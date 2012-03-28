@@ -2,7 +2,7 @@
 -- ER/Studio Data Architect 9.1 SQL Code Generation
 -- Project :      CAP and Data entry.DM1
 --
--- Date Created : Wednesday, March 21, 2012 23:16:25
+-- Date Created : Wednesday, March 28, 2012 12:26:47
 -- Target DBMS : MySQL 5.x
 --
 
@@ -14,7 +14,7 @@ CREATE TABLE Assay(
     Assay_ID           INT              AUTO_INCREMENT,
     Assay_Name         VARCHAR(128)     NOT NULL,
     Assay_status_ID    INT              NOT NULL,
-    Version            VARCHAR(10)      DEFAULT 1 NOT NULL,
+    Assay_Version      VARCHAR(10)      DEFAULT 1 NOT NULL,
     Description        VARCHAR(1000),
     Designed_By        VARCHAR(100),
     PRIMARY KEY (Assay_ID)
@@ -34,6 +34,11 @@ CREATE TABLE Assay_Status(
 COMMENT=''
 ;
 
+insert into MLBD.Assay_Status (assay_status_ID, status) values ('1', 'Pending');
+insert into MLBD.Assay_Status (assay_status_ID, status) values ('2', 'Active');
+insert into MLBD.Assay_Status (assay_status_ID, status) values ('3', 'Superceded');
+insert into MLBD.Assay_Status (assay_status_ID) values ('4', 'Retired');
+commit;
 -- 
 -- TABLE: Element 
 --
@@ -66,6 +71,11 @@ CREATE TABLE Element_Status(
 COMMENT=''
 ;
 
+insert into MLBD.Element_status (Element_status_id, status, Capability) values ('1', 'Pending', 'Element is new, not yet approved but can be used for assasy definition and data entry subject to future curation and approval');
+insert into MLBD.Element_status (Element_status_id, status, Capability) values ('2', 'Published', 'Element can be used for any assay definiton or data upload');
+insert into MLBD.Element_status (Element_status_id, status, Capability) values ('3', 'Deprecated', 'Element has been replaced by a another one.  It should not be used in new assasy definitions, but can be used when uploading new experiments.  It is subject to future retirement');
+insert into MLBD.Element_status (Element_status_id, status, Capability) values ('4', 'Retired', 'Element has been retired and must not be used for new assay definitions.  It can be used for uploading experiment data');
+commit;
 -- 
 -- TABLE: Experiment 
 --
@@ -99,6 +109,13 @@ CREATE TABLE Experiment_Status(
 COMMENT=''
 ;
 
+insert into MLBD.Experiment_Status (Experiment_status_ID, status, Capability) values ('1', 'Pending', 'Experiment is newly loaded and has not been approved for upload to the warehouse');
+insert into MLBD.Experiment_Status (Experiment_status_ID, status, Capability) values ('2', 'Approved', 'Experiment has been approved as ready to upload.  It does not mena results are correct or cannot be changed');
+insert into MLBD.Experiment_Status (Experiment_status_ID, status, Capability) values ('3', 'Rejected', 'Experiment data has been rejected as not scientifically valid.  This will not be uploaded to the warehouse');
+insert into MLBD.Experiment_Status (Experiment_status_ID, status, Capability) values ('4', 'Held', 'Experiment data is private to the loading institution (Source Laboratory).  The Hold Until Date is set.  Though uploaded it cannot be queried except by the source laboratory');
+insert into MLBD.Experiment_Status (Experiment_status_ID, status, Capability) values ('5', 'Uploaded', 'Experiment has been copied into the warehouse and results are available for querying');
+insert into MLBD.Experiment_Status (Experiment_status_ID, status, Capability) values ('6', 'Mark for Deletion', 'Experiment has been confirmed as present in the warehouse and may be deleted at any time.');
+commit;
 -- 
 -- TABLE: External_Assay 
 --
@@ -177,12 +194,11 @@ CREATE TABLE Measure_Context_Item(
     Assay_ID                   INT             NOT NULL,
     Measure_Context_ID         INT             NOT NULL,
     Group_No                   INT,
-    Attribute_Type             VARCHAR(10)     
-                               CHECK (Attribute_Type in ('Fixed', 'Range', 'List', 'Number')),
+    Attribute_Type             VARCHAR(20)     NOT NULL
+                               CHECK (Attribute_Type in ('Fixed', 'List', 'Range', 'Number')),
     Attribute_ID               INT             NOT NULL,
+    Qualifier                  CHAR(2),
     Value_ID                   INT,
-    Qualifier                  CHAR(2)         
-                               CHECK (Qualifier in ('=', '>', '<', '<=', '>=', '~')),
     Value_Display              VARCHAR(256),
     Value_num                  FLOAT(8, 0),
     Value_Min                  FLOAT(8, 0),
@@ -243,7 +259,7 @@ COMMENT=''
 CREATE TABLE Project_Assay(
     Assay_ID               INT              NOT NULL,
     Project_ID             INT              NOT NULL,
-    Stage                  VARCHAR(20)      NOT NULL,
+    STAGE                  VARCHAR(20)      NOT NULL,
     Sequence_no            INT,
     Promotion_Threshold    FLOAT(8, 0),
     Promotion_Criteria     VARCHAR(1000),
@@ -267,6 +283,27 @@ COMMENT=''
 ;
 
 -- 
+-- TABLE: Qualifier 
+--
+
+CREATE TABLE Qualifier(
+    Qualifier      CHAR(2)          NOT NULL,
+    Description    VARCHAR(1000)    NOT NULL,
+    PRIMARY KEY (Qualifier)
+)ENGINE=INNODB
+COMMENT=''
+;
+
+insert into mlbd.qualifier values ('=', 'equals');
+insert into mlbd.qualifier values ('>=', 'greater than or equal');
+insert into mlbd.qualifier values ('<=', 'less than or equal');
+insert into mlbd.qualifier values ('<', 'greater than');
+insert into mlbd.qualifier values ('>', 'less than');
+insert into mlbd.qualifier values ('~', 'approximatley');
+insert into mlbd.qualifier values ('>>', 'very much greater than');
+insert into mlbd.qualifier values ('<<', 'very much less than');
+commit;
+-- 
 -- TABLE: Result 
 --
 
@@ -276,8 +313,7 @@ CREATE TABLE Result(
     value_num            FLOAT(8, 0),
     value_min            FLOAT(8, 0),
     Value_Max            FLOAT(8, 0),
-    Qualifier            CHAR(2)         
-                         CHECK (Qualifier in ('=', '<', '>', '<=', '>=', '~')),
+    Qualifier            CHAR(2),
     Result_Status_ID     INT             NOT NULL,
     Experiment_ID        INT             NOT NULL,
     Substance_ID         INT             NOT NULL,
@@ -312,8 +348,7 @@ CREATE TABLE Result_Context_Item(
     Group_No                  INT,
     Attribute_ID              INT             NOT NULL,
     Value_ID                  INT,
-    Qualifier                 CHAR(2)         
-                              CHECK (Qualifier in ('=', '>', '<', '<=', '>=', '~')),
+    Qualifier                 CHAR(2),
     Value_Display             VARCHAR(256),
     Value_num                 FLOAT(8, 0),
     Value_Min                 FLOAT(8, 0),
@@ -349,6 +384,13 @@ CREATE TABLE Result_Status(
 COMMENT=''
 ;
 
+insert into MLBD.Result_status (result_status_id, status) values ('1', 'Pending');
+insert into MLBD.Result_status (result_status_id, status) values ('2', 'Approved');
+insert into MLBD.Result_status (result_status_id, status) values ('3', 'Rejected');
+insert into MLBD.Result_status (result_status_id, status) values ('4', 'Uploading');
+insert into MLBD.Result_status (result_status_id, status) values ('5', 'Uploaded');
+insert into MLBD.Result_status (result_status_id, status) values ('6', 'Mark for Deletion');
+commit;
 -- 
 -- TABLE: Result_Type 
 --
@@ -376,6 +418,13 @@ CREATE TABLE Stage(
 COMMENT=''
 ;
 
+insert into MLBD.Stage (Stage) values ('Primary');
+insert into MLBD.Stage (Stage) values ('Secondary');
+insert into MLBD.Stage (Stage) values ('Confirmation');
+insert into MLBD.Stage (Stage) values ('Tertiary');
+insert into MLBD.Stage (Stage) values ('Counter-screen');
+insert into MLBD.Stage (Stage) values ('TBD');
+Commit;
 -- 
 -- TABLE: Substance 
 --
@@ -419,10 +468,10 @@ COMMENT=''
 ;
 
 -- 
--- INDEX: FK_assaY_assay_status_id 
+-- INDEX: FK_ASSAY_ASSAY_STATUS_ID 
 --
 
-CREATE INDEX FK_assaY_assay_status_id ON Assay(Assay_status_ID)
+CREATE INDEX FK_ASSAY_ASSAY_STATUS_ID ON Assay(Assay_status_ID)
 ;
 -- 
 -- INDEX: AK_Assay_Status 
@@ -431,82 +480,82 @@ CREATE INDEX FK_assaY_assay_status_id ON Assay(Assay_status_ID)
 CREATE UNIQUE INDEX AK_Assay_Status ON Assay_Status(Status)
 ;
 -- 
--- INDEX: FK_Element_element_status 
+-- INDEX: FK_ELEMENT_ELEMENT_STATUS 
 --
 
-CREATE INDEX FK_Element_element_status ON Element(Element_Status_ID)
+CREATE INDEX FK_ELEMENT_ELEMENT_STATUS ON Element(Element_Status_ID)
 ;
 -- 
--- INDEX: FK_Element_Unit 
+-- INDEX: FK_ELEMENT_UNIT 
 --
 
-CREATE INDEX FK_Element_Unit ON Element(Unit)
+CREATE INDEX FK_ELEMENT_UNIT ON Element(Unit)
 ;
 -- 
--- INDEX: FK_element_parent_element 
+-- INDEX: FK_ELEMENT_PARENT_ELEMENT 
 --
 
-CREATE INDEX FK_element_parent_element ON Element(Parent_Element_ID)
+CREATE INDEX FK_ELEMENT_PARENT_ELEMENT ON Element(Parent_Element_ID)
 ;
 -- 
--- INDEX: FK_experiment_assay 
+-- INDEX: FK_EXPERIMENT_ASSAY 
 --
 
-CREATE INDEX FK_experiment_assay ON Experiment(Assay_ID)
+CREATE INDEX FK_EXPERIMENT_ASSAY ON Experiment(Assay_ID)
 ;
 -- 
--- INDEX: FK_Project_experiment 
+-- INDEX: FK_PROJECT_EXPERIMENT 
 --
 
-CREATE INDEX FK_Project_experiment ON Experiment(Project_ID)
+CREATE INDEX FK_PROJECT_EXPERIMENT ON Experiment(Project_ID)
 ;
 -- 
--- INDEX: FK_experiment_exprt_status 
+-- INDEX: FK_EXPERIMENT_EXPRT_STATUS 
 --
 
-CREATE INDEX FK_experiment_exprt_status ON Experiment(Experiment_Status_ID)
+CREATE INDEX FK_EXPERIMENT_EXPRT_STATUS ON Experiment(Experiment_Status_ID)
 ;
 -- 
--- INDEX: FK_Experiment_source_lab 
+-- INDEX: FK_EXPERIMENT_SOURCE_LAB 
 --
 
-CREATE INDEX FK_Experiment_source_lab ON Experiment(Source_ID)
+CREATE INDEX FK_EXPERIMENT_SOURCE_LAB ON Experiment(Source_ID)
 ;
 -- 
--- INDEX: fk_ext_assay_assay 
+-- INDEX: FK_EXT_ASSAY_ASSAY 
 --
 
-CREATE INDEX fk_ext_assay_assay ON External_Assay(Assay_ID)
+CREATE INDEX FK_EXT_ASSAY_ASSAY ON External_Assay(Assay_ID)
 ;
 -- 
--- INDEX: `FK_ext_assay_ext_system` 
+-- INDEX: `FK_EXT_ASSAY_EXT_SYSTEM` 
 --
 
-CREATE INDEX `FK_ext_assay_ext_system` ON External_Assay(External_System_ID)
+CREATE INDEX `FK_EXT_ASSAY_EXT_SYSTEM` ON External_Assay(External_System_ID)
 ;
 -- 
--- INDEX: FK_Measure_assay 
+-- INDEX: FK_MEASURE_ASSAY 
 --
 
-CREATE INDEX FK_Measure_assay ON Measure(Assay_ID)
+CREATE INDEX FK_MEASURE_ASSAY ON Measure(Assay_ID)
 ;
 -- 
--- INDEX: FK_Measure_Unit 
+-- INDEX: FK_MEASURE_RESULT_TYPE 
 --
 
-CREATE INDEX FK_Measure_Unit ON Measure(Entry_Unit)
+CREATE INDEX FK_MEASURE_RESULT_TYPE ON Measure(Result_Type_ID)
 ;
 -- 
--- INDEX: FK_measure_M_context_Item 
+-- INDEX: FK_MEASURE_UNIT 
 --
 
-CREATE INDEX FK_measure_M_context_Item ON Measure(Measure_Context_ID)
+CREATE INDEX FK_MEASURE_UNIT ON Measure(Entry_Unit)
 ;
 -- 
--- INDEX: FK_Measure_result_type 
+-- INDEX: FK_MEASURE_M_CONTEXT_ITEM 
 --
 
-CREATE INDEX FK_Measure_result_type ON Measure(Result_Type_ID)
+CREATE INDEX FK_MEASURE_M_CONTEXT_ITEM ON Measure(Measure_Context_ID)
 ;
 -- 
 -- INDEX: AK_Measure_Context_item 
@@ -515,106 +564,118 @@ CREATE INDEX FK_Measure_result_type ON Measure(Result_Type_ID)
 CREATE UNIQUE INDEX AK_Measure_Context_item ON Measure_Context_Item(Measure_Context_ID, Group_No, Attribute_ID, Value_Display)
 ;
 -- 
--- INDEX: FK_M_context_Item_M_Context 
+-- INDEX: FK_M_CONTEXT_ITEM_M_CONTEXT 
 --
 
-CREATE INDEX FK_M_context_Item_M_Context ON Measure_Context_Item(Measure_Context_ID)
+CREATE INDEX FK_M_CONTEXT_ITEM_M_CONTEXT ON Measure_Context_Item(Measure_Context_ID)
 ;
 -- 
--- INDEX: FK_M_Context_item_assay 
+-- INDEX: FK_M_CONTEXT_ITEM_ATTRIBUTE 
 --
 
-CREATE INDEX FK_M_Context_item_assay ON Measure_Context_Item(Assay_ID)
+CREATE INDEX FK_M_CONTEXT_ITEM_ATTRIBUTE ON Measure_Context_Item(Attribute_ID)
 ;
 -- 
--- INDEX: FK_M_context_item_attribute 
+-- INDEX: FK_M_CONTEXT_ITEM_VALUE 
 --
 
-CREATE INDEX FK_M_context_item_attribute ON Measure_Context_Item(Attribute_ID)
+CREATE INDEX FK_M_CONTEXT_ITEM_VALUE ON Measure_Context_Item(Value_ID)
 ;
 -- 
--- INDEX: fk_M_context_item_value 
+-- INDEX: FK_M_CONTEXT_ITEM_ASSAY 
 --
 
-CREATE INDEX fk_M_context_item_value ON Measure_Context_Item(Value_ID)
+CREATE INDEX FK_M_CONTEXT_ITEM_ASSAY ON Measure_Context_Item(Assay_ID)
 ;
 -- 
--- INDEX: FK_ontology_item_Ontology 
+-- INDEX: FK_M_CONTEXT_ITEM_QUALIFIER 
 --
 
-CREATE INDEX FK_ontology_item_Ontology ON Ontology_Item(Ontology_ID)
+CREATE INDEX FK_M_CONTEXT_ITEM_QUALIFIER ON Measure_Context_Item(Qualifier)
 ;
 -- 
--- INDEX: FK_ontology_item_element 
+-- INDEX: FK_ONTOLOGY_ITEM_ONTOLOGY 
 --
 
-CREATE INDEX FK_ontology_item_element ON Ontology_Item(Element_ID)
+CREATE INDEX FK_ONTOLOGY_ITEM_ONTOLOGY ON Ontology_Item(Ontology_ID)
 ;
 -- 
--- INDEX: FK_Ontology_item_result_type 
+-- INDEX: FK_ONTOLOGY_ITEM_ELEMENT 
 --
 
-CREATE INDEX FK_Ontology_item_result_type ON Ontology_Item(Result_Type_ID)
+CREATE INDEX FK_ONTOLOGY_ITEM_ELEMENT ON Ontology_Item(Element_ID)
 ;
 -- 
--- INDEX: FK_Project_assay_assay 
+-- INDEX: FK_ONTOLOGY_ITEM_RESULT_TYPE 
 --
 
-CREATE INDEX FK_Project_assay_assay ON Project_Assay(Assay_ID)
+CREATE INDEX FK_ONTOLOGY_ITEM_RESULT_TYPE ON Ontology_Item(Result_Type_ID)
 ;
 -- 
--- INDEX: FK_project_assay_project 
+-- INDEX: FK_PROJECT_ASSAY_ASSAY 
 --
 
-CREATE INDEX FK_project_assay_project ON Project_Assay(Project_ID)
+CREATE INDEX FK_PROJECT_ASSAY_ASSAY ON Project_Assay(Assay_ID)
 ;
 -- 
--- INDEX: FK_Project_assay_stage 
+-- INDEX: FK_PROJECT_ASSAY_PROJECT 
 --
 
-CREATE INDEX FK_Project_assay_stage ON Project_Assay(Stage)
+CREATE INDEX FK_PROJECT_ASSAY_PROJECT ON Project_Assay(Project_ID)
 ;
 -- 
--- INDEX: FK_Protocol_assay 
+-- INDEX: FK_PROJECT_ASSAY_STAGE 
 --
 
-CREATE INDEX FK_Protocol_assay ON Protocol(Assay_ID)
+CREATE INDEX FK_PROJECT_ASSAY_STAGE ON Project_Assay(STAGE)
 ;
 -- 
--- INDEX: FK_result_result_status 
+-- INDEX: FK_PROTOCOL_ASSAY 
 --
 
-CREATE INDEX FK_result_result_status ON Result(Result_Status_ID)
+CREATE INDEX FK_PROTOCOL_ASSAY ON Protocol(Assay_ID)
 ;
 -- 
--- INDEX: FK_result_experiment 
+-- INDEX: FK_RESULT_RESULT_STATUS 
 --
 
-CREATE INDEX FK_result_experiment ON Result(Experiment_ID)
+CREATE INDEX FK_RESULT_RESULT_STATUS ON Result(Result_Status_ID)
 ;
 -- 
--- INDEX: fk_result_result_context 
+-- INDEX: FK_RESULT_EXPERIMENT 
 --
 
-CREATE INDEX fk_result_result_context ON Result(Result_Context_ID)
+CREATE INDEX FK_RESULT_EXPERIMENT ON Result(Experiment_ID)
 ;
 -- 
--- INDEX: FK_Result_substance 
+-- INDEX: FK_RESULT_RESULT_CONTEXT 
 --
 
-CREATE INDEX FK_Result_substance ON Result(Substance_ID)
+CREATE INDEX FK_RESULT_RESULT_CONTEXT ON Result(Result_Context_ID)
 ;
 -- 
--- INDEX: FK_result_unit 
+-- INDEX: FK_RESULT_SUBSTANCE 
 --
 
-CREATE INDEX FK_result_unit ON Result(Entry_Unit)
+CREATE INDEX FK_RESULT_SUBSTANCE ON Result(Substance_ID)
 ;
 -- 
--- INDEX: FK_Result_result_type 
+-- INDEX: FK_RESULT_UNIT 
 --
 
-CREATE INDEX FK_Result_result_type ON Result(Result_Type_ID)
+CREATE INDEX FK_RESULT_UNIT ON Result(Entry_Unit)
+;
+-- 
+-- INDEX: FK_RESULT_RESULT_TYPE 
+--
+
+CREATE INDEX FK_RESULT_RESULT_TYPE ON Result(Result_Type_ID)
+;
+-- 
+-- INDEX: FK_RESULT_QUALIFIER 
+--
+
+CREATE INDEX FK_RESULT_QUALIFIER ON Result(Qualifier)
 ;
 -- 
 -- INDEX: AK_Measure_Context_item_1 
@@ -623,70 +684,70 @@ CREATE INDEX FK_Result_result_type ON Result(Result_Type_ID)
 CREATE UNIQUE INDEX AK_Measure_Context_item_1 ON Result_Context_Item(Group_No, Attribute_ID, Value_Display)
 ;
 -- 
--- INDEX: fk_R_Context_item_experiment 
+-- INDEX: FK_R_CONTEXT_ITEM_EXPERIMENT 
 --
 
-CREATE INDEX fk_R_Context_item_experiment ON Result_Context_Item(Experiment_ID)
+CREATE INDEX FK_R_CONTEXT_ITEM_EXPERIMENT ON Result_Context_Item(Experiment_ID)
 ;
 -- 
--- INDEX: FK_R_context_item_R_context 
+-- INDEX: FK_R_CONTEXT_ITEM_R_CONTEXT 
 --
 
-CREATE INDEX FK_R_context_item_R_context ON Result_Context_Item(Result_Context_ID)
+CREATE INDEX FK_R_CONTEXT_ITEM_R_CONTEXT ON Result_Context_Item(Result_Context_ID)
 ;
 -- 
--- INDEX: FK_R_context_item_attribute 
+-- INDEX: FK_R_CONTEXT_ITEM_ATTRIBUTE 
 --
 
-CREATE INDEX FK_R_context_item_attribute ON Result_Context_Item(Attribute_ID)
+CREATE INDEX FK_R_CONTEXT_ITEM_ATTRIBUTE ON Result_Context_Item(Attribute_ID)
 ;
 -- 
--- INDEX: FK_R_Context_item_value 
+-- INDEX: FK_R_CONTEXT_ITEM_VALUE 
 --
 
-CREATE INDEX FK_R_Context_item_value ON Result_Context_Item(Value_ID)
+CREATE INDEX FK_R_CONTEXT_ITEM_VALUE ON Result_Context_Item(Value_ID)
 ;
 -- 
--- INDEX: FK_result_hierarchy_rslt_Prnt 
+-- INDEX: FK_RESULT_HIERARCHY_RSLT_PRNT 
 --
 
-CREATE INDEX FK_result_hierarchy_rslt_Prnt ON Result_Hierarchy(Result_ID)
+CREATE INDEX FK_RESULT_HIERARCHY_RSLT_PRNT ON Result_Hierarchy(Result_ID)
 ;
 -- 
--- INDEX: FK_result_hierarchy_result 
+-- INDEX: FK_RESULT_HIERARCHY_RESULT 
 --
 
-CREATE INDEX FK_result_hierarchy_result ON Result_Hierarchy(Parent_Result_ID)
+CREATE INDEX FK_RESULT_HIERARCHY_RESULT ON Result_Hierarchy(Parent_Result_ID)
 ;
 -- 
--- INDEX: FK_result_type_element_status 
+-- INDEX: FK_RESULT_TYPE_ELEMENT_STATUS 
 --
 
-CREATE INDEX FK_result_type_element_status ON Result_Type(Result_Type_Status_ID)
+CREATE INDEX FK_RESULT_TYPE_ELEMENT_STATUS ON Result_Type(Result_Type_Status_ID)
 ;
 -- 
--- INDEX: FK_result_type_unit 
+-- INDEX: FK_RESULT_TYPE_UNIT 
 --
 
-CREATE INDEX FK_result_type_unit ON Result_Type(Base_Unit)
+CREATE INDEX FK_RESULT_TYPE_UNIT ON Result_Type(Base_Unit)
 ;
 -- 
--- INDEX: FK_result_type_rslt_typ_prnt 
+-- INDEX: FK_RESULT_TYPE_RSLT_TYP_PRNT 
 --
 
-CREATE INDEX FK_result_type_rslt_typ_prnt ON Result_Type(Parent_Result_type_ID)
+CREATE INDEX FK_RESULT_TYPE_RSLT_TYP_PRNT ON Result_Type(Parent_Result_type_ID)
 ;
 -- 
--- INDEX: FK_Unit_conversion_from_Unit 
+-- INDEX: FK_UNIT_CONVERSION_FROM_UNIT 
 --
 
-CREATE INDEX FK_Unit_conversion_from_Unit ON Unit_Conversion(From_Unit)
+CREATE INDEX FK_UNIT_CONVERSION_FROM_UNIT ON Unit_Conversion(From_Unit)
 ;
 -- 
--- INDEX: FK_Unit_conversion_to_unit 
+-- INDEX: FK_UNIT_CONVERSION_TO_UNIT 
 --
 
-CREATE INDEX FK_Unit_conversion_to_unit ON Unit_Conversion(To_Unit)
+CREATE INDEX FK_UNIT_CONVERSION_TO_UNIT ON Unit_Conversion(To_Unit)
 ;
 -- 
 -- TABLE: Assay 
@@ -752,7 +813,7 @@ ALTER TABLE External_Assay ADD CONSTRAINT fk_ext_assay_assay
     REFERENCES Assay(Assay_ID)
 ;
 
-ALTER TABLE External_Assay ADD CONSTRAINT FK_ext_assay_ext_system 
+ALTER TABLE External_Assay ADD CONSTRAINT FK_ext_assay_ext_system 
     FOREIGN KEY (External_System_ID)
     REFERENCES External_System(External_System_ID)
 ;
@@ -802,6 +863,11 @@ ALTER TABLE Measure_Context_Item ADD CONSTRAINT FK_M_context_Item_M_Context
     REFERENCES Measure_Context(Measure_Context_ID)
 ;
 
+ALTER TABLE Measure_Context_Item ADD CONSTRAINT FK_M_context_item_qualifier 
+    FOREIGN KEY (Qualifier)
+    REFERENCES Qualifier(Qualifier)
+;
+
 ALTER TABLE Measure_Context_Item ADD CONSTRAINT fk_M_context_item_value 
     FOREIGN KEY (Value_ID)
     REFERENCES Element(Element_ID)
@@ -842,11 +908,6 @@ ALTER TABLE Project_Assay ADD CONSTRAINT FK_project_assay_project
     REFERENCES Project(Project_ID)
 ;
 
-ALTER TABLE Project_Assay ADD CONSTRAINT FK_Project_assay_stage 
-    FOREIGN KEY (Stage)
-    REFERENCES Stage(Stage)
-;
-
 
 -- 
 -- TABLE: Protocol 
@@ -865,6 +926,11 @@ ALTER TABLE Protocol ADD CONSTRAINT FK_Protocol_assay
 ALTER TABLE Result ADD CONSTRAINT FK_result_experiment 
     FOREIGN KEY (Experiment_ID)
     REFERENCES Experiment(Experiment_ID)
+;
+
+ALTER TABLE Result ADD CONSTRAINT FK_Result_Qualifier 
+    FOREIGN KEY (Qualifier)
+    REFERENCES Qualifier(Qualifier)
 ;
 
 ALTER TABLE Result ADD CONSTRAINT fk_result_result_context 
@@ -896,6 +962,11 @@ ALTER TABLE Result ADD CONSTRAINT FK_result_unit
 -- 
 -- TABLE: Result_Context_Item 
 --
+
+ALTER TABLE Result_Context_Item ADD CONSTRAINT RefQualifier55 
+    FOREIGN KEY (Qualifier)
+    REFERENCES Qualifier(Qualifier)
+;
 
 ALTER TABLE Result_Context_Item ADD CONSTRAINT FK_R_context_item_attribute 
     FOREIGN KEY (Attribute_ID)
