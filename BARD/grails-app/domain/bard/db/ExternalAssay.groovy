@@ -8,12 +8,13 @@ class ExternalAssay implements Serializable {
 	Integer externalSystemId
 	Integer assayId
 	String extAssayId
+	ExternalSystem externalSystem
+	Assay assay
 
 	int hashCode() {
 		def builder = new HashCodeBuilder()
 		builder.append externalSystemId
 		builder.append assayId
-		builder.append extAssayId
 		builder.toHashCode()
 	}
 
@@ -22,12 +23,13 @@ class ExternalAssay implements Serializable {
 		def builder = new EqualsBuilder()
 		builder.append externalSystemId, other.externalSystemId
 		builder.append assayId, other.assayId
-		builder.append extAssayId, other.extAssayId
 		builder.isEquals()
 	}
 
+	static belongsTo = [Assay, ExternalSystem]
+
 	static mapping = {
-		id composite: ["externalSystemId", "assayId", "extAssayId"]
+		id composite: ["externalSystemId", "assayId"]
 		version false
 	}
 

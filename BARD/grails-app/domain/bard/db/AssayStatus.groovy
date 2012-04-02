@@ -1,34 +1,17 @@
 package bard.db
 
-import org.apache.commons.lang.builder.EqualsBuilder
-import org.apache.commons.lang.builder.HashCodeBuilder
+class AssayStatus {
 
-class AssayStatus implements Serializable {
-
-	Integer assayStatusId
 	String status
 
-	int hashCode() {
-		def builder = new HashCodeBuilder()
-		builder.append assayStatusId
-		builder.append status
-		builder.toHashCode()
-	}
-
-	boolean equals(other) {
-		if (other == null) return false
-		def builder = new EqualsBuilder()
-		builder.append assayStatusId, other.assayStatusId
-		builder.append status, other.status
-		builder.isEquals()
-	}
+	static hasMany = [assaies: Assay]
 
 	static mapping = {
-		id composite: ["assayStatusId", "status"]
+		id column: "Assay_status_ID"
 		version false
 	}
 
 	static constraints = {
-		status maxSize: 20
+		status maxSize: 20, unique: true
 	}
 }

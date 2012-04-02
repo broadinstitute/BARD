@@ -1,60 +1,30 @@
 package bard.db
 
-import org.apache.commons.lang.builder.EqualsBuilder
-import org.apache.commons.lang.builder.HashCodeBuilder
+class Result {
 
-class Result implements Serializable {
-
-	Integer resultId
 	String valueDisplay
 	Float valueNum
 	Float valueMin
 	Float valueMax
-	String qualifier
-	Integer resultStatusId
-	Integer experimentId
-	Integer substanceId
-	Integer resultContextId
-	String entryUnit
-	Integer resultTypeId
+	ResultContext resultContext
+	Substance substance
+	Experiment experiment
+	ResultStatus resultStatus
+	Unit unit
+	ResultType resultType
+	Qualifier qualifier
 
-	int hashCode() {
-		def builder = new HashCodeBuilder()
-		builder.append resultId
-		builder.append valueDisplay
-		builder.append valueNum
-		builder.append valueMin
-		builder.append valueMax
-		builder.append qualifier
-		builder.append resultStatusId
-		builder.append experimentId
-		builder.append substanceId
-		builder.append resultContextId
-		builder.append entryUnit
-		builder.append resultTypeId
-		builder.toHashCode()
-	}
+	static hasMany = [resultHierarchiesForParentResultId: ResultHierarchy,
+	                  resultHierarchiesForResultId: ResultHierarchy]
+	static belongsTo = [Experiment, Qualifier, ResultContext, ResultStatus, ResultType, Substance, Unit]
 
-	boolean equals(other) {
-		if (other == null) return false
-		def builder = new EqualsBuilder()
-		builder.append resultId, other.resultId
-		builder.append valueDisplay, other.valueDisplay
-		builder.append valueNum, other.valueNum
-		builder.append valueMin, other.valueMin
-		builder.append valueMax, other.valueMax
-		builder.append qualifier, other.qualifier
-		builder.append resultStatusId, other.resultStatusId
-		builder.append experimentId, other.experimentId
-		builder.append substanceId, other.substanceId
-		builder.append resultContextId, other.resultContextId
-		builder.append entryUnit, other.entryUnit
-		builder.append resultTypeId, other.resultTypeId
-		builder.isEquals()
-	}
+	// TODO you have multiple hasMany references for class(es) [ResultHierarchy] 
+	//      so you'll need to disambiguate them with the 'mappedBy' property:
+	static mappedBy = [resultHierarchiesForParentResultId: "resultByParentResultId",
+	                   resultHierarchiesForResultId: "resultByResultId"]
 
 	static mapping = {
-		id composite: ["resultId", "valueDisplay", "valueNum", "valueMin", "valueMax", "qualifier", "resultStatusId", "experimentId", "substanceId", "resultContextId", "entryUnit", "resultTypeId"]
+		id column: "Result_ID"
 		version false
 	}
 
@@ -63,7 +33,5 @@ class Result implements Serializable {
 		valueNum nullable: true
 		valueMin nullable: true
 		valueMax nullable: true
-		qualifier nullable: true, maxSize: 2
-		entryUnit nullable: true, maxSize: 100
 	}
 }

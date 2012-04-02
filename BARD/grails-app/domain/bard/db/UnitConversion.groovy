@@ -10,14 +10,13 @@ class UnitConversion implements Serializable {
 	Float multiplier
 	Float offset
 	String formula
+	Unit unitByFromUnit
+	Unit unitByToUnit
 
 	int hashCode() {
 		def builder = new HashCodeBuilder()
 		builder.append fromUnit
 		builder.append toUnit
-		builder.append multiplier
-		builder.append offset
-		builder.append formula
 		builder.toHashCode()
 	}
 
@@ -26,14 +25,13 @@ class UnitConversion implements Serializable {
 		def builder = new EqualsBuilder()
 		builder.append fromUnit, other.fromUnit
 		builder.append toUnit, other.toUnit
-		builder.append multiplier, other.multiplier
-		builder.append offset, other.offset
-		builder.append formula, other.formula
 		builder.isEquals()
 	}
 
+	static belongsTo = [Unit]
+
 	static mapping = {
-		id composite: ["fromUnit", "toUnit", "multiplier", "offset", "formula"]
+		id composite: ["fromUnit", "toUnit"]
 		version false
 	}
 

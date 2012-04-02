@@ -8,12 +8,13 @@ class ResultHierarchy implements Serializable {
 	Integer resultId
 	Integer parentResultId
 	String hierarchyType
+	Result resultByParentResultId
+	Result resultByResultId
 
 	int hashCode() {
 		def builder = new HashCodeBuilder()
 		builder.append resultId
 		builder.append parentResultId
-		builder.append hierarchyType
 		builder.toHashCode()
 	}
 
@@ -22,12 +23,13 @@ class ResultHierarchy implements Serializable {
 		def builder = new EqualsBuilder()
 		builder.append resultId, other.resultId
 		builder.append parentResultId, other.parentResultId
-		builder.append hierarchyType, other.hierarchyType
 		builder.isEquals()
 	}
 
+	static belongsTo = [Result]
+
 	static mapping = {
-		id composite: ["resultId", "parentResultId", "hierarchyType"]
+		id composite: ["resultId", "parentResultId"]
 		version false
 	}
 

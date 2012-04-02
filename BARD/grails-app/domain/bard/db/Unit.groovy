@@ -1,30 +1,24 @@
 package bard.db
 
-import org.apache.commons.lang.builder.EqualsBuilder
-import org.apache.commons.lang.builder.HashCodeBuilder
-
-class Unit implements Serializable {
+class Unit {
 
 	String unit
 	String description
 
-	int hashCode() {
-		def builder = new HashCodeBuilder()
-		builder.append unit
-		builder.append description
-		builder.toHashCode()
-	}
+	static hasMany = [elements: Element,
+	                  measures: Measure,
+	                  resultTypes: ResultType,
+	                  results: Result,
+	                  unitConversionsForFromUnit: UnitConversion,
+	                  unitConversionsForToUnit: UnitConversion]
 
-	boolean equals(other) {
-		if (other == null) return false
-		def builder = new EqualsBuilder()
-		builder.append unit, other.unit
-		builder.append description, other.description
-		builder.isEquals()
-	}
+	// TODO you have multiple hasMany references for class(es) [UnitConversion] 
+	//      so you'll need to disambiguate them with the 'mappedBy' property:
+	static mappedBy = [unitConversionsForFromUnit: "unitByFromUnit",
+	                   unitConversionsForToUnit: "unitByToUnit"]
 
 	static mapping = {
-		id composite: ["unit", "description"]
+		id name: "unit", generator: "assigned"
 		version false
 	}
 

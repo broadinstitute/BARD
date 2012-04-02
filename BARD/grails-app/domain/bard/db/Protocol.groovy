@@ -1,36 +1,15 @@
 package bard.db
 
-import org.apache.commons.lang.builder.EqualsBuilder
-import org.apache.commons.lang.builder.HashCodeBuilder
+class Protocol {
 
-class Protocol implements Serializable {
-
-	Integer protocolId
 	String protocolName
 	byte[] protocolDocument
-	Integer assayId
+	Assay assay
 
-	int hashCode() {
-		def builder = new HashCodeBuilder()
-		builder.append protocolId
-		builder.append protocolName
-		builder.append protocolDocument
-		builder.append assayId
-		builder.toHashCode()
-	}
-
-	boolean equals(other) {
-		if (other == null) return false
-		def builder = new EqualsBuilder()
-		builder.append protocolId, other.protocolId
-		builder.append protocolName, other.protocolName
-		builder.append protocolDocument, other.protocolDocument
-		builder.append assayId, other.assayId
-		builder.isEquals()
-	}
+	static belongsTo = [Assay]
 
 	static mapping = {
-		id composite: ["protocolId", "protocolName", "protocolDocument", "assayId"]
+		id column: "Protocol_ID"
 		version false
 	}
 

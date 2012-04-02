@@ -11,15 +11,13 @@ class ProjectAssay implements Serializable {
 	Integer sequenceNo
 	Float promotionThreshold
 	String promotionCriteria
+	Project project
+	Assay assay
 
 	int hashCode() {
 		def builder = new HashCodeBuilder()
 		builder.append assayId
 		builder.append projectId
-		builder.append stage
-		builder.append sequenceNo
-		builder.append promotionThreshold
-		builder.append promotionCriteria
 		builder.toHashCode()
 	}
 
@@ -28,15 +26,13 @@ class ProjectAssay implements Serializable {
 		def builder = new EqualsBuilder()
 		builder.append assayId, other.assayId
 		builder.append projectId, other.projectId
-		builder.append stage, other.stage
-		builder.append sequenceNo, other.sequenceNo
-		builder.append promotionThreshold, other.promotionThreshold
-		builder.append promotionCriteria, other.promotionCriteria
 		builder.isEquals()
 	}
 
+	static belongsTo = [Assay, Project]
+
 	static mapping = {
-		id composite: ["assayId", "projectId", "stage", "sequenceNo", "promotionThreshold", "promotionCriteria"]
+		id composite: ["assayId", "projectId"]
 		version false
 	}
 
