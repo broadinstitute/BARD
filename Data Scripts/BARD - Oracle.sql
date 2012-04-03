@@ -2,7 +2,7 @@
 -- ER/Studio Data Architect 9.1 SQL Code Generation
 -- Project :      CAP and Data entry.DM1
 --
--- Date Created : Monday, April 02, 2012 18:20:42
+-- Date Created : Tuesday, April 03, 2012 12:45:26
 -- Target DBMS : Oracle 11g
 --
 
@@ -403,7 +403,7 @@ CREATE TABLE MLBD.ASSAY(
     DESCRIPTION        VARCHAR2(1000),
     DESIGNED_BY        VARCHAR2(100),
     VERSION            NUMBER(38, 0)     DEFAULT 0 NOT NULL,
-    Date_Created       TIMESTAMP(6)      DEFAULT sysdate NOT NULL,
+    DATE_CREATED       TIMESTAMP(6)      DEFAULT sysdate NOT NULL,
     Last_Updated       TIMESTAMP(6),
     MODIFIED_BY        VARCHAR2(40),
     CONSTRAINT PK_ASSAY PRIMARY KEY (ASSAY_ID)
