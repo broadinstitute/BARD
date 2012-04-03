@@ -2,7 +2,7 @@
 -- ER/Studio Data Architect 9.1 SQL Code Generation
 -- Project :      CAP and Data entry.DM1
 --
--- Date Created : Monday, April 02, 2012 18:21:14
+-- Date Created : Tuesday, April 03, 2012 12:46:03
 -- Target DBMS : MySQL 5.x
 --
 
@@ -18,7 +18,7 @@ CREATE TABLE Assay(
     Description        VARCHAR(1000),
     Designed_By        VARCHAR(100),
     Version            INT              DEFAULT 0 NOT NULL,
-    Date_Created       DATETIME         DEFAULT sysdate NOT NULL,
+    Date_Created       TIMESTAMP        DEFAULT current_timestamp NOT NULL,
     Last_Updated       DATETIME,
     Modified_by        VARCHAR(40),
     PRIMARY KEY (Assay_ID)
@@ -34,7 +34,7 @@ CREATE TABLE Assay_Status(
     Assay_status_ID    INT            AUTO_INCREMENT,
     Status             VARCHAR(20)    NOT NULL,
     Version            INT            DEFAULT 0 NOT NULL,
-    Date_Created       DATETIME       DEFAULT sysdate NOT NULL,
+    Date_Created       TIMESTAMP      DEFAULT current_timestamp NOT NULL,
     Last_Updated       DATETIME,
     Modified_by        VARCHAR(40),
     PRIMARY KEY (Assay_status_ID)
@@ -62,7 +62,7 @@ CREATE TABLE Element(
     Element_Status_ID    INT              NOT NULL,
     Unit                 VARCHAR(100),
     Version              INT              DEFAULT 0 NOT NULL,
-    Date_Created         DATETIME         DEFAULT sysdate NOT NULL,
+    Date_Created         TIMESTAMP        DEFAULT current_timestamp NOT NULL,
     Last_Updated         DATETIME,
     Modified_by          VARCHAR(40),
     PRIMARY KEY (Element_ID)
@@ -79,7 +79,7 @@ CREATE TABLE Element_Status(
     Element_Status       VARCHAR(20)     NOT NULL,
     Capability           VARCHAR(256),
     Version              INT             DEFAULT 0 NOT NULL,
-    Date_Created         DATETIME        DEFAULT sysdate NOT NULL,
+    Date_Created         TIMESTAMP       DEFAULT current_timestamp NOT NULL,
     Last_Updated         DATETIME,
     Modified_by          VARCHAR(40),
     PRIMARY KEY (Element_Status_ID)
@@ -105,11 +105,11 @@ CREATE TABLE Experiment(
     Run_Date_From           DATE,
     Run_Date_To             DATE,
     Hold_Until_Date         DATE             
-                            CHECK (Hold_Until_Date <= sysdate + 366),
+                            CHECK (Hold_Until_Date <= now() + 366),
     Description             VARCHAR(1000),
     Source_ID               INT              NOT NULL,
     Version                 INT              DEFAULT 0 NOT NULL,
-    Date_Created            DATETIME         DEFAULT sysdate NOT NULL,
+    Date_Created            TIMESTAMP        DEFAULT current_timestamp NOT NULL,
     Last_Updated            DATETIME,
     Modified_by             VARCHAR(40),
     PRIMARY KEY (Experiment_ID)
@@ -126,7 +126,7 @@ CREATE TABLE Experiment_Status(
     Status                  VARCHAR(20)      NOT NULL,
     Capability              VARCHAR(1000),
     Version                 INT              DEFAULT 0 NOT NULL,
-    Date_Created            DATETIME         DEFAULT sysdate NOT NULL,
+    Date_Created            TIMESTAMP        DEFAULT current_timestamp NOT NULL,
     Last_Updated            DATETIME,
     Modified_by             VARCHAR(40),
     PRIMARY KEY (Experiment_Status_ID)
@@ -150,7 +150,7 @@ CREATE TABLE External_Assay(
     Assay_ID              INT             NOT NULL,
     Ext_Assay_ID          VARCHAR(128)    NOT NULL,
     Version               INT             DEFAULT 0 NOT NULL,
-    Date_Created          DATETIME        DEFAULT sysdate NOT NULL,
+    Date_Created          TIMESTAMP       DEFAULT current_timestamp NOT NULL,
     Last_Updated          DATETIME,
     Modified_by           VARCHAR(40),
     PRIMARY KEY (External_System_ID, Assay_ID)
@@ -168,7 +168,7 @@ CREATE TABLE External_System(
     Owner                 VARCHAR(128),
     System_URL            VARCHAR(1000),
     Version               INT              DEFAULT 0 NOT NULL,
-    Date_Created          DATETIME         DEFAULT sysdate NOT NULL,
+    Date_Created          TIMESTAMP        DEFAULT current_timestamp NOT NULL,
     Last_Updated          DATETIME,
     Modified_by           VARCHAR(40),
     PRIMARY KEY (External_System_ID)
@@ -187,7 +187,7 @@ CREATE TABLE Laboratory(
     Description     VARCHAR(1000),
     Location        VARCHAR(250),
     Version         INT              DEFAULT 0 NOT NULL,
-    Date_Created    DATETIME         DEFAULT sysdate NOT NULL,
+    Date_Created    TIMESTAMP        DEFAULT current_timestamp NOT NULL,
     Last_Updated    DATETIME,
     Modified_by     VARCHAR(40),
     PRIMARY KEY (Lab_ID)
@@ -206,7 +206,7 @@ CREATE TABLE Measure(
     Entry_Unit            VARCHAR(100),
     Measure_Context_ID    INT,
     Version               INT             DEFAULT 0 NOT NULL,
-    Date_Created          DATETIME        DEFAULT sysdate NOT NULL,
+    Date_Created          TIMESTAMP       DEFAULT current_timestamp NOT NULL,
     Last_Updated          DATETIME,
     Modified_by           VARCHAR(40),
     PRIMARY KEY (Measure_ID)
@@ -222,7 +222,7 @@ CREATE TABLE Measure_Context(
     Measure_Context_ID    INT             AUTO_INCREMENT,
     Context_Name          VARCHAR(128)    NOT NULL,
     Version               INT             DEFAULT 0 NOT NULL,
-    Date_Created          DATETIME        DEFAULT sysdate NOT NULL,
+    Date_Created          TIMESTAMP       DEFAULT current_timestamp NOT NULL,
     Last_Updated          DATETIME,
     Modified_by           VARCHAR(40),
     PRIMARY KEY (Measure_Context_ID)
@@ -249,7 +249,7 @@ CREATE TABLE Measure_Context_Item(
     Value_Min                  FLOAT(8, 0),
     value_Max                  FLOAT(8, 0),
     Version                    INT             DEFAULT 0 NOT NULL,
-    Date_Created               DATETIME        DEFAULT sysdate NOT NULL,
+    Date_Created               TIMESTAMP       DEFAULT current_timestamp NOT NULL,
     Last_Updated               DATETIME,
     Modified_by                VARCHAR(40),
     PRIMARY KEY (measure_Context_Item_ID)
@@ -267,7 +267,7 @@ CREATE TABLE Ontology(
     Abbreviation     VARCHAR(20),
     System_URL       VARCHAR(1000),
     Version          INT              DEFAULT 0 NOT NULL,
-    Date_Created     DATETIME         DEFAULT sysdate NOT NULL,
+    Date_Created     TIMESTAMP        DEFAULT current_timestamp NOT NULL,
     Last_Updated     DATETIME,
     Modified_by      VARCHAR(40),
     PRIMARY KEY (Ontology_ID)
@@ -286,7 +286,7 @@ CREATE TABLE Ontology_Item(
     Item_Reference      CHAR(10),
     Result_Type_ID      INT,
     Version             INT            DEFAULT 0 NOT NULL,
-    Date_Created        DATETIME       DEFAULT sysdate NOT NULL,
+    Date_Created        TIMESTAMP      DEFAULT current_timestamp NOT NULL,
     Last_Updated        DATETIME,
     Modified_by         VARCHAR(40),
     PRIMARY KEY (Ontology_Item_ID)
@@ -305,7 +305,7 @@ CREATE TABLE Project(
                     CHECK (Group_Type in ('Project', 'Campaign', 'Panel', 'Study')),
     Description     VARCHAR(1000),
     Version         INT              DEFAULT 0 NOT NULL,
-    Date_Created    DATETIME         DEFAULT sysdate NOT NULL,
+    Date_Created    TIMESTAMP        DEFAULT current_timestamp NOT NULL,
     Last_Updated    DATETIME,
     Modified_by     VARCHAR(40),
     PRIMARY KEY (Project_ID)
@@ -325,7 +325,7 @@ CREATE TABLE Project_Assay(
     Promotion_Threshold    FLOAT(8, 0),
     Promotion_Criteria     VARCHAR(1000),
     Version                INT              DEFAULT 0 NOT NULL,
-    Date_Created           DATETIME         DEFAULT sysdate NOT NULL,
+    Date_Created           TIMESTAMP        DEFAULT current_timestamp NOT NULL,
     Last_Updated           DATETIME,
     Modified_by            VARCHAR(40),
     PRIMARY KEY (Assay_ID, Project_ID)
@@ -343,7 +343,7 @@ CREATE TABLE Protocol(
     Protocol_Document    LONGBLOB,
     Assay_ID             INT             NOT NULL,
     Version              INT             DEFAULT 0 NOT NULL,
-    Date_Created         DATETIME        DEFAULT sysdate NOT NULL,
+    Date_Created         TIMESTAMP       DEFAULT current_timestamp NOT NULL,
     Last_Updated         DATETIME,
     Modified_by          VARCHAR(40),
     PRIMARY KEY (Protocol_ID)
@@ -359,7 +359,7 @@ CREATE TABLE Qualifier(
     Qualifier       CHAR(2)          NOT NULL,
     Description     VARCHAR(1000),
     Version         INT              DEFAULT 0 NOT NULL,
-    Date_Created    DATETIME         DEFAULT sysdate NOT NULL,
+    Date_Created    TIMESTAMP        DEFAULT current_timestamp NOT NULL,
     Last_Updated    DATETIME,
     Modified_by     VARCHAR(40),
     PRIMARY KEY (Qualifier)
@@ -394,7 +394,7 @@ CREATE TABLE Result(
     Entry_Unit           VARCHAR(100),
     Result_Type_ID       INT             NOT NULL,
     Version              INT             DEFAULT 0 NOT NULL,
-    Date_Created         DATETIME        DEFAULT sysdate NOT NULL,
+    Date_Created         TIMESTAMP       DEFAULT current_timestamp NOT NULL,
     Last_Updated         DATETIME,
     Modified_by          VARCHAR(40),
     PRIMARY KEY (Result_ID)
@@ -410,7 +410,7 @@ CREATE TABLE Result_Context(
     Result_Context_ID    INT             AUTO_INCREMENT,
     Context_Name         VARCHAR(125),
     Version              INT             DEFAULT 0 NOT NULL,
-    Date_Created         DATETIME        DEFAULT sysdate NOT NULL,
+    Date_Created         TIMESTAMP       DEFAULT current_timestamp NOT NULL,
     Last_Updated         DATETIME,
     Modified_by          VARCHAR(40),
     PRIMARY KEY (Result_Context_ID)
@@ -435,7 +435,7 @@ CREATE TABLE Result_Context_Item(
     Value_Min                 FLOAT(8, 0),
     value_Max                 FLOAT(8, 0),
     Version                   INT             DEFAULT 0 NOT NULL,
-    Date_Created              DATETIME        DEFAULT sysdate NOT NULL,
+    Date_Created              TIMESTAMP       DEFAULT current_timestamp NOT NULL,
     Last_Updated              DATETIME,
     Modified_by               VARCHAR(40),
     PRIMARY KEY (Result_Context_Item_ID)
@@ -453,7 +453,7 @@ CREATE TABLE Result_Hierarchy(
     Hierarchy_Type      VARCHAR(10)    NOT NULL
                         CHECK (Hierarchy_Type in ('Child', 'Derives')),
     Version             INT            DEFAULT 0 NOT NULL,
-    Date_Created        DATETIME       DEFAULT sysdate NOT NULL,
+    Date_Created        TIMESTAMP      DEFAULT current_timestamp NOT NULL,
     Last_Updated        DATETIME,
     Modified_by         VARCHAR(40),
     PRIMARY KEY (Result_ID, Parent_Result_ID)
@@ -469,7 +469,7 @@ CREATE TABLE Result_Status(
     Result_Status_ID    INT            AUTO_INCREMENT,
     Status              VARCHAR(20)    NOT NULL,
     Version             INT            DEFAULT 0 NOT NULL,
-    Date_Created        DATETIME       DEFAULT sysdate NOT NULL,
+    Date_Created        TIMESTAMP      DEFAULT current_timestamp NOT NULL,
     Last_Updated        DATETIME,
     Modified_by         VARCHAR(40),
     PRIMARY KEY (Result_Status_ID)
@@ -496,7 +496,7 @@ CREATE TABLE Result_Type(
     Result_Type_Status_ID    INT              NOT NULL,
     Base_Unit                VARCHAR(100),
     Version                  INT              DEFAULT 0 NOT NULL,
-    Date_Created             DATETIME         DEFAULT sysdate NOT NULL,
+    Date_Created             TIMESTAMP        DEFAULT current_timestamp NOT NULL,
     Last_Updated             DATETIME,
     Modified_by              VARCHAR(40),
     PRIMARY KEY (Result_Type_ID)
@@ -512,7 +512,7 @@ CREATE TABLE Stage(
     Stage           VARCHAR(20)      NOT NULL,
     Description     VARCHAR(1000),
     Version         INT              DEFAULT 0 NOT NULL,
-    Date_Created    DATETIME         DEFAULT sysdate NOT NULL,
+    Date_Created    TIMESTAMP        DEFAULT current_timestamp NOT NULL,
     Last_Updated    DATETIME,
     Modified_by     VARCHAR(40),
     PRIMARY KEY (Stage)
@@ -539,7 +539,7 @@ CREATE TABLE Substance(
     Substance_Type      VARCHAR(20)       NOT NULL
                         CHECK (Substance_Type in ('small molecule', 'protein', 'peptide', 'antibody', 'cell', 'oligonucleotide')),
     Version             INT               DEFAULT 0 NOT NULL,
-    Date_Created        DATETIME          DEFAULT sysdate NOT NULL,
+    Date_Created        TIMESTAMP         DEFAULT current_timestamp NOT NULL,
     Last_Updated        DATETIME,
     Modified_by         VARCHAR(40),
     PRIMARY KEY (Substance_ID)
@@ -555,7 +555,7 @@ CREATE TABLE Unit(
     Unit            VARCHAR(100)     NOT NULL,
     Description     VARCHAR(1000),
     Version         INT              DEFAULT 0 NOT NULL,
-    Date_Created    DATETIME         DEFAULT sysdate NOT NULL,
+    Date_Created    TIMESTAMP        DEFAULT current_timestamp NOT NULL,
     Last_Updated    DATETIME,
     Modified_by     VARCHAR(40),
     PRIMARY KEY (Unit)
@@ -574,7 +574,7 @@ CREATE TABLE Unit_Conversion(
     Offset          FLOAT(8, 0),
     Formula         VARCHAR(256),
     Version         INT             DEFAULT 0 NOT NULL,
-    Date_Created    DATETIME        DEFAULT sysdate NOT NULL,
+    Date_Created    TIMESTAMP       DEFAULT current_timestamp NOT NULL,
     Last_Updated    DATETIME,
     Modified_by     VARCHAR(40),
     PRIMARY KEY (From_Unit, To_Unit)
