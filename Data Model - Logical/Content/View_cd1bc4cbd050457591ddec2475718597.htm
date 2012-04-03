@@ -18,7 +18,7 @@
 </TR>
 <TR>
 <TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">DDL Code&nbsp;</FONT></B></TD>
-<TD><TT><TT>CREATE VIEW BARD.project_assay AS</TT><BR><TT>SELECT Project_Assay.Assay_ID, Project_Assay.Project_ID, Project_Assay.Sequence_no, Project_Assay.Promotion_Threshold, Project_Assay.Promotion_Criteria</TT><BR><TT>FROM MLBD.project_assay</TT><BR>&nbsp;</TT></TD>
+<TD><TT><TT>CREATE VIEW BARD.project_assay AS</TT><BR><TT>SELECT Pro.Assay_ID, Pro.Project_ID, Pro.Stage, Pro.Sequence_no, Pro.Promotion_Threshold, Pro.Promotion_Criteria, Pro.Version, Pro.Created, Pro.Modified, Pro.Modified_by</TT><BR><TT>FROM MLBD.Project_Assay Pro</TT><BR>&nbsp;</TT></TD>
 </TR>
 </TABLE>
 <P>
@@ -32,31 +32,6 @@
 <TD VALIGN=TOP  WIDTH=22% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Column Name / Expression&nbsp;</FONT></B></TD>
 <TD VALIGN=TOP  WIDTH=22% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Alias Name&nbsp;</FONT></B></TD>
 <TD VALIGN=TOP  WIDTH=22% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Parent Table Name&nbsp;</FONT></B></TD>
-</TR>
-<TR>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">Assay_ID&nbsp;</FONT></TD>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "Tbl_c981f70a6dbb4bdc996b539da74398a5.htm">Project_Assay</A>&nbsp;</FONT></TD>
-</TR>
-<TR>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">Project_ID&nbsp;</FONT></TD>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "Tbl_c981f70a6dbb4bdc996b539da74398a5.htm">Project_Assay</A>&nbsp;</FONT></TD>
-</TR>
-<TR>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">Sequence_no&nbsp;</FONT></TD>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "Tbl_c981f70a6dbb4bdc996b539da74398a5.htm">Project_Assay</A>&nbsp;</FONT></TD>
-</TR>
-<TR>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">Promotion_Threshold&nbsp;</FONT></TD>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "Tbl_c981f70a6dbb4bdc996b539da74398a5.htm">Project_Assay</A>&nbsp;</FONT></TD>
-</TR>
-<TR>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">Promotion_Criteria&nbsp;</FONT></TD>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "Tbl_c981f70a6dbb4bdc996b539da74398a5.htm">Project_Assay</A>&nbsp;</FONT></TD>
 </TR>
 </TABLE>
 <P>
