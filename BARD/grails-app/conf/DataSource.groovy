@@ -1,8 +1,8 @@
 dataSource {
 	pooled = true
 	driverClassName = "com.mysql.jdbc.Driver"
-	username = "root"
-	password = "genome12"
+	username = "username"
+	password = "password"
 	dialect = "org.hibernate.dialect.MySQLDialect"
 }
 hibernate {
@@ -16,19 +16,19 @@ environments {
 	development {
 		dataSource {
 			dbCreate = "update" // one of 'create', 'create-drop', 'update', 'validate', ''
-			url = "jdbc:mysql://sinaa:3306/mlbd"
+			url = "jdbc:mysql://dbserver:3306/mlbd"
 		}
 	}
 	test {
 		dataSource {
 			dbCreate = "update"
-			url = "jdbc:mysql://sinaa:3306/mlbd"
+			url = "jdbc:mysql://dbserver:3306/mlbd"
 		}
 	}
 	production {
 		dataSource {
 			dbCreate = "update"
-			url = "jdbc:mysql://sinaa:3306/mlbd"
+			url = "jdbc:mysql://dbserver:3306/mlbd"
 		}
 	}
 }

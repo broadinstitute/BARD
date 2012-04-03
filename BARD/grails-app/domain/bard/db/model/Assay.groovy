@@ -1,0 +1,35 @@
+package bard.db.model
+
+class Assay {
+
+	String assayName
+	String assayVersion
+	String description
+	String designedBy
+	Date dateCreated
+	Date lastUpdated
+	String modifiedBy
+	AssayStatus assayStatus
+
+	static hasMany = [experiments: Experiment,
+	                  externalAssaies: ExternalAssay,
+	                  measureContextItems: MeasureContextItem,
+	                  measures: Measure,
+	                  projectAssaies: ProjectAssay,
+	                  protocols: Protocol]
+	static belongsTo = [AssayStatus]
+
+	static mapping = {
+		id column: "Assay_ID"
+	}
+
+	static constraints = {
+		assayName maxSize: 128
+		assayVersion maxSize: 10
+		description nullable: true, maxSize: 1000
+		designedBy nullable: true, maxSize: 100
+		dateCreated maxSize: 19
+		lastUpdated nullable: true, maxSize: 19
+		modifiedBy nullable: true, maxSize: 40
+	}
+}
