@@ -27,7 +27,11 @@
 </TR>
 <TR>
 <TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">DDL Code&nbsp;</FONT></B></TD>
-<TD><TT><TT>CREATE TABLE MLBD.Measure_Context_Item(</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp measure_Context_Item_ID&nbsp&nbsp&nbsp&nbsp INT&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp AUTO_INCREMENT,</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp Assay_ID&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp INT&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp NOT NULL,</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp Measure_Context_ID&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp INT&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp NOT NULL,</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp Group_No&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp INT,</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp Attribute_Type&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR(20)&nbsp&nbsp&nbsp&nbsp&nbsp NOT NULL,</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp Attribute_ID&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp INT&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp NOT NULL,</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp Value_ID&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp INT,</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp Qualifier&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp CHAR(2),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp Value_Display&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR(256),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp Value_num&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp FLOAT(8, 0),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp Value_Min&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp FLOAT(8, 0),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp value_Max&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp FLOAT(8, 0),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp CONSTRAINT CK_Qualifier CHECK (Qualifier in ('=', '>', '<', '<=', '>=', '~')),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp PRIMARY KEY (measure_Context_Item_ID), </TT><BR><TT>&nbsp&nbsp&nbsp&nbsp UNIQUE INDEX AK_Measure_Context_item(Measure_Context_ID, Group_No, Attribute_ID, Value_Display), </TT><BR><TT>&nbsp&nbsp&nbsp&nbsp CONSTRAINT FK_M_context_Item_M_Context FOREIGN KEY (Measure_Context_ID)</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp REFERENCES MLBD.Measure_Context(Measure_Context_ID),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp CONSTRAINT FK_M_context_item_attribute FOREIGN KEY (Attribute_ID)</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp REFERENCES MLBD.Element(Element_ID),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp CONSTRAINT fk_M_context_item_value FOREIGN KEY (Value_ID)</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp REFERENCES MLBD.Element(Element_ID),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp CONSTRAINT FK_M_Context_item_assay FOREIGN KEY (Assay_ID)</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp REFERENCES MLBD.Assay(Assay_ID),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp CONSTRAINT RefAttribute_type47 FOREIGN KEY (Attribute_Type)</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp REFERENCES MLBD.Attribute_type(Attribute_Type)</TT><BR><TT>)ENGINE=MYISAM</TT><BR><TT>;</TT><BR>&nbsp;</TT></TD>
+<TD><TT><TT>CREATE TABLE MLBD.Measure_Context_Item(</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp measure_Context_Item_ID&nbsp&nbsp&nbsp&nbsp INT&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp AUTO_INCREMENT,</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp Assay_ID&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp INT&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp NOT NULL,</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp Measure_Context_ID&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp INT&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp NOT NULL,</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp Group_No&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp INT,</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp Attribute_Type&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR(20)&nbsp&nbsp&nbsp&nbsp&nbsp NOT NULL,</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp Attribute_ID&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp INT&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp NOT NULL,</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp Qualifier&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp CHAR(2),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp Value_ID&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp INT,</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp Value_Display&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR(256),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp Value_num&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp FLOAT(8, 0),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp Value_Min&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp FLOAT(8, 0),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp value_Max&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp FLOAT(8, 0),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp Version&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp INT&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp DEFAULT 0 NOT NULL,</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp Date_Created&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp TIMESTAMP&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp DEFAULT current_timestamp NOT NULL,</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp Last_Updated&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp DATETIME,</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp Modified_by&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR(40),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp CONSTRAINT CK_Attribute_Type CHECK (Attribute_Type in ('Fixed', 'List', 'Range', 'Number')),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp PRIMARY KEY (measure_Context_Item_ID), </TT><BR><TT>&nbsp&nbsp&nbsp&nbsp UNIQUE INDEX AK_Measure_Context_item(Measure_Context_ID, Group_No, Attribute_ID, Value_Display), </TT><BR><TT>&nbsp&nbsp&nbsp&nbsp CONSTRAINT FK_M_context_Item_M_Context FOREIGN KEY (Measure_Context_ID)</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp REFERENCES MLBD.Measure_Context(Measure_Context_ID),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp CONSTRAINT FK_M_context_item_attribute FOREIGN KEY (Attribute_ID)</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp REFERENCES MLBD.Element(Element_ID),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp CONSTRAINT fk_M_context_item_value FOREIGN KEY (Value_ID)</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp REFERENCES MLBD.Element(Element_ID),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp CONSTRAINT FK_M_Context_item_assay FOREIGN KEY (Assay_ID)</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp REFERENCES MLBD.Assay(Assay_ID),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp CONSTRAINT FK_M_context_item_qualifier FOREIGN KEY (Qualifier)</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp REFERENCES MLBD.Qualifier(Qualifier)</TT><BR><TT>)ENGINE=MYISAM</TT><BR><TT>;</TT><BR>&nbsp;</TT></TD>
+</TR>
+<TR>
+<TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">PostSQL&nbsp;</FONT></B></TD>
+<TD><TT>&nbsp;</TT></TD>
 </TR>
 </TABLE>
 <P>
@@ -73,7 +77,7 @@
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><PRE><FONT SIZE=2 FACE="Arial">rows with the same group_no in the measure context combine to a single group for UI purposes</FONT></PRE>&nbsp;</FONT></TD>
 </TR>
 <TR>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "Tbl_bef806d4d9044c199ac5434cf9625ffc_Attr.htm#Attr_a9b3d1cacc2a49b290e104a9a34e0b68">Attribute_Type</A><img src="../Support/Gif/fk.gif" alt="(FK)">&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "Tbl_bef806d4d9044c199ac5434cf9625ffc_Attr.htm#Attr_c77ae171eb394523880fb3a44951254b">Attribute_Type</A>&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">VARCHAR(20)&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">NO&nbsp;</FONT></TD>
@@ -87,16 +91,16 @@
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><PRE><FONT SIZE=2 FACE="Arial"></FONT></PRE>&nbsp;</FONT></TD>
 </TR>
 <TR>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "Tbl_bef806d4d9044c199ac5434cf9625ffc_Attr.htm#Attr_13dc7ab8d5174f9e9920770aa3978bc7">Value_ID</A><img src="../Support/Gif/fk.gif" alt="(FK)">&nbsp;</FONT></TD>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "./DD_14d29d1188df46b099a3f4a8e6fd5a39_Domains.htm#Domain_4aa8a825d2ca4897b7a23f8e747ecc92">Identifier</A>&nbsp;</FONT></TD>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">INT&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "Tbl_bef806d4d9044c199ac5434cf9625ffc_Attr.htm#Attr_44023f3471f34ead8990e17b8546b4b5">Qualifier</A><img src="../Support/Gif/fk.gif" alt="(FK)">&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">CHAR(2)&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">YES&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><PRE><FONT SIZE=2 FACE="Arial"></FONT></PRE>&nbsp;</FONT></TD>
 </TR>
 <TR>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "Tbl_bef806d4d9044c199ac5434cf9625ffc_Attr.htm#Attr_8a4ac816327546868ba06ba8985b5f00">Qualifier</A>&nbsp;</FONT></TD>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">CHAR(2)&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "Tbl_bef806d4d9044c199ac5434cf9625ffc_Attr.htm#Attr_13dc7ab8d5174f9e9920770aa3978bc7">Value_ID</A><img src="../Support/Gif/fk.gif" alt="(FK)">&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "./DD_14d29d1188df46b099a3f4a8e6fd5a39_Domains.htm#Domain_4aa8a825d2ca4897b7a23f8e747ecc92">Identifier</A>&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">INT&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">YES&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><PRE><FONT SIZE=2 FACE="Arial"></FONT></PRE>&nbsp;</FONT></TD>
 </TR>
@@ -125,6 +129,34 @@
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "Tbl_bef806d4d9044c199ac5434cf9625ffc_Attr.htm#Attr_cc239319a11b46b5b91859cbdb01c42e">value_Max</A>&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">FLOAT(8, 0)&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">YES&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><PRE><FONT SIZE=2 FACE="Arial"></FONT></PRE>&nbsp;</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "Tbl_bef806d4d9044c199ac5434cf9625ffc_Attr.htm#Attr_c7842f6b1cba42e98424594eb39f8d74">Version</A>&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "./DD_14d29d1188df46b099a3f4a8e6fd5a39_Domains.htm#Domain_689076e03e404d9a87db7ae0c28f30a5">Version</A>&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">INT&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">NO&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><PRE><FONT SIZE=2 FACE="Arial">Update_version is used by Hibernate to resolve the "lost Update" problem when used in optimistic locking</FONT></PRE>&nbsp;</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "Tbl_bef806d4d9044c199ac5434cf9625ffc_Attr.htm#Attr_1673152acb7f4453ac6e3f0b06cb5a47">Date_Created</A>&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "./DD_14d29d1188df46b099a3f4a8e6fd5a39_Domains.htm#Domain_20ad7d5e89e44ec1aab7647a9de0485f">Date_Created</A>&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">TIMESTAMP&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">NO&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><PRE><FONT SIZE=2 FACE="Arial"></FONT></PRE>&nbsp;</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "Tbl_bef806d4d9044c199ac5434cf9625ffc_Attr.htm#Attr_8ea1b96529654b5b9aec662d1c63e245">Last_Updated</A>&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "./DD_14d29d1188df46b099a3f4a8e6fd5a39_Domains.htm#Domain_15fe67a93e16407d8db7e7da36ad7195">Last_Updated</A>&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">DATETIME&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">YES&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><PRE><FONT SIZE=2 FACE="Arial"></FONT></PRE>&nbsp;</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "Tbl_bef806d4d9044c199ac5434cf9625ffc_Attr.htm#Attr_7f5897c6b6d24d268fb004f326d01766">Modified_by</A>&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "./DD_14d29d1188df46b099a3f4a8e6fd5a39_Domains.htm#Domain_3954c4ba958a45c3acf6a345394fcf56">Modified_by</A>&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">VARCHAR(40)&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">YES&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><PRE><FONT SIZE=2 FACE="Arial"></FONT></PRE>&nbsp;</FONT></TD>
 </TR>
@@ -175,16 +207,6 @@
 <TD VALIGN=TOP  WIDTH=8% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Is Supertype&nbsp;</FONT></B></TD>
 </TR>
 <TR>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">Attribute_type&nbsp;</FONT></TD>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">Non-Identifying&nbsp;</FONT></TD>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">One To Zero or More&nbsp;</FONT></TD>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">Attribute_Type&nbsp;</FONT></TD>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">NO&nbsp;</FONT></TD>
-</TR>
-<TR>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "./Tbl_566f630aa22b4cc88e11cf96429d7563.htm">Assay</A>&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">Non-Identifying&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">One To Zero or More&nbsp;</FONT></TD>
@@ -212,6 +234,16 @@
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">Measure_Context_ID&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">NO&nbsp;</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "./Tbl_d5a598a5871f4f8ba9af66fc79c0c991.htm">Qualifier</A>&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">Non-Identifying&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">Zero or One to Zero or More&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "Submodel_6c96d4c3e8d141e3909914171b859fdb_Rel.htm#Rel_60a1fd2d0b264cc883f24f1e402c58d0">FK_M_context_item_qualifier</A>&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">Qualifier&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">NO&nbsp;</FONT></TD>
 </TR>
 <TR>
@@ -301,7 +333,7 @@
 <TD VALIGN=TOP  WIDTH=27% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Bound Attachments&nbsp;</FONT></B></TD>
 </TR>
 <TR>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = ./Model_3615115bde194f0985042d14e26b4981.htm>Logical</A><BR><A HREF = ./Tbl_8dad89895c514962832adda4a1a28959.htm>MLBD.Measure_Context_Item</A>&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">Logical<BR><A HREF = ./Tbl_8dad89895c514962832adda4a1a28959.htm>MLBD.Measure_Context_Item</A>&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">NO&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
@@ -315,7 +347,7 @@
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
 </TR>
 <TR>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = ./Model_9891910249014eee8b44f53720b573e8.htm>BARD - Oracle</A> (Oracle)<BR><A HREF = ./Tbl_d30d7753da364821bfad4443e0ff85b1.htm>MLBD.Measure_Context_Item</A>&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = ./Model_398ef9366d784ddb95b034e21ed22ee6.htm>BARD - Oracle</A> (Oracle)<BR><A HREF = ./Tbl_d30fc28c2a904edfbabf8aa07701068a.htm>MLBD.MEASURE_CONTEXT_ITEM</A>&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">NO&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
@@ -334,11 +366,11 @@
 <TD VALIGN=TOP  WIDTH=60% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Submodel Usage&nbsp;</FONT></B></TD>
 </TR>
 <TR>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = ./Model_3615115bde194f0985042d14e26b4981.htm>Logical</A>&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">Logical&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = ./Submodel_558f9af28b3745988970aa5c8f62ab7b_img.htm>Main Model</A>&nbsp;</FONT></TD>
 </TR>
 <TR>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = ./Model_3615115bde194f0985042d14e26b4981.htm>Logical</A>&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">Logical&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = ./Submodel_37b9a5cb42814fcb8cb1d27036b7fba9_img.htm>CAP</A>&nbsp;</FONT></TD>
 </TR>
 <TR>
@@ -350,12 +382,12 @@
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = ./Submodel_6c96d4c3e8d141e3909914171b859fdb_img.htm>CAP</A>&nbsp;</FONT></TD>
 </TR>
 <TR>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = ./Model_9891910249014eee8b44f53720b573e8.htm>BARD - Oracle</A> (Oracle)&nbsp;</FONT></TD>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = ./Submodel_05c70e27da7745a1999e07fb6a3269fa_img.htm>Main Model</A>&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = ./Model_398ef9366d784ddb95b034e21ed22ee6.htm>BARD - Oracle</A> (Oracle)&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = ./Submodel_ae8f61b5a34d4dae9ac84bcd6e556779_img.htm>Main Model</A>&nbsp;</FONT></TD>
 </TR>
 <TR>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = ./Model_9891910249014eee8b44f53720b573e8.htm>BARD - Oracle</A> (Oracle)&nbsp;</FONT></TD>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = ./Submodel_49cfd6efc9224537b9667276600b7e5c_img.htm>CAP</A>&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = ./Model_398ef9366d784ddb95b034e21ed22ee6.htm>BARD - Oracle</A> (Oracle)&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = ./Submodel_afc4bf8fa59e417cb36447dbbf56189b_img.htm>CAP</A>&nbsp;</FONT></TD>
 </TR>
 </TABLE>
 </BODY>

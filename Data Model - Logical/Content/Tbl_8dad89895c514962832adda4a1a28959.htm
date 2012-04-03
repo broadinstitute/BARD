@@ -73,7 +73,7 @@
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><PRE><FONT SIZE=2 FACE="Arial">rows with the same group_no in the measure context combine to a single group for UI purposes</FONT></PRE>&nbsp;</FONT></TD>
 </TR>
 <TR>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "Tbl_8dad89895c514962832adda4a1a28959_Attr.htm#Attr_2ab8fa7a4aad4c629638921227d5bd67">Attribute_Type</A><img src="../Support/Gif/fk.gif" alt="(FK)">&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "Tbl_8dad89895c514962832adda4a1a28959_Attr.htm#Attr_035b0b5101d24ef793c5dc6edf60d116">Attribute_Type</A>&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">VARCHAR(20)&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">NO&nbsp;</FONT></TD>
@@ -87,16 +87,16 @@
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><PRE><FONT SIZE=2 FACE="Arial"></FONT></PRE>&nbsp;</FONT></TD>
 </TR>
 <TR>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "Tbl_8dad89895c514962832adda4a1a28959_Attr.htm#Attr_1ba49c20bca94f86a38e17f364212653">Value_ID</A><img src="../Support/Gif/fk.gif" alt="(FK)">&nbsp;</FONT></TD>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "./DD_14d29d1188df46b099a3f4a8e6fd5a39_Domains.htm#Domain_4aa8a825d2ca4897b7a23f8e747ecc92">Identifier</A>&nbsp;</FONT></TD>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">INTEGER&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "Tbl_8dad89895c514962832adda4a1a28959_Attr.htm#Attr_20332bd8a5d6486f9a8673e79a6c3b72">Qualifier</A><img src="../Support/Gif/fk.gif" alt="(FK)">&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">CHAR(2)&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">YES&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><PRE><FONT SIZE=2 FACE="Arial"></FONT></PRE>&nbsp;</FONT></TD>
 </TR>
 <TR>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "Tbl_8dad89895c514962832adda4a1a28959_Attr.htm#Attr_ea82d52df0724b97b3af2ee267c56d82">Qualifier</A>&nbsp;</FONT></TD>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">CHAR(2)&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "Tbl_8dad89895c514962832adda4a1a28959_Attr.htm#Attr_1ba49c20bca94f86a38e17f364212653">Value_ID</A><img src="../Support/Gif/fk.gif" alt="(FK)">&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "./DD_14d29d1188df46b099a3f4a8e6fd5a39_Domains.htm#Domain_4aa8a825d2ca4897b7a23f8e747ecc92">Identifier</A>&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">INTEGER&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">YES&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><PRE><FONT SIZE=2 FACE="Arial"></FONT></PRE>&nbsp;</FONT></TD>
 </TR>
@@ -128,6 +128,34 @@
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">YES&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><PRE><FONT SIZE=2 FACE="Arial"></FONT></PRE>&nbsp;</FONT></TD>
 </TR>
+<TR>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "Tbl_8dad89895c514962832adda4a1a28959_Attr.htm#Attr_d2a97c9ee6654f36a3e97585783e38cf">Version</A>&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "./DD_14d29d1188df46b099a3f4a8e6fd5a39_Domains.htm#Domain_689076e03e404d9a87db7ae0c28f30a5">Version</A>&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">INTEGER&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">NO&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><PRE><FONT SIZE=2 FACE="Arial">Update_version is used by Hibernate to resolve the "lost Update" problem when used in optimistic locking</FONT></PRE>&nbsp;</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "Tbl_8dad89895c514962832adda4a1a28959_Attr.htm#Attr_579d39d7fc4e4af7b53e4df012496abe">Date_Created</A>&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "./DD_14d29d1188df46b099a3f4a8e6fd5a39_Domains.htm#Domain_20ad7d5e89e44ec1aab7647a9de0485f">Date_Created</A>&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">TIMESTAMP/DATE&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">NO&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><PRE><FONT SIZE=2 FACE="Arial"></FONT></PRE>&nbsp;</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "Tbl_8dad89895c514962832adda4a1a28959_Attr.htm#Attr_319aa76ba91a412bab5eeaf715c59ec1">Last_Updated</A>&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "./DD_14d29d1188df46b099a3f4a8e6fd5a39_Domains.htm#Domain_15fe67a93e16407d8db7e7da36ad7195">Last_Updated</A>&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">DATETIME&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">YES&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><PRE><FONT SIZE=2 FACE="Arial"></FONT></PRE>&nbsp;</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "Tbl_8dad89895c514962832adda4a1a28959_Attr.htm#Attr_fc497ba475c846f99de9c53d9ce3ea7b">Modified_by</A>&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "./DD_14d29d1188df46b099a3f4a8e6fd5a39_Domains.htm#Domain_3954c4ba958a45c3acf6a345394fcf56">Modified_by</A>&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">VARCHAR(40)&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">YES&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><PRE><FONT SIZE=2 FACE="Arial"></FONT></PRE>&nbsp;</FONT></TD>
+</TR>
 </TABLE>
 <P>
 <TABLE WIDTH=100% CELLPADDING=3 BORDER=2>
@@ -151,6 +179,31 @@
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">Alternate Key&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">Measure_Context_ID, Group_No, Attribute_ID, Value_Display&nbsp;</FONT></TD>
 </TR>
+<TR>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">FK_M_CONTEXT_ITEM_M_CONTEXT&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">Inversion Entry&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">Measure_Context_ID&nbsp;</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">FK_M_CONTEXT_ITEM_ATTRIBUTE&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">Inversion Entry&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">Attribute_ID&nbsp;</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">FK_M_CONTEXT_ITEM_VALUE&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">Inversion Entry&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">Value_ID&nbsp;</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">FK_M_CONTEXT_ITEM_ASSAY&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">Inversion Entry&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">Assay_ID&nbsp;</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">FK_M_CONTEXT_ITEM_QUALIFIER&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">Inversion Entry&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">Qualifier&nbsp;</FONT></TD>
+</TR>
 </TABLE>
 <P>
 <TABLE WIDTH=100% CELLPADDING=3 BORDER=2>
@@ -173,16 +226,6 @@
 <TD VALIGN=TOP  WIDTH=14% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">InversePhrase&nbsp;</FONT></B></TD>
 <TD VALIGN=TOP  WIDTH=14% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Foreign Keys&nbsp;</FONT></B></TD>
 <TD VALIGN=TOP  WIDTH=8% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Is Supertype&nbsp;</FONT></B></TD>
-</TR>
-<TR>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "./Tbl_698440c9e3b64bf08d0b772b70f1ba46.htm">Attribute_type</A>&nbsp;</FONT></TD>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">Non-Identifying&nbsp;</FONT></TD>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">One To Zero or More&nbsp;</FONT></TD>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">Attribute_Type&nbsp;</FONT></TD>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">NO&nbsp;</FONT></TD>
 </TR>
 <TR>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "./Tbl_d0ec2971fab44654aaeb5e6437b5816c.htm">Assay</A>&nbsp;</FONT></TD>
@@ -212,6 +255,16 @@
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">Measure_Context_ID&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">NO&nbsp;</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "./Tbl_3b7e0b3472e4402a9fcac9a8ca559c17.htm">Qualifier</A>&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">Non-Identifying&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">Zero or One to Zero or More&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">Qualifier&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">NO&nbsp;</FONT></TD>
 </TR>
 <TR>
@@ -316,7 +369,7 @@
 <TD VALIGN=TOP  WIDTH=27% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Bound Attachments&nbsp;</FONT></B></TD>
 </TR>
 <TR>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = ./Model_3615115bde194f0985042d14e26b4981.htm>Logical</A><BR><A HREF = ./Tbl_8dad89895c514962832adda4a1a28959.htm>MLBD.Measure_Context_Item</A>&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">Logical<BR><A HREF = ./Tbl_8dad89895c514962832adda4a1a28959.htm>MLBD.Measure_Context_Item</A>&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">NO&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
@@ -330,7 +383,7 @@
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
 </TR>
 <TR>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = ./Model_9891910249014eee8b44f53720b573e8.htm>BARD - Oracle</A> (Oracle)<BR><A HREF = ./Tbl_d30d7753da364821bfad4443e0ff85b1.htm>MLBD.Measure_Context_Item</A>&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = ./Model_398ef9366d784ddb95b034e21ed22ee6.htm>BARD - Oracle</A> (Oracle)<BR><A HREF = ./Tbl_d30fc28c2a904edfbabf8aa07701068a.htm>MLBD.MEASURE_CONTEXT_ITEM</A>&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">NO&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
@@ -349,11 +402,11 @@
 <TD VALIGN=TOP  WIDTH=60% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Submodel Usage&nbsp;</FONT></B></TD>
 </TR>
 <TR>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = ./Model_3615115bde194f0985042d14e26b4981.htm>Logical</A>&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">Logical&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = ./Submodel_558f9af28b3745988970aa5c8f62ab7b_img.htm>Main Model</A>&nbsp;</FONT></TD>
 </TR>
 <TR>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = ./Model_3615115bde194f0985042d14e26b4981.htm>Logical</A>&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">Logical&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = ./Submodel_37b9a5cb42814fcb8cb1d27036b7fba9_img.htm>CAP</A>&nbsp;</FONT></TD>
 </TR>
 <TR>
@@ -365,12 +418,12 @@
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = ./Submodel_6c96d4c3e8d141e3909914171b859fdb_img.htm>CAP</A>&nbsp;</FONT></TD>
 </TR>
 <TR>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = ./Model_9891910249014eee8b44f53720b573e8.htm>BARD - Oracle</A> (Oracle)&nbsp;</FONT></TD>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = ./Submodel_05c70e27da7745a1999e07fb6a3269fa_img.htm>Main Model</A>&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = ./Model_398ef9366d784ddb95b034e21ed22ee6.htm>BARD - Oracle</A> (Oracle)&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = ./Submodel_ae8f61b5a34d4dae9ac84bcd6e556779_img.htm>Main Model</A>&nbsp;</FONT></TD>
 </TR>
 <TR>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = ./Model_9891910249014eee8b44f53720b573e8.htm>BARD - Oracle</A> (Oracle)&nbsp;</FONT></TD>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = ./Submodel_49cfd6efc9224537b9667276600b7e5c_img.htm>CAP</A>&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = ./Model_398ef9366d784ddb95b034e21ed22ee6.htm>BARD - Oracle</A> (Oracle)&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = ./Submodel_afc4bf8fa59e417cb36447dbbf56189b_img.htm>CAP</A>&nbsp;</FONT></TD>
 </TR>
 </TABLE>
 </BODY>

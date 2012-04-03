@@ -27,7 +27,7 @@
 </TR>
 <TR>
 <TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">DDL Code&nbsp;</FONT></B></TD>
-<TD><TT><TT>CREATE TABLE MLBD.MEASURE_CONTEXT(</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp MEASURE_CONTEXT_ID&nbsp&nbsp&nbsp&nbsp NUMBER(38, 0)&nbsp&nbsp&nbsp&nbsp NOT NULL,</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp CONTEXT_NAME&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(128)&nbsp&nbsp&nbsp&nbsp NOT NULL,</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp VERSION&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp NUMBER(38, 0)&nbsp&nbsp&nbsp&nbsp DEFAULT 0 NOT NULL,</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp CREATED&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp TIMESTAMP(6)&nbsp&nbsp&nbsp&nbsp&nbsp DEFAULT sysdate NOT NULL,</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp MODIFIED&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp TIMESTAMP(6),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp MODIFIED_BY&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(40),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp CONSTRAINT PK_MEASURE_CONTEXT PRIMARY KEY (MEASURE_CONTEXT_ID)</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp USING INDEX</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp LOGGING</TT><BR><TT>)</TT><BR><TT>LOGGING</TT><BR><TT>;</TT><BR>&nbsp;</TT></TD>
+<TD><TT><TT>CREATE TABLE MLBD.MEASURE_CONTEXT(</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp MEASURE_CONTEXT_ID&nbsp&nbsp&nbsp&nbsp NUMBER(38, 0)&nbsp&nbsp&nbsp&nbsp NOT NULL,</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp CONTEXT_NAME&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(128)&nbsp&nbsp&nbsp&nbsp NOT NULL,</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp VERSION&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp NUMBER(38, 0)&nbsp&nbsp&nbsp&nbsp DEFAULT 0 NOT NULL,</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp Date_Created&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp TIMESTAMP(6)&nbsp&nbsp&nbsp&nbsp&nbsp DEFAULT sysdate NOT NULL,</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp Last_Updated&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp TIMESTAMP(6),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp MODIFIED_BY&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(40),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp CONSTRAINT PK_MEASURE_CONTEXT PRIMARY KEY (MEASURE_CONTEXT_ID)</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp USING INDEX</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp LOGGING</TT><BR><TT>)</TT><BR><TT>LOGGING</TT><BR><TT>;</TT><BR>&nbsp;</TT></TD>
 </TR>
 <TR>
 <TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">PostSQL&nbsp;</FONT></B></TD>
@@ -70,15 +70,15 @@
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><PRE><FONT SIZE=2 FACE="Arial">Update_version is used by Hibernate to resolve the "lost Update" problem when used in optimistic locking</FONT></PRE>&nbsp;</FONT></TD>
 </TR>
 <TR>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "Tbl_704838c765ec49cc8af53f3df2126b1a_Attr.htm#Attr_1435e490c1284955968de15e1e17a182">CREATED</A>&nbsp;</FONT></TD>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "./DD_14d29d1188df46b099a3f4a8e6fd5a39_Domains.htm#Domain_20ad7d5e89e44ec1aab7647a9de0485f">Created</A>&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "Tbl_704838c765ec49cc8af53f3df2126b1a_Attr.htm#Attr_1435e490c1284955968de15e1e17a182">Date_Created</A>&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "./DD_14d29d1188df46b099a3f4a8e6fd5a39_Domains.htm#Domain_20ad7d5e89e44ec1aab7647a9de0485f">Date_Created</A>&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">TIMESTAMP(6)&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">NO&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><PRE><FONT SIZE=2 FACE="Arial"></FONT></PRE>&nbsp;</FONT></TD>
 </TR>
 <TR>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "Tbl_704838c765ec49cc8af53f3df2126b1a_Attr.htm#Attr_2d8263e599594e42a2176f607e187e0d">MODIFIED</A>&nbsp;</FONT></TD>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "./DD_14d29d1188df46b099a3f4a8e6fd5a39_Domains.htm#Domain_15fe67a93e16407d8db7e7da36ad7195">Modified</A>&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "Tbl_704838c765ec49cc8af53f3df2126b1a_Attr.htm#Attr_2d8263e599594e42a2176f607e187e0d">Last_Updated</A>&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "./DD_14d29d1188df46b099a3f4a8e6fd5a39_Domains.htm#Domain_15fe67a93e16407d8db7e7da36ad7195">Last_Updated</A>&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">TIMESTAMP(6)&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">YES&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><PRE><FONT SIZE=2 FACE="Arial"></FONT></PRE>&nbsp;</FONT></TD>
@@ -156,7 +156,7 @@
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "./Tbl_d30fc28c2a904edfbabf8aa07701068a.htm">MEASURE_CONTEXT_ITEM</A>&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">Non-Identifying&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">One To Zero or More&nbsp;</FONT></TD>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "Submodel_ae8f61b5a34d4dae9ac84bcd6e556779_Rel.htm#Rel_fcf70b690dc44114897e485abe12c767">FK_M_CONTEXT_ITEM_M_CONTEXT</A>&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "Submodel_afc4bf8fa59e417cb36447dbbf56189b_Rel.htm#Rel_fcf70b690dc44114897e485abe12c767">FK_M_CONTEXT_ITEM_M_CONTEXT</A>&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
@@ -168,7 +168,7 @@
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "./Tbl_6cc851b468a54389bb4e78eea4dc521b.htm">MEASURE</A>&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">Non-Identifying&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">One To Zero or More&nbsp;</FONT></TD>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "Submodel_ae8f61b5a34d4dae9ac84bcd6e556779_Rel.htm#Rel_380b461028124b399bd1ac30d6e99aa4">FK_MEASURE_M_CONTEXT_ITEM</A>&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "Submodel_afc4bf8fa59e417cb36447dbbf56189b_Rel.htm#Rel_380b461028124b399bd1ac30d6e99aa4">FK_MEASURE_M_CONTEXT_ITEM</A>&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
@@ -202,23 +202,23 @@
 </TR>
 <TR>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">Current Row Count&nbsp;</FONT></TD>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">0&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">5000&nbsp;</FONT></TD>
 </TR>
 <TR>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">Growth&nbsp;</FONT></TD>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">Static&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">350&nbsp;</FONT></TD>
 </TR>
 <TR>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">Growth Type&nbsp;</FONT></TD>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">N/A&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">Rows&nbsp;</FONT></TD>
 </TR>
 <TR>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">Growth Period&nbsp;</FONT></TD>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">N/A&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">per Month&nbsp;</FONT></TD>
 </TR>
 <TR>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">Maximum Rows&nbsp;</FONT></TD>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">0&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">20000&nbsp;</FONT></TD>
 </TR>
 </TABLE>
 <P>
@@ -317,7 +317,7 @@
 </TR>
 <TR>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">Logical&nbsp;</FONT></TD>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = ./Submodel_558f9af28b3745988970aa5c8f62ab7b.htm>Main Model</A>&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = ./Submodel_558f9af28b3745988970aa5c8f62ab7b_img.htm>Main Model</A>&nbsp;</FONT></TD>
 </TR>
 <TR>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">Logical&nbsp;</FONT></TD>
@@ -325,7 +325,7 @@
 </TR>
 <TR>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = ./Model_6e1b6477694244b18eef1934b487219e.htm>BARD - MySQL</A> (MySQL)&nbsp;</FONT></TD>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = ./Submodel_5339dd1a52984a1ea5dc29afc8bb11ff.htm>Main Model</A>&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = ./Submodel_5339dd1a52984a1ea5dc29afc8bb11ff_img.htm>Main Model</A>&nbsp;</FONT></TD>
 </TR>
 <TR>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = ./Model_6e1b6477694244b18eef1934b487219e.htm>BARD - MySQL</A> (MySQL)&nbsp;</FONT></TD>
@@ -333,7 +333,7 @@
 </TR>
 <TR>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = ./Model_398ef9366d784ddb95b034e21ed22ee6.htm>BARD - Oracle</A> (Oracle)&nbsp;</FONT></TD>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = ./Submodel_ae8f61b5a34d4dae9ac84bcd6e556779.htm>Main Model</A>&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = ./Submodel_ae8f61b5a34d4dae9ac84bcd6e556779_img.htm>Main Model</A>&nbsp;</FONT></TD>
 </TR>
 <TR>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = ./Model_398ef9366d784ddb95b034e21ed22ee6.htm>BARD - Oracle</A> (Oracle)&nbsp;</FONT></TD>

@@ -27,7 +27,11 @@
 </TR>
 <TR>
 <TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">DDL Code&nbsp;</FONT></B></TD>
-<TD><TT><TT>CREATE TABLE MLBD.Result(</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp Result_ID&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp INT&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp AUTO_INCREMENT,</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp Value_Display&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR(256),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp value_num&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp FLOAT(8, 0),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp value_min&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp FLOAT(8, 0),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp Value_Max&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp FLOAT(8, 0),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp Qualifier&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp CHAR(2),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp Result_Status_ID&nbsp&nbsp&nbsp&nbsp&nbsp INT&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp NOT NULL,</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp Experiment_ID&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp INT&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp NOT NULL,</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp Substance_ID&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp INT&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp NOT NULL,</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp Result_Context_ID&nbsp&nbsp&nbsp&nbsp INT&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp NOT NULL,</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp Entry_Unit&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR(100),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp Result_Type_ID&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp INT&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp NOT NULL,</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp CONSTRAINT CK_Result_Qualifier CHECK (Qualifier in ('=', '<', '>', '<=', '>=', '~')),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp PRIMARY KEY (Result_ID), </TT><BR><TT>&nbsp&nbsp&nbsp&nbsp CONSTRAINT FK_result_result_status FOREIGN KEY (Result_Status_ID)</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp REFERENCES MLBD.Result_Status(Result_Status_ID),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp CONSTRAINT FK_result_experiment FOREIGN KEY (Experiment_ID)</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp REFERENCES MLBD.Experiment(Experiment_ID),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp CONSTRAINT fk_result_result_context FOREIGN KEY (Result_Context_ID)</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp REFERENCES MLBD.Result_Context(Result_Context_ID),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp CONSTRAINT FK_Result_substance FOREIGN KEY (Substance_ID)</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp REFERENCES MLBD.Substance(Substance_ID),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp CONSTRAINT FK_result_unit FOREIGN KEY (Entry_Unit)</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp REFERENCES MLBD.Unit(Unit),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp CONSTRAINT FK_Result_result_type FOREIGN KEY (Result_Type_ID)</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp REFERENCES MLBD.Result_Type(Result_Type_ID)</TT><BR><TT>)ENGINE=MYISAM</TT><BR><TT>;</TT><BR>&nbsp;</TT></TD>
+<TD><TT><TT>CREATE TABLE MLBD.Result(</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp Result_ID&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp INT&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp AUTO_INCREMENT,</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp Value_Display&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR(256),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp value_num&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp FLOAT(8, 0),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp value_min&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp FLOAT(8, 0),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp Value_Max&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp FLOAT(8, 0),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp Qualifier&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp CHAR(2),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp Result_Status_ID&nbsp&nbsp&nbsp&nbsp&nbsp INT&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp NOT NULL,</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp Experiment_ID&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp INT&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp NOT NULL,</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp Substance_ID&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp INT&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp NOT NULL,</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp Result_Context_ID&nbsp&nbsp&nbsp&nbsp INT&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp NOT NULL,</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp Entry_Unit&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR(100),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp Result_Type_ID&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp INT&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp NOT NULL,</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp Version&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp INT&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp DEFAULT 0 NOT NULL,</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp Date_Created&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp TIMESTAMP&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp DEFAULT current_timestamp NOT NULL,</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp Last_Updated&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp DATETIME,</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp Modified_by&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR(40),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp PRIMARY KEY (Result_ID), </TT><BR><TT>&nbsp&nbsp&nbsp&nbsp CONSTRAINT FK_result_result_status FOREIGN KEY (Result_Status_ID)</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp REFERENCES MLBD.Result_Status(Result_Status_ID),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp CONSTRAINT FK_result_experiment FOREIGN KEY (Experiment_ID)</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp REFERENCES MLBD.Experiment(Experiment_ID),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp CONSTRAINT fk_result_result_context FOREIGN KEY (Result_Context_ID)</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp REFERENCES MLBD.Result_Context(Result_Context_ID),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp CONSTRAINT FK_Result_substance FOREIGN KEY (Substance_ID)</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp REFERENCES MLBD.Substance(Substance_ID),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp CONSTRAINT FK_result_unit FOREIGN KEY (Entry_Unit)</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp REFERENCES MLBD.Unit(Unit),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp CONSTRAINT FK_Result_result_type FOREIGN KEY (Result_Type_ID)</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp REFERENCES MLBD.Result_Type(Result_Type_ID),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp CONSTRAINT FK_Result_Qualifier FOREIGN KEY (Qualifier)</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp REFERENCES MLBD.Qualifier(Qualifier)</TT><BR><TT>)ENGINE=MYISAM</TT><BR><TT>;</TT><BR>&nbsp;</TT></TD>
+</TR>
+<TR>
+<TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">PostSQL&nbsp;</FONT></B></TD>
+<TD><TT>&nbsp;</TT></TD>
 </TR>
 </TABLE>
 <P>
@@ -80,7 +84,7 @@
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><PRE><FONT SIZE=2 FACE="Arial"></FONT></PRE>&nbsp;</FONT></TD>
 </TR>
 <TR>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "Tbl_d402d03ac3ef42c5a59d029d8d13a806_Attr.htm#Attr_244c6bf0a78f4f4abdacc82b5f734948">Qualifier</A>&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "Tbl_d402d03ac3ef42c5a59d029d8d13a806_Attr.htm#Attr_fae154fb807643f095a8304a0d157eb7">Qualifier</A><img src="../Support/Gif/fk.gif" alt="(FK)">&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">CHAR(2)&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">YES&nbsp;</FONT></TD>
@@ -126,6 +130,34 @@
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "./DD_14d29d1188df46b099a3f4a8e6fd5a39_Domains.htm#Domain_4aa8a825d2ca4897b7a23f8e747ecc92">Identifier</A>&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">INT&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">NO&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><PRE><FONT SIZE=2 FACE="Arial"></FONT></PRE>&nbsp;</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "Tbl_d402d03ac3ef42c5a59d029d8d13a806_Attr.htm#Attr_953a775a28974619b59a30e3224540d1">Version</A>&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "./DD_14d29d1188df46b099a3f4a8e6fd5a39_Domains.htm#Domain_689076e03e404d9a87db7ae0c28f30a5">Version</A>&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">INT&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">NO&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><PRE><FONT SIZE=2 FACE="Arial">Update_version is used by Hibernate to resolve the "lost Update" problem when used in optimistic locking</FONT></PRE>&nbsp;</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "Tbl_d402d03ac3ef42c5a59d029d8d13a806_Attr.htm#Attr_de9c57ee30d649b5854de2ef546fccd2">Date_Created</A>&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "./DD_14d29d1188df46b099a3f4a8e6fd5a39_Domains.htm#Domain_20ad7d5e89e44ec1aab7647a9de0485f">Date_Created</A>&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">TIMESTAMP&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">NO&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><PRE><FONT SIZE=2 FACE="Arial"></FONT></PRE>&nbsp;</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "Tbl_d402d03ac3ef42c5a59d029d8d13a806_Attr.htm#Attr_6eaaaa37885648f5b6203be0d0d7e04c">Last_Updated</A>&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "./DD_14d29d1188df46b099a3f4a8e6fd5a39_Domains.htm#Domain_15fe67a93e16407d8db7e7da36ad7195">Last_Updated</A>&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">DATETIME&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">YES&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><PRE><FONT SIZE=2 FACE="Arial"></FONT></PRE>&nbsp;</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "Tbl_d402d03ac3ef42c5a59d029d8d13a806_Attr.htm#Attr_87ab578fe2f641b8b38c85954b5ed816">Modified_by</A>&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "./DD_14d29d1188df46b099a3f4a8e6fd5a39_Domains.htm#Domain_3954c4ba958a45c3acf6a345394fcf56">Modified_by</A>&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">VARCHAR(40)&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">YES&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><PRE><FONT SIZE=2 FACE="Arial"></FONT></PRE>&nbsp;</FONT></TD>
 </TR>
 </TABLE>
@@ -177,6 +209,16 @@
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">Experiment_ID&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">NO&nbsp;</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">Qualifier&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">Non-Identifying&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">Zero or One to Zero or More&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">FK_Result_Qualifier&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">Qualifier&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">NO&nbsp;</FONT></TD>
 </TR>
 <TR>
@@ -326,7 +368,7 @@
 <TD VALIGN=TOP  WIDTH=27% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Bound Attachments&nbsp;</FONT></B></TD>
 </TR>
 <TR>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = ./Model_3615115bde194f0985042d14e26b4981.htm>Logical</A><BR><A HREF = ./Tbl_0e07e6f941a549c4b6dd6a63fb9e936d.htm>MLBD.Result</A>&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">Logical<BR><A HREF = ./Tbl_0e07e6f941a549c4b6dd6a63fb9e936d.htm>MLBD.Result</A>&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">NO&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
@@ -340,7 +382,7 @@
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
 </TR>
 <TR>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = ./Model_9891910249014eee8b44f53720b573e8.htm>BARD - Oracle</A> (Oracle)<BR><A HREF = ./Tbl_36c47bfcd0c84590a5905991347128aa.htm>MLBD.Result</A>&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = ./Model_398ef9366d784ddb95b034e21ed22ee6.htm>BARD - Oracle</A> (Oracle)<BR><A HREF = ./Tbl_8217bb3f07014dbaab0b53d6cef65e30.htm>MLBD.RESULT</A>&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">NO&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
@@ -359,11 +401,11 @@
 <TD VALIGN=TOP  WIDTH=60% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Submodel Usage&nbsp;</FONT></B></TD>
 </TR>
 <TR>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = ./Model_3615115bde194f0985042d14e26b4981.htm>Logical</A>&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">Logical&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = ./Submodel_558f9af28b3745988970aa5c8f62ab7b_img.htm>Main Model</A>&nbsp;</FONT></TD>
 </TR>
 <TR>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = ./Model_3615115bde194f0985042d14e26b4981.htm>Logical</A>&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">Logical&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = ./Submodel_28520af204db43bab6e7a3f836089cd7_img.htm>Data Entry</A>&nbsp;</FONT></TD>
 </TR>
 <TR>
@@ -375,12 +417,12 @@
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = ./Submodel_b9748e3684f948c8844d169af3a5a5de_img.htm>Data Entry</A>&nbsp;</FONT></TD>
 </TR>
 <TR>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = ./Model_9891910249014eee8b44f53720b573e8.htm>BARD - Oracle</A> (Oracle)&nbsp;</FONT></TD>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = ./Submodel_05c70e27da7745a1999e07fb6a3269fa_img.htm>Main Model</A>&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = ./Model_398ef9366d784ddb95b034e21ed22ee6.htm>BARD - Oracle</A> (Oracle)&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = ./Submodel_ae8f61b5a34d4dae9ac84bcd6e556779_img.htm>Main Model</A>&nbsp;</FONT></TD>
 </TR>
 <TR>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = ./Model_9891910249014eee8b44f53720b573e8.htm>BARD - Oracle</A> (Oracle)&nbsp;</FONT></TD>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = ./Submodel_c3b433037d274977a66ab155bfdb9985_img.htm>Data Entry</A>&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = ./Model_398ef9366d784ddb95b034e21ed22ee6.htm>BARD - Oracle</A> (Oracle)&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = ./Submodel_5d6754c9b45c450caaa76a5435b389c3_img.htm>Data Entry</A>&nbsp;</FONT></TD>
 </TR>
 </TABLE>
 </BODY>

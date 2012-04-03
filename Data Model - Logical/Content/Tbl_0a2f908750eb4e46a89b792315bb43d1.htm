@@ -27,7 +27,7 @@
 </TR>
 <TR>
 <TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">DDL Code&nbsp;</FONT></B></TD>
-<TD><TT><TT>CREATE TABLE MLBD.SUBSTANCE(</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp SUBSTANCE_ID&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp NUMBER(38, 0)&nbsp&nbsp&nbsp&nbsp&nbsp NOT NULL,</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp COMPOUND_ID&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp NUMBER(10, 0),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp SMILES&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(4000),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp MOLECULAR_WEIGHT&nbsp&nbsp&nbsp&nbsp NUMBER(10, 3),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp SUBSTANCE_TYPE&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(20)&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp NOT NULL,</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp VERSION&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp NUMBER(38, 0)&nbsp&nbsp&nbsp&nbsp&nbsp DEFAULT 0 NOT NULL,</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp CREATED&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp TIMESTAMP(6)&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp DEFAULT sysdate NOT NULL,</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp MODIFIED&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp TIMESTAMP(6),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp MODIFIED_BY&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(40),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp CONSTRAINT CK_SUBSTANCE_TYPE CHECK (Substance_Type in ('small molecule', 'protein', 'peptide', 'antibody', 'cell', 'oligonucleotide')),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp CONSTRAINT PK_SUBSTANCE PRIMARY KEY (SUBSTANCE_ID)</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp USING INDEX</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp LOGGING</TT><BR><TT>)</TT><BR><TT>LOGGING</TT><BR><TT>;</TT><BR>&nbsp;</TT></TD>
+<TD><TT><TT>CREATE TABLE MLBD.SUBSTANCE(</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp SUBSTANCE_ID&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp NUMBER(38, 0)&nbsp&nbsp&nbsp&nbsp&nbsp NOT NULL,</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp COMPOUND_ID&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp NUMBER(10, 0),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp SMILES&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(4000),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp MOLECULAR_WEIGHT&nbsp&nbsp&nbsp&nbsp NUMBER(10, 3),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp SUBSTANCE_TYPE&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(20)&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp NOT NULL,</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp VERSION&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp NUMBER(38, 0)&nbsp&nbsp&nbsp&nbsp&nbsp DEFAULT 0 NOT NULL,</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp Date_Created&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp TIMESTAMP(6)&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp DEFAULT sysdate NOT NULL,</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp Last_Updated&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp TIMESTAMP(6),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp MODIFIED_BY&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(40),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp CONSTRAINT CK_SUBSTANCE_TYPE CHECK (Substance_Type in ('small molecule', 'protein', 'peptide', 'antibody', 'cell', 'oligonucleotide')),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp CONSTRAINT PK_SUBSTANCE PRIMARY KEY (SUBSTANCE_ID)</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp USING INDEX</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp LOGGING</TT><BR><TT>)</TT><BR><TT>LOGGING</TT><BR><TT>;</TT><BR>&nbsp;</TT></TD>
 </TR>
 <TR>
 <TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">PostSQL&nbsp;</FONT></B></TD>
@@ -91,15 +91,15 @@
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><PRE><FONT SIZE=2 FACE="Arial">Update_version is used by Hibernate to resolve the "lost Update" problem when used in optimistic locking</FONT></PRE>&nbsp;</FONT></TD>
 </TR>
 <TR>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "Tbl_0a2f908750eb4e46a89b792315bb43d1_Attr.htm#Attr_7638ac700d964ab893552ecc1c203ed5">CREATED</A>&nbsp;</FONT></TD>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "./DD_14d29d1188df46b099a3f4a8e6fd5a39_Domains.htm#Domain_20ad7d5e89e44ec1aab7647a9de0485f">Created</A>&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "Tbl_0a2f908750eb4e46a89b792315bb43d1_Attr.htm#Attr_7638ac700d964ab893552ecc1c203ed5">Date_Created</A>&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "./DD_14d29d1188df46b099a3f4a8e6fd5a39_Domains.htm#Domain_20ad7d5e89e44ec1aab7647a9de0485f">Date_Created</A>&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">TIMESTAMP(6)&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">NO&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><PRE><FONT SIZE=2 FACE="Arial"></FONT></PRE>&nbsp;</FONT></TD>
 </TR>
 <TR>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "Tbl_0a2f908750eb4e46a89b792315bb43d1_Attr.htm#Attr_9bab00d683544723a151111910e065a0">MODIFIED</A>&nbsp;</FONT></TD>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "./DD_14d29d1188df46b099a3f4a8e6fd5a39_Domains.htm#Domain_15fe67a93e16407d8db7e7da36ad7195">Modified</A>&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "Tbl_0a2f908750eb4e46a89b792315bb43d1_Attr.htm#Attr_9bab00d683544723a151111910e065a0">Last_Updated</A>&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "./DD_14d29d1188df46b099a3f4a8e6fd5a39_Domains.htm#Domain_15fe67a93e16407d8db7e7da36ad7195">Last_Updated</A>&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">TIMESTAMP(6)&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">YES&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><PRE><FONT SIZE=2 FACE="Arial"></FONT></PRE>&nbsp;</FONT></TD>
@@ -177,7 +177,7 @@
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "./Tbl_8217bb3f07014dbaab0b53d6cef65e30.htm">RESULT</A>&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">Non-Identifying&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">One To Zero or More&nbsp;</FONT></TD>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "Submodel_ae8f61b5a34d4dae9ac84bcd6e556779_Rel.htm#Rel_feaf4be082144b2fbe49847e00a5ac30">FK_RESULT_SUBSTANCE</A>&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "Submodel_5d6754c9b45c450caaa76a5435b389c3_Rel.htm#Rel_feaf4be082144b2fbe49847e00a5ac30">FK_RESULT_SUBSTANCE</A>&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
@@ -211,7 +211,7 @@
 </TR>
 <TR>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">Current Row Count&nbsp;</FONT></TD>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">0&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">35000000&nbsp;</FONT></TD>
 </TR>
 <TR>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">Growth&nbsp;</FONT></TD>
@@ -326,7 +326,7 @@
 </TR>
 <TR>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">Logical&nbsp;</FONT></TD>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = ./Submodel_558f9af28b3745988970aa5c8f62ab7b.htm>Main Model</A>&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = ./Submodel_558f9af28b3745988970aa5c8f62ab7b_img.htm>Main Model</A>&nbsp;</FONT></TD>
 </TR>
 <TR>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">Logical&nbsp;</FONT></TD>
@@ -334,7 +334,7 @@
 </TR>
 <TR>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = ./Model_6e1b6477694244b18eef1934b487219e.htm>BARD - MySQL</A> (MySQL)&nbsp;</FONT></TD>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = ./Submodel_5339dd1a52984a1ea5dc29afc8bb11ff.htm>Main Model</A>&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = ./Submodel_5339dd1a52984a1ea5dc29afc8bb11ff_img.htm>Main Model</A>&nbsp;</FONT></TD>
 </TR>
 <TR>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = ./Model_6e1b6477694244b18eef1934b487219e.htm>BARD - MySQL</A> (MySQL)&nbsp;</FONT></TD>
@@ -342,7 +342,7 @@
 </TR>
 <TR>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = ./Model_398ef9366d784ddb95b034e21ed22ee6.htm>BARD - Oracle</A> (Oracle)&nbsp;</FONT></TD>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = ./Submodel_ae8f61b5a34d4dae9ac84bcd6e556779.htm>Main Model</A>&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = ./Submodel_ae8f61b5a34d4dae9ac84bcd6e556779_img.htm>Main Model</A>&nbsp;</FONT></TD>
 </TR>
 <TR>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = ./Model_398ef9366d784ddb95b034e21ed22ee6.htm>BARD - Oracle</A> (Oracle)&nbsp;</FONT></TD>
