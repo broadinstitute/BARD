@@ -2,7 +2,7 @@
 -- ER/Studio Data Architect 9.1 SQL Code Generation
 -- Project :      CAP and Data entry.DM1
 --
--- Date Created : Wednesday, March 28, 2012 12:26:47
+-- Date Created : Monday, April 02, 2012 18:21:14
 -- Target DBMS : MySQL 5.x
 --
 
@@ -17,6 +17,10 @@ CREATE TABLE Assay(
     Assay_Version      VARCHAR(10)      DEFAULT 1 NOT NULL,
     Description        VARCHAR(1000),
     Designed_By        VARCHAR(100),
+    Version            INT              DEFAULT 0 NOT NULL,
+    Date_Created       DATETIME         DEFAULT sysdate NOT NULL,
+    Last_Updated       DATETIME,
+    Modified_by        VARCHAR(40),
     PRIMARY KEY (Assay_ID)
 )ENGINE=INNODB
 COMMENT=''
@@ -29,6 +33,10 @@ COMMENT=''
 CREATE TABLE Assay_Status(
     Assay_status_ID    INT            AUTO_INCREMENT,
     Status             VARCHAR(20)    NOT NULL,
+    Version            INT            DEFAULT 0 NOT NULL,
+    Date_Created       DATETIME       DEFAULT sysdate NOT NULL,
+    Last_Updated       DATETIME,
+    Modified_by        VARCHAR(40),
     PRIMARY KEY (Assay_status_ID)
 )ENGINE=INNODB
 COMMENT=''
@@ -47,12 +55,16 @@ CREATE TABLE Element(
     Element_ID           INT              AUTO_INCREMENT,
     Parent_Element_ID    INT,
     Label                VARCHAR(128)     NOT NULL,
-    Description          VARCHAR(1000)    NOT NULL,
+    Description          VARCHAR(1000),
     Abbreviation         VARCHAR(20),
     Acronym              VARCHAR(20),
     Synonyms             VARCHAR(1000),
     Element_Status_ID    INT              NOT NULL,
     Unit                 VARCHAR(100),
+    Version              INT              DEFAULT 0 NOT NULL,
+    Date_Created         DATETIME         DEFAULT sysdate NOT NULL,
+    Last_Updated         DATETIME,
+    Modified_by          VARCHAR(40),
     PRIMARY KEY (Element_ID)
 )ENGINE=INNODB
 COMMENT=''
@@ -66,6 +78,10 @@ CREATE TABLE Element_Status(
     Element_Status_ID    INT             AUTO_INCREMENT,
     Element_Status       VARCHAR(20)     NOT NULL,
     Capability           VARCHAR(256),
+    Version              INT             DEFAULT 0 NOT NULL,
+    Date_Created         DATETIME        DEFAULT sysdate NOT NULL,
+    Last_Updated         DATETIME,
+    Modified_by          VARCHAR(40),
     PRIMARY KEY (Element_Status_ID)
 )ENGINE=INNODB
 COMMENT=''
@@ -86,11 +102,16 @@ CREATE TABLE Experiment(
     Assay_ID                INT              NOT NULL,
     Project_ID              INT,
     Experiment_Status_ID    INT              NOT NULL,
-    Run_Date                DATETIME,
+    Run_Date_From           DATE,
+    Run_Date_To             DATE,
     Hold_Until_Date         DATE             
                             CHECK (Hold_Until_Date <= sysdate + 366),
-    Description             VARCHAR(1000)    NOT NULL,
+    Description             VARCHAR(1000),
     Source_ID               INT              NOT NULL,
+    Version                 INT              DEFAULT 0 NOT NULL,
+    Date_Created            DATETIME         DEFAULT sysdate NOT NULL,
+    Last_Updated            DATETIME,
+    Modified_by             VARCHAR(40),
     PRIMARY KEY (Experiment_ID)
 )ENGINE=INNODB
 COMMENT=''
@@ -104,6 +125,10 @@ CREATE TABLE Experiment_Status(
     Experiment_Status_ID    INT              AUTO_INCREMENT,
     Status                  VARCHAR(20)      NOT NULL,
     Capability              VARCHAR(1000),
+    Version                 INT              DEFAULT 0 NOT NULL,
+    Date_Created            DATETIME         DEFAULT sysdate NOT NULL,
+    Last_Updated            DATETIME,
+    Modified_by             VARCHAR(40),
     PRIMARY KEY (Experiment_Status_ID)
 )ENGINE=INNODB
 COMMENT=''
@@ -124,6 +149,10 @@ CREATE TABLE External_Assay(
     External_System_ID    INT             NOT NULL,
     Assay_ID              INT             NOT NULL,
     Ext_Assay_ID          VARCHAR(128)    NOT NULL,
+    Version               INT             DEFAULT 0 NOT NULL,
+    Date_Created          DATETIME        DEFAULT sysdate NOT NULL,
+    Last_Updated          DATETIME,
+    Modified_by           VARCHAR(40),
     PRIMARY KEY (External_System_ID, Assay_ID)
 )ENGINE=INNODB
 COMMENT=''
@@ -138,6 +167,10 @@ CREATE TABLE External_System(
     System_Name           VARCHAR(128)     NOT NULL,
     Owner                 VARCHAR(128),
     System_URL            VARCHAR(1000),
+    Version               INT              DEFAULT 0 NOT NULL,
+    Date_Created          DATETIME         DEFAULT sysdate NOT NULL,
+    Last_Updated          DATETIME,
+    Modified_by           VARCHAR(40),
     PRIMARY KEY (External_System_ID)
 )ENGINE=INNODB
 COMMENT=''
@@ -151,8 +184,12 @@ CREATE TABLE Laboratory(
     Lab_ID          INT              AUTO_INCREMENT,
     Lab_Name        VARCHAR(125)     NOT NULL,
     Abbreviation    VARCHAR(20),
-    Description     VARCHAR(1000)    NOT NULL,
+    Description     VARCHAR(1000),
     Location        VARCHAR(250),
+    Version         INT              DEFAULT 0 NOT NULL,
+    Date_Created    DATETIME         DEFAULT sysdate NOT NULL,
+    Last_Updated    DATETIME,
+    Modified_by     VARCHAR(40),
     PRIMARY KEY (Lab_ID)
 )ENGINE=INNODB
 COMMENT=''
@@ -168,6 +205,10 @@ CREATE TABLE Measure(
     Result_Type_ID        INT             NOT NULL,
     Entry_Unit            VARCHAR(100),
     Measure_Context_ID    INT,
+    Version               INT             DEFAULT 0 NOT NULL,
+    Date_Created          DATETIME        DEFAULT sysdate NOT NULL,
+    Last_Updated          DATETIME,
+    Modified_by           VARCHAR(40),
     PRIMARY KEY (Measure_ID)
 )ENGINE=INNODB
 COMMENT=''
@@ -180,6 +221,10 @@ COMMENT=''
 CREATE TABLE Measure_Context(
     Measure_Context_ID    INT             AUTO_INCREMENT,
     Context_Name          VARCHAR(128)    NOT NULL,
+    Version               INT             DEFAULT 0 NOT NULL,
+    Date_Created          DATETIME        DEFAULT sysdate NOT NULL,
+    Last_Updated          DATETIME,
+    Modified_by           VARCHAR(40),
     PRIMARY KEY (Measure_Context_ID)
 )ENGINE=INNODB
 COMMENT=''
@@ -203,6 +248,10 @@ CREATE TABLE Measure_Context_Item(
     Value_num                  FLOAT(8, 0),
     Value_Min                  FLOAT(8, 0),
     value_Max                  FLOAT(8, 0),
+    Version                    INT             DEFAULT 0 NOT NULL,
+    Date_Created               DATETIME        DEFAULT sysdate NOT NULL,
+    Last_Updated               DATETIME,
+    Modified_by                VARCHAR(40),
     PRIMARY KEY (measure_Context_Item_ID)
 )ENGINE=INNODB
 COMMENT=''
@@ -217,6 +266,10 @@ CREATE TABLE Ontology(
     Ontology_Name    VARCHAR(256)     NOT NULL,
     Abbreviation     VARCHAR(20),
     System_URL       VARCHAR(1000),
+    Version          INT              DEFAULT 0 NOT NULL,
+    Date_Created     DATETIME         DEFAULT sysdate NOT NULL,
+    Last_Updated     DATETIME,
+    Modified_by      VARCHAR(40),
     PRIMARY KEY (Ontology_ID)
 )ENGINE=INNODB
 COMMENT='an external ontology or dictionary or other source of reference data'
@@ -227,11 +280,15 @@ COMMENT='an external ontology or dictionary or other source of reference data'
 --
 
 CREATE TABLE Ontology_Item(
-    Ontology_Item_ID    INT         AUTO_INCREMENT,
-    Ontology_ID         INT         NOT NULL,
+    Ontology_Item_ID    INT            AUTO_INCREMENT,
+    Ontology_ID         INT            NOT NULL,
     Element_ID          INT,
     Item_Reference      CHAR(10),
     Result_Type_ID      INT,
+    Version             INT            DEFAULT 0 NOT NULL,
+    Date_Created        DATETIME       DEFAULT sysdate NOT NULL,
+    Last_Updated        DATETIME,
+    Modified_by         VARCHAR(40),
     PRIMARY KEY (Ontology_Item_ID)
 )ENGINE=INNODB
 COMMENT=''
@@ -246,7 +303,11 @@ CREATE TABLE Project(
     Project_Name    VARCHAR(256)     NOT NULL,
     Group_Type      VARCHAR(20)      DEFAULT 'Project' NOT NULL
                     CHECK (Group_Type in ('Project', 'Campaign', 'Panel', 'Study')),
-    Description     VARCHAR(1000)    NOT NULL,
+    Description     VARCHAR(1000),
+    Version         INT              DEFAULT 0 NOT NULL,
+    Date_Created    DATETIME         DEFAULT sysdate NOT NULL,
+    Last_Updated    DATETIME,
+    Modified_by     VARCHAR(40),
     PRIMARY KEY (Project_ID)
 )ENGINE=INNODB
 COMMENT=''
@@ -263,6 +324,10 @@ CREATE TABLE Project_Assay(
     Sequence_no            INT,
     Promotion_Threshold    FLOAT(8, 0),
     Promotion_Criteria     VARCHAR(1000),
+    Version                INT              DEFAULT 0 NOT NULL,
+    Date_Created           DATETIME         DEFAULT sysdate NOT NULL,
+    Last_Updated           DATETIME,
+    Modified_by            VARCHAR(40),
     PRIMARY KEY (Assay_ID, Project_ID)
 )ENGINE=INNODB
 COMMENT=''
@@ -277,6 +342,10 @@ CREATE TABLE Protocol(
     Protocol_Name        VARCHAR(500)    NOT NULL,
     Protocol_Document    LONGBLOB,
     Assay_ID             INT             NOT NULL,
+    Version              INT             DEFAULT 0 NOT NULL,
+    Date_Created         DATETIME        DEFAULT sysdate NOT NULL,
+    Last_Updated         DATETIME,
+    Modified_by          VARCHAR(40),
     PRIMARY KEY (Protocol_ID)
 )ENGINE=INNODB
 COMMENT=''
@@ -287,8 +356,12 @@ COMMENT=''
 --
 
 CREATE TABLE Qualifier(
-    Qualifier      CHAR(2)          NOT NULL,
-    Description    VARCHAR(1000)    NOT NULL,
+    Qualifier       CHAR(2)          NOT NULL,
+    Description     VARCHAR(1000),
+    Version         INT              DEFAULT 0 NOT NULL,
+    Date_Created    DATETIME         DEFAULT sysdate NOT NULL,
+    Last_Updated    DATETIME,
+    Modified_by     VARCHAR(40),
     PRIMARY KEY (Qualifier)
 )ENGINE=INNODB
 COMMENT=''
@@ -320,6 +393,10 @@ CREATE TABLE Result(
     Result_Context_ID    INT             NOT NULL,
     Entry_Unit           VARCHAR(100),
     Result_Type_ID       INT             NOT NULL,
+    Version              INT             DEFAULT 0 NOT NULL,
+    Date_Created         DATETIME        DEFAULT sysdate NOT NULL,
+    Last_Updated         DATETIME,
+    Modified_by          VARCHAR(40),
     PRIMARY KEY (Result_ID)
 )ENGINE=INNODB
 COMMENT=''
@@ -332,6 +409,10 @@ COMMENT=''
 CREATE TABLE Result_Context(
     Result_Context_ID    INT             AUTO_INCREMENT,
     Context_Name         VARCHAR(125),
+    Version              INT             DEFAULT 0 NOT NULL,
+    Date_Created         DATETIME        DEFAULT sysdate NOT NULL,
+    Last_Updated         DATETIME,
+    Modified_by          VARCHAR(40),
     PRIMARY KEY (Result_Context_ID)
 )ENGINE=INNODB
 COMMENT=''
@@ -353,6 +434,10 @@ CREATE TABLE Result_Context_Item(
     Value_num                 FLOAT(8, 0),
     Value_Min                 FLOAT(8, 0),
     value_Max                 FLOAT(8, 0),
+    Version                   INT             DEFAULT 0 NOT NULL,
+    Date_Created              DATETIME        DEFAULT sysdate NOT NULL,
+    Last_Updated              DATETIME,
+    Modified_by               VARCHAR(40),
     PRIMARY KEY (Result_Context_Item_ID)
 )ENGINE=INNODB
 COMMENT=''
@@ -367,6 +452,10 @@ CREATE TABLE Result_Hierarchy(
     Parent_Result_ID    INT            NOT NULL,
     Hierarchy_Type      VARCHAR(10)    NOT NULL
                         CHECK (Hierarchy_Type in ('Child', 'Derives')),
+    Version             INT            DEFAULT 0 NOT NULL,
+    Date_Created        DATETIME       DEFAULT sysdate NOT NULL,
+    Last_Updated        DATETIME,
+    Modified_by         VARCHAR(40),
     PRIMARY KEY (Result_ID, Parent_Result_ID)
 )ENGINE=INNODB
 COMMENT=''
@@ -379,6 +468,10 @@ COMMENT=''
 CREATE TABLE Result_Status(
     Result_Status_ID    INT            AUTO_INCREMENT,
     Status              VARCHAR(20)    NOT NULL,
+    Version             INT            DEFAULT 0 NOT NULL,
+    Date_Created        DATETIME       DEFAULT sysdate NOT NULL,
+    Last_Updated        DATETIME,
+    Modified_by         VARCHAR(40),
     PRIMARY KEY (Result_Status_ID)
 )ENGINE=INNODB
 COMMENT=''
@@ -402,6 +495,10 @@ CREATE TABLE Result_Type(
     Description              VARCHAR(1000),
     Result_Type_Status_ID    INT              NOT NULL,
     Base_Unit                VARCHAR(100),
+    Version                  INT              DEFAULT 0 NOT NULL,
+    Date_Created             DATETIME         DEFAULT sysdate NOT NULL,
+    Last_Updated             DATETIME,
+    Modified_by              VARCHAR(40),
     PRIMARY KEY (Result_Type_ID)
 )ENGINE=INNODB
 COMMENT=''
@@ -412,7 +509,12 @@ COMMENT=''
 --
 
 CREATE TABLE Stage(
-    Stage    VARCHAR(20)    NOT NULL,
+    Stage           VARCHAR(20)      NOT NULL,
+    Description     VARCHAR(1000),
+    Version         INT              DEFAULT 0 NOT NULL,
+    Date_Created    DATETIME         DEFAULT sysdate NOT NULL,
+    Last_Updated    DATETIME,
+    Modified_by     VARCHAR(40),
     PRIMARY KEY (Stage)
 )ENGINE=INNODB
 COMMENT=''
@@ -434,7 +536,12 @@ CREATE TABLE Substance(
     Compound_ID         INT,
     SMILES              VARCHAR(4000),
     Molecular_Weight    DECIMAL(10, 3),
-    Substance_Type      VARCHAR(20)       NOT NULL,
+    Substance_Type      VARCHAR(20)       NOT NULL
+                        CHECK (Substance_Type in ('small molecule', 'protein', 'peptide', 'antibody', 'cell', 'oligonucleotide')),
+    Version             INT               DEFAULT 0 NOT NULL,
+    Date_Created        DATETIME          DEFAULT sysdate NOT NULL,
+    Last_Updated        DATETIME,
+    Modified_by         VARCHAR(40),
     PRIMARY KEY (Substance_ID)
 )ENGINE=INNODB
 COMMENT=''
@@ -445,8 +552,12 @@ COMMENT=''
 --
 
 CREATE TABLE Unit(
-    Unit           VARCHAR(100)     NOT NULL,
-    Description    VARCHAR(1000)    NOT NULL,
+    Unit            VARCHAR(100)     NOT NULL,
+    Description     VARCHAR(1000),
+    Version         INT              DEFAULT 0 NOT NULL,
+    Date_Created    DATETIME         DEFAULT sysdate NOT NULL,
+    Last_Updated    DATETIME,
+    Modified_by     VARCHAR(40),
     PRIMARY KEY (Unit)
 )ENGINE=INNODB
 COMMENT=''
@@ -457,11 +568,15 @@ COMMENT=''
 --
 
 CREATE TABLE Unit_Conversion(
-    From_Unit     VARCHAR(100)    NOT NULL,
-    To_Unit       VARCHAR(100)    NOT NULL,
-    Multiplier    FLOAT(8, 0),
-    Offset        FLOAT(8, 0),
-    Formula       VARCHAR(256),
+    From_Unit       VARCHAR(100)    NOT NULL,
+    To_Unit         VARCHAR(100)    NOT NULL,
+    Multiplier      FLOAT(8, 0),
+    Offset          FLOAT(8, 0),
+    Formula         VARCHAR(256),
+    Version         INT             DEFAULT 0 NOT NULL,
+    Date_Created    DATETIME        DEFAULT sysdate NOT NULL,
+    Last_Updated    DATETIME,
+    Modified_by     VARCHAR(40),
     PRIMARY KEY (From_Unit, To_Unit)
 )ENGINE=INNODB
 COMMENT=''
@@ -676,12 +791,6 @@ CREATE INDEX FK_RESULT_RESULT_TYPE ON Result(Result_Type_ID)
 --
 
 CREATE INDEX FK_RESULT_QUALIFIER ON Result(Qualifier)
-;
--- 
--- INDEX: AK_Measure_Context_item_1 
---
-
-CREATE UNIQUE INDEX AK_Measure_Context_item_1 ON Result_Context_Item(Group_No, Attribute_ID, Value_Display)
 ;
 -- 
 -- INDEX: FK_R_CONTEXT_ITEM_EXPERIMENT 
@@ -963,11 +1072,6 @@ ALTER TABLE Result ADD CONSTRAINT FK_result_unit
 -- TABLE: Result_Context_Item 
 --
 
-ALTER TABLE Result_Context_Item ADD CONSTRAINT RefQualifier55 
-    FOREIGN KEY (Qualifier)
-    REFERENCES Qualifier(Qualifier)
-;
-
 ALTER TABLE Result_Context_Item ADD CONSTRAINT FK_R_context_item_attribute 
     FOREIGN KEY (Attribute_ID)
     REFERENCES Element(Element_ID)
@@ -976,6 +1080,11 @@ ALTER TABLE Result_Context_Item ADD CONSTRAINT FK_R_context_item_attribute
 ALTER TABLE Result_Context_Item ADD CONSTRAINT fk_R_Context_item_experiment 
     FOREIGN KEY (Experiment_ID)
     REFERENCES Experiment(Experiment_ID)
+;
+
+ALTER TABLE Result_Context_Item ADD CONSTRAINT FK_R_context_item_qualifier 
+    FOREIGN KEY (Qualifier)
+    REFERENCES Qualifier(Qualifier)
 ;
 
 ALTER TABLE Result_Context_Item ADD CONSTRAINT FK_R_context_item_R_context 
@@ -1039,34 +1148,3 @@ ALTER TABLE Unit_Conversion ADD CONSTRAINT FK_Unit_conversion_to_unit
 ;
 
 
---
--- views
---
-
-create view BARD.Assay as select * from MLBD.Assay;
-create view BARD.assay_status as select * from MLBD.assay_status;
-create view BARD.element as select * from MLBD.element;
-create view BARD.element_status as select * from MLBD.element_status;
-create view BARD.experiment as select * from MLBD.experiment;
-create view BARD.experiment_status as select * from MLBD.experiment_status;
-create view BARD.external_assay as select * from MLBD.external_assay;
-create view BARD.external_system as select * from MLBD.external_system;
-create view BARD.laboratory as select * from MLBD.laboratory;
-create view BARD.measure as select * from MLBD.measure;
-create view BARD.measure_context as select * from MLBD.measure_context;
-create view BARD.measure_context_item as select * from MLBD.measure_context_item;
-create view BARD.ontology as select * from MLBD.ontology;
-create view BARD.ontology_item as select * from MLBD.ontology_item;
-create view BARD.project as select * from MLBD.project;
-create view BARD.project_assay as select * from MLBD.project_assay;
-create view BARD.protocol as select * from MLBD.protocol;
-create view BARD.result as select * from MLBD.result;
-create view BARD.result_context as select * from MLBD.result_context;
-create view BARD.result_context_item as select * from MLBD.result_context_item;
-create view BARD.result_hierarchy as select * from MLBD.result_hierarchy;
-create view BARD.result_status as select * from MLBD.result_status;
-create view BARD.result_type as select * from MLBD.result_type;
-create view BARD.stage as select * from MLBD.stage;
-create view BARD.substance as select * from MLBD.substance;
-create view BARD.unit as select * from MLBD.unit;
-create view BARD.unit_conversion as select * from MLBD.unit_conversion;
