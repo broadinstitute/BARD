@@ -19,6 +19,16 @@ environments {
 			url = "jdbc:mysql://dbserver:3306/mlbd"
 		}
 	}
+    oracle {
+        dataSource {
+            dbCreate = 'validate'
+            url = "jdbc:oracle:thin:@dbnode01:1521:bcbdev"
+            driverClassName = "oracle.jdbc.driver.OracleDriver"
+            dialect = org.hibernate.dialect.Oracle10gDialect
+            username = "mlbd_dev"
+            password = "guest"
+        }
+    }
 	test {
 		dataSource {
 			dbCreate = "update"

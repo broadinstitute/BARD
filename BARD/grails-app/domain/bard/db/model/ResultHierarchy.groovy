@@ -5,14 +5,12 @@ import org.apache.commons.lang.builder.HashCodeBuilder
 
 class ResultHierarchy implements Serializable {
 
-	Integer resultId
-	Integer parentResultId
 	String hierarchyType
 	Date dateCreated
 	Date lastUpdated
 	String modifiedBy
-	Result resultByParentResultId
-	Result resultByResultId
+	Result resultId
+	Result parentResultId
 
 	int hashCode() {
 		def builder = new HashCodeBuilder()

@@ -7,7 +7,7 @@ class AssayStatus {
 	Date lastUpdated
 	String modifiedBy
 
-	static hasMany = [assaies: Assay]
+	static hasMany = [assays: Assay]
 
 	static mapping = {
 		id column: "Assay_status_ID"

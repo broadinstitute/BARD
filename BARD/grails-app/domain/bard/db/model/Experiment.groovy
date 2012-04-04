@@ -21,6 +21,7 @@ class Experiment {
 
 	static mapping = {
 		id column: "Experiment_ID"
+        laboratory column: "source_id"
 	}
 
 	static constraints = {

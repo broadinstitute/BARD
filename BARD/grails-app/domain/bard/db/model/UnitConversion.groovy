@@ -5,16 +5,14 @@ import org.apache.commons.lang.builder.HashCodeBuilder
 
 class UnitConversion implements Serializable {
 
-	String fromUnit
-	String toUnit
 	Float multiplier
 	Float offset
 	String formula
 	Date dateCreated
 	Date lastUpdated
 	String modifiedBy
-	Unit unitByFromUnit
-	Unit unitByToUnit
+	Unit fromUnit
+	Unit toUnit
 
 	int hashCode() {
 		def builder = new HashCodeBuilder()

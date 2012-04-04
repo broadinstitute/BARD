@@ -5,8 +5,6 @@ import org.apache.commons.lang.builder.HashCodeBuilder
 
 class ProjectAssay implements Serializable {
 
-	Integer assayId
-	Integer projectId
 	String stage
 	Integer sequenceNo
 	Float promotionThreshold
@@ -19,23 +17,23 @@ class ProjectAssay implements Serializable {
 
 	int hashCode() {
 		def builder = new HashCodeBuilder()
-		builder.append assayId
-		builder.append projectId
+		builder.append assay
+		builder.append project
 		builder.toHashCode()
 	}
 
 	boolean equals(other) {
 		if (other == null) return false
 		def builder = new EqualsBuilder()
-		builder.append assayId, other.assayId
-		builder.append projectId, other.projectId
+		builder.append assay, other.assay
+		builder.append project, other.project
 		builder.isEquals()
 	}
 
 	static belongsTo = [Assay, Project]
 
 	static mapping = {
-		id composite: ["assayId", "projectId"]
+		id composite: ["assay", "project"]
 	}
 
 	static constraints = {

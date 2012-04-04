@@ -5,8 +5,6 @@ import org.apache.commons.lang.builder.HashCodeBuilder
 
 class ExternalAssay implements Serializable {
 
-	Integer externalSystemId
-	Integer assayId
 	String extAssayId
 	Date dateCreated
 	Date lastUpdated
@@ -16,23 +14,23 @@ class ExternalAssay implements Serializable {
 
 	int hashCode() {
 		def builder = new HashCodeBuilder()
-		builder.append externalSystemId
-		builder.append assayId
+		builder.append externalSystem
+		builder.append assay
 		builder.toHashCode()
 	}
 
 	boolean equals(other) {
 		if (other == null) return false
 		def builder = new EqualsBuilder()
-		builder.append externalSystemId, other.externalSystemId
-		builder.append assayId, other.assayId
+		builder.append externalSystem, other.externalSystem
+		builder.append assay, other.assay
 		builder.isEquals()
 	}
 
 	static belongsTo = [Assay, ExternalSystem]
 
 	static mapping = {
-		id composite: ["externalSystemId", "assayId"]
+		id composite: ["externalSystem", "assay"]
 	}
 
 	static constraints = {

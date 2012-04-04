@@ -17,8 +17,8 @@ class Unit {
 
 	// TODO you have multiple hasMany references for class(es) [UnitConversion] 
 	//      so you'll need to disambiguate them with the 'mappedBy' property:
-	static mappedBy = [unitConversionsForFromUnit: "unitByFromUnit",
-	                   unitConversionsForToUnit: "unitByToUnit"]
+	static mappedBy = [unitConversionsForFromUnit: "fromUnit",
+	                   unitConversionsForToUnit: "toUnit"]
 
 	static mapping = {
 		id name: "unit", generator: "assigned"

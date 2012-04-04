@@ -23,8 +23,8 @@ class Result {
 
 	// TODO you have multiple hasMany references for class(es) [ResultHierarchy] 
 	//      so you'll need to disambiguate them with the 'mappedBy' property:
-	static mappedBy = [resultHierarchiesForParentResultId: "resultByParentResultId",
-	                   resultHierarchiesForResultId: "resultByResultId"]
+	static mappedBy = [resultHierarchiesForParentResultId: "parentResultId",
+	                   resultHierarchiesForResultId: "resultId"]
 
 	static mapping = {
 		id column: "Result_ID"

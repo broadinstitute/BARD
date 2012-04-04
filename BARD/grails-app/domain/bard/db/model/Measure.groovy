@@ -7,13 +7,14 @@ class Measure {
 	String modifiedBy
 	MeasureContext measureContext
 	Assay assay
-	Unit unit
+	Unit entryUnit
 	ResultType resultType
 
 	static belongsTo = [Assay, MeasureContext, ResultType, Unit]
 
 	static mapping = {
 		id column: "Measure_ID"
+        entryUnit column: "entry_unit"
 	}
 
 	static constraints = {

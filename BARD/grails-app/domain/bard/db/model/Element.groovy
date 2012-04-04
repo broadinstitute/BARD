@@ -31,6 +31,7 @@ class Element {
 
 	static mapping = {
 		id column: "Element_ID"
+        unit column: "unit"
 	}
 
 	static constraints = {
