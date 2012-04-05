@@ -17,17 +17,20 @@ class Result {
 	ResultType resultType
 	Qualifier qualifier
 
-	static hasMany = [resultHierarchiesForParentResultId: ResultHierarchy,
-	                  resultHierarchiesForResultId: ResultHierarchy]
+	static hasMany = [resultHierarchiesForParentResult: ResultHierarchy,
+	                  resultHierarchiesForResult: ResultHierarchy]
 	static belongsTo = [Experiment, Qualifier, ResultContext, ResultStatus, ResultType, Substance, Unit]
 
-	// TODO you have multiple hasMany references for class(es) [ResultHierarchy] 
-	//      so you'll need to disambiguate them with the 'mappedBy' property:
-	static mappedBy = [resultHierarchiesForParentResultId: "parentResultId",
-	                   resultHierarchiesForResultId: "resultId"]
+	static mappedBy = [resultHierarchiesForParentResult: "parentResult",
+	                   resultHierarchiesForResult: "result"]
 
 	static mapping = {
 		id column: "Result_ID"
+        unit column: "entry_unit"
+        qualifier column: "qualifier", sqlType: "char", length: 2
+        valueNum sqlType: "binary_float"
+        valueMin sqlType: "binary_float"
+        valueMax sqlType: "binary_float"
 	}
 
 	static constraints = {

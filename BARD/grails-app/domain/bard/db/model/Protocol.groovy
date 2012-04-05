@@ -13,6 +13,7 @@ class Protocol {
 
 	static mapping = {
 		id column: "Protocol_ID"
+        protocolDocument sqlType: "longblob"
 	}
 
 	static constraints = {

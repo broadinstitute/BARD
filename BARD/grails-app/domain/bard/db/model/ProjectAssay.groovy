@@ -34,6 +34,7 @@ class ProjectAssay implements Serializable {
 
 	static mapping = {
 		id composite: ["assay", "project"]
+        promotionThreshold sqlType: "binary_float"
 	}
 
 	static constraints = {

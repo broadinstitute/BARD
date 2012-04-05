@@ -9,28 +9,28 @@ class ResultHierarchy implements Serializable {
 	Date dateCreated
 	Date lastUpdated
 	String modifiedBy
-	Result resultId
-	Result parentResultId
+	Result result
+	Result parentResult
 
 	int hashCode() {
 		def builder = new HashCodeBuilder()
-		builder.append resultId
-		builder.append parentResultId
+		builder.append result
+		builder.append parentResult
 		builder.toHashCode()
 	}
 
 	boolean equals(other) {
 		if (other == null) return false
 		def builder = new EqualsBuilder()
-		builder.append resultId, other.resultId
-		builder.append parentResultId, other.parentResultId
+		builder.append result, other.resultId
+		builder.append parentResult, other.parentResultId
 		builder.isEquals()
 	}
 
 	static belongsTo = [Result]
 
 	static mapping = {
-		id composite: ["resultId", "parentResultId"]
+		id composite: ["result", "parentResult"]
 	}
 
 	static constraints = {

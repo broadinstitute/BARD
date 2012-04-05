@@ -21,6 +21,12 @@ class MeasureContextItem {
 
 	static mapping = {
 		id column: "measure_Context_Item_ID"
+        elementByValueId column: "value_id"
+        elementByAttributeId column: "attribute_id"
+        qualifier column: "qualifier", sqlType: "char", length: 2
+        valueNum sqlType: "binary_float"
+        valueMin sqlType: "binary_float"
+        valueMax sqlType: "binary_float"
 	}
 
 	static constraints = {

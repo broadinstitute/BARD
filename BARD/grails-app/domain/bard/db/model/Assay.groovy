@@ -24,7 +24,7 @@ class Assay {
 	}
 
 	static constraints = {
-		assayName maxSize: 128
+		assayName nullable: false, maxSize: 128
 		assayVersion maxSize: 10
 		description nullable: true, maxSize: 1000
 		designedBy nullable: true, maxSize: 100

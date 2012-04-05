@@ -14,6 +14,7 @@ class Qualifier {
 
 	static mapping = {
 		id name: "qualifier", generator: "assigned"
+        qualifier sqlType: "char", length: 2
 	}
 
 	static constraints = {

@@ -9,16 +9,18 @@ class ResultType {
 	String modifiedBy
 	ElementStatus elementStatus
 	Unit unit
-	ResultType resultType
+	ResultType parentResultType
 
 	static hasMany = [measures: Measure,
 	                  ontologyItems: OntologyItem,
-	                  resultTypes: ResultType,
+	                  childResultTypes: ResultType,
 	                  results: Result]
 	static belongsTo = [ElementStatus, Unit]
 
 	static mapping = {
 		id column: "Result_Type_ID"
+        unit column: "base_unit"
+        elementStatus column: "result_type_status_id"
 	}
 
 	static constraints = {

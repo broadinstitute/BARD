@@ -14,6 +14,7 @@ class OntologyItem {
 
 	static mapping = {
 		id column: "Ontology_Item_ID"
+        itemReference sqlType: "char", length: 10
 	}
 
 	static constraints = {

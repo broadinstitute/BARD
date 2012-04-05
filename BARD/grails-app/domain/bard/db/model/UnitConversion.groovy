@@ -33,6 +33,10 @@ class UnitConversion implements Serializable {
 
 	static mapping = {
 		id composite: ["fromUnit", "toUnit"]
+        fromUnit column: "from_unit"
+        toUnit column:  "to_unit"
+        offset sqlType: "binary_float"
+        multiplier sqlType: "binary_float"
 	}
 
 	static constraints = {
