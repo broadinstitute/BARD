@@ -5,24 +5,32 @@
 -- Date Created : Tuesday, April 03, 2012 12:46:03
 -- Target DBMS : MySQL 5.x
 --
+--------------------------------------------------------------------------
+--
+-- Changed INT to BIGINT
+-- added (commentdd out) single column PK to tables
+--     External_assay, project_assay, result_hierarchy, unit_conversion
+-- Changed engine to MYISAM (for better performance, fewer restrictions
+--
+--------------------------------------------------------------------------
 
 -- 
 -- TABLE: Assay 
 --
 
 CREATE TABLE Assay(
-    Assay_ID           INT              AUTO_INCREMENT,
+    Assay_ID           BIGBIGINT        AUTO_INCREMENT,
     Assay_Name         VARCHAR(128)     NOT NULL,
-    Assay_status_ID    INT              NOT NULL,
+    Assay_status_ID    BIGBIGINT        NOT NULL,
     Assay_Version      VARCHAR(10)      DEFAULT 1 NOT NULL,
     Description        VARCHAR(1000),
     Designed_By        VARCHAR(100),
-    Version            INT              DEFAULT 0 NOT NULL,
+    Version            BIGINT           DEFAULT 0 NOT NULL,
     Date_Created       TIMESTAMP        DEFAULT current_timestamp NOT NULL,
     Last_Updated       DATETIME,
     Modified_by        VARCHAR(40),
     PRIMARY KEY (Assay_ID)
-)ENGINE=INNODB
+)ENGINE=MYISAM
 COMMENT=''
 ;
 
@@ -31,42 +39,42 @@ COMMENT=''
 --
 
 CREATE TABLE Assay_Status(
-    Assay_status_ID    INT            AUTO_INCREMENT,
+    Assay_status_ID    BIGINT         AUTO_INCREMENT,
     Status             VARCHAR(20)    NOT NULL,
-    Version            INT            DEFAULT 0 NOT NULL,
+    Version            BIGINT         DEFAULT 0 NOT NULL,
     Date_Created       TIMESTAMP      DEFAULT current_timestamp NOT NULL,
     Last_Updated       DATETIME,
     Modified_by        VARCHAR(40),
     PRIMARY KEY (Assay_status_ID)
-)ENGINE=INNODB
+)ENGINE=MYISAM
 COMMENT=''
 ;
 
 insert into MLBD.Assay_Status (assay_status_ID, status) values ('1', 'Pending');
 insert into MLBD.Assay_Status (assay_status_ID, status) values ('2', 'Active');
 insert into MLBD.Assay_Status (assay_status_ID, status) values ('3', 'Superceded');
-insert into MLBD.Assay_Status (assay_status_ID) values ('4', 'Retired');
+insert into MLBD.Assay_Status (assay_status_ID, status) values ('4', 'Retired');
 commit;
 -- 
 -- TABLE: Element 
 --
 
 CREATE TABLE Element(
-    Element_ID           INT              AUTO_INCREMENT,
-    Parent_Element_ID    INT,
+    Element_ID           BIGINT           AUTO_INCREMENT,
+    Parent_Element_ID    BIGINT,
     Label                VARCHAR(128)     NOT NULL,
     Description          VARCHAR(1000),
     Abbreviation         VARCHAR(20),
     Acronym              VARCHAR(20),
     Synonyms             VARCHAR(1000),
-    Element_Status_ID    INT              NOT NULL,
+    Element_Status_ID    BIGINT           NOT NULL,
     Unit                 VARCHAR(100),
-    Version              INT              DEFAULT 0 NOT NULL,
+    Version              BIGINT           DEFAULT 0 NOT NULL,
     Date_Created         TIMESTAMP        DEFAULT current_timestamp NOT NULL,
     Last_Updated         DATETIME,
     Modified_by          VARCHAR(40),
     PRIMARY KEY (Element_ID)
-)ENGINE=INNODB
+)ENGINE=MYISAM
 COMMENT=''
 ;
 
@@ -75,15 +83,15 @@ COMMENT=''
 --
 
 CREATE TABLE Element_Status(
-    Element_Status_ID    INT             AUTO_INCREMENT,
+    Element_Status_ID    BIGINT          AUTO_INCREMENT,
     Element_Status       VARCHAR(20)     NOT NULL,
     Capability           VARCHAR(256),
-    Version              INT             DEFAULT 0 NOT NULL,
+    Version              BIGINT          DEFAULT 0 NOT NULL,
     Date_Created         TIMESTAMP       DEFAULT current_timestamp NOT NULL,
     Last_Updated         DATETIME,
     Modified_by          VARCHAR(40),
     PRIMARY KEY (Element_Status_ID)
-)ENGINE=INNODB
+)ENGINE=MYISAM
 COMMENT=''
 ;
 
@@ -97,23 +105,23 @@ commit;
 --
 
 CREATE TABLE Experiment(
-    Experiment_ID           INT              AUTO_INCREMENT,
+    Experiment_ID           BIGINT           AUTO_INCREMENT,
     Experiment_Name         VARCHAR(256)     NOT NULL,
-    Assay_ID                INT              NOT NULL,
-    Project_ID              INT,
-    Experiment_Status_ID    INT              NOT NULL,
+    Assay_ID                BIGINT           NOT NULL,
+    Project_ID              BIGINT,
+    Experiment_Status_ID    BIGINT           NOT NULL,
     Run_Date_From           DATE,
     Run_Date_To             DATE,
     Hold_Until_Date         DATE             
                             CHECK (Hold_Until_Date <= now() + 366),
     Description             VARCHAR(1000),
-    Source_ID               INT              NOT NULL,
-    Version                 INT              DEFAULT 0 NOT NULL,
+    Source_ID               BIGINT           NOT NULL,
+    Version                 BIGINT           DEFAULT 0 NOT NULL,
     Date_Created            TIMESTAMP        DEFAULT current_timestamp NOT NULL,
     Last_Updated            DATETIME,
     Modified_by             VARCHAR(40),
     PRIMARY KEY (Experiment_ID)
-)ENGINE=INNODB
+)ENGINE=MYISAM
 COMMENT=''
 ;
 
@@ -122,15 +130,15 @@ COMMENT=''
 --
 
 CREATE TABLE Experiment_Status(
-    Experiment_Status_ID    INT              AUTO_INCREMENT,
+    Experiment_Status_ID    BIGINT           AUTO_INCREMENT,
     Status                  VARCHAR(20)      NOT NULL,
     Capability              VARCHAR(1000),
-    Version                 INT              DEFAULT 0 NOT NULL,
+    Version                 BIGINT           DEFAULT 0 NOT NULL,
     Date_Created            TIMESTAMP        DEFAULT current_timestamp NOT NULL,
     Last_Updated            DATETIME,
     Modified_by             VARCHAR(40),
     PRIMARY KEY (Experiment_Status_ID)
-)ENGINE=INNODB
+)ENGINE=MYISAM
 COMMENT=''
 ;
 
@@ -146,15 +154,17 @@ commit;
 --
 
 CREATE TABLE External_Assay(
-    External_System_ID    INT             NOT NULL,
-    Assay_ID              INT             NOT NULL,
+--    External_Assay_ID     BIGINT          NOT NULL,
+    External_System_ID    BIGINT          NOT NULL,
+    Assay_ID              BIGINT          NOT NULL,
     Ext_Assay_ID          VARCHAR(128)    NOT NULL,
-    Version               INT             DEFAULT 0 NOT NULL,
+    Version               BIGINT          DEFAULT 0 NOT NULL,
     Date_Created          TIMESTAMP       DEFAULT current_timestamp NOT NULL,
     Last_Updated          DATETIME,
     Modified_by           VARCHAR(40),
+--    PRIMARY KEY (External_Assay_ID)
     PRIMARY KEY (External_System_ID, Assay_ID)
-)ENGINE=INNODB
+)ENGINE=MYISAM
 COMMENT=''
 ;
 
@@ -163,16 +173,16 @@ COMMENT=''
 --
 
 CREATE TABLE External_System(
-    External_System_ID    INT              AUTO_INCREMENT,
+    External_System_ID    BIGINT           AUTO_INCREMENT,
     System_Name           VARCHAR(128)     NOT NULL,
     Owner                 VARCHAR(128),
     System_URL            VARCHAR(1000),
-    Version               INT              DEFAULT 0 NOT NULL,
+    Version               BIGINT           DEFAULT 0 NOT NULL,
     Date_Created          TIMESTAMP        DEFAULT current_timestamp NOT NULL,
     Last_Updated          DATETIME,
     Modified_by           VARCHAR(40),
     PRIMARY KEY (External_System_ID)
-)ENGINE=INNODB
+)ENGINE=MYISAM
 COMMENT=''
 ;
 
@@ -181,17 +191,17 @@ COMMENT=''
 --
 
 CREATE TABLE Laboratory(
-    Lab_ID          INT              AUTO_INCREMENT,
+    Lab_ID          BIGINT           AUTO_INCREMENT,
     Lab_Name        VARCHAR(125)     NOT NULL,
     Abbreviation    VARCHAR(20),
     Description     VARCHAR(1000),
     Location        VARCHAR(250),
-    Version         INT              DEFAULT 0 NOT NULL,
+    Version         BIGINT           DEFAULT 0 NOT NULL,
     Date_Created    TIMESTAMP        DEFAULT current_timestamp NOT NULL,
     Last_Updated    DATETIME,
     Modified_by     VARCHAR(40),
     PRIMARY KEY (Lab_ID)
-)ENGINE=INNODB
+)ENGINE=MYISAM
 COMMENT=''
 ;
 
@@ -200,17 +210,17 @@ COMMENT=''
 --
 
 CREATE TABLE Measure(
-    Measure_ID            INT             AUTO_INCREMENT,
-    Assay_ID              INT             NOT NULL,
-    Result_Type_ID        INT             NOT NULL,
+    Measure_ID            BIGINT          AUTO_INCREMENT,
+    Assay_ID              BIGINT          NOT NULL,
+    Result_Type_ID        BIGINT          NOT NULL,
     Entry_Unit            VARCHAR(100),
-    Measure_Context_ID    INT,
-    Version               INT             DEFAULT 0 NOT NULL,
+    Measure_Context_ID    BIGINT,
+    Version               BIGINT          DEFAULT 0 NOT NULL,
     Date_Created          TIMESTAMP       DEFAULT current_timestamp NOT NULL,
     Last_Updated          DATETIME,
     Modified_by           VARCHAR(40),
     PRIMARY KEY (Measure_ID)
-)ENGINE=INNODB
+)ENGINE=MYISAM
 COMMENT=''
 ;
 
@@ -219,14 +229,14 @@ COMMENT=''
 --
 
 CREATE TABLE Measure_Context(
-    Measure_Context_ID    INT             AUTO_INCREMENT,
+    Measure_Context_ID    BIGINT          AUTO_INCREMENT,
     Context_Name          VARCHAR(128)    NOT NULL,
-    Version               INT             DEFAULT 0 NOT NULL,
+    Version               BIGINT          DEFAULT 0 NOT NULL,
     Date_Created          TIMESTAMP       DEFAULT current_timestamp NOT NULL,
     Last_Updated          DATETIME,
     Modified_by           VARCHAR(40),
     PRIMARY KEY (Measure_Context_ID)
-)ENGINE=INNODB
+)ENGINE=MYISAM
 COMMENT=''
 ;
 
@@ -235,25 +245,25 @@ COMMENT=''
 --
 
 CREATE TABLE Measure_Context_Item(
-    measure_Context_Item_ID    INT             AUTO_INCREMENT,
-    Assay_ID                   INT             NOT NULL,
-    Measure_Context_ID         INT             NOT NULL,
-    Group_No                   INT,
+    measure_Context_Item_ID    BIGINT          AUTO_INCREMENT,
+    Assay_ID                   BIGINT          NOT NULL,
+    Measure_Context_ID         BIGINT          NOT NULL,
+    Group_No                   BIGINT,
     Attribute_Type             VARCHAR(20)     NOT NULL
                                CHECK (Attribute_Type in ('Fixed', 'List', 'Range', 'Number')),
-    Attribute_ID               INT             NOT NULL,
+    Attribute_ID               BIGINT          NOT NULL,
     Qualifier                  CHAR(2),
-    Value_ID                   INT,
+    Value_ID                   BIGINT,
     Value_Display              VARCHAR(256),
     Value_num                  FLOAT(8, 0),
     Value_Min                  FLOAT(8, 0),
     value_Max                  FLOAT(8, 0),
-    Version                    INT             DEFAULT 0 NOT NULL,
+    Version                    BIGINT          DEFAULT 0 NOT NULL,
     Date_Created               TIMESTAMP       DEFAULT current_timestamp NOT NULL,
     Last_Updated               DATETIME,
     Modified_by                VARCHAR(40),
     PRIMARY KEY (measure_Context_Item_ID)
-)ENGINE=INNODB
+)ENGINE=MYISAM
 COMMENT=''
 ;
 
@@ -262,16 +272,16 @@ COMMENT=''
 --
 
 CREATE TABLE Ontology(
-    Ontology_ID      INT              AUTO_INCREMENT,
+    Ontology_ID      BIGINT           AUTO_INCREMENT,
     Ontology_Name    VARCHAR(256)     NOT NULL,
     Abbreviation     VARCHAR(20),
     System_URL       VARCHAR(1000),
-    Version          INT              DEFAULT 0 NOT NULL,
+    Version          BIGINT           DEFAULT 0 NOT NULL,
     Date_Created     TIMESTAMP        DEFAULT current_timestamp NOT NULL,
     Last_Updated     DATETIME,
     Modified_by      VARCHAR(40),
     PRIMARY KEY (Ontology_ID)
-)ENGINE=INNODB
+)ENGINE=MYISAM
 COMMENT='an external ontology or dictionary or other source of reference data'
 ;
 
@@ -280,17 +290,17 @@ COMMENT='an external ontology or dictionary or other source of reference data'
 --
 
 CREATE TABLE Ontology_Item(
-    Ontology_Item_ID    INT            AUTO_INCREMENT,
-    Ontology_ID         INT            NOT NULL,
-    Element_ID          INT,
+    Ontology_Item_ID    BIGINT         AUTO_INCREMENT,
+    Ontology_ID         BIGINT         NOT NULL,
+    Element_ID          BIGINT,
     Item_Reference      CHAR(10),
-    Result_Type_ID      INT,
-    Version             INT            DEFAULT 0 NOT NULL,
+    Result_Type_ID      BIGINT,
+    Version             BIGINT         DEFAULT 0 NOT NULL,
     Date_Created        TIMESTAMP      DEFAULT current_timestamp NOT NULL,
     Last_Updated        DATETIME,
     Modified_by         VARCHAR(40),
     PRIMARY KEY (Ontology_Item_ID)
-)ENGINE=INNODB
+)ENGINE=MYISAM
 COMMENT=''
 ;
 
@@ -299,17 +309,17 @@ COMMENT=''
 --
 
 CREATE TABLE Project(
-    Project_ID      INT              AUTO_INCREMENT,
+    Project_ID      BIGINT           AUTO_INCREMENT,
     Project_Name    VARCHAR(256)     NOT NULL,
     Group_Type      VARCHAR(20)      DEFAULT 'Project' NOT NULL
                     CHECK (Group_Type in ('Project', 'Campaign', 'Panel', 'Study')),
     Description     VARCHAR(1000),
-    Version         INT              DEFAULT 0 NOT NULL,
+    Version         BIGINT           DEFAULT 0 NOT NULL,
     Date_Created    TIMESTAMP        DEFAULT current_timestamp NOT NULL,
     Last_Updated    DATETIME,
     Modified_by     VARCHAR(40),
     PRIMARY KEY (Project_ID)
-)ENGINE=INNODB
+)ENGINE=MYISAM
 COMMENT=''
 ;
 
@@ -318,18 +328,20 @@ COMMENT=''
 --
 
 CREATE TABLE Project_Assay(
-    Assay_ID               INT              NOT NULL,
-    Project_ID             INT              NOT NULL,
+--    Project_Assay_ID       BIGINT           NOT NULL,
+    Assay_ID               BIGINT           NOT NULL,
+    Project_ID             BIGINT           NOT NULL,
     STAGE                  VARCHAR(20)      NOT NULL,
-    Sequence_no            INT,
+    Sequence_no            BIGINT,
     Promotion_Threshold    FLOAT(8, 0),
     Promotion_Criteria     VARCHAR(1000),
-    Version                INT              DEFAULT 0 NOT NULL,
+    Version                BIGINT           DEFAULT 0 NOT NULL,
     Date_Created           TIMESTAMP        DEFAULT current_timestamp NOT NULL,
     Last_Updated           DATETIME,
     Modified_by            VARCHAR(40),
+--    PRIMARY KEY (Project_Assay_ID)
     PRIMARY KEY (Assay_ID, Project_ID)
-)ENGINE=INNODB
+)ENGINE=MYISAM
 COMMENT=''
 ;
 
@@ -338,16 +350,16 @@ COMMENT=''
 --
 
 CREATE TABLE Protocol(
-    Protocol_ID          INT             AUTO_INCREMENT,
+    Protocol_ID          BIGINT          AUTO_INCREMENT,
     Protocol_Name        VARCHAR(500)    NOT NULL,
     Protocol_Document    LONGBLOB,
-    Assay_ID             INT             NOT NULL,
-    Version              INT             DEFAULT 0 NOT NULL,
+    Assay_ID             BIGINT          NOT NULL,
+    Version              BIGINT          DEFAULT 0 NOT NULL,
     Date_Created         TIMESTAMP       DEFAULT current_timestamp NOT NULL,
     Last_Updated         DATETIME,
     Modified_by          VARCHAR(40),
     PRIMARY KEY (Protocol_ID)
-)ENGINE=INNODB
+)ENGINE=MYISAM
 COMMENT=''
 ;
 
@@ -358,47 +370,47 @@ COMMENT=''
 CREATE TABLE Qualifier(
     Qualifier       CHAR(2)          NOT NULL,
     Description     VARCHAR(1000),
-    Version         INT              DEFAULT 0 NOT NULL,
+    Version         BIGINT           DEFAULT 0 NOT NULL,
     Date_Created    TIMESTAMP        DEFAULT current_timestamp NOT NULL,
     Last_Updated    DATETIME,
     Modified_by     VARCHAR(40),
     PRIMARY KEY (Qualifier)
-)ENGINE=INNODB
+)ENGINE=MYISAM
 COMMENT=''
 ;
 
-insert into mlbd.qualifier values ('=', 'equals');
-insert into mlbd.qualifier values ('>=', 'greater than or equal');
-insert into mlbd.qualifier values ('<=', 'less than or equal');
-insert into mlbd.qualifier values ('<', 'greater than');
-insert into mlbd.qualifier values ('>', 'less than');
-insert into mlbd.qualifier values ('~', 'approximatley');
-insert into mlbd.qualifier values ('>>', 'very much greater than');
-insert into mlbd.qualifier values ('<<', 'very much less than');
+insert into mlbd.qualifier (Qualifier, Description) values ('=', 'equals');
+insert into mlbd.qualifier (Qualifier, Description) values ('>=', 'greater than or equal');
+insert into mlbd.qualifier (Qualifier, Description) values ('<=', 'less than or equal');
+insert into mlbd.qualifier (Qualifier, Description) values ('<', 'greater than');
+insert into mlbd.qualifier (Qualifier, Description) values ('>', 'less than');
+insert into mlbd.qualifier (Qualifier, Description) values ('~', 'approximatley');
+insert into mlbd.qualifier (Qualifier, Description) values ('>>', 'very much greater than');
+insert into mlbd.qualifier (Qualifier, Description) values ('<<', 'very much less than');
 commit;
 -- 
 -- TABLE: Result 
 --
 
 CREATE TABLE Result(
-    Result_ID            INT             AUTO_INCREMENT,
+    Result_ID            BIGINT          AUTO_INCREMENT,
     Value_Display        VARCHAR(256),
     value_num            FLOAT(8, 0),
     value_min            FLOAT(8, 0),
     Value_Max            FLOAT(8, 0),
     Qualifier            CHAR(2),
-    Result_Status_ID     INT             NOT NULL,
-    Experiment_ID        INT             NOT NULL,
-    Substance_ID         INT             NOT NULL,
-    Result_Context_ID    INT             NOT NULL,
+    Result_Status_ID     BIGINT          NOT NULL,
+    Experiment_ID        BIGINT          NOT NULL,
+    Substance_ID         BIGINT          NOT NULL,
+    Result_Context_ID    BIGINT          NOT NULL,
     Entry_Unit           VARCHAR(100),
-    Result_Type_ID       INT             NOT NULL,
-    Version              INT             DEFAULT 0 NOT NULL,
+    Result_Type_ID       BIGINT          NOT NULL,
+    Version              BIGINT          DEFAULT 0 NOT NULL,
     Date_Created         TIMESTAMP       DEFAULT current_timestamp NOT NULL,
     Last_Updated         DATETIME,
     Modified_by          VARCHAR(40),
     PRIMARY KEY (Result_ID)
-)ENGINE=INNODB
+)ENGINE=MYISAM
 COMMENT=''
 ;
 
@@ -407,14 +419,14 @@ COMMENT=''
 --
 
 CREATE TABLE Result_Context(
-    Result_Context_ID    INT             AUTO_INCREMENT,
+    Result_Context_ID    BIGINT          AUTO_INCREMENT,
     Context_Name         VARCHAR(125),
-    Version              INT             DEFAULT 0 NOT NULL,
+    Version              BIGINT          DEFAULT 0 NOT NULL,
     Date_Created         TIMESTAMP       DEFAULT current_timestamp NOT NULL,
     Last_Updated         DATETIME,
     Modified_by          VARCHAR(40),
     PRIMARY KEY (Result_Context_ID)
-)ENGINE=INNODB
+)ENGINE=MYISAM
 COMMENT=''
 ;
 
@@ -423,23 +435,23 @@ COMMENT=''
 --
 
 CREATE TABLE Result_Context_Item(
-    Result_Context_Item_ID    INT             AUTO_INCREMENT,
-    Experiment_ID             INT             NOT NULL,
-    Result_Context_ID         INT             NOT NULL,
-    Group_No                  INT,
-    Attribute_ID              INT             NOT NULL,
-    Value_ID                  INT,
+    Result_Context_Item_ID    BIGINT          AUTO_INCREMENT,
+    Experiment_ID             BIGINT          NOT NULL,
+    Result_Context_ID         BIGINT          NOT NULL,
+    Group_No                  BIGINT,
+    Attribute_ID              BIGINT          NOT NULL,
+    Value_ID                  BIGINT,
     Qualifier                 CHAR(2),
     Value_Display             VARCHAR(256),
     Value_num                 FLOAT(8, 0),
     Value_Min                 FLOAT(8, 0),
     value_Max                 FLOAT(8, 0),
-    Version                   INT             DEFAULT 0 NOT NULL,
+    Version                   BIGINT          DEFAULT 0 NOT NULL,
     Date_Created              TIMESTAMP       DEFAULT current_timestamp NOT NULL,
     Last_Updated              DATETIME,
     Modified_by               VARCHAR(40),
     PRIMARY KEY (Result_Context_Item_ID)
-)ENGINE=INNODB
+)ENGINE=MYISAM
 COMMENT=''
 ;
 
@@ -448,16 +460,18 @@ COMMENT=''
 --
 
 CREATE TABLE Result_Hierarchy(
-    Result_ID           INT            NOT NULL,
-    Parent_Result_ID    INT            NOT NULL,
+--    Result_Hierarchy_ID BIGINT         NOT NULL,
+    Result_ID           BIGINT         NOT NULL,
+    Parent_Result_ID    BIGINT         NOT NULL,
     Hierarchy_Type      VARCHAR(10)    NOT NULL
                         CHECK (Hierarchy_Type in ('Child', 'Derives')),
-    Version             INT            DEFAULT 0 NOT NULL,
+    Version             BIGINT         DEFAULT 0 NOT NULL,
     Date_Created        TIMESTAMP      DEFAULT current_timestamp NOT NULL,
     Last_Updated        DATETIME,
     Modified_by         VARCHAR(40),
+--    PRIMARY KEY (Result_Hierarchy_ID)
     PRIMARY KEY (Result_ID, Parent_Result_ID)
-)ENGINE=INNODB
+)ENGINE=MYISAM
 COMMENT=''
 ;
 
@@ -466,14 +480,14 @@ COMMENT=''
 --
 
 CREATE TABLE Result_Status(
-    Result_Status_ID    INT            AUTO_INCREMENT,
+    Result_Status_ID    BIGINT         AUTO_INCREMENT,
     Status              VARCHAR(20)    NOT NULL,
-    Version             INT            DEFAULT 0 NOT NULL,
+    Version             BIGINT         DEFAULT 0 NOT NULL,
     Date_Created        TIMESTAMP      DEFAULT current_timestamp NOT NULL,
     Last_Updated        DATETIME,
     Modified_by         VARCHAR(40),
     PRIMARY KEY (Result_Status_ID)
-)ENGINE=INNODB
+)ENGINE=MYISAM
 COMMENT=''
 ;
 
@@ -489,18 +503,18 @@ commit;
 --
 
 CREATE TABLE Result_Type(
-    Result_Type_ID           INT              AUTO_INCREMENT,
-    Parent_Result_type_ID    INT,
+    Result_Type_ID           BIGINT           AUTO_INCREMENT,
+    Parent_Result_type_ID    BIGINT,
     Result_Type_Name         VARCHAR(128)     NOT NULL,
     Description              VARCHAR(1000),
-    Result_Type_Status_ID    INT              NOT NULL,
+    Result_Type_Status_ID    BIGINT           NOT NULL,
     Base_Unit                VARCHAR(100),
-    Version                  INT              DEFAULT 0 NOT NULL,
+    Version                  BIGINT           DEFAULT 0 NOT NULL,
     Date_Created             TIMESTAMP        DEFAULT current_timestamp NOT NULL,
     Last_Updated             DATETIME,
     Modified_by              VARCHAR(40),
     PRIMARY KEY (Result_Type_ID)
-)ENGINE=INNODB
+)ENGINE=MYISAM
 COMMENT=''
 ;
 
@@ -511,12 +525,12 @@ COMMENT=''
 CREATE TABLE Stage(
     Stage           VARCHAR(20)      NOT NULL,
     Description     VARCHAR(1000),
-    Version         INT              DEFAULT 0 NOT NULL,
+    Version         BIGINT           DEFAULT 0 NOT NULL,
     Date_Created    TIMESTAMP        DEFAULT current_timestamp NOT NULL,
     Last_Updated    DATETIME,
     Modified_by     VARCHAR(40),
     PRIMARY KEY (Stage)
-)ENGINE=INNODB
+)ENGINE=MYISAM
 COMMENT=''
 ;
 
@@ -532,18 +546,18 @@ Commit;
 --
 
 CREATE TABLE Substance(
-    Substance_ID        INT               AUTO_INCREMENT,
-    Compound_ID         INT,
+    Substance_ID        BIGINT            AUTO_INCREMENT,
+    Compound_ID         BIGINT,
     SMILES              VARCHAR(4000),
     Molecular_Weight    DECIMAL(10, 3),
     Substance_Type      VARCHAR(20)       NOT NULL
                         CHECK (Substance_Type in ('small molecule', 'protein', 'peptide', 'antibody', 'cell', 'oligonucleotide')),
-    Version             INT               DEFAULT 0 NOT NULL,
+    Version             BIGINT            DEFAULT 0 NOT NULL,
     Date_Created        TIMESTAMP         DEFAULT current_timestamp NOT NULL,
     Last_Updated        DATETIME,
     Modified_by         VARCHAR(40),
     PRIMARY KEY (Substance_ID)
-)ENGINE=INNODB
+)ENGINE=MYISAM
 COMMENT=''
 ;
 
@@ -554,12 +568,12 @@ COMMENT=''
 CREATE TABLE Unit(
     Unit            VARCHAR(100)     NOT NULL,
     Description     VARCHAR(1000),
-    Version         INT              DEFAULT 0 NOT NULL,
+    Version         BIGINT           DEFAULT 0 NOT NULL,
     Date_Created    TIMESTAMP        DEFAULT current_timestamp NOT NULL,
     Last_Updated    DATETIME,
     Modified_by     VARCHAR(40),
     PRIMARY KEY (Unit)
-)ENGINE=INNODB
+)ENGINE=MYISAM
 COMMENT=''
 ;
 
@@ -568,17 +582,19 @@ COMMENT=''
 --
 
 CREATE TABLE Unit_Conversion(
-    From_Unit       VARCHAR(100)    NOT NULL,
-    To_Unit         VARCHAR(100)    NOT NULL,
-    Multiplier      FLOAT(8, 0),
-    Offset          FLOAT(8, 0),
-    Formula         VARCHAR(256),
-    Version         INT             DEFAULT 0 NOT NULL,
-    Date_Created    TIMESTAMP       DEFAULT current_timestamp NOT NULL,
-    Last_Updated    DATETIME,
-    Modified_by     VARCHAR(40),
+--    Unit_Conversion_ID  BIGINT          NOT NULL,
+    From_Unit           VARCHAR(100)    NOT NULL,
+    To_Unit             VARCHAR(100)    NOT NULL,
+    Multiplier          FLOAT(8, 0),
+    Offset              FLOAT(8, 0),
+    Formula             VARCHAR(256),
+    Version             BIGINT          DEFAULT 0 NOT NULL,
+    Date_Created        TIMESTAMP       DEFAULT current_timestamp NOT NULL,
+    Last_Updated        DATETIME,
+    Modified_by         VARCHAR(40),
+--    PRIMARY KEY (UNIT_cONVERSION_ID)
     PRIMARY KEY (From_Unit, To_Unit)
-)ENGINE=INNODB
+)ENGINE=MYISAM
 COMMENT=''
 ;
 
