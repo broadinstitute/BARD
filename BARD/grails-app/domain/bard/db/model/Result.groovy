@@ -28,9 +28,6 @@ class Result {
 		id column: "Result_ID"
         unit column: "entry_unit"
         qualifier column: "qualifier", sqlType: "char", length: 2
-        valueNum sqlType: "binary_float"
-        valueMin sqlType: "binary_float"
-        valueMax sqlType: "binary_float"
 	}
 
 	static constraints = {
