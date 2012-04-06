@@ -1,3 +1,3 @@
-tocTab[tocTab.length] = new Array("0.7:1", "", "Component Model", "EARoot/EA7/EA455.htm", "178.png", "12", "0", "", "Component diagram0","{E66B9D06-290C-4690-B7FC-9C5BCA4F2B24}");
-tocTab[tocTab.length] = new Array("0.7:2", "", "MLBD Hardware", "EARoot/EA7/EA457.htm", "179.png", "25", "0", "", "Deployment diagram0","{45B641A4-F344-4f75-949A-C157D3308067}");
-tocTab[tocTab.length] = new Array("0.7.1", "1", "MLBD overview", "EARoot/EA7/EA464.htm", "4.png", "", "", "{71CB31A6-D3CF-4677-B2D4-119052F67620}", "Package");
+tocTab[tocTab.length] = new Array("0.7:1", "", "Component Model", "EARoot/EA7/EA501.htm", "178.png", "12", "0", "", "Component diagram0","{E66B9D06-290C-4690-B7FC-9C5BCA4F2B24}");
+tocTab[tocTab.length] = new Array("0.7:2", "", "MLBD Hardware", "EARoot/EA7/EA503.htm", "179.png", "25", "0", "", "Deployment diagram0","{45B641A4-F344-4f75-949A-C157D3308067}");
+tocTab[tocTab.length] = new Array("0.7.1", "1", "MLBD overview", "EARoot/EA7/EA510.htm", "4.png", "", "", "{71CB31A6-D3CF-4677-B2D4-119052F67620}", "Package");
