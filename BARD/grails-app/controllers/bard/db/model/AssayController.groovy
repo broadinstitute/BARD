@@ -9,6 +9,13 @@ class AssayController {
     def index() {
         redirect(action: "list", params: params)
     }
+	
+	def assayDescription(){
+		AssayStatus assayStatus = AssayStatus.get(1);
+		Assay assay = new Assay(params)
+		assay.setAssayStatus(assayStatus)	
+		[assayInstance: assay]
+	}
 
     def list() {
         params.max = Math.min(params.max ? params.int('max') : 10, 100)
