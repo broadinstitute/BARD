@@ -19,4 +19,9 @@ class AssayStatus {
 		lastUpdated nullable: true, maxSize: 19
 		modifiedBy nullable: true, maxSize: 40
 	}
+
+    @Override
+    public String toString() {
+        return id + " - " + status;
+    }
 }
