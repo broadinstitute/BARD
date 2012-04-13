@@ -1,5 +1,5 @@
 
-<%@ page import="bard.db.model.Assay" %>
+<%@ page import="bard.db.registration.Assay" %>
 <!doctype html>
 <html>
 	<head>

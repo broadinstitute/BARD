@@ -1,4 +1,4 @@
-<%@ page import="bard.db.model.Assay" %>
+<%@ page import="bard.db.registration.Assay" %>
 
 
 
@@ -47,7 +47,7 @@
 		<g:message code="assay.assayStatus.label" default="Assay Status" />
 		<span class="required-indicator">*</span>
 	</label>
-	<g:select id="assayStatus" name="assayStatus.id" from="${bard.db.model.AssayStatus.list()}" optionKey="id" required="" value="${assayInstance?.assayStatus?.id}" class="many-to-one"/>
+	<g:select id="assayStatus" name="assayStatus.id" from="${bard.db.registration.AssayStatus.list()}" optionKey="id" required="" value="${assayInstance?.assayStatus?.id}" class="many-to-one"/>
 </div>
 
 <div class="fieldcontain ${hasErrors(bean: assayInstance, field: 'experiments', 'error')} ">
