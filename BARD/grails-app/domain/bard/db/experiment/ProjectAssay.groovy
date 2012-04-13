@@ -35,6 +35,7 @@ class ProjectAssay implements Serializable {
 
 	static mapping = {
 		id composite: ["assay", "project"]
+        stage column: "stage"
 	}
 
 	static constraints = {
