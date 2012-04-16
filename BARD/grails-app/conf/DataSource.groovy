@@ -26,8 +26,8 @@ environments {
             dbCreate = 'validate'
             url = "jdbc:oracle:thin:@dbnode01:1521:bcbdev"
             driverClassName = "oracle.jdbc.driver.OracleDriver"
-            dialect = org.hibernate.dialect.Oracle10gDialect
-            username = "mlbd_dev"
+            dialect = bard.SequencePerTableOracleDialect
+            username = "bard_dev"
             password = "guest"
         }
     }
