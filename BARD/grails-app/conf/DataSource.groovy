@@ -3,7 +3,6 @@ dataSource {
 	driverClassName = "com.mysql.jdbc.Driver"
 	username = "username"
 	password = "password"
-	dialect = "org.hibernate.dialect.MySQLDialect"
 }
 hibernate {
 	cache.use_second_level_cache = true
@@ -15,8 +14,11 @@ hibernate {
 environments {
 	development {
 		dataSource {
-			dbCreate = "update" // one of 'create', 'create-drop', 'update', 'validate', ''
-			url = "jdbc:mysql://dbserver:3306/mlbd"
+			dbCreate = "create-drop" // one of 'create', 'create-drop', 'update', 'validate', ''
+            url = "jdbc:h2:mem:devDB"
+            driverClassName = "org.h2.Driver"
+            username = "sa"
+            password = ""
 		}
 	}
     oracle {
@@ -24,21 +26,30 @@ environments {
             dbCreate = 'validate'
             url = "jdbc:oracle:thin:@dbnode01:1521:bcbdev"
             driverClassName = "oracle.jdbc.driver.OracleDriver"
-            dialect = org.hibernate.dialect.Oracle10gDialect
-            username = "mlbd_dev"
+            dialect = bard.SequencePerTableOracleDialect
+            username = "bard_dev"
             password = "guest"
+        }
+    }
+    mysql {
+        dataSource {
+            dbCreate = "update"
+            url = "jdbc:mysql://dbserver:3306/mlbd"
+            dialect = "org.hibernate.dialect.MySQLDialect"
         }
     }
 	test {
 		dataSource {
 			dbCreate = "update"
 			url = "jdbc:mysql://dbserver:3306/mlbd"
+            dialect = "org.hibernate.dialect.MySQLDialect"
 		}
 	}
 	production {
 		dataSource {
 			dbCreate = "update"
 			url = "jdbc:mysql://dbserver:3306/mlbd"
+            dialect = "org.hibernate.dialect.MySQLDialect"
 		}
 	}
 }
