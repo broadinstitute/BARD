@@ -1,7 +1,7 @@
 -- SCRIPT TO INSERT BAO data into the Element table
 --
 --  schatwin
---  4/18/12
+--  4/20/12 - added single root entry
 --
 -- commit every 10 rows to isolate any failures
 -- based on .obo file v9 from RDM team
@@ -10,10 +10,11 @@
 --  they should be ALTERed to reset the start number
 
 
-insert into element (element_id, parent_element_id,label, description, element_status_id) values (0, '', 'BARD ASSAY ONTOLOGY', '', 2);
-insert into element (element_id, parent_element_id,label, description, element_status_id) values (1, '', 'BARD DICTIONARY', '', 2);
-insert into element (element_id, parent_element_id,label, description, element_status_id) values (2, '', 'EXTERNAL DICTIONARY', '', 2);
-insert into element (element_id, parent_element_id,label, description, element_status_id) values (3, '', 'EXTERNAL ONTOLOGY', '', 2);
+insert into element (element_id, parent_element_id,label, description, element_status_id) values (-1, '', 'Root', '', 2);
+insert into element (element_id, parent_element_id,label, description, element_status_id) values (0, -1, 'BARD ASSAY ONTOLOGY', '', 2);
+insert into element (element_id, parent_element_id,label, description, element_status_id) values (1, -1, 'BARD DICTIONARY', '', 2);
+insert into element (element_id, parent_element_id,label, description, element_status_id) values (2, -1, 'EXTERNAL DICTIONARY', '', 2);
+insert into element (element_id, parent_element_id,label, description, element_status_id) values (3, -1, 'EXTERNAL ONTOLOGY', '', 2);
 insert into element (element_id, parent_element_id,label, description, element_status_id) values (4, 0, 'assay', 'An experiment carried out to test the effect of a perturbagen on a biological entity, measuring one or more readout facilitated by an assay design and assay type, and record the results one or more endpoint that quantifies or qualifies the extent of perturbation.', 2);
 insert into element (element_id, parent_element_id,label, description, element_status_id) values (5, 0, 'biology', 'A biological entity or process that is the presumed subject of the assay; may refer to a macromolecule whose activity is being regulated, or to a cell-biological process (e.g., neurite outgrowth).', 2);
 insert into element (element_id, parent_element_id,label, description, element_status_id) values (6, 0, 'project management', '', 2);
