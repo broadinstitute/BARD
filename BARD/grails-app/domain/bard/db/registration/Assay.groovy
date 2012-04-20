@@ -6,6 +6,8 @@ import bard.db.experiment.ProjectAssay
 
 class Assay {
 
+    static expose = 'assay'
+
 	String assayName
 	String assayVersion
 	String description

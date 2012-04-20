@@ -2,6 +2,8 @@ package bard.db.registration
 
 class AssayStatus {
 
+    static expose = 'assay-status'
+
 	String status
 	Date dateCreated
 	Date lastUpdated

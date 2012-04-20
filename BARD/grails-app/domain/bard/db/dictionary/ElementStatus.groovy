@@ -2,6 +2,8 @@ package bard.db.dictionary
 
 class ElementStatus {
 
+    static expose = 'element-status'
+
 	String elementStatus
 	String capability
 	Date dateCreated

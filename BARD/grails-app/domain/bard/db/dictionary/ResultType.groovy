@@ -6,6 +6,8 @@ import bard.db.util.Unit
 
 class ResultType {
 
+    static expose = 'result-type'
+
 	String resultTypeName
 	String description
 	Date dateCreated

@@ -6,6 +6,8 @@ import bard.db.util.Unit
 
 class Element {
 
+    static expose = 'element'
+
 	String label
 	String description
 	String abbreviation

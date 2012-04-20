@@ -5,6 +5,8 @@ import bard.db.dictionary.ResultType
 
 class Measure {
 
+    static expose = 'measure'
+
 	Date dateCreated
 	Date lastUpdated
 	String modifiedBy

@@ -24,11 +24,21 @@ environments {
     oracle {
         dataSource {
             dbCreate = 'validate'
-            url = "jdbc:oracle:thin:@dbnode01:1521:bcbdev"
+            url = "jdbc:oracle:thin:@barddb:1521:bardqa"
             driverClassName = "oracle.jdbc.driver.OracleDriver"
             dialect = bard.SequencePerTableOracleDialect
             username = "bard_dev"
-            password = "guest"
+            password = "bard_dev"
+        }
+    }
+    oracle_qa {
+        dataSource {
+            dbCreate = 'validate'
+            url = "jdbc:oracle:thin:@barddb:1521:bardqa"
+            driverClassName = "oracle.jdbc.driver.OracleDriver"
+            dialect = bard.SequencePerTableOracleDialect
+            username = "bard_qa"
+            password = "bard_qa"
         }
     }
     mysql {

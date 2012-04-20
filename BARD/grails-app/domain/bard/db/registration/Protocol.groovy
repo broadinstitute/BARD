@@ -2,6 +2,8 @@ package bard.db.registration
 
 class Protocol {
 
+    static expose = 'protocol'
+
 	String protocolName
 	byte[] protocolDocument
 	Date dateCreated

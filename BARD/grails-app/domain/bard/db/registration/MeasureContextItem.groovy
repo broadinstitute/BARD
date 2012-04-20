@@ -6,6 +6,8 @@ import bard.db.util.Qualifier
 
 class MeasureContextItem {
 
+    static expose = 'measure-context-item'
+
 	Integer groupNo
 	AttributeType attributeType
 	String valueDisplay

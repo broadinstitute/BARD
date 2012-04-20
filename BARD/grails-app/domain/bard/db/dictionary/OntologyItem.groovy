@@ -2,6 +2,8 @@ package bard.db.dictionary
 
 class OntologyItem {
 
+    static expose = 'ontology-item'
+
 	String itemReference
 	Date dateCreated
 	Date lastUpdated
