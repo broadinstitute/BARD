@@ -1,0 +1,39 @@
+{
+    "id": "ExtBox1-ext-gen43443",
+    "type": "treepanel",
+    "reference": {
+        "name": "items",
+        "type": "array"
+    },
+    "codeClass": null,
+    "userConfig": {
+        "height": 250,
+        "width": 400,
+        "autoScroll": true,
+        "title": "Dictionary",
+        "store": "elementTreeStore",
+        "rootVisible": false,
+        "useArrows": true,
+        "designer|userClassName": "elementTree"
+    },
+    "customConfigs": [],
+    "designerId": "73cba1bf-3a9d-4a81-85e3-bee986f37af1",
+    "$viewOrder": 5,
+    "expanded": true,
+    "cn": [
+        {
+            "id": "ExtBox1-ext-gen43452",
+            "type": "treeview",
+            "reference": {
+                "name": "viewConfig",
+                "type": "object"
+            },
+            "codeClass": null,
+            "userConfig": {
+                "designer|userClassName": "MyTreeView"
+            },
+            "customConfigs": [],
+            "expanded": true
+        }
+    ]
+}

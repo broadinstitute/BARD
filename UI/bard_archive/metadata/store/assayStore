@@ -7,7 +7,9 @@
     },
     "codeClass": null,
     "userConfig": {
+        "autoLoad": true,
         "storeId": "assayStore",
+        "model": "Assay",
         "designer|userClassName": "assayStore",
         "autoCreated": "false"
     },
@@ -19,7 +21,7 @@
         }
     ],
     "designerId": "0065163c-b9de-4ad6-b7a5-40652f3b9bc9",
-    "$viewOrder": 2,
+    "$viewOrder": 1,
     "expanded": true,
     "cn": [
         {
@@ -32,11 +34,11 @@
             "codeClass": null,
             "userConfig": {
                 "filterParam": "assayId",
-                "url": "",
+                "url": "api/assay",
                 "designer|userClassName": "Ajax Proxy2"
             },
             "customConfigs": [],
-            "expanded": false,
+            "expanded": true,
             "cn": [
                 {
                     "id": "ExtBox1-ext-gen9184",
@@ -47,12 +49,30 @@
                     },
                     "codeClass": null,
                     "userConfig": {
+                        "root": "data",
+                        "totalProperty": "count",
                         "designer|userClassName": "Json Reader2"
                     },
                     "customConfigs": [],
                     "expanded": true
                 }
             ]
+        },
+        {
+            "id": "ExtBox1-ext-gen47789",
+            "type": "datafield",
+            "reference": {
+                "name": "fields",
+                "type": "array"
+            },
+            "codeClass": null,
+            "userConfig": {
+                "name": "id",
+                "type": "int",
+                "designer|userClassName": "MyField27"
+            },
+            "customConfigs": [],
+            "expanded": true
         },
         {
             "id": "ExtBox1-ext-gen9761",
@@ -64,6 +84,7 @@
             "codeClass": null,
             "userConfig": {
                 "name": "assayName",
+                "type": "string",
                 "designer|userClassName": "MyField5"
             },
             "customConfigs": [],

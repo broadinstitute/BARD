@@ -13,7 +13,7 @@
     "customConfigs": [],
     "designerId": "fa3aad52-b802-43c4-bbad-7b8deb12b107",
     "$viewOrder": 0,
-    "expanded": false,
+    "expanded": true,
     "cn": [
         {
             "id": "ExtBox1-ext-gen19444",
@@ -186,6 +186,23 @@
                 "name": "assayStatus",
                 "type": "string",
                 "designer|userClassName": "MyField18"
+            },
+            "customConfigs": [],
+            "expanded": true
+        },
+        {
+            "id": "ExtBox1-ext-gen53142",
+            "type": "hasmanyassociation",
+            "reference": {
+                "name": "hasMany",
+                "type": "object"
+            },
+            "codeClass": null,
+            "userConfig": {
+                "model": "measure",
+                "foreignKey": "assay_id",
+                "name": "measures",
+                "designer|userClassName": "MyHasManyAssociation"
             },
             "customConfigs": [],
             "expanded": true

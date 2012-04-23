@@ -1,9 +1,5 @@
 package bard.db.util
 
-import bard.db.experiment.Result
-import bard.db.experiment.ResultContextItem
-import bard.db.registration.MeasureContextItem
-
 class Qualifier {
 
 	String qualifier
@@ -11,10 +7,6 @@ class Qualifier {
 	Date dateCreated
 	Date lastUpdated
 	String modifiedBy
-
-	static hasMany = [measureContextItems: MeasureContextItem,
-	                  resultContextItems: ResultContextItem,
-	                  results: Result]
 
 	static mapping = {
 		id name: "qualifier", generator: "assigned"

@@ -15,7 +15,7 @@ class Measure {
 	Unit entryUnit
 	ResultType resultType
 
-	static belongsTo = [Assay, MeasureContext, ResultType, Unit]
+	static belongsTo = [Assay]
 
 	static mapping = {
 		id column: "Measure_ID"
@@ -26,5 +26,9 @@ class Measure {
 		dateCreated maxSize: 19
 		lastUpdated nullable: true, maxSize: 19
 		modifiedBy nullable: true, maxSize: 40
+        assay nullable: false
+        resultType nullable: false
+        measureContext nullable: true
+        entryUnit nullable: true
 	}
 }

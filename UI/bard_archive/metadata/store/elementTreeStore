@@ -1,30 +1,24 @@
 {
-    "id": "ExtBox1-ext-gen31945",
-    "type": "jsonstore",
+    "id": "ExtBox1-ext-gen42560",
+    "type": "treestore",
     "reference": {
         "name": "items",
         "type": "array"
     },
     "codeClass": null,
     "userConfig": {
-        "storeId": "MyJsonStore3",
-        "model": "AssayStatus",
-        "designer|userClassName": "AssayStatusDStore",
-        "autoCreated": "false"
+        "autoLoad": true,
+        "storeId": "elementTreeStore",
+        "model": "elementModel",
+        "designer|userClassName": "elementTreeStore"
     },
-    "customConfigs": [
-        {
-            "group": "(Custom Properties)",
-            "name": "autoCreated",
-            "type": "string"
-        }
-    ],
-    "designerId": "1ba10220-79f4-48e9-81d1-6c819a3d1050",
-    "$viewOrder": 2,
+    "customConfigs": [],
+    "designerId": "a2c19908-53f1-4426-95f0-053f6aaeb659",
+    "$viewOrder": 3,
     "expanded": true,
     "cn": [
         {
-            "id": "ExtBox1-ext-gen31952",
+            "id": "ExtBox1-ext-gen42567",
             "type": "ajaxproxy",
             "reference": {
                 "name": "proxy",
@@ -32,14 +26,14 @@
             },
             "codeClass": null,
             "userConfig": {
-                "url": "api/assay-status",
-                "designer|userClassName": "MyAjaxProxy3"
+                "url": "element/list",
+                "designer|userClassName": "MyAjaxProxy4"
             },
             "customConfigs": [],
             "expanded": true,
             "cn": [
                 {
-                    "id": "ExtBox1-ext-gen31960",
+                    "id": "ExtBox1-ext-gen42575",
                     "type": "jsonreader",
                     "reference": {
                         "name": "reader",
@@ -47,7 +41,7 @@
                     },
                     "codeClass": null,
                     "userConfig": {
-                        "designer|userClassName": "MyJsonReader4"
+                        "designer|userClassName": "MyJsonReader5"
                     },
                     "customConfigs": [],
                     "expanded": true

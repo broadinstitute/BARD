@@ -1,11 +1,11 @@
 {
     "name": "bard",
     "settings": {
-        "urlPrefix": "http://localhost/BARD",
+        "urlPrefix": "http://localhost:8081/BARD",
         "directAPI": "",
         "spacesToIndent": "4",
         "codeGenFormat": "Class",
-        "exportPath": "C:/Program Files/Apache Software Foundation/Apache2.2/htdocs/cap",
+        "exportPath": "../../BARD/web-app",
         "extPath": "http://extjs.cachefly.net/ext-4.0.2a/",
         "senchaIoKey": "",
         "senchaIoPath": "/",
@@ -70,14 +70,6 @@
             ],
             "className": "assayStatusStore"
         },
-        "86440226-df93-4191-91e5-05ab3cd420fb": {
-            "paths": [
-                "metadata/store/assayResultTypeStore",
-                "app/store/override/assayResultTypeStore.js",
-                "app/store/assayResultTypeStore.js"
-            ],
-            "className": "assayResultTypeStore"
-        },
         "0065163c-b9de-4ad6-b7a5-40652f3b9bc9": {
             "paths": [
                 "metadata/store/assayStore",
@@ -125,6 +117,38 @@
                 "app/model/Project.js"
             ],
             "className": "Project"
+        },
+        "500444c0-8971-474d-b476-57aef6a5820d": {
+            "paths": [
+                "metadata/model/elementModel",
+                "app/model/override/elementModel.js",
+                "app/model/elementModel.js"
+            ],
+            "className": "elementModel"
+        },
+        "a2c19908-53f1-4426-95f0-053f6aaeb659": {
+            "paths": [
+                "metadata/store/elementTreeStore",
+                "app/store/override/elementTreeStore.js",
+                "app/store/elementTreeStore.js"
+            ],
+            "className": "elementTreeStore"
+        },
+        "73cba1bf-3a9d-4a81-85e3-bee986f37af1": {
+            "paths": [
+                "metadata/view/elementTree",
+                "app/view/override/elementTree.js",
+                "app/view/elementTree.js"
+            ],
+            "className": "elementTree"
+        },
+        "cbd7a3b6-ddc5-42d0-8749-1925b0912401": {
+            "paths": [
+                "metadata/model/measure",
+                "app/model/override/measure.js",
+                "app/model/measure.js"
+            ],
+            "className": "measure"
         }
     },
     "expandedState": {

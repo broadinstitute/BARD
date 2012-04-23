@@ -1,0 +1,79 @@
+{
+    "id": "ExtBox1-ext-gen53296",
+    "type": "datamodel",
+    "reference": {
+        "name": "items",
+        "type": "array"
+    },
+    "codeClass": null,
+    "userConfig": {
+        "designer|userClassName": "measure"
+    },
+    "customConfigs": [],
+    "designerId": "cbd7a3b6-ddc5-42d0-8749-1925b0912401",
+    "$viewOrder": 5,
+    "expanded": true,
+    "cn": [
+        {
+            "id": "ExtBox1-ext-gen53496",
+            "type": "datafield",
+            "reference": {
+                "name": "fields",
+                "type": "array"
+            },
+            "codeClass": null,
+            "userConfig": {
+                "name": "resultType",
+                "designer|userClassName": "MyField28"
+            },
+            "customConfigs": [],
+            "expanded": true
+        },
+        {
+            "id": "ExtBox1-ext-gen53667",
+            "type": "datafield",
+            "reference": {
+                "name": "fields",
+                "type": "array"
+            },
+            "codeClass": null,
+            "userConfig": {
+                "name": "entryUnit",
+                "designer|userClassName": "MyField29"
+            },
+            "customConfigs": [],
+            "expanded": true
+        },
+        {
+            "id": "ExtBox1-ext-gen53845",
+            "type": "datafield",
+            "reference": {
+                "name": "fields",
+                "type": "array"
+            },
+            "codeClass": null,
+            "userConfig": {
+                "name": "measureContext",
+                "designer|userClassName": "MyField30"
+            },
+            "customConfigs": [],
+            "expanded": true
+        },
+        {
+            "id": "ExtBox1-ext-gen54397",
+            "type": "belongstoassociation",
+            "reference": {
+                "name": "belongsTo",
+                "type": "object"
+            },
+            "codeClass": null,
+            "userConfig": {
+                "model": "Assay",
+                "foreignKey": null,
+                "designer|userClassName": "MyBelongsToAssociation2"
+            },
+            "customConfigs": [],
+            "expanded": true
+        }
+    ]
+}

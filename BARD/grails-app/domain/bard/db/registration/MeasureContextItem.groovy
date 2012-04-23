@@ -17,18 +17,18 @@ class MeasureContextItem {
 	Date dateCreated
 	Date lastUpdated
 	String modifiedBy
-	Element elementByValueId
+    Element attributeElement
+    Element valueElement
 	MeasureContext measureContext
-	Element elementByAttributeId
 	Assay assay
 	Qualifier qualifier
 
-	static belongsTo = [Assay, Element, MeasureContext, Qualifier]
+	static belongsTo = [Assay, MeasureContext]
 
 	static mapping = {
 		id column: "measure_Context_Item_ID"
-        elementByValueId column: "value_id"
-        elementByAttributeId column: "attribute_id"
+        valueElement column: "value_id"
+        attributeElement column: "attribute_id"
         qualifier column: "qualifier", sqlType: "char", length: 2
 	}
 
@@ -43,5 +43,10 @@ class MeasureContextItem {
 		dateCreated maxSize: 19
 		lastUpdated nullable: true, maxSize: 19
 		modifiedBy nullable: true, maxSize: 40
+        attributeElement nullable: false
+        valueElement nullable: true
+        measureContext nullable: false
+        assay nullable: false
+        qualifier nullable: true
 	}
 }

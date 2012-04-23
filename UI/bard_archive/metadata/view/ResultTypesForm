@@ -17,136 +17,8 @@
     "customConfigs": [],
     "designerId": "37e76b91-6c80-4630-960a-47f86929220d",
     "$viewOrder": 1,
-    "expanded": true,
+    "expanded": false,
     "cn": [
-        {
-            "id": "ExtBox1-ext-gen2025",
-            "type": "fieldset",
-            "reference": {
-                "name": "items",
-                "type": "array"
-            },
-            "codeClass": null,
-            "userConfig": {
-                "title": null,
-                "designer|userClassName": "MyFieldSet"
-            },
-            "customConfigs": [],
-            "expanded": true,
-            "cn": [
-                {
-                    "id": "ExtBox1-ext-gen2184",
-                    "type": "displayfield",
-                    "reference": {
-                        "name": "items",
-                        "type": "array"
-                    },
-                    "codeClass": null,
-                    "userConfig": {
-                        "name": "assayIdField",
-                        "value": "2244",
-                        "fieldLabel": "Assay ID#",
-                        "designer|userClassName": "MyTextField"
-                    },
-                    "customConfigs": [],
-                    "expanded": true
-                },
-                {
-                    "id": "ExtBox1-ext-gen2832",
-                    "type": "combobox",
-                    "reference": {
-                        "name": "items",
-                        "type": "array"
-                    },
-                    "codeClass": null,
-                    "userConfig": {
-                        "name": "statusComboBox",
-                        "fieldLabel": "Status",
-                        "displayField": null,
-                        "store": null,
-                        "valueField": null,
-                        "designer|userClassName": "MyComboBox"
-                    },
-                    "customConfigs": [],
-                    "expanded": true
-                },
-                {
-                    "id": "ExtBox1-ext-gen3339",
-                    "type": "displayfield",
-                    "reference": {
-                        "name": "items",
-                        "type": "array"
-                    },
-                    "codeClass": null,
-                    "userConfig": {
-                        "name": "lastUpdatedField",
-                        "value": "March 19, 2012",
-                        "fieldLabel": "Last Updated",
-                        "designer|userClassName": "MyDisplayField",
-                        "layout|anchor": "100%"
-                    },
-                    "customConfigs": [],
-                    "expanded": true
-                },
-                {
-                    "id": "ExtBox1-ext-gen6225",
-                    "type": "fieldcontainer",
-                    "reference": {
-                        "name": "items",
-                        "type": "array"
-                    },
-                    "codeClass": null,
-                    "userConfig": {
-                        "height": 27,
-                        "layout": "hbox",
-                        "fieldLabel": null,
-                        "designer|userClassName": "MyFieldContainer",
-                        "container|align": "stretch",
-                        "layout|anchor": "100%"
-                    },
-                    "customConfigs": [],
-                    "expanded": false,
-                    "cn": [
-                        {
-                            "id": "ExtBox1-ext-gen5309",
-                            "type": "textfield",
-                            "reference": {
-                                "name": "items",
-                                "type": "array"
-                            },
-                            "codeClass": null,
-                            "userConfig": {
-                                "padding": null,
-                                "name": "assayName",
-                                "fieldLabel": "Name",
-                                "designer|userClassName": "MyTextField1",
-                                "layout|flex": 1
-                            },
-                            "customConfigs": [],
-                            "expanded": true
-                        },
-                        {
-                            "id": "ExtBox1-ext-gen5868",
-                            "type": "numberfield",
-                            "reference": {
-                                "name": "items",
-                                "type": "array"
-                            },
-                            "codeClass": null,
-                            "userConfig": {
-                                "width": null,
-                                "name": "assayInstance.assayVersion",
-                                "fieldLabel": "Version",
-                                "designer|userClassName": "MyNumberField",
-                                "layout|flex": 1
-                            },
-                            "customConfigs": [],
-                            "expanded": true
-                        }
-                    ]
-                }
-            ]
-        },
         {
             "id": "ExtBox1-ext-gen8088",
             "type": "panel",
@@ -156,8 +28,8 @@
             },
             "codeClass": null,
             "userConfig": {
-                "height": 434,
-                "width": 971,
+                "height": 459,
+                "width": 817,
                 "layout": "border",
                 "title": "Measures/Result Types",
                 "designer|userClassName": "MyPanel"
@@ -176,7 +48,7 @@
                     "userConfig": {
                         "autoScroll": true,
                         "title": null,
-                        "store": null,
+                        "store": "assayStore",
                         "designer|userClassName": "MyGridPanel",
                         "layout|flex": 1,
                         "layout|region": "center"

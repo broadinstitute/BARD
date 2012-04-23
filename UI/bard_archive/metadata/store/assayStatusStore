@@ -33,7 +33,7 @@
             },
             "codeClass": null,
             "userConfig": {
-                "url": "",
+                "url": "api/assay-status",
                 "designer|userClassName": "Ajax Proxy"
             },
             "customConfigs": [],

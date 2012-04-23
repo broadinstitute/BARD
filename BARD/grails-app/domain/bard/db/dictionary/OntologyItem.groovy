@@ -2,8 +2,6 @@ package bard.db.dictionary
 
 class OntologyItem {
 
-    static expose = 'ontology-item'
-
 	String itemReference
 	Date dateCreated
 	Date lastUpdated
@@ -12,7 +10,7 @@ class OntologyItem {
 	ResultType resultType
 	Ontology ontology
 
-	static belongsTo = [Element, Ontology, ResultType]
+	static belongsTo = [Ontology]
 
 	static mapping = {
 		id column: "Ontology_Item_ID"
@@ -24,5 +22,8 @@ class OntologyItem {
 		dateCreated maxSize: 19
 		lastUpdated nullable: true, maxSize: 19
 		modifiedBy nullable: true, maxSize: 40
+        ontology nullable: false
+        element nullable: true
+        resultType nullable: true
 	}
 }

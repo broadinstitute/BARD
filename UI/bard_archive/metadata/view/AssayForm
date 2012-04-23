@@ -51,7 +51,7 @@
                 "width": 230,
                 "name": "assayStatus",
                 "fieldLabel": "Status",
-                "store": null,
+                "store": "AssayStatusDStore",
                 "designer|userClassName": "MyComboBox",
                 "layout|x": 320,
                 "layout|y": 10
@@ -167,12 +167,13 @@
                 "height": 190,
                 "width": 210,
                 "title": "Protocol",
+                "store": "assayStore",
                 "designer|userClassName": "MyGridPanel",
                 "layout|x": 10,
                 "layout|y": 280
             },
             "customConfigs": [],
-            "expanded": false,
+            "expanded": true,
             "cn": [
                 {
                     "id": "ExtBox1-ext-gen16326",
@@ -219,6 +220,7 @@
                 "height": 190,
                 "width": 420,
                 "title": "Project",
+                "store": "assayStore",
                 "designer|userClassName": "MyGridPanel1",
                 "layout|x": 340,
                 "layout|y": 280

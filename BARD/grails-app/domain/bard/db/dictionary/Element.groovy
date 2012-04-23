@@ -1,7 +1,5 @@
 package bard.db.dictionary
 
-import bard.db.experiment.ResultContextItem
-import bard.db.registration.MeasureContextItem
 import bard.db.util.Unit
 
 class Element {
@@ -18,22 +16,10 @@ class Element {
 	String modifiedBy
 	ElementStatus elementStatus
 	Unit unit
-	Element element
+	Element parentElement
 
 	static hasMany = [elements: Element,
-	                  measureContextItemsForAttributeId: MeasureContextItem,
-	                  measureContextItemsForValueId: MeasureContextItem,
-	                  ontologyItems: OntologyItem,
-	                  resultContextItemsForAttributeId: ResultContextItem,
-	                  resultContextItemsForValueId: ResultContextItem]
-	static belongsTo = [ElementStatus, Unit]
-
-	// TODO you have multiple hasMany references for class(es) [ResultContextItem, MeasureContextItem] 
-	//      so you'll need to disambiguate them with the 'mappedBy' property:
-	static mappedBy = [measureContextItemsForAttributeId: "elementByAttributeId",
-	                   measureContextItemsForValueId: "elementByValueId",
-	                   resultContextItemsForAttributeId: "elementByAttributeId",
-	                   resultContextItemsForValueId: "elementByValueId"]
+	                  ontologyItems: OntologyItem]
 
 	static mapping = {
 		id column: "Element_ID"
@@ -49,5 +35,8 @@ class Element {
 		dateCreated maxSize: 19
 		lastUpdated nullable: true, maxSize: 19
 		modifiedBy nullable: true, maxSize: 40
+        unit nullable: true
+        parentElement nullable: true
+        elementStatus nullable: false
 	}
 }

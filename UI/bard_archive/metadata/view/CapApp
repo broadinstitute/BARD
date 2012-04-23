@@ -26,7 +26,7 @@
             "codeClass": null,
             "userConfig": {
                 "title": "CAP Assay Definition",
-                "activeTab": 1,
+                "activeTab": 2,
                 "designer|userClassName": "MyTabPanel"
             },
             "customConfigs": [],
@@ -45,7 +45,62 @@
                         "designer|userClassName": "MyPanel"
                     },
                     "customConfigs": [],
-                    "expanded": true
+                    "expanded": true,
+                    "cn": [
+                        {
+                            "id": "ExtBox1-ext-gen45016",
+                            "type": "gridpanel",
+                            "reference": {
+                                "name": "items",
+                                "type": "array"
+                            },
+                            "codeClass": null,
+                            "userConfig": {
+                                "height": 288,
+                                "width": 894,
+                                "title": "All Assays",
+                                "store": "assayStore",
+                                "designer|userClassName": "MyGridPanel4"
+                            },
+                            "customConfigs": [],
+                            "expanded": true,
+                            "cn": [
+                                {
+                                    "id": "ExtBox1-ext-gen45027",
+                                    "type": "gridcolumn",
+                                    "reference": {
+                                        "name": "columns",
+                                        "type": "array"
+                                    },
+                                    "codeClass": null,
+                                    "userConfig": {
+                                        "dataIndex": "id",
+                                        "text": "ID",
+                                        "designer|userClassName": "MyColumn8"
+                                    },
+                                    "customConfigs": [],
+                                    "expanded": true
+                                },
+                                {
+                                    "id": "ExtBox1-ext-gen48976",
+                                    "type": "gridcolumn",
+                                    "reference": {
+                                        "name": "columns",
+                                        "type": "array"
+                                    },
+                                    "codeClass": null,
+                                    "userConfig": {
+                                        "dataIndex": "assayName",
+                                        "flex": 1,
+                                        "text": "Assay Name",
+                                        "designer|userClassName": "MyColumn9"
+                                    },
+                                    "customConfigs": [],
+                                    "expanded": true
+                                }
+                            ]
+                        }
+                    ]
                 },
                 {
                     "id": "ExtBox1-ext-gen4624",

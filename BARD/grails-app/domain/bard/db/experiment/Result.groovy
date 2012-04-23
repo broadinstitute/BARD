@@ -23,7 +23,7 @@ class Result {
 
 	static hasMany = [resultHierarchiesForParentResult: ResultHierarchy,
 	                  resultHierarchiesForResult: ResultHierarchy]
-	static belongsTo = [Experiment, Qualifier, ResultContext, ResultStatus, ResultType, Substance, Unit]
+	static belongsTo = [Experiment, ResultContext ]
 
 	static mappedBy = [resultHierarchiesForParentResult: "parentResult",
 	                   resultHierarchiesForResult: "result"]

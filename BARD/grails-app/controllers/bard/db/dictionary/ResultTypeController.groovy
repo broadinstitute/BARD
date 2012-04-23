@@ -2,18 +2,18 @@ package bard.db.dictionary
 
 import groovy.json.JsonBuilder
 
-class ElementController {
+class ResultTypeController {
 
     def list() {
 
         // Define a recursive closure to assemble the JSON
         def buildForNode
-        buildForNode = { Element node ->
+        buildForNode = { ResultType node ->
             def map=[:]
             map.id = node.id
-            map.text = node.label
-            if (node.elements) {
-                map.children = node.elements.collect {
+            map.text = node.resultTypeName
+            if (node.childResultTypes) {
+                map.children = node.childResultTypes.collect {
                     buildForNode(it)
                 }
             }
@@ -23,11 +23,10 @@ class ElementController {
             return map
         }
 
-        Element root = Element.findByParentElementIsNull()
+        ResultType root = ResultType.findByParentResultTypeIsNull()
 
         def builder = new JsonBuilder()
         builder(buildForNode(root))
         render builder.toString()
     }
-
 }

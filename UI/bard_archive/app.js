@@ -18,6 +18,16 @@ Ext.Loader.setConfig({
 });
 
 Ext.application({
+    models: [
+        'elementModel',
+        'measure'
+    ],
+    stores: [
+        'elementTreeStore'
+    ],
+    views: [
+        'elementTree'
+    ],
     autoCreateViewport: true,
     name: 'BARD'
 });

@@ -1,10 +1,5 @@
 package bard.db.util
 
-import bard.db.experiment.Result
-import bard.db.registration.Measure
-import bard.db.dictionary.Element
-import bard.db.dictionary.ResultType
-
 class Unit {
 
 	String unit
@@ -13,15 +8,9 @@ class Unit {
 	Date lastUpdated
 	String modifiedBy
 
-	static hasMany = [elements: Element,
-	                  measures: Measure,
-	                  resultTypes: ResultType,
-	                  results: Result,
-	                  unitConversionsForFromUnit: UnitConversion,
+	static hasMany = [unitConversionsForFromUnit: UnitConversion,
 	                  unitConversionsForToUnit: UnitConversion]
 
-	// TODO you have multiple hasMany references for class(es) [UnitConversion] 
-	//      so you'll need to disambiguate them with the 'mappedBy' property:
 	static mappedBy = [unitConversionsForFromUnit: "fromUnit",
 	                   unitConversionsForToUnit: "toUnit"]
 

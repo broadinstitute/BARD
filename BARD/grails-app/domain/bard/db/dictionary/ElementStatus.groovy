@@ -10,9 +10,6 @@ class ElementStatus {
 	Date lastUpdated
 	String modifiedBy
 
-	static hasMany = [elements: Element,
-	                  resultTypes: ResultType]
-
 	static mapping = {
 		id column: "Element_Status_ID"
 	}

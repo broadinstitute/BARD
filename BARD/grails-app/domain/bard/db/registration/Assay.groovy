@@ -23,7 +23,6 @@ class Assay {
 	                  measures: Measure,
 	                  projectAssaies: ProjectAssay,
 	                  protocols: Protocol]
-	static belongsTo = [AssayStatus]
 
 	static mapping = {
 		id column: "Assay_ID"

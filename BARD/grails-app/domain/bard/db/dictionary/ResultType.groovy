@@ -1,7 +1,5 @@
 package bard.db.dictionary
 
-import bard.db.experiment.Result
-import bard.db.registration.Measure
 import bard.db.util.Unit
 
 class ResultType {
@@ -14,18 +12,15 @@ class ResultType {
 	Date lastUpdated
 	String modifiedBy
 	ElementStatus elementStatus
-	Unit unit
+	Unit baseUnit
 	ResultType parentResultType
 
-	static hasMany = [measures: Measure,
-	                  ontologyItems: OntologyItem,
-	                  childResultTypes: ResultType,
-	                  results: Result]
-	static belongsTo = [ElementStatus, Unit]
+	static hasMany = [ontologyItems: OntologyItem,
+	                  childResultTypes: ResultType]
 
 	static mapping = {
 		id column: "Result_Type_ID"
-        unit column: "base_unit"
+        baseUnit column: "base_unit"
         elementStatus column: "result_type_status_id"
 	}
 
@@ -35,5 +30,7 @@ class ResultType {
 		dateCreated maxSize: 19
 		lastUpdated nullable: true, maxSize: 19
 		modifiedBy nullable: true, maxSize: 40
+        baseUnit nullable: true
+        parentResultType nullable: true
 	}
 }
