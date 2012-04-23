@@ -1,0 +1,73 @@
+{
+    "id": "ExtBox1-ext-gen9174",
+    "type": "jsonstore",
+    "reference": {
+        "name": "items",
+        "type": "array"
+    },
+    "codeClass": null,
+    "userConfig": {
+        "storeId": "assayStore",
+        "designer|userClassName": "assayStore",
+        "autoCreated": "false"
+    },
+    "customConfigs": [
+        {
+            "group": "(Custom Properties)",
+            "name": "autoCreated",
+            "type": "string"
+        }
+    ],
+    "designerId": "0065163c-b9de-4ad6-b7a5-40652f3b9bc9",
+    "$viewOrder": 2,
+    "expanded": true,
+    "cn": [
+        {
+            "id": "ExtBox1-ext-gen9178",
+            "type": "ajaxproxy",
+            "reference": {
+                "name": "proxy",
+                "type": "object"
+            },
+            "codeClass": null,
+            "userConfig": {
+                "filterParam": "assayId",
+                "url": "",
+                "designer|userClassName": "Ajax Proxy2"
+            },
+            "customConfigs": [],
+            "expanded": false,
+            "cn": [
+                {
+                    "id": "ExtBox1-ext-gen9184",
+                    "type": "jsonreader",
+                    "reference": {
+                        "name": "reader",
+                        "type": "object"
+                    },
+                    "codeClass": null,
+                    "userConfig": {
+                        "designer|userClassName": "Json Reader2"
+                    },
+                    "customConfigs": [],
+                    "expanded": true
+                }
+            ]
+        },
+        {
+            "id": "ExtBox1-ext-gen9761",
+            "type": "datafield",
+            "reference": {
+                "name": "fields",
+                "type": "array"
+            },
+            "codeClass": null,
+            "userConfig": {
+                "name": "assayName",
+                "designer|userClassName": "MyField5"
+            },
+            "customConfigs": [],
+            "expanded": true
+        }
+    ]
+}

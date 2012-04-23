@@ -1,0 +1,39 @@
+{
+    "id": "ExtBox1-ext-gen32937",
+    "type": "window",
+    "reference": {
+        "name": "items",
+        "type": "array"
+    },
+    "codeClass": null,
+    "userConfig": {
+        "height": 367,
+        "width": 626,
+        "layout": "vbox",
+        "title": "Enter Project Details",
+        "designer|userClassName": "ProjectWindow",
+        "container|align": "stretch"
+    },
+    "customConfigs": [],
+    "designerId": "526a7649-2a43-4e2c-9745-94f449d5fecb",
+    "$viewOrder": 4,
+    "expanded": false,
+    "cn": [
+        {
+            "id": "ExtBox1-ext-gen48003",
+            "type": "linkedinstance",
+            "reference": {
+                "name": "items",
+                "type": "array"
+            },
+            "codeClass": null,
+            "userConfig": {
+                "layout|flex": 1
+            },
+            "customConfigs": [],
+            "iconCls": "icon-linkedinstance",
+            "expanded": true,
+            "masterInstanceId": "ExtBox1-ext-gen33457"
+        }
+    ]
+}

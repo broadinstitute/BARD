@@ -1,0 +1,137 @@
+{
+    "name": "bard",
+    "settings": {
+        "urlPrefix": "http://localhost/BARD",
+        "directAPI": "",
+        "spacesToIndent": "4",
+        "codeGenFormat": "Class",
+        "exportPath": "C:/Program Files/Apache Software Foundation/Apache2.2/htdocs/cap",
+        "extPath": "http://extjs.cachefly.net/ext-4.0.2a/",
+        "senchaIoKey": "",
+        "senchaIoPath": "/",
+        "lineEnding": "CRLF",
+        "instantiateStore": true,
+        "genTimestamps": true,
+        "saveOnDeploy": false,
+        "appName": "CAP",
+        "mapsAPI": "http://maps.google.com/maps/api/js?sensor=true",
+        "exportXDSFiles": true
+    },
+    "xdsVersion": "2.0.0",
+    "xdsBuild": "412",
+    "framework": "ext40",
+    "topInstanceFileMap": {
+        "110015e9-e6b5-4406-a802-e961cd3dbb72": {
+            "paths": [
+                "metadata/view/AssayForm",
+                "app/view/override/AssayForm.js",
+                "app/view/AssayForm.js"
+            ],
+            "className": "AssayForm"
+        },
+        "1459faf8-b14c-4da9-bb1b-a102e6a861a2": {
+            "paths": [
+                "metadata/view/CapApp",
+                "app/view/override/CapApp.js",
+                "app/view/CapApp.js",
+                "app/view/Viewport.js"
+            ],
+            "className": "CapApp"
+        },
+        "d7c6360d-9396-4e43-8b77-895e1992e77e": {
+            "paths": [
+                "metadata/view/ProjectForm",
+                "app/view/override/ProjectForm.js",
+                "app/view/ProjectForm.js"
+            ],
+            "className": "ProjectForm"
+        },
+        "526a7649-2a43-4e2c-9745-94f449d5fecb": {
+            "paths": [
+                "metadata/view/ProjectWindow",
+                "app/view/override/ProjectWindow.js",
+                "app/view/ProjectWindow.js"
+            ],
+            "className": "ProjectWindow"
+        },
+        "37e76b91-6c80-4630-960a-47f86929220d": {
+            "paths": [
+                "metadata/view/ResultTypesForm",
+                "app/view/override/ResultTypesForm.js",
+                "app/view/ResultTypesForm.js"
+            ],
+            "className": "ResultTypesForm"
+        },
+        "4a31810a-d983-4000-aa11-0502e55d9428": {
+            "paths": [
+                "metadata/store/assayStatusStore",
+                "app/store/override/assayStatusStore.js",
+                "app/store/assayStatusStore.js"
+            ],
+            "className": "assayStatusStore"
+        },
+        "86440226-df93-4191-91e5-05ab3cd420fb": {
+            "paths": [
+                "metadata/store/assayResultTypeStore",
+                "app/store/override/assayResultTypeStore.js",
+                "app/store/assayResultTypeStore.js"
+            ],
+            "className": "assayResultTypeStore"
+        },
+        "0065163c-b9de-4ad6-b7a5-40652f3b9bc9": {
+            "paths": [
+                "metadata/store/assayStore",
+                "app/store/override/assayStore.js",
+                "app/store/assayStore.js"
+            ],
+            "className": "assayStore"
+        },
+        "fa3aad52-b802-43c4-bbad-7b8deb12b107": {
+            "paths": [
+                "metadata/model/Assay",
+                "app/model/override/Assay.js",
+                "app/model/Assay.js"
+            ],
+            "className": "Assay"
+        },
+        "2b92ac37-52f3-40af-a97b-7626bafdd681": {
+            "paths": [
+                "metadata/model/AssayStatus",
+                "app/model/override/AssayStatus.js",
+                "app/model/AssayStatus.js"
+            ],
+            "className": "AssayStatus"
+        },
+        "1ba10220-79f4-48e9-81d1-6c819a3d1050": {
+            "paths": [
+                "metadata/store/AssayStatusDStore",
+                "app/store/override/AssayStatusDStore.js",
+                "app/store/AssayStatusDStore.js"
+            ],
+            "className": "AssayStatusDStore"
+        },
+        "c1257bd9-f1e2-4ba1-821f-41d76b751210": {
+            "paths": [
+                "metadata/model/Protocol",
+                "app/model/override/Protocol.js",
+                "app/model/Protocol.js"
+            ],
+            "className": "Protocol"
+        },
+        "62a3ef49-905a-4220-900e-85e9676c86e2": {
+            "paths": [
+                "metadata/model/Project",
+                "app/model/override/Project.js",
+                "app/model/Project.js"
+            ],
+            "className": "Project"
+        }
+    },
+    "expandedState": {
+        "data": true,
+        "model": true,
+        "component": true,
+        "controller": true,
+        "resource": false
+    }
+}

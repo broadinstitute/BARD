@@ -1,0 +1,198 @@
+{
+    "id": "ExtBox1-ext-gen33457",
+    "type": "form",
+    "reference": {
+        "name": "items",
+        "type": "array"
+    },
+    "codeClass": null,
+    "userConfig": {
+        "layout": "absolute",
+        "bodyPadding": 10,
+        "preventHeader": true,
+        "title": "ProjectForm",
+        "designer|userClassName": "ProjectForm",
+        "designer|userAlias": "projectform",
+        "designer|snapToGrid": 10
+    },
+    "customConfigs": [],
+    "designerId": "d7c6360d-9396-4e43-8b77-895e1992e77e",
+    "$viewOrder": 3,
+    "expanded": false,
+    "cn": [
+        {
+            "id": "ExtBox1-ext-gen34028",
+            "type": "combobox",
+            "reference": {
+                "name": "items",
+                "type": "array"
+            },
+            "codeClass": null,
+            "userConfig": {
+                "width": 500,
+                "name": "projectName",
+                "fieldLabel": "Project",
+                "designer|userClassName": "MyComboBox1"
+            },
+            "customConfigs": [],
+            "expanded": true
+        },
+        {
+            "id": "ExtBox1-ext-gen34368",
+            "type": "combobox",
+            "reference": {
+                "name": "items",
+                "type": "array"
+            },
+            "codeClass": null,
+            "userConfig": {
+                "name": "groupType",
+                "fieldLabel": "Type",
+                "designer|userClassName": "MyComboBox2",
+                "layout|x": 10,
+                "layout|y": 40
+            },
+            "customConfigs": [],
+            "expanded": true
+        },
+        {
+            "id": "ExtBox1-ext-gen34673",
+            "type": "combobox",
+            "reference": {
+                "name": "items",
+                "type": "array"
+            },
+            "codeClass": null,
+            "userConfig": {
+                "name": "stage",
+                "fieldLabel": "Stage",
+                "designer|userClassName": "MyComboBox3",
+                "layout|x": 10,
+                "layout|y": 70
+            },
+            "customConfigs": [],
+            "expanded": true
+        },
+        {
+            "id": "ExtBox1-ext-gen34981",
+            "type": "gridpanel",
+            "reference": {
+                "name": "items",
+                "type": "array"
+            },
+            "codeClass": null,
+            "userConfig": {
+                "height": 150,
+                "width": 510,
+                "title": "Other assays in this project:",
+                "designer|userClassName": "MyGridPanel2",
+                "layout|x": 10,
+                "layout|y": 120
+            },
+            "customConfigs": [],
+            "expanded": true,
+            "cn": [
+                {
+                    "id": "ExtBox1-ext-gen34994",
+                    "type": "gridcolumn",
+                    "reference": {
+                        "name": "columns",
+                        "type": "array"
+                    },
+                    "codeClass": null,
+                    "userConfig": {
+                        "width": 507,
+                        "dataIndex": "string",
+                        "text": "Assay Names",
+                        "designer|userClassName": "MyColumn4"
+                    },
+                    "customConfigs": [],
+                    "expanded": true
+                },
+                {
+                    "id": "ExtBox1-ext-gen35026",
+                    "type": "gridview",
+                    "reference": {
+                        "name": "viewConfig",
+                        "type": "object"
+                    },
+                    "codeClass": null,
+                    "userConfig": {
+                        "designer|userClassName": "MyGridView2"
+                    },
+                    "customConfigs": [],
+                    "expanded": true
+                }
+            ]
+        },
+        {
+            "id": "ExtBox1-ext-gen36904",
+            "type": "button",
+            "reference": {
+                "name": "items",
+                "type": "array"
+            },
+            "codeClass": null,
+            "userConfig": {
+                "width": 40,
+                "text": "Up",
+                "designer|userClassName": "MyButton6",
+                "layout|x": 540,
+                "layout|y": 120
+            },
+            "customConfigs": [],
+            "expanded": true
+        },
+        {
+            "id": "ExtBox1-ext-gen37151",
+            "type": "button",
+            "reference": {
+                "name": "items",
+                "type": "array"
+            },
+            "codeClass": null,
+            "userConfig": {
+                "text": "Down",
+                "designer|userClassName": "MyButton7",
+                "layout|x": 540,
+                "layout|y": 160
+            },
+            "customConfigs": [],
+            "expanded": true
+        },
+        {
+            "id": "ExtBox1-ext-gen38010",
+            "type": "button",
+            "reference": {
+                "name": "items",
+                "type": "array"
+            },
+            "codeClass": null,
+            "userConfig": {
+                "text": "Save",
+                "designer|userClassName": "MyButton8",
+                "layout|x": 540,
+                "layout|y": 290
+            },
+            "customConfigs": [],
+            "expanded": true
+        },
+        {
+            "id": "ExtBox1-ext-gen38263",
+            "type": "button",
+            "reference": {
+                "name": "items",
+                "type": "array"
+            },
+            "codeClass": null,
+            "userConfig": {
+                "text": "Cancel",
+                "designer|userClassName": "MyButton9",
+                "layout|x": 470,
+                "layout|y": 290
+            },
+            "customConfigs": [],
+            "expanded": true
+        }
+    ]
+}

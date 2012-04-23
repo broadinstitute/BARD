@@ -1,4 +1,4 @@
-package bard.db
+package bard.db.dictionary
 
 
 

@@ -1,0 +1,58 @@
+{
+    "id": "ExtBox1-ext-gen31945",
+    "type": "jsonstore",
+    "reference": {
+        "name": "items",
+        "type": "array"
+    },
+    "codeClass": null,
+    "userConfig": {
+        "storeId": "MyJsonStore3",
+        "model": "AssayStatus",
+        "designer|userClassName": "AssayStatusDStore",
+        "autoCreated": "false"
+    },
+    "customConfigs": [
+        {
+            "group": "(Custom Properties)",
+            "name": "autoCreated",
+            "type": "string"
+        }
+    ],
+    "designerId": "1ba10220-79f4-48e9-81d1-6c819a3d1050",
+    "$viewOrder": 3,
+    "expanded": true,
+    "cn": [
+        {
+            "id": "ExtBox1-ext-gen31952",
+            "type": "ajaxproxy",
+            "reference": {
+                "name": "proxy",
+                "type": "object"
+            },
+            "codeClass": null,
+            "userConfig": {
+                "url": "http://localhost:8081/BARD/api/assay-status",
+                "designer|userClassName": "MyAjaxProxy3"
+            },
+            "customConfigs": [],
+            "expanded": true,
+            "cn": [
+                {
+                    "id": "ExtBox1-ext-gen31960",
+                    "type": "jsonreader",
+                    "reference": {
+                        "name": "reader",
+                        "type": "object"
+                    },
+                    "codeClass": null,
+                    "userConfig": {
+                        "designer|userClassName": "MyJsonReader4"
+                    },
+                    "customConfigs": [],
+                    "expanded": true
+                }
+            ]
+        }
+    ]
+}

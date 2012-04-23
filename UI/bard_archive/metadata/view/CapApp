@@ -1,0 +1,131 @@
+{
+    "id": "ExtBox1-ext-gen44876",
+    "type": "viewport",
+    "reference": {
+        "name": "items",
+        "type": "array"
+    },
+    "codeClass": null,
+    "userConfig": {
+        "designer|initialView": true,
+        "layout": "fit",
+        "designer|userClassName": "CapApp"
+    },
+    "customConfigs": [],
+    "designerId": "1459faf8-b14c-4da9-bb1b-a102e6a861a2",
+    "$viewOrder": 2,
+    "expanded": true,
+    "cn": [
+        {
+            "id": "ExtBox1-ext-gen4604",
+            "type": "tabpanel",
+            "reference": {
+                "name": "items",
+                "type": "array"
+            },
+            "codeClass": null,
+            "userConfig": {
+                "title": "CAP Assay Definition",
+                "activeTab": 1,
+                "designer|userClassName": "MyTabPanel"
+            },
+            "customConfigs": [],
+            "expanded": true,
+            "cn": [
+                {
+                    "id": "ExtBox1-ext-gen4615",
+                    "type": "panel",
+                    "reference": {
+                        "name": "items",
+                        "type": "array"
+                    },
+                    "codeClass": null,
+                    "userConfig": {
+                        "title": "Find an Assay",
+                        "designer|userClassName": "MyPanel"
+                    },
+                    "customConfigs": [],
+                    "expanded": true
+                },
+                {
+                    "id": "ExtBox1-ext-gen4624",
+                    "type": "panel",
+                    "reference": {
+                        "name": "items",
+                        "type": "array"
+                    },
+                    "codeClass": null,
+                    "userConfig": {
+                        "width": 983,
+                        "title": "Extract Name, Description",
+                        "designer|userClassName": "MyPanel1"
+                    },
+                    "customConfigs": [],
+                    "expanded": true,
+                    "cn": [
+                        {
+                            "id": "ExtBox1-ext-gen45418",
+                            "type": "linkedinstance",
+                            "reference": {
+                                "name": "items",
+                                "type": "array"
+                            },
+                            "codeClass": null,
+                            "userConfig": {},
+                            "customConfigs": [],
+                            "iconCls": "icon-linkedinstance",
+                            "expanded": true,
+                            "masterInstanceId": "ExtBox1-ext-gen7307"
+                        }
+                    ]
+                },
+                {
+                    "id": "ExtBox1-ext-gen9568",
+                    "type": "panel",
+                    "reference": {
+                        "name": "items",
+                        "type": "array"
+                    },
+                    "codeClass": null,
+                    "userConfig": {
+                        "title": "Result Types (Measures)",
+                        "designer|userClassName": "MyPanel3"
+                    },
+                    "customConfigs": [],
+                    "expanded": true,
+                    "cn": [
+                        {
+                            "id": "ExtBox1-ext-gen9581",
+                            "type": "tab",
+                            "reference": {
+                                "name": "tabConfig",
+                                "type": "object"
+                            },
+                            "codeClass": null,
+                            "userConfig": {
+                                "designer|userClassName": "TabConfig"
+                            },
+                            "customConfigs": [],
+                            "iconCls": "icon-tab-bar",
+                            "expanded": true
+                        },
+                        {
+                            "id": "ExtBox1-ext-gen11941",
+                            "type": "linkedinstance",
+                            "reference": {
+                                "name": "items",
+                                "type": "array"
+                            },
+                            "codeClass": null,
+                            "userConfig": {},
+                            "customConfigs": [],
+                            "iconCls": "icon-linkedinstance",
+                            "expanded": true,
+                            "masterInstanceId": "ExtBox1-ext-gen1824"
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}
