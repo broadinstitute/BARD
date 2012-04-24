@@ -181,6 +181,30 @@
                 "app/model/Stage.js"
             ],
             "className": "Stage"
+        },
+        "b4821179-c692-4d3a-8be6-c0b91085c21a": {
+            "paths": [
+                "metadata/model/ResultType",
+                "app/model/override/ResultType.js",
+                "app/model/ResultType.js"
+            ],
+            "className": "ResultType"
+        },
+        "493d900a-ea94-41d2-81ee-20b6c61114d4": {
+            "paths": [
+                "metadata/store/ResultTypeStore",
+                "app/store/override/ResultTypeStore.js",
+                "app/store/ResultTypeStore.js"
+            ],
+            "className": "ResultTypeStore"
+        },
+        "0bd406e6-35aa-42ba-93a0-92751904e796": {
+            "paths": [
+                "metadata/view/ResultTypeTree",
+                "app/view/override/ResultTypeTree.js",
+                "app/view/ResultTypeTree.js"
+            ],
+            "className": "ResultTypeTree"
         }
     },
     "expandedState": {

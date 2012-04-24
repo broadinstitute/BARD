@@ -7,6 +7,7 @@
     },
     "codeClass": null,
     "userConfig": {
+        "autoLoad": true,
         "storeId": "MyJsonStore3",
         "model": "AssayStatus",
         "designer|userClassName": "AssayStatusDStore",
@@ -21,7 +22,7 @@
     ],
     "designerId": "1ba10220-79f4-48e9-81d1-6c819a3d1050",
     "$viewOrder": 1,
-    "expanded": false,
+    "expanded": true,
     "cn": [
         {
             "id": "ExtBox1-ext-gen31952",
@@ -47,6 +48,8 @@
                     },
                     "codeClass": null,
                     "userConfig": {
+                        "root": "data",
+                        "totalProperty": "count",
                         "designer|userClassName": "MyJsonReader4"
                     },
                     "customConfigs": [],

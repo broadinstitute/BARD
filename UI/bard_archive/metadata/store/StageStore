@@ -15,7 +15,7 @@
     "customConfigs": [],
     "designerId": "d18f2c2d-815c-483f-be1c-dbfef19026b4",
     "$viewOrder": 5,
-    "expanded": false,
+    "expanded": true,
     "cn": [
         {
             "id": "ExtBox1-ext-gen18441",
@@ -41,6 +41,7 @@
                     },
                     "codeClass": null,
                     "userConfig": {
+                        "root": "data",
                         "designer|userClassName": "MyJsonReader7"
                     },
                     "customConfigs": [],

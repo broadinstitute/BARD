@@ -14,7 +14,7 @@
     "customConfigs": [],
     "designerId": "1459faf8-b14c-4da9-bb1b-a102e6a861a2",
     "$viewOrder": 2,
-    "expanded": false,
+    "expanded": true,
     "cn": [
         {
             "id": "ExtBox1-ext-gen4604",
@@ -26,7 +26,7 @@
             "codeClass": null,
             "userConfig": {
                 "title": "CAP Assay Definition",
-                "activeTab": 2,
+                "activeTab": 1,
                 "designer|userClassName": "MyTabPanel"
             },
             "customConfigs": [],
@@ -45,7 +45,7 @@
                         "designer|userClassName": "MyPanel"
                     },
                     "customConfigs": [],
-                    "expanded": true,
+                    "expanded": false,
                     "cn": [
                         {
                             "id": "ExtBox1-ext-gen45016",
@@ -97,6 +97,24 @@
                                     },
                                     "customConfigs": [],
                                     "expanded": true
+                                },
+                                {
+                                    "id": "ExtBox1-ext-gen11764",
+                                    "type": "basiceventbinding",
+                                    "reference": {
+                                        "name": "listeners",
+                                        "type": "array"
+                                    },
+                                    "codeClass": null,
+                                    "userConfig": {
+                                        "fn": "onGridpanelSelectionChange",
+                                        "implHandler": " Ext.get(\"\").getForm().loadRecord(records[0]);",
+                                        "name": "selectionchange",
+                                        "scope": "me",
+                                        "designer|userClassName": "onGridpanelSelectionChange"
+                                    },
+                                    "customConfigs": [],
+                                    "expanded": true
                                 }
                             ]
                         }
@@ -116,7 +134,7 @@
                         "designer|userClassName": "MyPanel1"
                     },
                     "customConfigs": [],
-                    "expanded": true,
+                    "expanded": false,
                     "cn": [
                         {
                             "id": "ExtBox1-ext-gen45418",
@@ -147,7 +165,7 @@
                         "designer|userClassName": "MyPanel3"
                     },
                     "customConfigs": [],
-                    "expanded": true,
+                    "expanded": false,
                     "cn": [
                         {
                             "id": "ExtBox1-ext-gen9581",
@@ -179,6 +197,20 @@
                             "masterInstanceId": "ExtBox1-ext-gen1824"
                         }
                     ]
+                },
+                {
+                    "id": "ExtBox1-ext-gen13933",
+                    "type": "linkedinstance",
+                    "reference": {
+                        "name": "items",
+                        "type": "array"
+                    },
+                    "codeClass": null,
+                    "userConfig": {},
+                    "customConfigs": [],
+                    "iconCls": "icon-linkedinstance",
+                    "expanded": true,
+                    "masterInstanceId": "ExtBox1-ext-gen43443"
                 }
             ]
         }

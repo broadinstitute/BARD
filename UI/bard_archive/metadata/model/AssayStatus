@@ -13,7 +13,7 @@
     "customConfigs": [],
     "designerId": "2b92ac37-52f3-40af-a97b-7626bafdd681",
     "$viewOrder": 1,
-    "expanded": false,
+    "expanded": true,
     "cn": [
         {
             "id": "ExtBox1-ext-gen23534",
@@ -32,7 +32,7 @@
             "expanded": true
         },
         {
-            "id": "ExtBox1-ext-gen23860",
+            "id": "ExtBox1-ext-gen20973",
             "type": "datafield",
             "reference": {
                 "name": "fields",
@@ -40,88 +40,11 @@
             },
             "codeClass": null,
             "userConfig": {
-                "name": "modifiedBy",
-                "type": "string",
-                "designer|userClassName": "MyField15"
+                "name": "id",
+                "designer|userClassName": "MyField34"
             },
             "customConfigs": [],
             "expanded": true
-        },
-        {
-            "id": "ExtBox1-ext-gen24167",
-            "type": "datafield",
-            "reference": {
-                "name": "fields",
-                "type": "array"
-            },
-            "codeClass": null,
-            "userConfig": {
-                "name": "dateCreated",
-                "type": "date",
-                "designer|userClassName": "MyField16"
-            },
-            "customConfigs": [],
-            "expanded": true
-        },
-        {
-            "id": "ExtBox1-ext-gen24497",
-            "type": "datafield",
-            "reference": {
-                "name": "fields",
-                "type": "array"
-            },
-            "codeClass": null,
-            "userConfig": {
-                "name": "lastUpdated",
-                "type": "date",
-                "designer|userClassName": "MyField17"
-            },
-            "customConfigs": [],
-            "expanded": true
-        },
-        {
-            "id": "ExtBox1-ext-gen24824",
-            "type": "restproxy",
-            "reference": {
-                "name": "proxy",
-                "type": "object"
-            },
-            "codeClass": null,
-            "userConfig": {
-                "designer|userClassName": "MyRestProxy1"
-            },
-            "customConfigs": [],
-            "expanded": false,
-            "cn": [
-                {
-                    "id": "ExtBox1-ext-gen25630",
-                    "type": "jsonreader",
-                    "reference": {
-                        "name": "reader",
-                        "type": "object"
-                    },
-                    "codeClass": null,
-                    "userConfig": {
-                        "designer|userClassName": "MyJsonReader3"
-                    },
-                    "customConfigs": [],
-                    "expanded": true
-                },
-                {
-                    "id": "ExtBox1-ext-gen25724",
-                    "type": "jsonwriter",
-                    "reference": {
-                        "name": "writer",
-                        "type": "object"
-                    },
-                    "codeClass": null,
-                    "userConfig": {
-                        "designer|userClassName": "MyJsonWriter"
-                    },
-                    "customConfigs": [],
-                    "expanded": true
-                }
-            ]
         }
     ]
 }

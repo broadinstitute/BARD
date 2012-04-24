@@ -1,5 +1,5 @@
 {
-    "id": "ExtBox1-ext-gen15153",
+    "id": "ExtBox1-ext-gen15403",
     "type": "datamodel",
     "reference": {
         "name": "items",
@@ -7,15 +7,15 @@
     },
     "codeClass": null,
     "userConfig": {
-        "designer|userClassName": "groupType"
+        "designer|userClassName": "ResultType"
     },
     "customConfigs": [],
-    "designerId": "31d9c9db-cd67-4911-830d-25364f55c454",
-    "$viewOrder": 6,
+    "designerId": "b4821179-c692-4d3a-8be6-c0b91085c21a",
+    "$viewOrder": 8,
     "expanded": true,
     "cn": [
         {
-            "id": "ExtBox1-ext-gen15334",
+            "id": "ExtBox1-ext-gen15601",
             "type": "datafield",
             "reference": {
                 "name": "fields",
@@ -24,13 +24,13 @@
             "codeClass": null,
             "userConfig": {
                 "name": "id",
-                "designer|userClassName": "MyField26"
+                "designer|userClassName": "MyField32"
             },
             "customConfigs": [],
             "expanded": true
         },
         {
-            "id": "ExtBox1-ext-gen15503",
+            "id": "ExtBox1-ext-gen15773",
             "type": "datafield",
             "reference": {
                 "name": "fields",
@@ -38,8 +38,8 @@
             },
             "codeClass": null,
             "userConfig": {
-                "name": "label",
-                "designer|userClassName": "MyField27"
+                "name": "test",
+                "designer|userClassName": "MyField33"
             },
             "customConfigs": [],
             "expanded": true

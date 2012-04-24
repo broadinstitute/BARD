@@ -19,6 +19,6 @@ Ext.define('BARD.view.Viewport', {
     requires: [
         'BARD.view.CapApp',
         'BARD.view.ProjectWindow',
-        'BARD.view.elementTree'
+        'BARD.view.ResultTypeTree'
     ]
 });

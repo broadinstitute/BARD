@@ -32,7 +32,9 @@
                 "width": 500,
                 "name": "projectName",
                 "fieldLabel": "Project",
+                "displayField": "projectName",
                 "store": "ProjectStore",
+                "valueField": "id",
                 "designer|userClassName": "MyComboBox1"
             },
             "customConfigs": [],
@@ -49,7 +51,9 @@
             "userConfig": {
                 "name": "groupType",
                 "fieldLabel": "Type",
+                "displayField": "label",
                 "store": "groupTypeStore",
+                "valueField": "id",
                 "designer|userClassName": "MyComboBox2",
                 "layout|x": 10,
                 "layout|y": 40
@@ -68,7 +72,9 @@
             "userConfig": {
                 "name": "stage",
                 "fieldLabel": "Stage",
+                "displayField": "stage",
                 "store": "StageStore",
+                "valueField": "id",
                 "designer|userClassName": "MyComboBox3",
                 "layout|x": 10,
                 "layout|y": 70
@@ -88,6 +94,7 @@
                 "height": 150,
                 "width": 510,
                 "title": "Other assays in this project:",
+                "store": "assayStore",
                 "designer|userClassName": "MyGridPanel2",
                 "layout|x": 10,
                 "layout|y": 120

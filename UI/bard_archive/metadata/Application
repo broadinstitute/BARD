@@ -15,7 +15,8 @@
             "Assay",
             "AssayStatus",
             "Protocol",
-            "Project"
+            "Project",
+            "ResultType"
         ],
         "stores": [
             "elementTreeStore",
@@ -23,10 +24,12 @@
             "ProjectStore",
             "StageStore",
             "assayStore",
-            "AssayStatusDStore"
+            "AssayStatusDStore",
+            "ResultTypeStore"
         ],
         "views": [
-            "elementTree"
+            "elementTree",
+            "ResultTypeTree"
         ],
         "autoCreateViewport": true,
         "name": "BARD"

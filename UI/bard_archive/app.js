@@ -26,7 +26,8 @@ Ext.application({
         'Assay',
         'AssayStatus',
         'Protocol',
-        'Project'
+        'Project',
+        'ResultType'
     ],
     stores: [
         'elementTreeStore',
@@ -34,10 +35,12 @@ Ext.application({
         'ProjectStore',
         'StageStore',
         'assayStore',
-        'AssayStatusDStore'
+        'AssayStatusDStore',
+        'ResultTypeStore'
     ],
     views: [
-        'elementTree'
+        'elementTree',
+        'ResultTypeTree'
     ],
     autoCreateViewport: true,
     name: 'BARD'
