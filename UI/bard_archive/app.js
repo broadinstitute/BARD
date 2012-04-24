@@ -22,13 +22,19 @@ Ext.application({
         'elementModel',
         'measure',
         'groupType',
-        'Stage'
+        'Stage',
+        'Assay',
+        'AssayStatus',
+        'Protocol',
+        'Project'
     ],
     stores: [
         'elementTreeStore',
         'groupTypeStore',
         'ProjectStore',
-        'StageStore'
+        'StageStore',
+        'assayStore',
+        'AssayStatusDStore'
     ],
     views: [
         'elementTree'

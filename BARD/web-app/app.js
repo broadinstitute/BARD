@@ -20,10 +20,21 @@ Ext.Loader.setConfig({
 Ext.application({
     models: [
         'elementModel',
-        'measure'
+        'measure',
+        'groupType',
+        'Stage',
+        'Assay',
+        'AssayStatus',
+        'Protocol',
+        'Project'
     ],
     stores: [
-        'elementTreeStore'
+        'elementTreeStore',
+        'groupTypeStore',
+        'ProjectStore',
+        'StageStore',
+        'assayStore',
+        'AssayStatusDStore'
     ],
     views: [
         'elementTree'
