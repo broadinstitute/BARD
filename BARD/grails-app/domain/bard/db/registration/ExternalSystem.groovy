@@ -9,7 +9,7 @@ class ExternalSystem {
 	Date lastUpdated
 	String modifiedBy
 
-	static hasMany = [externalAssaies: ExternalAssay]
+	static hasMany = [externalAssays: ExternalAssay]
 
 	static mapping = {
 		id column: "External_System_ID"

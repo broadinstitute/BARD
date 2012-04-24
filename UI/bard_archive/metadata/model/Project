@@ -12,5 +12,37 @@
     "customConfigs": [],
     "designerId": "62a3ef49-905a-4220-900e-85e9676c86e2",
     "$viewOrder": 3,
-    "expanded": true
+    "expanded": true,
+    "cn": [
+        {
+            "id": "ExtBox1-ext-gen16730",
+            "type": "datafield",
+            "reference": {
+                "name": "fields",
+                "type": "array"
+            },
+            "codeClass": null,
+            "userConfig": {
+                "name": "id",
+                "designer|userClassName": "MyField28"
+            },
+            "customConfigs": [],
+            "expanded": true
+        },
+        {
+            "id": "ExtBox1-ext-gen16899",
+            "type": "datafield",
+            "reference": {
+                "name": "fields",
+                "type": "array"
+            },
+            "codeClass": null,
+            "userConfig": {
+                "name": "projectName",
+                "designer|userClassName": "MyField31"
+            },
+            "customConfigs": [],
+            "expanded": true
+        }
+    ]
 }

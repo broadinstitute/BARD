@@ -101,4 +101,5 @@ class AssayController {
             redirect(action: "show", id: params.id)
         }
     }
+
 }

@@ -106,12 +106,12 @@
 				</li>
 				</g:if>
 			
-				<g:if test="${assayInstance?.externalAssaies}">
+				<g:if test="${assayInstance?.externalAssays}">
 				<li class="fieldcontain">
-					<span id="externalAssaies-label" class="property-label"><g:message code="assay.externalAssaies.label" default="External Assaies" /></span>
+					<span id="externalAssays-label" class="property-label"><g:message code="assay.externalAssays.label" default="External Assays" /></span>
 					
-						<g:each in="${assayInstance.externalAssaies}" var="e">
-						<span class="property-value" aria-labelledby="externalAssaies-label"><g:link controller="externalAssay" action="show" id="${e.id}">${e?.encodeAsHTML()}</g:link></span>
+						<g:each in="${assayInstance.externalAssays}" var="e">
+						<span class="property-value" aria-labelledby="externalAssays-label"><g:link controller="externalAssay" action="show" id="${e.id}">${e?.encodeAsHTML()}</g:link></span>
 						</g:each>
 					
 				</li>
@@ -139,12 +139,12 @@
 				</li>
 				</g:if>
 			
-				<g:if test="${assayInstance?.projectAssaies}">
+				<g:if test="${assayInstance?.projectAssays}">
 				<li class="fieldcontain">
-					<span id="projectAssaies-label" class="property-label"><g:message code="assay.projectAssaies.label" default="Project Assaies" /></span>
+					<span id="projectAssays-label" class="property-label"><g:message code="assay.projectAssays.label" default="Project Assays" /></span>
 					
-						<g:each in="${assayInstance.projectAssaies}" var="p">
-						<span class="property-value" aria-labelledby="projectAssaies-label"><g:link controller="projectAssay" action="show" id="${p.id}">${p?.encodeAsHTML()}</g:link></span>
+						<g:each in="${assayInstance.projectAssays}" var="p">
+						<span class="property-value" aria-labelledby="projectAssays-label"><g:link controller="projectAssay" action="show" id="${p.id}">${p?.encodeAsHTML()}</g:link></span>
 						</g:each>
 					
 				</li>

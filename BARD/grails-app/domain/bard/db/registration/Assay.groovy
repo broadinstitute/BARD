@@ -18,10 +18,10 @@ class Assay {
 	AssayStatus assayStatus
 
 	static hasMany = [experiments: Experiment,
-	                  externalAssaies: ExternalAssay,
+	                  externalAssays: ExternalAssay,
 	                  measureContextItems: MeasureContextItem,
 	                  measures: Measure,
-	                  projectAssaies: ProjectAssay,
+	                  projectAssays: ProjectAssay,
 	                  protocols: Protocol]
 
 	static mapping = {

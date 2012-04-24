@@ -2,6 +2,8 @@ package bard.db.experiment
 
 class Project {
 
+    static expose = 'project'
+
 	String projectName
 	GroupType groupType
 	String description
@@ -10,7 +12,7 @@ class Project {
 	String modifiedBy
 
 	static hasMany = [experiments: Experiment,
-	                  projectAssaies: ProjectAssay]
+	                  projectAssays: ProjectAssay]
 
 	static mapping = {
 		id column: "Project_ID"

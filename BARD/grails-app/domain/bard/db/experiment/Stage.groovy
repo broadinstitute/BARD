@@ -2,6 +2,8 @@ package bard.db.experiment
 
 class Stage {
 
+    static expose = 'stage'
+
 	String stage
 	String description
 	Date dateCreated

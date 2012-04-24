@@ -1,5 +1,5 @@
 {
-    "id": "ExtBox1-ext-gen31945",
+    "id": "ExtBox1-ext-gen18434",
     "type": "jsonstore",
     "reference": {
         "name": "items",
@@ -7,24 +7,18 @@
     },
     "codeClass": null,
     "userConfig": {
-        "storeId": "MyJsonStore3",
-        "model": "AssayStatus",
-        "designer|userClassName": "AssayStatusDStore",
-        "autoCreated": "false"
+        "autoLoad": true,
+        "storeId": "StageStore",
+        "model": "Stage",
+        "designer|userClassName": "StageStore"
     },
-    "customConfigs": [
-        {
-            "group": "(Custom Properties)",
-            "name": "autoCreated",
-            "type": "string"
-        }
-    ],
-    "designerId": "1ba10220-79f4-48e9-81d1-6c819a3d1050",
-    "$viewOrder": 1,
+    "customConfigs": [],
+    "designerId": "d18f2c2d-815c-483f-be1c-dbfef19026b4",
+    "$viewOrder": 5,
     "expanded": true,
     "cn": [
         {
-            "id": "ExtBox1-ext-gen31952",
+            "id": "ExtBox1-ext-gen18441",
             "type": "ajaxproxy",
             "reference": {
                 "name": "proxy",
@@ -32,14 +26,14 @@
             },
             "codeClass": null,
             "userConfig": {
-                "url": "api/assay-status",
-                "designer|userClassName": "MyAjaxProxy3"
+                "url": "api/stage",
+                "designer|userClassName": "MyAjaxProxy6"
             },
             "customConfigs": [],
             "expanded": true,
             "cn": [
                 {
-                    "id": "ExtBox1-ext-gen31960",
+                    "id": "ExtBox1-ext-gen18449",
                     "type": "jsonreader",
                     "reference": {
                         "name": "reader",
@@ -47,7 +41,7 @@
                     },
                     "codeClass": null,
                     "userConfig": {
-                        "designer|userClassName": "MyJsonReader4"
+                        "designer|userClassName": "MyJsonReader7"
                     },
                     "customConfigs": [],
                     "expanded": true

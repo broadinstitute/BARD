@@ -67,14 +67,14 @@
 
 </div>
 
-<div class="fieldcontain ${hasErrors(bean: assayInstance, field: 'externalAssaies', 'error')} ">
-	<label for="externalAssaies">
-		<g:message code="assay.externalAssaies.label" default="External Assaies" />
+<div class="fieldcontain ${hasErrors(bean: assayInstance, field: 'externalAssays', 'error')} ">
+	<label for="externalAssays">
+		<g:message code="assay.externalAssays.label" default="External Assays" />
 		
 	</label>
 	
 <ul class="one-to-many">
-<g:each in="${assayInstance?.externalAssaies?}" var="e">
+<g:each in="${assayInstance?.externalAssays?}" var="e">
     <li><g:link controller="externalAssay" action="show" id="${e.id}">${e?.encodeAsHTML()}</g:link></li>
 </g:each>
 <li class="add">
@@ -118,14 +118,14 @@
 
 </div>
 
-<div class="fieldcontain ${hasErrors(bean: assayInstance, field: 'projectAssaies', 'error')} ">
-	<label for="projectAssaies">
-		<g:message code="assay.projectAssaies.label" default="Project Assaies" />
+<div class="fieldcontain ${hasErrors(bean: assayInstance, field: 'projectAssays', 'error')} ">
+	<label for="projectAssays">
+		<g:message code="assay.projectAssays.label" default="Project Assays" />
 		
 	</label>
 	
 <ul class="one-to-many">
-<g:each in="${assayInstance?.projectAssaies?}" var="p">
+<g:each in="${assayInstance?.projectAssays?}" var="p">
     <li><g:link controller="projectAssay" action="show" id="${p.id}">${p?.encodeAsHTML()}</g:link></li>
 </g:each>
 <li class="add">

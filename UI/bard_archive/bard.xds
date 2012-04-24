@@ -62,14 +62,6 @@
             ],
             "className": "ResultTypesForm"
         },
-        "4a31810a-d983-4000-aa11-0502e55d9428": {
-            "paths": [
-                "metadata/store/assayStatusStore",
-                "app/store/override/assayStatusStore.js",
-                "app/store/assayStatusStore.js"
-            ],
-            "className": "assayStatusStore"
-        },
         "0065163c-b9de-4ad6-b7a5-40652f3b9bc9": {
             "paths": [
                 "metadata/store/assayStore",
@@ -149,6 +141,46 @@
                 "app/model/measure.js"
             ],
             "className": "measure"
+        },
+        "f6d08db1-1aab-49a0-acc6-7cc48b7cdde2": {
+            "paths": [
+                "metadata/store/groupTypeStore",
+                "app/store/override/groupTypeStore.js",
+                "app/store/groupTypeStore.js"
+            ],
+            "className": "groupTypeStore"
+        },
+        "31d9c9db-cd67-4911-830d-25364f55c454": {
+            "paths": [
+                "metadata/model/groupType",
+                "app/model/override/groupType.js",
+                "app/model/groupType.js"
+            ],
+            "className": "groupType"
+        },
+        "3fef5961-4b34-41e0-af60-55b23397e3b0": {
+            "paths": [
+                "metadata/store/ProjectStore",
+                "app/store/override/ProjectStore.js",
+                "app/store/ProjectStore.js"
+            ],
+            "className": "ProjectStore"
+        },
+        "d18f2c2d-815c-483f-be1c-dbfef19026b4": {
+            "paths": [
+                "metadata/store/StageStore",
+                "app/store/override/StageStore.js",
+                "app/store/StageStore.js"
+            ],
+            "className": "StageStore"
+        },
+        "155077e4-c135-462f-8418-5c11c51cf917": {
+            "paths": [
+                "metadata/model/Stage",
+                "app/model/override/Stage.js",
+                "app/model/Stage.js"
+            ],
+            "className": "Stage"
         }
     },
     "expandedState": {

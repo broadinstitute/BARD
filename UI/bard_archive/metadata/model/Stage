@@ -1,5 +1,5 @@
 {
-    "id": "ExtBox1-ext-gen41814",
+    "id": "ExtBox1-ext-gen17904",
     "type": "datamodel",
     "reference": {
         "name": "items",
@@ -7,15 +7,15 @@
     },
     "codeClass": null,
     "userConfig": {
-        "designer|userClassName": "elementModel"
+        "designer|userClassName": "Stage"
     },
     "customConfigs": [],
-    "designerId": "500444c0-8971-474d-b476-57aef6a5820d",
-    "$viewOrder": 4,
-    "expanded": false,
+    "designerId": "155077e4-c135-462f-8418-5c11c51cf917",
+    "$viewOrder": 7,
+    "expanded": true,
     "cn": [
         {
-            "id": "ExtBox1-ext-gen42007",
+            "id": "ExtBox1-ext-gen18092",
             "type": "datafield",
             "reference": {
                 "name": "fields",
@@ -24,14 +24,13 @@
             "codeClass": null,
             "userConfig": {
                 "name": "id",
-                "type": "int",
-                "designer|userClassName": "MyField25"
+                "designer|userClassName": "MyField32"
             },
             "customConfigs": [],
             "expanded": true
         },
         {
-            "id": "ExtBox1-ext-gen42182",
+            "id": "ExtBox1-ext-gen18261",
             "type": "datafield",
             "reference": {
                 "name": "fields",
@@ -39,9 +38,8 @@
             },
             "codeClass": null,
             "userConfig": {
-                "name": "text",
-                "type": "string",
-                "designer|userClassName": "MyField26"
+                "name": "stage",
+                "designer|userClassName": "MyField33"
             },
             "customConfigs": [],
             "expanded": true

@@ -14,7 +14,7 @@
     "customConfigs": [],
     "designerId": "1459faf8-b14c-4da9-bb1b-a102e6a861a2",
     "$viewOrder": 2,
-    "expanded": true,
+    "expanded": false,
     "cn": [
         {
             "id": "ExtBox1-ext-gen4604",
@@ -26,7 +26,7 @@
             "codeClass": null,
             "userConfig": {
                 "title": "CAP Assay Definition",
-                "activeTab": 2,
+                "activeTab": 0,
                 "designer|userClassName": "MyTabPanel"
             },
             "customConfigs": [],
