@@ -45,7 +45,7 @@
                         "designer|userClassName": "MyPanel"
                     },
                     "customConfigs": [],
-                    "expanded": false,
+                    "expanded": true,
                     "cn": [
                         {
                             "id": "ExtBox1-ext-gen45016",
@@ -108,7 +108,7 @@
                                     "codeClass": null,
                                     "userConfig": {
                                         "fn": "onGridpanelSelectionChange",
-                                        "implHandler": " Ext.get(\"\").getForm().loadRecord(records[0]);",
+                                        "implHandler": "\tvar formPanel = Ext.get(\"assay-form\");\r\n\tformPanel.getForm().loadRecord(records[0]);",
                                         "name": "selectionchange",
                                         "scope": "me",
                                         "designer|userClassName": "onGridpanelSelectionChange"

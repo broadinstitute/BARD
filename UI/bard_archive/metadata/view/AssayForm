@@ -8,11 +8,13 @@
     "codeClass": null,
     "userConfig": {
         "height": 602,
+        "id": "assay-form",
         "width": 938,
         "layout": "absolute",
         "bodyPadding": 10,
         "preventHeader": true,
         "title": "AssayForm",
+        "url": "api/assay",
         "designer|userClassName": "AssayForm",
         "designer|userAlias": "assayform",
         "designer|snapToGrid": 10
