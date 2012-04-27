@@ -1,5 +1,5 @@
 {
-    "id": "ExtBox1-ext-gen17074",
+    "id": "ExtBox1-ext-gen45868",
     "type": "jsonstore",
     "reference": {
         "name": "items",
@@ -7,18 +7,17 @@
     },
     "codeClass": null,
     "userConfig": {
-        "autoLoad": true,
-        "storeId": "ProjectStore",
+        "storeId": "MyJsonStore4",
         "model": "Project",
-        "designer|userClassName": "ProjectStore"
+        "designer|userClassName": "ProjectDStore"
     },
     "customConfigs": [],
-    "designerId": "3fef5961-4b34-41e0-af60-55b23397e3b0",
-    "$viewOrder": 4,
+    "designerId": "8f9fa8be-08f1-4748-8873-a97eab9b46eb",
+    "$viewOrder": 3,
     "expanded": true,
     "cn": [
         {
-            "id": "ExtBox1-ext-gen17081",
+            "id": "ExtBox1-ext-gen45875",
             "type": "ajaxproxy",
             "reference": {
                 "name": "proxy",
@@ -26,14 +25,14 @@
             },
             "codeClass": null,
             "userConfig": {
-                "url": "api/project",
-                "designer|userClassName": "MyAjaxProxy5"
+                "url": "http://localhost:8081/BARD/api/project",
+                "designer|userClassName": "MyAjaxProxy4"
             },
             "customConfigs": [],
             "expanded": true,
             "cn": [
                 {
-                    "id": "ExtBox1-ext-gen17089",
+                    "id": "ExtBox1-ext-gen45883",
                     "type": "jsonreader",
                     "reference": {
                         "name": "reader",
@@ -41,9 +40,7 @@
                     },
                     "codeClass": null,
                     "userConfig": {
-                        "root": "data",
-                        "totalProperty": "count",
-                        "designer|userClassName": "MyJsonReader6"
+                        "designer|userClassName": "MyJsonReader5"
                     },
                     "customConfigs": [],
                     "expanded": true

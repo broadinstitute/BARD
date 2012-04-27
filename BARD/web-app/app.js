@@ -26,17 +26,18 @@ Ext.application({
         'Assay',
         'AssayStatus',
         'Protocol',
-        'Project',
-        'ResultType'
+        'ResultType',
+        'Project'
     ],
     stores: [
         'elementTreeStore',
         'groupTypeStore',
-        'ProjectStore',
         'StageStore',
         'assayStore',
         'AssayStatusDStore',
-        'ResultTypeStore'
+        'ResultTypeStore',
+        'ProjectDStore',
+        'ProtocolDStore'
     ],
     views: [
         'elementTree',

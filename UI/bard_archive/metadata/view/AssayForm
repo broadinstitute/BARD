@@ -32,7 +32,7 @@
             "codeClass": null,
             "userConfig": {
                 "width": 240,
-                "name": "assayId",
+                "name": "id",
                 "fieldLabel": "ID #",
                 "designer|userClassName": "MyTextField"
             },
@@ -222,7 +222,7 @@
                 "height": 190,
                 "width": 420,
                 "title": "Project",
-                "store": "assayStore",
+                "store": "ProjectDStore",
                 "designer|userClassName": "MyGridPanel1",
                 "layout|x": 340,
                 "layout|y": 280

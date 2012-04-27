@@ -1,5 +1,5 @@
 {
-    "id": "ExtBox1-ext-gen18434",
+    "id": "ExtBox1-ext-gen16730",
     "type": "jsonstore",
     "reference": {
         "name": "items",
@@ -7,18 +7,17 @@
     },
     "codeClass": null,
     "userConfig": {
-        "autoLoad": true,
-        "storeId": "StageStore",
-        "model": "Stage",
-        "designer|userClassName": "StageStore"
+        "storeId": "MyJsonStore",
+        "model": "Protocol",
+        "designer|userClassName": "ProtocolDStore"
     },
     "customConfigs": [],
-    "designerId": "d18f2c2d-815c-483f-be1c-dbfef19026b4",
-    "$viewOrder": 6,
-    "expanded": false,
+    "designerId": "8a61628e-21ae-4846-a49c-53e17f43a3da",
+    "$viewOrder": 5,
+    "expanded": true,
     "cn": [
         {
-            "id": "ExtBox1-ext-gen18441",
+            "id": "ExtBox1-ext-gen16737",
             "type": "ajaxproxy",
             "reference": {
                 "name": "proxy",
@@ -26,14 +25,14 @@
             },
             "codeClass": null,
             "userConfig": {
-                "url": "api/stage",
-                "designer|userClassName": "MyAjaxProxy6"
+                "url": "api/protocol",
+                "designer|userClassName": "MyAjaxProxy"
             },
             "customConfigs": [],
             "expanded": true,
             "cn": [
                 {
-                    "id": "ExtBox1-ext-gen18449",
+                    "id": "ExtBox1-ext-gen16745",
                     "type": "jsonreader",
                     "reference": {
                         "name": "reader",
@@ -41,8 +40,7 @@
                     },
                     "codeClass": null,
                     "userConfig": {
-                        "root": "data",
-                        "designer|userClassName": "MyJsonReader7"
+                        "designer|userClassName": "MyJsonReader1"
                     },
                     "customConfigs": [],
                     "expanded": true

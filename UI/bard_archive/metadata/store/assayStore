@@ -22,7 +22,7 @@
     ],
     "designerId": "0065163c-b9de-4ad6-b7a5-40652f3b9bc9",
     "$viewOrder": 0,
-    "expanded": false,
+    "expanded": true,
     "cn": [
         {
             "id": "ExtBox1-ext-gen9178",
@@ -57,38 +57,6 @@
                     "expanded": true
                 }
             ]
-        },
-        {
-            "id": "ExtBox1-ext-gen47789",
-            "type": "datafield",
-            "reference": {
-                "name": "fields",
-                "type": "array"
-            },
-            "codeClass": null,
-            "userConfig": {
-                "name": "id",
-                "type": "int",
-                "designer|userClassName": "MyField27"
-            },
-            "customConfigs": [],
-            "expanded": true
-        },
-        {
-            "id": "ExtBox1-ext-gen9761",
-            "type": "datafield",
-            "reference": {
-                "name": "fields",
-                "type": "array"
-            },
-            "codeClass": null,
-            "userConfig": {
-                "name": "assayName",
-                "type": "string",
-                "designer|userClassName": "MyField5"
-            },
-            "customConfigs": [],
-            "expanded": true
         }
     ]
 }
