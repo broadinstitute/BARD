@@ -6,27 +6,35 @@ as
     pv_tree_result_type varchar2(31) := 'RESULT_TYPE';
     pv_tree_unit varchar2(31) := 'UNIT';
     
-    procedure delete_old_tree(avi_tree_name in varchar2,
-                            ano_error out number, 
-                            avo_errmsg out varchar2);
+--    procedure delete_old_tree(avi_tree_name in varchar2,
+--                            ano_error out number, 
+--                            avo_errmsg out varchar2);
     
 --    procedure walk_down_the_tree(ani_element_id in number,
 --                                anio_node_id in out number,
 --                                ani_parent_node_id in number,
 --                                avi_relationship_type in varchar2,
 --                                avi_tree_name in varchar2,
+--                                ani_recursion_level number,
 --                                ano_error out number,
 --                                avo_errmsg out varchar2);
                                 
-    procedure Save_node (ari_element in element%rowtype,
-                                ani_node_id in number,
-                                ani_parent_node_id in number,
-                                avi_tree_name in varchar2,
-                                ano_error out number,
-                                avo_errmsg out varchar2);
+--    procedure Save_node (ari_element in element%rowtype,
+--                                ani_node_id in number,
+--                                ani_parent_node_id in number,
+--                                avi_tree_name in varchar2,
+--                                ano_error out number,
+--                                avo_errmsg out varchar2);
                                 
     procedure make_trees (avi_tree_name in varchar2 default null);
+    
+    procedure add_element(avi_tree_name in varchar2,
+                        ani_parent_element_id in number,
+                        avi_element_label varchar2,
+                        avi_element_description varchar2,
+                        avi_element_abbreviation varchar2,
+                        avi_element_synonyms varchar2);
                           
-    end manage_ontology;
+end manage_ontology;
 
 /
