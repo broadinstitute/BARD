@@ -25,8 +25,9 @@
             },
             "codeClass": null,
             "userConfig": {
+                "id": "capTabPanel",
                 "title": "CAP Assay Definition",
-                "activeTab": 1,
+                "activeTab": 0,
                 "designer|userClassName": "MyTabPanel"
             },
             "customConfigs": [],
@@ -41,11 +42,12 @@
                     },
                     "codeClass": null,
                     "userConfig": {
+                        "itemId": "findAssayTab",
                         "title": "Find an Assay",
                         "designer|userClassName": "MyPanel"
                     },
                     "customConfigs": [],
-                    "expanded": false,
+                    "expanded": true,
                     "cn": [
                         {
                             "id": "ExtBox1-ext-gen45016",
@@ -108,7 +110,7 @@
                                     "codeClass": null,
                                     "userConfig": {
                                         "fn": "onGridpanelSelectionChange",
-                                        "implHandler": " Ext.get(\"\").getForm().loadRecord(records[0]);",
+                                        "implHandler": "var tabs = Ext.getCmp(\"capTabPanel\");\r\nvar tab = Ext.getCmp('assayTab');\r\nvar assayFormPanel = tab.getComponent('assayForm');\r\nassayFormPanel.getForm('form').loadRecord(selections[0]);\r\ntabs.setActiveTab(tab);\r\n",
                                         "name": "selectionchange",
                                         "scope": "me",
                                         "designer|userClassName": "onGridpanelSelectionChange"
@@ -129,12 +131,15 @@
                     },
                     "codeClass": null,
                     "userConfig": {
+                        "id": "assayTab",
+                        "itemId": "assayFormTab",
                         "width": 983,
+                        "activeItem": "",
                         "title": "Extract Name, Description",
                         "designer|userClassName": "MyPanel1"
                     },
                     "customConfigs": [],
-                    "expanded": false,
+                    "expanded": true,
                     "cn": [
                         {
                             "id": "ExtBox1-ext-gen45418",
@@ -144,7 +149,9 @@
                                 "type": "array"
                             },
                             "codeClass": null,
-                            "userConfig": {},
+                            "userConfig": {
+                                "id": "assayForm"
+                            },
                             "customConfigs": [],
                             "iconCls": "icon-linkedinstance",
                             "expanded": true,

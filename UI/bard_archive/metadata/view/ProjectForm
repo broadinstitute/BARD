@@ -18,7 +18,7 @@
     "customConfigs": [],
     "designerId": "d7c6360d-9396-4e43-8b77-895e1992e77e",
     "$viewOrder": 3,
-    "expanded": false,
+    "expanded": true,
     "cn": [
         {
             "id": "ExtBox1-ext-gen34028",
@@ -33,7 +33,7 @@
                 "name": "projectName",
                 "fieldLabel": "Project",
                 "displayField": "projectName",
-                "store": "ProjectStore",
+                "store": "ProjectDStore",
                 "valueField": "id",
                 "designer|userClassName": "MyComboBox1"
             },
