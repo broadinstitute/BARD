@@ -93,6 +93,7 @@ class BootStrap {
         environments {
             development {
 
+                // TODO guard against accidentally creating duplicates by using an if block
                 def defaultStatus = new AssayStatus(status:"Pending").save();
                 new AssayStatus(status:"Active").save();
                 new AssayStatus(status:"Superceded").save();

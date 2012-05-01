@@ -28,7 +28,7 @@ class Measure {
 		modifiedBy nullable: true, maxSize: 40
         assay nullable: false
         resultType nullable: false
-        measureContext nullable: true
+        measureContext nullable: false
         entryUnit nullable: true
 	}
 }

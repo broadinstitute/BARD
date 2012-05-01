@@ -45,7 +45,7 @@ class MeasureContextItem {
 		modifiedBy nullable: true, maxSize: 40
         attributeElement nullable: false
         valueElement nullable: true
-        measureContext nullable: false
+        measureContext nullable: true
         assay nullable: false
         qualifier nullable: true
 	}
