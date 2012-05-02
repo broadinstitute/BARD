@@ -213,6 +213,14 @@
                 "app/model/Project.js"
             ],
             "className": "Project"
+        },
+        "d60c17da-4f6f-4dbc-9433-f168b710bfe3": {
+            "paths": [
+                "metadata/store/AssayStatutsStore",
+                "app/store/override/AssayStatutsStore.js",
+                "app/store/AssayStatutsStore.js"
+            ],
+            "className": "AssayStatutsStore"
         }
     },
     "expandedState": {

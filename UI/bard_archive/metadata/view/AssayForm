@@ -8,6 +8,7 @@
     "codeClass": null,
     "userConfig": {
         "height": 602,
+        "id": "",
         "width": 938,
         "layout": "absolute",
         "bodyPadding": 10,
@@ -51,8 +52,11 @@
                 "width": 230,
                 "name": "assayStatus",
                 "fieldLabel": "Status",
+                "allowBlank": false,
+                "editable": false,
                 "displayField": "status",
-                "store": "AssayStatusDStore",
+                "forceSelection": true,
+                "store": "AssayStatutsStore",
                 "valueField": "id",
                 "designer|userClassName": "MyComboBox",
                 "layout|x": 320,
@@ -228,7 +232,7 @@
                 "layout|y": 280
             },
             "customConfigs": [],
-            "expanded": true,
+            "expanded": false,
             "cn": [
                 {
                     "id": "ExtBox1-ext-gen18379",
@@ -409,10 +413,11 @@
                     },
                     "codeClass": null,
                     "userConfig": {
-                        "fn": "onButtonClick",
+                        "fn": "onNextButtonClick",
+                        "implHandler": "var assayFormPanel = Ext.getCmp(\"assayForm\");\r\nvar assayForm = assayFormPanel.getForm('form');\r\nif (assayForm.isValid()) {\r\n\t//assayForm.submit();\r\n\tvar assayStore = Ext.getStore('assayStore');\r\n\tvar assayModel = Ext.create('BARD.model.Assay');\r\n\tassayForm.updateRecord(assayModel);\r\n\tassayStore.insert(0, assayModel);\r\n\tassayStore.sync();\r\n\tExt.MessageBox.alert('Thank you!', 'Your form has been submitted.');\r\n}",
                         "name": "click",
                         "scope": "me",
-                        "designer|userClassName": "onButtonClick"
+                        "designer|userClassName": "onNextButtonClick"
                     },
                     "customConfigs": [],
                     "expanded": true
@@ -447,10 +452,11 @@
                     },
                     "codeClass": null,
                     "userConfig": {
-                        "fn": "onButtonClick1",
+                        "fn": "onCancelButtonClick",
+                        "implHandler": "var assayFormPanel = Ext.getCmp(\"assayForm\");\r\nvar assayForm = assayFormPanel.getForm('form');\r\nassayForm.reset();",
                         "name": "click",
                         "scope": "me",
-                        "designer|userClassName": "onButtonClick1"
+                        "designer|userClassName": "onCancelButtonClick"
                     },
                     "customConfigs": [],
                     "expanded": true

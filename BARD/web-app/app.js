@@ -37,7 +37,8 @@ Ext.application({
         'AssayStatusDStore',
         'ResultTypeStore',
         'ProjectDStore',
-        'ProtocolDStore'
+        'ProtocolDStore',
+        'AssayStatutsStore'
     ],
     views: [
         'elementTree',

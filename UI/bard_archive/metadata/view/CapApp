@@ -61,6 +61,7 @@
                                 "height": 288,
                                 "width": 894,
                                 "title": "All Assays",
+                                "forceFit": false,
                                 "store": "assayStore",
                                 "designer|userClassName": "MyGridPanel4"
                             },
@@ -117,6 +118,42 @@
                                     },
                                     "customConfigs": [],
                                     "expanded": true
+                                },
+                                {
+                                    "id": "ExtBox1-ext-gen43053",
+                                    "type": "toolbar",
+                                    "reference": {
+                                        "name": "dockedItems",
+                                        "type": "array"
+                                    },
+                                    "codeClass": null,
+                                    "userConfig": {
+                                        "designer|userClassName": "MyToolbar1",
+                                        "dock": "top"
+                                    },
+                                    "customConfigs": [],
+                                    "expanded": true,
+                                    "cn": [
+                                        {
+                                            "id": "ExtBox1-ext-gen43456",
+                                            "type": "textfield",
+                                            "reference": {
+                                                "name": "items",
+                                                "type": "array"
+                                            },
+                                            "codeClass": null,
+                                            "userConfig": {
+                                                "width": 394,
+                                                "name": "SearchTextField",
+                                                "fieldLabel": "Search",
+                                                "labelWidth": 70,
+                                                "designer|userClassName": "MyTextField4",
+                                                "layout|flex": null
+                                            },
+                                            "customConfigs": [],
+                                            "expanded": true
+                                        }
+                                    ]
                                 }
                             ]
                         }
@@ -150,7 +187,8 @@
                             },
                             "codeClass": null,
                             "userConfig": {
-                                "id": "assayForm"
+                                "id": "assayForm",
+                                "url": "api/assay"
                             },
                             "customConfigs": [],
                             "iconCls": "icon-linkedinstance",
