@@ -8,3 +8,4 @@ web-app/WEB-INF/classes/
 *.iws
 *.ipr
 stacktrace.log
+thumbs.db
