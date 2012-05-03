@@ -33,13 +33,11 @@ Ext.define('BARD.view.CapApp', {
             items: [
                 {
                     xtype: 'tabpanel',
-                    id: 'capTabPanel',
                     title: 'CAP Assay Definition',
-                    activeTab: 0,
+                    activeTab: 1,
                     items: [
                         {
                             xtype: 'panel',
-                            itemId: 'findAssayTab',
                             title: 'Find an Assay',
                             items: [
                                 {
@@ -88,10 +86,7 @@ Ext.define('BARD.view.CapApp', {
                         },
                         {
                             xtype: 'panel',
-                            id: 'assayTab',
-                            itemId: 'assayFormTab',
                             width: 983,
-                            activeItem: '',
                             title: 'Extract Name, Description',
                             items: [
                                 {
@@ -122,12 +117,8 @@ Ext.define('BARD.view.CapApp', {
     },
 
     onGridpanelSelectionChange: function(tablepanel, selections, options) {
-        var tabs = Ext.getCmp("capTabPanel");
-        var tab = Ext.getCmp('assayTab');
-        var assayFormPanel = tab.getComponent('assayForm');
-        assayFormPanel.getForm('form').loadRecord(selections[0]);
-        tabs.setActiveTab(tab);
-
+        var formPanel = Ext.get("assay-form");
+        formPanel.getForm().loadRecord(records[0]);
     }
 
 });

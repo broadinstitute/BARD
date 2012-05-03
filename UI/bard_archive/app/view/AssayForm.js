@@ -27,16 +27,21 @@ Ext.define('BARD.view.AssayForm', {
     bodyPadding: 10,
     preventHeader: true,
     title: 'AssayForm',
+    url: 'api/assay',
 
     initComponent: function() {
         var me = this;
+
+        me.initialConfig = Ext.apply({
+            url: 'api/assay'
+        }, me.initialConfig);
 
         Ext.applyIf(me, {
             items: [
                 {
                     xtype: 'textfield',
                     width: 240,
-                    name: 'id',
+                    name: 'assayId',
                     fieldLabel: 'ID #'
                 },
                 {
@@ -119,7 +124,7 @@ Ext.define('BARD.view.AssayForm', {
                     height: 190,
                     width: 420,
                     title: 'Project',
-                    store: 'ProjectDStore',
+                    store: 'assayStore',
                     x: 340,
                     y: 280,
                     viewConfig: {

@@ -14,6 +14,7 @@
         "bodyPadding": 10,
         "preventHeader": true,
         "title": "AssayForm",
+        "url": "api/assay",
         "designer|userClassName": "AssayForm",
         "designer|userAlias": "assayform",
         "designer|snapToGrid": 10
@@ -33,7 +34,7 @@
             "codeClass": null,
             "userConfig": {
                 "width": 240,
-                "name": "id",
+                "name": "assayId",
                 "fieldLabel": "ID #",
                 "designer|userClassName": "MyTextField"
             },
@@ -226,7 +227,7 @@
                 "height": 190,
                 "width": 420,
                 "title": "Project",
-                "store": "ProjectDStore",
+                "store": "assayStore",
                 "designer|userClassName": "MyGridPanel1",
                 "layout|x": 340,
                 "layout|y": 280

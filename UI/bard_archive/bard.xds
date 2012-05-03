@@ -150,6 +150,14 @@
             ],
             "className": "groupType"
         },
+        "3fef5961-4b34-41e0-af60-55b23397e3b0": {
+            "paths": [
+                "metadata/store/ProjectStore",
+                "app/store/override/ProjectStore.js",
+                "app/store/ProjectStore.js"
+            ],
+            "className": "ProjectStore"
+        },
         "d18f2c2d-815c-483f-be1c-dbfef19026b4": {
             "paths": [
                 "metadata/store/StageStore",
@@ -189,30 +197,6 @@
                 "app/view/ResultTypeTree.js"
             ],
             "className": "ResultTypeTree"
-        },
-        "8f9fa8be-08f1-4748-8873-a97eab9b46eb": {
-            "paths": [
-                "metadata/store/ProjectDStore",
-                "app/store/override/ProjectDStore.js",
-                "app/store/ProjectDStore.js"
-            ],
-            "className": "ProjectDStore"
-        },
-        "8a61628e-21ae-4846-a49c-53e17f43a3da": {
-            "paths": [
-                "metadata/store/ProtocolDStore",
-                "app/store/override/ProtocolDStore.js",
-                "app/store/ProtocolDStore.js"
-            ],
-            "className": "ProtocolDStore"
-        },
-        "62a3ef49-905a-4220-900e-85e9676c86e2": {
-            "paths": [
-                "metadata/model/Project",
-                "app/model/override/Project.js",
-                "app/model/Project.js"
-            ],
-            "className": "Project"
         },
         "d60c17da-4f6f-4dbc-9433-f168b710bfe3": {
             "paths": [

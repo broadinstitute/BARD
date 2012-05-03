@@ -41,7 +41,17 @@ Ext.define('BARD.store.assayStore', {
                     type: 'json',
                     root: 'data'
                 }
-            }
+            },
+            fields: [
+                {
+                    name: 'id',
+                    type: 'int'
+                },
+                {
+                    name: 'assayName',
+                    type: 'string'
+                }
+            ]
         }, cfg)]);
     }
 });
