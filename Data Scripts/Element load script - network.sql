@@ -7,6 +7,14 @@
 
 
 -- clean out old data
+delete from assay_descriptor;
+delete from biology_descriptor;
+delete from instance_descriptor;
+delete from result_type;
+delete from unit;
+
+
+
 delete from tree_root;
 delete from element_hierarchy;
 delete from element;
@@ -400,6 +408,51 @@ insert into element (element_id, label, description, element_status_id) values (
 insert into element (element_id, label, description, element_status_id) values (327, 'assay serum', 'The serum used in assay medium while performing an assay on cells and is optimized for each assay type. In certain assays, the cells could be maintained at either a lower concentration of the serum used in regular culture or in a specialized serum, including dextran charcoal treated serum, dialyzed serum, etc. This is done to avoid interference with the assay measurements.', 2);
 insert into element (element_id, label, description, element_status_id) values (328, 'culture serum', 'Cultured cells require serum or growth factors for growth by cell division. Each cell type is grown in a medium supplemented with a variable concentration of serum (up to 20%) which is optimized for its growth. Specialized sera include dextran charcoal treated serum, which lacks certain hormones, growth factors, etc, dialyzed serum, which lacks low molecular weight molecules (below 10,000 MW), such as glucose, amino acids, low molecular weight hormones, cytokines, etc. These sera are used in certain assays to avoid interference from the normal serum components. Most commonly, fetal bovine serum is used in cell culture, but other sera such as horse serum are also used.', 2);
 insert into element (element_id, label, description, element_status_id) values (329, 'culture medium', 'The liquid broth used to grow cells, which is optimized for each cell type and includes additives such as growth factors, buffers, amino acids, antibiotics, etc. This information can be obtained from ATCC or found in relevant publications.', 2);
+insert into element (element_id, label, description, element_status_id) values (346, 'coupled substrate', '', 2);
+insert into element (element_id, label, description, element_status_id) values (347, 'peptide', '', 2);
+COMMIT;
+insert into element (element_id, label, description, element_status_id) values (348, 'Rhok2', '', 2);
+insert into element (element_id, label, description, element_status_id) values (349, 'S6', '', 2);
+insert into element (element_id, label, description, element_status_id) values (350, 'Measured Entity', '', 2);
+insert into element (element_id, label, description, element_status_id) values (351, 'readout', '', 2);
+insert into element (element_id, label, description, element_status_id) values (352, 'nucleotide', '', 2);
+insert into element (element_id, label, description, element_status_id) values (353, 'ATP', '', 2);
+insert into element (element_id, label, description, element_status_id) values (354, 'HEPES_50mM_7.3pH/MgCl_10mM/BSA_0.1%/DTT_2mM', '', 2);
+insert into element (element_id, label, description, element_status_id) values (355, 'Vehicle Components', '', 2);
+insert into element (element_id, label, description, element_status_id) values (356, 'HEPES', '', 2);
+insert into element (element_id, label, description, element_status_id) values (357, 'MgCl', '', 2);
+COMMIT;
+insert into element (element_id, label, description, element_status_id) values (358, 'BSA', '', 2);
+insert into element (element_id, label, description, element_status_id) values (359, 'DTT', '', 2);
+insert into element (element_id, label, description, element_status_id) values (360, 'assay mode', '', 2);
+insert into element (element_id, label, description, element_status_id) values (361, 'in vitro', '', 2);
+insert into element (element_id, label, description, element_status_id) values (362, 'in vivo', '', 2);
+insert into element (element_id, label, description, element_status_id) values (363, 'in silico', '', 2);
+insert into element (element_id, label, description, element_status_id) values (364, 'inhibition', '', 2);
+insert into element (element_id, label, description, element_status_id) values (365, 'Kinase Glo', '', 2);
+insert into element (element_id, label, description, element_status_id) values (366, 'concentration', '', 2);
+insert into element (element_id, label, description, element_status_id) values (367, 'incubation temperature', '', 2);
+COMMIT;
+insert into element (element_id, label, description, element_status_id) values (368, 'software', '', 2);
+insert into element (element_id, label, description, element_status_id) values (369, 'Number of exclusions', '', 2);
+insert into element (element_id, label, description, element_status_id) values (370, 'Number of points', '', 2);
+insert into element (element_id, label, description, element_status_id) values (371, 'ViewLux', '', 2);
+insert into element (element_id, label, description, element_status_id) values (372, 'Assay Explorer', '', 2);
+insert into element (element_id, label, description, element_status_id) values (373, 'PI (avg)', '', 2);
+insert into element (element_id, label, description, element_status_id) values (374, 'LogIC50', '', 2);
+insert into element (element_id, label, description, element_status_id) values (375, 'Hill coeff', '', 2);
+insert into element (element_id, label, description, element_status_id) values (376, 'Hill s0', '', 2);
+insert into element (element_id, label, description, element_status_id) values (377, 'Hill sinf', '', 2);
+COMMIT;
+insert into element (element_id, label, description, element_status_id) values (378, 'Hill dS', '', 2);
+insert into element (element_id, label, description, element_status_id) values (379, 'Statistical', '', 2);
+insert into element (element_id, label, description, element_status_id) values (380, 'Count', '', 2);
+insert into element (element_id, label, description, element_status_id) values (381, 'Chi Squared', '', 2);
+insert into element (element_id, label, description, element_status_id) values (382, 'R Squared', '', 2);
+insert into element (element_id, label, description, element_status_id) values (383, '%', '', 2);
+insert into element (element_id, label, description, element_status_id) values (384, 'deg C', '', 2);
+insert into element (element_id, label, description, element_status_id) values (385, 's', '', 2);
+insert into element (element_id, label, description, element_status_id) values (386, 'uM', '', 2);
 commit;
 
 
@@ -407,10 +460,10 @@ commit;
 --
 -- element hierarchy
 --
-insert into element_hierarchy (child_element_id, parent_element_id, relationship_type) values (0, '', 'is_a');
-insert into element_hierarchy (child_element_id, parent_element_id, relationship_type) values (1, 0, 'is_a');
-insert into element_hierarchy (child_element_id, parent_element_id, relationship_type) values (5, 1, 'is_a');
-insert into element_hierarchy (child_element_id, parent_element_id, relationship_type) values (9, 5, 'is_a');
+insert into element_hierarchy (child_element_id, parent_element_id, relationship_type) values (0, '', 'has_a');
+insert into element_hierarchy (child_element_id, parent_element_id, relationship_type) values (1, 0, 'has_a');
+insert into element_hierarchy (child_element_id, parent_element_id, relationship_type) values (5, 1, 'has_a');
+insert into element_hierarchy (child_element_id, parent_element_id, relationship_type) values (9, 5, 'has_a');
 insert into element_hierarchy (child_element_id, parent_element_id, relationship_type) values (21, 9, 'is_a');
 insert into element_hierarchy (child_element_id, parent_element_id, relationship_type) values (300, 21, 'is_a');
 insert into element_hierarchy (child_element_id, parent_element_id, relationship_type) values (22, 9, 'is_a');
@@ -571,11 +624,11 @@ insert into element_hierarchy (child_element_id, parent_element_id, relationship
 insert into element_hierarchy (child_element_id, parent_element_id, relationship_type) values (213, 13, 'is_a');
 insert into element_hierarchy (child_element_id, parent_element_id, relationship_type) values (214, 13, 'is_a');
 insert into element_hierarchy (child_element_id, parent_element_id, relationship_type) values (215, 13, 'is_a');
-insert into element_hierarchy (child_element_id, parent_element_id, relationship_type) values (6, 1, 'is_a');
+insert into element_hierarchy (child_element_id, parent_element_id, relationship_type) values (6, 1, 'has_a');
 insert into element_hierarchy (child_element_id, parent_element_id, relationship_type) values (14, 6, 'is_a');
 insert into element_hierarchy (child_element_id, parent_element_id, relationship_type) values (17, 14, 'is_a');
 insert into element_hierarchy (child_element_id, parent_element_id, relationship_type) values (15, 6, 'is_a');
-insert into element_hierarchy (child_element_id, parent_element_id, relationship_type) values (7, 1, 'is_a');
+insert into element_hierarchy (child_element_id, parent_element_id, relationship_type) values (7, 1, 'has_a');
 insert into element_hierarchy (child_element_id, parent_element_id, relationship_type) values (18, 7, 'is_a');
 insert into element_hierarchy (child_element_id, parent_element_id, relationship_type) values (24, 18, 'is_a');
 insert into element_hierarchy (child_element_id, parent_element_id, relationship_type) values (25, 24, 'is_a');
@@ -602,7 +655,7 @@ insert into element_hierarchy (child_element_id, parent_element_id, relationship
 insert into element_hierarchy (child_element_id, parent_element_id, relationship_type) values (216, 7, 'is_a');
 insert into element_hierarchy (child_element_id, parent_element_id, relationship_type) values (246, 216, 'is_a');
 insert into element_hierarchy (child_element_id, parent_element_id, relationship_type) values (218, 216, 'is_a');
-insert into element_hierarchy (child_element_id, parent_element_id, relationship_type) values (8, 1, 'is_a');
+insert into element_hierarchy (child_element_id, parent_element_id, relationship_type) values (8, 1, 'has_a');
 insert into element_hierarchy (child_element_id, parent_element_id, relationship_type) values (250, 8, 'is_a');
 insert into element_hierarchy (child_element_id, parent_element_id, relationship_type) values (255, 250, 'is_a');
 insert into element_hierarchy (child_element_id, parent_element_id, relationship_type) values (341, 255, 'is_a');
@@ -621,7 +674,7 @@ insert into element_hierarchy (child_element_id, parent_element_id, relationship
 insert into element_hierarchy (child_element_id, parent_element_id, relationship_type) values (252, 251, 'is_a');
 insert into element_hierarchy (child_element_id, parent_element_id, relationship_type) values (253, 251, 'is_a');
 insert into element_hierarchy (child_element_id, parent_element_id, relationship_type) values (254, 251, 'is_a');
-insert into element_hierarchy (child_element_id, parent_element_id, relationship_type) values (2, 0, 'is_a');
+insert into element_hierarchy (child_element_id, parent_element_id, relationship_type) values (2, 0, 'has_a');
 insert into element_hierarchy (child_element_id, parent_element_id, relationship_type) values (304, 2, 'is_a');
 insert into element_hierarchy (child_element_id, parent_element_id, relationship_type) values (305, 2, 'is_a');
 insert into element_hierarchy (child_element_id, parent_element_id, relationship_type) values (306, 2, 'is_a');
@@ -638,7 +691,7 @@ insert into element_hierarchy (child_element_id, parent_element_id, relationship
 insert into element_hierarchy (child_element_id, parent_element_id, relationship_type) values (316, 311, 'is_a');
 insert into element_hierarchy (child_element_id, parent_element_id, relationship_type) values (312, 307, 'is_a');
 insert into element_hierarchy (child_element_id, parent_element_id, relationship_type) values (317, 312, 'is_a');
-insert into element_hierarchy (child_element_id, parent_element_id, relationship_type) values (3, 0, 'is_a');
+insert into element_hierarchy (child_element_id, parent_element_id, relationship_type) values (3, 0, 'has_a');
 insert into element_hierarchy (child_element_id, parent_element_id, relationship_type) values (290, 3, 'is_a');
 insert into element_hierarchy (child_element_id, parent_element_id, relationship_type) values (291, 290, 'is_a');
 insert into element_hierarchy (child_element_id, parent_element_id, relationship_type) values (292, 290, 'is_a');
@@ -650,7 +703,7 @@ insert into element_hierarchy (child_element_id, parent_element_id, relationship
 insert into element_hierarchy (child_element_id, parent_element_id, relationship_type) values (298, 296, 'is_a');
 insert into element_hierarchy (child_element_id, parent_element_id, relationship_type) values (299, 296, 'is_a');
 insert into element_hierarchy (child_element_id, parent_element_id, relationship_type) values (346, 296, 'is_a');
-insert into element_hierarchy (child_element_id, parent_element_id, relationship_type) values (4, 0, 'is_a');
+insert into element_hierarchy (child_element_id, parent_element_id, relationship_type) values (4, 0, 'has_a');
 insert into element_hierarchy (child_element_id, parent_element_id, relationship_type) values (287, 4, 'is_a');
 insert into element_hierarchy (child_element_id, parent_element_id, relationship_type) values (287, 4, 'is_a');
 insert into element_hierarchy (child_element_id, parent_element_id, relationship_type) values (289, 4, 'is_a');
@@ -707,7 +760,7 @@ insert into element_hierarchy (child_element_id, parent_element_id, relationship
 insert into element_hierarchy (child_element_id, parent_element_id, relationship_type) values (281, 345, 'is_a');
 insert into element_hierarchy (child_element_id, parent_element_id, relationship_type) values (64, 61, 'is_a');
 insert into element_hierarchy (child_element_id, parent_element_id, relationship_type) values (122, 61, 'is_a');
-insert into element_hierarchy (child_element_id, parent_element_id, relationship_type) values (123, 61, 'is_a');
+insert into element_hierarchy (child_element_id, parent_element_id, relationship_type) values (123, 86, 'is_a');
 insert into element_hierarchy (child_element_id, parent_element_id, relationship_type) values (124, 61, 'is_a');
 insert into element_hierarchy (child_element_id, parent_element_id, relationship_type) values (117, 112, 'is_a');
 insert into element_hierarchy (child_element_id, parent_element_id, relationship_type) values (118, 112, 'is_a');
@@ -754,6 +807,47 @@ insert into element_hierarchy (child_element_id, parent_element_id, relationship
 insert into element_hierarchy (child_element_id, parent_element_id, relationship_type) values (327, 131, 'is_a');
 insert into element_hierarchy (child_element_id, parent_element_id, relationship_type) values (328, 131, 'is_a');
 insert into element_hierarchy (child_element_id, parent_element_id, relationship_type) values (329, 131, 'is_a');
+insert into element_hierarchy (child_element_id, parent_element_id, relationship_type) values (346, 31, 'is_a');
+insert into element_hierarchy (child_element_id, parent_element_id, relationship_type) values (347, 23, 'is_a');
+insert into element_hierarchy (child_element_id, parent_element_id, relationship_type) values (348, 38, 'is_a');
+insert into element_hierarchy (child_element_id, parent_element_id, relationship_type) values (349, 347, 'is_a');
+insert into element_hierarchy (child_element_id, parent_element_id, relationship_type) values (350, 31, 'is_a');
+insert into element_hierarchy (child_element_id, parent_element_id, relationship_type) values (351, 28, 'is_a');
+insert into element_hierarchy (child_element_id, parent_element_id, relationship_type) values (352, 9, 'is_a');
+insert into element_hierarchy (child_element_id, parent_element_id, relationship_type) values (353, 352, 'is_a');
+insert into element_hierarchy (child_element_id, parent_element_id, relationship_type) values (354, 84, 'is_a');
+insert into element_hierarchy (child_element_id, parent_element_id, relationship_type) values (355, 84, 'is_a');
+insert into element_hierarchy (child_element_id, parent_element_id, relationship_type) values (356, 355, 'is_a');
+insert into element_hierarchy (child_element_id, parent_element_id, relationship_type) values (357, 355, 'is_a');
+insert into element_hierarchy (child_element_id, parent_element_id, relationship_type) values (358, 355, 'is_a');
+insert into element_hierarchy (child_element_id, parent_element_id, relationship_type) values (359, 355, 'is_a');
+insert into element_hierarchy (child_element_id, parent_element_id, relationship_type) values (360, 13, 'is_a');
+insert into element_hierarchy (child_element_id, parent_element_id, relationship_type) values (361, 360, 'is_a');
+insert into element_hierarchy (child_element_id, parent_element_id, relationship_type) values (362, 360, 'is_a');
+insert into element_hierarchy (child_element_id, parent_element_id, relationship_type) values (363, 360, 'is_a');
+insert into element_hierarchy (child_element_id, parent_element_id, relationship_type) values (364, 254, 'is_a');
+insert into element_hierarchy (child_element_id, parent_element_id, relationship_type) values (365, 101, 'is_a');
+insert into element_hierarchy (child_element_id, parent_element_id, relationship_type) values (366, 109, 'is_a');
+insert into element_hierarchy (child_element_id, parent_element_id, relationship_type) values (367, 112, 'is_a');
+insert into element_hierarchy (child_element_id, parent_element_id, relationship_type) values (368, 251, 'is_a');
+insert into element_hierarchy (child_element_id, parent_element_id, relationship_type) values (369, 251, 'is_a');
+insert into element_hierarchy (child_element_id, parent_element_id, relationship_type) values (370, 251, 'is_a');
+insert into element_hierarchy (child_element_id, parent_element_id, relationship_type) values (371, 307, 'is_a');
+insert into element_hierarchy (child_element_id, parent_element_id, relationship_type) values (372, 368, 'is_a');
+insert into element_hierarchy (child_element_id, parent_element_id, relationship_type) values (373, 257, 'is_a');
+insert into element_hierarchy (child_element_id, parent_element_id, relationship_type) values (374, 341, 'is_a');
+insert into element_hierarchy (child_element_id, parent_element_id, relationship_type) values (375, 341, 'is_a');
+insert into element_hierarchy (child_element_id, parent_element_id, relationship_type) values (376, 341, 'is_a');
+insert into element_hierarchy (child_element_id, parent_element_id, relationship_type) values (377, 341, 'is_a');
+insert into element_hierarchy (child_element_id, parent_element_id, relationship_type) values (378, 341, 'is_a');
+insert into element_hierarchy (child_element_id, parent_element_id, relationship_type) values (379, 250, 'is_a');
+insert into element_hierarchy (child_element_id, parent_element_id, relationship_type) values (380, 379, 'is_a');
+insert into element_hierarchy (child_element_id, parent_element_id, relationship_type) values (381, 379, 'is_a');
+insert into element_hierarchy (child_element_id, parent_element_id, relationship_type) values (382, 379, 'is_a');
+insert into element_hierarchy (child_element_id, parent_element_id, relationship_type) values (383, 123, 'is_a');
+insert into element_hierarchy (child_element_id, parent_element_id, relationship_type) values (384, 123, 'is_a');
+insert into element_hierarchy (child_element_id, parent_element_id, relationship_type) values (385, 123, 'is_a');
+insert into element_hierarchy (child_element_id, parent_element_id, relationship_type) values (386, 123, 'is_a');
 commit;
 
 --
@@ -770,6 +864,5 @@ insert into tree_root (tree_root_id, tree_name, element_id, relationship_type) v
 insert into tree_root (tree_root_id, tree_name, element_id, relationship_type) values (4, 'RESULT_TYPE', 8, 'has_a, is_a');
 
 insert into tree_root (tree_root_id, tree_name, element_id, relationship_type) values (5, 'UNIT', 123, 'has_a, is_a');
-
 
 commit;
