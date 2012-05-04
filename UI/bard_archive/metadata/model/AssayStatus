@@ -7,7 +7,7 @@
     },
     "codeClass": null,
     "userConfig": {
-        "idProperty": "status",
+        "idProperty": "id",
         "designer|userClassName": "AssayStatus"
     },
     "customConfigs": [],
@@ -15,6 +15,22 @@
     "$viewOrder": 1,
     "expanded": true,
     "cn": [
+        {
+            "id": "ExtBox1-ext-gen20973",
+            "type": "datafield",
+            "reference": {
+                "name": "fields",
+                "type": "array"
+            },
+            "codeClass": null,
+            "userConfig": {
+                "name": "id",
+                "type": "int",
+                "designer|userClassName": "MyField34"
+            },
+            "customConfigs": [],
+            "expanded": true
+        },
         {
             "id": "ExtBox1-ext-gen23534",
             "type": "datafield",
@@ -32,7 +48,7 @@
             "expanded": true
         },
         {
-            "id": "ExtBox1-ext-gen20973",
+            "id": "ExtBox1-ext-gen14273",
             "type": "datafield",
             "reference": {
                 "name": "fields",
@@ -40,8 +56,41 @@
             },
             "codeClass": null,
             "userConfig": {
-                "name": "id",
-                "designer|userClassName": "MyField34"
+                "name": "modifiedBy",
+                "type": "string",
+                "designer|userClassName": "MyField35"
+            },
+            "customConfigs": [],
+            "expanded": true
+        },
+        {
+            "id": "ExtBox1-ext-gen14613",
+            "type": "datafield",
+            "reference": {
+                "name": "fields",
+                "type": "array"
+            },
+            "codeClass": null,
+            "userConfig": {
+                "name": "dateCreated",
+                "type": "date",
+                "designer|userClassName": "MyField36"
+            },
+            "customConfigs": [],
+            "expanded": true
+        },
+        {
+            "id": "ExtBox1-ext-gen14967",
+            "type": "datafield",
+            "reference": {
+                "name": "fields",
+                "type": "array"
+            },
+            "codeClass": null,
+            "userConfig": {
+                "name": "lastUpdated",
+                "type": "date",
+                "designer|userClassName": "MyField37"
             },
             "customConfigs": [],
             "expanded": true

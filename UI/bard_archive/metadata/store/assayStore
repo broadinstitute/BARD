@@ -55,6 +55,21 @@
                     },
                     "customConfigs": [],
                     "expanded": true
+                },
+                {
+                    "id": "ExtBox1-ext-gen35294",
+                    "type": "jsonwriter",
+                    "reference": {
+                        "name": "writer",
+                        "type": "object"
+                    },
+                    "codeClass": null,
+                    "userConfig": {
+                        "root": "data",
+                        "designer|userClassName": "MyJsonWriter"
+                    },
+                    "customConfigs": [],
+                    "expanded": true
                 }
             ]
         },

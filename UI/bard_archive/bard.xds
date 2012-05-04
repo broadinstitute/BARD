@@ -102,14 +102,6 @@
             ],
             "className": "Protocol"
         },
-        "62a3ef49-905a-4220-900e-85e9676c86e2": {
-            "paths": [
-                "metadata/model/Project",
-                "app/model/override/Project.js",
-                "app/model/Project.js"
-            ],
-            "className": "Project"
-        },
         "500444c0-8971-474d-b476-57aef6a5820d": {
             "paths": [
                 "metadata/model/elementModel",
@@ -205,6 +197,14 @@
                 "app/view/ResultTypeTree.js"
             ],
             "className": "ResultTypeTree"
+        },
+        "d60c17da-4f6f-4dbc-9433-f168b710bfe3": {
+            "paths": [
+                "metadata/store/AssayStatutsStore",
+                "app/store/override/AssayStatutsStore.js",
+                "app/store/AssayStatutsStore.js"
+            ],
+            "className": "AssayStatutsStore"
         }
     },
     "expandedState": {

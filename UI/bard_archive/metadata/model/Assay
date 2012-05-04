@@ -136,7 +136,9 @@
             },
             "codeClass": null,
             "userConfig": {
+                "dateFormat": "Y-m-d H:i:s",
                 "name": "lastUpdated",
+                "sortType": "asDate",
                 "type": "date",
                 "designer|userClassName": "MyField13"
             },
@@ -168,7 +170,7 @@
             "userConfig": {
                 "associationKey": "assayStatus",
                 "model": "AssayStatus",
-                "foreignKey": "status",
+                "foreignKey": "id",
                 "designer|userClassName": "MyBelongsToAssociation"
             },
             "customConfigs": [],
@@ -184,7 +186,7 @@
             "codeClass": null,
             "userConfig": {
                 "name": "assayStatus",
-                "type": "string",
+                "type": "int",
                 "designer|userClassName": "MyField18"
             },
             "customConfigs": [],

@@ -36,7 +36,10 @@ Ext.application({
         'StageStore',
         'assayStore',
         'AssayStatusDStore',
-        'ResultTypeStore'
+        'ResultTypeStore',
+        'ProjectDStore',
+        'ProtocolDStore',
+        'AssayStatutsStore'
     ],
     views: [
         'elementTree',
