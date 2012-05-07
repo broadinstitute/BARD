@@ -1,4 +1,4 @@
-package bard.db.util
+package bard.db.dictionary
 
 import org.apache.commons.lang.builder.EqualsBuilder
 import org.apache.commons.lang.builder.HashCodeBuilder

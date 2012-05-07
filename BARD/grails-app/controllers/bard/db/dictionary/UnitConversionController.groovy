@@ -1,4 +1,4 @@
-package bard.db.util
+package bard.db.dictionary
 
 class UnitConversionController {
 

@@ -1,4 +1,4 @@
-package bard.db.experiment
+package bard.db.dictionary
 
 class Stage {
 
