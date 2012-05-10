@@ -20,7 +20,7 @@ class Assay {
 	static hasMany = [experiments: Experiment,
 	                  externalAssays: ExternalAssay,
 	                  measureContextItems: MeasureContextItem,
-	                  measures: Measure,
+	                  measureContexts: MeasureContext,
 	                  projectAssays: ProjectAssay,
 	                  protocols: Protocol]
 

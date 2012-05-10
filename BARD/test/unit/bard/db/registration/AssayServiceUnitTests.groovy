@@ -1,46 +1,35 @@
 package bard.db.registration
 
-import grails.test.mixin.TestFor
-import grails.test.mixin.Mock
+import bard.db.dictionary.Element
 import bard.db.dictionary.ResultType
+import grails.test.mixin.Mock
+import grails.test.mixin.TestFor
+import bard.db.dictionary.AssayDescriptor
+import bard.db.dictionary.ElementStatus
 
 /**
  * See the API for {@link grails.test.mixin.services.ServiceUnitTestMixin} for usage instructions
  */
 @TestFor(AssayService)
-@Mock([MeasureContextItem, Assay, MeasureContext, Measure, ResultType])
+@Mock([MeasureContextItem, Assay, MeasureContext, Measure, ResultType, Element, AssayDescriptor])
 class AssayServiceUnitTests {
 
     void testGetMeasureContextItemsForAssay() {
 
-        MeasureContextItem item1 = new MeasureContextItem()
-        MeasureContextItem item2 = new MeasureContextItem()
-        item1.groupNo = 1
-        item2.groupNo = 1
-        MeasureContextItem item3 = new MeasureContextItem()
-        MeasureContextItem item4 = new MeasureContextItem()
-
-        ResultType resultType = new ResultType()
-        Measure measure = new Measure(resultType: resultType)
-
-        MeasureContext context = new MeasureContext(measure: measure)
-        context.addToMeasureContextItems(item3)
-        context.addToMeasureContextItems(item4)
+        Element element = new Element()
+        ElementStatus elementStatus = new ElementStatus()
+        AssayDescriptor assayDescriptor = new AssayDescriptor(id: 3, label: "assay mode", element: element, elementStatus: elementStatus).save()
+        assert assayDescriptor.validate()
+        assert AssayDescriptor.count() > 0
+        MeasureContextItem item1 = new MeasureContextItem(attributeElement: element)
 
         Assay assay = new Assay()
         assay.addToMeasureContextItems(item1)
-        assay.addToMeasureContextItems(item2)
-        assay.addToMeasureContextItems(item3)
-        assay.addToMeasureContextItems(item4)
-        assay.addToMeasures(measure)
 
         Map map = service.getMeasureContextItemsForAssay(assay)
 
-        Set items = map.measureContextItems
-
-        assert items.size() == 4
-        assert items.contains(item1)
-        assert items.contains(item2)
+        assert map.assayDescriptors
+        assert map.assayDescriptors.contains(item1)
 
     }
 }

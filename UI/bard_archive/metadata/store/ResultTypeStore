@@ -14,7 +14,7 @@
     },
     "customConfigs": [],
     "designerId": "493d900a-ea94-41d2-81ee-20b6c61114d4",
-    "$viewOrder": 6,
+    "$viewOrder": 5,
     "expanded": true,
     "cn": [
         {
@@ -26,7 +26,7 @@
             },
             "codeClass": null,
             "userConfig": {
-                "url": "api/result-type",
+                "url": "resultType/list",
                 "designer|userClassName": "MyAjaxProxy6"
             },
             "customConfigs": [],
@@ -41,7 +41,7 @@
                     },
                     "codeClass": null,
                     "userConfig": {
-                        "root": "data",
+                        "root": null,
                         "totalProperty": "count",
                         "designer|userClassName": "MyJsonReader7"
                     },

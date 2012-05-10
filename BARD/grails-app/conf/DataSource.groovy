@@ -31,7 +31,7 @@ environments {
             password = "bard_dev"
         }
     }
-    oracle_qa {
+    oracleqa {
         dataSource {
             dbCreate = 'validate'
             url = "jdbc:oracle:thin:@barddb:1521:bardqa"
@@ -50,10 +50,12 @@ environments {
     }
 	test {
 		dataSource {
-			dbCreate = "update"
-			url = "jdbc:mysql://dbserver:3306/mlbd"
-            dialect = "org.hibernate.dialect.MySQLDialect"
-		}
+            dbCreate = "create-drop" // one of 'create', 'create-drop', 'update', 'validate', ''
+            url = "jdbc:h2:mem:devDB"
+            driverClassName = "org.h2.Driver"
+            username = "sa"
+            password = ""
+        }
 	}
 	production {
 		dataSource {

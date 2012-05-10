@@ -1,0 +1,51 @@
+{
+    "id": "ExtBox1-ext-gen16131",
+    "type": "treestore",
+    "reference": {
+        "name": "items",
+        "type": "array"
+    },
+    "codeClass": null,
+    "userConfig": {
+        "storeId": "AssayDetailTreeStore",
+        "model": "AssayDetailModel",
+        "designer|userClassName": "AssayDetailTreeStore"
+    },
+    "customConfigs": [],
+    "designerId": "8f2c2ed3-8bd3-463f-99ab-55bcc8f925a0",
+    "$viewOrder": 8,
+    "expanded": true,
+    "cn": [
+        {
+            "id": "ExtBox1-ext-gen16138",
+            "type": "ajaxproxy",
+            "reference": {
+                "name": "proxy",
+                "type": "object"
+            },
+            "codeClass": null,
+            "userConfig": {
+                "url": "assay/details/1",
+                "designer|userClassName": "MyAjaxProxy8"
+            },
+            "customConfigs": [],
+            "expanded": true,
+            "cn": [
+                {
+                    "id": "ExtBox1-ext-gen16146",
+                    "type": "jsonreader",
+                    "reference": {
+                        "name": "reader",
+                        "type": "object"
+                    },
+                    "codeClass": null,
+                    "userConfig": {
+                        "designer|userClassName": "MyJsonReader8"
+                    },
+                    "customConfigs": [],
+                    "expanded": true
+                }
+            ]
+        }
+    ]
+}

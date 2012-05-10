@@ -11,12 +11,11 @@
         "width": 400,
         "title": "My Tree Panel",
         "store": "ResultTypeStore",
-        "rootVisible": false,
         "designer|userClassName": "ResultTypeTree"
     },
     "customConfigs": [],
     "designerId": "0bd406e6-35aa-42ba-93a0-92751904e796",
-    "$viewOrder": 6,
+    "$viewOrder": 5,
     "expanded": true,
     "cn": [
         {
@@ -28,6 +27,7 @@
             },
             "codeClass": null,
             "userConfig": {
+                "rootVisible": false,
                 "designer|userClassName": "MyTreeView1"
             },
             "customConfigs": [],

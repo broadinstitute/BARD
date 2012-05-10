@@ -26,7 +26,7 @@
             "codeClass": null,
             "userConfig": {
                 "title": "CAP Assay Definition",
-                "activeTab": 1,
+                "activeTab": 2,
                 "designer|userClassName": "MyTabPanel"
             },
             "customConfigs": [],
@@ -182,8 +182,7 @@
                             },
                             "codeClass": null,
                             "userConfig": {
-                                "id": "assayForm",
-                                "url": "api/assay"
+                                "id": "assayForm"
                             },
                             "customConfigs": [],
                             "iconCls": "icon-linkedinstance",
@@ -201,11 +200,11 @@
                     },
                     "codeClass": null,
                     "userConfig": {
-                        "title": "Result Types (Measures)",
+                        "title": "Assay Detail",
                         "designer|userClassName": "MyPanel3"
                     },
                     "customConfigs": [],
-                    "expanded": false,
+                    "expanded": true,
                     "cn": [
                         {
                             "id": "ExtBox1-ext-gen9581",
@@ -223,34 +222,23 @@
                             "expanded": true
                         },
                         {
-                            "id": "ExtBox1-ext-gen11941",
+                            "id": "ExtBox1-ext-gen17231",
                             "type": "linkedinstance",
                             "reference": {
                                 "name": "items",
                                 "type": "array"
                             },
                             "codeClass": null,
-                            "userConfig": {},
+                            "userConfig": {
+                                "height": 658,
+                                "width": 893
+                            },
                             "customConfigs": [],
                             "iconCls": "icon-linkedinstance",
                             "expanded": true,
-                            "masterInstanceId": "ExtBox1-ext-gen1824"
+                            "masterInstanceId": "ExtBox1-ext-gen15827"
                         }
                     ]
-                },
-                {
-                    "id": "ExtBox1-ext-gen13933",
-                    "type": "linkedinstance",
-                    "reference": {
-                        "name": "items",
-                        "type": "array"
-                    },
-                    "codeClass": null,
-                    "userConfig": {},
-                    "customConfigs": [],
-                    "iconCls": "icon-linkedinstance",
-                    "expanded": true,
-                    "masterInstanceId": "ExtBox1-ext-gen43443"
                 }
             ]
         }

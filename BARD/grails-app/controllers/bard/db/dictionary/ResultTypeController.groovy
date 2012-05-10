@@ -12,8 +12,8 @@ class ResultTypeController {
             def map=[:]
             map.id = node.id
             map.text = node.resultTypeName
-            if (node.childResultTypes) {
-                map.children = node.childResultTypes.collect {
+            if (node.children) {
+                map.children = node.children.collect {
                     buildForNode(it)
                 }
             }
@@ -23,7 +23,7 @@ class ResultTypeController {
             return map
         }
 
-        ResultType root = ResultType.findByParentResultTypeIsNull()
+        ResultType root = ResultType.findByParentIsNull()
 
         def builder = new JsonBuilder()
         builder(buildForNode(root))

@@ -1,0 +1,74 @@
+{
+    "id": "ExtBox1-ext-gen15827",
+    "type": "treepanel",
+    "reference": {
+        "name": "items",
+        "type": "array"
+    },
+    "codeClass": null,
+    "userConfig": {
+        "height": null,
+        "width": null,
+        "autoScroll": true,
+        "title": "Assay Detail",
+        "store": "AssayDetailTreeStore",
+        "rootVisible": false,
+        "designer|userClassName": "AssayDetailTreeGrid",
+        "designer|userAlias": "assaydetailtreegrid"
+    },
+    "customConfigs": [],
+    "designerId": "7149b94a-306b-4eac-9bb5-c539eafa4d12",
+    "$viewOrder": 7,
+    "iconCls": "icon-treegridpanel",
+    "expanded": true,
+    "cn": [
+        {
+            "id": "ExtBox1-ext-gen15832",
+            "type": "treeview",
+            "reference": {
+                "name": "viewConfig",
+                "type": "object"
+            },
+            "codeClass": null,
+            "userConfig": {
+                "designer|userClassName": "MyTreeView2"
+            },
+            "customConfigs": [],
+            "expanded": true
+        },
+        {
+            "id": "ExtBox1-ext-gen15836",
+            "type": "treecolumn",
+            "reference": {
+                "name": "columns",
+                "type": "array"
+            },
+            "codeClass": null,
+            "userConfig": {
+                "dataIndex": "text",
+                "flex": 1,
+                "text": "Components",
+                "designer|userClassName": "MyTreeColumn"
+            },
+            "customConfigs": [],
+            "expanded": true
+        },
+        {
+            "id": "ExtBox1-ext-gen15840",
+            "type": "gridcolumn",
+            "reference": {
+                "name": "columns",
+                "type": "array"
+            },
+            "codeClass": null,
+            "userConfig": {
+                "dataIndex": "value",
+                "flex": 1,
+                "text": "Value",
+                "designer|userClassName": "MyColumn10"
+            },
+            "customConfigs": [],
+            "expanded": true
+        }
+    ]
+}

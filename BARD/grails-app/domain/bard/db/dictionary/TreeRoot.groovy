@@ -18,5 +18,7 @@ class TreeRoot {
         element nullable: false
         relationshipType nullable: true, maxSize: 20
         treeName nullable: false, maxSize: 30
+        lastUpdated nullable: true
+        modifiedBy nullable: true
     }
 }

@@ -2,11 +2,13 @@ package bard.db.dictionary
 
 class Unit {
 
+    static expose = 'unit'
+
 	String unit
 	String description
-	Date dateCreated
-	Date lastUpdated
-	String modifiedBy
+    Element element
+    Long nodeId
+    Long parentNodeId
 
 	static hasMany = [unitConversionsForFromUnit: UnitConversion,
 	                  unitConversionsForToUnit: UnitConversion]
@@ -16,13 +18,14 @@ class Unit {
 
 	static mapping = {
 		id name: "unit", generator: "assigned"
+        element column: "unit_id"
+        version false
 	}
 
 	static constraints = {
-		unit maxSize: 100
+		unit maxSize: 128
 		description nullable: true, maxSize: 1000
-		dateCreated maxSize: 19
-		lastUpdated nullable: true, maxSize: 19
-		modifiedBy nullable: true, maxSize: 40
+        nodeId nullable: false
+        parentNodeId nullable: false
 	}
 }

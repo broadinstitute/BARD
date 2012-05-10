@@ -6,19 +6,21 @@ class Stage {
 
 	String stage
 	String description
-	Date dateCreated
-	Date lastUpdated
-	String modifiedBy
+    Element element
+    Stage parent
 
-	static mapping = {
-		id name: "stage", generator: "assigned"
+    static hasMany = [children: Stage]
+
+    static mapping = {
+		id column: "node_id", generator: "assigned"
+        parent column: "parent_node_id"
+        version false
+        element column: "stage_id"
 	}
 
 	static constraints = {
-		stage maxSize: 20
+		stage maxSize: 128
+        element nullable: false
 		description nullable: true, maxSize: 1000
-		dateCreated maxSize: 19
-		lastUpdated nullable: true, maxSize: 19
-		modifiedBy nullable: true, maxSize: 40
 	}
 }

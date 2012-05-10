@@ -7,7 +7,6 @@ class OntologyItem {
 	Date lastUpdated
 	String modifiedBy
 	Element element
-	ResultType resultType
 	Ontology ontology
 
 	static belongsTo = [Ontology]
@@ -24,6 +23,5 @@ class OntologyItem {
 		modifiedBy nullable: true, maxSize: 40
         ontology nullable: false
         element nullable: true
-        resultType nullable: true
 	}
 }

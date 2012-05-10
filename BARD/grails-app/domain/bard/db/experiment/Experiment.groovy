@@ -14,20 +14,19 @@ class Experiment {
 	String modifiedBy
 	ExperimentStatus experimentStatus
 	Project project
-	Laboratory laboratory
 	Assay assay
 
 	static hasMany = [resultContextItems: ResultContextItem,
 	                  results: Result]
-	static belongsTo = [Assay, ExperimentStatus, Laboratory, Project]
+	static belongsTo = [Assay, ExperimentStatus, Project]
 
 	static mapping = {
 		id column: "Experiment_ID"
-        laboratory column: "source_id"
 	}
 
 	static constraints = {
 		experimentName maxSize: 256
+        experimentStatus nullable: false
 		runDateFrom nullable: true, maxSize: 10
 		runDateTo nullable: true, maxSize: 10
 		holdUntilDate nullable: true, maxSize: 10

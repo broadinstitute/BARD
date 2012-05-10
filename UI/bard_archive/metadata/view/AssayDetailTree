@@ -1,5 +1,5 @@
 {
-    "id": "ExtBox1-ext-gen43443",
+    "id": "ExtBox1-ext-gen15134",
     "type": "treepanel",
     "reference": {
         "name": "items",
@@ -7,23 +7,21 @@
     },
     "codeClass": null,
     "userConfig": {
-        "height": 250,
-        "width": 400,
-        "autoScroll": true,
-        "title": "Dictionary",
-        "store": "elementTreeStore",
+        "height": null,
+        "width": null,
+        "title": "Assay Detail",
+        "store": "AssayDetailTreeStore",
         "rootVisible": false,
-        "useArrows": true,
-        "designer|userClassName": "elementTree",
-        "designer|userAlias": "elementtree"
+        "designer|userClassName": "AssayDetailTree",
+        "designer|userAlias": "assaydetailtree"
     },
     "customConfigs": [],
-    "designerId": "73cba1bf-3a9d-4a81-85e3-bee986f37af1",
-    "$viewOrder": 5,
-    "expanded": true,
+    "designerId": "f62376e9-6899-4e25-b713-4a78ac7cf2b5",
+    "$viewOrder": 6,
+    "expanded": false,
     "cn": [
         {
-            "id": "ExtBox1-ext-gen43452",
+            "id": "ExtBox1-ext-gen15143",
             "type": "treeview",
             "reference": {
                 "name": "viewConfig",

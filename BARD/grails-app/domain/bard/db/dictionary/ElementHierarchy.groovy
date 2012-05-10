@@ -5,17 +5,19 @@ class ElementHierarchy {
     Element parentElement
     Element childElement
     String relationshipType
-    Date dateCreated = new Date()
-    Date lastUpdated = new Date()
+    Date dateCreated
+    Date lastUpdated
     String modifiedBy
-    Integer version = 0
+
+    static mapping = {
+        id column: "element_hierarchy_id"
+    }
 
     static constraints = {
         parentElement nullable: true
         childElement nullable: false
         relationshipType nullable: false
-        dateCreated maxSize: 19
-        lastUpdated nullable: true, maxSize: 19
+        lastUpdated nullable: true
         modifiedBy nullable: true, maxSize: 40
     }
 }

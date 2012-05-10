@@ -2,10 +2,10 @@ package bard.db.experiment
 
 public enum GroupType {
 	
-	PROJECT("Project"),
-	CAMPAIGN("Campaign"),
-	PANEL("Panel"),
-	STUDY("Study")
+	Project("Project"),
+	Campaign("Campaign"),
+	Panel("Panel"),
+	Study("Study")
 	
 	final String value
 	
@@ -22,6 +22,6 @@ public enum GroupType {
 	}
 	
 	static list(){
-		[PROJECT, CAMPAIGN, PANEL, STUDY]
+		[GroupType.Project, GroupType.Campaign, GroupType.Panel, GroupType.Study]
 	}
 }

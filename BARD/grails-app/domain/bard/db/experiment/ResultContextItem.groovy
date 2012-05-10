@@ -5,35 +5,39 @@ import bard.db.util.Qualifier
 
 class ResultContextItem {
 
-	Integer groupNo
-	String valueDisplay
+    Experiment experiment
+    ResultContextItem parentGroup
+    Result result
+    Element attribute
+    Qualifier qualifier
+    String valueDisplay
 	Float valueNum
 	Float valueMin
 	Float valueMax
-	Date dateCreated
-	Date lastUpdated
-	String modifiedBy
-	ResultContext resultContext
-	Element elementByValueId
-	Experiment experiment
-	Element elementByAttributeId
-	Qualifier qualifier
+	Element valueControlled
+    Date dateCreated
+    Date lastUpdated
+    String modifiedBy
 
-	static belongsTo = [Element, Experiment, Qualifier, ResultContext]
+    static belongsTo = [Experiment]
 
 	static mapping = {
 		id column: "Result_Context_Item_ID"
-        elementByValueId column: "value_id"
-        elementByAttributeId column: "attribute_id"
+        attribute column: "attribute_id"
+        valueControlled column: "value_id"
         qualifier column: "qualifier", sqlType: "char", length: 2
+        parentGroup column: "group_result_context_id"
 	}
 
 	static constraints = {
-		groupNo nullable: true
+		parentGroup nullable: true
+        attribute nullable: false
+        result nullable: true
 		valueDisplay nullable: true, maxSize: 256
 		valueNum nullable: true
 		valueMin nullable: true
 		valueMax nullable: true
+        valueControlled nullable: true
 		dateCreated maxSize: 19
 		lastUpdated nullable: true, maxSize: 19
 		modifiedBy nullable: true, maxSize: 40

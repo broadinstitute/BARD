@@ -8,7 +8,7 @@ class MeasureContextItem {
 
     static expose = 'measure-context-item'
 
-	Integer groupNo
+	MeasureContextItem parentGroup
 	AttributeType attributeType
 	String valueDisplay
 	Float valueNum
@@ -23,17 +23,20 @@ class MeasureContextItem {
 	Assay assay
 	Qualifier qualifier
 
+    static hasMany = [children: MeasureContextItem]
+
 	static belongsTo = [Assay, MeasureContext]
 
 	static mapping = {
 		id column: "measure_Context_Item_ID"
+        parentGroup column: "GROUP_MEASURE_CONTEXT_ITEM_ID"
         valueElement column: "value_id"
         attributeElement column: "attribute_id"
         qualifier column: "qualifier", sqlType: "char", length: 2
 	}
 
 	static constraints = {
-		groupNo nullable: true
+		parentGroup nullable: true
 		attributeType maxSize: 20
 //		valueDisplay nullable: true, maxSize: 256, unique: ["Attribute_ID", "Group_No", "Measure_Context_ID"]
 		valueDisplay nullable: true, maxSize: 256

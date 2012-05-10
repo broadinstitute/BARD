@@ -2,10 +2,10 @@ package bard.db.registration
 
 public enum AttributeType {
 	
-	FIXED("Fixed"),
-	LIST("List"),
-	RANGE("Range"),
-	NUMBER("Number")
+	Fixed("Fixed"),
+	List("List"),
+	Range("Range"),
+	Number("Number")
 	
 	final String value
 	
@@ -22,7 +22,7 @@ public enum AttributeType {
 	}
 	
 	static list(){
-		[FIXED, LIST, RANGE, NUMBER]
+		[Fixed, AttributeType.List, AttributeType.Range, AttributeType.Number]
 	}
 		  
 }

@@ -8,6 +8,7 @@ class MeasureContext {
 	Date dateCreated
 	Date lastUpdated
 	String modifiedBy
+    Assay assay
 
 	static hasMany = [measureContextItems: MeasureContextItem,
 	                  measures: Measure]
@@ -18,6 +19,7 @@ class MeasureContext {
 
 	static constraints = {
 		contextName maxSize: 128
+        assay nullable: false
 		dateCreated maxSize: 19
 		lastUpdated nullable: true, maxSize: 19
 		modifiedBy nullable: true, maxSize: 40

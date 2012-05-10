@@ -1,0 +1,48 @@
+{
+    "id": "ExtBox1-ext-gen15716",
+    "type": "datamodel",
+    "reference": {
+        "name": "items",
+        "type": "array"
+    },
+    "codeClass": null,
+    "userConfig": {
+        "designer|userClassName": "AssayDetailModel"
+    },
+    "customConfigs": [],
+    "designerId": "d0401d45-05ee-4278-a315-fe4ae1b61ba9",
+    "$viewOrder": 9,
+    "expanded": true,
+    "cn": [
+        {
+            "id": "ExtBox1-ext-gen15910",
+            "type": "datafield",
+            "reference": {
+                "name": "fields",
+                "type": "array"
+            },
+            "codeClass": null,
+            "userConfig": {
+                "name": "text",
+                "designer|userClassName": "MyField35"
+            },
+            "customConfigs": [],
+            "expanded": true
+        },
+        {
+            "id": "ExtBox1-ext-gen15440",
+            "type": "datafield",
+            "reference": {
+                "name": "fields",
+                "type": "array"
+            },
+            "codeClass": null,
+            "userConfig": {
+                "name": "value",
+                "designer|userClassName": "MyField36"
+            },
+            "customConfigs": [],
+            "expanded": true
+        }
+    ]
+}

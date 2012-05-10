@@ -8,7 +8,9 @@ public enum SubstanceType {
 	ANTIBODY("antibody"),
 	CELL("cell"),
 	OLIGONUCLEOTIDE("oligonucleotide")
-	
+
+    String value
+
 	SubstanceType(String value){
 		this.value = value
 	}

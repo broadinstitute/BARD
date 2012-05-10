@@ -118,14 +118,6 @@
             ],
             "className": "elementTreeStore"
         },
-        "73cba1bf-3a9d-4a81-85e3-bee986f37af1": {
-            "paths": [
-                "metadata/view/elementTree",
-                "app/view/override/elementTree.js",
-                "app/view/elementTree.js"
-            ],
-            "className": "elementTree"
-        },
         "cbd7a3b6-ddc5-42d0-8749-1925b0912401": {
             "paths": [
                 "metadata/model/measure",
@@ -205,6 +197,46 @@
                 "app/store/AssayStatutsStore.js"
             ],
             "className": "AssayStatutsStore"
+        },
+        "62a3ef49-905a-4220-900e-85e9676c86e2": {
+            "paths": [
+                "metadata/model/Project",
+                "app/model/override/Project.js",
+                "app/model/Project.js"
+            ],
+            "className": "Project"
+        },
+        "f62376e9-6899-4e25-b713-4a78ac7cf2b5": {
+            "paths": [
+                "metadata/view/AssayDetailTree",
+                "app/view/override/AssayDetailTree.js",
+                "app/view/AssayDetailTree.js"
+            ],
+            "className": "AssayDetailTree"
+        },
+        "8f2c2ed3-8bd3-463f-99ab-55bcc8f925a0": {
+            "paths": [
+                "metadata/store/AssayDetailTreeStore",
+                "app/store/override/AssayDetailTreeStore.js",
+                "app/store/AssayDetailTreeStore.js"
+            ],
+            "className": "AssayDetailTreeStore"
+        },
+        "d0401d45-05ee-4278-a315-fe4ae1b61ba9": {
+            "paths": [
+                "metadata/model/AssayDetailModel",
+                "app/model/override/AssayDetailModel.js",
+                "app/model/AssayDetailModel.js"
+            ],
+            "className": "AssayDetailModel"
+        },
+        "7149b94a-306b-4eac-9bb5-c539eafa4d12": {
+            "paths": [
+                "metadata/view/AssayDetailTreeGrid",
+                "app/view/override/AssayDetailTreeGrid.js",
+                "app/view/AssayDetailTreeGrid.js"
+            ],
+            "className": "AssayDetailTreeGrid"
         }
     },
     "expandedState": {

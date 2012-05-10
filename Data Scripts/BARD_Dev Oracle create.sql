@@ -856,7 +856,7 @@ insert into qualifier (qualifier, description) values ('>=', 'greater than or eq
 insert into qualifier (qualifier, description) values ('<=', 'less than or equal');
 insert into qualifier (qualifier, description) values ('<', 'greater than');
 insert into qualifier (qualifier, description) values ('>', 'less than');
-insert into qualifier (qualifier, description) values ('~', 'approximatley');
+insert into qualifier (qualifier, description) values ('~', 'approximately');
 insert into qualifier (qualifier, description) values ('>>', 'very much greater than');
 insert into qualifier (qualifier, description) values ('<<', 'very much less than');
 commit;

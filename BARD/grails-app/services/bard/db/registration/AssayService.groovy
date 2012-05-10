@@ -1,16 +1,19 @@
 package bard.db.registration
 
-import bard.db.dictionary.AssayDescriptor
-import bard.db.dictionary.BiologyDescriptor
-import bard.db.dictionary.InstanceDescriptor
+import bard.db.dictionary.*
 
 class AssayService {
 
     Map getMeasureContextItemsForAssay(Assay assay) {
         Map map = [:]
         assay.measureContextItems.each {
-            if (it.measureContext == null) {
+            if (it.measureContext == null &&
+                    ResultType.findByElement(it.attributeElement) == null &&
+                it.parentGroup == null)
+            {
                 Map submap = addItem(it)
+                log.info("**** Map:    " + map)
+                log.info("**** SubMap: " +submap)
                 mergeMaps(map, submap)
             }
         }
@@ -18,10 +21,26 @@ class AssayService {
         return map
     }
 
-    void mergeMaps(Map map, Map subMap) {
+    void mergeMaps(def map, def subMap) {
+        log.info("  Map:    " + map)
+        log.info("  SubMap: " +subMap)
         subMap.keySet().each {
             if (map.containsKey(it)) {
-                mergeMaps(map.get(it), subMap.get(it))
+                if (map.get(it) instanceof Map && subMap.get(it) instanceof Map) {
+                    mergeMaps(map.get(it), subMap.get(it))
+                }
+                else {
+                    def item = map.get(it)
+                    if (item instanceof List) {
+                        item.push(subMap)
+                    }
+                    else {
+                        List list = []
+                        list.push(item)
+                        list.push(subMap)
+                        map.put(it,list)
+                    }
+                }
             }
             else {
                 map.put(it, subMap.get(it))
@@ -34,15 +53,19 @@ class AssayService {
         assay.measureContexts.each {
             List info = []
             it.measures.each {
-                String measureText = it.resultType.resultTypeName
+                String measureText = ResultType.findByElement(Element.get(it.resultTypeId))?.resultTypeName
                 if (it.entryUnit != null) {
                     measureText += " " + it.entryUnit.unit
                 }
                 info.add(measureText)
             }
             if (it.measureContextItems != null) {
-                info.addAll(it.measureContextItems)
-            }
+                it.measureContextItems.each {
+                    if (it.parentGroup == null) {
+                        info.add(it)
+                    }
+                }
+             }
             map.put(it.contextName, info)
         }
         return map
@@ -91,7 +114,7 @@ class AssayService {
         if (instanceDescriptor != null) {
             return getPathForInstanceDescriptor(instanceDescriptor, item)
         }
-        throw new RuntimeException("Unsupported Element Type")
+        throw new RuntimeException("Unsupported Element Type: " + item)
     }
 
     // get an array of labels by navigating up through the parents

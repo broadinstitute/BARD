@@ -17,8 +17,10 @@ Ext.define('BARD.view.Viewport', {
     extend: 'BARD.view.CapApp',
     renderTo: Ext.getBody(),
     requires: [
+        'BARD.view.ResultTypesForm',
         'BARD.view.CapApp',
         'BARD.view.ProjectWindow',
-        'BARD.view.ResultTypeTree'
+        'BARD.view.ResultTypeTree',
+        'BARD.view.AssayDetailTree'
     ]
 });

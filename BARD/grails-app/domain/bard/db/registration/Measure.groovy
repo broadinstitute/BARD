@@ -1,6 +1,6 @@
 package bard.db.registration
 
-import bard.db.util.Unit
+import bard.db.dictionary.Unit
 import bard.db.dictionary.ResultType
 
 class Measure {
@@ -11,11 +11,10 @@ class Measure {
 	Date lastUpdated
 	String modifiedBy
 	MeasureContext measureContext
-	Assay assay
 	Unit entryUnit
 	ResultType resultType
 
-	static belongsTo = [Assay]
+	static belongsTo = [MeasureContext]
 
 	static mapping = {
 		id column: "Measure_ID"
@@ -26,7 +25,6 @@ class Measure {
 		dateCreated maxSize: 19
 		lastUpdated nullable: true, maxSize: 19
 		modifiedBy nullable: true, maxSize: 40
-        assay nullable: false
         resultType nullable: false
         measureContext nullable: false
         entryUnit nullable: true
