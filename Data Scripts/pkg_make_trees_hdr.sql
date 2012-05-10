@@ -1,10 +1,12 @@
-create or replace package bard_dev.Manage_Ontology
+create or replace package Manage_Ontology
 as
     pv_tree_assay_descriptor varchar2(31) := 'ASSAY_DESCRIPTOR';
     pv_tree_biology_descriptor varchar2(31) := 'BIOLOGY_DESCRIPTOR';
     pv_tree_instance_descriptor varchar2(31) := 'INSTANCE_DESCRIPTOR';
     pv_tree_result_type varchar2(31) := 'RESULT_TYPE';
     pv_tree_unit varchar2(31) := 'UNIT';
+    pv_tree_stage varchar2(31) := 'STAGE';
+    pv_tree_laboratory varchar2(31) := 'LABORATORY';
     
 --    procedure delete_old_tree(avi_tree_name in varchar2,
 --                            ano_error out number, 
@@ -30,10 +32,10 @@ as
     
     procedure add_element(avi_tree_name in varchar2,
                         ani_parent_element_id in number,
-                        avi_element_label varchar2,
-                        avi_element_description varchar2,
-                        avi_element_abbreviation varchar2,
-                        avi_element_synonyms varchar2);
+                        avi_element_label in varchar2,
+                        avi_element_description in varchar2,
+                        avi_element_abbreviation in varchar2,
+                        avi_element_synonyms in varchar2);
                           
 end manage_ontology;
 

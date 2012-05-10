@@ -1,4 +1,4 @@
-create or replace package body bard_dev.Manage_Ontology
+create or replace package body Manage_Ontology
 as
 -- forward declaration, needed for the recursion to compile
     procedure walk_down_the_tree(ani_element_id in number,
@@ -13,8 +13,8 @@ as
     pn_recursion_limit number := 20;  -- change this limit as needed
     
     -- for testing only
-    pb_trace boolean := false;
-    pn_node_id_max number := null;    --1000;  -- for testing purposes only, 
+    pb_trace boolean := false;     -- true;
+    pn_node_id_max number := null; --5; --1000;  -- for testing purposes only, 
 ----------------------------------------------------------------------  
                               
     procedure trace(avi_msg in varchar2)
@@ -59,6 +59,14 @@ as
         elsif avi_tree_name = pv_tree_unit
         then
             delete from Unit;
+            
+        elsif avi_tree_name = pv_tree_stage
+        then
+            delete from Stage;
+            
+        elsif avi_tree_name = pv_tree_laboratory
+        then
+            delete from laboratory;
         end if;
         
         trace('Delete from ' || avi_tree_name || ' '|| to_char(sql%rowcount) || ' rows' );
@@ -175,6 +183,36 @@ as
                 parent_node_id,
                 unit_id,
                 unit,
+                description)
+                values
+                (ani_node_id,
+                ani_parent_node_id,
+                ari_element.element_id,
+                ari_element.label,
+                ari_element.description);
+                
+        elsif avi_tree_name = pv_tree_stage
+        then
+            insert into stage
+                (node_id,
+                parent_node_id,
+                stage_id,
+                stage,
+                description)
+                values
+                (ani_node_id,
+                ani_parent_node_id,
+                ari_element.element_id,
+                ari_element.label,
+                ari_element.description);
+                
+        elsif avi_tree_name = pv_tree_laboratory
+        then
+            insert into laboratory
+                (node_id,
+                parent_node_id,
+                laboratory_id,
+                laboratory,
                 description)
                 values
                 (ani_node_id,
@@ -341,10 +379,10 @@ as
 
     procedure add_element(avi_tree_name in varchar2,
                         ani_parent_element_id in number,
-                        avi_element_label varchar2,
-                        avi_element_description varchar2,
-                        avi_element_abbreviation varchar2,
-                        avi_element_synonyms varchar2)
+                        avi_element_label in varchar2,
+                        avi_element_description in varchar2,
+                        avi_element_abbreviation in varchar2,
+                        avi_element_synonyms in varchar2)
     as
     begin
         -- just stubbed for now
