@@ -344,7 +344,7 @@ as
             delete_old_tree(lr_tree_root.tree_name, ln_error, lv_errmsg);
             
             -- put in the root row
-            lr_element.element_id := 0;
+            lr_element.element_id := lr_tree_root.element_id;
             lr_element.label := lr_tree_root.tree_name;
             lr_element.description := 'Singular root to ensure tree viewers work';
             lr_element.element_status_id := 2;

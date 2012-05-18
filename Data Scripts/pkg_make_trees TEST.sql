@@ -8,3 +8,21 @@ begin
 end;
 /
 
+-- TO TEST THE RECURSION DEPTH MAKE A CIRCULAR RELATIONSHIP 
+-- Make macromolecule a child of protein
+-- (protein is a child of macromolecule type)
+insert into element_hierarchy (
+    element_hierarchy_id, 
+    child_element_id, 
+    parent_element_id, 
+    relationship_type) 
+values (
+    element_hierarchy_id_seq.nextval, 
+    526, 
+    '38', 
+    'is_a');
+    
+    
+
+
+

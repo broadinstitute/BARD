@@ -3,7 +3,7 @@ assay_name,
 description, 
 assay_status_id, 
 designed_by) 
-values (1, 
+values (assay_id_seq.nextval, 
 'Dose-response biochemical assay of inhibitors of Rho kinase 2 (Rock2)', 
 'Rho-Kinase is a serine/threonine kinase involved in the regulation of smooth muscle contraction and cytoskeletal reorganization of nonmuscle cells (1). Its inhibition is known to promote the smooth muscle relaxation. Thus, small-molecule inhibitors of Rho-Kinase may be effective probes for treatment of cerebral vasospasm (2) and potentially effective for treatment of angina (3), hypertension (4), arteriosclerosis (5), and erectile dysfunction (6).', 
 2, 
@@ -26,7 +26,7 @@ stage,
 promotion_criteria) 
 values (1, 
 1,
-1, 
+assay_id_seq.currval, 
 'confirmatory assay',
 'The activity score was calculated based on pIC50 values for compounds for which an exact IC50 value was calculated and based on the observed pIC50 range, specifically the maximum lower limit of the pIC50 value as calculated from the lowest concentration for which greater than 50% inhibition is observed. This results in a conservative estimate of the activity score for compounds for which no exact IC50 value is given while maintaining a reasonable rank order of all compounds tested'
 );
@@ -38,7 +38,7 @@ insert into protocol (protocol_id,
  protocol_document) 
 values 
  (1,
- 1,
+ assay_id_seq.currval,
  'Dose-response biochemical assay of inhibitors of Rho kinase 2 (Rock2)',
  empty_blob()
  );
@@ -48,7 +48,7 @@ insert into protocol (protocol_id,
  protocol_document) 
 values 
  (2,
- 1,
+ assay_id_seq.currval,
  'Dose-response biochemical assay of inhibitors of Rho kinase 2 (Rock2) pt 2',
  empty_blob()
  );
@@ -109,21 +109,63 @@ The activity score was calculated based on pIC50 values for compounds for '
  ))
 where protocol_id = 2;
 
+insert into external_system (external_system_id, system_name, owner, system_url) values (1, 'PubChem', 'NIH', 'http://pubchem.ncbi.nlm.nih.gov/assay/assay.cgi?');
+insert into external_assay (external_system_id, assay_id, ext_assay_id) values (1, assay_id_seq.currval, 'aid=644');
 
-insert into measure_context (assay_id, measure_context_id, context_name) values (1, 1, 'Context for PI (avg)');
-insert into measure_context (assay_id, measure_context_id, context_name) values (1, 2, 'Context for IC50');
 
-insert into measure (assay_id, measure_id, result_type_id, measure_context_id, entry_unit) values (1, 1, 373, 1, '%');
-insert into measure (assay_id, measure_id, result_type_id, measure_context_id, entry_unit) values (1, 2, 341, 2, 'uM');
-insert into measure (assay_id, measure_id, result_type_id, measure_context_id, entry_unit) values (1, 3, 374, 2, '');
-insert into measure (assay_id, measure_id, result_type_id, measure_context_id, entry_unit) values (1, 4, 375, 2, '');
-insert into measure (assay_id, measure_id, result_type_id, measure_context_id, entry_unit) values (1, 5, 376, 2, 'uM');
-insert into measure (assay_id, measure_id, result_type_id, measure_context_id, entry_unit) values (1, 6, 377, 2, 'uM');
-insert into measure (assay_id, measure_id, result_type_id, measure_context_id, entry_unit) values (1, 7, 378, 2, 'uM');
-insert into measure (assay_id, measure_id, result_type_id, measure_context_id, entry_unit) values (1, 8, 381, 2, '');
-insert into measure (assay_id, measure_id, result_type_id, measure_context_id, entry_unit) values (1, 9, 382, 2, '');
+insert into measure_context (assay_id, measure_context_id, context_name) values (assay_id_seq.currval, 1, 'Context for PI (avg)');
+insert into measure_context (assay_id, measure_context_id, context_name) values (assay_id_seq.currval, 2, 'Context for IC50');
+
+insert into measure (assay_id, measure_id, result_type_id, measure_context_id, entry_unit, parent_measure_id) values (assay_id_seq.currval, 1, 373, '1', '%', '');
+insert into measure (assay_id, measure_id, result_type_id, measure_context_id, entry_unit, parent_measure_id) values (assay_id_seq.currval, 2, 341, '2', 'uM', 1);
+insert into measure (assay_id, measure_id, result_type_id, measure_context_id, entry_unit, parent_measure_id) values (assay_id_seq.currval, 3, 374, '2', '', 2);
+insert into measure (assay_id, measure_id, result_type_id, measure_context_id, entry_unit, parent_measure_id) values (assay_id_seq.currval, 4, 375, '2', '', 2);
+insert into measure (assay_id, measure_id, result_type_id, measure_context_id, entry_unit, parent_measure_id) values (assay_id_seq.currval, 5, 376, '2', 'uM', 2);
+insert into measure (assay_id, measure_id, result_type_id, measure_context_id, entry_unit, parent_measure_id) values (assay_id_seq.currval, 6, 377, '2', 'uM', 2);
+insert into measure (assay_id, measure_id, result_type_id, measure_context_id, entry_unit, parent_measure_id) values (assay_id_seq.currval, 7, 378, '2', 'uM', 2);
+insert into measure (assay_id, measure_id, result_type_id, measure_context_id, entry_unit, parent_measure_id) values (assay_id_seq.currval, 8, 381, '2', '', 2);
+insert into measure (assay_id, measure_id, result_type_id, measure_context_id, entry_unit, parent_measure_id) values (assay_id_seq.currval, 9, 382, '2', '', 2);
 commit;
 
+
+
+insert into measure_context_item ( MEASURE_CONTEXT_ITEM_ID, GROUP_MEASURE_CONTEXT_ITEM_ID, ASSAY_ID, MEASURE_CONTEXT_ID, ATTRIBUTE_TYPE,  ATTRIBUTE_ID,  QUALIFIER,  VALUE_ID, VALUE_DISPLAY, VALUE_NUM, VALUE_MIN, VALUE_MAX) values (1, 1, assay_id_seq.currval, '', 'Fixed', 352, '', '353', 'ATP', '', '', '');
+insert into measure_context_item ( MEASURE_CONTEXT_ITEM_ID, GROUP_MEASURE_CONTEXT_ITEM_ID, ASSAY_ID, MEASURE_CONTEXT_ID, ATTRIBUTE_TYPE,  ATTRIBUTE_ID,  QUALIFIER,  VALUE_ID, VALUE_DISPLAY, VALUE_NUM, VALUE_MIN, VALUE_MAX) values (2, 1, assay_id_seq.currval, '', 'Fixed', 10, '', '346', 'Coupled Substrate ', '', '', '');
+insert into measure_context_item ( MEASURE_CONTEXT_ITEM_ID, GROUP_MEASURE_CONTEXT_ITEM_ID, ASSAY_ID, MEASURE_CONTEXT_ID, ATTRIBUTE_TYPE,  ATTRIBUTE_ID,  QUALIFIER,  VALUE_ID, VALUE_DISPLAY, VALUE_NUM, VALUE_MIN, VALUE_MAX) values (3, 1, assay_id_seq.currval, '', 'Fixed', 10, '', '350', 'Measured Entity ', '', '', '');
+insert into measure_context_item ( MEASURE_CONTEXT_ITEM_ID, GROUP_MEASURE_CONTEXT_ITEM_ID, ASSAY_ID, MEASURE_CONTEXT_ID, ATTRIBUTE_TYPE,  ATTRIBUTE_ID,  QUALIFIER,  VALUE_ID, VALUE_DISPLAY, VALUE_NUM, VALUE_MIN, VALUE_MAX) values (4, 1, assay_id_seq.currval, '', 'Fixed', 366, '', '', '20 uM', '20', '', '');
+insert into measure_context_item ( MEASURE_CONTEXT_ITEM_ID, GROUP_MEASURE_CONTEXT_ITEM_ID, ASSAY_ID, MEASURE_CONTEXT_ID, ATTRIBUTE_TYPE,  ATTRIBUTE_ID,  QUALIFIER,  VALUE_ID, VALUE_DISPLAY, VALUE_NUM, VALUE_MIN, VALUE_MAX) values (5, 5, assay_id_seq.currval, '', 'Fixed', 347, '', '349', 'S6 ', '', '', '');
+insert into measure_context_item ( MEASURE_CONTEXT_ITEM_ID, GROUP_MEASURE_CONTEXT_ITEM_ID, ASSAY_ID, MEASURE_CONTEXT_ID, ATTRIBUTE_TYPE,  ATTRIBUTE_ID,  QUALIFIER,  VALUE_ID, VALUE_DISPLAY, VALUE_NUM, VALUE_MIN, VALUE_MAX) values (6, 5, assay_id_seq.currval, '', 'Fixed', 10, '', '47', 'Substrate ', '', '', '');
+insert into measure_context_item ( MEASURE_CONTEXT_ITEM_ID, GROUP_MEASURE_CONTEXT_ITEM_ID, ASSAY_ID, MEASURE_CONTEXT_ID, ATTRIBUTE_TYPE,  ATTRIBUTE_ID,  QUALIFIER,  VALUE_ID, VALUE_DISPLAY, VALUE_NUM, VALUE_MIN, VALUE_MAX) values (7, 5, assay_id_seq.currval, '', 'Fixed', 366, '', '', '20 uM', '20', '', '');
+insert into measure_context_item ( MEASURE_CONTEXT_ITEM_ID, GROUP_MEASURE_CONTEXT_ITEM_ID, ASSAY_ID, MEASURE_CONTEXT_ID, ATTRIBUTE_TYPE,  ATTRIBUTE_ID,  QUALIFIER,  VALUE_ID, VALUE_DISPLAY, VALUE_NUM, VALUE_MIN, VALUE_MAX) values (8, 8, assay_id_seq.currval, '', 'Fixed', 26, '', '', 'Y-27632 ', '', '', '');
+insert into measure_context_item ( MEASURE_CONTEXT_ITEM_ID, GROUP_MEASURE_CONTEXT_ITEM_ID, ASSAY_ID, MEASURE_CONTEXT_ID, ATTRIBUTE_TYPE,  ATTRIBUTE_ID,  QUALIFIER,  VALUE_ID, VALUE_DISPLAY, VALUE_NUM, VALUE_MIN, VALUE_MAX) values (9, 8, assay_id_seq.currval, '', 'Fixed', 10, '', '41', 'Positive Control ', '', '', '');
+insert into measure_context_item ( MEASURE_CONTEXT_ITEM_ID, GROUP_MEASURE_CONTEXT_ITEM_ID, ASSAY_ID, MEASURE_CONTEXT_ID, ATTRIBUTE_TYPE,  ATTRIBUTE_ID,  QUALIFIER,  VALUE_ID, VALUE_DISPLAY, VALUE_NUM, VALUE_MIN, VALUE_MAX) values (10, 8, assay_id_seq.currval, '', 'Fixed', 366, '', '', '13 uM', '13', '', '');
+insert into measure_context_item ( MEASURE_CONTEXT_ITEM_ID, GROUP_MEASURE_CONTEXT_ITEM_ID, ASSAY_ID, MEASURE_CONTEXT_ID, ATTRIBUTE_TYPE,  ATTRIBUTE_ID,  QUALIFIER,  VALUE_ID, VALUE_DISPLAY, VALUE_NUM, VALUE_MIN, VALUE_MAX) values (11, 11, assay_id_seq.currval, '', 'Fixed', 38, '', '348', 'Rhok2 ', '', '', '');
+insert into measure_context_item ( MEASURE_CONTEXT_ITEM_ID, GROUP_MEASURE_CONTEXT_ITEM_ID, ASSAY_ID, MEASURE_CONTEXT_ID, ATTRIBUTE_TYPE,  ATTRIBUTE_ID,  QUALIFIER,  VALUE_ID, VALUE_DISPLAY, VALUE_NUM, VALUE_MIN, VALUE_MAX) values (12, 11, assay_id_seq.currval, '', 'Fixed', 10, '', '69', 'Target ', '', '', '');
+insert into measure_context_item ( MEASURE_CONTEXT_ITEM_ID, GROUP_MEASURE_CONTEXT_ITEM_ID, ASSAY_ID, MEASURE_CONTEXT_ID, ATTRIBUTE_TYPE,  ATTRIBUTE_ID,  QUALIFIER,  VALUE_ID, VALUE_DISPLAY, VALUE_NUM, VALUE_MIN, VALUE_MAX) values (13, 11, assay_id_seq.currval, '', 'Fixed', 84, '', '354', 'HEPES_50mM_7.3pH/MgCl_10mM/BSA_0.1%/DTT_2mM ', '', '', '');
+insert into measure_context_item ( MEASURE_CONTEXT_ITEM_ID, GROUP_MEASURE_CONTEXT_ITEM_ID, ASSAY_ID, MEASURE_CONTEXT_ID, ATTRIBUTE_TYPE,  ATTRIBUTE_ID,  QUALIFIER,  VALUE_ID, VALUE_DISPLAY, VALUE_NUM, VALUE_MIN, VALUE_MAX) values (14, 14, assay_id_seq.currval, '', 'Fixed', 117, '', '', '2 h', '2', '', '');
+insert into measure_context_item ( MEASURE_CONTEXT_ITEM_ID, GROUP_MEASURE_CONTEXT_ITEM_ID, ASSAY_ID, MEASURE_CONTEXT_ID, ATTRIBUTE_TYPE,  ATTRIBUTE_ID,  QUALIFIER,  VALUE_ID, VALUE_DISPLAY, VALUE_NUM, VALUE_MIN, VALUE_MAX) values (15, 14, assay_id_seq.currval, '', 'Fixed', 367, '', '', '25 degC', '25', '', '');
+insert into measure_context_item ( MEASURE_CONTEXT_ITEM_ID, GROUP_MEASURE_CONTEXT_ITEM_ID, ASSAY_ID, MEASURE_CONTEXT_ID, ATTRIBUTE_TYPE,  ATTRIBUTE_ID,  QUALIFIER,  VALUE_ID, VALUE_DISPLAY, VALUE_NUM, VALUE_MIN, VALUE_MAX) values (16, 16, assay_id_seq.currval, '', 'Fixed', 101, '', '365', 'Kinase Glo ', '', '', '');
+insert into measure_context_item ( MEASURE_CONTEXT_ITEM_ID, GROUP_MEASURE_CONTEXT_ITEM_ID, ASSAY_ID, MEASURE_CONTEXT_ID, ATTRIBUTE_TYPE,  ATTRIBUTE_ID,  QUALIFIER,  VALUE_ID, VALUE_DISPLAY, VALUE_NUM, VALUE_MIN, VALUE_MAX) values (17, 16, assay_id_seq.currval, '', 'Fixed', 117, '', '', '10 min', '10', '', '');
+insert into measure_context_item ( MEASURE_CONTEXT_ITEM_ID, GROUP_MEASURE_CONTEXT_ITEM_ID, ASSAY_ID, MEASURE_CONTEXT_ID, ATTRIBUTE_TYPE,  ATTRIBUTE_ID,  QUALIFIER,  VALUE_ID, VALUE_DISPLAY, VALUE_NUM, VALUE_MIN, VALUE_MAX) values (18, 16, assay_id_seq.currval, '', 'Fixed', 28, '', '351', 'Readout ', '', '', '');
+insert into measure_context_item ( MEASURE_CONTEXT_ITEM_ID, GROUP_MEASURE_CONTEXT_ITEM_ID, ASSAY_ID, MEASURE_CONTEXT_ID, ATTRIBUTE_TYPE,  ATTRIBUTE_ID,  QUALIFIER,  VALUE_ID, VALUE_DISPLAY, VALUE_NUM, VALUE_MIN, VALUE_MAX) values (19, 19, assay_id_seq.currval, '', 'Fixed', 307, '', '371', 'Viewlux ', '', '', '');
+insert into measure_context_item ( MEASURE_CONTEXT_ITEM_ID, GROUP_MEASURE_CONTEXT_ITEM_ID, ASSAY_ID, MEASURE_CONTEXT_ID, ATTRIBUTE_TYPE,  ATTRIBUTE_ID,  QUALIFIER,  VALUE_ID, VALUE_DISPLAY, VALUE_NUM, VALUE_MIN, VALUE_MAX) values (20, 20, assay_id_seq.currval, '', 'Fixed', 13, '', '361', 'In Vitro ', '', '', '');
+insert into measure_context_item ( MEASURE_CONTEXT_ITEM_ID, GROUP_MEASURE_CONTEXT_ITEM_ID, ASSAY_ID, MEASURE_CONTEXT_ID, ATTRIBUTE_TYPE,  ATTRIBUTE_ID,  QUALIFIER,  VALUE_ID, VALUE_DISPLAY, VALUE_NUM, VALUE_MIN, VALUE_MAX) values (21, 21, assay_id_seq.currval, '', 'Fixed', 149, '', '', 'Phosphorylation ', '', '', '');
+insert into measure_context_item ( MEASURE_CONTEXT_ITEM_ID, GROUP_MEASURE_CONTEXT_ITEM_ID, ASSAY_ID, MEASURE_CONTEXT_ID, ATTRIBUTE_TYPE,  ATTRIBUTE_ID,  QUALIFIER,  VALUE_ID, VALUE_DISPLAY, VALUE_NUM, VALUE_MIN, VALUE_MAX) values (22, 22, assay_id_seq.currval, '', 'Fixed', 360, '', '510', 'Inhibition ', '', '', '');
+insert into measure_context_item ( MEASURE_CONTEXT_ITEM_ID, GROUP_MEASURE_CONTEXT_ITEM_ID, ASSAY_ID, MEASURE_CONTEXT_ID, ATTRIBUTE_TYPE,  ATTRIBUTE_ID,  QUALIFIER,  VALUE_ID, VALUE_DISPLAY, VALUE_NUM, VALUE_MIN, VALUE_MAX) values (23, 23, assay_id_seq.currval, '1', 'List', 366, '', '', '0.003 uM', '0.003', '', '');
+insert into measure_context_item ( MEASURE_CONTEXT_ITEM_ID, GROUP_MEASURE_CONTEXT_ITEM_ID, ASSAY_ID, MEASURE_CONTEXT_ID, ATTRIBUTE_TYPE,  ATTRIBUTE_ID,  QUALIFIER,  VALUE_ID, VALUE_DISPLAY, VALUE_NUM, VALUE_MIN, VALUE_MAX) values (24, 23, assay_id_seq.currval, '1', 'List', 366, '', '', '0.0091 uM', '0.0091', '', '');
+insert into measure_context_item ( MEASURE_CONTEXT_ITEM_ID, GROUP_MEASURE_CONTEXT_ITEM_ID, ASSAY_ID, MEASURE_CONTEXT_ID, ATTRIBUTE_TYPE,  ATTRIBUTE_ID,  QUALIFIER,  VALUE_ID, VALUE_DISPLAY, VALUE_NUM, VALUE_MIN, VALUE_MAX) values (25, 23, assay_id_seq.currval, '1', 'List', 366, '', '', '0.0273 uM', '0.0273', '', '');
+insert into measure_context_item ( MEASURE_CONTEXT_ITEM_ID, GROUP_MEASURE_CONTEXT_ITEM_ID, ASSAY_ID, MEASURE_CONTEXT_ID, ATTRIBUTE_TYPE,  ATTRIBUTE_ID,  QUALIFIER,  VALUE_ID, VALUE_DISPLAY, VALUE_NUM, VALUE_MIN, VALUE_MAX) values (26, 23, assay_id_seq.currval, '1', 'List', 366, '', '', '0.0818 uM', '0.0818', '', '');
+insert into measure_context_item ( MEASURE_CONTEXT_ITEM_ID, GROUP_MEASURE_CONTEXT_ITEM_ID, ASSAY_ID, MEASURE_CONTEXT_ID, ATTRIBUTE_TYPE,  ATTRIBUTE_ID,  QUALIFIER,  VALUE_ID, VALUE_DISPLAY, VALUE_NUM, VALUE_MIN, VALUE_MAX) values (27, 23, assay_id_seq.currval, '1', 'List', 366, '', '', '0.2454 uM', '0.2454', '', '');
+insert into measure_context_item ( MEASURE_CONTEXT_ITEM_ID, GROUP_MEASURE_CONTEXT_ITEM_ID, ASSAY_ID, MEASURE_CONTEXT_ID, ATTRIBUTE_TYPE,  ATTRIBUTE_ID,  QUALIFIER,  VALUE_ID, VALUE_DISPLAY, VALUE_NUM, VALUE_MIN, VALUE_MAX) values (28, 23, assay_id_seq.currval, '1', 'List', 366, '', '', '0.7 uM', '0.7', '', '');
+insert into measure_context_item ( MEASURE_CONTEXT_ITEM_ID, GROUP_MEASURE_CONTEXT_ITEM_ID, ASSAY_ID, MEASURE_CONTEXT_ID, ATTRIBUTE_TYPE,  ATTRIBUTE_ID,  QUALIFIER,  VALUE_ID, VALUE_DISPLAY, VALUE_NUM, VALUE_MIN, VALUE_MAX) values (29, 23, assay_id_seq.currval, '1', 'List', 366, '', '', '2.2 uM', '2.2', '', '');
+insert into measure_context_item ( MEASURE_CONTEXT_ITEM_ID, GROUP_MEASURE_CONTEXT_ITEM_ID, ASSAY_ID, MEASURE_CONTEXT_ID, ATTRIBUTE_TYPE,  ATTRIBUTE_ID,  QUALIFIER,  VALUE_ID, VALUE_DISPLAY, VALUE_NUM, VALUE_MIN, VALUE_MAX) values (30, 23, assay_id_seq.currval, '1', 'List', 366, '', '', '6.6 uM', '6.6', '', '');
+insert into measure_context_item ( MEASURE_CONTEXT_ITEM_ID, GROUP_MEASURE_CONTEXT_ITEM_ID, ASSAY_ID, MEASURE_CONTEXT_ID, ATTRIBUTE_TYPE,  ATTRIBUTE_ID,  QUALIFIER,  VALUE_ID, VALUE_DISPLAY, VALUE_NUM, VALUE_MIN, VALUE_MAX) values (31, 23, assay_id_seq.currval, '1', 'List', 366, '', '', '19.9 uM', '19.9', '', '');
+insert into measure_context_item ( MEASURE_CONTEXT_ITEM_ID, GROUP_MEASURE_CONTEXT_ITEM_ID, ASSAY_ID, MEASURE_CONTEXT_ID, ATTRIBUTE_TYPE,  ATTRIBUTE_ID,  QUALIFIER,  VALUE_ID, VALUE_DISPLAY, VALUE_NUM, VALUE_MIN, VALUE_MAX) values (32, 23, assay_id_seq.currval, '1', 'List', 366, '', '', '59.6 uM', '59.6', '', '');
+insert into measure_context_item ( MEASURE_CONTEXT_ITEM_ID, GROUP_MEASURE_CONTEXT_ITEM_ID, ASSAY_ID, MEASURE_CONTEXT_ID, ATTRIBUTE_TYPE,  ATTRIBUTE_ID,  QUALIFIER,  VALUE_ID, VALUE_DISPLAY, VALUE_NUM, VALUE_MIN, VALUE_MAX) values (33, 33, assay_id_seq.currval, '1', 'Fixed', 380, '', '', '3 ', '3', '', '');
+insert into measure_context_item ( MEASURE_CONTEXT_ITEM_ID, GROUP_MEASURE_CONTEXT_ITEM_ID, ASSAY_ID, MEASURE_CONTEXT_ID, ATTRIBUTE_TYPE,  ATTRIBUTE_ID,  QUALIFIER,  VALUE_ID, VALUE_DISPLAY, VALUE_NUM, VALUE_MIN, VALUE_MAX) values (34, 34, assay_id_seq.currval, '2', 'Fixed', 368, '', '372', 'Assay Explorer ', '', '', '');
+insert into measure_context_item ( MEASURE_CONTEXT_ITEM_ID, GROUP_MEASURE_CONTEXT_ITEM_ID, ASSAY_ID, MEASURE_CONTEXT_ID, ATTRIBUTE_TYPE,  ATTRIBUTE_ID,  QUALIFIER,  VALUE_ID, VALUE_DISPLAY, VALUE_NUM, VALUE_MIN, VALUE_MAX) values (35, 34, assay_id_seq.currval, '2', 'Fixed', 370, '', '', '30 ', '30', '', '');
+insert into measure_context_item ( MEASURE_CONTEXT_ITEM_ID, GROUP_MEASURE_CONTEXT_ITEM_ID, ASSAY_ID, MEASURE_CONTEXT_ID, ATTRIBUTE_TYPE,  ATTRIBUTE_ID,  QUALIFIER,  VALUE_ID, VALUE_DISPLAY, VALUE_NUM, VALUE_MIN, VALUE_MAX) values (36, 34, assay_id_seq.currval, '2', 'Range', 369, '', '', '0 - 4 ', '', '0', '4');
+commit;
 
 
 insert into substance (substance_id, substance_type) values (7970106, 'small molecule');
@@ -167,6 +209,12 @@ insert into substance (substance_id, substance_type) values (4257150, 'small mol
 insert into substance (substance_id, substance_type) values (4255222, 'small molecule');
 insert into substance (substance_id, substance_type) values (3714088, 'small molecule');
 commit;
+
+
+insert into experiment (project_id, assay_id, experiment_id, experiment_name,run_date_from, 
+ run_date_to, description, hold_until_date, experiment_status_id) values 
+(1, assay_id_seq.currval, 1, 'Dose-response biochemical assay of inhibitors of Rho kinase 2 (Rock2): 1', 
+to_date('03/12/2012', 'MM/DD/YYYY'), to_date('03/12/2012', 'MM/DD/YYYY'), '', '', 2);
 
 
 insert into result (RESULT_ID, VALUE_DISPLAY, VALUE_NUM, VALUE_MIN, VALUE_MAX, QUALIFIER, RESULT_STATUS_ID, EXPERIMENT_ID, SUBSTANCE_ID, RESULT_TYPE_ID ) values (1, '< 0.00303uM', 0.00303, '', '', '<', 2, 1, 7970106, 341);
@@ -1775,46 +1823,6 @@ insert into result_context_item( RESULT_CONTEXT_ITEM_ID,  GROUP_RESULT_CONTEXT_I
 insert into result_context_item( RESULT_CONTEXT_ITEM_ID,  GROUP_RESULT_CONTEXT_ID,  EXPERIMENT_ID,  RESULT_ID,  ATTRIBUTE_ID,  VALUE_ID,  QUALIFIER,  VALUE_DISPLAY,  VALUE_NUM,  VALUE_MIN,  VALUE_MAX) values(result_context_item_id_seq.nextval, '', 1, 438, 366, '', '', '6.6', 6.6, '', '');
 insert into result_context_item( RESULT_CONTEXT_ITEM_ID,  GROUP_RESULT_CONTEXT_ID,  EXPERIMENT_ID,  RESULT_ID,  ATTRIBUTE_ID,  VALUE_ID,  QUALIFIER,  VALUE_DISPLAY,  VALUE_NUM,  VALUE_MIN,  VALUE_MAX) values(result_context_item_id_seq.nextval, '', 1, 439, 366, '', '', '19.9', 19.9, '', '');
 insert into result_context_item( RESULT_CONTEXT_ITEM_ID,  GROUP_RESULT_CONTEXT_ID,  EXPERIMENT_ID,  RESULT_ID,  ATTRIBUTE_ID,  VALUE_ID,  QUALIFIER,  VALUE_DISPLAY,  VALUE_NUM,  VALUE_MIN,  VALUE_MAX) values(result_context_item_id_seq.nextval, '', 1, 440, 366, '', '', '59.6', 59.6, '', '');
-commit;
-
-
-
-insert into measure_context_item ( MEASURE_CONTEXT_ITEM_ID, GROUP_MEASURE_CONTEXT_ITEM_ID, ASSAY_ID, MEASURE_CONTEXT_ID, ATTRIBUTE_TYPE,  ATTRIBUTE_ID,  QUALIFIER,  VALUE_ID, VALUE_DISPLAY, VALUE_NUM, VALUE_MIN, VALUE_MAX) values (1, 1, 1, '', 'Fixed', 352, '', '353', 'ATP', '', '', '');
-insert into measure_context_item ( MEASURE_CONTEXT_ITEM_ID, GROUP_MEASURE_CONTEXT_ITEM_ID, ASSAY_ID, MEASURE_CONTEXT_ID, ATTRIBUTE_TYPE,  ATTRIBUTE_ID,  QUALIFIER,  VALUE_ID, VALUE_DISPLAY, VALUE_NUM, VALUE_MIN, VALUE_MAX) values (2, 1, 1, '', 'Fixed', 10, '', '346', 'Coupled Substrate ', '', '', '');
-insert into measure_context_item ( MEASURE_CONTEXT_ITEM_ID, GROUP_MEASURE_CONTEXT_ITEM_ID, ASSAY_ID, MEASURE_CONTEXT_ID, ATTRIBUTE_TYPE,  ATTRIBUTE_ID,  QUALIFIER,  VALUE_ID, VALUE_DISPLAY, VALUE_NUM, VALUE_MIN, VALUE_MAX) values (3, 1, 1, '', 'Fixed', 10, '', '350', 'Measured Entity ', '', '', '');
-insert into measure_context_item ( MEASURE_CONTEXT_ITEM_ID, GROUP_MEASURE_CONTEXT_ITEM_ID, ASSAY_ID, MEASURE_CONTEXT_ID, ATTRIBUTE_TYPE,  ATTRIBUTE_ID,  QUALIFIER,  VALUE_ID, VALUE_DISPLAY, VALUE_NUM, VALUE_MIN, VALUE_MAX) values (4, 1, 1, '', 'Fixed', 366, '', '', '20 uM', '20', '', '');
-insert into measure_context_item ( MEASURE_CONTEXT_ITEM_ID, GROUP_MEASURE_CONTEXT_ITEM_ID, ASSAY_ID, MEASURE_CONTEXT_ID, ATTRIBUTE_TYPE,  ATTRIBUTE_ID,  QUALIFIER,  VALUE_ID, VALUE_DISPLAY, VALUE_NUM, VALUE_MIN, VALUE_MAX) values (5, 5, 1, '', 'Fixed', 347, '', '349', 'S6 ', '', '', '');
-insert into measure_context_item ( MEASURE_CONTEXT_ITEM_ID, GROUP_MEASURE_CONTEXT_ITEM_ID, ASSAY_ID, MEASURE_CONTEXT_ID, ATTRIBUTE_TYPE,  ATTRIBUTE_ID,  QUALIFIER,  VALUE_ID, VALUE_DISPLAY, VALUE_NUM, VALUE_MIN, VALUE_MAX) values (6, 5, 1, '', 'Fixed', 10, '', '47', 'Substrate ', '', '', '');
-insert into measure_context_item ( MEASURE_CONTEXT_ITEM_ID, GROUP_MEASURE_CONTEXT_ITEM_ID, ASSAY_ID, MEASURE_CONTEXT_ID, ATTRIBUTE_TYPE,  ATTRIBUTE_ID,  QUALIFIER,  VALUE_ID, VALUE_DISPLAY, VALUE_NUM, VALUE_MIN, VALUE_MAX) values (7, 5, 1, '', 'Fixed', 366, '', '', '20 uM', '20', '', '');
-insert into measure_context_item ( MEASURE_CONTEXT_ITEM_ID, GROUP_MEASURE_CONTEXT_ITEM_ID, ASSAY_ID, MEASURE_CONTEXT_ID, ATTRIBUTE_TYPE,  ATTRIBUTE_ID,  QUALIFIER,  VALUE_ID, VALUE_DISPLAY, VALUE_NUM, VALUE_MIN, VALUE_MAX) values (8, 8, 1, '', 'Fixed', 26, '', '', 'Y-27632 ', '', '', '');
-insert into measure_context_item ( MEASURE_CONTEXT_ITEM_ID, GROUP_MEASURE_CONTEXT_ITEM_ID, ASSAY_ID, MEASURE_CONTEXT_ID, ATTRIBUTE_TYPE,  ATTRIBUTE_ID,  QUALIFIER,  VALUE_ID, VALUE_DISPLAY, VALUE_NUM, VALUE_MIN, VALUE_MAX) values (9, 8, 1, '', 'Fixed', 10, '', '41', 'Positive Control ', '', '', '');
-insert into measure_context_item ( MEASURE_CONTEXT_ITEM_ID, GROUP_MEASURE_CONTEXT_ITEM_ID, ASSAY_ID, MEASURE_CONTEXT_ID, ATTRIBUTE_TYPE,  ATTRIBUTE_ID,  QUALIFIER,  VALUE_ID, VALUE_DISPLAY, VALUE_NUM, VALUE_MIN, VALUE_MAX) values (10, 8, 1, '', 'Fixed', 366, '', '', '13 uM', '13', '', '');
-insert into measure_context_item ( MEASURE_CONTEXT_ITEM_ID, GROUP_MEASURE_CONTEXT_ITEM_ID, ASSAY_ID, MEASURE_CONTEXT_ID, ATTRIBUTE_TYPE,  ATTRIBUTE_ID,  QUALIFIER,  VALUE_ID, VALUE_DISPLAY, VALUE_NUM, VALUE_MIN, VALUE_MAX) values (11, 11, 1, '', 'Fixed', 38, '', '348', 'Rhok2 ', '', '', '');
-insert into measure_context_item ( MEASURE_CONTEXT_ITEM_ID, GROUP_MEASURE_CONTEXT_ITEM_ID, ASSAY_ID, MEASURE_CONTEXT_ID, ATTRIBUTE_TYPE,  ATTRIBUTE_ID,  QUALIFIER,  VALUE_ID, VALUE_DISPLAY, VALUE_NUM, VALUE_MIN, VALUE_MAX) values (12, 11, 1, '', 'Fixed', 10, '', '69', 'Target ', '', '', '');
-insert into measure_context_item ( MEASURE_CONTEXT_ITEM_ID, GROUP_MEASURE_CONTEXT_ITEM_ID, ASSAY_ID, MEASURE_CONTEXT_ID, ATTRIBUTE_TYPE,  ATTRIBUTE_ID,  QUALIFIER,  VALUE_ID, VALUE_DISPLAY, VALUE_NUM, VALUE_MIN, VALUE_MAX) values (13, 11, 1, '', 'Fixed', 84, '', '354', 'HEPES_50mM_7.3pH/MgCl_10mM/BSA_0.1%/DTT_2mM ', '', '', '');
-insert into measure_context_item ( MEASURE_CONTEXT_ITEM_ID, GROUP_MEASURE_CONTEXT_ITEM_ID, ASSAY_ID, MEASURE_CONTEXT_ID, ATTRIBUTE_TYPE,  ATTRIBUTE_ID,  QUALIFIER,  VALUE_ID, VALUE_DISPLAY, VALUE_NUM, VALUE_MIN, VALUE_MAX) values (14, 14, 1, '', 'Fixed', 117, '', '', '2 h', '2', '', '');
-insert into measure_context_item ( MEASURE_CONTEXT_ITEM_ID, GROUP_MEASURE_CONTEXT_ITEM_ID, ASSAY_ID, MEASURE_CONTEXT_ID, ATTRIBUTE_TYPE,  ATTRIBUTE_ID,  QUALIFIER,  VALUE_ID, VALUE_DISPLAY, VALUE_NUM, VALUE_MIN, VALUE_MAX) values (15, 14, 1, '', 'Fixed', 367, '', '', '25 degC', '25', '', '');
-insert into measure_context_item ( MEASURE_CONTEXT_ITEM_ID, GROUP_MEASURE_CONTEXT_ITEM_ID, ASSAY_ID, MEASURE_CONTEXT_ID, ATTRIBUTE_TYPE,  ATTRIBUTE_ID,  QUALIFIER,  VALUE_ID, VALUE_DISPLAY, VALUE_NUM, VALUE_MIN, VALUE_MAX) values (16, 16, 1, '', 'Fixed', 101, '', '365', 'Kinase Glo ', '', '', '');
-insert into measure_context_item ( MEASURE_CONTEXT_ITEM_ID, GROUP_MEASURE_CONTEXT_ITEM_ID, ASSAY_ID, MEASURE_CONTEXT_ID, ATTRIBUTE_TYPE,  ATTRIBUTE_ID,  QUALIFIER,  VALUE_ID, VALUE_DISPLAY, VALUE_NUM, VALUE_MIN, VALUE_MAX) values (17, 16, 1, '', 'Fixed', 117, '', '', '10 min', '10', '', '');
-insert into measure_context_item ( MEASURE_CONTEXT_ITEM_ID, GROUP_MEASURE_CONTEXT_ITEM_ID, ASSAY_ID, MEASURE_CONTEXT_ID, ATTRIBUTE_TYPE,  ATTRIBUTE_ID,  QUALIFIER,  VALUE_ID, VALUE_DISPLAY, VALUE_NUM, VALUE_MIN, VALUE_MAX) values (18, 16, 1, '', 'Fixed', 28, '', '351', 'Readout ', '', '', '');
-insert into measure_context_item ( MEASURE_CONTEXT_ITEM_ID, GROUP_MEASURE_CONTEXT_ITEM_ID, ASSAY_ID, MEASURE_CONTEXT_ID, ATTRIBUTE_TYPE,  ATTRIBUTE_ID,  QUALIFIER,  VALUE_ID, VALUE_DISPLAY, VALUE_NUM, VALUE_MIN, VALUE_MAX) values (19, 19, 1, '', 'Fixed', 307, '', '371', 'Viewlux ', '', '', '');
-insert into measure_context_item ( MEASURE_CONTEXT_ITEM_ID, GROUP_MEASURE_CONTEXT_ITEM_ID, ASSAY_ID, MEASURE_CONTEXT_ID, ATTRIBUTE_TYPE,  ATTRIBUTE_ID,  QUALIFIER,  VALUE_ID, VALUE_DISPLAY, VALUE_NUM, VALUE_MIN, VALUE_MAX) values (20, 20, 1, '', 'Fixed', 13, '', '361', 'In Vitro ', '', '', '');
-insert into measure_context_item ( MEASURE_CONTEXT_ITEM_ID, GROUP_MEASURE_CONTEXT_ITEM_ID, ASSAY_ID, MEASURE_CONTEXT_ID, ATTRIBUTE_TYPE,  ATTRIBUTE_ID,  QUALIFIER,  VALUE_ID, VALUE_DISPLAY, VALUE_NUM, VALUE_MIN, VALUE_MAX) values (21, 21, 1, '', 'Fixed', 149, '', '', 'Phosphorylation ', '', '', '');
-insert into measure_context_item ( MEASURE_CONTEXT_ITEM_ID, GROUP_MEASURE_CONTEXT_ITEM_ID, ASSAY_ID, MEASURE_CONTEXT_ID, ATTRIBUTE_TYPE,  ATTRIBUTE_ID,  QUALIFIER,  VALUE_ID, VALUE_DISPLAY, VALUE_NUM, VALUE_MIN, VALUE_MAX) values (22, 22, 1, '', 'Fixed', 360, '', '364', 'Inhibition ', '', '', '');
-insert into measure_context_item ( MEASURE_CONTEXT_ITEM_ID, GROUP_MEASURE_CONTEXT_ITEM_ID, ASSAY_ID, MEASURE_CONTEXT_ID, ATTRIBUTE_TYPE,  ATTRIBUTE_ID,  QUALIFIER,  VALUE_ID, VALUE_DISPLAY, VALUE_NUM, VALUE_MIN, VALUE_MAX) values (23, 23, 1, '1', 'List', 366, '', '', '0.003 uM', '0.003', '', '');
-insert into measure_context_item ( MEASURE_CONTEXT_ITEM_ID, GROUP_MEASURE_CONTEXT_ITEM_ID, ASSAY_ID, MEASURE_CONTEXT_ID, ATTRIBUTE_TYPE,  ATTRIBUTE_ID,  QUALIFIER,  VALUE_ID, VALUE_DISPLAY, VALUE_NUM, VALUE_MIN, VALUE_MAX) values (24, 23, 1, '1', 'List', 366, '', '', '0.0091 uM', '0.0091', '', '');
-insert into measure_context_item ( MEASURE_CONTEXT_ITEM_ID, GROUP_MEASURE_CONTEXT_ITEM_ID, ASSAY_ID, MEASURE_CONTEXT_ID, ATTRIBUTE_TYPE,  ATTRIBUTE_ID,  QUALIFIER,  VALUE_ID, VALUE_DISPLAY, VALUE_NUM, VALUE_MIN, VALUE_MAX) values (25, 23, 1, '1', 'List', 366, '', '', '0.0273 uM', '0.0273', '', '');
-insert into measure_context_item ( MEASURE_CONTEXT_ITEM_ID, GROUP_MEASURE_CONTEXT_ITEM_ID, ASSAY_ID, MEASURE_CONTEXT_ID, ATTRIBUTE_TYPE,  ATTRIBUTE_ID,  QUALIFIER,  VALUE_ID, VALUE_DISPLAY, VALUE_NUM, VALUE_MIN, VALUE_MAX) values (26, 23, 1, '1', 'List', 366, '', '', '0.0818 uM', '0.0818', '', '');
-insert into measure_context_item ( MEASURE_CONTEXT_ITEM_ID, GROUP_MEASURE_CONTEXT_ITEM_ID, ASSAY_ID, MEASURE_CONTEXT_ID, ATTRIBUTE_TYPE,  ATTRIBUTE_ID,  QUALIFIER,  VALUE_ID, VALUE_DISPLAY, VALUE_NUM, VALUE_MIN, VALUE_MAX) values (27, 23, 1, '1', 'List', 366, '', '', '0.2454 uM', '0.2454', '', '');
-insert into measure_context_item ( MEASURE_CONTEXT_ITEM_ID, GROUP_MEASURE_CONTEXT_ITEM_ID, ASSAY_ID, MEASURE_CONTEXT_ID, ATTRIBUTE_TYPE,  ATTRIBUTE_ID,  QUALIFIER,  VALUE_ID, VALUE_DISPLAY, VALUE_NUM, VALUE_MIN, VALUE_MAX) values (28, 23, 1, '1', 'List', 366, '', '', '0.7 uM', '0.7', '', '');
-insert into measure_context_item ( MEASURE_CONTEXT_ITEM_ID, GROUP_MEASURE_CONTEXT_ITEM_ID, ASSAY_ID, MEASURE_CONTEXT_ID, ATTRIBUTE_TYPE,  ATTRIBUTE_ID,  QUALIFIER,  VALUE_ID, VALUE_DISPLAY, VALUE_NUM, VALUE_MIN, VALUE_MAX) values (29, 23, 1, '1', 'List', 366, '', '', '2.2 uM', '2.2', '', '');
-insert into measure_context_item ( MEASURE_CONTEXT_ITEM_ID, GROUP_MEASURE_CONTEXT_ITEM_ID, ASSAY_ID, MEASURE_CONTEXT_ID, ATTRIBUTE_TYPE,  ATTRIBUTE_ID,  QUALIFIER,  VALUE_ID, VALUE_DISPLAY, VALUE_NUM, VALUE_MIN, VALUE_MAX) values (30, 23, 1, '1', 'List', 366, '', '', '6.6 uM', '6.6', '', '');
-insert into measure_context_item ( MEASURE_CONTEXT_ITEM_ID, GROUP_MEASURE_CONTEXT_ITEM_ID, ASSAY_ID, MEASURE_CONTEXT_ID, ATTRIBUTE_TYPE,  ATTRIBUTE_ID,  QUALIFIER,  VALUE_ID, VALUE_DISPLAY, VALUE_NUM, VALUE_MIN, VALUE_MAX) values (31, 23, 1, '1', 'List', 366, '', '', '19.9 uM', '19.9', '', '');
-insert into measure_context_item ( MEASURE_CONTEXT_ITEM_ID, GROUP_MEASURE_CONTEXT_ITEM_ID, ASSAY_ID, MEASURE_CONTEXT_ID, ATTRIBUTE_TYPE,  ATTRIBUTE_ID,  QUALIFIER,  VALUE_ID, VALUE_DISPLAY, VALUE_NUM, VALUE_MIN, VALUE_MAX) values (32, 23, 1, '1', 'List', 366, '', '', '59.6 uM', '59.6', '', '');
-insert into measure_context_item ( MEASURE_CONTEXT_ITEM_ID, GROUP_MEASURE_CONTEXT_ITEM_ID, ASSAY_ID, MEASURE_CONTEXT_ID, ATTRIBUTE_TYPE,  ATTRIBUTE_ID,  QUALIFIER,  VALUE_ID, VALUE_DISPLAY, VALUE_NUM, VALUE_MIN, VALUE_MAX) values (33, 33, 1, '1', 'Fixed', 380, '', '', '3 ', '3', '', '');
-insert into measure_context_item ( MEASURE_CONTEXT_ITEM_ID, GROUP_MEASURE_CONTEXT_ITEM_ID, ASSAY_ID, MEASURE_CONTEXT_ID, ATTRIBUTE_TYPE,  ATTRIBUTE_ID,  QUALIFIER,  VALUE_ID, VALUE_DISPLAY, VALUE_NUM, VALUE_MIN, VALUE_MAX) values (34, 34, 1, '2', 'Fixed', 368, '', '372', 'Assay Explorer ', '', '', '');
-insert into measure_context_item ( MEASURE_CONTEXT_ITEM_ID, GROUP_MEASURE_CONTEXT_ITEM_ID, ASSAY_ID, MEASURE_CONTEXT_ID, ATTRIBUTE_TYPE,  ATTRIBUTE_ID,  QUALIFIER,  VALUE_ID, VALUE_DISPLAY, VALUE_NUM, VALUE_MIN, VALUE_MAX) values (35, 34, 1, '2', 'Fixed', 370, '', '', '30 ', '30', '', '');
-insert into measure_context_item ( MEASURE_CONTEXT_ITEM_ID, GROUP_MEASURE_CONTEXT_ITEM_ID, ASSAY_ID, MEASURE_CONTEXT_ID, ATTRIBUTE_TYPE,  ATTRIBUTE_ID,  QUALIFIER,  VALUE_ID, VALUE_DISPLAY, VALUE_NUM, VALUE_MIN, VALUE_MAX) values (36, 34, 1, '2', 'Range', 369, '', '', '0 - 4 ', '', '0', '4');
 commit;
 
 
