@@ -1,3 +1,10 @@
-tocTab[tocTab.length] = new Array("0.7:1", "", "Component Model", "EARoot/EA7/EA638.htm", "178.png", "12", "0", "", "Component diagram0","{E66B9D06-290C-4690-B7FC-9C5BCA4F2B24}");
-tocTab[tocTab.length] = new Array("0.7:2", "", "MLBD Hardware", "EARoot/EA7/EA640.htm", "179.png", "25", "0", "", "Deployment diagram0","{45B641A4-F344-4f75-949A-C157D3308067}");
-tocTab[tocTab.length] = new Array("0.7.1", "1", "MLBD overview", "EARoot/EA7/EA647.htm", "4.png", "", "", "{71CB31A6-D3CF-4677-B2D4-119052F67620}", "Package");
+tocTab[tocTab.length] = new Array("0.7:1", "", "Component Model", "EARoot/EA7/EA671.htm", "178.png", "12", "0", "", "Component diagram0","{E66B9D06-290C-4690-B7FC-9C5BCA4F2B24}");
+tocTab[tocTab.length] = new Array("0.7:2", "", "Data entry info flow", "EARoot/EA7/EA677.htm", "99.png", "696", "0", "", "UMLDiagram0","{4B4AC7D3-BE46-4551-B2F3-27431C58A85D}");
+tocTab[tocTab.length] = new Array("0.7:3", "", "get data for a SAR table", "EARoot/EA7/EA678.htm", "102.png", "702", "0", "", "InteractionOccurrence0","{9C1C871D-3904-48a2-A766-04B6AAC0E0B8}");
+tocTab[tocTab.length] = new Array("0.7:4", "", "MLBD Data Consumers", "EARoot/EA7/EA680.htm", "99.png", "697", "0", "", "UMLDiagram0","{AB2050A9-90A7-46ef-8263-A74EAB238745}");
+tocTab[tocTab.length] = new Array("0.7:5", "", "MLBD data upload", "EARoot/EA7/EA681.htm", "99.png", "764", "0", "", "UMLDiagram0","{C8C74CCE-0CB8-48aa-B02A-4E44D097DB61}");
+tocTab[tocTab.length] = new Array("0.7:6", "", "MLBD Hardware", "EARoot/EA7/EA682.htm", "99.png", "688", "0", "", "UMLDiagram0","{ABA840CD-7324-4905-B6A2-2A8C201AAA02}");
+tocTab[tocTab.length] = new Array("0.7:7", "", "MLBD migration", "EARoot/EA7/EA683.htm", "99.png", "699", "0", "", "UMLDiagram0","{99D6A316-8520-4011-A583-C4DFC6524E4B}");
+tocTab[tocTab.length] = new Array("0.7:8", "", "MLBD overview", "EARoot/EA7/EA684.htm", "99.png", "700", "0", "", "UMLDiagram0","{CBF2863B-745C-44b5-9316-FA043718BBEB}");
+tocTab[tocTab.length] = new Array("0.7:9", "", "Query data info flow", "EARoot/EA7/EA686.htm", "99.png", "701", "0", "", "UMLDiagram0","{EBF9DB10-73C4-464d-9182-E513712FE009}");
+tocTab[tocTab.length] = new Array("0.7.1", "1", "MLBD components", "EARoot/EA7/EA679.htm", "4.png", "", "", "{71CB31A6-D3CF-4677-B2D4-119052F67620}", "Package");
