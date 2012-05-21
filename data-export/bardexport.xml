@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bardexport xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+ xsi:noNamespaceSchemaLocation="BARDexportSchema.xsd">
+    <!--  -->
+    <link type="application/vnd.bard.cap+xml;type=cap" href="http://bard/export/projects" rel="item"
+         title="List of all BARD Projects"/>
+    <link type="application/vnd.bard.cap+xml;type=experiments" href="http://bard/export/experiments" rel="item"
+         title="List of all BARD Experiments"/>
+     <!-- More links could be added, for instance we can add a link with a rel of archive to denote archived experiments -->
+</bardexport>
