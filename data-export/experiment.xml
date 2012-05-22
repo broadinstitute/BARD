@@ -1,19 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
-  <experiment xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<experiment xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
  xsi:noNamespaceSchemaLocation="BARDexportSchema.xsd"
  count="600"
  experimentName="Dose-response biochemical assay of inhibitors of Rho kinase 2 (Rock2): 1"
- runDateFrom="2012-03-12"
- runDateTo="2012-03-12">
-    <experimentStatus>
-      <status>Approved</status>
-      <capability>Experiment has been approved as ready to upload.  It does not mean results are correct or cannot be changed</capability>
-    </experimentStatus>
-    <description />
-    <link rel='related' title='Link to Project' type='application/vnd.bard.cap+xml;type=cap' href='http://bard/project/1' />
-    <link rel='related' title='Link to Assay' type='application/vnd.bard.cap+xml;type=cap' href='http://bard/assay/1' />
-    <link rel='edit' title='Use link to edit Experiment' type='application/vnd.bard.cap+xml;type=experiment' href='http://bard/experiment/1' />
-    <link rel='up' title='List Esperiments' type='application/vnd.bard.cap+xml;type=experiments' href='http://bard/experiments' />
-  </experiment>
+ runDateFrom="2012-03-12T00:00:00.000-04:00"
+ runDateTo="2012-03-12T00:00:00.000-04:00">
+  <experimentStatus>
+    <status>Approved</status>
+  </experimentStatus>
+  <link rel='related' title='Link to Project' type='application/vnd.bard.cap+xml;type=cap' href='http://bard/project/1' />
+  <link rel='related' title='Link to Assay' type='application/vnd.bard.cap+xml;type=cap' href='http://bard/assay/1' />
+  <link rel='edit' title='Use link to edit Experiment' type='application/vnd.bard.cap+xml;type=experiment' href='http://bard/experiment/1' />
+  <link rel='related' title='List Related Results' type='application/vnd.bard.cap+xml;type=results' href='http://bard/experiment/1/results' />
+  <link rel='up' title='List Experiments' type='application/vnd.bard.cap+xml;type=experiments' href='http://bard/experiments' />
+</experiment>
 
