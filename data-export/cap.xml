@@ -1,488 +1,304 @@
-<?xml version="1.0" encoding="UTF-8"?>
 <cap xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
  xsi:noNamespaceSchemaLocation="BARDexportSchema.xsd">
-  <dictionary>
-    <resultTypes>
-      <resultType resultTypeId="635" nodeId="53" parentNodeId="0" abbreviation="" baseUnit="" resultTypeStatus="Published">
-        <resultTypeName>time endpoint</resultTypeName>
-        
-        <description/>
-        <synonyms/>
-      </resultType>
-      <resultType resultTypeId="624" nodeId="54" parentNodeId="53" abbreviation="" baseUnit="s" resultTypeStatus="Published">
-        <resultTypeName>T1/2</resultTypeName>
-        
-        <description>An endpoint expressiong half-life.</description>
-        <synonyms/>
-      </resultType>
-      <resultType resultTypeId="594" nodeId="0" abbreviation="" baseUnit="" resultTypeStatus="Published">
-        <resultTypeName>RESULT_TYPE</resultTypeName>
-       
-        <description>Singular root to ensure tree viewers work</description>
-        <synonyms/>
-      </resultType>
-      <resultType resultTypeId="255" nodeId="1" parentNodeId="0" abbreviation="" baseUnit="" resultTypeStatus="Published">
-        <resultTypeName>concentration endpoint</resultTypeName>
-         <description>An endpoint expressed as a concentration at which a perturbagen mediates a ined response (e.g., IC50, EC50); always has one value in units of molar concentration.</description>
-        <synonyms/>
-      </resultType>
-      <resultType resultTypeId="341" nodeId="2" parentNodeId="1" abbreviation="" baseUnit="uM" resultTypeStatus="Published">
-        <resultTypeName>IC50</resultTypeName>
-         <description/>
-        <synonyms/>
-      </resultType>
-      <resultType resultTypeId="374" nodeId="3" parentNodeId="2" abbreviation="" baseUnit="" resultTypeStatus="Published">
-        <resultTypeName>LogIC50</resultTypeName>
-        <description/>
-        <synonyms/>
-      </resultType>
-      <resultType resultTypeId="375" nodeId="4" parentNodeId="2" abbreviation="" baseUnit="" resultTypeStatus="Published">
-        <resultTypeName>Hill coeff</resultTypeName>
-        <description/>
-        <synonyms/>
-      </resultType>
-      <resultType resultTypeId="376" nodeId="5" parentNodeId="2" abbreviation="" baseUnit="" resultTypeStatus="Published">
-        <resultTypeName>Hill s0</resultTypeName>
-        <description/>
-        <synonyms/>
-      </resultType>
-      <resultType resultTypeId="377" nodeId="6" parentNodeId="2" abbreviation="" baseUnit="" resultTypeStatus="Published">
-        <resultTypeName>Hill sinf</resultTypeName>
-        <description/>
-        <synonyms/>
-      </resultType>
-      <resultType resultTypeId="378" nodeId="7" parentNodeId="2" abbreviation="" baseUnit="" resultTypeStatus="Published">
-        <resultTypeName>Hill dS</resultTypeName>
-        <description/>
-        <synonyms/>
-      </resultType>
-      <resultType resultTypeId="438" nodeId="8" parentNodeId="1" abbreviation="" baseUnit="uM" resultTypeStatus="Published">
-        <resultTypeName>CC50</resultTypeName>
-        <description/>
-        <synonyms/>
-      </resultType>
-      <resultType resultTypeId="467" nodeId="9" parentNodeId="1" abbreviation="" baseUnit="uM" resultTypeStatus="Published">
-        <resultTypeName>EC50</resultTypeName>
-        <description/>
-        <synonyms/>
-      </resultType>
-      <resultType resultTypeId="504" nodeId="10" parentNodeId="1" abbreviation="" baseUnit="uM" resultTypeStatus="Published">
-        <resultTypeName>IC90</resultTypeName>
-        <description/>
-        <synonyms/>
-      </resultType>
-      <resultType resultTypeId="518" nodeId="11" parentNodeId="1" abbreviation="" baseUnit="mg/kg" resultTypeStatus="Published">
-        <resultTypeName>LD50</resultTypeName>
-         <description/>
-        <synonyms/>
-      </resultType>
-      <resultType resultTypeId="538" nodeId="12" parentNodeId="1" abbreviation="" baseUnit="" resultTypeStatus="Published">
-        <resultTypeName>MIC</resultTypeName>
-        <description/>
-        <synonyms/>
-      </resultType>
-      <resultType resultTypeId="256" nodeId="13" parentNodeId="0" abbreviation="" baseUnit="" resultTypeStatus="Published">
-        <resultTypeName>biochemical constant endpoint</resultTypeName>
-        <description>An endpoint used to express binding constants or enzyme kinetic constants reflecting interactions between ligands and macromolecules (e.g., Bmax, Kd).</description>
-        <synonyms/>
-      </resultType>
-      <resultType resultTypeId="259" nodeId="14" parentNodeId="13" abbreviation="" baseUnit="" resultTypeStatus="Published">
-        <resultTypeName>binding constant</resultTypeName>
-        <description>This endpoint type describes the bonding affinity between two molecules at equilibrium, e.g., drug-receptor interaction.</description>
-        <synonyms/>
-      </resultType>
-      <resultType resultTypeId="343" nodeId="15" parentNodeId="14" abbreviation="" baseUnit="" resultTypeStatus="Published">
-        <resultTypeName>Bmax</resultTypeName>
-         <description>It is the amount of drug required to saturate a population of receptors and a measure of the number of receptors present in the sample. It is derived from Scatchard plot of binding data. It is analogous to Vmax in enzyme kinetics. The units of Bmax include cpm, sites/cell or fmol/mg. http</description>
-        <synonyms/>
-      </resultType>
-      <resultType resultTypeId="513" nodeId="16" parentNodeId="14" abbreviation="" baseUnit="" resultTypeStatus="Published">
-        <resultTypeName>Kd</resultTypeName>
-        <description/>
-        <synonyms/>
-      </resultType>
-      <resultType resultTypeId="514" nodeId="17" parentNodeId="14" abbreviation="" baseUnit="" resultTypeStatus="Published">
-        <resultTypeName>Ki</resultTypeName>
-         <description/>
-        <synonyms/>
-      </resultType>
-      <resultType resultTypeId="260" nodeId="18" parentNodeId="13" abbreviation="" baseUnit="" resultTypeStatus="Published">
-        <resultTypeName>enzyme kinetic constant</resultTypeName>
-         <description>Describe kinetics of enzyme-catalyzed reactions. It includes the enzyme kinetic constants namely, Km and Vmax, which help to model the time course of disappearance of substrate and the production of product.</description>
-        <synonyms/>
-      </resultType>
-      <resultType resultTypeId="344" nodeId="19" parentNodeId="18" abbreviation="" baseUnit="" resultTypeStatus="Published">
-        <resultTypeName>Vmax</resultTypeName>
-        <!-- <capability>Element can be used for any assay definiton or data upload</capability> -->
-        <description>Vmax is ined as the maximum initial velocity of an enzyme catalyzed reaction under the given conditions, and it is measured in units of quantity of substrate transformed per unit time for a given concentration of enzyme.</description>
-        <synonyms/>
-      </resultType>
-      <resultType resultTypeId="516" nodeId="20" parentNodeId="18" abbreviation="" baseUnit="" resultTypeStatus="Published">
-        <resultTypeName>Km</resultTypeName>
-        <!-- <capability>Element can be used for any assay definiton or data upload</capability> -->
-        <description>A Michaelis-Menten binding constant.</description>
-        <synonyms/>
-      </resultType>
-      <resultType resultTypeId="257" nodeId="21" parentNodeId="0" abbreviation="" baseUnit="" resultTypeStatus="Published">
-        <resultTypeName>response endpoint</resultTypeName>
-        <!-- <capability>Element can be used for any assay definiton or data upload</capability> -->
-        <description>An endpoint reporting the magnitude or relative magnitude of effect induced by a perturbagen; often expressed relative to control measurements.</description>
-        <synonyms/>
-      </resultType>
-      <resultType resultTypeId="340" nodeId="22" parentNodeId="21" abbreviation="" baseUnit="%" resultTypeStatus="Published">
-        <resultTypeName>percent inhibition</resultTypeName>
-        <!-- <capability>Element can be used for any assay definiton or data upload</capability> -->
-        <description/>
-        <synonyms/>
-      </resultType>
-      <resultType resultTypeId="373" nodeId="23" parentNodeId="21" abbreviation="" baseUnit="%" resultTypeStatus="Published">
-        <resultTypeName>PI (avg)</resultTypeName>
-        <!-- <capability>Element can be used for any assay definiton or data upload</capability> -->
-        <description/>
-        <synonyms/>
-      </resultType>
-      <resultType resultTypeId="491" nodeId="24" parentNodeId="21" abbreviation="" baseUnit="" resultTypeStatus="Published">
-        <resultTypeName>fold change</resultTypeName>
-        <!-- <capability>Element can be used for any assay definiton or data upload</capability> -->
-        <description/>
-        <synonyms/>
-      </resultType>
-      <resultType resultTypeId="565" nodeId="25" parentNodeId="21" abbreviation="" baseUnit="%" resultTypeStatus="Published">
-        <resultTypeName>percent activation</resultTypeName>
-        <!-- <capability>Element can be used for any assay definiton or data upload</capability> -->
-        <description/>
-        <synonyms/>
-      </resultType>
-      <resultType resultTypeId="566" nodeId="26" parentNodeId="21" abbreviation="" baseUnit="%" resultTypeStatus="Published">
-        <resultTypeName>percent activity</resultTypeName>
-        <!-- <capability>Element can be used for any assay definiton or data upload</capability> -->
-        <description/>
-        <synonyms/>
-      </resultType>
-      <resultType resultTypeId="567" nodeId="27" parentNodeId="21" abbreviation="" baseUnit="%" resultTypeStatus="Published">
-        <resultTypeName>percent bound</resultTypeName>
-        <!-- <capability>Element can be used for any assay definiton or data upload</capability> -->
-        <description/>
-        <synonyms/>
-      </resultType>
-      <resultType resultTypeId="568" nodeId="28" parentNodeId="21" abbreviation="" baseUnit="%" resultTypeStatus="Published">
-        <resultTypeName>percent effect</resultTypeName>
-        <!-- <capability>Element can be used for any assay definiton or data upload</capability> -->
-        <description/>
-        <synonyms/>
-      </resultType>
-      <resultType resultTypeId="570" nodeId="29" parentNodeId="21" abbreviation="" baseUnit="%" resultTypeStatus="Published">
-        <resultTypeName>percent recovery</resultTypeName>
-        <!-- <capability>Element can be used for any assay definiton or data upload</capability> -->
-        <description/>
-        <synonyms/>
-      </resultType>
-      <resultType resultTypeId="258" nodeId="30" parentNodeId="0" abbreviation="" baseUnit="" resultTypeStatus="Published">
-        <resultTypeName>temperature endpoint</resultTypeName>
-        <!-- <capability>Element can be used for any assay definiton or data upload</capability> -->
-        <description>An endpoint that reports a change in temperature as a measure of the extent of perturbation (e.g., Tm).</description>
-        <synonyms/>
-      </resultType>
-      <resultType resultTypeId="342" nodeId="31" parentNodeId="30" abbreviation="" baseUnit="deg C" resultTypeStatus="Published">
-        <resultTypeName>Tm</resultTypeName>
-        <!-- <capability>Element can be used for any assay definiton or data upload</capability> -->
-        <description/>
-        <synonyms/>
-      </resultType>
-      <resultType resultTypeId="261" nodeId="32" parentNodeId="0" abbreviation="" baseUnit="" resultTypeStatus="Published">
-        <resultTypeName>profile endpoint</resultTypeName>
-        <!-- <capability>Element can be used for any assay definiton or data upload</capability> -->
-        <description/>
-        <synonyms/>
-      </resultType>
-      <resultType resultTypeId="262" nodeId="33" parentNodeId="32" abbreviation="" baseUnit="" resultTypeStatus="Published">
-        <resultTypeName>gene-expression profile</resultTypeName>
-        <!-- <capability>Element can be used for any assay definiton or data upload</capability> -->
-        <description/>
-        <synonyms/>
-      </resultType>
-      <resultType resultTypeId="263" nodeId="34" parentNodeId="32" abbreviation="" baseUnit="" resultTypeStatus="Published">
-        <resultTypeName>panel-assay profile</resultTypeName>
-        <!-- <capability>Element can be used for any assay definiton or data upload</capability> -->
-        <description/>
-        <synonyms/>
-      </resultType>
-      <resultType resultTypeId="264" nodeId="35" parentNodeId="32" abbreviation="" baseUnit="" resultTypeStatus="Published">
-        <resultTypeName>computational profile</resultTypeName>
-        <!-- <capability>Element can be used for any assay definiton or data upload</capability> -->
-        <description/>
-        <synonyms/>
-      </resultType>
-      <resultType resultTypeId="379" nodeId="36" parentNodeId="0" abbreviation="" baseUnit="" resultTypeStatus="Published">
-        <resultTypeName>Statistical</resultTypeName>
-        <!-- <capability>Element can be used for any assay definiton or data upload</capability> -->
-        <description/>
-        <synonyms/>
-      </resultType>
-      <resultType resultTypeId="380" nodeId="37" parentNodeId="36" abbreviation="" baseUnit="" resultTypeStatus="Published">
-        <resultTypeName>Count</resultTypeName>
-        <!-- <capability>Element can be used for any assay definiton or data upload</capability> -->
-        <description/>
-        <synonyms/>
-      </resultType>
-      <resultType resultTypeId="381" nodeId="38" parentNodeId="36" abbreviation="" baseUnit="" resultTypeStatus="Published">
-        <resultTypeName>Chi Squared</resultTypeName>
-        <!-- <capability>Element can be used for any assay definiton or data upload</capability> -->
-        <description/>
-        <synonyms/>
-      </resultType>
-      <resultType resultTypeId="382" nodeId="39" parentNodeId="36" abbreviation="" baseUnit="" resultTypeStatus="Published">
-        <resultTypeName>R Squared</resultTypeName>
-        <!-- <capability>Element can be used for any assay definiton or data upload</capability> -->
-        <description/>
-        <synonyms/>
-      </resultType>
-      <resultType resultTypeId="499" nodeId="40" parentNodeId="0" abbreviation="" baseUnit="" resultTypeStatus="Published">
-        <resultTypeName>graphical calculation endpoint</resultTypeName>
-        <!-- <capability>Element can be used for any assay definiton or data upload</capability> -->
-        <description>An endpoint derived from calculus-based analysis of graphical measures.</description>
-        <synonyms/>
-      </resultType>
-      <resultType resultTypeId="407" nodeId="41" parentNodeId="40" abbreviation="" baseUnit="" resultTypeStatus="Published">
-        <resultTypeName>area-under-curve</resultTypeName>
-        <!-- <capability>Element can be used for any assay definiton or data upload</capability> -->
-        <description>Area (e.g., integral) under a curve.</description>
-        <synonyms/>
-      </resultType>
-      <resultType resultTypeId="447" nodeId="42" parentNodeId="40" abbreviation="" baseUnit="" resultTypeStatus="Published">
-        <resultTypeName>Cmax</resultTypeName>
-        <!-- <capability>Element can be used for any assay definiton or data upload</capability> -->
-        <description>A maximal concentration achieved in a dosing experiment (maximum point of a concentration curve).</description>
-        <synonyms/>
-      </resultType>
-      <resultType resultTypeId="609" nodeId="43" parentNodeId="40" abbreviation="" baseUnit="" resultTypeStatus="Published">
-        <resultTypeName>slope</resultTypeName>
-        <!-- <capability>Element can be used for any assay definiton or data upload</capability> -->
-        <description/>
-        <synonyms/>
-      </resultType>
-      <resultType resultTypeId="577" nodeId="44" parentNodeId="0" abbreviation="" baseUnit="" resultTypeStatus="Published">
-        <resultTypeName>physical property endpoint</resultTypeName>
-        <!-- <capability>Element can be used for any assay definiton or data upload</capability> -->
-        <description>A measurement of an intrinsic property of a molecular entity.</description>
-        <synonyms/>
-      </resultType>
-      <resultType resultTypeId="120" nodeId="45" parentNodeId="44" abbreviation="" baseUnit="" resultTypeStatus="Published">
-        <resultTypeName>pH</resultTypeName>
-        <!-- <capability>Element can be used for any assay definiton or data upload</capability> -->
-        <description/>
-        <synonyms/>
-      </resultType>
-      <resultType resultTypeId="521" nodeId="46" parentNodeId="44" abbreviation="" baseUnit="" resultTypeStatus="Published">
-        <resultTypeName>logD</resultTypeName>
-        <!-- <capability>Element can be used for any assay definiton or data upload</capability> -->
-        <description/>
-        <synonyms/>
-      </resultType>
-      <resultType resultTypeId="522" nodeId="47" parentNodeId="44" abbreviation="" baseUnit="" resultTypeStatus="Published">
-        <resultTypeName>logP</resultTypeName>
-        <!-- <capability>Element can be used for any assay definiton or data upload</capability> -->
-        <description/>
-        <synonyms/>
-      </resultType>
-      <resultType resultTypeId="569" nodeId="48" parentNodeId="44" abbreviation="" baseUnit="%" resultTypeStatus="Published">
-        <resultTypeName>percent purity</resultTypeName>
-        <!-- <capability>Element can be used for any assay definiton or data upload</capability> -->
-        <description/>
-        <synonyms/>
-      </resultType>
-      <resultType resultTypeId="573" nodeId="49" parentNodeId="44" abbreviation="" baseUnit="" resultTypeStatus="Published">
-        <resultTypeName>permeability A-B</resultTypeName>
-        <!-- <capability>Element can be used for any assay definiton or data upload</capability> -->
-        <description/>
-        <synonyms/>
-      </resultType>
-      <resultType resultTypeId="574" nodeId="50" parentNodeId="44" abbreviation="" baseUnit="" resultTypeStatus="Published">
-        <resultTypeName>permeability B-A</resultTypeName>
-        <!-- <capability>Element can be used for any assay definiton or data upload</capability> -->
-        <description/>
-        <synonyms/>
-      </resultType>
-      <resultType resultTypeId="580" nodeId="51" parentNodeId="44" abbreviation="" baseUnit="" resultTypeStatus="Published">
-        <resultTypeName>pKa</resultTypeName>
-        <!-- <capability>Element can be used for any assay definiton or data upload</capability> -->
-        <description/>
-        <synonyms/>
-      </resultType>
-      <resultType resultTypeId="613" nodeId="52" parentNodeId="44" abbreviation="" baseUnit="" resultTypeStatus="Published">
-        <resultTypeName>solubility</resultTypeName>
-        <!-- <capability>Element can be used for any assay definiton or data upload</capability> -->
-        <description/>
-        <synonyms/>
-      </resultType>
-    </resultTypes>
-    <stages>
-      <stage stageId="223" nodeId="0">
-        <stageName>STAGE</stageName>
-        <description>Singular root to ensure tree viewers work</description>
-      </stage>
-      <stage stageId="224" nodeId="1" parentNodeId="0">
-        <stageName>confirmatory assay</stageName>
-        <description>An assay performed to confirm activity of perturbagens identified in a primary assay; may be performed as replicate measurements or as a concentration-response assay.</description>
-      </stage>
-      <stage stageId="225" nodeId="2" parentNodeId="0">
-        <stageName>lead-optimization assay</stageName>
-        <description>An assay performed in the lead-optimization stage on a relatively small number of active perturbagens; typically a high-quality concentration-response assay.</description>
-      </stage>
-      <stage stageId="226" nodeId="3" parentNodeId="0">
-        <stageName>primary assay</stageName>
-        <description>An assay performed (usually first in a campaign) to identify potentially biologically active pertubagens; usually performed at a single concentration with one or two measurements.</description>
-      </stage>
-      <stage stageId="227" nodeId="4" parentNodeId="0">
-        <stageName>secondary assay</stageName>
-        <description>An assay performed following a confirmatory assay to confirm the biological activity a perturbagen using a different assay type or design; may address mode-of-action, toxicity, activity profile, and selectivity.</description>
-      </stage>
-      <stage stageId="228" nodeId="5" parentNodeId="4">
-        <stageName>alternate confirmatory assay</stageName>
-        <description/>
-      </stage>
-      <stage stageId="231" nodeId="6" parentNodeId="5">
-        <stageName>alternate assay component</stageName>
-        <description/>
-      </stage>
-      <stage stageId="232" nodeId="7" parentNodeId="5">
-        <stageName>alternate assay format</stageName>
-        <description/>
-      </stage>
-      <stage stageId="233" nodeId="8" parentNodeId="5">
-        <stageName>alternate assay type</stageName>
-        <description/>
-      </stage>
-      <stage stageId="234" nodeId="9" parentNodeId="5">
-        <stageName>orthogonal assay design</stageName>
-        <description/>
-      </stage>
-      <stage stageId="235" nodeId="10" parentNodeId="5">
-        <stageName>orthogonal assay detection method</stageName>
-        <description/>
-      </stage>
-      <stage stageId="280" nodeId="11" parentNodeId="5">
-        <stageName>alternate assay parameter</stageName>
-        <description/>
-      </stage>
-      <stage stageId="229" nodeId="12" parentNodeId="4">
-        <stageName>counter-screening assay</stageName>
-        <description/>
-      </stage>
-      <stage stageId="236" nodeId="13" parentNodeId="12">
-        <stageName>alternate target assay</stageName>
-        <description/>
-      </stage>
-      <stage stageId="237" nodeId="14" parentNodeId="12">
-        <stageName>compound toxicity assay</stageName>
-        <description/>
-      </stage>
-      <stage stageId="238" nodeId="15" parentNodeId="12">
-        <stageName>parental cell line assay</stageName>
-        <description/>
-      </stage>
-      <stage stageId="239" nodeId="16" parentNodeId="12">
-        <stageName>physicochemical assay</stageName>
-        <description/>
-      </stage>
-      <stage stageId="240" nodeId="17" parentNodeId="12">
-        <stageName>construct variant assay</stageName>
-        <description/>
-      </stage>
-      <stage stageId="230" nodeId="18" parentNodeId="4">
-        <stageName>selectivity assay</stageName>
-        <description/>
-      </stage>
-      <stage stageId="621" nodeId="19" parentNodeId="0">
-        <stageName>summary assay</stageName>
-        <description/>
-      </stage>
-    </stages>
-    
-  </dictionary>
   <projects>
-    <project projectId="1" groupType="Project">
+    <project projectId='1' groupType='Project'>
       <projectName>Scripps special project #1</projectName>
-      <description/>
       <projectAssays>
-        <projectAssay projectAssayId="1" stageRef="224">
+        <projectAssay>
           <promotionCriteria>The activity score was calculated based on pIC50 values for compounds for which an exact IC50 value was calculated and based on the observed pIC50 range, specifically the maximum lower limit of the pIC50 value as calculated from the lowest concentration for which greater than 50% inhibition is observed. This results in a conservative estimate of the activity score for compounds for which no exact IC50 value is given while maintaining a reasonable rank order of all compounds tested</promotionCriteria>
-          <assay assayId="1" assayVersion="1" status="Active">
+          <stage>
+            <link rel='related' href='http://bard/dictionary/stage/224' type='application/vnd.bard.cap+xml;type=stage' />
+          </stage>
+          <assay assayId='1' assayVersion='1' status='Active'>
             <assayName>Dose-response biochemical assay of inhibitors of Rho kinase 2 (Rock2)</assayName>
             <description>Rho-Kinase is a serine/threonine kinase involved in the regulation of smooth muscle contraction and cytoskeletal reorganization of nonmuscle cells (1). Its inhibition is known to promote the smooth muscle relaxation. Thus, small-molecule inhibitors of Rho-Kinase may be effective probes for treatment of cerebral vasospasm (2) and potentially effective for treatment of angina (3), hypertension (4), arteriosclerosis (5), and erectile dysfunction (6).</description>
             <designedBy>Scripps Florida</designedBy>
             <externalAssays>
-              <externalAssay externalAssayId="aid=644">
-                <externalSystem externalSystemId="1" systemUrl="http://pubchem.ncbi.nlm.nih.gov/assay/assay.cgi?">
+              <externalAssay externalAssayId='aid=644'>
+                <externalSystem systemUrl='http://pubchem.ncbi.nlm.nih.gov/assay/assay.cgi?aid=644'>
                   <systemName>PubChem</systemName>
                   <owner>NIH</owner>
                 </externalSystem>
               </externalAssay>
             </externalAssays>
-
-
             <measures>
-              <measure measureId="1" resultTypeRef="373" measureContextRef="1" entryUnit="%"/>
-              <measure measureId="2" resultTypeRef="341" measureContextRef="2" entryUnit="uM"/>
-              <measure measureId="3" resultTypeRef="374" measureContextRef="2" entryUnit=""/>
-              <measure measureId="4" resultTypeRef="375" measureContextRef="2" entryUnit=""/>
-              <measure measureId="5" resultTypeRef="376" measureContextRef="2" entryUnit="uM"/>
-              <measure measureId="6" resultTypeRef="377" measureContextRef="2" entryUnit="uM"/>
-              <measure measureId="7" resultTypeRef="378" measureContextRef="2" entryUnit="uM"/>
-              <measure measureId="8" resultTypeRef="381" measureContextRef="2" entryUnit=""/>
-              <measure measureId="9" resultTypeRef="382" measureContextRef="2" entryUnit=""/>
+              <measure measureId='1' measureContextRef='1' measureRef='1' entryUnit='%'>
+                <resultTypeRef>
+                  <link rel='related' href='http://bard/dictionary/resultType/373' type='application/vnd.bard.cap+xml;type=resultType' />
+                </resultTypeRef>
+              </measure>
+              <measure measureId='2' measureContextRef='2' measureRef='2' entryUnit='uM'>
+                <resultTypeRef>
+                  <link rel='related' href='http://bard/dictionary/resultType/341' type='application/vnd.bard.cap+xml;type=resultType' />
+                </resultTypeRef>
+              </measure>
+              <measure measureId='3' measureContextRef='2' measureRef='3'>
+                <resultTypeRef>
+                  <link rel='related' href='http://bard/dictionary/resultType/374' type='application/vnd.bard.cap+xml;type=resultType' />
+                </resultTypeRef>
+              </measure>
+              <measure measureId='4' measureContextRef='2' measureRef='4'>
+                <resultTypeRef>
+                  <link rel='related' href='http://bard/dictionary/resultType/375' type='application/vnd.bard.cap+xml;type=resultType' />
+                </resultTypeRef>
+              </measure>
+              <measure measureId='5' measureContextRef='2' measureRef='5' entryUnit='uM'>
+                <resultTypeRef>
+                  <link rel='related' href='http://bard/dictionary/resultType/376' type='application/vnd.bard.cap+xml;type=resultType' />
+                </resultTypeRef>
+              </measure>
+              <measure measureId='6' measureContextRef='2' measureRef='6' entryUnit='uM'>
+                <resultTypeRef>
+                  <link rel='related' href='http://bard/dictionary/resultType/377' type='application/vnd.bard.cap+xml;type=resultType' />
+                </resultTypeRef>
+              </measure>
+              <measure measureId='7' measureContextRef='2' measureRef='7' entryUnit='uM'>
+                <resultTypeRef>
+                  <link rel='related' href='http://bard/dictionary/resultType/378' type='application/vnd.bard.cap+xml;type=resultType' />
+                </resultTypeRef>
+              </measure>
+              <measure measureId='8' measureContextRef='2' measureRef='8'>
+                <resultTypeRef>
+                  <link rel='related' href='http://bard/dictionary/resultType/381' type='application/vnd.bard.cap+xml;type=resultType' />
+                </resultTypeRef>
+              </measure>
+              <measure measureId='9' measureContextRef='2' measureRef='9'>
+                <resultTypeRef>
+                  <link rel='related' href='http://bard/dictionary/resultType/382' type='application/vnd.bard.cap+xml;type=resultType' />
+                </resultTypeRef>
+              </measure>
             </measures>
             <measureContexts>
-              <measureContext measureContextId="1">
+              <measureContext measureContextId='1'>
                 <contextName>Context for PI (avg)</contextName>
               </measureContext>
-              <measureContext measureContextId="2">
+              <measureContext measureContextId='2'>
                 <contextName>Context for IC50</contextName>
               </measureContext>
             </measureContexts>
             <measureContextItems>
-              <measureContextItem measureContextItemId="1" attributeType="Fixed" valueDisplay="ATP" attributeId="352"/>
-              <measureContextItem measureContextItemId="2" measureContextItemRef="1" attributeType="Fixed" valueId="346" valueDisplay="Coupled Substrate" attributeId="10"/>
-              <measureContextItem measureContextItemId="3" measureContextItemRef="1" attributeType="Fixed" valueId="350" valueDisplay="Measured Entity" attributeId="10"/>
-              <measureContextItem measureContextItemId="4" measureContextItemRef="1" attributeType="Fixed" valueDisplay="20 uM" valueNum="20" attributeId="366"/>
-              <measureContextItem measureContextItemId="5" attributeType="Fixed" valueDisplay="S6" attributeId="347"/>
-              <measureContextItem measureContextItemId="6" measureContextItemRef="5" attributeType="Fixed" valueId="47" valueDisplay="Substrate " attributeId="10"/>
-              <measureContextItem measureContextItemId="7" measureContextItemRef="5" attributeType="Fixed" valueDisplay="20 uM" valueNum="20" attributeId="366"/>
-              <measureContextItem measureContextItemId="8" attributeType="Fixed" valueDisplay="Y-27632" attributeId="26"/>
-              <measureContextItem measureContextItemId="9" measureContextItemRef="8" attributeType="Fixed" valueId="41" valueDisplay="Positive Control" attributeId="10"/>
-              <measureContextItem measureContextItemId="10" measureContextItemRef="8" attributeType="Fixed" valueDisplay="13 uM" valueNum="13" attributeId="366"/>
-              <measureContextItem measureContextItemId="11" attributeType="Fixed" valueDisplay="Rhok2" attributeId="38"/>
-              <measureContextItem measureContextItemId="12" measureContextItemRef="11" attributeType="Fixed" valueId="69" valueDisplay="Target" attributeId="10"/>
-              <measureContextItem measureContextItemId="13" measureContextItemRef="11" attributeType="Fixed" valueId="354" valueDisplay="HEPES_50mM_7.3pH/MgCl_10mM/BSA_0.1%/DTT_2mM" attributeId="84"/>
-              <measureContextItem measureContextItemId="14" attributeType="Fixed" valueDisplay="2 h" valueNum="2" attributeId="117"/>
-              <measureContextItem measureContextItemId="15" measureContextItemRef="14" attributeType="Fixed" valueDisplay="25 degC" valueNum="25" attributeId="367"/>
-              <measureContextItem measureContextItemId="16" attributeType="Fixed" valueId="365" valueDisplay="Kinase Glo" attributeId="101"/>
-              <measureContextItem measureContextItemId="17" measureContextItemRef="16" attributeType="Fixed" valueDisplay="10 min" valueNum="10" attributeId="117"/>
-              <measureContextItem measureContextItemId="18" measureContextItemRef="16" attributeType="Fixed" valueId="351" valueDisplay="Readout" attributeId="28"/>
-              <measureContextItem measureContextItemId="19" attributeType="Fixed" valueId="315" valueDisplay="Perkin Elmer Viewlux" attributeId="307"/>
-              <measureContextItem measureContextItemId="20" attributeType="Fixed" valueId="361" valueDisplay="In Vitro" attributeId="13"/>
-              <measureContextItem measureContextItemId="21" attributeType="Fixed" valueDisplay="Phosphorylation" attributeId="149"/>
-              <measureContextItem measureContextItemId="22" attributeType="Fixed" valueId="510" valueDisplay="Inhibition" attributeId="360"/>
-              <measureContextItem measureContextItemId="23" measureContextRef="1" attributeType="List" valueDisplay="0.003 uM" valueNum="0.003" attributeId="366"/>
-              <measureContextItem measureContextItemId="24" measureContextItemRef="23" measureContextRef="1" attributeType="List" valueDisplay="0.0091 uM" valueNum="0.0091" attributeId="366"/>
-              <measureContextItem measureContextItemId="25" measureContextItemRef="23" measureContextRef="1" attributeType="List" valueDisplay="0.0273 uM" valueNum="0.0273" attributeId="366"/>
-              <measureContextItem measureContextItemId="26" measureContextItemRef="23" measureContextRef="1" attributeType="List" valueDisplay="0.0818 uM" valueNum="0.0818" attributeId="366"/>
-              <measureContextItem measureContextItemId="27" measureContextItemRef="23" measureContextRef="1" attributeType="List" valueDisplay="0.2454 uM" valueNum="0.2454" attributeId="366"/>
-              <measureContextItem measureContextItemId="28" measureContextItemRef="23" measureContextRef="1" attributeType="List" valueDisplay="0.7 uM" valueNum="0.7" attributeId="366"/>
-              <measureContextItem measureContextItemId="29" measureContextItemRef="23" measureContextRef="1" attributeType="List" valueDisplay="2.2 uM" valueNum="2.2" attributeId="366"/>
-              <measureContextItem measureContextItemId="30" measureContextItemRef="23" measureContextRef="1" attributeType="List" valueDisplay="6.6 uM" valueNum="6.6" attributeId="366"/>
-              <measureContextItem measureContextItemId="31" measureContextItemRef="23" measureContextRef="1" attributeType="List" valueDisplay="19.9 uM" valueNum="19.9" attributeId="366"/>
-              <measureContextItem measureContextItemId="32" measureContextItemRef="23" measureContextRef="1" attributeType="List" valueDisplay="59.6 uM" valueNum="59.6" attributeId="366"/>
-              <measureContextItem measureContextItemId="33" measureContextRef="1" attributeType="Fixed" valueDisplay="3" valueNum="3" attributeId="380"/>
-              <measureContextItem measureContextItemId="34" measureContextRef="2" attributeType="Fixed" valueId="372" valueDisplay="Assay Explorer" attributeId="368"/>
-              <measureContextItem measureContextItemId="35" measureContextItemRef="34" measureContextRef="2" attributeType="Fixed" valueDisplay="30" valueNum="30" attributeId="370"/>
-              <measureContextItem measureContextItemId="36" measureContextItemRef="34" measureContextRef="2" attributeType="Range" valueDisplay="0 - 4" valueMin="0" valueMax="4" attributeId="369"/>
+              <measureContextItem measureContextItemId='1' attributeType='Fixed' valueDisplay='ATP'>
+                <attributeId>
+                  <link rel='related' href='http://bard/dictionary/element/352' type='application/vnd.bard.cap+xml;type=element' />
+                </attributeId>
+              </measureContextItem>
+              <measureContextItem measureContextItemId='2' measureContextItemRef='1' attributeType='Fixed' valueDisplay='Coupled Substrate '>
+                <valueId>
+                  <link rel='related' href='http://bard/dictionary/element/346' type='application/vnd.bard.cap+xml;type=element' />
+                </valueId>
+                <attributeId>
+                  <link rel='related' href='http://bard/dictionary/element/10' type='application/vnd.bard.cap+xml;type=element' />
+                </attributeId>
+              </measureContextItem>
+              <measureContextItem measureContextItemId='3' measureContextItemRef='1' attributeType='Fixed' valueDisplay='Measured Entity '>
+                <valueId>
+                  <link rel='related' href='http://bard/dictionary/element/350' type='application/vnd.bard.cap+xml;type=element' />
+                </valueId>
+                <attributeId>
+                  <link rel='related' href='http://bard/dictionary/element/10' type='application/vnd.bard.cap+xml;type=element' />
+                </attributeId>
+              </measureContextItem>
+              <measureContextItem measureContextItemId='4' measureContextItemRef='1' attributeType='Fixed' valueDisplay='20 uM' valueNum='20'>
+                <attributeId>
+                  <link rel='related' href='http://bard/dictionary/element/366' type='application/vnd.bard.cap+xml;type=element' />
+                </attributeId>
+              </measureContextItem>
+              <measureContextItem measureContextItemId='5' attributeType='Fixed' valueDisplay='S6 '>
+                <attributeId>
+                  <link rel='related' href='http://bard/dictionary/element/347' type='application/vnd.bard.cap+xml;type=element' />
+                </attributeId>
+              </measureContextItem>
+              <measureContextItem measureContextItemId='6' measureContextItemRef='5' attributeType='Fixed' valueDisplay='Substrate '>
+                <valueId>
+                  <link rel='related' href='http://bard/dictionary/element/47' type='application/vnd.bard.cap+xml;type=element' />
+                </valueId>
+                <attributeId>
+                  <link rel='related' href='http://bard/dictionary/element/10' type='application/vnd.bard.cap+xml;type=element' />
+                </attributeId>
+              </measureContextItem>
+              <measureContextItem measureContextItemId='7' measureContextItemRef='5' attributeType='Fixed' valueDisplay='20 uM' valueNum='20'>
+                <attributeId>
+                  <link rel='related' href='http://bard/dictionary/element/366' type='application/vnd.bard.cap+xml;type=element' />
+                </attributeId>
+              </measureContextItem>
+              <measureContextItem measureContextItemId='8' attributeType='Fixed' valueDisplay='Y-27632 '>
+                <attributeId>
+                  <link rel='related' href='http://bard/dictionary/element/26' type='application/vnd.bard.cap+xml;type=element' />
+                </attributeId>
+              </measureContextItem>
+              <measureContextItem measureContextItemId='9' measureContextItemRef='8' attributeType='Fixed' valueDisplay='Positive Control '>
+                <valueId>
+                  <link rel='related' href='http://bard/dictionary/element/41' type='application/vnd.bard.cap+xml;type=element' />
+                </valueId>
+                <attributeId>
+                  <link rel='related' href='http://bard/dictionary/element/10' type='application/vnd.bard.cap+xml;type=element' />
+                </attributeId>
+              </measureContextItem>
+              <measureContextItem measureContextItemId='10' measureContextItemRef='8' attributeType='Fixed' valueDisplay='13 uM' valueNum='13'>
+                <attributeId>
+                  <link rel='related' href='http://bard/dictionary/element/366' type='application/vnd.bard.cap+xml;type=element' />
+                </attributeId>
+              </measureContextItem>
+              <measureContextItem measureContextItemId='11' attributeType='Fixed' valueDisplay='Rhok2 '>
+                <attributeId>
+                  <link rel='related' href='http://bard/dictionary/element/38' type='application/vnd.bard.cap+xml;type=element' />
+                </attributeId>
+              </measureContextItem>
+              <measureContextItem measureContextItemId='12' measureContextItemRef='11' attributeType='Fixed' valueDisplay='Target '>
+                <valueId>
+                  <link rel='related' href='http://bard/dictionary/element/69' type='application/vnd.bard.cap+xml;type=element' />
+                </valueId>
+                <attributeId>
+                  <link rel='related' href='http://bard/dictionary/element/10' type='application/vnd.bard.cap+xml;type=element' />
+                </attributeId>
+              </measureContextItem>
+              <measureContextItem measureContextItemId='13' measureContextItemRef='11' attributeType='Fixed' valueDisplay='HEPES_50mM_7.3pH/MgCl_10mM/BSA_0.1%/DTT_2mM '>
+                <valueId>
+                  <link rel='related' href='http://bard/dictionary/element/354' type='application/vnd.bard.cap+xml;type=element' />
+                </valueId>
+                <attributeId>
+                  <link rel='related' href='http://bard/dictionary/element/84' type='application/vnd.bard.cap+xml;type=element' />
+                </attributeId>
+              </measureContextItem>
+              <measureContextItem measureContextItemId='14' attributeType='Fixed' valueDisplay='2 h' valueNum='2'>
+                <attributeId>
+                  <link rel='related' href='http://bard/dictionary/element/117' type='application/vnd.bard.cap+xml;type=element' />
+                </attributeId>
+              </measureContextItem>
+              <measureContextItem measureContextItemId='15' measureContextItemRef='14' attributeType='Fixed' valueDisplay='25 degC' valueNum='25'>
+                <attributeId>
+                  <link rel='related' href='http://bard/dictionary/element/367' type='application/vnd.bard.cap+xml;type=element' />
+                </attributeId>
+              </measureContextItem>
+              <measureContextItem measureContextItemId='16' attributeType='Fixed' valueDisplay='Kinase Glo '>
+                <valueId>
+                  <link rel='related' href='http://bard/dictionary/element/365' type='application/vnd.bard.cap+xml;type=element' />
+                </valueId>
+                <attributeId>
+                  <link rel='related' href='http://bard/dictionary/element/101' type='application/vnd.bard.cap+xml;type=element' />
+                </attributeId>
+              </measureContextItem>
+              <measureContextItem measureContextItemId='17' measureContextItemRef='16' attributeType='Fixed' valueDisplay='10 min' valueNum='10'>
+                <attributeId>
+                  <link rel='related' href='http://bard/dictionary/element/117' type='application/vnd.bard.cap+xml;type=element' />
+                </attributeId>
+              </measureContextItem>
+              <measureContextItem measureContextItemId='18' measureContextItemRef='16' attributeType='Fixed' valueDisplay='Readout '>
+                <valueId>
+                  <link rel='related' href='http://bard/dictionary/element/351' type='application/vnd.bard.cap+xml;type=element' />
+                </valueId>
+                <attributeId>
+                  <link rel='related' href='http://bard/dictionary/element/28' type='application/vnd.bard.cap+xml;type=element' />
+                </attributeId>
+              </measureContextItem>
+              <measureContextItem measureContextItemId='19' attributeType='Fixed' valueDisplay='Perkin Elmer Viewlux'>
+                <valueId>
+                  <link rel='related' href='http://bard/dictionary/element/315' type='application/vnd.bard.cap+xml;type=element' />
+                </valueId>
+                <attributeId>
+                  <link rel='related' href='http://bard/dictionary/element/307' type='application/vnd.bard.cap+xml;type=element' />
+                </attributeId>
+              </measureContextItem>
+              <measureContextItem measureContextItemId='20' attributeType='Fixed' valueDisplay='In Vitro '>
+                <valueId>
+                  <link rel='related' href='http://bard/dictionary/element/361' type='application/vnd.bard.cap+xml;type=element' />
+                </valueId>
+                <attributeId>
+                  <link rel='related' href='http://bard/dictionary/element/13' type='application/vnd.bard.cap+xml;type=element' />
+                </attributeId>
+              </measureContextItem>
+              <measureContextItem measureContextItemId='21' attributeType='Fixed' valueDisplay='Phosphorylation '>
+                <attributeId>
+                  <link rel='related' href='http://bard/dictionary/element/149' type='application/vnd.bard.cap+xml;type=element' />
+                </attributeId>
+              </measureContextItem>
+              <measureContextItem measureContextItemId='22' attributeType='Fixed' valueDisplay='Inhibition '>
+                <valueId>
+                  <link rel='related' href='http://bard/dictionary/element/510' type='application/vnd.bard.cap+xml;type=element' />
+                </valueId>
+                <attributeId>
+                  <link rel='related' href='http://bard/dictionary/element/360' type='application/vnd.bard.cap+xml;type=element' />
+                </attributeId>
+              </measureContextItem>
+              <measureContextItem measureContextItemId='23' measureContextRef='1' attributeType='List' valueDisplay='0.003 uM' valueNum='0.003'>
+                <attributeId>
+                  <link rel='related' href='http://bard/dictionary/element/366' type='application/vnd.bard.cap+xml;type=element' />
+                </attributeId>
+              </measureContextItem>
+              <measureContextItem measureContextItemId='24' measureContextItemRef='23' measureContextRef='1' attributeType='List' valueDisplay='0.0091 uM' valueNum='0.0091'>
+                <attributeId>
+                  <link rel='related' href='http://bard/dictionary/element/366' type='application/vnd.bard.cap+xml;type=element' />
+                </attributeId>
+              </measureContextItem>
+              <measureContextItem measureContextItemId='25' measureContextItemRef='23' measureContextRef='1' attributeType='List' valueDisplay='0.0273 uM' valueNum='0.0273'>
+                <attributeId>
+                  <link rel='related' href='http://bard/dictionary/element/366' type='application/vnd.bard.cap+xml;type=element' />
+                </attributeId>
+              </measureContextItem>
+              <measureContextItem measureContextItemId='26' measureContextItemRef='23' measureContextRef='1' attributeType='List' valueDisplay='0.0818 uM' valueNum='0.0818'>
+                <attributeId>
+                  <link rel='related' href='http://bard/dictionary/element/366' type='application/vnd.bard.cap+xml;type=element' />
+                </attributeId>
+              </measureContextItem>
+              <measureContextItem measureContextItemId='27' measureContextItemRef='23' measureContextRef='1' attributeType='List' valueDisplay='0.2454 uM' valueNum='0.2454'>
+                <attributeId>
+                  <link rel='related' href='http://bard/dictionary/element/366' type='application/vnd.bard.cap+xml;type=element' />
+                </attributeId>
+              </measureContextItem>
+              <measureContextItem measureContextItemId='28' measureContextItemRef='23' measureContextRef='1' attributeType='List' valueDisplay='0.7 uM' valueNum='0.7'>
+                <attributeId>
+                  <link rel='related' href='http://bard/dictionary/element/366' type='application/vnd.bard.cap+xml;type=element' />
+                </attributeId>
+              </measureContextItem>
+              <measureContextItem measureContextItemId='29' measureContextItemRef='23' measureContextRef='1' attributeType='List' valueDisplay='2.2 uM' valueNum='2.2'>
+                <attributeId>
+                  <link rel='related' href='http://bard/dictionary/element/366' type='application/vnd.bard.cap+xml;type=element' />
+                </attributeId>
+              </measureContextItem>
+              <measureContextItem measureContextItemId='30' measureContextItemRef='23' measureContextRef='1' attributeType='List' valueDisplay='6.6 uM' valueNum='6.6'>
+                <attributeId>
+                  <link rel='related' href='http://bard/dictionary/element/366' type='application/vnd.bard.cap+xml;type=element' />
+                </attributeId>
+              </measureContextItem>
+              <measureContextItem measureContextItemId='31' measureContextItemRef='23' measureContextRef='1' attributeType='List' valueDisplay='19.9 uM' valueNum='19.9'>
+                <attributeId>
+                  <link rel='related' href='http://bard/dictionary/element/366' type='application/vnd.bard.cap+xml;type=element' />
+                </attributeId>
+              </measureContextItem>
+              <measureContextItem measureContextItemId='32' measureContextItemRef='23' measureContextRef='1' attributeType='List' valueDisplay='59.6 uM' valueNum='59.6'>
+                <attributeId>
+                  <link rel='related' href='http://bard/dictionary/element/366' type='application/vnd.bard.cap+xml;type=element' />
+                </attributeId>
+              </measureContextItem>
+              <measureContextItem measureContextItemId='33' measureContextRef='1' attributeType='Fixed' valueDisplay='3 ' valueNum='3'>
+                <attributeId>
+                  <link rel='related' href='http://bard/dictionary/element/380' type='application/vnd.bard.cap+xml;type=element' />
+                </attributeId>
+              </measureContextItem>
+              <measureContextItem measureContextItemId='34' measureContextRef='2' attributeType='Fixed' valueDisplay='Assay Explorer '>
+                <valueId>
+                  <link rel='related' href='http://bard/dictionary/element/372' type='application/vnd.bard.cap+xml;type=element' />
+                </valueId>
+                <attributeId>
+                  <link rel='related' href='http://bard/dictionary/element/368' type='application/vnd.bard.cap+xml;type=element' />
+                </attributeId>
+              </measureContextItem>
+              <measureContextItem measureContextItemId='35' measureContextItemRef='34' measureContextRef='2' attributeType='Fixed' valueDisplay='30 ' valueNum='30'>
+                <attributeId>
+                  <link rel='related' href='http://bard/dictionary/element/370' type='application/vnd.bard.cap+xml;type=element' />
+                </attributeId>
+              </measureContextItem>
+              <measureContextItem measureContextItemId='36' measureContextItemRef='34' measureContextRef='2' attributeType='Range' valueDisplay='0 - 4 ' valueMin='0' valueMax='4'>
+                <attributeId>
+                  <link rel='related' href='http://bard/dictionary/element/369' type='application/vnd.bard.cap+xml;type=element' />
+                </attributeId>
+              </measureContextItem>
             </measureContextItems>
             <protocolDocuments>
-              <protocolDocument uri="http://bard/protocolDocument/1">
+              <protocolDocument uri='http://bard/protocolDocument/1'>
                 <protocolName>Dose-response biochemical assay of inhibitors of Rho kinase 2 (Rock2)</protocolName>
               </protocolDocument>
-              <protocolDocument uri="http://bard/protocolDocument/2">
+              <protocolDocument uri='http://bard/protocolDocument/2'>
                 <protocolName>Dose-response biochemical assay of inhibitors of Rho kinase 2 (Rock2) pt 2</protocolName>
               </protocolDocument>
             </protocolDocuments>

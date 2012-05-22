@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<cap xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<dictionary xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
  xsi:noNamespaceSchemaLocation="BARDexportSchema.xsd">
-    <dictionary>
     <resultTypes>
         <resultType resultTypeId="1" nodeId="1" abbreviation="h_Dls" baseUnit="aNrqzbzRHVGiY4Om2HrHotWwV.zw"
              resultTypeStatus="Pending">
@@ -26,56 +25,4 @@
             <stageName>My Name</stageName>
         </stage>      
     </stages>
-   
-    </dictionary>
-    <projects>
-        <project projectId="1">
-            <projectName>My Project</projectName>
-            <projectAssays>
-                <projectAssay projectAssayId="1" stageRef="1">
-                    <assay assayId="1">
-                        <assayName>Assay 1</assayName>
-                        <measures>
-                            <measure measureId="1" resultTypeRef="1" measureContextRef="2"/>
-                            <measure measureId="2" resultTypeRef="1" measureContextRef="2" measureRef="1"/>
-                        </measures>
-                        <measureContexts>
-                            <measureContext measureContextId="1">
-                                <contextName>Context for PI (avg)</contextName>
-                            </measureContext>
-                            <measureContext measureContextId="2">
-                                <contextName>Context for IC50</contextName>
-                            </measureContext>
-                        </measureContexts>
-
-                        <measureContextItems>
-                            <measureContextItem measureContextItemId="36" measureContextRef="2" attributeType="Range" valueDisplay="0 - 4" valueMin="0" valueMax="4" attributeId="369"/>
-                            <measureContextItem measureContextItemId="361" measureContextRef="2"  measureContextItemRef="36"    attributeType="Range" valueDisplay="0 - 4" valueMin="0" valueMax="4" attributeId="369"/>
-                        </measureContextItems>
-                    </assay>
-                </projectAssay>
-                <projectAssay projectAssayId="2" relatedAssayRef="1">
-                    <assay assayId="2">
-                        <assayName>Assay 1</assayName>
-                        <measures>
-                            <measure measureId="1" resultTypeRef="1" measureContextRef="2"/>
-                            <measure measureId="2" resultTypeRef="1" measureContextRef="2" measureRef="1"/>
-                        </measures>
-                        <measureContexts>
-                            <measureContext measureContextId="1">
-                                <contextName>Context for PI (avg)</contextName>
-                            </measureContext>
-                            <measureContext measureContextId="2">
-                                <contextName>Context for IC50</contextName>
-                            </measureContext>
-                        </measureContexts>
-                        <measureContextItems>
-                            <measureContextItem measureContextItemId="36" measureContextRef="2" attributeType="Range" valueDisplay="0 - 4" valueMin="0" valueMax="4" attributeId="369"/>
-                            <measureContextItem measureContextItemId="361" measureContextRef="2"  measureContextItemRef="36"    attributeType="Range" valueDisplay="0 - 4" valueMin="0" valueMax="4" attributeId="369"/>
-                        </measureContextItems>
-                    </assay>
-                </projectAssay>
-            </projectAssays>
-        </project>
-    </projects>
-</cap>
+</dictionary>
