@@ -186,6 +186,17 @@ application/vnd.bard.cap+xml;type=resultType</xs:documentation>
             </xs:attribute>
         </xs:complexType>
     </xs:element>
+    <xs:element name="projects">
+        <xs:annotation>
+            <xs:documentation>The list of projects in the CAP.
+These can be filtered to a specific project depending on the query</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="project"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
     <xs:element name="cap">
         <xs:annotation>
             <xs:documentation>The root element for all the CAP data.
@@ -195,17 +206,7 @@ We use XML schema's key/keyref synthax to validate foreign keys used in this par
         </xs:annotation>
         <xs:complexType>
             <xs:sequence>
-                <xs:element minOccurs="0" name="projects">
-                    <xs:annotation>
-                        <xs:documentation>The list of projects in the CAP.
-These can be filtered to a specific project depending on the query</xs:documentation>
-                    </xs:annotation>
-                    <xs:complexType>
-                        <xs:sequence>
-                            <xs:element ref="project"/>
-                        </xs:sequence>
-                    </xs:complexType>
-                </xs:element>
+                <xs:element ref="projects"/>
             </xs:sequence>
         </xs:complexType>
         <xs:key name="Assay_Key">
@@ -749,6 +750,7 @@ Link to parent experiment
                         <xs:enumeration value="application/vnd.bard.cap+xml;type=bardexport"/>
                         <xs:enumeration value="application/vnd.bard.cap+xml;type=stage"/>
                         <xs:enumeration value="application/vnd.bard.cap+xml;type=element"/>
+                        <xs:enumeration value="application/vnd.bard.cap+xml;type=projects"/>
                     </xs:restriction>
                 </xs:simpleType>
             </xs:attribute>
