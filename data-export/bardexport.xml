@@ -2,7 +2,7 @@
 <bardexport xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
  xsi:noNamespaceSchemaLocation="BARDexportSchema.xsd">
     <!--  -->
-    <link type="application/vnd.bard.cap+xml;type=cap" href="http://bard/export/projects" rel="item"
+    <link type="application/vnd.bard.cap+xml;type=cap" href="http://bard/export/cap" rel="item"
          title="List of all BARD Projects"/>
     <link type="application/vnd.bard.cap+xml;type=dictionary" href="http://bard/export/dictionary" rel="item"
         title="Fetch data dictionary"/>
