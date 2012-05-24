@@ -69,8 +69,7 @@ will give you this element
                 </xs:element>
             </xs:sequence>
             <xs:attribute name="stageId" type="bardID"/>
-            <xs:attribute name="nodeId" type="bardID" use="required"/>
-            <xs:attribute name="parentNodeId" type="bardID" use="optional"/>
+            <xs:attribute name="parentStageId" type="bardID" use="optional"/>
         </xs:complexType>
     </xs:element>
     <xs:element name="dictionary">
@@ -113,6 +112,14 @@ application/vnd.bard.cap+xml;type=dictionary should give the client the entire d
                             <xs:element maxOccurs="unbounded" ref="resultType"/>
                         </xs:sequence>
                     </xs:complexType>
+                    <xs:key name="ResultType_Key">
+                        <xs:selector xpath="resultType"/>
+                        <xs:field xpath="@resultTypeId"/>
+                    </xs:key>
+                    <xs:keyref name="ResultType_KeyRef" refer="ResultType_Key">
+                        <xs:selector xpath="resultType"/>
+                        <xs:field xpath="@parentResultTypeId"/>
+                    </xs:keyref>
                 </xs:element>
                 <xs:element minOccurs="0" name="stages">
                     <xs:complexType>
@@ -120,35 +127,89 @@ application/vnd.bard.cap+xml;type=dictionary should give the client the entire d
                             <xs:element maxOccurs="unbounded" ref="stage"/>
                         </xs:sequence>
                     </xs:complexType>
+                    <xs:key name="Stage_Key">
+                        <xs:selector xpath="stage"/>
+                        <xs:field xpath="@stageId"/>
+                    </xs:key>
+                    <xs:keyref name="Stage_KeyRef" refer="Stage_Key">
+                        <xs:selector xpath="stage"/>
+                        <xs:field xpath="@parentStageId"/>
+                    </xs:keyref>
+                </xs:element>
+                <xs:element minOccurs="0" name="biologyDescriptors">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element maxOccurs="unbounded" name="biologyDescriptor"
+                                type="descriptorType"/>
+                        </xs:sequence>
+                    </xs:complexType>
+                    <xs:key name="Biology_Descriptor_Key">
+                        <xs:selector xpath="biologyDescriptor"/>
+                        <xs:field xpath="@descriptorId"/>
+                    </xs:key>
+                    <xs:keyref name="Biology_Descriptor_KeyRef" refer="Biology_Descriptor_Key">
+                        <xs:selector xpath="biologyDescriptor"/>
+                        <xs:field xpath="@parentDescriptorId"/>
+                    </xs:keyref>
+                </xs:element>
+                <xs:element minOccurs="0" name="assayDescriptors">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element maxOccurs="unbounded" name="assayDescriptor"
+                                type="descriptorType"/>
+                        </xs:sequence>
+                    </xs:complexType>
+                    <xs:key name="Assay_Descriptor_Key">
+                        <xs:selector xpath="assayDescriptor"/>
+                        <xs:field xpath="@descriptorId"/>
+                    </xs:key>
+                    <xs:keyref name="Assay_Descriptor_KeyRef" refer="Assay_Descriptor_Key">
+                        <xs:selector xpath="assayDescriptor"/>
+                        <xs:field xpath="@parentDescriptorId"/>
+                    </xs:keyref>
+                </xs:element>
+                <xs:element minOccurs="0" name="instanceDescriptors">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element maxOccurs="unbounded" name="instanceDescriptor"
+                                type="descriptorType"/>
+                        </xs:sequence>
+                    </xs:complexType>
+                    <xs:key name="Instance_Descriptor_Key">
+                        <xs:selector xpath="instanceDescriptor"/>
+                        <xs:field xpath="@descriptorId"/>
+                    </xs:key>
+                    <xs:keyref name="Instance_Descriptor_KeyRef" refer="Instance_Descriptor_Key">
+                        <xs:selector xpath="instanceDescriptor"/>
+                        <xs:field xpath="@parentDescriptorId"/>
+                    </xs:keyref>
+                </xs:element>
+                <xs:element minOccurs="0" name="laboratories">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element maxOccurs="unbounded" name="laboratory">
+                                <xs:complexType>
+                                    <xs:sequence>
+                                        <xs:element name="laboratory" type="xs:string"/>
+                                        <xs:element minOccurs="0" ref="description"/>
+                                    </xs:sequence>
+                                    <xs:attribute name="laboratoryId" type="bardID" use="required"/>
+                                    <xs:attribute name="parentLaboratoryId" type="bardID"/>
+                                </xs:complexType>
+                            </xs:element>
+                        </xs:sequence>
+                    </xs:complexType>
+                    <xs:key name="Laboratory_Key">
+                        <xs:selector xpath="laboratory"/>
+                        <xs:field xpath="@laboratoryId"/>
+                    </xs:key>
+                    <xs:keyref name="Laboratory_KeyRef" refer="Laboratory_Key">
+                        <xs:selector xpath="laboratory"/>
+                        <xs:field xpath="@parentLaboratoryId"/>
+                    </xs:keyref>
                 </xs:element>
             </xs:sequence>
         </xs:complexType>
-        <xs:key name="ResultTypeNode_Key">
-            <xs:annotation>
-                <xs:documentation>The node attribute on the result type element must be unique.</xs:documentation>
-            </xs:annotation>
-            <xs:selector xpath="dictionary/resultTypes/resultType"/>
-            <xs:field xpath="@nodeId"/>
-        </xs:key>
-        <xs:keyref name="ResultTypeNode_KeyRef" refer="ResultTypeNode_Key">
-            <xs:annotation>
-                <xs:documentation>References the node attribute on result type element. A child references its parent</xs:documentation>
-            </xs:annotation>
-            <xs:selector xpath="dictionary/resultTypes/resultType"/>
-            <xs:field xpath="@parentNodeId"/>
-        </xs:keyref>
-        <xs:key name="Stage_Key">
-            <xs:selector xpath="dictionary/stages/stage"/>
-            <xs:field xpath="@stageId"/>
-        </xs:key>
-        <xs:key name="StageNode_Key">
-            <xs:selector xpath="dictionary/stages/stage"/>
-            <xs:field xpath="@nodeId"/>
-        </xs:key>
-        <xs:keyref name="StageNode_KeyRef" refer="StageNode_Key">
-            <xs:selector xpath="dictionary/stages/stage"/>
-            <xs:field xpath="@parentNodeId"/>
-        </xs:keyref>
         <xs:key name="Element_Key">
             <xs:selector xpath="dictionary/elements/element"/>
             <xs:field xpath="@elementId"/>
@@ -171,8 +232,7 @@ application/vnd.bard.cap+xml;type=resultType</xs:documentation>
                 <xs:element minOccurs="0" name="synonyms" type="xs:string"/>
             </xs:sequence>
             <xs:attribute name="resultTypeId" type="bardID" use="required"> </xs:attribute>
-            <xs:attribute name="nodeId" type="bardID" use="required"> </xs:attribute>
-            <xs:attribute name="parentNodeId" type="bardID" use="optional"> </xs:attribute>
+            <xs:attribute name="parentResultTypeId" type="bardID" use="optional"> </xs:attribute>
             <xs:attribute name="abbreviation" type="xs:string"/>
             <xs:attribute name="baseUnit" type="xs:string"/>
             <xs:attribute name="resultTypeStatus" use="required">
@@ -386,7 +446,7 @@ application/vnd.bard.cap+xml;type=assay</xs:documentation>
                 <xs:element minOccurs="0" name="protocolDocuments">
                     <xs:complexType>
                         <xs:sequence>
-                            <xs:element maxOccurs="unbounded" name="protocolDocument">
+                            <xs:element maxOccurs="unbounded" name="protocolDocument" minOccurs="0">
                                 <xs:complexType>
                                     <xs:sequence>
 
@@ -411,6 +471,7 @@ application/vnd.bard.cap+xml;type=assay</xs:documentation>
                         </xs:sequence>
                     </xs:complexType>
                 </xs:element>
+                <xs:element maxOccurs="unbounded" ref="link"/>
             </xs:sequence>
             <xs:attribute name="assayId" use="required">
                 <xs:annotation>
@@ -580,6 +641,7 @@ The link with 'edit' relation should be used to set the status of this experimen
                     </xs:complexType>
                 </xs:element>
                 <xs:element minOccurs="0" ref="description"/>
+                <xs:element minOccurs="0" ref="resultContextItems"/>
                 <xs:element maxOccurs="unbounded" minOccurs="0" ref="link">
                     <xs:annotation>
                         <xs:documentation>Link to self
@@ -634,36 +696,7 @@ Link to parent experiment
                         </xs:attribute>
                     </xs:complexType>
                 </xs:element>
-                <xs:element minOccurs="0" name="resultContextItem" maxOccurs="unbounded">
-                    <xs:annotation>
-                        <xs:documentation>We include the group result context Id and the result context item Id so that the client can walk the tree from child to parent</xs:documentation>
-                    </xs:annotation>
-                    <xs:complexType>
-                        <xs:sequence>
-                            <xs:element name="attributeId">
-                                <xs:complexType>
-                                    <xs:sequence>
-                                        <xs:element ref="link"/>
-                                    </xs:sequence>
-                                </xs:complexType>
-                            </xs:element>
-                            <xs:element minOccurs="0" name="valueId">
-                                <xs:complexType>
-                                    <xs:sequence>
-                                        <xs:element ref="link"/>
-                                    </xs:sequence>
-                                </xs:complexType>
-                            </xs:element>
-                        </xs:sequence>
-                        <xs:attribute name="resultContextItemId" type="bardID" use="required"/>
-                        <xs:attribute name="groupResultContextId" type="bardID"/>
-                        <xs:attribute name="qualifier" type="xs:string"/>
-                        <xs:attribute name="valueDisplay" type="xs:string"/>
-                        <xs:attribute name="valueNum" type="xs:double"/>
-                        <xs:attribute name="valueMin" type="xs:double"/>
-                        <xs:attribute name="valueMax" type="xs:double"/>
-                    </xs:complexType>
-                </xs:element>
+                <xs:element minOccurs="0" ref="resultContextItems"/>
                 <xs:element minOccurs="0" name="resultHierarchy" maxOccurs="unbounded">
                     <xs:complexType>
                         <xs:attribute name="parentResultId" type="xs:long"/>
@@ -782,5 +815,64 @@ Link to parent experiment
                 </xs:annotation>
             </xs:attribute>
         </xs:complexType>
+    </xs:element>
+    <xs:complexType name="descriptorType">
+        <xs:sequence>
+            <xs:element name="elementStatus" type="xs:string"/>
+            <xs:element minOccurs="0" name="label" type="xs:string"/>
+            <xs:element minOccurs="0" ref="description"/>
+            <xs:element minOccurs="0" name="synonyms" type="xs:string"/>
+            <xs:element minOccurs="0" name="acronym" type="xs:string"/>
+        </xs:sequence>
+        <xs:attribute name="descriptorId" type="bardID" use="required"/>
+        <xs:attribute name="parentDescriptorId" type="bardID"/>
+        <xs:attribute name="elementId" type="bardID"/>
+        <xs:attribute name="abbreviation" type="xs:string"/>
+        <xs:attribute name="externalUrl" type="xs:string"/>
+        <xs:attribute name="unit" type="xs:string"/>
+    </xs:complexType>
+    <xs:element name="resultContextItems">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="resultContextItem" maxOccurs="unbounded">
+                    <xs:annotation>
+                        <xs:documentation>We include the group result context Id and the result context item Id so that the client can walk the tree from child to parent</xs:documentation>
+                    </xs:annotation>
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element name="attributeId">
+                                <xs:complexType>
+                                    <xs:sequence>
+                                        <xs:element ref="link"/>
+                                    </xs:sequence>
+                                </xs:complexType>
+                            </xs:element>
+                            <xs:element minOccurs="0" name="valueId">
+                                <xs:complexType>
+                                    <xs:sequence>
+                                        <xs:element ref="link"/>
+                                    </xs:sequence>
+                                </xs:complexType>
+                            </xs:element>
+                        </xs:sequence>
+                        <xs:attribute name="resultContextItemId" type="bardID" use="required"/>
+                        <xs:attribute name="groupResultContextId" type="bardID"/>
+                        <xs:attribute name="qualifier" type="xs:string"/>
+                        <xs:attribute name="valueDisplay" type="xs:string"/>
+                        <xs:attribute name="valueNum" type="xs:double"/>
+                        <xs:attribute name="valueMin" type="xs:double"/>
+                        <xs:attribute name="valueMax" type="xs:double"/>
+                    </xs:complexType>
+                </xs:element>
+            </xs:sequence>
+        </xs:complexType>
+        <xs:key name="ResultContextItem_Key">
+            <xs:selector xpath="resultContextItem"/>
+            <xs:field xpath="@resultContextItemId"/>
+        </xs:key>
+        <xs:keyref name="ResultContextItem_KeyRef" refer="ResultContextItem_Key">
+            <xs:selector xpath="resultContextItem"/>
+            <xs:field xpath="groupResultContextId"/>
+        </xs:keyref>
     </xs:element>
 </xs:schema>

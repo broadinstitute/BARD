@@ -8,6 +8,13 @@
   <experimentStatus>
     <status>Approved</status>
   </experimentStatus>
+  <resultContextItems>
+    <resultContextItem resultContextItemId='288' valueDisplay='2.2' valueNum='2.2'>
+      <attributeId>
+        <link rel='related' href='http://bard/dictionary/element/366' type='application/vnd.bard.cap+xml;type=element' />
+      </attributeId>
+    </resultContextItem>
+  </resultContextItems>
   <link rel='related' title='Link to Project' type='application/vnd.bard.cap+xml;type=cap' href='http://bard/project/1' />
   <link rel='related' title='Link to Assay' type='application/vnd.bard.cap+xml;type=cap' href='http://bard/assay/1' />
   <link rel='edit' title='Use link to edit Experiment' type='application/vnd.bard.cap+xml;type=experiment' href='http://bard/experiment/1' />

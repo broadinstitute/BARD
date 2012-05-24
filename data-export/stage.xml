@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <stage xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
  xsi:noNamespaceSchemaLocation="BARDexportSchema.xsd"
- stageId="230"
- nodeId="18"
- parentNodeId="4">
-    <stageName>selectivity assay</stageName>
+ stageId="223">
+    <stageName>STAGE</stageName>
+    <description>Singular root to ensure tree viewers work</description>
 </stage>

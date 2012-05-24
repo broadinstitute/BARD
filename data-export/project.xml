@@ -302,6 +302,7 @@
                 <protocolName>Dose-response biochemical assay of inhibitors of Rho kinase 2 (Rock2) pt 2</protocolName>
               </protocolDocument>
             </protocolDocuments>
+            <link type="application/vnd.bard.cap+xml;type=assay" href="adfdf" rel="related"></link>
           </assay>
         </projectAssay>
       </projectAssays>

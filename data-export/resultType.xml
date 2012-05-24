@@ -2,8 +2,7 @@
 <resultType xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
  xsi:noNamespaceSchemaLocation="BARDexportSchema.xsd"
  resultTypeId="635"
- nodeId="53"
- parentNodeId="0"
+ parentResultTypeId="577"
  resultTypeStatus="Published">
     <resultTypeName>time endpoint</resultTypeName>
 </resultType>

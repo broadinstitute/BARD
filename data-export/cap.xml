@@ -302,6 +302,328 @@
                 <protocolName>Dose-response biochemical assay of inhibitors of Rho kinase 2 (Rock2) pt 2</protocolName>
               </protocolDocument>
             </protocolDocuments>
+            <link rel='up' href='http://bard/dictionary/projects/1' type='application/vnd.bard.cap+xml;type=project' />
+          </assay>
+        </projectAssay>
+      </projectAssays>
+    </project>
+    <project projectId='2' groupType='Project'>
+      <projectName>2126 - MLPCN Malaria - Inhibitor</projectName>
+      <projectAssays>
+        <projectAssay>
+          <promotionCriteria>- PUBCHEM_ACTIVITY_OUTCOME was set to '2' (active) if the AC50 calculation resulted in an AC50_Qualifier of '=', and to '1' (inactive) if the AC50 calculation resulted in an AC50_Qualifier of '&gt;'</promotionCriteria>
+          <stage>
+            <link rel='related' href='http://bard/dictionary/stage/224' type='application/vnd.bard.cap+xml;type=stage' />
+          </stage>
+          <assay assayId='2' assayVersion='1' status='Active'>
+            <assayName>A cell-based HTS for delayed death inhibitors of the malarial parasite plastid.</assayName>
+            <description>A cell-based HTS for delayed death inhibitors of the malarial parasite plastid Measured in Microorganism System Using Plate Reader - 2126-01_Inhibitor_Dose_DryPowder_Activity [Confirmatory]</description>
+            <designedBy>Broad Institute</designedBy>
+            <externalAssays>
+              <externalAssay externalAssayId='aid=504633'>
+                <externalSystem systemUrl='http://pubchem.ncbi.nlm.nih.gov/assay/assay.cgi?aid=504633'>
+                  <systemName>PubChem</systemName>
+                  <owner>NIH</owner>
+                </externalSystem>
+              </externalAssay>
+            </externalAssays>
+            <measures>
+              <measure measureId='10' measureContextRef='3' measureRef='10' entryUnit='%'>
+                <resultTypeRef>
+                  <link rel='related' href='http://bard/dictionary/resultType/566' type='application/vnd.bard.cap+xml;type=resultType' />
+                </resultTypeRef>
+              </measure>
+              <measure measureId='11' measureContextRef='4' measureRef='11' entryUnit='uM'>
+                <resultTypeRef>
+                  <link rel='related' href='http://bard/dictionary/resultType/655' type='application/vnd.bard.cap+xml;type=resultType' />
+                </resultTypeRef>
+              </measure>
+              <measure measureId='12' measureContextRef='4' measureRef='12'>
+                <resultTypeRef>
+                  <link rel='related' href='http://bard/dictionary/resultType/659' type='application/vnd.bard.cap+xml;type=resultType' />
+                </resultTypeRef>
+              </measure>
+              <measure measureId='13' measureContextRef='4' measureRef='13'>
+                <resultTypeRef>
+                  <link rel='related' href='http://bard/dictionary/resultType/656' type='application/vnd.bard.cap+xml;type=resultType' />
+                </resultTypeRef>
+              </measure>
+              <measure measureId='14' measureContextRef='4' measureRef='14' entryUnit='%'>
+                <resultTypeRef>
+                  <link rel='related' href='http://bard/dictionary/resultType/657' type='application/vnd.bard.cap+xml;type=resultType' />
+                </resultTypeRef>
+              </measure>
+              <measure measureId='15' measureContextRef='4' measureRef='15' entryUnit='%'>
+                <resultTypeRef>
+                  <link rel='related' href='http://bard/dictionary/resultType/658' type='application/vnd.bard.cap+xml;type=resultType' />
+                </resultTypeRef>
+              </measure>
+            </measures>
+            <measureContexts>
+              <measureContext measureContextId='3'>
+                <contextName>Context for percent activity</contextName>
+              </measureContext>
+              <measureContext measureContextId='4'>
+                <contextName>Context for AC50</contextName>
+              </measureContext>
+            </measureContexts>
+            <measureContextItems>
+              <measureContextItem measureContextItemId='37' measureContextItemRef='37' attributeType='Fixed' valueDisplay='Plasmodium falciparum'>
+                <valueId>
+                  <link rel='related' href='http://bard/dictionary/element/660' type='application/vnd.bard.cap+xml;type=element' />
+                </valueId>
+                <attributeId>
+                  <link rel='related' href='http://bard/dictionary/element/267' type='application/vnd.bard.cap+xml;type=element' />
+                </attributeId>
+              </measureContextItem>
+              <measureContextItem measureContextItemId='38' measureContextItemRef='37' attributeType='Fixed' valueDisplay='Target '>
+                <valueId>
+                  <link rel='related' href='http://bard/dictionary/element/69' type='application/vnd.bard.cap+xml;type=element' />
+                </valueId>
+                <attributeId>
+                  <link rel='related' href='http://bard/dictionary/element/10' type='application/vnd.bard.cap+xml;type=element' />
+                </attributeId>
+              </measureContextItem>
+              <measureContextItem measureContextItemId='39' measureContextItemRef='37' attributeType='Fixed' valueDisplay='Measured Entity '>
+                <valueId>
+                  <link rel='related' href='http://bard/dictionary/element/350' type='application/vnd.bard.cap+xml;type=element' />
+                </valueId>
+                <attributeId>
+                  <link rel='related' href='http://bard/dictionary/element/10' type='application/vnd.bard.cap+xml;type=element' />
+                </attributeId>
+              </measureContextItem>
+              <measureContextItem measureContextItemId='40' measureContextItemRef='37' attributeType='Fixed' valueDisplay='RPMI/Albumax_4.16mg/mL '>
+                <valueId>
+                  <link rel='related' href='http://bard/dictionary/element/666' type='application/vnd.bard.cap+xml;type=element' />
+                </valueId>
+                <attributeId>
+                  <link rel='related' href='http://bard/dictionary/element/84' type='application/vnd.bard.cap+xml;type=element' />
+                </attributeId>
+              </measureContextItem>
+              <measureContextItem measureContextItemId='41' measureContextItemRef='37' attributeType='Fixed' valueDisplay='10000 ppm (vol)' valueNum='10000'>
+                <attributeId>
+                  <link rel='related' href='http://bard/dictionary/element/366' type='application/vnd.bard.cap+xml;type=element' />
+                </attributeId>
+              </measureContextItem>
+              <measureContextItem measureContextItemId='42' measureContextItemRef='42' attributeType='Fixed' valueDisplay='SYBR lysis '>
+                <attributeId>
+                  <link rel='related' href='http://bard/dictionary/element/84' type='application/vnd.bard.cap+xml;type=element' />
+                </attributeId>
+              </measureContextItem>
+              <measureContextItem measureContextItemId='43' measureContextItemRef='42' attributeType='Fixed' valueDisplay='Buffer '>
+                <valueId>
+                  <link rel='related' href='http://bard/dictionary/element/70' type='application/vnd.bard.cap+xml;type=element' />
+                </valueId>
+                <attributeId>
+                  <link rel='related' href='http://bard/dictionary/element/10' type='application/vnd.bard.cap+xml;type=element' />
+                </attributeId>
+              </measureContextItem>
+              <measureContextItem measureContextItemId='44' measureContextItemRef='42' attributeType='Range' valueDisplay='20 - 36 h' valueMin='20' valueMax='36'>
+                <attributeId>
+                  <link rel='related' href='http://bard/dictionary/element/117' type='application/vnd.bard.cap+xml;type=element' />
+                </attributeId>
+              </measureContextItem>
+              <measureContextItem measureContextItemId='45' measureContextItemRef='42' attributeType='Fixed' valueDisplay='25 deg C' valueNum='25'>
+                <attributeId>
+                  <link rel='related' href='http://bard/dictionary/element/367' type='application/vnd.bard.cap+xml;type=element' />
+                </attributeId>
+              </measureContextItem>
+              <measureContextItem measureContextItemId='46' measureContextItemRef='46' attributeType='Fixed' valueDisplay='72 h' valueNum='72'>
+                <attributeId>
+                  <link rel='related' href='http://bard/dictionary/element/117' type='application/vnd.bard.cap+xml;type=element' />
+                </attributeId>
+              </measureContextItem>
+              <measureContextItem measureContextItemId='47' measureContextItemRef='46' attributeType='Fixed' valueDisplay='low oxygen '>
+                <valueId>
+                  <link rel='related' href='http://bard/dictionary/element/662' type='application/vnd.bard.cap+xml;type=element' />
+                </valueId>
+                <attributeId>
+                  <link rel='related' href='http://bard/dictionary/element/661' type='application/vnd.bard.cap+xml;type=element' />
+                </attributeId>
+              </measureContextItem>
+              <measureContextItem measureContextItemId='48' measureContextItemRef='46' attributeType='Fixed' valueDisplay='37 deg C' valueNum='37'>
+                <attributeId>
+                  <link rel='related' href='http://bard/dictionary/element/367' type='application/vnd.bard.cap+xml;type=element' />
+                </attributeId>
+              </measureContextItem>
+              <measureContextItem measureContextItemId='49' measureContextItemRef='46' attributeType='Fixed' valueDisplay='SYBR Green I '>
+                <attributeId>
+                  <link rel='related' href='http://bard/dictionary/element/98' type='application/vnd.bard.cap+xml;type=element' />
+                </attributeId>
+              </measureContextItem>
+              <measureContextItem measureContextItemId='50' measureContextItemRef='46' attributeType='Fixed' valueDisplay='480 nm' valueNum='480'>
+                <attributeId>
+                  <link rel='related' href='http://bard/dictionary/element/663' type='application/vnd.bard.cap+xml;type=element' />
+                </attributeId>
+              </measureContextItem>
+              <measureContextItem measureContextItemId='51' measureContextItemRef='46' attributeType='Fixed' valueDisplay='530 nm' valueNum='530'>
+                <attributeId>
+                  <link rel='related' href='http://bard/dictionary/element/664' type='application/vnd.bard.cap+xml;type=element' />
+                </attributeId>
+              </measureContextItem>
+              <measureContextItem measureContextItemId='52' measureContextItemRef='46' attributeType='Fixed' valueDisplay='Readout '>
+                <valueId>
+                  <link rel='related' href='http://bard/dictionary/element/351' type='application/vnd.bard.cap+xml;type=element' />
+                </valueId>
+                <attributeId>
+                  <link rel='related' href='http://bard/dictionary/element/28' type='application/vnd.bard.cap+xml;type=element' />
+                </attributeId>
+              </measureContextItem>
+              <measureContextItem measureContextItemId='53' measureContextItemRef='53' attributeType='Fixed' valueDisplay='Plate-Reader '>
+                <valueId>
+                  <link rel='related' href='http://bard/dictionary/element/311' type='application/vnd.bard.cap+xml;type=element' />
+                </valueId>
+                <attributeId>
+                  <link rel='related' href='http://bard/dictionary/element/307' type='application/vnd.bard.cap+xml;type=element' />
+                </attributeId>
+              </measureContextItem>
+              <measureContextItem measureContextItemId='54' measureContextItemRef='54' attributeType='Fixed' valueDisplay='In Vitro '>
+                <valueId>
+                  <link rel='related' href='http://bard/dictionary/element/361' type='application/vnd.bard.cap+xml;type=element' />
+                </valueId>
+                <attributeId>
+                  <link rel='related' href='http://bard/dictionary/element/13' type='application/vnd.bard.cap+xml;type=element' />
+                </attributeId>
+              </measureContextItem>
+              <measureContextItem measureContextItemId='55' measureContextItemRef='55' measureContextRef='4' attributeType='Fixed' valueDisplay='Marquardt-Levenberg '>
+                <valueId>
+                  <link rel='related' href='http://bard/dictionary/element/665' type='application/vnd.bard.cap+xml;type=element' />
+                </valueId>
+                <attributeId>
+                  <link rel='related' href='http://bard/dictionary/element/252' type='application/vnd.bard.cap+xml;type=element' />
+                </attributeId>
+              </measureContextItem>
+              <measureContextItem measureContextItemId='56' measureContextItemRef='55' measureContextRef='4' attributeType='Number' valueDisplay=' '>
+                <attributeId>
+                  <link rel='related' href='http://bard/dictionary/element/370' type='application/vnd.bard.cap+xml;type=element' />
+                </attributeId>
+              </measureContextItem>
+              <measureContextItem measureContextItemId='57' measureContextItemRef='57' attributeType='Fixed' valueDisplay='viability assay '>
+                <valueId>
+                  <link rel='related' href='http://bard/dictionary/element/160' type='application/vnd.bard.cap+xml;type=element' />
+                </valueId>
+                <attributeId>
+                  <link rel='related' href='http://bard/dictionary/element/13' type='application/vnd.bard.cap+xml;type=element' />
+                </attributeId>
+              </measureContextItem>
+              <measureContextItem measureContextItemId='58' measureContextItemRef='58' measureContextRef='3' attributeType='List' valueDisplay='0.0245 nM' valueNum='0.0245'>
+                <attributeId>
+                  <link rel='related' href='http://bard/dictionary/element/366' type='application/vnd.bard.cap+xml;type=element' />
+                </attributeId>
+              </measureContextItem>
+              <measureContextItem measureContextItemId='59' measureContextItemRef='58' measureContextRef='3' attributeType='List' valueDisplay='0.049 nM' valueNum='0.049'>
+                <attributeId>
+                  <link rel='related' href='http://bard/dictionary/element/366' type='application/vnd.bard.cap+xml;type=element' />
+                </attributeId>
+              </measureContextItem>
+              <measureContextItem measureContextItemId='60' measureContextItemRef='58' measureContextRef='3' attributeType='List' valueDisplay='0.098 nM' valueNum='0.098'>
+                <attributeId>
+                  <link rel='related' href='http://bard/dictionary/element/366' type='application/vnd.bard.cap+xml;type=element' />
+                </attributeId>
+              </measureContextItem>
+              <measureContextItem measureContextItemId='61' measureContextItemRef='58' measureContextRef='3' attributeType='List' valueDisplay='0.195 nM' valueNum='0.195'>
+                <attributeId>
+                  <link rel='related' href='http://bard/dictionary/element/366' type='application/vnd.bard.cap+xml;type=element' />
+                </attributeId>
+              </measureContextItem>
+              <measureContextItem measureContextItemId='62' measureContextItemRef='58' measureContextRef='3' attributeType='List' valueDisplay='0.391 nM' valueNum='0.391'>
+                <attributeId>
+                  <link rel='related' href='http://bard/dictionary/element/366' type='application/vnd.bard.cap+xml;type=element' />
+                </attributeId>
+              </measureContextItem>
+              <measureContextItem measureContextItemId='63' measureContextItemRef='58' measureContextRef='3' attributeType='List' valueDisplay='0.781 nM' valueNum='0.781'>
+                <attributeId>
+                  <link rel='related' href='http://bard/dictionary/element/366' type='application/vnd.bard.cap+xml;type=element' />
+                </attributeId>
+              </measureContextItem>
+              <measureContextItem measureContextItemId='64' measureContextItemRef='58' measureContextRef='3' attributeType='List' valueDisplay='1.56 nM' valueNum='1.56'>
+                <attributeId>
+                  <link rel='related' href='http://bard/dictionary/element/366' type='application/vnd.bard.cap+xml;type=element' />
+                </attributeId>
+              </measureContextItem>
+              <measureContextItem measureContextItemId='65' measureContextItemRef='58' measureContextRef='3' attributeType='List' valueDisplay='2.44 nM' valueNum='2.44'>
+                <attributeId>
+                  <link rel='related' href='http://bard/dictionary/element/366' type='application/vnd.bard.cap+xml;type=element' />
+                </attributeId>
+              </measureContextItem>
+              <measureContextItem measureContextItemId='66' measureContextItemRef='58' measureContextRef='3' attributeType='List' valueDisplay='3.12 nM' valueNum='3.12'>
+                <attributeId>
+                  <link rel='related' href='http://bard/dictionary/element/366' type='application/vnd.bard.cap+xml;type=element' />
+                </attributeId>
+              </measureContextItem>
+              <measureContextItem measureContextItemId='67' measureContextItemRef='58' measureContextRef='3' attributeType='List' valueDisplay='6.25 nM' valueNum='6.25'>
+                <attributeId>
+                  <link rel='related' href='http://bard/dictionary/element/366' type='application/vnd.bard.cap+xml;type=element' />
+                </attributeId>
+              </measureContextItem>
+              <measureContextItem measureContextItemId='68' measureContextItemRef='58' measureContextRef='3' attributeType='List' valueDisplay='9.77 nM' valueNum='9.77'>
+                <attributeId>
+                  <link rel='related' href='http://bard/dictionary/element/366' type='application/vnd.bard.cap+xml;type=element' />
+                </attributeId>
+              </measureContextItem>
+              <measureContextItem measureContextItemId='69' measureContextItemRef='58' measureContextRef='3' attributeType='List' valueDisplay='12.5 nM' valueNum='12.5'>
+                <attributeId>
+                  <link rel='related' href='http://bard/dictionary/element/366' type='application/vnd.bard.cap+xml;type=element' />
+                </attributeId>
+              </measureContextItem>
+              <measureContextItem measureContextItemId='70' measureContextItemRef='58' measureContextRef='3' attributeType='List' valueDisplay='19.5 nM' valueNum='19.5'>
+                <attributeId>
+                  <link rel='related' href='http://bard/dictionary/element/366' type='application/vnd.bard.cap+xml;type=element' />
+                </attributeId>
+              </measureContextItem>
+              <measureContextItem measureContextItemId='71' measureContextItemRef='58' measureContextRef='3' attributeType='List' valueDisplay='25 nM' valueNum='25'>
+                <attributeId>
+                  <link rel='related' href='http://bard/dictionary/element/366' type='application/vnd.bard.cap+xml;type=element' />
+                </attributeId>
+              </measureContextItem>
+              <measureContextItem measureContextItemId='72' measureContextItemRef='58' measureContextRef='3' attributeType='List' valueDisplay='39.1 nM' valueNum='39.1'>
+                <attributeId>
+                  <link rel='related' href='http://bard/dictionary/element/366' type='application/vnd.bard.cap+xml;type=element' />
+                </attributeId>
+              </measureContextItem>
+              <measureContextItem measureContextItemId='73' measureContextItemRef='58' measureContextRef='3' attributeType='List' valueDisplay='50 nM' valueNum='50'>
+                <attributeId>
+                  <link rel='related' href='http://bard/dictionary/element/366' type='application/vnd.bard.cap+xml;type=element' />
+                </attributeId>
+              </measureContextItem>
+              <measureContextItem measureContextItemId='74' measureContextItemRef='58' measureContextRef='3' attributeType='List' valueDisplay='78.1 nM' valueNum='78.1'>
+                <attributeId>
+                  <link rel='related' href='http://bard/dictionary/element/366' type='application/vnd.bard.cap+xml;type=element' />
+                </attributeId>
+              </measureContextItem>
+              <measureContextItem measureContextItemId='75' measureContextItemRef='58' measureContextRef='3' attributeType='List' valueDisplay='156 nM' valueNum='156'>
+                <attributeId>
+                  <link rel='related' href='http://bard/dictionary/element/366' type='application/vnd.bard.cap+xml;type=element' />
+                </attributeId>
+              </measureContextItem>
+              <measureContextItem measureContextItemId='76' measureContextItemRef='58' measureContextRef='3' attributeType='List' valueDisplay='312 nM' valueNum='312'>
+                <attributeId>
+                  <link rel='related' href='http://bard/dictionary/element/366' type='application/vnd.bard.cap+xml;type=element' />
+                </attributeId>
+              </measureContextItem>
+              <measureContextItem measureContextItemId='77' measureContextItemRef='58' measureContextRef='3' attributeType='List' valueDisplay='625 nM' valueNum='625'>
+                <attributeId>
+                  <link rel='related' href='http://bard/dictionary/element/366' type='application/vnd.bard.cap+xml;type=element' />
+                </attributeId>
+              </measureContextItem>
+              <measureContextItem measureContextItemId='78' measureContextItemRef='58' measureContextRef='3' attributeType='List' valueDisplay='1250 nM' valueNum='1250'>
+                <attributeId>
+                  <link rel='related' href='http://bard/dictionary/element/366' type='application/vnd.bard.cap+xml;type=element' />
+                </attributeId>
+              </measureContextItem>
+              <measureContextItem measureContextItemId='79' measureContextItemRef='58' measureContextRef='3' attributeType='List' valueDisplay='2500 nM' valueNum='2500'>
+                <attributeId>
+                  <link rel='related' href='http://bard/dictionary/element/366' type='application/vnd.bard.cap+xml;type=element' />
+                </attributeId>
+              </measureContextItem>
+              <measureContextItem measureContextItemId='80' measureContextItemRef='58' measureContextRef='3' attributeType='List' valueDisplay='5000 nM' valueNum='5000'>
+                <attributeId>
+                  <link rel='related' href='http://bard/dictionary/element/366' type='application/vnd.bard.cap+xml;type=element' />
+                </attributeId>
+              </measureContextItem>
+            </measureContextItems>
+            <protocolDocuments />
+            <link rel='up' href='http://bard/dictionary/projects/2' type='application/vnd.bard.cap+xml;type=project' />
           </assay>
         </projectAssay>
       </projectAssays>
