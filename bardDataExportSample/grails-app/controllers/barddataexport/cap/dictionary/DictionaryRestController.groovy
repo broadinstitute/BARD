@@ -75,7 +75,7 @@ class DictionaryRestController {
             final BigDecimal elementId = params.elementId as BigDecimal
             final def writer = response.writer
             final MarkupBuilder xml = new MarkupBuilder(writer)
-            dictionaryExportService.generateElement(xml, elementId)
+            dictionaryExportService.generateElementWithElementId(xml, elementId)
             return
         }
         response.status = HttpServletResponse.SC_BAD_REQUEST

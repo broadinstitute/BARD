@@ -181,8 +181,7 @@ class DictionaryExportService {
  * @param sql
  * @param xml
  */
-    protected void generateStages(final MarkupBuilder xml) {
-        final Sql sql = new Sql(dataSource)
+    protected void generateStages(final Sql sql, final MarkupBuilder xml) {
         xml.stages() {
             sql.eachRow('SELECT STAGE_ID FROM STAGE') { row ->
                 generateStage(xml, row.STAGE_ID)
@@ -256,12 +255,17 @@ class DictionaryExportService {
         }
 
     }
+
+    public void generateResultType(final MarkupBuilder xml, final BigDecimal resultTypeId) {
+        final Sql sql = new Sql(dataSource)
+        generateResultType(sql, xml, resultTypeId)
+    }
 /**
  * Generate Result Types
  * @return all the result types in the schema
  */
-    protected void generateResultTypes( final MarkupBuilder xml) {
-        final Sql sql = new Sql(dataSource)
+    protected void generateResultTypes(final Sql sql, final MarkupBuilder xml) {
+
         xml.resultTypes() {
             sql.eachRow('select RESULT_TYPE_ID from RESULT_TYPE RESULT_TYPE JOIN ELEMENT_STATUS ELEMENT_STATUS ON RESULT_TYPE.RESULT_TYPE_STATUS_ID=ELEMENT_STATUS.ELEMENT_STATUS_ID') { row ->
                 final BigDecimal resultTypeId = row.RESULT_TYPE_ID
@@ -275,13 +279,13 @@ class DictionaryExportService {
         xml.elements() {
             sql.eachRow('SELECT ELEMENT_ID FROM ELEMENT') { elementRow ->
                 final BigDecimal elementId = elementRow.ELEMENT_ID
-                generateElement(sql, xml, elementId)
+                generateElementWithElementId(xml, elementId)
             }
         }
     }
 
-    public void generateElement(final Sql sql, final MarkupBuilder xml, final BigDecimal elementId) {
-
+    public void generateElementWithElementId(final MarkupBuilder xml, final BigDecimal elementId) {
+        final Sql sql = new Sql(dataSource)
         sql.eachRow('select ELEMENT_ID, LABEL,DESCRIPTION,ABBREVIATION,ACRONYM,SYNONYMS, EXTERNAL_URL,UNIT, ELEMENT_STATUS_ID from ELEMENT WHERE ELEMENT_ID=' + elementId) { elementRow ->
 
             def elementStatusId = elementRow.ELEMENT_STATUS_ID
@@ -302,7 +306,7 @@ class DictionaryExportService {
         }
     }
 
-    protected void generateElement(final MarkupBuilder xml, final ElementDTO elementDTO) {
+    public void generateElement(final MarkupBuilder xml, final ElementDTO elementDTO) {
         def attributes = [:]
 
 

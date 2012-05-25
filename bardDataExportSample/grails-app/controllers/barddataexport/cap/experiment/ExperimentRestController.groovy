@@ -61,7 +61,7 @@ class ExperimentRestController {
         response.contentType = mimeType
         //do validations
         if (mimeType == request.getHeader(HttpHeaders.ACCEPT) && params.experimentId) {
-            final BigDecimal experimentId = params.id as BigDecimal
+            final BigDecimal experimentId = params.experimentId as BigDecimal
 
             final def writer = response.writer
             final MarkupBuilder xml = new MarkupBuilder(writer)

@@ -173,16 +173,19 @@ class ExperimentExportService {
         }
     }
 
-    public String generateExperiments(final MarkupBuilder xml) {
+    public void generateExperiments(final MarkupBuilder xml) {
         final Sql sql = new Sql(dataSource)
         generateExperiments(sql, xml)
     }
 
-    protected String generateExperiments(final Sql sql, final MarkupBuilder xml) {
-
+    protected void generateExperiments(final Sql sql, final MarkupBuilder xml) {
+       //TODO Add open experiments
         def count = null
         sql.eachRow('select count(*)  as experimentsCount from EXPERIMENT') { countRow ->
             count = countRow.experimentsCount
+        }
+        if(count == 0){
+            return
         }
         int counter = 0
         xml.experiments(count: count) {

@@ -89,17 +89,28 @@ class DictionaryExportServiceIntegrationTests {
 
     @Test
     void testGenerateResultTypes() {
+        def url = "jdbc:oracle:thin:@barddb:1521:bardqa"
+        def driver = "oracle.jdbc.driver.OracleDriver"
+        def user = "bard_qa"
+        def password = "bard_qa"
+        Sql sql = Sql.newInstance(url, user, password, driver)
         def writer = new StringWriter()
         def xml = new MarkupBuilder(writer)
-        dictionaryExportService.generateResultTypes(xml)
+        dictionaryExportService.generateResultTypes(sql,xml)
         println writer.toString()
     }
 
     @Test
     void testGenerateStages() {
+        def url = "jdbc:oracle:thin:@barddb:1521:bardqa"
+        def driver = "oracle.jdbc.driver.OracleDriver"
+        def user = "bard_qa"
+        def password = "bard_qa"
+        Sql sql = Sql.newInstance(url, user, password, driver)
+
         def writer = new StringWriter()
         def xml = new MarkupBuilder(writer)
-        dictionaryExportService.generateStages(xml)
+        dictionaryExportService.generateStages(sql,xml)
         println writer.toString()
     }
 
