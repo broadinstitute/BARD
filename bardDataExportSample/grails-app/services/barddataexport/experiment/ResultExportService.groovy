@@ -69,10 +69,11 @@ class ResultExportService {
 
     }
 
-    public void generateResult(final MarkupBuilder xml, final BigDecimal experimentId, final BigDecimal resultId) {
+    public void generateResult(final MarkupBuilder xml, final BigDecimal resultId) {
         final Sql sql = new Sql(dataSource)
-        final String experimentHref = "${EXPERIMENT_URL_PREFIX}${experimentId}"
-        sql.eachRow("SELECT * FROM RESULT WHERE EXPERIMENT_ID=" + experimentId + " and RESULT_ID=" + resultId) { resultRow ->
+
+        sql.eachRow("SELECT * FROM RESULT WHERE RESULT_ID=" + resultId) { resultRow ->
+            final String experimentHref = "${EXPERIMENT_URL_PREFIX}$resultRow.EXPERIMENT_ID}"
             ResultDTO resultDTO =
                 new ResultDTO(
                         resultRow.RESULT_ID,

@@ -1,8 +1,7 @@
 out/*
 target/*
 *.log
-.idea/vcs.xml
-.idea/workspace.xml
+.idea/*
 .classpath
 .project
 .settings/

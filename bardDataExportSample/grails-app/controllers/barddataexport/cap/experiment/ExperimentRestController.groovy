@@ -77,12 +77,12 @@ class ExperimentRestController {
         def mimeType = grailsApplication.config.bard.data.export.data.result.xml
         response.contentType = mimeType
         //do validations
-        if (mimeType == request.getHeader(HttpHeaders.ACCEPT) && params.experimentId &&params.resultId) {
+        if (mimeType == request.getHeader(HttpHeaders.ACCEPT) && params.resultId) {
             final BigDecimal resultId = params.resultId as BigDecimal
             final BigDecimal experimentId = params.experimentId as BigDecimal
             final def writer = response.writer
             final MarkupBuilder xml = new MarkupBuilder(writer)
-            resultExportService.generateResult(xml, experimentId, resultId)
+            resultExportService.generateResult(xml, resultId)
             return
 
         }
