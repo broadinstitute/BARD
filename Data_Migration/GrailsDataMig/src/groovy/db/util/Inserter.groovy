@@ -4,6 +4,7 @@ import edu.scripps.fl.pubchem.PubChemFactory
 import edu.scripps.fl.pubchem.db.PCAssay
 import edu.scripps.fl.pubchem.PubChemXMLParserFactory
 import db.registration.Assay
+import db.registration.AssayStatus
 
 /**
  * Created by IntelliJ IDEA.
@@ -21,9 +22,11 @@ class Inserter {
         println assays.get(0).getExtRegId()
 
         Assay bardAssay = new Assay()
+        AssayStatus assayStatus =  AssayStatus.findByStatusLike("%Pending")
         bardAssay.setAssayName(pcAssay.getName().substring(0,127))
         bardAssay.setAssayVersion(pcAssay.version as String )
         bardAssay.setDateCreated(pcAssay.getDepositDate() )
+        bardAssay.assayStatus =   assayStatus
         if ( !bardAssay.save( flush: true ) ) {
             bardAssay.errors.each {
                 println "Problem saving record = ${it}"
