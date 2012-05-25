@@ -1,0 +1,95 @@
+package barddataexport.cap.cap
+
+import barddataexport.cap.CapExportService
+import groovy.xml.MarkupBuilder
+import org.codehaus.groovy.grails.commons.GrailsApplication
+import org.codehaus.groovy.grails.web.servlet.HttpHeaders
+
+import javax.servlet.http.HttpServletResponse
+
+class CapRestController {
+    CapExportService capExportService
+    GrailsApplication grailsApplication
+    static allowedMethods = [
+            project: "GET",
+            updateProject: "PATCH",
+            assay: "GET",
+            updateAssay: "PATCH",
+            projects: "GET",
+            cap: "GET"
+    ]
+
+    def index() {
+        return unsupported()
+    }
+
+    def projects() {
+        def mimeType = grailsApplication.config.bard.data.export.cap.projects.xml
+        response.contentType = mimeType
+        //do validations
+        if (mimeType != request.getHeader(HttpHeaders.ACCEPT)) {
+            response.status = HttpServletResponse.SC_BAD_REQUEST
+
+            render ""
+            return
+        }
+        final def writer = response.writer
+        final MarkupBuilder xml = new MarkupBuilder(writer)
+        capExportService.generateNewProjects(xml)
+    }
+
+    def cap() {
+        def mimeType = grailsApplication.config.bard.data.export.cap.xml
+        response.contentType = mimeType
+        //do validations
+        if (mimeType != request.getHeader(HttpHeaders.ACCEPT)) {
+            response.status = HttpServletResponse.SC_BAD_REQUEST
+
+            render ""
+            return
+        }
+        final def writer = response.writer
+        final MarkupBuilder xml = new MarkupBuilder(writer)
+        capExportService.generateCap(xml)
+
+    }
+
+    def assay() {
+        def mimeType = grailsApplication.config.bard.data.export.cap.assay.xml
+        response.contentType = mimeType
+        //do validations
+        if (mimeType == request.getHeader(HttpHeaders.ACCEPT) && params.assayId) {
+            final BigDecimal assayId = params.assayId as BigDecimal
+
+            final def writer = response.writer
+            final MarkupBuilder xml = new MarkupBuilder(writer)
+            capExportService.generateAssay(xml, assayId)
+            return
+        }
+        response.status = HttpServletResponse.SC_BAD_REQUEST
+        render ""
+    }
+
+    def project() {
+        def mimeType = grailsApplication.config.bard.data.export.cap.project.xml
+        response.contentType = mimeType
+        //do validations
+        if (mimeType == request.getHeader(HttpHeaders.ACCEPT) && params.projectId) {
+            final BigDecimal projectId = params.projectId as BigDecimal
+            final def writer = response.writer
+            final MarkupBuilder xml = new MarkupBuilder(writer)
+            capExportService.generateProject(xml, projectId)
+            return
+        }
+        response.status = HttpServletResponse.SC_BAD_REQUEST
+        render ""
+    }
+
+    def updateAssay() {
+
+    }
+
+    def updateProject() {
+
+    }
+}
