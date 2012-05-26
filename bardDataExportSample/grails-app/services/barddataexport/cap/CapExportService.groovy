@@ -2,20 +2,15 @@ package barddataexport.cap
 
 import groovy.sql.Sql
 import groovy.xml.MarkupBuilder
+import org.codehaus.groovy.grails.commons.GrailsApplication
+import org.codehaus.groovy.grails.web.mapping.LinkGenerator
 
 import javax.sql.DataSource
 
 class CapExportService {
     DataSource dataSource
-    final static String STAGE_MEDIA_TYPE = "application/vnd.bard.cap+xml;type=stage"
-    final static String STAGE_BASE_URL = "http://bard/dictionary/stage/"
-    final static String PROTOCOL_DOCUMENT_BASE_URL = "http://bard/protocolDocument/"
-    final static String RESULT_TYPE_BASE_URL = "http://bard/dictionary/resultType/"
-    final static String RESULT_TYPE_MEDIA_TYPE = "application/vnd.bard.cap+xml;type=resultType"
-    final static String ELEMENT_BASE_URL = "http://bard/dictionary/element/"
-    final static String ELEMENT_MEDIA_TYPE = "application/vnd.bard.cap+xml;type=element"
-    final static String PROJECT_BASE_URL = "http://bard/dictionary/projects/"
-    final static String PROJECT_MEDIA_TYPE = "application/vnd.bard.cap+xml;type=project"
+    LinkGenerator grailsLinkGenerator
+    GrailsApplication grailsApplication
 
     /**
      * Generate a measure contexts
@@ -69,7 +64,10 @@ class CapExportService {
         xml.measure(attributes) {
             if (measureDTO.resultTypeId || measureDTO.resultTypeId.toString().isInteger()) {
                 resultTypeRef() {
-                    link(rel: 'related', href: "${RESULT_TYPE_BASE_URL}${measureDTO.resultTypeId}", type: "${RESULT_TYPE_MEDIA_TYPE}")
+                    final String RESULT_TYPE_MEDIA_TYPE = grailsApplication.config.bard.data.export.dictionary.resultType.xml
+                    final String resultTypeHref = grailsLinkGenerator.link(mapping: 'resultType', absolute: true, params: [id: measureDTO.resultTypeId]).toString()
+
+                    link(rel: 'related', href: "${resultTypeHref}", type: "${RESULT_TYPE_MEDIA_TYPE}")
                 }
             }
         }
@@ -129,14 +127,19 @@ class CapExportService {
 
 
         xml.measureContextItem(attributes) {
+            final String ELEMENT_MEDIA_TYPE = grailsApplication.config.bard.data.export.dictionary.element.xml
             if (dto.valueId || dto.valueId.toString().isInteger()) {
                 valueId() {
-                    link(rel: 'related', href: "${ELEMENT_BASE_URL}${dto.valueId}", type: "${ELEMENT_MEDIA_TYPE}")
+                    final String valueHref = grailsLinkGenerator.link(mapping: 'element', absolute: true, params: [id: dto.valueId]).toString()
+
+                    link(rel: 'related', href: "${valueHref}", type: "${ELEMENT_MEDIA_TYPE}")
                 }
             }
             if (dto.attributeId || dto.attributeId.toString().isInteger()) {
+                final String attributeHref = grailsLinkGenerator.link(mapping: 'element', absolute: true, params: [id: dto.attributeId]).toString()
+
                 attributeId() {
-                    link(rel: 'related', href: "${ELEMENT_BASE_URL}${dto.attributeId}", type: "${ELEMENT_MEDIA_TYPE}")
+                    link(rel: 'related', href: "${attributeHref}", type: "${ELEMENT_MEDIA_TYPE}")
                 }
             }
         }
@@ -198,7 +201,7 @@ class CapExportService {
      */
     public void generateProtocolDocument(
             final MarkupBuilder xml, final String protocolNameText, final BigDecimal protocolId) {
-        final String protocolUri = PROTOCOL_DOCUMENT_BASE_URL + protocolId
+        final String protocolUri = grailsLinkGenerator.link(mapping: 'protocolDocument', absolute: true, params: [id: protocolId]).toString()
         xml.protocolDocument(uri: protocolUri) {
             protocolName(protocolNameText)
         }
@@ -228,7 +231,10 @@ class CapExportService {
             }
             if (projectAssayDTO.stageId) {
                 stage() {
-                    link(rel: 'related', href: "${STAGE_BASE_URL}${projectAssayDTO.stageId}", type: "${STAGE_MEDIA_TYPE}")
+                    final String STAGE_MEDIA_TYPE = grailsApplication.config.bard.data.export.dictionary.stage.xml
+                    final String stageHref = grailsLinkGenerator.link(mapping: 'stage', absolute: true, params: [id: projectAssayDTO.stageId]).toString()
+
+                    link(rel: 'related', href: "${stageHref}", type: "${STAGE_MEDIA_TYPE}")
                 }
             }
 
@@ -241,7 +247,7 @@ class CapExportService {
                         assayStatus = assayStatusRow.STATUS
                     }
                 }
-                generateAssay(sql, xml, new AssayDTO(projectAssayDTO.projectId,projectAssayDTO.assayId, assayRow.ASSAY_VERSION, assayStatus, assayRow.ASSAY_NAME, assayRow.DESCRIPTION, assayRow.DESIGNED_BY))
+                generateAssay(sql, xml, new AssayDTO(projectAssayDTO.projectId, projectAssayDTO.assayId, assayRow.ASSAY_VERSION, assayStatus, assayRow.ASSAY_NAME, assayRow.DESCRIPTION, assayRow.DESIGNED_BY))
             }
         }
     }
@@ -378,7 +384,11 @@ class CapExportService {
             generateMeasureContexts(sql, xml, assayDTO.assayId)
             generateMeasureContextItems(sql, xml, assayDTO.assayId)
             generateProtocolDocuments(sql, xml, assayDTO.assayId)
-            link(rel: 'up', href: "${PROJECT_BASE_URL}${assayDTO.projectId}", type: "${PROJECT_MEDIA_TYPE}")
+
+            final String PROJECT_MEDIA_TYPE = grailsApplication.config.bard.data.export.cap.project.xml
+            final String projectHref = grailsLinkGenerator.link(mapping: 'project', absolute: true, params: [id: assayDTO.projectId]).toString()
+
+            link(rel: 'up', href: "${projectHref}", type: "${PROJECT_MEDIA_TYPE}")
         }
     }
 
@@ -399,7 +409,7 @@ class CapExportService {
                     assayStatus = assayStatusRow.STATUS
                 }
             }
-            generateAssay(sql, xml, new AssayDTO(projectId,assayId, assayRow.ASSAY_VERSION, assayStatus, assayRow.ASSAY_NAME, assayRow.DESCRIPTION, assayRow.DESIGNED_BY))
+            generateAssay(sql, xml, new AssayDTO(projectId, assayId, assayRow.ASSAY_VERSION, assayStatus, assayRow.ASSAY_NAME, assayRow.DESCRIPTION, assayRow.DESIGNED_BY))
         }
     }
 }
@@ -518,11 +528,11 @@ class AssayDTO {
     AssayDTO(
             final BigDecimal projectId,
             final BigDecimal assayId,
-             final String assayVersion,
-             final String assayStatus,
-             final String assayName,
-             final String description,
-             final String designedBy) {
+            final String assayVersion,
+            final String assayStatus,
+            final String assayName,
+            final String description,
+            final String designedBy) {
         this.projectId = projectId
         this.assayId = assayId
         this.assayVersion = assayVersion

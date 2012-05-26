@@ -2,24 +2,15 @@ package barddataexport.experiment
 
 import groovy.sql.Sql
 import groovy.xml.MarkupBuilder
+import org.codehaus.groovy.grails.commons.GrailsApplication
+import org.codehaus.groovy.grails.web.mapping.LinkGenerator
 
 import javax.sql.DataSource
 
 class ResultExportService {
     DataSource dataSource
-
-    //TODO: read from properties file
-    final static int MAX_RESULTS_RECORDS_PER_PAGE = 5000
-    final static String RESULT_TYPE_URL_PREFIX = "http://bard/resultType/"
-    final static String EXPERIMENT_URL_PREFIX = "http://bard/experiment/"
-
-    final static String RESULT_MEDIA_TYPE = "application/vnd.bard.cap+xml;type=result"
-    final static String RESULTS_MEDIA_TYPE = "application/vnd.bard.cap+xml;type=results"
-    final static String RESULT_TYPE_MEDIA_TYPE = "application/vnd.bard.cap+xml;type=resultType"
-    final static String EXPERIMENT_MEDIA_TYPE = "application/vnd.bard.cap+xml;type=experiment"
-    final static String PUBCHEM_SID_URL = "http://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid="
-    final static String ELEMENT_BASE_URL = "http://bard/dictionary/element/"
-    final static String ELEMENT_MEDIA_TYPE = "application/vnd.bard.cap+xml;type=element"
+    GrailsApplication grailsApplication
+    LinkGenerator grailsLinkGenerator
 
     /**
      * Generate the result element
@@ -31,8 +22,7 @@ class ResultExportService {
     protected void generateResult(final Sql sql, final MarkupBuilder xml, final ResultDTO resultDTO, final String experimentHref) {
 
         final BigDecimal resultId = resultDTO.resultId
-        final String resultHref = "${experimentHref}/result/${resultId}"
-
+        final String resultHref = grailsLinkGenerator.link(mapping: 'result', absolute: true, params: [id: resultId]).toString()
 
         def attributes = [:]
 
@@ -57,6 +47,7 @@ class ResultExportService {
             generateResultStatus(sql, xml, resultDTO.statusId)
 
             if (resultDTO.substanceId || resultDTO.substanceId.toString().isInteger()) {
+                final String PUBCHEM_SID_URL = grailsApplication.config.bard.pubchem.sid.url.prefix
                 substance(url: "${PUBCHEM_SID_URL}${resultDTO.substanceId}")
             }
 
@@ -73,7 +64,7 @@ class ResultExportService {
         final Sql sql = new Sql(dataSource)
 
         sql.eachRow("SELECT * FROM RESULT WHERE RESULT_ID=" + resultId) { resultRow ->
-            final String experimentHref = "${EXPERIMENT_URL_PREFIX}$resultRow.EXPERIMENT_ID}"
+            final String experimentHref = grailsLinkGenerator.link(mapping: 'experiment', absolute: true, params: [id: resultRow.EXPERIMENT_ID]).toString()
             ResultDTO resultDTO =
                 new ResultDTO(
                         resultRow.RESULT_ID,
@@ -96,8 +87,8 @@ class ResultExportService {
      * @return
      */
     protected void generateResults(final Sql sql, final MarkupBuilder xml, final BigDecimal experimentId, final int numberOfResults) {
-
-        def experimentHref = "${EXPERIMENT_URL_PREFIX}${experimentId}"
+        final String experimentHref = grailsLinkGenerator.link(mapping: 'experiment', absolute: true, params: [id: experimentId]).toString()
+        final int MAX_RESULTS_RECORDS_PER_PAGE = grailsApplication.config.bard.results.max.per.page
 
         xml.results(count: numberOfResults) {
             int counter = 0
@@ -192,14 +183,20 @@ class ResultExportService {
 
 
                 xml.resultContextItem(attributes) {
+                    final String ELEMENT_MEDIA_TYPE = grailsApplication.config.bard.data.export.dictionary.element.xml
+
                     if (resultContextItemRow.ATTRIBUTE_ID || resultContextItemRow.ATTRIBUTE_ID.toString().isInteger()) {
+                        final String attributeHref = grailsLinkGenerator.link(mapping: 'element', absolute: true, params: [id: "${resultContextItemRow.ATTRIBUTE_ID}"]).toString()
+
                         attributeId() {
-                            link(rel: 'related', href: "${ELEMENT_BASE_URL}${resultContextItemRow.ATTRIBUTE_ID}", type: "${ELEMENT_MEDIA_TYPE}")
+                            link(rel: 'related', href: "${attributeHref}", type: "${ELEMENT_MEDIA_TYPE}")
                         }
                     }
                     if (resultContextItemRow.VALUE_ID || resultContextItemRow.VALUE_ID.toString().isInteger()) {
+                        final String attributeHref = grailsLinkGenerator.link(mapping: 'element', absolute: true, params: [id: "${resultContextItemRow.VALUE_ID}"]).toString()
+
                         valueId() {
-                            link(rel: 'related', href: "${ELEMENT_BASE_URL}${resultContextItemRow.VALUE_ID}", type: "${ELEMENT_MEDIA_TYPE}")
+                            link(rel: 'related', href: "${attributeHref}", type: "${ELEMENT_MEDIA_TYPE}")
                         }
                     }
 
@@ -239,12 +236,15 @@ class ResultExportService {
      * @param resultHref
      */
     protected void generateResultLinks(final MarkupBuilder xml, final BigDecimal resultId, final BigDecimal resultTypeId, final String experimentHref, final String resultHref) {
+        final String EXPERIMENT_MEDIA_TYPE = grailsApplication.config.bard.data.export.data.experiment.xml
 
         xml.link(rel: 'up', title: 'Experiment', type: "${EXPERIMENT_MEDIA_TYPE}",
                 href: experimentHref) {
         }
-        def resultTypeHref = "${RESULT_TYPE_URL_PREFIX}${resultTypeId}"
 
+        final String resultTypeHref = grailsLinkGenerator.link(mapping: 'resultType', absolute: true, params: [id: resultTypeId]).toString()
+        final String RESULT_TYPE_MEDIA_TYPE = grailsApplication.config.bard.data.export.dictionary.resultType.xml
+        final String RESULT_MEDIA_TYPE = grailsApplication.config.bard.data.export.data.result.xml
         xml.link(rel: 'related', title: 'Result Type', type: "${RESULT_TYPE_MEDIA_TYPE}",
                 href: resultTypeHref) {
         }
@@ -259,11 +259,16 @@ class ResultExportService {
      * @param numberOfResults
      */
     protected void generateResultsLinks(final MarkupBuilder xml, final String experimentHref, final int numberOfResults) {
+        final String EXPERIMENT_MEDIA_TYPE = grailsApplication.config.bard.data.export.data.experiment.xml
+
         xml.link(rel: 'collection', title: 'Experiment', type: "${EXPERIMENT_MEDIA_TYPE}",
                 href: experimentHref) {
         }
+        final int MAX_RESULTS_RECORDS_PER_PAGE = grailsApplication.config.bard.results.max.per.page
+
         if (numberOfResults > MAX_RESULTS_RECORDS_PER_PAGE) {
-            def resultsHref = experimentHref + "/results"
+            final String RESULTS_MEDIA_TYPE = grailsApplication.config.bard.data.export.data.results.xml
+            final String resultsHref = grailsLinkGenerator.link(mapping: 'results', absolute: true, params: [id: experimentId]).toString()
             xml.link(rel: 'next', title: 'Results', type: "${RESULTS_MEDIA_TYPE}",
                     href: resultsHref) {
             }

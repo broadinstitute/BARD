@@ -58,8 +58,8 @@ class CapRestController {
         def mimeType = grailsApplication.config.bard.data.export.cap.assay.xml
         response.contentType = mimeType
         //do validations
-        if (mimeType == request.getHeader(HttpHeaders.ACCEPT) && params.assayId) {
-            final BigDecimal assayId = params.assayId as BigDecimal
+        if (mimeType == request.getHeader(HttpHeaders.ACCEPT) && params.id) {
+            final BigDecimal assayId = params.id as BigDecimal
 
             final def writer = response.writer
             final MarkupBuilder xml = new MarkupBuilder(writer)
@@ -74,8 +74,8 @@ class CapRestController {
         def mimeType = grailsApplication.config.bard.data.export.cap.project.xml
         response.contentType = mimeType
         //do validations
-        if (mimeType == request.getHeader(HttpHeaders.ACCEPT) && params.projectId) {
-            final BigDecimal projectId = params.projectId as BigDecimal
+        if (mimeType == request.getHeader(HttpHeaders.ACCEPT) && params.id) {
+            final BigDecimal projectId = params.id as BigDecimal
             final def writer = response.writer
             final MarkupBuilder xml = new MarkupBuilder(writer)
             capExportService.generateProject(xml, projectId)

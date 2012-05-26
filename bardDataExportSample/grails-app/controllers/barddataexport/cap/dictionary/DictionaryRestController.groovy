@@ -40,8 +40,8 @@ class DictionaryRestController {
         def mimeType = grailsApplication.config.bard.data.export.dictionary.resultType.xml
         response.contentType = mimeType
         //do validations
-        if (mimeType == request.getHeader(HttpHeaders.ACCEPT) && params.resultTypeId) {
-            final BigDecimal resultTypeId = params.resultTypeId as BigDecimal
+        if (mimeType == request.getHeader(HttpHeaders.ACCEPT) && params.id) {
+            final BigDecimal resultTypeId = params.id as BigDecimal
             final def writer = response.writer
             final MarkupBuilder xml = new MarkupBuilder(writer)
             dictionaryExportService.generateResultType(xml, resultTypeId)
@@ -55,8 +55,8 @@ class DictionaryRestController {
         def mimeType = grailsApplication.config.bard.data.export.dictionary.stage.xml
         response.contentType = mimeType
         //do validations
-        if (mimeType == request.getHeader(HttpHeaders.ACCEPT) && params.stageId) {
-            final BigDecimal stageId = params.stageId as BigDecimal
+        if (mimeType == request.getHeader(HttpHeaders.ACCEPT) && params.id) {
+            final BigDecimal stageId = params.id as BigDecimal
 
             final def writer = response.writer
             final MarkupBuilder xml = new MarkupBuilder(writer)
@@ -71,8 +71,8 @@ class DictionaryRestController {
         def mimeType = grailsApplication.config.bard.data.export.dictionary.element.xml
         response.contentType = mimeType
         //do validations
-        if (mimeType == request.getHeader(HttpHeaders.ACCEPT) && params.elementId) {
-            final BigDecimal elementId = params.elementId as BigDecimal
+        if (mimeType == request.getHeader(HttpHeaders.ACCEPT) && params.id) {
+            final BigDecimal elementId = params.id as BigDecimal
             final def writer = response.writer
             final MarkupBuilder xml = new MarkupBuilder(writer)
             dictionaryExportService.generateElementWithElementId(xml, elementId)

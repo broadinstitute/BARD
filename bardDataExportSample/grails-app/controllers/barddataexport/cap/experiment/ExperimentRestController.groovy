@@ -45,10 +45,10 @@ class ExperimentRestController {
         def mimeType = grailsApplication.config.bard.data.export.data.results.xml
         response.contentType = mimeType
         //do validations
-        if (mimeType == request.getHeader(HttpHeaders.ACCEPT) && params.experimentId) {
+        if (mimeType == request.getHeader(HttpHeaders.ACCEPT) && params.id) {
             final def writer = response.writer
             final MarkupBuilder xml = new MarkupBuilder(writer)
-            final BigDecimal experimentId = params.experimentId as BigDecimal
+            final BigDecimal experimentId = params.id as BigDecimal
             resultExportService.generateResults(xml, experimentId)
             return
         }
@@ -60,8 +60,8 @@ class ExperimentRestController {
         def mimeType = grailsApplication.config.bard.data.export.data.experiment.xml
         response.contentType = mimeType
         //do validations
-        if (mimeType == request.getHeader(HttpHeaders.ACCEPT) && params.experimentId) {
-            final BigDecimal experimentId = params.experimentId as BigDecimal
+        if (mimeType == request.getHeader(HttpHeaders.ACCEPT) && params.id) {
+            final BigDecimal experimentId = params.id as BigDecimal
 
             final def writer = response.writer
             final MarkupBuilder xml = new MarkupBuilder(writer)
@@ -77,9 +77,8 @@ class ExperimentRestController {
         def mimeType = grailsApplication.config.bard.data.export.data.result.xml
         response.contentType = mimeType
         //do validations
-        if (mimeType == request.getHeader(HttpHeaders.ACCEPT) && params.resultId) {
-            final BigDecimal resultId = params.resultId as BigDecimal
-            final BigDecimal experimentId = params.experimentId as BigDecimal
+        if (mimeType == request.getHeader(HttpHeaders.ACCEPT) && params.id) {
+            final BigDecimal resultId = params.id as BigDecimal
             final def writer = response.writer
             final MarkupBuilder xml = new MarkupBuilder(writer)
             resultExportService.generateResult(xml, resultId)

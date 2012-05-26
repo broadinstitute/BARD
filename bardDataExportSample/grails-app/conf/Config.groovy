@@ -9,6 +9,13 @@
 // if (System.properties["${appName}.config.location"]) {
 //    grails.config.locations << "file:" + System.properties["${appName}.config.location"]
 // }
+
+//Number of experiments per page
+bard.experiments.max.per.page=1000000
+
+//number of results per page
+bard.results.max.per.page=5000
+bard.pubchem.sid.url.prefix='http://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid='
 //root
 bard.data.export.bardexport.xml = 'application/vnd.bard.cap+xml;type=bardexport'
 
