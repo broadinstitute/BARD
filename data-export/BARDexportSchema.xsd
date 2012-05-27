@@ -30,6 +30,7 @@ will give you this element
                 <xs:element minOccurs="0" ref="description"/>
                 <xs:element minOccurs="0" name="synonyms" type="xs:string"/>
                 <xs:element minOccurs="0" name="externalUrl" type="xs:anyURI"/>
+                <xs:element maxOccurs="unbounded" minOccurs="0" ref="link"/>
             </xs:sequence>
             <xs:attribute name="elementId" type="bardID" use="required"/>
             <xs:attribute name="elementStatus">
@@ -69,7 +70,7 @@ will give you this element
                     </xs:annotation>
                 </xs:element>
             </xs:sequence>
-            <xs:attribute name="stageId" type="bardID"/>
+            <xs:attribute name="stageId" type="bardID" use="required"/>
             <xs:attribute name="parentStageId" type="bardID" use="optional"/>
             <xs:attribute name="stageStatus" type="xs:string" use="required"/>
         </xs:complexType>
@@ -212,6 +213,30 @@ application/vnd.bard.cap+xml;type=dictionary should give the client the entire d
                         <xs:field xpath="@parentLaboratoryId"/>
                     </xs:keyref>
                 </xs:element>
+                <xs:element minOccurs="0" name="units">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element maxOccurs="unbounded" name="unit">
+                                <xs:complexType>
+                                    <xs:sequence>
+                                        <xs:element minOccurs="0" ref="description"/>
+                                    </xs:sequence>
+                                    <xs:attribute name="unitId" type="bardID" use="required"/>
+                                    <xs:attribute name="parentUnitId" type="bardID" use="optional"/>
+                                    <xs:attribute name="unit" type="xs:string" use="required"/>
+                                </xs:complexType>
+                                <xs:key name="Unit_Key">
+                                    <xs:selector xpath="unit"/>
+                                    <xs:field xpath="@unitId"/>
+                                </xs:key>
+                                <xs:keyref name="Unit_KeyRef" refer="Unit_Key">
+                                    <xs:selector xpath="unit"/>
+                                    <xs:field xpath="@parentUnitId"/>
+                                </xs:keyref>
+                            </xs:element>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
             </xs:sequence>
         </xs:complexType>
         <xs:key name="Element_Key">
@@ -222,6 +247,14 @@ application/vnd.bard.cap+xml;type=dictionary should give the client the entire d
             <xs:selector xpath="dictionary/elementHierarchies/elementHierarchy"/>
             <xs:field xpath="@parentElementId | @childElementId"/>
         </xs:keyref>
+        <xs:keyref name="Element_Unit_KeyRef" refer="Element_Unit_Key">
+            <xs:selector xpath="elements/element"/>
+            <xs:field xpath="@unit"/>
+        </xs:keyref>
+        <xs:key name="Element_Unit_Key">
+            <xs:selector xpath="units/unit"/>
+            <xs:field xpath="@unit"/>
+        </xs:key>
     </xs:element>
     <xs:element name="resultType">
         <xs:annotation>
