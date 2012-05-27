@@ -20,7 +20,7 @@ class CapExportService {
     protected void generateMeasureContexts(final Sql sql, final MarkupBuilder xml, final BigDecimal assayId) {
 
         xml.measureContexts() {
-            sql.eachRow('select MEASURE_CONTEXT_ID,CONTEXT_NAME from MEASURE_CONTEXT WHERE ASSAY_ID=' + assayId) { row ->
+            sql.eachRow('SELECT MEASURE_CONTEXT_ID,CONTEXT_NAME FROM MEASURE_CONTEXT WHERE ASSAY_ID=' + assayId) { row ->
                 generateMeasureContext(xml, row.MEASURE_CONTEXT_ID, row.CONTEXT_NAME)
             }
         }
@@ -36,7 +36,7 @@ class CapExportService {
     protected void generateMeasures(final Sql sql, final MarkupBuilder xml, final BigDecimal assayId) {
 
         xml.measures() {
-            sql.eachRow('select MEASURE_ID,MEASURE_CONTEXT_ID,RESULT_TYPE_ID,ENTRY_UNIT,PARENT_MEASURE_ID from MEASURE WHERE ASSAY_ID=' + assayId) { row ->
+            sql.eachRow('SELECT MEASURE_ID,MEASURE_CONTEXT_ID,RESULT_TYPE_ID,ENTRY_UNIT,PARENT_MEASURE_ID FROM MEASURE WHERE ASSAY_ID=' + assayId) { row ->
                 final MeasureDTO measureDTO = new MeasureDTO(row.MEASURE_ID, row.MEASURE_CONTEXT_ID, row.RESULT_TYPE_ID, row.PARENT_MEASURE_ID, row.ENTRY_UNIT)
                 generateMeasure(xml, measureDTO)
             }
@@ -76,7 +76,7 @@ class CapExportService {
     protected void generateMeasureContextItems(final Sql sql, final MarkupBuilder xml, final BigDecimal assayId) {
 
         xml.measureContextItems() {
-            sql.eachRow('select MEASURE_CONTEXT_ITEM_ID,GROUP_MEASURE_CONTEXT_ITEM_ID,MEASURE_CONTEXT_ID,ATTRIBUTE_TYPE,ATTRIBUTE_ID,QUALIFIER,VALUE_ID,VALUE_DISPLAY,VALUE_NUM,VALUE_MIN,VALUE_MAX from MEASURE_CONTEXT_ITEM WHERE ASSAY_ID=' + assayId) { row ->
+            sql.eachRow('SELECT MEASURE_CONTEXT_ITEM_ID,GROUP_MEASURE_CONTEXT_ITEM_ID,MEASURE_CONTEXT_ID,ATTRIBUTE_TYPE,ATTRIBUTE_ID,QUALIFIER,VALUE_ID,VALUE_DISPLAY,VALUE_NUM,VALUE_MIN,VALUE_MAX FROM MEASURE_CONTEXT_ITEM WHERE ASSAY_ID=' + assayId) { row ->
                 MeasureContextItemDTO dto = new MeasureContextItemDTO(
                         row.MEASURE_CONTEXT_ITEM_ID,
                         row.GROUP_MEASURE_CONTEXT_ITEM_ID,
@@ -150,7 +150,7 @@ class CapExportService {
                                           final MarkupBuilder xml, final BigDecimal assayId) {
 
         xml.externalAssays() {
-            sql.eachRow('select EXTERNAL_SYSTEM_ID,EXT_ASSAY_ID from EXTERNAL_ASSAY WHERE ASSAY_ID=' + assayId) { externalAssayRow ->
+            sql.eachRow('SELECT EXTERNAL_SYSTEM_ID,EXT_ASSAY_ID FROM EXTERNAL_ASSAY WHERE ASSAY_ID=' + assayId) { externalAssayRow ->
                 generateExternalAssay(sql, xml, externalAssayRow.EXT_ASSAY_ID, externalAssayRow.EXTERNAL_SYSTEM_ID)
             }
         }
@@ -164,7 +164,7 @@ class CapExportService {
 
         xml.externalAssay(externalAssayId: externalAssayId) {
             if (externalSystemId) {
-                sql.eachRow('select SYSTEM_NAME,OWNER,SYSTEM_URL from EXTERNAL_SYSTEM WHERE EXTERNAL_SYSTEM_ID=' + externalSystemId) { externalSystemRow ->
+                sql.eachRow('SELECT SYSTEM_NAME,OWNER,SYSTEM_URL FROM EXTERNAL_SYSTEM WHERE EXTERNAL_SYSTEM_ID=' + externalSystemId) { externalSystemRow ->
                     def attributes = [:]
 
                     if (externalSystemRow.SYSTEM_URL) {
@@ -185,32 +185,33 @@ class CapExportService {
 
 
 
-    protected void generateProtocolDocuments(final Sql sql,
-                                             final MarkupBuilder xml, final BigDecimal assayId) {
-        xml.protocolDocuments() {
-            sql.eachRow('select PROTOCOL_ID,PROTOCOL_NAME,PROTOCOL_DOCUMENT from PROTOCOL WHERE ASSAY_ID=' + assayId) { documentRow ->
-                generateProtocolDocument(xml, documentRow.PROTOCOL_NAME, documentRow.PROTOCOL_ID)
+    protected void generateAssayDocuments(final Sql sql,
+                                          final MarkupBuilder xml,
+                                          final BigDecimal assayId) {
+        xml.assayDocuments() {
+            sql.eachRow('SELECT ASSAY_DOCUMENT_ID,DOCUMENT_NAME FROM ASSAY_DOCUMENT WHERE ASSAY_ID=' + assayId) { documentRow ->
+                generateAssayDocument(xml, documentRow.DOCUMENT_NAME, documentRow.ASSAY_DOCUMENT_ID)
             }
         }
     }
     /**
      * Should we expose this as a service?
      * @param xml
-     * @param protocolNameText
-     * @param protocolId
+     * @param documentNameText
+     * @param assayDocumentId
      */
-    public void generateProtocolDocument(
-            final MarkupBuilder xml, final String protocolNameText, final BigDecimal protocolId) {
-        final String protocolUri = grailsLinkGenerator.link(mapping: 'protocolDocument', absolute: true, params: [id: protocolId]).toString()
-        xml.protocolDocument(uri: protocolUri) {
-            protocolName(protocolNameText)
+    public void generateAssayDocument(
+            final MarkupBuilder xml, final String documentNameText, final BigDecimal assayDocumentId) {
+        final String assayDocumentUri = grailsLinkGenerator.link(mapping: 'assayDocument', absolute: true, params: [id: assayDocumentId]).toString()
+        xml.assayDocument(uri: assayDocumentUri) {
+            documentName(documentNameText)
         }
     }
 
 
     protected void generateProjectAssay(final Sql sql,
                                         final MarkupBuilder xml,
-                                        ProjectAssayDTO projectAssayDTO
+                                        final ProjectAssayDTO projectAssayDTO
     ) {
 
         def attributes = [:]
@@ -238,16 +239,10 @@ class CapExportService {
                 }
             }
 
-            sql.eachRow('select ASSAY_NAME,ASSAY_STATUS_ID,ASSAY_VERSION,DESCRIPTION,DESIGNED_BY from ASSAY WHERE ASSAY_ID=' + projectAssayDTO.assayId) { assayRow ->
-
-                def assayStatusId = assayRow.ASSAY_STATUS_ID
-                def assayStatus = null
-                if (assayStatusId) {
-                    sql.eachRow('select STATUS from ASSAY_STATUS where ASSAY_STATUS_ID=' + assayStatusId) {  assayStatusRow ->
-                        assayStatus = assayStatusRow.STATUS
-                    }
-                }
-                generateAssay(sql, xml, new AssayDTO(projectAssayDTO.projectId, projectAssayDTO.assayId, assayRow.ASSAY_VERSION, assayStatus, assayRow.ASSAY_NAME, assayRow.DESCRIPTION, assayRow.DESIGNED_BY))
+            sql.eachRow('SELECT ASSAY_NAME, ASSAY_STATUS, ASSAY_VERSION, DESCRIPTION, DESIGNED_BY,READY_FOR_EXTRACTION FROM ASSAY WHERE ASSAY_ID=' + projectAssayDTO.assayId) { assayRow ->
+                generateAssay(sql, xml, new AssayDTO(projectAssayDTO.projectId, projectAssayDTO.assayId,
+                        assayRow.ASSAY_VERSION, assayRow.ASSAY_STATUS, assayRow.ASSAY_NAME, assayRow.DESCRIPTION,
+                        assayRow.DESIGNED_BY, assayRow.READY_FOR_EXTRACTION))
             }
         }
     }
@@ -256,22 +251,15 @@ class CapExportService {
 
     protected void generateProjectAssays(final Sql sql, final MarkupBuilder xml, final BigDecimal projectId) {
         xml.projectAssays() {
-            sql.eachRow('select PROJECT_ASSAY_ID,PROJECT_ID,ASSAY_ID,STAGE,RELATED_ASSAY_ID,SEQUENCE_NO,PROMOTION_THRESHOLD,PROMOTION_CRITERIA from PROJECT_ASSAY WHERE PROJECT_ID=' + projectId) { projectAssayRow ->
+            sql.eachRow('SELECT PROJECT_ASSAY_ID,PROJECT_ID,ASSAY_ID,STAGE_ID,RELATED_ASSAY_ID,SEQUENCE_NO,PROMOTION_THRESHOLD,PROMOTION_CRITERIA FROM PROJECT_ASSAY WHERE PROJECT_ID=' + projectId) { projectAssayRow ->
 
-                def stage = projectAssayRow.STAGE
-                def stageId = null
-                if (stage) {
-                    sql.eachRow("select STAGE_ID from STAGE where STAGE='" + stage + "'") {  stageRow ->
-                        stageId = stageRow.STAGE_ID
-                    }
-                }
                 final ProjectAssayDTO projectAssayDTO =
                     new ProjectAssayDTO(
                             projectAssayRow.PROJECT_ID,
                             projectAssayRow.PROJECT_ASSAY_ID,
                             projectAssayRow.RELATED_ASSAY_ID,
                             projectAssayRow.ASSAY_ID,
-                            stageId,
+                            projectAssayRow.STAGE_ID,
                             projectAssayRow.SEQUENCE_NO,
                             projectAssayRow.PROMOTION_THRESHOLD,
                             projectAssayRow.PROMOTION_CRITERIA)
@@ -286,6 +274,7 @@ class CapExportService {
     protected void generateProject(Sql sql, final MarkupBuilder xml, ProjectDTO projectDTO) {
         def attributes = [:]
         attributes.put('projectId', projectDTO.projectId)
+        attributes.put('readyForExtraction', projectDTO.readyForExtraction)
         if (projectDTO.groupType) {
             attributes.put('groupType', projectDTO.groupType)
         }
@@ -299,6 +288,10 @@ class CapExportService {
                 description(projectDTO.description)
             }
             generateProjectAssays(sql, xml, projectDTO.projectId)
+            final String PROJECT_MEDIA_TYPE = grailsApplication.config.bard.data.export.cap.project.xml
+            final String projectHref = grailsLinkGenerator.link(mapping: 'project', absolute: true, params: [id: projectDTO.projectId]).toString()
+            link(rel: 'edit', href: "${projectHref}", type: "${PROJECT_MEDIA_TYPE}")
+
         }
 
     }
@@ -310,13 +303,14 @@ class CapExportService {
         xml.projects() {
             String selectStatement
             if (onlyNewProjects) {
-                selectStatement = 'SELECT PROJECT_ID, PROJECT_NAME, GROUP_TYPE, DESCRIPTION FROM PROJECT WHERE IS_DIRTY=0'
+                selectStatement = "SELECT PROJECT_ID, PROJECT_NAME, GROUP_TYPE, DESCRIPTION, READY_FOR_EXTRACTION FROM PROJECT WHERE READY_FOR_EXTRACTION='Ready'"
             }
             else {
-                selectStatement = 'SELECT PROJECT_ID, PROJECT_NAME, GROUP_TYPE, DESCRIPTION from PROJECT'
+                selectStatement = 'SELECT PROJECT_ID, PROJECT_NAME, GROUP_TYPE, DESCRIPTION, READY_FOR_EXTRACTION FROM PROJECT'
             }
             sql.eachRow(selectStatement) { row ->
-                generateProject(sql, xml, new ProjectDTO(row.PROJECT_ID, row.GROUP_TYPE, row.PROJECT_NAME, row.DESCRIPTION))
+                generateProject(sql, xml, new ProjectDTO(row.PROJECT_ID, row.GROUP_TYPE, row.PROJECT_NAME, row.DESCRIPTION,
+                        row.READY_FOR_EXTRACTION))
             }
         }
     }
@@ -334,10 +328,18 @@ class CapExportService {
 
     public void generateProject(final MarkupBuilder xml, final BigDecimal projectId) {
         final Sql sql = new Sql(dataSource)
-        final String selectStatement = 'SELECT PROJECT_ID, PROJECT_NAME, GROUP_TYPE, DESCRIPTION FROM PROJECT WHERE PROJECT_ID=' + projectId
+        final String selectStatement = 'SELECT PROJECT_ID, PROJECT_NAME, GROUP_TYPE, DESCRIPTION, READY_FOR_EXTRACTION FROM PROJECT WHERE PROJECT_ID=' + projectId
 
         sql.eachRow(selectStatement) { row ->
-            generateProject(sql, xml, new ProjectDTO(row.PROJECT_ID, row.GROUP_TYPE, row.PROJECT_NAME, row.DESCRIPTION))
+            generateProject(sql, xml,
+                    new ProjectDTO(
+                            row.PROJECT_ID,
+                            row.GROUP_TYPE,
+                            row.PROJECT_NAME,
+                            row.DESCRIPTION,
+                            row.READY_FOR_EXTRACTION
+                    )
+            )
         }
     }
     /**
@@ -360,6 +362,8 @@ class CapExportService {
 
         def attributes = [:]
         attributes.put('assayId', assayDTO.assayId)
+        attributes.put('readyForExtraction', assayDTO.readyForExtraction)
+
         if (assayDTO.assayVersion) {
             attributes.put('assayVersion', assayDTO.assayVersion)
         }
@@ -383,12 +387,16 @@ class CapExportService {
             generateMeasures(sql, xml, assayDTO.assayId)
             generateMeasureContexts(sql, xml, assayDTO.assayId)
             generateMeasureContextItems(sql, xml, assayDTO.assayId)
-            generateProtocolDocuments(sql, xml, assayDTO.assayId)
+            generateAssayDocuments(sql, xml, assayDTO.assayId)
 
             final String PROJECT_MEDIA_TYPE = grailsApplication.config.bard.data.export.cap.project.xml
             final String projectHref = grailsLinkGenerator.link(mapping: 'project', absolute: true, params: [id: assayDTO.projectId]).toString()
 
+            final String ASSAY_MEDIA_TYPE = grailsApplication.config.bard.data.export.cap.assay.xml
+            final String assayHref = grailsLinkGenerator.link(mapping: 'assay', absolute: true, params: [id: assayDTO.assayId]).toString()
+            link(rel: 'edit', href: "${assayHref}", type: "${ASSAY_MEDIA_TYPE}")
             link(rel: 'up', href: "${projectHref}", type: "${PROJECT_MEDIA_TYPE}")
+
         }
     }
 
@@ -397,19 +405,23 @@ class CapExportService {
             final BigDecimal assayId) {
         final Sql sql = new Sql(dataSource)
 
-        sql.eachRow('select ASSAY_NAME,ASSAY_STATUS_ID,ASSAY_VERSION,DESCRIPTION,DESIGNED_BY from ASSAY WHERE ASSAY_ID=' + assayId) { assayRow ->
+        sql.eachRow('SELECT ASSAY_NAME,ASSAY_STATUS,ASSAY_VERSION,DESCRIPTION,DESIGNED_BY FROM ASSAY WHERE ASSAY_ID=' + assayId) { assayRow ->
             BigDecimal projectId = null
-            sql.eachRow('select PROJECT_ID from PROJECT_ASSAY WHERE ASSAY_ID=' + assayId) { projectAssayRow ->
+            sql.eachRow('SELECT PROJECT_ID FROM PROJECT_ASSAY WHERE ASSAY_ID=' + assayId) { projectAssayRow ->
                 projectId = projectAssayRow.PROJECT_ID
             }
-            def assayStatusId = assayRow.ASSAY_STATUS_ID
-            def assayStatus = null
-            if (assayStatusId) {
-                sql.eachRow('select STATUS from ASSAY_STATUS where ASSAY_STATUS_ID=' + assayStatusId) {  assayStatusRow ->
-                    assayStatus = assayStatusRow.STATUS
-                }
-            }
-            generateAssay(sql, xml, new AssayDTO(projectId, assayId, assayRow.ASSAY_VERSION, assayStatus, assayRow.ASSAY_NAME, assayRow.DESCRIPTION, assayRow.DESIGNED_BY))
+            generateAssay(
+                    sql, xml,
+                    new AssayDTO(projectId,
+                            assayId,
+                            assayRow.ASSAY_VERSION,
+                            assayRow.ASSAY_STATUS,
+                            assayRow.ASSAY_NAME,
+                            assayRow.DESCRIPTION,
+                            assayRow.DESIGNED_BY,
+                            assayRow.READY_FOR_EXTRACTION
+                    )
+            )
         }
     }
 }
@@ -418,12 +430,14 @@ class ProjectDTO {
     final String groupType
     final String projectName
     final String description
+    final String readyForExtraction
 
-    ProjectDTO(final BigDecimal projectId, final String groupType, final String projectName, final String description) {
+    ProjectDTO(final BigDecimal projectId, final String groupType, final String projectName, final String description, final String readyForExtraction) {
         this.projectId = projectId
         this.groupType = groupType
         this.projectName = projectName
         this.description = description
+        this.readyForExtraction = readyForExtraction
     }
 }
 class ProjectAssayDTO {
@@ -524,6 +538,7 @@ class AssayDTO {
     final String assayName
     final String description
     final String designedBy
+    final String readyForExtraction
 
     AssayDTO(
             final BigDecimal projectId,
@@ -532,7 +547,8 @@ class AssayDTO {
             final String assayStatus,
             final String assayName,
             final String description,
-            final String designedBy) {
+            final String designedBy,
+            final String readyForExtraction) {
         this.projectId = projectId
         this.assayId = assayId
         this.assayVersion = assayVersion
@@ -540,5 +556,6 @@ class AssayDTO {
         this.assayName = assayName
         this.description = description
         this.designedBy = designedBy
+        this.readyForExtraction = readyForExtraction
     }
 }

@@ -14,7 +14,8 @@ class DictionaryRestController {
             dictionary: "GET",
             resultType: "GET",
             stage: "GET",
-            element: "GET"
+            element: "GET",
+            updateElemet: "PATCH"
     ]
 
     def index() {
@@ -80,5 +81,8 @@ class DictionaryRestController {
         }
         response.status = HttpServletResponse.SC_BAD_REQUEST
         render ""
+    }
+    def updateElement(){
+
     }
 }

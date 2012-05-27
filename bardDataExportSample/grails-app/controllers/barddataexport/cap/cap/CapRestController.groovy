@@ -37,7 +37,23 @@ class CapRestController {
         final MarkupBuilder xml = new MarkupBuilder(writer)
         capExportService.generateNewProjects(xml)
     }
-
+    def assayDocument(){
+//        def mimeType = grailsApplication.config.bard.data.export.cap.projects.xml
+//        response.contentType = mimeType
+//        //do validations
+//        if (mimeType != request.getHeader(HttpHeaders.ACCEPT)) {
+//            response.status = HttpServletResponse.SC_BAD_REQUEST
+//
+//            render ""
+//            return
+//        }
+//        final def writer = response.writer
+//        final MarkupBuilder xml = new MarkupBuilder(writer)
+//        capExportService.generateNewProjects(xml)
+        //TODO NYI
+        throw new RuntimeException("Not yet Implemented")
+          //return null
+    }
     def cap() {
         def mimeType = grailsApplication.config.bard.data.export.cap.xml
         response.contentType = mimeType

@@ -2,11 +2,15 @@ package barddataexport.dictionary
 
 import groovy.sql.Sql
 import groovy.xml.MarkupBuilder
+import org.codehaus.groovy.grails.commons.GrailsApplication
+import org.codehaus.groovy.grails.web.mapping.LinkGenerator
 
 import javax.sql.DataSource
 
 class DictionaryExportService {
     DataSource dataSource
+    GrailsApplication grailsApplication
+    LinkGenerator grailsLinkGenerator
 
     protected void generateSingleDescriptor(final MarkupBuilder xml, final DescriptorDTO descriptorDTO) {
         if (descriptorDTO.elementStatus) {
@@ -20,9 +24,6 @@ class DictionaryExportService {
         }
         if (descriptorDTO.synonyms) {
             xml.synonyms(descriptorDTO.synonyms)
-        }
-        if (descriptorDTO.acronym) {
-            xml.acronym(descriptorDTO.acronym)
         }
     }
 
@@ -68,53 +69,28 @@ class DictionaryExportService {
 
     protected void generateDescriptors(final Sql sql, final MarkupBuilder xml, final DescriptorType descriptorType) {
 
-        final String selectQuery = "SELECT assay.NODE_ID, assay.PARENT_NODE_ID,assay.ELEMENT_ID,assay.LABEL,assay.DESCRIPTION, assay.ABBREVIATION,ACRONYM, assay.SYNONYMS, assay.EXTERNAL_URL, assay.UNIT, assay.ELEMENT_STATUS_ID ,ELEMENT_STATUS.ELEMENT_STATUS  FROM ${descriptorType} assay JOIN ELEMENT_STATUS ELEMENT_STATUS ON assay.ELEMENT_STATUS_ID=ELEMENT_STATUS.ELEMENT_STATUS_ID"
+        final String selectQuery = "SELECT NODE_ID,PARENT_NODE_ID,ELEMENT_ID,LABEL,DESCRIPTION,ABBREVIATION,SYNONYMS,EXTERNAL_URL,UNIT,ELEMENT_STATUS FROM ${descriptorType}"
 
-        sql.eachRow(selectQuery) { biologyDescriptionRow ->
-            final DescriptorDTO biologyDescriptorDTO =
+        sql.eachRow(selectQuery) { descriptionRow ->
+            final DescriptorDTO descriptorDTO =
                 new DescriptorDTO(
-                        biologyDescriptionRow.PARENT_NODE_ID,
-                        biologyDescriptionRow.NODE_ID,
-                        biologyDescriptionRow.ELEMENT_ID,
-                        biologyDescriptionRow.LABEL,
-                        biologyDescriptionRow.DESCRIPTION,
-                        biologyDescriptionRow.ABBREVIATION,
-                        biologyDescriptionRow.ACRONYM,
-                        biologyDescriptionRow.SYNONYMS,
-                        biologyDescriptionRow.EXTERNAL_URL,
-                        biologyDescriptionRow.UNIT,
-                        biologyDescriptionRow.ELEMENT_STATUS
+                        descriptionRow.PARENT_NODE_ID,
+                        descriptionRow.NODE_ID,
+                        descriptionRow.ELEMENT_ID,
+                        descriptionRow.LABEL,
+                        descriptionRow.DESCRIPTION,
+                        descriptionRow.ABBREVIATION,
+                        descriptionRow.SYNONYMS,
+                        descriptionRow.EXTERNAL_URL,
+                        descriptionRow.UNIT,
+                        descriptionRow.ELEMENT_STATUS
                 )
-            generateDescriptor(xml, biologyDescriptorDTO, descriptorType)
+            generateDescriptor(xml, descriptorDTO, descriptorType)
         }
     }
 
     public void generateDescriptors(final MarkupBuilder xml, final DescriptorType descriptorType) {
         final Sql sql = new Sql(dataSource)
-
-        switch (descriptorType) {
-            case DescriptorType.BIOLOGY_DESCRIPTOR:
-                xml.biologyDescriptors() {
-                    generateDescriptors(sql, xml, descriptorType)
-                }
-                break
-            case DescriptorType.ASSAY_DESCRIPTOR:
-                xml.assayDescriptors() {
-                    generateDescriptors(sql, xml, descriptorType)
-                }
-                break
-            case DescriptorType.INSTANCE_DESCRIPTOR:
-                xml.instanceDescriptors() {
-                    generateDescriptors(sql, xml, descriptorType)
-                }
-                break
-            default:
-                throw new RuntimeException("Unsupported Descriptor Type ${descriptorType}")
-        }
-    }
-
-    protected void generateDescriptors(final Sql sql, final MarkupBuilder xml, final DescriptorType descriptorType, final boolean isString) {
-        //final Sql sql = new Sql(dataSource)
 
         switch (descriptorType) {
             case DescriptorType.BIOLOGY_DESCRIPTOR:
@@ -194,14 +170,14 @@ class DictionaryExportService {
  */
     public void generateStage(final MarkupBuilder xml, final BigDecimal stageId) {
         final Sql sql = new Sql(dataSource)
-        sql.eachRow('SELECT STAGE_ID, NODE_ID, PARENT_NODE_ID,STAGE,DESCRIPTION FROM STAGE WHERE STAGE_ID=' + stageId) { row ->
+        sql.eachRow('SELECT STAGE_ID, NODE_ID, PARENT_NODE_ID,STAGE,DESCRIPTION, STAGE_STATUS FROM STAGE WHERE STAGE_ID=' + stageId) { row ->
 
             final BigDecimal parentNodeId = row.PARENT_NODE_ID
             BigDecimal stageParentId = null
-            sql.eachRow('select STAGE_ID FROM STAGE WHERE PARENT_NODE_ID=' + parentNodeId) { parentStageRow ->
+            sql.eachRow('SELECT STAGE_ID FROM STAGE WHERE NODE_ID=' + parentNodeId) { parentStageRow ->
                 stageParentId = parentStageRow.STAGE_ID
             }
-            generateStage(xml, row.STAGE_ID, stageParentId, row.STAGE, row.DESCRIPTION)
+            generateStage(xml, row.STAGE_ID, stageParentId, row.STAGE, row.DESCRIPTION, row.STAGE_STATUS)
         }
     }
 /**
@@ -213,11 +189,15 @@ class DictionaryExportService {
  * @param stage
  * @param description
  */
-    protected void generateStage(final MarkupBuilder xml, final BigDecimal stageId, final BigDecimal parentStageId, final String stage, final String descriptionText) {
+    protected void generateStage(final MarkupBuilder xml, final BigDecimal stageId, final BigDecimal parentStageId, final String stage,
+                                 final String descriptionText, final String stageStatus) {
         def attributes = [:]
 
         if (stageId || stageId.toString().isInteger()) {
             attributes.put('stageId', stageId)
+        }
+        if (stageStatus) {
+            attributes.put('stageStatus', stageStatus)
         }
         if (parentStageId || parentStageId.toString().isInteger()) {
             attributes.put('parentStageId', parentStageId)
@@ -234,11 +214,11 @@ class DictionaryExportService {
 
     public void generateResultType(final Sql sql, final MarkupBuilder xml, final BigDecimal resultTypeId) {
         // final Sql sql = new Sql(dataSource)
-        sql.eachRow('select NODE_ID,PARENT_NODE_ID,RESULT_TYPE_ID,RESULT_TYPE_NAME,DESCRIPTION,ABBREVIATION,SYNONYMS,BASE_UNIT,ELEMENT_STATUS.ELEMENT_STATUS from RESULT_TYPE RESULT_TYPE JOIN ELEMENT_STATUS ELEMENT_STATUS ON RESULT_TYPE.RESULT_TYPE_STATUS_ID=ELEMENT_STATUS.ELEMENT_STATUS_ID WHERE RESULT_TYPE.RESULT_TYPE_ID=' + resultTypeId) { row ->
+        sql.eachRow('SELECT NODE_ID,PARENT_NODE_ID,RESULT_TYPE_ID,RESULT_TYPE_NAME,DESCRIPTION,ABBREVIATION,SYNONYMS,BASE_UNIT,RESULT_TYPE_STATUS FROM RESULT_TYPE WHERE RESULT_TYPE_ID=' + resultTypeId) { row ->
 
             final BigDecimal parentNodeId = row.PARENT_NODE_ID
             BigDecimal resultTypeParentId = null
-            sql.eachRow('select RESULT_TYPE_ID FROM RESULT_TYPE WHERE PARENT_NODE_ID=' + parentNodeId) { parentResultTypeRow ->
+            sql.eachRow('select RESULT_TYPE_ID FROM RESULT_TYPE WHERE NODE_ID=' + parentNodeId) { parentResultTypeRow ->
                 resultTypeParentId = parentResultTypeRow.RESULT_TYPE_ID
             }
             final ResultTypeDTO resultTypeDTO =
@@ -250,7 +230,8 @@ class DictionaryExportService {
                         row.ABBREVIATION,
                         row.SYNONYMS,
                         row.BASE_UNIT,
-                        row.ELEMENT_STATUS)
+                        row.RESULT_TYPE_STATUS
+                )
             generateResultType(xml, resultTypeDTO)
         }
 
@@ -267,7 +248,7 @@ class DictionaryExportService {
     protected void generateResultTypes(final Sql sql, final MarkupBuilder xml) {
 
         xml.resultTypes() {
-            sql.eachRow('select RESULT_TYPE_ID from RESULT_TYPE RESULT_TYPE JOIN ELEMENT_STATUS ELEMENT_STATUS ON RESULT_TYPE.RESULT_TYPE_STATUS_ID=ELEMENT_STATUS.ELEMENT_STATUS_ID') { row ->
+            sql.eachRow('SELECT RESULT_TYPE_ID FROM RESULT_TYPE') { row ->
                 final BigDecimal resultTypeId = row.RESULT_TYPE_ID
                 generateResultType(sql, xml, resultTypeId)
             }
@@ -286,22 +267,20 @@ class DictionaryExportService {
 
     public void generateElementWithElementId(final MarkupBuilder xml, final BigDecimal elementId) {
         final Sql sql = new Sql(dataSource)
-        sql.eachRow('select ELEMENT_ID, LABEL,DESCRIPTION,ABBREVIATION,ACRONYM,SYNONYMS, EXTERNAL_URL,UNIT, ELEMENT_STATUS_ID from ELEMENT WHERE ELEMENT_ID=' + elementId) { elementRow ->
+        sql.eachRow('SELECT ELEMENT_ID, LABEL,DESCRIPTION,ABBREVIATION,SYNONYMS, EXTERNAL_URL,UNIT, ELEMENT_STATUS, READY_FOR_EXTRACTION FROM ELEMENT WHERE ELEMENT_ID=' + elementId) { elementRow ->
 
-            def elementStatusId = elementRow.ELEMENT_STATUS_ID
-            def elementStatus = null
-            if (elementStatusId) {
-                sql.eachRow('select ELEMENT_STATUS from ELEMENT_STATUS where ELEMENT_STATUS_ID=' + elementStatusId) {  elementStatusRow ->
-                    elementStatus = elementStatusRow.ELEMENT_STATUS
-                }
-            }
+
             final ElementDTO elementDTO =
                 new ElementDTO(
                         elementRow.ELEMENT_ID,
                         elementRow.LABEL,
                         elementRow.DESCRIPTION,
                         elementRow.ABBREVIATION,
-                        elementRow.ACRONYM, elementRow.SYNONYMS, elementRow.EXTERNAL_URL, elementRow.UNIT, elementStatus)
+                        elementRow.SYNONYMS,
+                        elementRow.EXTERNAL_URL,
+                        elementRow.UNIT,
+                        elementRow.ELEMENT_STATUS,
+                        elementRow.READY_FOR_EXTRACTION)
             generateElement(xml, elementDTO)
         }
     }
@@ -311,16 +290,14 @@ class DictionaryExportService {
 
 
         attributes.put('elementId', elementDTO.elementId)
-
+        attributes.put('readyForExtraction', elementDTO.readyForExtraction)
         if (elementDTO.elementStatus) {
             attributes.put('elementStatus', elementDTO.elementStatus)
         }
         if (elementDTO.abbreviation) {
             attributes.put('abbreviation', elementDTO.abbreviation)
         }
-        if (elementDTO.acronym) {
-            attributes.put('acronym', elementDTO.acronym)
-        }
+
         if (elementDTO.unit) {
             attributes.put('unit', elementDTO.unit)
         }
@@ -337,12 +314,17 @@ class DictionaryExportService {
             if (elementDTO.externalUrl) {
                 externalUrl(elementDTO.externalUrl)
             }
+
+            final String ELEMENT_MEDIA_TYPE = grailsApplication.config.bard.data.export.dictionary.element.xml
+            final String elementHref = grailsLinkGenerator.link(mapping: 'element', absolute: true, params: [id: elementDTO.elementId]).toString()
+            link(rel: 'edit', href: "${elementHref}", type: "${ELEMENT_MEDIA_TYPE}")
+
         }
     }
 
     protected void generateElementHierarchies(final Sql sql, final MarkupBuilder xml) {
         xml.elementHierarchies() {
-            sql.eachRow('select ELEMENT_HIERARCHY_ID,PARENT_ELEMENT_ID,CHILD_ELEMENT_ID, RELATIONSHIP_TYPE from ELEMENT_HIERARCHY') { elementHierarchyRow ->
+            sql.eachRow('SELECT ELEMENT_HIERARCHY_ID,PARENT_ELEMENT_ID,CHILD_ELEMENT_ID, RELATIONSHIP_TYPE FROM ELEMENT_HIERARCHY') { elementHierarchyRow ->
                 generateElementHierarchy(xml, elementHierarchyRow.ELEMENT_HIERARCHY_ID,
                         elementHierarchyRow.PARENT_ELEMENT_ID, elementHierarchyRow.CHILD_ELEMENT_ID, elementHierarchyRow.RELATIONSHIP_TYPE)
             }
@@ -373,12 +355,12 @@ class DictionaryExportService {
 
     protected void generateLabs(final Sql sql, MarkupBuilder xml) {
         xml.laboratories() {
-            sql.eachRow('select LABORATORY_ID,LABORATORY, DESCRIPTION, PARENT_NODE_ID  FROM LABORATORY') { labRow ->
+            sql.eachRow('select LABORATORY_ID,LABORATORY, DESCRIPTION, PARENT_NODE_ID,LABORATORY_STATUS  FROM LABORATORY') { labRow ->
                 BigDecimal parentLabId = null
-                sql.eachRow('SELECT LABORATORY_ID FROM LABORATORY WHERE PARENT_NODE_ID=' + labRow.PARENT_NODE_ID) { parentLaboratoryRow ->
+                sql.eachRow('SELECT LABORATORY_ID FROM LABORATORY WHERE NODE_ID=' + labRow.PARENT_NODE_ID) { parentLaboratoryRow ->
                     parentLabId = parentLaboratoryRow.LABORATORY_ID
                 }
-                final LaboratoryDTO laboratoryDTO = new LaboratoryDTO(labRow.LABORATORY_ID, parentLabId, labRow.DESCRIPTION, labRow.LABORATORY)
+                final LaboratoryDTO laboratoryDTO = new LaboratoryDTO(labRow.LABORATORY_ID, parentLabId, labRow.DESCRIPTION, labRow.LABORATORY, labRow.LABORATORY_STATUS)
                 generateLab(xml, laboratoryDTO)
             }
         }
@@ -391,11 +373,70 @@ class DictionaryExportService {
         if (laboratoryDTO.parentLabId || laboratoryDTO.parentLabId.toString().isInteger()) {
             attributes.put('parentLaboratoryId', laboratoryDTO.parentLabId)
         }
+        if (laboratoryDTO.laboratoryStatus) {
+            attributes.put('laboratoryStatus', laboratoryDTO.laboratoryStatus)
+        }
         xml.laboratory(attributes) {
             laboratory(laboratoryDTO.labName)
             description(laboratoryDTO.description)
         }
     }
+    /**
+     *
+     * @param sql
+     * @param xml
+     */
+    protected void generateUnits(final Sql sql ,final MarkupBuilder xml) {
+        xml.units() {
+             sql.eachRow('SELECT UNIT_ID, NODE_ID,PARENT_NODE_ID,UNIT,DESCRIPTION FROM UNIT') { row ->
+
+                final BigDecimal parentNodeId = row.PARENT_NODE_ID
+                BigDecimal parentUnitId = null
+                if (parentNodeId) {
+                    sql.eachRow('SELECT UNIT_ID FROM UNIT WHERE NODE_ID=' + parentNodeId) { parentUnitRow ->
+                        parentUnitId = parentUnitRow.UNIT_ID
+                    }
+                }
+                generateUnit(xml, row.UNIT_ID, parentUnitId, row.UNIT, row.DESCRIPTION)
+            }
+        }
+    }
+
+    /**
+     *
+     * @param xml
+     * @param unitId
+     * @param parentUnitId
+     * @param unit
+     * @param descriptionText
+     */
+    protected void generateUnit(
+            final MarkupBuilder xml,
+            final BigDecimal unitId,
+            final BigDecimal parentUnitId,
+            final String unit,
+            final String descriptionText
+    ) {
+        def attributes = [:]
+
+        if (unitId || unitId.toString().isInteger()) {
+            attributes.put('unitId', unitId)
+        }
+
+        if (parentUnitId || parentUnitId.toString().isInteger()) {
+            attributes.put('parentUnitId', parentUnitId)
+        }
+        if (unit) {
+            attributes.put('unit', unit)
+        }
+        xml.unit(attributes) {
+
+            if (descriptionText) {
+                description(descriptionText)
+            }
+        }
+    }
+
 /**
  * Root node for generating the entire cap
  * @return cap as XML
@@ -414,10 +455,11 @@ class DictionaryExportService {
             generateElementHierarchies(sql, xml)
             generateResultTypes(sql, xml)
             generateStages(sql, xml)
-            generateDescriptors(sql, xml, DescriptorType.BIOLOGY_DESCRIPTOR, false)
-            generateDescriptors(sql, xml, DescriptorType.ASSAY_DESCRIPTOR, false)
-            generateDescriptors(sql, xml, DescriptorType.INSTANCE_DESCRIPTOR, false)
+            generateDescriptors(xml, DescriptorType.BIOLOGY_DESCRIPTOR)
+            generateDescriptors(xml, DescriptorType.ASSAY_DESCRIPTOR)
+            generateDescriptors(xml, DescriptorType.INSTANCE_DESCRIPTOR)
             generateLabs(sql, xml)
+            generateUnits(sql,xml)
         }
     }
 
@@ -427,15 +469,17 @@ class LaboratoryDTO {
     final BigDecimal parentLabId
     final String description
     final String labName
+    final String laboratoryStatus
 
     LaboratoryDTO(final BigDecimal labId,
                   final BigDecimal parentLabId,
                   final String description,
-                  final String labName) {
+                  final String labName, final String laboratoryStatus) {
         this.labId = labId
         this.parentLabId = parentLabId
         this.description = description
         this.labName = labName
+        this.laboratoryStatus = laboratoryStatus
     }
 
 }
@@ -444,26 +488,26 @@ class ElementDTO {
     final String label
     final String description
     final String abbreviation
-    final String acronym
     final String synonyms
     final String externalUrl
     final String unit
     final String elementStatus
+    final String readyForExtraction
 
     ElementDTO(final BigDecimal elementId,
                final String label,
                final String description,
                final String abbreviation,
-               final String acronym,
                final String synonyms,
                final String externalUrl,
                final String unit,
-               final String elementStatus) {
+               final String elementStatus,
+               final String readyForExtraction) {
+        this.readyForExtraction = readyForExtraction
         this.elementId = elementId
         this.label = label
         this.description = description
         this.abbreviation = abbreviation
-        this.acronym = acronym
         this.synonyms = synonyms
         this.externalUrl = externalUrl
         this.unit = unit
@@ -501,7 +545,6 @@ class ResultTypeDTO {
         this.baseUnit = baseUnit
         this.status = status
     }
-    //SELECT NODE_ID, PARENT_NODE_ID,ELEMENT_ID,LABEL,DESCRIPTION, ABBREVIATION,ACRONYM, SYNONYMS, EXTERNAL_URL, UNIT, ELEMENT_STATUS_ID
 
 }
 class DescriptorDTO {
@@ -511,7 +554,6 @@ class DescriptorDTO {
     final String label
     final String description
     final String abbreviation
-    final String acronym
     final String synonyms
     final String externalUrl
     final String unit
@@ -524,7 +566,6 @@ class DescriptorDTO {
             final String label,
             final String description,
             final String abbreviation,
-            final String acronym,
             final String synonyms,
             final String externalUrl,
             final String unit,
@@ -538,7 +579,6 @@ class DescriptorDTO {
 
         this.description = description
         this.abbreviation = abbreviation
-        this.acronym = acronym
 
         this.synonyms = synonyms
         this.externalUrl = externalUrl

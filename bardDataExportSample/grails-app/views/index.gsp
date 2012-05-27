@@ -99,51 +99,98 @@
     <br/>
 
     <div id="controller-list" role="navigation">
-        <h3>Dictionary</h3>
+        <h3>Root Service</h3>
         <table>
             <thead><th>Resource</th><th>URL</th><th>Accept Header</th><th>Comments</th></thead>
             <tbody>
-                 <tr><td>Dictionary</td><td><g:link mapping="dictionary">Copy this link</g:link></td><td>application/vnd.bard.cap+xml;type=dictionary</td><td>Returns every thing in the dictionary</td>
-                </tr>
-                <tr><td>Result Type</td><td><g:link mapping="resultType" params="[id: 1]">Copy this link</g:link></td><td>application/vnd.bard.cap+xml;type=resultType</td><td>Replace the resultTypeId value with any valid Id</td>
-                </tr>
-                <tr><td>Stage</td><td><g:link mapping="stage" params="[id: 1]">Copy this link</g:link></td><td>application/vnd.bard.cap+xml;type=stage</td><td>Replace the stageId value with any valid Id</td>
-                </tr>
-                <tr><td>Element</td><td><g:link mapping="element" params="[id: 1]">Copy this link</g:link></td><td>application/vnd.bard.cap+xml;type=element</td><td>Replace the elementId value with any valid Id</td>
-                </tr>
-
-            </tbody>
+            <tr><td>Root Service</td><td><g:link
+                    mapping="api">Copy this link</g:link></td><td>application/vnd.bard.cap+xml;type=bardexport</td><td>This is the only URL that we expose to clients</td>
+            </tr>
+               </tbody>
         </table>
         <br/>
         <br/>
+
         <h3>Projects and Assays</h3>
         <table>
             <thead><th>Resource</th><th>URL</th><th>Accept Header</th><th>Comments</th></thead>
             <tbody>
-            <tr><td>All Projects</td><td><g:link mapping="cap">Copy this link</g:link></td><td>application/vnd.bard.cap+xml;type=cap</td><td>Returns All Projects</td>
+            <tr><td>All Projects</td><td><g:link
+                    mapping="cap">Copy this link</g:link></td><td>application/vnd.bard.cap+xml;type=cap</td><td>Returns All Projects</td>
             </tr>
             <tr><td>Projects Not Uploaded</td><td></td><td>application/vnd.bard.cap+xml;type=projects</td><td>This is not yet implemented because of changes in data model</td>
             </tr>
-            <tr><td>Assay</td><td><g:link mapping="assay" params="[id: 1]">Copy this link</g:link></td><td>application/vnd.bard.cap+xml;type=assay</td><td>Replace the assayId value with any valid Id</td>
+            <tr><td>Assay</td><td><g:link mapping="assay"
+                                          params="[id: 1]">Copy this link</g:link></td><td>application/vnd.bard.cap+xml;type=assay</td><td>Replace the assayId value with any valid Id</td>
             </tr>
-            <tr><td>Project</td><td><g:link mapping="project" params="[id: 1]">Copy this link</g:link></td><td>application/vnd.bard.cap+xml;type=project</td><td>Replace projectId value with any valid Id</td>
+            <tr><td>Project</td><td><g:link mapping="project"
+                                            params="[id: 1]">Copy this link</g:link></td><td>application/vnd.bard.cap+xml;type=project</td><td>Replace projectId value with any valid Id</td>
+            </tr>
+
+            </tbody>
+        </table>
+
+        <br/>
+        <br/>
+
+        <h3>Dictionary</h3>
+        <table>
+            <thead><th>Resource</th><th>URL</th><th>Accept Header</th><th>Comments</th></thead>
+            <tbody>
+            <tr><td>Dictionary</td><td><g:link
+                    mapping="dictionary">Copy this link</g:link></td><td>application/vnd.bard.cap+xml;type=dictionary</td><td>Returns every thing in the dictionary</td>
+            </tr>
+            <tr><td>Result Type</td><td><g:link mapping="resultType"
+                                                params="[id: 1]">Copy this link</g:link></td><td>application/vnd.bard.cap+xml;type=resultType</td><td>Replace the resultTypeId value with any valid Id</td>
+            </tr>
+            <tr><td>Stage</td><td><g:link mapping="stage"
+                                          params="[id: 1]">Copy this link</g:link></td><td>application/vnd.bard.cap+xml;type=stage</td><td>Replace the stageId value with any valid Id</td>
+            </tr>
+            <tr><td>Element</td><td><g:link mapping="element"
+                                            params="[id: 1]">Copy this link</g:link></td><td>application/vnd.bard.cap+xml;type=element</td><td>Replace the elementId value with any valid Id</td>
             </tr>
 
             </tbody>
         </table>
         <br/>
         <br/>
+
+        <h3>Projects and Assays</h3>
+        <table>
+            <thead><th>Resource</th><th>URL</th><th>Accept Header</th><th>Comments</th></thead>
+            <tbody>
+            <tr><td>All Projects</td><td><g:link
+                    mapping="cap">Copy this link</g:link></td><td>application/vnd.bard.cap+xml;type=cap</td><td>Returns All Projects</td>
+            </tr>
+            <tr><td>Projects Not Uploaded</td><td></td><td>application/vnd.bard.cap+xml;type=projects</td><td>This is not yet implemented because of changes in data model</td>
+            </tr>
+            <tr><td>Assay</td><td><g:link mapping="assay"
+                                          params="[id: 1]">Copy this link</g:link></td><td>application/vnd.bard.cap+xml;type=assay</td><td>Replace the assayId value with any valid Id</td>
+            </tr>
+            <tr><td>Project</td><td><g:link mapping="project"
+                                            params="[id: 1]">Copy this link</g:link></td><td>application/vnd.bard.cap+xml;type=project</td><td>Replace projectId value with any valid Id</td>
+            </tr>
+
+            </tbody>
+        </table>
+        <br/>
+        <br/>
+
         <h3>Experiments and Results</h3>
         <table>
             <thead><th>Resource</th><th>URL</th><th>Accept Header</th><th>Comments</th></thead>
             <tbody>
-            <tr><td>All Experiments</td><td><g:link mapping="experiments">Copy this link</g:link></td><td>application/vnd.bard.cap+xml;type=experiments</td><td>Returns All Experiments (Should really return experiments that have not been uploaded)</td>
+            <tr><td>All Experiments</td><td><g:link
+                    mapping="experiments">Copy this link</g:link></td><td>application/vnd.bard.cap+xml;type=experiments</td><td>Returns All Experiments (Should really return experiments that have not been uploaded)</td>
             </tr>
-            <tr><td>Experiment</td><td><g:link mapping="experiment" params="[id: 1]">Copy this link</g:link></td><td>application/vnd.bard.cap+xml;type=experiment</td><td>A particular experiment</td>
+            <tr><td>Experiment</td><td><g:link mapping="experiment"
+                                               params="[id: 1]">Copy this link</g:link></td><td>application/vnd.bard.cap+xml;type=experiment</td><td>A particular experiment</td>
             </tr>
-            <tr><td>Results</td><td><g:link mapping="results" params="[id: 1]">Copy this link</g:link></td><td>application/vnd.bard.cap+xml;type=results</td><td>Results of a particular experiment</td>
+            <tr><td>Results</td><td><g:link mapping="results"
+                                            params="[id: 1]">Copy this link</g:link></td><td>application/vnd.bard.cap+xml;type=results</td><td>Results of a particular experiment</td>
             </tr>
-            <tr><td>Result</td><td><g:link mapping="result" params="[id: 1]">Copy this link</g:link></td><td>application/vnd.bard.cap+xml;type=result</td><td>A result</td>
+            <tr><td>Result</td><td><g:link mapping="result"
+                                           params="[id: 1]">Copy this link</g:link></td><td>application/vnd.bard.cap+xml;type=result</td><td>A result</td>
             </tr>
 
             </tbody>

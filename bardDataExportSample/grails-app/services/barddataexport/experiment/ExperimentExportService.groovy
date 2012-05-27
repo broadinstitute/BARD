@@ -13,19 +13,8 @@ class ExperimentExportService {
     DataSource dataSource
     LinkGenerator grailsLinkGenerator
     GrailsApplication grailsApplication
+    ResultExportService resultExportService
 
-    protected void generateExperimentStatus(
-            final Sql sql,
-            final MarkupBuilder xml,
-            final BigDecimal statusId) {
-
-        sql.eachRow('select STATUS from EXPERIMENT_STATUS where EXPERIMENT_STATUS_ID=' + statusId) { statusRow ->
-            xml.experimentStatus() {
-                status(statusRow.STATUS)
-            }
-        }
-
-    }
     /**
      *
      * Generate the result context element
@@ -36,57 +25,29 @@ class ExperimentExportService {
      */
     protected void generateResultContextItems(final Sql sql, final MarkupBuilder xml, final BigDecimal experimentId) {
         xml.resultContextItems() {
-            sql.eachRow("SELECT * FROM RESULT_CONTEXT_ITEM WHERE EXPERIMENT_ID=" + experimentId + " and RESULT_ID IS NULL") { resultContextItemRow ->
-                def attributes = [:]
-                attributes.put('resultContextItemId', resultContextItemRow.RESULT_CONTEXT_ITEM_ID)
-                if (resultContextItemRow.GROUP_RESULT_CONTEXT_ID || resultContextItemRow.GROUP_RESULT_CONTEXT_ID.toString().isInteger()) {
-                    attributes.put('groupResultContextItemId', resultContextItemRow.GROUP_RESULT_CONTEXT_ID)
-                }
-
-                if (resultContextItemRow.QUALIFIER) {
-                    attributes.put('qualifier', resultContextItemRow.QUALIFIER)
-                }
-
-
-                if (resultContextItemRow.VALUE_DISPLAY) {
-                    attributes.put('valueDisplay', resultContextItemRow.VALUE_DISPLAY)
-                }
-                if (resultContextItemRow.VALUE_NUM || resultContextItemRow.VALUE_NUM.toString().isInteger()) {
-                    attributes.put('valueNum', resultContextItemRow.VALUE_NUM)
-                }
-                if (resultContextItemRow.VALUE_MIN || resultContextItemRow.VALUE_MIN.toString().isInteger()) {
-                    attributes.put('valueMin', resultContextItemRow.VALUE_MIN)
-                }
-                if (resultContextItemRow.VALUE_MAX || resultContextItemRow.VALUE_MAX.toString().isInteger()) {
-                    attributes.put('valueMax', resultContextItemRow.VALUE_MAX)
-                }
-
-
-                xml.resultContextItem(attributes) {
-                    final String ELEMENT_MEDIA_TYPE = grailsApplication.config.bard.data.export.dictionary.element.xml
-
-                    if (resultContextItemRow.ATTRIBUTE_ID || resultContextItemRow.ATTRIBUTE_ID.toString().isInteger()) {
-                        final String attributeHref = grailsLinkGenerator.link(mapping: 'element', absolute: true, params: [id: "${resultContextItemRow.ATTRIBUTE_ID}"]).toString()
-                        attributeId() {
-                            link(rel: 'related', href: "${attributeHref}", type: "${ELEMENT_MEDIA_TYPE}")
-                        }
-                    }
-                    if (resultContextItemRow.VALUE_ID || resultContextItemRow.VALUE_ID.toString().isInteger()) {
-                        final String valueHref = grailsLinkGenerator.link(mapping: 'element', absolute: true, params: [id: "${resultContextItemRow.VALUE_ID}"]).toString()
-
-                        valueId() {
-                            link(rel: 'related', href: "${valueHref}", type: "${ELEMENT_MEDIA_TYPE}")
-                        }
-                    }
-
-                }
+            sql.eachRow("SELECT * FROM RESULT_CONTEXT_ITEM WHERE EXPERIMENT_ID=" + experimentId + " AND RESULT_ID IS NULL") { resultContextItemRow ->
+                resultExportService.generateResultContextItem(
+                        xml,
+                        new ResultContextItemDTO(
+                                resultContextItemRow.RESULT_CONTEXT_ITEM_ID,
+                                resultContextItemRow.GROUP_RESULT_CONTEXT_ID,
+                                resultContextItemRow.VALUE_NUM,
+                                resultContextItemRow.VALUE_MAX,
+                                resultContextItemRow.VALUE_MIN,
+                                resultContextItemRow.ATTRIBUTE_ID,
+                                resultContextItemRow.VALUE_ID,
+                                resultContextItemRow.QUALIFIER,
+                                resultContextItemRow.VALUE_DISPLAY
+                        )
+                )
             }
         }
     }
 
     protected void generateExperimentLinks(final MarkupBuilder xml, final BigDecimal projectId, final BigDecimal assayId, final BigDecimal experimentId) {
 
-        final String CAP_MEDIA_TYPE = grailsApplication.config.bard.data.export.cap.xm
+        final String PROJECT_MEDIA_TYPE = grailsApplication.config.bard.data.export.cap.project.xml
+        final String ASSAY_MEDIA_TYPE = grailsApplication.config.bard.data.export.cap.assay.xml
         final String RESULTS_MEDIA_TYPE = grailsApplication.config.bard.data.export.data.results.xml
         final String EXPERIMENT_MEDIA_TYPE = grailsApplication.config.bard.data.export.data.experiment.xml
         final String EXPERIMENTS_MEDIA_TYPE = grailsApplication.config.bard.data.export.data.experiments.xml
@@ -102,50 +63,44 @@ class ExperimentExportService {
 
         final String resultsHref = grailsLinkGenerator.link(mapping: 'results', absolute: true, params: [id: experimentId]).toString()
 
-        xml.link(rel: 'related', title: 'Link to Project', type: "${CAP_MEDIA_TYPE}", href: projectHref) {
-        }
-
-        xml.link(rel: 'related', title: 'Link to Assay', type: "${CAP_MEDIA_TYPE}", href: assayHref) {
-        }
-
-        xml.link(rel: 'edit', title: 'Use link to edit Experiment', type: "${EXPERIMENT_MEDIA_TYPE}", href: experimentHref) {
-        }
-        xml.link(rel: 'related', title: 'List Related Results', type: "${RESULTS_MEDIA_TYPE}", href: "${resultsHref}") {
-        }
-        xml.link(rel: 'up', title: 'List Experiments', type: "${EXPERIMENTS_MEDIA_TYPE}", href: "${experimentsHref}") {
-        }
+        xml.link(rel: 'related', title: 'Link to Project', type: "${PROJECT_MEDIA_TYPE}", href: projectHref)
+        xml.link(rel: 'related', title: 'Link to Assay', type: "${ASSAY_MEDIA_TYPE}", href: assayHref)
+        xml.link(rel: 'related', title: 'List Related Results', type: "${RESULTS_MEDIA_TYPE}", href: "${resultsHref}")
+        xml.link(rel: 'edit', title: 'Use link to edit Experiment', type: "${EXPERIMENT_MEDIA_TYPE}", href: experimentHref)
+        xml.link(rel: 'up', title: 'List Experiments', type: "${EXPERIMENTS_MEDIA_TYPE}", href: "${experimentsHref}")
     }
 
     public void generateExperiment(final MarkupBuilder xml, final BigDecimal experimentId) {
         final Sql sql = new Sql(dataSource)
-        sql.eachRow('select * FROM EXPERIMENT WHERE EXPERIMENT_ID=' + experimentId) { experimentRow ->
+        sql.eachRow('SELECT * FROM EXPERIMENT WHERE EXPERIMENT_ID=' + experimentId) { experimentRow ->
 
             final ExperimentDTO experimentDTO =
                 new ExperimentDTO(
                         experimentRow.EXPERIMENT_ID,
                         experimentRow.EXPERIMENT_NAME,
-                        experimentRow.EXPERIMENT_STATUS_ID,
+                        experimentRow.EXPERIMENT_STATUS,
                         experimentRow.HOLD_UNTIL_DATE,
                         experimentRow.RUN_DATE_FROM,
                         experimentRow.RUN_DATE_TO,
                         experimentRow.DESCRIPTION,
                         experimentRow.PROJECT_ID,
-                        experimentRow.ASSAY_ID)
-
+                        experimentRow.ASSAY_ID,
+                        experimentRow.READY_FOR_EXTRACTION
+                )
             generateExperiment(sql, xml, experimentDTO)
         }
     }
 
     protected void generateExperiment(final Sql sql, final MarkupBuilder xml, final ExperimentDTO dto) {
         def resultsCount = null
-        sql.eachRow('select count(*)  as resultsCount from RESULT WHERE EXPERIMENT_ID=' + dto.experimentId) { resultsCountRow ->
-            resultsCount = resultsCountRow.resultsCount
+        sql.eachRow('SELECT count(*) AS RESULTSCOUNT FROM RESULT WHERE EXPERIMENT_ID=' + dto.experimentId) { resultsCountRow ->
+            resultsCount = resultsCountRow.RESULTSCOUNT
         }
 
         def attributes = [:]
-        attributes.put('count', resultsCount)
+        attributes.put('numberOfResults', resultsCount)
         attributes.put('experimentName', dto.experimentName)
-
+        attributes.put("readyForExtraction", dto.readyForExtraction)
 
 
         if (dto.holdUntilDate) {
@@ -170,7 +125,10 @@ class ExperimentExportService {
         xml.experiment(
                 attributes) {
 
-            generateExperimentStatus(sql, xml, dto.experimentStatusId)
+
+            experimentStatus() {
+                status(dto.experimentStatus)
+            }
             if (dto.description) {
                 description(dto.description)
             }
@@ -186,9 +144,8 @@ class ExperimentExportService {
 
     protected void generateExperiments(final Sql sql, final MarkupBuilder xml) {
         final int MAX_EXPERIMENTS_RECORDS_PER_PAGE = grailsApplication.config.bard.experiments.max.per.page
-        //TODO Add open experiments
         def count = null
-        sql.eachRow('select count(*)  as experimentsCount from EXPERIMENT') { countRow ->
+        sql.eachRow("select count(*)  as experimentsCount FROM EXPERIMENT WHERE READY_FOR_EXTRACTION='Ready'") { countRow ->
             count = countRow.experimentsCount
         }
         if (count == 0) {
@@ -196,21 +153,22 @@ class ExperimentExportService {
         }
         int counter = 0
         xml.experiments(count: count) {
-            sql.eachRow('select * FROM EXPERIMENT') { experimentRow ->
+            sql.eachRow("SELECT * FROM EXPERIMENT WHERE READY_FOR_EXTRACTION='Ready'") { experimentRow ->
                 if (counter <= MAX_EXPERIMENTS_RECORDS_PER_PAGE) { //probably use rowNum instead
-
 
                     final ExperimentDTO experimentDTO =
                         new ExperimentDTO(
                                 experimentRow.EXPERIMENT_ID,
                                 experimentRow.EXPERIMENT_NAME,
-                                experimentRow.EXPERIMENT_STATUS_ID,
+                                experimentRow.EXPERIMENT_STATUS,
                                 experimentRow.HOLD_UNTIL_DATE,
                                 experimentRow.RUN_DATE_FROM,
                                 experimentRow.RUN_DATE_TO,
                                 experimentRow.DESCRIPTION,
                                 experimentRow.PROJECT_ID,
-                                experimentRow.ASSAY_ID)
+                                experimentRow.ASSAY_ID,
+                                experimentRow.READY_FOR_EXTRACTION
+                        )
 
                     generateExperiment(sql, xml, experimentDTO)
                     counter++
@@ -219,9 +177,7 @@ class ExperimentExportService {
             if (count > MAX_EXPERIMENTS_RECORDS_PER_PAGE) {
                 def experimentsHref = grailsLinkGenerator.link(mapping: 'experiments', absolute: true).toString()
                 final String EXPERIMENTS_MEDIA_TYPE = grailsApplication.config.bard.data.export.data.experiments.xml
-
-                link(rel: 'next', title: 'List Experiments', type: "${EXPERIMENTS_MEDIA_TYPE}", href: "${experimentsHref}") {
-                }
+                link(rel: 'next', title: 'List Experiments', type: "${EXPERIMENTS_MEDIA_TYPE}", href: "${experimentsHref}")
             }
         }
     }
@@ -231,32 +187,35 @@ class ExperimentExportService {
 class ExperimentDTO {
     final BigDecimal experimentId
     final String experimentName
-    final BigDecimal experimentStatusId
+    final String experimentStatus
     final Date holdUntilDate
     final Date runFromDate
     final Date runToDate
     final String description
     final BigDecimal projectId
     final BigDecimal assayId
+    final String readyForExtraction
 
     ExperimentDTO(final BigDecimal experimentId,
                   final String experimentName,
-                  final BigDecimal experimentStatusId,
+                  final String experimentStatus,
                   final Date holdUntilDate,
                   final Date runFromDate,
                   final Date runToDate,
                   final String description,
                   final BigDecimal projectId,
-                  final BigDecimal assayId) {
+                  final BigDecimal assayId,
+                  final String readyForExtraction) {
         this.experimentId = experimentId
+        this.holdUntilDate = holdUntilDate
         this.experimentName = experimentName
-        this.experimentStatusId = experimentStatusId
+        this.experimentStatus = experimentStatus
         this.runFromDate = runFromDate
         this.runToDate = runToDate
         this.description = description
         this.projectId = projectId
         this.assayId = assayId
-
+        this.readyForExtraction = readyForExtraction
     }
 
 }

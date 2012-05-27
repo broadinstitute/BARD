@@ -6,6 +6,9 @@ class UrlMappings {
 				// apply constraints here
 			}
 		}
+        name api: "/api"(controller: "rootRest") {
+            action = [GET: "api"]
+        }
         name dictionary: "/api/dictionary"(controller: "dictionaryRest") {
             action = [GET: "dictionary"]
         }
@@ -30,8 +33,8 @@ class UrlMappings {
         name assay: "/api/cap/assay/$id"(controller: "capRest") {
             action = [GET: "assay", PATCH: "updateAssay"]
         }
-        name protocolDocument: "/api/cap/protocolDocument/$id"(controller: "capRest") {
-            action = [GET: "protocolDocument"]
+        name assayDocument: "/api/cap/assayDocument/$id"(controller: "capRest") {
+            action = [GET: "assayDocument"]
         }
         name experiments: "/api/data"(controller: "experimentRest") {
             action = [GET: "experiments"]
