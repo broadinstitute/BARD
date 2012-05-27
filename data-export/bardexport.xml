@@ -1,14 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <bardexport xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
  xsi:noNamespaceSchemaLocation="BARDexportSchema.xsd">
-    <!-- List of projects that are ready for upload-->
-    <link type="application/vnd.bard.cap+xml;type=projects" href="http://bard/export/projects" rel="item"
-         title="List of all BARD Projects"/>
-    <!-- Entire Bard dictionary -->
-    <link type="application/vnd.bard.cap+xml;type=dictionary" href="http://bard/export/dictionary" rel="item"
-        title="Fetch data dictionary"/>
-    <!-- List of experiments that are ready for upload-->
-    <link type="application/vnd.bard.cap+xml;type=experiments" href="http://bard/export/experiments" rel="item"
-         title="List of all BARD Experiments"/>
-     <!-- More links could be added, for instance we can add a link with a rel of archive to denote archived experiments -->
+    <link rel='item' title='List of projects, ready for extraction' href='http://localhost/api/cap/projects' type='application/vnd.bard.cap+xml;type=projects' />
+    <link rel='item' title='The BARD Dictionary' href='http://localhost/api/dictionary' type='application/vnd.bard.cap+xml;type=dictionary' />
+    <link rel='item' title='List of experiments, ready for extraction' type='application/vnd.bard.cap+xml;type=experiments' href='http://localhost/api/data' />
 </bardexport>

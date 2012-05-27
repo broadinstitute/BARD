@@ -1,20 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <result xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
  xsi:noNamespaceSchemaLocation="BARDexportSchema.xsd"
- valueDisplay=" 48%"
- valueNum="48">
+ readyForExtraction="Ready"
+ valueDisplay="&lt; 0.00303uM"
+ valueNum="0.00303"
+ qualifier="&lt; ">
   <status>Approved</status>
-  <substance url='http://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=7971820' />
+  <substance url='http://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=7970106' />
   <resultContextItems>
-    <resultContextItem resultContextItemId='288' valueDisplay='2.2' valueNum='2.2'>
+    <resultContextItem resultContextItemId='2' valueDisplay='0' valueNum='0'>
       <attributeId>
-        <link rel='related' href='http://bard/dictionary/element/366' type='application/vnd.bard.cap+xml;type=element' />
+        <link rel='related' href='http://localhost/api/dictionary/element/369' type='application/vnd.bard.cap+xml;type=element' />
       </attributeId>
     </resultContextItem>
   </resultContextItems>
-
-  <resultHierarchy parentResultId='25' hierarchyType='Derives' />
-  <link rel='up' title='Experiment' type='application/vnd.bard.cap+xml;type=experiment' href='http://bard/experiment/1' />
-  <link rel='related' title='Result Type' type='application/vnd.bard.cap+xml;type=resultType' href='http://bard/resultType/373' />
-  <link rel='edit' title='Edit Link' type='application/vnd.bard.cap+xml;type=result' href='http://bard/experiment/1/result/287' />
+  <link rel='up' title='Experiment' type='application/vnd.bard.cap+xml;type=experiment' href='http://localhost/api/data/experiment/1' />
+  <link rel='related' title='Result Type' type='application/vnd.bard.cap+xml;type=resultType' href='http://localhost/api/dictionary/resultType/341' />
+  <link rel='edit' title='Edit Link' type='application/vnd.bard.cap+xml;type=result' href='http://localhost/api/data/result/1' />
 </result>

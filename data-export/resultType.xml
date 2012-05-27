@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <resultType xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
  xsi:noNamespaceSchemaLocation="BARDexportSchema.xsd"
- resultTypeId="635"
- parentResultTypeId="577"
+ resultTypeId="624"
+ parentResultTypeId="624"
+ baseUnit="s"
  resultTypeStatus="Published">
-    <resultTypeName>time endpoint</resultTypeName>
+    <resultTypeName>T1/2</resultTypeName>
+    <description>An endpoint expressiong half-life.</description>
 </resultType>

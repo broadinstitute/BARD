@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <element xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
  xsi:noNamespaceSchemaLocation="BARDexportSchema.xsd"
- elementId="252"
+ elementId="1"
+ readyForExtraction="Ready"
  elementStatus="Published">
-    <label>curve-fit specification</label>
-    <description>A descripition of curve-fit parameters used to obtain an endpoint by fitting a single function across a range of measurements; contains information about curve-fit parameters, methods, properties (e.g., Hill coefficient), concentration range, and replicates.</description>
+    <label>BARD ASSAY ONTOLOGY</label>
 </element>
