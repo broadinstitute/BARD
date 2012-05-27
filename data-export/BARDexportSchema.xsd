@@ -629,6 +629,7 @@ application/vnd.bard.cap+xml;type=project</xs:documentation>
                         </xs:sequence>
                     </xs:complexType>
                 </xs:element>
+                <xs:element maxOccurs="unbounded" minOccurs="0" ref="link"/>
             </xs:sequence>
             <xs:attribute name="projectId" type="bardID" use="required"/>
             <xs:attribute name="groupType">

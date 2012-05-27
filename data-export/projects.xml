@@ -301,10 +301,12 @@
                 <documentName>Dose-response biochemical assay of inhibitors of Rho kinase 2 (Rock2) pt 2</documentName>
               </assayDocument>
             </assayDocuments>
+            <link rel='edit' href='http://localhost/api/cap/assay/1' type='application/vnd.bard.cap+xml;type=assay' />
             <link rel='up' href='http://localhost/api/cap/project/1' type='application/vnd.bard.cap+xml;type=project' />
           </assay>
         </projectAssay>
       </projectAssays>
+      <link rel='edit' href='http://localhost/api/cap/project/1' type='application/vnd.bard.cap+xml;type=project' />
     </project>
     <project projectId='2' readyForExtraction='Ready' groupType='Project'>
       <projectName>2126 - MLPCN Malaria - Inhibitor</projectName>
@@ -622,10 +624,11 @@
               </measureContextItem>
             </measureContextItems>
             <assayDocuments />
+            <link rel='edit' href='http://localhost/api/cap/assay/2' type='application/vnd.bard.cap+xml;type=assay' />
             <link rel='up' href='http://localhost/api/cap/project/2' type='application/vnd.bard.cap+xml;type=project' />
           </assay>
         </projectAssay>
       </projectAssays>
+      <link rel='edit' href='http://localhost/api/cap/project/2' type='application/vnd.bard.cap+xml;type=project' />
     </project>
   </projects>
-

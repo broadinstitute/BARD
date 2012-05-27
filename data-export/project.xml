@@ -1,5 +1,8 @@
 <project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
- xsi:noNamespaceSchemaLocation="BARDexportSchema.xsd" projectId='1' readyForExtraction='Ready' groupType='Project'>
+ xsi:noNamespaceSchemaLocation="BARDexportSchema.xsd"
+ projectId="1"
+ readyForExtraction="Ready"
+ groupType="Project">
       <projectName>Scripps special project #1</projectName>
       <projectAssays>
         <projectAssay>
@@ -300,9 +303,11 @@
                 <documentName>Dose-response biochemical assay of inhibitors of Rho kinase 2 (Rock2) pt 2</documentName>
               </assayDocument>
             </assayDocuments>
+            <link rel='edit' href='http://localhost/api/cap/assay/1' type='application/vnd.bard.cap+xml;type=assay' />
             <link rel='up' href='http://localhost/api/cap/project/1' type='application/vnd.bard.cap+xml;type=project' />
           </assay>
         </projectAssay>
       </projectAssays>
+      <link rel='edit' href='http://localhost/api/cap/project/1' type='application/vnd.bard.cap+xml;type=project' />
     </project>
    

@@ -1,5 +1,9 @@
 <assay xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
- xsi:noNamespaceSchemaLocation="BARDexportSchema.xsd" assayId='1' readyForExtraction='Ready' assayVersion='1' status='Active'>
+ xsi:noNamespaceSchemaLocation="BARDexportSchema.xsd"
+ assayId="1"
+ readyForExtraction="Ready"
+ assayVersion="1"
+ status="Active">
             <assayName>Dose-response biochemical assay of inhibitors of Rho kinase 2 (Rock2)</assayName>
             <description>Rho-Kinase is a serine/threonine kinase involved in the regulation of smooth muscle contraction and cytoskeletal reorganization of nonmuscle cells (1). Its inhibition is known to promote the smooth muscle relaxation. Thus, small-molecule inhibitors of Rho-Kinase may be effective probes for treatment of cerebral vasospasm (2) and potentially effective for treatment of angina (3), hypertension (4), arteriosclerosis (5), and erectile dysfunction (6).</description>
             <designedBy>Scripps Florida</designedBy>
@@ -292,7 +296,7 @@
                 <documentName>Dose-response biochemical assay of inhibitors of Rho kinase 2 (Rock2) pt 2</documentName>
               </assayDocument>
             </assayDocuments>
+            <link rel='edit' href='http://localhost/api/cap/assay/1' type='application/vnd.bard.cap+xml;type=assay' />
             <link rel='up' href='http://localhost/api/cap/project/1' type='application/vnd.bard.cap+xml;type=project' />
           </assay>
-
    
