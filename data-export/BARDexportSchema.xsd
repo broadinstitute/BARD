@@ -197,6 +197,8 @@ application/vnd.bard.cap+xml;type=dictionary should give the client the entire d
                                     </xs:sequence>
                                     <xs:attribute name="laboratoryId" type="bardID" use="required"/>
                                     <xs:attribute name="parentLaboratoryId" type="bardID"/>
+                                    <xs:attribute name="laboratoryStatus" type="xs:string"
+                                        use="required"/>
                                 </xs:complexType>
                             </xs:element>
                         </xs:sequence>

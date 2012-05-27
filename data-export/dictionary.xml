@@ -6564,7 +6564,7 @@
     </instanceDescriptor>
   </instanceDescriptors>
   <laboratories>
-    <laboratory laboratoryId='241'>
+    <laboratory laboratoryId='241' laboratoryStatus="Published">
       <laboratory>LABORATORY</laboratory>
       <description>Singular root to ensure tree viewers work</description>
     </laboratory>
