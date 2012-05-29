@@ -1,9 +1,6 @@
 package bard.db.registration
 
-import bard.db.dictionary.AssayDescriptor
-import bard.db.dictionary.BiologyDescriptor
-import bard.db.dictionary.InstanceDescriptor
-import bard.db.dictionary.ResultType
+import bard.db.dictionary.*
 
 /**
  * Created with IntelliJ IDEA.
@@ -16,6 +13,10 @@ class AssayServiceIntegrationTests extends GroovyTestCase {
 
     AssayService assayService
 
+    void testGetContextForAssay() {
+
+    }
+
     void testGetMeasureContextItemsForAssay() {
 
         AssayDescriptor assayDescriptor = AssayDescriptor.findByLabel('nucleotide')
@@ -23,21 +24,27 @@ class AssayServiceIntegrationTests extends GroovyTestCase {
         BiologyDescriptor biologyDescriptor = BiologyDescriptor.findByLabel('molecular target')
         InstanceDescriptor instanceDescriptor = InstanceDescriptor.findByLabel('small-molecule perturbagen')
         ResultType resultType = ResultType.findByResultTypeName('IC50')
+        Element negControl = Element.findByLabel('negative control')
 
         Assay assay = new Assay(assayName: "Test assay service", assayVersion: 1, assayStatus: AssayStatus.get(1), description: "Test").save()
         assert assay.validate()
 
-        MeasureContextItem assayItem = new MeasureContextItem(attributeElement: assayDescriptor.element, attributeType: AttributeType.NUMBER)
-        MeasureContextItem assayKitItem = new MeasureContextItem(attributeElement: assayDescriptor2.element, attributeType: AttributeType.NUMBER)
-        MeasureContextItem biologyItem = new MeasureContextItem(attributeElement: biologyDescriptor.element, attributeType: AttributeType.NUMBER)
-        MeasureContextItem instanceItem = new MeasureContextItem(attributeElement: instanceDescriptor.element, attributeType: AttributeType.NUMBER)
+        MeasureContextItem assayItem = new MeasureContextItem(attributeElement: assayDescriptor.element, attributeType: AttributeType.Number)
+        MeasureContextItem assayKitItem = new MeasureContextItem(attributeElement: assayDescriptor2.element, attributeType: AttributeType.Number)
+        MeasureContextItem negControlItem = new MeasureContextItem(attributeElement: negControl, attributeType: AttributeType.Number)
+        MeasureContextItem biologyItem = new MeasureContextItem(attributeElement: biologyDescriptor.element, attributeType: AttributeType.Number)
+        MeasureContextItem instanceItem = new MeasureContextItem(attributeElement: instanceDescriptor.element, attributeType: AttributeType.Number)
 
         assay.addToMeasureContextItems(assayItem)
         assay.addToMeasureContextItems(assayKitItem)
+        assay.addToMeasureContextItems(negControlItem)
         assay.addToMeasureContextItems(biologyItem)
         assay.addToMeasureContextItems(instanceItem)
 
+        assayItem.addToChildren(negControlItem)
+
         assert assayItem.validate()
+        assert negControlItem.validate()
         assert assayKitItem.validate()
         assert biologyItem.validate()
         assert instanceItem.validate()
@@ -48,15 +55,17 @@ class AssayServiceIntegrationTests extends GroovyTestCase {
         assert context.validate()
 
         Measure measure = new Measure(resultType: resultType)
+        assay.addToMeasures(measure)
         context.addToMeasures(measure)
         assert measure.validate()
 
         Map map = assayService.getMeasureContextItemsForAssay(assay)
 
-        assert map.'ASSAY_DESCRIPTOR'.'assay component'.'nucleotide' == assayItem
-        assert map.'ASSAY_DESCRIPTOR'.'assay component'.'assay kit' == assayKitItem
-        assert map.'BIOLOGY_DESCRIPTOR'.'molecular target' == biologyItem
-        assert map.'INSTANCE_DESCRIPTOR'.'assay instance'.'perturbagen collection'.'small-molecule collection'.'small-molecule perturbagen' == instanceItem
+        assert map.'Assay Context'.contains(assayItem)
+        assert map.'Assay Context'.'nucleotide'.'negative control' == negControlItem
+        assert map.'Assay Context'.'assay kit' == assayKitItem
+        assert map.'Assay Context'.'molecular target' == biologyItem
+        assert map.'Assay Context'.'small-molecule perturbagen' == instanceItem
         assert map.'Result Types'[contextName]
         assert map.'Result Types'[contextName].get(0) == 'IC50'
 

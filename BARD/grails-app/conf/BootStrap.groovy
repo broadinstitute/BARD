@@ -180,6 +180,7 @@ class BootStrap {
         assert context.validate()
 
         Measure measure = new Measure(resultType: resultType)
+        assay.addToMeasures(measure)
         context.addToMeasures(measure)
         assert measure.validate()
 

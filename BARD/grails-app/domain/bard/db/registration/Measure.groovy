@@ -7,6 +7,7 @@ class Measure {
 
     static expose = 'measure'
 
+    Assay assay
 	Date dateCreated
 	Date lastUpdated
 	String modifiedBy
@@ -14,7 +15,7 @@ class Measure {
 	Unit entryUnit
 	ResultType resultType
 
-	static belongsTo = [MeasureContext]
+	static belongsTo = [Assay]
 
 	static mapping = {
 		id column: "Measure_ID"

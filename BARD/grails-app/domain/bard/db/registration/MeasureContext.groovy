@@ -1,5 +1,10 @@
 package bard.db.registration
 
+/**
+ * Defines the context for a Measure or group of Measures by grouping a set of
+ * measureContextItems.  A group of measures could share the same context if
+ * the measurements are taken at the same time {TODO doublcheck statement with Simon}
+ */
 class MeasureContext {
 
     static expose = 'measure-context'
