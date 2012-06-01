@@ -6,18 +6,8 @@ class AssayService {
 
     Map getMeasureContextItemsForAssay(Assay assay) {
         Map map = [:]
-        assay.measureContextItems.each {
-            if (it.measureContext == null &&
-                    ResultType.findByElement(it.attributeElement) == null &&
-                it.parentGroup == null)
-            {
-                Map submap = addItem(it)
-                log.info("**** Map:    " + map)
-                log.info("**** SubMap: " +submap)
-                mergeMaps(map, submap)
-            }
-        }
-        map.'Result Types' = getResultTypeMapForAssay(assay)
+        map.'Assay Context' = assay.measureContextItems
+        map.'Result Context' = getResultTypeMapForAssay(assay)
         return map
     }
 
@@ -50,6 +40,13 @@ class AssayService {
 
     Map getResultTypeMapForAssay(Assay assay) {
         Map map = [:]
+        // TODO change logic below to match the following:
+        // get measures
+        //   those with parent measure id == null are top level
+        //     then get child measures
+        //     then get measure context for parent measure
+        //       then get measure context items for measure context
+        //         if a list type, concatenate all the values together into a single line item (e.g. concentrations for dose)
         assay.measureContexts.each {
             List info = []
             it.measures.each {
@@ -101,6 +98,7 @@ class AssayService {
         return map
     }
 
+    // TODO get rid of path reconstruction
     Map addItem(MeasureContextItem item) {
         AssayDescriptor assayDescriptor = AssayDescriptor.findByElement(item.attributeElement)
         if (assayDescriptor != null) {
