@@ -45,10 +45,10 @@
 </TR>
 </TABLE>
 <HR>
-<A NAME = "Index_58dee5e1f17e4da8b4165633477e70a5"></A>
+<A NAME = "Index_0c2d358776bd49208b4396c6664c2753"></A>
 <TABLE WIDTH=100% CELLPADDING=1 BORDER=2>
 <TR>
-<TD VALIGN=TOP BGCOLOR="darkblue" ><B><FONT SIZE=5 COLOR="white" FACE="Arial">ASSAY.FK_ASSAY_ASSAY_STATUS_ID&nbsp;</FONT></B></TD>
+<TD VALIGN=TOP BGCOLOR="darkblue" ><B><FONT SIZE=5 COLOR="white" FACE="Arial">ASSAY.IDX_ASSAY_NAME_VERSION&nbsp;</FONT></B></TD>
 </TR>
 </TABLE>
 <TABLE WIDTH=100% CELLPADDING=2 BORDER=2>
@@ -70,13 +70,13 @@
 </TR>
 <TR>
 <TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">DDL Code&nbsp;</FONT></B></TD>
-<TD><TT><TT>CREATE INDEX BARD_QA.FK_ASSAY_ASSAY_STATUS_ID ON BARD_QA.ASSAY(ASSAY_STATUS_ID)</TT><BR><TT>TABLESPACE BARD_DAT</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp LOGGING</TT><BR><TT>;</TT><BR>&nbsp;</TT></TD>
+<TD><TT><TT>CREATE INDEX BARD_QA.IDX_ASSAY_NAME_VERSION ON BARD_QA.ASSAY(ASSAY_NAME, ASSAY_VERSION)</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp LOGGING</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp STORAGE(BUFFER_POOL DEFAULT</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp )</TT><BR><TT>;</TT><BR>&nbsp;</TT></TD>
 </TR>
 </TABLE>
 <P>
 <TABLE WIDTH=100% CELLPADDING=3 BORDER=2>
 <TR>
-<TD VALIGN=TOP BGCOLOR="LIGHTGREY" ><B><FONT SIZE=4 FACE="Arial">ASSAY.FK_ASSAY_ASSAY_STATUS_ID Index Columns&nbsp;</FONT></B></TD>
+<TD VALIGN=TOP BGCOLOR="LIGHTGREY" ><B><FONT SIZE=4 FACE="Arial">ASSAY.IDX_ASSAY_NAME_VERSION Index Columns&nbsp;</FONT></B></TD>
 </TR>
 </TABLE>
 <TABLE WIDTH=100% CELLPADDING=2 BORDER=2>
@@ -85,7 +85,101 @@
 <TD VALIGN=TOP  WIDTH=22% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Sort Order&nbsp;</FONT></B></TD>
 </TR>
 <TR>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF="Tbl_0c68b0f8dc3f490cbccbae57c96dcc7a_Attr.htm#Attr_b3fdcdc2684243ceb59107c6006ba0a0">ASSAY_STATUS_ID</A>&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF="Tbl_0c68b0f8dc3f490cbccbae57c96dcc7a_Attr.htm#Attr_ade438e5981a4d60a752e6e890483203">ASSAY_NAME</A>&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">Ascending&nbsp;</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF="Tbl_0c68b0f8dc3f490cbccbae57c96dcc7a_Attr.htm#Attr_6251b48152b040f59136f6cd0b7f96c8">ASSAY_VERSION</A>&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">Ascending&nbsp;</FONT></TD>
+</TR>
+</TABLE>
+<HR>
+<A NAME = "Index_38fbd1132b284a91b32dd19029274313"></A>
+<TABLE WIDTH=100% CELLPADDING=1 BORDER=2>
+<TR>
+<TD VALIGN=TOP BGCOLOR="darkblue" ><B><FONT SIZE=5 COLOR="white" FACE="Arial">Assay_document.PK_Assay_document&nbsp;</FONT></B></TD>
+</TR>
+</TABLE>
+<TABLE WIDTH=100% CELLPADDING=2 BORDER=2>
+<TR>
+<TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">PK/UK Constraint Name&nbsp;</FONT></B></TD>
+<TD><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Unique&nbsp;</FONT></B></TD>
+<TD><FONT SIZE=2 FACE="Arial">YES&nbsp;</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Clustered Option&nbsp;</FONT></B></TD>
+<TD><FONT SIZE=2 FACE="Arial">NON-CLUSTERED&nbsp;</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">IndexType&nbsp;</FONT></B></TD>
+<TD><FONT SIZE=2 FACE="Arial">PrimaryKey&nbsp;</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">DDL Code&nbsp;</FONT></B></TD>
+<TD><TT>&nbsp;</TT></TD>
+</TR>
+</TABLE>
+<P>
+<TABLE WIDTH=100% CELLPADDING=3 BORDER=2>
+<TR>
+<TD VALIGN=TOP BGCOLOR="LIGHTGREY" ><B><FONT SIZE=4 FACE="Arial">Assay_document.PK_Assay_document Index Columns&nbsp;</FONT></B></TD>
+</TR>
+</TABLE>
+<TABLE WIDTH=100% CELLPADDING=2 BORDER=2>
+<TR>
+<TD VALIGN=TOP  WIDTH=22% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">ColumnName&nbsp;</FONT></B></TD>
+<TD VALIGN=TOP  WIDTH=22% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Sort Order&nbsp;</FONT></B></TD>
+</TR>
+<TR>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF="Tbl_ca3f589c150f4fb89dee41aa253b4770_Attr.htm#Attr_f39b78cd41a2479f8a0d937aa3e0c13d">Assay_document_ID</A>&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">Ascending&nbsp;</FONT></TD>
+</TR>
+</TABLE>
+<HR>
+<A NAME = "Index_b710d2af48a9466da91a7c06457191d2"></A>
+<TABLE WIDTH=100% CELLPADDING=1 BORDER=2>
+<TR>
+<TD VALIGN=TOP BGCOLOR="darkblue" ><B><FONT SIZE=5 COLOR="white" FACE="Arial">Assay_document.FK_PROTOCOL_ASSAY&nbsp;</FONT></B></TD>
+</TR>
+</TABLE>
+<TABLE WIDTH=100% CELLPADDING=2 BORDER=2>
+<TR>
+<TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">PK/UK Constraint Name&nbsp;</FONT></B></TD>
+<TD><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Unique&nbsp;</FONT></B></TD>
+<TD><FONT SIZE=2 FACE="Arial">NO&nbsp;</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Clustered Option&nbsp;</FONT></B></TD>
+<TD><FONT SIZE=2 FACE="Arial">NON-CLUSTERED&nbsp;</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">IndexType&nbsp;</FONT></B></TD>
+<TD><FONT SIZE=2 FACE="Arial">Index&nbsp;</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">DDL Code&nbsp;</FONT></B></TD>
+<TD><TT><TT>CREATE INDEX BARD_QA.FK_PROTOCOL_ASSAY ON BARD_QA.Assay_document(ASSAY_ID)</TT><BR><TT>TABLESPACE BARD_DAT</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp LOGGING</TT><BR><TT>;</TT><BR>&nbsp;</TT></TD>
+</TR>
+</TABLE>
+<P>
+<TABLE WIDTH=100% CELLPADDING=3 BORDER=2>
+<TR>
+<TD VALIGN=TOP BGCOLOR="LIGHTGREY" ><B><FONT SIZE=4 FACE="Arial">Assay_document.FK_PROTOCOL_ASSAY Index Columns&nbsp;</FONT></B></TD>
+</TR>
+</TABLE>
+<TABLE WIDTH=100% CELLPADDING=2 BORDER=2>
+<TR>
+<TD VALIGN=TOP  WIDTH=22% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">ColumnName&nbsp;</FONT></B></TD>
+<TD VALIGN=TOP  WIDTH=22% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Sort Order&nbsp;</FONT></B></TD>
+</TR>
+<TR>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF="Tbl_ca3f589c150f4fb89dee41aa253b4770_Attr.htm#Attr_82b8dae5f3f74db59604e9542c2c84b1">ASSAY_ID</A>&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">Ascending&nbsp;</FONT></TD>
 </TR>
 </TABLE>
@@ -221,51 +315,6 @@
 </TR>
 <TR>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF="Tbl_9a0cc5708959429f9071509fd6e42938_Attr.htm#Attr_af75480d21734ffab797f321b76e5725">LABEL</A>&nbsp;</FONT></TD>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">Ascending&nbsp;</FONT></TD>
-</TR>
-</TABLE>
-<HR>
-<A NAME = "Index_9fb8dffa22244477b3c37257ed347575"></A>
-<TABLE WIDTH=100% CELLPADDING=1 BORDER=2>
-<TR>
-<TD VALIGN=TOP BGCOLOR="darkblue" ><B><FONT SIZE=5 COLOR="white" FACE="Arial">ELEMENT.FK_ELEMENT_ELEMENT_STATUS&nbsp;</FONT></B></TD>
-</TR>
-</TABLE>
-<TABLE WIDTH=100% CELLPADDING=2 BORDER=2>
-<TR>
-<TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">PK/UK Constraint Name&nbsp;</FONT></B></TD>
-<TD><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
-</TR>
-<TR>
-<TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Unique&nbsp;</FONT></B></TD>
-<TD><FONT SIZE=2 FACE="Arial">NO&nbsp;</FONT></TD>
-</TR>
-<TR>
-<TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Clustered Option&nbsp;</FONT></B></TD>
-<TD><FONT SIZE=2 FACE="Arial">NON-CLUSTERED&nbsp;</FONT></TD>
-</TR>
-<TR>
-<TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">IndexType&nbsp;</FONT></B></TD>
-<TD><FONT SIZE=2 FACE="Arial">Index&nbsp;</FONT></TD>
-</TR>
-<TR>
-<TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">DDL Code&nbsp;</FONT></B></TD>
-<TD><TT><TT>CREATE INDEX BARD_QA.FK_ELEMENT_ELEMENT_STATUS ON BARD_QA.ELEMENT(ELEMENT_STATUS_ID)</TT><BR><TT>TABLESPACE BARD_DAT</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp LOGGING</TT><BR><TT>;</TT><BR>&nbsp;</TT></TD>
-</TR>
-</TABLE>
-<P>
-<TABLE WIDTH=100% CELLPADDING=3 BORDER=2>
-<TR>
-<TD VALIGN=TOP BGCOLOR="LIGHTGREY" ><B><FONT SIZE=4 FACE="Arial">ELEMENT.FK_ELEMENT_ELEMENT_STATUS Index Columns&nbsp;</FONT></B></TD>
-</TR>
-</TABLE>
-<TABLE WIDTH=100% CELLPADDING=2 BORDER=2>
-<TR>
-<TD VALIGN=TOP  WIDTH=22% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">ColumnName&nbsp;</FONT></B></TD>
-<TD VALIGN=TOP  WIDTH=22% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Sort Order&nbsp;</FONT></B></TD>
-</TR>
-<TR>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF="Tbl_9a0cc5708959429f9071509fd6e42938_Attr.htm#Attr_aa239567cac6497c8fc04098e612de1f">ELEMENT_STATUS_ID</A>&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">Ascending&nbsp;</FONT></TD>
 </TR>
 </TABLE>
@@ -446,51 +495,6 @@
 </TR>
 <TR>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF="Tbl_6f76676b4baa487f9eb8f3d8070b72a2_Attr.htm#Attr_d1cce8104df043598a707c592ea1a296">PROJECT_ID</A>&nbsp;</FONT></TD>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">Ascending&nbsp;</FONT></TD>
-</TR>
-</TABLE>
-<HR>
-<A NAME = "Index_f36673c6c1d648e488d57a7420a40b02"></A>
-<TABLE WIDTH=100% CELLPADDING=1 BORDER=2>
-<TR>
-<TD VALIGN=TOP BGCOLOR="darkblue" ><B><FONT SIZE=5 COLOR="white" FACE="Arial">EXPERIMENT.FK_EXPERIMENT_EXPRT_STATUS&nbsp;</FONT></B></TD>
-</TR>
-</TABLE>
-<TABLE WIDTH=100% CELLPADDING=2 BORDER=2>
-<TR>
-<TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">PK/UK Constraint Name&nbsp;</FONT></B></TD>
-<TD><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
-</TR>
-<TR>
-<TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Unique&nbsp;</FONT></B></TD>
-<TD><FONT SIZE=2 FACE="Arial">NO&nbsp;</FONT></TD>
-</TR>
-<TR>
-<TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Clustered Option&nbsp;</FONT></B></TD>
-<TD><FONT SIZE=2 FACE="Arial">NON-CLUSTERED&nbsp;</FONT></TD>
-</TR>
-<TR>
-<TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">IndexType&nbsp;</FONT></B></TD>
-<TD><FONT SIZE=2 FACE="Arial">Index&nbsp;</FONT></TD>
-</TR>
-<TR>
-<TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">DDL Code&nbsp;</FONT></B></TD>
-<TD><TT><TT>CREATE INDEX BARD_QA.FK_EXPERIMENT_EXPRT_STATUS ON BARD_QA.EXPERIMENT(EXPERIMENT_STATUS_ID)</TT><BR><TT>TABLESPACE BARD_DAT</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp LOGGING</TT><BR><TT>;</TT><BR>&nbsp;</TT></TD>
-</TR>
-</TABLE>
-<P>
-<TABLE WIDTH=100% CELLPADDING=3 BORDER=2>
-<TR>
-<TD VALIGN=TOP BGCOLOR="LIGHTGREY" ><B><FONT SIZE=4 FACE="Arial">EXPERIMENT.FK_EXPERIMENT_EXPRT_STATUS Index Columns&nbsp;</FONT></B></TD>
-</TR>
-</TABLE>
-<TABLE WIDTH=100% CELLPADDING=2 BORDER=2>
-<TR>
-<TD VALIGN=TOP  WIDTH=22% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">ColumnName&nbsp;</FONT></B></TD>
-<TD VALIGN=TOP  WIDTH=22% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Sort Order&nbsp;</FONT></B></TD>
-</TR>
-<TR>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF="Tbl_6f76676b4baa487f9eb8f3d8070b72a2_Attr.htm#Attr_acd6f0dd62454f2f88194eaf08a2f8a6">EXPERIMENT_STATUS_ID</A>&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">Ascending&nbsp;</FONT></TD>
 </TR>
 </TABLE>
@@ -859,51 +863,6 @@
 </TR>
 </TABLE>
 <HR>
-<A NAME = "Index_0b94c9d3826e4fa0a672a2b86bcd11d6"></A>
-<TABLE WIDTH=100% CELLPADDING=1 BORDER=2>
-<TR>
-<TD VALIGN=TOP BGCOLOR="darkblue" ><B><FONT SIZE=5 COLOR="white" FACE="Arial">PROJECT_ASSAY.FK_PROJECT_ASSAY_STAGE&nbsp;</FONT></B></TD>
-</TR>
-</TABLE>
-<TABLE WIDTH=100% CELLPADDING=2 BORDER=2>
-<TR>
-<TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">PK/UK Constraint Name&nbsp;</FONT></B></TD>
-<TD><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
-</TR>
-<TR>
-<TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Unique&nbsp;</FONT></B></TD>
-<TD><FONT SIZE=2 FACE="Arial">NO&nbsp;</FONT></TD>
-</TR>
-<TR>
-<TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Clustered Option&nbsp;</FONT></B></TD>
-<TD><FONT SIZE=2 FACE="Arial">NON-CLUSTERED&nbsp;</FONT></TD>
-</TR>
-<TR>
-<TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">IndexType&nbsp;</FONT></B></TD>
-<TD><FONT SIZE=2 FACE="Arial">Index&nbsp;</FONT></TD>
-</TR>
-<TR>
-<TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">DDL Code&nbsp;</FONT></B></TD>
-<TD><TT><TT>CREATE INDEX BARD_QA.FK_PROJECT_ASSAY_STAGE ON BARD_QA.PROJECT_ASSAY(STAGE)</TT><BR><TT>TABLESPACE BARD_DAT</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp LOGGING</TT><BR><TT>;</TT><BR>&nbsp;</TT></TD>
-</TR>
-</TABLE>
-<P>
-<TABLE WIDTH=100% CELLPADDING=3 BORDER=2>
-<TR>
-<TD VALIGN=TOP BGCOLOR="LIGHTGREY" ><B><FONT SIZE=4 FACE="Arial">PROJECT_ASSAY.FK_PROJECT_ASSAY_STAGE Index Columns&nbsp;</FONT></B></TD>
-</TR>
-</TABLE>
-<TABLE WIDTH=100% CELLPADDING=2 BORDER=2>
-<TR>
-<TD VALIGN=TOP  WIDTH=22% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">ColumnName&nbsp;</FONT></B></TD>
-<TD VALIGN=TOP  WIDTH=22% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Sort Order&nbsp;</FONT></B></TD>
-</TR>
-<TR>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF="Tbl_d123df90c5504b828fde9ec184f91dd4_Attr.htm#Attr_19cbee4a8b6a4fe58728305f6058ae3f">STAGE</A>&nbsp;</FONT></TD>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">Ascending&nbsp;</FONT></TD>
-</TR>
-</TABLE>
-<HR>
 <A NAME = "Index_5797d8902d3a4e389aa1e27f2ea75a01"></A>
 <TABLE WIDTH=100% CELLPADDING=1 BORDER=2>
 <TR>
@@ -945,96 +904,6 @@
 </TR>
 <TR>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF="Tbl_d123df90c5504b828fde9ec184f91dd4_Attr.htm#Attr_058d7d62bc4c42cebec925811cddc864">RELATED_ASSAY_ID</A>&nbsp;</FONT></TD>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">Ascending&nbsp;</FONT></TD>
-</TR>
-</TABLE>
-<HR>
-<A NAME = "Index_38fbd1132b284a91b32dd19029274313"></A>
-<TABLE WIDTH=100% CELLPADDING=1 BORDER=2>
-<TR>
-<TD VALIGN=TOP BGCOLOR="darkblue" ><B><FONT SIZE=5 COLOR="white" FACE="Arial">Protocol_document.PK_PROTOCOL&nbsp;</FONT></B></TD>
-</TR>
-</TABLE>
-<TABLE WIDTH=100% CELLPADDING=2 BORDER=2>
-<TR>
-<TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">PK/UK Constraint Name&nbsp;</FONT></B></TD>
-<TD><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
-</TR>
-<TR>
-<TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Unique&nbsp;</FONT></B></TD>
-<TD><FONT SIZE=2 FACE="Arial">YES&nbsp;</FONT></TD>
-</TR>
-<TR>
-<TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Clustered Option&nbsp;</FONT></B></TD>
-<TD><FONT SIZE=2 FACE="Arial">NON-CLUSTERED&nbsp;</FONT></TD>
-</TR>
-<TR>
-<TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">IndexType&nbsp;</FONT></B></TD>
-<TD><FONT SIZE=2 FACE="Arial">PrimaryKey&nbsp;</FONT></TD>
-</TR>
-<TR>
-<TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">DDL Code&nbsp;</FONT></B></TD>
-<TD><TT>&nbsp;</TT></TD>
-</TR>
-</TABLE>
-<P>
-<TABLE WIDTH=100% CELLPADDING=3 BORDER=2>
-<TR>
-<TD VALIGN=TOP BGCOLOR="LIGHTGREY" ><B><FONT SIZE=4 FACE="Arial">Protocol_document.PK_PROTOCOL Index Columns&nbsp;</FONT></B></TD>
-</TR>
-</TABLE>
-<TABLE WIDTH=100% CELLPADDING=2 BORDER=2>
-<TR>
-<TD VALIGN=TOP  WIDTH=22% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">ColumnName&nbsp;</FONT></B></TD>
-<TD VALIGN=TOP  WIDTH=22% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Sort Order&nbsp;</FONT></B></TD>
-</TR>
-<TR>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF="Tbl_ca3f589c150f4fb89dee41aa253b4770_Attr.htm#Attr_f39b78cd41a2479f8a0d937aa3e0c13d">PROTOCOL_ID</A>&nbsp;</FONT></TD>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">Ascending&nbsp;</FONT></TD>
-</TR>
-</TABLE>
-<HR>
-<A NAME = "Index_b710d2af48a9466da91a7c06457191d2"></A>
-<TABLE WIDTH=100% CELLPADDING=1 BORDER=2>
-<TR>
-<TD VALIGN=TOP BGCOLOR="darkblue" ><B><FONT SIZE=5 COLOR="white" FACE="Arial">Protocol_document.FK_PROTOCOL_ASSAY&nbsp;</FONT></B></TD>
-</TR>
-</TABLE>
-<TABLE WIDTH=100% CELLPADDING=2 BORDER=2>
-<TR>
-<TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">PK/UK Constraint Name&nbsp;</FONT></B></TD>
-<TD><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
-</TR>
-<TR>
-<TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Unique&nbsp;</FONT></B></TD>
-<TD><FONT SIZE=2 FACE="Arial">NO&nbsp;</FONT></TD>
-</TR>
-<TR>
-<TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Clustered Option&nbsp;</FONT></B></TD>
-<TD><FONT SIZE=2 FACE="Arial">NON-CLUSTERED&nbsp;</FONT></TD>
-</TR>
-<TR>
-<TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">IndexType&nbsp;</FONT></B></TD>
-<TD><FONT SIZE=2 FACE="Arial">Index&nbsp;</FONT></TD>
-</TR>
-<TR>
-<TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">DDL Code&nbsp;</FONT></B></TD>
-<TD><TT><TT>CREATE INDEX BARD_QA.FK_PROTOCOL_ASSAY ON BARD_QA.Protocol_document(ASSAY_ID)</TT><BR><TT>TABLESPACE BARD_DAT</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp LOGGING</TT><BR><TT>;</TT><BR>&nbsp;</TT></TD>
-</TR>
-</TABLE>
-<P>
-<TABLE WIDTH=100% CELLPADDING=3 BORDER=2>
-<TR>
-<TD VALIGN=TOP BGCOLOR="LIGHTGREY" ><B><FONT SIZE=4 FACE="Arial">Protocol_document.FK_PROTOCOL_ASSAY Index Columns&nbsp;</FONT></B></TD>
-</TR>
-</TABLE>
-<TABLE WIDTH=100% CELLPADDING=2 BORDER=2>
-<TR>
-<TD VALIGN=TOP  WIDTH=22% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">ColumnName&nbsp;</FONT></B></TD>
-<TD VALIGN=TOP  WIDTH=22% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Sort Order&nbsp;</FONT></B></TD>
-</TR>
-<TR>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF="Tbl_ca3f589c150f4fb89dee41aa253b4770_Attr.htm#Attr_82b8dae5f3f74db59604e9542c2c84b1">ASSAY_ID</A>&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">Ascending&nbsp;</FONT></TD>
 </TR>
 </TABLE>
@@ -1255,7 +1124,7 @@
 <TD VALIGN=TOP  WIDTH=22% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Sort Order&nbsp;</FONT></B></TD>
 </TR>
 <TR>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF="Tbl_df506bffdc684465aa0dc3f10d4ccb37_Attr.htm#Attr_5b4530c963ee46a48c344ac9dc69edbd">QUALIFIER</A>&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF="Tbl_df506bffdc684465aa0dc3f10d4ccb37_Attr.htm#Attr_c396f87d4b01452da518becdb30a3945">QUALIFIER</A>&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">Ascending&nbsp;</FONT></TD>
 </TR>
 </TABLE>
