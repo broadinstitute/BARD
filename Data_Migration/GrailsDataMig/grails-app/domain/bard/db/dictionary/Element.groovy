@@ -21,7 +21,7 @@ class Element {
 	String modifiedBy
 	String elementStatus
 	Unit unit
-    String readyForExtraction = 'Ready'
+    String readyForExtraction  = 'Ready'
 
     static hasMany = [treeRoots: TreeRoot,
             ontologyItems: OntologyItem,

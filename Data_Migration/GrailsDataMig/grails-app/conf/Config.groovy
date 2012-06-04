@@ -93,7 +93,7 @@ log4j = {
 }
 
 // DB Reverse Engineering configuration options
-// uncomment these to run db-reverse-engineer plugin. Run as: grails db-reverse-engineer
-grails.plugin.reveng.packageName = 'bard.db.model'
+// uncomment these to run bard.db-reverse-engineer plugin. Run as: grails bard.db-reverse-engineer
+grails.plugin.reveng.packageName = 'bard.bard.db.model'
 grails.plugin.reveng.jdbcDriverJarDep = 'mysql:mysql-connector-java:5.1.16'
 //grails.plugin.reveng.includeTables = ['Test_Measure_Context_Item']

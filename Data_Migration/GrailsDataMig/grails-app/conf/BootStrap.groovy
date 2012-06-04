@@ -1,4 +1,4 @@
-import db.util.Inserter
+import bard.db.util.Inserter
 
 class BootStrap {
 

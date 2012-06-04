@@ -9,6 +9,9 @@ hibernate {
     cache.use_query_cache = true
     cache.provider_class = 'net.sf.ehcache.hibernate.EhCacheProvider'
     cache.region.factory_class = 'org.hibernate.cache.RegionFactory'
+    show_sql = true
+    format_sql = true
+    use_sql_comments = true
 }
 // environment specific settings
 environments {

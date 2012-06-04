@@ -15,7 +15,7 @@ class Experiment {
     String experimentStatus
     Project project
     Assay assay
-    String readyForExtraction = 'Ready'
+    String readyForExtraction  = 'Ready'
 
     static hasMany = [resultContextItems: ResultContextItem,
             results: Result]
