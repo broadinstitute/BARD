@@ -1,7 +1,6 @@
 package bardqueryapi
 
 import org.codehaus.groovy.grails.commons.GrailsApplication
-import grails.converters.deep.JSON
 
 @Mixin(QueryApiControllerHelper)
 class QueryApiController {
