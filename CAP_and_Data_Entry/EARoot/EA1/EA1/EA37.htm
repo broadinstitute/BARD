@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-<title>CAP UI Find Assay</title>
+<title><select UOM></title>
 <link href="../../../css/ea.css" rel="stylesheet" type="text/css" />
 <script>
 function initPage(src) {	
@@ -31,74 +31,71 @@ function nameClassifier(name, separator)
 </script>
 </head>
 <body onload="initPage(this);" class="Content">
+<div class="pageHeader"></div>
 <div class="PageBody">
-	
-<img src="EA38.png" usemap="#EA38" border="0" />
-
-<MAP NAME="EA38">
-<area shape="rect" coords="772,185,887,256" href="EA47.htm" target="_self">
-<area shape="rect" coords="610,640,700,660" href="EA88.htm" target="_self">
-<area shape="rect" coords="772,395,912,469" href="EA48.htm" target="_self">
-<area shape="rect" coords="29,37,134,82" href="../EA2/EA201.htm" target="_self">
-<area shape="rect" coords="25,311,586,330" href="EA114.htm" target="_self">
-<area shape="rect" coords="605,481,695,516" href="EA105.htm" target="_self">
-<area shape="rect" coords="604,340,694,360" href="EA133.htm" target="_self">
-<area shape="rect" coords="605,446,695,466" href="../EA2/EA201.htm" target="_self">
-<area shape="rect" coords="33,338,590,660" href="EA191.htm" target="_self">
-<area shape="rect" coords="10,306,730,318" href="EA80.htm" target="_self">
-<area shape="rect" coords="528,195,618,215" href="EA111.htm" target="_self">
-<area shape="rect" coords="17,226,107,246" href="EA145.htm" target="_self">
-<area shape="rect" coords="17,192,156,214" href="EA94.htm" target="_self">
-<area shape="rect" coords="17,160,107,180" href="EA156.htm" target="_self">
-<area shape="rect" coords="17,128,107,148" href="EA77.htm" target="_self">
-<area shape="rect" coords="155,254,484,275" href="EA63.htm" target="_self">
-<area shape="rect" coords="155,224,401,244" href="EA146.htm" target="_self">
-<area shape="rect" coords="155,276,485,295" href="EA64.htm" target="_self">
-<area shape="rect" coords="155,194,394,212" href="EA84.htm" target="_self">
-<area shape="rect" coords="155,163,392,183" href="EA157.htm" target="_self">
-<area shape="rect" coords="155,131,245,151" href="EA78.htm" target="_self">
-<area shape="rect" coords="39,101,718,122" href="EA107.htm" target="_self">
-<area shape="rect" coords="622,36,727,81" href="EA29.htm" target="_self">
-<area shape="rect" coords="474,36,579,81" href="EA35.htm" target="_self">
-<area shape="rect" coords="325,37,430,82" href="EA39.htm" target="_self">
-<area shape="rect" coords="177,36,282,81" href="EA33.htm" target="_self">
-<area shape="rect" coords="10,87,730,99" href="EA103.htm" target="_self">
-<area shape="rect" coords="11,10,747,731" href="EA50.htm" target="_self">
-</MAP>
-
-	<div class="ObjectTitle">CAP UI Find Assay : User Interface diagram</div>
+	<div id="name_classifier" style="display: none;"></div>
+	<span class="ObjectTitle"><script type="text/javascript">document.write(nameClassifier("&lt;select UOM&gt;", " : "))</script>  : Public  &lt;&lt;combobox&gt;&gt; GUIElement</span>
 	<table border="0" cellpadding="0" cellspacing="0" class="ObjectDetails">
 		<tr>
 			<td width="15%" class="ObjectDetailsTopic">Created:</td>
-			<td width="85%" class="ObjectDetailsValue">4/5/2012 1:25:19 PM</td>
+			<td width="85%" class="ObjectDetailsValue">4/3/2012 9:55:23 PM</td>
 		</tr>
 		<tr>
-			<td width="15%" class="ObjectDetailsTopic">Modified:</td>
-			<td width="85%" class="ObjectDetailsValue">4/26/2012 4:39:38 PM</td>
+			<td class="ObjectDetailsTopic">Modified:</td>
+			<td class="ObjectDetailsValue">5/10/2012 6:50:29 PM</td>
 		</tr>
-		<tr style="padding-top: 10px;">
-			<td width="15%" class="ObjectDetailsTopic"><img src="../../../images/plus03.gif" align="absmiddle" id="proj" onclick="parent.toggleData(this.id)" />Project:</td>
-			<td width="85%" class="ObjectDetailsValue"></td>			
+		<tr style="height: 10px"><td colspan="2"></td></tr>
+		<tr>
+			<td class="ObjectDetailsTopic"><img src="../../../images/plus03.gif" align="absmiddle" id="proj" onclick="parent.toggleData(this.id)" />Project:</td>
+			<td class="ObjectDetailsValue"></td>
 		</tr>
 		<tr id="proj00" style="display: none;">
-			<td width="15%" class="ObjectDetailsTopic" style="padding-left: 18px;">Author:</td>
-			<td width="85%" class="ObjectDetailsValue">Simon</td>
+			<td class="ObjectDetailsTopic" style="padding-left: 18px;">Author:</td>
+			<td class="ObjectDetailsValue">Simon</td>
 		</tr>
 		<tr id="proj01" style="display: none;">
-			<td width="15%" class="ObjectDetailsTopic" style="padding-left: 18px;">Version:</td>
-			<td width="85%" class="ObjectDetailsValue">1.0</td>
+			<td class="ObjectDetailsTopic" style="padding-left: 18px;">Version:</td>
+			<td class="ObjectDetailsValue">1.0</td>
+		</tr>
+		<tr id="proj02" style="display: none;">
+			<td class="ObjectDetailsTopic" style="padding-left: 18px;">Phase:</td>
+			<td class="ObjectDetailsValue">1.0</td>
+		</tr>
+		<tr id="proj03" style="display: none;">
+			<td class="ObjectDetailsTopic" style="padding-left: 18px;">Status:</td>
+			<td class="ObjectDetailsValue">Proposed</td>
+		</tr>
+		<tr id="proj04" style="display: none;">
+			<td class="ObjectDetailsTopic" style="padding-left: 18px;">Complexity:</td>
+			<td class="ObjectDetailsValue">Easy</td>
+		</tr>
+		<tr id="proj05" style="display: none;">
+			<td class="ObjectDetailsTopic" style="padding-left: 18px;">Difficulty:</td>
+			<td class="ObjectDetailsValue"></td>
+		</tr>
+		<tr id="proj06" style="display: none;">
+			<td class="ObjectDetailsTopic" style="padding-left: 18px;">Priority:</td>
+			<td class="ObjectDetailsValue"></td>
+		</tr>
+		<tr id="proj05" style="display: none;">
+			<td class="ObjectDetailsTopic" style="padding-left: 18px;">Multiplicity:</td>
+			<td class="ObjectDetailsValue"></td>
 		</tr>
 		<tr>
-			<td width="15%" class="ObjectDetailsTopic"><img src="../../../images/plus03.gif" align="absmiddle" id="adv" onclick="parent.toggleData(this.id)" />Advanced:</td>
-			<td width="85%" class="ObjectDetailsValue"></td>			
+			<td class="ObjectDetailsTopic"><img src="../../../images/plus03.gif" align="absmiddle" id="adv" onclick="parent.toggleData(this.id)" />Advanced:</td>
+			<td class="ObjectDetailsValue"></td>
 		</tr>
 		<tr id="adv00" style="display: none;">
-			<td width="15%" class="ObjectDetailsTopic" style="padding-left: 18px;">ID:</td>
-			<td width="85%" class="ObjectDetailsValue">{D6E126BB-6847-4b7c-8DB4-8802D6F2AA2B}</td>
+			<td class="ObjectDetailsTopic" style="padding-left: 18px;">UUID:</td>
+			<td class="ObjectDetailsValue">{571C1E0B-025A-49cc-AE7E-D02B4E609851}</td>
+		</tr>
+		<tr id="adv01" style="display: none;">
+			<td class="ObjectDetailsTopic" style="padding-left: 18px;">Appears In:</td>
+			<td class="ObjectDetailsValue"><a href="../EA2/EA176.htm">CAP UI Measure Detail v2</a></td>
 		</tr>
 	</table>
 	
-</div>
+<div class="pageFooter"></div>
  
 </body>
 </html>
