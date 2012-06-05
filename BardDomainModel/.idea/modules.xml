@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/BardDomainModel.iml" filepath="$PROJECT_DIR$/BardDomainModel.iml" />
+      <module fileurl="file://$PROJECT_DIR$/BardDomainModel-grailsPlugins.iml" filepath="$PROJECT_DIR$/BardDomainModel-grailsPlugins.iml" />
     </modules>
   </component>
 </project>

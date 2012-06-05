@@ -1,61 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="4a5d984a-6e04-4a7c-9ef9-70115f03398b" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/grails-app/domain/bard/db/experiment/Experiment.groovy" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/grails-app/domain/bard/db/registration/Assay.groovy" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/grails-app/domain/bard/db/util/Qualifier.groovy" />
-      <change type="DELETED" beforePath="C:\dev\ssss\BARD\Data_Migration\GrailsDataMig\grails-app\domain\db\dictionary\ElementStatus.groovy" afterPath="" />
-      <change type="DELETED" beforePath="C:\dev\ssss\BARD\Data_Migration\GrailsDataMig\grails-app\domain\db\experiment\Experiment.groovy" afterPath="" />
-      <change type="DELETED" beforePath="C:\dev\ssss\BARD\Data_Migration\GrailsDataMig\grails-app\domain\db\experiment\ExperimentStatus.groovy" afterPath="" />
-      <change type="DELETED" beforePath="C:\dev\ssss\BARD\Data_Migration\GrailsDataMig\grails-app\domain\db\experiment\ResultStatus.groovy" afterPath="" />
-      <change type="DELETED" beforePath="C:\dev\ssss\BARD\Data_Migration\GrailsDataMig\grails-app\domain\db\registration\Assay.groovy" afterPath="" />
-      <change type="DELETED" beforePath="C:\dev\ssss\BARD\Data_Migration\GrailsDataMig\grails-app\domain\db\registration\AssayStatus.groovy" afterPath="" />
-      <change type="DELETED" beforePath="C:\dev\ssss\BARD\Data_Migration\GrailsDataMig\grails-app\domain\db\util\Qualifier.groovy" afterPath="" />
-      <change type="MOVED" beforePath="C:\dev\ssss\BARD\Data_Migration\GrailsDataMig\grails-app\domain\db\dictionary\AssayDescriptor.groovy" afterPath="$PROJECT_DIR$/grails-app/domain/bard/db/dictionary/AssayDescriptor.groovy" />
-      <change type="MOVED" beforePath="C:\dev\ssss\BARD\Data_Migration\GrailsDataMig\grails-app\domain\db\dictionary\BiologyDescriptor.groovy" afterPath="$PROJECT_DIR$/grails-app/domain/bard/db/dictionary/BiologyDescriptor.groovy" />
-      <change type="MOVED" beforePath="C:\dev\ssss\BARD\Data_Migration\GrailsDataMig\grails-app\domain\db\dictionary\Element.groovy" afterPath="$PROJECT_DIR$/grails-app/domain/bard/db/dictionary/Element.groovy" />
-      <change type="MOVED" beforePath="C:\dev\ssss\BARD\Data_Migration\GrailsDataMig\grails-app\domain\db\dictionary\ElementHierarchy.groovy" afterPath="$PROJECT_DIR$/grails-app/domain/bard/db/dictionary/ElementHierarchy.groovy" />
-      <change type="MOVED" beforePath="C:\dev\ssss\BARD\Data_Migration\GrailsDataMig\grails-app\domain\db\dictionary\InstanceDescriptor.groovy" afterPath="$PROJECT_DIR$/grails-app/domain/bard/db/dictionary/InstanceDescriptor.groovy" />
-      <change type="MOVED" beforePath="C:\dev\ssss\BARD\Data_Migration\GrailsDataMig\grails-app\domain\db\dictionary\Laboratory.groovy" afterPath="$PROJECT_DIR$/grails-app/domain/bard/db/dictionary/Laboratory.groovy" />
-      <change type="MOVED" beforePath="C:\dev\ssss\BARD\Data_Migration\GrailsDataMig\grails-app\domain\db\dictionary\Ontology.groovy" afterPath="$PROJECT_DIR$/grails-app/domain/bard/db/dictionary/Ontology.groovy" />
-      <change type="MOVED" beforePath="C:\dev\ssss\BARD\Data_Migration\GrailsDataMig\grails-app\domain\db\dictionary\OntologyItem.groovy" afterPath="$PROJECT_DIR$/grails-app/domain/bard/db/dictionary/OntologyItem.groovy" />
-      <change type="MOVED" beforePath="C:\dev\ssss\BARD\Data_Migration\GrailsDataMig\grails-app\domain\db\dictionary\ResultType.groovy" afterPath="$PROJECT_DIR$/grails-app/domain/bard/db/dictionary/ResultType.groovy" />
-      <change type="MOVED" beforePath="C:\dev\ssss\BARD\Data_Migration\GrailsDataMig\grails-app\domain\db\dictionary\Stage.groovy" afterPath="$PROJECT_DIR$/grails-app/domain/bard/db/dictionary/Stage.groovy" />
-      <change type="MOVED" beforePath="C:\dev\ssss\BARD\Data_Migration\GrailsDataMig\grails-app\domain\db\dictionary\TreeRoot.groovy" afterPath="$PROJECT_DIR$/grails-app/domain/bard/db/dictionary/TreeRoot.groovy" />
-      <change type="MOVED" beforePath="C:\dev\ssss\BARD\Data_Migration\GrailsDataMig\grails-app\domain\db\dictionary\Unit.groovy" afterPath="$PROJECT_DIR$/grails-app/domain/bard/db/dictionary/Unit.groovy" />
-      <change type="MOVED" beforePath="C:\dev\ssss\BARD\Data_Migration\GrailsDataMig\grails-app\domain\db\dictionary\UnitConversion.groovy" afterPath="$PROJECT_DIR$/grails-app/domain/bard/db/dictionary/UnitConversion.groovy" />
-      <change type="MOVED" beforePath="C:\dev\ssss\BARD\Data_Migration\GrailsDataMig\grails-app\domain\db\experiment\GroupType.groovy" afterPath="$PROJECT_DIR$/grails-app/domain/bard/db/experiment/GroupType.groovy" />
-      <change type="MOVED" beforePath="C:\dev\ssss\BARD\Data_Migration\GrailsDataMig\grails-app\domain\db\experiment\HierarchyType.groovy" afterPath="$PROJECT_DIR$/grails-app/domain/bard/db/experiment/HierarchyType.groovy" />
-      <change type="MOVED" beforePath="C:\dev\ssss\BARD\Data_Migration\GrailsDataMig\grails-app\domain\db\experiment\Project.groovy" afterPath="$PROJECT_DIR$/grails-app/domain/bard/db/experiment/Project.groovy" />
-      <change type="MOVED" beforePath="C:\dev\ssss\BARD\Data_Migration\GrailsDataMig\grails-app\domain\db\experiment\ProjectAssay.groovy" afterPath="$PROJECT_DIR$/grails-app/domain/bard/db/experiment/ProjectAssay.groovy" />
-      <change type="MOVED" beforePath="C:\dev\ssss\BARD\Data_Migration\GrailsDataMig\grails-app\domain\db\experiment\Result.groovy" afterPath="$PROJECT_DIR$/grails-app/domain/bard/db/experiment/Result.groovy" />
-      <change type="MOVED" beforePath="C:\dev\ssss\BARD\Data_Migration\GrailsDataMig\grails-app\domain\db\experiment\ResultContextItem.groovy" afterPath="$PROJECT_DIR$/grails-app/domain/bard/db/experiment/ResultContextItem.groovy" />
-      <change type="MOVED" beforePath="C:\dev\ssss\BARD\Data_Migration\GrailsDataMig\grails-app\domain\db\experiment\ResultHierarchy.groovy" afterPath="$PROJECT_DIR$/grails-app/domain/bard/db/experiment/ResultHierarchy.groovy" />
-      <change type="MOVED" beforePath="C:\dev\ssss\BARD\Data_Migration\GrailsDataMig\grails-app\domain\db\experiment\Substance.groovy" afterPath="$PROJECT_DIR$/grails-app/domain/bard/db/experiment/Substance.groovy" />
-      <change type="MOVED" beforePath="C:\dev\ssss\BARD\Data_Migration\GrailsDataMig\grails-app\domain\db\experiment\SubstanceType.groovy" afterPath="$PROJECT_DIR$/grails-app/domain/bard/db/experiment/SubstanceType.groovy" />
-      <change type="MOVED" beforePath="C:\dev\ssss\BARD\Data_Migration\GrailsDataMig\grails-app\domain\db\registration\AttributeType.groovy" afterPath="$PROJECT_DIR$/grails-app/domain/bard/db/registration/AttributeType.groovy" />
-      <change type="MOVED" beforePath="C:\dev\ssss\BARD\Data_Migration\GrailsDataMig\grails-app\domain\db\registration\ExternalAssay.groovy" afterPath="$PROJECT_DIR$/grails-app/domain/bard/db/registration/ExternalAssay.groovy" />
-      <change type="MOVED" beforePath="C:\dev\ssss\BARD\Data_Migration\GrailsDataMig\grails-app\domain\db\registration\ExternalSystem.groovy" afterPath="$PROJECT_DIR$/grails-app/domain/bard/db/registration/ExternalSystem.groovy" />
-      <change type="MOVED" beforePath="C:\dev\ssss\BARD\Data_Migration\GrailsDataMig\grails-app\domain\db\registration\Measure.groovy" afterPath="$PROJECT_DIR$/grails-app/domain/bard/db/registration/Measure.groovy" />
-      <change type="MOVED" beforePath="C:\dev\ssss\BARD\Data_Migration\GrailsDataMig\grails-app\domain\db\registration\MeasureContext.groovy" afterPath="$PROJECT_DIR$/grails-app/domain/bard/db/registration/MeasureContext.groovy" />
-      <change type="MOVED" beforePath="C:\dev\ssss\BARD\Data_Migration\GrailsDataMig\grails-app\domain\db\registration\MeasureContextItem.groovy" afterPath="$PROJECT_DIR$/grails-app/domain/bard/db/registration/MeasureContextItem.groovy" />
-      <change type="MOVED" beforePath="C:\dev\ssss\BARD\Data_Migration\GrailsDataMig\grails-app\domain\db\registration\Protocol.groovy" afterPath="$PROJECT_DIR$/grails-app/domain/bard/db/registration/Protocol.groovy" />
-      <change type="MOVED" beforePath="C:\dev\ssss\BARD\Data_Migration\GrailsDataMig\src\groovy\db\util\Inserter.groovy" afterPath="$PROJECT_DIR$/src/groovy/bard/db/util/Inserter.groovy" />
-      <change type="MOVED" beforePath="C:\dev\ssss\BARD\Data_Migration\GrailsDataMig\test\unit\db\util\RecordTransferMgrControllerTests.groovy" afterPath="$PROJECT_DIR$/test/unit/bard/db/util/RecordTransferMgrControllerTests.groovy" />
-      <change type="MOVED" beforePath="C:\dev\ssss\BARD\Data_Migration\GrailsDataMig\test\unit\db\util\RecordTransferMgrTests.groovy" afterPath="$PROJECT_DIR$/test/unit/bard/db/util/RecordTransferMgrTests.groovy" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../BardDomainModel/.idea/workspace.xml" afterPath="$PROJECT_DIR$/../../BardDomainModel/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../BardDomainModel/grails-app/domain/bard/db/dictionary/Element.groovy" afterPath="$PROJECT_DIR$/../../BardDomainModel/grails-app/domain/bard/db/dictionary/Element.groovy" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../BardDomainModel/grails-app/domain/bard/db/dictionary/ResultType.groovy" afterPath="$PROJECT_DIR$/../../BardDomainModel/grails-app/domain/bard/db/dictionary/ResultType.groovy" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../BardDomainModel/grails-app/domain/bard/db/experiment/Experiment.groovy" afterPath="$PROJECT_DIR$/../../BardDomainModel/grails-app/domain/bard/db/experiment/Experiment.groovy" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../BardDomainModel/grails-app/domain/bard/db/experiment/Project.groovy" afterPath="$PROJECT_DIR$/../../BardDomainModel/grails-app/domain/bard/db/experiment/Project.groovy" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../BardDomainModel/grails-app/domain/bard/db/registration/Assay.groovy" afterPath="$PROJECT_DIR$/../../BardDomainModel/grails-app/domain/bard/db/registration/Assay.groovy" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/gradle.xml" afterPath="$PROJECT_DIR$/.idea/gradle.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/grails-app/conf/BootStrap.groovy" afterPath="$PROJECT_DIR$/grails-app/conf/BootStrap.groovy" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/grails-app/conf/Config.groovy" afterPath="$PROJECT_DIR$/grails-app/conf/Config.groovy" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/grails-app/conf/DataSource.groovy" afterPath="$PROJECT_DIR$/grails-app/conf/DataSource.groovy" />
-    </list>
+    <list default="true" id="4a5d984a-6e04-4a7c-9ef9-70115f03398b" name="Default" comment="" />
     <ignored path="GrailsDataMig.iws" />
     <ignored path=".idea/workspace.xml" />
     <ignored path="$USER_HOME$/.grails/" />
@@ -259,8 +205,8 @@
     </option>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="1922" />
-    <option name="y" value="6" />
+    <option name="x" value="1917" />
+    <option name="y" value="3" />
     <option name="width" value="1838" />
     <option name="height" value="1138" />
   </component>
@@ -921,7 +867,7 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="1922" y="6" width="1838" height="1138" extended-state="0" />
+    <frame x="1917" y="3" width="1838" height="1138" extended-state="0" />
     <editor active="true" />
     <layout>
       <window_info id="Data Sources" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32992327" sideWeight="0.6705471" order="7" side_tool="false" content_ui="tabs" />
@@ -945,7 +891,7 @@
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.20482604" sideWeight="0.7467205" order="0" side_tool="false" content_ui="combo" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.2532795" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.2532795" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
