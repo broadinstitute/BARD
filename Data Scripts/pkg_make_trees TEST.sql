@@ -20,7 +20,12 @@ values (
     element_hierarchy_id_seq.nextval, 
     526, 
     '38', 
-    'is_a');
+    'is_a')
+    ;
+    
+    
+select * from tree_root;
+    
     
     
 
