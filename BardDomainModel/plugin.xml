@@ -1,0 +1,53 @@
+<plugin name='bard-domain-model' version='0.1' grailsVersion='2.0 &gt; *'>
+  <author>Your name</author>
+  <title>Bard Domain Model Plugin</title>
+  <description>Brief summary/description of the plugin.
+</description>
+  <documentation>http://grails.org/plugin/bard-domain-model</documentation>
+  <type>BardDomainModelGrailsPlugin</type>
+  <resources>
+    <resource>bard.db.dictionary.AssayDescriptor</resource>
+    <resource>bard.db.dictionary.BiologyDescriptor</resource>
+    <resource>bard.db.dictionary.Element</resource>
+    <resource>bard.db.dictionary.ElementHierarchy</resource>
+    <resource>bard.db.dictionary.InstanceDescriptor</resource>
+    <resource>bard.db.dictionary.Laboratory</resource>
+    <resource>bard.db.dictionary.Ontology</resource>
+    <resource>bard.db.dictionary.OntologyItem</resource>
+    <resource>bard.db.dictionary.ResultType</resource>
+    <resource>bard.db.dictionary.Stage</resource>
+    <resource>bard.db.dictionary.TreeRoot</resource>
+    <resource>bard.db.dictionary.Unit</resource>
+    <resource>bard.db.dictionary.UnitConversion</resource>
+    <resource>bard.db.experiment.Experiment</resource>
+    <resource>bard.db.experiment.GroupType</resource>
+    <resource>bard.db.experiment.HierarchyType</resource>
+    <resource>bard.db.experiment.Project</resource>
+    <resource>bard.db.experiment.ProjectAssay</resource>
+    <resource>bard.db.experiment.Result</resource>
+    <resource>bard.db.experiment.ResultContextItem</resource>
+    <resource>bard.db.experiment.ResultHierarchy</resource>
+    <resource>bard.db.experiment.Substance</resource>
+    <resource>bard.db.experiment.SubstanceType</resource>
+    <resource>bard.db.registration.Assay</resource>
+    <resource>bard.db.registration.AttributeType</resource>
+    <resource>bard.db.registration.ExternalAssay</resource>
+    <resource>bard.db.registration.ExternalSystem</resource>
+    <resource>bard.db.registration.Measure</resource>
+    <resource>bard.db.registration.MeasureContext</resource>
+    <resource>bard.db.registration.MeasureContextItem</resource>
+    <resource>bard.db.registration.Protocol</resource>
+    <resource>bard.db.util.Qualifier</resource>
+  </resources>
+  <repositories>
+    <repository name='grailsCentral' url='http://plugins.grails.org' />
+    <repository name='http://repo.grails.org/grails/plugins' url='http://repo.grails.org/grails/plugins/' />
+    <repository name='http://repo.grails.org/grails/core' url='http://repo.grails.org/grails/core/' />
+    <repository name='grailsCore' url='http://svn.codehaus.org/grails/trunk/grails-plugins' />
+    <repository name='mavenCentral' url='http://repo1.maven.org/maven2/' />
+  </repositories>
+  <dependencies />
+  <plugins />
+  <runtimePluginRequirements />
+  <behavior />
+</plugin>

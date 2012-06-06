@@ -2,327 +2,41 @@
 -- ER/Studio Data Architect 9.1 SQL Code Generation
 -- Project :      CAP and Data entry.DM1
 --
--- Date Created : Thursday, May 17, 2012 19:23:44
+-- Date Created : Monday, June 04, 2012 16:23:00
 -- Target DBMS : Oracle 11g
 --
 
-ALTER TABLE ASSAY
-DROP CONSTRAINT FK_ASSAY_ASSAY_STATUS_ID
+
+-- 
+-- USER: BARD_DEV 
+--
+
+CREATE USER BARD_DEV IDENTIFIED BY VALUES 'bard_dev'
+;
+grant connect to bard_dev
+;
+grant resource to bard_dev
 ;
 
-ALTER TABLE ASSAY_DESCRIPTOR
-DROP CONSTRAINT FK_ASSAY_DESCRIPTOR_PARENT_SLF
-;
 
-ALTER TABLE ASSAY_DESCRIPTOR
-DROP CONSTRAINT FK_ASSAY_DESCRIPTOR_STATUS
-;
+------  edit this to insert the correct SID name -- talk to your admin-----
 
-ALTER TABLE BIOLOGY_DESCRIPTOR
-DROP CONSTRAINT FK_BIOLOGY_DESCRIPTOR_PRNT_SLF
-;
+connect bard_dev@XE/bard_dev
 
-ALTER TABLE BIOLOGY_DESCRIPTOR
-DROP CONSTRAINT FK_BIOLOGY_DESCRIPTOR_STATUS
-;
 
-ALTER TABLE ELEMENT
-DROP CONSTRAINT FK_ELEMENT_ELEMENT_STATUS
-;
+---------------------------------------------------------------------------
 
-ALTER TABLE ELEMENT
-DROP CONSTRAINT FK_Element_Unit
-;
-
-ALTER TABLE ELEMENT_HIERARCHY
-DROP CONSTRAINT FK_E_HIERARCHY_CHILD_ELEM_ID
-;
-
-ALTER TABLE ELEMENT_HIERARCHY
-DROP CONSTRAINT FK_E_HIERARCHY_PARENT_ELEM_ID
-;
-
-ALTER TABLE EXPERIMENT
-DROP CONSTRAINT FK_EXPERIMENT_ASSAY
-;
-
-ALTER TABLE EXPERIMENT
-DROP CONSTRAINT FK_EXPERIMENT_EXPRT_STATUS
-;
-
-ALTER TABLE EXPERIMENT
-DROP CONSTRAINT FK_PROJECT_EXPERIMENT
-;
-
-ALTER TABLE EXTERNAL_ASSAY
-DROP CONSTRAINT FK_EXT_ASSAY_ASSAY
-;
-
-ALTER TABLE EXTERNAL_ASSAY
-DROP CONSTRAINT FK_EXT_ASSAY_EXT_SYSTEM
-;
-
-ALTER TABLE INSTANCE_DESCRIPTOR
-DROP CONSTRAINT FK_INSTANCE_DESCRIPTOR_STATUS
-;
-
-ALTER TABLE INSTANCE_DESCRIPTOR
-DROP CONSTRAINT FK_INSTANCE_DESCRIPTR_PRNT_SLF
-;
-
-ALTER TABLE LABORATORY
-DROP CONSTRAINT FK_LABORATORY_PARENT_NODE_ID
-;
-
-ALTER TABLE MEASURE
-DROP CONSTRAINT FK_MEASURE_ASSAY
-;
-
-ALTER TABLE MEASURE
-DROP CONSTRAINT FK_Measure_Element_Unit
-;
-
-ALTER TABLE MEASURE
-DROP CONSTRAINT FK_MEASURE_M_CONTEXT
-;
-
-ALTER TABLE MEASURE
-DROP CONSTRAINT FK_MEASURE_PARENT_MEASURE_ID
-;
-
-ALTER TABLE MEASURE
-DROP CONSTRAINT FK_MEASURE_RESULT_TYPE
-;
-
-ALTER TABLE MEASURE_CONTEXT
-DROP CONSTRAINT FK_MEASURE_CONTEXT_ASSAY
-;
-
-ALTER TABLE MEASURE_CONTEXT_ITEM
-DROP CONSTRAINT FK_M_CONTEXT_ITEM_ASSAY
-;
-
-ALTER TABLE MEASURE_CONTEXT_ITEM
-DROP CONSTRAINT FK_M_CONTEXT_ITEM_ATTRIBUTE
-;
-
-ALTER TABLE MEASURE_CONTEXT_ITEM
-DROP CONSTRAINT FK_M_CONTEXT_ITEM_M_CONTEXT
-;
-
-ALTER TABLE MEASURE_CONTEXT_ITEM
-DROP CONSTRAINT FK_M_CONTEXT_ITEM_QUALIFIER
-;
-
-ALTER TABLE MEASURE_CONTEXT_ITEM
-DROP CONSTRAINT FK_M_CONTEXT_ITEM_VALUE
-;
-
-ALTER TABLE MEASURE_CONTEXT_ITEM
-DROP CONSTRAINT FK_MEASURE_CONTEXT_ITEM_GROUP
-;
-
-ALTER TABLE ONTOLOGY_ITEM
-DROP CONSTRAINT FK_ONTOLOGY_ITEM_ELEMENT
-;
-
-ALTER TABLE ONTOLOGY_ITEM
-DROP CONSTRAINT FK_ONTOLOGY_ITEM_ONTOLOGY
-;
-
-ALTER TABLE PROJECT_ASSAY
-DROP CONSTRAINT FK_PROJECT_ASSAY_ASSAY
-;
-
-ALTER TABLE PROJECT_ASSAY
-DROP CONSTRAINT FK_PROJECT_ASSAY_PROJECT
-;
-
-ALTER TABLE PROJECT_ASSAY
-DROP CONSTRAINT FK_Project_Assay_Related_Assay
-;
-
-ALTER TABLE PROJECT_ASSAY
-DROP CONSTRAINT FK_PROJECT_ASSAY_STAGE
-;
-
-ALTER TABLE PROTOCOL
-DROP CONSTRAINT FK_PROTOCOL_ASSAY
-;
-
-ALTER TABLE RESULT
-DROP CONSTRAINT FK_RESULT_EXPERIMENT
-;
-
-ALTER TABLE RESULT
-DROP CONSTRAINT FK_RESULT_QUALIFIER
-;
-
-ALTER TABLE RESULT
-DROP CONSTRAINT FK_RESULT_RESULT_STATUS
-;
-
-ALTER TABLE RESULT
-DROP CONSTRAINT FK_Result_Result_Type
-;
-
-ALTER TABLE RESULT
-DROP CONSTRAINT FK_RESULT_SUBSTANCE
-;
-
-ALTER TABLE RESULT_CONTEXT_ITEM
-DROP CONSTRAINT FK_R_CONTEXT_ITEM_ATTRIBUTE
-;
-
-ALTER TABLE RESULT_CONTEXT_ITEM
-DROP CONSTRAINT FK_R_CONTEXT_ITEM_EXPERIMENT
-;
-
-ALTER TABLE RESULT_CONTEXT_ITEM
-DROP CONSTRAINT FK_R_context_item_qualifier
-;
-
-ALTER TABLE RESULT_CONTEXT_ITEM
-DROP CONSTRAINT FK_R_CONTEXT_ITEM_VALUE
-;
-
-ALTER TABLE RESULT_CONTEXT_ITEM
-DROP CONSTRAINT FK_RESULT_CONTEXT_ITEM_GROUP
-;
-
-ALTER TABLE RESULT_CONTEXT_ITEM
-DROP CONSTRAINT FK_RESULT_CONTEXT_ITEM_RESULT
-;
-
-ALTER TABLE RESULT_HIERARCHY
-DROP CONSTRAINT FK_RESULT_HIERARCHY_RESULT
-;
-
-ALTER TABLE RESULT_HIERARCHY
-DROP CONSTRAINT FK_RESULT_HIERARCHY_RSLT_PRNT
-;
-
-ALTER TABLE RESULT_TYPE
-DROP CONSTRAINT FK_Result_Type_Parent_Self
-;
-
-ALTER TABLE RESULT_TYPE
-DROP CONSTRAINT FK_Result_Type_status
-;
-
-ALTER TABLE STAGE
-DROP CONSTRAINT FK_STAGE_PARENT_NODE_ID
-;
-
-ALTER TABLE TREE_ROOT
-DROP CONSTRAINT FK_TREE_ROOT_ELEMENT
-;
-
-ALTER TABLE UNIT
-DROP CONSTRAINT FK_UNIT_PARENT_SELF
-;
-
-ALTER TABLE UNIT_CONVERSION
-DROP CONSTRAINT FK_UNIT_CONVERSN_FRM_UNT_ELMNT
-;
-
-ALTER TABLE UNIT_CONVERSION
-DROP CONSTRAINT FK_UNIT_CONVERSN_TO_UNT_ELMNT
-;
-
-DROP TABLE ASSAY CASCADE CONSTRAINTS
-;
-DROP TABLE ASSAY_DESCRIPTOR CASCADE CONSTRAINTS
-;
-DROP TABLE ASSAY_STATUS CASCADE CONSTRAINTS
-;
-DROP TABLE BIOLOGY_DESCRIPTOR CASCADE CONSTRAINTS
-;
-DROP TABLE DATABASECHANGELOG CASCADE CONSTRAINTS
-;
-DROP TABLE DATABASECHANGELOGLOCK CASCADE CONSTRAINTS
-;
-DROP TABLE ELEMENT CASCADE CONSTRAINTS
-;
-DROP TABLE ELEMENT_HIERARCHY CASCADE CONSTRAINTS
-;
-DROP TABLE ELEMENT_STATUS CASCADE CONSTRAINTS
-;
-DROP TABLE EXPERIMENT CASCADE CONSTRAINTS
-;
-DROP TABLE EXPERIMENT_STATUS CASCADE CONSTRAINTS
-;
-DROP TABLE EXTERNAL_ASSAY CASCADE CONSTRAINTS
-;
-DROP TABLE EXTERNAL_SYSTEM CASCADE CONSTRAINTS
-;
-DROP TABLE INSTANCE_DESCRIPTOR CASCADE CONSTRAINTS
-;
-DROP TABLE LABORATORY CASCADE CONSTRAINTS
-;
-DROP TABLE MEASURE CASCADE CONSTRAINTS
-;
-DROP TABLE MEASURE_CONTEXT CASCADE CONSTRAINTS
-;
-DROP TABLE MEASURE_CONTEXT_ITEM CASCADE CONSTRAINTS
-;
-DROP TABLE ONTOLOGY CASCADE CONSTRAINTS
-;
-DROP TABLE ONTOLOGY_ITEM CASCADE CONSTRAINTS
-;
-DROP TABLE PROJECT CASCADE CONSTRAINTS
-;
-DROP TABLE PROJECT_ASSAY CASCADE CONSTRAINTS
-;
-DROP TABLE PROTOCOL CASCADE CONSTRAINTS
-;
-DROP TABLE QUALIFIER CASCADE CONSTRAINTS
-;
-DROP TABLE RESULT CASCADE CONSTRAINTS
-;
-DROP TABLE RESULT_CONTEXT_ITEM CASCADE CONSTRAINTS
-;
-DROP TABLE RESULT_HIERARCHY CASCADE CONSTRAINTS
-;
-DROP TABLE RESULT_STATUS CASCADE CONSTRAINTS
-;
-DROP TABLE RESULT_TYPE CASCADE CONSTRAINTS
-;
-DROP TABLE STAGE CASCADE CONSTRAINTS
-;
-DROP TABLE SUBSTANCE CASCADE CONSTRAINTS
-;
-DROP TABLE TREE_ROOT CASCADE CONSTRAINTS
-;
-DROP TABLE UNIT CASCADE CONSTRAINTS
-;
-DROP TABLE UNIT_CONVERSION CASCADE CONSTRAINTS
-;
 -- 
 -- SEQUENCE: ASSAY_ID_SEQ 
 --
 
 CREATE SEQUENCE ASSAY_ID_SEQ
-    START WITH 3
+    START WITH 1
     INCREMENT BY 1
     NOMINVALUE
     MAXVALUE 2147483648
     NOCYCLE
     CACHE 2
-    NOORDER
-;
-
--- 
--- SEQUENCE: ASSAY_STATUS_ID_SEQ 
---
-
-CREATE SEQUENCE ASSAY_STATUS_ID_SEQ
-    START WITH 6
-    INCREMENT BY 1
-    NOMINVALUE
-    MAXVALUE 2147483648
-    NOCYCLE
-    NOCACHE
     NOORDER
 ;
 
@@ -334,7 +48,7 @@ CREATE SEQUENCE ELEMENT_HIERARCHY_ID_SEQ
     START WITH 1
     INCREMENT BY 1
     NOMINVALUE
-    MAXVALUE 2148000000
+    MAXVALUE 2147483648
     NOCYCLE
     CACHE 2
     NOORDER
@@ -355,20 +69,6 @@ CREATE SEQUENCE ELEMENT_ID_SEQ
 ;
 
 -- 
--- SEQUENCE: ELEMENT_STATUS_ID_SEQ 
---
-
-CREATE SEQUENCE ELEMENT_STATUS_ID_SEQ
-    START WITH 5
-    INCREMENT BY 1
-    NOMINVALUE
-    MAXVALUE 2147483648
-    NOCYCLE
-    NOCACHE
-    NOORDER
-;
-
--- 
 -- SEQUENCE: EXPERIMENT_ID_SEQ 
 --
 
@@ -379,20 +79,6 @@ CREATE SEQUENCE EXPERIMENT_ID_SEQ
     MAXVALUE 2147483648
     NOCYCLE
     CACHE 2
-    NOORDER
-;
-
--- 
--- SEQUENCE: EXPERIMENT_STATUS_ID_SEQ 
---
-
-CREATE SEQUENCE EXPERIMENT_STATUS_ID_SEQ
-    START WITH 6
-    INCREMENT BY 1
-    NOMINVALUE
-    MAXVALUE 2147483648
-    NOCYCLE
-    NOCACHE
     NOORDER
 ;
 
@@ -565,20 +251,6 @@ CREATE SEQUENCE RESULT_ID_SEQ
 ;
 
 -- 
--- SEQUENCE: RESULT_STATUS_ID_SEQ 
---
-
-CREATE SEQUENCE RESULT_STATUS_ID_SEQ
-    START WITH 7
-    INCREMENT BY 1
-    NOMINVALUE
-    MAXVALUE 2147483648
-    NOCYCLE
-    NOCACHE
-    NOORDER
-;
-
--- 
 -- SEQUENCE: RESULT_TYPE_ID_SEQ 
 --
 
@@ -593,39 +265,25 @@ CREATE SEQUENCE RESULT_TYPE_ID_SEQ
 ;
 
 -- 
--- SEQUENCE: SUBSTANCE_ID_SEQ 
---
-
-CREATE SEQUENCE SUBSTANCE_ID_SEQ
-    START WITH 1
-    INCREMENT BY 1
-    NOMINVALUE
-    MAXVALUE 2147483648
-    NOCYCLE
-    CACHE 2
-    NOORDER
-;
-
--- 
 -- TABLE: ASSAY 
 --
 
 CREATE TABLE ASSAY(
-    ASSAY_ID           NUMBER(19, 0)     NOT NULL,
-    ASSAY_NAME         VARCHAR2(128)     NOT NULL,
-    ASSAY_STATUS_ID    NUMBER(19, 0)     NOT NULL,
-    ASSAY_VERSION      VARCHAR2(10)      DEFAULT 1 NOT NULL,
-    DESCRIPTION        VARCHAR2(1000),
-    DESIGNED_BY        VARCHAR2(100),
-    VERSION            NUMBER(38, 0)     DEFAULT 0 NOT NULL,
-    DATE_CREATED       TIMESTAMP(6)      DEFAULT sysdate NOT NULL,
-    Last_Updated       TIMESTAMP(6),
-    MODIFIED_BY        VARCHAR2(40),
+    ASSAY_ID                NUMBER(19, 0)     NOT NULL,
+    ASSAY_STATUS            VARCHAR2(20)      DEFAULT 'Pending' NOT NULL
+                            CONSTRAINT CK_ASSAY_STATUS CHECK (Assay_Status IN ('Pending', 'Active', 'Superceded', 'Retired')),
+    ASSAY_NAME              VARCHAR2(128)     NOT NULL,
+    ASSAY_VERSION           VARCHAR2(10)      DEFAULT 1 NOT NULL,
+    DESCRIPTION             VARCHAR2(1000),
+    DESIGNED_BY             VARCHAR2(100),
+    READY_FOR_EXTRACTION    VARCHAR2(20)      DEFAULT 'Ready' NOT NULL
+                            CONSTRAINT CK_ASSAY_EXTRACTION CHECK (ready_for_extraction IN ('Ready', 'Started', 'Complete')),
+    VERSION                 NUMBER(38, 0)     DEFAULT 0 NOT NULL,
+    DATE_CREATED            TIMESTAMP(6)      DEFAULT sysdate NOT NULL,
+    Last_Updated            TIMESTAMP(6),
+    MODIFIED_BY             VARCHAR2(40),
     CONSTRAINT PK_ASSAY PRIMARY KEY (ASSAY_ID)
-    USING INDEX
-TABLESPACE BARD_DAT
 )
-TABLESPACE BARD_DAT
 ;
 
 
@@ -637,74 +295,60 @@ COMMENT ON COLUMN ASSAY.VERSION IS 'Update_version is used by Hibernate to resol
 --
 
 CREATE TABLE ASSAY_DESCRIPTOR(
-    NODE_ID              NUMBER(19, 0)     NOT NULL,
-    PARENT_NODE_ID       NUMBER(19, 0),
-    ELEMENT_ID           NUMBER(19, 0)     NOT NULL,
-    LABEL                VARCHAR2(128)     NOT NULL,
-    DESCRIPTION          VARCHAR2(1000),
-    ABBREVIATION         VARCHAR2(20),
-    ACRONYM              VARCHAR2(20),
-    SYNONYMS             VARCHAR2(1000),
-    EXTERNAL_URL         VARCHAR2(1000),
-    UNIT                 VARCHAR2(128),
-    ELEMENT_STATUS_ID    NUMBER(19, 0)     NOT NULL,
+    NODE_ID           NUMBER(19, 0)     NOT NULL,
+    PARENT_NODE_ID    NUMBER(19, 0),
+    ELEMENT_ID        NUMBER(19, 0)     NOT NULL,
+    ELEMENT_STATUS    VARCHAR2(20)      NOT NULL,
+    LABEL             VARCHAR2(128)     NOT NULL,
+    DESCRIPTION       VARCHAR2(1000),
+    ABBREVIATION      VARCHAR2(20),
+    SYNONYMS          VARCHAR2(1000),
+    EXTERNAL_URL      VARCHAR2(1000),
+    UNIT              VARCHAR2(128),
     CONSTRAINT PK_ASSAY_DESCRIPTOR PRIMARY KEY (NODE_ID)
-    USING INDEX
-TABLESPACE BARD_DAT
 )
-TABLESPACE BARD_DAT
 ;
 
 
 
 -- 
--- TABLE: ASSAY_STATUS 
+-- TABLE: Assay_document 
 --
 
-CREATE TABLE ASSAY_STATUS(
-    ASSAY_STATUS_ID    NUMBER(19, 0)    NOT NULL,
-    STATUS             VARCHAR2(20)     NOT NULL,
-    VERSION            NUMBER(38, 0)    DEFAULT 0 NOT NULL,
-    Date_Created       TIMESTAMP(6)     DEFAULT sysdate NOT NULL,
-    Last_Updated       TIMESTAMP(6),
-    MODIFIED_BY        VARCHAR2(40),
-    CONSTRAINT PK_ASSAY_STATUS PRIMARY KEY (ASSAY_STATUS_ID)
-    USING INDEX
-TABLESPACE BARD_DAT
+CREATE TABLE Assay_document(
+    Assay_document_ID    NUMBER(19, 0)    NOT NULL,
+    ASSAY_ID             NUMBER(19, 0)    NOT NULL,
+    Document_Name        VARCHAR2(500)    NOT NULL,
+    Document_Content     LONG RAW         DEFAULT EMPTY_BLOB(),
+    VERSION              NUMBER(38, 0)    DEFAULT 0 NOT NULL,
+    Date_Created         TIMESTAMP(6)     DEFAULT sysdate NOT NULL,
+    Last_Updated         TIMESTAMP(6),
+    MODIFIED_BY          VARCHAR2(40),
+    CONSTRAINT PK_Assay_document PRIMARY KEY (Assay_document_ID)
 )
-TABLESPACE BARD_DAT
 ;
 
 
 
-COMMENT ON COLUMN ASSAY_STATUS.VERSION IS 'Update_version is used by Hibernate to resolve the "lost Update" problem when used in optimistic locking'
+COMMENT ON COLUMN Assay_document.VERSION IS 'Update_version is used by Hibernate to resolve the "lost Update" problem when used in optimistic locking'
 ;
-insert into Assay_Status (assay_status_ID, status) values ('1', 'Pending');
-insert into Assay_Status (assay_status_ID, status) values ('2', 'Active');
-insert into Assay_Status (assay_status_ID, status) values ('3', 'Superceded');
-insert into Assay_Status (assay_status_ID, status) values ('4', 'Retired');
-commit;
 -- 
 -- TABLE: BIOLOGY_DESCRIPTOR 
 --
 
 CREATE TABLE BIOLOGY_DESCRIPTOR(
-    NODE_ID              NUMBER(19, 0)     NOT NULL,
-    PARENT_NODE_ID       NUMBER(19, 0),
-    ELEMENT_ID           NUMBER(19, 0)     NOT NULL,
-    LABEL                VARCHAR2(128)     NOT NULL,
-    DESCRIPTION          VARCHAR2(1000),
-    ABBREVIATION         VARCHAR2(20),
-    ACRONYM              VARCHAR2(20),
-    SYNONYMS             VARCHAR2(1000),
-    EXTERNAL_URL         VARCHAR2(1000),
-    UNIT                 VARCHAR2(128),
-    ELEMENT_STATUS_ID    NUMBER(19, 0)     NOT NULL,
+    NODE_ID           NUMBER(19, 0)     NOT NULL,
+    PARENT_NODE_ID    NUMBER(19, 0),
+    ELEMENT_ID        NUMBER(19, 0)     NOT NULL,
+    ELEMENT_STATUS    VARCHAR2(20)      NOT NULL,
+    LABEL             VARCHAR2(128)     NOT NULL,
+    DESCRIPTION       VARCHAR2(1000),
+    ABBREVIATION      VARCHAR2(20),
+    SYNONYMS          VARCHAR2(1000),
+    EXTERNAL_URL      VARCHAR2(1000),
+    UNIT              VARCHAR2(128),
     CONSTRAINT PK_BIOLOGY_DESCRIPTOR PRIMARY KEY (NODE_ID)
-    USING INDEX
-TABLESPACE BARD_DAT
 )
-TABLESPACE BARD_DAT
 ;
 
 
@@ -726,10 +370,7 @@ CREATE TABLE DATABASECHANGELOG(
     TAG              VARCHAR2(255),
     LIQUIBASE        VARCHAR2(20),
     CONSTRAINT PK_DATABASECHANGELOG PRIMARY KEY (ID, AUTHOR, FILENAME)
-    USING INDEX
-TABLESPACE BARD_DAT
 )
-TABLESPACE BARD_DAT
 ;
 
 
@@ -744,10 +385,7 @@ CREATE TABLE DATABASECHANGELOGLOCK(
     LOCKGRANTED    TIMESTAMP(6),
     LOCKEDBY       VARCHAR2(255),
     CONSTRAINT PK_DATABASECHANGELOGLOCK PRIMARY KEY (ID)
-    USING INDEX
-TABLESPACE BARD_DAT
 )
-TABLESPACE BARD_DAT
 ;
 
 
@@ -757,24 +395,23 @@ TABLESPACE BARD_DAT
 --
 
 CREATE TABLE ELEMENT(
-    ELEMENT_ID           NUMBER(19, 0)     NOT NULL,
-    LABEL                VARCHAR2(128)     NOT NULL,
-    DESCRIPTION          VARCHAR2(1000),
-    ABBREVIATION         VARCHAR2(20),
-    ACRONYM              VARCHAR2(20),
-    SYNONYMS             VARCHAR2(1000),
-    EXTERNAL_URL         VARCHAR2(1000),
-    UNIT                 VARCHAR2(128),
-    ELEMENT_STATUS_ID    NUMBER(19, 0)     NOT NULL,
-    VERSION              NUMBER(38, 0)     DEFAULT 0 NOT NULL,
-    Date_Created         TIMESTAMP(6)      DEFAULT sysdate NOT NULL,
-    Last_Updated         TIMESTAMP(6),
-    MODIFIED_BY          VARCHAR2(40),
+    ELEMENT_ID              NUMBER(19, 0)     NOT NULL,
+    ELEMENT_STATUS          VARCHAR2(20)      DEFAULT 'Pending' NOT NULL
+                            CONSTRAINT CK_ELEMENT_STATUS CHECK (Element_Status IN ('Pending', 'Published', 'Deprecated', 'Retired')),
+    LABEL                   VARCHAR2(128)     NOT NULL,
+    DESCRIPTION             VARCHAR2(1000),
+    ABBREVIATION            VARCHAR2(20),
+    SYNONYMS                VARCHAR2(1000),
+    UNIT                    VARCHAR2(128),
+    EXTERNAL_URL            VARCHAR2(1000),
+    READY_FOR_EXTRACTION    VARCHAR2(20)      DEFAULT 'Ready' NOT NULL
+                            CONSTRAINT CK_ELEMENT_EXTRACTION CHECK (ready_for_extraction IN ('Ready', 'Started', 'Complete')),
+    VERSION                 NUMBER(38, 0)     DEFAULT 0 NOT NULL,
+    Date_Created            TIMESTAMP(6)      DEFAULT sysdate NOT NULL,
+    Last_Updated            TIMESTAMP(6),
+    MODIFIED_BY             VARCHAR2(40),
     CONSTRAINT PK_ELEMENT PRIMARY KEY (ELEMENT_ID)
-    USING INDEX
-TABLESPACE BARD_DAT
 )
-TABLESPACE BARD_DAT
 ;
 
 
@@ -796,7 +433,6 @@ CREATE TABLE ELEMENT_HIERARCHY(
     MODIFIED_BY             VARCHAR2(40),
     CONSTRAINT PK_ELEMENT_HIERARCHY PRIMARY KEY (ELEMENT_HIERARCHY_ID)
 )
-TABLESPACE BARD_DAT
 ;
 
 
@@ -804,78 +440,19 @@ TABLESPACE BARD_DAT
 COMMENT ON COLUMN ELEMENT_HIERARCHY.VERSION IS 'Update_version is used by Hibernate to resolve the "lost Update" problem when used in optimistic locking'
 ;
 -- 
--- TABLE: ELEMENT_STATUS 
---
-
-CREATE TABLE ELEMENT_STATUS(
-    ELEMENT_STATUS_ID    NUMBER(19, 0)    NOT NULL,
-    ELEMENT_STATUS       VARCHAR2(20)     NOT NULL,
-    CAPABILITY           VARCHAR2(256),
-    VERSION              NUMBER(38, 0)    DEFAULT 0 NOT NULL,
-    Date_Created         TIMESTAMP(6)     DEFAULT sysdate NOT NULL,
-    Last_Updated         TIMESTAMP(6),
-    MODIFIED_BY          VARCHAR2(40),
-    CONSTRAINT PK_ELEMENT_STATUS PRIMARY KEY (ELEMENT_STATUS_ID)
-    USING INDEX
-TABLESPACE BARD_DAT
-)
-TABLESPACE BARD_DAT
-;
-
-
-
-COMMENT ON COLUMN ELEMENT_STATUS.CAPABILITY IS 'Description of the actions allowed when elements are in this state'
-;
-COMMENT ON COLUMN ELEMENT_STATUS.VERSION IS 'Update_version is used by Hibernate to resolve the "lost Update" problem when used in optimistic locking'
-;
---
---
-insert into Element_status (Element_status_id, element_status, Capability) values ('1', 'Pending', 'Element is new, not yet approved but can be used for assasy definition and data entry subject to future curation and approval');
-insert into Element_status (Element_status_id, element_status, Capability) values ('2', 'Published', 'Element can be used for any assay definiton or data upload');
-insert into Element_status (Element_status_id, element_status, Capability) values ('3', 'Deprecated', 'Element has been replaced by a another one.  It should not be used in new assasy definitions, but can be used when uploading new experiments.  It is subject to future retirement');
-insert into Element_status (Element_status_id, element_status, Capability) values ('4', 'Retired', 'Element has been retired and must not be used for new assay definitions.  It can be used for uploading experiment data');
-commit;
---
-INSERT INTO element ( ELEMENT_ID, LABEL, DESCRIPTION, ABBREVIATION, ACRONYM, SYNONYMS, EXTERNAL_URL, UNIT, ELEMENT_STATUS_ID)
-values (0, 'Root', 'single origin for all hierarchies in the dictionary', '', '', '', '', '', 2);
-INSERT INTO element ( ELEMENT_ID, LABEL, DESCRIPTION, ABBREVIATION, ACRONYM, SYNONYMS, EXTERNAL_URL, UNIT, ELEMENT_STATUS_ID)
-values (1, 'assay', 'terms for describing the assay design, etc.', '', '', '', '', '', 2);
-INSERT INTO element ( ELEMENT_ID, LABEL, DESCRIPTION, ABBREVIATION, ACRONYM, SYNONYMS, EXTERNAL_URL, UNIT, ELEMENT_STATUS_ID)
-values (2, 'biology', 'terms for describing the assay biology', '', '', '', '', '', 2);
-INSERT INTO element ( ELEMENT_ID, LABEL, DESCRIPTION, ABBREVIATION, ACRONYM, SYNONYMS, EXTERNAL_URL, UNIT, ELEMENT_STATUS_ID)
-values (3, 'result', 'terms describing differrent result types in assays', '', '', '', '', '', 2);
-INSERT INTO element ( ELEMENT_ID, LABEL, DESCRIPTION, ABBREVIATION, ACRONYM, SYNONYMS, EXTERNAL_URL, UNIT, ELEMENT_STATUS_ID)
-values (4, 'project management', 'terms describing data gathered at assay run time - the assay instance', '', '', '', '', '', 2);
-INSERT INTO element ( ELEMENT_ID, LABEL, DESCRIPTION, ABBREVIATION, ACRONYM, SYNONYMS, EXTERNAL_URL, UNIT, ELEMENT_STATUS_ID)
-values (5, 'unit of measurement', 'units of measure used throughout', '', '', '', '', '', 2);
-commit;
---
---
-insert into element_hierarchy ( PARENT_ELEMENT_ID, CHILD_ELEMENT_ID, RELATIONSHIP_TYPE)
-values ('', 0, 'is_a');
-insert into element_hierarchy ( PARENT_ELEMENT_ID, CHILD_ELEMENT_ID, RELATIONSHIP_TYPE)
-values (0, 1, 'is_a');
-insert into element_hierarchy ( PARENT_ELEMENT_ID, CHILD_ELEMENT_ID, RELATIONSHIP_TYPE)
-values (0, 2, 'is_a');
-insert into element_hierarchy ( PARENT_ELEMENT_ID, CHILD_ELEMENT_ID, RELATIONSHIP_TYPE)
-values (0, 3, 'is_a');
-insert into element_hierarchy ( PARENT_ELEMENT_ID, CHILD_ELEMENT_ID, RELATIONSHIP_TYPE)
-values (0, 4, 'is_a');
-insert into element_hierarchy ( PARENT_ELEMENT_ID, CHILD_ELEMENT_ID, RELATIONSHIP_TYPE)
-values (0, 5, 'is_a');
-commit;
---
---
--- 
 -- TABLE: EXPERIMENT 
 --
 
 CREATE TABLE EXPERIMENT(
     EXPERIMENT_ID           NUMBER(19, 0)     NOT NULL,
     EXPERIMENT_NAME         VARCHAR2(256)     NOT NULL,
+    EXPERIMENT_STATUS       VARCHAR2(20)      DEFAULT 'Pending' NOT NULL
+                            CONSTRAINT CK_EXPERIMENT_STATUS CHECK (Experiment_Status IN ('Pending', 'Approved', 'Rejected', 'Revised')),
+    READY_FOR_EXTRACTION    VARCHAR2(20)      DEFAULT 'Ready' NOT NULL
+                            CONSTRAINT CK_EXPERIMENT_EXTRACTION CHECK (ready_for_extraction IN ('Ready', 'Started', 'Complete')),
     ASSAY_ID                NUMBER(19, 0)     NOT NULL,
     PROJECT_ID              NUMBER(19, 0),
-    EXPERIMENT_STATUS_ID    NUMBER(19, 0)     NOT NULL,
+    LABORATORY_ID           NUMBER(19, 0),
     RUN_DATE_FROM           DATE,
     RUN_DATE_TO             DATE,
     HOLD_UNTIL_DATE         DATE,
@@ -885,10 +462,7 @@ CREATE TABLE EXPERIMENT(
     Last_Updated            TIMESTAMP(6),
     MODIFIED_BY             VARCHAR2(40),
     CONSTRAINT PK_EXPERIMENT PRIMARY KEY (EXPERIMENT_ID)
-    USING INDEX
-TABLESPACE BARD_DAT
 )
-TABLESPACE BARD_DAT
 ;
 
 
@@ -897,37 +471,6 @@ COMMENT ON COLUMN EXPERIMENT.HOLD_UNTIL_DATE IS 'can only be set a max of 1 year
 ;
 COMMENT ON COLUMN EXPERIMENT.VERSION IS 'Update_version is used by Hibernate to resolve the "lost Update" problem when used in optimistic locking'
 ;
--- 
--- TABLE: EXPERIMENT_STATUS 
---
-
-CREATE TABLE EXPERIMENT_STATUS(
-    EXPERIMENT_STATUS_ID    NUMBER(19, 0)     NOT NULL,
-    STATUS                  VARCHAR2(20)      NOT NULL,
-    CAPABILITY              VARCHAR2(1000),
-    VERSION                 NUMBER(38, 0)     DEFAULT 0 NOT NULL,
-    Date_Created            TIMESTAMP(6)      DEFAULT sysdate NOT NULL,
-    Last_Updated            TIMESTAMP(6),
-    MODIFIED_BY             VARCHAR2(40),
-    CONSTRAINT PK_EXPERIMENT_STATUS PRIMARY KEY (EXPERIMENT_STATUS_ID)
-    USING INDEX
-TABLESPACE BARD_DAT
-)
-TABLESPACE BARD_DAT
-;
-
-
-
-COMMENT ON COLUMN EXPERIMENT_STATUS.CAPABILITY IS 'describes the actions that can be done with this experiment status and the limitations (this is help text)'
-;
-COMMENT ON COLUMN EXPERIMENT_STATUS.VERSION IS 'Update_version is used by Hibernate to resolve the "lost Update" problem when used in optimistic locking'
-;
-insert into Experiment_Status (Experiment_status_ID, status, Capability) values ('2', 'Approved', 'Experiment has been approved as ready to upload.  It does not mena results are correct or cannot be changed');
-insert into Experiment_Status (Experiment_status_ID, status, Capability) values ('3', 'Rejected', 'Experiment data has been rejected as not scientifically valid.  This will not be uploaded to the warehouse');
-insert into Experiment_Status (Experiment_status_ID, status, Capability) values ('4', 'Held', 'Experiment data is private to the loading institution (Source Laboratory).  The Hold Until Date is set.  Though uploaded it cannot be queried except by the source laboratory');
-insert into Experiment_Status (Experiment_status_ID, status, Capability) values ('5', 'Uploaded', 'Experiment has been copied into the warehouse and results are available for querying');
-insert into Experiment_Status (Experiment_status_ID, status, Capability) values ('6', 'Mark for Deletion', 'Experiment has been confirmed as present in the warehouse and may be deleted at any time.');
-commit;
 -- 
 -- TABLE: EXTERNAL_ASSAY 
 --
@@ -941,10 +484,7 @@ CREATE TABLE EXTERNAL_ASSAY(
     Last_Updated          TIMESTAMP(6),
     MODIFIED_BY           VARCHAR2(40),
     CONSTRAINT PK_EXTERNAL_ASSAY PRIMARY KEY (EXTERNAL_SYSTEM_ID, ASSAY_ID)
-    USING INDEX
-TABLESPACE BARD_DAT
 )
-TABLESPACE BARD_DAT
 ;
 
 
@@ -965,10 +505,7 @@ CREATE TABLE EXTERNAL_SYSTEM(
     Last_Updated          TIMESTAMP(6),
     MODIFIED_BY           VARCHAR2(40),
     CONSTRAINT PK_EXTERNAL_SYSTEM PRIMARY KEY (EXTERNAL_SYSTEM_ID)
-    USING INDEX
-TABLESPACE BARD_DAT
 )
-TABLESPACE BARD_DAT
 ;
 
 
@@ -980,22 +517,18 @@ COMMENT ON COLUMN EXTERNAL_SYSTEM.VERSION IS 'Update_version is used by Hibernat
 --
 
 CREATE TABLE INSTANCE_DESCRIPTOR(
-    NODE_ID              NUMBER(19, 0)     NOT NULL,
-    PARENT_NODE_ID       NUMBER(19, 0),
-    ELEMENT_ID           NUMBER(19, 0)     NOT NULL,
-    LABEL                VARCHAR2(128)     NOT NULL,
-    DESCRIPTION          VARCHAR2(1000),
-    ABBREVIATION         VARCHAR2(20),
-    ACRONYM              VARCHAR2(20),
-    SYNONYMS             VARCHAR2(1000),
-    EXTERNAL_URL         VARCHAR2(1000),
-    UNIT                 VARCHAR2(128),
-    ELEMENT_STATUS_ID    NUMBER(19, 0)     NOT NULL,
+    NODE_ID           NUMBER(19, 0)     NOT NULL,
+    PARENT_NODE_ID    NUMBER(19, 0),
+    ELEMENT_ID        NUMBER(19, 0)     NOT NULL,
+    ELEMENT_STATUS    VARCHAR2(20)      NOT NULL,
+    LABEL             VARCHAR2(128)     NOT NULL,
+    DESCRIPTION       VARCHAR2(1000),
+    ABBREVIATION      VARCHAR2(20),
+    SYNONYMS          VARCHAR2(1000),
+    EXTERNAL_URL      VARCHAR2(1000),
+    UNIT              VARCHAR2(128),
     CONSTRAINT PK_INSTANCE_DESCRIPTOR PRIMARY KEY (NODE_ID)
-    USING INDEX
-TABLESPACE BARD_DAT
 )
-TABLESPACE BARD_DAT
 ;
 
 
@@ -1005,16 +538,14 @@ TABLESPACE BARD_DAT
 --
 
 CREATE TABLE LABORATORY(
-    NODE_ID           NUMBER(19, 0)     NOT NULL,
-    PARENT_NODE_ID    NUMBER(19, 0),
-    LABORATORY_ID     NUMBER(19, 0)     NOT NULL,
-    LABORATORY        VARCHAR2(128)     NOT NULL,
-    DESCRIPTION       VARCHAR2(1000),
+    NODE_ID              NUMBER(19, 0)     NOT NULL,
+    PARENT_NODE_ID       NUMBER(19, 0),
+    LABORATORY_ID        NUMBER(19, 0)     NOT NULL,
+    LABORATORY_STATUS    VARCHAR2(20)      NOT NULL,
+    LABORATORY           VARCHAR2(128)     NOT NULL,
+    DESCRIPTION          VARCHAR2(1000),
     CONSTRAINT PK_LABORATORY PRIMARY KEY (NODE_ID)
-    USING INDEX
-TABLESPACE BARD_DAT
 )
-TABLESPACE BARD_DAT
 ;
 
 
@@ -1035,10 +566,7 @@ CREATE TABLE MEASURE(
     Last_Updated          TIMESTAMP(6),
     MODIFIED_BY           VARCHAR2(40),
     CONSTRAINT PK_MEASURE PRIMARY KEY (MEASURE_ID)
-    USING INDEX
-TABLESPACE BARD_DAT
 )
-TABLESPACE BARD_DAT
 ;
 
 
@@ -1058,10 +586,7 @@ CREATE TABLE MEASURE_CONTEXT(
     Last_Updated          TIMESTAMP(6),
     MODIFIED_BY           VARCHAR2(40),
     CONSTRAINT PK_MEASURE_CONTEXT PRIMARY KEY (MEASURE_CONTEXT_ID)
-    USING INDEX
-TABLESPACE BARD_DAT
 )
-TABLESPACE BARD_DAT
 ;
 
 
@@ -1082,7 +607,8 @@ CREATE TABLE MEASURE_CONTEXT_ITEM(
     ATTRIBUTE_TYPE                   VARCHAR2(20)     NOT NULL
                                      CONSTRAINT CK_ATTRIBUTE_TYPE CHECK (ATTRIBUTE_TYPE in ('Fixed', 'List', 'Range', 'Number')),
     ATTRIBUTE_ID                     NUMBER(19, 0)    NOT NULL,
-    QUALIFIER                        CHAR(2),
+    QUALIFIER                        CHAR(2)          
+                                     CONSTRAINT CK_MEASURE_CONTEXT_ITEM_QALFR CHECK (QUALIFIER IN ('= ', '< ', '<=', '> ', '>=', '<<', '>>', '~ ')),
     VALUE_ID                         NUMBER(19, 0),
     VALUE_DISPLAY                    VARCHAR2(256),
     VALUE_NUM                        FLOAT(126),
@@ -1093,10 +619,7 @@ CREATE TABLE MEASURE_CONTEXT_ITEM(
     Last_Updated                     TIMESTAMP(6),
     MODIFIED_BY                      VARCHAR2(40),
     CONSTRAINT PK_MEASURE_CONTEXT_ITEM PRIMARY KEY (MEASURE_CONTEXT_ITEM_ID)
-    USING INDEX
-TABLESPACE BARD_DAT
 )
-TABLESPACE BARD_DAT
 ;
 
 
@@ -1121,10 +644,7 @@ CREATE TABLE ONTOLOGY(
     Last_Updated     TIMESTAMP(6),
     MODIFIED_BY      VARCHAR2(40),
     CONSTRAINT PK_ONTOLOGY PRIMARY KEY (ONTOLOGY_ID)
-    USING INDEX
-TABLESPACE BARD_DAT
 )
-TABLESPACE BARD_DAT
 ;
 
 
@@ -1147,10 +667,7 @@ CREATE TABLE ONTOLOGY_ITEM(
     Last_Updated        TIMESTAMP(6),
     MODIFIED_BY         VARCHAR2(40),
     CONSTRAINT PK_ONTOLOGY_ITEM PRIMARY KEY (ONTOLOGY_ITEM_ID)
-    USING INDEX
-TABLESPACE BARD_DAT
 )
-TABLESPACE BARD_DAT
 ;
 
 
@@ -1164,20 +681,19 @@ COMMENT ON COLUMN ONTOLOGY_ITEM.VERSION IS 'Update_version is used by Hibernate 
 --
 
 CREATE TABLE PROJECT(
-    PROJECT_ID      NUMBER(19, 0)     NOT NULL,
-    PROJECT_NAME    VARCHAR2(256)     NOT NULL,
-    GROUP_TYPE      VARCHAR2(20)      DEFAULT 'Project' NOT NULL
-                    CONSTRAINT CK_PROJECT_TYPE CHECK (GROUP_TYPE in ('Project', 'Campaign', 'Panel', 'Study')),
-    DESCRIPTION     VARCHAR2(1000),
-    VERSION         NUMBER(38, 0)     DEFAULT 0 NOT NULL,
-    Date_Created    TIMESTAMP(6)      DEFAULT sysdate NOT NULL,
-    Last_Updated    TIMESTAMP(6),
-    MODIFIED_BY     VARCHAR2(40),
+    PROJECT_ID              NUMBER(19, 0)     NOT NULL,
+    PROJECT_NAME            VARCHAR2(256)     NOT NULL,
+    GROUP_TYPE              VARCHAR2(20)      DEFAULT 'Project' NOT NULL
+                            CONSTRAINT CK_PROJECT_TYPE CHECK (GROUP_TYPE in ('Project', 'Campaign', 'Panel', 'Study')),
+    DESCRIPTION             VARCHAR2(1000),
+    ready_for_extraction    VARCHAR2(20)      DEFAULT 'Ready' NOT NULL
+                            CONSTRAINT CK_PROJECT_EXTRACTION CHECK (ready_for_extraction IN ('Ready', 'Started', 'Complete')),
+    VERSION                 NUMBER(38, 0)     DEFAULT 0 NOT NULL,
+    Date_Created            TIMESTAMP(6)      DEFAULT sysdate NOT NULL,
+    Last_Updated            TIMESTAMP(6),
+    MODIFIED_BY             VARCHAR2(40),
     CONSTRAINT PK_PROJECT PRIMARY KEY (PROJECT_ID)
-    USING INDEX
-TABLESPACE BARD_DAT
 )
-TABLESPACE BARD_DAT
 ;
 
 
@@ -1192,7 +708,7 @@ CREATE TABLE PROJECT_ASSAY(
     PROJECT_ASSAY_ID       NUMBER(19, 0)     NOT NULL,
     PROJECT_ID             NUMBER(19, 0)     NOT NULL,
     ASSAY_ID               NUMBER(19, 0)     NOT NULL,
-    STAGE                  VARCHAR2(128)     NOT NULL,
+    Stage_ID               NUMBER(19, 0)     NOT NULL,
     RELATED_ASSAY_ID       NUMBER(19, 0),
     SEQUENCE_NO            NUMBER(38, 0),
     PROMOTION_THRESHOLD    FLOAT(126),
@@ -1202,10 +718,7 @@ CREATE TABLE PROJECT_ASSAY(
     Last_Updated           TIMESTAMP(6),
     MODIFIED_BY            VARCHAR2(40),
     CONSTRAINT PK_PROJECT_ASSAY PRIMARY KEY (PROJECT_ASSAY_ID)
-    USING INDEX
-TABLESPACE BARD_DAT
 )
-TABLESPACE BARD_DAT
 ;
 
 
@@ -1215,88 +728,36 @@ COMMENT ON COLUMN PROJECT_ASSAY.SEQUENCE_NO IS 'defines the promotion order (and
 COMMENT ON COLUMN PROJECT_ASSAY.VERSION IS 'Update_version is used by Hibernate to resolve the "lost Update" problem when used in optimistic locking'
 ;
 -- 
--- TABLE: PROTOCOL 
---
-
-CREATE TABLE PROTOCOL(
-    PROTOCOL_ID          NUMBER(19, 0)    NOT NULL,
-    ASSAY_ID             NUMBER(19, 0)    NOT NULL,
-    PROTOCOL_NAME        VARCHAR2(500)    NOT NULL,
-    PROTOCOL_DOCUMENT    LONG RAW,
-    VERSION              NUMBER(38, 0)    DEFAULT 0 NOT NULL,
-    Date_Created         TIMESTAMP(6)     DEFAULT sysdate NOT NULL,
-    Last_Updated         TIMESTAMP(6),
-    MODIFIED_BY          VARCHAR2(40),
-    CONSTRAINT PK_PROTOCOL PRIMARY KEY (PROTOCOL_ID)
-    USING INDEX
-TABLESPACE BARD_DAT
-)
-TABLESPACE BARD_DAT
-;
-
-
-
-COMMENT ON COLUMN PROTOCOL.VERSION IS 'Update_version is used by Hibernate to resolve the "lost Update" problem when used in optimistic locking'
-;
--- 
--- TABLE: QUALIFIER 
---
-
-CREATE TABLE QUALIFIER(
-    QUALIFIER       CHAR(2)           NOT NULL,
-    DESCRIPTION     VARCHAR2(1000),
-    VERSION         NUMBER(38, 0)     DEFAULT 0 NOT NULL,
-    Date_Created    TIMESTAMP(6)      DEFAULT sysdate NOT NULL,
-    Last_Updated    TIMESTAMP(6),
-    MODIFIED_BY     VARCHAR2(40),
-    CONSTRAINT PK_QUALIFIER PRIMARY KEY (QUALIFIER)
-    USING INDEX
-TABLESPACE BARD_DAT
-)
-TABLESPACE BARD_DAT
-;
-
-
-
-COMMENT ON COLUMN QUALIFIER.VERSION IS 'Update_version is used by Hibernate to resolve the "lost Update" problem when used in optimistic locking'
-;
-insert into qualifier (qualifier, description) values ('=', 'equals');
-insert into qualifier (qualifier, description) values ('>=', 'greater than or equal');
-insert into qualifier (qualifier, description) values ('<=', 'less than or equal');
-insert into qualifier (qualifier, description) values ('<', 'greater than');
-insert into qualifier (qualifier, description) values ('>', 'less than');
-insert into qualifier (qualifier, description) values ('~', 'approximatley');
-insert into qualifier (qualifier, description) values ('>>', 'very much greater than');
-insert into qualifier (qualifier, description) values ('<<', 'very much less than');
-commit;
--- 
 -- TABLE: RESULT 
 --
 
 CREATE TABLE RESULT(
-    RESULT_ID           NUMBER(19, 0)    NOT NULL,
-    VALUE_DISPLAY       VARCHAR2(256),
-    VALUE_NUM           FLOAT(126),
-    VALUE_MIN           FLOAT(126),
-    VALUE_MAX           FLOAT(126),
-    QUALIFIER           CHAR(2),
-    RESULT_STATUS_ID    NUMBER(19, 0)    NOT NULL,
-    EXPERIMENT_ID       NUMBER(19, 0)    NOT NULL,
-    SUBSTANCE_ID        NUMBER(19, 0)    NOT NULL,
-    RESULT_TYPE_ID      NUMBER(19, 0)    NOT NULL,
-    VERSION             NUMBER(38, 0)    DEFAULT 0 NOT NULL,
-    Date_Created        TIMESTAMP(6)     DEFAULT sysdate NOT NULL,
-    Last_Updated        TIMESTAMP(6),
-    MODIFIED_BY         VARCHAR2(40),
+    RESULT_ID               NUMBER(19, 0)    NOT NULL,
+    RESULT_STATUS           VARCHAR2(20)     DEFAULT 'Pending' NOT NULL
+                            CONSTRAINT CK_RESULT_STATUS CHECK (Result_Status IN ('Pending', 'Approved', 'Rejected', 'Mark for Deletion')),
+    READY_FOR_EXTRACTION    VARCHAR2(20)     DEFAULT 'Ready' NOT NULL
+                            CONSTRAINT CK_RESULT_EXTRACTION CHECK (ready_for_extraction IN ('Ready', 'Started', 'Complete')),
+    VALUE_DISPLAY           VARCHAR2(256),
+    VALUE_NUM               FLOAT(126),
+    VALUE_MIN               FLOAT(126),
+    VALUE_MAX               FLOAT(126),
+    QUALIFIER               CHAR(2)          
+                            CONSTRAINT CK_RESULT_QUALIFIER CHECK (Qualifier IN ('= ', '< ', '<=', '> ', '>=', '<<', '>>', '~ ')),
+    EXPERIMENT_ID           NUMBER(19, 0)    NOT NULL,
+    SUBSTANCE_ID            NUMBER(19, 0)    NOT NULL,
+    RESULT_TYPE_ID          NUMBER(19, 0)    NOT NULL,
+    VERSION                 NUMBER(38, 0)    DEFAULT 0 NOT NULL,
+    Date_Created            TIMESTAMP(6)     DEFAULT sysdate NOT NULL,
+    Last_Updated            TIMESTAMP(6),
+    MODIFIED_BY             VARCHAR2(40),
     CONSTRAINT PK_RESULT PRIMARY KEY (RESULT_ID)
-    USING INDEX
-TABLESPACE BARD_DAT
 )
-TABLESPACE BARD_DAT
 ;
 
 
 
+COMMENT ON COLUMN RESULT.SUBSTANCE_ID IS 'Has external reference to the PubChem SID'
+;
 COMMENT ON COLUMN RESULT.VERSION IS 'Update_version is used by Hibernate to resolve the "lost Update" problem when used in optimistic locking'
 ;
 -- 
@@ -1310,7 +771,8 @@ CREATE TABLE RESULT_CONTEXT_ITEM(
     RESULT_ID                  NUMBER(19, 0),
     ATTRIBUTE_ID               NUMBER(19, 0)    NOT NULL,
     VALUE_ID                   NUMBER(19, 0),
-    QUALIFIER                  CHAR(2),
+    QUALIFIER                  CHAR(2)          
+                               CONSTRAINT CK_RESULT_CONTEXT_ITEM_QUALFR CHECK (Qualifier IN ('= ', '< ', '<=', '> ', '>=', '<<', '>>', '~ ')),
     VALUE_DISPLAY              VARCHAR2(256),
     VALUE_NUM                  FLOAT(126),
     VALUE_MIN                  FLOAT(126),
@@ -1320,10 +782,7 @@ CREATE TABLE RESULT_CONTEXT_ITEM(
     Last_Updated               TIMESTAMP(6),
     MODIFIED_BY                VARCHAR2(40),
     CONSTRAINT PK_Result_context_item PRIMARY KEY (RESULT_CONTEXT_ITEM_ID)
-    USING INDEX
-TABLESPACE BARD_DAT
 )
-TABLESPACE BARD_DAT
 ;
 
 
@@ -1346,10 +805,7 @@ CREATE TABLE RESULT_HIERARCHY(
     Last_Updated        TIMESTAMP(6),
     MODIFIED_BY         VARCHAR2(40),
     CONSTRAINT PK_RESULT_HIERARCHY PRIMARY KEY (RESULT_ID, PARENT_RESULT_ID)
-    USING INDEX
-TABLESPACE BARD_DAT
 )
-TABLESPACE BARD_DAT
 ;
 
 
@@ -1359,53 +815,21 @@ COMMENT ON COLUMN RESULT_HIERARCHY.HIERARCHY_TYPE IS 'two types of hierarchy are
 COMMENT ON COLUMN RESULT_HIERARCHY.VERSION IS 'Update_version is used by Hibernate to resolve the "lost Update" problem when used in optimistic locking'
 ;
 -- 
--- TABLE: RESULT_STATUS 
---
-
-CREATE TABLE RESULT_STATUS(
-    RESULT_STATUS_ID    NUMBER(19, 0)    NOT NULL,
-    STATUS              VARCHAR2(20)     NOT NULL,
-    VERSION             NUMBER(38, 0)    DEFAULT 0 NOT NULL,
-    Date_Created        TIMESTAMP(6)     DEFAULT sysdate NOT NULL,
-    Last_Updated        TIMESTAMP(6),
-    MODIFIED_BY         VARCHAR2(40),
-    CONSTRAINT PK_RESULT_STATUS PRIMARY KEY (RESULT_STATUS_ID)
-    USING INDEX
-TABLESPACE BARD_DAT
-)
-TABLESPACE BARD_DAT
-;
-
-
-
-COMMENT ON COLUMN RESULT_STATUS.VERSION IS 'Update_version is used by Hibernate to resolve the "lost Update" problem when used in optimistic locking'
-;
-insert into Result_status (result_status_id, status) values ('1', 'Pending');
-insert into Result_status (result_status_id, status) values ('2', 'Approved');
-insert into Result_status (result_status_id, status) values ('3', 'Rejected');
-insert into Result_status (result_status_id, status) values ('4', 'Uploading');
-insert into Result_status (result_status_id, status) values ('5', 'Uploaded');
-insert into Result_status (result_status_id, status) values ('6', 'Mark for Deletion');
-commit;
--- 
 -- TABLE: RESULT_TYPE 
 --
 
 CREATE TABLE RESULT_TYPE(
-    NODE_ID                  NUMBER(19, 0)     NOT NULL,
-    Parent_node_id           NUMBER(19, 0),
-    RESULT_TYPE_ID           NUMBER(19, 0)     NOT NULL,
-    RESULT_TYPE_NAME         VARCHAR2(128)     NOT NULL,
-    DESCRIPTION              VARCHAR2(1000),
-    ABBREVIATION             VARCHAR2(20),
-    SYNONYMS                 VARCHAR2(1000),
-    BASE_UNIT                VARCHAR2(128),
-    RESULT_TYPE_STATUS_ID    NUMBER(19, 0)     NOT NULL,
+    NODE_ID               NUMBER(19, 0)     NOT NULL,
+    Parent_node_id        NUMBER(19, 0),
+    RESULT_TYPE_ID        NUMBER(19, 0)     NOT NULL,
+    RESULT_TYPE_STATUS    VARCHAR2(20)      NOT NULL,
+    RESULT_TYPE_NAME      VARCHAR2(128)     NOT NULL,
+    DESCRIPTION           VARCHAR2(1000),
+    ABBREVIATION          VARCHAR2(20),
+    SYNONYMS              VARCHAR2(1000),
+    BASE_UNIT             VARCHAR2(128),
     CONSTRAINT PK_RESULT_TYPE PRIMARY KEY (NODE_ID)
-    USING INDEX
-TABLESPACE BARD_DAT
 )
-TABLESPACE BARD_DAT
 ;
 
 
@@ -1418,13 +842,11 @@ CREATE TABLE STAGE(
     NODE_ID           NUMBER(19, 0)     NOT NULL,
     PARENT_NODE_ID    NUMBER(19, 0),
     STAGE_ID          NUMBER(19, 0)     NOT NULL,
+    STAGE_STATUS      VARCHAR2(20)      NOT NULL,
     STAGE             VARCHAR2(128)     NOT NULL,
     DESCRIPTION       VARCHAR2(1000),
     CONSTRAINT PK_STAGE PRIMARY KEY (NODE_ID)
-    USING INDEX
-TABLESPACE BARD_DAT
 )
-TABLESPACE BARD_DAT
 ;
 
 
@@ -1441,14 +863,11 @@ CREATE TABLE SUBSTANCE(
     SUBSTANCE_TYPE      VARCHAR2(20)      NOT NULL
                         CONSTRAINT CK_SUBSTANCE_TYPE CHECK (Substance_Type in ('small molecule', 'protein', 'peptide', 'antibody', 'cell', 'oligonucleotide')),
     VERSION             NUMBER(38, 0)     DEFAULT 0 NOT NULL,
-    Date_Created        TIMESTAMP(6)      DEFAULT sysdate NOT NULL,
-    Last_Updated        TIMESTAMP(6),
+    DATE_CREATED        TIMESTAMP(6)      DEFAULT sysdate NOT NULL,
+    LAST_UPDATED        TIMESTAMP(6),
     MODIFIED_BY         VARCHAR2(40),
     CONSTRAINT PK_SUBSTANCE PRIMARY KEY (SUBSTANCE_ID)
-    USING INDEX
-TABLESPACE BARD_DAT
 )
-TABLESPACE BARD_DAT
 ;
 
 
@@ -1469,27 +888,14 @@ CREATE TABLE TREE_ROOT(
     LAST_UPDATED         TIMESTAMP(6),
     MODIFIED_BY          VARCHAR2(40),
     CONSTRAINT PK_TREE_ROOT PRIMARY KEY (TREE_ROOT_ID)
-    USING INDEX
-TABLESPACE BARD_DAT
 )
-TABLESPACE BARD_DAT
 ;
 
 
 
 COMMENT ON COLUMN TREE_ROOT.VERSION IS 'Update_version is used by Hibernate to resolve the "lost Update" problem when used in optimistic locking'
 ;
-insert into tree_root ( TREE_ROOT_ID, TREE_NAME, ELEMENT_ID, RELATIONSHIP_TYPE)
-values (1, 'ASSAY_DESCRIPTOR', 0, 'is_a');
-insert into tree_root ( TREE_ROOT_ID, TREE_NAME, ELEMENT_ID, RELATIONSHIP_TYPE)
-values (2, 'BIOLOGY_DESCRIPTOR', 0, 'is_a');
-insert into tree_root ( TREE_ROOT_ID, TREE_NAME, ELEMENT_ID, RELATIONSHIP_TYPE)
-values (3, 'INSTANCE_DESCRIPTOR', 0, 'is_a');
-insert into tree_root ( TREE_ROOT_ID, TREE_NAME, ELEMENT_ID, RELATIONSHIP_TYPE)
-values (4, 'RESULT_TYPE', 0, 'is_a');
-insert into tree_root ( TREE_ROOT_ID, TREE_NAME, ELEMENT_ID, RELATIONSHIP_TYPE)
-values (5, 'UNIT', 0, 'is_a');
-COMMIT;
+
 -- 
 -- TABLE: UNIT 
 --
@@ -1501,10 +907,7 @@ CREATE TABLE UNIT(
     UNIT              VARCHAR2(128)     NOT NULL,
     DESCRIPTION       VARCHAR2(1000),
     CONSTRAINT PK_UNIT PRIMARY KEY (NODE_ID)
-    USING INDEX
-TABLESPACE BARD_DAT
 )
-TABLESPACE BARD_DAT
 ;
 
 
@@ -1524,10 +927,7 @@ CREATE TABLE UNIT_CONVERSION(
     Last_Updated    TIMESTAMP(6),
     MODIFIED_BY     VARCHAR2(40),
     CONSTRAINT PK_UNIT_CONVERSION PRIMARY KEY (FROM_UNIT, TO_UNIT)
-    USING INDEX
-TABLESPACE BARD_DAT
 )
-TABLESPACE BARD_DAT
 ;
 
 
@@ -1535,231 +935,110 @@ TABLESPACE BARD_DAT
 COMMENT ON COLUMN UNIT_CONVERSION.VERSION IS 'Update_version is used by Hibernate to resolve the "lost Update" problem when used in optimistic locking'
 ;
 -- 
--- INDEX: FK_ASSAY_ASSAY_STATUS_ID 
+-- INDEX: IDX_ASSAY_NAME_VERSION 
 --
 
-DROP INDEX FK_ASSAY_ASSAY_STATUS_ID
-;
-
-CREATE INDEX FK_ASSAY_ASSAY_STATUS_ID ON ASSAY(ASSAY_STATUS_ID)
-TABLESPACE BARD_DAT
+CREATE INDEX IDX_ASSAY_NAME_VERSION ON ASSAY(ASSAY_NAME, ASSAY_VERSION)
 ;
 -- 
 -- INDEX: FK_ASSAY_DESCRIPTOR_PARENT_SLF 
 --
 
-DROP INDEX FK_ASSAY_DESCRIPTOR_PARENT_SLF
-;
-
 CREATE INDEX FK_ASSAY_DESCRIPTOR_PARENT_SLF ON ASSAY_DESCRIPTOR(PARENT_NODE_ID)
-TABLESPACE BARD_DAT
 ;
 -- 
--- INDEX: FK_ASSAY_DESCRIPTOR_STATUS 
+-- INDEX: FK_PROTOCOL_ASSAY 
 --
 
-DROP INDEX FK_ASSAY_DESCRIPTOR_STATUS
-;
-
-CREATE INDEX FK_ASSAY_DESCRIPTOR_STATUS ON ASSAY_DESCRIPTOR(ELEMENT_STATUS_ID)
-TABLESPACE BARD_DAT
-;
--- 
--- INDEX: AK_ASSAY_STATUS 
---
-
-DROP INDEX AK_ASSAY_STATUS
-;
-
-CREATE UNIQUE INDEX AK_ASSAY_STATUS ON ASSAY_STATUS(STATUS)
-TABLESPACE BARD_DAT
+CREATE INDEX FK_PROTOCOL_ASSAY ON Assay_document(ASSAY_ID)
 ;
 -- 
 -- INDEX: FK_BIOLOGY_DESCRIPTOR_PRNT_SLF 
 --
 
-DROP INDEX FK_BIOLOGY_DESCRIPTOR_PRNT_SLF
-;
-
 CREATE INDEX FK_BIOLOGY_DESCRIPTOR_PRNT_SLF ON BIOLOGY_DESCRIPTOR(PARENT_NODE_ID)
-TABLESPACE BARD_DAT
-;
--- 
--- INDEX: FK_BIOLOGY_DESCRIPTOR_STATUS 
---
-
-DROP INDEX FK_BIOLOGY_DESCRIPTOR_STATUS
-;
-
-CREATE INDEX FK_BIOLOGY_DESCRIPTOR_STATUS ON BIOLOGY_DESCRIPTOR(ELEMENT_STATUS_ID)
-TABLESPACE BARD_DAT
 ;
 -- 
 -- INDEX: FK_ELEMENT_UNIT 
 --
 
-DROP INDEX FK_ELEMENT_UNIT
-;
-
 CREATE INDEX FK_ELEMENT_UNIT ON ELEMENT(UNIT)
-TABLESPACE BARD_DAT
-;
--- 
--- INDEX: FK_ELEMENT_ELEMENT_STATUS 
---
-
-DROP INDEX FK_ELEMENT_ELEMENT_STATUS
-;
-
-CREATE INDEX FK_ELEMENT_ELEMENT_STATUS ON ELEMENT(ELEMENT_STATUS_ID)
-TABLESPACE BARD_DAT
 ;
 -- 
 -- INDEX: UI_ELEMENT_LOWER_LABEL 
 --
 
-DROP INDEX UI_ELEMENT_LOWER_LABEL
-;
-
 CREATE UNIQUE INDEX UI_ELEMENT_LOWER_LABEL ON ELEMENT(LOWER("LABEL"))
-TABLESPACE BARD_DAT
 ;
 -- 
 -- INDEX: AK_ELEMENT_HIERARCHY 
 --
 
-DROP INDEX AK_ELEMENT_HIERARCHY
-;
-
 CREATE UNIQUE INDEX AK_ELEMENT_HIERARCHY ON ELEMENT_HIERARCHY(CHILD_ELEMENT_ID, PARENT_ELEMENT_ID, RELATIONSHIP_TYPE)
-TABLESPACE BARD_DAT
 ;
 -- 
 -- INDEX: FK_E_HIERARCHY_PARENT_ELEM_ID 
 --
 
-DROP INDEX FK_E_HIERARCHY_PARENT_ELEM_ID
-;
-
 CREATE INDEX FK_E_HIERARCHY_PARENT_ELEM_ID ON ELEMENT_HIERARCHY(PARENT_ELEMENT_ID)
-TABLESPACE BARD_DAT
 ;
 -- 
 -- INDEX: FK_E_HIERARCHY_CHILD_ELEM_ID 
 --
 
-DROP INDEX FK_E_HIERARCHY_CHILD_ELEM_ID
-;
-
 CREATE INDEX FK_E_HIERARCHY_CHILD_ELEM_ID ON ELEMENT_HIERARCHY(CHILD_ELEMENT_ID)
-TABLESPACE BARD_DAT
 ;
 -- 
 -- INDEX: FK_EXPERIMENT_ASSAY 
 --
 
-DROP INDEX FK_EXPERIMENT_ASSAY
-;
-
 CREATE INDEX FK_EXPERIMENT_ASSAY ON EXPERIMENT(ASSAY_ID)
-TABLESPACE BARD_DAT
 ;
 -- 
 -- INDEX: FK_PROJECT_EXPERIMENT 
 --
 
-DROP INDEX FK_PROJECT_EXPERIMENT
-;
-
 CREATE INDEX FK_PROJECT_EXPERIMENT ON EXPERIMENT(PROJECT_ID)
-TABLESPACE BARD_DAT
-;
--- 
--- INDEX: FK_EXPERIMENT_EXPRT_STATUS 
---
-
-DROP INDEX FK_EXPERIMENT_EXPRT_STATUS
-;
-
-CREATE INDEX FK_EXPERIMENT_EXPRT_STATUS ON EXPERIMENT(EXPERIMENT_STATUS_ID)
-TABLESPACE BARD_DAT
 ;
 -- 
 -- INDEX: FK_EXT_ASSAY_ASSAY 
 --
 
-DROP INDEX FK_EXT_ASSAY_ASSAY
-;
-
 CREATE INDEX FK_EXT_ASSAY_ASSAY ON EXTERNAL_ASSAY(ASSAY_ID)
-TABLESPACE BARD_DAT
 ;
 -- 
 -- INDEX: "FK_EXT_ASSAY_EXT_SYSTEM" 
 --
 
-DROP INDEX "FK_EXT_ASSAY_EXT_SYSTEM"
-;
-
 CREATE INDEX "FK_EXT_ASSAY_EXT_SYSTEM" ON EXTERNAL_ASSAY(EXTERNAL_SYSTEM_ID)
-TABLESPACE BARD_DAT
 ;
 -- 
 -- INDEX: FK_INSTANCE_DESCRIPTR_PRNT_SLF 
 --
 
-DROP INDEX FK_INSTANCE_DESCRIPTR_PRNT_SLF
-;
-
 CREATE INDEX FK_INSTANCE_DESCRIPTR_PRNT_SLF ON INSTANCE_DESCRIPTOR(PARENT_NODE_ID)
-TABLESPACE BARD_DAT
-;
--- 
--- INDEX: FK_INSTANCE_DESCRIPTOR_STATUS 
---
-
-DROP INDEX FK_INSTANCE_DESCRIPTOR_STATUS
-;
-
-CREATE INDEX FK_INSTANCE_DESCRIPTOR_STATUS ON INSTANCE_DESCRIPTOR(ELEMENT_STATUS_ID)
-TABLESPACE BARD_DAT
 ;
 -- 
 -- INDEX: FK_MEASURE_RESULT_TYPE 
 --
 
-DROP INDEX FK_MEASURE_RESULT_TYPE
-;
-
 CREATE INDEX FK_MEASURE_RESULT_TYPE ON MEASURE(RESULT_TYPE_ID)
-TABLESPACE BARD_DAT
 ;
 -- 
 -- INDEX: FK_MEASURE_M_CONTEXT 
 --
 
-DROP INDEX FK_MEASURE_M_CONTEXT
-;
-
 CREATE INDEX FK_MEASURE_M_CONTEXT ON MEASURE(MEASURE_CONTEXT_ID)
-TABLESPACE BARD_DAT
 ;
 -- 
 -- INDEX: FK_MEASURE_ELEMENT_UNIT 
 --
 
-DROP INDEX FK_MEASURE_ELEMENT_UNIT
-;
-
 CREATE INDEX FK_MEASURE_ELEMENT_UNIT ON MEASURE(ENTRY_UNIT)
-TABLESPACE BARD_DAT
 ;
 -- 
 -- INDEX: FK_MEASURE_ASSAY 
 --
-
-DROP INDEX FK_MEASURE_ASSAY
-;
 
 CREATE INDEX FK_MEASURE_ASSAY ON MEASURE(ASSAY_ID)
 ;
@@ -1767,350 +1046,187 @@ CREATE INDEX FK_MEASURE_ASSAY ON MEASURE(ASSAY_ID)
 -- INDEX: FK_MEASURE_PARENT_MEASURE_ID 
 --
 
-DROP INDEX FK_MEASURE_PARENT_MEASURE_ID
-;
-
 CREATE INDEX FK_MEASURE_PARENT_MEASURE_ID ON MEASURE(PARENT_MEASURE_ID)
-;
--- 
--- INDEX: AK_MEASURE_CONTEXT_ITEM 
---
-
-DROP INDEX AK_MEASURE_CONTEXT_ITEM
-;
-
-CREATE UNIQUE INDEX AK_MEASURE_CONTEXT_ITEM ON MEASURE_CONTEXT_ITEM(MEASURE_CONTEXT_ID, GROUP_MEASURE_CONTEXT_ITEM_ID, ATTRIBUTE_ID, VALUE_DISPLAY)
-TABLESPACE BARD_DAT
 ;
 -- 
 -- INDEX: FK_M_CONTEXT_ITEM_M_CONTEXT 
 --
 
-DROP INDEX FK_M_CONTEXT_ITEM_M_CONTEXT
-;
-
 CREATE INDEX FK_M_CONTEXT_ITEM_M_CONTEXT ON MEASURE_CONTEXT_ITEM(MEASURE_CONTEXT_ID)
-TABLESPACE BARD_DAT
 ;
 -- 
 -- INDEX: FK_M_CONTEXT_ITEM_ATTRIBUTE 
 --
 
-DROP INDEX FK_M_CONTEXT_ITEM_ATTRIBUTE
-;
-
 CREATE INDEX FK_M_CONTEXT_ITEM_ATTRIBUTE ON MEASURE_CONTEXT_ITEM(ATTRIBUTE_ID)
-TABLESPACE BARD_DAT
 ;
 -- 
 -- INDEX: FK_M_CONTEXT_ITEM_VALUE 
 --
 
-DROP INDEX FK_M_CONTEXT_ITEM_VALUE
-;
-
 CREATE INDEX FK_M_CONTEXT_ITEM_VALUE ON MEASURE_CONTEXT_ITEM(VALUE_ID)
-TABLESPACE BARD_DAT
 ;
 -- 
 -- INDEX: FK_M_CONTEXT_ITEM_ASSAY 
 --
 
-DROP INDEX FK_M_CONTEXT_ITEM_ASSAY
-;
-
 CREATE INDEX FK_M_CONTEXT_ITEM_ASSAY ON MEASURE_CONTEXT_ITEM(ASSAY_ID)
-TABLESPACE BARD_DAT
 ;
 -- 
 -- INDEX: FK_M_CONTEXT_ITEM_QUALIFIER 
 --
 
-DROP INDEX FK_M_CONTEXT_ITEM_QUALIFIER
-;
-
 CREATE INDEX FK_M_CONTEXT_ITEM_QUALIFIER ON MEASURE_CONTEXT_ITEM(QUALIFIER)
-TABLESPACE BARD_DAT
 ;
 -- 
 -- INDEX: FK_MEASURE_CONTEXT_ITEM_GROUP 
 --
 
-DROP INDEX FK_MEASURE_CONTEXT_ITEM_GROUP
-;
-
 CREATE INDEX FK_MEASURE_CONTEXT_ITEM_GROUP ON MEASURE_CONTEXT_ITEM(GROUP_MEASURE_CONTEXT_ITEM_ID)
-TABLESPACE BARD_DAT
+;
+-- 
+-- INDEX: AK_MEASURE_CONTEXT_ITEM 
+--
+
+CREATE UNIQUE INDEX AK_MEASURE_CONTEXT_ITEM ON MEASURE_CONTEXT_ITEM(MEASURE_CONTEXT_ID, GROUP_MEASURE_CONTEXT_ITEM_ID, ATTRIBUTE_ID, ATTRIBUTE_TYPE, VALUE_DISPLAY)
 ;
 -- 
 -- INDEX: FK_ONTOLOGY_ITEM_ONTOLOGY 
 --
 
-DROP INDEX FK_ONTOLOGY_ITEM_ONTOLOGY
-;
-
 CREATE INDEX FK_ONTOLOGY_ITEM_ONTOLOGY ON ONTOLOGY_ITEM(ONTOLOGY_ID)
-TABLESPACE BARD_DAT
 ;
 -- 
 -- INDEX: FK_ONTOLOGY_ITEM_ELEMENT 
 --
 
-DROP INDEX FK_ONTOLOGY_ITEM_ELEMENT
-;
-
 CREATE INDEX FK_ONTOLOGY_ITEM_ELEMENT ON ONTOLOGY_ITEM(ELEMENT_ID)
-TABLESPACE BARD_DAT
 ;
 -- 
 -- INDEX: FK_PROJECT_ASSAY_ASSAY 
 --
 
-DROP INDEX FK_PROJECT_ASSAY_ASSAY
-;
-
 CREATE INDEX FK_PROJECT_ASSAY_ASSAY ON PROJECT_ASSAY(ASSAY_ID)
-TABLESPACE BARD_DAT
 ;
 -- 
 -- INDEX: FK_PROJECT_ASSAY_PROJECT 
 --
 
-DROP INDEX FK_PROJECT_ASSAY_PROJECT
-;
-
 CREATE INDEX FK_PROJECT_ASSAY_PROJECT ON PROJECT_ASSAY(PROJECT_ID)
-TABLESPACE BARD_DAT
-;
--- 
--- INDEX: FK_PROJECT_ASSAY_STAGE 
---
-
-DROP INDEX FK_PROJECT_ASSAY_STAGE
-;
-
-CREATE INDEX FK_PROJECT_ASSAY_STAGE ON PROJECT_ASSAY(STAGE)
-TABLESPACE BARD_DAT
 ;
 -- 
 -- INDEX: FK_PROJECT_ASSAY_RELATED_ASSAY 
 --
 
-DROP INDEX FK_PROJECT_ASSAY_RELATED_ASSAY
-;
-
 CREATE INDEX FK_PROJECT_ASSAY_RELATED_ASSAY ON PROJECT_ASSAY(RELATED_ASSAY_ID)
-TABLESPACE BARD_DAT
-;
--- 
--- INDEX: FK_PROTOCOL_ASSAY 
---
-
-DROP INDEX FK_PROTOCOL_ASSAY
-;
-
-CREATE INDEX FK_PROTOCOL_ASSAY ON PROTOCOL(ASSAY_ID)
-TABLESPACE BARD_DAT
-;
--- 
--- INDEX: FK_RESULT_RESULT_STATUS 
---
-
-DROP INDEX FK_RESULT_RESULT_STATUS
-;
-
-CREATE INDEX FK_RESULT_RESULT_STATUS ON RESULT(RESULT_STATUS_ID)
-TABLESPACE BARD_DAT
 ;
 -- 
 -- INDEX: FK_RESULT_EXPERIMENT 
 --
 
-DROP INDEX FK_RESULT_EXPERIMENT
-;
-
 CREATE INDEX FK_RESULT_EXPERIMENT ON RESULT(EXPERIMENT_ID)
-TABLESPACE BARD_DAT
 ;
 -- 
 -- INDEX: FK_RESULT_SUBSTANCE 
 --
 
-DROP INDEX FK_RESULT_SUBSTANCE
-;
-
 CREATE INDEX FK_RESULT_SUBSTANCE ON RESULT(SUBSTANCE_ID)
-TABLESPACE BARD_DAT
 ;
 -- 
 -- INDEX: FK_RESULT_RESULT_TYPE 
 --
 
-DROP INDEX FK_RESULT_RESULT_TYPE
-;
-
 CREATE INDEX FK_RESULT_RESULT_TYPE ON RESULT(RESULT_TYPE_ID)
-TABLESPACE BARD_DAT
 ;
 -- 
 -- INDEX: FK_RESULT_QUALIFIER 
 --
 
-DROP INDEX FK_RESULT_QUALIFIER
-;
-
 CREATE INDEX FK_RESULT_QUALIFIER ON RESULT(QUALIFIER)
-TABLESPACE BARD_DAT
 ;
 -- 
 -- INDEX: FK_R_CONTEXT_ITEM_EXPERIMENT 
 --
 
-DROP INDEX FK_R_CONTEXT_ITEM_EXPERIMENT
-;
-
 CREATE INDEX FK_R_CONTEXT_ITEM_EXPERIMENT ON RESULT_CONTEXT_ITEM(EXPERIMENT_ID)
-TABLESPACE BARD_DAT
 ;
 -- 
 -- INDEX: FK_R_CONTEXT_ITEM_ATTRIBUTE 
 --
 
-DROP INDEX FK_R_CONTEXT_ITEM_ATTRIBUTE
-;
-
 CREATE INDEX FK_R_CONTEXT_ITEM_ATTRIBUTE ON RESULT_CONTEXT_ITEM(ATTRIBUTE_ID)
-TABLESPACE BARD_DAT
 ;
 -- 
 -- INDEX: FK_R_CONTEXT_ITEM_VALUE 
 --
 
-DROP INDEX FK_R_CONTEXT_ITEM_VALUE
-;
-
 CREATE INDEX FK_R_CONTEXT_ITEM_VALUE ON RESULT_CONTEXT_ITEM(VALUE_ID)
-TABLESPACE BARD_DAT
 ;
 -- 
 -- INDEX: FK_R_CONTEXT_ITEM_QUALIFIER 
 --
 
-DROP INDEX FK_R_CONTEXT_ITEM_QUALIFIER
-;
-
 CREATE INDEX FK_R_CONTEXT_ITEM_QUALIFIER ON RESULT_CONTEXT_ITEM(QUALIFIER)
-TABLESPACE BARD_DAT
 ;
 -- 
 -- INDEX: FK_RESULT_CONTEXT_ITEM_RESULT 
 --
 
-DROP INDEX FK_RESULT_CONTEXT_ITEM_RESULT
-;
-
 CREATE INDEX FK_RESULT_CONTEXT_ITEM_RESULT ON RESULT_CONTEXT_ITEM(RESULT_ID)
-TABLESPACE BARD_DAT
 ;
 -- 
 -- INDEX: FK_RESULT_CONTEXT_ITEM_GROUP 
 --
 
-DROP INDEX FK_RESULT_CONTEXT_ITEM_GROUP
-;
-
 CREATE INDEX FK_RESULT_CONTEXT_ITEM_GROUP ON RESULT_CONTEXT_ITEM(GROUP_RESULT_CONTEXT_ID)
-TABLESPACE BARD_DAT
 ;
 -- 
 -- INDEX: FK_RESULT_HIERARCHY_RSLT_PRNT 
 --
 
-DROP INDEX FK_RESULT_HIERARCHY_RSLT_PRNT
-;
-
 CREATE INDEX FK_RESULT_HIERARCHY_RSLT_PRNT ON RESULT_HIERARCHY(RESULT_ID)
-TABLESPACE BARD_DAT
 ;
 -- 
 -- INDEX: FK_RESULT_HIERARCHY_RESULT 
 --
 
-DROP INDEX FK_RESULT_HIERARCHY_RESULT
-;
-
 CREATE INDEX FK_RESULT_HIERARCHY_RESULT ON RESULT_HIERARCHY(PARENT_RESULT_ID)
-TABLESPACE BARD_DAT
 ;
 -- 
 -- INDEX: FK_RESULT_TYPE_PARENT_SELF 
 --
 
-DROP INDEX FK_RESULT_TYPE_PARENT_SELF
-;
-
 CREATE INDEX FK_RESULT_TYPE_PARENT_SELF ON RESULT_TYPE(Parent_node_id)
-TABLESPACE BARD_DAT
-;
--- 
--- INDEX: FK_RESULT_TYPE_STATUS 
---
-
-DROP INDEX FK_RESULT_TYPE_STATUS
-;
-
-CREATE INDEX FK_RESULT_TYPE_STATUS ON RESULT_TYPE(RESULT_TYPE_STATUS_ID)
-TABLESPACE BARD_DAT
 ;
 -- 
 -- INDEX: AK_TREE_ROOT_NAME 
 --
 
-DROP INDEX AK_TREE_ROOT_NAME
-;
-
 CREATE UNIQUE INDEX AK_TREE_ROOT_NAME ON TREE_ROOT(TREE_NAME)
-TABLESPACE BARD_DAT
 ;
 -- 
 -- INDEX: FK_TREE_ROOT_ELEMENT 
 --
 
-DROP INDEX FK_TREE_ROOT_ELEMENT
-;
-
 CREATE INDEX FK_TREE_ROOT_ELEMENT ON TREE_ROOT(ELEMENT_ID)
-TABLESPACE BARD_DAT
 ;
 -- 
 -- INDEX: FK_UNIT_PARENT_SELF 
 --
 
-DROP INDEX FK_UNIT_PARENT_SELF
-;
-
 CREATE INDEX FK_UNIT_PARENT_SELF ON UNIT(PARENT_NODE_ID)
-TABLESPACE BARD_DAT
 ;
 -- 
 -- INDEX: FK_UNIT_CONVERSN_FRM_UNT_ELMNT 
 --
 
-DROP INDEX FK_UNIT_CONVERSN_FRM_UNT_ELMNT
-;
-
 CREATE INDEX FK_UNIT_CONVERSN_FRM_UNT_ELMNT ON UNIT_CONVERSION(FROM_UNIT)
-TABLESPACE BARD_DAT
 ;
 -- 
 -- INDEX: FK_UNIT_CONVERSN_TO_UNT_ELMNT 
 --
 
-DROP INDEX FK_UNIT_CONVERSN_TO_UNT_ELMNT
-;
-
 CREATE INDEX FK_UNIT_CONVERSN_TO_UNT_ELMNT ON UNIT_CONVERSION(TO_UNIT)
-TABLESPACE BARD_DAT
 ;
 -- 
 -- TABLE: ELEMENT 
@@ -2118,19 +1234,7 @@ TABLESPACE BARD_DAT
 
 ALTER TABLE ELEMENT ADD 
     CONSTRAINT AK_ELEMENT_LABEL UNIQUE (LABEL)
-    USING INDEX
-TABLESPACE BARD_DAT
 ;
-
--- 
--- TABLE: ASSAY 
---
-
-ALTER TABLE ASSAY ADD CONSTRAINT FK_ASSAY_ASSAY_STATUS_ID 
-    FOREIGN KEY (ASSAY_STATUS_ID)
-    REFERENCES ASSAY_STATUS(ASSAY_STATUS_ID)
-;
-
 
 -- 
 -- TABLE: ASSAY_DESCRIPTOR 
@@ -2141,9 +1245,14 @@ ALTER TABLE ASSAY_DESCRIPTOR ADD CONSTRAINT FK_ASSAY_DESCRIPTOR_PARENT_SLF
     REFERENCES ASSAY_DESCRIPTOR(NODE_ID)
 ;
 
-ALTER TABLE ASSAY_DESCRIPTOR ADD CONSTRAINT FK_ASSAY_DESCRIPTOR_STATUS 
-    FOREIGN KEY (ELEMENT_STATUS_ID)
-    REFERENCES ELEMENT_STATUS(ELEMENT_STATUS_ID)
+
+-- 
+-- TABLE: Assay_document 
+--
+
+ALTER TABLE Assay_document ADD CONSTRAINT FK_Assay_document_assay 
+    FOREIGN KEY (ASSAY_ID)
+    REFERENCES ASSAY(ASSAY_ID)
 ;
 
 
@@ -2156,20 +1265,10 @@ ALTER TABLE BIOLOGY_DESCRIPTOR ADD CONSTRAINT FK_BIOLOGY_DESCRIPTOR_PRNT_SLF
     REFERENCES BIOLOGY_DESCRIPTOR(NODE_ID)
 ;
 
-ALTER TABLE BIOLOGY_DESCRIPTOR ADD CONSTRAINT FK_BIOLOGY_DESCRIPTOR_STATUS 
-    FOREIGN KEY (ELEMENT_STATUS_ID)
-    REFERENCES ELEMENT_STATUS(ELEMENT_STATUS_ID)
-;
-
 
 -- 
 -- TABLE: ELEMENT 
 --
-
-ALTER TABLE ELEMENT ADD CONSTRAINT FK_ELEMENT_ELEMENT_STATUS 
-    FOREIGN KEY (ELEMENT_STATUS_ID)
-    REFERENCES ELEMENT_STATUS(ELEMENT_STATUS_ID)
-;
 
 ALTER TABLE ELEMENT ADD CONSTRAINT FK_Element_Unit 
     FOREIGN KEY (UNIT)
@@ -2201,9 +1300,9 @@ ALTER TABLE EXPERIMENT ADD CONSTRAINT FK_EXPERIMENT_ASSAY
     REFERENCES ASSAY(ASSAY_ID)
 ;
 
-ALTER TABLE EXPERIMENT ADD CONSTRAINT FK_EXPERIMENT_EXPRT_STATUS 
-    FOREIGN KEY (EXPERIMENT_STATUS_ID)
-    REFERENCES EXPERIMENT_STATUS(EXPERIMENT_STATUS_ID)
+ALTER TABLE EXPERIMENT ADD CONSTRAINT FK_EXPERIMENT_LABORATORY 
+    FOREIGN KEY (LABORATORY_ID)
+    REFERENCES ELEMENT(ELEMENT_ID)
 ;
 
 ALTER TABLE EXPERIMENT ADD CONSTRAINT FK_PROJECT_EXPERIMENT 
@@ -2230,11 +1329,6 @@ ALTER TABLE EXTERNAL_ASSAY ADD CONSTRAINT FK_EXT_ASSAY_EXT_SYSTEM
 -- 
 -- TABLE: INSTANCE_DESCRIPTOR 
 --
-
-ALTER TABLE INSTANCE_DESCRIPTOR ADD CONSTRAINT FK_INSTANCE_DESCRIPTOR_STATUS 
-    FOREIGN KEY (ELEMENT_STATUS_ID)
-    REFERENCES ELEMENT_STATUS(ELEMENT_STATUS_ID)
-;
 
 ALTER TABLE INSTANCE_DESCRIPTOR ADD CONSTRAINT FK_INSTANCE_DESCRIPTR_PRNT_SLF 
     FOREIGN KEY (PARENT_NODE_ID)
@@ -2311,11 +1405,6 @@ ALTER TABLE MEASURE_CONTEXT_ITEM ADD CONSTRAINT FK_M_CONTEXT_ITEM_M_CONTEXT
     REFERENCES MEASURE_CONTEXT(MEASURE_CONTEXT_ID)
 ;
 
-ALTER TABLE MEASURE_CONTEXT_ITEM ADD CONSTRAINT FK_M_CONTEXT_ITEM_QUALIFIER 
-    FOREIGN KEY (QUALIFIER)
-    REFERENCES QUALIFIER(QUALIFIER)
-;
-
 ALTER TABLE MEASURE_CONTEXT_ITEM ADD CONSTRAINT FK_M_CONTEXT_ITEM_VALUE 
     FOREIGN KEY (VALUE_ID)
     REFERENCES ELEMENT(ELEMENT_ID)
@@ -2362,18 +1451,8 @@ ALTER TABLE PROJECT_ASSAY ADD CONSTRAINT FK_Project_Assay_Related_Assay
 ;
 
 ALTER TABLE PROJECT_ASSAY ADD CONSTRAINT FK_PROJECT_ASSAY_STAGE 
-    FOREIGN KEY (STAGE)
-    REFERENCES ELEMENT(LABEL)
-;
-
-
--- 
--- TABLE: PROTOCOL 
---
-
-ALTER TABLE PROTOCOL ADD CONSTRAINT FK_PROTOCOL_ASSAY 
-    FOREIGN KEY (ASSAY_ID)
-    REFERENCES ASSAY(ASSAY_ID)
+    FOREIGN KEY (Stage_ID)
+    REFERENCES ELEMENT(ELEMENT_ID)
 ;
 
 
@@ -2386,24 +1465,9 @@ ALTER TABLE RESULT ADD CONSTRAINT FK_RESULT_EXPERIMENT
     REFERENCES EXPERIMENT(EXPERIMENT_ID)
 ;
 
-ALTER TABLE RESULT ADD CONSTRAINT FK_RESULT_QUALIFIER 
-    FOREIGN KEY (QUALIFIER)
-    REFERENCES QUALIFIER(QUALIFIER)
-;
-
-ALTER TABLE RESULT ADD CONSTRAINT FK_RESULT_RESULT_STATUS 
-    FOREIGN KEY (RESULT_STATUS_ID)
-    REFERENCES RESULT_STATUS(RESULT_STATUS_ID)
-;
-
 ALTER TABLE RESULT ADD CONSTRAINT FK_Result_Result_Type 
     FOREIGN KEY (RESULT_TYPE_ID)
     REFERENCES ELEMENT(ELEMENT_ID)
-;
-
-ALTER TABLE RESULT ADD CONSTRAINT FK_RESULT_SUBSTANCE 
-    FOREIGN KEY (SUBSTANCE_ID)
-    REFERENCES SUBSTANCE(SUBSTANCE_ID)
 ;
 
 
@@ -2419,11 +1483,6 @@ ALTER TABLE RESULT_CONTEXT_ITEM ADD CONSTRAINT FK_R_CONTEXT_ITEM_ATTRIBUTE
 ALTER TABLE RESULT_CONTEXT_ITEM ADD CONSTRAINT FK_R_CONTEXT_ITEM_EXPERIMENT 
     FOREIGN KEY (EXPERIMENT_ID)
     REFERENCES EXPERIMENT(EXPERIMENT_ID)
-;
-
-ALTER TABLE RESULT_CONTEXT_ITEM ADD CONSTRAINT FK_R_context_item_qualifier 
-    FOREIGN KEY (QUALIFIER)
-    REFERENCES QUALIFIER(QUALIFIER)
 ;
 
 ALTER TABLE RESULT_CONTEXT_ITEM ADD CONSTRAINT FK_R_CONTEXT_ITEM_VALUE 
@@ -2464,11 +1523,6 @@ ALTER TABLE RESULT_HIERARCHY ADD CONSTRAINT FK_RESULT_HIERARCHY_RSLT_PRNT
 ALTER TABLE RESULT_TYPE ADD CONSTRAINT FK_Result_Type_Parent_Self 
     FOREIGN KEY (Parent_node_id)
     REFERENCES RESULT_TYPE(NODE_ID)
-;
-
-ALTER TABLE RESULT_TYPE ADD CONSTRAINT FK_Result_Type_status 
-    FOREIGN KEY (RESULT_TYPE_STATUS_ID)
-    REFERENCES ELEMENT_STATUS(ELEMENT_STATUS_ID)
 ;
 
 

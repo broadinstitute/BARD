@@ -94,8 +94,9 @@ as
                 description,
                 abbreviation,
                 synonyms,
+                external_URL,
                 unit,
-                element_status_id)
+                element_status)
                 values
                 (ani_node_id,
                 ani_parent_node_id,
@@ -104,8 +105,9 @@ as
                 ari_element.description,
                 ari_element.abbreviation,
                 ari_element.synonyms,
+                ari_element.external_URL,
                 ari_element.unit,
-                ari_element.element_status_id);
+                ari_element.element_status);
                 
         elsif avi_tree_name = pv_tree_biology_descriptor
         then
@@ -117,8 +119,9 @@ as
                 description,
                 abbreviation,
                 synonyms,
+                external_URL,
                 unit,
-                element_status_id)
+                element_status)
                 values
                 (ani_node_id,
                 ani_parent_node_id,
@@ -127,8 +130,9 @@ as
                 ari_element.description,
                 ari_element.abbreviation,
                 ari_element.synonyms,
+                ari_element.external_URL,
                 ari_element.unit,
-                ari_element.element_status_id);
+                ari_element.element_status);
         
         elsif avi_tree_name = pv_tree_instance_descriptor
         then
@@ -140,8 +144,9 @@ as
                 description,
                 abbreviation,
                 synonyms,
+                external_URL,
                 unit,
-                element_status_id)
+                element_status)
                 values
                 (ani_node_id,
                 ani_parent_node_id,
@@ -150,8 +155,9 @@ as
                 ari_element.description,
                 ari_element.abbreviation,
                 ari_element.synonyms,
+                ari_element.external_URL,
                 ari_element.unit,
-                ari_element.element_status_id);
+                ari_element.element_status);
         
         elsif avi_tree_name = pv_tree_result_type
         then
@@ -164,7 +170,7 @@ as
                 abbreviation,
                 synonyms,
                 base_unit,
-                result_type_status_id)
+                result_type_status)
                 values
                 (ani_node_id,
                 ani_parent_node_id,
@@ -174,7 +180,7 @@ as
                 ari_element.abbreviation,
                 ari_element.synonyms,
                 ari_element.unit,
-                ari_element.element_status_id);
+                ari_element.element_status);
         
         elsif avi_tree_name = pv_tree_unit
         then
@@ -198,12 +204,14 @@ as
                 parent_node_id,
                 stage_id,
                 stage,
+                stage_status,
                 description)
                 values
                 (ani_node_id,
                 ani_parent_node_id,
                 ari_element.element_id,
                 ari_element.label,
+                ari_element.element_status,
                 ari_element.description);
                 
         elsif avi_tree_name = pv_tree_laboratory
@@ -213,12 +221,14 @@ as
                 parent_node_id,
                 laboratory_id,
                 laboratory,
+                laboratory_status,
                 description)
                 values
                 (ani_node_id,
                 ani_parent_node_id,
                 ari_element.element_id,
                 ari_element.label,
+                ari_element.element_status,
                 ari_element.description);
         
 
@@ -347,7 +357,7 @@ as
             lr_element.element_id := lr_tree_root.element_id;
             lr_element.label := lr_tree_root.tree_name;
             lr_element.description := 'Singular root to ensure tree viewers work';
-            lr_element.element_status_id := 2;
+            lr_element.element_status := 'Published';
             lr_element.version := 0;
             lr_element.date_created := sysdate;
             -- all other values are nulls
