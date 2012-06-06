@@ -244,6 +244,23 @@ application/vnd.bard.cap+xml;type=dictionary should give the client the entire d
                         <xs:field xpath="@parentUnitId"/>
                     </xs:keyref>
                 </xs:element>
+                <xs:element minOccurs="0" name="unitConversions">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element maxOccurs="unbounded" name="unitConversion">
+                                <xs:complexType>
+                                    <xs:sequence>
+                                        <xs:element minOccurs="0" name="formula" type="xs:string"/>
+                                    </xs:sequence>
+                                    <xs:attribute name="fromUnit" type="xs:string" use="required"/>
+                                    <xs:attribute name="toUnit" type="xs:string" use="required"/>
+                                    <xs:attribute name="multiplier" type="xs:double"/>
+                                    <xs:attribute name="offset" type="xs:double"/>
+                                </xs:complexType>
+                            </xs:element>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
             </xs:sequence>
         </xs:complexType>
         <xs:key name="Element_Key">
@@ -274,6 +291,14 @@ should reference a unit</xs:documentation>
         <xs:keyref name="ResultType_BaseUnit_KeyNameRef" refer="Unit_Key_Name">
             <xs:selector xpath="resultTypes/resultType"/>
             <xs:field xpath="@baseUnit"/>
+        </xs:keyref>
+        <xs:keyref name="UnitConversion_FromUnit_KeyNameRef" refer="Unit_Key_Name">
+            <xs:selector xpath="unitConversions/unitConversion"/>
+            <xs:field xpath="@fromUnit"/>
+        </xs:keyref>
+        <xs:keyref name="UnitConversion_ToUnit_KeyNameRef" refer="Unit_Key_Name">
+            <xs:selector xpath="unitConversions/unitConversion"/>
+            <xs:field xpath="@toUnit"/>
         </xs:keyref>
     </xs:element>
     <xs:element name="resultType">

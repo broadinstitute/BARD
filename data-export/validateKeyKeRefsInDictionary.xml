@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dictionary xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+ xsi:noNamespaceSchemaLocation="BARDexportSchema.xsd">
+    <elements>
+        <element elementId="50" elementStatus="Pending" abbreviation="abbreviation0" unit="unit3" readyForExtraction="Ready">
+            <label>label0</label>
+            <description>description0</description>
+            <synonyms>synonyms0</synonyms>
+            <externalUrl>http://www.oxygenxml.com/</externalUrl>
+            <link type="application/vnd.bard.cap+xml;type=experiments" href="http://www.oxygenxml.com/" rel="related"
+                 title="title0"/>
+            <link type="application/vnd.bard.cap+xml;type=experiments" href="http://www.oxygenxml.com/" rel="related"
+                 title="title1"/>
+        </element>
+        <element elementId="50" elementStatus="Pending" abbreviation="abbreviation1" unit="unit8" readyForExtraction="Ready">
+            <label>label1</label>
+            <description>description1</description>
+            <synonyms>synonyms1</synonyms>
+            <externalUrl>http://www.oxygenxml.com/</externalUrl>
+            <link type="application/vnd.bard.cap+xml;type=experiments" href="http://www.oxygenxml.com/" rel="related"
+                 title="title2"/>
+            <link type="application/vnd.bard.cap+xml;type=experiments" href="http://www.oxygenxml.com/" rel="related"
+                 title="title3"/>
+        </element>
+    </elements>
+    <elementHierarchies>
+        <elementHierarchy parentElementId="50" childElementId="50">
+            <relationshipType>supported by</relationshipType>
+        </elementHierarchy>
+        <elementHierarchy parentElementId="50" childElementId="50">
+            <relationshipType>supported by</relationshipType>
+        </elementHierarchy>
+    </elementHierarchies>
+    <resultTypes>
+        <resultType resultTypeId="50" parentResultTypeId="50" abbreviation="abbreviation2" baseUnit="unit3" resultTypeStatus="Published">
+            <resultTypeName>resultTypeName0</resultTypeName>
+            <description>description2</description>
+            <synonyms>synonyms2</synonyms>
+        </resultType>
+        <resultType resultTypeId="51" parentResultTypeId="50" abbreviation="abbreviation3" baseUnit="unit8" resultTypeStatus="Published">
+            <resultTypeName>resultTypeName1</resultTypeName>
+            <description>description3</description>
+            <synonyms>synonyms3</synonyms>
+        </resultType>
+    </resultTypes>
+    <stages>
+        <stage stageId="50"  stageStatus="stageStatus0">
+            <stageName>stageName0</stageName>
+            <description>description4</description>
+        </stage>
+        <stage stageId="51" parentStageId="50" stageStatus="stageStatus1">
+            <stageName>stageName1</stageName>
+            <description>description5</description>
+        </stage>
+    </stages>
+    <biologyDescriptors>
+        <biologyDescriptor descriptorId="50" elementId="50" abbreviation="abbreviation4" externalUrl="externalUrl0"
+             unit="unit2">
+            <elementStatus>elementStatus2</elementStatus>
+            <label>label2</label>
+            <description>description6</description>
+            <synonyms>synonyms4</synonyms>
+        </biologyDescriptor>
+        <biologyDescriptor descriptorId="51" parentDescriptorId="50" elementId="50" abbreviation="abbreviation5" externalUrl="externalUrl1"
+             unit="unit3">
+            <elementStatus>elementStatus3</elementStatus>
+            <label>label3</label>
+            <description>description7</description>
+            <synonyms>synonyms5</synonyms>
+        </biologyDescriptor>
+    </biologyDescriptors>
+    <assayDescriptors>
+        <assayDescriptor descriptorId="50" parentDescriptorId="50" elementId="50" abbreviation="abbreviation6" externalUrl="externalUrl2"
+             unit="unit4">
+            <elementStatus>elementStatus4</elementStatus>
+            <label>label4</label>
+            <description>description8</description>
+            <synonyms>synonyms6</synonyms>
+        </assayDescriptor>
+        <assayDescriptor descriptorId="52"  elementId="50" abbreviation="abbreviation7" unit="unit3">
+            <elementStatus>elementStatus5</elementStatus>
+            <label>label5</label>
+            <description>description9</description>
+            <synonyms>synonyms7</synonyms>
+        </assayDescriptor>
+    </assayDescriptors>
+    <instanceDescriptors>
+        <instanceDescriptor descriptorId="51" parentDescriptorId="50" elementId="50" abbreviation="abbreviation8" externalUrl="externalUrl4"
+             unit="unit6">
+            <elementStatus>elementStatus6</elementStatus>
+            <label>label6</label>
+            <description>description10</description>
+            <synonyms>synonyms8</synonyms>
+        </instanceDescriptor>
+        <instanceDescriptor descriptorId="50" parentDescriptorId="50" elementId="50" abbreviation="abbreviation9" externalUrl="externalUrl5"
+             unit="unit7">
+            <elementStatus>elementStatus7</elementStatus>
+            <label>label7</label>
+            <description>description11</description>
+            <synonyms>synonyms9</synonyms>
+        </instanceDescriptor>
+    </instanceDescriptors>
+    <laboratories>
+        <laboratory laboratoryId="50" parentLaboratoryId="50" laboratoryStatus="laboratoryStatus0">
+            <laboratory>laboratory0</laboratory>
+            <description>description12</description>
+        </laboratory>
+        <laboratory laboratoryId="51" parentLaboratoryId="50" laboratoryStatus="laboratoryStatus1">
+            <laboratory>laboratory1</laboratory>
+            <description>description13</description>
+        </laboratory>
+    </laboratories>
+    <units>
+        <unit unitId="50" parentUnitId="50" unit="unit3">
+            <description>description14</description>
+        </unit>
+        <unit unitId="51" parentUnitId="50" unit="unit8">
+            <description>description14</description>
+        </unit>
+        <unit unitId="52" parentUnitId="50" unit="unit9">
+            <description>description15</description>
+        </unit>
+    </units>
+    <unitConversions>
+        <unitConversion fromUnit="unit3" toUnit="unit8">
+            <formula>formula0</formula>
+        </unitConversion>
+        <unitConversion fromUnit="unit3" toUnit="unit8" multiplier="0" offset="0">
+            <formula>formula1</formula>
+        </unitConversion>
+    </unitConversions>
+</dictionary>
