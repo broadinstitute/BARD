@@ -264,18 +264,30 @@ application/vnd.bard.cap+xml;type=dictionary should give the client the entire d
             </xs:sequence>
         </xs:complexType>
         <xs:key name="Element_Key">
+            <xs:annotation>
+                <xs:documentation>A definition to say that the elementId attribute on an element must be unique throughout this document</xs:documentation>
+            </xs:annotation>
             <xs:selector xpath="dictionary/elements/element"/>
             <xs:field xpath="@elementId"/>
         </xs:key>
         <xs:keyref name="Element_KeyRef" refer="Element_Key">
+            <xs:annotation>
+                <xs:documentation>Any element that references an elementId</xs:documentation>
+            </xs:annotation>
             <xs:selector xpath="dictionary/elementHierarchies/elementHierarchy"/>
             <xs:field xpath="@parentElementId | @childElementId"/>
         </xs:keyref>
         <xs:key name="Unit_Key_Name">
+            <xs:annotation>
+                <xs:documentation>Signifies that the unit attribute on a Unit element must be unique throughout this document</xs:documentation>
+            </xs:annotation>
             <xs:selector xpath="units/unit"/>
             <xs:field xpath="@unit"/>
         </xs:key>
         <xs:keyref name="Element_Unit_KeyNameRef" refer="Unit_Key_Name">
+            <xs:annotation>
+                <xs:documentation>The unit attribute on an element object must reference a Unit Key in this document</xs:documentation>
+            </xs:annotation>
             <xs:selector xpath="elements/element"/>
             <xs:field xpath="@unit"/>
         </xs:keyref>
