@@ -44,7 +44,6 @@ will give you this element
                 </xs:simpleType>
             </xs:attribute>
             <xs:attribute name="abbreviation" type="xs:string"/>
-            <xs:attribute name="acronym" type="xs:string"/>
             <xs:attribute name="unit" type="xs:string"/>
             <xs:attribute ref="readyForExtraction" use="required"/>
         </xs:complexType>
@@ -96,10 +95,18 @@ application/vnd.bard.cap+xml;type=dictionary should give the client the entire d
                             <xs:element name="elementHierarchy" maxOccurs="unbounded">
                                 <xs:complexType>
                                     <xs:sequence>
-                                        <xs:element name="relationshipType" type="xs:string"/>
+                                        <xs:element name="relationshipType">
+                                            <xs:simpleType>
+                                                <xs:restriction base="xs:string">
+                                                  <xs:enumeration value="supported by"/>
+                                                  <xs:enumeration value="child of"/>
+                                                  <xs:enumeration value="has_a"/>
+                                                  <xs:enumeration value="derives from"/>
+                                                  <xs:enumeration value="is_a"/>
+                                                </xs:restriction>
+                                            </xs:simpleType>
+                                        </xs:element>
                                     </xs:sequence>
-                                    <xs:attribute name="elementHierarchyId" type="bardID"
-                                        use="required"/>
                                     <xs:attribute name="parentElementId" type="bardID"
                                         use="optional"/>
                                     <xs:attribute name="childElementId" type="bardID" use="required"
@@ -225,17 +232,17 @@ application/vnd.bard.cap+xml;type=dictionary should give the client the entire d
                                     <xs:attribute name="parentUnitId" type="bardID" use="optional"/>
                                     <xs:attribute name="unit" type="xs:string" use="required"/>
                                 </xs:complexType>
-                                <xs:key name="Unit_Key">
-                                    <xs:selector xpath="unit"/>
-                                    <xs:field xpath="@unitId"/>
-                                </xs:key>
-                                <xs:keyref name="Unit_KeyRef" refer="Unit_Key">
-                                    <xs:selector xpath="unit"/>
-                                    <xs:field xpath="@parentUnitId"/>
-                                </xs:keyref>
                             </xs:element>
                         </xs:sequence>
                     </xs:complexType>
+                    <xs:key name="Unit_Key">
+                        <xs:selector xpath="units/unit"/>
+                        <xs:field xpath="@unitId"/>
+                    </xs:key>
+                    <xs:keyref name="Unit_KeyRef" refer="Unit_Key">
+                        <xs:selector xpath="units/unit"/>
+                        <xs:field xpath="@parentUnitId"/>
+                    </xs:keyref>
                 </xs:element>
             </xs:sequence>
         </xs:complexType>
@@ -247,14 +254,27 @@ application/vnd.bard.cap+xml;type=dictionary should give the client the entire d
             <xs:selector xpath="dictionary/elementHierarchies/elementHierarchy"/>
             <xs:field xpath="@parentElementId | @childElementId"/>
         </xs:keyref>
-        <xs:keyref name="Element_Unit_KeyRef" refer="Element_Unit_Key">
-            <xs:selector xpath="elements/element"/>
-            <xs:field xpath="@unit"/>
-        </xs:keyref>
-        <xs:key name="Element_Unit_Key">
+        <xs:key name="Unit_Key_Name">
             <xs:selector xpath="units/unit"/>
             <xs:field xpath="@unit"/>
         </xs:key>
+        <xs:keyref name="Element_Unit_KeyNameRef" refer="Unit_Key_Name">
+            <xs:selector xpath="elements/element"/>
+            <xs:field xpath="@unit"/>
+        </xs:keyref>
+        <xs:keyref name="Unit_Descriptor_KeyRef" refer="Unit_Key_Name">
+            <xs:annotation>
+                <xs:documentation>The unit attribute on the descriptors (instance, ass and biology)
+should reference a unit</xs:documentation>
+            </xs:annotation>
+            <xs:selector
+                xpath="assayDescriptiors/assayDescriptor|biologyDescriptiors/biologyDescriptor|instanceDescriptiors/instanceDescriptor"/>
+            <xs:field xpath="@unit"/>
+        </xs:keyref>
+        <xs:keyref name="ResultType_BaseUnit_KeyNameRef" refer="Unit_Key_Name">
+            <xs:selector xpath="resultTypes/resultType"/>
+            <xs:field xpath="@baseUnit"/>
+        </xs:keyref>
     </xs:element>
     <xs:element name="resultType">
         <xs:annotation>
@@ -271,7 +291,11 @@ application/vnd.bard.cap+xml;type=resultType</xs:documentation>
             <xs:attribute name="resultTypeId" type="bardID" use="required"> </xs:attribute>
             <xs:attribute name="parentResultTypeId" type="bardID" use="optional"> </xs:attribute>
             <xs:attribute name="abbreviation" type="xs:string"/>
-            <xs:attribute name="baseUnit" type="xs:string"/>
+            <xs:attribute name="baseUnit" type="xs:string">
+                <xs:annotation>
+                    <xs:documentation>A reference to a unit</xs:documentation>
+                </xs:annotation>
+            </xs:attribute>
             <xs:attribute name="resultTypeStatus" use="required">
                 <xs:simpleType>
                     <xs:restriction base="xs:string">
@@ -863,7 +887,6 @@ Link to parent experiment
             <xs:element minOccurs="0" name="label" type="xs:string"/>
             <xs:element minOccurs="0" ref="description"/>
             <xs:element minOccurs="0" name="synonyms" type="xs:string"/>
-            <xs:element minOccurs="0" name="acronym" type="xs:string"/>
         </xs:sequence>
         <xs:attribute name="descriptorId" type="bardID" use="required"/>
         <xs:attribute name="parentDescriptorId" type="bardID"/>
