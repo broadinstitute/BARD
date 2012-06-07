@@ -12,14 +12,14 @@ class BardDomainModelGrailsPlugin {
 
     // TODO Fill in these fields
     def title = "Bard Domain Model Plugin" // Headline display name of the plugin
-    def author = "Your name"
-    def authorEmail = ""
+    def author = "Broad Chemical Biology Platform"
+    def authorEmail = "cbntsoftware@broadinstitute.org"
     def description = '''\
-Brief summary/description of the plugin.
+Provide domain objects for any objects wishing to directly access the Bard database.
 '''
 
     // URL to the plugin's documentation
-    def documentation = "http://grails.org/plugin/bard-domain-model"
+    def documentation = "https://github.com/broadinstitute/BARD/wiki/Bard-domain-objects-for-grails"
 
     // Extra (optional) plugin metadata
 
@@ -27,16 +27,16 @@ Brief summary/description of the plugin.
 //    def license = "APACHE"
 
     // Details of company behind the plugin (if there is one)
-//    def organization = [ name: "My Company", url: "http://www.my-company.com/" ]
+    def organization = [ name: "Broad Institute", url: "http://www.broadinstitute.org/" ]
 
     // Any additional developers beyond the author specified above.
-//    def developers = [ [ name: "Joe Bloggs", email: "joe@bloggs.net" ]]
+    def developers = [ [ name: "ba" ]]
 
     // Location of the plugin's issue tracker.
 //    def issueManagement = [ system: "JIRA", url: "http://jira.grails.org/browse/GPMYPLUGIN" ]
 
     // Online location of the plugin's browseable source code.
-//    def scm = [ url: "http://svn.grails-plugins.codehaus.org/browse/grails-plugins/" ]
+    def scm = [ url: "https://github.com/broadinstitute/BARD/tree/master/BardDomainModel" ]
 
     def doWithWebDescriptor = { xml ->
         // TODO Implement additions to web.xml (optional), this event occurs before
