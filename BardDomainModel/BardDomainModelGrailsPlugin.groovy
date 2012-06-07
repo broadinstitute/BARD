@@ -1,4 +1,7 @@
 class BardDomainModelGrailsPlugin {
+
+    String groupId = 'org.grails.plugin'
+
     // the plugin version
     def version = "0.1"
     // the version or versions of Grails the plugin is designed for

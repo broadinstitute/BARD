@@ -41,6 +41,7 @@
     <resource>bard.db.util.Qualifier</resource>
   </resources>
   <repositories>
+    <repository name='http://cbip-repo:8081/artifactory/repo' url='http://cbip-repo:8081/artifactory/repo/' />
     <repository name='grailsCentral' url='http://plugins.grails.org' />
     <repository name='http://repo.grails.org/grails/plugins' url='http://repo.grails.org/grails/plugins/' />
     <repository name='http://repo.grails.org/grails/core' url='http://repo.grails.org/grails/core/' />

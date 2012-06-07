@@ -2,43 +2,13 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="4a5d984a-6e04-4a7c-9ef9-70115f03398b" name="Default" comment="">
-      <change type="DELETED" beforePath="C:\dev\ssss\BARD\Data_Migration\GrailsDataMig\grails-app\domain\bard\db\dictionary\AssayDescriptor.groovy" afterPath="" />
-      <change type="DELETED" beforePath="C:\dev\ssss\BARD\Data_Migration\GrailsDataMig\grails-app\domain\bard\db\dictionary\BiologyDescriptor.groovy" afterPath="" />
-      <change type="DELETED" beforePath="C:\dev\ssss\BARD\Data_Migration\GrailsDataMig\grails-app\domain\bard\db\dictionary\Element.groovy" afterPath="" />
-      <change type="DELETED" beforePath="C:\dev\ssss\BARD\Data_Migration\GrailsDataMig\grails-app\domain\bard\db\dictionary\ElementHierarchy.groovy" afterPath="" />
-      <change type="DELETED" beforePath="C:\dev\ssss\BARD\Data_Migration\GrailsDataMig\grails-app\domain\bard\db\dictionary\InstanceDescriptor.groovy" afterPath="" />
-      <change type="DELETED" beforePath="C:\dev\ssss\BARD\Data_Migration\GrailsDataMig\grails-app\domain\bard\db\dictionary\Laboratory.groovy" afterPath="" />
-      <change type="DELETED" beforePath="C:\dev\ssss\BARD\Data_Migration\GrailsDataMig\grails-app\domain\bard\db\dictionary\Ontology.groovy" afterPath="" />
-      <change type="DELETED" beforePath="C:\dev\ssss\BARD\Data_Migration\GrailsDataMig\grails-app\domain\bard\db\dictionary\OntologyItem.groovy" afterPath="" />
-      <change type="DELETED" beforePath="C:\dev\ssss\BARD\Data_Migration\GrailsDataMig\grails-app\domain\bard\db\dictionary\ResultType.groovy" afterPath="" />
-      <change type="DELETED" beforePath="C:\dev\ssss\BARD\Data_Migration\GrailsDataMig\grails-app\domain\bard\db\dictionary\Stage.groovy" afterPath="" />
-      <change type="DELETED" beforePath="C:\dev\ssss\BARD\Data_Migration\GrailsDataMig\grails-app\domain\bard\db\dictionary\TreeRoot.groovy" afterPath="" />
-      <change type="DELETED" beforePath="C:\dev\ssss\BARD\Data_Migration\GrailsDataMig\grails-app\domain\bard\db\dictionary\Unit.groovy" afterPath="" />
-      <change type="DELETED" beforePath="C:\dev\ssss\BARD\Data_Migration\GrailsDataMig\grails-app\domain\bard\db\dictionary\UnitConversion.groovy" afterPath="" />
-      <change type="DELETED" beforePath="C:\dev\ssss\BARD\Data_Migration\GrailsDataMig\grails-app\domain\bard\db\experiment\Experiment.groovy" afterPath="" />
-      <change type="DELETED" beforePath="C:\dev\ssss\BARD\Data_Migration\GrailsDataMig\grails-app\domain\bard\db\experiment\GroupType.groovy" afterPath="" />
-      <change type="DELETED" beforePath="C:\dev\ssss\BARD\Data_Migration\GrailsDataMig\grails-app\domain\bard\db\experiment\HierarchyType.groovy" afterPath="" />
-      <change type="DELETED" beforePath="C:\dev\ssss\BARD\Data_Migration\GrailsDataMig\grails-app\domain\bard\db\experiment\Project.groovy" afterPath="" />
-      <change type="DELETED" beforePath="C:\dev\ssss\BARD\Data_Migration\GrailsDataMig\grails-app\domain\bard\db\experiment\ProjectAssay.groovy" afterPath="" />
-      <change type="DELETED" beforePath="C:\dev\ssss\BARD\Data_Migration\GrailsDataMig\grails-app\domain\bard\db\experiment\Result.groovy" afterPath="" />
-      <change type="DELETED" beforePath="C:\dev\ssss\BARD\Data_Migration\GrailsDataMig\grails-app\domain\bard\db\experiment\ResultContextItem.groovy" afterPath="" />
-      <change type="DELETED" beforePath="C:\dev\ssss\BARD\Data_Migration\GrailsDataMig\grails-app\domain\bard\db\experiment\ResultHierarchy.groovy" afterPath="" />
-      <change type="DELETED" beforePath="C:\dev\ssss\BARD\Data_Migration\GrailsDataMig\grails-app\domain\bard\db\experiment\Substance.groovy" afterPath="" />
-      <change type="DELETED" beforePath="C:\dev\ssss\BARD\Data_Migration\GrailsDataMig\grails-app\domain\bard\db\experiment\SubstanceType.groovy" afterPath="" />
-      <change type="DELETED" beforePath="C:\dev\ssss\BARD\Data_Migration\GrailsDataMig\grails-app\domain\bard\db\registration\Assay.groovy" afterPath="" />
-      <change type="DELETED" beforePath="C:\dev\ssss\BARD\Data_Migration\GrailsDataMig\grails-app\domain\bard\db\registration\AttributeType.groovy" afterPath="" />
-      <change type="DELETED" beforePath="C:\dev\ssss\BARD\Data_Migration\GrailsDataMig\grails-app\domain\bard\db\registration\ExternalAssay.groovy" afterPath="" />
-      <change type="DELETED" beforePath="C:\dev\ssss\BARD\Data_Migration\GrailsDataMig\grails-app\domain\bard\db\registration\ExternalSystem.groovy" afterPath="" />
-      <change type="DELETED" beforePath="C:\dev\ssss\BARD\Data_Migration\GrailsDataMig\grails-app\domain\bard\db\registration\Measure.groovy" afterPath="" />
-      <change type="DELETED" beforePath="C:\dev\ssss\BARD\Data_Migration\GrailsDataMig\grails-app\domain\bard\db\registration\MeasureContext.groovy" afterPath="" />
-      <change type="DELETED" beforePath="C:\dev\ssss\BARD\Data_Migration\GrailsDataMig\grails-app\domain\bard\db\registration\MeasureContextItem.groovy" afterPath="" />
-      <change type="DELETED" beforePath="C:\dev\ssss\BARD\Data_Migration\GrailsDataMig\grails-app\domain\bard\db\registration\Protocol.groovy" afterPath="" />
-      <change type="DELETED" beforePath="C:\dev\ssss\BARD\Data_Migration\GrailsDataMig\grails-app\domain\bard\db\util\Qualifier.groovy" afterPath="" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../BardDomainModel/grails-bard-domain-model-0.1.zip" afterPath="$PROJECT_DIR$/../../BardDomainModel/grails-bard-domain-model-0.1.zip" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../BardDomainModel/.idea/workspace.xml" afterPath="$PROJECT_DIR$/../../BardDomainModel/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../BardDomainModel/BardDomainModelGrailsPlugin.groovy" afterPath="$PROJECT_DIR$/../../BardDomainModel/BardDomainModelGrailsPlugin.groovy" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../BardDomainModel/application.properties" afterPath="$PROJECT_DIR$/../../BardDomainModel/application.properties" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../BardDomainModel/grails-app/conf/BuildConfig.groovy" afterPath="$PROJECT_DIR$/../../BardDomainModel/grails-app/conf/BuildConfig.groovy" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../BardDomainModel/grails-bard-domain-model-0.1.zip.sha1" afterPath="$PROJECT_DIR$/../../BardDomainModel/grails-bard-domain-model-0.1.zip.sha1" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../BardDomainModel/plugin.xml" afterPath="$PROJECT_DIR$/../../BardDomainModel/plugin.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/modules.xml" afterPath="$PROJECT_DIR$/.idea/modules.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="GrailsDataMig.iws" />
