@@ -64,4 +64,14 @@ environments {
             dialect = "org.hibernate.dialect.MySQLDialect"
 		}
 	}
+    gwalzer_bard {
+        dataSource {
+            dbCreate = 'validate'
+            url = "jdbc:oracle:thin:@barddb:1521:bardqa"
+            driverClassName = "oracle.jdbc.driver.OracleDriver"
+            dialect = bard.SequencePerTableOracleDialect
+            username = "gwalzer_bard"
+            password = "welcome2012"
+        }
+    }
 }
