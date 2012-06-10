@@ -26,7 +26,8 @@ grails.project.dependency.resolution = {
     dependencies {
         compile 'com.oracle:ojdbc6:11.2.0.2.0'
         // specify dependencies here under either 'build', 'compile', 'runtime', 'test' or 'provided' scopes eg.
-
+        test "org.spockframework:spock-core:0.6-groovy-1.8"
+        test "org.objenesis:objenesis:1.2" // used by spock for Mocking objects that have no args constructor
         // runtime 'mysql:mysql-connector-java:5.1.16'
           test 'xmlunit:xmlunit:1.3'
     }
@@ -42,5 +43,6 @@ grails.project.dependency.resolution = {
         //runtime ":yui-minify-resources:0.1.4"
 
         build ":tomcat:$grailsVersion"
+        compile ":spock:0.6"
     }
 }
