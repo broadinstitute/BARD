@@ -4,6 +4,8 @@ grails.project.test.reports.dir = "target/test-reports"
 grails.project.target.level = 1.6
 //grails.project.war.file = "target/${appName}-${appVersion}.war"
 
+//grails.project.repos.barddomain.url =  "http://cbip-repo:8081/artifactory/repo"
+
 grails.project.dependency.resolution = {
     // inherit Grails' default dependencies
     inherits("global") {
@@ -12,15 +14,11 @@ grails.project.dependency.resolution = {
     }
     log "warn" // log level of Ivy resolver, either 'error', 'warn', 'info', 'debug' or 'verbose'
     repositories {
+        grailsPlugins()
+        grailsHome()
+        mavenRepo 'http://cbip-repo:8081/artifactory/repo'
+        grailsRepo 'http://cbip-repo:8081/artifactory/repo'
         grailsCentral()
-        // uncomment the below to enable remote dependency resolution
-        // from public Maven repositories
-        //mavenCentral()
-        //mavenLocal()
-        //mavenRepo "http://snapshots.repository.codehaus.org"
-        //mavenRepo "http://repository.codehaus.org"
-        //mavenRepo "http://download.java.net/maven/2/"
-        //mavenRepo "http://repository.jboss.com/maven2/"
     }
     dependencies {
         // specify dependencies here under either 'build', 'compile', 'runtime', 'test' or 'provided' scopes eg.
@@ -30,8 +28,19 @@ grails.project.dependency.resolution = {
 
     plugins {
         build(":tomcat:$grailsVersion",
-              ":release:1.0.0") {
+              ":release:2.0.0") {
             export = false
         }
     }
 }
+
+grails.project.repos.default = "releases"
+
+grails.project.repos.releases.url = "http://cbip-repo:8081/artifactory/plugins-release-local"
+grails.project.repos.releases.username = "bcbdev"
+grails.project.repos.releases.password = "ch3mh3ad"
+
+grails.project.repos.snapshots.url = "http://cbip-repo:8081/artifactory/plugins-snapshot-local"
+grails.project.repos.snapshots.username = "bcbdev"
+grails.project.repos.snapshots.password = "ch3mh3ad"
+
