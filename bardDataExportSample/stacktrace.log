@@ -1,0 +1,798 @@
+2012-06-10 11:31:06,029 [main] ERROR StackTrace  - Full Stack Trace:
+groovy.lang.MissingMethodException: No signature of method: barddataexport.dictionary.DictionaryExportHelperService.generateAttributesForStage() is applicable for argument types: (java.lang.String, java.lang.String, java.lang.String) values: [1, 2, Published]
+Possible solutions: generateAttributesForStage(java.math.BigDecimal, java.math.BigDecimal, java.lang.String)
+	at barddataexport.dictionary.DictionaryExportHelperServiceUnitSpec.test generate Attributes For Stage #stageId #parentStageId #status(DictionaryExportHelperServiceUnitSpec.groovy:96)
+2012-06-10 11:31:06,053 [main] ERROR StackTrace  - Full Stack Trace:
+groovy.lang.MissingMethodException: No signature of method: barddataexport.dictionary.DictionaryExportHelperService.generateAttributesForStage() is applicable for argument types: (java.lang.String, java.lang.String, java.lang.String) values: [1, 2, Published]
+Possible solutions: generateAttributesForStage(java.math.BigDecimal, java.math.BigDecimal, java.lang.String)
+	at barddataexport.dictionary.DictionaryExportHelperServiceUnitSpec.test generate Attributes For Stage #stageId #parentStageId #status(DictionaryExportHelperServiceUnitSpec.groovy:96)
+2012-06-10 11:31:06,141 [main] ERROR StackTrace  - Full Stack Trace:
+groovy.lang.MissingMethodException: No signature of method: barddataexport.dictionary.DictionaryExportHelperService.generateAttributesForStage() is applicable for argument types: (java.lang.String, java.lang.String, java.lang.String) values: [1, 2, Published]
+Possible solutions: generateAttributesForStage(java.math.BigDecimal, java.math.BigDecimal, java.lang.String)
+	at barddataexport.dictionary.DictionaryExportHelperServiceUnitSpec.test generate Attributes For Stage #stageId #parentStageId #status(DictionaryExportHelperServiceUnitSpec.groovy:96)
+2012-06-10 11:31:06,143 [main] ERROR StackTrace  - Full Stack Trace:
+groovy.lang.MissingMethodException: No signature of method: barddataexport.dictionary.DictionaryExportHelperService.generateAttributesForStage() is applicable for argument types: (java.lang.String, java.lang.String, java.lang.String) values: [1, 2, Published]
+Possible solutions: generateAttributesForStage(java.math.BigDecimal, java.math.BigDecimal, java.lang.String)
+	at barddataexport.dictionary.DictionaryExportHelperServiceUnitSpec.test generate Attributes For Stage #stageId #parentStageId #status(DictionaryExportHelperServiceUnitSpec.groovy:96)
+2012-06-10 11:31:06,152 [main] ERROR StackTrace  - Full Stack Trace:
+groovy.lang.MissingMethodException: No signature of method: barddataexport.dictionary.DictionaryExportHelperService.generateAttributesForStage() is applicable for argument types: (java.lang.String, java.lang.String, java.lang.String) values: [1, 2, Published]
+Possible solutions: generateAttributesForStage(java.math.BigDecimal, java.math.BigDecimal, java.lang.String)
+	at barddataexport.dictionary.DictionaryExportHelperServiceUnitSpec.test generate Attributes For Stage #stageId #parentStageId #status(DictionaryExportHelperServiceUnitSpec.groovy:96)
+2012-06-10 11:31:06,153 [main] ERROR StackTrace  - Full Stack Trace:
+groovy.lang.MissingMethodException: No signature of method: barddataexport.dictionary.DictionaryExportHelperService.generateAttributesForStage() is applicable for argument types: (java.lang.String, java.lang.String, java.lang.String) values: [1, 2, Published]
+Possible solutions: generateAttributesForStage(java.math.BigDecimal, java.math.BigDecimal, java.lang.String)
+	at barddataexport.dictionary.DictionaryExportHelperServiceUnitSpec.test generate Attributes For Stage #stageId #parentStageId #status(DictionaryExportHelperServiceUnitSpec.groovy:96)
+2012-06-10 11:31:06,160 [main] ERROR StackTrace  - Full Stack Trace:
+groovy.lang.MissingMethodException: No signature of method: barddataexport.dictionary.DictionaryExportHelperService.generateAttributesForStage() is applicable for argument types: (java.lang.String, java.lang.String, java.lang.String) values: [2, , Published]
+Possible solutions: generateAttributesForStage(java.math.BigDecimal, java.math.BigDecimal, java.lang.String)
+	at barddataexport.dictionary.DictionaryExportHelperServiceUnitSpec.test generate Attributes For Stage #stageId #parentStageId #status(DictionaryExportHelperServiceUnitSpec.groovy:96)
+2012-06-10 11:31:06,162 [main] ERROR StackTrace  - Full Stack Trace:
+groovy.lang.MissingMethodException: No signature of method: barddataexport.dictionary.DictionaryExportHelperService.generateAttributesForStage() is applicable for argument types: (java.lang.String, java.lang.String, java.lang.String) values: [2, , Published]
+Possible solutions: generateAttributesForStage(java.math.BigDecimal, java.math.BigDecimal, java.lang.String)
+	at barddataexport.dictionary.DictionaryExportHelperServiceUnitSpec.test generate Attributes For Stage #stageId #parentStageId #status(DictionaryExportHelperServiceUnitSpec.groovy:96)
+2012-06-10 11:31:06,171 [main] ERROR StackTrace  - Full Stack Trace:
+groovy.lang.MissingMethodException: No signature of method: barddataexport.dictionary.DictionaryExportHelperService.generateAttributesForStage() is applicable for argument types: (java.lang.String, java.lang.String, java.lang.String) values: [2, , Published]
+Possible solutions: generateAttributesForStage(java.math.BigDecimal, java.math.BigDecimal, java.lang.String)
+	at barddataexport.dictionary.DictionaryExportHelperServiceUnitSpec.test generate Attributes For Stage #stageId #parentStageId #status(DictionaryExportHelperServiceUnitSpec.groovy:96)
+2012-06-10 11:31:06,172 [main] ERROR StackTrace  - Full Stack Trace:
+groovy.lang.MissingMethodException: No signature of method: barddataexport.dictionary.DictionaryExportHelperService.generateAttributesForStage() is applicable for argument types: (java.lang.String, java.lang.String, java.lang.String) values: [2, , Published]
+Possible solutions: generateAttributesForStage(java.math.BigDecimal, java.math.BigDecimal, java.lang.String)
+	at barddataexport.dictionary.DictionaryExportHelperServiceUnitSpec.test generate Attributes For Stage #stageId #parentStageId #status(DictionaryExportHelperServiceUnitSpec.groovy:96)
+2012-06-10 11:31:06,178 [main] ERROR StackTrace  - Full Stack Trace:
+groovy.lang.MissingMethodException: No signature of method: barddataexport.dictionary.DictionaryExportHelperService.generateAttributesForStage() is applicable for argument types: (java.lang.String, java.lang.String, java.lang.String) values: [2, , Published]
+Possible solutions: generateAttributesForStage(java.math.BigDecimal, java.math.BigDecimal, java.lang.String)
+	at barddataexport.dictionary.DictionaryExportHelperServiceUnitSpec.test generate Attributes For Stage #stageId #parentStageId #status(DictionaryExportHelperServiceUnitSpec.groovy:96)
+2012-06-10 11:31:06,179 [main] ERROR StackTrace  - Full Stack Trace:
+groovy.lang.MissingMethodException: No signature of method: barddataexport.dictionary.DictionaryExportHelperService.generateAttributesForStage() is applicable for argument types: (java.lang.String, java.lang.String, java.lang.String) values: [2, , Published]
+Possible solutions: generateAttributesForStage(java.math.BigDecimal, java.math.BigDecimal, java.lang.String)
+	at barddataexport.dictionary.DictionaryExportHelperServiceUnitSpec.test generate Attributes For Stage #stageId #parentStageId #status(DictionaryExportHelperServiceUnitSpec.groovy:96)
+2012-06-10 11:31:06,183 [main] ERROR StackTrace  - Full Stack Trace:
+groovy.lang.MissingMethodException: No signature of method: barddataexport.dictionary.DictionaryExportHelperService.generateAttributesForStage() is applicable for argument types: (java.lang.String, java.lang.String, java.lang.String) values: [3, 1, ]
+Possible solutions: generateAttributesForStage(java.math.BigDecimal, java.math.BigDecimal, java.lang.String)
+	at barddataexport.dictionary.DictionaryExportHelperServiceUnitSpec.test generate Attributes For Stage #stageId #parentStageId #status(DictionaryExportHelperServiceUnitSpec.groovy:96)
+2012-06-10 11:31:06,184 [main] ERROR StackTrace  - Full Stack Trace:
+groovy.lang.MissingMethodException: No signature of method: barddataexport.dictionary.DictionaryExportHelperService.generateAttributesForStage() is applicable for argument types: (java.lang.String, java.lang.String, java.lang.String) values: [3, 1, ]
+Possible solutions: generateAttributesForStage(java.math.BigDecimal, java.math.BigDecimal, java.lang.String)
+	at barddataexport.dictionary.DictionaryExportHelperServiceUnitSpec.test generate Attributes For Stage #stageId #parentStageId #status(DictionaryExportHelperServiceUnitSpec.groovy:96)
+2012-06-10 11:31:06,196 [main] ERROR StackTrace  - Full Stack Trace:
+groovy.lang.MissingMethodException: No signature of method: barddataexport.dictionary.DictionaryExportHelperService.generateAttributesForStage() is applicable for argument types: (java.lang.String, java.lang.String, java.lang.String) values: [3, 1, ]
+Possible solutions: generateAttributesForStage(java.math.BigDecimal, java.math.BigDecimal, java.lang.String)
+	at barddataexport.dictionary.DictionaryExportHelperServiceUnitSpec.test generate Attributes For Stage #stageId #parentStageId #status(DictionaryExportHelperServiceUnitSpec.groovy:96)
+2012-06-10 11:31:06,197 [main] ERROR StackTrace  - Full Stack Trace:
+groovy.lang.MissingMethodException: No signature of method: barddataexport.dictionary.DictionaryExportHelperService.generateAttributesForStage() is applicable for argument types: (java.lang.String, java.lang.String, java.lang.String) values: [3, 1, ]
+Possible solutions: generateAttributesForStage(java.math.BigDecimal, java.math.BigDecimal, java.lang.String)
+	at barddataexport.dictionary.DictionaryExportHelperServiceUnitSpec.test generate Attributes For Stage #stageId #parentStageId #status(DictionaryExportHelperServiceUnitSpec.groovy:96)
+2012-06-10 11:31:06,202 [main] ERROR StackTrace  - Full Stack Trace:
+groovy.lang.MissingMethodException: No signature of method: barddataexport.dictionary.DictionaryExportHelperService.generateAttributesForStage() is applicable for argument types: (java.lang.String, java.lang.String, java.lang.String) values: [3, 1, ]
+Possible solutions: generateAttributesForStage(java.math.BigDecimal, java.math.BigDecimal, java.lang.String)
+	at barddataexport.dictionary.DictionaryExportHelperServiceUnitSpec.test generate Attributes For Stage #stageId #parentStageId #status(DictionaryExportHelperServiceUnitSpec.groovy:96)
+2012-06-10 11:31:06,203 [main] ERROR StackTrace  - Full Stack Trace:
+groovy.lang.MissingMethodException: No signature of method: barddataexport.dictionary.DictionaryExportHelperService.generateAttributesForStage() is applicable for argument types: (java.lang.String, java.lang.String, java.lang.String) values: [3, 1, ]
+Possible solutions: generateAttributesForStage(java.math.BigDecimal, java.math.BigDecimal, java.lang.String)
+	at barddataexport.dictionary.DictionaryExportHelperServiceUnitSpec.test generate Attributes For Stage #stageId #parentStageId #status(DictionaryExportHelperServiceUnitSpec.groovy:96)
+2012-06-10 11:31:06,212 [main] ERROR StackTrace  - Full Stack Trace:
+groovy.lang.MissingMethodException: No signature of method: barddataexport.dictionary.DictionaryExportHelperService.generateAttributesForStage() is applicable for argument types: (java.lang.String, java.lang.String, java.lang.String) values: [, , Published]
+Possible solutions: generateAttributesForStage(java.math.BigDecimal, java.math.BigDecimal, java.lang.String)
+	at barddataexport.dictionary.DictionaryExportHelperServiceUnitSpec.test generate Attributes For Stage #stageId #parentStageId #status(DictionaryExportHelperServiceUnitSpec.groovy:96)
+2012-06-10 11:31:06,212 [main] ERROR StackTrace  - Full Stack Trace:
+groovy.lang.MissingMethodException: No signature of method: barddataexport.dictionary.DictionaryExportHelperService.generateAttributesForStage() is applicable for argument types: (java.lang.String, java.lang.String, java.lang.String) values: [, , Published]
+Possible solutions: generateAttributesForStage(java.math.BigDecimal, java.math.BigDecimal, java.lang.String)
+	at barddataexport.dictionary.DictionaryExportHelperServiceUnitSpec.test generate Attributes For Stage #stageId #parentStageId #status(DictionaryExportHelperServiceUnitSpec.groovy:96)
+2012-06-10 11:31:06,224 [main] ERROR StackTrace  - Full Stack Trace:
+groovy.lang.MissingMethodException: No signature of method: barddataexport.dictionary.DictionaryExportHelperService.generateAttributesForStage() is applicable for argument types: (java.lang.String, java.lang.String, java.lang.String) values: [, , Published]
+Possible solutions: generateAttributesForStage(java.math.BigDecimal, java.math.BigDecimal, java.lang.String)
+	at barddataexport.dictionary.DictionaryExportHelperServiceUnitSpec.test generate Attributes For Stage #stageId #parentStageId #status(DictionaryExportHelperServiceUnitSpec.groovy:96)
+2012-06-10 11:31:06,225 [main] ERROR StackTrace  - Full Stack Trace:
+groovy.lang.MissingMethodException: No signature of method: barddataexport.dictionary.DictionaryExportHelperService.generateAttributesForStage() is applicable for argument types: (java.lang.String, java.lang.String, java.lang.String) values: [, , Published]
+Possible solutions: generateAttributesForStage(java.math.BigDecimal, java.math.BigDecimal, java.lang.String)
+	at barddataexport.dictionary.DictionaryExportHelperServiceUnitSpec.test generate Attributes For Stage #stageId #parentStageId #status(DictionaryExportHelperServiceUnitSpec.groovy:96)
+2012-06-10 11:31:06,228 [main] ERROR StackTrace  - Full Stack Trace:
+groovy.lang.MissingMethodException: No signature of method: barddataexport.dictionary.DictionaryExportHelperService.generateAttributesForStage() is applicable for argument types: (java.lang.String, java.lang.String, java.lang.String) values: [, , Published]
+Possible solutions: generateAttributesForStage(java.math.BigDecimal, java.math.BigDecimal, java.lang.String)
+	at barddataexport.dictionary.DictionaryExportHelperServiceUnitSpec.test generate Attributes For Stage #stageId #parentStageId #status(DictionaryExportHelperServiceUnitSpec.groovy:96)
+2012-06-10 11:31:06,229 [main] ERROR StackTrace  - Full Stack Trace:
+groovy.lang.MissingMethodException: No signature of method: barddataexport.dictionary.DictionaryExportHelperService.generateAttributesForStage() is applicable for argument types: (java.lang.String, java.lang.String, java.lang.String) values: [, , Published]
+Possible solutions: generateAttributesForStage(java.math.BigDecimal, java.math.BigDecimal, java.lang.String)
+	at barddataexport.dictionary.DictionaryExportHelperServiceUnitSpec.test generate Attributes For Stage #stageId #parentStageId #status(DictionaryExportHelperServiceUnitSpec.groovy:96)
+2012-06-10 11:31:41,296 [main] ERROR StackTrace  - Full Stack Trace:
+groovy.lang.MissingMethodException: No signature of method: barddataexport.dictionary.DictionaryExportHelperService.generateAttributesForStage() is applicable for argument types: (java.lang.String, java.lang.String, java.lang.String) values: [1, 2, Published]
+Possible solutions: generateAttributesForStage(java.math.BigDecimal, java.math.BigDecimal, java.lang.String)
+	at barddataexport.dictionary.DictionaryExportHelperServiceUnitSpec.test generate Attributes For Stage #stageId #parentStageId #status(DictionaryExportHelperServiceUnitSpec.groovy:96)
+2012-06-10 11:31:41,319 [main] ERROR StackTrace  - Full Stack Trace:
+groovy.lang.MissingMethodException: No signature of method: barddataexport.dictionary.DictionaryExportHelperService.generateAttributesForStage() is applicable for argument types: (java.lang.String, java.lang.String, java.lang.String) values: [1, 2, Published]
+Possible solutions: generateAttributesForStage(java.math.BigDecimal, java.math.BigDecimal, java.lang.String)
+	at barddataexport.dictionary.DictionaryExportHelperServiceUnitSpec.test generate Attributes For Stage #stageId #parentStageId #status(DictionaryExportHelperServiceUnitSpec.groovy:96)
+2012-06-10 11:31:41,354 [main] ERROR StackTrace  - Full Stack Trace:
+groovy.lang.MissingMethodException: No signature of method: barddataexport.dictionary.DictionaryExportHelperService.generateAttributesForStage() is applicable for argument types: (java.lang.String, java.lang.String, java.lang.String) values: [1, 2, Published]
+Possible solutions: generateAttributesForStage(java.math.BigDecimal, java.math.BigDecimal, java.lang.String)
+	at barddataexport.dictionary.DictionaryExportHelperServiceUnitSpec.test generate Attributes For Stage #stageId #parentStageId #status(DictionaryExportHelperServiceUnitSpec.groovy:96)
+2012-06-10 11:31:41,355 [main] ERROR StackTrace  - Full Stack Trace:
+groovy.lang.MissingMethodException: No signature of method: barddataexport.dictionary.DictionaryExportHelperService.generateAttributesForStage() is applicable for argument types: (java.lang.String, java.lang.String, java.lang.String) values: [1, 2, Published]
+Possible solutions: generateAttributesForStage(java.math.BigDecimal, java.math.BigDecimal, java.lang.String)
+	at barddataexport.dictionary.DictionaryExportHelperServiceUnitSpec.test generate Attributes For Stage #stageId #parentStageId #status(DictionaryExportHelperServiceUnitSpec.groovy:96)
+2012-06-10 11:31:41,362 [main] ERROR StackTrace  - Full Stack Trace:
+groovy.lang.MissingMethodException: No signature of method: barddataexport.dictionary.DictionaryExportHelperService.generateAttributesForStage() is applicable for argument types: (java.lang.String, java.lang.String, java.lang.String) values: [1, 2, Published]
+Possible solutions: generateAttributesForStage(java.math.BigDecimal, java.math.BigDecimal, java.lang.String)
+	at barddataexport.dictionary.DictionaryExportHelperServiceUnitSpec.test generate Attributes For Stage #stageId #parentStageId #status(DictionaryExportHelperServiceUnitSpec.groovy:96)
+2012-06-10 11:31:41,363 [main] ERROR StackTrace  - Full Stack Trace:
+groovy.lang.MissingMethodException: No signature of method: barddataexport.dictionary.DictionaryExportHelperService.generateAttributesForStage() is applicable for argument types: (java.lang.String, java.lang.String, java.lang.String) values: [1, 2, Published]
+Possible solutions: generateAttributesForStage(java.math.BigDecimal, java.math.BigDecimal, java.lang.String)
+	at barddataexport.dictionary.DictionaryExportHelperServiceUnitSpec.test generate Attributes For Stage #stageId #parentStageId #status(DictionaryExportHelperServiceUnitSpec.groovy:96)
+2012-06-10 11:31:41,370 [main] ERROR StackTrace  - Full Stack Trace:
+groovy.lang.MissingMethodException: No signature of method: barddataexport.dictionary.DictionaryExportHelperService.generateAttributesForStage() is applicable for argument types: (java.lang.String, java.lang.String, java.lang.String) values: [2, , Published]
+Possible solutions: generateAttributesForStage(java.math.BigDecimal, java.math.BigDecimal, java.lang.String)
+	at barddataexport.dictionary.DictionaryExportHelperServiceUnitSpec.test generate Attributes For Stage #stageId #parentStageId #status(DictionaryExportHelperServiceUnitSpec.groovy:96)
+2012-06-10 11:31:41,371 [main] ERROR StackTrace  - Full Stack Trace:
+groovy.lang.MissingMethodException: No signature of method: barddataexport.dictionary.DictionaryExportHelperService.generateAttributesForStage() is applicable for argument types: (java.lang.String, java.lang.String, java.lang.String) values: [2, , Published]
+Possible solutions: generateAttributesForStage(java.math.BigDecimal, java.math.BigDecimal, java.lang.String)
+	at barddataexport.dictionary.DictionaryExportHelperServiceUnitSpec.test generate Attributes For Stage #stageId #parentStageId #status(DictionaryExportHelperServiceUnitSpec.groovy:96)
+2012-06-10 11:31:41,382 [main] ERROR StackTrace  - Full Stack Trace:
+groovy.lang.MissingMethodException: No signature of method: barddataexport.dictionary.DictionaryExportHelperService.generateAttributesForStage() is applicable for argument types: (java.lang.String, java.lang.String, java.lang.String) values: [2, , Published]
+Possible solutions: generateAttributesForStage(java.math.BigDecimal, java.math.BigDecimal, java.lang.String)
+	at barddataexport.dictionary.DictionaryExportHelperServiceUnitSpec.test generate Attributes For Stage #stageId #parentStageId #status(DictionaryExportHelperServiceUnitSpec.groovy:96)
+2012-06-10 11:31:41,383 [main] ERROR StackTrace  - Full Stack Trace:
+groovy.lang.MissingMethodException: No signature of method: barddataexport.dictionary.DictionaryExportHelperService.generateAttributesForStage() is applicable for argument types: (java.lang.String, java.lang.String, java.lang.String) values: [2, , Published]
+Possible solutions: generateAttributesForStage(java.math.BigDecimal, java.math.BigDecimal, java.lang.String)
+	at barddataexport.dictionary.DictionaryExportHelperServiceUnitSpec.test generate Attributes For Stage #stageId #parentStageId #status(DictionaryExportHelperServiceUnitSpec.groovy:96)
+2012-06-10 11:31:41,387 [main] ERROR StackTrace  - Full Stack Trace:
+groovy.lang.MissingMethodException: No signature of method: barddataexport.dictionary.DictionaryExportHelperService.generateAttributesForStage() is applicable for argument types: (java.lang.String, java.lang.String, java.lang.String) values: [2, , Published]
+Possible solutions: generateAttributesForStage(java.math.BigDecimal, java.math.BigDecimal, java.lang.String)
+	at barddataexport.dictionary.DictionaryExportHelperServiceUnitSpec.test generate Attributes For Stage #stageId #parentStageId #status(DictionaryExportHelperServiceUnitSpec.groovy:96)
+2012-06-10 11:31:41,387 [main] ERROR StackTrace  - Full Stack Trace:
+groovy.lang.MissingMethodException: No signature of method: barddataexport.dictionary.DictionaryExportHelperService.generateAttributesForStage() is applicable for argument types: (java.lang.String, java.lang.String, java.lang.String) values: [2, , Published]
+Possible solutions: generateAttributesForStage(java.math.BigDecimal, java.math.BigDecimal, java.lang.String)
+	at barddataexport.dictionary.DictionaryExportHelperServiceUnitSpec.test generate Attributes For Stage #stageId #parentStageId #status(DictionaryExportHelperServiceUnitSpec.groovy:96)
+2012-06-10 11:31:41,394 [main] ERROR StackTrace  - Full Stack Trace:
+groovy.lang.MissingMethodException: No signature of method: barddataexport.dictionary.DictionaryExportHelperService.generateAttributesForStage() is applicable for argument types: (java.lang.String, java.lang.String, java.lang.String) values: [3, 1, ]
+Possible solutions: generateAttributesForStage(java.math.BigDecimal, java.math.BigDecimal, java.lang.String)
+	at barddataexport.dictionary.DictionaryExportHelperServiceUnitSpec.test generate Attributes For Stage #stageId #parentStageId #status(DictionaryExportHelperServiceUnitSpec.groovy:96)
+2012-06-10 11:31:41,395 [main] ERROR StackTrace  - Full Stack Trace:
+groovy.lang.MissingMethodException: No signature of method: barddataexport.dictionary.DictionaryExportHelperService.generateAttributesForStage() is applicable for argument types: (java.lang.String, java.lang.String, java.lang.String) values: [3, 1, ]
+Possible solutions: generateAttributesForStage(java.math.BigDecimal, java.math.BigDecimal, java.lang.String)
+	at barddataexport.dictionary.DictionaryExportHelperServiceUnitSpec.test generate Attributes For Stage #stageId #parentStageId #status(DictionaryExportHelperServiceUnitSpec.groovy:96)
+2012-06-10 11:31:41,407 [main] ERROR StackTrace  - Full Stack Trace:
+groovy.lang.MissingMethodException: No signature of method: barddataexport.dictionary.DictionaryExportHelperService.generateAttributesForStage() is applicable for argument types: (java.lang.String, java.lang.String, java.lang.String) values: [3, 1, ]
+Possible solutions: generateAttributesForStage(java.math.BigDecimal, java.math.BigDecimal, java.lang.String)
+	at barddataexport.dictionary.DictionaryExportHelperServiceUnitSpec.test generate Attributes For Stage #stageId #parentStageId #status(DictionaryExportHelperServiceUnitSpec.groovy:96)
+2012-06-10 11:31:41,408 [main] ERROR StackTrace  - Full Stack Trace:
+groovy.lang.MissingMethodException: No signature of method: barddataexport.dictionary.DictionaryExportHelperService.generateAttributesForStage() is applicable for argument types: (java.lang.String, java.lang.String, java.lang.String) values: [3, 1, ]
+Possible solutions: generateAttributesForStage(java.math.BigDecimal, java.math.BigDecimal, java.lang.String)
+	at barddataexport.dictionary.DictionaryExportHelperServiceUnitSpec.test generate Attributes For Stage #stageId #parentStageId #status(DictionaryExportHelperServiceUnitSpec.groovy:96)
+2012-06-10 11:31:41,414 [main] ERROR StackTrace  - Full Stack Trace:
+groovy.lang.MissingMethodException: No signature of method: barddataexport.dictionary.DictionaryExportHelperService.generateAttributesForStage() is applicable for argument types: (java.lang.String, java.lang.String, java.lang.String) values: [3, 1, ]
+Possible solutions: generateAttributesForStage(java.math.BigDecimal, java.math.BigDecimal, java.lang.String)
+	at barddataexport.dictionary.DictionaryExportHelperServiceUnitSpec.test generate Attributes For Stage #stageId #parentStageId #status(DictionaryExportHelperServiceUnitSpec.groovy:96)
+2012-06-10 11:31:41,415 [main] ERROR StackTrace  - Full Stack Trace:
+groovy.lang.MissingMethodException: No signature of method: barddataexport.dictionary.DictionaryExportHelperService.generateAttributesForStage() is applicable for argument types: (java.lang.String, java.lang.String, java.lang.String) values: [3, 1, ]
+Possible solutions: generateAttributesForStage(java.math.BigDecimal, java.math.BigDecimal, java.lang.String)
+	at barddataexport.dictionary.DictionaryExportHelperServiceUnitSpec.test generate Attributes For Stage #stageId #parentStageId #status(DictionaryExportHelperServiceUnitSpec.groovy:96)
+2012-06-10 11:31:41,419 [main] ERROR StackTrace  - Full Stack Trace:
+groovy.lang.MissingMethodException: No signature of method: barddataexport.dictionary.DictionaryExportHelperService.generateAttributesForStage() is applicable for argument types: (java.lang.String, java.lang.String, java.lang.String) values: [, , Published]
+Possible solutions: generateAttributesForStage(java.math.BigDecimal, java.math.BigDecimal, java.lang.String)
+	at barddataexport.dictionary.DictionaryExportHelperServiceUnitSpec.test generate Attributes For Stage #stageId #parentStageId #status(DictionaryExportHelperServiceUnitSpec.groovy:96)
+2012-06-10 11:31:41,419 [main] ERROR StackTrace  - Full Stack Trace:
+groovy.lang.MissingMethodException: No signature of method: barddataexport.dictionary.DictionaryExportHelperService.generateAttributesForStage() is applicable for argument types: (java.lang.String, java.lang.String, java.lang.String) values: [, , Published]
+Possible solutions: generateAttributesForStage(java.math.BigDecimal, java.math.BigDecimal, java.lang.String)
+	at barddataexport.dictionary.DictionaryExportHelperServiceUnitSpec.test generate Attributes For Stage #stageId #parentStageId #status(DictionaryExportHelperServiceUnitSpec.groovy:96)
+2012-06-10 11:31:41,431 [main] ERROR StackTrace  - Full Stack Trace:
+groovy.lang.MissingMethodException: No signature of method: barddataexport.dictionary.DictionaryExportHelperService.generateAttributesForStage() is applicable for argument types: (java.lang.String, java.lang.String, java.lang.String) values: [, , Published]
+Possible solutions: generateAttributesForStage(java.math.BigDecimal, java.math.BigDecimal, java.lang.String)
+	at barddataexport.dictionary.DictionaryExportHelperServiceUnitSpec.test generate Attributes For Stage #stageId #parentStageId #status(DictionaryExportHelperServiceUnitSpec.groovy:96)
+2012-06-10 11:31:41,431 [main] ERROR StackTrace  - Full Stack Trace:
+groovy.lang.MissingMethodException: No signature of method: barddataexport.dictionary.DictionaryExportHelperService.generateAttributesForStage() is applicable for argument types: (java.lang.String, java.lang.String, java.lang.String) values: [, , Published]
+Possible solutions: generateAttributesForStage(java.math.BigDecimal, java.math.BigDecimal, java.lang.String)
+	at barddataexport.dictionary.DictionaryExportHelperServiceUnitSpec.test generate Attributes For Stage #stageId #parentStageId #status(DictionaryExportHelperServiceUnitSpec.groovy:96)
+2012-06-10 11:31:41,434 [main] ERROR StackTrace  - Full Stack Trace:
+groovy.lang.MissingMethodException: No signature of method: barddataexport.dictionary.DictionaryExportHelperService.generateAttributesForStage() is applicable for argument types: (java.lang.String, java.lang.String, java.lang.String) values: [, , Published]
+Possible solutions: generateAttributesForStage(java.math.BigDecimal, java.math.BigDecimal, java.lang.String)
+	at barddataexport.dictionary.DictionaryExportHelperServiceUnitSpec.test generate Attributes For Stage #stageId #parentStageId #status(DictionaryExportHelperServiceUnitSpec.groovy:96)
+2012-06-10 11:31:41,434 [main] ERROR StackTrace  - Full Stack Trace:
+groovy.lang.MissingMethodException: No signature of method: barddataexport.dictionary.DictionaryExportHelperService.generateAttributesForStage() is applicable for argument types: (java.lang.String, java.lang.String, java.lang.String) values: [, , Published]
+Possible solutions: generateAttributesForStage(java.math.BigDecimal, java.math.BigDecimal, java.lang.String)
+	at barddataexport.dictionary.DictionaryExportHelperServiceUnitSpec.test generate Attributes For Stage #stageId #parentStageId #status(DictionaryExportHelperServiceUnitSpec.groovy:96)
+2012-06-10 11:32:14,198 [main] ERROR StackTrace  - Full Stack Trace:
+Condition not satisfied:
+
+mapResults == results
+|          |  |
+|          |  [stageId:1, parentStageId:2, status:Published]
+|          false
+[stageId:1, stageStatus:Published, parentStageId:2]
+
+	at barddataexport.dictionary.DictionaryExportHelperServiceUnitSpec.test generate Attributes For Stage #stageId #parentStageId #status(DictionaryExportHelperServiceUnitSpec.groovy:98)
+2012-06-10 11:32:14,204 [main] ERROR StackTrace  - Full Stack Trace:
+Condition not satisfied:
+
+mapResults == results
+|          |  |
+|          |  [stageId:1, parentStageId:2, status:Published]
+|          false
+[stageId:1, stageStatus:Published, parentStageId:2]
+
+	at barddataexport.dictionary.DictionaryExportHelperServiceUnitSpec.test generate Attributes For Stage #stageId #parentStageId #status(DictionaryExportHelperServiceUnitSpec.groovy:98)
+2012-06-10 11:32:14,218 [main] ERROR StackTrace  - Full Stack Trace:
+junit.framework.AssertionFailedError: Condition not satisfied:
+
+mapResults == results
+|          |  |
+|          |  [stageId:1, parentStageId:2, status:Published]
+|          false
+[stageId:1, stageStatus:Published, parentStageId:2]
+
+	at barddataexport.dictionary.DictionaryExportHelperServiceUnitSpec.test generate Attributes For Stage #stageId #parentStageId #status(DictionaryExportHelperServiceUnitSpec.groovy:98)
+2012-06-10 11:32:14,218 [main] ERROR StackTrace  - Full Stack Trace:
+junit.framework.AssertionFailedError: Condition not satisfied:
+
+mapResults == results
+|          |  |
+|          |  [stageId:1, parentStageId:2, status:Published]
+|          false
+[stageId:1, stageStatus:Published, parentStageId:2]
+
+	at barddataexport.dictionary.DictionaryExportHelperServiceUnitSpec.test generate Attributes For Stage #stageId #parentStageId #status(DictionaryExportHelperServiceUnitSpec.groovy:98)
+2012-06-10 11:32:14,222 [main] ERROR StackTrace  - Full Stack Trace:
+junit.framework.AssertionFailedError: Condition not satisfied:
+
+mapResults == results
+|          |  |
+|          |  [stageId:1, parentStageId:2, status:Published]
+|          false
+[stageId:1, stageStatus:Published, parentStageId:2]
+
+	at barddataexport.dictionary.DictionaryExportHelperServiceUnitSpec.test generate Attributes For Stage #stageId #parentStageId #status(DictionaryExportHelperServiceUnitSpec.groovy:98)
+2012-06-10 11:32:14,223 [main] ERROR StackTrace  - Full Stack Trace:
+junit.framework.AssertionFailedError: Condition not satisfied:
+
+mapResults == results
+|          |  |
+|          |  [stageId:1, parentStageId:2, status:Published]
+|          false
+[stageId:1, stageStatus:Published, parentStageId:2]
+
+	at barddataexport.dictionary.DictionaryExportHelperServiceUnitSpec.test generate Attributes For Stage #stageId #parentStageId #status(DictionaryExportHelperServiceUnitSpec.groovy:98)
+2012-06-10 11:32:14,227 [main] ERROR StackTrace  - Full Stack Trace:
+Condition not satisfied:
+
+mapResults == results
+|          |  |
+|          |  [stageId:2, status:Published]
+|          false
+[stageId:2, stageStatus:Published]
+
+	at barddataexport.dictionary.DictionaryExportHelperServiceUnitSpec.test generate Attributes For Stage #stageId #parentStageId #status(DictionaryExportHelperServiceUnitSpec.groovy:98)
+2012-06-10 11:32:14,227 [main] ERROR StackTrace  - Full Stack Trace:
+Condition not satisfied:
+
+mapResults == results
+|          |  |
+|          |  [stageId:2, status:Published]
+|          false
+[stageId:2, stageStatus:Published]
+
+	at barddataexport.dictionary.DictionaryExportHelperServiceUnitSpec.test generate Attributes For Stage #stageId #parentStageId #status(DictionaryExportHelperServiceUnitSpec.groovy:98)
+2012-06-10 11:32:14,228 [main] ERROR StackTrace  - Full Stack Trace:
+junit.framework.AssertionFailedError: Condition not satisfied:
+
+mapResults == results
+|          |  |
+|          |  [stageId:2, status:Published]
+|          false
+[stageId:2, stageStatus:Published]
+
+	at barddataexport.dictionary.DictionaryExportHelperServiceUnitSpec.test generate Attributes For Stage #stageId #parentStageId #status(DictionaryExportHelperServiceUnitSpec.groovy:98)
+2012-06-10 11:32:14,228 [main] ERROR StackTrace  - Full Stack Trace:
+junit.framework.AssertionFailedError: Condition not satisfied:
+
+mapResults == results
+|          |  |
+|          |  [stageId:2, status:Published]
+|          false
+[stageId:2, stageStatus:Published]
+
+	at barddataexport.dictionary.DictionaryExportHelperServiceUnitSpec.test generate Attributes For Stage #stageId #parentStageId #status(DictionaryExportHelperServiceUnitSpec.groovy:98)
+2012-06-10 11:32:14,228 [main] ERROR StackTrace  - Full Stack Trace:
+junit.framework.AssertionFailedError: Condition not satisfied:
+
+mapResults == results
+|          |  |
+|          |  [stageId:2, status:Published]
+|          false
+[stageId:2, stageStatus:Published]
+
+	at barddataexport.dictionary.DictionaryExportHelperServiceUnitSpec.test generate Attributes For Stage #stageId #parentStageId #status(DictionaryExportHelperServiceUnitSpec.groovy:98)
+2012-06-10 11:32:14,228 [main] ERROR StackTrace  - Full Stack Trace:
+junit.framework.AssertionFailedError: Condition not satisfied:
+
+mapResults == results
+|          |  |
+|          |  [stageId:2, status:Published]
+|          false
+[stageId:2, stageStatus:Published]
+
+	at barddataexport.dictionary.DictionaryExportHelperServiceUnitSpec.test generate Attributes For Stage #stageId #parentStageId #status(DictionaryExportHelperServiceUnitSpec.groovy:98)
+2012-06-10 11:32:14,232 [main] ERROR StackTrace  - Full Stack Trace:
+Condition not satisfied:
+
+mapResults == results
+|          |  |
+|          |  [status:Published]
+|          false
+[stageStatus:Published]
+
+	at barddataexport.dictionary.DictionaryExportHelperServiceUnitSpec.test generate Attributes For Stage #stageId #parentStageId #status(DictionaryExportHelperServiceUnitSpec.groovy:98)
+2012-06-10 11:32:14,232 [main] ERROR StackTrace  - Full Stack Trace:
+Condition not satisfied:
+
+mapResults == results
+|          |  |
+|          |  [status:Published]
+|          false
+[stageStatus:Published]
+
+	at barddataexport.dictionary.DictionaryExportHelperServiceUnitSpec.test generate Attributes For Stage #stageId #parentStageId #status(DictionaryExportHelperServiceUnitSpec.groovy:98)
+2012-06-10 11:32:14,237 [main] ERROR StackTrace  - Full Stack Trace:
+junit.framework.AssertionFailedError: Condition not satisfied:
+
+mapResults == results
+|          |  |
+|          |  [status:Published]
+|          false
+[stageStatus:Published]
+
+	at barddataexport.dictionary.DictionaryExportHelperServiceUnitSpec.test generate Attributes For Stage #stageId #parentStageId #status(DictionaryExportHelperServiceUnitSpec.groovy:98)
+2012-06-10 11:32:14,237 [main] ERROR StackTrace  - Full Stack Trace:
+junit.framework.AssertionFailedError: Condition not satisfied:
+
+mapResults == results
+|          |  |
+|          |  [status:Published]
+|          false
+[stageStatus:Published]
+
+	at barddataexport.dictionary.DictionaryExportHelperServiceUnitSpec.test generate Attributes For Stage #stageId #parentStageId #status(DictionaryExportHelperServiceUnitSpec.groovy:98)
+2012-06-10 11:32:14,238 [main] ERROR StackTrace  - Full Stack Trace:
+junit.framework.AssertionFailedError: Condition not satisfied:
+
+mapResults == results
+|          |  |
+|          |  [status:Published]
+|          false
+[stageStatus:Published]
+
+	at barddataexport.dictionary.DictionaryExportHelperServiceUnitSpec.test generate Attributes For Stage #stageId #parentStageId #status(DictionaryExportHelperServiceUnitSpec.groovy:98)
+2012-06-10 11:32:14,238 [main] ERROR StackTrace  - Full Stack Trace:
+junit.framework.AssertionFailedError: Condition not satisfied:
+
+mapResults == results
+|          |  |
+|          |  [status:Published]
+|          false
+[stageStatus:Published]
+
+	at barddataexport.dictionary.DictionaryExportHelperServiceUnitSpec.test generate Attributes For Stage #stageId #parentStageId #status(DictionaryExportHelperServiceUnitSpec.groovy:98)
+2012-06-10 11:32:44,246 [main] ERROR StackTrace  - Full Stack Trace:
+Condition not satisfied:
+
+mapResults == results
+|          |  |
+|          |  [stageId:1, parentStageId:2, status:Published]
+|          false
+[stageId:1, parentStageId:2, stageStatus:Published]
+
+	at barddataexport.dictionary.DictionaryExportHelperServiceUnitSpec.test generate Attributes For Stage #stageId #parentStageId #status(DictionaryExportHelperServiceUnitSpec.groovy:98)
+2012-06-10 11:32:44,252 [main] ERROR StackTrace  - Full Stack Trace:
+Condition not satisfied:
+
+mapResults == results
+|          |  |
+|          |  [stageId:1, parentStageId:2, status:Published]
+|          false
+[stageId:1, parentStageId:2, stageStatus:Published]
+
+	at barddataexport.dictionary.DictionaryExportHelperServiceUnitSpec.test generate Attributes For Stage #stageId #parentStageId #status(DictionaryExportHelperServiceUnitSpec.groovy:98)
+2012-06-10 11:32:44,267 [main] ERROR StackTrace  - Full Stack Trace:
+junit.framework.AssertionFailedError: Condition not satisfied:
+
+mapResults == results
+|          |  |
+|          |  [stageId:1, parentStageId:2, status:Published]
+|          false
+[stageId:1, parentStageId:2, stageStatus:Published]
+
+	at barddataexport.dictionary.DictionaryExportHelperServiceUnitSpec.test generate Attributes For Stage #stageId #parentStageId #status(DictionaryExportHelperServiceUnitSpec.groovy:98)
+2012-06-10 11:32:44,268 [main] ERROR StackTrace  - Full Stack Trace:
+junit.framework.AssertionFailedError: Condition not satisfied:
+
+mapResults == results
+|          |  |
+|          |  [stageId:1, parentStageId:2, status:Published]
+|          false
+[stageId:1, parentStageId:2, stageStatus:Published]
+
+	at barddataexport.dictionary.DictionaryExportHelperServiceUnitSpec.test generate Attributes For Stage #stageId #parentStageId #status(DictionaryExportHelperServiceUnitSpec.groovy:98)
+2012-06-10 11:32:44,272 [main] ERROR StackTrace  - Full Stack Trace:
+junit.framework.AssertionFailedError: Condition not satisfied:
+
+mapResults == results
+|          |  |
+|          |  [stageId:1, parentStageId:2, status:Published]
+|          false
+[stageId:1, parentStageId:2, stageStatus:Published]
+
+	at barddataexport.dictionary.DictionaryExportHelperServiceUnitSpec.test generate Attributes For Stage #stageId #parentStageId #status(DictionaryExportHelperServiceUnitSpec.groovy:98)
+2012-06-10 11:32:44,272 [main] ERROR StackTrace  - Full Stack Trace:
+junit.framework.AssertionFailedError: Condition not satisfied:
+
+mapResults == results
+|          |  |
+|          |  [stageId:1, parentStageId:2, status:Published]
+|          false
+[stageId:1, parentStageId:2, stageStatus:Published]
+
+	at barddataexport.dictionary.DictionaryExportHelperServiceUnitSpec.test generate Attributes For Stage #stageId #parentStageId #status(DictionaryExportHelperServiceUnitSpec.groovy:98)
+2012-06-10 11:32:44,276 [main] ERROR StackTrace  - Full Stack Trace:
+Condition not satisfied:
+
+mapResults == results
+|          |  |
+|          |  [stageId:2, status:Published]
+|          false
+[stageId:2, stageStatus:Published]
+
+	at barddataexport.dictionary.DictionaryExportHelperServiceUnitSpec.test generate Attributes For Stage #stageId #parentStageId #status(DictionaryExportHelperServiceUnitSpec.groovy:98)
+2012-06-10 11:32:44,276 [main] ERROR StackTrace  - Full Stack Trace:
+Condition not satisfied:
+
+mapResults == results
+|          |  |
+|          |  [stageId:2, status:Published]
+|          false
+[stageId:2, stageStatus:Published]
+
+	at barddataexport.dictionary.DictionaryExportHelperServiceUnitSpec.test generate Attributes For Stage #stageId #parentStageId #status(DictionaryExportHelperServiceUnitSpec.groovy:98)
+2012-06-10 11:32:44,277 [main] ERROR StackTrace  - Full Stack Trace:
+junit.framework.AssertionFailedError: Condition not satisfied:
+
+mapResults == results
+|          |  |
+|          |  [stageId:2, status:Published]
+|          false
+[stageId:2, stageStatus:Published]
+
+	at barddataexport.dictionary.DictionaryExportHelperServiceUnitSpec.test generate Attributes For Stage #stageId #parentStageId #status(DictionaryExportHelperServiceUnitSpec.groovy:98)
+2012-06-10 11:32:44,277 [main] ERROR StackTrace  - Full Stack Trace:
+junit.framework.AssertionFailedError: Condition not satisfied:
+
+mapResults == results
+|          |  |
+|          |  [stageId:2, status:Published]
+|          false
+[stageId:2, stageStatus:Published]
+
+	at barddataexport.dictionary.DictionaryExportHelperServiceUnitSpec.test generate Attributes For Stage #stageId #parentStageId #status(DictionaryExportHelperServiceUnitSpec.groovy:98)
+2012-06-10 11:32:44,277 [main] ERROR StackTrace  - Full Stack Trace:
+junit.framework.AssertionFailedError: Condition not satisfied:
+
+mapResults == results
+|          |  |
+|          |  [stageId:2, status:Published]
+|          false
+[stageId:2, stageStatus:Published]
+
+	at barddataexport.dictionary.DictionaryExportHelperServiceUnitSpec.test generate Attributes For Stage #stageId #parentStageId #status(DictionaryExportHelperServiceUnitSpec.groovy:98)
+2012-06-10 11:32:44,278 [main] ERROR StackTrace  - Full Stack Trace:
+junit.framework.AssertionFailedError: Condition not satisfied:
+
+mapResults == results
+|          |  |
+|          |  [stageId:2, status:Published]
+|          false
+[stageId:2, stageStatus:Published]
+
+	at barddataexport.dictionary.DictionaryExportHelperServiceUnitSpec.test generate Attributes For Stage #stageId #parentStageId #status(DictionaryExportHelperServiceUnitSpec.groovy:98)
+2012-06-10 11:32:44,285 [main] ERROR StackTrace  - Full Stack Trace:
+Condition not satisfied:
+
+mapResults == results
+|          |  |
+|          |  [status:Published]
+|          false
+[stageStatus:Published]
+
+	at barddataexport.dictionary.DictionaryExportHelperServiceUnitSpec.test generate Attributes For Stage #stageId #parentStageId #status(DictionaryExportHelperServiceUnitSpec.groovy:98)
+2012-06-10 11:32:44,286 [main] ERROR StackTrace  - Full Stack Trace:
+Condition not satisfied:
+
+mapResults == results
+|          |  |
+|          |  [status:Published]
+|          false
+[stageStatus:Published]
+
+	at barddataexport.dictionary.DictionaryExportHelperServiceUnitSpec.test generate Attributes For Stage #stageId #parentStageId #status(DictionaryExportHelperServiceUnitSpec.groovy:98)
+2012-06-10 11:32:44,290 [main] ERROR StackTrace  - Full Stack Trace:
+junit.framework.AssertionFailedError: Condition not satisfied:
+
+mapResults == results
+|          |  |
+|          |  [status:Published]
+|          false
+[stageStatus:Published]
+
+	at barddataexport.dictionary.DictionaryExportHelperServiceUnitSpec.test generate Attributes For Stage #stageId #parentStageId #status(DictionaryExportHelperServiceUnitSpec.groovy:98)
+2012-06-10 11:32:44,290 [main] ERROR StackTrace  - Full Stack Trace:
+junit.framework.AssertionFailedError: Condition not satisfied:
+
+mapResults == results
+|          |  |
+|          |  [status:Published]
+|          false
+[stageStatus:Published]
+
+	at barddataexport.dictionary.DictionaryExportHelperServiceUnitSpec.test generate Attributes For Stage #stageId #parentStageId #status(DictionaryExportHelperServiceUnitSpec.groovy:98)
+2012-06-10 11:32:44,290 [main] ERROR StackTrace  - Full Stack Trace:
+junit.framework.AssertionFailedError: Condition not satisfied:
+
+mapResults == results
+|          |  |
+|          |  [status:Published]
+|          false
+[stageStatus:Published]
+
+	at barddataexport.dictionary.DictionaryExportHelperServiceUnitSpec.test generate Attributes For Stage #stageId #parentStageId #status(DictionaryExportHelperServiceUnitSpec.groovy:98)
+2012-06-10 11:32:44,290 [main] ERROR StackTrace  - Full Stack Trace:
+junit.framework.AssertionFailedError: Condition not satisfied:
+
+mapResults == results
+|          |  |
+|          |  [status:Published]
+|          false
+[stageStatus:Published]
+
+	at barddataexport.dictionary.DictionaryExportHelperServiceUnitSpec.test generate Attributes For Stage #stageId #parentStageId #status(DictionaryExportHelperServiceUnitSpec.groovy:98)
+2012-06-10 11:48:30,079 [main] ERROR StackTrace  - Full Stack Trace:
+groovy.lang.MissingMethodException: No signature of method: barddataexport.dictionary.DictionaryExportHelperService.generateAttributesForStage() is applicable for argument types: (java.lang.String, java.lang.String, java.lang.String) values: [, , Published]
+Possible solutions: generateAttributesForStage(java.math.BigDecimal, java.math.BigDecimal, java.lang.String)
+	at barddataexport.dictionary.DictionaryExportHelperServiceUnitSpec.test generate Attributes For Stage #stageId #parentStageId #status(DictionaryExportHelperServiceUnitSpec.groovy:96)
+2012-06-10 11:48:30,122 [main] ERROR StackTrace  - Full Stack Trace:
+groovy.lang.MissingMethodException: No signature of method: barddataexport.dictionary.DictionaryExportHelperService.generateAttributesForStage() is applicable for argument types: (java.lang.String, java.lang.String, java.lang.String) values: [, , Published]
+Possible solutions: generateAttributesForStage(java.math.BigDecimal, java.math.BigDecimal, java.lang.String)
+	at barddataexport.dictionary.DictionaryExportHelperServiceUnitSpec.test generate Attributes For Stage #stageId #parentStageId #status(DictionaryExportHelperServiceUnitSpec.groovy:96)
+2012-06-10 11:48:30,181 [main] ERROR StackTrace  - Full Stack Trace:
+groovy.lang.MissingMethodException: No signature of method: barddataexport.dictionary.DictionaryExportHelperService.generateAttributesForStage() is applicable for argument types: (java.lang.String, java.lang.String, java.lang.String) values: [, , Published]
+Possible solutions: generateAttributesForStage(java.math.BigDecimal, java.math.BigDecimal, java.lang.String)
+	at barddataexport.dictionary.DictionaryExportHelperServiceUnitSpec.test generate Attributes For Stage #stageId #parentStageId #status(DictionaryExportHelperServiceUnitSpec.groovy:96)
+2012-06-10 11:48:30,182 [main] ERROR StackTrace  - Full Stack Trace:
+groovy.lang.MissingMethodException: No signature of method: barddataexport.dictionary.DictionaryExportHelperService.generateAttributesForStage() is applicable for argument types: (java.lang.String, java.lang.String, java.lang.String) values: [, , Published]
+Possible solutions: generateAttributesForStage(java.math.BigDecimal, java.math.BigDecimal, java.lang.String)
+	at barddataexport.dictionary.DictionaryExportHelperServiceUnitSpec.test generate Attributes For Stage #stageId #parentStageId #status(DictionaryExportHelperServiceUnitSpec.groovy:96)
+2012-06-10 11:48:30,191 [main] ERROR StackTrace  - Full Stack Trace:
+groovy.lang.MissingMethodException: No signature of method: barddataexport.dictionary.DictionaryExportHelperService.generateAttributesForStage() is applicable for argument types: (java.lang.String, java.lang.String, java.lang.String) values: [, , Published]
+Possible solutions: generateAttributesForStage(java.math.BigDecimal, java.math.BigDecimal, java.lang.String)
+	at barddataexport.dictionary.DictionaryExportHelperServiceUnitSpec.test generate Attributes For Stage #stageId #parentStageId #status(DictionaryExportHelperServiceUnitSpec.groovy:96)
+2012-06-10 11:48:30,193 [main] ERROR StackTrace  - Full Stack Trace:
+groovy.lang.MissingMethodException: No signature of method: barddataexport.dictionary.DictionaryExportHelperService.generateAttributesForStage() is applicable for argument types: (java.lang.String, java.lang.String, java.lang.String) values: [, , Published]
+Possible solutions: generateAttributesForStage(java.math.BigDecimal, java.math.BigDecimal, java.lang.String)
+	at barddataexport.dictionary.DictionaryExportHelperServiceUnitSpec.test generate Attributes For Stage #stageId #parentStageId #status(DictionaryExportHelperServiceUnitSpec.groovy:96)
+2012-06-10 12:03:57,387 [main] ERROR StackTrace  - Full Stack Trace:
+groovy.lang.GroovyRuntimeException: Could not find matching constructor for: barddataexport.dictionary.DescriptorDTO(null, java.math.BigDecimal, null, null, null, null, null, null)
+	at barddataexport.dictionary.DictionaryExportHelperServiceUnitSpec.test Generate Attributes For Descriptor #dto(DictionaryExportHelperServiceUnitSpec.groovy:114)
+2012-06-10 12:03:57,391 [main] ERROR StackTrace  - Full Stack Trace:
+groovy.lang.GroovyRuntimeException: Could not find matching constructor for: barddataexport.dictionary.DescriptorDTO(null, java.math.BigDecimal, null, null, null, null, null, null)
+	at barddataexport.dictionary.DictionaryExportHelperServiceUnitSpec.test Generate Attributes For Descriptor #dto(DictionaryExportHelperServiceUnitSpec.groovy:114)
+2012-06-10 12:03:57,395 [main] ERROR StackTrace  - Full Stack Trace:
+groovy.lang.GroovyRuntimeException: Could not find matching constructor for: barddataexport.dictionary.DescriptorDTO(null, java.math.BigDecimal, null, null, null, null, null, null)
+	at barddataexport.dictionary.DictionaryExportHelperServiceUnitSpec.test Generate Attributes For Descriptor #dto(DictionaryExportHelperServiceUnitSpec.groovy:114)
+2012-06-10 12:03:57,395 [main] ERROR StackTrace  - Full Stack Trace:
+groovy.lang.GroovyRuntimeException: Could not find matching constructor for: barddataexport.dictionary.DescriptorDTO(null, java.math.BigDecimal, null, null, null, null, null, null)
+	at barddataexport.dictionary.DictionaryExportHelperServiceUnitSpec.test Generate Attributes For Descriptor #dto(DictionaryExportHelperServiceUnitSpec.groovy:114)
+2012-06-10 12:03:57,402 [main] ERROR StackTrace  - Full Stack Trace:
+groovy.lang.GroovyRuntimeException: Could not find matching constructor for: barddataexport.dictionary.DescriptorDTO(null, java.math.BigDecimal, null, null, null, null, null, null)
+	at barddataexport.dictionary.DictionaryExportHelperServiceUnitSpec.test Generate Attributes For Descriptor #dto(DictionaryExportHelperServiceUnitSpec.groovy:114)
+2012-06-10 12:03:57,402 [main] ERROR StackTrace  - Full Stack Trace:
+groovy.lang.GroovyRuntimeException: Could not find matching constructor for: barddataexport.dictionary.DescriptorDTO(null, java.math.BigDecimal, null, null, null, null, null, null)
+	at barddataexport.dictionary.DictionaryExportHelperServiceUnitSpec.test Generate Attributes For Descriptor #dto(DictionaryExportHelperServiceUnitSpec.groovy:114)
+2012-06-10 12:11:13,824 [main] ERROR StackTrace  - Full Stack Trace:
+Condition not satisfied:
+
+mapResults == results
+|          |  |
+|          |  [elementId:1]
+|          false
+[descriptorId:1]
+
+	at barddataexport.dictionary.DictionaryExportHelperServiceUnitSpec.test Generate Attributes For Descriptor #dto(DictionaryExportHelperServiceUnitSpec.groovy:110)
+2012-06-10 12:11:13,829 [main] ERROR StackTrace  - Full Stack Trace:
+Condition not satisfied:
+
+mapResults == results
+|          |  |
+|          |  [elementId:1]
+|          false
+[descriptorId:1]
+
+	at barddataexport.dictionary.DictionaryExportHelperServiceUnitSpec.test Generate Attributes For Descriptor #dto(DictionaryExportHelperServiceUnitSpec.groovy:110)
+2012-06-10 12:11:13,849 [main] ERROR StackTrace  - Full Stack Trace:
+junit.framework.AssertionFailedError: Condition not satisfied:
+
+mapResults == results
+|          |  |
+|          |  [elementId:1]
+|          false
+[descriptorId:1]
+
+	at barddataexport.dictionary.DictionaryExportHelperServiceUnitSpec.test Generate Attributes For Descriptor #dto(DictionaryExportHelperServiceUnitSpec.groovy:110)
+2012-06-10 12:11:13,850 [main] ERROR StackTrace  - Full Stack Trace:
+junit.framework.AssertionFailedError: Condition not satisfied:
+
+mapResults == results
+|          |  |
+|          |  [elementId:1]
+|          false
+[descriptorId:1]
+
+	at barddataexport.dictionary.DictionaryExportHelperServiceUnitSpec.test Generate Attributes For Descriptor #dto(DictionaryExportHelperServiceUnitSpec.groovy:110)
+2012-06-10 12:11:13,854 [main] ERROR StackTrace  - Full Stack Trace:
+junit.framework.AssertionFailedError: Condition not satisfied:
+
+mapResults == results
+|          |  |
+|          |  [elementId:1]
+|          false
+[descriptorId:1]
+
+	at barddataexport.dictionary.DictionaryExportHelperServiceUnitSpec.test Generate Attributes For Descriptor #dto(DictionaryExportHelperServiceUnitSpec.groovy:110)
+2012-06-10 12:11:13,854 [main] ERROR StackTrace  - Full Stack Trace:
+junit.framework.AssertionFailedError: Condition not satisfied:
+
+mapResults == results
+|          |  |
+|          |  [elementId:1]
+|          false
+[descriptorId:1]
+
+	at barddataexport.dictionary.DictionaryExportHelperServiceUnitSpec.test Generate Attributes For Descriptor #dto(DictionaryExportHelperServiceUnitSpec.groovy:110)
+2012-06-10 12:11:13,862 [main] ERROR StackTrace  - Full Stack Trace:
+Condition not satisfied:
+
+mapResults == results
+|          |  |
+|          |  [elementId:1, parentDescriptorId:1, abbreviation:abb, baseUnit:uM, resultTypeStatus:Status]
+|          false
+[descriptorId:1, parentDescriptorId:1, elementId:1, abbreviation:abb, externalUrl:http://www.broad.org, unit:uM]
+
+	at barddataexport.dictionary.DictionaryExportHelperServiceUnitSpec.test Generate Attributes For Descriptor #dto(DictionaryExportHelperServiceUnitSpec.groovy:110)
+2012-06-10 12:11:13,862 [main] ERROR StackTrace  - Full Stack Trace:
+Condition not satisfied:
+
+mapResults == results
+|          |  |
+|          |  [elementId:1, parentDescriptorId:1, abbreviation:abb, baseUnit:uM, resultTypeStatus:Status]
+|          false
+[descriptorId:1, parentDescriptorId:1, elementId:1, abbreviation:abb, externalUrl:http://www.broad.org, unit:uM]
+
+	at barddataexport.dictionary.DictionaryExportHelperServiceUnitSpec.test Generate Attributes For Descriptor #dto(DictionaryExportHelperServiceUnitSpec.groovy:110)
+2012-06-10 12:11:13,867 [main] ERROR StackTrace  - Full Stack Trace:
+junit.framework.AssertionFailedError: Condition not satisfied:
+
+mapResults == results
+|          |  |
+|          |  [elementId:1, parentDescriptorId:1, abbreviation:abb, baseUnit:uM, resultTypeStatus:Status]
+|          false
+[descriptorId:1, parentDescriptorId:1, elementId:1, abbreviation:abb, externalUrl:http://www.broad.org, unit:uM]
+
+	at barddataexport.dictionary.DictionaryExportHelperServiceUnitSpec.test Generate Attributes For Descriptor #dto(DictionaryExportHelperServiceUnitSpec.groovy:110)
+2012-06-10 12:11:13,867 [main] ERROR StackTrace  - Full Stack Trace:
+junit.framework.AssertionFailedError: Condition not satisfied:
+
+mapResults == results
+|          |  |
+|          |  [elementId:1, parentDescriptorId:1, abbreviation:abb, baseUnit:uM, resultTypeStatus:Status]
+|          false
+[descriptorId:1, parentDescriptorId:1, elementId:1, abbreviation:abb, externalUrl:http://www.broad.org, unit:uM]
+
+	at barddataexport.dictionary.DictionaryExportHelperServiceUnitSpec.test Generate Attributes For Descriptor #dto(DictionaryExportHelperServiceUnitSpec.groovy:110)
+2012-06-10 12:11:13,867 [main] ERROR StackTrace  - Full Stack Trace:
+junit.framework.AssertionFailedError: Condition not satisfied:
+
+mapResults == results
+|          |  |
+|          |  [elementId:1, parentDescriptorId:1, abbreviation:abb, baseUnit:uM, resultTypeStatus:Status]
+|          false
+[descriptorId:1, parentDescriptorId:1, elementId:1, abbreviation:abb, externalUrl:http://www.broad.org, unit:uM]
+
+	at barddataexport.dictionary.DictionaryExportHelperServiceUnitSpec.test Generate Attributes For Descriptor #dto(DictionaryExportHelperServiceUnitSpec.groovy:110)
+2012-06-10 12:11:13,867 [main] ERROR StackTrace  - Full Stack Trace:
+junit.framework.AssertionFailedError: Condition not satisfied:
+
+mapResults == results
+|          |  |
+|          |  [elementId:1, parentDescriptorId:1, abbreviation:abb, baseUnit:uM, resultTypeStatus:Status]
+|          false
+[descriptorId:1, parentDescriptorId:1, elementId:1, abbreviation:abb, externalUrl:http://www.broad.org, unit:uM]
+
+	at barddataexport.dictionary.DictionaryExportHelperServiceUnitSpec.test Generate Attributes For Descriptor #dto(DictionaryExportHelperServiceUnitSpec.groovy:110)
+2012-06-10 12:26:16,221 [main] ERROR StackTrace  - Full Stack Trace:
+groovy.lang.GroovyRuntimeException: Could not find matching constructor for: groovy.xml.StreamingMarkupBuilder(java.io.StringWriter)
+	at barddataexport.dictionary.DictionaryExportHelperServiceUnitSpec.test generate Single Descriptor #dto(DictionaryExportHelperServiceUnitSpec.groovy:112)
+2012-06-10 12:26:16,224 [main] ERROR StackTrace  - Full Stack Trace:
+groovy.lang.GroovyRuntimeException: Could not find matching constructor for: groovy.xml.StreamingMarkupBuilder(java.io.StringWriter)
+	at barddataexport.dictionary.DictionaryExportHelperServiceUnitSpec.test generate Single Descriptor #dto(DictionaryExportHelperServiceUnitSpec.groovy:112)
+2012-06-10 12:26:16,227 [main] ERROR StackTrace  - Full Stack Trace:
+groovy.lang.GroovyRuntimeException: Could not find matching constructor for: groovy.xml.StreamingMarkupBuilder(java.io.StringWriter)
+	at barddataexport.dictionary.DictionaryExportHelperServiceUnitSpec.test generate Single Descriptor #dto(DictionaryExportHelperServiceUnitSpec.groovy:112)
+2012-06-10 12:26:16,227 [main] ERROR StackTrace  - Full Stack Trace:
+groovy.lang.GroovyRuntimeException: Could not find matching constructor for: groovy.xml.StreamingMarkupBuilder(java.io.StringWriter)
+	at barddataexport.dictionary.DictionaryExportHelperServiceUnitSpec.test generate Single Descriptor #dto(DictionaryExportHelperServiceUnitSpec.groovy:112)
+2012-06-10 12:26:16,232 [main] ERROR StackTrace  - Full Stack Trace:
+groovy.lang.GroovyRuntimeException: Could not find matching constructor for: groovy.xml.StreamingMarkupBuilder(java.io.StringWriter)
+	at barddataexport.dictionary.DictionaryExportHelperServiceUnitSpec.test generate Single Descriptor #dto(DictionaryExportHelperServiceUnitSpec.groovy:112)
+2012-06-10 12:26:16,232 [main] ERROR StackTrace  - Full Stack Trace:
+groovy.lang.GroovyRuntimeException: Could not find matching constructor for: groovy.xml.StreamingMarkupBuilder(java.io.StringWriter)
+	at barddataexport.dictionary.DictionaryExportHelperServiceUnitSpec.test generate Single Descriptor #dto(DictionaryExportHelperServiceUnitSpec.groovy:112)
+2012-06-10 12:26:16,239 [main] ERROR StackTrace  - Full Stack Trace:
+groovy.lang.GroovyRuntimeException: Could not find matching constructor for: groovy.xml.StreamingMarkupBuilder(java.io.StringWriter)
+	at barddataexport.dictionary.DictionaryExportHelperServiceUnitSpec.test generate Single Descriptor #dto(DictionaryExportHelperServiceUnitSpec.groovy:112)
+2012-06-10 12:26:16,239 [main] ERROR StackTrace  - Full Stack Trace:
+groovy.lang.GroovyRuntimeException: Could not find matching constructor for: groovy.xml.StreamingMarkupBuilder(java.io.StringWriter)
+	at barddataexport.dictionary.DictionaryExportHelperServiceUnitSpec.test generate Single Descriptor #dto(DictionaryExportHelperServiceUnitSpec.groovy:112)
+2012-06-10 12:26:16,243 [main] ERROR StackTrace  - Full Stack Trace:
+groovy.lang.GroovyRuntimeException: Could not find matching constructor for: groovy.xml.StreamingMarkupBuilder(java.io.StringWriter)
+	at barddataexport.dictionary.DictionaryExportHelperServiceUnitSpec.test generate Single Descriptor #dto(DictionaryExportHelperServiceUnitSpec.groovy:112)
+2012-06-10 12:26:16,243 [main] ERROR StackTrace  - Full Stack Trace:
+groovy.lang.GroovyRuntimeException: Could not find matching constructor for: groovy.xml.StreamingMarkupBuilder(java.io.StringWriter)
+	at barddataexport.dictionary.DictionaryExportHelperServiceUnitSpec.test generate Single Descriptor #dto(DictionaryExportHelperServiceUnitSpec.groovy:112)
+2012-06-10 12:26:16,243 [main] ERROR StackTrace  - Full Stack Trace:
+groovy.lang.GroovyRuntimeException: Could not find matching constructor for: groovy.xml.StreamingMarkupBuilder(java.io.StringWriter)
+	at barddataexport.dictionary.DictionaryExportHelperServiceUnitSpec.test generate Single Descriptor #dto(DictionaryExportHelperServiceUnitSpec.groovy:112)
+2012-06-10 12:26:16,243 [main] ERROR StackTrace  - Full Stack Trace:
+groovy.lang.GroovyRuntimeException: Could not find matching constructor for: groovy.xml.StreamingMarkupBuilder(java.io.StringWriter)
+	at barddataexport.dictionary.DictionaryExportHelperServiceUnitSpec.test generate Single Descriptor #dto(DictionaryExportHelperServiceUnitSpec.groovy:112)
+2012-06-10 12:38:08,327 [main] ERROR StackTrace  - Full Stack Trace:
+groovy.lang.MissingMethodException: No signature of method: barddataexport.dictionary.DictionaryExportHelperService.generateSingleDescriptor() is applicable for argument types: (groovy.xml.MarkupBuilder, barddataexport.dictionary.DescriptorDTO) values: [groovy.xml.MarkupBuilder@566f0962, barddataexport.dictionary.DescriptorDTO@7814d044]
+Possible solutions: generateSingleDescriptor(groovy.xml.StreamingMarkupBuilder, barddataexport.dictionary.DescriptorDTO)
+	at barddataexport.dictionary.DictionaryExportHelperServiceUnitSpec.test generate Single Descriptor #dto(DictionaryExportHelperServiceUnitSpec.groovy:116)
+2012-06-10 12:38:08,377 [main] ERROR StackTrace  - Full Stack Trace:
+groovy.lang.MissingMethodException: No signature of method: barddataexport.dictionary.DictionaryExportHelperService.generateSingleDescriptor() is applicable for argument types: (groovy.xml.MarkupBuilder, barddataexport.dictionary.DescriptorDTO) values: [groovy.xml.MarkupBuilder@566f0962, barddataexport.dictionary.DescriptorDTO@7814d044]
+Possible solutions: generateSingleDescriptor(groovy.xml.StreamingMarkupBuilder, barddataexport.dictionary.DescriptorDTO)
+	at barddataexport.dictionary.DictionaryExportHelperServiceUnitSpec.test generate Single Descriptor #dto(DictionaryExportHelperServiceUnitSpec.groovy:116)
+2012-06-10 12:38:08,461 [main] ERROR StackTrace  - Full Stack Trace:
+groovy.lang.MissingMethodException: No signature of method: barddataexport.dictionary.DictionaryExportHelperService.generateSingleDescriptor() is applicable for argument types: (groovy.xml.MarkupBuilder, barddataexport.dictionary.DescriptorDTO) values: [groovy.xml.MarkupBuilder@566f0962, barddataexport.dictionary.DescriptorDTO@7814d044]
+Possible solutions: generateSingleDescriptor(groovy.xml.StreamingMarkupBuilder, barddataexport.dictionary.DescriptorDTO)
+	at barddataexport.dictionary.DictionaryExportHelperServiceUnitSpec.test generate Single Descriptor #dto(DictionaryExportHelperServiceUnitSpec.groovy:116)
+2012-06-10 12:38:08,464 [main] ERROR StackTrace  - Full Stack Trace:
+groovy.lang.MissingMethodException: No signature of method: barddataexport.dictionary.DictionaryExportHelperService.generateSingleDescriptor() is applicable for argument types: (groovy.xml.MarkupBuilder, barddataexport.dictionary.DescriptorDTO) values: [groovy.xml.MarkupBuilder@566f0962, barddataexport.dictionary.DescriptorDTO@7814d044]
+Possible solutions: generateSingleDescriptor(groovy.xml.StreamingMarkupBuilder, barddataexport.dictionary.DescriptorDTO)
+	at barddataexport.dictionary.DictionaryExportHelperServiceUnitSpec.test generate Single Descriptor #dto(DictionaryExportHelperServiceUnitSpec.groovy:116)
+2012-06-10 12:38:08,475 [main] ERROR StackTrace  - Full Stack Trace:
+groovy.lang.MissingMethodException: No signature of method: barddataexport.dictionary.DictionaryExportHelperService.generateSingleDescriptor() is applicable for argument types: (groovy.xml.MarkupBuilder, barddataexport.dictionary.DescriptorDTO) values: [groovy.xml.MarkupBuilder@566f0962, barddataexport.dictionary.DescriptorDTO@7814d044]
+Possible solutions: generateSingleDescriptor(groovy.xml.StreamingMarkupBuilder, barddataexport.dictionary.DescriptorDTO)
+	at barddataexport.dictionary.DictionaryExportHelperServiceUnitSpec.test generate Single Descriptor #dto(DictionaryExportHelperServiceUnitSpec.groovy:116)
+2012-06-10 12:38:08,476 [main] ERROR StackTrace  - Full Stack Trace:
+groovy.lang.MissingMethodException: No signature of method: barddataexport.dictionary.DictionaryExportHelperService.generateSingleDescriptor() is applicable for argument types: (groovy.xml.MarkupBuilder, barddataexport.dictionary.DescriptorDTO) values: [groovy.xml.MarkupBuilder@566f0962, barddataexport.dictionary.DescriptorDTO@7814d044]
+Possible solutions: generateSingleDescriptor(groovy.xml.StreamingMarkupBuilder, barddataexport.dictionary.DescriptorDTO)
+	at barddataexport.dictionary.DictionaryExportHelperServiceUnitSpec.test generate Single Descriptor #dto(DictionaryExportHelperServiceUnitSpec.groovy:116)
+2012-06-10 12:38:08,483 [main] ERROR StackTrace  - Full Stack Trace:
+groovy.lang.MissingMethodException: No signature of method: barddataexport.dictionary.DictionaryExportHelperService.generateSingleDescriptor() is applicable for argument types: (groovy.xml.MarkupBuilder, barddataexport.dictionary.DescriptorDTO) values: [groovy.xml.MarkupBuilder@7730661d, barddataexport.dictionary.DescriptorDTO@39df3255]
+Possible solutions: generateSingleDescriptor(groovy.xml.StreamingMarkupBuilder, barddataexport.dictionary.DescriptorDTO)
+	at barddataexport.dictionary.DictionaryExportHelperServiceUnitSpec.test generate Single Descriptor #dto(DictionaryExportHelperServiceUnitSpec.groovy:116)
+2012-06-10 12:38:08,485 [main] ERROR StackTrace  - Full Stack Trace:
+groovy.lang.MissingMethodException: No signature of method: barddataexport.dictionary.DictionaryExportHelperService.generateSingleDescriptor() is applicable for argument types: (groovy.xml.MarkupBuilder, barddataexport.dictionary.DescriptorDTO) values: [groovy.xml.MarkupBuilder@7730661d, barddataexport.dictionary.DescriptorDTO@39df3255]
+Possible solutions: generateSingleDescriptor(groovy.xml.StreamingMarkupBuilder, barddataexport.dictionary.DescriptorDTO)
+	at barddataexport.dictionary.DictionaryExportHelperServiceUnitSpec.test generate Single Descriptor #dto(DictionaryExportHelperServiceUnitSpec.groovy:116)
+2012-06-10 12:38:08,496 [main] ERROR StackTrace  - Full Stack Trace:
+groovy.lang.MissingMethodException: No signature of method: barddataexport.dictionary.DictionaryExportHelperService.generateSingleDescriptor() is applicable for argument types: (groovy.xml.MarkupBuilder, barddataexport.dictionary.DescriptorDTO) values: [groovy.xml.MarkupBuilder@7730661d, barddataexport.dictionary.DescriptorDTO@39df3255]
+Possible solutions: generateSingleDescriptor(groovy.xml.StreamingMarkupBuilder, barddataexport.dictionary.DescriptorDTO)
+	at barddataexport.dictionary.DictionaryExportHelperServiceUnitSpec.test generate Single Descriptor #dto(DictionaryExportHelperServiceUnitSpec.groovy:116)
+2012-06-10 12:38:08,497 [main] ERROR StackTrace  - Full Stack Trace:
+groovy.lang.MissingMethodException: No signature of method: barddataexport.dictionary.DictionaryExportHelperService.generateSingleDescriptor() is applicable for argument types: (groovy.xml.MarkupBuilder, barddataexport.dictionary.DescriptorDTO) values: [groovy.xml.MarkupBuilder@7730661d, barddataexport.dictionary.DescriptorDTO@39df3255]
+Possible solutions: generateSingleDescriptor(groovy.xml.StreamingMarkupBuilder, barddataexport.dictionary.DescriptorDTO)
+	at barddataexport.dictionary.DictionaryExportHelperServiceUnitSpec.test generate Single Descriptor #dto(DictionaryExportHelperServiceUnitSpec.groovy:116)
+2012-06-10 12:38:08,502 [main] ERROR StackTrace  - Full Stack Trace:
+groovy.lang.MissingMethodException: No signature of method: barddataexport.dictionary.DictionaryExportHelperService.generateSingleDescriptor() is applicable for argument types: (groovy.xml.MarkupBuilder, barddataexport.dictionary.DescriptorDTO) values: [groovy.xml.MarkupBuilder@7730661d, barddataexport.dictionary.DescriptorDTO@39df3255]
+Possible solutions: generateSingleDescriptor(groovy.xml.StreamingMarkupBuilder, barddataexport.dictionary.DescriptorDTO)
+	at barddataexport.dictionary.DictionaryExportHelperServiceUnitSpec.test generate Single Descriptor #dto(DictionaryExportHelperServiceUnitSpec.groovy:116)
+2012-06-10 12:38:08,503 [main] ERROR StackTrace  - Full Stack Trace:
+groovy.lang.MissingMethodException: No signature of method: barddataexport.dictionary.DictionaryExportHelperService.generateSingleDescriptor() is applicable for argument types: (groovy.xml.MarkupBuilder, barddataexport.dictionary.DescriptorDTO) values: [groovy.xml.MarkupBuilder@7730661d, barddataexport.dictionary.DescriptorDTO@39df3255]
+Possible solutions: generateSingleDescriptor(groovy.xml.StreamingMarkupBuilder, barddataexport.dictionary.DescriptorDTO)
+	at barddataexport.dictionary.DictionaryExportHelperServiceUnitSpec.test generate Single Descriptor #dto(DictionaryExportHelperServiceUnitSpec.groovy:116)

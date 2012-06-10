@@ -1,0 +1,18 @@
+--Output from test Generate Attributes For Unit 1 2 uM--
+--Output from test Generate Attributes For Unit 2 null uM--
+--Output from test Generate Attributes For Unit 3 1 --
+--Output from test Generate Attributes For Unit null null cm--
+--Output from test Generate Attributes For Element Hierarchy 1 2 3--
+--Output from test Generate Attributes For Element Hierarchy 2 null 3--
+--Output from test Generate Attributes For Element Hierarchy 3 1 null--
+--Output from test Generate Attributes For Element Hierarchy null null 3--
+--Output from test generate Attributes For Stage 1 2 Published--
+--Output from test generate Attributes For Stage 2 null Published--
+--Output from test generate Attributes For Stage 3 1 null--
+--Output from test generate Attributes For Stage null null Published--
+--Output from test Generate Attributes For ResultType barddataexport.dictionary.ResultTypeDTO@3d689405--
+--Output from test Generate Attributes For ResultType barddataexport.dictionary.ResultTypeDTO@3a97263f--
+--Output from test Generate Attributes For Descriptor barddataexport.dictionary.DescriptorDTO@7c2f1622--
+--Output from test Generate Attributes For Descriptor barddataexport.dictionary.DescriptorDTO@68049b03--
+--Output from test generate Single Descriptor barddataexport.dictionary.DescriptorDTO@7814d044--
+--Output from test generate Single Descriptor barddataexport.dictionary.DescriptorDTO@39df3255--
