@@ -1,0 +1,55 @@
+Testsuite: barddataexport.dictionary.DictionaryExportHelperServiceUnitSpec
+Tests run: 18, Failures: 0, Errors: 2, Time elapsed: 0.348 sec
+------------- Standard Error -----------------
+--Output from test Generate Attributes For Unit 1 2 uM--
+--Output from test Generate Attributes For Unit 2 null uM--
+--Output from test Generate Attributes For Unit 3 1 --
+--Output from test Generate Attributes For Unit null null cm--
+--Output from test Generate Attributes For Element Hierarchy 1 2 3--
+--Output from test Generate Attributes For Element Hierarchy 2 null 3--
+--Output from test Generate Attributes For Element Hierarchy 3 1 null--
+--Output from test Generate Attributes For Element Hierarchy null null 3--
+--Output from test generate Attributes For Stage 1 2 Published--
+--Output from test generate Attributes For Stage 2 null Published--
+--Output from test generate Attributes For Stage 3 1 null--
+--Output from test generate Attributes For Stage null null Published--
+--Output from test Generate Attributes For ResultType barddataexport.dictionary.ResultTypeDTO@3d689405--
+--Output from test Generate Attributes For ResultType barddataexport.dictionary.ResultTypeDTO@3a97263f--
+--Output from test Generate Attributes For Descriptor barddataexport.dictionary.DescriptorDTO@7c2f1622--
+--Output from test Generate Attributes For Descriptor barddataexport.dictionary.DescriptorDTO@68049b03--
+--Output from test generate Single Descriptor barddataexport.dictionary.DescriptorDTO@7814d044--
+--Output from test generate Single Descriptor barddataexport.dictionary.DescriptorDTO@39df3255--
+------------- ---------------- ---------------
+
+Testcase: test Generate Attributes For Unit 1 2 uM took 0.066 sec
+Testcase: test Generate Attributes For Unit 2 null uM took 0.001 sec
+Testcase: test Generate Attributes For Unit 3 1  took 0.001 sec
+Testcase: test Generate Attributes For Unit null null cm took 0 sec
+Testcase: test Generate Attributes For Element Hierarchy 1 2 3 took 0.001 sec
+Testcase: test Generate Attributes For Element Hierarchy 2 null 3 took 0.001 sec
+Testcase: test Generate Attributes For Element Hierarchy 3 1 null took 0 sec
+Testcase: test Generate Attributes For Element Hierarchy null null 3 took 0 sec
+Testcase: test generate Attributes For Stage 1 2 Published took 0.001 sec
+Testcase: test generate Attributes For Stage 2 null Published took 0 sec
+Testcase: test generate Attributes For Stage 3 1 null took 0.001 sec
+Testcase: test generate Attributes For Stage null null Published took 0 sec
+Testcase: test Generate Attributes For ResultType barddataexport.dictionary.ResultTypeDTO@3d689405 took 0.002 sec
+Testcase: test Generate Attributes For ResultType barddataexport.dictionary.ResultTypeDTO@3a97263f took 0 sec
+Testcase: test Generate Attributes For Descriptor barddataexport.dictionary.DescriptorDTO@7c2f1622 took 0.002 sec
+Testcase: test Generate Attributes For Descriptor barddataexport.dictionary.DescriptorDTO@68049b03 took 0.002 sec
+Testcase: test generate Single Descriptor barddataexport.dictionary.DescriptorDTO@7814d044 took 0.172 sec
+	Caused an ERROR
+No signature of method: barddataexport.dictionary.DictionaryExportHelperService.generateSingleDescriptor() is applicable for argument types: (groovy.xml.MarkupBuilder, barddataexport.dictionary.DescriptorDTO) values: [groovy.xml.MarkupBuilder@566f0962, barddataexport.dictionary.DescriptorDTO@7814d044]
+Possible solutions: generateSingleDescriptor(groovy.xml.StreamingMarkupBuilder, barddataexport.dictionary.DescriptorDTO)
+groovy.lang.MissingMethodException: No signature of method: barddataexport.dictionary.DictionaryExportHelperService.generateSingleDescriptor() is applicable for argument types: (groovy.xml.MarkupBuilder, barddataexport.dictionary.DescriptorDTO) values: [groovy.xml.MarkupBuilder@566f0962, barddataexport.dictionary.DescriptorDTO@7814d044]
+Possible solutions: generateSingleDescriptor(groovy.xml.StreamingMarkupBuilder, barddataexport.dictionary.DescriptorDTO)
+	at barddataexport.dictionary.DictionaryExportHelperServiceUnitSpec.test generate Single Descriptor #dto(DictionaryExportHelperServiceUnitSpec.groovy:116)
+
+Testcase: test generate Single Descriptor barddataexport.dictionary.DescriptorDTO@39df3255 took 0.023 sec
+	Caused an ERROR
+No signature of method: barddataexport.dictionary.DictionaryExportHelperService.generateSingleDescriptor() is applicable for argument types: (groovy.xml.MarkupBuilder, barddataexport.dictionary.DescriptorDTO) values: [groovy.xml.MarkupBuilder@7730661d, barddataexport.dictionary.DescriptorDTO@39df3255]
+Possible solutions: generateSingleDescriptor(groovy.xml.StreamingMarkupBuilder, barddataexport.dictionary.DescriptorDTO)
+groovy.lang.MissingMethodException: No signature of method: barddataexport.dictionary.DictionaryExportHelperService.generateSingleDescriptor() is applicable for argument types: (groovy.xml.MarkupBuilder, barddataexport.dictionary.DescriptorDTO) values: [groovy.xml.MarkupBuilder@7730661d, barddataexport.dictionary.DescriptorDTO@39df3255]
+Possible solutions: generateSingleDescriptor(groovy.xml.StreamingMarkupBuilder, barddataexport.dictionary.DescriptorDTO)
+	at barddataexport.dictionary.DictionaryExportHelperServiceUnitSpec.test generate Single Descriptor #dto(DictionaryExportHelperServiceUnitSpec.groovy:116)
+
