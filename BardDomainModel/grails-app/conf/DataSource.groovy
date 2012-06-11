@@ -13,18 +13,12 @@ hibernate {
 environments {
     development {
         dataSource {
-           // dbCreate = "create-drop" // one of 'create', 'create-drop', 'update', 'validate', ''
-           // url = "jdbc:h2:mem:devDb;MVCC=TRUE"
-            url = "jdbc:oracle:thin:@barddb:1521:bardqa"
-            //url = "jdbc:oracle:thin:@dbnode01:1521:bcbdev"
-            dialect = bard.SequencePerTableOracleDialect
-            username = "JASIEDU"
-            password = "JASIEDU"
+            dbCreate = "create-drop" // one of 'create', 'create-drop', 'update', 'validate', ''
+           url = "jdbc:h2:mem:devDb;MVCC=TRUE"
         }
     }
     oracleqa {
         dataSource {
-            //dbCreate = 'update'
             url = "jdbc:oracle:thin:@barddb:1521:bardqa"
             driverClassName = "oracle.jdbc.driver.OracleDriver"
             dialect = bard.SequencePerTableOracleDialect

@@ -1,6 +1,6 @@
 class BardDomainModelGrailsPlugin {
 
-    String groupId = 'org.grails.plugin'
+    String groupId = 'org.grails.plugins'
 
     // the plugin version
     def version = "0.1"
