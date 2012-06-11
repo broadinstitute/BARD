@@ -24,6 +24,7 @@ grails.project.dependency.resolution = {
         // specify dependencies here under either 'build', 'compile', 'runtime', 'test' or 'provided' scopes eg.
 
         // runtime 'mysql:mysql-connector-java:5.1.5'
+        compile 'com.oracle:ojdbc6:11.2.0.2.0'
     }
 
     plugins {
@@ -31,6 +32,7 @@ grails.project.dependency.resolution = {
               ":release:2.0.0") {
             export = false
         }
+        build ":database-migration:1.0"
     }
 }
 
