@@ -1,4 +1,4 @@
-<plugin name='bard-domain-model' version='0.1' grailsVersion='2.0 &gt; *'>
+<plugin name='bard-domain-model' version='0.1.1' grailsVersion='2.0 &gt; *'>
   <author>Broad Chemical Biology Platform</author>
   <authorEmail>cbntsoftware@broadinstitute.org</authorEmail>
   <title>Bard Domain Model Plugin</title>
