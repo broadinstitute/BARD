@@ -2,13 +2,15 @@ package barddataexport.dictionary
 
 import groovy.sql.Sql
 import groovy.xml.MarkupBuilder
-import org.codehaus.groovy.grails.commons.GrailsApplication
 import org.codehaus.groovy.grails.web.mapping.LinkGenerator
 
 class DictionaryExportHelperService {
-    GrailsApplication grailsApplication
     LinkGenerator grailsLinkGenerator
+    final String elementMimeType
 
+    DictionaryExportHelperService(String elementMimeType) {
+        this.elementMimeType = elementMimeType
+    }
     /**
      * Root node for generating the entire dictionary
      * @param sql
@@ -370,7 +372,7 @@ class DictionaryExportHelperService {
             }
             //now generate links for editing the element
             //clients can use this link to indicate that they have consumed the element
-            final String ELEMENT_MEDIA_TYPE = grailsApplication.config.bard.data.export.dictionary.element.xml
+            final String ELEMENT_MEDIA_TYPE = this.elementMimeType
             final String elementHref = grailsLinkGenerator.link(mapping: 'element', absolute: true, params: [id: elementDTO.elementId]).toString()
             link(rel: 'edit', href: "${elementHref}", type: "${ELEMENT_MEDIA_TYPE}")
 
