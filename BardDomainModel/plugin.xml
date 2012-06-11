@@ -39,6 +39,8 @@
     <resource>bard.db.registration.MeasureContextItem</resource>
     <resource>bard.db.registration.Protocol</resource>
     <resource>bard.db.util.Qualifier</resource>
+    <resource>changelog</resource>
+    <resource>iteration-001.01-initial-base-line</resource>
   </resources>
   <repositories>
     <repository name='http://cbip-repo:8081/artifactory/repo' url='http://cbip-repo:8081/artifactory/repo/' />
@@ -48,8 +50,16 @@
     <repository name='grailsCore' url='http://svn.codehaus.org/grails/trunk/grails-plugins' />
     <repository name='mavenCentral' url='http://repo1.maven.org/maven2/' />
   </repositories>
-  <dependencies />
-  <plugins />
+  <dependencies>
+    <compile>
+      <dependency group='com.oracle' name='ojdbc6' version='11.2.0.2.0' />
+    </compile>
+  </dependencies>
+  <plugins>
+    <build>
+      <plugin group='org.grails.plugins' name='database-migration' version='1.0' />
+    </build>
+  </plugins>
   <runtimePluginRequirements />
   <behavior />
 </plugin>

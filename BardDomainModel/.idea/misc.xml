@@ -2,9 +2,11 @@
 <project version="4">
   <component name="DaemonCodeAnalyzer">
     <disable_hints />
-<<<<<<< HEAD
   </component>
-  <component name="IdProvider" IDEtalkID="7E9DAF179C603EDEF121B9AEF0C52955" />
+  <component name="EntryPointsManager">
+    <entry_points version="2.0" />
+  </component>
+  <component name="IdProvider" IDEtalkID="2017CC044D4F1E7B09EC8CF9298A616A" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="false">
     <OptionsSetting value="true" id="Add" />
     <OptionsSetting value="true" id="Remove" />
@@ -17,19 +19,6 @@
   </component>
   <component name="ProjectResources">
     <default-html-doctype>http://www.w3.org/1999/xhtml</default-html-doctype>
-=======
-  </component>
-  <component name="IdProvider" IDEtalkID="1A6F715CBE6A5410D401645BD2802338" />
-  <component name="ProjectLevelVcsManager" settingsEditedManually="false">
-    <OptionsSetting value="true" id="Add" />
-    <OptionsSetting value="true" id="Remove" />
-    <OptionsSetting value="true" id="Checkout" />
-    <OptionsSetting value="true" id="Update" />
-    <OptionsSetting value="true" id="Status" />
-    <OptionsSetting value="true" id="Edit" />
-    <ConfirmationsSetting value="0" id="Add" />
-    <ConfirmationsSetting value="0" id="Remove" />
->>>>>>> a728da9fd7c9a72d2f55d03bd7efae44e4cd16de
   </component>
   <component name="ProjectRootManager" version="2" languageLevel="JDK_1_6" assert-keyword="true" jdk-15="true" project-jdk-name="1.6" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/out" />
@@ -154,26 +143,6 @@
       <Host>localhost</Host>
       <Port>5050</Port>
     </configuration>
-<<<<<<< HEAD
-=======
-  </component>
-  <component name="WebServicesPlugin" addRequiredLibraries="true" />
-  <component name="masterDetails">
-    <states>
-      <state key="ProjectJDKs.UI">
-        <settings>
-          <last-edited>1.6</last-edited>
-          <splitter-proportions>
-            <option name="proportions">
-              <list>
-                <option value="0.2" />
-              </list>
-            </option>
-          </splitter-proportions>
-        </settings>
-      </state>
-    </states>
->>>>>>> a728da9fd7c9a72d2f55d03bd7efae44e4cd16de
   </component>
   <component name="WebServicesPlugin" addRequiredLibraries="true" />
 </project>
