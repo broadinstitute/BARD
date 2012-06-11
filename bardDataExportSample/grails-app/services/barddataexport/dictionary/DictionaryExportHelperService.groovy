@@ -11,7 +11,8 @@ class DictionaryExportHelperService {
 
     /**
      * Root node for generating the entire dictionary
-     * @return dictionary as XML
+     * @param sql
+     * @param xml
      */
     public void generateDictionary(final Sql sql, final MarkupBuilder xml) {
         xml.dictionary() {
@@ -22,6 +23,7 @@ class DictionaryExportHelperService {
             generateDescriptors(sql, xml, [DescriptorType.BIOLOGY_DESCRIPTOR, DescriptorType.ASSAY_DESCRIPTOR, DescriptorType.INSTANCE_DESCRIPTOR])
             generateLabs(sql, xml)
             generateUnits(sql, xml)
+            generateUnitConversions(sql, xml)
         }
     }
     /**
@@ -81,130 +83,6 @@ class DictionaryExportHelperService {
             generateDescriptor(xml, descriptorDTO, descriptorType)
         }
     }
-
-    /**
-     * Generate a descriptor element for the given descriptorType
-     * @param xml
-     * @param descriptorDTO
-     * @param descriptorType
-     */
-    public void generateDescriptor(final MarkupBuilder xml, final DescriptorDTO descriptorDTO, final DescriptorType descriptorType) {
-        final Map<String, String> attributes = generateAttributesForDescriptor(descriptorDTO);
-        switch (descriptorType) {
-            case DescriptorType.BIOLOGY_DESCRIPTOR:
-                xml.biologyDescriptor(attributes) {
-                    generateSingleDescriptor(xml, descriptorDTO)
-                }
-                break
-            case DescriptorType.ASSAY_DESCRIPTOR:
-                xml.assayDescriptor(attributes) {
-                    generateSingleDescriptor(xml, descriptorDTO)
-                }
-                break
-            case DescriptorType.INSTANCE_DESCRIPTOR:
-                xml.instanceDescriptor(attributes) {
-                    generateSingleDescriptor(xml, descriptorDTO)
-                }
-                break
-            default:
-                throw new RuntimeException("Unknown Descriptor Type ${descriptorType}")
-        }
-    }
-
-    /**
-     * Generate result type element for a given dto
-     *
-     * <resultType> </resultType>
-     * @param xml
-     * @param resultTypeDTO
-     */
-    public void generateResultType(final MarkupBuilder xml, final ResultTypeDTO resultTypeDTO) {
-        final Map<String, String> attributes = generateAttributesForResultType(resultTypeDTO)
-
-        xml.resultType(attributes) {
-
-            if (resultTypeDTO.resultTypeName) {
-                resultTypeName(resultTypeDTO.resultTypeName)
-            }
-            if (resultTypeDTO.description) {
-                description(resultTypeDTO.description)
-            }
-            if (resultTypeDTO.synonyms) {
-                synonyms(resultTypeDTO.synonyms)
-            }
-        }
-    }
-
-    /**
-     * Generate a single stage from the given parameters
-     * @param xml
-     * @param stageId
-     * @param parentStageId
-     * @param stage
-     * @param descriptionText
-     * @param stageStatus
-     */
-    public void generateStage(final MarkupBuilder xml,
-                              final BigDecimal stageId,
-                              final BigDecimal parentStageId,
-                              final String stage,
-                              final String descriptionText,
-                              final String stageStatus) {
-
-        final Map<String, String> attributes = generateAttributesForStage(stageId, parentStageId, stageStatus)
-        xml.stage(attributes) {
-            if (stage) {
-                stageName(stage)
-            }
-            if (descriptionText) {
-                description(descriptionText)
-            }
-        }
-    }
-    /**
-     *  Generate element from a dto
-     * @param xml
-     * @param elementDTO
-     *
-     * <element></element>
-     */
-    public void generateElement(final MarkupBuilder xml, final ElementDTO elementDTO) {
-        final Map<String, String> attributes = [:]
-
-
-        attributes.put('elementId', elementDTO.elementId.toString())
-        attributes.put('readyForExtraction', elementDTO.readyForExtraction)
-        if (elementDTO.elementStatus) {
-            attributes.put('elementStatus', elementDTO.elementStatus)
-        }
-        if (elementDTO.abbreviation) {
-            attributes.put('abbreviation', elementDTO.abbreviation)
-        }
-
-        if (elementDTO.unit) {
-            attributes.put('unit', elementDTO.unit)
-        }
-        xml.element(attributes) {
-            if (elementDTO.label) {
-                label(elementDTO.label)
-            }
-            if (elementDTO.description) {
-                description(elementDTO.description)
-            }
-            if (elementDTO.synonyms) {
-                synonyms(elementDTO.synonyms)
-            }
-            if (elementDTO.externalUrl) {
-                externalUrl(elementDTO.externalUrl)
-            }
-            //now generate links for editing the element
-            //clients can use this link to indicate that they have consumed the element
-            final String ELEMENT_MEDIA_TYPE = grailsApplication.config.bard.data.export.dictionary.element.xml
-            final String elementHref = grailsLinkGenerator.link(mapping: 'element', absolute: true, params: [id: elementDTO.elementId]).toString()
-            link(rel: 'edit', href: "${elementHref}", type: "${ELEMENT_MEDIA_TYPE}")
-
-        }
-    }
     /**
      * Generate an element from an elementId
      * <element elementId=""></element>
@@ -252,8 +130,7 @@ class DictionaryExportHelperService {
     public void generateElementHierarchies(final Sql sql, final MarkupBuilder xml) {
         xml.elementHierarchies() {
             sql.eachRow('SELECT ELEMENT_HIERARCHY_ID,PARENT_ELEMENT_ID,CHILD_ELEMENT_ID, RELATIONSHIP_TYPE FROM ELEMENT_HIERARCHY') { elementHierarchyRow ->
-                generateElementHierarchy(xml, elementHierarchyRow.ELEMENT_HIERARCHY_ID,
-                        elementHierarchyRow.PARENT_ELEMENT_ID, elementHierarchyRow.CHILD_ELEMENT_ID, elementHierarchyRow.RELATIONSHIP_TYPE)
+                generateElementHierarchy(xml, new ElementHierarchyDTO(elementHierarchyRow.PARENT_ELEMENT_ID, elementHierarchyRow.CHILD_ELEMENT_ID, elementHierarchyRow.RELATIONSHIP_TYPE))
             }
         }
     }
@@ -312,7 +189,10 @@ class DictionaryExportHelperService {
             sql.eachRow('SELECT STAGE_ID FROM STAGE WHERE NODE_ID=' + parentNodeId) { parentStageRow ->
                 stageParentId = parentStageRow.STAGE_ID
             }
-            generateStage(xml, row.STAGE_ID, stageParentId, row.STAGE, row.DESCRIPTION, row.STAGE_STATUS)
+            final String stage = row.STAGE
+            final String descriptionText = row.DESCRIPTION
+            final String stageStatus = row.STAGE_STATUS
+            generateStage(xml, new StageDTO(stageId, stageParentId, stage, descriptionText, stageStatus))
         }
     }
     /**
@@ -331,27 +211,6 @@ class DictionaryExportHelperService {
     }
     /**
      *
-     * @param xml
-     * @param elementHierarchyId
-     * @param parentElementId
-     * @param childElementId
-     * @param relationshipTypeValue
-     */
-    public void generateElementHierarchy(final MarkupBuilder xml,
-                                         final BigDecimal elementHierarchyId,
-                                         final BigDecimal parentElementId,
-                                         final BigDecimal childElementId,
-                                         final BigDecimal relationshipTypeValue) {
-
-        final Map<String, String> attributes = generateAttributesForElementHierarchy(elementHierarchyId, parentElementId, childElementId)
-        xml.elementHierarchy(attributes) {
-            if (relationshipTypeValue) {
-                relationshipType(relationshipTypeValue)
-            }
-        }
-    }
-    /**
-     *
      * @param sql
      * @param xml
      */
@@ -365,6 +224,15 @@ class DictionaryExportHelperService {
                 final LaboratoryDTO laboratoryDTO = new LaboratoryDTO(labRow.LABORATORY_ID, parentLabId, labRow.DESCRIPTION, labRow.LABORATORY, labRow.LABORATORY_STATUS)
                 generateLab(xml, laboratoryDTO)
             }
+        }
+    }
+
+    public void generateUnitConversions(final Sql sql, final MarkupBuilder xml) {
+        xml.unitConversions() {
+            sql.eachRow('SELECT FROM_UNIT,TO_UNIT,MULTIPLIER,OFFSET,FORMULA FROM UNIT_CONVERSION') { row ->
+                final UnitConversionDTO unitConversionDTO =   new UnitConversionDTO(row.FROM_UNIT, row.TO_UNIT, row.FORMULA, row.OFFSET, row.MULTIPLIER)
+                generateUnitConversion(xml,unitConversionDTO)
+             }
         }
     }
     /**
@@ -388,6 +256,160 @@ class DictionaryExportHelperService {
                 final String descriptionText = row.DESCRIPTION
                 final UnitDTO unitDTO = new UnitDTO(unitId, parentUnitId, unit, descriptionText)
                 generateUnit(xml, unitDTO)
+            }
+        }
+    }
+    /**
+     *
+     * @param xml
+     * @param unitId
+     * @param parentUnitId
+     * @param unit
+     * @param descriptionText
+     */
+    public void generateUnitConversion(
+            final MarkupBuilder xml,
+            final UnitConversionDTO unitConversionDTO
+    ) {
+        final Map<String, String> attributes =
+            generateAttributesForUnitConversion(unitConversionDTO)
+
+        xml.unitConversion(attributes) {
+            if (unitConversionDTO.formula) {
+                formula(unitConversionDTO.formula)
+            }
+        }
+    }
+    /**
+     * Generate a descriptor element for the given descriptorType
+     * @param xml
+     * @param descriptorDTO
+     * @param descriptorType
+     */
+    public void generateDescriptor(final MarkupBuilder xml, final DescriptorDTO descriptorDTO, final DescriptorType descriptorType) {
+        final Map<String, String> attributes = generateAttributesForDescriptor(descriptorDTO);
+        switch (descriptorType) {
+            case DescriptorType.BIOLOGY_DESCRIPTOR:
+                xml.biologyDescriptor(attributes) {
+                    generateSingleDescriptor(xml, descriptorDTO)
+                }
+                break
+            case DescriptorType.ASSAY_DESCRIPTOR:
+                xml.assayDescriptor(attributes) {
+                    generateSingleDescriptor(xml, descriptorDTO)
+                }
+                break
+            case DescriptorType.INSTANCE_DESCRIPTOR:
+                xml.instanceDescriptor(attributes) {
+                    generateSingleDescriptor(xml, descriptorDTO)
+                }
+                break
+            default:
+                throw new RuntimeException("Unknown Descriptor Type ${descriptorType}")
+        }
+    }
+    /**
+     * Generate result type element for a given dto
+     *
+     * <resultType> </resultType>
+     * @param xml
+     * @param resultTypeDTO
+     */
+    public void generateResultType(final MarkupBuilder xml, final ResultTypeDTO resultTypeDTO) {
+        final Map<String, String> attributes = generateAttributesForResultType(resultTypeDTO)
+
+        xml.resultType(attributes) {
+
+            if (resultTypeDTO.resultTypeName) {
+                resultTypeName(resultTypeDTO.resultTypeName)
+            }
+            if (resultTypeDTO.description) {
+                description(resultTypeDTO.description)
+            }
+            if (resultTypeDTO.synonyms) {
+                synonyms(resultTypeDTO.synonyms)
+            }
+        }
+    }
+
+    /**
+     *  Generate element from a dto
+     * @param xml
+     * @param elementDTO
+     *
+     * <element></element>
+     */
+    public void generateElement(final MarkupBuilder xml, final ElementDTO elementDTO) {
+        final Map<String, String> attributes = [:]
+
+
+        attributes.put('elementId', elementDTO.elementId.toString())
+        attributes.put('readyForExtraction', elementDTO.readyForExtraction)
+        if (elementDTO.elementStatus) {
+            attributes.put('elementStatus', elementDTO.elementStatus)
+        }
+        if (elementDTO.abbreviation) {
+            attributes.put('abbreviation', elementDTO.abbreviation)
+        }
+
+        if (elementDTO.unit) {
+            attributes.put('unit', elementDTO.unit)
+        }
+        xml.element(attributes) {
+            if (elementDTO.label) {
+                label(elementDTO.label)
+            }
+            if (elementDTO.description) {
+                description(elementDTO.description)
+            }
+            if (elementDTO.synonyms) {
+                synonyms(elementDTO.synonyms)
+            }
+            if (elementDTO.externalUrl) {
+                externalUrl(elementDTO.externalUrl)
+            }
+            //now generate links for editing the element
+            //clients can use this link to indicate that they have consumed the element
+            final String ELEMENT_MEDIA_TYPE = grailsApplication.config.bard.data.export.dictionary.element.xml
+            final String elementHref = grailsLinkGenerator.link(mapping: 'element', absolute: true, params: [id: elementDTO.elementId]).toString()
+            link(rel: 'edit', href: "${elementHref}", type: "${ELEMENT_MEDIA_TYPE}")
+
+        }
+    }
+    /**
+     *
+     * @param xml
+     * @param elementHierarchyDTO
+     */
+    public void generateElementHierarchy(final MarkupBuilder xml,
+                                         final ElementHierarchyDTO elementHierarchyDTO) {
+
+        final Map<String, String> attributes = generateAttributesForElementHierarchy(elementHierarchyDTO.parentElementId, elementHierarchyDTO.childElementId)
+        xml.elementHierarchy(attributes) {
+            if (elementHierarchyDTO.relationshipTypeValue) {
+                relationshipType(elementHierarchyDTO.relationshipTypeValue)
+            }
+        }
+    }
+    /**
+     * Generate a single stage from the given parameters
+     * @param xml
+     * @param stageId
+     * @param parentStageId
+     * @param stage
+     * @param descriptionText
+     * @param stageStatus
+     */
+    public void generateStage(final MarkupBuilder xml,
+                              final StageDTO stageDTO) {
+
+        final Map<String, String> attributes = generateAttributesForStage(stageDTO.stageId, stageDTO.parentStageId, stageDTO.stageStatus)
+        xml.stage(attributes) {
+            if (stageDTO.stage) {
+                stageName(stageDTO.stage)
+            }
+            if (stageDTO.descriptionText) {
+                description(stageDTO.descriptionText)
             }
         }
     }
@@ -483,17 +505,31 @@ class DictionaryExportHelperService {
      * @param childElementId
      * @return Map
      */
-    public Map<String, String> generateAttributesForElementHierarchy(final BigDecimal elementHierarchyId, final BigDecimal parentElementId, final BigDecimal childElementId) {
+    public Map<String, String> generateAttributesForElementHierarchy(final BigDecimal parentElementId, final BigDecimal childElementId) {
         final Map<String, String> attributes = [:]
 
-        if (elementHierarchyId) {
-            attributes.put('elementHierarchyId', elementHierarchyId.toString())
-        }
         if (parentElementId) {
             attributes.put('parentElementId', parentElementId.toString())
         }
         if (childElementId) {
             attributes.put('childElementId', childElementId.toString())
+        }
+        return attributes
+    }
+    public Map<String, String> generateAttributesForUnitConversion(final UnitConversionDTO unitConversionDTO){
+        final Map<String, String> attributes = [:]
+
+        if(unitConversionDTO.fromUnit){
+            attributes.put('fromUnit', unitConversionDTO.fromUnit)
+        }
+        if(unitConversionDTO.toUnit){
+            attributes.put('toUnit', unitConversionDTO.toUnit)
+        }
+        if(unitConversionDTO.multiplier){
+            attributes.put('multiplier', unitConversionDTO.multiplier.toString())
+        }
+        if(unitConversionDTO.offSet){
+            attributes.put('offset', unitConversionDTO.offSet.toString())
         }
         return attributes
     }
@@ -686,4 +722,62 @@ class ResultTypeDTO {
         this.baseUnit = baseUnit
         this.status = status
     }
+}
+class StageDTO {
+    final BigDecimal stageId
+    final BigDecimal parentStageId
+    final String stage
+    final String descriptionText
+    final String stageStatus
+
+    StageDTO(final BigDecimal stageId,
+             final BigDecimal parentStageId,
+             final String stage,
+             final String descriptionText,
+             final String stageStatus) {
+
+        this.stageId = stageId
+        this.parentStageId = parentStageId
+        this.stage = stage
+        this.descriptionText = descriptionText
+        this.stageStatus = stageStatus
+    }
+
+
+}
+class ElementHierarchyDTO {
+    final BigDecimal parentElementId
+    final BigDecimal childElementId
+    final String relationshipTypeValue
+
+    ElementHierarchyDTO(
+            final BigDecimal parentElementId,
+            final BigDecimal childElementId,
+            final String relationshipTypeValue) {
+        this.parentElementId = parentElementId
+        this.childElementId = childElementId
+        this.relationshipTypeValue = relationshipTypeValue
+    }
+}
+class UnitConversionDTO {
+
+
+    final String fromUnit
+    final String toUnit
+    final String formula
+    final BigDecimal offSet
+    final BigDecimal multiplier
+
+    UnitConversionDTO(final String fromUnit,
+                      final String toUnit,
+                      final String formula,
+                      final BigDecimal offSet,
+                      final BigDecimal multiplier) {
+        this.fromUnit = fromUnit
+        this.toUnit= toUnit
+        this.formula = formula
+        this.offSet = offSet
+        this.multiplier = multiplier
+    }
+
 }

@@ -13,11 +13,9 @@ hibernate {
 environments {
     development {
         dataSource {
-            url = "jdbc:oracle:thin:@barddb:1521:bardqa"
-            driverClassName = "oracle.jdbc.driver.OracleDriver"
-            dialect = bard.SequencePerTableOracleDialect
-            username = "bard_qa"
-            password = "bard_qa"        }
+            dbCreate = "create-drop"
+            url = "jdbc:h2:mem:devDb;MVCC=TRUE"
+        }
     }
     development_bardqa {
         dataSource {
@@ -41,25 +39,11 @@ environments {
     }
     test {
         dataSource {
-           // dbCreate = "create-drop" // one of 'create', 'create-drop', 'update', 'validate', ''
-            //url = "jdbc:h2:mem:devDb;MVCC=TRUE"
-            url = "jdbc:oracle:thin:@barddb:1521:bardqa"
-            driverClassName = "oracle.jdbc.driver.OracleDriver"
-            dialect = bard.SequencePerTableOracleDialect
-            username = "bard_qa"
-            password = "bard_qa"
+            dbCreate = "create-drop" // one of 'create', 'create-drop', 'update', 'validate', ''
+            url = "jdbc:h2:mem:devDb;MVCC=TRUE"
+        }
+    }
 
-        }
-    }
-    test_generate_samples {
-        dataSource {
-            url = "jdbc:oracle:thin:@barddb:1521:bardqa"
-            driverClassName = "oracle.jdbc.driver.OracleDriver"
-            dialect = bard.SequencePerTableOracleDialect
-            username = "bard_qa"
-            password = "bard_qa"
-        }
-    }
     production {
         dataSource {
             dbCreate = "update"

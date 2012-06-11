@@ -1,11 +1,11 @@
 class UrlMappings {
 
-	static mappings = {
-		"/$controller/$action?/$id?"{
-			constraints {
-				// apply constraints here
-			}
-		}
+    static mappings = {
+        "/$controller/$action?/$id?" {
+            constraints {
+                // apply constraints here
+            }
+        }
         name api: "/api"(controller: "rootRest") {
             action = [GET: "api"]
         }
@@ -40,7 +40,7 @@ class UrlMappings {
             action = [GET: "experiments"]
         }
         name experiment: "/api/data/experiment/$id"(controller: "experimentRest") {
-            action = [GET: "experiment", PATCH:"updateExperiment"]
+            action = [GET: "experiment", PATCH: "updateExperiment"]
         }
         name results: "/api/data/experiment/$id/results"(controller: "experimentRest") {
             action = [GET: "results"]
@@ -48,7 +48,7 @@ class UrlMappings {
         name result: "/api/data/result/$id"(controller: "experimentRest") {
             action = [GET: "result", PATCH: "updateResult"]
         }
-        "/"(view:"/index")
-		"500"(view:'/error')
-	}
+        "/"(view: "/index")
+        "500"(view: '/error')
+    }
 }

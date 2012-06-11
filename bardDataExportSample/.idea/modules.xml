@@ -4,6 +4,7 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/BardDataExportSample.iml" filepath="$PROJECT_DIR$/BardDataExportSample.iml" />
       <module fileurl="file://$PROJECT_DIR$/BardDataExportSample-grailsPlugins.iml" filepath="$PROJECT_DIR$/BardDataExportSample-grailsPlugins.iml" />
+      <module fileurl="file://$PROJECT_DIR$/BardDataExportSample-grailsPlugins.iml" filepath="$PROJECT_DIR$/BardDataExportSample-grailsPlugins.iml" />
     </modules>
   </component>
 </project>

@@ -11,11 +11,11 @@
 // }
 
 //Number of experiments per page
-bard.experiments.max.per.page=1000000
+bard.experiments.max.per.page = 1000000
 
 //number of results per page
-bard.results.max.per.page=5000
-bard.pubchem.sid.url.prefix='http://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid='
+bard.results.max.per.page = 5000
+bard.pubchem.sid.url.prefix = 'http://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid='
 //root
 bard.data.export.bardexport.xml = 'application/vnd.bard.cap+xml;type=bardexport'
 
@@ -41,7 +41,7 @@ grails.project.groupId = appName // change this to alter the default package nam
 grails.mime.file.extensions = true // enables the parsing of file extensions from URLs into the request format
 grails.mime.use.accept.header = false
 grails.mime.types = [html: ['text/html', 'application/xhtml+xml'],
-        xml: [ 'text/xml', 'application/xml',
+        xml: ['text/xml', 'application/xml',
                 "${bard.data.export.bardexport.xml}",
                 "${bard.data.export.data.experiments.xml}",
                 "${bard.data.export.data.experiment.xml}",
@@ -50,7 +50,7 @@ grails.mime.types = [html: ['text/html', 'application/xhtml+xml'],
                 "${bard.data.export.cap.xml}",
                 "${bard.data.export.cap.projects.xml}",
                 "${bard.data.export.cap.project.xml}",
-                "${bard.data.export.cap.assay.xml}" ,
+                "${bard.data.export.cap.assay.xml}",
                 "${bard.data.export.dictionary.xml}",
                 "${bard.data.export.dictionary.resultType.xml}",
                 "${bard.data.export.dictionary.stage.xml}",
