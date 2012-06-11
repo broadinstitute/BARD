@@ -19,7 +19,7 @@ environments {
     }
     oracleqa {
         dataSource {
-            dbCreate = 'update'
+//            dbCreate = 'update'
             url = "jdbc:oracle:thin:@barddb:1521:bardqa"
             driverClassName = "oracle.jdbc.driver.OracleDriver"
             dialect = bard.SequencePerTableOracleDialect

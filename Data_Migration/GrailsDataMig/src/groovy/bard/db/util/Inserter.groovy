@@ -1,12 +1,12 @@
 package bard.db.util
 
-import edu.scripps.fl.pubchem.PubChemFactory
-import edu.scripps.fl.pubchem.db.PCAssay
-import edu.scripps.fl.pubchem.PubChemXMLParserFactory
-import bard.db.registration.Assay
 import bard.db.experiment.Experiment
+import bard.db.registration.Assay
 import bard.db.registration.ExternalAssay
 import bard.db.registration.ExternalSystem
+import edu.scripps.fl.pubchem.PubChemFactory
+import edu.scripps.fl.pubchem.PubChemXMLParserFactory
+import edu.scripps.fl.pubchem.db.PCAssay
 
 class Inserter {
     Inserter(){}
@@ -39,11 +39,11 @@ class Inserter {
 
         // id, status, name, assay_version, version, date_created, ready_for_extraction
         Assay bardAssay = new Assay()
-        bardAssay.setAssayName(pcAssay.getName())
+        bardAssay.setAssayName(pcAssay.getName().substring(0,127))
         bardAssay.setAssayVersion(pcAssay.version as String)
         bardAssay.setVersion(1)
         bardAssay.setDateCreated(pcAssay.getDepositDate() )
-        bardAssay.setDescription(pcAssay.getDescription())
+        bardAssay.setDescription(pcAssay.getDescription().substring(0,999))
         bardAssay.setAssayStatus("Active")
         bardAssay.setReadyForExtraction('Ready')
 
@@ -54,8 +54,9 @@ class Inserter {
                 bardAssay.errors.each {
                     println "Problem saving record = ${it}"
                 }
-                print 'hello'
+
             }
+            print "Assay Record successfully inserted"
         }
         catch(Exception ex) {
             ex.printStackTrace()
@@ -63,12 +64,14 @@ class Inserter {
 
 
 
+        ExternalSystem  externalSystem  =  ExternalSystem.findById(1l)
         ExternalAssay extAssay = new ExternalAssay()
-        extAssay.setExternalSystem(system)
+        extAssay.setExternalSystem(externalSystem)
         extAssay.setAssay(bardAssay)
         extAssay.setDateCreated(pcAssay.getDepositDate())
         extAssay.setExtAssayId("aid=" + pcAssay.getAID())
         extAssay.setVersion(pcAssay.getVersion())
+        print "ExternalAssay Record successfully inserted"
 
 
 
