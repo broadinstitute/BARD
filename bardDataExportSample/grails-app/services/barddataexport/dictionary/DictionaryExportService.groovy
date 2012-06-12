@@ -1,9 +1,8 @@
 package barddataexport.dictionary
 
 import groovy.sql.Sql
-
-import javax.sql.DataSource
 import groovy.xml.MarkupBuilder
+
 /**
  * Top Level service for handling the
  * generation of dictionary and dictionary elements
@@ -12,9 +11,7 @@ import groovy.xml.MarkupBuilder
  *
  */
 class DictionaryExportService {
-    DataSource dataSource
     DictionaryExportHelperService dictionaryExportHelperService
-
 
     /**
      *  Generate a stage element given a stageId
@@ -23,8 +20,7 @@ class DictionaryExportService {
      * @param stageId
      */
     public void generateStage(final MarkupBuilder xml, final BigDecimal stageId) {
-        final Sql sql = new Sql(dataSource)
-        this.dictionaryExportHelperService.generateStage(sql,xml,stageId)
+        this.dictionaryExportHelperService.generateStage(xml, stageId)
         //validate stage
     }
 
@@ -35,8 +31,7 @@ class DictionaryExportService {
      * @param resultTypeId
      */
     public void generateResultType(final MarkupBuilder xml, final BigDecimal resultTypeId) {
-        final Sql sql = new Sql(dataSource)
-        dictionaryExportHelperService.generateResultType(sql, xml, resultTypeId)
+        dictionaryExportHelperService.generateResultType(xml, resultTypeId)
         //validate result type
     }
 
@@ -47,8 +42,7 @@ class DictionaryExportService {
      * @param elementId
      */
     public void generateElementWithElementId(final MarkupBuilder xml, final BigDecimal elementId) {
-        final Sql sql = new Sql(dataSource)
-        dictionaryExportHelperService.generateElementWithElementId(sql,xml,elementId)
+        dictionaryExportHelperService.generateElementWithElementId(xml, elementId)
         //validate element
     }
     /**
@@ -59,15 +53,14 @@ class DictionaryExportService {
      * <element></element>
      */
     public void generateElement(final MarkupBuilder xml, final ElementDTO elementDTO) {
-      dictionaryExportHelperService.generateElement(xml,elementDTO)
-      //validate element
+        dictionaryExportHelperService.generateElement(xml, elementDTO)
+        //validate element
     }
     /**
      * Root node for generating the entire dictionary
      */
     public void generateDictionary(final MarkupBuilder xml) {
-        final Sql sql = new Sql(dataSource)
-        dictionaryExportHelperService.generateDictionary(sql, xml)
+        dictionaryExportHelperService.generateDictionary(xml)
         //validate dictionary
     }
 }

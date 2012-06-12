@@ -1,7 +1,7 @@
 package barddataexport.dictionary
 
 import groovy.xml.MarkupBuilder
-import org.codehaus.groovy.grails.commons.GrailsApplication
+
 import org.codehaus.groovy.grails.web.mapping.LinkGenerator
 import org.custommonkey.xmlunit.Diff
 import org.custommonkey.xmlunit.XMLUnit
@@ -19,7 +19,8 @@ class DictionaryExportHelperServiceUnitSpec extends Specification {
     void setup() {
         grailsLinkGenerator = Mock()
         this.dictionaryExportHelperService =
-            new DictionaryExportHelperService(elementMimeType: "xml", grailsLinkGenerator: grailsLinkGenerator)
+            new DictionaryExportHelperService("xml")
+        this.dictionaryExportHelperService.grailsLinkGenerator = grailsLinkGenerator
     }
 
     void tearDown() {
@@ -235,14 +236,6 @@ class DictionaryExportHelperServiceUnitSpec extends Specification {
         when:
         this.dictionaryExportHelperService.generateElement(xml, dto)
         then:
-//        grailsApplication.getConfig() >> config
-//        config.getProperty('bard') >> bard
-//        bard.getProperty('data') >> data
-//        data.getProperty('export') >> export
-//        export.getProperty('dictionary') >> dictionary
-//        dictionary.getProperty('element') >> element
-//        element.getProperty('xml') >> 'xml'
-
         XMLUnit.setIgnoreWhitespace(true)
         def xmlDiff = new Diff(writer.toString(), results)
         assert xmlDiff.similar()

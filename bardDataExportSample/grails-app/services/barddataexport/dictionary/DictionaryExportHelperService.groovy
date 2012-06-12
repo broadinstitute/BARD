@@ -4,52 +4,55 @@ import groovy.sql.Sql
 import groovy.xml.MarkupBuilder
 import org.codehaus.groovy.grails.web.mapping.LinkGenerator
 
+import javax.sql.DataSource
+
 class DictionaryExportHelperService {
     LinkGenerator grailsLinkGenerator
-    final String elementMimeType
+    String elementMimeType
+    DataSource dataSource
 
-    DictionaryExportHelperService(String elementMimeType) {
+    DictionaryExportHelperService(final String elementMimeType) {
         this.elementMimeType = elementMimeType
     }
     /**
      * Root node for generating the entire dictionary
-     * @param sql
+     *
      * @param xml
      */
-    public void generateDictionary(final Sql sql, final MarkupBuilder xml) {
+    public void generateDictionary(final MarkupBuilder xml) {
         xml.dictionary() {
-            generateElements(sql, xml)
-            generateElementHierarchies(sql, xml)
-            generateResultTypes(sql, xml)
-            generateStages(sql, xml)
-            generateDescriptors(sql, xml, [DescriptorType.BIOLOGY_DESCRIPTOR, DescriptorType.ASSAY_DESCRIPTOR, DescriptorType.INSTANCE_DESCRIPTOR])
-            generateLabs(sql, xml)
-            generateUnits(sql, xml)
-            generateUnitConversions(sql, xml)
+            generateElements(xml)
+            generateElementHierarchies(xml)
+            generateResultTypes(xml)
+            generateStages(xml)
+            generateDescriptors(xml, [DescriptorType.BIOLOGY_DESCRIPTOR, DescriptorType.ASSAY_DESCRIPTOR, DescriptorType.INSTANCE_DESCRIPTOR])
+            generateLabs(xml)
+            generateUnits(xml)
+            generateUnitConversions(xml)
         }
     }
     /**
      * Root node for generating all the descriptors
-     * @param sql
+     *
      * @param xml
      * @param descriptorType
      */
-    public void generateDescriptors(final Sql sql, final MarkupBuilder xml, final List<DescriptorType> descriptorTypes) {
+    public void generateDescriptors(final MarkupBuilder xml, final List<DescriptorType> descriptorTypes) {
         for (DescriptorType descriptorType in descriptorTypes) {
             switch (descriptorType) {
                 case DescriptorType.BIOLOGY_DESCRIPTOR:
                     xml.biologyDescriptors() {
-                        generateDescriptors(sql, xml, descriptorType)
+                        generateDescriptors(xml, descriptorType)
                     }
                     break
                 case DescriptorType.ASSAY_DESCRIPTOR:
                     xml.assayDescriptors() {
-                        generateDescriptors(sql, xml, descriptorType)
+                        generateDescriptors(xml, descriptorType)
                     }
                     break
                 case DescriptorType.INSTANCE_DESCRIPTOR:
                     xml.instanceDescriptors() {
-                        generateDescriptors(sql, xml, descriptorType)
+                        generateDescriptors(xml, descriptorType)
                     }
                     break
                 default:
@@ -57,14 +60,71 @@ class DictionaryExportHelperService {
             }
         }
     }
+
+
+    /**
+     * Generate stages
+     *
+     * @param xml
+     */
+    public void generateStages(final MarkupBuilder xml) {
+        final Sql sql = new Sql(dataSource)
+
+        xml.stages() {
+            sql.eachRow('SELECT STAGE_ID FROM STAGE') { row ->
+                final BigDecimal stageId = row.STAGE_ID
+                generateStage(xml, stageId)
+            }
+        }
+    }
+    /**
+     * @param xml
+     */
+    public void generateLabs(final MarkupBuilder xml) {
+        final Sql sql = new Sql(dataSource)
+
+        xml.laboratories() {
+            sql.eachRow('select LABORATORY_ID,LABORATORY, DESCRIPTION, PARENT_NODE_ID,LABORATORY_STATUS  FROM LABORATORY') { labRow ->
+                BigDecimal parentLabId = null
+                sql.eachRow('SELECT LABORATORY_ID FROM LABORATORY WHERE NODE_ID=' + labRow.PARENT_NODE_ID) { parentLaboratoryRow ->
+                    parentLabId = parentLaboratoryRow.LABORATORY_ID
+                }
+                final LaboratoryDTO laboratoryDTO = new LaboratoryDTO(labRow.LABORATORY_ID, parentLabId, labRow.DESCRIPTION, labRow.LABORATORY, labRow.LABORATORY_STATUS)
+                generateLab(xml, laboratoryDTO)
+            }
+        }
+    }
+    /**
+     * Generate stages
+     *
+     * @param xml
+     * @param stageId
+     */
+    public void generateStage(final MarkupBuilder xml, final BigDecimal stageId) {
+        final Sql sql = new Sql(dataSource)
+
+        sql.eachRow('SELECT STAGE_ID, NODE_ID, PARENT_NODE_ID,STAGE,DESCRIPTION, STAGE_STATUS FROM STAGE WHERE STAGE_ID=' + stageId) { row ->
+
+            final BigDecimal parentNodeId = row.PARENT_NODE_ID
+            BigDecimal stageParentId = null
+            sql.eachRow('SELECT STAGE_ID FROM STAGE WHERE NODE_ID=' + parentNodeId) { parentStageRow ->
+                stageParentId = parentStageRow.STAGE_ID
+            }
+            final String stage = row.STAGE
+            final String descriptionText = row.DESCRIPTION
+            final String stageStatus = row.STAGE_STATUS
+            generateStage(xml, new StageDTO(stageId, stageParentId, stage, descriptionText, stageStatus))
+        }
+    }
     /**
      * Root node for generating XML for a specific descriptor type (instanceDescriptor)
      *
-     * @param sql
+     *
      * @param xml
      * @param descriptorType
      */
-    public void generateDescriptors(final Sql sql, final MarkupBuilder xml, final DescriptorType descriptorType) {
+    public void generateDescriptors(final MarkupBuilder xml, final DescriptorType descriptorType) {
+        final Sql sql = new Sql(this.dataSource)
 
         final String selectQuery = "SELECT NODE_ID,PARENT_NODE_ID,ELEMENT_ID,LABEL,DESCRIPTION,ABBREVIATION,SYNONYMS,EXTERNAL_URL,UNIT,ELEMENT_STATUS FROM ${descriptorType}"
 
@@ -88,11 +148,13 @@ class DictionaryExportHelperService {
     /**
      * Generate an element from an elementId
      * <element elementId=""></element>
-     * @param sql
+
      * @param xml
      * @param elementId
      */
-    public void generateElementWithElementId(final Sql sql, final MarkupBuilder xml, final BigDecimal elementId) {
+    public void generateElementWithElementId(final MarkupBuilder xml, final BigDecimal elementId) {
+        final Sql sql = new Sql(dataSource)
+
         sql.eachRow('SELECT ELEMENT_ID, LABEL,DESCRIPTION,ABBREVIATION,SYNONYMS, EXTERNAL_URL,UNIT, ELEMENT_STATUS, READY_FOR_EXTRACTION FROM ELEMENT WHERE ELEMENT_ID=' + elementId) { elementRow ->
 
 
@@ -112,37 +174,43 @@ class DictionaryExportHelperService {
     }
     /**
      * Root Node for generating all elements
-     * @param sql
+
      * @param xml
      */
-    public void generateElements(final Sql sql, final MarkupBuilder xml) {
+    public void generateElements(final MarkupBuilder xml) {
+        final Sql sql = new Sql(dataSource)
 
         xml.elements() {
             sql.eachRow('SELECT ELEMENT_ID FROM ELEMENT') { elementRow ->
                 final BigDecimal elementId = elementRow.ELEMENT_ID
-                generateElementWithElementId(sql, xml, elementId)
+                generateElementWithElementId(xml, elementId)
             }
         }
     }
     /**
      * Root node for generating element hierarchies
-     * @param sql
+
      * @param xml
      */
-    public void generateElementHierarchies(final Sql sql, final MarkupBuilder xml) {
+    public void generateElementHierarchies(final MarkupBuilder xml) {
+        final Sql sql = new Sql(dataSource)
+
         xml.elementHierarchies() {
             sql.eachRow('SELECT ELEMENT_HIERARCHY_ID,PARENT_ELEMENT_ID,CHILD_ELEMENT_ID, RELATIONSHIP_TYPE FROM ELEMENT_HIERARCHY') { elementHierarchyRow ->
                 generateElementHierarchy(xml, new ElementHierarchyDTO(elementHierarchyRow.PARENT_ELEMENT_ID, elementHierarchyRow.CHILD_ELEMENT_ID, elementHierarchyRow.RELATIONSHIP_TYPE))
             }
         }
     }
+
     /**
      *
-     * @param sql
+
      * @param xml
      * @param resultTypeId
      */
-    public void generateResultType(final Sql sql, final MarkupBuilder xml, final BigDecimal resultTypeId) {
+    public void generateResultType(final MarkupBuilder xml, final BigDecimal resultTypeId) {
+        final Sql sql = new Sql(dataSource)
+
         sql.eachRow('SELECT NODE_ID,PARENT_NODE_ID,RESULT_TYPE_ID,RESULT_TYPE_NAME,DESCRIPTION,ABBREVIATION,SYNONYMS,BASE_UNIT,RESULT_TYPE_STATUS FROM RESULT_TYPE WHERE RESULT_TYPE_ID=' + resultTypeId) { row ->
 
             final BigDecimal parentNodeId = row.PARENT_NODE_ID
@@ -166,83 +234,40 @@ class DictionaryExportHelperService {
 
     }
     /**
-     * Generate stages
-     * @param sql
-     * @param xml
-     */
-    public void generateStages(final Sql sql, final MarkupBuilder xml) {
-        xml.stages() {
-            sql.eachRow('SELECT STAGE_ID FROM STAGE') { row ->
-                generateStage(sql, xml, row.STAGE_ID)
-            }
-        }
-    }
-    /**
-     * Generate stages
-     * @param sql
-     * @param xml
-     * @param stageId
-     */
-    public void generateStage(final Sql sql, final MarkupBuilder xml, final BigDecimal stageId) {
-        sql.eachRow('SELECT STAGE_ID, NODE_ID, PARENT_NODE_ID,STAGE,DESCRIPTION, STAGE_STATUS FROM STAGE WHERE STAGE_ID=' + stageId) { row ->
-
-            final BigDecimal parentNodeId = row.PARENT_NODE_ID
-            BigDecimal stageParentId = null
-            sql.eachRow('SELECT STAGE_ID FROM STAGE WHERE NODE_ID=' + parentNodeId) { parentStageRow ->
-                stageParentId = parentStageRow.STAGE_ID
-            }
-            final String stage = row.STAGE
-            final String descriptionText = row.DESCRIPTION
-            final String stageStatus = row.STAGE_STATUS
-            generateStage(xml, new StageDTO(stageId, stageParentId, stage, descriptionText, stageStatus))
-        }
-    }
-    /**
      * Generate Result Types
-     * @param sql
+
      * @param xml
      */
-    public void generateResultTypes(final Sql sql, final MarkupBuilder xml) {
+    public void generateResultTypes(final MarkupBuilder xml) {
+        final Sql sql = new Sql(dataSource)
 
         xml.resultTypes() {
             sql.eachRow('SELECT RESULT_TYPE_ID FROM RESULT_TYPE') { row ->
                 final BigDecimal resultTypeId = row.RESULT_TYPE_ID
-                generateResultType(sql, xml, resultTypeId)
-            }
-        }
-    }
-    /**
-     *
-     * @param sql
-     * @param xml
-     */
-    public void generateLabs(final Sql sql, MarkupBuilder xml) {
-        xml.laboratories() {
-            sql.eachRow('select LABORATORY_ID,LABORATORY, DESCRIPTION, PARENT_NODE_ID,LABORATORY_STATUS  FROM LABORATORY') { labRow ->
-                BigDecimal parentLabId = null
-                sql.eachRow('SELECT LABORATORY_ID FROM LABORATORY WHERE NODE_ID=' + labRow.PARENT_NODE_ID) { parentLaboratoryRow ->
-                    parentLabId = parentLaboratoryRow.LABORATORY_ID
-                }
-                final LaboratoryDTO laboratoryDTO = new LaboratoryDTO(labRow.LABORATORY_ID, parentLabId, labRow.DESCRIPTION, labRow.LABORATORY, labRow.LABORATORY_STATUS)
-                generateLab(xml, laboratoryDTO)
+                generateResultType(xml, resultTypeId)
             }
         }
     }
 
-    public void generateUnitConversions(final Sql sql, final MarkupBuilder xml) {
+
+    public void generateUnitConversions(final MarkupBuilder xml) {
+        final Sql sql = new Sql(dataSource)
+
         xml.unitConversions() {
             sql.eachRow('SELECT FROM_UNIT,TO_UNIT,MULTIPLIER,OFFSET,FORMULA FROM UNIT_CONVERSION') { row ->
-                final UnitConversionDTO unitConversionDTO =   new UnitConversionDTO(row.FROM_UNIT, row.TO_UNIT, row.FORMULA, row.OFFSET, row.MULTIPLIER)
-                generateUnitConversion(xml,unitConversionDTO)
-             }
+                final UnitConversionDTO unitConversionDTO = new UnitConversionDTO(row.FROM_UNIT, row.TO_UNIT, row.FORMULA, row.OFFSET, row.MULTIPLIER)
+                generateUnitConversion(xml, unitConversionDTO)
+            }
         }
     }
     /**
      *
-     * @param sql
+
      * @param xml
      */
-    public void generateUnits(final Sql sql, final MarkupBuilder xml) {
+    public void generateUnits(final MarkupBuilder xml) {
+        final Sql sql = new Sql(dataSource)
+
         xml.units() {
             sql.eachRow('SELECT UNIT_ID, NODE_ID,PARENT_NODE_ID,UNIT,DESCRIPTION FROM UNIT') { row ->
 
@@ -518,19 +543,20 @@ class DictionaryExportHelperService {
         }
         return attributes
     }
-    public Map<String, String> generateAttributesForUnitConversion(final UnitConversionDTO unitConversionDTO){
+
+    public Map<String, String> generateAttributesForUnitConversion(final UnitConversionDTO unitConversionDTO) {
         final Map<String, String> attributes = [:]
 
-        if(unitConversionDTO.fromUnit){
+        if (unitConversionDTO.fromUnit) {
             attributes.put('fromUnit', unitConversionDTO.fromUnit)
         }
-        if(unitConversionDTO.toUnit){
+        if (unitConversionDTO.toUnit) {
             attributes.put('toUnit', unitConversionDTO.toUnit)
         }
-        if(unitConversionDTO.multiplier){
+        if (unitConversionDTO.multiplier) {
             attributes.put('multiplier', unitConversionDTO.multiplier.toString())
         }
-        if(unitConversionDTO.offSet){
+        if (unitConversionDTO.offSet) {
             attributes.put('offset', unitConversionDTO.offSet.toString())
         }
         return attributes
@@ -776,7 +802,7 @@ class UnitConversionDTO {
                       final BigDecimal offSet,
                       final BigDecimal multiplier) {
         this.fromUnit = fromUnit
-        this.toUnit= toUnit
+        this.toUnit = toUnit
         this.formula = formula
         this.offSet = offSet
         this.multiplier = multiplier
