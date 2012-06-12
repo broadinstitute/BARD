@@ -29,59 +29,47 @@ class Inserter {
         bardAssay.save()
     } */
 
+    PCAssay getPCAssay(long assayId) {
+        InputStream is = PubChemFactory.getInstance().getXmlDescr(assayId);
+        List<PCAssay> assays = PubChemXMLParserFactory.getInstance().populateAssayFromXML(is, false);
+        PCAssay pcAssay = assays.get(0);
+        return pcAssay;
+    }
+
     void runInsert(long assayId ){
-        InputStream is = PubChemFactory.getInstance().getXmlDescr(assayId)
-        List<PCAssay> assays = PubChemXMLParserFactory.getInstance().populateAssayFromXML(is, false)
-        PCAssay pcAssay = assays.get(0)
+
+       testSaveAssay()
+
+
+
 //        String.format("%s.%s", pcAssay.getVersion(), pcAssay.getRevision())
-        Experiment expt = new Experiment()
-        expt.setLastUpdated(pcAssay.getModifyDate())
+        ExternalSystem system =  ExternalSystem.findBySystemNameLike("PubChem")
 
-        // id, status, name, assay_version, version, date_created, ready_for_extraction
-        Assay bardAssay = new Assay()
-        bardAssay.setAssayName(pcAssay.getName().substring(0,127))
-        bardAssay.setAssayVersion(pcAssay.version as String)
-        bardAssay.setVersion(1)
-        bardAssay.setDateCreated(pcAssay.getDepositDate() )
-        bardAssay.setDescription(pcAssay.getDescription().substring(0,999))
-        bardAssay.setAssayStatus("Active")
-        bardAssay.setReadyForExtraction('Ready')
+        ExternalAssay extAssay = ExternalAssay.findByExternalSystemAndExtAssayId(system,"aid=" + assayId)
+        if( null != extAssay )
+            extAssay.getAssay().delete(flush:  true)
+        else {
+            PCAssay pcAssay = getPCAssay(assayId)
 
- //       ExternalSystem system =  ExternalSystem.findBySystemNameLike("PubChem")
+            Assay bardAssay = new Assay()
+            // id, status, name, assay_version, version, date_created, ready_for_extraction
+            bardAssay.setAssayName(pcAssay.getName().substring(0,127))
+            bardAssay.setAssayVersion(pcAssay.version as String)
+            bardAssay.setVersion(1)
+            bardAssay.setDateCreated(pcAssay.getDepositDate() )
+            bardAssay.setDescription(pcAssay.getDescription().substring(0,999))
+            bardAssay.setAssayStatus("Active")
+            bardAssay.setReadyForExtraction('Ready')
+            bardAssay.save()
 
-        try {
-            if ( !bardAssay.save( /* flush: true */ ) ) {
-                bardAssay.errors.each {
-                    println "Problem saving record = ${it}"
-                }
-
-            }
-            print "Assay Record successfully inserted"
+            extAssay = new ExternalAssay()
+            extAssay.setExternalSystem(system)
+            extAssay.setAssay(bardAssay)
+            extAssay.setDateCreated(pcAssay.getDepositDate())
+            extAssay.setExtAssayId("aid=" + pcAssay.getAID())
+            extAssay.setVersion(pcAssay.getVersion())
+            extAssay.save()
         }
-        catch(Exception ex) {
-            ex.printStackTrace()
-        }
-
-
-
-        ExternalSystem  externalSystem  =  ExternalSystem.findById(1l)
-        ExternalAssay extAssay = new ExternalAssay()
-        extAssay.setExternalSystem(externalSystem)
-        extAssay.setAssay(bardAssay)
-        extAssay.setDateCreated(pcAssay.getDepositDate())
-        extAssay.setExtAssayId("aid=" + pcAssay.getAID())
-        extAssay.setVersion(pcAssay.getVersion())
-        print "ExternalAssay Record successfully inserted"
-
-
-
-        if ( !extAssay.save( flush: true ) ) {
-            extAssay.errors.each {
-                println "Problem saving record = ${it}"
-            }
-        }
-
-
         println "finished saving AID" + assayId
     }
 

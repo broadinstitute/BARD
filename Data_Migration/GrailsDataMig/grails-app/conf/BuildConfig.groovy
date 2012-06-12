@@ -25,7 +25,7 @@ grails.project.dependency.resolution = {
         grailsRepo "http://cbip-repo:8081/artifactory/repo"
         // uncomment these to enable remote dependency resolution from public Maven repositories
         //mavenCentral()
-        //mavenLocal()
+//        mavenLocal()
         //mavenRepo "http://snapshots.repository.codehaus.org"
         //mavenRepo "http://repository.codehaus.org"
         //mavenRepo "http://download.java.net/maven/2/"
@@ -35,13 +35,15 @@ grails.project.dependency.resolution = {
         // specify dependencies here under either 'build', 'compile', 'runtime', 'test' or 'provided' scopes eg.
 
         runtime 'mysql:mysql-connector-java:5.1.16'
+        runtime 'edu.scripps:PubChemDB-core:20120607'
+        runtime 'edu.scripps:PubChemDB-web:20110819'
     }
 
     plugins {
         runtime ":hibernate:$grailsVersion"
         runtime ":jquery:1.7.1"
         runtime ":resources:1.1.6"
-        runtime ":bard-domain-model:0.1"
+        runtime ":bard-domain-model:0.1.1"
 
         // Uncomment these (or add new ones) to enable additional resources capabilities
         //runtime ":zipped-resources:1.0"
