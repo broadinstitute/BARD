@@ -23,66 +23,98 @@ class DictionaryRestController {
     }
 
     def dictionary() {
-        def mimeType = grailsApplication.config.bard.data.export.dictionary.xml
-        response.contentType = mimeType
-        //do validations
-        if (mimeType != request.getHeader(HttpHeaders.ACCEPT)) {
-            response.status = HttpServletResponse.SC_BAD_REQUEST
+        try {
+            final String mimeType = grailsApplication.config.bard.data.export.dictionary.xml
+            response.contentType = mimeType
+            //do validations
+            if (mimeType == request.getHeader(HttpHeaders.ACCEPT)) {
+                final Writer writer = response.writer
+                final MarkupBuilder xml = new MarkupBuilder(writer)
+                dictionaryExportService.generateDictionary(xml)
 
+                return
+            }
+            response.status = HttpServletResponse.SC_BAD_REQUEST
             render ""
             return
+
+        } catch (Exception ee) {
+            response.status = HttpServletResponse.SC_INTERNAL_SERVER_ERROR
+            log.error(ee.message)
+            ee.printStackTrace()
+            return
         }
-        final def writer = response.writer
-        final MarkupBuilder xml = new MarkupBuilder(writer)
-        dictionaryExportService.generateDictionary(xml)
     }
 
     def resultType() {
-        def mimeType = grailsApplication.config.bard.data.export.dictionary.resultType.xml
-        response.contentType = mimeType
-        //do validations
-        if (mimeType == request.getHeader(HttpHeaders.ACCEPT) && params.id) {
-            final BigDecimal resultTypeId = params.id as BigDecimal
-            final def writer = response.writer
-            final MarkupBuilder xml = new MarkupBuilder(writer)
-            dictionaryExportService.generateResultType(xml, resultTypeId)
+        try {
+            final String mimeType = grailsApplication.config.bard.data.export.dictionary.resultType.xml
+            response.contentType = mimeType
+            //do validations
+            if (mimeType == request.getHeader(HttpHeaders.ACCEPT) && params.id) {
+                final BigDecimal resultTypeId = params.id as BigDecimal
+                final Writer writer = response.writer
+                final MarkupBuilder xml = new MarkupBuilder(writer)
+                dictionaryExportService.generateResultType(xml, resultTypeId)
+                return
+            }
+            response.status = HttpServletResponse.SC_BAD_REQUEST
+            render ""
+            return
+        } catch (Exception ee) {
+            response.status = HttpServletResponse.SC_INTERNAL_SERVER_ERROR
+            log.error(ee.message)
+            ee.printStackTrace()
             return
         }
-        response.status = HttpServletResponse.SC_BAD_REQUEST
-        render ""
     }
 
     def stage() {
-        def mimeType = grailsApplication.config.bard.data.export.dictionary.stage.xml
-        response.contentType = mimeType
-        //do validations
-        if (mimeType == request.getHeader(HttpHeaders.ACCEPT) && params.id) {
-            final BigDecimal stageId = params.id as BigDecimal
+        try {
+            final String mimeType = grailsApplication.config.bard.data.export.dictionary.stage.xml
+            response.contentType = mimeType
+            //do validations
+            if (mimeType == request.getHeader(HttpHeaders.ACCEPT) && params.id) {
+                final BigDecimal stageId = params.id as BigDecimal
 
-            final def writer = response.writer
-            final MarkupBuilder xml = new MarkupBuilder(writer)
-            dictionaryExportService.generateStage(xml, stageId)
+                final Writer writer = response.writer
+                final MarkupBuilder xml = new MarkupBuilder(writer)
+                dictionaryExportService.generateStage(xml, stageId)
+                return
+            }
+            response.status = HttpServletResponse.SC_BAD_REQUEST
+            render ""
+        } catch (Exception ee) {
+            response.status = HttpServletResponse.SC_INTERNAL_SERVER_ERROR
+            log.error(ee.message)
+            ee.printStackTrace()
             return
         }
-        response.status = HttpServletResponse.SC_BAD_REQUEST
-        render ""
     }
 
     def element() {
-        def mimeType = grailsApplication.config.bard.data.export.dictionary.element.xml
-        response.contentType = mimeType
-        //do validations
-        if (mimeType == request.getHeader(HttpHeaders.ACCEPT) && params.id) {
-            final BigDecimal elementId = params.id as BigDecimal
-            final def writer = response.writer
-            final MarkupBuilder xml = new MarkupBuilder(writer)
-            dictionaryExportService.generateElementWithElementId(xml, elementId)
+        try {
+            final String mimeType = grailsApplication.config.bard.data.export.dictionary.element.xml
+            response.contentType = mimeType
+            //do validations
+            if (mimeType == request.getHeader(HttpHeaders.ACCEPT) && params.id) {
+                final BigDecimal elementId = params.id as BigDecimal
+                final Writer writer = response.writer
+                final MarkupBuilder xml = new MarkupBuilder(writer)
+                dictionaryExportService.generateElementWithElementId(xml, elementId)
+                return
+            }
+            response.status = HttpServletResponse.SC_BAD_REQUEST
+            render ""
+        } catch (Exception ee) {
+            response.status = HttpServletResponse.SC_INTERNAL_SERVER_ERROR
+            log.error(ee.message)
+            ee.printStackTrace()
             return
         }
-        response.status = HttpServletResponse.SC_BAD_REQUEST
-        render ""
     }
-    def updateElement(){
+
+    def updateElement() {
 
     }
 }
