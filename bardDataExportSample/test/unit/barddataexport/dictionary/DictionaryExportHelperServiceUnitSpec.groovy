@@ -1,7 +1,6 @@
 package barddataexport.dictionary
 
 import groovy.xml.MarkupBuilder
-
 import org.codehaus.groovy.grails.web.mapping.LinkGenerator
 import org.custommonkey.xmlunit.Diff
 import org.custommonkey.xmlunit.XMLUnit
@@ -15,12 +14,17 @@ import spock.lang.Unroll
 class DictionaryExportHelperServiceUnitSpec extends Specification {
     DictionaryExportHelperService dictionaryExportHelperService
     LinkGenerator grailsLinkGenerator
+    Writer writer
+    MarkupBuilder markupBuilder
 
     void setup() {
         grailsLinkGenerator = Mock()
         this.dictionaryExportHelperService =
             new DictionaryExportHelperService("xml")
         this.dictionaryExportHelperService.grailsLinkGenerator = grailsLinkGenerator
+        this.writer = new StringWriter()
+        this.markupBuilder = new MarkupBuilder(writer)
+
     }
 
     void tearDown() {
@@ -130,12 +134,8 @@ class DictionaryExportHelperServiceUnitSpec extends Specification {
     }
 
     void "test generate Single Descriptor #label #dto"() {
-        given:
-        def writer = new StringWriter()
-        final MarkupBuilder xml = new MarkupBuilder(writer)
         when:
-
-        this.dictionaryExportHelperService.generateSingleDescriptor(xml, dto)
+        this.dictionaryExportHelperService.generateSingleDescriptor(this.markupBuilder, dto)
 
         then:
         assert results == writer.toString()
@@ -151,16 +151,12 @@ class DictionaryExportHelperServiceUnitSpec extends Specification {
 
     void "test generate Unit #label #dto"() {
         given:
-        def writer = new StringWriter()
-        final MarkupBuilder xml = new MarkupBuilder(writer)
 
         when:
-        this.dictionaryExportHelperService.generateUnit(xml, dto)
+        this.dictionaryExportHelperService.generateUnit(this.markupBuilder, dto)
 
         then:
-        XMLUnit.setIgnoreWhitespace(true)
-        def xmlDiff = new Diff(writer.toString(), results)
-        assert xmlDiff.similar()
+        assertXml(results)
         where:
         label                      | dto                                                                        | results
         "Full Unit element"        | new UnitDTO(new BigDecimal("1"), new BigDecimal("1"), "cm", "Centimetres") | DictionaryXmlExamples.SINGLE_UNIT
@@ -169,20 +165,24 @@ class DictionaryExportHelperServiceUnitSpec extends Specification {
 
 
     }
+    /**
+     * Be sure to use asserts in helper methods
+     * @param writer
+     * @param results
+     */
+    void assertXml(final String results) {
+        XMLUnit.setIgnoreWhitespace(true)
+        final Diff xmlDiff = new Diff(this.writer.toString(), results)
+        assert true == xmlDiff.similar()
+    }
 
     void "test generate Lab #label #dto"() {
 
-        given:
-        def writer = new StringWriter()
-        final MarkupBuilder xml = new MarkupBuilder(writer)
-
         when:
-        this.dictionaryExportHelperService.generateLab(xml, dto)
+        this.dictionaryExportHelperService.generateLab(this.markupBuilder, dto)
 
         then:
-        XMLUnit.setIgnoreWhitespace(true)
-        def xmlDiff = new Diff(writer.toString(), results)
-        assert xmlDiff.similar()
+        assertXml(results)
         where:
         label                   | dto                                                                                      | results
         "Full Lab"              | new LaboratoryDTO(new BigDecimal("1"), new BigDecimal("2"), "Desc", "labName", "Status") | DictionaryXmlExamples.LABORATORY_SAMPLE_FULL
@@ -191,17 +191,12 @@ class DictionaryExportHelperServiceUnitSpec extends Specification {
     }
 
     void "test generate Stage #label #dto"() {
-        given:
-        def writer = new StringWriter()
-        final MarkupBuilder xml = new MarkupBuilder(writer)
 
         when:
-        this.dictionaryExportHelperService.generateStage(xml, dto)
-
+        this.dictionaryExportHelperService.generateStage(this.markupBuilder, dto)
         then:
-        XMLUnit.setIgnoreWhitespace(true)
-        def xmlDiff = new Diff(writer.toString(), results)
-        assert xmlDiff.similar()
+        assertXml(results)
+
         where:
         label                     | dto                                                                               | results
         "Full Stage"              | new StageDTO(new BigDecimal("1"), new BigDecimal("2"), "Stage", "desc", "Status") | DictionaryXmlExamples.STAGE_FULL
@@ -209,17 +204,11 @@ class DictionaryExportHelperServiceUnitSpec extends Specification {
     }
 
     void "test Generate Element Hierarchy #label #dto"() {
-        given:
-        def writer = new StringWriter()
-        final MarkupBuilder xml = new MarkupBuilder(writer)
-
         when:
-        this.dictionaryExportHelperService.generateElementHierarchy(xml, dto)
+        this.dictionaryExportHelperService.generateElementHierarchy(this.markupBuilder, dto)
 
         then:
-        XMLUnit.setIgnoreWhitespace(true)
-        def xmlDiff = new Diff(writer.toString(), results)
-        assert xmlDiff.similar()
+        assertXml(results)
         where:
         label                         | dto                                                                           | results
         "Full Hierarchy"              | new ElementHierarchyDTO(new BigDecimal("1"), new BigDecimal("2"), "Is Child") | DictionaryXmlExamples.ELEMENT_HIERARCHY_FULL
@@ -228,17 +217,10 @@ class DictionaryExportHelperServiceUnitSpec extends Specification {
     }
 
     void "test generate Element #label #dto"() {
-        given:
-        def writer = new StringWriter()
-        final MarkupBuilder xml = new MarkupBuilder(writer)
-
-
         when:
-        this.dictionaryExportHelperService.generateElement(xml, dto)
+        this.dictionaryExportHelperService.generateElement(this.markupBuilder, dto)
         then:
-        XMLUnit.setIgnoreWhitespace(true)
-        def xmlDiff = new Diff(writer.toString(), results)
-        assert xmlDiff.similar()
+        assertXml(results)
         where:
         label                         | dto                                                                                                                 | results
         "Full Element"                | new ElementDTO(new BigDecimal("1"), "label", "desc", "abb", "syn", "http://www.broad.org", "cm", "status", "ready") | DictionaryXmlExamples.ELEMENT_FULL
@@ -246,17 +228,10 @@ class DictionaryExportHelperServiceUnitSpec extends Specification {
     }
 
     void "test generate Result Type #label #dto"() {
-        given:
-        def writer = new StringWriter()
-        final MarkupBuilder xml = new MarkupBuilder(writer)
-
-
         when:
-        this.dictionaryExportHelperService.generateResultType(xml, dto)
+        this.dictionaryExportHelperService.generateResultType(this.markupBuilder, dto)
         then:
-        XMLUnit.setIgnoreWhitespace(true)
-        def xmlDiff = new Diff(writer.toString(), results)
-        assert xmlDiff.similar()
+        assertXml(results)
         where:
         label                   | dto                                                                                                                 | results
         "Full Result Type"      | new ResultTypeDTO(new BigDecimal("1"), new BigDecimal("1"), "resultTypeName", "desc", "abb", "syn", "cm", "status") | DictionaryXmlExamples.RESULT_TYPE_FULL
@@ -265,16 +240,12 @@ class DictionaryExportHelperServiceUnitSpec extends Specification {
     }
 
     void "test generate Descriptor #label #dto #descriptorType"() {
-        given:
-        def writer = new StringWriter()
-        final MarkupBuilder xml = new MarkupBuilder(writer)
+
 
         when:
-        this.dictionaryExportHelperService.generateDescriptor(xml, dto, descriptorType)
+        this.dictionaryExportHelperService.generateDescriptor(this.markupBuilder, dto, descriptorType)
         then:
-        XMLUnit.setIgnoreWhitespace(true)
-        def xmlDiff = new Diff(writer.toString(), results)
-        assert xmlDiff.similar()
+        assertXml(results)
         where:
         label                 | dto                                                                                                                                                 | descriptorType                     | results
         "Assay descriptor"    | new DescriptorDTO(new BigDecimal("1"), new BigDecimal("2"), new BigDecimal("3"), "label", "desc", "abb", "syn", "http://broad.org", "cm", "status") | DescriptorType.ASSAY_DESCRIPTOR    | DictionaryXmlExamples.ASSAY_DESCRIPTOR
@@ -287,16 +258,11 @@ class DictionaryExportHelperServiceUnitSpec extends Specification {
      * DictionaryExportHelperService#generateAttributesForUnitConversion
      */
     void "test Generate Unit Conversion #label #dto"() {
-        given:
-        def writer = new StringWriter()
-        final MarkupBuilder xml = new MarkupBuilder(writer)
-
         when:
-        this.dictionaryExportHelperService.generateUnitConversion(xml, dto)
+        this.dictionaryExportHelperService.generateUnitConversion(this.markupBuilder, dto)
         then:
-        XMLUnit.setIgnoreWhitespace(true)
-        def xmlDiff = new Diff(writer.toString(), results)
-        assert xmlDiff.similar()
+        assertXml(results)
+
         where:
         label                      | dto                                                                                              | results
         "Full Unit Conversion"     | new UnitConversionDTO("fromUnit", "toUnit", "formula", new BigDecimal("1"), new BigDecimal("1")) | DictionaryXmlExamples.UNIT_CONVERSION_FULL

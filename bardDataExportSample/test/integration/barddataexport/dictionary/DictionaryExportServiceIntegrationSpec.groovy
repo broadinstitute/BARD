@@ -4,9 +4,12 @@ import grails.plugin.spock.IntegrationSpec
 import groovy.xml.MarkupBuilder
 import org.custommonkey.xmlunit.Diff
 import org.custommonkey.xmlunit.XMLUnit
-import javax.xml.validation.SchemaFactory
+
 import javax.xml.XMLConstants
 import javax.xml.transform.stream.StreamSource
+import javax.xml.validation.SchemaFactory
+import javax.xml.validation.Schema
+import javax.xml.validation.Validator
 
 class DictionaryExportServiceIntegrationSpec extends IntegrationSpec {
     static final String BARD_DICTIONARY_EXPORT_SCHEMA = "test/integration/barddataexport/dictionary/dictionarySchema.xsd"
@@ -23,11 +26,14 @@ class DictionaryExportServiceIntegrationSpec extends IntegrationSpec {
     void tearDown() {
         // Tear down logic here
     }
-
+    /**
+     * Use assert == true here
+     * @param results
+     */
     void assertResults(final String results) {
         XMLUnit.setIgnoreWhitespace(true)
         final Diff xmlDiff = new Diff(this.writer.toString(), results)
-        assert xmlDiff.similar()
+        assert true == xmlDiff.similar()
     }
 
     void "test generate Stage"() {
@@ -56,7 +62,7 @@ class DictionaryExportServiceIntegrationSpec extends IntegrationSpec {
         then:
         assertResults(results)
         where:
-        label      | results
+        label     | results
         "Element" | DictionaryIntegrationXml.ELEMENT
     }
 
@@ -70,18 +76,19 @@ class DictionaryExportServiceIntegrationSpec extends IntegrationSpec {
         label      | dto                                                                                             | results
         "Elements" | new ElementDTO(new BigDecimal("386"), 'uM', null, null, null, null, null, 'Published', 'Ready') | DictionaryIntegrationXml.ELEMENT
     }
-    void "test generate Dictionary"(){
+
+    void "test generate Dictionary"() {
         when:
         this.dictionaryExportService.generateDictionary(this.markupBuilder)
         then:
         assertResults(results)
-        def factory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI)
-        def schema = factory.newSchema(new StreamSource(new FileReader(BARD_DICTIONARY_EXPORT_SCHEMA)))
-        def validator = schema.newValidator()
+        final SchemaFactory factory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI)
+        final Schema schema = factory.newSchema(new StreamSource(new FileReader(BARD_DICTIONARY_EXPORT_SCHEMA)))
+        final Validator validator = schema.newValidator()
         validator.validate(new StreamSource(new StringReader(results)))
         where:
-        label      |  results
-        "Dictionary" |  DictionaryIntegrationXml.DICTIONARY
+        label        | results
+        "Dictionary" | DictionaryIntegrationXml.DICTIONARY
     }
 
 }
