@@ -23,25 +23,20 @@ class BardWebInterfaceController {
      * @return
      */
     def findCompoundsForAssay(Integer max, Integer offset, Integer assay) {
-        //NCGS' max and offset
-        Integer skip = offset ?: 0
-        Integer top = max ?: 1000
-        params.max = top
+        offset = offset ?: 0
+        max = max ?: 100
+        params.max = max.toString()
 
-        String assayId = assay.toString() ?: params.id //if 'assay' param is provided, use that; otherwise, try the default id one
-        final AssayDisplayType assayDisplayType = AssayDisplayType.Compounds
+        Integer assayId = assay ?: params.id as Integer //if 'assay' param is provided, use that; otherwise, try the default id one
+
         if (assayId) {
-            final String assayResourceUrl = "/bard/rest/v1/assays/" + assayId
-            final String assayUrl = grailsApplication.config.ncgc.server.root.url + assayResourceUrl
-            final wslite.json.JSONObject assayJson = queryAssayApiService.executeGetRequestJSON(assayUrl, null) //get the Assay instance
-            final Integer totalCompounds = assayJson.substances
-            final String assayUrlPaging = assayUrl + '/compounds?skip=' + skip + '&top=' + top
-            final wslite.json.JSONObject assayCompoundsJson = queryAssayApiService.executeGetRequestJSON(assayUrlPaging, null)
+            final Integer totalCompounds = queryAssayApiService.getTotalAssayCompounds(assayId)
+            final List<String> assayCompoundsPage = queryAssayApiService.getAssayCompoundsResultset(max, offset, assayId)
 
-            render(view: "findCompoundsForAssay", model: [assayCompoundsJsonArray: assayCompoundsJson.collection, totalCompounds: totalCompounds, aid: assayId])
+            render(view: "findCompoundsForAssay", model: [assayCompoundsJsonArray: assayCompoundsPage, totalCompounds: totalCompounds, aid: assayId])
         }
         else {
-            render "Assay parameter required"
+            render "Assay ID is not defined"
         }
     }
 

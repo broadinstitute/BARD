@@ -41,7 +41,7 @@
 <div>
     <div>
         <g:each var="compound" in="${assayCompoundsJsonArray}">
-            <g:set var="cid" value="${compound.split('/').toList().last()}"/>
+            <g:set var="cid" value="${compound}"/>
             <g:link action="showCompound" params="[cid: cid]">
                 <g:message code="assay.compound.display" args="[cid]" default="${cid}"/><br>
             </g:link>

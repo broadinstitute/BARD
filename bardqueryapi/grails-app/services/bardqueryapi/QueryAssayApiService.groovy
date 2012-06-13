@@ -46,7 +46,33 @@ class QueryAssayApiService extends QueryExecutorService {
         return executeGetRequestJSON(url, headers)
     }
 
+    Integer getTotalAssayCompounds (Integer assayId) {
+        final String assayResourceUrl = "${grailsApplication.config.ncgc.server.root.url}/bard/rest/v1/assays/${assayId}"
+        final wslite.json.JSONObject assayJson = executeGetRequestJSON(assayResourceUrl, null) //get the Assay instance
+        final Integer totalCompounds = assayJson.substances ?: 0
+        return totalCompounds
+    }
 
+    /**
+     * Returns a 'page' list of CIDs from an assay's compounds result set, based on Offset and Max
+     * @param max
+     * @param offset
+     * @param assayId
+     * @return List<String> of CIDs (size==max)
+     */
+    List<String> getAssayCompoundsResultset(Integer max, Integer offset, Integer assayId) {
+        final String assayUrlPaging = "${grailsApplication.config.ncgc.server.root.url}/bard/rest/v1/assays/${assayId}/compounds?skip=${offset}&top=${max}" //NCGS' max and offset
+        final wslite.json.JSONObject assayCompoundsJson = executeGetRequestJSON(assayUrlPaging, null)
+        if (assayCompoundsJson.collection) {
+            List<String> compoundUrlList = assayCompoundsJson.collection.toList()
+            //strip the CID from the ending of the compound resource url (e.g., /bard/rest/v1/compounds/661090 --> 661090)
+            return compoundUrlList.collect { compoundResourceUrl ->
+                compoundResourceUrl.split('/').toList().last()
+            }
+        }
+
+        return []
+    }
 }
 class MockQueryAssayApiService{
     def findAssays() {
