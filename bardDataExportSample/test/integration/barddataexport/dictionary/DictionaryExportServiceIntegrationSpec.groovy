@@ -2,14 +2,15 @@ package barddataexport.dictionary
 
 import grails.plugin.spock.IntegrationSpec
 import groovy.xml.MarkupBuilder
-import org.custommonkey.xmlunit.Diff
-import org.custommonkey.xmlunit.XMLUnit
 
 import javax.xml.XMLConstants
 import javax.xml.transform.stream.StreamSource
 import javax.xml.validation.SchemaFactory
 import javax.xml.validation.Schema
 import javax.xml.validation.Validator
+
+import common.tests.XmlTestAssertions
+import common.tests.XmlTestSamples
 
 class DictionaryExportServiceIntegrationSpec extends IntegrationSpec {
     static final String BARD_DICTIONARY_EXPORT_SCHEMA = "test/integration/barddataexport/dictionary/dictionarySchema.xsd"
@@ -26,44 +27,35 @@ class DictionaryExportServiceIntegrationSpec extends IntegrationSpec {
     void tearDown() {
         // Tear down logic here
     }
-    /**
-     * Use assert == true here
-     * @param results
-     */
-    void assertResults(final String results) {
-        XMLUnit.setIgnoreWhitespace(true)
-        final Diff xmlDiff = new Diff(this.writer.toString(), results)
-        assert true == xmlDiff.similar()
-    }
 
     void "test generate Stage"() {
         when:
         this.dictionaryExportService.generateStage(this.markupBuilder, new BigDecimal("341"))
         then:
-        assertResults(results)
+        XmlTestAssertions.assertResults(results,this.writer.toString())
         where:
         label   | results
-        "Stage" | DictionaryIntegrationXml.STAGE
+        "Stage" | XmlTestSamples.STAGE
     }
 
     void "test generate ResultType"() {
         when:
         this.dictionaryExportService.generateResultType(this.markupBuilder, new BigDecimal("341"))
         then:
-        assertResults(results)
+        XmlTestAssertions.assertResults(results,this.writer.toString())
         where:
         label         | results
-        "Result Type" | DictionaryIntegrationXml.RESULT_TYPE
+        "Result Type" | XmlTestSamples.RESULT_TYPE
     }
 
     void "test generate Element With Element Id"() {
         when:
         this.dictionaryExportService.generateElementWithElementId(this.markupBuilder, new BigDecimal("386"))
         then:
-        assertResults(results)
+        XmlTestAssertions.assertResultsWithOverrideAttributes(results,this.writer.toString())
         where:
         label     | results
-        "Element" | DictionaryIntegrationXml.ELEMENT
+        "Element" | XmlTestSamples.ELEMENT
     }
 
     void "test generate Element"() {
@@ -71,24 +63,24 @@ class DictionaryExportServiceIntegrationSpec extends IntegrationSpec {
         when:
         this.dictionaryExportService.generateElement(this.markupBuilder, dto)
         then:
-        assertResults(results)
+        XmlTestAssertions.assertResultsWithOverrideAttributes(results,this.writer.toString())
         where:
         label      | dto                                                                                             | results
-        "Elements" | new ElementDTO(new BigDecimal("386"), 'uM', null, null, null, null, null, 'Published', 'Ready') | DictionaryIntegrationXml.ELEMENT
+        "Elements" | new ElementDTO(new BigDecimal("386"), 'uM', null, null, null, null, null, 'Published', 'Ready') | XmlTestSamples.ELEMENT
     }
 
     void "test generate Dictionary"() {
         when:
         this.dictionaryExportService.generateDictionary(this.markupBuilder)
         then:
-        assertResults(results)
+        XmlTestAssertions.assertResultsWithOverrideAttributes(results,this.writer.toString())
         final SchemaFactory factory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI)
         final Schema schema = factory.newSchema(new StreamSource(new FileReader(BARD_DICTIONARY_EXPORT_SCHEMA)))
         final Validator validator = schema.newValidator()
         validator.validate(new StreamSource(new StringReader(results)))
         where:
         label        | results
-        "Dictionary" | DictionaryIntegrationXml.DICTIONARY
+        "Dictionary" | XmlTestSamples.DICTIONARY
     }
 
 }

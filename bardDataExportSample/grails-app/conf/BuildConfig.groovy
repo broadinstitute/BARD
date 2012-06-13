@@ -6,6 +6,12 @@ grails.project.target.level = 1.6
 grails.project.source.level = 1.6
 //grails.project.war.file = "target/${appName}-${appVersion}.war"
 
+//we exclude the following from the war file
+grails.war.resources = { stagingDir ->
+    delete(file:"${stagingDir}/WEB-INF/classes/common/tests/XmlTestSamples.class")
+    delete(file:"${stagingDir}/WEB-INF/classes/common/tests/XmlTestAssertions.class")
+    delete(dir:"${stagingDir}/WEB-INF/classes/common/tests")
+}
 grails.project.dependency.resolution = {
     // inherit Grails' default dependencies
     inherits("global") {
@@ -28,7 +34,7 @@ grails.project.dependency.resolution = {
         // specify dependencies here under either 'build', 'compile', 'runtime', 'test' or 'provided' scopes eg.
         test "org.spockframework:spock-core:0.6-groovy-1.8"
         test('org.codehaus.groovy.modules.http-builder:http-builder:0.5.2'){
-            exclude "org.codehaus.groovy"
+            exclude "groovy"
         }
         test "org.objenesis:objenesis:1.2" // used by spock for Mocking objects that have no args constructor
         // runtime 'mysql:mysql-connector-java:5.1.16'

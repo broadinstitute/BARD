@@ -2,17 +2,22 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="30263ca6-daef-4910-a93e-888c36fe2d54" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/test/functional/barddataexport/dictionary/DictionaryControllerFunctionalSpec.groovy" />
+      <change type="DELETED" beforePath="C:\bard_repos\BARD\bardDataExportSample\test\unit\barddataexport\CapRestControllerTests.groovy" afterPath="" />
+      <change type="DELETED" beforePath="C:\bard_repos\BARD\bardDataExportSample\test\unit\barddataexport\ExperimentExportServiceTests.groovy" afterPath="" />
+      <change type="DELETED" beforePath="C:\bard_repos\BARD\bardDataExportSample\test\unit\barddataexport\cap\util\RootRestControllerTests.groovy" afterPath="" />
+      <change type="DELETED" beforePath="C:\bard_repos\BARD\bardDataExportSample\test\unit\barddataexport\util\RootServiceTests.groovy" afterPath="" />
+      <change type="MOVED" beforePath="C:\bard_repos\BARD\bardDataExportSample\test\functional\barddataexport\dictionary\DictionaryControllerFunctionalSpec.groovy" afterPath="$PROJECT_DIR$/test/functional/barddataexport/dictionary/DictionaryRestControllerFunctionalSpec.groovy" />
+      <change type="MOVED" beforePath="C:\bard_repos\BARD\bardDataExportSample\test\integration\barddataexport\util\RootServiceIntegrationTests.groovy" afterPath="$PROJECT_DIR$/test/integration/barddataexport/util/RootServiceIntegrationSpec.groovy" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/grails-app/conf/BootStrap.groovy" afterPath="$PROJECT_DIR$/grails-app/conf/BootStrap.groovy" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/grails-app/conf/BuildConfig.groovy" afterPath="$PROJECT_DIR$/grails-app/conf/BuildConfig.groovy" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/grails-app/controllers/barddataexport/cap/cap/CapRestController.groovy" afterPath="$PROJECT_DIR$/grails-app/controllers/barddataexport/cap/cap/CapRestController.groovy" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/grails-app/controllers/barddataexport/cap/dictionary/DictionaryRestController.groovy" afterPath="$PROJECT_DIR$/grails-app/controllers/barddataexport/cap/dictionary/DictionaryRestController.groovy" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/grails-app/controllers/barddataexport/cap/experiment/ExperimentRestController.groovy" afterPath="$PROJECT_DIR$/grails-app/controllers/barddataexport/cap/experiment/ExperimentRestController.groovy" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/grails-app/controllers/barddataexport/cap/util/RootRestController.groovy" afterPath="$PROJECT_DIR$/grails-app/controllers/barddataexport/cap/util/RootRestController.groovy" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/grails-app/conf/spring/resources.groovy" afterPath="$PROJECT_DIR$/grails-app/conf/spring/resources.groovy" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/grails-app/services/barddataexport/util/RootService.groovy" afterPath="$PROJECT_DIR$/grails-app/services/barddataexport/util/RootService.groovy" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/grails-app/views/index.gsp" afterPath="$PROJECT_DIR$/grails-app/views/index.gsp" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/test/integration/barddataexport/cap/CapExportServiceIntegrationTests.groovy" afterPath="$PROJECT_DIR$/test/integration/barddataexport/cap/CapExportServiceIntegrationTests.groovy" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/test/integration/barddataexport/dictionary/DictionaryExportHelperServiceIntegrationSpec.groovy" afterPath="$PROJECT_DIR$/test/integration/barddataexport/dictionary/DictionaryExportHelperServiceIntegrationSpec.groovy" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/test/integration/barddataexport/dictionary/DictionaryExportServiceIntegrationSpec.groovy" afterPath="$PROJECT_DIR$/test/integration/barddataexport/dictionary/DictionaryExportServiceIntegrationSpec.groovy" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/test/integration/barddataexport/experiment/ExperimentExportServiceIntegrationTests.groovy" afterPath="$PROJECT_DIR$/test/integration/barddataexport/experiment/ExperimentExportServiceIntegrationTests.groovy" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/test/integration/barddataexport/experiment/ResultExportServiceIntegrationTests.groovy" afterPath="$PROJECT_DIR$/test/integration/barddataexport/experiment/ResultExportServiceIntegrationTests.groovy" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/test/unit/barddataexport/dictionary/DictionaryExportHelperServiceUnitSpec.groovy" afterPath="$PROJECT_DIR$/test/unit/barddataexport/dictionary/DictionaryExportHelperServiceUnitSpec.groovy" />
     </list>
     <ignored path="bardDataExtraction.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -253,7 +258,59 @@
         <option name="CONDITION" value="" />
         <option name="LOG_MESSAGE" value="" />
       </breakpoint>
-      <breakpoint url="file://$PROJECT_DIR$/test/functional/barddataexport/dictionary/DictionaryControllerFunctionalSpec.groovy" line="48" class="barddataexport.dictionary.DictionaryControllerFunctionalSpec" package="barddataexport.dictionary">
+      <breakpoint url="file://$PROJECT_DIR$/test/functional/barddataexport/dictionary/DictionaryRestControllerFunctionalSpec.groovy" line="49" class="barddataexport.dictionary.DictionaryControllerFunctionalSpec" package="barddataexport.dictionary">
+        <option name="ENABLED" value="true" />
+        <option name="LOG_ENABLED" value="false" />
+        <option name="LOG_EXPRESSION_ENABLED" value="false" />
+        <option name="SUSPEND_POLICY" value="SuspendAll" />
+        <option name="COUNT_FILTER_ENABLED" value="false" />
+        <option name="COUNT_FILTER" value="0" />
+        <option name="CONDITION_ENABLED" value="false" />
+        <option name="CLASS_FILTERS_ENABLED" value="false" />
+        <option name="INSTANCE_FILTERS_ENABLED" value="false" />
+        <option name="CONDITION" value="" />
+        <option name="LOG_MESSAGE" value="" />
+      </breakpoint>
+      <breakpoint url="file://$PROJECT_DIR$/src/groovy/common/tests/XmlTestAssertions.groovy" line="33" class="common.tests.XmlTestAssertions$0" package="common.tests">
+        <option name="ENABLED" value="true" />
+        <option name="LOG_ENABLED" value="false" />
+        <option name="LOG_EXPRESSION_ENABLED" value="false" />
+        <option name="SUSPEND_POLICY" value="SuspendAll" />
+        <option name="COUNT_FILTER_ENABLED" value="false" />
+        <option name="COUNT_FILTER" value="0" />
+        <option name="CONDITION_ENABLED" value="false" />
+        <option name="CLASS_FILTERS_ENABLED" value="false" />
+        <option name="INSTANCE_FILTERS_ENABLED" value="false" />
+        <option name="CONDITION" value="" />
+        <option name="LOG_MESSAGE" value="" />
+      </breakpoint>
+      <breakpoint url="file://$PROJECT_DIR$/src/groovy/common/tests/XmlTestAssertions.groovy" line="35" class="common.tests.XmlTestAssertions$0" package="common.tests">
+        <option name="ENABLED" value="true" />
+        <option name="LOG_ENABLED" value="false" />
+        <option name="LOG_EXPRESSION_ENABLED" value="false" />
+        <option name="SUSPEND_POLICY" value="SuspendAll" />
+        <option name="COUNT_FILTER_ENABLED" value="false" />
+        <option name="COUNT_FILTER" value="0" />
+        <option name="CONDITION_ENABLED" value="false" />
+        <option name="CLASS_FILTERS_ENABLED" value="false" />
+        <option name="INSTANCE_FILTERS_ENABLED" value="false" />
+        <option name="CONDITION" value="" />
+        <option name="LOG_MESSAGE" value="" />
+      </breakpoint>
+      <breakpoint url="file://$PROJECT_DIR$/grails-app/controllers/barddataexport/cap/util/RootRestController.groovy" line="21" class="barddataexport.cap.util.RootRestController" package="barddataexport.cap.util">
+        <option name="ENABLED" value="true" />
+        <option name="LOG_ENABLED" value="false" />
+        <option name="LOG_EXPRESSION_ENABLED" value="false" />
+        <option name="SUSPEND_POLICY" value="SuspendAll" />
+        <option name="COUNT_FILTER_ENABLED" value="false" />
+        <option name="COUNT_FILTER" value="0" />
+        <option name="CONDITION_ENABLED" value="false" />
+        <option name="CLASS_FILTERS_ENABLED" value="false" />
+        <option name="INSTANCE_FILTERS_ENABLED" value="false" />
+        <option name="CONDITION" value="" />
+        <option name="LOG_MESSAGE" value="" />
+      </breakpoint>
+      <breakpoint url="file://$PROJECT_DIR$/grails-app/controllers/barddataexport/cap/util/RootRestController.groovy" line="22" class="barddataexport.cap.util.RootRestController" package="barddataexport.cap.util">
         <option name="ENABLED" value="true" />
         <option name="LOG_ENABLED" value="false" />
         <option name="LOG_EXPRESSION_ENABLED" value="false" />
@@ -307,10 +364,57 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="DictionaryRestController.groovy" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/grails-app/controllers/barddataexport/cap/dictionary/DictionaryRestController.groovy">
+      <file leaf-file-name="RootServiceUnitSpec.groovy" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/test/unit/barddataexport/util/RootServiceUnitSpec.groovy">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="119" column="45" selection-start="4392" selection-end="4392" vertical-scroll-proportion="-9.304348">
+            <state line="37" column="58" selection-start="941" selection-end="941" vertical-scroll-proportion="0.0">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="RootRestControllerUnitSpec.groovy" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/test/unit/barddataexport/util/RootRestControllerUnitSpec.groovy">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="24" column="3" selection-start="497" selection-end="497" vertical-scroll-proportion="0.43023255">
+              <folding>
+                <element signature="e#29#78#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="RootRestControllerFunctionalSpec.groovy" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/test/functional/barddataexport/dictionary/RootRestControllerFunctionalSpec.groovy">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="18" column="23" selection-start="614" selection-end="614" vertical-scroll-proportion="0.0">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="CapExportServiceIntegrationTests.groovy" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/test/integration/barddataexport/cap/CapExportServiceIntegrationTests.groovy">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="22" column="1" selection-start="447" selection-end="514" vertical-scroll-proportion="0.0">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="ResultExportServiceIntegrationTests.groovy" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/test/integration/barddataexport/experiment/ResultExportServiceIntegrationTests.groovy">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="24" column="5" selection-start="488" selection-end="488" vertical-scroll-proportion="0.0">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="ExperimentExportServiceIntegrationTests.groovy" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/test/integration/barddataexport/experiment/ExperimentExportServiceIntegrationTests.groovy">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="15" column="19" selection-start="442" selection-end="442" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -319,47 +423,27 @@
       <file leaf-file-name="UrlMappings.groovy" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/grails-app/conf/UrlMappings.groovy">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="49" column="9" selection-start="1989" selection-end="1989" vertical-scroll-proportion="0.0">
+            <state line="0" column="6" selection-start="6" selection-end="17" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="main.gsp" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/grails-app/views/layouts/main.gsp">
+      <file leaf-file-name="Config.groovy" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/grails-app/conf/Config.groovy">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="-0.0">
+            <state line="19" column="0" selection-start="857" selection-end="888" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="index.gsp" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/grails-app/views/index.gsp">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="94" column="12" selection-start="2181" selection-end="2181" vertical-scroll-proportion="0.03846154">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="RootRestController.groovy" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="RootRestController.groovy" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/grails-app/controllers/barddataexport/cap/util/RootRestController.groovy">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="20" column="23" selection-start="556" selection-end="556" vertical-scroll-proportion="0.20425531">
+            <state line="16" column="8" selection-start="434" selection-end="434" vertical-scroll-proportion="3.7826087">
               <folding>
                 <element signature="e#33#71#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="DictionaryControllerFunctionalSpec.groovy" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/test/functional/barddataexport/dictionary/DictionaryControllerFunctionalSpec.groovy">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="205" column="5" selection-start="8656" selection-end="8656" vertical-scroll-proportion="0.0">
-              <folding>
-                <element signature="e#35#63#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -379,22 +463,22 @@
   <component name="IdeDocumentHistory">
     <option name="changedFiles">
       <list>
-        <option value="$PROJECT_DIR$/test/integration/barddataexport/dictionary/DictionaryExportServiceIntegrationSpec.groovy" />
-        <option value="$PROJECT_DIR$/test/unit/barddataexport/dictionary/DictionaryControllerUnitSpec.groovy" />
-        <option value="$PROJECT_DIR$/test/unit/barddataexport/dictionary/DictionaryRestControllerUnitSpec.groovy" />
-        <option value="$PROJECT_DIR$/test/functional/barddataexport/dictionary/RestControllerSpec.groovy" />
-        <option value="$PROJECT_DIR$/grails-app/conf/BuildConfig.groovy" />
-        <option value="$PROJECT_DIR$/test/integration/barddataexport/dictionary/DictionaryExportHelperServiceIntegrationSpec.groovy" />
-        <option value="$PROJECT_DIR$/test/integration/barddataexport/util/DictionaryIntegrationXml.groovy" />
-        <option value="$PROJECT_DIR$/test/functional/barddataexport/dictionary/DictionaryControllerSpec.groovy" />
-        <option value="$PROJECT_DIR$/grails-app/conf/BootStrap.groovy" />
-        <option value="$PROJECT_DIR$/test/functional/barddataexport/dictionary/DictionaryControllerFunctionalSpec.groovy" />
+        <option value="$PROJECT_DIR$/test/integration/barddataexport/util/RootServiceIntegrationSpec.groovy" />
+        <option value="$PROJECT_DIR$/grails-app/conf/spring/resources.groovy" />
         <option value="$PROJECT_DIR$/grails-app/services/barddataexport/util/RootService.groovy" />
-        <option value="$PROJECT_DIR$/grails-app/controllers/barddataexport/cap/experiment/ExperimentRestController.groovy" />
-        <option value="$PROJECT_DIR$/grails-app/controllers/barddataexport/cap/cap/CapRestController.groovy" />
-        <option value="$PROJECT_DIR$/grails-app/controllers/barddataexport/cap/dictionary/DictionaryRestController.groovy" />
-        <option value="$PROJECT_DIR$/grails-app/views/index.gsp" />
-        <option value="$PROJECT_DIR$/grails-app/controllers/barddataexport/cap/util/RootRestController.groovy" />
+        <option value="$PROJECT_DIR$/src/groovy/common/tests/XmlTestSamples.groovy" />
+        <option value="$PROJECT_DIR$/test/unit/barddataexport/util/RootServiceUnitSpec.groovy" />
+        <option value="$PROJECT_DIR$/grails-app/conf/Config.groovy" />
+        <option value="$PROJECT_DIR$/grails-app/conf/BuildConfig.groovy" />
+        <option value="$PROJECT_DIR$/test/functional/barddataexport/dictionary/RootRestControllerFunctionalSpec.groovy" />
+        <option value="$PROJECT_DIR$/test/integration/barddataexport/cap/CapExportServiceIntegrationTests.groovy" />
+        <option value="$PROJECT_DIR$/test/integration/barddataexport/experiment/ResultExportServiceIntegrationTests.groovy" />
+        <option value="$PROJECT_DIR$/test/integration/barddataexport/experiment/ExperimentExportServiceIntegrationTests.groovy" />
+        <option value="$PROJECT_DIR$/test/unit/barddataexport/util/RootRestControllerUnitSpec.groovy" />
+        <option value="$PROJECT_DIR$/test/unit/barddataexport/dictionary/UrlMappingsUnitSpec.groovy" />
+        <option value="$PROJECT_DIR$/test/unit/barddataexport/experiment/UrlMappingsUnitSpec.groovy" />
+        <option value="$PROJECT_DIR$/test/unit/barddataexport/UrlMappingsUnitSpec.groovy" />
+        <option value="$PROJECT_DIR$/test/unit/UrlMappingsUnitSpec.groovy" />
       </list>
     </option>
   </component>
@@ -473,6 +557,44 @@
               <option name="myItemId" value="test" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="unit" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="barddataexport" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="util" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="bardDataExtraction" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="bardDataExportSample" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="test" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="unit" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="barddataexport" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="dictionary" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
           </PATH>
           <PATH>
             <PATH_ELEMENT>
@@ -521,6 +643,44 @@
               <option name="myItemId" value="barddataexport" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="experiment" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="ResultExportServiceIntegrationTests.groovy" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.ClassesTreeStructureProvider$PsiClassOwnerTreeNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="bardDataExtraction" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="bardDataExportSample" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="test" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="integration" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="barddataexport" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="experiment" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="ExperimentExportServiceIntegrationTests.groovy" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.ClassesTreeStructureProvider$PsiClassOwnerTreeNode" />
+            </PATH_ELEMENT>
           </PATH>
           <PATH>
             <PATH_ELEMENT>
@@ -545,6 +705,28 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="dictionary" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="bardDataExtraction" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="bardDataExportSample" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="test" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="integration" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="barddataexport" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -583,146 +765,6 @@
               <option name="myItemId" value="grails-app" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="views" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="bardDataExtraction" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="bardDataExportSample" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="grails-app" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="views" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="layouts" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="bardDataExtraction" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="bardDataExportSample" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="grails-app" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="bardDataExtraction" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="bardDataExportSample" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="grails-app" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="controllers" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="cap" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="util" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="bardDataExtraction" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="bardDataExportSample" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="grails-app" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="controllers" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="cap" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="experiment" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="bardDataExtraction" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="bardDataExportSample" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="grails-app" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="controllers" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="cap" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="dictionary" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="bardDataExtraction" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="bardDataExportSample" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="grails-app" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="controllers" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="cap" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
           </PATH>
           <PATH>
             <PATH_ELEMENT>
@@ -750,7 +792,7 @@
     </panes>
   </component>
   <component name="PropertiesComponent">
-    <property name="last_directory_selection" value="$PROJECT_DIR$/test/integration/barddataexport/experiment" />
+    <property name="last_directory_selection" value="$PROJECT_DIR$/test/unit" />
     <property name="GoToFile.includeJavaFiles" value="false" />
     <property name="options.splitter.main.proportions" value="0.3" />
     <property name="recentsLimit" value="5" />
@@ -768,8 +810,8 @@
   </component>
   <component name="RecentsManager">
     <key name="CopyClassDialog.RECENTS_KEY">
-      <recent name="barddataexport.util" />
       <recent name="barddataexport.dictionary" />
+      <recent name="barddataexport.util" />
       <recent name="barddataexport.experiment" />
       <recent name="barddataexport.cap.experiment" />
       <recent name="barddataexport.cap" />
@@ -779,16 +821,18 @@
       <recent name="C:\Users\jasiedu\.grails\2.0.4\projects\bardDataExportSample\plugins\bard-domain-model-0.1.1\grails-app\domain\bard\db\dictionary" />
     </key>
     <key name="MoveClassesOrPackagesDialog.RECENTS_KEY">
+      <recent name="" />
+      <recent name="barddataexport" />
       <recent name="barddataexport.experiment" />
       <recent name="barddataexport.dictionary" />
       <recent name="barddataexport.cap" />
     </key>
   </component>
-  <component name="RunManager" selected="Grails.DictionaryControllerFunctionalSpec">
-    <configuration default="false" name="test dictionary fail with HTTP POST()" type="GrailsRunConfigurationType" factoryName="Grails" temporary="true">
+  <component name="RunManager" selected="Grails.testControllerMapping()">
+    <configuration default="false" name="test index #label fail()" type="GrailsRunConfigurationType" factoryName="Grails" temporary="true">
       <module name="bardDataExportSample" />
       <setting name="vmparams" value="" />
-      <setting name="cmdLine" value="test-app functional: barddataexport.dictionary.DictionaryControllerSpec.test dictionary fail with HTTP POST -echoOut" />
+      <setting name="cmdLine" value="test-app unit: barddataexport.util.RootRestControllerUnitSpec.test index #label fail -echoOut" />
       <setting name="depsClasspath" value="true" />
       <setting name="passParentEnv" value="true" />
       <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
@@ -799,10 +843,10 @@
         <option name="Make" enabled="false" />
       </method>
     </configuration>
-    <configuration default="false" name="test result Type()" type="GrailsRunConfigurationType" factoryName="Grails" temporary="true">
+    <configuration default="false" name="RootRestControllerFunctionalSpec" type="GrailsRunConfigurationType" factoryName="Grails" temporary="true">
       <module name="bardDataExportSample" />
       <setting name="vmparams" value="" />
-      <setting name="cmdLine" value="test-app functional: barddataexport.dictionary.DictionaryControllerFunctionalSpec.test result Type -echoOut" />
+      <setting name="cmdLine" value="test-app functional: barddataexport.dictionary.RootRestControllerFunctionalSpec -echoOut" />
       <setting name="depsClasspath" value="true" />
       <setting name="passParentEnv" value="true" />
       <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
@@ -813,41 +857,43 @@
         <option name="Make" enabled="false" />
       </method>
     </configuration>
-    <configuration default="false" name="test GET Result Type Success()" type="GrailsRunConfigurationType" factoryName="Grails" temporary="true">
+    <configuration default="false" name="CapExportServiceIntegrationTests" type="GrailsRunConfigurationType" factoryName="Grails" temporary="true">
       <module name="bardDataExportSample" />
       <setting name="vmparams" value="" />
-      <setting name="cmdLine" value="test-app functional: barddataexport.dictionary.DictionaryControllerFunctionalSpec.test GET Result Type Success -echoOut" />
+      <setting name="cmdLine" value="test-app integration: barddataexport.cap.CapExportServiceIntegration -echoOut" />
       <setting name="depsClasspath" value="true" />
       <setting name="passParentEnv" value="true" />
       <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
       <setting name="launchBrowser" value="true" />
-      <RunnerSettings RunnerId="Debug">
-        <option name="DEBUG_PORT" value="" />
-        <option name="TRANSPORT" value="0" />
-        <option name="LOCAL" value="true" />
-      </RunnerSettings>
       <RunnerSettings RunnerId="Run" />
-      <ConfigurationWrapper RunnerId="Debug" />
       <ConfigurationWrapper RunnerId="Run" />
       <method>
         <option name="Make" enabled="false" />
       </method>
     </configuration>
-    <configuration default="false" name="test result Type 404 not Found()" type="GrailsRunConfigurationType" factoryName="Grails" temporary="true">
+    <configuration default="false" name="UrlMappingsUnitSpec" type="GrailsRunConfigurationType" factoryName="Grails" temporary="true">
       <module name="bardDataExportSample" />
       <setting name="vmparams" value="" />
-      <setting name="cmdLine" value="test-app functional: barddataexport.dictionary.DictionaryControllerFunctionalSpec.test result Type 404 not Found -echoOut" />
+      <setting name="cmdLine" value="test-app unit: UrlMappingsUnitSpec -echoOut" />
       <setting name="depsClasspath" value="true" />
       <setting name="passParentEnv" value="true" />
       <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
       <setting name="launchBrowser" value="true" />
-      <RunnerSettings RunnerId="Debug">
-        <option name="DEBUG_PORT" value="" />
-        <option name="TRANSPORT" value="0" />
-        <option name="LOCAL" value="true" />
-      </RunnerSettings>
       <RunnerSettings RunnerId="Run" />
-      <ConfigurationWrapper RunnerId="Debug" />
+      <ConfigurationWrapper RunnerId="Run" />
+      <method>
+        <option name="Make" enabled="false" />
+      </method>
+    </configuration>
+    <configuration default="false" name="testControllerMapping()" type="GrailsRunConfigurationType" factoryName="Grails" temporary="true">
+      <module name="bardDataExportSample" />
+      <setting name="vmparams" value="" />
+      <setting name="cmdLine" value="test-app unit: UrlMappings.testControllerMapping -echoOut" />
+      <setting name="depsClasspath" value="true" />
+      <setting name="passParentEnv" value="true" />
+      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
+      <setting name="launchBrowser" value="true" />
+      <RunnerSettings RunnerId="Run" />
       <ConfigurationWrapper RunnerId="Run" />
       <method>
         <option name="Make" enabled="false" />
@@ -977,6 +1023,17 @@
         <option name="AntTarget" enabled="false" />
         <option name="BuildArtifacts" enabled="false" />
         <option name="Make" enabled="true" />
+        <option name="Maven.BeforeRunTask" enabled="false" />
+      </method>
+    </configuration>
+    <configuration default="true" type="JavascriptDebugSession" factoryName="Local">
+      <JSDebuggerConfigurationSettings>
+        <option name="engineId" />
+        <option name="fileUrl" />
+      </JSDebuggerConfigurationSettings>
+      <method>
+        <option name="AntTarget" enabled="false" />
+        <option name="BuildArtifacts" enabled="false" />
         <option name="Maven.BeforeRunTask" enabled="false" />
       </method>
     </configuration>
@@ -1117,6 +1174,54 @@
         <option name="Make" enabled="false" />
       </method>
     </configuration>
+    <configuration default="false" name="test  element #label #id()" type="GrailsRunConfigurationType" factoryName="Grails">
+      <module name="bardDataExportSample" />
+      <setting name="vmparams" value="" />
+      <setting name="cmdLine" value="test-app unit: barddataexport.dictionary.DictionaryRestControllerUnitSpec.test  element #label #id -echoOut" />
+      <setting name="depsClasspath" value="true" />
+      <setting name="passParentEnv" value="true" />
+      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
+      <setting name="launchBrowser" value="true" />
+      <RunnerSettings RunnerId="Run" />
+      <ConfigurationWrapper RunnerId="Run" />
+      <method>
+        <option name="Make" enabled="false" />
+      </method>
+    </configuration>
+    <configuration default="false" name="DictionaryControllerFunctionalSpec" type="GrailsRunConfigurationType" factoryName="Grails">
+      <module name="bardDataExportSample" />
+      <setting name="vmparams" value="" />
+      <setting name="cmdLine" value="test-app functional: barddataexport.dictionary.DictionaryControllerFunctionalSpec -echoOut" />
+      <setting name="depsClasspath" value="true" />
+      <setting name="passParentEnv" value="true" />
+      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
+      <setting name="launchBrowser" value="true" />
+      <RunnerSettings RunnerId="Debug">
+        <option name="DEBUG_PORT" value="" />
+        <option name="TRANSPORT" value="0" />
+        <option name="LOCAL" value="true" />
+      </RunnerSettings>
+      <RunnerSettings RunnerId="Run" />
+      <ConfigurationWrapper RunnerId="Debug" />
+      <ConfigurationWrapper RunnerId="Run" />
+      <method>
+        <option name="Make" enabled="false" />
+      </method>
+    </configuration>
+    <configuration default="false" name="RootServiceIntegrationSpec" type="GrailsRunConfigurationType" factoryName="Grails">
+      <module name="bardDataExportSample" />
+      <setting name="vmparams" value="" />
+      <setting name="cmdLine" value="test-app integration: barddataexport.util.RootServiceIntegrationSpec -echoOut" />
+      <setting name="depsClasspath" value="true" />
+      <setting name="passParentEnv" value="true" />
+      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
+      <setting name="launchBrowser" value="true" />
+      <RunnerSettings RunnerId="Run" />
+      <ConfigurationWrapper RunnerId="Run" />
+      <method>
+        <option name="Make" enabled="false" />
+      </method>
+    </configuration>
     <configuration default="false" name="DictionaryExportHelperServiceUnitSpec.test generate Single Descriptor #label #dto" type="JUnit" factoryName="JUnit">
       <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea">
         <pattern>
@@ -1176,41 +1281,7 @@
       <ConfigurationWrapper RunnerId="Run" />
       <method />
     </configuration>
-    <configuration default="false" name="test  element #label #id()" type="GrailsRunConfigurationType" factoryName="Grails">
-      <module name="bardDataExportSample" />
-      <setting name="vmparams" value="" />
-      <setting name="cmdLine" value="test-app unit: barddataexport.dictionary.DictionaryRestControllerUnitSpec.test  element #label #id -echoOut" />
-      <setting name="depsClasspath" value="true" />
-      <setting name="passParentEnv" value="true" />
-      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
-      <setting name="launchBrowser" value="true" />
-      <RunnerSettings RunnerId="Run" />
-      <ConfigurationWrapper RunnerId="Run" />
-      <method>
-        <option name="Make" enabled="false" />
-      </method>
-    </configuration>
-    <configuration default="false" name="DictionaryControllerFunctionalSpec" type="GrailsRunConfigurationType" factoryName="Grails">
-      <module name="bardDataExportSample" />
-      <setting name="vmparams" value="" />
-      <setting name="cmdLine" value="test-app functional: barddataexport.dictionary.DictionaryControllerFunctionalSpec -echoOut" />
-      <setting name="depsClasspath" value="true" />
-      <setting name="passParentEnv" value="true" />
-      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
-      <setting name="launchBrowser" value="true" />
-      <RunnerSettings RunnerId="Debug">
-        <option name="DEBUG_PORT" value="" />
-        <option name="TRANSPORT" value="0" />
-        <option name="LOCAL" value="true" />
-      </RunnerSettings>
-      <RunnerSettings RunnerId="Run" />
-      <ConfigurationWrapper RunnerId="Debug" />
-      <ConfigurationWrapper RunnerId="Run" />
-      <method>
-        <option name="Make" enabled="false" />
-      </method>
-    </configuration>
-    <list size="15">
+    <list size="17">
       <item index="0" class="java.lang.String" itemvalue="Grails.testGenerateAssayDescriptors()" />
       <item index="1" class="java.lang.String" itemvalue="Grails.Grails:bardDataExtraction" />
       <item index="2" class="java.lang.String" itemvalue="Grails.Grails:bardDataExportSample" />
@@ -1218,14 +1289,16 @@
       <item index="4" class="java.lang.String" itemvalue="Grails.testGenerateResultContextItem()" />
       <item index="5" class="java.lang.String" itemvalue="Grails.testGenerateExperimentLinks()" />
       <item index="6" class="java.lang.String" itemvalue="Grails.test  dictionary #label()" />
-      <item index="7" class="java.lang.String" itemvalue="JUnit.DictionaryExportHelperServiceUnitSpec.test generate Single Descriptor #label #dto" />
-      <item index="8" class="java.lang.String" itemvalue="JUnit.DictionaryExportHelperServiceUnitSpec" />
-      <item index="9" class="java.lang.String" itemvalue="Grails.test  element #label #id()" />
-      <item index="10" class="java.lang.String" itemvalue="Grails.test dictionary fail with HTTP POST()" />
-      <item index="11" class="java.lang.String" itemvalue="Grails.test result Type()" />
-      <item index="12" class="java.lang.String" itemvalue="Grails.test GET Result Type Success()" />
-      <item index="13" class="java.lang.String" itemvalue="Grails.test result Type 404 not Found()" />
-      <item index="14" class="java.lang.String" itemvalue="Grails.DictionaryControllerFunctionalSpec" />
+      <item index="7" class="java.lang.String" itemvalue="Grails.test  element #label #id()" />
+      <item index="8" class="java.lang.String" itemvalue="Grails.DictionaryControllerFunctionalSpec" />
+      <item index="9" class="java.lang.String" itemvalue="Grails.RootServiceIntegrationSpec" />
+      <item index="10" class="java.lang.String" itemvalue="JUnit.DictionaryExportHelperServiceUnitSpec.test generate Single Descriptor #label #dto" />
+      <item index="11" class="java.lang.String" itemvalue="JUnit.DictionaryExportHelperServiceUnitSpec" />
+      <item index="12" class="java.lang.String" itemvalue="Grails.test index #label fail()" />
+      <item index="13" class="java.lang.String" itemvalue="Grails.RootRestControllerFunctionalSpec" />
+      <item index="14" class="java.lang.String" itemvalue="Grails.CapExportServiceIntegrationTests" />
+      <item index="15" class="java.lang.String" itemvalue="Grails.UrlMappingsUnitSpec" />
+      <item index="16" class="java.lang.String" itemvalue="Grails.testControllerMapping()" />
     </list>
     <configuration name="&lt;template&gt;" type="WebApp" default="true" selected="false">
       <Host>localhost</Host>
@@ -1261,31 +1334,31 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1616" height="876" extended-state="6" />
-    <editor active="true" />
+    <editor active="false" />
     <layout>
       <window_info id="Data Sources" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="JetGradle" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Persistence" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32899022" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32793522" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.43049932" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="IDEtalk Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="12" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.22941971" sideWeight="0.498125" order="8" side_tool="true" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="5" side_tool="true" content_ui="tabs" />
-      <window_info id="Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3697706" sideWeight="0.4975" order="9" side_tool="false" content_ui="tabs" />
+      <window_info id="Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.2645074" sideWeight="0.4975" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Grails View" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="IDEtalk" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32899022" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32793522" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
       <window_info id="Web" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="4" side_tool="true" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="true" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.2825" sideWeight="0.6990553" order="0" side_tool="false" content_ui="combo" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.30094466" sideWeight="0.98603654" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.27375" sideWeight="0.6720648" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.32793522" sideWeight="0.98603654" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.02625" sideWeight="0.82321185" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
@@ -1385,120 +1458,113 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="jar://C:/grails-2.0.4/src/grails-web-2.0.4-sources.jar!/org/codehaus/groovy/grails/web/servlet/HttpHeaders.java">
+    <entry file="file://$PROJECT_DIR$/test/integration/barddataexport/dictionary/DictionaryExportHelperServiceIntegrationSpec.groovy">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="45" column="31" selection-start="2051" selection-end="2051" vertical-scroll-proportion="0.0">
+        <state line="56" column="0" selection-start="1902" selection-end="1902" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="jar://$USER_HOME$/.grails/ivy-cache/org.codehaus.groovy.modules.http-builder/http-builder/jars/http-builder-0.5.2.jar!/groovyx/net/http/RESTClient.class">
+    <entry file="file://$PROJECT_DIR$/grails-app/conf/spring/resources.groovy">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="15" column="47" selection-start="781" selection-end="781" vertical-scroll-proportion="-6.76">
+        <state line="10" column="46" selection-start="579" selection-end="579" vertical-scroll-proportion="0.0">
           <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$USER_HOME$/.grails/ivy-cache/org.codehaus.groovy.modules.http-builder/http-builder/jars/http-builder-0.5.2.jar!/groovyx/net/http/HTTPBuilder.class">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="29" column="28" selection-start="1631" selection-end="1631" vertical-scroll-proportion="-5.4">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/grails-app/conf/Config.groovy">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="34" column="92" selection-start="1653" selection-end="1699" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/grails-app/services/barddataexport/dictionary/DictionaryExportHelperService.groovy">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="400" column="0" selection-start="14633" selection-end="14633" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$USER_HOME$/.grails/ivy-cache/xmlunit/xmlunit/jars/xmlunit-1.3.jar!/org/custommonkey/xmlunit/Diff.class">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="46" column="19" selection-start="2777" selection-end="2777" vertical-scroll-proportion="-7.92">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/grails-app/conf/BootStrap.groovy">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="29" column="125" selection-start="818" selection-end="821" vertical-scroll-proportion="0.0">
-          <folding>
-            <element signature="e#0#33#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/grails-app/services/barddataexport/util/RootService.groovy">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="17" column="7" selection-start="742" selection-end="742" vertical-scroll-proportion="0.0">
+        <state line="14" column="16" selection-start="441" selection-end="441" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/grails-app/controllers/barddataexport/cap/cap/CapRestController.groovy">
+    <entry file="file://$PROJECT_DIR$/src/groovy/common/tests/XmlTestSamples.groovy">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="107" column="57" selection-start="3873" selection-end="3873" vertical-scroll-proportion="-14.26087">
+        <state line="16" column="39" selection-start="689" selection-end="689" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/grails-app/controllers/barddataexport/cap/experiment/ExperimentRestController.groovy">
+    <entry file="file://$PROJECT_DIR$/test/integration/barddataexport/util/RootServiceIntegrationSpec.groovy">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="61" column="0" selection-start="2174" selection-end="2174" vertical-scroll-proportion="-9.695652">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/grails-app/controllers/barddataexport/cap/dictionary/DictionaryRestController.groovy">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="119" column="45" selection-start="4392" selection-end="4392" vertical-scroll-proportion="-9.304348">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/test/functional/barddataexport/dictionary/DictionaryControllerFunctionalSpec.groovy">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="205" column="5" selection-start="8656" selection-end="8656" vertical-scroll-proportion="0.0">
+        <state line="9" column="20" selection-start="231" selection-end="231" vertical-scroll-proportion="0.0">
           <folding>
-            <element signature="e#35#63#0" expanded="true" />
+            <element signature="e#29#66#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/grails-app/conf/UrlMappings.groovy">
+    <entry file="file://$PROJECT_DIR$/grails-app/conf/BuildConfig.groovy">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="49" column="9" selection-start="1989" selection-end="1989" vertical-scroll-proportion="0.0">
+        <state line="32" column="84" selection-start="1452" selection-end="1452" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/grails-app/views/layouts/main.gsp">
+    <entry file="file://$PROJECT_DIR$/test/unit/barddataexport/util/RootServiceUnitSpec.groovy">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/grails-app/views/index.gsp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="94" column="12" selection-start="2181" selection-end="2181" vertical-scroll-proportion="0.03846154">
+        <state line="37" column="58" selection-start="941" selection-end="941" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/grails-app/controllers/barddataexport/cap/util/RootRestController.groovy">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="20" column="23" selection-start="556" selection-end="556" vertical-scroll-proportion="0.20425531">
+        <state line="16" column="8" selection-start="434" selection-end="434" vertical-scroll-proportion="3.7826087">
           <folding>
             <element signature="e#33#71#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/grails-app/conf/Config.groovy">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="19" column="0" selection-start="857" selection-end="888" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/test/functional/barddataexport/dictionary/RootRestControllerFunctionalSpec.groovy">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="18" column="23" selection-start="614" selection-end="614" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/test/integration/barddataexport/cap/CapExportServiceIntegrationTests.groovy">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="22" column="1" selection-start="447" selection-end="514" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/test/integration/barddataexport/experiment/ResultExportServiceIntegrationTests.groovy">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="24" column="5" selection-start="488" selection-end="488" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/test/integration/barddataexport/experiment/ExperimentExportServiceIntegrationTests.groovy">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="15" column="19" selection-start="442" selection-end="442" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/grails-app/conf/UrlMappings.groovy">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="0" column="6" selection-start="6" selection-end="17" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/test/unit/barddataexport/util/RootRestControllerUnitSpec.groovy">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="24" column="3" selection-start="497" selection-end="497" vertical-scroll-proportion="0.43023255">
+          <folding>
+            <element signature="e#29#78#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -1510,7 +1576,7 @@
         <entry key="bardDataExportSample">
           <value>
             <GrailsSettings>
-              <option name="buildConfigCrc" value="992565001" />
+              <option name="buildConfigCrc" value="1351606680" />
               <option name="pluginDependenciesCrc" value="53699431" />
               <option name="properties">
                 <map>

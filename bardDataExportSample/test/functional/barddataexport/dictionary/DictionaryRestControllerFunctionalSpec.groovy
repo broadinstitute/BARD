@@ -5,8 +5,6 @@ import groovyx.net.http.RESTClient
 import org.codehaus.groovy.grails.commons.GrailsApplication
 import org.codehaus.groovy.grails.web.context.ServletContextHolder
 import org.codehaus.groovy.grails.web.servlet.GrailsApplicationAttributes
-import org.custommonkey.xmlunit.Diff
-import org.custommonkey.xmlunit.XMLUnit
 import org.springframework.context.ApplicationContext
 import spock.lang.Specification
 import spock.lang.Unroll
@@ -15,6 +13,9 @@ import javax.servlet.ServletContext
 import javax.servlet.http.HttpServletResponse
 
 import static groovyx.net.http.Method.GET
+import common.tests.XmlTestAssertions
+
+import common.tests.XmlTestSamples
 
 /**
  * Created with IntelliJ IDEA.
@@ -24,7 +25,7 @@ import static groovyx.net.http.Method.GET
  * To change this template use File | Settings | File Templates.
  */
 @Unroll
-class DictionaryControllerFunctionalSpec extends Specification {
+class DictionaryRestControllerFunctionalSpec extends Specification {
     GrailsApplication grailsApplication
     // TODO should be configured in Config.groovy, seems like grails.server.url which can be set per environment
     final String baseUrl = "http://localhost:${System.getProperty('server.port') ?: '8080'}/bardDataExportSample/api/dictionary" // your app URL
@@ -48,7 +49,7 @@ class DictionaryControllerFunctionalSpec extends Specification {
         then: 'We expect an XML representation of the entire dictionary'
         assert serverResponse.statusLine.statusCode == HttpServletResponse.SC_OK
         final String responseData = serverResponse.data.readLines().join()
-        assertResults(DICTIONARY, responseData)
+        XmlTestAssertions.assertResults(XmlTestSamples.DICTIONARY, responseData)
     }
 
     def 'test GET dictionary fail with wrong Accept Header'() {
@@ -109,7 +110,7 @@ class DictionaryControllerFunctionalSpec extends Specification {
         then: 'We expect an XML representation of that Result Type'
         assert serverResponse.statusLine.statusCode == HttpServletResponse.SC_OK
         final String responseData = serverResponse.data.readLines().join()
-        assertResults(RESULT_TYPE, responseData)
+        XmlTestAssertions.assertResults(XmlTestSamples.RESULT_TYPE, responseData)
     }
 
 
@@ -156,7 +157,7 @@ class DictionaryControllerFunctionalSpec extends Specification {
         then: 'We expect an XML representation of that Stage'
         assert serverResponse.statusLine.statusCode == HttpServletResponse.SC_OK
         final String responseData = serverResponse.data.readLines().join()
-        assertResults(STAGE, responseData)
+        XmlTestAssertions.assertResults(XmlTestSamples.STAGE, responseData)
     }
 
     void 'test Element 404 not Found'() {
@@ -202,105 +203,9 @@ class DictionaryControllerFunctionalSpec extends Specification {
         then: 'We expect an XML representation of that Element'
         assert serverResponse.statusLine.statusCode == HttpServletResponse.SC_OK
         final String responseData = serverResponse.data.readLines().join()
-        assertResults(ELEMENT, responseData)
-    }
-    void assertResults(final String expectedResults, final String generatedResults) {
-        XMLUnit.setIgnoreWhitespace(true)
-        Diff xmlDiff = new Diff(expectedResults, generatedResults)
-        assert true == xmlDiff.similar()
+        XmlTestAssertions.assertResults(XmlTestSamples.ELEMENT, responseData)
     }
 
-    static String STAGE = '''
-    <stage stageId='341' stageStatus='Published'>
-      <stageName>construct variant assay</stageName>
-    </stage>
-'''
-    static String RESULT_TYPE = '''
-    <resultType resultTypeId='341' baseUnit='uM' resultTypeStatus='Published'>
-      <resultTypeName>IC50</resultTypeName>
-    </resultType>
-'''
-    static String ELEMENT = '''
-    <element elementId='386' readyForExtraction='Ready' elementStatus='Published'>
-      <label>uM</label>
-      <link rel='edit' href='http://localhost:8080/bardDataExportSample/api/dictionary/element/386' type='application/vnd.bard.cap+xml;type=element' />
-    </element>
-    '''
-    static String DICTIONARY = '''
-<dictionary>
-  <elements>
-    <element elementId='386' readyForExtraction='Ready' elementStatus='Published'>
-      <label>uM</label>
-      <link rel='edit' href='http://localhost:8080/bardDataExportSample/api/dictionary/element/386' type='application/vnd.bard.cap+xml;type=element' />
-    </element>
-    <element elementId='366' readyForExtraction='Ready' elementStatus='Published'>
-      <label>concentration</label>
-      <link rel='edit' href='http://localhost:8080/bardDataExportSample/api/dictionary/element/366' type='application/vnd.bard.cap+xml;type=element' />
-    </element>
-    <element elementId='123' readyForExtraction='Ready' elementStatus='Published'>
-      <label>unit of measurement</label>
-      <description>It is the inite magnitude of a physical quantity or of time. It has a quantity and a unit associated with it.</description>
-      <link rel='edit' href='http://localhost:8080/bardDataExportSample/api/dictionary/element/123' type='application/vnd.bard.cap+xml;type=element' />
-    </element>
-    <element elementId='341' readyForExtraction='Ready' elementStatus='Published' unit='uM'>
-      <label>IC50</label>
-      <link rel='edit' href='http://localhost:8080/bardDataExportSample/api/dictionary/element/341' type='application/vnd.bard.cap+xml;type=element' />
-    </element>
-  </elements>
-  <elementHierarchies>
-    <elementHierarchy parentElementId='341' childElementId='366'>
-      <relationshipType>derives from</relationshipType>
-    </elementHierarchy>
-  </elementHierarchies>
-  <resultTypes>
-    <resultType resultTypeId='341' baseUnit='uM' resultTypeStatus='Published'>
-      <resultTypeName>IC50</resultTypeName>
-    </resultType>
-  </resultTypes>
-  <stages>
-    <stage stageId='341' stageStatus='Published'>
-      <stageName>construct variant assay</stageName>
-    </stage>
-  </stages>
-  <biologyDescriptors>
-    <biologyDescriptor descriptorId='4' elementId='366'>
-      <elementStatus>Published</elementStatus>
-      <label>macromolecule description</label>
-      <description>A long name for a gene or protein from a trusted international source (e.g., Entrez, UniProt).</description>
-    </biologyDescriptor>
-  </biologyDescriptors>
-  <assayDescriptors>
-    <assayDescriptor descriptorId='287' elementId='386'>
-      <elementStatus>Published</elementStatus>
-      <label>assay phase</label>
-      <description>It refers to whether all the assay components are in solution or some are in solid phase, which determines their ability to scatter light.</description>
-    </assayDescriptor>
-  </assayDescriptors>
-  <instanceDescriptors>
-    <instanceDescriptor descriptorId='12' elementId='123'>
-      <elementStatus>Published</elementStatus>
-      <label>macromolecule description</label>
-      <description>A long name for a gene or protein from a trusted international source (e.g., Entrez, UniProt).</description>
-    </instanceDescriptor>
-  </instanceDescriptors>
-  <laboratories>
-    <laboratory laboratoryId='341' laboratoryStatus='Published'>
-      <laboratoryName>LABORATORY</laboratoryName>
-      <description>Singular root to ensure tree viewers work</description>
-    </laboratory>
-  </laboratories>
-  <units>
-    <unit unitId='123' unit='UNIT'>
-      <description>Singular root to ensure tree viewers work</description>
-    </unit>
-    <unit unitId='366' unit='concentration' />
-    <unit unitId='386' parentUnitId='366' unit='uM' />
-  </units>
-  <unitConversions>
-    <unitConversion fromUnit='uM' toUnit='concentration' multiplier='2.5' offset='2'>
-      <formula>2*2</formula>
-    </unitConversion>
-  </unitConversions>
-</dictionary>
-'''
+
+
 }
