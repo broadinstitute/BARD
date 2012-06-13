@@ -13,7 +13,7 @@
 </head>
 
 <body>
-<g:form name="aidForm" action="findCompoundsForAssay">
+<g:form name="aidForm" controller="bardWebInterface" action="findCompoundsForAssay">
     <label for="assay">
         <g:message code="assay.id.label" default="AID"/>
     </label>

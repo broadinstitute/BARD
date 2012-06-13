@@ -25,7 +25,7 @@ class BardWebInterfaceController {
     def findCompoundsForAssay(Integer max, Integer offset, Integer assay) {
         //NCGS' max and offset
         Integer skip = offset ?: 0
-        Integer top = max ?: 10
+        Integer top = max ?: 1000
         params.max = top
 
         String assayId = assay.toString() ?: params.id //if 'assay' param is provided, use that; otherwise, try the default id one
@@ -34,7 +34,7 @@ class BardWebInterfaceController {
             final String assayResourceUrl = "/bard/rest/v1/assays/" + assayId
             final String assayUrl = grailsApplication.config.ncgc.server.root.url + assayResourceUrl
             final wslite.json.JSONObject assayJson = queryAssayApiService.executeGetRequestJSON(assayUrl, null) //get the Assay instance
-            final Integer totalCompounds = assayJson.samples
+            final Integer totalCompounds = assayJson.substances
             final String assayUrlPaging = assayUrl + '/compounds?skip=' + skip + '&top=' + top
             final wslite.json.JSONObject assayCompoundsJson = queryAssayApiService.executeGetRequestJSON(assayUrlPaging, null)
 
