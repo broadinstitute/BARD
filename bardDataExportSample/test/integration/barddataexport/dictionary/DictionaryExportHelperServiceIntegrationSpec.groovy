@@ -156,8 +156,8 @@ class DictionaryExportHelperServiceIntegrationSpec extends IntegrationSpec {
 
     void assertResults(final String results) {
         XMLUnit.setIgnoreWhitespace(true)
-        def xmlDiff = new Diff(this.writer.toString(), results)
-        assert xmlDiff.similar()
+        Diff xmlDiff = new Diff(this.writer.toString(), results)
+        assert true == xmlDiff.similar()
     }
 }
 class DictionaryIntegrationXml {

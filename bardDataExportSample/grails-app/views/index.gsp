@@ -91,8 +91,8 @@
         Firefox has the RestClient Plugin ( I am sure there are others).</b>
 
     <p>
-        <b>The table below lists the available resources and the Accept Type that it requires. The Accept string goes in the header of most client apps.<br/>
-            Note that we are not doing any serious error checking, so you might see stack traces every now and then.<br/>
+        <b>The table below lists the available resources and the Accept Types that it requires. The Accept string goes in the header of most client apps.<br/>
+            <br/>
         </b>
     </p>
     <br/>
@@ -134,46 +134,46 @@
         <br/>
         <br/>
 
-        <h3>Projects and Assays</h3>
-        <table>
-            <thead><th>Resource</th><th>URL</th><th>Accept Header</th><th>Comments</th></thead>
-            <tbody>
-            <tr><td>All Projects</td><td><g:link
-                    mapping="cap">Copy this link</g:link></td><td>application/vnd.bard.cap+xml;type=cap</td><td>Returns All Projects</td>
-            </tr>
-            <tr><td>Projects Not Uploaded</td><td></td><td>application/vnd.bard.cap+xml;type=projects</td><td>This is not yet implemented because of changes in data model</td>
-            </tr>
-            <tr><td>Assay</td><td><g:link mapping="assay"
-                                          params="[id: 1]">Copy this link</g:link></td><td>application/vnd.bard.cap+xml;type=assay</td><td>Replace the assayId value with any valid Id</td>
-            </tr>
-            <tr><td>Project</td><td><g:link mapping="project"
-                                            params="[id: 1]">Copy this link</g:link></td><td>application/vnd.bard.cap+xml;type=project</td><td>Replace projectId value with any valid Id</td>
-            </tr>
+        %{--<h3>Projects and Assays</h3>--}%
+        %{--<table>--}%
+            %{--<thead><th>Resource</th><th>URL</th><th>Accept Header</th><th>Comments</th></thead>--}%
+            %{--<tbody>--}%
+            %{--<tr><td>All Projects</td><td><g:link--}%
+                    %{--mapping="cap">Copy this link</g:link></td><td>application/vnd.bard.cap+xml;type=cap</td><td>Returns All Projects</td>--}%
+            %{--</tr>--}%
+            %{--<tr><td>Projects Not Uploaded</td><td></td><td>application/vnd.bard.cap+xml;type=projects</td><td>This is not yet implemented because of changes in data model</td>--}%
+            %{--</tr>--}%
+            %{--<tr><td>Assay</td><td><g:link mapping="assay"--}%
+                                          %{--params="[id: 1]">Copy this link</g:link></td><td>application/vnd.bard.cap+xml;type=assay</td><td>Replace the assayId value with any valid Id</td>--}%
+            %{--</tr>--}%
+            %{--<tr><td>Project</td><td><g:link mapping="project"--}%
+                                            %{--params="[id: 1]">Copy this link</g:link></td><td>application/vnd.bard.cap+xml;type=project</td><td>Replace projectId value with any valid Id</td>--}%
+            %{--</tr>--}%
 
-            </tbody>
-        </table>
+            %{--</tbody>--}%
+        %{--</table>--}%
         <br/>
         <br/>
 
-        <h3>Experiments and Results</h3>
-        <table>
-            <thead><th>Resource</th><th>URL</th><th>Accept Header</th><th>Comments</th></thead>
-            <tbody>
-            <tr><td>All Experiments</td><td><g:link
-                    mapping="experiments">Copy this link</g:link></td><td>application/vnd.bard.cap+xml;type=experiments</td><td>Returns All Experiments (Should really return experiments that have not been uploaded)</td>
-            </tr>
-            <tr><td>Experiment</td><td><g:link mapping="experiment"
-                                               params="[id: 1]">Copy this link</g:link></td><td>application/vnd.bard.cap+xml;type=experiment</td><td>A particular experiment</td>
-            </tr>
-            <tr><td>Results</td><td><g:link mapping="results"
-                                            params="[id: 1]">Copy this link</g:link></td><td>application/vnd.bard.cap+xml;type=results</td><td>Results of a particular experiment</td>
-            </tr>
-            <tr><td>Result</td><td><g:link mapping="result"
-                                           params="[id: 1]">Copy this link</g:link></td><td>application/vnd.bard.cap+xml;type=result</td><td>A result</td>
-            </tr>
+        %{--<h3>Experiments and Results</h3>--}%
+        %{--<table>--}%
+            %{--<thead><th>Resource</th><th>URL</th><th>Accept Header</th><th>Comments</th></thead>--}%
+            %{--<tbody>--}%
+            %{--<tr><td>All Experiments</td><td><g:link--}%
+                    %{--mapping="experiments">Copy this link</g:link></td><td>application/vnd.bard.cap+xml;type=experiments</td><td>Returns All Experiments (Should really return experiments that have not been uploaded)</td>--}%
+            %{--</tr>--}%
+            %{--<tr><td>Experiment</td><td><g:link mapping="experiment"--}%
+                                               %{--params="[id: 1]">Copy this link</g:link></td><td>application/vnd.bard.cap+xml;type=experiment</td><td>A particular experiment</td>--}%
+            %{--</tr>--}%
+            %{--<tr><td>Results</td><td><g:link mapping="results"--}%
+                                            %{--params="[id: 1]">Copy this link</g:link></td><td>application/vnd.bard.cap+xml;type=results</td><td>Results of a particular experiment</td>--}%
+            %{--</tr>--}%
+            %{--<tr><td>Result</td><td><g:link mapping="result"--}%
+                                           %{--params="[id: 1]">Copy this link</g:link></td><td>application/vnd.bard.cap+xml;type=result</td><td>A result</td>--}%
+            %{--</tr>--}%
 
-            </tbody>
-        </table>
+            %{--</tbody>--}%
+        %{--</table>--}%
     </div>
 </div>
 </body>

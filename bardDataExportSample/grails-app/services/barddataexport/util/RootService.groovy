@@ -11,11 +11,11 @@ class RootService {
     public void generateRootElement(final MarkupBuilder xml) {
         xml.bardexport() {
 
-            final String projectsHref = grailsLinkGenerator.link(mapping: 'projects', absolute: true).toString()
-            final String PROJECTS_MEDIA_TYPE = grailsApplication.config.bard.data.export.cap.projects.xml
-            link(rel: 'item', title: "List of projects, ready for extraction", href: "${projectsHref}", type: "${PROJECTS_MEDIA_TYPE}"){
+//            final String projectsHref = grailsLinkGenerator.link(mapping: 'projects', absolute: true).toString()
+//            final String PROJECTS_MEDIA_TYPE = grailsApplication.config.bard.data.export.cap.projects.xml
+//            link(rel: 'item', title: "List of projects, ready for extraction", href: "${projectsHref}", type: "${PROJECTS_MEDIA_TYPE}"){
 
-            }
+     //       }
 
 
             final String dictionaryHref = grailsLinkGenerator.link(mapping: 'dictionary', absolute: true).toString()
@@ -24,10 +24,10 @@ class RootService {
 
             }
 
-            final String experimentsHref = grailsLinkGenerator.link(mapping: 'experiments', absolute: true).toString()
-            final String EXPERIMENTS_MEDIA_TYPE = grailsApplication.config.bard.data.export.data.experiments.xml
-            link(rel: 'item', title: 'List of experiments, ready for extraction', type: "${EXPERIMENTS_MEDIA_TYPE}", href: "${experimentsHref}") {
-            }
+//            final String experimentsHref = grailsLinkGenerator.link(mapping: 'experiments', absolute: true).toString()
+//            final String EXPERIMENTS_MEDIA_TYPE = grailsApplication.config.bard.data.export.data.experiments.xml
+//            link(rel: 'item', title: 'List of experiments, ready for extraction', type: "${EXPERIMENTS_MEDIA_TYPE}", href: "${experimentsHref}") {
+//            }
         }
     }
 }

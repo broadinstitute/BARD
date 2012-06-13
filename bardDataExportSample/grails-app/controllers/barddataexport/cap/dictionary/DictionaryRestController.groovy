@@ -18,15 +18,16 @@ class DictionaryRestController {
             updateElemet: "PATCH"
     ]
 
-    def index() {
-        return unsupported()
-    }
-
+    /**
+     * Fetch the entire dictionary
+     * @return
+     */
     def dictionary() {
         try {
             final String mimeType = grailsApplication.config.bard.data.export.dictionary.xml
             response.contentType = mimeType
             //do validations
+            //mime types must match the expected type
             if (mimeType == request.getHeader(HttpHeaders.ACCEPT)) {
                 final Writer writer = response.writer
                 final MarkupBuilder xml = new MarkupBuilder(writer)
@@ -36,16 +37,16 @@ class DictionaryRestController {
             }
             response.status = HttpServletResponse.SC_BAD_REQUEST
             render ""
-            return
-
         } catch (Exception ee) {
             response.status = HttpServletResponse.SC_INTERNAL_SERVER_ERROR
             log.error(ee.message)
             ee.printStackTrace()
-            return
         }
     }
-
+    /**
+     * Get a result type with the given id
+     * @return
+     */
     def resultType() {
         try {
             final String mimeType = grailsApplication.config.bard.data.export.dictionary.resultType.xml
@@ -60,15 +61,16 @@ class DictionaryRestController {
             }
             response.status = HttpServletResponse.SC_BAD_REQUEST
             render ""
-            return
         } catch (Exception ee) {
             response.status = HttpServletResponse.SC_INTERNAL_SERVER_ERROR
             log.error(ee.message)
             ee.printStackTrace()
-            return
         }
     }
-
+    /**
+     * Get the stage with the given id
+     * @return
+     */
     def stage() {
         try {
             final String mimeType = grailsApplication.config.bard.data.export.dictionary.stage.xml
@@ -88,10 +90,12 @@ class DictionaryRestController {
             response.status = HttpServletResponse.SC_INTERNAL_SERVER_ERROR
             log.error(ee.message)
             ee.printStackTrace()
-            return
         }
     }
-
+    /**
+     * Get the element with the given id
+     * @return
+     */
     def element() {
         try {
             final String mimeType = grailsApplication.config.bard.data.export.dictionary.element.xml
@@ -110,11 +114,12 @@ class DictionaryRestController {
             response.status = HttpServletResponse.SC_INTERNAL_SERVER_ERROR
             log.error(ee.message)
             ee.printStackTrace()
-            return
         }
     }
-
+    /**
+     * Update the status of the given element
+     */
     def updateElement() {
-
+        throw new RuntimeException("Not Yet Implemented")
     }
 }
