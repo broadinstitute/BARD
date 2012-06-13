@@ -1,12 +1,11 @@
 package barddataexport.cap.util
 
-import barddataexport.experiment.ExperimentExportService
-import barddataexport.experiment.ResultExportService
+import barddataexport.util.RootService
+import groovy.xml.MarkupBuilder
 import org.codehaus.groovy.grails.commons.GrailsApplication
 import org.codehaus.groovy.grails.web.servlet.HttpHeaders
+
 import javax.servlet.http.HttpServletResponse
-import groovy.xml.MarkupBuilder
-import barddataexport.util.RootService
 
 class RootRestController {
     RootService rootService
@@ -16,20 +15,26 @@ class RootRestController {
     ]
 
     def index() {
-        return unsupported()
+        return response.sendError(HttpServletResponse.SC_METHOD_NOT_ALLOWED)
     }
-
     def api() {
-        def mimeType = grailsApplication.config.bard.data.export.bardexport.xml
-        response.contentType = mimeType
-        //do validations
-        if (mimeType != request.getHeader(HttpHeaders.ACCEPT)) {
+        try {
+            final String mimeType = grailsApplication.config.bard.data.export.bardexport.xml
+            response.contentType = mimeType
+            //do validations
+            if (mimeType == request.getHeader(HttpHeaders.ACCEPT)) {
+                final def writer = response.writer
+                final MarkupBuilder xml = new MarkupBuilder(writer)
+                rootService.generateRootElement(xml)
+                return
+            }
             response.status = HttpServletResponse.SC_BAD_REQUEST
             render ""
-            return
+
+        } catch (Exception ee) {
+            response.status = HttpServletResponse.SC_INTERNAL_SERVER_ERROR
+            log.error(ee.message)
+            ee.printStackTrace()
         }
-        final def writer = response.writer
-        final MarkupBuilder xml = new MarkupBuilder(writer)
-        rootService.generateRootElement(xml)
     }
 }

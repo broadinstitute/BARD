@@ -9,7 +9,7 @@ hibernate {
     cache.use_query_cache = true
     cache.provider_class = 'net.sf.ehcache.hibernate.EhCacheProvider'
     cache.region.factory_class = 'org.hibernate.cache.RegionFactory'
-    show_sql = true
+    show_sql = false
     format_sql = true
     use_sql_comments = true
 }
@@ -23,7 +23,7 @@ environments {
     }
     oracleqa {
         dataSource {
-            dbCreate = 'update'
+            dbCreate = ''
             url = "jdbc:oracle:thin:@barddb:1521:bardqa"
             driverClassName = "oracle.jdbc.driver.OracleDriver"
             dialect = bard.SequencePerTableOracleDialect
@@ -31,6 +31,18 @@ environments {
             password = "bard_qa"
         }
     }
+
+    southern {
+        dataSource {
+            dbCreate = ''
+            url = "jdbc:oracle:thin:@barddb:1521:bardqa"
+            driverClassName = "oracle.jdbc.driver.OracleDriver"
+            dialect = bard.SequencePerTableOracleDialect
+            username = "southern"
+            password = "SOUTHERN"
+        }
+    }
+
     test {
         dataSource {
             dbCreate = "update"

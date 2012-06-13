@@ -1,5 +1,7 @@
+import bard.db.dictionary.Element
 import grails.util.Environment
 import groovy.sql.Sql
+
 import javax.sql.DataSource
 
 class BootStrap {
@@ -11,15 +13,18 @@ class BootStrap {
         switch (Environment.current.name) {
             case "test":
             case "development":
-                //Create test data
-               final Sql sql = new Sql(dataSource)
-               insertTestRecords(sql)
-               break;
+                if (Element.list().isEmpty()) {
+                    //Create test data
+                    final Sql sql = new Sql(dataSource)
+                    insertTestRecords(sql)
+                }
+                break;
         }
 
     }
     def destroy = {
     }
+
     def insertTestRecords(final Sql sql) {
 
         sql.execute "INSERT INTO ELEMENT (ELEMENT_ID,LABEL,ELEMENT_STATUS,READY_FOR_EXTRACTION,VERSION,DATE_CREATED) values (386,'uM','Published','Ready',0,SYSDATE)"
