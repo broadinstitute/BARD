@@ -10,7 +10,7 @@ import javax.servlet.http.HttpServletResponse
 
 @Unroll
 class QueryApiSpec extends Specification {
-    String baseUrl = System.properties.get('grails.serverUrl') ?: "http://localhost:8080"
+    String baseUrl = System.properties.get('grails.serverUrl') ?: "http://localhost:8080/bardqueryapi"
 
     def "Test REST Query API: #label"() {
         given: "there is a service end point to get the root elements"
