@@ -14,7 +14,7 @@ will give you this element
         </xs:annotation>
         <xs:complexType>
             <xs:sequence>
-                <xs:element name="label" type="xs:string"/>
+                <xs:element ref="label"/>
                 <xs:element minOccurs="0" ref="description"/>
                 <xs:element minOccurs="0" name="synonyms" type="xs:string"/>
                 <xs:element minOccurs="0" name="externalUrl" type="xs:anyURI"/>
