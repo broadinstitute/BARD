@@ -43,6 +43,12 @@ class AssayServiceIntegrationTests extends GroovyTestCase {
 
         assayItem.addToChildren(negControlItem)
 
+        assayItem.save()
+        assayKitItem.save()
+        negControlItem.save()
+        biologyItem.save()
+        instanceItem.save()
+
         assert assayItem.validate()
         assert negControlItem.validate()
         assert assayKitItem.validate()
@@ -52,6 +58,7 @@ class AssayServiceIntegrationTests extends GroovyTestCase {
         String contextName = "Context for IC50"
         MeasureContext context = new MeasureContext(contextName: contextName)
         assay.addToMeasureContexts(context)
+        context.save()
         assert context.validate()
 
         Measure measure = new Measure(resultType: resultType)
@@ -62,12 +69,11 @@ class AssayServiceIntegrationTests extends GroovyTestCase {
         Map map = assayService.getMeasureContextItemsForAssay(assay)
 
         assert map.'Assay Context'.contains(assayItem)
-        assert map.'Assay Context'.'nucleotide'.'negative control' == negControlItem
-        assert map.'Assay Context'.'assay kit' == assayKitItem
-        assert map.'Assay Context'.'molecular target' == biologyItem
-        assert map.'Assay Context'.'small-molecule perturbagen' == instanceItem
-        assert map.'Result Types'[contextName]
-        assert map.'Result Types'[contextName].get(0) == 'IC50'
+        assert map.'Assay Context'.contains(negControlItem)
+        assert map.'Assay Context'.contains(assayKitItem)
+        assert map.'Assay Context'.contains(biologyItem)
+        assert map.'Assay Context'.contains(instanceItem)
+        assert map.'Result Context'[contextName]
 
     }
 }
