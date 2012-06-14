@@ -27,7 +27,7 @@ abstract class QueryExecutorService {
         } catch (RESTClientException ex) {
             String message = ex.response.statusMessage
             final int code = ex.response.statusCode
-            return [message: code] as JSON
+            return [errorMessage: message, errorCode: code] as JSON
         }
     }
 
