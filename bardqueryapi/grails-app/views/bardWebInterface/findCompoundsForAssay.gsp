@@ -23,12 +23,12 @@
 </div>
 
 <g:form controller="bardWebInterface" action="findCompoundsForAssay" params="[assay: aid]">
-    <div class="projectListHeader">
-        <div class="projectListTitle">
+    <div class="listHeader">
+        <div class="listTitle">
             <h1><g:message code="assay.compound.text" args="[aid, totalCompounds]"/></h1><br>
         </div>
 
-        <div class="projectListFilter">
+        <div class="listFilter">
             <label for="max">Max per page:</label>
             <g:textField id="max" name="max" value="${params.max}" maxlength="4" style="width: 8%"/>
             <g:actionSubmit value="Update" action="findCompoundsForAssay" style="background-color: #acD4F4;"/>
@@ -39,7 +39,7 @@
 </g:form>
 
 <div>
-    <div>
+    <div class="content">
         <g:each var="compound" in="${assayCompoundsJsonArray}">
             <g:set var="cid" value="${compound}"/>
             <g:link action="showCompound" params="[cid: cid]">

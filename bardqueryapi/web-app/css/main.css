@@ -700,26 +700,35 @@ a.skip {
     background-image: url(../images/skin/database_add.png);
 }
 
-div.projectListHeader {
+div.listHeader {
     padding: 20px 0px 30px 0px;
 }
 
-div.projectListTitle {
+div.listTitle {
     float:left;
 }
 
-div.projectListTitle h1 {
+div.listTitle h1 {
     display: inline;
     margin-right: 0px;
+    margin-left: 10px;
 }
 
-div.projectListTitle span {
+div.listTitle span {
     font-size: 11px;
     padding-left: 5px;
 }
 
-div.projectListFilter {
+div.listFilter {
     float:right;
     text-align:right;
     margin-right:10px;
+}
+
+div.clear {
+    margin-bottom:20px;
+}
+
+div.content {
+    margin-left: 10px;
 }

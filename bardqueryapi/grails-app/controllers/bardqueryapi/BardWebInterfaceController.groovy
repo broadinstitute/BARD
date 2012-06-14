@@ -1,5 +1,7 @@
 package bardqueryapi
 
+import grails.converters.JSON
+
 /**
  * Created with IntelliJ IDEA.
  * User: gwalzer
@@ -46,9 +48,13 @@ class BardWebInterfaceController {
         if (compoundId) {
             final String compoundResourceUrl = "/bard/rest/v1/compounds/" + compoundId.toString()
             final String compoundUrl = grailsApplication.config.ncgc.server.root.url + compoundResourceUrl
-            final wslite.json.JSONObject compoundJson = queryAssayApiService.executeGetRequestJSON(compoundUrl, null) //get the Assay instance
-
-            render(view: "showCompound", model: [compoundJson: compoundJson])
+            def compoundJson = queryAssayApiService.executeGetRequestJSON(compoundUrl, null) //get the Assay instance
+            def compound = JSON.parse(compoundJson.toString())
+            //If the compound does not exist and we get back a server error, generate an empty JSON object.
+            if (compound.errorMessage) {
+                compoundJson = null
+            }
+            render(view: "showCompound", model: [compoundJson: compoundJson, compoundId: compoundId])
         }
         else {
             render "Compound ID (CID) parameter required"
