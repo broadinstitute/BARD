@@ -12,13 +12,14 @@ class Experiment {
 	Date dateCreated
 	Date lastUpdated
 	String modifiedBy
-	ExperimentStatus experimentStatus
+	String experimentStatus
 	Project project
 	Assay assay
+	String readyForExtraction = 'Ready'
 
 	static hasMany = [resultContextItems: ResultContextItem,
-	                  results: Result]
-	static belongsTo = [Assay, ExperimentStatus, Project]
+			results: Result]
+	static belongsTo = [Assay, Project]
 
 	static mapping = {
 		id column: "Experiment_ID"
@@ -26,7 +27,7 @@ class Experiment {
 
 	static constraints = {
 		experimentName maxSize: 256
-        experimentStatus nullable: false
+		experimentStatus nullable: false
 		runDateFrom nullable: true, maxSize: 10
 		runDateTo nullable: true, maxSize: 10
 		holdUntilDate nullable: true, maxSize: 10
@@ -34,5 +35,7 @@ class Experiment {
 		dateCreated maxSize: 19
 		lastUpdated nullable: true, maxSize: 19
 		modifiedBy nullable: true, maxSize: 40
+		experimentStatus maxSize: 20, nullable: false, inList: ["Pending", "Approved", "Rejected", "Revised"]
+		readyForExtraction maxSize: 20, nullable: false, inList: [ "Ready", "Started", "Complete" ]
 	}
 }

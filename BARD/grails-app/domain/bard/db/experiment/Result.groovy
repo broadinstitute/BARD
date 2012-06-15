@@ -14,35 +14,35 @@ class Result {
 	String modifiedBy
 	Substance substance
 	Experiment experiment
-	ResultStatus resultStatus
+	String resultStatus
 	Element resultType
 	Qualifier qualifier
-
+	
 	static hasMany = [resultHierarchiesForParentResult: ResultHierarchy,
-	                  resultHierarchiesForResult: ResultHierarchy,
-                      resultContextItems: ResultContextItem]
-
+	resultHierarchiesForResult: ResultHierarchy,
+						  resultContextItems: ResultContextItem]
+	
 	static belongsTo = [Experiment, ResultContextItem ]
-
+	
 	static mappedBy = [resultHierarchiesForParentResult: "parentResult",
-	                   resultHierarchiesForResult: "result"]
-
+	resultHierarchiesForResult: "result"]
+	
 	static mapping = {
-		id column: "Result_ID"
-        qualifier column: "qualifier", sqlType: "char", length: 2
-        resultType column: "result_type_id"
+	id column: "Result_ID"
+			qualifier column: "qualifier", sqlType: "char", length: 2
+			resultType column: "result_type_id"
 	}
-
+	
 	static constraints = {
-		valueDisplay nullable: true, maxSize: 256
-		valueNum nullable: true
-		valueMin nullable: true
-		valueMax nullable: true
-		dateCreated maxSize: 19
-		lastUpdated nullable: true, maxSize: 19
-		modifiedBy nullable: true, maxSize: 40
-        substance nullable: false
-        resultStatus nullable: false
-        resultType nullable: false
+	valueDisplay nullable: true, maxSize: 256
+	valueNum nullable: true
+	valueMin nullable: true
+	valueMax nullable: true
+	dateCreated maxSize: 19
+	lastUpdated nullable: true, maxSize: 19
+	modifiedBy nullable: true, maxSize: 40
+			substance nullable: false
+			resultStatus maxSize: 20, nullable: false, inList: ["Pending", "Approved", "Rejected", "Mark for Deletion"]
+			resultType nullable: false
 	}
 }

@@ -10,20 +10,22 @@ class Assay {
 
 	String assayName
 	String assayVersion
-	String description
+	//String description
 	String designedBy
 	Date dateCreated
 	Date lastUpdated
 	String modifiedBy
-	AssayStatus assayStatus
+	String assayStatus = 'Pending'
+	String readyForExtraction = 'Ready'
+
 
 	static hasMany = [experiments: Experiment,
-	                  externalAssays: ExternalAssay,
-	                  measureContextItems: MeasureContextItem,
-                      measures : Measure,
-	                  measureContexts: MeasureContext,
-	                  projectAssays: ProjectAssay,
-	                  protocols: Protocol]
+			externalAssays: ExternalAssay,
+			measureContextItems: MeasureContextItem,
+			measures : Measure,
+			measureContexts: MeasureContext,
+			projectAssays: ProjectAssay,
+			assayDocuments: AssayDocument]
 
 	static mapping = {
 		id column: "Assay_ID"
@@ -32,10 +34,12 @@ class Assay {
 	static constraints = {
 		assayName nullable: false, maxSize: 128
 		assayVersion maxSize: 10
-		description nullable: true, maxSize: 1000
+		//description nullable: true, maxSize: 1000
 		designedBy nullable: true, maxSize: 100
 		dateCreated maxSize: 19
 		lastUpdated nullable: true, maxSize: 19
 		modifiedBy nullable: true, maxSize: 40
+		assayStatus maxSize: 20, nullable: false, inList: ["Pending", "Active", "Superseded", "Retired"]
+		readyForExtraction maxSize: 20, nullable: false, inList: [ "Ready", "Started", "Complete" ]
 	}
 }

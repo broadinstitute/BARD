@@ -5,7 +5,6 @@ import bard.db.dictionary.ResultType
 import grails.test.mixin.Mock
 import grails.test.mixin.TestFor
 import bard.db.dictionary.AssayDescriptor
-import bard.db.dictionary.ElementStatus
 
 /**
  * See the API for {@link grails.test.mixin.services.ServiceUnitTestMixin} for usage instructions
@@ -17,8 +16,7 @@ class AssayServiceUnitTests {
     void testGetMeasureContextItemsForAssay() {
 
         Element element = new Element()
-        ElementStatus elementStatus = new ElementStatus()
-        AssayDescriptor assayDescriptor = new AssayDescriptor(id: 3, label: "assay mode", element: element, elementStatus: elementStatus).save()
+        AssayDescriptor assayDescriptor = new AssayDescriptor(id: 3, label: "assay mode", element: element, "Pending": elementStatus).save()
         assert assayDescriptor.validate()
         assert AssayDescriptor.count() > 0
         MeasureContextItem item1 = new MeasureContextItem(attributeElement: element)
