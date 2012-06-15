@@ -20,7 +20,7 @@ databaseChangeLog = {
 
                         String alterSeqSql = "create sequence ${sequenceName} increment by 1 start with ${startWithVal} maxvalue 2147483648 cache 2"
                         sql.execute(alterSeqSql)
-                        println("The $tableName table had a max ${tableName}_ID of ${maxId} reset sequence ${sequenceName} to start with ${startWithVal}")
+                        println("The $tableName table had a max ${tableName}_ID of ${maxId}, the sequence ${sequenceName} was reset to start with ${startWithVal}")
                     }
                     catch (java.sql.SQLSyntaxErrorException e) {
                         //println(e.message)
