@@ -9,3 +9,4 @@ web-app/WEB-INF/classes/
 *.ipr
 stacktrace.log
 thumbs.db
+atlassian-ide-plugin.xml
