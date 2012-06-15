@@ -6,7 +6,7 @@ import wslite.rest.RESTClient
 import wslite.rest.RESTClientException
 import wslite.rest.Response
 
-abstract class QueryExecutorService {
+class QueryExecutorService {
 
     def grailsApplication
     HTTPBasicAuthorization clientBasicAuth

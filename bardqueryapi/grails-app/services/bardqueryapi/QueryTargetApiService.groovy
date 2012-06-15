@@ -1,8 +1,9 @@
 package bardqueryapi
 
-class QueryTargetApiService extends QueryExecutorService{
+class QueryTargetApiService {
 
-
+    def grailsApplication
+    QueryExecutorService queryExecutorService
 
     //Target
     ///v1/targets/accession/{acc} - JSON representation of a protein target identified by Uniprot accession
@@ -16,7 +17,7 @@ class QueryTargetApiService extends QueryExecutorService{
     def findProteinByUniprotAccession(String accessionUrl) {
         final String url = grailsApplication.config.ncgc.server.root.url + accessionUrl
         println url
-        return executeGetRequestJSON(url, null)
+        return queryExecutorService.executeGetRequestJSON(url, null)
     }
     /**
      *
@@ -26,7 +27,7 @@ class QueryTargetApiService extends QueryExecutorService{
     def findProteinByGeneId(String geneUrl) {
         final String url = grailsApplication.config.ncgc.server.root.url + geneUrl
         println url
-        return executeGetRequestJSON(url, null)
+        return queryExecutorService.executeGetRequestJSON(url, null)
     }
 
 }

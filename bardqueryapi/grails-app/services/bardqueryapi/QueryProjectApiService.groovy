@@ -1,6 +1,9 @@
 package bardqueryapi
 
-class QueryProjectApiService extends QueryExecutorService {
+class QueryProjectApiService {
+
+    def grailsApplication
+    QueryExecutorService queryExecutorService
 
     //We consider a project to be represented by a PubChem summary assay.
     // As the BAO develops and includes the specifications for project management,
@@ -13,7 +16,7 @@ class QueryProjectApiService extends QueryExecutorService {
     // annotated directly to the project (ie summary assay) and the not those associated with the component assays
     def findProjects() {
         final String url = grailsApplication.config.ncgc.server.projects.root.url
-        return executeGetRequestJSON(url, null)
+        return queryExecutorService.executeGetRequestJSON(url, null)
     }
     /**
      *
@@ -23,7 +26,7 @@ class QueryProjectApiService extends QueryExecutorService {
      */
     def findProject(String projectUrl) {
         final String url = grailsApplication.config.ncgc.server.root.url + projectUrl
-        return executeGetRequestJSON(url, null)
+        return queryExecutorService.executeGetRequestJSON(url, null)
     }
     /**
      * Find the protein targets by project
@@ -32,7 +35,7 @@ class QueryProjectApiService extends QueryExecutorService {
     def findProteinTargetsByProject(String projectUrl) {
         final String url = grailsApplication.config.ncgc.server.root.url + projectUrl + "/targets"
         println url
-        return executeGetRequestJSON(url, null)
+        return queryExecutorService.executeGetRequestJSON(url, null)
     }
     /**
      * Find probes by project
@@ -42,7 +45,7 @@ class QueryProjectApiService extends QueryExecutorService {
     def findProbesByProject(String projectUrl) {
         final String url = grailsApplication.config.ncgc.server.root.url + projectUrl + "/probes"
         println url
-        return executeGetRequestJSON(url, null)
+        return queryExecutorService.executeGetRequestJSON(url, null)
     }
     /**
      *
@@ -51,6 +54,6 @@ class QueryProjectApiService extends QueryExecutorService {
     def findAssaysByProject(String projectUrl) {
         final String url = grailsApplication.config.ncgc.server.root.url + projectUrl + "/assays"
         println url
-        return executeGetRequestJSON(url, null)
+        return queryExecutorService.executeGetRequestJSON(url, null)
     }
 }

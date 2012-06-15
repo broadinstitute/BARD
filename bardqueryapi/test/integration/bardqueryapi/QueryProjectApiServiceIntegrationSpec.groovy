@@ -53,10 +53,10 @@ class QueryProjectApiServiceIntegrationSpec extends IntegrationSpec {
         when:
         final def probes = queryProjectApiService.findProbesByProject(projectUrl)
         then:
-        assert probes
-        probes.each {probe->
-            println probe
-        }
+        assert !probes
+//        probes.each {probe->
+//            println probe
+//        }
     }
     void testFindAssaysByProject(){
         given:

@@ -1,8 +1,11 @@
 package bardqueryapi
 
-class QueryCompoundApiService extends QueryExecutorService {
+class QueryCompoundApiService {
 
-   //Compound
+    def grailsApplication
+    QueryExecutorService queryExecutorService
+
+    //Compound
     ///v1/compounds/{id} - Retrieve compound by its CID
     ///v1/compounds/sid/{id} - Retrieve compound by it SID
     ///v1/compounds/probeid/{id} - Retrieve compound by its probe id
@@ -14,9 +17,9 @@ class QueryCompoundApiService extends QueryExecutorService {
         final String url = grailsApplication.config.ncgc.server.root.url + cidUrl
         println url
         if(headers){
-            return executeGetRequestString(url,headers)
+            return queryExecutorService.executeGetRequestString(url,headers)
         }
-        return executeGetRequestJSON(url,null)
+        return queryExecutorService.executeGetRequestJSON(url,null)
     }
     /**
      *
@@ -28,9 +31,9 @@ class QueryCompoundApiService extends QueryExecutorService {
         final String url = grailsApplication.config.ncgc.server.root.url +  sidUrl
         println url
         if(headers){
-            return executeGetRequestString(url,headers)
+            return queryExecutorService.executeGetRequestString(url,headers)
         }
-        return executeGetRequestJSON(url,null)
+        return queryExecutorService.executeGetRequestJSON(url,null)
     }
     /**
      *
@@ -42,8 +45,8 @@ class QueryCompoundApiService extends QueryExecutorService {
         final String url = grailsApplication.config.ncgc.server.root.url +  probeUrl
         println url
         if(headers){
-            return executeGetRequestString(url,headers)
+            return queryExecutorService.executeGetRequestString(url,headers)
         }
-        return executeGetRequestJSON(url,null)
+        return queryExecutorService.executeGetRequestJSON(url,null)
     }
 }

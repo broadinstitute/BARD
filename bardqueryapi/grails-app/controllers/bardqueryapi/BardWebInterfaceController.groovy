@@ -1,6 +1,8 @@
 package bardqueryapi
 
 import grails.converters.JSON
+import javax.servlet.http.HttpServletResponse
+import org.codehaus.groovy.grails.web.json.JSONObject
 
 /**
  * Created with IntelliJ IDEA.
@@ -12,6 +14,8 @@ import grails.converters.JSON
 class BardWebInterfaceController {
 
     QueryAssayApiService queryAssayApiService
+    QueryExecutorService queryExecutorService
+
 
     def index() {
         render(view: "index.gsp")
@@ -29,15 +33,14 @@ class BardWebInterfaceController {
         max = max ?: 100
         params.max = max.toString()
 
-        Integer assayId = assay ?: params.id as Integer //if 'assay' param is provided, use that; otherwise, try the default id one
+        if (assay) {
+            final Integer totalCompounds = queryAssayApiService.getTotalAssayCompounds(assay)
+            final List<String> assayCompoundsPage = queryAssayApiService.getAssayCompoundsResultset(max, offset, assay)
 
-        if (assayId) {
-            final Integer totalCompounds = queryAssayApiService.getTotalAssayCompounds(assayId)
-            final List<String> assayCompoundsPage = queryAssayApiService.getAssayCompoundsResultset(max, offset, assayId)
-
-            render(view: "findCompoundsForAssay", model: [assayCompoundsJsonArray: assayCompoundsPage, totalCompounds: totalCompounds, aid: assayId])
+            render(view: "findCompoundsForAssay", model: [assayCompoundsJsonArray: assayCompoundsPage, totalCompounds: totalCompounds, aid: assay])
         }
         else {
+            response.status = HttpServletResponse.SC_NOT_FOUND
             render "Assay ID is not defined"
         }
     }
@@ -48,10 +51,10 @@ class BardWebInterfaceController {
         if (compoundId) {
             final String compoundResourceUrl = "/bard/rest/v1/compounds/" + compoundId.toString()
             final String compoundUrl = grailsApplication.config.ncgc.server.root.url + compoundResourceUrl
-            def compoundJson = queryAssayApiService.executeGetRequestJSON(compoundUrl, null) //get the Assay instance
+            def compoundJson = queryExecutorService.executeGetRequestJSON(compoundUrl, null) //get the Assay instance
             def compound = JSON.parse(compoundJson.toString())
             //If the compound does not exist and we get back a server error, generate an empty JSON object.
-            if (compound.errorMessage) {
+            if (compound.getClass() == JSONObject && compound.errorMessage) {
                 compoundJson = null
             }
             render(view: "showCompound", model: [compoundJson: compoundJson, compoundId: compoundId])

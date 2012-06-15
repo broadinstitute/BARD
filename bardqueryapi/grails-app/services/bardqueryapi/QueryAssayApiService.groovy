@@ -2,7 +2,10 @@ package bardqueryapi
 
 import grails.converters.JSON
 
-class QueryAssayApiService extends QueryExecutorService {
+class QueryAssayApiService {
+
+    def grailsApplication
+    QueryExecutorService queryExecutorService
 
     /**
      * v1/assays/{aid} - JSON representation of an assay, identified by its AID.
@@ -11,7 +14,7 @@ class QueryAssayApiService extends QueryExecutorService {
     def findAssayByAid(String assayAidUrl) {
         final String url = grailsApplication.config.ncgc.server.root.url + assayAidUrl
         println url
-        return executeGetRequestJSON(url, null)
+        return queryExecutorService.executeGetRequestJSON(url, null)
     }
     /**
      * v1/assays/{aid}/targets - list of paths to protein targets, annotated for this assay
@@ -20,7 +23,7 @@ class QueryAssayApiService extends QueryExecutorService {
     def findProteinTargetsByAssay(String assayAidUrl) {
         final String url = grailsApplication.config.ncgc.server.root.url + assayAidUrl + "/targets"
         println url
-        return executeGetRequestJSON(url, null)
+        return queryExecutorService.executeGetRequestJSON(url, null)
      }
     /**
      * v1/assays/{aid}/publications - list of paths to documents, annotated for this assay.
@@ -30,7 +33,7 @@ class QueryAssayApiService extends QueryExecutorService {
     def findPublicationsByAssay(String assayAidUrl) {
         final String url = grailsApplication.config.ncgc.server.root.url + assayAidUrl + "/publications"
         println url
-        return executeGetRequestJSON(url, null)
+        return queryExecutorService.executeGetRequestJSON(url, null)
     }
     /**
      * v1/assays/{aid}/compounds - by default, a JSON list of paths to compounds identified by CID.
@@ -43,13 +46,13 @@ class QueryAssayApiService extends QueryExecutorService {
     def findCompoundsByAssay(String assayAidUrl, Map headers) {
         final String url = grailsApplication.config.ncgc.server.root.url + assayAidUrl + "/compounds"
         println url
-        return executeGetRequestJSON(url, headers)
+        return queryExecutorService.executeGetRequestJSON(url, headers)
     }
 
     Integer getTotalAssayCompounds (Integer assayId) {
         final String assayResourceUrl = "${grailsApplication.config.ncgc.server.root.url}/bard/rest/v1/assays/${assayId}"
-        final wslite.json.JSONObject assayJson = executeGetRequestJSON(assayResourceUrl, null) //get the Assay instance
-        final Integer totalCompounds = assayJson.substances ?: 0
+        final wslite.json.JSONObject assayJson = queryExecutorService.executeGetRequestJSON(assayResourceUrl, null) //get the Assay instance
+        final Integer totalCompounds = assayJson.compounds ?: 0
         return totalCompounds
     }
 
@@ -62,7 +65,7 @@ class QueryAssayApiService extends QueryExecutorService {
      */
     List<String> getAssayCompoundsResultset(Integer max, Integer offset, Integer assayId) {
         final String assayUrlPaging = "${grailsApplication.config.ncgc.server.root.url}/bard/rest/v1/assays/${assayId}/compounds?skip=${offset}&top=${max}" //NCGS' max and offset
-        final wslite.json.JSONObject assayCompoundsJson = executeGetRequestJSON(assayUrlPaging, null)
+        final wslite.json.JSONObject assayCompoundsJson = queryExecutorService.executeGetRequestJSON(assayUrlPaging, null)
         if (assayCompoundsJson.collection) {
             List<String> compoundUrlList = assayCompoundsJson.collection.toList()
             //strip the CID from the ending of the compound resource url (e.g., /bard/rest/v1/compounds/661090 --> 661090)
