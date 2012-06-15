@@ -14,7 +14,16 @@ environments {
     development {
         dataSource {
             dbCreate = "create-drop" // one of 'create', 'create-drop', 'update', 'validate', ''
-           url = "jdbc:h2:mem:devDb;MVCC=TRUE"
+            url = "jdbc:h2:mem:devDb;MVCC=TRUE"
+        }
+    }
+    oracledev {
+        dataSource {
+            url = "jdbc:oracle:thin:@barddb:1521:bardqa"
+            driverClassName = "oracle.jdbc.driver.OracleDriver"
+            dialect = bard.SequencePerTableOracleDialect
+            username = "bard_dev"
+            password = "bard_dev"
         }
     }
     oracleqa {
@@ -24,6 +33,24 @@ environments {
             dialect = bard.SequencePerTableOracleDialect
             username = "bard_qa"
             password = "bard_qa"
+        }
+    }
+    ddurkin {
+        dataSource {
+            url = "jdbc:oracle:thin:@barddb:1521:bardqa"
+            driverClassName = "oracle.jdbc.driver.OracleDriver"
+            dialect = bard.SequencePerTableOracleDialect
+            username = "ddurkin"
+            password = "guest"
+        }
+    }
+    jacob {
+        dataSource {
+            url = "jdbc:oracle:thin:@barddb:1521:bardqa"
+            driverClassName = "oracle.jdbc.driver.OracleDriver"
+            dialect = bard.SequencePerTableOracleDialect
+            username = "JASIEDU"
+            password= "JASIEDU"
         }
     }
     test {
@@ -38,14 +65,14 @@ environments {
             url = "jdbc:h2:prodDb;MVCC=TRUE"
             pooled = true
             properties {
-               maxActive = -1
-               minEvictableIdleTimeMillis=1800000
-               timeBetweenEvictionRunsMillis=1800000
-               numTestsPerEvictionRun=3
-               testOnBorrow=true
-               testWhileIdle=true
-               testOnReturn=true
-               validationQuery="SELECT 1"
+                maxActive = -1
+                minEvictableIdleTimeMillis = 1800000
+                timeBetweenEvictionRunsMillis = 1800000
+                numTestsPerEvictionRun = 3
+                testOnBorrow = true
+                testWhileIdle = true
+                testOnReturn = true
+                validationQuery = "SELECT 1"
             }
         }
     }
