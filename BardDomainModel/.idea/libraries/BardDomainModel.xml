@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="BardDomainModel">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/grails-bard-domain-model-0.1.1.zip!/" />
+      <root url="jar://$PROJECT_DIR$/grails-bard-domain-model-0.1.zip!/" />
+      <root url="jar://$PROJECT_DIR$/grails-bard-domain-model-0.1.2.zip!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

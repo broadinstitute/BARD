@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/BARD.iml" filepath="$PROJECT_DIR$/BARD.iml" />
+      <module fileurl="file://$PROJECT_DIR$/BARD/BARD.iml" filepath="$PROJECT_DIR$/BARD/BARD.iml" />
+      <module fileurl="file://$PROJECT_DIR$/bardDataExportSample/BardDataExportSample.iml" filepath="$PROJECT_DIR$/bardDataExportSample/BardDataExportSample.iml" />
+      <module fileurl="file://$PROJECT_DIR$/bardqueryapi/Bardqueryapi.iml" filepath="$PROJECT_DIR$/bardqueryapi/Bardqueryapi.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Data_Migration/Data_Migration_Groovy/Data_Migration_Groovy.iml" filepath="$PROJECT_DIR$/Data_Migration/Data_Migration_Groovy/Data_Migration_Groovy.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Data_Migration/GrailsDataMig/GrailsDataMig.iml" filepath="$PROJECT_DIR$/Data_Migration/GrailsDataMig/GrailsDataMig.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Data_Migration/datamig/src/main/Main.iml" filepath="$PROJECT_DIR$/Data_Migration/datamig/src/main/Main.iml" />
+    </modules>
+  </component>
+</project>
+

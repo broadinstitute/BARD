@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="lib">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/Data_Migration/lib/commons-httpclient-3.0-rc4.jar!/" />
+      <root url="jar://$PROJECT_DIR$/Data_Migration/lib/commons-vfs2-2.0.jar!/" />
+      <root url="jar://$PROJECT_DIR$/Data_Migration/lib/jaxen-1.1-beta-12.jar!/" />
+      <root url="jar://$PROJECT_DIR$/Data_Migration/lib/PubChemDB-core-20110819.jar!/" />
+      <root url="jar://$PROJECT_DIR$/Data_Migration/lib/PubChemDB-web-20110819.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
