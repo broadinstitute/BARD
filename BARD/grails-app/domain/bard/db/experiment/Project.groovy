@@ -11,14 +11,14 @@ class Project {
 	Date lastUpdated
 	String modifiedBy
 	String readyForExtraction = 'Ready'
-	
+
 	static hasMany = [experiments: Experiment,
 	projectAssays: ProjectAssay]
-	
+
 	static mapping = {
-	id column: "Project_ID"
+	id column: "Project_ID", generator: "assigned"
 	}
-	
+
 	static constraints = {
 		projectName maxSize: 256
 		groupType maxSize: 20

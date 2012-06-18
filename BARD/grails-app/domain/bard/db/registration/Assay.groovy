@@ -28,7 +28,7 @@ class Assay {
 			assayDocuments: AssayDocument]
 
 	static mapping = {
-		id column: "Assay_ID"
+		id column: "Assay_ID", generator: "assigned"
 	}
 
 	static constraints = {

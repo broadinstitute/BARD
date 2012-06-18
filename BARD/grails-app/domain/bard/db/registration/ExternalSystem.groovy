@@ -12,7 +12,7 @@ class ExternalSystem {
 	static hasMany = [externalAssays: ExternalAssay]
 
 	static mapping = {
-		id column: "External_System_ID"
+		id column: "External_System_ID", generator: "assigned"
 	}
 
 	static constraints = {

@@ -15,7 +15,8 @@ class AssayDocument {
 	static belongsTo = [assay: Assay]
 
 	static mapping = {
-		id column: "ASSAY_DOCUMENT_ID"
+		id column: "ASSAY_DOCUMENT_ID", generator: "assigned"
+        documentContent type: "text", sqlType: 'clob'
 	}
 
 	static constraints = {

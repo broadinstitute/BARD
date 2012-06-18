@@ -37,7 +37,7 @@ class Element {
 		parentElementRelationships: "parentElement"]
 
 	static mapping = {
-		id column: "Element_ID"
+		id column: "Element_ID", generator: 'assigned'
 		unit column: "unit"
 		externalURL column: "external_url"
 	}
