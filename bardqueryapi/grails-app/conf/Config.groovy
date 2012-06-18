@@ -1,3 +1,5 @@
+import grails.util.Environment
+
 // locations to search for config files that get merged into the main config
 // config files can either be Java properties files or ConfigSlurper scripts
 
@@ -74,7 +76,20 @@ environments {
     }
     production {
         grails.logging.jul.usebridge = false
-        // TODO: grails.serverURL = "http://www.changeme.com"
+    }
+}
+
+grails.serverURL = System.properties.get('grails.serverUrl') ?: getServerUrl()
+
+String getServerUrl() {
+    switch (Environment.current.name) {
+        case ('production'):
+            //TODO
+            grails.serverURL = "http://www.changeme.com"
+            break
+        default:
+            "http://localhost:8080/bardqueryapi"
+            break
     }
 }
 

@@ -7,10 +7,12 @@ import groovyx.net.http.HttpResponseDecorator
 import static groovyx.net.http.ContentType.JSON
 import static groovyx.net.http.Method.GET
 import javax.servlet.http.HttpServletResponse
+import grails.plugin.remotecontrol.RemoteControl
 
 @Unroll
 class QueryApiSpec extends Specification {
-    String baseUrl = System.properties.get('grails.serverUrl') ?: "http://localhost:8080/bardqueryapi"
+    RemoteControl remote = new RemoteControl()
+    String baseUrl = remote { ctx.grailsApplication.config.grails.serverURL }
 
     def "Test REST Query API: #label"() {
         given: "there is a service end point to get the root elements"
@@ -24,18 +26,19 @@ class QueryApiSpec extends Specification {
         assert serverResponse.statusLine.statusCode == HttpServletResponse.SC_OK
         println serverResponse.data.toString()
         assert serverResponse.data.size() > 0
+        assert !serverResponse.data.any{ it.toString().contains("errorCode") }
 
         where:
-        label                          | queryType        | paramType                | paramValue
-        "Get probes for  project"     | "searchProject"  | "projectType=Probes"     | "project=1772"
+        label                         | queryType        | paramType                | paramValue
+        "Get probes for project"      | "searchProject"  | "projectType=Probes"     | "project=1772"
         "Get assays for project"      | "searchProject"  | "projectType=Assays"     | "project=1772"
-        "Get projects"                | "searchProject"  | ""                       | "project=1772"
+        "Get projects by AID"         | "searchProject"  | ""                       | "project=1772"
         "Get targets for assay"       | "searchAssay"    | "assayType=Targets"      | "assay=1772"
         "Get publications for assay"  | "searchAssay"    | "assayType=Publications" | "assay=1772"
         "Get compounds for assay"     | "searchAssay"    | "assayType=Compounds"    | "assay=1772"
-        "Get assays"                  | "searchAssay"    | "assayType=Assay"        | "assay=1772"
-        "Search by compound CID"      | "searchCompound" | "compoundType=CID"       | "compound=888706"
-        "Search by compound SID"      | "searchCompound" | "compoundType=SID"       | "compound=57578335"
+        "Get assays by AID"           | "searchAssay"    | "assayType=Assay"        | "assay=1772"
+        "Get compound by CID"         | "searchCompound" | "compoundType=CID"       | "compound=888706"
+        "Get compound by SID"         | "searchCompound" | "compoundType=SID"       | "compound=57578335"
         "Search targets by accession" | "searchTarget"   | "targetType=Accession"   | "target=P01112"
         "Search targets by GeneId"    | "searchTarget"   | "targetType=GeneId"      | "target=3265"
     }
