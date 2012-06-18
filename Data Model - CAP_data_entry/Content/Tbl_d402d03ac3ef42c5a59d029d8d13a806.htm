@@ -18,20 +18,12 @@
 <TD><FONT SIZE=2 FACE="Arial">Result&nbsp;</FONT></TD>
 </TR>
 <TR>
-<TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Owner&nbsp;</FONT></B></TD>
-<TD><FONT SIZE=2 FACE="Arial">MLBD_DEV&nbsp;</FONT></TD>
-</TR>
-<TR>
 <TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Definition&nbsp;</FONT></B></TD>
 <TD><FONT SIZE=2 FACE="Arial"><PRE><FONT SIZE=2 FACE="Arial"></FONT></PRE>&nbsp;</FONT></TD>
 </TR>
 <TR>
 <TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">DDL Code&nbsp;</FONT></B></TD>
 <TD><TT><TT>CREATE TABLE MLBD_DEV.Result(</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp Result_ID&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp BIGINT&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp AUTO_INCREMENT,</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp Value_Display&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR(256),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp value_num&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp FLOAT(8, 0),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp value_min&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp FLOAT(8, 0),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp Value_Max&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp FLOAT(8, 0),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp Qualifier&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp CHAR(2),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp Result_Status_ID&nbsp&nbsp&nbsp&nbsp&nbsp BIGINT&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp NOT NULL,</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp Experiment_ID&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp BIGINT&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp NOT NULL,</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp Substance_ID&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp BIGINT&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp NOT NULL,</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp Result_Context_ID&nbsp&nbsp&nbsp&nbsp BIGINT&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp NOT NULL,</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp Entry_Unit&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR(100),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp Result_Type_ID&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp BIGINT&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp NOT NULL,</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp Version&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp INT&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp DEFAULT 0 NOT NULL,</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp Date_Created&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp TIMESTAMP&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp DEFAULT current_timestamp NOT NULL,</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp Last_Updated&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp DATETIME,</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp Modified_by&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR(40),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp PRIMARY KEY (Result_ID), </TT><BR><TT>&nbsp&nbsp&nbsp&nbsp CONSTRAINT FK_result_result_status FOREIGN KEY (Result_Status_ID)</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp REFERENCES MLBD_DEV.Result_Status(Result_Status_ID),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp CONSTRAINT FK_result_experiment FOREIGN KEY (Experiment_ID)</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp REFERENCES MLBD_DEV.Experiment(Experiment_ID),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp CONSTRAINT fk_result_result_context FOREIGN KEY (Result_Context_ID)</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp REFERENCES MLBD_DEV.Result_Context(Result_Context_ID),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp CONSTRAINT FK_Result_substance FOREIGN KEY (Substance_ID)</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp REFERENCES MLBD_DEV.Substance(Substance_ID),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp CONSTRAINT FK_result_unit FOREIGN KEY (Entry_Unit)</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp REFERENCES MLBD_DEV.Unit(Unit),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp CONSTRAINT FK_Result_result_type FOREIGN KEY (Result_Type_ID)</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp REFERENCES MLBD_DEV.Result_Type(Result_Type_ID),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp CONSTRAINT FK_Result_Qualifier FOREIGN KEY (Qualifier)</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp REFERENCES MLBD_DEV.Qualifier(Qualifier)</TT><BR><TT>)ENGINE=MYISAM</TT><BR><TT>;</TT><BR>&nbsp;</TT></TD>
-</TR>
-<TR>
-<TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">PostSQL&nbsp;</FONT></B></TD>
-<TD><TT>&nbsp;</TT></TD>
 </TR>
 </TABLE>
 <P>
@@ -447,11 +439,11 @@
 </TR>
 <TR>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = ./Model_d83f40fde12c42e2b5419e69d090a11d.htm>BARD_QA</A> (Oracle)&nbsp;</FONT></TD>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = ./Submodel_c9da7f2c0d864c4580a523b1aef2406c_img.htm>Main Model</A>&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = ./Submodel_c9da7f2c0d864c4580a523b1aef2406c.htm>Main Model</A>&nbsp;</FONT></TD>
 </TR>
 <TR>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = ./Model_d83f40fde12c42e2b5419e69d090a11d.htm>BARD_QA</A> (Oracle)&nbsp;</FONT></TD>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = ./Submodel_639bb79e37e844c69ca1c928c205b6b5_img.htm>Data Entry</A>&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = ./Submodel_639bb79e37e844c69ca1c928c205b6b5.htm>Data Entry</A>&nbsp;</FONT></TD>
 </TR>
 <TR>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">SCHATWIN (Oracle)&nbsp;</FONT></TD>

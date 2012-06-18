@@ -129,7 +129,8 @@ application/vnd.bard.cap+xml;type=assay</xs:documentation>
                                         <xs:element name="resultTypeRef">
                                             <xs:complexType>
                                                 <xs:sequence>
-                                                  <xs:element ref="link"/>
+                                                  <xs:element ref="label"/>
+                                                  <xs:element ref="link" minOccurs="0"/>
                                                 </xs:sequence>
                                             </xs:complexType>
                                         </xs:element>
@@ -174,13 +175,15 @@ application/vnd.bard.cap+xml;type=assay</xs:documentation>
                                         <xs:element minOccurs="0" name="valueId">
                                             <xs:complexType>
                                                 <xs:sequence>
-                                                  <xs:element ref="link"/>
+                                                  <xs:element ref="label"/>
+                                                  <xs:element ref="link" minOccurs="0"/>
                                                 </xs:sequence>
                                             </xs:complexType>
                                         </xs:element>
                                         <xs:element minOccurs="0" name="attributeId">
                                             <xs:complexType>
                                                 <xs:sequence>
+                                                  <xs:element ref="label"/>
                                                   <xs:element ref="link"/>
                                                 </xs:sequence>
                                             </xs:complexType>
@@ -349,7 +352,8 @@ application/vnd.bard.cap+xml;type=project</xs:documentation>
                                         <xs:element minOccurs="0" name="stage">
                                             <xs:complexType>
                                                 <xs:sequence>
-                                                  <xs:element ref="link"/>
+                                                  <xs:element ref="label"/>
+                                                  <xs:element ref="link" minOccurs="0"/>
                                                 </xs:sequence>
                                             </xs:complexType>
                                         </xs:element>
@@ -484,7 +488,7 @@ Link to parent experiment
                         </xs:attribute>
                     </xs:complexType>
                 </xs:element>
-                <xs:element maxOccurs="unbounded" ref="link">
+                <xs:element maxOccurs="unbounded" ref="link" minOccurs="0">
                     <xs:annotation>
                         <xs:documentation>Link to experiment and next list of results if any</xs:documentation>
                     </xs:annotation>
@@ -517,14 +521,16 @@ Link to parent experiment
                             <xs:element name="attributeId">
                                 <xs:complexType>
                                     <xs:sequence>
-                                        <xs:element ref="link"/>
+                                        <xs:element ref="label"/>
+                                        <xs:element ref="link" minOccurs="0"/>
                                     </xs:sequence>
                                 </xs:complexType>
                             </xs:element>
                             <xs:element minOccurs="0" name="valueId">
                                 <xs:complexType>
                                     <xs:sequence>
-                                        <xs:element ref="link"/>
+                                        <xs:element ref="label"/>
+                                        <xs:element ref="link" maxOccurs="unbounded" minOccurs="0"/>
                                     </xs:sequence>
                                 </xs:complexType>
                             </xs:element>

@@ -10,7 +10,7 @@
   <resultContextItems>
     <resultContextItem resultContextItemId='2' valueDisplay='0' valueNum='0'>
       <attributeId>
-        <link rel='related' href='http://localhost/api/dictionary/element/369' type='application/vnd.bard.cap+xml;type=element' />
+        <label/><link rel='related' href='http://localhost/api/dictionary/element/369' type='application/vnd.bard.cap+xml;type=element' />
       </attributeId>
     </resultContextItem>
   </resultContextItems>

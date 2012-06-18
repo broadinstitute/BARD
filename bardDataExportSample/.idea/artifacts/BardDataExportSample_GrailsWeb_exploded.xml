@@ -1,0 +1,7 @@
+<component name="ArtifactManager">
+  <artifact type="exploded-war" name="BardDataExportSample:GrailsWeb exploded">
+    <root id="root">
+      <element id="javaee-facet-resources" facet="BardDataExportSample/web/GrailsWeb" />
+    </root>
+  </artifact>
+</component>

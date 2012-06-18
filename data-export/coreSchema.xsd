@@ -98,4 +98,5 @@
             </xs:restriction>
         </xs:simpleType>
     </xs:attribute>
+    <xs:element name="label" type="xs:string"/>
 </xs:schema>

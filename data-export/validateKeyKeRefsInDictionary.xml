@@ -102,11 +102,11 @@
     </instanceDescriptors>
     <laboratories>
         <laboratory laboratoryId="50" parentLaboratoryId="50" laboratoryStatus="laboratoryStatus0">
-            <laboratory>laboratory0</laboratory>
+            <laboratoryName>laboratory0</laboratoryName>
             <description>description12</description>
         </laboratory>
         <laboratory laboratoryId="51" parentLaboratoryId="50" laboratoryStatus="laboratoryStatus1">
-            <laboratory>laboratory1</laboratory>
+            <laboratoryName>laboratory1</laboratoryName>
             <description>description13</description>
         </laboratory>
     </laboratories>
