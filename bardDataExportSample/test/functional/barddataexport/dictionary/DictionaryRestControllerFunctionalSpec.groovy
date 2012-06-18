@@ -16,6 +16,7 @@ import static groovyx.net.http.Method.GET
 import common.tests.XmlTestAssertions
 
 import common.tests.XmlTestSamples
+import grails.plugin.remotecontrol.RemoteControl
 
 /**
  * Created with IntelliJ IDEA.
@@ -26,25 +27,16 @@ import common.tests.XmlTestSamples
  */
 @Unroll
 class DictionaryRestControllerFunctionalSpec extends Specification {
-    GrailsApplication grailsApplication
-    // TODO should be configured in Config.groovy, seems like grails.server.url which can be set per environment
-    final String baseUrl = "http://localhost:${System.getProperty('server.port') ?: '8080'}/bardDataExportSample/api/dictionary" // your app URL
-
-
-    void setup() {
-        ServletContext servletContext = ServletContextHolder.getServletContext()
-        ApplicationContext context = (ApplicationContext) servletContext.getAttribute(GrailsApplicationAttributes.APPLICATION_CONTEXT)
-        this.grailsApplication = context.getBean("grailsApplication")
-    }
-
-
+    RemoteControl remote = new RemoteControl()
+    final String baseUrl = remote { ctx.grailsApplication.config.grails.serverURL } + "/api/dictionary"
+    String dictionaryAcceptContentType = remote { ctx.grailsApplication.config.bard.data.export.dictionary.xml }
 
     def 'test GET dictionary success'() {
         given: "there is a service end point to get the dictionary"
         RESTClient http = new RESTClient(baseUrl)
         when: 'We send an HTTP GET request for the dictionary'
         def serverResponse = http.request(GET, XML) {
-            headers.'Accept' = grailsApplication.config.bard.data.export.dictionary.xml
+            headers.'Accept' = dictionaryAcceptContentType
         }
         then: 'We expect an XML representation of the entire dictionary'
         assert serverResponse.statusLine.statusCode == HttpServletResponse.SC_OK

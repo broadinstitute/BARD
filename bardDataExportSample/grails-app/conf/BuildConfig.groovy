@@ -56,5 +56,6 @@ grails.project.dependency.resolution = {
 
         build ":tomcat:$grailsVersion"
         compile ":spock:0.6"
+        test ":remote-control:1.2"
     }
 }
