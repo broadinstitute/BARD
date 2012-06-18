@@ -50,7 +50,7 @@ class QueryAssayApiService {
     }
 
     Integer getTotalAssayCompounds (Integer assayId) {
-        final String assayResourceUrl = "${grailsApplication.config.ncgc.server.root.url}/bard/rest/v1/assays/${assayId}"
+        final String assayResourceUrl = "${grailsApplication.config.ncgc.server.root.url}/bard/rest/v1/experiments/${assayId}"
         final wslite.json.JSONObject assayJson = queryExecutorService.executeGetRequestJSON(assayResourceUrl, null) //get the Assay instance
         final Integer totalCompounds = assayJson.compounds ?: 0
         return totalCompounds
@@ -64,7 +64,7 @@ class QueryAssayApiService {
      * @return List<String> of CIDs (size==max)
      */
     List<String> getAssayCompoundsResultset(Integer max, Integer offset, Integer assayId) {
-        final String assayUrlPaging = "${grailsApplication.config.ncgc.server.root.url}/bard/rest/v1/assays/${assayId}/compounds?skip=${offset}&top=${max}" //NCGS' max and offset
+        final String assayUrlPaging = "${grailsApplication.config.ncgc.server.root.url}/bard/rest/v1/experiments/${assayId}/compounds?skip=${offset}&top=${max}" //NCGS' max and offset
         final wslite.json.JSONObject assayCompoundsJson = queryExecutorService.executeGetRequestJSON(assayUrlPaging, null)
         if (assayCompoundsJson.collection) {
             List<String> compoundUrlList = assayCompoundsJson.collection.toList()
