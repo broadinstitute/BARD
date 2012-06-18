@@ -12,7 +12,7 @@ class OntologyItem {
 	static belongsTo = [Ontology]
 
 	static mapping = {
-		id column: "Ontology_Item_ID"
+		id column: "Ontology_Item_ID", generator: "assigned"
         itemReference sqlType: "char", length: 10
 	}
 

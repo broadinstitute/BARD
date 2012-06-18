@@ -1,0 +1,2 @@
+insert into project (project_id, project_name, group_type, description) values (1, 'Scripps special project #1', 'Project', '');
+insert into project (project_id, project_name, group_type, description) values (2, '2126 - MLPCN Malaria - Inhibitor', 'Project', '');

@@ -9,7 +9,6 @@ class BiologyDescriptor {
 	String label
 	String description
 	String abbreviation
-	String acronym
 	String synonyms
 	String externalURL
 	Unit unit
@@ -30,7 +29,6 @@ class BiologyDescriptor {
 		label maxSize: 128
 		description nullable: true, maxSize: 1000
 		abbreviation nullable: true, maxSize: 20
-		acronym nullable: true, maxSize: 20
 		synonyms nullable: true, maxSize: 1000
 		externalURL nullable: true, maxSize: 1000
 		unit nullable: true

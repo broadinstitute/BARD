@@ -3,7 +3,7 @@ package bard.db.experiment
 import bard.db.registration.Assay
 
 class ProjectAssay implements Serializable {
-	
+
 //		Stage stage
 		Integer sequenceNo
 		Float promotionThreshold
@@ -15,12 +15,12 @@ class ProjectAssay implements Serializable {
 		Assay assay
 
 		static belongsTo = [Assay, Project]
-	
+
 		static mapping = {
-			id column: "project_assay_id"
+			id column: "project_assay_id", generator: "assigned"
 //            stage column: "stage"
 		}
-	
+
 		static constraints = {
 //			stage maxSize: 128, nullable: false
 			sequenceNo nullable: true

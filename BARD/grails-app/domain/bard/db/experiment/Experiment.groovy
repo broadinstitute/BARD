@@ -22,7 +22,7 @@ class Experiment {
 	static belongsTo = [Assay, Project]
 
 	static mapping = {
-		id column: "Experiment_ID"
+		id column: "Experiment_ID", generator: "assigned"
 	}
 
 	static constraints = {

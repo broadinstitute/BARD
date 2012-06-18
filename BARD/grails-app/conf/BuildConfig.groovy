@@ -13,43 +13,51 @@ grails.project.dependency.resolution = {
         // uncomment to disable ehcache
         // excludes 'ehcache'
     }
-    log "error" // log level of Ivy resolver, either 'error', 'warn', 'info', 'debug' or 'verbose'
+    log "warn" // log level of Ivy resolver, either 'error', 'warn', 'info', 'debug' or 'verbose'
     checksums true // Whether to verify checksums on resolve
 
     repositories {
         inherits true // Whether to inherit repository definitions from plugins
         grailsPlugins()
         grailsHome()
-        grailsCentral()
-        mavenCentral()
-
-        // uncomment these to enable remote dependency resolution from public Maven repositories
-        //mavenCentral()
-        //mavenLocal()
-        //mavenRepo "http://snapshots.repository.codehaus.org"
-        //mavenRepo "http://repository.codehaus.org"
-        //mavenRepo "http://download.java.net/maven/2/"
-        //mavenRepo "http://repository.jboss.com/maven2/"
+        mavenRepo  "http://bard-repo.broadinstitute.org:8081/artifactory/bard-virtual-repo"
+        grailsRepo("http://bard-repo.broadinstitute.org:8081/artifactory/bard-virtual-repo", "grailsCentral")
     }
     dependencies {
-        // specify dependencies here under either 'build', 'compile', 'runtime', 'test' or 'provided' scopes eg.
+        // build scope
 
+        // compile scope
+
+        // runtime scope
          runtime 'mysql:mysql-connector-java:5.1.16'
+
+        // test scope
+
+        // provided  scope
     }
 
-    plugins {        
-		runtime ":hibernate:$grailsVersion"
-		runtime ":jquery:1.7.1"
-		runtime ":jquery-ui:1.8.15"
-		runtime ":resources:1.1.6"
-
-		test ":spock:0.6"
-
-        // Uncomment these (or add new ones) to enable additional resources capabilities
-        //runtime ":zipped-resources:1.0"
-        //runtime ":cached-resources:1.0"
-        //runtime ":yui-minify-resources:0.1.4"
-
+    plugins {
+        // build scope
         build ":tomcat:$grailsVersion"
+
+        // compile scope
+        compile ":database-migration:1.1"
+        compile ":db-reverse-engineer:0.4"
+        compile ":extjs4:4.1.0-RC.0"
+        compile ":grails-ui:1.2.3"
+        compile ":json-rest-api:1.0.11"
+        compile ":webflow:2.0.0"
+        compile ":yui:2.8.2.1"
+
+        // runtime scope
+        runtime ":hibernate:$grailsVersion"
+        runtime ":jquery:1.7.1"
+		runtime ":jquery-ui:1.8.15"
+        runtime ":resources:1.1.6"
+
+        // test scope
+        test ":spock:0.6"
+
+        // provided  scope
     }
 }

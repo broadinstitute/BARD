@@ -37,6 +37,16 @@ environments {
 			password = "bard_qa"
 		}
 	}
+	ddurkin {
+		dataSource {
+			dbCreate = 'validate'
+			url = "jdbc:oracle:thin:@barddb:1521:bardqa"
+			driverClassName = "oracle.jdbc.driver.OracleDriver"
+			dialect = bard.SequencePerTableOracleDialect
+			username = "ddurkin"
+			password = "guest"
+		}
+	}
 	mysql {
 		dataSource {
 //        	dbCreate = "update"

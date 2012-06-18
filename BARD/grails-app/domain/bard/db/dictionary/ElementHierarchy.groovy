@@ -10,7 +10,7 @@ class ElementHierarchy {
     String modifiedBy
 
     static mapping = {
-        id column: "element_hierarchy_id"
+        id column: "element_hierarchy_id", generator: "assigned"
     }
 
     static constraints = {

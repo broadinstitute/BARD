@@ -20,7 +20,7 @@ class Measure {
 	static belongsTo = [Assay]
 
 	static mapping = {
-		id column: "Measure_ID"
+		id column: "Measure_ID", generator: "assigned"
         entryUnit column: "entry_unit"
 //		resultType column: 'result_type_id'
 //		resultType ignoreNotFound : true
