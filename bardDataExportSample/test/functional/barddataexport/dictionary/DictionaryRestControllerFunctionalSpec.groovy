@@ -2,9 +2,6 @@ package barddataexport.dictionary
 
 import grails.converters.XML
 import groovyx.net.http.RESTClient
-import org.codehaus.groovy.grails.commons.GrailsApplication
-import org.codehaus.groovy.grails.web.context.ServletContextHolder
-import org.codehaus.groovy.grails.web.servlet.GrailsApplicationAttributes
 import org.springframework.context.ApplicationContext
 import spock.lang.Specification
 import spock.lang.Unroll
