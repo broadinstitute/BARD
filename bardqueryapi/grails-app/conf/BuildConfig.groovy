@@ -53,7 +53,7 @@ grails.project.dependency.resolution = {
 
         build ":tomcat:$grailsVersion"
 
-        test ":remote-control:1.2"
+        compile ":remote-control:1.2"
 //        test "org.grails.plugins:functional-spock-groovy18:0.2"
     }
 }
