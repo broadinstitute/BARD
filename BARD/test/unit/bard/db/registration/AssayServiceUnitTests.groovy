@@ -15,10 +15,15 @@ class AssayServiceUnitTests {
 
     void testGetMeasureContextItemsForAssay() {
 
-        Element element = new Element()
-        AssayDescriptor assayDescriptor = new AssayDescriptor(id: 3, label: "assay mode", element: element, "Pending": elementStatus).save()
+        Element element = new Element(label: "Test", elementStatus: "Published", readyForExtraction: "Ready")
+        element.setId(1)
+        element.save()
+        assert element.validate()
+        AssayDescriptor assayDescriptor = new AssayDescriptor(label: "assay mode", element: element, elementStatus: "Published")
+        assayDescriptor.setId(8)
+        assayDescriptor.save()
         assert assayDescriptor.validate()
-        assert AssayDescriptor.count() > 0
+        assert AssayDescriptor.count() == 1
         MeasureContextItem item1 = new MeasureContextItem(attributeElement: element)
 
         Assay assay = new Assay()
@@ -26,8 +31,8 @@ class AssayServiceUnitTests {
 
         Map map = service.getMeasureContextItemsForAssay(assay)
 
-        assert map.assayDescriptors
-        assert map.assayDescriptors.contains(item1)
+        assert map["Assay Context"]
+        assert map["Assay Context"].contains(item1)
 
     }
 }
