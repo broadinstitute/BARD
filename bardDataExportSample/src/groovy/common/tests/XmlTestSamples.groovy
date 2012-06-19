@@ -21,7 +21,7 @@ class XmlTestSamples {
 '''
     static String BARD_DATA_EXPORT = '''
 <bardexport>
-    <link rel='item' title='The BARD Dictionary' href='http://localhost/api/dictionary' type='application/vnd.bard.cap+xml;type=dictionary' />
+    <link rel='item' title='The BARD Dictionary' href='http://localhost:8080/bardDataExportSample/api/dictionary' type='application/vnd.bard.cap+xml;type=dictionary' />
     </bardexport>
     '''
     static String UNIT_CONVERSION_FULL = '''
@@ -195,20 +195,20 @@ class XmlTestSamples {
 <elements>
   <element elementId='386' readyForExtraction='Ready' elementStatus='Published'>
     <label>uM</label>
-    <link rel='edit' href='http://localhost/api/dictionary/element/386' type='application/vnd.bard.cap+xml;type=element' />
+    <link rel='edit' href='http://localhost:8080/bardDataExportSample/api/dictionary/element/386' type='application/vnd.bard.cap+xml;type=element' />
   </element>
   <element elementId='366' readyForExtraction='Ready' elementStatus='Published'>
     <label>concentration</label>
-    <link rel='edit' href='http://localhost/api/dictionary/element/366' type='application/vnd.bard.cap+xml;type=element' />
+    <link rel='edit' href='http://localhost:8080/bardDataExportSample/api/dictionary/element/366' type='application/vnd.bard.cap+xml;type=element' />
   </element>
   <element elementId='123' readyForExtraction='Ready' elementStatus='Published'>
     <label>unit of measurement</label>
     <description>It is the inite magnitude of a physical quantity or of time. It has a quantity and a unit associated with it.</description>
-    <link rel='edit' href='http://localhost/api/dictionary/element/123' type='application/vnd.bard.cap+xml;type=element' />
+    <link rel='edit' href='http://localhost:8080/bardDataExportSample/api/dictionary/element/123' type='application/vnd.bard.cap+xml;type=element' />
   </element>
   <element elementId='341' readyForExtraction='Ready' elementStatus='Published' unit='uM'>
     <label>IC50</label>
-    <link rel='edit' href='http://localhost/api/dictionary/element/341' type='application/vnd.bard.cap+xml;type=element' />
+    <link rel='edit' href='http://localhost:8080/bardDataExportSample/api/dictionary/element/341' type='application/vnd.bard.cap+xml;type=element' />
   </element>
 </elements>
 '''
