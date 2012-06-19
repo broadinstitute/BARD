@@ -221,6 +221,9 @@ application/vnd.bard.cap+xml;type=assay</xs:documentation>
                     <xs:complexType>
                         <xs:sequence>
                             <xs:element maxOccurs="unbounded" name="assayDocument" minOccurs="0">
+                                <xs:annotation>
+                                    <xs:documentation>Links to the document on the CAP</xs:documentation>
+                                </xs:annotation>
                                 <xs:complexType>
                                     <xs:sequence>
 
@@ -238,8 +241,22 @@ application/vnd.bard.cap+xml;type=assay</xs:documentation>
                                                 </xs:restriction>
                                             </xs:simpleType>
                                         </xs:element>
+                                        <xs:element minOccurs="0" name="documentContent"
+                                            type="xs:string"/>
+                                        <xs:element minOccurs="0" ref="link"/>
                                     </xs:sequence>
-                                    <xs:attribute name="uri" type="xs:anyURI"/>
+                                    <xs:attribute name="documentType">
+                                        <xs:simpleType>
+                                            <xs:restriction base="xs:string">
+                                                <xs:enumeration value="Description"/>
+                                                <xs:enumeration value="Protocol"/>
+                                                <xs:enumeration value="Comments"/>
+                                                <xs:enumeration value="Paper"/>
+                                                <xs:enumeration value="External URL"/>
+                                                <xs:enumeration value="Other"/>
+                                            </xs:restriction>
+                                        </xs:simpleType>
+                                    </xs:attribute>
                                 </xs:complexType>
                             </xs:element>
                         </xs:sequence>
@@ -305,6 +322,13 @@ application/vnd.bard.cap+xml;type=assay</xs:documentation>
                 xpath="measureContextItems/measureContextItem | measureContextItemRefs/measureContextItemRef"/>
             <xs:field xpath="@measureContextItemRef"/>
         </xs:keyref>
+    </xs:element>
+    <xs:element name="assays">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element maxOccurs="unbounded" ref="assay"/>
+            </xs:sequence>
+        </xs:complexType>
     </xs:element>
     <xs:element name="project">
         <xs:annotation>
@@ -526,14 +550,18 @@ Link to parent experiment
                                     </xs:sequence>
                                 </xs:complexType>
                             </xs:element>
-                            <xs:element minOccurs="0" name="valueId">
-                                <xs:complexType>
-                                    <xs:sequence>
-                                        <xs:element ref="label"/>
-                                        <xs:element ref="link" maxOccurs="unbounded" minOccurs="0"/>
-                                    </xs:sequence>
-                                </xs:complexType>
-                            </xs:element>
+                            <xs:choice>
+                                <xs:element minOccurs="0" name="valueId">
+                                    <xs:complexType>
+                                        <xs:sequence>
+                                            <xs:element ref="label"/>
+                                            <xs:element ref="link" maxOccurs="unbounded"
+                                                minOccurs="0"/>
+                                        </xs:sequence>
+                                    </xs:complexType>
+                                </xs:element>
+                                <xs:element name="resultContextItemValues"/>
+                            </xs:choice>
                         </xs:sequence>
                         <xs:attribute name="resultContextItemId" type="bardID" use="required"/>
                         <xs:attribute name="groupResultContextId" type="bardID"/>
