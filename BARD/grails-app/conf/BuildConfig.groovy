@@ -43,7 +43,9 @@ grails.project.dependency.resolution = {
 
         // compile scope
         compile ":database-migration:1.1"
-        compile ":db-reverse-engineer:0.4"
+        compile(":db-reverse-engineer:0.4") {
+            excludes "hibernate-core"
+        }
         compile ":extjs4:4.1.0-RC.0"
         compile ":grails-ui:1.2.3"
         compile ":json-rest-api:1.0.11"
