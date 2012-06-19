@@ -11,7 +11,26 @@ import org.junit.*
 @TestFor(Assay)
 class AssayTests {
 
-    void testSomething() {
-       fail "Implement me"
+    Assay assay
+
+    @Before
+    public void setUp() {
+
+        mockForConstraintsTests(Assay)
+
+        assay = new Assay(assayName: "Test", assayVersion: "2", assayStatus: "Active", readyForExtraction: "Complete")
+    }
+
+    void testValidConstraints() {
+
+        assertTrue "Assay is valid", assay.validate()
+    }
+
+    void testNoAssayName() {
+        assay.setAssayName(null)
+
+        assertFalse "Assay should not be valid with no name", assay.validate()
+        assertEquals "nullable", assay.errors["assayName"]
+
     }
 }
