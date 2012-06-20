@@ -12,6 +12,35 @@ import grails.util.Environment
 //    grails.config.locations << "file:" + System.properties["${appName}.config.location"]
 // }
 
+if (appName) {
+    grails.config.locations = []
+
+    // If the developer specifies a directory for the external config files at the command line, use it.
+    // This will look like 'grails -DprimaryConfigDir=[directory name] [target]'
+    // Otherwise, look for these files in the user's home .grails/projectdb directory
+    // If there are no external config files in either location, don't override anything in this Config.groovy
+    String primaryOverrideDirName = System.properties.get('primaryConfigDir')
+    String secondaryOverrideDirName = "${userHome}/.grails/${appName}"
+
+    List<String> fileNames = ["${appName}-commons-config.groovy", "${appName}-${Environment.current.name}-config.groovy"]
+    fileNames.each {fileName ->
+        String primaryFullName = "${primaryOverrideDirName}/${fileName}"
+        String secondaryFullName = "${secondaryOverrideDirName}/${fileName}"
+
+        if (new File(primaryFullName).exists()) {
+            println "Overriding Config.groovy with $primaryFullName"
+            grails.config.locations << "file:$primaryFullName"
+        }
+        else if (new File(secondaryFullName).exists()) {
+            println "Overriding Config.groovy with $secondaryFullName"
+            grails.config.locations << "file:$secondaryFullName"
+        }
+        else {
+            println "Skipping Config.groovy overrides: $primaryFullName and $secondaryFullName not found"
+        }
+    }
+}
+
 //Number of experiments per page
 bard.experiments.max.per.page = 1000000
 
