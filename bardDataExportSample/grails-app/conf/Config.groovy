@@ -22,17 +22,16 @@ bard.pubchem.sid.url.prefix = 'http://pubchem.ncbi.nlm.nih.gov/summary/summary.c
 bard.data.export.bardexport.xml = 'application/vnd.bard.cap+xml;type=bardexport'
 
 //experiments
-bard.data.export.data.experiments.xml = 'application/vnd.bard.cap+xml;type=experiments'
-bard.data.export.data.experiment.xml = 'application/vnd.bard.cap+xml;type=experiment'
-bard.data.export.data.results.xml = 'application/vnd.bard.cap+xml;type=results'
-bard.data.export.data.result.xml = 'application/vnd.bard.cap+xml;type=result'
+bard.data.export.experiments.xml = 'application/vnd.bard.cap+xml;type=experiments'
+bard.data.export.experiment.xml = 'application/vnd.bard.cap+xml;type=experiment'
+bard.data.export.results.xml = 'application/vnd.bard.cap+xml;type=results'
+bard.data.export.result.xml = 'application/vnd.bard.cap+xml;type=result'
 
 //cap
 bard.data.export.cap.xml = 'application/vnd.bard.cap+xml;type=cap'
-bard.data.export.cap.projects.xml = 'application/vnd.bard.cap+xml;type=projects'
-bard.data.export.cap.project.xml = 'application/vnd.bard.cap+xml;type=project'
-bard.data.export.cap.assay.xml = 'application/vnd.bard.cap+xml;type=assay'
-bard.data.export.cap.assay.doc.xml='application/vnd.bard.cap+xml;type=assayDoc'
+bard.data.export.assays.xml = 'application/vnd.bard.cap+xml;type=assays'
+bard.data.export.assay.xml = 'application/vnd.bard.cap+xml;type=assay'
+bard.data.export.assay.doc.xml='application/vnd.bard.cap+xml;type=assayDoc'
 
 //dictionary
 bard.data.export.dictionary.resultType.xml = 'application/vnd.bard.cap+xml;type=resultType'

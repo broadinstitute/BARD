@@ -16,7 +16,8 @@ class BootStrap {
                 if (Element.list().isEmpty()) {
                     //Create test data
                     final Sql sql = new Sql(dataSource)
-                    insertTestRecords(sql)
+                    insertTestDictionaryRecords(sql)
+                    insertTestAssayDefRecords(sql)
                 }
                 break;
         }
@@ -25,11 +26,41 @@ class BootStrap {
     def destroy = {
     }
 
-    def insertTestRecords(final Sql sql) {
+    def insertTestAssayDefRecords(final Sql sql) {
+        sql.execute "INSERT INTO ASSAY (ASSAY_ID,ASSAY_NAME,ASSAY_STATUS,ASSAY_VERSION,DESIGNED_BY,READY_FOR_EXTRACTION,VERSION, DATE_CREATED) values (1,'Dose-response biochemical assay of inhibitors of Rho kinase 2 (Rock2)','Active','1','Scripps Florida','Ready',0,SYSDATE)"
+        sql.execute "INSERT INTO ASSAY (ASSAY_ID,ASSAY_NAME,ASSAY_STATUS,ASSAY_VERSION,DESIGNED_BY,READY_FOR_EXTRACTION,VERSION, DATE_CREATED) values (2,'Some nice label','Active','1.1','Broad Institute','Complete',0,SYSDATE)"
+
+        //REM INSERTING into EXTERNAL_SYSTEM
+        sql.execute "INSERT INTO EXTERNAL_SYSTEM (EXTERNAL_SYSTEM_ID,SYSTEM_NAME,OWNER,SYSTEM_URL,VERSION,DATE_CREATED) values (1,'PubChem','NIH','http://pubchem.ncbi.nlm.nih.gov/assay/assay.cgi?',0,SYSDATE)"
+
+        sql.execute "INSERT INTO EXTERNAL_ASSAY (EXTERNAL_SYSTEM_ID,ASSAY_ID,EXT_ASSAY_ID,VERSION,DATE_CREATED) values (1,1,'aid=644',0,SYSDATE)"
+
+        //REM INSERTING into MEASURE_CONTEXT
+        sql.execute "INSERT INTO MEASURE_CONTEXT (MEASURE_CONTEXT_ID,ASSAY_ID,CONTEXT_NAME,VERSION, DATE_CREATED) values (2,1,'Context for IC50',0, SYSDATE)"
+
+        //TODO: Not Yet Created REM INSERTING into MEASURE
+        //sql.execute "INSERT INTO MEASURE (MEASURE_ID,ASSAY_ID,MEASURE_CONTEXT_ID,RESULT_TYPE_ID,ENTRY_UNIT,VERSION,DATE_CREATED) values (2,1,2,341,'uM',0, SYSDATE)"
+
+        // REM INSERTING into MEASURE_CONTEXT_ITEM
+        sql.execute "INSERT INTO MEASURE_CONTEXT_ITEM (MEASURE_CONTEXT_ITEM_ID,GROUP_MEASURE_CONTEXT_ITEM_ID,ASSAY_ID,MEASURE_CONTEXT_ID,ATTRIBUTE_TYPE,ATTRIBUTE_ID,QUALIFIER,VALUE_ID,VALUE_DISPLAY,VALUE_NUM,VALUE_MIN,VALUE_MAX,VERSION,DATE_CREATED) values (34,null,1,2,'Fixed',368,null,372,'Assay Explorer ',null,null,null,0,SYSDATE)"
+        sql.execute "INSERT INTO MEASURE_CONTEXT_ITEM (MEASURE_CONTEXT_ITEM_ID,GROUP_MEASURE_CONTEXT_ITEM_ID,ASSAY_ID,MEASURE_CONTEXT_ID,ATTRIBUTE_TYPE,ATTRIBUTE_ID,QUALIFIER,VALUE_ID,VALUE_DISPLAY,VALUE_NUM,VALUE_MIN,VALUE_MAX,VERSION,DATE_CREATED) values (35,34,1,2,'Fixed',370,null,null,'30',30,null,null,0,SYSDATE)"
+        sql.execute "INSERT INTO MEASURE_CONTEXT_ITEM (MEASURE_CONTEXT_ITEM_ID,GROUP_MEASURE_CONTEXT_ITEM_ID,ASSAY_ID,MEASURE_CONTEXT_ID,ATTRIBUTE_TYPE,ATTRIBUTE_ID,QUALIFIER,VALUE_ID,VALUE_DISPLAY,VALUE_NUM,VALUE_MIN,VALUE_MAX,VERSION,DATE_CREATED) values (36,34,1,2,'Range',369,null,null,'0 - 4',null,0,4,0,SYSDATE)"
+
+        //TODO: Not yet created REM INSERTING into ASSAY_DOCUMENT
+//        sql.execute "INSERT INTO ASSAY_DOCUMENT (ASSAY_DOCUMENT_ID,ASSAY_ID,DOCUMENT_NAME,DOCUMENT_TYPE,DOCUMENT_CONTENT, DATE_CREATED) values (1,1,'Dose-response biochemical assay of inhibitors of Rho kinase 2 (Rock2)','Protocol','Some Document1',SYSDATE)"
+//        sql.execute "INSERT INTO ASSAY_DOCUMENT (ASSAY_DOCUMENT_ID,ASSAY_ID,DOCUMENT_NAME,DOCUMENT_TYPE,DOCUMENT_CONTENT, DATE_CREATED) values (2,1,'Dose-response biochemical assay of inhibitors of Rho kinase 2 (Rock2) pt 2','Protocol','Some Document2',SYSDATE)"
+
+    }
+
+    def insertTestDictionaryRecords(final Sql sql) {
 
         sql.execute "INSERT INTO ELEMENT (ELEMENT_ID,LABEL,ELEMENT_STATUS,READY_FOR_EXTRACTION,VERSION,DATE_CREATED) values (386,'uM','Published','Ready',0,SYSDATE)"
         sql.execute "INSERT INTO ELEMENT (ELEMENT_ID,LABEL,ELEMENT_STATUS,READY_FOR_EXTRACTION,VERSION,DATE_CREATED) values (366,'concentration','Published','Ready',0,SYSDATE)"
         sql.execute "INSERT INTO ELEMENT (ELEMENT_ID,LABEL,DESCRIPTION,ELEMENT_STATUS,READY_FOR_EXTRACTION,VERSION,DATE_CREATED) values (123,'unit of measurement','It is the inite magnitude of a physical quantity or of time. It has a quantity and a unit associated with it.','Published','Ready',0,SYSDATE)"
+        sql.execute "INSERT INTO ELEMENT (ELEMENT_ID,LABEL,ELEMENT_STATUS,READY_FOR_EXTRACTION,VERSION,DATE_CREATED) values (372,'Assay Explorer','Published','Ready',0,SYSDATE)"
+        sql.execute "INSERT INTO ELEMENT (ELEMENT_ID,LABEL,ELEMENT_STATUS,READY_FOR_EXTRACTION,VERSION,DATE_CREATED) values (370,'Number of points','Published','Ready',0,SYSDATE)"
+        sql.execute "INSERT INTO ELEMENT (ELEMENT_ID,LABEL,ELEMENT_STATUS,READY_FOR_EXTRACTION,VERSION,DATE_CREATED) values (369,'Number of exclusions','Published','Ready',0,SYSDATE)"
+        sql.execute "INSERT INTO ELEMENT (ELEMENT_ID,LABEL,ELEMENT_STATUS,READY_FOR_EXTRACTION,VERSION,DATE_CREATED) values (368,'software','Published','Ready',0,SYSDATE)"
 
 
         sql.execute "Insert into UNIT (NODE_ID,PARENT_NODE_ID,UNIT_ID,UNIT,DESCRIPTION) values (0,0,123,'UNIT','Singular root to ensure tree viewers work')"
