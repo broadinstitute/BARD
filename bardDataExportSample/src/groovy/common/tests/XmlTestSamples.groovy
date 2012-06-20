@@ -18,16 +18,16 @@ class XmlTestSamples {
 <links>
   <link rel='edit' href='http://localhost:8080/bardDataExportSample/api/assay/1' type='application/vnd.bard.cap+xml;type=assay' />
   <link rel='self' href='http://localhost:8080/bardDataExportSample/api/assay/1' type='application/vnd.bard.cap+xml;type=assay' />
-  <link rel='up' href='http://localhost:8080/bardDataExportSample/test' type='application/vnd.bard.cap+xml;type=assays' />
+  <link rel='up' href='http://localhost:8080/bardDataExportSample/api/assays' type='application/vnd.bard.cap+xml;type=assays' />
 </links>
 '''
-    static String ASSAYS='''
+    static String ASSAYS = '''
 <assays count='1'>
   <link rel='related' title='1' type='application/vnd.bard.cap+xml;type=assay' href='http://localhost:8080/bardDataExportSample/api/assay/1' />
 </assays>
 '''
 
-    static String EXTERNAL_ASSAY='''
+    static String EXTERNAL_ASSAY = '''
     <externalAssay externalAssayId='aid=644'>
     <externalSystem>
     <systemName>PubChem</systemName>
@@ -36,12 +36,12 @@ class XmlTestSamples {
     </externalSystem>
 </externalAssay>
  '''
-    static String EMPTY_EXTERNAL_ASSAY='''
+    static String EMPTY_EXTERNAL_ASSAY = '''
    <externalAssay externalAssayId='aid=666' />
     '''
 
 
-    static String EXTERNAL_ASSAYS='''
+    static String EXTERNAL_ASSAYS = '''
 <externalAssays>
   <externalAssay externalAssayId='aid=644'>
     <externalSystem>
@@ -52,11 +52,11 @@ class XmlTestSamples {
   </externalAssay>
 </externalAssays>
 '''
-    static String EMPTY_EXTERNAL_ASSAYS='''
+    static String EMPTY_EXTERNAL_ASSAYS = '''
     <externalAssays/>
     '''
 
-    static String MEASURE_CONTEXT_ITEMS='''
+    static String MEASURE_CONTEXT_ITEMS = '''
 <measureContextItems>
   <measureContextItem measureContextItemId='34' measureContextRef='2' valueDisplay='Assay Explorer '>
     <valueId>
@@ -78,17 +78,17 @@ class XmlTestSamples {
   </measureContextItem>
 </measureContextItems>
 '''
-    static String MEASURE_CONTEXTS='''
+    static String MEASURE_CONTEXTS = '''
    <measureContexts>
   <measureContext measureContextId='2'>
     <contextName>Context for IC50</contextName>
   </measureContext>
 </measureContexts>
 '''
-    static String EMPTY_MEASURE_CONTEXT_ITEMS ='''
+    static String EMPTY_MEASURE_CONTEXT_ITEMS = '''
 <measureContextItems />
 '''
-    static String EMPTY_MEASURE_CONTEXTS ='''
+    static String EMPTY_MEASURE_CONTEXTS = '''
      <measureContexts/>
      '''
 
