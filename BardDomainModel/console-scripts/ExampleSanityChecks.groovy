@@ -18,7 +18,7 @@ import bard.db.experiment.ResultContextItem
 import bard.db.experiment.ResultHierarchy
 import bard.db.experiment.Substance
 import bard.db.registration.Assay
-import bard.db.registration.ExternalAssay
+import bard.db.registration.ExternalReference
 import bard.db.registration.ExternalSystem
 import bard.db.registration.Measure
 import bard.db.registration.MeasureContext

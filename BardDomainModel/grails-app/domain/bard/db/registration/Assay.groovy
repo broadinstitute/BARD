@@ -14,11 +14,12 @@ class Assay {
 	Date lastUpdated
 	String modifiedBy
 	String assayStatus = 'Pending'
+    String assayType = 'Regular'
 	String readyForExtraction = 'Ready'
 
 
 	static hasMany = [experiments: Experiment,
-			externalAssays: ExternalAssay,
+			externalAssays: ExternalReference,
 			measureContextItems: MeasureContextItem,
 			measures : Measure,
 			measureContexts: MeasureContext,
@@ -37,6 +38,7 @@ class Assay {
 		lastUpdated nullable: true, maxSize: 19
 		modifiedBy nullable: true, maxSize: 40
 		assayStatus maxSize: 20, nullable: false, inList: ["Pending", "Active", "Superseded", "Retired"]
+        assayType inList: ['Regular', 'Panel - Array', 'Panel - Group']
 		readyForExtraction maxSize: 20, nullable: false, inList: [ "Ready", "Started", "Complete" ]
 	}
 }

@@ -1,5 +1,7 @@
 package bard.db.experiment
 
+import bard.db.registration.ExternalReference
+
 class Project {
 
     static expose = 'project'
@@ -12,10 +14,10 @@ class Project {
 	String modifiedBy
 	String readyForExtraction = 'Ready'
 
-	static hasMany = [experiments: Experiment]
+	static hasMany = [projectExperiments: ProjectExperiment, externalReferences:ExternalReference]
 
 	static mapping = {
-	id column: "Project_ID", generator: "assigned"
+        id column: "Project_ID", generator: "assigned"
 	}
 
 	static constraints = {

@@ -9,7 +9,7 @@ class ExternalSystem {
 	Date lastUpdated
 	String modifiedBy
 
-	static hasMany = [externalAssays: ExternalAssay]
+	static hasMany = [externalAssays: ExternalReference]
 
 	static mapping = {
 		id column: "External_System_ID", generator: "assigned"

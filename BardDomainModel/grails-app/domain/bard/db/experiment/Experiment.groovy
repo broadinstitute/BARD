@@ -1,6 +1,7 @@
 package bard.db.experiment
 
 import bard.db.registration.Assay
+import bard.db.registration.ExternalReference
 
 class Experiment {
 
@@ -18,7 +19,9 @@ class Experiment {
 	String readyForExtraction = 'Ready'
 
 	static hasMany = [resultContextItems: ResultContextItem,
-			results: Result]
+			results: Result,
+            projectExperiments:ProjectExperiment,
+            externalReferences:ExternalReference]
 	static belongsTo = [Assay, Project]
 
 	static mapping = {
