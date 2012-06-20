@@ -8,11 +8,11 @@ import javax.sql.DataSource
 
 class DictionaryExportHelperService {
     LinkGenerator grailsLinkGenerator
-    String elementMimeType
+    String elementMediaType
     DataSource dataSource
 
-    DictionaryExportHelperService(final String elementMimeType) {
-        this.elementMimeType = elementMimeType
+    DictionaryExportHelperService(final String elementMediaType) {
+        this.elementMediaType = elementMediaType
     }
     /**
      * Root node for generating the entire dictionary
@@ -397,7 +397,7 @@ class DictionaryExportHelperService {
             }
             //now generate links for editing the element
             //clients can use this link to indicate that they have consumed the element
-            final String ELEMENT_MEDIA_TYPE = this.elementMimeType
+            final String ELEMENT_MEDIA_TYPE = this.elementMediaType
             final String elementHref = grailsLinkGenerator.link(mapping: 'element', absolute: true, params: [id: elementDTO.elementId]).toString()
             link(rel: 'edit', href: "${elementHref}", type: "${ELEMENT_MEDIA_TYPE}")
 

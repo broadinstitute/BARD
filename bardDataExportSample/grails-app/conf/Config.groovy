@@ -32,6 +32,7 @@ bard.data.export.cap.xml = 'application/vnd.bard.cap+xml;type=cap'
 bard.data.export.cap.projects.xml = 'application/vnd.bard.cap+xml;type=projects'
 bard.data.export.cap.project.xml = 'application/vnd.bard.cap+xml;type=project'
 bard.data.export.cap.assay.xml = 'application/vnd.bard.cap+xml;type=assay'
+bard.data.export.cap.assay.doc.xml='application/vnd.bard.cap+xml;type=assayDoc'
 
 //dictionary
 bard.data.export.dictionary.resultType.xml = 'application/vnd.bard.cap+xml;type=resultType'
@@ -116,10 +117,12 @@ grails.serverURL = System.properties.get('grails.serverUrl') ?: getServerUrl()
 String getServerUrl() {
     switch (Environment.current.name) {
         case ('production'):
-            //TODO
+
             grails.serverURL = "http://www.changeme.com"
             break
         default:
+            //TODO parametize port number to make more flexible.
+            // Also refactor when we start externalizing config files
             "http://localhost:8080/bardDataExportSample"
             break
     }

@@ -1,6 +1,6 @@
 package barddataexport.dictionary
 
-import groovy.sql.Sql
+
 import groovy.xml.MarkupBuilder
 
 /**

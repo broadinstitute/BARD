@@ -1,15 +1,15 @@
 package barddataexport.util
 
 import groovy.xml.MarkupBuilder
-import org.codehaus.groovy.grails.commons.GrailsApplication
+
 import org.codehaus.groovy.grails.web.mapping.LinkGenerator
 
 class RootService {
     LinkGenerator grailsLinkGenerator
-    final String dictionaryXmlMimeType
+    final String dictionaryMediaType
 
     RootService(final String dictionaryXmlMimeType){
-      this.dictionaryXmlMimeType = dictionaryXmlMimeType
+      this.dictionaryMediaType = dictionaryXmlMimeType
     }
     //TODO URLMappings tests
     public void generateRootElement(final MarkupBuilder xml) {
@@ -23,7 +23,7 @@ class RootService {
 
 
             final String dictionaryHref = grailsLinkGenerator.link(mapping: 'dictionary', absolute: true).toString()
-            final String DICTIONARY_MEDIA_TYPE = dictionaryXmlMimeType
+            final String DICTIONARY_MEDIA_TYPE = dictionaryMediaType
             link(rel: 'item', title: "The BARD Dictionary", href: "${dictionaryHref}", type: "${DICTIONARY_MEDIA_TYPE}") {
 
             }

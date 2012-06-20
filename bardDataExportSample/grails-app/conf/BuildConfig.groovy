@@ -12,6 +12,8 @@ grails.war.resources = { stagingDir ->
     delete(file:"${stagingDir}/WEB-INF/classes/common/tests/XmlTestAssertions.class")
     delete(dir:"${stagingDir}/WEB-INF/classes/common/tests")
 }
+
+
 grails.project.dependency.resolution = {
     // inherit Grails' default dependencies
     inherits("global") {

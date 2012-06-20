@@ -8,7 +8,7 @@ import org.junit.After
 import org.junit.Before
 import org.junit.Test
 
-class CapExportServiceIntegrationTests {
+class AssayExportServiceIntegrationTests {
     CapExportService capExportService
 
     @Before
