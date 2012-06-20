@@ -6,7 +6,6 @@ class Laboratory {
     Element element
 	String description
     Laboratory parent
-    String laboratoryStatus
 
     static hasMany = [children: Laboratory]
 
@@ -22,7 +21,5 @@ class Laboratory {
         parent nullable: true
         element nullable: false
 		description nullable: true, maxSize: 1000
-        laboratoryStatus maxSize: 20, nullable: false, inList: ["Pending", "Published", "Deprecated", "Retired"]
-
-    }
+	}
 }

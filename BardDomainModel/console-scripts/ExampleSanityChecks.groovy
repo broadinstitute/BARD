@@ -13,7 +13,6 @@ import bard.db.dictionary.Unit
 import bard.db.dictionary.UnitConversion
 import bard.db.experiment.Experiment
 import bard.db.experiment.Project
-import bard.db.experiment.ProjectAssay
 import bard.db.experiment.Result
 import bard.db.experiment.ResultContextItem
 import bard.db.experiment.ResultHierarchy

@@ -14,7 +14,7 @@ class Ontology {
 	static hasMany = [ontologyItems: OntologyItem]
 
 	static mapping = {
-		id column: "Ontology_ID"
+		id column: "Ontology_ID", generator: "assigned"
 	}
 
 	static constraints = {

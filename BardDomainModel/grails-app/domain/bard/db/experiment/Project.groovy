@@ -9,14 +9,13 @@ class Project {
 	String description
 	Date dateCreated
 	Date lastUpdated
-    String modifiedBy
-    String readyForExtraction = 'Ready'
+	String modifiedBy
+	String readyForExtraction = 'Ready'
 
-    static hasMany = [experiments: Experiment,
-	                  projectAssays: ProjectAssay]
+	static hasMany = [experiments: Experiment]
 
 	static mapping = {
-		id column: "Project_ID"
+	id column: "Project_ID", generator: "assigned"
 	}
 
 	static constraints = {
@@ -26,6 +25,6 @@ class Project {
 		dateCreated maxSize: 19
 		lastUpdated nullable: true, maxSize: 19
 		modifiedBy nullable: true, maxSize: 40
-        readyForExtraction maxSize: 20, nullable: false, inList: [ "Ready", "Started", "Complete" ]
-    }
+		readyForExtraction maxSize: 20, nullable: false, inList: [ "Ready", "Started", "Complete" ]
+	}
 }

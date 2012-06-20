@@ -1,7 +1,6 @@
 package bard.db.experiment
 
 import bard.db.dictionary.Element
-import bard.db.util.Qualifier
 
 class ResultContextItem {
 
@@ -9,7 +8,7 @@ class ResultContextItem {
     ResultContextItem parentGroup
     Result result
     Element attribute
-    Qualifier qualifier
+    String qualifier
     String valueDisplay
 	Float valueNum
 	Float valueMin
@@ -22,7 +21,7 @@ class ResultContextItem {
     static belongsTo = [Experiment]
 
 	static mapping = {
-		id column: "Result_Context_Item_ID"
+		id column: "Result_Context_Item_ID", generator: "assigned"
         attribute column: "attribute_id"
         valueControlled column: "value_id"
         qualifier column: "qualifier", sqlType: "char", length: 2

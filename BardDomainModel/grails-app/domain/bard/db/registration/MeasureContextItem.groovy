@@ -2,7 +2,6 @@ package bard.db.registration
 
 import bard.db.dictionary.Element
 
-import bard.db.util.Qualifier
 
 class MeasureContextItem {
 
@@ -21,14 +20,14 @@ class MeasureContextItem {
     Element valueElement
 	MeasureContext measureContext
 	Assay assay
-	Qualifier qualifier
+	String qualifier
 
     static hasMany = [children: MeasureContextItem]
 
 	static belongsTo = [Assay, MeasureContext]
 
 	static mapping = {
-		id column: "measure_Context_Item_ID"
+		id column: "measure_Context_Item_ID", generator: "assigned"
         parentGroup column: "GROUP_MEASURE_CONTEXT_ITEM_ID"
         valueElement column: "value_id"
         attributeElement column: "attribute_id"

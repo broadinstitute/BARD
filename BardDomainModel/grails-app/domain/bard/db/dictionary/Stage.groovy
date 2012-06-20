@@ -8,7 +8,6 @@ class Stage {
 	String description
     Element element
     Stage parent
-    String stageStatus
 
     static hasMany = [children: Stage]
 
@@ -23,7 +22,5 @@ class Stage {
 		stage maxSize: 128
         element nullable: false
 		description nullable: true, maxSize: 1000
-        stageStatus maxSize: 20, nullable: false, inList: ["Pending", "Published", "Deprecated", "Retired"]
-
-    }
+	}
 }
