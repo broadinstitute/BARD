@@ -19,6 +19,7 @@
     <resultContextItems>
       <resultContextItem resultContextItemId='611' valueDisplay='100800' valueNum='100800'>
         <attributeId>
+          <label></label>
           <link rel='related' href='http://localhost/api/dictionary/element/117' type='application/vnd.bard.cap+xml;type=element' />
         </attributeId>
       </resultContextItem>
