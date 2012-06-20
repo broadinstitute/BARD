@@ -12,10 +12,18 @@ hibernate {
 // environment specific settings
 environments {
     development {
+//        dataSource {
+//            dbCreate = "create-drop"
+//            url = "jdbc:h2:mem:devDb;MVCC=TRUE"
+//        }
         dataSource {
-            dbCreate = "create-drop"
-            url = "jdbc:h2:mem:devDb;MVCC=TRUE"
+            url = "jdbc:oracle:thin:@barddb:1521:bardqa"
+            driverClassName = "oracle.jdbc.driver.OracleDriver"
+            dialect = bard.SequencePerTableOracleDialect
+            username = "bard_qa"
+            password = "bard_qa"
         }
+
     }
     development_bardqa {
         dataSource {

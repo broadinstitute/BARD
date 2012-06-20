@@ -174,7 +174,13 @@ class AssayExportHelperService {
             final MarkupBuilder markupBuilder, final BigDecimal assayDocumentId) {
         final Sql sql = new Sql(dataSource)
         sql.eachRow('SELECT ASSAY_DOCUMENT_ID,DOCUMENT_NAME,DOCUMENT_TYPE, DOCUMENT_CONTENT FROM ASSAY_DOCUMENT WHERE ASSAY_DOCUMENT_ID=' + assayDocumentId) { documentRow ->
-            generateAssayDocument(markupBuilder, new AssayDocumentDTO(documentRow.DOCUMENT_NAME, documentRow.DOCUMENT_TYPE, documentRow.ASSAY_DOCUMENT_ID, documentRow.DOCUMENT_CONTENT))
+           String documentContent = null
+            if(documentRow.DOCUMENT_CONTENT){//TODO: This should go away once we use the domain plugin
+                java.sql.Clob clob = (java.sql.Clob) documentRow.DOCUMENT_CONTENT
+                documentContent = clob?.asciiStream.text
+            }
+
+            generateAssayDocument(markupBuilder, new AssayDocumentDTO(documentRow.DOCUMENT_NAME, documentRow.DOCUMENT_TYPE, documentRow.ASSAY_DOCUMENT_ID, documentContent))
         }
     }
     /**
@@ -347,7 +353,7 @@ class AssayExportHelperService {
             final BigDecimal assayId) {
         final Sql sql = new Sql(dataSource)
 
-        sql.eachRow('SELECT ASSAY_NAME,ASSAY_STATUS,ASSAY_VERSION,DESIGNED_BY FROM ASSAY WHERE ASSAY_ID=' + assayId) { assayRow ->
+        sql.eachRow('SELECT ASSAY_NAME,ASSAY_STATUS,ASSAY_VERSION,DESIGNED_BY,READY_FOR_EXTRACTION FROM ASSAY WHERE ASSAY_ID=' + assayId) { assayRow ->
             generateAssay(
                     markupBuilder,
                     new AssayDTO(

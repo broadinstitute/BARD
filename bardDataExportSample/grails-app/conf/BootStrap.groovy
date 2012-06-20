@@ -12,7 +12,7 @@ class BootStrap {
 
         switch (Environment.current.name) {
             case "test":
-            case "development":
+           case "development":
                 if (Element.list().isEmpty()) {
                     //Create test data
                     final Sql sql = new Sql(dataSource)

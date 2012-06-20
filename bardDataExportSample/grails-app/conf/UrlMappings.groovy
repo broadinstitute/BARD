@@ -24,7 +24,7 @@ class UrlMappings {
 //        name cap: "/api/cap"(controller: "capRest") {
 //            action = [GET: "cap"]
 //        }
-        name projects: "/api/assays"(controller: "assayRest") {
+        name assays: "/api/assays"(controller: "assayRest") {
             action = [GET: "assays"]
         }
 
