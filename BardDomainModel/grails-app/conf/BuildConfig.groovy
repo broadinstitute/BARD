@@ -44,11 +44,13 @@ grails.project.dependency.resolution = {
 
 grails.project.repos.default = "releases"
 
-grails.project.repos.releases.url = "http://bard-repo:8081/artifactory/plugins-release-local"
+grails.project.repos.releases.url = "http://bard-repo.broadinstitute.org:8081/artifactory/plugins-release-local"
+// TODO externalize these
 grails.project.repos.releases.username = "changeme"
+// TODO document artifactory encrypted password howto
 grails.project.repos.releases.password = "changeme"
 
-grails.project.repos.snapshots.url = "http://bard-repo:8081/artifactory/plugins-snapshot-local"
-grails.project.repos.releases.username = "changeme"
-grails.project.repos.releases.password = "changeme"
+grails.project.repos.snapshots.url = "http://bard-repo.broadinstitute.org:8081/artifactory/plugins-snapshot-local"
+grails.project.repos.snapshots.username = "changeme"
+grails.project.repos.snapshots.password = "changeme"
 

@@ -1,4 +1,4 @@
-<plugin name='bard-domain-model' version='0.1.2' grailsVersion='2.0 &gt; *'>
+<plugin name='bard-domain-model' version='0.1.3' grailsVersion='2.0 &gt; *'>
   <author>Broad Chemical Biology Platform</author>
   <authorEmail>cbntsoftware@broadinstitute.org</authorEmail>
   <title>Bard Domain Model Plugin</title>
@@ -24,15 +24,16 @@
     <resource>bard.db.experiment.GroupType</resource>
     <resource>bard.db.experiment.HierarchyType</resource>
     <resource>bard.db.experiment.Project</resource>
-    <resource>bard.db.experiment.ProjectAssay</resource>
+    <resource>bard.db.experiment.ProjectExperiment</resource>
     <resource>bard.db.experiment.Result</resource>
     <resource>bard.db.experiment.ResultContextItem</resource>
     <resource>bard.db.experiment.ResultHierarchy</resource>
     <resource>bard.db.experiment.Substance</resource>
     <resource>bard.db.experiment.SubstanceType</resource>
     <resource>bard.db.registration.Assay</resource>
+    <resource>bard.db.registration.AssayDocument</resource>
     <resource>bard.db.registration.AttributeType</resource>
-    <resource>bard.db.registration.ExternalAssay</resource>
+    <resource>bard.db.registration.ExternalReference</resource>
     <resource>bard.db.registration.ExternalSystem</resource>
     <resource>bard.db.registration.Measure</resource>
     <resource>bard.db.registration.MeasureContext</resource>
@@ -40,24 +41,25 @@
     <resource>bard.db.registration.Protocol</resource>
     <resource>bard.db.util.Qualifier</resource>
     <resource>changelog</resource>
+    <resource>drop-retired-tables</resource>
     <resource>iteration-001.01-initial-base-line</resource>
+    <resource>iteration-002.01-initial-changes</resource>
+    <resource>manage-stored-procedures</resource>
+    <resource>reset-sequences</resource>
   </resources>
   <repositories>
-    <repository name='http://cbip-repo:8081/artifactory/repo' url='http://cbip-repo:8081/artifactory/repo/' />
-    <repository name='grailsCentral' url='http://plugins.grails.org' />
-    <repository name='http://repo.grails.org/grails/plugins' url='http://repo.grails.org/grails/plugins/' />
-    <repository name='http://repo.grails.org/grails/core' url='http://repo.grails.org/grails/core/' />
-    <repository name='grailsCore' url='http://svn.codehaus.org/grails/trunk/grails-plugins' />
+    <repository name='http://bard-repo:8081/artifactory/bard-virtual-repo' url='http://bard-repo:8081/artifactory/bard-virtual-repo/' />
+    <repository name='grailsCentral' url='http://bard-repo:8081/artifactory/bard-virtual-repo' />
     <repository name='mavenCentral' url='http://repo1.maven.org/maven2/' />
   </repositories>
   <dependencies>
-    <compile>
+    <build>
       <dependency group='com.oracle' name='ojdbc6' version='11.2.0.2.0' />
-    </compile>
+    </build>
   </dependencies>
   <plugins>
     <build>
-      <plugin group='org.grails.plugins' name='database-migration' version='1.0' />
+      <plugin group='org.grails.plugins' name='database-migration' version='1.1' />
     </build>
   </plugins>
   <runtimePluginRequirements />
