@@ -3,31 +3,26 @@ package barddataexport.registration
 import groovy.xml.MarkupBuilder
 
 class AssayExportService {
+    AssayExportHelperService assayExportHelperService
     /**
      * Stream an assay document given an assay document Id
      * @param xml
      * @param assayDocumentId
      */
     public void generateAssayDocument(
-            final MarkupBuilder xml, final BigDecimal assayDocumentId) {
-
+            final MarkupBuilder markupBuilder, final BigDecimal assayDocumentId) {
+        this.assayExportHelperService.generateAssayDocument(markupBuilder,assayDocumentId)
     }
     /**
      * Stub for generating assays with status of Ready
-     * @param xml
-     */
-    public void generateNewAssays(
-            final MarkupBuilder xml) {
-
-    }
-    /**
-     * Generate all assays, regardless of status
-     * @param xml
+     * @param markupBuilder
      */
     public void generateAssays(
-            final MarkupBuilder xml) {
+            final MarkupBuilder markupBuilder) {
+        this.assayExportHelperService.generateAssays(markupBuilder)
 
     }
+
     /**
      * Generate an assay given an assayId
      *
@@ -35,8 +30,9 @@ class AssayExportService {
      * @param assayId
      */
     public void generateAssay(
-            final MarkupBuilder xml,
+            final MarkupBuilder markupBuilder,
             final BigDecimal assayId) {
+        this.assayExportHelperService.generateAssay(markupBuilder,assayId)
 
     }
 }

@@ -162,6 +162,19 @@ class AssayExportHelperService {
         }
     }
     /**
+     * Should we expose this as a service?
+     * @param markupBuilder
+     * @param documentNameText
+     * @param assayDocumentId
+     */
+    protected void generateAssayDocument(
+            final MarkupBuilder markupBuilder, final BigDecimal assayDocumentId) {
+        final Sql sql = new Sql(dataSource)
+        sql.eachRow('SELECT ASSAY_DOCUMENT_ID,DOCUMENT_NAME,DOCUMENT_TYPE FROM ASSAY_DOCUMENT WHERE ASSAY_DOCUMENT_ID=' + assayDocumentId) { documentRow ->
+            generateAssayDocument(markupBuilder, new AssayDocumentDTO(documentRow.DOCUMENT_NAME, documentRow.DOCUMENT_TYPE, documentRow.ASSAY_DOCUMENT_ID))
+        }
+    }
+    /**
      * Generate a measure contexts
      * @param sql
      * @param markupBuilder
