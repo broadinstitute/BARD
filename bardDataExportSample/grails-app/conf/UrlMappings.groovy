@@ -24,14 +24,14 @@ class UrlMappings {
 //        name cap: "/api/cap"(controller: "capRest") {
 //            action = [GET: "cap"]
 //        }
-        name projects: "/api/assays"(controller: "capRest") {
+        name projects: "/api/assays"(controller: "assayRest") {
             action = [GET: "assays"]
         }
 
-        name assay: "/api/assay/$id"(controller: "capRest") {
+        name assay: "/api/assay/$id"(controller: "assayRest") {
             action = [GET: "assay", PATCH: "updateAssay"]
         }
-        name assayDocument: "/api/assayDocument/$id"(controller: "capRest") {
+        name assayDocument: "/api/assayDocument/$id"(controller: "assayRest") {
             action = [GET: "assayDocument"]
         }
 //        name experiments: "/api/data"(controller: "experimentRest") {

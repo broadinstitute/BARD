@@ -158,6 +158,9 @@ class AssayExportHelperService {
             if (assayDocumentDTO.documentName) {
                 documentName(assayDocumentDTO.documentName)
             }
+            if(assayDocumentDTO.documentContent){
+                documentContent(assayDocumentDTO.documentContent)
+            }
             link(rel: 'item', href: "${assayDocumentHref}", type: "${ASSAY_DOC_MEDIA_TYPE}")
         }
     }
@@ -170,8 +173,8 @@ class AssayExportHelperService {
     protected void generateAssayDocument(
             final MarkupBuilder markupBuilder, final BigDecimal assayDocumentId) {
         final Sql sql = new Sql(dataSource)
-        sql.eachRow('SELECT ASSAY_DOCUMENT_ID,DOCUMENT_NAME,DOCUMENT_TYPE FROM ASSAY_DOCUMENT WHERE ASSAY_DOCUMENT_ID=' + assayDocumentId) { documentRow ->
-            generateAssayDocument(markupBuilder, new AssayDocumentDTO(documentRow.DOCUMENT_NAME, documentRow.DOCUMENT_TYPE, documentRow.ASSAY_DOCUMENT_ID))
+        sql.eachRow('SELECT ASSAY_DOCUMENT_ID,DOCUMENT_NAME,DOCUMENT_TYPE, DOCUMENT_CONTENT FROM ASSAY_DOCUMENT WHERE ASSAY_DOCUMENT_ID=' + assayDocumentId) { documentRow ->
+            generateAssayDocument(markupBuilder, new AssayDocumentDTO(documentRow.DOCUMENT_NAME, documentRow.DOCUMENT_TYPE, documentRow.ASSAY_DOCUMENT_ID, documentRow.DOCUMENT_CONTENT))
         }
     }
     /**
@@ -296,7 +299,7 @@ class AssayExportHelperService {
 
         markupBuilder.assayDocuments() {
             sql.eachRow('SELECT ASSAY_DOCUMENT_ID,DOCUMENT_NAME,DOCUMENT_TYPE FROM ASSAY_DOCUMENT WHERE ASSAY_ID=' + assayId) { documentRow ->
-                generateAssayDocument(markupBuilder, new AssayDocumentDTO(documentRow.DOCUMENT_NAME, documentRow.DOCUMENT_TYPE, documentRow.ASSAY_DOCUMENT_ID))
+                generateAssayDocument(markupBuilder, new AssayDocumentDTO(documentRow.DOCUMENT_NAME, documentRow.DOCUMENT_TYPE, documentRow.ASSAY_DOCUMENT_ID, null))
             }
         }
     }
@@ -363,17 +366,19 @@ class AssayDocumentDTO {
     final String documentName
     String documentType
     final BigDecimal assayDocumentId
-
+    final String documentContent
     /**
      *
      * @param documentName
      * @param documentType
      * @param assayDocumentId
+     * @param documentContent
      */
-    AssayDocumentDTO(final String documentName, final String documentType, final BigDecimal assayDocumentId) {
+    AssayDocumentDTO(String documentName, String documentType, BigDecimal assayDocumentId, String documentContent) {
         this.documentName = documentName
         this.documentType = documentType
         this.assayDocumentId = assayDocumentId
+        this.documentContent = documentContent
     }
 }
 class ExternalSystemDTO {

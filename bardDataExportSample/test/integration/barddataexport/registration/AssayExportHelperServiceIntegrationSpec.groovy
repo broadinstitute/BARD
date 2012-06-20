@@ -110,5 +110,9 @@ class AssayExportHelperServiceIntegrationSpec extends IntegrationSpec {
         "An Assay ready for extraction" | XmlTestSamples.ASSAY_LINKS
 
     }
+    //generateMeasures
+     //generateAssayDocuments
+    //generateAssay
+    //generateAssay given an id
 
 }

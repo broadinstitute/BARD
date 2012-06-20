@@ -27,8 +27,7 @@ bard.data.export.experiment.xml = 'application/vnd.bard.cap+xml;type=experiment'
 bard.data.export.results.xml = 'application/vnd.bard.cap+xml;type=results'
 bard.data.export.result.xml = 'application/vnd.bard.cap+xml;type=result'
 
-//cap
-bard.data.export.cap.xml = 'application/vnd.bard.cap+xml;type=cap'
+//assays
 bard.data.export.assays.xml = 'application/vnd.bard.cap+xml;type=assays'
 bard.data.export.assay.xml = 'application/vnd.bard.cap+xml;type=assay'
 bard.data.export.assay.doc.xml='application/vnd.bard.cap+xml;type=assayDoc'
