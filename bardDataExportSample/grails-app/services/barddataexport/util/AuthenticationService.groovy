@@ -27,8 +27,8 @@ class AuthenticationService {
 
             Boolean match = doIpAddressesMatch(remoteIpAddress, ipAddress)
             if (match) {
-                //TODO
-                //log the request into a file.
+                final String requestParamsString = "URL: '${request.forwardURI}' Remote address: '${request.getRemoteAddr()}'"
+                log.info(requestParamsString)
                 return true
             }
         }

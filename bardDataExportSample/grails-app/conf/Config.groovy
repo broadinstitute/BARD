@@ -60,7 +60,7 @@ bard.data.export.result.xml = 'application/vnd.bard.cap+xml;type=result'
 bard.data.export.cap.xml = 'application/vnd.bard.cap+xml;type=cap'
 bard.data.export.assays.xml = 'application/vnd.bard.cap+xml;type=assays'
 bard.data.export.assay.xml = 'application/vnd.bard.cap+xml;type=assay'
-bard.data.export.assay.doc.xml='application/vnd.bard.cap+xml;type=assayDoc'
+bard.data.export.assay.doc.xml = 'application/vnd.bard.cap+xml;type=assayDoc'
 
 //dictionary
 bard.data.export.dictionary.resultType.xml = 'application/vnd.bard.cap+xml;type=resultType'
@@ -161,9 +161,13 @@ log4j = {
     // Example of changing the log pattern for the default console
     // appender:
     //
-    //appenders {
-    //    console name:'stdout', layout:pattern(conversionPattern: '%c{2} %m%n')
-    //}
+    appenders {
+        console name: 'stdout', layout: pattern(conversionPattern: '[%d{ABSOLUTE} %p %c]  %m%n')
+        //    console name:'stdout', layout:pattern(conversionPattern: '%c{2} %m%n')
+        rollingFile name: "restApiFileAppender",
+                file: "logs/" + Environment.current.name + "/bardDataExport_rest_api.log",
+                layout: pattern(conversionPattern: '[%d{dd-MMM-yyyy HH:mm:ss,SSS}] %m%n')
+    }
 
     error 'org.codehaus.groovy.grails.web.servlet',  //  controllers
             'org.codehaus.groovy.grails.web.pages', //  GSP
@@ -176,7 +180,6 @@ log4j = {
             'org.springframework',
             'org.hibernate',
             'net.sf.ehcache.hibernate'
-}
 
-barddataexport.externalapplication.apiKey.hashed = 'afe884d7ba7f233580b5243520947b1c'
-barddataexport.externalapplication.ipAddress.whiteList = ['127.0.0.1', '0:0:0:0:0:0:0:1']
+    info restApiFileAppender: "grails.app.services.barddataexport.util.AuthenticationService"
+}
