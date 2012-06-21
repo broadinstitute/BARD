@@ -36,11 +36,14 @@ class AuthenticationServiceUnitSpec extends Specification {
         assert response == expectedMatched
 
         where:
-        label                              | lhs       | rhs       | expectedMatched
-        "matched - identical literals"     | '1.2.3.4' | '1.2.3.4' | true
-        "matched - wildcard"               | '1.*.3.4' | '1.5.3.4' | true
-        "not matched - different literals" | '1.2.3.4' | '1.2.3.5' | false
-        "not matched - wildcard"           | '1.*.3.4' | '1.2.3.5' | false
+        label                                   | lhs               | rhs               | expectedMatched
+        "IPv4 matched - identical literals"     | '1.2.3.4'         | '1.2.3.4'         | true
+        "IPv4 matched - wildcard"               | '1.*.3.4'         | '1.5.3.4'         | true
+        "IPv4 not matched - different literals" | '1.2.3.4'         | '1.2.3.5'         | false
+        "IPv4 not matched - wildcard"           | '1.*.3.4'         | '1.2.3.5'         | false
+        "IPv6 matched - identical literals"     | '1:2:3:4:5:6:7:8' | '1:2:3:4:5:6:7:8' | true
+        "IPv6 matched - wildcard"               | '1:*:3:4:5:6:7:8' | '1:9:3:4:5:6:7:8' | true
+        "IPv6 matched - mismatch"               | '1:2:3:4:5:6:7:8' | '1:9:3:4:5:6:7:8' | false
     }
 
     /**
@@ -59,9 +62,12 @@ class AuthenticationServiceUnitSpec extends Specification {
         assert response == expectedResult
 
         where:
-        label                                           | remoteAddress | whiteList   | expectedResult
-        "remote address is in the whitelist"            | '1.2.3.4'     | ['1.2.3.4'] | true
-        "remote address is in the whitelist - wildcard" | '1.5.3.4'     | ['1.*.3.4'] | true
-        "remote address is not in the whitelist"        | '1.2.3.4'     | ['1.*.3.5'] | false
+        label                                                | remoteAddress     | whiteList           | expectedResult
+        "IPv4 remote address is in the whitelist"            | '1.2.3.4'         | ['1.2.3.4']         | true
+        "IPv4 remote address is in the whitelist - wildcard" | '1.5.3.4'         | ['1.*.3.4']         | true
+        "IPv4 remote address is not in the whitelist"        | '1.2.3.4'         | ['1.*.3.5']         | false
+        "IPv6 matched - identical literals"                  | '1:2:3:4:5:6:7:8' | ['1:2:3:4:5:6:7:8'] | true
+        "IPv6 matched - wildcard"                            | '1:*:3:4:5:6:7:8' | ['1:9:3:4:5:6:7:8'] | true
+        "IPv6 matched - mismatch"                            | '1:2:3:4:5:6:7:8' | ['1:9:3:4:5:6:7:8'] | false
     }
 }

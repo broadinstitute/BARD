@@ -10,7 +10,7 @@ class AuthenticationService {
     def grailsApplication
 
     Boolean authenticate(HttpServletRequest request) {
-        InetAddressValidator inetAddressValidator = InetAddressValidator.getInstance()
+//        InetAddressValidator inetAddressValidator = InetAddressValidator.getInstance()
 
         String apiKey = grailsApplication.config.barddataexport.externalapplication.apiKey.hashed
         String requestApiKey = request.getHeader('APIKEY')
@@ -19,11 +19,11 @@ class AuthenticationService {
 
         List<String> ipAddressWhiteList = grailsApplication.config.barddataexport.externalapplication.ipAddress.whiteList as List<String>
         String remoteIpAddress = request.getRemoteAddr()
-        assert inetAddressValidator.isValid(remoteIpAddress)
+//        assert inetAddressValidator.isValid(remoteIpAddress)
 
         for (String ipAddress in ipAddressWhiteList) {
 //            assert inetAddressValidator.isValid(ipAddress)
-            assert ipAddress.split(/\./).size() == 4
+//            assert ipAddress.split(/\./).size() == 4
 
             Boolean match = doIpAddressesMatch(remoteIpAddress, ipAddress)
             if (match) {
@@ -37,10 +37,12 @@ class AuthenticationService {
     }
 
     Boolean doIpAddressesMatch(String rhs, String lhs) {
-        String[] rhsStringArray = rhs.split(/\./)
-        String[] lhsStringArray = lhs.split(/\./)
+        String[] rhsStringArray = rhs.split(/[\.:]/) //IPv6 uses ':' instead of '.'
+        String[] lhsStringArray = lhs.split(/[\.:]/) //IPv6 uses ':' instead of '.'
+        if (rhsStringArray.size() != lhsStringArray.size())
+            return false
 
-        for (int i in 0..3) {
+        for (int i in 0..<rhsStringArray.size()) { //IPv6 allows larger UP address fields. For example, when running locally we receive 0:0:0:0:0:0:0:1 as the remote address.
             if (rhsStringArray[i] == '*' || lhsStringArray[i] == '*')
                 continue
 

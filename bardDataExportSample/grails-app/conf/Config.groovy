@@ -177,3 +177,6 @@ log4j = {
             'org.hibernate',
             'net.sf.ehcache.hibernate'
 }
+
+barddataexport.externalapplication.apiKey.hashed = 'afe884d7ba7f233580b5243520947b1c'
+barddataexport.externalapplication.ipAddress.whiteList = ['127.0.0.1', '0:0:0:0:0:0:0:1']
