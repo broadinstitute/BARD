@@ -8,6 +8,12 @@ import org.codehaus.groovy.grails.web.servlet.HttpHeaders
 
 import javax.servlet.http.HttpServletResponse
 
+/**
+ * Please note that the BardDataExportFilters is applied to all incoming request.
+ * ALL incoming request need to have a custom http header named 'APIKEY' and the correct MD5 hash value
+ * In addition, the request's remote IP address has to be whitelisted in the commons-config file.
+ */
+
 class ExperimentRestController {
     ExperimentExportService experimentExportService
     ResultExportService resultExportService

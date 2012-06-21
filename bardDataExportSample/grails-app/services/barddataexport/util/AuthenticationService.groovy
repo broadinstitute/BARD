@@ -9,6 +9,15 @@ class AuthenticationService {
 
     def grailsApplication
 
+    /**
+     * Used by the BardDataExportFilters filter to check authentication of the incoming request
+     * against an IP address whitelist and an APIKEY hash code.
+     *
+     * Get the APIKEY from the incoming request's header (custom key).
+     *
+     * @param request
+     * @return
+     */
     Boolean authenticate(HttpServletRequest request) {
 //        InetAddressValidator inetAddressValidator = InetAddressValidator.getInstance()
 
@@ -36,6 +45,15 @@ class AuthenticationService {
         return false
     }
 
+    /**
+     * Compares two IP addresses to check if they match. Accepts wildcard ('*') as part(s) of an IP address.
+     * For example, '1.*.3.4' would compare true both with '1.2.3.4' and '1.5.3.4'
+     * There is also a support for IPv6 with wildcards (e.g., '1:2:3:4:5:6:7:*')
+     *
+     * @param rhs
+     * @param lhs
+     * @return
+     */
     Boolean doIpAddressesMatch(String rhs, String lhs) {
         String[] rhsStringArray = rhs.split(/[\.:]/) //IPv6 uses ':' instead of '.'
         String[] lhsStringArray = lhs.split(/[\.:]/) //IPv6 uses ':' instead of '.'
