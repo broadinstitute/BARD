@@ -56,8 +56,9 @@ class AuthenticationServiceUnitSpec extends Specification {
         Boolean response = service.authenticate(httpServletRequest)
 
         then:
+        (0..1) * httpServletRequest.getRequestURL() >> { new StringBuffer("url") }
         1 * httpServletRequest.getHeader(_) >> { 'apikey' }
-        1 * httpServletRequest.getRemoteAddr() >> { remoteAddress }
+        (1..2) * httpServletRequest.getRemoteAddr() >> { remoteAddress }
 
         assert response == expectedResult
 
