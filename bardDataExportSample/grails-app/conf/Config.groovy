@@ -12,6 +12,35 @@ import grails.util.Environment
 //    grails.config.locations << "file:" + System.properties["${appName}.config.location"]
 // }
 
+if (appName) {
+    grails.config.locations = []
+
+    // If the developer specifies a directory for the external config files at the command line, use it.
+    // This will look like 'grails -DprimaryConfigDir=[directory name] [target]'
+    // Otherwise, look for these files in the user's home .grails/projectdb directory
+    // If there are no external config files in either location, don't override anything in this Config.groovy
+    String primaryOverrideDirName = System.properties.get('primaryConfigDir')
+    String secondaryOverrideDirName = "${userHome}/.grails/${appName}"
+
+    List<String> fileNames = ["${appName}-commons-config.groovy", "${appName}-${Environment.current.name}-config.groovy"]
+    fileNames.each {fileName ->
+        String primaryFullName = "${primaryOverrideDirName}/${fileName}"
+        String secondaryFullName = "${secondaryOverrideDirName}/${fileName}"
+
+        if (new File(primaryFullName).exists()) {
+            println "Overriding Config.groovy with $primaryFullName"
+            grails.config.locations << "file:$primaryFullName"
+        }
+        else if (new File(secondaryFullName).exists()) {
+            println "Overriding Config.groovy with $secondaryFullName"
+            grails.config.locations << "file:$secondaryFullName"
+        }
+        else {
+            println "Skipping Config.groovy overrides: $primaryFullName and $secondaryFullName not found"
+        }
+    }
+}
+
 //Number of experiments per page
 bard.experiments.max.per.page = 1000000
 
@@ -30,7 +59,7 @@ bard.data.export.result.xml = 'application/vnd.bard.cap+xml;type=result'
 //assays
 bard.data.export.assays.xml = 'application/vnd.bard.cap+xml;type=assays'
 bard.data.export.assay.xml = 'application/vnd.bard.cap+xml;type=assay'
-bard.data.export.assay.doc.xml='application/vnd.bard.cap+xml;type=assayDoc'
+bard.data.export.assay.doc.xml = 'application/vnd.bard.cap+xml;type=assayDoc'
 
 //dictionary
 bard.data.export.dictionary.resultType.xml = 'application/vnd.bard.cap+xml;type=resultType'
@@ -131,9 +160,13 @@ log4j = {
     // Example of changing the log pattern for the default console
     // appender:
     //
-    //appenders {
-    //    console name:'stdout', layout:pattern(conversionPattern: '%c{2} %m%n')
-    //}
+    appenders {
+        console name: 'stdout', layout: pattern(conversionPattern: '[%d{ABSOLUTE} %p %c]  %m%n')
+        //    console name:'stdout', layout:pattern(conversionPattern: '%c{2} %m%n')
+        rollingFile name: "restApiFileAppender",
+                file: "logs/" + Environment.current.name + "/bardDataExport_rest_api.log",
+                layout: pattern(conversionPattern: '[%d{dd-MMM-yyyy HH:mm:ss,SSS}] %m%n')
+    }
 
     error 'org.codehaus.groovy.grails.web.servlet',  //  controllers
             'org.codehaus.groovy.grails.web.pages', //  GSP
@@ -146,4 +179,6 @@ log4j = {
             'org.springframework',
             'org.hibernate',
             'net.sf.ehcache.hibernate'
+
+    info restApiFileAppender: "grails.app.services.barddataexport.util.AuthenticationService"
 }
