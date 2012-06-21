@@ -33,6 +33,7 @@ class RootRestControllerFunctionalSpec extends Specification {
         when: 'We send an HTTP GET request for the root elements'
         def serverResponse = http.request(GET, XML) {
             headers.'Accept' = rootAcceptContentType
+            headers.'APIKEY' = 'changeMe'
         }
         then: 'We expect an XML representation of the root elements'
         assert serverResponse.statusLine.statusCode == HttpServletResponse.SC_OK
@@ -47,6 +48,7 @@ class RootRestControllerFunctionalSpec extends Specification {
         when: 'We send an HTTP GET request for the root element with the wrong mime type'
         def serverResponse = http.request(GET, XML) {
             headers.'Accept' = "some bogus"
+            headers.'APIKEY' = 'changeMe'
             response.failure = { resp ->
                 resp
             }

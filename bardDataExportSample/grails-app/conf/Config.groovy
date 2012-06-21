@@ -182,3 +182,6 @@ log4j = {
 
     info restApiFileAppender: "grails.app.services.barddataexport.util.AuthenticationService"
 }
+
+barddataexport.externalapplication.apiKey.hashed = 'changeMe'
+barddataexport.externalapplication.ipAddress.whiteList = ['127.0.0.1', '0:0:0:0:0:0:0:1'] //localhost

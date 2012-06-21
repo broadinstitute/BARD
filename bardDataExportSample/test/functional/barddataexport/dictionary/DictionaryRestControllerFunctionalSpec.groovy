@@ -34,6 +34,7 @@ class DictionaryRestControllerFunctionalSpec extends Specification {
         when: 'We send an HTTP GET request for the dictionary'
         def serverResponse = http.request(GET, XML) {
             headers.'Accept' = dictionaryAcceptContentType
+            headers.'APIKEY' = 'changeMe'
         }
         then: 'We expect an XML representation of the entire dictionary'
         assert serverResponse.statusLine.statusCode == HttpServletResponse.SC_OK
@@ -48,6 +49,7 @@ class DictionaryRestControllerFunctionalSpec extends Specification {
         when: 'We send an HTTP GET request for a dictionary with the wrong mime type'
         def serverResponse = http.request(GET, XML) {
             headers.'Accept' = "some bogus"
+            headers.'APIKEY' = 'changeMe'
             response.failure = { resp ->
                 resp
             }
@@ -64,6 +66,7 @@ class DictionaryRestControllerFunctionalSpec extends Specification {
         when: 'We send an HTTP GET request, with the appropriate mime type, for a result type with a non-existing id of 1'
         def serverResponse = http.request(GET, XML) {
             headers.Accept = 'application/vnd.bard.cap+xml;type=resultType'
+            headers.'APIKEY' = 'changeMe'
             response.failure = { resp ->
                 resp
             }
@@ -80,6 +83,7 @@ class DictionaryRestControllerFunctionalSpec extends Specification {
         when: 'We send an HTTP GET request, with the wrong mime type'
         def serverResponse = http.request(GET, XML) {
             headers.Accept = 'application/vnd.bard.cap+xml;type=element'
+            headers.'APIKEY' = 'changeMe'
             response.failure = { resp ->
                 resp
             }
@@ -95,6 +99,7 @@ class DictionaryRestControllerFunctionalSpec extends Specification {
         when: 'We send an HTTP GET request for that result type with the appropriate mime type'
         def serverResponse = http.request(GET, XML) {
             headers.Accept = 'application/vnd.bard.cap+xml;type=resultType'
+            headers.'APIKEY' = 'changeMe'
         }
         then: 'We expect an XML representation of that Result Type'
         assert serverResponse.statusLine.statusCode == HttpServletResponse.SC_OK
@@ -111,6 +116,7 @@ class DictionaryRestControllerFunctionalSpec extends Specification {
         when: 'We send an HTTP GET request, with the appropriate mime type, for a stage with a non-existing id of 1'
         def serverResponse = http.request(GET, XML) {
             headers.Accept = 'application/vnd.bard.cap+xml;type=stage'
+            headers.'APIKEY' = 'changeMe'
             response.failure = { resp ->
                 resp
             }
@@ -127,6 +133,7 @@ class DictionaryRestControllerFunctionalSpec extends Specification {
         when: 'We send an HTTP GET request, with the wrong mime type'
         def serverResponse = http.request(GET, XML) {
             headers.Accept = 'application/vnd.bard.cap+xml;type=element'
+            headers.'APIKEY' = 'changeMe'
             response.failure = { resp ->
                 resp
             }
@@ -142,6 +149,7 @@ class DictionaryRestControllerFunctionalSpec extends Specification {
         when: 'We send an HTTP GET request for that Stage with the appropriate mime type'
         def serverResponse = http.request(GET, XML) {
             headers.Accept = 'application/vnd.bard.cap+xml;type=stage'
+            headers.'APIKEY' = 'changeMe'
         }
         then: 'We expect an XML representation of that Stage'
         assert serverResponse.statusLine.statusCode == HttpServletResponse.SC_OK
@@ -157,6 +165,7 @@ class DictionaryRestControllerFunctionalSpec extends Specification {
         when: 'We send an HTTP GET request, with the appropriate mime type, for an Element with a non-existing id of 1'
         def serverResponse = http.request(GET, XML) {
             headers.Accept = 'application/vnd.bard.cap+xml;type=element'
+            headers.'APIKEY' = 'changeMe'
             response.failure = { resp ->
                 resp
             }
@@ -173,6 +182,7 @@ class DictionaryRestControllerFunctionalSpec extends Specification {
         when: 'We send an HTTP GET request, with the wrong mime type'
         def serverResponse = http.request(GET, XML) {
             headers.Accept = 'application/vnd.bard.cap+xml;type=stage'
+            headers.'APIKEY' = 'changeMe'
             response.failure = { resp ->
                 resp
             }
@@ -188,13 +198,13 @@ class DictionaryRestControllerFunctionalSpec extends Specification {
         when: 'We send an HTTP GET request for that Element with the appropriate mime type'
         def serverResponse = http.request(GET, XML) {
             headers.Accept = 'application/vnd.bard.cap+xml;type=element'
+            headers.'APIKEY' = 'changeMe'
         }
         then: 'We expect an XML representation of that Element'
         assert serverResponse.statusLine.statusCode == HttpServletResponse.SC_OK
         final String responseData = serverResponse.data.readLines().join()
         XmlTestAssertions.assertResults(XmlTestSamples.ELEMENT, responseData)
     }
-
 
 
 }
