@@ -100,10 +100,11 @@ class DictionaryExportHelperServiceIntegrationSpec extends IntegrationSpec {
         "Elements" | XmlTestSamples.ELEMENT
     }
 
-    void "test generate #label"() {
+    void "test generate elements #label"() {
         when:
         this.dictionaryExportHelperService.generateElements(this.markupBuilder)
         then:
+        println writer.toString()
         XmlTestAssertions.assertResults(results,this.writer.toString())
         where:
         label      | results

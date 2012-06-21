@@ -134,24 +134,22 @@
         <br/>
         <br/>
 
-        %{--<h3>Projects and Assays</h3>--}%
-        %{--<table>--}%
-            %{--<thead><th>Resource</th><th>URL</th><th>Accept Header</th><th>Comments</th></thead>--}%
-            %{--<tbody>--}%
-            %{--<tr><td>All Projects</td><td><g:link--}%
-                    %{--mapping="cap">Copy this link</g:link></td><td>application/vnd.bard.cap+xml;type=cap</td><td>Returns All Projects</td>--}%
-            %{--</tr>--}%
-            %{--<tr><td>Projects Not Uploaded</td><td></td><td>application/vnd.bard.cap+xml;type=projects</td><td>This is not yet implemented because of changes in data model</td>--}%
-            %{--</tr>--}%
-            %{--<tr><td>Assay</td><td><g:link mapping="assay"--}%
-                                          %{--params="[id: 1]">Copy this link</g:link></td><td>application/vnd.bard.cap+xml;type=assay</td><td>Replace the assayId value with any valid Id</td>--}%
-            %{--</tr>--}%
-            %{--<tr><td>Project</td><td><g:link mapping="project"--}%
-                                            %{--params="[id: 1]">Copy this link</g:link></td><td>application/vnd.bard.cap+xml;type=project</td><td>Replace projectId value with any valid Id</td>--}%
-            %{--</tr>--}%
+        <h3>Assays</h3>
+        <table>
+            <thead><th>Resource</th><th>URL</th><th>Accept Header</th><th>Comments</th></thead>
+            <tbody>
+            <tr><td>All Assays</td><td><g:link
+                    mapping="assays">Copy this link</g:link></td><td>application/vnd.bard.cap+xml;type=assays</td><td>Returns All Assays Read For Extraction</td>
+            </tr>
+            <tr><td>Assay</td><td><g:link mapping="assay"
+                                          params="[id: 1]">Copy this link</g:link></td><td>application/vnd.bard.cap+xml;type=assay</td><td>Replace the assayId value with a valid Id</td>
+            </tr>
+            <tr><td>Assay Document</td><td><g:link mapping="assayDocument"
+                                            params="[id: 1]">Copy this link</g:link></td><td>application/vnd.bard.cap+xml;type=assayDoc</td><td>Replace assayDocumentId value with a valid Id</td>
+            </tr>
 
-            %{--</tbody>--}%
-        %{--</table>--}%
+            </tbody>
+        </table>
         <br/>
         <br/>
 

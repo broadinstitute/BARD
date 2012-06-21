@@ -14,6 +14,84 @@ package common.tests
  delete(file:"${stagingDir}/WEB-INF/classes/common/tests/XmlTestAssertions.class")
  delete(dir:"${stagingDir}/WEB-INF/classes/common/tests")}*/
 class XmlTestSamples {
+    static String ASSAY_LINKS = '''
+<links>
+  <link rel='edit' href='http://localhost:8080/bardDataExportSample/api/assay/1' type='application/vnd.bard.cap+xml;type=assay' />
+  <link rel='self' href='http://localhost:8080/bardDataExportSample/api/assay/1' type='application/vnd.bard.cap+xml;type=assay' />
+  <link rel='up' href='http://localhost:8080/bardDataExportSample/api/assays' type='application/vnd.bard.cap+xml;type=assays' />
+</links>
+'''
+    static String ASSAYS = '''
+<assays count='1'>
+  <link rel='related' title='1' type='application/vnd.bard.cap+xml;type=assay' href='http://localhost:8080/bardDataExportSample/api/assay/1' />
+</assays>
+'''
+
+    static String EXTERNAL_ASSAY = '''
+    <externalAssay externalAssayId='aid=644'>
+    <externalSystem>
+    <systemName>PubChem</systemName>
+    <owner>NIH</owner>
+    <systemUrl>http://pubchem.ncbi.nlm.nih.gov/assay/assay.cgi?aid=644</systemUrl>
+    </externalSystem>
+</externalAssay>
+ '''
+    static String EMPTY_EXTERNAL_ASSAY = '''
+   <externalAssay externalAssayId='aid=666' />
+    '''
+
+
+    static String EXTERNAL_ASSAYS = '''
+<externalAssays>
+  <externalAssay externalAssayId='aid=644'>
+    <externalSystem>
+      <systemName>PubChem</systemName>
+      <owner>NIH</owner>
+      <systemUrl>http://pubchem.ncbi.nlm.nih.gov/assay/assay.cgi?aid=644</systemUrl>
+    </externalSystem>
+  </externalAssay>
+</externalAssays>
+'''
+    static String EMPTY_EXTERNAL_ASSAYS = '''
+    <externalAssays/>
+    '''
+
+    static String MEASURE_CONTEXT_ITEMS = '''
+<measureContextItems>
+  <measureContextItem measureContextItemId='34' measureContextRef='2' valueDisplay='Assay Explorer '>
+    <valueId>
+      <link rel='related' href='http://localhost:8080/bardDataExportSample/api/dictionary/element/372' type='application/vnd.bard.cap+xml;type=element' />
+    </valueId>
+    <attributeId attributeType='Fixed'>
+      <link rel='related' href='http://localhost:8080/bardDataExportSample/api/dictionary/element/368' type='application/vnd.bard.cap+xml;type=element' />
+    </attributeId>
+  </measureContextItem>
+  <measureContextItem measureContextItemId='35' measureContextItemRef='34' measureContextRef='2' valueDisplay='30' valueNum='30'>
+    <attributeId attributeType='Fixed'>
+      <link rel='related' href='http://localhost:8080/bardDataExportSample/api/dictionary/element/370' type='application/vnd.bard.cap+xml;type=element' />
+    </attributeId>
+  </measureContextItem>
+  <measureContextItem measureContextItemId='36' measureContextItemRef='34' measureContextRef='2' valueDisplay='0 - 4' valueMin='0' valueMax='4'>
+    <attributeId attributeType='Range'>
+      <link rel='related' href='http://localhost:8080/bardDataExportSample/api/dictionary/element/369' type='application/vnd.bard.cap+xml;type=element' />
+    </attributeId>
+  </measureContextItem>
+</measureContextItems>
+'''
+    static String MEASURE_CONTEXTS = '''
+   <measureContexts>
+  <measureContext measureContextId='2'>
+    <contextName>Context for IC50</contextName>
+  </measureContext>
+</measureContexts>
+'''
+    static String EMPTY_MEASURE_CONTEXT_ITEMS = '''
+<measureContextItems />
+'''
+    static String EMPTY_MEASURE_CONTEXTS = '''
+     <measureContexts/>
+     '''
+
     static String BARD_DATA_EXPORT_UNIT = '''
    <bardexport>
     <link rel='item' title='The BARD Dictionary' href='null' type='xml' />
@@ -59,25 +137,41 @@ class XmlTestSamples {
     '''
     static String DICTIONARY = '''
 <dictionary>
-  <elements>
-    <element elementId='386' readyForExtraction='Ready' elementStatus='Published'>
-      <label>uM</label>
-      <link rel='edit' href='http://localhost:8080/bardDataExportSample/api/dictionary/element/386' type='application/vnd.bard.cap+xml;type=element' />
-    </element>
-    <element elementId='366' readyForExtraction='Ready' elementStatus='Published'>
-      <label>concentration</label>
-      <link rel='edit' href='http://localhost:8080/bardDataExportSample/api/dictionary/element/366' type='application/vnd.bard.cap+xml;type=element' />
-    </element>
-    <element elementId='123' readyForExtraction='Ready' elementStatus='Published'>
-      <label>unit of measurement</label>
-      <description>It is the inite magnitude of a physical quantity or of time. It has a quantity and a unit associated with it.</description>
-      <link rel='edit' href='http://localhost:8080/bardDataExportSample/api/dictionary/element/123' type='application/vnd.bard.cap+xml;type=element' />
-    </element>
-    <element elementId='341' readyForExtraction='Ready' elementStatus='Published' unit='uM'>
-      <label>IC50</label>
-      <link rel='edit' href='http://localhost:8080/bardDataExportSample/api/dictionary/element/341' type='application/vnd.bard.cap+xml;type=element' />
-    </element>
-  </elements>
+<elements>
+  <element elementId='386' readyForExtraction='Ready' elementStatus='Published'>
+    <label>uM</label>
+    <link rel='edit' href='http://localhost:8080/bardDataExportSample/api/dictionary/element/386' type='application/vnd.bard.cap+xml;type=element' />
+  </element>
+  <element elementId='366' readyForExtraction='Ready' elementStatus='Published'>
+    <label>concentration</label>
+    <link rel='edit' href='http://localhost:8080/bardDataExportSample/api/dictionary/element/366' type='application/vnd.bard.cap+xml;type=element' />
+  </element>
+  <element elementId='123' readyForExtraction='Ready' elementStatus='Published'>
+    <label>unit of measurement</label>
+    <description>It is the inite magnitude of a physical quantity or of time. It has a quantity and a unit associated with it.</description>
+    <link rel='edit' href='http://localhost:8080/bardDataExportSample/api/dictionary/element/123' type='application/vnd.bard.cap+xml;type=element' />
+  </element>
+  <element elementId='372' readyForExtraction='Ready' elementStatus='Published'>
+    <label>Assay Explorer</label>
+    <link rel='edit' href='http://localhost:8080/bardDataExportSample/api/dictionary/element/372' type='application/vnd.bard.cap+xml;type=element' />
+  </element>
+  <element elementId='370' readyForExtraction='Ready' elementStatus='Published'>
+    <label>Number of points</label>
+    <link rel='edit' href='http://localhost:8080/bardDataExportSample/api/dictionary/element/370' type='application/vnd.bard.cap+xml;type=element' />
+  </element>
+  <element elementId='369' readyForExtraction='Ready' elementStatus='Published'>
+    <label>Number of exclusions</label>
+    <link rel='edit' href='http://localhost:8080/bardDataExportSample/api/dictionary/element/369' type='application/vnd.bard.cap+xml;type=element' />
+  </element>
+  <element elementId='368' readyForExtraction='Ready' elementStatus='Published'>
+    <label>software</label>
+    <link rel='edit' href='http://localhost:8080/bardDataExportSample/api/dictionary/element/368' type='application/vnd.bard.cap+xml;type=element' />
+  </element>
+  <element elementId='341' readyForExtraction='Ready' elementStatus='Published' unit='uM'>
+    <label>IC50</label>
+    <link rel='edit' href='http://localhost:8080/bardDataExportSample/api/dictionary/element/341' type='application/vnd.bard.cap+xml;type=element' />
+  </element>
+</elements>
   <elementHierarchies>
     <elementHierarchy parentElementId='341' childElementId='366'>
       <relationshipType>derives from</relationshipType>
@@ -205,6 +299,22 @@ class XmlTestSamples {
     <label>unit of measurement</label>
     <description>It is the inite magnitude of a physical quantity or of time. It has a quantity and a unit associated with it.</description>
     <link rel='edit' href='http://localhost:8080/bardDataExportSample/api/dictionary/element/123' type='application/vnd.bard.cap+xml;type=element' />
+  </element>
+  <element elementId='372' readyForExtraction='Ready' elementStatus='Published'>
+    <label>Assay Explorer</label>
+    <link rel='edit' href='http://localhost:8080/bardDataExportSample/api/dictionary/element/372' type='application/vnd.bard.cap+xml;type=element' />
+  </element>
+  <element elementId='370' readyForExtraction='Ready' elementStatus='Published'>
+    <label>Number of points</label>
+    <link rel='edit' href='http://localhost:8080/bardDataExportSample/api/dictionary/element/370' type='application/vnd.bard.cap+xml;type=element' />
+  </element>
+  <element elementId='369' readyForExtraction='Ready' elementStatus='Published'>
+    <label>Number of exclusions</label>
+    <link rel='edit' href='http://localhost:8080/bardDataExportSample/api/dictionary/element/369' type='application/vnd.bard.cap+xml;type=element' />
+  </element>
+  <element elementId='368' readyForExtraction='Ready' elementStatus='Published'>
+    <label>software</label>
+    <link rel='edit' href='http://localhost:8080/bardDataExportSample/api/dictionary/element/368' type='application/vnd.bard.cap+xml;type=element' />
   </element>
   <element elementId='341' readyForExtraction='Ready' elementStatus='Published' unit='uM'>
     <label>IC50</label>

@@ -21,7 +21,7 @@ class AssayExportHelperServiceUnitSpec extends Specification {
     void setup() {
         grailsLinkGenerator = Mock()
         this.assayExportHelperService =
-            new AssayExportHelperService("xml", "xml", "xml", "xml")
+            new AssayExportHelperService(new AssayDefinitionMediaTypesDTO("xml", "xml", "xml", "xml","xml"))
         this.assayExportHelperService.grailsLinkGenerator = grailsLinkGenerator
         this.writer = new StringWriter()
         this.markupBuilder = new MarkupBuilder(writer)
@@ -108,8 +108,8 @@ class AssayExportHelperServiceUnitSpec extends Specification {
         XmlTestAssertions.assertResults(results, this.writer.toString())
         where:
         label                | dto                                                                    | results
-        "No Document Name"   | new AssayDocumentDTO(null, "Comments", new BigDecimal("6"))            | ASSAY_DOCUMENT_NO_DOCUMENT_NAME
-        "With Document Name" | new AssayDocumentDTO("Document Name", "Comments", new BigDecimal("6")) | ASSAY_DOCUMENT_WITH_DOCUMENT_NAME
+        "No Document Name"   | new AssayDocumentDTO(null, "Comments", new BigDecimal("6"), null)            | ASSAY_DOCUMENT_NO_DOCUMENT_NAME
+        "With Document Name" | new AssayDocumentDTO("Document Name", "Comments", new BigDecimal("6"), null) | ASSAY_DOCUMENT_WITH_DOCUMENT_NAME
 
     }
 
