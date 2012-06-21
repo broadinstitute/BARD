@@ -18,5 +18,6 @@ class ProjectExperiment {
     }
     static mapping = {
         id column: "PROJECT_EXPERIMENT_ID", generator: "assigned"
+        precedingExperiment column: "FOLLOWS_EXPERIMENT_ID"
     }
 }

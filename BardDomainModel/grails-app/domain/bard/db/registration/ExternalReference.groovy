@@ -12,7 +12,8 @@ class ExternalReference implements Serializable {
 	Date lastUpdated
 	String modifiedBy
 	ExternalSystem externalSystem
-
+    Experiment experiment
+    Project project
 
 	int hashCode() {
 		def builder = new HashCodeBuilder()
