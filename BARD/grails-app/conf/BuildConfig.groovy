@@ -42,15 +42,12 @@ grails.project.dependency.resolution = {
         build ":tomcat:$grailsVersion"
 
         // compile scope
-        compile ":database-migration:1.1"
-        compile(":db-reverse-engineer:0.4") {
-            excludes "hibernate-core"
-        }
         compile ":extjs4:4.1.0-RC.0"
         compile ":grails-ui:1.2.3"
         compile ":json-rest-api:1.0.11"
         compile ":webflow:2.0.0"
         compile ":yui:2.8.2.1"
+        compile ":bard-domain-model:0.1.4"
 
         // runtime scope
         runtime ":hibernate:$grailsVersion"
