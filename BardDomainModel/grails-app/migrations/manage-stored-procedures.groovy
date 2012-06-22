@@ -10,8 +10,8 @@ databaseChangeLog = {
 
         grailsChange {
             final List<String> sqlBlocks = []
-            File file = new File('grails-app/migrations/sql/create-ontology-procedures.sql')
-            for (String sqlBlock in file.text.split('/')) {
+            String text = resourceAccessor.getResourceAsStream('sql/create-ontology-procedures.sql').text
+            for (String sqlBlock in text.split('/')) {
                 sqlBlocks.add(sqlBlock)
             }
 
@@ -21,7 +21,7 @@ databaseChangeLog = {
                 }
             }
 
-            checkSum(sqlBlocks.join('/'))
+            checkSum(text)
         }
     }
 

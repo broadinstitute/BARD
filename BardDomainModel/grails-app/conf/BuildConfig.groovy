@@ -38,8 +38,8 @@ grails.project.dependency.resolution = {
         build(":release:2.0.2") {
             export = false
         }
-        build ":database-migration:1.1"{
-            export = false
+        build(":database-migration:1.1"){
+            export = true
         }
     }
 }
