@@ -47,7 +47,7 @@ grails.project.dependency.resolution = {
         compile ":json-rest-api:1.0.11"
         compile ":webflow:2.0.0"
         compile ":yui:2.8.2.1"
-        compile ":bard-domain-model:0.1.4"
+        compile ":bard-domain-model:0.1.5"
 
         // runtime scope
         runtime ":hibernate:$grailsVersion"
@@ -60,4 +60,8 @@ grails.project.dependency.resolution = {
 
         // provided  scope
     }
+    // if you comment out the dependency above, you can 
+    // include a plugin by specifying the location of the unpacked source
+    // handy if you making lots of changes
+    //grails.plugin.location.'bard-domain-model' = "../BardDomainModel"
 }
