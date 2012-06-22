@@ -4,6 +4,7 @@ import grails.test.mixin.TestFor
 import spock.lang.Specification
 import spock.lang.Unroll
 
+
 /**
  * Created with IntelliJ IDEA.
  * User: balexand
@@ -14,47 +15,252 @@ import spock.lang.Unroll
 @TestFor(Element)
 class ElementUnitSpec extends Specification {
 
-    def existingElement = [new Element(label: 'existingName')]
-    def validElement = new Element (label:'name',elementStatus:'Pending',readyForExtraction:'Ready')
+    ArrayList<Element> existingElement = [new Element(label: 'existingName')]
+    Element validElement = new Element (label:'name',elementStatus:'Pending',readyForExtraction:'Ready')
 
     @Unroll
-    void "test required non blank name"() {
+    void "test constraints on label"() {
         given:
         mockForConstraintsTests(Element, existingElement)
-        //129.times{longString += "a" }
 
         when:
-        def element = validElement
+        Element element = validElement
         element.label = name
         element.validate()
 
         then:
-        UnitSpecUtils.assertFieldValidationExpectations(element, 'name', valid, errorCode)
+        TestUtils.assertFieldValidationExpectations(element, 'label', valid, errorCode)
 
         where:
-        name           | valid | errorCode
-        "foo"          | true  | null
+        name                    | valid | errorCode
+        TestUtils.lString100    | true | null
+        TestUtils.lString500    | false | 'maxSize'
+        null                    | false | 'nullable'
+        "foo"                   | true  | null
 
     }
-}
 
-class UnitSpecUtils {
 
-    /**
-     * With the spock data driven constraints tests the then: block was looking the same over all the domain classes.
-     *
-     * So just moving this to a single spot.
-     * @param domainObject the Domain instance object under test
-     * @param fieldName the name of the field we're looking to test
-     * @param valid  true if the domainObject is expected to be pass validation, false otherwise
-     * @param errorCode  the expected code for the constraint that caused the domainObject to fail validation
-     */
-    static void assertFieldValidationExpectations(Object domainObject, fieldName, Boolean valid, String errorCode) {
-        //println("domainObject.errors: ${domainObject.hasErrors()}" )
-        //println(domainObject.dump())
-        assert domainObject.errors[fieldName] == errorCode
-        assert domainObject.hasErrors() == !valid
-        assert domainObject.errors.hasFieldErrors(fieldName) == !valid
+    @Unroll
+    void "test constraints on description"() {
+        given:
+        mockForConstraintsTests(Element, existingElement)
+
+        when:
+        Element element = validElement
+        element.description = name
+        element.validate()
+
+        then:
+        TestUtils.assertFieldValidationExpectations(element, 'description', valid, errorCode)
+
+        where:
+        name                     | valid | errorCode
+        null                     | true  | null
+        TestUtils.lString1000    | true  | null
+        TestUtils.lString1000+"a"| false | 'maxSize'
+        "foo"                    | true  | null
     }
+
+
+
+    @Unroll
+    void "test constraints on abbreviation"() {
+        given:
+        mockForConstraintsTests(Element, existingElement)
+
+        when:
+        Element element = validElement
+        element.abbreviation = name
+        element.validate()
+
+        then:
+        TestUtils.assertFieldValidationExpectations(element, 'abbreviation', valid, errorCode)
+
+        where:
+        name                                        | valid | errorCode
+        null                                        | true  | null
+        TestUtils.lString10+TestUtils.lString10     | true | null
+        TestUtils.lString10+TestUtils.lString10+"1" | false | 'maxSize'
+        "foo"                                       | true  | null
+    }
+
+    @Unroll
+    void "test constraints on synonyms"() {
+        given:
+        mockForConstraintsTests(Element, existingElement)
+
+        when:
+        Element element = validElement
+        element.synonyms = name
+        element.validate()
+
+        then:
+        TestUtils.assertFieldValidationExpectations(element, 'synonyms', valid, errorCode)
+
+        where:
+        name                     | valid | errorCode
+        null                     | true  | null
+        TestUtils.lString1000    | true  | null
+        TestUtils.lString1000+"a"| false | 'maxSize'
+        "foo"                    | true  | null
+    }
+
+
+    @Unroll
+    void "test constraints on externalURL"() {
+        given:
+        mockForConstraintsTests(Element, existingElement)
+
+        when:
+        Element element = validElement
+        element.externalURL = name
+        element.validate()
+
+        then:
+        TestUtils.assertFieldValidationExpectations(element, 'externalURL', valid, errorCode)
+
+        where:
+        name                     | valid | errorCode
+        null                     | true  | null
+        TestUtils.lString1000    | true  | null
+        TestUtils.lString1000+"a"| false | 'maxSize'
+        "foo"                    | true  | null
+    }
+
+    @Unroll
+    void "test constraints on dateCreated"() {
+        given:
+        mockForConstraintsTests(Element, existingElement)
+
+        when:
+        Element element = validElement
+        element.dateCreated = name
+        element.validate()
+
+        then:
+        TestUtils.assertFieldValidationExpectations(element, 'dateCreated', valid, errorCode)
+
+        where:
+        name                     | valid | errorCode
+        new Date()               | true  |  null
+        null                     | true  |  null     // why isn't this false
+    }
+
+
+    @Unroll
+    void "test constraints on lastUpdated"() {
+        given:
+        mockForConstraintsTests(Element, existingElement)
+
+        when:
+        Element element = validElement
+        element.lastUpdated = name
+        element.validate()
+
+        then:
+        TestUtils.assertFieldValidationExpectations(element, 'lastUpdated', valid, errorCode)
+
+        where:
+        name                     | valid | errorCode
+        new Date()               | true  |  null
+        null                     | true  |  null     // why isn't this false
+    }
+
+
+    @Unroll
+    void "test constraints on modifiedBy"() {
+        given:
+        mockForConstraintsTests(Element, existingElement)
+
+        when:
+        Element element = validElement
+        element.modifiedBy = name
+        element.validate()
+
+        then:
+        TestUtils.assertFieldValidationExpectations(element, 'modifiedBy', valid, errorCode)
+
+        where:
+        name                    | valid | errorCode
+        null                    | true  | null
+        TestUtils.lString40     | true  | null
+        TestUtils.lString40+"a" | false | 'maxSize'
+        "joe"                   | true  | null
+    }
+
+
+
+    private Unit createUnit(){
+        new Unit()
+    }
+
+    @Unroll
+    void "test constraints on unit"() {
+        given:
+        mockForConstraintsTests(Element, existingElement)
+
+
+        when:
+        Element element = validElement
+        element.unit = name
+        element.validate()
+
+        then:
+        TestUtils.assertFieldValidationExpectations(element, 'modifiedBy', valid, errorCode)
+
+        where:
+        name                    | valid | errorCode
+        null                    | true  | null
+        createUnit()     | true  | null
+    }
+
+
+    @Unroll
+    void "test constraints on elementStatus"() {
+        given:
+        mockForConstraintsTests(Element, existingElement)
+
+        when:
+        Element element = validElement
+        element.elementStatus = name
+        element.validate()
+
+        then:
+        TestUtils.assertFieldValidationExpectations(element, 'elementStatus', valid, errorCode)
+
+        where:
+        name                     | valid | errorCode
+        "Pending"                | true  | null
+        "Published"              | true  | null
+        "Deprecated"             | true  | null
+        "Retired"                | true  | null
+        "foo"                    | false  | 'inList'
+    }
+
+
+
+    @Unroll
+    void "test constraints on readyForExtraction"() {
+        given:
+        mockForConstraintsTests(Element, existingElement)
+
+        when:
+        Element element = validElement
+        element.readyForExtraction = name
+        element.validate()
+
+        then:
+        TestUtils.assertFieldValidationExpectations(element, 'readyForExtraction', valid, errorCode)
+
+        where:
+        name                     | valid | errorCode
+        "Ready"                | true  | null
+        "Started"              | true  | null
+        "Complete"             | true  | null
+        "foo"                    | false  | 'inList'
+    }
+
+
 
 }

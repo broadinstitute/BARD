@@ -58,67 +58,161 @@
     <favorites_list name="BardDomainModel" />
   </component>
   <component name="FileEditorManager">
-    <leaf>
-      <file leaf-file-name="Element.groovy" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/grails-app/domain/bard/db/dictionary/Element.groovy">
-          <provider editor-type-id="org.jetbrains.plugins.grails.perspectives.DomainClassesRelationsEditorProvider">
-            <state />
-          </provider>
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="45" column="26" selection-start="1018" selection-end="1018" vertical-scroll-proportion="-17.790697">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="ElementUnitSpec.groovy" pinned="false" current="true" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/test/unit/bard/db/dictionary/ElementUnitSpec.groovy">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="36" column="0" selection-start="983" selection-end="983" vertical-scroll-proportion="0.9093484">
-              <folding>
-                <element signature="e#28#60#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="DataSource.groovy" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/grails-app/conf/DataSource.groovy">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="49" column="10" selection-start="1491" selection-end="1491" vertical-scroll-proportion="0.0">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="BiologyDescriptorTests.groovy" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/test/unit/bard/db/dictionary/BiologyDescriptorTests.groovy">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="15" column="0" selection-start="312" selection-end="344" vertical-scroll-proportion="14.826087">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="BuildConfig.groovy" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/grails-app/conf/BuildConfig.groovy">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="40" column="45" selection-start="1481" selection-end="1481" vertical-scroll-proportion="-27.2">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="CachedRowSetImpl.class" pinned="false" current="false" current-in-tab="false">
-        <entry file="jar://C:/Program Files/Java/jdk1.6.0_23/jre/lib/rt.jar!/com/sun/rowset/CachedRowSetImpl.class">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="61" column="115" selection-start="2619" selection-end="2619" vertical-scroll-proportion="0.0">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-    </leaf>
+    <splitter split-orientation="horizontal" split-proportion="0.91298527">
+      <split-first>
+        <splitter split-orientation="horizontal" split-proportion="0.7347089">
+          <split-first>
+            <splitter split-orientation="horizontal" split-proportion="0.49898994">
+              <split-first>
+                <leaf>
+                  <file leaf-file-name="ElementUnitSpec.groovy" pinned="false" current="false" current-in-tab="false">
+                    <entry file="file://$PROJECT_DIR$/test/unit/bard/db/dictionary/ElementUnitSpec.groovy">
+                      <provider selected="true" editor-type-id="text-editor">
+                        <state line="196" column="0" selection-start="5494" selection-end="5550" vertical-scroll-proportion="-5.5833335">
+                          <folding>
+                            <element signature="e#28#60#0" expanded="true" />
+                          </folding>
+                        </state>
+                      </provider>
+                    </entry>
+                  </file>
+                  <file leaf-file-name="Element.groovy" pinned="false" current="false" current-in-tab="false">
+                    <entry file="file://$PROJECT_DIR$/grails-app/domain/bard/db/dictionary/Element.groovy">
+                      <provider editor-type-id="org.jetbrains.plugins.grails.perspectives.DomainClassesRelationsEditorProvider">
+                        <state />
+                      </provider>
+                      <provider selected="true" editor-type-id="text-editor">
+                        <state line="17" column="28" selection-start="315" selection-end="315" vertical-scroll-proportion="-5.9534883">
+                          <folding />
+                        </state>
+                      </provider>
+                    </entry>
+                  </file>
+                  <file leaf-file-name="ElementHierarchy.groovy" pinned="false" current="false" current-in-tab="false">
+                    <entry file="file://$PROJECT_DIR$/grails-app/domain/bard/db/dictionary/ElementHierarchy.groovy">
+                      <provider editor-type-id="org.jetbrains.plugins.grails.perspectives.DomainClassesRelationsEditorProvider">
+                        <state />
+                      </provider>
+                      <provider selected="true" editor-type-id="text-editor">
+                        <state line="2" column="15" selection-start="34" selection-end="50" vertical-scroll-proportion="-0.7906977">
+                          <folding />
+                        </state>
+                      </provider>
+                    </entry>
+                  </file>
+                  <file leaf-file-name="ElementHierarchyUnitSpec.groovy" pinned="false" current="true" current-in-tab="true">
+                    <entry file="file://$PROJECT_DIR$/test/unit/bard/db/dictionary/ElementHierarchyUnitSpec.groovy">
+                      <provider selected="true" editor-type-id="text-editor">
+                        <state line="104" column="68" selection-start="3080" selection-end="3080" vertical-scroll-proportion="0.33333334">
+                          <folding>
+                            <element signature="e#28#60#0" expanded="true" />
+                          </folding>
+                        </state>
+                      </provider>
+                    </entry>
+                  </file>
+                  <file leaf-file-name="DataSource.groovy" pinned="false" current="false" current-in-tab="false">
+                    <entry file="file://$PROJECT_DIR$/grails-app/conf/DataSource.groovy">
+                      <provider selected="true" editor-type-id="text-editor">
+                        <state line="49" column="10" selection-start="1491" selection-end="1491" vertical-scroll-proportion="0.0">
+                          <folding />
+                        </state>
+                      </provider>
+                    </entry>
+                  </file>
+                  <file leaf-file-name="BiologyDescriptorTests.groovy" pinned="false" current="false" current-in-tab="false">
+                    <entry file="file://$PROJECT_DIR$/test/unit/bard/db/dictionary/BiologyDescriptorTests.groovy">
+                      <provider selected="true" editor-type-id="text-editor">
+                        <state line="48" column="14" selection-start="1373" selection-end="1373" vertical-scroll-proportion="-16.652174">
+                          <folding />
+                        </state>
+                      </provider>
+                    </entry>
+                  </file>
+                  <file leaf-file-name="BiologyDescriptor.groovy" pinned="false" current="false" current-in-tab="false">
+                    <entry file="file://$PROJECT_DIR$/grails-app/domain/bard/db/dictionary/BiologyDescriptor.groovy">
+                      <provider editor-type-id="org.jetbrains.plugins.grails.perspectives.DomainClassesRelationsEditorProvider">
+                        <state />
+                      </provider>
+                      <provider selected="true" editor-type-id="text-editor">
+                        <state line="2" column="6" selection-start="34" selection-end="34" vertical-scroll-proportion="-0.7906977">
+                          <folding />
+                        </state>
+                      </provider>
+                    </entry>
+                  </file>
+                  <file leaf-file-name="BuildConfig.groovy" pinned="false" current="false" current-in-tab="false">
+                    <entry file="file://$PROJECT_DIR$/grails-app/conf/BuildConfig.groovy">
+                      <provider selected="true" editor-type-id="text-editor">
+                        <state line="16" column="15" selection-start="607" selection-end="609" vertical-scroll-proportion="0.0">
+                          <folding />
+                        </state>
+                      </provider>
+                    </entry>
+                  </file>
+                  <file leaf-file-name="Unit.groovy" pinned="false" current="false" current-in-tab="false">
+                    <entry file="file://$PROJECT_DIR$/grails-app/domain/bard/db/dictionary/Unit.groovy">
+                      <provider editor-type-id="org.jetbrains.plugins.grails.perspectives.DomainClassesRelationsEditorProvider">
+                        <state />
+                      </provider>
+                      <provider selected="true" editor-type-id="text-editor">
+                        <state line="0" column="26" selection-start="8" selection-end="26" vertical-scroll-proportion="-0.0">
+                          <folding />
+                        </state>
+                      </provider>
+                    </entry>
+                  </file>
+                </leaf>
+              </split-first>
+              <split-second>
+                <leaf>
+                  <file leaf-file-name="ElementHierarchy.groovy" pinned="false" current="false" current-in-tab="true">
+                    <entry file="file://$PROJECT_DIR$/grails-app/domain/bard/db/dictionary/ElementHierarchy.groovy">
+                      <provider editor-type-id="org.jetbrains.plugins.grails.perspectives.DomainClassesRelationsEditorProvider">
+                        <state />
+                      </provider>
+                      <provider selected="true" editor-type-id="text-editor">
+                        <state line="6" column="18" selection-start="116" selection-end="132" vertical-scroll-proportion="0.2246696">
+                          <folding />
+                        </state>
+                      </provider>
+                    </entry>
+                  </file>
+                </leaf>
+              </split-second>
+            </splitter>
+          </split-first>
+          <split-second>
+            <leaf>
+              <file leaf-file-name="ElementUnitSpec.groovy" pinned="false" current="false" current-in-tab="true">
+                <entry file="file://$PROJECT_DIR$/test/unit/bard/db/dictionary/ElementUnitSpec.groovy">
+                  <provider selected="true" editor-type-id="text-editor">
+                    <state line="190" column="5" selection-start="3749" selection-end="5494" vertical-scroll-proportion="0.82646424">
+                      <folding>
+                        <element signature="e#28#60#0" expanded="true" />
+                      </folding>
+                    </state>
+                  </provider>
+                </entry>
+              </file>
+            </leaf>
+          </split-second>
+        </splitter>
+      </split-first>
+      <split-second>
+        <leaf>
+          <file leaf-file-name="TestUtils.groovy" pinned="false" current="false" current-in-tab="true">
+            <entry file="file://$PROJECT_DIR$/test/unit/bard/db/dictionary/TestUtils.groovy">
+              <provider selected="true" editor-type-id="text-editor">
+                <state line="23" column="0" selection-start="920" selection-end="920" vertical-scroll-proportion="0.80785125">
+                  <folding />
+                </state>
+              </provider>
+            </entry>
+          </file>
+        </leaf>
+      </split-second>
+    </splitter>
   </component>
   <component name="FindManager">
     <FindUsagesManager>
@@ -140,16 +234,20 @@
         <option value="$PROJECT_DIR$/grails-app/conf/DataSource.groovy" />
         <option value="$PROJECT_DIR$/test/unit/bard/db/dictionary/ElementTestsSpec.groovy" />
         <option value="$PROJECT_DIR$/test/unit/bard/db/dictionary/ElementTests.groovy" />
+        <option value="$PROJECT_DIR$/test/unit/bard/db/dictionary/BiologyDescriptorTests.groovy" />
+        <option value="$PROJECT_DIR$/test/unit/bard/db/dictionary/SpockUtilities.groovy" />
+        <option value="$PROJECT_DIR$/test/unit/bard/db/dictionary/TestUtils.groovy" />
         <option value="$PROJECT_DIR$/grails-app/domain/bard/db/dictionary/Element.groovy" />
         <option value="$PROJECT_DIR$/test/unit/bard/db/dictionary/ElementUnitSpec.groovy" />
+        <option value="$PROJECT_DIR$/test/unit/bard/db/dictionary/ElementHierarchyUnitSpec.groovy" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="37" />
-    <option name="y" value="143" />
-    <option name="width" value="1714" />
-    <option name="height" value="789" />
+    <option name="x" value="33" />
+    <option name="y" value="288" />
+    <option name="width" value="2944" />
+    <option name="height" value="1054" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="false">
     <OptionsSetting value="true" id="Add" />
@@ -158,6 +256,8 @@
     <OptionsSetting value="true" id="Update" />
     <OptionsSetting value="true" id="Status" />
     <OptionsSetting value="true" id="Edit" />
+    <OptionsSetting value="true" id="Undo Check Out" />
+    <OptionsSetting value="true" id="Get Latest Version" />
     <ConfirmationsSetting value="0" id="Add" />
     <ConfirmationsSetting value="0" id="Remove" />
   </component>
@@ -177,16 +277,6 @@
       <sortByType />
     </navigator>
     <panes>
-      <pane id="PackagesPane">
-        <subPane>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="BardDomainModel" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageViewProjectNode" />
-            </PATH_ELEMENT>
-          </PATH>
-        </subPane>
-      </pane>
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -252,50 +342,6 @@
               <option name="myItemId" value="dictionary" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="ElementUnitSpec.groovy" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.ClassesTreeStructureProvider$PsiClassOwnerTreeNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="BardDomainModel" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="BardDomainModel" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="test" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="unit" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="db" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="dictionary" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="BardDomainModel" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="BardDomainModel" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="test" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
           </PATH>
           <PATH>
             <PATH_ELEMENT>
@@ -308,46 +354,6 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="grails-app" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="BardDomainModel" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="BardDomainModel" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="grails-app" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="migrations" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="BardDomainModel" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="BardDomainModel" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="grails-app" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="migrations" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="sql" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -370,36 +376,6 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="db" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="registration" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="BardDomainModel" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="BardDomainModel" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="grails-app" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="domain" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="db" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="experiment" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -463,6 +439,20 @@
           </PATH>
         </subPane>
       </pane>
+      <pane id="PackagesPane">
+        <subPane>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="BardDomainModel" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="BardDomainModel" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageViewModuleNode" />
+            </PATH_ELEMENT>
+          </PATH>
+        </subPane>
+      </pane>
       <pane id="Scope">
         <subPane subId="Project Files">
           <PATH>
@@ -489,11 +479,11 @@
     <property name="dynamic.classpath" value="false" />
     <property name="MemberChooser.copyJavadoc" value="false" />
   </component>
-  <component name="RunManager" selected="Grails.ElementUnitSpec">
-    <configuration default="false" name="ElementUnitSpec" type="GrailsRunConfigurationType" factoryName="Grails" temporary="true">
+  <component name="RunManager" selected="Grails.ElementHierarchyUnitSpec">
+    <configuration default="false" name="test constraints on abbreviation()" type="GrailsRunConfigurationType" factoryName="Grails" temporary="true">
       <module name="BardDomainModel" />
       <setting name="vmparams" value="" />
-      <setting name="cmdLine" value="test-app unit: bard.db.dictionary.ElementUnitSpec -echoOut" />
+      <setting name="cmdLine" value="test-app unit: bard.db.dictionary.ElementUnitSpec.test constraints on abbreviation -echoOut" />
       <setting name="depsClasspath" value="true" />
       <setting name="passParentEnv" value="true" />
       <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
@@ -510,10 +500,28 @@
         <option name="Make" enabled="false" />
       </method>
     </configuration>
-    <configuration default="false" name="ElementTests" type="GrailsRunConfigurationType" factoryName="Grails" temporary="true">
+    <configuration default="false" name="test constraints on dateCreated()" type="GrailsRunConfigurationType" factoryName="Grails" temporary="true">
       <module name="BardDomainModel" />
       <setting name="vmparams" value="" />
-      <setting name="cmdLine" value="test-app unit: bard.db.dictionary.Element -echoOut" />
+      <setting name="cmdLine" value="test-app unit: bard.db.dictionary.ElementUnitSpec.test constraints on dateCreated -echoOut" />
+      <setting name="depsClasspath" value="true" />
+      <setting name="passParentEnv" value="true" />
+      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
+      <setting name="launchBrowser" value="true" />
+      <RunnerSettings RunnerId="Debug">
+        <option name="DEBUG_PORT" value="" />
+        <option name="TRANSPORT" value="0" />
+        <option name="LOCAL" value="true" />
+      </RunnerSettings>
+      <ConfigurationWrapper RunnerId="Debug" />
+      <method>
+        <option name="Make" enabled="false" />
+      </method>
+    </configuration>
+    <configuration default="false" name="test constraints on unit()" type="GrailsRunConfigurationType" factoryName="Grails" temporary="true">
+      <module name="BardDomainModel" />
+      <setting name="vmparams" value="" />
+      <setting name="cmdLine" value="test-app unit: bard.db.dictionary.ElementUnitSpec.test constraints on unit -echoOut" />
       <setting name="depsClasspath" value="true" />
       <setting name="passParentEnv" value="true" />
       <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
@@ -530,10 +538,10 @@
         <option name="Make" enabled="false" />
       </method>
     </configuration>
-    <configuration default="false" name="test required non blank name()" type="GrailsRunConfigurationType" factoryName="Grails" temporary="true">
+    <configuration default="false" name="test constraints on parentElement()" type="GrailsRunConfigurationType" factoryName="Grails" temporary="true">
       <module name="BardDomainModel" />
       <setting name="vmparams" value="" />
-      <setting name="cmdLine" value="test-app unit: bard.db.dictionary.ElementUnitSpec.test required non blank name -echoOut" />
+      <setting name="cmdLine" value="test-app unit: bard.db.dictionary.ElementHierarchyUnitSpec.test constraints on parentElement -echoOut" />
       <setting name="depsClasspath" value="true" />
       <setting name="passParentEnv" value="true" />
       <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
@@ -639,10 +647,32 @@
         <option name="PhingTarget" enabled="false" />
       </method>
     </configuration>
-    <list size="3">
-      <item index="0" class="java.lang.String" itemvalue="Grails.ElementUnitSpec" />
-      <item index="1" class="java.lang.String" itemvalue="Grails.ElementTests" />
-      <item index="2" class="java.lang.String" itemvalue="Grails.test required non blank name()" />
+    <configuration default="false" name="ElementHierarchyUnitSpec" type="GrailsRunConfigurationType" factoryName="Grails">
+      <module name="BardDomainModel" />
+      <setting name="vmparams" value="" />
+      <setting name="cmdLine" value="test-app unit: bard.db.dictionary.ElementHierarchyUnitSpec -echoOut" />
+      <setting name="depsClasspath" value="true" />
+      <setting name="passParentEnv" value="true" />
+      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
+      <setting name="launchBrowser" value="true" />
+      <RunnerSettings RunnerId="Debug">
+        <option name="DEBUG_PORT" value="" />
+        <option name="TRANSPORT" value="0" />
+        <option name="LOCAL" value="true" />
+      </RunnerSettings>
+      <RunnerSettings RunnerId="Run" />
+      <ConfigurationWrapper RunnerId="Debug" />
+      <ConfigurationWrapper RunnerId="Run" />
+      <method>
+        <option name="Make" enabled="false" />
+      </method>
+    </configuration>
+    <list size="5">
+      <item index="0" class="java.lang.String" itemvalue="Grails.test constraints on abbreviation()" />
+      <item index="1" class="java.lang.String" itemvalue="Grails.test constraints on dateCreated()" />
+      <item index="2" class="java.lang.String" itemvalue="Grails.test constraints on unit()" />
+      <item index="3" class="java.lang.String" itemvalue="Grails.ElementHierarchyUnitSpec" />
+      <item index="4" class="java.lang.String" itemvalue="Grails.test constraints on parentElement()" />
     </list>
     <configuration name="&lt;template&gt;" type="WebApp" default="true" selected="false">
       <Host>localhost</Host>
@@ -659,21 +689,22 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="37" y="143" width="1714" height="789" extended-state="0" />
+    <frame x="33" y="288" width="2944" height="1054" extended-state="0" />
     <editor active="false" />
     <layout>
       <window_info id="Data Sources" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Persistence" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="JetGradle" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
+      <window_info id="Persistence" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3296582" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.48842874" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.4244763" sideWeight="0.99896085" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="IDEtalk Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
-      <window_info id="Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32744282" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Grails View" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3271028" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Grails View" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32965758" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="IDEtalk" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Web" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
@@ -681,13 +712,12 @@
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="true" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.2620773" sideWeight="0.6246106" order="0" side_tool="false" content_ui="combo" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.3753894" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.12777008" sideWeight="0.57552373" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.1940463" sideWeight="0.99677074" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Atlassian " active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
     </layout>
   </component>
@@ -797,30 +827,48 @@
         <state line="12" column="20" selection-start="243" selection-end="243" vertical-scroll-proportion="-4.0" />
       </provider>
     </entry>
-    <entry file="jar://C:/Program Files/Java/jdk1.6.0_23/jre/lib/rt.jar!/com/sun/rowset/CachedRowSetImpl.class">
+    <entry file="file://$PROJECT_DIR$/grails-app/conf/DataSource.groovy">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="61" column="115" selection-start="2619" selection-end="2619" vertical-scroll-proportion="0.0">
+        <state line="49" column="10" selection-start="1491" selection-end="1491" vertical-scroll-proportion="0.0" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/test/unit/bard/db/dictionary/BiologyDescriptorTests.groovy">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="48" column="14" selection-start="1373" selection-end="1373" vertical-scroll-proportion="-16.652174">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/grails-app/domain/bard/db/dictionary/BiologyDescriptor.groovy">
+      <provider editor-type-id="org.jetbrains.plugins.grails.perspectives.DomainClassesRelationsEditorProvider">
+        <state />
+      </provider>
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="2" column="6" selection-start="34" selection-end="34" vertical-scroll-proportion="-0.7906977">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/grails-app/conf/BuildConfig.groovy">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="40" column="45" selection-start="1481" selection-end="1481" vertical-scroll-proportion="-27.2">
+        <state line="16" column="15" selection-start="607" selection-end="609" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/grails-app/conf/DataSource.groovy">
+    <entry file="file://$PROJECT_DIR$/grails-app/domain/bard/db/dictionary/Unit.groovy">
+      <provider editor-type-id="org.jetbrains.plugins.grails.perspectives.DomainClassesRelationsEditorProvider">
+        <state />
+      </provider>
       <provider selected="true" editor-type-id="text-editor">
-        <state line="49" column="10" selection-start="1491" selection-end="1491" vertical-scroll-proportion="0.0">
+        <state line="0" column="26" selection-start="8" selection-end="26" vertical-scroll-proportion="-0.0">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/test/unit/bard/db/dictionary/BiologyDescriptorTests.groovy">
+    <entry file="file://$PROJECT_DIR$/test/unit/bard/db/dictionary/TestUtils.groovy">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="15" column="0" selection-start="312" selection-end="344" vertical-scroll-proportion="14.826087">
+        <state line="23" column="0" selection-start="920" selection-end="920" vertical-scroll-proportion="0.80785125">
           <folding />
         </state>
       </provider>
@@ -830,14 +878,33 @@
         <state />
       </provider>
       <provider selected="true" editor-type-id="text-editor">
-        <state line="45" column="26" selection-start="1018" selection-end="1018" vertical-scroll-proportion="-17.790697">
+        <state line="17" column="28" selection-start="315" selection-end="315" vertical-scroll-proportion="-5.9534883">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/grails-app/domain/bard/db/dictionary/ElementHierarchy.groovy">
+      <provider editor-type-id="org.jetbrains.plugins.grails.perspectives.DomainClassesRelationsEditorProvider">
+        <state />
+      </provider>
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="2" column="15" selection-start="34" selection-end="50" vertical-scroll-proportion="-0.7906977">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/test/unit/bard/db/dictionary/ElementUnitSpec.groovy">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="36" column="0" selection-start="983" selection-end="983" vertical-scroll-proportion="0.9093484">
+        <state line="196" column="0" selection-start="5494" selection-end="5550" vertical-scroll-proportion="-5.5833335">
+          <folding>
+            <element signature="e#28#60#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/test/unit/bard/db/dictionary/ElementHierarchyUnitSpec.groovy">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="104" column="68" selection-start="3080" selection-end="3080" vertical-scroll-proportion="0.33333334">
           <folding>
             <element signature="e#28#60#0" expanded="true" />
           </folding>
@@ -855,10 +922,10 @@
               <option name="pluginDependenciesCrc" value="1908611810" />
               <option name="properties">
                 <map>
-                  <entry key="grails.project.class.dir" value="target/classes" />
-                  <entry key="grails.project.test.class.dir" value="target/test-classes" />
-                  <entry key="grails.project.test.reports.dir" value="target/test-reports" />
+                  <entry key="grails.global.plugins.dir" value="C:\Users\balexand\.grails\2.0.4\global-plugins" />
+                  <entry key="grails.project.plugins.dir" value="target\plugins" />
                   <entry key="grails.project.work.dir" value="target" />
+                  <entry key="grails.work.dir" value="C:\Users\balexand\.grails\2.0.4" />
                 </map>
               </option>
             </GrailsSettings>
