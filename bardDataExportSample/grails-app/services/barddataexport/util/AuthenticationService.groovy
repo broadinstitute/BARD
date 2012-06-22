@@ -22,11 +22,12 @@ class AuthenticationService {
 //        InetAddressValidator inetAddressValidator = InetAddressValidator.getInstance()
 
         String apiKey = grailsApplication.config.barddataexport.externalapplication.apiKey.hashed
-        String requestApiKey = request.getHeader('APIKEY')
+        String apiKeyHeader = grailsApplication.config.barddataexport.externalapplication.apiKey.header
+        String requestApiKey = request.getHeader(apiKeyHeader)
         if (apiKey != requestApiKey)
             return false
 
-        List<String> ipAddressWhiteList = grailsApplication.config.barddataexport.externalapplication.ipAddress.whiteList as List<String>
+        List<String> ipAddressWhiteList = grailsApplication.config.barddataexport.externalapplication.ipAddress.whiteList.keySet() as List<String>
         String remoteIpAddress = request.getRemoteAddr()
 //        assert inetAddressValidator.isValid(remoteIpAddress)
 

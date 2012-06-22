@@ -14,6 +14,10 @@ import common.tests.XmlTestAssertions
 
 import common.tests.XmlTestSamples
 import grails.plugin.remotecontrol.RemoteControl
+import org.codehaus.groovy.grails.commons.GrailsApplication
+import org.codehaus.groovy.grails.web.context.ServletContextHolder
+import org.codehaus.groovy.grails.web.servlet.GrailsApplicationAttributes
+import spock.lang.Shared
 
 /**
  * Created with IntelliJ IDEA.
@@ -27,14 +31,31 @@ class DictionaryRestControllerFunctionalSpec extends Specification {
     RemoteControl remote = new RemoteControl()
     final String baseUrl = remote { ctx.grailsApplication.config.grails.serverURL } + "/api/dictionary"
     String dictionaryAcceptContentType = remote { ctx.grailsApplication.config.bard.data.export.dictionary.xml }
+    final String apiKeyHeader = remote { ctx.grailsApplication.config.barddataexport.externalapplication.apiKey.header }
+    final String apiKeyHashed = remote { ctx.grailsApplication.config.barddataexport.externalapplication.apiKey.hashed }
 
     def 'test GET dictionary success'() {
+        /**
+         * This is the code used in case the Remote Control feature is not used and both the functional test and Grails application
+         * run in the SAME jvm.
+         *
+         * When the Grails application runs in a separate jvm, the RemoteControl object is populated properly BUT the ServletContext is not.
+         *
+         * For conclusion: the test has to choose ONE of the two options: single jvm (with the configuration below) or remote-contorl.
+         *
+         * ServletContext servletContext = ServletContextHolder.getServletContext()
+         * ApplicationContext context = (ApplicationContext) servletContext.getAttribute(GrailsApplicationAttributes.APPLICATION_CONTEXT)
+         * GrailsApplication grailsApp = context.getBean("grailsApplication")
+
+         */
+
         given: "there is a service end point to get the dictionary"
         RESTClient http = new RESTClient(baseUrl)
         when: 'We send an HTTP GET request for the dictionary'
         def serverResponse = http.request(GET, XML) {
             headers.'Accept' = dictionaryAcceptContentType
-            headers.'APIKEY' = 'changeMe'
+//            headers."${grailsApp.config.barddataexport.externalapplication.apiKey.header}" = "${grailsApp.config.barddataexport.externalapplication.apiKey.hashed}"
+            headers."${apiKeyHeader}" = apiKeyHashed
         }
         then: 'We expect an XML representation of the entire dictionary'
         assert serverResponse.statusLine.statusCode == HttpServletResponse.SC_OK
@@ -49,7 +70,7 @@ class DictionaryRestControllerFunctionalSpec extends Specification {
         when: 'We send an HTTP GET request for a dictionary with the wrong mime type'
         def serverResponse = http.request(GET, XML) {
             headers.'Accept' = "some bogus"
-            headers.'APIKEY' = 'changeMe'
+            headers."${apiKeyHeader}" = apiKeyHashed
             response.failure = { resp ->
                 resp
             }
@@ -66,7 +87,7 @@ class DictionaryRestControllerFunctionalSpec extends Specification {
         when: 'We send an HTTP GET request, with the appropriate mime type, for a result type with a non-existing id of 1'
         def serverResponse = http.request(GET, XML) {
             headers.Accept = 'application/vnd.bard.cap+xml;type=resultType'
-            headers.'APIKEY' = 'changeMe'
+            headers."${apiKeyHeader}" = apiKeyHashed
             response.failure = { resp ->
                 resp
             }
@@ -83,7 +104,7 @@ class DictionaryRestControllerFunctionalSpec extends Specification {
         when: 'We send an HTTP GET request, with the wrong mime type'
         def serverResponse = http.request(GET, XML) {
             headers.Accept = 'application/vnd.bard.cap+xml;type=element'
-            headers.'APIKEY' = 'changeMe'
+            headers."${apiKeyHeader}" = apiKeyHashed
             response.failure = { resp ->
                 resp
             }
@@ -99,7 +120,7 @@ class DictionaryRestControllerFunctionalSpec extends Specification {
         when: 'We send an HTTP GET request for that result type with the appropriate mime type'
         def serverResponse = http.request(GET, XML) {
             headers.Accept = 'application/vnd.bard.cap+xml;type=resultType'
-            headers.'APIKEY' = 'changeMe'
+            headers."${apiKeyHeader}" = apiKeyHashed
         }
         then: 'We expect an XML representation of that Result Type'
         assert serverResponse.statusLine.statusCode == HttpServletResponse.SC_OK
@@ -116,7 +137,7 @@ class DictionaryRestControllerFunctionalSpec extends Specification {
         when: 'We send an HTTP GET request, with the appropriate mime type, for a stage with a non-existing id of 1'
         def serverResponse = http.request(GET, XML) {
             headers.Accept = 'application/vnd.bard.cap+xml;type=stage'
-            headers.'APIKEY' = 'changeMe'
+            headers."${apiKeyHeader}" = apiKeyHashed
             response.failure = { resp ->
                 resp
             }
@@ -133,7 +154,7 @@ class DictionaryRestControllerFunctionalSpec extends Specification {
         when: 'We send an HTTP GET request, with the wrong mime type'
         def serverResponse = http.request(GET, XML) {
             headers.Accept = 'application/vnd.bard.cap+xml;type=element'
-            headers.'APIKEY' = 'changeMe'
+            headers."${apiKeyHeader}" = apiKeyHashed
             response.failure = { resp ->
                 resp
             }
@@ -149,7 +170,7 @@ class DictionaryRestControllerFunctionalSpec extends Specification {
         when: 'We send an HTTP GET request for that Stage with the appropriate mime type'
         def serverResponse = http.request(GET, XML) {
             headers.Accept = 'application/vnd.bard.cap+xml;type=stage'
-            headers.'APIKEY' = 'changeMe'
+            headers."${apiKeyHeader}" = apiKeyHashed
         }
         then: 'We expect an XML representation of that Stage'
         assert serverResponse.statusLine.statusCode == HttpServletResponse.SC_OK
@@ -165,7 +186,7 @@ class DictionaryRestControllerFunctionalSpec extends Specification {
         when: 'We send an HTTP GET request, with the appropriate mime type, for an Element with a non-existing id of 1'
         def serverResponse = http.request(GET, XML) {
             headers.Accept = 'application/vnd.bard.cap+xml;type=element'
-            headers.'APIKEY' = 'changeMe'
+            headers."${apiKeyHeader}" = apiKeyHashed
             response.failure = { resp ->
                 resp
             }
@@ -182,7 +203,7 @@ class DictionaryRestControllerFunctionalSpec extends Specification {
         when: 'We send an HTTP GET request, with the wrong mime type'
         def serverResponse = http.request(GET, XML) {
             headers.Accept = 'application/vnd.bard.cap+xml;type=stage'
-            headers.'APIKEY' = 'changeMe'
+            headers."${apiKeyHeader}" = apiKeyHashed
             response.failure = { resp ->
                 resp
             }
@@ -198,13 +219,11 @@ class DictionaryRestControllerFunctionalSpec extends Specification {
         when: 'We send an HTTP GET request for that Element with the appropriate mime type'
         def serverResponse = http.request(GET, XML) {
             headers.Accept = 'application/vnd.bard.cap+xml;type=element'
-            headers.'APIKEY' = 'changeMe'
+            headers."${apiKeyHeader}" = apiKeyHashed
         }
         then: 'We expect an XML representation of that Element'
         assert serverResponse.statusLine.statusCode == HttpServletResponse.SC_OK
         final String responseData = serverResponse.data.readLines().join()
         XmlTestAssertions.assertResults(XmlTestSamples.ELEMENT, responseData)
     }
-
-
 }

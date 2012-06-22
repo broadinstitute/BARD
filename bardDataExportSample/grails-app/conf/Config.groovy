@@ -12,35 +12,6 @@ import grails.util.Environment
 //    grails.config.locations << "file:" + System.properties["${appName}.config.location"]
 // }
 
-if (appName) {
-    grails.config.locations = []
-
-    // If the developer specifies a directory for the external config files at the command line, use it.
-    // This will look like 'grails -DprimaryConfigDir=[directory name] [target]'
-    // Otherwise, look for these files in the user's home .grails/projectdb directory
-    // If there are no external config files in either location, don't override anything in this Config.groovy
-    String primaryOverrideDirName = System.properties.get('primaryConfigDir')
-    String secondaryOverrideDirName = "${userHome}/.grails/${appName}"
-
-    List<String> fileNames = ["${appName}-commons-config.groovy", "${appName}-${Environment.current.name}-config.groovy"]
-    fileNames.each {fileName ->
-        String primaryFullName = "${primaryOverrideDirName}/${fileName}"
-        String secondaryFullName = "${secondaryOverrideDirName}/${fileName}"
-
-        if (new File(primaryFullName).exists()) {
-            println "Overriding Config.groovy with $primaryFullName"
-            grails.config.locations << "file:$primaryFullName"
-        }
-        else if (new File(secondaryFullName).exists()) {
-            println "Overriding Config.groovy with $secondaryFullName"
-            grails.config.locations << "file:$secondaryFullName"
-        }
-        else {
-            println "Skipping Config.groovy overrides: $primaryFullName and $secondaryFullName not found"
-        }
-    }
-}
-
 //Number of experiments per page
 bard.experiments.max.per.page = 1000000
 
@@ -183,5 +154,43 @@ log4j = {
     info restApiFileAppender: "grails.app.services.barddataexport.util.AuthenticationService"
 }
 
+barddataexport.externalapplication.apiKey.header = 'APIKEY'
 barddataexport.externalapplication.apiKey.hashed = 'changeMe'
-barddataexport.externalapplication.ipAddress.whiteList = ['127.0.0.1', '0:0:0:0:0:0:0:1'] //localhost
+barddataexport.externalapplication.ipAddress.whiteList = ['127.0.0.1': 'local address - IPv4', //localhost
+        '0:0:0:0:0:0:0:1': 'local address - IPv6'] //localhost
+
+/**
+ * Loads external config files from the .grails subfolder in the user's home directory
+ * Home directory in Windows is usually: C:\Users\<username>\.grails
+ * In Unix, this is usually ~\.grails
+ *
+ * bardDataExportSample-commons-config.groovy is used to holed generic, non envrironment-specific configurations such as external api credentials, etc.
+ */
+if (appName) {
+    grails.config.locations = []
+
+    // If the developer specifies a directory for the external config files at the command line, use it.
+    // This will look like 'grails -DprimaryConfigDir=[directory name] [target]'
+    // Otherwise, look for these files in the user's home .grails/projectdb directory
+    // If there are no external config files in either location, don't override anything in this Config.groovy
+    String primaryOverrideDirName = System.properties.get('primaryConfigDir')
+    String secondaryOverrideDirName = "${userHome}/.grails/${appName}"
+
+    List<String> fileNames = ["${appName}-commons-config.groovy", "${appName}-${Environment.current.name}-config.groovy"]
+    fileNames.each {fileName ->
+        String primaryFullName = "${primaryOverrideDirName}/${fileName}"
+        String secondaryFullName = "${secondaryOverrideDirName}/${fileName}"
+
+        if (new File(primaryFullName).exists()) {
+            println "Overriding Config.groovy with $primaryFullName"
+            grails.config.locations << "file:$primaryFullName"
+        }
+        else if (new File(secondaryFullName).exists()) {
+            println "Overriding Config.groovy with $secondaryFullName"
+            grails.config.locations << "file:$secondaryFullName"
+        }
+        else {
+            println "Skipping Config.groovy overrides: $primaryFullName and $secondaryFullName not found"
+        }
+    }
+}
