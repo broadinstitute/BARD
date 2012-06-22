@@ -26,4 +26,13 @@ class TestUtils {
         assert domainObject.hasErrors() == !valid
         assert domainObject.errors.hasFieldErrors(fieldName) == !valid
     }
+
+  static String varlength( int x ) {
+      def a = new StringBuffer()
+      x.times{a.append("a")}
+      a.toString()
+  }
+
+
+
 }
