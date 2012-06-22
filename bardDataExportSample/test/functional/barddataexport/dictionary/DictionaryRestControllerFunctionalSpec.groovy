@@ -63,6 +63,23 @@ class DictionaryRestControllerFunctionalSpec extends Specification {
         XmlTestAssertions.assertResults(XmlTestSamples.DICTIONARY, responseData)
     }
 
+    def 'test GET unauthorized'() {
+
+        given: "there is a service end point to get the dictionary"
+        RESTClient http = new RESTClient(baseUrl)
+
+        when: 'We send an HTTP GET request for a dictionary without the API key'
+        def serverResponse = http.request(GET, XML) {
+            headers.'Accept' = "some bogus"
+//            headers."${apiKeyHeader}" = apiKeyHashed
+            response.failure = { resp ->
+                resp
+            }
+        }
+        then: 'We expect a status code of 401 (Unauthorized)'
+        assert serverResponse.statusLine.statusCode == HttpServletResponse.SC_UNAUTHORIZED
+    }
+
     def 'test GET dictionary fail with wrong Accept Header'() {
         given: "there is a service end point to get the dictionary"
         RESTClient http = new RESTClient(baseUrl)
