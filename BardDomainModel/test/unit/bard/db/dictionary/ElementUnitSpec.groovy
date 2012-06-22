@@ -18,6 +18,11 @@ class ElementUnitSpec extends Specification {
     ArrayList<Element> existingElement = [new Element(label: 'existingName')]
     Element validElement = new Element (label:'name',elementStatus:'Pending',readyForExtraction:'Ready')
 
+    private Unit createUnit(){
+        new Unit()
+    }
+
+
     @Unroll
     void "test constraints on label"() {
         given:
@@ -33,8 +38,8 @@ class ElementUnitSpec extends Specification {
 
         where:
         name                    | valid | errorCode
-        TestUtils.lString100    | true | null
-        TestUtils.lString500    | false | 'maxSize'
+        TestUtils.lString129    | true | null
+        TestUtils.lString129+"a"| false | 'maxSize'
         null                    | false | 'nullable'
         "foo"                   | true  | null
 
@@ -190,10 +195,6 @@ class ElementUnitSpec extends Specification {
     }
 
 
-
-    private Unit createUnit(){
-        new Unit()
-    }
 
     @Unroll
     void "test constraints on unit"() {
