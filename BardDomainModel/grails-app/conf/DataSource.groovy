@@ -45,6 +45,16 @@ environments {
             password = "guest"
         }
     }
+    ben {
+        dataSource {
+            //dbCreate = "validate"
+            url = "jdbc:oracle:thin:@barddb:1521:bardqa"
+            driverClassName = "oracle.jdbc.driver.OracleDriver"
+            dialect = bard.SequencePerTableOracleDialect
+            username = "balexand"
+            password = "bardqa "
+        }
+    }
     jacob {
         dataSource {
             url = "jdbc:oracle:thin:@barddb:1521:bardqa"

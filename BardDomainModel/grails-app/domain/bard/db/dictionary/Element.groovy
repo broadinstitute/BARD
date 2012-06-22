@@ -43,7 +43,7 @@ class Element {
 	}
 
 	static constraints = {
-		label maxSize: 128
+		label maxSize: 129
 		description nullable: true, maxSize: 1000
 		abbreviation nullable: true, maxSize: 20
 		//acronym nullable: true, maxSize: 20
