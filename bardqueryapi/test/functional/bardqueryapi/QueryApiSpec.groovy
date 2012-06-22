@@ -8,7 +8,12 @@ import static groovyx.net.http.ContentType.JSON
 import static groovyx.net.http.Method.GET
 import javax.servlet.http.HttpServletResponse
 import grails.plugin.remotecontrol.RemoteControl
+import org.junit.Ignore
 
+/*
+ * Superseded by BardWebInterfaceFunctionalSpec
+ */
+@Ignore
 @Unroll
 class QueryApiSpec extends Specification {
     RemoteControl remote = new RemoteControl()
