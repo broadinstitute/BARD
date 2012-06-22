@@ -26,6 +26,7 @@ class InstanceDescriptor {
 
 	static constraints = {
 		parent nullable: true
+        element nullable: false
 		label maxSize: 128
 		description nullable: true, maxSize: 1000
 		abbreviation nullable: true, maxSize: 20
