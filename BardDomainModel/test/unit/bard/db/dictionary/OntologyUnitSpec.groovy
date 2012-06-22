@@ -34,8 +34,8 @@ class OntologyUnitSpec  extends Specification {
         where:
         name                                        | valid | errorCode
         null                                        | false | 'nullable'
-        TestUtils.lString256+"1"                    | false | 'maxSize'
-        TestUtils.lString256                        | true  | null
+        TestUtils.varlength(257)                    | false | 'maxSize'
+        TestUtils.varlength(256)                    | true  | null
     }
 
 
