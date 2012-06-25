@@ -58,6 +58,8 @@
                         <xs:enumeration value="application/vnd.bard.cap+xml;type=stage"/>
                         <xs:enumeration value="application/vnd.bard.cap+xml;type=element"/>
                         <xs:enumeration value="application/vnd.bard.cap+xml;type=projects"/>
+                        <xs:enumeration value="application/vnd.bard.cap+xml;type=assayDoc"/>
+                        <xs:enumeration value="application/vnd.bard.cap+xml;type=assays"/>
                     </xs:restriction>
                 </xs:simpleType>
             </xs:attribute>

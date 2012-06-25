@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
+    <xs:annotation>
+        <xs:documentation>All of the individual schema needed to do a data export</xs:documentation>
+    </xs:annotation>
+    <xs:include schemaLocation="coreSchema.xsd"/>
+    <xs:element name="projects">
+        <xs:annotation>
+            <xs:documentation>The list of projects in the CAP.
+These can be filtered to a specific project depending on the query</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="link" maxOccurs="unbounded"/>
+            </xs:sequence>
+            <xs:attribute name="count" type="xs:integer" use="required"/>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="project">
+        <xs:annotation>
+            <xs:documentation>Models a project in the cap. Maps to
+application/vnd.bard.cap+xml;type=project</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="projectName">
+                    <xs:annotation>
+                        <xs:documentation>Name of current Project
+                        </xs:documentation>
+                    </xs:annotation>
+                    <xs:simpleType>
+                        <xs:restriction base="xs:string">
+                            <xs:maxLength value="256"/>
+                        </xs:restriction>
+                    </xs:simpleType>
+                </xs:element>
+                <xs:element minOccurs="0" ref="description">
+                    <xs:annotation>
+                        <xs:documentation>Description for current element
+                        </xs:documentation>
+                    </xs:annotation>
+                </xs:element>
+                <xs:element maxOccurs="unbounded" minOccurs="0" ref="link"/>
+            </xs:sequence>
+            <xs:attribute name="projectId" type="bardID" use="required"/>
+            <xs:attribute name="groupType" use="required">
+                <xs:simpleType>
+                    <xs:restriction base="xs:string">
+                        <xs:enumeration value="Project"/>
+                        <xs:enumeration value="Campaign"/>
+                        <xs:enumeration value="Panel"/>
+                        <xs:enumeration value="Study"/>
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:attribute>
+        </xs:complexType>
+    </xs:element>
+</xs:schema>

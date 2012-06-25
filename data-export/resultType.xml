@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <resultType xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
  xsi:noNamespaceSchemaLocation="BARDexportSchema.xsd"
- resultTypeId="260"
- parentResultTypeId="256"
+ resultTypeElement="result endpoint"
  resultTypeStatus="Published">
-    <resultTypeName>enzyme kinetic constant</resultTypeName>
-    <description>Describe kinetics of enzyme-catalyzed reactions. It includes the enzyme kinetic constants namely, Km and Vmax, which help to model the time course of disappearance of substrate and the production of product.</description>
+    <resultTypeName>RESULT_TYPE</resultTypeName>
+    <description>Singular root to ensure tree viewers work</description>
+    <link rel='related' href='http://localhost:8080/dataExport/api/dictionary/element/594' type='application/vnd.bard.cap+xml;type=element' />
 </resultType>
