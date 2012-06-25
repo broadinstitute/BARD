@@ -37,8 +37,8 @@ class OntologyItemUnitSpec  extends Specification {
 
         where:
         name                        | valid | errorCode
-        TestUtils.lString10         | true  | null
-        TestUtils.lString10+"a"     | false | 'maxSize'
+        TestUtils.createString(10)         | true  | null
+        TestUtils.createString(10)+"a"     | false | 'maxSize'
         null                        | true  | null
     }
 
@@ -99,8 +99,8 @@ class OntologyItemUnitSpec  extends Specification {
         where:
         name                    | valid | errorCode
         null                    | true  | null
-        TestUtils.lString40     | true  | null
-        TestUtils.lString40+"a" | false | 'maxSize'
+        TestUtils.createString(40)     | true  | null
+        TestUtils.createString(40)+"a" | false | 'maxSize'
         "joe"                   | true  | null
     }
 

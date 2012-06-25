@@ -12,20 +12,20 @@ import spock.lang.Unroll
  * To change this template use File | Settings | File Templates.
  */
 @TestFor(InstanceDescriptor)
-class ResultTypeUnitSpec  extends Specification {
+class ResultTypeUnitSpec extends Specification {
 
-    ArrayList<ResultType> existingResultType = [new ResultType(resultTypeName: "resultTypeName",element:createElement(),resultTypeStatus: "resultTypeStatus" )]
-    ResultType validResultType = new ResultType (resultTypeName: "resultTypeName",element:createElement(),resultTypeStatus: "resultTypeStatus")
+    ArrayList<ResultType> existingResultType = [new ResultType(resultTypeName: "resultTypeName", element: createElement(), resultTypeStatus: "resultTypeStatus")]
+    ResultType validResultType = new ResultType(resultTypeName: "resultTypeName", element: createElement(), resultTypeStatus: "resultTypeStatus")
 
-    private Element createElement(){
+    private Element createElement() {
         new Element(label: 'existingLabel')
     }
 
-    private ResultType createResultType(){
-        new ResultType(resultTypeName: "resultTypeName",element:createElement(),resultTypeStatus: "resultTypeStatus")
+    private ResultType createResultType() {
+        new ResultType(resultTypeName: "resultTypeName", element: createElement(), resultTypeStatus: "resultTypeStatus")
     }
 
-    private Unit createUnit(){
+    private Unit createUnit() {
         new Unit()
     }
 
@@ -47,9 +47,9 @@ class ResultTypeUnitSpec  extends Specification {
         TestUtils.assertFieldValidationExpectations(resultType, 'parent', valid, errorCode)
 
         where:
-        name                      | valid | errorCode
-        null                      | true  | null
-        createResultType()        | true  | null
+        name               | valid | errorCode
+        null               | true  | null
+        createResultType() | true  | null
     }
 
 
@@ -67,10 +67,10 @@ class ResultTypeUnitSpec  extends Specification {
         TestUtils.assertFieldValidationExpectations(resultType, 'resultTypeName', valid, errorCode)
 
         where:
-        name                      | valid | errorCode
-        null                      | false | 'nullable'
-        TestUtils.lString128+"a"  | false | 'maxSize'
-        TestUtils.lString128      | true  | null
+        name                              | valid | errorCode
+        null                              | false | 'nullable'
+        TestUtils.createString(128) + "a" | false | 'maxSize'
+        TestUtils.createString(128)       | true  | null
     }
 
 
@@ -89,9 +89,9 @@ class ResultTypeUnitSpec  extends Specification {
         TestUtils.assertFieldValidationExpectations(resultType, 'element', valid, errorCode)
 
         where:
-        name                      | valid | errorCode
-        null                      | false | 'nullable'
-        createElement()           | true  | null
+        name            | valid | errorCode
+        null            | false | 'nullable'
+        createElement() | true  | null
     }
 
 
@@ -111,11 +111,11 @@ class ResultTypeUnitSpec  extends Specification {
         TestUtils.assertFieldValidationExpectations(resultType, 'description', valid, errorCode)
 
         where:
-        name                     | valid | errorCode
-        null                     | true  | null
-        TestUtils.lString1000    | true  | null
-        TestUtils.lString1000+"a"| false | 'maxSize'
-        "foo"                    | true  | null
+        name                               | valid | errorCode
+        null                               | true  | null
+        TestUtils.createString(1000)       | true  | null
+        TestUtils.createString(1000) + "a" | false | 'maxSize'
+        "foo"                              | true  | null
     }
 
 
@@ -134,11 +134,11 @@ class ResultTypeUnitSpec  extends Specification {
         TestUtils.assertFieldValidationExpectations(resultType, 'abbreviation', valid, errorCode)
 
         where:
-        name                                        | valid | errorCode
-        null                                        | true  | null
-        TestUtils.lString10+TestUtils.lString10     | true | null
-        TestUtils.lString10+TestUtils.lString10+"1" | false | 'maxSize'
-        "foo"                                       | true  | null
+        name                             | valid | errorCode
+        null                             | true  | null
+        TestUtils.createString(20)       | true  | null
+        TestUtils.createString(20) + "1" | false | 'maxSize'
+        "foo"                            | true  | null
     }
 
     @Unroll
@@ -155,10 +155,10 @@ class ResultTypeUnitSpec  extends Specification {
         TestUtils.assertFieldValidationExpectations(resultType, 'synonyms', valid, errorCode)
 
         where:
-        name                     | valid | errorCode
-        null                     | true  | null
-        TestUtils.lString1000+"a"| false | 'maxSize'
-        TestUtils.lString1000    | true  | null
+        name                               | valid | errorCode
+        null                               | true  | null
+        TestUtils.createString(1000) + "a" | false | 'maxSize'
+        TestUtils.createString(1000)       | true  | null
     }
 
 

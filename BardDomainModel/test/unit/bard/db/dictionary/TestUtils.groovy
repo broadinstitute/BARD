@@ -8,16 +8,6 @@ package bard.db.dictionary
  * To change this template use File | Settings | File Templates.
  */
 class TestUtils {
-    final static String lString10 = "1234567890"
-    final static String lString19 =  lString10+"123456789"
-    final static String lString40 = lString10+lString10+lString10+lString10
-    final static String lString50 = lString40+lString10
-    final static String lString100 = lString50+lString50
-    final static String lString128 = lString100+lString10+lString10+"12345678"
-    final static String lString129 =  lString100+lString10+lString10+"123456789"
-    final static String lString256 =  lString128+lString128
-    final static String lString500 = lString100+lString100+lString100+lString100+lString100
-    final static String lString1000 = lString500+lString500
 
 
     static void assertFieldValidationExpectations(Object domainObject, fieldName, Boolean valid, String errorCode) {
@@ -27,12 +17,17 @@ class TestUtils {
         assert domainObject.errors.hasFieldErrors(fieldName) == !valid
     }
 
-  static String varlength( int x ) {
-      def a = new StringBuffer()
-      x.times{a.append("a")}
-      a.toString()
-  }
-
+    /**
+     * quick utility method to create strings of a given length
+     * @param length
+     * @return a string where size() == length
+     */
+    static String createString(int length) {
+        assert length >= 0
+        def a = new StringBuffer()
+        length.times {a.append("a")}
+        a.toString()
+    }
 
 
 }

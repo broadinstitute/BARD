@@ -34,8 +34,8 @@ class OntologyUnitSpec  extends Specification {
         where:
         name                                        | valid | errorCode
         null                                        | false | 'nullable'
-        TestUtils.varlength(257)                    | false | 'maxSize'
-        TestUtils.varlength(256)                    | true  | null
+        TestUtils.createString(257)                    | false | 'maxSize'
+        TestUtils.createString(256)                    | true  | null
     }
 
 
@@ -55,9 +55,8 @@ class OntologyUnitSpec  extends Specification {
         where:
         name                                        | valid | errorCode
         null                                        | true  | null
-        TestUtils.lString10+TestUtils.lString10     | true | null
-        TestUtils.lString10+TestUtils.lString10+"1" | false | 'maxSize'
-        TestUtils.lString10+TestUtils.lString10     | true | null
+        TestUtils.createString(20)     | true | null
+        TestUtils.createString(20)+"1" | false | 'maxSize'
     }
 
 
@@ -77,8 +76,8 @@ class OntologyUnitSpec  extends Specification {
         where:
         name                     | valid | errorCode
         null                     | true  | null
-        TestUtils.lString1000+"a"| false | 'maxSize'
-        TestUtils.lString1000    | true  | null
+        TestUtils.createString(1000)+"a"| false | 'maxSize'
+        TestUtils.createString(1000)    | true  | null
     }
 
 
@@ -138,8 +137,8 @@ class OntologyUnitSpec  extends Specification {
         where:
         name                    | valid | errorCode
         null                    | true  | null
-        TestUtils.lString40     | true  | null
-        TestUtils.lString40+"a" | false | 'maxSize'
+        TestUtils.createString(40)     | true  | null
+        TestUtils.createString(40)+"a" | false | 'maxSize'
         "joe"                   | true  | null
     }
 

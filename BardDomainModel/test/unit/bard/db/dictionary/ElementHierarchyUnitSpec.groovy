@@ -147,8 +147,8 @@ class ElementHierarchyUnitSpec extends Specification {
         where:
         name                    | valid | errorCode
         null                    | true  | null
-        TestUtils.lString40     | true  | null
-        TestUtils.lString40+"a" | false | 'maxSize'
+        TestUtils.createString(40)     | true  | null
+        TestUtils.createString(40)+"a" | false | 'maxSize'
         "joe"                   | true  | null
     }
 

@@ -4,7 +4,6 @@ import grails.test.mixin.TestFor
 import spock.lang.Specification
 import spock.lang.Unroll
 
-
 /**
  * Created with IntelliJ IDEA.
  * User: balexand
@@ -16,9 +15,9 @@ import spock.lang.Unroll
 class ElementUnitSpec extends Specification {
 
     ArrayList<Element> existingElement = [new Element(label: 'existingName')]
-    Element validElement = new Element (label:'name',elementStatus:'Pending',readyForExtraction:'Ready')
+    Element validElement = new Element(label: 'name', elementStatus: 'Pending', readyForExtraction: 'Ready')
 
-    private Unit createUnit(){
+    private Unit createUnit() {
         new Unit()
     }
 
@@ -37,11 +36,11 @@ class ElementUnitSpec extends Specification {
         TestUtils.assertFieldValidationExpectations(element, 'label', valid, errorCode)
 
         where:
-        name                    | valid | errorCode
-        TestUtils.lString129    | true | null
-        TestUtils.lString129+"a"| false | 'maxSize'
-        null                    | false | 'nullable'
-        "foo"                   | true  | null
+        name                       | valid | errorCode
+        TestUtils.createString(129)       | true  | null
+        TestUtils.createString(129) + "a" | false | 'maxSize'
+        null                       | false | 'nullable'
+        "foo"                      | true  | null
 
     }
 
@@ -60,11 +59,11 @@ class ElementUnitSpec extends Specification {
         TestUtils.assertFieldValidationExpectations(element, 'description', valid, errorCode)
 
         where:
-        name                     | valid | errorCode
-        null                     | true  | null
-        TestUtils.lString1000    | true  | null
-        TestUtils.lString1000+"a"| false | 'maxSize'
-        "foo"                    | true  | null
+        name                        | valid | errorCode
+        null                        | true  | null
+        TestUtils.createString(1000)       | true  | null
+        TestUtils.createString(1000) + "a" | false | 'maxSize'
+        "foo"                       | true  | null
     }
 
 
@@ -83,11 +82,11 @@ class ElementUnitSpec extends Specification {
         TestUtils.assertFieldValidationExpectations(element, 'abbreviation', valid, errorCode)
 
         where:
-        name                                        | valid | errorCode
-        null                                        | true  | null
-        TestUtils.lString10+TestUtils.lString10     | true | null
-        TestUtils.lString10+TestUtils.lString10+"1" | false | 'maxSize'
-        "foo"                                       | true  | null
+        name                                            | valid | errorCode
+        null                                            | true  | null
+        TestUtils.createString(20)        | true  | null
+        TestUtils.createString(20) + "1" | false | 'maxSize'
+        "foo"                                           | true  | null
     }
 
     @Unroll
@@ -104,11 +103,11 @@ class ElementUnitSpec extends Specification {
         TestUtils.assertFieldValidationExpectations(element, 'synonyms', valid, errorCode)
 
         where:
-        name                     | valid | errorCode
-        null                     | true  | null
-        TestUtils.lString1000    | true  | null
-        TestUtils.lString1000+"a"| false | 'maxSize'
-        "foo"                    | true  | null
+        name                        | valid | errorCode
+        null                        | true  | null
+        TestUtils.createString(1000)       | true  | null
+        TestUtils.createString(1000) + "a" | false | 'maxSize'
+        "foo"                       | true  | null
     }
 
 
@@ -126,11 +125,11 @@ class ElementUnitSpec extends Specification {
         TestUtils.assertFieldValidationExpectations(element, 'externalURL', valid, errorCode)
 
         where:
-        name                     | valid | errorCode
-        null                     | true  | null
-        TestUtils.lString1000    | true  | null
-        TestUtils.lString1000+"a"| false | 'maxSize'
-        "foo"                    | true  | null
+        name                        | valid | errorCode
+        null                        | true  | null
+        TestUtils.createString(1000)       | true  | null
+        TestUtils.createString(1000) + "a" | false | 'maxSize'
+        "foo"                       | true  | null
     }
 
     @Unroll
@@ -147,9 +146,9 @@ class ElementUnitSpec extends Specification {
         TestUtils.assertFieldValidationExpectations(element, 'dateCreated', valid, errorCode)
 
         where:
-        name                     | valid | errorCode
-        new Date()               | true  |  null
-        null                     | true  |  null     // why isn't this false
+        name       | valid | errorCode
+        new Date() | true  | null
+        null       | true  | null     // why isn't this false
     }
 
 
@@ -167,9 +166,9 @@ class ElementUnitSpec extends Specification {
         TestUtils.assertFieldValidationExpectations(element, 'lastUpdated', valid, errorCode)
 
         where:
-        name                     | valid | errorCode
-        new Date()               | true  |  null
-        null                     | true  |  null     // why isn't this false
+        name       | valid | errorCode
+        new Date() | true  | null
+        null       | true  | null     // why isn't this false
     }
 
 
@@ -187,11 +186,11 @@ class ElementUnitSpec extends Specification {
         TestUtils.assertFieldValidationExpectations(element, 'modifiedBy', valid, errorCode)
 
         where:
-        name                    | valid | errorCode
-        null                    | true  | null
-        TestUtils.lString40     | true  | null
-        TestUtils.lString40+"a" | false | 'maxSize'
-        "joe"                   | true  | null
+        name                             | valid | errorCode
+        null                             | true  | null
+        TestUtils.createString(40)       | true  | null
+        TestUtils.createString(40) + "a" | false | 'maxSize'
+        "joe"                            | true  | null
     }
 
 
@@ -211,9 +210,9 @@ class ElementUnitSpec extends Specification {
         TestUtils.assertFieldValidationExpectations(element, 'modifiedBy', valid, errorCode)
 
         where:
-        name                    | valid | errorCode
-        null                    | true  | null
-        createUnit()     | true  | null
+        name         | valid | errorCode
+        null         | true  | null
+        createUnit() | true  | null
     }
 
 
@@ -231,12 +230,12 @@ class ElementUnitSpec extends Specification {
         TestUtils.assertFieldValidationExpectations(element, 'elementStatus', valid, errorCode)
 
         where:
-        name                     | valid | errorCode
-        "Pending"                | true  | null
-        "Published"              | true  | null
-        "Deprecated"             | true  | null
-        "Retired"                | true  | null
-        "foo"                    | false  | 'inList'
+        name         | valid | errorCode
+        "Pending"    | true  | null
+        "Published"  | true  | null
+        "Deprecated" | true  | null
+        "Retired"    | true  | null
+        "foo"        | false | 'inList'
     }
 
 
@@ -255,13 +254,12 @@ class ElementUnitSpec extends Specification {
         TestUtils.assertFieldValidationExpectations(element, 'readyForExtraction', valid, errorCode)
 
         where:
-        name                     | valid | errorCode
-        "Ready"                | true  | null
-        "Started"              | true  | null
-        "Complete"             | true  | null
-        "foo"                    | false  | 'inList'
+        name       | valid | errorCode
+        "Ready"    | true  | null
+        "Started"  | true  | null
+        "Complete" | true  | null
+        "foo"      | false | 'inList'
     }
-
 
 
 }

@@ -90,8 +90,8 @@ class InstanceDescriptorUnitSpec  extends Specification {
         where:
         name                      | valid | errorCode
         null                      | false | 'nullable'
-        TestUtils.lString128+"a"  | false | 'maxSize'
-        TestUtils.lString128      | true  | null
+        TestUtils.createString(128)+"a"  | false | 'maxSize'
+        TestUtils.createString(128)      | true  | null
     }
 
 
@@ -112,8 +112,8 @@ class InstanceDescriptorUnitSpec  extends Specification {
         where:
         name                     | valid | errorCode
         null                     | true  | null
-        TestUtils.lString1000    | true  | null
-        TestUtils.lString1000+"a"| false | 'maxSize'
+        TestUtils.createString(1000)    | true  | null
+        TestUtils.createString(1000)+"a"| false | 'maxSize'
         "foo"                    | true  | null
     }
 
@@ -135,8 +135,8 @@ class InstanceDescriptorUnitSpec  extends Specification {
         where:
         name                                        | valid | errorCode
         null                                        | true  | null
-        TestUtils.lString10+TestUtils.lString10     | true | null
-        TestUtils.lString10+TestUtils.lString10+"1" | false | 'maxSize'
+        TestUtils.createString(20)     | true | null
+        TestUtils.createString(20) +"1" | false | 'maxSize'
         "foo"                                       | true  | null
     }
 
@@ -156,8 +156,8 @@ class InstanceDescriptorUnitSpec  extends Specification {
         where:
         name                     | valid | errorCode
         null                     | true  | null
-        TestUtils.lString1000    | true  | null
-        TestUtils.lString1000+"a"| false | 'maxSize'
+        TestUtils.createString(1000)    | true  | null
+        TestUtils.createString(1000)+"a"| false | 'maxSize'
         "foo"                    | true  | null
     }
 
@@ -177,8 +177,8 @@ class InstanceDescriptorUnitSpec  extends Specification {
         where:
         name                     | valid | errorCode
         null                     | true  | null
-        TestUtils.lString1000    | true  | null
-        TestUtils.lString1000+"a"| false | 'maxSize'
+        TestUtils.createString(1000)    | true  | null
+        TestUtils.createString(1000)+"a"| false | 'maxSize'
         "foo"                    | true  | null
     }
 
