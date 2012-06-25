@@ -15,6 +15,14 @@ class ProjectExperiment {
     String modifiedBy
 
     static constraints = {
+        project()
+        stage(nullable: true)
+        experiment()
+        precedingExperiment(nullable: true)
+        description(nullable: true)
+        dateCreated()
+        lastUpdated(nullable: true) // check on this with Simon, seems like it shouldn't be nullable
+        modifiedBy(nullable: true)  // check on this with Simon, seems like it shouldn't be nullable
     }
     static mapping = {
         id column: "PROJECT_EXPERIMENT_ID", generator: "assigned"
