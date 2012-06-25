@@ -26,6 +26,8 @@ bard.data.export.experiments.xml = 'application/vnd.bard.cap+xml;type=experiment
 bard.data.export.experiment.xml = 'application/vnd.bard.cap+xml;type=experiment'
 bard.data.export.results.xml = 'application/vnd.bard.cap+xml;type=results'
 bard.data.export.result.xml = 'application/vnd.bard.cap+xml;type=result'
+bard.data.export.projects.xml = 'application/vnd.bard.cap+xml;type=projects'
+bard.data.export.project.xml = 'application/vnd.bard.cap+xml;type=project'
 
 //assays
 bard.data.export.assays.xml = 'application/vnd.bard.cap+xml;type=assays'
@@ -44,14 +46,14 @@ grails.mime.use.accept.header = false
 grails.mime.types = [html: ['text/html', 'application/xhtml+xml'],
         xml: ['text/xml', 'application/xml',
                 "${bard.data.export.bardexport.xml}",
-                "${bard.data.export.data.experiments.xml}",
-                "${bard.data.export.data.experiment.xml}",
-                "${bard.data.export.data.results.xml}",
-                "${bard.data.export.data.result.xml}",
-                "${bard.data.export.cap.xml}",
-                "${bard.data.export.cap.projects.xml}",
-                "${bard.data.export.cap.project.xml}",
-                "${bard.data.export.cap.assay.xml}",
+                "${bard.data.export.experiments.xml}",
+                "${bard.data.export.experiment.xml}",
+                "${bard.data.export.results.xml}",
+                "${bard.data.export.result.xml}",
+                 "${bard.data.export.projects.xml}",
+                "${bard.data.export.project.xml}",
+                "${bard.data.export.assays.xml}",
+                "${bard.data.export.assay.xml}",
                 "${bard.data.export.dictionary.xml}",
                 "${bard.data.export.dictionary.resultType.xml}",
                 "${bard.data.export.dictionary.stage.xml}",

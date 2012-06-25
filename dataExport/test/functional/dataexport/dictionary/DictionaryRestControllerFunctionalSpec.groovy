@@ -2,7 +2,7 @@ package dataexport.dictionary
 
 import grails.converters.XML
 import groovyx.net.http.RESTClient
-import org.springframework.context.ApplicationContext
+//import org.springframework.context.ApplicationContext
 import spock.lang.Specification
 import spock.lang.Unroll
 
@@ -54,7 +54,6 @@ class DictionaryRestControllerFunctionalSpec extends Specification {
         when: 'We send an HTTP GET request for the dictionary'
         def serverResponse = http.request(GET, XML) {
             headers.'Accept' = dictionaryAcceptContentType
-//            headers."${grailsApp.config.dataexport.externalapplication.apiKey.header}" = "${grailsApp.config.dataexport.externalapplication.apiKey.hashed}"
             headers."${apiKeyHeader}" = apiKeyHashed
         }
         then: 'We expect an XML representation of the entire dictionary'
@@ -149,7 +148,7 @@ class DictionaryRestControllerFunctionalSpec extends Specification {
     void 'test Stage 404 not Found'() {
 
         given: "there is a service endpoint to get a stage"
-        final RESTClient http = new RESTClient("${baseUrl}/stage/1")
+        final RESTClient http = new RESTClient("${baseUrl}/stage/1000000")
 
         when: 'We send an HTTP GET request, with the appropriate mime type, for a stage with a non-existing id of 1'
         def serverResponse = http.request(GET, XML) {
@@ -166,7 +165,7 @@ class DictionaryRestControllerFunctionalSpec extends Specification {
     void 'test Stage 400 not bad request'() {
 
         given: "there is a service endpoint to get a stage"
-        final RESTClient http = new RESTClient("${baseUrl}/stage/1")
+        final RESTClient http = new RESTClient("${baseUrl}/stage/10000000")
 
         when: 'We send an HTTP GET request, with the wrong mime type'
         def serverResponse = http.request(GET, XML) {
@@ -198,7 +197,7 @@ class DictionaryRestControllerFunctionalSpec extends Specification {
     void 'test Element 404 not Found'() {
 
         given: "there is a service endpoint to get an Element"
-        final RESTClient http = new RESTClient("${baseUrl}/element/1")
+        final RESTClient http = new RESTClient("${baseUrl}/element/1000000")
 
         when: 'We send an HTTP GET request, with the appropriate mime type, for an Element with a non-existing id of 1'
         def serverResponse = http.request(GET, XML) {
@@ -215,7 +214,7 @@ class DictionaryRestControllerFunctionalSpec extends Specification {
     void 'test Element 400 not bad request'() {
 
         given: "there is a service endpoint to get an Element"
-        final RESTClient http = new RESTClient("${baseUrl}/element/1")
+        final RESTClient http = new RESTClient("${baseUrl}/element/1000000")
 
         when: 'We send an HTTP GET request, with the wrong mime type'
         def serverResponse = http.request(GET, XML) {

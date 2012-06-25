@@ -1,6 +1,9 @@
 package dataexport.dictionary
 
-
+import bard.db.dictionary.Element
+import bard.db.dictionary.ResultType
+import bard.db.dictionary.Stage
+import exceptions.NotFoundException
 import groovy.xml.MarkupBuilder
 
 /**
@@ -17,82 +20,73 @@ class DictionaryExportService {
      *  Generate a stage element given a stageId
      *  <stage></stage>
      * @param xml
-     * @param stageId
+     * @param elementId - This usually is called by the Rest controller.
+     * The Id supplied is the Id if an Element, not the id of the Stage
      */
-    public void generateStage(final MarkupBuilder xml, final BigDecimal stageId) {
-        this.dictionaryExportHelperService.generateStage(xml, stageId)
-        //validate stage
+    public void generateStage(final MarkupBuilder xml, final Long elementId) {
+        String errorMessage
+        final Element element = Element.get(elementId)
+        if (element) {
+            final Stage stage = Stage.findByElement(element)
+            if (stage) {
+                this.dictionaryExportHelperService.generateStage(xml, stage)
+                return
+            } else {
+                errorMessage = "Stage with element id ${elementId} does not exists"
+            }
+        } else {
+            errorMessage = "Element with id ${elementId} does not exists"
+        }
+        log.error(errorMessage)
+        throw new NotFoundException(errorMessage)
     }
 
     /**
      *  Generate a resultType given a resultTypeId
      *   <resultType></resultType>
      * @param xml
-     * @param resultTypeId
+     * @param elementId - This usually is called by the Rest controller.
+     * The Id supplied is the Id if an Element, not the id of the ResultType
      */
-    public void generateResultType(final MarkupBuilder xml, final BigDecimal resultTypeId) {
-        dictionaryExportHelperService.generateResultType(xml, resultTypeId)
-        //validate result type
+    public void generateResultType(final MarkupBuilder xml, final Long elementId) {
+
+        String errorMessage
+        final Element element = Element.get(elementId)
+        if (element) {
+            final ResultType resultType = ResultType.findByElement(element)
+            if (resultType) {
+                dictionaryExportHelperService.generateResultType(xml, resultType)
+                return
+            } else {
+                errorMessage = "Result Type with element id ${elementId} does not exists"
+            }
+        } else {
+            errorMessage = "Element with id ${elementId} does not exists"
+        }
+        log.error(errorMessage)
+        throw new NotFoundException(errorMessage)
     }
 
     /**
      * Generate an element from an elementId
      * <element elementId=""></element>
      * @param xml
-     * @param elementId
+     * @param elementId - This usually is called by the Rest controller.
      */
-    public void generateElementWithElementId(final MarkupBuilder xml, final BigDecimal elementId) {
-        dictionaryExportHelperService.generateElementWithElementId(xml, elementId)
-        //validate element
-    }
-    /**
-     *  Generate element from a dto
-     * @param xml
-     * @param elementDTO
-     *
-     * <element></element>
-     */
-    public void generateElement(final MarkupBuilder xml, final ElementDTO elementDTO) {
-        dictionaryExportHelperService.generateElement(xml, elementDTO)
-        //validate element
+    public void generateElement(final MarkupBuilder xml, final Long elementId) {
+        final Element element = Element.get(elementId)
+        if (element) {
+            dictionaryExportHelperService.generateElement(xml, element)
+            return
+        }
+        String errorMessage = "Element with id ${elementId} does not exists"
+        log.error(errorMessage)
+        throw new NotFoundException(errorMessage)
     }
     /**
      * Root node for generating the entire dictionary
      */
     public void generateDictionary(final MarkupBuilder xml) {
         dictionaryExportHelperService.generateDictionary(xml)
-        //validate dictionary
-    }
-}
-
-class ElementDTO {
-    final BigDecimal elementId
-    final String label
-    final String description
-    final String abbreviation
-    final String synonyms
-    final String externalUrl
-    final String unit
-    final String elementStatus
-    final String readyForExtraction
-
-    ElementDTO(final BigDecimal elementId,
-               final String label,
-               final String description,
-               final String abbreviation,
-               final String synonyms,
-               final String externalUrl,
-               final String unit,
-               final String elementStatus,
-               final String readyForExtraction) {
-        this.readyForExtraction = readyForExtraction
-        this.elementId = elementId
-        this.label = label
-        this.description = description
-        this.abbreviation = abbreviation
-        this.synonyms = synonyms
-        this.externalUrl = externalUrl
-        this.unit = unit
-        this.elementStatus = elementStatus
     }
 }

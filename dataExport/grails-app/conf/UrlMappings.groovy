@@ -21,18 +21,22 @@ class UrlMappings {
         name element: "/api/dictionary/element/$id"(controller: "dictionaryRest") {
             action = [GET: "element"]
         }
-//        name cap: "/api/cap"(controller: "capRest") {
-//            action = [GET: "cap"]
-//        }
         name assays: "/api/assays"(controller: "assayRest") {
             action = [GET: "assays"]
         }
 
-        name assay: "/api/assay/$id"(controller: "assayRest") {
+        name assay: "/api/assays/$id"(controller: "assayRest") {
             action = [GET: "assay", PATCH: "updateAssay"]
         }
         name assayDocument: "/api/assayDocument/$id"(controller: "assayRest") {
             action = [GET: "assayDocument"]
+        }
+        name projects: "/api/projects"(controller: "projectRest") {
+            action = [GET: "projects"]
+        }
+
+        name project: "/api/projects/$id"(controller: "projectRest") {
+            action = [GET: "project", PATCH: "updateProject"]
         }
 //        name experiments: "/api/data"(controller: "experimentRest") {
 //            action = [GET: "experiments"]

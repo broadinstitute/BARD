@@ -95,6 +95,7 @@
             </xs:restriction>
         </xs:simpleType>
     </xs:attribute>
+    <xs:element name="label" type="xs:string"/>
     <xs:annotation>
         <xs:documentation>All of the individual schema needed to do a data export</xs:documentation>
     </xs:annotation>
@@ -108,7 +109,7 @@
         </xs:annotation>
         <xs:complexType>
             <xs:sequence>
-                <xs:element name="label" type="xs:string"/>
+                <xs:element ref="label"/>
                 <xs:element minOccurs="0" ref="description"/>
                 <xs:element minOccurs="0" name="synonyms" type="xs:string"/>
                 <xs:element minOccurs="0" name="externalUrl" type="xs:anyURI"/>
@@ -150,10 +151,18 @@
                         </xs:documentation>
                     </xs:annotation>
                 </xs:element>
+                <xs:element minOccurs="0" ref="link"/>
             </xs:sequence>
-            <xs:attribute name="stageId" type="bardID" use="required"/>
-            <xs:attribute name="parentStageId" type="bardID" use="optional"/>
-            <xs:attribute name="stageStatus" type="xs:string" use="required"/>
+            <xs:attribute name="stageElement" type="xs:string" use="required">
+                <xs:annotation>
+                    <xs:documentation>The label on the element that this stage refers ti</xs:documentation>
+                </xs:annotation>
+            </xs:attribute>
+            <xs:attribute name="parentStageName" type="xs:string" use="optional">
+                <xs:annotation>
+                    <xs:documentation>The parent stage name of this stage</xs:documentation>
+                </xs:annotation>
+            </xs:attribute>
         </xs:complexType>
     </xs:element>
     <xs:element name="resultType">
@@ -167,9 +176,18 @@
                 <xs:element name="resultTypeName" type="xs:string"/>
                 <xs:element minOccurs="0" ref="description"/>
                 <xs:element minOccurs="0" name="synonyms" type="xs:string"/>
+                <xs:element minOccurs="0" ref="link"/>
             </xs:sequence>
-            <xs:attribute name="resultTypeId" type="bardID" use="required"> </xs:attribute>
-            <xs:attribute name="parentResultTypeId" type="bardID" use="optional"> </xs:attribute>
+            <xs:attribute name="resultTypeElement" type="xs:string" use="required">
+                <xs:annotation>
+                    <xs:documentation>The label on the element that this result type refers to</xs:documentation>
+                </xs:annotation>
+            </xs:attribute>
+            <xs:attribute name="parentResultType" type="xs:string" use="optional">
+                <xs:annotation>
+                    <xs:documentation>The label on the parent result type</xs:documentation>
+                </xs:annotation>
+            </xs:attribute>
             <xs:attribute name="abbreviation" type="xs:string"/>
             <xs:attribute name="baseUnit" type="xs:string">
                 <xs:annotation>
@@ -209,6 +227,32 @@
                             <xs:element name="elementHierarchy" maxOccurs="unbounded">
                                 <xs:complexType>
                                     <xs:sequence>
+                                        <xs:element name="childElement">
+                                            <xs:complexType>
+                                                <xs:sequence>
+                                                    <xs:element minOccurs="0" ref="link"/>
+                                                </xs:sequence>
+                                                <xs:attribute name="childElement" type="xs:string"
+                                                              use="required">
+                                                    <xs:annotation>
+                                                        <xs:documentation>The label on the element that this child points to</xs:documentation>
+                                                    </xs:annotation>
+                                                </xs:attribute>
+                                            </xs:complexType>
+                                        </xs:element>
+                                        <xs:element minOccurs="0" name="parentElement">
+                                            <xs:complexType>
+                                                <xs:sequence>
+                                                    <xs:element ref="link"/>
+                                                </xs:sequence>
+                                                <xs:attribute name="parentElement" type="xs:string"
+                                                              use="optional">
+                                                    <xs:annotation>
+                                                        <xs:documentation>The label on the element that this parent points to</xs:documentation>
+                                                    </xs:annotation>
+                                                </xs:attribute>
+                                            </xs:complexType>
+                                        </xs:element>
                                         <xs:element name="relationshipType">
                                             <xs:simpleType>
                                                 <xs:restriction base="xs:string">
@@ -221,10 +265,6 @@
                                             </xs:simpleType>
                                         </xs:element>
                                     </xs:sequence>
-                                    <xs:attribute name="parentElementId" type="bardID"
-                                                  use="optional"/>
-                                    <xs:attribute name="childElementId" type="bardID" use="required"
-                                            />
                                 </xs:complexType>
                             </xs:element>
                         </xs:sequence>
@@ -236,14 +276,6 @@
                             <xs:element maxOccurs="unbounded" ref="resultType"/>
                         </xs:sequence>
                     </xs:complexType>
-                    <xs:key name="ResultType_Key">
-                        <xs:selector xpath="resultType"/>
-                        <xs:field xpath="@resultTypeId"/>
-                    </xs:key>
-                    <xs:keyref name="ResultType_KeyRef" refer="ResultType_Key">
-                        <xs:selector xpath="resultType"/>
-                        <xs:field xpath="@parentResultTypeId"/>
-                    </xs:keyref>
                 </xs:element>
                 <xs:element minOccurs="0" name="stages">
                     <xs:complexType>
@@ -251,62 +283,14 @@
                             <xs:element maxOccurs="unbounded" ref="stage"/>
                         </xs:sequence>
                     </xs:complexType>
-                    <xs:key name="Stage_Key">
-                        <xs:selector xpath="stage"/>
-                        <xs:field xpath="@stageId"/>
-                    </xs:key>
-                    <xs:keyref name="Stage_KeyRef" refer="Stage_Key">
-                        <xs:selector xpath="stage"/>
-                        <xs:field xpath="@parentStageId"/>
-                    </xs:keyref>
                 </xs:element>
-                <xs:element minOccurs="0" name="biologyDescriptors">
+                <xs:element minOccurs="0" name="descriptors">
                     <xs:complexType>
                         <xs:sequence>
-                            <xs:element maxOccurs="unbounded" name="biologyDescriptor"
+                            <xs:element maxOccurs="unbounded" name="descriptor"
                                         type="descriptorType"/>
                         </xs:sequence>
                     </xs:complexType>
-                    <xs:key name="Biology_Descriptor_Key">
-                        <xs:selector xpath="biologyDescriptor"/>
-                        <xs:field xpath="@descriptorId"/>
-                    </xs:key>
-                    <xs:keyref name="Biology_Descriptor_KeyRef" refer="Biology_Descriptor_Key">
-                        <xs:selector xpath="biologyDescriptor"/>
-                        <xs:field xpath="@parentDescriptorId"/>
-                    </xs:keyref>
-                </xs:element>
-                <xs:element minOccurs="0" name="assayDescriptors">
-                    <xs:complexType>
-                        <xs:sequence>
-                            <xs:element maxOccurs="unbounded" name="assayDescriptor"
-                                        type="descriptorType"/>
-                        </xs:sequence>
-                    </xs:complexType>
-                    <xs:key name="Assay_Descriptor_Key">
-                        <xs:selector xpath="assayDescriptor"/>
-                        <xs:field xpath="@descriptorId"/>
-                    </xs:key>
-                    <xs:keyref name="Assay_Descriptor_KeyRef" refer="Assay_Descriptor_Key">
-                        <xs:selector xpath="assayDescriptor"/>
-                        <xs:field xpath="@parentDescriptorId"/>
-                    </xs:keyref>
-                </xs:element>
-                <xs:element minOccurs="0" name="instanceDescriptors">
-                    <xs:complexType>
-                        <xs:sequence>
-                            <xs:element maxOccurs="unbounded" name="instanceDescriptor"
-                                        type="descriptorType"/>
-                        </xs:sequence>
-                    </xs:complexType>
-                    <xs:key name="Instance_Descriptor_Key">
-                        <xs:selector xpath="instanceDescriptor"/>
-                        <xs:field xpath="@descriptorId"/>
-                    </xs:key>
-                    <xs:keyref name="Instance_Descriptor_KeyRef" refer="Instance_Descriptor_Key">
-                        <xs:selector xpath="instanceDescriptor"/>
-                        <xs:field xpath="@parentDescriptorId"/>
-                    </xs:keyref>
                 </xs:element>
                 <xs:element minOccurs="0" name="laboratories">
                     <xs:complexType>
@@ -316,23 +300,23 @@
                                     <xs:sequence>
                                         <xs:element name="laboratoryName" type="xs:string"/>
                                         <xs:element minOccurs="0" ref="description"/>
+                                        <xs:element minOccurs="0" ref="link"/>
                                     </xs:sequence>
-                                    <xs:attribute name="laboratoryId" type="bardID" use="required"/>
-                                    <xs:attribute name="parentLaboratoryId" type="bardID"/>
-                                    <xs:attribute name="laboratoryStatus" type="xs:string"
-                                                  use="required"/>
+                                    <xs:attribute name="laboratoryElement" type="xs:string"
+                                                  use="required">
+                                        <xs:annotation>
+                                            <xs:documentation>References an element label</xs:documentation>
+                                        </xs:annotation>
+                                    </xs:attribute>
+                                    <xs:attribute name="parentLaboratory" type="xs:string">
+                                        <xs:annotation>
+                                            <xs:documentation>Name of the parent laboratory</xs:documentation>
+                                        </xs:annotation>
+                                    </xs:attribute>
                                 </xs:complexType>
                             </xs:element>
                         </xs:sequence>
                     </xs:complexType>
-                    <xs:key name="Laboratory_Key">
-                        <xs:selector xpath="laboratory"/>
-                        <xs:field xpath="@laboratoryId"/>
-                    </xs:key>
-                    <xs:keyref name="Laboratory_KeyRef" refer="Laboratory_Key">
-                        <xs:selector xpath="laboratory"/>
-                        <xs:field xpath="@parentLaboratoryId"/>
-                    </xs:keyref>
                 </xs:element>
                 <xs:element minOccurs="0" name="units">
                     <xs:complexType>
@@ -341,22 +325,15 @@
                                 <xs:complexType>
                                     <xs:sequence>
                                         <xs:element minOccurs="0" ref="description"/>
+                                        <xs:element minOccurs="0" ref="link"/>
                                     </xs:sequence>
-                                    <xs:attribute name="unitId" type="bardID" use="required"/>
-                                    <xs:attribute name="parentUnitId" type="bardID" use="optional"/>
+                                    <xs:attribute name="unitElement" type="xs:string" use="required"/>
+                                    <xs:attribute name="parentUnit" type="xs:string" use="optional"/>
                                     <xs:attribute name="unit" type="xs:string" use="required"/>
                                 </xs:complexType>
                             </xs:element>
                         </xs:sequence>
                     </xs:complexType>
-                    <xs:key name="Unit_Key">
-                        <xs:selector xpath="units/unit"/>
-                        <xs:field xpath="@unitId"/>
-                    </xs:key>
-                    <xs:keyref name="Unit_KeyRef" refer="Unit_Key">
-                        <xs:selector xpath="units/unit"/>
-                        <xs:field xpath="@parentUnitId"/>
-                    </xs:keyref>
                 </xs:element>
                 <xs:element minOccurs="0" name="unitConversions">
                     <xs:complexType>
@@ -365,6 +342,7 @@
                                 <xs:complexType>
                                     <xs:sequence>
                                         <xs:element minOccurs="0" name="formula" type="xs:string"/>
+                                        <xs:element minOccurs="0" ref="link"/>
                                     </xs:sequence>
                                     <xs:attribute name="fromUnit" type="xs:string" use="required"/>
                                     <xs:attribute name="toUnit" type="xs:string" use="required"/>
@@ -384,21 +362,14 @@
             <xs:selector xpath="dictionary/elements/element"/>
             <xs:field xpath="@elementId"/>
         </xs:key>
-        <xs:keyref name="Element_KeyRef" refer="Element_Key">
-            <xs:annotation>
-                <xs:documentation>Any element that references an elementId</xs:documentation>
-            </xs:annotation>
+        <xs:key name="Element_Label_Key">
+            <xs:selector xpath="dictionary/elements/element"/>
+            <xs:field xpath="@label"/>
+        </xs:key>
+        <xs:keyref name="Element_LabelKeyRef" refer="Element_Label_Key">
             <xs:selector xpath="dictionary/elementHierarchies/elementHierarchy"/>
-            <xs:field xpath="@parentElementId"/>
+            <xs:field xpath="@parentElement | @childElement"/>
         </xs:keyref>
-        <xs:keyref name="Element_KeyChildRef" refer="Element_Key">
-            <xs:annotation>
-                <xs:documentation>Any element that references an elementId</xs:documentation>
-            </xs:annotation>
-            <xs:selector xpath="dictionary/elementHierarchies/elementHierarchy"/>
-            <xs:field xpath="@childElementId"/>
-        </xs:keyref>
-
         <xs:key name="Unit_Key_Name">
             <xs:annotation>
                 <xs:documentation>Signifies that the unit attribute on a Unit element must be unique throughout this document</xs:documentation>
@@ -418,8 +389,7 @@
                 <xs:documentation>The unit attribute on the descriptors (instance, ass and biology)
                     should reference a unit</xs:documentation>
             </xs:annotation>
-            <xs:selector
-                    xpath="assayDescriptiors/assayDescriptor|biologyDescriptiors/biologyDescriptor|instanceDescriptiors/instanceDescriptor"/>
+            <xs:selector xpath="descriptiors/descriptor"/>
             <xs:field xpath="@unit"/>
         </xs:keyref>
         <xs:keyref name="ResultType_BaseUnit_KeyNameRef" refer="Unit_Key_Name">
@@ -434,19 +404,76 @@
             <xs:selector xpath="unitConversions/unitConversion"/>
             <xs:field xpath="@toUnit"/>
         </xs:keyref>
+        <xs:keyref name="Element_LabelResultTypeKeyRef" refer="Element_Label_Key">
+            <xs:selector xpath="dictionary/elementHierarchies/elementHierarchy"/>
+            <xs:field xpath="@element"/>
+        </xs:keyref>
+        <xs:keyref name="Element_LabelStageElementKeyRef" refer="Element_Label_Key">
+            <xs:selector xpath="dictionary/stages/stage"/>
+            <xs:field xpath="@stageElement"/>
+        </xs:keyref>
+        <xs:keyref name="Element_LabKeyRef" refer="Element_Label_Key">
+            <xs:selector xpath="dictionary/laboratories/laboratory"/>
+            <xs:field xpath="@laboratoryElement"/>
+        </xs:keyref>
+        <xs:keyref name="Element_UnitLabelKeyRef" refer="Element_Label_Key">
+            <xs:selector xpath="dictionary/units/unit"/>
+            <xs:field xpath="@unitElement"/>
+        </xs:keyref>
+        <xs:key name="ResultType_Name_Key">
+            <xs:selector xpath="dictionary/resultTypes/resultType"/>
+            <xs:field xpath="resultTypeName"/>
+        </xs:key>
+        <xs:keyref name="ResultTypeName_KeyRef" refer="ResultType_Name_Key">
+            <xs:selector xpath="dictionary/resultTypes/resultType"/>
+            <xs:field xpath="@parentResultType"/>
+        </xs:keyref>
+        <xs:key name="Stage_Key">
+            <xs:selector xpath="dictionary/stages/stage"/>
+            <xs:field xpath="stageName"/>
+        </xs:key>
+        <xs:keyref name="Stage_KeyRef" refer="Stage_Key">
+            <xs:selector xpath="dictionary/stages/stage"/>
+            <xs:field xpath="@parentStageName"/>
+        </xs:keyref>
+        <xs:key name="Laboratory_Key">
+            <xs:selector xpath="dictionary/laboratories/laboratory"/>
+            <xs:field xpath="laboratoryName"/>
+        </xs:key>
+        <xs:keyref name="Laboratory_KeyRef" refer="Laboratory_Key">
+            <xs:selector xpath="dictionary/laboratories/laboratory"/>
+            <xs:field xpath="@parentLaboratory"/>
+        </xs:keyref>
+        <xs:key name="Unit_Key">
+            <xs:selector xpath="dictionary/units/unit"/>
+            <xs:field xpath="unit"/>
+        </xs:key>
+        <xs:keyref name="Unit_KeyRef" refer="Unit_Key">
+            <xs:selector xpath="dictionary/units/unit"/>
+            <xs:field xpath="@parentUnit"/>
+        </xs:keyref>
     </xs:element>
     <xs:complexType name="descriptorType">
         <xs:sequence>
             <xs:element name="elementStatus" type="xs:string"/>
-            <xs:element minOccurs="0" name="label" type="xs:string"/>
+            <xs:element name="label" type="xs:string"/>
             <xs:element minOccurs="0" ref="description"/>
             <xs:element minOccurs="0" name="synonyms" type="xs:string"/>
+            <xs:element minOccurs="0" ref="link"/>
         </xs:sequence>
-        <xs:attribute name="descriptorId" type="bardID" use="required"/>
-        <xs:attribute name="parentDescriptorId" type="bardID"/>
-        <xs:attribute name="elementId" type="bardID"/>
+        <xs:attribute name="parentDescriptorLabel" type="xs:string">
+            <xs:annotation>
+                <xs:documentation>The label on the parent descriptor</xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+        <xs:attribute name="descriptorElement" type="xs:string" use="required">
+            <xs:annotation>
+                <xs:documentation>The label on the element that this descriptor refers to.</xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
         <xs:attribute name="abbreviation" type="xs:string"/>
         <xs:attribute name="externalUrl" type="xs:string"/>
         <xs:attribute name="unit" type="xs:string"/>
+        <xs:attribute name="descriptor" type="xs:string" use="required"/>
     </xs:complexType>
 </xs:schema>

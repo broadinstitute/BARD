@@ -1,6 +1,7 @@
 package dataexport.cap.registration
 
 import dataexport.registration.AssayExportService
+import exceptions.NotFoundException
 import groovy.xml.MarkupBuilder
 import org.codehaus.groovy.grails.commons.GrailsApplication
 import org.codehaus.groovy.grails.web.servlet.HttpHeaders
@@ -58,15 +59,20 @@ class AssayRestController {
             response.contentType = mimeType
             //do validations
             if (mimeType == request.getHeader(HttpHeaders.ACCEPT) && params.id) {
-                final BigDecimal assayDocumentId = params.id as BigDecimal
                 final Writer writer = response.writer
                 final MarkupBuilder markupBuilder = new MarkupBuilder(writer)
-                this.assayExportService.generateAssayDocument(markupBuilder,assayDocumentId)
+                this.assayExportService.generateAssayDocument(markupBuilder, new Long(params.id))
                 return
             }
             response.status = HttpServletResponse.SC_BAD_REQUEST
             render ""
-        } catch (Exception ee) {
+        }
+        catch (NotFoundException notFoundException) {
+            log.error(notFoundException.message)
+            response.status = HttpServletResponse.SC_NOT_FOUND
+            render ""
+        }
+        catch (Exception ee) {
             response.status = HttpServletResponse.SC_INTERNAL_SERVER_ERROR
             log.error(ee.message)
             ee.printStackTrace()
@@ -82,25 +88,30 @@ class AssayRestController {
             response.contentType = mimeType
             //do validations
             if (mimeType == request.getHeader(HttpHeaders.ACCEPT) && params.id) {
-                final BigDecimal assayId = params.id as BigDecimal
                 final Writer writer = response.writer
                 final MarkupBuilder markupBuilder = new MarkupBuilder(writer)
-                this.assayExportService.generateAssay(markupBuilder, assayId)
+                this.assayExportService.generateAssay(markupBuilder, new Long(params.id))
                 return
             }
             response.status = HttpServletResponse.SC_BAD_REQUEST
             render ""
-        } catch (Exception ee) {
+        } catch (NotFoundException notFoundException) {
+            log.error(notFoundException.message)
+            response.status = HttpServletResponse.SC_NOT_FOUND
+            render ""
+        }
+        catch (Exception ee) {
             response.status = HttpServletResponse.SC_INTERNAL_SERVER_ERROR
             log.error(ee.message)
             ee.printStackTrace()
         }
     }
 
-    /**
-     * Update the status of the given element
-     */
+/**
+ * Update the status of the given element
+ */
     def updateAssay() {
         throw new RuntimeException("Not Yet Implemented")
     }
+
 }

@@ -3,16 +3,15 @@ package dataexport.dictionary
 import common.tests.XmlTestAssertions
 import common.tests.XmlTestSamples
 import grails.converters.XML
+import grails.plugin.remotecontrol.RemoteControl
 import groovyx.net.http.RESTClient
-import org.springframework.context.ApplicationContext
+import org.custommonkey.xmlunit.XMLAssert
 import spock.lang.Specification
 import spock.lang.Unroll
 
-import javax.servlet.ServletContext
 import javax.servlet.http.HttpServletResponse
 
 import static groovyx.net.http.Method.GET
-import grails.plugin.remotecontrol.RemoteControl
 
 /**
  * Created with IntelliJ IDEA.

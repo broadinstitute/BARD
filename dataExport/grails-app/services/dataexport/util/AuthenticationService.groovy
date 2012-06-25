@@ -24,8 +24,9 @@ class AuthenticationService {
         String apiKey = grailsApplication.config.dataexport.externalapplication.apiKey.hashed
         String apiKeyHeader = grailsApplication.config.dataexport.externalapplication.apiKey.header
         String requestApiKey = request.getHeader(apiKeyHeader)
-        if (apiKey != requestApiKey)
+        if (apiKey != requestApiKey) {
             return false
+        }
 
         List<String> ipAddressWhiteList = grailsApplication.config.dataexport.externalapplication.ipAddress.whiteList.keySet() as List<String>
         String remoteIpAddress = request.getRemoteAddr()

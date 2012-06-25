@@ -5,12 +5,12 @@ package dataexport.registration
   */
 class AssayDefinitionMediaTypesDTO {
     final String elementMediaType
-    final String resultTypeMediaType
     final String assayMediaType
     final String assayDocMediaType
     final String assaysMediaType
+    final String resultTypeMediaType
 
-    AssayDefinitionMediaTypesDTO( final String elementMediaType,final String resultTypeMediaType,
+    AssayDefinitionMediaTypesDTO( final String elementMediaType, String resultTypeMediaType,
                         final String assayMediaType,final String assayDocMediaType,
                         final String assaysMediaType){
         this.elementMediaType = elementMediaType

@@ -7,17 +7,13 @@ import javax.sql.DataSource
 class BootStrap {
     DataSource dataSource
     def init = { servletContext ->
-        //insert element
-        //insert descriptors, assay, biology, instance
-
         switch (Environment.current.name) {
             case "test":
-           case "development":
                 if (Element.list().isEmpty()) {
-                    //Create test data
                     final Sql sql = new Sql(dataSource)
                     insertTestDictionaryRecords(sql)
                     insertTestAssayDefRecords(sql)
+                    insertTestProjectRecords(sql)
                 }
                 break;
         }
@@ -25,30 +21,26 @@ class BootStrap {
     }
     def destroy = {
     }
-
+    def insertTestProjectRecords(final Sql sql) {
+        sql.execute "INSERT INTO PROJECT (project_id,project_name,group_type,description,ready_for_extraction,VERSION,date_created) VALUES (1,'Scripps special project #1','Project',NULL,'Ready',0,SYSDATE)"
+        sql.execute "INSERT INTO PROJECT (project_id,project_name,group_type,description,ready_for_extraction,VERSION,date_created) VALUES (2,'2126 - MLPCN Malaria - Inhibitor','Project',NULL,'Ready',0,SYSDATE)"
+    }
     def insertTestAssayDefRecords(final Sql sql) {
-        sql.execute "INSERT INTO ASSAY (ASSAY_ID,ASSAY_NAME,ASSAY_STATUS,ASSAY_VERSION,DESIGNED_BY,READY_FOR_EXTRACTION,VERSION, DATE_CREATED) values (1,'Dose-response biochemical assay of inhibitors of Rho kinase 2 (Rock2)','Active','1','Scripps Florida','Ready',0,SYSDATE)"
-        sql.execute "INSERT INTO ASSAY (ASSAY_ID,ASSAY_NAME,ASSAY_STATUS,ASSAY_VERSION,DESIGNED_BY,READY_FOR_EXTRACTION,VERSION, DATE_CREATED) values (2,'Some nice label','Active','1.1','Broad Institute','Complete',0,SYSDATE)"
-
-        //REM INSERTING into EXTERNAL_SYSTEM
-        sql.execute "INSERT INTO EXTERNAL_SYSTEM (EXTERNAL_SYSTEM_ID,SYSTEM_NAME,OWNER,SYSTEM_URL,VERSION,DATE_CREATED) values (1,'PubChem','NIH','http://pubchem.ncbi.nlm.nih.gov/assay/assay.cgi?',0,SYSDATE)"
-
-        sql.execute "INSERT INTO EXTERNAL_ASSAY (EXTERNAL_SYSTEM_ID,ASSAY_ID,EXT_ASSAY_ID,VERSION,DATE_CREATED) values (1,1,'aid=644',0,SYSDATE)"
+        sql.execute "INSERT INTO ASSAY (ASSAY_ID,ASSAY_NAME,ASSAY_STATUS,ASSAY_VERSION,DESIGNED_BY,READY_FOR_EXTRACTION,VERSION, DATE_CREATED, ASSAY_TYPE) values (1,'Dose-response biochemical assay of inhibitors of Rho kinase 2 (Rock2)','Active','1','Scripps Florida','Ready',0,SYSDATE,'Regular')"
+        sql.execute "INSERT INTO ASSAY (ASSAY_ID,ASSAY_NAME,ASSAY_STATUS,ASSAY_VERSION,DESIGNED_BY,READY_FOR_EXTRACTION,VERSION, DATE_CREATED, ASSAY_TYPE) values (2,'Some nice label','Active','1.1','Broad Institute','Complete',0,SYSDATE,'Regular')"
 
         //REM INSERTING into MEASURE_CONTEXT
         sql.execute "INSERT INTO MEASURE_CONTEXT (MEASURE_CONTEXT_ID,ASSAY_ID,CONTEXT_NAME,VERSION, DATE_CREATED) values (2,1,'Context for IC50',0, SYSDATE)"
 
-        //TODO: Not Yet Created REM INSERTING into MEASURE
-        //sql.execute "INSERT INTO MEASURE (MEASURE_ID,ASSAY_ID,MEASURE_CONTEXT_ID,RESULT_TYPE_ID,ENTRY_UNIT,VERSION,DATE_CREATED) values (2,1,2,341,'uM',0, SYSDATE)"
+        sql.execute "INSERT INTO MEASURE (MEASURE_ID,ASSAY_ID,MEASURE_CONTEXT_ID,RESULT_TYPE_ID,ENTRY_UNIT,VERSION,DATE_CREATED) values (2,1,2,341,'uM',0, SYSDATE)"
 
         // REM INSERTING into MEASURE_CONTEXT_ITEM
         sql.execute "INSERT INTO MEASURE_CONTEXT_ITEM (MEASURE_CONTEXT_ITEM_ID,GROUP_MEASURE_CONTEXT_ITEM_ID,ASSAY_ID,MEASURE_CONTEXT_ID,ATTRIBUTE_TYPE,ATTRIBUTE_ID,QUALIFIER,VALUE_ID,VALUE_DISPLAY,VALUE_NUM,VALUE_MIN,VALUE_MAX,VERSION,DATE_CREATED) values (34,null,1,2,'Fixed',368,null,372,'Assay Explorer ',null,null,null,0,SYSDATE)"
         sql.execute "INSERT INTO MEASURE_CONTEXT_ITEM (MEASURE_CONTEXT_ITEM_ID,GROUP_MEASURE_CONTEXT_ITEM_ID,ASSAY_ID,MEASURE_CONTEXT_ID,ATTRIBUTE_TYPE,ATTRIBUTE_ID,QUALIFIER,VALUE_ID,VALUE_DISPLAY,VALUE_NUM,VALUE_MIN,VALUE_MAX,VERSION,DATE_CREATED) values (35,34,1,2,'Fixed',370,null,null,'30',30,null,null,0,SYSDATE)"
         sql.execute "INSERT INTO MEASURE_CONTEXT_ITEM (MEASURE_CONTEXT_ITEM_ID,GROUP_MEASURE_CONTEXT_ITEM_ID,ASSAY_ID,MEASURE_CONTEXT_ID,ATTRIBUTE_TYPE,ATTRIBUTE_ID,QUALIFIER,VALUE_ID,VALUE_DISPLAY,VALUE_NUM,VALUE_MIN,VALUE_MAX,VERSION,DATE_CREATED) values (36,34,1,2,'Range',369,null,null,'0 - 4',null,0,4,0,SYSDATE)"
 
-        //TODO: Not yet created REM INSERTING into ASSAY_DOCUMENT
-//        sql.execute "INSERT INTO ASSAY_DOCUMENT (ASSAY_DOCUMENT_ID,ASSAY_ID,DOCUMENT_NAME,DOCUMENT_TYPE,DOCUMENT_CONTENT, DATE_CREATED) values (1,1,'Dose-response biochemical assay of inhibitors of Rho kinase 2 (Rock2)','Protocol','Some Document1',SYSDATE)"
-//        sql.execute "INSERT INTO ASSAY_DOCUMENT (ASSAY_DOCUMENT_ID,ASSAY_ID,DOCUMENT_NAME,DOCUMENT_TYPE,DOCUMENT_CONTENT, DATE_CREATED) values (2,1,'Dose-response biochemical assay of inhibitors of Rho kinase 2 (Rock2) pt 2','Protocol','Some Document2',SYSDATE)"
+        sql.execute "INSERT INTO ASSAY_DOCUMENT (ASSAY_DOCUMENT_ID,ASSAY_ID,DOCUMENT_NAME,DOCUMENT_TYPE,DOCUMENT_CONTENT, DATE_CREATED,VERSION) values (1,1,'Dose-response biochemical assay of inhibitors of Rho kinase 2 (Rock2)','Protocol','Some Document1',SYSDATE,0)"
+        sql.execute "INSERT INTO ASSAY_DOCUMENT (ASSAY_DOCUMENT_ID,ASSAY_ID,DOCUMENT_NAME,DOCUMENT_TYPE,DOCUMENT_CONTENT, DATE_CREATED,VERSION) values (2,1,'Dose-response biochemical assay of inhibitors of Rho kinase 2 (Rock2) pt 2','Protocol','Some Document2',SYSDATE,0)"
 
     }
 
@@ -73,9 +65,9 @@ class BootStrap {
 
         sql.execute "INSERT INTO RESULT_TYPE (NODE_ID,RESULT_TYPE_ID,RESULT_TYPE_NAME,BASE_UNIT,RESULT_TYPE_STATUS) values (2,341,'IC50','uM','Published')"
 
-        sql.execute "INSERT INTO STAGE (NODE_ID,STAGE_ID,STAGE, STAGE_STATUS) values (17,341,'construct variant assay','Published')"
+        sql.execute "INSERT INTO STAGE (NODE_ID,STAGE_ID,DESCRIPTION,STAGE) values (17,341,'Description','construct variant assay')"
 
-        sql.execute "INSERT INTO LABORATORY (NODE_ID,LABORATORY_ID,LABORATORY,DESCRIPTION, LABORATORY_STATUS) values (0,341,'LABORATORY','Singular root to ensure tree viewers work','Published')"
+        sql.execute "INSERT INTO LABORATORY (NODE_ID,LABORATORY_ID,LABORATORY,DESCRIPTION) values (0,341,'LABORATORY','Singular root to ensure tree viewers work')"
 
         sql.execute "INSERT INTO ASSAY_DESCRIPTOR (NODE_ID,ELEMENT_ID,ELEMENT_STATUS,LABEL,DESCRIPTION) values (287,386,'Published','assay phase','It refers to whether all the assay components are in solution or some are in solid phase, which determines their ability to scatter light.')"
         sql.execute "INSERT INTO BIOLOGY_DESCRIPTOR (NODE_ID,ELEMENT_ID,ELEMENT_STATUS,LABEL,DESCRIPTION) values (4,366,'Published','macromolecule description','A long name for a gene or protein from a trusted international source (e.g., Entrez, UniProt).')"

@@ -27,13 +27,11 @@ grails.project.dependency.resolution = {
     repositories {
         grailsPlugins()
         grailsHome()
-        grailsCentral()
-        mavenRepo "http://cbip-repo:8081/artifactory/repo"
-        grailsRepo "http://cbip-repo:8081/artifactory/svn.codehaus.org_grails-plugins"
-        grailsRepo "http://cbip-repo:8081/artifactory/svn.codehaus.org_grails_trunk_grails-plugins"
+        mavenRepo 'http://bard-repo:8081/artifactory/bard-virtual-repo'
+        grailsRepo('http://bard-repo:8081/artifactory/bard-virtual-repo', 'grailsCentral')
     }
     dependencies {
-        compile 'com.oracle:ojdbc6:11.2.0.2.0'
+        build 'com.oracle:ojdbc6:11.2.0.2.0'
         // specify dependencies here under either 'build', 'compile', 'runtime', 'test' or 'provided' scopes eg.
         test "org.spockframework:spock-core:0.6-groovy-1.8"
         test('org.codehaus.groovy.modules.http-builder:http-builder:0.5.2'){
@@ -46,17 +44,9 @@ grails.project.dependency.resolution = {
 
     plugins {
         runtime ":hibernate:$grailsVersion"
-        runtime ":jquery:1.7.1"
-        runtime ":resources:1.1.6"
-        runtime ":bard-domain-model:0.1.2"
+         runtime ":resources:1.1.6"
+        runtime ":bard-domain-model:0.1.5"
         compile ":functional-spock:0.6"
-
-
-        // Uncomment these (or add new ones) to enable additional resources capabilities
-        //runtime ":zipped-resources:1.0"
-        //runtime ":cached-resources:1.0"
-        //runtime ":yui-minify-resources:0.1.4"
-
         build ":tomcat:$grailsVersion"
         compile ":spock:0.6"
         compile ":remote-control:1.2"
