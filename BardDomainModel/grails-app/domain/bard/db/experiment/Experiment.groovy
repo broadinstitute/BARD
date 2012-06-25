@@ -14,7 +14,6 @@ class Experiment {
 	Date lastUpdated
 	String modifiedBy
 	String experimentStatus
-	Project project
 	Assay assay
 	String readyForExtraction = 'Ready'
 
@@ -22,7 +21,7 @@ class Experiment {
 			results: Result,
             projectExperiments:ProjectExperiment,
             externalReferences:ExternalReference]
-	static belongsTo = [Assay, Project]
+	static belongsTo = [Assay]
 
 	static mapping = {
 		id column: "Experiment_ID", generator: "assigned"

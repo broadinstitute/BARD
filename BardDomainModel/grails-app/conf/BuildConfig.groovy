@@ -38,19 +38,24 @@ grails.project.dependency.resolution = {
         build(":release:2.0.2") {
             export = false
         }
-        build ":database-migration:1.1"
+        compile(":database-migration:1.1"){
+            export = true
+        }
     }
 }
 
 grails.project.repos.default = "releases"
 
 grails.project.repos.releases.url = "http://bard-repo.broadinstitute.org:8081/artifactory/plugins-release-local"
-// TODO externalize these
-grails.project.repos.releases.username = "changeme"
-// TODO document artifactory encrypted password howto
-grails.project.repos.releases.password = "changeme"
+
+// create a ~/.grails/settings.groovy file with these
+// login to bard-repo:8443, click on your profile and get the unescaped encrypted password from artifactory
+// use that encrypted password in the settings.groovy file
+//
+// grails.project.repos.releases.username = "changeme"
+// grails.project.repos.releases.password = "changeme"
 
 grails.project.repos.snapshots.url = "http://bard-repo.broadinstitute.org:8081/artifactory/plugins-snapshot-local"
-grails.project.repos.snapshots.username = "changeme"
-grails.project.repos.snapshots.password = "changeme"
+//grails.project.repos.snapshots.username = "changeme"
+//grails.project.repos.snapshots.password = "changeme"
 

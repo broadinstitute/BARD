@@ -48,6 +48,13 @@ class BiologyDescriptorTests extends GrailsUnitTestCase {
         assertFalse "Missing elementStatus should make biologyDescriptor invalid", biologyDescriptor.validate()
         assertEquals "nullable", biologyDescriptor.errors.elementStatus
     }
+    void testInvalidConstraints3() {
+        mockForConstraintsTests( BiologyDescriptor )
+
+        biologyDescriptor.abbreviation = "ddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd"
+        assertFalse "Missing elementStatus should make biologyDescriptor invalid", biologyDescriptor.validate()
+        assertEquals "maxSize", biologyDescriptor.errors.abbreviation
+    }
 
     void testInvalidConstraints2() {
         mockForConstraintsTests( BiologyDescriptor )

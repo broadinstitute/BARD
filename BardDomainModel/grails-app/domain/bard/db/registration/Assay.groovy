@@ -19,7 +19,6 @@ class Assay {
 
 
 	static hasMany = [experiments: Experiment,
-			externalAssays: ExternalReference,
 			measureContextItems: MeasureContextItem,
 			measures : Measure,
 			measureContexts: MeasureContext,

@@ -21,7 +21,6 @@ class ExperimentTests {
 
         experiment = new Experiment(experimentName: "Test", experimentStatus: "Approved", readyForExtraction: "Complete")
         experiment.setAssay(new Assay())
-        experiment.setProject(new Project())
     }
 
     void testValidConstraints() {

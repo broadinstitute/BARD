@@ -39,7 +39,7 @@ environments {
 	}
 	ddurkin {
 		dataSource {
-			dbCreate = 'validate'
+		//	dbCreate = 'validate'
 			url = "jdbc:oracle:thin:@barddb:1521:bardqa"
 			driverClassName = "oracle.jdbc.driver.OracleDriver"
 			dialect = bard.SequencePerTableOracleDialect

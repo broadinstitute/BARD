@@ -1,16 +1,24 @@
+import grails.plugin.databasemigration.MigrationUtils
+import liquibase.resource.FileSystemResourceAccessor
+import org.codehaus.groovy.grails.plugins.GrailsPluginUtils
+
 class BardDomainModelGrailsPlugin {
 
     String groupId = 'org.grails.plugins'
 
     // the plugin version
-    def version = "0.1.3"
+    def version = "0.1.5"
     // the version or versions of Grails the plugin is designed for
     def grailsVersion = "2.0 > *"
     // the other plugins this plugin depends on
     def dependsOn = [:]
+
+    // since we want to override the migrationResourceAccessor configured by the database-migraiton plugin
+    // asked to be loaded after that plugin
+    def loadAfter = ['datbase-migration']
     // resources that are excluded from plugin packaging
     def pluginExcludes = [
-        "grails-app/views/error.gsp"
+        "grails-app/views/error.gsp",
     ]
 
     // TODO Fill in these fields
@@ -46,7 +54,17 @@ Provide domain objects for any objects wishing to directly access the Bard datab
     }
 
     def doWithSpring = {
-        // TODO Implement runtime spring config (optional)
+        /**
+         *  overriding the configuration of the migrationResourceAccessor so it can file the
+         *  changelog in this plugin instead of the parent application.
+         *
+         *  based on the initialization that happens in the DatabaseMigrationGrailsPlugin.groovy
+         */
+        File bardDomainModelPluginDir = GrailsPluginUtils.getPluginDirForName('bard-domain-model').getFile()
+        //println(bardDomainModelPluginDir.path)
+        String changelogLocationPath = new File(bardDomainModelPluginDir, MigrationUtils.changelogLocation).path
+        //println(changelogLocationPath)
+        migrationResourceAccessor(FileSystemResourceAccessor, changelogLocationPath)
     }
 
     def doWithDynamicMethods = { ctx ->
