@@ -56,7 +56,6 @@ class ProjectRestControllerFunctionalSpec extends Specification {
         then: 'We expect an XML representation of the projects'
         assert serverResponse.statusLine.statusCode == HttpServletResponse.SC_OK
         final String responseData = serverResponse.data.readLines().join()
-
         XmlTestAssertions.assertResults(XmlTestSamples.PROJECTS_FROM_SERVER, responseData)
     }
 

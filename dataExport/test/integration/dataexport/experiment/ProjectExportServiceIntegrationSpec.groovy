@@ -63,7 +63,7 @@ class ProjectExportServiceIntegrationSpec extends IntegrationSpec {
         then: "An XML is generated that conforms to the expected XML"
         XmlTestAssertions.assertResultsWithOverrideAttributes(XmlTestSamples.PROJECTS, this.writer.toString())
         XMLAssert.assertXpathEvaluatesTo("2", "//projects/@count", this.writer.toString());
-        XMLAssert.assertXpathEvaluatesTo("related", "//link/@rel", this.writer.toString());
+        XMLAssert.assertXpathEvaluatesTo("edit", "//link/@rel", this.writer.toString());
         XMLAssert.assertXpathEvaluatesTo("application/vnd.bard.cap+xml;type=project", "//link/@type", this.writer.toString());
         XMLAssert.assertXpathEvaluatesTo("http://localhost:8080/dataExport/api/projects/1", "//link/@href", this.writer.toString());
 

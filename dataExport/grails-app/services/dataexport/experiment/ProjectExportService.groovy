@@ -63,10 +63,7 @@ class ProjectExportService {
         final int numberOfProjects = projects.size()
         markupBuilder.projects(count: numberOfProjects) {
             for (Project project : projects) {
-                final String projectHref = grailsLinkGenerator.link(mapping: 'project', absolute: true, params: [id: project.id]).toString()
-                link(rel: 'related', title: "${project.projectName}", type: "${this.projectMediaType}",
-                        href: projectHref) {
-                }
+               generateProject(markupBuilder,project)
             }
         }
     }

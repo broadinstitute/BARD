@@ -28,7 +28,7 @@ class AssayRestController {
      * Fetch assays with readyForExtraction of ready
      * @return
      */
-    def assays() {
+    void assays() {
         try {
             final String mimeType = grailsApplication.config.bard.data.export.assays.xml
             response.contentType = mimeType
@@ -45,7 +45,9 @@ class AssayRestController {
             render ""
         } catch (Exception ee) {
             response.status = HttpServletResponse.SC_INTERNAL_SERVER_ERROR
-            log.error(ee.message)
+            log.error(ee.message,ee)
+            //clean out groovy grails boiler plate stuff
+            //e message body
             ee.printStackTrace()
         }
     }
@@ -53,7 +55,7 @@ class AssayRestController {
      * Get an assay with the given id
      * @return
      */
-    def assayDocument() {
+    void assayDocument() {
         try {
             final String mimeType = grailsApplication.config.bard.data.export.assay.doc.xml
             response.contentType = mimeType
@@ -82,7 +84,7 @@ class AssayRestController {
      * Get an assay with the given id
      * @return
      */
-    def assay() {
+    void assay() {
         try {
             final String mimeType = grailsApplication.config.bard.data.export.assay.xml
             response.contentType = mimeType
@@ -110,7 +112,7 @@ class AssayRestController {
 /**
  * Update the status of the given element
  */
-    def updateAssay() {
+    void updateAssay() {
         throw new RuntimeException("Not Yet Implemented")
     }
 

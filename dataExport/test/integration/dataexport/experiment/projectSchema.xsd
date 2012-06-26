@@ -111,7 +111,7 @@
         </xs:annotation>
         <xs:complexType>
             <xs:sequence>
-                <xs:element ref="link" maxOccurs="unbounded"/>
+                <xs:element ref="project" maxOccurs="unbounded"/>
             </xs:sequence>
             <xs:attribute name="count" type="xs:integer" use="required"/>
         </xs:complexType>

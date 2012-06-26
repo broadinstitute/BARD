@@ -23,7 +23,7 @@ class RootRestController {
     def index() {
         return response.sendError(HttpServletResponse.SC_METHOD_NOT_ALLOWED)
     }
-    def api() {
+    void api() {
         try {
             final String mimeType = grailsApplication.config.bard.data.export.bardexport.xml
             response.contentType = mimeType
