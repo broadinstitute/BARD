@@ -23,7 +23,7 @@ class ProjectRestController {
             projects: "GET"
     ]
 
-    void projects() {
+    def projects() {
         try {
             final String mimeType = grailsApplication.config.bard.data.export.projects.xml
             response.contentType = mimeType
@@ -44,7 +44,7 @@ class ProjectRestController {
         }
     }
 
-    void project() {
+    def project() {
         try {
             final String mimeType = grailsApplication.config.bard.data.export.project.xml
             response.contentType = mimeType
@@ -68,7 +68,7 @@ class ProjectRestController {
             ee.printStackTrace()
         }
     }
-    void updateProject() {
+    def updateProject() {
         throw new RuntimeException("Not Yet Implemented")
     }
 }

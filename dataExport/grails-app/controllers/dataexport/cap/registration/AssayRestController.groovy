@@ -28,7 +28,7 @@ class AssayRestController {
      * Fetch assays with readyForExtraction of ready
      * @return
      */
-    void assays() {
+    def assays() {
         try {
             final String mimeType = grailsApplication.config.bard.data.export.assays.xml
             response.contentType = mimeType
@@ -55,7 +55,7 @@ class AssayRestController {
      * Get an assay with the given id
      * @return
      */
-    void assayDocument() {
+    def assayDocument() {
         try {
             final String mimeType = grailsApplication.config.bard.data.export.assay.doc.xml
             response.contentType = mimeType
@@ -84,7 +84,7 @@ class AssayRestController {
      * Get an assay with the given id
      * @return
      */
-    void assay() {
+    def assay() {
         try {
             final String mimeType = grailsApplication.config.bard.data.export.assay.xml
             response.contentType = mimeType
@@ -112,7 +112,7 @@ class AssayRestController {
 /**
  * Update the status of the given element
  */
-    void updateAssay() {
+    def updateAssay() {
         throw new RuntimeException("Not Yet Implemented")
     }
 

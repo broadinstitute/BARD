@@ -29,7 +29,7 @@ class DictionaryRestController {
      * Fetch the entire dictionary
      * @return
      */
-    void dictionary() {
+    def dictionary() {
         try {
             final String mimeType = grailsApplication.config.bard.data.export.dictionary.xml
             response.contentType = mimeType
@@ -54,7 +54,7 @@ class DictionaryRestController {
      * Get a result type given an element id
      * @return
      */
-    void resultType() {
+    def resultType() {
         try {
             final String mimeType = grailsApplication.config.bard.data.export.dictionary.resultType.xml
             response.contentType = mimeType
@@ -82,7 +82,7 @@ class DictionaryRestController {
      * Get the stage with the given an element id
      * @return
      */
-    void stage() {
+    def stage() {
         try {
             final String mimeType = grailsApplication.config.bard.data.export.dictionary.stage.xml
             response.contentType = mimeType
@@ -111,7 +111,7 @@ class DictionaryRestController {
  * Get the element with the given id
  * @return
  */
-    void element() {
+    def element() {
         try {
             final String mimeType = grailsApplication.config.bard.data.export.dictionary.element.xml
             response.contentType = mimeType
@@ -137,7 +137,7 @@ class DictionaryRestController {
 /**
  * Update the status of the given element
  */
-    void updateElement() {
+    def updateElement() {
         throw new RuntimeException("Not Yet Implemented")
     }
 
