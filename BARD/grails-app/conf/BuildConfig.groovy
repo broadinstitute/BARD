@@ -47,7 +47,7 @@ grails.project.dependency.resolution = {
         compile ":json-rest-api:1.0.11"
         compile ":webflow:2.0.0"
         compile ":yui:2.8.2.1"
-        compile ":bard-domain-model:0.1.5"
+        compile ":bard-domain-model:0.1.6"
 
         // runtime scope
         runtime ":hibernate:$grailsVersion"
