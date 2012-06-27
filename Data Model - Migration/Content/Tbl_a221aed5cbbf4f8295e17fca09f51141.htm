@@ -35,7 +35,7 @@
 </TR>
 <TR>
 <TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">DDL Code&nbsp;</FONT></B></TD>
-<TD><TT><TT>CREATE TABLE PCCOMPOUND_SYNONYMS(</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp CID&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp NUMBER(20, 0)&nbsp&nbsp&nbsp&nbsp NOT NULL,</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp SYNONYM_NAME&nbsp&nbsp&nbsp&nbsp VARCHAR2(255),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp CONSTRAINT FKDAB292599CAE2D7A FOREIGN KEY (CID)</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp REFERENCES PCCOMPOUND(CD_ID)</TT><BR><TT>)</TT><BR><TT>LOGGING</TT><BR><TT>;</TT><BR>&nbsp;</TT></TD>
+<TD><TT><TT>CREATE TABLE PCCOMPOUND_SYNONYMS(</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp CID&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp NUMBER(19, 0)&nbsp&nbsp&nbsp&nbsp NOT NULL,</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp SYNONYM_NAME&nbsp&nbsp&nbsp&nbsp VARCHAR2(255 CHAR),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp CONSTRAINT FK_PCCOMPOUND_SYNONYMS_COMPOUN FOREIGN KEY (CID)</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp REFERENCES PCCOMPOUND(CD_ID)</TT><BR><TT>)</TT><BR><TT>LOGGING</TT><BR><TT>;</TT><BR>&nbsp;</TT></TD>
 </TR>
 <TR>
 <TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">PostSQL&nbsp;</FONT></B></TD>
@@ -59,7 +59,7 @@
 <TR>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "Tbl_a221aed5cbbf4f8295e17fca09f51141_Attr.htm#Attr_aa191bd5f0684e199e4605b4084c1243">CID</A><img src="../Support/Gif/fk.gif" alt="(FK)">&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">NUMBER(20, 0)&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">NUMBER(19, 0)&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">NO&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><PRE><FONT SIZE=2 FACE="Arial"></FONT></PRE>&nbsp;</FONT></TD>
 </TR>
@@ -112,7 +112,7 @@
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "./Tbl_9e230dd409af4a459b6e60a9f1a42fef.htm">PCCOMPOUND</A>&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">Non-Identifying&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">One To Zero or More&nbsp;</FONT></TD>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "Submodel_987c0f39fd1b44fea9c1096ec0c8e0b6_Rel.htm#Rel_444c5a12f0d44c93a2ccbceb723b3c98">FKDAB292599CAE2D7A</A>&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "Submodel_987c0f39fd1b44fea9c1096ec0c8e0b6_Rel.htm#Rel_444c5a12f0d44c93a2ccbceb723b3c98">FK_PCCOMPOUND_SYNONYMS_COMPOUN</A>&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">CID&nbsp;</FONT></TD>
