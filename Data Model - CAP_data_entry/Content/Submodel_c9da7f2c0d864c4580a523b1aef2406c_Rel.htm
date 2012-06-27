@@ -616,20 +616,20 @@
 </TR>
 </TABLE>
 <HR>
-<A NAME = "Rel_d3faf6b7e4fa45eb936b5e00d6415933"></A>
+<A NAME = "Rel_b08a2ff352d441e98e69cdd2b221b81c"></A>
 <TABLE WIDTH=100% CELLPADDING=1 BORDER=2>
 <TR>
-<TD VALIGN=TOP BGCOLOR="darkblue" ><B><FONT SIZE=5 COLOR="white" FACE="Arial">"EXTERNAL_SYSTEM to EXTERNAL_ASSAY"&nbsp;</FONT></B></TD>
+<TD VALIGN=TOP BGCOLOR="darkblue" ><B><FONT SIZE=5 COLOR="white" FACE="Arial">"EXPERIMENT to EXTERNAL_REFERENCE"&nbsp;</FONT></B></TD>
 </TR>
 </TABLE>
 <TABLE WIDTH=100% CELLPADDING=2 BORDER=2>
 <TR>
 <TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">RelationshipType&nbsp;</FONT></B></TD>
-<TD><FONT SIZE=2 FACE="Arial">Identifying&nbsp;</FONT></TD>
+<TD><FONT SIZE=2 FACE="Arial">Non-Identifying&nbsp;</FONT></TD>
 </TR>
 <TR>
 <TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Relationship Name&nbsp;</FONT></B></TD>
-<TD><FONT SIZE=2 FACE="Arial">FK_EXT_ASSAY_EXT_SYSTEM&nbsp;</FONT></TD>
+<TD><FONT SIZE=2 FACE="Arial">FK_EXT_REFERENCE_EXPERIMENT&nbsp;</FONT></TD>
 </TR>
 <TR>
 <TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Relationship Business Name&nbsp;</FONT></B></TD>
@@ -637,25 +637,25 @@
 </TR>
 <TR>
 <TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Parent Table&nbsp;</FONT></B></TD>
-<TD><FONT SIZE=2 FACE="Arial"><A HREF="Tbl_8a3a4257b9da4dd0a8a93b24c31cb93b.htm">EXTERNAL_SYSTEM</A>&nbsp;</FONT></TD>
+<TD><FONT SIZE=2 FACE="Arial"><A HREF="Tbl_6f76676b4baa487f9eb8f3d8070b72a2.htm">EXPERIMENT</A>&nbsp;</FONT></TD>
 </TR>
 <TR>
 <TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Child Table&nbsp;</FONT></B></TD>
-<TD><FONT SIZE=2 FACE="Arial"><A HREF="Tbl_2f47be957fd34fe4b7fd5da5f81839f7.htm">EXTERNAL_ASSAY</A>&nbsp;</FONT></TD>
+<TD><FONT SIZE=2 FACE="Arial"><A HREF="Tbl_2f47be957fd34fe4b7fd5da5f81839f7.htm">EXTERNAL_REFERENCE</A>&nbsp;</FONT></TD>
 </TR>
 <TR>
 <TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Cardinality&nbsp;</FONT></B></TD>
-<TD><FONT SIZE=2 FACE="Arial">One To Zero or More&nbsp;</FONT></TD>
+<TD><FONT SIZE=2 FACE="Arial">Zero or One to Zero or More&nbsp;</FONT></TD>
 </TR>
 <TR>
 <TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Existence&nbsp;</FONT></B></TD>
-<TD><FONT SIZE=2 FACE="Arial">Mandatory&nbsp;</FONT></TD>
+<TD><FONT SIZE=2 FACE="Arial">Optional&nbsp;</FONT></TD>
 </TR>
 </TABLE>
 <P>
 <TABLE WIDTH=100% CELLPADDING=3 BORDER=2>
 <TR>
-<TD VALIGN=TOP BGCOLOR="LIGHTGREY" ><B><FONT SIZE=4 FACE="Arial">"EXTERNAL_SYSTEM to EXTERNAL_ASSAY" Relationship Description&nbsp;</FONT></B></TD>
+<TD VALIGN=TOP BGCOLOR="LIGHTGREY" ><B><FONT SIZE=4 FACE="Arial">"EXPERIMENT to EXTERNAL_REFERENCE" Relationship Description&nbsp;</FONT></B></TD>
 </TR>
 </TABLE>
 <TABLE WIDTH=100% CELLPADDING=2 BORDER=2>
@@ -679,7 +679,84 @@
 <P>
 <TABLE WIDTH=100% CELLPADDING=3 BORDER=2>
 <TR>
-<TD VALIGN=TOP BGCOLOR="LIGHTGREY" ><B><FONT SIZE=4 FACE="Arial">"EXTERNAL_SYSTEM to EXTERNAL_ASSAY" Foreign Keys&nbsp;</FONT></B></TD>
+<TD VALIGN=TOP BGCOLOR="LIGHTGREY" ><B><FONT SIZE=4 FACE="Arial">"EXPERIMENT to EXTERNAL_REFERENCE" Foreign Keys&nbsp;</FONT></B></TD>
+</TR>
+</TABLE>
+<TABLE WIDTH=100% CELLPADDING=2 BORDER=2>
+<TR>
+<TD VALIGN=TOP  WIDTH=22% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Parent Key&nbsp;</FONT></B></TD>
+<TD VALIGN=TOP  WIDTH=22% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Child Key&nbsp;</FONT></B></TD>
+</TR>
+<TR>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">EXPERIMENT_ID&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">EXPERIMENT_ID&nbsp;</FONT></TD>
+</TR>
+</TABLE>
+<HR>
+<A NAME = "Rel_d3faf6b7e4fa45eb936b5e00d6415933"></A>
+<TABLE WIDTH=100% CELLPADDING=1 BORDER=2>
+<TR>
+<TD VALIGN=TOP BGCOLOR="darkblue" ><B><FONT SIZE=5 COLOR="white" FACE="Arial">"EXTERNAL_SYSTEM to EXTERNAL_REFERENCE"&nbsp;</FONT></B></TD>
+</TR>
+</TABLE>
+<TABLE WIDTH=100% CELLPADDING=2 BORDER=2>
+<TR>
+<TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">RelationshipType&nbsp;</FONT></B></TD>
+<TD><FONT SIZE=2 FACE="Arial">Non-Identifying&nbsp;</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Relationship Name&nbsp;</FONT></B></TD>
+<TD><FONT SIZE=2 FACE="Arial">FK_EXT_REFERENCE_EXT_SYSTEM&nbsp;</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Relationship Business Name&nbsp;</FONT></B></TD>
+<TD><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Parent Table&nbsp;</FONT></B></TD>
+<TD><FONT SIZE=2 FACE="Arial"><A HREF="Tbl_8a3a4257b9da4dd0a8a93b24c31cb93b.htm">EXTERNAL_SYSTEM</A>&nbsp;</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Child Table&nbsp;</FONT></B></TD>
+<TD><FONT SIZE=2 FACE="Arial"><A HREF="Tbl_2f47be957fd34fe4b7fd5da5f81839f7.htm">EXTERNAL_REFERENCE</A>&nbsp;</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Cardinality&nbsp;</FONT></B></TD>
+<TD><FONT SIZE=2 FACE="Arial">One To Zero or More&nbsp;</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Existence&nbsp;</FONT></B></TD>
+<TD><FONT SIZE=2 FACE="Arial">Mandatory&nbsp;</FONT></TD>
+</TR>
+</TABLE>
+<P>
+<TABLE WIDTH=100% CELLPADDING=3 BORDER=2>
+<TR>
+<TD VALIGN=TOP BGCOLOR="LIGHTGREY" ><B><FONT SIZE=4 FACE="Arial">"EXTERNAL_SYSTEM to EXTERNAL_REFERENCE" Relationship Description&nbsp;</FONT></B></TD>
+</TR>
+</TABLE>
+<TABLE WIDTH=100% CELLPADDING=2 BORDER=2>
+<TR>
+<TD VALIGN=TOP  WIDTH=22% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Verb Sentence&nbsp;</FONT></B></TD>
+<TD VALIGN = TOP><FONT SIZE=2 FACE="Arial"><PRE><FONT SIZE=2 FACE="Arial"></FONT></PRE>&nbsp;</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN=TOP  WIDTH=22% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Inverse Verb Sentence&nbsp;</FONT></B></TD>
+<TD VALIGN = TOP><FONT SIZE=2 FACE="Arial"><PRE><FONT SIZE=2 FACE="Arial"></FONT></PRE>&nbsp;</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN=TOP  WIDTH=22% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Definition&nbsp;</FONT></B></TD>
+<TD VALIGN = TOP><FONT SIZE=2 FACE="Arial"><PRE><FONT SIZE=2 FACE="Arial"></FONT></PRE>&nbsp;</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN=TOP  WIDTH=22% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Note&nbsp;</FONT></B></TD>
+<TD VALIGN = TOP><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
+</TR>
+</TABLE>
+<P>
+<TABLE WIDTH=100% CELLPADDING=3 BORDER=2>
+<TR>
+<TD VALIGN=TOP BGCOLOR="LIGHTGREY" ><B><FONT SIZE=4 FACE="Arial">"EXTERNAL_SYSTEM to EXTERNAL_REFERENCE" Foreign Keys&nbsp;</FONT></B></TD>
 </TR>
 </TABLE>
 <TABLE WIDTH=100% CELLPADDING=2 BORDER=2>
@@ -693,20 +770,20 @@
 </TR>
 </TABLE>
 <HR>
-<A NAME = "Rel_b08a2ff352d441e98e69cdd2b221b81c"></A>
+<A NAME = "Rel_8be19358836f4cb389f7f347225dbe06"></A>
 <TABLE WIDTH=100% CELLPADDING=1 BORDER=2>
 <TR>
-<TD VALIGN=TOP BGCOLOR="darkblue" ><B><FONT SIZE=5 COLOR="white" FACE="Arial">"EXPERIMENT to EXTERNAL_ASSAY"&nbsp;</FONT></B></TD>
+<TD VALIGN=TOP BGCOLOR="darkblue" ><B><FONT SIZE=5 COLOR="white" FACE="Arial">"PROJECT to EXTERNAL_REFERENCE"&nbsp;</FONT></B></TD>
 </TR>
 </TABLE>
 <TABLE WIDTH=100% CELLPADDING=2 BORDER=2>
 <TR>
 <TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">RelationshipType&nbsp;</FONT></B></TD>
-<TD><FONT SIZE=2 FACE="Arial">Identifying&nbsp;</FONT></TD>
+<TD><FONT SIZE=2 FACE="Arial">Non-Identifying&nbsp;</FONT></TD>
 </TR>
 <TR>
 <TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Relationship Name&nbsp;</FONT></B></TD>
-<TD><FONT SIZE=2 FACE="Arial">FK_EXTERNAL_ASSAY_EXPERIMENT&nbsp;</FONT></TD>
+<TD><FONT SIZE=2 FACE="Arial">FK_EXT_REFERENCE_PROJECT&nbsp;</FONT></TD>
 </TR>
 <TR>
 <TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Relationship Business Name&nbsp;</FONT></B></TD>
@@ -714,25 +791,25 @@
 </TR>
 <TR>
 <TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Parent Table&nbsp;</FONT></B></TD>
-<TD><FONT SIZE=2 FACE="Arial"><A HREF="Tbl_6f76676b4baa487f9eb8f3d8070b72a2.htm">EXPERIMENT</A>&nbsp;</FONT></TD>
+<TD><FONT SIZE=2 FACE="Arial"><A HREF="Tbl_1f93c77e7ddf44e1b6a840f13218de7f.htm">PROJECT</A>&nbsp;</FONT></TD>
 </TR>
 <TR>
 <TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Child Table&nbsp;</FONT></B></TD>
-<TD><FONT SIZE=2 FACE="Arial"><A HREF="Tbl_2f47be957fd34fe4b7fd5da5f81839f7.htm">EXTERNAL_ASSAY</A>&nbsp;</FONT></TD>
+<TD><FONT SIZE=2 FACE="Arial"><A HREF="Tbl_2f47be957fd34fe4b7fd5da5f81839f7.htm">EXTERNAL_REFERENCE</A>&nbsp;</FONT></TD>
 </TR>
 <TR>
 <TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Cardinality&nbsp;</FONT></B></TD>
-<TD><FONT SIZE=2 FACE="Arial">One To Zero or More&nbsp;</FONT></TD>
+<TD><FONT SIZE=2 FACE="Arial">Zero or One to Zero or More&nbsp;</FONT></TD>
 </TR>
 <TR>
 <TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Existence&nbsp;</FONT></B></TD>
-<TD><FONT SIZE=2 FACE="Arial">Mandatory&nbsp;</FONT></TD>
+<TD><FONT SIZE=2 FACE="Arial">Optional&nbsp;</FONT></TD>
 </TR>
 </TABLE>
 <P>
 <TABLE WIDTH=100% CELLPADDING=3 BORDER=2>
 <TR>
-<TD VALIGN=TOP BGCOLOR="LIGHTGREY" ><B><FONT SIZE=4 FACE="Arial">"EXPERIMENT to EXTERNAL_ASSAY" Relationship Description&nbsp;</FONT></B></TD>
+<TD VALIGN=TOP BGCOLOR="LIGHTGREY" ><B><FONT SIZE=4 FACE="Arial">"PROJECT to EXTERNAL_REFERENCE" Relationship Description&nbsp;</FONT></B></TD>
 </TR>
 </TABLE>
 <TABLE WIDTH=100% CELLPADDING=2 BORDER=2>
@@ -756,7 +833,7 @@
 <P>
 <TABLE WIDTH=100% CELLPADDING=3 BORDER=2>
 <TR>
-<TD VALIGN=TOP BGCOLOR="LIGHTGREY" ><B><FONT SIZE=4 FACE="Arial">"EXPERIMENT to EXTERNAL_ASSAY" Foreign Keys&nbsp;</FONT></B></TD>
+<TD VALIGN=TOP BGCOLOR="LIGHTGREY" ><B><FONT SIZE=4 FACE="Arial">"PROJECT to EXTERNAL_REFERENCE" Foreign Keys&nbsp;</FONT></B></TD>
 </TR>
 </TABLE>
 <TABLE WIDTH=100% CELLPADDING=2 BORDER=2>
@@ -765,8 +842,8 @@
 <TD VALIGN=TOP  WIDTH=22% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Child Key&nbsp;</FONT></B></TD>
 </TR>
 <TR>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">EXPERIMENT_ID&nbsp;</FONT></TD>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">EXPERIMENT_ID&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">PROJECT_ID&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">PROJECT_ID&nbsp;</FONT></TD>
 </TR>
 </TABLE>
 <HR>
@@ -1938,7 +2015,7 @@
 </TR>
 <TR>
 <TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Relationship Name&nbsp;</FONT></B></TD>
-<TD><FONT SIZE=2 FACE="Arial">FK_PRCT_EXPRMNT_EXPERIMENT&nbsp;</FONT></TD>
+<TD><FONT SIZE=2 FACE="Arial">fk_project_exprmnt_experiment&nbsp;</FONT></TD>
 </TR>
 <TR>
 <TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Relationship Business Name&nbsp;</FONT></B></TD>
@@ -2002,7 +2079,7 @@
 </TR>
 </TABLE>
 <HR>
-<A NAME = "Rel_dd1417ed72af447ca0d9d80eed79959c"></A>
+<A NAME = "Rel_87c25c6c7f3c4b61993580f0cf4b8bc2"></A>
 <TABLE WIDTH=100% CELLPADDING=1 BORDER=2>
 <TR>
 <TD VALIGN=TOP BGCOLOR="darkblue" ><B><FONT SIZE=5 COLOR="white" FACE="Arial">"EXPERIMENT to Project_Experiment"&nbsp;</FONT></B></TD>
@@ -2015,11 +2092,11 @@
 </TR>
 <TR>
 <TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Relationship Name&nbsp;</FONT></B></TD>
-<TD><FONT SIZE=2 FACE="Arial">FK_PRJCT_EXPRMNT_LDS_2_EXPRMNT&nbsp;</FONT></TD>
+<TD><FONT SIZE=2 FACE="Arial">FK_PROJECT_EXPRMNT_FLW_EXPRMNT&nbsp;</FONT></TD>
 </TR>
 <TR>
 <TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Relationship Business Name&nbsp;</FONT></B></TD>
-<TD><FONT SIZE=2 FACE="Arial">leads to&nbsp;</FONT></TD>
+<TD><FONT SIZE=2 FACE="Arial">follows&nbsp;</FONT></TD>
 </TR>
 <TR>
 <TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Parent Table&nbsp;</FONT></B></TD>
@@ -2075,7 +2152,7 @@
 </TR>
 <TR>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">EXPERIMENT_ID&nbsp;</FONT></TD>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">LEADS_TO_EXPERIMENT_ID&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">FOLLOWS_EXPERIMENT_ID&nbsp;</FONT></TD>
 </TR>
 </TABLE>
 <HR>
@@ -2092,7 +2169,7 @@
 </TR>
 <TR>
 <TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Relationship Name&nbsp;</FONT></B></TD>
-<TD><FONT SIZE=2 FACE="Arial">FK_PROJECT_ASSAY_PROJECT&nbsp;</FONT></TD>
+<TD><FONT SIZE=2 FACE="Arial">FK_project_exprmnt_project&nbsp;</FONT></TD>
 </TR>
 <TR>
 <TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Relationship Business Name&nbsp;</FONT></B></TD>
@@ -2156,10 +2233,10 @@
 </TR>
 </TABLE>
 <HR>
-<A NAME = "Rel_21c4afc1213b46c2aaea911c2b78a18e"></A>
+<A NAME = "Rel_b56393ff5da146569871b4d9a4f1ee8a"></A>
 <TABLE WIDTH=100% CELLPADDING=1 BORDER=2>
 <TR>
-<TD VALIGN=TOP BGCOLOR="darkblue" ><B><FONT SIZE=5 COLOR="white" FACE="Arial">"ELEMENT to Project_Step_Item"&nbsp;</FONT></B></TD>
+<TD VALIGN=TOP BGCOLOR="darkblue" ><B><FONT SIZE=5 COLOR="white" FACE="Arial">"ELEMENT to Project_Experiment"&nbsp;</FONT></B></TD>
 </TR>
 </TABLE>
 <TABLE WIDTH=100% CELLPADDING=2 BORDER=2>
@@ -2169,11 +2246,11 @@
 </TR>
 <TR>
 <TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Relationship Name&nbsp;</FONT></B></TD>
-<TD><FONT SIZE=2 FACE="Arial">FK_PROJECT_STEP_ELEMENT_ATTR&nbsp;</FONT></TD>
+<TD><FONT SIZE=2 FACE="Arial">FK_PROJECT_EXPRMNT_STAGE&nbsp;</FONT></TD>
 </TR>
 <TR>
 <TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Relationship Business Name&nbsp;</FONT></B></TD>
-<TD><FONT SIZE=2 FACE="Arial">attribute&nbsp;</FONT></TD>
+<TD><FONT SIZE=2 FACE="Arial">stage&nbsp;</FONT></TD>
 </TR>
 <TR>
 <TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Parent Table&nbsp;</FONT></B></TD>
@@ -2181,240 +2258,9 @@
 </TR>
 <TR>
 <TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Child Table&nbsp;</FONT></B></TD>
-<TD><FONT SIZE=2 FACE="Arial"><A HREF="Tbl_231f00756fe84cf7830fb68f95ff4323.htm">Project_Step_Item</A>&nbsp;</FONT></TD>
-</TR>
-<TR>
-<TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Cardinality&nbsp;</FONT></B></TD>
-<TD><FONT SIZE=2 FACE="Arial">One To Zero or More&nbsp;</FONT></TD>
-</TR>
-<TR>
-<TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Existence&nbsp;</FONT></B></TD>
-<TD><FONT SIZE=2 FACE="Arial">Mandatory&nbsp;</FONT></TD>
-</TR>
-</TABLE>
-<P>
-<TABLE WIDTH=100% CELLPADDING=3 BORDER=2>
-<TR>
-<TD VALIGN=TOP BGCOLOR="LIGHTGREY" ><B><FONT SIZE=4 FACE="Arial">"ELEMENT to Project_Step_Item" Relationship Description&nbsp;</FONT></B></TD>
-</TR>
-</TABLE>
-<TABLE WIDTH=100% CELLPADDING=2 BORDER=2>
-<TR>
-<TD VALIGN=TOP  WIDTH=22% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Verb Sentence&nbsp;</FONT></B></TD>
-<TD VALIGN = TOP><FONT SIZE=2 FACE="Arial"><PRE><FONT SIZE=2 FACE="Arial"></FONT></PRE>&nbsp;</FONT></TD>
-</TR>
-<TR>
-<TD VALIGN=TOP  WIDTH=22% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Inverse Verb Sentence&nbsp;</FONT></B></TD>
-<TD VALIGN = TOP><FONT SIZE=2 FACE="Arial"><PRE><FONT SIZE=2 FACE="Arial"></FONT></PRE>&nbsp;</FONT></TD>
-</TR>
-<TR>
-<TD VALIGN=TOP  WIDTH=22% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Definition&nbsp;</FONT></B></TD>
-<TD VALIGN = TOP><FONT SIZE=2 FACE="Arial"><PRE><FONT SIZE=2 FACE="Arial"></FONT></PRE>&nbsp;</FONT></TD>
-</TR>
-<TR>
-<TD VALIGN=TOP  WIDTH=22% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Note&nbsp;</FONT></B></TD>
-<TD VALIGN = TOP><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
-</TR>
-</TABLE>
-<P>
-<TABLE WIDTH=100% CELLPADDING=3 BORDER=2>
-<TR>
-<TD VALIGN=TOP BGCOLOR="LIGHTGREY" ><B><FONT SIZE=4 FACE="Arial">"ELEMENT to Project_Step_Item" Foreign Keys&nbsp;</FONT></B></TD>
-</TR>
-</TABLE>
-<TABLE WIDTH=100% CELLPADDING=2 BORDER=2>
-<TR>
-<TD VALIGN=TOP  WIDTH=22% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Parent Key&nbsp;</FONT></B></TD>
-<TD VALIGN=TOP  WIDTH=22% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Child Key&nbsp;</FONT></B></TD>
-</TR>
-<TR>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">ELEMENT_ID&nbsp;</FONT></TD>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">ATTRIBUTE_ID&nbsp;</FONT></TD>
-</TR>
-</TABLE>
-<HR>
-<A NAME = "Rel_2a5323ca61f64013b4568ab9f8e2d7e6"></A>
-<TABLE WIDTH=100% CELLPADDING=1 BORDER=2>
-<TR>
-<TD VALIGN=TOP BGCOLOR="darkblue" ><B><FONT SIZE=5 COLOR="white" FACE="Arial">"ELEMENT to Project_Step_Item"&nbsp;</FONT></B></TD>
-</TR>
-</TABLE>
-<TABLE WIDTH=100% CELLPADDING=2 BORDER=2>
-<TR>
-<TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">RelationshipType&nbsp;</FONT></B></TD>
-<TD><FONT SIZE=2 FACE="Arial">Non-Identifying&nbsp;</FONT></TD>
-</TR>
-<TR>
-<TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Relationship Name&nbsp;</FONT></B></TD>
-<TD><FONT SIZE=2 FACE="Arial">FK_PROJECT_STEP_ELEMENT_VALUE&nbsp;</FONT></TD>
-</TR>
-<TR>
-<TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Relationship Business Name&nbsp;</FONT></B></TD>
-<TD><FONT SIZE=2 FACE="Arial">value&nbsp;</FONT></TD>
-</TR>
-<TR>
-<TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Parent Table&nbsp;</FONT></B></TD>
-<TD><FONT SIZE=2 FACE="Arial"><A HREF="Tbl_9a0cc5708959429f9071509fd6e42938.htm">ELEMENT</A>&nbsp;</FONT></TD>
-</TR>
-<TR>
-<TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Child Table&nbsp;</FONT></B></TD>
-<TD><FONT SIZE=2 FACE="Arial"><A HREF="Tbl_231f00756fe84cf7830fb68f95ff4323.htm">Project_Step_Item</A>&nbsp;</FONT></TD>
-</TR>
-<TR>
-<TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Cardinality&nbsp;</FONT></B></TD>
-<TD><FONT SIZE=2 FACE="Arial">Zero or One to Zero or More&nbsp;</FONT></TD>
-</TR>
-<TR>
-<TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Existence&nbsp;</FONT></B></TD>
-<TD><FONT SIZE=2 FACE="Arial">Optional&nbsp;</FONT></TD>
-</TR>
-</TABLE>
-<P>
-<TABLE WIDTH=100% CELLPADDING=3 BORDER=2>
-<TR>
-<TD VALIGN=TOP BGCOLOR="LIGHTGREY" ><B><FONT SIZE=4 FACE="Arial">"ELEMENT to Project_Step_Item" Relationship Description&nbsp;</FONT></B></TD>
-</TR>
-</TABLE>
-<TABLE WIDTH=100% CELLPADDING=2 BORDER=2>
-<TR>
-<TD VALIGN=TOP  WIDTH=22% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Verb Sentence&nbsp;</FONT></B></TD>
-<TD VALIGN = TOP><FONT SIZE=2 FACE="Arial"><PRE><FONT SIZE=2 FACE="Arial"></FONT></PRE>&nbsp;</FONT></TD>
-</TR>
-<TR>
-<TD VALIGN=TOP  WIDTH=22% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Inverse Verb Sentence&nbsp;</FONT></B></TD>
-<TD VALIGN = TOP><FONT SIZE=2 FACE="Arial"><PRE><FONT SIZE=2 FACE="Arial"></FONT></PRE>&nbsp;</FONT></TD>
-</TR>
-<TR>
-<TD VALIGN=TOP  WIDTH=22% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Definition&nbsp;</FONT></B></TD>
-<TD VALIGN = TOP><FONT SIZE=2 FACE="Arial"><PRE><FONT SIZE=2 FACE="Arial"></FONT></PRE>&nbsp;</FONT></TD>
-</TR>
-<TR>
-<TD VALIGN=TOP  WIDTH=22% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Note&nbsp;</FONT></B></TD>
-<TD VALIGN = TOP><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
-</TR>
-</TABLE>
-<P>
-<TABLE WIDTH=100% CELLPADDING=3 BORDER=2>
-<TR>
-<TD VALIGN=TOP BGCOLOR="LIGHTGREY" ><B><FONT SIZE=4 FACE="Arial">"ELEMENT to Project_Step_Item" Foreign Keys&nbsp;</FONT></B></TD>
-</TR>
-</TABLE>
-<TABLE WIDTH=100% CELLPADDING=2 BORDER=2>
-<TR>
-<TD VALIGN=TOP  WIDTH=22% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Parent Key&nbsp;</FONT></B></TD>
-<TD VALIGN=TOP  WIDTH=22% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Child Key&nbsp;</FONT></B></TD>
-</TR>
-<TR>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">ELEMENT_ID&nbsp;</FONT></TD>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">VALUE_ID&nbsp;</FONT></TD>
-</TR>
-</TABLE>
-<HR>
-<A NAME = "Rel_21ad78313c654228b614e0e13d81a91e"></A>
-<TABLE WIDTH=100% CELLPADDING=1 BORDER=2>
-<TR>
-<TD VALIGN=TOP BGCOLOR="darkblue" ><B><FONT SIZE=5 COLOR="white" FACE="Arial">"Project_Experiment to Project_Step_Item"&nbsp;</FONT></B></TD>
-</TR>
-</TABLE>
-<TABLE WIDTH=100% CELLPADDING=2 BORDER=2>
-<TR>
-<TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">RelationshipType&nbsp;</FONT></B></TD>
-<TD><FONT SIZE=2 FACE="Arial">Non-Identifying&nbsp;</FONT></TD>
-</TR>
-<TR>
-<TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Relationship Name&nbsp;</FONT></B></TD>
-<TD><FONT SIZE=2 FACE="Arial">FK_PROJECT_STEP_ITEM_EXPRMNT&nbsp;</FONT></TD>
-</TR>
-<TR>
-<TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Relationship Business Name&nbsp;</FONT></B></TD>
-<TD><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
-</TR>
-<TR>
-<TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Parent Table&nbsp;</FONT></B></TD>
 <TD><FONT SIZE=2 FACE="Arial"><A HREF="Tbl_31376083c224469ab1525e6fcad9bd06.htm">Project_Experiment</A>&nbsp;</FONT></TD>
 </TR>
 <TR>
-<TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Child Table&nbsp;</FONT></B></TD>
-<TD><FONT SIZE=2 FACE="Arial"><A HREF="Tbl_231f00756fe84cf7830fb68f95ff4323.htm">Project_Step_Item</A>&nbsp;</FONT></TD>
-</TR>
-<TR>
-<TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Cardinality&nbsp;</FONT></B></TD>
-<TD><FONT SIZE=2 FACE="Arial">One To Zero or More&nbsp;</FONT></TD>
-</TR>
-<TR>
-<TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Existence&nbsp;</FONT></B></TD>
-<TD><FONT SIZE=2 FACE="Arial">Mandatory&nbsp;</FONT></TD>
-</TR>
-</TABLE>
-<P>
-<TABLE WIDTH=100% CELLPADDING=3 BORDER=2>
-<TR>
-<TD VALIGN=TOP BGCOLOR="LIGHTGREY" ><B><FONT SIZE=4 FACE="Arial">"Project_Experiment to Project_Step_Item" Relationship Description&nbsp;</FONT></B></TD>
-</TR>
-</TABLE>
-<TABLE WIDTH=100% CELLPADDING=2 BORDER=2>
-<TR>
-<TD VALIGN=TOP  WIDTH=22% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Verb Sentence&nbsp;</FONT></B></TD>
-<TD VALIGN = TOP><FONT SIZE=2 FACE="Arial"><PRE><FONT SIZE=2 FACE="Arial"></FONT></PRE>&nbsp;</FONT></TD>
-</TR>
-<TR>
-<TD VALIGN=TOP  WIDTH=22% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Inverse Verb Sentence&nbsp;</FONT></B></TD>
-<TD VALIGN = TOP><FONT SIZE=2 FACE="Arial"><PRE><FONT SIZE=2 FACE="Arial"></FONT></PRE>&nbsp;</FONT></TD>
-</TR>
-<TR>
-<TD VALIGN=TOP  WIDTH=22% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Definition&nbsp;</FONT></B></TD>
-<TD VALIGN = TOP><FONT SIZE=2 FACE="Arial"><PRE><FONT SIZE=2 FACE="Arial"></FONT></PRE>&nbsp;</FONT></TD>
-</TR>
-<TR>
-<TD VALIGN=TOP  WIDTH=22% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Note&nbsp;</FONT></B></TD>
-<TD VALIGN = TOP><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
-</TR>
-</TABLE>
-<P>
-<TABLE WIDTH=100% CELLPADDING=3 BORDER=2>
-<TR>
-<TD VALIGN=TOP BGCOLOR="LIGHTGREY" ><B><FONT SIZE=4 FACE="Arial">"Project_Experiment to Project_Step_Item" Foreign Keys&nbsp;</FONT></B></TD>
-</TR>
-</TABLE>
-<TABLE WIDTH=100% CELLPADDING=2 BORDER=2>
-<TR>
-<TD VALIGN=TOP  WIDTH=22% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Parent Key&nbsp;</FONT></B></TD>
-<TD VALIGN=TOP  WIDTH=22% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Child Key&nbsp;</FONT></B></TD>
-</TR>
-<TR>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">PROJECT_EXPERIMENT_ID&nbsp;</FONT></TD>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">PROJECT_EXPERIMENT_ID&nbsp;</FONT></TD>
-</TR>
-</TABLE>
-<HR>
-<A NAME = "Rel_f472ea6a776d4e9496c86acd8401c74f"></A>
-<TABLE WIDTH=100% CELLPADDING=1 BORDER=2>
-<TR>
-<TD VALIGN=TOP BGCOLOR="darkblue" ><B><FONT SIZE=5 COLOR="white" FACE="Arial">"Project_Step_Item to Project_Step_Item"&nbsp;</FONT></B></TD>
-</TR>
-</TABLE>
-<TABLE WIDTH=100% CELLPADDING=2 BORDER=2>
-<TR>
-<TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">RelationshipType&nbsp;</FONT></B></TD>
-<TD><FONT SIZE=2 FACE="Arial">Non-Identifying&nbsp;</FONT></TD>
-</TR>
-<TR>
-<TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Relationship Name&nbsp;</FONT></B></TD>
-<TD><FONT SIZE=2 FACE="Arial">FK_PROJECT_STEP_ITEM_GROUP&nbsp;</FONT></TD>
-</TR>
-<TR>
-<TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Relationship Business Name&nbsp;</FONT></B></TD>
-<TD><FONT SIZE=2 FACE="Arial">Group&nbsp;</FONT></TD>
-</TR>
-<TR>
-<TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Parent Table&nbsp;</FONT></B></TD>
-<TD><FONT SIZE=2 FACE="Arial"><A HREF="Tbl_231f00756fe84cf7830fb68f95ff4323.htm">Project_Step_Item</A>&nbsp;</FONT></TD>
-</TR>
-<TR>
-<TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Child Table&nbsp;</FONT></B></TD>
-<TD><FONT SIZE=2 FACE="Arial"><A HREF="Tbl_231f00756fe84cf7830fb68f95ff4323.htm">Project_Step_Item</A>&nbsp;</FONT></TD>
-</TR>
-<TR>
 <TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Cardinality&nbsp;</FONT></B></TD>
 <TD><FONT SIZE=2 FACE="Arial">Zero or One to Zero or More&nbsp;</FONT></TD>
 </TR>
@@ -2426,7 +2272,7 @@
 <P>
 <TABLE WIDTH=100% CELLPADDING=3 BORDER=2>
 <TR>
-<TD VALIGN=TOP BGCOLOR="LIGHTGREY" ><B><FONT SIZE=4 FACE="Arial">"Project_Step_Item to Project_Step_Item" Relationship Description&nbsp;</FONT></B></TD>
+<TD VALIGN=TOP BGCOLOR="LIGHTGREY" ><B><FONT SIZE=4 FACE="Arial">"ELEMENT to Project_Experiment" Relationship Description&nbsp;</FONT></B></TD>
 </TR>
 </TABLE>
 <TABLE WIDTH=100% CELLPADDING=2 BORDER=2>
@@ -2450,7 +2296,7 @@
 <P>
 <TABLE WIDTH=100% CELLPADDING=3 BORDER=2>
 <TR>
-<TD VALIGN=TOP BGCOLOR="LIGHTGREY" ><B><FONT SIZE=4 FACE="Arial">"Project_Step_Item to Project_Step_Item" Foreign Keys&nbsp;</FONT></B></TD>
+<TD VALIGN=TOP BGCOLOR="LIGHTGREY" ><B><FONT SIZE=4 FACE="Arial">"ELEMENT to Project_Experiment" Foreign Keys&nbsp;</FONT></B></TD>
 </TR>
 </TABLE>
 <TABLE WIDTH=100% CELLPADDING=2 BORDER=2>
@@ -2459,8 +2305,8 @@
 <TD VALIGN=TOP  WIDTH=22% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Child Key&nbsp;</FONT></B></TD>
 </TR>
 <TR>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">PROJECT_STEP_ITEM_ID&nbsp;</FONT></TD>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">GROUP_CONTEXT_ITEM_ID&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">ELEMENT_ID&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">STAGE_ID&nbsp;</FONT></TD>
 </TR>
 </TABLE>
 <HR>
