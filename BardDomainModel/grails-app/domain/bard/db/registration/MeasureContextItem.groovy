@@ -38,19 +38,18 @@ class MeasureContextItem {
     static constraints = {
         parentGroup nullable: true
         attributeType maxSize: 20
-//		valueDisplay nullable: true, maxSize: 256, unique: ["Attribute_ID", "Group_No", "Measure_Context_ID"]
-        extValueId(maxSize: 60)
-        valueDisplay nullable: true, maxSize: 1000
-        valueNum nullable: true
-        valueMin nullable: true
-        valueMax nullable: true
-        dateCreated maxSize: 19
-        lastUpdated nullable: true, maxSize: 19
-        modifiedBy nullable: true, maxSize: 40
-        attributeElement nullable: false
-        valueElement nullable: true
-        measureContext nullable: true
-        assay nullable: false
-        qualifier nullable: true
+        extValueId(nullable: true, maxSize: 100)
+        valueDisplay(nullable: true, maxSize: 512)
+        valueNum(nullable: true)
+        valueMin(nullable: true)
+        valueMax(nullable: true)
+        dateCreated(maxSize: 19)
+        lastUpdated(nullable: true, maxSize: 19)
+        modifiedBy(nullable: true, maxSize: 40)
+        attributeElement(nullable: false)
+        valueElement(nullable: true)
+        measureContext(nullable: true)
+        assay(nullable: false)
+        qualifier(nullable: true)
     }
 }

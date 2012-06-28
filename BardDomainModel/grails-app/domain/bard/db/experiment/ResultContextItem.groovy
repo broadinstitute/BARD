@@ -14,6 +14,8 @@ class ResultContextItem {
 	Float valueMin
 	Float valueMax
 	Element valueControlled
+    String extValueId
+
     Date dateCreated
     Date lastUpdated
     String modifiedBy
@@ -31,14 +33,17 @@ class ResultContextItem {
 	static constraints = {
 		parentGroup nullable: true
         attribute nullable: false
+        qualifier( nullable: true )
         result nullable: true
-		valueDisplay nullable: true, maxSize: 256
+		valueDisplay nullable: true, maxSize: 512
 		valueNum nullable: true
 		valueMin nullable: true
 		valueMax nullable: true
         valueControlled nullable: true
+        extValueId(nullable: true,maxSize: 100)
 		dateCreated maxSize: 19
 		lastUpdated nullable: true, maxSize: 19
 		modifiedBy nullable: true, maxSize: 40
+
 	}
 }
