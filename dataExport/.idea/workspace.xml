@@ -5,7 +5,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="30263ca6-daef-4910-a93e-888c36fe2d54" name="Default" comment="">
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/grails-app/services/dataexport/experiment/ExperimentExportService.groovy" afterPath="$PROJECT_DIR$/grails-app/services/dataexport/experiment/ExperimentExportService.groovy" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/groovy/common/tests/XmlTestSamples.groovy" afterPath="$PROJECT_DIR$/src/groovy/common/tests/XmlTestSamples.groovy" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/groovy/dataexport/registration/MediaTypesDTO.groovy" afterPath="$PROJECT_DIR$/src/groovy/dataexport/registration/MediaTypesDTO.groovy" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/test/unit/dataexport/experiment/ExperimentExportServiceUnitSpec.groovy" afterPath="$PROJECT_DIR$/test/unit/dataexport/experiment/ExperimentExportServiceUnitSpec.groovy" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/test/unit/dataexport/util/RootServiceUnitSpec.groovy" afterPath="$PROJECT_DIR$/test/unit/dataexport/util/RootServiceUnitSpec.groovy" />
     </list>
     <ignored path="bardDataExtraction.iws" />
@@ -247,7 +250,7 @@
         <option name="CONDITION" value="" />
         <option name="LOG_MESSAGE" value="" />
       </breakpoint>
-      <breakpoint url="file://$PROJECT_DIR$/grails-app/services/dataexport/experiment/ExperimentExportService.groovy" line="280" class="dataexport.experiment.ExperimentExportService" package="dataexport.experiment">
+      <breakpoint url="file://$PROJECT_DIR$/grails-app/services/dataexport/experiment/ExperimentExportService.groovy" line="286" class="dataexport.experiment.ExperimentExportService" package="dataexport.experiment">
         <option name="ENABLED" value="true" />
         <option name="LOG_ENABLED" value="false" />
         <option name="LOG_EXPRESSION_ENABLED" value="false" />
@@ -304,19 +307,7 @@
       <file leaf-file-name="ExperimentExportService.groovy" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/grails-app/services/dataexport/experiment/ExperimentExportService.groovy">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="24" column="25" selection-start="727" selection-end="727" vertical-scroll-proportion="0.0">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="ExternalSystem.groovy" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/target/plugins/bard-domain-model-0.1.5/grails-app/domain/bard/db/registration/ExternalSystem.groovy">
-          <provider editor-type-id="org.jetbrains.plugins.grails.perspectives.DomainClassesRelationsEditorProvider">
-            <state />
-          </provider>
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="5" column="15" selection-start="85" selection-end="85" vertical-scroll-proportion="0.0">
+            <state line="276" column="19" selection-start="13048" selection-end="13048" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -340,16 +331,30 @@
             <state />
           </provider>
           <provider selected="true" editor-type-id="text-editor">
-            <state line="5" column="6" selection-start="115" selection-end="115" vertical-scroll-proportion="-0.39534885">
+            <state line="5" column="6" selection-start="115" selection-end="115" vertical-scroll-proportion="-1.5813954">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="ExperimentExportServiceUnitSpec.groovy" pinned="false" current="false" current-in-tab="false">
+      <file leaf-file-name="ExperimentExportServiceUnitSpec.groovy" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/test/unit/dataexport/experiment/ExperimentExportServiceUnitSpec.groovy">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="51" column="41" selection-start="2139" selection-end="2139" vertical-scroll-proportion="0.0">
+            <state line="28" column="28" selection-start="892" selection-end="892" vertical-scroll-proportion="0.11861614">
+              <folding>
+                <element signature="e#31#64#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="ResultContextItem.groovy" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/target/plugins/bard-domain-model-0.1.5/grails-app/domain/bard/db/experiment/ResultContextItem.groovy">
+          <provider editor-type-id="org.jetbrains.plugins.grails.perspectives.DomainClassesRelationsEditorProvider">
+            <state />
+          </provider>
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="4" column="6" selection-start="69" selection-end="69" vertical-scroll-proportion="-1.5813954">
               <folding />
             </state>
           </provider>
@@ -358,7 +363,7 @@
       <file leaf-file-name="XmlTestSamples.groovy" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/groovy/common/tests/XmlTestSamples.groovy">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="53" column="55" selection-start="2563" selection-end="2563" vertical-scroll-proportion="0.0">
+            <state line="165" column="24" selection-start="7476" selection-end="7476" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -373,10 +378,10 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="MediaTypesDTO.groovy" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="MediaTypesDTO.groovy" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/groovy/dataexport/registration/MediaTypesDTO.groovy">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="12" column="30" selection-start="347" selection-end="347" vertical-scroll-proportion="0.65806454">
+            <state line="12" column="30" selection-start="347" selection-end="347" vertical-scroll-proportion="-4.08">
               <folding />
             </state>
           </provider>
@@ -423,21 +428,21 @@
         <option value="$PROJECT_DIR$/test/unit/dataexport/registration/AssayExportHelperServiceUnitSpec.groovy" />
         <option value="$PROJECT_DIR$/test/unit/dataexport/registration/AssayExportServiceUnitSpec.groovy" />
         <option value="$PROJECT_DIR$/test/unit/dataexport/dictionary/DictionaryExportHelperServiceUnitSpec.groovy" />
-        <option value="$PROJECT_DIR$/grails-app/services/dataexport/experiment/ExperimentExportService.groovy" />
         <option value="$PROJECT_DIR$/target/plugins/bard-domain-model-0.1.5/grails-app/domain/bard/db/registration/ExternalReference.groovy" />
-        <option value="$PROJECT_DIR$/test/unit/dataexport/experiment/ExperimentExportServiceUnitSpec.groovy" />
-        <option value="$PROJECT_DIR$/src/groovy/common/tests/XmlTestSamples.groovy" />
         <option value="$PROJECT_DIR$/grails-app/services/dataexport/util/RootService.groovy" />
         <option value="$PROJECT_DIR$/test/unit/dataexport/util/RootServiceUnitSpec.groovy" />
         <option value="$PROJECT_DIR$/src/groovy/dataexport/registration/MediaTypesDTO.groovy" />
+        <option value="$PROJECT_DIR$/grails-app/services/dataexport/experiment/ExperimentExportService.groovy" />
+        <option value="$PROJECT_DIR$/src/groovy/common/tests/XmlTestSamples.groovy" />
+        <option value="$PROJECT_DIR$/test/unit/dataexport/experiment/ExperimentExportServiceUnitSpec.groovy" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds">
     <option name="x" value="-8" />
     <option name="y" value="-8" />
-    <option name="width" value="1616" />
-    <option name="height" value="876" />
+    <option name="width" value="1936" />
+    <option name="height" value="1056" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true">
     <OptionsSetting value="true" id="Add" />
@@ -599,67 +604,11 @@
       <recent name="" />
     </key>
   </component>
-  <component name="RunManager" selected="JUnit.RootServiceUnitSpec">
-    <configuration default="false" name="AssayExportServiceUnitSpec" type="JUnit" factoryName="JUnit" temporary="true">
-      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea">
-        <pattern>
-          <option name="PATTERN" value="dataexport.registration.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <module name="DataExport" />
-      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
-      <option name="ALTERNATIVE_JRE_PATH" />
-      <option name="PACKAGE_NAME" value="dataexport.registration" />
-      <option name="MAIN_CLASS_NAME" value="dataexport.registration.AssayExportServiceUnitSpec" />
-      <option name="METHOD_NAME" />
-      <option name="TEST_OBJECT" value="class" />
-      <option name="VM_PARAMETERS" value="-ea" />
-      <option name="PARAMETERS" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
-      <option name="ENV_VARIABLES" />
-      <option name="PASS_PARENT_ENVS" value="true" />
-      <option name="TEST_SEARCH_SCOPE">
-        <value defaultName="moduleWithDependencies" />
-      </option>
-      <envs />
-      <patterns />
-      <RunnerSettings RunnerId="Run" />
-      <ConfigurationWrapper RunnerId="Run" />
-      <method />
-    </configuration>
-    <configuration default="false" name="ExperimentExportServiceUnitSpec" type="JUnit" factoryName="JUnit" temporary="true">
-      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea">
-        <pattern>
-          <option name="PATTERN" value="dataexport.experiment.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <module name="DataExport" />
-      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
-      <option name="ALTERNATIVE_JRE_PATH" />
-      <option name="PACKAGE_NAME" value="dataexport.experiment" />
-      <option name="MAIN_CLASS_NAME" value="dataexport.experiment.ExperimentExportServiceUnitSpec" />
-      <option name="METHOD_NAME" />
-      <option name="TEST_OBJECT" value="class" />
-      <option name="VM_PARAMETERS" value="-ea" />
-      <option name="PARAMETERS" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
-      <option name="ENV_VARIABLES" />
-      <option name="PASS_PARENT_ENVS" value="true" />
-      <option name="TEST_SEARCH_SCOPE">
-        <value defaultName="moduleWithDependencies" />
-      </option>
-      <envs />
-      <patterns />
-      <RunnerSettings RunnerId="Run" />
-      <ConfigurationWrapper RunnerId="Run" />
-      <method />
-    </configuration>
-    <configuration default="false" name="test generate External Reference #label()" type="GrailsRunConfigurationType" factoryName="Grails" temporary="true">
+  <component name="RunManager" selected="JUnit.ExperimentExportServiceUnitSpec.test Generate Experiment Links #label">
+    <configuration default="false" name="test generate Project Experiments #label()" type="GrailsRunConfigurationType" factoryName="Grails" temporary="true">
       <module name="DataExport" />
       <setting name="vmparams" value="" />
-      <setting name="cmdLine" value="test-app unit: dataexport.experiment.ExperimentExportServiceUnitSpec.test generate External Reference #label -echoOut" />
+      <setting name="cmdLine" value="test-app unit: dataexport.experiment.ExperimentExportServiceUnitSpec.test generate Project Experiments #label -echoOut" />
       <setting name="depsClasspath" value="true" />
       <setting name="passParentEnv" value="true" />
       <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
@@ -670,7 +619,7 @@
         <option name="Make" enabled="false" />
       </method>
     </configuration>
-    <configuration default="false" name="ExperimentExportServiceUnitSpec.test generate External References" type="JUnit" factoryName="JUnit" temporary="true">
+    <configuration default="false" name="ExperimentExportServiceUnitSpec.test generate Result Context Items #label" type="JUnit" factoryName="JUnit" temporary="true">
       <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea">
         <pattern>
           <option name="PATTERN" value="dataexport.experiment.*" />
@@ -682,7 +631,7 @@
       <option name="ALTERNATIVE_JRE_PATH" />
       <option name="PACKAGE_NAME" value="dataexport.experiment" />
       <option name="MAIN_CLASS_NAME" value="dataexport.experiment.ExperimentExportServiceUnitSpec" />
-      <option name="METHOD_NAME" value="test generate External References" />
+      <option name="METHOD_NAME" value="test generate Result Context Items #label" />
       <option name="TEST_OBJECT" value="method" />
       <option name="VM_PARAMETERS" value="-ea" />
       <option name="PARAMETERS" />
@@ -698,20 +647,76 @@
       <ConfigurationWrapper RunnerId="Run" />
       <method />
     </configuration>
-    <configuration default="false" name="RootServiceUnitSpec" type="JUnit" factoryName="JUnit" temporary="true">
+    <configuration default="false" name="ExperimentExportServiceUnitSpec.test generate Attributes For Result Context Item #label" type="JUnit" factoryName="JUnit" temporary="true">
       <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea">
         <pattern>
-          <option name="PATTERN" value="dataexport.util.*" />
+          <option name="PATTERN" value="dataexport.experiment.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
       <module name="DataExport" />
       <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
       <option name="ALTERNATIVE_JRE_PATH" />
-      <option name="PACKAGE_NAME" value="dataexport.util" />
-      <option name="MAIN_CLASS_NAME" value="dataexport.util.RootServiceUnitSpec" />
-      <option name="METHOD_NAME" />
-      <option name="TEST_OBJECT" value="class" />
+      <option name="PACKAGE_NAME" value="dataexport.experiment" />
+      <option name="MAIN_CLASS_NAME" value="dataexport.experiment.ExperimentExportServiceUnitSpec" />
+      <option name="METHOD_NAME" value="test generate Attributes For Result Context Item #label" />
+      <option name="TEST_OBJECT" value="method" />
+      <option name="VM_PARAMETERS" value="-ea" />
+      <option name="PARAMETERS" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="ENV_VARIABLES" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <option name="TEST_SEARCH_SCOPE">
+        <value defaultName="moduleWithDependencies" />
+      </option>
+      <envs />
+      <patterns />
+      <RunnerSettings RunnerId="Run" />
+      <ConfigurationWrapper RunnerId="Run" />
+      <method />
+    </configuration>
+    <configuration default="false" name="ExperimentExportServiceUnitSpec.test generate Result Context Item #label" type="JUnit" factoryName="JUnit" temporary="true">
+      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea">
+        <pattern>
+          <option name="PATTERN" value="dataexport.experiment.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <module name="DataExport" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="PACKAGE_NAME" value="dataexport.experiment" />
+      <option name="MAIN_CLASS_NAME" value="dataexport.experiment.ExperimentExportServiceUnitSpec" />
+      <option name="METHOD_NAME" value="test generate Result Context Item #label" />
+      <option name="TEST_OBJECT" value="method" />
+      <option name="VM_PARAMETERS" value="-ea" />
+      <option name="PARAMETERS" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="ENV_VARIABLES" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <option name="TEST_SEARCH_SCOPE">
+        <value defaultName="moduleWithDependencies" />
+      </option>
+      <envs />
+      <patterns />
+      <RunnerSettings RunnerId="Run" />
+      <ConfigurationWrapper RunnerId="Run" />
+      <method />
+    </configuration>
+    <configuration default="false" name="ExperimentExportServiceUnitSpec.test Generate Experiment Links #label" type="JUnit" factoryName="JUnit" temporary="true">
+      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea">
+        <pattern>
+          <option name="PATTERN" value="dataexport.experiment.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <module name="DataExport" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="PACKAGE_NAME" value="dataexport.experiment" />
+      <option name="MAIN_CLASS_NAME" value="dataexport.experiment.ExperimentExportServiceUnitSpec" />
+      <option name="METHOD_NAME" value="test Generate Experiment Links #label" />
+      <option name="TEST_OBJECT" value="method" />
       <option name="VM_PARAMETERS" value="-ea" />
       <option name="PARAMETERS" />
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
@@ -1237,11 +1242,11 @@
       <item index="14" class="java.lang.String" itemvalue="Grails.AssayRestControllerUnitSpec" />
       <item index="15" class="java.lang.String" itemvalue="JUnit.DictionaryExportHelperServiceUnitSpec" />
       <item index="16" class="java.lang.String" itemvalue="JUnit.DictionaryExportHelperServiceUnitSpec.test Generate Attributes For ResultType #label" />
-      <item index="17" class="java.lang.String" itemvalue="JUnit.AssayExportServiceUnitSpec" />
-      <item index="18" class="java.lang.String" itemvalue="JUnit.ExperimentExportServiceUnitSpec" />
-      <item index="19" class="java.lang.String" itemvalue="Grails.test generate External Reference #label()" />
-      <item index="20" class="java.lang.String" itemvalue="JUnit.ExperimentExportServiceUnitSpec.test generate External References" />
-      <item index="21" class="java.lang.String" itemvalue="JUnit.RootServiceUnitSpec" />
+      <item index="17" class="java.lang.String" itemvalue="Grails.test generate Project Experiments #label()" />
+      <item index="18" class="java.lang.String" itemvalue="JUnit.ExperimentExportServiceUnitSpec.test generate Result Context Items #label" />
+      <item index="19" class="java.lang.String" itemvalue="JUnit.ExperimentExportServiceUnitSpec.test generate Attributes For Result Context Item #label" />
+      <item index="20" class="java.lang.String" itemvalue="JUnit.ExperimentExportServiceUnitSpec.test generate Result Context Item #label" />
+      <item index="21" class="java.lang.String" itemvalue="JUnit.ExperimentExportServiceUnitSpec.test Generate Experiment Links #label" />
     </list>
     <configuration name="&lt;template&gt;" type="WebApp" default="true" selected="false">
       <Host>localhost</Host>
@@ -1276,7 +1281,7 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="-8" width="1616" height="876" extended-state="6" />
+    <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
     <editor active="false" />
     <layout>
       <window_info id="Data Sources" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
@@ -1284,12 +1289,13 @@
       <window_info id="JetGradle" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Persistence" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.21064061" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.40890688" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="IDEtalk Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="12" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.22941971" sideWeight="0.498125" order="8" side_tool="true" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="5" side_tool="true" content_ui="tabs" />
-      <window_info id="Console" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.4534413" sideWeight="0.4975" order="9" side_tool="false" content_ui="tabs" />
+      <window_info id="Console" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.25081432" sideWeight="0.4975" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Grails View" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="IDEtalk" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
@@ -1299,12 +1305,11 @@
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="true" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.21375" sideWeight="0.5465587" order="0" side_tool="false" content_ui="combo" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.24021593" sideWeight="0.98603654" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.178125" sideWeight="0.7491857" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.39739415" sideWeight="0.98603654" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.02625" sideWeight="0.82321185" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3130904" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
     </layout>
   </component>
@@ -1401,11 +1406,6 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/grails-app/services/dataexport/registration/AssayExportHelperService.groovy">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="175" column="80" selection-start="7434" selection-end="7434" vertical-scroll-proportion="0.2984694" />
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/grails-app/services/dataexport/experiment/ProjectExportService.groovy">
       <provider selected="true" editor-type-id="text-editor">
         <state line="13" column="44" selection-start="376" selection-end="376" vertical-scroll-proportion="0.3261391" />
@@ -1455,33 +1455,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/test/unit/dataexport/experiment/ExperimentExportServiceUnitSpec.groovy">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="51" column="41" selection-start="2139" selection-end="2139" vertical-scroll-proportion="0.0" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/groovy/common/tests/XmlTestSamples.groovy">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="53" column="55" selection-start="2563" selection-end="2563" vertical-scroll-proportion="0.0" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/target/plugins/bard-domain-model-0.1.5/grails-app/domain/bard/db/experiment/Experiment.groovy">
-      <provider editor-type-id="org.jetbrains.plugins.grails.perspectives.DomainClassesRelationsEditorProvider">
-        <state />
-      </provider>
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="5" column="6" selection-start="115" selection-end="115" vertical-scroll-proportion="-0.39534885">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/grails-app/services/dataexport/experiment/ExperimentExportService.groovy">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="24" column="25" selection-start="727" selection-end="727" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/test/unit/dataexport/util/RootServiceUnitSpec.groovy">
       <provider selected="true" editor-type-id="text-editor">
         <state line="24" column="23" selection-start="767" selection-end="767" vertical-scroll-proportion="0.0">
@@ -1505,8 +1478,51 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/groovy/dataexport/registration/MediaTypesDTO.groovy">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="12" column="30" selection-start="347" selection-end="347" vertical-scroll-proportion="0.65806454">
+        <state line="12" column="30" selection-start="347" selection-end="347" vertical-scroll-proportion="-4.08">
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/target/plugins/bard-domain-model-0.1.5/grails-app/domain/bard/db/experiment/ResultContextItem.groovy">
+      <provider editor-type-id="org.jetbrains.plugins.grails.perspectives.DomainClassesRelationsEditorProvider">
+        <state />
+      </provider>
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="4" column="6" selection-start="69" selection-end="69" vertical-scroll-proportion="-1.5813954">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/grails-app/services/dataexport/experiment/ExperimentExportService.groovy">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="276" column="19" selection-start="13048" selection-end="13048" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/target/plugins/bard-domain-model-0.1.5/grails-app/domain/bard/db/experiment/Experiment.groovy">
+      <provider editor-type-id="org.jetbrains.plugins.grails.perspectives.DomainClassesRelationsEditorProvider">
+        <state />
+      </provider>
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="5" column="6" selection-start="115" selection-end="115" vertical-scroll-proportion="-1.5813954">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/groovy/common/tests/XmlTestSamples.groovy">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="165" column="24" selection-start="7476" selection-end="7476" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/test/unit/dataexport/experiment/ExperimentExportServiceUnitSpec.groovy">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="28" column="28" selection-start="892" selection-end="892" vertical-scroll-proportion="0.11861614">
+          <folding>
+            <element signature="e#31#64#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
