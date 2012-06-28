@@ -44,6 +44,15 @@ The link with 'edit' relation should be used to set the status of this experimen
                                 <xs:complexType>
                                     <xs:sequence>
                                         <xs:element minOccurs="0" ref="description"/>
+                                        <xs:element minOccurs="0" name="precedingExperiment">
+                                            <xs:complexType>
+                                                <xs:sequence minOccurs="0">
+                                                  <xs:element ref="link"/>
+                                                </xs:sequence>
+                                                <xs:attribute name="id" type="bardID" use="required"
+                                                />
+                                            </xs:complexType>
+                                        </xs:element>
                                         <xs:element maxOccurs="unbounded" minOccurs="0" ref="link">
                                             <xs:annotation>
                                                 <xs:documentation>Link to self
@@ -95,12 +104,12 @@ Link to Project and Assay</xs:documentation>
                     </xs:annotation>
                 </xs:element>
             </xs:sequence>
-            <xs:attribute name="numberOfResults" type="xs:integer" use="optional"/>
             <xs:attribute name="experimentName" type="xs:string" use="required"/>
             <xs:attribute name="holdUntilDate" type="xs:dateTime" use="optional"/>
             <xs:attribute name="runDateFrom" type="xs:dateTime" use="optional"/>
             <xs:attribute name="runDateTo" type="xs:dateTime" use="optional"/>
             <xs:attribute name="status" type="xs:string"/>
+            <xs:attribute name="experimentId" type="bardID"/>
         </xs:complexType>
     </xs:element>
     <xs:element name="results">
@@ -212,25 +221,17 @@ Link to parent experiment
                             <xs:element name="attributeId" minOccurs="0">
                                 <xs:complexType>
                                     <xs:sequence>
-                                        <xs:element ref="label"/>
                                         <xs:element ref="link" minOccurs="0"/>
                                     </xs:sequence>
-                                </xs:complexType>
-                            </xs:element>
-                            <xs:element minOccurs="0" name="valueId">
-                                <xs:complexType>
-                                    <xs:sequence>
-                                        <xs:element ref="label"/>
-                                        <xs:element ref="link" maxOccurs="unbounded" minOccurs="0"/>
-                                    </xs:sequence>
+                                    <xs:attribute name="label" type="xs:string" use="required"/>
                                 </xs:complexType>
                             </xs:element>
                             <xs:element minOccurs="0" name="valueControlled">
                                 <xs:complexType>
                                     <xs:sequence>
-                                        <xs:element ref="label"/>
                                         <xs:element ref="link" minOccurs="0"/>
                                     </xs:sequence>
+                                    <xs:attribute name="label" type="xs:string" use="required"/>
                                 </xs:complexType>
                             </xs:element>
                         </xs:sequence>
