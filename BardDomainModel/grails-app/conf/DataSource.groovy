@@ -3,6 +3,10 @@ dataSource {
     driverClassName = "org.h2.Driver"
     username = "sa"
     password = ""
+    // defaulting to using validate unless we specify something different on command line
+    // you can't always use the validation option for database migration dbm- commmands
+    // say bootstrapping a fresh schema, in this case you can turn off validation
+    dbCreate = System.getProperty('dataSource.dbCreate')?:"validate"
 }
 hibernate {
     cache.use_second_level_cache = true
@@ -13,7 +17,6 @@ hibernate {
 environments {
     development {
         dataSource {
-            dbCreate = "create-drop" // one of 'create', 'create-drop', 'update', 'validate', ''
             url = "jdbc:h2:mem:devDb;MVCC=TRUE"
         }
     }
@@ -37,7 +40,6 @@ environments {
     }
     ddurkin {
         dataSource {
-            //dbCreate = "validate"
             url = "jdbc:oracle:thin:@barddb:1521:bardqa"
             driverClassName = "oracle.jdbc.driver.OracleDriver"
             dialect = bard.SequencePerTableOracleDialect
@@ -66,13 +68,11 @@ environments {
     }
     test {
         dataSource {
-            dbCreate = "update"
             url = "jdbc:h2:mem:testDb;MVCC=TRUE"
         }
     }
     production {
         dataSource {
-            dbCreate = "update"
             url = "jdbc:h2:prodDb;MVCC=TRUE"
             pooled = true
             properties {
