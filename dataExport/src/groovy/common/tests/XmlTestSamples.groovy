@@ -16,6 +16,82 @@ package common.tests
 
 
 class XmlTestSamples {
+    //We include a dummy header, just so we can validate, otherwise the XML is not well-formed
+    static final String EXPERIMENTS_LINK_UNIT='''
+    <dummyHeader>
+    <link rel='related' title='Link to Assay' type='assayMediaType' href='null' />
+    <link rel='related' title='List Related Results' type='resultsMediaType' href='null' />
+    <link rel='edit' title='Use link to edit Experiment' type='experimentMediaType' href='null' />
+    <link rel='up' title='List Experiments' type='experimentsMediaType' href='null' />
+    </dummyHeader>
+    '''
+
+    static final String RESULT_CONTEXT_ITEM_UNIT ='''
+  <resultContextItem resultContextItemId='' qualifier='%' valueDisplay='20 %' valueNum='2.0' valueMin='1.0' valueMax='3.0'>
+    <attribute label='attrribute'>
+      <link rel='related' href='null' type='elementMediaType' />
+    </attribute>
+    <valueControlled label='valueControlled'>
+      <link rel='related' href='null' type='elementMediaType' />
+    </valueControlled>
+  </resultContextItem>
+'''
+    static final String RESULT_CONTEXT_ITEM_UNIT_NO_CHILD_ELEMENTS ='''
+  <resultContextItem resultContextItemId='' qualifier='%' valueDisplay='20 %' valueNum='2.0' valueMin='1.0' valueMax='3.0' />
+'''
+    static final String RESULT_CONTEXT_ITEMS_UNIT ='''
+<resultContextItems>
+  <resultContextItem resultContextItemId='' qualifier='%' valueDisplay='20 %' valueNum='2.0' valueMin='1.0' valueMax='3.0'>
+    <attribute label='attrribute'>
+      <link rel='related' href='null' type='elementMediaType' />
+    </attribute>
+    <valueControlled label='valueControlled'>
+      <link rel='related' href='null' type='elementMediaType' />
+    </valueControlled>
+  </resultContextItem>
+</resultContextItems>
+'''
+    static final String RESULT_CONTEXT_ITEMS_UNIT_NO_CHILD_ELEMENTS ='''
+<resultContextItems>
+  <resultContextItem resultContextItemId='' qualifier='%' valueDisplay='20 %' valueNum='2.0' valueMin='1.0' valueMax='3.0' />
+</resultContextItems>
+'''
+    static final String PROJECT_EXPERIMENTS_UNIT = '''
+<projectExperiments>
+  <projectExperiment>
+    <description>description</description>
+    <precedingExperiment id='null'>
+      <link rel='related' href='null' type='experimentMediaType' />
+    </precedingExperiment>
+    <link rel='related' href='null' type='projectMediaType' />
+    <link rel='related' href='null' type='stageMediaType' />
+  </projectExperiment>
+</projectExperiments>
+'''
+    static final String PROJECT_EXPERIMENT_UNIT = '''
+  <projectExperiment>
+    <description>description</description>
+    <precedingExperiment id='null'>
+      <link rel='related' href='null' type='experimentMediaType' />
+    </precedingExperiment>
+    <link rel='related' href='null' type='projectMediaType' />
+    <link rel='related' href='null' type='stageMediaType' />
+  </projectExperiment>
+'''
+    static final String PROJECT_EXPERIMENT_UNIT_NO_CHILD_ELEMENTS = '''
+    <projectExperiment>
+    <description>description</description>
+    <link rel='related' href='null' type='projectMediaType' />
+    </projectExperiment>
+'''
+    static final String PROJECT_EXPERIMENTS_UNIT_NO_CHILD_ELEMENTS = '''
+    <projectExperiments>
+    <projectExperiment>
+    <description>description</description>
+    <link rel='related' href='null' type='projectMediaType' />
+    </projectExperiment>
+</projectExperiments>
+'''
     static final String EXTERNAL_REFERENCES_UNT='''
 <externalReferences>
 <externalReference>
@@ -23,7 +99,7 @@ class XmlTestSamples {
   <externalSystem name='systemName' owner='owner'>
     <systemUrl>http://broad.org</systemUrl>
   </externalSystem>
-    <link rel='related' href='null' type='null' />
+    <link rel='related' href='null' type='projectMediaType' />
     </externalReference>
     </externalReferences>
     '''
@@ -33,13 +109,13 @@ class XmlTestSamples {
   <externalSystem name='systemName' owner='owner'>
     <systemUrl>http://broad.org</systemUrl>
   </externalSystem>
-    <link rel='related' href='null' type='null' />
+    <link rel='related' href='null' type='projectMediaType' />
     </externalReference>
     '''
 
     static final String EXPERIMENT_UNIT_ONLY_ATTRIBUTES = '''
   <experiment experimentId='' experimentName='Experiment1' status='Published' holdUntilDate='1969-12-31T19:00:00.000-05:00' runDateFrom='1969-12-31T19:00:00.000-05:00' runDateTo='1969-12-31T19:00:00.000-05:00'>
-  <link rel='related' title='Link to Assay' type='null' href='null' />
+  <link rel='related' title='Link to Assay' type='assayMediaType' href='null' />
   <link rel='related' title='List Related Results' type='resultsMediaType' href='null' />
   <link rel='edit' title='Use link to edit Experiment' type='experimentMediaType' href='null' />
   <link rel='up' title='List Experiments' type='experimentsMediaType' href='null' />
@@ -58,26 +134,26 @@ class XmlTestSamples {
       </valueControlled>
     </resultContextItem>
   </resultContextItems>
-    <projectExperiments>
+  <projectExperiments>
     <projectExperiment>
       <description>Broad</description>
       <precedingExperiment id='null'>
         <link rel='related' href='null' type='experimentMediaType' />
       </precedingExperiment>
-      <link rel='related' href='null' type='null' />
-      <link rel='related' href='null' type='null' />
+      <link rel='related' href='null' type='projectMediaType' />
+      <link rel='related' href='null' type='stageMediaType' />
     </projectExperiment>
   </projectExperiments>
-    <externalReferences>
+  <externalReferences>
     <externalReference>
       <externalAssayRef>External Assay Ref</externalAssayRef>
       <externalSystem name='systemName' owner='owner'>
         <systemUrl>http://broad.org</systemUrl>
       </externalSystem>
-      <link rel='related' href='null' type='null' />
+      <link rel='related' href='null' type='projectMediaType' />
     </externalReference>
   </externalReferences>
-  <link rel='related' title='Link to Assay' type='null' href='null' />
+  <link rel='related' title='Link to Assay' type='assayMediaType' href='null' />
   <link rel='related' title='List Related Results' type='resultsMediaType' href='null' />
   <link rel='edit' title='Use link to edit Experiment' type='experimentMediaType' href='null' />
   <link rel='up' title='List Experiments' type='experimentsMediaType' href='null' />

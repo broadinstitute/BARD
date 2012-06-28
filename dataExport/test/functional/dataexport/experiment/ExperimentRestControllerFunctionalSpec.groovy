@@ -1,12 +1,9 @@
 package dataexport.experiment
 
-
-
-import common.tests.XmlTestAssertions
-import common.tests.XmlTestSamples
 import grails.converters.XML
 import grails.plugin.remotecontrol.RemoteControl
 import groovyx.net.http.RESTClient
+import org.custommonkey.xmlunit.XMLAssert
 import spock.lang.Specification
 import spock.lang.Unroll
 
@@ -22,16 +19,16 @@ import static groovyx.net.http.Method.GET
  * To change this template use File | Settings | File Templates.
  */
 @Unroll
-class ProjectRestControllerFunctionalSpec extends Specification {
+class ExperimentRestControllerFunctionalSpec extends Specification {
     RemoteControl remote = new RemoteControl()
-    final String baseUrl = remote { ctx.grailsApplication.config.grails.serverURL } + "/api/projects"
-    String projectsMediaType = remote { ctx.grailsApplication.config.bard.data.export.projects.xml }
-    String projectMediaType = remote { ctx.grailsApplication.config.bard.data.export.project.xml }
+    final String baseUrl = remote { ctx.grailsApplication.config.grails.serverURL } + "/api/experiments"
+    String experimentsMediaType = remote { ctx.grailsApplication.config.bard.data.export.experiments.xml }
+    String experimentMediaType = remote { ctx.grailsApplication.config.bard.data.export.experiment.xml }
 
     final String apiKeyHeader = remote { ctx.grailsApplication.config.dataexport.externalapplication.apiKey.header }
     final String apiKeyHashed = remote { ctx.grailsApplication.config.dataexport.externalapplication.apiKey.hashed }
 
-    def 'test GET projects success'() {
+    def 'test GET Experiments success'() {
         /**
          * This is the code used in case the Remote Control feature is not used and both the functional test and Grails application
          * run in the SAME jvm.
@@ -46,27 +43,32 @@ class ProjectRestControllerFunctionalSpec extends Specification {
 
          */
 
-        given: "there is a service end point to get the the list of projects with status of ready"
+        given: "there is a service end point to get the the list of experiments with status of ready"
         RESTClient http = new RESTClient(baseUrl)
-        when: 'We send an HTTP GET request for the list of projects with status of ready'
+        when: 'We send an HTTP GET request for the list of experiments with status of ready'
         def serverResponse = http.request(GET, XML) {
-            headers.'Accept' = projectsMediaType
+            headers.'Accept' = experimentsMediaType
             headers."${apiKeyHeader}" = apiKeyHashed
         }
-        then: 'We expect an XML representation of the projects'
+        then: 'We expect an XML representation of the experiments'
         assert serverResponse.statusLine.statusCode == HttpServletResponse.SC_OK
         final String responseData = serverResponse.data.readLines().join()
-        XmlTestAssertions.assertResults(XmlTestSamples.PROJECTS_FROM_SERVER, responseData)
+        XMLAssert.assertXpathEvaluatesTo("1", "count(//experiments)", responseData)
+        XMLAssert.assertXpathEvaluatesTo("0", "count(//experiment)", responseData)
+        XMLAssert.assertXpathEvaluatesTo("3", "count(//link)", responseData)
+        XMLAssert.assertXpathEvaluatesTo('application/vnd.bard.cap+xml;type=experiment', "//link/@type", responseData)
+        XMLAssert.assertXpathEvaluatesTo('related', "//link/@rel", responseData)
+
     }
 
     def 'test GET unauthorized'() {
 
-        given: "there is a service end point to get the projects"
+        given: "there is a service end point to get the experiments"
         RESTClient http = new RESTClient(baseUrl)
 
-        when: 'We send an HTTP GET request for projects without the API key'
+        when: 'We send an HTTP GET request for experiments without the API key'
         def serverResponse = http.request(GET, XML) {
-            headers.'Accept' = projectsMediaType
+            headers.'Accept' = experimentsMediaType
             response.failure = { resp ->
                 resp
             }
@@ -75,11 +77,11 @@ class ProjectRestControllerFunctionalSpec extends Specification {
         assert serverResponse.statusLine.statusCode == HttpServletResponse.SC_UNAUTHORIZED
     }
 
-    def 'test GET project fail with wrong Accept Header'() {
-        given: "there is a service end point to get projects"
+    def 'test GET experiment fail with wrong Accept Header'() {
+        given: "there is a service end point to get experiments"
         RESTClient http = new RESTClient(baseUrl)
 
-        when: 'We send an HTTP GET request for the projects with the wrong mime type'
+        when: 'We send an HTTP GET request for the experiments with the wrong mime type'
         def serverResponse = http.request(GET, XML) {
             headers.'Accept' = "some bogus"
             headers."${apiKeyHeader}" = apiKeyHashed
@@ -91,14 +93,14 @@ class ProjectRestControllerFunctionalSpec extends Specification {
         assert serverResponse.statusLine.statusCode == HttpServletResponse.SC_BAD_REQUEST
     }
 
-    void 'test project 404 not Found'() {
+    void 'test experiment 404 not Found'() {
 
-        given: "there is a service endpoint to get a project"
+        given: "there is a service endpoint to get a experiment"
         final RESTClient http = new RESTClient("${baseUrl}/333891")
 
-        when: 'We send an HTTP GET request, with the appropriate mime type, for a project with a non-existing id'
+        when: 'We send an HTTP GET request, with the appropriate mime type, for a experiment with a non-existing id'
         def serverResponse = http.request(GET, XML) {
-            headers.Accept = projectMediaType
+            headers.Accept = experimentMediaType
             headers."${apiKeyHeader}" = apiKeyHashed
             response.failure = { resp ->
                 resp
@@ -108,14 +110,14 @@ class ProjectRestControllerFunctionalSpec extends Specification {
         assert serverResponse.statusLine.statusCode == HttpServletResponse.SC_NOT_FOUND
     }
 
-    void 'test experiments 400 not bad request'() {
+    void 'test experiment 400 not bad request'() {
 
-        given: "there is a service endpoint to get a project"
+        given: "there is a service endpoint to get a experiment"
         final RESTClient http = new RESTClient("${baseUrl}/10000")
 
         when: 'We send an HTTP GET request, with the wrong mime type'
         def serverResponse = http.request(GET, XML) {
-            headers.Accept = projectsMediaType
+            headers.Accept = experimentsMediaType
             headers."${apiKeyHeader}" = apiKeyHashed
             response.failure = { resp ->
                 resp
@@ -125,19 +127,25 @@ class ProjectRestControllerFunctionalSpec extends Specification {
         assert serverResponse.statusLine.statusCode == HttpServletResponse.SC_BAD_REQUEST
     }
 
-    def 'test GET Project Success'() {
-        given: "there is a service endpoint to get an project with id 1"
+    def 'test GET Experiment Success'() {
+        given: "there is a service endpoint to get an experiment with id 1"
         RESTClient http = new RESTClient("${baseUrl}/1")
 
-        when: 'We send an HTTP GET request for that project with the appropriate mime type'
+        when: 'We send an HTTP GET request for that experiment with the appropriate mime type'
         def serverResponse = http.request(GET, XML) {
-            headers.Accept = projectMediaType
+            headers.Accept = experimentMediaType
             headers."${apiKeyHeader}" = apiKeyHashed
         }
-        then: 'We expect an XML representation of that project'
+        then: 'We expect an XML representation of that experiment'
 
         assert serverResponse.statusLine.statusCode == HttpServletResponse.SC_OK
         final String responseData = serverResponse.data.readLines().join()
-        XmlTestAssertions.assertResults(XmlTestSamples.PROJECT_FROM_SERVER, responseData)
+        XMLAssert.assertXpathEvaluatesTo("1", "count(//experiment)", responseData)
+        XMLAssert.assertXpathEvaluatesTo("0", "count(//experiments)", responseData)
+        XMLAssert.assertXpathEvaluatesTo("1", "count(//resultContextItems)", responseData)
+        XMLAssert.assertXpathEvaluatesTo("2", "count(//resultContextItem)", responseData)
+        XMLAssert.assertXpathEvaluatesTo("Number of points", "//resultContextItem/attribute/@label", responseData)
+        XMLAssert.assertXpathEvaluatesTo("application/vnd.bard.cap+xml;type=element", "//resultContextItem/attribute/link/@type", responseData)
+        XMLAssert.assertXpathEvaluatesTo("10", "count(//link)", responseData)
     }
 }
