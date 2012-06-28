@@ -20,8 +20,9 @@ class RootServiceUnitSpec extends Specification {
 
     void setup() {
         grailsLinkGenerator = Mock()
+        final MediaTypesDTO mediaTypesDTO = new MediaTypesDTO(dictionaryMediaType: "dictionaryMediaType", assaysMediaType: "assaysMediaType", projectsMediaType: "projectsMediaType")
         this.rootService =
-            new RootService(new MediaTypesDTO(dictionaryMediaType: "dictionaryMediaType",assaysMediaType:"assaysMediaType", projectsMediaType:"projectsMediaType"))
+            new RootService(mediaTypesDTO)
         this.rootService.grailsLinkGenerator = grailsLinkGenerator
         this.writer = new StringWriter()
         this.markupBuilder = new MarkupBuilder(writer)
