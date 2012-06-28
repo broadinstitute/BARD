@@ -3,6 +3,7 @@ package dataexport.dictionary
 import groovy.xml.MarkupBuilder
 import org.codehaus.groovy.grails.web.mapping.LinkGenerator
 import bard.db.dictionary.*
+import dataexport.registration.MediaTypesDTO
 
 /**
  *  This is wired in resources.groovy
@@ -12,8 +13,8 @@ class DictionaryExportHelperService {
     String elementMediaType
     List<Laboratory> laboratories
 
-    DictionaryExportHelperService(final String elementMediaType) {
-        this.elementMediaType = elementMediaType
+    DictionaryExportHelperService(final MediaTypesDTO mediaTypesDTO) {
+        this.elementMediaType = mediaTypesDTO.elementMediaType
     }
     /**
      * Root node for generating the entire dictionary

@@ -9,6 +9,7 @@ import grails.test.mixin.Mock
 import groovy.xml.MarkupBuilder
 import org.codehaus.groovy.grails.web.mapping.LinkGenerator
 import spock.lang.Specification
+import dataexport.registration.MediaTypesDTO
 
 /**
  * Created with IntelliJ IDEA.
@@ -27,19 +28,20 @@ class ProjectExportServiceUnitSpec extends Specification {
 
     void setup() {
         LinkGenerator grailsLinkGenerator = Mock()
-        this.projectExportService = new ProjectExportService("projectsMediaType", "projectMediaType")
+        MediaTypesDTO mediaTypesDTO = new MediaTypesDTO(projectMediaType:"projectMediaType",projectsMediaType: "projectsMediaType" )
+
+        this.projectExportService = new ProjectExportService(mediaTypesDTO)
         projectExportService.grailsLinkGenerator = grailsLinkGenerator
         this.writer = new StringWriter()
         this.markupBuilder = new MarkupBuilder(writer)
     }
+
     void "test generate Project #label"() {
         given: "A Project"
         final Project project = new Project(projectName: projectName, groupType: groupType, description: description, readyForExtraction: 'Ready')
         when: "We attempt to generate a Project XML document"
-        Project.metaClass.static.get = {id -> project }
         this.projectExportService.generateProject(this.markupBuilder, project)
         then: "A valid xml document is generated and is similar to the expected document"
-        println  this.writer.toString()
         XmlTestAssertions.assertResults(results, this.writer.toString())
         where:
         label                         | projectName     | groupType         | description | results

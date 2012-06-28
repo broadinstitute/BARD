@@ -28,9 +28,12 @@ class AssayExportServiceUnitSpec extends Specification {
 
     void setup() {
         LinkGenerator grailsLinkGenerator = Mock()
+        final MediaTypesDTO mediaTypesDTO =
+            new MediaTypesDTO(resultTypeMediaType: "xml",elementMediaType: "xml", assaysMediaType: "xml", assayMediaType: "xml", assayDocMediaType: "xml")
+
         this.assayExportService = this.service
         AssayExportHelperService assayExportHelperService =
-            new AssayExportHelperService(new AssayDefinitionMediaTypesDTO("xml", "xml", "xml", "xml", "xml"))
+            new AssayExportHelperService(mediaTypesDTO)
         assayExportHelperService.grailsLinkGenerator = grailsLinkGenerator
         this.assayExportService.assayExportHelperService = assayExportHelperService
         this.writer = new StringWriter()

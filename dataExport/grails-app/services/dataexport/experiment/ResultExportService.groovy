@@ -1,5 +1,6 @@
 package dataexport.experiment
 
+import bard.db.experiment.ResultContextItem
 import groovy.sql.Sql
 import groovy.xml.MarkupBuilder
 import org.codehaus.groovy.grails.commons.GrailsApplication
@@ -122,6 +123,7 @@ class ResultExportService {
 
         generateResults(sql, xml, experimentId, resultsCount)
     }
+
 
     protected void generateResultContextItem(final MarkupBuilder xml, final ResultContextItemDTO resultContextItemDTO) {
         def attributes = [:]

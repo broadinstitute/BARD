@@ -8,6 +8,7 @@ import org.codehaus.groovy.grails.web.mapping.LinkGenerator
 import spock.lang.Specification
 import spock.lang.Unroll
 import bard.db.dictionary.*
+import dataexport.registration.MediaTypesDTO
 
 /**
  *
@@ -23,7 +24,7 @@ class DictionaryExportHelperServiceUnitSpec extends Specification {
     void setup() {
         grailsLinkGenerator = Mock()
         this.dictionaryExportHelperService =
-            new DictionaryExportHelperService("xml")
+            new DictionaryExportHelperService(new MediaTypesDTO(elementMediaType: "xml"))
         this.dictionaryExportHelperService.grailsLinkGenerator = grailsLinkGenerator
         this.writer = new StringWriter()
         this.markupBuilder = new MarkupBuilder(writer)

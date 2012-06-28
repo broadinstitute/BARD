@@ -16,6 +16,93 @@ package common.tests
 
 
 class XmlTestSamples {
+    static final String EXTERNAL_REFERENCES_UNT='''
+<externalReferences>
+<externalReference>
+    <externalAssayRef>External Assay Ref</externalAssayRef>
+  <externalSystem name='systemName' owner='owner'>
+    <systemUrl>http://broad.org</systemUrl>
+  </externalSystem>
+    <link rel='related' href='null' type='null' />
+    </externalReference>
+    </externalReferences>
+    '''
+    static final String EXTERNAL_REFERENCE_UNT='''
+<externalReference>
+    <externalAssayRef>External Assay Ref</externalAssayRef>
+  <externalSystem name='systemName' owner='owner'>
+    <systemUrl>http://broad.org</systemUrl>
+  </externalSystem>
+    <link rel='related' href='null' type='null' />
+    </externalReference>
+    '''
+
+    static final String EXPERIMENT_UNIT_ONLY_ATTRIBUTES = '''
+  <experiment experimentId='' experimentName='Experiment1' status='Published' holdUntilDate='1969-12-31T19:00:00.000-05:00' runDateFrom='1969-12-31T19:00:00.000-05:00' runDateTo='1969-12-31T19:00:00.000-05:00'>
+  <link rel='related' title='Link to Assay' type='null' href='null' />
+  <link rel='related' title='List Related Results' type='resultsMediaType' href='null' />
+  <link rel='edit' title='Use link to edit Experiment' type='experimentMediaType' href='null' />
+  <link rel='up' title='List Experiments' type='experimentsMediaType' href='null' />
+</experiment>
+    '''
+    static final String EXPERIMENT_UNIT_ATTRIBUTES_AND_ELEMENTS = '''
+<experiment experimentId='' experimentName='Experiment1' status='Published' holdUntilDate='1969-12-31T19:00:00.000-05:00' runDateFrom='1969-12-31T19:00:00.000-05:00' runDateTo='1969-12-31T19:00:00.000-05:00'>
+  <description>Broad</description>
+  <resultContextItems>
+    <resultContextItem resultContextItemId='' qualifier='&lt;' valueDisplay='&lt; 20 uM' valueNum='1.0' valueMin='5.0' valueMax='20.0'>
+      <attribute label='attribute'>
+        <link rel='related' href='null' type='elementMediaType' />
+      </attribute>
+      <valueControlled label='valueControlled'>
+        <link rel='related' href='null' type='elementMediaType' />
+      </valueControlled>
+    </resultContextItem>
+  </resultContextItems>
+    <projectExperiments>
+    <projectExperiment>
+      <description>Broad</description>
+      <precedingExperiment id='null'>
+        <link rel='related' href='null' type='experimentMediaType' />
+      </precedingExperiment>
+      <link rel='related' href='null' type='null' />
+      <link rel='related' href='null' type='null' />
+    </projectExperiment>
+  </projectExperiments>
+    <externalReferences>
+    <externalReference>
+      <externalAssayRef>External Assay Ref</externalAssayRef>
+      <externalSystem name='systemName' owner='owner'>
+        <systemUrl>http://broad.org</systemUrl>
+      </externalSystem>
+      <link rel='related' href='null' type='null' />
+    </externalReference>
+  </externalReferences>
+  <link rel='related' title='Link to Assay' type='null' href='null' />
+  <link rel='related' title='List Related Results' type='resultsMediaType' href='null' />
+  <link rel='edit' title='Use link to edit Experiment' type='experimentMediaType' href='null' />
+  <link rel='up' title='List Experiments' type='experimentsMediaType' href='null' />
+</experiment>
+'''
+    static final String EXPERIMENTS_2_RECORDS_UNIT = '''
+   <experiments count='2'>
+  <link rel='related' type='experimentMediaType' href='null' />
+  <link rel='related' type='experimentMediaType' href='null' />
+</experiments>
+'''
+    static final String EXPERIMENTS_2_RECORDS_WITH_NEXT_UNIT = '''
+    <experiments count='3'>
+  <link rel='related' type='experimentMediaType' href='null' />
+  <link rel='related' type='experimentMediaType' href='null' />
+  <link rel='next' title='List Experiments' type='experimentsMediaType' href='null' />
+</experiments>
+'''
+    static final String EXPERIMENT_SINGLE_RECORD_UNIT = '''
+<experiments count='3'>
+  <link rel='next' title='List Experiments' type='experimentsMediaType' href='null' />
+</experiments>
+'''
+
+
     static final String PROJECTS = '''
 <projects count='2'>
   <project projectId='1' groupType='Project'>

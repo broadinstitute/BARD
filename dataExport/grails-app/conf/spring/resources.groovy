@@ -1,33 +1,45 @@
-import dataexport.registration.AssayDefinitionMediaTypesDTO
+import dataexport.registration.MediaTypesDTO
 
 // Place your Spring DSL code here
 beans = {
-    final String elementMediaType = grailsApplication.config.bard.data.export.dictionary.element.xml
-    final String resultTypeMediaType = grailsApplication.config.bard.data.export.dictionary.resultType.xml
-    final String assayMediaType = grailsApplication.config.bard.data.export.assay.xml
-    final String assayDocMediaType = grailsApplication.config.bard.data.export.assay.doc.xml
-    String dictionaryMediaType = grailsApplication.config.bard.data.export.dictionary.xml
-    final String assaysMediaType = grailsApplication.config.bard.data.export.assays.xml
-    final String projectMediaType = grailsApplication.config.bard.data.export.project.xml
-    final String projectsMediaType = grailsApplication.config.bard.data.export.projects.xml
+    final MediaTypesDTO mediaTypesDTO = new MediaTypesDTO()
+    mediaTypesDTO.elementMediaType = grailsApplication.config.bard.data.export.dictionary.element.xml
+    mediaTypesDTO.stageMediaType = grailsApplication.config.bard.data.export.dictionary.stage.xml
+    mediaTypesDTO.resultTypeMediaType = grailsApplication.config.bard.data.export.dictionary.resultType.xml
+    mediaTypesDTO.assayMediaType = grailsApplication.config.bard.data.export.assay.xml
+    mediaTypesDTO.assayDocMediaType = grailsApplication.config.bard.data.export.assay.doc.xml
+    mediaTypesDTO.dictionaryMediaType = grailsApplication.config.bard.data.export.dictionary.xml
+    mediaTypesDTO.assaysMediaType = grailsApplication.config.bard.data.export.assays.xml
+    mediaTypesDTO.projectMediaType = grailsApplication.config.bard.data.export.project.xml
+    mediaTypesDTO.projectsMediaType = grailsApplication.config.bard.data.export.projects.xml
+    mediaTypesDTO.experimentsMediaType = grailsApplication.config.bard.data.export.experiments.xml
+    mediaTypesDTO.experimentMediaType = grailsApplication.config.bard.data.export.experiment.xml
+    mediaTypesDTO.resultsMediaType = grailsApplication.config.bard.data.export.results.xml
+    final int maxExperimentsRecordsPerPage = grailsApplication.config.bard.experiments.max.per.page
 
+
+
+
+
+    experimentExportService(dataexport.experiment.ExperimentExportService, mediaTypesDTO,
+            maxExperimentsRecordsPerPage) {
+        grailsLinkGenerator = ref('grailsLinkGenerator')
+    }
     //inject element mime type here
-    dictionaryExportHelperService(dataexport.dictionary.DictionaryExportHelperService, elementMediaType) {
+    dictionaryExportHelperService(dataexport.dictionary.DictionaryExportHelperService, mediaTypesDTO) {
         grailsLinkGenerator = ref('grailsLinkGenerator')
     }
 
-    rootService(dataexport.util.RootService, dictionaryMediaType, assaysMediaType, projectsMediaType) {
+    rootService(dataexport.util.RootService, mediaTypesDTO) {
         grailsLinkGenerator = ref('grailsLinkGenerator')
     }
 
-    AssayDefinitionMediaTypesDTO assayDefinitionMediaTypesDTO = new AssayDefinitionMediaTypesDTO(elementMediaType, resultTypeMediaType,
-            assayMediaType, assayDocMediaType,
-            assaysMediaType)
-    assayExportHelperService(dataexport.registration.AssayExportHelperService, assayDefinitionMediaTypesDTO) {
+
+    assayExportHelperService(dataexport.registration.AssayExportHelperService, mediaTypesDTO) {
         grailsLinkGenerator = ref('grailsLinkGenerator')
     }
 
-    projectExportService(dataexport.experiment.ProjectExportService, projectsMediaType, projectMediaType) {
+    projectExportService(dataexport.experiment.ProjectExportService, mediaTypesDTO) {
         grailsLinkGenerator = ref('grailsLinkGenerator')
     }
 }

@@ -12,18 +12,10 @@ import bard.db.registration.*
  */
 class AssayExportHelperService {
     LinkGenerator grailsLinkGenerator
-    final String elementMediaType
-    final String assayMediaType
-    final String assayDocMediaType
-    final String assaysMediaType
-    final String resultTypeMediaType
+    final MediaTypesDTO mediaTypesDTO
 
-    AssayExportHelperService(final AssayDefinitionMediaTypesDTO dto) {
-        this.elementMediaType = dto.elementMediaType
-        this.assayMediaType = dto.assayMediaType
-        this.assayDocMediaType = dto.assayDocMediaType
-        this.assaysMediaType = dto.assaysMediaType
-        this.resultTypeMediaType = dto.resultTypeMediaType
+    AssayExportHelperService(final MediaTypesDTO mediaTypesDTO) {
+        this.mediaTypesDTO = mediaTypesDTO
     }
 
     protected void generateMeasureContext(final MarkupBuilder markupBuilder, final MeasureContext measureContext) {
@@ -54,7 +46,7 @@ class AssayExportHelperService {
             if (resultType) { //this is the result type
                 resultTypeRef(label: resultType.label) {
                     final String href = grailsLinkGenerator.link(mapping: 'resultType', absolute: true, params: [id: resultType.id]).toString()
-                    link(rel: 'related', href: "${href}", type: "${this.resultTypeMediaType}")
+                    link(rel: 'related', href: "${href}", type: "${this.mediaTypesDTO.resultTypeMediaType}")
                 }
             }
             final Unit unit = measure.entryUnit
@@ -62,7 +54,7 @@ class AssayExportHelperService {
                 entryUnit(unit: unit.unit) {
                     if (unit.element?.id) {
                         final String href = grailsLinkGenerator.link(mapping: 'element', absolute: true, params: [id: unit.element.id]).toString()
-                        link(rel: 'related', href: "${href}", type: "${this.elementMediaType}")
+                        link(rel: 'related', href: "${href}", type: "${this.mediaTypesDTO.elementMediaType}")
                     }
                 }
             }
@@ -110,14 +102,14 @@ class AssayExportHelperService {
             if (valueElement) {
                 valueId(label: valueElement.label) {
                     final String valueHref = grailsLinkGenerator.link(mapping: 'element', absolute: true, params: [id: valueElement.id]).toString()
-                    link(rel: 'related', href: "${valueHref}", type: "${this.elementMediaType}")
+                    link(rel: 'related', href: "${valueHref}", type: "${this.mediaTypesDTO.elementMediaType}")
                 }
             }
             //add attributeId element
             if (attributeElement) {
                 final String attributeHref = grailsLinkGenerator.link(mapping: 'element', absolute: true, params: [id: attributeElement.id]).toString()
                 attributeId(attributeType: measureContextItem.attributeType.value, label: attributeElement.label) {
-                    link(rel: 'related', href: "${attributeHref}", type: "${this.elementMediaType}")
+                    link(rel: 'related', href: "${attributeHref}", type: "${this.mediaTypesDTO.elementMediaType}")
                 }
             }
         }
@@ -143,7 +135,7 @@ class AssayExportHelperService {
                     documentContent(assayDocument.documentContent)
                 }
             }
-            link(rel: 'item', href: "${assayDocumentHref}", type: "${this.assayDocMediaType}")
+            link(rel: 'item', href: "${assayDocumentHref}", type: "${this.mediaTypesDTO.assayDocMediaType}")
         }
     }
     /**
@@ -183,7 +175,7 @@ class AssayExportHelperService {
         markupBuilder.assays(count: numberOfAssays) {
             for (Assay assay : assays) {
                 final String assayHref = grailsLinkGenerator.link(mapping: 'assay', absolute: true, params: [id: assay.id]).toString()
-                markupBuilder.link(rel: 'related', title: "${assay.id}", type: "${this.assayMediaType}",
+                markupBuilder.link(rel: 'related', title: "${assay.id}", type: "${this.mediaTypesDTO.assayMediaType}",
                         href: assayHref) {
                 }
             }
@@ -194,9 +186,9 @@ class AssayExportHelperService {
         final String assayHref = grailsLinkGenerator.link(mapping: 'assay', absolute: true, params: [id: assayId]).toString()
         final String assaysHref = grailsLinkGenerator.link(mapping: 'assays', absolute: true).toString()
 
-        markupBuilder.link(rel: 'edit', href: "${assayHref}", type: "${this.assayMediaType}")
-        markupBuilder.link(rel: 'self', href: "${assayHref}", type: "${this.assayMediaType}")
-        markupBuilder.link(rel: 'up', href: "${assaysHref}", type: "${this.assaysMediaType}")
+        markupBuilder.link(rel: 'edit', href: "${assayHref}", type: "${this.mediaTypesDTO.assayMediaType}")
+        markupBuilder.link(rel: 'self', href: "${assayHref}", type: "${this.mediaTypesDTO.assayMediaType}")
+        markupBuilder.link(rel: 'up', href: "${assaysHref}", type: "${this.mediaTypesDTO.assaysMediaType}")
 
     }
 

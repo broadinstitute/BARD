@@ -5,6 +5,7 @@ import bard.db.experiment.Project
 import exceptions.NotFoundException
 import groovy.xml.MarkupBuilder
 import org.codehaus.groovy.grails.web.mapping.LinkGenerator
+import dataexport.registration.MediaTypesDTO
 
 class ProjectExportService {
     LinkGenerator grailsLinkGenerator
@@ -12,9 +13,9 @@ class ProjectExportService {
     final String projectsMediaType
 
     //This is instantiated from resources.groovy
-    ProjectExportService(final String projectsMediaType, final String projectMediaType) {
-        this.projectMediaType = projectMediaType
-        this.projectsMediaType = projectsMediaType
+    ProjectExportService(final MediaTypesDTO mediaTypesDTO) {
+        this.projectMediaType = mediaTypesDTO.projectMediaType
+        this.projectsMediaType = mediaTypesDTO.projectsMediaType
     }
 
     /**

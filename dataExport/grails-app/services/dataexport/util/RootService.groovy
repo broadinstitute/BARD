@@ -1,5 +1,6 @@
 package dataexport.util
 
+import dataexport.registration.MediaTypesDTO
 import groovy.xml.MarkupBuilder
 import org.codehaus.groovy.grails.web.mapping.LinkGenerator
 
@@ -11,14 +12,12 @@ class RootService {
     /**
      * This is wired in resources.groovy
      *
-     * @param dictionaryMediaType
-     * @param assaysMediaType
-     * @param projectsMediaType
+     * @param mediaTypesDTO
      */
-    RootService(final String dictionaryMediaType, final String assaysMediaType, final String projectsMediaType) {
-        this.dictionaryMediaType = dictionaryMediaType
-        this.assaysMediaType = assaysMediaType
-        this.projectsMediaType = projectsMediaType
+    RootService(final MediaTypesDTO mediaTypesDTO) {
+        this.dictionaryMediaType = mediaTypesDTO.dictionaryMediaType
+        this.assaysMediaType = mediaTypesDTO.assaysMediaType
+        this.projectsMediaType = mediaTypesDTO.projectsMediaType
     }
 
     public void generateRootElement(final MarkupBuilder xml) {
