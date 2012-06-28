@@ -38,15 +38,15 @@ class UrlMappings {
         name project: "/api/projects/$id"(controller: "projectRest") {
             action = [GET: "project", PATCH: "updateProject"]
         }
-//        name experiments: "/api/data"(controller: "experimentRest") {
-//            action = [GET: "experiments"]
-//        }
-//        name experiment: "/api/data/experiment/$id"(controller: "experimentRest") {
-//            action = [GET: "experiment", PATCH: "updateExperiment"]
-//        }
-//        name results: "/api/data/experiment/$id/results"(controller: "experimentRest") {
-//            action = [GET: "results"]
-//        }
+        name experiments: "/api/experiments"(controller: "experimentRest") {
+            action = [GET: "experiments"]
+        }
+        name experiment: "/api/experiments/$id"(controller: "experimentRest") {
+            action = [GET: "experiment", PATCH: "updateExperiment"]
+        }
+        name results: "/api/experiments/$id/results"(controller: "experimentRest") {
+            action = [GET: "results"]
+        }
 //        name result: "/api/data/result/$id"(controller: "experimentRest") {
 //            action = [GET: "result", PATCH: "updateResult"]
 //        }

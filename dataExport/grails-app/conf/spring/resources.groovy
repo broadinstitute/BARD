@@ -18,9 +18,6 @@ beans = {
     final int maxExperimentsRecordsPerPage = grailsApplication.config.bard.experiments.max.per.page
 
 
-
-
-
     experimentExportService(dataexport.experiment.ExperimentExportService, mediaTypesDTO,
             maxExperimentsRecordsPerPage) {
         grailsLinkGenerator = ref('grailsLinkGenerator')

@@ -7,6 +7,7 @@ import org.codehaus.groovy.grails.commons.GrailsApplication
 import org.codehaus.groovy.grails.web.servlet.HttpHeaders
 
 import javax.servlet.http.HttpServletResponse
+import exceptions.NotFoundException
 
 /**
  * Please note that the DataExportFilters is applied to all incoming request.
@@ -32,19 +33,28 @@ class ExperimentRestController {
     }
 
     def experiments() {
-        throw new RuntimeException("Not Yet Implemented")
-//        def mimeType = grailsApplication.config.bard.data.export.data.experiments.xml
-//        response.contentType = mimeType
-//        //do validations
-//        if (mimeType != request.getHeader(HttpHeaders.ACCEPT)) {
-//            response.status = HttpServletResponse.SC_BAD_REQUEST
-//
-//            render ""
-//            return
-//        }
-//        final def writer = response.writer
-//        final MarkupBuilder xml = new MarkupBuilder(writer)
-//        experimentExportService.generateExperiments(xml)
+
+        try {
+            final String mimeType = grailsApplication.config.bard.data.export.experiments.xml
+            response.contentType = mimeType
+            //mime types must match the expected type
+            if (mimeType == request.getHeader(HttpHeaders.ACCEPT)) {
+                final Writer writer = response.writer
+                final MarkupBuilder markupBuilder = new MarkupBuilder(writer)
+                int start = 0
+                if (params.start){
+                    start = new Integer(params.start)
+                }
+                this.experimentExportService.generateExperiments(markupBuilder,start)
+                return
+            }
+            response.status = HttpServletResponse.SC_BAD_REQUEST
+            render ""
+        } catch (Exception ee) {
+            response.status = HttpServletResponse.SC_INTERNAL_SERVER_ERROR
+            log.error(ee.message)
+            ee.printStackTrace()
+        }
     }
 
     def results() {
@@ -65,20 +75,29 @@ class ExperimentRestController {
     }
 
     def experiment() {
-//        def mimeType = grailsApplication.config.bard.data.export.data.experiment.xml
-//        response.contentType = mimeType
-//        //do validations
-//        if (mimeType == request.getHeader(HttpHeaders.ACCEPT) && params.id) {
-//            final BigDecimal experimentId = params.id as BigDecimal
-//
-//            final def writer = response.writer
-//            final MarkupBuilder xml = new MarkupBuilder(writer)
-//            experimentExportService.generateExperiment(xml, experimentId)
-//            return
-//        }
-//        response.status = HttpServletResponse.SC_BAD_REQUEST
-//        render ""
-        throw new RuntimeException("Not Yet Implemented")
+        try {
+            final String mimeType = grailsApplication.config.bard.data.export.experiment.xml
+            response.contentType = mimeType
+            //do validations
+            if (mimeType == request.getHeader(HttpHeaders.ACCEPT) && params.id) {
+                final Writer writer = response.writer
+                final MarkupBuilder markupBuilder = new MarkupBuilder(writer)
+                this.experimentExportService.generateExperiment(markupBuilder, new Long(params.id))
+                return
+            }
+            response.status = HttpServletResponse.SC_BAD_REQUEST
+            render ""
+        } catch (NotFoundException notFoundException) {
+            log.error(notFoundException.message)
+            response.status = HttpServletResponse.SC_NOT_FOUND
+            render ""
+        }
+        catch (Exception ee) {
+            response.status = HttpServletResponse.SC_INTERNAL_SERVER_ERROR
+            log.error(ee.message)
+            ee.printStackTrace()
+        }
+
     }
 
     def result() {
