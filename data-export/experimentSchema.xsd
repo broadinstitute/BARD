@@ -218,7 +218,7 @@ Link to parent experiment
                     </xs:annotation>
                     <xs:complexType>
                         <xs:sequence>
-                            <xs:element name="attributeId" minOccurs="0">
+                            <xs:element name="attribute" minOccurs="0">
                                 <xs:complexType>
                                     <xs:sequence>
                                         <xs:element ref="link" minOccurs="0"/>
