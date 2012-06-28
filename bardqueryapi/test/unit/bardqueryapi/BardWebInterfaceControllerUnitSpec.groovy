@@ -1,13 +1,10 @@
 package bardqueryapi
 
-import static org.junit.Assert.*
-
-import grails.test.mixin.*
-import grails.test.mixin.support.*
-import org.junit.*
-import spock.lang.Specification
-import javax.servlet.http.HttpServletResponse
 import grails.converters.JSON
+import grails.test.mixin.TestFor
+import spock.lang.Specification
+
+import javax.servlet.http.HttpServletResponse
 
 /**
  * See the API for {@link grails.test.mixin.support.GrailsUnitTestMixin} for usage instructions
@@ -17,13 +14,15 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
 
     QueryAssayApiService queryAssayApiService
     QueryExecutorService queryExecutorService
-
+    QueryTargetApiService queryTargetApiService
 
     void setup() {
         queryAssayApiService = Mock()
-        controller.queryAssayApiService = queryAssayApiService
+        controller.queryAssayApiService = this.queryAssayApiService
         queryExecutorService = Mock()
-        controller.queryExecutorService = queryExecutorService
+        controller.queryExecutorService = this.queryExecutorService
+        queryTargetApiService = Mock()
+        controller.queryTargetApiService = this.queryTargetApiService
         controller.grailsApplication.config.ncgc.server.root.url = 'httpMock://'
     }
 
@@ -67,6 +66,42 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
         where:
         label                                         | totalAssayCompounds | assayCompoundsResultset | max            | offset         | assayId        | expectedTotalCompounds
         "Render view with name findCompoundsForAssay" | new Integer(10)     | ['a']                   | new Integer(1) | new Integer(2) | new Integer(0) | 1
+    }
+    /**
+     */
+    void "test find Assay for Target if-branch #label"() {
+        when:
+        request.method = 'GET'
+        params.target = target
+        controller.findAssaysForTarget()
+        then:
+        1 * queryTargetApiService.findAssaysForAccessionTarget(target) >> { expectedAssays }
+
+        "/bardWebInterface/showAssaysForTarget" == view
+        expectedAssays == model.assays
+        target == model.target
+
+        where:
+        label                                       | expectedAssays     | target
+        "Render view with name findAssaysForTarget" | ['60001', '60003'] | "2"
+    }
+    /**
+     */
+    void "test find Assay for Target else-branch #label"() {
+        when:
+        request.method = 'GET'
+        params.target = target
+        controller.findAssaysForTarget()
+        then:
+        0 * queryTargetApiService.findAssaysForAccessionTarget(target) >> { expectedAssays }
+
+        "Target is required" == response.text
+        response.status == HttpServletResponse.SC_BAD_REQUEST
+
+
+        where:
+        label                                       | expectedAssays | target
+        "Render view with name findAssaysForTarget" | []             | ""
     }
 
     void "test showCompound #label"() {

@@ -2,8 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/bardqueryapi.iml" filepath="$PROJECT_DIR$/bardqueryapi.iml" />
-      <module fileurl="file://$PROJECT_DIR$/bardqueryapi-grailsPlugins.iml" filepath="$PROJECT_DIR$/bardqueryapi-grailsPlugins.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Bardqueryapi.iml" filepath="$PROJECT_DIR$/Bardqueryapi.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Bardqueryapi-grailsPlugins.iml" filepath="$PROJECT_DIR$/Bardqueryapi-grailsPlugins.iml" />
     </modules>
   </component>
 </project>

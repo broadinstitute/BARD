@@ -20,10 +20,8 @@ grails.project.dependency.resolution = {
     repositories {
         grailsPlugins()
         grailsHome()
-        grailsCentral()
-        mavenRepo "http://cbip-repo:8081/artifactory/repo"
-        grailsRepo "http://cbip-repo:8081/artifactory/svn.codehaus.org_grails-plugins"
-        grailsRepo "http://cbip-repo:8081/artifactory/svn.codehaus.org_grails_trunk_grails-plugins"
+        mavenRepo 'http://bard-repo:8081/artifactory/bard-virtual-repo'
+        grailsRepo('http://bard-repo:8081/artifactory/bard-virtual-repo', 'grailsCentral')
     }
     dependencies {
 

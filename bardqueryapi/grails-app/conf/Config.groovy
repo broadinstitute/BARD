@@ -19,7 +19,8 @@ ncgc.server.projects.url="${ncgc.server.root.url}/bard/rest/v1/projects/"
 ncgc.server.assays.root.url= "${ncgc.server.root.url}/bard/rest/v1/assays/"
 ncgc.server.compounds.root.url="${ncgc.server.root.url}/bard/rest/v1/compounds/"
 ncgc.server.projects.root.url="${ncgc.server.root.url}/bard/rest/v1/projects/"
-
+ncgc.server.accession.root.url="${ncgc.server.root.url}/bard/rest/v1/targets/accession/"
+ncgc.server.gene.root.url="${ncgc.server.root.url}/bard/rest/v1/targets/geneid/"
 
 grails.project.groupId = appName // change this to alter the default package name and Maven publishing destination
 grails.mime.file.extensions = true // enables the parsing of file extensions from URLs into the request format

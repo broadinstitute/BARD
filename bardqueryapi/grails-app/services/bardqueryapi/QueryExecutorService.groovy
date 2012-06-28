@@ -8,7 +8,6 @@ import wslite.rest.Response
 
 class QueryExecutorService {
 
-    def grailsApplication
     HTTPBasicAuthorization clientBasicAuth
     //we use this as a template so that we can clone it for every request
     RESTClient restClient
@@ -48,12 +47,7 @@ class QueryExecutorService {
             String message = ex.response.statusMessage
             final int code = ex.response.statusCode
             return [message: code] as JSON
-        } catch (RESTClientException ex) {
-            String message = ex.response.statusMessage
-            final int code = ex.response.statusCode
-            return [message: code] as JSON
         }
-
 
     }
 }

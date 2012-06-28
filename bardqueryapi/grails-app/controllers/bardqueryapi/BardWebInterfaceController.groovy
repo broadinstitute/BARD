@@ -15,7 +15,7 @@ class BardWebInterfaceController {
 
     QueryAssayApiService queryAssayApiService
     QueryExecutorService queryExecutorService
-
+    QueryTargetApiService queryTargetApiService
 
     def index() {
         render(view: "index.gsp")
@@ -63,5 +63,28 @@ class BardWebInterfaceController {
             render "Compound ID (CID) parameter required"
         }
 
+    }
+    /**
+     * Find list of assays with the given target
+     * @param target
+     * @return
+     */
+    def findAssaysForTarget() {
+
+        if (params.target) {
+            List<String> assays = queryTargetApiService.findAssaysForAccessionTarget(params.target)
+            render(view: "showAssaysForTarget", model: [assays: assays, target: params.target])
+            return
+        }
+        response.status = HttpServletResponse.SC_BAD_REQUEST
+        render "Target is required"
+    }
+    /**
+     * Find list of assays with the given target
+     * @param target
+     * @return
+     */
+    def targets() {
+        render(view: "findAssaysForTarget.gsp")
     }
 }

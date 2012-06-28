@@ -13,8 +13,7 @@ class QueryAssayApiService {
      */
     def findAssayByAid(String assayAidUrl) {
         final String url = grailsApplication.config.ncgc.server.root.url + assayAidUrl
-        println url
-        return queryExecutorService.executeGetRequestJSON(url, null)
+         return queryExecutorService.executeGetRequestJSON(url, null)
     }
     /**
      * v1/assays/{aid}/targets - list of paths to protein targets, annotated for this assay
