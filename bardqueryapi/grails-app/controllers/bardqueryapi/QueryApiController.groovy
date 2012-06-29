@@ -181,6 +181,17 @@ public enum CompoundDisplayType {
     SID
 
 }
+public enum SearchType {
+    TARGET("Assays For Target"),
+    COMPOUNDS("Compounds For Assay")
+    final String description
+    SearchType(String description){
+      this.description = description
+    }
+    String getDescription(){
+        return this.description;
+    }
+}
 public enum CompoundFormat {
     DEFAULT("Some mime type"),
     SDF("chemical/x-mdl-sdfile"),

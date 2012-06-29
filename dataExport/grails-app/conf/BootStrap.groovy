@@ -14,6 +14,7 @@ class BootStrap {
                     insertTestDictionaryRecords(sql)
                     insertTestAssayDefRecords(sql)
                     insertTestProjectRecords(sql)
+                    insertExperiments(sql)
                 }
                 break;
         }
@@ -21,10 +22,34 @@ class BootStrap {
     }
     def destroy = {
     }
+
+    def insertExperiments(final Sql sql) {
+        sql.execute "INSERT INTO EXPERIMENT (EXPERIMENT_ID,EXPERIMENT_NAME,ASSAY_ID,EXPERIMENT_STATUS,READY_FOR_EXTRACTION,RUN_DATE_FROM,RUN_DATE_TO,HOLD_UNTIL_DATE,VERSION,DATE_CREATED) VALUES (1,'A cell-based HTS for delayed death inhibitors of the malarial parasite plastid Measured in Microorganism System Using Plate Reader - 2126-01_Inhibitor_Dose_DryPowder_Activity:1',1,'Approved','Ready',SYSDATE,SYSDATE,SYSDATE,0,SYSDATE)"
+        sql.execute "INSERT INTO EXPERIMENT (EXPERIMENT_ID,EXPERIMENT_NAME,ASSAY_ID,EXPERIMENT_STATUS,READY_FOR_EXTRACTION,RUN_DATE_FROM,RUN_DATE_TO,HOLD_UNTIL_DATE,VERSION,DATE_CREATED) VALUES (2,'A cell-based HTS for delayed death inhibitors of the malarial parasite plastid Measured in Microorganism System Using Plate Reader - 2126-01_Inhibitor_Dose_DryPowder_Activity:2',1,'Approved','Ready',SYSDATE,SYSDATE,SYSDATE,0,SYSDATE)"
+        sql.execute "INSERT INTO EXPERIMENT (EXPERIMENT_ID,EXPERIMENT_NAME,ASSAY_ID,EXPERIMENT_STATUS,READY_FOR_EXTRACTION,RUN_DATE_FROM,RUN_DATE_TO,HOLD_UNTIL_DATE,VERSION,DATE_CREATED) VALUES (23,'A cell-based HTS for delayed death inhibitors of the malarial parasite plastid Measured in Microorganism System Using Plate Reader - 2126-01_Inhibitor_Dose_DryPowder_Activity:23',1,'Approved','Ready',SYSDATE,SYSDATE,SYSDATE,0,SYSDATE)"
+
+        //Result context item
+        sql.execute "INSERT INTO RESULT_CONTEXT_ITEM (RESULT_CONTEXT_ITEM_ID,EXPERIMENT_ID,ATTRIBUTE_ID,VALUE_DISPLAY,VALUE_NUM, QUALIFIER,VERSION,DATE_CREATED) VALUES (1,1,370,'66',66,'%',0,SYSDATE)"
+        sql.execute "INSERT INTO RESULT_CONTEXT_ITEM (RESULT_CONTEXT_ITEM_ID,EXPERIMENT_ID,ATTRIBUTE_ID,VALUE_DISPLAY,VALUE_NUM,QUALIFIER,VERSION,DATE_CREATED) VALUES (2,1,370,'66',66,'%',0,SYSDATE)"
+        sql.execute "INSERT INTO RESULT_CONTEXT_ITEM (RESULT_CONTEXT_ITEM_ID,EXPERIMENT_ID,ATTRIBUTE_ID,VALUE_DISPLAY,VALUE_NUM,QUALIFIER,VERSION,DATE_CREATED) VALUES (3,2,370,'66',66,'%',0,SYSDATE)"
+        sql.execute "INSERT INTO RESULT_CONTEXT_ITEM (RESULT_CONTEXT_ITEM_ID,EXPERIMENT_ID,ATTRIBUTE_ID,VALUE_DISPLAY,VALUE_NUM,QUALIFIER,VERSION,DATE_CREATED) VALUES (4,2,370,'66',66,'%',0,SYSDATE)"
+
+        //project experiment
+        sql.execute "INSERT INTO PROJECT_EXPERIMENT (PROJECT_EXPERIMENT_ID,EXPERIMENT_ID,FOLLOWS_EXPERIMENT_ID,STAGE_ID,PROJECT_ID,DESCRIPTION,VERSION,DATE_CREATED, LAST_UPDATED, MODIFIED_BY) VALUES (1,1,2,17,1,'Description',0,SYSDATE,SYSDATE,'Broad')"
+
+        //External System
+        sql.execute "INSERT INTO EXTERNAL_SYSTEM (EXTERNAL_SYSTEM_ID,SYSTEM_NAME,OWNER,SYSTEM_URL,VERSION,DATE_CREATED) VALUES (1,'PubChem','NIH','http://pubchem.ncbi.nlm.nih.gov/assay/assay.cgi?',0,SYSDATE)"
+
+        //External Reference
+        sql.execute "INSERT INTO EXTERNAL_REFERENCE (EXTERNAL_SYSTEM_ID,EXTERNAL_REFERENCE_ID,EXPERIMENT_ID,PROJECT_ID,EXT_ASSAY_REF,VERSION,DATE_CREATED) VALUES (1,1,1,1,'aid=1007',0,SYSDATE)"
+
+    }
+
     def insertTestProjectRecords(final Sql sql) {
         sql.execute "INSERT INTO PROJECT (project_id,project_name,group_type,description,ready_for_extraction,VERSION,date_created) VALUES (1,'Scripps special project #1','Project',NULL,'Ready',0,SYSDATE)"
         sql.execute "INSERT INTO PROJECT (project_id,project_name,group_type,description,ready_for_extraction,VERSION,date_created) VALUES (2,'2126 - MLPCN Malaria - Inhibitor','Project',NULL,'Ready',0,SYSDATE)"
     }
+
     def insertTestAssayDefRecords(final Sql sql) {
         sql.execute "INSERT INTO ASSAY (ASSAY_ID,ASSAY_NAME,ASSAY_STATUS,ASSAY_VERSION,DESIGNED_BY,READY_FOR_EXTRACTION,VERSION, DATE_CREATED, ASSAY_TYPE) values (1,'Dose-response biochemical assay of inhibitors of Rho kinase 2 (Rock2)','Active','1','Scripps Florida','Ready',0,SYSDATE,'Regular')"
         sql.execute "INSERT INTO ASSAY (ASSAY_ID,ASSAY_NAME,ASSAY_STATUS,ASSAY_VERSION,DESIGNED_BY,READY_FOR_EXTRACTION,VERSION, DATE_CREATED, ASSAY_TYPE) values (2,'Some nice label','Active','1.1','Broad Institute','Complete',0,SYSDATE,'Regular')"

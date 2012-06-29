@@ -149,7 +149,11 @@ class ExperimentExportService {
             }
         }
     }
-
+    /**
+     *
+     * @param markupBuilder
+     * @param externalReference
+     */
     protected void generateExternalReference(final MarkupBuilder markupBuilder, final ExternalReference externalReference) {
 
         markupBuilder.externalReference() {
@@ -168,7 +172,11 @@ class ExperimentExportService {
             }
         }
     }
-
+    /**
+     *
+     * @param markupBuilder
+     * @param projectExperiments
+     */
     protected void generateProjectExperiments(final MarkupBuilder markupBuilder, final Set<ProjectExperiment> projectExperiments) {
         markupBuilder.projectExperiments() {
             for (ProjectExperiment projectExperiment : projectExperiments) {
@@ -187,7 +195,6 @@ class ExperimentExportService {
                 precedingExperiment(id: precedingExperimentR.id.toString()) {
                     final String precedingExperimentHref = grailsLinkGenerator.link(mapping: 'experiment', absolute: true, params: [id: "${precedingExperimentR.id}"]).toString()
                     link(rel: 'related', href: "${precedingExperimentHref}", type: "${this.mediaTypesDTO.experimentMediaType}")
-
                 }
             }
             final Project project = projectExperiment.project
@@ -198,7 +205,6 @@ class ExperimentExportService {
             }
             final Stage stage = projectExperiment.stage
             if (stage) {
-
                 final Element element = stage.element
                 if (element) {
                     final String href = grailsLinkGenerator.link(mapping: 'stage', absolute: true, params: [id: element.id]).toString()
@@ -276,6 +282,7 @@ class ExperimentExportService {
         final String resultsHref = grailsLinkGenerator.link(mapping: 'results', absolute: true, params: [id: experiment.id]).toString()
 
         markupBuilder.link(rel: 'related', title: 'Link to Assay', type: "${this.mediaTypesDTO.assayMediaType}", href: assayHref)
+
         markupBuilder.link(rel: 'related', title: 'List Related Results', type: "${this.mediaTypesDTO.resultsMediaType}", href: "${resultsHref}")
         markupBuilder.link(rel: 'edit', title: 'Use link to edit Experiment', type: "${this.mediaTypesDTO.experimentMediaType}", href: experimentHref)
         markupBuilder.link(rel: 'up', title: 'List Experiments', type: "${this.mediaTypesDTO.experimentsMediaType}", href: "${experimentsHref}")

@@ -52,5 +52,8 @@
         <g:paginate total="${totalCompounds}" params="[assay: aid]"/>
     </div>
 </div>
+
+
+
 </body>
 </html>

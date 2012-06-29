@@ -6,7 +6,10 @@ class QueryAssayApiService {
 
     def grailsApplication
     QueryExecutorService queryExecutorService
-
+    static String[] breakApartDistinctStrings(String inputString) {
+        def outputList = inputString.split()
+        return outputList.findAll { it.size() > 0 }.unique()
+    }
     /**
      * v1/assays/{aid} - JSON representation of an assay, identified by its AID.
      * @param assayId
