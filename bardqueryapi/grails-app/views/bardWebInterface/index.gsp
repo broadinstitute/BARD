@@ -19,8 +19,6 @@
         <li><g:link controller="bardWebInterface" action="index"><g:message
                 code="default.home.label"/></g:link>
         </li>
-        <li><g:link controller="bardWebInterface" action="targets">Find Assays For Target</g:link>
-        </li>
     </ul>
 </div>
 
