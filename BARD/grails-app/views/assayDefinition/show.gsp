@@ -14,7 +14,7 @@
 </head>
 <body>
 <div>
-  	<div><p><h1>Assay View</h1></p></div>
+  	<div class="ui-widget"><p><h1>Assay View</h1></p></div>
   	
 	<g:if test="${flash.message}">
 		<div class="ui-widget">
@@ -180,6 +180,7 @@
 							<tr>
 								<g:sortableColumn property="attributeType" title="${message(code: 'measureContextItem.id.label', default: 'ID')}" />	
 								<g:sortableColumn property="attributeType" title="${message(code: 'measureContextItem.attributeType.label', default: 'Attribute Type')}" />							
+								<g:sortableColumn property="attributeType" title="${message(code: 'measureContextItem.attributeElement.label.label', default: 'Attribute Element')}" />
 								<g:sortableColumn property="valueDisplay" title="${message(code: 'measureContextItem.valueDisplay.label', default: 'Value Display')}" />
 								<g:sortableColumn property="valueDisplay" title="${message(code: 'measureContextItem.valueNum.label', default: 'Value')}" />
 								<g:sortableColumn property="valueDisplay" title="${message(code: 'measureContextItem.valueMin.label', default: 'Value Min')}" />
@@ -191,7 +192,8 @@
 						<g:each in="${assayInstance?.measureContextItems.sort{it.id}}" status="i" var="measureContextItemInstance">
 							<tr class="${(i % 2) == 0 ? 'even' : 'odd'}">
 								<td>${fieldValue(bean: measureContextItemInstance, field: "id")}</td>
-								<td>${fieldValue(bean: measureContextItemInstance, field: "attributeType")}</td>							
+								<td>${fieldValue(bean: measureContextItemInstance, field: "attributeType")}</td>	
+								<td>${fieldValue(bean: measureContextItemInstance, field: "attributeElement.label")}</td>						
 								<td>${fieldValue(bean: measureContextItemInstance, field: "valueDisplay")}</td>								
 								<td>${fieldValue(bean: measureContextItemInstance, field: "valueNum")}</td>
 								<td>${fieldValue(bean: measureContextItemInstance, field: "valueMin")}</td>

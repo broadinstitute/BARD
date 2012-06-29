@@ -9,12 +9,11 @@ hibernate {
 environments {
 	development {
 		dataSource {
-//			dbCreate = 'validate'
 			url = "jdbc:oracle:thin:@barddb:1521:bardqa"
 			driverClassName = "oracle.jdbc.driver.OracleDriver"
 			dialect = bard.SequencePerTableOracleDialect
-			username = "bard_dev"
-			password = "bard_dev"
+			username = "YCRUZ"
+			password = "YCRUZ"
 		}
 	}
 	oracledev {
@@ -37,6 +36,15 @@ environments {
 			password = "bard_qa"
 		}
 	}
+	ycruz {
+		dataSource {
+			url = "jdbc:oracle:thin:@barddb:1521:bardqa"
+			driverClassName = "oracle.jdbc.driver.OracleDriver"
+			dialect = bard.SequencePerTableOracleDialect
+			username = "YCRUZ"
+			password = "YCRUZ"
+		}
+	}
 	ddurkin {
 		dataSource {
 		//	dbCreate = 'validate'
@@ -53,18 +61,24 @@ environments {
 //        	dialect = "org.hibernate.dialect.MySQLDialect"
 			pooled = true
 			driverClassName = "com.mysql.jdbc.Driver"
-			url = "jdbc:mysql://sinaa:3306/mlbd"
-			username = "root"
-			password = "genome12"
+			url = "jdbc:mysql://dbserver:3306/schema"
+			username = "user"
+			password = "pwd"
 		}
 	}
 	test {
 		dataSource {
-			dbCreate = "create-drop" // one of 'create', 'create-drop', 'update', 'validate', ''
-			url = "jdbc:h2:mem:devDB"
-			driverClassName = "org.h2.Driver"
-			username = "sa"
-			password = ""
+			url = "jdbc:oracle:thin:@barddb:1521:bardqa"
+			driverClassName = "oracle.jdbc.driver.OracleDriver"
+			dialect = bard.SequencePerTableOracleDialect
+			username = "YCRUZ"
+			password = "YCRUZ"
+			
+//			dbCreate = "create-drop" // one of 'create', 'create-drop', 'update', 'validate', ''
+//			url = "jdbc:h2:mem:devDB"
+//			driverClassName = "org.h2.Driver"
+//			username = "sa"
+//			password = ""
 		}
 	}
 	production {

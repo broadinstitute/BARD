@@ -27,4 +27,20 @@ class AssayDefinitionControllerTests {
 
         assert model.assayInstance == assay
     }
+	
+//	void testFindById() {
+//		params.id = 4
+//		controller.findById()		
+//		
+//		assertEquals "show", controller.response.redirectArgs["action"]
+//		assertEquals assay.id, controller.redirectArgs["id"]		
+//	}
+//	
+//	void testFindByName() {
+//		params.assayName = "Test"
+//		controller.findByName()
+//		
+//		assertEquals "show", controller.redirectArgs["action"]
+//		assertEquals assay.id, controller.redirectArgs["id"]
+//	}
 }
