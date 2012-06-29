@@ -45,7 +45,7 @@ grails.project.dependency.resolution = {
     plugins {
         runtime ":hibernate:$grailsVersion"
         runtime ":resources:1.1.6"
-        runtime ":bard-domain-model:0.1.7-SNAPSHOT"
+        runtime ":bard-domain-model:0.1.7"
         compile ":functional-spock:0.6"
         build ":tomcat:$grailsVersion"
         compile ":spock:0.6"
