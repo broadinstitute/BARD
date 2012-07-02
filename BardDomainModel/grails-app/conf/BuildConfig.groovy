@@ -30,6 +30,10 @@ grails.project.dependency.resolution = {
         build(":tomcat:$grailsVersion"){
             export = false
         }
+        build(":codenarc:0.15"){
+            export = false
+        }
+
         // seems like rest client builder is required by release plugin but not getting included transitively
         // so adding explicitly here
         build(":rest-client-builder:1.0.2"){
@@ -59,3 +63,13 @@ grails.project.repos.snapshots.url = "http://bard-repo.broadinstitute.org:8081/a
 //grails.project.repos.snapshots.username = "changeme"
 //grails.project.repos.snapshots.password = "changeme"
 
+codenarc.ruleSetFiles = "file:grails-app/conf/BardCodeNarcRuleSet.groovy"
+codenarc.reports = {
+    html('html') {
+        outputFile = 'target/codenarc-reports/html/BARD-CodeNarc-Report.html'
+        title = 'BARD CodeNarc Report'
+    }
+}
+codenarc {
+    exclusions = ['**/grails-app/migrations/*']
+}
