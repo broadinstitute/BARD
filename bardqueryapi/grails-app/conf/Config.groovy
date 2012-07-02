@@ -86,7 +86,13 @@ String getServerUrl() {
     switch (Environment.current.name) {
         case ('production'):
             //TODO
-            grails.serverURL = "http://www.changeme.com"
+            "http://bard.broadinstitute.org/bardqueryapi"
+            break
+        case ('oracleqa'):
+            "http://bard-qa.broadinstitute.org/bardqueryapi"
+            break
+        case ('oracledev'):
+            "http://bard-dev.broadinstitute.org/bardqueryapi"
             break
         default:
             "http://localhost:8080/bardqueryapi"
