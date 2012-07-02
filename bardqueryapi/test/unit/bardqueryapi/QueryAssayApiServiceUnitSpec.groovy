@@ -40,9 +40,9 @@ class QueryAssayApiServiceUnitSpec extends Specification {
         assert response == expectedCompounds
 
         where:
-        label                        | assayId          | assayJson                                                 | expectedCompounds
-        "Return 1 compound"          | new Integer(872) | JSON.parse('{"compounds": 10}')                           | new Integer(10)
-        "Return error (0 compounds)" | new Integer(872) | JSON.parse('{"errorMessage": "error", "errorCode": 404}') | new Integer(0)
+        label                        | assayId          | assayJson                                           | expectedCompounds
+        "Return 1 compound"          | new Integer(872) | JSON.parse('{"compounds": 10}')                     | new Integer(10)
+        "Return error (0 compounds)" | new Integer(872) | ["errorMessage": "error", "errorCode": 404] as JSON | new Integer(0)
     }
 
     /**
