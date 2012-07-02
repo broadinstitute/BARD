@@ -31,7 +31,7 @@ grails.project.dependency.resolution = {
         grailsRepo('http://bard-repo:8081/artifactory/bard-virtual-repo', 'grailsCentral')
     }
     dependencies {
-        build 'com.oracle:ojdbc6:11.2.0.2.0'
+        compile 'com.oracle:ojdbc6:11.2.0.2.0'
         // specify dependencies here under either 'build', 'compile', 'runtime', 'test' or 'provided' scopes eg.
         test "org.spockframework:spock-core:0.6-groovy-1.8"
         test('org.codehaus.groovy.modules.http-builder:http-builder:0.5.2'){
@@ -45,10 +45,22 @@ grails.project.dependency.resolution = {
     plugins {
         runtime ":hibernate:$grailsVersion"
         runtime ":resources:1.1.6"
-        runtime ":bard-domain-model:0.1.7-SNAPSHOT"
+        runtime ":bard-domain-model:0.1.7"
         compile ":functional-spock:0.6"
         build ":tomcat:$grailsVersion"
+        build ":codenarc:0.15"
         compile ":spock:0.6"
         compile ":remote-control:1.2"
     }
+}
+
+codenarc.ruleSetFiles = "file:grails-app/conf/BardCodeNarcRuleSet.groovy"
+codenarc.reports = {
+    html('html') {
+        outputFile = 'target/codenarc-reports/html/BARD-CodeNarc-Report.html'
+        title = 'BARD CodeNarc Report'
+    }
+}
+codenarc {
+    exclusions = ['**/grails-app/migrations/*']
 }

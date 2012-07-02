@@ -24,7 +24,7 @@ class BardWebInterfaceController {
     }
 
     def homePage() {
-        render(view: "homePage",totalCompounds:  0, model: [assays: [], compounds: [], experiments: [], projects: []])
+        render(view: "homePage", totalCompounds: 0, model: [assays: [], compounds: [], experiments: [], projects: []])
     }
     /**
      * TODO: This will require refactoring after this iteration
@@ -32,31 +32,34 @@ class BardWebInterfaceController {
      * @return
      */
     def search() {
-        if (params.searchString) {
+        if (params.searchString?.trim()) {
             if (params.searchType == SearchType.TARGET.name()) {
                 List<String> assays = queryTargetApiService.findAssaysForAccessionTarget(params.searchString)
-                render(view: "homePage", model: [totalCompounds:0, assays: assays, compounds: [], experiments: [], projects: []])
+                render(view: "homePage", model: [totalCompounds: 0, assays: assays, compounds: [], experiments: [], projects: []])
                 return
             }
             if (params.searchType == SearchType.COMPOUNDS.name()) {
                 Integer totalCompounds = 0
                 Set<String> compounds = [] as Set<String>
-                Integer offset = params.offset as Integer?: 0
-                Integer max = params.max as Integer?: 100
+                Integer offset = params.offset as Integer ?: 0
+                Integer max = params.max as Integer ?: 100
                 params.max = max.toString()
                 final String[] assays = QueryAssayApiService.breakApartDistinctStrings(params.searchString)
-                for (String currentAssay : assays){
-                    if (!currentAssay.isInteger()){
+                for (String currentAssay : assays) {
+                    if (!currentAssay.isInteger()) {
                         flash.message = 'Search String must be a number'
-                        redirect(action: "homePage", params: [searchString:params.searchString])
+                        redirect(action: "homePage", params: [searchString: params.searchString])
                         return
                     }
                     final Integer assay = new Integer(currentAssay)
                     totalCompounds = totalCompounds + queryAssayApiService.getTotalAssayCompounds(assay)
-                    final Set<String> resultset = queryAssayApiService.getAssayCompoundsResultset(max, offset, assay)  as Set<String>
-                    compounds.addAll(resultset)
+                    Set<String> resultset = []
+                    if (totalCompounds > 0) {
+                        resultset = queryAssayApiService.getAssayCompoundsResultset(max, offset, assay) as Set<String>
+                        compounds.addAll(resultset)
+                    }
                 }
-                render(view: "homePage", model: [totalCompounds:  totalCompounds, assays: assays as List<String>, compounds: compounds as List<String>, experiments: [], projects: []])
+                render(view: "homePage", model: [totalCompounds: totalCompounds, assays: assays as List<String>, compounds: compounds as List<String>, experiments: [], projects: []])
                 return
             }
         }

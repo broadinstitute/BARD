@@ -40,6 +40,7 @@ grails.project.dependency.resolution = {
     plugins {
         // build scope
         build ":tomcat:$grailsVersion"
+        build ":codenarc:0.15"
 
         // compile scope
         compile ":extjs4:4.1.0-RC.0"
@@ -47,7 +48,7 @@ grails.project.dependency.resolution = {
         compile ":json-rest-api:1.0.11"
         compile ":webflow:2.0.0"
         compile ":yui:2.8.2.1"
-        compile ":bard-domain-model:0.1.6"
+        compile ":bard-domain-model:0.1.7"
 
         // runtime scope
         runtime ":hibernate:$grailsVersion"
@@ -64,4 +65,15 @@ grails.project.dependency.resolution = {
     // include a plugin by specifying the location of the unpacked source
     // handy if you making lots of changes
     //grails.plugin.location.'bard-domain-model' = "../BardDomainModel"
+}
+
+codenarc.ruleSetFiles = "file:grails-app/conf/BardCodeNarcRuleSet.groovy"
+codenarc.reports = {
+    html('html') {
+        outputFile = 'target/codenarc-reports/html/BARD-CodeNarc-Report.html'
+        title = 'BARD CodeNarc Report'
+    }
+}
+codenarc {
+    exclusions = ['**/grails-app/migrations/*']
 }
