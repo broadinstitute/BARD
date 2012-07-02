@@ -12,7 +12,7 @@ import grails.util.Environment
 //    grails.config.locations << "file:" + System.properties["${appName}.config.location"]
 // }
 //Defaults
-ncgc.server.root.url = "http://assay.nih.gov"
+ncgc.server.root.url = "http://assay.nih.gov:8080"
 ncgc.server.username = "bogus"
 ncgs.server.password = "bogus"
 ncgc.server.projects.url="${ncgc.server.root.url}/bard/rest/v1/projects/"
