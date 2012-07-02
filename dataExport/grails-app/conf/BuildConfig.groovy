@@ -48,7 +48,19 @@ grails.project.dependency.resolution = {
         runtime ":bard-domain-model:0.1.7"
         compile ":functional-spock:0.6"
         build ":tomcat:$grailsVersion"
+        build ":codenarc:0.15"
         compile ":spock:0.6"
         compile ":remote-control:1.2"
     }
+}
+
+codenarc.ruleSetFiles = "file:grails-app/conf/BardCodeNarcRuleSet.groovy"
+codenarc.reports = {
+    html('html') {
+        outputFile = 'target/codenarc-reports/html/BARD-CodeNarc-Report.html'
+        title = 'BARD CodeNarc Report'
+    }
+}
+codenarc {
+    exclusions = ['**/grails-app/migrations/*']
 }

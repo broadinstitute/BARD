@@ -44,6 +44,7 @@ grails.project.dependency.resolution = {
         runtime ":resources:1.1.6"
         compile ":spock:0.6"
         compile ":functional-spock:0.6"
+        build ":codenarc:0.15"
 
         // Uncomment these (or add new ones) to enable additional resources capabilities
         //runtime ":zipped-resources:1.0"
@@ -55,4 +56,15 @@ grails.project.dependency.resolution = {
         compile ":remote-control:1.2"
 //        test "org.grails.plugins:functional-spock-groovy18:0.2"
     }
+}
+
+codenarc.ruleSetFiles = "file:grails-app/conf/BardCodeNarcRuleSet.groovy"
+codenarc.reports = {
+    html('html') {
+        outputFile = 'target/codenarc-reports/html/BARD-CodeNarc-Report.html'
+        title = 'BARD CodeNarc Report'
+    }
+}
+codenarc {
+    exclusions = ['**/grails-app/migrations/*']
 }
