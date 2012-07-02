@@ -47,6 +47,7 @@ class AssayExportServiceUnitSpec extends Specification {
         Assay.metaClass.static.get = {id -> assay }
         this.assayExportService.generateAssay(this.markupBuilder, assay.id)
         then: "A valid xml document is generated and is similar to the expected document"
+        println this.writer.toString()
         XmlTestAssertions.assertResults(results, this.writer.toString())
         where:
         label                         | assayName     | assayVersion | designedBy | results

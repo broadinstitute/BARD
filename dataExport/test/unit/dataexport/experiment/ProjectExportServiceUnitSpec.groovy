@@ -42,7 +42,7 @@ class ProjectExportServiceUnitSpec extends Specification {
         when: "We attempt to generate a Project XML document"
         this.projectExportService.generateProject(this.markupBuilder, project)
         then: "A valid xml document is generated and is similar to the expected document"
-        XmlTestAssertions.assertResults(results, this.writer.toString())
+         XmlTestAssertions.assertResults(results, this.writer.toString())
         where:
         label                         | projectName     | groupType         | description | results
         "Project with no description" | "Project Name1" | GroupType.Project | ""          | XmlTestSamples.PROJECT_NO_DESCRIPTION

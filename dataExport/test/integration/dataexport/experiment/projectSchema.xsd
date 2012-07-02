@@ -159,6 +159,7 @@
                     </xs:restriction>
                 </xs:simpleType>
             </xs:attribute>
+            <xs:attribute ref="readyForExtraction"/>
         </xs:complexType>
     </xs:element>
 </xs:schema>

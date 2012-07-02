@@ -138,6 +138,6 @@ class ProjectRestControllerFunctionalSpec extends Specification {
 
         assert serverResponse.statusLine.statusCode == HttpServletResponse.SC_OK
         final String responseData = serverResponse.data.readLines().join()
-        XmlTestAssertions.assertResults(XmlTestSamples.PROJECT_FROM_SERVER, responseData)
+         XmlTestAssertions.assertResults(XmlTestSamples.PROJECT_FROM_SERVER, responseData)
     }
 }

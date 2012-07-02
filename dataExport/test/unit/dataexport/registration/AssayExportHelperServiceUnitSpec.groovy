@@ -39,8 +39,7 @@ class AssayExportHelperServiceUnitSpec extends Specification {
         when: "We attempt to generate a measure in xml"
         this.assayExportHelperService.generateMeasure(this.markupBuilder, measure)
         then: "A valid xml measure is generated with the expected measure attributes, result type and entry unit"
-        println this.writer.toString()
-        XmlTestAssertions.assertResults(results, this.writer.toString())
+         XmlTestAssertions.assertResults(results, this.writer.toString())
         where:
         label                                           | measure                                                                                                                                          | results
         "Measure with Parent No Child Elements"         | new Measure(measureContext: new MeasureContext(contextName: "label"))                                                                            | XmlTestSamples.MEASURE_1_UNIT
