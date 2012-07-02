@@ -29,11 +29,16 @@ class QueryTargetApiService {
      */
     List<String> findAssaysForAccessionTarget(final String accessionNumber) {
         final String url = "${this.accessionUrl}${accessionNumber}/assays"
-        def assays = queryExecutorService.executeGetRequestJSON(url, null)
-        List<String> assayIds = []
-        assays.each { assayUrl ->
-            String currentAID = assayUrl.split('/').toList().last()
-            assayIds.add(currentAID)
+        final List<String> assayIds = []
+        try {
+            def assays = queryExecutorService.executeGetRequestJSON(url, null)
+            assays.each { assayUrl ->
+                String currentAID = assayUrl.split('/').toList().last()
+                assayIds.add(currentAID)
+            }
+        }
+        catch (Exception exp) {
+            log.error("We got back an error from the NCGC server: ${exp.message}")
         }
         return assayIds
     }
