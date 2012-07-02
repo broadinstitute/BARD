@@ -4,12 +4,12 @@ import bard.db.registration.Assay
 import bard.db.registration.AssayDocument
 import common.tests.XmlTestAssertions
 import common.tests.XmlTestSamples
+import exceptions.NotFoundException
 import grails.test.mixin.Mock
 import grails.test.mixin.TestFor
 import groovy.xml.MarkupBuilder
 import org.codehaus.groovy.grails.web.mapping.LinkGenerator
 import spock.lang.Specification
-import exceptions.NotFoundException
 
 /**
  * Created with IntelliJ IDEA.
@@ -29,7 +29,7 @@ class AssayExportServiceUnitSpec extends Specification {
     void setup() {
         LinkGenerator grailsLinkGenerator = Mock()
         final MediaTypesDTO mediaTypesDTO =
-            new MediaTypesDTO(resultTypeMediaType: "xml",elementMediaType: "xml", assaysMediaType: "xml", assayMediaType: "xml", assayDocMediaType: "xml")
+            new MediaTypesDTO(resultTypeMediaType: "xml", elementMediaType: "xml", assaysMediaType: "xml", assayMediaType: "xml", assayDocMediaType: "xml")
 
         this.assayExportService = this.service
         AssayExportHelperService assayExportHelperService =
@@ -68,6 +68,7 @@ class AssayExportServiceUnitSpec extends Specification {
         "Document Type, Document Content, no document Name" | "documentType" | "Content"       | ""             | XmlTestSamples.ASSAY_DOCUMENT_NO_DOCUMENT_NAME_UNIT
         "With Document Name"                                | "documentType" | "Content"       | "documentName" | XmlTestSamples.ASSAY_DOCUMENT_WITH_DOCUMENT_NAME_UNIT
     }
+
     void "test Generate Assay Document Not Found Exception"() {
         given:
         AssayDocument.metaClass.static.get = {id -> null }
@@ -76,6 +77,7 @@ class AssayExportServiceUnitSpec extends Specification {
         then: "An exception should be thrown"
         thrown(NotFoundException)
     }
+
     void "test Generate Assay Not Found Exception"() {
         given:
         Assay.metaClass.static.get = {id -> null }

@@ -266,6 +266,9 @@ class ExperimentExportService {
                     link(rel: 'related', href: "${attributeHref}", type: "${this.mediaTypesDTO.elementMediaType}")
                 }
             }
+            if (resultContextItem.extValueId) {
+                extValueId(resultContextItem.extValueId)
+            }
 
         }
     }
@@ -275,6 +278,8 @@ class ExperimentExportService {
      * @param experiment
      */
     protected void generateExperimentLinks(final MarkupBuilder markupBuilder, final Experiment experiment) {
+        //TODO: Does not exist in domain
+        // experiment.laboratory
 
         final String assayHref = grailsLinkGenerator.link(mapping: 'assay', absolute: true, params: [id: experiment.assay?.id]).toString()
         final String experimentHref = grailsLinkGenerator.link(mapping: 'experiment', absolute: true, params: [id: experiment.id]).toString()

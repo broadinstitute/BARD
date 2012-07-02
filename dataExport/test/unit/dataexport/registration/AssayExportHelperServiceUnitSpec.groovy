@@ -3,12 +3,12 @@ package dataexport.registration
 import bard.db.dictionary.Element
 import bard.db.dictionary.Unit
 import common.tests.XmlTestAssertions
+import common.tests.XmlTestSamples
 import grails.test.mixin.Mock
 import groovy.xml.MarkupBuilder
 import org.codehaus.groovy.grails.web.mapping.LinkGenerator
 import spock.lang.Specification
 import bard.db.registration.*
-import common.tests.XmlTestSamples
 
 /**
  * Created with IntelliJ IDEA.
@@ -26,7 +26,7 @@ class AssayExportHelperServiceUnitSpec extends Specification {
 
     void setup() {
         grailsLinkGenerator = Mock()
-        final MediaTypesDTO mediaTypesDTO = new MediaTypesDTO(resultTypeMediaType: "xml",elementMediaType: "xml", assaysMediaType: "xml", assayMediaType: "xml", assayDocMediaType: "xml")
+        final MediaTypesDTO mediaTypesDTO = new MediaTypesDTO(resultTypeMediaType: "xml", elementMediaType: "xml", assaysMediaType: "xml", assayMediaType: "xml", assayDocMediaType: "xml")
         this.assayExportHelperService =
             new AssayExportHelperService(mediaTypesDTO)
         this.assayExportHelperService.grailsLinkGenerator = grailsLinkGenerator
@@ -39,7 +39,7 @@ class AssayExportHelperServiceUnitSpec extends Specification {
         when: "We attempt to generate a measure in xml"
         this.assayExportHelperService.generateMeasure(this.markupBuilder, measure)
         then: "A valid xml measure is generated with the expected measure attributes, result type and entry unit"
-        println  this.writer.toString()
+        println this.writer.toString()
         XmlTestAssertions.assertResults(results, this.writer.toString())
         where:
         label                                           | measure                                                                                                                                          | results

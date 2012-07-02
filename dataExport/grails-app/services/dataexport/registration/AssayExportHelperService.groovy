@@ -35,6 +35,8 @@ class AssayExportHelperService {
         if (measure.measureContext) {
             attributes.put('measureContextRef', measure.measureContext.contextName)
         }
+
+        //TODO Add Parent measure
         return attributes
     }
 
@@ -98,7 +100,8 @@ class AssayExportHelperService {
         markupBuilder.measureContextItem(attributes) {
             final Element valueElement = measureContextItem.valueElement
             final Element attributeElement = measureContextItem.attributeElement
-            //add value id element
+
+                        //add value id element
             if (valueElement) {
                 valueId(label: valueElement.label) {
                     final String valueHref = grailsLinkGenerator.link(mapping: 'element', absolute: true, params: [id: valueElement.id]).toString()
@@ -111,6 +114,9 @@ class AssayExportHelperService {
                 attributeId(attributeType: measureContextItem.attributeType.value, label: attributeElement.label) {
                     link(rel: 'related', href: "${attributeHref}", type: "${this.mediaTypesDTO.elementMediaType}")
                 }
+            }
+            if(measureContextItem.extValueId){
+                extValueId(measureContextItem.extValueId)
             }
         }
 
@@ -144,9 +150,11 @@ class AssayExportHelperService {
      * @param measureContexts
      */
     protected void generateMeasureContexts(final MarkupBuilder markupBuilder, final Set<MeasureContext> measureContexts) {
-        markupBuilder.measureContexts() {
-            for (MeasureContext measureContext : measureContexts) {
-                generateMeasureContext(markupBuilder, measureContext)
+        if (measureContexts) {
+            markupBuilder.measureContexts() {
+                for (MeasureContext measureContext : measureContexts) {
+                    generateMeasureContext(markupBuilder, measureContext)
+                }
             }
         }
     }
@@ -155,10 +163,12 @@ class AssayExportHelperService {
      * @param markupBuilder
      * @param measureContextItems
      */
-    protected void generateMeasureContextItems(final MarkupBuilder markupBuilder, final Set<MeasureContextItem> measureContextItems) {
-        markupBuilder.measureContextItems() {
-            for (MeasureContextItem measureContextItem : measureContextItems) {
-                generateMeasureContextItem(markupBuilder, measureContextItem)
+    public void generateMeasureContextItems(final MarkupBuilder markupBuilder, final Set<MeasureContextItem> measureContextItems) {
+        if (measureContextItems) {
+            markupBuilder.measureContextItems() {
+                for (MeasureContextItem measureContextItem : measureContextItems) {
+                    generateMeasureContextItem(markupBuilder, measureContextItem)
+                }
             }
         }
     }
@@ -193,9 +203,11 @@ class AssayExportHelperService {
     }
 
     protected void generateMeasures(final MarkupBuilder markupBuilder, final Set<Measure> measures) {
-        markupBuilder.measures() {
-            for (Measure measure : measures) {
-                generateMeasure(markupBuilder, measure)
+        if (measures) {
+            markupBuilder.measures() {
+                for (Measure measure : measures) {
+                    generateMeasure(markupBuilder, measure)
+                }
             }
         }
     }
@@ -203,10 +215,11 @@ class AssayExportHelperService {
     public void generateAssayDocuments(
             final MarkupBuilder markupBuilder,
             final Set<AssayDocument> assayDocuments) {
-
-        markupBuilder.assayDocuments() {
-            for (AssayDocument assayDocument : assayDocuments) {
-                generateAssayDocument(markupBuilder, assayDocument, false)
+        if (assayDocuments) {
+            markupBuilder.assayDocuments() {
+                for (AssayDocument assayDocument : assayDocuments) {
+                    generateAssayDocument(markupBuilder, assayDocument, false)
+                }
             }
         }
     }
@@ -221,9 +234,16 @@ class AssayExportHelperService {
             final Assay assay) {
 
         final Map<String, String> attributes = [:]
+
+        if(assay.id){
+            attributes.put("assayId",assay.id.toString())
+        }
         attributes.put('readyForExtraction', assay.readyForExtraction)
         if (assay.assayVersion) {
             attributes.put('assayVersion', assay.assayVersion)
+        }
+        if (assay.assayType) {
+            attributes.put('assayType', assay.assayType)
         }
         if (assay.assayStatus) {
             attributes.put('status', assay.assayStatus)

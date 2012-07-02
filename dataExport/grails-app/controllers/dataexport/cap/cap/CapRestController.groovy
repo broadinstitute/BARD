@@ -1,11 +1,7 @@
 package dataexport.cap.cap
 
 import dataexport.cap.CapExportService
-import groovy.xml.MarkupBuilder
 import org.codehaus.groovy.grails.commons.GrailsApplication
-import org.codehaus.groovy.grails.web.servlet.HttpHeaders
-
-import javax.servlet.http.HttpServletResponse
 
 /**
  * Please note that the DataExportFilters is applied to all incoming request.
@@ -44,7 +40,8 @@ class CapRestController {
 //        capExportService.generateNewProjects(xml)
         throw new RuntimeException("Not Yet Implemented")
     }
-    def assayDocument(){
+
+    def assayDocument() {
 //        def mimeType = grailsApplication.config.bard.data.export.cap.projects.xml
 //        response.contentType = mimeType
 //        //do validations
@@ -59,8 +56,9 @@ class CapRestController {
 //        capExportService.generateNewProjects(xml)
         //TODO NYI
         throw new RuntimeException("Not yet Implemented")
-          //return null
+        //return null
     }
+
     def cap() {
 //        def mimeType = grailsApplication.config.bard.data.export.cap.xml
 //        response.contentType = mimeType

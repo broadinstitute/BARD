@@ -141,7 +141,7 @@ class AssayRestControllerFunctionalSpec extends Specification {
         then: 'We expect an XML representation of that assay'
         assert serverResponse.statusLine.statusCode == HttpServletResponse.SC_OK
         final String responseData = serverResponse.data.readLines().join()
-        XMLAssert.assertXpathEvaluatesTo("1", "count(//measureContexts)",responseData)
+        XMLAssert.assertXpathEvaluatesTo("1", "count(//measureContexts)", responseData)
         XMLAssert.assertXpathEvaluatesTo("1", "count(//measureContext)", responseData)
         XMLAssert.assertXpathEvaluatesTo("1", "count(//measures)", responseData)
         XMLAssert.assertXpathEvaluatesTo("1", "count(//measure)", responseData)

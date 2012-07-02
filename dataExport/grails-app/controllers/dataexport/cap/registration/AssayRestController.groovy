@@ -45,7 +45,7 @@ class AssayRestController {
             render ""
         } catch (Exception ee) {
             response.status = HttpServletResponse.SC_INTERNAL_SERVER_ERROR
-            log.error(ee.message,ee)
+            log.error(ee.message, ee)
             //clean out groovy grails boiler plate stuff
             //e message body
             ee.printStackTrace()

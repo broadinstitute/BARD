@@ -25,7 +25,9 @@
     </xs:simpleType>
     <xs:element name="status">
         <xs:annotation>
-            <xs:documentation>Status of the current object. Consuming applications are allowed to change the value of this object to 'Uploaded' once they have processed the object</xs:documentation>
+            <xs:documentation>Status of the current object. Consuming applications are allowed to change the value of
+                this object to 'Uploaded' once they have processed the object
+            </xs:documentation>
         </xs:annotation>
         <xs:simpleType>
             <xs:restriction base="xs:string">
@@ -68,7 +70,9 @@
             </xs:attribute>
             <xs:attribute name="href" type="xs:anyURI" use="required">
                 <xs:annotation>
-                    <xs:documentation>The URI to the object whose relationship to the current object is described by the rel attribute</xs:documentation>
+                    <xs:documentation>The URI to the object whose relationship to the current object is described by the
+                        rel attribute
+                    </xs:documentation>
                 </xs:annotation>
             </xs:attribute>
             <xs:attribute name="rel" use="required">
@@ -113,8 +117,8 @@
                 <xs:element ref="link" maxOccurs="unbounded">
                     <xs:annotation>
                         <xs:documentation>Link to next list of experiment's
-application/vnd.bard.cap+xml;type=experiments
-</xs:documentation>
+                            application/vnd.bard.cap+xml;type=experiments
+                        </xs:documentation>
                     </xs:annotation>
                 </xs:element>
             </xs:sequence>
@@ -128,10 +132,12 @@ application/vnd.bard.cap+xml;type=experiments
     <xs:element name="experiment">
         <xs:annotation>
             <xs:documentation>There are links to the assay and project that this experiment belongs.
-There are also links to the set of results, resultContextItems
-and the Result Hierarchy associated to this experiment
+                There are also links to the set of results, resultContextItems
+                and the Result Hierarchy associated to this experiment
 
-The link with 'edit' relation should be used to set the status of this experiment to 'uploaded' once it is consumed</xs:documentation>
+                The link with 'edit' relation should be used to set the status of this experiment to 'uploaded' once it
+                is consumed
+            </xs:documentation>
         </xs:annotation>
         <xs:complexType>
             <xs:sequence>
@@ -147,17 +153,18 @@ The link with 'edit' relation should be used to set the status of this experimen
                                         <xs:element minOccurs="0" name="precedingExperiment">
                                             <xs:complexType>
                                                 <xs:sequence minOccurs="0">
-                                                  <xs:element ref="link"/>
+                                                    <xs:element ref="link"/>
                                                 </xs:sequence>
                                                 <xs:attribute name="id" type="bardID" use="required"
-                                                />
+                                                        />
                                             </xs:complexType>
                                         </xs:element>
                                         <xs:element maxOccurs="unbounded" minOccurs="0" ref="link">
                                             <xs:annotation>
                                                 <xs:documentation>Link to self
-Link to results
-Link to Project and Assay</xs:documentation>
+                                                    Link to results
+                                                    Link to Project and Assay
+                                                </xs:documentation>
                                             </xs:annotation>
                                         </xs:element>
                                     </xs:sequence>
@@ -176,18 +183,19 @@ Link to Project and Assay</xs:documentation>
                                         <xs:element name="externalSystem">
                                             <xs:complexType>
                                                 <xs:sequence>
-                                                  <xs:element name="systemUrl" type="xs:anyURI"/>
+                                                    <xs:element name="systemUrl" type="xs:anyURI"/>
                                                 </xs:sequence>
                                                 <xs:attribute name="name" type="xs:string"
-                                                  use="required"/>
+                                                              use="required"/>
                                                 <xs:attribute name="owner" type="xs:string"/>
                                             </xs:complexType>
                                         </xs:element>
                                         <xs:element maxOccurs="unbounded" minOccurs="0" ref="link">
                                             <xs:annotation>
                                                 <xs:documentation>Link to self
-Link to results
-Link to Project and Assay</xs:documentation>
+                                                    Link to results
+                                                    Link to Project and Assay
+                                                </xs:documentation>
                                             </xs:annotation>
                                         </xs:element>
                                     </xs:sequence>
@@ -199,8 +207,9 @@ Link to Project and Assay</xs:documentation>
                 <xs:element maxOccurs="unbounded" minOccurs="0" ref="link">
                     <xs:annotation>
                         <xs:documentation>Link to self
-Link to results
-Link to Project and Assay</xs:documentation>
+                            Link to results
+                            Link to Project and Assay
+                        </xs:documentation>
                     </xs:annotation>
                 </xs:element>
             </xs:sequence>
@@ -215,15 +224,15 @@ Link to Project and Assay</xs:documentation>
     <xs:element name="results">
         <xs:annotation>
             <xs:documentation>The results of a given experiment.
-</xs:documentation>
+            </xs:documentation>
         </xs:annotation>
         <xs:complexType>
             <xs:sequence maxOccurs="1" minOccurs="1">
                 <xs:element maxOccurs="unbounded" ref="link">
                     <xs:annotation>
                         <xs:documentation>Link to next set of results
-Link to parent experiment
-</xs:documentation>
+                            Link to parent experiment
+                        </xs:documentation>
                     </xs:annotation>
                 </xs:element>
             </xs:sequence>
@@ -236,7 +245,9 @@ Link to parent experiment
     </xs:element>
     <xs:element name="result">
         <xs:annotation>
-            <xs:documentation>An individual results. Has links back to parent experiment and to result types  and elements from the dictionary</xs:documentation>
+            <xs:documentation>An individual results. Has links back to parent experiment and to result types and
+                elements from the dictionary
+            </xs:documentation>
         </xs:annotation>
         <xs:complexType>
             <xs:sequence>
@@ -314,7 +325,9 @@ Link to parent experiment
             <xs:sequence>
                 <xs:element name="resultContextItem" maxOccurs="unbounded" minOccurs="0">
                     <xs:annotation>
-                        <xs:documentation>We include the group result context Id and the result context item Id so that the client can walk the tree from child to parent</xs:documentation>
+                        <xs:documentation>We include the group result context Id and the result context item Id so that
+                            the client can walk the tree from child to parent
+                        </xs:documentation>
                     </xs:annotation>
                     <xs:complexType>
                         <xs:sequence>

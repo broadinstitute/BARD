@@ -17,7 +17,7 @@ package common.tests
 
 class XmlTestSamples {
     //We include a dummy header, just so we can validate, otherwise the XML is not well-formed
-    static final String EXPERIMENTS_LINK_UNIT='''
+    static final String EXPERIMENTS_LINK_UNIT = '''
     <dummyHeader>
     <link rel='related' title='Link to Assay' type='assayMediaType' href='null' />
     <link rel='related' title='List Related Results' type='resultsMediaType' href='null' />
@@ -26,7 +26,7 @@ class XmlTestSamples {
     </dummyHeader>
     '''
 
-    static final String RESULT_CONTEXT_ITEM_UNIT ='''
+    static final String RESULT_CONTEXT_ITEM_UNIT = '''
   <resultContextItem resultContextItemId='' qualifier='%' valueDisplay='20 %' valueNum='2.0' valueMin='1.0' valueMax='3.0'>
     <attribute label='attrribute'>
       <link rel='related' href='null' type='elementMediaType' />
@@ -36,10 +36,10 @@ class XmlTestSamples {
     </valueControlled>
   </resultContextItem>
 '''
-    static final String RESULT_CONTEXT_ITEM_UNIT_NO_CHILD_ELEMENTS ='''
+    static final String RESULT_CONTEXT_ITEM_UNIT_NO_CHILD_ELEMENTS = '''
   <resultContextItem resultContextItemId='' qualifier='%' valueDisplay='20 %' valueNum='2.0' valueMin='1.0' valueMax='3.0' />
 '''
-    static final String RESULT_CONTEXT_ITEMS_UNIT ='''
+    static final String RESULT_CONTEXT_ITEMS_UNIT = '''
 <resultContextItems>
   <resultContextItem resultContextItemId='' qualifier='%' valueDisplay='20 %' valueNum='2.0' valueMin='1.0' valueMax='3.0'>
     <attribute label='attrribute'>
@@ -51,7 +51,7 @@ class XmlTestSamples {
   </resultContextItem>
 </resultContextItems>
 '''
-    static final String RESULT_CONTEXT_ITEMS_UNIT_NO_CHILD_ELEMENTS ='''
+    static final String RESULT_CONTEXT_ITEMS_UNIT_NO_CHILD_ELEMENTS = '''
 <resultContextItems>
   <resultContextItem resultContextItemId='' qualifier='%' valueDisplay='20 %' valueNum='2.0' valueMin='1.0' valueMax='3.0' />
 </resultContextItems>
@@ -92,7 +92,7 @@ class XmlTestSamples {
     </projectExperiment>
 </projectExperiments>
 '''
-    static final String EXTERNAL_REFERENCES_UNT='''
+    static final String EXTERNAL_REFERENCES_UNT = '''
 <externalReferences>
 <externalReference>
     <externalAssayRef>External Assay Ref</externalAssayRef>
@@ -103,7 +103,7 @@ class XmlTestSamples {
     </externalReference>
     </externalReferences>
     '''
-    static final String EXTERNAL_REFERENCE_UNT='''
+    static final String EXTERNAL_REFERENCE_UNT = '''
 <externalReference>
     <externalAssayRef>External Assay Ref</externalAssayRef>
   <externalSystem name='systemName' owner='owner'>

@@ -2,11 +2,11 @@ package dataexport.util
 
 import common.tests.XmlTestAssertions
 import common.tests.XmlTestSamples
+import dataexport.registration.MediaTypesDTO
 import groovy.xml.MarkupBuilder
 import org.codehaus.groovy.grails.web.mapping.LinkGenerator
 import spock.lang.Specification
 import spock.lang.Unroll
-import dataexport.registration.MediaTypesDTO
 
 /**
  *

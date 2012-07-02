@@ -1,11 +1,10 @@
 package dataexport.experiment
 
 import bard.db.experiment.Project
-
+import dataexport.registration.MediaTypesDTO
 import exceptions.NotFoundException
 import groovy.xml.MarkupBuilder
 import org.codehaus.groovy.grails.web.mapping.LinkGenerator
-import dataexport.registration.MediaTypesDTO
 
 class ProjectExportService {
     LinkGenerator grailsLinkGenerator
@@ -26,6 +25,9 @@ class ProjectExportService {
     protected void generateProject(final MarkupBuilder markupBuilder, final Project project) {
         def attributes = [:]
         attributes.put('projectId', project.id)
+        if (project.readyForExtraction) {
+            attributes.put('readyForExtraction', project.readyForExtraction)
+        }
         if (project.groupType) {
             attributes.put('groupType', project.groupType)
         }
@@ -64,7 +66,7 @@ class ProjectExportService {
         final int numberOfProjects = projects.size()
         markupBuilder.projects(count: numberOfProjects) {
             for (Project project : projects) {
-               generateProject(markupBuilder,project)
+                generateProject(markupBuilder, project)
             }
         }
     }

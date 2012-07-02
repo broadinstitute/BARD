@@ -38,9 +38,9 @@ class ExperimentRestControllerUnitSpec extends Specification {
         then: "We expect a response with the given status code"
         expectedResults == response.status
         where:
-        label               | mimeType                                       | expectedResults
-        "Expects 400 Error" | "application/vnd.bard.cap+xml;type=dictionary" | HttpServletResponse.SC_BAD_REQUEST
-        "Expects 200 OK"    | "application/vnd.bard.cap+xml;type=experiments"     | HttpServletResponse.SC_OK
+        label               | mimeType                                        | expectedResults
+        "Expects 400 Error" | "application/vnd.bard.cap+xml;type=dictionary"  | HttpServletResponse.SC_BAD_REQUEST
+        "Expects 200 OK"    | "application/vnd.bard.cap+xml;type=experiments" | HttpServletResponse.SC_OK
     }
     /**
      *
@@ -72,7 +72,7 @@ class ExperimentRestControllerUnitSpec extends Specification {
         then:
         expectedResults == response.status
         where:
-        label                      | id  | mimeType                                  | expectedResults
+        label                           | id  | mimeType                                       | expectedResults
         "Expects 200 OK For Experiment" | "5" | "application/vnd.bard.cap+xml;type=experiment" | HttpServletResponse.SC_OK
     }
 }

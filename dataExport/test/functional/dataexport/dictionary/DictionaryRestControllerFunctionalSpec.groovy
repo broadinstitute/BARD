@@ -1,23 +1,19 @@
 package dataexport.dictionary
 
-import grails.converters.XML
-import groovyx.net.http.RESTClient
 //import org.springframework.context.ApplicationContext
+
+
+import common.tests.XmlTestAssertions
+import common.tests.XmlTestSamples
+import grails.converters.XML
+import grails.plugin.remotecontrol.RemoteControl
+import groovyx.net.http.RESTClient
 import spock.lang.Specification
 import spock.lang.Unroll
 
-import javax.servlet.ServletContext
 import javax.servlet.http.HttpServletResponse
 
 import static groovyx.net.http.Method.GET
-import common.tests.XmlTestAssertions
-
-import common.tests.XmlTestSamples
-import grails.plugin.remotecontrol.RemoteControl
-import org.codehaus.groovy.grails.commons.GrailsApplication
-import org.codehaus.groovy.grails.web.context.ServletContextHolder
-import org.codehaus.groovy.grails.web.servlet.GrailsApplicationAttributes
-import spock.lang.Shared
 
 /**
  * Created with IntelliJ IDEA.

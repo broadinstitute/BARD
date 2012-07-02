@@ -1,10 +1,12 @@
 package dataexport.dictionary
 
+import bard.db.dictionary.Element
+import bard.db.dictionary.ResultType
+import bard.db.dictionary.Stage
 import common.tests.XmlTestAssertions
 import common.tests.XmlTestSamples
 import grails.plugin.spock.IntegrationSpec
 import groovy.xml.MarkupBuilder
-import bard.db.dictionary.*
 
 class DictionaryExportHelperServiceIntegrationSpec extends IntegrationSpec {
     DictionaryExportHelperService dictionaryExportHelperService

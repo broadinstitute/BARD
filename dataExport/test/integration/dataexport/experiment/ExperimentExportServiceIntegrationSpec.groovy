@@ -1,8 +1,6 @@
 package dataexport.experiment
 
-import bard.db.registration.Assay
-import bard.db.registration.AssayDocument
-import dataexport.registration.AssayExportService
+import bard.db.experiment.Experiment
 import grails.plugin.spock.IntegrationSpec
 import groovy.xml.MarkupBuilder
 
@@ -11,7 +9,6 @@ import javax.xml.transform.stream.StreamSource
 import javax.xml.validation.Schema
 import javax.xml.validation.SchemaFactory
 import javax.xml.validation.Validator
-import bard.db.experiment.Experiment
 
 class ExperimentExportServiceIntegrationSpec extends IntegrationSpec {
     static final String BARD_EXPERIMENT_EXPORT_SCHEMA = "test/integration/dataexport/experiment/experimentSchema.xsd"
@@ -49,7 +46,7 @@ class ExperimentExportServiceIntegrationSpec extends IntegrationSpec {
 
 
         when: "A service call is made to generate the experiments"
-        this.experimentExportService.generateExperiments(this.markupBuilder,0)
+        this.experimentExportService.generateExperiments(this.markupBuilder, 0)
         then: "An XML is generated that conforms to the expected XML"
         println this.writer.toString()
         final SchemaFactory factory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI)

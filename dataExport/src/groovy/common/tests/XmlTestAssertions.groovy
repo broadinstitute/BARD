@@ -1,10 +1,6 @@
 package common.tests
 
-import org.custommonkey.xmlunit.Diff
-import org.custommonkey.xmlunit.XMLUnit
-import org.custommonkey.xmlunit.DifferenceListener
-import org.custommonkey.xmlunit.DifferenceConstants
-import org.custommonkey.xmlunit.Difference
+import org.custommonkey.xmlunit.*
 
 /**
  * This class will not be packaged into a war file. We only need it for test purposes

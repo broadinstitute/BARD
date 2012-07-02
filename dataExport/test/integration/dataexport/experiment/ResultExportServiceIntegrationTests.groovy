@@ -1,11 +1,8 @@
 package dataexport.experiment
 
-import groovy.sql.Sql
-import groovy.xml.MarkupBuilder
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
-import org.custommonkey.xmlunit.*
 
 class ResultExportServiceIntegrationTests {
     ResultExportService resultExportService
@@ -19,11 +16,11 @@ class ResultExportServiceIntegrationTests {
     void tearDown() {
         // Tear down logic here
     }
+
     @Test
     void testSomething() {
         println("Testing")
     }
-
 
 //    @Test
 //    void testGenerateResults() {

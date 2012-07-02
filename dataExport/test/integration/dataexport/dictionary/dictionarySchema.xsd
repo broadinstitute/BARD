@@ -19,7 +19,9 @@
     </xs:simpleType>
     <xs:element name="status">
         <xs:annotation>
-            <xs:documentation>Status of the current object. Consuming applications are allowed to change the value of this object to 'Uploaded' once they have processed the object</xs:documentation>
+            <xs:documentation>Status of the current object. Consuming applications are allowed to change the value of
+                this object to 'Uploaded' once they have processed the object
+            </xs:documentation>
         </xs:annotation>
         <xs:simpleType>
             <xs:restriction base="xs:string">
@@ -60,7 +62,9 @@
             </xs:attribute>
             <xs:attribute name="href" type="xs:anyURI" use="required">
                 <xs:annotation>
-                    <xs:documentation>The URI to the object whose relationship to the current object is described by the rel attribute</xs:documentation>
+                    <xs:documentation>The URI to the object whose relationship to the current object is described by the
+                        rel attribute
+                    </xs:documentation>
                 </xs:annotation>
             </xs:attribute>
             <xs:attribute name="rel" use="required">
@@ -169,7 +173,8 @@
         <xs:annotation>
             <xs:documentation>Models a result type from the dictionary.
                 maps to the mime type :
-                application/vnd.bard.cap+xml;type=resultType</xs:documentation>
+                application/vnd.bard.cap+xml;type=resultType
+            </xs:documentation>
         </xs:annotation>
         <xs:complexType>
             <xs:sequence>
@@ -210,7 +215,8 @@
         <xs:annotation>
             <xs:documentation>Holds the whole dictionary
                 Doing an HTTP get with a link of type
-                application/vnd.bard.cap+xml;type=dictionary should give the client the entire dictionary</xs:documentation>
+                application/vnd.bard.cap+xml;type=dictionary should give the client the entire dictionary
+            </xs:documentation>
         </xs:annotation>
         <xs:complexType>
             <xs:sequence>
@@ -235,7 +241,9 @@
                                                 <xs:attribute name="childElement" type="xs:string"
                                                               use="required">
                                                     <xs:annotation>
-                                                        <xs:documentation>The label on the element that this child points to</xs:documentation>
+                                                        <xs:documentation>The label on the element that this child
+                                                            points to
+                                                        </xs:documentation>
                                                     </xs:annotation>
                                                 </xs:attribute>
                                             </xs:complexType>
@@ -248,7 +256,9 @@
                                                 <xs:attribute name="parentElement" type="xs:string"
                                                               use="optional">
                                                     <xs:annotation>
-                                                        <xs:documentation>The label on the element that this parent points to</xs:documentation>
+                                                        <xs:documentation>The label on the element that this parent
+                                                            points to
+                                                        </xs:documentation>
                                                     </xs:annotation>
                                                 </xs:attribute>
                                             </xs:complexType>
@@ -357,7 +367,9 @@
         </xs:complexType>
         <xs:key name="Element_Key">
             <xs:annotation>
-                <xs:documentation>A definition to say that the elementId attribute on an element must be unique throughout this document</xs:documentation>
+                <xs:documentation>A definition to say that the elementId attribute on an element must be unique
+                    throughout this document
+                </xs:documentation>
             </xs:annotation>
             <xs:selector xpath="dictionary/elements/element"/>
             <xs:field xpath="@elementId"/>
@@ -372,14 +384,17 @@
         </xs:keyref>
         <xs:key name="Unit_Key_Name">
             <xs:annotation>
-                <xs:documentation>Signifies that the unit attribute on a Unit element must be unique throughout this document</xs:documentation>
+                <xs:documentation>Signifies that the unit attribute on a Unit element must be unique throughout this
+                    document
+                </xs:documentation>
             </xs:annotation>
             <xs:selector xpath="units/unit"/>
             <xs:field xpath="@unit"/>
         </xs:key>
         <xs:keyref name="Element_Unit_KeyNameRef" refer="Unit_Key_Name">
             <xs:annotation>
-                <xs:documentation>The unit attribute on an element object must reference a Unit Key in this document</xs:documentation>
+                <xs:documentation>The unit attribute on an element object must reference a Unit Key in this document
+                </xs:documentation>
             </xs:annotation>
             <xs:selector xpath="elements/element"/>
             <xs:field xpath="@unit"/>
@@ -387,7 +402,8 @@
         <xs:keyref name="Unit_Descriptor_KeyRef" refer="Unit_Key_Name">
             <xs:annotation>
                 <xs:documentation>The unit attribute on the descriptors (instance, ass and biology)
-                    should reference a unit</xs:documentation>
+                    should reference a unit
+                </xs:documentation>
             </xs:annotation>
             <xs:selector xpath="descriptiors/descriptor"/>
             <xs:field xpath="@unit"/>

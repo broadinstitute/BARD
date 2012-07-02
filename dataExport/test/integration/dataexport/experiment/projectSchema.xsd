@@ -25,7 +25,9 @@
     </xs:simpleType>
     <xs:element name="status">
         <xs:annotation>
-            <xs:documentation>Status of the current object. Consuming applications are allowed to change the value of this object to 'Uploaded' once they have processed the object</xs:documentation>
+            <xs:documentation>Status of the current object. Consuming applications are allowed to change the value of
+                this object to 'Uploaded' once they have processed the object
+            </xs:documentation>
         </xs:annotation>
         <xs:simpleType>
             <xs:restriction base="xs:string">
@@ -68,7 +70,9 @@
             </xs:attribute>
             <xs:attribute name="href" type="xs:anyURI" use="required">
                 <xs:annotation>
-                    <xs:documentation>The URI to the object whose relationship to the current object is described by the rel attribute</xs:documentation>
+                    <xs:documentation>The URI to the object whose relationship to the current object is described by the
+                        rel attribute
+                    </xs:documentation>
                 </xs:annotation>
             </xs:attribute>
             <xs:attribute name="rel" use="required">
@@ -107,7 +111,8 @@
     <xs:element name="projects">
         <xs:annotation>
             <xs:documentation>The list of projects in the CAP.
-                These can be filtered to a specific project depending on the query</xs:documentation>
+                These can be filtered to a specific project depending on the query
+            </xs:documentation>
         </xs:annotation>
         <xs:complexType>
             <xs:sequence>
@@ -119,7 +124,8 @@
     <xs:element name="project">
         <xs:annotation>
             <xs:documentation>Models a project in the cap. Maps to
-                application/vnd.bard.cap+xml;type=project</xs:documentation>
+                application/vnd.bard.cap+xml;type=project
+            </xs:documentation>
         </xs:annotation>
         <xs:complexType>
             <xs:sequence>

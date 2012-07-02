@@ -5,7 +5,6 @@ import common.tests.XmlTestSamples
 import grails.converters.XML
 import grails.plugin.remotecontrol.RemoteControl
 import groovyx.net.http.RESTClient
-import org.custommonkey.xmlunit.XMLAssert
 import spock.lang.Specification
 import spock.lang.Unroll
 

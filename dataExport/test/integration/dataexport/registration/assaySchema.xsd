@@ -25,7 +25,9 @@
     </xs:simpleType>
     <xs:element name="status">
         <xs:annotation>
-            <xs:documentation>Status of the current object. Consuming applications are allowed to change the value of this object to 'Uploaded' once they have processed the object</xs:documentation>
+            <xs:documentation>Status of the current object. Consuming applications are allowed to change the value of
+                this object to 'Uploaded' once they have processed the object
+            </xs:documentation>
         </xs:annotation>
         <xs:simpleType>
             <xs:restriction base="xs:string">
@@ -68,7 +70,9 @@
             </xs:attribute>
             <xs:attribute name="href" type="xs:anyURI" use="required">
                 <xs:annotation>
-                    <xs:documentation>The URI to the object whose relationship to the current object is described by the rel attribute</xs:documentation>
+                    <xs:documentation>The URI to the object whose relationship to the current object is described by the
+                        rel attribute
+                    </xs:documentation>
                 </xs:annotation>
             </xs:attribute>
             <xs:attribute name="rel" use="required">
@@ -107,10 +111,11 @@
     <xs:annotation>
         <xs:documentation>All of the individual schema needed to do a data export</xs:documentation>
     </xs:annotation>
-     <xs:element name="assay">
+    <xs:element name="assay">
         <xs:annotation>
             <xs:documentation>Models an assay in the CAP. Maps to a mime type of
-                application/vnd.bard.cap+xml;type=assay</xs:documentation>
+                application/vnd.bard.cap+xml;type=assay
+            </xs:documentation>
         </xs:annotation>
         <xs:complexType>
             <xs:sequence>
@@ -153,14 +158,17 @@
                                                 <xs:attribute name="label" type="xs:string"
                                                               use="required">
                                                     <xs:annotation>
-                                                        <xs:documentation>label on Element that this references</xs:documentation>
+                                                        <xs:documentation>label on Element that this references
+                                                        </xs:documentation>
                                                     </xs:annotation>
                                                 </xs:attribute>
                                             </xs:complexType>
                                         </xs:element>
                                         <xs:element minOccurs="0" name="entryUnit">
                                             <xs:annotation>
-                                                <xs:documentation>Unit and a link to the Unit element in the dictionary</xs:documentation>
+                                                <xs:documentation>Unit and a link to the Unit element in the
+                                                    dictionary
+                                                </xs:documentation>
                                             </xs:annotation>
                                             <xs:complexType>
                                                 <xs:sequence>
@@ -177,6 +185,7 @@
                                             <xs:documentation>References the measure context name</xs:documentation>
                                         </xs:annotation>
                                     </xs:attribute>
+                                    <xs:attribute name="parentMeasure" type="bardID"/>
                                 </xs:complexType>
                             </xs:element>
                         </xs:sequence>
@@ -190,7 +199,9 @@
                                     <xs:sequence>
                                         <xs:element minOccurs="0" name="valueId">
                                             <xs:annotation>
-                                                <xs:documentation>The label references the label of the element that it references</xs:documentation>
+                                                <xs:documentation>The label references the label of the element that it
+                                                    references
+                                                </xs:documentation>
                                             </xs:annotation>
                                             <xs:complexType>
                                                 <xs:sequence>
@@ -199,14 +210,17 @@
                                                 <xs:attribute name="label" type="xs:string"
                                                               use="required">
                                                     <xs:annotation>
-                                                        <xs:documentation>Label on an element in the dictionary</xs:documentation>
+                                                        <xs:documentation>Label on an element in the dictionary
+                                                        </xs:documentation>
                                                     </xs:annotation>
                                                 </xs:attribute>
                                             </xs:complexType>
                                         </xs:element>
                                         <xs:element minOccurs="0" name="attributeId">
                                             <xs:annotation>
-                                                <xs:documentation>The label references the label of the element that it references</xs:documentation>
+                                                <xs:documentation>The label references the label of the element that it
+                                                    references
+                                                </xs:documentation>
                                             </xs:annotation>
                                             <xs:complexType>
                                                 <xs:sequence>
@@ -227,6 +241,8 @@
                                                               use="required"/>
                                             </xs:complexType>
                                         </xs:element>
+                                        <xs:element minOccurs="0" name="extValueId" type="xs:string"
+                                                />
                                     </xs:sequence>
                                     <xs:attribute name="measureContextItemId" type="bardID"
                                                   use="required"/>
@@ -255,6 +271,7 @@
                 </xs:element>
                 <xs:element maxOccurs="unbounded" ref="link"/>
             </xs:sequence>
+            <xs:attribute name="assayId" type="bardID"/>
             <xs:attribute default="1 " name="assayVersion" use="optional">
                 <xs:annotation>
                     <xs:documentation>The assay version
@@ -278,6 +295,15 @@
                 </xs:simpleType>
             </xs:attribute>
             <xs:attribute ref="readyForExtraction"/>
+            <xs:attribute name="assayType" use="required">
+                <xs:simpleType>
+                    <xs:restriction base="xs:string">
+                        <xs:enumeration value="Regular"/>
+                        <xs:enumeration value="Panel - Array"/>
+                        <xs:enumeration value="Panel - Group"/>
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:attribute>
         </xs:complexType>
         <xs:key name="MeasureContext_Key">
             <xs:selector xpath="assay/measureContexts/measureContext"/>
@@ -306,7 +332,7 @@
             <xs:sequence>
                 <xs:element maxOccurs="unbounded" ref="link"/>
             </xs:sequence>
-            <xs:attribute name="count">
+            <xs:attribute name="count" type="xs:integer" use="required">
                 <xs:annotation>
                     <xs:documentation>The number of available assays</xs:documentation>
                 </xs:annotation>
@@ -316,7 +342,6 @@
     <xs:element name="assayDocument">
         <xs:complexType>
             <xs:sequence>
-
 
 
                 <xs:element name="documentName">

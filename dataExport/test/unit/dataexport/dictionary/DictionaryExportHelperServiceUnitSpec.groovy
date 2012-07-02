@@ -2,13 +2,13 @@ package dataexport.dictionary
 
 import common.tests.XmlTestAssertions
 import common.tests.XmlTestSamples
+import dataexport.registration.MediaTypesDTO
 import grails.test.mixin.Mock
 import groovy.xml.MarkupBuilder
 import org.codehaus.groovy.grails.web.mapping.LinkGenerator
 import spock.lang.Specification
 import spock.lang.Unroll
 import bard.db.dictionary.*
-import dataexport.registration.MediaTypesDTO
 
 /**
  *

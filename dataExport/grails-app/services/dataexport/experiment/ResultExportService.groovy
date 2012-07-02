@@ -1,6 +1,5 @@
 package dataexport.experiment
 
-import bard.db.experiment.ResultContextItem
 import groovy.sql.Sql
 import groovy.xml.MarkupBuilder
 import org.codehaus.groovy.grails.commons.GrailsApplication
@@ -12,6 +11,10 @@ class ResultExportService {
     DataSource dataSource
     GrailsApplication grailsApplication
     LinkGenerator grailsLinkGenerator
+    //TODO use a Stax builder for results
+//    def factory = XMLOutputFactory.newInstance()
+//    def writer = new StringWriter()
+//    def builder = new StaxBuilder(factory.createXMLStreamWriter(writer))
 
     /**
      * Generate the result element

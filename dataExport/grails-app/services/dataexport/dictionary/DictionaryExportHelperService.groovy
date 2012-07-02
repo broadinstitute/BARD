@@ -376,7 +376,7 @@ class DictionaryExportHelperService {
         if (descriptorDTO.synonyms) {
             xml.synonyms(descriptorDTO.synonyms)
         }
-        if(descriptorDTO.elementId){
+        if (descriptorDTO.elementId) {
             final String elementHref = grailsLinkGenerator.link(mapping: 'element', absolute: true, params: [id: descriptorDTO.elementId]).toString()
             xml.link(rel: 'edit', href: "${elementHref}", type: "${this.elementMediaType}")
 
