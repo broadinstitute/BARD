@@ -110,6 +110,7 @@ Link to Project and Assay</xs:documentation>
             <xs:attribute name="runDateTo" type="xs:dateTime" use="optional"/>
             <xs:attribute name="status" type="xs:string"/>
             <xs:attribute name="experimentId" type="bardID"/>
+            <xs:attribute ref="readyForExtraction"/>
         </xs:complexType>
     </xs:element>
     <xs:element name="results">
@@ -143,9 +144,9 @@ Link to parent experiment
                 <xs:element name="resultType">
                     <xs:complexType>
                         <xs:sequence>
-                            <xs:element ref="label"/>
                             <xs:element minOccurs="0" ref="link"/>
                         </xs:sequence>
+                        <xs:attribute name="label" type="xs:string" use="required"/>
                     </xs:complexType>
                 </xs:element>
                 <xs:element name="substance">
@@ -165,7 +166,7 @@ Link to parent experiment
                         <xs:sequence>
                             <xs:element name="resultHierarchy" maxOccurs="unbounded">
                                 <xs:complexType>
-                                    <xs:attribute name="parentResultId" type="xs:long"/>
+                                    <xs:attribute name="parentResultId" type="bardID"/>
                                     <xs:attribute name="hierarchyType">
                                         <xs:simpleType>
                                             <xs:restriction base="xs:string">
@@ -185,7 +186,6 @@ Link to parent experiment
                     </xs:annotation>
                 </xs:element>
             </xs:sequence>
-            <xs:attribute name="resultId" type="bardID" use="required"/>
             <xs:attribute name="valueDisplay" type="xs:string" use="optional"/>
             <xs:attribute name="valueNum" type="xs:float" use="optional"/>
             <xs:attribute name="valueMin" type="xs:float" use="optional"/>
@@ -212,7 +212,7 @@ Link to parent experiment
     <xs:element name="resultContextItems">
         <xs:complexType>
             <xs:sequence>
-                <xs:element name="resultContextItem" maxOccurs="unbounded" minOccurs="0">
+                <xs:element name="resultContextItem" maxOccurs="unbounded">
                     <xs:annotation>
                         <xs:documentation>We include the group result context Id and the result context item Id so that the client can walk the tree from child to parent</xs:documentation>
                     </xs:annotation>
@@ -234,6 +234,7 @@ Link to parent experiment
                                     <xs:attribute name="label" type="xs:string" use="required"/>
                                 </xs:complexType>
                             </xs:element>
+                            <xs:element minOccurs="0" name="extValueId" type="xs:string"/>
                         </xs:sequence>
                         <xs:attribute name="resultContextItemId" type="bardID" use="required"/>
                         <xs:attribute name="parentGroup" type="bardID"/>
