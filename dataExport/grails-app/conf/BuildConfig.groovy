@@ -31,7 +31,7 @@ grails.project.dependency.resolution = {
         grailsRepo('http://bard-repo:8081/artifactory/bard-virtual-repo', 'grailsCentral')
     }
     dependencies {
-        build 'com.oracle:ojdbc6:11.2.0.2.0'
+        compile 'com.oracle:ojdbc6:11.2.0.2.0'
         // specify dependencies here under either 'build', 'compile', 'runtime', 'test' or 'provided' scopes eg.
         test "org.spockframework:spock-core:0.6-groovy-1.8"
         test('org.codehaus.groovy.modules.http-builder:http-builder:0.5.2'){
