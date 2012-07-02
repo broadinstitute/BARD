@@ -126,7 +126,7 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
 
         controller.search()
         then: "We expect to call the following methods and then go back to the home page"
-        0 * queryAssayApiService.getTotalAssayCompounds(_) >> {  }
+        0 * queryAssayApiService.getTotalAssayCompounds(_) >> { }
         0 * queryAssayApiService.getAssayCompoundsResultset(_, _, _) >> { }
         assert flash.message == 'Search String must be a number'
         assert response.redirectedUrl == '/bardWebInterface/homePage?searchString=P1234'
@@ -170,6 +170,33 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
         assert flash.message == 'Search String is required'
         assert response.redirectedUrl == '/bardWebInterface/homePage'
 
+    }
+
+    /**
+     */
+    void "test search - erroneous input #label"() {
+        given:
+
+        when: "We search with the Assay ids for Compounds"
+        request.method = 'GET'
+        params.searchString = assayId
+        params.searchType = SearchType.COMPOUNDS.toString()
+        params.max = max
+        params.offset = offset
+        controller.search()
+        then: "We expect to call the following methods and then go back to the home page"
+        1 * queryAssayApiService.getTotalAssayCompounds(_) >> { totalAssayCompounds }
+        0 * queryAssayApiService.getAssayCompoundsResultset(_, _, _) >> { assayCompoundsResultset }
+
+        "/bardWebInterface/homePage" == view
+        model.assays == [assayId]
+        model.compounds == assayCompoundsResultset
+        totalAssayCompounds * 2 == model.totalCompounds
+        assert model.experiments.isEmpty()
+        assert model.projects.isEmpty()
+        where:
+        label                                           | totalAssayCompounds | assayCompoundsResultset | max            | offset         | assayId   | expectedTotalCompounds
+        "Search for compounds for a non-existing assay" | new Integer(0)      | []                      | new Integer(1) | new Integer(2) | '1234567' | 0
     }
 
     void "test showCompound #label"() {
