@@ -24,7 +24,10 @@ class AuthenticationService {
         String apiKey = grailsApplication.config.dataexport.externalapplication.apiKey.hashed
         String apiKeyHeader = grailsApplication.config.dataexport.externalapplication.apiKey.header
         String requestApiKey = request.getHeader(apiKeyHeader)
+        final String requestParamsString = "URL: '${request.getRequestURL()}'; Remote address: '${request.getRemoteAddr()}'; Request api-key='${requestApiKey}'"
+
         if (apiKey != requestApiKey) {
+            log.info("Failed authentication - invalid api-key: ${requestParamsString}")
             return false
         }
 
@@ -38,12 +41,12 @@ class AuthenticationService {
 
             Boolean match = doIpAddressesMatch(remoteIpAddress, ipAddress)
             if (match) {
-                final String requestParamsString = "URL: '${request.getRequestURL()}'; Remote address: '${request.getRemoteAddr()}'"
-                log.info(requestParamsString)
+                log.info("Successful authentication: ${requestParamsString}")
                 return true
             }
         }
 
+        log.info("Failed authentication - remote IP address is not in the whitelist: ${requestParamsString}")
         return false
     }
 
