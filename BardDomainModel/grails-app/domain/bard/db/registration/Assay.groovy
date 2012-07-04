@@ -6,38 +6,42 @@ class Assay {
 
     static expose = 'assay'
 
-	String assayName
-	String assayVersion
-	//String description
-	String designedBy
-	Date dateCreated
-	Date lastUpdated
-	String modifiedBy
-	String assayStatus = 'Pending'
+    String assayStatus = 'Pending'
+    String assayName
+    String assayVersion
+    String designedBy
+    String readyForExtraction = 'Ready'
     String assayType = 'Regular'
-	String readyForExtraction = 'Ready'
+
+    String modifiedBy
+    // grails auto-timestamp
+    Date dateCreated
+    Date lastUpdated
 
 
-	static hasMany = [experiments: Experiment,
-			measureContextItems: MeasureContextItem,
-			measures : Measure,
-			measureContexts: MeasureContext,
-			assayDocuments: AssayDocument]
 
-	static mapping = {
-		id( column: "Assay_ID", generator: "sequence", params: [sequence:'ASSAY_ID_SEQ'])
-	}
+    static hasMany = [experiments: Experiment,
+            measureContextItems: MeasureContextItem,
+            measures: Measure,
+            measureContexts: MeasureContext,
+            assayDocuments: AssayDocument]
 
-	static constraints = {
-		assayName nullable: false, maxSize: 128
-		assayVersion maxSize: 10
-		//description nullable: true, maxSize: 1000
-		designedBy nullable: true, maxSize: 100
-		dateCreated maxSize: 19
-		lastUpdated nullable: true, maxSize: 19
-		modifiedBy nullable: true, maxSize: 40
-		assayStatus maxSize: 20, nullable: false, inList: ["Pending", "Active", "Superseded", "Retired"]
-        assayType inList: ['Regular', 'Panel - Array', 'Panel - Group']
-		readyForExtraction maxSize: 20, nullable: false, inList: [ "Ready", "Started", "Complete" ]
-	}
+    static mapping = {
+        id(column: "Assay_ID", generator: "sequence", params: [sequence: 'ASSAY_ID_SEQ'])
+
+    }
+
+    static constraints = {
+        // TODO consider and Enum to replace the inListk
+        assayStatus(maxSize: 20, blank: false, inList: ["Pending", "Active", "Superseded", "Retired"])
+        assayName(maxSize: 1000, blank: false)
+        assayVersion(maxSize: 10, blank: false, matches: /\d+/)   // does this need to look like a number
+        designedBy(nullable: true, maxSize: 100)
+        readyForExtraction(maxSize: 20, blank: false, inList: ["Ready", "Started", "Complete"])
+        assayType(inList: ['Regular', 'Panel - Array', 'Panel - Group'])
+
+        modifiedBy(nullable: true, maxSize: 40)
+        dateCreated()
+        lastUpdated(nullable: true) // TODO make this not nullable
+    }
 }
