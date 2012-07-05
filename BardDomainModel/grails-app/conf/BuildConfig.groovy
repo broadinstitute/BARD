@@ -60,8 +60,8 @@ grails.project.repos.releases.url = "http://bard-repo.broadinstitute.org:8081/ar
 // grails.project.repos.releases.password = "changeme"
 
 grails.project.repos.snapshots.url = "http://bard-repo.broadinstitute.org:8081/artifactory/plugins-snapshot-local"
-//grails.project.repos.snapshots.username = "changeme"
-//grails.project.repos.snapshots.password = "changeme"
+grails.project.repos.snapshots.username = "changeme"
+grails.project.repos.snapshots.password = "changeme"
 
 codenarc.ruleSetFiles = "file:grails-app/conf/BardCodeNarcRuleSet.groovy"
 codenarc.reports = {

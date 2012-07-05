@@ -1,39 +1,38 @@
 package bard.db.registration
 
-import bard.db.dictionary.Unit
-import bard.db.dictionary.ResultType
 import bard.db.dictionary.Element
+import bard.db.dictionary.Unit
 
 class Measure {
 
     static expose = 'measure'
 
-	Date dateCreated
-	Date lastUpdated
-	String modifiedBy
-	MeasureContext measureContext
-	Unit entryUnit
-	//ResultType resultType
-	Element element
-	Assay assay
+    Date dateCreated
+    Date lastUpdated
+    String modifiedBy
+    MeasureContext measureContext
+    Unit entryUnit
+    Element element
+    Assay assay
+    Measure parentMeasure
 
-	static belongsTo = [Assay]
+    static belongsTo = [Assay]
+    static hasMany = [children: Measure]
 
-	static mapping = {
-		id column: "Measure_ID", generator: "assigned"
+    static mapping = {
+        id column: "Measure_ID", generator: "assigned"
+        parentMeasure column: "PARENT_MEASURE_ID"
         entryUnit column: "entry_unit"
-//		resultType column: 'result_type_id'
-//		resultType ignoreNotFound : true
-		element column: 'result_type_id'
-	}
+        element column: 'result_type_id'
+    }
 
-	static constraints = {
-		dateCreated maxSize: 19
-		lastUpdated nullable: true, maxSize: 19
-		modifiedBy nullable: true, maxSize: 40
-//        resultType nullable: false
-		element nullable: false
+    static constraints = {
+        parentMeasure nullable: true
+        dateCreated maxSize: 19
+        lastUpdated nullable: true, maxSize: 19
+        modifiedBy nullable: true, maxSize: 40
+        element nullable: false
         measureContext nullable: false
         entryUnit nullable: true
-	}
+    }
 }

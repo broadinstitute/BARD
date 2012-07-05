@@ -2,6 +2,7 @@ package bard.db.experiment
 
 import bard.db.registration.Assay
 import bard.db.registration.ExternalReference
+import bard.db.dictionary.Laboratory
 
 class Experiment {
 
@@ -16,6 +17,7 @@ class Experiment {
 	String experimentStatus
 	Assay assay
 	String readyForExtraction = 'Ready'
+    Laboratory laboratory
 
 	static hasMany = [resultContextItems: ResultContextItem,
 			results: Result,
@@ -39,5 +41,6 @@ class Experiment {
 		modifiedBy nullable: true, maxSize: 40
 		experimentStatus maxSize: 20, nullable: false, inList: ["Pending", "Approved", "Rejected", "Revised"]
 		readyForExtraction maxSize: 20, nullable: false, inList: [ "Ready", "Started", "Complete" ]
+        laboratory nullable: true
 	}
 }
