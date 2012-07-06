@@ -29,10 +29,7 @@ class AssayDefinitionController {
 	}
 
 	def show() {
-
-        def assayJson = elasticSearchService.searchForAssay(params.id as Integer)
-        //def assayInstance = Assay.get(params.id)
-        def assayInstance = assayJson._source
+        def assayInstance = Assay.get(params.id)
 
         if (!assayInstance) {
 			flash.message = message(code: 'default.not.found.message', args: [message(code: 'assay.label', default: 'Assay'), params.id])
