@@ -5,7 +5,7 @@ grails.servlet.version = "2.5" // Change depending on target container complianc
 grails.project.work.dir = "target"
 grails.project.target.level = 1.6
 grails.project.source.level = 1.6
-grails.server.port.http=8081
+grails.server.port.http = 8081
 //grails.project.war.file = "target/${appName}-${appVersion}.war"
 
 grails.project.dependency.resolution = {
@@ -21,7 +21,7 @@ grails.project.dependency.resolution = {
         inherits true // Whether to inherit repository definitions from plugins
         grailsPlugins()
         grailsHome()
-        mavenRepo  "http://bard-repo.broadinstitute.org:8081/artifactory/bard-virtual-repo"
+        mavenRepo "http://bard-repo.broadinstitute.org:8081/artifactory/bard-virtual-repo"
         grailsRepo("http://bard-repo.broadinstitute.org:8081/artifactory/bard-virtual-repo", "grailsCentral")
     }
     dependencies {
@@ -30,9 +30,11 @@ grails.project.dependency.resolution = {
         // compile scope
 
         // runtime scope
-         runtime 'mysql:mysql-connector-java:5.1.16'
+        runtime 'mysql:mysql-connector-java:5.1.16'
+        runtime 'com.github.groovy-wslite:groovy-wslite:0.7.0'
 
         // test scope
+        test "org.spockframework:spock-core:0.6-groovy-1.8"
 
         // provided  scope
     }
@@ -53,7 +55,7 @@ grails.project.dependency.resolution = {
         // runtime scope
         runtime ":hibernate:$grailsVersion"
         runtime ":jquery:1.7.1"
-		runtime ":jquery-ui:1.8.15"
+        runtime ":jquery-ui:1.8.15"
         runtime ":resources:1.1.6"
 
         // test scope

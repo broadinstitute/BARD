@@ -99,3 +99,5 @@ log4j = {
 grails.plugin.reveng.packageName = 'bard.db.model'
 grails.plugin.reveng.jdbcDriverJarDep = 'mysql:mysql-connector-java:5.1.16'
 //grails.plugin.reveng.includeTables = ['Test_Measure_Context_Item']
+
+bard.services.elasticSearchService.restNode.baseUrl = 'http://bard-dev-vm:9200'

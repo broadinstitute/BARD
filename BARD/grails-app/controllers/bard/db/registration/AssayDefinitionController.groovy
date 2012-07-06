@@ -1,9 +1,12 @@
 package bard.db.registration
 
+import bard.services.ElasticSearchService
+
 
 class AssayDefinitionController {
 	
 	static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
+    ElasticSearchService elasticSearchService
 
     def index() {
 		redirect(action: "description", params: params)
@@ -26,9 +29,12 @@ class AssayDefinitionController {
 	}
 
 	def show() {
-		
-		def assayInstance = Assay.get(params.id)
-		if (!assayInstance) {
+
+        def assayJson = elasticSearchService.searchForAssay(params.id as Integer)
+        //def assayInstance = Assay.get(params.id)
+        def assayInstance = assayJson._source
+
+        if (!assayInstance) {
 			flash.message = message(code: 'default.not.found.message', args: [message(code: 'assay.label', default: 'Assay'), params.id])
 			return
 		}

@@ -20,7 +20,7 @@ class QueryAssayApiServiceUnitSpec extends Specification {
     void setup() {
         queryExecutorService = Mock()
         service.queryExecutorService = queryExecutorService
-        service.grailsApplication.config.ncgc.server.root.url = 'httpMock://'
+        service.grailsApplication.config.bard.services.elasticSearchService.restNode.baseUrl = 'httpMock://'
     }
 
     void tearDown() {
