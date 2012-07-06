@@ -157,3 +157,6 @@ if (appName) {
         }
     }
 }
+
+bard.services.elasticSearchService.restNode.baseUrl = 'http://bard-dev-vm:9200'
+bard.assay.view.url = 'https://bard.broadinstitute.org/BARD/assayDefinition/showAssayES'
