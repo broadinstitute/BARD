@@ -4854,6 +4854,14 @@ Rel_e8cb059af7254a3389a626e5479c0c5b.iconSrc = ICONPATH + "Gif/rel.gif"
 Rel_e8cb059af7254a3389a626e5479c0c5b.altTxt = "Relationship"
 }
 }
+{
+Submodel_6e10c93845e24aa68019e56cd2c9b556 = insFld(Model_Node, gFld("RI hierarchy", "javascript:parent.op()"))
+Submodel_6e10c93845e24aa68019e56cd2c9b556.iconSrc = ICONPATH + "Gif/submodel.gif"
+Submodel_6e10c93845e24aa68019e56cd2c9b556.iconSrcClosed = ICONPATH + "Gif/submodel.gif"
+SubmodelImgNode = insDoc(Submodel_6e10c93845e24aa68019e56cd2c9b556, gLnk("R", "Model Image", "Content/Submodel_6e10c93845e24aa68019e56cd2c9b556_img.htm"))
+SubmodelImgNode.iconSrc = ICONPATH + "Gif/image.gif"
+SubmodelImgNode.altTxt = "Model Image"
+}
 Model_Node = insFld(Diag_Node, gFld("BARD_Dev", "Content/Model_398ef9366d784ddb95b034e21ed22ee6.htm"))
 Model_Node.iconSrc = ICONPATH + "Gif/physical.gif"
 Model_Node.iconSrcClosed = ICONPATH + "Gif/physical.gif"
