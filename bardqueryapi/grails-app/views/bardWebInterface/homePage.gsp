@@ -5,8 +5,8 @@
     <r:require modules="core"/>
 
     <r:script>
-        $(document).ready(function() {
-         $( "#accordion" ).accordion({ autoHeight: false });
+        $(document).ready(function () {
+            $("#accordion").accordion({ autoHeight:false });
         })
     </r:script>
     <r:layoutResources/>
@@ -16,24 +16,20 @@
 <body>
 <div>
     <div>
-        <h1>BARD</h1>
+        <h1 style="text-align: center">BARD</h1>
 
-        <h2>BioAssay Research Database</h2> <br/><br/>
+        <h2 style="text-align: center">BioAssay Research Database</h2> <br/><br/>
+
         <g:if test="${flash.message}">
             <div class="error">${flash.message}</div>
         </g:if>
         <br/><br/>
 
-    <g:form name="aidForm" controller="bardWebInterface" action="search">
+        <g:form name="aidForm" controller="bardWebInterface" action="search">
 
-            <div class="content">
+            <div class="content ">
                 <g:textField name="searchString" value="${params?.searchString}" size="50"/>
-                <label for="searchType">
-                    <g:message code="compound.compoundType.label" default=" Search Type"/>
-                </label>
-                <g:select name="searchType" from="${SearchType?.values()}"
-                          value="${params?.searchType}" optionValue="description"/>
-                 <br/> <br/>
+                <br/><br/>
                 <g:submitButton name="search"
                                 value="Search"/>
                 <g:submitButton name="search"
@@ -45,7 +41,7 @@
         <br/>
     </div>
 
-     <div id="accordion">
+    <div id="accordion">
         <g:render template="assays"/>
         <g:render template="compounds"/>
         <g:render template="experiments"/>
