@@ -12,7 +12,9 @@ class TestUtils {
 
     static void assertFieldValidationExpectations(Object domainObject, fieldName, Boolean valid, String errorCode) {
 //        println("domainObject.errors[fieldName]=${domainObject.errors[fieldName]}")
-        assert domainObject.errors[fieldName] == errorCode
+        //println((domainObject.errors[fieldName]?.codes as List))
+        assert errorCode ==  (domainObject.errors[fieldName]?.codes as List)?.find{it == errorCode}
+        println(domainObject.dump())
         assert domainObject.hasErrors() == !valid
         assert domainObject.errors.hasFieldErrors(fieldName) == !valid
     }

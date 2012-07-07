@@ -9,85 +9,62 @@ import spock.lang.Unroll
 import bard.db.dictionary.ElementHierarchy
 import bard.db.dictionary.TestUtils
 import static bard.db.dictionary.TestUtils.assertFieldValidationExpectations
+import grails.buildtestdata.mixin.Build
 
 /**
  * See the API for {@link grails.test.mixin.domain.DomainClassUnitTestMixin} for usage instructions
  */
-@TestFor(Assay)
+@Build(Assay)
 @Unroll
 class AssayUnitSpec extends Specification {
+    Assay domainInstance
 
-    Assay assay
-
-    @Before
-    public void setup() {
-        mockForConstraintsTests(Assay)
-        assay = new Assay(assayName: "Test", assayVersion: "2", assayStatus: "Active", readyForExtraction: "Complete")
+    void setup() {
+        domainInstance = Assay.buildWithoutSave(assayVersion: '2')
     }
 
-    void testValidConstraints() {
 
-        expect:
-        assertTrue "Assay is valid", assay.validate()
-    }
-
-    void testNoAssayName() {
-        assay.setAssayName(null)
-
-        expect:
-        assertFalse "Assay should not be valid with no name", assay.validate()
-        assertEquals "nullable", assay.errors["assayName"]
-
-    }
-
-    void "test assayStatus constraints #desc assayStatus: '#assayStatus'"() {
-
-        given:
-        mockForConstraintsTests(Assay)
+    void "test assayStatus constraints #desc assayStatus: '#valueUnderTest'"() {
+        final String field = 'assayStatus'
 
         when:
-
-        assay.assayStatus = assayStatus
-        assay.validate()
-
-        then:
-        assertFieldValidationExpectations(assay, 'assayStatus', valid, errorCode)
-
-        where:
-        desc               | assayStatus  | valid | errorCode
-        'null not valid'   | null         | false | 'nullable'
-        'blank not valid'  | ''           | false | 'blank'
-        'blank not valid'  | '   '        | false | 'blank'
-        'value not inList' | 'Foo'        | false | 'inList'
-        'valid value'      | 'Pending'    | true  | null
-        'valid value'      | 'Active'     | true  | null
-        'valid value'      | 'Superseded' | true  | null
-        'valid value'      | 'Retired'    | true  | null
-    }
-
-    void "test readyForExtraction constraints #desc readyForExtraction: '#valueUnderTest'"() {
-
-        given:
-        mockForConstraintsTests(Assay)
-        String field = 'readyForExtraction'
-
-        when:
-        assay[(field)] = valueUnderTest
-        assay.validate()
+        domainInstance[(field)] = valueUnderTest
+        domainInstance.validate()
 
         then:
-        assertFieldValidationExpectations(assay, field, valid, errorCode)
+        assertFieldValidationExpectations(domainInstance, field, valid, errorCode)
 
         where:
         desc               | valueUnderTest | valid | errorCode
         'null not valid'   | null           | false | 'nullable'
         'blank not valid'  | ''             | false | 'blank'
         'blank not valid'  | '   '          | false | 'blank'
-        'value not inList' | 'Foo'          | false | 'inList'
+        'value not inList' | 'Foo'          | false | 'not.inList'
+        'valid value'      | 'Pending'      | true  | null
+        'valid value'      | 'Active'       | true  | null
+        'valid value'      | 'Superseded'   | true  | null
+        'valid value'      | 'Retired'      | true  | null
+    }
+
+    void "test readyForExtraction constraints #desc readyForExtraction: '#valueUnderTest'"() {
+
+        final String field = 'readyForExtraction'
+
+        when:
+        domainInstance[(field)] = valueUnderTest
+        domainInstance.validate()
+
+        then:
+        assertFieldValidationExpectations(domainInstance, field, valid, errorCode)
+
+        where:
+        desc               | valueUnderTest | valid | errorCode
+        'null not valid'   | null           | false | 'nullable'
+        'blank not valid'  | ''             | false | 'blank'
+        'blank not valid'  | '   '          | false | 'blank'
+        'value not inList' | 'Foo'          | false | 'not.inList'
         'valid value'      | 'Ready'        | true  | null
         'valid value'      | 'Started'      | true  | null
         'valid value'      | 'Complete'     | true  | null
     }
-
-
 }
