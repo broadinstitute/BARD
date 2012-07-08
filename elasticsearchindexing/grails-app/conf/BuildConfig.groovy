@@ -20,18 +20,13 @@ grails.project.dependency.resolution = {
         grailsRepo('http://bard-repo:8081/artifactory/bard-virtual-repo', 'grailsCentral')
     }
     dependencies {
-        test "org.spockframework:spock-core:0.6-groovy-1.8"
         // specify dependencies here under either 'build', 'compile', 'runtime', 'test' or 'provided' scopes eg.
         runtime 'com.github.groovy-wslite:groovy-wslite:0.7.0'
     }
 
     plugins {
+        compile ":executor:0.3"
         runtime ":hibernate:$grailsVersion"
-        runtime ":jquery:1.7.1"
-        runtime ":resources:1.1.6"
-        build ":tomcat:$grailsVersion"
-        compile ":spock:0.6"
-        compile ":functional-spock:0.6"
-        compile ":remote-control:1.2"
+        compile ":resources:1.1.6"
     }
 }
