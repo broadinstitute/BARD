@@ -1,0 +1,15 @@
+// Place your Spring DSL code here
+beans = {
+    clientBasicAuth(wslite.http.auth.HTTPBasicAuthorization) {
+        username = "bogus"
+        password = "bogus"
+    }
+    httpClient(wslite.http.HTTPClient) {
+        sslTrustAllCerts = true
+    }
+    restClient(wslite.rest.RESTClient) {
+        url = grailsApplication.config.ncgc.server.root.url
+        httpClient = ref('httpClient')
+        authorization = ref('clientBasicAuth')
+    }
+}
