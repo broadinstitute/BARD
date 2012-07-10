@@ -47,8 +47,8 @@ class Assay {
         readyForExtraction(maxSize: READY_FOR_EXTRACTION_MAX_SIZE, blank: false, inList: ["Ready", "Started", "Complete"])
         assayType(inList: ['Regular', 'Panel - Array', 'Panel - Group'])
 
-        modifiedBy(nullable: true, maxSize: MODIFIED_BY_MAX_SIZE)
         dateCreated(nullable: false)
-        lastUpdated(nullable: true) // TODO make this not nullable
+        lastUpdated(nullable: true)
+        modifiedBy(nullable: true, blank: false, maxSize: MODIFIED_BY_MAX_SIZE)
     }
 }

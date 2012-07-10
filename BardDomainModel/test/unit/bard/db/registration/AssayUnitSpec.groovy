@@ -1,6 +1,6 @@
 package bard.db.registration
 
-import grails.buildtestdata.mixin.Build
+
 import spock.lang.Specification
 import spock.lang.Unroll
 
@@ -10,6 +10,7 @@ import static bard.db.registration.Assay.ASSAY_NAME_MAX_SIZE
 import static bard.db.registration.Assay.ASSAY_VERSION_MAX_SIZE
 import static bard.db.registration.Assay.DESIGNED_BY_MAX_SIZE
 import static bard.db.registration.Assay.MODIFIED_BY_MAX_SIZE
+import grails.buildtestdata.mixin.Build
 
 /**
  * See the API for {@link grails.test.mixin.domain.DomainClassUnitTestMixin} for usage instructions
@@ -35,18 +36,18 @@ class AssayUnitSpec extends Specification {
         assertFieldValidationExpectations(domainInstance, field, valid, errorCode)
 
         where:
-        desc              | valueUnderTest | valid | errorCode
-        'null not valid'  | null           | false | 'nullable'
-        'blank not valid' | ''             | false | 'blank'
-        'blank not valid' | '   '          | false | 'blank'
+        desc               | valueUnderTest | valid | errorCode
+        'null not valid'   | null           | false | 'nullable'
+        'blank not valid'  | ''             | false | 'blank'
+        'blank not valid'  | '   '          | false | 'blank'
 
+        'value not inList' | 'Foo'          | false | 'not.inList'
+        'valid value'      | 'Pending'      | true  | null
+        'valid value'      | 'Active'       | true  | null
+        'valid value'      | 'Superseded'   | true  | null
+        'valid value'      | 'Retired'      | true  | null
         // 'too long'         | createString(ASSAY_STATUS_MAX_SIZE) | false | 'maxSize.exceeded'  // can't seem to hit only getting not.inList
 
-        'value not inList' | 'Foo' | false | 'not.inList'
-        'valid value' | 'Pending' | true | null
-        'valid value' | 'Active' | true | null
-        'valid value' | 'Superseded' | true | null
-        'valid value' | 'Retired' | true | null
     }
 
     void "test assayName constraints #desc assayName: '#valueUnderTest'"() {
@@ -179,11 +180,11 @@ class AssayUnitSpec extends Specification {
         where:
         desc               | valueUnderTest                         | valid | errorCode
         'too long'         | createString(MODIFIED_BY_MAX_SIZE + 1) | false | 'maxSize.exceeded'
+        'blank valid'      | ''                                     | false | 'blank'
+        'blank valid'      | '  '                                   | false | 'blank'
 
         'exactly at limit' | createString(MODIFIED_BY_MAX_SIZE)     | true  | null
         'null valid'       | null                                   | true  | null
-        'blank valid'      | ''                                     | true  | null
-        'blank valid'      | '  '                                   | true  | null
     }
 
     void "test dateCreated constraints #desc dateCreated: '#valueUnderTest'"() {
@@ -219,3 +220,4 @@ class AssayUnitSpec extends Specification {
     }
 
 }
+
