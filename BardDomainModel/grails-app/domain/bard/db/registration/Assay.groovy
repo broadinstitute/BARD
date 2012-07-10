@@ -6,6 +6,13 @@ class Assay {
 
     static expose = 'assay'
 
+    private static final int ASSAY_STATUS_MAX_SIZE = 20
+    private static final int ASSAY_NAME_MAX_SIZE = 1000
+    private static final int ASSAY_VERSION_MAX_SIZE = 10
+    private static final int DESIGNED_BY_MAX_SIZE = 100
+    private static final int READY_FOR_EXTRACTION_MAX_SIZE = 20
+    private static final int MODIFIED_BY_MAX_SIZE = 40
+
     String assayStatus = 'Pending'
     String assayName
     String assayVersion
@@ -33,15 +40,15 @@ class Assay {
 
     static constraints = {
         // TODO consider and Enum to replace the inListk
-        assayStatus(maxSize: 20, blank: false, inList: ["Pending", "Active", "Superseded", "Retired"])
-        assayName(maxSize: 1000, blank: false)
-        assayVersion(maxSize: 10, blank: false, matches: /\d+/)   // does this need to look like a number
-        designedBy(nullable: true, maxSize: 100)
-        readyForExtraction(maxSize: 20, blank: false, inList: ["Ready", "Started", "Complete"])
+        assayStatus(maxSize: ASSAY_STATUS_MAX_SIZE, blank: false, inList: ["Pending", "Active", "Superseded", "Retired"])
+        assayName(maxSize: ASSAY_NAME_MAX_SIZE, blank: false)
+        assayVersion(maxSize: ASSAY_VERSION_MAX_SIZE, blank: false, matches: /\d+/)   // does this need to look like a number
+        designedBy(nullable: true, maxSize: DESIGNED_BY_MAX_SIZE)
+        readyForExtraction(maxSize: READY_FOR_EXTRACTION_MAX_SIZE, blank: false, inList: ["Ready", "Started", "Complete"])
         assayType(inList: ['Regular', 'Panel - Array', 'Panel - Group'])
 
-        modifiedBy(nullable: true, maxSize: 40)
-        dateCreated()
+        modifiedBy(nullable: true, maxSize: MODIFIED_BY_MAX_SIZE)
+        dateCreated(nullable: false)
         lastUpdated(nullable: true) // TODO make this not nullable
     }
 }

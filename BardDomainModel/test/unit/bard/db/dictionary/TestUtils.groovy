@@ -1,5 +1,7 @@
 package bard.db.dictionary
 
+import org.apache.commons.lang.StringUtils
+
 /**
  * Created with IntelliJ IDEA.
  * User: balexand
@@ -13,8 +15,8 @@ class TestUtils {
     static void assertFieldValidationExpectations(Object domainObject, fieldName, Boolean valid, String errorCode) {
 //        println("domainObject.errors[fieldName]=${domainObject.errors[fieldName]}")
         //println((domainObject.errors[fieldName]?.codes as List))
-        assert errorCode ==  (domainObject.errors[fieldName]?.codes as List)?.find{it == errorCode}
-        println(domainObject.dump())
+//        println(domainObject.dump())
+        assert errorCode == (domainObject.errors[fieldName]?.codes as List)?.find {it == errorCode}
         assert domainObject.hasErrors() == !valid
         assert domainObject.errors.hasFieldErrors(fieldName) == !valid
     }
@@ -25,10 +27,20 @@ class TestUtils {
      * @return a string where size() == length
      */
     static String createString(int length) {
+        return createString(length, 'a')
+    }
+
+    /**
+     * quick utility method to create strings of a given length with a given char
+     * @param length
+     * @return a string where size() == length
+     */
+    static String createString(int length, String aChar) {
         assert length >= 0
-        def a = new StringBuffer()
-        length.times {a.append("a")}
-        a.toString()
+        assert StringUtils.isNotBlank(aChar)
+        StringBuffer sB = new StringBuffer()
+        length.times {sB.append(aChar)}
+        return sB.toString()
     }
 
 
