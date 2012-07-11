@@ -1,6 +1,9 @@
 package bard.db.dictionary
 
 import org.apache.commons.lang.StringUtils
+import org.springframework.validation.FieldError
+import org.codehaus.groovy.grails.plugins.testing.GrailsMockErrors
+import org.grails.datastore.mapping.validation.ValidationErrors
 
 /**
  * Created with IntelliJ IDEA.
@@ -11,12 +14,18 @@ import org.apache.commons.lang.StringUtils
  */
 class TestUtils {
 
-
-    static void assertFieldValidationExpectations(Object domainObject, fieldName, Boolean valid, String errorCode) {
-//        println("domainObject.errors[fieldName]=${domainObject.errors[fieldName]}")
-        //println((domainObject.errors[fieldName]?.codes as List))
+    /**
+     * Group of assertions to check for field validations to ensure that a validation
+     * passes or fails for the expected reasons
+     * @param domainObject
+     * @param fieldName
+     * @param valid
+     * @param errorCode
+     */
+    static void assertFieldValidationExpectations(Object domainObject, String fieldName, Boolean valid, String errorCode) {
 //        println(domainObject.dump())
-        assert errorCode == (domainObject.errors[fieldName]?.codes as List)?.find {it == errorCode}
+        String foundErrorCode = getErrorCode(domainObject, fieldName, errorCode)
+        assert errorCode == foundErrorCode
         assert domainObject.hasErrors() == !valid
         assert domainObject.errors.hasFieldErrors(fieldName) == !valid
     }
@@ -41,6 +50,32 @@ class TestUtils {
         StringBuffer sB = new StringBuffer()
         length.times {sB.append(aChar)}
         return sB.toString()
+    }
+
+    /**
+     * // TODO look into why this is different and which is "correct" and fix or submit a bug
+     *  vanilla grails domainObject.errors returns GrailsMockErrors which in turn returns
+     *  String error codes for validation failures.
+     *
+     *  When using the build-test-data plugin @Build annotation domainObject.errors returns
+     *  ValidationErrors which in term returns a FieldError and has a list of codes
+     *  so we try to find one that matches and return it
+     * @param domainObject
+     * @param fieldName
+     * @param errorCode
+     * @return a String representing the error code
+     */
+    private static String getErrorCode(domainObject, String fieldName, String errorCode) {
+
+        String foundErrorCode = null
+        if (domainObject.errors instanceof ValidationErrors) {
+            FieldError fieldError = domainObject.errors[fieldName]
+            foundErrorCode = fieldError?.codes?.find {it == errorCode}
+        }
+        else if (domainObject.errors instanceof GrailsMockErrors) {
+            foundErrorCode = domainObject.errors[fieldName]
+        }
+        return foundErrorCode
     }
 
 
