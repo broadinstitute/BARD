@@ -58,6 +58,15 @@ class ElasticSearchService {
 
     JSONObject getAssayDocument(Integer docId) {
         String elasticSearchQueryString = "${elasticSearchBaseUrl}/${assayIndexName}/${assayIndexTypeName}/${docId}"
+        return getElasticSearchDocument(elasticSearchQueryString)
+    }
+
+    JSONObject getCompoundDocument(Integer docId) {
+        String elasticSearchQueryString = "${elasticSearchBaseUrl}/${compoundIndexName}/${compoundIndexTypeName}/${docId}"
+        return getElasticSearchDocument(elasticSearchQueryString)
+    }
+
+    private JSONObject getElasticSearchDocument(String elasticSearchQueryString) {
         JSONObject result
         try {
             result = queryExecutorService.executeGetRequestJSON(elasticSearchQueryString, null)
@@ -99,7 +108,7 @@ public class ESAssay extends ESResult {
         JSONObject assaySource = hitJsonObj?._source
         this.assayNumber = assaySource.aid
         JSONObject firstAssayTarget = assaySource.targets[0]
-        this.assayName = "${firstAssayTarget?.targetName} (${firstAssayTarget.acc})"
+        this.assayName = "${firstAssayTarget?.name} (${firstAssayTarget.acc})"
     }
 
     @Override

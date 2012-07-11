@@ -1,4 +1,4 @@
-<plugin name='elastic-search' version='0.1' grailsVersion='2.0 &gt; *'>
+<plugin name='elastic-search' version='0.1-SNAPSHOT' grailsVersion='2.0 &gt; *'>
   <author>Broad Chemical Biology Platform</author>
   <authorEmail>bard-tech@broadinstitute.org</authorEmail>
   <title>Elastic Search Plugin</title>
@@ -17,8 +17,8 @@
   </repositories>
   <dependencies>
     <test>
-      <dependency group='org.objenesis' name='objenesis' version='1.2' />
       <dependency group='org.spockframework' name='spock-core' version='0.6-groovy-1.8' />
+      <dependency group='org.objenesis' name='objenesis' version='1.2' />
     </test>
     <runtime>
       <dependency group='com.github.groovy-wslite' name='groovy-wslite' version='0.7.0' />

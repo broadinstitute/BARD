@@ -88,14 +88,19 @@ class BardWebInterfaceController {
         Integer compoundId = cid ?: params.id as Integer//if 'assay' param is provided, use that; otherwise, try the default id one
 
         if (compoundId) {
-            final String compoundResourceUrl = "/bard/rest/v1/compounds/" + compoundId.toString()
-            final String compoundUrl = grailsApplication.config.ncgc.server.root.url + compoundResourceUrl
-            def compoundJson = queryExecutorInternalService.executeGetRequestJSON(compoundUrl, null) //get the Assay instance
-            def compound = JSON.parse(compoundJson.toString())
-            //If the compound does not exist and we get back a server error, generate an empty JSON object.
-            if (compound.getClass() == JSONObject && compound.errorMessage) {
-                compoundJson = null
-            }
+//            final String compoundResourceUrl = "/bard/rest/v1/compounds/" + compoundId.toString()
+//            final String compoundUrl = grailsApplication.config.ncgc.server.root.url + compoundResourceUrl
+//            def compoundJson = queryExecutorInternalService.executeGetRequestJSON(compoundUrl, null) //get the Assay instance
+//            def compound = JSON.parse(compoundJson.toString())
+//            //If the compound does not exist and we get back a server error, generate an empty JSON object.
+//            if (compound.getClass() == JSONObject && compound.errorMessage) {
+//                compoundJson = null
+//            }
+            JSONObject compoundESDocument = elasticSearchService.getCompoundDocument(compoundId)
+            JSONObject compoundJson = [cid: compoundESDocument?._id,
+                    sids: compoundESDocument?._source?.sids,
+                    probeId: compoundESDocument?._source?.probeId,
+                    smiles: compoundESDocument?._source?.smiles] as JSONObject
             render(view: "showCompound", model: [compoundJson: compoundJson, compoundId: compoundId])
         }
         else {
