@@ -10,7 +10,7 @@ beans = {
         sslTrustAllCerts = true
     }
     restClient(wslite.rest.RESTClient) {
-        url = grailsApplication.config.elasticSearchService.restNode.baseUrl
+        url = 'http://localhost:9200'
         httpClient = ref('httpClient')
         authorization = ref('clientBasicAuth')
     }

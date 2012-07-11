@@ -25,13 +25,13 @@ class ElasticSearchService {
         //3. Build the returned map.
         String elasticSearchQueryString = "${elasticSearchBaseUrl}/${assayIndexName}/${searchParamName}${searchTerm}&size=${max}"
 
-        JSONObject response
+        JSONObject response = [:] as JSONObject
         try {
             response = queryExecutorService.executeGetRequestJSON(elasticSearchQueryString, null)
         }
         catch (RESTClientException exp) {
-            String message = exp.response.statusMessage
-            final int code = exp.response.statusCode
+            String message = exp?.response?.statusMessage
+            Integer code = exp?.response?.statusCode
             log.error("Error querying the ElasticSearcg API server: ${code} - ${message}")
         }
 
@@ -67,17 +67,17 @@ class ElasticSearchService {
     }
 
     private JSONObject getElasticSearchDocument(String elasticSearchQueryString) {
-        JSONObject result
+        JSONObject result = [:] as JSONObject
         try {
             result = queryExecutorService.executeGetRequestJSON(elasticSearchQueryString, null)
         }
         catch (RESTClientException exp) {
-            String message = exp.response.statusMessage
-            final int code = exp.response.statusCode
+            String message = exp?.response?.statusMessage
+            Integer code = exp?.response?.statusCode
             log.error("Error querying the ElasticSearcg API server: ${code} - ${message}")
         }
 
-        return result ?: [] as JSONObject
+        return result
     }
 }
 
