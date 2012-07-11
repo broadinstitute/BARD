@@ -7,20 +7,23 @@ import grails.converters.JSON
 
 class ElasticSearchService {
 
-    def grailsApplication
     QueryExecutorService queryExecutorService
-
+    String elasticSearchBaseUrl
+    String assayIndexName
+    String assayIndexTypeName
+    String compoundIndexName
+    String compoundIndexTypeName
+    final static String searchParamName = '_search?q='
     /**
      * Returns a json map of lists of assays, compounds, etc. as returned and parsed from the ElasticSearch query.
      * @param searchString
      * @return
      */
-    JSONObject search(String searchString, Integer max = 99999) {
+    JSONObject search(String searchTerm, Integer max = 99999) {
         //1. Query all assays
         //2. Query all compounds
         //3. Build the returned map.
-        String elasticSearchBaseUrl = grailsApplication.config.bard.services.elasticSearchService.restNode.baseUrl
-        String elasticSearchQueryString = "${elasticSearchBaseUrl}/assays/_search?q=${searchString}&size=${max}"
+        String elasticSearchQueryString = "${elasticSearchBaseUrl}/${assayIndexName}/${searchParamName}${searchTerm}&size=${max}"
 
         JSONObject response
         try {
@@ -37,13 +40,16 @@ class ElasticSearchService {
         List<ESCompound> compounds = []
 
         for (JSONObject hit in hits) {
-            if (hit._type == 'assay') {
-                String targetName = hit._source.targets != null ? hit._source.targets[0].name : "Unknown target"
-                ESAssay esAssay = new ESAssay(_index: hit._index, _type: hit._type, _id: hit._id, assayNumber: hit._source.aid, assayName: targetName + ' (' + hit._source.targets[0].acc + ')')
+            if (hit._type == assayIndexTypeName) {
+                ESAssay esAssay = new ESAssay(hit)
                 assays.add(esAssay)
-            } else if (hit._type == 'compound') {
-                ESCompound esCompound = new ESCompound(_index: hit._index, _type: hit._type, _id: hit._id, cid: hit._source.cid, smiles: hit._source.smiles)
-                compounds.add(esCompound)
+            } else if (hit._type == compoundIndexTypeName) {
+                //'compound' type in the 'assays' index is just a list of CIDs.
+                JSONArray cids = hit?._source?.cids ?: [] as JSONArray
+                for (def cid in cids) {
+                    ESCompound esCompound = new ESCompound(_id: cid as String, _index: compoundIndexName, _type: compoundIndexTypeName, cid: cid as String)
+                    compounds.add(esCompound)
+                }
             }
         }
 
@@ -51,10 +57,10 @@ class ElasticSearchService {
     }
 
     JSONObject getAssayDocument(Integer docId) {
-        String baseUrl = grailsApplication.config.elasticSearchService.restNode.baseUrl
+        String elasticSearchQueryString = "${elasticSearchBaseUrl}/${assayIndexName}/${assayIndexTypeName}/${docId}"
         JSONObject result
         try {
-            result = queryExecutorService.executeGetRequestJSON("${baseUrl}/assays/assay/${docId}", null)
+            result = queryExecutorService.executeGetRequestJSON(elasticSearchQueryString, null)
         }
         catch (RESTClientException exp) {
             String message = exp.response.statusMessage
@@ -79,8 +85,22 @@ public abstract class ESResult {
  * A single assay result item, returned from ElasticSearch search.
  */
 public class ESAssay extends ESResult {
-    String assayNumber
-    String assayName
+    final String assayNumber
+    final String assayName
+
+    /**
+     * A custom constructor to instantiate an assay from an ES assay doc type.
+     * @param _source
+     */
+    public ESAssay(JSONObject hitJsonObj) {
+        this._index = hitJsonObj?._index
+        this._type = hitJsonObj?._type
+        this._id = hitJsonObj?._id
+        JSONObject assaySource = hitJsonObj?._source
+        this.assayNumber = assaySource.aid
+        JSONObject firstAssayTarget = assaySource.targets[0]
+        this.assayName = "${firstAssayTarget?.targetName} (${firstAssayTarget.acc})"
+    }
 
     @Override
     String toString() {
@@ -93,7 +113,17 @@ public class ESAssay extends ESResult {
  */
 public class ESCompound extends ESResult {
     String cid
-    String smiles
+
+    ESCompound() {
+        super()
+    }
+
+    ESCompound(JSONObject hitJsonObj) {
+        this._index = hitJsonObj?._index
+        this._type = hitJsonObj?._type
+        this._id = hitJsonObj?._id
+        this.cid = hitJsonObj?._source.cid
+    }
 
     @Override
     String toString() {

@@ -1,11 +1,8 @@
 package bardqueryapi
 
-import org.codehaus.groovy.grails.commons.GrailsApplication
-import wslite.json.JSONArray
-
 class QueryTargetApiService {
 
-    QueryExecutorService queryExecutorService
+    QueryExecutorInternalService queryExecutorInternalService
     final String accessionUrl
     final String geneUrl
     /**
@@ -31,7 +28,7 @@ class QueryTargetApiService {
         final String url = "${this.accessionUrl}${accessionNumber}/assays"
         final List<String> assayIds = []
         try {
-            def assays = queryExecutorService.executeGetRequestJSON(url, null)
+            def assays = queryExecutorInternalService.executeGetRequestJSON(url, null)
             assays.each { assayUrl ->
                 String currentAID = assayUrl.split('/').toList().last()
                 assayIds.add(currentAID)
@@ -54,7 +51,7 @@ class QueryTargetApiService {
     // Instead, use the filter parameter with this resource to identify a subset of targets.
     def findProteinByUniprotAccession(String accessionNumber) {
         final String url = "${this.accessionUrl}${accessionNumber}"
-        return queryExecutorService.executeGetRequestJSON(url, null)
+        return queryExecutorInternalService.executeGetRequestJSON(url, null)
     }
     /**
      *
@@ -63,7 +60,7 @@ class QueryTargetApiService {
      */
     def findProteinByGeneId(String geneId) {
         final String url = "${this.geneUrl}${geneId}"
-        return queryExecutorService.executeGetRequestJSON(url, null)
+        return queryExecutorInternalService.executeGetRequestJSON(url, null)
     }
 
 }

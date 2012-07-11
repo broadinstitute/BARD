@@ -11,13 +11,13 @@ class QueryTargetApiServiceUnitSpec extends Specification {
 
     QueryTargetApiService queryTargetApiService
 
-    QueryExecutorService queryExecutorService
+    QueryExecutorInternalService queryExecutorInternalService
 
 
     void setup() {
-        queryExecutorService = Mock()
+        queryExecutorInternalService = Mock()
         queryTargetApiService = new QueryTargetApiService("accessionUrl", "geneUrl")
-        queryTargetApiService.queryExecutorService = queryExecutorService
+        queryTargetApiService.queryExecutorService = queryExecutorInternalService
     }
 
     void tearDown() {
@@ -32,7 +32,7 @@ class QueryTargetApiServiceUnitSpec extends Specification {
         final List<String> assays = queryTargetApiService.findAssaysForAccessionTarget(accessionUrl)
 
         then:
-        1 * queryExecutorService.executeGetRequestJSON(_, _) >> { assayJson }
+        1 * queryExecutorInternalService.executeGetRequestJSON(_, _) >> { assayJson }
 
         assert assays == expectedAssayList
         where:

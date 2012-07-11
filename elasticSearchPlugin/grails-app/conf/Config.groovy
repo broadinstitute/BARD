@@ -24,5 +24,3 @@ log4j = {
 }
 
 elasticSearchService.restNode.baseUrl = 'http://bard-dev-vm:9200'
-bard.assay.view.url = 'https://bard.broadinstitute.org/BARD/assayDefinition/showAssayES'
-ncgc.server.root.url = "http://assay.nih.gov:8080"

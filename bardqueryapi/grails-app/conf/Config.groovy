@@ -122,6 +122,12 @@ log4j = {
            'net.sf.ehcache.hibernate'
 }
 
+
+bard.services.elasticSearchService.restNode.baseUrl = 'http://bard-dev-vm:9200'
+    bard.assay.view.url = 'https://bard.broadinstitute.org/BARD/ESAssay/show'
+ncgc.server.root.url = "http://assay.nih.gov:8080"
+
+
 /**
  * Loads external config files from the .grails subfolder in the user's home directory
  * Home directory in Windows is usually: C:\Users\<username>\.grails
@@ -157,6 +163,3 @@ if (appName) {
         }
     }
 }
-
-bard.services.elasticSearchService.restNode.baseUrl = 'http://bard-dev-vm:9200'
-bard.assay.view.url = 'https://bard.broadinstitute.org/BARD/assayDefinition/showAssayES'

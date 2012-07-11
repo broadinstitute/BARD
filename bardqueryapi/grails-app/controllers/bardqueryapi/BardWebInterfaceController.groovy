@@ -4,6 +4,9 @@ import grails.converters.JSON
 import org.codehaus.groovy.grails.web.json.JSONObject
 
 import javax.servlet.http.HttpServletResponse
+import elasticsearchplugin.ElasticSearchService
+import elasticsearchplugin.ESAssay
+import elasticsearchplugin.ESCompound
 
 /**
  * Created with IntelliJ IDEA.
@@ -15,7 +18,7 @@ import javax.servlet.http.HttpServletResponse
 class BardWebInterfaceController {
 
     QueryAssayApiService queryAssayApiService
-    QueryExecutorService queryExecutorService
+    QueryExecutorInternalService queryExecutorInternalService
     QueryTargetApiService queryTargetApiService
     ElasticSearchService elasticSearchService
 
@@ -34,43 +37,11 @@ class BardWebInterfaceController {
     def search() {
         def searchString = params.searchString?.trim()
         if (searchString) {
-            Map<String, List<ESResult>> result = elasticSearchService.search(searchString)
-
-//            if (params.searchType == SearchType.TARGET.name()) {
-//                List<String> assays = queryTargetApiService.findAssaysForAccessionTarget(params.searchString)
-//                queryExecutorService.executeGetRequestJSON(params.searchString,[:])
-////                List<String> assays = queryTargetApiService.findAssaysForAccessionTarget(params.searchString)
-//                render(view: "homePage", model: [totalCompounds: 0, assays: assays, compounds: [], experiments: [], projects: []])
-//                return
-//            }
-//            if (params.searchType == SearchType.COMPOUNDS.name()) {
-//                Integer totalCompounds = 0
-//                Set<String> compounds = [] as Set<String>
-//                Integer offset = params.offset as Integer ?: 0
-//                Integer max = params.max as Integer ?: 100
-//                params.max = max.toString()
-//                final String[] assays = QueryAssayApiService.breakApartDistinctStrings(params.searchString)
-//                for (String currentAssay : assays) {
-//                    if (!currentAssay.isInteger()) {
-//                        flash.message = 'Search String must be a number'
-//                        redirect(action: "homePage", params: [searchString: params.searchString])
-//                        return
-//                    }
-//                    final Integer assay = new Integer(currentAssay)
-//                    totalCompounds = totalCompounds + queryAssayApiService.getTotalAssayCompounds(assay)
-//                    Set<String> resultset = []
-//                    if (totalCompounds > 0) {
-//                        resultset = queryAssayApiService.getAssayCompoundsResultset(max, offset, assay) as Set<String>
-//                        compounds.addAll(resultset)
-//                    }
-//                }
-//                render(view: "homePage", model: [totalCompounds: totalCompounds, assays: assays as List<String>, compounds: compounds as List<String>, experiments: [], projects: []])
-//                return
-//            }
+            JSONObject result = elasticSearchService.search(searchString)
 
             List<Map> assays = []
             for (ESAssay assay in result.assays) {
-                String assayString = assay.makePretty()
+                String assayString = assay.toString()
                 String bardAssayViewUrl = grailsApplication.config.bard.assay.view.url
                 String showAssayResource = "${bardAssayViewUrl}/${assay.assayNumber}"
                 def assayMap = [assayName: assayString, assayResource: showAssayResource] as Map
@@ -79,7 +50,7 @@ class BardWebInterfaceController {
 
             List<String> compounds = []
             for (ESCompound compound in result.compounds) {
-                String compoundString = compound.makePretty()
+                String compoundString = compound.toString()
                 compounds.add(compoundString)
             }
 
@@ -119,7 +90,7 @@ class BardWebInterfaceController {
         if (compoundId) {
             final String compoundResourceUrl = "/bard/rest/v1/compounds/" + compoundId.toString()
             final String compoundUrl = grailsApplication.config.ncgc.server.root.url + compoundResourceUrl
-            def compoundJson = queryExecutorService.executeGetRequestJSON(compoundUrl, null) //get the Assay instance
+            def compoundJson = queryExecutorInternalService.executeGetRequestJSON(compoundUrl, null) //get the Assay instance
             def compound = JSON.parse(compoundJson.toString())
             //If the compound does not exist and we get back a server error, generate an empty JSON object.
             if (compound.getClass() == JSONObject && compound.errorMessage) {

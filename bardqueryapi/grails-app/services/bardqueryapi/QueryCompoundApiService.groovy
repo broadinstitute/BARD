@@ -3,7 +3,7 @@ package bardqueryapi
 class QueryCompoundApiService {
 
     def grailsApplication
-    QueryExecutorService queryExecutorService
+    QueryExecutorInternalService queryExecutorInternalService
 
     //Compound
     ///v1/compounds/{id} - Retrieve compound by its CID
@@ -17,9 +17,9 @@ class QueryCompoundApiService {
         final String url = grailsApplication.config.ncgc.server.root.url + cidUrl
         println url
         if(headers){
-            return queryExecutorService.executeGetRequestString(url,headers)
+            return queryExecutorInternalService.executeGetRequestString(url,headers)
         }
-        return queryExecutorService.executeGetRequestJSON(url,null)
+        return queryExecutorInternalService.executeGetRequestJSON(url,null)
     }
     /**
      *
@@ -31,9 +31,9 @@ class QueryCompoundApiService {
         final String url = grailsApplication.config.ncgc.server.root.url +  sidUrl
         println url
         if(headers){
-            return queryExecutorService.executeGetRequestString(url,headers)
+            return queryExecutorInternalService.executeGetRequestString(url,headers)
         }
-        return queryExecutorService.executeGetRequestJSON(url,null)
+        return queryExecutorInternalService.executeGetRequestJSON(url,null)
     }
     /**
      *
@@ -45,8 +45,8 @@ class QueryCompoundApiService {
         final String url = grailsApplication.config.ncgc.server.root.url +  probeUrl
         println url
         if(headers){
-            return queryExecutorService.executeGetRequestString(url,headers)
+            return queryExecutorInternalService.executeGetRequestString(url,headers)
         }
-        return queryExecutorService.executeGetRequestJSON(url,null)
+        return queryExecutorInternalService.executeGetRequestJSON(url,null)
     }
 }
