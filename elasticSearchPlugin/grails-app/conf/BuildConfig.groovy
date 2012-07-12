@@ -28,6 +28,7 @@ grails.project.dependency.resolution = {
         build(":release:2.0.2") { export = false }
 	// seems like rest client builder is required by release plugin but not getting included transitively so adding explicitly here
         build(":rest-client-builder:1.0.2") { export = false }
+	build(":codenarc:0.15"){ export = false }
 
         test ":spock:0.6"
     }
