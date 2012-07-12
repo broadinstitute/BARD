@@ -1,10 +1,14 @@
-import wslite.json.JSONObject
 import wslite.json.JSONArray
 import wslite.rest.RESTClient
+import bardelasticsearch.ElasticSearchCompoundsIndexService
+import bardelasticsearch.RestClientFactoryService
 
 //get the service from the context
-elasticSearchCompoundsIndexService = ctx.getBean("elasticSearchCompoundsIndexService")
+ElasticSearchCompoundsIndexService elasticSearchCompoundsIndexService = ctx.getBean("elasticSearchCompoundsIndexService")
 assert elasticSearchCompoundsIndexService
+
+RestClientFactoryService restClientFactoryService = ctx.getBean("restClientFactoryService")
+assert restClientFactoryService
 
 //the name of the elasticsearch index for assays
 String indexName = "assays"
@@ -25,14 +29,13 @@ final String ncgcAssaysURL = "${ncgcRootURL}${ncgcRelativeURL}assays/"
 final String elasticSearchURL = elasticSearchCompoundsIndexService.elasticSearchURL
 assert elasticSearchURL
 
-
 //get a RESTClient using the url to the elasticsearch assays index
-RESTClient cloneRestClient = elasticSearchCompoundsIndexService.cloneRestClient("${elasticSearchURL}${indexName}")
+RESTClient cloneRestClient = restClientFactoryService.createNewRestClient("${elasticSearchURL}${indexName}")
 
 //create the index if it does not already exist
-try{
-elasticSearchCompoundsIndexService.putRequest(cloneRestClient, "")
-}catch(Exception eee){
+try {
+    elasticSearchCompoundsIndexService.putRequest(cloneRestClient, "")
+} catch (Exception eee) {
     println eee.message
 }
 

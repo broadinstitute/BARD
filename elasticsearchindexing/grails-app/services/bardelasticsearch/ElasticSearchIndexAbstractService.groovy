@@ -5,23 +5,10 @@ import wslite.rest.RESTClientException
 import wslite.rest.Response
 
 abstract class ElasticSearchIndexAbstractService {
-    RESTClient restClient
     String elasticSearchURL //root url to elastic search server
     String ncgcRootURL  //root url to NCGC server
     String ncgcRelativeURL
-
-    /**
-     * We clone the rest client because the urls are different and this is a multi threaded application
-     * @param yourURL
-     * @return @link RESTClient
-     */
-    RESTClient cloneRestClient(final String yourURL) {
-        RESTClient restClientClone = new RESTClient(yourURL)
-        restClientClone.httpClient = this.restClient.httpClient
-        restClientClone.httpClient.authorization = this.restClient.httpClient.authorization
-        return restClientClone;
-    }
-
+    RestClientFactoryService restClientFactoryService
     /**
      * Execute a get query
      * @param url

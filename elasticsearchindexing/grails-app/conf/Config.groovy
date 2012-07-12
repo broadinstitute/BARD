@@ -1,3 +1,5 @@
+import grails.util.Environment
+
 elasticsearch.server.url = "http://localhost:9200/"
 ncgc.server.url.rest.api.root = "http://assay.nih.gov:8080/"
 ncgc.server.url.rest.api.relative = "bard/rest/v1/"
@@ -69,7 +71,6 @@ environments {
     }
     production {
         grails.logging.jul.usebridge = false
-        // TODO: grails.serverURL = "http://www.changeme.com"
     }
 }
 
@@ -105,5 +106,41 @@ log4j = {
         debug 'stdout'
         error 'fileAppender'
         additivity = true
+    }
+}
+
+/**
+ * Loads external config files from the .grails subfolder in the user's home directory
+ * Home directory in Windows is usually: C:\Users\<username>\.grails
+ * In Unix, this is usually ~\.grails
+ *
+ * dataExport-commons-config.groovy is used to holed generic, non envrironment-specific configurations such as external api credentials, etc.
+ */
+if (appName) {
+    grails.config.locations = []
+
+    // If the developer specifies a directory for the external config files at the command line, use it.
+    // This will look like 'grails -DprimaryConfigDir=[directory name] [target]'
+    // Otherwise, look for these files in the user's home .grails/projectdb directory
+    // If there are no external config files in either location, don't override anything in this Config.groovy
+    String primaryOverrideDirName = System.properties.get('primaryConfigDir')
+    String secondaryOverrideDirName = "${userHome}/.grails/${appName}"
+
+    List<String> fileNames = ["${appName}-commons-config.groovy", "${appName}-${Environment.current.name}-config.groovy"]
+    fileNames.each {fileName ->
+        String primaryFullName = "${primaryOverrideDirName}/${fileName}"
+        String secondaryFullName = "${secondaryOverrideDirName}/${fileName}"
+
+        if (new File(primaryFullName).exists()) {
+            println "Overriding Config.groovy with $primaryFullName"
+            grails.config.locations << "file:$primaryFullName"
+        }
+        else if (new File(secondaryFullName).exists()) {
+            println "Overriding Config.groovy with $secondaryFullName"
+            grails.config.locations << "file:$secondaryFullName"
+        }
+        else {
+            println "Skipping Config.groovy overrides: $primaryFullName and $secondaryFullName not found"
+        }
     }
 }

@@ -19,12 +19,17 @@ grails.project.dependency.resolution = {
         mavenRepo 'http://bard-repo:8081/artifactory/bard-virtual-repo'
         grailsRepo('http://bard-repo:8081/artifactory/bard-virtual-repo', 'grailsCentral')
     }
+
     dependencies {
+        test "org.objenesis:objenesis:1.2" // used by spock for Mocking object that lack no args constructor
+
+        test "org.spockframework:spock-core:0.6-groovy-1.8"
         // specify dependencies here under either 'build', 'compile', 'runtime', 'test' or 'provided' scopes eg.
         runtime 'com.github.groovy-wslite:groovy-wslite:0.7.0'
     }
 
     plugins {
+        compile ":spock:0.6"
         compile ":executor:0.3"
         runtime ":hibernate:$grailsVersion"
         compile ":resources:1.1.6"

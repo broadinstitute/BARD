@@ -4,28 +4,11 @@ package bardelasticsearch
 //import JSONObject
 
 
-import wslite.rest.RESTClient
 import wslite.json.JSONArray
+import wslite.rest.RESTClient
 
 class ElasticSearchAssayIndexService extends ElasticSearchIndexAbstractService {
-
-    /**
-     * Create a mapping for the assay type
-     * This mapping marks some fields as "not_analyzed" ('not analyzed' means that the field in not compressed
-     * via space removal, but instead retained exactly as it was received for exact term matching
-     */
-    public void createIndexAndMappingForAssayType(final String indexName, final String indexType) {
-        RESTClient restClientClone = this.cloneRestClient("${this.elasticSearchURL}${indexName}")
-
-        //create the index  if it does not already exist
-        try {
-            putRequest(restClientClone, "")
-        }
-        catch (Exception ee) {
-            log.error(ee)
-        }
-
-        final String mappingForAssay = '''
+    private final static String mappingForAssay = '''
 {
   "assay":{
     "properties":{
@@ -91,12 +74,23 @@ class ElasticSearchAssayIndexService extends ElasticSearchIndexAbstractService {
   }
 }
 '''
+    /**
+     * Create a mapping for the assay type
+     * This mapping marks some fields as "not_analyzed" ('not analyzed' means that the field in not compressed
+     * via space removal, but instead retained exactly as it was received for exact term matching
+     */
+    public void createIndexAndMappingForAssayType(final String indexName, final String indexType) {
+        RESTClient restClientClone = this.restClientFactoryService.createNewRestClient("${this.elasticSearchURL}${indexName}")
+
+        //create the index  if it does not already exist
+        putRequest(restClientClone, "")
 
         //construct the mapping url
         final String mappingUrl = "${elasticSearchURL}${indexName}/${indexType}/_mapping"
 
         restClientClone.url = mappingUrl
-        //PUT the mapping URL
+
+        //Create the mappings
         putRequest(restClientClone, mappingForAssay)
     }
 
@@ -107,7 +101,7 @@ class ElasticSearchAssayIndexService extends ElasticSearchIndexAbstractService {
      */
     public void indexAssays(final String indexName, final String indexType, final String ncgcAssaysURL) {
 
-        final RESTClient restClientClone = cloneRestClient(ncgcAssaysURL)
+        final RESTClient restClientClone = this.restClientFactoryService.createNewRestClient(ncgcAssaysURL)
 
         //fetch the list of all assays from NCGC
         final def jsonArray = this.executeGetRequestJSON(restClientClone)
@@ -115,14 +109,14 @@ class ElasticSearchAssayIndexService extends ElasticSearchIndexAbstractService {
 
         assert jsonArray instanceof JSONArray
 
-        final JSONArray assaysAsJSON = (JSONArray)jsonArray
-        final List<String> assays = assaysAsJSON .subList(0,assaysAsJSON.length())
+        final JSONArray assaysAsJSON = (JSONArray) jsonArray
+        final List<String> assays = assaysAsJSON.subList(0, assaysAsJSON.length())
 
 
 
         int counter = 0
         //for each assay  get the JSON doc from NCGC and index it
-        for(String assay : assays){
+        for (String assay : assays) {
             ++counter
             //strip the relative url off the string
             //the string looks like /bard/rest/v1/assays/123 will be 123 after striping
@@ -131,7 +125,7 @@ class ElasticSearchAssayIndexService extends ElasticSearchIndexAbstractService {
             //construct url to fetch assay json from NCGC
             final String assayUrl = "${ncgcAssaysURL}${assayId}"
             restClientClone.url = assayUrl
-           //get assay document from NCGC
+            //get assay document from NCGC
             final String requestToPut = this.executeGetRequestJSON(restClient)
 
             //construct the url to use for indexing this document
@@ -139,7 +133,7 @@ class ElasticSearchAssayIndexService extends ElasticSearchIndexAbstractService {
 
             // Form the put command
             restClientClone.url = indexUrl
-            putRequest(restClientClone,requestToPut)
+            putRequest(restClientClone, requestToPut)
         }
         println "# ${counter} Assays indexed"
     }

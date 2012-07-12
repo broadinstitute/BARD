@@ -1,8 +1,13 @@
 import wslite.rest.RESTClient
+import bardelasticsearch.RestClientFactoryService
 
 //get the service from the context
 elasticSearchCompoundsIndexService = ctx.getBean("elasticSearchCompoundsIndexService")
 assert elasticSearchCompoundsIndexService
+
+RestClientFactoryService restClientFactoryService = ctx.getBean("restClientFactoryService")
+assert restClientFactoryService
+
 
 //the root url to elasticsearch-http://localhost:9200/
 final String elasticSearchURL = elasticSearchCompoundsIndexService.elasticSearchURL
@@ -12,7 +17,7 @@ assert elasticSearchURL
 final String indexName = "compounds"
 
 //construct url to create the index
-final RESTClient cloneRestClient = elasticSearchCompoundsIndexService.cloneRestClient("${elasticSearchURL}${indexName}")
+final RESTClient cloneRestClient = restClientFactoryService.createNewRestClient("${elasticSearchURL}${indexName}")
 //create the index if it does not already exist
 elasticSearchCompoundsIndexService.putRequest(cloneRestClient, "")
 

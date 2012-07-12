@@ -1,5 +1,6 @@
 import bardelasticsearch.ElasticSearchAssayIndexService
 import bardelasticsearch.ElasticSearchCompoundsIndexService
+import bardelasticsearch.RestClientFactoryService
 
 // Place your Spring DSL code here
 beans = {
@@ -16,24 +17,28 @@ beans = {
     }
     httpClient(wslite.http.HTTPClient) {
         sslTrustAllCerts = true
+        authorization = ref('clientBasicAuth')
     }
     restClient(wslite.rest.RESTClient) {
         url = "${elasticSearchUrl}"
         httpClient = ref('httpClient')
         authorization = ref('clientBasicAuth')
     }
+    restClientFactoryService(RestClientFactoryService) {
+        restClient = ref('restClient')
+    }
     elasticSearchCompoundsIndexService(ElasticSearchCompoundsIndexService) {
         elasticSearchURL = "${elasticSearchUrl}"
         numberOfThreads = 20
         ncgcRootURL = "${ncgcRootUrl}"
         ncgcRelativeURL = "${ncgcRelativeUrl}"
-        restClient = ref('restClient')
+        restClientFactoryService = ref('restClientFactoryService')
         executorService = ref('executorService')
     }
     elasticSearchAssayIndexService(ElasticSearchAssayIndexService) {
         elasticSearchURL = "${elasticSearchUrl}"
         ncgcRootURL = "${ncgcRootUrl}"
         ncgcRelativeURL = "${ncgcRelativeUrl}"
-        restClient = ref('restClient')
+        restClientFactoryService = ref('restClientFactoryService')
     }
 }

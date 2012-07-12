@@ -47,12 +47,17 @@ class ElasticSearchCompoundsIndexService extends ElasticSearchIndexAbstractServi
             final int lastIndex = i != (numberOfThreads - 1) ? (i + 1) * numberOfAssaysPerThread : numberOfAssays;
             final List assaySubList = assays.subList(firstIndex, lastIndex);
             final String threadName = "Thread" + i
+
+            // When the curry() method is called on a closure instance with one or more arguments,
+            // a copy of the closure is first made. The incoming arguments are then bound permanently
+            // to the new closure instance so that the parameters 1..N to the curry()
+            // call are bound to the 1..N parameters of the closure. The new curried closure is then returned the caller.
             tasks << (indexAssayCompoundsClosure.curry(ncgcExperimentsURL, assaySubList, threadName) as Callable)
         }
         //now execute all tasks
         final List<FutureTask> futureTasks = executorService.invokeAll(tasks)
         futureTasks.each {futureTask ->
-            println "Future Task: " + futureTask.get()
+            log.info "Future Task: " + futureTask.get()
         }
     }
     /**
@@ -61,12 +66,12 @@ class ElasticSearchCompoundsIndexService extends ElasticSearchIndexAbstractServi
     def indexAssayCompoundsClosure = {String ncgcExperimentsURL, List assays, String threadName ->
         String compoundsForAssayURL = null
         try {
-            final RESTClient restClientClone = this.cloneRestClient(ncgcExperimentsURL)
+            final RESTClient restClientClone = this.restClientFactoryService.createNewRestClient(ncgcExperimentsURL)
 
             println "Executing ${threadName}"
             int counter = 1
             int numberOfAssays = assays.size()
-            assays.each {assay ->
+            for (String assay : assays) {
                 //strip out the string /bard/rest/v1/assays/223 from the current, because we want only the aid
                 final String aid = assay.toString().replaceAll('/bard/rest/v1/assays/', '')
 
@@ -105,12 +110,12 @@ class ElasticSearchCompoundsIndexService extends ElasticSearchIndexAbstractServi
             return
         }
         //list of compounds are located in the collection
-        final JSONArray compoundCollection = compoundsArray.collection
+        final JSONArray compoundCollection = ((JSONObject) compoundsArray).collection
 
         //if the collection is not empty
         if (!compoundCollection.isEmpty()) {
             //if there are more compounds they would be included in the link object
-            final String moreCompoundsLink = compoundsArray.link
+            final String moreCompoundsLink = ((JSONObject) compoundsArray).link
 
             //recursively fetch compounds
             if (moreCompoundsLink != 'null') {
@@ -139,8 +144,14 @@ class ElasticSearchCompoundsIndexService extends ElasticSearchIndexAbstractServi
         restClientClone.url = compoundsForAssayURL
         try {
             def compoundsArray = this.executeGetRequestJSON(restClientClone)
-            final JSONArray collection = compoundsArray.collection
-            final String moreCompounds = compoundsArray.link
+            if (!compoundsArray instanceof JSONObject) {
+                log.error("${compoundsArray.toString()} URL: ${compoundsForAssayURL}")
+                return
+            }
+
+            final JSONArray collection = ((JSONObject) compoundsArray).collection
+            final String moreCompounds = ((JSONObject) compoundsArray).link
+            //if the collection is not empty
             if (!collection.isEmpty()) {
                 compoundCollection.addAll(collection)
             }
@@ -220,7 +231,7 @@ class ElasticSearchCompoundsIndexService extends ElasticSearchIndexAbstractServi
     protected void indexCompounds(final String cid, final String compoundURL, final String threadName) {
         //fetch the compounds associated with the currentcid
         try {
-            RESTClient restClientClone = this.cloneRestClient(compoundURL)
+            RESTClient restClientClone = this.restClientFactoryService.createNewRestClient(compoundURL)
             def compoundJSON = this.executeGetRequestJSON(restClientClone)
             if (!compoundJSON instanceof JSONObject) {
                 log.error("${compoundJSON.toString()} URL: ${compoundURL}")
@@ -248,7 +259,7 @@ class ElasticSearchCompoundsIndexService extends ElasticSearchIndexAbstractServi
         //the url for searching ES
         final String urlForSearching = "${elasticSearchURL}assays/compound/_search"
 
-        final RESTClient cloneRestClient = this.cloneRestClient(urlForSearching)
+        final RESTClient cloneRestClient = this.restClientFactoryService.createNewRestClient(urlForSearching)
 
         //We post the request to ES
         def response = this.postRequest(cloneRestClient, ELASTIC_COMPOUNDS_SEARCH)
