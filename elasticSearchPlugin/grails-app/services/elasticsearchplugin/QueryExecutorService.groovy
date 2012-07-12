@@ -1,12 +1,12 @@
 package elasticsearchplugin
 
-import grails.converters.JSON
-import wslite.http.auth.HTTPBasicAuthorization
 import wslite.rest.RESTClient
 import wslite.rest.RESTClientException
 import wslite.rest.Response
 
 class QueryExecutorService {
+
+    static transactional = false
 
     //we use this as a template so that we can clone it for every request
     RESTClient restClient

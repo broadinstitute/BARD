@@ -3,9 +3,10 @@ package elasticsearchplugin
 import org.codehaus.groovy.grails.web.json.JSONArray
 import org.codehaus.groovy.grails.web.json.JSONObject
 import wslite.rest.RESTClientException
-import grails.converters.JSON
 
 class ElasticSearchService {
+
+    static transactional = false
 
     QueryExecutorService queryExecutorService
     String elasticSearchBaseUrl
