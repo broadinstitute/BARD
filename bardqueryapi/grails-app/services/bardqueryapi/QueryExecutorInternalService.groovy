@@ -6,7 +6,7 @@ import wslite.rest.RESTClient
 import wslite.rest.RESTClientException
 import wslite.rest.Response
 
-class QueryExecutorService {
+class QueryExecutorInternalService {
 
     HTTPBasicAuthorization clientBasicAuth
     //we use this as a template so that we can clone it for every request

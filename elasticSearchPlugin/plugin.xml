@@ -1,0 +1,34 @@
+<plugin name='elastic-search' version='0.1-SNAPSHOT' grailsVersion='2.0 &gt; *'>
+  <author>Broad Chemical Biology Platform</author>
+  <authorEmail>bard-tech@broadinstitute.org</authorEmail>
+  <title>Elastic Search Plugin</title>
+  <description>Provides an ElasticSearch integration and querying services.</description>
+  <documentation>https://github.com/broadinstitute/BARD/wiki/elasticSearchPlugin</documentation>
+  <type>ElasticSearchGrailsPlugin</type>
+  <resources>
+    <resource>spring.resources</resource>
+    <resource>elasticsearchplugin.ElasticSearchService</resource>
+    <resource>elasticsearchplugin.QueryExecutorService</resource>
+  </resources>
+  <repositories>
+    <repository name='http://bard-repo:8081/artifactory/bard-virtual-repo' url='http://bard-repo:8081/artifactory/bard-virtual-repo/' />
+    <repository name='grailsCentral' url='http://bard-repo:8081/artifactory/bard-virtual-repo' />
+    <repository name='mavenCentral' url='http://repo1.maven.org/maven2/' />
+  </repositories>
+  <dependencies>
+    <test>
+      <dependency group='org.spockframework' name='spock-core' version='0.6-groovy-1.8' />
+      <dependency group='org.objenesis' name='objenesis' version='1.2' />
+    </test>
+    <runtime>
+      <dependency group='com.github.groovy-wslite' name='groovy-wslite' version='0.7.0' />
+    </runtime>
+  </dependencies>
+  <plugins>
+    <test>
+      <plugin group='org.grails.plugins' name='spock' version='0.6' />
+    </test>
+  </plugins>
+  <runtimePluginRequirements />
+  <behavior />
+</plugin>

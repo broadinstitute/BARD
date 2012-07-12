@@ -26,9 +26,9 @@ class AssayDefinitionController {
 	}
 
 	def show() {
-		
-		def assayInstance = Assay.get(params.id)
-		if (!assayInstance) {
+        def assayInstance = Assay.get(params.id)
+
+        if (!assayInstance) {
 			flash.message = message(code: 'default.not.found.message', args: [message(code: 'assay.label', default: 'Assay'), params.id])
 			return
 		}

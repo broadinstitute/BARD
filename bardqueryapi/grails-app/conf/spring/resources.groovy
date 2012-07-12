@@ -18,6 +18,14 @@ beans = {
     final String geneIdUrl = grailsApplication.config.ncgc.server.gene.root.url
 
     queryTargetApiService(bardqueryapi.QueryTargetApiService,accessionUrl,geneIdUrl){
+        queryExecutorInternalService = ref('queryExecutorInternalService')
+    }
+    elasticSearchService(elasticsearchplugin.ElasticSearchService) {
+        elasticSearchBaseUrl = grailsApplication.config.bard.services.elasticSearchService.restNode.baseUrl
+        assayIndexName = 'assays'
+        assayIndexTypeName = 'assay'
+        compoundIndexName = 'compounds'
+        compoundIndexTypeName = 'compound'
         queryExecutorService = ref('queryExecutorService')
     }
 

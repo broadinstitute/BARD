@@ -13,14 +13,14 @@ import javax.servlet.http.HttpServletResponse
 class BardWebInterfaceControllerUnitSpec extends Specification {
 
     QueryAssayApiService queryAssayApiService
-    QueryExecutorService queryExecutorService
+    QueryExecutorInternalService queryExecutorInternalService
     QueryTargetApiService queryTargetApiService
 
     void setup() {
         queryAssayApiService = Mock()
         controller.queryAssayApiService = this.queryAssayApiService
-        queryExecutorService = Mock()
-        controller.queryExecutorService = this.queryExecutorService
+        queryExecutorInternalService = Mock()
+        controller.queryExecutorService = this.queryExecutorInternalService
         queryTargetApiService = Mock()
         controller.queryTargetApiService = this.queryTargetApiService
         controller.grailsApplication.config.ncgc.server.root.url = 'httpMock://'
@@ -204,7 +204,7 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
         request.method = 'GET'
         controller.showCompound(new Integer(872))
         then:
-        1 * queryExecutorService.executeGetRequestJSON("httpMock:///bard/rest/v1/compounds/872", null) >> { compoundJson }
+        1 * queryExecutorInternalService.executeGetRequestJSON("httpMock:///bard/rest/v1/compounds/872", null) >> { compoundJson }
 
         "/bardWebInterface/showCompound" == view
         expectedCompoundJson.toString() == model.compoundJson.toString()
