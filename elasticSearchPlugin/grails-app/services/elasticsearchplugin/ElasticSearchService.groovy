@@ -111,9 +111,9 @@ public class ESAssay extends ESResult {
         this._type = hitJsonObj?._type
         this._id = hitJsonObj?._id
         JSONObject assaySource = hitJsonObj?._source
-        this.assayNumber = assaySource.aid
-        JSONObject firstAssayTarget = assaySource.targets[0]
-        this.assayName = "${firstAssayTarget?.name} (${firstAssayTarget.acc})"
+        this.assayNumber = assaySource?.aid
+        JSONObject firstAssayTarget = assaySource.targets ? assaySource.targets[0] : [:] as JSONObject
+        this.assayName = "${firstAssayTarget?.name} (${firstAssayTarget?.acc})"
     }
 
     @Override
