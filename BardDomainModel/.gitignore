@@ -2,3 +2,5 @@
 *.sha1
 plugin.xml
 .idea/workspace.xml
+.idea/misc.xml
+out/
