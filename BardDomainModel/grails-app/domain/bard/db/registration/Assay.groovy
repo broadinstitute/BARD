@@ -6,38 +6,49 @@ class Assay {
 
     static expose = 'assay'
 
-	String assayName
-	String assayVersion
-	//String description
-	String designedBy
-	Date dateCreated
-	Date lastUpdated
-	String modifiedBy
-	String assayStatus = 'Pending'
+    private static final int ASSAY_STATUS_MAX_SIZE = 20
+    private static final int ASSAY_NAME_MAX_SIZE = 1000
+    private static final int ASSAY_VERSION_MAX_SIZE = 10
+    private static final int DESIGNED_BY_MAX_SIZE = 100
+    private static final int READY_FOR_EXTRACTION_MAX_SIZE = 20
+    private static final int MODIFIED_BY_MAX_SIZE = 40
+
+    String assayStatus = 'Pending'
+    String assayName
+    String assayVersion
+    String designedBy
+    String readyForExtraction = 'Ready'
     String assayType = 'Regular'
-	String readyForExtraction = 'Ready'
+
+    String modifiedBy
+    // grails auto-timestamp
+    Date dateCreated
+    Date lastUpdated
 
 
-	static hasMany = [experiments: Experiment,
-			measureContextItems: MeasureContextItem,
-			measures : Measure,
-			measureContexts: MeasureContext,
-			assayDocuments: AssayDocument]
 
-	static mapping = {
-		id column: "Assay_ID", generator: "assigned"
-	}
+    static hasMany = [experiments: Experiment,
+            measureContextItems: MeasureContextItem,
+            measures: Measure,
+            measureContexts: MeasureContext,
+            assayDocuments: AssayDocument]
 
-	static constraints = {
-		assayName nullable: false, maxSize: 128
-		assayVersion maxSize: 10
-		//description nullable: true, maxSize: 1000
-		designedBy nullable: true, maxSize: 100
-		dateCreated maxSize: 19
-		lastUpdated nullable: true, maxSize: 19
-		modifiedBy nullable: true, maxSize: 40
-		assayStatus maxSize: 20, nullable: false, inList: ["Pending", "Active", "Superseded", "Retired"]
-        assayType inList: ['Regular', 'Panel - Array', 'Panel - Group']
-		readyForExtraction maxSize: 20, nullable: false, inList: [ "Ready", "Started", "Complete" ]
-	}
+    static mapping = {
+        id(column: "Assay_ID", generator: "sequence", params: [sequence: 'ASSAY_ID_SEQ'])
+
+    }
+
+    static constraints = {
+        // TODO consider and Enum to replace the inListk
+        assayStatus(maxSize: ASSAY_STATUS_MAX_SIZE, blank: false, inList: ["Pending", "Active", "Superseded", "Retired"])
+        assayName(maxSize: ASSAY_NAME_MAX_SIZE, blank: false)
+        assayVersion(maxSize: ASSAY_VERSION_MAX_SIZE, blank: false, matches: /\d+/)   // does this need to look like a number
+        designedBy(nullable: true, maxSize: DESIGNED_BY_MAX_SIZE)
+        readyForExtraction(maxSize: READY_FOR_EXTRACTION_MAX_SIZE, blank: false, inList: ["Ready", "Started", "Complete"])
+        assayType(inList: ['Regular', 'Panel - Array', 'Panel - Group'])
+
+        dateCreated(nullable: false)
+        lastUpdated(nullable: true)
+        modifiedBy(nullable: true, blank: false, maxSize: MODIFIED_BY_MAX_SIZE)
+    }
 }
