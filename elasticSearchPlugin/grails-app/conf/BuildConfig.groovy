@@ -19,27 +19,18 @@ grails.project.dependency.resolution = {
     }
     dependencies {
         // specify dependencies here under either 'build', 'compile', 'runtime', 'test' or 'provided' scopes eg.
-
-        // runtime 'mysql:mysql-connector-java:5.1.5'
-        test "org.spockframework:spock-core:0.6-groovy-1.8"
         runtime 'com.github.groovy-wslite:groovy-wslite:0.7.0'
-        test "org.objenesis:objenesis:1.2" // used by spock for Mocking objects that have no args constructor
-
+        test "org.spockframework:spock-core:0.6-groovy-1.8"
     }
 
     plugins {
+        build(":codenarc:0.15"){ export = false }
+        build(":tomcat:$grailsVersion") { export = false }
+        build(":release:2.0.2") { export = false }
+	// seems like rest client builder is required by release plugin but not getting included transitively so adding explicitly here
+        build(":rest-client-builder:1.0.2") { export = false }
+
         test ":spock:0.6"
-
-        build(":codenarc:0.15"){
-            export = false
-        }
-
-        build(":tomcat:$grailsVersion") {
-            export = false
-        }
-        build(":release:2.0.2") {
-            export = false
-        }
     }
 }
 
