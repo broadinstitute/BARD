@@ -12,4 +12,12 @@ beans = {
         httpClient = ref('httpClient')
         authorization = ref('clientBasicAuth')
     }
+    elasticSearchService(elasticsearchplugin.ElasticSearchService) {
+        elasticSearchBaseUrl = grailsApplication.config.bard.services.elasticSearchService.restNode.baseUrl
+        assayIndexName = 'assays'
+        assayIndexTypeName = 'assay'
+        compoundIndexName = 'compounds'
+        compoundIndexTypeName = 'compound'
+        queryExecutorService = ref('queryExecutorService')
+    }
 }

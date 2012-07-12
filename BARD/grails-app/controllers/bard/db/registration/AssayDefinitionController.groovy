@@ -1,12 +1,9 @@
 package bard.db.registration
 
-import bard.services.ElasticSearchService
-
 
 class AssayDefinitionController {
 	
 	static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
-    ElasticSearchService elasticSearchService
 
     def index() {
 		redirect(action: "description", params: params)

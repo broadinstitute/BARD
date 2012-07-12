@@ -21,7 +21,7 @@ beans = {
         queryExecutorInternalService = ref('queryExecutorInternalService')
     }
     elasticSearchService(elasticsearchplugin.ElasticSearchService) {
-        elasticSearchBaseUrl = "http://bard-dev-vm:9200"
+        elasticSearchBaseUrl = grailsApplication.config.bard.services.elasticSearchService.restNode.baseUrl
         assayIndexName = 'assays'
         assayIndexTypeName = 'assay'
         compoundIndexName = 'compounds'

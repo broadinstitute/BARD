@@ -44,7 +44,7 @@ grails.project.dependency.resolution = {
 }
 
 
-grails.project.repos.default = "releases"
+grails.project.repos.default = "snapshots"
 
 grails.project.repos.releases.url = "http://bard-repo.broadinstitute.org:8081/artifactory/plugins-release-local"
 

@@ -17,8 +17,8 @@
   </repositories>
   <dependencies>
     <test>
-      <dependency group='org.objenesis' name='objenesis' version='1.2' />
       <dependency group='org.spockframework' name='spock-core' version='0.6-groovy-1.8' />
+      <dependency group='org.objenesis' name='objenesis' version='1.2' />
     </test>
     <runtime>
       <dependency group='com.github.groovy-wslite' name='groovy-wslite' version='0.7.0' />

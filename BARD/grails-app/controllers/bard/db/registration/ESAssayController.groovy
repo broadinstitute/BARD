@@ -1,6 +1,6 @@
 package bard.db.registration
 
-import bard.services.ElasticSearchService
+import elasticsearchplugin.ElasticSearchService
 
 class ESAssayController {
 	
@@ -11,7 +11,7 @@ class ESAssayController {
 	
 	def show() {
 		
-		def assayJson = elasticSearchService.searchForAssay(params.id as Integer)
+		def assayJson = elasticSearchService.getAssayDocument(params.id as Integer)
 		def assayInstance = assayJson._source
 		
 		if (!assayInstance) {
