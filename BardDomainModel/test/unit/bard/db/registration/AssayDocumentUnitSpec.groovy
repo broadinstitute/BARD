@@ -29,7 +29,7 @@ class AssayDocumentUnitSpec extends Specification {
         domainInstance = AssayDocument.buildWithoutSave(assay: Assay.buildWithoutSave(assayVersion: '2'))
     }
 
-    void "test documentName constraints #desc documentName: '#valueUnderTest'"() {
+    void "test documentName constraints #desc documentName: "() {
 
         final String field = 'documentName'
 
@@ -79,7 +79,7 @@ class AssayDocumentUnitSpec extends Specification {
 //        'exactly at limit' | createString(DOCUMENT_TYPE_MAX_SIZE)     | true  | null
     }
 
-    void "test documentContent constraints #desc documentContent: '#valueUnderTest'"() {
+    void "test documentContent constraints #desc documentContent: "() {
 
         final String field = 'documentContent'
 
