@@ -32,10 +32,10 @@
         </tr>
         <g:if test="${compoundJson}">
             <tr>
-                <td>${compoundJson.cid}</td>
-                <td>${compoundJson.sids.join(', ')}</td>
-                <td>${compoundJson.probeId}</td>
-                <td>${compoundJson.smiles}</td>
+                <td>${compoundJson?.cid}</td>
+                <td>${compoundJson?.sids?.join(', ')}</td>
+                <td>${compoundJson?.probeId}</td>
+                <td>${compoundJson?.smiles}</td>
             </tr>
         </g:if>
     </table>

@@ -14,37 +14,37 @@ class BardWebInterfaceFunctionalSpec extends Specification {
     RemoteControl remote = new RemoteControl()
     String baseUrl = remote { ctx.grailsApplication.config.grails.serverURL }
 
-    def "Test REST Query API: #label"() {
+    def "Test ElasticSearch querying: #label"() {
         given: "there is a service end point to get the root elements"
-        String requestUrl = generateRequestUrl([param1, param2, param3])
+        String requestUrl = generateRequestUrl([param1])
         RESTClient http = new RESTClient(requestUrl)
 
-        when: 'We send an HTTP GET request for the root elements'
+        when: 'We send an HTTP GET request for the search action'
         HttpResponseDecorator serverResponse = http.get(requestContentType: JSON)
 
         then: 'We expect a JSON representation of the root elements'
         assert serverResponse.statusLine.statusCode == HttpServletResponse.SC_OK
         println serverResponse.data.toString()
         assert serverResponse.data.size() > 0
-        assert !serverResponse.data.any{ it.toString().contains("errorCode") }
+        assert !serverResponse.data.any { it.toString().contains("errorCode") }
 
         where:
-        label                                        | param1       | param2       | param3
-        "Find compounds for assay"                   | "assay=604"  | null         | null
-        "Find compounds for assay w/ offset and max" | "assay=644"  | "offset=100" | "max=50"
-        "Show compound by CID"                       | "cid=571349" | null         | null
+        label                  | param1
+        "Find assay by id"     | "644"
+        "Find assay by name"   | "Dose-response"
     }
 
     /*
      * Chain together the test parameters to create a URL for the request
      */
-    private String generateRequestUrl(List<String> paramList){
+
+    private String generateRequestUrl(List<String> paramList) {
         String allParams = paramList?.join("&")
 
         StringBuilder sb = new StringBuilder()
 
         sb.append(baseUrl)
-        sb.append("/bardWebInterface/?${allParams}")
+        sb.append("/bardWebInterface/search?searchString=${allParams}")
 
         return sb.toString()
     }

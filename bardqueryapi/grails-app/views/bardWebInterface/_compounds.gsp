@@ -12,10 +12,4 @@
             <g:link controller="bardWebInterface" action="showCompound" params="[cid: compound]">${compound}</g:link>
         </g:each>
     </div>
-    <g:if test="${totalCompounds}">
-        <div class="pagination">
-            <g:paginate total="${totalCompounds}" action="search"
-                        params="[searchString: params?.searchString, searchType: 'COMPOUNDS']"/>
-        </div>
-    </g:if>
 </div>

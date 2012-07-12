@@ -45,13 +45,13 @@ class BardWebInterfaceController {
                 assays.add(assayMap)
             }
 
-            List<String> compounds = []
+            Set<String> compounds = [] as Set
             for (ESCompound compound in result.compounds) {
                 String compoundString = compound.toString()
                 compounds.add(compoundString)
             }
 
-            render(view: "homePage", model: [totalCompounds: compounds.size, assays: assays as List<Map>, compounds: compounds as List<String>, experiments: [], projects: []])
+            render(view: "homePage", model: [totalCompounds: compounds.size(), assays: assays as List<Map>, compounds: compounds.toList(), experiments: [], projects: []])
             return
         }
         flash.message = 'Search String is required'
