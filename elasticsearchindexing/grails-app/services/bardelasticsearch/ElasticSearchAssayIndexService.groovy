@@ -126,7 +126,7 @@ class ElasticSearchAssayIndexService extends ElasticSearchIndexAbstractService {
             final String assayUrl = "${ncgcAssaysURL}${assayId}"
             restClientClone.url = assayUrl
             //get assay document from NCGC
-            final String requestToPut = this.executeGetRequestJSON(restClient)
+            final String requestToPut = this.executeGetRequestJSON(restClientClone)
 
             //construct the url to use for indexing this document
             final String indexUrl = "${this.elasticSearchURL}${indexName}/${indexType}/${assayId}"
