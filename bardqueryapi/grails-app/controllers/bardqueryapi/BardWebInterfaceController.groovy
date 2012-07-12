@@ -4,6 +4,9 @@ import grails.converters.JSON
 import org.codehaus.groovy.grails.web.json.JSONObject
 
 import javax.servlet.http.HttpServletResponse
+import elasticsearchplugin.ElasticSearchService
+import elasticsearchplugin.ESAssay
+import elasticsearchplugin.ESCompound
 
 /**
  * Created with IntelliJ IDEA.
@@ -14,10 +17,7 @@ import javax.servlet.http.HttpServletResponse
  */
 class BardWebInterfaceController {
 
-    QueryAssayApiService queryAssayApiService
-    QueryExecutorService queryExecutorService
-    QueryTargetApiService queryTargetApiService
-
+    ElasticSearchService elasticSearchService
 
     def index() {
         homePage()
@@ -32,76 +32,42 @@ class BardWebInterfaceController {
      * @return
      */
     def search() {
-        if (params.searchString?.trim()) {
-            if (params.searchType == SearchType.TARGET.name()) {
-                List<String> assays = queryTargetApiService.findAssaysForAccessionTarget(params.searchString)
-                render(view: "homePage", model: [totalCompounds: 0, assays: assays, compounds: [], experiments: [], projects: []])
-                return
+        def searchString = params.searchString?.trim()
+        if (searchString) {
+            JSONObject result = elasticSearchService.search(searchString)
+
+            List<Map> assays = []
+            for (ESAssay assay in result.assays) {
+                String assayString = assay.toString()
+                String bardAssayViewUrl = grailsApplication.config.bard.assay.view.url
+                String showAssayResource = "${bardAssayViewUrl}/${assay.assayNumber}"
+                def assayMap = [assayName: assayString, assayResource: showAssayResource] as Map
+                assays.add(assayMap)
             }
-            if (params.searchType == SearchType.COMPOUNDS.name()) {
-                Integer totalCompounds = 0
-                Set<String> compounds = [] as Set<String>
-                Integer offset = params.offset as Integer ?: 0
-                Integer max = params.max as Integer ?: 100
-                params.max = max.toString()
-                final String[] assays = QueryAssayApiService.breakApartDistinctStrings(params.searchString)
-                for (String currentAssay : assays) {
-                    if (!currentAssay.isInteger()) {
-                        flash.message = 'Search String must be a number'
-                        redirect(action: "homePage", params: [searchString: params.searchString])
-                        return
-                    }
-                    final Integer assay = new Integer(currentAssay)
-                    totalCompounds = totalCompounds + queryAssayApiService.getTotalAssayCompounds(assay)
-                    Set<String> resultset = []
-                    if (totalCompounds > 0) {
-                        resultset = queryAssayApiService.getAssayCompoundsResultset(max, offset, assay) as Set<String>
-                        compounds.addAll(resultset)
-                    }
-                }
-                render(view: "homePage", model: [totalCompounds: totalCompounds, assays: assays as List<String>, compounds: compounds as List<String>, experiments: [], projects: []])
-                return
+
+            List<String> compounds = []
+            for (ESCompound compound in result.compounds) {
+                String compoundString = compound.toString()
+                compounds.add(compoundString)
             }
+
+            render(view: "homePage", model: [totalCompounds: compounds.size, assays: assays as List<Map>, compounds: compounds as List<String>, experiments: [], projects: []])
+            return
         }
         flash.message = 'Search String is required'
         redirect(action: "homePage")
     }
-    /**
-     * The format that the NCGC api expects is: http://assay.nih.gov/bard/rest/v1/assays/862/compounds?skip=20&top=5
-     * skip is offset
-     * top is max
-     *
-     * @return
-     */
-    def findCompoundsForAssay(Integer max, Integer offset, Integer assay) {
-        offset = offset ?: 0
-        max = max ?: 100
-        params.max = max.toString()
 
-        if (assay) {
-            final Integer totalCompounds = queryAssayApiService.getTotalAssayCompounds(assay)
-            final List<String> assayCompoundsPage = queryAssayApiService.getAssayCompoundsResultset(max, offset, assay)
-
-            render(view: "findCompoundsForAssay", model: [assayCompoundsJsonArray: assayCompoundsPage, totalCompounds: totalCompounds, aid: assay])
-        }
-        else {
-            response.status = HttpServletResponse.SC_NOT_FOUND
-            render "Assay ID is not defined"
-        }
-    }
 
     def showCompound(Integer cid) {
         Integer compoundId = cid ?: params.id as Integer//if 'assay' param is provided, use that; otherwise, try the default id one
 
         if (compoundId) {
-            final String compoundResourceUrl = "/bard/rest/v1/compounds/" + compoundId.toString()
-            final String compoundUrl = grailsApplication.config.ncgc.server.root.url + compoundResourceUrl
-            def compoundJson = queryExecutorService.executeGetRequestJSON(compoundUrl, null) //get the Assay instance
-            def compound = JSON.parse(compoundJson.toString())
-            //If the compound does not exist and we get back a server error, generate an empty JSON object.
-            if (compound.getClass() == JSONObject && compound.errorMessage) {
-                compoundJson = null
-            }
+            JSONObject compoundESDocument = elasticSearchService.getCompoundDocument(compoundId)
+            JSONObject compoundJson = [cid: compoundESDocument?._id,
+                    sids: compoundESDocument?._source?.sids,
+                    probeId: compoundESDocument?._source?.probeId,
+                    smiles: compoundESDocument?._source?.smiles] as JSONObject
             render(view: "showCompound", model: [compoundJson: compoundJson, compoundId: compoundId])
         }
         else {

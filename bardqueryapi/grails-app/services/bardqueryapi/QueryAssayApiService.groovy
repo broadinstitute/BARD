@@ -5,7 +5,7 @@ import grails.converters.JSON
 class QueryAssayApiService {
 
     def grailsApplication
-    QueryExecutorService queryExecutorService
+    QueryExecutorInternalService queryExecutorInternalService
 
     static String[] breakApartDistinctStrings(String inputString) {
         def outputList = inputString.split()
@@ -17,7 +17,7 @@ class QueryAssayApiService {
      */
     def findAssayByAid(String assayAidUrl) {
         final String url = grailsApplication.config.ncgc.server.root.url + assayAidUrl
-        return queryExecutorService.executeGetRequestJSON(url, null)
+        return queryExecutorInternalService.executeGetRequestJSON(url, null)
     }
     /**
      * v1/assays/{aid}/targets - list of paths to protein targets, annotated for this assay
@@ -26,7 +26,7 @@ class QueryAssayApiService {
     def findProteinTargetsByAssay(String assayAidUrl) {
         final String url = grailsApplication.config.ncgc.server.root.url + assayAidUrl + "/targets"
         println url
-        return queryExecutorService.executeGetRequestJSON(url, null)
+        return queryExecutorInternalService.executeGetRequestJSON(url, null)
     }
     /**
      * v1/assays/{aid}/publications - list of paths to documents, annotated for this assay.
@@ -36,7 +36,7 @@ class QueryAssayApiService {
     def findPublicationsByAssay(String assayAidUrl) {
         final String url = grailsApplication.config.ncgc.server.root.url + assayAidUrl + "/publications"
         println url
-        return queryExecutorService.executeGetRequestJSON(url, null)
+        return queryExecutorInternalService.executeGetRequestJSON(url, null)
     }
     /**
      * v1/assays/{aid}/compounds - by default, a JSON list of paths to compounds identified by CID.
@@ -49,7 +49,7 @@ class QueryAssayApiService {
     def findCompoundsByAssay(String assayAidUrl, Map headers) {
         final String url = grailsApplication.config.ncgc.server.root.url + assayAidUrl + "/compounds"
         println url
-        return queryExecutorService.executeGetRequestJSON(url, headers)
+        return queryExecutorInternalService.executeGetRequestJSON(url, headers)
     }
 
     Integer getTotalAssayCompounds(Integer assayId) {
@@ -57,7 +57,7 @@ class QueryAssayApiService {
         //this is a really ugly solution to user-story 31923055. This all would go away with the next refactoring.
         Integer totalCompounds = 0
         try {
-            final wslite.json.JSONObject assayJson = queryExecutorService.executeGetRequestJSON(assayResourceUrl, null) //get the Assay instance
+            final wslite.json.JSONObject assayJson = queryExecutorInternalService.executeGetRequestJSON(assayResourceUrl, null) //get the Assay instance
             totalCompounds = assayJson.compounds ?: 0
         }
         catch (Exception exp) {
@@ -76,7 +76,7 @@ class QueryAssayApiService {
      */
     List<String> getAssayCompoundsResultset(Integer max, Integer offset, Integer assayId) {
         final String assayUrlPaging = "${grailsApplication.config.ncgc.server.root.url}/bard/rest/v1/experiments/${assayId}/compounds?skip=${offset}&top=${max}" //NCGS' max and offset
-        final wslite.json.JSONObject assayCompoundsJson = queryExecutorService.executeGetRequestJSON(assayUrlPaging, null)
+        final wslite.json.JSONObject assayCompoundsJson = queryExecutorInternalService.executeGetRequestJSON(assayUrlPaging, null)
         if (assayCompoundsJson.collection) {
             List<String> compoundUrlList = assayCompoundsJson.collection.toList()
             //strip the CID from the ending of the compound resource url (e.g., /bard/rest/v1/compounds/661090 --> 661090)

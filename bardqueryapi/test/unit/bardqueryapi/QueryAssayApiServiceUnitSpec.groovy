@@ -1,9 +1,5 @@
 package bardqueryapi
 
-import static org.junit.Assert.*
-
-
-
 import grails.converters.JSON
 import grails.test.mixin.TestFor
 import spock.lang.Specification
@@ -14,13 +10,13 @@ import spock.lang.Specification
 @TestFor(QueryAssayApiService)
 class QueryAssayApiServiceUnitSpec extends Specification {
 
-    QueryExecutorService queryExecutorService
+    QueryExecutorInternalService queryExecutorInternalService
 
 
     void setup() {
-        queryExecutorService = Mock()
-        service.queryExecutorService = queryExecutorService
-        service.grailsApplication.config.ncgc.server.root.url = 'httpMock://'
+        queryExecutorInternalService = Mock()
+        service.queryExecutorInternalService = queryExecutorInternalService
+        service.grailsApplication.config.bard.services.elasticSearchService.restNode.baseUrl = 'httpMock://'
     }
 
     void tearDown() {
@@ -35,7 +31,7 @@ class QueryAssayApiServiceUnitSpec extends Specification {
         Integer response = service.getTotalAssayCompounds(assayId)
 
         then:
-        1 * queryExecutorService.executeGetRequestJSON(_, _) >> { assayJson }
+        1 * queryExecutorInternalService.executeGetRequestJSON(_, _) >> { assayJson }
 
         assert response == expectedCompounds
 
@@ -53,7 +49,7 @@ class QueryAssayApiServiceUnitSpec extends Specification {
         List<String> response = service.getAssayCompoundsResultset(max, offset, assayId)
 
         then:
-        1 * queryExecutorService.executeGetRequestJSON(_, _) >> { assayJson }
+        1 * queryExecutorInternalService.executeGetRequestJSON(_, _) >> { assayJson }
 
         assert response == expectedCompoundList
 

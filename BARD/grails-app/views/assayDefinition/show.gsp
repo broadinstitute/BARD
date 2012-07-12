@@ -72,6 +72,7 @@
 			<!-- Assay Documents fields -->
 			<h3><a href="#">Documents</a></h3>
 			<div>
+				
 				<g:if test="${assayInstance?.assayDocuments}">
 				<li>
 					<g:each in="${assayInstance.assayDocuments.sort{it.id}}" var="assayDocument">
