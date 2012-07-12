@@ -4,7 +4,10 @@ import grails.converters.JSON
 import grails.test.mixin.TestFor
 import spock.lang.Specification
 
-import javax.servlet.http.HttpServletResponse
+import elasticsearchplugin.ElasticSearchService
+import org.codehaus.groovy.grails.web.json.JSONObject
+import elasticsearchplugin.ESAssay
+import elasticsearchplugin.ESCompound
 
 /**
  * See the API for {@link grails.test.mixin.support.GrailsUnitTestMixin} for usage instructions
@@ -12,207 +15,86 @@ import javax.servlet.http.HttpServletResponse
 @TestFor(BardWebInterfaceController)
 class BardWebInterfaceControllerUnitSpec extends Specification {
 
-    QueryAssayApiService queryAssayApiService
-    QueryExecutorInternalService queryExecutorInternalService
-    QueryTargetApiService queryTargetApiService
+    ElasticSearchService elasticSearchService
+
+    final static String compoundDocumentJson = '''{
+        "_index": "compounds",
+        "_type": "compound",
+        "_id": "3237916",
+        "_score": "1",
+        "_source": {
+            "resourcePath": "/bard/rest/v1/compounds/3237916",
+            "probeId": "null",
+            "sids": [
+                4243156,
+                24368917
+            ],
+            "smiles": "C-C",
+            "cid": 3237916,
+            "url": "null"
+        }
+    }'''
+
+    final static ESAssay esAssay = new ESAssay(
+            _index: 'index',
+            _type: 'type',
+            _id: 'id',
+            assayNumber: 'assayNumber',
+            assayName: 'assayName'
+    )
+
+    final static ESCompound esCompound = new ESCompound(
+            _index: 'index',
+            _type: 'type',
+            _id: 'id',
+            cid: '1234567890'
+    )
 
     void setup() {
-        queryAssayApiService = Mock()
-        controller.queryAssayApiService = this.queryAssayApiService
-        queryExecutorInternalService = Mock()
-        controller.queryExecutorService = this.queryExecutorInternalService
-        queryTargetApiService = Mock()
-        controller.queryTargetApiService = this.queryTargetApiService
-        controller.grailsApplication.config.ncgc.server.root.url = 'httpMock://'
+        elasticSearchService = Mock()
+        controller.elasticSearchService = this.elasticSearchService
     }
 
     void tearDown() {
         // Tear down logic here
     }
 
-    /**
-     */
-    void "test findCompoundsForAssay if-branch #label"() {
-        when:
-        request.method = 'GET'
-        controller.findCompoundsForAssay(max, offset, assayId)
-        then:
-        1 * queryAssayApiService.getTotalAssayCompounds(assayId) >> { totalAssayCompounds }
-        1 * queryAssayApiService.getAssayCompoundsResultset(max, offset, assayId) >> { assayCompoundsResultset }
-
-        "/bardWebInterface/findCompoundsForAssay" == view
-        assayCompoundsResultset == model.assayCompoundsJsonArray
-        totalAssayCompounds == model.totalCompounds
-        assayId == model.aid
-
-        where:
-        label                                         | totalAssayCompounds | assayCompoundsResultset            | max            | offset         | assayId          | expectedTotalCompounds
-        "Render view with name findCompoundsForAssay" | new Integer(10)     | ['/bard/rest/v1/compounds/661090'] | new Integer(1) | new Integer(2) | new Integer(872) | 1
-        "Render view with name findCompoundsForAssay" | new Integer(0)      | ['a', 'b']                         | new Integer(1) | new Integer(2) | new Integer(872) | 1
-    }
-
-    void "test findCompoundsForAssay else-branch #label"() {
-        when:
-        request.method = 'GET'
-        controller.findCompoundsForAssay(max, offset, assayId)
-
-        then:
-        0 * queryAssayApiService.getTotalAssayCompounds(assayId) >> { totalAssayCompounds }
-        0 * queryAssayApiService.getAssayCompoundsResultset(max, offset, assayId) >> { assayCompoundsResultset }
-
-        "Assay ID is not defined" == response.text
-        response.status == HttpServletResponse.SC_NOT_FOUND
-
-        where:
-        label                                         | totalAssayCompounds | assayCompoundsResultset | max            | offset         | assayId        | expectedTotalCompounds
-        "Render view with name findCompoundsForAssay" | new Integer(10)     | ['a']                   | new Integer(1) | new Integer(2) | new Integer(0) | 1
-    }
-    /**
-     */
-    void "test search for Target if-branch #label"() {
-        when:
-        request.method = 'GET'
-        params.searchString = target
-        params.searchType = searchType.toString()
-        controller.search()
-        then:
-        1 * queryTargetApiService.findAssaysForAccessionTarget(target) >> { expectedAssays }
-
-        "/bardWebInterface/homePage" == view
-        expectedAssays == model.assays
-        0 == model.totalCompounds
-        assert model.compounds.isEmpty()
-        assert model.experiments.isEmpty()
-        assert model.projects.isEmpty()
-        where:
-        label                    | expectedAssays     | target | searchType
-        "Find Assays for target" | ['60001', '60003'] | "2"    | SearchType.TARGET
-    }
-    /**
-     */
-    void "test search for compounds given an assay #label"() {
-        given:
-
-        when: "We search with the Assay ids for Compounds"
-        request.method = 'GET'
-        params.searchString = assayId
-        params.searchType = SearchType.COMPOUNDS.toString()
-        params.max = max
-        params.offset = offset
-        controller.search()
-        then: "We expect to call the following methods and then go back to the home page"
-        1 * queryAssayApiService.getTotalAssayCompounds(new Integer(assayId)) >> { totalAssayCompounds }
-        1 * queryAssayApiService.getAssayCompoundsResultset(max, offset, new Integer(assayId)) >> { assayCompoundsResultset }
-
-        "/bardWebInterface/homePage" == view
-        model.assays == [assayId]
-        model.compounds == assayCompoundsResultset
-        totalAssayCompounds == model.totalCompounds
-        assert model.experiments.isEmpty()
-        assert model.projects.isEmpty()
-        where:
-        label                                           | totalAssayCompounds | assayCompoundsResultset            | max            | offset         | assayId | expectedTotalCompounds
-        "Search for compounds, given a single assay id" | new Integer(10)     | ['/bard/rest/v1/compounds/661090'] | new Integer(1) | new Integer(2) | '872'   | 1
-    }
-    /**
-     */
-    void "test search for compounds given an assayid which is not a number #label"() {
-        given:
-
-        when: "We search with the Assay ids for Compounds"
-        request.method = 'GET'
-        params.searchString = "P1234"
-        params.searchType = SearchType.COMPOUNDS.toString()
-
-        controller.search()
-        then: "We expect to call the following methods and then go back to the home page"
-        0 * queryAssayApiService.getTotalAssayCompounds(_) >> { }
-        0 * queryAssayApiService.getAssayCompoundsResultset(_, _, _) >> { }
-        assert flash.message == 'Search String must be a number'
-        assert response.redirectedUrl == '/bardWebInterface/homePage?searchString=P1234'
-    }
-    /**
-     */
-    void "test search for compounds given a multiple assays #label"() {
-        given:
-
-        when: "We search with the Assay ids for Compounds"
-        request.method = 'GET'
-        params.searchString = assayId1 + " " + assayId2
-        params.searchType = SearchType.COMPOUNDS.toString()
-        params.max = max
-        params.offset = offset
-        controller.search()
-        then: "We expect to call the following methods and then go back to the home page"
-        2 * queryAssayApiService.getTotalAssayCompounds(_) >> { totalAssayCompounds }
-        2 * queryAssayApiService.getAssayCompoundsResultset(_, _, _) >> { assayCompoundsResultset }
-
-        "/bardWebInterface/homePage" == view
-        model.assays == [assayId1, assayId2]
-        model.compounds == assayCompoundsResultset
-        totalAssayCompounds * 2 == model.totalCompounds
-        assert model.experiments.isEmpty()
-        assert model.projects.isEmpty()
-        where:
-        label                                           | totalAssayCompounds | assayCompoundsResultset            | max            | offset         | assayId1 | assayId2 | expectedTotalCompounds
-        "Search for compounds, given a single assay id" | new Integer(10)     | ['/bard/rest/v1/compounds/661090'] | new Integer(1) | new Integer(2) | '872'    | '873'    | 2
-    }
-    /**
-     */
-    void "test search for else-branch #label"() {
-        when:
-        request.method = 'GET'
-        controller.search()
-        then:
-        0 * queryTargetApiService.findAssaysForAccessionTarget(_) >> { }
-        0 * queryAssayApiService.getTotalAssayCompounds(_) >> { }
-        0 * queryAssayApiService.getAssayCompoundsResultset(_, _, _) >> { }
-        assert flash.message == 'Search String is required'
-        assert response.redirectedUrl == '/bardWebInterface/homePage'
-
-    }
-
-    /**
-     */
-    void "test search - erroneous input #label"() {
-        given:
-
-        when: "We search with the Assay ids for Compounds"
-        request.method = 'GET'
-        params.searchString = assayId
-        params.searchType = SearchType.COMPOUNDS.toString()
-        params.max = max
-        params.offset = offset
-        controller.search()
-        then: "We expect to call the following methods and then go back to the home page"
-        1 * queryAssayApiService.getTotalAssayCompounds(_) >> { totalAssayCompounds }
-        0 * queryAssayApiService.getAssayCompoundsResultset(_, _, _) >> { assayCompoundsResultset }
-
-        "/bardWebInterface/homePage" == view
-        model.assays == [assayId]
-        model.compounds == assayCompoundsResultset
-        totalAssayCompounds * 2 == model.totalCompounds
-        assert model.experiments.isEmpty()
-        assert model.projects.isEmpty()
-        where:
-        label                                           | totalAssayCompounds | assayCompoundsResultset | max            | offset         | assayId   | expectedTotalCompounds
-        "Search for compounds for a non-existing assay" | new Integer(0)      | []                      | new Integer(1) | new Integer(2) | '1234567' | 0
-    }
-
     void "test showCompound #label"() {
         when:
         request.method = 'GET'
-        controller.showCompound(new Integer(872))
+        controller.showCompound(cid)
         then:
-        1 * queryExecutorInternalService.executeGetRequestJSON("httpMock:///bard/rest/v1/compounds/872", null) >> { compoundJson }
+        1 * elasticSearchService.getCompoundDocument(_) >> { compoundJson }
 
         "/bardWebInterface/showCompound" == view
-        expectedCompoundJson.toString() == model.compoundJson.toString()
+        expectedCompoundJson == model.compoundJson.toString()
         872 == model.compoundId
 
         where:
-        label                                | compoundJson                               | expectedCompoundJson
-        "compound not found - error message" | [errorMessage: 'error message'] as JSON    | null
-        "Return a compound"                  | ['/bard/rest/v1/compounds/661090'] as JSON | ['/bard/rest/v1/compounds/661090'] as JSON
+        label                                | cid              | compoundJson                     | expectedCompoundJson
+        "compound not found - error message" | new Integer(872) | [:] as JSONObject                | '{"probeId":null,"sids":null,"smiles":null,"cid":null}'
+        "Return a compound"                  | new Integer(872) | JSON.parse(compoundDocumentJson) | '{"probeId":"null","sids":[4243156,24368917],"smiles":"C-C","cid":"3237916"}'
+    }
+
+    void "test search #label"() {
+        when:
+        request.method = 'GET'
+        controller.params.searchString = searchTerm
+        controller.search()
+
+        then:
+        1 * elasticSearchService.search(searchTerm) >> { resultJson }
+
+        assert "/bardWebInterface/homePage" == view
+        assert model.totalCompounds == expectedTotalCompounds
+        assert model.assays.size == expectedAssays
+        assert model.compounds.size == expectedCompounds
+        assert model.experiments == []
+        assert model.projects == []
+
+        where:
+        label                                | searchTerm | resultJson                                                 | expectedTotalCompounds | expectedAssays | expectedCompounds
+        "nothig was found"                   | '644'      | [assays: [], compounds: []] as JSONObject                  | 0                      | 0              | 0
+        "An Assay and a compound were found" | '644'      | [assays: [esAssay], compounds: [esCompound]] as JSONObject | 1                      | 1              | 1
     }
 }

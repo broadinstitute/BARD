@@ -17,7 +17,7 @@ class QueryTargetApiServiceUnitSpec extends Specification {
     void setup() {
         queryExecutorInternalService = Mock()
         queryTargetApiService = new QueryTargetApiService("accessionUrl", "geneUrl")
-        queryTargetApiService.queryExecutorService = queryExecutorInternalService
+        queryTargetApiService.queryExecutorInternalService = queryExecutorInternalService
     }
 
     void tearDown() {

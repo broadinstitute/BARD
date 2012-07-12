@@ -94,8 +94,12 @@ public abstract class ESResult {
  * A single assay result item, returned from ElasticSearch search.
  */
 public class ESAssay extends ESResult {
-    final String assayNumber
-    final String assayName
+    String assayNumber
+    String assayName
+
+    ESAssay() {
+        super()
+    }
 
     /**
      * A custom constructor to instantiate an assay from an ES assay doc type.

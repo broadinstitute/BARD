@@ -15,7 +15,7 @@ class QueryAssayApiServiceUnitSpec extends Specification {
 
     void setup() {
         queryExecutorInternalService = Mock()
-        service.queryExecutorService = queryExecutorInternalService
+        service.queryExecutorInternalService = queryExecutorInternalService
         service.grailsApplication.config.bard.services.elasticSearchService.restNode.baseUrl = 'httpMock://'
     }
 
