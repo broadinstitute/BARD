@@ -5,6 +5,8 @@ class AssayDefinitionController {
 	
 	static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
 
+    CardFactoryService cardFactoryService
+
     def index() {
 		redirect(action: "description", params: params)
 	}
@@ -35,7 +37,9 @@ class AssayDefinitionController {
 		else
 			flash.message = null
 
-		[assayInstance: assayInstance]
+        List<CardDto> cardDtoList = cardFactoryService.createCardDtoListForAssay(assayInstance)
+
+		[assayInstance: assayInstance, cardDtoList: cardDtoList]
 	}
 	
 	def findById(){
