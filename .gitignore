@@ -10,5 +10,5 @@ web-app/WEB-INF/classes/
 stacktrace.log
 thumbs.db
 atlassian-ide-plugin.xml
-**/*.zip.sha1
-**/*.zip
+*.zip.sha1
+*.zip
