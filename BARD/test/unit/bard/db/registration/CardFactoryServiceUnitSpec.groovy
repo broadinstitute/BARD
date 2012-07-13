@@ -12,10 +12,8 @@ import spock.lang.Specification
 @Mock(Assay)
 class CardFactoryServiceUnitSpec extends Specification {
 
-    MeasureContextItem singleItem
-
     void setup() {
-        singleItem = new MeasureContextItem(attributeElement: new Element(label: "Test"))
+
     }
 
     void "test createCardDtoListForAssay with null Assay"() {

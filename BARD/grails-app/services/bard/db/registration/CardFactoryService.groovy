@@ -6,10 +6,12 @@ class CardFactoryService {
 
     List<CardDto> createCardDtoListForAssay(Assay assay) {
         List<CardDto> cards = new ArrayList<CardDto>()
-        if (assay == null) {
+        if (assay == null || assay.getMeasureContextItems() == null) {
             return cards
         }
-        for (MeasureContextItem item : assay.getMeasureContextItems()) {
+        Set<MeasureContextItem> items = assay.getMeasureContextItems();
+        List<MeasureContextItem> itemList = items.sort { a, b -> a.attributeElement?.label <=> b.attributeElement?.label }
+        for (MeasureContextItem item : itemList) {
             // get all the assay-level context items at the top of the hierarchy
             // and create one card per item
             if (item.getMeasureContext() == null &&  // TODO add isAssayLevelContextItem() method to domain class
