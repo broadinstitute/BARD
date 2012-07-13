@@ -1,8 +1,11 @@
 package elasticsearchplugin
 
-import org.codehaus.groovy.grails.web.json.JSONArray
-import org.codehaus.groovy.grails.web.json.JSONObject
+//import org.codehaus.groovy.grails.web.json.JSONArray
+//import org.codehaus.groovy.grails.web.json.JSONObject
 import wslite.rest.RESTClientException
+//import grails.converters.JSON
+import wslite.json.JSONObject
+import wslite.json.JSONArray
 
 class ElasticSearchService {
 
@@ -14,24 +17,30 @@ class ElasticSearchService {
     String assayIndexTypeName
     String compoundIndexName
     String compoundIndexTypeName
-    final static String searchParamName = '_search?q='
+    final static String searchParamName = '_search'
 
+    final static String ES_QUERY_STRING_TEMPLATE = '''{
+        "query": {
+            "query_string": {
+                "default_field": "_all",
+                "query": "*"
+            }
+        },
+        "size": 200
+    }'''
 
     /**
-     *  TODO: Unify the return types so they both return one type of JSONObject
-     *
-     *  We should absolutely do that in the next iteration. Right now it is too late to refactor
      * @param queryObject
      * The JSONObject should conform to an ES query syntax otherwise the parser would throw an exception
      *  Uses the ES query String query
-     * @return  the data retrieved from the Server as a JSONObject
+     * @return the data retrieved from the Server as a JSONObject
      */
-    wslite.json.JSONObject searchQueryStringQuery(final String url, final wslite.json.JSONObject queryObject) {
-        def response = queryExecutorService.postRequest(url, queryObject.toString())
-        if(response instanceof wslite.json.JSONObject){
+    JSONObject searchQueryStringQuery(final String url, final JSONObject queryObject) {
+            def response = queryExecutorService.postRequest(url, queryObject.toString())
+        if (response instanceof JSONObject) {
             return response
         }
-        if(response instanceof wslite.json.JSONArray){
+        if (response instanceof JSONArray) {
             return response.toJSONObject(response)
         }
         //the response should either be a JSOnObject or a JSONArray
@@ -43,15 +52,21 @@ class ElasticSearchService {
      * @param searchString
      * @return
      */
-    JSONObject search(String searchTerm, Integer max = 99999) {
+    Map<String, List> search(String searchTerm, Integer max = 99999) {
+        String queryObject = searchTerm
+        if (searchTerm) {
+            queryObject = ES_QUERY_STRING_TEMPLATE.replaceAll("\\*", searchTerm)
+
+        }
+
         //1. Query all assays
         //2. Query all compounds
         //3. Build the returned map.
-        String elasticSearchQueryString = "${elasticSearchBaseUrl}/${assayIndexName}/${searchParamName}${searchTerm}&size=${max}"
+        String elasticSearchQueryString = "${elasticSearchBaseUrl}/${assayIndexName}/${searchParamName}"
 
         JSONObject response = new JSONObject()
         try {
-            response = queryExecutorService.executeGetRequestJSON(elasticSearchQueryString, null)
+            response = searchQueryStringQuery(elasticSearchQueryString, new JSONObject(queryObject))
         }
         catch (RESTClientException exp) {
             String message = exp?.response?.statusMessage
@@ -77,8 +92,7 @@ class ElasticSearchService {
             }
         }
 
-        final JSONObject responseObject = new JSONObject([assays: assays, compounds: compounds])
-        return responseObject
+        return ["assays":assays, "compounds":compounds]
     }
 
     JSONObject getAssayDocument(Integer docId) {
@@ -99,7 +113,7 @@ class ElasticSearchService {
         catch (RESTClientException exp) {
             String message = exp?.response?.statusMessage
             Integer code = exp?.response?.statusCode
-            log.error("Error querying the ElasticSearcg API server: ${code} - ${message}")
+            log.error("Error querying the ElasticSearch API server: ${code} - ${message}")
         }
 
         return result
@@ -109,7 +123,7 @@ class ElasticSearchService {
 /**
  * Describes a single ElasticSearch result item
  */
-public abstract class ESResult {
+public abstract class ESResult implements Serializable{
     String _index
     String _type
     String _id
@@ -118,7 +132,7 @@ public abstract class ESResult {
 /**
  * A single assay result item, returned from ElasticSearch search.
  */
-public class ESAssay extends ESResult {
+public class ESAssay extends ESResult implements Serializable{
     String assayNumber
     String assayName
 
@@ -149,7 +163,7 @@ public class ESAssay extends ESResult {
 /**
  * A single compound result item, returned from ElasticSearch search.
  */
-public class ESCompound extends ESResult {
+public class ESCompound extends ESResult implements Serializable{
     String cid
 
     ESCompound() {

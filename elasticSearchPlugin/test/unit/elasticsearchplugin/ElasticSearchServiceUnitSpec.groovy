@@ -1,9 +1,8 @@
 package elasticsearchplugin
 
-import grails.converters.JSON
 import grails.test.mixin.TestFor
 import spock.lang.Specification
-import org.codehaus.groovy.grails.web.json.JSONObject
+import wslite.json.JSONObject
 
 /**
  * See the API for {@link grails.test.mixin.support.GrailsUnitTestMixin} for usage instructions
@@ -41,18 +40,19 @@ class ElasticSearchServiceUnitSpec extends Specification {
     void "test search #label"() {
 
         when:
-        JSONObject response = service.search(searchTerm, 999999)
+        Map<String, List> response = service.search(searchTerm, 999999)
+        println()
 
         then:
-        queryExecutorService.executeGetRequestJSON(_, _) >> { assayJson }
+        queryExecutorService.postRequest(_, _) >> { assayJson }
 
-        assert response.assays.size == expectedAssayCount
-        assert response.compounds.size == expectedCompoundCount
+        assert response.assays.size() == expectedAssayCount
+        assert response.compounds.size() == expectedCompoundCount
 
         where:
-        label     | searchTerm | assayJson                           | expectedAssayCount | expectedCompoundCount
-        "for AID" | "644"      | JSON.parse(jsonAssayResponseString) | 1                  | 2
-        "for AID" | "644"      | JSON.parse('{}')                    | 0                  | 0
+        label     | searchTerm | assayJson                               | expectedAssayCount | expectedCompoundCount
+        "for AID" | "644"      | new JSONObject(jsonAssayResponseString) | 1                  | 2
+        "for AID" | "644"      | new JSONObject()                        | 0                  | 0
     }
 
     void "test getAssayDocument #label"() {
@@ -67,22 +67,22 @@ class ElasticSearchServiceUnitSpec extends Specification {
         assert response.keySet().size() == expectedKeySetSize
 
         where:
-        label     | assayId        | assayJson                      | expectedKeySetSize
-        "for AID" | 644 as Integer | JSON.parse('{"key": "value"}') | 1
-        "for AID" | 644 as Integer | JSON.parse('{}')               | 0
+        label     | assayId        | assayJson                          | expectedKeySetSize
+        "for AID" | 644 as Integer | new JSONObject('{"key": "value"}') | 1
+        "for AID" | 644 as Integer | new JSONObject()                   | 0
     }
 
     void "test query String Query #label"() {
-         when:
-        final wslite.json.JSONObject response = service.searchQueryStringQuery(url, queryStringDSL)
+        when:
+        final JSONObject response = service.searchQueryStringQuery(url, queryStringDSL)
 
         then:
         queryExecutorService.postRequest(_, _) >> { queryStringDSL }
         assert response.keySet().size() == expectedKeySetSize
 
         where:
-        label                  | url                     | queryStringDSL                       | expectedKeySetSize
-        "Non Empty JSONObject" | "http://localhost:9200" | new wslite.json.JSONObject([a: "b"]) | 1
-        "Empty JSONObject"     | "http://localhost:9200" | new wslite.json.JSONObject()         | 0
+        label                  | url                     | queryStringDSL           | expectedKeySetSize
+        "Non Empty JSONObject" | "http://localhost:9200" | new JSONObject([a: "b"]) | 1
+        "Empty JSONObject"     | "http://localhost:9200" | new JSONObject()         | 0
     }
 }
