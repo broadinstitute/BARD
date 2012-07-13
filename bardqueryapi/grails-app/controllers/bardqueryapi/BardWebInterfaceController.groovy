@@ -123,8 +123,8 @@ class AutoCompleteHelper {
     protected List<String> handleAutoComplete(final ElasticSearchService elasticSearchService,final String elasticSearchRootURL){
         final String urlToElastic = "${elasticSearchRootURL}/${AUTO_COMPLETE_SEARCH_URL}"
         String request = ELASTIC_AUTO_COMPLETE_SEARCH
-        if (params?.searchString) {
-            request = ELASTIC_AUTO_COMPLETE_SEARCH.replaceAll("\\*", "${params.searchString}*")
+        if (params?.term) {
+            request = ELASTIC_AUTO_COMPLETE_SEARCH.replaceAll("\\*", "${params.term}*")
 
         }
         final wslite.json.JSONObject jsonObject =  new wslite.json.JSONObject(request)
