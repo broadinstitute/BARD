@@ -1,8 +1,8 @@
 package elasticsearchplugin
 
+import grails.converters.JSON
 import grails.test.mixin.TestFor
 import spock.lang.Specification
-import grails.converters.JSON
 import org.codehaus.groovy.grails.web.json.JSONObject
 
 /**
@@ -25,7 +25,7 @@ class ElasticSearchServiceUnitSpec extends Specification {
     }'''
 
     void setup() {
-        queryExecutorService = Mock()
+        queryExecutorService = Mock(QueryExecutorService)
         service.queryExecutorService = queryExecutorService
         service.elasticSearchBaseUrl = 'http://mockMe'
         service.assayIndexName = 'assays'
@@ -44,7 +44,7 @@ class ElasticSearchServiceUnitSpec extends Specification {
         JSONObject response = service.search(searchTerm, 999999)
 
         then:
-        1 * queryExecutorService.executeGetRequestJSON(_, _) >> { assayJson }
+        queryExecutorService.executeGetRequestJSON(_, _) >> { assayJson }
 
         assert response.assays.size == expectedAssayCount
         assert response.compounds.size == expectedCompoundCount
@@ -62,7 +62,7 @@ class ElasticSearchServiceUnitSpec extends Specification {
         println()
 
         then:
-        1 * queryExecutorService.executeGetRequestJSON(_, _) >> { assayJson }
+        queryExecutorService.executeGetRequestJSON(_, _) >> { assayJson }
 
         assert response.keySet().size() == expectedKeySetSize
 
@@ -70,5 +70,19 @@ class ElasticSearchServiceUnitSpec extends Specification {
         label     | assayId        | assayJson                      | expectedKeySetSize
         "for AID" | 644 as Integer | JSON.parse('{"key": "value"}') | 1
         "for AID" | 644 as Integer | JSON.parse('{}')               | 0
+    }
+
+    void "test query String Query #label"() {
+         when:
+        final wslite.json.JSONObject response = service.searchQueryStringQuery(url, queryStringDSL)
+
+        then:
+        queryExecutorService.postRequest(_, _) >> { queryStringDSL }
+        assert response.keySet().size() == expectedKeySetSize
+
+        where:
+        label                  | url                     | queryStringDSL                       | expectedKeySetSize
+        "Non Empty JSONObject" | "http://localhost:9200" | new wslite.json.JSONObject([a: "b"]) | 1
+        "Empty JSONObject"     | "http://localhost:9200" | new wslite.json.JSONObject()         | 0
     }
 }

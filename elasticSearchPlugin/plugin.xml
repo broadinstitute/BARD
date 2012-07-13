@@ -1,4 +1,4 @@
-<plugin name='elastic-search' version='0.1-SNAPSHOT' grailsVersion='2.0 &gt; *'>
+<plugin name='elastic-search' version='0.2-SNAPSHOT' grailsVersion='2.0 &gt; *'>
   <author>Broad Chemical Biology Platform</author>
   <authorEmail>bard-tech@broadinstitute.org</authorEmail>
   <title>Elastic Search Plugin</title>
@@ -6,9 +6,11 @@
   <documentation>https://github.com/broadinstitute/BARD/wiki/elasticSearchPlugin</documentation>
   <type>ElasticSearchGrailsPlugin</type>
   <resources>
+    <resource>BardCodeNarcRuleSet</resource>
     <resource>spring.resources</resource>
     <resource>elasticsearchplugin.ElasticSearchService</resource>
     <resource>elasticsearchplugin.QueryExecutorService</resource>
+    <resource>elasticsearchplugin.RestClientFactoryService</resource>
   </resources>
   <repositories>
     <repository name='http://bard-repo:8081/artifactory/bard-virtual-repo' url='http://bard-repo:8081/artifactory/bard-virtual-repo/' />

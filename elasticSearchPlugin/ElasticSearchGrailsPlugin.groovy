@@ -1,12 +1,10 @@
-import org.codehaus.groovy.grails.plugins.GrailsPluginUtils
-import elasticsearchplugin.ElasticSearchService
 
 class ElasticSearchGrailsPlugin {
 
     String groupId = 'org.grails.plugins'
 
     // the plugin version
-    def version = "0.1-SNAPSHOT"
+    def version = "0.2-SNAPSHOT"
     // the version or versions of Grails the plugin is designed for
     def grailsVersion = "2.0 > *"
     // the other plugins this plugin depends on

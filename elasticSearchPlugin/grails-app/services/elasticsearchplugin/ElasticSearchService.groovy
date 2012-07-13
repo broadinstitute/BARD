@@ -15,6 +15,29 @@ class ElasticSearchService {
     String compoundIndexName
     String compoundIndexTypeName
     final static String searchParamName = '_search?q='
+
+
+    /**
+     *  TODO: Unify the return types so they both return one type of JSONObject
+     *
+     *  We should absolutely do that in the next iteration. Right now it is too late to refactor
+     * @param queryObject
+     * The JSONObject should conform to an ES query syntax otherwise the parser would throw an exception
+     *  Uses the ES query String query
+     * @return  the data retrieved from the Server as a JSONObject
+     */
+    wslite.json.JSONObject searchQueryStringQuery(final String url, final wslite.json.JSONObject queryObject) {
+        def response = queryExecutorService.postRequest(url, queryObject.toString())
+        if(response instanceof wslite.json.JSONObject){
+            return response
+        }
+        if(response instanceof wslite.json.JSONArray){
+            return response.toJSONObject(response)
+        }
+        //the response should either be a JSOnObject or a JSONArray
+        return null
+    }
+
     /**
      * Returns a json map of lists of assays, compounds, etc. as returned and parsed from the ElasticSearch query.
      * @param searchString
@@ -26,7 +49,7 @@ class ElasticSearchService {
         //3. Build the returned map.
         String elasticSearchQueryString = "${elasticSearchBaseUrl}/${assayIndexName}/${searchParamName}${searchTerm}&size=${max}"
 
-        JSONObject response = [:] as JSONObject
+        JSONObject response = new JSONObject()
         try {
             response = queryExecutorService.executeGetRequestJSON(elasticSearchQueryString, null)
         }
@@ -54,7 +77,8 @@ class ElasticSearchService {
             }
         }
 
-        return [assays: assays, compounds: compounds] as JSONObject
+        final JSONObject responseObject = new JSONObject([assays: assays, compounds: compounds])
+        return responseObject
     }
 
     JSONObject getAssayDocument(Integer docId) {
