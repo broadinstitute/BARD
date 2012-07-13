@@ -4,32 +4,34 @@ import org.apache.commons.lang.StringUtils
 
 class CardFactoryService {
 
+    private static final String ASSAY_COMPONENT_ROLE = "assay component role"
+
     List<CardDto> createCardDtoListForAssay(Assay assay) {
         List<CardDto> cards = new ArrayList<CardDto>()
         if (assay == null || assay.getMeasureContextItems() == null) {
             return cards
         }
-        Set<MeasureContextItem> items = assay.getMeasureContextItems();
-        List<MeasureContextItem> itemList = items.sort { a, b -> a.attributeElement?.label <=> b.attributeElement?.label }
-        for (MeasureContextItem item : itemList) {
-            // get all the assay-level context items at the top of the hierarchy
-            // and create one card per item
-            if (item.getMeasureContext() == null &&  // TODO add isAssayLevelContextItem() method to domain class
-                item.getParentGroup() == null) { // TODO add isChildContextItem() to domain class
+        List<MeasureContextItem> items = assay.getMeasureContextItems() as List
+        items.removeAll { item -> item.getMeasureContext() != null } // TODO add isAssayLevelContextItem() method to domain class
+        Map<Long, List<MeasureContextItem>> grouping = items.groupBy { item ->
+            if (item.parentGroup != null)
+                return item.parentGroup.id
+            else
+                return item.id
+        }
 
-                CardDto card = new CardDto()
-                cards.add(card)
-                card.title = generateCardTitle(item) // TODO change this to call out to Dictionary REST API by adding a DictionaryLookupService
-
-                List<MeasureContextItem> itemsForLine = new ArrayList<MeasureContextItem>()
-                itemsForLine.add(item)
-                if (item.children) {
-                    itemsForLine.addAll(item.children) // TODO change this to get all descendants
+        List<Long> groupingIds = grouping.keySet() as List
+        Collections.sort(groupingIds)
+        for (Long groupingId : groupingIds) {
+            List<MeasureContextItem> itemsInGroup = grouping.get(groupingId)
+            itemsInGroup = itemsInGroup.sort { a, b -> a.attributeElement?.label <=> b.attributeElement?.label }
+            CardDto card = new CardDto()
+            cards.add(card)
+            for (MeasureContextItem item : itemsInGroup) {
+                if (item.parentGroup == null || item.parentGroup.id == item.id) {
+                    card.title = generateCardTitle(item)
                 }
-
-                for (MeasureContextItem lineItem : itemsForLine) {
-                    card.lines.add(createCardLineDtoForMeasureContextItem(lineItem))
-                }
+                card.lines.add(createCardLineDtoForMeasureContextItem(item))
             }
         }
         return cards
@@ -40,12 +42,12 @@ class CardFactoryService {
      * @return the appropriate title (with special handling for assay component role)
      */
     protected String generateCardTitle(MeasureContextItem item) {
-        if (item.attributeElement.label == "assay component role") {
+        if (item.attributeElement.label == ASSAY_COMPONENT_ROLE) {
             return item.valueDisplay
         }
         else {
             for (MeasureContextItem child : item.getChildren()) {
-                if (child.attributeElement.label == "assay component role") {
+                if (child.attributeElement.label == ASSAY_COMPONENT_ROLE) {
                     return child.valueDisplay
                 }
             }
