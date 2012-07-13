@@ -1,0 +1,27 @@
+div.cardView table.gridtable {
+    width: 100%;
+    table-layout: fixed;
+}
+
+div.cardView table.gridtable caption {
+    text-align: left;
+    font-size: larger;
+    font-weight: bolder;
+    margin: 4px;
+}
+
+div.cardView div.card {
+    border: 1px solid black;
+    width: 300px;
+    padding: 5px;
+    float: left;
+    word-wrap: break-word;
+    min-height: 100px;
+    margin: 5px;
+    background-color: #e0ffff;
+}
+
+div.cardView table.gridtable td {
+    width: 50%;
+    border-color: #d3d3d3;
+}

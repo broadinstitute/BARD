@@ -23,12 +23,18 @@ class AssayDefinitionControllerUnitSpec extends Specification {
     }
 
     void 'test show'() {
+        given:
+        defineBeans {
+            cardFactoryService(CardFactoryService)
+        }
+
         when:
         params.id = 4
         def model = controller.show()
 
         then:
         model.assayInstance == assay
+        model.cardDtoList != null
     }
 
     void 'testFindById()'() {

@@ -6,6 +6,9 @@ class CardFactoryService {
 
     List<CardDto> createCardDtoListForAssay(Assay assay) {
         List<CardDto> cards = new ArrayList<CardDto>()
+        if (assay == null) {
+            return cards
+        }
         for (MeasureContextItem item : assay.getMeasureContextItems()) {
             // get all the assay-level context items at the top of the hierarchy
             // and create one card per item
@@ -14,11 +17,13 @@ class CardFactoryService {
 
                 CardDto card = new CardDto()
                 cards.add(card)
-                card.title = item.attributeElement.label // TODO change this to call out to Dictionary REST API by adding a DictionaryLookupService
+                card.title = generateCardTitle(item) // TODO change this to call out to Dictionary REST API by adding a DictionaryLookupService
 
                 List<MeasureContextItem> itemsForLine = new ArrayList<MeasureContextItem>()
                 itemsForLine.add(item)
-                itemsForLine.addAll(item.children) // TODO change this to get all descendants
+                if (item.children) {
+                    itemsForLine.addAll(item.children) // TODO change this to get all descendants
+                }
 
                 for (MeasureContextItem lineItem : itemsForLine) {
                     card.lines.add(createCardLineDtoForMeasureContextItem(lineItem))
@@ -26,6 +31,24 @@ class CardFactoryService {
             }
         }
         return cards
+    }
+
+    /**
+     * @param item a parent context item
+     * @return the appropriate title (with special handling for assay component role)
+     */
+    protected String generateCardTitle(MeasureContextItem item) {
+        if (item.attributeElement.label == "assay component role") {
+            return item.valueDisplay
+        }
+        else {
+            for (MeasureContextItem child : item.getChildren()) {
+                if (child.attributeElement.label == "assay component role") {
+                    return child.valueDisplay
+                }
+            }
+        }
+        return item.attributeElement.label
     }
 
     private CardLineDto createCardLineDtoForMeasureContextItem(MeasureContextItem item) {
