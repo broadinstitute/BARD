@@ -12,3 +12,5 @@ thumbs.db
 atlassian-ide-plugin.xml
 *.zip.sha1
 *.zip
+.idea/workspace.xml
+.idea/misc.xml
