@@ -74,6 +74,7 @@ application/vnd.bard.cap+xml;type=assay</xs:documentation>
                                             <xs:documentation>References the measure context name</xs:documentation>
                                         </xs:annotation>
                                     </xs:attribute>
+                                    <xs:attribute name="parentMeasure" type="bardID"/>
                                 </xs:complexType>
                             </xs:element>
                         </xs:sequence>
@@ -124,6 +125,8 @@ application/vnd.bard.cap+xml;type=assay</xs:documentation>
                                                   use="required"/>
                                             </xs:complexType>
                                         </xs:element>
+                                        <xs:element minOccurs="0" name="extValueId" type="xs:string"
+                                        />
                                     </xs:sequence>
                                     <xs:attribute name="measureContextItemId" type="bardID"
                                         use="required"/>
@@ -176,6 +179,15 @@ application/vnd.bard.cap+xml;type=assay</xs:documentation>
                 </xs:simpleType>
             </xs:attribute>
             <xs:attribute ref="readyForExtraction"/>
+            <xs:attribute name="assayType" use="required">
+                <xs:simpleType>
+                    <xs:restriction base="xs:string">
+                        <xs:enumeration value="Regular"/>
+                        <xs:enumeration value="Panel - Array"/>
+                        <xs:enumeration value="Panel - Group"/>
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:attribute>
         </xs:complexType>
         <xs:key name="MeasureContext_Key">
             <xs:selector xpath="assay/measureContexts/measureContext"/>

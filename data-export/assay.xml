@@ -2,6 +2,7 @@
  xsi:noNamespaceSchemaLocation="assaySchema.xsd"
  readyForExtraction="Ready"
  assayVersion="1"
+ assayType="Regular"
  status="Active">
   <assayName>Dose-response biochemical assay of inhibitors of Rho kinase 2 (Rock2)</assayName>
   <designedBy>Scripps Florida</designedBy>

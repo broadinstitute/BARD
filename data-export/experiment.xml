@@ -1,14 +1,11 @@
 <experiment xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
- xsi:noNamespaceSchemaLocation="BARDexportSchema.xsd"
- numberOfResults="600"
+ xsi:noNamespaceSchemaLocation="experimentSchema.xsd"
  experimentName="Dose-response biochemical assay of inhibitors of Rho kinase 2 (Rock2): 1"
  readyForExtraction="Ready"
  runDateFrom="2012-03-12T00:00:00.000-04:00"
- runDateTo="2012-03-12T00:00:00.000-04:00">
-    <experimentStatus>
-      <status>Approved</status>
-    </experimentStatus>
-    <resultContextItems />
+ runDateTo="2012-03-12T00:00:00.000-04:00"
+  status="Approved">
+
     <link rel='related' title='Link to Project' type='application/vnd.bard.cap+xml;type=project' href='http://localhost/api/cap/project/1' />
     <link rel='related' title='Link to Assay' type='application/vnd.bard.cap+xml;type=assay' href='http://localhost/api/cap/assay/1' />
     <link rel='edit' title='Use link to edit Experiment' type='application/vnd.bard.cap+xml;type=experiment' href='http://localhost/api/data/experiment/1' />
