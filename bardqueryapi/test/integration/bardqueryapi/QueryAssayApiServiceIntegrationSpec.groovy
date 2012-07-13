@@ -1,6 +1,7 @@
 package bardqueryapi
 
 import grails.plugin.spock.IntegrationSpec
+import elasticsearchplugin.QueryExecutorService
 
 /**
  * See the API for {@link grails.test.mixin.support.GrailsUnitTestMixin} for usage instructions
@@ -9,6 +10,7 @@ import grails.plugin.spock.IntegrationSpec
 class QueryAssayApiServiceIntegrationSpec extends IntegrationSpec {
 
     QueryAssayApiService queryAssayApiService
+    QueryExecutorService queryExecutorService
 
     void setup() {
         // Setup logic here
@@ -52,17 +54,21 @@ class QueryAssayApiServiceIntegrationSpec extends IntegrationSpec {
         }
     }
 
-    void testFindPublicationsByAssay() {
+    void testAssays() {
         given:
-        final String publicationUrl = "/bard/rest/v1/assays/1772"
+        final String publicationUrl = "http://assay.nih.gov/bard/rest/v1/assays"
         when:
-        final def publicationsByAssay = queryAssayApiService.findPublicationsByAssay(publicationUrl)
+        def assays = queryExecutorService.executeGetRequestJSON(publicationUrl,null)
+
         then:
-        assert publicationsByAssay
-        publicationsByAssay.each {publicationByAssay ->
-            println publicationByAssay
+        assert assays
+        int counter = 0
+        assays.each {assay ->
+            ++counter
+            println counter + ":" + assay
         }
     }
+
 //    void testFindAssayByAid() {
 //        given:
 //        String aid = 493159

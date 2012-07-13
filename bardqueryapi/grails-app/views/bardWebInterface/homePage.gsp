@@ -6,6 +6,11 @@
 
     <r:script>
         $(document).ready(function () {
+            var autoOpts = {
+                source: "/bardqueryapi/bardWebInterface/autoCompleteAssayNames",
+                minLength: 2
+            }
+            $( "#searchString" ).autocomplete(autoOpts);
             $("#accordion").accordion({ autoHeight:false });
         })
     </r:script>
@@ -28,7 +33,7 @@
         <g:form name="aidForm" controller="bardWebInterface" action="search">
 
             <div class="content ">
-                <g:textField name="searchString" value="${params?.searchString}" size="50"/>
+                <g:textField id="searchString" name="searchString" value="${params?.searchString}" size="50"/>
                 <br/><br/>
                 <g:submitButton name="search"
                                 value="Search"/>
