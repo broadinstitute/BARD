@@ -132,7 +132,7 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
     void "test handle autocomplete #label"() {
         when:
         request.method = 'GET'
-        controller.params.searchString = searchString
+        controller.params.term = searchString
         final List<String> responseList = controller.handleAutoComplete(this.elasticSearchService, "http://localhost")
 
 

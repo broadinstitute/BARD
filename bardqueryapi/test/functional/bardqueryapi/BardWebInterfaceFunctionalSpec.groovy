@@ -38,7 +38,7 @@ class BardWebInterfaceFunctionalSpec extends Specification {
 
         StringBuilder sb = new StringBuilder()
         sb.append(baseUrl)
-        sb.append("/bardWebInterface/autoCompleteAssayNames?searchString=Bro*")
+        sb.append("/bardWebInterface/autoCompleteAssayNames?term=Bro*")
 
         final String requestUrl = sb.toString()
         RESTClient http = new RESTClient(requestUrl)

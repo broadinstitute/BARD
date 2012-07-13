@@ -16,7 +16,8 @@ class ElasticSearchGrailsPlugin {
     // resources that are excluded from plugin packaging
     def pluginExcludes = [
             "grails-app/views/error.gsp",
-            "web-app"
+            "web-app",
+            "grails-app/conf/BardCodeNarcRuleSet.groovy"
     ]
 
     // TODO Fill in these fields
