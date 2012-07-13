@@ -1,4 +1,5 @@
 import elasticsearchplugin.ElasticSearchService
+import elasticsearchplugin.RestClientFactoryService
 
 // Place your Spring DSL code here
 beans = {
@@ -13,6 +14,9 @@ beans = {
         url = 'http://localhost:9200'
         httpClient = ref('httpClient')
         authorization = ref('clientBasicAuth')
+    }
+    restClientFactoryService(RestClientFactoryService) {
+        restClient = ref('restClient')
     }
     elasticSearchService(elasticsearchplugin.ElasticSearchService) {
         elasticSearchBaseUrl = 'http://localhost:9200'

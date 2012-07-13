@@ -1,13 +1,12 @@
 package bardqueryapi
 
-import grails.converters.JSON
-import grails.test.mixin.TestFor
-import spock.lang.Specification
-
-import elasticsearchplugin.ElasticSearchService
-import org.codehaus.groovy.grails.web.json.JSONObject
 import elasticsearchplugin.ESAssay
 import elasticsearchplugin.ESCompound
+import elasticsearchplugin.ElasticSearchService
+import grails.converters.JSON
+import grails.test.mixin.TestFor
+import org.codehaus.groovy.grails.web.json.JSONObject
+import spock.lang.Specification
 
 /**
  * See the API for {@link grails.test.mixin.support.GrailsUnitTestMixin} for usage instructions
@@ -34,6 +33,19 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
             "url": "null"
         }
     }'''
+    final static String AUTO_COMPLETE_NAMES = '''
+{
+    "hits": {
+        "hits": [
+            {
+                "fields": {
+                    "name": "Broad Institute MLPCN Platelet Activation"
+                }
+            }
+        ]
+    }
+  }
+ '''
 
     final static ESAssay esAssay = new ESAssay(
             _index: 'index',
@@ -51,8 +63,9 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
     )
 
     void setup() {
-        elasticSearchService = Mock()
+        elasticSearchService = Mock(ElasticSearchService)
         controller.elasticSearchService = this.elasticSearchService
+        controller.metaClass.mixin(AutoCompleteHelper)
     }
 
     void tearDown() {
@@ -64,7 +77,7 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
         request.method = 'GET'
         controller.showCompound(cid)
         then:
-        1 * elasticSearchService.getCompoundDocument(_) >> { compoundJson }
+        elasticSearchService.getCompoundDocument(_) >> { compoundJson }
 
         "/bardWebInterface/showCompound" == view
         expectedCompoundJson == model.compoundJson.toString()
@@ -72,8 +85,8 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
 
         where:
         label                                | cid              | compoundJson                     | expectedCompoundJson
-        "compound not found - error message" | new Integer(872) | [:] as JSONObject                | '{"probeId":null,"sids":null,"smiles":null,"cid":null}'
-        "Return a compound"                  | new Integer(872) | JSON.parse(compoundDocumentJson) | '{"probeId":"null","sids":[4243156,24368917],"smiles":"C-C","cid":"3237916"}'
+        "compound not found - error message" | new Integer(872) | [:] as JSONObject                | '{}'
+        "Return a compound"                  | new Integer(872) | JSON.parse(compoundDocumentJson) | '{"probeId":"null","sids":"[4243156,24368917]","cid":"3237916","smiles":"C-C"}'
     }
 
     void "test search #label"() {
@@ -83,7 +96,7 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
         controller.search()
 
         then:
-        1 * elasticSearchService.search(searchTerm) >> { resultJson }
+        elasticSearchService.search(searchTerm) >> { resultJson }
 
         assert "/bardWebInterface/homePage" == view
         assert model.totalCompounds == expectedTotalCompounds
@@ -94,7 +107,43 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
 
         where:
         label                                | searchTerm | resultJson                                                 | expectedTotalCompounds | expectedAssays | expectedCompounds
-        "nothig was found"                   | '644'      | [assays: [], compounds: []] as JSONObject                  | 0                      | 0              | 0
+        "nothing was found"                  | '644'      | [assays: [], compounds: []] as JSONObject                  | 0                      | 0              | 0
         "An Assay and a compound were found" | '644'      | [assays: [esAssay], compounds: [esCompound]] as JSONObject | 1                      | 1              | 1
+    }
+
+    void "test autocomplete #label"() {
+        when:
+        request.method = 'GET'
+        controller.params.searchString = searchString
+        controller.autoCompleteAssayNames()
+
+
+        then:
+        elasticSearchService.searchQueryStringQuery(_, _) >> { expectedJSONResponse }
+        assertEquals expectedRender, controller.response.json.toString()
+
+        where:
+        label                 | searchString | expectedJSONResponse                            | expectedRender
+        "Return two strings"  | "Bro"        | new wslite.json.JSONObject(AUTO_COMPLETE_NAMES) | '["Broad Institute MLPCN Platelet Activation"]'
+        "Return Empty String" | "644"        | []                                              | '[""]'
+
+    }
+
+    void "test handle autocomplete #label"() {
+        when:
+        request.method = 'GET'
+        controller.params.term = searchString
+        final List<String> responseList = controller.handleAutoComplete(this.elasticSearchService, "http://localhost")
+
+
+        then:
+        elasticSearchService.searchQueryStringQuery(_, _) >> { expectedJSONResponse }
+        responseList == expectedList
+
+        where:
+        label                 | searchString | expectedJSONResponse                            | expectedList
+        "Return two strings"  | "Bro"        | new wslite.json.JSONObject(AUTO_COMPLETE_NAMES) | ["Broad Institute MLPCN Platelet Activation"]
+        "Return Empty String" | "644"        | []                                              | []
+
     }
 }
