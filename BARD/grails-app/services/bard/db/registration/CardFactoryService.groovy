@@ -4,6 +4,8 @@ import org.apache.commons.lang.StringUtils
 
 class CardFactoryService {
 
+    private static final String ASSAY_COMPONENT_ROLE = "assay component role"
+
     List<CardDto> createCardDtoListForAssay(Assay assay) {
         List<CardDto> cards = new ArrayList<CardDto>()
         if (assay == null || assay.getMeasureContextItems() == null) {
@@ -40,12 +42,12 @@ class CardFactoryService {
      * @return the appropriate title (with special handling for assay component role)
      */
     protected String generateCardTitle(MeasureContextItem item) {
-        if (item.attributeElement.label == "assay component role") {
+        if (item.attributeElement.label == ASSAY_COMPONENT_ROLE) {
             return item.valueDisplay
         }
         else {
             for (MeasureContextItem child : item.getChildren()) {
-                if (child.attributeElement.label == "assay component role") {
+                if (child.attributeElement.label == ASSAY_COMPONENT_ROLE) {
                     return child.valueDisplay
                 }
             }
