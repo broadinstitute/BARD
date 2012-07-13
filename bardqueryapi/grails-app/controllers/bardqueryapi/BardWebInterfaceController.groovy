@@ -1,9 +1,5 @@
 package bardqueryapi
 
-import grails.converters.JSON
-import org.codehaus.groovy.grails.web.json.JSONObject
-
-import javax.servlet.http.HttpServletResponse
 import elasticsearchplugin.ElasticSearchService
 import elasticsearchplugin.ESAssay
 import elasticsearchplugin.ESCompound
@@ -37,7 +33,7 @@ class BardWebInterfaceController {
     def search() {
         def searchString = params.searchString?.trim()
         if (searchString) {
-            org.codehaus.groovy.grails.web.json.JSONObject result = elasticSearchService.search(searchString)
+            Map<String, List> result = elasticSearchService.search(searchString)
 
             List<Map> assays = []
             for (ESAssay assay in result.assays) {
@@ -66,8 +62,8 @@ class BardWebInterfaceController {
         Integer compoundId = cid ?: params.id as Integer//if 'assay' param is provided, use that; otherwise, try the default id one
 
         if (compoundId) {
-            org.codehaus.groovy.grails.web.json.JSONObject compoundESDocument = elasticSearchService.getCompoundDocument(compoundId)
-            org.codehaus.groovy.grails.web.json.JSONObject compoundJson = [cid: compoundESDocument?._id,
+            JSONObject compoundESDocument = elasticSearchService.getCompoundDocument(compoundId)
+            JSONObject compoundJson = [cid: compoundESDocument?._id,
                     sids: compoundESDocument?._source?.sids,
                     probeId: compoundESDocument?._source?.probeId,
                     smiles: compoundESDocument?._source?.smiles] as JSONObject
@@ -127,9 +123,9 @@ class AutoCompleteHelper {
             request = ELASTIC_AUTO_COMPLETE_SEARCH.replaceAll("\\*", "${params.term}*")
 
         }
-        final wslite.json.JSONObject jsonObject =  new wslite.json.JSONObject(request)
+        final JSONObject jsonObject =  new JSONObject(request)
 
-        final wslite.json.JSONObject responseObject = elasticSearchService.searchQueryStringQuery(urlToElastic,jsonObject)
+        final JSONObject responseObject = elasticSearchService.searchQueryStringQuery(urlToElastic,jsonObject)
         return responseObject?.hits?.hits.collect { it.fields }.collect { it.name }
 
     }
