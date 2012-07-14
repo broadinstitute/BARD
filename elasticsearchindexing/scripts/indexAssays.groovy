@@ -24,8 +24,9 @@ assert ncgcAssaysURL
 final String elasticSearchURL = elasticSearchAssayIndexService.elasticSearchURL
 assert elasticSearchURL
 
-//craete the mapping for assays
-elasticSearchAssayIndexService.createIndexAndMappingForAssayType(indexName, indexType)
+//println elasticSearchURL
+//create the mapping for assays
+//elasticSearchAssayIndexService.createIndexAndMappingForAssayType(indexName, indexType)
 //now index assays from ncgc
 elasticSearchAssayIndexService.indexAssays(indexName, indexType,ncgcAssaysURL)
 

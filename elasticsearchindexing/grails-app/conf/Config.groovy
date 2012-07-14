@@ -1,6 +1,6 @@
 import grails.util.Environment
 
-elasticsearch.server.url = "http://localhost:9200/"
+elasticsearch.server.url = "http://bard-qa-vm:9200/"
 ncgc.server.url.rest.api.root = "http://assay.nih.gov:8080/"
 ncgc.server.url.rest.api.relative = "bard/rest/v1/"
 

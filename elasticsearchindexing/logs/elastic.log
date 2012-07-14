@@ -1,0 +1,204 @@
+2012-07-12 12:58:47,423 [pool-8-thread-18] ERROR bardelasticsearch.ElasticSearchCompoundsIndexService  - http://assay.nih.gov:8080/bard/rest/v1/experiments/540277/compounds?skip=55000&top=500&expand=false
+2012-07-12 12:58:47,426 [pool-8-thread-18] ERROR bardelasticsearch.ElasticSearchCompoundsIndexService  - java.lang.NullPointerException: Cannot get property 'statusMessage' on null object
+2012-07-12 12:58:56,674 [pool-8-thread-6] ERROR bardelasticsearch.ElasticSearchCompoundsIndexService  - http://assay.nih.gov:8080/bard/rest/v1/experiments/1906/compounds?skip=11000&top=500&expand=false
+2012-07-12 12:58:56,675 [pool-8-thread-6] ERROR bardelasticsearch.ElasticSearchCompoundsIndexService  - java.lang.NullPointerException: Cannot get property 'statusMessage' on null object
+2012-07-12 12:58:59,859 [pool-8-thread-1] ERROR bardelasticsearch.ElasticSearchCompoundsIndexService  - http://assay.nih.gov:8080/bard/rest/v1/experiments/760/compounds?skip=68500&top=500&expand=false
+2012-07-12 12:58:59,860 [pool-8-thread-1] ERROR bardelasticsearch.ElasticSearchCompoundsIndexService  - java.lang.NullPointerException: Cannot get property 'statusMessage' on null object
+2012-07-12 12:59:02,006 [pool-8-thread-8] ERROR bardelasticsearch.ElasticSearchCompoundsIndexService  - http://assay.nih.gov:8080/bard/rest/v1/experiments/2315/compounds?skip=270500&top=500&expand=false
+2012-07-12 12:59:02,006 [pool-8-thread-8] ERROR bardelasticsearch.ElasticSearchCompoundsIndexService  - java.lang.NullPointerException: Cannot get property 'statusMessage' on null object
+2012-07-12 12:59:05,411 [pool-8-thread-12] ERROR bardelasticsearch.ElasticSearchCompoundsIndexService  - http://assay.nih.gov:8080/bard/rest/v1/experiments/485281/compounds?skip=172500&top=500&expand=false
+2012-07-12 12:59:05,411 [pool-8-thread-12] ERROR bardelasticsearch.ElasticSearchCompoundsIndexService  - java.lang.NullPointerException: Cannot get property 'statusMessage' on null object
+2012-07-12 13:32:19,097 [pool-8-thread-12] ERROR bardelasticsearch.ElasticSearchCompoundsIndexService  - http://assay.nih.gov:8080/bard/rest/v1/experiments/485294/compounds?skip=139500&top=500&expand=false
+2012-07-12 13:32:19,097 [pool-8-thread-12] ERROR bardelasticsearch.ElasticSearchCompoundsIndexService  - java.lang.NullPointerException: Cannot get property 'statusMessage' on null object
+2012-07-13 09:23:53,694 [Thread-15] ERROR bardelasticsearch.ElasticSearchAssayIndexService  - wslite.rest.RESTClientException: 400 Bad Request
+2012-07-13 09:25:46,838 [Thread-15] ERROR bardelasticsearch.ElasticSearchAssayIndexService  - wslite.rest.RESTClientException: 400 Bad Request
+2012-07-13 10:00:23,734 [Thread-15] ERROR bardelasticsearch.ElasticSearchAssayIndexService  - wslite.rest.RESTClientException: 400 Bad Request
+2012-07-13 10:30:37,934 [Thread-15] ERROR bardelasticsearch.ElasticSearchAssayIndexService  - wslite.rest.RESTClientException: 400 Bad Request
+2012-07-13 10:41:02,317 [main] ERROR bardelasticsearch.ElasticSearchAssayIndexService  - wslite.rest.RESTClientException: 400 Bad Request
+2012-07-13 10:43:20,777 [main] ERROR bardelasticsearch.ElasticSearchAssayIndexService  - wslite.rest.RESTClientException: 400 Bad Request
+2012-07-13 21:04:02,830 [pool-8-thread-6] ERROR bardelasticsearch.ElasticSearchCompoundsIndexService  - http://assay.nih.gov:8080/bard/rest/v1/experiments/2014/compounds?skip=282500&top=500&expand=false
+2012-07-13 21:04:02,835 [pool-8-thread-6] ERROR bardelasticsearch.ElasticSearchCompoundsIndexService  - java.lang.NullPointerException: Cannot get property 'statusMessage' on null object
+2012-07-14 07:32:18,928 [pool-8-thread-10] ERROR bardelasticsearch.ElasticSearchCompoundsIndexService  - http://assay.nih.gov:8080/bard/rest/v1/compounds/3785328
+2012-07-14 07:32:18,933 [pool-8-thread-10] ERROR bardelasticsearch.ElasticSearchCompoundsIndexService  - java.lang.NullPointerException: Cannot get property 'statusMessage' on null object
+2012-07-14 07:33:48,716 [pool-8-thread-13] ERROR bardelasticsearch.ElasticSearchCompoundsIndexService  - http://assay.nih.gov:8080/bard/rest/v1/compounds/8069391
+2012-07-14 07:33:48,719 [pool-8-thread-13] ERROR bardelasticsearch.ElasticSearchCompoundsIndexService  - java.lang.NullPointerException: Cannot get property 'statusMessage' on null object
+2012-07-14 07:33:48,724 [pool-8-thread-16] ERROR bardelasticsearch.ElasticSearchCompoundsIndexService  - http://assay.nih.gov:8080/bard/rest/v1/compounds/24980288
+2012-07-14 07:33:48,724 [pool-8-thread-16] ERROR bardelasticsearch.ElasticSearchCompoundsIndexService  - java.lang.NullPointerException: Cannot get property 'statusMessage' on null object
+2012-07-14 07:33:48,854 [pool-8-thread-12] ERROR bardelasticsearch.ElasticSearchCompoundsIndexService  - http://assay.nih.gov:8080/bard/rest/v1/compounds/5728937
+2012-07-14 07:33:48,855 [pool-8-thread-12] ERROR bardelasticsearch.ElasticSearchCompoundsIndexService  - java.lang.NullPointerException: Cannot get property 'statusMessage' on null object
+2012-07-14 07:33:58,902 [pool-8-thread-18] ERROR bardelasticsearch.ElasticSearchCompoundsIndexService  - http://assay.nih.gov:8080/bard/rest/v1/compounds/360849
+2012-07-14 07:33:58,902 [pool-8-thread-18] ERROR bardelasticsearch.ElasticSearchCompoundsIndexService  - java.lang.NullPointerException: Cannot get property 'statusMessage' on null object
+2012-07-14 07:34:00,862 [pool-8-thread-5] ERROR bardelasticsearch.ElasticSearchCompoundsIndexService  - http://assay.nih.gov:8080/bard/rest/v1/compounds/1768056
+2012-07-14 07:34:00,863 [pool-8-thread-5] ERROR bardelasticsearch.ElasticSearchCompoundsIndexService  - java.lang.NullPointerException: Cannot get property 'statusMessage' on null object
+2012-07-14 07:35:30,926 [pool-8-thread-15] ERROR bardelasticsearch.ElasticSearchCompoundsIndexService  - http://assay.nih.gov:8080/bard/rest/v1/compounds/20953585
+2012-07-14 07:35:30,926 [pool-8-thread-15] ERROR bardelasticsearch.ElasticSearchCompoundsIndexService  - java.lang.NullPointerException: Cannot get property 'statusMessage' on null object
+2012-07-14 07:35:41,268 [pool-8-thread-10] ERROR bardelasticsearch.ElasticSearchCompoundsIndexService  - http://assay.nih.gov:8080/bard/rest/v1/compounds/3811993
+2012-07-14 07:35:41,269 [pool-8-thread-10] ERROR bardelasticsearch.ElasticSearchCompoundsIndexService  - java.lang.NullPointerException: Cannot get property 'statusMessage' on null object
+2012-07-14 07:35:41,517 [pool-8-thread-3] ERROR bardelasticsearch.ElasticSearchCompoundsIndexService  - http://assay.nih.gov:8080/bard/rest/v1/compounds/860095
+2012-07-14 07:35:41,517 [pool-8-thread-3] ERROR bardelasticsearch.ElasticSearchCompoundsIndexService  - java.lang.NullPointerException: Cannot get property 'statusMessage' on null object
+2012-07-14 07:35:41,760 [pool-8-thread-1] ERROR bardelasticsearch.ElasticSearchCompoundsIndexService  - http://assay.nih.gov:8080/bard/rest/v1/compounds/540523
+2012-07-14 07:35:41,761 [pool-8-thread-1] ERROR bardelasticsearch.ElasticSearchCompoundsIndexService  - java.lang.NullPointerException: Cannot get property 'statusMessage' on null object
+2012-07-14 07:35:43,640 [pool-8-thread-8] ERROR bardelasticsearch.ElasticSearchCompoundsIndexService  - http://assay.nih.gov:8080/bard/rest/v1/compounds/2965100
+2012-07-14 07:35:43,640 [pool-8-thread-8] ERROR bardelasticsearch.ElasticSearchCompoundsIndexService  - java.lang.NullPointerException: Cannot get property 'statusMessage' on null object
+2012-07-14 07:35:43,679 [pool-8-thread-16] ERROR bardelasticsearch.ElasticSearchCompoundsIndexService  - http://assay.nih.gov:8080/bard/rest/v1/compounds/24980673
+2012-07-14 07:35:43,679 [pool-8-thread-16] ERROR bardelasticsearch.ElasticSearchCompoundsIndexService  - java.lang.NullPointerException: Cannot get property 'statusMessage' on null object
+2012-07-14 07:39:03,830 [pool-8-thread-16] ERROR bardelasticsearch.ElasticSearchCompoundsIndexService  - http://assay.nih.gov:8080/bard/rest/v1/compounds/24981372
+2012-07-14 07:39:03,830 [pool-8-thread-16] ERROR bardelasticsearch.ElasticSearchCompoundsIndexService  - java.lang.NullPointerException: Cannot get property 'statusMessage' on null object
+2012-07-14 07:39:03,839 [pool-8-thread-15] ERROR bardelasticsearch.ElasticSearchCompoundsIndexService  - http://assay.nih.gov:8080/bard/rest/v1/compounds/22333913
+2012-07-14 07:39:03,839 [pool-8-thread-15] ERROR bardelasticsearch.ElasticSearchCompoundsIndexService  - java.lang.NullPointerException: Cannot get property 'statusMessage' on null object
+2012-07-14 07:39:03,850 [pool-8-thread-17] ERROR bardelasticsearch.ElasticSearchCompoundsIndexService  - http://assay.nih.gov:8080/bard/rest/v1/compounds/6066494
+2012-07-14 07:39:03,851 [pool-8-thread-17] ERROR bardelasticsearch.ElasticSearchCompoundsIndexService  - java.lang.NullPointerException: Cannot get property 'statusMessage' on null object
+2012-07-14 07:39:03,974 [pool-8-thread-4] ERROR bardelasticsearch.ElasticSearchCompoundsIndexService  - http://assay.nih.gov:8080/bard/rest/v1/compounds/1219021
+2012-07-14 07:39:03,975 [pool-8-thread-4] ERROR bardelasticsearch.ElasticSearchCompoundsIndexService  - java.lang.NullPointerException: Cannot get property 'statusMessage' on null object
+2012-07-14 07:39:04,258 [pool-8-thread-10] ERROR bardelasticsearch.ElasticSearchCompoundsIndexService  - http://assay.nih.gov:8080/bard/rest/v1/compounds/3837806
+2012-07-14 07:39:04,258 [pool-8-thread-10] ERROR bardelasticsearch.ElasticSearchCompoundsIndexService  - java.lang.NullPointerException: Cannot get property 'statusMessage' on null object
+2012-07-14 07:39:04,278 [pool-8-thread-8] ERROR bardelasticsearch.ElasticSearchCompoundsIndexService  - http://assay.nih.gov:8080/bard/rest/v1/compounds/2970287
+2012-07-14 07:39:04,278 [pool-8-thread-8] ERROR bardelasticsearch.ElasticSearchCompoundsIndexService  - java.lang.NullPointerException: Cannot get property 'statusMessage' on null object
+2012-07-14 07:39:04,293 [pool-8-thread-12] ERROR bardelasticsearch.ElasticSearchCompoundsIndexService  - http://assay.nih.gov:8080/bard/rest/v1/compounds/5760303
+2012-07-14 07:39:04,294 [pool-8-thread-12] ERROR bardelasticsearch.ElasticSearchCompoundsIndexService  - java.lang.NullPointerException: Cannot get property 'statusMessage' on null object
+2012-07-14 07:39:04,328 [pool-8-thread-19] ERROR bardelasticsearch.ElasticSearchCompoundsIndexService  - http://assay.nih.gov:8080/bard/rest/v1/compounds/16009791
+2012-07-14 07:39:04,329 [pool-8-thread-19] ERROR bardelasticsearch.ElasticSearchCompoundsIndexService  - java.lang.NullPointerException: Cannot get property 'statusMessage' on null object
+2012-07-14 07:39:04,361 [pool-8-thread-9] ERROR bardelasticsearch.ElasticSearchCompoundsIndexService  - http://assay.nih.gov:8080/bard/rest/v1/compounds/3238473
+2012-07-14 07:39:04,362 [pool-8-thread-9] ERROR bardelasticsearch.ElasticSearchCompoundsIndexService  - java.lang.NullPointerException: Cannot get property 'statusMessage' on null object
+2012-07-14 07:39:04,421 [pool-8-thread-14] ERROR bardelasticsearch.ElasticSearchCompoundsIndexService  - http://assay.nih.gov:8080/bard/rest/v1/compounds/16194690
+2012-07-14 07:39:04,421 [pool-8-thread-14] ERROR bardelasticsearch.ElasticSearchCompoundsIndexService  - java.lang.NullPointerException: Cannot get property 'statusMessage' on null object
+2012-07-14 07:39:04,480 [pool-8-thread-20] ERROR bardelasticsearch.ElasticSearchCompoundsIndexService  - http://assay.nih.gov:8080/bard/rest/v1/compounds/16031801
+2012-07-14 07:39:04,480 [pool-8-thread-20] ERROR bardelasticsearch.ElasticSearchCompoundsIndexService  - java.lang.NullPointerException: Cannot get property 'statusMessage' on null object
+2012-07-14 07:40:49,170 [pool-8-thread-8] ERROR bardelasticsearch.ElasticSearchCompoundsIndexService  - http://assay.nih.gov:8080/bard/rest/v1/compounds/2972420
+2012-07-14 07:40:49,170 [pool-8-thread-8] ERROR bardelasticsearch.ElasticSearchCompoundsIndexService  - java.lang.NullPointerException: Cannot get property 'statusMessage' on null object
+2012-07-14 07:42:29,256 [pool-8-thread-6] ERROR bardelasticsearch.ElasticSearchCompoundsIndexService  - http://assay.nih.gov:8080/bard/rest/v1/compounds/2345101
+2012-07-14 07:42:29,260 [pool-8-thread-6] ERROR bardelasticsearch.ElasticSearchCompoundsIndexService  - java.lang.NullPointerException: Cannot get property 'statusMessage' on null object
+2012-07-14 07:42:29,568 [pool-8-thread-9] ERROR bardelasticsearch.ElasticSearchCompoundsIndexService  - http://assay.nih.gov:8080/bard/rest/v1/compounds/3239310
+2012-07-14 07:42:29,568 [pool-8-thread-9] ERROR bardelasticsearch.ElasticSearchCompoundsIndexService  - java.lang.NullPointerException: Cannot get property 'statusMessage' on null object
+2012-07-14 07:44:11,620 [pool-8-thread-12] ERROR bardelasticsearch.ElasticSearchCompoundsIndexService  - http://assay.nih.gov:8080/bard/rest/v1/compounds/5807939
+2012-07-14 07:44:11,620 [pool-8-thread-12] ERROR bardelasticsearch.ElasticSearchCompoundsIndexService  - java.lang.NullPointerException: Cannot get property 'statusMessage' on null object
+2012-07-14 07:44:11,883 [pool-8-thread-5] ERROR bardelasticsearch.ElasticSearchCompoundsIndexService  - http://assay.nih.gov:8080/bard/rest/v1/compounds/1870175
+2012-07-14 07:44:11,883 [pool-8-thread-5] ERROR bardelasticsearch.ElasticSearchCompoundsIndexService  - java.lang.NullPointerException: Cannot get property 'statusMessage' on null object
+2012-07-14 07:44:13,266 [pool-8-thread-13] ERROR bardelasticsearch.ElasticSearchCompoundsIndexService  - http://assay.nih.gov:8080/bard/rest/v1/compounds/9368524
+2012-07-14 07:44:13,266 [pool-8-thread-13] ERROR bardelasticsearch.ElasticSearchCompoundsIndexService  - java.lang.NullPointerException: Cannot get property 'statusMessage' on null object
+2012-07-14 07:44:13,396 [pool-8-thread-4] ERROR bardelasticsearch.ElasticSearchCompoundsIndexService  - http://assay.nih.gov:8080/bard/rest/v1/compounds/1244098
+2012-07-14 07:44:13,396 [pool-8-thread-4] ERROR bardelasticsearch.ElasticSearchCompoundsIndexService  - java.lang.NullPointerException: Cannot get property 'statusMessage' on null object
+2012-07-14 07:44:13,397 [pool-8-thread-16] ERROR bardelasticsearch.ElasticSearchCompoundsIndexService  - http://assay.nih.gov:8080/bard/rest/v1/compounds/24982555
+2012-07-14 07:44:13,398 [pool-8-thread-16] ERROR bardelasticsearch.ElasticSearchCompoundsIndexService  - java.lang.NullPointerException: Cannot get property 'statusMessage' on null object
+2012-07-14 07:45:47,640 [pool-8-thread-1] ERROR bardelasticsearch.ElasticSearchCompoundsIndexService  - http://assay.nih.gov:8080/bard/rest/v1/compounds/628325
+2012-07-14 07:45:47,641 [pool-8-thread-1] ERROR bardelasticsearch.ElasticSearchCompoundsIndexService  - java.lang.NullPointerException: Cannot get property 'statusMessage' on null object
+2012-07-14 07:45:47,641 [pool-8-thread-9] ERROR bardelasticsearch.ElasticSearchCompoundsIndexService  - http://assay.nih.gov:8080/bard/rest/v1/compounds/3240168
+2012-07-14 07:45:47,642 [pool-8-thread-9] ERROR bardelasticsearch.ElasticSearchCompoundsIndexService  - java.lang.NullPointerException: Cannot get property 'statusMessage' on null object
+2012-07-14 07:45:48,648 [pool-8-thread-15] ERROR bardelasticsearch.ElasticSearchCompoundsIndexService  - http://assay.nih.gov:8080/bard/rest/v1/compounds/22553804
+2012-07-14 07:45:48,648 [pool-8-thread-15] ERROR bardelasticsearch.ElasticSearchCompoundsIndexService  - java.lang.NullPointerException: Cannot get property 'statusMessage' on null object
+2012-07-14 07:45:52,654 [pool-8-thread-4] ERROR bardelasticsearch.ElasticSearchCompoundsIndexService  - http://assay.nih.gov:8080/bard/rest/v1/compounds/1246027
+2012-07-14 07:45:52,654 [pool-8-thread-4] ERROR bardelasticsearch.ElasticSearchCompoundsIndexService  - java.lang.NullPointerException: Cannot get property 'statusMessage' on null object
+2012-07-14 07:47:26,170 [pool-8-thread-20] ERROR bardelasticsearch.ElasticSearchCompoundsIndexService  - http://assay.nih.gov:8080/bard/rest/v1/compounds/16033878
+2012-07-14 07:47:26,171 [pool-8-thread-20] ERROR bardelasticsearch.ElasticSearchCompoundsIndexService  - java.lang.NullPointerException: Cannot get property 'statusMessage' on null object
+2012-07-14 07:47:35,046 [pool-8-thread-3] ERROR bardelasticsearch.ElasticSearchCompoundsIndexService  - http://assay.nih.gov:8080/bard/rest/v1/compounds/886876
+2012-07-14 07:47:35,047 [pool-8-thread-3] ERROR bardelasticsearch.ElasticSearchCompoundsIndexService  - java.lang.NullPointerException: Cannot get property 'statusMessage' on null object
+2012-07-14 07:47:35,197 [pool-8-thread-8] ERROR bardelasticsearch.ElasticSearchCompoundsIndexService  - http://assay.nih.gov:8080/bard/rest/v1/compounds/2983498
+2012-07-14 07:47:35,198 [pool-8-thread-8] ERROR bardelasticsearch.ElasticSearchCompoundsIndexService  - java.lang.NullPointerException: Cannot get property 'statusMessage' on null object
+2012-07-14 07:49:09,047 [pool-8-thread-16] ERROR bardelasticsearch.ElasticSearchCompoundsIndexService  - http://assay.nih.gov:8080/bard/rest/v1/compounds/25102699
+2012-07-14 07:49:09,047 [pool-8-thread-16] ERROR bardelasticsearch.ElasticSearchCompoundsIndexService  - java.lang.NullPointerException: Cannot get property 'statusMessage' on null object
+2012-07-14 07:49:09,090 [pool-8-thread-8] ERROR bardelasticsearch.ElasticSearchCompoundsIndexService  - http://assay.nih.gov:8080/bard/rest/v1/compounds/2985820
+2012-07-14 07:49:09,090 [pool-8-thread-8] ERROR bardelasticsearch.ElasticSearchCompoundsIndexService  - java.lang.NullPointerException: Cannot get property 'statusMessage' on null object
+2012-07-14 07:49:12,390 [pool-8-thread-11] ERROR bardelasticsearch.ElasticSearchCompoundsIndexService  - http://assay.nih.gov:8080/bard/rest/v1/compounds/4898345
+2012-07-14 07:49:12,390 [pool-8-thread-11] ERROR bardelasticsearch.ElasticSearchCompoundsIndexService  - java.lang.NullPointerException: Cannot get property 'statusMessage' on null object
+2012-07-14 07:49:12,398 [pool-8-thread-20] ERROR bardelasticsearch.ElasticSearchCompoundsIndexService  - http://assay.nih.gov:8080/bard/rest/v1/compounds/16034266
+2012-07-14 07:49:12,398 [pool-8-thread-20] ERROR bardelasticsearch.ElasticSearchCompoundsIndexService  - java.lang.NullPointerException: Cannot get property 'statusMessage' on null object
+2012-07-14 07:49:12,418 [pool-8-thread-5] ERROR bardelasticsearch.ElasticSearchCompoundsIndexService  - http://assay.nih.gov:8080/bard/rest/v1/compounds/1917121
+2012-07-14 07:49:12,418 [pool-8-thread-18] ERROR bardelasticsearch.ElasticSearchCompoundsIndexService  - http://assay.nih.gov:8080/bard/rest/v1/compounds/2274467
+2012-07-14 07:49:12,418 [pool-8-thread-5] ERROR bardelasticsearch.ElasticSearchCompoundsIndexService  - java.lang.NullPointerException: Cannot get property 'statusMessage' on null object
+2012-07-14 07:49:12,418 [pool-8-thread-18] ERROR bardelasticsearch.ElasticSearchCompoundsIndexService  - java.lang.NullPointerException: Cannot get property 'statusMessage' on null object
+2012-07-14 07:49:12,462 [pool-8-thread-10] ERROR bardelasticsearch.ElasticSearchCompoundsIndexService  - http://assay.nih.gov:8080/bard/rest/v1/compounds/3975251
+2012-07-14 07:49:12,463 [pool-8-thread-10] ERROR bardelasticsearch.ElasticSearchCompoundsIndexService  - java.lang.NullPointerException: Cannot get property 'statusMessage' on null object
+2012-07-14 07:50:55,869 [pool-8-thread-17] ERROR bardelasticsearch.ElasticSearchCompoundsIndexService  - http://assay.nih.gov:8080/bard/rest/v1/compounds/6880338
+2012-07-14 07:50:55,869 [pool-8-thread-17] ERROR bardelasticsearch.ElasticSearchCompoundsIndexService  - java.lang.NullPointerException: Cannot get property 'statusMessage' on null object
+2012-07-14 07:50:55,888 [pool-8-thread-15] ERROR bardelasticsearch.ElasticSearchCompoundsIndexService  - http://assay.nih.gov:8080/bard/rest/v1/compounds/23723021
+2012-07-14 07:50:55,888 [pool-8-thread-15] ERROR bardelasticsearch.ElasticSearchCompoundsIndexService  - java.lang.NullPointerException: Cannot get property 'statusMessage' on null object
+2012-07-14 07:50:56,902 [pool-8-thread-14] ERROR bardelasticsearch.ElasticSearchCompoundsIndexService  - http://assay.nih.gov:8080/bard/rest/v1/compounds/16248655
+2012-07-14 07:50:56,902 [pool-8-thread-14] ERROR bardelasticsearch.ElasticSearchCompoundsIndexService  - java.lang.NullPointerException: Cannot get property 'statusMessage' on null object
+2012-07-14 07:50:56,929 [pool-8-thread-19] ERROR bardelasticsearch.ElasticSearchCompoundsIndexService  - http://assay.nih.gov:8080/bard/rest/v1/compounds/16012692
+2012-07-14 07:50:56,929 [pool-8-thread-19] ERROR bardelasticsearch.ElasticSearchCompoundsIndexService  - java.lang.NullPointerException: Cannot get property 'statusMessage' on null object
+2012-07-14 07:52:34,482 [pool-8-thread-15] ERROR bardelasticsearch.ElasticSearchCompoundsIndexService  - http://assay.nih.gov:8080/bard/rest/v1/compounds/23723343
+2012-07-14 07:52:34,482 [pool-8-thread-15] ERROR bardelasticsearch.ElasticSearchCompoundsIndexService  - java.lang.NullPointerException: Cannot get property 'statusMessage' on null object
+2012-07-14 07:52:34,743 [pool-8-thread-5] ERROR bardelasticsearch.ElasticSearchCompoundsIndexService  - http://assay.nih.gov:8080/bard/rest/v1/compounds/1945308
+2012-07-14 07:52:34,743 [pool-8-thread-5] ERROR bardelasticsearch.ElasticSearchCompoundsIndexService  - java.lang.NullPointerException: Cannot get property 'statusMessage' on null object
+2012-07-14 07:52:34,783 [pool-8-thread-17] ERROR bardelasticsearch.ElasticSearchCompoundsIndexService  - http://assay.nih.gov:8080/bard/rest/v1/compounds/6883499
+2012-07-14 07:52:34,783 [pool-8-thread-17] ERROR bardelasticsearch.ElasticSearchCompoundsIndexService  - java.lang.NullPointerException: Cannot get property 'statusMessage' on null object
+2012-07-14 07:52:34,844 [pool-8-thread-13] ERROR bardelasticsearch.ElasticSearchCompoundsIndexService  - http://assay.nih.gov:8080/bard/rest/v1/compounds/9550502
+2012-07-14 07:52:34,844 [pool-8-thread-13] ERROR bardelasticsearch.ElasticSearchCompoundsIndexService  - java.lang.NullPointerException: Cannot get property 'statusMessage' on null object
+2012-07-14 07:52:39,910 [pool-8-thread-18] ERROR bardelasticsearch.ElasticSearchCompoundsIndexService  - http://assay.nih.gov:8080/bard/rest/v1/compounds/3139937
+2012-07-14 07:52:39,910 [pool-8-thread-18] ERROR bardelasticsearch.ElasticSearchCompoundsIndexService  - java.lang.NullPointerException: Cannot get property 'statusMessage' on null object
+2012-07-14 07:54:18,500 [pool-8-thread-2] ERROR bardelasticsearch.ElasticSearchCompoundsIndexService  - http://assay.nih.gov:8080/bard/rest/v1/compounds/721008
+2012-07-14 07:54:18,500 [pool-8-thread-2] ERROR bardelasticsearch.ElasticSearchCompoundsIndexService  - java.lang.NullPointerException: Cannot get property 'statusMessage' on null object
+2012-07-14 07:54:18,522 [pool-8-thread-5] ERROR bardelasticsearch.ElasticSearchCompoundsIndexService  - http://assay.nih.gov:8080/bard/rest/v1/compounds/1960218
+2012-07-14 07:54:18,522 [pool-8-thread-5] ERROR bardelasticsearch.ElasticSearchCompoundsIndexService  - java.lang.NullPointerException: Cannot get property 'statusMessage' on null object
+2012-07-14 07:54:21,846 [pool-8-thread-8] ERROR bardelasticsearch.ElasticSearchCompoundsIndexService  - http://assay.nih.gov:8080/bard/rest/v1/compounds/2997722
+2012-07-14 07:54:21,846 [pool-8-thread-8] ERROR bardelasticsearch.ElasticSearchCompoundsIndexService  - java.lang.NullPointerException: Cannot get property 'statusMessage' on null object
+2012-07-14 07:55:28,656 [pool-8-thread-14] ERROR bardelasticsearch.ElasticSearchCompoundsIndexService  - http://assay.nih.gov:8080/bard/rest/v1/compounds/16284289
+2012-07-14 07:55:28,657 [pool-8-thread-14] ERROR bardelasticsearch.ElasticSearchCompoundsIndexService  - wslite.rest.RESTClientException: Connection timed out: connect
+2012-07-14 07:55:58,527 [pool-8-thread-4] ERROR bardelasticsearch.ElasticSearchCompoundsIndexService  - http://assay.nih.gov:8080/bard/rest/v1/compounds/1283831
+2012-07-14 07:55:58,527 [pool-8-thread-4] ERROR bardelasticsearch.ElasticSearchCompoundsIndexService  - java.lang.NullPointerException: Cannot get property 'statusMessage' on null object
+2012-07-14 07:56:00,533 [pool-8-thread-13] ERROR bardelasticsearch.ElasticSearchCompoundsIndexService  - http://assay.nih.gov:8080/bard/rest/v1/compounds/9551319
+2012-07-14 07:56:00,533 [pool-8-thread-13] ERROR bardelasticsearch.ElasticSearchCompoundsIndexService  - java.lang.NullPointerException: Cannot get property 'statusMessage' on null object
+2012-07-14 07:56:01,763 [pool-8-thread-15] ERROR bardelasticsearch.ElasticSearchCompoundsIndexService  - http://assay.nih.gov:8080/bard/rest/v1/compounds/23724166
+2012-07-14 07:56:01,763 [pool-8-thread-15] ERROR bardelasticsearch.ElasticSearchCompoundsIndexService  - java.lang.NullPointerException: Cannot get property 'statusMessage' on null object
+2012-07-14 07:56:01,798 [pool-8-thread-12] ERROR bardelasticsearch.ElasticSearchCompoundsIndexService  - http://assay.nih.gov:8080/bard/rest/v1/compounds/6104612
+2012-07-14 07:56:01,798 [pool-8-thread-12] ERROR bardelasticsearch.ElasticSearchCompoundsIndexService  - java.lang.NullPointerException: Cannot get property 'statusMessage' on null object
+2012-07-14 07:57:39,883 [pool-8-thread-13] ERROR bardelasticsearch.ElasticSearchCompoundsIndexService  - http://assay.nih.gov:8080/bard/rest/v1/compounds/9551698
+2012-07-14 07:57:39,883 [pool-8-thread-13] ERROR bardelasticsearch.ElasticSearchCompoundsIndexService  - java.lang.NullPointerException: Cannot get property 'statusMessage' on null object
+2012-07-14 07:57:40,504 [pool-8-thread-5] ERROR bardelasticsearch.ElasticSearchCompoundsIndexService  - http://assay.nih.gov:8080/bard/rest/v1/compounds/1989738
+2012-07-14 07:57:40,504 [pool-8-thread-5] ERROR bardelasticsearch.ElasticSearchCompoundsIndexService  - java.lang.NullPointerException: Cannot get property 'statusMessage' on null object
+2012-07-14 07:57:40,530 [pool-8-thread-4] ERROR bardelasticsearch.ElasticSearchCompoundsIndexService  - http://assay.nih.gov:8080/bard/rest/v1/compounds/1289870
+2012-07-14 07:57:40,530 [pool-8-thread-4] ERROR bardelasticsearch.ElasticSearchCompoundsIndexService  - java.lang.NullPointerException: Cannot get property 'statusMessage' on null object
+2012-07-14 07:57:41,373 [pool-8-thread-2] ERROR bardelasticsearch.ElasticSearchCompoundsIndexService  - http://assay.nih.gov:8080/bard/rest/v1/compounds/728524
+2012-07-14 07:57:41,373 [pool-8-thread-2] ERROR bardelasticsearch.ElasticSearchCompoundsIndexService  - java.lang.NullPointerException: Cannot get property 'statusMessage' on null object
+2012-07-14 07:57:41,382 [pool-8-thread-20] ERROR bardelasticsearch.ElasticSearchCompoundsIndexService  - http://assay.nih.gov:8080/bard/rest/v1/compounds/16759035
+2012-07-14 07:57:41,382 [pool-8-thread-20] ERROR bardelasticsearch.ElasticSearchCompoundsIndexService  - java.lang.NullPointerException: Cannot get property 'statusMessage' on null object
+2012-07-14 07:57:41,482 [pool-8-thread-7] ERROR bardelasticsearch.ElasticSearchCompoundsIndexService  - http://assay.nih.gov:8080/bard/rest/v1/compounds/2826621
+2012-07-14 07:57:41,482 [pool-8-thread-16] ERROR bardelasticsearch.ElasticSearchCompoundsIndexService  - http://assay.nih.gov:8080/bard/rest/v1/compounds/42601240
+2012-07-14 07:57:41,482 [pool-8-thread-7] ERROR bardelasticsearch.ElasticSearchCompoundsIndexService  - java.lang.NullPointerException: Cannot get property 'statusMessage' on null object
+2012-07-14 07:57:41,482 [pool-8-thread-16] ERROR bardelasticsearch.ElasticSearchCompoundsIndexService  - java.lang.NullPointerException: Cannot get property 'statusMessage' on null object
+2012-07-14 07:57:41,574 [pool-8-thread-3] ERROR bardelasticsearch.ElasticSearchCompoundsIndexService  - http://assay.nih.gov:8080/bard/rest/v1/compounds/902008
+2012-07-14 07:57:41,574 [pool-8-thread-3] ERROR bardelasticsearch.ElasticSearchCompoundsIndexService  - java.lang.NullPointerException: Cannot get property 'statusMessage' on null object
+2012-07-14 07:57:41,663 [pool-8-thread-10] ERROR bardelasticsearch.ElasticSearchCompoundsIndexService  - http://assay.nih.gov:8080/bard/rest/v1/compounds/4075726
+2012-07-14 07:57:41,663 [pool-8-thread-10] ERROR bardelasticsearch.ElasticSearchCompoundsIndexService  - java.lang.NullPointerException: Cannot get property 'statusMessage' on null object
+2012-07-14 07:57:42,700 [pool-8-thread-12] ERROR bardelasticsearch.ElasticSearchCompoundsIndexService  - http://assay.nih.gov:8080/bard/rest/v1/compounds/6172754
+2012-07-14 07:57:42,700 [pool-8-thread-12] ERROR bardelasticsearch.ElasticSearchCompoundsIndexService  - java.lang.NullPointerException: Cannot get property 'statusMessage' on null object
+2012-07-14 07:57:42,704 [pool-8-thread-19] ERROR bardelasticsearch.ElasticSearchCompoundsIndexService  - http://assay.nih.gov:8080/bard/rest/v1/compounds/16014262
+2012-07-14 07:57:42,704 [pool-8-thread-19] ERROR bardelasticsearch.ElasticSearchCompoundsIndexService  - java.lang.NullPointerException: Cannot get property 'statusMessage' on null object
+2012-07-14 07:57:42,773 [pool-8-thread-6] ERROR bardelasticsearch.ElasticSearchCompoundsIndexService  - http://assay.nih.gov:8080/bard/rest/v1/compounds/2397017
+2012-07-14 07:57:42,773 [pool-8-thread-6] ERROR bardelasticsearch.ElasticSearchCompoundsIndexService  - java.lang.NullPointerException: Cannot get property 'statusMessage' on null object
+2012-07-14 07:59:28,489 [pool-8-thread-12] ERROR bardelasticsearch.ElasticSearchCompoundsIndexService  - http://assay.nih.gov:8080/bard/rest/v1/compounds/6223846
+2012-07-14 07:59:28,489 [pool-8-thread-12] ERROR bardelasticsearch.ElasticSearchCompoundsIndexService  - java.lang.NullPointerException: Cannot get property 'statusMessage' on null object
+2012-07-14 07:59:28,608 [pool-8-thread-20] ERROR bardelasticsearch.ElasticSearchCompoundsIndexService  - http://assay.nih.gov:8080/bard/rest/v1/compounds/16759636
+2012-07-14 07:59:28,608 [pool-8-thread-20] ERROR bardelasticsearch.ElasticSearchCompoundsIndexService  - java.lang.NullPointerException: Cannot get property 'statusMessage' on null object
+2012-07-14 07:59:28,719 [pool-8-thread-3] ERROR bardelasticsearch.ElasticSearchCompoundsIndexService  - http://assay.nih.gov:8080/bard/rest/v1/compounds/906845
+2012-07-14 07:59:28,720 [pool-8-thread-3] ERROR bardelasticsearch.ElasticSearchCompoundsIndexService  - java.lang.NullPointerException: Cannot get property 'statusMessage' on null object
+2012-07-14 07:59:28,906 [pool-8-thread-10] ERROR bardelasticsearch.ElasticSearchCompoundsIndexService  - http://assay.nih.gov:8080/bard/rest/v1/compounds/4088240
+2012-07-14 07:59:28,907 [pool-8-thread-10] ERROR bardelasticsearch.ElasticSearchCompoundsIndexService  - java.lang.NullPointerException: Cannot get property 'statusMessage' on null object
+2012-07-14 07:59:33,618 [pool-8-thread-15] ERROR bardelasticsearch.ElasticSearchCompoundsIndexService  - http://assay.nih.gov:8080/bard/rest/v1/compounds/24671701
+2012-07-14 07:59:33,618 [pool-8-thread-15] ERROR bardelasticsearch.ElasticSearchCompoundsIndexService  - java.lang.NullPointerException: Cannot get property 'statusMessage' on null object
+2012-07-14 07:59:33,680 [pool-8-thread-8] ERROR bardelasticsearch.ElasticSearchCompoundsIndexService  - http://assay.nih.gov:8080/bard/rest/v1/compounds/2999122
+2012-07-14 07:59:33,680 [pool-8-thread-8] ERROR bardelasticsearch.ElasticSearchCompoundsIndexService  - java.lang.NullPointerException: Cannot get property 'statusMessage' on null object
+2012-07-14 07:59:33,700 [pool-8-thread-6] ERROR bardelasticsearch.ElasticSearchCompoundsIndexService  - http://assay.nih.gov:8080/bard/rest/v1/compounds/2403716
+2012-07-14 07:59:33,700 [pool-8-thread-6] ERROR bardelasticsearch.ElasticSearchCompoundsIndexService  - java.lang.NullPointerException: Cannot get property 'statusMessage' on null object
+2012-07-14 07:59:33,722 [pool-8-thread-9] ERROR bardelasticsearch.ElasticSearchCompoundsIndexService  - http://assay.nih.gov:8080/bard/rest/v1/compounds/3243911
+2012-07-14 07:59:33,722 [pool-8-thread-9] ERROR bardelasticsearch.ElasticSearchCompoundsIndexService  - java.lang.NullPointerException: Cannot get property 'statusMessage' on null object
+2012-07-14 07:59:33,851 [pool-8-thread-19] ERROR bardelasticsearch.ElasticSearchCompoundsIndexService  - http://assay.nih.gov:8080/bard/rest/v1/compounds/16014639
+2012-07-14 07:59:33,851 [pool-8-thread-19] ERROR bardelasticsearch.ElasticSearchCompoundsIndexService  - java.lang.NullPointerException: Cannot get property 'statusMessage' on null object
+2012-07-14 08:01:18,109 [pool-8-thread-3] ERROR bardelasticsearch.ElasticSearchCompoundsIndexService  - http://assay.nih.gov:8080/bard/rest/v1/compounds/915546
+2012-07-14 08:01:18,109 [pool-8-thread-3] ERROR bardelasticsearch.ElasticSearchCompoundsIndexService  - java.lang.NullPointerException: Cannot get property 'statusMessage' on null object
+2012-07-14 08:01:18,911 [pool-8-thread-18] ERROR bardelasticsearch.ElasticSearchCompoundsIndexService  - http://assay.nih.gov:8080/bard/rest/v1/compounds/3754587
+2012-07-14 08:01:18,911 [pool-8-thread-18] ERROR bardelasticsearch.ElasticSearchCompoundsIndexService  - java.lang.NullPointerException: Cannot get property 'statusMessage' on null object
+2012-07-14 08:01:18,916 [pool-8-thread-20] ERROR bardelasticsearch.ElasticSearchCompoundsIndexService  - http://assay.nih.gov:8080/bard/rest/v1/compounds/17756868
+2012-07-14 08:01:18,916 [pool-8-thread-20] ERROR bardelasticsearch.ElasticSearchCompoundsIndexService  - java.lang.NullPointerException: Cannot get property 'statusMessage' on null object
+2012-07-14 08:01:20,466 [pool-8-thread-12] ERROR bardelasticsearch.ElasticSearchCompoundsIndexService  - http://assay.nih.gov:8080/bard/rest/v1/compounds/6253566
+2012-07-14 08:01:20,467 [pool-8-thread-12] ERROR bardelasticsearch.ElasticSearchCompoundsIndexService  - java.lang.NullPointerException: Cannot get property 'statusMessage' on null object
+2012-07-14 08:01:23,373 [pool-8-thread-1] ERROR bardelasticsearch.ElasticSearchCompoundsIndexService  - http://assay.nih.gov:8080/bard/rest/v1/compounds/648800
+2012-07-14 08:01:23,373 [pool-8-thread-1] ERROR bardelasticsearch.ElasticSearchCompoundsIndexService  - java.lang.NullPointerException: Cannot get property 'statusMessage' on null object
+2012-07-14 08:03:02,672 [pool-8-thread-19] ERROR bardelasticsearch.ElasticSearchCompoundsIndexService  - http://assay.nih.gov:8080/bard/rest/v1/compounds/16015449
+2012-07-14 08:03:02,673 [pool-8-thread-19] ERROR bardelasticsearch.ElasticSearchCompoundsIndexService  - java.lang.NullPointerException: Cannot get property 'statusMessage' on null object
+2012-07-14 08:04:42,603 [pool-8-thread-14] ERROR bardelasticsearch.ElasticSearchCompoundsIndexService  - http://assay.nih.gov:8080/bard/rest/v1/compounds/16324459
+2012-07-14 08:04:42,604 [pool-8-thread-14] ERROR bardelasticsearch.ElasticSearchCompoundsIndexService  - java.lang.NullPointerException: Cannot get property 'statusMessage' on null object
+2012-07-14 08:04:42,618 [pool-8-thread-8] ERROR bardelasticsearch.ElasticSearchCompoundsIndexService  - http://assay.nih.gov:8080/bard/rest/v1/compounds/3089085
+2012-07-14 08:04:42,619 [pool-8-thread-8] ERROR bardelasticsearch.ElasticSearchCompoundsIndexService  - java.lang.NullPointerException: Cannot get property 'statusMessage' on null object
+2012-07-14 08:13:04,063 [pool-8-thread-8] ERROR bardelasticsearch.ElasticSearchCompoundsIndexService  - http://assay.nih.gov:8080/bard/rest/v1/compounds/3121126
+2012-07-14 08:13:04,063 [pool-8-thread-8] ERROR bardelasticsearch.ElasticSearchCompoundsIndexService  - java.lang.NullPointerException: Cannot get property 'statusMessage' on null object

@@ -13,9 +13,16 @@ import java.util.concurrent.ExecutorService
 import java.util.concurrent.FutureTask
 
 class ElasticSearchCompoundsIndexService extends ElasticSearchIndexAbstractService {
+
+    //failures while indexing index 'compounds' and type 'compound'
+    final Set<String> compoundsFailedIndexing = [] as Set<String>
+
+    //failures while indexing index 'assays', with type 'compound'
+    final Set<String> assayCompoundsFailedIndexing = [] as Set<String>
+
     ExecutorService executorService  //runs method concurrently
     int numberOfThreads = 10   //defaults to 10
-    //Fetches all of the cids in the assays/compound, in elastic search
+    //Fetches all of the cids in the assays/compound index, in elastic search
     final static String ELASTIC_COMPOUNDS_SEARCH = ''' {
   "fields": [
     "cids"
@@ -103,35 +110,43 @@ class ElasticSearchCompoundsIndexService extends ElasticSearchIndexAbstractServi
      * @param compoundsForAssayURL
      */
     protected void indexAssayCompounds(final RESTClient restClientClone, final String aid, final String compoundsForAssayURL, final String threadName) {
-        //fetch the compounds associated with the current aid
-        def compoundsArray = this.executeGetRequestJSON(restClientClone)
-        if (!compoundsArray instanceof JSONObject) {
-            log.error("${compoundsArray.toString()} URL: ${compoundsForAssayURL}")
-            return
-        }
-        //list of compounds are located in the collection
-        final JSONArray compoundCollection = ((JSONObject) compoundsArray).collection
-
-        //if the collection is not empty
-        if (!compoundCollection.isEmpty()) {
-            //if there are more compounds they would be included in the link object
-            final String moreCompoundsLink = ((JSONObject) compoundsArray).link
-
-            //recursively fetch compounds
-            if (moreCompoundsLink != 'null') {
-                recursivelyFetchCompounds(restClientClone, moreCompoundsLink.toString().replaceFirst('/', ''), compoundCollection, threadName)
+        try {
+            //fetch the compounds associated with the current aid
+            def compoundsArray = this.executeGetRequestJSON(restClientClone)
+            if (!compoundsArray instanceof JSONObject) {
+                log.error("${compoundsArray.toString()} URL: ${compoundsForAssayURL}")
+                return
             }
-            //strip out the string /bard/rest/v1/compounds/223 from the current, because we want only the cid
-            final String cids = compoundCollection.toString().replaceAll('/bard/rest/v1/compounds/', '')
-            //then we reconstruct the JSON with the aid
-            final String cidJson = "{aid: ${aid}, cids:${cids}}"
-            // println cidJson
-            final JSONObject requestToSend = new JSONObject(cidJson)
-            //construct the URL and then index the document
-            final String urlForIndexing = "${elasticSearchURL}assays/compound/${aid}"
-            restClientClone.url = urlForIndexing
-            //index document
-            this.putRequest(restClientClone, requestToSend.toString())
+            //list of compounds are located in the collection
+            final JSONArray compoundCollection = ((JSONObject) compoundsArray).collection
+
+            //if the collection is not empty
+            if (!compoundCollection.isEmpty()) {
+                //if there are more compounds they would be included in the link object
+                final String moreCompoundsLink = ((JSONObject) compoundsArray).link
+
+                //recursively fetch compounds
+                if (moreCompoundsLink != 'null') {
+                    recursivelyFetchCompounds(restClientClone, moreCompoundsLink.toString().replaceFirst('/', ''), compoundCollection, threadName)
+                }
+                //strip out the string /bard/rest/v1/compounds/223 from the current, because we want only the cid
+                final String cids = compoundCollection.toString().replaceAll('/bard/rest/v1/compounds/', '')
+                //then we reconstruct the JSON with the aid
+                final String cidJson = "{aid: ${aid}, cids:${cids}}"
+                // println cidJson
+                final JSONObject requestToSend = new JSONObject(cidJson)
+                //construct the URL and then index the document
+                final String urlForIndexing = "${elasticSearchURL}assays/compound/${aid}"
+                restClientClone.url = urlForIndexing
+
+                //index document
+                this.putRequest(restClientClone, requestToSend.toString())
+
+            }
+        } catch (Exception ee) {
+            //add the aids for compounds we could not index successfully
+            assayCompoundsFailedIndexing.add(aid)
+            log.error(ee)
         }
     }
 /**
@@ -142,29 +157,23 @@ class ElasticSearchCompoundsIndexService extends ElasticSearchIndexAbstractServi
         final String compoundsForAssayURL = "${ncgcRootURL}${moreCompoundsLink}"
 
         restClientClone.url = compoundsForAssayURL
-        try {
-            def compoundsArray = this.executeGetRequestJSON(restClientClone)
-            if (!compoundsArray instanceof JSONObject) {
-                log.error("${compoundsArray.toString()} URL: ${compoundsForAssayURL}")
-                return
-            }
-
-            final JSONArray collection = ((JSONObject) compoundsArray).collection
-            final String moreCompounds = ((JSONObject) compoundsArray).link
-            //if the collection is not empty
-            if (!collection.isEmpty()) {
-                compoundCollection.addAll(collection)
-            }
-
-            //if there are more compounds, call method again
-            if (moreCompounds != 'null') {
-                recursivelyFetchCompounds(restClientClone, moreCompounds.toString().replaceFirst('/', ''), compoundCollection, threadName)
-            }
-        } catch (Exception tt) {
-            log.error(compoundsForAssayURL)
-            log.error(tt)
+        def compoundsArray = this.executeGetRequestJSON(restClientClone)
+        if (!compoundsArray instanceof JSONObject) {
+            log.error("${compoundsArray.toString()} URL: ${compoundsForAssayURL}")
+            return
         }
 
+        final JSONArray collection = ((JSONObject) compoundsArray).collection
+        final String moreCompounds = ((JSONObject) compoundsArray).link
+        //if the collection is not empty
+        if (!collection.isEmpty()) {
+            compoundCollection.addAll(collection)
+        }
+
+        //if there are more compounds, call method again
+        if (moreCompounds != 'null') {
+            recursivelyFetchCompounds(restClientClone, moreCompounds.toString().replaceFirst('/', ''), compoundCollection, threadName)
+        }
     }
     /**
      * Allows us to run it in a multi-threaded fashion using the executor service plugin
@@ -228,7 +237,7 @@ class ElasticSearchCompoundsIndexService extends ElasticSearchIndexAbstractServi
      * @param compoundURL
      * @param threadName
      */
-    protected void indexCompounds(final String cid, final String compoundURL, final String threadName) {
+    public void indexCompounds(final String cid, final String compoundURL, final String threadName) {
         //fetch the compounds associated with the currentcid
         try {
             RESTClient restClientClone = this.restClientFactoryService.createNewRestClient(compoundURL)
@@ -244,8 +253,8 @@ class ElasticSearchCompoundsIndexService extends ElasticSearchIndexAbstractServi
             //index document
             this.putRequest(restClientClone, requestToPut.toString())
         } catch (Exception ee) {
+            compoundsFailedIndexing.add(compoundURL)
             println "Error: ${compoundURL}"
-            log.error(compoundURL)
             log.error(ee)
         }
     }

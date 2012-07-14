@@ -2,6 +2,12 @@ import wslite.json.JSONArray
 import wslite.rest.RESTClient
 import bardelasticsearch.ElasticSearchCompoundsIndexService
 import bardelasticsearch.RestClientFactoryService
+/**
+ * Used for reindexing aids that failed during the run of the
+ * indexAssayCompounds script.
+ * Perhaps we could put the logic here into that script and use a switch statement to run
+ * either script based on user input.
+ */
 
 //get the service from the context
 ElasticSearchCompoundsIndexService elasticSearchCompoundsIndexService = ctx.getBean("elasticSearchCompoundsIndexService")
@@ -51,3 +57,8 @@ try {
     ee.printStackTrace()
     println ee.message
 }
+final Set<String> aidsWhoseCompoundsFailedIndexing = elasticSearchCompoundsIndexService.assayCompoundsFailedIndexing
+if(aidsWhoseCompoundsFailedIndexing){
+    println "Please reindex the following aids ${aidsWhoseCompoundsFailedIndexing.toString()} using the reIndexFailedAssayCompounds.groovy script"
+}
+//Construct a JSONArray from the List and reindex
