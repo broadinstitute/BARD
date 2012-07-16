@@ -1,6 +1,14 @@
+import static groovy.io.FileType.DIRECTORIES
+import static groovy.io.FileType.FILES
+
 databaseChangeLog = {
-    include file: 'iteration-001/01-initial-base-line.groovy'
-    include file: 'iteration-002/01-initial-changes.groovy'
+    String bardDomainModelMigrationsDir = ctx.migrationResourceAccessor.baseDirectory
+    File migrationsDir = new File(bardDomainModelMigrationsDir)
+    migrationsDir.eachFileMatch(DIRECTORIES, ~/iteration-\d+/) {dir ->
+        dir.eachFileMatch(FILES, ~/\d+.*/) {file ->
+            include file: "${dir.name}/${file.name}"
+        }
+    }
 
 
 
