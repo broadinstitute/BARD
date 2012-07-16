@@ -1,6 +1,4 @@
-
--- packages -----------------------------------------------------------------
-create or replace package Manage_Ontology
+CREATE OR REPLACE package MANAGE_ONTOLOGY
 as
     pv_tree_assay_descriptor varchar2(31) := 'ASSAY_DESCRIPTOR';
     pv_tree_biology_descriptor varchar2(31) := 'BIOLOGY_DESCRIPTOR';
@@ -40,10 +38,8 @@ as
                         avi_element_synonyms in varchar2);
 
 end manage_ontology;
-
-/
-
-create or replace package body Manage_Ontology
+;
+CREATE OR REPLACE package body DATA_MIG.Manage_Ontology
 as
 -- forward declaration, needed for the recursion to compile
     procedure walk_down_the_tree(ani_element_id in number,
@@ -289,6 +285,9 @@ as
 
     end save_node;
 
+    --- edited schatwin, 6;25;12 --------------------------------------------------
+    -- changedwhere clause in cursor in walk_down_the_tree to just use 1st 3 letters of the relationship (property)
+    ---
     procedure walk_down_the_tree(ani_element_id in number,
                                 anio_node_id in out number,
                                 ani_parent_node_id in number,
@@ -304,7 +303,8 @@ as
                  element_hierarchy eh
             where e.element_id = eh.child_element_id
               and eh.parent_element_id = ani_element_id
-              and avi_relationship_type like '%' || eh.relationship_type || '%';
+              and avi_relationship_type like '%' || substr(eh.relationship_type, 1, 3) || '%';
+--              and avi_relationship_type like '%' || eh.relationship_type || '%';
 
     ln_node_id number;
     ln_next_parent_node_id number;
@@ -468,5 +468,4 @@ as
     end add_element;
 
 end manage_ontology;
-
 /
