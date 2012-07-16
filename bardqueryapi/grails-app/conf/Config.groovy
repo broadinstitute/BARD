@@ -122,8 +122,6 @@ log4j = {
 }
 
 
-bard.services.elasticSearchService.restNode.baseUrl = 'http://bard-dev-vm:9200'
-bard.assay.view.url = 'http://localhost:8081/BARD/ESAssay/show'
 ncgc.server.root.url = "http://assay.nih.gov:8080"
 
 /**

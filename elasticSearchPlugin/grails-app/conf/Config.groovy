@@ -22,5 +22,3 @@ log4j = {
 
     warn   'org.mortbay.log'
 }
-
-elasticSearchService.restNode.baseUrl = 'http://bard-dev-vm:9200'
