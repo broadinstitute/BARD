@@ -58,7 +58,7 @@ class ElasticSearchGrailsPlugin {
          *  based on the initialization that happens in the DatabaseMigrationGrailsPlugin.groovy
          */
         elasticSearchService(elasticsearchplugin.ElasticSearchService) {
-            elasticSearchBaseUrl = "http://bard-dev-vm:9200"
+            elasticSearchBaseUrl = "http://localhost:9200"
             assayIndexName = 'assays'
             assayIndexTypeName = 'assay'
             compoundIndexName = 'compounds'
