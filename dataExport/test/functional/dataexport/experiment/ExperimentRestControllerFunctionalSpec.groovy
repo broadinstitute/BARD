@@ -22,7 +22,7 @@ import static groovyx.net.http.Method.GET
 class ExperimentRestControllerFunctionalSpec extends Specification {
     RemoteControl remote = new RemoteControl()
     final String baseUrl = remote { ctx.grailsApplication.config.grails.serverURL } + "/api/experiments"
-    final String experimentBaseUrl = remote { ctx.grailsApplication.config.grails.serverURL } + "/api/experiment"
+    final String experimentBaseUrl = remote { ctx.grailsApplication.config.grails.serverURL } + "/api/experiments"
 
     String experimentsMediaType = remote { ctx.grailsApplication.config.bard.data.export.experiments.xml }
     String experimentMediaType = remote { ctx.grailsApplication.config.bard.data.export.experiment.xml }
