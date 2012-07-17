@@ -31,49 +31,47 @@ import javax.xml.datatype.XMLGregorianCalendar
  */
 class ExperimentExportService {
 
+    ResultExportService resultExportService
     LinkGenerator grailsLinkGenerator
-    final MediaTypesDTO mediaTypesDTO
-    final int maxExperimentsRecordsPerPage
-    /**
-     * See resources.groovy for wiring of this method
-     * @param mediaTypesDTO
-     * @param maxExperimentsRecordsPerPage - The number of experiments that can fit on a page
-     */
-    public ExperimentExportService(final MediaTypesDTO mediaTypesDTO,
-                                   final int maxExperimentsRecordsPerPage) {
-        this.mediaTypesDTO = mediaTypesDTO
-        this.maxExperimentsRecordsPerPage = maxExperimentsRecordsPerPage
-    }
+    MediaTypesDTO mediaTypeDTO
+    int numberRecordsPerPage
 
     /**
-     *  start is used for paging, it tells us where we are in the paging process
+     *  offset is used for paging, it tells us where we are in the paging process
      * @param markupBuilder
-     * @param start
+     * @param offset
+     * @return true if there are more experiments than can fit on a page
+     * this.numberRecordsPerPage is what determines how many experiments should fit on a page
+     * Making markupBuilder def, so we can use any of the markup builders (Stax, markupBuilder etc) at run time
+     * For instance, if we are generating just one experiment, we should just use MarkUpBuilder
      */
-    public void generateExperiments(final MarkupBuilder markupBuilder, final int start) {
-        int end = this.maxExperimentsRecordsPerPage
-        boolean moreExperiments = false
-        List<Experiment> experiments = Experiment.findAllByReadyForExtraction('Ready')
-        final int numberOfExperiments = experiments.size()
-        if (numberOfExperiments > this.maxExperimentsRecordsPerPage) {
-            moreExperiments = true
-        } else {
-            end = numberOfExperiments
-        }
-        experiments = experiments.subList(start, end)
+    public boolean generateExperiments(def markupBuilder, int offset) {
 
-        markupBuilder.experiments(count: numberOfExperiments) {
+        int end = this.numberRecordsPerPage + 1  //A trick to know if there are more records
+        boolean hasMoreExperiments = false //This is used for paging, if there are more experiments than the threshold, add next link and return true
+
+        List<Experiment> experiments = Experiment.findAllByReadyForExtraction('Ready', [sort: "id", order: "asc", offset: offset, max: end])
+        final int numberOfExperiments = experiments.size()
+        if (numberOfExperiments > this.numberRecordsPerPage) {
+            hasMoreExperiments = true
+            experiments = experiments.subList(0, this.numberRecordsPerPage)
+
+        }
+        offset = this.numberRecordsPerPage
+
+        markupBuilder.experiments(count: experiments.size()) {
             for (Experiment experiment : experiments) {
                 final String experimentHref = grailsLinkGenerator.link(mapping: 'experiment', absolute: true, params: [id: experiment.id]).toString()
-                link(rel: 'related', type: "${this.mediaTypesDTO.experimentMediaType}", href: "${experimentHref}")
+                link(rel: 'related', type: "${this.mediaTypeDTO.experimentMediaType}", href: "${experimentHref}")
             }
-            //if there are more records that can fit on a page then add the next link, with the start parameter
+            //if there are more records that can fit on a page then add the next link, with the offset parameter
             //being the end variable in this method
-            if (moreExperiments) {
-                final String experimentsHref = grailsLinkGenerator.link(mapping: 'experiments', absolute: true, params: [start: "${end}"]).toString()
-                link(rel: 'next', title: 'List Experiments', type: "${this.mediaTypesDTO.experimentsMediaType}", href: "${experimentsHref}")
+            if (hasMoreExperiments) {
+                final String experimentsHref = grailsLinkGenerator.link(mapping: 'experiments', absolute: true, params: [offset: offset]).toString()
+                link(rel: 'next', title: 'List Experiments', type: "${this.mediaTypeDTO.experimentsMediaType}", href: "${experimentsHref}")
             }
         }
+        return hasMoreExperiments
     }
     /**
      * @param markupBuilder
@@ -86,7 +84,11 @@ class ExperimentExportService {
         }
         this.generateExperiment(markupBuilder, experiment)
     }
-
+    /**
+     *
+     * @param experiment
+     * @return a Map of key value pairs that maps to attribute name and value in the generated XML
+     */
     protected Map<String, String> generateAttributesForExperiment(final Experiment experiment) {
         Map<String, String> attributes = [:]
 
@@ -94,19 +96,19 @@ class ExperimentExportService {
         attributes.put('experimentName', experiment.experimentName)
         attributes.put('status', experiment.experimentStatus)
 
-        if (experiment.holdUntilDate) {
+        if (experiment.holdUntilDate) {   //convert date to XML date
             final GregorianCalendar gregorianCalendar = new GregorianCalendar();
             gregorianCalendar.setTime(experiment.holdUntilDate);
             final XMLGregorianCalendar holdUntilDate = DatatypeFactory.newInstance().newXMLGregorianCalendar(gregorianCalendar);
             attributes.put('holdUntilDate', holdUntilDate.toString())
         }
-        if (experiment.runDateFrom) {
+        if (experiment.runDateFrom) {  //convert date to XML date
             final GregorianCalendar gregorianCalendar = new GregorianCalendar();
             gregorianCalendar.setTime(experiment.runDateFrom);
             final XMLGregorianCalendar runDateFrom = DatatypeFactory.newInstance().newXMLGregorianCalendar(gregorianCalendar);
             attributes.put('runDateFrom', runDateFrom.toString())
         }
-        if (experiment.runDateTo) {
+        if (experiment.runDateTo) {//convert date to XML date
             final GregorianCalendar gregorianCalendar = new GregorianCalendar();
             gregorianCalendar.setTime(experiment.runDateTo);
             final XMLGregorianCalendar runDateTo = DatatypeFactory.newInstance().newXMLGregorianCalendar(gregorianCalendar);
@@ -118,6 +120,7 @@ class ExperimentExportService {
      * @param markupBuilder
      * @param experiment
      *
+     * Serialize Experiment to XML
      */
     protected void generateExperiment(final MarkupBuilder markupBuilder, final Experiment experiment) {
         final Map<String, String> attributes = generateAttributesForExperiment(experiment)
@@ -128,7 +131,7 @@ class ExperimentExportService {
             }
             final Set<ResultContextItem> resultContextItems = experiment.resultContextItems
             if (resultContextItems) {
-                generateResultContextItems(markupBuilder, resultContextItems)
+                resultExportService.generateResultContextItems(markupBuilder, resultContextItems)
             }
             final Set<ProjectExperiment> projectExperiments = experiment.projectExperiments
             if (projectExperiments) {
@@ -138,10 +141,15 @@ class ExperimentExportService {
             if (externalReferences) {
                 generateExternalReferences(markupBuilder, externalReferences)
             }
+            if (experiment.laboratory) {
+                laboratory(experiment.laboratory.laboratory)
+            }
             generateExperimentLinks(markupBuilder, experiment)
         }
     }
-
+    /**
+     * External References to an Experiment
+     */
     protected void generateExternalReferences(final MarkupBuilder markupBuilder, final Set<ExternalReference> externalReferences) {
         markupBuilder.externalReferences() {
             for (ExternalReference externalReference : externalReferences) {
@@ -150,7 +158,7 @@ class ExperimentExportService {
         }
     }
     /**
-     *
+     * External Reference to an Experiment
      * @param markupBuilder
      * @param externalReference
      */
@@ -168,12 +176,12 @@ class ExperimentExportService {
             final Project project = externalReference.project
             if (project) {
                 final String projectHref = grailsLinkGenerator.link(mapping: 'project', absolute: true, params: [id: "${project.id}"]).toString()
-                link(rel: 'related', href: "${projectHref}", type: "${this.mediaTypesDTO.projectMediaType}")
+                link(rel: 'related', href: "${projectHref}", type: "${this.mediaTypeDTO.projectMediaType}")
             }
         }
     }
     /**
-     *
+     * List of @ProjectExperiment associated to a given Experiment
      * @param markupBuilder
      * @param projectExperiments
      */
@@ -184,7 +192,12 @@ class ExperimentExportService {
             }
         }
     }
-
+    /**
+     * Generate projectExperiment
+     *
+     * @param markupBuilder
+     * @param projectExperiment
+     */
     protected void generateProjectExperiment(final MarkupBuilder markupBuilder, ProjectExperiment projectExperiment) {
         markupBuilder.projectExperiment() {
             if (projectExperiment.description) {
@@ -194,13 +207,13 @@ class ExperimentExportService {
             if (precedingExperimentR) {
                 precedingExperiment(id: precedingExperimentR.id.toString()) {
                     final String precedingExperimentHref = grailsLinkGenerator.link(mapping: 'experiment', absolute: true, params: [id: "${precedingExperimentR.id}"]).toString()
-                    link(rel: 'related', href: "${precedingExperimentHref}", type: "${this.mediaTypesDTO.experimentMediaType}")
+                    link(rel: 'related', href: "${precedingExperimentHref}", type: "${this.mediaTypeDTO.experimentMediaType}")
                 }
             }
             final Project project = projectExperiment.project
             if (project) {
                 final String projectHref = grailsLinkGenerator.link(mapping: 'project', absolute: true, params: [id: "${project.id}"]).toString()
-                link(rel: 'related', href: "${projectHref}", type: "${this.mediaTypesDTO.projectMediaType}")
+                link(rel: 'related', href: "${projectHref}", type: "${this.mediaTypeDTO.projectMediaType}")
 
             }
             final Stage stage = projectExperiment.stage
@@ -208,89 +221,34 @@ class ExperimentExportService {
                 final Element element = stage.element
                 if (element) {
                     final String href = grailsLinkGenerator.link(mapping: 'stage', absolute: true, params: [id: element.id]).toString()
-                    link(rel: 'related', href: "${href}", type: "${this.mediaTypesDTO.stageMediaType}")
+                    link(rel: 'related', href: "${href}", type: "${this.mediaTypeDTO.stageMediaType}")
                 }
             }
-        }
-    }
-    //TODO: Move to Result Service once that is ready
-    protected void generateResultContextItems(final MarkupBuilder markupBuilder, final Set<ResultContextItem> resultContextItems) {
-        markupBuilder.resultContextItems() {
-            for (ResultContextItem resultContextItem : resultContextItems) {
-                generateResultContextItem(markupBuilder, resultContextItem)
-            }
-        }
-    }
-    //TODO: Move to Result Service once that is ready
-    protected Map<String, String> generateAttributesForResultContextItem(final ResultContextItem resultContextItem) {
-        Map<String, String> attributes = [:]
-        attributes.put('resultContextItemId', resultContextItem.id?.toString())
-        if (resultContextItem.parentGroup && resultContextItem.parentGroup.id.toString().isInteger()) {
-            attributes.put('parentGroup', resultContextItem.parentGroup.id.toString())
-        }
-
-        if (resultContextItem.qualifier) {
-            attributes.put('qualifier', resultContextItem.qualifier)
-        }
-        if (resultContextItem.valueDisplay) {
-            attributes.put('valueDisplay', resultContextItem.valueDisplay)
-        }
-        if (resultContextItem.valueNum || resultContextItem.valueNum.toString().isInteger()) {
-            attributes.put('valueNum', resultContextItem.valueNum.toString())
-        }
-        if (resultContextItem.valueMin || resultContextItem.valueMin.toString().isInteger()) {
-            attributes.put('valueMin', resultContextItem.valueMin.toString())
-        }
-        if (resultContextItem.valueMax || resultContextItem.valueMax.toString().isInteger()) {
-            attributes.put('valueMax', resultContextItem.valueMax.toString())
-        }
-        return attributes
-    }
-    //TODO: Move to Result Service once that is ready
-    protected void generateResultContextItem(final MarkupBuilder markupBuilder, final ResultContextItem resultContextItem) {
-
-        final Map<String, String> attributes = generateAttributesForResultContextItem(resultContextItem)
-
-        markupBuilder.resultContextItem(attributes) {
-
-            if (resultContextItem.attribute) {
-                final String attributeHref = grailsLinkGenerator.link(mapping: 'element', absolute: true, params: [id: "${resultContextItem.attribute.id}"]).toString()
-                attribute(label: resultContextItem.attribute.label) {
-                    link(rel: 'related', href: "${attributeHref}", type: "${this.mediaTypesDTO.elementMediaType}")
-                }
-            }
-            if (resultContextItem.valueControlled) {
-                final String attributeHref = grailsLinkGenerator.link(mapping: 'element', absolute: true, params: [id: "${resultContextItem.valueControlled.id}"]).toString()
-
-                valueControlled(label: resultContextItem.valueControlled.label) {
-                    link(rel: 'related', href: "${attributeHref}", type: "${this.mediaTypesDTO.elementMediaType}")
-                }
-            }
-            if (resultContextItem.extValueId) {
-                extValueId(resultContextItem.extValueId)
-            }
-
         }
     }
     /**
-     *
+     *  Generate links from an experiment object
+     *  - results, parent experiments,assay, and self
      * @param markupBuilder
      * @param experiment
      */
     protected void generateExperimentLinks(final MarkupBuilder markupBuilder, final Experiment experiment) {
-        //TODO: Does not exist in domain
-        // experiment.laboratory
 
+        //link to the assay
         final String assayHref = grailsLinkGenerator.link(mapping: 'assay', absolute: true, params: [id: experiment.assay?.id]).toString()
-        final String experimentHref = grailsLinkGenerator.link(mapping: 'experiment', absolute: true, params: [id: experiment.id]).toString()
+        markupBuilder.link(rel: 'related', title: 'Link to Assay', type: "${this.mediaTypeDTO.assayMediaType}", href: assayHref)
+
+        //link to list of experiments
         final String experimentsHref = grailsLinkGenerator.link(mapping: 'experiments', absolute: true).toString()
-        final String resultsHref = grailsLinkGenerator.link(mapping: 'results', absolute: true, params: [id: experiment.id]).toString()
+        markupBuilder.link(rel: 'up', title: 'List Experiments', type: "${this.mediaTypeDTO.experimentsMediaType}", href: "${experimentsHref}")
 
-        markupBuilder.link(rel: 'related', title: 'Link to Assay', type: "${this.mediaTypesDTO.assayMediaType}", href: assayHref)
+        //link to results associated with this experiment
+        final String resultsHref = grailsLinkGenerator.link(mapping: 'results', absolute: true, params: [id: experiment.id, offset: 0]).toString()
+        markupBuilder.link(rel: 'related', title: 'List Related Results', type: "${this.mediaTypeDTO.resultsMediaType}", href: "${resultsHref}")
 
-        markupBuilder.link(rel: 'related', title: 'List Related Results', type: "${this.mediaTypesDTO.resultsMediaType}", href: "${resultsHref}")
-        markupBuilder.link(rel: 'edit', title: 'Use link to edit Experiment', type: "${this.mediaTypesDTO.experimentMediaType}", href: experimentHref)
-        markupBuilder.link(rel: 'up', title: 'List Experiments', type: "${this.mediaTypesDTO.experimentsMediaType}", href: "${experimentsHref}")
+        //link to edit this experiment. You can only change the ready_for_extraction status
+        final String experimentHref = grailsLinkGenerator.link(mapping: 'experiment', absolute: true, params: [id: experiment.id]).toString()
+        markupBuilder.link(rel: 'edit', title: 'Use link to edit Experiment', type: "${this.mediaTypeDTO.experimentMediaType}", href: experimentHref)
     }
 }
 

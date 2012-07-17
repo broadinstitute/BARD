@@ -24,7 +24,9 @@ class DictionaryRestController {
             element: "GET",
             updateElemet: "PATCH"
     ]
-
+    def index() {
+        return response.sendError(HttpServletResponse.SC_METHOD_NOT_ALLOWED)
+    }
     /**
      * Fetch the entire dictionary
      * @return
@@ -138,7 +140,8 @@ class DictionaryRestController {
  * Update the status of the given element
  */
     def updateElement() {
-        throw new RuntimeException("Not Yet Implemented")
+        response.status = HttpServletResponse.SC_NOT_IMPLEMENTED
+        render ""
     }
 
 }

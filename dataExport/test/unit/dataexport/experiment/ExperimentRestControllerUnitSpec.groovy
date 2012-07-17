@@ -33,7 +33,7 @@ class ExperimentRestControllerUnitSpec extends Specification {
         when: "We send an HTTP GET Request to the experiments action"
         request.method = 'GET'
         controller.request.addHeader(HttpHeaders.ACCEPT, mimeType)
-
+        params.start = "0"
         controller.experiments()
         then: "We expect a response with the given status code"
         expectedResults == response.status
@@ -51,13 +51,13 @@ class ExperimentRestControllerUnitSpec extends Specification {
         controller.request.addHeader(HttpHeaders.ACCEPT, mimeType)
         controller.params.id = id
 
-        controller.experiment()
+        controller.experiment(new Integer(id))
         then:
         expectedResults == response.status
         where:
-        label                     | id   | mimeType                                       | expectedResults
-        "Expects 400 Bad request" | "2"  | "bogus.mime.type"                              | HttpServletResponse.SC_BAD_REQUEST
-        "Expects 400 Bad request" | null | "application/vnd.bard.cap+xml;type=experiment" | HttpServletResponse.SC_BAD_REQUEST
+        label                     | id  | mimeType                                       | expectedResults
+        "Expects 400 Bad request" | "2" | "bogus.mime.type"                              | HttpServletResponse.SC_BAD_REQUEST
+        "Expects 400 Bad request" | "0" | "application/vnd.bard.cap+xml;type=experiment" | HttpServletResponse.SC_BAD_REQUEST
     }
     /**
      *
@@ -66,9 +66,8 @@ class ExperimentRestControllerUnitSpec extends Specification {
         when: "We send an HTTP GET request for a specific experiment"
         request.method = 'GET'
         controller.request.addHeader(HttpHeaders.ACCEPT, mimeType)
-        controller.params.id = id
 
-        controller.experiment()
+        controller.experiment(new Integer(id))
         then:
         expectedResults == response.status
         where:

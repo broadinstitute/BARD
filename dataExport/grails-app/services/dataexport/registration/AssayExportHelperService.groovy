@@ -35,8 +35,9 @@ class AssayExportHelperService {
         if (measure.measureContext) {
             attributes.put('measureContextRef', measure.measureContext.contextName)
         }
-
-        //TODO Add Parent measure
+        if(measure.parentMeasure){
+            attributes.put('parentMeasure', measure.parentMeasure.id.toString())
+        }
         return attributes
     }
 

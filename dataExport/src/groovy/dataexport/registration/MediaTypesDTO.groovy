@@ -16,7 +16,7 @@ class MediaTypesDTO {
     String experimentsMediaType
     String experimentMediaType
     String resultsMediaType
-
+    String resultMediaType
     MediaTypesDTO() {
 
     }

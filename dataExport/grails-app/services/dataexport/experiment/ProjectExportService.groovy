@@ -61,7 +61,7 @@ class ProjectExportService {
     /**
      * @param xml
      */
-    public void generateProjects(final MarkupBuilder markupBuilder) {
+    public void generateProjects(def markupBuilder) {
         final List<Project> projects = Project.findAllByReadyForExtraction('Ready')
         final int numberOfProjects = projects.size()
         markupBuilder.projects(count: numberOfProjects) {

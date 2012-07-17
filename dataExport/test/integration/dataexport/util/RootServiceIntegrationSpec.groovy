@@ -25,12 +25,12 @@ class RootServiceIntegrationSpec extends IntegrationSpec {
         rootService.generateRootElement(this.markupBuilder)
         then:
         XmlTestAssertions.assertResults(results, writer.toString())
-        //assert that there are two links, one each for dictionary and assays
-        XMLAssert.assertXpathEvaluatesTo("3", "count(//link)", writer.toString());
+        //assert that there are 4 links
+        XMLAssert.assertXpathEvaluatesTo("4", "count(//link)", writer.toString());
         XMLAssert.assertXpathEvaluatesTo("1", "count(//link[@type='application/vnd.bard.cap+xml;type=assays'])", writer.toString())
         XMLAssert.assertXpathEvaluatesTo("1", "count(//link[@type='application/vnd.bard.cap+xml;type=dictionary'])", writer.toString())
         XMLAssert.assertXpathEvaluatesTo("1", "count(//link[@type='application/vnd.bard.cap+xml;type=projects'])", writer.toString())
-        XMLAssert.assertXpathEvaluatesTo("0", "count(//link[@type='application/vnd.bard.cap+xml;type=experiments'])", writer.toString())
+        XMLAssert.assertXpathEvaluatesTo("1", "count(//link[@type='application/vnd.bard.cap+xml;type=experiments'])", writer.toString())
 
         where:
         label                 | results

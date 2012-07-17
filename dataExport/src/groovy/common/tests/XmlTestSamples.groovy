@@ -18,16 +18,16 @@ package common.tests
 class XmlTestSamples {
     //We include a dummy header, just so we can validate, otherwise the XML is not well-formed
     static final String EXPERIMENTS_LINK_UNIT = '''
-    <dummyHeader>
-    <link rel='related' title='Link to Assay' type='assayMediaType' href='null' />
-    <link rel='related' title='List Related Results' type='resultsMediaType' href='null' />
-    <link rel='edit' title='Use link to edit Experiment' type='experimentMediaType' href='null' />
-    <link rel='up' title='List Experiments' type='experimentsMediaType' href='null' />
-    </dummyHeader>
+<dummyHeader>
+  <link rel='related' title='Link to Assay' type='assayMediaType' href='null' />
+  <link rel='up' title='List Experiments' type='experimentsMediaType' href='null' />
+  <link rel='related' title='List Related Results' type='resultsMediaType' href='null' />
+  <link rel='edit' title='Use link to edit Experiment' type='experimentMediaType' href='null' />
+</dummyHeader>
     '''
 
     static final String RESULT_CONTEXT_ITEM_UNIT = '''
-  <resultContextItem resultContextItemId='' qualifier='%' valueDisplay='20 %' valueNum='2.0' valueMin='1.0' valueMax='3.0'>
+  <resultContextItem resultContextItemId='null' qualifier='%' valueDisplay='20 %' valueNum='2.0' valueMin='1.0' valueMax='3.0'>
     <attribute label='attrribute'>
       <link rel='related' href='null' type='elementMediaType' />
     </attribute>
@@ -37,11 +37,11 @@ class XmlTestSamples {
   </resultContextItem>
 '''
     static final String RESULT_CONTEXT_ITEM_UNIT_NO_CHILD_ELEMENTS = '''
-  <resultContextItem resultContextItemId='' qualifier='%' valueDisplay='20 %' valueNum='2.0' valueMin='1.0' valueMax='3.0' />
+  <resultContextItem resultContextItemId='null' qualifier='%' valueDisplay='20 %' valueNum='2.0' valueMin='1.0' valueMax='3.0' />
 '''
     static final String RESULT_CONTEXT_ITEMS_UNIT = '''
 <resultContextItems>
-  <resultContextItem resultContextItemId='' qualifier='%' valueDisplay='20 %' valueNum='2.0' valueMin='1.0' valueMax='3.0'>
+  <resultContextItem resultContextItemId='null' qualifier='%' valueDisplay='20 %' valueNum='2.0' valueMin='1.0' valueMax='3.0'>
     <attribute label='attrribute'>
       <link rel='related' href='null' type='elementMediaType' />
     </attribute>
@@ -53,7 +53,7 @@ class XmlTestSamples {
 '''
     static final String RESULT_CONTEXT_ITEMS_UNIT_NO_CHILD_ELEMENTS = '''
 <resultContextItems>
-  <resultContextItem resultContextItemId='' qualifier='%' valueDisplay='20 %' valueNum='2.0' valueMin='1.0' valueMax='3.0' />
+  <resultContextItem resultContextItemId='null' qualifier='%' valueDisplay='20 %' valueNum='2.0' valueMin='1.0' valueMax='3.0' />
 </resultContextItems>
 '''
     static final String PROJECT_EXPERIMENTS_UNIT = '''
@@ -114,11 +114,11 @@ class XmlTestSamples {
     '''
 
     static final String EXPERIMENT_UNIT_ONLY_ATTRIBUTES = '''
-  <experiment experimentId='' experimentName='Experiment1' status='Published' holdUntilDate='1969-12-31T19:00:00.000-05:00' runDateFrom='1969-12-31T19:00:00.000-05:00' runDateTo='1969-12-31T19:00:00.000-05:00'>
+<experiment experimentId='' experimentName='Experiment1' status='Published' holdUntilDate='1969-12-31T19:00:00.000-05:00' runDateFrom='1969-12-31T19:00:00.000-05:00' runDateTo='1969-12-31T19:00:00.000-05:00'>
   <link rel='related' title='Link to Assay' type='assayMediaType' href='null' />
+  <link rel='up' title='List Experiments' type='experimentsMediaType' href='null' />
   <link rel='related' title='List Related Results' type='resultsMediaType' href='null' />
   <link rel='edit' title='Use link to edit Experiment' type='experimentMediaType' href='null' />
-  <link rel='up' title='List Experiments' type='experimentsMediaType' href='null' />
 </experiment>
     '''
     static final String EXPERIMENT_UNIT_ATTRIBUTES_AND_ELEMENTS = '''
@@ -154,9 +154,9 @@ class XmlTestSamples {
     </externalReference>
   </externalReferences>
   <link rel='related' title='Link to Assay' type='assayMediaType' href='null' />
+  <link rel='up' title='List Experiments' type='experimentsMediaType' href='null' />
   <link rel='related' title='List Related Results' type='resultsMediaType' href='null' />
   <link rel='edit' title='Use link to edit Experiment' type='experimentMediaType' href='null' />
-  <link rel='up' title='List Experiments' type='experimentsMediaType' href='null' />
 </experiment>
 '''
     static final String EXPERIMENTS_2_RECORDS_UNIT = '''
@@ -166,20 +166,20 @@ class XmlTestSamples {
 </experiments>
 '''
     static final String EXPERIMENTS_2_RECORDS_WITH_NEXT_UNIT = '''
-    <experiments count='3'>
+<experiments count='2'>
   <link rel='related' type='experimentMediaType' href='null' />
   <link rel='related' type='experimentMediaType' href='null' />
-  <link rel='next' title='List Experiments' type='experimentsMediaType' href='null' />
 </experiments>
 '''
     static final String EXPERIMENT_SINGLE_RECORD_UNIT = '''
-<experiments count='3'>
+<experiments count='2'>
+  <link rel='related' type='experimentMediaType' href='null' />
+  <link rel='related' type='experimentMediaType' href='null' />
   <link rel='next' title='List Experiments' type='experimentsMediaType' href='null' />
 </experiments>
 '''
 
-
-    static final String PROJECTS = '''
+ static final String PROJECTS = '''
 <projects count='2'>
   <project projectId='1' readyForExtraction='Ready' groupType='Project'>
     <projectName>Scripps special project #1</projectName>
@@ -382,18 +382,20 @@ class XmlTestSamples {
 '''
 
     static String BARD_DATA_EXPORT_UNIT = '''
-   <bardexport>
-    <link rel='item' title='The BARD Dictionary' href='null' type='dictionaryMediaType' />
-    <link rel='item' title='List of assays, ready for extraction' href='null' type='assaysMediaType' />
-    <link rel='item' title='List of projects, ready for extraction' href='null' type='projectsMediaType' />
-    </bardexport>
+<bardexport>
+  <link rel='item' title='The BARD Dictionary' href='null' type='dictionaryMediaType' />
+  <link rel='item' title='List of assays, ready for extraction' href='null' type='assaysMediaType' />
+  <link rel='item' title='List of projects, ready for extraction' href='null' type='projectsMediaType' />
+  <link rel='item' title='List of experiments, ready for extraction' type='experimentsMediaType' href='null' />
+</bardexport>
 '''
     static String BARD_DATA_EXPORT = '''
 <bardexport>
-    <link rel='item' title='The BARD Dictionary' href='http://localhost:8080/dataExport/api/dictionary' type='application/vnd.bard.cap+xml;type=dictionary' />
-    <link rel='item' title='List of assays, ready for extraction' href='http://localhost:8080/dataExport/api/assays' type='application/vnd.bard.cap+xml;type=assays' />
-    <link rel='item' title='List of projects, ready for extraction' href='http://localhost:8080/dataExport/api/projects' type='application/vnd.bard.cap+xml;type=projects' />
-    </bardexport>
+  <link rel='item' title='The BARD Dictionary' href='http://localhost:8080/dataExport/api/dictionary' type='application/vnd.bard.cap+xml;type=dictionary' />
+  <link rel='item' title='List of assays, ready for extraction' href='http://localhost:8080/dataExport/api/assays' type='application/vnd.bard.cap+xml;type=assays' />
+  <link rel='item' title='List of projects, ready for extraction' href='http://localhost:8080/dataExport/api/projects' type='application/vnd.bard.cap+xml;type=projects' />
+  <link rel='item' title='List of experiments, ready for extraction' type='application/vnd.bard.cap+xml;type=experiments' href='http://localhost:8080/dataExport/api/experiments' />
+</bardexport>
     '''
     static String UNIT_CONVERSION_FULL = '''
 <unitConversion fromUnit='fromUnit' toUnit='toUnit' multiplier='1.0' offset='1.0'>

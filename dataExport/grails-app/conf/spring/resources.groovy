@@ -1,4 +1,6 @@
 import dataexport.registration.MediaTypesDTO
+import dataexport.experiment.ResultExportService
+import org.codehaus.groovy.grails.web.mapping.LinkGenerator
 
 // Place your Spring DSL code here
 beans = {
@@ -15,12 +17,21 @@ beans = {
     mediaTypesDTO.experimentsMediaType = grailsApplication.config.bard.data.export.experiments.xml
     mediaTypesDTO.experimentMediaType = grailsApplication.config.bard.data.export.experiment.xml
     mediaTypesDTO.resultsMediaType = grailsApplication.config.bard.data.export.results.xml
+    mediaTypesDTO.resultMediaType = grailsApplication.config.bard.data.export.result.xml
+
     final int maxExperimentsRecordsPerPage = grailsApplication.config.bard.experiments.max.per.page
 
-
-    experimentExportService(dataexport.experiment.ExperimentExportService, mediaTypesDTO,
-            maxExperimentsRecordsPerPage) {
+    resultExportService(dataexport.experiment.ResultExportService) {
+        maxResultsRecordsPerPage = maxExperimentsRecordsPerPage
+        mediaTypes = mediaTypesDTO
         grailsLinkGenerator = ref('grailsLinkGenerator')
+    }
+
+    experimentExportService(dataexport.experiment.ExperimentExportService) {
+        numberRecordsPerPage = maxExperimentsRecordsPerPage
+        mediaTypeDTO = mediaTypesDTO
+        grailsLinkGenerator = ref('grailsLinkGenerator')
+        resultExportService= ref('resultExportService')
     }
     //inject element mime type here
     dictionaryExportHelperService(dataexport.dictionary.DictionaryExportHelperService, mediaTypesDTO) {

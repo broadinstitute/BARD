@@ -2,12 +2,14 @@ package dataexport.cap.experiment
 
 import dataexport.experiment.ExperimentExportService
 import dataexport.experiment.ResultExportService
+import exceptions.NotFoundException
 import groovy.xml.MarkupBuilder
+import groovy.xml.StaxBuilder
 import org.codehaus.groovy.grails.commons.GrailsApplication
 import org.codehaus.groovy.grails.web.servlet.HttpHeaders
 
 import javax.servlet.http.HttpServletResponse
-import exceptions.NotFoundException
+import javax.xml.stream.XMLOutputFactory
 
 /**
  * Please note that the DataExportFilters is applied to all incoming request.
@@ -29,7 +31,7 @@ class ExperimentRestController {
     ]
 
     def index() {
-        return unsupported()
+        return response.sendError(HttpServletResponse.SC_METHOD_NOT_ALLOWED)
     }
 
     def experiments() {
@@ -39,50 +41,83 @@ class ExperimentRestController {
             response.contentType = mimeType
             //mime types must match the expected type
             if (mimeType == request.getHeader(HttpHeaders.ACCEPT)) {
-                final Writer writer = response.writer
-                final MarkupBuilder markupBuilder = new MarkupBuilder(writer)
-                int start = 0
-                if (params.start){
-                    start = new Integer(params.start)
+                final int offset = params.offset ? new Integer(params.offset) : 0
+
+                final XMLOutputFactory factory = XMLOutputFactory.newInstance()
+                final StringWriter markupWriter = new StringWriter()
+                final StaxBuilder staxBuilder = new StaxBuilder(factory.createXMLStreamWriter(markupWriter))
+
+                final boolean hasMoreExperiments = this.experimentExportService.generateExperiments(staxBuilder, offset)
+                if (hasMoreExperiments) {
+                    //we set the header to 206
+                    response.status = HttpServletResponse.SC_PARTIAL_CONTENT
+                } else {
+                    response.status = HttpServletResponse.SC_OK
                 }
-                this.experimentExportService.generateExperiments(markupBuilder,start)
+                response.contentLength = markupWriter.toString().length()
+                response.contentType = mimeType
+                render markupWriter.toString()
+                //now set the writer
                 return
             }
             response.status = HttpServletResponse.SC_BAD_REQUEST
             render ""
         } catch (Exception ee) {
             response.status = HttpServletResponse.SC_INTERNAL_SERVER_ERROR
-            log.error(ee.message)
-            ee.printStackTrace()
+            log.error(ee)
+            render ""
+        }
+    }
+    /**
+     * Render XML for each result object of the given Experiment
+     * If the number of experiments > than the max per page
+     * then use paging by setting the SC_PARTIAL_CONTENT header in the response
+     * @param id - The Id of this experiment
+     * @return
+     */
+    def results(Integer id) {
+        try {
+            final String mimeType = grailsApplication.config.bard.data.export.results.xml
+            //mime types must match the expected type
+            if (mimeType == request.getHeader(HttpHeaders.ACCEPT) && id) {
+
+                final int offset = params.offset ? new Integer(params.offset) : 0
+
+                //we use the stax builder here
+                final XMLOutputFactory factory = XMLOutputFactory.newInstance()
+                final StringWriter markupWriter = new StringWriter()
+                final StaxBuilder staxBuilder = new StaxBuilder(factory.createXMLStreamWriter(markupWriter))
+                final boolean hasMoreResults = this.resultExportService.generateResults(staxBuilder, id, offset)
+                if (hasMoreResults) {
+                    //we set the header to 206
+                    response.status = HttpServletResponse.SC_PARTIAL_CONTENT
+                } else {
+                    response.status = HttpServletResponse.SC_OK
+                }
+                response.contentLength = markupWriter.toString().length()
+                response.contentType = mimeType
+                render markupWriter.toString()
+                //now set the writer
+                return
+            }
+            response.status = HttpServletResponse.SC_BAD_REQUEST
+            render ""
+        } catch (Exception ee) {
+            response.status = HttpServletResponse.SC_INTERNAL_SERVER_ERROR
+            log.error(ee)
+            render ""
         }
     }
 
-    def results() {
-        throw new RuntimeException("Not Yet Implemented")
-//        //TODO: Set response header for partial requests
-//        def mimeType = grailsApplication.config.bard.data.export.data.results.xml
-//        response.contentType = mimeType
-//        //do validations
-//        if (mimeType == request.getHeader(HttpHeaders.ACCEPT) && params.id) {
-//            final def writer = response.writer
-//            final MarkupBuilder xml = new MarkupBuilder(writer)
-//            final BigDecimal experimentId = params.id as BigDecimal
-//            resultExportService.generateResults(xml, experimentId)
-//            return
-//        }
-//        response.status = HttpServletResponse.SC_BAD_REQUEST
-//        render ""
-    }
-
-    def experiment() {
+    def experiment(Integer id) {
         try {
             final String mimeType = grailsApplication.config.bard.data.export.experiment.xml
             response.contentType = mimeType
             //do validations
-            if (mimeType == request.getHeader(HttpHeaders.ACCEPT) && params.id) {
+            if (mimeType == request.getHeader(HttpHeaders.ACCEPT) && id) {
                 final Writer writer = response.writer
                 final MarkupBuilder markupBuilder = new MarkupBuilder(writer)
-                this.experimentExportService.generateExperiment(markupBuilder, new Long(params.id))
+                this.experimentExportService.generateExperiment(markupBuilder, id)
                 return
             }
             response.status = HttpServletResponse.SC_BAD_REQUEST
@@ -95,34 +130,43 @@ class ExperimentRestController {
         catch (Exception ee) {
             response.status = HttpServletResponse.SC_INTERNAL_SERVER_ERROR
             log.error(ee.message)
-            ee.printStackTrace()
+            render ""
         }
 
     }
 
-    def result() {
-//        def mimeType = grailsApplication.config.bard.data.export.data.result.xml
-//        response.contentType = mimeType
-//        //do validations
-//        if (mimeType == request.getHeader(HttpHeaders.ACCEPT) && params.id) {
-//            final BigDecimal resultId = params.id as BigDecimal
-//            final def writer = response.writer
-//            final MarkupBuilder xml = new MarkupBuilder(writer)
-//            resultExportService.generateResult(xml, resultId)
-//            return
-//
-//        }
-//        response.status = HttpServletResponse.SC_BAD_REQUEST
-//
-//        render ""
-        throw new RuntimeException("Not Yet Implemented")
+    def result(Integer id) {
+        try {
+            final String mimeType = grailsApplication.config.bard.data.export.result.xml
+            response.contentType = mimeType
+            //do validations
+            if (mimeType == request.getHeader(HttpHeaders.ACCEPT) && id) {
+                final Writer writer = response.writer
+                final MarkupBuilder markupBuilder = new MarkupBuilder(writer)
+                this.resultExportService.generateResult(markupBuilder, id)
+                return
+            }
+            response.status = HttpServletResponse.SC_BAD_REQUEST
+            render ""
+        } catch (NotFoundException notFoundException) {
+            log.error(notFoundException)
+            response.status = HttpServletResponse.SC_NOT_FOUND
+            render ""
+        }
+        catch (Exception ee) {
+            response.status = HttpServletResponse.SC_INTERNAL_SERVER_ERROR
+            log.error(ee.message)
+            render ""
+        }
     }
 
     def updateResult() {
-        throw new RuntimeException("Not Yet Implemented")
+        response.status = HttpServletResponse.SC_NOT_IMPLEMENTED
+        render ""
     }
 
     def updateExperiment() {
-
+        response.status = HttpServletResponse.SC_NOT_IMPLEMENTED
+        render ""
     }
 }

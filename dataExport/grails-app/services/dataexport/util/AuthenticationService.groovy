@@ -46,7 +46,7 @@ class AuthenticationService {
             }
         }
 
-        log.info("Failed authentication - remote IP address is not in the whitelist: ${requestParamsString}")
+       log.info("Failed authentication - remote IP address is not in the whitelist: ${requestParamsString}")
         return false
     }
 

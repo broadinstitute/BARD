@@ -1,365 +1,279 @@
 package dataexport.experiment
 
-import groovy.sql.Sql
-import groovy.xml.MarkupBuilder
-import org.codehaus.groovy.grails.commons.GrailsApplication
-import org.codehaus.groovy.grails.web.mapping.LinkGenerator
+//import bard.db.experiment.Experiment
 
-import javax.sql.DataSource
+
+import bard.db.dictionary.Element
+import dataexport.registration.MediaTypesDTO
+import exceptions.NotFoundException
+import groovy.xml.MarkupBuilder
+import groovy.xml.StaxBuilder
+import org.codehaus.groovy.grails.web.mapping.LinkGenerator
+import bard.db.experiment.*
 
 class ResultExportService {
-    DataSource dataSource
-    GrailsApplication grailsApplication
     LinkGenerator grailsLinkGenerator
-    //TODO use a Stax builder for results
-//    def factory = XMLOutputFactory.newInstance()
-//    def writer = new StringWriter()
-//    def builder = new StaxBuilder(factory.createXMLStreamWriter(writer))
+    MediaTypesDTO mediaTypes
+    int maxResultsRecordsPerPage
 
+    /**
+     * Generate the results for a given experiment
+     * @param markupBuilder - The markup builder to write
+     * @param experimentId - The id of the experiment
+     * @param offset - For paging
+     * @return true if there are more results than can fit on a page
+     */
+    public boolean generateResults(final StaxBuilder markupBuilder, final Long experimentId, final int offset) {
+        Experiment experiment = Experiment.get(experimentId)
+        if (!experiment) {
+            throw new NotFoundException("Could not find Experiment with Id ${experimentId}")
+        }
+        return generateResults(markupBuilder, experiment, offset)
+    }
+    /**
+     * Given a resultId, find the result and generate an XML object
+     * @param markupBuilder
+     * @param resultId
+     */
+    public void generateResult(final MarkupBuilder markupBuilder, final Long resultId) {
+
+        final Result result = Result.get(resultId)
+        if (!result) {
+            throw new NotFoundException("Could not find Result with Id ${resultId}")
+        }
+        generateResult(markupBuilder, result)
+
+    }
+
+    protected Map<String, String> generateAttributesForResult(final Result result) {
+        Map<String, String> attributes = [:]
+
+        if (result.readyForExtraction) {
+            attributes.put('readyForExtraction', result.readyForExtraction)
+        }
+        if (result.valueDisplay) {
+            attributes.put('valueDisplay', result.valueDisplay)
+        }
+        if (result.valueNum || result.valueNum.toString().isInteger()) {
+            attributes.put('valueNum', result.valueNum.toString())
+        }
+        if (result.valueMin || result.valueMin.toString().isInteger()) {
+            attributes.put('valueMin', result.valueMin.toString())
+        }
+        if (result.valueMax || result.valueMax.toString().isInteger()) {
+            attributes.put('valueMax', result.valueMax.toString())
+        }
+        if (result.qualifier) {
+            attributes.put('qualifier', result.qualifier)
+        }
+        if (result.resultStatus) {
+            attributes.put('status', result.resultStatus)
+        }
+        return attributes
+    }
     /**
      * Generate the result element
+     * @param markupBuilder
+     * @param result
      *
-     * @param sql
-     * @param xml
-     * @param experimentId
      */
-    protected void generateResult(final Sql sql, final MarkupBuilder xml, final ResultDTO resultDTO, final String experimentHref) {
+    protected void generateResult(final MarkupBuilder markupBuilder, final Result result) {
 
-        final BigDecimal resultId = resultDTO.resultId
-        final String resultHref = grailsLinkGenerator.link(mapping: 'result', absolute: true, params: [id: resultId]).toString()
+        final Map<String, String> attributes = generateAttributesForResult(result)
 
-        def attributes = [:]
-        if (resultDTO.readyForExtraction) {
-            attributes.put('readyForExtraction', resultDTO.readyForExtraction)
-        }
-
-        if (resultDTO.valueDisplay) {
-            attributes.put('valueDisplay', resultDTO.valueDisplay)
-        }
-        if (resultDTO.valueNum || resultDTO.valueNum.toString().isInteger()) {
-            attributes.put('valueNum', resultDTO.valueNum)
-        }
-        if (resultDTO.valueMin || resultDTO.valueMin.toString().isInteger()) {
-            attributes.put('valueMin', resultDTO.valueMin)
-        }
-        if (resultDTO.valueMax || resultDTO.valueMax.toString().isInteger()) {
-            attributes.put('valueMax', resultDTO.valueMax)
-        }
-        if (resultDTO.qualifier) {
-            attributes.put('qualifier', resultDTO.qualifier)
-        }
-        xml.result(
-                attributes
-        ) {
-            if (resultDTO.status) {
-                status(resultDTO.status)
-            }
-            if (resultDTO.substanceId || resultDTO.substanceId.toString().isInteger()) {
-                final String PUBCHEM_SID_URL = grailsApplication.config.bard.pubchem.sid.url.prefix
-                substance(url: "${PUBCHEM_SID_URL}${resultDTO.substanceId}")
-            }
-
-            generateResultContextItem(sql, xml, resultId)
-
-            generateResultHierarchy(sql, xml, resultId)
-
-            generateResultLinks(xml, resultId, resultDTO.resultTypeId, experimentHref, resultHref)
-        }
-
-    }
-
-    public void generateResult(final MarkupBuilder xml, final BigDecimal resultId) {
-        final Sql sql = new Sql(dataSource)
-
-        sql.eachRow("SELECT * FROM RESULT WHERE RESULT_ID=" + resultId) { resultRow ->
-
-            final String experimentHref = grailsLinkGenerator.link(mapping: 'experiment', absolute: true, params: [id: resultRow.EXPERIMENT_ID]).toString()
-            ResultDTO resultDTO =
-                new ResultDTO(
-                        resultRow.RESULT_ID,
-                        resultRow.RESULT_STATUS,
-                        resultRow.SUBSTANCE_ID,
-                        resultRow.RESULT_TYPE_ID,
-                        resultRow.VALUE_NUM,
-                        resultRow.VALUE_MIN,
-                        resultRow.VALUE_MAX,
-                        resultRow.VALUE_DISPLAY,
-                        resultRow.QUALIFIER,
-                        resultRow.READY_FOR_EXTRACTION
-                )
-            generateResult(sql, xml, resultDTO, experimentHref)
-        }
-    }
-    /**
-     * Generate the results for a given experiment
-     * @param experimentId
-     * @param numberOfResults
-     * @return
-     */
-    protected void generateResults(final Sql sql, final MarkupBuilder xml, final BigDecimal experimentId, final int numberOfResults) {
-        final String experimentHref = grailsLinkGenerator.link(mapping: 'experiment', absolute: true, params: [id: experimentId]).toString()
-
-        xml.results(count: numberOfResults) {
-            sql.eachRow('SELECT * FROM RESULT WHERE EXPERIMENT_ID=' + experimentId) { resultRow ->
-                final String resultHref = grailsLinkGenerator.link(mapping: 'result', absolute: true, params: [id: resultRow.RESULT_ID]).toString()
-                final String RESULT_MEDIA_TYPE = grailsApplication.config.bard.data.export.data.result.xml
-                xml.link(rel: 'related', title: '', type: "${RESULT_MEDIA_TYPE}",
-                        href: resultHref) {
+        markupBuilder.result(attributes) {
+            final Element resultType = result.resultType
+            if (resultType) { //this is the result type
+                resultTypeRef(label: resultType.label) {
+                    final String href = grailsLinkGenerator.link(mapping: 'resultType', absolute: true, params: [id: resultType.id]).toString()
+                    link(rel: 'related', href: "${href}", type: "${this.mediaTypes.resultTypeMediaType}")
                 }
             }
-            generateResultsLinks(xml, experimentHref, numberOfResults, experimentId)
-        }
-    }
-
-    /**
-     * Generate the results for a given experiment
-     * @param experimentId
-     * @param numberOfResults
-     * @return
-     */
-    public void generateResults(final MarkupBuilder xml, final BigDecimal experimentId) {
-        final Sql sql = new Sql(dataSource)
-        int resultsCount = 0
-        sql.eachRow('SELECT COUNT(*) AS RESULTSCOUNT FROM RESULT WHERE EXPERIMENT_ID=' + experimentId) { resultsCountRow ->
-            resultsCount = resultsCountRow.resultsCount
-        }
-
-        generateResults(sql, xml, experimentId, resultsCount)
-    }
-
-
-    protected void generateResultContextItem(final MarkupBuilder xml, final ResultContextItemDTO resultContextItemDTO) {
-        def attributes = [:]
-        attributes.put('resultContextItemId', resultContextItemDTO.resultContextItemId)
-        if (resultContextItemDTO.groupResultContextItemId || resultContextItemDTO.groupResultContextItemId.toString().isInteger()) {
-            attributes.put('groupResultContextItemId', resultContextItemDTO.groupResultContextItemId)
-        }
-
-        if (resultContextItemDTO.qualifier) {
-            attributes.put('qualifier', resultContextItemDTO.qualifier)
-        }
-
-
-        if (resultContextItemDTO.valueDisplay) {
-            attributes.put('valueDisplay', resultContextItemDTO.valueDisplay)
-        }
-        if (resultContextItemDTO.valueNum || resultContextItemDTO.valueNum.toString().isInteger()) {
-            attributes.put('valueNum', resultContextItemDTO.valueNum)
-        }
-        if (resultContextItemDTO.valueMin || resultContextItemDTO.valueMin.toString().isInteger()) {
-            attributes.put('valueMin', resultContextItemDTO.valueMin)
-        }
-        if (resultContextItemDTO.valueMax || resultContextItemDTO.valueMax.toString().isInteger()) {
-            attributes.put('valueMax', resultContextItemDTO.valueMax)
-        }
-
-
-        xml.resultContextItem(attributes) {
-            final String ELEMENT_MEDIA_TYPE = grailsApplication.config.bard.data.export.dictionary.element.xml
-
-            if (resultContextItemDTO.attributeId || resultContextItemDTO.attributeId.toString().isInteger()) {
-                final String attributeHref = grailsLinkGenerator.link(mapping: 'element', absolute: true, params: [id: "${resultContextItemDTO.attributeId}"]).toString()
-
-                attributeId() {
-                    link(rel: 'related', href: "${attributeHref}", type: "${ELEMENT_MEDIA_TYPE}")
-                }
-            }
-            if (resultContextItemDTO.valueId || resultContextItemDTO.valueId.toString().isInteger()) {
-                final String attributeHref = grailsLinkGenerator.link(mapping: 'element', absolute: true, params: [id: "${resultContextItemDTO.valueId}"]).toString()
-
-                valueId() {
-                    link(rel: 'related', href: "${attributeHref}", type: "${ELEMENT_MEDIA_TYPE}")
+            final Substance substances = result.substance
+            if (substances) {
+                substance(sid: substances.id.toString()) {
                 }
             }
 
-        }
-    }
-    /**
-     *
-     * Generate the result context element
-     *
-     * @param sql
-     * @param xml
-     * @param resultId
-     */
-    protected void generateResultContextItem(final Sql sql, final MarkupBuilder xml, final BigDecimal resultId) {
-        xml.resultContextItems() {
-            sql.eachRow('SELECT * FROM RESULT_CONTEXT_ITEM WHERE RESULT_ID=' + resultId) { resultContextItemRow ->
-                generateResultContextItem(xml,
-                        new ResultContextItemDTO(
-                                resultContextItemRow.RESULT_CONTEXT_ITEM_ID,
-                                resultContextItemRow.GROUP_RESULT_CONTEXT_ID,
-                                resultContextItemRow.VALUE_NUM,
-                                resultContextItemRow.VALUE_MAX,
-                                resultContextItemRow.VALUE_MIN,
-                                resultContextItemRow.ATTRIBUTE_ID,
-                                resultContextItemRow.VALUE_ID,
-                                resultContextItemRow.QUALIFIER,
-                                resultContextItemRow.VALUE_DISPLAY
-                        )
-                )
+            final Set<ResultContextItem> resultContextItems = result.resultContextItems
+            if (resultContextItems) {
+                generateResultContextItems(markupBuilder, resultContextItems)
             }
-        }
-    }
-    /**
-     * Generate the RESULT_HIERARCHY element
-     *
-     * @param sql
-     * @param xml
-     * @param resultId
-     */
-    protected void generateResultHierarchy(final Sql sql, final MarkupBuilder xml, final BigDecimal resultId) {
-        sql.eachRow('SELECT PARENT_RESULT_ID,HIERARCHY_TYPE FROM RESULT_HIERARCHY WHERE RESULT_ID=' + resultId) { resultHierarchyRow ->
-            ResultHierarchyDTO resultHierarchyDTO = new ResultHierarchyDTO(resultHierarchyRow.PARENT_RESULT_ID, resultHierarchyRow.HIERARCHY_TYPE)
-            generateResultHierarchy(xml, resultHierarchyDTO)
-        }
-    }
-    /**
-     * Generate the RESULT_HIERARCHY element
-     *
-     * @param sql
-     * @param xml
-     * @param resultId
-     */
-    protected void generateResultHierarchy(final MarkupBuilder xml, ResultHierarchyDTO resultHierarchyDTO) {
-        def attributes = [:]
-        if (resultHierarchyDTO.parentResultId || resultHierarchyDTO.parentResultId.toString().isInteger()) {
-            attributes.put('parentResultId', resultHierarchyDTO.parentResultId)
-        }
-        if (resultHierarchyDTO.hierarchyType) {
-            attributes.put('hierarchyType', resultHierarchyDTO.hierarchyType)
-        }
 
-        xml.resultHierarchy(attributes)
+            final Set<ResultHierarchy> hierarchies = [] as Set<ResultHierarchy>
+            if (result.resultHierarchiesForParentResult) {
+                hierarchies.addAll(result.resultHierarchiesForParentResult)
+            }
+            if (result.resultHierarchiesForResult) {
+                hierarchies.addAll(result.resultHierarchiesForResult)
+            }
+            if (hierarchies) {
+                generateResultHierarchies(markupBuilder, hierarchies)
+            }
+            generateResultLinks(markupBuilder, result)
+        }
 
     }
     /**
      * Generate the links needed for an individual result element
-     * @param sql
-     * @param xml
-     * @param resultId
-     * @param resultTypeId
-     * @param experimentHref
-     * @param resultHref
+     * @param markupBuilder
+     * @param result
      */
-    protected void generateResultLinks(final MarkupBuilder xml, final BigDecimal resultId, final BigDecimal resultTypeId, final String experimentHref, final String resultHref) {
-        final String EXPERIMENT_MEDIA_TYPE = grailsApplication.config.bard.data.export.data.experiment.xml
+    protected void generateResultLinks(def markupBuilder, final Result result) {
 
-        xml.link(rel: 'up', title: 'Experiment', type: "${EXPERIMENT_MEDIA_TYPE}",
+        final String experimentHref = grailsLinkGenerator.link(mapping: 'experiment', absolute: true, params: [id: result.experiment.id]).toString()
+
+        markupBuilder.link(rel: 'up', title: 'Experiment', type: "${this.mediaTypes.experimentMediaType}",
                 href: experimentHref) {
         }
-
-        final String resultTypeHref = grailsLinkGenerator.link(mapping: 'resultType', absolute: true, params: [id: resultTypeId]).toString()
-        final String RESULT_TYPE_MEDIA_TYPE = grailsApplication.config.bard.data.export.dictionary.resultType.xml
-        final String RESULT_MEDIA_TYPE = grailsApplication.config.bard.data.export.data.result.xml
-        xml.link(rel: 'related', title: 'Result Type', type: "${RESULT_TYPE_MEDIA_TYPE}",
-                href: resultTypeHref) {
-        }
-        xml.link(rel: 'edit', title: 'Edit Link', type: "${RESULT_MEDIA_TYPE}",
+        final String resultHref = grailsLinkGenerator.link(mapping: 'result', absolute: true, params: [id: result.id]).toString()
+        markupBuilder.link(rel: 'edit', type: "${this.mediaTypes.resultMediaType}",
                 href: resultHref) {
         }
     }
     /**
-     * Generate the links needed for the results element
-     * @param xml
-     * @param experimentHref
+     * Generate the results for a given experiment
+     * @param experimentId
      * @param numberOfResults
+     * @param offset - Used for paging, marks the position of the current result element within the experiment
+     * @return true if there are more results than can fit on a page
      */
-    protected void generateResultsLinks(final MarkupBuilder xml, final String experimentHref, final int numberOfResults, final BigDecimal experimentId) {
-        final String EXPERIMENT_MEDIA_TYPE = grailsApplication.config.bard.data.export.data.experiment.xml
+    protected boolean generateResults(final StaxBuilder markupBuilder, final Experiment experiment, int offset) {
 
-        xml.link(rel: 'collection', title: 'Experiment', type: "${EXPERIMENT_MEDIA_TYPE}",
-                href: experimentHref) {
+        int end = this.maxResultsRecordsPerPage + 1  //A trick to know if there are more records
+        boolean hasMoreResults = false //This is used for paging, if there are more results than the threshold, add next link and return true
+
+        List<Result> results = Result.findAllByExperimentAndReadyForExtraction(experiment, 'Ready', [sort: "id", order: "asc", offset: offset, max: end])
+        final int numberOfResults = results.size()
+        if (numberOfResults > this.maxResultsRecordsPerPage) {
+            hasMoreResults = true
+            results = results.subList(0, this.maxResultsRecordsPerPage) //we will leave one record behind but that is OK, since now we know there are more records
         }
-//        final int MAX_RESULTS_RECORDS_PER_PAGE = grailsApplication.config.bard.results.max.per.page
-//
-//        if (numberOfResults > MAX_RESULTS_RECORDS_PER_PAGE) {
-//            final String RESULTS_MEDIA_TYPE = grailsApplication.config.bard.data.export.data.results.xml
-//            final String resultsHref = grailsLinkGenerator.link(mapping: 'results', absolute: true, params: [id: experimentId]).toString()
-//            xml.link(rel: 'next', title: 'Results', type: "${RESULTS_MEDIA_TYPE}",
-//                    href: resultsHref) {
-//            }
-//        }
+        offset = this.maxResultsRecordsPerPage  //reset this to the max number of records
+        markupBuilder.results(count: results.size()) {
+            for (Result result : results) {
+                final String resultHref = grailsLinkGenerator.link(mapping: 'result', absolute: true, params: [id: result.id]).toString()
+                link(rel: 'related', type: "${this.mediaTypes.resultMediaType}", href: "${resultHref}")
+            }
+            generateResultsLinks(markupBuilder, experiment.id, hasMoreResults, offset)
+        }
+        return hasMoreResults
     }
-}
-class ResultContextItemDTO {
-    final BigDecimal resultContextItemId
-    final BigDecimal groupResultContextItemId
-    final BigDecimal valueNum
-    final BigDecimal valueMax
-    final BigDecimal valueMin
-    final BigDecimal attributeId
-    final BigDecimal valueId
-    final String qualifier
-    final String valueDisplay
+    /**
+     * Generate the links needed for the results element
+     *
+     * @param markupBuilder
+     * @param experimentId
+     * @param hasMoreResults
+     * @param offset - Used for paging results, where to start the next time ou try to fetch results
+     */
+    protected void generateResultsLinks(final StaxBuilder markupBuilder, final Long experimentId, final boolean hasMoreResults, final int offset) {
+        //if there are more records that can fit on a page then add the next link, with the offset parameter
+        //being the end variable in this method
+        if (hasMoreResults) {
+            final String resultsHref = grailsLinkGenerator.link(mapping: 'results', absolute: true, params: [id: experimentId, offset: offset]).toString()
+            markupBuilder.link(rel: 'next', type: "${this.mediaTypes.resultsMediaType}", href: "${resultsHref}")
+        }
+        final String experimentHref = grailsLinkGenerator.link(mapping: 'experiment', absolute: true, params: [id: experimentId]).toString()
+        markupBuilder.link(rel: 'up', type: "${this.mediaTypes.experimentMediaType}", href: experimentHref)
+    }
+    /**
+     *
+     * @param markupBuilder
+     * @param resultContextItems
+     */
+    protected void generateResultContextItems(def markupBuilder, final Set<ResultContextItem> resultContextItems) {
+        markupBuilder.resultContextItems() {
+            for (ResultContextItem resultContextItem : resultContextItems) {
+                generateResultContextItem(markupBuilder, resultContextItem)
+            }
+        }
+    }
+    /**
+     *
+     * @param resultContextItem
+     * @return
+     */
+    protected Map<String, String> generateAttributesForResultContextItem(final ResultContextItem resultContextItem) {
+        Map<String, String> attributes = [:]
+        attributes.put('resultContextItemId', resultContextItem.id?.toString())
+        if (resultContextItem.parentGroup && resultContextItem.parentGroup.id.toString().isInteger()) {
+            attributes.put('parentGroup', resultContextItem.parentGroup.id.toString())
+        }
 
-    ResultContextItemDTO(
-            final BigDecimal resultContextItemId,
-            final BigDecimal groupResultContextItemId,
-            final BigDecimal valueNum,
-            final BigDecimal valueMax,
-            final BigDecimal valueMin,
-            final BigDecimal attributeId,
-            final BigDecimal valueId,
-            final String qualifier,
-            final String valueDisplay
-    ) {
-        this.resultContextItemId = resultContextItemId
-        this.groupResultContextItemId = groupResultContextItemId
-        this.valueNum = valueNum
-        this.valueMax = valueMax
-        this.valueMin = valueMin
-        this.attributeId = attributeId
-        this.valueId = valueId
-        this.qualifier = qualifier
-        this.valueDisplay = valueDisplay
+        if (resultContextItem.qualifier) {
+            attributes.put('qualifier', resultContextItem.qualifier)
+        }
+        if (resultContextItem.valueDisplay) {
+            attributes.put('valueDisplay', resultContextItem.valueDisplay)
+        }
+        if (resultContextItem.valueNum || resultContextItem.valueNum.toString().isInteger()) {
+            attributes.put('valueNum', resultContextItem.valueNum.toString())
+        }
+        if (resultContextItem.valueMin || resultContextItem.valueMin.toString().isInteger()) {
+            attributes.put('valueMin', resultContextItem.valueMin.toString())
+        }
+        if (resultContextItem.valueMax || resultContextItem.valueMax.toString().isInteger()) {
+            attributes.put('valueMax', resultContextItem.valueMax.toString())
+        }
+        return attributes
+    }
+    /**
+     *
+     * @param markupBuilder
+     * @param resultContextItem
+     */
+    protected void generateResultContextItem(def markupBuilder, final ResultContextItem resultContextItem) {
+
+        final Map<String, String> attributes = generateAttributesForResultContextItem(resultContextItem)
+
+        markupBuilder.resultContextItem(attributes) {
+
+            if (resultContextItem.attribute) {
+                final String attributeHref = grailsLinkGenerator.link(mapping: 'element', absolute: true, params: [id: "${resultContextItem.attribute.id}"]).toString()
+                attribute(label: resultContextItem.attribute.label) {
+                    link(rel: 'related', href: "${attributeHref}", type: "${this.mediaTypes.elementMediaType}")
+                }
+            }
+            if (resultContextItem.valueControlled) {
+                final String attributeHref = grailsLinkGenerator.link(mapping: 'element', absolute: true, params: [id: "${resultContextItem.valueControlled.id}"]).toString()
+
+                valueControlled(label: resultContextItem.valueControlled.label) {
+                    link(rel: 'related', href: "${attributeHref}", type: "${this.mediaTypes.elementMediaType}")
+                }
+            }
+            if (resultContextItem.extValueId) {
+                extValueId(resultContextItem.extValueId)
+            }
+
+        }
     }
 
-}
-
-class ResultHierarchyDTO {
-    final BigDecimal parentResultId
-    final String hierarchyType
-
-    ResultHierarchyDTO(final BigDecimal parentResultId, final String hierarchyType) {
-        this.parentResultId = parentResultId
-        this.hierarchyType = hierarchyType
+    /**
+     * Generate the RESULT_HIERARCHY element
+     * @param markupBuilder
+     * @param resultHierarchies
+     */
+    protected void generateResultHierarchies(def markupBuilder, final Set<ResultHierarchy> resultHierarchies) {
+        markupBuilder.resultHierarchies() {
+            for (ResultHierarchy resultHierarchy : resultHierarchies) {
+                generateResultHierarchy(markupBuilder, resultHierarchy)
+            }
+        }
     }
-
-}
-class ResultDTO {
-    final String qualifier
-    final String valueDisplay
-    final BigDecimal valueNum
-    final BigDecimal valueMin
-    final BigDecimal valueMax
-    final BigDecimal resultId
-    final String status
-    final BigDecimal substanceId
-    final BigDecimal resultTypeId
-    final String readyForExtraction
-
-    ResultDTO(
-            final BigDecimal resultId,
-            final String status,
-            final BigDecimal substanceId,
-            final BigDecimal resultTypeId,
-            final BigDecimal valueNum,
-            final BigDecimal valueMin,
-            final BigDecimal valueMax,
-            final String valueDisplay,
-            final String qualifier,
-            final String readyForExtraction
-    ) {
-        this.qualifier = qualifier
-        this.valueDisplay = valueDisplay
-        this.valueMax = valueMax
-        this.valueMin = valueMin
-        this.valueNum = valueNum
-        this.resultId = resultId
-        this.status = status
-        this.substanceId = substanceId
-        this.resultTypeId = resultTypeId
-        this.readyForExtraction = readyForExtraction
+    /**
+     * Generate the RESULT_HIERARCHY element
+     * @param markupBuilder
+     * @param resultHierarchy
+     */
+    protected void generateResultHierarchy(def markupBuilder, final ResultHierarchy resultHierarchy) {
+        Map<String, String> attributes = [:]
+        if (resultHierarchy.parentResult) {
+            attributes.put('parentResultId', resultHierarchy.parentResult.id.toString())
+        }
+        if (resultHierarchy.hierarchyType) {
+            attributes.put('hierarchyType', resultHierarchy.hierarchyType.toString())
+        }
+        markupBuilder.resultHierarchy(attributes)
     }
 }

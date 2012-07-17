@@ -22,7 +22,9 @@ class ProjectRestController {
             updateProject: "PATCH",
             projects: "GET"
     ]
-
+    def index() {
+        return response.sendError(HttpServletResponse.SC_METHOD_NOT_ALLOWED)
+    }
     def projects() {
         try {
             final String mimeType = grailsApplication.config.bard.data.export.projects.xml
@@ -69,6 +71,7 @@ class ProjectRestController {
         }
     }
     def updateProject() {
-        throw new RuntimeException("Not Yet Implemented")
+        response.status = HttpServletResponse.SC_NOT_IMPLEMENTED
+        render ""
     }
 }

@@ -9,6 +9,7 @@ class RootService {
     final String dictionaryMediaType
     final String assaysMediaType
     final String projectsMediaType
+    final String experimentsMediaType
     /**
      * This is wired in resources.groovy
      *
@@ -18,6 +19,7 @@ class RootService {
         this.dictionaryMediaType = mediaTypesDTO.dictionaryMediaType
         this.assaysMediaType = mediaTypesDTO.assaysMediaType
         this.projectsMediaType = mediaTypesDTO.projectsMediaType
+        this.experimentsMediaType = mediaTypesDTO.experimentsMediaType
     }
 
     public void generateRootElement(final MarkupBuilder xml) {
@@ -35,10 +37,9 @@ class RootService {
 
             }
 
-//            final String experimentsHref = grailsLinkGenerator.link(mapping: 'experiments', absolute: true).toString()
-//            final String EXPERIMENTS_MEDIA_TYPE = grailsApplication.config.bard.data.export.data.experiments.xml
-//            link(rel: 'item', title: 'List of experiments, ready for extraction', type: "${EXPERIMENTS_MEDIA_TYPE}", href: "${experimentsHref}") {
-//            }
+            final String experimentsHref = grailsLinkGenerator.link(mapping: 'experiments', absolute: true).toString()
+            link(rel: 'item', title: 'List of experiments, ready for extraction', type: "${this.experimentsMediaType}", href: "${experimentsHref}") {
+            }
         }
     }
 }

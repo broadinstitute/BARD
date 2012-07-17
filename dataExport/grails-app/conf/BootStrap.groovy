@@ -11,9 +11,9 @@ class BootStrap {
             case "test":
                 if (Element.list().isEmpty()) {
                     final Sql sql = new Sql(dataSource)
-                    insertTestDictionaryRecords(sql)
-                    insertTestAssayDefRecords(sql)
-                    insertTestProjectRecords(sql)
+                    insertDictionaryRecords(sql)
+                    insertAssayDefRecords(sql)
+                    insertProjectRecords(sql)
                     insertExperiments(sql)
                 }
                 break;
@@ -45,12 +45,12 @@ class BootStrap {
 
     }
 
-    def insertTestProjectRecords(final Sql sql) {
+    def insertProjectRecords(final Sql sql) {
         sql.execute "INSERT INTO PROJECT (project_id,project_name,group_type,description,ready_for_extraction,VERSION,date_created) VALUES (1,'Scripps special project #1','Project',NULL,'Ready',0,SYSDATE)"
         sql.execute "INSERT INTO PROJECT (project_id,project_name,group_type,description,ready_for_extraction,VERSION,date_created) VALUES (2,'2126 - MLPCN Malaria - Inhibitor','Project',NULL,'Ready',0,SYSDATE)"
     }
 
-    def insertTestAssayDefRecords(final Sql sql) {
+    def insertAssayDefRecords(final Sql sql) {
         sql.execute "INSERT INTO ASSAY (ASSAY_ID,ASSAY_NAME,ASSAY_STATUS,ASSAY_VERSION,DESIGNED_BY,READY_FOR_EXTRACTION,VERSION, DATE_CREATED, ASSAY_TYPE) values (1,'Dose-response biochemical assay of inhibitors of Rho kinase 2 (Rock2)','Active','1','Scripps Florida','Ready',0,SYSDATE,'Regular')"
         sql.execute "INSERT INTO ASSAY (ASSAY_ID,ASSAY_NAME,ASSAY_STATUS,ASSAY_VERSION,DESIGNED_BY,READY_FOR_EXTRACTION,VERSION, DATE_CREATED, ASSAY_TYPE) values (2,'Some nice label','Active','1.1','Broad Institute','Complete',0,SYSDATE,'Regular')"
 
@@ -69,7 +69,7 @@ class BootStrap {
 
     }
 
-    def insertTestDictionaryRecords(final Sql sql) {
+    def insertDictionaryRecords(final Sql sql) {
 
         sql.execute "INSERT INTO ELEMENT (ELEMENT_ID,LABEL,ELEMENT_STATUS,READY_FOR_EXTRACTION,VERSION,DATE_CREATED) values (386,'uM','Published','Ready',0,SYSDATE)"
         sql.execute "INSERT INTO ELEMENT (ELEMENT_ID,LABEL,ELEMENT_STATUS,READY_FOR_EXTRACTION,VERSION,DATE_CREATED) values (366,'concentration','Published','Ready',0,SYSDATE)"

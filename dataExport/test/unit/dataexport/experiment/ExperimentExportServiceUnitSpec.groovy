@@ -14,6 +14,7 @@ import common.tests.XmlTestSamples
 import dataexport.registration.MediaTypesDTO
 import exceptions.NotFoundException
 import grails.test.mixin.Mock
+import grails.test.mixin.TestFor
 import groovy.xml.MarkupBuilder
 import org.codehaus.groovy.grails.web.mapping.LinkGenerator
 import spock.lang.Specification
@@ -25,7 +26,8 @@ import spock.lang.Specification
  * Time: 12:52 PM
  * To change this template use File | Settings | File Templates.
  */
-@Mock([Experiment])
+@TestFor(ExperimentExportService)
+@Mock([Experiment, ResultExportService])
 class ExperimentExportServiceUnitSpec extends Specification {
     Writer writer
     MarkupBuilder markupBuilder
@@ -34,16 +36,21 @@ class ExperimentExportServiceUnitSpec extends Specification {
     final int maxNumberOfExperimentsPerPage = 2
 
     void setup() {
+        this.experimentExportService = this.service
         LinkGenerator grailsLinkGenerator = Mock()
+
         final MediaTypesDTO mediaTypesDTO =
             new MediaTypesDTO(experimentsMediaType: "experimentsMediaType",
                     experimentMediaType: "experimentMediaType",
                     resultsMediaType: "resultsMediaType",
                     elementMediaType: "elementMediaType",
                     projectMediaType: "projectMediaType", stageMediaType: "stageMediaType", assayMediaType: "assayMediaType")
-        this.experimentExportService =
-            new ExperimentExportService(mediaTypesDTO, this.maxNumberOfExperimentsPerPage)
+        this.experimentExportService.mediaTypeDTO = mediaTypesDTO
+        this.experimentExportService.numberRecordsPerPage = maxNumberOfExperimentsPerPage
         this.experimentExportService.grailsLinkGenerator = grailsLinkGenerator
+        this.experimentExportService.resultExportService.grailsLinkGenerator = grailsLinkGenerator
+        this.experimentExportService.resultExportService.mediaTypes = mediaTypesDTO
+        this.experimentExportService.resultExportService.maxResultsRecordsPerPage = maxNumberOfExperimentsPerPage
         this.writer = new StringWriter()
         this.markupBuilder = new MarkupBuilder(writer)
     }
@@ -57,76 +64,8 @@ class ExperimentExportServiceUnitSpec extends Specification {
             this.experimentExportService.generateExperimentLinks(this.markupBuilder, experiment)
         }
         then: "The generated XML is the similar to the expected XML"
+        println this.writer.toString()
         XmlTestAssertions.assertResults(XmlTestSamples.EXPERIMENTS_LINK_UNIT, this.writer.toString())
-
-
-    }
-
-    void "test generate Attributes For Result Context Item #label"() {
-        given: "A Result Context Item"
-        when: "We call the service method to generate Attributes"
-        final Map<String, String> resultContextItemAttributes =
-            this.experimentExportService.generateAttributesForResultContextItem(resultContextItem)
-        then: "The generated map is equal to the expected map"
-        resultContextItemAttributes == results
-        where:
-        label                                      | resultContextItem  | results
-        "Full Document"                            | new ResultContextItem(
-                attribute: new Element(label: "attrribute"),
-                experiment: new Experiment(id: 5),
-                qualifier: "%", valueDisplay: "20 %",
-                valueNum: 2.0, valueMin: 1.0,
-                valueMax: 3.0,
-                valueControlled: new Element(label: "valueControlled")) | [resultContextItemId: null, qualifier: '%', valueDisplay: '20 %', valueNum: '2.0', valueMin: '1.0', valueMax: '3.0']
-        "No Experiment/attribute/valueControlled " | new ResultContextItem(
-                qualifier: "%", valueDisplay: "20 %",
-                valueNum: 2.0, valueMin: 1.0,
-                valueMax: 3.0)                                          | [resultContextItemId: null, qualifier: '%', valueDisplay: '20 %', valueNum: '2.0', valueMin: '1.0', valueMax: '3.0']
-
-    }
-
-    void "test generate Result Context Item #label"() {
-        given: "A Result Context Item"
-        when: "We call the service method to generate the XML representation"
-        this.experimentExportService.generateResultContextItem(this.markupBuilder, resultContextItem)
-        then: "The generated XML is the similar to the expected XML"
-        XmlTestAssertions.assertResults(results, this.writer.toString())
-        where:
-        label                                      | resultContextItem  | results
-        "Full Document"                            | new ResultContextItem(
-                attribute: new Element(label: "attrribute"),
-                experiment: new Experiment(id: 5),
-                qualifier: "%", valueDisplay: "20 %",
-                valueNum: 2.0, valueMin: 1.0,
-                valueMax: 3.0,
-                valueControlled: new Element(label: "valueControlled")) | XmlTestSamples.RESULT_CONTEXT_ITEM_UNIT
-        "No Experiment/attribute/valueControlled " | new ResultContextItem(
-                qualifier: "%", valueDisplay: "20 %",
-                valueNum: 2.0, valueMin: 1.0,
-                valueMax: 3.0)                                          | XmlTestSamples.RESULT_CONTEXT_ITEM_UNIT_NO_CHILD_ELEMENTS
-
-    }
-
-    void "test generate Result Context Items #label"() {
-        given: "A Set of Result Context Items"
-        when: "We call the service method to generate the XML representation of the Items"
-        this.experimentExportService.generateResultContextItems(this.markupBuilder, resultContextItems)
-        then: "We get back a valid ResultContextItems"
-        XmlTestAssertions.assertResults(results, this.writer.toString())
-        where:
-        label                                      | resultContextItems                            | results
-        "Full Document"                            | [new ResultContextItem(
-                attribute: new Element(label: "attrribute"),
-                experiment: new Experiment(id: 5),
-                qualifier: "%", valueDisplay: "20 %",
-                valueNum: 2.0, valueMin: 1.0,
-                valueMax: 3.0,
-                valueControlled: new Element(label: "valueControlled"))] as Set<ResultContextItem> | XmlTestSamples.RESULT_CONTEXT_ITEMS_UNIT
-        "No Experiment/attribute/valueControlled " | [new ResultContextItem(
-                qualifier: "%", valueDisplay: "20 %",
-                valueNum: 2.0, valueMin: 1.0,
-                valueMax: 3.0)] as Set<ResultContextItem>                                          | XmlTestSamples.RESULT_CONTEXT_ITEMS_UNIT_NO_CHILD_ELEMENTS
-
     }
 
     void "test generate Project Experiments #label"() {
@@ -159,18 +98,18 @@ class ExperimentExportServiceUnitSpec extends Specification {
 
     }
 
-    void "test generate Experiments #label starting from #start"() {
-        given: "A list of experiments and that the maximum list of experiments per page is ${this.maxNumberOfExperimentsPerPage} and we start from ${start}"
+    void "test generate Experiments #label starting from #offset"() {
+        given: "A list of experiments and that the maximum list of experiments per page is ${this.maxNumberOfExperimentsPerPage} and we offset from ${offset}"
         when: "We attempt to generate an experiments XML document"
-        Experiment.metaClass.static.findAllByReadyForExtraction = {status -> expectedExperiments }
-        this.experimentExportService.generateExperiments(this.markupBuilder, start)
+        Experiment.metaClass.static.findAllByReadyForExtraction = {status, map -> expectedExperiments }
+        this.experimentExportService.generateExperiments(this.markupBuilder, offset)
         then: "A valid xml document is generated and is similar to the expected document"
         XmlTestAssertions.assertResults(results, this.writer.toString())
         where:
-        label                                            | start | expectedExperiments                                                                                                             | results
-        "System has 2 experiments ready for extraction"  | 0     | [new Experiment(id: 1, readyForExtraction: 'ready'), new Experiment(id: 2, readyForExtraction: 'ready')]                        | XmlTestSamples.EXPERIMENTS_2_RECORDS_UNIT
-        "System has 3 experiments ready for extraction"  | 0     | [new Experiment(id: 1), new Experiment(id: 2, readyForExtraction: 'ready'), new Experiment(id: 3, readyForExtraction: 'ready')] | XmlTestSamples.EXPERIMENTS_2_RECORDS_WITH_NEXT_UNIT
-        "System has 3 experiments ready for extraction " | 2     | [new Experiment(id: 1), new Experiment(id: 2, readyForExtraction: 'ready'), new Experiment(id: 3, readyForExtraction: 'ready')] | XmlTestSamples.EXPERIMENT_SINGLE_RECORD_UNIT
+        label                                            | offset | expectedExperiments                                                                                                                                          | results
+        "System has 2 experiments ready for extraction"  | 0      | [new Experiment(id: 1, readyForExtraction: 'ready'), new Experiment(id: 2, readyForExtraction: 'ready')]                                                     | XmlTestSamples.EXPERIMENTS_2_RECORDS_UNIT
+        "System has 3 experiments ready for extraction"  | 0      | [new Experiment(id: 2, readyForExtraction: 'ready'), new Experiment(id: 3, readyForExtraction: 'ready')]                                                     | XmlTestSamples.EXPERIMENTS_2_RECORDS_WITH_NEXT_UNIT
+        "System has 3 experiments ready for extraction " | 2      | [new Experiment(id: 1, readyForExtraction: 'ready'), new Experiment(id: 2, readyForExtraction: 'ready'), new Experiment(id: 3, readyForExtraction: 'ready')] | XmlTestSamples.EXPERIMENT_SINGLE_RECORD_UNIT
 
     }
 
@@ -241,6 +180,7 @@ class ExperimentExportServiceUnitSpec extends Specification {
         when: "We attempt to generate an experiment XML document"
         this.experimentExportService.generateExperiment(this.markupBuilder, experiment)
         then: "A valid xml document is generated and is similar to the expected document"
+        println this.writer.toString()
         XmlTestAssertions.assertResults(results, this.writer.toString())
         where:
         label                                                                       | experimentName | description | results

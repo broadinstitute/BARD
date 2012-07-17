@@ -47,9 +47,9 @@ class UrlMappings {
         name results: "/api/experiments/$id/results"(controller: "experimentRest") {
             action = [GET: "results"]
         }
-//        name result: "/api/data/result/$id"(controller: "experimentRest") {
-//            action = [GET: "result", PATCH: "updateResult"]
-//        }
+        name result: "/api/results/$id"(controller: "experimentRest") {
+            action = [GET: "result", PATCH: "updateResult"]
+        }
         "/"(view: "/index")
         "500"(view: '/error')
     }

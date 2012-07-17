@@ -23,7 +23,9 @@ class AssayRestController {
             updateAssay: "PATCH",
             assayDocument: "GET"
     ]
-
+    def index() {
+        return response.sendError(HttpServletResponse.SC_METHOD_NOT_ALLOWED)
+    }
     /**
      * Fetch assays with readyForExtraction of ready
      * @return
@@ -113,7 +115,7 @@ class AssayRestController {
  * Update the status of the given element
  */
     def updateAssay() {
-        throw new RuntimeException("Not Yet Implemented")
+        response.status = HttpServletResponse.SC_NOT_IMPLEMENTED
     }
 
 }
