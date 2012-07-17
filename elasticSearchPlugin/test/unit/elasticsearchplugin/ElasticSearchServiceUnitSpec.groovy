@@ -23,6 +23,7 @@ class ElasticSearchServiceUnitSpec extends Specification {
         }
     }'''
 
+
     void setup() {
         queryExecutorService = Mock(QueryExecutorService)
         service.queryExecutorService = queryExecutorService
@@ -70,6 +71,23 @@ class ElasticSearchServiceUnitSpec extends Specification {
         label     | assayId        | assayJson                          | expectedKeySetSize
         "for AID" | 644 as Integer | new JSONObject('{"key": "value"}') | 1
         "for AID" | 644 as Integer | new JSONObject()                   | 0
+    }
+
+    void "test getAssayDocumentWithCID #label"() {
+
+        when:
+        JSONObject response = service.getAssayDocument(assayId)
+        println()
+
+        then:
+        queryExecutorService.executeGetRequestJSON(_, _) >> { assayJson }
+
+        assert response.keySet().size() == expectedKeySetSize
+
+        where:
+        label     | assayId        | assayJson                          | expectedKeySetSize
+        "for AID" | 174 as Integer | new JSONObject('{"key": "value"}') | 1
+        "for AID" | 174 as Integer | new JSONObject()                   | 0
     }
 
     void "test query String Query #label"() {
