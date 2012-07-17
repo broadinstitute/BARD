@@ -20,6 +20,6 @@ public enum HierarchyType {
 	}
 	
 	static list(){
-		[CHILD, DERIVES]
+		[Child, Derives]
 	}
 }
