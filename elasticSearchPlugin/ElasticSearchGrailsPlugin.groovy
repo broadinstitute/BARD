@@ -16,7 +16,8 @@ class ElasticSearchGrailsPlugin {
     // resources that are excluded from plugin packaging
     def pluginExcludes = [
             "grails-app/views/error.gsp",
-            "web-app"
+            "web-app",
+            "grails-app/conf/BardCodeNarcRuleSet.groovy"
     ]
 
     // TODO Fill in these fields
@@ -57,7 +58,7 @@ class ElasticSearchGrailsPlugin {
          *  based on the initialization that happens in the DatabaseMigrationGrailsPlugin.groovy
          */
         elasticSearchService(elasticsearchplugin.ElasticSearchService) {
-            elasticSearchBaseUrl = "http://bard-dev-vm:9200"
+            elasticSearchBaseUrl = "http://localhost:9200"
             assayIndexName = 'assays'
             assayIndexTypeName = 'assay'
             compoundIndexName = 'compounds'
