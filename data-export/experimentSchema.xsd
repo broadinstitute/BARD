@@ -27,11 +27,13 @@ application/vnd.bard.cap+xml;type=experiments
     </xs:element>
     <xs:element name="experiment">
         <xs:annotation>
-            <xs:documentation>There are links to the assay and project that this experiment belongs.
+            <xs:documentation>There are links to the assay,project,laboratory that this experiment belongs.
 There are also links to the set of results, resultContextItems
 and the Result Hierarchy associated to this experiment
 
-The link with 'edit' relation should be used to set the status of this experiment to 'uploaded' once it is consumed</xs:documentation>
+The link with 'edit' relation should be used to set the status of this experiment to 'uploaded' once it is consumed
+
+</xs:documentation>
         </xs:annotation>
         <xs:complexType>
             <xs:sequence>
@@ -151,13 +153,7 @@ Link to parent experiment
                 </xs:element>
                 <xs:element name="substance">
                     <xs:complexType>
-                        <xs:sequence minOccurs="0">
-                            <xs:element minOccurs="0" name="smiles" type="xs:string"/>
-                        </xs:sequence>
-                        <xs:attribute name="sid" type="xs:integer" use="required"/>
-                        <xs:attribute name="substanceType" type="xs:string" use="optional"/>
-                        <xs:attribute name="cid" type="xs:integer"/>
-                        <xs:attribute name="molecularWeight" type="xs:double"/>
+                        <xs:attribute name="sid" type="xs:string" use="required"/>
                     </xs:complexType>
                 </xs:element>
                 <xs:element minOccurs="0" ref="resultContextItems"/>
@@ -199,15 +195,8 @@ Link to parent experiment
                 </xs:simpleType>
             </xs:attribute>
             <xs:attribute name="status" type="xs:string" use="optional"/>
+            <xs:attribute ref="readyForExtraction"/>
         </xs:complexType>
-        <xs:key name="Result_Key">
-            <xs:selector xpath="result"/>
-            <xs:field xpath="@resultId"/>
-        </xs:key>
-        <xs:keyref name="Result_KeyRef" refer="Result_Key">
-            <xs:selector xpath="result/resultHierarchies/resultHierarchy"/>
-            <xs:field xpath="@parentResultId"/>
-        </xs:keyref>
     </xs:element>
     <xs:element name="resultContextItems">
         <xs:complexType>
