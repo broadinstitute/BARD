@@ -1,12 +1,12 @@
 package dataexport.cap.experiment
 
 import dataexport.experiment.ProjectExportService
+import exceptions.NotFoundException
 import groovy.xml.MarkupBuilder
 import org.codehaus.groovy.grails.commons.GrailsApplication
 import org.codehaus.groovy.grails.web.servlet.HttpHeaders
 
 import javax.servlet.http.HttpServletResponse
-import exceptions.NotFoundException
 
 /**
  * Please note that the DataExportFilters is applied to all incoming request.
@@ -22,9 +22,11 @@ class ProjectRestController {
             updateProject: "PATCH",
             projects: "GET"
     ]
+
     def index() {
         return response.sendError(HttpServletResponse.SC_METHOD_NOT_ALLOWED)
     }
+
     def projects() {
         try {
             final String mimeType = grailsApplication.config.bard.data.export.projects.xml
@@ -32,9 +34,11 @@ class ProjectRestController {
             //do validations
             //mime types must match the expected type
             if (mimeType == request.getHeader(HttpHeaders.ACCEPT)) {
-                final Writer writer = response.writer
-                final MarkupBuilder markupBuilder = new MarkupBuilder(writer)
+                final StringWriter markupWriter = new StringWriter()
+                final MarkupBuilder markupBuilder = new MarkupBuilder(markupWriter)
                 this.projectExportService.generateProjects(markupBuilder)
+                response.contentLength = markupWriter.toString().length()
+                render markupWriter.toString()
                 return
             }
             response.status = HttpServletResponse.SC_BAD_REQUEST
@@ -46,15 +50,18 @@ class ProjectRestController {
         }
     }
 
-    def project() {
+    def project(Integer id) {
         try {
             final String mimeType = grailsApplication.config.bard.data.export.project.xml
             response.contentType = mimeType
             //do validations
-            if (mimeType == request.getHeader(HttpHeaders.ACCEPT) && params.id) {
-                final Writer writer = response.writer
-                final MarkupBuilder markupBuilder = new MarkupBuilder(writer)
-                this.projectExportService.generateProject(markupBuilder, new Long(params.id))
+            if (mimeType == request.getHeader(HttpHeaders.ACCEPT) && id) {
+                final StringWriter markupWriter = new StringWriter()
+                final MarkupBuilder markupBuilder = new MarkupBuilder(markupWriter)
+                final Long eTag = this.projectExportService.generateProject(markupBuilder, new Long(id.toString()))
+                response.addHeader(HttpHeaders.ETAG, eTag.toString())
+                response.contentLength = markupWriter.toString().length()
+                render markupWriter.toString()
                 return
             }
             response.status = HttpServletResponse.SC_BAD_REQUEST
@@ -70,6 +77,7 @@ class ProjectRestController {
             ee.printStackTrace()
         }
     }
+
     def updateProject() {
         response.status = HttpServletResponse.SC_NOT_IMPLEMENTED
         render ""

@@ -77,12 +77,13 @@ class ExperimentExportService {
      * @param markupBuilder
      * @param experimentId
      */
-    public void generateExperiment(final MarkupBuilder markupBuilder, final Long experimentId) {
+    public Long generateExperiment(final MarkupBuilder markupBuilder, final Long experimentId) {
         final Experiment experiment = Experiment.get(experimentId)
         if (!experiment) {
             throw new NotFoundException("Could not find Experiment with Id ${experimentId}")
         }
         this.generateExperiment(markupBuilder, experiment)
+        return experiment.version
     }
     /**
      *

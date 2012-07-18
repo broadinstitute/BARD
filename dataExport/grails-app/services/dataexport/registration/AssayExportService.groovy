@@ -13,7 +13,7 @@ class AssayExportService {
      * @param markupBuilder
      * @param assayDocument
      */
-    public void generateAssayDocument(
+    public Long generateAssayDocument(
             final MarkupBuilder markupBuilder, final Long assayDocumentId) {
         final AssayDocument assayDocument = AssayDocument.get(assayDocumentId)
         if (!assayDocument) {
@@ -22,6 +22,7 @@ class AssayExportService {
         }
 
         this.assayExportHelperService.generateAssayDocument(markupBuilder, assayDocument, true)
+        return assayDocument.version
     }
     /**
      * Stub for generating assays with status of Ready
@@ -39,7 +40,7 @@ class AssayExportService {
      * @param markupBuilder
      * @param assay
      */
-    public void generateAssay(
+    public Long generateAssay(
             final MarkupBuilder markupBuilder,
             final Long assayId) {
 
@@ -49,5 +50,6 @@ class AssayExportService {
             throw new NotFoundException("Assay with Id ${assayId} does not exists")
         }
         this.assayExportHelperService.generateAssay(markupBuilder, assay)
+        return assay.version
     }
 }

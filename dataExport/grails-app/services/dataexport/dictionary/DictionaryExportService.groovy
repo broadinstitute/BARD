@@ -23,14 +23,14 @@ class DictionaryExportService {
      * @param elementId - This usually is called by the Rest controller.
      * The Id supplied is the Id if an Element, not the id of the Stage
      */
-    public void generateStage(final MarkupBuilder xml, final Long elementId) {
+    public Long generateStage(final MarkupBuilder xml, final Long elementId) {
         String errorMessage
         final Element element = Element.get(elementId)
         if (element) {
             final Stage stage = Stage.findByElement(element)
             if (stage) {
                 this.dictionaryExportHelperService.generateStage(xml, stage)
-                return
+                return stage.version
             } else {
                 errorMessage = "Stage with element id ${elementId} does not exists"
             }
@@ -48,7 +48,7 @@ class DictionaryExportService {
      * @param elementId - This usually is called by the Rest controller.
      * The Id supplied is the Id if an Element, not the id of the ResultType
      */
-    public void generateResultType(final MarkupBuilder xml, final Long elementId) {
+    public Long generateResultType(final MarkupBuilder xml, final Long elementId) {
 
         String errorMessage
         final Element element = Element.get(elementId)
@@ -56,7 +56,8 @@ class DictionaryExportService {
             final ResultType resultType = ResultType.findByElement(element)
             if (resultType) {
                 dictionaryExportHelperService.generateResultType(xml, resultType)
-                return
+
+                return resultType.version
             } else {
                 errorMessage = "Result Type with element id ${elementId} does not exists"
             }
@@ -73,11 +74,11 @@ class DictionaryExportService {
      * @param xml
      * @param elementId - This usually is called by the Rest controller.
      */
-    public void generateElement(final MarkupBuilder xml, final Long elementId) {
+    public Long generateElement(final MarkupBuilder xml, final Long elementId) {
         final Element element = Element.get(elementId)
         if (element) {
             dictionaryExportHelperService.generateElement(xml, element)
-            return
+            return element.version
         }
         String errorMessage = "Element with id ${elementId} does not exists"
         log.error(errorMessage)

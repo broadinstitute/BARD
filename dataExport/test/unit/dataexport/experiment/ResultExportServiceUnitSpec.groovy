@@ -7,16 +7,17 @@ import dataexport.registration.MediaTypesDTO
 import exceptions.NotFoundException
 import grails.test.mixin.Mock
 import grails.test.mixin.TestFor
+import groovy.sql.Sql
+import groovy.xml.MarkupBuilder
 import groovy.xml.StaxBuilder
 import org.codehaus.groovy.grails.web.mapping.LinkGenerator
 import org.custommonkey.xmlunit.XMLAssert
 import spock.lang.Specification
 
+import javax.sql.DataSource
 import javax.xml.stream.XMLOutputFactory
 
 import bard.db.experiment.*
-import bard.db.dictionary.ResultType
-import groovy.xml.MarkupBuilder
 
 /**
  * Created with IntelliJ IDEA.
@@ -32,10 +33,16 @@ class ResultExportServiceUnitSpec extends Specification {
     StaxBuilder staxBuilder
 
     ResultExportService resultExportService
+    DataSource dataSource = Mock()
+    LinkGenerator grailsLinkGenerator = Mock()
 
+    def cleanup() {
+        Sql.metaClass = null
+
+
+    }
 
     void setup() {
-        LinkGenerator grailsLinkGenerator = Mock()
         final MediaTypesDTO mediaTypesDTO =
             new MediaTypesDTO(
                     experimentsMediaType: "experimentsMediaType",
@@ -54,6 +61,7 @@ class ResultExportServiceUnitSpec extends Specification {
         this.resultExportService = this.service
         this.resultExportService.mediaTypes = mediaTypesDTO
         this.resultExportService.grailsLinkGenerator = grailsLinkGenerator
+        this.resultExportService.dataSource = dataSource
     }
 
     void "test generate Results #label"() {
@@ -62,6 +70,7 @@ class ResultExportServiceUnitSpec extends Specification {
         final Experiment experiment =
             new Experiment(experimentName: experimentName, results: result)
         when: "We attempt to generate a results XML document"
+
         Result.metaClass.static.Result.findAllByExperimentAndReadyForExtraction = {exp, ready, map -> result }
         this.resultExportService.generateResults(this.staxBuilder, experiment, 0)
         then: "A valid xml document is generated and is similar to the expected document"
@@ -96,26 +105,30 @@ class ResultExportServiceUnitSpec extends Specification {
                 qualifier: "%", valueDisplay: "20 %",
                 valueNum: 2.0, valueMin: 1.0,
                 valueMax: 3.0)] as Set<ResultContextItem>
-        final Result result = new Result(valueDisplay :"20 um",
+        final Result result = new Result(valueDisplay: "20 um",
                 valueNum: 20,
                 valueMin: 10,
                 valueMax: 30,
                 substance: new Substance(id: 2),
                 experiment: new Experiment(id: 20),
                 resultStatus: "Approved",
-                resultType : new Element(id:2,label: "Stuff"),
+                resultType: new Element(id: 2, label: "Stuff"),
                 qualifier: "=",
                 readyForExtraction: 'Ready', resultContextItems: resultContextItems)
 
-
         when: "We attempt to serialize the Result to XML"
+        Sql.metaClass.eachRow = { String query, Closure c ->
+            [200]
+
+        }
         this.resultExportService.generateResult(markupBuilder, result)
+
         then: "We obtain the expected XML object"
+        println writer1.toString()
         XMLAssert.assertXpathEvaluatesTo("3", "count(//link)", writer1.toString());
         XMLAssert.assertXpathEvaluatesTo("1", "count(//link[@type='experimentMediaType'])", writer1.toString())
         XMLAssert.assertXpathEvaluatesTo("1", "count(//link[@type='resultMediaType'])", writer1.toString())
         XMLAssert.assertXpathEvaluatesTo("1", "count(//resultTypeRef)", writer1.toString())
-        XMLAssert.assertXpathEvaluatesTo("1", "count(//substance)", writer1.toString())
         XMLAssert.assertXpathEvaluatesTo("1", "count(//resultContextItems)", writer1.toString())
         XMLAssert.assertXpathEvaluatesTo("1", "count(//resultContextItem)", writer1.toString())
         XMLAssert.assertXpathEvaluatesTo("1", "count(//link[@type='resultTypeMediaType'])", writer1.toString())
@@ -142,6 +155,7 @@ class ResultExportServiceUnitSpec extends Specification {
         then: "An exception should be thrown"
         thrown(NotFoundException)
     }
+
     void "test Generate Result Not Found Exception"() {
         given:
         Writer writer1 = new StringWriter()
@@ -152,6 +166,7 @@ class ResultExportServiceUnitSpec extends Specification {
         then: "An exception should be thrown"
         thrown(NotFoundException)
     }
+
     void "test generate Result Context Items #label"() {
         given: "A Set of Result Context Items"
         when: "We call the service method to generate the XML representation of the Items"

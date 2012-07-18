@@ -51,12 +51,13 @@ class ProjectExportService {
      * @param markupBuilder
      * @param projectId
      */
-    public void generateProject(final MarkupBuilder markupBuilder, final Long projectId) {
+    public Long generateProject(final MarkupBuilder markupBuilder, final Long projectId) {
         final Project project = Project.get(projectId)
         if (!project) {
             throw new NotFoundException("Could not find Project with Id ${projectId}")
         }
         this.generateProject(markupBuilder, project)
+        return project.version
     }
     /**
      * @param xml

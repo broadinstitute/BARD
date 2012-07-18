@@ -24,6 +24,7 @@ class DictionaryRestController {
             element: "GET",
             updateElemet: "PATCH"
     ]
+
     def index() {
         return response.sendError(HttpServletResponse.SC_METHOD_NOT_ALLOWED)
     }
@@ -38,10 +39,11 @@ class DictionaryRestController {
             //do validations
             //mime types must match the expected type
             if (mimeType == request.getHeader(HttpHeaders.ACCEPT)) {
-                final Writer writer = response.writer
-                final MarkupBuilder xml = new MarkupBuilder(writer)
-                dictionaryExportService.generateDictionary(xml)
-
+                final StringWriter markupWriter = new StringWriter()
+                final MarkupBuilder markupBuilder = new MarkupBuilder(markupWriter)
+                dictionaryExportService.generateDictionary(markupBuilder)
+                response.contentLength = markupWriter.toString().length()
+                render markupWriter.toString()
                 return
             }
             response.status = HttpServletResponse.SC_BAD_REQUEST
@@ -56,15 +58,18 @@ class DictionaryRestController {
      * Get a result type given an element id
      * @return
      */
-    def resultType() {
+    def resultType(Integer id) {
         try {
             final String mimeType = grailsApplication.config.bard.data.export.dictionary.resultType.xml
             response.contentType = mimeType
             //do validations
-            if (mimeType == request.getHeader(HttpHeaders.ACCEPT) && params?.id) {
-                final Writer writer = response.writer
-                final MarkupBuilder xml = new MarkupBuilder(writer)
-                dictionaryExportService.generateResultType(xml, new Long(params.id))
+            if (mimeType == request.getHeader(HttpHeaders.ACCEPT) && id) {
+                final StringWriter markupWriter = new StringWriter()
+                final MarkupBuilder markupBuilder = new MarkupBuilder(markupWriter)
+                final Long eTag = dictionaryExportService.generateResultType(markupBuilder, new Long(id))
+                response.addHeader(HttpHeaders.ETAG, eTag.toString())
+                response.contentLength = markupWriter.toString().length()
+                render markupWriter.toString()
                 return
             }
             response.status = HttpServletResponse.SC_BAD_REQUEST
@@ -84,16 +89,19 @@ class DictionaryRestController {
      * Get the stage with the given an element id
      * @return
      */
-    def stage() {
+    def stage(Integer id) {
         try {
             final String mimeType = grailsApplication.config.bard.data.export.dictionary.stage.xml
             response.contentType = mimeType
             //do validations
-            if (mimeType == request.getHeader(HttpHeaders.ACCEPT) && params.id) {
-                final Writer writer = response.writer
-                final MarkupBuilder xml = new MarkupBuilder(writer)
+            if (mimeType == request.getHeader(HttpHeaders.ACCEPT) && id) {
+                final StringWriter markupWriter = new StringWriter()
+                final MarkupBuilder markupBuilder = new MarkupBuilder(markupWriter)
 
-                dictionaryExportService.generateStage(xml, new Long(params.id))
+                final Long eTag = dictionaryExportService.generateStage(markupBuilder, new Long(id))
+                response.addHeader(HttpHeaders.ETAG, eTag.toString())
+                response.contentLength = markupWriter.toString().length()
+                render markupWriter.toString()
                 return
             }
             response.status = HttpServletResponse.SC_BAD_REQUEST
@@ -113,15 +121,18 @@ class DictionaryRestController {
  * Get the element with the given id
  * @return
  */
-    def element() {
+    def element(Integer id) {
         try {
             final String mimeType = grailsApplication.config.bard.data.export.dictionary.element.xml
             response.contentType = mimeType
             //do validations
-            if (mimeType == request.getHeader(HttpHeaders.ACCEPT) && params.id) {
-                final Writer writer = response.writer
-                final MarkupBuilder xml = new MarkupBuilder(writer)
-                dictionaryExportService.generateElement(xml, new Long(params.id))
+            if (mimeType == request.getHeader(HttpHeaders.ACCEPT) && id) {
+                final StringWriter markupWriter = new StringWriter()
+                final MarkupBuilder markupBuilder = new MarkupBuilder(markupWriter)
+                Long eTag = dictionaryExportService.generateElement(markupBuilder, new Long(id))
+                response.addHeader(HttpHeaders.ETAG, eTag.toString())
+                response.contentLength = markupWriter.toString().length()
+                render markupWriter.toString()
                 return
             }
             response.status = HttpServletResponse.SC_BAD_REQUEST

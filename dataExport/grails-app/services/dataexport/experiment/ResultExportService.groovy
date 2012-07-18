@@ -4,17 +4,24 @@ package dataexport.experiment
 
 
 import bard.db.dictionary.Element
+import bard.db.experiment.Experiment
+import bard.db.experiment.Result
+import bard.db.experiment.ResultContextItem
+import bard.db.experiment.ResultHierarchy
 import dataexport.registration.MediaTypesDTO
 import exceptions.NotFoundException
+import groovy.sql.Sql
 import groovy.xml.MarkupBuilder
 import groovy.xml.StaxBuilder
 import org.codehaus.groovy.grails.web.mapping.LinkGenerator
-import bard.db.experiment.*
+
+import javax.sql.DataSource
 
 class ResultExportService {
     LinkGenerator grailsLinkGenerator
     MediaTypesDTO mediaTypes
     int maxResultsRecordsPerPage
+    DataSource dataSource
 
     /**
      * Generate the results for a given experiment
@@ -31,17 +38,18 @@ class ResultExportService {
         return generateResults(markupBuilder, experiment, offset)
     }
     /**
-     * Given a resultId, find the result and generate an XML object
+     * Given a resultId, find the currentResult and generate an XML object
      * @param markupBuilder
      * @param resultId
      */
-    public void generateResult(final MarkupBuilder markupBuilder, final Long resultId) {
+    public Long generateResult(final MarkupBuilder markupBuilder, final Long resultId) {
 
         final Result result = Result.get(resultId)
         if (!result) {
             throw new NotFoundException("Could not find Result with Id ${resultId}")
         }
         generateResult(markupBuilder, result)
+        return result.version
 
     }
 
@@ -72,50 +80,56 @@ class ResultExportService {
         return attributes
     }
     /**
-     * Generate the result element
+     * Generate the currentResult element
      * @param markupBuilder
-     * @param result
+     * @param currentResult
      *
      */
-    protected void generateResult(final MarkupBuilder markupBuilder, final Result result) {
+    protected void generateResult(final MarkupBuilder markupBuilder, final Result currentResult) {
 
-        final Map<String, String> attributes = generateAttributesForResult(result)
+        final Map<String, String> attributes = generateAttributesForResult(currentResult)
 
         markupBuilder.result(attributes) {
-            final Element resultType = result.resultType
-            if (resultType) { //this is the result type
+            final Element resultType = currentResult.resultType
+            if (resultType) { //this is the currentResult type
                 resultTypeRef(label: resultType.label) {
                     final String href = grailsLinkGenerator.link(mapping: 'resultType', absolute: true, params: [id: resultType.id]).toString()
                     link(rel: 'related', href: "${href}", type: "${this.mediaTypes.resultTypeMediaType}")
                 }
             }
-            final Substance substances = result.substance
-            if (substances) {
-                substance(sid: substances.id.toString()) {
+            //TODO: The substance table, does not exist yet. We will need to fix the domain model plugin, but only after
+            //we decide on whether to cache all substances or validate on demand. So we will make a ronw SQL query for the SID
+            final Sql sql = new Sql(dataSource)
+            sql.eachRow('SELECT SUBSTANCE_ID FROM RESULT WHERE RESULT_ID=' + currentResult.id) { row ->
+                def substances = row.SUBSTANCE_ID
+                if (substances) {
+                    substance(sid: substances.toString()) {
+                    }
                 }
             }
 
-            final Set<ResultContextItem> resultContextItems = result.resultContextItems
+
+            final Set<ResultContextItem> resultContextItems = currentResult.resultContextItems
             if (resultContextItems) {
                 generateResultContextItems(markupBuilder, resultContextItems)
             }
 
             final Set<ResultHierarchy> hierarchies = [] as Set<ResultHierarchy>
-            if (result.resultHierarchiesForParentResult) {
-                hierarchies.addAll(result.resultHierarchiesForParentResult)
+            if (currentResult.resultHierarchiesForParentResult) {
+                hierarchies.addAll(currentResult.resultHierarchiesForParentResult)
             }
-            if (result.resultHierarchiesForResult) {
-                hierarchies.addAll(result.resultHierarchiesForResult)
+            if (currentResult.resultHierarchiesForResult) {
+                hierarchies.addAll(currentResult.resultHierarchiesForResult)
             }
             if (hierarchies) {
                 generateResultHierarchies(markupBuilder, hierarchies)
             }
-            generateResultLinks(markupBuilder, result)
+            generateResultLinks(markupBuilder, currentResult)
         }
 
     }
     /**
-     * Generate the links needed for an individual result element
+     * Generate the links needed for an individual currentResult element
      * @param markupBuilder
      * @param result
      */
@@ -126,7 +140,7 @@ class ResultExportService {
         markupBuilder.link(rel: 'up', title: 'Experiment', type: "${this.mediaTypes.experimentMediaType}",
                 href: experimentHref) {
         }
-        final String resultHref = grailsLinkGenerator.link(mapping: 'result', absolute: true, params: [id: result.id]).toString()
+        final String resultHref = grailsLinkGenerator.link(mapping: 'currentResult', absolute: true, params: [id: result.id]).toString()
         markupBuilder.link(rel: 'edit', type: "${this.mediaTypes.resultMediaType}",
                 href: resultHref) {
         }
@@ -135,7 +149,7 @@ class ResultExportService {
      * Generate the results for a given experiment
      * @param experimentId
      * @param numberOfResults
-     * @param offset - Used for paging, marks the position of the current result element within the experiment
+     * @param offset - Used for paging, marks the position of the current currentResult element within the experiment
      * @return true if there are more results than can fit on a page
      */
     protected boolean generateResults(final StaxBuilder markupBuilder, final Experiment experiment, int offset) {
@@ -152,7 +166,7 @@ class ResultExportService {
         offset = this.maxResultsRecordsPerPage  //reset this to the max number of records
         markupBuilder.results(count: results.size()) {
             for (Result result : results) {
-                final String resultHref = grailsLinkGenerator.link(mapping: 'result', absolute: true, params: [id: result.id]).toString()
+                final String resultHref = grailsLinkGenerator.link(mapping: 'currentResult', absolute: true, params: [id: result.id]).toString()
                 link(rel: 'related', type: "${this.mediaTypes.resultMediaType}", href: "${resultHref}")
             }
             generateResultsLinks(markupBuilder, experiment.id, hasMoreResults, offset)

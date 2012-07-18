@@ -1,6 +1,4 @@
 import dataexport.registration.MediaTypesDTO
-import dataexport.experiment.ResultExportService
-import org.codehaus.groovy.grails.web.mapping.LinkGenerator
 
 // Place your Spring DSL code here
 beans = {
@@ -25,6 +23,7 @@ beans = {
         maxResultsRecordsPerPage = maxExperimentsRecordsPerPage
         mediaTypes = mediaTypesDTO
         grailsLinkGenerator = ref('grailsLinkGenerator')
+        dataSource=ref('dataSource')
     }
 
     experimentExportService(dataexport.experiment.ExperimentExportService) {

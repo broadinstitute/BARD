@@ -37,10 +37,12 @@ class AssayRestController {
             //do validations
             //mime types must match the expected type
             if (mimeType == request.getHeader(HttpHeaders.ACCEPT)) {
-                final Writer writer = response.writer
-                //if we run into issues we should consider using StAX or StreamingMarkupBuilder
-                final MarkupBuilder markupBuilder = new MarkupBuilder(writer)
+                final StringWriter markupWriter = new StringWriter()
+                final MarkupBuilder markupBuilder = new MarkupBuilder(markupWriter)
                 this.assayExportService.generateAssays(markupBuilder)
+                response.contentLength = markupWriter.toString().length()
+                render markupWriter.toString()
+
                 return
             }
             response.status = HttpServletResponse.SC_BAD_REQUEST
@@ -57,15 +59,19 @@ class AssayRestController {
      * Get an assay with the given id
      * @return
      */
-    def assayDocument() {
+    def assayDocument(Integer id) {
         try {
             final String mimeType = grailsApplication.config.bard.data.export.assay.doc.xml
             response.contentType = mimeType
             //do validations
-            if (mimeType == request.getHeader(HttpHeaders.ACCEPT) && params.id) {
-                final Writer writer = response.writer
-                final MarkupBuilder markupBuilder = new MarkupBuilder(writer)
-                this.assayExportService.generateAssayDocument(markupBuilder, new Long(params.id))
+            if (mimeType == request.getHeader(HttpHeaders.ACCEPT) && id) {
+                final StringWriter markupWriter = new StringWriter()
+                final MarkupBuilder markupBuilder = new MarkupBuilder(markupWriter)
+                final Long eTag = this.assayExportService.generateAssayDocument(markupBuilder, new Long(id))
+                response.addHeader(HttpHeaders.ETAG, eTag.toString())
+                response.contentLength = markupWriter.toString().length()
+                render markupWriter.toString()
+                //add content length
                 return
             }
             response.status = HttpServletResponse.SC_BAD_REQUEST
@@ -86,15 +92,18 @@ class AssayRestController {
      * Get an assay with the given id
      * @return
      */
-    def assay() {
+    def assay(Integer id) {
         try {
             final String mimeType = grailsApplication.config.bard.data.export.assay.xml
             response.contentType = mimeType
             //do validations
-            if (mimeType == request.getHeader(HttpHeaders.ACCEPT) && params.id) {
-                final Writer writer = response.writer
-                final MarkupBuilder markupBuilder = new MarkupBuilder(writer)
-                this.assayExportService.generateAssay(markupBuilder, new Long(params.id))
+            if (mimeType == request.getHeader(HttpHeaders.ACCEPT) && id) {
+                final StringWriter markupWriter = new StringWriter()
+                final MarkupBuilder markupBuilder = new MarkupBuilder(markupWriter)
+                Long eTag = this.assayExportService.generateAssay(markupBuilder, new Long(id))
+                response.addHeader(HttpHeaders.ETAG, eTag.toString())
+                response.contentLength = markupWriter.toString().length()
+                render markupWriter.toString()
                 return
             }
             response.status = HttpServletResponse.SC_BAD_REQUEST

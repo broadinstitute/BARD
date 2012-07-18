@@ -115,9 +115,12 @@ class ExperimentRestController {
             response.contentType = mimeType
             //do validations
             if (mimeType == request.getHeader(HttpHeaders.ACCEPT) && id) {
-                final Writer writer = response.writer
-                final MarkupBuilder markupBuilder = new MarkupBuilder(writer)
-                this.experimentExportService.generateExperiment(markupBuilder, id)
+                final StringWriter markupWriter = new StringWriter()
+                final MarkupBuilder markupBuilder = new MarkupBuilder(markupWriter)
+                final Long eTag = this.experimentExportService.generateExperiment(markupBuilder, id)
+                response.addHeader(HttpHeaders.ETAG, eTag.toString())
+                response.contentLength = markupWriter.toString().length()
+                render markupWriter.toString()
                 return
             }
             response.status = HttpServletResponse.SC_BAD_REQUEST
@@ -141,9 +144,12 @@ class ExperimentRestController {
             response.contentType = mimeType
             //do validations
             if (mimeType == request.getHeader(HttpHeaders.ACCEPT) && id) {
-                final Writer writer = response.writer
-                final MarkupBuilder markupBuilder = new MarkupBuilder(writer)
-                this.resultExportService.generateResult(markupBuilder, id)
+                final StringWriter markupWriter = new StringWriter()
+                final MarkupBuilder markupBuilder = new MarkupBuilder(markupWriter)
+                final Long eTag = this.resultExportService.generateResult(markupBuilder, id)
+                response.addHeader(HttpHeaders.ETAG, eTag.toString())
+                response.contentLength = markupWriter.toString().length()
+                render markupWriter.toString()
                 return
             }
             response.status = HttpServletResponse.SC_BAD_REQUEST
