@@ -5,8 +5,10 @@ databaseChangeLog = {
     String bardDomainModelMigrationsDir = ctx.migrationResourceAccessor.baseDirectory
     File migrationsDir1 = new File(bardDomainModelMigrationsDir)
     File migrationsDir = migrationsDir1
-    migrationsDir.eachFileMatch(DIRECTORIES, ~/iteration-\d+/) {dir ->
-        dir.eachFileMatch(FILES, ~/\d+.*\.groovy/) {file ->
+
+
+    migrationsDir.traverse(type: DIRECTORIES, nameFilter: ~/iteration-\d+/, maxDepth: 0, sort: {a, b -> a.name <=> b.name }) {dir ->
+        dir.traverse(type: FILES, nameFilter: ~/\d+.*\.groovy/, maxDepth: 0, sort: {a, b -> a.name <=> b.name }) {file ->
             include file: "${dir.name}/${file.name}"
         }
     }
