@@ -38,8 +38,10 @@ as
                         avi_element_synonyms in varchar2);
 
 end manage_ontology;
-;
-CREATE OR REPLACE package body DATA_MIG.Manage_Ontology
+
+/
+
+CREATE OR REPLACE package body Manage_Ontology
 as
 -- forward declaration, needed for the recursion to compile
     procedure walk_down_the_tree(ani_element_id in number,
@@ -468,4 +470,5 @@ as
     end add_element;
 
 end manage_ontology;
+
 /

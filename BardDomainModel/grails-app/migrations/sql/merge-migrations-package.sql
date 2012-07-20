@@ -1,116 +1,4 @@
-CREATE OR REPLACE package MERGE_MIGRATION
-as
-
--- primary entry points ----------------------------------------------------------
-    procedure cleanout_data_mig
-        (av_table_name in varchar2,
-         an_id    in  number default null,
-         av_src_schema  in varchar2 default null);
-
-    procedure merge_migrate
-        (av_source_schema   in varchar2,
-         an_assay_id    in number default null);
-
-    procedure merge_migrate
-        (av_source_schema   in varchar2,
-         av_assay_id_range    in varchar2);
-
--- internal house-keeping ------------------------------------------------------
-    procedure log_error
-        (an_errnum   in  number,
-         av_errmsg  in varchar2,
-         av_location    in varchar2,
-         av_comment in varchar2 default null);
-
-    procedure log_statement
-        (av_table   IN  varchar2,
-         an_identifier  in number,
-         av_action      in varchar2,
-         av_statement   IN varchar2);
-
--- manage the identity_mapping table ---------------------------------------------
-    procedure save_mapping
-        (av_src_schema   in varchar2,
-         av_table_name  in  varchar2,
-         an_src_id   in  number,
-         an_trgt_id   in  number);
-
-    procedure get_mapping_id
-        (av_src_schema   in varchar2,
-         av_table_name  in  varchar2,
-         an_src_id   in  number,
-         ano_trgt_id   out  number);
-------------------------------------------------------------------------------------
-
-
--- make these available for individual testing and mini-migrations
-    procedure get_assay
-        (an_assay_id    in  number);
-
-    procedure get_assay_document
-        (an_src_assay_id    in  number);
-
-    procedure get_experiment
-        (an_src_assay_id    in  number);
-
-    procedure get_project_experiment
-        (an_src_experiment_id    in  number);
-
-    procedure get_project
-        (an_project_id    in  number default null);
-
-    procedure get_measure_context
-        (an_src_assay_id    in  number);
-
-    procedure get_measure
-        (an_src_assay_id    in  number);
-
-    procedure get_measure_context_item
-        (an_src_assay_id    in  number);
-
-    procedure get_element
-            (an_element_id    in  number default null);
-
-    procedure get_tree_root
-            (an_element_id in number default null);
-
-    procedure get_unit_conversion
-            (av_unit in varchar2 default null);
-
-    procedure get_element_hierarchy
-            (an_element_id    in  number default null);
-
-    procedure get_ontology
-        (an_ontology_id    in  number default null);
-
-    procedure get_external_system
-        (an_external_system_id    in  number default null);
-
-    procedure get_external_reference
-        (an_src_experiment_id    in  number);
-
-    procedure get_external_reference_proj
-        (an_src_project_id    in  number);
-
-    procedure get_ontology_item
-        (an_element_id    in  number);
-
-    procedure get_result
-        (an_experiment_id    in  number);
-
-    procedure get_result_context_item
-        (an_result_id   in  number,
-         an_experiment_id    in  number);
-
-    procedure get_result_hierarchy
-        (an_experiment_id   in  number);
-
-
-end Merge_Migration;
-
-/
-
-CREATE OR REPLACE package body Merge_Migration
+create or replace package body Merge_Migration
 as
     ------package constants and variables
     -- pv_src_schema    varchar2(31) :=  user;
@@ -616,7 +504,7 @@ as
             return false;
         when le_both_id_null
         then
-            log_error(-20001, 'both source experiment;project IDs are null', 'map_external_reference');
+            log_error(-20001, 'both source experiment/project IDs are null', 'map_external_reference');
             return false;
         when others
         then
@@ -1330,7 +1218,7 @@ as
             return false;
         when others
         then
-            log_error(sqlcode, sqlerrm, 'map_external_reference');
+            log_error(sqlcode, sqlerrm, 'map_ontology_item');
             return false;
     end map_ontology_item;
 
@@ -2024,6 +1912,7 @@ as
            then
               ln_trgt_assay_id := null;
            else
+              save_mapping (pv_src_schema, 'ASSAY', an_src_assay_id, ln_trgt_assay_id);
               log_statement('ASSAY', ln_trgt_assay_id, 'UPDATE', lv_statement);
            end if;
 
@@ -2123,6 +2012,9 @@ as
            then
               ln_trgt_assay_document_id := null;
            else
+              save_mapping(pv_src_schema, 'ASSAY_DOCUMENT',
+                    an_src_assay_document_id,
+                    ln_trgt_assay_document_id);
               log_statement('ASSAY_DOCUMENT', ln_trgt_assay_document_id, 'UPDATE', lv_statement);
            end if;
 
@@ -2231,6 +2123,7 @@ as
            then
               ln_trgt_project_id := null;
            else
+              save_mapping (pv_src_schema, 'PROJECT', an_src_project_id, ln_trgt_project_id);
               log_statement('PROJECT', ln_trgt_project_id, 'UPDATE', lv_statement);
            end if;
 
@@ -2265,7 +2158,6 @@ as
                 ar_row.MODIFIED_BY);
 
             save_mapping (pv_src_schema, 'PROJECT', an_src_project_id, ln_trgt_project_id);
-
             log_statement('PROJECT', ln_trgt_project_id, 'INSERT',
                 'src ID ' || to_char(an_src_project_id)
                 || ', ' || lv_statement);
@@ -2301,16 +2193,16 @@ as
             lv_statement := to_char(ar_row.assay_id)
             || ', ' || ar_row.experiment_status
             || ', ' || substr(ar_row.experiment_name, 1, 497)
-            || '..., ' || to_char(ar_row.run_date_from, 'MM;DD;YYYY')
-            || ', ' || to_char(ar_row.run_date_to, 'MM;DD;YYYY')
-            || ', ' || to_char(ar_row.hold_until_date, 'MM;DD;YYYY');
+            || '..., ' || to_char(ar_row.run_date_from, 'MM/DD/YYYY')
+            || ', ' || to_char(ar_row.run_date_to, 'MM/DD/YYYY')
+            || ', ' || to_char(ar_row.hold_until_date, 'MM/DD/YYYY');
         else
             lv_statement := to_char(ar_row.assay_id)
             || ', ' || ar_row.experiment_status
             || ', ' || ar_row.experiment_name
-            || ', ' || to_char(ar_row.run_date_from, 'MM;DD;YYYY')
-            || ', ' || to_char(ar_row.run_date_to, 'MM;DD;YYYY')
-            || ', ' || to_char(ar_row.hold_until_date, 'MM;DD;YYYY');
+            || ', ' || to_char(ar_row.run_date_from, 'MM/DD/YYYY')
+            || ', ' || to_char(ar_row.run_date_to, 'MM/DD/YYYY')
+            || ', ' || to_char(ar_row.hold_until_date, 'MM/DD/YYYY');
         end if;
 
         if length (ar_row.description) > 497
@@ -2350,6 +2242,7 @@ as
            then
               ln_trgt_experiment_id := null;
            else
+              save_mapping (pv_src_schema, 'EXPERIMENT', an_src_experiment_id, ln_trgt_experiment_id);
               log_statement('EXPERIMENT', ln_trgt_experiment_id, 'UPDATE', lv_statement);
            end if;
 
@@ -2450,6 +2343,7 @@ as
            then
               ln_trgt_result_id := null;
            else
+              save_mapping(pv_src_schema, 'RESULT', an_src_result_id, ln_trgt_result_id);
               log_statement('RESULT', ln_trgt_result_id, 'UPDATE', lv_statement);
            end if;
 
@@ -2495,9 +2389,7 @@ as
                 ar_row.LAST_UPDATED,
                 ar_row.MODIFIED_BY);
 
-            save_mapping(pv_src_schema, 'RESULT',
-                    an_src_result_id,
-                    ln_trgt_result_id);
+            save_mapping(pv_src_schema, 'RESULT', an_src_result_id, ln_trgt_result_id);
 
             log_statement('RESULT',ln_trgt_result_id,
                   'INSERT', lv_statement);
@@ -2560,6 +2452,7 @@ as
            then
               ln_trgt_ontology_id := null;
            else
+              save_mapping (pv_src_schema, 'ONTOLOGY', an_src_ontology_id, ln_trgt_ontology_id);
               log_statement('ONTOLOGY', ln_trgt_ontology_id, 'UPDATE', lv_statement);
            end if;
 
@@ -2661,7 +2554,7 @@ as
                 ar_row.MODIFIED_BY);
 
             log_statement('ONTOLOGY', -1, 'INSERT',
-                'src ID ' || ar_row.FROM_UNIT || ';' || ar_row.TO_UNIT
+                'src ID ' || ar_row.FROM_UNIT || '/' || ar_row.TO_UNIT
                 || ', ' || lv_statement);
 
        end if;
@@ -2720,6 +2613,7 @@ as
            then
               ln_trgt_external_system_id := null;
            else
+              save_mapping (pv_src_schema, 'EXTERNAL_SYSTEM', an_src_external_system_id, ln_trgt_external_system_id);
               log_statement('EXTERNAL_SYSTEM', ln_trgt_external_system_id, 'UPDATE', lv_statement);
            end if;
 
@@ -2826,6 +2720,7 @@ as
            then
               ln_trgt_measure_id := null;
            else
+              save_mapping(pv_src_schema, 'MEASURE', an_src_measure_id, ln_trgt_measure_id);
               log_statement('MEASURE', ln_trgt_measure_id, 'UPDATE', lv_statement);
            end if;
 
@@ -2862,9 +2757,7 @@ as
                 ar_row.LAST_UPDATED,
                 ar_row.MODIFIED_BY);
 
-            save_mapping(pv_src_schema, 'MEASURE',
-                    an_src_measure_id,
-                    ln_trgt_measure_id);
+            save_mapping(pv_src_schema, 'MEASURE', an_src_measure_id, ln_trgt_measure_id);
 
             log_statement('MEASURE',ln_trgt_measure_id,
                   'INSERT', lv_statement);
@@ -2927,6 +2820,7 @@ as
            then
               ln_trgt_measure_context_id := null;
            else
+              save_mapping(pv_src_schema, 'MEASURE_CONTEXT', an_src_measure_context_id, ln_trgt_measure_context_id);
               log_statement('MEASURE_CONTEXT', ln_trgt_measure_context_id, 'UPDATE', lv_statement);
            end if;
 
@@ -2956,9 +2850,7 @@ as
                 ar_row.LAST_UPDATED,
                 ar_row.MODIFIED_BY);
 
-            save_mapping(pv_src_schema, 'MEASURE_CONTEXT',
-                    an_src_measure_context_id,
-                    ln_trgt_measure_context_id);
+            save_mapping(pv_src_schema, 'MEASURE_CONTEXT', an_src_measure_context_id, ln_trgt_measure_context_id);
 
             log_statement('MEASURE_CONTEXT',ln_trgt_measure_context_id,
                   'INSERT', lv_statement);
@@ -3045,6 +2937,9 @@ as
            then
               ln_trgt_measure_context_itm_id := null;
            else
+              save_mapping(pv_src_schema, 'MEASURE_CONTEXT_ITEM',
+                    an_src_measure_context_item_id,
+                    ln_trgt_measure_context_itm_id);
               log_statement('MEASURE_CONTEXT_ITEM', ln_trgt_measure_context_itm_id, 'UPDATE', lv_statement);
            end if;
 
@@ -3164,6 +3059,9 @@ as
            then
               ln_trgt_result_context_item_id := null;
            else
+              save_mapping(pv_src_schema, 'RESULT_CONTEXT_ITEM',
+                    an_src_result_context_item_id,
+                    ln_trgt_result_context_item_id);
               log_statement('RESULT_CONTEXT_ITEM', ln_trgt_result_context_item_id, 'UPDATE', lv_statement);
            end if;
 
@@ -3284,7 +3182,10 @@ as
            then
               ln_trgt_external_reference_id := null;
            else
-              log_statement('EXTERNAL_REFERENCE', ln_trgt_external_reference_id, 'UPDATE', lv_statement);
+             save_mapping(pv_src_schema, 'EXTERNAL_REFERENCE',
+                    an_src_external_reference_id,
+                    ln_trgt_external_reference_id);
+             log_statement('EXTERNAL_REFERENCE', ln_trgt_external_reference_id, 'UPDATE', lv_statement);
            end if;
 
         end if;
@@ -3370,6 +3271,9 @@ as
            then
               ln_trgt_ontology_item_id := null;
            else
+              save_mapping(pv_src_schema, 'ONTOLOGY_ITEM',
+                    an_src_ontology_item_id,
+                    ln_trgt_ontology_item_id);
               log_statement('ONTOLOGY_ITEM', ln_trgt_ontology_item_id, 'UPDATE', lv_statement);
            end if;
 
@@ -3472,6 +3376,7 @@ as
            then
               ln_trgt_project_experiment_id := null;
            else
+              save_mapping (pv_src_schema, 'PROJECT_EXPERIMENT', an_src_project_experiment_id, ln_trgt_project_experiment_id);
               log_statement('PROJECT_EXPERIMENT', ln_trgt_project_experiment_id, 'UPDATE', lv_statement);
            end if;
 
@@ -3586,6 +3491,7 @@ as
            then
               ln_trgt_element_id := null;
            else
+              save_mapping (pv_src_schema, 'ELEMENT', an_src_element_id, ln_trgt_element_id);
               log_statement('ELEMENT', ln_trgt_element_id, 'UPDATE', lv_statement);
            end if;
 
@@ -3794,6 +3700,7 @@ as
            then
               ln_trgt_tree_root_id := null;
            else
+              save_mapping (pv_src_schema, 'TREE_ROOT', an_src_tree_root_id, ln_trgt_tree_root_id);
               log_statement('TREE_ROOT', ln_trgt_tree_root_id, 'UPDATE', lv_statement);
            end if;
 
@@ -4212,7 +4119,6 @@ as
             cleanout_data_mig('MEASURE_CONTEXT', ln_trgt_assay_id, pv_src_schema);
         end if;
 
-
         open_src_cursor(pv_src_schema, 'MEASURE_CONTEXT', an_src_assay_id, cur_measure_context);
 
         loop
@@ -4547,14 +4453,16 @@ as
         ln_trgt_from_unit   varchar2(128);
         lr_trgt_unit_conversion  unit_conversion%rowtype;
         lr_src_unit_conversion  unit_conversion%rowtype;
+
         ln_dummy_ID     number := null;
         lv_process_step varchar2(40);
 
     begin
         open_src_cursor(pv_src_schema, 'UNIT_CONVERSION', ln_dummy_ID, cur_unit_conversion);
-        lv_process_step := 'before open src cursor';
+        lv_process_step := 'after open src cursor';
 
         loop
+            lv_process_step := 'before fetch';
             fetch cur_unit_conversion into lr_src_unit_conversion;
             exit when cur_unit_conversion%notfound;
             lv_process_step := 'before map_unit_conversion';
@@ -4578,6 +4486,8 @@ as
             end if;
             log_error(sqlcode, sqlerrm, 'get_unit_conversion', lv_process_step);
     end get_unit_conversion;
+
+
 
 
     procedure get_result
@@ -4647,7 +4557,7 @@ as
             fetch cur_result_context_item into lr_src_result_context_item;
             exit when cur_result_context_item%notfound;
 --            dbms_output.put_line ('get_result_context_item, result_id=' ||to_char(an_result_id)
---                || ', i;p experiment=' || to_char(an_experiment_id)
+--                || ', i/p experiment=' || to_char(an_experiment_id)
 --                || ', QA experiment=' || to_char(lr_src_result_context_item.experiment_id)
 --                || ', QA result=' || to_char(lr_src_result_context_item.result_id)
 --                || ', modified_by=' || lr_src_result_context_item.modified_by);
@@ -4714,4 +4624,3 @@ as
     end get_result_hierarchy;
 
 end Merge_Migration;
-/
