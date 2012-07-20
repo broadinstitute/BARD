@@ -16,7 +16,7 @@ databaseChangeLog = {
     File sqlDir = new File(migrationsDir, 'iteration-001/sql')
     sqlDir.eachFileMatch(FILES, ~/\d+.*.sql/) {file ->
         String fileName = file.name
-        changeSet(author: "ddurkin", id: fileName, dbms: 'oracle') {
+        changeSet(author: "ddurkin", id: fileName, dbms: 'oracle',context:'standard') {
             sqlFile(path: "${sqlDir}/${fileName}")
         }
     }

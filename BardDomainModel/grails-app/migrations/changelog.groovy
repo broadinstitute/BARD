@@ -1,5 +1,3 @@
-import org.springframework.context.ApplicationContext
-
 import static groovy.io.FileType.DIRECTORIES
 import static groovy.io.FileType.FILES
 
@@ -15,10 +13,9 @@ databaseChangeLog = {
 
     // do last
     include file: 'manage-stored-procedures.groovy'
-    include file: 'reset-sequences.groovy'
+    include file: 'execute-load-data.groovy'
     include file: 'drop-retired-tables.groovy'
-
-
+    include file: 'reset-sequences.groovy'
 }
 
 

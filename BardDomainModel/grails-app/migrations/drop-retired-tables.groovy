@@ -6,7 +6,7 @@
  * So we'll always look for these tables and drop them.
  */
 databaseChangeLog = {
-    changeSet(author: "ddurkin", id: "drop retired tables", dbms: 'oracle', runAlways: 'true') {
+    changeSet(author: "ddurkin", id: "drop retired tables", dbms: 'oracle', context:'standard', runAlways: 'true') {
         grailsChange {
             change {
                 sql.eachRow("SELECT TABLE_NAME FROM USER_TABLES WHERE REGEXP_LIKE(TABLE_NAME, '[^_]+_[0-9]+')") {row ->
