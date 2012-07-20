@@ -1,4 +1,6 @@
-
+import bard.db.dictionary.*
+import bard.db.registration.*
+import bard.db.experiment.*
 /*
 for (cls in grailsApplication.DomainClasses) {
    println( "import ${cls.fullName}" )
@@ -7,6 +9,9 @@ for (cls in grailsApplication.DomainClasses) {
 
 for (cls in grailsApplication.DomainClasses) {
    //def domainClass = grailsApplication.getDomainClass(cls.fullName)
-   def domainClass =null
-   println( "${cls.fullName} ${cls.class} count: ${domainClass?.count()}" )
+   def domainClass = cls.shortName
+   println("domainClass: ${domainClass}")
+   def dcls = cls.newInstance()
+   assert dcls
+   println("dcls: ${dcls.count()}")
 }
