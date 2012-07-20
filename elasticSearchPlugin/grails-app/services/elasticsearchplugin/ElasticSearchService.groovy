@@ -2,16 +2,29 @@ package elasticsearchplugin
 
 //import org.codehaus.groovy.grails.web.json.JSONArray
 //import org.codehaus.groovy.grails.web.json.JSONObject
-import wslite.rest.RESTClientException
+
+
 //import grails.converters.JSON
-import wslite.json.JSONObject
+
+
 import wslite.json.JSONArray
+import wslite.json.JSONException
+import wslite.json.JSONObject
+import wslite.rest.RESTClientException
 
 class ElasticSearchService {
 
-    static transactional = false
-
     QueryExecutorService queryExecutorService
+    // Question:  why not this->def grailsConfig
+    // instead of the following lines?
+    def baseUrl =  org.codehaus.groovy.grails.commons.ConfigurationHolder.config.elasticSearchService.restNode.baseUrl
+    def elasticAssayIndex =  org.codehaus.groovy.grails.commons.ConfigurationHolder.config.elasticSearchService.restNode.elasticAssayIndex
+    def elasticCompoundIndex =  org.codehaus.groovy.grails.commons.ConfigurationHolder.config.elasticSearchService.restNode.elasticCompoundIndex
+    def elasticSearchRequester =  org.codehaus.groovy.grails.commons.ConfigurationHolder.config.elasticSearchService.restNode.elasticSearchRequester
+    def elasticAssayType =  org.codehaus.groovy.grails.commons.ConfigurationHolder.config.elasticSearchService.restNode.elasticAssayType
+    def elasticCompoundType =  org.codehaus.groovy.grails.commons.ConfigurationHolder.config.elasticSearchService.restNode.elasticCompoundType
+
+    static transactional = false
     String elasticSearchBaseUrl
     String assayIndexName
     String assayIndexTypeName
@@ -28,6 +41,9 @@ class ElasticSearchService {
         },
         "size": 200
     }'''
+
+
+
 
     /**
      * @param queryObject
@@ -46,6 +62,157 @@ class ElasticSearchService {
         //the response should either be a JSOnObject or a JSONArray
         return null
     }
+
+    /**
+     * General-purpose Elastic Search method. Based on the the searching term you're providing (  that's the inBardQueryType
+     * along with a particular value in inBardQueryType ), and the value you'd like to end up with ( that's the  outBardQueryType )
+     * this method should figure out which Elastic Search index is the right one to give you what you need. Note also  the
+     * parameter ( additionalParms which we can use to pass in anything else but the method needs.  By providing a default
+     * value for this parameter it becomes optional, and by making this parameter the first weekend choose to sprinkle those
+     * keyvalue pairs throughout the method call specification as desired, knowing that they will all get patched up into
+     * the additionalParms map.
+     *
+     * The reason for making searchValue an object is that we can easily handle either lists or strings. Note that Elastic Search
+     * want strings to be space delimited, so replace, those with spaces if necessary.
+     *
+     * @param additionalParms
+     * @param inBardQueryType
+     * @param searchValue
+     * @return
+     */
+    JSONObject elasticSearchQuery(LinkedHashMap additionalParms=[:],BardQueryType inBardQueryType, Object searchValue, BardQueryType outBardQueryType) {
+        // prepare the search value.  Take strings or lists, as long as toString makes it into something useful
+        String searchParmForEs =  searchValue?.toString()
+        if  (searchParmForEs.contains(","))
+            searchParmForEs=searchParmForEs.replaceAll(","," ")
+        searchParmForEs-="["
+        searchParmForEs-="]"
+        // put together the URL for elastic search
+        String elasticNodeSpecifier =  baseUrl +
+                chooseIndexToSearch( inBardQueryType, outBardQueryType) +
+                elasticSearchRequester
+        // Prepare to page, if necessary
+        Integer fromValue = 0
+        Integer sizeValue = 50
+        if (additionalParms.containsKey("from"))
+            fromValue = additionalParms ["from"]
+        if (additionalParms.containsKey("size"))
+            sizeValue = additionalParms ["size"]
+        //  Combine everything together to make the final JSON request
+        String searchSpecifier = chooseSearchSpecifier(inBardQueryType,outBardQueryType,searchParmForEs,fromValue,sizeValue)
+        JSONObject  jSONObject
+        try {
+            jSONObject = new JSONObject(searchSpecifier)
+        }
+        catch (JSONException exp) {
+            String message = exp?.toString()
+            log.error("Error building JSON  to send  to Elastic Search: ${message}")
+        }
+        searchQueryStringQuery(  elasticNodeSpecifier,  jSONObject )
+    }
+
+
+
+/**
+ * Here we pick which Elastic Search index to use.  Note that if nothing is selected then
+ *  we return a blank, which is fine because Elastic Search interprets that blank
+ *  as a request to search all indexes. The logic thus becomes "pick an index if we
+ *  know which one to choose, otherwise search everything
+ *
+ * @param inBardQueryType
+ * @param outBardQueryType
+ */
+    public String chooseIndexToSearch(BardQueryType inBardQueryType,BardQueryType outBardQueryType) {
+        String index = ""
+        switch (inBardQueryType)  {
+            case BardQueryType.Assay:
+                index =  elasticAssayIndex
+                break
+            case BardQueryType.Compound:
+                index = elasticCompoundIndex
+                break
+            case BardQueryType.Probe:
+            case BardQueryType.Experiment:
+            case BardQueryType.Project:
+            case BardQueryType.Target:
+            default: break;
+        }
+        switch (outBardQueryType)  {
+            case BardQueryType.Assay:
+                index +=  elasticAssayType
+                break
+            case BardQueryType.Compound:
+                index += elasticCompoundType
+                break
+            case BardQueryType.Probe:
+            case BardQueryType.Experiment:
+            case BardQueryType.Project:
+            case BardQueryType.Target:
+            default: break;
+        }
+
+        index
+    }
+
+
+
+    public String chooseSearchSpecifier( BardQueryType indexBardQueryType,
+                                         BardQueryType outBardQueryType,
+                                         String inValue,
+                                         Integer fromIndex,
+                                         Integer size) {
+        String searchSpecifier = ""
+        switch (outBardQueryType)  {
+            case BardQueryType.Assay:
+                searchSpecifier =  """{
+                    "query":{
+                        "query_string":{
+                            "default_field":"aid",
+                            "query":"$inValue"
+                         }
+                    },
+                    "from":${fromIndex},"size":${size}
+                 }"""
+                break
+            case BardQueryType.Compound:
+                switch (indexBardQueryType) {
+                    case BardQueryType.Assay:
+                       searchSpecifier =  """{
+                       "query":{
+                           "query_string":{
+                               "default_field":"cids",
+                               "query":"$inValue"
+                            }
+                       },
+                       "from":${fromIndex},"size":${size}
+                    }"""
+                        break;
+                    case BardQueryType.Compound:
+                        searchSpecifier =  """{
+                       "query":{
+                           "query_string":{
+                               "default_field":"cid",
+                               "query":"$inValue"
+                            }
+                       },
+                       "from":${fromIndex},"size":${size}
+                    }"""
+                        break;
+                    default: break;
+                }
+                break
+            case BardQueryType.Probe:
+            case BardQueryType.Experiment:
+            case BardQueryType.Project:
+            case BardQueryType.Target:
+            default: break;
+        }
+        searchSpecifier.toString()
+    }
+
+
+
+
 
     /**
      * Returns a json map of lists of assays, compounds, etc. as returned and parsed from the ElasticSearch query.
@@ -100,10 +267,6 @@ class ElasticSearchService {
         return getElasticSearchDocument(elasticSearchQueryString)
     }
 
-    JSONObject getCompoundDocument(Integer docId) {
-        String elasticSearchQueryString = "${elasticSearchBaseUrl}/${compoundIndexName}/${compoundIndexTypeName}/${docId}"
-        return getElasticSearchDocument(elasticSearchQueryString)
-    }
 
     private JSONObject getElasticSearchDocument(String elasticSearchQueryString) {
         JSONObject result = [:] as JSONObject
@@ -119,6 +282,18 @@ class ElasticSearchService {
         return result
     }
 }
+
+
+
+public enum BardQueryType {
+    Assay,
+    Compound,
+    Probe,
+    Experiment,
+    Project,
+    Target
+}
+
 
 /**
  * Describes a single ElasticSearch result item

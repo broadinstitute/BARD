@@ -24,3 +24,8 @@ log4j = {
 }
 
 elasticSearchService.restNode.baseUrl = 'http://bard-dev-vm:9200'
+elasticSearchService.restNode.elasticAssayIndex =  '/assays'
+elasticSearchService.restNode.elasticCompoundIndex =  '/compounds'
+elasticSearchService.restNode.elasticAssayType =  '/assay'
+elasticSearchService.restNode.elasticCompoundType =  '/compound'
+elasticSearchService.restNode.elasticSearchRequester  =  '/_search'
