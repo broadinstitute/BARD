@@ -35,6 +35,10 @@ grails.project.dependency.resolution = {
         test('org.codehaus.groovy.modules.http-builder:http-builder:0.5.2') {
             excludes "commons-logging", "xml-apis", "groovy"
         }
+
+        compile "ChemAxon:ChemAxonJChemBase:5.10"
+
+        compile 'org.apache.commons:commons-lang3:3.1'
     }
 
     plugins {
