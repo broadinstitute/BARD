@@ -80,7 +80,10 @@ class ElasticSearchService {
      * @param searchValue
      * @return
      */
-    JSONObject elasticSearchQuery(LinkedHashMap additionalParms=[:],BardQueryType inBardQueryType, Object searchValue, BardQueryType outBardQueryType) {
+    JSONObject elasticSearchQuery( LinkedHashMap additionalParms=[:],
+                                   BardQueryType inBardQueryType,
+                                   Object searchValue,
+                                   BardQueryType outBardQueryType ) {
         // prepare the search value.  Take strings or lists, as long as toString makes it into something useful
         String searchParmForEs =  searchValue?.toString()
         if  (searchParmForEs.contains(","))
@@ -111,6 +114,18 @@ class ElasticSearchService {
         searchQueryStringQuery(  elasticNodeSpecifier,  jSONObject )
     }
 
+    /**
+     *   Simplified signature of  elasticSearchQuery for the most common 'all' search.
+     * @param additionalParms
+     * @param searchValue
+     * @return
+     */
+    JSONObject elasticSearchQuery( LinkedHashMap additionalParms=[:],
+                                   Object searchValue ) {
+        elasticSearchQuery(additionalParms, BardQueryType.Assay, searchValue, BardQueryType.Default )
+    }
+
+
 
 
 /**
@@ -122,7 +137,7 @@ class ElasticSearchService {
  * @param inBardQueryType
  * @param outBardQueryType
  */
-    public String chooseIndexToSearch(BardQueryType inBardQueryType,BardQueryType outBardQueryType) {
+    private String chooseIndexToSearch(BardQueryType inBardQueryType,BardQueryType outBardQueryType) {
         String index = ""
         switch (inBardQueryType)  {
             case BardQueryType.Assay:
@@ -148,6 +163,7 @@ class ElasticSearchService {
             case BardQueryType.Experiment:
             case BardQueryType.Project:
             case BardQueryType.Target:
+            case BardQueryType.Default:
             default: break;
         }
 
@@ -156,7 +172,7 @@ class ElasticSearchService {
 
 
 
-    public String chooseSearchSpecifier( BardQueryType indexBardQueryType,
+    private String chooseSearchSpecifier( BardQueryType indexBardQueryType,
                                          BardQueryType outBardQueryType,
                                          String inValue,
                                          Integer fromIndex,
@@ -205,6 +221,25 @@ class ElasticSearchService {
             case BardQueryType.Experiment:
             case BardQueryType.Project:
             case BardQueryType.Target:
+            case BardQueryType.Default:
+                searchSpecifier =  """{
+                       "fields": ["aid",
+                                  "targets",
+                                  "name",
+                                  "acc",
+                                  "sids",
+                                  "probeId",
+                                  "smiles" ],
+                       "query":{
+                           "query_string":{
+                               "default_field":"_all",
+                               "query":"$inValue"
+                            }
+                       },
+                       "from":${fromIndex},"size":${size}
+                    }"""
+
+                break;
             default: break;
         }
         searchSpecifier.toString()
@@ -291,7 +326,8 @@ public enum BardQueryType {
     Probe,
     Experiment,
     Project,
-    Target
+    Target,
+    Default
 }
 
 

@@ -33,7 +33,6 @@ class ElasticSearchServiceIntegrationSpec extends IntegrationSpec {
         when:
         final String cidQuerySpecifier = "174"
         def returnJson = elasticSearchService.elasticSearchQuery(BardQueryType.Assay,cidQuerySpecifier,BardQueryType.Compound)
-        println returnJson
 
         then:
         assert returnJson
@@ -56,7 +55,6 @@ class ElasticSearchServiceIntegrationSpec extends IntegrationSpec {
         when:
         final String cidQuerySpecifier = "174 3237916"
         def returnJson = elasticSearchService.elasticSearchQuery(BardQueryType.Assay,cidQuerySpecifier,BardQueryType.Compound)
-        println returnJson
 
         then:
         assert returnJson
@@ -78,7 +76,6 @@ class ElasticSearchServiceIntegrationSpec extends IntegrationSpec {
         when:
         final String cidQuerySpecifier = "644"
         def returnJson = elasticSearchService.elasticSearchQuery(BardQueryType.Assay,cidQuerySpecifier,BardQueryType.Assay)
-        println returnJson
 
         then:
         assert returnJson
@@ -101,7 +98,6 @@ class ElasticSearchServiceIntegrationSpec extends IntegrationSpec {
         when:
         final String cidQuerySpecifier = "644 643 647"
         def returnJson = elasticSearchService.elasticSearchQuery(BardQueryType.Assay,cidQuerySpecifier,BardQueryType.Assay)
-        println returnJson
 
         then:
         assert returnJson
@@ -123,7 +119,6 @@ class ElasticSearchServiceIntegrationSpec extends IntegrationSpec {
         when:
         final String cidQuerySpecifier ="174"
         def returnJson = elasticSearchService.elasticSearchQuery(BardQueryType.Compound,cidQuerySpecifier,BardQueryType.Compound)
-        println returnJson
 
         then:
         assert returnJson
@@ -151,7 +146,6 @@ class ElasticSearchServiceIntegrationSpec extends IntegrationSpec {
         def  cidQuerySpecifier =  [174, 3237916]
 
         def returnJson = elasticSearchService.elasticSearchQuery(BardQueryType.Compound,cidQuerySpecifier,BardQueryType.Compound)
-        println returnJson
 
         then:
         assert returnJson
@@ -164,6 +158,51 @@ class ElasticSearchServiceIntegrationSpec extends IntegrationSpec {
     }
 
 
+
+    void "test elasticSearchQuery to search everything"() {
+
+        given:
+        elasticSearchService != null
+
+
+        when:
+        def  cidQuerySpecifier =  "174"
+
+        def returnJson = elasticSearchService.elasticSearchQuery(BardQueryType.Assay,cidQuerySpecifier,BardQueryType.Default)
+
+        then:
+        assert returnJson
+        assert returnJson.containsKey("hits")
+        JSONObject jsonHitObject = returnJson["hits"]
+        assert jsonHitObject.containsKey("total")
+        assert jsonHitObject["hits"].size()>10
+        assert jsonHitObject["hits"][0]._type=="assay"
+
+    }
+
+
+
+
+    void "test simplified elasticSearchQuery call"() {
+
+        given:
+        elasticSearchService != null
+
+
+        when:
+        def  cidQuerySpecifier =  "174"
+
+        def returnJson = elasticSearchService.elasticSearchQuery(cidQuerySpecifier)
+
+        then:
+        assert returnJson
+        assert returnJson.containsKey("hits")
+        JSONObject jsonHitObject = returnJson["hits"]
+        assert jsonHitObject.containsKey("total")
+        assert jsonHitObject["hits"].size()>10
+        assert jsonHitObject["hits"][0]._type=="assay"
+
+    }
 
 
 
@@ -258,7 +297,6 @@ class ElasticSearchServiceIntegrationSpec extends IntegrationSpec {
         assert jsonHitObject["hits"].size() > 0
 
     }
-
 
 
 
