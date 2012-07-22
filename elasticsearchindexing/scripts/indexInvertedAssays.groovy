@@ -80,7 +80,7 @@ for (String cid in cids) {
      combinedAids = combinedAids.substring(0,combinedAids.size()-1)
      
       // insert into elastic search index
-      final String cidJson = "{aid: ${cid}, cids:[${combinedAids.toString()}]}"   
+      final String cidJson = "{cid: ${cid}, apids:[${combinedAids.toString()}]}"
       final  wslite.json.JSONObject requestToSend = new wslite.json.JSONObject(cidJson)
                 
       cloneRestClient.url = "${elasticSearchURL}${indexName}/${indexType}"
