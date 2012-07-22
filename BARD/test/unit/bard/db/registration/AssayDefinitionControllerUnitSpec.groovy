@@ -16,7 +16,7 @@ class AssayDefinitionControllerUnitSpec extends Specification {
 
     @Before
     void setup() {
-        assay = new Assay(assayName: "Test", assayVersion: "1")
+        assay = new Assay(assayName: "Test", assayVersion: "1", dateCreated: new Date())
         assay.setId(4)
         assay.save()
         assert assay.validate()
