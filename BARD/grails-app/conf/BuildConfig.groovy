@@ -32,6 +32,9 @@ grails.project.dependency.resolution = {
         // runtime scope
         runtime 'mysql:mysql-connector-java:5.1.16'
         runtime 'com.github.groovy-wslite:groovy-wslite:0.7.0'
+        compile('cbip:cbip_encoding:0.1') {
+            excludes "junit"
+        }
 
         // test scope
         test "org.spockframework:spock-core:0.6-groovy-1.8"
@@ -50,7 +53,7 @@ grails.project.dependency.resolution = {
         compile ":json-rest-api:1.0.11"
         compile ":webflow:2.0.0"
         compile ":yui:2.8.2.1"
-        compile ":bard-domain-model:0.1.9-SNAPSHOT"
+        compile ":bard-domain-model:0.2.0-SNAPSHOT"
 
         // runtime scope
         runtime ":hibernate:$grailsVersion"
