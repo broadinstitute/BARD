@@ -40,6 +40,9 @@ grails.project.dependency.resolution = {
         test "org.objenesis:objenesis:1.2" // used by spock for Mocking objects that have no args constructor
         // runtime 'mysql:mysql-connector-java:5.1.16'
         test 'xmlunit:xmlunit:1.3'
+        compile('cbip:cbip_encoding:0.1') {
+            excludes "junit"
+        }
     }
 
     plugins {
