@@ -6,6 +6,7 @@ import spock.lang.Specification
 import spock.lang.Unroll
 import javax.servlet.http.HttpServletRequest
 import spock.lang.Shared
+import spock.lang.Ignore
 
 /**
  * See the API for {@link grails.test.mixin.support.GrailsUnitTestMixin} for usage instructions
@@ -48,6 +49,7 @@ class AuthenticationServiceUnitSpec extends Specification {
 
     /**
      */
+    @Ignore
     void "test authenticate #label"() {
 
         when:
