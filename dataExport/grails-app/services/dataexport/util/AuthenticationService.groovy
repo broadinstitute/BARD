@@ -31,23 +31,20 @@ class AuthenticationService {
             return false
         }
 
-        List<String> ipAddressWhiteList = grailsApplication.config.dataexport.externalapplication.ipAddress.whiteList.keySet() as List<String>
-        String remoteIpAddress = request.getRemoteAddr()
-//        assert inetAddressValidator.isValid(remoteIpAddress)
+//        List<String> ipAddressWhiteList = grailsApplication.config.dataexport.externalapplication.ipAddress.whiteList.keySet() as List<String>
+//        String remoteIpAddress = request.getRemoteAddr()
 
-        for (String ipAddress in ipAddressWhiteList) {
-//            assert inetAddressValidator.isValid(ipAddress)
-//            assert ipAddress.split(/\./).size() == 4
+//        for (String ipAddress in ipAddressWhiteList) {
 
-            Boolean match = doIpAddressesMatch(remoteIpAddress, ipAddress)
-            if (match) {
-                log.info("Successful authentication: ${requestParamsString}")
-                return true
-            }
-        }
+//        Boolean match = doIpAddressesMatch(remoteIpAddress, ipAddress)
+//        if (match) {
+        log.info("Successful authentication: ${requestParamsString}")
+        return true
+//        }
+//        }
 
-        log.info("Failed authentication - remote IP address is not in the whitelist: ${requestParamsString}")
-        return false
+//        log.info("Failed authentication - remote IP address is not in the whitelist: ${requestParamsString}")
+//        return false
     }
 
     /**
