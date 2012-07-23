@@ -33,7 +33,6 @@ class RootRestController {
                 final StringWriter markupWriter = new StringWriter()
                 final MarkupBuilder markupBuilder = new MarkupBuilder(markupWriter)
                 this.rootService.generateRootElement(markupBuilder)
-                response.contentLength = markupWriter.toString().length()
                 render (text: markupWriter.toString(), contentType: mimeType, encoding: responseContentTypeEncoding)
 
                 return

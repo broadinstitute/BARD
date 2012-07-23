@@ -38,7 +38,6 @@ class ProjectRestController {
                 final StringWriter markupWriter = new StringWriter()
                 final MarkupBuilder markupBuilder = new MarkupBuilder(markupWriter)
                 this.projectExportService.generateProjects(markupBuilder)
-                response.contentLength = markupWriter.toString().length()
                 render (text: markupWriter.toString(), contentType: mimeType, encoding: responseContentTypeEncoding)
                 return
             }
@@ -60,7 +59,6 @@ class ProjectRestController {
                 final MarkupBuilder markupBuilder = new MarkupBuilder(markupWriter)
                 final Long eTag = this.projectExportService.generateProject(markupBuilder, new Long(id.toString()))
                 response.addHeader(HttpHeaders.ETAG, eTag.toString())
-                response.contentLength = markupWriter.toString().length()
                 render (text: markupWriter.toString(), contentType: mimeType, encoding: responseContentTypeEncoding)
                 return
             }

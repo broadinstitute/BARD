@@ -43,7 +43,6 @@ class DictionaryRestController {
                 final StringWriter markupWriter = new StringWriter()
                 final MarkupBuilder markupBuilder = new MarkupBuilder(markupWriter)
                 dictionaryExportService.generateDictionary(markupBuilder)
-                response.contentLength = markupWriter.toString().length()
                 render (text: markupWriter.toString(), contentType: mimeType, encoding: responseContentTypeEncoding)
                 return
             }
@@ -68,7 +67,6 @@ class DictionaryRestController {
                 final MarkupBuilder markupBuilder = new MarkupBuilder(markupWriter)
                 final Long eTag = dictionaryExportService.generateResultType(markupBuilder, new Long(id))
                 response.addHeader(HttpHeaders.ETAG, eTag.toString())
-                response.contentLength = markupWriter.toString().length()
                 render (text: markupWriter.toString(), contentType: mimeType, encoding: responseContentTypeEncoding)
                 return
             }
@@ -99,7 +97,6 @@ class DictionaryRestController {
 
                 final Long eTag = dictionaryExportService.generateStage(markupBuilder, new Long(id))
                 response.addHeader(HttpHeaders.ETAG, eTag.toString())
-                response.contentLength = markupWriter.toString().length()
                 render (text: markupWriter.toString(), contentType: mimeType, encoding: responseContentTypeEncoding)
                 return
             }
@@ -129,7 +126,6 @@ class DictionaryRestController {
                 final MarkupBuilder markupBuilder = new MarkupBuilder(markupWriter)
                 Long eTag = dictionaryExportService.generateElement(markupBuilder, new Long(id))
                 response.addHeader(HttpHeaders.ETAG, eTag.toString())
-                response.contentLength = markupWriter.toString().length()
                 render (text: markupWriter.toString(), contentType: mimeType, encoding: responseContentTypeEncoding)
                 return
             }

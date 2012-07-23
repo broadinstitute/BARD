@@ -42,7 +42,6 @@ class AssayRestController {
                 final StringWriter markupWriter = new StringWriter()
                 final MarkupBuilder markupBuilder = new MarkupBuilder(markupWriter)
                 this.assayExportService.generateAssays(markupBuilder)
-                response.contentLength = markupWriter.toString().length()
                 render (text: markupWriter.toString(), contentType: mimeType, encoding: responseContentTypeEncoding)
 
                 return
@@ -70,9 +69,7 @@ class AssayRestController {
                 final MarkupBuilder markupBuilder = new MarkupBuilder(markupWriter)
                 final Long eTag = this.assayExportService.generateAssayDocument(markupBuilder, new Long(id))
                 response.addHeader(HttpHeaders.ETAG, eTag.toString())
-                response.contentLength = markupWriter.toString().length()
                 render (text: markupWriter.toString(), contentType: mimeType, encoding: responseContentTypeEncoding)
-                //add content length
                 return
             }
             response.status = HttpServletResponse.SC_BAD_REQUEST
@@ -102,7 +99,6 @@ class AssayRestController {
                 final MarkupBuilder markupBuilder = new MarkupBuilder(markupWriter)
                 Long eTag = this.assayExportService.generateAssay(markupBuilder, new Long(id))
                 response.addHeader(HttpHeaders.ETAG, eTag.toString())
-                response.contentLength = markupWriter.toString().length()
                 render (text: markupWriter.toString(), contentType: mimeType, encoding: responseContentTypeEncoding)
                 return
             }

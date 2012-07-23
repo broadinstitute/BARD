@@ -56,7 +56,6 @@ class ExperimentRestController {
                 } else {
                     response.status = HttpServletResponse.SC_OK
                 }
-                response.contentLength = markupWriter.toString().length()
                 render (text: markupWriter.toString(), contentType: mimeType, encoding: responseContentTypeEncoding)
                 //now set the writer
                 return
@@ -95,7 +94,6 @@ class ExperimentRestController {
                 } else {
                     response.status = HttpServletResponse.SC_OK
                 }
-                response.contentLength = markupWriter.toString().length()
                 render (text: markupWriter.toString(), contentType: mimeType, encoding: responseContentTypeEncoding)
                 //now set the writer
                 return
@@ -118,7 +116,6 @@ class ExperimentRestController {
                 final MarkupBuilder markupBuilder = new MarkupBuilder(markupWriter)
                 final Long eTag = this.experimentExportService.generateExperiment(markupBuilder, id)
                 response.addHeader(HttpHeaders.ETAG, eTag.toString())
-                response.contentLength = markupWriter.toString().length()
                 render (text: markupWriter.toString(), contentType: mimeType, encoding: responseContentTypeEncoding)
                 return
             }
@@ -146,7 +143,6 @@ class ExperimentRestController {
                 final MarkupBuilder markupBuilder = new MarkupBuilder(markupWriter)
                 final Long eTag = this.resultExportService.generateResult(markupBuilder, id)
                 response.addHeader(HttpHeaders.ETAG, eTag.toString())
-                response.contentLength = markupWriter.toString().length()
                 render (text: markupWriter.toString(), contentType: mimeType, encoding: responseContentTypeEncoding)
                 return
             }
