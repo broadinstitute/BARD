@@ -23,6 +23,8 @@ class ProjectRestController {
             projects: "GET"
     ]
 
+    static final String responseContentTypeEncoding = "UTF-8"
+
     def index() {
         return response.sendError(HttpServletResponse.SC_METHOD_NOT_ALLOWED)
     }
@@ -30,7 +32,6 @@ class ProjectRestController {
     def projects() {
         try {
             final String mimeType = grailsApplication.config.bard.data.export.projects.xml
-            response.contentType = mimeType
             //do validations
             //mime types must match the expected type
             if (mimeType == request.getHeader(HttpHeaders.ACCEPT)) {
@@ -38,7 +39,7 @@ class ProjectRestController {
                 final MarkupBuilder markupBuilder = new MarkupBuilder(markupWriter)
                 this.projectExportService.generateProjects(markupBuilder)
                 response.contentLength = markupWriter.toString().length()
-                render markupWriter.toString()
+                render (text: markupWriter.toString(), contentType: mimeType, encoding: responseContentTypeEncoding)
                 return
             }
             response.status = HttpServletResponse.SC_BAD_REQUEST
@@ -53,7 +54,6 @@ class ProjectRestController {
     def project(Integer id) {
         try {
             final String mimeType = grailsApplication.config.bard.data.export.project.xml
-            response.contentType = mimeType
             //do validations
             if (mimeType == request.getHeader(HttpHeaders.ACCEPT) && id) {
                 final StringWriter markupWriter = new StringWriter()
@@ -61,7 +61,7 @@ class ProjectRestController {
                 final Long eTag = this.projectExportService.generateProject(markupBuilder, new Long(id.toString()))
                 response.addHeader(HttpHeaders.ETAG, eTag.toString())
                 response.contentLength = markupWriter.toString().length()
-                render markupWriter.toString()
+                render (text: markupWriter.toString(), contentType: mimeType, encoding: responseContentTypeEncoding)
                 return
             }
             response.status = HttpServletResponse.SC_BAD_REQUEST

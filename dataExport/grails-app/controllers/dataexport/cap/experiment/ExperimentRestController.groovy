@@ -30,6 +30,8 @@ class ExperimentRestController {
             results: "GET"
     ]
 
+    static final String responseContentTypeEncoding = "UTF-8"
+
     def index() {
         return response.sendError(HttpServletResponse.SC_METHOD_NOT_ALLOWED)
     }
@@ -55,8 +57,7 @@ class ExperimentRestController {
                     response.status = HttpServletResponse.SC_OK
                 }
                 response.contentLength = markupWriter.toString().length()
-                response.contentType = mimeType
-                render markupWriter.toString()
+                render (text: markupWriter.toString(), contentType: mimeType, encoding: responseContentTypeEncoding)
                 //now set the writer
                 return
             }
@@ -95,8 +96,7 @@ class ExperimentRestController {
                     response.status = HttpServletResponse.SC_OK
                 }
                 response.contentLength = markupWriter.toString().length()
-                response.contentType = mimeType
-                render markupWriter.toString()
+                render (text: markupWriter.toString(), contentType: mimeType, encoding: responseContentTypeEncoding)
                 //now set the writer
                 return
             }
@@ -112,7 +112,6 @@ class ExperimentRestController {
     def experiment(Integer id) {
         try {
             final String mimeType = grailsApplication.config.bard.data.export.experiment.xml
-            response.contentType = mimeType
             //do validations
             if (mimeType == request.getHeader(HttpHeaders.ACCEPT) && id) {
                 final StringWriter markupWriter = new StringWriter()
@@ -120,7 +119,7 @@ class ExperimentRestController {
                 final Long eTag = this.experimentExportService.generateExperiment(markupBuilder, id)
                 response.addHeader(HttpHeaders.ETAG, eTag.toString())
                 response.contentLength = markupWriter.toString().length()
-                render markupWriter.toString()
+                render (text: markupWriter.toString(), contentType: mimeType, encoding: responseContentTypeEncoding)
                 return
             }
             response.status = HttpServletResponse.SC_BAD_REQUEST
@@ -141,7 +140,6 @@ class ExperimentRestController {
     def result(Integer id) {
         try {
             final String mimeType = grailsApplication.config.bard.data.export.result.xml
-            response.contentType = mimeType
             //do validations
             if (mimeType == request.getHeader(HttpHeaders.ACCEPT) && id) {
                 final StringWriter markupWriter = new StringWriter()
@@ -149,7 +147,7 @@ class ExperimentRestController {
                 final Long eTag = this.resultExportService.generateResult(markupBuilder, id)
                 response.addHeader(HttpHeaders.ETAG, eTag.toString())
                 response.contentLength = markupWriter.toString().length()
-                render markupWriter.toString()
+                render (text: markupWriter.toString(), contentType: mimeType, encoding: responseContentTypeEncoding)
                 return
             }
             response.status = HttpServletResponse.SC_BAD_REQUEST

@@ -20,18 +20,22 @@ class RootRestController {
             api: "GET",
     ]
 
+    static final String responseContentTypeEncoding = "UTF-8"
+
     def index() {
         return response.sendError(HttpServletResponse.SC_METHOD_NOT_ALLOWED)
     }
     def api() {
         try {
             final String mimeType = grailsApplication.config.bard.data.export.bardexport.xml
-            response.contentType = mimeType
             //do validations
             if (mimeType == request.getHeader(HttpHeaders.ACCEPT)) {
-                final def writer = response.writer
-                final MarkupBuilder xml = new MarkupBuilder(writer)
-                rootService.generateRootElement(xml)
+                final StringWriter markupWriter = new StringWriter()
+                final MarkupBuilder markupBuilder = new MarkupBuilder(markupWriter)
+                this.rootService.generateRootElement(markupBuilder)
+                response.contentLength = markupWriter.toString().length()
+                render (text: markupWriter.toString(), contentType: mimeType, encoding: responseContentTypeEncoding)
+
                 return
             }
             response.status = HttpServletResponse.SC_BAD_REQUEST

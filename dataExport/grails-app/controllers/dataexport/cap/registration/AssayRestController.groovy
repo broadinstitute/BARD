@@ -23,6 +23,9 @@ class AssayRestController {
             updateAssay: "PATCH",
             assayDocument: "GET"
     ]
+
+    static final String responseContentTypeEncoding = "UTF-8"
+
     def index() {
         return response.sendError(HttpServletResponse.SC_METHOD_NOT_ALLOWED)
     }
@@ -33,7 +36,6 @@ class AssayRestController {
     def assays() {
         try {
             final String mimeType = grailsApplication.config.bard.data.export.assays.xml
-            response.contentType = mimeType
             //do validations
             //mime types must match the expected type
             if (mimeType == request.getHeader(HttpHeaders.ACCEPT)) {
@@ -41,7 +43,7 @@ class AssayRestController {
                 final MarkupBuilder markupBuilder = new MarkupBuilder(markupWriter)
                 this.assayExportService.generateAssays(markupBuilder)
                 response.contentLength = markupWriter.toString().length()
-                render markupWriter.toString()
+                render (text: markupWriter.toString(), contentType: mimeType, encoding: responseContentTypeEncoding)
 
                 return
             }
@@ -62,7 +64,6 @@ class AssayRestController {
     def assayDocument(Integer id) {
         try {
             final String mimeType = grailsApplication.config.bard.data.export.assay.doc.xml
-            response.contentType = mimeType
             //do validations
             if (mimeType == request.getHeader(HttpHeaders.ACCEPT) && id) {
                 final StringWriter markupWriter = new StringWriter()
@@ -70,7 +71,7 @@ class AssayRestController {
                 final Long eTag = this.assayExportService.generateAssayDocument(markupBuilder, new Long(id))
                 response.addHeader(HttpHeaders.ETAG, eTag.toString())
                 response.contentLength = markupWriter.toString().length()
-                render markupWriter.toString()
+                render (text: markupWriter.toString(), contentType: mimeType, encoding: responseContentTypeEncoding)
                 //add content length
                 return
             }
@@ -95,7 +96,6 @@ class AssayRestController {
     def assay(Integer id) {
         try {
             final String mimeType = grailsApplication.config.bard.data.export.assay.xml
-            response.contentType = mimeType
             //do validations
             if (mimeType == request.getHeader(HttpHeaders.ACCEPT) && id) {
                 final StringWriter markupWriter = new StringWriter()
@@ -103,7 +103,7 @@ class AssayRestController {
                 Long eTag = this.assayExportService.generateAssay(markupBuilder, new Long(id))
                 response.addHeader(HttpHeaders.ETAG, eTag.toString())
                 response.contentLength = markupWriter.toString().length()
-                render markupWriter.toString()
+                render (text: markupWriter.toString(), contentType: mimeType, encoding: responseContentTypeEncoding)
                 return
             }
             response.status = HttpServletResponse.SC_BAD_REQUEST

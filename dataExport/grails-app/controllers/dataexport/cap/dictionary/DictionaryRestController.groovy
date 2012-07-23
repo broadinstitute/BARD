@@ -25,6 +25,8 @@ class DictionaryRestController {
             updateElemet: "PATCH"
     ]
 
+    static final String responseContentTypeEncoding = "UTF-8"
+
     def index() {
         return response.sendError(HttpServletResponse.SC_METHOD_NOT_ALLOWED)
     }
@@ -35,7 +37,6 @@ class DictionaryRestController {
     def dictionary() {
         try {
             final String mimeType = grailsApplication.config.bard.data.export.dictionary.xml
-            response.contentType = mimeType
             //do validations
             //mime types must match the expected type
             if (mimeType == request.getHeader(HttpHeaders.ACCEPT)) {
@@ -43,7 +44,7 @@ class DictionaryRestController {
                 final MarkupBuilder markupBuilder = new MarkupBuilder(markupWriter)
                 dictionaryExportService.generateDictionary(markupBuilder)
                 response.contentLength = markupWriter.toString().length()
-                render markupWriter.toString()
+                render (text: markupWriter.toString(), contentType: mimeType, encoding: responseContentTypeEncoding)
                 return
             }
             response.status = HttpServletResponse.SC_BAD_REQUEST
@@ -61,7 +62,6 @@ class DictionaryRestController {
     def resultType(Integer id) {
         try {
             final String mimeType = grailsApplication.config.bard.data.export.dictionary.resultType.xml
-            response.contentType = mimeType
             //do validations
             if (mimeType == request.getHeader(HttpHeaders.ACCEPT) && id) {
                 final StringWriter markupWriter = new StringWriter()
@@ -69,7 +69,7 @@ class DictionaryRestController {
                 final Long eTag = dictionaryExportService.generateResultType(markupBuilder, new Long(id))
                 response.addHeader(HttpHeaders.ETAG, eTag.toString())
                 response.contentLength = markupWriter.toString().length()
-                render markupWriter.toString()
+                render (text: markupWriter.toString(), contentType: mimeType, encoding: responseContentTypeEncoding)
                 return
             }
             response.status = HttpServletResponse.SC_BAD_REQUEST
@@ -92,7 +92,6 @@ class DictionaryRestController {
     def stage(Integer id) {
         try {
             final String mimeType = grailsApplication.config.bard.data.export.dictionary.stage.xml
-            response.contentType = mimeType
             //do validations
             if (mimeType == request.getHeader(HttpHeaders.ACCEPT) && id) {
                 final StringWriter markupWriter = new StringWriter()
@@ -101,7 +100,7 @@ class DictionaryRestController {
                 final Long eTag = dictionaryExportService.generateStage(markupBuilder, new Long(id))
                 response.addHeader(HttpHeaders.ETAG, eTag.toString())
                 response.contentLength = markupWriter.toString().length()
-                render markupWriter.toString()
+                render (text: markupWriter.toString(), contentType: mimeType, encoding: responseContentTypeEncoding)
                 return
             }
             response.status = HttpServletResponse.SC_BAD_REQUEST
@@ -124,7 +123,6 @@ class DictionaryRestController {
     def element(Integer id) {
         try {
             final String mimeType = grailsApplication.config.bard.data.export.dictionary.element.xml
-            response.contentType = mimeType
             //do validations
             if (mimeType == request.getHeader(HttpHeaders.ACCEPT) && id) {
                 final StringWriter markupWriter = new StringWriter()
@@ -132,7 +130,7 @@ class DictionaryRestController {
                 Long eTag = dictionaryExportService.generateElement(markupBuilder, new Long(id))
                 response.addHeader(HttpHeaders.ETAG, eTag.toString())
                 response.contentLength = markupWriter.toString().length()
-                render markupWriter.toString()
+                render (text: markupWriter.toString(), contentType: mimeType, encoding: responseContentTypeEncoding)
                 return
             }
             response.status = HttpServletResponse.SC_BAD_REQUEST
