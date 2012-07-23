@@ -24,7 +24,7 @@ class AuthenticationService {
         String apiKey = grailsApplication.config.dataexport.externalapplication.apiKey.hashed
         String apiKeyHeader = grailsApplication.config.dataexport.externalapplication.apiKey.header
         String requestApiKey = request.getHeader(apiKeyHeader)
-        final String requestParamsString = "URL: '${request.getRequestURL()}'; Remote address: '${request.getRemoteAddr()}'; Request api-key='${requestApiKey}'"
+        final String requestParamsString = "URL: '${request.getRequestURL()}'; Remote address: '${request.getRemoteAddr()}'"
 
         if (apiKey != requestApiKey) {
             log.info("Failed authentication - invalid api-key: ${requestParamsString}")
