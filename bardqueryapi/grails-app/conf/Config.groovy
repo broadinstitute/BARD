@@ -12,6 +12,7 @@ import grails.util.Environment
 //    grails.config.locations << "file:" + System.properties["${appName}.config.location"]
 // }
 //Defaults
+bard.services.elasticSearchService.restNode.baseUrl="http://bard-dev-vm:9200"
 ncgc.server.root.url = "http://assay.nih.gov:8080"
 ncgc.server.username = "bogus"
 ncgs.server.password = "bogus"
