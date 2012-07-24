@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<ParameterPanel>
+    <Precision Key="precision" Label="Decimal places"/>
+    <MultipleSelection Key="type" Label="Type" Tooltip="Type.">
+	<Choice Value="increments" Text="Increments" Tooltip="Displays the increments given by atoms." Selected="true"/>
+	<Choice Value="refractivity" Text="Refractivity" Tooltip="Calculates the value of the molar refractivity." Selected="true"/>
+    </MultipleSelection>
+    <Boolean Key="inch" Label="Increments of hydrogens" Tooltip="Displays the increments given by hydrogens." Value="true">
+	<Dependencies>
+	    <Item Key="type" Range="increments"/>
+	</Dependencies>
+    </Boolean>
+    <Boolean Key="mspace" Label="Display in MarvinSpace" Tooltip="The result window opens as 3D MarvinSpace viewer." Value="true"/>
+</ParameterPanel>

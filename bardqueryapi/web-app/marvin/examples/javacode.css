@@ -1,0 +1,34 @@
+body {
+    color: black;
+    background-color: white;
+    font-family: monospace
+}
+
+.comment {
+    color: gray;
+    font-style: italic;
+}
+
+.keyword, .type, .preproc {
+    color: darkblue;
+    font-weight: bold;
+}
+
+.string {
+    color: green;
+    font-weight: bold;
+}
+
+.number {
+    color: blue;    
+}
+
+.url {
+    color: blue;
+    text-decoration: underline;
+}
+
+.function {
+    font-weight: bold;
+}
+

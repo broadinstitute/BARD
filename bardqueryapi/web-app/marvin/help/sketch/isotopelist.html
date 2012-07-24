@@ -1,0 +1,56 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+	<META HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=utf-8">
+	<TITLE>Isotope list editing</TITLE>
+ <link rel=stylesheet type="text/css" href="../marvinmanuals.css">
+</HEAD>
+<BODY>
+<H1 CLASS="title">Isotope list editing</H1>
+
+<p>All isotopes are listed in a binary file: <strong>chemaxon/isotopes.data</strong>. MarvinSketch reads it by startup. It is the 
+encoded/compressed version of <strong>isotopes.txt</strong>. The file itself is a compressed file which stores
+the data in a heavily optimized versioned format.
+The source file (isotopes.txt) can be found in the <strong>build</strong> subdirectory of the Marvin package. 
+You can add or edit the isotopes by altering isotopes.txt.
+To encode source file (isotopes.txt), use <strong>IsotopeCompiler</strong> tool that creates a new copy of isotopes.data from the given source
+file.
+This tool is bundled with both Marvin Beans and Marvin Applets packages. It is wrapped into <strong>isotopescomp.jar</strong> in the 
+<strong>build</strong> subdirectory.</p>
+<p><strong>If you use a custom isotopes.data file, please note that, you have to recreate
+the file when upgrading your Marvin application!</strong></p>
+<p>Marvin applets reads the precompiled isotopes list from <em>chemaxon/isotopes.data</em> location from the <em>marvin</em> directory.
+MarvinSketch from the Marvin Beans package refers to the same relative path to access the isotopes list. 
+But - in this case - the path indicates the location of the file inside <em>MarvinBeans.jar</em> (or jchem.jar by JChem package).
+You can find "MarvinBeans.jar" in the <em>lib</em> subdirectory of Marvin Beans package.</p>
+
+<p>
+The following values are in the tab-separated columns:
+<ul>
+<li>Atom number
+<li>Number of neutrons
+<li>Mass (exact mass of the isotope, preferably at least 5 decimal places)
+<li>Abundance (values normalized to the most abundant natural isotope; main isotope - 100.00, artificial isotope - 0)
+</ul>
+
+<p>To add a custom isotope:
+	<ol>
+		<li>Open <em>build/isotopes.txt</em>.</li>
+		<li>Edit (or copy) a line next to the other isotopes of the given atom number. Fill in the other data. Save the file.</li>
+ 		<li>Regenerate <em>isotopes.data</em>: enter into the <em>build</em> directory and type the following command:
+			<pre>java -jar isotopescomp.jar isotopes.txt</pre>
+			The output will be <em>isotopes.data</em> in the same directory.</li>
+		<li>Refresh <em>isotopes.data</em>:
+			<ul>
+				<li><strong>Marvin Applets</strong>: Overwrite old <em>isotopes.data</em> with the new one in the <em>chemaxon</em> subdirectory of the
+				Marvin Beans package.</li>
+				<li><strong>Marvin Beans</strong>: There are two ways to replace the isotopes.data file. You can copy the file to the <em>user_home/chemaxon/</em> folder 
+				or you can overwrite <em>chemaxon/isotopes.data</em> inside the <em>MarvinBeans.jar</em> (or jchem.jar by JChem package).
+				MarvinBeans.jar is actually a compressed archive file that you can extract/pack with any zip (un)compressor
+				tool. Consult with the manual of your (un)compressor tool how to update certain file in an existing zip file.</li>
+			</ul>
+		</li>
+	</ol>
+</p>
+</BODY>
+</HTML>

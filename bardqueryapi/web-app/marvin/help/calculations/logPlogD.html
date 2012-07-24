@@ -1,0 +1,340 @@
+<html>
+<head>
+<link REL="stylesheet"  TYPE="text/css" HREF="../marvinmanuals.css" TITLE="logP and logD">
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<title></title>
+<meta name="description" content="">
+<meta name="keywords" content="">
+<meta name="author" content="j.szegezdi">
+</head>
+<body>
+<H1 align="center">logP and logD Calculation</H1>
+<OL>
+
+<LI> <A HREF="#Intro">Introduction</A></LI>
+<LI><A HREF="#Symbols">Symbols</A></LI>
+<LI><A HREF="#logPD_Def">Definition of Partition Coefficient <i>P</i> and Distribution Coefficient <i>D</i></A></LI>
+<LI><A HREF="#Microp">Micro Partition Coefficient</A></LI>
+<LI><A HREF="#MacroMicroRel">Relation Between Macro and Micro Partition Coefficients</A></LI>
+<li><a href="#methods">LogP calculation methods</a></li>
+<LI><A HREF="#Examples">Examples</A></LI>
+
+
+<UL>
+<LI><A HREF="#Example1">Example 1</A></LI>
+<LI><A HREF="#Example2">Example 2</A></LI>
+<LI><A HREF="#Example3">Example 3</A></LI>
+<LI><A HREF="#Example4">Example 4</A></LI>
+</UL>
+
+
+<LI><A HREF="#References">References</A></LI>
+
+</OL>
+<A NAME="Intro" ></A>
+<H2>1. Introduction</H2>
+
+The mass flux of a molecule at the interface of two immiscible solvents is governed by its lipophilicity. 
+The more lipophilic a molecule is, the more soluble it is in lipophilic organic phase. 
+For the same reason, drug penetration into a biological membrane is also influenced by its lipophilicity. 
+When a molecule is ionizable at the pH of a solution, it forms a hydrophilic anion or cation and subsequently 
+fails to dissolve in organic phase. Ionization of a molecule leads to the accumulation of the hydrophilic form
+ in the aqueous phase. In contrast, its lipophilic form will decrease in both aqueous and organic phase 
+ due to the law of conservation of mass. 
+The partition coefficient of a molecule observed in a water&#8211;<i>n</i>-octanol system has been adopted as the standard measure of lipophilicity. 
+The observed partition coefficient depends on the support electrolyte concentration of the bulk phase the compound is dissolved in. 
+Extra ion-pair forming chemical agents added to the aqueous/organic phase may have a significant effect on the partitioning behavior of a molecule.
+<BR>
+
+It is often meaningful to obtain the partition coefficients of molecules by calculation.  
+The molecular structure and extent of ionization are the primary factors in calculating the partition coefficient. 
+The standard partition coefficient of ionized and unionized species calculated from the molecular structure is
+based largely on the atomic log<i>P</i> increments given in <A HREF="#Ref1">Ref.1. </A>
+The extent of ionization at a given pH is obtained from the predicted p<i>K</i><SUB>a</SUB> of a molecule.  
+Our calculation method takes into account the effect of the counterion ion concentration on log<i>D</i> and log<i>P</i>.
+
+<A NAME="Symbols"></A>
+<H2>2. Symbols</H2>
+
+
+Throughout this document we use the following symbols:
+<ul>
+<li><b><i>P</i><SUB>i</SUB></b> (upper case) the macro partition coefficient,
+ where subscript i refers to the ionization state of species included in <i>P</i><SUB>i</SUB>. e.g. i= -2, -1, 0, +1, +2</li>
+<li><b><i>p</i><SUB>i</SUB></b> (lower case) the micro partition coefficient,
+ where subscript i refers to the microspecies. e.g. i=1,2,3,4,&hellip;</li>
+<li><b><i>D</i></b> the distribution coefficient</li>
+<li><b>[ ]</b> concentration of microspecies</li>
+<li><b>log<i>P</i></b> the logarithm of the partition coefficient </li>
+<li><b>log<i>D</i></b> the logarithm of the distribution coefficient</li>
+</ul>
+
+
+<H2><A class="anchor" NAME="logPD_Def">3. Definition of Partition Coefficient <i>P</i> and Distribution Coefficient <i>D</i></A></H2>
+
+The partition coefficient is the ratio of the concentration of the compound in octanol to the concentration of the compound in water.
+The distribution coefficient is the ratio of the sum of the concentrations of all species of the 
+compound in octanol to the sum of the concentrations of all species of the compound in water.
+
+Based on acid dissociation reactions, we can introduce the concept of a partition coefficient 
+for cationic and anionic species and for neutral species. 
+The following gives the definition of partition and distribution coefficients 
+for ionized and unionized species.
+
+<BR><img src="logPlogD_files/logPlogD_def.png" width="686" height="313" alt="logPlogD_def"/>
+
+<BR>
+
+The partition and distribution coefficients for multiprotic compounds are defined in much the same way as for monoprotic compounds, using the following formulas.
+
+
+<BR><img src="logPlogD_files/multipro_def.png" width="679" height="233" alt="multipro_def"/>
+<BR>
+
+<H3><A class="anchor" NAME="Example">Example</A></H3>
+
+In this example we suppose that the compound A<SUB>1</SUB>A<SUB>2</SUB>B<SUB>1</SUB>B<SUB>2</SUB> contains two acidic and two basic ionization sites.
+This compound has 16 protonation states in aqueous solution. The microspecies which are assigned to the protonation states 
+are summarized in Table 1.
+<BR>
+<BR>Table 1. 
+<TABLE BORDER=1 WIDTH=40% HEIGHT=25% cellpadding="0" cellspacing="1" >
+
+<TR><TD ><CENTER>Microspecies</CENTER></TD>
+<TD><CENTER>charge</CENTER></TD>
+
+<TR><TD><CENTER>A<SUB>1</SUB>A<SUB>2</SUB>B<SUB>1</SUB>B<SUB>2</SUB></CENTER></TD>
+<TD><CENTER>0</CENTER></TD>
+
+<TR><TD><CENTER>A<SUB>1</SUB><SUP>-</SUP>A<SUB>2</SUB>B<SUB>1</SUB>B<SUB>2</SUB></CENTER></TD>
+<TD><CENTER>-1</CENTER></TD>
+
+<TR><TD><CENTER>A<SUB>1</SUB>A<SUB>2</SUB><SUP>-</SUP>B<SUB>1</SUB>B<SUB>2</SUB></CENTER></TD>
+<TD><CENTER>-1</CENTER></TD>
+
+<TR><TD><CENTER>A<SUB>1</SUB>A<SUB>2</SUB>B<SUB>1</SUB><SUP>+</SUP>B<SUB>2</SUB></CENTER></TD>
+<TD><CENTER>+1</CENTER></TD>
+
+<TR><TD><CENTER>A<SUB>1</SUB>A<SUB>2</SUB>B<SUB>1</SUB>B<SUB>2</SUB><SUP>+</SUP></CENTER></TD>
+<TD><CENTER>+1</CENTER></TD>
+
+<TR><TD><CENTER>A<SUB>1</SUB><SUP>-</SUP>A<SUB>2</SUB><SUP>-</SUP>B<SUB>1</SUB>B<SUB>2</SUB></CENTER></TD>
+<TD><CENTER>-2</CENTER></TD>
+
+<TR><TD><CENTER>A<SUB>1</SUB><SUP>-</SUP>A<SUB>2</SUB>B<SUB>1</SUB><SUP>+</SUP>B<SUB>2</SUB></CENTER></TD>
+<TD><CENTER>0</CENTER></TD>
+
+<TR><TD><CENTER>A<SUB>1</SUB><SUP>-</SUP>A<SUB>2</SUB>B<SUB>1</SUB>B<SUB>2</SUB><SUP>+</SUP></CENTER></TD>
+<TD><CENTER>0</CENTER></TD>
+
+<TR><TD><CENTER>A<SUB>1</SUB>A<SUB>2</SUB><SUP>-</SUP>B<SUB>1</SUB><SUP>+</SUP>B<SUB>2</SUB></CENTER></TD>
+<TD><CENTER>0</CENTER></TD>
+
+<TR><TD><CENTER>A<SUB>1</SUB>A<SUB>2</SUB><SUP>-</SUP>B<SUB>1</SUB>B<SUB>2</SUB><SUP>+</SUP></CENTER></TD>
+<TD><CENTER>0</CENTER></TD>
+
+<TR><TD><CENTER>A<SUB>1</SUB>A<SUB>2</SUB>B<SUB>1</SUB><SUP>+</SUP>B<SUB>2</SUB><SUP>+</SUP></CENTER></TD>
+<TD><CENTER>+2</CENTER></TD>
+
+<TR><TD><CENTER>A<SUB>1</SUB><SUP>-</SUP>A<SUB>2</SUB><SUP>-</SUP>B<SUB>1</SUB><SUP>+</SUP>B<SUB>2</SUB></CENTER></TD>
+<TD><CENTER>-1</CENTER></TD>
+
+<TR><TD><CENTER>A<SUB>1</SUB><SUP>-</SUP>A<SUB>2</SUB><SUP>-</SUP>B<SUB>1</SUB>B<SUB>2</SUB><SUP>+</SUP></CENTER></TD>
+<TD><CENTER>-1</CENTER></TD>
+
+<TR><TD><CENTER>A<SUB>1</SUB><SUP>-</SUP>A<SUB>2</SUB>B<SUB>1</SUB><SUP>+</SUP>B<SUB>2</SUB><SUP>+</SUP></CENTER></TD>
+<TD><CENTER>+1</CENTER></TD>
+
+<TR><TD><CENTER>A<SUB>1</SUB>A<SUB>2</SUB><SUP>-</SUP>B<SUB>1</SUB><SUP>+</SUP>B<SUB>2</SUB><SUP>+</SUP></CENTER></TD>
+<TD><CENTER>+1</CENTER></TD>
+
+<TR><TD><CENTER>A<SUB>1</SUB><SUP>-</SUP>A<SUB>2</SUB><SUP>-</SUP>B<SUB>1</SUB><SUP>+</SUP>B<SUB>2</SUB><SUP>+</SUP></CENTER></TD>
+<TD><CENTER>0</CENTER></TD>
+
+</TABLE>
+
+<BR>
+Partition coefficients and distribution coefficients are expressed by the following formulas: 
+<table border="0">
+  <tbody>
+<tr><td>1. Partition coefficient of the neutral species:</td>
+<td colspan="2">
+<img src="logPlogD_files/P0_exp.png" width="738" height="100" alt="P0_exp"/>
+</td></tr>
+<tr><td>
+2. Partition coefficient of the anionic and the cationic species:</td>
+<td>
+<img src="logPlogD_files/P_ion1_exp.png" width="543" height="153" alt="P_ion1_exp"/>
+</td>
+<td colspan="2">
+<img src="logPlogD_files/P_ion2_exp.png" width="233" height="154" alt="P_ion2_exp"/>
+</td><td></td></tr>
+
+<tr><td>3. The distribution coefficient of the A<SUB>1</SUB>A<SUB>2</SUB>B<SUB>1</SUB>B<SUB>2</SUB> molecule:</td>
+<td><img src="logPlogD_files/D_exp.png" width="297" height="89" alt="D_exp"/></td></tr>
+</tbody>
+</table>
+
+
+<H2><A class="anchor" NAME="Microp">4. Micro Partition Coefficient</A></H2>
+
+The micro partition coefficient is the ratio of the concentration of two microspecies defined with <i>p</i><SUB>i</SUB> 
+as expressed with the next relation:
+<BR><img src="logPlogD_files/pi_exp.png" width="236" height="66" alt="pi_exp"/>
+
+
+<BR>
+
+
+<H2><A class="anchor" NAME="MacroMicroRel">5. Relation Between Macro and Micro Partition Coefficients</A></H2>
+
+Macro partition coefficients<i> P<SUB>0</SUB>&hellip;P<SUB>i</SUB></i> 
+can also be expressed as a function of micro partition coefficients <i>p<SUB>0</SUB>&hellip;p<SUB>i</SUB></i>.
+
+<BR>From the definition of micro partition coefficients, we obtain the following formula for the concentration of microspecies in octanol:
+<BR>
+<BR>[microspecies]<SUB>i,octanol</SUB> =<i> p</i><SUB>i</SUB> &sdot;[microspecies]<SUB>i,water</SUB>
+<BR>
+where <i>p</i><SUB>i</SUB> is the micro partition coefficient of microspecies i. 
+<BR>
+<BR>For example, <i> P</i><SUB>-1</SUB> includes four micro partition coefficients 
+(<i>p<SUB>1</SUB>, p<SUB>2</SUB>, p<SUB>3</SUB>, p<SUB>4</SUB></i>).
+They are given by:
+<p><img src="logPlogD_files/p1p2p3p4.png" width="433" height="155" alt="p1p2p3p4"/></p>
+
+<p>
+
+After substituting the <i>p</i><SUB>i</SUB>s  into the original formula for <i>P</i><SUB>-1</SUB> 
+we get the following simpler formula which includes only aqueous concentration of the 
+appropriate microspecies:</p>
+<p><img src="logPlogD_files/P_1_new.png" width="801" height="89" alt="P_1_new"/>
+<p>
+This can be further simplified if we introduce the acid dissociation constants of the 
+A<SUB>1</SUB>A<SUB>2</SUB>B<SUB>1</SUB>B<SUB>2</SUB> molecule.
+The next five ionization reactions of the A<SUB>1</SUB>A<SUB>2</SUB>B<SUB>1</SUB>B<SUB>2</SUB>
+molecule are used to rearrange <i>P</i><SUB>-1</SUB> into a concentration free form.
+<p><img src="logPlogD_files/5_reaction.png" width="529" height="380" alt="5_reaction"/>
+
+</p>
+So we can further simplify the formula for <i>P</i><SUB>-1</SUB> to the following.  
+ This expression reveals that <i>P</i><SUB>-1</SUB> does not depend on the pH of the solution: 
+ <BR><img src="logPlogD_files/P_1_Concfree.png" width="367" height="115" alt="P_1_Concfree"/>
+<BR>
+ <BR>
+ Similarly, one could show that 
+  <i>P</i><SUB>0</SUB>, <i>P</i><SUB>+1</SUB>,<i> P</i><SUB>-2</SUB> 
+ and <i>P</i><SUB>+2</SUB> are also pH-independent.<BR>
+<BR>
+In contrast to this, the distribution coefficient <i>D</i> does depend on the solution 
+pH (see <A HREF="#Ref2">Ref.2.</A>):
+
+<BR><img src="logPlogD_files/D_pi.png" width="318" height="80" alt="D_pi"/>
+<br>
+  
+<h2><a class="anchor" name="methods">6. log<i>P</i> calculation methods</a></h2>
+<p><table>
+    <tr><td><p>log<i>P</i> calculations are based on a pool of fragments predefined
+    in the calculator. This set is based on the data set in <a href="#Ref1"> 
+    references 1</a>. Every fragment is assigned a unique name and a value. <br>
+      </td>
+      <!--<td><img src="logPlogD_files/set1.png" width="237" height="247" alt="set1"/>
+    </td>--></tr>
+    
+    <tr><td>
+        The log<i>P</i> value of a molecule
+        is the sum of the fragment values present in the molecule. <br>
+      </td>
+    <!--  <td><img src="logPlogD_files/fragments.png" width="417" height="514" alt="fragments"/>
+    </td>--></tr>
+    
+    <tr><td>
+        log<i>P</i> plugin handled 
+        only one fragment set until version 5.1.2, above, it was extended with two additional 
+        sets. The sets are based on a published data set (see <a href="#Ref1a"> 
+        reference 2</a>) and the PhysProp<sup>&copy;</sup> database.<br>
+      </td>
+      <!--<td><img src="logPlogD_files/allsets.png" width="477" height="259" alt="allsets"/>
+    </td>--></tr>
+    
+    
+    <tr><td>The <b>trainable log<i>P</i></b> (available from version 5.1.3) offers the user to define 
+        his own log<i>P</i> database and calculate log<i>P</i> values based on the experimental data. 
+        New fragment value extensions make a more precise calculation possible. <br>
+      </td>
+      
+      <!--<td><img src="logPlogD_files/userset.png" width="771" height="423" alt="userset"/>
+    </td>--></tr>
+    <tr>
+      <td>Choosing the weighted method requires the user to define the weight of each 
+        set of data needed. This method may include any of the three internal data sets and 
+        the user defined set.<br>
+        
+      </td>
+      <!--<td><img src="logPlogD_files/weighted.png" width="939" height="616" alt="weighted"/>
+    </td>--></tr>
+  </table>
+ </p>
+ <br>
+   
+ <H2><A class="anchor" NAME="Examples">7. Examples</A> </H2>
+
+<h3><A class="anchor" NAME="Example1">Example 1</A></h3>
+The compound below is zwitterionic that looks like 
+the A<SUB>1</SUB>A<SUB>2</SUB>B<SUB>1</SUB>B<SUB>2</SUB> molecule in the theoretical section above. Lipophilicity of this compound reaches its maximum near to the isoelectric point.
+<table>
+<tr><td><IMG SRC="logPlogD_files/mol_logD-pH.png"  width="298" height="268"   HSPACE=18 VSPACE=10 ></td>
+<td><IMG SRC="logPlogD_files/logD-pH.jpg" width="556" height="417"  HSPACE=18 VSPACE=10 ></td> 
+</tr>
+</table>
+
+<h3><A class="anchor" NAME="Example2">Example 2</a></h3>
+Homidium is a quaternary ammonium ion with strong hydrophilic character. 
+Its log<i>P</i> is calculated with the use of the ionic fragment of the N<SUP>+</SUP> ion.
+The calculated and measured log<i>P</i> agree.
+<BR>
+<table border=0 cellpadding=5 cellspacing=5>
+<tr>
+<td>
+Calculated log<i>P</i> = -1.09 </td>
+<td> measured log<i>P</i>= -1.10 </td>
+<td>
+, see <A HREF="#Ref3">Ref.3.</A></td>
+</tr>
+</table>
+<BR>
+<IMG SRC="logPlogD_files/homidium.png"     HSPACE=18 VSPACE=10 > 
+
+
+<h3><A class="anchor" NAME="Example3"></a>Example 3</h3>
+Ibuprofen has the typical log<i>D</i> vs. pH profile that is characteristic of acidic compounds. 
+Lipophilic behavior of ibuprofen will be dominant when its carboxylic group is unionized (at low pH). 
+At higher pH the carboxylic group reaches the fully ionized state and hydrofilicity becomes enhanced. 
+<BR>
+
+<IMG SRC="logPlogD_files/ibuprofen_logD.jpg"   HSPACE=18 VSPACE=10 > 
+
+
+<h3><A class="anchor" NAME="Example4"></a>Example 4</h3>
+The measured distribution coefficient also depends on the method.  
+The shake flask and the pH-metric methods are the most popular. 
+The figure below shows the calculated and measured log<i>D</i> of 
+lignocaine as function of pH. 
+<BR>
+
+<IMG SRC="logPlogD_files/lignocaine_logD.jpg"  HSPACE=6 VSPACE=10 > 
+<BR clear=LEFT>
+<P>&nbsp;<P>
+
+<H2><A class="anchor" NAME="References"></a>7. References</H2>
+<OL>
+
+<LI><A class="text" NAME="Ref1">Viswanadhan, V. N.; Ghose, A. K.; Revankar, G. R. and Robins, R. K., <i> J.Chem.Inf.Comput.Sci.</i>, <b>1989</b>, <i>29</i>, 3, 163-172; <a href="http://dx.doi.org/10.1021/ci00063a006">doi</a></A></LI>
+<li><a class="text" name="Ref1a">Klopman, G.; Li, Ju-Yun.; Wang, S.; Dimayuga,  M.: <i>J.Chem.Inf.Comput.Sci.</i>, <b>1994</b>, <i>34</i>, 752; <a href="http://dx.doi.org/10.1021/ci00020a009">doi</a></a></li>
+<li>PhysProp<sup>&copy;</sup> database, <a href="http://esc.syrres.com/interkow/pp1357.htm">webpage</a></li>
+<LI><A class="text" NAME="Ref2">Csizmadia, F.; Tsantili-Kakoulidou, A.; Panderi, I. and Darvas, F., <i>J.Pharm.Sci.</i>, <b>1997</b>, <i>86</i>, 7, 865-871; <a href="http://dx.doi.org/10.1021/js960177k">doi</a></A></LI>
+<LI><A class="text" NAME="Ref3">Bouchard, G.; Carrupt, P. A.; Testa, B.; Gobry, V. and Girault, H. H., <i>Pharm.Res.</i>, <b>2001</b>, <i>18</i>, 5, 702-708; <a href="http://dx.doi.org/10.1023/A:1011001914685">doi</a></A></LI>
+
+</OL>
+
+</body>
+</html>

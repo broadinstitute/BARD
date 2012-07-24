@@ -1,0 +1,274 @@
+<html>
+<head>
+<meta NAME="author" CONTENT="Peter Csizmadia, Tamas Vertse">
+<link REL ="stylesheet" TYPE="text/css" HREF="marvinmanuals.css" TITLE="Style">
+<title>Marvin Beans Platforms</title>
+</head>
+<body>
+
+<h1 ALIGN=CENTER>Cut/Copy/Paste and Drag &amp; Drop Functionality</h1>
+<p>
+The cut, copy, and paste operations work in the bean and application versions
+of Marvin, and also in the applets. However, because of security reasons,
+the untrusted (unsigned) applets perform these operations using a local clipboard 
+inside the JVM process. The non-applet versions of Marvin and the signed 
+Marvin applets are allowed to use the system clipboard.
+</p>
+
+<h2><a class="anchor" name="where_available">Where available?</a></h2>
+
+<table CELLSPACING=0 CELLPADDING=5 class="colored-grid">
+<tr valign=top>
+    <th>&nbsp;</th>
+    <th>Marvin unsigned<br>applets</th>
+    <th>Marvin signed<br>applets<sup>1</sup></th>
+    <th>Marvin Beans and <br> applications</th>
+</tr>
+<tr>
+    <td>Cut/Copy/Paste</td>
+    <td align=center>inside Marvin</td>
+    <td align=center>yes</td>
+    <td align=center>yes</td>
+</tr>
+<tr>
+    <td>Drag &amp; Drop</td>
+    <td align=center>no</td>
+    <td align=center>yes<sup>2</sup></td>
+    <td align=center>yes</td>
+</tr>
+</table>
+
+<!--APPLETONLY_BEGIN-->
+<p><small>1: You can find more info about signed Marvin applets in the 
+following documents:
+<a href="developer/applets/browsers.html">Browser compatibility of Marvin Applets</a>,
+<a href="developer/applets/signing.html">Signed applets</a>
+</small></p>
+<!--APPLETONLY_END-->
+<p><small>2: Drag &amp; Drop works only when the sketcher is in its own window.
+ When the applet is in the browser window, drop events are received by the 
+ browser instead of the applet.</small></p>
+
+<h2><a class="anchor" name="copyassmi">Copy, Copy As..., Copy as Smiles</a></h2>
+<p>Marvin has three commands to place objects on the clipboard: <code>Copy</code>,
+<code>Copy As...</code> and <code>Copy as Smiles</code>. </p>
+<ul>
+<li>Using the <b>Copy</b> command, the structure is copied to the clipboard in
+a couple of formats. The molecule always will be there in <b>mrv</b>,
+<b>MDL Molfile</b> and <b>DayLight SMILES</b> formats. The other formats (like
+<i>Plain Text</i> or <i>Bitmap Image</i>) are optional.
+See the table in the <a href="#clipboard.formats">Clipboard formats</a>
+section about supported options and default settings.</li>
+
+<li>Using the <strong>Copy As...</strong> command, a dialog will display to select
+in which format you would like to place the molecule to the clipboard.</li>
+
+<li>Using the <b>Copy as Smiles</b> command, the Smiles string of the structure
+is copied to the clipboard in <code>String</code> and <code>Plain Text</code>
+    formats.<br>
+    <small><em>Note:</em>Any <a href="formats/formats.html">file format of
+    Marvin</a> can be copied to the clipboard as a <code>string</code> or as
+    <code>plain text</code>. From the
+    <code>Edit</code> menu choose <code>Source</code> then
+    <code>Edit/Copy</code> to place the desired format  on
+    the clipboard as plain text.?</small></li>
+</ul>
+
+<h2><a class="anchor" name="clipboard.formats">Clipboard formats</a></h2>
+<p>
+Marvin can place more than one clipboard object on the clipboard, each
+represents the same molecule in different format.
+Copy from Marvin supports the following representations:</p>
+<ul>
+<li><strong>Marvin Document (mrv)</strong>: Marvin's own format. Only
+Marvin can paste it.</li>
+<li><strong>MDL Molfile</strong>: a popular molecule description format.
+A lot of chemical drawing tool can paste it like Marvin, ChemDraw, etc.</li>
+<li><strong>Daylight SMILES</strong>: wide range molecule format. Several chemical editor
+can paste it. In a few editor, SMILES can not be pasted directly. E.g.
+ChemDraw uses the "Paste Special/SMILES" option to copy SMILES from the
+clipboard.</li>
+<li><strong>Plain Text (molecule source)</strong>: To be able to copy
+the molecule source into text editors or into other application that do not
+support chemical formats.</li>
+<li><strong>Bitmap Image</strong>: To paste molecule image into presentations
+or into documents.</li>
+<li><strong>Vector Graphical Image (EMF)</strong>:  The vector graphics is
+scalable unlike bitmap image. It can be pasted into MS-Office
+documents or into other applications that support Enhanced MetaFile format.</li>
+<li><strong>OLE object</strong>: To copy a Marvin OLE object into MS-Office.
+This format is available under Windows.
+To be able to paste it into an MS-Office document, marvinOLEServer.exe registration is required. (Marvin installer does it automatically or you can register it
+manually in Marvin applications through the
+<em>Edit/Preferences/OLEServer</em> menu.) You can read more about OLE support
+in <a href="marvinoleserver.html">Marvin OLE User's Guide</a>.</li>
+<li><strong>Portable document format (PDF) </strong> which contains vector graphical image. It is the default format in MacOSX.</li>
+
+</ul>
+
+<p>
+A couple of formats are not available on a few platforms.</p>
+<h4><a class="anchor" name="setCopyOpts">Setting copy format options</a></h4>
+<p>You can also apply or deny the accessibility of one or more copy formats.
+    You can set it by the following ways:
+</p>
+<ul>
+<li>On the <b>Copy</b> panel of the <b>Preferences</b> dialog
+in the <b>Edit</b> menu.</li>
+<li>As an applet parameter:
+<a href="developer/sketchman.html#parameters.copyOpts">copyOpts</a></li>
+<li>From the Marvin Beans API:
+<a href="developer/beans/api/chemaxon/marvin/common/UserSettings.html#setCopyOpts(java.lang.String)">UserSettings.setCopyOpts(String)</a></li>
+</ul>
+
+<table>
+<tr><td>
+<table CELLSPACING=0 CELLPADDING=5 class="colored-grid">
+<tr>
+    <th>Format</th>
+    <th>Windows</th>
+    <th>Mac OS X</th>
+    <th>Linux</th>
+</tr>
+<tr>
+    <td>Marvin Document (mrv)</td>
+    <td align=center>+D</td>
+    <td align=center>-</td>
+    <td align=center>+D</td>
+</tr>
+<tr>
+    <td>MDL Molfile</td>
+    <td align=center>+D</td>
+    <td align=center>-</td>
+    <td align=center>+D</td>
+</tr>
+<tr>
+    <td>Daylight SMILES</td>
+    <td align=center>+D</td>
+    <td align=center>-</td>
+    <td align=center>+D</td>
+</tr>
+<tr>
+    <td>Plain Text (molecule source)</td>
+    <td align=center>+</td>
+    <td align=center>+</td>
+    <td align=center>+D</td>
+</tr>
+<tr>
+    <td>Bitmap Image</td>
+    <td align=center>+</td>
+    <td align=center>+</td>
+    <td align=center>+D</td>
+</tr>
+<tr>
+    <td>Vector Graphical Image (EMF)</td>
+    <td align=center>+D</td>
+    <td align=center>-</td>
+    <td align=center>-</td>
+</tr>
+<tr>
+    <td>OLE object</td>
+    <td align=center>+D</td>
+    <td align=center>-</td>
+    <td align=center>-</td>
+</tr>
+</table></td>
+<td width=10>&nbsp;</td>
+<td valign=top>
+<table>
+<tr><th>+</th><td> supported</td></tr>
+<tr><th>-</th><td> not supported</td></tr>
+<tr><th>D</th><td> selected as default</td></tr>
+</table>
+</td></tr>
+</table>
+
+<p>When the <b>content of the clipboard</b> is pasted into an application (and
+it is available in more than one format), the
+application retrieves data in the most descriptive format.
+Most versions of Microsoft Office prefer pasting <b>image</b> instead of
+<b>text</b> if the content of the clipboard is available in both formats.
+But there are a few ones that paste text as default. In that case, you should
+use "Paste As Special" option in MS-Office to paste it as image but it can be
+unconfortable to someone.
+The workaround can be the restriction of the text copy from Marvin.
+That is the reason why text copy is disabled in the default settings of Marvin
+(on a couple of platforms). <br>
+In that case, we recommend <strong>Copy As...</strong> or <b>Copy as SMILES</b> to paste text into MS-Word and
+in other editors.
+Another solution can be to change the default options of the <b>Copy</b>
+command (see <a href="#setCopyOpts">above</a> how to do it).</p>
+
+<p>If we compare <b>Bitmap</b> and <b>Vector Graphical Image</b> formats, the
+situation is the same as in the previous case (text vs. image). Most of the
+applications prefer bitmap image although they can accept vector graphical
+images as an Enhanced MetaFile (EMF), like MS-Word. Since vector graphics
+are scalable unlike bitmap images, we have chosen EMF as default from image
+formats (where it is supported).</p>
+
+<h2>Data transfer between Marvin and other chemical drawing tools</h2>
+<table>
+<tr>
+<td>
+<table CELLSPACING=0 CELLPADDING=5 class="colored-grid">
+<tr>
+    <th>&nbsp;</th>
+    <th>Windows<sup>1</sup></th>
+    <th>Macintosh OS X<sup>4</sup></th>
+</tr>
+<tr>
+    <td>ISISDraw<sup>2</sup></td>
+    <td>Copy &amp; Paste</td>
+    <td>Copy &amp; Paste</td>
+
+</tr>
+<tr>
+    <td>ChemDraw</td>
+    <td>Copy &amp; Paste</td>
+    <td>Copy &amp; Paste</td>
+</tr>
+<tr>
+    <td>ChemDraw Plugin</td>
+    <td>Copy &amp; Paste</td>
+    <td>Paste</td>
+</tr>
+</table>
+</td>
+<td width=10>&nbsp;</td>
+<td valign=top>
+<p><strong>Copy</strong>: copy a structure from the application into Marvin<br>
+<strong>Paste</strong>: copy a structure from Marvin into the application</p>
+</td>
+</tr>
+</table>
+
+<p><small>1: On windows in Java 1.2-1.3.1, the
+&lt;Java home directory&gt;/jre/lib/flavormap.properties file must be edited:
+<code>MDLCT=chemical/x-mdl-Molfile</code></small></p>
+<p><small>2: In case of ISISDraw the following option must be
+checked: <i>Option -> Settings -> General -> Copy Mol/Rxnfile to the
+		   Clipboard</i></small></p>
+<p><small>3: <em>Copy as SMILES</em> works</small></p>
+<p><small>4: In OS X, since Java 1.4, data transfer in chemical formats does
+not work. In that case, molecule can be pasted only as image or text into
+chemical drawing tools.
+Copy from an application to Marvin works if the application can place data
+as Plain Text to the clipboard.</small></p>
+
+<h2>Data transfer between Marvin and other applications</h2>
+
+<p>Marvin can paste SMILES strings, MDL MolFiles, etc. from a text editor
+    as molecules.</p>
+<p>
+X Window System: most text editors (xedit, emacs, gvim, etc.) do not
+transfer data to the X clipboard, so Marvin is unable to communicate with them.
+Copy &amp; Paste works with the following editors and other programs:</p>
+<ul>
+<li><strong>GNOME programs</strong>: gedit, gnotepad+ (gnp), gxedit, etc.</li>
+<li><strong>Motif programs</strong>: asWedit, nedit, Netscape, etc.</li>
+</ul>
+    <em>Note:</em> With the xclipboard program, you can test
+    whether your favorite editor uses the X clipboard or not.
+
+</body>
+</html>

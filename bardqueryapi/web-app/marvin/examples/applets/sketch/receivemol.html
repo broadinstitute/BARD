@@ -1,0 +1,61 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!--
+Author: Tamas Vertse
+Date: 30th October 2008
+-->
+<html>
+<head>
+<META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Marvin, display molecule whose source is encoded in the URL</title>
+<link type="text/css" href="../../../help/marvinmanuals.css" rel="stylesheet">
+</head>
+<body>
+
+<h1>Marvin display molecule whose source is encoded in the URL</h1>
+
+<p>This page is the pair of <a href="sendmol.html">sendmol.html</a>.
+It receives molecule source from this page. The molecule source is given
+in the URL. JavaScript is used to parse molecule source that is given
+for the MarvinView applet to display.</p>
+
+<script type="text/javascript" SRC="../../../marvin.js"></script>
+<script type="text/javascript">
+<!--
+    function decodeSpace(str) {
+        var s = str;
+        s = s.split("+").join(" ");
+        return s;
+    }
+
+    function getMolFromQuery() {
+        // parse the mol parameter from the query string
+        var res = null;
+        var mol = "";
+        var i = location.search.indexOf("=");
+        if(i > -1) {
+	    var paramname = location.search.substring(1,i);
+	    if(paramname.indexOf("mol") == 0) {
+	        res = location.search.substring(i+1);
+                var e = res.indexOf("&");
+                if(e == -1) {
+                    mol = res;
+                } else {
+                    mol = res.substring(0,e);
+                }
+	    }
+        }
+        // decode the mol parameter
+        mol = decodeSpace(mol);
+        mol = unescape(mol);
+        return mol;
+    }
+
+    var m = getMolFromQuery();
+    mview_begin("../../..",470,445);
+    mview_param("mol",m);
+    mview_end();
+//-->
+</script>
+
+</body>
+</html>

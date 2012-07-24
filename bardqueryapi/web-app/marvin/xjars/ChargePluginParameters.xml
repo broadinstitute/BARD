@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<ParameterPanel>
+    <Precision Key="precision" Label="Decimal places"/>
+    <SingleSelection Key="type" Label="Type">
+	<Choice Value="total" Text="Total" Tooltip="Calculates total charge." Selected="true"/>
+	<Choice Value="sigma" Text="Sigma" Tooltip="Calculates sigma charge."/>
+	<Choice Value="pi" Text="Pi" Tooltip="Calculate pi charge."/>
+    </SingleSelection>
+    <Boolean Key="implh" Label="Charges of implicit hydrogens"
+        Tooltip="Details the increment of the charge by the implicit hydrogens." Value="true">
+	<Dependencies>
+	    <Item Key="type" Range="sigma,total"/>
+	</Dependencies>
+    </Boolean>
+    <Boolean Key="resonance" Label="Take resonant structures"
+        Tooltip="Calculates the average of the charge of the resonant structures." Value="true"/>
+    <Boolean Key="microspecies" Label="Take major microspecies" 
+        Tooltip="Calculates the charge of the major microspecies present at the given pH." Value="false"/>
+    <Number Key="pH" Label="at pH" Range="[0.0,14.0]" Value="7.4">
+	<Dependencies>
+	    <Item Key="microspecies" Range="true"/>
+	</Dependencies>
+    </Number>
+    <Boolean Key="mspace" Label="Display in MarvinSpace" Tooltip="The result window opens as 3D MarvinSpace viewer." Value="true"/>
+</ParameterPanel>

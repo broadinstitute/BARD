@@ -1,0 +1,44 @@
+<html>
+<head>
+<meta NAME="author" CONTENT="Tamas Vertse">
+    <script type="text/javascript" src="../../sh_main.js"></script>
+    <script type="text/javascript" src="../../sh_javascript.js"></script>
+    <script type="text/javascript" src="../../sh_html.js"></script>
+    <link REL ="stylesheet" TYPE="text/css" HREF="../../sh_nedit.css" TITLE="Style">
+<link REL ="stylesheet" TYPE="text/css" HREF="../../../marvinmanuals.css" TITLE="Style">
+<title>MarvinSketch Example - Loading modules in background</title>
+</head>
+<body onload="sh_highlightDocument();">
+
+<h1>MarvinSketch Example - Loading modules in background</h1>
+
+<p>In the following example, all modules are loaded-in after startup in the idle time of the applet. You can specify which modules will be the first in the loading queue with the help of <a href="../../../help/developer/sketchman.html#parameters.bgloadPriority">bgloadPriority</a>.</p>
+<center>
+<script type="text/javascript" SRC="../../../marvin.js"></script>
+<script type="text/javascript">
+<!--
+msketch_begin("../../..", 540, 480);
+msketch_param("bgloadPriority","common.swing.fontediting");
+msketch_end();
+//-->
+</script>
+</center>
+<p>You can choose from the <a href="../../../help/developer/applets/modules.html">modules list</a> to load one or more in the background with priority.</p>
+<p>The source of this applet example can be found below:</p>
+<blockquote>
+<pre class="sh_html">
+&lt;script type=&quot;text/javascript&quot; SRC=&quot;../../../<a HREF="../marvin.js.txt">marvin.js</a>&quot;&gt;&lt;/script&gt;
+&lt;script type=&quot;text/javascript&quot;&gt;
+&lt;!--
+</pre><pre class="sh_javascript">
+msketch_begin(&quot;../../..&quot;, 540, 480);
+msketch_param(&quot;bgloadPriority&quot;,&quot;common.swing.fontediting&quot;);
+msketch_end();
+</pre><pre class="sh_html">
+//--&gt;
+&lt;/script&gt;
+</pre>
+</blockquote>
+
+</body>
+</html>

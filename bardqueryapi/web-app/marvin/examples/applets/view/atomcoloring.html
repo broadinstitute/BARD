@@ -1,0 +1,107 @@
+<html><head>
+<meta NAME="author" CONTENT="Erika Biro">
+    <script type="text/javascript" src="../../sh_main.js"></script>
+    <script type="text/javascript" src="../../sh_javascript.js"></script>
+    <script type="text/javascript" src="../../sh_html.js"></script>
+    <link REL ="stylesheet" TYPE="text/css" HREF="../../sh_nedit.css" TITLE="Style">
+<link REL ="stylesheet" TYPE="text/css" HREF="../../../marvinmanuals.css" TITLE="Style">
+<title>MarvinView Example - Atom coloring</title>
+</head>
+<body onload="sh_highlightDocument();">
+
+<h1>MarvinView Example - Atom coloring</h1>
+
+<h4>Concepts</h4>
+
+The atom coloring using the Marvin user interface is connected to the definition
+of <em>format styles</em> which can be found in the
+<a href="../../../help/sketch/sketch-basic.html#styles">How to customize structure drawing styles</a>
+paragraph of the Marvin User's Guide.
+<p>
+The detailed description of atom coloring can be found in the
+<a href="../../../help/developer/core/sets.html">Atom and bond set handling</a> paragraph of the Developer's Guide.</p>
+<h4>How to color atoms</h4>
+<p>
+This example introduces the atom coloring possibilities of the MarvinView applet with the help of atom sets.
+The goal of the example is to define a sub-structure (cyclohexanol) of a molecule
+    with an atom set and color it using a custom color (blue).
+<br>
+The result of the example can be seen in the applet below:
+<p>
+<center>
+<script type="text/javascript" SRC="../../../marvin.js"></script>
+<script type="text/javascript">
+<!--
+mview_begin("../../..", 300, 150);
+mview_param("mol", "../../../mols-2d/mol1.mol");
+
+mview_param("atomNumbersVisible", "true");
+mview_param("setColoringEnabled", "true");
+mview_param("atomSetColor1", "#0000ff");
+mview_param("atomSet0.1", "6,7,8,9,10,11,12");
+mview_end();
+//-->
+</script>
+</center>
+
+<p>
+To achive this, the following steps were done:</p>
+<ol>
+<li> Switching the atom set coloring mode on:
+<pre class="sh_javascript">
+mview_param("setColoringEnabled", "true");</pre>
+</li>
+<li> Assigning a custom color specified by the hexadecimal value to the first atom set:
+<pre class="sh_javascript">
+mview_param("atomSetColor1", "#0000ff");</pre>
+</li>
+<li>Defining the atom set by the indices of the included atoms:
+<pre class="sh_javascript">
+mview_param("atomSet0.1", "6,7,8,9,10,11,12");</pre></li>
+</ol>
+
+<p>Atom sets are defined with a comma separated list of atom indices.
+    The meaning of this parameter setting is: atoms of the molecule being in the
+    cell number 0 having the atom indices that are included in the given list belong
+    to the first atom set.</p>
+
+<p>The atom indices are set to visible using the atomNumbersVisible parameter, though
+    important to note, that indexing on the canvas starts from 1,
+    while the indices in the atom set start from 0.</p>
+
+<pre class="sh_javascript">
+    mview_param("atomNumbersVisible", "true");
+</pre>
+
+<p>Note that by coloring an atom the color of the connecting bonds are also affected.</p>
+
+<p>The required HTML code is as follows:</p>
+
+<blockquote>
+<pre class="sh_html">
+&lt;script type=&quot;text/javascript&quot; SRC=&quot;../../../<a HREF="../marvin.js.txt">marvin.js</a>&quot;&gt;&lt;/script&gt;
+&lt;script type=&quot;text/javascript&quot;&gt;
+&lt;!--
+</pre><pre class="sh_javascript">mview_begin(&quot;../../..&quot;, 300, 150);
+mview_param(&quot;<a>mol</a>&quot;, &quot;../../../mols-2d/mol1.mol&quot;);
+mview_param(&quot;<a>atomNumbersVisible</a>&quot;, &quot;true&quot;);
+mview_param(&quot;<a>setColoringEnabled</a>&quot;, &quot;true&quot;);
+mview_param(&quot;<a>atomSetColor1</a>&quot;, &quot;#0000ff&quot;);
+mview_param(&quot;<a>atomSet0.1</a>&quot;, &quot;6,7,8,9,10,11,12&quot;);
+mview_end();
+</pre><pre class="sh_html">//--&gt;
+&lt;/script&gt;
+</pre>
+</blockquote>
+
+
+<p>
+<center><div class="lenia">&nbsp;</div></center>
+<p>
+<!--The next example shows how to
+<a HREF="selection.html">select atoms</a> in the viewer.-->
+The next example shows how to
+<a HREF="colorsets.html">color atomsets</a> in the viewer using JavaScript.
+
+</body>
+</html>

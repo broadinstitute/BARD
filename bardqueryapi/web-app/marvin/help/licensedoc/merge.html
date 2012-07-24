@@ -1,0 +1,72 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+<head>
+    <link rel="stylesheet" href="../marvinmanuals.css" type="text/css">
+    <title>Merging License Files</title>
+</head>
+<body>
+    <h2>Merging License Files</h2>
+<p>Since the default licenses are stored in a <em>single file</em> named <code>license.cxl</code> located in the user's home directory,
+it is sometimes necessary to merge license files to a single file.</p>
+<p>
+Let's see this typical example: The user has an Annual license file, and starts evaluating another product. In this case the
+user receives another license file containing the evaluation licenses.<br>
+In this case the user simply <a href="installToDesktop.html#gui">installs</a> the new license file, and it is automatically merged with the existing license file.
+</p>
+<p>However if this user uses the products on a server or is a reseller, the Desktop installation is not suitable.</p>
+
+<h3><a name="merge_cmd" class="anchor">Merging the license files with a command line tool</a></h3>
+<p>License files can be merged with the <code>license</code> command line script.</p>
+<p>Usage:</p>
+<pre>
+    license -m <em>source_license_file1.cxl</em>
+               <em>source_license_file2.cxl</em>
+               <strong>result_license_file.cxl</strong>
+</pre>
+
+
+<h3><a name="merge_jsp" class="anchor">Online merging of the license files</a></h3>
+
+<p>Online license merging is available at: <a href="http://www.chemaxon.com/my-chemaxon/license-merger/">http://www.chemaxon.com/my-chemaxon/license-merger/</a></p>
+<img src="merge.png" alt="The license merging page" width="622" height="221"/>    
+
+    <ol>
+        <li>Use the Browse buttons to locate two license files to be merged (referred as source files).</li>
+        <li>Specify the name of the output file. It is recommended to keep it <code>license.cxl</code>, because
+        it is the default name of the automatically recognized license file.</li>
+        <li>Press the Merge button.</li>
+        <li>A dialog appears with which you can specify a location for the result (referred as output file).</li>
+    </ol>
+
+<h3><a name="merge_manual" class="anchor">Manual merging of the license files</a></h3>
+<p><b>Warning: Manual merging of the license files can destroy them, be cautious with this method,
+    and always create a backup first.</b></p>
+<p>The reason of this warning is due to potential encoding problems some text editors may cause.
+The license files are distibuted in UTF-8 encoding, and this is specified in the license file itself.
+Some of the text editors are unable to save the license file with UTF-8 encoding,
+but they use a different encoding, e.g. UTF-16,
+however they do not change the UTF-8 specification in the license file.
+</p>
+
+<p>
+<em>For manual merging, Notepad, or other UTF-8 compliant text editor is suggested.</em><br>
+Encoding problems were experienced with WordPad.    
+</p>
+
+<p>Manual editing the license files is otherwise straightforward if you are familiar with XML files.</p>
+Structure of a license file:
+<pre>
+    &lt;?xml version="1.0" encoding="UTF-8"?>
+    &lt;!--PLEASE DO NOT MODIFY THIS FILE AND BE AWARE THAT THE FILE CONTAINS CONFIDENTIAL INFORMATION.-->
+    &lt;ChemAxon>
+        &lt;License>
+        &lt;/License>
+        &lt;License>
+        &lt;/License>
+    &lt;/ChemAxon>
+</pre>
+<p>
+Copy whole <code>&lt;License></code> blocks from one license file, and paste them in another license file, inside the <code>&lt;ChemAxon></code> block.</p>
+
+</body>
+</html>

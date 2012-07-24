@@ -14,10 +14,12 @@ class ChemAxonController {
 
     byte[] generateStructureImage() {
         byte[] bytes = []
+
         if (session.smiles) {
             bytes = chemAxonService.generateStructurePNG(session.smiles, 300, 300)
         }
+
         response.contentType = 'image/png'
-        response.outputStream << bytes
+        response.outputStream.setBytes(bytes)
     }
 }

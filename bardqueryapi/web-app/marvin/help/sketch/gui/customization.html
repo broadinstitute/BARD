@@ -1,0 +1,224 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<html>
+<head>
+<META HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=utf-8">
+<TITLE>Customizing MarvinSketch GUI</TITLE>
+<link rel=stylesheet type="text/css" href="../../marvinmanuals.css">
+</head>
+<body>
+<h1>Customizing MarvinSketch GUI</h1>
+You can personalize the user interface to better suit your needs or style.<br>
+For example, you can reorganize the menu bar, you can create, delete or modify toolbars, and many more.<br>
+Any changes you make will become your personal default environment, though you can
+restore the default settings any time.
+
+<h2>Basic Changes</h2>
+<h4>Moving Toolbars</h4>
+To move a toolbar, drag it by its separator bar, which is located at the left edge of
+horizontal toolbars or at the top of vertical toolbars.<br>
+(Note, that depending on the Look&amp;Feel you currently use, the separator bar
+might be harder to notice and drag.)<br>
+While dragging the toolbar, you can see a colored border around it, indicating the
+place and direction the toolbar will have if you finish dragging. Depending on the current
+Look&amp;Feel the colors of the border are different. For example, using JGoodies SkyBluer Look&amp;Feel theme,
+light-blue border means that the toolbar will float, while dark-blue shows that the toolbar will be docked.
+If you set a toolbar to be floating, you can dock it back by closing it.
+<h4>Hide/Show Toolbars</h4>
+You can change the visibility of toolbars in the <b>View > Toolbars</b> menu.
+<h4>Hide/Show Menu Bar</h4>
+To hide the Menubar, choose <b>View > Menubar</b>. To show it, press F11 after clicking on the canvas. 
+<h4>Hide/Show Status Bar</h4>
+<b>View > Status Bar</b> turns the Status Bar on or off.
+
+<h2>Advanced Changes</h2>
+
+The graphical user interface of MarvinSketch can interactively be personalized using the <b>View > Customize</b> dialog.<br>
+Note that the customization related functions usually do not ask for confirmation
+before taking action to make the procedure faster.
+The original interface can be restored any time by choosing <b>View > Configurations > Reset current configuration</b>.
+<h3><a class="anchor" name="menus">Menus</a></h3>
+<img src="gui-files/customize1.png"><br><br>
+By choosing a menu from the Menus list, the contents of the selected menu will be listed in the Menu Contents.<br>
+With selecting a menu entry, its detailed help text will appear in the Details field.
+If a black triangle is visible on the right side of a menu entry, it means that this entry is a Submenu.
+To list the contents of the submenu, select it from the Menus list.
+
+<h4>List of the available Menu commands</h4>
+<table cellspacing="0" class="grid">
+    <tr>
+        <td width="20%">New</td>
+        <td>Creates a new menu and places it at the end of the Menu Bar.</td>
+    </tr>
+    <tr>
+        <td>Menu > Move</td>
+        <td>Allows altering the position of main menus.</td>
+    </tr>
+    <tr>
+        <td>Menu > Rename</td>
+        <td>Renaming a menu in an appearing dialog.</td>
+    </tr>
+    <tr>
+        <td>Menu > Delete</td>
+        <td>Removes a menu with all of its contents.</td>
+    </tr>
+</table>
+<h4>List of the available Menu Contents commands</h4>
+<img src="gui-files/customize5.png"><br><br>
+<table cellspacing="0" class="grid">
+    <tr>
+        <td width="20%">Add</td>
+        <td>Makes the above <b>Add Commands</b> dialog visible, where you can browse
+            all available commands of MarvinSketch.
+            The commands are organized to Categories, and are listed in alphabetical order.            
+        </td>
+    </tr>
+    <tr>
+        <td>Move Up/Down</td>
+        <td>Moves a menu element by one position in the container menu.</td>
+    </tr>
+    <tr>
+        <td>Modify > Add Submenu</td>
+        <td>Adds a new submenu after the currently selected element.</td>
+    </tr>
+    <tr>
+        <td>Modify > Begin a Group</td>
+        <td>Adds a menu separator after the currently selected element.</td>
+    </tr>
+    <tr>
+        <td>Modify > Rename</td>
+        <td>Renames a sumbenu or menu element. You can also change the mnemonics by replacing the &amp; sign in the name.</td>
+    </tr>
+    <tr>
+        <td>Modify > Delete</td>
+        <td>Removes the menu element or submenu.</td>
+    </tr>
+
+</table>
+
+<h3>Popups</h3>
+
+The customization of Pop-up menus are similar to normal menus. However it is not
+possible to remove, rename or create a new Pop-up menu, you can only change the contents of the available Pop-up menus.
+The reason for this is that these menus are context-sensitive, and their name and
+existence are bound to the underlying contexts.
+
+<h3><a class="anchor" name="toolbars">Toolbars</a></h3>
+
+<img src="gui-files/customize3_55.png">
+<br>
+Note, that the <a href="toolbars.html#templates">Advanced Templates Toolbar</a> is not possible to be customized.
+<h4>List of the available Toolbar commands</h4>
+<table cellspacing="0" class="grid">
+    <tr>
+        <td width="20%">Use Large Icons</td>
+        <td>When checked, all toolbar buttons have 24x24 pixel sized icons, otherwise the 16x16 pixel versions.
+        By default the large icons are used.</td>
+    </tr>
+    <tr>
+        <td width="20%">New</td>
+        <td>Creates a new toolbar and places it north to the first row having some space on the right-hand side.</td>
+    </tr>
+    <tr>
+        <td>Toolbar > Rename</td>
+        <td>Renaming a toolbar in an appearing dialog.</td>
+    </tr>
+    <tr>
+        <td>Toolbar > Delete</td>
+        <td>Removes a toolbar with all of its contents.</td>
+    </tr>
+    <tr>
+        <td>Toolbar > Icons Only</td>
+        <td>The buttons contained by this toolbar will be shown by icon only.
+            Those commands that does not have a corresponding icon defined will be shown by text in this case too.</td>
+    </tr>
+    <tr>
+        <td>Toolbar > Text Only</td>
+        <td>The buttons contained by this toolbar will be shown by text only.</td>
+    </tr>
+    <tr>
+        <td>Toolbar > Icons &amp; Text</td>
+        <td>Icon and text will also be shown for the buttons contained by this toolbar.
+            The text is appearing below the icon.</td>
+    </tr>
+</table>
+
+<h4>List of the available Toolbar Contents commands</h4>
+<table cellspacing="0" class="grid">
+    <tr>
+        <td width="20%">Add</td>
+        <td>Makes the <b>Add Commands</b> dialog visible, where you can browse
+            all available commands of MarvinSketch.
+            The commands are organized to Categories, and are listed in alphabetical order.
+        </td>
+    </tr>
+    <tr>
+        <td>Move Up/Down</td>
+        <td>Moves a toolbar element by one position in the container toolbar.</td>
+    </tr>
+    <tr>
+        <td>Modify > Rename</td>
+        <td>Renames an element. You can also change the mnemonics by replacing the &amp; sign in the name.</td>
+    </tr>
+    <tr>
+        <td>Modify > Delete</td>
+        <td>Removes the element or separator.</td>
+    </tr>
+    <tr>
+        <td>Modify > Begin a Group</td>
+        <td>Adds a toolbar separator after the currently selected element.</td>
+    </tr>
+</table>
+
+<h3><a class="anchor" name="shorcuts">Keymap</a></h3>
+It is possible to define and switch between Keymap Shemes, where all Sheme is a different shortcut-set.<br>
+On the Keymap tab, you can browse all available commands of MarvinSketch to define shortcuts
+to any of the commands you would like to.<br>
+
+<img src="gui-files/customize4.png"><br><br>
+
+Only one scheme can be active at a time. A scheme can be made active by selecting and pressing the <b>Activate</b> button.
+If a scheme is based on another it means that all of the shortcuts are inherited
+from the base scheme, though they can be overwritten one-by-one.
+<b>Duplicating</b> a scheme will create and activate a new scheme which will be based upon the previously selected one.
+Shemes - except the default one - can also be <b>Removed</b>.<br>
+
+<h4>Adding shortcuts</h4>
+A shortcut can be added by focusing the Shortcut field, and pressing the desired shortcut combination, for example F1.
+If the shortcut already exists, a warning message appears, and shows which command has the activated shortcut.<br>
+<img src="gui-files/customize6.png"><br><br>
+The <b>Tab</b> button is required if you would like to use the Tab key for a shortcut,
+because if you press Tab in the Shortcut field, it will loose the focus instead of defining the shortcut.<br>
+The <b>Clear</b> button helps you to remove the shortcut from the field, because pressing the
+Backspace button defines a new shortcut instead of removing it.
+<p>
+This document described the interactive way of customizing the user interface using the user interface itself.
+Another way of personalization is shown in the <a href="configurations.html">Configurations</a> document.</p>
+<p>
+The same method can be used on <a href="customization_server_side.html">server side</a> as well.</p>
+
+<h3><a class="anchor" name="special">Special commands</a></h3>
+<p>There are a few elements which are not part of the default configuration of MarvinSketch but you can add it via the customization dialog. These are: 
+<ul>
+<li><b><a name="lonepair" type="anchor"></a>Lone Pair Group</b> <br> The toolbar and the menu can be customized to contain the "Lone Pair Group" tool. You have to disable "Automatic Lone Pair" calculation (Preferences dialog, Structure tab) to be able to set the lone pairs manually. Then choose View > Customize..., Menu or Toolbars tab. The Lone Pair Group can be added in the menu contents section. Choose Tools from the Toolbars list, then click Add at the Toolbar contents section. Choose Lone Pair Group from the Insert Lone Pair category, click Add then click Close. The Lone Pair Group tool is now visible on the toolbar on the left of the canvas.</li>
+<li><b><a name="radicalgroup" type="anchor"></a>Radical Group</b> <br> You can add the "Radical Group" toolbar to your MarvinSketch configuration. This group contains a "Radical switch" button, a "Monovalent radical" button and a "Radical off" button. </li>
+<li><b><a name="freeradicalgroup" type="anchor"></a>Free Radical Group</b> <br> <img src="gui-files/icons/rdplusbig.png"> You can add the "Free Radical Group" to your MarvinSketch configuration. This group contains a <img src="gui-files/icons/rd0.png"> "0 radical", <img src="gui-files/icons/rd1.png"> "1 radical", <img src="gui-files/icons/rd2.png"> "2 radicals", <img src="gui-files/icons/rd3.png"> "3 radicals", <img src="gui-files/icons/rd4.png"> "4 radicals" and "Increase Radical" buttons. The last one increases the number of radical electrons on the atom by one. In case the number of radicals on the atom is 4, it will be set to zero instead of increasing. </li>
+<li><b><a name="manual_atom_map" type="anchor"></a>Manual Atom Map</b> <br><img src="gui-files/icons/map4b.png"> "Manual Atom Map" can be added from "Structure" category. Selecting the "Manual Atom Map" tool, hold down the left mouse button on an atom of the first molecule, then drag it to the corresponding atom of the second molecule. The same map number will be added to both atoms.</li>
+<li><b><a name="manual_atom_map" type="anchor"></a>Manual Atom Map-Unmap Group</b> <br>A group containing actions: "Manual Atom Map" and "Unmap Atoms".</li>
+<li><b><a name="reaxys" type="anchor"></a>Reaxys Generics</b> <br>
+<img src="gui-files/icons/reaxys24_2.png">
+ "Reaxys generics" can be added from the "Insert Template" category. This template library contains the generic abbreviation commonly used in the Reaxys database.</li>
+<li><b><a name="substcount" type="anchor"></a>Substitution Count</b> <br>
+Extension of the menu with the "Substitution Count": create a new entry recommendably in the "Atom" menu. Select the new submenu in the Menus dropdown list. Select the new entry and click Add.. Choose the commands from Atom Properties category (Substitution Count off, Substitution Count as Drawn, 0 substituent, 1 substituent, etc.), click Add, then click Close. </li>
+All query atoms and query atom properties (see the "Advanced" tab of the <a href="http://www.chemaxon.com/marvin/help/sketch/gui/dialogs.html#periodic">Periodic System</a>) can be added from "Insert Atom" category.
+You can also add the following combo(multi-item) buttons to the Toolbars: 
+<ul>
+<li><b>Generic Query Atoms Group:</b> A group containing "Any atom except H", "Any atom including H", "Hetero atom", "Any atom except C", "Any metal", "Any metal or H", "Any halogen", and "Any Halogen or H" guery atoms.</li>
+<li><b>Generic Query Properties Group:</b> A group containing "Valance", "Number of connections", "Substitution count", "Number of explicit connections", "Unsaturated atom", and "Aromatic/Aliphyatic" query properties. 
+</li>
+<li><b>Hydrogen Query Properties Group:</b> A group containing "Total number of attached Hydrogens" and "Number of implicite Hydrogenes" query properties. </li>
+<li><b>Ring Query Properties Group:</b> A group containing "Ring count", "Smallest ring size", and "Ring bond count" query properties.</li>
+</ul>
+</li>
+</ul>
+</body>
+</html>

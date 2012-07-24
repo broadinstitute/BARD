@@ -1,0 +1,73 @@
+<!DOCTYPE html><HTML>
+ <head>
+   <script type="text/javascript" src="../../../examples/sh_main.js"></script>
+   <script type="text/javascript" src="../../../examples/sh_java.js"></script>
+   <script type="text/javascript" src="../../../examples/sh_javascript.js">
+   </script>
+   <link REL ="stylesheet" TYPE="text/css" 
+         HREF="../../../examples/sh_nedit.css" TITLE="Style">
+   <META HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=utf-8">
+   <title> Query Hydrogens  </title>
+   <link rel=stylesheet type="text/css" href="../../marvinmanuals.css">
+ </head>
+
+<BODY onload="sh_highlightDocument();">
+<h1>Query Hydrogens</h1> 
+<p>
+For query molecules it is possible to define the number of Hydrogen atoms
+needed to have in the target structure. Either define it explicitly by
+adding the Hydrogen atoms to the specified atoms or implicitly by setting
+implicit hydrogen count. If the implicit hydrogen count is specified
+then it is stored in the atom and not calculated from the valence any more.
+</p>
+
+<p>
+Code Example: define query implicit hydrogen count
+</p>
+<blockquote>
+<pre class="sh_java">
+atom.setQProp("h", 2);
+</pre>
+</blockquote>
+<p>
+Code Example: define query explicit hydrogen count
+<blockquote>
+<pre class="sh_java">
+atom.setQProp("H", 2);
+</pre>
+</blockquote>
+
+</p>
+
+
+ <p>&nbsp;</p>
+ <p>&nbsp;</p>
+ 
+ <table summary="next pages">
+   <tr style="text-align:left">
+     <td width="250" valign="middle"> 
+       <p style="text-align: center;">
+        <a href="convert_explicit_to_implicit.html">
+          Converting explicit Hydrogens to implicit</a><br>
+        <i>Previous chapter</i>
+       </p>   
+     </td>
+     <td width="250" valign="middle">
+      <p style="text-align: center;">
+       <a href="core_index.html"> Table of contents</a> <br>
+       &nbsp;
+      </p>
+     </td>
+     <td width="250"valign="middle" >
+      <p style="text-align: center;"> 
+       <a href="stereochemistry_intro.html"> 
+           Introduction to Stereochemistry</a><br>
+       <i>Next chapter</i>
+      </p>
+     </td>
+   </tr>
+ </table>
+
+
+</BODY>
+</HTML>

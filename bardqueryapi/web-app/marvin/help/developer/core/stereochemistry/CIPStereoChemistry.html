@@ -1,0 +1,317 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+ <meta NAME="description" CONTENT="CIPStereoChemistry">
+ <meta NAME="author" CONTENT="Peter Vadasz">
+ <script type="text/javascript" src="../../../../examples/sh_main.js"></script>
+ <script type="text/javascript" src="../../../../examples/sh_java.js"></script>
+ <script type="text/javascript" src="../../../../examples/sh_javascript.js">
+      </script>
+ <link REL ="stylesheet" TYPE="text/css" 
+         HREF="../../../../examples/sh_nedit.css" TITLE="Style">
+ <meta HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=utf-8">
+ <title>CIPStereoChemistry</title>
+ <link rel=stylesheet type="text/css" href="../../../marvinmanuals.css">
+</head>
+
+<body onload="sh_highlightDocument();">
+ <h1>CIPStereoChemistry</h1>
+<!--
+ <h2>Introduction (new HTML, for chemical background see UGM doc)</h2>
+ Molecules with same connectivity but different spatial arrangement are called stereoisomers. This section is about representation of the stereodescriptors.
+Stereoisomer types:
+<ul>
+<li>Enantiomers: Molecules that are non-superimposable, complete mirror images of each other.<br>
+<img src="enantiomers.png"/>
+<li>Diastereomers: Stereoisomers that are not enantiomers.<br>
+<img src="diastereomers.png"/>
+</ul> -->
+
+ <h2>Definitions</h2>
+ <h3>Tetrahedral stereo descriptor</h3>
+<p>Parity is a simplified and local description of a chiral center. 
+It is used for string the three dimensional arrangement of the ligands around a chiral center 
+in a local canonical way without using the 
+<a href="http://en.wikipedia.org/wiki/Cahn-Ingold-Prelog_priority_rules">
+Cahn-Ingold-Prelog priority rules</a>. 
+The ligands of the chiral center are numbered according to the atom indexes in the molecule.
+If the atom has implicit Hydrogen, then this implicit Hydrogen atom is considered to be
+the highest numbered atom. The tetrahedral center atom is viewed such a way that the highest-numbered atom
+is behind the plane formed by the other three atoms. The three atoms can be
+arranged in either a clockwise or counterclockwise direction in ascending numerical order.</p>
+<table>
+	<tr>
+		<td align="center"><img src="tetrahedral_odd.png"/></td>
+		<td align="center"><img src="tetrahedral_odd_3d.png"/></td>
+	</tr>
+	<tr>
+		<td align="center" colspan="2"><code>TetrahedralStereoValue.ODD</code> </td>
+		
+</table><br>
+<p>Parity value <code>TetrahedralStereoValue.ODD</code> is assigned for a 
+clockwise arrangement at the stereo center and
+<code>TetrahedralStereoValue.EVEN</code> for
+counterclockwise. If the center has wiggly (wavy) bond then 
+<code>TetrahedralStereoValue.WIGGLY</code> value is assigned, 
+otherwise if 
+the given information is not enough to decide the spatial arrangement (e.g. no wedges in two dimensions) 
+<code>TetrahedralStereoValue.UNKNOWN</code> value is assigned.</p>
+<table>
+	<tr>
+		<td align="center"><img src="tetrahedral_wiggly.png"/></td>
+		<td align="center"><img src="tetrahedral_unknown.png"/></td>
+	</tr>
+	<tr>
+		<td><code>TetrahedralStereoValue.WIGGLY</code></td>
+		<td><code>TetrahedralStereoValue.UNKNOWN</code></td>
+	</tr>
+</table>
+
+<h3>Atrop stereo descriptor</h3>
+  <p>Hindered rotation around single bonds where the steric strain barrier to 
+  rotation is high enough to allow the isolation of the conformers resulting in
+  atrop stereoisomerism.<br>
+  Atrop stereo descriptor represents the topology of the case when two aromatic
+  rings connected by a single bond with at least three ortho ligands.</p>
+  <img src="simpleAtrop.png"/>
+  <p>We look at the molecule in the direction of the single bond between the two aromatic rings (axis). 
+  On the example shown below the red arrow indicates the direction of the view.</p>
+  <br> <img src="atropEvenWithColors.png"/><br>
+  <p>The axis is looked at from the direction where the highest indexed ligand connected to the axis (atom index 12) is behind the axis. 
+  The angle between two bonds connecting the highest indexed ligands on both sides to the axis is 
+  considered. On the example these are the bond between atoms 5 (marked blue) and 6 (in front of the axis) 
+  and the bond between atoms 12 (marked green) and 7. <br>
+ <!-- @@picture --> 
+  <ul>
+   <li><code>AtropStereoValue.EVEN</code> means that the angle is positive (between 0 and Pi).</li>
+   <li><code>AtropStereoValue.ODD</code> means that the angle is negative (between 0 and -Pi).</li>
+   <li><code>AtropStereoValue.UNKNOWN</code> means that the angle is near 0 or Pi (5&deg; threshold), or not defined
+   (2d structure without wedge information). </li>
+   <li><code>AtropStereoValue.WIGGLY</code> means that either the axis, or any of the bonds in the rings connected
+   to the axis is WIGGLY.</li>
+  </ul>
+ <h3><a name="axial"> </a>Axial stereo descriptor</h3>
+  <p>If two stereoactive atoms (atoms with at least three different ligands) are connected by an even numbered 
+  <a href="#chain of rigid parts">chain of rigid parts</a> then axial
+  stereo information can be defined on the ligands of the stereactive atoms. These ligands are the ones which are not in the chain of the rigid part.</p>
+  <img src="simpleAxial.png"/>
+  <p>Here we consider the chain of rigid parts as an axis. 
+   Number the ligands at the end of the chain according to their atom indices. 
+   Implicit hydrogen is got the lowest number, -1.
+   The axis is looked at from the direction where the highest indexed ligand connected 
+   to the axis is behind the axis. On the example below the axis is formed by the bonds between atoms 
+   with indexes 1 and 3. The red arrow indicates the direction of view.</p> 
+   <table>
+     <tr>
+       <td>
+         <img src="axialEvenWithColors.png"/>
+       </td>
+       <td>
+         <img src="axialEvenFromAxis.png"/><br>
+       </td>
+     </tr>
+   </table>   
+   The angle between two bonds connecting the highest indexed ligands on both sides of the axis is 
+   considered. On the example these are the bond between atoms 5 (marked blue) and 1 (in front of the axis) 
+   and the bond between atoms 6 (marked green) and 3. 
+   <ul>
+     <li><code>AxialStereoValue.EVEN</code> means that the angle is positive (between 0 and Pi).</li>  
+     <li><code>AxialStereoValue.ODD</code> means that the angle is negative (0 and -Pi).</li>
+     <li><code>AxialStereoValue.UNKNOWN</code> means that the angle is near 0 or Pi (5&deg; threshold), or not defined
+               (2d structure without wedge information). </li>
+     <li><code>AxialStereoValue.WIGGLY</code> means that any of the non-rigid-part-bonds connected to any of
+               the stereoactive atoms is WIGGLY.</li>
+  </ul>
+
+ <h3><a name="cistrans">CIS/TRANS stereo descriptor</h3>
+<p>In general, single bonds are rotatable, but double bonds are not. If the substituents on each side of the
+double bond are different then two diastereomers of the molecule can be distinguished based on the
+orientation of the ligands. Two substituents located on the same side of the reference plane defined by the double bond are referred to
+as cis isomer, otherwise, if the two substituents are located on the opposite side of the reference plane then 
+it is referred to as trans isomer.</p>
+<table>
+	<tr>
+	  <td colspan="2" align="center"><img src="trans.png"/></td>
+	  <td colspan="2" align="center"><img src="cis.png"/></td>
+	</tr>
+	<tr>
+	  <td colspan="2" align="center"><code> CisTransStereoValue.TRANS</code></td>
+      <td colspan="2" align="center"><code> CisTransStereoValue.CIS</code></td>
+	</tr>
+</table>
+<br>
+<p>
+Alicyclic compounds can also display cis-trans isomerism. In this case the so called rigid part becomes non-
+rotatable due to the constrain of a cycle.
+</p>
+
+ <table>
+   <tr>
+      <td> <img src="cisTransInAlicyclic2.png"/>  </td>
+      <td> <img src="cisTransInAlicyclic.png" />  </td>
+   </tr>
+   <tr>
+      <td align="center"> <i>trans</i>-1,2-dichlorocyclohexane </td>
+      <td align="center"> <i>cis</i>-1,2-dichlorocyclohexane </td>
+   </tr>
+ </table>
+
+ <h2><a name="rigid parts"></a>Rigid Parts</h2>
+Stereo active atoms are considered at the ends of rigid parts or chains of rigid parts. 
+The following substructures are considered as rigid parts:
+ <ul>
+ <li> Double bonds. </li>
+ <li> Four or six membered rings. <br>
+   <img src="rings.png"/> </li>
+ <li> Four-four and six-six membered fused ring pairs.  <br>
+   <img src="ringPairs.png"/> </li>
+ <li> Odd membered rings having lower than eight members, connected to each other 
+      directly or connected by intermediate four or six membered rings. Connection of two rings
+      means that they share exactly one common bond (all rings are fused). The 
+      intermediate even membered rings have to connect to other rings by bonds on the opposite sides.</li><br> 
+   <img src="ringChains.png"/> <br>
+   The following chain of rings is not a rigid part because the second intermediate
+   ring connects to its neighbors not by opposite bonds (marked green):<br>   
+   <img src="notRingChain.png"/> </li>
+ </ul>
+ <p>The rigid part is represented by the atoms and bonds of the outer hull. The outer
+ hull is detected as the symmetrical difference of all ring bonds contained
+ in the system. The hull of a rigid part is marked green on the following example.
+ There is always an opposite atom for each contained atom in a rigid part, e.g.
+ atom 13 is the opposite of atom 17 on the example. </p> 
+   <img src="hull.png"/>
+
+ <p>The same ring can be contained in more than one rigid system (e.g. all
+ six-six membered ring pairs are detected as two separate six membered 
+ rings as well). 
+ On the example below the red ring and the blue ring are detected 
+ as rigid parts (their common bond is purple) as well as the union of the two 
+ fused rings (marked with thicker bonds).</p>
+   <img src="multiRecognition.png"/>
+
+ <h3><a name="not supported rigid parts"></a>Not supported rigid parts</h3>
+ The more complex cases listed below are also rigid ring systems which are not 
+ supported yet, these will be handled in future releases:
+ <ul>
+ <li> Condensed ring systems consisting of more than two fused rings.<br>
+   <img src="condensedRings.png"/> </li>
+ <li> Molecules where ring chains are fused (where at least 
+ three rings share the same common bond and this is their only interesection).
+ In this case it is possible that not all chains will be found.
+ The common bond between atoms 4 and 10 shared by chains of rings between the 
+ three odd membered rings at the ends is marked red on the example below.<br>
+   <img src="chains3D.png"/> </li>
+ </ul>   
+ 
+ 
+<h3><a name="chain of rigid parts"></a>Chain of Rigid Parts</h3>
+ Stereo active atoms can be connected to each other by a chain of <a href="#rigid parts">rigid parts</a> where
+ the rigid parts are connected to another by exactly one atom (which is a 
+ spiro join for rings) and these connections are on opposite atoms of the rigid parts.
+ On the example below each rigid part defining the chain of rigid parts between atoms
+ 12 and 33 is marked with different color.<br>
+   <img src="rigidChain.png"/><br>
+ The type of the stereo active descriptor depends on the number of rigid parts in the
+ chain of rigid parts: it is <a href="#axial">axial</a> if the number is even, 
+ <a href="#cistrans">cis/trans</a> if the number is odd. On the above example the 
+ number of rigid parts between atoms 12 and 33 is seven thus their ligands with indexes
+ 35 and 36 are in trans position. 
+
+<h2>Stereo Active Part (SAP)</h2>
+ <p>Stereo active part of a molecule is an atom with 0 to 4 ligands that can have tetrahedral stereo information,
+ or with another stereo active part CIS/TRANS, ATROP or AXIAL stereo information.</p>
+ <p>Stereo centers with more than 4 connections are not supported yet.</p>
+ 
+ 
+ <h2>CIPStereoDescriptor types</h2>
+	<h3>TetrahedralStereoDescriptor</h3>
+	The stereo active center and its ligands are defined in one
+	SAP. The TetrahedralStereoValue defines the spatial
+	arrangement of the ligands around the stereocenter (UNKNOWN, ODD, EVEN,
+	WIGGLY).
+
+	<h3>AtropStereoDescriptor</h3>
+	The stereo active single bond (with hindered rotation) which connects two aromatic rings 
+	is represented with two SAPs. 
+	Each StereoActivePart contains a stereo active atom which is the endpoint of the single bond 
+	and the ligands which are connected by aromatic bond to this active atom.
+	(Such a way the stereo active single bond ligand is not part of the ligands array.)
+	The AtropStereoValue defines the spatial
+	arrangement of the ligands around the stereo active single bond 
+	(UNKNOWN, ODD, EVEN, WIGGLY)
+	
+	<h3>AxialStereoDescriptor</h3>
+	The two stereo active atoms (atoms with at least three different ligands) 
+	which are connected by even number of 
+	<a href="#rigid parts">rigid parts</a> are represented 
+	with two SAPs. Each StereoActivePart contains the 
+	stereo active atom and the ligands of the stereactive atoms. These ligands are the ones which are not in the chain of the rigid part..
+  	The AxialStereoValue defines the spatial
+	arrangement of the ligands around the two stereo active atoms 
+	(UNKNOWN, ODD, EVEN, WIGGLY)
+	
+	<h3>CisTransStereoDescriptor</h3>
+	The two stereo active atoms (atoms with at least three different ligands) 
+	which are connected by odd number of 
+	<a href="#rigid parts">rigid parts</a> are represented 
+	with two SAPs. Each StereoActivePart contains the 
+	stereo active atom and the ligands of the stereactive atoms. These ligands are the ones which are not in the chain of the rigid part..
+  	The CisTransStereoValue defines the spatial
+	arrangement of the ligands around the two stereo active atoms 
+	(UNKNOWN, CIS, TRANS, WIGGLY)
+	
+<h2>API usage example</h2>
+ <p> The following example demonstrates how to use the CIPStereoRecognizer and the equals/equalsTo methods.
+ Under the code, you can find the two molecules (m1 and m2).</p>
+ 
+ <blockquote>
+ <pre class="sh_java">
+
+//read or build the molecules
+Molecule m1, m2;
+/* ... */
+	
+int[] map = { 2, 1, 3, 0 };
+Collection&lt;CIPStereoDescriptor&gt; descriptors_m1 = CIPStereoRecognizer.calculateCIPStereoDescriptors(m1);
+Collection&lt;CIPStereoDescriptor&gt; descriptors_m2 = CIPStereoRecognizer.calculateCIPStereoDescriptors(m2);
+	
+CIPStereoDescriptorIface desc1 = (CIPStereoDescriptorIface) descriptorArray_m1.toArray()[0];
+CIPStereoDescriptorIface desc2 = (CIPStereoDescriptorIface) descriptorArray_m2.toArray()[0];
+
+System.out.println(desc1.equals(desc2)); 		//false
+System.out.println(desc1.equalsTo(desc2, map)); 	//true
+ </pre></blockquote>
+ 
+ <img src="TH_equalsTo_1_odd.png"/>
+ <img src="TH_equalsTo_1_even.png"/>
+ 
+  <p>&nbsp;</p>
+  <p>&nbsp;</p>
+ 
+ <table summary="next pages">
+   <tr style="text-align:left">
+     <td width="250" valign="middle"> 
+       <p style="text-align: center;">
+        <a href="../stereochemistry_intro.html">
+          Introduction to Stereochemistry</a><br>
+        <i>Previous chapter</i>
+       </p>   
+     </td>
+     <td width="250" valign="middle">
+      <p style="text-align: center;">
+       <a href="../core_index.html"> Table of contents</a> <br>
+       &nbsp;
+      </p>
+     </td>
+     <td width="250"valign="middle" >
+      <p style="text-align: center;"> 
+       <a href="../stereo_around_double_bond.html"> 
+           Stereoisomers around double bond</a><br>
+       <i>Next chapter</i>
+      </p>
+     </td>
+   </tr>
+ </table>
+ 
+</body>
+</html>

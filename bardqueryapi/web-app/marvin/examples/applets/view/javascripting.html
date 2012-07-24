@@ -1,0 +1,186 @@
+<html>
+<head>
+<meta NAME="author" CONTENT="Peter Csizmadia">
+    <script type="text/javascript" src="../../sh_main.js"></script>
+    <script type="text/javascript" src="../../sh_javascript.js"></script>
+    <script type="text/javascript" src="../../sh_html.js"></script>
+    <link REL ="stylesheet" TYPE="text/css" HREF="../../sh_nedit.css" TITLE="Style">
+<link REL ="stylesheet" TYPE="text/css" HREF="../../../marvinmanuals.css" TITLE="Style">
+<title>MarvinView Example - JavaScripting, CGI scripting using buttons and checkboxes</title>
+</head>
+<body onload="sh_highlightDocument();">
+
+<h1>MarvinView Example - JavaScripting, CGI scripting using buttons and checkboxes</h1>
+
+Pressing the <strong>Search</strong> button calls a CGI script.
+The <strong>Do it!</strong> button,
+the <strong>Yes</strong>/<strong>No</strong> &quot;button-like checkbox&quot;,
+the checkbox and the image buttons (the charts) trigger JavaScript expression
+evaluations.
+
+<p>
+<center>
+<script type="text/javascript" SRC="../../../marvin.js"></script>
+<script type="text/javascript">
+<!--
+mview_mayscript = true;
+mview_begin("../../..", 480, 400);
+mview_param("rows", "3");
+mview_param("cols", "2");
+mview_param("border", "1");
+mview_param("layoutH", ":1:2:L:0:0:L:0:1");
+mview_param("paramH", ":L:12b:L:10b");
+mview_param("cell0", "|Molecule|Info and\nControls");
+mview_param("cell1", "|Molecule|Info and\nControls");
+mview_param("layout", ":6:2:"
++"M:0:0:6:1:"
++"L:0:1:1:1:n:n:"
++"B:1:1:1:1:n:h:"
++"B:2:1:1:1:n:h:"
++"C:3:1:1:1:n:h:"
++"C:4:1:1:1:n:"
++"I:5:1:1:1:n");
+mview_param("param", ":M:150:150:"
++"L:10:"
++"B:10:search for more molecules like this:_self:"
++"B:10:execute some JavaScript::"
++"C:10:execute something else:"
++"C:10:select molecule");
+mview_param("cell2", "|../../../mols-2d/caffeine.csmol"
++"|first| Search |%|example-searchmore2.cgi?mol=first&n=6&cbx=%C"
++"| Do it! ||js:alert('first')"
++"| No | Yes |0|js:alert('No!')|js:alert('Yes!')"
++"|||0|js:alert('First unselected')|js:alert('First selected')"
++"|../../../img/easychart1.gif|js:alert('Chart 1 clicked')|");
+mview_param("cell3", "|O[C@H](\C=C\[C@@H](O)C1=CC=CC=C1)C2=CC=CC=C2"
++"|second| Search |%|example-searchmore2.cgi?mol=second&n=6&cbx=%C"
++"| Do it! ||js:alert('second')"
++"| No | Yes |0|js:alert('No!')|js:alert('Yes!')"
++"|||1|js:alert('Second unselected')|js:alert('Second selected')"
++"|../../../img/easychart2.gif|js:alert('Chart 2 clicked')|");
+mview_param("cell4", "|Ethane\n"
++"  Marvin  07119915552D\n"
++"\n"
++"  2  1  0  0  0  0  0  0  0  0999 V2000\n"
++"   -0.5625    1.2500    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n"
++"   -0.5625    0.2500    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n"
++"  1  2  1  0  0  0  0\n"
++"M  END\n"
++"|third| Search |%|example-searchmore2.cgi?mol=third&n=6&cbx=%C"
++"| Do it! ||js:alert('third')"
++"| No | Yes |1|js:alert('No!')|js:alert('Yes!')"
++"|||0|js:alert('Third unselected')|js:alert('Third selected')"
++"|../../../img/easychart3.gif|js:alert('Chart 3 clicked')|");
+mview_param("cell5", "|C[C@]12CC[C@@H]3[C@H](CC[C@H]4CC(=O)C(\C[C@]34C)=C\O)[C@@H]1CCC(=O)O2"
++"|fourth| Search |%|example-searchmore2.cgi?mol=fourth&n=6&cbx=%C"
++"| Do it! ||js:alert('fourth')"
++"| No | Yes |0|js:alert('No!')|js:alert('Yes!')"
++"|||1|js:alert('Fourth unselected')|js:alert('Fourth selected')"
++"|../../../img/easychart4.gif|js:alert('Chart 4 clicked')|");
+mview_end();
+//-->
+</script>
+</center>
+
+<p>
+The first two arguments of a checkbox in a <code>cell</code><em>i</em> parameter
+are its labels for the two states (up and down).
+Both are empty strings for the &quot;real&quot; checkbox.
+The third argument is the initial state: empty string or <code>0</code>
+for <em>up</em>, <code>1</code> for <em>down</em>.
+The fourth and fifth arguments are the JavaScript expressions evaluated
+when checking and unchecking.
+The JavaScript expressions begin with <code>js:</code>.
+
+<p>
+The molecule name
+(&quot;first&quot;, &quot;second&quot;, &quot;third&quot;, or &quot;fourth&quot;),
+the number of checkboxes in the applet and the <em>checkbox states</em>
+are arguments of the CGI script called when <strong>Search</strong> is pressed.<br>
+There are 6 checkboxes; their states are described by the 6 bits of the
+hexadecimal number substituted into the string <code>%C</code> in the
+CGI script URL.
+<p>
+
+<blockquote>
+<pre class="sh_html">
+&lt;script type=&quot;text/javascript&quot; SRC=&quot;../../../<a HREF="../marvin.js.txt">marvin.js</a>&quot;&gt;&lt;/script&gt;
+&lt;script type=&quot;text/javascript&quot;&gt;
+&lt;!--
+</pre><pre class="sh_javascript">mview_mayscript = true;
+mview_begin(&quot;../../..&quot;, 480, 400);
+mview_param(&quot;rows&quot;, &quot;2&quot;);
+mview_param(&quot;cols&quot;, &quot;2&quot;);
+mview_param(&quot;border&quot;, &quot;1&quot;);
+mview_param(&quot;layoutH&quot;, &quot;:1:2:L:0:0:L:0:1:&quot;);
+mview_param(&quot;paramH&quot;, &quot;:L:12b:L:10b&quot;);
+mview_param(&quot;cell0&quot;, &quot;|Molecule|Info and\nControls&quot;);
+mview_param(&quot;cell1&quot;, &quot;|Molecule|Info and\nControls&quot;);
+mview_param(&quot;layout&quot;, &quot;:6:2:&quot;
++&quot;M:0:0:6:1:&quot;
++&quot;L:0:1:1:1:n:n:&quot;
++&quot;B:1:1:1:1:n:h:&quot;
++&quot;B:2:1:1:1:n:h:&quot;
++&quot;C:3:1:1:1:n:h:&quot;
++&quot;C:4:1:1:1:n:&quot;
++&quot;I:5:1:1:1:n&quot;);
+mview_param(&quot;param&quot;, &quot;:M:150:150:&quot;
++&quot;L:10:&quot;
++&quot;B:10:search for more molecules like this:_self:&quot;
++&quot;B:10:execute some JavaScript::&quot;
++&quot;C:10:execute something else:&quot;
++&quot;C:10:select molecule&quot;);
+mview_param(&quot;cell2&quot;, &quot;|../../../mols-2d/caffeine.csmol&quot;
++&quot;|first| Search |%|example-searchmore2.cgi?mol=first&amp;n=6&amp;cbx=%C&quot;
++&quot;| Do it! ||js:alert('first')&quot;
++&quot;| No | Yes |0|js:alert('No!')|js:alert('Yes!')&quot;
++&quot;|||0|js:alert('First unselected')|js:alert('First selected')&quot;
++&quot;|../../../img/easychart1.gif|js:alert('Chart 1 clicked')|&quot;);
+mview_param(&quot;cell3&quot;, &quot;|O[C@H](\C=C\[C@@H](O)C1=CC=CC=C1)C2=CC=CC=C2&quot;
++&quot;|second| Search |%|example-searchmore2.cgi?mol=second&amp;n=6&amp;cbx=%C&quot;
++&quot;| Do it! ||js:alert('second')&quot;
++&quot;| No | Yes |0|js:alert('No!')|js:alert('Yes!')&quot;
++&quot;|||1|js:alert('Second unselected')|js:alert('Second selected')&quot;
++&quot;|../../../img/easychart2.gif|js:alert('Chart 2 clicked')|&quot;);
+mview_param(&quot;cell4&quot;, &quot;|Ethane\n&quot;
++&quot;  Marvin  07119915552D\n&quot;
++&quot;\n&quot;
++&quot;  2  1  0  0  0  0  0  0  0  0999 V2000\n&quot;
++&quot;   -0.5625    1.2500    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n&quot;
++&quot;   -0.5625    0.2500    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n&quot;
++&quot;  1  2  1  0  0  0  0\n&quot;
++&quot;M  END\n&quot;
++&quot;|third| Search |%|example-searchmore2.cgi?mol=third&amp;n=6&amp;cbx=%C&quot;
++&quot;| Do it! ||js:alert('third')&quot;
++&quot;| No | Yes |1|js:alert('No!')|js:alert('Yes!')&quot;
++&quot;|||0|js:alert('Third unselected')|js:alert('Third selected')&quot;
++&quot;|../../../img/easychart3.gif|js:alert('Chart 3 clicked')|&quot;);
+mview_param(&quot;cell5&quot;, &quot;|C[C@]12CC[C@@H]3[C@H](CC[C@H]4CC(=O)C(\C[C@]34C)=C\O)[C@@H]1CCC(=O)O2&quot;
++&quot;|fourth| Search |%|example-searchmore2.cgi?mol=fourth&amp;n=6&amp;cbx=%C&quot;
++&quot;| Do it! ||js:alert('fourth')&quot;
++&quot;| No | Yes |1|js:alert('No!')|js:alert('Yes!')&quot;
++&quot;|||0|js:alert('Fourth unselected')|js:alert('Fourth selected')&quot;
++&quot;|../../../img/easychart4.gif|js:alert('Chart 4 clicked')|&quot;);
+mview_end();
+</pre><pre class="sh_html">//--&gt;
+&lt;/script&gt;
+</pre>
+</blockquote>
+
+Description of the used parameters:
+<ul>
+    <li><a HREF="../../../help/developer/viewman.html#advanced.rows"><code>rows</code></a></li>
+    <li><a HREF="../../../help/developer/viewman.html#advanced.cols"><code>cols</code></a></li>
+    <li><a HREF="../../../help/developer/viewman.html#advanced.border"><code>border</code></a></li>
+    <li><a HREF="../../../help/developer/viewman.html#advanced.layout"><code>layout, layoutH</code></a></li>
+    <li><a HREF="../../../help/developer/viewman.html#advanced.param"><code>param, paramH</code></a></li>
+    <li><a HREF="../../../help/developer/viewman.html#advanced.cell"><code>cell0</code></a></li>
+</ul>
+
+
+<center><div class="lenia">&nbsp;</div></center>
+<p>
+The next example will show you how to <a HREF="configure1.html">change MarvinView settings</a>.
+
+</body>
+</html>

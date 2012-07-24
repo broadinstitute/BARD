@@ -49,7 +49,7 @@ grails.project.dependency.resolution = {
         compile ":spock:0.6"
         compile ":functional-spock:0.6"
         build ":codenarc:0.15"
-        compile ":elastic-search:0.2-SNAPSHOT"
+        compile ":elastic-search:0.3-SNAPSHOT"
 
         // Uncomment these (or add new ones) to enable additional resources capabilities
         //runtime ":zipped-resources:1.0"

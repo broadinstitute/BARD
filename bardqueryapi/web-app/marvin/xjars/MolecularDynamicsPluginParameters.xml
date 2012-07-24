@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<ParameterPanel>
+<Group Title="Display">
+    <RadioButtonGroup Key="display">
+	<Choice Value="animation" Text="Animation" Tooltip="Trajectory is displayed as an animation." Selected="true"/>
+	<Choice Value="frames" Tooltip="Trajectory frames are displayed individually." Text="Frames"/>
+    </RadioButtonGroup>
+</Group>
+    
+    <SingleSelection Key="forcefield" Label="Force Field" Toooltip="Type of force field used for calculation." >
+	<Choice Value="dreiding" Text="Dreiding" Selected="true"/>
+    </SingleSelection>
+    <SingleSelection Key="integrator" Label="Integrator" Tooltip="Integrator type used for solving Newton's laws of motion.">
+    	<Choice Value="positionverlet" Text="Position Verlet"/>
+    	<Choice Value="velocityverlet" Text="Velocity Verlet" Selected="true"/>
+    	<Choice Value="leapfrog" Text="Leap Frog"/>
+    </SingleSelection>
+    <Number Key="stepno" Label="Simulation steps:" Tooltip="Number of simulation steps." Range="[1,1000000000]" Value="1000" Type="integer"/>
+    <Number Key="steptime" Label="Step time (fs):" Tooltip="Time between simulation steps in femtoseconds." Range="[0,1000000000]" Value="0.1" Type="real"/>
+    <Number Key="temperature" Label="Initial temperature (K):" Tooltip="Initial temperature of the system in kelvin." Range="[0,1000000000]" Value="300" Type="real"/>
+    <Number Key="savestart" Label="Start time of display (fs):" Tooltip="The time of the first simulation frame to be displayed in femtoseconds." Range="[0,1000000000]" Value="0" Type="real"/>
+    <Number Key="samplinginterval" Label="Frame interval (fs):" Tooltip="Time between displayed simulation frames in femtoseconds." Range="[0,1000000000]" Value="10" Type="real"/>
+    
+</ParameterPanel>

@@ -1,0 +1,186 @@
+<html>
+<head>
+<meta NAME="author" CONTENT="Peter Csizmadia, Tamas Vertse">
+<link REL ="stylesheet" TYPE="text/css" HREF="../../marvinmanuals.css" TITLE="Style">
+<title>Marvin Applet Platforms</title>
+</head>
+<body>
+
+<h1 ALIGN=CENTER>Marvin Applet Platforms</h1>
+
+<h2><a NAME="swing"></a>Marvin</h2>
+
+Our applets are <a href="signing.html">signed</a> by Thawte's Java Code Signing Certificate which uses a JDK 1.3 code signing tool. Applets signed by this tool support browsers that contain JDK 1.3 or later (including Swing). 
+<p>
+<center>
+<table CELLSPACING=0 CELLPADDING=5 BORDER=0 id="colored-grid">
+<tr ALIGN=CENTER VALIGN=TOP>
+    <th>&nbsp;</th>
+    <th><address>Signed applets</address></th>
+</tr>
+<tr ALIGN=CENTER VALIGN=TOP>
+    <td><address>Firefox</address></td>
+    <td><address>yes</address></td>
+</tr>
+<tr ALIGN=CENTER VALIGN=TOP>
+    <td><address>MS Explorer 5.x, 6.x</address></td>
+    <td><address>yes</address></td>
+</tr>
+<tr ALIGN=CENTER VALIGN=TOP>
+    <td><address>all Java enabled browsers in Mac OS X</address></td>
+    <td><address>yes**</address></td>
+</tr>
+<tr ALIGN=CENTER VALIGN=TOP>
+    <td><address>Netscape 6.x, 7.x</address></td>
+    <td><address>yes</address></td>
+</tr>
+<tr ALIGN=CENTER VALIGN=TOP>
+    <td><address>Netscape 4.x</address></td>
+    <td><address>yes*</address></td>
+</tr>
+<tr ALIGN=CENTER VALIGN=TOP>
+    <td><address>MS Explorer 4.x</address></td>
+    <td><address>no</address></td>
+</tr>
+
+</table>
+</center>
+</p>
+<p>
+<table CELLSPACING=0 CELLPADDING=5 BORDER=0>
+  <tr valign="top">
+    <td><small>*:</small></td>
+    <td><small>Netscape 4.x can use Java 1.3 and Swing with Java Plugin, but in this case applet methods cannot be accessed from JavaScript 
+    (<a href="#js-communication">see Java - JavaScript communication</a>).</small></td>
+  </tr><tr valign="top">
+    <td><small>**:</small></td>
+    <td><small>Limitations under OS X. <a href="../user/for-mac-users.html">(see Notes for Mac users)</a></small></td>
+  </tr>
+</table>
+</p>
+<p>
+</p>
+
+Applets can be accessed in two ways:
+<ul>
+    <li><strong>built-in JVM</strong>: Only Netscape versions 6 - 7.0 
+    contain Java 2 compatible built-in JVM which includes Swing. Other 
+    <a href="#builtin-jvm">built-in JVM-s</a> do not support Swing.</li>
+<li><strong>Sun's Java Plugin</strong>:
+
+<a HREF="http://java.sun.com/products/plugin/" 
+TARGET="_top">Sun's Java Plugin</a> is required if the browser does not 
+contain a Java 2 compatible built-in JVM.
+</li>
+</ul>
+
+<a name="js-communication"></a>
+<h2>Java - JavaScript communication</h2>
+In a few browsers, especially early version of Netscape and the OS X versions of Internet Explorer, the plugin interface does not support Java - JavaScript
+communication.
+
+<p>
+<center>
+<table CELLSPACING=0 CELLPADDING=2 BORDER=0 BGCOLOR="#ffffff"><tr><td>
+<table CELLSPACING=0 CELLPADDING=0 BORDER=0 BGCOLOR="#e4f1f1"><tr><td>
+<table CELLSPACING=0 CELLPADDING=5 BORDER=0 id="colored-grid">
+<tr ALIGN=CENTER><th>&nbsp;</th>
+    <th><address>calling Java<br>
+	from JavaScript</address></th>
+    <th><address>calling JavaScript<br>
+	from Java</address></th></tr>
+<tr ALIGN=CENTER><td><address>Firefox</address></td>
+    <td><address>yes</address></td>
+    <td><address>yes (MAYSCRIPT)</address></td>
+    </tr>
+<tr ALIGN=CENTER><td><address>MS Explorer for Windows</address></td>
+    <td><address>yes</address></td>
+    <td><address>yes</address></td>
+    </tr>
+<tr ALIGN=CENTER><td><address>Safari</address></td>
+    <td><address>yes</address></td>
+    <td><address>yes (MAYSCRIPT)</address></td>
+    </tr>
+<tr ALIGN=CENTER><td><address>Netscape 7.01 -</address></td>
+    <td><address>yes</address></td>
+    <td><address>yes (MAYSCRIPT)<sup>1</sup></address></td>
+    </tr>
+<tr ALIGN=CENTER><td><address>Netscape 6.x, 7.0</address></td>
+    <td><address>yes</address></td>
+    <td><address>yes (MAYSCRIPT)<sup>1,2</sup></address></td>
+    </tr>
+<tr ALIGN=CENTER><td><address>Netscape 4.x</address></td>
+    <td><address>no</address></td>
+    <td><address>yes (MAYSCRIPT)</address></td>
+    </tr>
+<tr ALIGN=CENTER><td><address>MS Explorer for Machintosh systems</address></td>
+    <td><address>no</address></td>
+    <td><address>no</address></td>
+    </tr>
+    
+</table>
+</td></tr></table>
+</td></tr></table>
+<p><small>1: Limitations under OS X. 
+<a href="../user/for-mac-users.html">(see Notes for Mac users)</a></small><br>
+<small>2: Under Linux, the browser may <a href="../bugs/faq.html#crash.mayscript">crash</a> when a signed applet 
+calls JavaScript from Java.</small>
+</center>
+<p>
+In Netscape 6 and later versions (if Java Plug-in 1.3.1_01a or later is installed) the applet will 
+be run by the installed plug-in even in built-in mode (APPLET tag).
+In that case in Netscape 6.x, there are no problem with Java - JavaScript communication unless using the EMBED tag.
+<h2><a name="bultin-jvm">Built-in JVM in the browser</a></h2>
+Most of the (Java capable) browsers does not includes a built-in JVM (Java
+Virtual Machine).
+browsers require an installed JRE (Java Runtime Environment) for running 
+applets. Each (Java capable) 
+browser can launch applets with the installed JRE by the help of a Java Plugin.
+Normally, Java Plugins are part of the JRE and do not require any manually 
+settings to be able to run applets. (In the documentation of your browser, you 
+can find more info about its installation.)<br>
+The following browsers include built-in Java:
+<center>
+<table CELLSPACING=0 CELLPADDING=5 BORDER=0 id="colored-grid">
+<tr ALIGN=CENTER><td>&nbsp;</td>
+<th NOWRAP><address>built-in JVM</address></th>
+</tr>
+<tr ALIGN=CENTER>
+    <td ALIGN=LEFT NOWRAP><address>Netscape 6.x - 7.0</address></td>
+    <td><address>Java 2 (including Swing)</address></td>
+</tr>
+<tr ALIGN=CENTER>
+    <td ALIGN=LEFT NOWRAP><address>Netscape 4.7x - 4.8</address></td>
+    <td><address>Sun's Java 1.1 compatible</address></td>
+</tr>
+<tr ALIGN=CENTER>
+    <td ALIGN=LEFT NOWRAP><address>Netscape 4.0 - 4.05</address></td>
+    <td><address>Sun's Java 1.0 compatible</address></td>
+</tr>
+<tr ALIGN=CENTER>
+    <td ALIGN=LEFT NOWRAP><address>Netscape 4.x for Macintosh</address></td>
+    <td><address>Sun's Java 1.1 compatible<sup>1</sup></address></td>
+</tr>
+
+<tr ALIGN=CENTER>
+    <td ALIGN=LEFT NOWRAP><address>Internet Explorer</address></td>
+    <td><address>Sun's Java 1.1 compatible</address></td>
+</tr>
+</table>
+<p><small>1: These built-in JVMs still use the 1.0 version of the AWT 
+package.</small></p>
+</center>
+<p>
+The "marvin.js" interface can detect the best configuration for the 
+Marvin applets on the current platform (tries to use the Swing version 
+with the proper JVM if Swing is supported). But you can set the prefered JVM
+by using the "jvm" parameter. (The
+<a href="../../examples/applets/example-sketch1.1.html">first MarvinSketch example</a> demonstrates
+its usage.) 
+Actually, "marvin.js" operates with APPLET, OBJECT and EMBED tags.
+The following document can be useful for you if you would like understand
+what is the difference between the above tags:
+<a href="http://java.sun.com/products/plugin/versions.html">Encountering OBJECT, EMBED, and APPLET Tags With Different Plug-in Versions and Browsers</a></p>
+
+</body>
+</html>

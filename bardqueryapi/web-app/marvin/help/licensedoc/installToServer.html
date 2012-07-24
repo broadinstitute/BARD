@@ -1,0 +1,87 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+<head>
+    <link rel="stylesheet" href="../marvinmanuals.css" type="text/css">
+    <title>Installing Licenses on Servers</title>
+</head>
+<body>
+
+<p><em>Documentation for installing license files issued for <b>versions prior to 5.0</b> can be found <a href="licensing_old.html">here</a>.</em>
+</p>
+
+<h2>Installing Licenses on Servers</h2>
+
+<p>The possible ways of installing licenses on a server (web applications e.g. JSP pages, Pipeline Pilot):</p>
+<ol>
+    <li><a name="variable" class="text"><b>Using system variables (recommended):</b></a><br>
+    The location of the license file can be set with:
+        <ul>
+            <li><code>CHEMAXON_LICENSE_URL</code> environment variable (<a href="http://www.chemaxon.com/jchem/doc/admin/prepscripts.html">help on setting environment variables</a>)</li>
+            <li><code>chemaxon.license.url</code> Java system property</li>
+        </ul>
+        From version 5.3.2 it is possible to define multiple license files of arbitrary locations. The separator character is "<code>;</code>".<br>
+        In case license files are set this way, the license files from the user's home directory will not be read unless the special word "<code>default</code>" is given.<br>
+        Example: <code>-Dchemaxon.license.url="C:\ChemAxon\license2009.cxl;C:\ChemAxon\license2010.cxl;default"</code>
+    </li>
+    <li><a name="manual" class="text"><b>Manual install:</b></a><br>
+    The license file must be stored on the server, in the <code>.chemaxon</code> (Unix) or
+        <code>chemaxon</code> (Windows) sub-directory under the
+         home directory of the user who started JChem Server. The following locations are accepted:
+        <ul>
+            <li><code>(.)chemaxon/license.cxl</code> (the license file name is fix)</li>
+            <li><code>(.)chemaxon/licenses/*.cxl</code> (<b>from version 5.3.2 only</b> - the license file can have arbitrary name, the extension is fix)</li>
+        </ul>
+    </li>
+    <li><a name="cmdline" class="text"><b>Command line install:</b></a><br>
+    Launch the <code>license</code> shell script (Unix) or <code>license.bat</code>
+batch file (Windows). <br>
+    Type <code>license -h</code> for the list of available options.
+    
+    </li>
+    <li><a name="api" class="text"><b>Using API:</b></a><br>
+        <a href="../developer/beans/api/chemaxon/license/LicenseManager.html#setLicenseFile(java.lang.String)"><code>chemaxon.license.LicenseManager.setLicenseFile(String path)</code></a>
+    </li>
+</ol>
+
+<p><em>If the licenses are installed later, when a web application is already running, it is <b>not necessary to restart the web server</b> (e.g. Tomcat),
+the License Manager will automatically and repeatedly check if a license file was installed in the meanwhile.</em></p>
+
+<h2><a name="applets">Licensing Applets</a></h2>
+<p>
+Example:
+<blockquote>
+<pre>
+&lt;script LANGUAGE=&quot;JavaScript1.1&quot; SRC=&quot;../../../marvin.js&quot;&gt;&lt;/script&gt;
+&lt;script LANGUAGE=&quot;JavaScript1.1&quot;&gt;
+&lt;!--
+msketch_begin(&quot;../../..&quot;, 540, 480); <em>// arguments: codebase, width, height</em>
+<strong>msketch_param("licenseFile", "https://www.yourserver.com/chemaxon/license.cxl");</strong>
+msketch_end();
+//--&gt;
+&lt;/script&gt;
+</pre>
+</blockquote>
+<p>Restrictions:
+<ul>
+<li>The licenses should have the "Server mode allowed" field</li>
+<li>The value should start with http:// or https://</li>
+</ul>
+
+<h2><a name="jws">Licensing via Java Web Start</a></h2>
+<p>
+Example:
+<pre><strong>&lt;resources>
+  &lt;property name="chemaxon.license.url" value="https://www.yourserver.com/chemaxon/license.cxl"/>
+&lt;/resources>
+</strong></pre>
+<p>Restrictions:
+<ul>
+<li>The licenses should have the "Server mode allowed" field</li>
+<li>The value should start with http:// or https://</li>
+</ul>
+
+
+
+
+</body>
+</html>

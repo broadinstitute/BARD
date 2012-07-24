@@ -1,0 +1,67 @@
+<html>
+<head>
+<meta NAME="description" CONTENT="Basic molecule export options in Marvin.">
+<meta NAME="author" CONTENT="Peter Csizmadia">
+<link REL ="stylesheet" TYPE="text/css" HREF="../marvinmanuals.css" TITLE="Style">
+<title>Basic Export Options</title>
+</head>
+<body>
+<h1>Basic Export Options</h1>
+
+<blockquote>
+<table CELLSPACING=0 CELLPADDING=0>
+<tr VALIGN="TOP"><td><a class="text" NAME="a"><strong>a</strong>, <strong>+a</strong>, <strong>+a_gen</strong></a>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+	<td><a HREF="../sci/aromatization-doc.html#daylight_arom">General</a> aromatization. Example: &quot;<i>XXX</i>:a&quot;</td></tr>
+<tr VALIGN="TOP">
+    <td NOWRAP><a class="text" NAME="a_basic"><strong>a_bas</strong></a>&nbsp;&nbsp;
+	</td>
+	<td><a HREF="../sci/aromatization-doc.html#basic">Basic</a> aromatization.
+	Example: &quot;<i>XXX</i>:a_bas&quot;</td></tr>
+<tr VALIGN="TOP">
+    <td NOWRAP><a class="text" NAME="a_mdl"><strong>a_loose</strong></a>&nbsp;&nbsp;
+	</td>
+	<td><a HREF="../sci/aromatization-doc.html#mdl">Loose</a> aromatization.
+	Example: &quot;<i>XXX</i>:a_loose&quot;</td></tr>
+    <td NOWRAP><a class="text" NAME="a_mdl"><strong>a_ambig</strong></a>&nbsp;&nbsp;
+	</td>
+	<td><a HREF="../sci/aromatization-doc.html#ambig">Ambiguous</a> aromatization.
+	Example: &quot;<i>XXX</i>:a_ambig&quot;</td></tr>
+<tr VALIGN="TOP"><td><a class="text" NAME="minus_a"><strong>-a</strong>, <strong>-a_gen</strong></a></td>
+    <td>General Dearomatization. Example: &quot;<i>XXX</i>:-a&quot;</td></tr>
+<tr VALIGN="TOP">
+    <td NOWRAP><a class="text" NAME="a_huckel"><strong>-a_huckel</strong></a>
+	</td>
+	<td>Huckel dearomatization.
+	Example: &quot;<i>XXX</i>:-a_huckel&quot;</td></tr>
+<tr VALIGN="TOP">
+    <td NOWRAP><a class="text" NAME="a_huckel_ex"><strong>-a_huckel_ex</strong></a>
+	</td>
+	<td>Huckel dearomatization, throwing exception in case of failure.
+	Example: &quot;<i>XXX</i>:-a_huckel_ex&quot;</td></tr>
+<tr VALIGN="TOP"><td><strong>H</strong> or <strong>+H</strong></td>
+    <td>Add explicit Hydrogen atoms. Example: &quot;<i>XXX</i>:H&quot;</td></tr>
+<tr VALIGN="TOP"><td><strong>-H</strong></td>
+    <td>Remove explicit Hydrogen atoms. Example: &quot;<i>XXX</i>:-H&quot;</td></tr>
+</table>
+</blockquote>
+Here, <i>XXX</i> can be any molecule or image format like
+<a HREF="mol-csmol-doc.html#mol">mol, sdf, rdf, rgf</a>,
+<a HREF="mol-csmol-doc.html#rxnV2">rxn</a>,
+<a HREF="mol-csmol-doc.html#csmol">csmol, cssdf, csrdf, csrgf, csrxn</a>,
+<a HREF="smiles-doc.html">smiles</a>,
+<a HREF="cxsmiles-doc.html">cxsmiles</a>,
+<a HREF="abbrevgroup-doc.html">abbrevgroup</a>,
+<a HREF="mrv-doc.html">mrv</a>,
+<a HREF="cml-doc.html">cml</a>,
+<a HREF="jpeg-doc.html">jpeg</a>,
+<a HREF="png-doc.html">png</a>,
+<a HREF="ppm-doc.html">ppm</a> or
+<a HREF="svg-doc.html">svg</a>,
+but aromatization options have no effect on formats which do not store bond
+orders like
+<a HREF="cube-doc.html">cube</a>,
+<a HREF="pdb-doc.html">pdb</a> and
+<a HREF="xyz-doc.html">xyz</a>.
+
+</body>
+</html>

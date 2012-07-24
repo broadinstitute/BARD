@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<ParameterPanel>
+    <Precision Key="precision" Label="Decimal places"/>
+    <Boolean Key="excludesulfur" Label="Exclude sulfur atoms from calculation" Toltip="Sets to exclude sulfur atoms from PSA calculation." Value="true"/>
+    <Boolean Key="excludephosphorus" Label="Exclude phosphorus atoms from calculation" Toltip="Sets to exclude phosphorus atoms from PSA calculation." Value="true"/>    
+    <Boolean Key="microspecies" Label="Take major microspecies" Tooltip="Calculates the polar surface area for the major microspecies present at the given pH." Value="false"/>
+    <Number Key="pH" Label="at pH" Range="[0.0,14.0]" Value="7.4">
+	<Dependencies>
+	    <Item Key="microspecies" Range="true"/>
+	</Dependencies>
+    </Number>
+</ParameterPanel>

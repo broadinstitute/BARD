@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<ParameterPanel>
+    <Precision Key="precision" Label="Decimal places"/>
+    <SingleSelection Key="type" Tooltip="Setting type of the calculus: sigma charge or pi electronegativity components." Label="Type">
+	<Choice Value="sigma" Text="Sigma"/>
+	<Choice Value="pi" Text="Pi"/>
+    </SingleSelection>
+    <Boolean Key="resonance" Label="Take resonant structures" Tooltip="The average of the charge of the resonant structures will be calculated." Value="true"/>
+    <Boolean Key="microspecies" Label="Take major microspecies" Tooltip="The electronegativity of major microspecies at the given pH is calculated." Value="false"/>
+    <Number Key="pH" Label="at pH" Range="[0.0,14.0]" Value="7.4">
+	<Dependencies>
+	    <Item Key="microspecies" Range="true"/>
+	</Dependencies>
+    </Number>
+</ParameterPanel>

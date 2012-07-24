@@ -1,0 +1,620 @@
+<html>
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+  <meta NAME="description" CONTENT="Valence Calculation in Marvin">
+  <meta NAME="keywords" CONTENT="valence, check, error, Marvin">
+  <meta NAME="author" CONTENT="Peter Szakacs">
+  <link REL ="stylesheet" TYPE="text/css" HREF="../marvinmanuals.css" 
+      TITLE="Style">
+  <title>Valence Calculations</title>
+ </head>
+ 
+
+ <body>
+  <h1>Valence Calculations</h1>
+  <h2>Introduction</h2>
+    <p>The Valence Calculator has 3 functionality: </p>
+    <ul>
+      <li>calculate if there is valence error.</li>
+      <li>set the appropriate amount of implicit hydrogen </li>          
+    </ul>
+    <p>The functionality of the Valence Calculator is focused mainly on 
+    the organic compounds, although the inorganic compounds not 
+    containing transition-metal atoms are also supported. </p> 
+  <h2>Molecules</h2>
+  
+   <h3> 1st Group </h3>
+    <h4>Hydrogen</h4>
+      <ul> 
+       <li> <b>Default:</b> H<sup>+</sup> </li>
+       <li> <b>Molecules:</b> 
+          <ul>
+             <li> <i>Neutral atoms:</i>1 bond is accepted </li>
+             <li> <i>Charged atoms:</i> Not allowed in molecules.</li>
+             <li> <i>Radical:</i> Not allowed in molecules.</li>
+          </ul></li>   
+       <li> <b>Ions:</b> H<sup>+</sup>, H<sup>-</sup> </li>
+       <li> <b>Radical:</b> 
+          <ul>
+            <li> H<b>&middot;</b> is accepted </li>
+            <li> H without radical and charge or bond is not accepted.</li> 
+          </ul></li>
+      </ul>
+    <h4>Lithium (Li), Sodium (Na), Potassium (K), Rubidium (Rb), Caesium (Cs),
+        Francium (Fr)</h4>
+      <ul>
+        <li> <b>Default: </b> Li, Na, K, Rb, Cs, Fr respectively.  </li>
+        <li> <b>Molecules:</b> 
+           <ul>
+             <li> <i>Neutral atoms:</i>1 bond is accepted.</li>
+             <li> <i>Charged atoms:</i> Not allowed in molecules.</li>
+             <li> <i>Radical:</i> Not allowed in molecules.</li>
+           </ul></li>
+        <li> <b>Ions:</b>
+                Li<sup>+</sup>, Na<sup>+</sup>, K<sup>+</sup>,
+                Rb<sup>+</sup>, Cs<sup>+</sup>, Fr<sup>+</sup> are accepted.
+        <li> <b> Radical: </b> Me<b>&middot;</b> is accepted </li>
+      </ul>
+      
+   <h3>2nd Group</h3>
+      <ul>
+        <li> <b>Default: </b> Be, Mg, Ca, Sr, Ba, Ra respectively.  </li>
+        <li> <b>Molecules:</b> 
+          <ul>
+            <li> <i> Neutral atoms: </i>2 bonds are accepted.</li>
+            <li> <i> Charged atoms:</i>
+                Each added charge decreases by one the number of possible
+                bonds.</li>
+            <li> <i> Radical:</i> Each added radical decreases by one 
+                                  the number of possible bonds</li>   
+            </ul></li>
+        <li> <b>Ions:</b>
+         <ul>
+           <li> Be<sup>2+</sup>, Mg<sup>2+</sup>, Ca<sup>2+</sup>,
+                Sr<sup>2+</sup>, Ba<sup>2+</sup> 
+                Ra<sup>2+</sup> are accepted
+         </ul></li> 
+        <li> <b>Radicals:</b> <b>&middot;</b>Me<sup>+</sup> is accepted </li>
+      </ul>
+
+   <h3>13th Group</h3>
+    <h4> Boron</h4>
+      <ul> 
+         <li><b> Default: </b> BH<sub>3</sub>
+         <li><b> Molecules: </b> 
+           <ul>
+            <li> <i>Neutral atoms:</i>
+              <ul>
+                <li>Implicit Hydrogens are added to have 3 four bonds.</li>
+                <li>4 bonds are accepted with 1 negative charge on the boron 
+                    atom.</li> 
+                <li>5 or more bonds are forbidden.</li>
+              </ul></li>
+            <li><i> Charged atoms: </i>
+               <ul>
+                 <li> <i>  Positive charge: </i>
+                        Every added charge
+                        decreases by one the number of possible bonds. 
+                        Maximum charge accepted is +3. </li>
+                  <li> <i> Negative charge:</i> 
+                        BH<sub>4</sub><sup>-</sup>, 
+                        BH<sub>3</sub><sup>2-</sup> 
+                        BH<sub>2</sub><sup>3-</sup>
+                        BH<sup>4-</sup> and B<sup>5-</sup> are accepted.
+                  </li>
+               </ul>
+             </li>
+            <li><i> Radicals: </i>
+                Every added radical on these atoms  
+                decreases by one the number of necessary bonds.</li>
+            <li><i>Aromatic compounds:</i>
+             Boron may form <a href="#aromaticrule"> aromatic bonds</a> as well.
+            </li>
+          </ul></li>
+        </ul>
+      
+    <h4> Aluminium (Al), Gallium (Ga), Indium (In), Thallium (Th)</h4>
+      <ul>
+        <li> <b>Default:</b> Al, Ga, In, Th respectively. </li>
+        <li> <b>Molecules:</b> 
+          <ul>
+            <li> <i> Neutral Atoms: </i>3 bonds around these atoms are accepted.</li>
+            <li><i> Charged atoms: </i>
+               <ul>
+                 <li> <i>  Positive charge: </i>
+                        Every added charge
+                        decreases by one the number of possible bonds. 
+                        Maximum charge accepted is +3. </li>
+                  <li> <i> Negative charge:</i> 
+                        4- charge with 4 ligands is accepted. 
+                  </li>
+               </ul>
+            <li><i> Radicals: </i>
+                    Every added radical on these atoms  
+                    decreases by one the number of necessary bonds.</li>
+          </ul> 
+        <li> <b>Ions:</b>
+         <ul>
+           <li> Al<sup>+</sup>, Ga<sup>+</sup>, In<sup>+</sup>, Rb<sup>+</sup>,
+                Al<sup>3+</sup>, Ga<sup>3+</sup>, In<sup>3+</sup>, 
+                Rb<sup>3+</sup>
+                are accepted.</li>
+         </ul> 
+        <li> <b> Radical:</b> <b>&middot;</b>Me<sup>2+</sup> and 
+                        <b>&middot;</b><b>&#803;</b>Me<b>&middot;</b> 
+                        are allowed.
+      </ul>
+
+   <h3> 14th Group</h3>
+      <h4>Carbon (C), Silicon (Si), Germanium (Ge) </h4>
+        <ul>
+         <li><b> Default: </b>
+                CH<sub>4</sub>,
+                SiH<sub>4</sub>,
+                GeH<sub>4</sub> respectively.</li>
+         <li> <b>Molecules: </b> 
+           <ul>
+             <li> <i>Neutral atoms</i>
+                Implicit Hydrogens are added to have 4 four bonds. 
+                5 or more bonds are forbidden. 
+             </li>
+             <li> <i>  Charged atoms:  </i>
+                Every added charge on these atoms 
+                (no matter it is positive or negative) 
+                decreases by one the number of possible bonds. 
+                Maximum charge accepted is &#177;4.
+             </li>
+             <li><i> Radical: </i>
+                Every added radical on these atoms  
+                decreases by one the number accepted of bonds.
+             </li>
+            </ul> 
+           </li>
+        </ul>
+
+      <h4> <a name="aromaticrule"> Aromatic Systems </a></h4>
+     <p>General rules for aromatic compounds 
+     (in order of priority): </p>
+     <ul>
+       <li> <b>Since 5.10, the aromatic valence check is turned off.</b></li>
+       <li> Every aromatic system which can be aromatized from its Kekule form
+            using one of our aromatization method is accepted. </li>
+     </ul>
+     <ul>
+        <li> Atoms with aromatic bonds and 
+             four or more ligands must have valence error. </li>
+        <li> Carbon (C) atoms can add one electron to the aromatic system. </li>
+        <li> Nitrogen (N) and Phophorus (P) 
+             can add one (having two ligands) or two (having three ligands) 
+             electrons to the aromatic system. </li>
+        <li> Oxygen (O) and Sulfur (S) can add 
+             two electrons to the aromatic system. Sulfur doesn't add electrons
+             to the aromatic systems, if it has 3 or more ligands 
+             (except when the the third ligand is a double bonded oxygen).</li>
+        <li> Boron (B) can add zero (having three ligands) or one 
+             (having two ligands) 
+             electron to the aromatic system. </li>
+        <li> Charged atoms: 
+        <ul>
+          <li>  C<sup>+</sup> must act like B </li>
+          <li>  C<sup>-</sup> must act like N </li>
+          <li>  N<sup>-</sup> must act like O </li>
+          <li>  N<sup>+</sup> must act like C </li>
+          <li>  P<sup>-</sup> must act like S </li>
+          <li>  P<sup>+</sup> must act like C </li>
+          <li>  O<sup>+</sup> must act like N </li>
+          <li>  O<sup>-</sup> must act like F 
+                hence it should have valence error </li>
+          <li>  S<sup>+</sup> must act like P </li>
+          <li>  S<sup>-</sup> must act like Cl 
+                hence it should have valence error </li>
+          <li>  B<sup>+</sup> must act like Be 
+                hence it should have valence error </li>
+          <li>  B<sup>-</sup> must act like C </li>        
+        </ul> </li>
+        <li> <p>Given the form X=Y, where X is member of an aromatic ring 
+                while Y is not and the electronegativity of atom Y is larger
+                than that of atom X 
+                (that is, C=O, C=N, C=S, C=P, N=O and P=O).
+                Non ring double bond has so-called 
+                "single bond charge separated" mesomer form.
+                Then the non-ring hetero atom, Y,
+                gets negative charge and the ring member atom,
+                X, gets positive and therefore they act as charged atoms 
+                described above. </p></li>
+        <li> <p> Ambiguous (in implicit H) aromatic ring cases: </p>
+        <ul>
+         <li> Explore the system of aromatic rings.</li>
+         <li> Add the fixedly given electrons
+              (<i>e.g</i> non charged C, S ,O adds one electron;   
+              N with 3 ligands adds two electrons).</li>
+         <li> Add the ambiguous cases to get the maximum and minimum number 
+              of aromatic electrons.  </li>
+         <li> Check the <a href="aromatization-doc.html#huckelrule">
+              H&uuml;ckel rule</a>.  </li>
+         <li> A group consist of atoms adding one electron to the aromatic
+              system must contain even number of atoms.  </li>
+         <li> Fulfill the H&uuml;ckel rule in such a way to approach the case 
+              when all ring member add one electron to the aromatic ring system.
+              </li>
+         <li> <i> Note:</i>This algorithm will consider as aromatic the 
+          following type of molecules, although they aren't: consider a group 
+          that consists of atoms giving one pi electron to the aromatic system 
+          and contains even number of atoms. If the group can be split into
+          two part by cutting only one bond and the new groups contains odd
+          number of atoms, then the molecule is not aromatic. <br>
+          <i> Example:</i> the molecule depicted below is considered as
+                           aromatic although it isn't: <br> 
+                <img src="vc2.png" alt="Non aromatic system">
+               </li>
+        </ul> </li> 
+     </ul>     
+    <h4> Tin (Sn) </h4>
+      <ul>
+        <li> <b>Default:</b> Sn </li> 
+        <li> <b>Molecules:</b> 
+          <ul>
+             <li><i>Neutral atoms:</i> 
+                 Implicit Hydrogens are added to have 4 four bonds 
+                 (if Tin has at least 1 bond).
+                 5 or 6 bonds are also accepted.
+             </li>
+             <li><i>Charged atoms:</i>
+               <ul>
+                 <li><i>Positive chearge:</i>
+                     Every added charge (no matter it is positive or negative) 
+                     decreases by one the number of possible bonds. 
+                     Maximum charge accepted is +4. 
+                 </li>
+                 <li><i>Negative chearge:</i> Not allowed. </li>
+               </ul>
+             </li>  
+             <li><i>Radical:</i>
+                Every added radical on these atoms  
+                decreases by one the number accepted of bonds.
+             </li>
+          </ul>
+        </li>
+        <li> <b>Ions:</b>
+        <ul> 
+           <li>  Sn<sup>2+</sup> and Sn<sup>4+</sup> are accepted.</li>
+        </ul></li>
+      </ul>
+    <h4> Lead (Pb) </h4>
+      <ul>
+        <li> <b>Default:</b>  Pb </li>
+        <li> <b>Molecules:</b> 
+          <ul>
+            <li> <i> Neutral atom:</i>
+               <ul>
+                  <li> 1 or 2 bonds: 1 or 0 implicit hydrogen is added, 
+                       respectively. </li>
+                  <li> 3 or 4 bonds: 1 or 0 implicit hydrogen is added,
+                       respectively. </li>
+                 <li>5 or 6 bonds are accepted.</li>
+                 <li>More than 6 bonds are forbidden. </li>
+               </ul>
+             <li> <i> Charged atom:</i> 
+               <ul>
+                 <li><i>Positive chearge:</i>
+                     Every added charge (no matter it is positive or negative) 
+                     decreases by one the number of possible bonds. 
+                     Maximum charge accepted is +4. 
+                 </li>
+                 <li><i>Negative chearge:</i> Not allowed. </li>
+               </ul>
+             </li>  
+             <li><i>Radical:</i>
+                Every added radical on these atoms  
+                decreases by one the number accepted of bonds.
+             </li>
+          </ul> 
+        <li> <b>Ions:</b>
+          <ul> 
+             <li>  Pb<sup>2+</sup> and Pb<sup>4+</sup> are accepted.</li>
+          </ul> 
+        </li>
+      </ul>
+
+   <h3> 15th Group</h3>
+      <h4>Nitrogen (N) </h4>
+        <ul>
+         <li><b> Default: </b>NH<sub>3</sub> </li>
+         <li><b> Molecules: </b> 
+           <ul>   
+             <li> <i>Neutral atoms</i>
+                <ul>
+                  <li> Implicit hydrogens are added to have 3 four bonds
+                       (if nitrogen has at least 1 bond). </li>
+                  <li> More than 3 bonds are forbidden. </li>
+                  <li> If nitrogen has 4 ligands, charge is not set, hence
+                       not accepted </li>
+                  <li> Pentavalent N is accepted in those molecules, that have
+                       mesomer, where N is tetravalent:<br>
+                       <img src="vc1.png" alt="pentavalent nitrogen"> </li>
+                </ul> 
+             <li><i> Charged atoms in a molecule: </i>
+                <ul>
+                  <li> <i>Positive charge:</i> 
+                   <ul>
+                     <li> 1+: 4 bonds needed (incluing implicit hydrogens) </li>
+                     <li> 2+: 3 bonds needed (incluing implicit hydrogens) </li>
+                     <li> 3+: 2 bonds needed (incluing implicit hydrogens) </li>
+                     <li> 4+: 1 bonds needed (incluing implicit hydrogens) </li>
+                     <li> 5+: 0 bonds needed (incluing implicit hydrogens) </li>
+                     <li> 6+ or more: not allowed </li>
+                   </ul>
+                 </li>
+                 <li><i>Negative charge:</i> Every added negative charge 
+                 decreases by one the number of possible bonds.
+                 Maximum charge accepted is -3. </li>
+                </ul>
+             </li> 
+             <li><i> Radical: </i>
+                Every added radical on these atoms  
+                decreases by one the number of bonds. 
+                Maximum three added radical is allowed. </li>
+              
+             <li> <i>Aromatic compounds:</i>
+               Nitrogen may form <a href="#aromaticrule"> aromatic bonds</a> 
+               as well.
+             </li>
+          </ul></li>
+        </ul>
+      <h4> Phosphorus (P), Arsenic (As), Antimony (Sb), Bismuth (Bi) </h4>
+        <ul>
+         <li><b> Default:</b> PH<sub>3</sub>, AsH<sub>3</sub>,
+                              SbH<sub>3</sub>, BiH<sub>3</sub>
+         <li><b> Molecules: </b>
+           <ul>
+             <li> <i>Neutral atoms:</i>
+               <ul>
+                 <li>1 bond: 2 implicit Hydrogens are added. 
+                 <li>2 bond: 1 implicit Hydrogen is added.
+                 <li>3 bond: 0 implicit Hydrogen is added.
+                 <li>4 bond: 1 implicit Hydrogen is added.
+                 <li>5 bond: 0 implicit Hydrogen is added.
+                 <li> More than 5 bonds are forbidden
+               </ul> 
+             </li>
+             <li><i> Charged atoms in a molecule: </i>
+               <ul>
+                 <li> <i>Positive charge:  </i>
+                  <ul>
+                   <li>1+: 4 bonds are necessary (including implicit Hydrogens).
+                        </li>
+                   <li>2+: 3 bond is necessary (including implicit Hydrogens).  
+                        </li>
+                   <li>3+: 2 bond is allowed. </li>
+                   <li>4+: 1 bond is necessary (including implicit Hydrogens).
+                        </li>
+                   <li>5+: 0 bond is allowed.</li>
+                   <li>6+ or more: not allowed</li>
+                  </ul>
+                </li>
+                <li> <i>Negative charge:</i> Every added negative charge
+                         decreases by one the number of possible bonds.
+                         Maximum charge accepted is -3. </li>
+               </ul>
+             <li><i> Radical: </i>
+               Every added radical on these atoms  
+               decreases by one the number of bonds. 
+               Maximum three added radicals are allowed.</li>
+             <li> <i>Aromatic compounds:</i>
+                Phosphorus may form <a href="#aromaticrule"> aromatic bonds</a> 
+                as well.
+            </li>
+           </ul>
+          </li>
+        </ul>
+
+
+   <h3> 16th Group</h3>
+      <h4>Oxygen (O) </h4>
+        <ul>
+         <li><b> Default: </b> H<sub>2</sub>O </li>
+         <li><b> Molecules: </b> 
+           <ul>
+              <li> <i> Neutral atom: </i> 
+                 <ul>
+                   <li>Implicit Hydrogens are added to have 2 bonds
+                       (if Oxygen has at least 1 bond). 
+                   </li>
+                   <li> More than 2 bonds are forbidden
+                 </ul> 
+              </li>
+              <li> <i> Charged atom:</i>  
+                <ul> 
+                   <li> <i> Positive charge:</i>
+                     <ul>
+                        <li>1+: 3 bonds are necessary 
+                            (including implicit Hydrogens). </li>
+                        <li>2+: 4 bonds are necessary 
+                            (including implicit Hydrogens). </li>
+                        <li>3+: 3 bonds are necessary 
+                            (including implicit Hydrogens). </li>
+                        <li>4+: 2 bonds are necessary 
+                            (including implicit Hydrogens). </li>
+                        <li>5+: 1 bonds are necessary 
+                            (including implicit Hydrogens). </li>
+                        <li>6+: 0 bonds are necessary 
+                            (including implicit Hydrogens). </li>      
+                     </ul>
+                   </li>
+                   <li> <i> Negative charge:</i>
+                       One or two the negative charges are  accepted,
+                       with one or zero ligands, respectively.
+                   </li>
+                </ul>
+              </li>
+              <li> <i> Radical: </i>
+                   Every added radical on these atoms  
+                   decreases by one the number of bonds. 
+                   Maximum two added radical is allowed.
+              </li>
+              <li> <i> Aromatic compounds: </i>
+                Oxygen may form <a href="#aromaticrule"> aromatic bonds</a> 
+                as well.
+              </li>
+           </ul>
+         </ul> 
+      <h4> Sulfur (S), Selenium (Se), Tellurium (Te), Polonium (Po) </h4>
+        <ul>
+         <li><b> Default: </b>H<sub>2</sub>S, H<sub>2</sub>Se,
+                              H<sub>2</sub>Te, H<sub>2</sub>Po </li>
+         <li><b> Molecules: </b> 
+           <ul>
+              <li> <i> Neutral atom: </i> 
+                <ul>
+                 <li>1 bond: 1 implicit Hydrogen is added </li>
+                 <li>2 bond: 0 implicit Hydrogen is added </li>
+                 <li>3 bond: valence error on S/Se/Te/Po atom </li>
+                 <li>4 bond: 0 implicit Hydrogen is added </li>
+                 <li>5 bond: 1 implicit Hydrogen is added </li>
+                 <li>6 bond: 0 implicit Hydrogen is added </li>
+                 <li> More than 6 bonds are forbidden
+                </ul>   
+              </li>
+              <li> <i> Charged atom:</i>  
+                <ul> 
+                   <li> <i> Positive charge:</i>
+                     <ul>
+                       <li>1+: 1, 3 or 5 bonds are necessary 
+                             (including implicit Hydrogens). </li> 
+                       <li>2+: 0 or 4 bonds are necessary 
+                             (including implicit Hydrogens). </li> 
+                       <li>3+: 1 or 3 bonds are necessary
+                             (including implicit Hydrogens).  </li> 
+                       <li>4+: 0 or 2 bonds are necessary
+                             (including implicit Hydrogens). </li> 
+                       <li>5+: 1 bond is necessary 
+                             (including implicit Hydrogens). </li> 
+                       <li>6+: 0 bond is allowed. </li>
+                       <li>7+ or more: not allowed. </li> 
+                     </ul>
+                   </li>
+                   <li> <i> Negative charge:</i>
+                      <ul>
+                        <li> 1-: 1 bond accepted. 
+                             (<i>Exception:</i> 2 double bonded oxygens and 
+                             1 more ligand connected by a single bond)
+                        </li>
+                        <li> 2-: Zero ligand is accepted</li>
+                      </ul>
+                   </li>
+                </ul>
+              </li>
+              <li> <i> Radical: </i> Every added radical on these atoms  
+                         decreases by one the number of bonds. 
+                         Maximum 2 added radical is allowed.
+              </li>
+              <li> <i> Aromatic compounds: </i>
+                  Sulfur may form <a href="#aromaticrule"> aromatic bonds</a> 
+                  as well.
+              </li>
+           </ul>
+        </ul>
+   <h3> 17th Group</h3>
+      <ul>
+        <li><b>Default:</b>HF, HCl, HBr, HI, HAt </li>
+        <li><b>Molecules:</b>
+          <ul>
+            <li> <i>Neutral atoms:</i> 1 bond is allowed. <br>
+                 <i> Exceptions:</i>
+                 <ul> 
+                   <li> Interhalogen compounds 
+                        (both X and Y abbreviate a halogen atom):
+                     <ul>
+                       <li> XY<sub>3</sub>, where X is heavier than Y; </li>
+                       <li> XY<sub>5</sub>, where X can be every halogen but F,
+                                            Y = F;</li>
+                       <li> IF<sub>7</sub>.</li>
+                     </ul>  
+                   </li>
+                   <li> Halogen oxoacids: 
+                     <ul>
+                        <li> HXO<sub>y</sub>, where X = Cl, Br, I or At; and
+                                              y = 2, 3 or 4. </li>
+                     </ul>
+                   </li>
+                 </ul>
+            </li>
+            <li><i>Charged atom:</i>
+               <ul>  
+                 <li>1+: 2 bonds are necessary.</li>
+               </ul> 
+            </li>
+          </ul>
+        </li>
+        <li> <b> Ions:</b>
+          <ul>
+            <li> F<sup>-</sup>, Cl<sup>-</sup>, Br<sup>-</sup>,
+                 I<sup>-</sup>, At<sup>-</sup> are accepted.
+            </li>
+          </ul>
+        </li>
+        <li> <b>Radicals: </b>
+           <ul>
+             <li>1 Radical with 0 bond around the halogen atom is accepted.</li>
+           </ul>
+        </li>
+      </ul>
+      
+   <h3> 18th Group</h3>
+     <ul>
+       <li><b>Default:</b>He, Ne, Ar, Kr, Xe, Rd </li>
+       <li><b>Molecules:</b> 0 bond is accepted.
+          <ul>
+             <li><i> Exceptions:</i>
+                 The following xenon compounds are accepted:
+                 XeF<sub>2</sub>, XeF<sub>4</sub>, XeF<sub>6</sub>, 
+                 XeO<sub>3</sub>, XeO<sub>4</sub>
+                 XeOF<sub>4</sub>, XeO<sub>2</sub>F<sub>2</sub>,
+                 XeO<sub>3</sub>F<sub>2</sub>.
+              </li>
+           </ul>
+       </li>
+       <li><b>Ions:</b> 0 charge is accepted </li>
+       <li><b>Radicals:</b> 0 radical is accepted </li>
+     </ul>
+
+  <h2>Superatom S-Groups</h2>
+    S-group attachment points are considered as bonds. Three cases are possible:
+    <ul>
+       <li> There is one S-group attachment point around the 
+            investigated atom, that abbreviates one single bond; </li>
+       <li> There are two S-group attachment points around the 
+            investigated atom, both of them abbreviate one single bond; </li>
+       <li> There is one S-group attachment point around the 
+            investigated atom, that abbreviates one double bond. </li>   
+    </ul> 
+    When there is a valence error in an S-group, 
+    
+  <h2>Query Properties</h2>
+     If valence property is set, then the Valence Calculator uses that value,
+     <i>v</i>,
+     as the number of valence electron.
+     <ul>
+        <li> <b>Default: </b>  AH<sub><i>v</i></sub>  </li>
+        <li> <b>Molecules:</b> 
+          <ul>
+            <li> <i> Neutral atoms: </i>Maximum <i> v</i> bonds are accepted.
+            <li> <i> Charged atoms: </i>
+                        Every added radical on these atoms
+                        decreases by one the number of bonds.              
+            </li>     
+            <li> <i> Neutral atoms: </i> 
+                Every added radical on these atoms
+                decreases by one the number of bonds.
+            </li>
+          </ul> 
+        </li>
+        <li> <b>Ion:</b> Maximum <i> &#177;v</i> charges are accepted. </li>
+        <li> <b>Radical:</b> Maximum <i> v</i> radicals are accepted. </li>
+     </ul>
+     Other query properties are not handled by the valence calculator.
+     
+   <h2> Special atoms</h2>
+   <p> Special atoms are not handled by the valence calculator. </p>
+ </body>
+</html>

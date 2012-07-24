@@ -1,0 +1,31 @@
+<html><head>
+<meta NAME="author" CONTENT="Erika Biro">
+<link REL ="stylesheet" TYPE="text/css" HREF="../../../marvinmanuals.css" TITLE="Style">
+<title>MarvinView Example - Atom coloring</title>
+</head>
+<body onLoad="links_set_search(location.search)">
+
+<h1>MarvinView Example - Atom coloring</h1>
+<p>
+<center>
+<script type="text/javascript" SRC="../../../marvin.js"></script>
+<script type="text/javascript">
+<!--
+mview_begin("../../..", 300, 150);
+mview_param("rows", "1");
+mview_param("cols", "2");
+mview_param("cell0", "|../../../mols-2d/mol1.mol");
+mview_param("cell1", "|../../../mols-2d/mol2.mol");
+
+mview_param("atomNumbersVisible", true);
+mview_param("setColoringEnabled", true);
+mview_param("atomSetColor1", "#0000ff");
+mview_param("atomSet0.1", "6,7,8,9,10,11,12");
+mview_param("atomSet1.1", "1,2,3,4,5,7,8");
+mview_end();
+//-->
+</script>
+</center>
+
+</body>
+</html>

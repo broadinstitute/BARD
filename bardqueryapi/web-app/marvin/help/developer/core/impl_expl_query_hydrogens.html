@@ -1,0 +1,83 @@
+<!DOCTYPE html><HTML>
+ <head>
+    <script type="text/javascript" src="../../../examples/sh_main.js"></script>
+    <script type="text/javascript" src="../../../examples/sh_java.js"></script>
+    <script type="text/javascript" src="../../../examples/sh_javascript.js">
+     </script>
+    <link REL ="stylesheet" TYPE="text/css" 
+          HREF="../../../examples/sh_nedit.css" TITLE="Style">
+    <META HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=utf-8">
+    <title> Implicit, Explicit and Query Hydrogens  </title>
+        <link rel=stylesheet type="text/css" href="../../marvinmanuals.css">
+ </head>
+
+<BODY onload="sh_highlightDocument();">
+<h1>Implicit, Explicit and Query Hydrogens</h1> 
+<p>The Hydrogen atoms are included in the molecule implicitly, explicitly, 
+or both.  The  implicit  hydrogen count is calculated from the valence of the 
+atom. It equals the valence of the  atom minus  the  valence calculated 
+from the bond connections. It is accurate if and only if there is no further 
+modification on the 
+structure since the last valence check. </p>
+
+<p>The following example demonstrates how to get the implicit / explicit 
+hydrogen count of the atoms:</p>
+
+<blockquote>
+<p> 
+ <pre class="sh_java">
+import chemaxon.calculations.Hydrogenize;
+
+//import a simple chain
+Molecule mol = MolImporter.importMol("CCNCCCCCNCC");
+
+// check valences
+mol.valenceCheck();
+
+for (int i = 0; i &lt; mol.getAtomCount(); i++){
+    MolAtom atom = mol.getAtom(i);
+    int implicitH = atom.getImplicitHcount();
+    int explicitH = atom.getExplicitHcount();
+    System.out.println(i+"th atom has "+implicitH+" implicit and "
+        +explicitH+" explicit Hydrogens.");
+}
+</pre>
+</p>
+</blockquote>
+
+<p>The implicit hydrogen atoms can be converted to 
+   <a href="convert_implicit_to_explicit.html">explicit ones</a> and 
+   <a href="convert_explicit_to_implicit.html">vice versa</a>.
+</p>
+
+<p>&nbsp;</p>
+ <p>&nbsp;</p>
+ 
+ <table summary="next pages">
+   <tr style="text-align:left">
+     <td width="250" valign="middle"> 
+       <p style="text-align: center;">
+        <a href="convert_to_kekule.html">
+          Converting structure from aromatic form to Kekule form</a><br>
+        <i>Previous chapter</i>
+       </p>   
+     </td>
+     <td width="250" valign="middle">
+      <p style="text-align: center;">
+       <a href="core_index.html"> Table of contents</a> <br>
+       &nbsp;
+      </p>
+     </td>
+     <td width="250"valign="middle" >
+      <p style="text-align: center;"> 
+       <a href="convert_implicit_to_explicit.html"> 
+           Converting implicit Hydrogens to explicit<a><br>
+       <i>Next chapter</i>
+      </p>
+     </td>
+   </tr>
+ </table>
+
+
+</BODY>
+</HTML>

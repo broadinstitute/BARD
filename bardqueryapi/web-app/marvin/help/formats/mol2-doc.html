@@ -1,0 +1,44 @@
+<html>
+<head>
+<meta NAME="description" CONTENT="Tripos Mol2 format in Marvin">
+<meta NAME="keywords" CONTENT="Tripos Mol2, Java, Marvin">
+<meta NAME="author" CONTENT="Peter Csizmadia">
+<link REL ="stylesheet" TYPE="text/css" HREF="../marvinmanuals.css" TITLE="Style">
+<title>Tripos Mol2 format in Marvin</title>
+</head>
+<body>
+
+<h1>Tripos Mol2</h1>
+
+<p>
+Codename: <strong>mol2</strong>
+
+<p>
+Tripos Mol2 import/export is alpha level in the current version of Marvin.
+Only the following records are imported and exported:
+<ul>
+<li><code>@&lt;TRIPOS&gt;MOLECULE</code>
+    </li>
+<li><code>@&lt;TRIPOS&gt;ATOM<br>
+Import: x, y, z, atom_type, charge rounded to integer<br>
+Export: atom_id(=atom index), atom_name, x, y, z, atom_type, subst_id=1, subst_name="noname", charge (integer)</code>
+    </li>
+<li><code>@&lt;TRIPOS&gt;BOND</code>
+    </li>
+</ul>
+
+<p>
+
+<h2>See also</h2>
+<ul>
+<li><a href="basic-export-opts.html">Basic export options</a></li>
+<li>Tripos <a href="sybyl-doc.html">SYBYL mol</a> format in Marvin</li>
+</ul>
+
+<h2><a class="anchor" name="reference">Reference</a></h2>
+<ul>
+<li><a HREF="http://www.tripos.com/data/support/mol2.pdf" TARGET="_top">http://www.tripos.com/data/support/mol2.pdf</a></li>
+</ul>
+
+</body>
+</html>

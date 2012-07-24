@@ -1,0 +1,147 @@
+<html>
+<head>
+  <meta NAME="description" CONTENT="Iterators">
+  <script type="text/javascript" src="../../../examples/sh_main.js"></script>
+  <script type="text/javascript" src="../../../examples/sh_java.js"></script>
+  <script type="text/javascript" src="../../../examples/sh_javascript.js">
+    </script>
+  <link REL ="stylesheet" TYPE="text/css" 
+        HREF="../../../examples/sh_nedit.css" TITLE="Style">
+  <meta NAME="author" CONTENT="Erika Biro">
+  <link REL ="stylesheet" TYPE="text/css" HREF="../../marvinmanuals.css" 
+        TITLE="Style">
+  <title>Iterators</title>
+</head>
+<body onload="sh_highlightDocument();">
+
+<h1><a class="anchor" NAME="iterator-facotry">Iterator Factory</a></h1>
+<p>
+The <code>IteratorFactory</code> class provides implementations of <code>java.util.Iterator</code>
+to ease the handling of atoms and bonds used in <code>Molecule</code> objects and its 
+descendants. The IteratorFactory object always belongs to one particular Molecule object (or descendant).
+The following iterators are included in this class: </p>
+<ul>
+<li>AtomIterator: The <code>AtomIterator</code> class provides 
+an iterator for the atoms of the specified molecule of the factory 
+according to the atom related behavior set in the factory.
+<li>BondIterator:  The <code>BondIterator</code> class provides an iterator to process
+the bonds of the specified molecule in this factory
+according to the bond related behavior of this factory.
+<li>AtomNeighbourIterator: The <code>AtomNeighbourIterator</code> class provides an iterator to process
+the atoms connecting to a specified atom according to the atom and bond related
+behavior of the factory
+<li>BondNeighbourIterator:  The <code>BondNeighbourIterator</code> class provides an iterator to
+process the bonds connecting to the specified atom according to the atom
+and bond related behavior of this factory.
+<li>RxnComponentIterator: The <code>RxnComponentIterator</code> class provides an iterator to process
+the reaction components (reactant, product and agent components) in the reaction molecule of 
+the factory.
+<li>RgComponentIterator: 
+The <code>RgComponentIterator</code> class provides an iterator to process
+the R-group definition components in the specified molecule  of 
+the factory.
+</ul>
+
+The above mentioned iterators are constructed by the appropriate IteratorFactory.createXXX() methods.
+For example an atom iterator can be constructed with the createAtomIterator() method of the iterator factory.
+The behavior of the iterator is determined by the parameters given in the constructor of the iterator factory.
+The behavior can be bond or atom related: the factory constructs consistent iterators for the specified molecule with 
+the specified behavior.
+<ul>
+<li>atom related behavior: specifies how to iterate on atoms. The following constant values are available or
+their combination by the bitwise or (|) operator:
+     <ul>
+     <li> INCLUDE_ALL_ATOMS
+     <li> INCLUDE_CHEMICAL_ATOMS
+     <li> SKIP_EXPLICIT_H
+     <li> SKIP_MULTICENTER
+     <li> SKIP_LONE_PAIR
+     <li> SKIP_PSEUDO_ATOM
+     </ul>
+<li>bondRelatedBehavior: specifies how to iterate on bonds. The following constant values are available or
+their combination by the bitwise or (|) operator:
+     <ul>
+     <li> INCLUDE_ALL_BONDS
+     <li> SKIP_COORDINATE_BONDS
+     <li> SKIP_COVALENT_BONDS
+     </ul>
+</ul>
+
+<h4><a class="anchor" name="iterator-example">Usage examples</a></h4>
+<p>Example for simple usage of an atom iterator:  </p>
+<pre class="sh_java">
+ <blockquote>
+   //initialize a Molecule;
+   Molecule molecule = ...;
+   //create an iterator factory where the iterators skip the pseudo atom and coordinate bonds.
+   IteratorFactory ifc = new IteratorFactory(molecule, IteratorFactory.SKIP_PSEUDO_ATOM | IteratorFactory.SKIP_EXPLICIT_H,
+               IteratorFactory.SKIP_COORDINATE_BONDS);
+   AtomIterator atomIterator = ifc.createAtomIterator();
+   //iteration on the atoms of a component except the pseudo atoms.
+   while (atomIterator.hasNext()){
+      MolAtom atom = atomIterator.nextAtom();
+      //process the atom
+      ...
+    }
+ <blockquote>
+</pre>
+
+<p>Example for complex usage of iterators:
+<pre class="sh_java">
+     //initialize an RgMolecule; 
+     RgMolecule mol = ... ;
+     //create the iterator factory with the specified molecule and parameters related to atoms and bonds.
+     IteratorFactory factory = new IteratorFactory(mol, IteratorFactory.INCLUDE_ALL_ATOMS, IteratorFactory.INCLUDE_ALL_BONDS);
+     RgComponentIterator rgIterator = factory.createRgComponentIterator();
+     //iteration on the components of the RgMolecule.
+     while (rgIterator.hasNext()) {
+         Molecule component = rgIterator.nextComponent();
+         IteratorFactory ifc = new IteratorFactory(component, IteratorFactory.SKIP_PSEUDO_ATOM | IteratorFactory.SKIP_EXPLICIT_H,
+                 IteratorFactory.SKIP_COORDINATE_BONDS);
+         AtomIterator atomIterator = ifc.createAtomIterator();
+         //iteration on the atoms of a component
+         while (atomIterator.hasNext()){
+             MolAtom atom = atomIterator.nextAtom();
+             //process the atom
+             ...
+         }
+         //iteration on the bonds of a component
+         BondIterator bondIterator = ifc.createBondIterator();
+         while (bondIterator.hasNext()){
+             MolBond bond = bondIterator.nextBond();
+             //process the bond
+             ...
+         }
+     }       
+</pre> 
+ <p>&nbsp;</p>
+  <p>&nbsp;</p>
+ 
+ <table summary="next pages">
+   <tr style="text-align:left">
+     <td width="250" valign="middle"> 
+       <p style="text-align: center;">
+        <a href="relative_configuration_of_tetrahedral_stereo_centers.html">
+          Relative configuration of tetrahedral stereo centers</a><br>
+        <i>Previous chapter</i>
+       </p>   
+     </td>
+     <td width="250" valign="middle">
+      <p style="text-align: center;">
+       <a href="core_index.html"> Table of contents</a> <br>
+       &nbsp;
+      </p>
+     </td>
+     <td width="250"valign="middle" >
+      <p style="text-align: center;"> 
+       <a href="sets.html"> 
+           Atom and bond-set handling</a><br>
+       <i>Next chapter</i>
+      </p>
+     </td>
+   </tr>
+ </table> 
+
+
+</body>
+</html>
