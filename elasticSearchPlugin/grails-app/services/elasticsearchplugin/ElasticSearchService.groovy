@@ -87,6 +87,9 @@ class ElasticSearchService {
                 JSONArray cids = hit?._source?.cids ?: [] as JSONArray
                 for (def cid in cids) {
                     ESCompound esCompound = new ESCompound(_id: cid as String, _index: compoundIndexName, _type: compoundIndexTypeName, cid: cid as String)
+                    JSONObject compoundESDocument = getCompoundDocument(new Integer(cid))
+                    String smiles = compoundESDocument?._source?.smiles
+                    esCompound.smiles = smiles
                     compounds.add(esCompound)
                 }
             }
@@ -165,6 +168,7 @@ public class ESAssay extends ESResult implements Serializable{
  */
 public class ESCompound extends ESResult implements Serializable{
     String cid
+    String smiles
 
     ESCompound() {
         super()
