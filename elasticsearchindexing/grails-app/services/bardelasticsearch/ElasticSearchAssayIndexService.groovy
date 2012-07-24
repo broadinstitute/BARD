@@ -74,6 +74,11 @@ class ElasticSearchAssayIndexService extends ElasticSearchIndexAbstractService {
   }
 }
 '''
+
+
+
+
+
     /**
      * Create a mapping for the assay type
      * This mapping marks some fields as "not_analyzed" ('not analyzed' means that the field in not compressed
@@ -93,6 +98,7 @@ class ElasticSearchAssayIndexService extends ElasticSearchIndexAbstractService {
         //Create the mappings
         putRequest(restClientClone, mappingForAssay)
     }
+
 
     /**
      *  Fetches all the assays from NCGC,

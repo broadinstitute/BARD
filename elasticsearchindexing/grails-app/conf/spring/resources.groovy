@@ -1,4 +1,5 @@
 import bardelasticsearch.ElasticSearchAssayIndexService
+import bardelasticsearch.ElasticSearchCompoundIndexService
 import bardelasticsearch.ElasticSearchCompoundsIndexService
 import bardelasticsearch.RestClientFactoryService
 
@@ -34,6 +35,12 @@ beans = {
         ncgcRelativeURL = "${ncgcRelativeUrl}"
         restClientFactoryService = ref('restClientFactoryService')
         executorService = ref('executorService')
+    }
+    elasticSearchCompoundIndexService(ElasticSearchCompoundIndexService) {
+        elasticSearchURL = "${elasticSearchUrl}"
+        ncgcRootURL = "${ncgcRootUrl}"
+        ncgcRelativeURL = "${ncgcRelativeUrl}"
+        restClientFactoryService = ref('restClientFactoryService')
     }
     elasticSearchAssayIndexService(ElasticSearchAssayIndexService) {
         elasticSearchURL = "${elasticSearchUrl}"
