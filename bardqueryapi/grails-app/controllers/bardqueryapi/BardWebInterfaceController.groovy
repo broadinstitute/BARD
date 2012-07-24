@@ -40,7 +40,7 @@ class BardWebInterfaceController {
                 String assayString = assay.toString()
                 String bardAssayViewUrl = grailsApplication.config.bard.assay.view.url
                 String showAssayResource = "${bardAssayViewUrl}/${assay.assayNumber}"
-                def assayMap = [assayName: assayString, assayResource: showAssayResource] as Map
+                def assayMap = [assayName: assayString, assayResource: showAssayResource, assayNumber: assay.assayNumber] as Map
                 assays.add(assayMap)
             }
 
