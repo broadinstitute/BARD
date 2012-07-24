@@ -1,0 +1,1293 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<html>
+<head>
+<META HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=utf-8">
+<TITLE>Menus of MarvinSketch</TITLE>
+<link rel=stylesheet type="text/css" href="../../marvinmanuals.css">
+</head>
+<body>
+<h1>Menus of MarvinSketch</h1>
+<p>The Menu Bar contains almost all commands that are available in MarvinSketch.<br>
+The main menus are groups of functionally similar commands shown in the following picture:
+<img src="gui-files/menubar.png">
+</p>
+
+<dl>
+    <dt><a href="#file">File Menu</a></dt>
+    <dd>The File menu contains the available file operations, such as New, Open, Save, Print, and Close.
+        (Note that the unsigned Swing applets contain only a subset of these functions.)</dd>
+
+    <dt><a href="#edit">Edit Menu</a></dt>
+    <dd>The Edit menu contains general clipboard operations like Copy and Paste,
+	structure selecting and deleting commands, as well as Marvin-specific editing options.
+    </dd>
+
+    <dt><a href="#view">View Menu</a></dt>
+    <dd>The View menu allows you to alter the
+	way the molecule is displayed without modifying the structure file
+	itself. You can change the molecule display type, background color,
+        color scheme, error highlighting, etc.<br>
+        See also: <A HREF="../sketch-basic.html#display-structure">Structure Display Options</A>.<br>
+        The view menu also contains operations to change the graphical user interface.
+    </dd>
+
+    <dt><a href="#insert">Insert Menu</a></dt>
+    <dd>The Insert menu allows drawing structure templates, bonds, reaction arrows, graphics, text boxes, and more on
+        the canvas.
+        It is also possible to add a special text box containing the IUPAC Name of the structure.<BR>
+        See also: <a href="../sketch-basic.html#howto.draw.graphic">
+        How To Draw Graphic Objects and Text Boxes</a>.
+
+    </dd>
+
+    <dt><a href="#atom">Atom Menu</a></dt>
+    <dd>
+        Contains all atom related properties such as charge, atom radicals, maps, and many more.
+    </dd>
+
+    <dt><a href="#bond">Bond Menu</a></dt>
+    <dd>
+        Allows changing the type of a bond, and makes bond properties available like bold, topology, reacting center, etc.
+    </dd>
+
+    <dt><a href="#structure">Structure Menu</a></dt>
+    <dd>
+        Provides chemical functions relating to structures like molecule cleaning, aromatization, reaction-handling, and more.
+    </dd>
+
+    <dt><a href="#calculations">Calculations Menu</a></dt>
+    <dd>
+        Contains the available <a href="../../calculations/calculator-plugins.html">Calculator Plugins</a>.
+    </dd>
+	
+	<dt><a href="#tools">Tools Menu</a></dt>
+    <dd>
+        Contains the available <a href="../../calculations/services_menu.html">Services</a>.
+    </dd>
+
+    <dt><a href="#help">Help Menu</a></dt>
+    <dd>
+        Provides information about using the program, technical details and license management. 
+    </dd>
+</dl>
+
+<h2>Full Menu Reference</h2>
+
+<h3><a class="anchor" name="file">File Menu</a></h3>
+<table cellspacing="0" class="grid">
+    <tr>
+        <td width="25%"><a class="text" name="clear">New &gt; Clear Desk</a></td>
+        <td width="75%">Removes the structure being on the canvas including all fragments and graphical objects.</td>
+    </tr>
+    <tr>
+        <td><a class="text" name="new">New &gt; New Window</a></td>
+        <td>Opens another MarvinSketch window.</td>
+    </tr>
+    <tr>
+        <td><a class="text" name="open">Open</a></td>
+        <td>Loads your saved molecule file into Marvin and discard any unsaved changes to the molecule you were previously working with.</td>
+    </tr>
+    <tr>
+        <td><a class="text" name="openImage">Open Image</a></td>
+        <td>Tries to convert an image file to a structure using OSRA.</td>
+    </tr>
+    <tr>
+        <td><a class="text" name="recentItems">Recent Files</a></td>
+        <td>List of recently used file names.</td>
+    </tr>
+    <tr>
+        <td><a class="text" name="close">Close</a></td>
+        <td>Finishes working with the currently open molecule.</td>
+    </tr>
+    <tr>
+        <td><a class="text" name="save">Save</a></td>
+        <td>Saves the molecule to the same file it was opened from and in the same format. If you are working with a new molecule, Save will function as Save As.</td>
+    </tr>
+    <tr>
+        <td><a class="text" name="saveAs">Save As</a></td>
+        <td>Save the molecule in a different location or with a different file name or format.</td>
+    </tr>
+    <tr>
+        <td><a class="text" name="saveAsImage">Save As Image</a></td>
+        <td>Save an image of the molecule in the required location in required format. A saved image cannot be opened for later editing in Marvin.</td>
+    </tr>
+    <tr>
+        <td><a class="text" name="documentSettings">Document Settings</a></td>
+        <td>Create a multipage molecular document that helps to work with large drawings by dividing them into pages.</td>
+    </tr>
+    <tr>
+        <td><a class="text" name="print">Print</a></td>
+        <td>Prints an image of the current molecule.</td>
+    </tr>
+    <tr>
+        <td><a class="text" name="exit">Exit</a></td>
+        <td>Saves GUI settings, preferences and My Templates before exiting the application.</td>
+    </tr>
+</table>
+
+<h3><a class="anchor" name="edit">Edit Menu</a></h3>
+<table cellspacing="0" class="grid">
+    <tr>
+        <td width="25%"><a class="text" name="undo">Undo</a></td>
+        <td width="75%">Reverses the last command or the last entry you typed.</td>
+    </tr>
+    <tr>
+        <td><a class="text" name="redo">Redo</a></td>
+        <td>Reverses the action of the last Undo command.</td>
+    </tr>
+    <tr>
+        <td><a class="text" name="cut">Cut</a></td>
+        <td>Removes and copies the selection to the clipboard.</td>
+    </tr>
+    <tr>
+        <td><a class="text" name="copy">Copy</a></td>
+        <td>Copies the selection to the clipboard.</td>
+    </tr>
+    <tr>
+        <td><a class="text" name="copyAs">Copy As</a></td>
+        <td>Copies the selection to the clipboard in the specified format.</td>
+    </tr>
+    <tr>
+        <td><a class="text" name="copyAsSmiles">Copy As Smiles</a></td>
+        <td>Copies the selection to the clipboard in SMILES format.</td>
+    </tr>
+    <tr>
+        <td><a class="text" name="paste">Paste</a></td>
+        <td>Inserts the contents of the clipboard at the location of the cursor, without replacing selection.</td>
+    </tr>
+    <tr>
+        <td><a class="text" name="delete">Delete</a></td>
+        <td>Removes the selection from the canvas.</td>
+    </tr>
+    <tr>
+        <td><a class="text" name="selectAll">Select All</a></td>
+        <td>Selects the structure being on the canvas including all fragments and graphical objects.</td>
+    </tr>
+     <tr>
+        <td><a class="text" name="dragSelection1">Transformation</a></td>
+        <td>These transformations affect the molecular coordinates. Note: The structure will be saved with the altered coordinates.</td>
+    </tr>
+	<tr>
+        <td><a class="text" name="dragSelection">Transformation &gt; Drag Selection</a></td>
+        <td>Moves selection on the canvas with changing coordinates. </td>
+    </tr>
+    <tr>
+        <td><a class="text" name="rotateSelection">Transformation &gt; Rotate in 2D</a></td>
+        <td>Rotates selection in the plane of the canvas with changing coordinates. </td>
+    </tr>
+    <tr>
+        <td><a class="text" name="rotateSelection3D">Transformation &gt; Rotate in 3D &gt; Around arbitrary axis</a></td>
+        <td>Rotates selection in 3D around an axis defined by two atoms selected by the user.</td>
+    </tr>
+    <tr>
+        <td><a class="text" name="rotateSelection3D0">Transformation &gt; Rotate in 3D &gt; Around X axis</a></td>
+        <td>Rotates selection in 3D around a horizontal axis placed in the canvas..</td>
+    </tr>
+ <tr>
+        <td><a class="text" name="rotateSelection3D1">Transformation &gt; Rotate in 3D &gt; Around Y axis</a></td>
+        <td>Rotates selection in 3D around a vertical axis placed in the canvas.</td>
+    </tr>
+ <tr>
+        <td><a class="text" name="rotateSelection3D2">Transformation &gt; Rotate in 3D &gt; Around Z axis</a></td>
+        <td>Rotates the selection in 3D around an axis perpendicular to the canvas.</td>
+    </tr>
+ <tr>
+        <td><a class="text" name="rotateSelection3D3">Transformation &gt; Rotate in 3D &gt; Free 3D rotation</a></td>
+        <td>Rotates selection in 3D with changing coordinates. Compare it to the <a href="#rotate3DMode">Rotate in 3D</a> transformation of View Menu, which affects only the position of observation.</td>
+    </tr>
+ <tr>
+        <td><a class="text" name="rotateSelection3D4">Transformation &gt; Rotate in 3D &gt; Group rotation</a></td>
+        <td>The selected group rotates around the bond that connects it to the molecule.</td>
+    </tr>
+    <tr>
+        <td><a class="text" name="switchSelectionTransformation">Transformation &gt; Switch Transformation</a></td>
+        <td>Changes transformation mode from Drag to Rotate in 2D, Rotate in 2D to Rotate in 3D, while Rotate in 3D to Drag.</td>
+    </tr>
+   
+    <tr>
+        <td><a class="text" name="flipHorizontally">Transformation &gt; Flip &gt; Flip Horizontally</a></td>
+        <td>Flips the selected object(s) horizontally, preserving the configuration of all enantiomers.</td>
+    </tr>
+    <tr>
+        <td><a class="text" name="flipVertically">Transformation &gt; Flip &gt; Flip Vertically</a></td>
+        <td>Flips the selected object(s) vertically, preserving the configuration of all enantiomers.</td>
+    </tr>
+    <tr>
+        <td><a class="text" name="flipPlane">Transformation &gt; Flip &gt; Rotate 180&deg; in Canvas</a></td>
+        <td>Rotates the selected object(s) on the canvas plane, preserving the configuration of all enantiomers.</td>
+    </tr>
+    <tr>
+        <td><a class="text" name="flipGroup">Transformation &gt; Flip &gt; Group Flip</a></td>
+        <td>Rotates the selected structure group by 180&deg; around an axis set on the bond connecting the selection to the rest of the molecule. Stereocenters in the molecules are retained, the wedge bond styles change to keep the stereo information.</td>
+    </tr>
+    <tr>
+        <td><a class="text" name="mirrorHorizontally">Transformation &gt; Mirror  &gt; Mirror Horizontally </a></td>
+        <td>Mirrors the selected object(s) horizontally, inverting the configuration of all enantiomers.</td>
+    </tr>
+    <tr>
+        <td><a class="text" name="mirrorVertically">Transformation &gt; Mirror  &gt; Mirror Vertically</a></td>
+        <td>Mirrors the selected object(s) vertically, inverting the configuration of all enantiomers.</td>
+    </tr>
+   <tr>
+        <td><a class="text" name="mirrorCanvas">Transformation &gt; Mirror  &gt; Mirror to Canvas Plane</a></td>
+        <td>Mirrors the selected object(s) to the canvas plane, inverting the configuration of all enantiomers.</td>
+    </tr>
+   <tr>
+        <td><a class="text" name="mirrorGroup">Transformation &gt; Mirror  &gt; Group Mirror</a></td>
+        <td>Mirrors the selected group if it has only one connecting bond to the structure.</td>
+    </tr>
+   <tr>
+        <td><a class="text" name="inverseCenter">Transformation &gt; Inverse  &gt; Inverse to geometric center</a></td>
+        <td>Reflects the selected fragment(s) through the geometric center point.</td>
+    </tr>
+   <tr>
+        <td><a class="text" name="inverseArb">Transformation &gt; Inverse  &gt; Inverse to an arbitrary center</a></td>
+        <td>Reflects the selected fragment(s) through the chosen point in any fragment (an atom).</td>
+    </tr>
+   <tr>
+        <td><a class="text" name="3dPlane">Transformation &gt; 3D plane</a></td>
+        <td>Rotates the molecule to place the selected 3 atoms into the plane of the canvas.</td>
+    </tr>
+    <tr>
+        <td><a class="text" name="moveToFront">Object &gt; Bring to Front</a></td>
+        <td>Brings the selected object in front of all others.</td>
+    </tr>
+    <tr>
+        <td><a class="text" name="moveToBack">Object &gt; Send to Back</a></td>
+        <td>Places the selected object behind all others.</td>
+    </tr>
+	<tr>
+        <td><a class="text" name="moveToBack">Object &gt; Align</a></td>
+        <td>Aligns the centers of the selected objects horizontally or vertically on the canvas.</td>
+    </tr>
+	<tr>
+        <td><a class="text" name="moveToBack">Object &gt; Distribute</a></td>
+        <td>Distributes the selected objects horizontally or vertically in the space defined by the furthermost objects.</td>
+    </tr>
+	<tr>
+        <td><a class="text" name="moveToBack">Object &gt; Align and Distribute</a></td>
+        <td>Performs alignment and distribution horizontally or vertically. </td>
+    </tr>
+    <tr>
+        <td><a class="text" name="formatObject">Format</a></td>
+        <td>Changes atom and bond drawing properties.</td>
+    </tr>
+    <tr>
+        <td><a class="text" name="source">Source</a></td>
+        <td>You can alter a molecule by directly editing its source in the Edit Source Window. You can view and edit the source in any of the supported file formats.</td>
+    </tr>
+    <tr>
+        <td><a class="text" name="iupac">Import Name</a></td>
+        <td>Opens the Source window in IUPAC Name format, and enables you to enter directly a IUPAC Name and convert it to structure.</td>
+    </tr>
+    <tr>
+        <td><a class="text" name="preferences">Preferences</a></td>
+        <td>The Preferences dialog window allows you to change many of the MarvinSketch display settings, including look &amp; feel, error highlighting, and object visibility.</td>
+    </tr>
+</table>
+
+<h3><a class="anchor" name="view">View Menu</a></h3>
+<table cellspacing="0" class="grid">
+    <tr>
+        <td width="25%"><a class="text" name="normalMode">Transform &gt; Sketch</a></td>
+        <td width="75%">The Sketch mode allows drawing into the canvas.</td>
+    </tr>
+    <tr>
+        <td><a class="text" name="zoomMode">Transform &gt; Zoom</a></td>
+        <td>Zoom the content of the canvas by dragging the mouse without modifying atom coordinates.</td>
+    </tr>
+    <tr>
+        <td><a class="text" name="rotate3DMode">Transform &gt; Rotate in 3D</a></td>
+        <td>Spin the structure around its central point in 3 dimension with the help of the mouse without modifying atom coordinates. Compare it to the <a href="#rotateSelection3D3">Free 3D rotation</a> of Edit Menu, which affects the molecular coordinates.</td>
+    </tr>
+    <tr>
+        <td><a class="text" name="resetView">Transform &gt; Reset View</a></td>
+        <td>Restores the starting view as modified by rotation and zoom.</td>
+    </tr>
+    <tr>
+        <td><a class="text" name="zoomTool">Zoom</a></td>
+        <td>Allows you to select a magnification percentage from the list or to type a custom percentage.</td>
+    </tr>
+    <tr>
+        <td><a class="text" name="atomSymbols">Display &gt; Atom Symbols in 3D</a></td>
+        <td>Sets atom symbol visibility in 3D mode. Note that in 3D mode, atoms may become invisible in Wireframe and Stick mode by hiding atom symbols.</td>
+    </tr>
+    <tr>
+        <td><a class="text" name="wireframe">Display &gt; Wireframe</a></td>
+        <td>Displays bonds as thin lines, and atoms (except Carbon) as symbols.</td>
+    </tr>
+    <tr>
+        <td><a class="text" name="wireframeAndKnobs">Display &gt; Wireframe with Knobs</a></td>
+        <td>Displays bonds as thin lines, Carbon atoms as knobs, and other atoms as symbols.</td>
+    </tr>
+    <tr>
+        <td><a class="text" name="stick">Display &gt; Stick</a></td>
+        <td>Displays bonds as thick lines, and atoms (except Carbon) as symbols.</td>
+    </tr>
+    <tr>
+        <td><a class="text" name="ballAndStick">Display &gt; Ball and Stick</a></td>
+        <td>Displays bonds as thick lines, atoms as shaded balls, and atoms (except Carbon and Hydrogen) as symbols on balls.</td>
+    </tr>
+    <tr>
+        <td><a class="text" name="spacefill">Display &gt; Spacefill</a></td>
+        <td>Displays atoms as large shaded balls, and atoms (except Carbon and Hydrogen) as symbols on the balls.</td>
+    </tr>
+    <tr>
+        <td><a class="text" name="lowQuality">Display &gt; Quality &gt; Low Quality</a></td>
+        <td>Disables line anti-aliasing.</td>
+    </tr>
+    <tr>
+        <td><a class="text" name="highQuality">Display &gt; Quality &gt; High Quality</a></td>
+        <td>Enables line anti-aliasing.</td>
+    </tr>
+    <tr>
+        <td><a class="text" name="monoScheme">Colors &gt; Monochrome</a></td>
+        <td>Displays all atoms with default drawing color.</td>
+    </tr>
+    <tr>
+        <td><a class="text" name="cpkScheme">Colors &gt; CPK</a></td>
+        <td>Displays all atoms with Corey-Pauling-Kultun colors.</td>
+    </tr>
+    <tr>
+        <td><a class="text" name="shapelyScheme">Colors &gt; Shapely</a></td>
+        <td>This color scheme is based on RasMol's shapely color scheme for nucleic and amino acids.</td>
+    </tr>
+    <tr>
+        <td><a class="text" name="groupScheme">Colors &gt; Group</a></td>
+        <td>Coloring atoms based on PDB residue numbers.</td>
+    </tr>
+    <tr>
+        <td><a class="text" name="coloringEnabled">Colors &gt; Atom/Bond Sets</a></td>
+        <td>Colors atoms and bonds according to the color of the pre-defined set they belong to.</td>
+    </tr>
+    <tr>
+        <td><a class="text" name="background">Colors &gt; Background</a></td>
+        <td>Sets custom background color with adjusted default drawing color.</td>
+    </tr>
+    <tr>
+        <td><a class="text" name="whiteBackground">Colors &gt; White Background</a></td>
+        <td>Sets the background color to white and the default drawing color to black.</td>
+    </tr>
+    <tr>
+        <td><a class="text" name="blackBackground">Colors &gt; Black Background</a></td>
+        <td>Sets the background color to black and the default drawing color to white.</td>
+    </tr>
+    <tr>
+        <td><a class="text" name="chiralitySupport.all">Stereo &gt; R/S Labels &gt; All</a></td>
+        <td>Always show atom chirality (R/S).</td>
+    </tr>
+    <tr>
+        <td><a class="text" name="chiralitySupport.selected">Stereo &gt; R/S Labels &gt; Absolute Stereo</a></td>
+        <td>Show atom chirality if chiral flag is set for the molecule or the atom's enhanced stereo type is absolute.</td>
+    </tr>
+    <tr>
+        <td><a class="text" name="chiralitySupport.none">Stereo &gt; R/S Labels &gt; None</a></td>
+        <td>Do not show atom chirality (R/S).</td>
+    </tr>
+    <tr>
+        <td><a class="text" name="EZLabelsVisible">Stereo &gt; E/Z Labels</a></td>
+        <td>Toggles the display of absolute double bond stereo configuration labels. Bonds known to have an (E) or (Z) configuration will be marked as such.</td>
+    </tr>
+    <tr>
+        <td><a class="text" name="absoluteLabelsVisible">Stereo &gt; Absolute Labels</a></td>
+        <td>Toggles the display of the Absolute label if the chiral flag is set on the molecule.</td>
+    </tr>
+    <tr>
+        <td><a class="text" name="implicitH.All">Implicit Hydrogens &gt; On All</a></td>
+        <td>View hydrogens by symbol on all atoms. This option is disabled in Spacefill and Ball & Stick display modes.</td>
+    </tr>
+    <tr>
+        <td><a class="text" name="implicitH.HeteroTerm">Implicit Hydrogens &gt; On Hetero and Terminal</a></td>
+        <td>View hydrogens by symbol on hetero and terminal carbon atoms. This option is disabled in Spacefill and Ball & Stick display modes.</td>
+    </tr>
+    <tr>
+        <td><a class="text" name="implicitH.Hetero">Implicit Hydrogens &gt; On Hetero</a></td>
+        <td>View hydrogens by symbol on hetero atoms only. This option is disabled in Spacefill and Ball & Stick display modes.</td>
+    </tr>
+    <tr>
+        <td><a class="text" name="implicitH.Off">Implicit Hydrogens &gt; Off</a></td>
+        <td>Disable hydrogens by symbol on all atoms.</td>
+    </tr>
+    <tr>
+        <td><a class="text" name="PeptideSequence.1">Peptide Display &gt; 1-letter</a></td>
+        <td>View peptide sequence with 1-letter aminoacid codes.</td>
+    </tr>
+    <tr>
+        <td><a class="text" name="PeptideSequence.3">Peptide Display &gt; 3-letter</a></td>
+        <td>View peptide sequence with 3-letter aminoacid codes.</td>
+    </tr>
+    <tr>
+        <td><a class="text" name="atomNumbersVisible">Misc &gt; Atom Numbers</a></td>
+        <td>Toggles the visibility of unique internal atom indices. The indices are continuous starting from 1.</td>
+    </tr>
+    <tr>
+        <td><a class="text" name="atomPropertiesVisible">Misc &gt; Atom Properties</a></td>
+        <td>Toggles the visibility of atom properties.</td>
+    </tr>
+    <tr>
+        <td><a class="text" name="atomMappingVisible">Misc &gt; Atom Mapping</a></td>
+        <td>Toggles the visibility of atom mapping labels.</td>
+    </tr>
+    <tr>
+        <td><a class="text" name="graphInvariantsVisible">Misc &gt; Graph Invariants</a></td>
+        <td>Toggles the display of graph invariants (canonical labels).</td>
+    </tr>
+    <tr>
+        <td><a class="text" name="bondLengthsVisible">Misc &gt; Bond Lengths</a></td>
+        <td>Toggles the display of bond lengths in Angstroms on the middle of the bonds.</td>
+    </tr>
+    <tr>
+        <td><a class="text" name="lonePairsVisible">Misc &gt; Lone Pairs</a></td>
+        <td>Toggles the display of lone pairs.</td>
+    </tr>
+    <tr>
+        <td><a class="text" name="rGroupsVisible">Misc &gt; R-groups</a></td>
+        <td>Toggles the display of R-group definitions.</td>
+    </tr>
+   <tr>
+        <td><a class="text" name="rLogicVisible">Misc &gt; R-logic</a></td>
+        <td>Toggles the display of R-logic definitions.</td>
+    </tr>
+     <tr>
+        <td><a class="text" name="valence">Misc &gt; Valence</a></td>
+        <td>Toggles the display of valence numbers. Default setting is On.</td>
+    </tr>
+	<tr>
+        <td><a class="text" name="ligandError">Misc &gt; Ligand Error</a></td>
+        <td>Toggles the display of ligand errors. Default setting is On.</td>
+    </tr>
+    <tr>
+        <td><a class="text" name="fitPageWidth">Pages &gt; Fit Page Width</a></td>
+        <td>Adjusts the width of the current page to the width of the canvas.</td>
+    </tr>
+    <tr>
+        <td><a class="text" name="fitPageHeight">Pages &gt; Fit Page Height</a></td>
+        <td>Adjusts the height of the current page to the height of the canvas.</td>
+    </tr>
+    <tr>
+        <td><a class="text" name="fitPage">Pages &gt; Fit Page</a></td>
+        <td>Adjusts the current page so that the whole current page will be placed centralized within the canvas.</td>
+    </tr>
+    <tr>
+        <td><a class="text" name="previousPage">Pages &gt; Previous Page</a></td>
+        <td>Goes to the previous page of multipage molecular document.</td>
+    </tr>
+    <tr>
+        <td><a class="text" name="nextPage">Pages &gt; Next Page</a></td>
+        <td>Goes to the next page of multipage molecular document.</td>
+    </tr>
+    <tr>
+        <td><a class="text" name="firstPage">Pages &gt; First Page</a></td>
+        <td>Goes to the first page of multipage molecular document.</td>
+    </tr>
+    <tr>
+        <td><a class="text" name="lastPage">Pages &gt; Last Page</a></td>
+        <td>Goes to the last page of multipage molecular document.</td>
+    </tr>
+    <tr>
+        <td><a class="text" name="gotoPage">Pages &gt; Goto Page</a></td>
+        <td>Goes directly to a specific page by entering a number in the appearing dialog window.</td>
+    </tr>
+    <tr>
+        <td><a class="text" name="periodicSystem">Periodic System</a></td>
+        <td>Shows periodic system and query/atom property drawing window.</td>
+    </tr>
+    <tr>
+        <td><a class="text" name="marvinView2D">Open MarvinView2D</a></td>
+        <td>Launches a MarvinView window in 2D mode containing the current molecule from the Sketcher.</td>
+    </tr>
+    <tr>
+        <td><a class="text" name="marvinView3D">Open MarvinView3D</a></td>
+        <td>Launches a MarvinView window in 3D mode containing the current molecule from the Sketcher.</td>
+    </tr>
+    <tr>
+        <td><a class="text" name="marvinSpace">Open MarvinSpace</a></td>
+        <td>Launches a MarvinSpace window containing the current molecule from the Sketcher.</td>
+    </tr>
+    <tr>
+        <td><a class="text" name="toolbars">Toolbars &gt; Toolbars</a></td>
+        <td>Sets the visibility of individual toolbars.</td>
+    </tr>
+    <tr>
+        <td><a class="text" name="menubar">Menubar</a></td>
+        <td>Sets the visibility of the main menubar.</td>
+    </tr>
+    <tr>
+        <td><a class="text" name="statusbar">Status Bar</a></td>
+        <td>Sets the visibility of the status bar.</td>
+    </tr>
+    <tr>
+        <td><a class="text" name="configurations">Configurations &gt; Configurations</a></td>
+        <td>Lists the available configurations, and allows quick switch.</td>
+    </tr>
+    <tr>
+        <td><a class="text" name="resetConfiguration">Configurations &gt; Reset Current Configuration</a></td>
+        <td>Removes all local modifications made on the active GUI configuration. Note that this action cannot be undone.</td>
+    </tr>
+    <tr>
+        <td><a class="text" name="configurationsDialog">Configurations &gt; Configuration Settings</a></td>
+        <td>Configurations are GUI alternatives storing whole menu, toolbar and popup personalizations. This makes easy to define and quickly change the GUI for various purposes like sketching, publishing, teaching, etc.</td>
+    </tr>
+    <tr>
+        <td><a class="text" name="customize">Customize</a></td>
+        <td>Customization allows you to personalize the GUI of MarvinSketch including menus, toolbars and keyboard shortcuts.</td>
+    </tr>
+</table>
+
+<h3><a class="anchor" name="insert">Insert Menu</a></h3>
+<table cellspacing="0" class="grid">
+    <tr>
+        <td width="25%"><a class="text" name="templates">Template Library</a></td>
+        <td width="75%">Organized collection of template molecules.</td>
+    </tr>
+    <tr>
+        <td><a class="text" name="abbrevGroups">Groups</a></td>
+        <td>The full list of Abbreviation Groups.</td>
+    </tr>
+
+    <tr>
+        <td><a class="text" name="nemSubst">New substiuent</a></td>
+        <td>Opens a new MarvinSketch window to add new fragments to tha canvas without having to change e.g. the 3D view mode.</td>
+    </tr>
+    <tr>
+        <td><a class="text" name="bond.single">Bond &gt; Single</a></td>
+        <td>Places Single type bond on the canvas.</td>
+    </tr>
+    <tr>
+        <td><a class="text" name="bond.double">Bond &gt; Double</a></td>
+        <td>Places Double type bond on the canvas.</td>
+    </tr>
+    <tr>
+        <td><a class="text" name="bond.triple">Bond &gt; Triple</a></td>
+        <td>Places Triple type bond on the canvas.</td>
+    </tr>
+    <tr>
+        <td><a class="text" name="bond.aromatic">Bond &gt; Aromatic</a></td>
+        <td>Places Aromatic type bond on the canvas.</td>
+    </tr>
+    <tr>
+        <td><a class="text" name="bond.singleUp">Bond &gt; Single Up</a></td>
+        <td>Places Single Up type wedge bond on the canvas.</td>
+    </tr>
+    <tr>
+        <td><a class="text" name="bond.singleDown">Bond &gt; Single Down</a></td>
+        <td>Places Single Down type wedge bond on the canvas.</td>
+    </tr>
+    <tr>
+        <td><a class="text" name="bond.singleEither">Bond &gt; Single Up or Down</a></td>
+        <td>Places Single Up or Down type wedge bond on the canvas.</td>
+    </tr>
+    <tr>
+        <td><a class="text" name="bond.doubleCT">Bond &gt; Double Cis or Trans</a></td>
+        <td>Places Double Cis or Trans query type double bond on the canvas.</td>
+    </tr>
+    <tr>
+        <td><a class="text" name="bond.doubleCTU">Bond &gt; Double C/T or Unspec</a></td>
+        <td>Places Double C/T or Unspec query type double bond on the canvas.</td>
+    </tr>
+    <tr>
+        <td><a class="text" name="bond.singleOrDouble">Bond &gt; Single or Double</a></td>
+        <td>Places Single or Double type bond on the canvas.</td>
+    </tr>
+    <tr>
+        <td><a class="text" name="bond.singleOrAromatic">Bond &gt; Single or Aromatic</a></td>
+        <td>Places Single or Aromatic type bond on the canvas.</td>
+    </tr>
+    <tr>
+        <td><a class="text" name="bond.doubleOrAromatic">Bond &gt; Double or Aromatic</a></td>
+        <td>Places Double or Aromatic type bond on the canvas.</td>
+    </tr>
+    <tr>
+        <td><a class="text" name="bond.any">Bond &gt; Any</a></td>
+        <td>Places Any type bond on the canvas.</td>
+    </tr>
+    <tr>
+        <td><a class="text" name="bond.coord">Bond &gt; Coordinate</a></td>
+        <td>Places Coordinate type bond on the canvas.</td>
+    </tr>
+    <tr>
+        <td><a class="text" name="reactionArrow0">Arrow &gt; Single Reaction Arrow</a></td>
+        <td>Places a Single Reaction Arrow object on the canvas.</td>
+    </tr>
+    <tr>
+        <td><a class="text" name="reactionArrow1">Arrow &gt; Retrosynthetic Arrow</a></td>
+        <td>Places a Retrosynthetic Arrow object on the canvas.</td>
+    </tr>
+        <tr>
+        <td><a class="text" name="reactionArrow2">Arrow &gt; Equilibrium Arrow</a></td>
+        <td>Places an Equilibirum Arrow object on the canvas.</td>
+    </tr>
+	<tr>
+        <td><a class="text" name="reactionArrow3">Arrow &gt; Two-headed Arrow</a></td>
+        <td>Places a Two-headed Arrow object on the canvas.</td>
+    </tr>
+    <tr>
+        <td><a class="text" name="reactionArrow4">Arrow &gt; Single Arrow</a></td>
+        <td>Places a Single Arrow graphical object on the canvas.</td>
+    </tr>
+	<tr>
+		<td><a class="text" name="reactionArrow5">Arrow &gt; Graph. Retrosynthetic Arrow</a></td>
+		<td>Places a Retrosynthetic Arrow graphical object on the canvas.</td>
+	</tr>
+	<tr>
+		<td><a class="text" name="reactionArrow6">Arrow &gt; Graph. Equilibrium Arrow</a></td>
+		<td>Places an Equilibrium Arrow graphical object on the canvas.</td>
+	</tr>
+    <tr>
+        <td><a class="text" name="reactionArrow7">Arrow &gt; Resonance Arrow</a></td>
+        <td>Places a Resonance Arrow graphical object on the canvas.</td>
+    </tr>
+	<tr>
+		<td><a class="text" name="reactionArrow8">Arrow &gt; Curved Arrow</a></td>
+		<td>Places a Curved Arrow graphical object on the canvas.</td>
+	</tr>
+	<tr>
+		<td><a class="text" name="reactionArrow9">Arrow &gt; Dashed Arrow</a></td>
+		<td>Places a Dashed Arrow graphical object on the canvas.</td>
+	</tr>
+	<tr>
+		<td><a class="text" name="reactionArrow10">Arrow &gt; Crossed Arrow</a></td>
+		<td>Places a Crossed Arrow graphical object on the canvas.</td>
+	</tr>
+    <tr>
+        <td><a class="text" name="insertRoundBracket">Bracket &gt; Parentheses</a></td>
+        <td>Places a Parentheses object on the canvas.</td>
+    </tr>
+    <tr>
+        <td><a class="text" name="insertSquareBracket">Bracket &gt; Square Brackets</a></td>
+        <td>Places a Square Brackets object on the canvas.</td>
+    </tr>
+    <tr>
+        <td><a class="text" name="insertBraces">Bracket &gt; Braces</a></td>
+        <td>Places a Braces object on the canvas.</td>
+    </tr>
+    <tr>
+        <td><a class="text" name="insertChevrons">Bracket &gt; Chevrons</a></td>
+        <td>Places a Chevrons object on the canvas.</td>
+    </tr>
+    <tr>
+        <td><a href="electronflow.html">Electron Flow &gt; 1 Electron</a></td>
+        <td>Places an electron flow arrow object on the canvas representing one-electron transfer.</td>
+    </tr>
+    <tr>
+        <td><a href="electronflow.html">Electron Flow &gt; 2 Electrons</a></td>
+        <td>Places an electron flow arrow object on the canvas representing two-electron transfer.</td>
+    </tr>
+    <tr>
+        <td><a class="text" name="insertLine">Graphics &gt; Line</a></td>
+        <td>Places a Line object on the canvas.</td>
+    </tr>
+    <tr>
+        <td><a class="text" name="insertArrow">Graphics &gt; Single Arrow</a></td>
+        <td>Places a Single Arrow object on the canvas.</td>
+    </tr>
+    <tr>
+        <td><a class="text" name="insertTwoHeadedArrow">Graphics &gt; Two-headed Arrow</a></td>
+        <td>Places a Two-headed Arrow object on the canvas.</td>
+    </tr>
+    <tr>
+        <td><a class="text" name="insertPolyline">Graphics &gt; Polyline</a></td>
+        <td>Places a Polyline object on the canvas.</td>
+    </tr>
+    <tr>
+        <td><a class="text" name="insertRectangle">Graphics &gt; Rectangle</a></td>
+        <td>Places a Rectangle object (Square object in case the Shift button is pressed) on the canvas.</td>
+    </tr>
+    <tr>
+        <td><a class="text" name="insertRoundedRectangle">Graphics &gt; Rounded Rectangle</a></td>
+        <td>Places a Rounded Rectangle object (Rounded Square object in case the Shift button is pressed) on the canvas.</td>
+    </tr>
+    <tr>
+        <td><a class="text" name="insertEllipse">Graphics &gt; Ellipse</a></td>
+        <td>Places an Ellipse object (Circle object in case the Shift button is pressed) on the canvas.</td>
+    </tr>
+    <tr>
+        <td><a class="text" name="insertChain">Chain &gt; Chain</a></td>
+        <td>Places a carbon chain on the canvas. The number of carbon atoms can be increased or decreased by dragging the mouse. The chain drawing direction is mirrored based on the direction of the mouse movements.</td>
+    </tr>
+	<tr>
+        <td><a class="text" name="insertChain">Chain &gt; Curved Chain</a></td>
+        <td>Places a curved carbon chain on the canvas. The direction of the chain growth follows the mouse path. The number of carbon atoms can be increased or decreased by dragging the mouse. The chain drawing direction is mirrored based on the direction of the mouse movements.</td>
+    </tr>
+    <tr>
+        <td><a class="text" name="insertText">Text</a></td>
+        <td>Places a Text object on the canvas. Allows changing text properties on the appearing toolbar.</td>
+    </tr>
+    <tr>
+        <td><a class="text" name="insertName">IUPAC Name</a></td>
+        <td>Places a Text object containing the preferred IUPAC name of the molecule being drawn.</td>
+    </tr>
+</table>
+
+<h3><a class="anchor" name="atom">Atom Menu</a></h3>
+<table cellspacing="0" class="grid">
+    <tr>
+        <td width="25%"><a class="text" name="chirality.Off">Stereo &gt; R/S &gt; Off</a></td>
+        <td width="75%">Removes the absolute stereo configuration from a chiral atom along with the marking wedge bond.</td>
+    </tr>
+    <tr>
+        <td><a class="text" name="chirality.R">Stereo &gt; R/S &gt; R</a></td>
+        <td>Sets the absolute stereo configuration on a chiral atom to R, marking it with wedge bond.</td>
+    </tr>
+    <tr>
+        <td><a class="text" name="chirality.S">Stereo &gt; R/S &gt; S</a></td>
+        <td>Sets the absolute stereo configuration on a chiral atom to S, marking it with wedge bond.</td>
+    </tr>
+    <tr>
+        <td><a class="text" name="atomReactionStereoNone">Stereo &gt; Reaction &gt; Off</a></td>
+        <td>Sets the stereo configuration of the atom not to be considered during the reaction.</td>
+    </tr>
+    <tr>
+        <td><a class="text" name="atomReactionStereoInversed">Stereo &gt; Reaction &gt; Inversion</a></td>
+        <td>Sets the stereo configuration of the atom to be inverted during the reaction.</td>
+    </tr>
+    <tr>
+        <td><a class="text" name="atomReactionStereoRetained">Stereo &gt; Reaction &gt; Retention</a></td>
+        <td>Sets the stereo configuration of the atom to be retained during the reaction.</td>
+    </tr>
+    <tr>
+        <td><a class="text" name="atomEnhancedStereo">Stereo &gt; Enhanced</a></td>
+        <td>See <a href="../../sci/stereo-doc.html">Stereo Documentation</a> for details.</td>
+    </tr>
+    <tr>
+        <td><a class="text" name="atomCharge">Charge</a></td>
+        <td>Allows you to change the charge of any atom between [-128, 128]. The number of implicit hydrogens will be adjusted if possible to accommodate the new charge. Valence errors will be highlighted in red.</td>
+    </tr>
+    <tr>
+        <td><a class="text" name="atomValence">Valence</a></td>
+        <td>Allows you to change the valence of any atom between [0, 8].</td>
+    </tr>
+    <tr>
+        <td><a class="text" name="atomRadical.none">Radical &gt; Off</a></td>
+        <td>Removes the radical designation from an atom.</td>
+    </tr>
+    <tr>
+        <td><a class="text" name="atomRadical.rad1">Radical &gt; Monovalent</a></td>
+        <td>Sets Monovalent radical center.</td>
+    </tr>
+    <tr>
+        <td><a class="text" name="atomRadical.rad2">Radical &gt; Divalent</a></td>
+        <td>Sets Divalent radical center.</td>
+    </tr>
+    <tr>
+        <td><a class="text" name="atomRadical.rad2singlet">Radical &gt; Divalent Singlet</a></td>
+        <td>Sets Divalent radical center with singlet electronic configuration.</td>
+    </tr>
+    <tr>
+        <td><a class="text" name="atomRadical.rad2triplet">Radical &gt; Divalent Triplet</a></td>
+        <td>Sets Divalent radical center with triplet electronic configuration.</td>
+    </tr>
+    <tr>
+        <td><a class="text" name="atomRadical.rad3">Radical &gt; Trivalent</a></td>
+        <td>Sets Trivalent radical center.</td>
+    </tr>
+    <tr>
+        <td><a class="text" name="atomRadical.rad3doublet">Radical &gt; Trivalent Doublet</a></td>
+        <td>Sets Trivalent radical center with doublet electronic configuration.</td>
+    </tr>
+    <tr>
+        <td><a class="text" name="atomRadical.rad3quartet">Radical &gt; Trivalent Quartet</a></td>
+        <td>Sets Trivalent radical center with quartet electronic configuration.</td>
+    </tr>
+    <tr>
+        <td><a class="text" name="atomIsotope">Isotope</a></td>
+        <td>Sets or changes the isotope number of the selected element, or resets the default atom (no isotope) when it is set to Off.</td>
+    </tr>
+    <tr>
+        <td><a class="text" name="atomMap">Map</a></td>
+        <td>Sets map labels/identifiers on the selected atoms that do not change while altering the molecule. They are useful when dealing with reactions, and can be saved in SMILES and MDL formats.</td>
+    </tr>
+    <tr>
+        <td><a class="text" name="atomRgroup">R-group</a></td>
+        <td>Changes the selected atom to an R-group label. R-groups symbolize alternative substituents.</td>
+    </tr>
+    <tr>
+        <td><a class="text" name="atomRgroup">R-group Attachment</a></td>
+        <td>The selected atom becomes the attachment point for the substituent.</td>
+    </tr>
+    <tr>
+        <td><a class="text" name="atomRgroup">R-group Attachment Order</a></td>
+        <td>Changes the order (numbering) of the attachment points.</td>
+    </tr>
+    <tr>
+        <td><a class="text" name="attachmentPoint">Group &gt; S-group Attachment Point</a></td>
+        <td>If the selected atom is part of an  S-group, you can specify an attachment point.</td>
+    </tr>
+    <tr>
+        <td><a class="text" name="atomLinkNode">Link Node</a></td>
+        <td>Specifies query structures containing rings or chains of variable size.</td>
+    </tr>
+    <tr>
+        <td><a class="text" name="branchAtom">Add Branch</a></td>
+        <td>Adds a new bond with implicit hydrogens to the selected atom. This option is disabled for atoms that can have no more bonds.</td>
+    </tr>
+	<tr>
+        <td><a class="text" name="branchAtom">Edit Properties</a></td>
+        <td>Specifies the property of an atom.</td>
+    </tr>
+	</table>
+
+<h3><a class="anchor" name="bond">Bond Menu</a></h3>
+<table cellspacing="0" class="grid">
+    <tr>
+        <td width="25%"><a class="text" name="single">Type &gt; Single</a></td>
+        <td width="75%">Changes the selected bond type to Single.</td>
+    </tr>
+    <tr>
+        <td><a class="text" name="double">Type &gt; Double</a></td>
+        <td>Changes the selected bond type to Double.</td>
+    </tr>
+    <tr>
+        <td><a class="text" name="triple">Type &gt; Triple</a></td>
+        <td>Changes the selected bond type to Triple.</td>
+    </tr>
+    <tr>
+        <td><a class="text" name="aromatic">Type &gt; Aromatic</a></td>
+        <td>Changes the selected bond type to Aromatic.</td>
+    </tr>
+    <tr>
+        <td><a class="text" name="singleUp">Type &gt; Single Up</a></td>
+        <td>Changes the selected bond type to Single Up.</td>
+    </tr>
+    <tr>
+        <td><a class="text" name="singleDown">Type &gt; Single Down</a></td>
+        <td>Changes the selected bond type to Single Down.</td>
+    </tr>
+    <tr>
+        <td><a class="text" name="singleEither">Type &gt; Single Up or Down</a></td>
+        <td>Changes the selected bond type to Single Up or Down.</td>
+    </tr>
+    <tr>
+        <td><a class="text" name="cisOrTrans">Type &gt; Double Cis or Trans</a></td>
+        <td>Changes the selected bond type to Double Cis or Trans.</td>
+    </tr>
+    <tr>
+        <td><a class="text" name="cisOrTransOrUnspec">Type &gt; Double C/T or Unspec</a></td>
+        <td>Changes the selected bond type to Double Cis/Trans or Unspec.</td>
+    </tr>
+    <tr>
+        <td><a class="text" name="singleOrDouble">Type &gt; Single or Double</a></td>
+        <td>Changes the selected bond type to Single or Double.</td>
+    </tr>
+    <tr>
+        <td><a class="text" name="singleOrAromatic">Type &gt; Single or Aromatic</a></td>
+        <td>Changes the selected bond type to Single or Aromatic.</td>
+    </tr>
+    <tr>
+        <td><a class="text" name="doubleOrAromatic">Type &gt; Double or Aromatic</a></td>
+        <td>Changes the selected bond type to Double or Aromatic.</td>
+    </tr>
+    <tr>
+        <td><a class="text" name="any">Type &gt; Any</a></td>
+        <td>Changes the selected bond type to Any.</td>
+    </tr>
+    <tr>
+        <td><a class="text" name="coord">Type &gt; Coordinate</a></td>
+        <td>Changes the selected bond type to Coordinate.</td>
+    </tr>
+    <tr>
+        <td><a class="text" name="boldSingle">Bold</a></td>
+        <td>Changes the selected bond to Bold. See details on <a href="../sketch-basic.html#boldaromatic">bold tool</a> application.</td>
+    </tr>
+	<tr>
+        <td><a class="text" name="boldSingle">Hashed</a></td>
+        <td>Changes the selected bond to Hashed. 
+    </tr>
+    <tr>
+        <td><a class="text" name="bondTopology.ignore">Topology &gt; None</a></td>
+        <td>Unsets the bond topology property.</td>
+    </tr>
+    <tr>
+        <td><a class="text" name="bondTopology.inRing">Topology &gt; In Ring</a></td>
+        <td>Sets a bond property so that when the molecule is used as a query, the specified bond must be in a ring to score a hit.</td>
+    </tr>
+    <tr>
+        <td><a class="text" name="bondTopology.inChain">Topology &gt; In Chain</a></td>
+        <td>Sets a bond property so that when the molecule is used as a query, the specified bond must be in a chain to score a hit.</td>
+    </tr>
+    <tr>
+        <td><a class="text" name="bondReactingCenter.none">Reacting Center &gt; None</a></td>
+        <td>Unsets reacting center query feature of the selected bond.</td>
+    </tr>
+    <tr>
+        <td><a class="text" name="bondReactingCenter.center">Reacting Center &gt; Center</a></td>
+        <td>Sets reacting center query feature on the selected bond: the bond takes part in the reaction.</td>
+    </tr>
+    <tr>
+        <td><a class="text" name="bondReactingCenter.makeOrBreak">Reacting Center &gt; Make or Break</a></td>
+        <td>Sets reacting center query feature on the selected bond: the bond is created or disappears in the reaction.</td>
+    </tr>
+    <tr>
+        <td><a class="text" name="bondReactingCenter.change">Reacting Center &gt; Change</a></td>
+        <td>Sets reacting center query feature on the selected bond: the bond remains in the reaction, but its bond type changes, for example from single to double.</td>
+    </tr>
+    <tr>
+        <td><a class="text" name="bondReactingCenter.makeAndChange">Reacting Center &gt; Make and Change</a></td>
+        <td>Sets reacting center query feature on the selected bond: currently it works exactly as "Center".</td>
+    </tr>
+    <tr>
+        <td><a class="text" name="bondReactingCenter.notCenter">Reacting Center &gt; Not Center</a></td>
+        <td>Sets reacting center query feature on the selected bond: the bond must not change in the reaction.</td>
+    </tr>
+    <tr>
+        <td><a class="text" name="bondStereoSearch">Stereo Search</a></td>
+        <td>Uses stereo configuration of the specified double bond when this molecule is used as a query.</td>
+    </tr>
+    <tr>
+        <td><a class="text" name="regenerate">Regenerate Bonds</a></td>
+        <td>Generate bonds for an XYZ structure with a different bond length cut-off.</td>
+    </tr>
+     <tr>
+        <td><a class="text" name="alignBond.horizontal">Align &gt; Horizontally</a></td>
+        <td>Alters the molecule so that the selected bond is oriented horizontally.</td>
+    </tr>
+    <tr>
+        <td><a class="text" name="alignBond.vertical">Align &gt; Vertically</a></td>
+        <td>Alters the molecule so that the selected bond is oriented vertically.</td>
+    </tr>
+    <tr>
+        <td><a class="text" name="ligand.order">Ligand order</a></td>
+        <td>Changes the order of the attachment of R-group ligands.</td>
+    </tr>
+</table>
+
+<h3><a class="anchor" name="structure">Structure Menu</a></h3>
+<table cellspacing="0" class="grid">
+    <tr>
+        <td width="25%"><a class="text" name="clean2D">Clean 2D &gt; Clean in 2D</a></td>
+        <td width="75%">Calculates new 2D coordinates for the molecule.</td>
+    </tr>
+    <tr>
+        <td><a class="text" name="clean2DWedgeH">Clean 2D &gt; Hydrogenize
+        Chiral Center</a></td>
+        <td>Adds an explicit hydrogen atom to a chiral center having no terminal atoms when
+        2D cleaning is performed.</td>
+    </tr>
+    <tr>
+        <td><a class="text" name="clean2DWedgeBonds">Clean 2D &gt; Clean Wedge Bonds</a></td>
+        <td>Arranges the wedge bonds of the molecule in 2D.</td>
+    </tr>
+    <tr>
+        <td><a class="text" name="clean3D">Clean 3D &gt; Clean in 3D</a></td>
+        <td>Calculates new 3D coordinates for the molecule. Clean3D builds up conformers of fragments from which the best, i.e. the lowest energy conformer is given back. The quality of the structures is measured by a simple energy function (Dreiding type molecular mechanics).</td>
+    </tr>
+    <tr>
+        <td><a class="text" name="clean3DOption.fineBuild">Clean 3D &gt; Cleaning Method &gt; Fine Build</a></td>
+        <td>Fine Clean3D builds up conformers of fragments to find low energy conformer. Leaves failed fragments intact.</td>
+    </tr>
+    <tr>
+        <td><a class="text" name="clean3DOption.fineWithHydrogenize">Clean 3D &gt; Cleaning Method &gt; Fine with Hydrogenize</a></td>
+        <td>The build process always adds explicit Hydrogens to the structures which are removed if not present in the original molecule. This option prevents the removal of extra Hydrogen atoms, otherwise gives the same results than Fine build.</td>
+    </tr>
+    <tr>
+        <td><a class="text" name="clean3DOption.fastBuild">Clean 3D &gt; Cleaning Method &gt; Fast Build</a></td>
+        <td>Fast clean, which if fails, performs fine clean. It accepts any generated structure, and it is the default behavior of the Clean3D function.</td>
+    </tr>
+    <tr>
+        <td><a class="text" name="clean3DOption.buildOrOptimize">Clean 3D &gt; Cleaning Method &gt; Build or Optimize</a></td>
+        <td>Builds 3D structure for non-3D molecules and just optimizes the 3D molecules with the Dreiding force field.</td>
+    </tr>
+    <tr>
+        <td><a class="text" name="clean3DOption.optimize">Clean 3D &gt; Cleaning Method &gt; Gradient Optimize</a></td>
+        <td>Optimizes with the Dreiding force field using the actual structure as starting geometry.</td>
+    </tr>
+    <tr>
+        <td><a class="text" name="clean3DSelectConformer">Clean 3D &gt; Display Stored Conformers </a></td>
+        <td>Allows you to choose one of the possible conformer structures which were calculated via the Conformers plugin.</td>
+    </tr>
+ <tr>
+        <td><a class="text" name="assignatoms">Directed Merge &gt; Assign Atoms</a></td>
+        <td>Chooses the atoms of the fragments to be merged.</td>
+    </tr>
+<tr>
+        <td><a class="text" name="merge">Directed Merge &gt; Merge</a></td>
+        <td>Merges the fragments at the atoms set.</td>
+    </tr>
+
+    <tr>
+        <td><a class="text" name="hydrogenize">Add &gt; Add Explicit Hydrogens</a></td>
+        <td>Adds explicit H atoms instead of the current implicit ones. Explicit hydrogens are displayed with atoms joining its neighbor while implicit hydrogens are displayed by atom symbols only.</td>
+    </tr>
+    <tr>
+        <td><a class="text" name="attachData">Add &gt; Data</a></td>
+        <td>Attaches data like stoichiometry coefficient to the molecule.</td>
+    </tr>
+    <tr>
+        <td><a class="text" name="setAbsoluteStereo">Add &gt; Absolute Stereo (CHIRAL)</a></td>
+        <td>Sets chiral flag for the molecule.</td>
+    </tr>
+    <tr>
+        <td><a class="text" name="addMulticenter">Add &gt; Multi-Center</a></td>
+        <td>Adds a multi-center attachment point representing a group of atoms.</td>
+    </tr>
+    <tr>
+        <td><a class="text" name="createMarkush">Add &gt; Position Variation Bond</a></td>
+        <td>Create a variable point of attachment to represent a connection point to a group of atoms.</td>
+    </tr>
+    <tr>
+        <td><a class="text" name="dehydrogenize">Remove &gt; Remove Explicit Hydrogens</a></td>
+        <td>Removes explicit H atoms and increases the number of implicit hydrogens.</td>
+    </tr>
+    <tr>
+        <td><a class="text" name="removeData">Remove &gt; Data</a></td>
+        <td>Removes attached data from the molecule.</td>
+    </tr>
+    <tr>
+        <td><a class="text" name="removeAbsoluteStereo">Remove &gt; Absolute Stereo (CHIRAL)</a></td>
+        <td>Removes the chiral flag of the molecule.</td>
+    </tr>
+    <tr>
+        <td><a class="text" name="editData">Edit data</a></td>
+        <td>Changes a previously attached data like stoichiometry coefficient of the molecule.</td>
+    </tr>
+    <tr>
+        <td><a class="text" name="aromatize">Aromatic Form &gt; Convert to Aromatic Form</a></td>
+        <td>Transforms the molecule to aromatic representation using the transformation method set.</td>
+    </tr>
+    <tr>
+        <td><a class="text" name="aromatizeMethod.basic">Aromatic Form &gt; Conversion Method &gt; Basic</a></td>
+        <td>Basic aromatization method is described <a href="../../sci/aromatization-doc.html#basic">here</a>.</td>
+    </tr>
+    <tr>
+        <td><a class="text" name="aromatizeMethod.general">Aromatic Form &gt; Conversion Method &gt; General</a></td>
+        <td>General aromatization method is described <a href="../../sci/aromatization-doc.html#daylight_arom">here</a>.</td>
+    </tr> 
+    <tr>
+        <td><a class="text" name="aromatizeMethod.loose">Aromatic Form &gt; Conversion Method &gt; Loose</a></td>
+        <td>Loose aromatization method is described <a href="../../sci/aromatization-doc.html#loose">here</a>.</td>
+    </tr>
+    <tr>
+        <td><a class="text" name="dearomatize">Aromatic Form &gt; Convert to Kekul&eacute; Form</a></td>
+        <td>Transforms the molecule to non-aromatic representation.</td>
+    </tr>
+   
+    <tr>
+        <td><a class="text" name="createSGroup">Group &gt; Group</a></td>
+        <td>Creates a custom S-group, R-group or Repeating Unit with Repetition Ranges.</td>
+    </tr>
+    <tr>
+        <td><a class="text" name="createRepeatingGroup">Group &gt; Frequency Variation</a></td>
+        <td>Creates a Repeating Unit with Repetition Ranges.</td>
+    </tr>
+    <tr>
+        <td><a class="text" name="mergeBrackets">Group &gt; Merge Brackets</a></td>
+        <td>Creates a bracket that crosses two bonds.</td>
+    </tr>
+    <tr>
+        <td><a class="text" name="editSGroup">Group &gt; Edit Group</a></td>
+        <td>Modifies the properties of the selected group (restricted
+        to 4 types: generic, component, monomer, mer).</td>
+    </tr>
+    <tr>
+        <td><a class="text" name="contractSGroup">Group &gt; Contract Group</a></td>
+        <td>Contracts all groups to its abbreviations.</td>
+    </tr>
+    <tr>
+        <td><a class="text" name="expandSGroup">Group &gt; Expand Group</a></td>
+        <td>Displays the full structure instead of the abbreviations.</td>
+    </tr>
+    <tr>
+        <td><a class="text" name="ungroupSGroup">Group &gt; Ungroup</a></td>
+        <td>Removes all abbreviated group associations from the molecule.</td>
+    </tr>
+    <tr>
+        <td><a class="text" name="groupReactionFragment">Reaction &gt; Merge Reactants</a></td>
+        <td>Merges the selected fragments to a reactant, product or agent.</td>
+    </tr>
+    <tr>
+        <td><a class="text" name="splitReactionFragment">Reaction &gt; Unmerge Reactants</a></td>
+        <td>Removes selected fragments from a previously merged reactant, product or agent.</td>
+    </tr>
+    <tr>
+        <td><a class="text" name="mapAtoms">Mapping &gt; Map Atoms</a></td>
+        <td>Inserts map numbers of the selected atoms.</td>
+    </tr>
+    <tr>
+        <td><a class="text" name="atomMappingMethod.complete">Mapping &gt; Reaction Mapping Method &gt; Complete</a></td>
+        <td>All atoms in the reaction are mapped.</td>
+    </tr>
+    <tr>
+        <td><a class="text" name="atomMappingMethod.changing">Mapping &gt; Reaction Mapping Method &gt; Changing</a></td>
+        <td>Only those atoms are mapped that have changing bond. Either the bond order changes, or new bond is created, or bond is deleted. Orphan and widow atoms are included.</td>
+    </tr>
+    <tr>
+        <td><a class="text" name="atomMappingMethod.matching">Mapping &gt; Reaction Mapping Method &gt; Matching</a></td>
+        <td>Maps all matching atoms in the reaction (Daylight style mapping). A reaction atom is called matching if it is not an orphan/widow atom: it exists on both sides of the reaction.</td>
+    </tr>
+    <tr>
+        <td><a class="text" name="unmapAtoms">Mapping &gt; Unmap Atoms</a></td>
+        <td>Removes map numbers of the selected atoms.</td>
+    </tr>
+
+    <tr>
+        <td><a class="text" name="rlogic">Attribute &gt; R-Logic</a></td>
+        <td>Allows setting additional R-group conditions such as occurrence, rest H and if-then expressions to R-groups in the R-logic dialog window.</td>
+    </tr>
+    <tr>
+        <td><a class="text" name="openWithChemSpider">Find Structure Online &gt Find Structure in ChemSpider</a></td>
+        <td>If ChemSpider contains the structure, it opens the records in your default browser.</td>
+    </tr>
+    <tr>
+        <td><a class="text" name="openWithPubChem">Find Structure Online &gt Find Structure in PubChem</a></td>
+        <td>If PubChem contains the structure, it opens the records in your default browser.</td>
+    </tr>
+    <tr>
+        <td><a class="text" name="openWithChemicalizeOrg">Find Structure Online &gt Find Structure in Chemicalize</a></td>
+        <td>If Chemicalize.org contains the structure, it opens the records in your default browser.</td>
+    </tr> 
+    <tr>
+        <td><a class="text" name="checkStructure">Check Structure</a></td>
+        <td>Checks and corrects chemical structures. See <a href="../../structurechecker/checker.html">Structure Checker in MarvinSketch</a> for more details.</td>
+    </tr>
+    <tr>
+        <td><a class="text" name="autoCheck">Auto Check</a></td>
+        <td>Toggles auto checking of structures while drawing.</td>
+    </tr>
+</table>
+
+<h3><a class="anchor" name="calculations">Calculations Menu</a></h3>
+<table cellspacing="0" class="grid">
+    <tr>
+        <td width="25%"><a href="../../calculations/elemanal.html">Elemental Analysis</a></td>
+        <td width="75%">Calculates the elemental composition of the molecule.</td>
+    </tr>
+    <tr>
+        <td><a href="../../calculations/s2n.html">Naming</a></td>
+        <td>Generates IUPAC or traditional name of the molecule.</td>
+    </tr>
+    <tr>
+        <td><a href="../../calculations/protonation.html#pka">Protonation &gt; pKa</a></td>
+        <td>Calculates the pKa values of the molecule. </td>
+    </tr>
+    <tr>
+        <td><a href="../../calculations/protonation.html#ms">Protonation &gt; Major Microspecies</a></td>
+        <td>Draws molecular microspecies at given pH.</td>
+    </tr>
+    <tr>
+        <td><a href="../../calculations/protonation.html#isopoint">Protonation &gt; Isoelectric Point</a></td>
+        <td>Calculates gross charge distribution of a molecule as function of pH.</td>
+    </tr>
+    <tr>
+        <td><a href="../../calculations/partitioning.html#logp">Partitioning &gt; logP</a></td>
+        <td>Calculates the octanol/water partition coefficient.</td>
+    </tr>
+    <tr>
+        <td><a href="../../calculations/partitioning.html#logd">Partitioning &gt; logD</a></td>
+        <td>Calculates the octanol/water partition coefficient at any pH.</td>
+    </tr>
+    <tr>
+        <td><a href="../../calculations/chargegroup.html#charge">Charge &gt; Charge</a></td>
+        <td>Calculates the partial charge value of each atom.</td>
+    </tr>
+    <tr>
+        <td><a href="../../calculations/chargegroup.html#polarizability">Charge &gt; Polarizability</a></td>
+        <td>Calculates the polarizability of each atoms.</td>
+    </tr>
+    <tr>
+        <td><a href="../../calculations/chargegroup.html#oen">Charge &gt; Orbital Electronegativity </a></td>
+        <td>Calculates electronegativity of each atoms.</td>
+    </tr>
+  <tr>
+        <td><a href="../../calculations/nmr.html">NMR &gt; CNMR Prediction</a></td>
+        <td>Predicts <sup>13</sup>C NMR chemical shifts of the molecule.</td>
+    </tr>
+	<tr>
+        <td><a href="../../calculations/nmrpredict.html">NMR &gt; HNMR Prediction</a></td>
+        <td>Predicts <sup>1</sup>H NMR chemical shifts of the molecule.</td>
+    </tr>
+	<tr>
+        <td><a href="../../calculations/nmrview.html">NMR &gt; NMR Spectrum Viewer</a></td>
+        <td>Opens and displays JCAMP-DX NMR spectral file.</td>
+    </tr>
+	<tr>
+        <td><a href="../../calculations/isomers.html#tautomer">Isomers &gt; Tautomers</a></td>
+        <td>Generates two dimensional tautomers of the molecule.</td>
+    </tr>
+	<tr>
+        <td><a href="../../calculations/isomers.html#stereoisomer">Isomers &gt; Stereoisomers</a></td>
+        <td>Generates all possible stereoisomers of the molecule. </td>
+    </tr>
+
+    <tr>
+        <td><a href="../../calculations/conformation.html#conformer">Conformation &gt; Conformers</a></td>
+        <td>Generates selected number of conformers or the lowest energy conformer of a molecule.</td>
+    </tr>
+    <tr>
+        <td><a href="../../calculations/conformation.html#moldyn">Conformaton &gt; Molecular Dynamics</a></td>
+        <td>Calculates the configurations of the system by integrating Newton's laws of motion.</td>
+    </tr>
+    <tr>
+        <td><a href="../../calculations/conformation.html#align">Conformation &gt; 3D Alignment</a></td>
+        <td>Overlays drug sized molecules onto each other in the 3D space.</td>
+    </tr>
+    <tr>
+        <td><a href="../../calculations/geometrygroup.html#topolanal">Geometry &gt; Topology Analysis</a></td>
+        <td>Provides characteristic values related to the topological structure of a molecule.</td>
+    </tr>
+    <tr>
+        <td><a href="../../calculations/geometrygroup.html#geometry">Geometry &gt; Geometry</a></td>
+        <td>Provides characteristic values related to the geometrical structure of a molecule. It can calculate steric hindrance and Dreiding energy.</td>
+    </tr>
+    <tr>
+        <td><a href="../../calculations/geometrygroup.html#TPSA">Geometry &gt; Polar Surface Area (2D)</a></td>
+        <td>Provides estimation of topoligical polar surface area (TPSA).</td>
+    </tr>
+    <tr>
+        <td><a href="../../calculations/geometrygroup.html#MSA">Geometry &gt; Molecular Surface Area (3D)</a></td>
+        <td>Calculates van der Waals or solvent accessible molecular surface area.</td>
+    </tr>
+    <tr>
+        <td><a href="../../calculations/markush.html">Markush Enumeration</a></td>
+        <td>Generates a whole or a subset of the library of a generic Markush structure.</td>
+    </tr>
+    <tr>
+        <td><a href="../../calculations/predictor.html">Predictor</a></td>
+        <td>Predicts molecular properties based on its structure. The method is based on QSAR algorithm using a multiple linear regression model and a least squares fitting.</td>
+    </tr>
+    <tr>
+        <td><a href="../../calculations/other.html#HBDA">Other &gt; H Bond Donor/Acceptor</a></td>
+        <td>Calculates atomic hydrogen bond donor and acceptor inclination.</td>
+    </tr>
+    <tr>
+        <td><a href="../../calculations/other.html#huckel">Other &gt; Huckel Analysis</a></td>
+        <td>Calculates localization energies L(+) and L(-) for electrophilic and nucleophilic attack at an aromatic center.</td>
+    </tr>
+    <tr>
+        <td><a href="../../calculations/other.html#refractivity">Other &gt; Refractivity</a></td>
+        <td>Calculates molar refractivity of the molecule.</td>
+    </tr> 
+    <tr>
+        <td><a href="../../calculations/other.html#resonance">Other &gt; Resonance</a></td>
+        <td>Generates all resonance structures of the molecule.</td>
+    </tr>
+    <tr>
+        <td><a href="../../calculations/other.html#framework">Other &gt; Structural Frameworks</a></td>
+        <td>Calculates Bemis and Murcko frameworks and other structure based reduced representations of the input structures.</td>
+    </tr>
+</table>
+
+<h3><a class="anchor" name="tools">Tools Menu</a></h3>
+<table cellspacing="0" class="grid">
+<tr>
+        <td width="25%"><a href="../../calculations/services_menu.html">Services</a></td>
+        <td width="75%">Provides accessibility to previously integrated <a href="../../calculations/services_menu.html#thirdparty">third-party calculations<sup>*</sup></a>.</td>
+    </tr>
+</table>
+
+<h3><a class="anchor" name="help">Help Menu</a></h3>
+<table cellspacing="0" class="grid">
+    <tr>
+        <td width="25%"><a class="text" name="helpContents">Help Contents</a></td>
+        <td width="75%">Shows MarvinSketch User's Guide.</td>
+    </tr>
+    <tr>
+        <td><a class="text" name="licenses">Licenses</a></td>
+        <td>Starts ChemAxon License Manager where you can manage the licenses of all ChemAxon products.</td>
+    </tr>
+    <tr>
+        <td><a class="text" name="about">About MarvinSketch</a></td>
+        <td>Shows MarvinSketch product information and technical details.</td>
+    </tr>
+</table>
+</body>
+</html>

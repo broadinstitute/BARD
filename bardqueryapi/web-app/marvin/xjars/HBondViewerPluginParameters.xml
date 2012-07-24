@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<ParameterPanel>
+    <SingleSelection Key="rows" Label="Table rows">
+	<Choice Value="1" Text="1"/>
+	<Choice Value="2" Text="2" Selected="true"/>
+	<Choice Value="3" Text="3"/>
+    </SingleSelection>
+    <SingleSelection Key="cols" Label="Table columns">
+	<Choice Value="2" Text="2" Selected="true"/>
+	<Choice Value="3" Text="3"/>
+    </SingleSelection>
+    <Boolean Key="conf" Label="Generate conformers" Value="true"/>
+</ParameterPanel>

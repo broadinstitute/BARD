@@ -1,0 +1,154 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<title>Protonation</title>
+<link rel="stylesheet" type="text/css" href="../marvinmanuals.css">
+</head>
+<body>
+<h1>Protonation</h1>
+
+
+<h2><a class="anchor" name="pka">p<i>K</i><sub>a</sub> Plugin</a>
+<a href="pka_training.html"><img border="0" src="images/trainable.png" width="30" height="27" alt="Calculation can be trained with measured data"/></a>
+</h2>
+
+<p>Most molecules contain some specific functional groups likely to
+lose or gain proton under specific circumstances. Each ionization
+equilibrium between the protonated and deprotonated forms of the molecule
+can be described with a constant value called p<i>K</i><sub>a</sub>. The
+p<i>K</i><sub>a</sub> plugin calculates the p<i>K</i><sub>a</sub> values
+of all proton gaining or losing atoms on the basis of the partial
+charge distribution. <BR>
+<a href="pKa.html">Learn more</a> about how the plugin calculates p<i>K</i><sub>a</sub>.
+</p>
+
+<p><b>We introduced the trainable p<i>K</i><sub>a</sub> calculation</b> from version 5.2!
+You can define a file with experimental data, and use its values for the correction of
+calculations.</p>
+
+<p>The <b CLASS="buttonName"> p<i>K</i><sub>a</sub> options</b> panel offers different parameters to set: </p>
+<p>
+<table> <tr>
+		<img src="images/pKaoptions.png" width="224" height="439"></tr>
+</table>
+</p>
+
+<ul>
+	<li><b>Decimal places:</b> setting the number of decimal places with which the result value is given.</li>
+	<li><b>Mode:</b> micro, macro: micro and macro acidic dissociation constants.
+<a href="pKa.html#MultiProtic">Read details.</a></li>
+	<li><b>Acid/base prefix:</b>
+		<ul>
+			<li><b>static:</b> submitted ionic forms are converted to their neutral forms
+    (adding or removing protons) and their p<i>K</i><sub>a</sub> is calculated.</li>
+			<li><b>dynamic:</b> the p<i>K</i><sub>a</sub> of ionic forms are calculated,
+    not their conjugated acids or bases.</li>
+		</ul>
+	</li>
+	<li><b>Min basic p<i>K</i><sub>a</sub>:</b> widens the calculation range because weak bases will have lower p<i>K</i><sub>a</sub> values than the default -10.</li>
+	<li><b>Max acidic p<i>K</i><sub>a</sub>:</b> widens the calculation range because weak acids will have higher p<i>K</i><sub>a</sub> values than the default 20. </li>
+	<li><b>Temperature:</b> setting the temperature in Kelvin.</li>
+	<li><b>Show distribution chart:</b> checking this box, you will have microspecies/macrospecies
+distribution as function of pH calculated and displayed. If not, only the p<i>K</i><sub>a</sub>
+of the drawn molecule will be calculated.</li>
+	<li><b>Distribution chart: pH lower limit, upper limit, step size:</b> you can set the range of displaying the microspecies distribution diagram.</li>
+	<li><b>Use correction library:</b> check this box to use a file with experimental data for the calculation. See the <a href="pka_training.html">detailed guide for training data setup.</a></li>
+	<li><b>Consider tautomerization:</b>Selecting this option, the most feasible tautomer and resonance structures are considered to be subject of the pKa calculation.</li>
+</ul>
+
+<p>Results are shown in a separate window. When checking the Show microspecies
+distribution box, this window appears (for the explanation about the
+<b>red&amp;blue color representation</b> of the p<i>K</i><sub>a</sub> values
+next to the protonable groups read <a href="redbluepka.html">this document</a>):</p>
+
+<p>
+<table>
+	<tr>
+		<td><img src="images/pKa.png" width="600" height="531"></td>
+	</tr>
+</table>
+</p>
+
+
+<p>The chart shows the microspecies distribution curves vs. pH. The
+microspecies images are shown in the legend. When clicking on an image,
+the corresponding microspecies molecule is displayed in the upper-left
+viewer. (The viewer can be detached from the chart panel by double
+clicking in it, or else by selecting <b>Open Viewer</b> from the <b>View</b>
+menu.) The original molecule with the p<i>K</i><sub>a</sub> values is
+shown when clicking on the chart outside of the legend image areas, or
+else when selecting <b>pKa Values</b> from the <b>View</b> menu.</p>
+
+<p>Note: If there are 8 or less ionizable atoms in the molecule, then microspecies 
+distribution is displayed on the chart, otherwise macrospecies distribution
+is shown. Images of microspecies are displayed only on the microspecies distribution 
+chart; on macrospecies distribution chart the formal charges of the macrospecies are shown.</p>
+
+<p>The contents of the text field can be copied to the clipboard by Ctrl+C, the structure field offers a context menu from MarvinView.
+</p>
+<p>When moving the mouse over one of the microspecies images, the corresponding (pH : % of the microspecies) coordinates appear on the curves. </p>
+
+<p>Calculation with the option 'Take major tautomeric form' gives same values for different tautomers.
+<table>
+    <tr><td><img src="images/majortautomer_pka.png" width="450" height="262"></td></tr>
+</table>
+
+<h2><a class="anchor" NAME="ms">Major Microspecies Plugin</a></h2>
+<p>Determines the major protonation form at a specified pH.</p>
+<p>The pH can be set in the <b CLASS="buttonName">Major Microspecies Options</b> panel,
+the default pH is 7.4.</p>
+<p>
+
+<table>
+	<tr>
+		<td><img src="images/major-microspecies_panel.png" width="199" height="115"></td>
+	</tr>
+</table>
+
+<ul>
+<li><b>Take major tautomeric form:</b> if tautomeric forms are more
+        likely to occur, tha major tautomer is used to calculate the major microspecies.</li>
+</ul>
+<p>The result is shown in a separate window, indicated the pH value and the structure in a MarvinView field.</p>
+<p>
+<table>
+	<tr>
+		<td><img src="images/majorms.png" width="388" height="423"></td>
+	</tr>
+</table>
+
+
+<p>The contents of the text field can be copied to the clipboard by Ctrl+C, the structure field offers a context menu from MarvinView.
+</p>
+
+<h2><a class="anchor" NAME="isopoint">Isoelectric Point Plugin</a></h2>
+<p>Net charge of an ionizable molecule is zero at a certain pH. This
+pH is called the isoelectric point, also referred to as pI. Isoelectric point plugin calculates
+gross charge distribution of a molecule as function of pH.</p>
+<p>The <b CLASS="buttonName">Isoelectric Point Options</b> panel contains the pH, and the option to switch off the charge distribution chart of the charge of the molecule vs. pH:
+</p>
+<p>
+<table cellpadding="4">
+	<tr>
+		<td><img src="images/iep_panel.png" width="199" height="141"></td>
+	</tr>
+</table>
+</p>
+
+<p>The result is shown in a separate window, containing the molecule structure at the pI and the value of pI. If the Show charge distribution checkbox was checked, the charge vs. pH curve is displayed. When moving the mouse over the dots in the curve, the coordinates (pH : charge) appear.
+</p>
+<p>
+<table cellpadding="4">
+	<tr>
+		<td><img src="images/isoelectricpoint.png" width="800" height="543"></td>
+	</tr>
+</table>
+</p>
+
+<p>The contents of the text field can be copied to the clipboard by Ctrl+C, the structure field offers a context menu from MarvinView.
+</p>
+
+
+</body>
+</html>

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<ParameterPanel>
+    <Boolean Key="lfin" Label="Process only the largest fragment of the input structure" Value="false"/>
+    <Boolean Key="lfout" Label="Return only the largest fragment of the result" Value="false"/>
+    <Boolean Key="keepsingleatom" Label="Keep single atom for non-empty acyclic structures" Value="true"/>
+</ParameterPanel>

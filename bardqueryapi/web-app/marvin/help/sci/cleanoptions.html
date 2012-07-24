@@ -1,0 +1,102 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+  <meta name="author" content="Tamas Vertse">
+  <link rel="stylesheet" type="text/css" href="../marvinmanuals.css"
+ title="Style">
+  <title>Cleaning Options in Marvin</title>
+</head>
+<body>
+<h1>Cleaning Options in Marvin</h1>
+
+<p>Both 2D and 3D options can be divided into two groups: <i>Base</i>
+and <i>Extra</i>.
+<i>Base</i> contains the typically used options which are also
+accessible via "Structure/Clean 2D" or "Structure/Clean 3D" menu in Marvin. You can use them in each
+case.
+<i>Extra</i> includes further options which are accepted only by the
+MolConvert application and the clean method of MoleculeGraph in the
+Marvin Beans API.</p>
+<h2><a class="anchor" name="2d">2D options</a></h2>
+<ul>
+  <li><a class="text" name="base.2d"><b>Base:</b> (none available)</a>
+  <li><a class="text" name="extra.2d"><b>Extra:</b></a>
+    <p> <i>e</i> Keep verbose either flag<br>
+    </p>
+    <ul>
+If it is not possible to decide whether
+the double bond is CIS or TRANS, the double
+bond either flag (crossed double bond) is kept.<br>
+Otherwise, the flag is removed and converted to double bond
+with a wiggly bond.
+    </ul>
+    <p> <i>E</i> Error output:</p>
+    <ul>
+	0 - no output (default)<br>
+	1 - error output to standard error 
+    </ul>
+
+    <p> <i>d</i> show debugging info</p>
+    <p> <i>2</i> try to keep actual 2D alignment</p>
+    <p> <i>p</i> ignore parity setting </p>
+    <ul>
+    do not set wedges, the parity information is lost.
+    </ul>
+    <p> <i>H</i> add Hydrogens</p>
+    <ul> Add Hydrogen atoms to chiral centers<br> 
+         having no terminal atoms.
+    </ul>
+    <p> <i>w</i> wedge clean</p>
+    <ul> Do not try to keep the actual wedge arrangement,<br>
+        but rearrange the wedges also.
+    </ul>
+    <p> <i>W</i> stereo clean</p>
+    <ul> Only rearrange the wedges of the molecule, 
+        but keep the original coordinates untouched.
+    </ul>
+    <p> <i>s</i> shorten explicit H bond lengths <ul> Use 1.0 Angstrom explicit Hydrogen 
+    bond length. All other bonds will remain 1.54 Angstrom long. 
+    </ul>
+    <p> <i>tX</i> set time limit to X ms </p>
+    <ul>maximum time spent in the cleaning<br>
+    default value: 20000ms<br>
+    if X&lt;1, no time limit used
+    </ul>
+    <p> <i>T{filename}</i> ring system template file name<br>
+    </p>
+    <ul>
+Use the template file during ring system cleaning together with
+the local template file definition
+(which is located at the users home directory .chemaxon/cleantemplates.t).
+    </ul>
+  </li>
+</ul>
+<h2><a class="anchor" name="3d">3D options</a></h2>
+<ul>
+  <li><a class="text" name="base.3d"><b>Base:</b></a>
+    <p> <i>S{fine}</i> Find low energy conformer. Leave failed
+fragments intact. </p>
+    <p> <i>S{fast}</i> Fast clean, if failed, perform fine clean,
+accept any generated structure (default)</p>
+    <p><small>Notes: <i>null</i> always specifies the default value. <i>O0</i>
+and <i>OD</i> are deprecated. They use the default value.</small></p>
+  </li>
+  <li><a class="text" name="extra.3d"><b>Extra:</b></a>
+    <p> <i>?</i> Print the complete list of options to <code>System.err</code>.
+The same list can be printed by invoking the <a
+ href="../applications/molconvert.html">MolConverter</a>
+with <span style="font-style: italic;">the -H3D </span>option. <br>
+    </p>
+    <p> <i>S{nofaulty}</i> Same as <span style="font-style: italic;">S{fast}</span>,
+but leave failed fragments intact. </p>
+    <p> <i>S{conformers}</i> Generate conformers, store the calculated
+conformer coordinates and energies in PropertyObjects. </p>
+    <p> <i>E</i> Store calculated Dreiding energy in SDF property
+string. The Dreiding energy for each fragment will be calculated in the
+last step.&nbsp; Their sum will be stored in the sdf property called
+"Energy".<br>
+    </p>
+  </li>
+</ul>
+</body>
+</html>

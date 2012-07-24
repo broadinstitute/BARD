@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<ParameterPanel>
+	<Group>
+	    <MultipleSelection Key="type" Label="Type">
+		<Choice Value="dreidingenergy" Text="Dreiding energy" Tooltip="Energy related to the stability of the actual 3D structure (conformation) of the molecule."  Selected="true"/>
+		<Choice Value="mmff94energy" Text="MMFF94 energy"  Tooltip="MMFF94 energy" Selected="true"/>
+		<Choice Value="hindrance" Text="Steric hindrance (atomic)" Tooltip="Steric hindrance of an atom calculated from the covalent radii values and geometrical distances." Selected="true"/>
+		<Choice Value="minimalprojectionarea" Text="&lt;html&gt;Minimal projection area (&Aring;&lt;sup&gt;2&lt;/sup&gt;)&lt;/html&gt;" Tooltip="Calculates the minimum of projection areas of the conformer, based on the van der Waals radius (in &#197;<sup>2</sup>)." Selected="true"/>
+		<Choice Value="maximalprojectionarea" Text="&lt;html&gt;Maximal projection area (&Aring;&lt;sup&gt;2&lt;/sup&gt;)&lt;/html&gt;" Tooltip="Calculates the maximum of projection areas of the conformer, based on the van der Waals radius (in &#197;<sup>2</sup>)." Selected="true"/>
+		<Choice Value="minimalprojectionradius" Text="&lt;html&gt;Minimal projection radius (&Aring;)&lt;/html&gt;" Tooltip="Calculates the radius for the minimal projection area of the conformer (in &#197;<sup>2</sup>)." Selected="true"/>
+                <Choice Value="maximalprojectionradius" Text="&lt;html&gt;Maximal projection radius (&Aring;)&lt;/html&gt;" Tooltip="Calculates the radius for the maximal projection area of the conformer (in &#197;<sup>2</sup>)." Selected="true"/>
+                <Choice Value="maxz" Text="&lt;html&gt;Maximal distance perpendicular to the min projection (&Aring;)&lt;/html&gt; " Selected="true"/>
+                <Choice Value="minz" Text="&lt;html&gt;Maximal distance perpendicular to the max projection (&Aring;)&lt;/html&gt; ." Selected="true"/>
+                <Choice Value="volume" Text="&lt;html&gt;van der Waals volume (&Aring;&lt;sup&gt;3&lt;/sup&gt;)&lt;/html&gt;" Tooltip="Calculates the van der Waals volume of the conformer (in &#197;<sup>3</sup>)." Selected="true"/>
+	    </MultipleSelection>
+	    <SingleSelection Key="energyunit" Label="Energy unit"  Tooltip="Gives dreiding energy values in kcal/mol or kJ/mol.">
+	    	<Choice Value="kcal/mol" Text="kcal/mol" Selected="true" />
+	    	<Choice Value="kJ/mol" Text="kJ/mol" />
+	    </SingleSelection>
+	    <Dependencies>
+		    <Item Key="type" Range="dreidingenergy,mmff94energy"/>
+		</Dependencies>
+	    <Precision Key="precision" Label="Decimal places"/>
+	    
+	    <Separator/>
+	    	   
+	    <Number Key="radiusscalefactor" Label="Radius scale factor" Tooltip="Atom radii from the periodic system are multiplied by this number." Range="[0.001,1000|" Value="1.0">
+		<Dependencies>
+		    <Item Key="type" Range="minimalprojectionarea,maximalprojectionarea,minimalprojectionradius,maximalprojectionradius"/>
+		</Dependencies>
+        </Number>		
+		<Boolean Key="mmff94optimization" Label="Set MMFF94 optimization" Tooltip="Sets MMFF94 optimization." Value="false">
+		<Dependencies>
+	    	<Item Key="type" Range="mmff94energy"/>
+		</Dependencies>
+    	</Boolean>
+		<Boolean Key="optimizeprojection" Label="Set projection optimization" Tooltip="Sets the projection optimization." Value="false">
+		<Dependencies>
+	    	<Item Key="type" Range="minimalprojectionarea,maximalprojectionarea,minimalprojectionradius,maximalprojectionradius"/>
+		</Dependencies>
+    	</Boolean>
+	</Group>
+	
+	<Group Title="Calculate for lowest energy conformer">
+	    <RadioButtonGroup Key="calcforleconformer">
+		<Choice Value="if2D" Text="If molecule is in 2D" Tooltip="The lowest energy conformer of the 2D molecule is generated, and its parameters calculated. 3D input molecules are considered in the given conformation." Selected="true"/>
+		<Choice Value="never" Text="Never"  Tooltip="The input molecule is used for calculation."/>
+		<Choice Value="always" Text="Always"  Tooltip="The lowest energy conformer is generated (3D and 2D molecules as well), and its geometry parameters calculated."/>
+	    </RadioButtonGroup>
+	</Group>
+
+    <SingleSelection Key="optimization" Label="Optimization limit">
+		<Choice Value="0" Text="Very loose"/>
+		<Choice Value="1" Text="Normal" Selected="true"/>
+		<Choice Value="2" Text="Strict"/>
+		<Choice Value="3" Text="Very strict"/>
+    </SingleSelection>
+    <Dependencies>
+	    <Item Key="calcforleconformer" Range="if2D,always"/>
+	    <Item Key="type" Range="dreidingenergy,hindrance,minimalprojectionarea,maximalprojectionarea,minimalprojectionradius,maximalprojectionradius"/>
+	</Dependencies>
+</ParameterPanel>

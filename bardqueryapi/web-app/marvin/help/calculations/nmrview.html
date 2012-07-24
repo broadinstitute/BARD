@@ -1,0 +1,155 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta http-equiv="content-type" content="text/html; charset=utf-8">
+	<meta id="description" content="ChemAxon's apparatus to view nuclear magnetic resonance (NMR) spectra"/>
+	<meta id="keywords" content="NMR">
+	<meta id="author" content="Viktoria Palfi">
+	<link rel ="stylesheet" type="text/css" href="../marvinmanuals.css">
+	<title>NMR Spectrum Viewer - ChemAxon's tool to view Nuclear Magnetic Resonance spectra</title>
+</head>
+<body>
+<h1>NMR Spectrum Viewer - ChemAxon's tool to view Nuclear Magnetic Resonance spectra</h1>
+<h3 align="center">Version 5.10.1</h3>
+<h2>Contents</h2>
+<ul>
+<li><a href="#nmr">NMR Spectrum Viewer</a></li>
+<li><a href="#menu">NMR Spectrum Viewer Menu</a></li>
+<li><a href="#toolbar">NMR Spectrum Viewer Toolbar</a></li>
+<li><a href="#panels">NMR Spectrum Viewer Panels</a></li>
+<li><a href="#popup">NMR Spectrum Viewer Pop-up Menu</a></li>
+<li><a href="#statusbar">NMR Spectrum Viewer Statusbar</a></li>
+</ul>
+<ul>
+	<li><a href="nmr.html">NMR Calculation main page</a></li>
+</ul>
+<center><div class="lenia">&nbsp;</div></center>
+<h2><a class="anchor" id="nmr"></a>NMR Spectrum Viewer </h2> 
+<p>
+NMR Spectrum Viewer is part of the <a href="nmr.html">NMR Calculation</a> group. It is able to display Nuclear Magnetic Resonance spectra saved in JCAMP-DX format (*.jdx). The opened spectrum can be zoomed in, exported to PDF files, or simply copy-pasted as images. 
+</p>
+<p>
+<img src="nmr_files/nmrview.png" width="790" height="609"/> 
+</p>
+<p>The <b>NMR Spectrum Viewer</b> window consists of a <a href="#menu">menu</a>, <a href="#toolbar">toolbar</a>, <a href="#panels">two panels</a>, and a <a href="#statusbar">status bar</a>. 
+</p>
+<h3><a class="anchor" id="menu"></a>NMR Spectrum Viewer Menu</h3>
+The menu contains <b>File</b>, <b>View</b>, and <b>Help</b> elements.  
+
+<h4>File menu</h4>
+	<ul>
+		<li>File > <img src="nmr_files/open.png"/> <a class="anchor" id="import"></a><b>Import from JCAMP-DX...</b>: Open an NMR Spectrum in JCAMP-DX format to display it in NMR Spectrum Viewer. Clicking on this menu item will launch the <b>Open</b> dialog window. Select an NMR spectrum in JCAMP-DX format and click on <b>Open</b>. </li>
+		<li>File > <b>Exit</b>: Close application.</li>
+	</ul>
+	
+<h4>View menu</h4>
+	<ul>
+		<li>View > <a class="anchor" id="unit"></a><b>Measurement Unit</b>: Display NMR spectrum in one of the following units:  
+			<ul>
+				<li><img src="nmr_files/nmr_hz.png"/> <b>Hz</b> or;</li>
+				<li><img src="nmr_files/nmr_ppm.png"/> <b>ppm</b>.</li>
+			</ul>
+		</li>
+		<li>View > <img src="nmr_files/peak_shift.png"/> <a class="anchor" id="display"></a><b>Display Local Maximum Places</b>: NMR Spectrum Viewer can display local maximum places as spectrum labels when the JCAMP-DX file contains <code>PEAKTABLE</code> information.</li>
+		<li>View > <img src="nmr_files/h_zoomin.png"/> <a class="anchor" id="hzoomin"></a><b>Horizontal Zoom In</b>: Zoom in on NMR Spectrum along the X-axis.</li>  
+		<li>View > <img src="nmr_files/h_zoomout.png"/> <a class="anchor" id="hzoomout"></a><b>Horizontal Zoom Out</b>: Zoom out on NMR Spectrum along the X-axis.</li>
+		<li>View > <img src="nmr_files/v_zoomin.png"/> <a class="anchor" id="vzoomin"></a><b>Vertical Zoom In</b>: Zoom in on NMR Spectrum along the Y-axis.</li>
+		<li>View > <img src="nmr_files/v_zoomout.png"/> <a class="anchor" id="vzoomout"></a><b>Vertical Zoom Out</b>: Zoom out on NMR Spectrum along the Y-axis.</li>
+		<li>View > <img src="nmr_files/resetzoom.png"/> <a class="anchor" id="resetzoom"></a><b>Reset Zoom</b>: Restore spectrum zooming to full spectrum view.</li>
+	</ul>
+
+<h4>Help</h4>
+	<ul>
+		<li>Help > <b>Help Contents</b>: Open this help page in your browser.</li>
+	</ul>
+<p><a href="#">Back to top</a></p>	
+<center><div class="lenia">&nbsp;</div></center>
+<h3><a class="anchor" id="toolbar"></a>NMR Spectrum Viewer Toolbar</h3>
+<p>You can use toolbar elements to access selected NMR Spectrum Viewer menu items.</p>
+<ul>
+<table>
+<tr>
+	<td colspan="2"><img src="nmr_files/nmrview_toolbar.png"/></td>
+</tr>
+<tr>
+<td><img src="nmr_files/open.png"/></td>
+<td>Import from JCAMP-DX...</td>
+</tr>
+<tr>
+<td><img src="nmr_files/peak_shift.png"/></td>
+<td>Display Local Maximum Places</td>
+</tr>
+<tr>
+<td><img src="nmr_files/nmr_unit.png"/></td>
+<td>Measurement Unit</td>
+</tr>
+<tr>
+<td><img src="nmr_files/h_zoomin.png"/></td>
+<td>Horizontal Zoom In</td>
+</tr>
+<tr>
+<td><img src="nmr_files/h_zoomout.png"/></td>
+<td>Horizontal Zoom Out</td>
+</tr>
+<tr>
+<td><img src="nmr_files/v_zoomin.png"/></td>
+<td>Vertical Zoom In</td>
+</tr>
+<tr>
+<td><img src="nmr_files/v_zoomout.png"/></td>
+<td>Vertical Zoom Out</td>
+</tr>
+<tr>
+<td><img src="nmr_files/resetzoom.png"/></td>
+<td>Reset Zoom</td>
+</tr>
+</table>
+</ul>
+<p><a href="#">Back to top</a></p>	
+<center><div class="lenia">&nbsp;</div></center>
+<h3><a class="anchor" id="panels"></a>NMR Spectrum Viewer Panels</h3>
+<p>Panels can be copied separately as images by right-clicking on the appropriate panel and selecting <b>Copy to clipboard</b> action.</p> 
+<h4>Spectrum View Panel</h4>
+<p><img src="nmr_files/svpanel2.png"/> <img src="nmr_files/svpanel.png"/></p>
+<p>Displays the whole imported spectrum. 
+<ul>
+	<li>If you want to zoom in on specific region of the spectrum, use <i>left-click and drag</i> or <i>ctrl + left-click and drag</i> on <b>NMR Spectrum Preview Panel</b>. The background of the selected region will be highlighted in white, while unselected region of the spectrum will turn to grey.</li>
+	<li>You can move the selection window by left-clicking into the middle of the selection; hold mouse button while moving the selection, and release button to place it.</li>
+	<li>You can resize the selection window if you grab-and-drag the yellow side frame around the highlighted area.</li>
+</ul>
+</p>
+<h4>Spectrum Display Panel</h4>
+<p><img src="nmr_files/sdpanel.png"/></p>
+<p>Displays the appropriate zoom region of the spectrum. Move your mouse pointer over the <b>NMR Spectrum Display Panel</b> and use mouse-wheel to zoom in and out horizontally, ctrl+mouse-wheel to zoom in and out verically on the NMR spectrum. </p>
+<p><a href="#">Back to top</a></p>	
+<center><div class="lenia">&nbsp;</div></center>
+
+<h3><a class="anchor" id="popup"></a>NMR Spectrum Viewer Pop-up Menu</h3>
+<img src="nmr_files/copyto_nmrviewer.png"/>
+<p>Right-clicking on any panel pops up a menu with the following element:<br>
+
+<ul>
+<li><b>Copy to clipboard</b>: The panel in question will be copied to the clipboard.
+</li>
+</ul>
+</p>
+<p><a href="#">Back to top</a></p>	
+<center><div class="lenia">&nbsp;</div></center>
+<h3><a class="anchor" id="statusbar"></a>NMR Spectrum Viewer Status Bar</h3>
+<p>
+The status bar of NMR Spectrum Viewer displays the X and Y coordinates of mouse cursor position, and the following data stored in the opened JCAMP-DX file: </p>
+<p><img src="nmr_files/nmr_statusbar.png"/>
+<ul>
+<li>Nucleus; 
+<li>Frequency,
+<li>Owner; 
+<li>File.
+</ul>
+</p>
+<p><a href="#">Back to top</a></p>	
+<center><div class="lenia">&nbsp;</div></center>
+<center><font face="helvetica"> Copyright&copy; 2011-2012 <a href="http://www.chemaxon.com">ChemAxon Ltd.</a>
+&nbsp;&nbsp;&nbsp;All rights reserved. </font></center>
+</body>
+</html>
+			

@@ -1,0 +1,151 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<html>
+<head>
+<META HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=utf-8">
+<TITLE>Customizing MarvinSketch GUI - Server side</TITLE>
+<link rel=stylesheet type="text/css" href="../../marvinmanuals.css">
+</head>
+<body>
+<h1>Customizing MarvinSketch GUI - Server side</h1>
+<p>The <a href="customization.html">Customization</a> document demonstrates an easy,
+interactive way of GUI personalization.</p>
+<p>
+This document shows how to use the same interactive method to customize the GUI if MarvinSketch is
+used as an <b>applet</b> being on a server or as a <b>JavaBean</b>.
+</p>
+<p>Note, that API and XSD will also be available very soon.</p>
+
+<h4>The configuration file</h4>
+MarvinSketch stores all changes made on the GUI in a <b>configuration file</b>.<br>
+This file is located at <code>USER_HOME/CHEMAXON_DIR/VERSION/customization.xml</code>,
+where
+<ul>
+    <li><code>USER_HOME</code> is <code>C:\Documents and Settings\USERNAME</code> on Windows,
+    <code>/home/USERNAME</code> on Unix</li>
+    <li><code>CHEMAXON_DIR</code> is <code>chemaxon</code> (Windows) or<code>.chemaxon</code> (Unix)</li>
+    <li><code>VERSION</code> is the actual version number of MarvinSketch,
+        with which the customization is made</li>
+</ul>
+
+Example location:<br>
+Windows: <code>C:\Documents and Settings\USERNAME\chemaxon\5.0.0\customization.xml</code><br>
+Unix/Linux: <code>/home/USERNAME/.chemaxon/5.0.0/customization.xml</code>
+
+
+<h4>Applet customization step-by-step</h4>
+
+<ol>
+    <li>Remove the the configuration file from your local file system (make sure to create a backup)</li>
+    <li>Launch MarvinSketch on the client side</li>
+    <li>Personalize the GUI using the methods described in the
+        <a href="customization.html">Customization</a> document</li>
+    <li>Upload the newly created configuration file to be beside the MarvinSketch applet on the server,
+        e.g. http://example-server.org/marvin/customization.xml</li>
+    <li>Set the "menuconfig" <a href="../../developer/sketchman.html#parameters.menuconfig">applet parameter</a>
+        to the URL of the configuration file, e.g <br>
+        <code>msketch_param("menuconfig", "http://example-server.org/marvin/configuration.xml");</code><br>
+        or<br>
+        <code>msketch_param("menuconfig", "files/marvin/configuration.xml");</code>
+    </li>
+</ol>
+
+<h4>JavaBean customization step-by-step</h4>
+
+<ol>
+    <li>Remove the the configuration file from your local file system (make sure to create a backup)</li>
+    <li>Launch MarvinSketch on the client side</li>
+    <li>Personalize the GUI using the methods described in the
+        <a href="customization.html">Customization</a> document</li>
+    <li>Copy the newly created configuration file to a path which is included in the classpath of the application</li>
+    <li>Use UserSettings to instantiate the bean:
+        <pre>
+        UserSettings userSettings=new UserSettings();
+        userSettings.put("menuconfig", "org/example/configuration.xml");
+        MSketchPane sketchPane=new MSketchPane(userSettings);
+        </pre>
+    </li>
+</ol>
+
+<h4>Example 1 : Make ISIS/Draw-like configuration to be the default</h4>
+<p>The <a href="configurations.html">Configurations</a> document describes built-in
+alternative schemas for personalized GUIs.<br>
+To make a configuration schema to be the default, the identifier of the desired configuration
+has to be set in a simple xml file.</p>
+<p>The identifiers of the available configurations are below:</p>
+<blockquote>
+<table cellspacing="0" id="colored-grid" width="300">
+    <tr>
+        <th>Configuration</th>
+        <th>Identifier</th>
+    </tr>
+    <tr>
+        <td>Marvin</td>
+        <td>default</td>
+    </tr>
+    <tr>
+        <td>Classic Marvin</td>
+        <td>classic</td>
+    </tr>
+    <tr>
+        <td>ISIS/Draw-like</td>
+        <td>config1</td>
+    </tr>
+    <tr>
+        <td>ChemDraw-like</td>
+        <td>config2</td>
+    </tr>
+
+</table>
+</blockquote>
+<p>
+The contents of the configuration file:</p>
+<pre>
+    &lt;?xml version="1.0" encoding="UTF-8"?&gt;
+    &lt;customization active="config1"&gt;
+    &lt;/customization&gt;
+</pre>
+
+<h4>Example 2: Creating a custom Tools palette</h4>
+
+<p>This example shows a configuration file which performs the following changes:
+</p>
+<ul>
+    <li>the Tools toolbar on the left hand side is hidden</li>
+    <li>a new toolbar is defined in its place with some custom actions</li>
+    <li>the Atoms toolbar on the right hand side is changed</li>
+</ul>
+
+<p>The result is shown in the picture below:</p>
+<img src="gui-files/custom_marvin.png" width="600" height="656"><br>
+<p>The content of the <i>default</i> scheme of the configuration file is as follows:</p>
+<pre>
+       &lt;scheme id="default"&gt;
+        &lt;modify path="toolbar/atoms/atom.N" visible="false"/&gt;
+        &lt;modify path="toolbar/atoms/atom.S" visible="false"/&gt;
+        &lt;modify path="toolbar/atoms/atom.F" visible="false"/&gt;
+        &lt;modify path="toolbar/atoms/atom.P" visible="false"/&gt;
+        &lt;modify path="toolbar/atoms/atom.Cl" visible="false"/&gt;
+        &lt;modify path="toolbar/atoms/atom.I" visible="false"/&gt;
+        &lt;add path="toolbar/atoms"&gt;
+          &lt;item id="increaseCharge"/&gt;
+          &lt;item id="decreaseCharge"/&gt;
+        &lt;/add&gt;
+        &lt;order itemorder="periodicSystem/atom.H/atom.C/atom.N/atom.O/atom.S/atom.F/atom.P/atom.Cl/atom.Br/atom.I/increaseCharge/decreaseCharge" path="toolbar/atoms"/&gt;
+        &lt;modify index="1" path="toolbar/tools" row="0" visible="false"/&gt;
+        &lt;toolbar anchor="west" id="CustomToolbar-0" index="0" name="Custom-Tools-Palette" row="0"&gt;
+          &lt;item id="bondGroup"/&gt;
+          &lt;item id="insertElectronFlow"/&gt;
+          &lt;item id="insertElectronFlow2"/&gt;
+          &lt;item id="insertRectangle"/&gt;
+          &lt;item id="insertArrow"/&gt;
+          &lt;item id="insertTwoHeadedArrow"/&gt;
+        &lt;/toolbar&gt;
+      &lt;/scheme&gt;
+</pre>
+
+<p>Currently using a configuration file is the only way to change the GUI of applets or beans. The possibility of using the API will be available soon.
+</p><p>
+Note that the graphical user interface of MarvinView and MarvinSpace can not be customized yet.
+</p>
+</body>
+</html>

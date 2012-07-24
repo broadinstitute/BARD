@@ -1,0 +1,67 @@
+<html>
+<head>
+<meta NAME="author" CONTENT="Peter Csizmadia">
+    <script type="text/javascript" src="../../sh_main.js"></script>
+    <script type="text/javascript" src="../../sh_javascript.js"></script>
+    <script type="text/javascript" src="../../sh_html.js"></script>
+    <link REL ="stylesheet" TYPE="text/css" HREF="../../sh_nedit.css" TITLE="Style">
+<link REL ="stylesheet" TYPE="text/css" HREF="../../../marvinmanuals.css" TITLE="Style">
+<title>MarvinSketch Example - Structure templates</title>
+</head>
+<body onload="sh_highlightDocument();">
+
+<h1>MarvinSketch Example - Structure templates</h1>
+<p>
+In this example the handling of template groups by parameters is introduced.
+</p>
+
+<center>
+<script type="text/javascript" SRC="../../../marvin.js"></script>
+<script type="text/javascript">
+<!--
+msketch_begin("../../..", 580, 480);
+msketch_param("molbg", "#ffffff");
+msketch_param("ttmpls0", "*Generic*chemaxon/marvin/templates/generic.t");
+msketch_param("ttmpls1", "*Rings*chemaxon/marvin/templates/rings.t");
+msketch_param("xtmpls", "chemaxon/marvin/templates/wedgebonds.t");
+msketch_param("tmpls11", ":Conformers:chemaxon/marvin/templates/conformers.t");
+msketch_end();
+//-->
+</script>
+</center>
+<p>
+    A new template group, Conformers is defined with the
+    <a href="../../../help/developer/sketchman.html#parameters.tmpls"><b>tmpls11</b></a> parameter.
+    To make it visible on the template toolbar by default, it should have been set with the <b>ttmpls11</b> parameter.<br>
+    Wedge bonds are added as extra templates with the <a href="../../../help/developer/sketchman.html#parameters.xtmpls"><b>xtmpls</b></a> parameter.<br>
+    Template group visibility is controlled with the combination of <b>tmpls</b> and <b>ttmpls</b> parameters.
+    Generic and Rings groups are made visible by using the <b>ttmpls</b> parameter.
+</p>
+<p>For more information on template groups please visit <a href="../../../help/developer/templates.html">this link</a>.</p>
+
+<blockquote>
+<pre class="sh_html">
+&lt;script type=&quot;text/javascript&quot; SRC=&quot;../../../<a HREF="../marvin.js.txt">marvin.js</a>&quot;&gt;&lt;/script&gt;
+&lt;script type=&quot;text/javascript&quot;&gt;
+&lt;!--
+</pre><pre class="sh_javascript">
+msketch_begin(&quot;../../..&quot;, 580, 480);
+msketch_param(&quot;molbg&quot;, &quot;#ffffff&quot;);
+msketch_param(&quot;ttmpls0&quot;, &quot;*Generic*chemaxon/marvin/templates/generic.t&quot;);
+msketch_param(&quot;ttmpls1&quot;, &quot;*Rings*chemaxon/marvin/templates/rings.t&quot;);
+msketch_param(&quot;xtmpls&quot;, &quot;chemaxon/marvin/templates/wedgebonds.t&quot;);
+msketch_param(&quot;tmpls11&quot;, &quot;:Conformers:chemaxon/marvin/templates/conformers.t&quot;);
+msketch_end();
+</pre><pre class="sh_html">
+//--&gt;
+&lt;/script&gt;
+</pre>
+</blockquote>
+
+<p>
+<center><div class="lenia">&nbsp;</div></center>
+<p>
+The <a HREF="abbrevgroups.html">next example</a> demonstrates the customization of abbreviated groups.
+
+</body>
+</html>

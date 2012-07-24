@@ -1,0 +1,212 @@
+<html>
+<head>
+<link REL ="stylesheet" TYPE="text/css" HREF="../../marvinmanuals.css" TITLE="Style">
+<title>Marvin Applets FAQ</title>
+</head>
+<body>
+<h1 align=center>Marvin Applets Frequently Asked Questions</h1>
+
+Class and JAR files
+<ul>
+<li><a HREF="#question0">Which Java versions are supported by Marvin applets?</a></li>
+<li><a HREF="#question1">Which files are required to run Marvin applets?</a></li>
+<li><a HREF="#question5">How can I delete plugin packages from the Marvin applets package?</a></li>
+<li><a HREF="#unsign_jar">How can I create an unsigned jar file from a signed jar file?</a></li>
+<li><a href="#signingvalid">How long is the signed applet valid?</a></li>
+<li><a href="#iis">I receive a java.lang.RuntimeException with IIS server, what's the problem?</a></li>
+<li><a href="#applet_cache_problem">The applet is loading but it never loads.</a></li>
+<li><a href="#applet_java_incompatibility">Some Applet functionalities do not work.</a></li>   
+</ul>
+MSketch and MView
+<ul>
+<li><a href="#mviewapplet.napplets_vs_table.memory">If I put MView
+    applets in an HTML table then I can display only about
+    200 molecules because the browser slows down and runs out of memory.
+    Do you provide a simple and "thin" applet, which just displays molecules
+    without any rotation and linkage to the sketcher?</a></li>
+<li><a href="#consecutive_spaces">I do not manage to load a molecule
+string using an applet parameter in Mozilla.</a></li>
+</ul>
+Other
+<ul>
+<li><a HREF="#netscape_set_java_env">How can I set the Java environment of Netscape in Linux?</a></li>
+<li><a HREF="#question7">IE can not load Marvin applets over SSL communication.
+I have received this warning message: &quot;This page contains both secure and
+non-secure items.&quot;</a></li>
+</ul>
+<p>
+<center><div class="lenia">&nbsp;</div></center>
+<p>
+To see further questions, visit the following pages:
+<ul>
+<li><a href="for-mac-users.html">Notes for Mac users</a>
+<li><a href="../../faq/bugs.html">Crashes, freezes and other bugs FAQ</a>
+</ul>
+<center><div class="lenia">&nbsp;</div></center>
+
+<ul>
+<li>
+    <h3><a NAME="question0"></a>Which Java versions are supported by Marvin applets?</h3>
+    <p>ChemAxon products support only Sun distributed Java. On Mac platform (where Sun Java is not available), our products support Apple's built-in Java that is compatible with Sun's distribution.
+    Marvin applets requires at least Java 1.6.</p>
+</li>
+<li>
+    <h3><a NAME="question1"></a>Which files are required to run Marvin applets?</h3>
+   <p>Several packages can be downloaded from the 
+	<a href="http://www.chemaxon.com/marvin/download.html">Marvin site</a>:<ul>
+    <li><i>marvin-bin-VERSION.tar.gz</i> or <i>marvin-bin-VERSION.zip</i>
+        <p>Download and unpack: <pre>
+zip: unzip marvin-bin-VERSION.zip
+tar.gz: gunzip &lt; marvin-bin-VERSION.tar.gz |tar xf -</pre>
+    	This distribution contains all files necessary for using MarvinSketch and 
+	MarvinView applets, without HTML pages and examples.</li>
+    <li><i>marvin-all-VERSION.tar.gz</i> and <i>marvin-all-VERSION.zip</i>
+	<p>Download and unpack:<pre>
+zip: unzip marvin-all-VERSION.zip
+tar.gz: gunzip &lt; marvin-all-VERSION.tar.gz | tar xf -</pre>
+	This distribution contains all files necessary  for using MarvinSketch 
+    	and MarvinView applets, as well as the documentation and examples. 
+    	</li>
+    </ul> 
+</li>
+
+<li>
+    <h3><a NAME="question5"></a>How can I delete plugin packages from the Marvin applets package?</h3>
+<p>
+Remove <code>chemaxon/marvin/plugin</code> and <code>sjars/plugin</code> directories
+    from the <code>marvin</code> directory.
+    <pre>
+    cd marvin
+    rm -r chemaxon/marvin/plugin
+    rm -r sjars/plugin
+    </pre>
+</li>
+<li>
+    <h3><a NAME="unsign_jar"></a>How can I create an unsigned jar file from a signed jar file?</h3>
+<p>See the linking <a href="https://www.chemaxon.com/forum/ftopic65.html">forum topic</a>.</p>
+</li>
+
+<li><h3><a name="signingvalid" class="anchor">How long is the signed applet valid?</a></h3>
+<p>Read the following document, to check the expiration date of signing for Marvin applets:
+<a href="../../expirationdate.html">Expiration date of releases</a>.</p>
+</li>
+
+<li><h3><a name="iis" class="anchor">I receive a java.lang.RuntimeException with IIS server, what's the problem?</a></h3>
+<p>The following exception occurs with Marvin 5.2.x versions:</p>
+<pre>
+    Exception in thread "AWT-EventQueue-2" java.lang.RuntimeException: java.lang.NoClassDefFoundError:
+    Could not initialize class chemaxon.marvin.modules.GraphInvariants
+            at chemaxon.marvin.util.MarvinModule.load(Unknown Source)
+            at chemaxon.struc.MoleculeGraph.a(Unknown Source)
+</pre>
+<p>IIS servers versioned 6.0 and above serve only those files that are on
+the mime type list of the server or web site, but some types required by Marvin are not on the list by default.</p>
+<p><b>Solution:</b> add the following mime types in the HTTP headers tab on the
+properties dialog of the web site or the server:
+<ul>
+    <li>.properties = "text/plain"</li>
+    <li>.data = "application/octet-stream"</li>
+</ul>
+<p>If IIS should transfer molecule files to the clients, then the molecule file formats
+    should also be registered with their extension.<br/>
+A few commonly used extensions and the corresponding mime types are below:
+<ul>
+    <li>.mrv = "chemical/x-chemaxon-marvinfile"</li>
+    <li>.mol = "chemical/x-mdl-molfile"</li>
+    <li>.cdx = "chemical/x-cdx"</li>
+    <li>.sdf = "chemical/x-mdl-sdfile"</li>
+    <li>.smi = "chemical/x-daylight-smiles"</li>
+    <li>.rxn = "chemical/x-mdl-rxnfile"</li>
+    <li>.rdf = "chemical/x-mdl-rdfile"</li>
+    <li>.pdb = "chemical/x-pdb"</li>
+</ul><br/>
+</li>
+
+<li><h3><a name="applet_cache_problem" class="anchor">The applet is loading but it never loads.</a></h3>
+    <p>On the Java console a ClassNotFoundException is thrown, caused by an IOException which is thrown when the webserver reports an error to the GET request for the <code>http://host.tld/appletpath/JMSketch.class</code></p>
+    <p><b>This problem occurs with Java 1.6.0_u15+ versions, if the Java cache is turned off.</b></p>
+
+    <p>The problem will no longer exist after Marvin 5.3, until that the Java cache is not suggested to be switched off.</p>
+
+</li>
+
+<li><h3><a name="applet_java_incompatibility" class="anchor">Some Applet functionalities do not work.</a></h3>
+	<p>On the Java console a ClassNotFoundException is thrown, caused by an IOException wich is thrown when the webserver reports and error to the GET request for a .class file.</p>
+	<p><b>This problem occurs with Java 1.6.0_u15+ versions.</b></p>
+	<p>The problem is caused by the <a href="http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=6888528">6888528 java bug</a>. A possible solution is to clean the java cache, and redo the actions with a clean cache when this error occurs.
+	 Another solution is to turn off the "Enable the next-generation Java Plug-in" in the Java Plug-in group on the Advanced tab of the Java Control Panel.</p>
+</li>
+
+<li><h3><a NAME="mviewapplet.napplets_vs_table.memory"></a>
+    When I put MView applets into an HTML table,  I can only display about
+    200 molecules because the browser slows down and runs out of memory.
+    Do you provide a simple and "thin" applet, which just displays molecules
+    without any rotation and linkage to the sketcher?</h3>
+    <p>
+    The rotation and the linkage to the sketcher have negligible
+    contribution to the memory footprint. The largest contributions are from</p>
+    <ol>
+    <li>double buffering of Swing components</li>
+    <li>size of Molecule objects</li>
+    <li>large color arrays that store the shades for 3D rendering modes</li>
+    </ol>
+    <p>
+    Even if we provided a "thin" applet without 3D support, it would 
+    only enable you to use about twice as many molecules. Then you would run
+    out of memory again because of the double buffering.</p>
+    <p>
+    You should use an <i>n</i>-molecule scrollable MView table instead of
+    <i>n</i> applets. Then the common data will be stored in only one place
+    (instead of <i>n</i>) and the number of Swing components will be
+    equal to the number of visible molecules which is usually much smaller than
+    <i>n</i>.
+    </p>
+</li>
+<li><h3><a NAME="consecutive_spaces"></a>I do not manage to load a molecule
+string using an applet parameter in Mozilla.</h3>
+<p>Your molecule string may contain consecutive space characters in applet
+parameters which are converted to only one space. This bug applies to Mozilla
+0.9.7-1.0 and probably some earlier versions too.
+</li>
+<li>
+    <h3><a NAME="netscape_set_java_env"></a>How can I set the Java environment of Firefox in Linux?</h3>
+<p>See the documentation of Sun's Java:
+<a href="http://java.sun.com/javase/6/webnotes/install/jre/manual-plugin-install-linux.html">Manual Installation and Registration of Linux Plugin</a></p>
+</li>
+<li>
+<h3><a NAME="question7"></a>IE can not load Marvin applets over SSL communication. 
+I have received this warning message: &quot;This page contains both secure
+and non-secure items.&quot;</h3>
+<p>
+The <code>CODEBASE</code> attribute of the <code>OBJECT</code> tag refers to a 
+non-secure page that the browser does not accept.
+The browser downloads the plugin from this URL, if the Java Plugin is not 
+installed on your machine.<br>
+You should change this URL to a secure one.</p>
+    <ol>
+    <li>To provide a secure page for downloading a Java Plugin, copy a JRE <em>cab</em> file to your site.
+    <pre>
+    http://java.sun.com/products/plugin/autodl/jinstall-1_4_2-windows-i586.cab#Version=1,3,0,0
+    </pre>
+    </li>
+    <li>Modify the reference to this <em>cab</em> file in marvin.js. (Search the following code
+    in the <code>applet_begin</code> function).
+    <pre>
+    s += ' CODEBASE=" http://java.sun.com/products/plugin/autodl/jinstall-1_4_2-windows-i586.cab#Version=1,3,0,0"\n';
+    </pre>
+    You should replace the text with
+    <pre>
+    s += ' CODEBASE=" https://&lt;PLUGINLOCATION&gt;/jinstall-1_4_2-windows-i586.cab#Version=1,3,0,0"\n';
+    </pre>
+    where <code>&lt;PLUGINLOCATION&gt;</code> is the new location of the
+    <em>cab</em> file (e.g.: <code>www.my_secure_site.com/java_plugin</code>).
+    <small>Note: The new URL must start with "https" protocol instead of "http".</small>
+    </li>
+    </ol>
+</li>
+
+
+</ul>
+
+</body>
+</html>

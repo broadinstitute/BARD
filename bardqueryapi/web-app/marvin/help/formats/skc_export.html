@@ -1,0 +1,186 @@
+<!-- 
+    Document   : SKC_export
+    Created on : March 10, 2010
+    Author     : Annamaria Jakab
+-->
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+    <title>SKC Export options details</title>
+    <link REL ="stylesheet" TYPE="text/css" HREF="../marvinmanuals.css" TITLE="Style">
+  </head>
+  <body>
+  <h1>SKC Export options details</h1>
+ 
+ <h2><a name="atoms">Atoms</a></h2>
+ <p>The following atom features are exported from Marvin to the SKC file format:</p>
+  
+  <p>  <table border="1">
+<thead>
+<tr>
+<th>Marvin</th>
+<th>ISIS/Draw</th>
+</tr>
+</thead>
+<tbody>
+<tr><td colspan="2"><b>General properties</b></tr>
+<tr><td>Type</td><td>Supported</td></tr>
+<tr><td>Stereo Reaction</td><td>Supported</td></tr>
+<tr><td>Stereo Enhanced</td><td>Supported (exported as Attached Data)</td></tr>
+<tr><td>Charge</td><td>Supported</td></tr>
+<tr><td>Valence</td><td>Supported</td></tr>
+<tr><td>Radical</td><td>Supported</td></tr>
+<tr><td>Isotope	</td><td>Supported</td></tr>
+<tr><td>Map</td><td>Supported</td></tr>
+<tr><td>Alias</td><td>Supported</td></tr>
+<tr><td>Pseudo</td><td>Supported</td></tr>
+<tr><td>SMARTS</td><td>Supported</td></tr>
+<tr><td>Value</td><td>Supported</td></tr>
+
+
+<tr><td colspan="2"><b>Query properties</b></tr>
+<tr><td>Total number of attached hydrogens</td><td>Supported</td></tr>
+<tr><td>Valence, Sum of bond orders</td><td>Supported</td></tr>
+<tr><td>Number of connections</td><td>Supported</td>
+<tr><td>Ring count</td><td>Not supported by ISIS/Draw</td>
+<tr><td>Smallest ring size</td><td>Supported</td>
+<tr><td>Ring bond count</td><td>Supported</td>
+<tr><td>Substitution count</td><td>Supported</td>
+<tr><td>Number of implicit hydrogens</td><td>Supported</td>
+<tr><td>Number of explicit connections</td><td>Supported</td>
+<tr><td>Unsaturated atom</td><td>Supported</td></tr>
+<tr><td colspan="2"><b>Atom Label</b></tr>
+<tr><td>Font, style</td><td>Supported</td>
+<tr><td>Scale</td><td>Supported</td>
+<tr><td>Atom color</td><td>Supported</td>
+
+</tbody>
+</table>
+</p>
+ 
+ <h2><a name="bonds">Bonds</a></h2>
+  <p>The following bond features from Marvin are exported to the SKC file format:</p>
+  
+  <p>  <table border="1">
+<thead>
+<tr>
+<th>Marvin</th>
+<th>ISIS/Draw</th>
+</tr>
+</thead>
+<tbody>
+
+<tr><td colspan="2"><b>Bond type</b></tr>
+
+<tr><td>Single</td><td>Supported</td></tr>
+<tr><td>Double</td><td>Supported</td></tr>
+<tr><td>Triple</td><td>Supported</td></tr>
+<tr><td>Aromatic</td><td>Supported</td></tr>
+<tr><td>Single Up</td><td>Supported (Up)</td></tr>
+<tr><td>Single Down</td><td>Supported (Down)</td></tr>
+<tr><td>Single Up or Down</td><td>Supported (Either)</td></tr>
+<tr><td>Double Cis or Trans</td><td>Supported (Dbl Either)</td></tr>
+<tr><td>Double C/T or unspec</td><td>Supported (Double)</td></tr>
+<tr><td>Single or Double</td><td>Supported (Single/Double)</td></tr>
+<tr><td>Double or Aromatic</td><td>Supported (Double/Aromatic)</td></tr>
+<tr><td>Any</td><td>Supported</td></tr>
+<tr><td>Coordinate</td><td>Supported</td></tr>
+
+<tr><td colspan="2"><b>Reacting center</b></tr>
+
+<tr><td>Center</td><td>Supported</td></tr>
+<tr><td>Make/Break</td><td>Supported</td></tr>
+<tr><td>Change</td><td>Supported</td></tr>
+<tr><td>Make/Change</td><td>Supported</td></tr>
+<tr><td>Not Center</td><td>Supported</td></tr>
+
+<tr><td colspan="2"><b>Topology</b></td></tr>
+
+<tr><td>In Ring</td><td>Supported</td></tr>
+<tr><td>In Chain</td><td>Supported</td></tr>
+
+<tr><td colspan="2"><b>Other</b></td></tr>
+
+<tr><td>Stereo search</td><td>Supported</td></tr>
+<tr><td>Thickness</td><td>Supported</td></tr>
+<tr><td>Color</td><td>Supported</td></tr>
+<tr><td>Crossed bond</td><td>Supported</td></tr>
+</tbody>
+</table>
+</p>
+
+ <h2><a name="reaction">Reaction</a></h2>
+<p>The following reaction features of Marvin are exported to the SKC file format:</p>
+
+<p>
+<table border="1">
+<thead>
+<tr>
+<th>Marvin</th>
+<th>ISIS/Draw</th>
+</tr>
+</thead>
+
+<tbody>
+<tr><td>Reaction arrow</td><td>Supported, some types of reaction arrows are converted to single reaction arrows</td></tr>
+<tr><td>Reactant</td><td>Supported</td></tr>
+<tr><td>Product</td><td>Supported</td></tr>
+<tr><td>Agent</td><td>Supported</td></tr>
+<tr><td>Multiple step reaction with graphic arrows</td><td>Supported, converted to Multiple step reaction</td></tr>
+<tr><td>Reaction and R-group combination</td><td>Supported</td></tr>
+<tr><td>Reaction and S-group combination</td><td>Supported</td></tr>
+
+</tbody>
+</table>
+ 
+ 
+ <h2><a name="groups">Groups</a></h2>
+<p>The following groups are exported to the SKC file format as:</p>
+
+<p>
+<table border="1">
+<thead>
+<tr>
+<th>Marvin</th>
+<th>ISIS/Draw</th>
+</tr>
+</thead>
+<tbody>
+<tr><td colspan="2"><b>S-groups</b>	</td></tr>
+
+<tr><td>Anypolymer (anyp)	</td><td>Any polymer type</td></tr>
+<tr><td>Component (c)	</td><td>Component  type</td></tr>
+<tr><td>Copolymer (co)	</td><td>Copolymer type</td></tr>
+<tr><td>Copolymer, alternating (alt)	</td><td>Copolymer type with alternating polymer subtype</td></tr>
+<tr><td>Copolymer, block (blk)	</td><td>Copolymer type with block polymer subtype</td></tr>
+<tr><td>Copolymer, random (ran)	</td><td>Copolymer type with random polymer subtype</td></tr>
+<tr><td>Crosslink (xl)	</td><td>Crosslink type</td></tr>
+<tr><td>Generic ()	</td><td>Generic type</td></tr>
+<tr><td>Graft (grf)	</td><td>Graft type</td></tr>
+<tr><td>Mer (mer)	</td><td>Mer type</td></tr>
+<tr><td>Mixture, ordered (f)	</td><td>Mixture type</td></tr>
+<tr><td>Mixture, unordered (mix)	</td><td>Mixture type</td></tr>
+<tr><td>Modification (mod)	</td><td>Modification type</td></tr>
+<tr><td>Monomer (mon)	</td><td>Monomer type</td></tr>
+<tr><td>Multiple S-Group (#)</td><td>Multiple group type</td></tr>
+<tr><td>Repeating unit with repetition ranges(e.g.2,4-6)</td><td>Supported</td></tr>
+<tr><td>SRU polymer(n)	</td><td>Label and bracket type supported, repeat pattern not yet supported</td></tr>
+<tr><td>Superatom S-group</td><td>Supported</td></tr>
+<tr><td>Attached data</td><td>Supported</td></tr>
+
+<tr><td colspan="2"><b>R-groups</b>	</td></tr>
+<tr><td>R-group</td><td>	Supported</td></tr>
+<tr><td>R-Logic</td><td>Not supported</td></tr>
+</tbody>
+</table>
+
+<p>Note: head-to-tail with flip (ht,f) and head-to-head with flip (hh,f) attributes are not handled because they are not supported by Symyx3.1 and ISIS/Draw.
+
+<h2>Graphical objects</h2>
+<p>
+Rounded rectangle, ellipse and graphical bracket objects are supported, except for the line style. Text attributes are also exported.
+
+<p><center><a href="skc-doc.html">Back to SKC file format page</a></center></p>
+
+  </body>
+</html>

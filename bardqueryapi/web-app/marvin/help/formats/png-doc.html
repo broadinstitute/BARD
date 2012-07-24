@@ -1,0 +1,61 @@
+<html>
+<head>
+<meta NAME="author" CONTENT="Peter Csizmadia">
+<link REL ="stylesheet" TYPE="text/css" HREF="../marvinmanuals.css" TITLE="Style">
+<title>PNG image export in Marvin</title>
+</head>
+<body>
+
+<h1>Portable Network Graphics</h1>
+
+<p>
+Codename: <strong>png</strong>
+
+<p>
+Marvin is able to export PNG
+<a HREF="images-doc.html">image files</a>.
+The PngExport module recognizes
+the <a HREF="images-doc.html#options">common image export options</a>, and the
+following special options:
+<blockquote>
+<table CELLSPACING="0" CELLPADDING="5" border="0">
+<tr><td valign="top"><code>b...</code></td>
+    <td>Bits/pixel, valid values, and their meanings:
+    <ul>
+    <li>1 - Black and white colors defined with a palette, image data contains 1 bit/pixel</li>
+    <li>2 - Black, white, light, and dark gray colors defined with a palette, image data contains 2 bits/pixel</li>
+    <li>4 - 16 base colors defined with a palette, image data contains 2 bits/pixel</li>
+    <li>8 - 256 colors defined with a palette, image data contains 2 bits/pixel</li>
+    <li>24 - image data contains 3*8 bits/pixel RGB colors, without palette.</li>
+    <li>32 - image data contains 3*8 bits/pixel RGB colors, and 8 bits/pixel alpha channel, without palette.</li>
+    </ul>
+</td></tr>
+<tr><td><code>nosource</code></td>
+    <td>Omits saving of molecule source into image as comment.</td></tr>
+<tr><td><code><s>Z...</s></code></td>
+    <td>Deprecated. Images are being exported with maximum compression level.</td></tr>
+</table>
+</blockquote>
+Examples:
+<blockquote>
+<table CELLSPACING="0" CELLPADDING="5" border="0">
+<tr VALIGN=TOP><td><code>png</code></td>
+    <td>Default settings: 200x200 pixels,
+	white background (or black in 3D), maximum compression.</td></tr>
+<tr VALIGN=TOP><td><code>png:w100,b32,#ffffff00</code></td>
+    <td>100x100 PNG with yellow background, alpha channel is encoded.</td></tr>
+</table>
+</blockquote>
+<p>
+
+<h2>Reference</h2>
+<ul>
+<li><a HREF="http://www.libpng.org/pub/png/" TARGET="_top">PNG Home Site (http://www.libpng.org/pub/png/)</a></li>
+</ul>
+
+<p ALIGN=LEFT>
+<small>PngExport uses the default Javax ImageIO package to export PNG images.</small>
+</p>
+
+</body>
+</html>

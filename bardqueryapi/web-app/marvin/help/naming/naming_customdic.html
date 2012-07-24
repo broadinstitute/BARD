@@ -1,0 +1,76 @@
+<!--
+    Document   : custom dictionary
+    Author     : Annamaria Jakab
+-->
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <HEAD>
+	<META HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=utf-8">
+	<TITLE>Custom Dictionary in Name import</TITLE>
+ <link rel=stylesheet type="text/css" href="../marvinmanuals.css">
+</HEAD>
+  <body>
+
+  <h1>Custom Dictionary in Name import</h1>
+
+
+<p>It is possible to extend the name to structure conversion by putting
+structures with their name in a custom dictionary file. Names present in
+the custom dictionary will be converted to the corresponding structure. The
+custom dictionary has precedence over the standard name to structure conversion.
+</p>
+<p>Default path: CHEMAXON_DIR/custom_names.smi where CHEMAXON_DIR is located at:
+        <ul>
+            <li>Windows XP: C:\Documents and Settings\USERNAME\chemaxon</li>
+			<li>Windows Vista or above: C:\Users\USERNAME\chemaxon</li>
+            <li>Linux: /home/USERNAME/.chemaxon</li>
+            <li>OS X:  /Users/USERNAME/.chemaxon</li>
+        </ul>
+
+<h3>Format</h3>
+<p>
+For performance reasons, the dictionary has to be in SMILES format.
+To use a dictionary in another format, it can be converted to SMILES using
+molconvert or mview (Save As). In the same way, several dictionaries should
+be merged into a single dictionary file in SMILES format.
+
+<p>
+The dictionary file can be represented in 2 different ways.
+In the most simple and usual one, each line contains a SMILES and a name field, separated by a tab character.
+For instance:
+<pre>
+C\C=C\CCC(O)=O	gamma-hexenoic acid
+</pre>
+<p>
+If there are named properties in the file, the NAME field will be used.
+For instance:
+<pre>
+#SMILES	EXACT_MASS	NAME
+C\C=C\CCC(O)=O	114.1424	gamma-hexenoic acid
+</pre>
+
+<h3>Preventing a name from being converted</h3>
+
+If a name is converted by name to structure but is not desired, it can be blocked using the custom dictionary.
+This can be useful for instance with names like ATP, which have a chemical meaning
+(adenosine triphosphate), but also unrelated non-chemical meanings.
+
+To block it, use such a line in the custom dictionary:
+
+<pre>
+[IGNORE]	ATP
+</pre>
+
+<h3>Using a different location for the dictionary</h3>
+
+Path can be changed from API or console by using the <code>dict</code> property:
+
+<h4>API</h4>
+<code>Molecule mol = MolImporter.importMol("CUSTOMNAME", "name:dict=PATH");</code>
+
+<h4>Command line</h4>
+<code>molconvert smiles -s CUSTOMNAME{name:dict=PATH}</code>
+</p>
+
+  </body>
+</html>

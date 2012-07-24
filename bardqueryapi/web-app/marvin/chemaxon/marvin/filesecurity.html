@@ -1,0 +1,36 @@
+<html>
+<head>
+<title>Marvin caught a SecurityException</title>
+<link REL ="stylesheet" TYPE="text/css" HREF="../../marvinmanuals.css" TITLE="Style">
+</head>
+<body>
+<font COLOR="red">
+<blink>Error:</blink> Marvin cannot load a molecule or template file
+</font>
+
+<p>This error occurs if the applet does not have permission to load a file
+from a local drive. Some browsers (Netscape, MSIE) do not let applets read
+local files in directories outside <b>CODEBASE</b>, because of security
+reasons. Other browsers (Opera, Konqueror) do not let applets read local
+files at all.
+
+<p>Possible solutions:
+<ul>
+<li>Install a web server and try to access the applet and
+    the molecule files through the http protocol.
+    <p>
+    </li>
+<li>Copy the molecule file(s) to a directory which is inside the applet's
+    <b>CODEBASE</b>.
+    <p>
+    </li>
+<li>Disable Java security in your web browser.
+    <ul>
+    <li>in Konqueror 2.1: uncheck the &quot;Use Security Manager&quot;
+	option in the Java settings</li>
+    </ul>
+    </li>
+</ul>
+
+</body>
+</html>

@@ -1,0 +1,992 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML>
+<HEAD>
+	<META HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=windows-1252">
+	<TITLE>Marvin Document format</TITLE>
+	<META NAME="GENERATOR" CONTENT="LibreOffice 3.4  (Win32)">
+	<META NAME="AUTHOR" CONTENT="Peter Csizmadia">
+	<META NAME="CREATED" CONTENT="0;0">
+	<META NAME="CHANGED" CONTENT="20111110;11280623">
+	<STYLE TYPE="text/css">
+	<!--
+		P { color: #333333; font-family: "Verdana", "Arial", "Helvetica", sans-serif; font-size: 12pt; line-height: 150% }
+		TD P { color: #333333; font-family: "Verdana", "Arial", "Helvetica", sans-serif; font-size: 12pt; line-height: 150% }
+		H1 { margin-top: 0.11cm; margin-bottom: 0.11cm; background: #e4f1f1; border: 1px solid #cae4e4; padding: 0.06cm; color: #077179; line-height: 150%; text-align: center }
+		PRE { color: #333333; font-family: monospace; font-size: 10pt; line-height: 150% }
+		H2 { color: #077179; line-height: 150% }
+		H2.cjk { font-family: "SimSun" }
+		H2.ctl { font-family: "Mangal" }
+		A:link { color: #6b6f40 }
+		CODE { font-family: monospace; font-size: 10pt }
+	-->
+	</STYLE>
+</HEAD>
+<BODY LANG="hu-HU" TEXT="#333333" LINK="#6b6f40" BGCOLOR="#ffffff" DIR="LTR">
+<H1>Marvin Documents</H1>
+<P>Codename: <STRONG>mrv</STRONG> 
+</P>
+<H2 CLASS="western">Contents</H2>
+<UL>
+	<LI><P STYLE="margin-bottom: 0cm"><A HREF="#mrv">Marvin Documents
+	format</A> 
+	</P>
+	<LI><P><A HREF="#export">Export options</A> 
+	</P>
+</UL>
+<H2 CLASS="western"><A NAME="mrv"></A>Marvin Documents format</H2>
+<P>An XML based format that is capable to store graphics objects
+(lines, text boxes, etc.) and molecule objects. 
+</P>
+<P>The following tags are recognized: 
+</P>
+<UL>
+	<LI><P STYLE="margin-bottom: 0cm"><B>&lt;cml&gt;</B> &mdash; root
+	element<BR>Children: 
+	</P>
+	<UL>
+		<LI><P STYLE="margin-bottom: 0cm"><A HREF="#MDocument"><B>&lt;MDocument&gt;</B></A>
+				</P>
+	</UL>
+	<LI><P STYLE="margin-bottom: 0cm"><A NAME="MDocument"></A><B>&lt;MDocument&gt;</B>
+	- top level container of a record<BR>Attributes: 
+	</P>
+	<UL>
+		<LI><P STYLE="margin-bottom: 0cm"><I>atomSetRGB</I>, <I>bondSetRGB</I>
+		&mdash; atom/bond set colors.<BR>Comma separated list of entries in
+		&quot;<I>k</I>:<I>color</I>&quot; format, where <I>k</I> is the set
+		sequence number and <I>color</I> is the color specification in one
+		of the following forms: &quot;#RRGGBB&quot; - RGB components as a
+		6-digit hexadecimal number, &quot;D&quot; - default set color, &quot;N&quot;
+		- no set color (normal atom/bond coloring is used). 
+		</P>
+		<LI><P STYLE="margin-bottom: 0cm"><I>multipageEnabled</I> &mdash;
+		enables the multipage molecular document. Its value is &quot;true&quot;
+		or &quot;false&quot;. 
+		</P>
+		<LI><P STYLE="margin-bottom: 0cm"><I>multipageSelectedPage</I> &mdash;
+		the selected page in multipage molecular document. Its value is &quot;k&quot;
+		where k is a non-negativ integer. 
+		</P>
+		<LI><P STYLE="margin-bottom: 0cm"><I>multipageColumnCount</I> &mdash;
+		number of columns in multipage molecular document. Its value is &quot;k&quot;
+		where k is a non-negativ integer. 
+		</P>
+		<LI><P STYLE="margin-bottom: 0cm"><I>multipageRowCount</I> &mdash;
+		number of rows in multipage molecular document. Its value is &quot;k&quot;
+		where k is a non-negativ integer. 
+		</P>
+		<LI><P STYLE="margin-bottom: 0cm"><I>multipageWidth</I> &mdash;
+		width of a page in multipage molecular document. Its value is &quot;d&quot;
+		where d is a floating point number. 
+		</P>
+		<LI><P STYLE="margin-bottom: 0cm"><I>multipageHeight</I> &mdash;
+		height of a page in multipage molecular document. Its value is &quot;d&quot;
+		where d is a floating point number. 
+		</P>
+		<LI><P STYLE="margin-bottom: 0cm"><I>multipageLeft</I> &mdash; left
+		margin of a page in multipage molecular document. Its value is &quot;d&quot;
+		where d is a floating point number. 
+		</P>
+		<LI><P STYLE="margin-bottom: 0cm"><I>multipageRight</I> &mdash;
+		right of a page in multipage molecular document. Its value is &quot;d&quot;
+		where d is a floating point number. 
+		</P>
+		<LI><P STYLE="margin-bottom: 0cm"><I>multipageTop</I> &mdash; top
+		margin of a page in multipage molecular document. Its value is &quot;d&quot;
+		where d is a floating point number. 
+		</P>
+		<LI><P STYLE="margin-bottom: 0cm"><I>multipageBottom</I> &mdash;
+		bottom margin of a page in multipage molecular document. Its value
+		is &quot;d&quot; where d is a floating point number. 
+		</P>
+	</UL>
+	<P STYLE="margin-bottom: 0cm">Children: 
+	</P>
+	<UL>
+		<LI><P STYLE="margin-bottom: 0cm"><A NAME="MChemicalStruct"></A><B>&lt;MChemicalStruct&gt;</B>
+		- chemical structure<BR>Children: 
+		</P>
+		<UL>
+			<LI><P STYLE="margin-bottom: 0cm"><B>&lt;molecule&gt;</B> &mdash;
+			It can contain both <A HREF="cml-doc.html">CML</A> and Marvin
+			attributes. Currently, there is only one Marvin attribute: 
+			</P>
+			<UL>
+				<LI><P STYLE="margin-bottom: 0cm"><I>absStereo</I> 
+				</P>
+			</UL>
+			<P STYLE="margin-bottom: 0cm">Children: 
+			</P>
+			<UL>
+				<LI><P STYLE="margin-bottom: 0cm"><B>&lt;atomArray&gt;</B> &mdash;
+				It can contain both <A HREF="cml-doc.html">CML</A> and Marvin
+				attributes. Marvin attributes are explained below. 
+				</P>
+				<UL>
+					<LI><P STYLE="margin-bottom: 0cm"><I>residueType</I>, <I>residueId</I>
+					&mdash; residue type/ID value or zero 
+					</P>
+					<LI><P STYLE="margin-bottom: 0cm"><I>lonePair</I> &mdash; Number
+					of lone pairs. 
+					</P>
+					<LI><P STYLE="margin-bottom: 0cm"><I>residueAtomName</I> &mdash;
+					PDB atom name or zero. 
+					</P>
+					<LI><P STYLE="margin-bottom: 0cm"><I>radical</I> &mdash; Radical
+					center value or zero. 
+					</P>
+					<LI><P STYLE="margin-bottom: 0cm"><I>reactionStereo</I> &mdash;
+					Reaction stereo value or zero. 
+					</P>
+					<LI><P STYLE="margin-bottom: 0cm"><I>sgroupRef</I> &mdash;
+					S-group reference value or zero: 
+					</P>
+					<LI><P STYLE="margin-bottom: 0cm"><I>sgroupAttachmentPoint</I> &mdash;
+					S-group attachment point value or zero: &quot;1&quot;, (on first
+					site) &quot;2&quot; (on second site) or &quot;both&quot; (on
+					both sites) 
+					</P>
+					<LI><P STYLE="margin-bottom: 0cm"><I>rgroupRef</I> &mdash;
+					R-group reference value or zero. 
+					</P>
+					<LI><P STYLE="margin-bottom: 0cm"><I>attachmentPoint</I> &mdash;
+					S-group attachment point value. Exported for backward
+					compatibility, but not imported. Attachment point value is
+					imported from <I>attachmentOrder</I> tag for R-group attachment
+					points, from <I>sgroupAttachmentPoint</I> tag for S-group
+					attachment points since Marvin version 5.4. 
+					</P>
+					<LI><P STYLE="margin-bottom: 0cm"><I>attachmentOrder</I> &mdash;
+					Attachment point order value in the case of R-group attachment
+					point or zero otherwise. 
+					</P>
+					<LI><P STYLE="margin-bottom: 0cm"><I>mrvValence</I> &mdash;
+					Valence or `-'. 
+					</P>
+					<LI><P STYLE="margin-bottom: 0cm"><I>mrvQueryProps</I> &mdash;
+					Query atom properties or zero. 
+					</P>
+					<LI><P STYLE="margin-bottom: 0cm"><I>mrvAlias</I> &mdash; Atom
+					alias or zero. 
+					</P>
+					<LI><P STYLE="margin-bottom: 0cm"><I>mrvExtraLabel</I> &mdash;
+					Atom extra label or zero. 
+					</P>
+					<LI><P STYLE="margin-bottom: 0cm"><I>mrvPseudo</I> &mdash;
+					Pseudoatom name or zero. 
+					</P>
+					<LI><P STYLE="margin-bottom: 0cm"><I>mrvStereoGroup</I>, <I>mrvMap</I>
+										</P>
+					<LI><P STYLE="margin-bottom: 0cm"><I>mrvSetSeq</I> &mdash; Atom
+					set sequence number. 
+					</P>
+					<LI><P STYLE="margin-bottom: 0cm"><I>mrvLinkNodeRep</I> &mdash;
+					Number of repetitions for link nodes. A number <I>n</I> in the
+					list is the maximum number of repetitions for the corresponding
+					atom (value 1 means that the atom is not a link node), <I>m</I>-<I>n</I>
+					sets both the minimum and maximum values. 
+					</P>
+					<LI><P STYLE="margin-bottom: 0cm"><I>mrvLinkNodeOut</I> &mdash;
+					Outer bond references for link nodes. Comma separated numbers in
+					the list defines the indices of bonds (amongst bonds of the link
+					atom) leading to the outer atoms (non-repeating neighbours) of
+					the link nodes, &quot;-&quot; means no outer bonds. 
+					</P>
+					<LI><P STYLE="margin-bottom: 0cm"><I>mrvSpecIsotopeSymbolPreferred</I>
+					&mdash; Special symbols are preferred for Hydrogen isotopes (D,
+					T) if the value is 1, normal element symbol (H) is used if the
+					value is 0. 
+					</P>
+				</UL>
+				<P STYLE="margin-bottom: 0cm">Children: 
+				</P>
+				<UL>
+					<LI><P STYLE="margin-bottom: 0cm"><B>&lt;atom&gt;</B> &mdash; It
+					can contain both <A HREF="cml-doc.html">CML</A> and Marvin
+					attributes. Marvin attributes are explained below. 
+					</P>
+					<UL>
+						<LI><P STYLE="margin-bottom: 0cm"><I>lonePair</I> &mdash;
+						Number of lone pais. 
+						</P>
+						<LI><P STYLE="margin-bottom: 0cm"><I>residueType</I>, <I>residueId</I>
+						&mdash; They were present in CML1 but removed later. 
+						</P>
+						<LI><P STYLE="margin-bottom: 0cm"><I>residueAtomName</I> &mdash;
+						PDB atom name. 
+						</P>
+						<LI><P STYLE="margin-bottom: 0cm"><I>radical</I> &mdash;
+						Radical center: &quot;monovalent&quot; (doublet), &quot;divalent&quot;,
+						&quot;divalent1&quot; (singlet), &quot;divalent3&quot;
+						(triplet), &quot;trivalent&quot;, &quot;trivalent2&quot;
+						(doublet) &quot;trivalent4&quot; (quartet) or &quot;4&quot;
+						(special incorrect value for student examination). 
+						</P>
+						<LI><P STYLE="margin-bottom: 0cm"><I>reactionStereo</I> &mdash;
+						Reaction stereo: &quot;Inv&quot; (inversion) or &quot;Ret&quot;
+						(retention). 
+						</P>
+						<LI><P STYLE="margin-bottom: 0cm"><I>sgroupRef</I> &mdash;
+						S-group reference. 
+						</P>
+						<LI><P STYLE="margin-bottom: 0cm"><I>sgroupAttachmentPoint</I>
+						&mdash; S-group attachment point: &quot;1&quot;, (on first
+						site) &quot;2&quot; (on second site) or &quot;both&quot; (on
+						both sites). 
+						</P>
+						<LI><P STYLE="margin-bottom: 0cm"><I>rgroupRef</I> &mdash;
+						R-group reference. Currently, only positive integer values are
+						accepted. 
+						</P>
+						<LI><P STYLE="margin-bottom: 0cm"><I>attachmentPoint</I> &mdash;
+						S-group attachment point value. Exported for backward
+						compatibility, but not imported. Attachment point value is
+						imported from <I>attachmentOrder</I> tag for R-group attachment
+						points, from <I>sgroupAttachmentPoint</I> tag for S-group
+						attachment points since Marvin version 5.4. 
+						</P>
+						<LI><P STYLE="margin-bottom: 0cm"><I>attachmentOrder</I> &mdash;
+						Attachment point order value in the case of R-group attachment
+						point. 
+						</P>
+						<LI><P STYLE="margin-bottom: 0cm"><I>ligandOrder</I> &mdash;
+						Order of ligands connected to an R-group atom: list of atom
+						identifiers. 
+						</P>
+						<LI><P STYLE="margin-bottom: 0cm"><I>mrvValence</I> &mdash;
+						Valence.</P>
+						<LI><P STYLE="margin-bottom: 0cm"><I>mrvQueryProps</I> &mdash;
+						Query atom properties.<BR>Format: [<I>atom Type</I>:][<I>Query
+						properties</I>][;] [str:<I>query string</I>], where <I>atom
+						type</I> can be &quot;A&quot; (any atom), &quot;Q&quot;
+						(heteroatom), &quot;L,<I>element1</I>,...&quot; (inclusive atom
+						list) or &quot;L!<I>element1</I>!...&quot; (exclusive atom
+						list). <I>Query properties</I> is a semicolon separated list.
+						An element of the list starts with prefix: 
+						</P>
+						<UL>
+							<LI><P STYLE="margin-bottom: 0cm">&quot;H&quot; &mdash; total
+							hydrogen count, see <A HREF="smiles-doc.html#smarts.H">SMARTS
+							H</A>, 
+							</P>
+							<LI><P STYLE="margin-bottom: 0cm">&quot;h&quot; &mdash;
+							implicit hydrogen count, see <A HREF="smiles-doc.html#smarts.h">SMARTS
+							h</A>, 
+							</P>
+							<LI><P STYLE="margin-bottom: 0cm">&quot;X&quot; &mdash; total
+							connection count, see <A HREF="smiles-doc.html#smarts.X">SMARTS
+							X</A>, 
+							</P>
+							<LI><P STYLE="margin-bottom: 0cm">&quot;D&quot; &mdash;
+							degree, see <A HREF="smiles-doc.html#smarts.D">SMARTS D</A>, 
+							</P>
+							<LI><P STYLE="margin-bottom: 0cm">&quot;R&quot; &mdash; SSSR
+							ring count, see <A HREF="smiles-doc.html#smarts.R">SMARTS R</A>,
+														</P>
+							<LI><P STYLE="margin-bottom: 0cm">&quot;r&quot; &mdash;
+							smallest ring size in SSSR, see <A HREF="smiles-doc.html#smarts.r">SMARTS
+							r</A>, 
+							</P>
+							<LI><P STYLE="margin-bottom: 0cm">&quot;a&quot; &mdash;
+							aromatic (&quot;a1&quot;) or aliphatic (&quot;a0&quot;), see
+							<A HREF="smiles-doc.html#smarts.a_A">SMARTS a/A</A>, 
+							</P>
+							<LI><P STYLE="margin-bottom: 0cm">&quot;u&quot; &mdash;
+							unsaturated atom, see <A HREF="mol-csmol-doc.html#molV2.unsat">MDL
+							M UNS</A>, 
+							</P>
+							<LI><P STYLE="margin-bottom: 0cm">&quot;s&quot; &mdash;
+							substitution count, see <A HREF="mol-csmol-doc.html#molV2.subst">MDL
+							M SUB</A>, 
+							</P>
+							<LI><P STYLE="margin-bottom: 0cm">&quot;rb&quot; &mdash; ring
+							bond count), see <A HREF="mol-csmol-doc.html#molV2.rbcnt">MDL
+							M RBC</A>. 
+							</P>
+						</UL>
+						<P STYLE="margin-bottom: 0cm">The following characters may be
+						digits representing an integer value or &quot;*&quot; in case
+						of s and rb query properties. The <I>query string</I> contains
+						properties unknown by Marvin or known properties in a logical
+						relation that cannot be represented by Marvin. Examples: &quot;A:&quot;
+						(any atom), &quot;L!O!S:H1,R1&quot; (atom is not oxygen, not
+						sulfur, 1 hydrogen is connected to it and it is inside a ring).
+												</P>
+						<LI><P STYLE="margin-bottom: 0cm"><I>mrvAlias</I> &mdash; Atom
+						alias. 
+						</P>
+						<LI><P STYLE="margin-bottom: 0cm"><I>mrvExtraLabel</I> &mdash;
+						Atom extra label. 
+						</P>
+						<LI><P STYLE="margin-bottom: 0cm"><I>mrvPseudo</I> &mdash;
+						Pseudoatom name. 
+						</P>
+						<LI><P STYLE="margin-bottom: 0cm"><I>mrvStereoGroup</I>, <I>mrvMap</I>
+												</P>
+						<LI><P STYLE="margin-bottom: 0cm"><I>mrvSetSeq</I> &mdash; Atom
+						set sequence number. 
+						</P>
+						<LI><P STYLE="margin-bottom: 0cm"><I>mrvLinkNodeRep</I> &mdash;
+						Number of repetitions for a link node in format &quot;<I>n</I>&quot;
+						(maximum number of repetitions) or &quot;<I>m</I>-<I>n</I>&quot;
+						(minimum and maximum). 
+						</P>
+						<LI><P STYLE="margin-bottom: 0cm"><I>mrvLinkNodeOut</I> &mdash;
+						Outer bond references for a link node in comma separated list
+						of bond indices (amongst bonds of the link atom) leading to the
+						outer atoms (non-repeating neighbours) of the link nodes, &quot;-&quot;
+						means no outer bonds. 
+						</P>
+						<LI><P STYLE="margin-bottom: 0cm"><I>mrvSpecIsotopeSymbolPreferred</I>
+						&mdash; Special symbols are preferred for Hydrogen isotopes (D,
+						T) if the value is 1, normal element symbol (H) is used if the
+						value is 0 (default). 
+						</P>
+						<LI><P STYLE="margin-bottom: 0cm"><B>&lt;scalar</B>
+						id=&quot;<I>atomId</I>:<I>propertyId</I>&quot;
+						title=&quot;<I>propertyKey</I>&quot;
+						convention=&quot;<I>marvin:atomprop</I>&quot;
+						dataType=&quot;<I>dataType</I>&quot; value=&quot;<I>propertyValue</I>&quot;
+						<B>/&gt;</B> &mdash; General atom property represented by a
+						<I>propertyKey</I> and <I>propertyValue</I> pair. The atom
+						reference <I>atomId</I> must be valid atom identifier. The
+						convention value is <I>marvin:atomprop</I>.<BR>Supported data
+						types are: &quot;string&quot;, &quot;boolean&quot;, &quot;integer&quot;,
+						&quot;double&quot;, &quot;float&quot;. The &quot;null&quot;
+						value is exported with &quot;unknown&quot; data type. 
+						</P>
+						<LI><P STYLE="margin-bottom: 0cm"><B>&lt;atomBicycloStereo
+						</B>connectionAtom=&quot;<I>atomId</I>&quot; lowBridge=&quot;<I>atomId1
+						atomId2 ... </I>&quot; highBridge=&quot;<I>atomId1 atomId2 ...
+						</I>&quot;<B>&gt;</B> stereoValue <B>&lt;/atomBicycloStereo&gt;</B>
+						&mdash; The atom reference <I>atomId</I> must be valid atom
+						identifier. Supported stereo values are: &quot;either&quot;,
+						&quot;lower&quot;, &quot;higher&quot; stereo value types. 
+						</P>
+					</UL>
+					<P STYLE="margin-bottom: 0cm">An &lt;atom&gt; tag is recognized
+					at import even if the atomArray container is not present.</P>
+				</UL>
+				<LI><P STYLE="margin-bottom: 0cm"><B>&lt;bondArray&gt;</B> 
+				</P>
+				<UL>
+					<LI><P STYLE="margin-bottom: 0cm"><B>&lt;bond</B> atomRefs2=&quot;<I>a1</I>
+					<I>a2</I>&quot; order=&quot;<I>order</I>&quot; <B>&gt;</B><BR>The
+					atom references <I>a1</I> and <I>a2</I> must be valid atom ids.
+					The <I>order</I> value can be &quot;1&quot;, &quot;S&quot;
+					(single), &quot;2&quot;, &quot;D&quot; (double), &quot;3&quot;,
+					&quot;T&quot; (triple) or &quot;A&quot; (aromatic).<BR>The
+					following attributes can be present, which are not included in
+					CML: 
+					</P>
+					<UL>
+						<LI><P STYLE="margin-bottom: 0cm"><I>queryType</I> &mdash;
+						Query bond type: &quot;SD&quot; (single or double), &quot;SA&quot;
+						(single or aromatic), &quot;DA&quot; (double or aromatic) or
+						&quot;Any&quot;. 
+						</P>
+						<LI><P STYLE="margin-bottom: 0cm"><I>mrvQueryProps</I> &mdash;
+						Query bond properties. Format: str:<I>query string</I>, where
+						<I>query string</I> contains query bond properties unknown by
+						Marvin or known properties in a logical relation that cannot be
+						represented by Marvin. 
+						</P>
+						<LI><P STYLE="margin-bottom: 0cm"><I>mrvSetSeq</I> &mdash; Bond
+						set sequence number. 
+						</P>
+						<LI><P STYLE="margin-bottom: 0cm"><I>mrvBold</I> &mdash; Bold
+						bond attribute. 
+						</P>
+						<LI><P STYLE="margin-bottom: 0cm"><I>mrvHashed</I> &mdash;
+						Hashed bond attribute. 
+						</P>
+					</UL>
+					<LI><P STYLE="margin-bottom: 0cm"><B>&lt;bond</B> atomRefs2=&quot;<I>a1</I>
+					<I>a2</I>&quot; convention=&quot;<I>convention</I>&quot; <B>&gt;</B><BR>The
+					atom references <I>a1</I> and <I>a2</I> must be valid atom ids.
+					The <I>convention</I> value can be &quot;cxn:coord&quot;
+					(coordinate bond).</P>
+					<LI><P STYLE="margin-bottom: 0cm"><B>&lt;bond</B> atomRefs2=&quot;<I>a1</I>
+					<I>a2</I>&quot; mrvBold=&quot;<I>mrvBoldValue</I>&quot;<B>&gt;</B><BR>Describes
+					the &quot;bold&quot; attribute of the bond. The atom references
+					<I>a1</I> and <I>a2</I> must be valid atom ids. The <I>mrvBoldValue</I>
+					value can be &quot;true&quot; or &quot;false&quot;.</P>
+					<LI><P STYLE="margin-bottom: 0cm"><B>&lt;bond</B> atomRefs2=&quot;<I>a1</I>
+					<I>a2</I>&quot; mrvHashed=&quot;<I>mrvHashedValue</I>&quot;<B>&gt;</B><BR>Describes
+					the &quot;hashed&quot; attribute of the bond. The atom
+					references <I>a1</I> and <I>a2</I> must be valid atom ids. The
+					<I>mrvHashedValue</I> value can be &quot;true&quot; or &quot;false&quot;.</P>
+				</UL>
+				<LI><P STYLE="margin-bottom: 0cm"><B>&lt;molecule</B> id=&quot;<I>sg1</I>&quot;
+				role=&quot;SuperatomSgroup&quot;<B>&gt;</B> &mdash; contracted
+				Superatom S-group 
+				</P>
+				<UL>
+					<LI><P STYLE="margin-bottom: 0cm"><B>&lt;atomArray&gt;</B> 
+					</P>
+					<LI><P STYLE="margin-bottom: 0cm"><B>&lt;atom&gt;</B> 
+					</P>
+					<LI><P STYLE="margin-bottom: 0cm"><B>&lt;bondArray&gt;</B> 
+					</P>
+					<LI><P STYLE="margin-bottom: 0cm"><B>&lt;bond&gt;</B> 
+					</P>
+				</UL>
+				<LI><P STYLE="margin-bottom: 0cm"><B>&lt;molecule</B> id=&quot;<I>sg2</I>&quot;
+				role=&quot;SuperatomSgroup&quot; <B>/&gt;</B> &mdash; expanded
+				Superatom S-group 
+				</P>
+				<LI><P STYLE="margin-bottom: 0cm"><B>&lt;molecule</B> id=&quot;<I>sg3</I>&quot;
+				role=&quot;MultipleSgroup&quot; atomRefs=&quot;<I>a1 a2 ...</I>
+				&quot;<B>/&gt;</B> &mdash; Multiple S-group 
+				</P>
+				<LI><P STYLE="margin-bottom: 0cm"><B>&lt;molecule</B> id=&quot;<I>sg3</I>&quot;
+				role=&quot;DataSgroup&quot; fieldName=&quot;<I>fieldName</I>&quot;
+				[fieldType=&quot;<I>F|N|T</I>&quot;] [units=&quot;<I>unit</I>&quot;]
+				[x=&quot;<I>x coordinate</I>&quot;] [y=&quot;<I>y coordinate</I>&quot;]
+				[dataDisplayed=&quot;<I>displayed|not displayed</I>&quot;]
+				[placement=&quot;<I>Relative|Absolute</I>&quot;]
+				[unitsDisplayed=&quot;<I>Unit displayed|not displayed</I>&quot;]
+				[displayedChars=&quot;<I>number of characters displayed per
+				line</I>&quot;] [displayedLines=&quot;<I>number of lines to
+				display</I>&quot;] [tag=&quot;<I>tag</I>&quot;] [pos=&quot;<I>0-9</I>&quot;]
+				[queryType=&quot;<I>mQ|IQ|MQ|?Q</I>&quot;]
+				[queryOp=&quot;<I>&lt;|&gt;|&lt;&gt;|&lt;=|&gt;=|=|like|between|contains</I>&quot;]
+				[fieldData=&quot;<I>first line of data</I>&quot;]
+				[fieldData1=&quot;<I>second line of data</I>&quot;]... <B>/&gt;</B>
+				&mdash; Data S-group 
+				</P>
+				<LI><P STYLE="margin-bottom: 0cm"><B>&lt;molecule</B> id=&quot;<I>sg1</I>&quot;
+				role=&quot;ComponentSgroup&quot; title=&quot;<I>c</I>&quot;
+				charge=&quot;<I>onAtoms|onBracket</I> &quot; molID=&quot;<I>m1</I>&quot;
+				atomRefs=&quot;<I>a1 a2 ...</I> &quot;<B>&gt;</B> &mdash;
+				Component S-group 
+				</P>
+				<UL>
+					<LI><P STYLE="margin-bottom: 0cm"><B>&lt;bracket</B>
+					coordinates=&quot;<I>x1 y1 z1 x2 y2 z2</I>&quot;<B>/&gt;</B> &mdash;
+					coordinates of left bracket-endpoints 
+					</P>
+					<LI><P STYLE="margin-bottom: 0cm"><B>&lt;bracket</B>
+					coordinates=&quot;<I>x1 y1 z1 x2 y2 z2</I>&quot;<B>/&gt;</B> &mdash;
+					coordinates of right bracket-endpoints 
+					</P>
+				</UL>
+				<LI><P STYLE="margin-bottom: 0cm"><B>&lt;molecule</B> id=&quot;<I>sg1</I>&quot;
+				role=&quot;MixtureSgroup&quot; title=&quot;<I>mix</I>&quot;
+				molID=&quot;<I>m1</I>&quot; atomRefs=&quot;<I>a1 a2 ...</I> &quot;<B>&gt;</B>
+				&mdash; Mixture (unordered mixture) S-group 
+				</P>
+				<UL>
+					<LI><P STYLE="margin-bottom: 0cm"><B>&lt;bracket</B>
+					coordinates=&quot;<I>x1 y1 z1 x2 y2 z2</I>&quot;<B>/&gt;</B> &mdash;
+					coordinates of left bracket-endpoints 
+					</P>
+					<LI><P STYLE="margin-bottom: 0cm"><B>&lt;bracket</B>
+					coordinates=&quot;<I>x1 y1 z1 x2 y2 z2</I>&quot;<B>/&gt;</B> &mdash;
+					coordinates of right bracket-endpoints 
+					</P>
+				</UL>
+				<LI><P STYLE="margin-bottom: 0cm"><B>&lt;molecule</B> id=&quot;<I>sg1</I>&quot;
+				role=&quot;FormulationSgroup&quot; title=&quot;<I>f</I>&quot;
+				molID=&quot;<I>m1</I>&quot; atomRefs=&quot;<I>a1 a2 ...</I> &quot;<B>&gt;</B>
+				&mdash; Formulation (ordered mixture) S-group 
+				</P>
+				<UL>
+					<LI><P STYLE="margin-bottom: 0cm"><B>&lt;bracket</B>
+					coordinates=&quot;<I>x1 y1 z1 x2 y2 z2</I>&quot;<B>/&gt;</B> &mdash;
+					coordinates of left bracket-endpoints 
+					</P>
+					<LI><P STYLE="margin-bottom: 0cm"><B>&lt;bracket</B>
+					coordinates=&quot;<I>x1 y1 z1 x2 y2 z2</I>&quot;<B>/&gt;</B> &mdash;
+					coordinates of right bracket-endpoints 
+					</P>
+				</UL>
+				<LI><P STYLE="margin-bottom: 0cm"><B>&lt;molecule</B> id=&quot;<I>sg1</I>&quot;
+				role=&quot;SruSgroup&quot; title=&quot;<I>name</I>&quot;
+				molID=&quot;<I>m1</I>&quot; atomRefs=&quot;<I>a1 a2 ...</I> &quot;
+				correspondence=&quot;<I>b1 b2 ...</I> &quot; bondList=&quot;<I>b1
+				b2 ...</I> &quot; connect=&quot;<I>hh|ht|eu</I> &quot; <B>&gt;</B>
+				&mdash; SRU S-group, where 
+				</P>
+				<UL>
+					<LI><P STYLE="margin-bottom: 0cm"><I>name</I> is single letter:
+					a-z or A-Z. 
+					</P>
+					<LI><P STYLE="margin-bottom: 0cm">for <I>correspondence</I> see
+					MDL M CRS 
+					</P>
+					<LI><P STYLE="margin-bottom: 0cm">for <I>bondlist</I> see MDL M
+					SBL 
+					</P>
+					<LI><P STYLE="margin-bottom: 0cm">for <I>connect</I> see MDL M
+					SCN 
+					</P>
+				</UL>
+				<LI><P STYLE="margin-bottom: 0cm"><B>&lt;molecule</B> id=&quot;<I>sg1</I>&quot;
+				role=&quot;GenericSgroup&quot; charge=&quot;<I>onAtoms|onBrackets</I>
+				&quot; molID=&quot;<I>m1</I>&quot; atomRefs=&quot;<I>a1 a2 ...</I>
+				&quot;<B>&gt;</B> &mdash; generic S-group 
+				</P>
+				<LI><P STYLE="margin-bottom: 0cm"><B>&lt;molecule</B> id=&quot;<I>sg1</I>&quot;
+				role=&quot;MerSgroup&quot; title=&quot;<I>mer</I>&quot;
+				charge=&quot;<I>onAtoms|onBracket</I> &quot; molID=&quot;<I>m1</I>&quot;
+				atomRefs=&quot;<I>a1 a2 ...</I> &quot;<B>&gt;</B> &mdash; mer
+				S-group 
+				</P>
+				<LI><P STYLE="margin-bottom: 0cm"><B>&lt;molecule</B> id=&quot;<I>sg1</I>&quot;
+				role=&quot;MonomerSgroup&quot; title=&quot;<I>mon</I>&quot;
+				charge=&quot;<I>onAtoms|onBracket</I> &quot; molID=&quot;<I>m1</I>&quot;
+				atomRefs=&quot;<I>a1 a2 ...</I> &quot;<B>&gt;</B> &mdash; monomer
+				S-group 
+				</P>
+				<LI><P STYLE="margin-bottom: 0cm"><B>&lt;molecule</B> id=&quot;<I>sg1</I>&quot;
+				role=&quot;AnyPolymerSgroup&quot; title=&quot;<I>any</I>&quot;
+				molID=&quot;<I>m1</I>&quot; atomRefs=&quot;<I>a1 a2 ...</I> &quot;<B>&gt;</B>
+				&mdash; anypolymer S-group 
+				</P>
+				<LI><P STYLE="margin-bottom: 0cm"><B>&lt;molecule</B> id=&quot;<I>sg1</I>&quot;
+				role=&quot;AlternatingCopolymerSgroup&quot; title=&quot;<I>alt</I>&quot;
+				molID=&quot;<I>m1</I>&quot; atomRefs=&quot;<I>a1 a2 ...</I> &quot;<B>&gt;</B>
+				&mdash; alternating copolymer S-group 
+				</P>
+				<LI><P STYLE="margin-bottom: 0cm"><B>&lt;molecule</B> id=&quot;<I>sg1</I>&quot;
+				role=&quot;BlockCopolymerSgroup&quot; title=&quot;<I>blk</I>&quot;
+				molID=&quot;<I>m1</I>&quot; atomRefs=&quot;<I>a1 a2 ...</I> &quot;<B>&gt;</B>
+				&mdash; block copolymer S-group 
+				</P>
+				<LI><P STYLE="margin-bottom: 0cm"><B>&lt;molecule</B> id=&quot;<I>sg1</I>&quot;
+				role=&quot;RandomCopolymerSgroup&quot; title=&quot;<I>ran</I>&quot;
+				molID=&quot;<I>m1</I>&quot; atomRefs=&quot;<I>a1 a2 ...</I> &quot;<B>&gt;</B>
+				&mdash; random S-group 
+				</P>
+				<LI><P STYLE="margin-bottom: 0cm"><B>&lt;molecule</B> id=&quot;<I>sg1</I>&quot;
+				role=&quot;CopolymerSgroup&quot; title=&quot;<I>co</I>&quot;
+				molID=&quot;<I>m1</I>&quot; atomRefs=&quot;<I>a1 a2 ...</I> &quot;<B>&gt;</B>
+				&mdash; copolymer S-group 
+				</P>
+				<LI><P STYLE="margin-bottom: 0cm"><B>&lt;molecule</B> id=&quot;<I>sg1</I>&quot;
+				role=&quot;CrosslinkSgroup&quot; title=&quot;<I>xl</I>&quot;
+				molID=&quot;<I>m1</I>&quot; atomRefs=&quot;<I>a1 a2 ...</I> &quot;<B>&gt;</B>
+				&mdash; crosslink S-group 
+				</P>
+				<LI><P STYLE="margin-bottom: 0cm"><B>&lt;molecule</B> id=&quot;<I>sg1</I>&quot;
+				role=&quot;GraftSgroup&quot; title=&quot;<I>grf</I>&quot;
+				molID=&quot;<I>m1</I>&quot; atomRefs=&quot;<I>a1 a2 ...</I> &quot;<B>&gt;</B>
+				&mdash; grafted S-group 
+				</P>
+				<LI><P STYLE="margin-bottom: 0cm"><B>&lt;molecule</B> id=&quot;<I>sg1</I>&quot;
+				role=&quot;ModificationSgrop&quot; title=&quot;<I>mod</I>&quot;
+				molID=&quot;<I>m1</I>&quot; atomRefs=&quot;<I>a1 a2 ...</I> &quot;<B>&gt;</B>
+				&mdash; modification S-group 
+				</P>
+				<LI><P STYLE="margin-bottom: 0cm"><B>&lt;molecule</B> id=&quot;<I>sg1</I>&quot;
+				role=&quot;MulticenterSgroup&quot; molID=&quot;<I>m1</I>&quot;
+				atomRefs=&quot;<I>a1 a2 ...</I> &quot; center=&quot;<I>a</I> &quot;
+				<B>&gt;</B> &mdash; multicenter S-group to represent coordination
+				compounds and markush structures (depending on bond type
+				connencting to the center) 
+				</P>
+				<LI><P STYLE="margin-bottom: 0cm"><A HREF="cml-doc.html#propertyList"><B>&lt;propertyList&gt;</B></A>
+								</P>
+				<LI><P STYLE="margin-bottom: 0cm"><A HREF="cml-doc.html#property"><B>&lt;property&gt;</B></A>
+								</P>
+			</UL>
+			<LI><P STYLE="margin-bottom: 0cm"><B>&lt;reaction&gt;</B> &mdash;
+			It can contain both <A HREF="cml-doc.html">CML</A> and Marvin
+			attributes. Marvin attributes are explained below. Its children
+			can be the same as it is discussed in the <A HREF="cml-doc.html">CML</A>
+			as well as new ones that are described below. 
+			</P>
+			<UL>
+				<LI><P STYLE="margin-bottom: 0cm"><I>absStereo</I> 
+				</P>
+				<LI><P STYLE="margin-bottom: 0cm"><I>arrowType</I> &mdash;
+				reaction arrow type: &quot;DEFAULT&quot; (-&gt;), &quot;RESONANCE&quot;
+				(&lt;-&gt;), &quot;RETROSYNTHETIC&quot; (=&gt;), &quot;EQUILIBRIUM&quot;
+				(=) 
+				</P>
+			</UL>
+			<P STYLE="margin-bottom: 0cm">Children: 
+			</P>
+			<UL>
+				<LI><P STYLE="margin-bottom: 0cm"><B>&lt;agentList&gt;</B>List of
+				agents in this reaction. 
+				</P>
+				<UL>
+					<LI><P STYLE="margin-bottom: 0cm"><B>&lt;molecule&gt;</B> 
+					</P>
+				</UL>
+			</UL>
+			<LI><P STYLE="margin-bottom: 0cm"><B>&lt;Rgroup</B>
+			rgroupID=&quot;<I>rgroupID</I>&quot;<B>&gt;</B> &mdash; R-group. 
+			</P>
+			<UL>
+				<LI><P STYLE="margin-bottom: 0cm"><B>&lt;molecule&gt;</B> &mdash;
+				an R-group member in <A HREF="cml-doc.html">CML</A> 
+				</P>
+			</UL>
+		</UL>
+		<LI><P STYLE="margin-bottom: 0cm"><A NAME="MMoleculeMovie"></A><B>&lt;MMoleculeMovie&gt;</B>
+		- animation of a chemical process<BR>Children: 
+		</P>
+		<UL>
+			<LI><P STYLE="margin-bottom: 0cm"><A HREF="#MChemicalStruct"><B>&lt;MChemicalStruct&gt;</B></A>
+			&mdash; a frame of the movie 
+			</P>
+		</UL>
+		<LI><P STYLE="margin-bottom: 0cm"><B>&lt;MPolyline&gt;</B> - line,
+		arc, polyline and/or arrow.<BR>Attributes: 
+		</P>
+		<UL>
+			<LI><P STYLE="margin-bottom: 0cm"><I>headSkip</I>, <I>tailSkip</I>
+			&mdash; Distance of (visible) head or tail from the corresponding
+			line end point. 
+			</P>
+			<LI><P STYLE="margin-bottom: 0cm"><I>headWidth</I>, <I>tailWidth</I>
+			&mdash; Arrow head/tail width. 
+			</P>
+			<LI><P STYLE="margin-bottom: 0cm"><I>headLength</I>, <I>tailLength</I>
+			&mdash; Arrow head/tail length. 
+			</P>
+			<LI><P STYLE="margin-bottom: 0cm"><I>headFlags</I>, <I>tailFlags</I>
+			&mdash; Arrow head/tail options. 
+			</P>
+			<LI><P STYLE="margin-bottom: 0cm"><I>arcAngle</I> &mdash; Arc
+			central angle or 0. 
+			</P>
+		</UL>
+		<P STYLE="margin-bottom: 0cm">Children: 
+		</P>
+		<UL>
+			<LI><P STYLE="margin-bottom: 0cm"><B>&lt;MPoint</B> x=&quot;<I>x</I>&quot;
+			y=&quot;<I>y</I>&quot; [z=&quot;<I>z</I>&quot;]<B>&gt;</B> &mdash;
+			Represents a location in space 
+			</P>
+			<LI><P STYLE="margin-bottom: 0cm"><B>&lt;MAtomSetPoint</B>
+			atomRefs=&quot;...&quot; [weights=&quot;...&quot;]<B>&gt;</B> &mdash;
+			Represents an atom or atom pair (bond or incipient bond). The
+			<I>atomRefs</I> argument is a space separated list of atoms,
+			<I>weights</I> is a space separated list of floating point
+			numbers. The atom set's location is the weighted average of the
+			atom locations. 
+			</P>
+			<LI><P STYLE="margin-bottom: 0cm"><B>&lt;MMidPoint</B>
+			lineRef=&quot;<I>lineRef</I>&quot; [pos=&quot;<I>position</I>&quot;]<B>&gt;</B>
+			&mdash; Middle point of a line or a section of a
+			polyline.<BR>Attributes: 
+			</P>
+			<UL>
+				<LI><P STYLE="margin-bottom: 0cm"><I>lineRef</I> &mdash;
+				Reference to the MPolyline object. 
+				</P>
+				<LI><P STYLE="margin-bottom: 0cm"><I>position</I> &mdash;
+				Polyline section index (0, ..., n-1), default: 0. 
+				</P>
+			</UL>
+			<LI><P STYLE="margin-bottom: 0cm"><B>&lt;MRectanglePoint</B>
+			pos=&quot;<I>position</I>&quot; rectRef=&quot;<I>rectRef</I>&quot;<B>&gt;</B>
+			&mdash; A corner of a rectangle or a middle point of one of its
+			edges.<BR>Attributes: 
+			</P>
+			<UL>
+				<LI><P STYLE="margin-bottom: 0cm"><I>position</I> &mdash; Integer
+				value between 0 and 7. Top left corner=0, top right corner=1,
+				bottom right corner=2, bottom left corner=3, top middle point=4,
+				right middle point=5, bottom middle point=6, left middle point=7.
+								</P>
+				<LI><P STYLE="margin-bottom: 0cm"><I>rectRef</I> &mdash;
+				Reference to the MRectangle object. 
+				</P>
+			</UL>
+		</UL>
+		<LI><P STYLE="margin-bottom: 0cm"><B>&lt;MEFlow&gt;</B> &mdash;
+		curved electron flow arrow. MEFlow is a subclass of MPolyline thus
+		it has the same attributes, but it can only contain two
+		points.<BR>Children: 
+		</P>
+		<UL>
+			<LI><P STYLE="margin-bottom: 0cm"><B>&lt;MAtomSetPoint&gt;</B> 
+			</P>
+		</UL>
+		<LI><P STYLE="margin-bottom: 0cm"><B>&lt;MRectangle</B>
+		[toption=&quot;<I>toption</I>&quot;] [tcenter=&quot;<I>tcenter</I>&quot;]<B>&gt;</B>
+		&mdash; rectangle object<BR>Optional attributes: 
+		</P>
+		<UL>
+			<LI><P STYLE="margin-bottom: 0cm"><A NAME="MRectangle.toption"></A>
+			<I>toption</I> &mdash; Transformation option: ALLOW_ALL (default,
+			all transformations are allowed), NOROT (only scaling is allowed,
+			the rectangle is not rotatable). 
+			</P>
+			<LI><P STYLE="margin-bottom: 0cm"><A NAME="MRectangle.tcenter"></A>
+			<I>tcenter</I> &mdash; Central point: NW (top left corner), NE
+			(top right corner), SE (bottom right corner), SW (bottom left
+			corner), CENTER (geometrical center), N (top middle point), E
+			(right middle point), S (bottom middle point), W (left middle
+			point). 
+			</P>
+		</UL>
+		<P STYLE="margin-bottom: 0cm">Children: 
+		</P>
+		<UL>
+			<LI><P STYLE="margin-bottom: 0cm"><B>&lt;MPoint</B> x=&quot;<I>x</I><SUB>1</SUB>&quot;
+			y=&quot;<I>y</I><SUB>1</SUB>&quot; [z=&quot;<I>z</I><SUB>1</SUB>&quot;]
+			<B>/&gt;</B> &mdash; Top left corner. 
+			</P>
+			<LI><P STYLE="margin-bottom: 0cm"><B>&lt;MPoint</B> x=&quot;<I>x</I><SUB>2</SUB>&quot;
+			y=&quot;<I>y</I><SUB>2</SUB>&quot; [z=&quot;<I>z</I><SUB>2</SUB>&quot;]
+			<B>/&gt;</B> &mdash; Top right corner. 
+			</P>
+			<LI><P STYLE="margin-bottom: 0cm"><B>&lt;MPoint</B> x=&quot;<I>x</I><SUB>3</SUB>&quot;
+			y=&quot;<I>y</I><SUB>3</SUB>&quot; [z=&quot;<I>z</I><SUB>3</SUB>&quot;]
+			<B>/&gt;</B> &mdash; Bottom right corner. 
+			</P>
+			<LI><P STYLE="margin-bottom: 0cm"><B>&lt;MPoint</B> x=&quot;<I>x</I><SUB>4</SUB>&quot;
+			y=&quot;<I>y</I><SUB>4</SUB>&quot; [z=&quot;<I>z</I><SUB>4</SUB>&quot;]
+			<B>/&gt;</B> &mdash; Bottom left corner. 
+			</P>
+		</UL>
+		<LI><P STYLE="margin-bottom: 0cm"><B>&lt;MRoundedRectangle</B>
+		[toption=&quot;<I>toption</I>&quot;] [tcenter=&quot;<I>tcenter</I>&quot;]<B>&gt;</B>
+		&mdash; rounded cornered rectangle object<BR>It is derived from
+		MRectangle, thus it inherits the <A HREF="#MRectangle.toption">toption</A>
+		and <A HREF="#MRectangle.tcenter">tcenter</A> attributes.<BR>Extra
+		attributes: 
+		</P>
+		<UL>
+			<LI><P STYLE="margin-bottom: 0cm"><I>arcWidth</I> &mdash; double
+			value of corner's arc's width 
+			</P>
+			<LI><P STYLE="margin-bottom: 0cm"><I>arcHeight</I> &mdash; double
+			value of corner's arc's height 
+			</P>
+		</UL>
+		<P STYLE="margin-bottom: 0cm">Children: 
+		</P>
+		<UL>
+			<LI><P STYLE="margin-bottom: 0cm"><B>&lt;MPoint</B> x=&quot;<I>x</I><SUB>1</SUB>&quot;
+			y=&quot;<I>y</I><SUB>1</SUB>&quot; [z=&quot;<I>z</I><SUB>1</SUB>&quot;]
+			<B>/&gt;</B> &mdash; Top left corner. 
+			</P>
+			<LI><P STYLE="margin-bottom: 0cm"><B>&lt;MPoint</B> x=&quot;<I>x</I><SUB>2</SUB>&quot;
+			y=&quot;<I>y</I><SUB>2</SUB>&quot; [z=&quot;<I>z</I><SUB>2</SUB>&quot;]
+			<B>/&gt;</B> &mdash; Top right corner. 
+			</P>
+			<LI><P STYLE="margin-bottom: 0cm"><B>&lt;MPoint</B> x=&quot;<I>x</I><SUB>3</SUB>&quot;
+			y=&quot;<I>y</I><SUB>3</SUB>&quot; [z=&quot;<I>z</I><SUB>3</SUB>&quot;]
+			<B>/&gt;</B> &mdash; Bottom right corner. 
+			</P>
+			<LI><P STYLE="margin-bottom: 0cm"><B>&lt;MPoint</B> x=&quot;<I>x</I><SUB>4</SUB>&quot;
+			y=&quot;<I>y</I><SUB>4</SUB>&quot; [z=&quot;<I>z</I><SUB>4</SUB>&quot;]
+			<B>/&gt;</B> &mdash; Bottom left corner. 
+			</P>
+		</UL>
+		<LI><P STYLE="margin-bottom: 0cm"><B>&lt;MEllipse</B>
+		[toption=&quot;<I>toption</I>&quot;] [tcenter=&quot;<I>tcenter</I>&quot;]<B>&gt;</B>
+		&mdash; ellipse object<BR>It is derived from MRectangle, thus it
+		inherits the <A HREF="#MRectangle.toption">toption</A> and <A HREF="#MRectangle.tcenter">tcenter</A>
+		attributes.<BR>Children: 
+		</P>
+		<UL>
+			<LI><P STYLE="margin-bottom: 0cm"><B>&lt;MPoint</B> x=&quot;<I>x</I><SUB>1</SUB>&quot;
+			y=&quot;<I>y</I><SUB>1</SUB>&quot; [z=&quot;<I>z</I><SUB>1</SUB>&quot;]
+			<B>/&gt;</B> &mdash; Top left corner. 
+			</P>
+			<LI><P STYLE="margin-bottom: 0cm"><B>&lt;MPoint</B> x=&quot;<I>x</I><SUB>2</SUB>&quot;
+			y=&quot;<I>y</I><SUB>2</SUB>&quot; [z=&quot;<I>z</I><SUB>2</SUB>&quot;]
+			<B>/&gt;</B> &mdash; Top right corner. 
+			</P>
+			<LI><P STYLE="margin-bottom: 0cm"><B>&lt;MPoint</B> x=&quot;<I>x</I><SUB>3</SUB>&quot;
+			y=&quot;<I>y</I><SUB>3</SUB>&quot; [z=&quot;<I>z</I><SUB>3</SUB>&quot;]
+			<B>/&gt;</B> &mdash; Bottom right corner. 
+			</P>
+			<LI><P STYLE="margin-bottom: 0cm"><B>&lt;MPoint</B> x=&quot;<I>x</I><SUB>4</SUB>&quot;
+			y=&quot;<I>y</I><SUB>4</SUB>&quot; [z=&quot;<I>z</I><SUB>4</SUB>&quot;]
+			<B>/&gt;</B> &mdash; Bottom left corner. 
+			</P>
+		</UL>
+		<LI><P STYLE="margin-bottom: 0cm"><B>&lt;MTextBox</B> [text=&quot;<I>The
+		text</I>&quot;] [fontScale=&quot;<I>fontScale</I>&quot;]
+		[halign=&quot;LEFT<I>|</I>CENTER<I>|</I>RIGHT&quot;]
+		[valign=&quot;TOP<I>|</I>CENTER<I>|</I>BOTTOM&quot;]
+		[autoSize=&quot;true<I>|</I>false&quot;] &mdash; text box.<BR>It is
+		derived from MRectangle, thus it inherits the <A HREF="#MRectangle.toption">toption</A>
+		and <A HREF="#MRectangle.tcenter">tcenter</A> attributes.<BR>Extra
+		attributes:</P>
+		<UL>
+			<LI><P STYLE="margin-bottom: 0cm"><I>text</I> &mdash; The text.
+			This attribute can only be used to define a single text line. In
+			case of multiple lines the &lt;Field name=&quot;text&quot;&gt; tag
+			must be used. The string can contain \uXXXX unicode escapes.
+			Backslash characters are always escaped with another backslash. 
+			</P>
+			<LI><P STYLE="margin-bottom: 0cm"><I>fontScale</I> &mdash; Base
+			font size (default: 10) 
+			</P>
+			<LI><P STYLE="margin-bottom: 0cm"><A NAME="MTextBox.halign"></A><I>halign</I>
+			&mdash; Horizontal alignment (default: LEFT). 
+			</P>
+			<LI><P STYLE="margin-bottom: 0cm"><A NAME="MTextBox.valign"></A><I>valign</I>
+			&mdash; Vertical alignment (default: TOP). 
+			</P>
+			<LI><P STYLE="margin-bottom: 0cm"><A NAME="MTextBox.autoSize"></A><I>autoSize</I>
+			&mdash; Whether the box should be resized in order for the text to
+			fit. 
+			</P>
+		</UL>
+		<P STYLE="margin-bottom: 0cm">Children: 
+		</P>
+		<UL>
+			<LI><P STYLE="margin-bottom: 0cm"><B>&lt;Field</B> name=&quot;text&quot;<B>&gt;</B><I>The
+			text</I> <B>&lt;/Field&gt;</B> 
+			</P>
+			<LI><P STYLE="margin-bottom: 0cm"><B>&lt;MPoint</B> x=&quot;<I>x</I><SUB>1</SUB>&quot;
+			y=&quot;<I>y</I><SUB>1</SUB>&quot; [z=&quot;<I>z</I><SUB>1</SUB>&quot;]
+			<B>/&gt;</B> &mdash; Top left corner. Recalculated is
+			<I>autoSize</I>=true, unless <I>halign</I>=&quot;LEFT&quot;. 
+			</P>
+			<LI><P STYLE="margin-bottom: 0cm"><B>&lt;MPoint</B> x=&quot;<I>x</I><SUB>2</SUB>&quot;
+			y=&quot;<I>y</I><SUB>2</SUB>&quot; [z=&quot;<I>z</I><SUB>2</SUB>&quot;]
+			<B>/&gt;</B> &mdash; Top right corner. Recalculated if
+			<I>autoSize</I>=true, unless <I>valign</I>=&quot;TOP&quot;. 
+			</P>
+			<LI><P STYLE="margin-bottom: 0cm"><B>&lt;MPoint</B> x=&quot;<I>x</I><SUB>3</SUB>&quot;
+			y=&quot;<I>y</I><SUB>3</SUB>&quot; [z=&quot;<I>z</I><SUB>3</SUB>&quot;]
+			<B>/&gt;</B> &mdash; Bottom right corner. Recalculated if
+			<I>autoSize</I>=true, unless <I>valign</I>=&quot;BOTTOM&quot;. 
+			</P>
+			<LI><P STYLE="margin-bottom: 0cm"><B>&lt;MPoint</B> x=&quot;<I>x</I><SUB>4</SUB>&quot;
+			y=&quot;<I>y</I><SUB>4</SUB>&quot; [z=&quot;<I>z</I><SUB>4</SUB>&quot;]
+			<B>/&gt;</B> &mdash; Bottom left corner. Recalculated is
+			<I>autoSize</I>=true, unless <I>halign</I>=&quot;RIGHT&quot;. 
+			</P>
+		</UL>
+		<LI><P STYLE="margin-bottom: 0cm"><B>&lt;MNameTextBox</B>
+		[autoResize=&quot;<I>true|false</I>&quot;] [autoAlign=&quot;<I>true|false</I>&quot;]
+		[preferredWidth=&quot;<I>preferredWidth</I>&quot;] - text object
+		that contains molecule name.<BR>It is derived from MTextBox, thus
+		it inherits its attributes. Extra attributes:</P>
+		<UL>
+			<LI><P STYLE="margin-bottom: 0cm"><I>autoResize</I> Defines
+			whether the alignment of the text box is in user set or automatic
+			mode (automatic mode means the box is resized according to the
+			position and size of the molecule). The default value is true. 
+			</P>
+			<LI><P STYLE="margin-bottom: 0cm"><I>autoAlign</I> Defines whether
+			the alignment of the text box is in user set or automatic mode.
+			(automatic mode means the box is aligned according to the position
+			and size of the molecule). The default value is true. 
+			</P>
+			<LI><P><I>preferredWidth</I> the preferred width of the text box
+			in automatic resize mode 
+			</P>
+		</UL>
+	</UL>
+</UL>
+<H2 CLASS="WESTERN"><A NAME="export"></A>Export options</H2>
+<P>The argument of MolConverter, MolExporter  and the <CODE>getMol</CODE>/<CODE>getM</CODE>
+functions (of the applets and beans) is the format string. The format
+specification (&quot;mrv&quot;) is followed by &quot;:&quot; and the
+selected option(s) for mrv export. 
+</P>
+<TABLE WIDTH=850 CELLPADDING=0 CELLSPACING=0>
+	<COL WIDTH=104>
+	<COL WIDTH=746>
+	<TR VALIGN=TOP>
+		<TD WIDTH=104 STYLE="border: none; padding: 0cm">
+			<P STYLE="border: none; padding: 0cm">mrv:...</P>
+		</TD>
+		<TD WIDTH=746 STYLE="; border: none; padding: 0cm">
+			<P STYLE="border: none; padding: 0cm"><A HREF="basic-export-opts.html">Basic
+			options for aromatization and H atom adding/removal.</A></P>
+		</TD>
+	</TR>
+	<TR VALIGN=TOP>
+		<TD WIDTH=104 STYLE="; border: none; padding: 0cm">
+			<P STYLE="border: none; padding: 0cm">mrv:S &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</P>
+		</TD>
+		<TD WIDTH=746 STYLE="; border: none; padding: 0cm">
+			<P STYLE="border: none; padding: 0cm">Save selection. If set then
+			the mrv output will contain which atoms and graphical objects are
+			in seleted state.</P>
+		</TD>
+	</TR>
+	<TR VALIGN=TOP>
+		<TD WIDTH=104 STYLE="; border: none; padding: 0cm">
+			<P STYLE="border: none; padding: 0cm">mrv:P</P>
+		</TD>
+		<TD WIDTH=746 STYLE="; border: none; padding: 0cm">
+			<P STYLE="border: none; padding: 0cm">Create human readable
+			output: put new xml elements in new lines and indent for embedded
+			elements.</P>
+		</TD>
+	</TR>
+</TABLE>
+<P>Example of MRV file exported without options: 
+</P>
+<PRE STYLE="margin-left: 1cm; margin-right: 1cm">
+&lt;?xml version=&quot;1.0&quot;?&gt;&lt;cml&gt;
+&lt;MDocument&gt;&lt;MChemicalStruct&gt;&lt;molecule title=&quot;Ethane&quot; molID=&quot;m1&quot;&gt;&lt;atomArray atomID=&quot;a1 a2&quot; elementType=&quot;C C&quot; x2=&quot;0.0 0.0&quot; y2=&quot;0.0 1.54&quot;&gt;&lt;/atomArray&gt;&lt;bondArray&gt;&lt;bond atomRefs2=&quot;a1 a2&quot; order=&quot;1&quot;&gt;&lt;/bond&gt;&lt;/bondArray&gt;&lt;/molecule&gt;&lt;/MChemicalStruct&gt;&lt;MRectangle id=&quot;o2&quot;&gt;&lt;MPoint x=&quot;-6.599999904632568&quot; y=&quot;1.7050000429153442&quot;&gt;&lt;/MPoint&gt;&lt;MPoint x=&quot;-2.640000104904175&quot; y=&quot;1.7050000429153442&quot;&gt;&lt;/MPoint&gt;&lt;MPoint x=&quot;-2.640000104904175&quot; y=&quot;-0.16500000655651093&quot;&gt;&lt;/MPoint&gt;&lt;MPoint x=&quot;-6.599999904632568&quot; y=&quot;-0.16500000655651093&quot;&gt;&lt;/MPoint&gt;&lt;/MRectangle&gt;&lt;/MDocument&gt;
+&lt;/cml&gt;
+</PRE>
+
+<P>
+Example of MRV file exported with option &quot;S&quot;: 
+</P>
+<PRE STYLE="margin-left: 1cm; margin-right: 1cm">
+&lt;?xml version=&quot;1.0&quot;?&gt;&lt;cml&gt;
+&lt;MDocument&gt;&lt;MChemicalStruct&gt;&lt;molecule title=&quot;Ethane&quot; molID=&quot;m1&quot;&gt;&lt;atomArray atomID=&quot;a1 a2&quot; elementType=&quot;C C&quot; isSelected=&quot;true true&quot; x2=&quot;0.0 0.0&quot; y2=&quot;0.0 1.54&quot;&gt;&lt;/atomArray&gt;&lt;bondArray&gt;&lt;bond atomRefs2=&quot;a1 a2&quot; order=&quot;1&quot;&gt;&lt;/bond&gt;&lt;/bondArray&gt;&lt;/molecule&gt;&lt;/MChemicalStruct&gt;&lt;MRectangle id=&quot;o2&quot; isSelected=&quot;true&quot;&gt;&lt;MPoint x=&quot;-6.599999904632568&quot; y=&quot;1.7050000429153442&quot;&gt;&lt;/MPoint&gt;&lt;MPoint x=&quot;-2.640000104904175&quot; y=&quot;1.7050000429153442&quot;&gt;&lt;/MPoint&gt;&lt;MPoint x=&quot;-2.640000104904175&quot; y=&quot;-0.16500000655651093&quot;&gt;&lt;/MPoint&gt;&lt;MPoint x=&quot;-6.599999904632568&quot; y=&quot;-0.16500000655651093&quot;&gt;&lt;/MPoint&gt;&lt;/MRectangle&gt;&lt;/MDocument&gt;
+&lt;/cml&gt;
+</PRE>
+
+<P>
+Example of MRV file exported with option &quot;P&quot;: 
+</P>
+<PRE STYLE="margin-left: 1cm; margin-right: 1cm">
+&lt;?xml version=&quot;1.0&quot;?&gt;
+&lt;cml&gt;
+&lt;MDocument&gt;
+  &lt;MChemicalStruct&gt;
+    &lt;molecule title=&quot;Ethane&quot; molID=&quot;m1&quot;&gt;
+      &lt;atomArray atomID=&quot;a1 a2&quot; elementType=&quot;C C&quot; x2=&quot;0.0 0.0&quot; y2=&quot;0.0 1.54&quot;/&gt;
+      &lt;bondArray&gt;
+        &lt;bond atomRefs2=&quot;a1 a2&quot; order=&quot;1&quot;/&gt;
+      &lt;/bondArray&gt;
+    &lt;/molecule&gt;
+  &lt;/MChemicalStruct&gt;
+  &lt;MRectangle id=&quot;o2&quot;&gt;
+    &lt;MPoint x=&quot;-6.599999904632568&quot; y=&quot;1.7050000429153442&quot;/&gt;
+    &lt;MPoint x=&quot;-2.640000104904175&quot; y=&quot;1.7050000429153442&quot;/&gt;
+    &lt;MPoint x=&quot;-2.640000104904175&quot; y=&quot;-0.16500000655651093&quot;/&gt;
+    &lt;MPoint x=&quot;-6.599999904632568&quot; y=&quot;-0.16500000655651093&quot;/&gt;
+  &lt;/MRectangle&gt;
+&lt;/MDocument&gt;
+&lt;/cml&gt;
+</PRE>
+
+<P>
+Example of MRV file exported with options &quot;SP&quot;: 
+</P>
+<PRE STYLE="margin-left: 1cm; margin-right: 1cm">
+&lt;?xml version=&quot;1.0&quot;?&gt;
+&lt;cml&gt;
+&lt;MDocument&gt;
+  &lt;MChemicalStruct&gt;
+    &lt;molecule title=&quot;Ethane&quot; molID=&quot;m1&quot;&gt;
+      &lt;atomArray atomID=&quot;a1 a2&quot; elementType=&quot;C C&quot; isSelected=&quot;true true&quot; x2=&quot;0.0 0.0&quot; y2=&quot;0.0 1.54&quot;/&gt;
+      &lt;bondArray&gt;
+        &lt;bond atomRefs2=&quot;a1 a2&quot; order=&quot;1&quot;/&gt;
+      &lt;/bondArray&gt;
+    &lt;/molecule&gt;
+  &lt;/MChemicalStruct&gt;
+  &lt;MRectangle id=&quot;o2&quot; isSelected=&quot;true&quot;&gt;
+    &lt;MPoint x=&quot;-6.599999904632568&quot; y=&quot;1.7050000429153442&quot;/&gt;
+    &lt;MPoint x=&quot;-2.640000104904175&quot; y=&quot;1.7050000429153442&quot;/&gt;
+    &lt;MPoint x=&quot;-2.640000104904175&quot; y=&quot;-0.16500000655651093&quot;/&gt;
+    &lt;MPoint x=&quot;-6.599999904632568&quot; y=&quot;-0.16500000655651093&quot;/&gt;
+  &lt;/MRectangle&gt;
+&lt;/MDocument&gt;
+&lt;/cml&gt;
+</PRE>
+</BODY>
+</HTML>

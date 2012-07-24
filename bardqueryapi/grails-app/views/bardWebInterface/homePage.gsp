@@ -7,12 +7,31 @@
     <r:script>
         $(document).ready(function () {
             var autoOpts = {
-                source: "/bardqueryapi/bardWebInterface/autoCompleteAssayNames",
-                minLength: 2
-            }
-            $( "#searchString" ).autocomplete(autoOpts);
+                source:"/bardqueryapi/bardWebInterface/autoCompleteAssayNames",
+                minLength:2
+            };
+            $("#searchString").autocomplete(autoOpts);
             $("#accordion").accordion({ autoHeight:false });
-        })
+
+            $('#structureModal').click(
+                function() {
+                    url = '${request.contextPath}/chemAxon/marvinSketch';
+                    $("#modalDiv").dialog("open");
+                    $("#modalIFrame").attr('src',url);
+                    return false;
+            });
+
+            $("#modalDiv").dialog({
+                modal: true,
+                autoOpen: false,
+                height: '700',
+                width: '50%',
+                draggable: true,
+                resizeable: true,
+                title: ''
+            });
+
+        });
     </r:script>
     <r:layoutResources/>
     <r:require modules="bootstrap"/>
@@ -36,13 +55,26 @@
         <g:form name="aidForm" controller="bardWebInterface" action="search">
 
             <div class="content ">
-                <g:textField id="searchString" name="searchString" value="${params?.searchString}" size="50"/>
-                <br/><br/>
-                <g:submitButton name="search"
-                                value="Search"/>
-                <g:submitButton name="search"
-                                value="I'm Feeling Serendipitous"/>
-
+                <table class="skinnyTable">
+                    <tr>
+                        <td>
+                            <g:textField id="searchString" name="searchString" value="${params?.searchString}"
+                                         size="50"/>
+                        </td>
+                        <td>
+                            <g:submitButton name="search"
+                                            value="Search"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="text-align: right;">
+                            <span id="structureModal" style="color:blue;text-decoration: underline;">
+                                Create a structure for a search
+                            </span>
+                        </td>
+                        <td/>
+                    </tr>
+                </table>
             </div>
         </g:form>
         <br/>
@@ -57,7 +89,18 @@
     </div>    <!-- End accordion -->
 
 </div><!-- End body div -->
+
 <r:layoutResources/>
 <r:require modules="bootstrap"/>
+
+<div id="modalDiv">
+    <iframe name="modalIFrame" id="modalIFrame" width="100%" height="100%" marginWidth="0"
+            marginHeight="0" frameBorder="0"
+            scrolling="auto">
+
+    </iframe>
+</div>
+
+
 </body>
 </html>

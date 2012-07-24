@@ -1,0 +1,98 @@
+<html>
+<head>
+<meta NAME="description" CONTENT="Demo page for molfile compression.">
+<meta NAME="keywords" CONTENT="MDL, mol, molCompress, JavaScript, Marvin">
+<link REL ="stylesheet" TYPE="text/css" HREF="../marvinmanuals.css" TITLE="Style">
+<title>Molfile compression in JavaScript</title>
+
+<script LANGUAGE="JavaScript">
+<!--
+oldbrowser = true;
+
+// molCompress() returns a string with \n newline characters.
+// The <textarea> HTML element needs \r\n end-of-line characters
+// in MS Windows, so we must fix the molCompress() output before
+// setting the value of a <textarea>.
+function eolfix(s) {
+	if(navigator.userAgent.lastIndexOf("(Win") >= 0) {
+		return s.split("\n").join("\r\n");
+	} else {
+		return s;
+	}
+}
+//-->
+</script>
+
+<script LANGUAGE="JavaScript1.1">
+<!--
+oldbrowser = false;
+//-->
+</script>
+
+<script LANGUAGE="JavaScript1.1" SRC="molcompress.js"></script>
+
+<script>
+<!--
+function compress(c) {
+	if(oldbrowser) {
+		alert("Your old browser does not know JavaScript 1.1.\n"+
+		      "Compression does not work, sorry.");
+		return;
+	}
+	var mol = molCompress(document.MolForm.MolTxt.value, c);
+	document.MolForm.MolTxt.value = eolfix(mol);
+}
+//-->
+</script>
+
+</head>
+<body onLoad="defmol=document.MolForm.MolTxt.value">
+
+<form NAME="MolForm">
+<table cellpadding="5" cellspacing="0" border="0">
+<tr><td>
+    <input TYPE=button VALUE="Compress" onClick="compress(true)">
+    <input TYPE=button VALUE="Inflate" onClick="compress(false)">
+    <input TYPE=button VALUE="Clear" onClick="document.MolForm.MolTxt.value=''">
+    <input TYPE=button VALUE="Reset" onClick="document.MolForm.MolTxt.value=defmol;document.MolForm.CMolTxt.value=''">
+    </td>
+    <td ALIGN=CENTER><h3>Molfile to be compressed</h3></td>
+</tr>
+<tr><td COLSPAN=2>
+    <small><textarea NAME="MolTxt" ROWS=24 COLS=70>
+
+  -ISIS-  08109508552D
+
+  9  9  0  0  0  0  0  0  0  0  2 V2000
+    3.1333   -2.4100    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0
+    1.0833   -2.4100    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0
+    4.3433   -0.7700    0.0000 N   0  3  0  0  0  0  0  0  0  0  0  0
+    3.7333   -4.3800    0.0000 N   0  0  0  0  0  0  0  0  0  0  0  0
+    0.4333   -4.3500    0.0000 N   0  0  0  0  0  0  0  0  0  0  0  0
+    2.0733   -5.5400    0.0000 O   0  0  0  0  0  0  0  0  0  0  0  0
+    6.4333   -0.8100    0.0000 O   0  5  0  0  0  0  0  0  0  0  0  0
+    3.6433    1.1500    0.0000 O   0  0  0  0  0  0  0  0  0  0  0  0
+   -0.1167   -0.7200    0.0000 N   0  0  0  0  0  0  0  0  0  0  0  0
+  2  1  1  0  0  0  0
+  3  1  1  0  0  0  0
+  4  1  2  0  0  0  0
+  5  2  2  0  0  0  0
+  6  4  1  0  0  0  0
+  7  3  1  0  0  0  0
+  8  3  2  0  0  0  0
+  9  2  1  0  0  0  0
+  5  6  1  0  0  0  0
+M  CHG  2   3   1   7  -1
+M  END
+</textarea></small>
+</td>
+</tr>
+</table>
+</form>
+
+The compression is performed by JavaScript functions on this page.
+This <a HREF="../formats/mol-csmol-doc.html#csmol">compression method</a>
+is also built into the molecule sketcher and viewer applets.
+
+</body>
+</html>

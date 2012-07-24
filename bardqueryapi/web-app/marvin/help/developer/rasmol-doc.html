@@ -1,0 +1,133 @@
+<html>
+<head>
+<meta NAME="description" CONTENT="RasMol in Marvin">
+<meta NAME="keywords" CONTENT="RasMol, Java, Marvin">
+<meta NAME="author" CONTENT="Peter Csizmadia">
+<link REL ="stylesheet" TYPE="text/css" HREF="../marvinmanuals.css" TITLE="Style">
+<title>RasMol Scripts in Marvin</title>
+</head>
+<body>
+
+<h1>RasMol Scripts</h1>
+
+<p>
+MarvinView can execute scripts containing 3D viewing commands
+delimited by semicolons or newlines. Comment lines start with #.
+Currently, only the following subset of RasMol/Chime commands is implemented:
+<p>
+<table CELLSPACING=0 CELLPADDING=4 BORDER=0 id="colored-grid">
+<tr VALIGN=TOP>
+    <td NOWRAP><code>ballstick</code><br>
+	<code>ballstick on</code><br>
+	<code>ballstick true</code></td>
+    <td>Ball &amp; stick rendering style.<br>
+	This command is Marvin-specific.</td>
+    </tr>
+<tr VALIGN=TOP>
+    <td NOWRAP><code>center</code><br>
+	<code>center</code> <em>atomno</em><br>
+	<code>center [</code><em>x</em><code>, </code><em>y</em><code>,
+	    </code><em>z</em><code>]</code><br><br>
+	<code>centre</code><br>
+	<code>centre</code> <em>atomno</em><br>
+	<code>centre [</code><em>x</em><code>, </code><em>y</em><code>,
+	    </code><em>z</em><code>]</code><br>
+    <td>Defines the center point for the
+	<code>rotate</code> and <code>zoom</code> commands.
+	Without argument, the center is set to be the center of gravity.
+	The argument can be an atom number, or three coordinates specifying
+	the distance from the center of gravity.
+	The <em>x</em>, <em>y</em>, <em>z</em> values are in RasMol units
+	(1/250 Angstrom).
+	</td>
+    </tr>
+<tr VALIGN=TOP>
+    <td NOWRAP><code>cpk</code></td>
+    <td>Synonymous with <code>spacefill</code>.</td>
+    </tr>
+<tr VALIGN=TOP>
+    <td NOWRAP><code>delay</code><br>
+	<code>delay</code> <em>seconds</em></td>
+    <td>Delays the continuation of script execution for the specified number of
+	seconds. Default delay value is 1 second.
+	</td>
+    </tr>
+<tr VALIGN=TOP>
+    <td NOWRAP><code>echo</code> <em>text</em></td>
+    <td>Prints a message to the standard output.</td>
+    </tr>
+<tr VALIGN=TOP>
+    <td NOWRAP><code>exit</code></td>
+    <td>Exits from the script. In case of nested scripts, it terminates only
+	the current level.</td>
+    </tr>
+<tr VALIGN=TOP>
+    <td NOWRAP><a NAME="load"><code>load </code><em>molfile</em></a></td>
+    <td>Loads a molecule file from the specified URL.</td>
+    </tr>
+<tr VALIGN=TOP>
+    <td NOWRAP><code>quit</code></td>
+    <td>Exits from the script interpreter.
+	Terminates all nested levels of scripts.</td>
+    </tr>
+<tr VALIGN=TOP>
+    <td NOWRAP><code>refresh</code></td>
+    <td>Redraws the current image. In Marvin, this command is not necessary
+	because the image is automatically refreshed at the beginning of
+	<code>delay</code> commands and at the end of script.</td></tr>
+<tr VALIGN=TOP>
+    <td NOWRAP><code>reset</code></td>
+    <td>Restores the default viewing transformation.</td></tr>
+<tr VALIGN=TOP>
+    <td NOWRAP><code>rotate x</code> <em>angle</em><br>
+	<code>rotate y</code> <em>angle</em><br>
+	<code>rotate z</code> <em>angle</em></td>
+    <td>Rotates about the &quot;x&quot;, &quot;y&quot; or &quot;z&quot; axis
+	with the specified angle (degrees).</td>
+    </tr>
+<tr VALIGN=TOP>
+    <td NOWRAP><a NAME="script"><code>script </code><em>file</em></a><br>
+	<code>source </code><em>file</em></td>
+    <td>Reads a script from the specified URL.<br>
+	Scripts can be nested without any depth limitation in Marvin.</td>
+    </tr>
+<tr VALIGN=TOP>
+    <td NOWRAP><code>spacefill</code><br>
+	<code>spacefill on</code><br>
+	<code>spacefill true</code></td>
+    <td>Atoms are represented by balls, bonds are not drawn.</td>
+    </tr>
+<tr VALIGN=TOP>
+    <td NOWRAP><code>sticks</code><br>
+	<code>sticks on</code><br>
+	<code>sticks true</code></td>
+    <td>Sticks rendering style.<br>
+	This command is Marvin-specific.</td>
+    </tr>
+<tr VALIGN=TOP>
+    <td NOWRAP><code>wireframe</code><br>
+	<code>wireframe on</code><br>
+	<code>wireframe true</code></td>
+    <td>Bonds are represented by lines in wireframe mode.</td>
+    </tr>
+<tr VALIGN=TOP>
+    <td NOWRAP><code>wireknobs</code><br>
+	<code>wireknobs on</code><br>
+	<code>wireknobs true</code></td>
+    <td>Wireframe with knobs.<br>
+	This command is Marvin-specific.</td>
+    </tr>
+<tr VALIGN=TOP>
+    <td NOWRAP><code>zap</code></td>
+    <td>Deletes molecule and resets parameter
+	variables to their default values.</td></tr>
+<tr VALIGN=TOP>
+    <td NOWRAP><code>zoom</code> <em>percentage</em></td>
+    <td>Magnifies to the specified value.</td>
+    </tr>
+</table>
+<p>
+<strong>Warning:</strong> RasMol support is incomplete and <em>experimental</em>.
+
+</body>
+</html>

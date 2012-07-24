@@ -1,0 +1,88 @@
+<html>
+<head>
+<meta NAME="author" CONTENT="Peter Csizmadia">
+    <script type="text/javascript" src="../../sh_main.js"></script>
+    <script type="text/javascript" src="../../sh_javascript.js"></script>
+    <script type="text/javascript" src="../../sh_html.js"></script>
+    <link REL ="stylesheet" TYPE="text/css" HREF="../../sh_nedit.css" TITLE="Style">
+<link REL ="stylesheet" TYPE="text/css" HREF="../../../marvinmanuals.css" TITLE="Style">
+<title>MarvinView Example - Background colors, 3D, rotation</title>
+</head>
+<body onload="sh_highlightDocument();">
+
+<h1>MarvinView Example - Background colors, 3D, rotation</h1>
+
+All the molecules are shown in 3D now. Other changes:
+<ul>
+<li>table background color is the same as the page color</li>
+<li>molecule background is black</li>
+<li>default mouse drag action is &quot;Rotate in 3D&quot;</li>
+<li>two molecules are continuously rotated</li>
+<li>the rendering style is &quot;ball and stick&quot;</li>
+</ul>
+
+<center>
+<script type="text/javascript" SRC="../../../marvin.js"></script>
+<script type="text/javascript">
+<!--
+mview_begin("../../..", 201, 241);
+mview_param("background", "#ffffff");
+mview_param("molbg", "#000000");
+mview_param("navmode", "rot3d");
+mview_param("animate", "1,2");
+mview_param("rendering", "ballstick");
+mview_param("rows", "2");
+mview_param("cols", "2");
+mview_param("border", "1");
+mview_param("layout", ":2:1:M:1:0:1:1:L:0:0:1:1:c:n:1:1");
+mview_param("param", ":M:100:100:L:10b");
+mview_param("cell0", "|../../../mols-3d/nci1949.csmol|1949");
+mview_param("cell1", "|../../../mols-3d/nci1683.csmol|1683");
+mview_param("cell2", "|../../../mols-3d/nci1659.csmol|1659");
+mview_param("cell3", "|../../../mols-3d/nci15976.csmol|15976");
+mview_end();
+//-->
+</script>
+</center>
+
+<blockquote>
+<pre class="sh_html">
+&lt;script type=&quot;text/javascript&quot; SRC=&quot;../../../<a HREF="../marvin.js.txt">marvin.js</a>&quot;&gt;&lt;/script&gt;
+&lt;script type=&quot;text/javascript&quot;&gt;
+&lt;!--
+</pre><pre class="sh_javascript">mview_begin(&quot;../../..&quot;, 201, 241);
+mview_param(&quot;background&quot;, &quot;#ffffff&quot;);
+mview_param(&quot;molbg&quot;, &quot;#000000&quot;);
+mview_param(&quot;navmode&quot;, &quot;rot3d&quot;);
+mview_param(&quot;animate&quot;, &quot;1,2&quot;);
+mview_param(&quot;rendering&quot;, &quot;ballstick&quot;);
+mview_param(&quot;rows&quot;, &quot;2&quot;);
+mview_param(&quot;cols&quot;, &quot;2&quot;);
+mview_param(&quot;border&quot;, &quot;1&quot;);
+mview_param(&quot;layout&quot;, &quot;:2:1:M:1:0:1:1:L:0:0:1:1:c:n:1:1&quot;);
+mview_param(&quot;param&quot;, &quot;:M:100:100:L:10b&quot;);
+mview_param(&quot;cell0&quot;, &quot;|../../../mols-3d/nci1949.csmol|1949&quot;);
+mview_param(&quot;cell1&quot;, &quot;|../../../mols-3d/nci1683.csmol|1683&quot;);
+mview_param(&quot;cell2&quot;, &quot;|../../../mols-3d/nci1659.csmol|1659&quot;);
+mview_param(&quot;cell3&quot;, &quot;|../../../mols-3d/nci15976.csmol|15976&quot;);
+mview_end();
+</pre><pre class="sh_html">//--&gt;
+&lt;/script&gt;
+</pre>
+</blockquote>
+
+Description of the used parameters:
+<ul>
+    <li><a HREF="../../../help/developer/viewman.html#parameters.background"><code>background</code></a></li>
+    <li><a HREF="../../../help/developer/viewman.html#parameters.molbg"><code>molbg</code></a></li>
+    <li><a HREF="../../../help/developer/viewman.html#parameters.navmode"><code>navmode</code></a></li>
+    <li><a HREF="../../../help/developer/viewman.html#3d.animate"><code>animate</code></a></li>
+    <li><a HREF="../../../help/developer/viewman.html#3d.rendering"><code>rendering</code></a></li>
+</ul>
+
+
+<center><div class="lenia">&nbsp;</div></center>
+<p>
+The next example demonstrates more <a HREF="configure3.html">3D viewer settings</a>.
+</body>
+</html>

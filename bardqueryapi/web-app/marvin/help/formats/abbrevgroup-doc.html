@@ -1,0 +1,120 @@
+<html>
+<head>
+    <meta NAME="description" CONTENT="Format of default.abbrevgroup file">
+    <meta NAME="author" CONTENT="Szilveszter Juhos">
+    <link REL ="stylesheet" TYPE="text/css" HREF="../marvinmanuals.css" TITLE="Style">
+    <title>Abbreviated group file format</title>
+</head>
+<body>
+
+<h1>ChemAxon SMILES Abbreviated Groups</h1>
+
+<p>
+Codename: <strong>abbrevgroup</strong>
+
+<h3>File format for abbreviated groups in Marvin</h3>
+<p>
+    Abbreviated groups are stored in a TAB-delimited text file called
+    <b>default.abbrevgroup</b>.
+    The basic format is:
+</p>
+<pre>
+    Ac	CC=O	2
+    AcAc	CC(=O)CC(=O)	5
+    Acet	CC=O	2
+    Ade	NC1=C2N=CNC2=NC=N1	6	1
+</pre>
+<p>
+    <b>Please make sure the words are separated by TAB characters not by
+	spaces.</b>
+</p>
+<p>
+    In these lines the very first word is the abbreviation, the second is the
+    SMILES string representing the molecule fragment depicted by the
+    abbreviation. These are followed by one or two numbers that are the
+    number(s) of link nodes (atoms) in the SMILES string. In the first
+    line using the <b>Ac</b> abbreviation the second carbon is the
+    link when the group is connected to an other molecule. If there is no number
+    following the the SMILES string the abbreviated group can not be linked to
+    other atoms. Furtheremore the maximal number of link nodes are two.
+</p>
+<p>
+    Usually the bond points towards the middle of the abbreviation but when
+    the string contains atom symbols, probably we want to make it point
+    to the symbol of the bonding atom. Furthermore it is desirable to flip the
+    abbreviation when the group is in the opposite side:
+</p>
+<img src="abbrev_1.png" alt="Flipped abbreviated groups CN and COOH">
+<p>
+    To achieve the flipping effect one have to provide the alternative name
+    of the abbreviated group that will be printed on the left side of the
+    molecule:</p>
+    <pre>
+	CN	C#N	1	leftName=NC
+	CO2Et	CCOC=O	4	leftName=EtO2C
+	CO2H	OC=O	2	leftName=HO2C
+	COOH	OC=O	2	leftName=HOOC
+	COOiAm	CC(C)CCOC=O	7	leftName=iAmOOC
+    </pre>
+    <p>
+    If the abbreviation contains numbers, those will be treated as subscripts:</p>
+    <pre>
+	C10H21	CCCCCCCCCC	1	leftName=H21C10
+	CBr3	BrC(Br)Br	2	leftName=Br3C
+    </pre>
+    <img src="abbrev_2.png" alt="Numbers as subscripts in abbreviated names">
+
+<p>
+    Additionally there can be groups where it is good to have flipping
+    abbreviations but the string represents the form that is used on the left
+    side. For these groups (for example AcO, MeO) the <b>rightName</b> specifier
+    can be used:</p>
+    <pre>
+	BnNH	NCC1=CC=CC=C1	1	rightName=HNBn
+	BnO	OCC1=CC=CC=C1	1	rightName=OBn
+	BnO2C	O=COCC1=CC=CC=C1	2	rightName=CO2Bn
+	BnOOC	O=COCC1=CC=CC=C1	2	rightName=COOBn
+    </pre>
+    <img src="abbrev_3.png" alt="Abbreviations on the right.">
+    <p>
+    If you do not want to flip an abbreviation but want to be sure that the
+    bond points to an atom symbol and not to the middle of the string, you
+    still can define the <b>center</b> specifier:</p>
+    <pre>
+	c-C10H19	C1CCCCCCCCC1	1	center=AUTO
+	c-C11H21	C1CCCCCCCCCC1	1	center=AUTO
+	c-C12H23	C1CCCCCCCCCCC1	1	center=AUTO
+    </pre>
+    <img src="abbrev_4.png" alt="Bonds pointing to an atom">
+    <p>
+    This option allows to point to the very first character in the abbreviated
+    group string that is the same as the atom symbol of the binding atom. This
+    option makes it possible to fine-tune the position of the bond to point to
+    any of the characters.
+    </p>
+
+<h3>Extending the built-in abbreviated groups</h3>
+	<p>
+	From the 5.10 release extension possibilities have been introduced for the default
+	built-in abbreviated groups.</p>
+	<p>
+	A user can define abbreviated groups to be used in MarvinSketch in a file called
+	user.abbrevgroup. This file has to be placed in the chemaxon settings directory
+	that is located in the chemaxon or .chemaxon folder inside the home directory of
+	the user.
+	</p>
+	<p>
+	For developers who are developing based on the MarvinBeans library, or who are using
+	the Marvin Applets package, it is possible to extend the abbreviated group list via 
+	files that can be defined for usage in MarvinSketch with the help of the <A 
+	href="../developer/sketchman.html#parameters.customAbbrevgroups">customAbbrevgroups</a>
+	parameter.<br/>
+	</p>
+
+<h2>See also</h2>
+<ul>
+<li><a HREF="smiles-doc.html">SMILES and SMARTS</a></li>
+</ul>
+
+</body>
+</html>

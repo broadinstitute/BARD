@@ -1,0 +1,123 @@
+<!DOCTYPE html><HTML>
+
+ <head>
+  <script type="text/javascript" src="../../../examples/sh_main.js"></script>
+  <script type="text/javascript" src="../../../examples/sh_java.js"></script>
+  <script type="text/javascript" src="../../../examples/sh_javascript.js">
+     </script>
+  <link REL ="stylesheet" TYPE="text/css" 
+        HREF="../../../examples/sh_nedit.css" TITLE="Style">
+  <META HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=utf-8">
+  <title> Chirality  </title>
+  <link rel=stylesheet type="text/css" href="../../marvinmanuals.css">
+ </head>
+
+<BODY onload="sh_highlightDocument();" >
+<h1>Chirality</h1> 
+<p>Atoms with four different substituents can have point chirality. 
+Chirality of molecules  having no  actual point chirality, but axial or planar 
+chirality is not yet supported. 
+The following criteria need to be fulfilled for a 
+tetrahedral stereogenic center: 
+</p>
+<ul>
+<li>Conditions for tetrahedral parity need to be met. </li>
+<li>In case of 2 dimensional molecules the stereocenter must have a 
+wedged bond. </li>
+</ul>
+<p>The possible values of a tetrahedral stereogenic center are: </p>
+<blockquote>
+<table>
+ <tr>
+  <td> 0
+  </td>
+  <td> or atoms which are not stereogenic center.
+  </td>
+ </tr>
+ <tr>
+  <td> R
+  </td>
+  <td> For atoms which have chirality R.
+  </td>
+ </tr>
+ <tr>
+  <td> S
+  </td>
+  <td> For atoms which have chirality S.
+  </td>
+ </tr>
+ <tr>
+  <td> R|S
+  </td>
+  <td> For atoms which can have chirality but it is not specified.
+  </td>
+ </tr>
+</table>
+</blockquote>
+<h2>Setting chirality information in the GUI</h2>
+ <p style="text-align: left;">
+   <span style="font-size: 10pt; font-family: 'Arial'; color: #000000;">&nbsp;
+    </span></p>
+<p style="text-align: left;"><img src="images/chirality_1new.png" width="470" 
+   height="438" border="0" alt="rs"></p>
+<p style="text-align: left;">
+  <span style="font-size: 10pt; font-family: 'Arial'; color: #000000;">&nbsp;
+   </span></p>
+
+<h2>Setting chirality information (API)</h2> 
+<p>The chirality type can be modified through the parity change of the 
+sterocenter described in the 
+<a href="parity.html#nulld">Setting parity information in 0 D</a> and 
+<a href="parity.html#23d">Setting parity information in 2 or 3 D</a> 
+sections or with the 
+<code>setChirality (int i, int c) </code>function of the 
+<code>MoleculeGraph </code> class 
+
+<p>Code example:</p> 
+<blockquote> <pre class="sh_java">
+<b>boolean</b> success = molecule.<b>setChirality</b>(2, StereoConstants. CHIRALITY_R); 
+</pre></blockquote>
+
+<h2>Getting chirality information (API)</h2> 
+<p>Chirality information can be calculated using the 
+<code>getChirality(int i) </code>function of <code>MoleculeGraph</code> 
+class in any spatial dimension. </p>
+
+<p>Code example: </p>
+<blockquote><pre class="sh_java">
+<b>int</b> c = molecule.<b>getChirality</b>(2); 
+</blockquote></pre>
+<p style="text-align: left;"><span style="font-size: 10pt; font-family: 'Arial'; color: #000000;">&nbsp;</span></p>
+<p style="text-align: left;"><span style="font-size: 10pt; font-family: 'Arial'; color: #000000;">&nbsp;</span></p>
+
+  <p>&nbsp;</p>
+  <p>&nbsp;</p>
+ 
+ <table summary="next pages">
+   <tr style="text-align:left">
+     <td width="250" valign="middle"> 
+       <p style="text-align: center;">
+        <a href="parity.html">
+          Parity</a><br>
+        <i>Previous chapter</i>
+       </p>   
+     </td>
+     <td width="250" valign="middle">
+      <p style="text-align: center;">
+       <a href="core_index.html"> Table of contents</a> <br>
+       &nbsp;
+      </p>
+     </td>
+     <td width="250"valign="middle" >
+      <p style="text-align: center;"> 
+       <a href="relative_configuration_of_tetrahedral_stereo_centers.html"> 
+           Relative configuration of tetrahedral stereo centers</a><br>
+       <i>Next chapter</i>
+      </p>
+     </td>
+   </tr>
+ </table> 
+
+
+</BODY>
+</HTML>

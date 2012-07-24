@@ -1,0 +1,54 @@
+<html>
+<head>
+<meta NAME="author" CONTENT="Istvan Fajth">
+    <script type="text/javascript" src="../../sh_main.js"></script>
+    <script type="text/javascript" src="../../sh_javascript.js"></script>
+    <script type="text/javascript" src="../../sh_html.js"></script>
+    <link REL ="stylesheet" TYPE="text/css" HREF="../../sh_nedit.css" TITLE="Style">
+<link REL ="stylesheet" TYPE="text/css" HREF="../../../marvinmanuals.css" TITLE="Style">
+<title>MarvinSketch Example - Specify a custom splash screen image</title>
+</head>
+<body onload="sh_highlightDocument();">
+
+<h1>MarvinSketch Example - Specify a custom splash screen image</h1>
+<p>
+In this example the possibility to add a custom splash screen image will be discussed.
+</p>
+
+<center>
+<script type="text/javascript" SRC="../../../marvin.js"></script>
+<script type="text/javascript">
+<!--
+msketch_begin("../../..", 580, 480);
+msketch_param("splashScreenImage", "examples/applets/sketch/sampleSplash.gif");
+msketch_end();
+//-->
+</script>
+</center>
+<p>
+While the applet is loading, the specified image is shown as the splash screen.<br/>
+All images supported by the ImageIcon class can be used as a splash screen.
+Using animated gif files is not recommended because they can be displayed uncorrectly.<br/>
+The <a href="../../../help/developer/sketchman.html#parameters.splashScreenImage"><code>splashScreenImage</code></a> parameter should contain the relative path to the image from the html code's path.
+</p>
+
+<blockquote>
+<pre class="sh_html">
+&lt;script type=&quot;text/javascript&quot; SRC=&quot;../../../<a HREF="../marvin.js.txt">marvin.js</a>&quot;&gt;&lt;/script&gt;
+&lt;script type=&quot;text/javascript&quot;&gt;
+&lt;!--
+</pre><pre class="sh_javascript">msketch_begin(&quot;../../..&quot;, 580, 480);
+msketch_param(&quot;splashScreenImage&quot;, &quot;examples/applets/sketch/sampleSplash.gif&quot;);
+msketch_end();
+</pre><pre class="sh_html">//--&gt;
+&lt;/script&gt;
+</pre>
+</blockquote>
+
+<p>
+<center><div class="lenia">&nbsp;</div></center>
+<p>
+The <a HREF="hydrogens.html">next example</a> is about using Hydrogen atom related properties.
+
+</body>
+</html>
