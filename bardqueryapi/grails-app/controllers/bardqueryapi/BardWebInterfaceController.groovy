@@ -46,8 +46,7 @@ class BardWebInterfaceController {
 
             Set<String> compounds = [] as Set
             for (ESCompound compound in result.compounds) {
-                String compoundString = compound.toString()
-                compounds.add(compoundString)
+                 compounds.add(compound)
             }
 
             render(view: "homePage", model: [totalCompounds: compounds.size(), assays: assays as List<Map>, compounds: compounds.toList(), experiments: [], projects: []])

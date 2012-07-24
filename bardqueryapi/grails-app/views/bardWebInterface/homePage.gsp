@@ -15,6 +15,9 @@
         })
     </r:script>
     <r:layoutResources/>
+    <r:require modules="bootstrap"/>
+
+
     <title>BARD Home</title>
 </head>
 
@@ -55,5 +58,6 @@
 
 </div><!-- End body div -->
 <r:layoutResources/>
+<r:require modules="bootstrap"/>
 </body>
 </html>

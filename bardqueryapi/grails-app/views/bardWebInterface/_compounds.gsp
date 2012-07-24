@@ -8,8 +8,27 @@
 
 <div>
     <div class="content">
-        <g:each var="compound" in="${compounds}">
-            <g:link controller="bardWebInterface" action="showCompound" params="[cid: compound]">${compound}</g:link>
-        </g:each>
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th>Structure</th>
+                <th>CID</th>
+            </tr>
+            </thead>
+            <tbody>
+            <g:each var="compound" in="${compounds}">
+
+                <tr>
+                    <td>
+                        <img src="${createLink(controller:'chemAxon', action:'generateStructureImage', params:[smiles: compound.smiles])}" width="150" height="120" />
+                    </td>
+                    <td>
+                        ${compound.cid}
+                    </td>
+                </tr>
+            </g:each>
+            </tbody>
+        </table>
+
     </div>
 </div>
