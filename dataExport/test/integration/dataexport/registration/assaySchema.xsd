@@ -126,7 +126,7 @@
                     </xs:annotation>
                     <xs:simpleType>
                         <xs:restriction base="xs:string">
-                            <xs:maxLength value="128"/>
+                            <xs:maxLength value="1000"/>
                         </xs:restriction>
                     </xs:simpleType>
                 </xs:element>
@@ -295,7 +295,7 @@
                 </xs:simpleType>
             </xs:attribute>
             <xs:attribute ref="readyForExtraction"/>
-            <xs:attribute name="assayType" use="required">
+            <xs:attribute name="assayType" use="optional">
                 <xs:simpleType>
                     <xs:restriction base="xs:string">
                         <xs:enumeration value="Regular"/>
