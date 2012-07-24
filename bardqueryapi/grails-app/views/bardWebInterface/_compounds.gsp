@@ -20,7 +20,7 @@
 
                 <tr>
                     <td>
-                        <img src="${createLink(controller:'chemAxon', action:'generateStructureImage', params:[smiles: compound.smiles])}" width="150" height="120" />
+                        <img src="${createLink(controller:'chemAxon', action:'generateStructureImage', params:[smiles: compound.smiles, width: 150, height: 120])}" />
                     </td>
                     <td>
                         ${compound.cid}
