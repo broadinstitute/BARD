@@ -300,6 +300,11 @@ class ElasticSearchService {
         return getElasticSearchDocument(elasticSearchQueryString)
     }
 
+    JSONObject getCompoundDocument(Integer docId) {
+        String elasticSearchQueryString = "${elasticSearchBaseUrl}/${compoundIndexName}/${compoundIndexTypeName}/${docId}"
+        return getElasticSearchDocument(elasticSearchQueryString)
+    }
+
 
     private JSONObject getElasticSearchDocument(String elasticSearchQueryString) {
         JSONObject result = [:] as JSONObject
