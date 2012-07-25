@@ -6,6 +6,8 @@ import wslite.rest.RESTClientException
 //import grails.converters.JSON
 import wslite.json.JSONObject
 import wslite.json.JSONArray
+import org.apache.commons.lang.builder.EqualsBuilder
+import org.apache.commons.lang.builder.HashCodeBuilder
 
 class ElasticSearchService {
 
@@ -77,9 +79,11 @@ class ElasticSearchService {
         JSONArray hits = response?.hits?.hits ?: [] as JSONArray
         List<ESAssay> assays = []
         List<ESCompound> compounds = []
+        final Map<TargetAccessionNumber, Set<String>> accessionNumberToAssayIds = [:]
 
         for (JSONObject hit in hits) {
             if (hit._type == assayIndexTypeName) {
+                aggregateAccessionNumbersToAssayNumbers(hit, accessionNumberToAssayIds)
                 ESAssay esAssay = new ESAssay(hit)
                 assays.add(esAssay)
             } else if (hit._type == compoundIndexTypeName) {
@@ -87,17 +91,37 @@ class ElasticSearchService {
                 JSONArray cids = hit?._source?.cids ?: [] as JSONArray
                 for (def cid in cids) {
                     ESCompound esCompound = new ESCompound(_id: cid as String, _index: compoundIndexName, _type: compoundIndexTypeName, cid: cid as String)
-                    JSONObject compoundESDocument = getCompoundDocument(new Integer(cid))
+                    JSONObject compoundESDocument = getCompoundDocument(new Integer(cid.toString()))
                     String smiles = compoundESDocument?._source?.smiles
                     esCompound.smiles = smiles
                     compounds.add(esCompound)
                 }
             }
         }
-
-        return ["assays":assays, "compounds":compounds]
+        return ["assays": assays, "compounds": compounds, "compoundHeaderInfo": accessionNumberToAssayIds]
     }
+    /**
+     * A custom constructor to instantiate an assay from an ES assay doc type.
+     * @param _source
+     */
+    protected void aggregateAccessionNumbersToAssayNumbers(JSONObject hitJsonObj, Map<TargetAccessionNumber, Set<String>> accessionNumberToAssayIds) {
+        final JSONObject assaySource = hitJsonObj?._source
+        def assayNumber = assaySource?.aid
 
+        JSONArray assayTargets = assaySource.targets
+        for (JSONObject assayTarget in assayTargets) {
+            final TargetAccessionNumber targetAccessionNumber = new TargetAccessionNumber(accessionNumber: assayTarget.acc, targetName: assayTarget.name)
+            Set<String> setOfAssayIds = accessionNumberToAssayIds.get(targetAccessionNumber)
+            if (!setOfAssayIds) {
+                setOfAssayIds = [] as Set<String>
+            }
+            if (setOfAssayIds.size() <= 3) {  //we will only display a max of 3 assay numbers per target
+                //this should probably be done on the client side
+                setOfAssayIds.add(assayNumber.toString())
+                accessionNumberToAssayIds.put(targetAccessionNumber, setOfAssayIds)
+            }
+        }
+    }
     JSONObject getAssayDocument(Integer docId) {
         String elasticSearchQueryString = "${elasticSearchBaseUrl}/${assayIndexName}/${assayIndexTypeName}/${docId}"
         return getElasticSearchDocument(elasticSearchQueryString)
@@ -111,7 +135,7 @@ class ElasticSearchService {
     private JSONObject getElasticSearchDocument(String elasticSearchQueryString) {
         JSONObject result = [:] as JSONObject
         try {
-            result = queryExecutorService.executeGetRequestJSON(elasticSearchQueryString, null)
+            result = (JSONObject)queryExecutorService.executeGetRequestJSON(elasticSearchQueryString, null)
         }
         catch (RESTClientException exp) {
             String message = exp?.response?.statusMessage
@@ -174,7 +198,7 @@ public class ESCompound extends ESResult implements Serializable{
         super()
     }
 
-    ESCompound(JSONObject hitJsonObj) {
+    public ESCompound(JSONObject hitJsonObj) {
         this._index = hitJsonObj?._index
         this._type = hitJsonObj?._type
         this._id = hitJsonObj?._id
@@ -184,5 +208,36 @@ public class ESCompound extends ESResult implements Serializable{
     @Override
     String toString() {
         return this.cid
+    }
+}
+public class TargetAccessionNumber implements Serializable, Comparable<TargetAccessionNumber> {
+    String targetName
+    String accessionNumber
+
+    public TargetAccessionNumber() {
+
+    }
+
+    @Override
+    int compareTo(TargetAccessionNumber o) {
+        return this.accessionNumber.compareTo(o.accessionNumber)
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        final TargetAccessionNumber otherObject = (TargetAccessionNumber) obj;
+
+        return new EqualsBuilder()
+                .append(this.accessionNumber, otherObject.accessionNumber)
+                .append(this.targetName, otherObject.targetName)
+                .isEquals();
+    }
+
+    @Override
+    public int hashCode() {
+        return new HashCodeBuilder()
+                .append(this.accessionNumber)
+                .append(this.targetName)
+                .toHashCode();
     }
 }
