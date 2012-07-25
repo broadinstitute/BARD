@@ -24,11 +24,17 @@
             $("#modalDiv").dialog({
                 modal: true,
                 autoOpen: false,
-                height: '700',
-                width: '50%',
+                height: '560',
+                width: '600',
                 draggable: true,
                 resizeable: true,
-                title: ''
+                title: "To finish click the 'X' button",
+                beforeClose: function() {
+                    var marvinSketch = $('#modalIFrame').contents().find('#MarvinSketch')[0];
+                    var smiles = marvinSketch.getMol('smiles')
+		            $('#searchString').attr('value', smiles);
+		            return true;
+                }
             });
 
         });

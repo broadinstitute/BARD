@@ -7,10 +7,10 @@ import chemaxon.formats.MolImporter
 class ChemAxonController {
 
     ChemAxonService chemAxonService
-//
-//    def index() {
-//        session.putValue('smiles', params.smiles)
-//    }
+
+    def index() {
+        session.putValue('smiles', params.smiles)
+    }
 
     def generateStructureImage() {
         byte[] bytes = []

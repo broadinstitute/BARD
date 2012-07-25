@@ -9,6 +9,24 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 <html>
 <head>
+    <r:require modules="core"/>
+    <r:script>
+
+        $(document).ready(function () {
+            $('#clickHere').click(
+                    function () {
+                        var marvinSketch = document.MSketch;
+                        var smiles = marvinSketch.getMol('smiles')
+                        alert(smiles)
+                    }
+            );
+        });
+    </r:script>
+
+    <r:layoutResources/>
+    <r:require modules="bootstrap"/>
+
+</head>
 
 <body>
 <div>
@@ -27,10 +45,17 @@
 <div>
     <script type="text/javascript" SRC="${request.contextPath}/marvin/marvin.js"></script>
     <script type="text/javascript">
-        msketch_name="MarvinSketch";
+        msketch_name = "MSketch";
         msketch_begin("${request.contextPath}/marvin", 540, 480);
         msketch_end();
     </script>
+</div>
+
+<r:layoutResources/>
+<r:require modules="bootstrap"/>
+
+<div id='clickHere'>
+    <span>Click Here</span>
 </div>
 </body>
 </html>
