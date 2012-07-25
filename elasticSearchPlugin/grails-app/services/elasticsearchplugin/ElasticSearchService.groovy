@@ -22,6 +22,8 @@ class ElasticSearchService {
     def elasticCompoundIndex =  org.codehaus.groovy.grails.commons.ConfigurationHolder.config.elasticSearchService.restNode.elasticCompoundIndex
     def elasticSearchRequester =  org.codehaus.groovy.grails.commons.ConfigurationHolder.config.elasticSearchService.restNode.elasticSearchRequester
     def elasticAssayType =  org.codehaus.groovy.grails.commons.ConfigurationHolder.config.elasticSearchService.restNode.elasticAssayType
+    def elasticXCompoundType =  "xcompound"
+    def elasticXCompoundIndex =  "/compound"
     def elasticCompoundType =  org.codehaus.groovy.grails.commons.ConfigurationHolder.config.elasticSearchService.restNode.elasticCompoundType
 
     static transactional = false
@@ -96,7 +98,7 @@ class ElasticSearchService {
                 elasticSearchRequester
         // Prepare to page, if necessary
         Integer fromValue = 0
-        Integer sizeValue = 50
+        Integer sizeValue = 500
         if (additionalParms.containsKey("from"))
             fromValue = additionalParms ["from"]
         if (additionalParms.containsKey("size"))
@@ -105,6 +107,7 @@ class ElasticSearchService {
         String searchSpecifier = chooseSearchSpecifier(inBardQueryType,outBardQueryType,searchParmForEs,fromValue,sizeValue)
         JSONObject  jSONObject
         try {
+            println  searchSpecifier
             jSONObject = new JSONObject(searchSpecifier)
         }
         catch (JSONException exp) {
@@ -120,9 +123,47 @@ class ElasticSearchService {
      * @param searchValue
      * @return
      */
-    JSONObject elasticSearchQuery( LinkedHashMap additionalParms=[:],
+    def elasticSearchQuery( LinkedHashMap additionalParms=[:],
                                    Object searchValue ) {
-        elasticSearchQuery(additionalParms, BardQueryType.Assay, searchValue, BardQueryType.Default )
+        JSONObject response //= new  JSONObject ()
+        if (additionalParms.size() == 0)
+            response = elasticSearchQuery(additionalParms, BardQueryType.Xcompound, searchValue, BardQueryType.Default )
+        else {
+            if (additionalParms.containsKey("searchIndex")) {
+                def requestedSearchIndex =  additionalParms["searchIndex"]
+                if (requestedSearchIndex instanceof BardQueryType ) {
+                    BardQueryType bardQueryType =  requestedSearchIndex as BardQueryType
+                   response =   elasticSearchQuery(additionalParms,bardQueryType, searchValue, BardQueryType.Default )
+                    print  response.toString()
+                }
+
+            }
+            else
+                response =   elasticSearchQuery(additionalParms,requestedSearchIndex as BardQueryType, searchValue, BardQueryType.Default )
+        }
+        JSONArray hits = response?.hits?.hits ?: [] as JSONArray
+        List<ESAssay> assays = []
+        List<ESCompound> compounds = []
+        List<ESXCompound> xcompounds = []
+
+        for (JSONObject hit in hits) {
+            if (hit._type == assayIndexTypeName) {
+                ESAssay esAssay = new ESAssay(hit)
+                assays.add(esAssay)
+            } else if (hit._type == compoundIndexTypeName) {
+                //'compound' type in the 'assays' index is just a list of CIDs.
+                JSONArray cids = hit?._source?.cids ?: [] as JSONArray
+                for (def cid in cids) {
+                    ESCompound esCompound = new ESCompound(_id: cid as String, _index: compoundIndexName, _type: compoundIndexTypeName, cid: cid as String)
+                    compounds.add(esCompound)
+                }
+            }  else if (hit._type == elasticXCompoundType) {
+                 xcompounds.add( new ESXCompound(hit) )
+            }
+        }
+
+        return ["assays":assays, "compounds":compounds, "xcompounds": xcompounds]
+
     }
 
 
@@ -138,98 +179,30 @@ class ElasticSearchService {
  * @param outBardQueryType
  */
     private String chooseIndexToSearch(BardQueryType inBardQueryType,BardQueryType outBardQueryType) {
+        // for now all searches handled by the plug-in will cross the "compound" index ( type xcompound  ) and
+        //  the "assays" index (type assay).
         String index = ""
-        switch (inBardQueryType)  {
-            case BardQueryType.Assay:
-                index =  elasticAssayIndex
-                break
-            case BardQueryType.Compound:
-                index = elasticCompoundIndex
-                break
-            case BardQueryType.Probe:
-            case BardQueryType.Experiment:
-            case BardQueryType.Project:
-            case BardQueryType.Target:
-            default: break;
-        }
-        switch (outBardQueryType)  {
-            case BardQueryType.Assay:
-                index +=  elasticAssayType
-                break
-            case BardQueryType.Compound:
-                index += elasticCompoundType
-                break
-            case BardQueryType.Probe:
-            case BardQueryType.Experiment:
-            case BardQueryType.Project:
-            case BardQueryType.Target:
-            case BardQueryType.Default:
-            default: break;
-        }
-
-        index
+        index  = elasticXCompoundIndex+",assays"
     }
 
 
 
+    /**
+     * Change the JSON that specifies how we search elastic search
+     * @param indexBardQueryType
+     * @param outBardQueryType
+     * @param inValue
+     * @param fromIndex
+     * @param size
+     * @return
+     */
     private String chooseSearchSpecifier( BardQueryType indexBardQueryType,
                                          BardQueryType outBardQueryType,
                                          String inValue,
                                          Integer fromIndex,
                                          Integer size) {
-        String searchSpecifier = ""
-        switch (outBardQueryType)  {
-            case BardQueryType.Assay:
-                searchSpecifier =  """{
-                    "query":{
-                        "query_string":{
-                            "default_field":"aid",
-                            "query":"$inValue"
-                         }
-                    },
-                    "from":${fromIndex},"size":${size}
-                 }"""
-                break
-            case BardQueryType.Compound:
-                switch (indexBardQueryType) {
-                    case BardQueryType.Assay:
-                       searchSpecifier =  """{
-                       "query":{
-                           "query_string":{
-                               "default_field":"cids",
-                               "query":"$inValue"
-                            }
-                       },
-                       "from":${fromIndex},"size":${size}
-                    }"""
-                        break;
-                    case BardQueryType.Compound:
-                        searchSpecifier =  """{
-                       "query":{
-                           "query_string":{
-                               "default_field":"cid",
-                               "query":"$inValue"
-                            }
-                       },
-                       "from":${fromIndex},"size":${size}
-                    }"""
-                        break;
-                    default: break;
-                }
-                break
-            case BardQueryType.Probe:
-            case BardQueryType.Experiment:
-            case BardQueryType.Project:
-            case BardQueryType.Target:
-            case BardQueryType.Default:
-                searchSpecifier =  """{
-                       "fields": ["aid",
-                                  "targets",
-                                  "name",
-                                  "acc",
-                                  "sids",
-                                  "probeId",
-                                  "smiles" ],
+        // For now every search will be in "all field" search.   This method should be responsible for inserting values for paging.
+        String searchSpecifier = """{
                        "query":{
                            "query_string":{
                                "default_field":"_all",
@@ -239,9 +212,6 @@ class ElasticSearchService {
                        "from":${fromIndex},"size":${size}
                     }"""
 
-                break;
-            default: break;
-        }
         searchSpecifier.toString()
     }
 
@@ -327,6 +297,7 @@ public enum BardQueryType {
     Experiment,
     Project,
     Target,
+    Xcompound,
     Default
 }
 
@@ -387,6 +358,79 @@ public class ESCompound extends ESResult implements Serializable{
         this._id = hitJsonObj?._id
         this.cid = hitJsonObj?._source.cid
     }
+
+    @Override
+    String toString() {
+        return this.cid
+    }
+}
+
+
+/**
+ * A single compound result item, returned from ElasticSearch search.
+ */
+public class ESXCompound extends ESResult implements Serializable{
+    String cid
+    String probeId
+    String smiles
+    String url
+    List <Integer>  apids
+    List <Integer>  sids
+
+
+    ESXCompound() {
+        super()
+    }
+
+    ESXCompound(JSONObject hitJsonObj) {
+        this._index = hitJsonObj?._index
+        this._type = hitJsonObj?._type
+        this._id = hitJsonObj?._id
+        this.cid = hitJsonObj?._source.cid
+        JSONObject xcompoundSource = hitJsonObj?._source
+        this.cid = xcompoundSource?.cid
+        this.probeId = xcompoundSource?.probeId
+        this.smiles = xcompoundSource?.smiles
+        this.url = xcompoundSource?.url
+        this.apids = xcompoundSource?.apids?.toList()
+        List listOfLists  = xcompoundSource?.sids?.toList() // This line is a workaround for an accidental list of lists
+        this.sids = listOfLists ? listOfLists[0].toList() :  listOfLists
+    }
+
+
+    static List<Integer> combinedApids (List <ESXCompound> listOfEsxCompounds) {
+       def apidLists = new  ArrayList< List< Integer>>()
+       for (ESXCompound eSXCompound in listOfEsxCompounds)
+          apidLists << eSXCompound.apids
+       mergeLists( apidLists )
+    }
+
+
+    static List<Integer> combinedSids (List <ESXCompound> listOfEsxCompounds) {
+        def sidLists = new  ArrayList<List< Integer>>()
+        for (ESXCompound eSXCompound in listOfEsxCompounds)
+            sidLists << eSXCompound.sids
+        mergeLists( sidLists )
+    }
+
+
+
+
+    static List<Integer> mergeLists( List< List< Integer>> lists) {
+        List<Integer>  first
+        if (lists.size()==0)
+            return (new ArrayList())
+        else {
+            first = lists.first()
+            if ((lists.size()>1)) {
+                for(  List< Integer> aList in (lists.drop(1) ) ) {
+                    first=first.plus(aList).unique()
+                }
+            }
+        }
+        return first
+    }
+
 
     @Override
     String toString() {

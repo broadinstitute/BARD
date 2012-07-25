@@ -24,6 +24,30 @@ class ElasticSearchServiceUnitSpec extends Specification {
     }'''
 
 
+    final static jsonXCompound = '''
+            {"_index":"compound","_type":"xcompound","_id":"cJrTWNb_TZupO_xDgE2NTw", "_score":0.13223398, "_source" :
+                {smiles: "CC(=O)CCC1=CC=C(C=C1)OC(=O)C2=CN=CC=C2",url: null, apids:[411,425,430,431,432,445,588358],
+                 sids:[[1127384,3461229,5526257,7972531,9181059,16623828,44484393]], probeId:null,cid: 881181}
+                 }
+            }'''
+
+
+
+    final static jsonXCompound2 = '''
+            {"_index":"compound","_type":"xcompound","_id":"cJrTWNb_TZupO_xDgE2NTw", "_source" :
+                {smiles: "C",url: null, apids:[411,412,413],
+                 sids:[[1127384]], probeId:null,cid: 881181}
+                 }
+            }'''
+
+    final static jsonXCompound3 = '''
+            {"_index":"compound","_type":"xcompound","_id":"cJrTWNb_TZupO_xDgE2NTw", "_source" :
+                {smiles: "C",url: null, apids:[412,413,414],
+                 sids:[[1127384]], probeId:null,cid: 881181}
+                 }
+            }'''
+
+
     void setup() {
         queryExecutorService = Mock(QueryExecutorService)
         service.queryExecutorService = queryExecutorService
@@ -37,6 +61,43 @@ class ElasticSearchServiceUnitSpec extends Specification {
     void tearDown() {
         // Tear down logic here
     }
+
+
+
+    void "try xcompound constructor"(){
+        when:
+        def jSONObject = new JSONObject(jsonXCompound)
+        assert  jSONObject
+
+        then:
+        ESXCompound eSXCompound = new ESXCompound(jSONObject)
+        assert   eSXCompound
+        assert eSXCompound.smiles == "CC(=O)CCC1=CC=C(C=C1)OC(=O)C2=CN=CC=C2"
+        assert eSXCompound.cid == "881181"
+        assert eSXCompound.probeId == "null"
+        assert eSXCompound.url == "null"
+        assert eSXCompound.apids.size() > 1
+        assert eSXCompound.sids.size() > 1
+
+//        where:    // still to be parameterized
+//        eSXCompound.smiles == "CC(=O)CCC1=CC=C(C=C1)OC(=O)C2=CN=CC=C2"
+
+    }
+
+    void "try merging lists"(){
+        when:
+        def jSONObject1 = new JSONObject(jsonXCompound2)
+        def jSONObject2 = new JSONObject(jsonXCompound3)
+        def listOfESXCompound = new ArrayList()
+        listOfESXCompound  <<  jSONObject1 <<   jSONObject2
+
+        then:
+        List<Integer> aids = ESXCompound.combinedApids(listOfESXCompound)
+        assert aids.size()==4
+        aids.containsAll([411,412,413,414])
+
+    }
+
 
     void "test search #label"() {
 

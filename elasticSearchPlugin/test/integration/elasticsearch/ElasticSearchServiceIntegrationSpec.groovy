@@ -1,8 +1,11 @@
 package elasticsearch
 
-import elasticsearchplugin.ElasticSearchService
 import elasticsearchplugin.BardQueryType
+import elasticsearchplugin.ESAssay
+import elasticsearchplugin.ESXCompound
+import elasticsearchplugin.ElasticSearchService
 import grails.plugin.spock.IntegrationSpec
+import spock.lang.Unroll
 import wslite.json.JSONObject
 
 /*
@@ -23,139 +26,71 @@ class ElasticSearchServiceIntegrationSpec extends IntegrationSpec {
 
 
 
-
-    void "test elasticSearchQuery to see it search the assay  index  for  a single CID"() {
-
-        given:
-        elasticSearchService != null
-
-
-        when:
-        final String cidQuerySpecifier = "174"
-        def returnJson = elasticSearchService.elasticSearchQuery(BardQueryType.Assay,cidQuerySpecifier,BardQueryType.Compound)
-
-        then:
-        assert returnJson
-        assert returnJson.containsKey("hits")
-        JSONObject jsonHitObject = returnJson["hits"]
-        assert jsonHitObject.containsKey("total")
-        assert jsonHitObject["hits"].size()>0
-        assert jsonHitObject["hits"][0]._type=="compound"
-
-    }
-
-
-
-    void "test elasticSearchQuery to handle the search  assay index CIDs"() {
+    @Unroll("Use new search")
+    def "test simplified elasticSearchQuery call"() {
 
         given:
         elasticSearchService != null
 
 
         when:
-        final String cidQuerySpecifier = "174 3237916"
-        def returnJson = elasticSearchService.elasticSearchQuery(BardQueryType.Assay,cidQuerySpecifier,BardQueryType.Compound)
+        def  cidQuerySpecifier =  "174 881181"
+
+        def mapOfObjects = elasticSearchService.elasticSearchQuery(searchIndex:BardQueryType.Xcompound,cidQuerySpecifier)
+        List<ESXCompound> listOfESXCompounds =  mapOfObjects."xcompounds"
+
 
         then:
-        assert returnJson
-        assert returnJson.containsKey("hits")
-        JSONObject jsonHitObject = returnJson["hits"]
-        assert jsonHitObject.containsKey("total")
-        assert jsonHitObject["hits"].size()>10 // will be equal to max # per query for common compounds
-        assert jsonHitObject["hits"][0]._type=="compound"
-
+        assert listOfESXCompounds.size()==2
+        def apisList = ESXCompound.combinedApids(listOfESXCompounds)
+        assert  apisList.size() > 300
     }
 
 
-    void "test elasticSearchQuery to search the assay index for a single AID"() {
+
+    @Unroll("Use new search")
+    def "test assorted apid and cid parms elasticSearchQuery call"() {
 
         given:
         elasticSearchService != null
 
 
         when:
-        final String cidQuerySpecifier = "644"
-        def returnJson = elasticSearchService.elasticSearchQuery(BardQueryType.Assay,cidQuerySpecifier,BardQueryType.Assay)
+        def  cidQuerySpecifier =  "174 644"
+
+        def mapOfObjects = elasticSearchService.elasticSearchQuery(searchIndex:BardQueryType.Xcompound,cidQuerySpecifier)
+        List<ESXCompound> listOfESXCompounds =  mapOfObjects."xcompounds"
+        List<ESAssay> listOfESXAssays =  mapOfObjects."assays"
+
 
         then:
-        assert returnJson
-        assert returnJson.containsKey("hits")
-        JSONObject jsonHitObject = returnJson["hits"]
-        assert jsonHitObject.containsKey("total")
-        assert jsonHitObject["hits"].size()==1
-        assert jsonHitObject["hits"][0]._type=="assay"
-
+        assert listOfESXCompounds.size()>10
+        def apisList = ESXCompound.combinedApids(listOfESXCompounds)
+        assert  apisList.size() > 200
+        assert  listOfESXAssays.size()>10
     }
 
 
 
-    void "test elasticSearchQuery to search the assay index for a multiple AIDs"() {
+
+    void "test simplified elasticSearchQuery with everybodies favorite 644 search"() {
 
         given:
         elasticSearchService != null
 
 
         when:
-        final String cidQuerySpecifier = "644 643 647"
-        def returnJson = elasticSearchService.elasticSearchQuery(BardQueryType.Assay,cidQuerySpecifier,BardQueryType.Assay)
+        def  cidQuerySpecifier =  "644"
+
+        def returnMap = elasticSearchService.elasticSearchQuery(cidQuerySpecifier)
 
         then:
-        assert returnJson
-        assert returnJson.containsKey("hits")
-        JSONObject jsonHitObject = returnJson["hits"]
-        assert jsonHitObject.containsKey("total")
-        assert jsonHitObject["hits"].size()==3
-        assert jsonHitObject["hits"][0]._type=="assay"
+        assert returnMap.assays.size()==1
+        assert returnMap.xcompounds.size()==206
 
     }
 
 
-    void "test elasticSearchQuery to search  compound index for a single  CID"() {
-
-        given:
-        elasticSearchService != null
-
-
-        when:
-        final String cidQuerySpecifier ="174"
-        def returnJson = elasticSearchService.elasticSearchQuery(BardQueryType.Compound,cidQuerySpecifier,BardQueryType.Compound)
-
-        then:
-        assert returnJson
-        assert returnJson.containsKey("hits")
-        JSONObject jsonHitObject = returnJson["hits"]
-        assert jsonHitObject.containsKey("total")
-        assert jsonHitObject["hits"].size()==1
-        assert jsonHitObject["hits"][0]._type=="compound"
-
-    }
-
-
-
-
-
-
-
-    void "test elasticSearchQuery to search  compound index for a multiple  CIDs"() {
-
-        given:
-        elasticSearchService != null
-
-
-        when:
-        def  cidQuerySpecifier =  [174, 3237916]
-
-        def returnJson = elasticSearchService.elasticSearchQuery(BardQueryType.Compound,cidQuerySpecifier,BardQueryType.Compound)
-
-        then:
-        assert returnJson
-        assert returnJson.containsKey("hits")
-        JSONObject jsonHitObject = returnJson["hits"]
-        assert jsonHitObject.containsKey("total")
-        assert jsonHitObject["hits"].size()==2
-        assert jsonHitObject["hits"][0]._type=="compound"
-
-    }
 
 
 
@@ -176,33 +111,9 @@ class ElasticSearchServiceIntegrationSpec extends IntegrationSpec {
         JSONObject jsonHitObject = returnJson["hits"]
         assert jsonHitObject.containsKey("total")
         assert jsonHitObject["hits"].size()>10
-        assert jsonHitObject["hits"][0]._type=="assay"
 
     }
 
-
-
-
-    void "test simplified elasticSearchQuery call"() {
-
-        given:
-        elasticSearchService != null
-
-
-        when:
-        def  cidQuerySpecifier =  "174"
-
-        def returnJson = elasticSearchService.elasticSearchQuery(cidQuerySpecifier)
-
-        then:
-        assert returnJson
-        assert returnJson.containsKey("hits")
-        JSONObject jsonHitObject = returnJson["hits"]
-        assert jsonHitObject.containsKey("total")
-        assert jsonHitObject["hits"].size()>10
-        assert jsonHitObject["hits"][0]._type=="assay"
-
-    }
 
 
 
@@ -229,9 +140,6 @@ class ElasticSearchServiceIntegrationSpec extends IntegrationSpec {
         assert returnJson.containsKey("hits")
         JSONObject jsonHitObject = returnJson["hits"]
         assert jsonHitObject.containsKey("total")
-        assert jsonHitObject["hits"].size()==2
-        assert jsonHitObject["hits"][0]._type=="compound"
-        assert jsonHitObject["hits"][1]._type=="assay"
 
     }
 
