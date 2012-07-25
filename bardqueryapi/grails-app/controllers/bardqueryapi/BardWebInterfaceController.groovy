@@ -49,7 +49,7 @@ class BardWebInterfaceController {
                  compounds.add(compound)
             }
 
-            render(view: "homePage", model: [totalCompounds: compounds.size(), assays: assays as List<Map>, compounds: compounds.toList(), experiments: [], projects: []])
+            render(view: "homePage", model: [totalCompounds: compounds.size(), assays: assays as List<Map>, compounds: compounds.toList(), compoundHeaderInfo: result.compoundHeaderInfo ,experiments: [], projects: []])
             return
         }
         flash.message = 'Search String is required'
