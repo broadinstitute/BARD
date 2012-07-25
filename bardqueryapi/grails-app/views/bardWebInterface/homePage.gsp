@@ -24,7 +24,7 @@
             $("#modalDiv").dialog({
                 modal: true,
                 autoOpen: false,
-                height: '560',
+                height: '660',
                 width: '600',
                 draggable: true,
                 resizeable: true,
