@@ -97,7 +97,7 @@ class BardWebInterfaceController {
         StructureSearchType searchType = structureSearchType as StructureSearchType
         String searchString = ''
 
-        String ncgcSearchBaseUrl = grailsApplication.config.ncgc.server.structureSearchPlugin.root.url
+        String ncgcSearchBaseUrl = grailsApplication.config.ncgc.server.structureSearch.root.url
 
         String searchModifiers
         switch (searchType) {
@@ -115,24 +115,20 @@ class BardWebInterfaceController {
                 break
         }
 
-        String searchUrl = "${ncgcSearchBaseUrl}?q=${smiles}${searchModifiers}&method=search"
-        String resultSdf = queryExecutorInternalService.executeGetRequestString(searchUrl, null)
+        String searchUrl = "${ncgcSearchBaseUrl}?filter=${smiles}[structure]${searchModifiers}"
+        def resultJson = queryExecutorInternalService.executeGetRequestJSON(searchUrl, null)
 
-        InputStream smilesInputStream = new ByteArrayInputStream(resultSdf.getBytes());
-        MolImporter molImporter = new MolImporter(smilesInputStream, 'sdf')
-        List<Molecule> molecules = []
-        Molecule molecule
-        while (molecule = molImporter.read()) {
-            molecules << molecule
+        List<String> molecules = resultJson.collect { String compoundUri ->
+            compoundUri.split('/').last()
         }
 
         if (molecules.isEmpty()) {
-            flash.message = message(code: 'structure.search.nonFound', default: 'Sub-structure did not find any structure')
+            flash.message = message(code: 'structure.search.nonFound', default: 'Structure search could not find any structure')
             render(view: 'homePage', model: [totalCompounds: 0, assays: [] as List<Map>, compounds: [], compoundHeaderInfo: '', experiments: [], projects: []])
             return
         }
         else {
-            searchString = molecules*.moleculeName.join(' ')
+            searchString = molecules.join(' ')
             redirect(action: "search", params: ['searchString': searchString])
             return
         }
