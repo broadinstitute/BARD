@@ -4,6 +4,9 @@ import elasticsearchplugin.ElasticSearchService
 import elasticsearchplugin.ESAssay
 import elasticsearchplugin.ESCompound
 import wslite.json.JSONObject
+import chemaxon.formats.MolImporter
+import chemaxon.struc.Molecule
+import elasticsearchplugin.QueryExecutorService
 
 /**
  * TODO: Unify the use of JSONObject
@@ -17,6 +20,7 @@ import wslite.json.JSONObject
 class BardWebInterfaceController {
 
     ElasticSearchService elasticSearchService
+    QueryExecutorInternalService queryExecutorInternalService
 
     def index() {
         homePage()
@@ -91,7 +95,30 @@ class BardWebInterfaceController {
 
     def structureSearch(String smiles, String structureSearchType) {
         StructureSearchType searchType = structureSearchType as StructureSearchType
+        String searchString = ''
 
+        String ncgcSearchBaseUrl = grailsApplication.config.ncgc.server.structureSearchPlugin.root.url
+        String searchUrl = "${ncgcSearchBaseUrl}?q=${smiles}&type=sub&method=search"
+        String resultSdf = queryExecutorInternalService.executeGetRequestString(searchUrl, null)
+
+        InputStream smilesInputStream = new ByteArrayInputStream(resultSdf.getBytes());
+        MolImporter molImporter = new MolImporter(smilesInputStream, 'sdf')
+        List<Molecule> molecules = []
+        Molecule molecule
+        while (molecule = molImporter.read()) {
+            molecules << molecule
+        }
+
+        if (molecules.isEmpty()) {
+            flash.message = message(code: 'structure.search.nonFound', default: 'Sub-structure did not find any structure')
+            render(view: 'homePage', model: [totalCompounds: 0, assays: [] as List<Map>, compounds: [], compoundHeaderInfo: '', experiments: [], projects: []])
+            return
+        }
+        else {
+            searchString = molecules*.moleculeName.join(' ')
+            redirect(action: "search", params: ['searchString': searchString])
+            return
+        }
     }
 }
 /**
