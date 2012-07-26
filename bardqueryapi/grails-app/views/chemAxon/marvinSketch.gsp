@@ -1,4 +1,34 @@
+<%@ page import="bardqueryapi.StructureSearchType" %>
+<!DOCTYPE html>
 <html>
+<head>
+    <r:require modules="core"/>
+
+    <r:script>
+
+        $(document).ready(function () {
+            $('#searchButton').click(function () {
+                var structureSearchTypeSelected = $('#structureSearchType').attr('value')
+                parent.$('#hiddenFieldStructureSearchType').attr('value', structureSearchTypeSelected)
+
+                var marvinSketch = $('#MarvinSketch')[0];
+                var smiles = marvinSketch.getMol('smiles')
+                parent.$('#hiddenFieldSmiles').attr('value', smiles);
+                parent.$('#structureSearchForm').submit();
+
+                parent.$('#modalDiv').dialog("close");
+            });
+
+            $('#cancelButton').click(function () {
+                parent.$('#modalDiv').dialog("close");
+            });
+        });
+    </r:script>
+    <r:layoutResources/>
+    <r:require modules="bootstrap"/>
+
+</head>
+
 <body>
 <div>
     <script type="text/javascript" SRC="${request.contextPath}/marvin/marvin.js"></script>
@@ -13,18 +43,23 @@
     <table class="skinnyTable" style="margin-top: 10px; float: right;" align="left">
         <tr>
             <td style="padding-right: 20px;">
-                <g:radioGroup name="structureSearchMatchType" values="['exact', 'substructure', 'similarity']"
-                              value="substructure"
-                              labels="['exact match', 'substructure', 'similarity']">
+                <g:radioGroup name="structureSearchType" id='structureSearchType'
+                              values="[StructureSearchType.EXACT_MATCH, StructureSearchType.SUB_STRUCTURE, StructureSearchType.SIMILARITY]"
+                              value="${StructureSearchType.SUB_STRUCTURE}"
+                              labels="[StructureSearchType.EXACT_MATCH.description, StructureSearchType.SUB_STRUCTURE.description, StructureSearchType.SIMILARITY.description]">
                     <p>${it.radio} ${it.label}</p>
                 </g:radioGroup>
             </td>
             <td>
-                <g:submitButton name="search" value="Search"/>
-                <g:submitButton name="cancel" value="Cancel"/>
+                <g:submitButton name="searchButton" id="searchButton" value="Search"/>
+                <g:submitButton name="cancelButton" id="cancelButton" value="Cancel"/>
             </td>
         </tr>
     </table>
 </div>
+
+<r:layoutResources/>
+<r:require modules="bootstrap"/>
+
 </body>
 </html>

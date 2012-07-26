@@ -46,10 +46,10 @@ class BardWebInterfaceController {
 
             Set<String> compounds = [] as Set
             for (ESCompound compound in result.compounds) {
-                 compounds.add(compound)
+                compounds.add(compound)
             }
 
-            render(view: "homePage", model: [totalCompounds: compounds.size(), assays: assays as List<Map>, compounds: compounds.toList(), compoundHeaderInfo: result.compoundHeaderInfo ,experiments: [], projects: []])
+            render(view: "homePage", model: [totalCompounds: compounds.size(), assays: assays as List<Map>, compounds: compounds.toList(), compoundHeaderInfo: result.compoundHeaderInfo, experiments: [], projects: []])
             return
         }
         flash.message = 'Search String is required'
@@ -72,18 +72,26 @@ class BardWebInterfaceController {
             render "Compound ID (CID) parameter required"
         }
     }
+
+
     def autoCompleteAssayNames() {
         final String elasticSearchRootURL = grailsApplication.config.bard.services.elasticSearchService.restNode.baseUrl
         final List<String> assayNames = handleAutoComplete(this.elasticSearchService, elasticSearchRootURL)
 
         render(contentType: "text/json") {
-            for (String assayName: assayNames) {
+            for (String assayName : assayNames) {
                 element assayName
             }
-            if (!assayNames){
+            if (!assayNames) {
                 element ""
             }
         }
+    }
+
+
+    def structureSearch(String smiles, String structureSearchType) {
+        StructureSearchType searchType = structureSearchType as StructureSearchType
+
     }
 }
 /**
@@ -115,19 +123,33 @@ class AutoCompleteHelper {
      * @param elasticSearchRootURL
      * @return
      */
-    protected List<String> handleAutoComplete(final ElasticSearchService elasticSearchService,final String elasticSearchRootURL){
+    protected List<String> handleAutoComplete(final ElasticSearchService elasticSearchService, final String elasticSearchRootURL) {
         final String urlToElastic = "${elasticSearchRootURL}/${AUTO_COMPLETE_SEARCH_URL}"
         String request = ELASTIC_AUTO_COMPLETE_SEARCH
         if (params?.term) {
             request = ELASTIC_AUTO_COMPLETE_SEARCH.replaceAll("\\*", "${params.term}*")
 
         }
-        final JSONObject jsonObject =  new JSONObject(request)
+        final JSONObject jsonObject = new JSONObject(request)
 
-        final JSONObject responseObject = elasticSearchService.searchQueryStringQuery(urlToElastic,jsonObject)
+        final JSONObject responseObject = elasticSearchService.searchQueryStringQuery(urlToElastic, jsonObject)
         return responseObject?.hits?.hits.collect { it.fields }.collect { it.name }
 
     }
-
 }
 
+public enum StructureSearchType {
+    EXACT_MATCH("Exact match"),
+    SUB_STRUCTURE("Sub-structure"),
+    SIMILARITY("Similarity");
+
+    final String description
+
+    StructureSearchType(String description) {
+        this.description = description
+    }
+
+    String getDescription() {
+        return this.description;
+    }
+}
