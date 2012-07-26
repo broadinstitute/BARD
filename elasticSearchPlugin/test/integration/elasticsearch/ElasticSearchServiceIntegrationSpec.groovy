@@ -123,8 +123,8 @@ class ElasticSearchServiceIntegrationSpec extends IntegrationSpec {
         given:
         elasticSearchService != null
         String elasticNodeSpecifier =  grailsApplication.config.elasticSearchService.restNode.baseUrl +
-                                       grailsApplication.config.elasticSearchService.restNode.elasticAssayIndex +
-                                       grailsApplication.config.elasticSearchService.restNode.elasticSearchRequester
+                grailsApplication.config.elasticSearchService.restNode.elasticAssayIndex +
+                grailsApplication.config.elasticSearchService.restNode.elasticSearchRequester
         String testStr = """
 {"query":{"bool":{"must":[{"query_string":{"default_field":"_all","query":"644"}}],"must_not":[],"should":[]}},"from":0,"size":50,"sort":[],"facets":{}}"""
 
@@ -171,8 +171,7 @@ class ElasticSearchServiceIntegrationSpec extends IntegrationSpec {
         JSONObject jsonHitObject = returnJson["hits"]
         assert jsonHitObject.containsKey("total")
         assert jsonHitObject["hits"].size()==1
-        assert jsonHitObject["hits"][0]._type=="compound"
-        assert jsonHitObject["hits"][0]._id=="174"
+        assert jsonHitObject["hits"][0]._type=="xcompound"
 
     }
 
