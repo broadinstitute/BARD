@@ -12,15 +12,6 @@ class ElasticSearchService {
     QueryExecutorService queryExecutorService
     // references into elastic search, set in Config
     String baseUrl =  org.codehaus.groovy.grails.commons.ConfigurationHolder.config.elasticSearchService.restNode.baseUrl
-    String elasticAssayIndex =  org.codehaus.groovy.grails.commons.ConfigurationHolder.config.elasticSearchService.restNode.elasticAssayIndex
-    String elasticCompoundIndex =  org.codehaus.groovy.grails.commons.ConfigurationHolder.config.elasticSearchService.restNode.elasticCompoundIndex
-    String elasticSearchRequester =  org.codehaus.groovy.grails.commons.ConfigurationHolder.config.elasticSearchService.restNode.elasticSearchRequester
-    String elasticAssayType =  org.codehaus.groovy.grails.commons.ConfigurationHolder.config.elasticSearchService.restNode.elasticAssayType
-    String elasticXCompoundType =  org.codehaus.groovy.grails.commons.ConfigurationHolder.config.elasticSearchService.restNode.elasticXCompoundType
-    String elasticXCompoundIndex =  org.codehaus.groovy.grails.commons.ConfigurationHolder.config.elasticSearchService.restNode.elasticXCompoundIndex
-    String elasticCompoundType =  org.codehaus.groovy.grails.commons.ConfigurationHolder.config.elasticSearchService.restNode.elasticCompoundType
-    // elements per page by default
-    int defaultElementsPerPage =  org.codehaus.groovy.grails.commons.ConfigurationHolder.config.elasticSearchService.defaultElementsPerPage
     // following values set in resources.groovy
     static transactional = false
     String elasticSearchBaseUrl
@@ -28,7 +19,10 @@ class ElasticSearchService {
     String assayIndexTypeName
     String compoundIndexName
     String compoundIndexTypeName
-    final static String searchParamName = '_search'
+    String xcompoundIndexName
+    String xcompoundIndexTypeName
+    Integer defaultElementsPerPage
+    String eSsElasticSearchRequester
 
     final static String ES_QUERY_STRING_TEMPLATE = '''{
         "query": {
@@ -78,7 +72,7 @@ class ElasticSearchService {
      * @param searchValue
      * @return
      */
-    JSONObject elasticSearchQuery( LinkedHashMap additionalParms=[:],
+    def elasticSearchQuery( LinkedHashMap additionalParms=[:],
                                    BardQueryType inBardQueryType,
                                    Object searchValue,
                                    BardQueryType outBardQueryType ) {
@@ -89,7 +83,7 @@ class ElasticSearchService {
         searchParmForEs-="["
         searchParmForEs-="]"
         // put together the URL for elastic search
-        String elasticNodeSpecifier =  "${baseUrl}${chooseIndexToSearch( inBardQueryType, outBardQueryType)}${elasticSearchRequester}"
+        String elasticNodeSpecifier =  "${elasticSearchBaseUrl}/${chooseIndexToSearch( inBardQueryType, outBardQueryType)}${eSsElasticSearchRequester}"
         // Prepare to page, if necessary
         Integer fromValue = 0
         Integer sizeValue = defaultElementsPerPage
@@ -101,7 +95,7 @@ class ElasticSearchService {
         //  Combine everything together to make the final JSON request
         String searchSpecifier = chooseSearchSpecifier(inBardQueryType,outBardQueryType,searchParmForEs,fromValue,sizeValue)
         JSONObject  jSONObject =  new JSONObject(searchSpecifier)
-        searchQueryStringQuery(  elasticNodeSpecifier,  jSONObject )
+        return searchQueryStringQuery(  elasticNodeSpecifier,  jSONObject )
     }
 
     /**
@@ -119,7 +113,7 @@ class ElasticSearchService {
      */
      Map<String, List>  elasticSearchQuery( LinkedHashMap additionalParms=[:],
                                    Object searchValue ) {
-        JSONObject response
+        JSONObject response =  new JSONObject()
         if (additionalParms.size() == 0)
             // by default search the Assays AND Compound index
             response = elasticSearchQuery(additionalParms, BardQueryType.Xcompound, searchValue, BardQueryType.Default )
@@ -142,15 +136,15 @@ class ElasticSearchService {
         List<ESXCompound> xcompounds = []
         final Map<TargetAccessionNumber, Set<String>> accessionNumberToAssayIds = [:]
 
-        for (JSONObject hit in hits) {
-            if (hit._type == assayIndexTypeName) {
+         for (JSONObject hit in hits) {
+             if (hit._type == assayIndexTypeName) {
                 aggregateAccessionNumbersToAssayNumbers(hit, accessionNumberToAssayIds)
                 ESAssay esAssay = new ESAssay(hit)
                 assays.add(esAssay)
             }
-            else if (hit._type == elasticXCompoundType) {
+            else if (hit._type == xcompoundIndexTypeName) {
                  xcompounds.add( new ESXCompound(hit) )
-            }
+             }
         }
 
         return ["assays":assays, "compounds":compounds, "xcompounds": xcompounds, "compoundHeaderInfo": accessionNumberToAssayIds]
@@ -172,8 +166,8 @@ class ElasticSearchService {
     private String chooseIndexToSearch(BardQueryType inBardQueryType,BardQueryType outBardQueryType) {
         // for now all searches handled by the plug-in will cross the "compound" index ( type xcompound  ) and
         //  the "assays" index (type assay).
-        return "${elasticXCompoundIndex},${assayIndexName}"
-   }
+        return "${xcompoundIndexName},${assayIndexName}"
+    }
 
 
 
@@ -224,7 +218,7 @@ class ElasticSearchService {
         //1. Query all assays
         //2. Query all compounds
         //3. Build the returned map.
-        String elasticSearchQueryString = "${elasticSearchBaseUrl}/${assayIndexName}/${searchParamName}"
+        String elasticSearchQueryString = "${elasticSearchBaseUrl}/${assayIndexName}${eSsElasticSearchRequester}"
 
         JSONObject response = new JSONObject()
         try {

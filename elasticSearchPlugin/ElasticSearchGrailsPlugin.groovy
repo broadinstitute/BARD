@@ -4,7 +4,7 @@ class ElasticSearchGrailsPlugin {
     String groupId = 'org.grails.plugins'
 
     // the plugin version
-    def version = "0.3.2-SNAPSHOT"
+    def version = "0.4.2-SNAPSHOT"
     // the version or versions of Grails the plugin is designed for
     def grailsVersion = "2.0 > *"
     // the other plugins this plugin depends on
@@ -64,6 +64,12 @@ class ElasticSearchGrailsPlugin {
             compoundIndexName = 'compounds'
             compoundIndexTypeName = 'compound'
             queryExecutorService = ref('queryExecutorService')
+            xcompoundIndexName = 'compound'
+            xcompoundIndexTypeName = 'xcompound'
+            defaultElementsPerPage = 500
+            eSsElasticSearchRequester  =  '/_search'
+
+
         }
     }
 

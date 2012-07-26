@@ -24,6 +24,11 @@ beans = {
         assayIndexTypeName = 'assay'
         compoundIndexName = 'compounds'
         compoundIndexTypeName = 'compound'
+        xcompoundIndexName = 'compound'
+        xcompoundIndexTypeName = 'xcompound'
         queryExecutorService = ref('queryExecutorService')
+        defaultElementsPerPage = 500
+        elasticSearchBaseUrl = 'http://bard-dev-vm:9200'
+        eSsElasticSearchRequester  =  '/_search'
     }
 }

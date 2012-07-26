@@ -27,6 +27,10 @@ beans = {
         compoundIndexName = 'compounds'
         compoundIndexTypeName = 'compound'
         queryExecutorService = ref('queryExecutorService')
+        xcompoundIndexName = 'compound'
+        xcompoundIndexTypeName = 'xcompound'
+        defaultElementsPerPage = 500
+        eSsElasticSearchRequester  =  '/_search'
     }
 
 }
