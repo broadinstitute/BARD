@@ -98,7 +98,24 @@ class BardWebInterfaceController {
         String searchString = ''
 
         String ncgcSearchBaseUrl = grailsApplication.config.ncgc.server.structureSearchPlugin.root.url
-        String searchUrl = "${ncgcSearchBaseUrl}?q=${smiles}&type=sub&method=search"
+
+        String searchModifiers
+        switch (searchType) {
+            case StructureSearchType.SUB_STRUCTURE:
+                searchModifiers = '&type=sub'
+                break
+            case StructureSearchType.SIMILARITY:
+                searchModifiers = "&type=sim&cutoff=0.9"
+                break
+            case StructureSearchType.EXACT_MATCH:
+                searchModifiers = '&type=exact'
+                break
+            default:
+                throw new RuntimeException("Undeifined structure-search type")
+                break
+        }
+
+        String searchUrl = "${ncgcSearchBaseUrl}?q=${smiles}${searchModifiers}&method=search"
         String resultSdf = queryExecutorInternalService.executeGetRequestString(searchUrl, null)
 
         InputStream smilesInputStream = new ByteArrayInputStream(resultSdf.getBytes());
