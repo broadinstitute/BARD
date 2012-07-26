@@ -28,15 +28,11 @@
                 width: '600',
                 draggable: true,
                 resizeable: true,
-                title: "To finish click the 'X' button",
+                title: "",
                 beforeClose: function() {
-                    var marvinSketch = $('#modalIFrame').contents().find('#MarvinSketch')[0];
-                    var smiles = marvinSketch.getMol('smiles')
-		            $('#searchString').attr('value', smiles);
 		            return true;
                 }
             });
-
         });
     </r:script>
     <r:layoutResources/>
@@ -107,6 +103,13 @@
     </iframe>
 </div>
 
+<div id="structureSearchDiv">
+    <g:form name="structureSearchForm" id="structureSearchForm" controller="bardWebInterface"
+            action="structureSearch">
+        <g:hiddenField name="smiles" id='hiddenFieldSmiles'/>
+        <g:hiddenField name="structureSearchType" id='hiddenFieldStructureSearchType'/>
+    </g:form>
+</div>
 
 </body>
 </html>
