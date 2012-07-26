@@ -1,34 +1,27 @@
 package elasticsearchplugin
 
-//import org.codehaus.groovy.grails.web.json.JSONArray
-//import org.codehaus.groovy.grails.web.json.JSONObject
 
-
-//import grails.converters.JSON
-
-
-import wslite.json.JSONArray
 import org.apache.commons.lang.builder.EqualsBuilder
 import org.apache.commons.lang.builder.HashCodeBuilder
-import wslite.json.JSONException
+import wslite.json.JSONArray
 import wslite.json.JSONObject
 import wslite.rest.RESTClientException
-
 
 class ElasticSearchService {
 
     QueryExecutorService queryExecutorService
-    // Question:  why not this->def grailsConfig
-    // instead of the following lines?
-    def baseUrl =  org.codehaus.groovy.grails.commons.ConfigurationHolder.config.elasticSearchService.restNode.baseUrl
-    def elasticAssayIndex =  org.codehaus.groovy.grails.commons.ConfigurationHolder.config.elasticSearchService.restNode.elasticAssayIndex
-    def elasticCompoundIndex =  org.codehaus.groovy.grails.commons.ConfigurationHolder.config.elasticSearchService.restNode.elasticCompoundIndex
-    def elasticSearchRequester =  org.codehaus.groovy.grails.commons.ConfigurationHolder.config.elasticSearchService.restNode.elasticSearchRequester
-    def elasticAssayType =  org.codehaus.groovy.grails.commons.ConfigurationHolder.config.elasticSearchService.restNode.elasticAssayType
-    def elasticXCompoundType =  "xcompound"
-    def elasticXCompoundIndex =  "/compound"
-    def elasticCompoundType =  org.codehaus.groovy.grails.commons.ConfigurationHolder.config.elasticSearchService.restNode.elasticCompoundType
-
+    // references into elastic search, set in Config
+    String baseUrl =  org.codehaus.groovy.grails.commons.ConfigurationHolder.config.elasticSearchService.restNode.baseUrl
+    String elasticAssayIndex =  org.codehaus.groovy.grails.commons.ConfigurationHolder.config.elasticSearchService.restNode.elasticAssayIndex
+    String elasticCompoundIndex =  org.codehaus.groovy.grails.commons.ConfigurationHolder.config.elasticSearchService.restNode.elasticCompoundIndex
+    String elasticSearchRequester =  org.codehaus.groovy.grails.commons.ConfigurationHolder.config.elasticSearchService.restNode.elasticSearchRequester
+    String elasticAssayType =  org.codehaus.groovy.grails.commons.ConfigurationHolder.config.elasticSearchService.restNode.elasticAssayType
+    String elasticXCompoundType =  org.codehaus.groovy.grails.commons.ConfigurationHolder.config.elasticSearchService.restNode.elasticXCompoundType
+    String elasticXCompoundIndex =  org.codehaus.groovy.grails.commons.ConfigurationHolder.config.elasticSearchService.restNode.elasticXCompoundIndex
+    String elasticCompoundType =  org.codehaus.groovy.grails.commons.ConfigurationHolder.config.elasticSearchService.restNode.elasticCompoundType
+    // elements per page by default
+    int defaultElementsPerPage =  org.codehaus.groovy.grails.commons.ConfigurationHolder.config.elasticSearchService.defaultElementsPerPage
+    // following values set in resources.groovy
     static transactional = false
     String elasticSearchBaseUrl
     String assayIndexName
@@ -96,49 +89,48 @@ class ElasticSearchService {
         searchParmForEs-="["
         searchParmForEs-="]"
         // put together the URL for elastic search
-        String elasticNodeSpecifier =  baseUrl +
-                chooseIndexToSearch( inBardQueryType, outBardQueryType) +
-                elasticSearchRequester
+        String elasticNodeSpecifier =  "${baseUrl}${chooseIndexToSearch( inBardQueryType, outBardQueryType)}${elasticSearchRequester}"
         // Prepare to page, if necessary
         Integer fromValue = 0
-        Integer sizeValue = 500
+        Integer sizeValue = defaultElementsPerPage
         if (additionalParms.containsKey("from"))
             fromValue = additionalParms ["from"]
         if (additionalParms.containsKey("size"))
             sizeValue = additionalParms ["size"]
+
         //  Combine everything together to make the final JSON request
         String searchSpecifier = chooseSearchSpecifier(inBardQueryType,outBardQueryType,searchParmForEs,fromValue,sizeValue)
-        JSONObject  jSONObject
-        try {
-            println  searchSpecifier
-            jSONObject = new JSONObject(searchSpecifier)
-        }
-        catch (JSONException exp) {
-            String message = exp?.toString()
-            log.error("Error building JSON  to send  to Elastic Search: ${message}")
-        }
+        JSONObject  jSONObject =  new JSONObject(searchSpecifier)
         searchQueryStringQuery(  elasticNodeSpecifier,  jSONObject )
     }
 
     /**
-     *   Simplified signature of  elasticSearchQuery for the most common 'all' search.
+     * elasticSearchQuery provides an easy way to call Elastic Search.  Note that by putting the LinkedHashMap ( with
+     * a default value ) as the first parameter that you can optionally specify additional parameters, and that if the
+     * values are specified as a keyvalue pairs then the ordering doesn't matter. Therefore you should be able to call:
+     *            elasticSearchQuery( "644" )
+     *            elasticSearchQuery( "644", size: 100 )
+     *            elasticSearchQuery( from: 0, "644", size: 100 )
+     *  Passing an a search value that is actually a list ( as opposed to a string ) is also fine.
+     *
      * @param additionalParms
      * @param searchValue
      * @return
      */
-    def elasticSearchQuery( LinkedHashMap additionalParms=[:],
+     Map<String, List>  elasticSearchQuery( LinkedHashMap additionalParms=[:],
                                    Object searchValue ) {
-        JSONObject response //= new  JSONObject ()
+        JSONObject response
         if (additionalParms.size() == 0)
+            // by default search the Assays AND Compound index
             response = elasticSearchQuery(additionalParms, BardQueryType.Xcompound, searchValue, BardQueryType.Default )
         else {
+            // Allow the specified search index. This should be useful when people start searching "as target" or whatever else...
             if (additionalParms.containsKey("searchIndex")) {
                 def requestedSearchIndex =  additionalParms["searchIndex"]
                 if (requestedSearchIndex instanceof BardQueryType ) {
                     BardQueryType bardQueryType =  requestedSearchIndex as BardQueryType
-                   response =   elasticSearchQuery(additionalParms,bardQueryType, searchValue, BardQueryType.Default )
-                    print  response.toString()
-                }
+                    response =   elasticSearchQuery(additionalParms,bardQueryType, searchValue, BardQueryType.Default )
+                 }
 
             }
             else
@@ -148,24 +140,20 @@ class ElasticSearchService {
         List<ESAssay> assays = []
         List<ESCompound> compounds = []
         List<ESXCompound> xcompounds = []
+        final Map<TargetAccessionNumber, Set<String>> accessionNumberToAssayIds = [:]
 
         for (JSONObject hit in hits) {
             if (hit._type == assayIndexTypeName) {
+                aggregateAccessionNumbersToAssayNumbers(hit, accessionNumberToAssayIds)
                 ESAssay esAssay = new ESAssay(hit)
                 assays.add(esAssay)
-            } else if (hit._type == compoundIndexTypeName) {
-                //'compound' type in the 'assays' index is just a list of CIDs.
-                JSONArray cids = hit?._source?.cids ?: [] as JSONArray
-                for (def cid in cids) {
-                    ESCompound esCompound = new ESCompound(_id: cid as String, _index: compoundIndexName, _type: compoundIndexTypeName, cid: cid as String)
-                    compounds.add(esCompound)
-                }
-            }  else if (hit._type == elasticXCompoundType) {
+            }
+            else if (hit._type == elasticXCompoundType) {
                  xcompounds.add( new ESXCompound(hit) )
             }
         }
 
-        return ["assays":assays, "compounds":compounds, "xcompounds": xcompounds]
+        return ["assays":assays, "compounds":compounds, "xcompounds": xcompounds, "compoundHeaderInfo": accessionNumberToAssayIds]
 
     }
 
@@ -184,9 +172,8 @@ class ElasticSearchService {
     private String chooseIndexToSearch(BardQueryType inBardQueryType,BardQueryType outBardQueryType) {
         // for now all searches handled by the plug-in will cross the "compound" index ( type xcompound  ) and
         //  the "assays" index (type assay).
-        String index = ""
-        index  = elasticXCompoundIndex+",assays"
-    }
+        return "${elasticXCompoundIndex},${assayIndexName}"
+   }
 
 
 
@@ -474,29 +461,26 @@ public class ESXCompound extends ESResult implements Serializable{
     }
 
 
-    static List<Integer> combinedSids (List <ESXCompound> listOfEsxCompounds) {
-        def sidLists = new  ArrayList<List< Integer>>()
-        for (ESXCompound eSXCompound in listOfEsxCompounds)
-            sidLists << eSXCompound.sids
-        mergeLists( sidLists )
-    }
-
-
-
-
+    /**
+     * Merge together the elements in a list of lists. Perform the merging with sets,
+     * but change everything back to a list on the way out.
+     * @param lists
+     * @return
+     */
     static List<Integer> mergeLists( List< List< Integer>> lists) {
-        List<Integer>  first
-        if (lists.size()==0)
-            return (new ArrayList())
-        else {
-            first = lists.first()
+        Set<Integer>  first   = new LinkedHashSet(0)
+        if (lists.size() > 0) {
+
+            first = lists.first() as Set
             if ((lists.size()>1)) {
+
                 for(  List< Integer> aList in (lists.drop(1) ) ) {
-                    first=first.plus(aList).unique()
+                    first+= aList as Set
+                    first.flatten()
                 }
             }
         }
-        return first
+        return first as List
     }
 
 

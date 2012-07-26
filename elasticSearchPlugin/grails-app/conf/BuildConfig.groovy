@@ -44,7 +44,7 @@ grails.project.repos.releases.url = "http://bard-repo.broadinstitute.org:8081/ar
 // use that encrypted password in the settings.groovy file
 //
 grails.project.repos.releases.username = "changeme"
-grails.project.repos.releases.password = "changeme"
+grails.project.repos.releases.password = "changme"
 
 grails.project.repos.snapshots.url = "http://bard-repo.broadinstitute.org:8081/artifactory/plugins-snapshot-local"
 grails.project.repos.snapshots.username = "changeme"

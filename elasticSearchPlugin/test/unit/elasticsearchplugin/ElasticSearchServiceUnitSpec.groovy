@@ -95,6 +95,8 @@ class ElasticSearchServiceUnitSpec extends Specification {
         List<Integer> aids = ESXCompound.combinedApids(listOfESXCompound)
         assert aids.size()==4
         aids.containsAll([411,412,413,414])
+        List<Integer> nullTest = ESXCompound.mergeLists( new ArrayList< List< Integer>> ())
+        assert nullTest.size()==0
 
     }
 

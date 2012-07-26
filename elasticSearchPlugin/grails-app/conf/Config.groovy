@@ -23,10 +23,18 @@ log4j = {
     warn   'org.mortbay.log'
 }
 
+elasticSearchService.defaultElementsPerPage = 500
+
+// Elastic root
 elasticSearchService.restNode.baseUrl = 'http://bard-dev-vm:9200'
+// indexes
 elasticSearchService.restNode.elasticAssayIndex =  '/assays'
 elasticSearchService.restNode.elasticCompoundIndex =  '/compounds'
-elasticSearchService.restNode.elasticAssayType =  '/assay'
-elasticSearchService.restNode.elasticCompoundType =  '/compound'
+elasticSearchService.restNode.elasticXCompoundIndex =  '/compound'
+// types
+elasticSearchService.restNode.elasticCompoundType =  'compound'
+elasticSearchService.restNode.elasticXCompoundType =  'xcompound'
+elasticSearchService.restNode.elasticAssayType =  'assay'
+// commands
 elasticSearchService.restNode.elasticSearchRequester  =  '/_search'
 
