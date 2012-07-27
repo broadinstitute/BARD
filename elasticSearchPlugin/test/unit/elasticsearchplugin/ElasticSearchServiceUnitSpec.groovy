@@ -166,4 +166,20 @@ class ElasticSearchServiceUnitSpec extends Specification {
         "Non Empty JSONObject" | "http://localhost:9200" | new JSONObject([a: "b"]) | 1
         "Empty JSONObject"     | "http://localhost:9200" | new JSONObject()         | 0
     }
+
+    void "test ESXCompound object"() {
+        when:
+        final JSONObject sampleResponse = new JSONObject(jsonXCompound)
+
+        then:
+        ESXCompound eSXCompound  = new ESXCompound (sampleResponse)
+        assert eSXCompound.cid  == "881181"
+        assert eSXCompound.probeId  == "null"
+        assert eSXCompound.smiles  == "CC(=O)CCC1=CC=C(C=C1)OC(=O)C2=CN=CC=C2"
+        assert eSXCompound.url  == "null"
+        assert eSXCompound.apids.size()  == 7
+        assert "881181".equals(eSXCompound.toString())
+    }
+
+
 }
