@@ -4,6 +4,9 @@ import elasticsearchplugin.ESAssay
 import elasticsearchplugin.ESXCompound
 import elasticsearchplugin.ElasticSearchService
 import wslite.json.JSONObject
+import chemaxon.formats.MolImporter
+import chemaxon.struc.Molecule
+import elasticsearchplugin.QueryExecutorService
 
 /**
  * TODO: Unify the use of JSONObject
@@ -17,6 +20,7 @@ import wslite.json.JSONObject
 class BardWebInterfaceController {
 
     ElasticSearchService elasticSearchService
+    QueryExecutorInternalService queryExecutorInternalService
 
     def index() {
         homePage()
@@ -97,6 +101,48 @@ class BardWebInterfaceController {
             if (!assayNames){
                 element ""
             }
+        }
+    }
+
+
+    def structureSearch(String smiles, String structureSearchType) {
+        StructureSearchType searchType = structureSearchType as StructureSearchType
+        String searchString = ''
+
+        String ncgcSearchBaseUrl = grailsApplication.config.ncgc.server.structureSearch.root.url
+
+        String searchModifiers
+        switch (searchType) {
+            case StructureSearchType.SUB_STRUCTURE:
+                searchModifiers = '&type=sub'
+                break
+            case StructureSearchType.SIMILARITY:
+                searchModifiers = "&type=sim&cutoff=0.9"
+                break
+            case StructureSearchType.EXACT_MATCH:
+                searchModifiers = '&type=exact'
+                break
+            default:
+                throw new RuntimeException("Undeifined structure-search type")
+                break
+        }
+
+        String searchUrl = "${ncgcSearchBaseUrl}?filter=${smiles}[structure]${searchModifiers}"
+        def resultJson = queryExecutorInternalService.executeGetRequestJSON(searchUrl, null)
+
+        List<String> molecules = resultJson.collect { String compoundUri ->
+            compoundUri.split('/').last()
+        }
+
+        if (molecules.isEmpty()) {
+            flash.message = message(code: 'structure.search.nonFound', default: 'Structure search could not find any structure')
+            render(view: 'homePage', model: [totalCompounds: 0, assays: [] as List<Map>, compounds: [], compoundHeaderInfo: '', experiments: [], projects: []])
+            return
+        }
+        else {
+            searchString = molecules.join(' ')
+            redirect(action: "search", params: ['searchString': searchString])
+            return
         }
     }
 }

@@ -8,7 +8,7 @@
 
         $(document).ready(function () {
             $('#searchButton').click(function () {
-                var structureSearchTypeSelected = $('#structureSearchType').attr('value')
+                var structureSearchTypeSelected = $('input:radio[name=structureSearchType]:checked').val()
                 parent.$('#hiddenFieldStructureSearchType').attr('value', structureSearchTypeSelected)
 
                 var marvinSketch = $('#MarvinSketch')[0];
@@ -43,7 +43,7 @@
     <table class="skinnyTable" style="margin-top: 10px; float: right;" align="left">
         <tr>
             <td style="padding-right: 20px;">
-                <g:radioGroup name="structureSearchType" id='structureSearchType'
+                <g:radioGroup name="structureSearchType"
                               values="[StructureSearchType.EXACT_MATCH, StructureSearchType.SUB_STRUCTURE, StructureSearchType.SIMILARITY]"
                               value="${StructureSearchType.SUB_STRUCTURE}"
                               labels="[StructureSearchType.EXACT_MATCH.description, StructureSearchType.SUB_STRUCTURE.description, StructureSearchType.SIMILARITY.description]">
