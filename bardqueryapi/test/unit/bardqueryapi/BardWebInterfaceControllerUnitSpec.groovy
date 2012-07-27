@@ -103,7 +103,6 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
         controller.search()
 
         then:
-//        elasticSearchService.search(searchTerm) >> { resultJson }
         elasticSearchService.elasticSearchQuery(searchTerm) >> { resultJson }
 
         assert "/bardWebInterface/homePage" == view

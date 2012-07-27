@@ -72,7 +72,7 @@ class ElasticSearchServiceIntegrationSpec extends IntegrationSpec {
 
 
 
-
+    @Unroll("Use new search")
     void "test simplified elasticSearchQuery with everybodies favorite 644 search"() {
 
         given:
@@ -93,7 +93,7 @@ class ElasticSearchServiceIntegrationSpec extends IntegrationSpec {
 
 
 
-
+    @Unroll("Use new search")
     void "test elasticSearchQuery to search everything"() {
 
         given:
@@ -117,7 +117,7 @@ class ElasticSearchServiceIntegrationSpec extends IntegrationSpec {
 
 
 
-
+    @Unroll("Use new search")
     void "test searchQueryStringQuery  to see it pull back  everything  in the assay index which  matches an AID"() {
 
         given:
@@ -146,7 +146,7 @@ class ElasticSearchServiceIntegrationSpec extends IntegrationSpec {
 
 
 
-
+    @Unroll("Use new search")
     void "test searchQueryStringQuery and pull back  everything  in the compound index a matching a single CID"() {
 
         given:
@@ -178,7 +178,7 @@ class ElasticSearchServiceIntegrationSpec extends IntegrationSpec {
 
 
 
-
+    @Unroll("Use new search")
     void "test searchQueryStringQuery and pull back  everything  in the compound  index matching a pair of CIDs"() {
 
         given:
