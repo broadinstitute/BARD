@@ -72,7 +72,7 @@ class ElasticSearchServiceIntegrationSpec extends IntegrationSpec {
 
 
 
-
+    @Unroll("Use new search")
     void "test simplified elasticSearchQuery with everybodies favorite 644 search"() {
 
         given:
@@ -90,10 +90,45 @@ class ElasticSearchServiceIntegrationSpec extends IntegrationSpec {
 
     }
 
+    @Unroll("Use new search")
+    void "test  elasticSearchQuery with additional parameters but no searchIndex"() {
+
+        given:
+        elasticSearchService != null
+
+
+        when:
+        def  cidQuerySpecifier =  "644"
+
+        def returnMap = elasticSearchService.elasticSearchQuery(cidQuerySpecifier, unkownparameter: 20)
+
+        then:
+        assert returnMap.assays.size()==1
+        assert returnMap.xcompounds.size()==206
+
+    }
+
+
+    @Unroll("Use new search")
+    void "test  elasticSearchQuery with from and size parameters"() {
+
+        given:
+        elasticSearchService != null
+
+
+        when:
+        def  cidQuerySpecifier =  "644"
+
+        def returnMap = elasticSearchService.elasticSearchQuery(cidQuerySpecifier, from:  0, size: 20)
+
+        then:
+        assert ((returnMap.assays.size()+returnMap.xcompounds.size()) == 20)
+    }
 
 
 
 
+    @Unroll("Use new search")
     void "test elasticSearchQuery to search everything"() {
 
         given:
@@ -117,7 +152,7 @@ class ElasticSearchServiceIntegrationSpec extends IntegrationSpec {
 
 
 
-
+    @Unroll("Use new search")
     void "test searchQueryStringQuery  to see it pull back  everything  in the assay index which  matches an AID"() {
 
         given:
@@ -146,7 +181,7 @@ class ElasticSearchServiceIntegrationSpec extends IntegrationSpec {
 
 
 
-
+    @Unroll("Use new search")
     void "test searchQueryStringQuery and pull back  everything  in the compound index a matching a single CID"() {
 
         given:
@@ -178,7 +213,7 @@ class ElasticSearchServiceIntegrationSpec extends IntegrationSpec {
 
 
 
-
+    @Unroll("Use new search")
     void "test searchQueryStringQuery and pull back  everything  in the compound  index matching a pair of CIDs"() {
 
         given:

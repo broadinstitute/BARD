@@ -2,6 +2,7 @@ package bardqueryapi
 
 import elasticsearchplugin.ESAssay
 import elasticsearchplugin.ESCompound
+import elasticsearchplugin.ESXCompound
 import elasticsearchplugin.ElasticSearchService
 import grails.test.mixin.TestFor
 import spock.lang.Specification
@@ -63,6 +64,13 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
             cid: '1234567890'
     )
 
+    final static ESXCompound esxCompound = new ESXCompound(
+            _index: 'index',
+            _type: 'type',
+            _id: 'id',
+            cid: '1234567890'
+    )
+
     final static String STRUCTURE_SEARCH_RESPONSE_JSON = '''
     ["/bard/rest/v1/compounds/6796",
     "/bard/rest/v1/compounds/9189",
@@ -105,7 +113,7 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
         controller.search()
 
         then:
-        elasticSearchService.search(searchTerm) >> { resultJson }
+        elasticSearchService.elasticSearchQuery(searchTerm) >> { resultJson }
 
         assert "/bardWebInterface/homePage" == view
         assert model.totalCompounds == expectedTotalCompounds
@@ -117,7 +125,7 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
         where:
         label                                | searchTerm | resultJson                                   | expectedTotalCompounds | expectedAssays | expectedCompounds
         "nothing was found"                  | '644'      | [assays: [], compounds: []]                  | 0                      | 0              | 0
-        "An Assay and a compound were found" | '644'      | [assays: [esAssay], compounds: [esCompound]] | 1                      | 1              | 1
+        "An Assay and a compound were found" | '644'      | [assays: [esAssay], xcompounds: [esxCompound]]| 1                      | 1              | 1
     }
 
     void "test autocomplete #label"() {
