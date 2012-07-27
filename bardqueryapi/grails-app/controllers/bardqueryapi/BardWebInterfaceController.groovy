@@ -105,7 +105,7 @@ class BardWebInterfaceController {
             return
         }
         else {
-            searchString = molecules.join(' ')
+            String searchString = molecules.join(' ')
             redirect(action: "search", params: ['searchString': searchString])
             return
         }
