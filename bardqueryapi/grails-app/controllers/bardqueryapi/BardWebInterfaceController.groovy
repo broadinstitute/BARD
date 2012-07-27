@@ -4,9 +4,6 @@ import elasticsearchplugin.ElasticSearchService
 import elasticsearchplugin.ESAssay
 import elasticsearchplugin.ESCompound
 import wslite.json.JSONObject
-import chemaxon.formats.MolImporter
-import chemaxon.struc.Molecule
-import elasticsearchplugin.QueryExecutorService
 
 /**
  * TODO: Unify the use of JSONObject
@@ -92,13 +89,48 @@ class BardWebInterfaceController {
         }
     }
 
-
+    /**
+     * An Action to provide a search-call to NCGC REST API: find CIDs by structure (SMILES).
+     * @param smiles
+     * @param structureSearchType
+     * @return
+     */
     def structureSearch(String smiles, String structureSearchType) {
+
+        List<String> molecules = getCIDsByStructureFromNCGC(smiles, structureSearchType)
+
+        if (molecules.isEmpty()) {
+            flash.message = message(code: 'structure.search.nonFound', default: 'Structure search could not find any structure')
+            render(view: 'homePage', model: [totalCompounds: 0, assays: [] as List<Map>, compounds: [], compoundHeaderInfo: '', experiments: [], projects: []])
+            return
+        }
+        else {
+            searchString = molecules.join(' ')
+            redirect(action: "search", params: ['searchString': searchString])
+            return
+        }
+    }
+
+    /**
+     * Query NCGC REST API for a list of CIDs based on a structure (SIMLES) provided; the query could be of type: exact-match, sub-structure search or similarity-search.
+     * Also see: https://github.com/ncatsdpiprobedev/bard/wiki/Structure-search
+     *
+     * @param structureSearchType
+     * @param smiles
+     * @return
+     */
+    protected List<String> getCIDsByStructureFromNCGC(String smiles, String structureSearchType) {
         StructureSearchType searchType = structureSearchType as StructureSearchType
         String searchString = ''
 
         String ncgcSearchBaseUrl = grailsApplication.config.ncgc.server.structureSearch.root.url
 
+        /**
+         * Build the NCGC REST call-url.
+         * For example: http://assay.nih.gov/bard/rest/v1/compounds?filter=n1cccc2ccccc12[structure]&type=sim&cutoff=0.9
+         *  type - can be sub, super, exact or sim
+         *  cutoff - the similarity cutoff if a similarity search is desired
+         */
         String searchModifiers
         switch (searchType) {
             case StructureSearchType.SUB_STRUCTURE:
@@ -118,20 +150,12 @@ class BardWebInterfaceController {
         String searchUrl = "${ncgcSearchBaseUrl}?filter=${smiles}[structure]${searchModifiers}"
         def resultJson = queryExecutorInternalService.executeGetRequestJSON(searchUrl, null)
 
+        //Strip the CID from the end part of a compound's relative resource-url. e.g.: /bard/rest/v1/compounds/6796
         List<String> molecules = resultJson.collect { String compoundUri ->
             compoundUri.split('/').last()
         }
 
-        if (molecules.isEmpty()) {
-            flash.message = message(code: 'structure.search.nonFound', default: 'Structure search could not find any structure')
-            render(view: 'homePage', model: [totalCompounds: 0, assays: [] as List<Map>, compounds: [], compoundHeaderInfo: '', experiments: [], projects: []])
-            return
-        }
-        else {
-            searchString = molecules.join(' ')
-            redirect(action: "search", params: ['searchString': searchString])
-            return
-        }
+        return molecules
     }
 }
 /**

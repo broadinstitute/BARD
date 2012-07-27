@@ -6,6 +6,7 @@ import elasticsearchplugin.ElasticSearchService
 import grails.test.mixin.TestFor
 import spock.lang.Specification
 import wslite.json.JSONObject
+import wslite.json.JSONArray
 
 /**
  * See the API for {@link grails.test.mixin.support.GrailsUnitTestMixin} for usage instructions
@@ -14,6 +15,7 @@ import wslite.json.JSONObject
 class BardWebInterfaceControllerUnitSpec extends Specification {
 
     ElasticSearchService elasticSearchService
+    QueryExecutorInternalService queryExecutorInternalService
 
     final static String compoundDocumentJson = '''{
         "_index": "compounds",
@@ -61,9 +63,17 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
             cid: '1234567890'
     )
 
+    final static String STRUCTURE_SEARCH_RESPONSE_JSON = '''
+    ["/bard/rest/v1/compounds/6796",
+    "/bard/rest/v1/compounds/9189",
+    "/bard/rest/v1/compounds/7047"]
+    '''
+
     void setup() {
         elasticSearchService = Mock(ElasticSearchService)
         controller.elasticSearchService = this.elasticSearchService
+        queryExecutorInternalService = Mock(QueryExecutorInternalService)
+        controller.queryExecutorInternalService = this.queryExecutorInternalService
         controller.metaClass.mixin(AutoCompleteHelper)
     }
 
@@ -144,5 +154,21 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
         "Return two strings"  | "Bro"        | new JSONObject(AUTO_COMPLETE_NAMES) | ["Broad Institute MLPCN Platelet Activation"]
         "Return Empty String" | "644"        | []                                  | []
 
+    }
+
+    void "test handle getCIDsByStructureFromNCGC #label"() {
+        when:
+        controller.grailsApplication.config.ncgc.server.structureSearch.root.url = 'http://mockedUrl'
+
+        final List<String> responseList = controller.getCIDsByStructureFromNCGC(smiles, searchType)
+
+
+        then:
+        queryExecutorInternalService.executeGetRequestJSON(_, _) >> { expectedJSONResponse }
+        responseList == expectedList
+
+        where:
+        label               | smiles | searchType                               | expectedJSONResponse                          | expectedList
+        "Return three CIDs" | "CN"   | StructureSearchType.SUB_STRUCTURE.name() | new JSONArray(STRUCTURE_SEARCH_RESPONSE_JSON) | ["6796", "9189", "7047"]
     }
 }

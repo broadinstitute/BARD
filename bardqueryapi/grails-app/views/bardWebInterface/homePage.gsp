@@ -13,6 +13,7 @@
             $("#searchString").autocomplete(autoOpts);
             $("#accordion").accordion({ autoHeight:false });
 
+            <%-- An even handler to open (bring-to-front) the MarvinSketch modal window. Opens MarvingSketch in a new gsp: marvinSketch.gsp --%>
             $('#structureModal').click(
                 function() {
                     url = '${request.contextPath}/chemAxon/marvinSketch';
@@ -21,6 +22,7 @@
                     return false;
             });
 
+            <%-- Define the MarvinSketch modal window (JQuery UI Modal) --%>
             $("#modalDiv").dialog({
                 modal: true,
                 autoOpen: false,
@@ -30,6 +32,8 @@
                 resizeable: true,
                 title: "",
                 beforeClose: function() {
+                    <%-- Processing before closing (send-to-back) of the modal window could be done here
+                    FALSE will prevent closing of the modal window. --%>
 		            return true;
                 }
             });
@@ -95,6 +99,7 @@
 <r:layoutResources/>
 <r:require modules="bootstrap"/>
 
+<%-- MarvinSketch's modal window --%>
 <div id="modalDiv">
     <iframe name="modalIFrame" id="modalIFrame" width="100%" height="100%" marginWidth="0"
             marginHeight="0" frameBorder="0"
@@ -103,6 +108,7 @@
     </iframe>
 </div>
 
+<%-- Is used to capture the SMILES and search-type in the parent form (entered in the modal child window) before submit for searching --%>
 <div id="structureSearchDiv">
     <g:form name="structureSearchForm" id="structureSearchForm" controller="bardWebInterface"
             action="structureSearch">
