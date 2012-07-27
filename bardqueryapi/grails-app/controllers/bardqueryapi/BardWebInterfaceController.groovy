@@ -1,8 +1,8 @@
 package bardqueryapi
 
-import elasticsearchplugin.ElasticSearchService
 import elasticsearchplugin.ESAssay
-import elasticsearchplugin.ESCompound
+import elasticsearchplugin.ESXCompound
+import elasticsearchplugin.ElasticSearchService
 import wslite.json.JSONObject
 
 /**
@@ -32,9 +32,16 @@ class BardWebInterfaceController {
      * @return
      */
     def search() {
+        /**
+         * TODO - How to build the Search result set
+         * 1. Collect all assay documents from assays/assay (goes as primary to assay tab)
+         * 2. Collect all compound documents from compound/Xcompound (goes as primary to compound tab)
+         * 3. Collect all assay documents from compound/Xcompound.apids[] (goes as secondary to assay tab)
+         * 4. Collect all compound documents from compound/Xcompound (goes as secondary to compound tab). this is an ElasticSearch hit on Xcompound.aid[]
+         */
         def searchString = params.searchString?.trim()
         if (searchString) {
-            Map<String, List> result = elasticSearchService.search(searchString)
+            Map<String, List> result = elasticSearchService.elasticSearchQuery(searchString)
 
             List<Map> assays = []
             for (ESAssay assay in result.assays) {
@@ -46,11 +53,18 @@ class BardWebInterfaceController {
             }
 
             Set<String> compounds = [] as Set
-            for (ESCompound compound in result.compounds) {
+            for (ESXCompound compound in result.xcompounds) {
                 compounds.add(compound)
+                // Note:  if we want to perform a secondary search and pull back the APID records for each compound
+                //  then we could use the lines below.  As of code review on July 26 I am leaving them commented out,
+                //  since the result of these extra records seems undesirable.
+//                for (int apid in compound?.apids) {
+//                    def assayMap = [assayName: "assay referencing cid=${compound.cid}", assayResource: "referenced assay", assayNumber: apid] as Map
+//                    assays.add(assayMap)
+//                }
             }
 
-            render(view: "homePage", model: [totalCompounds: compounds.size(), assays: assays as List<Map>, compounds: compounds.toList(), compoundHeaderInfo: result.compoundHeaderInfo, experiments: [], projects: []])
+            render(view: "homePage", model: [totalCompounds: compounds.size(), assays: assays as List<Map>, compounds: compounds.toList(), compoundHeaderInfo: result.compoundHeaderInfo ,experiments: [], projects: []])
             return
         }
         flash.message = 'Search String is required'
@@ -73,21 +87,20 @@ class BardWebInterfaceController {
             render "Compound ID (CID) parameter required"
         }
     }
-
-
     def autoCompleteAssayNames() {
         final String elasticSearchRootURL = grailsApplication.config.bard.services.elasticSearchService.restNode.baseUrl
         final List<String> assayNames = handleAutoComplete(this.elasticSearchService, elasticSearchRootURL)
 
         render(contentType: "text/json") {
-            for (String assayName : assayNames) {
+            for (String assayName: assayNames) {
                 element assayName
             }
-            if (!assayNames) {
+            if (!assayNames){
                 element ""
             }
         }
     }
+
 
     /**
      * An Action to provide a search-call to NCGC REST API: find CIDs by structure (SMILES).
@@ -187,19 +200,20 @@ class AutoCompleteHelper {
      * @param elasticSearchRootURL
      * @return
      */
-    protected List<String> handleAutoComplete(final ElasticSearchService elasticSearchService, final String elasticSearchRootURL) {
+    protected List<String> handleAutoComplete(final ElasticSearchService elasticSearchService,final String elasticSearchRootURL){
         final String urlToElastic = "${elasticSearchRootURL}/${AUTO_COMPLETE_SEARCH_URL}"
         String request = ELASTIC_AUTO_COMPLETE_SEARCH
         if (params?.term) {
             request = ELASTIC_AUTO_COMPLETE_SEARCH.replaceAll("\\*", "${params.term}*")
 
         }
-        final JSONObject jsonObject = new JSONObject(request)
+        final JSONObject jsonObject =  new JSONObject(request)
 
-        final JSONObject responseObject = elasticSearchService.searchQueryStringQuery(urlToElastic, jsonObject)
+        final JSONObject responseObject = elasticSearchService.searchQueryStringQuery(urlToElastic,jsonObject)
         return responseObject?.hits?.hits.collect { it.fields }.collect { it.name }
 
     }
+
 }
 
 public enum StructureSearchType {
