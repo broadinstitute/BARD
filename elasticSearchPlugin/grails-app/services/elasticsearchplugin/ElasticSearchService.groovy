@@ -119,8 +119,9 @@ class ElasticSearchService {
             response = elasticSearchQuery(additionalParms, BardQueryType.Xcompound, searchValue, BardQueryType.Default )
         else {
             // Allow the specified search index. This should be useful when people start searching "as target" or whatever else...
+            def requestedSearchIndex =  additionalParms["searchIndex"]
             if (additionalParms.containsKey("searchIndex")) {
-                def requestedSearchIndex =  additionalParms["searchIndex"]
+                requestedSearchIndex =  additionalParms["searchIndex"]
                 if (requestedSearchIndex instanceof BardQueryType ) {
                     BardQueryType bardQueryType =  requestedSearchIndex as BardQueryType
                     response =   elasticSearchQuery(additionalParms,bardQueryType, searchValue, BardQueryType.Default )

@@ -90,6 +90,41 @@ class ElasticSearchServiceIntegrationSpec extends IntegrationSpec {
 
     }
 
+    @Unroll("Use new search")
+    void "test  elasticSearchQuery with additional parameters but no searchIndex"() {
+
+        given:
+        elasticSearchService != null
+
+
+        when:
+        def  cidQuerySpecifier =  "644"
+
+        def returnMap = elasticSearchService.elasticSearchQuery(cidQuerySpecifier, unkownparameter: 20)
+
+        then:
+        assert returnMap.assays.size()==1
+        assert returnMap.xcompounds.size()==206
+
+    }
+
+
+    @Unroll("Use new search")
+    void "test  elasticSearchQuery with from and size parameters"() {
+
+        given:
+        elasticSearchService != null
+
+
+        when:
+        def  cidQuerySpecifier =  "644"
+
+        def returnMap = elasticSearchService.elasticSearchQuery(cidQuerySpecifier, from:  0, size: 20)
+
+        then:
+        assert ((returnMap.assays.size()+returnMap.xcompounds.size()) == 20)
+    }
+
 
 
 
