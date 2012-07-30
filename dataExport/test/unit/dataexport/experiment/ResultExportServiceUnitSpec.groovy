@@ -125,9 +125,9 @@ class ResultExportServiceUnitSpec extends Specification {
 
         then: "We obtain the expected XML object"
         println writer1.toString()
-        XMLAssert.assertXpathEvaluatesTo("2", "count(//link)", writer1.toString());
+        XMLAssert.assertXpathEvaluatesTo("3", "count(//link)", writer1.toString());
         XMLAssert.assertXpathEvaluatesTo("1", "count(//link[@type='experimentMediaType'])", writer1.toString())
-        XMLAssert.assertXpathEvaluatesTo("0", "count(//link[@type='resultMediaType'])", writer1.toString())
+        XMLAssert.assertXpathEvaluatesTo("1", "count(//link[@type='resultMediaType'])", writer1.toString())
         XMLAssert.assertXpathEvaluatesTo("1", "count(//resultTypeRef)", writer1.toString())
         XMLAssert.assertXpathEvaluatesTo("1", "count(//resultContextItems)", writer1.toString())
         XMLAssert.assertXpathEvaluatesTo("1", "count(//resultContextItem)", writer1.toString())
@@ -144,7 +144,7 @@ class ResultExportServiceUnitSpec extends Specification {
             this.resultExportService.generateResultLinks(this.staxBuilder, result)
         }
         then: "We obtain the expected XML object"
-        XmlTestAssertions.assertResults("<links><link rel=\"up\" title=\"Experiment\" type=\"experimentMediaType\" href=\"null\"></link></links>", this.writer.toString())
+        XmlTestAssertions.assertResults("<links><link rel=\"up\" title=\"Experiment\" type=\"experimentMediaType\" href=\"null\"></link><link rel=\"edit\" type=\"resultMediaType\" href=\"null\"></link></links>", this.writer.toString())
     }
 
     void "test Generate Results Not Found Exception"() {

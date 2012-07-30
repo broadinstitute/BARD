@@ -140,10 +140,10 @@ class ResultExportService {
         markupBuilder.link(rel: 'up', title: 'Experiment', type: "${this.mediaTypes.experimentMediaType}",
                 href: experimentHref) {
         }
-//        final String resultHref = grailsLinkGenerator.link(mapping: 'currentResult', absolute: true, params: [id: result.id]).toString()
-//        markupBuilder.link(rel: 'edit', type: "${this.mediaTypes.resultMediaType}",
-//                href: resultHref) {
-//        }
+        final String resultHref = grailsLinkGenerator.link(mapping: 'result', absolute: true, params: [id: result.id]).toString()
+        markupBuilder.link(rel: 'edit', type: "${this.mediaTypes.resultMediaType}",
+                href: resultHref) {
+        }
     }
     /**
      * Generate the results for a given experiment
