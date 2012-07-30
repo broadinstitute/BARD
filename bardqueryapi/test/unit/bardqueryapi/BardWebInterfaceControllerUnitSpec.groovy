@@ -8,6 +8,7 @@ import grails.test.mixin.TestFor
 import spock.lang.Specification
 import wslite.json.JSONObject
 import wslite.json.JSONArray
+import elasticsearchplugin.QueryExecutorService
 
 /**
  * See the API for {@link grails.test.mixin.support.GrailsUnitTestMixin} for usage instructions
@@ -16,7 +17,7 @@ import wslite.json.JSONArray
 class BardWebInterfaceControllerUnitSpec extends Specification {
 
     ElasticSearchService elasticSearchService
-    QueryExecutorInternalService queryExecutorInternalService
+    QueryExecutorService queryExecutorService
 
     final static String compoundDocumentJson = '''{
         "_index": "compounds",
@@ -80,8 +81,8 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
     void setup() {
         elasticSearchService = Mock(ElasticSearchService)
         controller.elasticSearchService = this.elasticSearchService
-        queryExecutorInternalService = Mock(QueryExecutorInternalService)
-        controller.queryExecutorInternalService = this.queryExecutorInternalService
+        queryExecutorService = Mock(QueryExecutorService)
+        controller.queryExecutorService = this.queryExecutorService
         controller.metaClass.mixin(AutoCompleteHelper)
     }
 
@@ -123,9 +124,9 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
         assert model.projects == []
 
         where:
-        label                                | searchTerm | resultJson                                   | expectedTotalCompounds | expectedAssays | expectedCompounds
-        "nothing was found"                  | '644'      | [assays: [], compounds: []]                  | 0                      | 0              | 0
-        "An Assay and a compound were found" | '644'      | [assays: [esAssay], xcompounds: [esxCompound]]| 1                      | 1              | 1
+        label                                | searchTerm | resultJson                                     | expectedTotalCompounds | expectedAssays | expectedCompounds
+        "nothing was found"                  | '644'      | [assays: [], compounds: []]                    | 0                      | 0              | 0
+        "An Assay and a compound were found" | '644'      | [assays: [esAssay], xcompounds: [esxCompound]] | 1                      | 1              | 1
     }
 
     void "test autocomplete #label"() {
@@ -167,16 +168,17 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
     void "test handle getCIDsByStructureFromNCGC #label"() {
         when:
         controller.grailsApplication.config.ncgc.server.structureSearch.root.url = 'http://mockedUrl'
-
         final List<String> responseList = controller.getCIDsByStructureFromNCGC(smiles, searchType)
 
 
         then:
-        queryExecutorInternalService.executeGetRequestJSON(_, _) >> { expectedJSONResponse }
+        queryExecutorService.executeGetRequestJSON(expectedRequestUrl, [connectTimeout: 5000, readTimeout: 10000]) >> { expectedJSONResponse }
         responseList == expectedList
 
         where:
-        label               | smiles | searchType                               | expectedJSONResponse                          | expectedList
-        "Return three CIDs" | "CN"   | StructureSearchType.SUB_STRUCTURE.name() | new JSONArray(STRUCTURE_SEARCH_RESPONSE_JSON) | ["6796", "9189", "7047"]
+        label                  | smiles | searchType                               | expectedJSONResponse                          | expectedList             | expectedRequestUrl
+        "Sub-structure searcg" | "C-C"  | StructureSearchType.SUB_STRUCTURE.name() | new JSONArray(STRUCTURE_SEARCH_RESPONSE_JSON) | ["6796", "9189", "7047"] | 'http://mockedUrl?filter=C-C[structure]&type=sub'
+        "Exact-match search"   | "C-C"  | StructureSearchType.EXACT_MATCH.name()   | new JSONArray(STRUCTURE_SEARCH_RESPONSE_JSON) | ["6796", "9189", "7047"] | 'http://mockedUrl?filter=C-C[structure]&type=exact'
+        "Similarity search"    | "C-C"  | StructureSearchType.SIMILARITY.name()    | new JSONArray(STRUCTURE_SEARCH_RESPONSE_JSON) | ["6796", "9189", "7047"] | 'http://mockedUrl?filter=C-C[structure]&type=sim&cutoff=0.9'
     }
 }

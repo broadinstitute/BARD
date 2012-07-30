@@ -49,7 +49,7 @@ grails.project.dependency.resolution = {
         compile ":spock:0.6"
         compile ":functional-spock:0.6"
         build ":codenarc:0.15"
-        compile ":elastic-search:0.4.2-SNAPSHOT"
+        compile ":elastic-search:0.4.3-SNAPSHOT"
         compile ":twitter-bootstrap:2.0.2.25"
 
         // Uncomment these (or add new ones) to enable additional resources capabilities

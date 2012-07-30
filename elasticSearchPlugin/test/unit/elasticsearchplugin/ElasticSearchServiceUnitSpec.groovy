@@ -120,13 +120,13 @@ class ElasticSearchServiceUnitSpec extends Specification {
     }
 
     void "test getAssayDocument #label"() {
+        String expectedUrl = "${service.elasticSearchBaseUrl}/${service.assayIndexName}/${service.assayIndexTypeName}/${assayId}"
 
         when:
         JSONObject response = service.getAssayDocument(assayId)
-        println()
 
         then:
-        queryExecutorService.executeGetRequestJSON(_, _) >> { assayJson }
+        queryExecutorService.executeGetRequestJSON(expectedUrl) >> { assayJson }
 
         assert response.keySet().size() == expectedKeySetSize
 
@@ -137,13 +137,14 @@ class ElasticSearchServiceUnitSpec extends Specification {
     }
 
     void "test getAssayDocumentWithCID #label"() {
+        String expectedUrl = "${service.elasticSearchBaseUrl}/${service.assayIndexName}/${service.assayIndexTypeName}/${assayId}"
 
         when:
         JSONObject response = service.getAssayDocument(assayId)
         println()
 
         then:
-        queryExecutorService.executeGetRequestJSON(_, _) >> { assayJson }
+        queryExecutorService.executeGetRequestJSON(expectedUrl) >> { assayJson }
 
         assert response.keySet().size() == expectedKeySetSize
 

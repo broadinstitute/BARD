@@ -4,6 +4,8 @@ import elasticsearchplugin.ESAssay
 import elasticsearchplugin.ESXCompound
 import elasticsearchplugin.ElasticSearchService
 import wslite.json.JSONObject
+import elasticsearchplugin.QueryExecutorService
+import wslite.rest.RESTClientException
 
 /**
  * TODO: Unify the use of JSONObject
@@ -17,7 +19,7 @@ import wslite.json.JSONObject
 class BardWebInterfaceController {
 
     ElasticSearchService elasticSearchService
-    QueryExecutorInternalService queryExecutorInternalService
+    QueryExecutorService queryExecutorService
 
     def index() {
         homePage()
@@ -64,7 +66,7 @@ class BardWebInterfaceController {
 //                }
             }
 
-            render(view: "homePage", model: [totalCompounds: compounds.size(), assays: assays as List<Map>, compounds: compounds.toList(), compoundHeaderInfo: result.compoundHeaderInfo ,experiments: [], projects: []])
+            render(view: "homePage", model: [totalCompounds: compounds.size(), assays: assays as List<Map>, compounds: compounds.toList(), compoundHeaderInfo: result.compoundHeaderInfo, experiments: [], projects: []])
             return
         }
         flash.message = 'Search String is required'
@@ -87,20 +89,20 @@ class BardWebInterfaceController {
             render "Compound ID (CID) parameter required"
         }
     }
+
     def autoCompleteAssayNames() {
         final String elasticSearchRootURL = grailsApplication.config.bard.services.elasticSearchService.restNode.baseUrl
         final List<String> assayNames = handleAutoComplete(this.elasticSearchService, elasticSearchRootURL)
 
         render(contentType: "text/json") {
-            for (String assayName: assayNames) {
+            for (String assayName : assayNames) {
                 element assayName
             }
-            if (!assayNames){
+            if (!assayNames) {
                 element ""
             }
         }
     }
-
 
     /**
      * An Action to provide a search-call to NCGC REST API: find CIDs by structure (SMILES).
@@ -110,7 +112,20 @@ class BardWebInterfaceController {
      */
     def structureSearch(String smiles, String structureSearchType) {
 
-        List<String> molecules = getCIDsByStructureFromNCGC(smiles, structureSearchType)
+        List<String> molecules = []
+
+        try {
+            molecules = getCIDsByStructureFromNCGC(smiles, structureSearchType)
+        }
+        catch (RESTClientException exp) {
+            if (exp.cause instanceof SocketTimeoutException) {
+                flash.message = message(code: 'structure.search.timeout', default: 'Structure search has timed-out; it is possible that the result-set is too big for the server to return in a timely fashion or that the server has not responded at all')
+                render(view: 'homePage', model: [totalCompounds: 0, assays: [] as List<Map>, compounds: [], compoundHeaderInfo: '', experiments: [], projects: []])
+                return
+            }
+            //rethrow the exception - it must be something else than timeout.
+            throw exp
+        }
 
         if (molecules.isEmpty()) {
             flash.message = message(code: 'structure.search.nonFound', default: 'Structure search could not find any structure')
@@ -161,7 +176,7 @@ class BardWebInterfaceController {
         }
 
         String searchUrl = "${ncgcSearchBaseUrl}?filter=${smiles}[structure]${searchModifiers}"
-        def resultJson = queryExecutorInternalService.executeGetRequestJSON(searchUrl, null)
+        def resultJson = queryExecutorService.executeGetRequestJSON(searchUrl, [connectTimeout: 5000, readTimeout: 10000])
 
         //Strip the CID from the end part of a compound's relative resource-url. e.g.: /bard/rest/v1/compounds/6796
         List<String> molecules = resultJson.collect { String compoundUri ->
@@ -200,16 +215,16 @@ class AutoCompleteHelper {
      * @param elasticSearchRootURL
      * @return
      */
-    protected List<String> handleAutoComplete(final ElasticSearchService elasticSearchService,final String elasticSearchRootURL){
+    protected List<String> handleAutoComplete(final ElasticSearchService elasticSearchService, final String elasticSearchRootURL) {
         final String urlToElastic = "${elasticSearchRootURL}/${AUTO_COMPLETE_SEARCH_URL}"
         String request = ELASTIC_AUTO_COMPLETE_SEARCH
         if (params?.term) {
             request = ELASTIC_AUTO_COMPLETE_SEARCH.replaceAll("\\*", "${params.term}*")
 
         }
-        final JSONObject jsonObject =  new JSONObject(request)
+        final JSONObject jsonObject = new JSONObject(request)
 
-        final JSONObject responseObject = elasticSearchService.searchQueryStringQuery(urlToElastic,jsonObject)
+        final JSONObject responseObject = elasticSearchService.searchQueryStringQuery(urlToElastic, jsonObject)
         return responseObject?.hits?.hits.collect { it.fields }.collect { it.name }
 
     }

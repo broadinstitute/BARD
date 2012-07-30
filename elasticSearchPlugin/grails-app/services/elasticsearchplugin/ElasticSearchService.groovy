@@ -291,7 +291,7 @@ class ElasticSearchService {
     private JSONObject getElasticSearchDocument(String elasticSearchQueryString) {
         JSONObject result = [:] as JSONObject
         try {
-            result = (JSONObject)queryExecutorService.executeGetRequestJSON(elasticSearchQueryString, null)
+            result = (JSONObject)queryExecutorService.executeGetRequestJSON(elasticSearchQueryString)
         }
         catch (RESTClientException exp) {
             String message = exp?.response?.statusMessage

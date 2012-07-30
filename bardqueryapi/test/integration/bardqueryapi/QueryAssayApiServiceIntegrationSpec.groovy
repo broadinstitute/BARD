@@ -58,7 +58,7 @@ class QueryAssayApiServiceIntegrationSpec extends IntegrationSpec {
         given:
         final String publicationUrl = "http://assay.nih.gov/bard/rest/v1/assays"
         when:
-        def assays = queryExecutorService.executeGetRequestJSON(publicationUrl,null)
+        def assays = queryExecutorService.executeGetRequestJSON(publicationUrl)
 
         then:
         assert assays

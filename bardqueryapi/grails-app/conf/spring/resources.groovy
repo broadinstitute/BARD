@@ -21,7 +21,7 @@ beans = {
         queryExecutorInternalService = ref('queryExecutorInternalService')
     }
     bardWebInterfaceController(bardqueryapi.BardWebInterfaceController) {
-        queryExecutorInternalService = ref('queryExecutorInternalService')
+        queryExecutorService = ref('queryExecutorService')
     }
     elasticSearchService(elasticsearchplugin.ElasticSearchService) {
         elasticSearchBaseUrl = grailsApplication.config.bard.services.elasticSearchService.restNode.baseUrl
