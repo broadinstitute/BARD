@@ -166,7 +166,7 @@ class ResultExportService {
         offset = this.maxResultsRecordsPerPage  //reset this to the max number of records
         markupBuilder.results(count: results.size()) {
             for (Result result : results) {
-                final String resultHref = grailsLinkGenerator.link(mapping: 'currentResult', absolute: true, params: [id: result.id]).toString()
+                final String resultHref = grailsLinkGenerator.link(mapping: 'result', absolute: true, params: [id: result.id]).toString()
                 link(rel: 'related', type: "${this.mediaTypes.resultMediaType}", href: "${resultHref}")
             }
             generateResultsLinks(markupBuilder, experiment.id, hasMoreResults, offset)
