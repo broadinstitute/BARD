@@ -10,6 +10,12 @@ import spock.lang.Unroll
 import javax.servlet.http.HttpServletResponse
 
 import static groovyx.net.http.Method.GET
+import bard.db.dictionary.Element
+
+import static groovyx.net.http.Method.PUT
+import static groovyx.net.http.ContentType.TEXT
+import bard.db.experiment.Experiment
+import bard.db.experiment.Result
 
 /**
  * Created with IntelliJ IDEA.
@@ -29,6 +35,7 @@ class ExperimentRestControllerFunctionalSpec extends Specification {
 
     final String apiKeyHeader = remote { ctx.grailsApplication.config.dataexport.externalapplication.apiKey.header }
     final String apiKeyHashed = remote { ctx.grailsApplication.config.dataexport.externalapplication.apiKey.hashed }
+
 
     def 'test GET Experiments success'() {
         /**
@@ -57,7 +64,7 @@ class ExperimentRestControllerFunctionalSpec extends Specification {
         final String responseData = serverResponse.data.readLines().join()
         XMLAssert.assertXpathEvaluatesTo("1", "count(//experiments)", responseData)
         XMLAssert.assertXpathEvaluatesTo("0", "count(//experiment)", responseData)
-        XMLAssert.assertXpathEvaluatesTo("3", "count(//link)", responseData)
+        XMLAssert.assertXpathEvaluatesTo("2", "count(//link)", responseData)
         XMLAssert.assertXpathEvaluatesTo('application/vnd.bard.cap+xml;type=experiment', "//link/@type", responseData)
         XMLAssert.assertXpathEvaluatesTo('related', "//link/@rel", responseData)
 
@@ -141,6 +148,9 @@ class ExperimentRestControllerFunctionalSpec extends Specification {
         then: 'We expect an XML representation of that experiment'
 
         assert serverResponse.statusLine.statusCode == HttpServletResponse.SC_OK
+        assert serverResponse.getFirstHeader('ETag')
+        assert serverResponse.getFirstHeader('ETag').name == 'ETag'
+        assert serverResponse.getFirstHeader('ETag').value == '0'
         final String responseData = serverResponse.data.readLines().join()
         XMLAssert.assertXpathEvaluatesTo("1", "count(//experiment)", responseData)
         XMLAssert.assertXpathEvaluatesTo("0", "count(//experiments)", responseData)
@@ -150,4 +160,25 @@ class ExperimentRestControllerFunctionalSpec extends Specification {
         XMLAssert.assertXpathEvaluatesTo("application/vnd.bard.cap+xml;type=element", "//resultContextItem/attribute/link/@type", responseData)
         XMLAssert.assertXpathEvaluatesTo("10", "count(//link)", responseData)
     }
+
+    def 'test Update Experiment Success'(){
+        given: "there is a service endpoint to update the Experiment with id 386"
+        Experiment experiment = Experiment.get(1)
+        experiment.readyForExtraction = 'Ready'
+        RESTClient http = new RESTClient("${experimentBaseUrl}/1")
+
+        when: 'We send an HTTP PUT request for that Experiment with a Status of Complete and an ETAG Header of 1'
+
+        def serverResponse = http.request(PUT, TEXT) {
+            headers.'If-Match' = '0'
+            body = "Complete"
+            headers."${apiKeyHeader}" = apiKeyHashed
+        }
+        then: 'We expect an HTTP Status Code of OK, with the status of the Element now set to Complete'
+        assert serverResponse.statusLine.statusCode == HttpServletResponse.SC_OK
+        assert serverResponse.getFirstHeader('ETag')
+
+
+    }
+
 }

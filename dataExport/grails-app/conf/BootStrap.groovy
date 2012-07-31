@@ -9,6 +9,7 @@ class BootStrap {
     def init = { servletContext ->
         switch (Environment.current.name) {
             case "test":
+            case "development":
                 if (Element.list().isEmpty()) {
                     final Sql sql = new Sql(dataSource)
                     insertDictionaryRecords(sql)
@@ -26,7 +27,14 @@ class BootStrap {
     def insertExperiments(final Sql sql) {
         sql.execute "INSERT INTO EXPERIMENT (EXPERIMENT_ID,EXPERIMENT_NAME,ASSAY_ID,EXPERIMENT_STATUS,READY_FOR_EXTRACTION,RUN_DATE_FROM,RUN_DATE_TO,HOLD_UNTIL_DATE,VERSION,DATE_CREATED) VALUES (1,'A cell-based HTS for delayed death inhibitors of the malarial parasite plastid Measured in Microorganism System Using Plate Reader - 2126-01_Inhibitor_Dose_DryPowder_Activity:1',1,'Approved','Ready',SYSDATE,SYSDATE,SYSDATE,0,SYSDATE)"
         sql.execute "INSERT INTO EXPERIMENT (EXPERIMENT_ID,EXPERIMENT_NAME,ASSAY_ID,EXPERIMENT_STATUS,READY_FOR_EXTRACTION,RUN_DATE_FROM,RUN_DATE_TO,HOLD_UNTIL_DATE,VERSION,DATE_CREATED) VALUES (2,'A cell-based HTS for delayed death inhibitors of the malarial parasite plastid Measured in Microorganism System Using Plate Reader - 2126-01_Inhibitor_Dose_DryPowder_Activity:2',1,'Approved','Ready',SYSDATE,SYSDATE,SYSDATE,0,SYSDATE)"
-        sql.execute "INSERT INTO EXPERIMENT (EXPERIMENT_ID,EXPERIMENT_NAME,ASSAY_ID,EXPERIMENT_STATUS,READY_FOR_EXTRACTION,RUN_DATE_FROM,RUN_DATE_TO,HOLD_UNTIL_DATE,VERSION,DATE_CREATED) VALUES (23,'A cell-based HTS for delayed death inhibitors of the malarial parasite plastid Measured in Microorganism System Using Plate Reader - 2126-01_Inhibitor_Dose_DryPowder_Activity:23',1,'Approved','Ready',SYSDATE,SYSDATE,SYSDATE,0,SYSDATE)"
+        sql.execute "INSERT INTO EXPERIMENT (EXPERIMENT_ID,EXPERIMENT_NAME,ASSAY_ID,EXPERIMENT_STATUS,READY_FOR_EXTRACTION,RUN_DATE_FROM,RUN_DATE_TO,HOLD_UNTIL_DATE,VERSION,DATE_CREATED) VALUES (23,'A cell-based HTS for delayed death inhibitors of the malarial parasite plastid Measured in Microorganism System Using Plate Reader - 2126-01_Inhibitor_Dose_DryPowder_Activity:23',1,'Approved','Complete',SYSDATE,SYSDATE,SYSDATE,0,SYSDATE)"
+
+        sql.execute "INSERT INTO SUBSTANCE (SUBSTANCE_ID,COMPOUND_ID,SMILES,MOLECULAR_WEIGHT,SUBSTANCE_TYPE,VERSION,DATE_CREATED,LAST_UPDATED,MODIFIED_BY) VALUES(7976469,7976469,'CC', 12,'SMALL_MOLECULE',0,SYSDATE,SYSDATE,'schatwin')"
+
+
+        sql.execute "INSERT INTO RESULT (QUALIFIER,RESULT_ID,VALUE_DISPLAY,VALUE_NUM,RESULT_STATUS,READY_FOR_EXTRACTION,EXPERIMENT_ID,SUBSTANCE_ID,RESULT_TYPE_ID,VERSION,DATE_CREATED,LAST_UPDATED,MODIFIED_BY) values ('>',532,'101.3%',101.3,'Approved','Complete',1,7976469,341,0,SYSDATE,SYSDATE,'schatwin')"
+
+        sql.execute "INSERT INTO RESULT (QUALIFIER,RESULT_ID,VALUE_DISPLAY,VALUE_NUM,RESULT_STATUS,READY_FOR_EXTRACTION,EXPERIMENT_ID,SUBSTANCE_ID,RESULT_TYPE_ID,VERSION,DATE_CREATED,LAST_UPDATED,MODIFIED_BY) values ('>',533,'101.3%',101.3,'Approved','Ready',2,7976469,341,0,SYSDATE,SYSDATE,'schatwin')"
 
         //Result context item
         sql.execute "INSERT INTO RESULT_CONTEXT_ITEM (RESULT_CONTEXT_ITEM_ID,EXPERIMENT_ID,ATTRIBUTE_ID,VALUE_DISPLAY,VALUE_NUM, QUALIFIER,VERSION,DATE_CREATED) VALUES (1,1,370,'66',66,'%',0,SYSDATE)"
@@ -48,6 +56,8 @@ class BootStrap {
     def insertProjectRecords(final Sql sql) {
         sql.execute "INSERT INTO PROJECT (project_id,project_name,group_type,description,ready_for_extraction,VERSION,date_created) VALUES (1,'Scripps special project #1','Project',NULL,'Ready',0,SYSDATE)"
         sql.execute "INSERT INTO PROJECT (project_id,project_name,group_type,description,ready_for_extraction,VERSION,date_created) VALUES (2,'2126 - MLPCN Malaria - Inhibitor','Project',NULL,'Ready',0,SYSDATE)"
+        sql.execute "INSERT INTO PROJECT (project_id,project_name,group_type,description,ready_for_extraction,VERSION,date_created) VALUES (3,'2126 - MLPCN Malaria - Inhibitor','Project',NULL,'Complete',0,SYSDATE)"
+
     }
 
     def insertAssayDefRecords(final Sql sql) {
@@ -77,7 +87,7 @@ class BootStrap {
         sql.execute "INSERT INTO ELEMENT (ELEMENT_ID,LABEL,ELEMENT_STATUS,READY_FOR_EXTRACTION,VERSION,DATE_CREATED) values (372,'Assay Explorer','Published','Ready',0,SYSDATE)"
         sql.execute "INSERT INTO ELEMENT (ELEMENT_ID,LABEL,ELEMENT_STATUS,READY_FOR_EXTRACTION,VERSION,DATE_CREATED) values (370,'Number of points','Published','Ready',0,SYSDATE)"
         sql.execute "INSERT INTO ELEMENT (ELEMENT_ID,LABEL,ELEMENT_STATUS,READY_FOR_EXTRACTION,VERSION,DATE_CREATED) values (369,'Number of exclusions','Published','Ready',0,SYSDATE)"
-        sql.execute "INSERT INTO ELEMENT (ELEMENT_ID,LABEL,ELEMENT_STATUS,READY_FOR_EXTRACTION,VERSION,DATE_CREATED) values (368,'software','Published','Ready',0,SYSDATE)"
+        sql.execute "INSERT INTO ELEMENT (ELEMENT_ID,LABEL,ELEMENT_STATUS,READY_FOR_EXTRACTION,VERSION,DATE_CREATED) values (368,'software','Published','Complete',0,SYSDATE)"
 
 
         sql.execute "Insert into UNIT (NODE_ID,PARENT_NODE_ID,UNIT_ID,UNIT,DESCRIPTION) values (0,0,123,'UNIT','Singular root to ensure tree viewers work')"

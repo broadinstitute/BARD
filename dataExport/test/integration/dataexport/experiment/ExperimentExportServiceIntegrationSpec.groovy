@@ -2,16 +2,21 @@ package dataexport.experiment
 
 import bard.db.experiment.Experiment
 import bard.db.registration.ExternalReference
+import dataexport.registration.BardHttpResponse
+import exceptions.NotFoundException
 import grails.plugin.spock.IntegrationSpec
 import groovy.xml.MarkupBuilder
 import org.custommonkey.xmlunit.XMLAssert
+import spock.lang.Unroll
 
+import javax.servlet.http.HttpServletResponse
 import javax.xml.XMLConstants
 import javax.xml.transform.stream.StreamSource
 import javax.xml.validation.Schema
 import javax.xml.validation.SchemaFactory
 import javax.xml.validation.Validator
 
+@Unroll
 class ExperimentExportServiceIntegrationSpec extends IntegrationSpec {
     static final String BARD_EXPERIMENT_EXPORT_SCHEMA = "test/integration/dataexport/experiment/experimentSchema.xsd"
 
@@ -27,6 +32,36 @@ class ExperimentExportServiceIntegrationSpec extends IntegrationSpec {
 
     void tearDown() {
         // Tear down logic here
+    }
+
+    void "test update #label"() {
+        given: "Given an Experiment with id #id and version #version"
+        when: "We call the experiment service to update this experiment"
+        final BardHttpResponse bardHttpResponse = this.experimentExportService.update(experimentId, version,status)
+
+        then: "An ETag of #expectedETag is returned together with an HTTP Status of #expectedStatusCode"
+        assert bardHttpResponse
+        assert bardHttpResponse.ETag == expectedETag
+        assert bardHttpResponse.httpResponseCode == expectedStatusCode
+
+        where:
+        label                                                | expectedStatusCode                         | expectedETag | experimentId | version | status
+        "Return OK and ETag 1"                               | HttpServletResponse.SC_OK                  | new Long(1)  | new Long(1)  | 0       | "Complete"
+        "Return NOT_ACCEPTABLE and ETag 0"                   | HttpServletResponse.SC_NOT_ACCEPTABLE      | new Long(0)  | new Long(2)  | 0       | "Complete"
+        "Return CONFLICT and ETag 0"                         | HttpServletResponse.SC_CONFLICT            | new Long(0)  | new Long(1)  | -1      | "Complete"
+        "Return PRECONDITION_FAILED and ETag 0"              | HttpServletResponse.SC_PRECONDITION_FAILED | new Long(0)  | new Long(1)  | 2       | "Complete"
+        "Return OK and ETag 0, Already completed Experiment" | HttpServletResponse.SC_OK                  | new Long(0)  | new Long(23) | 0       | "Complete"
+    }
+
+
+
+    void "test update Not Found Status"() {
+        given: "Given a non-existing Experiment"
+        when: "We call the experiment service to update this experiment"
+        this.experimentExportService.update(new Long(100000), 0, "stuff")
+
+        then: "An exception is thrown, indicating that the experiment does not exist"
+        thrown(NotFoundException)
     }
 
     void "test generate and validate Experiment with id"() {

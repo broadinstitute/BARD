@@ -7,19 +7,20 @@ package dataexport.experiment
 
 import bard.db.dictionary.Element
 import bard.db.dictionary.Stage
-import bard.db.experiment.Experiment
-import bard.db.experiment.Project
-import bard.db.experiment.ProjectExperiment
-import bard.db.experiment.ResultContextItem
 import bard.db.registration.ExternalReference
 import bard.db.registration.ExternalSystem
+import dataexport.registration.BardHttpResponse
 import dataexport.registration.MediaTypesDTO
+import dataexport.registration.UpdateType
 import exceptions.NotFoundException
 import groovy.xml.MarkupBuilder
 import org.codehaus.groovy.grails.web.mapping.LinkGenerator
 
+import javax.servlet.http.HttpServletResponse
 import javax.xml.datatype.DatatypeFactory
 import javax.xml.datatype.XMLGregorianCalendar
+
+import bard.db.experiment.*
 
 /**
  * Class that generates Experiments as XML
@@ -36,6 +37,46 @@ class ExperimentExportService {
     MediaTypesDTO mediaTypeDTO
     int numberRecordsPerPage
 
+    /**
+     * Set the ReadyForExtraction value on the element to 'Complete'
+     *
+     * Return a 409, conflict, if the version supplied by client is less than the version in the database
+     *
+     * Return a 412, precondition failed, if the version supplied by client is not equal to the version in the database
+     *
+     * Return a 404 , if the element cannot be found
+     *
+     * @param id
+     * @param version
+     * Returns the HTTPStatus Code
+     */
+    public BardHttpResponse update(final Long id, final Long clientVersion, final String latestStatus) {
+        final Experiment experiment = Experiment.findById(id)
+        if (!experiment) { //we could not find the element
+            throw new NotFoundException("Experiment with ID: ${id}, could not be found")
+        }
+        //make sure there are no children with a status other than 'Complete'
+        final int outStandingResults = Result.countByExperimentAndReadyForExtractionNotEqual(experiment, UpdateType.COMPLETE.description)
+        if (outStandingResults > 0) {//this experiments has results that have not yet been consumed
+            return new BardHttpResponse(httpResponseCode: HttpServletResponse.SC_NOT_ACCEPTABLE, ETag: experiment.version)
+        }
+
+
+        if (experiment.version > clientVersion) { //There is a conflict, supplied version is less than the current version
+            return new BardHttpResponse(httpResponseCode: HttpServletResponse.SC_CONFLICT, ETag: experiment.version)
+        }
+        if (experiment.version != clientVersion) {//supplied version is not equal to the version in database
+            return new BardHttpResponse(httpResponseCode: HttpServletResponse.SC_PRECONDITION_FAILED, ETag: experiment.version)
+        }
+
+        final String currentStatus = experiment.readyForExtraction
+        if (currentStatus != latestStatus) {
+            experiment.readyForExtraction = latestStatus
+            experiment.save(flush: true)
+        }
+        //we probably should supply a new version
+        return new BardHttpResponse(httpResponseCode: HttpServletResponse.SC_OK, ETag: experiment.version)
+    }
     /**
      *  offset is used for paging, it tells us where we are in the paging process
      * @param markupBuilder

@@ -19,14 +19,14 @@ class UrlMappings {
             action = [GET: "stage"]
         }
         name element: "/api/dictionary/element/$id"(controller: "dictionaryRest") {
-            action = [GET: "element"]
+            action = [GET: "element", PUT: "updateElement"]
         }
         name assays: "/api/assays"(controller: "assayRest") {
             action = [GET: "assays"]
         }
 
         name assay: "/api/assays/$id"(controller: "assayRest") {
-            action = [GET: "assay", PATCH: "updateAssay"]
+            action = [GET: "assay", PUT: "updateAssay"]
         }
         name assayDocument: "/api/assayDocument/$id"(controller: "assayRest") {
             action = [GET: "assayDocument"]
@@ -36,19 +36,19 @@ class UrlMappings {
         }
 
         name project: "/api/projects/$id"(controller: "projectRest") {
-            action = [GET: "project", PATCH: "updateProject"]
+            action = [GET: "project", PUT: "updateProject"]
         }
         name experiments: "/api/experiments"(controller: "experimentRest") {
             action = [GET: "experiments"]
         }
         name experiment: "/api/experiments/$id"(controller: "experimentRest") {
-            action = [GET: "experiment", PATCH: "updateExperiment"]
+            action = [GET: "experiment", PUT: "updateExperiment"]
         }
         name results: "/api/experiments/$id/results"(controller: "experimentRest") {
             action = [GET: "results"]
         }
         name result: "/api/results/$id"(controller: "experimentRest") {
-            action = [GET: "result", PATCH: "updateResult"]
+            action = [GET: "result", PUT: "updateResult"]
         }
         "/"(view: "/index")
         "500"(view: '/error')

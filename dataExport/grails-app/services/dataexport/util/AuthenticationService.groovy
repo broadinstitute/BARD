@@ -1,9 +1,6 @@
 package dataexport.util
 
 import javax.servlet.http.HttpServletRequest
-import org.codehaus.groovy.grails.validation.routines.InetAddressValidator
-import org.codehaus.groovy.grails.plugins.codecs.MD5BytesCodec
-import java.security.MessageDigest
 
 class AuthenticationService {
 
@@ -19,8 +16,6 @@ class AuthenticationService {
      * @return
      */
     Boolean authenticate(HttpServletRequest request) {
-//        InetAddressValidator inetAddressValidator = InetAddressValidator.getInstance()
-
         String apiKey = grailsApplication.config.dataexport.externalapplication.apiKey.hashed
         String apiKeyHeader = grailsApplication.config.dataexport.externalapplication.apiKey.header
         String requestApiKey = request.getHeader(apiKeyHeader)
@@ -30,21 +25,8 @@ class AuthenticationService {
             log.info("Failed authentication - invalid api-key: ${requestParamsString}")
             return false
         }
-
-//        List<String> ipAddressWhiteList = grailsApplication.config.dataexport.externalapplication.ipAddress.whiteList.keySet() as List<String>
-//        String remoteIpAddress = request.getRemoteAddr()
-
-//        for (String ipAddress in ipAddressWhiteList) {
-//
-//            Boolean match = doIpAddressesMatch(remoteIpAddress, ipAddress)
-//            if (match) {
         log.info("Successful authentication: ${requestParamsString}")
         return true
-//            }
-//        }
-
-//       log.info("Failed authentication - remote IP address is not in the whitelist: ${requestParamsString}")
-//        return false
     }
 
     /**

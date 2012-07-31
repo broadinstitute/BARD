@@ -7,13 +7,13 @@ import org.codehaus.groovy.grails.commons.GrailsApplication
 import org.codehaus.groovy.grails.web.servlet.HttpHeaders
 
 import javax.servlet.http.HttpServletResponse
-
+import dataexport.cap.registration.UpdateStatusHelper
 /**
  * Please note that the DataExportFilters is applied to all incoming request.
  * ALL incoming request need to have a custom http header named 'APIKEY' and the correct MD5 hash value
  * In addition, the request's remote IP address has to be whitelisted in the commons-config file.
  */
-
+@Mixin(UpdateStatusHelper)
 class DictionaryRestController {
     DictionaryExportService dictionaryExportService
     GrailsApplication grailsApplication
@@ -22,7 +22,7 @@ class DictionaryRestController {
             resultType: "GET",
             stage: "GET",
             element: "GET",
-            updateElemet: "PATCH"
+            updateElemet: "PUT"
     ]
 
     static final String responseContentTypeEncoding = "UTF-8"
@@ -43,7 +43,7 @@ class DictionaryRestController {
                 final StringWriter markupWriter = new StringWriter()
                 final MarkupBuilder markupBuilder = new MarkupBuilder(markupWriter)
                 dictionaryExportService.generateDictionary(markupBuilder)
-                render (text: markupWriter.toString(), contentType: mimeType, encoding: responseContentTypeEncoding)
+                render(text: markupWriter.toString(), contentType: mimeType, encoding: responseContentTypeEncoding)
                 return
             }
             response.status = HttpServletResponse.SC_BAD_REQUEST
@@ -67,7 +67,7 @@ class DictionaryRestController {
                 final MarkupBuilder markupBuilder = new MarkupBuilder(markupWriter)
                 final Long eTag = dictionaryExportService.generateResultType(markupBuilder, new Long(id))
                 response.addHeader(HttpHeaders.ETAG, eTag.toString())
-                render (text: markupWriter.toString(), contentType: mimeType, encoding: responseContentTypeEncoding)
+                render(text: markupWriter.toString(), contentType: mimeType, encoding: responseContentTypeEncoding)
                 return
             }
             response.status = HttpServletResponse.SC_BAD_REQUEST
@@ -97,7 +97,7 @@ class DictionaryRestController {
 
                 final Long eTag = dictionaryExportService.generateStage(markupBuilder, new Long(id))
                 response.addHeader(HttpHeaders.ETAG, eTag.toString())
-                render (text: markupWriter.toString(), contentType: mimeType, encoding: responseContentTypeEncoding)
+                render(text: markupWriter.toString(), contentType: mimeType, encoding: responseContentTypeEncoding)
                 return
             }
             response.status = HttpServletResponse.SC_BAD_REQUEST
@@ -126,7 +126,7 @@ class DictionaryRestController {
                 final MarkupBuilder markupBuilder = new MarkupBuilder(markupWriter)
                 Long eTag = dictionaryExportService.generateElement(markupBuilder, new Long(id))
                 response.addHeader(HttpHeaders.ETAG, eTag.toString())
-                render (text: markupWriter.toString(), contentType: mimeType, encoding: responseContentTypeEncoding)
+                render(text: markupWriter.toString(), contentType: mimeType, encoding: responseContentTypeEncoding)
                 return
             }
             response.status = HttpServletResponse.SC_BAD_REQUEST
@@ -144,9 +144,7 @@ class DictionaryRestController {
 /**
  * Update the status of the given element
  */
-    def updateElement() {
-        response.status = HttpServletResponse.SC_NOT_IMPLEMENTED
-        render ""
+    def updateElement(final Long id) {
+      updateDomainObject(this.dictionaryExportService,id)
     }
-
 }

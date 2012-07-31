@@ -1,7 +1,6 @@
 package dataexport.experiment
 
-
-
+import bard.db.experiment.Project
 import common.tests.XmlTestAssertions
 import common.tests.XmlTestSamples
 import grails.converters.XML
@@ -12,7 +11,9 @@ import spock.lang.Unroll
 
 import javax.servlet.http.HttpServletResponse
 
+import static groovyx.net.http.ContentType.TEXT
 import static groovyx.net.http.Method.GET
+import static groovyx.net.http.Method.PUT
 
 /**
  * Created with IntelliJ IDEA.
@@ -55,6 +56,8 @@ class ProjectRestControllerFunctionalSpec extends Specification {
         }
         then: 'We expect an XML representation of the projects'
         assert serverResponse.statusLine.statusCode == HttpServletResponse.SC_OK
+
+
         final String responseData = serverResponse.data.readLines().join()
         XmlTestAssertions.assertResults(XmlTestSamples.PROJECTS_FROM_SERVER, responseData)
     }
@@ -137,7 +140,29 @@ class ProjectRestControllerFunctionalSpec extends Specification {
         then: 'We expect an XML representation of that project'
 
         assert serverResponse.statusLine.statusCode == HttpServletResponse.SC_OK
+        assert serverResponse.getFirstHeader('ETag')
+        assert serverResponse.getFirstHeader('ETag').name == 'ETag'
+        assert serverResponse.getFirstHeader('ETag').value == '0'
         final String responseData = serverResponse.data.readLines().join()
-         XmlTestAssertions.assertResults(XmlTestSamples.PROJECT_FROM_SERVER, responseData)
+        XmlTestAssertions.assertResults(XmlTestSamples.PROJECT_FROM_SERVER, responseData)
+    }
+
+    def 'test Update Project Success'() {
+        given: "there is a service endpoint to update the Project with id 1"
+        Project project = Project.get(1)
+        project.readyForExtraction = 'Ready'
+        RESTClient http = new RESTClient("${baseUrl}/1")
+
+        when: 'We send an HTTP PUT request for that Project with a Status of Complete and an IF_Match header of 0'
+
+        def serverResponse = http.request(PUT, TEXT) {
+            headers.'If-Match' = '0'
+            body = "Complete"
+            headers."${apiKeyHeader}" = apiKeyHashed
+        }
+        then: 'We expect an HTTP Status Code of OK, with the status of the Assay now set to Complete'
+        assert serverResponse.statusLine.statusCode == HttpServletResponse.SC_OK
+        assert serverResponse.getFirstHeader('ETag')
+
     }
 }

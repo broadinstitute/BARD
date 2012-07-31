@@ -15,6 +15,10 @@ import javax.servlet.http.HttpServletResponse
 
 import static groovyx.net.http.Method.GET
 import org.custommonkey.xmlunit.XMLAssert
+import bard.db.experiment.Project
+
+import static groovyx.net.http.Method.PUT
+import static groovyx.net.http.ContentType.TEXT
 
 /**
  * Created with IntelliJ IDEA.
@@ -140,6 +144,9 @@ class AssayRestControllerFunctionalSpec extends Specification {
         }
         then: 'We expect an XML representation of that assay'
         assert serverResponse.statusLine.statusCode == HttpServletResponse.SC_OK
+        assert serverResponse.getFirstHeader('ETag')
+        assert serverResponse.getFirstHeader('ETag').name == 'ETag'
+        assert serverResponse.getFirstHeader('ETag').value == '0'
         final String responseData = serverResponse.data.readLines().join()
         XMLAssert.assertXpathEvaluatesTo("1", "count(//measureContexts)", responseData)
         XMLAssert.assertXpathEvaluatesTo("1", "count(//measureContext)", responseData)
@@ -197,7 +204,29 @@ class AssayRestControllerFunctionalSpec extends Specification {
         }
         then: 'We expect an XML representation of that AssayDocument'
         assert serverResponse.statusLine.statusCode == HttpServletResponse.SC_OK
+        assert serverResponse.getFirstHeader('ETag')
+        assert serverResponse.getFirstHeader('ETag').name == 'ETag'
+        assert serverResponse.getFirstHeader('ETag').value == '0'
         final String responseData = serverResponse.data.readLines().join()
         XmlTestAssertions.assertResults(XmlTestSamples.ASSAY_DOCUMENT_SERVER, responseData)
+    }
+
+    def 'test Update Assay Success'() {
+        given: "there is a service endpoint to update the assay with id 1"
+        Project project = Project.get(1)
+        project.readyForExtraction = 'Ready'
+        RESTClient http = new RESTClient("${baseUrl}/1")
+
+        when: 'We send an HTTP PUT request for that Assay with a Status of Complete and an IF_Match header of 0'
+
+        def serverResponse = http.request(PUT, TEXT) {
+            headers.'If-Match' = '0'
+            body = "Complete"
+            headers."${apiKeyHeader}" = apiKeyHashed
+        }
+        then: 'We expect an HTTP Status Code of OK, with the status of the Assay now set to Complete'
+        assert serverResponse.statusLine.statusCode == HttpServletResponse.SC_OK
+        assert serverResponse.getFirstHeader('ETag')
+
     }
 }

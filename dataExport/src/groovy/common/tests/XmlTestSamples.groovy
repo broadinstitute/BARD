@@ -463,7 +463,7 @@ class XmlTestSamples {
       <label>Number of exclusions</label>
       <link rel='edit' href='http://localhost:8080/dataExport/api/dictionary/element/369' type='application/vnd.bard.cap+xml;type=element' />
     </element>
-    <element elementId='368' readyForExtraction='Ready' elementStatus='Published'>
+    <element elementId='368' readyForExtraction='Complete' elementStatus='Published'>
       <label>software</label>
       <link rel='edit' href='http://localhost:8080/dataExport/api/dictionary/element/368' type='application/vnd.bard.cap+xml;type=element' />
     </element>
@@ -601,7 +601,7 @@ class XmlTestSamples {
     <label>Number of exclusions</label>
     <link rel='edit' href='http://localhost:8080/dataExport/api/dictionary/element/369' type='application/vnd.bard.cap+xml;type=element' />
   </element>
-  <element elementId='368' readyForExtraction='Ready' elementStatus='Published'>
+  <element elementId='368' readyForExtraction='Complete' elementStatus='Published'>
     <label>software</label>
     <link rel='edit' href='http://localhost:8080/dataExport/api/dictionary/element/368' type='application/vnd.bard.cap+xml;type=element' />
   </element>

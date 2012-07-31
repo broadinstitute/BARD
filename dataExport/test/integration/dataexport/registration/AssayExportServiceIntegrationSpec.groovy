@@ -5,11 +5,13 @@ import bard.db.registration.AssayDocument
 import grails.plugin.spock.IntegrationSpec
 import groovy.xml.MarkupBuilder
 
+import javax.servlet.http.HttpServletResponse
 import javax.xml.XMLConstants
 import javax.xml.transform.stream.StreamSource
 import javax.xml.validation.Schema
 import javax.xml.validation.SchemaFactory
 import javax.xml.validation.Validator
+import exceptions.NotFoundException
 
 class AssayExportServiceIntegrationSpec extends IntegrationSpec {
     static final String BARD_ASSAY_EXPORT_SCHEMA = "test/integration/dataexport/registration/assaySchema.xsd"
@@ -26,6 +28,31 @@ class AssayExportServiceIntegrationSpec extends IntegrationSpec {
 
     void tearDown() {
         // Tear down logic here
+    }
+    void "test update Not Found Status"() {
+        given: "Given a non-existing Assay"
+        when: "We call the assay service to update this assay"
+        this.assayExportService.update(new Long(100000), 0, "assay")
+
+        then: "An exception is thrown, indicating that the project does not exist"
+        thrown(NotFoundException)
+    }
+    void "test update #label"() {
+        given: "Given an Assay with id #id and version #version"
+        when: "We call the assay service to update this assay"
+        final BardHttpResponse bardHttpResponse = this.assayExportService.update(assayId, version, status)
+
+        then: "An ETag of #expectedETag is returned together with an HTTP Status of #expectedStatusCode"
+        assert bardHttpResponse
+        assert bardHttpResponse.ETag == expectedETag
+        assert bardHttpResponse.httpResponseCode == expectedStatusCode
+
+        where:
+        label                                           | expectedStatusCode                         | expectedETag | assayId     | version | status
+        "Return OK and ETag 1"                          | HttpServletResponse.SC_OK                  | new Long(1)  | new Long(1) | 0       | "Complete"
+        "Return CONFLICT and ETag 0"                    | HttpServletResponse.SC_CONFLICT            | new Long(0)  | new Long(1) | -1      | "Complete"
+        "Return PRECONDITION_FAILED and ETag 0"         | HttpServletResponse.SC_PRECONDITION_FAILED | new Long(0)  | new Long(1) | 2       | "Complete"
+        "Return OK and ETag 0, Already completed Assay" | HttpServletResponse.SC_OK                  | new Long(0)  | new Long(2) | 0       | "Complete"
     }
 
     void "test generate and validate AssayDocument #label"() {

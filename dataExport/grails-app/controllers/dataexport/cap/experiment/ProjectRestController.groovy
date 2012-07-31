@@ -1,25 +1,29 @@
 package dataexport.cap.experiment
 
+import bard.db.experiment.Project
 import dataexport.experiment.ProjectExportService
+import dataexport.registration.BardHttpResponse
 import exceptions.NotFoundException
 import groovy.xml.MarkupBuilder
 import org.codehaus.groovy.grails.commons.GrailsApplication
 import org.codehaus.groovy.grails.web.servlet.HttpHeaders
 
 import javax.servlet.http.HttpServletResponse
+import dataexport.cap.registration.UpdateStatusHelper
+import dataexport.registration.UpdateType
 
 /**
  * Please note that the DataExportFilters is applied to all incoming request.
  * ALL incoming request need to have a custom http header named 'APIKEY' and the correct MD5 hash value
  * In addition, the request's remote IP address has to be whitelisted in the commons-config file.
  */
-
+@Mixin(UpdateStatusHelper)
 class ProjectRestController {
     ProjectExportService projectExportService
     GrailsApplication grailsApplication
     static allowedMethods = [
             project: "GET",
-            updateProject: "PATCH",
+            updateProject: "PUT",
             projects: "GET"
     ]
 
@@ -38,7 +42,7 @@ class ProjectRestController {
                 final StringWriter markupWriter = new StringWriter()
                 final MarkupBuilder markupBuilder = new MarkupBuilder(markupWriter)
                 this.projectExportService.generateProjects(markupBuilder)
-                render (text: markupWriter.toString(), contentType: mimeType, encoding: responseContentTypeEncoding)
+                render(text: markupWriter.toString(), contentType: mimeType, encoding: responseContentTypeEncoding)
                 return
             }
             response.status = HttpServletResponse.SC_BAD_REQUEST
@@ -50,6 +54,7 @@ class ProjectRestController {
         }
     }
 
+
     def project(Integer id) {
         try {
             final String mimeType = grailsApplication.config.bard.data.export.project.xml
@@ -59,7 +64,7 @@ class ProjectRestController {
                 final MarkupBuilder markupBuilder = new MarkupBuilder(markupWriter)
                 final Long eTag = this.projectExportService.generateProject(markupBuilder, new Long(id.toString()))
                 response.addHeader(HttpHeaders.ETAG, eTag.toString())
-                render (text: markupWriter.toString(), contentType: mimeType, encoding: responseContentTypeEncoding)
+                render(text: markupWriter.toString(), contentType: mimeType, encoding: responseContentTypeEncoding)
                 return
             }
             response.status = HttpServletResponse.SC_BAD_REQUEST
@@ -75,9 +80,7 @@ class ProjectRestController {
             ee.printStackTrace()
         }
     }
-
-    def updateProject() {
-        response.status = HttpServletResponse.SC_NOT_IMPLEMENTED
-        render ""
+    def updateProject(Long id) {
+       updateDomainObject(this.projectExportService,id)
     }
 }

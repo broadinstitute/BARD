@@ -14,6 +14,10 @@ import spock.lang.Unroll
 import javax.servlet.http.HttpServletResponse
 
 import static groovyx.net.http.Method.GET
+import bard.db.dictionary.Element
+
+import static groovyx.net.http.Method.PUT
+import static groovyx.net.http.ContentType.TEXT
 
 /**
  * Created with IntelliJ IDEA.
@@ -235,7 +239,29 @@ class DictionaryRestControllerFunctionalSpec extends Specification {
         }
         then: 'We expect an XML representation of that Element'
         assert serverResponse.statusLine.statusCode == HttpServletResponse.SC_OK
+        assert serverResponse.getFirstHeader('ETag')
+        assert serverResponse.getFirstHeader('ETag').name == 'ETag'
+        assert serverResponse.getFirstHeader('ETag').value == '0'
         final String responseData = serverResponse.data.readLines().join()
         XmlTestAssertions.assertResults(XmlTestSamples.ELEMENT, responseData)
+    }
+
+    def 'test Update Element Success'(){
+        given: "there is a service endpoint to update the Element with id 386"
+        Element element = Element.get(386)
+        element.readyForExtraction = 'Ready'
+        RESTClient http = new RESTClient("${baseUrl}/element/386")
+
+        when: 'We send an HTTP PUT request for that Element with a Status of Complete and an IF_Match header of 0'
+
+        def serverResponse = http.request(PUT, TEXT) {
+            headers.'If-Match' = '0'
+            body = "Complete"
+            headers."${apiKeyHeader}" = apiKeyHashed
+        }
+        then: 'We expect an HTTP Status Code of OK, with the status of the Element now set to Complete'
+        assert serverResponse.statusLine.statusCode == HttpServletResponse.SC_OK
+        assert serverResponse.getFirstHeader('ETag')
+
     }
 }

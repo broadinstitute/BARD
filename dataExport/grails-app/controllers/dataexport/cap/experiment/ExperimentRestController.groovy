@@ -10,22 +10,23 @@ import org.codehaus.groovy.grails.web.servlet.HttpHeaders
 
 import javax.servlet.http.HttpServletResponse
 import javax.xml.stream.XMLOutputFactory
+import dataexport.cap.registration.UpdateStatusHelper
 
 /**
  * Please note that the DataExportFilters is applied to all incoming request.
  * ALL incoming request need to have a custom http header named 'APIKEY' and the correct MD5 hash value
  * In addition, the request's remote IP address has to be whitelisted in the commons-config file.
  */
-
+@Mixin(UpdateStatusHelper)
 class ExperimentRestController {
     ExperimentExportService experimentExportService
     ResultExportService resultExportService
     GrailsApplication grailsApplication
     static allowedMethods = [
             experiment: "GET",
-            updateExperiment: "PATCH",
+            updateExperiment: "PUT",
             result: "GET",
-            updateResult: "PATCH",
+            updateResult: "PUT",
             experiments: "GET",
             results: "GET"
     ]
@@ -56,7 +57,7 @@ class ExperimentRestController {
                 } else {
                     response.status = HttpServletResponse.SC_OK
                 }
-                render (text: markupWriter.toString(), contentType: mimeType, encoding: responseContentTypeEncoding)
+                render(text: markupWriter.toString(), contentType: mimeType, encoding: responseContentTypeEncoding)
                 //now set the writer
                 return
             }
@@ -94,7 +95,7 @@ class ExperimentRestController {
                 } else {
                     response.status = HttpServletResponse.SC_OK
                 }
-                render (text: markupWriter.toString(), contentType: mimeType, encoding: responseContentTypeEncoding)
+                render(text: markupWriter.toString(), contentType: mimeType, encoding: responseContentTypeEncoding)
                 //now set the writer
                 return
             }
@@ -107,6 +108,7 @@ class ExperimentRestController {
         }
     }
 
+
     def experiment(Integer id) {
         try {
             final String mimeType = grailsApplication.config.bard.data.export.experiment.xml
@@ -116,7 +118,7 @@ class ExperimentRestController {
                 final MarkupBuilder markupBuilder = new MarkupBuilder(markupWriter)
                 final Long eTag = this.experimentExportService.generateExperiment(markupBuilder, id)
                 response.addHeader(HttpHeaders.ETAG, eTag.toString())
-                render (text: markupWriter.toString(), contentType: mimeType, encoding: responseContentTypeEncoding)
+                render(text: markupWriter.toString(), contentType: mimeType, encoding: responseContentTypeEncoding)
                 return
             }
             response.status = HttpServletResponse.SC_BAD_REQUEST
@@ -143,7 +145,7 @@ class ExperimentRestController {
                 final MarkupBuilder markupBuilder = new MarkupBuilder(markupWriter)
                 final Long eTag = this.resultExportService.generateResult(markupBuilder, id)
                 response.addHeader(HttpHeaders.ETAG, eTag.toString())
-                render (text: markupWriter.toString(), contentType: mimeType, encoding: responseContentTypeEncoding)
+                render(text: markupWriter.toString(), contentType: mimeType, encoding: responseContentTypeEncoding)
                 return
             }
             response.status = HttpServletResponse.SC_BAD_REQUEST
@@ -160,13 +162,16 @@ class ExperimentRestController {
         }
     }
 
-    def updateResult() {
-        response.status = HttpServletResponse.SC_NOT_IMPLEMENTED
-        render ""
+    def updateResult(Long id) {
+       updateDomainObject(this.resultExportService,id)
     }
-
-    def updateExperiment() {
-        response.status = HttpServletResponse.SC_NOT_IMPLEMENTED
-        render ""
+    /**
+     * We lock it so that no operation can update results and the current experiment
+     * Means NCGC is processing the experiment at the current time
+     * @param id
+     * @return
+     */
+    def updateExperiment(Integer id) {
+        updateDomainObject(this.experimentExportService,id)
     }
 }
