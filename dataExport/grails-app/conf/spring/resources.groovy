@@ -24,6 +24,7 @@ beans = {
         mediaTypes = mediaTypesDTO
         grailsLinkGenerator = ref('grailsLinkGenerator')
         dataSource=ref('dataSource')
+        utilityService=ref('utilityService')
     }
 
     experimentExportService(dataexport.experiment.ExperimentExportService) {
@@ -31,6 +32,7 @@ beans = {
         mediaTypeDTO = mediaTypesDTO
         grailsLinkGenerator = ref('grailsLinkGenerator')
         resultExportService= ref('resultExportService')
+        utilityService=ref('utilityService')
     }
     //inject element mime type here
     dictionaryExportHelperService(dataexport.dictionary.DictionaryExportHelperService, mediaTypesDTO) {
@@ -44,9 +46,10 @@ beans = {
 
     assayExportHelperService(dataexport.registration.AssayExportHelperService, mediaTypesDTO) {
         grailsLinkGenerator = ref('grailsLinkGenerator')
-    }
+     }
 
     projectExportService(dataexport.experiment.ProjectExportService, mediaTypesDTO) {
         grailsLinkGenerator = ref('grailsLinkGenerator')
+        utilityService=ref('utilityService')
     }
 }

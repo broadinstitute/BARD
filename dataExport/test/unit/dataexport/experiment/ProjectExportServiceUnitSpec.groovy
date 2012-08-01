@@ -27,7 +27,7 @@ class ProjectExportServiceUnitSpec extends Specification {
 
 
     void setup() {
-        LinkGenerator grailsLinkGenerator = Mock()
+        LinkGenerator grailsLinkGenerator = Mock(LinkGenerator.class)
         MediaTypesDTO mediaTypesDTO = new MediaTypesDTO(projectMediaType: "projectMediaType", projectsMediaType: "projectsMediaType")
 
         this.projectExportService = new ProjectExportService(mediaTypesDTO)

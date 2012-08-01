@@ -51,13 +51,13 @@ class ProjectExportServiceIntegrationSpec extends IntegrationSpec {
         assert bardHttpResponse
         assert bardHttpResponse.ETag == expectedETag
         assert bardHttpResponse.httpResponseCode == expectedStatusCode
-
+        assert Project.get(projectId).readyForExtraction == expectStatus
         where:
-        label                                             | expectedStatusCode                         | expectedETag | projectId   | version | status
-        "Return OK and ETag 1"                            | HttpServletResponse.SC_OK                  | new Long(1)  | new Long(1) | 0       | "Complete"
-        "Return CONFLICT and ETag 0"                      | HttpServletResponse.SC_CONFLICT            | new Long(0)  | new Long(1) | -1      | "Complete"
-        "Return PRECONDITION_FAILED and ETag 0"           | HttpServletResponse.SC_PRECONDITION_FAILED | new Long(0)  | new Long(1) | 2       | "Complete"
-        "Return OK and ETag 0, Already completed Project" | HttpServletResponse.SC_OK                  | new Long(0)  | new Long(3) | 0       | "Complete"
+        label                                             | expectedStatusCode                         | expectedETag | projectId   | version | status     | expectStatus
+        "Return OK and ETag 1"                            | HttpServletResponse.SC_OK                  | new Long(1)  | new Long(1) | 0       | "Complete" | "Complete"
+        "Return CONFLICT and ETag 0"                      | HttpServletResponse.SC_CONFLICT            | new Long(0)  | new Long(1) | -1      | "Complete" | "Ready"
+        "Return PRECONDITION_FAILED and ETag 0"           | HttpServletResponse.SC_PRECONDITION_FAILED | new Long(0)  | new Long(1) | 2       | "Complete" | "Ready"
+        "Return OK and ETag 0, Already completed Project" | HttpServletResponse.SC_OK                  | new Long(0)  | new Long(3) | 0       | "Complete" | "Complete"
     }
 
     void "test generate and validate Project #label"() {

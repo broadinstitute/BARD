@@ -37,20 +37,20 @@ class ExperimentExportServiceIntegrationSpec extends IntegrationSpec {
     void "test update #label"() {
         given: "Given an Experiment with id #id and version #version"
         when: "We call the experiment service to update this experiment"
-        final BardHttpResponse bardHttpResponse = this.experimentExportService.update(experimentId, version,status)
+        final BardHttpResponse bardHttpResponse = this.experimentExportService.update(experimentId, version, status)
 
         then: "An ETag of #expectedETag is returned together with an HTTP Status of #expectedStatusCode"
         assert bardHttpResponse
         assert bardHttpResponse.ETag == expectedETag
         assert bardHttpResponse.httpResponseCode == expectedStatusCode
-
+        assert Experiment.get(experimentId).readyForExtraction == expectedStatus
         where:
-        label                                                | expectedStatusCode                         | expectedETag | experimentId | version | status
-        "Return OK and ETag 1"                               | HttpServletResponse.SC_OK                  | new Long(1)  | new Long(1)  | 0       | "Complete"
-        "Return NOT_ACCEPTABLE and ETag 0"                   | HttpServletResponse.SC_NOT_ACCEPTABLE      | new Long(0)  | new Long(2)  | 0       | "Complete"
-        "Return CONFLICT and ETag 0"                         | HttpServletResponse.SC_CONFLICT            | new Long(0)  | new Long(1)  | -1      | "Complete"
-        "Return PRECONDITION_FAILED and ETag 0"              | HttpServletResponse.SC_PRECONDITION_FAILED | new Long(0)  | new Long(1)  | 2       | "Complete"
-        "Return OK and ETag 0, Already completed Experiment" | HttpServletResponse.SC_OK                  | new Long(0)  | new Long(23) | 0       | "Complete"
+        label                                                | expectedStatusCode                         | expectedETag | experimentId | version | status     | expectedStatus
+        "Return OK and ETag 1"                               | HttpServletResponse.SC_OK                  | new Long(1)  | new Long(1)  | 0       | "Complete" | "Complete"
+        "Return NOT_ACCEPTABLE and ETag 0"                   | HttpServletResponse.SC_NOT_ACCEPTABLE      | new Long(0)  | new Long(2)  | 0       | "Complete" | "Ready"
+        "Return CONFLICT and ETag 0"                         | HttpServletResponse.SC_CONFLICT            | new Long(0)  | new Long(1)  | -1      | "Complete" | "Ready"
+        "Return PRECONDITION_FAILED and ETag 0"              | HttpServletResponse.SC_PRECONDITION_FAILED | new Long(0)  | new Long(1)  | 2       | "Complete" | "Ready"
+        "Return OK and ETag 0, Already completed Experiment" | HttpServletResponse.SC_OK                  | new Long(0)  | new Long(23) | 0       | "Complete" | "Complete"
     }
 
 

@@ -8,11 +8,13 @@ import org.codehaus.groovy.grails.web.mapping.LinkGenerator
 import dataexport.registration.BardHttpResponse
 import javax.servlet.http.HttpServletResponse
 import dataexport.registration.UpdateType
+import dataexport.util.UtilityService
 
 class ProjectExportService {
     LinkGenerator grailsLinkGenerator
     final String projectMediaType
     final String projectsMediaType
+    UtilityService utilityService
 
     //This is instantiated from resources.groovy
     ProjectExportService(final MediaTypesDTO mediaTypesDTO) {
@@ -36,22 +38,7 @@ class ProjectExportService {
      */
     public BardHttpResponse update(final Long id, final Long clientVersion, final String latestStatus) {
         final Project project = Project.findById(id)
-        if (!project) { //we could not find the element
-            throw new NotFoundException("Project with ID: ${id}, could not be found")
-        }
-        if (project.version > clientVersion) { //There is a conflict, supplied version is less than the current version
-            return new BardHttpResponse(httpResponseCode: HttpServletResponse.SC_CONFLICT, ETag: project.version)
-        }
-        if (project.version != clientVersion) {//supplied version is not equal to the version in database
-            return new BardHttpResponse(httpResponseCode: HttpServletResponse.SC_PRECONDITION_FAILED, ETag: project.version)
-        }
-        final String currentStatus = project.readyForExtraction
-        if (currentStatus != latestStatus) {
-            project.readyForExtraction = latestStatus
-            project.save(flush: true)
-        }
-        //we probably should supply a new version
-        return new BardHttpResponse(httpResponseCode: HttpServletResponse.SC_OK, ETag: project.version)
+        return utilityService.update(project,id,clientVersion,latestStatus,"Project")
     }
     /**
      * Generate a Project

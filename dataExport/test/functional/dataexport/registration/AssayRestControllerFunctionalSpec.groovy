@@ -227,6 +227,6 @@ class AssayRestControllerFunctionalSpec extends Specification {
         then: 'We expect an HTTP Status Code of OK, with the status of the Assay now set to Complete'
         assert serverResponse.statusLine.statusCode == HttpServletResponse.SC_OK
         assert serverResponse.getFirstHeader('ETag')
-
+        assert serverResponse.getFirstHeader('ETag').value == "1"
     }
 }
