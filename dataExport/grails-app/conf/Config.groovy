@@ -158,8 +158,6 @@ log4j = {
 
 dataexport.externalapplication.apiKey.header = 'APIKEY'
 dataexport.externalapplication.apiKey.hashed = 'changeMe'
-dataexport.externalapplication.ipAddress.whiteList = ['127.0.0.1': 'local address - IPv4', //localhost
-        '0:0:0:0:0:0:0:1': 'local address - IPv6'] //localhost
 
 /**
  * Loads external config files from the .grails subfolder in the user's home directory
