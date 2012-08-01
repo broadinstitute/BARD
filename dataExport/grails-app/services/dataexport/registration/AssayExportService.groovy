@@ -6,10 +6,11 @@ import exceptions.NotFoundException
 import groovy.xml.MarkupBuilder
 
 import javax.servlet.http.HttpServletResponse
+import dataexport.util.UtilityService
 
 class AssayExportService {
     AssayExportHelperService assayExportHelperService
-
+    UtilityService utilityService
     /**
      * Stream an assay document
      * @param markupBuilder
@@ -41,25 +42,7 @@ class AssayExportService {
      * Returns the HTTPStatus Code
      */
     public BardHttpResponse update(final Long assayId, final Long clientVersion, final String latestStatus) {
-
-        final Assay assay = Assay.findById(assayId)
-        if (!assay) { //we could not find the element
-            throw new NotFoundException("Assay Document with ID: ${assayId}, could not be found")
-        }
-        if (assay.version > clientVersion) { //There is a conflict, supplied version is less than the current version
-            return new BardHttpResponse(httpResponseCode: HttpServletResponse.SC_CONFLICT, ETag: assay.version)
-        }
-        if (assay.version != clientVersion) {//supplied version is not equal to the version in database
-            return new BardHttpResponse(httpResponseCode: HttpServletResponse.SC_PRECONDITION_FAILED, ETag: assay.version)
-        }
-
-        //no-op if the status is already completed
-        final String currentStatus = assay.readyForExtraction
-        if (currentStatus != latestStatus) {
-            assay.readyForExtraction = latestStatus
-            assay.save(flush: true)
-        }
-        return new BardHttpResponse(httpResponseCode: HttpServletResponse.SC_OK, ETag: assay.version)
+       return utilityService.update(Assay.get(assayId),assayId,clientVersion,latestStatus,"Assay")
     }
     /**
      * Stub for generating assays with status of Ready

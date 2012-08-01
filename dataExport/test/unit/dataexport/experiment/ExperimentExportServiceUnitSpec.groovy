@@ -11,7 +11,6 @@ import bard.db.registration.ExternalReference
 import bard.db.registration.ExternalSystem
 import common.tests.XmlTestAssertions
 import common.tests.XmlTestSamples
-import dataexport.registration.BardHttpResponse
 import dataexport.registration.MediaTypesDTO
 import exceptions.NotFoundException
 import grails.test.mixin.Mock
@@ -38,7 +37,7 @@ class ExperimentExportServiceUnitSpec extends Specification {
 
     void setup() {
         this.experimentExportService = this.service
-        LinkGenerator grailsLinkGenerator = Mock()
+        LinkGenerator grailsLinkGenerator = Mock(LinkGenerator.class)
 
         final MediaTypesDTO mediaTypesDTO =
             new MediaTypesDTO(experimentsMediaType: "experimentsMediaType",

@@ -10,21 +10,21 @@ import bard.db.experiment.ResultContextItem
 import bard.db.experiment.ResultHierarchy
 import dataexport.registration.BardHttpResponse
 import dataexport.registration.MediaTypesDTO
-import dataexport.registration.UpdateType
 import exceptions.NotFoundException
 import groovy.sql.Sql
 import groovy.xml.MarkupBuilder
 import groovy.xml.StaxBuilder
 import org.codehaus.groovy.grails.web.mapping.LinkGenerator
 
-import javax.servlet.http.HttpServletResponse
 import javax.sql.DataSource
+import dataexport.util.UtilityService
 
 class ResultExportService {
     LinkGenerator grailsLinkGenerator
     MediaTypesDTO mediaTypes
     int maxResultsRecordsPerPage
     DataSource dataSource
+    UtilityService utilityService
     /**
      * Set the ReadyForExtraction value on the element to 'Complete'
      *
@@ -40,22 +40,7 @@ class ResultExportService {
      */
     public BardHttpResponse update(final Long id, final Long clientVersion, final String latestStatus) {
         final Result result = Result.findById(id)
-        if (!result) { //we could not find the element
-            throw new NotFoundException("Result with ID: ${id}, could not be found")
-        }
-        if (result.version > clientVersion) { //There is a conflict, supplied version is less than the current version
-            return new BardHttpResponse(httpResponseCode: HttpServletResponse.SC_CONFLICT, ETag: result.version)
-        }
-        if (result.version != clientVersion) {//supplied version is not equal to the version in database
-            return new BardHttpResponse(httpResponseCode: HttpServletResponse.SC_PRECONDITION_FAILED, ETag: result.version)
-        }
-        final String currentStatus = result.readyForExtraction
-        if (currentStatus != latestStatus) {
-            result.readyForExtraction = latestStatus
-            result.save(flush: true)
-        }
-        //we probably should supply a new version
-        return new BardHttpResponse(httpResponseCode: HttpServletResponse.SC_OK, ETag: result.version)
+        return utilityService.update(result,id,clientVersion,latestStatus,"Result")
     }
     /**
      * Generate the results for a given experiment

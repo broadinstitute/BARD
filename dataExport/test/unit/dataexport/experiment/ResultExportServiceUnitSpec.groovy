@@ -33,8 +33,8 @@ class ResultExportServiceUnitSpec extends Specification {
     StaxBuilder staxBuilder
 
     ResultExportService resultExportService
-    DataSource dataSource = Mock()
-    LinkGenerator grailsLinkGenerator = Mock()
+    DataSource dataSource = Mock(DataSource.class)
+    LinkGenerator grailsLinkGenerator = Mock(LinkGenerator.class)
 
     def cleanup() {
         Sql.metaClass = null

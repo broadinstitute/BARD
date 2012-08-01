@@ -1,5 +1,6 @@
 package dataexport.dictionary
 
+import bard.db.dictionary.Element
 import common.tests.XmlTestAssertions
 import common.tests.XmlTestSamples
 import dataexport.registration.BardHttpResponse
@@ -29,14 +30,16 @@ class DictionaryExportServiceIntegrationSpec extends IntegrationSpec {
     void tearDown() {
         // Tear down logic here
     }
+
     void "test update Not Found Status"() {
         given: "Given a non-existing Element"
         when: "We call the dictionary service to update this element"
-        this.dictionaryExportService.update(new Long(100000), 0,"element")
+        this.dictionaryExportService.update(new Long(100000), 0, "element")
 
         then: "An exception is thrown, indicating that the element does not exist"
         thrown(NotFoundException)
     }
+
     void "test update #label"() {
         given: "Given an Element with id #id and version #version"
         when: "We call the dictionary service to update this project"
@@ -46,13 +49,14 @@ class DictionaryExportServiceIntegrationSpec extends IntegrationSpec {
         assert bardHttpResponse
         assert bardHttpResponse.ETag == expectedETag
         assert bardHttpResponse.httpResponseCode == expectedStatusCode
+        assert Element.get(elementId).readyForExtraction == expectedStatus
 
         where:
-        label                                             | expectedStatusCode                         | expectedETag | elementId     | version | status
-        "Return OK and ETag 1"                            | HttpServletResponse.SC_OK                  | new Long(1)  | new Long(386) | 0       | "Complete"
-        "Return CONFLICT and ETag 0"                      | HttpServletResponse.SC_CONFLICT            | new Long(0)  | new Long(386) | -1      | "Complete"
-        "Return PRECONDITION_FAILED and ETag 0"           | HttpServletResponse.SC_PRECONDITION_FAILED | new Long(0)  | new Long(386) | 2       | "Complete"
-        "Return OK and ETag 0, Already completed Element" | HttpServletResponse.SC_OK                  | new Long(0)  | new Long(368) | 0       | "Complete"
+        label                                             | expectedStatusCode                         | expectedETag | elementId     | version | status     | expectedStatus
+        "Return OK and ETag 1"                            | HttpServletResponse.SC_OK                  | new Long(1)  | new Long(386) | 0       | "Complete" | "Complete"
+        "Return CONFLICT and ETag 0"                      | HttpServletResponse.SC_CONFLICT            | new Long(0)  | new Long(386) | -1      | "Complete" | "Ready"
+        "Return PRECONDITION_FAILED and ETag 0"           | HttpServletResponse.SC_PRECONDITION_FAILED | new Long(0)  | new Long(386) | 2       | "Complete" | "Ready"
+        "Return OK and ETag 0, Already completed Element" | HttpServletResponse.SC_OK                  | new Long(0)  | new Long(368) | 0       | "Complete" | "Complete"
     }
 
     void "test generate Stage"() {

@@ -6,6 +6,8 @@ import bard.db.dictionary.Stage
 import dataexport.cap.dictionary.DictionaryRestController
 import dataexport.cap.registration.UpdateStatusHelper
 import dataexport.registration.BardHttpResponse
+import dataexport.util.UtilityService
+import exceptions.NotFoundException
 import grails.test.mixin.Mock
 import grails.test.mixin.TestFor
 import org.codehaus.groovy.grails.web.servlet.HttpHeaders
@@ -13,7 +15,6 @@ import spock.lang.Specification
 import spock.lang.Unroll
 
 import javax.servlet.http.HttpServletResponse
-import exceptions.NotFoundException
 
 /**
  *
@@ -25,6 +26,9 @@ class DictionaryRestControllerUnitSpec extends Specification {
 
     void setup() {
         controller.metaClass.mixin(UpdateStatusHelper)
+        controller.dictionaryExportService = Mock(DictionaryExportService.class)
+        controller.dictionaryExportService.utilityService = Mock(UtilityService.class)
+
     }
 
     void tearDown() {
@@ -33,7 +37,6 @@ class DictionaryRestControllerUnitSpec extends Specification {
 
     void "test update element, 200 Status"() {
         given: "An Element with an id of 1, a version of 0 and a status of Complete"
-        controller.dictionaryExportService = Mock(DictionaryExportService.class)
         request.method = 'PUT'
         controller.request.addHeader(HttpHeaders.IF_MATCH, "0")
         controller.params.id = "1"
@@ -50,10 +53,8 @@ class DictionaryRestControllerUnitSpec extends Specification {
 
     void "test update element, #label"() {
         given: "An Element with an id of #id, a version of #version and a status of #readyForExtraction"
-        controller.dictionaryExportService = Mock(DictionaryExportService.class)
         request.method = 'PUT'
         controller.request.addHeader(IF_MATCH, version)
-        //controller.params.id = id
         controller.request.content = readyForExtraction
 
         0 * controller.dictionaryExportService.update(_, _, _) >> {
@@ -70,15 +71,15 @@ class DictionaryRestControllerUnitSpec extends Specification {
         "No id supplied"              | null | 0       | "Complete"         | 400                    | HttpHeaders.IF_MATCH
         "No If_Match header supplied" | 1    | 0       | "Complete"         | 400                    | "None"
     }
+
     void "test update element throw NotFoundException"() {
         given: "An Element with an id of '1', a version of '0' and a status of 'Complete'"
-        controller.dictionaryExportService = Mock(DictionaryExportService.class)
         request.method = 'PUT'
         controller.request.addHeader(HttpHeaders.IF_MATCH, "0")
         controller.request.content = "Complete"
 
-       1 * controller.dictionaryExportService.update(_, _, _) >> {
-          throw new NotFoundException("message")
+        1 * controller.dictionaryExportService.update(_, _, _) >> {
+            throw new NotFoundException("message")
         }
         when: "We do an HTTP PUT on the DictionaryController, the updateElement method is called which increments the version and applies the status to the element"
         controller.updateElement(2)
@@ -87,14 +88,14 @@ class DictionaryRestControllerUnitSpec extends Specification {
         response.status == HttpServletResponse.SC_NOT_FOUND
 
     }
+
     void "test update element throw Exception - Internal Server Error"() {
         given: "An Element with an id of '1', a version of '0' and a status of 'Complete'"
-        controller.dictionaryExportService = Mock(DictionaryExportService.class)
         request.method = 'PUT'
         controller.request.addHeader(HttpHeaders.IF_MATCH, "0")
         controller.request.content = "Complete"
 
-        1 * controller.dictionaryExportService.update(_, _, _) >> {
+        controller.dictionaryExportService.update(_, _, _) >> {
             throw new Exception("message")
         }
         when: "We do an HTTP PUT on the DictionaryController, the updateElement method is called which increments the version and applies the status to the element"
@@ -104,9 +105,9 @@ class DictionaryRestControllerUnitSpec extends Specification {
         response.status == HttpServletResponse.SC_INTERNAL_SERVER_ERROR
 
     }
+
     void "test update element, 400 Status, because status is not understood by server"() {
         given: "An Element with an id of 1, a version of 0 and a status of 'InComplete'"
-        controller.dictionaryExportService = Mock(DictionaryExportService.class)
         request.method = 'PUT'
         controller.request.addHeader(HttpHeaders.IF_MATCH, "0")
         controller.params.id = "1"
@@ -123,7 +124,6 @@ class DictionaryRestControllerUnitSpec extends Specification {
 
     void "test update element, 400 Status"() {
         given: "An Element with an id of 1, a version of 0 and no status"
-        controller.dictionaryExportService = Mock(DictionaryExportService.class)
         request.method = 'PUT'
         controller.request.addHeader(HttpHeaders.IF_MATCH, "0")
         controller.params.id = "1"
@@ -142,7 +142,6 @@ class DictionaryRestControllerUnitSpec extends Specification {
      */
     void "test  dictionary #label"() {
         given:
-        controller.dictionaryExportService = Mock(DictionaryExportService.class)
         when:
         request.method = 'GET'
         controller.request.addHeader(HttpHeaders.ACCEPT, mimeType)
@@ -161,19 +160,18 @@ class DictionaryRestControllerUnitSpec extends Specification {
      */
     void "test  result type #label"() {
         given:
-        controller.dictionaryExportService = Mock(DictionaryExportService.class)
         request.method = 'GET'
         controller.request.addHeader(HttpHeaders.ACCEPT, mimeType)
         controller.params.id = id
 
         when:
-        controller.resultType()
+        controller.resultType(id)
         then:
         expectedResults == response.status
         where:
         label                     | id   | mimeType                                       | expectedResults
-        "Expects 200 OK"          | "5"  | "application/vnd.bard.cap+xml;type=resultType" | HttpServletResponse.SC_OK
-        "Expects 400 Bad request" | "2"  | "bogus.mime.type"                              | HttpServletResponse.SC_BAD_REQUEST
+        "Expects 200 OK"          | 5    | "application/vnd.bard.cap+xml;type=resultType" | HttpServletResponse.SC_OK
+        "Expects 400 Bad request" | 2    | "bogus.mime.type"                              | HttpServletResponse.SC_BAD_REQUEST
         "Expects 400 Bad request" | null | "application/vnd.bard.cap+xml;type=resultType" | HttpServletResponse.SC_BAD_REQUEST
     }
     /**
@@ -181,19 +179,18 @@ class DictionaryRestControllerUnitSpec extends Specification {
      */
     void "test  stage #label #id"() {
         given:
-        controller.dictionaryExportService = Mock(DictionaryExportService.class)
         request.method = 'GET'
         controller.request.addHeader(HttpHeaders.ACCEPT, mimeType)
         controller.params.id = id
 
         when:
-        controller.stage()
+        controller.stage(id)
         then:
         expectedResults == response.status
         where:
         label                     | id   | mimeType                                  | expectedResults
-        "Expects 200 OK"          | "5"  | "application/vnd.bard.cap+xml;type=stage" | HttpServletResponse.SC_OK
-        "Expects 400 Bad request" | "2"  | "bogus.mime.type"                         | HttpServletResponse.SC_BAD_REQUEST
+        "Expects 200 OK"          | 5    | "application/vnd.bard.cap+xml;type=stage" | HttpServletResponse.SC_OK
+        "Expects 400 Bad request" | 2    | "bogus.mime.type"                         | HttpServletResponse.SC_BAD_REQUEST
         "Expects 400 Bad request" | null | "application/vnd.bard.cap+xml;type=stage" | HttpServletResponse.SC_BAD_REQUEST
     }
     /**
@@ -201,18 +198,17 @@ class DictionaryRestControllerUnitSpec extends Specification {
      */
     void "test  element #label #id"() {
         given:
-        controller.dictionaryExportService = Mock(DictionaryExportService.class)
         params.id = id
         request.method = 'GET'
         controller.request.addHeader(HttpHeaders.ACCEPT, mimeType)
         when:
-        controller.element()
+        controller.element(id)
         then:
         expectedResults == response.status
         where:
         label                     | id   | mimeType                                    | expectedResults
-        "Expects 200 OK"          | "5"  | "application/vnd.bard.cap+xml;type=element" | HttpServletResponse.SC_OK
-        "Expects 400 Bad request" | "2"  | "bogus.mime.type"                           | HttpServletResponse.SC_BAD_REQUEST
+        "Expects 200 OK"          | 5    | "application/vnd.bard.cap+xml;type=element" | HttpServletResponse.SC_OK
+        "Expects 400 Bad request" | 2    | "bogus.mime.type"                           | HttpServletResponse.SC_BAD_REQUEST
         "Expects 400 Bad request" | null | "application/vnd.bard.cap+xml;type=element" | HttpServletResponse.SC_BAD_REQUEST
     }
 }
