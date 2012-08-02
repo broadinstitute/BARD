@@ -4,6 +4,7 @@
 <head>
 <r:require modules="core"/>
 <meta name="layout" content="basic"/>
+<link rel="stylesheet" href="${resource(dir: 'css', file: 'card.css')}" type="text/css">
 <title>Assay Definition</title>
 <r:script>
 	$(document).ready(function() {
@@ -68,8 +69,36 @@
 				</li>
 				</g:if>
 			</div>
-			
-			<!-- Assay Documents fields -->
+
+            <h3><a href="#">Assay and Biology Details</a></h3>
+            <div class="cardView">
+                <table>
+                <tr><td>
+                    <g:each in="${cardDtoList}" status="cardIndex" var="card">
+
+                        <g:if test="${(cardIndex % 3) == 0 && cardIndex != 0}">
+                            </td></tr><tr><td>
+                        </g:if>
+
+                        <div class="card">
+                            <table class="gridtable">
+                                <caption>${card.title}</caption>
+                                <tbody>
+                                <g:each in="${card.lines}" status="i" var="line">
+                                    <tr class="${(i % 2) == 0 ? 'even' : 'odd'}">
+                                        <td>${line.attributeLabel}</td>
+                                        <td>${line.valueLabel}</td>
+                                    </tr>
+                                </g:each>
+                                </tbody>
+                            </table>
+                        </div>
+                    </g:each>
+                </td></tr>
+                </table>
+            </div>
+
+    <!-- Assay Documents fields -->
 			<h3><a href="#">Documents</a></h3>
 			<div>
 				

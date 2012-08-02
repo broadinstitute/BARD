@@ -16,19 +16,25 @@ class AssayDefinitionControllerUnitSpec extends Specification {
 
     @Before
     void setup() {
-        assay = new Assay(assayName: "Test", assayVersion: "1", dateCreated: new Date())
+        assay = new Assay(assayName: "Test", assayVersion: "1")
         assay.setId(4)
         assay.save()
         assert assay.validate()
     }
 
     void 'test show'() {
+        given:
+        defineBeans {
+            cardFactoryService(CardFactoryService)
+        }
+
         when:
         params.id = 4
         def model = controller.show()
 
         then:
         model.assayInstance == assay
+        model.cardDtoList != null
     }
 
     void 'testFindById()'() {
