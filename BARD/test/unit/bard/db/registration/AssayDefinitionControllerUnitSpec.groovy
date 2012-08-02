@@ -8,6 +8,8 @@ import spock.lang.Specification
 /**
  * See the API for {@link grails.test.mixin.support.GrailsUnitTestMixin} for usage instructions
  */
+
+
 @TestFor(AssayDefinitionController)
 @Mock(Assay)
 class AssayDefinitionControllerUnitSpec extends Specification {
@@ -16,7 +18,8 @@ class AssayDefinitionControllerUnitSpec extends Specification {
 
     @Before
     void setup() {
-        assay = new Assay(assayName: "Test", assayVersion: "1")
+        assay = new Assay(assayName: "Test", assayVersion: "1", assayStatus: 'Pending',
+                readyForExtraction: 'Ready', assayType: 'Regular',dateCreated: new Date())
         assay.setId(4)
         assay.save()
         assert assay.validate()
