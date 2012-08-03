@@ -2,7 +2,9 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <meta name="layout" content="main"/>
     <r:require modules="core"/>
+    <r:require modules="bootstrap"/>
 
     <r:script>
         $(document).ready(function () {
@@ -11,7 +13,6 @@
                 minLength:2
             };
             $("#searchString").autocomplete(autoOpts);
-            $("#accordion").accordion({ autoHeight:false });
 
             <%-- An even handler to open (bring-to-front) the MarvinSketch modal window. Opens MarvingSketch in a new gsp: marvinSketch.gsp --%>
             $('#structureModal').click(
@@ -39,9 +40,6 @@
             });
         });
     </r:script>
-    <r:layoutResources/>
-    <r:require modules="bootstrap"/>
-
 
     <title>BARD Home</title>
 </head>
@@ -86,18 +84,33 @@
         <br/>
         <br/>
     </div>
-
-    <div id="accordion">
-        <g:render template="assays"/>
-        <g:render template="compounds"/>
-        <g:render template="experiments"/>
-        <g:render template="projects"/>
-    </div>    <!-- End accordion -->
-
 </div><!-- End body div -->
+<div id="resultTab">
+    <ul id="resultTabUL" class="nav nav-tabs">
+        <li class="active"><a href="#assays" data-toggle="tab">Assays (${assays.size()})</a></li>
+        <li><a href="#compounds" data-toggle="tab">Compounds (${compounds.size()})</a></li>
+        <li><a href="#experiments" data-toggle="tab">Experiments (${experiments.size()})</a></li>
+        <li><a href="#projects" data-toggle="tab">Projects (${projects.size()})</a></li>
+    </ul>
 
-<r:layoutResources/>
-<r:require modules="bootstrap"/>
+    <div id="resultTabContent" class="tab-content">
+        <div class="tab-pane fade in active" id="assays">
+            <g:render template="assays"/>
+        </div>
+
+        <div class="tab-pane fade" id="compounds">
+            <g:render template="compounds"/>
+        </div>
+
+        <div class="tab-pane fade" id="experiments">
+            <g:render template="experiments"/>
+        </div>
+
+        <div class="tab-pane fade" id="projects">
+            <g:render template="projects"/>
+        </div>
+    </div>
+</div>    <!-- End accordion -->
 
 <%-- MarvinSketch's modal window --%>
 <div id="modalDiv">
