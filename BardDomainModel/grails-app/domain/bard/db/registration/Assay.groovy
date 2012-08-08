@@ -17,7 +17,7 @@ class Assay {
     String assayName
     String assayVersion
     String designedBy
-    String readyForExtraction = 'Ready'
+    String readyForExtraction = 'Pending'
     String assayType = 'Regular'
 
     String modifiedBy
@@ -44,7 +44,7 @@ class Assay {
         assayName(maxSize: ASSAY_NAME_MAX_SIZE, blank: false)
         assayVersion(maxSize: ASSAY_VERSION_MAX_SIZE, blank: false, matches: /\d+/)   // does this need to look like a number
         designedBy(nullable: true, maxSize: DESIGNED_BY_MAX_SIZE)
-        readyForExtraction(maxSize: READY_FOR_EXTRACTION_MAX_SIZE, blank: false, inList: ["Ready", "Started", "Complete"])
+        readyForExtraction(maxSize: READY_FOR_EXTRACTION_MAX_SIZE, blank: false, inList: ["Pending","Ready", "Started", "Complete"])
         assayType(inList: ['Regular', 'Panel - Array', 'Panel - Group'])
 
         dateCreated(nullable: false)
