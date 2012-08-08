@@ -13,11 +13,11 @@ dataSource.dbCreate = System.getProperty('dataSource.dbCreate') ?: 'validate'
 environments {
     development {
         dataSource {
-            dbCreate = "create-drop" // one of 'create', 'create-drop', 'update', 'validate', ''
-            url = "jdbc:h2:mem:devDB"
-            driverClassName = "org.h2.Driver"
-            username = "sa"
-            password = ""
+            url = "jdbc:oracle:thin:@barddb:1521:bardqa"
+			driverClassName = "oracle.jdbc.driver.OracleDriver"
+			dialect = bard.SequencePerTableOracleDialect
+			username = "YCRUZ"
+			password = "YCRUZ"
         }
     }
     mysql {

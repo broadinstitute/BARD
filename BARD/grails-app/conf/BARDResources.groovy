@@ -5,11 +5,22 @@ modules = {
 		}
 	}
 	core {
-		dependsOn 'jquery, jquery-ui, jquery-theme'
+		dependsOn 'jquery, jquery-ui, jquery-theme, underscore, backbone'
 		//resource url:'/css/main.css'
 		//resource url:'/css/mobile.css'
 		resource url:'/js/application.js'
+		resource url:'/backbone_example.js'
 	}
+	
+	backbone {
+		resource url: '/js/backbone.js'
+	}
+	
+	underscore {
+		resource url: '/js/underscore.js'
+	}
+	
 	images {
+		
 	}
 }

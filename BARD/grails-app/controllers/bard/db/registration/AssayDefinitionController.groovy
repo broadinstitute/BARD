@@ -11,6 +11,10 @@ class AssayDefinitionController {
 		redirect(action: "description", params: params)
 	}
 	
+	def example() {
+		
+	}
+	
 	def description() {
 		[assayInstance: new Assay(params)]
 	}	
