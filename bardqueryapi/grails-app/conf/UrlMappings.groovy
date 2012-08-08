@@ -7,7 +7,11 @@ class UrlMappings {
 			}
 		}
 
-		"/"(view:"/index")
-		"500"(view:'/error')
+    //    "/"(view:"/index")
+        "/"{
+              controller = "BardWebInterface"
+              action = "index"
+        }
+        "500"(view:'/error')
 	}
 }
