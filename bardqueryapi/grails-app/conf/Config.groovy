@@ -1,4 +1,5 @@
 import grails.util.Environment
+import org.apache.log4j.DailyRollingFileAppender
 
 // locations to search for config files that get merged into the main config
 // config files can either be Java properties files or ConfigSlurper scripts
@@ -12,7 +13,7 @@ import grails.util.Environment
 //    grails.config.locations << "file:" + System.properties["${appName}.config.location"]
 // }
 //Defaults
-bard.services.elasticSearchService.restNode.baseUrl="http://bard-dev-vm:9200"
+bard.services.elasticSearchService.restNode.baseUrl = "http://bard-dev-vm:9200"
 ncgc.server.root.url = "http://assay.nih.gov:8080"
 ncgc.server.username = "bogus"
 ncgs.server.password = "bogus"
@@ -106,9 +107,24 @@ log4j = {
     // Example of changing the log pattern for the default console
     // appender:
     //
-    //appenders {
-    //    console name:'stdout', layout:pattern(conversionPattern: '%c{2} %m%n')
-    //}
+    appenders {
+//        console name:'stdout', layout:pattern(conversionPattern: '%c{2} %m%n')
+        appender new DailyRollingFileAppender(
+                name: "NCGCResponseTimeAppender",
+                file: "logs/" + Environment.current.name + "/NCGC_ResponseTime.log",
+                layout: pattern(conversionPattern: '%m%n'),
+                immediateFlush: true,
+                threshold: org.apache.log4j.Level.INFO,
+                datePattern: "'.'yyyy-MM-dd"
+        )
+    }
+
+    environments {
+
+    }
+
+    //Capture the response time (round-trip + response parsing time) from NCGC API requests.
+    info NCGCResponseTimeAppender: 'grails.app.services.elasticsearchplugin.QueryExecutorService'
 
     error 'org.codehaus.groovy.grails.web.servlet',  //  controllers
             'org.codehaus.groovy.grails.web.pages', //  GSP

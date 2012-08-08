@@ -21,6 +21,7 @@ grails.project.dependency.resolution = {
         // specify dependencies here under either 'build', 'compile', 'runtime', 'test' or 'provided' scopes eg.
         runtime 'com.github.groovy-wslite:groovy-wslite:0.7.0'
         test "org.spockframework:spock-core:0.6-groovy-1.8"
+        compile 'org.apache.commons:commons-lang3:3.1'
     }
 
     plugins {
@@ -47,8 +48,8 @@ grails.project.repos.releases.username = "changeme"
 grails.project.repos.releases.password = "changme"
 
 grails.project.repos.snapshots.url = "http://bard-repo.broadinstitute.org:8081/artifactory/plugins-snapshot-local"
-grails.project.repos.snapshots.username = "changeme"
-grails.project.repos.snapshots.password = "changeme"
+//grails.project.repos.snapshots.username = "changeme"
+//grails.project.repos.snapshots.password = "changeme"
 
 codenarc.ruleSetFiles = "file:grails-app/conf/BardCodeNarcRuleSet.groovy"
 codenarc.reports = {
