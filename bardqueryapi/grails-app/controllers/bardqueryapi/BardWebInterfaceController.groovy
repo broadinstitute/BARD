@@ -25,6 +25,10 @@ class BardWebInterfaceController {
         homePage()
     }
 
+    def example() {
+
+    }
+
     def homePage() {
         render(view: "homePage", totalCompounds: 0, model: [assays: [], compounds: [], experiments: [], projects: []])
     }

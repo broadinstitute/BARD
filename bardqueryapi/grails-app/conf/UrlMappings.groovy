@@ -6,8 +6,12 @@ class UrlMappings {
 				// apply constraints here
 			}
 		}
+        "/bbgrid/$id?"(controller: "grid") {
+            action = [GET:"list", POST: "save", DELETE: "delete", PUT: "edit"]
+        }
 
-		"/"(view:"/index")
+
+        "/"(view:"/index")
 		"500"(view:'/error')
 	}
 }
