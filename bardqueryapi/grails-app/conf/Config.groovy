@@ -25,6 +25,7 @@ ncgc.server.accession.root.url = "${ncgc.server.root.url}/bard/rest/v1/targets/a
 ncgc.server.gene.root.url = "${ncgc.server.root.url}/bard/rest/v1/targets/geneid/"
 ncgc.server.structureSearch.root.url = "${ncgc.server.root.url}/bard/rest/v1/compounds"
 bard.assay.view.url = 'http://localhost:8081/BARD/ESAssay/show'
+bard.cap.home='http://localhost:8081/BARD'
 grails.project.groupId = appName // change this to alter the default package name and Maven publishing destination
 grails.mime.file.extensions = true // enables the parsing of file extensions from URLs into the request format
 grails.mime.use.accept.header = false
