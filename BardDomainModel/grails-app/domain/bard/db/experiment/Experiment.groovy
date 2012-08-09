@@ -16,7 +16,7 @@ class Experiment {
 	String modifiedBy
 	String experimentStatus
 	Assay assay
-	String readyForExtraction = 'Ready'
+	String readyForExtraction = 'Pending'
     Laboratory laboratory
 
 	static hasMany = [resultContextItems: ResultContextItem,
@@ -40,7 +40,7 @@ class Experiment {
 		lastUpdated nullable: true, maxSize: 19
 		modifiedBy nullable: true, maxSize: 40
 		experimentStatus maxSize: 20, nullable: false, inList: ["Pending", "Approved", "Rejected", "Revised"]
-		readyForExtraction maxSize: 20, nullable: false, inList: [ "Ready", "Started", "Complete" ]
+		readyForExtraction maxSize: 20, nullable: false, inList: [ "Pending","Ready", "Started", "Complete" ]
         laboratory nullable: true
 	}
 }

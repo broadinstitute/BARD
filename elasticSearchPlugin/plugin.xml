@@ -1,4 +1,4 @@
-<plugin name='elastic-search' version='0.4.3-SNAPSHOT' grailsVersion='2.0 &gt; *'>
+<plugin name='elastic-search' version='0.4.5-SNAPSHOT' grailsVersion='2.0 &gt; *'>
   <author>Broad Chemical Biology Platform</author>
   <authorEmail>bard-tech@broadinstitute.org</authorEmail>
   <title>Elastic Search Plugin</title>
@@ -21,6 +21,9 @@
     <test>
       <dependency group='org.spockframework' name='spock-core' version='0.6-groovy-1.8' />
     </test>
+    <compile>
+      <dependency group='org.apache.commons' name='commons-lang3' version='3.1' />
+    </compile>
     <runtime>
       <dependency group='com.github.groovy-wslite' name='groovy-wslite' version='0.7.0' />
     </runtime>

@@ -60,7 +60,7 @@ grails.project.dependency.resolution = {
         runtime ":jquery:1.7.1"
         runtime ":jquery-ui:1.8.15"
         runtime ":resources:1.1.6"
-        runtime ":elastic-search:0.4.2-SNAPSHOT"
+        runtime ":elastic-search:0.4.5-SNAPSHOT"
 
         // test scope
         test ":spock:0.6"

@@ -16,7 +16,7 @@ class Result {
     String resultStatus
     Element resultType
     String qualifier
-    String readyForExtraction = 'Ready'
+    String readyForExtraction = 'Pending'
 
     static hasMany = [resultHierarchiesForParentResult: ResultHierarchy,
             resultHierarchiesForResult: ResultHierarchy,
@@ -40,7 +40,7 @@ class Result {
         valueMax nullable: true
         dateCreated maxSize: 19
         lastUpdated nullable: true, maxSize: 19
-        readyForExtraction maxSize: 20, nullable: false, inList: ["Ready", "Started", "Complete"]
+        readyForExtraction maxSize: 20, nullable: false, inList: ["Pending","Ready", "Started", "Complete"]
 
         modifiedBy nullable: true, maxSize: 40
         substance nullable: false

@@ -12,7 +12,7 @@ class Project {
 	Date dateCreated
 	Date lastUpdated
 	String modifiedBy
-	String readyForExtraction = 'Ready'
+	String readyForExtraction = 'Pending'
 
 	static hasMany = [projectExperiments: ProjectExperiment, externalReferences:ExternalReference]
 
@@ -27,6 +27,6 @@ class Project {
 		dateCreated maxSize: 19
 		lastUpdated nullable: true, maxSize: 19
 		modifiedBy nullable: true, maxSize: 40
-		readyForExtraction maxSize: 20, nullable: false, inList: [ "Ready", "Started", "Complete" ]
+		readyForExtraction maxSize: 20, nullable: false, inList: [ "Pending","Ready", "Started", "Complete" ]
 	}
 }

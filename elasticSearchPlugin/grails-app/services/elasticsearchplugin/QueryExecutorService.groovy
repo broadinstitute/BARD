@@ -3,6 +3,7 @@ package elasticsearchplugin
 import wslite.rest.RESTClient
 import wslite.rest.RESTClientException
 import wslite.rest.Response
+import org.apache.commons.lang3.time.StopWatch
 
 class QueryExecutorService {
 
@@ -37,7 +38,13 @@ class QueryExecutorService {
 
         final RESTClient clonedRestClient = this.restClientFactoryService.createNewRestClient(url)
 
+        StopWatch sw = new StopWatch()
+        Date now = new Date()
+        sw.start()
         Response response = clonedRestClient.get(restClientParams)
+        sw.stop()
+        Map loggingMap = [url: url, requestMethod: response?.request?.method, time: now.format('MM/dd/yyyy  HH:mm:ss.S'), responseTimeInMilliSeconds: sw.time]
+        log.info(loggingMap.toString())
 
         return response.json
     }
@@ -46,7 +53,13 @@ class QueryExecutorService {
 
         final RESTClient clonedRestClient = this.restClientFactoryService.createNewRestClient(url)
 
+        StopWatch sw = new StopWatch()
+        Date now = new Date()
+        sw.start()
         Response response = clonedRestClient.get(restClientParams)
+        sw.stop()
+        Map loggingMap = [url: url, requestMethod: response?.request?.method, time: now.format('MM/dd/yyyy  HH:mm:ss.S'), responseTimeInMilliSeconds: sw.time]
+        log.info(loggingMap.toString())
 
         //check for no content and others
         return response.getContentAsString()
@@ -60,9 +73,17 @@ class QueryExecutorService {
      */
     def postRequest(final String url, final String data) throws RESTClientException {
         final RESTClient restClientClone = restClientFactoryService.createNewRestClient(url)
+
+        StopWatch sw = new StopWatch()
+        Date now = new Date()
+        sw.start()
         def response = restClientClone.post() {
             text data
         }
+        sw.stop()
+        Map loggingMap = [url: url, requestMethod: response?.request?.method, time: now.format('MM/dd/yyyy  HH:mm:ss.S'), responseTimeInMilliSeconds: sw.time]
+        log.info(loggingMap.toString())
+
         return response.json
     }
 }
