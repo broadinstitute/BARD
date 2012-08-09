@@ -122,7 +122,7 @@ class QueryService {
      * @param elasticSearchRootURL
      * @return
      */
-    private List<String> handleAutoComplete(final String term) {
+    protected List<String> handleAutoComplete(final String term) {
 
         //TODO, this should go to NCGC, once their stuff is ready
         final String urlToElastic = "${this.elasticSearchRootURL}/${AUTO_COMPLETE_SEARCH_URL}"
@@ -144,7 +144,7 @@ class QueryService {
      * @param smiles
      * @return
      */
-    public List<String> getCIDsByStructure(final String smiles, final StructureSearchType searchType) {
+    protected List<String> getCIDsByStructure(final String smiles, final StructureSearchType searchType) {
         /**
          * Build the NCGC REST call-url.
          * For example: http://assay.nih.gov/bard/rest/v1/compounds?filter=n1cccc2ccccc12[structure]&type=sim&cutoff=0.9
