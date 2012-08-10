@@ -25,10 +25,9 @@ $(function () {
         // Default attributes for a CompoundGridRow item.
         defaults:{
             cid:0,
-            img:"undefined"
+            img:""
         },
         initialize:function () {
-
         }
 
     });
@@ -56,7 +55,6 @@ $(function () {
     window.CompoundGridRowView = Backbone.View.extend({
 
         initialize:function () {
-            alert("initializing the view");
         }
 
     });
@@ -75,91 +73,86 @@ $(function () {
 //
 //        // Lazily show the tooltip that tells you to press `enter` to save
 //        // a new todo item, after one second.
-//        showTooltip:function (e) {
-//            var tooltip = this.$(".ui-tooltip-top");
-//            var val = this.input.val();
-//            tooltip.fadeOut();
-//            if (this.tooltipTimeout) clearTimeout(this.tooltipTimeout);
-//            if (val == '' || val == this.input.attr('placeholder')) return;
-//            var show = function () {
-//                tooltip.show().fadeIn();
-//            };
-//            this.tooltipTimeout = _.delay(show, 1000);
-//        }
+        showTooltip:function (e) {
+            var tooltip = this.$(".ui-tooltip-top");
+            var val = this.input.val();
+            tooltip.fadeOut();
+            if (this.tooltipTimeout) clearTimeout(this.tooltipTimeout);
+            if (val == '' || val == this.input.attr('placeholder')) return;
+            var show = function () {
+                tooltip.show().fadeIn();
+            };
+            this.tooltipTimeout = _.delay(show, 1000);
+        },
+
         // At initialization we bind to the relevant events on the `Todos`
         // collection, when items are added or changed. Kick things off by
         // loading any preexisting todos that might be saved in *localStorage*.
         initialize:function () {
-            var tempCompoundGridRowList = [];
-            _.each(compounds, function (compound) {
-                var compoundGridRow = new window.CompoundGridRow();
-                compoundGridRow.cid = compound.cid;
-                compoundGridRow.img = compound.img;
-                tempCompoundGridRowList.push(compoundGridRow);
-            });
-            window.CompoundGridRowList = new window.CompoundGridRowList(tempCompoundGridRowList);
-            alert("initialized the app");
+            window.CompoundGridRowList = new window.CompoundGridRowList(compounds);
         }
     });
 
-// Finally, we kick things off by creating the **App**.
+//    var molecularspreadsheet_columns = [
+//        {
+//            header: "Structure",
+//            className: "molspreadsheet-class",
+//            getFormatted: function() {
+//                return this.get("img");
+//            }
+//        },{
+//            header: "CID",
+//            className: "molspreadsheet-class",
+//            getFormatted: function() {
+//                return this.get("cid");
+//            }
+//        },{
+//            header: "blah",
+//            className: "molspreadsheet-class",
+//            getFormatted: function() {
+//                return this.get("cid");
+//            }
+//        }
+//    ];
+    var molecularspreadsheet_columns = [
+        {
+            header: "Structure",
+            className: "molspreadsheet-class",
+            getFormatted: function() {
+                return this.get("img");
+            }
+        },{
+            header: "CID",
+            className: "molspreadsheet-class",
+            getFormatted: function() {
+                return this.get("cid");
+            }
+        }
+    ];
+
+    for (i=0; i<additionalHeaders.length ; i++ ) {
+        var arrayElement = {
+            header: additionalHeaders[i],
+            className: "molspreadsheet-class",
+            getFormatted: function() {
+                return this.get("paddedColumn"+i);
+            }};
+        molecularspreadsheet_columns.push( arrayElement );
+    }
+
+
+    // Finally, we kick things off by creating the **App**.
     window.App = new AppView;
 
 
-    // this sequence works
-//    var Vertebrate = {};
-//    Vertebrate.Model = Backbone.Model.extend();
-//    Vertebrate.Collection = Backbone.Collection.extend({
-//        model: Vertebrate.Model
-//    });
-//    var vertebrates = new Vertebrate.Collection([
-//        {
-//            img: "Angatha",
-//            cid: "jawless fishes",
-//            paddedColumn1 : "5"
-//        },{
-//            img: "Chondrichthyes",
-//            cid: "cartilaginous fishes",
-//            paddedColumn1 : "6"
-//        }]);
-//    var bbcompounds_table = new Backbone.Table({
-//        collection: vertebrates,
-//        columns: ["img", "cid", "paddedColumn1"]
-//    });
-
-
-      var Gridbb = {};
-      Gridbb.Model = Backbone.Model.extend();
-      Gridbb.Collection = Backbone.Collection.extend({
-        model: Gridbb.Model
-      });
-    var tempCompoundGridRowList = [];
-//    _.each(compounds, function (compound) {
-//        var compoundGridRow = new window.CompoundGridRow();
-//        compoundGridRow.cid = compound.cid;
-//        compoundGridRow.img = compound.img;
-//        tempCompoundGridRowList.push(compoundGridRow);
-//    });
-    var griddata = new Gridbb.Collection(compounds);
     var bbcompounds_table = new Backbone.Table({
-        collection: griddata,
-        columns: ["img", "cid", "paddedColumn1"]
+        collection: window.CompoundGridRowList,
+        columns: molecularspreadsheet_columns
     });
-
-
-
-
-
-
-
-
-//    var bbcompounds_table = new Backbone.Table({
-//        collection: window.CompoundGridRowList,
-//        columns: ["img", "cid", "paddedColumn1"]
-//    });
 
     // Render and append the table.
     $("#compoundDiv").append(bbcompounds_table.render().el);
+
 
 
 });

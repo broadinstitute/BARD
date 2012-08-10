@@ -61,13 +61,8 @@ class BardWebInterfaceController {
             Set<String> compounds = [] as Set
             for (ESXCompound compound in result.xcompounds) {
                 compounds.add(compound)
-                // Note:  if we want to perform a secondary search and pull back the APID records for each compound
-                //  then we could use the lines below.  As of code review on July 26 I am leaving them commented out,
-                //  since the result of these extra records seems undesirable.
-//                for (int apid in compound?.apids) {
-//                    def assayMap = [assayName: "assay referencing cid=${compound.cid}", assayResource: "referenced assay", assayNumber: apid] as Map
-//                    assays.add(assayMap)
-//                }
+                // Note:  un-comment the following lines for a secondary search based on APID records
+//                for (int apid in compound?.apids) {assays.add([assayName: "assay referencing cid=${compound.cid}", assayResource: "referenced assay", assayNumber: apid] as Map)
             }
 
             render(view: "homePage", model: [totalCompounds: compounds.size(), assays: assays as List<Map>, compounds: compounds.toList(), compoundHeaderInfo: result.compoundHeaderInfo, experiments: [], projects: []])

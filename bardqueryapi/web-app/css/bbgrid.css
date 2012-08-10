@@ -218,7 +218,6 @@ html {
  */
 .ui-tooltip, .ui-tooltip-top, .ui-tooltip-right, .ui-tooltip-bottom, .ui-tooltip-left {
   color:#ffffff;
-  cursor:normal;
   display:-moz-inline-stack;
   display:inline-block;
   font-size:12px;
@@ -252,7 +251,6 @@ html {
   background-image:-moz-linear-gradient(top,#555555,#222222);
   background-image:-webkit-gradient(linear,left top,left bottom,color-stop(0,#555555),color-stop(1,#222222));
   filter:progid:DXImageTransform.Microsoft.gradient(startColorStr=#555555,EndColorStr=#222222);
-  -ms-filter:progid:DXImageTransform.Microsoft.gradient(startColorStr=#555555,EndColorStr=#222222);
 }
 .ui-tooltip:after, .ui-tooltip-top:after, .ui-tooltip-right:after, .ui-tooltip-bottom:after, .ui-tooltip-left:after {
   content:"\25B8";
@@ -309,3 +307,21 @@ html {
   -khtml-transform:rotate(180deg);
   -webkit-transform:rotate(180deg);
 }
+th.molspreadsheet-class {
+    font-size: 16px;
+    font-weight: bold;
+    background: rgba(221, 221, 221, 0.20);
+    color:#111111;
+    padding: 5px 10 10px 10;
+    border-width: 1px;
+    text-align: center;
+    line-height: 1;
+}
+td.molspreadsheet-class {
+    font-size: 12px;
+    font-weight: bold;
+    padding: 2px 0 3px 0;
+    text-align: center;
+    line-height: 1;
+}
+
