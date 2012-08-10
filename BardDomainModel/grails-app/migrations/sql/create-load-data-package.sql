@@ -1,8 +1,12 @@
--- Alter Package SQL
+--
+-- PACKAGE: LOAD_DATA
+--
 
-CREATE OR REPLACE package load_data
+create or replace package load_data
 as
     type r_cursor is ref cursor;
+
+    procedure reset_sequence;
 
     procedure Load_reference;
 
@@ -538,27 +542,151 @@ as
         then
 
             insert into element
-            select * from data_mig.element
+                (ELEMENT_ID,
+                ELEMENT_STATUS,
+                LABEL,
+                DESCRIPTION,
+                ABBREVIATION,
+                SYNONYMS,
+                UNIT,
+                EXTERNAL_URL,
+                READY_FOR_EXTRACTION,
+                VERSION,
+                DATE_CREATED,
+                LAST_UPDATED,
+                MODIFIED_BY)
+            select ELEMENT_ID,
+                ELEMENT_STATUS,
+                LABEL,
+                DESCRIPTION,
+                ABBREVIATION,
+                SYNONYMS,
+                UNIT,
+                EXTERNAL_URL,
+                READY_FOR_EXTRACTION,
+                VERSION,
+                DATE_CREATED,
+                LAST_UPDATED,
+                MODIFIED_BY
+            from data_mig.element
             order by nvl(unit, ' ');
 
             insert into element_hierarchy
-            select * from data_mig.element_hierarchy;
+                (ELEMENT_HIERARCHY_ID,
+                PARENT_ELEMENT_ID,
+                CHILD_ELEMENT_ID,
+                RELATIONSHIP_TYPE,
+                VERSION,
+                DATE_CREATED,
+                LAST_UPDATED,
+                MODIFIED_BY)
+            select ELEMENT_HIERARCHY_ID,
+                PARENT_ELEMENT_ID,
+                CHILD_ELEMENT_ID,
+                RELATIONSHIP_TYPE,
+                VERSION,
+                DATE_CREATED,
+                LAST_UPDATED,
+                MODIFIED_BY
+         from data_mig.element_hierarchy;
 
             insert into ontology
-            select * from data_mig.ontology;
+                (ONTOLOGY_ID,
+                ONTOLOGY_NAME,
+                ABBREVIATION,
+                SYSTEM_URL,
+                VERSION,
+                DATE_CREATED,
+                LAST_UPDATED,
+                MODIFIED_BY)
+            select ONTOLOGY_ID,
+                ONTOLOGY_NAME,
+                ABBREVIATION,
+                SYSTEM_URL,
+                VERSION,
+                DATE_CREATED,
+                LAST_UPDATED,
+                MODIFIED_BY
+            from data_mig.ontology;
 
             insert into tree_root
-            select * from data_mig.tree_root;
+                (TREE_ROOT_ID,
+                TREE_NAME,
+                ELEMENT_ID,
+                RELATIONSHIP_TYPE,
+                VERSION,
+                DATE_CREATED,
+                LAST_UPDATED,
+                MODIFIED_BY)
+            select TREE_ROOT_ID,
+                TREE_NAME,
+                ELEMENT_ID,
+                RELATIONSHIP_TYPE,
+                VERSION,
+                DATE_CREATED,
+                LAST_UPDATED,
+                MODIFIED_BY
+            from data_mig.tree_root;
 
             insert into external_system
-            select * from data_mig.external_system;
+                (EXTERNAL_SYSTEM_ID,
+                SYSTEM_NAME,
+                OWNER,
+                SYSTEM_URL,
+                VERSION,
+                DATE_CREATED,
+                LAST_UPDATED,
+                MODIFIED_BY)
+            select EXTERNAL_SYSTEM_ID,
+                SYSTEM_NAME,
+                OWNER,
+                SYSTEM_URL,
+                VERSION,
+                DATE_CREATED,
+                LAST_UPDATED,
+                MODIFIED_BY
+            from data_mig.external_system;
             commit;
 
             insert into ontology_item
-            select * from data_mig.ontology_item;
+                (ONTOLOGY_ITEM_ID,
+                ONTOLOGY_ID,
+                ELEMENT_ID,
+                ITEM_REFERENCE,
+                VERSION,
+                DATE_CREATED,
+                LAST_UPDATED,
+                MODIFIED_BY)
+            select ONTOLOGY_ITEM_ID,
+                ONTOLOGY_ID,
+                ELEMENT_ID,
+                ITEM_REFERENCE,
+                VERSION,
+                DATE_CREATED,
+                LAST_UPDATED,
+                MODIFIED_BY
+            from data_mig.ontology_item;
 
             insert into unit_conversion
-            select * from data_mig.unit_conversion;
+                (FROM_UNIT,
+                TO_UNIT,
+                MULTIPLIER,
+                OFFSET,
+                FORMULA,
+                VERSION,
+                DATE_CREATED,
+                LAST_UPDATED,
+                MODIFIED_BY)
+            select FROM_UNIT,
+                TO_UNIT,
+                MULTIPLIER,
+                OFFSET,
+                FORMULA,
+                VERSION,
+                DATE_CREATED,
+                LAST_UPDATED,
+                MODIFIED_BY
+            from data_mig.unit_conversion;
 
             manage_ontology.make_trees;
             commit;
@@ -599,19 +727,93 @@ as
         for rec_assay in cur_assay
         loop
             insert into assay
-            select * from data_mig.assay
+                (ASSAY_ID,
+                ASSAY_STATUS,
+                ASSAY_NAME,
+                ASSAY_VERSION,
+                ASSAY_TYPE,
+                DESIGNED_BY,
+                READY_FOR_EXTRACTION,
+                VERSION,
+                DATE_CREATED,
+                LAST_UPDATED,
+                MODIFIED_BY)
+            select ASSAY_ID,
+                ASSAY_STATUS,
+                ASSAY_NAME,
+                ASSAY_VERSION,
+                ASSAY_TYPE,
+                DESIGNED_BY,
+                READY_FOR_EXTRACTION,
+                VERSION,
+                DATE_CREATED,
+                LAST_UPDATED,
+                MODIFIED_BY
+            from data_mig.assay
             where assay_id = rec_assay.assay_id;
 
             insert into assay_document
-            select * from data_mig.assay_document
+                (ASSAY_DOCUMENT_ID,
+                ASSAY_ID,
+                DOCUMENT_NAME,
+                DOCUMENT_TYPE,
+                DOCUMENT_CONTENT,
+                VERSION,
+                DATE_CREATED,
+                LAST_UPDATED,
+                MODIFIED_BY)
+            select ASSAY_DOCUMENT_ID,
+                ASSAY_ID,
+                DOCUMENT_NAME,
+                DOCUMENT_TYPE,
+                DOCUMENT_CONTENT,
+                VERSION,
+                DATE_CREATED,
+                LAST_UPDATED,
+                MODIFIED_BY
+            from data_mig.assay_document
             where assay_id = rec_assay.assay_id;
 
             insert into measure_context
-            select * from data_mig.measure_context
+                (MEASURE_CONTEXT_ID,
+                ASSAY_ID,
+                CONTEXT_NAME,
+                VERSION,
+                DATE_CREATED,
+                LAST_UPDATED,
+                MODIFIED_BY)
+            select MEASURE_CONTEXT_ID,
+                ASSAY_ID,
+                CONTEXT_NAME,
+                VERSION,
+                DATE_CREATED,
+                LAST_UPDATED,
+                MODIFIED_BY
+            from data_mig.measure_context
             where assay_id = rec_assay.assay_id;
 
             insert into measure
-            select * from data_mig.measure
+                (MEASURE_ID,
+                ASSAY_ID,
+                MEASURE_CONTEXT_ID,
+                PARENT_MEASURE_ID,
+                RESULT_TYPE_ID,
+                ENTRY_UNIT,
+                VERSION,
+                DATE_CREATED,
+                LAST_UPDATED,
+                MODIFIED_BY)
+            select MEASURE_ID,
+                ASSAY_ID,
+                MEASURE_CONTEXT_ID,
+                PARENT_MEASURE_ID,
+                RESULT_TYPE_ID,
+                ENTRY_UNIT,
+                VERSION,
+                DATE_CREATED,
+                LAST_UPDATED,
+                MODIFIED_BY
+            from data_mig.measure
             where assay_id = rec_assay.assay_id;
 
             insert into measure_context_item
@@ -632,17 +834,92 @@ as
                 DATE_CREATED,
                 LAST_UPDATED,
                 MODIFIED_BY)
-            select * from data_mig.measure_context_item
+            select MEASURE_CONTEXT_ITEM_ID,
+                GROUP_MEASURE_CONTEXT_ITEM_ID,
+                ASSAY_ID,
+                MEASURE_CONTEXT_ID,
+                ATTRIBUTE_TYPE,
+                ATTRIBUTE_ID,
+                QUALIFIER,
+                VALUE_ID,
+                EXT_VALUE_ID,
+                VALUE_DISPLAY,
+                VALUE_NUM,
+                VALUE_MIN,
+                VALUE_MAX,
+                VERSION,
+                DATE_CREATED,
+                LAST_UPDATED,
+                MODIFIED_BY
+            from data_mig.measure_context_item
             where assay_id = rec_assay.assay_id;
 
             for rec_experiment in cur_experiment(rec_assay.assay_id)
             loop
                 insert into experiment
-                select * from data_mig.experiment
+                    (EXPERIMENT_ID,
+                    EXPERIMENT_NAME,
+                    EXPERIMENT_STATUS,
+                    READY_FOR_EXTRACTION,
+                    ASSAY_ID,
+                    LABORATORY_ID,
+                    RUN_DATE_FROM,
+                    RUN_DATE_TO,
+                    HOLD_UNTIL_DATE,
+                    DESCRIPTION,
+                    VERSION,
+                    DATE_CREATED,
+                    LAST_UPDATED,
+                    MODIFIED_BY)
+                select EXPERIMENT_ID,
+                    EXPERIMENT_NAME,
+                    EXPERIMENT_STATUS,
+                    READY_FOR_EXTRACTION,
+                    ASSAY_ID,
+                    LABORATORY_ID,
+                    RUN_DATE_FROM,
+                    RUN_DATE_TO,
+                    HOLD_UNTIL_DATE,
+                    DESCRIPTION,
+                    VERSION,
+                    DATE_CREATED,
+                    LAST_UPDATED,
+                    MODIFIED_BY
+                from data_mig.experiment
                 where experiment_id = rec_experiment.experiment_id;
 
                 insert into result
-                select * from data_mig.result
+                    (RESULT_ID,
+                    RESULT_STATUS,
+                    READY_FOR_EXTRACTION,
+                    VALUE_DISPLAY,
+                    VALUE_NUM,
+                    VALUE_MIN,
+                    VALUE_MAX,
+                    QUALIFIER,
+                    EXPERIMENT_ID,
+                    SUBSTANCE_ID,
+                    RESULT_TYPE_ID,
+                    VERSION,
+                    DATE_CREATED,
+                    LAST_UPDATED,
+                    MODIFIED_BY)
+                select RESULT_ID,
+                    RESULT_STATUS,
+                    READY_FOR_EXTRACTION,
+                    VALUE_DISPLAY,
+                    VALUE_NUM,
+                    VALUE_MIN,
+                    VALUE_MAX,
+                    QUALIFIER,
+                    EXPERIMENT_ID,
+                    SUBSTANCE_ID,
+                    RESULT_TYPE_ID,
+                    VERSION,
+                    DATE_CREATED,
+                    LAST_UPDATED,
+                    MODIFIED_BY
+                from data_mig.result
                 where experiment_id = rec_experiment.experiment_id;
 
                 insert into result_context_item
@@ -662,18 +939,57 @@ as
                     DATE_CREATED,
                     LAST_UPDATED,
                     MODIFIED_BY)
-                select * from data_mig.result_context_item
+                select RESULT_CONTEXT_ITEM_ID,
+                    GROUP_RESULT_CONTEXT_ID,
+                    EXPERIMENT_ID,
+                    RESULT_ID,
+                    ATTRIBUTE_ID,
+                    VALUE_ID,
+                    EXT_VALUE_ID,
+                    QUALIFIER,
+                    VALUE_NUM,
+                    VALUE_MIN,
+                    VALUE_MAX,
+                    VALUE_DISPLAY,
+                    VERSION,
+                    DATE_CREATED,
+                    LAST_UPDATED,
+                    MODIFIED_BY
+                from data_mig.result_context_item
                 where experiment_id = rec_experiment.experiment_id;
 
                 insert into result_hierarchy
-                select * from data_mig.result_hierarchy
+                    (RESULT_ID,
+                    PARENT_RESULT_ID,
+                    HIERARCHY_TYPE,
+                    VERSION,
+                    DATE_CREATED,
+                    LAST_UPDATED,
+                    MODIFIED_BY)
+                select RESULT_ID,
+                    PARENT_RESULT_ID,
+                    HIERARCHY_TYPE,
+                    VERSION,
+                    DATE_CREATED,
+                    LAST_UPDATED,
+                    MODIFIED_BY
+                from data_mig.result_hierarchy
                 where result_id in
                     (select result_id
                      from result
                      where experiment_id = rec_experiment.experiment_id);
 
                 insert into project
-                select * from data_mig.project dp
+                select PROJECT_ID,
+                    PROJECT_NAME,
+                    GROUP_TYPE,
+                    DESCRIPTION,
+                    READY_FOR_EXTRACTION,
+                    VERSION,
+                    DATE_CREATED,
+                    LAST_UPDATED,
+                    MODIFIED_BY
+                from data_mig.project dp
                 where project_id in
                     (select project_id from data_mig.project_experiment
                      where experiment_id = rec_experiment.experiment_id
@@ -682,12 +998,50 @@ as
                             where p.project_id = dp.project_id);
 
                 insert into project_experiment
-                select * from data_mig.project_experiment pe
+                    (PROJECT_EXPERIMENT_ID,
+                    PROJECT_ID,
+                    STAGE_ID,
+                    EXPERIMENT_ID,
+                    FOLLOWS_EXPERIMENT_ID,
+                    DESCRIPTION,
+                    VERSION,
+                    DATE_CREATED,
+                    LAST_UPDATED,
+                    MODIFIED_BY)
+                select PROJECT_EXPERIMENT_ID,
+                    PROJECT_ID,
+                    STAGE_ID,
+                    EXPERIMENT_ID,
+                    FOLLOWS_EXPERIMENT_ID,
+                    DESCRIPTION,
+                    VERSION,
+                    DATE_CREATED,
+                    LAST_UPDATED,
+                    MODIFIED_BY
+                from data_mig.project_experiment pe
                 where experiment_id = rec_experiment.experiment_id
                  and follows_experiment_id is null;
 
                 insert into external_reference
-                select * from data_mig.external_reference
+                    (EXTERNAL_REFERENCE_ID,
+                    EXTERNAL_SYSTEM_ID,
+                    EXPERIMENT_ID,
+                    PROJECT_ID,
+                    EXT_ASSAY_REF,
+                    VERSION,
+                    DATE_CREATED,
+                    LAST_UPDATED,
+                    MODIFIED_BY)
+                select EXTERNAL_REFERENCE_ID,
+                    EXTERNAL_SYSTEM_ID,
+                    EXPERIMENT_ID,
+                    PROJECT_ID,
+                    EXT_ASSAY_REF,
+                    VERSION,
+                    DATE_CREATED,
+                    LAST_UPDATED,
+                    MODIFIED_BY
+                from data_mig.external_reference
                 where experiment_id = rec_experiment.experiment_id;
 
             end loop;
@@ -697,7 +1051,25 @@ as
         end loop;
 
         insert into external_reference
-        select * from data_mig.external_reference der
+            (EXTERNAL_REFERENCE_ID,
+            EXTERNAL_SYSTEM_ID,
+            EXPERIMENT_ID,
+            PROJECT_ID,
+            EXT_ASSAY_REF,
+            VERSION,
+            DATE_CREATED,
+            LAST_UPDATED,
+            MODIFIED_BY)
+        select EXTERNAL_REFERENCE_ID,
+            EXTERNAL_SYSTEM_ID,
+            EXPERIMENT_ID,
+            PROJECT_ID,
+            EXT_ASSAY_REF,
+            VERSION,
+            DATE_CREATED,
+            LAST_UPDATED,
+            MODIFIED_BY
+        from data_mig.external_reference der
         where project_id in
                 (select project_id from project)
           and not exists (select 1 from external_reference er
@@ -705,7 +1077,25 @@ as
 
         -- pick up any projects that have no descendant experiments
         insert into project
-        select * from data_mig.project p
+            (PROJECT_ID,
+            PROJECT_NAME,
+            GROUP_TYPE,
+            DESCRIPTION,
+            READY_FOR_EXTRACTION,
+            VERSION,
+            DATE_CREATED,
+            LAST_UPDATED,
+            MODIFIED_BY)
+        select PROJECT_ID,
+            PROJECT_NAME,
+            GROUP_TYPE,
+            DESCRIPTION,
+            READY_FOR_EXTRACTION,
+            VERSION,
+            DATE_CREATED,
+            LAST_UPDATED,
+            MODIFIED_BY
+        from data_mig.project p
         where not exists (select 1
                 from project pp
                 where pp.project_id = p.project_id);
@@ -717,9 +1107,29 @@ as
             for rec_experiment in cur_experiment(rec_assay.assay_id)
             loop
                 insert into project_experiment
-                select * from data_mig.project_experiment pe
+                    (PROJECT_EXPERIMENT_ID,
+                    PROJECT_ID,
+                    STAGE_ID,
+                    EXPERIMENT_ID,
+                    FOLLOWS_EXPERIMENT_ID,
+                    DESCRIPTION,
+                    VERSION,
+                    DATE_CREATED,
+                    LAST_UPDATED,
+                    MODIFIED_BY)
+                select PROJECT_EXPERIMENT_ID,
+                    PROJECT_ID,
+                    STAGE_ID,
+                    EXPERIMENT_ID,
+                    FOLLOWS_EXPERIMENT_ID,
+                    DESCRIPTION,
+                    VERSION,
+                    DATE_CREATED,
+                    LAST_UPDATED,
+                    MODIFIED_BY
+                from data_mig.project_experiment pe
                 where experiment_id = rec_experiment.experiment_id
-                 and exists (select * from experiment e2
+                 and exists (select 1 from experiment e2
                         where e2.experiment_id = pe.follows_experiment_id);
             end loop;
 
@@ -765,19 +1175,93 @@ as
         for rec_assay in cur_assay
         loop
             insert into assay
-            select * from data_mig.assay
+                (ASSAY_ID,
+                ASSAY_STATUS,
+                ASSAY_NAME,
+                ASSAY_VERSION,
+                ASSAY_TYPE,
+                DESIGNED_BY,
+                READY_FOR_EXTRACTION,
+                VERSION,
+                DATE_CREATED,
+                LAST_UPDATED,
+                MODIFIED_BY)
+            select ASSAY_ID,
+                ASSAY_STATUS,
+                ASSAY_NAME,
+                ASSAY_VERSION,
+                ASSAY_TYPE,
+                DESIGNED_BY,
+                READY_FOR_EXTRACTION,
+                VERSION,
+                DATE_CREATED,
+                LAST_UPDATED,
+                MODIFIED_BY
+            from data_mig.assay
             where assay_id = rec_assay.assay_id;
 
             insert into assay_document
-            select * from data_mig.assay_document
+                (ASSAY_DOCUMENT_ID,
+                ASSAY_ID,
+                DOCUMENT_NAME,
+                DOCUMENT_TYPE,
+                DOCUMENT_CONTENT,
+                VERSION,
+                DATE_CREATED,
+                LAST_UPDATED,
+                MODIFIED_BY)
+            select ASSAY_DOCUMENT_ID,
+                ASSAY_ID,
+                DOCUMENT_NAME,
+                DOCUMENT_TYPE,
+                DOCUMENT_CONTENT,
+                VERSION,
+                DATE_CREATED,
+                LAST_UPDATED,
+                MODIFIED_BY
+            from data_mig.assay_document
             where assay_id = rec_assay.assay_id;
 
             insert into measure_context
-            select * from data_mig.measure_context
+                (MEASURE_CONTEXT_ID,
+                ASSAY_ID,
+                CONTEXT_NAME,
+                VERSION,
+                DATE_CREATED,
+                LAST_UPDATED,
+                MODIFIED_BY)
+            select MEASURE_CONTEXT_ID,
+                ASSAY_ID,
+                CONTEXT_NAME,
+                VERSION,
+                DATE_CREATED,
+                LAST_UPDATED,
+                MODIFIED_BY
+            from data_mig.measure_context
             where assay_id = rec_assay.assay_id;
 
             insert into measure
-            select * from data_mig.measure
+                (MEASURE_ID,
+                ASSAY_ID,
+                MEASURE_CONTEXT_ID,
+                PARENT_MEASURE_ID,
+                RESULT_TYPE_ID,
+                ENTRY_UNIT,
+                VERSION,
+                DATE_CREATED,
+                LAST_UPDATED,
+                MODIFIED_BY)
+            select MEASURE_ID,
+                ASSAY_ID,
+                MEASURE_CONTEXT_ID,
+                PARENT_MEASURE_ID,
+                RESULT_TYPE_ID,
+                ENTRY_UNIT,
+                VERSION,
+                DATE_CREATED,
+                LAST_UPDATED,
+                MODIFIED_BY
+            from data_mig.measure
             where assay_id = rec_assay.assay_id;
 
             insert into measure_context_item
@@ -798,30 +1282,125 @@ as
                 DATE_CREATED,
                 LAST_UPDATED,
                 MODIFIED_BY)
-            select * from data_mig.measure_context_item
+            select MEASURE_CONTEXT_ITEM_ID,
+                GROUP_MEASURE_CONTEXT_ITEM_ID,
+                ASSAY_ID,
+                MEASURE_CONTEXT_ID,
+                ATTRIBUTE_TYPE,
+                ATTRIBUTE_ID,
+                QUALIFIER,
+                VALUE_ID,
+                EXT_VALUE_ID,
+                VALUE_DISPLAY,
+                VALUE_NUM,
+                VALUE_MIN,
+                VALUE_MAX,
+                VERSION,
+                DATE_CREATED,
+                LAST_UPDATED,
+                MODIFIED_BY
+            from data_mig.measure_context_item
             where assay_id = rec_assay.assay_id;
 
              for rec_experiment in cur_experiment(rec_assay.assay_id)
             loop
                 insert into experiment
-                select * from data_mig.experiment
+                    (EXPERIMENT_ID,
+                    EXPERIMENT_NAME,
+                    EXPERIMENT_STATUS,
+                    READY_FOR_EXTRACTION,
+                    ASSAY_ID,
+                    LABORATORY_ID,
+                    RUN_DATE_FROM,
+                    RUN_DATE_TO,
+                    HOLD_UNTIL_DATE,
+                    DESCRIPTION,
+                    VERSION,
+                    DATE_CREATED,
+                    LAST_UPDATED,
+                    MODIFIED_BY)
+                select EXPERIMENT_ID,
+                    EXPERIMENT_NAME,
+                    EXPERIMENT_STATUS,
+                    READY_FOR_EXTRACTION,
+                    ASSAY_ID,
+                    LABORATORY_ID,
+                    RUN_DATE_FROM,
+                    RUN_DATE_TO,
+                    HOLD_UNTIL_DATE,
+                    DESCRIPTION,
+                    VERSION,
+                    DATE_CREATED,
+                    LAST_UPDATED,
+                    MODIFIED_BY
+                from data_mig.experiment
                 where experiment_id = rec_experiment.experiment_id;
 
                 insert into project
-                select * from data_mig.project
+                select PROJECT_ID,
+                    PROJECT_NAME,
+                    GROUP_TYPE,
+                    DESCRIPTION,
+                    READY_FOR_EXTRACTION,
+                    VERSION,
+                    DATE_CREATED,
+                    LAST_UPDATED,
+                    MODIFIED_BY
+                from data_mig.project dp
                 where project_id in
                     (select project_id from data_mig.project_experiment
                      where experiment_id = rec_experiment.experiment_id
-                     or follows_experiment_id = rec_experiment.experiment_id);
+                     or follows_experiment_id = rec_experiment.experiment_id)
+                 and not exists (select 1 from project p
+                            where p.project_id = dp.project_id);
 
                 insert into project_experiment
-                select * from data_mig.project_experiment pe
+                    (PROJECT_EXPERIMENT_ID,
+                    PROJECT_ID,
+                    STAGE_ID,
+                    EXPERIMENT_ID,
+                    FOLLOWS_EXPERIMENT_ID,
+                    DESCRIPTION,
+                    VERSION,
+                    DATE_CREATED,
+                    LAST_UPDATED,
+                    MODIFIED_BY)
+                select PROJECT_EXPERIMENT_ID,
+                    PROJECT_ID,
+                    STAGE_ID,
+                    EXPERIMENT_ID,
+                    FOLLOWS_EXPERIMENT_ID,
+                    DESCRIPTION,
+                    VERSION,
+                    DATE_CREATED,
+                    LAST_UPDATED,
+                    MODIFIED_BY
+                from data_mig.project_experiment pe
                 where experiment_id = rec_experiment.experiment_id
                  and follows_experiment_id is null;
 
                 insert into external_reference
-                select * from data_mig.external_reference
+                    (EXTERNAL_REFERENCE_ID,
+                    EXTERNAL_SYSTEM_ID,
+                    EXPERIMENT_ID,
+                    PROJECT_ID,
+                    EXT_ASSAY_REF,
+                    VERSION,
+                    DATE_CREATED,
+                    LAST_UPDATED,
+                    MODIFIED_BY)
+                select EXTERNAL_REFERENCE_ID,
+                    EXTERNAL_SYSTEM_ID,
+                    EXPERIMENT_ID,
+                    PROJECT_ID,
+                    EXT_ASSAY_REF,
+                    VERSION,
+                    DATE_CREATED,
+                    LAST_UPDATED,
+                    MODIFIED_BY
+                from data_mig.external_reference
                 where experiment_id = rec_experiment.experiment_id;
+
 
             end loop;
 
@@ -830,7 +1409,25 @@ as
         end loop;
 
         insert into external_reference
-        select * from data_mig.external_reference der
+            (EXTERNAL_REFERENCE_ID,
+            EXTERNAL_SYSTEM_ID,
+            EXPERIMENT_ID,
+            PROJECT_ID,
+            EXT_ASSAY_REF,
+            VERSION,
+            DATE_CREATED,
+            LAST_UPDATED,
+            MODIFIED_BY)
+        select EXTERNAL_REFERENCE_ID,
+            EXTERNAL_SYSTEM_ID,
+            EXPERIMENT_ID,
+            PROJECT_ID,
+            EXT_ASSAY_REF,
+            VERSION,
+            DATE_CREATED,
+            LAST_UPDATED,
+            MODIFIED_BY
+        from data_mig.external_reference der
         where project_id in
                 (select project_id from project)
           and not exists (select 1 from external_reference er
@@ -843,9 +1440,29 @@ as
             for rec_experiment in cur_experiment(rec_assay.assay_id)
             loop
                 insert into project_experiment
-                select * from data_mig.project_experiment pe
+                    (PROJECT_EXPERIMENT_ID,
+                    PROJECT_ID,
+                    STAGE_ID,
+                    EXPERIMENT_ID,
+                    FOLLOWS_EXPERIMENT_ID,
+                    DESCRIPTION,
+                    VERSION,
+                    DATE_CREATED,
+                    LAST_UPDATED,
+                    MODIFIED_BY)
+                select PROJECT_EXPERIMENT_ID,
+                    PROJECT_ID,
+                    STAGE_ID,
+                    EXPERIMENT_ID,
+                    FOLLOWS_EXPERIMENT_ID,
+                    DESCRIPTION,
+                    VERSION,
+                    DATE_CREATED,
+                    LAST_UPDATED,
+                    MODIFIED_BY
+                from data_mig.project_experiment pe
                 where experiment_id = rec_experiment.experiment_id
-                 and exists (select * from experiment e2
+                 and exists (select 1 from experiment e2
                         where e2.experiment_id = pe.follows_experiment_id);
             end loop;
 
