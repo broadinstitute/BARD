@@ -33,19 +33,33 @@ class QueryService {
 }
 '''
 
-    JSONObject showCompound(final Integer compoundId) {
+//    JSONObject showCompound(final Integer compoundId) {
+//        //TODO this should go to NCGC
+//        if (compoundId) {
+//            JSONObject compoundESDocument = elasticSearchService.getCompoundDocument(compoundId)
+//            JSONObject compoundJson = [cid: compoundESDocument?._id,
+//                    sids: compoundESDocument?._source?.sids,
+//                    probeId: compoundESDocument?._source?.probeId,
+//                    smiles: compoundESDocument?._source?.smiles] as JSONObject
+//
+//            return compoundJson
+//        }
+//        return null
+//
+//    }
+
+    Map showCompound(final Integer compoundId) {
         //TODO this should go to NCGC
         if (compoundId) {
             JSONObject compoundESDocument = elasticSearchService.getCompoundDocument(compoundId)
-            JSONObject compoundJson = [cid: compoundESDocument?._id,
+            return [cid: compoundESDocument?._id,
                     sids: compoundESDocument?._source?.sids,
                     probeId: compoundESDocument?._source?.probeId,
-                    smiles: compoundESDocument?._source?.smiles] as JSONObject
+                    smiles: compoundESDocument?._source?.smiles]
 
-            return compoundJson
+            //return compoundJson
         }
-        return null
-
+        return [:]
     }
     /**
      * We pre-process the search String, to extract the type of search

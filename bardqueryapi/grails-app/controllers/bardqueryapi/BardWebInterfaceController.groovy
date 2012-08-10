@@ -40,7 +40,7 @@ class BardWebInterfaceController {
         Integer compoundId = cid ?: params.id as Integer//if 'assay' param is provided, use that; otherwise, try the default id one
 
         if (compoundId) {
-            JSONObject compoundJson = this.queryService.showCompound(compoundId)
+            Map compoundJson = this.queryService.showCompound(compoundId)
             render(view: "showCompound", model: [compoundJson: compoundJson, compoundId: compoundId])
         }
         else {
