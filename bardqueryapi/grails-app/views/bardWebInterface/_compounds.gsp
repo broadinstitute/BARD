@@ -1,43 +1,28 @@
+<%@ page import="grails.converters.JSON" %>
 <g:set var="numberOfHeadersToDisplay" value="${0}"/>
-<div class="content" style="padding-top: 5px">
-    <table class="table table-striped">
-        <thead>
-        <tr>
-            <th>Structure</th>
-            <th>CID</th>
-            <g:each in="${compoundHeaderInfo}" var="currentEntry" status="i">
-            %{--${currentEntry.value?.replaceAll(']', '')}--}%
-            %{--<g:each in=" ${currentEntry.value}" var="assayNumber">--}%
-            %{--${assayNumber} &nbsp;--}%
-            %{--We want to display a max of five targets. Each target Name should have an accession number associated with it
-            and a list of assay numbers should be in brackets underneath it. The assay numbers should be limited to 3
-            --}%
-                <g:if test="i < 5">
-                    <g:set var="numberOfHeadersToDisplay" value="${numberOfHeadersToDisplay + 1}"/>
-                    <th>${currentEntry.key.targetName} ${currentEntry.key.accessionNumber} <br/>
-                        (
-                        ${currentEntry.value.toString().replaceAll(/[\[\], ]+/, ' ')}
-                        )
-                    </th>
-                </g:if>
-            </g:each>
-        </tr>
-        </thead>
-        <tbody>
-        <g:each var="compound" in="${compounds}">
+<%
+    // first build up the headers
+    int counter = 0
+    def header = new  ArrayList<String> ()
+    for (currentEntry in compoundHeaderInfo)  {
+        if (counter < 5) {
+            numberOfHeadersToDisplay =  numberOfHeadersToDisplay + 1
+            header << "${currentEntry.key.targetName} ${currentEntry.key.accessionNumber}<br/>(${currentEntry.value.toString().replaceAll(/[\[\], ]+/, ' ')})"
+        }
+    }
 
-            <tr>
-                <td>
-                    <img src="${createLink(controller: 'chemAxon', action: 'generateStructureImage', params: [smiles: compound.smiles, width: 150, height: 120])}"/>
-                </td>
-                <td>
-                    ${compound.cid}
-                </td>
-                <g:each var="i" in="${(0..<numberOfHeadersToDisplay)}">
-                    <td></td>
-                </g:each>
-            </tr>
-        </g:each>
-        </tbody>
-    </table>
-</div>
+    // next fill out the individual cells
+    List<Map> conciseCompoundList = []
+    for (def compound in compounds) {
+        Map oneRow = [cid: compound.cid, img: """<img src="${createLink(controller: 'chemAxon', action: 'generateStructureImage', params: [smiles: compound.smiles, width: 150, height: 120])}"/>"""]
+        for (int i in numberOfHeadersToDisplay) {
+            oneRow.put("paddedColumn${i}", '')
+        }
+        conciseCompoundList << oneRow
+    }
+%>
+<script type="text/javascript">
+    var compounds = ${conciseCompoundList as JSON}
+    var additionalHeaders = ${header as JSON}
+</script>
+<div class="content" id="compoundDiv" style="padding-top: 5px"></div>

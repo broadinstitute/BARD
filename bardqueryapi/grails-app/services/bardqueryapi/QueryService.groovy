@@ -33,19 +33,33 @@ class QueryService {
 }
 '''
 
-    JSONObject showCompound(final Integer compoundId) {
+//    JSONObject showCompound(final Integer compoundId) {
+//        //TODO this should go to NCGC
+//        if (compoundId) {
+//            JSONObject compoundESDocument = elasticSearchService.getCompoundDocument(compoundId)
+//            JSONObject compoundJson = [cid: compoundESDocument?._id,
+//                    sids: compoundESDocument?._source?.sids,
+//                    probeId: compoundESDocument?._source?.probeId,
+//                    smiles: compoundESDocument?._source?.smiles] as JSONObject
+//
+//            return compoundJson
+//        }
+//        return null
+//
+//    }
+
+    Map showCompound(final Integer compoundId) {
         //TODO this should go to NCGC
         if (compoundId) {
             JSONObject compoundESDocument = elasticSearchService.getCompoundDocument(compoundId)
-            JSONObject compoundJson = [cid: compoundESDocument?._id,
+            return [cid: compoundESDocument?._id,
                     sids: compoundESDocument?._source?.sids,
                     probeId: compoundESDocument?._source?.probeId,
-                    smiles: compoundESDocument?._source?.smiles] as JSONObject
+                    smiles: compoundESDocument?._source?.smiles]
 
-            return compoundJson
+            //return compoundJson
         }
-        return null
-
+        return [:]
     }
     /**
      * We pre-process the search String, to extract the type of search
@@ -122,7 +136,7 @@ class QueryService {
      * @param elasticSearchRootURL
      * @return
      */
-    private List<String> handleAutoComplete(final String term) {
+    protected List<String> handleAutoComplete(final String term) {
 
         //TODO, this should go to NCGC, once their stuff is ready
         final String urlToElastic = "${this.elasticSearchRootURL}/${AUTO_COMPLETE_SEARCH_URL}"
@@ -144,7 +158,7 @@ class QueryService {
      * @param smiles
      * @return
      */
-    public List<String> getCIDsByStructure(final String smiles, final StructureSearchType searchType) {
+    protected List<String> getCIDsByStructure(final String smiles, final StructureSearchType searchType) {
         /**
          * Build the NCGC REST call-url.
          * For example: http://assay.nih.gov/bard/rest/v1/compounds?filter=n1cccc2ccccc12[structure]&type=sim&cutoff=0.9
