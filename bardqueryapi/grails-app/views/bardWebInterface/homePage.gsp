@@ -51,7 +51,9 @@
         <h1 style="text-align: center">BARD</h1>
 
         <h2 style="text-align: center">BioAssay Research Database</h2> <br/><br/>
-
+        <br/>
+        <h3 style="text-align: center"><a href="${grailsApplication.config.bard.cap.home}" style="color:blue;text-decoration: underline;">CAP - Catalog of Assay Protocols Home</a></h3>
+        <br/>
         <g:if test="${flash.message}">
             <div class="error">${flash.message}</div>
         </g:if>
@@ -88,10 +90,10 @@
 </div><!-- End body div -->
 <div id="resultTab">
     <ul id="resultTabUL" class="nav nav-tabs">
-        <li class="active"><a href="#assays" data-toggle="tab">Assays (${assays.size()})</a></li>
-        <li><a href="#compounds" data-toggle="tab">Compounds (${compounds.size()})</a></li>
-        <li><a href="#experiments" data-toggle="tab">Experiments (${experiments.size()})</a></li>
-        <li><a href="#projects" data-toggle="tab">Projects (${projects.size()})</a></li>
+        <li class="active"><a href="#assays" data-toggle="tab">Assays (${assays?.size()})</a></li>
+        <li><a href="#compounds" data-toggle="tab">Compounds (${compounds?.size()})</a></li>
+        <li><a href="#experiments" data-toggle="tab">Experiments (${experiments?.size()})</a></li>
+        <li><a href="#projects" data-toggle="tab">Projects (${projects?.size()})</a></li>
     </ul>
 
     <div id="resultTabContent" class="tab-content">

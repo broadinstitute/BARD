@@ -93,27 +93,6 @@ $(function () {
         }
     });
 
-//    var molecularspreadsheet_columns = [
-//        {
-//            header: "Structure",
-//            className: "molspreadsheet-class",
-//            getFormatted: function() {
-//                return this.get("img");
-//            }
-//        },{
-//            header: "CID",
-//            className: "molspreadsheet-class",
-//            getFormatted: function() {
-//                return this.get("cid");
-//            }
-//        },{
-//            header: "blah",
-//            className: "molspreadsheet-class",
-//            getFormatted: function() {
-//                return this.get("cid");
-//            }
-//        }
-//    ];
     var molecularspreadsheet_columns = [
         {
             header: "Structure",
@@ -125,7 +104,7 @@ $(function () {
             header: "CID",
             className: "molspreadsheet-class",
             getFormatted: function() {
-                return this.get("cid");
+                return "<a href='./showCompound?cid=" + this.get("cid")+ "' target='_blank'>" + this.get("cid") + "</a>";
             }
         }
     ];
