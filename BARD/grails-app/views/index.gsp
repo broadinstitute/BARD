@@ -9,7 +9,7 @@
 <br/>
 <br/>
 <div class="row">
-    <div class="span2"><a href="${grailsApplication.config.bard.home.page}"><img src="${resource(dir: 'images', file: 'bardLogo.png')}" alt="CAP - Catalog of Assay Protocols"/></a></div>
+    <div class="span2"><a href="${grailsApplication.config.bard.home.page}"><img src="${resource(dir: 'images', file: 'bardLogo.png')}" alt="To BARD Home" title="To BARD Home"/></a></div>
     <div class="span6"><h1 style="text-align: center">CAP - Catalog of Assay Protocols</h1><br/><br/>
         <div class="span6">
             <p>CAP allows you to define assays, which can subsequently be used to upload data into the BioAssay Research Database (BARD).
@@ -25,11 +25,10 @@
            </p>
             <br/><br/>
             <p>
-                Create a new assay from scratch<br/><br/>
-                Find an existing assay to clone<br/> <br/>
-                View favorite assays<br/><br/>
-                Read about assay terminology in more detail<br/><br/>
-
+                <a href="#"><img src="${resource(dir: 'images', file: 'lightBulbIcon.png')}" alt="Create New Assay" title="Create New Assay"/> Create a new assay from scratch</a> <br/><br/>
+                <a href="#"><img src="${resource(dir: 'images', file: 'magnifyingGlassIcon.png')}" alt="Find Exiting Assay" title="Find Exiting Assay"/> Find an existing assay to clone</a><br/> <br/>
+                <a href="#"><img src="${resource(dir: 'images', file: 'starIcon.png')}" alt="View Favorite Assay" title="View Favorite Assay"/> View favorite assays</a><br/><br/>
+                <a href="#"><img src="${resource(dir: 'images', file: 'openBookIcon.png')}" alt="Read about assay terminology" title=" Read about assay terminology"/> Read about assay terminology in more detail</a><br/><br/>
             </p>
             <br/>
             <br/>
