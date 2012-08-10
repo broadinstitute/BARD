@@ -14,7 +14,7 @@ databaseChangeLog = {
                 usernames = usernames - currentUsername.toUpperCase()
                 for (username in usernames) {
                     String grant = "GRANT EXECUTE ON LOAD_DATA TO ${username}"
-                    println(grant)
+                    //println(grant)
                     sql.execute(grant)
                 }
             }
