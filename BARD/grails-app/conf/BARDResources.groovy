@@ -10,6 +10,7 @@ modules = {
 		//resource url:'/css/mobile.css'
 		resource url:'/js/application.js'
 		resource url:'/backbone_example.js'
+		resource url: '/modules/assay_cards.js'
 	}
 	
 	backbone {

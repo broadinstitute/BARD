@@ -1,6 +1,10 @@
 package bard.db.registration
 
+import grails.converters.JSON
+
 class AssayJSonController {
+	
+	CardFactoryService cardFactoryService
 
     def index() {
 		redirect(action: "getNames", params: params)
@@ -23,4 +27,13 @@ class AssayJSonController {
 				element ""
 		}
 	}
+	
+	def getCards(){
+		def assayInstance = Assay.get(params.id)
+		List<CardDto> cardDtoList = new ArrayList<CardDto>()
+		if(assayInstance?.id)
+			cardDtoList = cardFactoryService.createCardDtoListForAssay(assayInstance)
+		render cardDtoList as JSON
+	}
+
 }
