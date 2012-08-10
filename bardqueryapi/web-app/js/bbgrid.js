@@ -8,9 +8,10 @@ var compoundGrid_columns = ['img', 'cid', 'paddedColumn1'];
 
 
 // Load the application once the DOM is ready, using `jQuery.ready`:
-$(document).ready(function () {
+//$(document).ready(function () {
+$(function () {
 
-    _.templateSettings = {
+        _.templateSettings = {
         interpolate:/\{\{(.+?)\}\}/g,
         evaluate:/\{!(.+?)!\}/g
     };
@@ -27,7 +28,7 @@ $(document).ready(function () {
             img:"undefined"
         },
         initialize:function () {
-//            alert("Pretending to initialize");
+
         }
 
     });
@@ -40,20 +41,23 @@ $(document).ready(function () {
     window.CompoundGridRowList = Backbone.Collection.extend({
 
         // Reference to this collection's model.
-        model:CompoundGridRow,
+        model:window.CompoundGridRow,
 
         url:'/bardqueryapi/bbgrid'
 
     });
 
     // Create our global collection of **CompoundGridRows**.
-    window.CompoundGridRows = new CompoundGridRowList;
+//    window.CompoundGridRows = new CompoundGridRowList;
+    window.CompoundGridRows = new CompoundGridRowList();
 
-    // CompoundGridRow Item View
-    // --------------
 
     // The DOM element for a CompoundGridRow item...
     window.CompoundGridRowView = Backbone.View.extend({
+
+        initialize:function () {
+            alert("initializing the view");
+        }
 
     });
 
@@ -94,20 +98,68 @@ $(document).ready(function () {
                 tempCompoundGridRowList.push(compoundGridRow);
             });
             window.CompoundGridRowList = new window.CompoundGridRowList(tempCompoundGridRowList);
-            alert("1");
+            alert("initialized the app");
         }
     });
 
-    alert("2")
+// Finally, we kick things off by creating the **App**.
+    window.App = new AppView;
+
+
+    // this sequence works
+//    var Vertebrate = {};
+//    Vertebrate.Model = Backbone.Model.extend();
+//    Vertebrate.Collection = Backbone.Collection.extend({
+//        model: Vertebrate.Model
+//    });
+//    var vertebrates = new Vertebrate.Collection([
+//        {
+//            img: "Angatha",
+//            cid: "jawless fishes",
+//            paddedColumn1 : "5"
+//        },{
+//            img: "Chondrichthyes",
+//            cid: "cartilaginous fishes",
+//            paddedColumn1 : "6"
+//        }]);
+//    var bbcompounds_table = new Backbone.Table({
+//        collection: vertebrates,
+//        columns: ["img", "cid", "paddedColumn1"]
+//    });
+
+
+      var Gridbb = {};
+      Gridbb.Model = Backbone.Model.extend();
+      Gridbb.Collection = Backbone.Collection.extend({
+        model: Gridbb.Model
+      });
+    var tempCompoundGridRowList = [];
+//    _.each(compounds, function (compound) {
+//        var compoundGridRow = new window.CompoundGridRow();
+//        compoundGridRow.cid = compound.cid;
+//        compoundGridRow.img = compound.img;
+//        tempCompoundGridRowList.push(compoundGridRow);
+//    });
+    var griddata = new Gridbb.Collection(compounds);
     var bbcompounds_table = new Backbone.Table({
-        collection: window.CompoundGridRowList,
-        columns: ['img', 'cid', 'paddedColumn1']
+        collection: griddata,
+        columns: ["img", "cid", "paddedColumn1"]
     });
+
+
+
+
+
+
+
+
+//    var bbcompounds_table = new Backbone.Table({
+//        collection: window.CompoundGridRowList,
+//        columns: ["img", "cid", "paddedColumn1"]
+//    });
 
     // Render and append the table.
     $("#compoundDiv").append(bbcompounds_table.render().el);
 
-// Finally, we kick things off by creating the **App**.
-    window.App = new AppView;
 
 });
