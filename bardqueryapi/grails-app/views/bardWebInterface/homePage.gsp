@@ -5,6 +5,7 @@
     <meta name="layout" content="main"/>
     <r:require modules="core"/>
     <r:require modules="bootstrap"/>
+    <r:require modules="backbone_grid"/>
 
     <r:script>
         $(document).ready(function () {

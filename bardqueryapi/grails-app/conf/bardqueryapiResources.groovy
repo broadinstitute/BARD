@@ -16,6 +16,7 @@ modules = {
         dependsOn 'jquery, jquery-ui, jquery-theme, underscore, backbone'
         resource url:'/css/main.css'
         resource url:'/js/bbgrid.js'
+        resource url:'/js/backbone.table.js'
         resource url:'/css/bbgrid.css'
     }
     backbone_ex {

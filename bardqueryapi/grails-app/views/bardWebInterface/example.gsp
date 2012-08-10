@@ -2,16 +2,9 @@
 <!DOCTYPE html>
 <html>
 <head>
-    %{--<r:require modules="backbone_ex"/>--}%
     <r:require modules="backbone_grid"/>
-    %{--<r:require modules="core"/> --}%
     <meta name="layout" content="main"/>
     <title>Backbone example</title>
-    %{--<r:script>--}%
-    %{--(function($){--}%
-    %{--getListView();--}%
-    %{--})(jQuery);--}%
-    %{--</r:script>--}%
 
 </head>
 
