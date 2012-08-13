@@ -4,6 +4,7 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/BARD.iml" filepath="$PROJECT_DIR$/BARD.iml" />
       <module fileurl="file://$PROJECT_DIR$/BARD-grailsPlugins.iml" filepath="$PROJECT_DIR$/BARD-grailsPlugins.iml" />
+      <module fileurl="file://$PROJECT_DIR$/bardDomainModel-inplacePlugin.iml" filepath="$PROJECT_DIR$/bardDomainModel-inplacePlugin.iml" />
     </modules>
   </component>
 </project>

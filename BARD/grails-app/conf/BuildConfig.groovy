@@ -46,29 +46,25 @@ grails.project.dependency.resolution = {
         // build scope
         build ":tomcat:$grailsVersion"
         build ":codenarc:0.15"
-
         // compile scope
         compile ":grails-ui:1.2.3"
         compile ":yui:2.8.2.1"
-        compile ":bard-domain-model:0.2.0-SNAPSHOT"
         compile ":twitter-bootstrap:2.0.2.25"
+        compile ":elastic-search:0.4.5-SNAPSHOT"
+
         // runtime scope
         runtime ":hibernate:$grailsVersion"
         runtime ":jquery:1.7.1"
         runtime ":jquery-ui:1.8.15"
         runtime ":resources:1.1.6"
-        runtime ":elastic-search:0.4.5-SNAPSHOT"
-
         // test scope
         test ":spock:0.6"
-
         // provided  scope
     }
-    // if you comment out the dependency above, you can 
-    // include a plugin by specifying the location of the unpacked source
-    // handy if you making lots of changes
-    //grails.plugin.location.'bard-domain-model' = "../BardDomainModel"
 }
+
+// making the domain plugin an in-place plugin
+grails.plugin.location.'bard-domain-model' = "../BardDomainModel"
 
 codenarc.ruleSetFiles = "file:grails-app/conf/BardCodeNarcRuleSet.groovy"
 codenarc.reports = {
