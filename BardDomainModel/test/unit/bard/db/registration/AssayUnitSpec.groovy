@@ -1,17 +1,13 @@
 package bard.db.registration
 
-
+import grails.buildtestdata.mixin.Build
+import org.apache.maven.artifact.ant.shaded.StringUtils
 import spock.lang.Specification
 import spock.lang.Unroll
 
 import static bard.db.dictionary.TestUtils.assertFieldValidationExpectations
 import static bard.db.dictionary.TestUtils.createString
-import static bard.db.registration.Assay.ASSAY_NAME_MAX_SIZE
-import static bard.db.registration.Assay.ASSAY_VERSION_MAX_SIZE
-import static bard.db.registration.Assay.DESIGNED_BY_MAX_SIZE
-import static bard.db.registration.Assay.MODIFIED_BY_MAX_SIZE
-import grails.buildtestdata.mixin.Build
-import org.apache.maven.artifact.ant.shaded.StringUtils
+import static bard.db.registration.Assay.*
 
 /**
  * See the API for {@link grails.test.mixin.domain.DomainClassUnitTestMixin} for usage instructions
@@ -93,7 +89,7 @@ class AssayUnitSpec extends Specification {
 
         'too long'                     | createString(ASSAY_VERSION_MAX_SIZE + 1)  | false | 'maxSize.exceeded'
 
-        'exactly at limit, not digits' | createString(ASSAY_VERSION_MAX_SIZE)      | false | 'matches.invalid'
+        'exactly at limit, not digits' | createString(ASSAY_VERSION_MAX_SIZE)      | true  | null
 
         'exactly at limit, digits'     | createString(ASSAY_VERSION_MAX_SIZE, '9') | true  | null
     }
