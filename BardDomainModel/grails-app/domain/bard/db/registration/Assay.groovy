@@ -42,7 +42,7 @@ class Assay {
         // TODO consider and Enum to replace the inListk
         assayStatus(maxSize: ASSAY_STATUS_MAX_SIZE, blank: false, inList: ["Pending", "Active", "Superseded", "Retired"])
         assayName(maxSize: ASSAY_NAME_MAX_SIZE, blank: false)
-        assayVersion(maxSize: ASSAY_VERSION_MAX_SIZE, blank: false, matches: /\d+/)   // does this need to look like a number
+        assayVersion(maxSize: ASSAY_VERSION_MAX_SIZE, blank: false)
         designedBy(nullable: true, maxSize: DESIGNED_BY_MAX_SIZE)
         readyForExtraction(maxSize: READY_FOR_EXTRACTION_MAX_SIZE, blank: false, inList: ["Pending","Ready", "Started", "Complete"])
         assayType(inList: ['Regular', 'Panel - Array', 'Panel - Group'])
