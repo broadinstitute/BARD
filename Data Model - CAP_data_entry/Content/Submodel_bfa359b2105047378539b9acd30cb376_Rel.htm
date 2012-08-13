@@ -12,12 +12,20 @@
 <TD><FONT SIZE=2 FACE="Arial">Non-Identifying&nbsp;</FONT></TD>
 </TR>
 <TR>
+<TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Do Not Generate&nbsp;</FONT></B></TD>
+<TD><FONT SIZE=2 FACE="Arial">False&nbsp;</FONT></TD>
+</TR>
+<TR>
 <TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Relationship Name&nbsp;</FONT></B></TD>
 <TD><FONT SIZE=2 FACE="Arial">FK_ASSAY_DESCRIPTOR_PARENT_SLF&nbsp;</FONT></TD>
 </TR>
 <TR>
 <TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Relationship Business Name&nbsp;</FONT></B></TD>
 <TD><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Physical Only&nbsp;</FONT></B></TD>
+<TD><FONT SIZE=2 FACE="Arial">No&nbsp;</FONT></TD>
 </TR>
 <TR>
 <TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Parent Table&nbsp;</FONT></B></TD>
@@ -34,6 +42,26 @@
 <TR>
 <TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Existence&nbsp;</FONT></B></TD>
 <TD><FONT SIZE=2 FACE="Arial">Optional&nbsp;</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Propagated Key&nbsp;</FONT></B></TD>
+<TD><FONT SIZE=2 FACE="Arial">Primary Key&nbsp;</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Deferrable&nbsp;</FONT></B></TD>
+<TD><FONT SIZE=2 FACE="Arial">NO&nbsp;</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Initially Deferred&nbsp;</FONT></B></TD>
+<TD><FONT SIZE=2 FACE="Arial">NO&nbsp;</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Disabled&nbsp;</FONT></B></TD>
+<TD><FONT SIZE=2 FACE="Arial">NO&nbsp;</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">NoValidate&nbsp;</FONT></B></TD>
+<TD><FONT SIZE=2 FACE="Arial">NO&nbsp;</FONT></TD>
 </TR>
 </TABLE>
 <P>
@@ -76,6 +104,50 @@
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">PARENT_NODE_ID&nbsp;</FONT></TD>
 </TR>
 </TABLE>
+<P>
+<TABLE WIDTH=100% CELLPADDING=3 BORDER=2>
+<TR>
+<TD VALIGN=TOP BGCOLOR="LIGHTGREY" ><B><FONT SIZE=4 FACE="Arial">"ASSAY_DESCRIPTOR to ASSAY_DESCRIPTOR" Trigger Templates&nbsp;</FONT></B></TD>
+</TR>
+</TABLE>
+<TABLE WIDTH=100% CELLPADDING=2 BORDER=2>
+<TR>
+<TD VALIGN=TOP  WIDTH=22% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">ParentInsert&nbsp;</FONT></B></TD>
+<TD VALIGN = TOP><FONT SIZE=2 FACE="Arial">None&nbsp;</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN=TOP  WIDTH=22% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">ParentUpdate&nbsp;</FONT></B></TD>
+<TD VALIGN = TOP><FONT SIZE=2 FACE="Arial">None&nbsp;</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN=TOP  WIDTH=22% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">ParentDelete&nbsp;</FONT></B></TD>
+<TD VALIGN = TOP><FONT SIZE=2 FACE="Arial">None&nbsp;</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN=TOP  WIDTH=22% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">ChildInsert&nbsp;</FONT></B></TD>
+<TD VALIGN = TOP><FONT SIZE=2 FACE="Arial">None&nbsp;</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN=TOP  WIDTH=22% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">ChildUpdate&nbsp;</FONT></B></TD>
+<TD VALIGN = TOP><FONT SIZE=2 FACE="Arial">None&nbsp;</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN=TOP  WIDTH=22% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">ChildDelete&nbsp;</FONT></B></TD>
+<TD VALIGN = TOP><FONT SIZE=2 FACE="Arial">None&nbsp;</FONT></TD>
+</TR>
+</TABLE>
+<P>
+<TABLE WIDTH=100% CELLPADDING=3 BORDER=2>
+<TR>
+<TD VALIGN=TOP BGCOLOR="LIGHTGREY" ><B><FONT SIZE=4 FACE="Arial">"ASSAY_DESCRIPTOR to ASSAY_DESCRIPTOR" Bound Attachments&nbsp;</FONT></B></TD>
+</TR>
+</TABLE>
+<TABLE WIDTH=100% CELLPADDING=2 BORDER=2>
+<TR>
+<TD VALIGN=TOP  WIDTH=30% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Name&nbsp;</FONT></B></TD>
+<TD VALIGN=TOP  WIDTH=46% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Current Value&nbsp;</FONT></B></TD>
+</TR>
+</TABLE>
 <HR>
 <A NAME = "Rel_9d9732e6c643422788e52de35b08982f"></A>
 <TABLE WIDTH=100% CELLPADDING=1 BORDER=2>
@@ -89,12 +161,20 @@
 <TD><FONT SIZE=2 FACE="Arial">Non-Identifying&nbsp;</FONT></TD>
 </TR>
 <TR>
+<TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Do Not Generate&nbsp;</FONT></B></TD>
+<TD><FONT SIZE=2 FACE="Arial">False&nbsp;</FONT></TD>
+</TR>
+<TR>
 <TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Relationship Name&nbsp;</FONT></B></TD>
 <TD><FONT SIZE=2 FACE="Arial">FK_BIOLOGY_DESCRIPTOR_PRNT_SLF&nbsp;</FONT></TD>
 </TR>
 <TR>
 <TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Relationship Business Name&nbsp;</FONT></B></TD>
 <TD><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Physical Only&nbsp;</FONT></B></TD>
+<TD><FONT SIZE=2 FACE="Arial">No&nbsp;</FONT></TD>
 </TR>
 <TR>
 <TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Parent Table&nbsp;</FONT></B></TD>
@@ -111,6 +191,26 @@
 <TR>
 <TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Existence&nbsp;</FONT></B></TD>
 <TD><FONT SIZE=2 FACE="Arial">Optional&nbsp;</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Propagated Key&nbsp;</FONT></B></TD>
+<TD><FONT SIZE=2 FACE="Arial">Primary Key&nbsp;</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Deferrable&nbsp;</FONT></B></TD>
+<TD><FONT SIZE=2 FACE="Arial">NO&nbsp;</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Initially Deferred&nbsp;</FONT></B></TD>
+<TD><FONT SIZE=2 FACE="Arial">NO&nbsp;</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Disabled&nbsp;</FONT></B></TD>
+<TD><FONT SIZE=2 FACE="Arial">NO&nbsp;</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">NoValidate&nbsp;</FONT></B></TD>
+<TD><FONT SIZE=2 FACE="Arial">NO&nbsp;</FONT></TD>
 </TR>
 </TABLE>
 <P>
@@ -153,6 +253,50 @@
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">PARENT_NODE_ID&nbsp;</FONT></TD>
 </TR>
 </TABLE>
+<P>
+<TABLE WIDTH=100% CELLPADDING=3 BORDER=2>
+<TR>
+<TD VALIGN=TOP BGCOLOR="LIGHTGREY" ><B><FONT SIZE=4 FACE="Arial">"BIOLOGY_DESCRIPTOR to BIOLOGY_DESCRIPTOR" Trigger Templates&nbsp;</FONT></B></TD>
+</TR>
+</TABLE>
+<TABLE WIDTH=100% CELLPADDING=2 BORDER=2>
+<TR>
+<TD VALIGN=TOP  WIDTH=22% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">ParentInsert&nbsp;</FONT></B></TD>
+<TD VALIGN = TOP><FONT SIZE=2 FACE="Arial">None&nbsp;</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN=TOP  WIDTH=22% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">ParentUpdate&nbsp;</FONT></B></TD>
+<TD VALIGN = TOP><FONT SIZE=2 FACE="Arial">None&nbsp;</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN=TOP  WIDTH=22% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">ParentDelete&nbsp;</FONT></B></TD>
+<TD VALIGN = TOP><FONT SIZE=2 FACE="Arial">None&nbsp;</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN=TOP  WIDTH=22% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">ChildInsert&nbsp;</FONT></B></TD>
+<TD VALIGN = TOP><FONT SIZE=2 FACE="Arial">None&nbsp;</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN=TOP  WIDTH=22% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">ChildUpdate&nbsp;</FONT></B></TD>
+<TD VALIGN = TOP><FONT SIZE=2 FACE="Arial">None&nbsp;</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN=TOP  WIDTH=22% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">ChildDelete&nbsp;</FONT></B></TD>
+<TD VALIGN = TOP><FONT SIZE=2 FACE="Arial">None&nbsp;</FONT></TD>
+</TR>
+</TABLE>
+<P>
+<TABLE WIDTH=100% CELLPADDING=3 BORDER=2>
+<TR>
+<TD VALIGN=TOP BGCOLOR="LIGHTGREY" ><B><FONT SIZE=4 FACE="Arial">"BIOLOGY_DESCRIPTOR to BIOLOGY_DESCRIPTOR" Bound Attachments&nbsp;</FONT></B></TD>
+</TR>
+</TABLE>
+<TABLE WIDTH=100% CELLPADDING=2 BORDER=2>
+<TR>
+<TD VALIGN=TOP  WIDTH=30% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Name&nbsp;</FONT></B></TD>
+<TD VALIGN=TOP  WIDTH=46% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Current Value&nbsp;</FONT></B></TD>
+</TR>
+</TABLE>
 <HR>
 <A NAME = "Rel_b4be82dfe4ac4b6ebad5f7bf861c1f89"></A>
 <TABLE WIDTH=100% CELLPADDING=1 BORDER=2>
@@ -166,12 +310,20 @@
 <TD><FONT SIZE=2 FACE="Arial">Non-Identifying&nbsp;</FONT></TD>
 </TR>
 <TR>
+<TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Do Not Generate&nbsp;</FONT></B></TD>
+<TD><FONT SIZE=2 FACE="Arial">False&nbsp;</FONT></TD>
+</TR>
+<TR>
 <TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Relationship Name&nbsp;</FONT></B></TD>
 <TD><FONT SIZE=2 FACE="Arial">FK_E_HIERARCHY_CHILD_ELEM_ID&nbsp;</FONT></TD>
 </TR>
 <TR>
 <TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Relationship Business Name&nbsp;</FONT></B></TD>
 <TD><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Physical Only&nbsp;</FONT></B></TD>
+<TD><FONT SIZE=2 FACE="Arial">No&nbsp;</FONT></TD>
 </TR>
 <TR>
 <TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Parent Table&nbsp;</FONT></B></TD>
@@ -188,6 +340,26 @@
 <TR>
 <TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Existence&nbsp;</FONT></B></TD>
 <TD><FONT SIZE=2 FACE="Arial">Mandatory&nbsp;</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Propagated Key&nbsp;</FONT></B></TD>
+<TD><FONT SIZE=2 FACE="Arial">Primary Key&nbsp;</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Deferrable&nbsp;</FONT></B></TD>
+<TD><FONT SIZE=2 FACE="Arial">NO&nbsp;</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Initially Deferred&nbsp;</FONT></B></TD>
+<TD><FONT SIZE=2 FACE="Arial">NO&nbsp;</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Disabled&nbsp;</FONT></B></TD>
+<TD><FONT SIZE=2 FACE="Arial">NO&nbsp;</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">NoValidate&nbsp;</FONT></B></TD>
+<TD><FONT SIZE=2 FACE="Arial">NO&nbsp;</FONT></TD>
 </TR>
 </TABLE>
 <P>
@@ -230,6 +402,50 @@
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">CHILD_ELEMENT_ID&nbsp;</FONT></TD>
 </TR>
 </TABLE>
+<P>
+<TABLE WIDTH=100% CELLPADDING=3 BORDER=2>
+<TR>
+<TD VALIGN=TOP BGCOLOR="LIGHTGREY" ><B><FONT SIZE=4 FACE="Arial">"ELEMENT to ELEMENT_HIERARCHY" Trigger Templates&nbsp;</FONT></B></TD>
+</TR>
+</TABLE>
+<TABLE WIDTH=100% CELLPADDING=2 BORDER=2>
+<TR>
+<TD VALIGN=TOP  WIDTH=22% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">ParentInsert&nbsp;</FONT></B></TD>
+<TD VALIGN = TOP><FONT SIZE=2 FACE="Arial">None&nbsp;</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN=TOP  WIDTH=22% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">ParentUpdate&nbsp;</FONT></B></TD>
+<TD VALIGN = TOP><FONT SIZE=2 FACE="Arial">None&nbsp;</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN=TOP  WIDTH=22% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">ParentDelete&nbsp;</FONT></B></TD>
+<TD VALIGN = TOP><FONT SIZE=2 FACE="Arial">Cascade&nbsp;</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN=TOP  WIDTH=22% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">ChildInsert&nbsp;</FONT></B></TD>
+<TD VALIGN = TOP><FONT SIZE=2 FACE="Arial">None&nbsp;</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN=TOP  WIDTH=22% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">ChildUpdate&nbsp;</FONT></B></TD>
+<TD VALIGN = TOP><FONT SIZE=2 FACE="Arial">None&nbsp;</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN=TOP  WIDTH=22% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">ChildDelete&nbsp;</FONT></B></TD>
+<TD VALIGN = TOP><FONT SIZE=2 FACE="Arial">None&nbsp;</FONT></TD>
+</TR>
+</TABLE>
+<P>
+<TABLE WIDTH=100% CELLPADDING=3 BORDER=2>
+<TR>
+<TD VALIGN=TOP BGCOLOR="LIGHTGREY" ><B><FONT SIZE=4 FACE="Arial">"ELEMENT to ELEMENT_HIERARCHY" Bound Attachments&nbsp;</FONT></B></TD>
+</TR>
+</TABLE>
+<TABLE WIDTH=100% CELLPADDING=2 BORDER=2>
+<TR>
+<TD VALIGN=TOP  WIDTH=30% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Name&nbsp;</FONT></B></TD>
+<TD VALIGN=TOP  WIDTH=46% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Current Value&nbsp;</FONT></B></TD>
+</TR>
+</TABLE>
 <HR>
 <A NAME = "Rel_823a716dade843a4b2e27c56643406e8"></A>
 <TABLE WIDTH=100% CELLPADDING=1 BORDER=2>
@@ -243,12 +459,20 @@
 <TD><FONT SIZE=2 FACE="Arial">Non-Identifying&nbsp;</FONT></TD>
 </TR>
 <TR>
+<TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Do Not Generate&nbsp;</FONT></B></TD>
+<TD><FONT SIZE=2 FACE="Arial">False&nbsp;</FONT></TD>
+</TR>
+<TR>
 <TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Relationship Name&nbsp;</FONT></B></TD>
 <TD><FONT SIZE=2 FACE="Arial">FK_E_HIERARCHY_PARENT_ELEM_ID&nbsp;</FONT></TD>
 </TR>
 <TR>
 <TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Relationship Business Name&nbsp;</FONT></B></TD>
 <TD><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Physical Only&nbsp;</FONT></B></TD>
+<TD><FONT SIZE=2 FACE="Arial">No&nbsp;</FONT></TD>
 </TR>
 <TR>
 <TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Parent Table&nbsp;</FONT></B></TD>
@@ -265,6 +489,26 @@
 <TR>
 <TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Existence&nbsp;</FONT></B></TD>
 <TD><FONT SIZE=2 FACE="Arial">Optional&nbsp;</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Propagated Key&nbsp;</FONT></B></TD>
+<TD><FONT SIZE=2 FACE="Arial">Primary Key&nbsp;</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Deferrable&nbsp;</FONT></B></TD>
+<TD><FONT SIZE=2 FACE="Arial">NO&nbsp;</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Initially Deferred&nbsp;</FONT></B></TD>
+<TD><FONT SIZE=2 FACE="Arial">NO&nbsp;</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Disabled&nbsp;</FONT></B></TD>
+<TD><FONT SIZE=2 FACE="Arial">NO&nbsp;</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">NoValidate&nbsp;</FONT></B></TD>
+<TD><FONT SIZE=2 FACE="Arial">NO&nbsp;</FONT></TD>
 </TR>
 </TABLE>
 <P>
@@ -307,6 +551,50 @@
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">PARENT_ELEMENT_ID&nbsp;</FONT></TD>
 </TR>
 </TABLE>
+<P>
+<TABLE WIDTH=100% CELLPADDING=3 BORDER=2>
+<TR>
+<TD VALIGN=TOP BGCOLOR="LIGHTGREY" ><B><FONT SIZE=4 FACE="Arial">"ELEMENT to ELEMENT_HIERARCHY" Trigger Templates&nbsp;</FONT></B></TD>
+</TR>
+</TABLE>
+<TABLE WIDTH=100% CELLPADDING=2 BORDER=2>
+<TR>
+<TD VALIGN=TOP  WIDTH=22% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">ParentInsert&nbsp;</FONT></B></TD>
+<TD VALIGN = TOP><FONT SIZE=2 FACE="Arial">None&nbsp;</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN=TOP  WIDTH=22% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">ParentUpdate&nbsp;</FONT></B></TD>
+<TD VALIGN = TOP><FONT SIZE=2 FACE="Arial">None&nbsp;</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN=TOP  WIDTH=22% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">ParentDelete&nbsp;</FONT></B></TD>
+<TD VALIGN = TOP><FONT SIZE=2 FACE="Arial">Cascade&nbsp;</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN=TOP  WIDTH=22% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">ChildInsert&nbsp;</FONT></B></TD>
+<TD VALIGN = TOP><FONT SIZE=2 FACE="Arial">None&nbsp;</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN=TOP  WIDTH=22% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">ChildUpdate&nbsp;</FONT></B></TD>
+<TD VALIGN = TOP><FONT SIZE=2 FACE="Arial">None&nbsp;</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN=TOP  WIDTH=22% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">ChildDelete&nbsp;</FONT></B></TD>
+<TD VALIGN = TOP><FONT SIZE=2 FACE="Arial">None&nbsp;</FONT></TD>
+</TR>
+</TABLE>
+<P>
+<TABLE WIDTH=100% CELLPADDING=3 BORDER=2>
+<TR>
+<TD VALIGN=TOP BGCOLOR="LIGHTGREY" ><B><FONT SIZE=4 FACE="Arial">"ELEMENT to ELEMENT_HIERARCHY" Bound Attachments&nbsp;</FONT></B></TD>
+</TR>
+</TABLE>
+<TABLE WIDTH=100% CELLPADDING=2 BORDER=2>
+<TR>
+<TD VALIGN=TOP  WIDTH=30% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Name&nbsp;</FONT></B></TD>
+<TD VALIGN=TOP  WIDTH=46% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Current Value&nbsp;</FONT></B></TD>
+</TR>
+</TABLE>
 <HR>
 <A NAME = "Rel_853804b26fa742c7922606425163dfbc"></A>
 <TABLE WIDTH=100% CELLPADDING=1 BORDER=2>
@@ -320,12 +608,20 @@
 <TD><FONT SIZE=2 FACE="Arial">Non-Identifying&nbsp;</FONT></TD>
 </TR>
 <TR>
+<TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Do Not Generate&nbsp;</FONT></B></TD>
+<TD><FONT SIZE=2 FACE="Arial">False&nbsp;</FONT></TD>
+</TR>
+<TR>
 <TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Relationship Name&nbsp;</FONT></B></TD>
 <TD><FONT SIZE=2 FACE="Arial">FK_Element_Unit&nbsp;</FONT></TD>
 </TR>
 <TR>
 <TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Relationship Business Name&nbsp;</FONT></B></TD>
 <TD><FONT SIZE=2 FACE="Arial">measured in&nbsp;</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Physical Only&nbsp;</FONT></B></TD>
+<TD><FONT SIZE=2 FACE="Arial">No&nbsp;</FONT></TD>
 </TR>
 <TR>
 <TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Parent Table&nbsp;</FONT></B></TD>
@@ -342,6 +638,26 @@
 <TR>
 <TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Existence&nbsp;</FONT></B></TD>
 <TD><FONT SIZE=2 FACE="Arial">Optional&nbsp;</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Propagated Key&nbsp;</FONT></B></TD>
+<TD><FONT SIZE=2 FACE="Arial">AK_ELEMENT_LABEL&nbsp;</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Deferrable&nbsp;</FONT></B></TD>
+<TD><FONT SIZE=2 FACE="Arial">NO&nbsp;</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Initially Deferred&nbsp;</FONT></B></TD>
+<TD><FONT SIZE=2 FACE="Arial">NO&nbsp;</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Disabled&nbsp;</FONT></B></TD>
+<TD><FONT SIZE=2 FACE="Arial">NO&nbsp;</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">NoValidate&nbsp;</FONT></B></TD>
+<TD><FONT SIZE=2 FACE="Arial">NO&nbsp;</FONT></TD>
 </TR>
 </TABLE>
 <P>
@@ -384,6 +700,50 @@
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">UNIT&nbsp;</FONT></TD>
 </TR>
 </TABLE>
+<P>
+<TABLE WIDTH=100% CELLPADDING=3 BORDER=2>
+<TR>
+<TD VALIGN=TOP BGCOLOR="LIGHTGREY" ><B><FONT SIZE=4 FACE="Arial">"ELEMENT to ELEMENT" Trigger Templates&nbsp;</FONT></B></TD>
+</TR>
+</TABLE>
+<TABLE WIDTH=100% CELLPADDING=2 BORDER=2>
+<TR>
+<TD VALIGN=TOP  WIDTH=22% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">ParentInsert&nbsp;</FONT></B></TD>
+<TD VALIGN = TOP><FONT SIZE=2 FACE="Arial">None&nbsp;</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN=TOP  WIDTH=22% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">ParentUpdate&nbsp;</FONT></B></TD>
+<TD VALIGN = TOP><FONT SIZE=2 FACE="Arial">None&nbsp;</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN=TOP  WIDTH=22% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">ParentDelete&nbsp;</FONT></B></TD>
+<TD VALIGN = TOP><FONT SIZE=2 FACE="Arial">None&nbsp;</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN=TOP  WIDTH=22% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">ChildInsert&nbsp;</FONT></B></TD>
+<TD VALIGN = TOP><FONT SIZE=2 FACE="Arial">None&nbsp;</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN=TOP  WIDTH=22% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">ChildUpdate&nbsp;</FONT></B></TD>
+<TD VALIGN = TOP><FONT SIZE=2 FACE="Arial">None&nbsp;</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN=TOP  WIDTH=22% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">ChildDelete&nbsp;</FONT></B></TD>
+<TD VALIGN = TOP><FONT SIZE=2 FACE="Arial">None&nbsp;</FONT></TD>
+</TR>
+</TABLE>
+<P>
+<TABLE WIDTH=100% CELLPADDING=3 BORDER=2>
+<TR>
+<TD VALIGN=TOP BGCOLOR="LIGHTGREY" ><B><FONT SIZE=4 FACE="Arial">"ELEMENT to ELEMENT" Bound Attachments&nbsp;</FONT></B></TD>
+</TR>
+</TABLE>
+<TABLE WIDTH=100% CELLPADDING=2 BORDER=2>
+<TR>
+<TD VALIGN=TOP  WIDTH=30% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Name&nbsp;</FONT></B></TD>
+<TD VALIGN=TOP  WIDTH=46% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Current Value&nbsp;</FONT></B></TD>
+</TR>
+</TABLE>
 <HR>
 <A NAME = "Rel_1612390059e54264945b2e2ed2235073"></A>
 <TABLE WIDTH=100% CELLPADDING=1 BORDER=2>
@@ -397,12 +757,20 @@
 <TD><FONT SIZE=2 FACE="Arial">Non-Identifying&nbsp;</FONT></TD>
 </TR>
 <TR>
+<TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Do Not Generate&nbsp;</FONT></B></TD>
+<TD><FONT SIZE=2 FACE="Arial">False&nbsp;</FONT></TD>
+</TR>
+<TR>
 <TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Relationship Name&nbsp;</FONT></B></TD>
 <TD><FONT SIZE=2 FACE="Arial">FK_INSTANCE_DESCRIPTR_PRNT_SLF&nbsp;</FONT></TD>
 </TR>
 <TR>
 <TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Relationship Business Name&nbsp;</FONT></B></TD>
 <TD><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Physical Only&nbsp;</FONT></B></TD>
+<TD><FONT SIZE=2 FACE="Arial">No&nbsp;</FONT></TD>
 </TR>
 <TR>
 <TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Parent Table&nbsp;</FONT></B></TD>
@@ -419,6 +787,26 @@
 <TR>
 <TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Existence&nbsp;</FONT></B></TD>
 <TD><FONT SIZE=2 FACE="Arial">Optional&nbsp;</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Propagated Key&nbsp;</FONT></B></TD>
+<TD><FONT SIZE=2 FACE="Arial">Primary Key&nbsp;</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Deferrable&nbsp;</FONT></B></TD>
+<TD><FONT SIZE=2 FACE="Arial">NO&nbsp;</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Initially Deferred&nbsp;</FONT></B></TD>
+<TD><FONT SIZE=2 FACE="Arial">NO&nbsp;</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Disabled&nbsp;</FONT></B></TD>
+<TD><FONT SIZE=2 FACE="Arial">NO&nbsp;</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">NoValidate&nbsp;</FONT></B></TD>
+<TD><FONT SIZE=2 FACE="Arial">NO&nbsp;</FONT></TD>
 </TR>
 </TABLE>
 <P>
@@ -461,6 +849,50 @@
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">PARENT_NODE_ID&nbsp;</FONT></TD>
 </TR>
 </TABLE>
+<P>
+<TABLE WIDTH=100% CELLPADDING=3 BORDER=2>
+<TR>
+<TD VALIGN=TOP BGCOLOR="LIGHTGREY" ><B><FONT SIZE=4 FACE="Arial">"INSTANCE_DESCRIPTOR to INSTANCE_DESCRIPTOR" Trigger Templates&nbsp;</FONT></B></TD>
+</TR>
+</TABLE>
+<TABLE WIDTH=100% CELLPADDING=2 BORDER=2>
+<TR>
+<TD VALIGN=TOP  WIDTH=22% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">ParentInsert&nbsp;</FONT></B></TD>
+<TD VALIGN = TOP><FONT SIZE=2 FACE="Arial">None&nbsp;</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN=TOP  WIDTH=22% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">ParentUpdate&nbsp;</FONT></B></TD>
+<TD VALIGN = TOP><FONT SIZE=2 FACE="Arial">None&nbsp;</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN=TOP  WIDTH=22% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">ParentDelete&nbsp;</FONT></B></TD>
+<TD VALIGN = TOP><FONT SIZE=2 FACE="Arial">None&nbsp;</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN=TOP  WIDTH=22% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">ChildInsert&nbsp;</FONT></B></TD>
+<TD VALIGN = TOP><FONT SIZE=2 FACE="Arial">None&nbsp;</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN=TOP  WIDTH=22% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">ChildUpdate&nbsp;</FONT></B></TD>
+<TD VALIGN = TOP><FONT SIZE=2 FACE="Arial">None&nbsp;</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN=TOP  WIDTH=22% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">ChildDelete&nbsp;</FONT></B></TD>
+<TD VALIGN = TOP><FONT SIZE=2 FACE="Arial">None&nbsp;</FONT></TD>
+</TR>
+</TABLE>
+<P>
+<TABLE WIDTH=100% CELLPADDING=3 BORDER=2>
+<TR>
+<TD VALIGN=TOP BGCOLOR="LIGHTGREY" ><B><FONT SIZE=4 FACE="Arial">"INSTANCE_DESCRIPTOR to INSTANCE_DESCRIPTOR" Bound Attachments&nbsp;</FONT></B></TD>
+</TR>
+</TABLE>
+<TABLE WIDTH=100% CELLPADDING=2 BORDER=2>
+<TR>
+<TD VALIGN=TOP  WIDTH=30% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Name&nbsp;</FONT></B></TD>
+<TD VALIGN=TOP  WIDTH=46% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Current Value&nbsp;</FONT></B></TD>
+</TR>
+</TABLE>
 <HR>
 <A NAME = "Rel_93f096f9b7aa4a37a43f0edbbab0fb32"></A>
 <TABLE WIDTH=100% CELLPADDING=1 BORDER=2>
@@ -474,12 +906,20 @@
 <TD><FONT SIZE=2 FACE="Arial">Non-Identifying&nbsp;</FONT></TD>
 </TR>
 <TR>
+<TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Do Not Generate&nbsp;</FONT></B></TD>
+<TD><FONT SIZE=2 FACE="Arial">False&nbsp;</FONT></TD>
+</TR>
+<TR>
 <TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Relationship Name&nbsp;</FONT></B></TD>
 <TD><FONT SIZE=2 FACE="Arial">FK_LABORATORY_PARENT_NODE_ID&nbsp;</FONT></TD>
 </TR>
 <TR>
 <TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Relationship Business Name&nbsp;</FONT></B></TD>
 <TD><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Physical Only&nbsp;</FONT></B></TD>
+<TD><FONT SIZE=2 FACE="Arial">No&nbsp;</FONT></TD>
 </TR>
 <TR>
 <TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Parent Table&nbsp;</FONT></B></TD>
@@ -496,6 +936,26 @@
 <TR>
 <TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Existence&nbsp;</FONT></B></TD>
 <TD><FONT SIZE=2 FACE="Arial">Optional&nbsp;</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Propagated Key&nbsp;</FONT></B></TD>
+<TD><FONT SIZE=2 FACE="Arial">Primary Key&nbsp;</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Deferrable&nbsp;</FONT></B></TD>
+<TD><FONT SIZE=2 FACE="Arial">NO&nbsp;</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Initially Deferred&nbsp;</FONT></B></TD>
+<TD><FONT SIZE=2 FACE="Arial">NO&nbsp;</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Disabled&nbsp;</FONT></B></TD>
+<TD><FONT SIZE=2 FACE="Arial">NO&nbsp;</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">NoValidate&nbsp;</FONT></B></TD>
+<TD><FONT SIZE=2 FACE="Arial">NO&nbsp;</FONT></TD>
 </TR>
 </TABLE>
 <P>
@@ -538,6 +998,50 @@
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">PARENT_NODE_ID&nbsp;</FONT></TD>
 </TR>
 </TABLE>
+<P>
+<TABLE WIDTH=100% CELLPADDING=3 BORDER=2>
+<TR>
+<TD VALIGN=TOP BGCOLOR="LIGHTGREY" ><B><FONT SIZE=4 FACE="Arial">"LABORATORY to LABORATORY" Trigger Templates&nbsp;</FONT></B></TD>
+</TR>
+</TABLE>
+<TABLE WIDTH=100% CELLPADDING=2 BORDER=2>
+<TR>
+<TD VALIGN=TOP  WIDTH=22% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">ParentInsert&nbsp;</FONT></B></TD>
+<TD VALIGN = TOP><FONT SIZE=2 FACE="Arial">None&nbsp;</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN=TOP  WIDTH=22% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">ParentUpdate&nbsp;</FONT></B></TD>
+<TD VALIGN = TOP><FONT SIZE=2 FACE="Arial">None&nbsp;</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN=TOP  WIDTH=22% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">ParentDelete&nbsp;</FONT></B></TD>
+<TD VALIGN = TOP><FONT SIZE=2 FACE="Arial">None&nbsp;</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN=TOP  WIDTH=22% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">ChildInsert&nbsp;</FONT></B></TD>
+<TD VALIGN = TOP><FONT SIZE=2 FACE="Arial">None&nbsp;</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN=TOP  WIDTH=22% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">ChildUpdate&nbsp;</FONT></B></TD>
+<TD VALIGN = TOP><FONT SIZE=2 FACE="Arial">None&nbsp;</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN=TOP  WIDTH=22% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">ChildDelete&nbsp;</FONT></B></TD>
+<TD VALIGN = TOP><FONT SIZE=2 FACE="Arial">None&nbsp;</FONT></TD>
+</TR>
+</TABLE>
+<P>
+<TABLE WIDTH=100% CELLPADDING=3 BORDER=2>
+<TR>
+<TD VALIGN=TOP BGCOLOR="LIGHTGREY" ><B><FONT SIZE=4 FACE="Arial">"LABORATORY to LABORATORY" Bound Attachments&nbsp;</FONT></B></TD>
+</TR>
+</TABLE>
+<TABLE WIDTH=100% CELLPADDING=2 BORDER=2>
+<TR>
+<TD VALIGN=TOP  WIDTH=30% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Name&nbsp;</FONT></B></TD>
+<TD VALIGN=TOP  WIDTH=46% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Current Value&nbsp;</FONT></B></TD>
+</TR>
+</TABLE>
 <HR>
 <A NAME = "Rel_05aac4f209f54e1ebaab6ac5ed366af4"></A>
 <TABLE WIDTH=100% CELLPADDING=1 BORDER=2>
@@ -551,12 +1055,20 @@
 <TD><FONT SIZE=2 FACE="Arial">Non-Identifying&nbsp;</FONT></TD>
 </TR>
 <TR>
+<TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Do Not Generate&nbsp;</FONT></B></TD>
+<TD><FONT SIZE=2 FACE="Arial">False&nbsp;</FONT></TD>
+</TR>
+<TR>
 <TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Relationship Name&nbsp;</FONT></B></TD>
 <TD><FONT SIZE=2 FACE="Arial">FK_ONTOLOGY_ITEM_ELEMENT&nbsp;</FONT></TD>
 </TR>
 <TR>
 <TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Relationship Business Name&nbsp;</FONT></B></TD>
 <TD><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Physical Only&nbsp;</FONT></B></TD>
+<TD><FONT SIZE=2 FACE="Arial">No&nbsp;</FONT></TD>
 </TR>
 <TR>
 <TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Parent Table&nbsp;</FONT></B></TD>
@@ -573,6 +1085,26 @@
 <TR>
 <TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Existence&nbsp;</FONT></B></TD>
 <TD><FONT SIZE=2 FACE="Arial">Optional&nbsp;</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Propagated Key&nbsp;</FONT></B></TD>
+<TD><FONT SIZE=2 FACE="Arial">Primary Key&nbsp;</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Deferrable&nbsp;</FONT></B></TD>
+<TD><FONT SIZE=2 FACE="Arial">NO&nbsp;</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Initially Deferred&nbsp;</FONT></B></TD>
+<TD><FONT SIZE=2 FACE="Arial">NO&nbsp;</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Disabled&nbsp;</FONT></B></TD>
+<TD><FONT SIZE=2 FACE="Arial">NO&nbsp;</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">NoValidate&nbsp;</FONT></B></TD>
+<TD><FONT SIZE=2 FACE="Arial">NO&nbsp;</FONT></TD>
 </TR>
 </TABLE>
 <P>
@@ -615,6 +1147,50 @@
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">ELEMENT_ID&nbsp;</FONT></TD>
 </TR>
 </TABLE>
+<P>
+<TABLE WIDTH=100% CELLPADDING=3 BORDER=2>
+<TR>
+<TD VALIGN=TOP BGCOLOR="LIGHTGREY" ><B><FONT SIZE=4 FACE="Arial">"ELEMENT to ONTOLOGY_ITEM" Trigger Templates&nbsp;</FONT></B></TD>
+</TR>
+</TABLE>
+<TABLE WIDTH=100% CELLPADDING=2 BORDER=2>
+<TR>
+<TD VALIGN=TOP  WIDTH=22% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">ParentInsert&nbsp;</FONT></B></TD>
+<TD VALIGN = TOP><FONT SIZE=2 FACE="Arial">None&nbsp;</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN=TOP  WIDTH=22% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">ParentUpdate&nbsp;</FONT></B></TD>
+<TD VALIGN = TOP><FONT SIZE=2 FACE="Arial">None&nbsp;</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN=TOP  WIDTH=22% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">ParentDelete&nbsp;</FONT></B></TD>
+<TD VALIGN = TOP><FONT SIZE=2 FACE="Arial">Cascade&nbsp;</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN=TOP  WIDTH=22% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">ChildInsert&nbsp;</FONT></B></TD>
+<TD VALIGN = TOP><FONT SIZE=2 FACE="Arial">None&nbsp;</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN=TOP  WIDTH=22% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">ChildUpdate&nbsp;</FONT></B></TD>
+<TD VALIGN = TOP><FONT SIZE=2 FACE="Arial">None&nbsp;</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN=TOP  WIDTH=22% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">ChildDelete&nbsp;</FONT></B></TD>
+<TD VALIGN = TOP><FONT SIZE=2 FACE="Arial">None&nbsp;</FONT></TD>
+</TR>
+</TABLE>
+<P>
+<TABLE WIDTH=100% CELLPADDING=3 BORDER=2>
+<TR>
+<TD VALIGN=TOP BGCOLOR="LIGHTGREY" ><B><FONT SIZE=4 FACE="Arial">"ELEMENT to ONTOLOGY_ITEM" Bound Attachments&nbsp;</FONT></B></TD>
+</TR>
+</TABLE>
+<TABLE WIDTH=100% CELLPADDING=2 BORDER=2>
+<TR>
+<TD VALIGN=TOP  WIDTH=30% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Name&nbsp;</FONT></B></TD>
+<TD VALIGN=TOP  WIDTH=46% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Current Value&nbsp;</FONT></B></TD>
+</TR>
+</TABLE>
 <HR>
 <A NAME = "Rel_5bbd843dee5d4294aaf17fcf0ecb3a98"></A>
 <TABLE WIDTH=100% CELLPADDING=1 BORDER=2>
@@ -628,12 +1204,20 @@
 <TD><FONT SIZE=2 FACE="Arial">Non-Identifying&nbsp;</FONT></TD>
 </TR>
 <TR>
+<TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Do Not Generate&nbsp;</FONT></B></TD>
+<TD><FONT SIZE=2 FACE="Arial">False&nbsp;</FONT></TD>
+</TR>
+<TR>
 <TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Relationship Name&nbsp;</FONT></B></TD>
 <TD><FONT SIZE=2 FACE="Arial">FK_ONTOLOGY_ITEM_ONTOLOGY&nbsp;</FONT></TD>
 </TR>
 <TR>
 <TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Relationship Business Name&nbsp;</FONT></B></TD>
 <TD><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Physical Only&nbsp;</FONT></B></TD>
+<TD><FONT SIZE=2 FACE="Arial">No&nbsp;</FONT></TD>
 </TR>
 <TR>
 <TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Parent Table&nbsp;</FONT></B></TD>
@@ -650,6 +1234,26 @@
 <TR>
 <TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Existence&nbsp;</FONT></B></TD>
 <TD><FONT SIZE=2 FACE="Arial">Mandatory&nbsp;</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Propagated Key&nbsp;</FONT></B></TD>
+<TD><FONT SIZE=2 FACE="Arial">Primary Key&nbsp;</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Deferrable&nbsp;</FONT></B></TD>
+<TD><FONT SIZE=2 FACE="Arial">NO&nbsp;</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Initially Deferred&nbsp;</FONT></B></TD>
+<TD><FONT SIZE=2 FACE="Arial">NO&nbsp;</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Disabled&nbsp;</FONT></B></TD>
+<TD><FONT SIZE=2 FACE="Arial">NO&nbsp;</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">NoValidate&nbsp;</FONT></B></TD>
+<TD><FONT SIZE=2 FACE="Arial">NO&nbsp;</FONT></TD>
 </TR>
 </TABLE>
 <P>
@@ -692,6 +1296,50 @@
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">ONTOLOGY_ID&nbsp;</FONT></TD>
 </TR>
 </TABLE>
+<P>
+<TABLE WIDTH=100% CELLPADDING=3 BORDER=2>
+<TR>
+<TD VALIGN=TOP BGCOLOR="LIGHTGREY" ><B><FONT SIZE=4 FACE="Arial">"ONTOLOGY to ONTOLOGY_ITEM" Trigger Templates&nbsp;</FONT></B></TD>
+</TR>
+</TABLE>
+<TABLE WIDTH=100% CELLPADDING=2 BORDER=2>
+<TR>
+<TD VALIGN=TOP  WIDTH=22% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">ParentInsert&nbsp;</FONT></B></TD>
+<TD VALIGN = TOP><FONT SIZE=2 FACE="Arial">None&nbsp;</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN=TOP  WIDTH=22% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">ParentUpdate&nbsp;</FONT></B></TD>
+<TD VALIGN = TOP><FONT SIZE=2 FACE="Arial">None&nbsp;</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN=TOP  WIDTH=22% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">ParentDelete&nbsp;</FONT></B></TD>
+<TD VALIGN = TOP><FONT SIZE=2 FACE="Arial">None&nbsp;</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN=TOP  WIDTH=22% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">ChildInsert&nbsp;</FONT></B></TD>
+<TD VALIGN = TOP><FONT SIZE=2 FACE="Arial">None&nbsp;</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN=TOP  WIDTH=22% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">ChildUpdate&nbsp;</FONT></B></TD>
+<TD VALIGN = TOP><FONT SIZE=2 FACE="Arial">None&nbsp;</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN=TOP  WIDTH=22% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">ChildDelete&nbsp;</FONT></B></TD>
+<TD VALIGN = TOP><FONT SIZE=2 FACE="Arial">None&nbsp;</FONT></TD>
+</TR>
+</TABLE>
+<P>
+<TABLE WIDTH=100% CELLPADDING=3 BORDER=2>
+<TR>
+<TD VALIGN=TOP BGCOLOR="LIGHTGREY" ><B><FONT SIZE=4 FACE="Arial">"ONTOLOGY to ONTOLOGY_ITEM" Bound Attachments&nbsp;</FONT></B></TD>
+</TR>
+</TABLE>
+<TABLE WIDTH=100% CELLPADDING=2 BORDER=2>
+<TR>
+<TD VALIGN=TOP  WIDTH=30% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Name&nbsp;</FONT></B></TD>
+<TD VALIGN=TOP  WIDTH=46% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Current Value&nbsp;</FONT></B></TD>
+</TR>
+</TABLE>
 <HR>
 <A NAME = "Rel_1c6e89adb84348028d9cd3aff85872fa"></A>
 <TABLE WIDTH=100% CELLPADDING=1 BORDER=2>
@@ -705,12 +1353,20 @@
 <TD><FONT SIZE=2 FACE="Arial">Non-Identifying&nbsp;</FONT></TD>
 </TR>
 <TR>
+<TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Do Not Generate&nbsp;</FONT></B></TD>
+<TD><FONT SIZE=2 FACE="Arial">False&nbsp;</FONT></TD>
+</TR>
+<TR>
 <TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Relationship Name&nbsp;</FONT></B></TD>
 <TD><FONT SIZE=2 FACE="Arial">FK_Result_Type_Parent_Self&nbsp;</FONT></TD>
 </TR>
 <TR>
 <TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Relationship Business Name&nbsp;</FONT></B></TD>
 <TD><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Physical Only&nbsp;</FONT></B></TD>
+<TD><FONT SIZE=2 FACE="Arial">No&nbsp;</FONT></TD>
 </TR>
 <TR>
 <TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Parent Table&nbsp;</FONT></B></TD>
@@ -727,6 +1383,26 @@
 <TR>
 <TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Existence&nbsp;</FONT></B></TD>
 <TD><FONT SIZE=2 FACE="Arial">Optional&nbsp;</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Propagated Key&nbsp;</FONT></B></TD>
+<TD><FONT SIZE=2 FACE="Arial">Primary Key&nbsp;</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Deferrable&nbsp;</FONT></B></TD>
+<TD><FONT SIZE=2 FACE="Arial">NO&nbsp;</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Initially Deferred&nbsp;</FONT></B></TD>
+<TD><FONT SIZE=2 FACE="Arial">NO&nbsp;</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Disabled&nbsp;</FONT></B></TD>
+<TD><FONT SIZE=2 FACE="Arial">NO&nbsp;</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">NoValidate&nbsp;</FONT></B></TD>
+<TD><FONT SIZE=2 FACE="Arial">NO&nbsp;</FONT></TD>
 </TR>
 </TABLE>
 <P>
@@ -769,6 +1445,50 @@
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">Parent_node_id&nbsp;</FONT></TD>
 </TR>
 </TABLE>
+<P>
+<TABLE WIDTH=100% CELLPADDING=3 BORDER=2>
+<TR>
+<TD VALIGN=TOP BGCOLOR="LIGHTGREY" ><B><FONT SIZE=4 FACE="Arial">"RESULT_TYPE to RESULT_TYPE" Trigger Templates&nbsp;</FONT></B></TD>
+</TR>
+</TABLE>
+<TABLE WIDTH=100% CELLPADDING=2 BORDER=2>
+<TR>
+<TD VALIGN=TOP  WIDTH=22% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">ParentInsert&nbsp;</FONT></B></TD>
+<TD VALIGN = TOP><FONT SIZE=2 FACE="Arial">None&nbsp;</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN=TOP  WIDTH=22% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">ParentUpdate&nbsp;</FONT></B></TD>
+<TD VALIGN = TOP><FONT SIZE=2 FACE="Arial">None&nbsp;</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN=TOP  WIDTH=22% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">ParentDelete&nbsp;</FONT></B></TD>
+<TD VALIGN = TOP><FONT SIZE=2 FACE="Arial">None&nbsp;</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN=TOP  WIDTH=22% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">ChildInsert&nbsp;</FONT></B></TD>
+<TD VALIGN = TOP><FONT SIZE=2 FACE="Arial">None&nbsp;</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN=TOP  WIDTH=22% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">ChildUpdate&nbsp;</FONT></B></TD>
+<TD VALIGN = TOP><FONT SIZE=2 FACE="Arial">None&nbsp;</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN=TOP  WIDTH=22% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">ChildDelete&nbsp;</FONT></B></TD>
+<TD VALIGN = TOP><FONT SIZE=2 FACE="Arial">None&nbsp;</FONT></TD>
+</TR>
+</TABLE>
+<P>
+<TABLE WIDTH=100% CELLPADDING=3 BORDER=2>
+<TR>
+<TD VALIGN=TOP BGCOLOR="LIGHTGREY" ><B><FONT SIZE=4 FACE="Arial">"RESULT_TYPE to RESULT_TYPE" Bound Attachments&nbsp;</FONT></B></TD>
+</TR>
+</TABLE>
+<TABLE WIDTH=100% CELLPADDING=2 BORDER=2>
+<TR>
+<TD VALIGN=TOP  WIDTH=30% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Name&nbsp;</FONT></B></TD>
+<TD VALIGN=TOP  WIDTH=46% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Current Value&nbsp;</FONT></B></TD>
+</TR>
+</TABLE>
 <HR>
 <A NAME = "Rel_b7bdc2dc53c5471389dcfc3d33594181"></A>
 <TABLE WIDTH=100% CELLPADDING=1 BORDER=2>
@@ -782,12 +1502,20 @@
 <TD><FONT SIZE=2 FACE="Arial">Non-Identifying&nbsp;</FONT></TD>
 </TR>
 <TR>
+<TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Do Not Generate&nbsp;</FONT></B></TD>
+<TD><FONT SIZE=2 FACE="Arial">False&nbsp;</FONT></TD>
+</TR>
+<TR>
 <TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Relationship Name&nbsp;</FONT></B></TD>
 <TD><FONT SIZE=2 FACE="Arial">FK_STAGE_PARENT_NODE_ID&nbsp;</FONT></TD>
 </TR>
 <TR>
 <TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Relationship Business Name&nbsp;</FONT></B></TD>
 <TD><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Physical Only&nbsp;</FONT></B></TD>
+<TD><FONT SIZE=2 FACE="Arial">No&nbsp;</FONT></TD>
 </TR>
 <TR>
 <TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Parent Table&nbsp;</FONT></B></TD>
@@ -804,6 +1532,26 @@
 <TR>
 <TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Existence&nbsp;</FONT></B></TD>
 <TD><FONT SIZE=2 FACE="Arial">Optional&nbsp;</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Propagated Key&nbsp;</FONT></B></TD>
+<TD><FONT SIZE=2 FACE="Arial">Primary Key&nbsp;</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Deferrable&nbsp;</FONT></B></TD>
+<TD><FONT SIZE=2 FACE="Arial">NO&nbsp;</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Initially Deferred&nbsp;</FONT></B></TD>
+<TD><FONT SIZE=2 FACE="Arial">NO&nbsp;</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Disabled&nbsp;</FONT></B></TD>
+<TD><FONT SIZE=2 FACE="Arial">NO&nbsp;</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">NoValidate&nbsp;</FONT></B></TD>
+<TD><FONT SIZE=2 FACE="Arial">NO&nbsp;</FONT></TD>
 </TR>
 </TABLE>
 <P>
@@ -846,6 +1594,50 @@
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">PARENT_NODE_ID&nbsp;</FONT></TD>
 </TR>
 </TABLE>
+<P>
+<TABLE WIDTH=100% CELLPADDING=3 BORDER=2>
+<TR>
+<TD VALIGN=TOP BGCOLOR="LIGHTGREY" ><B><FONT SIZE=4 FACE="Arial">"STAGE to STAGE" Trigger Templates&nbsp;</FONT></B></TD>
+</TR>
+</TABLE>
+<TABLE WIDTH=100% CELLPADDING=2 BORDER=2>
+<TR>
+<TD VALIGN=TOP  WIDTH=22% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">ParentInsert&nbsp;</FONT></B></TD>
+<TD VALIGN = TOP><FONT SIZE=2 FACE="Arial">None&nbsp;</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN=TOP  WIDTH=22% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">ParentUpdate&nbsp;</FONT></B></TD>
+<TD VALIGN = TOP><FONT SIZE=2 FACE="Arial">None&nbsp;</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN=TOP  WIDTH=22% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">ParentDelete&nbsp;</FONT></B></TD>
+<TD VALIGN = TOP><FONT SIZE=2 FACE="Arial">None&nbsp;</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN=TOP  WIDTH=22% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">ChildInsert&nbsp;</FONT></B></TD>
+<TD VALIGN = TOP><FONT SIZE=2 FACE="Arial">None&nbsp;</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN=TOP  WIDTH=22% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">ChildUpdate&nbsp;</FONT></B></TD>
+<TD VALIGN = TOP><FONT SIZE=2 FACE="Arial">None&nbsp;</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN=TOP  WIDTH=22% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">ChildDelete&nbsp;</FONT></B></TD>
+<TD VALIGN = TOP><FONT SIZE=2 FACE="Arial">None&nbsp;</FONT></TD>
+</TR>
+</TABLE>
+<P>
+<TABLE WIDTH=100% CELLPADDING=3 BORDER=2>
+<TR>
+<TD VALIGN=TOP BGCOLOR="LIGHTGREY" ><B><FONT SIZE=4 FACE="Arial">"STAGE to STAGE" Bound Attachments&nbsp;</FONT></B></TD>
+</TR>
+</TABLE>
+<TABLE WIDTH=100% CELLPADDING=2 BORDER=2>
+<TR>
+<TD VALIGN=TOP  WIDTH=30% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Name&nbsp;</FONT></B></TD>
+<TD VALIGN=TOP  WIDTH=46% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Current Value&nbsp;</FONT></B></TD>
+</TR>
+</TABLE>
 <HR>
 <A NAME = "Rel_d11fab5608b74a708b152f3a41cf3ffd"></A>
 <TABLE WIDTH=100% CELLPADDING=1 BORDER=2>
@@ -859,12 +1651,20 @@
 <TD><FONT SIZE=2 FACE="Arial">Non-Identifying&nbsp;</FONT></TD>
 </TR>
 <TR>
+<TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Do Not Generate&nbsp;</FONT></B></TD>
+<TD><FONT SIZE=2 FACE="Arial">False&nbsp;</FONT></TD>
+</TR>
+<TR>
 <TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Relationship Name&nbsp;</FONT></B></TD>
 <TD><FONT SIZE=2 FACE="Arial">FK_TREE_ROOT_ELEMENT&nbsp;</FONT></TD>
 </TR>
 <TR>
 <TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Relationship Business Name&nbsp;</FONT></B></TD>
 <TD><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Physical Only&nbsp;</FONT></B></TD>
+<TD><FONT SIZE=2 FACE="Arial">No&nbsp;</FONT></TD>
 </TR>
 <TR>
 <TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Parent Table&nbsp;</FONT></B></TD>
@@ -881,6 +1681,26 @@
 <TR>
 <TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Existence&nbsp;</FONT></B></TD>
 <TD><FONT SIZE=2 FACE="Arial">Mandatory&nbsp;</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Propagated Key&nbsp;</FONT></B></TD>
+<TD><FONT SIZE=2 FACE="Arial">Primary Key&nbsp;</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Deferrable&nbsp;</FONT></B></TD>
+<TD><FONT SIZE=2 FACE="Arial">NO&nbsp;</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Initially Deferred&nbsp;</FONT></B></TD>
+<TD><FONT SIZE=2 FACE="Arial">NO&nbsp;</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Disabled&nbsp;</FONT></B></TD>
+<TD><FONT SIZE=2 FACE="Arial">NO&nbsp;</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">NoValidate&nbsp;</FONT></B></TD>
+<TD><FONT SIZE=2 FACE="Arial">NO&nbsp;</FONT></TD>
 </TR>
 </TABLE>
 <P>
@@ -923,6 +1743,50 @@
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">ELEMENT_ID&nbsp;</FONT></TD>
 </TR>
 </TABLE>
+<P>
+<TABLE WIDTH=100% CELLPADDING=3 BORDER=2>
+<TR>
+<TD VALIGN=TOP BGCOLOR="LIGHTGREY" ><B><FONT SIZE=4 FACE="Arial">"ELEMENT to TREE_ROOT" Trigger Templates&nbsp;</FONT></B></TD>
+</TR>
+</TABLE>
+<TABLE WIDTH=100% CELLPADDING=2 BORDER=2>
+<TR>
+<TD VALIGN=TOP  WIDTH=22% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">ParentInsert&nbsp;</FONT></B></TD>
+<TD VALIGN = TOP><FONT SIZE=2 FACE="Arial">None&nbsp;</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN=TOP  WIDTH=22% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">ParentUpdate&nbsp;</FONT></B></TD>
+<TD VALIGN = TOP><FONT SIZE=2 FACE="Arial">None&nbsp;</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN=TOP  WIDTH=22% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">ParentDelete&nbsp;</FONT></B></TD>
+<TD VALIGN = TOP><FONT SIZE=2 FACE="Arial">None&nbsp;</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN=TOP  WIDTH=22% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">ChildInsert&nbsp;</FONT></B></TD>
+<TD VALIGN = TOP><FONT SIZE=2 FACE="Arial">None&nbsp;</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN=TOP  WIDTH=22% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">ChildUpdate&nbsp;</FONT></B></TD>
+<TD VALIGN = TOP><FONT SIZE=2 FACE="Arial">None&nbsp;</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN=TOP  WIDTH=22% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">ChildDelete&nbsp;</FONT></B></TD>
+<TD VALIGN = TOP><FONT SIZE=2 FACE="Arial">None&nbsp;</FONT></TD>
+</TR>
+</TABLE>
+<P>
+<TABLE WIDTH=100% CELLPADDING=3 BORDER=2>
+<TR>
+<TD VALIGN=TOP BGCOLOR="LIGHTGREY" ><B><FONT SIZE=4 FACE="Arial">"ELEMENT to TREE_ROOT" Bound Attachments&nbsp;</FONT></B></TD>
+</TR>
+</TABLE>
+<TABLE WIDTH=100% CELLPADDING=2 BORDER=2>
+<TR>
+<TD VALIGN=TOP  WIDTH=30% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Name&nbsp;</FONT></B></TD>
+<TD VALIGN=TOP  WIDTH=46% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Current Value&nbsp;</FONT></B></TD>
+</TR>
+</TABLE>
 <HR>
 <A NAME = "Rel_bcb093b8c2a6448fb9b423a55e7aea35"></A>
 <TABLE WIDTH=100% CELLPADDING=1 BORDER=2>
@@ -936,12 +1800,20 @@
 <TD><FONT SIZE=2 FACE="Arial">Identifying&nbsp;</FONT></TD>
 </TR>
 <TR>
+<TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Do Not Generate&nbsp;</FONT></B></TD>
+<TD><FONT SIZE=2 FACE="Arial">False&nbsp;</FONT></TD>
+</TR>
+<TR>
 <TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Relationship Name&nbsp;</FONT></B></TD>
 <TD><FONT SIZE=2 FACE="Arial">FK_UNIT_CONVERSN_FRM_UNT_ELMNT&nbsp;</FONT></TD>
 </TR>
 <TR>
 <TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Relationship Business Name&nbsp;</FONT></B></TD>
 <TD><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Physical Only&nbsp;</FONT></B></TD>
+<TD><FONT SIZE=2 FACE="Arial">No&nbsp;</FONT></TD>
 </TR>
 <TR>
 <TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Parent Table&nbsp;</FONT></B></TD>
@@ -958,6 +1830,26 @@
 <TR>
 <TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Existence&nbsp;</FONT></B></TD>
 <TD><FONT SIZE=2 FACE="Arial">Mandatory&nbsp;</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Propagated Key&nbsp;</FONT></B></TD>
+<TD><FONT SIZE=2 FACE="Arial">AK_ELEMENT_LABEL&nbsp;</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Deferrable&nbsp;</FONT></B></TD>
+<TD><FONT SIZE=2 FACE="Arial">NO&nbsp;</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Initially Deferred&nbsp;</FONT></B></TD>
+<TD><FONT SIZE=2 FACE="Arial">NO&nbsp;</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Disabled&nbsp;</FONT></B></TD>
+<TD><FONT SIZE=2 FACE="Arial">NO&nbsp;</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">NoValidate&nbsp;</FONT></B></TD>
+<TD><FONT SIZE=2 FACE="Arial">NO&nbsp;</FONT></TD>
 </TR>
 </TABLE>
 <P>
@@ -1000,6 +1892,50 @@
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">FROM_UNIT&nbsp;</FONT></TD>
 </TR>
 </TABLE>
+<P>
+<TABLE WIDTH=100% CELLPADDING=3 BORDER=2>
+<TR>
+<TD VALIGN=TOP BGCOLOR="LIGHTGREY" ><B><FONT SIZE=4 FACE="Arial">"ELEMENT to UNIT_CONVERSION" Trigger Templates&nbsp;</FONT></B></TD>
+</TR>
+</TABLE>
+<TABLE WIDTH=100% CELLPADDING=2 BORDER=2>
+<TR>
+<TD VALIGN=TOP  WIDTH=22% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">ParentInsert&nbsp;</FONT></B></TD>
+<TD VALIGN = TOP><FONT SIZE=2 FACE="Arial">None&nbsp;</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN=TOP  WIDTH=22% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">ParentUpdate&nbsp;</FONT></B></TD>
+<TD VALIGN = TOP><FONT SIZE=2 FACE="Arial">None&nbsp;</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN=TOP  WIDTH=22% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">ParentDelete&nbsp;</FONT></B></TD>
+<TD VALIGN = TOP><FONT SIZE=2 FACE="Arial">None&nbsp;</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN=TOP  WIDTH=22% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">ChildInsert&nbsp;</FONT></B></TD>
+<TD VALIGN = TOP><FONT SIZE=2 FACE="Arial">None&nbsp;</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN=TOP  WIDTH=22% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">ChildUpdate&nbsp;</FONT></B></TD>
+<TD VALIGN = TOP><FONT SIZE=2 FACE="Arial">None&nbsp;</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN=TOP  WIDTH=22% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">ChildDelete&nbsp;</FONT></B></TD>
+<TD VALIGN = TOP><FONT SIZE=2 FACE="Arial">None&nbsp;</FONT></TD>
+</TR>
+</TABLE>
+<P>
+<TABLE WIDTH=100% CELLPADDING=3 BORDER=2>
+<TR>
+<TD VALIGN=TOP BGCOLOR="LIGHTGREY" ><B><FONT SIZE=4 FACE="Arial">"ELEMENT to UNIT_CONVERSION" Bound Attachments&nbsp;</FONT></B></TD>
+</TR>
+</TABLE>
+<TABLE WIDTH=100% CELLPADDING=2 BORDER=2>
+<TR>
+<TD VALIGN=TOP  WIDTH=30% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Name&nbsp;</FONT></B></TD>
+<TD VALIGN=TOP  WIDTH=46% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Current Value&nbsp;</FONT></B></TD>
+</TR>
+</TABLE>
 <HR>
 <A NAME = "Rel_3b99faacdcf04f28820ca52c14244ec6"></A>
 <TABLE WIDTH=100% CELLPADDING=1 BORDER=2>
@@ -1013,12 +1949,20 @@
 <TD><FONT SIZE=2 FACE="Arial">Identifying&nbsp;</FONT></TD>
 </TR>
 <TR>
+<TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Do Not Generate&nbsp;</FONT></B></TD>
+<TD><FONT SIZE=2 FACE="Arial">False&nbsp;</FONT></TD>
+</TR>
+<TR>
 <TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Relationship Name&nbsp;</FONT></B></TD>
 <TD><FONT SIZE=2 FACE="Arial">FK_UNIT_CONVERSN_TO_UNT_ELMNT&nbsp;</FONT></TD>
 </TR>
 <TR>
 <TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Relationship Business Name&nbsp;</FONT></B></TD>
 <TD><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Physical Only&nbsp;</FONT></B></TD>
+<TD><FONT SIZE=2 FACE="Arial">No&nbsp;</FONT></TD>
 </TR>
 <TR>
 <TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Parent Table&nbsp;</FONT></B></TD>
@@ -1035,6 +1979,26 @@
 <TR>
 <TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Existence&nbsp;</FONT></B></TD>
 <TD><FONT SIZE=2 FACE="Arial">Mandatory&nbsp;</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Propagated Key&nbsp;</FONT></B></TD>
+<TD><FONT SIZE=2 FACE="Arial">AK_ELEMENT_LABEL&nbsp;</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Deferrable&nbsp;</FONT></B></TD>
+<TD><FONT SIZE=2 FACE="Arial">NO&nbsp;</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Initially Deferred&nbsp;</FONT></B></TD>
+<TD><FONT SIZE=2 FACE="Arial">NO&nbsp;</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Disabled&nbsp;</FONT></B></TD>
+<TD><FONT SIZE=2 FACE="Arial">NO&nbsp;</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">NoValidate&nbsp;</FONT></B></TD>
+<TD><FONT SIZE=2 FACE="Arial">NO&nbsp;</FONT></TD>
 </TR>
 </TABLE>
 <P>
@@ -1077,6 +2041,50 @@
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">TO_UNIT&nbsp;</FONT></TD>
 </TR>
 </TABLE>
+<P>
+<TABLE WIDTH=100% CELLPADDING=3 BORDER=2>
+<TR>
+<TD VALIGN=TOP BGCOLOR="LIGHTGREY" ><B><FONT SIZE=4 FACE="Arial">"ELEMENT to UNIT_CONVERSION" Trigger Templates&nbsp;</FONT></B></TD>
+</TR>
+</TABLE>
+<TABLE WIDTH=100% CELLPADDING=2 BORDER=2>
+<TR>
+<TD VALIGN=TOP  WIDTH=22% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">ParentInsert&nbsp;</FONT></B></TD>
+<TD VALIGN = TOP><FONT SIZE=2 FACE="Arial">None&nbsp;</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN=TOP  WIDTH=22% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">ParentUpdate&nbsp;</FONT></B></TD>
+<TD VALIGN = TOP><FONT SIZE=2 FACE="Arial">None&nbsp;</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN=TOP  WIDTH=22% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">ParentDelete&nbsp;</FONT></B></TD>
+<TD VALIGN = TOP><FONT SIZE=2 FACE="Arial">None&nbsp;</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN=TOP  WIDTH=22% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">ChildInsert&nbsp;</FONT></B></TD>
+<TD VALIGN = TOP><FONT SIZE=2 FACE="Arial">None&nbsp;</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN=TOP  WIDTH=22% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">ChildUpdate&nbsp;</FONT></B></TD>
+<TD VALIGN = TOP><FONT SIZE=2 FACE="Arial">None&nbsp;</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN=TOP  WIDTH=22% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">ChildDelete&nbsp;</FONT></B></TD>
+<TD VALIGN = TOP><FONT SIZE=2 FACE="Arial">None&nbsp;</FONT></TD>
+</TR>
+</TABLE>
+<P>
+<TABLE WIDTH=100% CELLPADDING=3 BORDER=2>
+<TR>
+<TD VALIGN=TOP BGCOLOR="LIGHTGREY" ><B><FONT SIZE=4 FACE="Arial">"ELEMENT to UNIT_CONVERSION" Bound Attachments&nbsp;</FONT></B></TD>
+</TR>
+</TABLE>
+<TABLE WIDTH=100% CELLPADDING=2 BORDER=2>
+<TR>
+<TD VALIGN=TOP  WIDTH=30% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Name&nbsp;</FONT></B></TD>
+<TD VALIGN=TOP  WIDTH=46% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Current Value&nbsp;</FONT></B></TD>
+</TR>
+</TABLE>
 <HR>
 <A NAME = "Rel_ab07c7140e264170bf387750aa96638a"></A>
 <TABLE WIDTH=100% CELLPADDING=1 BORDER=2>
@@ -1090,12 +2098,20 @@
 <TD><FONT SIZE=2 FACE="Arial">Non-Identifying&nbsp;</FONT></TD>
 </TR>
 <TR>
+<TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Do Not Generate&nbsp;</FONT></B></TD>
+<TD><FONT SIZE=2 FACE="Arial">False&nbsp;</FONT></TD>
+</TR>
+<TR>
 <TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Relationship Name&nbsp;</FONT></B></TD>
 <TD><FONT SIZE=2 FACE="Arial">FK_UNIT_PARENT_SELF&nbsp;</FONT></TD>
 </TR>
 <TR>
 <TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Relationship Business Name&nbsp;</FONT></B></TD>
 <TD><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Physical Only&nbsp;</FONT></B></TD>
+<TD><FONT SIZE=2 FACE="Arial">No&nbsp;</FONT></TD>
 </TR>
 <TR>
 <TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Parent Table&nbsp;</FONT></B></TD>
@@ -1112,6 +2128,26 @@
 <TR>
 <TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Existence&nbsp;</FONT></B></TD>
 <TD><FONT SIZE=2 FACE="Arial">Optional&nbsp;</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Propagated Key&nbsp;</FONT></B></TD>
+<TD><FONT SIZE=2 FACE="Arial">Primary Key&nbsp;</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Deferrable&nbsp;</FONT></B></TD>
+<TD><FONT SIZE=2 FACE="Arial">NO&nbsp;</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Initially Deferred&nbsp;</FONT></B></TD>
+<TD><FONT SIZE=2 FACE="Arial">NO&nbsp;</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Disabled&nbsp;</FONT></B></TD>
+<TD><FONT SIZE=2 FACE="Arial">NO&nbsp;</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">NoValidate&nbsp;</FONT></B></TD>
+<TD><FONT SIZE=2 FACE="Arial">NO&nbsp;</FONT></TD>
 </TR>
 </TABLE>
 <P>
@@ -1152,6 +2188,50 @@
 <TR>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">NODE_ID&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">PARENT_NODE_ID&nbsp;</FONT></TD>
+</TR>
+</TABLE>
+<P>
+<TABLE WIDTH=100% CELLPADDING=3 BORDER=2>
+<TR>
+<TD VALIGN=TOP BGCOLOR="LIGHTGREY" ><B><FONT SIZE=4 FACE="Arial">"UNIT to UNIT" Trigger Templates&nbsp;</FONT></B></TD>
+</TR>
+</TABLE>
+<TABLE WIDTH=100% CELLPADDING=2 BORDER=2>
+<TR>
+<TD VALIGN=TOP  WIDTH=22% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">ParentInsert&nbsp;</FONT></B></TD>
+<TD VALIGN = TOP><FONT SIZE=2 FACE="Arial">None&nbsp;</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN=TOP  WIDTH=22% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">ParentUpdate&nbsp;</FONT></B></TD>
+<TD VALIGN = TOP><FONT SIZE=2 FACE="Arial">None&nbsp;</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN=TOP  WIDTH=22% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">ParentDelete&nbsp;</FONT></B></TD>
+<TD VALIGN = TOP><FONT SIZE=2 FACE="Arial">None&nbsp;</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN=TOP  WIDTH=22% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">ChildInsert&nbsp;</FONT></B></TD>
+<TD VALIGN = TOP><FONT SIZE=2 FACE="Arial">None&nbsp;</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN=TOP  WIDTH=22% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">ChildUpdate&nbsp;</FONT></B></TD>
+<TD VALIGN = TOP><FONT SIZE=2 FACE="Arial">None&nbsp;</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN=TOP  WIDTH=22% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">ChildDelete&nbsp;</FONT></B></TD>
+<TD VALIGN = TOP><FONT SIZE=2 FACE="Arial">None&nbsp;</FONT></TD>
+</TR>
+</TABLE>
+<P>
+<TABLE WIDTH=100% CELLPADDING=3 BORDER=2>
+<TR>
+<TD VALIGN=TOP BGCOLOR="LIGHTGREY" ><B><FONT SIZE=4 FACE="Arial">"UNIT to UNIT" Bound Attachments&nbsp;</FONT></B></TD>
+</TR>
+</TABLE>
+<TABLE WIDTH=100% CELLPADDING=2 BORDER=2>
+<TR>
+<TD VALIGN=TOP  WIDTH=30% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Name&nbsp;</FONT></B></TD>
+<TD VALIGN=TOP  WIDTH=46% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Current Value&nbsp;</FONT></B></TD>
 </TR>
 </TABLE>
 </BODY>
