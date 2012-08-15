@@ -14,7 +14,7 @@ class MeasureContext {
 	                  measures: Measure]
 
 	static mapping = {
-		id column: "Measure_Context_ID", generator: "assigned"
+        id(column: "MEASURE_CONTEXT_ID", generator: "sequence", params: [sequence: 'MEASURE_CONTEXT_ID_SEQ'])
 	}
 
 	static constraints = {
