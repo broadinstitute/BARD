@@ -14,15 +14,11 @@ import javax.xml.transform.stream.StreamSource
 import javax.xml.validation.Schema
 import javax.xml.validation.SchemaFactory
 import javax.xml.validation.Validator
-import groovyx.net.http.RESTClient
-import groovyx.net.http.HttpResponseDecorator
-
-import static groovyx.net.http.ContentType.JSON
 
 class DictionaryExportServiceIntegrationSpec extends IntegrationSpec {
     static final String BARD_DICTIONARY_EXPORT_SCHEMA = "test/integration/dataexport/dictionary/dictionarySchema.xsd"
     DictionaryExportService dictionaryExportService
-    private static final String BASE_URL = "http://bard.nih.gov/api/v1"
+
     Writer writer
     MarkupBuilder markupBuilder
 
@@ -136,57 +132,6 @@ class DictionaryExportServiceIntegrationSpec extends IntegrationSpec {
         where:
         label        | results
         "Dictionary" | XmlTestSamples.DICTIONARY
-    }
-    def "Test REST Query API: #label"() {
-        given: "A service end point to get to the root elements"
-        String requestUrl = "${BASE_URL}/${resourceString}"
-        println("requestUrl: $requestUrl")
-
-        RESTClient http = new RESTClient(requestUrl)
-
-        when: "We send an HTTP GET request for the root elements"
-        HttpResponseDecorator serverResponse = http.get(requestContentType: JSON)
-
-        then: "We expect a JSON representation of the root elements"
-        serverResponse.statusLine.statusCode == HttpServletResponse.SC_OK
-        serverResponse.data.size() > 0
-        println(serverResponse.data)
-//        println("serverResponse.data.size() : ${serverResponse.data.size()}")
-
-
-        where:
-        label                                    | resourceString
-        "Get all projects"                       | "projects"
-        "Get project by AID"                     | "projects/1772"
-//        "Get assays for project"                 | "projects/1772/assays" // seems broken
-        "Get probes for project"                 | "projects/1772/probes"
-//        "Get targets for project"                | "projects/1772/targets" // seems broken
-        "Get assay by assay ID"                  | "assays/604"
-        "Get publications for assay"             | "assays/604/publications"
-        "Get targets for assay"                  | "assays/604/targets"
-        "Get experiments for assay"              | "assays/604/experiments"
-//        "Get experiment details"                 | "assays/1048/experiment/1048"  //seems broken
-        "Get experiment by experiment ID"        | "experiments/2480"
-//        "Get results for experiment"             | "experiments/2480/activities"  //seems broken
-        "Get compounds for experiment"           | "experiments/2480/compounds"
-        "Get substances for experiment"          | "experiments/2480/substances"
-        "Get experiment data entities"           | "experiments/2480/exptdata"
-        "Get experiment data entity"             | "exptdata/2480"
-        "Get all targets"                        | "targets"
-        "Get target by accession"                | "targets/accession/P01112"
-        "Get target by GeneID"                   | "targets/geneid/3265"
-        "Get publications by accession"          | "targets/accession/P01112/publications"
-        "Get document description by PubMed ID"  | "documents/1868473"
-//        "Get document description by DOI"        | "documents/doi/10.1002%2Fcyto.a.10035" //seems broken
-        "Get compound by CID"                    | "compounds/888706"
-        "Get compound by SID"                    | "compounds/sid/57578335"
-//        "Get compound by probe ID"               | "compounds/probeid/ML099" // slow at 24 seconds
-        "Get experiment data for CID"            | "compounds/888706/exptdata"
-        "Get experiments for CID"                | "compounds/888706/experiments"
-        "Get substance by SID"                   | "substances/57578335"
-        "Get substances by CID"                  | "substances/cid/888706"
-        "Get experiment data for SID"            | "substances/57578335/exptdata"
-        "Get experiments for SID"                | "substances/57578335/experiments"
     }
 
 }
