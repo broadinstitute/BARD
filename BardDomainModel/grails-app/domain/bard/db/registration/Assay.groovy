@@ -17,7 +17,7 @@ class Assay {
     String assayName
     String assayVersion
     String designedBy
-    String readyForExtraction = 'Pending'
+    String readyForExtraction = 'Ready' // TODO switch back to 'Pending' as soon as we have the changlog in place
     String assayType = 'Regular'
 
     String modifiedBy
@@ -34,12 +34,12 @@ class Assay {
             assayDocuments: AssayDocument]
 
     static mapping = {
-        id(column: "Assay_ID", generator: "sequence", params: [sequence: 'ASSAY_ID_SEQ'])
+        id(column: "ASSAY_ID", generator: "sequence", params: [sequence: 'ASSAY_ID_SEQ'])
 
     }
 
     static constraints = {
-        // TODO consider and Enum to replace the inListk
+        // TODO consider and Enum to replace the inList
         assayStatus(maxSize: ASSAY_STATUS_MAX_SIZE, blank: false, inList: ["Pending", "Active", "Superseded", "Retired"])
         assayName(maxSize: ASSAY_NAME_MAX_SIZE, blank: false)
         assayVersion(maxSize: ASSAY_VERSION_MAX_SIZE, blank: false)

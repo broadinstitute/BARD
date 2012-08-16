@@ -17,7 +17,7 @@ class Project {
 	static hasMany = [projectExperiments: ProjectExperiment, externalReferences:ExternalReference]
 
 	static mapping = {
-        id column: "Project_ID", generator: "assigned"
+        id(column: "PROJECT_ID", generator: "sequence", params: [sequence: 'PROJECT_ID_SEQ'])
 	}
 
 	static constraints = {

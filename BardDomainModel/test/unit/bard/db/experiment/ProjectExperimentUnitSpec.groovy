@@ -1,6 +1,6 @@
 package bard.db.experiment
 
-import bard.db.dictionary.TestUtils
+import test.TestUtils
 import grails.test.mixin.TestFor
 import spock.lang.Specification
 import spock.lang.Unroll

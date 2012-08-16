@@ -28,7 +28,7 @@ class Result {
             resultHierarchiesForResult: "result"]
 
     static mapping = {
-        id column: "Result_ID", generator: "assigned"
+        id( column: "RESULT_ID", generator: "sequence", params: [sequence: 'RESULT_ID_SEQ'])
         qualifier column: "qualifier", sqlType: "char", length: 2
         resultType column: "result_type_id"
     }

@@ -26,7 +26,7 @@ class Experiment {
 	static belongsTo = [Assay]
 
 	static mapping = {
-		id column: "Experiment_ID", generator: "assigned"
+        id(column: "EXPERIMENT_ID", generator: "sequence", params: [sequence: 'EXPERIMENT_ID_SEQ'])
 	}
 
 	static constraints = {

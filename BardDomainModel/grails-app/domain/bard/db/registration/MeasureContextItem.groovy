@@ -28,7 +28,7 @@ class MeasureContextItem {
     static belongsTo = [Assay, MeasureContext]
 
     static mapping = {
-        id column: "measure_Context_Item_ID", generator: "assigned"
+        id( column: 'MEASURE_CONTEXT_ITEM_ID', generator: 'sequence', params: [sequence: 'MEASURE_CONTEXT_ITEM_ID_SEQ'])
         parentGroup column: "GROUP_MEASURE_CONTEXT_ITEM_ID"
         valueElement column: "value_id"
         attributeElement column: "attribute_id"

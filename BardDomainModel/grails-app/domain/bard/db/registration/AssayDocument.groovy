@@ -18,7 +18,7 @@ class AssayDocument {
     static belongsTo = [assay: Assay]
 
     static mapping = {
-        id column: "ASSAY_DOCUMENT_ID", generator: "assigned"
+        id( column: 'ASSAY_DOCUMENT_ID', generator: 'sequence', params: [sequence: 'ASSAY_DOCUMENT_ID_SEQ'])
         documentContent type: "text", sqlType: 'clob'
     }
 

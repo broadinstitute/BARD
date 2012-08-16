@@ -25,7 +25,7 @@ class ProjectExperiment {
         modifiedBy(nullable: true)  // check on this with Simon, seems like it shouldn't be nullable
     }
     static mapping = {
-        id column: "PROJECT_EXPERIMENT_ID", generator: "assigned"
+        id(column: "PROJECT_EXPERIMENT_ID", generator: "sequence", params: [sequence: 'PROJECT_EXPERIMENT_ID_SEQ'])
         precedingExperiment column: "FOLLOWS_EXPERIMENT_ID"
     }
 }

@@ -13,7 +13,7 @@ class Substance {
 	static hasMany = [results: Result]
 
 	static mapping = {
-		id column: "Substance_ID", generator: "assigned"
+		id( column: 'SUBSTANCE_ID', generator: 'assigned' )
 	}
 
 	static constraints = {

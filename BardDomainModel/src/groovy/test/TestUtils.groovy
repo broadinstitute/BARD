@@ -1,9 +1,7 @@
-package bard.db.dictionary
+package test
 
 import org.apache.commons.lang.StringUtils
 import org.springframework.validation.FieldError
-import org.codehaus.groovy.grails.plugins.testing.GrailsMockErrors
-import org.grails.datastore.mapping.validation.ValidationErrors
 
 /**
  * Created with IntelliJ IDEA.
@@ -68,11 +66,12 @@ class TestUtils {
     private static String getErrorCode(domainObject, String fieldName, String errorCode) {
 
         String foundErrorCode = null
-        if (domainObject.errors instanceof ValidationErrors) {
+        if (domainObject.errors instanceof org.grails.datastore.mapping.validation.ValidationErrors ||
+                domainObject.errors instanceof grails.validation.ValidationErrors) {
             FieldError fieldError = domainObject.errors[fieldName]
             foundErrorCode = fieldError?.codes?.find {it == errorCode}
         }
-        else if (domainObject.errors instanceof GrailsMockErrors) {
+        else if (domainObject.errors instanceof org.codehaus.groovy.grails.plugins.testing.GrailsMockErrors) {
             foundErrorCode = domainObject.errors[fieldName]
         }
         return foundErrorCode

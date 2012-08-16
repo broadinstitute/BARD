@@ -20,7 +20,7 @@ class Measure {
     static hasMany = [children: Measure]
 
     static mapping = {
-        id column: "Measure_ID", generator: "assigned"
+        id( column: 'MEASURE_ID', generator: 'sequence', params: [sequence: 'MEASURE_ID_SEQ'])
         parentMeasure column: "PARENT_MEASURE_ID"
         entryUnit column: "entry_unit"
         element column: 'result_type_id'

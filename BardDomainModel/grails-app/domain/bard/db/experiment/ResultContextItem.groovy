@@ -23,7 +23,7 @@ class ResultContextItem {
     static belongsTo = [Experiment]
 
 	static mapping = {
-		id column: "Result_Context_Item_ID", generator: "assigned"
+		id( column: 'RESULT_CONTEXT_ITEM_ID', generator: 'sequence', params: [sequence: 'RESULT_CONTEXT_ITEM_ID_SEQ'])
         attribute column: "attribute_id"
         valueControlled column: "value_id"
         qualifier column: "qualifier", sqlType: "char", length: 2
