@@ -22,7 +22,7 @@ class DictionaryRestController {
             resultType: "GET",
             stage: "GET",
             element: "GET",
-            updateElemet: "PUT"
+            updateElement: "PUT"
     ]
 
     static final String responseContentTypeEncoding = "UTF-8"

@@ -48,7 +48,6 @@ grails.project.dependency.resolution = {
     plugins {
         runtime ":hibernate:$grailsVersion"
         runtime ":resources:1.1.6"
-        runtime ":bard-domain-model:0.2.0-SNAPSHOT"
         compile ":functional-spock:0.6"
         build ":tomcat:$grailsVersion"
         build ":codenarc:0.15"
@@ -56,6 +55,9 @@ grails.project.dependency.resolution = {
         compile ":remote-control:1.2"
     }
 }
+
+// making the domain plugin an in-place plugin
+grails.plugin.location.'bard-domain-model' = "../BardDomainModel"
 
 codenarc.ruleSetFiles = "file:grails-app/conf/BardCodeNarcRuleSet.groovy"
 codenarc.reports = {
