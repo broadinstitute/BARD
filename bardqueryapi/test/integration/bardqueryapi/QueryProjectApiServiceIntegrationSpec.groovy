@@ -29,7 +29,7 @@ class QueryProjectApiServiceIntegrationSpec extends IntegrationSpec {
 
     void testFindProject() {
         given:
-        final String projectUrl = "/bard/rest/v1/projects/1772"
+        final String projectUrl = "/projects/1772"
         when:
         final def project = queryProjectApiService.findProject(projectUrl)
         then:
@@ -39,7 +39,7 @@ class QueryProjectApiServiceIntegrationSpec extends IntegrationSpec {
 
     void testFindProteinTargetsByProject() {
         given:
-        final String projectUrl = "/bard/rest/v1/projects/1772"
+        final String projectUrl = "/projects/1772"
         when:
         final def project = queryProjectApiService.findProteinTargetsByProject(projectUrl)
         then:
@@ -49,7 +49,7 @@ class QueryProjectApiServiceIntegrationSpec extends IntegrationSpec {
 
     void testFindProbesByProject() {
         given:
-        final String projectUrl = "/bard/rest/v1/projects/1772"
+        final String projectUrl = "/projects/1772"
         when:
         final def probes = queryProjectApiService.findProbesByProject(projectUrl)
         then:
@@ -60,7 +60,7 @@ class QueryProjectApiServiceIntegrationSpec extends IntegrationSpec {
     }
     void testFindAssaysByProject(){
         given:
-        final String projectUrl = "/bard/rest/v1/projects/1772"
+        final String projectUrl = "/projects/1772"
         when:
         final def assays = queryProjectApiService.findAssaysByProject(projectUrl)
         then:

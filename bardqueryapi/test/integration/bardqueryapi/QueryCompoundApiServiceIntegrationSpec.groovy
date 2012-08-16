@@ -21,7 +21,7 @@ class QueryCompoundApiServiceIntegrationSpec extends IntegrationSpec {
 
     void testFindCompoundByCID() {
         given:
-        String cidUrl = "/bard/rest/v1/compounds/1356407"
+        String cidUrl = "/compounds/1356407"
 
         when:
         final def compound = queryCompoundApiService.findCompoundByCID(cidUrl,null)
@@ -32,7 +32,7 @@ class QueryCompoundApiServiceIntegrationSpec extends IntegrationSpec {
     }
     void testFindCompoundByCIDSDFFormat() {
         given:
-        String cidUrl = "/bard/rest/v1/compounds/1356407"
+        String cidUrl = "/compounds/1356407"
 
         when:
         final def compound = queryCompoundApiService.findCompoundByCID(cidUrl,[Accept:"chemical/x-mdl-sdfile"])
@@ -42,7 +42,7 @@ class QueryCompoundApiServiceIntegrationSpec extends IntegrationSpec {
     }
     void testFindCompoundByCIDDaylightSmilesFormat() {
         given:
-        String cidUrl = "/bard/rest/v1/compounds/1356407"
+        String cidUrl = "/compounds/1356407"
 
         when:
         final def compound = queryCompoundApiService.findCompoundByCID(cidUrl,[Accept:"chemical/x-daylight-smiles"])
@@ -52,7 +52,7 @@ class QueryCompoundApiServiceIntegrationSpec extends IntegrationSpec {
     }
     void testFindCompoundBySID() {
         given:
-        String cidUrl = "/bard/rest/v1/compounds/sid/92764147"
+        String cidUrl = "/compounds/sid/92764147"
 
         when:
         final def compound = queryCompoundApiService.findCompoundByCID(cidUrl,null)
@@ -63,7 +63,7 @@ class QueryCompoundApiServiceIntegrationSpec extends IntegrationSpec {
     }
     void testFindCompoundBySIDSDFFormat() {
         given:
-        String cidUrl = "/bard/rest/v1/compounds/sid/92764147"
+        String cidUrl = "/compounds/sid/92764147"
 
         when:
         final def compound = queryCompoundApiService.findCompoundByCID(cidUrl,[Accept:"chemical/x-mdl-sdfile"])
@@ -73,7 +73,7 @@ class QueryCompoundApiServiceIntegrationSpec extends IntegrationSpec {
     }
     void testFindCompoundBySIDDaylightSmilesFormat() {
         given:
-        String cidUrl = "/bard/rest/v1/compounds/sid/92764147"
+        String cidUrl = "/compounds/sid/92764147"
 
         when:
         final def compound = queryCompoundApiService.findCompoundByCID(cidUrl,[Accept:"chemical/x-daylight-smiles"])
