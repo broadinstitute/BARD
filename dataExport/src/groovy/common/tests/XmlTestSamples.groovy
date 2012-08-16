@@ -290,6 +290,9 @@ class XmlTestSamples {
   <link rel='edit' href='http://localhost:8080/dataExport/api/assays/1' type='application/vnd.bard.cap+xml;type=assay' />
   <link rel='self' href='http://localhost:8080/dataExport/api/assays/1' type='application/vnd.bard.cap+xml;type=assay' />
   <link rel='up' href='http://localhost:8080/dataExport/api/assays' type='application/vnd.bard.cap+xml;type=assays' />
+  <link rel='related' type='application/vnd.bard.cap+xml;type=experiment' href='http://localhost:8080/dataExport/api/experiments/1' />
+  <link rel='related' type='application/vnd.bard.cap+xml;type=experiment' href='http://localhost:8080/dataExport/api/experiments/2' />
+  <link rel='related' type='application/vnd.bard.cap+xml;type=experiment' href='http://localhost:8080/dataExport/api/experiments/23' />
 </links>
 '''
     static String PROJECT_FROM_SERVER = '''

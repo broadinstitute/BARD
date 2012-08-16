@@ -11,7 +11,7 @@ class QueryAssayApiServiceIntegrationSpec extends IntegrationSpec {
 
     QueryAssayApiService queryAssayApiService
     QueryExecutorService queryExecutorService
-
+    def grailsApplication
     void setup() {
         // Setup logic here
     }
@@ -22,7 +22,7 @@ class QueryAssayApiServiceIntegrationSpec extends IntegrationSpec {
 
     void testFindAssayByAid() {
         given:
-        final String aidUrl = "/bard/rest/v1/assays/1772"
+        final String aidUrl = "/assays/1772"
         when:
         final def assay = queryAssayApiService.findAssayByAid(aidUrl)
         then:
@@ -32,7 +32,7 @@ class QueryAssayApiServiceIntegrationSpec extends IntegrationSpec {
 
     void testFindCompoundsByAssay() {
         given:
-        final String aidUrl = "/bard/rest/v1/assays/1772"
+        final String aidUrl = "/assays/1772"
         when:
         final def compounds = queryAssayApiService.findCompoundsByAssay(aidUrl, null)
         then:
@@ -44,7 +44,7 @@ class QueryAssayApiServiceIntegrationSpec extends IntegrationSpec {
 
     void testFindProteinTargetsByAssay() {
         given:
-        final String aidUrl = "/bard/rest/v1/assays/1772"
+        final String aidUrl = "/assays/1772"
         when:
         final def proteinTargetsByAssay = queryAssayApiService.findProteinTargetsByAssay(aidUrl)
         then:
@@ -56,7 +56,7 @@ class QueryAssayApiServiceIntegrationSpec extends IntegrationSpec {
 
     void testAssays() {
         given:
-        final String publicationUrl = "http://assay.nih.gov/bard/rest/v1/assays"
+        final String publicationUrl = "${grailsApplication.config.ncgc.server.root.url}/assays"
         when:
         def assays = queryExecutorService.executeGetRequestJSON(publicationUrl)
 
