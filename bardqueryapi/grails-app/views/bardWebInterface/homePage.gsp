@@ -42,7 +42,18 @@
         });
     </r:script>
 
-    <title>BARD Home</title>
+    <r:script>
+
+        $(document).ready(function(){
+            $(".trigger").click(function(){
+                $(".panel").toggle("fast");
+                $(this).toggleClass("active");
+                return false;
+            });
+        });
+     </r:script>
+
+        <title>BARD Home</title>
 </head>
 
 <body>
@@ -58,6 +69,9 @@
             <div class="error">${flash.message}</div>
         </g:if>
         <br/><br/>
+
+
+
 
         <g:form name="aidForm" controller="bardWebInterface" action="search">
 
@@ -132,6 +146,20 @@
         <g:hiddenField name="structureSearchType" id='hiddenFieldStructureSearchType'/>
     </g:form>
 </div>
+
+%{--container for the SAR cart goes here--}%
+<div id="container">
+</div>
+
+%{-- SAR cart itself goes here--}%
+<div class="panel">
+    <h3>Sliding Panel</h3>
+    <div style="clear:both;"></div>
+    <div style="clear:both;"></div>
+
+</div>
+<a class="trigger" href="#">infos</a>
+
 
 </body>
 </html>
