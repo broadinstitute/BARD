@@ -13,19 +13,17 @@ class Assay {
     private static final int READY_FOR_EXTRACTION_MAX_SIZE = 20
     private static final int MODIFIED_BY_MAX_SIZE = 40
 
-    String assayStatus = 'Pending'
+    AssayStatus assayStatus = AssayStatus.Pending
     String assayName
     String assayVersion
     String designedBy
-    String readyForExtraction = 'Ready' // TODO switch back to 'Pending' as soon as we have the changlog in place
+    ReadyForExtraction readyForExtraction = ReadyForExtraction.Pending
     String assayType = 'Regular'
 
     String modifiedBy
     // grails auto-timestamp
     Date dateCreated
     Date lastUpdated
-
-
 
     static hasMany = [experiments: Experiment,
             measureContextItems: MeasureContextItem,
@@ -35,20 +33,33 @@ class Assay {
 
     static mapping = {
         id(column: "ASSAY_ID", generator: "sequence", params: [sequence: 'ASSAY_ID_SEQ'])
-
     }
 
     static constraints = {
-        // TODO consider and Enum to replace the inList
-        assayStatus(maxSize: ASSAY_STATUS_MAX_SIZE, blank: false, inList: ["Pending", "Active", "Superseded", "Retired"])
+        assayStatus(maxSize: ASSAY_STATUS_MAX_SIZE, blank: false)
         assayName(maxSize: ASSAY_NAME_MAX_SIZE, blank: false)
         assayVersion(maxSize: ASSAY_VERSION_MAX_SIZE, blank: false)
         designedBy(nullable: true, maxSize: DESIGNED_BY_MAX_SIZE)
-        readyForExtraction(maxSize: READY_FOR_EXTRACTION_MAX_SIZE, blank: false, inList: ["Pending","Ready", "Started", "Complete"])
+        readyForExtraction(maxSize: READY_FOR_EXTRACTION_MAX_SIZE, blank: false)
+        // TODO we can use enum mapping for this http://stackoverflow.com/questions/3748760/grails-enum-mapping
+        // the ' - ' is this issue in this case
         assayType(inList: ['Regular', 'Panel - Array', 'Panel - Group'])
 
         dateCreated(nullable: false)
         lastUpdated(nullable: true)
         modifiedBy(nullable: true, blank: false, maxSize: MODIFIED_BY_MAX_SIZE)
     }
+}
+enum AssayStatus {
+    Pending,
+    Active,
+    Superseded,
+    Retired
+}
+
+enum ReadyForExtraction {
+    Pending,
+    Ready,
+    Started,
+    Complete
 }
