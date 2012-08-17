@@ -45,6 +45,7 @@ grails.project.dependency.resolution = {
         runtime ":hibernate:$grailsVersion"
         runtime ":jquery:1.7.1"
         compile ":jquery-ui:1.8.15"
+        compile ":shopping-cart:0.8.2"
         runtime ":resources:1.1.6"
         compile ":spock:0.6"
         compile ":functional-spock:0.6"

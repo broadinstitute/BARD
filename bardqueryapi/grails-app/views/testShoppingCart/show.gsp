@@ -19,7 +19,7 @@
                 <table>
                     <thead>
                         <tr>
-                        
+
                    	        <th>Product</th>
                         
                    	        <th>Qty</th>

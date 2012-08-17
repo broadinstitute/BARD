@@ -1,4 +1,4 @@
-<%@ page import="bardqueryapi.SearchType; bard.db.registration.*" %>
+<%@ page import="bardqueryapi.SearchType; bard.db.registration.*; com.metasieve.shoppingcart.*; com.metasieve.shoppingcart.Shoppable.*;" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -6,6 +6,7 @@
     <r:require modules="core"/>
     <r:require modules="bootstrap"/>
     <r:require modules="backbone_grid"/>
+
 
     <r:script>
         $(document).ready(function () {
@@ -153,9 +154,64 @@
 
 %{-- SAR cart itself goes here--}%
 <div class="panel">
-    <h3>Sliding Panel</h3>
-    <div style="clear:both;"></div>
-    <div style="clear:both;"></div>
+    <h3>SAR Cart</h3>
+
+    <sc:each>
+        <tr>
+            <td>
+                ${findByShoppingItem(it['item']) ?: ShoppingCartInterfaceTestProduct.findByShoppingItem(it['item'])}
+            </td>
+            <td>
+                ${it['qty']}
+            </td>
+            <td>
+                <g:remoteLink action="add"
+                              params="${[id:(findByShoppingItem(it['item']) ?: ShoppingCartInterfaceTestProduct.findByShoppingItem(it['item'])).id, class:(findByShoppingItem(it['item']) ?: ShoppingCartInterfaceTestProduct.findByShoppingItem(it['item'])).class, version:(findByShoppingItem(it['item']) ?: ShoppingCartInterfaceTestProduct.findByShoppingItem(it['item'])).version]}"
+                              update="shoppingCartContent"
+                              onComplete="Effect.Pulsate('shoppingCartContent', {pulses: 1, duration: 1.0});">
+                    Add
+                </g:remoteLink>
+            </td>
+            <td>
+                <g:remoteLink action="remove"
+                              params="${[id:(findByShoppingItem(it['item']) ?: ShoppingCartInterfaceTestProduct.findByShoppingItem(it['item'])).id, class:(findByShoppingItem(it['item']) ?: ShoppingCartInterfaceTestProduct.findByShoppingItem(it['item'])).class, version:(findByShoppingItem(it['item']) ?: ShoppingCartInterfaceTestProduct.findByShoppingItem(it['item'])).version]}"
+                              update="shoppingCartContent"
+                              onComplete="Effect.Pulsate('shoppingCartContent', {pulses: 1, duration: 1.0});">
+                    Remove
+                </g:remoteLink>
+            </td>
+            <td>
+                <g:remoteLink action="removeAll"
+                              params="${[id:(findByShoppingItem(it['item']) ?: ShoppingCartInterfaceTestProduct.findByShoppingItem(it['item'])).id, class:(findByShoppingItem(it['item']) ?: ShoppingCartInterfaceTestProduct.findByShoppingItem(it['item'])).class, version:(findByShoppingItem(it['item']) ?: ShoppingCartInterfaceTestProduct.findByShoppingItem(it['item'])).version]}"
+                              update="shoppingCartContent"
+                              onComplete="Effect.Pulsate('shoppingCartContent', {pulses: 1, duration: 1.0});">
+                    Remove All
+                </g:remoteLink>
+            </td>
+        </tr>
+    </sc:each>
+    <g:if test="${checkedOutItems}">
+        <tr>
+            <td><h2>Checked out items</h2></td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+        </tr>
+        <g:each in="${checkedOutItems}" var="item">
+            <tr>
+                <td>
+                    ${com.metasieve.shoppingcart.Shoppable.findByShoppingItem(item['item']) ?: com.metasieve.shoppingcart.ShoppingCartInterfaceTestProduct.findByShoppingItem(item['item'])}
+                </td>
+                <td>
+                    ${item['qty']}
+                </td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+            </tr>
+        </g:each>
+    </g:if>
 
 </div>
 <a class="trigger" href="#">infos</a>
