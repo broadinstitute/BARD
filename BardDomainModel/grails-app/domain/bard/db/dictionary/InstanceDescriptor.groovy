@@ -2,8 +2,6 @@ package bard.db.dictionary
 
 class InstanceDescriptor {
 
-    static expose = 'instance-descriptor'
-
 	InstanceDescriptor parent
 	Element element
 	String label

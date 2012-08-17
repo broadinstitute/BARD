@@ -4,8 +4,6 @@ import bard.db.experiment.Experiment
 
 class Assay {
 
-    static expose = 'assay'
-
     private static final int ASSAY_STATUS_MAX_SIZE = 20
     private static final int ASSAY_NAME_MAX_SIZE = 1000
     private static final int ASSAY_VERSION_MAX_SIZE = 10

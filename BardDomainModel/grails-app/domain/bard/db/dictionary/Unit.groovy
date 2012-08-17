@@ -2,8 +2,6 @@ package bard.db.dictionary
 
 class Unit {
 
-    static expose = 'unit'
-
 	String unit
 	String description
     Element element

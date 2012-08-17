@@ -2,7 +2,6 @@ package bard.db.registration
 
 class AssayDocument {
 
-    static expose = 'assay-document'
     private static final int DOCUMENT_NAME_MAX_SIZE = 500
     private static final int DOCUMENT_TYPE_MAX_SIZE = 20
     private static final int MODIFIED_BY_MAX_SIZE = 40

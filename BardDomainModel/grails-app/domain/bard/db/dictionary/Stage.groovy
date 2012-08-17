@@ -2,8 +2,6 @@ package bard.db.dictionary
 
 class Stage {
 
-    static expose = 'stage'
-
 	String stage
 	String description
     Element element

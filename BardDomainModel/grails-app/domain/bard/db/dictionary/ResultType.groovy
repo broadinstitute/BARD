@@ -2,8 +2,6 @@ package bard.db.dictionary
 
 class ResultType {
 
-    static expose = 'result-type'
-
     ResultType parent
     Element element
     String resultTypeName

@@ -2,8 +2,6 @@ package bard.db.dictionary
 
 class Ontology {
 
-    static expose = 'ontology'
-
 	String ontologyName
 	String abbreviation
 	String systemUrl

@@ -5,8 +5,6 @@ import bard.db.dictionary.Element
 
 class MeasureContextItem {
 
-    static expose = 'measure-context-item'
-
     MeasureContextItem parentGroup
     AttributeType attributeType
     String extValueId

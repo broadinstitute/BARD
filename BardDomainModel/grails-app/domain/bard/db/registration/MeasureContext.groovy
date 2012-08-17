@@ -2,8 +2,6 @@ package bard.db.registration
 
 class MeasureContext {
 
-    static expose = 'measure-context'
-
 	String contextName
 	Date dateCreated
 	Date lastUpdated

@@ -2,8 +2,6 @@ package bard.db.dictionary
 
 class BiologyDescriptor {
 
-    static expose = 'biology-descriptor'
-
 	BiologyDescriptor parent
 	Element element
 	String label

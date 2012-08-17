@@ -2,19 +2,6 @@ package bard.db.dictionary
 
 class Element {
 
-    static expose = 'element'
-
-    static api = [
-            excludedFields: [
-                    "treeRoots",
-                    "ontologyItems",
-                    "childElementRelationships",
-                    "parentElementRelationships"
-            ],
-            list: { params -> Element.list(params) },
-            count: { params -> Element.count() }
-    ]
-
     String label
     String description
     String abbreviation

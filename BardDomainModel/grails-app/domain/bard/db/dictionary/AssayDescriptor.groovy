@@ -2,8 +2,6 @@ package bard.db.dictionary
 
 class AssayDescriptor {
 
-    static expose = 'assay-descriptor'
-
 	AssayDescriptor parent
 	Element element
 	String label

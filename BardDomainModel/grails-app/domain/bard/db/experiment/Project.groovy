@@ -4,8 +4,6 @@ import bard.db.registration.ExternalReference
 
 class Project {
 
-    static expose = 'project'
-
 	String projectName
 	GroupType groupType
 	String description
