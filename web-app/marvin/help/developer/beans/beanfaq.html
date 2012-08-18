@@ -1,0 +1,131 @@
+<html>
+<head>
+<link REL ="stylesheet" TYPE="text/css" HREF="../../marvinmanuals.css">
+<title>Marvin Beans FAQ</title>
+</head>
+<body>
+<h1 align=center>Marvin Beans Frequently Asked Questions</h1>
+
+<ul>
+<li><a HREF="#question0">Which Java versions are supported by Marvin Beans?</a></li>
+<li><a href="#mviewpane.ncomponents_vs_table.memory">If I put MViewPane 
+    objects in JTable cells then I can display only about
+    200 molecules. These huge objects cause out of memory exceptions.
+    Do you provide a simple and "thin" viewer component, which just displays
+    a molecule without any rotation and linkage to the sketcher?</a></li>
+<li><a href="#mviewpane.getM">MViewPane.getM(int) returns with null.</a></li>
+<li><a href="#mviewpane.setParams">I called MViewPane.setParams() to change only one 
+    parameter in MarvinView but it changed all of them.</a></li>
+<li><a href="#generateimage">Is there a way to generate image without opening a display?</a></li>
+<li><a href="#selectedatoms">How can I get the selected atoms from MSketchPane?</a></li>
+</ul>
+
+<center><div class="lenia">&nbsp;</div></center>
+
+<ul>
+<li>
+    <h3><a NAME="question0"></a>Which Java versions are supported by Marvin Beans?</h3>
+    <p>Marvin Beans requires at least Java 1.6.</p>
+</li>
+<li><h3><a NAME="mviewpane.ncomponents_vs_table.memory"></a>If I put MViewPane 
+    objects in JTable cells then I can display only about
+    200 molecules. These huge objects cause out of memory exceptions.
+    Do you provide a simple and "thin" viewer component, which just displays
+    a molecule without any rotation and linkage to the sketcher?</h3>
+    <p>
+    The rotation and the linkage to the sketcher have negligible
+    contribution to the memory footprint. The largest contributions are from</p>
+    <ol>
+    <li>double buffering of Swing components</li>
+    <li>size of Molecule objects</li>
+    <li>large color arrays that store the shades for 3D rendering modes</li>
+    </ol>
+    <p>
+    Even if we provided a "thin" panel without 3D support, it would 
+    only enable you to use about twice as many molecules. Then you would run
+    out of memory again because of the double buffering.</p>
+    <p>
+    The solution is to use only one <i>n</i>-molecule scrollable MViewPane
+    instead of a JTable with <i>n</i> MViewPanes. Then the common data will be
+    stored in only one place (instead of <i>n</i>) and the number of Swing
+    components will be equal to the number of visible molecules which is
+    usually much smaller than <i>n</i>.
+    </p>
+    </li>
+<li><h3><a NAME="mviewpane.getM"></a>MViewPane.getM(int) returns with null.</h3>
+<p>I have this problem when I want to get a Molecule from MViewPane:
+	<code>viewPane.getM(0)</code> returns null although I put a molecule in 0. 
+	Here is my code:
+<pre>	    viewPane.setM(0, "mols-2d/caffeine.mol");
+	    Molecule m = viewPane.getM(0);</pre>
+	The problem is that you called <code>getM(0)</code> too early. The molecule was not loaded yet, since 
+	<code>viewPane.getM(0)</code>. <code>MViewPane.setM(int,String)</code> launches a new thread for 
+	loading a molecule and the <code>getM(0)</code> method does not wait until this thread is finished.
+	Thus, there is no guaranty that the molecule loading process is finished until the method returns.
+	This method is generally used in case of loading a huge set of molecules in the same time.
+	If you use debug option: <code>viewPane.setDebug(2)</code>, you can see when the molecule is loaded.
+	Instead of <code>setM(int, java.lang.String)</code> use <code>setM(int, java.io.File, java.lang.String)</code>
+	method. Using this method will cause <code>setM</code> to wait until molecule loading is finished.
+	<p>This example shows a similar problem:
+<pre>
+	viewPane.setM(0, "CN1C=NC2=C1C(=O)N(C)C(=O)N2C");
+	Molecule m = viewPane.getM(0);
+</pre>
+	In this case, there are several ways to avoid this problem. For example, 
+	you can use <code>MViewPane.setM(int, Molecule)</code> method:
+<pre>
+	String smiles="CN1C=NC2=C1C(=O)N(C)C(=O)N2C";
+	byte[] buf=smiles.getBytes();
+	MolImporter mi = new MolImporter(new ByteArrayInputStream(buf));
+	try{
+	    Molecule mol = mi.importMol(buf);
+	    viewPane.setM(0,mol);
+	}catch(Exception e) {System.err.println(e);}
+	Molecule m = viewPane.getM(0);
+</pre>
+    <p>
+    </li>
+<li><h3><a NAME="mviewpane.setParams"></a>I called MViewPane.setParams() to change only one
+parameter in MarvinView but it changed all of them.</h3>
+
+<p>The MarvinPanel.setParams(String) method is used to set parameters when 
+MarvinPane is initialized (before loading the molecule). You should avoid calling this method 
+after setMol(..) or any other property-setting method.
+ You can find more details about it at
+ <a href="api/chemaxon/marvin/beans/MarvinPane.html#setParams(java.lang.String)">
+here</a>.</p>
+<p>The difference between a parameter and a property that you can modify a property's value 
+after initialization, while a parameter can only be set once.
+</p>
+</li>
+<li><h3><a NAME="generateimage"></a>Is there a way to generate image without opening a display?</h3>
+<p>Add the <code>-Djava.awt.headless=true</code> option to your Java command. E.g.:
+<pre>
+java -classpath lib/MarvinBeans.jar -Djava.awt.headless=true chemaxon.formats.MolConverter
+</pre>
+</p>
+<!--<p>The Xvfb virtual X11 server can be an alternative way. Documentation can be found on the <a href="http://www.xfree86.org/4.2.0/Xvfb.1.html" target="_blank">xfree86</a> site and in the Linux manual (<code>man Xvfb</code>).
+<pre>
+Xvfb :2 -screen 0 649x480x24 2&gt;&gt;logfile &amp;
+export DISPLAY=:2</pre>
+</p>-->
+</li>
+<li><h3><a NAME="selectedatoms"></a>How can I get the selected atoms from MSketchPane?</h3>
+<p>Please see the below example to get selected atoms.
+<pre>
+    Molecule mol = sketchPane.getMol();
+    if(mol != null) {
+        int size = mol.getAtomCount();
+        for(int i = 0;i &lt; size;i++) {
+            MolAtom atom = mol.getAtom(i);
+            if(atom.isSelected()) {
+                System.err.println(i+". atom is selected");
+            }
+        }
+    } 
+</pre>
+</li>
+</ul>
+
+</body>
+</html>

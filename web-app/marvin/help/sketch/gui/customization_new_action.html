@@ -1,0 +1,65 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<html>
+<head>
+<META HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=utf-8">
+<TITLE>Customizing MarvinSketch GUI - Assign new action</TITLE>
+<link rel=stylesheet type="text/css" href="../../marvinmanuals.css">
+</head>
+<body>
+<h1>Customizing MarvinSketch GUI - Assign new action</h1>
+
+<p>First of all, define the new action for the <strong>chemaxon.marvin.beans.MSketchPane</strong> component that you would like to integrate into your 
+custom application. 
+Your action has to be an extension of the <a href="http://download.oracle.com/javase/6/docs/api/javax/swing/AbstractAction.html">javax.swing.AbstractAction class</a>.
+In the below example, the new action is titled as <em>Foo</em>.</p>
+<pre>
+	private final Action newFooAction = new AbstractAction("Foo") {
+		public void actionPerformed(ActionEvent ev) {
+			System.err.println(ev);
+		}
+	};
+</pre>
+<p>An Action that has a non-null value for <a href="http://download.oracle.com/javase/6/docs/api/javax/swing/Action.html#SELECTED_KEY"><code>Action.SELECTED_KEY</code></a> property is displayed in different ways in the menu, 
+depending on the value of the <code>"Radio"</code> property. If the <code>"Radio"</code> is set to Boolean.TRUE it will be displayed as a 
+<a href="http://download.oracle.com/javase/6/docs/api/javax/swing/JRadioButtonMenuItem.html"><code>JRadioButtonMenuItem</code></a> otherwise 
+as a <a href="http://download.oracle.com/javase/6/docs/api/javax/swing/JCheckBoxMenuItem.html"><code>JCheckBoxMenuItem</code></a>. This property doesn't 
+affect the Action's behavior in toolbars. It will be always displayed as a <a href="http://download.oracle.com/javase/6/docs/api/javax/swing/JToggleButton.html"><code>JToggleButton</code></a> there.
+For examples see the code of the <code>"newToggleAction"</code> and <code>"newRadioAction"</code> actions in the attached <a href="gui-files/NewActionInSketch.java.txt">source code</a>.</p>
+<p>After that, add the new action to the action map of the sketcher</p>
+<pre>msketchPane.getActionMap().put("foo", newFooAction);</pre>
+
+<p>To be able to access it in the <strong>Customize...</strong> dialog, set the 
+<strong>useComponentActions</strong> parameter to <strong>true</strong>.</p>
+<pre>msketchPane.setParams("useComponentActions=true\n");</pre>
+
+<p>To test this functionality, run you custom application, open <strong>View/Customize</strong> menu, 
+push the <strong>Add...</strong> button. The <strong>Custom</strong> entry appears among
+<strong>Categories</strong>. Under this category, you will see <em>Foo</em> in the <strong>Commands</strong> 
+list.</p>
+<img src="gui-files/dialogs/add_commands.png" width="671" height="422" alt="Add Commands... dialog"/>
+
+<p>Thus, you can insert this command manually into the running application to the desired place.
+For example, you can insert the <em>Foo</em> action into the <em>Atom</em> popup menu.
+But this modification is not preserved for the next time.</p>
+<p>To add the new action permanently, define a menu configuration xml for you application.
+See the linking documentation how to export a configuration file: <a href="configurations.html">Configurations of MarvinSketch</a>.</p>
+In our example, the new action appears in the menu config file like this:
+<pre>
+&lt;add path="popup/atom"&gt;
+   &lt;item id="foo"/&gt;
+&lt;/add&gt;
+</pre>
+<p>The full xml file can be download from here: <a href="gui-files/foo.xml">foo.xml</a>.</p>
+<p>If the config xml is ready, place into the codebase of your application. The codebase is the same directory 
+where the main jar of your application is located.</p>
+<p>Modify the initalization of the sketcher component. Create a <em>UserSettings</em> object and 
+specify the location of the xml file in the <strong>menuconfig</strong> parameter 
+then give it for <strong>MSketchPane</strong>.</p>
+<pre>
+UserSettings settings = new UserSettings();
+settings.setProperty("menuconfig","foo.xml");
+MSketchPane msketchPane = new MSketchPane(settings);
+</pre>
+<p>The full java code is available here: <a href="gui-files/NewActionInSketch.java.txt">NewActionInSketch.java</a></p>
+</body>
+</html>

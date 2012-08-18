@@ -1,0 +1,541 @@
+<?xml version="1.0" ?>
+<cml>
+<MDocument>
+  <MChemicalStruct>
+    <molecule title="Tyramine" molID="m1">
+      <atomArray
+          atomID="a1 a2 a3 a4 a5 a6 a7 a8 a9 a10"
+          elementType="N C C C C C C O C C"
+          x2="7.105427357601002E-15 4.440892098500626E-15 1.333679121828039 1.3336791218280368 2.6673582436560745 2.6673582436560714 1.3336791218280346 1.3336791218280317 0.0 1.3322676295501878E-15"
+          y2="6.160000000000004 4.620000000000003 3.850000000000002 2.310000000000002 1.5399999999999978 -2.220446049250313E-15 -0.77 -2.31 1.9984014443252818E-15 1.5400000000000018"
+          />
+      <bondArray>
+        <bond atomRefs2="a1 a2" order="1" />
+        <bond atomRefs2="a2 a3" order="1" />
+        <bond atomRefs2="a3 a4" order="1" />
+        <bond atomRefs2="a4 a5" order="2" />
+        <bond atomRefs2="a5 a6" order="1" />
+        <bond atomRefs2="a6 a7" order="2" />
+        <bond atomRefs2="a7 a8" order="1" />
+        <bond atomRefs2="a7 a9" order="1" />
+        <bond atomRefs2="a9 a10" order="2" />
+        <bond atomRefs2="a4 a10" order="1" />
+      </bondArray>
+    </molecule>
+  </MChemicalStruct>
+</MDocument>
+<MDocument atomSetRGB="0:D" bondSetRGB="0:N,1:#000001"
+           bondSetLineThickness="1:0.064">
+  <MChemicalStruct>
+    <molecule title="Ephedrine" molID="m1" absStereo="true">
+      <atomArray>
+        <atom id="a1" elementType="C"
+              x2="4.556736999579127" y2="2.887500000000005" />
+        <atom id="a2" elementType="C"
+              x2="3.2230578777510903" y2="2.117500000000002" />
+        <atom id="a3" elementType="N"
+              x2="3.2230578777510925" y2="0.5775000000000032" />
+        <atom id="a4" elementType="C"
+              x2="1.8893787559230533" y2="2.8875000000000015" />
+        <atom id="a5" elementType="O"
+              x2="1.8893787559230528" y2="4.427500000000004" />
+        <atom id="a6" elementType="C"
+              x2="0.5556996340950173" y2="2.1175000000000033" />
+        <atom id="a7" elementType="C"
+              x2="0.555699634095016" y2="0.5774999999999987" />
+        <atom id="a8" elementType="C"
+              x2="-0.777979487733022" y2="-0.19249999999999862" />
+        <atom id="a9" elementType="C"
+              x2="-2.111658609561056" y2="0.5775000000000035" />
+        <atom id="a10" elementType="C"
+              x2="-2.1116586095610543" y2="2.1175000000000037" />
+        <atom id="a11" elementType="C"
+              x2="-0.7779794877330185" y2="2.8875000000000024" />
+        <atom id="a12" elementType="C"
+              x2="4.556736999579130" y2="-0.1924999999999948" />
+      </atomArray>
+      <bondArray>
+        <bond atomRefs2="a1 a2" order="1" />
+        <bond atomRefs2="a2 a3" order="1" mrvSetSeq="1">
+          <bondStereo>H</bondStereo>
+        </bond>
+        <bond atomRefs2="a2 a4" order="1" />
+        <bond atomRefs2="a4 a5" order="1">
+          <bondStereo>W</bondStereo>
+        </bond>
+        <bond atomRefs2="a4 a6" order="1" />
+        <bond atomRefs2="a6 a7" order="2" />
+        <bond atomRefs2="a7 a8" order="1" />
+        <bond atomRefs2="a8 a9" order="2" />
+        <bond atomRefs2="a9 a10" order="1" />
+        <bond atomRefs2="a10 a11" order="2" />
+        <bond atomRefs2="a6 a11" order="1" />
+        <bond atomRefs2="a3 a12" order="1" />
+      </bondArray>
+    </molecule>
+  </MChemicalStruct>
+</MDocument>
+<MDocument atomSetRGB="0:D" bondSetRGB="0:N,1:#000001"
+           bondSetLineThickness="1:0.064">
+  <MChemicalStruct>
+    <molecule title="Pseudoephedrine" molID="m1" absStereo="true">
+      <atomArray>
+        <atom id="a1" elementType="C"
+              x2="4.556736999579127" y2="2.887500000000005" />
+        <atom id="a2" elementType="C"
+              x2="3.2230578777510903" y2="2.117500000000002" />
+        <atom id="a3" elementType="N"
+              x2="3.2230578777510925" y2="0.5775000000000032" />
+        <atom id="a4" elementType="C"
+              x2="1.8893787559230533" y2="2.8875000000000015" />
+        <atom id="a5" elementType="O"
+              x2="1.8893787559230528" y2="4.427500000000004" />
+        <atom id="a6" elementType="C"
+              x2="0.5556996340950173" y2="2.1175000000000033" />
+        <atom id="a7" elementType="C"
+              x2="0.555699634095016" y2="0.5774999999999987" />
+        <atom id="a8" elementType="C"
+              x2="-0.777979487733022" y2="-0.19249999999999862" />
+        <atom id="a9" elementType="C"
+              x2="-2.111658609561056" y2="0.5775000000000035" />
+        <atom id="a10" elementType="C"
+              x2="-2.1116586095610543" y2="2.1175000000000037" />
+        <atom id="a11" elementType="C"
+              x2="-0.7779794877330185" y2="2.8875000000000024" />
+        <atom id="a12" elementType="C"
+              x2="4.556736999579130" y2="-0.1924999999999948" />
+      </atomArray>
+      <bondArray>
+        <bond atomRefs2="a1 a2" order="1" />
+        <bond atomRefs2="a2 a3" order="1" mrvSetSeq="1">
+          <bondStereo>H</bondStereo>
+        </bond>
+        <bond atomRefs2="a2 a4" order="1" />
+        <bond atomRefs2="a4 a5" order="1" mrvSetSeq="1">
+          <bondStereo>H</bondStereo>
+        </bond>
+        <bond atomRefs2="a4 a6" order="1" />
+        <bond atomRefs2="a6 a7" order="2" />
+        <bond atomRefs2="a7 a8" order="1" />
+        <bond atomRefs2="a8 a9" order="2" />
+        <bond atomRefs2="a9 a10" order="1" />
+        <bond atomRefs2="a10 a11" order="2" />
+        <bond atomRefs2="a6 a11" order="1" />
+        <bond atomRefs2="a3 a12" order="1" />
+      </bondArray>
+    </molecule>
+  </MChemicalStruct>
+</MDocument>
+<MDocument>
+  <MChemicalStruct>
+    <molecule title="Mescaline" molID="m1">
+      <atomArray
+          atomID="a1 a2 a3 a4 a5 a6 a7 a8 a9 a10 a11 a12 a13 a14 a15"
+          elementType="C O C C C C C N C C O C C O C"
+          x2="-2.934094068021678 -1.600414946193642 -0.26673582436560705 1.0669432974624324 2.400622419290466 3.734301541118504 5.067980662946537 6.4016597847745755 2.400622419290464 1.0669432974624269 1.0669432974624249 -0.26673582436561194 -0.26673582436560783 -1.6004149461936437 -1.6004149461936448"
+          y2="1.796666666666672 2.566666666666671 1.7966666666666684 2.566666666666668 1.7966666666666657 2.5666666666666624 1.79666666666666 2.5666666666666558 0.25666666666666577 -0.5133333333333323 -2.0533333333333323 -2.82333333333333 0.256666666666669 -0.5133333333333301 -2.05333333333333"
+          />
+      <bondArray>
+        <bond atomRefs2="a1 a2" order="1" />
+        <bond atomRefs2="a2 a3" order="1" />
+        <bond atomRefs2="a3 a4" order="2" />
+        <bond atomRefs2="a4 a5" order="1" />
+        <bond atomRefs2="a5 a6" order="1" />
+        <bond atomRefs2="a6 a7" order="1" />
+        <bond atomRefs2="a7 a8" order="1" />
+        <bond atomRefs2="a5 a9" order="2" />
+        <bond atomRefs2="a9 a10" order="1" />
+        <bond atomRefs2="a10 a11" order="1" />
+        <bond atomRefs2="a11 a12" order="1" />
+        <bond atomRefs2="a10 a13" order="2" />
+        <bond atomRefs2="a3 a13" order="1" />
+        <bond atomRefs2="a13 a14" order="1" />
+        <bond atomRefs2="a14 a15" order="1" />
+      </bondArray>
+    </molecule>
+  </MChemicalStruct>
+</MDocument>
+<MDocument>
+  <MChemicalStruct>
+    <molecule title="Cathinone" molID="m1" absStereo="true">
+      <atomArray>
+        <atom id="a1" elementType="C"
+              x2="1.9499484522385788" y2="6.157306695894643" />
+        <atom id="a2" elementType="C"
+              x2="1.179948452238576" y2="4.8236275740666095" />
+        <atom id="a3" elementType="N"
+              x2="-0.36005154776142323" y2="4.823627574066612" />
+        <atom id="a4" elementType="C"
+              x2="1.9499484522385748" y2="3.489948452238573" />
+        <atom id="a5" elementType="O"
+              x2="3.4899484522385746" y2="3.4899484522385715" />
+        <atom id="a6" elementType="C"
+              x2="1.179948452238573" y2="2.1562693304105385" />
+        <atom id="a7" elementType="C"
+              x2="1.9499484522385735" y2="0.8225902085824986" />
+        <atom id="a8" elementType="C"
+              x2="1.1799484522385706" y2="-0.5110889132455357" />
+        <atom id="a9" elementType="C"
+              x2="-0.36005154776142967" y2="-0.5110889132455332" />
+        <atom id="a10" elementType="C"
+              x2="-1.130051547761428" y2="0.8225902085825035" />
+        <atom id="a11" elementType="C"
+              x2="-0.360051547761427" y2="2.156269330410538" />
+      </atomArray>
+      <bondArray>
+        <bond atomRefs2="a1 a2" order="1" />
+        <bond atomRefs2="a2 a3" order="1">
+          <bondStereo>W</bondStereo>
+        </bond>
+        <bond atomRefs2="a2 a4" order="1" />
+        <bond atomRefs2="a4 a5" order="2" />
+        <bond atomRefs2="a4 a6" order="1" />
+        <bond atomRefs2="a6 a7" order="2" />
+        <bond atomRefs2="a7 a8" order="1" />
+        <bond atomRefs2="a8 a9" order="2" />
+        <bond atomRefs2="a9 a10" order="1" />
+        <bond atomRefs2="a10 a11" order="2" />
+        <bond atomRefs2="a6 a11" order="1" />
+      </bondArray>
+    </molecule>
+  </MChemicalStruct>
+</MDocument>
+<MDocument>
+  <MChemicalStruct>
+    <molecule title="Catechol" molID="m1">
+      <atomArray
+          atomID="a1 a2 a3 a4 a5 a6 a7 a8"
+          elementType="O C C C C C C O"
+          x2="3.3341978045700924 2.0005186827420554 2.0005186827420536 0.6668395609140164 -0.6668395609140184 -0.6668395609140162 0.6668395609140194 0.6668395609140203"
+          y2="2.3099999999999987 1.5400000000000003 -3.164135620181696E-15 -0.7700000000000008 1.3322676295501878E-15 1.540000000000002 2.3100000000000005 3.8499999999999996"
+          />
+      <bondArray>
+        <bond atomRefs2="a1 a2" order="1" />
+        <bond atomRefs2="a2 a3" order="2" />
+        <bond atomRefs2="a3 a4" order="1" />
+        <bond atomRefs2="a4 a5" order="2" />
+        <bond atomRefs2="a5 a6" order="1" />
+        <bond atomRefs2="a6 a7" order="2" />
+        <bond atomRefs2="a2 a7" order="1" />
+        <bond atomRefs2="a7 a8" order="1" />
+      </bondArray>
+    </molecule>
+  </MChemicalStruct>
+</MDocument>
+<MDocument>
+  <MChemicalStruct>
+    <molecule title="Dopamine" molID="m1">
+      <atomArray
+          atomID="a1 a2 a3 a4 a5 a6 a7 a8 a9 a10 a11"
+          elementType="O C C C C C C O C C N"
+          x2="-1.0002593413710255 0.3334197804570097 1.6670989022850478 3.0007780241130826 3.000778024113081 1.6670989022850429 0.3334197804570084 -1.0002593413710263 4.334457145941119 5.668136267769154 5.668136267769152"
+          y2="2.887500000000003 2.1175000000000006 2.8875 2.117499999999998 0.5774999999999975 -0.1925000000000009 0.5775000000000003 -0.19249999999999906 2.8874999999999966 2.1174999999999953 0.5774999999999952"
+          />
+      <bondArray>
+        <bond atomRefs2="a1 a2" order="1" />
+        <bond atomRefs2="a2 a3" order="2" />
+        <bond atomRefs2="a3 a4" order="1" />
+        <bond atomRefs2="a4 a5" order="2" />
+        <bond atomRefs2="a5 a6" order="1" />
+        <bond atomRefs2="a6 a7" order="2" />
+        <bond atomRefs2="a2 a7" order="1" />
+        <bond atomRefs2="a7 a8" order="1" />
+        <bond atomRefs2="a4 a9" order="1" />
+        <bond atomRefs2="a9 a10" order="1" />
+        <bond atomRefs2="a10 a11" order="1" />
+      </bondArray>
+    </molecule>
+  </MChemicalStruct>
+</MDocument>
+<MDocument>
+  <MChemicalStruct>
+    <molecule title="Noradrenaline" molID="m1">
+      <atomArray>
+        <atom id="a1" elementType="O"
+              x2="-1.0002593413710255" y2="2.887500000000003" />
+        <atom id="a2" elementType="C"
+              x2="0.3334197804570097" y2="2.1175000000000006" />
+        <atom id="a3" elementType="C"
+              x2="1.6670989022850478" y2="2.887500000000000" />
+        <atom id="a4" elementType="C"
+              x2="3.0007780241130826" y2="2.117499999999998" />
+        <atom id="a5" elementType="C"
+              x2="3.000778024113081" y2="0.5774999999999975" />
+        <atom id="a6" elementType="C"
+              x2="1.6670989022850429" y2="-0.1925000000000009" />
+        <atom id="a7" elementType="C"
+              x2="0.3334197804570084" y2="0.5775000000000003" />
+        <atom id="a8" elementType="O"
+              x2="-1.0002593413710263" y2="-0.19249999999999906" />
+        <atom id="a9" elementType="C"
+              x2="4.334457145941119" y2="2.8874999999999966" />
+        <atom id="a10" elementType="C"
+              x2="5.668136267769154" y2="2.1174999999999953" />
+        <atom id="a11" elementType="N"
+              x2="5.668136267769152" y2="0.5774999999999952" />
+        <atom id="a12" elementType="O"
+              x2="4.334457145941119" y2="4.427499999999997" />
+      </atomArray>
+      <bondArray>
+        <bond atomRefs2="a1 a2" order="1" />
+        <bond atomRefs2="a2 a3" order="2" />
+        <bond atomRefs2="a3 a4" order="1" />
+        <bond atomRefs2="a4 a5" order="2" />
+        <bond atomRefs2="a5 a6" order="1" />
+        <bond atomRefs2="a6 a7" order="2" />
+        <bond atomRefs2="a2 a7" order="1" />
+        <bond atomRefs2="a7 a8" order="1" />
+        <bond atomRefs2="a4 a9" order="1" />
+        <bond atomRefs2="a9 a10" order="1" />
+        <bond atomRefs2="a10 a11" order="1" />
+        <bond atomRefs2="a9 a12" order="1">
+          <bondStereo>W</bondStereo>
+        </bond>
+      </bondArray>
+    </molecule>
+  </MChemicalStruct>
+</MDocument>
+<MDocument>
+  <MChemicalStruct>
+    <molecule title="Adrenaline" molID="m1">
+      <atomArray>
+        <atom id="a1" elementType="O"
+              x2="-1.0002593413710255" y2="2.887500000000003" />
+        <atom id="a2" elementType="C"
+              x2="0.3334197804570097" y2="2.1175000000000006" />
+        <atom id="a3" elementType="C"
+              x2="1.6670989022850478" y2="2.887500000000000" />
+        <atom id="a4" elementType="C"
+              x2="3.0007780241130826" y2="2.117499999999998" />
+        <atom id="a5" elementType="C"
+              x2="3.000778024113081" y2="0.5774999999999975" />
+        <atom id="a6" elementType="C"
+              x2="1.6670989022850429" y2="-0.1925000000000009" />
+        <atom id="a7" elementType="C"
+              x2="0.3334197804570084" y2="0.5775000000000003" />
+        <atom id="a8" elementType="O"
+              x2="-1.0002593413710263" y2="-0.19249999999999906" />
+        <atom id="a9" elementType="C"
+              x2="4.334457145941119" y2="2.8874999999999966" />
+        <atom id="a10" elementType="C"
+              x2="5.668136267769154" y2="2.1174999999999953" />
+        <atom id="a11" elementType="N"
+              x2="5.668136267769152" y2="0.5774999999999952" />
+        <atom id="a12" elementType="O"
+              x2="4.334457145941119" y2="4.427499999999997" />
+        <atom id="a13" elementType="C"
+              x2="7.001815389597187" y2="-0.19250000000000633" />
+      </atomArray>
+      <bondArray>
+        <bond atomRefs2="a1 a2" order="1" />
+        <bond atomRefs2="a2 a3" order="2" />
+        <bond atomRefs2="a3 a4" order="1" />
+        <bond atomRefs2="a4 a5" order="2" />
+        <bond atomRefs2="a5 a6" order="1" />
+        <bond atomRefs2="a6 a7" order="2" />
+        <bond atomRefs2="a2 a7" order="1" />
+        <bond atomRefs2="a7 a8" order="1" />
+        <bond atomRefs2="a4 a9" order="1" />
+        <bond atomRefs2="a9 a10" order="1" />
+        <bond atomRefs2="a10 a11" order="1" />
+        <bond atomRefs2="a9 a12" order="1">
+          <bondStereo>W</bondStereo>
+        </bond>
+        <bond atomRefs2="a11 a13" order="1" />
+      </bondArray>
+    </molecule>
+  </MChemicalStruct>
+</MDocument>
+<MDocument atomSetRGB="0:D" bondSetRGB="0:N,1:#000001"
+           bondSetLineThickness="1:0.064">
+  <MChemicalStruct>
+    <molecule title="Colchicine" molID="m1">
+      <atomArray>
+        <atom id="a1" elementType="C"
+              x2="2.3614668448298173" y2="-4.832750573998010" />
+        <atom id="a2" elementType="O"
+              x2="-0.305889121792450" y2="-4.836235875201601" />
+        <atom id="a3" elementType="C"
+              x2="1.0267827417246287" y2="-4.064493881922838" />
+        <atom id="a4" elementType="N"
+              x2="1.0247705021365283" y2="-2.524495196568901" />
+        <atom id="a5" elementType="C"
+              x2="5.101970273450188" y2="-2.162757339247518" />
+        <atom id="a6" elementType="C"
+              x2="3.630982526810310" y2="-2.618602761770702" />
+        <atom id="a7" elementType="C"
+              x2="2.357442365653628" y2="-1.752753203290132" />
+        <atom id="a8" elementType="C"
+              x2="2.240351506816053" y2="-0.2172110414539034" />
+        <atom id="a9" elementType="C"
+              x2="0.7172534256436188" y2="0.0103240879851079" />
+        <atom id="a10" elementType="O"
+              x2="-1.5900307294713676" y2="1.2259050926646373" />
+        <atom id="a11" elementType="C"
+              x2="-0.05448856763515819" y2="1.3429959515021976" />
+        <atom id="a12" elementType="C"
+              x2="-0.09067746972607728" y2="5.376979685422996" />
+        <atom id="a13" elementType="O"
+              x2="-0.5426772093910164" y2="3.9048057027216347" />
+        <atom id="a14" elementType="C"
+              x2="0.5062629885864082" y2="2.7772754543171523" />
+        <atom id="a15" elementType="C"
+              x2="1.9772507352262791" y2="3.233120876840328" />
+        <atom id="a16" elementType="C"
+              x2="3.2507908963829695" y2="2.367271318359757" />
+        <atom id="a17" elementType="C"
+              x2="3.3678817552205342" y2="0.8317291565235282" />
+        <atom id="a18" elementType="C"
+              x2="9.507490591251182" y2="3.277586712471133" />
+        <atom id="a19" elementType="O"
+              x2="7.967491905897248" y2="3.2755744728830303" />
+        <atom id="a20" elementType="C"
+              x2="7.199235213822074" y2="1.9408903697778284" />
+        <atom id="a21" elementType="C"
+              x2="5.6557512272645445" y2="4.606234096812006" />
+        <atom id="a22" elementType="O"
+              x2="4.887494535189378" y2="3.271549993706814" />
+        <atom id="a23" elementType="C"
+              x2="5.659236528468147" y2="1.9388781301897215" />
+        <atom id="a24" elementType="C"
+              x2="4.890979836392982" y2="0.604194027084525" />
+        <atom id="a25" elementType="C"
+              x2="5.662721829671744" y2="-0.7284778364325675" />
+        <atom id="a26" elementType="C"
+              x2="7.2027205150256846" y2="-0.7264655968444674" />
+        <atom id="a27" elementType="C"
+              x2="7.970977207100839" y2="0.6082185062607436" />
+        <atom id="a28" elementType="O"
+              x2="9.510975892454795" y2="0.6102307458488427" />
+        <atom id="a29" elementType="C"
+              x2="10.279232584529957" y2="1.944914848954042" />
+      </atomArray>
+      <bondArray>
+        <bond atomRefs2="a3 a1" order="1" />
+        <bond atomRefs2="a3 a2" order="2" />
+        <bond atomRefs2="a4 a3" order="1" />
+        <bond atomRefs2="a6 a5" order="1" />
+        <bond atomRefs2="a7 a4" order="1" mrvSetSeq="1">
+          <bondStereo>H</bondStereo>
+        </bond>
+        <bond atomRefs2="a7 a6" order="1" />
+        <bond atomRefs2="a8 a7" order="1" />
+        <bond atomRefs2="a9 a8" order="2" />
+        <bond atomRefs2="a11 a9" order="1" />
+        <bond atomRefs2="a11 a10" order="2" />
+        <bond atomRefs2="a13 a12" order="1" />
+        <bond atomRefs2="a14 a11" order="1" />
+        <bond atomRefs2="a14 a13" order="1" />
+        <bond atomRefs2="a15 a14" order="2" />
+        <bond atomRefs2="a16 a15" order="1" />
+        <bond atomRefs2="a17 a8" order="1" />
+        <bond atomRefs2="a17 a16" order="2" />
+        <bond atomRefs2="a19 a18" order="1" />
+        <bond atomRefs2="a20 a19" order="1" />
+        <bond atomRefs2="a22 a21" order="1" />
+        <bond atomRefs2="a23 a20" order="2" />
+        <bond atomRefs2="a23 a22" order="1" />
+        <bond atomRefs2="a24 a17" order="1" />
+        <bond atomRefs2="a24 a23" order="1" />
+        <bond atomRefs2="a25 a5" order="1" />
+        <bond atomRefs2="a25 a24" order="2" />
+        <bond atomRefs2="a26 a25" order="1" />
+        <bond atomRefs2="a27 a20" order="1" />
+        <bond atomRefs2="a27 a26" order="2" />
+        <bond atomRefs2="a28 a27" order="1" />
+        <bond atomRefs2="a29 a28" order="1" />
+      </bondArray>
+    </molecule>
+  </MChemicalStruct>
+</MDocument>
+<MDocument>
+  <MChemicalStruct>
+    <molecule title="Muscarine" molID="m1" absStereo="true">
+      <atomArray>
+        <atom id="a1" elementType="C"
+              x2="0.9452307454294702" y2="2.102918909541986" />
+        <atom id="a2" elementType="O"
+              x2="2.191116916766889" y2="1.1977296210115778" />
+        <atom id="a3" elementType="C"
+              x2="1.7152307454294713" y2="-0.2668974140829591" />
+        <atom id="a4" elementType="C"
+              x2="0.17523074542947104" y2="-0.2668974140829602" />
+        <atom id="a5" elementType="C"
+              x2="-0.3006554259079488" y2="1.1977296210115762" />
+        <atom id="a6" elementType="O"
+              x2="-1.765282461002486" y2="1.6736157923489945" />
+        <atom id="a7" elementType="C"
+              x2="0.9452307454294697" y2="3.6429189095419856" />
+        <atom id="a8" elementType="N" formalCharge="1"
+              x2="4.1604200339598805" y2="-1.5127835854203775" />
+        <atom id="a9" elementType="C"
+              x2="4.1604200339598805" y2="-3.0527835854203778" />
+        <atom id="a10" elementType="C"
+              x2="4.160420033959882" y2="0.02721641457962254" />
+        <atom id="a11" elementType="C"
+              x2="5.700420033959881" y2="-1.5127835854203775" />
+        <atom id="a12" elementType="C"
+              x2="2.620420033959881" y2="-1.5127835854203775" />
+      </atomArray>
+      <bondArray>
+        <bond atomRefs2="a1 a2" order="1" />
+        <bond atomRefs2="a2 a3" order="1" />
+        <bond atomRefs2="a3 a12" order="1">
+          <bondStereo>H</bondStereo>
+        </bond>
+        <bond atomRefs2="a3 a4" order="1" />
+        <bond atomRefs2="a4 a5" order="1" />
+        <bond atomRefs2="a1 a5" order="1" />
+        <bond atomRefs2="a5 a6" order="1">
+          <bondStereo>W</bondStereo>
+        </bond>
+        <bond atomRefs2="a1 a7" order="1">
+          <bondStereo>H</bondStereo>
+        </bond>
+        <bond atomRefs2="a8 a9" order="1" />
+        <bond atomRefs2="a8 a10" order="1" />
+        <bond atomRefs2="a8 a11" order="1" />
+        <bond atomRefs2="a8 a12" order="1" />
+      </bondArray>
+    </molecule>
+  </MChemicalStruct>
+</MDocument>
+<MDocument>
+  <MChemicalStruct>
+    <molecule title="Capsaicin" molID="m1">
+      <atomArray
+          atomID="a1 a2 a3 a4 a5 a6 a7 a8 a9 a10 a11 a12 a13 a14 a15 a16 a17 a18 a19 a20 a21 a22"
+          elementType="C O C C C C N C O C C C C C C C C C C C C O"
+          x2="-5.334716487312148 -4.001037365484112 -4.001037365484111 -2.6673582436560714 -2.6673582436560714 -1.3336791218280357 -4.440892098500626E-16 1.3336791218280348 1.3336791218280348 2.6673582436560705 4.001037365484105 5.334716487312141 6.668395609140177 8.002074730968213 9.335753852796248 10.669432974624284 12.00311209645232 10.669432974624284 -4.001037365484107 -5.334716487312143 -5.334716487312145 -6.668395609140181"
+          y2="7.700000000000001 6.930000000000002 5.390000000000002 4.620000000000001 3.080000000000001 2.3100000000000005 3.080000000000001 2.3100000000000005 0.7700000000000005 3.080000000000001 2.3100000000000005 3.08 2.31 3.08 2.3099999999999996 3.08 2.31 4.62 2.3100000000000005 3.08 4.62 5.389999999999998"
+          />
+      <bondArray>
+        <bond atomRefs2="a1 a2" order="1" />
+        <bond atomRefs2="a2 a3" order="1" />
+        <bond atomRefs2="a3 a4" order="2" />
+        <bond atomRefs2="a4 a5" order="1" />
+        <bond atomRefs2="a5 a6" order="1" />
+        <bond atomRefs2="a6 a7" order="1" />
+        <bond atomRefs2="a7 a8" order="1" />
+        <bond atomRefs2="a8 a9" order="2" />
+        <bond atomRefs2="a8 a10" order="1" />
+        <bond atomRefs2="a10 a11" order="1" />
+        <bond atomRefs2="a11 a12" order="1" />
+        <bond atomRefs2="a12 a13" order="1" />
+        <bond atomRefs2="a13 a14" order="1" />
+        <bond atomRefs2="a14 a15" order="2">
+          <bondStereo>T</bondStereo>
+        </bond>
+        <bond atomRefs2="a15 a16" order="1" />
+        <bond atomRefs2="a16 a17" order="1" />
+        <bond atomRefs2="a16 a18" order="1" />
+        <bond atomRefs2="a5 a19" order="2" />
+        <bond atomRefs2="a19 a20" order="1" />
+        <bond atomRefs2="a20 a21" order="2" />
+        <bond atomRefs2="a3 a21" order="1" />
+        <bond atomRefs2="a21 a22" order="1" />
+      </bondArray>
+    </molecule>
+  </MChemicalStruct>
+</MDocument>
+</cml>

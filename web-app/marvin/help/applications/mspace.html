@@ -1,0 +1,99 @@
+<html>
+<head>
+<meta NAME="author" CONTENT="Miklos Vargyas">
+<link REL ="stylesheet" TYPE="text/css" HREF="../marvinmanuals.css" TITLE="Style">
+<title>MarvinSpace</title>
+</head>
+<body>
+
+<h1 align=center>MarvinSpace Application Options</h1>
+<h3 align=center>Version 5.10.1</h3>
+
+<p>MarvinSpace is a 3D molecular visualizer application to display
+macromolecules like proteins, protein-ligand complexes, RNA/DNA.<br>
+It is available as part of the Marvin Beans package.
+</P>
+
+<h2>Usage</h2>
+
+<blockquote>
+<font COLOR="#333399"><strong>mspace</strong></font> [<em>options</em>] [<em>structure files</em>]
+</blockquote>
+
+<p>
+<h3>Options</h3>
+<table CELLSPACING=0 CELLPADDING=4 BORDER="0" class="grid" width="70%">
+<tr><td><code>-h</code>, <code>--help</code></td>
+    <td>
+	print command line help
+	</td></tr>
+<tr><td><code>-</code></td>
+    <td>
+	import structures from standard input	
+	</td></tr>
+<tr><td><code>-v, --verbose</code></td><td>verbose mode</td></tr>
+<tr><td><code>-c, --columns &lt;number&gt;</code></td>
+    <td>
+	the number of visible columns (maximum: 5)
+	</td></tr>
+<tr><td><code>-r, --rows &lt;number&gt;</code></td>
+    <td>
+	the number of visible rows (maximum: 4)
+	</td></tr>
+<tr><td><code>-n, --nMols &lt;number&gt;</code></td>
+    <td>
+	the number of molecules to import (default: 1000)
+	</td></tr>
+<tr><td><code>--multiCell &lt;number&gt;</code></td>
+    <td>
+    loads every input molecule to an empty cell
+    </td></tr>
+<tr><td><code>--singleCell &lt;number&gt;</code></td>
+    <td>
+    loads every input molecule to the same cell
+    </td></tr>
+<tr><td><code>-q, --quality ( L[ow], M[ed], H[igh] ) (default: Med) </code></td>
+    <td>
+	sets display quality
+	</td></tr>
+<tr><td><code>-p &lt;string&gt; &lt;string&gt;</code></td>
+    <td>
+    display property
+    </td></tr>
+
+</table>
+
+<p>Multiple structure files can be passed in the command line. However,
+the number of molecules actually displayed is influenced by other parameters,
+namely <code>-n</code>, <code>-c</code> and <code>-r</code>. The number of cells
+(and thus the number of structures displayed) is the minimum of the product
+of row count and column count and the number of structures specified
+by the <code>-n</code> option. <!--When <code>-n</code> is given without specifying
+the number of rows and cells all input structures are displayed in the same cell.-->
+<br>
+Note, that the maximum number of cells is limited to 20.
+</p>
+
+<p>Note, that <a href="javaoptions.html">Java VM options</a> (like heap size)
+can be passed to JVM through the mspace command line.</p>
+
+<h2>Examples</h2>
+
+<ol>
+<li>Display the macromolecule defined in the given PDB file:
+     <pre>mspace 4DFR.pdb</pre>
+<li>View the first 6 structures from the given input file in a 2 rows by 3 columns table :
+     <pre>mspace -r 2 -c 3 molecules.sdf</pre>
+<li>View upto 10 structures defined in an SDFile in the same cell:
+     <pre>mspace -n 10 --singleCell ligands.sdf </pre>
+<li>Show the macromolecule defined in the given PDB file with the highest
+display quality :
+     <pre>mspace -q High 1AID.pdb</pre>
+<li>To display verylarge structures the heap size should be increased, in particular
+for surface calculations.
+     <pre>mspace -Xmx256M 1FFK.pdb</pre></li>
+</ol>
+
+<p>MarvinSpace <a href="../developer/space-par.html">Parameters and Events</a></p>
+</body>
+</html>

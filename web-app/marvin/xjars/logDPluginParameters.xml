@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<ParameterPanel>
+	<Tab Title="General Options">
+    <Group Title="logP method">
+	    <RadioButtonGroup Key="method">
+			<Choice Value="vg" Text="VG" Tooltip="The calculation method derived from the method of Viswanadhan, Ghose, et al. is applied (VG stands for Viswanadhan and Ghose, first authors of the cited paper)."/>
+			<Choice Value="klop" Text="KLOP" Tooltip="logP data from Klopman's paper is applied."/>
+			<Choice Value="phys" Text="PHYS" Tooltip="logP data from PHYSPROP database is used."/>
+			<Choice Value="user" Text="User defined" Tooltip="If a training set of structures and corresponding experimental logP values
+			        is created by the user, and stored in the appropriate format, it can be used as a database for related molecules' logP calculations."/>
+			<Choice Value="weighted" Text="Weighted" Selected="true" Tooltip="Default setting. The use of methods can be melted by the user, selecting this method turns the Method weights section active."/>
+	    </RadioButtonGroup>
+    </Group>
+    <Group>
+        <SingleSelection Key="logptrainingid" Label="logP training ID" Tooltip="Select the user defined logP training." ChoiceListReaderJavaMethod="chemaxon.marvin.calculations.logDPlugin.getLogPTrainingIds">
+			<Dependencies>
+	    		<Item Key="method" Range="user,weighted"/>
+			</Dependencies>
+        </SingleSelection>
+    </Group>
+    <Group Title="Method weights" Tooltip="You can set the proportion of the methods used in the calculations. Acitve only in Weighted method.">
+    	<Number Key="wvg" Label="VG" Range="[0.0,1000]" Tooltip="Weight of VG method." Value="1">
+		<Dependencies>
+	    		<Item Key="method" Range="weighted"/>
+			</Dependencies>
+        </Number>
+        <Number Key="wklop" Label="KLOP" Range="[0.0,1000]" Tooltip="Weight of KLOP method." Value="1">
+			<Dependencies>
+	    		<Item Key="method" Range="weighted"/>
+			</Dependencies>
+        </Number>
+        <Number Key="wphys" Label="PHYS" Range="[0.0,1000]" Tooltip="Weight of PHYS method."  Value="1">
+			<Dependencies>
+	    		<Item Key="method" Range="weighted"/>
+			</Dependencies>
+        </Number>
+        <Number Key="wuser" Label="User defined" Range="[0.0,1000]" Tooltip="Weight of user defined method." Value="0">
+			<Dependencies>
+	    		<Item Key="method" Range="weighted"/>
+			</Dependencies>
+        </Number>
+    </Group>
+    <Group Title="Electrolyte concentration">
+    <Number Key="anion" Label="&lt;html&gt;Cl&lt;sup&gt;-&lt;/sup&gt; concentration (mol/dm&lt;sup&gt;3&lt;/sup&gt;)&lt;/html&gt;"
+        Tooltip="&lt;html&gt;Cl&lt;sup&gt;-&lt;/sup&gt; concentration (mol/dm&lt;sup&gt;3&lt;/sup&gt;).&lt;/html&gt;" Range="[0.0,0.25]" Value="0.1"/>
+    <Number Key="kation" Label="&lt;html&gt;Na&lt;sup&gt;+&lt;/sup&gt; K&lt;sup&gt;+&lt;/sup&gt; concentration (mol/dm&lt;sup&gt;3&lt;/sup&gt;).&lt;/html>"
+        Tooltip="&lt;html&gt;Na&lt;sup&gt;+&lt;/sup&gt; K&lt;sup&gt;+&lt;/sup&gt; concentration (mol/dm&lt;sup&gt;3&lt;/sup&gt;).&lt;/html&gt;" Range="[0.0,0.25]" Value="0.1"/>
+   	</Group>
+    <Group Title="pKa correction library">
+	<Boolean Key="usepkacorrectionlibrary" Label="Use pKa correction library" Tooltip="Check this box to use a file with experimental data for the calculation." Value="false"/>
+    <SingleSelection Key="pkacorrectionlibrary" Label="pKa correction library" Tooltip="Select the user defined pKa correction library." ChoiceListReaderJavaMethod="chemaxon.marvin.calculations.pKaPlugin.getCorrectionLibraryIds">
+		<Dependencies>
+    		<Item Key="usepkacorrectionlibrary" Range="true"/>
+		</Dependencies>
+    </SingleSelection>
+    </Group>
+   	<Boolean Key="considertautomerization" Label="Consider tautomerization / resonance" Value="false"/>
+    </Tab>
+    <Tab Title="Display Options">
+    <Group Title="Precision">
+    <Precision Key="precision" Label="Decimal places"/>
+    </Group>
+    <Group Title="Chart">
+    <Number Key="lower" Label="pH lower limit" Tooltip="Defines the pH window in which the logD is calculated, with pH values starting from the lower limit incremented by the step size, the results given in table format and a chart." Range="[0.0,14.0]" Value="0"/>
+    <Number Key="upper" Label="pH upper limit" Tooltip="Defines the pH window in which the logD is calculated, with pH values starting from the lower limit incremented by the step size, the results given in table format and a chart." Range="[0.0,14.0]" Value="14"/>
+    <Number Key="step" Label="pH step size" Tooltip="Defines the pH window in which the logD is calculated, with pH values starting from the lower limit incremented by the step size, the results given in table format and a chart." Value="0.5"/>
+    </Group>
+    <Group Title="Reference pH values" Tooltip="The logD at the given reference pH values are calculated, both pH and logD values with an accuracy of the decimal places value set.">
+        <Number Key="ref1" Label="pH 1" Range="[0.0,14.0]" Value="1.5"/>
+        <Number Key="ref2" Label="pH 2" Range="[0.0,14.0]" Value="5.0"/>
+        <Number Key="ref3" Label="pH 3" Range="[0.0,14.0]" Value="6.5"/>
+        <Number Key="ref4" Label="pH 4" Range="[0.0,14.0]" Value="7.4"/>
+    </Group>
+   	</Tab>
+</ParameterPanel>

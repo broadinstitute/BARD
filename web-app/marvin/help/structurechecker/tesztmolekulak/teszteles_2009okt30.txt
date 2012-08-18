@@ -1,0 +1,117 @@
+
+- preferences/checkers list and Add checker window list not the same (alphabetical order)
+- into docs: moving checkers up/down
+- hide fixers that can not modify the molecule (pl. sajtgyár alias cant be fixed by converting to abbrev gr.)
+- unit test for all checkers/fixers, should contain multiple cases, current unit test too few, too simple, partly not working for the checker 
+
+******************************************************
+
+# abbre gr: 
+  -- 2 options are needed (check boxes): contracted/expanded
+
+# alias: DEFAULT
+  -- present fix option Remove alias to be renamed Delete alias atom, 
+  -- add 3rd fix option: Remove alias without deleting atom
+  -- alias checker detects pseudo as alias (bug)
+  -- Remove alias fixer deleted an abbrev. gr that was converted from an alias 
+  -- checker options: check atom symbol; check abbreviaton; check unknown alias (like brokkoli) 
+  
+	*test actions (alias.mrv): inserted 2 alias, 1 pseudo. 1 alias converted to abberv group (Ph). Checker found 1 abbr gr and 2 alias. Alias Checker detects pseudo as alias.
+ Alias fixer removes the real alias atoms (although 1 converted to abbr gr), but pseudo is not removed.
+
+# Pseudo Atom Checker should be implemented.  DEFAULT
+  -- checker options: check atom symbol; check abbreviaton; check unknown pseudo (like brokkoli)
+  -- fix options: delete pseudo atom; convert to carbon; convert to atom; convert to abbrev. group
+
+# aromaticity: 
+  -- in case of multiple incorrect ring structures in a canvas, one or more fragments are not considered, only one -> not all incorrect aromatics are detected (aromaticity.mrv/1)
+  -- changing arom. checker option in Pref dialog throws exception
+  -- basic aromat. does not detect pyridone mol. problem (it should mark it as an error) (mols from file: 2 or 3)
+  -- experienced behaviour: loose option does not work, result same as in csae of general (aromaticity.mrv/4)
+
+# atom map
+  OK; incompatibility with missing  atom map checker
+
+# atom value
+  -- not working
+
+# attach data
+  -- fix options text is wrong: rename Remove affected atom to Delete atom
+
+# bond angle  DEF
+  -- not working, implement chain angles (bondangle.mrv)
+  -- implement internal angles of rings (5.3 if sufficient time)
+  -- should not run in 3D
+
+# bond length   DEF
+  -- bug: call PartialClean only for that bond (presently all the canvas is cleaned!!!)  (tested on bondangle.mrv)
+  -- should not run in 3D
+
+# crossed-double bond
+  -- narrow end of wiggly should be connected to the (ex-crossed) double bond. crossed_wiggly.mrv/1 example molecule should not be detected as wiggly double (because it is a chiral atom just next to a double bond). 2nd example is NOT a wiggly double neither..
+  -- see standardizer 
+  
+# explicit H   DEF
+  -- by default all checker options are checked
+  -- checker is working (explicitH.mrv), only for regular explH (no radical, no isotope), option setting (Pref dialog) has no effect.
+  -- fix selected: extra wedge was added to OH
+
+# invalid chiral flag   DEF
+   -- rename Remove absolute stereo data to Fix chiral flag
+   -- fix chiral flag fixer should set the chiral flag in case of molecules having stereo center(s), remove chiral flag in case of mols not having stereo centers (see standardizer)
+   -- not working, always displays an error (see chiralflagchecker.mrv)
+
+# implement Chiral flag checker with Remove chiral flag fixer
+
+#invalid reaction map   
+  -- not working
+
+
+# invalid stereo   DEF
+  -- not working (invalidstereo.mrv)
+  -- rename to Invalid stereo wedge checker
+
+# isotope
+  -- OK
+
+# missing atom map
+  OK; incompatibility with atom map checker
+  -- should work if no map is found at all
+
+# molecule charge 
+  -- fixer removes the charge sign, but impl. Hs are not recalculated
+  -- in reaction, charge is not detected (on purpose?)
+  -- NH4+ ->fix leaves NH4 instead of NH3. Probably should be fixed in marvin.
+
+# multicenter
+  -- not working (multicenter.mrv)
+
+
+# implement coordinate bond checker NEW!
+
+# overlapping atoms   DEF
+  OK
+
+# overlapping bonds
+   OK but should have a smaller distance limit than in case of overlapping atom radius
+
+# query atoms
+  -- Group atom (Gx) should be detected as query atom
+
+# query bonds
+  OK
+
+# radical 
+  -- bug as with charge: remove the dots but nude atom makes no sense. Impl. Hs are not recalculated
+
+# 3D
+  -- rename Clean molecule to Convert molecule to 2D
+  -- bond angle checker should not run in 3D
+
+# valence  DEF
+  OK
+
+# wiggly double
+  -- narrow end of wiggly should be connected to the (ex-crossed) double bond. crossed_wiggly.mrv/1 example molecule should not be detected as wiggly double (because it is a chiral atom just next to a double bond). 2nd example is NOT a wiggly double neither..
+  -- see standardizer 
+

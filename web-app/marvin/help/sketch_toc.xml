@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="ISO-8859-1" standalone="no"?>
+  <!DOCTYPE toc PUBLIC "-//Sun Microsystems Inc.//DTD JavaHelp TOC Version 1.0//EN" "http://java.sun.com/products/javahelp/toc_1_0.dtd">
+  <toc version="1.0">
+    <tocitem target="Sketch" text="MarvinSketch">
+      <tocitem target="Sketch.Intro" text="Introduction to MarvinSketch"/>
+      <tocitem target="Sketch.Install" text="Installation/System Requirements"/>      
+      <tocitem target="Sketch.Launch" text="Application instructions"/>
+      <tocitem target="Sketch.License" text="License management"/>
+      <tocitem target="Sketch.Gui" text="MarvinSketch Graphical User Interface">
+          <tocitem target="Sketch.Gui.Canvas" text="Canvas"/>
+		  <tocitem target="Sketch.Gui.Menus" text="Menus"/>
+          <tocitem target="Sketch.Gui.Toolbars" text="Toolbars"/>
+          <tocitem target="Sketch.Gui.Popups" text="Pop-up Menus"/>
+          <tocitem target="Sketch.Gui.Statusbar" text="Status Bar"/>
+          <tocitem target="Sketch.Gui.Dialogs" text="Dialogs"/>
+          <tocitem target="Sketch.Gui.Shortcuts" text="Shortcuts"/>
+          <tocitem target="Sketch.Gui.Customize" text="Customizing MarvinSketch"/>
+          <tocitem target="Sketch.Gui.Configurations" text="Configurations of MarvinSketch"/>
+          <tocitem target="Sketch.Gui.Customize_Server" text="Customizing MarvinSketch - Server side"/>
+      </tocitem>
+
+      <tocitem target="Sketch.Basic" text="Basic MarvinSketch Functions">
+          <tocitem target="Sketch.Formats" text="File formats"/>
+          <tocitem target="Sketch.DataTransfer" text="Cut/Copy/Paste and Drag &amp; Drop Functionality"/>
+          <tocitem target="Sketch.Basic.Create" text="Create a new molecule"/>
+          <tocitem target="Sketch.Basic.Open" text="Open an existing molecule file"/>
+          <tocitem target="Sketch.Basic.Save" text="Save molecule"/>
+          <tocitem target="Sketch.Basic.Print" text="Print"/>
+          <tocitem target="Sketch.Basic.Multipage" text="Working with multipage molecular documents"/>
+          <tocitem target="Sketch.Basic.DrawStructures" text="Drawing structures">
+              <tocitem target="Sketch.Basic.DrawAtoms" text="Atoms"/>
+              <tocitem target="Sketch.Basic.DrawBonds" text="Bonds"/>
+              <tocitem target="Sketch.Basic.DrawTemplates" text="Templates"/>
+			  <tocitem target="Sketch.Basic.NewSubstituent" text="New substituent (fragment) editing"/>
+			  <tocitem target="Sketch.Basic.Sprouting" text="Sprouting"/>
+   			  <tocitem target="Sketch.Basic.MergeStructures" text="Merging structures"/>              
+			  <tocitem target="Sketch.Basic.DrawCCompounds" text="Coordination compounds"/>
+              <tocitem target="Sketch.Basic.DrawMarkush" text="Markush structures"/>
+              <tocitem target="Sketch.Basic.Flip" text="Flip a molecule"/>
+              <tocitem target="Sketch.Basic.Mirror" text="Mirror a molecule"/>
+          	  <tocitem target="Sketch.Basic.Inversion" text="Central inversion of a molecule"/>
+</tocitem>
+          <tocitem target="Sketch.Basic.Reactions" text="Reactions"/>
+		  <tocitem target="Sketch.Basic.Mapping" text="Mapping reactions"/>
+          <tocitem target="Sketch.Basic.ElectronFlow" text="Electron flow arrow"/>
+		  <tocitem target="Sketch.Basic.DrawRQuery" text="Drawing R-group queries"/>
+          <tocitem target="Sketch.Basic.DrawSGroup" text="Drawing S-groups"/>
+          <tocitem target="Sketch.Basic.DrawGraphics" text="Drawing graphics and text boxes"/>
+          <tocitem target="Sketch.Basic.DrawLinkAtom" text="Drawing Link atoms"/>
+          <tocitem target="Sketch.Basic.Select" text="Selecting structures"/>
+          <tocitem target="Sketch.Basic.Delete" text="Deleting structures"/>
+          <tocitem target="Sketch.Basic.Work" text="Working with structures"/>
+		  <tocitem target="Sketch.Basic.Stereo" text="Stereochemistry"/>
+          <tocitem target="Sketch.Basic.DisplayOptions" text="Structure Display Options"/>
+          <tocitem target="Sketch.Basic.LaunchViewers" text="Launching 2D and 3D Viewers"/>
+          <tocitem target="Sketch.Basic.DrawingStyles" text="Customizing structure drawing styles"/>
+      </tocitem>
+
+      <tocitem target="Sketch.Chem" text="Chemical Features of MarvinSketch">
+          <tocitem target="Sketch.Chem.valence-check" text="Valence Check"/>
+		  <tocitem target="Sketch.Chem.structurecheck" text="Structure Checker"/>
+          <tocitem target="Sketch.Chem.charges" text="Charges"/>
+          <tocitem target="Sketch.Chem.reactions" text="Reactions"/>
+          <tocitem target="Sketch.Chem.mapping" text="Mapping"/>
+          <tocitem target="Sketch.Chem.isotopes" text="Isotopes"/>
+          <tocitem target="Sketch.Chem.e-z" text="E/Z Feature"/>
+          <tocitem target="Sketch.Chem.sgroups" text="S-groups"/>
+          <tocitem target="Sketch.Chem.link-nodes" text="Link Nodes"/>
+          <tocitem target="Sketch.Chem.groups" text="Working with Groups"/>
+          <tocitem target="Sketch.Chem.radicals" text="Working with Radicals"/>
+          <tocitem target="Sketch.Chem.query-guide" text="Query Guide">
+              <tocitem target="Sketch.Chem.rgroups" text="R-groups"/>
+              <tocitem target="Sketch.Chem.atomlist" text="Atom Lists"/>
+              <tocitem target="Sketch.Chem.notlist" text="Not Lists"/>
+              <tocitem target="Sketch.Chem.generic-atoms" text="Generic Atoms"/>
+              <tocitem target="Sketch.Chem.atom-props" text="Atom Properties"/>
+			  <tocitem target="Sketch.Chem.attacheddata" text="Attached Data"/>
+          </tocitem>
+      </tocitem>
+
+      <tocitem target="Plugins" text="Calculator Plugins">
+        <tocitem target="Plugins.elemanal" text="Elemental Analysis Plugin"/>
+        <tocitem target="Plugins.iupacnaming" text="Naming Plugin"/>
+        <tocitem target="Plugins.protonation" text="Protonation">
+            <tocitem target="Plugins.protonation.pka" text="pKa Plugin"/>
+            <tocitem target="Plugins.protonation.ms" text="Major Microspecies Plugin"/>
+            <tocitem target="Plugins.protonation.isopoint" text="Isoelectric Point Plugin"/>
+        </tocitem>
+        <tocitem target="Plugins.partitioning" text="Partitioning">
+            <tocitem target="Plugins.partitioning.logp" text="logP Plugin"/>
+            <tocitem target="Plugins.partitioning.logd" text="logD Plugin"/>
+        </tocitem>
+        <tocitem target="Plugins.chargegroup" text="Charge">
+            <tocitem target="Plugins.chargegroup.charge" text="Charge Plugin"/>
+            <tocitem target="Plugins.chargegroup.polarizability" text="Polarizability Plugin"/>
+            <tocitem target="Plugins.chargegroup.oen" text="Orbital Electronegativity Plugin"/>
+        </tocitem>
+		<tocitem target="Plugins.nmrgroup" text="NMR">
+            <tocitem target="Plugins.nmrgroup.cnmr" text="CNMR Prediction"/>
+			<tocitem target="Plugins.nmrgroup.hnmr" text="HNMR Prediction"/>
+            <tocitem target="Plugins.nmrgroup.nmrview" text="NMR Spectrum Viewer"/>
+        </tocitem>
+        <tocitem target="Plugins.isomers" text="Isomers">
+            <tocitem target="Plugins.isomers.tautomer" text="Tautomerization Plugin"/>
+            <tocitem target="Plugins.isomers.stereoisomer" text="Stereoisomer Plugin"/>
+        </tocitem>
+        <tocitem target="Plugins.conformation" text="Conformation">
+            <tocitem target="Plugins.conformation.conformer" text="Conformer Plugin"/>
+            <tocitem target="Plugins.conformation.moldyn" text="Molecular Dynamics Plugin"/>
+            <tocitem target="Plugins.conformation.align" text="3D Alignment Plugin"/>
+        </tocitem>
+        <tocitem target="Plugins.geometrygroup" text="Geometry">
+            <tocitem target="Plugins.geometrygroup.topolanal" text="Topology Analysis Plugin"/>
+            <tocitem target="Plugins.geometrygroup.geometry" text="Geometry Plugin"/>
+            <tocitem target="Plugins.geometrygroup.TPSA" text="Polar Surface Area Plugin (2D)"/>
+            <tocitem target="Plugins.geometrygroup.MSA" text="Molecular Surface Area Plugin (3D)"/>
+        </tocitem>
+        <tocitem target="Plugins.markushenum" text="Markush Enumeration Plugin"/>
+        <tocitem target="Plugins.other" text="Other">
+            <tocitem target="Plugins.other.HBDA" text="Hydrogen Bond Donor-Acceptor Plugin"/>
+            <tocitem target="Plugins.other.huckel" text="Huckel Analysis Plugin"/>
+            <tocitem target="Plugins.other.refractivity" text="Refractivity Plugin"/>
+            <tocitem target="Plugins.other.resonance" text="Resonance Plugin"/>
+            <tocitem target="Plugins.other.framework" text="Structural Frameworks Plugin"/>
+        </tocitem>
+		<tocitem target="Plugins.services" text="Services Plugin">
+        <tocitem target="Plugins.validations" text="Test Results"/>
+        <tocitem target="Plugins.references" text="References"/>
+      </tocitem>
+      <tocitem target="Name2Structure" text="Name to Structure"/>
+      <tocitem target="Document2Structure" text="Document to Structure"/>
+      <tocitem target="Acknowledgements" text="Acknowledgements"/>
+
+    </tocitem>
+  </toc>

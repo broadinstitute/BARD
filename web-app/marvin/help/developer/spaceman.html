@@ -1,0 +1,266 @@
+<html>
+<head>
+<meta NAME="description" CONTENT="MarvinSpace Developer's Guide">
+<meta NAME="author" CONTENT="Judit Papp">
+<link REL ="stylesheet" TYPE="text/css" HREF="../marvinmanuals.css" TITLE="Style">
+<title>MarvinSpace Developer's Guide</title>
+</head>
+<body>
+<h1>MarvinSpace Developer's Guide</h1>
+<h3 align=center>Version 5.10.1</h3>
+
+<h2>Step by step code examples</h2>
+
+<ol>
+<li><a HREF="#application">How to create my own Application</a>
+<li><a HREF="#applet">How to create my own Applet</a>
+<li><a HREF="#jws">How to create a Java Web Start Application</a>
+<!--<li><a HREF="space-sc.html">How to use the Surface Coloring of MarvinSpace</a></li>-->
+<li><a HREF="space-map.html">How to display my own atom properties with MarvinSpace</a></li>
+</ol>
+
+<center><div class="lenia">&nbsp;</div></center>
+
+<h2><a NAME="application"></a>1. Applications</h2>
+
+<h3>1.1 Create a JFrame containing a MarvinSpace canvas</h3>
+<p>Let's create a simple MarvinSpace application.<br>
+First, we have to install the Jogl native libraries. <code>MSpaceInstaller</code>
+will do this for us.<br>
+The second step is creating a <code>JFrame</code>.<br>
+Third, we have to put the MarvinSpace canvas on it. <code>MSpaceEasy</code> makes it simple,
+we can also add several GUI components such as Popup Menu and MenuBar.<br>
+Finally the frame is ready to show.
+</p>
+<pre>
+public void createSimpleMarvinSpaceFrame() throws Exception {
+    //parameter true tells that dynamic loading of the Jogl native libraries is necessary
+    final chemaxon.marvin.space.MSpaceEasy mspace = new chemaxon.marvin.space.MSpaceEasy(true);
+
+    JFrame frame = new JFrame();
+    frame.setTitle(chemaxon.marvin.space.gui.MSpace.programName+" "+chemaxon.marvin.space.gui.MSpace.version);
+    frame.setSize(800, 750);
+    frame.setLocationRelativeTo(null);
+    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+    mspace.addCanvas(frame.getContentPane());
+    mspace.addPopupMenu();
+    mspace.addMenuBar(frame);
+    mspace.setSize(600, 600);
+
+    frame.pack();
+    frame.show();
+}
+</pre>
+
+<h3>1.2 Load a molecule</h3>
+To go one step further, we will need some molecules to display.
+The following code lines can be placed for example before the <code>frame.pack()</code> call.
+
+<p>In case of having a SMILES String:</p>
+<pre>
+    final String molS = "C1C2=CC=CC=C2C3=C4CC5=CC=CC=C5C4=C6CC7=CC=CC=C7C6=C13";
+    Molecule mol = MolImporter.importMol(molS);
+    mspace.addMolecule( mol );
+</pre>
+
+By default MarvinSpace checks whether the molecule is defined in plane or not, and
+calls Clean, Hydrogenize and Aromatize functions of the <a href="http://www.chemaxon.com/marvin/doc/api/chemaxon/struc/Molecule.html">Molecule</a>.
+
+<p>Loading from a file or URL:</p>
+<pre>
+    mspace.addMolecule("http://www.chemaxon.com/MarvinSpace/data/1AID.pdb");
+</pre>
+
+<p>Let's suppose we have a properly initilaized Vector containing <code>Molecule</code> objects.
+    We can place them in different cells each:</p>
+<pre>
+    for(int i=0; i&lt;molVector.size(); i++) {
+        mspace.addMoleculeToEmptyCell(molVector.get(i));
+    }
+</pre>
+
+<p>Loading a molecule without calling Clean, Hydrogenize and Aromatize:</p>
+<pre>
+    mspace.addMoleculeWithoutChange( mol );
+</pre>
+
+<p>In the previous examples we added the molecules to the scene, but we can also load a molecule by closing all molecules before:</p>
+<pre>
+    mspace.openMolecule( mol );
+</pre>
+
+<p>Loading molecule to a specific cell (indexing starts from 0, from top to bottom and left to right):</p>
+<pre>
+    mspace.addMoleculeTo( mol, 1 );
+</pre>
+
+<p>Runnable code example can be found <a href="../../examples/space/MSpaceExample2.java.txt">here</a>.</p>
+
+<h2><a NAME="applet"></a>2. Applets</h2>
+
+<pre>
+public class AppletExample extends JApplet {
+    MSpaceEasy mspace = null;
+
+    public void init() {
+        try {
+            /* The first argument indicates, that loading native libraries is necessary.
+            * The second is false, we do not need the technical information about loading the libraries.
+            * The applet codebase has to be set as third argument.
+            */
+            mspace= new MSpaceEasy(true, false, this.getCodeBase());
+            /* add Selection Panel and Canvas */
+            if(getParameter("selectionpanel")!=null && getParameter("selectionpanel").equals("true")) {
+                mspace.addSelectionPanel(this);
+            }
+            /* add Canvas */
+            else {
+                mspace.addCanvas(this.getContentPane());
+            }
+            /* add MenuBar */
+            if(getParameter("menubar")!=null && getParameter("menubar").equals("true")) {
+                mspace.addMenuBar(this);
+            }
+            /* add ToolBar */
+            if(getParameter("toolbar")!=null && getParameter("toolbar").equals("true")) {
+                mspace.addToolBar(this);
+            }
+            /* add Popup Menu */
+            if(getParameter("popupmenu")!=null && getParameter("popupmenu").equals("true")) {
+                mspace.addPopupMenu();
+            }
+            this.setVisible(true);
+
+            String rc = getParameter("rowCount");
+            String cc = getParameter("columnCount");
+            final int rowCount = rc == null ? 1 : Integer.parseInt(rc);
+            final int columnCount = cc == null ? 1 : Integer.parseInt(cc);
+            /* set the number of rows and columns */
+            if(rowCount > 1 || columnCount > 1) {
+                mspace.setLayout(rowCount, columnCount);
+            }
+            /* load a molecule */
+            final String mol = getParameter("molecule");
+            if(mol!=null) {
+                mspace.addMolecule(getAbsoluteFileName(mol));
+            }
+            /* load molecules in case of multiple cell view */
+            int n = 0;
+            while(n &lt; rowCount * columnCount ) {
+                final String moln = getParameter("cell"+n);
+                if(moln != null) {
+                    mspace.addMoleculeToEmptyCell(moln);
+                    n++;
+                }
+                else {
+                    break;
+                }
+            }
+
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    private String getAbsoluteFileName(String fileName) {
+        java.io.File f = new java.io.File(fileName);
+        if(fileName.startsWith("http:/") || fileName.startsWith("ftp:/")) {
+            try{
+                new java.net.URL(fileName).openConnection();
+            }
+            catch(Exception e ) {
+                fileName = getCodeBase() + ((fileName.charAt(0)!='/') ? fileName : fileName.substring(1));
+            }
+        }
+        else if(!f.exists()) {
+            fileName = getCodeBase() + ((fileName.charAt(0)!='/') ? fileName : fileName.substring(1));
+        }
+        return fileName;
+    }
+}
+</pre>
+
+<h2><a NAME="jws"></a>3. Java Web Start</h2>
+
+<pre>
+ &lt;?xml version="1.0" encoding="UTF-8"?&gt;
+
+ &lt;jnlp spec="1.0+"
+    codebase="http://www.chemaxon.com/marvinspace"
+    href="jnlp/1_3/mspace1aid.jnlp"&gt;
+
+    &lt;information&gt;
+       &lt;title&gt;MarvinSpace&lt;/title&gt;
+       &lt;vendor&gt;ChemAxon&lt;/vendor&gt;
+       &lt;icon href="mspace64.gif"/&gt;
+       &lt;homepage href="http://www.chemaxon.com"/&gt;
+       &lt;description&gt;MarvinSpace is a 3D molecule visualization tool.&lt;/description&gt;
+      &lt;offline-allowed/&gt;
+    &lt;/information&gt;
+
+    &lt;security&gt;
+        &lt;all-permissions/&gt;
+    &lt;/security&gt;
+
+    &lt;resources&gt;
+     &lt;j2se href="http://java.sun.com/products/autodl/j2se" version="1.4+" initial-heap-size="256m" max-heap-size="512m"/&gt;
+    &lt;jar href="lib/MarvinBeans.jar"/&gt;
+    &lt;jar href="lib/jextexp.jar"/&gt;
+    &lt;jar href="lib/chart.jar" download="lazy"/&gt;
+    &lt;jar href="lib/batik-core.jar" download="lazy"/&gt;
+    &lt;jar href="lib/freehep-base.jar" download="lazy"/&gt;
+    &lt;jar href="lib/freehep-graphics2d.jar" download="lazy"/&gt;
+    &lt;jar href="lib/freehep-graphicsio.jar" download="lazy"/&gt;
+    &lt;jar href="lib/freehep-graphicsio-emf.jar" download="lazy"/&gt;
+    &lt;jar href="lib/freehep-graphicsio-pdf.jar" download="lazy"/&gt;
+    &lt;property name="sun.java2d.noddraw" value="true"/&gt;
+    &lt;property name="jogl.GLContext.noopt" value="true"/&gt;
+    &lt;extension name="jogl" href="http://www.chemaxon.com/marvinspace/jnlp/1_3/mspace_jogl.jnlp"/&gt;
+    &lt;/resources&gt;
+
+
+    &lt;application-desc main-class="chemaxon.marvin.space.gui.MSpaceJWS"&gt;
+     &lt;argument&gt;-p&lt;/argument&gt;
+     &lt;argument&gt;Background.Smooth&lt;/argument&gt;
+     &lt;argument&gt;true&lt;/argument&gt;
+     &lt;argument&gt;-p&lt;/argument&gt;
+     &lt;argument&gt;Background.Color&lt;/argument&gt;
+     &lt;argument&gt;#cccccc&lt;/argument&gt;
+     &lt;argument&gt;-p&lt;/argument&gt;
+     &lt;argument&gt;Ligand.DrawType&lt;/argument&gt;
+     &lt;argument&gt;Stick&lt;/argument&gt;
+     &lt;argument&gt;-p&lt;/argument&gt;
+     &lt;argument&gt;MacroMolecule.DrawType&lt;/argument&gt;
+     &lt;argument&gt;Stick&lt;/argument&gt;
+     &lt;argument&gt;-p&lt;/argument&gt;
+     &lt;argument&gt;Water.DrawType&lt;/argument&gt;
+     &lt;argument&gt;Ball&lt;/argument&gt;
+     &lt;argument&gt;-p&lt;/argument&gt;
+     &lt;argument&gt;ShowSurface&lt;/argument&gt;
+     &lt;argument&gt;Connolly&lt;/argument&gt;
+     &lt;argument&gt;-p&lt;/argument&gt;
+     &lt;argument&gt;Surface.ColorType&lt;/argument&gt;
+     &lt;argument&gt;AtomType&lt;/argument&gt;
+     &lt;argument&gt;-p&lt;/argument&gt;
+     &lt;argument&gt;Surface.DrawType&lt;/argument&gt;
+     &lt;argument&gt;Transparent&lt;/argument&gt;
+     &lt;argument&gt;http://chemaxon.com/marvinspace/data/1AID.pdb&lt;/argument&gt;
+    &lt;/application-desc&gt;
+ &lt;/jnlp&gt;
+</pre>
+
+<hr>
+<p>
+<center>
+<font size="-2" face="helvetica">
+
+Copyright &copy; 2004-2012
+<a href="http://www.chemaxon.com">ChemAxon Ltd.</a>
+&nbsp;&nbsp;&nbsp;All rights reserved.
+</font>
+</center>
+</body>
+</html>

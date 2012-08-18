@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<ParameterPanel>
+    <Number Key="max" Label="Max. number of structures" Tooltip="Maximize the number of structures to display (decrease calculation time)." Range="[1,]" Value="1000" Type="int">
+	<Dependencies>
+	    <Item Key="canonical" Range="false"/>
+	</Dependencies>
+    </Number>
+    <Boolean Key="canonical" Label="Take canonical form" Tooltip="Ddisplays the canonical structure of the molecule." Value="false">
+    <Dependencies>
+	    <Item Key="mcontrib" Range="false"/>
+	</Dependencies>
+    </Boolean>
+    <Boolean Key="mcontrib" Label="Take major contributors" Tooltip="Select the most relevant structures." Value="true">
+	<Dependencies>
+	    <Item Key="canonical" Range="false"/>
+	</Dependencies>
+    </Boolean>
+    <Boolean Key="single" Label="Single fragment mode" Tooltip="If checked, the results are displayed in separate windows, if unchecked, the calculation handles unlinked molecules together and results are in the same window." Value="true"/>
+</ParameterPanel>

@@ -1,0 +1,37 @@
+<html>
+<head>
+<meta NAME="author" CONTENT="Peter Csizmadia">
+<link REL ="stylesheet" TYPE="text/css" HREF="../marvinmanuals.css" TITLE="Style">
+<title>Base64 in Marvin</title>
+</head>
+<body>
+
+<h1>Base64</h1>
+
+<p>
+Codename: <strong>base64</strong>
+
+<p>
+Marvin is able to import and export Base64 encoded files (RFC 1341).
+A binary file is encoded as a multi line ASCII file containing the characters
+`a'-`z', `A'-`Z', `0'-`9', `+' and `/'. A line contains no more than 76
+characters. 3 input bytes are encoded in the form of 4 ASCII characters.
+At the end of the file, there might be one or two `=' characters, for padding.
+<p>
+At export, the molecule file format is specified as an export option. Example:
+<blockquote>
+<table border="0" cellspacing="0" cellpadding="5">
+<tr VALIGN=TOP><td><strong>base64:gzip:sdf</strong></td>
+    <td>Exports a base64 encoded gzipped SD file.</td></tr>
+</table>
+</blockquote>
+<p>
+
+<h2>Reference</h2>
+<ul>
+<li><a HREF="http://rfc-1341.rfclist.com" TARGET="_top">http://rfc-1341.rfclist.com</a></li>
+</ul>
+
+
+</body>
+</html>

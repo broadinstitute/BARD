@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<ParameterPanel>
+    <Number Key="pH" Label="at pH" Range="[0.0,14.0]" Value="7.4" Tooltip="Determines the major protonation form at the specified pH."/>
+    <Boolean Key="majortautomer" Label="Take major tautomeric form" Tooltip="If tautomeric forms are more
+        likely to occur, then major tautomer is used to calculate the major microspecies." Value="false"/>
+	<Boolean Key="keephydrogens" Label="Keep explicit hydrogens" Tooltip="Keep explicit hydrogens on result." Value="false"/>
+</ParameterPanel>

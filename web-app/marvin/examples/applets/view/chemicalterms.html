@@ -1,0 +1,239 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<meta NAME="author" CONTENT="Zsolt Mohacsi">
+    <script type="text/javascript" src="../../sh_main.js"></script>
+    <script type="text/javascript" src="../../sh_javascript.js"></script>
+    <script type="text/javascript" src="../../sh_html.js"></script>
+    <link REL ="stylesheet" TYPE="text/css" HREF="../../sh_nedit.css" TITLE="Style">
+<link REL ="stylesheet" TYPE="text/css" HREF="../../../marvinmanuals.css" TITLE="Style">
+<title>MarvinView Example - Molecular property calculations with Chemical Terms</title>
+</head>
+<body onload="sh_highlightDocument();">
+
+<h1>MarvinView Example - Molecular property calculations with Chemical Terms</h1>
+
+<p>Select a molecule, and choose a 
+<a href="../../../help/chemicalterms/ChemicalTerms.html">Chemical Terms</a> 
+expression from the list, or enter one. Press the <strong>Evaluate</strong> 
+button to evaluate the expression on the selected molecule.</p>
+
+<center>
+<script type="text/javascript" SRC="../../../marvin.js">
+</script>
+<script type="text/javascript">
+<!--
+function evaluateChemicalTerms() {
+    if(document.MView != null) {
+        var e = document.CTForm.Expression.value;
+        var result = document.MView.evaluateChemicalTerms(e, getSelectedIndex());
+        document.CTForm.Result.value = result;
+    } else {
+        alert("Cannot evaluate expression on molecule:\n"+
+              "no JavaScript to Java communication in your browser.\n");
+    }
+}
+
+function getSelectedIndex() {
+    if(document.MView != null) {
+        var index = document.MView.getSelectedIndex();
+        if(index < 0) {
+            alert("Please select a molecule first.");
+        } else {
+            return index;
+        }
+    } else {
+        alert("Cannot get index of selected molecule:\n"+
+              "no JavaScript to Java communication in your browser.\n");
+    }
+}
+
+function setCTExpression(expression) {
+    document.CTForm.Expression.value = expression;
+    document.CTForm.Result.value = "";
+}
+
+mview_name = "MView";
+mview_begin("../../..", 600, 200);
+mview_param("tabScale", "25");
+mview_param("background", "#ffffff");
+mview_param("molbg", "#ffffff");
+mview_param("rows", "1");
+mview_param("cols", "3");
+mview_param("cell0", "|../../../mols-2d/l-tryptophan.csmol");
+mview_param("cell1", "|../../../mols-2d/caffeine.csmol");
+mview_param("cell2", "|../../../mols-2d/vitaminc.csmol");
+mview_end();
+//-->
+</script>
+<p>
+<form NAME="CTForm">
+<table BORDER=0>
+    <tr>
+        <td><a href="../../../help/chemicalterms/ChemicalTerms.html">Chemical Terms</a> expression:</td>
+        <td ALIGN="right">
+            <select NAME="ExpressionSelector" onChange="javascript:setCTExpression(this.value)">
+                <option VALUE=""> --- Select expression --- </option>
+                <option VALUE="mass()">Molecular weight</option>
+                <option VALUE="atomCount()">Atom count</option>
+                <option VALUE="bondCount()">Bond count</option>
+                <option VALUE="rotatableBondCount()">Rotatable bond count</option>
+                <option VALUE="ringCount()">Ring count</option>
+                <option VALUE="pKa('acidic', '1')">Strongest acidic pKa</option>
+                <option VALUE="pKa('basic', '1')">Strongest basic pKa</option>
+                <option VALUE="logP()">logP</option>
+                <option VALUE="topologicalPolarSurfaceArea()">Polar surface area</option>
+                <option VALUE="acceptorCount()">H bond acceptor count</option>
+                <option VALUE="donorCount()">H bond donor count</option>
+                <option VALUE="mostStableTautomer()">Most stable tautomer</option>
+                <option VALUE="tautomers()">Tautomers</option>
+                <option VALUE="name()">IUPAC name</option>
+                <option VALUE="molString('smiles')">SMILES</option>
+                <option VALUE=
+"(mass() <= 500) &&
+(logP() <= 5) &&
+(donorCount() <= 5) &&
+(acceptorCount() <= 10)">Lipinski rule of 5</option>
+                <option VALUE=
+"(mass() <= 300) && 
+(logP() <= 3) && 
+(donorCount() <= 3) && 
+(acceptorCount() <= 3) && 
+(rotatableBondCount() <= 3) && 
+(topologicalPolarSurfaceArea() <= 60)">Rule of 3</option>
+            </select>
+        </td>
+    </tr>
+    <tr>
+        <td COLSPAN=2><textarea NAME="Expression" ROWS=5 COLS=80></textarea></td>
+    </tr>
+</table>
+<p>
+<input TYPE=BUTTON VALUE="Evaluate" onClick="evaluateChemicalTerms()">
+</p>
+<table>
+    <tr>
+        <td>Result:</td>
+    </tr>
+    <tr>
+        <td><textarea NAME="Result" ROWS=5 COLS=80></textarea></td>
+    </tr>
+</table>
+</form>
+</center>
+
+<p>
+
+<!-- Code highlight BEGIN -->
+<link REL ="stylesheet" TYPE="text/css" HREF="../../javacode.css" TITLE="Style">
+<blockquote>
+<pre>
+<span class="keyword">&lt;script</span><span class="normal"> </span><span class="type">type</span><span class="symbol">=</span><span class="string">"text/javascript"</span><span class="normal"> </span><span class="type">type</span><span class="symbol">=</span><span class="string">"text/javascript"</span><span class="normal"> </span><span class="type">SRC</span><span class="symbol">=</span><span class="string">"../../../marvin.js"</span><span class="keyword">&gt;</span>
+<span class="keyword">&lt;/script&gt;</span>
+<span class="keyword">&lt;script</span><span class="normal"> </span><span class="type">type</span><span class="symbol">=</span><span class="string">"text/javascript"</span><span class="normal"> </span><span class="type">type</span><span class="symbol">=</span><span class="string">"text/javascript"</span><span class="keyword">&gt;</span>
+<span class="comment">&lt;!--</span>
+<span class="keyword">function</span><span class="normal"> </span><span class="function">evaluateChemicalTerms</span><span class="symbol">()</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">    </span><span class="keyword">if</span><span class="symbol">(</span><span class="normal">document</span><span class="symbol">.</span><span class="normal">MView </span><span class="symbol">!=</span><span class="normal"> </span><span class="keyword">null</span><span class="symbol">)</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">        </span><span class="keyword">var</span><span class="normal"> e </span><span class="symbol">=</span><span class="normal"> document</span><span class="symbol">.</span><span class="normal">CTForm</span><span class="symbol">.</span><span class="normal">Expression</span><span class="symbol">.</span><span class="normal">value</span><span class="symbol">;</span>
+<span class="normal">        </span><span class="keyword">var</span><span class="normal"> result </span><span class="symbol">=</span><span class="normal"> document</span><span class="symbol">.</span><span class="normal">MView</span><span class="symbol">.</span><span class="function">evaluateChemicalTerms</span><span class="symbol">(</span><span class="normal">e</span><span class="symbol">,</span><span class="normal"> </span><span class="function">getSelectedIndex</span><span class="symbol">());</span>
+<span class="normal">        document</span><span class="symbol">.</span><span class="normal">CTForm</span><span class="symbol">.</span><span class="normal">Result</span><span class="symbol">.</span><span class="normal">value </span><span class="symbol">=</span><span class="normal"> result</span><span class="symbol">;</span>
+<span class="normal">    </span><span class="cbracket">}</span><span class="normal"> </span><span class="keyword">else</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">        </span><span class="function">alert</span><span class="symbol">(</span><span class="string">"Cannot evaluate expression on molecule:</span><span class="specialchar">\n</span><span class="string">"</span><span class="symbol">+</span>
+<span class="normal">              </span><span class="string">"no JavaScript to Java communication in your browser.</span><span class="specialchar">\n</span><span class="string">"</span><span class="symbol">);</span>
+<span class="normal">    </span><span class="cbracket">}</span>
+<span class="cbracket">}</span>
+
+<span class="keyword">function</span><span class="normal"> </span><span class="function">getSelectedIndex</span><span class="symbol">()</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">    </span><span class="keyword">if</span><span class="symbol">(</span><span class="normal">document</span><span class="symbol">.</span><span class="normal">MView </span><span class="symbol">!=</span><span class="normal"> </span><span class="keyword">null</span><span class="symbol">)</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">        </span><span class="keyword">var</span><span class="normal"> index </span><span class="symbol">=</span><span class="normal"> document</span><span class="symbol">.</span><span class="normal">MView</span><span class="symbol">.</span><span class="function">getSelectedIndex</span><span class="symbol">();</span>
+<span class="normal">        </span><span class="keyword">if</span><span class="symbol">(</span><span class="normal">index </span><span class="symbol">&lt;</span><span class="normal"> </span><span class="number">0</span><span class="symbol">)</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">            </span><span class="function">alert</span><span class="symbol">(</span><span class="string">"Please select a molecule first."</span><span class="symbol">);</span>
+<span class="normal">        </span><span class="cbracket">}</span><span class="normal"> </span><span class="keyword">else</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">            </span><span class="keyword">return</span><span class="normal"> index</span><span class="symbol">;</span>
+<span class="normal">        </span><span class="cbracket">}</span>
+<span class="normal">    </span><span class="cbracket">}</span><span class="normal"> </span><span class="keyword">else</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">        </span><span class="function">alert</span><span class="symbol">(</span><span class="string">"Cannot get index of selected molecule:</span><span class="specialchar">\n</span><span class="string">"</span><span class="symbol">+</span>
+<span class="normal">              </span><span class="string">"no JavaScript to Java communication in your browser.</span><span class="specialchar">\n</span><span class="string">"</span><span class="symbol">);</span>
+<span class="normal">    </span><span class="cbracket">}</span>
+<span class="cbracket">}</span>
+
+<span class="keyword">function</span><span class="normal"> </span><span class="function">setCTExpression</span><span class="symbol">(</span><span class="normal">expression</span><span class="symbol">)</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">    document</span><span class="symbol">.</span><span class="normal">CTForm</span><span class="symbol">.</span><span class="normal">Expression</span><span class="symbol">.</span><span class="normal">value </span><span class="symbol">=</span><span class="normal"> expression</span><span class="symbol">;</span>
+<span class="normal">    document</span><span class="symbol">.</span><span class="normal">CTForm</span><span class="symbol">.</span><span class="normal">Result</span><span class="symbol">.</span><span class="normal">value </span><span class="symbol">=</span><span class="normal"> </span><span class="string">""</span><span class="symbol">;</span>
+<span class="cbracket">}</span>
+
+<span class="normal">mview_name </span><span class="symbol">=</span><span class="normal"> </span><span class="string">"MView"</span><span class="symbol">;</span>
+<span class="function">mview_begin</span><span class="symbol">(</span><span class="string">"../../.."</span><span class="symbol">,</span><span class="normal"> </span><span class="number">600</span><span class="symbol">,</span><span class="normal"> </span><span class="number">200</span><span class="symbol">);</span>
+<span class="function">mview_param</span><span class="symbol">(</span><span class="string">"tabScale"</span><span class="symbol">,</span><span class="normal"> </span><span class="string">"25"</span><span class="symbol">);</span>
+<span class="function">mview_param</span><span class="symbol">(</span><span class="string">"background"</span><span class="symbol">,</span><span class="normal"> </span><span class="string">"#ffffff"</span><span class="symbol">);</span>
+<span class="function">mview_param</span><span class="symbol">(</span><span class="string">"molbg"</span><span class="symbol">,</span><span class="normal"> </span><span class="string">"#ffffff"</span><span class="symbol">);</span>
+<span class="function">mview_param</span><span class="symbol">(</span><span class="string">"rows"</span><span class="symbol">,</span><span class="normal"> </span><span class="string">"1"</span><span class="symbol">);</span>
+<span class="function">mview_param</span><span class="symbol">(</span><span class="string">"cols"</span><span class="symbol">,</span><span class="normal"> </span><span class="string">"3"</span><span class="symbol">);</span>
+<span class="function">mview_param</span><span class="symbol">(</span><span class="string">"cell0"</span><span class="symbol">,</span><span class="normal"> </span><span class="string">"|../../../mols-2d/l-tryptophan.csmol"</span><span class="symbol">);</span>
+<span class="function">mview_param</span><span class="symbol">(</span><span class="string">"cell1"</span><span class="symbol">,</span><span class="normal"> </span><span class="string">"|../../../mols-2d/caffeine.csmol"</span><span class="symbol">);</span>
+<span class="function">mview_param</span><span class="symbol">(</span><span class="string">"cell2"</span><span class="symbol">,</span><span class="normal"> </span><span class="string">"|../../../mols-2d/vitaminc.csmol"</span><span class="symbol">);</span>
+<span class="function">mview_end</span><span class="symbol">();</span>
+<span class="comment">//--&gt;</span>
+<span class="keyword">&lt;/script&gt;</span>
+<span class="keyword">&lt;p&gt;</span>
+<span class="keyword">&lt;form</span><span class="normal"> </span><span class="type">NAME</span><span class="symbol">=</span><span class="string">"CTForm"</span><span class="keyword">&gt;</span>
+<span class="keyword">&lt;table</span><span class="normal"> </span><span class="type">BORDER</span><span class="symbol">=</span><span class="type">0</span><span class="keyword">&gt;</span>
+<span class="normal">    </span><span class="keyword">&lt;tr&gt;</span>
+<span class="normal">        </span><span class="keyword">&lt;td&gt;&lt;a</span><span class="normal"> </span><span class="type">href</span><span class="symbol">=</span><span class="string">"../../../help/applications/ChemicalTerms.html"</span><span class="keyword">&gt;</span><span class="normal">Chemical Terms</span><span class="keyword">&lt;/a&gt;</span><span class="normal"> expression:</span><span class="keyword">&lt;/td&gt;</span>
+<span class="normal">        </span><span class="keyword">&lt;td</span><span class="normal"> </span><span class="type">ALIGN</span><span class="symbol">=</span><span class="string">"right"</span><span class="keyword">&gt;</span>
+<span class="normal">            </span><span class="keyword">&lt;select</span><span class="normal"> </span><span class="type">NAME</span><span class="symbol">=</span><span class="string">"ExpressionSelector"</span><span class="normal"> </span><span class="type">onChange</span><span class="symbol">=</span><span class="string">"javascript:setCTExpression(this.value)"</span><span class="keyword">&gt;</span>
+<span class="normal">                </span><span class="keyword">&lt;option</span><span class="normal"> </span><span class="type">VALUE</span><span class="symbol">=</span><span class="string">""</span><span class="keyword">&gt;</span><span class="normal"> --- Select expression --- </span><span class="keyword">&lt;/option&gt;</span>
+<span class="normal">                </span><span class="keyword">&lt;option</span><span class="normal"> </span><span class="type">VALUE</span><span class="symbol">=</span><span class="string">"mass()"</span><span class="keyword">&gt;</span><span class="normal">Molecular weight</span><span class="keyword">&lt;/option&gt;</span>
+<span class="normal">                </span><span class="keyword">&lt;option</span><span class="normal"> </span><span class="type">VALUE</span><span class="symbol">=</span><span class="string">"atomCount()"</span><span class="keyword">&gt;</span><span class="normal">Atom count</span><span class="keyword">&lt;/option&gt;</span>
+<span class="normal">                </span><span class="keyword">&lt;option</span><span class="normal"> </span><span class="type">VALUE</span><span class="symbol">=</span><span class="string">"bondCount()"</span><span class="keyword">&gt;</span><span class="normal">Bond count</span><span class="keyword">&lt;/option&gt;</span>
+<span class="normal">                </span><span class="keyword">&lt;option</span><span class="normal"> </span><span class="type">VALUE</span><span class="symbol">=</span><span class="string">"rotatableBondCount()"</span><span class="keyword">&gt;</span><span class="normal">Rotatable bond count</span><span class="keyword">&lt;/option&gt;</span>
+<span class="normal">                </span><span class="keyword">&lt;option</span><span class="normal"> </span><span class="type">VALUE</span><span class="symbol">=</span><span class="string">"ringCount()"</span><span class="keyword">&gt;</span><span class="normal">Ring count</span><span class="keyword">&lt;/option&gt;</span>
+<span class="normal">                </span><span class="keyword">&lt;option</span><span class="normal"> </span><span class="type">VALUE</span><span class="symbol">=</span><span class="string">"pKa('acidic', '1')"</span><span class="keyword">&gt;</span><span class="normal">Strongest acidic pKa</span><span class="keyword">&lt;/option&gt;</span>
+<span class="normal">                </span><span class="keyword">&lt;option</span><span class="normal"> </span><span class="type">VALUE</span><span class="symbol">=</span><span class="string">"pKa('basic', '1')"</span><span class="keyword">&gt;</span><span class="normal">Strongest basic pKa</span><span class="keyword">&lt;/option&gt;</span>
+<span class="normal">                </span><span class="keyword">&lt;option</span><span class="normal"> </span><span class="type">VALUE</span><span class="symbol">=</span><span class="string">"logP()"</span><span class="keyword">&gt;</span><span class="normal">logP</span><span class="keyword">&lt;/option&gt;</span>
+<span class="normal">                </span><span class="keyword">&lt;option</span><span class="normal"> </span><span class="type">VALUE</span><span class="symbol">=</span><span class="string">"topologicalPolarSurfaceArea()"</span><span class="keyword">&gt;</span><span class="normal">Polar surface area</span><span class="keyword">&lt;/option&gt;</span>
+<span class="normal">                </span><span class="keyword">&lt;option</span><span class="normal"> </span><span class="type">VALUE</span><span class="symbol">=</span><span class="string">"acceptorCount()"</span><span class="keyword">&gt;</span><span class="normal">H bond acceptor count</span><span class="keyword">&lt;/option&gt;</span>
+<span class="normal">                </span><span class="keyword">&lt;option</span><span class="normal"> </span><span class="type">VALUE</span><span class="symbol">=</span><span class="string">"donorCount()"</span><span class="keyword">&gt;</span><span class="normal">H bond donor count</span><span class="keyword">&lt;/option&gt;</span>
+<span class="normal">                </span><span class="keyword">&lt;option</span><span class="normal"> </span><span class="type">VALUE</span><span class="symbol">=</span><span class="string">"mostStableTautomer()"</span><span class="keyword">&gt;</span><span class="normal">Most stable tautomer</span><span class="keyword">&lt;/option&gt;</span>
+<span class="normal">                </span><span class="keyword">&lt;option</span><span class="normal"> </span><span class="type">VALUE</span><span class="symbol">=</span><span class="string">"tautomers()"</span><span class="keyword">&gt;</span><span class="normal">Tautomers</span><span class="keyword">&lt;/option&gt;</span>
+<span class="normal">                </span><span class="keyword">&lt;option</span><span class="normal"> </span><span class="type">VALUE</span><span class="symbol">=</span><span class="string">"name()"</span><span class="keyword">&gt;</span><span class="normal">IUPAC name</span><span class="keyword">&lt;/option&gt;</span>
+<span class="normal">                </span><span class="keyword">&lt;option</span><span class="normal"> </span><span class="type">VALUE</span><span class="symbol">=</span><span class="string">"molString('smiles')"</span><span class="keyword">&gt;</span><span class="normal">SMILES</span><span class="keyword">&lt;/option&gt;</span>
+<span class="normal">                </span><span class="keyword">&lt;option</span><span class="normal"> </span><span class="type">VALUE</span><span class="symbol">=</span><span class="string">"(mass() &lt;= 500) &amp;&amp;</span>
+<span class="string">                               (logP() &lt;= 5) &amp;&amp;</span>
+<span class="string">                               (donorCount() &lt;= 5) &amp;&amp;</span>
+<span class="string">                               (acceptorCount() &lt;= 10)"</span><span class="keyword">&gt;</span><span class="normal">Lipinski rule of 5</span><span class="keyword">&lt;/option&gt;</span>
+<span class="normal">                </span><span class="keyword">&lt;option</span><span class="normal"> </span><span class="type">VALUE</span><span class="symbol">=</span><span class="string">"(mass() &lt;= 300) &amp;&amp; </span>
+<span class="string">                               (logP() &lt;= 3) &amp;&amp; </span>
+<span class="string">                               (donorCount() &lt;= 3) &amp;&amp; </span>
+<span class="string">                               (acceptorCount() &lt;= 3) &amp;&amp; </span>
+<span class="string">                               (rotatableBondCount() &lt;= 3) &amp;&amp; </span>
+<span class="string">                               (topologicalPolarSurfaceArea() &lt;= 60)"</span><span class="keyword">&gt;</span><span class="normal">Rule of 3</span><span class="keyword">&lt;/option&gt;</span>
+<span class="normal">            </span><span class="keyword">&lt;/select&gt;</span>
+<span class="normal">        </span><span class="keyword">&lt;/td&gt;</span>
+<span class="normal">    </span><span class="keyword">&lt;/tr&gt;</span>
+<span class="normal">    </span><span class="keyword">&lt;tr&gt;</span>
+<span class="normal">        </span><span class="keyword">&lt;td</span><span class="normal"> </span><span class="type">COLSPAN</span><span class="symbol">=</span><span class="type">2</span><span class="keyword">&gt;&lt;textarea</span><span class="normal"> </span><span class="type">NAME</span><span class="symbol">=</span><span class="string">"Expression"</span><span class="normal"> </span><span class="type">ROWS</span><span class="symbol">=</span><span class="type">5</span><span class="normal"> </span><span class="type">COLS</span><span class="symbol">=</span><span class="type">80</span><span class="keyword">&gt;&lt;/textarea&gt;&lt;/td&gt;</span>
+<span class="normal">    </span><span class="keyword">&lt;/tr&gt;</span>
+<span class="keyword">&lt;/table&gt;</span>
+<span class="keyword">&lt;p&gt;</span>
+<span class="keyword">&lt;input</span><span class="normal"> </span><span class="type">TYPE</span><span class="symbol">=</span><span class="type">BUTTON</span><span class="normal"> </span><span class="type">VALUE</span><span class="symbol">=</span><span class="string">"Evaluate"</span><span class="normal"> </span><span class="type">onClick</span><span class="symbol">=</span><span class="string">"evaluateChemicalTerms()"</span><span class="keyword">&gt;</span>
+<span class="keyword">&lt;/p&gt;</span>
+<span class="keyword">&lt;table&gt;</span>
+<span class="normal">    </span><span class="keyword">&lt;tr&gt;</span>
+<span class="normal">        </span><span class="keyword">&lt;td&gt;</span><span class="normal">Result:</span><span class="keyword">&lt;/td&gt;</span>
+<span class="normal">    </span><span class="keyword">&lt;/tr&gt;</span>
+<span class="normal">    </span><span class="keyword">&lt;tr&gt;</span>
+<span class="normal">        </span><span class="keyword">&lt;td&gt;&lt;textarea</span><span class="normal"> </span><span class="type">NAME</span><span class="symbol">=</span><span class="string">"Result"</span><span class="normal"> </span><span class="type">ROWS</span><span class="symbol">=</span><span class="type">5</span><span class="normal"> </span><span class="type">COLS</span><span class="symbol">=</span><span class="type">80</span><span class="keyword">&gt;&lt;/textarea&gt;&lt;/td&gt;</span>
+<span class="normal">    </span><span class="keyword">&lt;/tr&gt;</span>
+<span class="keyword">&lt;/table&gt;</span>
+<span class="keyword">&lt;/form&gt;</span>
+</pre>
+</blockquote>
+<!-- Code highlight END -->
+
+<p>
+<center><div class="lenia">&nbsp;</div></center>
+<p>
+
+</body>
+</html>

@@ -1,0 +1,158 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <meta name="description" content="ChemAxon's Structure Checker">
+	<meta name="author" content="Annamaria Jakab, Viktoria Palfi">
+	<meta name="keywords" content="Structure_Checker, Marvin">
+	<title>Structure Checker in MarvinSketch</title>
+    <link rel="stylesheet" type="text/css" href="../marvinmanuals.css">
+</head>
+<body>
+	<h1>Structure Checker in MarvinSketch</h1>
+		
+	<h3>Content</h3>
+		<ul>
+			<li><a href="#intro">Introduction</a></li>
+			<li><a href="#usage">Usage in MarvinSketch</a>
+				<ul>
+					<li><a href="#setting">Setting Structure Checker configuration</a></li>
+					<li><a href="#run">Start Structure Checker</a></li>
+				</ul>
+			</li>
+			<li><a href="#checkerlist">List of available checkers</a>
+			<ul>
+				<li><a href="checkerlist.html">Examples of available checkers and their fixers</a></li>
+			</ul></li>
+			<li><a href="#links">Links</a></li>
+		</ul>	
+				
+	<h2><a class="anchor" name="intro"></a>Introduction</h2>		
+    <p>Structure Checker is a tool for filtering <b>drawing mistakes</b> or <b>special structural elements</b>. Registering a compound in a company's database might limit the user in, for example, the introduction of non-natural isotopes, query bonds, species with charge, etc. The Structure Checker works with predefined checking elements and you can choose which ones should be considered when you run a check. Structure checker runs a check on the molecule(s) features and lists them in a separate window with the option to refresh when you make changes to your drawing. 
+	<p> Structure Checker's command line interface (<a href="https://www.chemaxon.com/jchem/doc/user/structurecheck_cline.html"><code>structurecheck</code></a>), <a href="https://www.chemaxon.com/jchem/doc/user/structurechecker.html">Structure Checker GUI</a>, and API for batch usage requires a Structure Checker license. This guide refers to the checkers available free in MarvinSketch as an add-on.
+
+    <h2><a class="anchor" name="usage"></a>Usage</h2>
+	
+	<h3><a class="anchor" name="setting"></a>Setting Structure Checker configuration</h3>
+    <p>Before you start using the Structure Checker in MarvinSketch, consult the list of available checkers in the Preferences dialog (<b>Edit</b> &gt; <b>Preferences</b> &gt; <b>Checkers</b> tab).</p>
+    <p>
+	<table cellspacing="20">
+	<tr>
+		<td><img src="pref_checkers.png" width="477" height="363" alt="pref_checkers"/></td>
+		<td valign="top" >The <b>default list</b> contains checkers in alphabetical order.<br>
+			Two types of checkers are listed and are distinguished by the additional 'error' tag and by different icons: 
+			<ul>
+				<li><img src="defaulterrorcheck.png" width="24" height="24" alt="error checker"/> <b>Error detecting checkers</b>: Error checkers are looking for chemically wrong molecule parts (e.g. valence errors, overlapping atoms);</li>
+				<li><img src="defaultfeaturecheck.png" width="24" height="24" alt="feature checker"/> <b>Feature detecting checkers</b>: Feature checkers searches the selected molecule characteristics which in the specific structures are not considered as an error (e.g. query properties). </li>
+			</ul>
+			Click on the name of the checker to see additional options and select the
+            needed options by clicking the tick box.
+		</td>
+	</tr>
+	</table>
+    <h4>Checking order</h4>
+    Some molecule properties might change after fixing an issue. You can define a checking sequence by moving up or down the list elements. The order of the checkers may be important in case you run a <b>Fix All</b> action.<br>
+	To <b>change the order of the checker items</b>, select the checker from the list and click the up <img src="up.png" width="24" height="24" alt="up"/> or down <img src="down.png" width="24" height="24" alt="down"/> icon on the right side of the dialog.
+        
+	<h4>Add and remove checker items</h4>
+    To <b>discard items</b> from the checking sequence, select the checker and click the <img src="remove.png" width="24" height="24" alt="remove"/> button on the right.<br> To revert this modification or <b>add new elements</b> to the list, click the <img src="add.png" width="24" height="24" alt="add"/> button on the right and select the checker needed.
+     
+    <h4>Save and load checker lists</h4>
+    Different checking lists might be needed for different compound families. To
+    make checking simpler, you can <b>save your checking list</b> to your
+    computer and open it again if you are editing the same molecule type. Click the
+    <b>Save</b> button <img src="save.png" width="24" height="24" alt="save"/>
+    to save your settings and click the <b>Load</b> button <img src="open.png" width="24" height="24" alt="open"/>
+    to open a saved configuration list.
+
+    <h3><a class="anchor" name="run"></a>Start Structure Checker</h3>
+    You can open Structure Checker at any stage of your work. As you
+    click the <b>Check structure</b> icon <img src="defaultcheck.png" width="24" height="24" alt="defaultcheck"/>
+    in the toolbar, or in the <b>Structure</b> menu, or left-click the <b>Checker</b> button on the statusbar, or shortcut ctrl+r, a window will appear next to the MarvinSketch window. The molecule regions found by the Structure Checker are highlighted on the canvas with a light red color. If you click on any checker message, the effected area changes color to darker red. If you move the cursor over one of the affected region, the appropriate checker message is highlighted in the checker list.
+
+    <h3>Recheck the structure</h3>
+	After you have changed the structure (including accepting a fix), the checker will offer re-checking: click on the <b>Check structure again</b> in the Structure Checker window. <p><img src="checkerwindow.png" width="255" height="317" alt="check"/></p>
+	<p>Another option is to turn on automatic re-checking: click the <b>Enable automatic checking</b> at the bottom of the text. At any point you can allow the Structure Checker to fix the issues one by one or every of them by a single click. 
+
+    <h3>Automatic structure checking</h3>   
+	Turn on <b>Automatic Check</b> to follow every drawing step you make by a quick check. This option is switched on in the <b>Structure</b> menu or right-clicking the <b>Checker</b> <img src="statusbar_checker_disabled.png" alt="inactive checker on statusbar"/> button on the status bar which then becomes colored. 
+		<ul>
+			<li>In case of an error, a red exclamation mark appears <img src="statusbar-checker-error.png" width="16" height="16" alt="found error report on statusbar"/>. Left-clicking on this icon opens the Structure Checker window, where all the warnings are listed.</li>
+			<li>While the molecules are scanned for checker issues, an olive question mark <img src="statusbar-checker-progress.png" width="16" height="16" alt="checking in progress"/> appears on the status bar.</li>
+			<li>If the molecule is correct, a green check mark <img src="defaultcheck.png" width="16" height="16" alt="active checker on statusbar"/> appears in the Checker icon on the status bar.</li>
+		</ul>
+
+	<h2><a id="checkerlist" class="anchor">List of available checkers and fixers</a></h2>
+		<ul class="floating">
+			<li><a href="checkerlist.html#abbr">Abbreviated Group</a></li>
+			<li><a href="checkerlist.html#absentcf">Absent Chiral Flag</a></li>
+			<li><a href="checkerlist.html#alias">Alias</a></li>
+			<li><a href="checkerlist.html#arom">Aromaticity Error</a></li>
+			<li><a href="checkerlist.html#atommap">Atom Map</a></li>
+			<li><a href="checkerlist.html#atomquery">Atom Query Property</a></li>
+			<li><a href="checkerlist.html#atomvalue">Atom Value</a></li>
+			<li><a href="checkerlist.html#attached">Attached Data</a></li>
+			<li><a href="checkerlist.html#bondangle">Bond Angle</a></li>
+			<li><a href="checkerlist.html#bondlength">Bond Length</a></li>
+			<li><a href="checkerlist.html#chiralflag">Chiral Flag Error</a></li>
+			<li><a href="checkerlist.html#circularrg">Circular R-group Reference</a></li>
+		</ul>
+		<ul class="floating">			
+			<li><a href="checkerlist.html#coord">Coordination System Error</a></li>
+			<li><a href="checkerlist.html#cov_counter">Covalent Counterion</a></li>
+			<li><a href="checkerlist.html#crosseddouble">Crossed Double-Bond</a></li>
+			<li><a href="checkerlist.html#empty">Empty Structure</a></li>
+			<li><a href="checkerlist.html#explh">Explicit Hydrogen</a></li>
+			<li><a href="checkerlist.html#expllp">Explicit Lone Pairs</a></li>
+			<li><a href="checkerlist.html#isotope">Isotope</a></li>
+			<li><a href="checkerlist.html#metallocene">Metallocene</a></li>
+			<li><a href="checkerlist.html#missingatommap">Missing Atom Map</a></li>
+			<li><a href="checkerlist.html#missingrg">Missing R-group Reference</a></li>
+			<li><a href="checkerlist.html#molcharge">Molecule Charge</a></li>
+			<li><a href="checkerlist.html#multicenter">Multicenter</a></li>
+			<li><a href="checkerlist.html#multicomponent">Multicomponent</a></li>
+		</ul>
+		<ul class="floating">
+			<li><a href="checkerlist.html#ocr">OCR Error</a></li>
+			<li><a href="checkerlist.html#overlappingatoms">Overlapping Atoms</a></li>
+			<li><a href="checkerlist.html#overlappingbonds">Overlapping Bonds</a></li>
+			<li><a href="checkerlist.html#pseudo">Pseudo Atom</a></li>
+			<li><a href="checkerlist.html#queryatom">Query Atom</a></li>
+			<li><a href="checkerlist.html#querybond">Query Bond</a></li>
+			<li><a href="checkerlist.html#ratom">R-atom</a></li>
+			<li><a href="checkerlist.html#rgattach">R-group Attachment Error</a></li>
+			<li><a href="checkerlist.html#rgref">R-group Reference Error</a></li>
+			<li><a href="checkerlist.html#racemate">Racemate</a></li>
+			<li><a href="checkerlist.html#radical">Radical</a></li>
+			<li><a href="checkerlist.html#rareelement">Rare Element</a></li>
+			<li><a href="checkerlist.html#reactionmap">Reaction Map Error</a></li>
+		</ul>
+		<ul class="floating">
+			<li><a href="checkerlist.html#ringstrain">Ring Strain Error</a></li>
+			<li><a href="checkerlist.html#solvent">Solvent</a></li>
+			<li><a href="checkerlist.html#staratom">Star Atom</a></li>
+			<li><a href="checkerlist.html#substructure">Substructure</a></li>
+			<li><a href="checkerlist.html#3d">Three dimension</a></li>
+			<li><a href="checkerlist.html#unbalreact">Unbalanced Reaction</a></li>
+			<li><a href="checkerlist.html#unusedrg">Unused R-group Reference</a></li>
+			<li><a href="checkerlist.html#valenceqp">Valence Property</a></li>
+			<li><a href="checkerlist.html#valence">Valence Error</a></li>
+			<li><a href="checkerlist.html#wedge">Wedge Error</a></li>
+			<li><a href="checkerlist.html#wigglydouble">Wiggly Double Bond</a></li>
+		</ul>
+		<div class="clear"></div>
+	
+<center><div class="lenia">&nbsp;</div></center>
+      
+<h3><a name="links" class="anchor">Links</h3>
+<p>
+	<a href="checkerlist.html">List of available checkers</a><br>
+	<a href="https://www.chemaxon.com/jchem/doc/user/structurechecker.html">Structure Checker GUI</a><br>
+	<a href="https://www.chemaxon.com/jchem/doc/user/structurecheck_cline.html"><code>structurecheck</code> Command Line Application</a><br>
+	<a href="../developer/checker.html">Structure Checker Developer Guide</a>
+</p>
+
+<center><div class="lenia">&nbsp;</div></center>	
+
+</body>
+</html>

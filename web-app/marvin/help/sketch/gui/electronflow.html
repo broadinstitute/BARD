@@ -1,0 +1,71 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<html>
+<head>
+<META HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=utf-8">
+<TITLE>Electron flow arrows</TITLE>
+<link rel=stylesheet type="text/css" href="../../marvinmanuals.css">
+</head>
+<body>
+<h1>Electron flow arrows</h1>
+<p>Electron flow arrow shows the actual direction of motion of the electrons. It can point from an 
+atom or bond to an other atom or bond or even an incipient bond (formed after the electron transition).</p>
+<h4>How to draw the electron flow arrow</h4>
+<ol>
+<li>Select the arrow type (single electron flow or electron pair flow). (Menu: <b>Insert</b> > <b>Electron Flow</b>)</li>
+<li>Move the cursor onto a bond or an atom of the structure on the canvas, right-click on it. (It will be the source of the electron flow.) </li>
+<li>Select the destination: move the mouse to the destination and click on it.</li>
+</ol>
+<img src="gui-files/electronflow.png" width="400" height="255">
+
+<h4>Handling endpoints</h4>
+<p>Logic of the selection of electron flow arrow endpoints are the following:</p>
+<p>If the source is an <u>atom</u>, the destination can be: 
+<ul>
+	<li> any atom;</li>
+	<li> a bond connected to this atom;</li>
+    <li> an incipient bond between this atom and any other atom.</li>
+</ul></p>
+<p>If the source is a <u>bond</u>, the destination can be: 
+<ul>
+	<li> one of the atoms at the end of this bond;</li>
+    <li> a bond connected to this bond (has common ending atom);</li>
+    <li> an incipient bond between this atom and any other atom.</li>
+</ul>
+</p>
+<p>
+If one endpoint of the electron flow arrow is in an <u>S-group</u> and the other is not, the arrow 
+has to connect to the attachment point of S-group.
+</p>
+<h4>Displaying electron flow arrows</h4>
+<p>
+Although the electron flow arrow can start from any atom or bond, its illustration in MarvinSketch 
+follows certain rules:</p>
+<p>If the source is an <u>atom</u>, the origin of a 1 electron flow arrow is: 
+<ul>
+	<li>the radical;</li>
+	<li>the lone pair if no radical is drawn;</li>
+	<li>the atom label if no lone pairs and radicals are drawn.</li>
+</ul>
+ </p>
+ <p>
+If the source is an <u>atom</u>, the origin of the 2 electron flow arrow is: 
+<ul>
+	<li>the lone pair;</li>
+	<li>the charge if no lone pairs are drawn;</li>
+	<li>the atom label if no lone pairs and charges are drawn.</li>
+</ul>
+</p>
+<p>If the source is a <u>bond</u>, the origin of the electron flow arrow is the midpoint of the bond.</p>
+<p>
+The <u>destination</u> of the electron flow can be:
+<ul>
+	<li> the atom label (the destination is an atom);</li>
+	<li> the midpoint of a bond (the destination is a bond);</li>
+	<li> the midpoint (1 electron), or the 3/4 point (2 electrons) of the distance between the atoms 
+		(the destination is an incipient bond).</li>
+</ul>
+</p>
+
+
+
+</body>

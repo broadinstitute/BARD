@@ -1,0 +1,62 @@
+<html>
+<head>
+<meta NAME="author" CONTENT="Peter Csizmadia">
+    <script type="text/javascript" src="../../sh_main.js"></script>
+    <script type="text/javascript" src="../../sh_javascript.js"></script>
+    <script type="text/javascript" src="../../sh_html.js"></script>
+    <link REL ="stylesheet" TYPE="text/css" HREF="../../sh_nedit.css" TITLE="Style">
+    <link REL ="stylesheet" TYPE="text/css" HREF="../../../marvinmanuals.css" TITLE="Style">
+<title>MarvinSketch Example - Pure visualization mode, detaching MarvinSketch from the web page</title>
+</head>
+<body onload="sh_highlightDocument();">
+
+<h1>MarvinSketch Example - Pure visualization mode, detaching MarvinSketch from the web page</h1>
+
+Seems like a viewer?
+Click on it!
+
+<p>
+
+<center>
+<script type="text/javascript" SRC="../../../marvin.js"></script>
+<script type="text/javascript">
+<!--
+msketch_begin("../../..", 200, 200);
+msketch_param("mol", "../../../mols-2d/esterification.rxn");
+msketch_param("autoScale", "true");
+msketch_param("detach", "hide");
+msketch_param("undetachByX","false");
+msketch_param("menubar", "false");
+msketch_param("isMyTemplatesEnabled", "true");
+msketch_end();
+//-->
+</script>
+</center>
+
+<blockquote>
+<pre class="sh_html">
+&lt;script type=&quot;text/javascript&quot; SRC=&quot;../../../<a HREF="../marvin.js.txt">marvin.js</a>&quot;&gt;&lt;/script&gt;
+&lt;script type=&quot;text/javascript&quot;&gt;
+&lt;!--
+</pre><pre class="sh_javascript">
+msketch_begin(&quot;../..&quot;, 200, 200);
+msketch_param(&quot;<a HREF="../../../help/developer/sketchman.html#parameters.mol">mol</a>&quot;, &quot;../../mols-2d/esterification.rxn&quot;);
+msketch_param(&quot;<a HREF="../../../help/developer/sketchman.html#parameters.autoscale">autoScale</a>&quot;, &quot;true&quot;);
+msketch_param(&quot;<a HREF="../../../help/developer/sketchman.html#parameters.detach">detach</a>&quot;, &quot;hide&quot;);
+msketch_param(&quot;<a HREF="../../../help/developer/sketchman.html#parameters.undetachByX">undetachByX</a>&quot;, &quot;false&quot;);
+msketch_param(&quot;<a HREF="../../../help/developer/sketchman.html#parameters.menubar">menubar</a>&quot;, &quot;false&quot;);
+msketch_end();
+</pre><pre class="sh_html">
+//--&gt;
+&lt;/script&gt;
+</pre>
+</blockquote>
+
+<p>
+<center><div class="lenia">&nbsp;</div></center>
+
+<p>It is also possible to display the sketcher window
+<a HREF="openwindow.html">immediately</a>.
+
+</body>
+</html>

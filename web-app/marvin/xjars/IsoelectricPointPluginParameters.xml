@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<ParameterPanel>
+    <Precision Key="precision" Label="Decimal places"/>
+    <Boolean Key="chargedistr" Label="Show charge distribution" Tooltip="The charge vs. pH curve is displayed." Value="true"/>
+    <Number Key="step" Label="pH step size" Range="[0.0,0.5]" Tooltip="Increment of pH value at which graph points are calculated." Value="0.5">
+	<Dependencies>
+	    <Item Key="chargedistr" Range="true"/>
+	</Dependencies>
+    </Number>
+    <Boolean Key="keephydrogens" Label="Keep explicit hydrogens" Tooltip="Keep explicit hydrogens on result molecule." Value="false">
+	<Dependencies>
+	    <Item Key="chargedistr" Range="true"/>
+	</Dependencies>
+	</Boolean>
+</ParameterPanel>

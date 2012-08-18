@@ -1,0 +1,121 @@
+<?xml version="1.0" ?>
+<cml>
+<MDocument>
+  <MChemicalStruct>
+    <molecule title="Cytosine" molID="m1">
+      <atomArray
+          atomID="a1 a2 a3 a4 a5 a6 a7 a8"
+          elementType="N C N C O N C C"
+          x2="1.333679121828039 1.3336791218280368 2.6673582436560745 2.6673582436560714 4.001037365484105 1.3336791218280346 0.0 1.3322676295501878E-15"
+          y2="3.850000000000002 2.310000000000002 1.5399999999999978 -2.220446049250313E-15 -0.7700000000000053 -0.77 1.9984014443252818E-15 1.5400000000000018"
+          />
+      <bondArray>
+        <bond atomRefs2="a1 a2" order="1" />
+        <bond atomRefs2="a2 a3" order="2" />
+        <bond atomRefs2="a3 a4" order="1" />
+        <bond atomRefs2="a4 a5" order="2" />
+        <bond atomRefs2="a4 a6" order="1" />
+        <bond atomRefs2="a6 a7" order="1" />
+        <bond atomRefs2="a7 a8" order="2" />
+        <bond atomRefs2="a2 a8" order="1" />
+      </bondArray>
+    </molecule>
+  </MChemicalStruct>
+</MDocument>
+<MDocument>
+  <MChemicalStruct>
+    <molecule title="Uracil" molID="m1">
+      <atomArray
+          atomID="a1 a2 a3 a4 a5 a6 a7 a8"
+          elementType="O C N C O N C C"
+          x2="1.333679121828039 1.3336791218280368 2.6673582436560745 2.6673582436560714 4.001037365484105 1.3336791218280346 0.0 1.3322676295501878E-15"
+          y2="3.850000000000002 2.310000000000002 1.5399999999999978 -2.220446049250313E-15 -0.7700000000000053 -0.77 1.9984014443252818E-15 1.5400000000000018"
+          />
+      <bondArray>
+        <bond atomRefs2="a1 a2" order="2" />
+        <bond atomRefs2="a2 a3" order="1" />
+        <bond atomRefs2="a3 a4" order="1" />
+        <bond atomRefs2="a4 a5" order="2" />
+        <bond atomRefs2="a4 a6" order="1" />
+        <bond atomRefs2="a6 a7" order="1" />
+        <bond atomRefs2="a7 a8" order="2" />
+        <bond atomRefs2="a2 a8" order="1" />
+      </bondArray>
+    </molecule>
+  </MChemicalStruct>
+</MDocument>
+<MDocument>
+  <MChemicalStruct>
+    <molecule title="Thymine" molID="m1">
+      <atomArray
+          atomID="a1 a2 a3 a4 a5 a6 a7 a8 a9"
+          elementType="O C N C O N C C C"
+          x2="1.333679121828039 1.3336791218280368 2.6673582436560745 2.6673582436560714 4.001037365484105 1.3336791218280346 0.0 1.3322676295501878E-15 -1.3336791218280337"
+          y2="3.850000000000002 2.310000000000002 1.5399999999999978 -2.220446049250313E-15 -0.7700000000000053 -0.77 1.9984014443252818E-15 1.5400000000000018 2.310000000000003"
+          />
+      <bondArray>
+        <bond atomRefs2="a1 a2" order="2" />
+        <bond atomRefs2="a2 a3" order="1" />
+        <bond atomRefs2="a3 a4" order="1" />
+        <bond atomRefs2="a4 a5" order="2" />
+        <bond atomRefs2="a4 a6" order="1" />
+        <bond atomRefs2="a6 a7" order="1" />
+        <bond atomRefs2="a7 a8" order="2" />
+        <bond atomRefs2="a2 a8" order="1" />
+        <bond atomRefs2="a8 a9" order="1" />
+      </bondArray>
+    </molecule>
+  </MChemicalStruct>
+</MDocument>
+<MDocument>
+  <MChemicalStruct>
+    <molecule title="Adenine" molID="m1">
+      <atomArray
+          atomID="a1 a2 a3 a4 a5 a6 a7 a8 a9 a10"
+          elementType="C N C N C N C N C N"
+          x2="-2.5023583742230358 -1.1686890331747772 -1.1686890331747772 -2.5023583742230358 -3.8360277152712943 -5.193134445403366 -3.8360277152712943 -5.323561044444967 -6.16226161306704 -2.5023583742230358"
+          y2="3.795033995558999 3.0250170549999584 1.4849831738818775 0.7149662333228368 1.4849831738818775 3.574707783681092 3.0250170549999584 1.0863998196154125 2.3778817591912365 5.335033995558999"
+          />
+      <bondArray>
+        <bond atomRefs2="a1 a2" order="2" />
+        <bond atomRefs2="a2 a3" order="1" />
+        <bond atomRefs2="a3 a4" order="2" />
+        <bond atomRefs2="a4 a5" order="1" />
+        <bond atomRefs2="a1 a7" order="1" />
+        <bond atomRefs2="a5 a8" order="1" />
+        <bond atomRefs2="a6 a7" order="1" />
+        <bond atomRefs2="a8 a9" order="1" />
+        <bond atomRefs2="a6 a9" order="2" />
+        <bond atomRefs2="a7 a5" order="2" />
+        <bond atomRefs2="a1 a10" order="1" />
+      </bondArray>
+    </molecule>
+  </MChemicalStruct>
+</MDocument>
+<MDocument>
+  <MChemicalStruct>
+    <molecule title="Guanine" molID="m1">
+      <atomArray
+          atomID="a1 a2 a3 a4 a5 a6 a7 a8 a9 a10 a11"
+          elementType="C N C N C N C N C O N"
+          x2="-2.5023583742230358 -1.1686890331747772 -1.1686890331747772 -2.5023583742230358 -3.8360277152712943 -5.193134445403366 -3.8360277152712943 -5.323561044444967 -6.16226161306704 -2.5023583742230358 0.1649949789624534"
+          y2="3.795033995558999 3.0250170549999584 1.4849831738818775 0.7149662333228368 1.4849831738818775 3.574707783681092 3.0250170549999584 1.0863998196154125 2.3778817591912365 5.335033995558999 0.7149916442079862"
+          />
+      <bondArray>
+        <bond atomRefs2="a1 a2" order="1" />
+        <bond atomRefs2="a2 a3" order="1" />
+        <bond atomRefs2="a3 a4" order="2" />
+        <bond atomRefs2="a4 a5" order="1" />
+        <bond atomRefs2="a1 a7" order="1" />
+        <bond atomRefs2="a5 a8" order="1" />
+        <bond atomRefs2="a6 a7" order="1" />
+        <bond atomRefs2="a8 a9" order="1" />
+        <bond atomRefs2="a6 a9" order="2" />
+        <bond atomRefs2="a7 a5" order="2" />
+        <bond atomRefs2="a1 a10" order="2" />
+        <bond atomRefs2="a3 a11" order="1" />
+      </bondArray>
+    </molecule>
+  </MChemicalStruct>
+</MDocument>
+</cml>

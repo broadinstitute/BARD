@@ -1,0 +1,165 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<title>Isomers</title>
+<link rel="stylesheet" type="text/css" href="../marvinmanuals.css">
+</head>
+<body>
+<h1>Isomers</h1>
+
+<h2><a class="anchor" name="tautomer">Tautomer Generator Plugin</a></h2>
+<p>Tautomers are organic compounds that are interconvertible by tautomerization. 
+Tautomerization reaction results in the formal migration of a hydrogen atom or proton, 
+accompanied by a switch of a single bond and adjacent double bond. Commonly, the
+catalysts of these reactions are acids or bases. In solution a chemical equilibrium
+of the tautomers will be reached. Some types of tautomers: ketone-enol, amid-imidic 
+acid, lactam-lactim, enamine-imine. <a href="tautomers.html">Learn more</a> about tautomerization and tautomers.</p>
+<p>Tautomers of a compound can be determined with the help of Tautomer Generator Plugin.<br>
+<b>Note</b>: Tautomer Generator Plugin does not consider the three dimensional structure of molecules during tautomer generation.</p>
+<p>Following options can be adjusted in the Tools &gt; Isomers &gt; Tautomers,  
+<b class="buttonName">Tautomers Options</b> panel:</p>
+<p>
+<table>
+	<tr>
+		<td><img src="images/tautomer_panel_general.png" width="367" height="421"></td>
+		<td><img src="images/tautomer_panel_advanced.png" width="367" height="421"></td>
+	</tr>
+</table>
+</p>
+<p><b>General options</b>
+<ul>
+    <li><b>Calculation:</b>
+	<ul>
+		<li><b>Dominant tautomer distribution:</b> displays the percentage of different tautomers present at the given pH.</li>
+        <li><b>Canonical tautomer:</b> calculates only the canonical tautomer of the structure. <a href="tautomers.html#rational" target="blank">Rational tautomer</a> generation mode can be activated.</li>
+        <li><b>Generic tautomer:</b> used for the identification of tautomers in JChem databases. It is calculated according to these rules:
+			<ol>
+				<li>Tautomeric regions are identified.</li>
+				<li> All bond types in the tautomeric regions will be changed to ANY.</li>
+				<li> Each region will be assigned a data S-group with Sum(bonding electrons).</li>
+				<li> Explicit hydrogens are removed.</li>
+				<li> Isotope hydrogen:
+					<ul>
+						<li>outside of tautomer regions is kept as is</li>
+						<li>inside tautomer regions:
+							<ul> 
+								<li>Non-mobilizable isotope hydrogen (attached to an atom which is neither donor nor acceptor, so does not lose or gain H during tautomerization): the isotope is kept as is.</li>
+								<li>Mobilizable isotope hydrogen (attached to a donor or acceptor atom in the tautomer region):<br> 
+								the mobilizable isotopic hydrogens are removed, and the number of each type is included in the data sgroup description. For example: "36 e 2 D 3 T" (meaning 36 bonding electrons, 2 tautomerizable Deuterium and 3 Tritium atoms in the region).</li>
+							</ul>
+						</li>
+					</ul>
+				<li> Only the protection or deprotection of tetrahedral stereo centers is taken into consideration.</li>
+				</li>
+			</ol>
+		</li>
+		<li><b>Major tautomer:</b> gives the first species from the dominant tautomer distribution.</li>
+		<li><b>All tautomers:</b> calculates all possible tautomers. If any deuterium or tritium is involved in the tautomerization, it moves during enumeration. Rational tautomer generation mode can be activated.</li>
+	</ul> 
+	</li>
+    <li><b>Max. number of structures:</b> maximize the number of structures to display.</li>
+    <li><b>Consider pH effect:</b> takes into account the protonation states at given pH. Applicable for
+    Major tautomer and Dominant tautomer distribution calculations.</li>
+	<li><b>Rational tautomer generation:</b> the tautomerization products are generated according to empirical rules.  Rational tautomer generation narrows down the possible tautomerization paths and leads to chemically more feasible products.</li>
+	<li><b>Single fragment mode:</b> if checked (default), the results are displayed in separate windows; if unchecked, the calculation handles unlinked molecules together and results are in the same window.
+</ul>
+</p>
+<p><b>Advanced options</b></p>
+<p>Note: the number of generated tautomers strongly depends on the options chosen.
+<ul>
+    <li><b>Decimal places:</b> setting the number of decimal places with which
+    the tautomer distirbution values are given.</li>
+    <li><b>Set max. allowed length of the tautomerization path; Path length:</b>
+    sets the number of bonds which are considered by displacing a double bond. </li>
+    <li><b>Protect aromaticity:</b> if checked (default), the aromaticity will be maintained.</li>
+    <li><b>Protect charge:</b> if checked (default), defined charged atoms maintain their charge during calculation.</li>
+    <li><b>Exclude antiaromatic compounds:</b> if checked (default), any tautomer structure having an
+    antiaromatic ring system will be discarded.</li> 
+    <li><b>Protect double bond stereo:</b> if checked, all double bonds with stereo information
+    remain intact. If unchecked (default), tautomer regions will lose the double
+    bond stereo information, any other 
+    stereo information in the molecule is kept intact.</li> 
+    <li><b>Protect all tetrahedral stereo centers:</b> if checked, stereocenters are not 
+    included in the tautomerization.  If unchecked (default), tautomer regions will lose the tetrahedral 
+    stereo information, any other 
+    stereo information in the molecule is kept intact.</li>
+    <li><b>Protect labeled tetrahedral stereo centers only:</b> if checked, stereocenters 
+            labeled with chiral flag or MDL Enhanced Stereo Represenation flags will 
+    not be included in tautomerization, other stereocenters will.</li>
+    <li><b>Single fragment mode:</b> if checked (default), the results are displayed in
+            separate windows, if unchecked, the calculation handles unlinked molecules together and 
+    results are in the same window. </li>
+    <li><b>Protect ester groups:</b> if checked, ester is not taking part in tautomerization. </li>
+	<li><b>Ring-chain tautomerization is allowed:</b> this option can be activated when "All tautomers" function is selected. If it is checked, tautomer generation will take into account the possibility of ring closure. </li>
+</ul>
+</p>
+<p>For example, the following structures are the
+calculated tautomers of 4-amino-6-ethoxypyrimidin-2-ol:</p>
+<p>
+<table cellpadding="4">
+   <tr><td>Dominant tautomer distribution</td>  <td><img src="images/domtautdistr.png" width="572" height="278" alt="domtautdistr"/>	
+
+</td></tr>
+             <tr><td>Canonical tautomer</td><td><img src="images/canonicaltautomer.png" width="241" height="289" alt="canonical_tautomer"/>
+</td></tr>
+               <tr><td>Generic tautomer and an isotope labelled example</td> <td><img src="images/generictautomer.png" width="491" height="278" alt="generictautomer"/>
+</td></tr>
+                <tr><td>Major tautomer</td> <td><img src="images/majortautomer.png" width="240" height="275" alt="majortautomer"/>
+</td></tr>
+           <tr><td>All tautomers</td> <td><img src="images/alltautomers.png" width="594" height="462" alt="alltautomers"/>
+</td></tr>
+
+</table>
+
+<h2><a class="anchor" name="stereoisomer">Stereoisomers Generator Plugin</a></h2>
+<p>The Stereoisomers Generator Plugin produces all possible stereoisomers of a
+given compound. The plugin handles both tetrahedral and double bond
+stereo centers.</p>
+<p>
+<table>
+	<tr>
+		<td><img src="images/stereo_panel.png" width="209" height="290"></td>
+	</tr>
+</table>
+</p>
+<ul>
+	<li><b>Generate</b>
+		<ul>
+			<li><b>Tetrahedral stereo isomers:</b> only the R/S isomers are generated.</li>
+			<li><b>double bond stereo isomers:</b> only E/Z isomers are generated.</li>
+			<li><b>both:</b> both R/S and E/Z isomers are generated.</li>
+        </ul>
+	</li>
+	<li><b>Generate all stereoisomers:</b> all isomers are generated</li> 
+	<li><b>Generate maximum:</b> only the given number of structures are generated. </li>
+	<li><b>Protect tetrahedral stereo centers:</b> if checked, preset stereocenters are not included in the stereoisomer generation.</li>
+	<li><b>Protect double bond stereo:</b> if checked, all double bonds with preset stereo information remain intact.</li>
+	<li><b>Filter invalid 3D structures:</b> sterically restricted isomers are discarded.</li>
+	<li><b>Display in 3D:</b> results are displayed in a 3D viewer. </li>
+</ul>
+<p>Results are displayed in a 2D viewer by default:</p>
+<p>
+<table cellpadding="4">
+	<tr>
+		<td><img src="images/stereoisomers.png" width="717" height="493"></td>
+	</tr>
+</table>
+</p>
+<p>To replace your drawn molecule in the sketcher with any of the isomers shown, click on the structure then press "Select" at the bottom of the cells (the result window will be closed).</p>
+<p>If "Filter invalid 3D structures" option is switched on in the
+<b>Stereoisomers Options</b> panel, the stereoisomers can also be displayed in 3D.</p>
+<p>
+<table cellpadding="4">
+	<tr>
+		<td><img src="images/stereoisomers3D.png" width="706" height="580"></td>
+	</tr>
+</table>
+</p>
+<h2>References</h2>
+<ul>
+	<li>Smith, M. B.; March, J. Advanced Organic Chemistry, 5th ed., Wiley Interscience, New York, 2001; pp 1218-1223. ISBN 0471585890 </li>
+</ul>
+
+</body>
+</html>

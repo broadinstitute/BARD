@@ -1,0 +1,70 @@
+The IUPAC International Chemical Identifier
+
+License Agreement
+
+
+This License Agreement is for use of the International Union of Pure and Applied Chemistry ("IUPAC") International Chemical Identifier Material ("InChITM Material"). This Licence Agreement is between IUPAC and you ("the Licensee") and comes into effect after you have signified your acceptance of the terms and conditions herein.
+
+
+1. Definitions
+
+"InChITM" means: the IUPAC International Chemical Identifier.
+
+"InChITM Material" means: the InChITM Protocol; the InChITM Software; and all documentation associated with InChITM, including, but not limited to, the algorithms, specification, and documentation of the software.
+
+"InChITM Protocol" means: the algorithm which is used to turn a graphical representation of a chemical structure into the corresponding InChITM.
+
+"InChITM Software" means: the software that implements the InChITM Protocol.
+
+2. Licence
+
+Subject to the terms and conditions set forth in this Licence Agreement IUPAC hereby grants the Licensee a non-exclusive and non-transferable right and license to use the InChITM Material.
+
+3. Duration
+
+The license granted in this Licence Agreement is for an indefinite period.
+
+4. Use of the InChITM Material
+
+4.1 The Licensee may:
+(i) download, copy, and redistribute any of the InChITM Material;
+(ii) use the InChITM Protocol with his/her own software, provided that generation of an InChITM is consistent with what would have been generated had the InChITM Software been used;
+(iii) modify the InChITM Software for the express purpose of implementation on a platform other than that specified for the InChITM Software in the InChITM Material (the Licensee must notify IUPAC of any such modification). The output so obtained can only be described as InChITM if it is the same as would have been obtained had the InChITM Software been used as provided by IUPAC for the same purpose;
+(iv) incorporate the InChITM Software into another software program on the condition that the output is an InChITM;
+(v) redistribute, including sell, the software mentioned in (ii), (iii), and (iv) above;
+(vi) publish papers or other publications regarding utilization of the InChITM Material;
+(vii) use the InChITM Material in educational and training materials;
+(viii) make a back-up copy of the InChITM Material.
+
+4.2 The Licensee must:
+(i) reference the InChITM Protocol and InChITM Software whenever it is used as described in Clause 5;
+(ii) in any and every use of the InChITM Protocol and/or the InChITM Software preserve the integrity of the same.
+
+4.3 The Licensee must not:
+(i) modify the InChITM Protocol in any way whatsoever;
+(ii) describe any software that he/she has written using the InChITM Protocol as being InChITM Software;
+(iii) use any InChITM Material out of context such that its use creates a false or misleading statement or impression of the InChITM Material;
+(iv) use the acronym " InChITM " in any advertising or publicity without the prior written permission from IUPAC.
+
+5. Copyright and Ownership
+
+5.1 InChITM Material is copyright of IUPAC and is subject to all applicable copyright and other rights of IUPAC. The following copyright notice must be displayed on all copies of and on any reference to any InChITM Material or any results obtained there from:
+
+" InChITM Material is © IUPAC [year]", where "year" is the current year
+
+5.2 The Licensee acquires no intellectual property rights in InChITM Material and all such rights remain with IUPAC.
+
+5.3 All intellectual property rights mentioned in this Clause 5 refer solely to those of the InChITM Material and not to any data that may be contained therein or used with it.
+
+5.4 The authors that have contributed to the InChITM Material exert any moral rights they may have in respect of the InChITM Material.
+
+6. Warranties and Liabilities
+
+6.1 The InChITM Material is made available on an "as is" basis, and IUPAC does not warrant the InChITM Material or any results obtained from the use thereof.
+
+6.2 IUPAC is in no way liable for any use the Licensee makes of the InChITM Material.
+
+7. Support
+
+IUPAC provides no support for the InChITM Material.
+

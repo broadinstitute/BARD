@@ -1,0 +1,93 @@
+<html>
+<head>
+<meta NAME="description" CONTENT="MarvinSketch: templates">
+<meta NAME="author" CONTENT="Judit Vasko-Szedlar, Peter Csizmadia">
+<link REL ="stylesheet" TYPE="text/css" HREF="../marvinmanuals.css" TITLE="Style">
+<title>Structure Templates</title>
+</head>
+<body>
+
+<h1><a class="anchor" NAME="default">Structure Templates</a></h1>
+
+<p>The description of templates, template groups and of their usage can be found in the
+<a href="../sketch/sketch-basic.html#templates">Templates</a> paragraph of the MarvinSketch User's Guide.</p>
+
+<p>The templates and template groups can be defined or redefined by using the
+<a HREF="sketchman.html#parameters.tmpls">tmpls</a>,
+<a HREF="sketchman.html#parameters.ttmpls">ttmpls</a> and
+<a HREF="sketchman.html#parameters.xtmpls">xtmpls</a> applet parameters or bean properties of MarvinSketch.</p>
+
+<p>The default template groups of MarvinSketch are defined with these parameters
+    as specified below. They are defined in the application, in the applet and
+    in the MSketchPane JavaBean component as well.
+
+<blockquote>
+<pre>
+tmpls0=:Generic:chemaxon/marvin/templates/generic.t
+tmpls1=:Rings:chemaxon/marvin/templates/rings.t
+tmpls2=:Amino Acids:chemaxon/marvin/templates/aminoacids.t
+tmpls3=:Aromatics:chemaxon/marvin/templates/aromatics.t
+tmpls4=:Bicyclics:chemaxon/marvin/templates/bicycles.t
+tmpls5=:Bridged Polycyclics:chemaxon/marvin/templates/bridged_polycycles.t
+tmpls6=:Crown Ethers:chemaxon/marvin/templates/crown_ethers.t
+tmpls7=:Cycloalkanes:chemaxon/marvin/templates/cycloalkanes.t
+tmpls8=:Hetero Cycles:chemaxon/marvin/templates/heterocycles.t
+tmpls9=:Polycyclics:chemaxon/marvin/templates/polycyclics.t
+tmpls10=:Configuration1:chemaxon/marvin/templates/config1.t
+tmpls128=:My Templates:
+</pre>
+</blockquote>
+<p>The My Templates group is a special group consisting of user-defined structures.
+They are stored in mrv format in a dedicated place under the user home directory.
+This path cannot be modified.</p>
+
+<p>The Generic and My Templates template groups are visible on the
+<a href="../sketch/gui/toolbars.html#templates">Advanced Templates</a> toolbar by default.
+All other template groups can also be accessed, but the template groups
+that are instantly visible on the Advanced Templates toolbar can the most easily be used.
+</p>
+
+<p>Additional template groups can simply be defined using the <b>tmpls</b> parameter.
+In the definition the name of the template group and the path of the structure file are
+given. The parameter name contains the index of the group which
+determines the sequence they appear in the application. <br>
+The parameter value starts with a delimiter character. The second occurrence of this character
+separates the name of the group from its path.<br>
+Setting a different name and a path using an existing index redefines the template group,
+for example the parameter bellow switches the order of Rings and Amino Acids while leaving
+other groups untouched:</p>
+<pre>
+    tmpls1=:Amino Acids:chemaxon/marvin/templates/aminoacids.t
+    tmpls2=:Rings:chemaxon/marvin/templates/rings.t
+</pre>
+
+<p>
+Template groups can be deleted from the Template Library by setting the path of the group to empty string.
+</p>
+
+
+<p>The <b>ttmpls</b> parameter can be used similarly to <b>tmpls</b>, but template groups
+defined with <b>ttmpls</b> parameter will appear on the Advanced Templates toolbar.
+In case <b>ttmpls</b> parameter is used, the Generic and My Templates template groups will
+not appear on the toolbar unless they are also set with the <b>ttmpls</b> parameter.</p>
+
+<p>A simpler way of defining one additional template group along with setting it visible on
+the toolbar is to use the <b>xtmpls</b> parameter. With this parameter it is not necessary
+(neither possible) to define the name and index of the template group. Its name is
+<b>Extra Templates</b>, and its index is <i>n</i> by default, where <i>n</i> is the total
+number of defined groups except the My Templates group, that is 11 by default.</p>
+
+An <a href="../../examples/applets/sketch/templates.html">applet example</a> is available
+showing the usage and effect of using these parameters in applets.<br>
+A <a href="../../examples/beans/sketch-templates/index.html">JavaBean example</a> is also available.
+
+<p><strong>Notes:</strong>
+The Generic template group is included in the
+Marvin Applet's JAR file (marvin.jar or jmarvin.jar), however all other template groups are
+downloaded from the web server the first time when they are accessed.
+All the default template groups are included in the Marvin Beans JAR file
+(MarvinBeans.jar).
+</p>
+
+</body>
+</html>

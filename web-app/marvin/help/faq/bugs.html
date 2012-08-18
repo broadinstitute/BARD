@@ -1,0 +1,77 @@
+<html>
+<head>
+<link REL ="stylesheet" TYPE="text/css" HREF="../marvinmanuals.css" TITLE="Style">
+<title>Crashes, freezes and other bugs FAQ</title>
+</head>
+<body>
+<h1 align=center>Crashes, freezes and other bugs</h1>
+<h2 align=center>Troubleshooting</h2>
+<!--
+<h3>Freezing bugs</h3>
+<ol>
+</ol>
+-->
+
+<h3><a class="anchor" NAME="funcNotWork">Function does not work</a></h3>
+<ul>
+<li><em>Question:</em> When I select the menu XXX or press button YYY in the
+    applet, I get an error message.<br>
+    When I click the &quot;Stack Trace&quot; button, it shows a
+    ClassNotFoundException, ClassFormatError, IncompatibleClassChangeError
+    or something similar.
+    <br>
+    Is it my fault (1), a Marvin installation problem (2) or a browser bug
+    (3)?</li>
+<li><em>Answer:</em> These are all possibilities.<br>
+    <ol>
+    <li>If jchem.jar, MarvinBeans.jar or some other JAR file containing
+	Marvin classes is in your <code>CLASSPATH</code>, then it can
+	interfere with the applet.<br>
+	Please remove them from the <code>CLASSPATH</code>.
+	Additional libraries such as Marvin should only be specified in a
+	<em>local</em> <code>CLASSPATH</code> inside a script or a Makefile,
+	but not in the <em>global</em> one that is also seen by the web browser.
+	</li>
+    <li>Marvin might be installed improperly, mixing the new files with an
+	older installation.<br>
+	If this is the case, then remove all files and reinstall it again.</li>
+    <li>There might also be a cache problem with your web browser.<br>
+	In Netscape, you can reload all classes with Shift+Reload. If you
+	still have the bug, then try to clear the cache with Edit -&gt;
+	Preferences &gt; Advanced -&gt; Cache and restart the browser.</li>
+    </ol>
+    </li>
+</ul>
+
+<!--
+<h3>Browser crashes</h3>
+<ul>
+</ul>
+-->
+
+<h3>Other bugs</h3>
+<ul>
+<li><em>Q:</em> How can I report a Marvin bug?
+    <p>
+    <em>A:</em> Post a comment to the <a href="http://www.chemaxon.com/forum/forum5.html">Marvin section of ChemAxon Technical forum</a> by describing
+	the circumstances:
+	<ol>
+	<li>What happened, and what did you exactly do before it happened.</li>
+	<li>The <strong>Stack Trace</strong>.<br>
+	    
+	    If an error window is popped up, please press &quot;Stack Trace&quot;
+	    and send its <strong>full</strong> contents to us. If you have no
+	    error window, then please send the <strong>full</strong> contents of
+	    the Java Console (in Netscape: Communicator/Tools/Java Console).
+	    
+	    </li>
+	<li>The http address if you found the bug on an internet web page,
+	    otherwise please send us the full page.</li>
+	<li>Which applet? (MarvinView or MarvinSketch)</li>
+	<li>Marvin version (see Help/About).</li>
+	</ol>
+    </li>
+</ul>
+
+</body>
+</html>

@@ -1,0 +1,608 @@
+Ac	CC=O	2
+AcAc	CC(=O)CC(=O)	5
+Acet	CC=O	2
+Acm	CNC(C)=O	1
+AcNH	CC(N)=O	3	rightName=HNAc
+AcO	CC(O)=O	3	rightName=OAc
+AcOH	CC(O)=O
+Ad	C1C2CC3CC1CC(C2)C3	2
+ADAarabif	O[C@H]1O[C@H](CO)[C@@H](O)[C@@H]1O	1
+ADAllos	O[C@H]1O[C@H](CO)[C@@H](O)[C@@H](O)[C@H]1O	1
+ADAltro	O[C@H]1O[C@H](CO)[C@@H](O)[C@@H](O)[C@@H]1O	1
+ADArabip	O[C@H]1OC[C@@H](O)C(O)[C@@H]1O	1
+Ade	NC1=C2N=CNC2=NC=N1	6	1
+ADEryth	O[C@H]1OC[C@@H](O)[C@H]1O	1
+ADFruct	OC[C@]1(O)O[C@H](CO)[C@@H](O)[C@@H]1O	1
+ADGalac	O[C@H]1O[C@H](CO)[C@H](O)[C@H](O)[C@H]1O	1
+ADGluco	O[C@H]1O[C@H](CO)[C@@H](O)[C@H](O)[C@H]1O	1
+ADIdose	O[C@H]1O[C@H](CO)[C@H](O)[C@@H](O)[C@@H]1O	1
+ADLyxof	O[C@H]1O[C@H](CO)[C@H](O)[C@@H]1O	1
+ADLyxop	O[C@H]1OC[C@@H](O)[C@H](O)[C@@H]1O	1
+ADManno	O[C@H]1O[C@H](CO)[C@@H](O)[C@H](O)[C@@H]1O	1
+ADPsico	OC[C@]1(O)O[C@H](CO)[C@@H](O)[C@H]1O	1
+ADRibof	O[C@H]1O[C@H](CO)[C@@H](O)[C@H]1O	1
+ADRibop	O[C@H]1OC[C@@H](O)[C@@H](O)[C@H]1O	1
+ADSorbo	OC[C@]1(O)O[C@H](CO)[C@H](O)[C@H]1O	1
+ADTagat	OC[C@]1(O)O[C@H](CO)[C@H](O)[C@@H]1O	1
+ADTalos	O[C@H]1O[C@H](CO)[C@H](O)[C@H](O)[C@@H]1O	1
+ADThreo	O[C@H]1OC[C@@H](O)[C@@H]1O	1
+ADXylof	O[C@H]1O[C@H](CO)[C@H](O)[C@H]1O	1
+ADXylop	O[C@H]1OC[C@@H](O)[C@H](O)[C@H]1O	1
+Ala	C[C@H](N)C=O	3	4
+AlCl3	Cl[Al](Cl)Cl
+All	CC=C	1
+Alloc	C=CCOC=O	5
+Allyl	CC=C	1
+Am	CCCCC	1
+AmNH	CCCCCN	6	rightName=HNAm
+AmO	CCCCCO	6	rightName=OAm
+AmO2C	CCCCCOC=O	7	rightName=CO2Am
+AmOOC	CCCCCOC=O	7	rightName=COOAm
+AMP	NC1=C2N=CN([C@@H]3O[C@H](CO)[C@@H](O[PH]([O-])=O)[C@H]3O)C2=NC=N1	11	14
+AmS	CCCCCS	6	rightName=SAm
+Amyl	CCCCC	1
+Arg	N[C@@H](CCCNC(N)=N)C=O	1	10
+Asn	N[C@@H](CC(N)=O)C=O	1	7
+Asp	N[C@@H](CC(O)=O)C=O	1	7
+BDAllos	O[C@@H]1O[C@H](CO)[C@@H](O)[C@@H](O)[C@H]1O	1
+BDAltro	O[C@@H]1O[C@H](CO)[C@@H](O)[C@@H](O)[C@@H]1O	1
+BDArabif	O[C@@H]1O[C@H](CO)[C@@H](O)[C@@H]1O	1
+BDArabip	O[C@@H]1OC[C@@H](O)C(O)[C@@H]1O	1
+BDEryth	O[C@@H]1OC[C@@H](O)[C@H]1O	1
+BDFruct	OC[C@@]1(O)O[C@H](CO)[C@@H](O)[C@@H]1O	1
+BDGalac	O[C@@H]1O[C@H](CO)[C@H](O)[C@H](O)[C@H]1O	1
+BDGluco	O[C@@H]1O[C@H](CO)[C@@H](O)[C@H](O)[C@H]1O	1
+BDGulos	O[C@@H]1O[C@H](CO)[C@H](O)[C@@H](O)[C@H]1O	1
+BDIdose	O[C@@H]1O[C@H](CO)[C@H](O)[C@@H](O)[C@@H]1O	1
+BDLyxof	O[C@@H]1O[C@H](CO)[C@H](O)[C@@H]1O	1
+BDLyxop	O[C@@H]1OC[C@@H](O)[C@H](O)[C@@H]1O	1
+BDManno	O[C@@H]1O[C@H](CO)[C@@H](O)[C@H](O)[C@@H]1O	1
+BDPsico	OC[C@@]1(O)O[C@H](CO)[C@@H](O)[C@H]1O	1
+BDRibof	O[C@@H]1O[C@H](CO)[C@@H](O)[C@H]1O	1
+BDRibop	O[C@@H]1OC[C@@H](O)[C@@H](O)[C@H]1O	1
+BDSorbo	OC[C@@]1(O)O[C@H](CO)[C@H](O)[C@H]1O	1
+BDTalos	O[C@@H]1O[C@H](CO)[C@H](O)[C@H](O)[C@@H]1O	1
+BDThreo	O[C@@H]1OC[C@@H](O)[C@@H]1O	1
+BDXylof	O[C@@H]1O[C@H](CO)[C@H](O)[C@H]1O	1
+BDXylop	O[C@@H]1OC[C@@H](O)[C@H](O)[C@H]1O	1
+Benzoyl	C1=CC=CC=C1C(=O)	7
+Benzyl	C1=CC=CC=C1C	7
+Bn	C1=CC=CC=C1C	7
+BnNH	NCC1=CC=CC=C1	1	rightName=HNBn
+BnO	OCC1=CC=CC=C1	1	rightName=OBn
+BnO2C	O=COCC1=CC=CC=C1	2	rightName=CO2Bn
+BnOOC	O=COCC1=CC=CC=C1	2	rightName=COOBn
+Boc	C(C)(C)(C)OC=O	6
+BocNH	CC(C)(C)OC(N)=O	7	rightName=HNBoc
+Bom	COCC1=CC=CC=C1	1
+Br2	BrBr
+Brosyl	BrC1=CC=C(C=C1)S(=O)=O	8
+Bs	BrC1=CC=C(C=C1)S(=O)=O	8
+Bt	N1N=NC2=CC=CC=C12	1
+Btm	CSC1=CC=CC=C1	1
+Bu	CCCC	1
+Bu3Sn	CCCC[Sn](CCCC)CCCC	5	rightName=SnBu3
+BuNH	CCCCN	5	rightName=HNBu
+BuO	CCCCO	5	rightName=OBu
+BuO2C	CCCCOC=O	6	rightName=CO2Bu
+BuOOC	CCCCOC=O	6	rightName=COOBu
+BuS	CCCCS	5	rightName=SBu
+Bz	C1=CC=CC=C1C(=O)	7
+Bzl	C1=CC=CC=C1C	7
+BzO	OC(=O)C1=CC=CC=C1	1	rightName=OBz
+C10	CCCCCCCCCC	1	10
+C10H21	CCCCCCCCCC	1	leftName=H21C10
+C11	CCCCCCCCCCC	1	11
+C11H23	CCCCCCCCCCC	1	leftName=H23C11
+C12	CCCCCCCCCCCC	1	12
+C12H25	CCCCCCCCCCCC	1	leftName=H25C12
+C13	CCCCCCCCCCCCC	1	13
+C13H27	CCCCCCCCCCCCC	1	leftName=H27C13
+C14	CCCCCCCCCCCCCC	1	14
+C14H29	CCCCCCCCCCCCCC	1	leftName=H29C14
+C15	CCCCCCCCCCCCCCC	1	15
+C15H31	CCCCCCCCCCCCCCC	1	leftName=H31C15
+C16	CCCCCCCCCCCCCCCC	1	16
+C16H33	CCCCCCCCCCCCCCCC	1	leftName=H33C16
+C17	CCCCCCCCCCCCCCCCC	1	17
+C17H35	CCCCCCCCCCCCCCCCC	1	leftName=H35C17
+C18	CCCCCCCCCCCCCCCCCC	1	18
+C18H37	CCCCCCCCCCCCCCCCCC	1	leftName=H37C18
+C19	CCCCCCCCCCCCCCCCCCC	1	19
+C19H39	CCCCCCCCCCCCCCCCCCC	1	leftName=H39C19
+C2	CC	1	2	
+C20	CCCCCCCCCCCCCCCCCCCC	1	20
+C20H41	CCCCCCCCCCCCCCCCCCCC	1	leftName=H41C20
+C21	CCCCCCCCCCCCCCCCCCCCC	1	21
+C21H43	CCCCCCCCCCCCCCCCCCCCC	1	leftName=H43C21
+C22	CCCCCCCCCCCCCCCCCCCCCC	1	22
+C22H45	CCCCCCCCCCCCCCCCCCCCCC	1	leftName=H45C22
+C23	CCCCCCCCCCCCCCCCCCCCCCC	1	23
+C23H47	CCCCCCCCCCCCCCCCCCCCCCC	1	leftName=H47C23
+C24	CCCCCCCCCCCCCCCCCCCCCCCC	1	24
+C24H49	CCCCCCCCCCCCCCCCCCCCCCCC	1	leftName=H49C24
+C25	CCCCCCCCCCCCCCCCCCCCCCCCC	1	25
+C25H51	CCCCCCCCCCCCCCCCCCCCCCCCC	1	leftName=H51C25
+C2H5	CC	1	leftName=H5C2
+C3	CCC	1	3
+C3H7	CCC	1	leftName=H7C3
+C4	CCCC	1	4
+C4H9	CCCC	1	leftName=H9C4
+C5	CCCCC	1	5
+C5H11	CCCCC	1	leftName=H11C5
+C6	CCCCCC	1	6
+C6H13	CCCCCC	1	leftName=H13C6
+C7	CCCCCCC	1	7
+C7H15	CCCCCCC	1	leftName=H15C7
+C8	CCCCCCCC	1	8
+C8H17	CCCCCCCC	1	leftName=H17C8
+C9	CCCCCCCCC	1	9
+C9H19	CCCCCCCCC	1	leftName=H19C9
+CBr3	BrC(Br)Br	2	leftName=Br3C
+Cbz	O=COCC1=CC=CC=C1	2
+CbzNH	NC(=O)OCC1=CC=CC=C1	1	rightName=HNCbz
+c-C10H19	C1CCCCCCCCC1	1	center=AUTO
+c-C11H21	C1CCCCCCCCCC1	1	center=AUTO
+c-C12H23	C1CCCCCCCCCCC1	1	center=AUTO
+c-C13H25	C1CCCCCCCCCCCC1	1	center=AUTO
+c-C14H27	C1CCCCCCCCCCCCC1	1	center=AUTO
+c-C15H29	C1CCCCCCCCCCCCCC1	1	center=AUTO
+c-C16H31	C1CCCCCCCCCCCCCCC1	1	center=AUTO
+c-C17H33	C1CCCCCCCCCCCCCCCC1	1	center=AUTO
+c-C18H35	C1CCCCCCCCCCCCCCCCC1	1	center=AUTO
+c-C19H37	C1CCCCCCCCCCCCCCCCCC1	1	center=AUTO
+c-C20H39	C1CCCCCCCCCCCCCCCCCCC1	1	center=AUTO
+c-C21H41	C1CCCCCCCCCCCCCCCCCCCC1	1	center=AUTO
+c-C22H43	C1CCCCCCCCCCCCCCCCCCCCC1	1	center=AUTO
+c-C23H45	C1CCCCCCCCCCCCCCCCCCCCCC1	1	center=AUTO
+c-C24H47	C1CCCCCCCCCCCCCCCCCCCCCCC1	1	center=AUTO
+c-C25H49	C1CCCCCCCCCCCCCCCCCCCCCCCC1	1	center=AUTO
+c-C5H9	C1CCCC1	1	center=AUTO
+c-C6H11	C1CCCCC1	1	center=AUTO
+c-C7H13	C1CCCCCC1	1	center=AUTO
+c-C8H15	C1CCCCCCC1	1	center=AUTO
+c-C9H17	C1CCCCCCCC1	1	center=AUTO
+CCl3	ClC(Cl)Cl	2	leftName=Cl3C
+Ce	CCC#N	1
+CF3	FC(F)F	2	leftName=F3C
+CHO	C=O	1	leftName=OCH
+Cl2	ClCl
+ClSO2	ClS(=O)=O	2	rightName=O2SCl
+CN	C#N	1	leftName=NC
+CO2Et	CCOC=O	4	leftName=EtO2C
+CO2H	OC=O	2	leftName=HO2C
+CO2iAm	CC(C)CCOC=O	7	leftName=iAmO2C
+CO2i-Am	CC(C)CCOC=O	7	leftName=i-AmO2C
+CO2iBu	CC(C)COC=O	6	leftName=iBuO2C
+CO2i-Bu	CC(C)COC=O	6	leftName=i-BuO2C
+CO2K	[K+].[O-]C=O	3	leftName=KO2C
+CO2Me	COC=O	3	leftName=MeO2C
+CO2Na	[Na+].[O-]C=O	3	leftName=NaO2C
+CO2n-Am	CCCCCOC=O	7	leftName=n-AmO2C
+CO2n-Bu	CCCCOC=O	6	leftName=n-BuO2C
+CO2neoAm	CC(C)(C)COC=O	7	leftName=neoAmO2C
+CO2neo-Am	CC(C)(C)COC=O	7	leftName=neo-AmO2C
+CO2n-Pr	CCCOC=O	5	leftName=n-PrO2C
+CO2Ph	O=COC1=CC=CC=C1	2	leftName=PhO2C
+CO2Pr	CCCOC=O	5	leftName=PrO2C
+CO2s-Am	CCCC(C)OC=O	7	leftName=s-AmO2C
+CO2sBu	CCC(C)OC=O	6	leftName=sBuO2C
+CO2s-Bu	CCC(C)OC=O	6	leftName=s-BuO2C
+CO2tAm	CCC(C)(C)OC=O	7	leftName=tAmO2C
+CO2t-Am	CCC(C)(C)OC=O	7	leftName=t-AmO2C
+CO2tBu	CC(C)(C)OC=O	6	leftName=tBuO2C
+CO2t-Bu	CC(C)(C)OC=O	6	leftName=t-BuO2C
+CoA	CC(C)(COP([O-])(=O)OP([O-])(=O)OCC1OC(C)(C(O)C1OP([O-])([O-])=O)N2C=NC3=C2N=CN=C3N)C(O)C(=O)NCCC(=O)NCCS	49
+COBr	BrC=O	2	leftName=BrOC
+COBu	CCCCC=O	5	leftName=BuOC
+COCF3	FC(F)(F)C=O	5	leftName=F3COC
+COCl	ClC=O	2	leftName=ClOC
+COCO	O=CC=O	3	2	leftName=OCOC
+COEt	CCC=O	3	leftName=EtOC
+COF	FC=O	2	leftName=FOC
+COiPr	CC(C)C=O	4	leftName=iPrOC
+COMe	CC=O	2	leftName=MeOC
+CONEt2	CCN(CC)C=O	6	leftName=Et2NOC
+CONH2	NC=O	2	leftName=NH2OC
+CONHEt	CCNC=O	4	leftName=EtHNOC
+CONHMe	CNC=O	3	leftName=MeHNOC
+CONMe2	CN(C)C=O	4	leftName=Me2NOC
+COOEt	CCOC=O	4	leftName=EtOOC
+COOH	OC=O	2	leftName=HOOC
+COOiAm	CC(C)CCOC=O	7	leftName=iAmOOC
+COOK	[K+].[O-]C=O	3	leftName=KOOC
+COONa	[Na+].[O-]C=O	3	leftName=NaOOC
+COOPh	O=COC1=CC=CC=C1	2	leftName=PhOOC
+COOsBu	CCC(C)OC=O	6	leftName=sBuOOC
+COPh	O=CC1=CC=CC=C1	2	leftName=PhOC
+COPr	CCCC=O	4	leftName=PrOC
+COsBu	CCC(C)C=O	5	leftName=sBuOC
+COs-Bu	CCC(C)C=O	5	leftName=s-BuOC
+COSH	SC=O	2	leftName=HSOC
+COtBu	CC(C)(C)C=O	5	leftName=tBuOC
+COt-Bu	CC(C)(C)C=O	5	leftName=t-BuOC
+CPh3	C1=CC=C(C=C1)C(C2=CC=CC=C2)C3=CC=CC=C3	7	leftName=Ph3C
+Ct	NC1=NC(=O)N(C=C1)[C@@H]2O[C@H](CO)[C@@H](O[PH]([O-])=O)[C@H]2O	13	16
+Cy	C1CCCCC1	1
+Cys	N[C@@H](CS)C=O	1	5
+Cyt	NC1=NC(=O)NC=C1	6	1
+dA	NC1=C2N=CN([C@H]3C[C@H](O[PH](O)=O)[C@@H](CO)O3)C2=NC=N1	16	11
+DAllos	OC[C@@H](O)[C@@H](O)[C@@H](O)[C@@H](O)C=O	1
+DAltro	OC[C@@H](O)[C@@H](O)[C@@H](O)[C@H](O)C=O	1
+DArabi	OC[C@@H](O)[C@@H](O)[C@H](O)C=O	2
+dC	NC1=NC(=O)N(C=C1)[C@H]2C[C@H](O[PH](O)=O)[C@@H](CO)O2	18	13
+Dde	C\C=C1\C(=O)CC(C)(C)CC1=O	2
+DEAE	CCN(CC)CC	1
+DEIPS	CC[Si](CC)C(C)C	3
+DEryth	OC[C@@H](O)[C@@H](O)C=O	1
+DErythu	OC[C@@H](O)C(=O)CO	2
+DFruct	OC[C@@H](O)[C@@H](O)[C@H](O)C(=O)CO	2
+dG	NC1=NC2=C(N=CN2[C@H]3C[C@H](O[PH](O)=O)[C@@H](CO)O3)C(=O)N1	18	13
+DGalac	OC[C@@H](O)[C@H](O)[C@H](O)[C@@H](O)C=O	1
+DGluco	OC[C@@H](O)[C@@H](O)[C@H](O)[C@@H](O)C=O	1
+DIdose	OC[C@@H](O)[C@H](O)[C@@H](O)[C@H](O)C=O	1
+Dip	CC(C)C1=CC(=CC=C1)C(C)C	5
+DLyxos	OC[C@@H](O)[C@H](O)[C@H](O)C=O	2
+DManno	OC[C@@H](O)[C@@H](O)[C@H](O)[C@H](O)C=O	1
+DMIPS	CC(C)[Si](C)C	4
+DMPM	CC1=CC=C(OC)C(OC)=C1	1
+DMPS	C[Si](C)C1=CC=CC=C1	2
+DMS	CSC
+DMT	COC1=CC=C(C=C1)C(C2=CC=CC=C2)C3=CC=C(OC)C=C3	9
+DMTr	COC1=CC=C(C=C1)C(C2=CC=CC=C2)C3=CC=C(OC)C=C3	9
+Dnp	C1=C(N(=O)=O)C=C(N(=O)=O)C=C1	1
+Dns	CN(C)C1=CC=CC2=C1C=CC=C2S(=O)=O	14
+DPIPS	CC(C)O[Si](C1=CC=CC=C1)C2=CC=CC=C2	5
+DPsico	OCC(=O)[C@H](O)[C@H](O)[C@H](O)CO	2
+DPTBS	CC(C)(C)O[Si](C1=CC=CC=C1)C2=CC=CC=C2	6
+DRibos	OC[C@@H](O)[C@@H](O)[C@@H](O)C=O	2
+DRibul	OC[C@@H](O)[C@@H](O)C(=O)CO	2
+DSorbo	OCC(=O)[C@H](O)[C@@H](O)[C@H](O)CO	2
+dT	CC1=CN([C@H]2C[C@H](O[PH](O)=O)[C@@H](CO)O2)C(=O)NC1=O	14	9
+DTagat	OCC(=O)[C@@H](O)[C@@H](O)[C@H](O)CO	2
+DTalos	OC[C@@H](O)[C@H](O)[C@H](O)[C@H](O)C=O	1
+DTBMS	C[Si](C(C)(C)C)C(C)(C)C	2
+DTBS	C[Si](C)(C(C)(C)C)C(C)(C)C	1	3
+DThreo	OC[C@@H](O)[C@H](O)C=O	1
+DXylos	OC[C@@H](O)[C@H](O)[C@@H](O)C=O	2
+DXylul	OC[C@@H](O)[C@H](O)C(=O)CO	2
+Et	CC	2
+Et2N	CCNCC	3	rightName=NEt2
+Et3N	CCN(CC)CC	3	rightName=NEt3
+Et3N+	CC[N+](CC)CC	3	rightName=N+Et3
+EtNH	CCN	3	rightName=HNEt
+EtO	CCO	3	rightName=OEt
+FMOC	O=COCC1C2=CC=CC=C2C3=C1C=CC=C3	2
+For	C=O	1
+Gln	N[C@@H](CCC(N)=O)C=O	1	8
+Glu	N[C@@H](CCC(O)=O)C=O	1	8
+Gly	NCC=O	1	3
+GMP	NC1=NC2=C(N=CN2[C@@H]3O[C@H](CO)[C@@H](O[PH]([O-])=O)[C@H]3O)C(=O)N1	13	16
+Gua	NC1=NC2=C(N=CN2)C(=O)N1	8	1
+H2	[H][H]
+H2NSO2	NS(=O)=O	2	rightName=SO2NH2
+H2O	[H]O[H]
+H2O+	[OH2+]	1	leftName=O+H2
+H2O2	OO
+H2SO4	OS(O)(=O)=O
+Hex	CCCCCC	1
+His	N[C@@H](CC1=CNC=N1)C=O	1	9
+HNO2	ON=O
+HNO3	ON(=O)=O
+HONH	NO	1	rightName=HNON
+I2	II
+iAm	CCC(C)C	1
+i-Am	CCC(C)C	1
+iAmNH	CC(C)CCN	6	rightName=HNiAm
+i-AmNH	CC(C)CCN	6	rightName=HNi-Am
+iAmO	CC(C)CCO	6	rightName=OiAm
+i-AmO	CC(C)CCO	6	rightName=Oi-Am
+i-AmOOC	CC(C)CCOC=O	7	rightName=COOi-Am
+iAmS	CC(C)CCS	6	rightName=SiAm
+i-AmS	CC(C)CCS	6	rightName=Si-Am
+iBu	CC(C)C	1
+i-Bu	CC(C)C	1
+iBuOOC	CC(C)COC=O	6	rightName=COOiBu
+i-BuOOC	CC(C)COC=O	6	rightName=COOi-Bu
+i-C3H7	CCC	2	center=AUTO
+i-C4H9	CC(C)C	1	center=AUTO
+i-C5H11	CCC(C)C	1	center=AUTO
+Ile	CC[C@H](C)[C@H](N)C=O	6	7
+iPr	CCC	2
+i-Pr	CCC	2
+iPrNH	CC(C)N	4	rightName=HNiPr
+i-PrNH	CC(C)N	4	rightName=HNi-Pr
+iPrO	CC(C)O	4	rightName=OiPr
+i-PrO	CC(C)O	4	rightName=Oi-Pr
+iPrO2C	CC(C)OC=O	5	rightName=CO2iPr
+i-PrO2C	CC(C)OC=O	5	rightName=CO2i-Pr
+iPrOOC	CC(C)OC=O	5	rightName=COOiPr
+i-PrOOC	CC(C)OC=O	5	rightName=COOi-Pr
+iPrS	CC(C)S	4	rightName=SiPr
+i-PrS	CC(C)S	4	rightName=Si-Pr
+Ips	IC1=CC=C(C=C1)S(=O)=O	8
+KMnO4	[K]O[Mn](=O)(=O)=O
+KNO2	[K]ON=O
+KNO3	[K]ON(=O)=O
+Leu	CC(C)C[C@H](N)C=O	6	7
+Lys	N[C@@H](CCCCN)C=O	1	8
+Mal	OC(=O)\C=C/C=O	6
+m-C6H4	C1=CC=CC=C1	1	3
+MDIPS	CC(C)[Si](C)C(C)C	4
+MDPS	C[Si](C1=CC=CC=C1)C2=CC=CC=C2	2
+Me	C	1
+Me2N	CNC	2	rightName=NMe2
+Me3N	CN(C)C
+Me3N+	C[N+](C)C	2	rightName=N+Me3
+MEM	COCCOC	1
+MeNH	CN	2	rightName=HNMe
+MeO	CO	2	rightName=OMe
+MeOOC	COC=O	3	rightName=COOMe
+Mes	CC1=CC(C)=CC(C)=C1	3
+Met	CSCC[C@H](N)C=O	6	7
+MgBr	[Mg]Br	1	leftName=BrMg
+MgCl	[Mg]Cl	1	leftName=ClMg
+MMT	COC1=CC=C(C=C1)C(C2=CC=CC=C2)C3=CC=CC=C3	9
+MMTr	COC1=CC=C(C=C1)C(C2=CC=CC=C2)C3=CC=CC=C3	9
+MnO2	O=[Mn]=O
+MOM	COC	1
+m-Phenylene	C1=CC=CC=C1	1	3
+MPM	CC1=CC=c(oc)C=C1	1
+Ms	CS(=O)=O	2
+MSM	CSC	1
+MsO	CS(O)(=O)=O	3	rightName=OMs
+m-Tol	CC1=CC=CC=C1	4
+m-Tolyl	CC1=CC=CC=C1	4
+Mtt	CC1=CC=C(C=C1)C(C2=CC=CC=C2)C3=CC=CC=C3	8
+N2	N#[N+]	2	leftName=N2
+N3	N=[N+]=[N-]	1	leftName=N3
+n-Am	CCCCC	1
+n-AmNH	CCCCCN	6	rightName=HNn-Am
+n-AmO	CCCCCO	6	rightName=On-Am
+n-AmOOC	CCCCCOC=O	7	rightName=COOn-Am
+n-AmS	CCCCCS	6	rightName=Sn-Am
+NaNO2	[Na]ON=O
+NaNO3	[Na]ON(=O)=O
+Naph	C1=CC=CC2=C1C=CC=C2	1
+NBS	BrN1C(=O)CCC1=O
+n-Bu	CCCC	1
+NBu4	CCCC[N+](CCCC)(CCCC)CCCC
+n-BuNH	CCCCN	5	leftName=HNn-Bu
+n-BuO	CCCCO	5	leftName=On-Bu
+n-BuOOC	CCCCOC=O	6	rightName=COOn-Bu
+n-BuS	CCCCS	5	rightName=Sn-Bu
+NC	[N+]#[C-]	1	leftName=CN
+n-C3H7	CCC	1	center=AUTO
+n-C4H9	CCCC	1	center=AUTO
+n-C5H11	CCCCC	1	center=AUTO
+n-C6H13	CCCCCC	1	center=AUTO
+NCO	N=C=O	1	leftName=OCN
+NCS	N=C=S	1	leftName=SCN
+neoAm	CC(C)(C)C	1
+neo-Am	CC(C)(C)C	1
+neoAmNH	CC(C)(C)CN	6	rightName=HNneoAm
+neo-AmNH	CC(C)(C)CN	6	rightName=HNneo-Am
+neoAmO	CC(C)(C)CO	6	rightName=OneoAm
+neo-AmO	CC(C)(C)CO	6	rightName=Oneo-Am
+neoAmOOC	CC(C)(C)COC=O	7	rightName=COOneoAm
+neo-AmOOC	CC(C)(C)COC=O	7	rightName=COOneo-Am
+neoAmS	CC(C)(C)CS	6	rightName=SneoAm
+neo-AmS	CC(C)(C)CS	6	rightName=Sneo-Am
+neo-C5H11	CC(C)(C)C	1	center=AUTO
+NEt4	CC[N+](CC)(CC)CC	leftName=Et4N
+NHAc	CC(N)=O	3	leftName=AcHN
+NHAm	CCCCCN	6	leftName=AmHN
+NHBn	NCC1=CC=CC=C1	1	leftName=BnHN
+NHBoc	CC(C)(C)OC(N)=O	7	leftName=BocHN
+NHBu	CCCCN	5	leftName=BuHN
+NHCbz	NC(=O)OCC1=CC=CC=C1	1	leftName=CbzHN
+NHEt	CCN	3	leftName=EtHN
+n-Hex	CCCCCC	1
+NHiAm	CC(C)CCN	6	leftName=iAmHN
+NHi-Am	CC(C)CCN	6	leftName=i-AmHN
+NHiPr	CC(C)N	4	leftName=iPrHN
+NHMe	CN	2	leftName=MeHN
+NHn-Am	CCCCCN	6	leftName=n-AmHN
+NHn-Bu	CCCCN	5	leftName=n-BuHN
+NHneoAm	CC(C)(C)CN	6	leftName=neoAmHN
+NHneo-Am	CC(C)(C)CN	6	leftName=neo-AmHN
+NHOH	NO	1	leftName=HOHN
+NHPh	NC1=CC=CC=C1	1	leftName=PhHN
+NHPr	CCCN	4	leftName=PrHN
+NHs-Am	CCCC(C)N	6	leftName=s-AmHN
+NHs-Bu	CCC(C)NH	5	leftName=s-BuHN
+NHtAm	CCC(C)(C)N	6	leftName=tAmHN
+NHt-Am	CCC(C)(C)N	6	leftName=t-AmHN
+NHTos	CC1=CC=C(C=C1)S(N)(=O)=O	9	leftName=TosHN
+NHTs	CC1=CC=C(C=C1)S(N)(=O)=O	9	leftName=TsHN
+NHZ	NC(=O)OCC1=CC=CC=C1	1	leftName=ZHN
+NO	N=O	1	leftName=ON
+NO2	[N+]([O-])=O	1	leftName=O2N
+NO3	O[N+]([O-])=O	1	rightName=O3N
+Np	O=N(=O)C1=CC=CC=C1	7
+n-Pr	CCC	1
+nPrO	CCCO	4	rightName=OnPr
+n-PrO	CCCO	4	rightName=On-Pr
+O2	OO
+o-C6H4	C1=CC=CC=C1	2	1	leftName=o-C6H4
+OK	O[K]	1	leftName=KO
+OLi	O[Li]	1	leftName=LiO
+ONa	O[Na]	1	leftName=NaO
+o-Phenylene	C1=CC=CC=C1	2	1
+OPr	CCCO	4	PrO
+OTIPS	CC(C)[Si](O)(C(C)C)C(C)C	5	leftName=TIPSO
+o-Tol	CC1=CC=CC=C1	3
+o-Tolyl	CC1=CC=CC=C1	3
+OTre	OCC(Cl)(Cl)Cl	1	leftName=TreO
+OTs	CC1=CC=C(C=C1)S(O)(=O)=O	9	leftName=TsO
+P+Ph3	C1=CC=C(C=C1)[P+](C2=CC=CC=C2)C3=CC=CC=C3	7	leftName=Ph3P+
+PBr3	BrP(Br)Br
+p-C6H4	C1=CC=CC=C1	4	1
+PCl3	ClP(Cl)Cl
+PF6	F[P-](F)(F)(F)(F)F
+Ph	C1=CC=CC=C1	1
+Ph3P	C1=CC=C(C=C1)P(C2=CC=CC=C2)C3=CC=CC=C3
+Ph3P+	C1=CC=C(C=C1)[P+](C2=CC=CC=C2)C3=CC=CC=C3	7
+Phe	N[C@@H](CC1=CC=CC=C1)C=O	1	10
+Phenyl	C1=CC=CC=C1	1
+PhNH	NC1=CC=CC=C1	1	rightName=HNPh
+PhO	OC1=CC=CC=C1	1	rightName=OPh
+PhOMe	COC1=CC=CC=C1	1	leftName=MeOPh
+Pht	O=CC1=CC=CC=C1C=O	2	9
+PI3	IP(I)I
+Piv	CC(C)(C)C=O	5
+PMB	CC1=CC=C(OC)C=C1	1
+PMBM	COCC1=CC=C(OC)C=C1	1
+PMP	COC1=CC=CC=C1	6
+PNB	O=CC1=CC=C(C=C1)N(=O)=O	2
+PO3	[O-]P(=O)[O-]	2	leftName=O3P
+PO3H	[O-]P(=O)O	2	leftName=HO3P
+PO3H2	OP(=O)O	2	leftName=H2O3P
+PO4	OP([O-])([O-])=O	1	leftName=O4P
+PO4H	OP(O)([O-])=O	1	leftName=HO4P
+PO4H2	OP(O)(O)=O	1	leftName=H2O4P
+POBr3	BrP(Br)(Br)=O
+Poc	O=COC1CCCC1	2
+POCl3	ClP(Cl)(Cl)=O
+P(OEt)2	CCOPOCC	4	leftName=(EtO)2P
+POI3	IP(I)(I)=O
+P(OMe)2	COPOC	3	leftName=(MeO)2P
+PO(OEt)2	CCOP(=O)OCC	4	leftName=(EtO)2OP
+PO(OMe)2	COP(=O)OC	3	leftName=(MeO)2OP
+PPh2	P(C1=CC=CC=C1)C2=CC=CC=C2	1	leftName=Ph2P
+PPh3	C1=CC=C(C=C1)P(C2=CC=CC=C2)C3=CC=CC=C3
+p-Phenylene	C1=CC=CC=C1	4	1
+PPi	[O-]P(=O)OP([O-])([O-])=O	2	rightName=PiP
+Pr	CCC	1
+PrNH	CCCN	4	rightName=HNPr
+Pro	O=C[C@@H]1CCCN1	7	2
+PrOOC	CCCOC=O	5	rightName=COOPr
+Prop	CCC	1
+p-Tol	CC1=CC=CC=C1	5
+p-Tolyl	CC1=CC=CC=C1	5
+Pv	CC(C)(C)C=O	5
+Py	C1=NC=CC=C1	1
+Pyrim	C1=NC=CC=N1	1
+ring10	C1CCCCCCCCC1	1
+ring11	C1CCCCCCCCCC1	1
+ring12	C1CCCCCCCCCCC1	1
+ring13	C1CCCCCCCCCCCC1	1
+ring14	C1CCCCCCCCCCCCC1	1
+ring15	C1CCCCCCCCCCCCCC1	1
+ring16	C1CCCCCCCCCCCCCCC1	1
+ring17	C1CCCCCCCCCCCCCCCC1	1
+ring18	C1CCCCCCCCCCCCCCCCC1	1
+ring19	C1CCCCCCCCCCCCCCCCCC1	1
+ring20	C1CCCCCCCCCCCCCCCCCCC1	1
+ring21	C1CCCCCCCCCCCCCCCCCCCC1	1
+ring22	C1CCCCCCCCCCCCCCCCCCCCC1	1
+ring23	C1CCCCCCCCCCCCCCCCCCCCCC1	1
+ring24	C1CCCCCCCCCCCCCCCCCCCCCCC1	1
+ring25	C1CCCCCCCCCCCCCCCCCCCCCCCC1	1
+ring3	C1CC1	1
+ring4	C1CCC1	1
+ring5	C1CCCC1	1
+ring6	C1CCCCC1	1
+ring7	C1CCCCCC1	1
+ring8	C1CCCCCCC1	1
+ring9	C1CCCCCCCC1	1
+s-Am	CCCCC	2
+s-AmNH	CCCC(C)N	6	rightName=HNs-AmNH
+s-AmO	CCCC(C)O	6	rightName=Os-Am
+s-AmOOC	CCCC(C)OC=O	7	rightName=COOs-Am
+s-AmS	CCCC(C)S	6	rightName=Ss-Am
+s-Bu	CCCC	2
+s-BuNH	CCC(C)NH	5	rightName=HNs-Bu
+s-BuO	CCC(C)O	5	rightName=Os-Bu
+s-BuOOC	CCC(C)OC=O	6	rightName=COOs-Bu
+s-BuS	CCC(C)S	5	rightName=Ss-Bu
+s-C5H11	CCCCC	2	leftName=sC5H11
+SEM	COCC[Si](C)(C)C	1
+Ser	N[C@@H](CO)C=O	1	5
+SES	C[Si](C)(C)CCS(=O)=O	7
+SEt	SCC	1	leftName=EtS
+SiMe3	C[Si](C)C	2	leftName=Me3Si
+SiMe3O	C[Si](C)(C)O	5	rightName=OMe3Si
+SiPr	CC(C)S	4	leftName=iPrS
+Si-Pr	CC(C)S	4	leftName=i-PrS
+SK	S[K]	1	leftName=KS
+SLi	S[Li]	1	leftName=LiS
+SMe	CS	2	leftName=MeS
+SNa	S[Na]	1	leftName=NaS
+SnMe3	C[Sn](C)C	2	leftName=Me3Sn
+SO2Cl	ClS(=O)=O	2	leftName=ClO2S
+SO2NH2	NS(=O)=O	2	leftName=H2NO2S
+SO3H	OS(=O)=O	2	leftName=HO3S
+SPh	SC1=CC=CC=C1	1	leftName=PhS
+SPr	CCCS	4	leftName=PrS
+Suc	OC(=O)CCC=O	6
+tAm	CCC(C)C	3
+t-Am	CCC(C)C	3
+tAmNH	CCC(C)(C)N	6	rightName=HNtAm
+t-AmNH	CCC(C)(C)N	6	rightName=HNt-Am
+tAmO	CCC(C)(C)O	6	rightName=OtAm
+t-AmO	CCC(C)(C)O	6	rightName=Ot-Am
+tAmOOC	CCC(C)(C)OC=O	7	rightName=COOtAm
+t-AmOOC	CCC(C)(C)OC=O	7	rightName=COOt-Am
+tAmS	CCC(C)(C)S	6	rightName=StAm
+t-AmS	CCC(C)(C)S	6	rightName=St-Am
+TBDMS	C[SiH](C)C(C)(C)C	2
+TBDPS	CC(C)(C)[Si](C1=CC=CC=C1)C2=CC=CC=C2	5
+TBMPS	CO[Si](C1=CC=CC=C1)C(C)(C)C	3
+t-Boc	C(C)(C)(C)OC=O	6
+TBS	C[SiH](C)C(C)(C)C	2
+TBSO	CC(C)(C)[Si](C)(C)O	8	rightName=OTBS
+TBT	C[Si](C)(C)C(C1=CC(=CC(=C1)C([Si](C)(C)C)[Si](C)(C)C)C([Si](C)(C)C)[Si](C)(C)C)[Si](C)(C)C	7
+tBu	C(C)(C)C	1
+t-Bu	C(C)(C)C	1
+tBuNH	CC(C)(C)N	5	rightName=HNtBu
+t-BuNH	CC(C)(C)N	5	rightName=HNt-Bu
+tBuO	CC(C)(C)O	5	rightName=OtBu
+t-BuO	CC(C)(C)O	5	rightName=Ot-Bu
+tBuOOC	CC(C)(C)OC=O	6	rightName=COOtBu
+t-BuOOC	CC(C)(C)OC=O	6	rightName=COOt-Bu
+tBuS	CC(C)(C)S	5	rightName=StBu
+t-BuS	CC(C)(C)S	5	rightName=St-Bu
+t-C4H9	C(C)(C)C	1	center=AUTO
+t-C5H11	CCC(C)C	3	center=AUTO
+t-C6H13	C(C)(C)C(C)C	4	center=AUTO
+TDS	CC(C)C(C)(C)[Si](C)C	7
+Tf	FC(F)(F)S(=O)=O	5
+TFA	FC(F)(F)C=O	5
+TfO	OS(=O)(=O)C(F)(F)F	1	rightName=OTf
+tHex	C(C)(C)C(C)C	4
+t-Hex	C(C)(C)C(C)C	4
+tHexyl	C(C)(C)C(C)C	4
+THF	C1CCCO1	1
+THP	C1CCCCO1	1
+THPO	C1CCCOC1O	7	rightName=OTHP
+Thr	C[C@@H](O)[C@H](N)C=O	5	6
+Thy	CC1=CNC(=O)NC1=O	4
+TIPDS	CC(C)[Si](O[Si](C(C)C)C(C)C)C(C)C	4	6
+TIPS	CC(C)[Si](C(C)C)C(C)C	4
+TIPSO	CC(C)[Si](O)(C(C)C)C(C)C	5	rightName=OTIPS
+TMS	C[SiH](C)C	2
+TMSO	C[Si](C)(C)O	5	rightName=OTMS
+TMT	COC1=CC=C(C=C1)C(C2=CC=C(OC)C=C2)C3=CC=C(OC)C=C3	9
+Tol	CC1=CC=CC=C1	5
+Tos	CC1=CC=C(C=C1)S(=O)=O	8
+TosNH	CC1=CC=C(C=C1)S(N)(=O)=O	9	rightName=HNTos
+TosO	CC1=CC=C(C=C1)S(O)(=O)=O	9	rightName=OTos
+Tosyl	CC1=CC=C(C=C1)S(=O)=O	8
+TPP	C1=CC=C(C=C1)[P+](C2=CC=CC=C2)C3=CC=CC=C3	7
+Tpt	C1=CC=C2C3C4=CC=CC=C4C(C2=C1)C5=C3C=CC=C5	12
+Tre	CC(Cl)(Cl)Cl	1
+Trityl	C1=CC=C(C=C1)C(C2=CC=CC=C2)C3=CC=CC=C3	7
+Troc	ClC(Cl)(Cl)COC=O	7
+Trp	N[C@@H](CC1=CNC2=C1C=CC=C2)C=O	1	13
+Trt	C1=CC=C(C=C1)C(C2=CC=CC=C2)C3=CC=CC=C3	7
+Try	N[C@@H](CC1=CNC2=C1C=CC=C2)C=O	1	13
+Ts	CC1=CC=C(C=C1)S(=O)=O	8
+TsNH	CC1=CC=C(C=C1)S(N)(=O)=O	9	rightName=HNTs
+TsO	CC1=CC=C(C=C1)S(O)(=O)=O	9
+Tyr	N[C@@H](CC1=CC=C(O)C=C1)C=O	1	11
+Ur	OC[C@H]1O[C@H]([C@H](O)[C@@H]1O[PH]([O-])=O)N2C=CC(=O)NC2=O	1	10
+Ura	O=C1NC=CC(=O)N1	3
+Val	C[C@@H](C)[C@H](N)C=O	5	6
+Z	O=COCC1=CC=CC=C1	2
+ZNH	NC(=O)OCC1=CC=CC=C1	1	rightName=HNZ

@@ -1,0 +1,385 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<meta NAME="author" CONTENT="Andras Volford, Peter Csizmadia">
+    <script type="text/javascript" src="../../sh_main.js"></script>
+    <script type="text/javascript" src="../../sh_javascript.js"></script>
+    <script type="text/javascript" src="../../sh_html.js"></script>
+    <link REL ="stylesheet" TYPE="text/css" HREF="../../sh_nedit.css" TITLE="Style">
+<link REL ="stylesheet" TYPE="text/css" HREF="../../../marvinmanuals.css" TITLE="Style">
+<title>MarvinView Example - Coloring atom and bond sets</title>
+</head>
+<body onload="sh_highlightDocument();">
+
+<h1>MarvinView Example - Coloring atom and bond sets</h1>
+
+This example demonstrates how to color sets of atoms and bonds in the molecule
+using JavaScript.
+<p>
+
+<center>
+<script type="text/javascript">
+<!--
+function showM(s) {
+	if(document.MView != null) {
+		document.MView.selectAllAtoms(0, false); // clear selection
+		document.MView.setM(0, "../../../mols-2d/" + s + ".csmol");
+	} else {
+		alert("Cannot set molecule:\n"+
+		      "no JavaScript to Java communication in your browser.\n");
+	}
+}
+//-->
+</script>
+
+<form action="http://www.chemaxon.com" onSubmit="return false">
+<table CELLSPACING=5 CELLPADDING=0 BORDER=0>
+<tr>
+<td><input TYPE=BUTTON VALUE="Caffeine" onClick="showM('caffeine')"></td>
+<td><input TYPE=BUTTON VALUE="Adrenaline" onClick="showM('l-adrenaline')"></td>
+<td><input TYPE=BUTTON VALUE="Aspirin" onClick="showM('aspirin')"></td>
+<td><input TYPE=BUTTON VALUE="Vitamin C" onClick="showM('vitaminc')"></td>
+</tr>
+</table>
+</form>
+
+<p>
+<script type="text/javascript" SRC="../../../marvin.js">
+</script>
+<script type="text/javascript">
+<!--
+function selectAllAtoms() {
+	if(document.MView != null) {
+		var set = document.SelForm.AtomColor.selectedIndex + 1;
+		for (var i = 0; i < document.MView.getAtomCount(0); i++) {
+		    document.MView.setAtomSetSeq(0, i, set);
+		}
+	} else {
+		alert("Cannot select atoms:\n"+
+		      "no JavaScript to Java communication in your browser.\n");
+	}
+}
+function unselectAllAtoms() {
+	if(document.MView != null) {
+		for (var i = 0; i < document.MView.getAtomCount(0); i++) {
+		    document.MView.setAtomSetSeq(0, i, 0);
+		}
+	} else {
+		alert("Cannot unselect atoms:\n"+
+		      "no JavaScript to Java communication in your browser.\n");
+	}
+}
+function selectAtom() {
+	if(document.MView != null) {
+		var set = document.SelForm.AtomColor.selectedIndex + 1;
+		var atom = document.SelForm.AtomNumber.value - 1;
+		document.MView.setAtomSetSeq(0, atom, set);
+	} else {
+		alert("Cannot select atom:\n"+
+		      "no JavaScript to Java communication in your browser.\n");
+	}
+}
+function unselectAtom() {
+	if(document.MView != null) {
+		var atom = document.SelForm.AtomNumber.value - 1;
+		document.MView.setAtomSetSeq(0, atom, 0);
+	} else {
+		alert("Cannot unselect atom:\n"+
+		      "no JavaScript to Java communication in your browser.\n");
+	}
+}
+function selectAllBonds() {
+	if(document.MView != null) {
+		var set = document.SelForm.BondColor.selectedIndex + 1;
+		document.MView.setBondSetSeqAll(0, set);
+	} else {
+		alert("Cannot select bonds:\n"+
+		      "no JavaScript to Java communication in your browser.\n");
+	}
+}
+function unselectAllBonds() {
+	if(document.MView != null) {
+		document.MView.setBondSetSeqAll(0, 0);
+	} else {
+		alert("Cannot unselect bonds:\n"+
+		      "no JavaScript to Java communication in your browser.\n");
+	}
+}
+function selectBond() {
+	if(document.MView != null) {
+		var set = document.SelForm.BondColor.selectedIndex + 1;
+		var atom1 = document.SelForm.AtomNumber1.value - 1;
+		var atom2 = document.SelForm.AtomNumber2.value - 1;
+		document.MView.setBondSetSeq(0, atom1, atom2, set);
+	} else {
+		alert("Cannot select bond:\n"+
+		      "no JavaScript to Java communication in your browser.\n");
+	}
+}
+function unselectBond() {
+	if(document.MView != null) {
+		var atom1 = document.SelForm.AtomNumber1.value - 1;
+		var atom2 = document.SelForm.AtomNumber2.value - 1;
+		document.MView.setBondSetSeq(0, atom1, atom2, 0);
+	} else {
+		alert("Cannot unselect bond:\n"+
+		      "no JavaScript to Java communication in your browser.\n");
+	}
+}
+mview_name = "MView";
+mview_begin("../../..", 200, 200);
+mview_param("colorScheme", "mono");
+mview_param("background", "#ffffff");
+mview_param("molbg", "#ffffff");
+mview_param("atomNumbersVisible",true);
+mview_param("atomSetColor1", "#ff0000");
+mview_param("atomSetColor2", "#00ff00");
+mview_param("atomSetColor3", "#0000ff");
+mview_param("bondSetColor1", "#ff0000");
+mview_param("bondSetColor2", "#00ff00");
+mview_param("bondSetColor3", "#0000ff");
+mview_param("atomSet0.1", "0,1,3,8,9");
+mview_param("mol", "../../../mols-2d/caffeine.csmol");
+mview_param("loadMols",
+ "../../../mols-2d/caffeine.csmol,"
++"../../../mols-2d/l-adrenaline.csmol,"
++"../../../mols-2d/aspirin.csmol,"
++"../../../mols-2d/vitaminc.csmol");
+mview_end();
+//-->
+</script>
+<p>
+<form action="http://www.chemaxon.com" onSubmit="return false" NAME="SelForm">
+<table CELLSPACING=5 CELLPADDING=0 BORDER=0>
+<tr>
+<td COLSPAN=5>Select atom or bond and its color</td>
+</tr>
+<tr>
+<td><input TYPE=BUTTON VALUE="Select All" onClick="selectAllAtoms()"></td>
+<td><input TYPE=BUTTON VALUE="Unselect All" onClick="unselectAllAtoms()"></td>
+<td><SELECT name="AtomColor">
+   <OPTION>Red
+   <OPTION>Green
+   <OPTION>Blue
+</SELECT></td>
+<td>Atom Number:</td>
+<td><input TYPE=TEXT SIZE=4 VALUE="" NAME="AtomNumber"></td>
+<td>&nbsp;</td>
+<td><input TYPE=BUTTON VALUE="Select" onClick="selectAtom()"></td>
+<td><input TYPE=BUTTON VALUE="Unselect" onClick="unselectAtom()"></td>
+</tr>
+<tr>
+<td><input TYPE=BUTTON VALUE="Select All" onClick="selectAllBonds()"></td>
+<td><input TYPE=BUTTON VALUE="Unselect All" onClick="unselectAllBonds()"></td>
+<td><SELECT name="BondColor">
+   <OPTION>Red
+   <OPTION>Green
+   <OPTION>Blue
+</SELECT></td>
+<td>Bond Endpoints:</td>
+<td><input TYPE=TEXT SIZE=4 VALUE="" NAME="AtomNumber1"></td>
+<td><input TYPE=TEXT SIZE=4 VALUE="" NAME="AtomNumber2"></td>
+<td><input TYPE=BUTTON VALUE="Select" onClick="selectBond()"></td>
+<td><input TYPE=BUTTON VALUE="Unselect" onClick="unselectBond()"></td>
+</tr>
+<tr>
+<td COLSPAN=5><small>Right click, then choose Misc -&gt; Atom Numbers
+    to see the atom numbers</small></td>
+</tr>
+</table>
+</form>
+</center>
+
+<p>
+The atom selection is handled by the following JavaScript functions:
+<blockquote>
+<pre class="sh_html"> 
+&lt;script type=&quot;text/javascript&quot; SRC=&quot;../../../<a HREF="../marvin.js.txt">marvin.js</a>&quot;&gt;&lt;/script&gt;
+&lt;script type=&quot;text/javascript&quot;&gt;
+&lt;!--
+</pre><pre class="sh_javascript">function selectAllAtoms() {
+	if(document.MView != null) {
+		var set = document.SelForm.AtomColor.selectedIndex + 1;
+		for (var i = 0; i &lt; document.MView.getAtomCount(0); i++) {
+		    document.MView.setAtomSetSeq(0, i, set);
+		}
+	} else {
+		alert(&quot;Cannot select atoms:\n&quot;+
+		      &quot;no JavaScript to Java communication in your browser.\n&quot;);
+	}
+}
+
+function unselectAllAtoms() {
+	if(document.MView != null) {
+		for (var i = 0; i &lt; document.MView.getAtomCount(0); i++) {
+		    document.MView.setAtomSetSeq(0, i, 0);
+		}
+	} else {
+		alert(&quot;Cannot unselect atoms:\n&quot;+
+		      &quot;no JavaScript to Java communication in your browser.\n&quot;);
+	}
+}
+function selectAtom() {
+	if(document.MView != null) {
+		var set = document.SelForm.AtomColor.selectedIndex + 1;
+		var atom = document.SelForm.AtomNumber.value - 1;
+		document.MView.setAtomSetSeq(0, atom, set);
+	} else {
+		alert(&quot;Cannot select atom:\n&quot;+
+		      &quot;no JavaScript to Java communication in your browser.\n&quot;);
+	}
+}
+function unselectAtom() {
+	if(document.MView != null) {
+		var atom = document.SelForm.AtomNumber1.value - 1;
+		document.MView.setAtomSetSeq(0, atom, 0);
+	} else {
+		alert(&quot;Cannot unselect atom:\n&quot;+
+		      &quot;no JavaScript to Java communication in your browser.\n&quot;);
+	}
+}
+function selectAllBonds() {
+	if(document.MView != null) {
+		var set = document.SelForm.BondColor.selectedIndex + 1;
+		document.MView.setBondSetSeqAll(0, set);
+	} else {
+		alert(&quot;Cannot select bonds:\n&quot;+
+		      &quot;no JavaScript to Java communication in your browser.\n&quot;);
+	}
+}
+
+function unselectAllBonds() {
+	if(document.MView != null) {
+		document.MView.setBondSetSeqAll(0, 0);
+		}
+	} else {
+		alert(&quot;Cannot unselect bonds:\n&quot;+
+		      &quot;no JavaScript to Java communication in your browser.\n&quot;);
+	}
+}
+function selectBond() {
+	if(document.MView != null) {
+		var set = document.SelForm.BondColor.selectedIndex + 1;
+		var atom1 = document.SelForm.AtomNumber1.value - 1;
+		var atom2 = document.SelForm.AtomNumber2.value - 1;
+		document.MView.setBondSetSeq(0, atom1, atom2, set);
+	} else {
+		alert(&quot;Cannot select bond:\n&quot;+
+		      &quot;no JavaScript to Java communication in your browser.\n&quot;);
+	}
+}
+function unselectBond() {
+	if(document.MView != null) {
+		var atom1 = document.SelForm.AtomNumber1.value - 1;
+		var atom2 = document.SelForm.AtomNumber2.value - 1;
+		document.MView.setBondSetSeq(0, atom1, atom2, 0);
+	} else {
+		alert(&quot;Cannot unselect bond:\n&quot;+
+		      &quot;no JavaScript to Java communication in your browser.\n&quot;);
+	}
+}
+</pre>
+</blockquote>
+
+Links to the main API methods used:
+<ul>
+    <li><a HREF="../../../help/developer/applets/api/JMView.html#getAtomCount(int)"><code>getAtomCount</code></a></li>
+    <li><a HREF="../../../help/developer/applets/api/JMView.html#setAtomSetSeq(int, int, int)"><code>setAtomSetSeq</code></a></li>
+    <li><a HREF="../../../help/developer/applets/api/JMView.html#setBondSetSeqAll(int, int)"><code>setBondSetSeqAll</code></a></li>
+    <li><a HREF="../../../help/developer/applets/api/JMView.html#setBondSetSeq(int, int, int, int)"><code>setBondSetSeqAll</code></a></li>
+</ul>
+
+Note that the atom indices are in the <code>[0, ..., n-1]</code> range, where <code>n</code> is the total
+number of atoms. So an atom index is lesser by 1 than the atom number
+<code>[1, ..., n]</code>, what the user sees when (s)he selects <code>View &gt; Misc &gt;
+Atom Numbers</code>.
+<p>
+In the applet tag, we specify the initial molecule,
+the coloring scheme, the colors of the three different atom and bond sets
+(red, greeen, blue) and the initial atom set for the red color:
+<blockquote>
+<pre class="sh_javascript">
+mview_name = &quot;MView&quot;;
+mview_begin(&quot;../../..&quot;, 200, 200);
+mview_param(&quot;colorScheme&quot;, &quot;mono&quot;);
+mview_param(&quot;background&quot;, &quot;#ffffff&quot;);
+mview_param(&quot;molbg&quot;, &quot;#ffffff&quot;);
+mview_param(&quot;atomNumbersVisible&quot;, &quot;true&quot;);
+mview_param(&quot;atomSetColor1&quot;, &quot;#ff0000&quot;);
+mview_param(&quot;atomSetColor2&quot;, &quot;#00ff00&quot;);
+mview_param(&quot;atomSetColor3&quot;, &quot;#0000ff&quot;);
+mview_param(&quot;atomSetColor1&quot;, &quot;#ff0000&quot;);
+mview_param(&quot;atomSetColor2&quot;, &quot;#00ff00&quot;);
+mview_param(&quot;atomSetColor3&quot;, &quot;#0000ff&quot;);
+mview_param(&quot;atomSet0.1&quot;, &quot;0,1,3,8,9&quot;);
+mview_param(&quot;mol&quot;, &quot;../../../mols-2d/caffeine.csmol&quot;);
+<B>mview_end();</B>
+//--&gt;
+</pre>
+</blockquote>
+
+Description of the used parameters:
+<ul>
+    <li><a HREF="../../../help/developer/viewman.html#parameters.colorScheme"><code>colorScheme</code></a></li>
+    <li><a HREF="../../../help/developer/viewman.html#parameters.background"><code>background</code></a></li>
+    <li><a HREF="../../../help/developer/viewman.html#parameters.molbg"><code>molbg</code></a></li>
+    <li><a HREF="../../../help/developer/viewman.html#parameters.atomNumbersVisible"><code>atomNumbersVisible</code></a></li>
+    <li><a HREF="../../../help/developer/viewman.html#parameters.atomSetColor"><code>atomSetColor</code></a></li>
+    <li><a HREF="../../../help/developer/viewman.html#parameters.atomSet"><code>atomSet</code></a></li>
+    <li><a HREF="../../../help/developer/viewman.html#parameters.mol"><code>mol</code></a></li>
+</ul>
+
+<p>
+Finally, the form used to select atoms is the following:
+<blockquote>
+<pre class="sh_html">
+<strong>&lt;form onSubmit</strong>="return false" <strong>NAME</strong>="SelForm"<strong>&gt;</strong>
+<strong>&lt;table CELLSPACING</strong>=5 <strong>CELLPADDING</strong>=0 <strong>BORDER</strong>=0<strong>&gt;</strong>
+<strong>&lt;tr&gt;</strong>
+<strong>&lt;td COLSPAN</strong>=5<strong>&gt;</strong>Select atom or bond and its color<strong>&lt;td&gt;</strong>
+<strong>&lt;/tr&gt;</strong>
+<strong>&lt;tr&gt;</strong>
+<strong>&lt;td&gt;&lt;input TYPE</strong>=BUTTON <strong>VALUE</strong>="Select All" <strong>onClick</strong>="selectAllAtoms()"<strong>&gt;&lt;/td&gt;</strong>
+<strong>&lt;td&gt;&lt;input TYPE</strong>=BUTTON <strong>VALUE</strong>="Unselect All" <strong>onClick</strong>="unselectAllAtoms()"<strong>&gt;&lt;/td&gt;</strong>
+<strong>&lt;td&gt;</strong><strong>&lt;SELECT name</strong>="AtomColor"<strong>&gt;</strong>
+       <strong>&lt;OPTION&gt;</strong>Red
+       <strong>&lt;OPTION&gt;</strong>Green
+       <strong>&lt;OPTION&gt;</strong>Blue
+<strong>&lt;/SELECT&gt;&lt;/td&gt;</strong>
+<strong>&lt;td&gt;</strong>Atom Number:<strong>&lt;/td&gt;</strong>
+<strong>&lt;td&gt;&lt;input TYPE</strong>=TEXT <strong>SIZE</strong>=4 <strong>VALUE</strong>="" <strong>NAME</strong>="AtomNumber"<strong>&gt;&lt;/td&gt;</strong>
+<strong>&lt;td&gt;&lt;/td&gt;</strong>
+<strong>&lt;td&gt;&lt;input TYPE</strong>=BUTTON <strong>VALUE</strong>="Select" <strong>onClick</strong>="selectAtom()"<strong>&gt;&lt;/td&gt;</strong>
+<strong>&lt;td&gt;&lt;input TYPE</strong>=BUTTON <strong>VALUE</strong>="Unselect" <strong>onClick</strong>="unselectAtom()"<strong>&gt;&lt;/td&gt;</strong>
+<strong>&lt;/tr&gt;</strong>
+<strong>&lt;tr&gt;</strong>
+<strong>&lt;td&gt;&lt;input TYPE</strong>=BUTTON <strong>VALUE</strong>="Select All" <strong>onClick</strong>="selectAllBonds()"<strong>&gt;&lt;/td&gt;</strong>
+<strong>&lt;td&gt;&lt;input TYPE</strong>=BUTTON <strong>VALUE</strong>="Unselect All" <strong>onClick</strong>="unselectAllBonds()"<strong>&gt;&lt;/td&gt;</strong>
+<strong>&lt;td&gt;</strong><strong>&lt;SELECT name</strong>="BondColor"<strong>&gt;</strong>
+       <strong>&lt;OPTION&gt;</strong>Red
+       <strong>&lt;OPTION&gt;</strong>Green
+       <strong>&lt;OPTION&gt;</strong>Blue
+<strong>&lt;/SELECT&gt;&lt;/td&gt;</strong>
+<strong>&lt;td&gt;</strong>Bond Endpoints:<strong>&lt;/td&gt;</strong>
+<strong>&lt;td&gt;&lt;input TYPE</strong>=TEXT <strong>SIZE</strong>=4 <strong>VALUE</strong>="" <strong>NAME</strong>="AtomNumber1"<strong>&gt;&lt;/td&gt;</strong>
+<strong>&lt;td&gt;&lt;input TYPE</strong>=TEXT <strong>SIZE</strong>=4 <strong>VALUE</strong>="" <strong>NAME</strong>="AtomNumber2"<strong>&gt;&lt;/td&gt;</strong>
+<strong>&lt;td&gt;&lt;input TYPE</strong>=BUTTON <strong>VALUE</strong>="Select" <strong>onClick</strong>="selectBond()"<strong>&gt;&lt;/td&gt;</strong>
+<strong>&lt;td&gt;&lt;input TYPE</strong>=BUTTON <strong>VALUE</strong>="Unselect" <strong>onClick</strong>="unselectBond()"<strong>&gt;&lt;/td&gt;</strong>
+<strong>&lt;/tr&gt;</strong>
+<strong>&lt;tr&gt;</strong>
+<strong>&lt;td</strong> <strong>COLSPAN</strong>=5<strong>&gt;&lt;small&gt;</strong>Right click, then choose Misc -&gt; Atom Numbers
+    to see the atom numbers<strong>&lt;/small&gt;&lt;td&gt;</strong>
+<strong>&lt;/tr&gt;</strong>
+<strong>&lt;/table&gt;</strong>
+<strong>&lt;/form&gt;</strong>
+</pre>
+</blockquote>
+
+<p>
+<center><div class="lenia">&nbsp;</div></center>
+<p>
+The next example shows
+<a HREF="japanese.html">East Asian character support</a> in applet parameters.
+
+</body>
+</html>

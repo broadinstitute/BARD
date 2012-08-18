@@ -1,0 +1,66 @@
+<html>
+<head>
+<meta NAME="author" CONTENT="Istvan Fajth">
+<link REL ="stylesheet" TYPE="text/css" HREF="../../../marvinmanuals.css" TITLE="Style">
+<title>MarvinSketch Example - Embedding MarvinSketch applet in HTML pages without the new splash screen</title>
+</head>
+<body onLoad="links_set_search(location.search)">
+
+<h1>MarvinSketch Example - Embedding MarvinSketch applet in HTML pages without the new splash screen</h1>
+
+In this example the way to embed a MarvinSketch applet in an HTML page without the new splash screen will be shown.
+This is the old behaviour of the applet, and the JMSketch applet class will be used to do this.  
+
+<h4><a class="anchor" name="marvinjs">Simple embedding without splash screen</a></h4>
+
+<p>To support the use of older style Marvin Applets, ChemAxon provides utility functions that help to
+overcome the problems of working with HTML tags. These utilities are stored in the
+<a href="../marvin.js.txt">marvin.js</a> JavaScript file.<br>
+As you see in the <a href="embed.html">Simple Embedding example</a>, the
+<strong>msketch_begin</strong> function, with two additional parameters will be used.<br/>
+The fourth parameter is a boolean and it specifies whether the old MarvinSketch
+Applet without the splash screen will be used, or the new one (true or false).<br/>
+The live old MarvinSketch applet embedded in the HTML page appears as follows:
+</p>
+
+<center>
+<script type="text/javascript" SRC="../../../marvin.js"></script>
+<script type="text/javascript">
+<!--
+msketch_begin("../../..", 540, 480, true, null);
+msketch_end();
+//-->
+</script>
+</center>
+
+<p>To achieve this, the following lines should be included in the HTML page:</p>
+<blockquote>
+<pre>
+<strong>&lt;script type</strong>=&quot;text/javascript&quot; <strong>SRC</strong>=&quot;../../../<a HREF="../marvin.js.txt">marvin.js</a>&quot;<strong>&gt;&lt;/script&gt;</strong>
+<strong>&lt;script type</strong>=&quot;text/javascript&quot;<strong>&gt;</strong>
+<strong>&lt;!--</strong>
+<strong>msketch_begin(</strong>&quot;../../..&quot;<strong>,</strong> 540<strong>,</strong> 480<strong>,</strong> true<strong>, </strong>null <strong>);</strong> <em>// arguments: codebase, width, height, oldbehaviour, splashscreen</em>
+<strong>msketch_end();</strong>
+<strong>//--&gt;</strong>
+<strong>&lt;/script&gt;</strong>
+</pre>
+</blockquote>
+
+<h4>Technical background</h4>
+<p>
+The functions above generate the following code, or equivalent with &lt;embed&gt; or &lt;object&gt; tag:
+<blockquote>
+<pre>
+<strong>&lt;applet CODEBASE</strong>="../../.." <strong>ARCHIVE</strong>=&quot;jmarvin.jar&quot;
+        <strong>CODE</strong>=&quot;JMSketch&quot; <strong>WIDTH</strong>=540 <strong>HEIGHT</strong>=480<strong>&gt;</strong>
+<strong>&lt;strong&gt;</strong>Your browser does not support the applet tag.<strong>&lt;/strong&gt;</strong>
+<strong>&lt;/applet&gt;</strong>
+</pre>
+</blockquote>
+<p>
+<center><div class="lenia">&nbsp;</div></center>
+<p>The
+<a HREF="colors.html">next example</a> introduces the use of applet parameters.
+
+</body>
+</html>

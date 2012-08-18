@@ -1,0 +1,111 @@
+IMPORTANT
+
+INFOZOOM IS WILLING TO LICENSE THE ENCLOSED SOFTWARE TO YOU ONLY UPON THE CONDITION THAT YOU ACCEPT ALL OF THE TERMS CONTAINED IN THE LICENSE AGREEMENT PRINTED BELOW.  PLEASE READ THE TERMS CAREFULLY BEFORE USING THE SOFTWARE, AS SUCH CONDUCT INDICATES YOUR ACCEPTANCE TO ALL OF THE TERMS OF THIS LICENSE AGREEMENT.  IF YOU DO NOT AGREE TO THE TERMS, INFOZOOM IS UNWILLING TO LICENSE THE SOFTWARE TO YOU, IN WHICH CASE YOU MUST IMMEDIATELY DELETE THE ZIP-FILE AND ANY EXTRACTED DATA.  
+
+This License Agreement ("Agreement") is a legal agreement between infoZoom, a company, located at Zeithstr. 119, 53819 Neunkirchen, Germany, and you, the user ("Licensee"), and is effective the date, Licensee extracts files from the zip-file or otherwise uses the enclosed software jacoZoom.
+
+1. GRANT OF EVALUATION LICENSE
+
+infoZoom grants Licensee a license to evaluate the enclosed software for 30 days, beginning with first usage. This evaluation license does not give Licensee the right to use the software other than for test purposes. The evaluation license doesn't give Licensee the right to use the software in any commercial form. If Licensee wants to continue using the software after the end of the evaluation time, it must purchase a commercial license. Otherwise it will delete all copies of the Software.
+
+2. COMMERCIAL DEVELOPER LICENSE
+
+A commercial license may be purchased from infoZoom. The purchaser is granted a non-exclusive, non-transferable, personal and worldwide license to use one copy of the Software in the development of software applications.
+This license is for a single individual and not an entire company.  Licensee may make a reasonable number of archival copies.  If additional programmers wish to use the Software, additional copies of the Software must be licensed.  This license grant is expressly conditioned upon Licensee's compliance with all of the terms of this Agreement.  The license granted hereunder applies only to the designated version of the enclosed Software.  If the Software is an upgrade, it, and the product that was upgraded, constitute a single copy of the Software for purposes hereof and the upgrade and product that was upgraded cannot be used by two people at the same time.
+
+3. REDISTRIBUTION RIGHTS
+
+One developer license entitles to either distribute the jacoZoom Runtime together with one END USER APPLICATION as detailed in sections 5, 6 and 7 or for use in one instance of a SERVER APPLICATION as detailed in section 8. The term jacoZoom Runtime is defined in section 4. One license may not be used for both cases at the same time.
+
+4. jacoZoom RUNTIME
+
+The jacoZoom Runtime consists of the java archive izmcomjni.jar and the native DLL izmjnicom.dll. The java archive izmcomtlb.jar is not part of the runtime and may not be redistributed.
+
+5.  END USER APPLICATION
+
+An "end user application" is a specific application program that is licensed to a person or firm for business or personal use and not with a view toward redistributing the application or any part of the application and may be either an application that is used by Licensee internally, or an application that is commercially distributed to end users for their use.  A user of an end user application may not redistribute the application or copy it (other than for archival purposes) and Licensee's license agreement covering the Application Software must contain restrictions prohibiting redistribution and copying.
+
+6. DISTRIBUTION OF ONLY 1 END USER APPLICATION
+
+Only one (1) end user application may be distributed to an unlimited number of end users under this license. There is no restriction concerning the number of copies of the end user application, covered by the license: Licensee may distribute as many copies of this end user applications as it wishes. If Licensee wishes to distribute more than one application, it must commercially license an additional jacoZoom license for each application it wishes to distribute. 
+
+7. REDISTRIBUTION 
+
+When distributing the software together with an end user application, Licensee has to strictly follow the steps outlined in the file readme.txt, which is included with this distribution. This has to be done in order to prevent unauthorized use of the software on the target computer other than together with the end user application of the licensee.
+
+8. SERVER APPLICATION
+
+If jacoZoom is used in a Server Application one developer license per running instance of the Server Application is needed. There is no restriction in the number of clients.
+
+8a. SERVER APPLICATION LICENSE
+
+A SERVER APPLICATION LICENSE is a COMMERCIAL DEVELOPER LICENSE which covers an unlimited number of running instances and the distribution of an unlimited number of copies of a Server Application.
+
+This license is tied to a specific server application product in the same form as the regular developer license is bound to a desktop application (see 5 and 6).
+
+
+9. SOURCE CODE LICENSE
+
+A Licensee of a commercial developer license may purchase a source code license. Purchaser of the source code license is granted non-exclusive and nontransferrable rights to the jacoZoom source code for archival and maintenance purposes. 
+
+The source for updates of jacoZoom 1.x will be made available to the Purchaser upon request within short terms after each change.
+Changes of the software are documented in the file 'jacoZoom history.txt' which is publicly available from the infozoom web-site.
+
+The purchaser may not disclose the source code or parts thereof to a third party.
+
+10. ENTERPRISE LICENSE
+
+An ENTERPRISE LICENSE is a COMMERCIAL DEVELOPER LICENSE which includes a SOURCE CODE LICENSE.
+The ENTERPRISE LICENSE is unlimited with respect to the number of individual programmers using the Software for development purposes on behalf of the LICENSEE.
+The ENTERPRISE LICENSE is unlimited with respect to the number of server applications and end user applications as long as these applications have been developed by the LICENSEE and are distributed by the LICENSEE.
+
+
+11. OTHER RESTRICTIONS
+
+Licensee may not use, copy, rent, lease, sell, sublicense, assign or otherwise transfer the Software or any copy, modification, or merged portion, in whole or in part, except as expressly provided for in this Agreement. Licensee acknowledges that the Software, in source code form, remains a confidential trade secret of infoZoom and therefore Licensee agrees that it shall not modify, decompile, disassemble or reverse engineer the Software or attempt to do so except as permitted by applicable legislation.
+Licensee will not develop any product with the Software that provides the user any development capability or which is generally competitive with the Software.
+Licensee will, in its license agreement, restrict customers of the Application Software from copying or otherwise redistributing the Application Software other than making a reasonable number of archival copies of the Application Software. 
+If Licensee wishes to use the Software in a manner prohibited by this Agreement, Licensee should contact infoZoom to determine whether a special license may be obtained.  
+
+12. PROPRIETARY RIGHTS; NOTICES
+
+Except for the limited license granted herein, infoZoom retains exclusive ownership of all proprietary rights (including all ownership rights, title, and interest) in and to the Software.  Licensee agrees not to represent that infoZoom is affiliated with or approves of Licensee's Application Software in any way. Except as required hereby, Licensee shall not use infoZoom's name, trademarks, or any infoZoom designation in association with Licensee's Application Software.
+The Application Software will contain the following copyright notice in the "About box": Portions of this product were created using jacoZoom (c)2000, infoZoom.  ALL RIGHTS RESERVED."
+
+13. TERM
+
+The license granted hereby is effective until terminated. Licensee may terminate the license by notifying infoZoom, without refund, and destroying all copies of the Software in any form. infoZoom may terminate the license if Licensee fails to comply with any term or condition of this Agreement. Upon such termination, Licensee shall cease using the Software and cease using or distributing the Application Software containing the Redistributables.  
+All restrictions prohibiting Licensee's use of the Software and intellectual property provisions relating to Software running to the benefit of infoZoom will survive termination of the license pursuant hereto. Termination will not affect properly granted end user licenses of the Application Software distributed by Licensee prior to termination.
+
+14. EXCLUSION OF WARRANTIES
+
+infoZoom offers and Licensee accepts the Software "AS IS." infoZoom does not warrant the Software will meet Licensee's requirements or will operate uninterrupted or error-free.  ALL WARRANTIES, EXPRESS OR IMPLIED, ARE EXCLUDED FROM THIS AGREEMENT AND SHALL NOT APPLY TO ANY SOFTWARE LICENSED UNDER THIS AGREEMENT, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE  AND  NONINFRINGEMENT.
+
+15.  LICENSEE'S REMEDIES: LIMITATIONS
+
+LICENSEE'S SOLE AND EXCLUSIVE REMEDIES AGAINST infoZoom ON ANY AND ALL LEGAL OR EQUITABLE THEORIES OF RECOVERY SHALL BE, AT infoZoom'S SOLE DISCRETION, (A) REPAIR OR REPLACEMENT OF DEFECTIVE SOFTWARE; OR (B) REFUND OF THE LICENSE FEE PAID BY LICENSEE.  
+
+16.  NO LIABILITY FOR CONSEQUENTIAL DAMAGES
+
+In no event shall infoZoom be liable for any damages whatsoever (including, without limitation, damages for loss of business profits, business interruption, loss of business information or other pecuniary loss) arising out of use of or inability to use the Software, even if infoZoom or its dealer have been advised of the possibility of such damages.
+
+17. AVAILABILITY OF THE SOURCE CODE 
+
+In the case that infoZoom ceases to exist or otherwise stops maintenance of the Software, without transferring ownership of the Software, infoZoom will make the source code of the Software available to Licensee. In the case, that infoZoom transfers ownership of the Software, it will oblige the successor to make the source code available to Licensee under the same conditions.
+
+18.  GENERAL
+
+This Agreement shall be interpreted, construed, and enforced according to the laws of the Federal Republic of Germany. In the event of any action under this Agreement, the parties agree that the courts located in Siegburg, Germany will have exclusive jurisdiction and that a suit may only be brought in Siegburg, Germany and Licensee submits itself for the jurisdiction and venue of the courts located in Siegburg, Germany. This Agreement constitutes the entire agreement and  understanding of the parties and may be modified only in writing signed by both parties.
+No officer, salesman, or agent has any authority to obligate infoZoom by any terms, stipulations or conditions not expressed in the Agreement.  All previous representations and agreements, if any, either verbal or written, referring to the subject matter of this Agreement are void. If any portion of this Agreement is determined to be legally invalid or unenforceable, such portion will be severed from this Agreement and the remainder of the Agreement will continue to be fully enforceable and valid. This Agreement, and the rights hereunder, may not be  assigned by Licensee (whether by oral or written assignment, sale of assets, merger, consolidation or otherwise), without the express written consent of infoZoom.
+Licensee agrees to be responsible for any and all losses or damages arising out of or incurred in connection with his Application Software.  Licensee agrees to defend, indemnify and hold infoZoom harmless from any such loss or damage (including attorney's fees) arising from the use, operation or performance of his Application Software or Licensee's breach of any terms of this Agreement.  Licensee shall be responsible for paying all state and federal use, sales or value added taxes, duties or governmental charges, whether presently in force or come into force in the future, related to the distribution and sale of the Application Software and will indemnify infoZoom against any claim made against infoZoom relating to any such taxes or assessments.
+
+
+
+
+
+
+
+
+
+
+

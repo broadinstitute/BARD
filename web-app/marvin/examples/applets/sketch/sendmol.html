@@ -1,0 +1,84 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!--
+Author: Tamas Vertse
+Date: 30th October 2008
+-->
+<html>
+<head>
+<META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Marvin, Send molecule to another page wrapping into the target URL</title>
+<link type="text/css" href="../../../help/marvinmanuals.css" rel="stylesheet">
+</head>
+<body>
+
+<h1>Marvin, Send molecule to another page wrapping into the target URL</h1>
+
+<p>This example demonstrates how you can post a molecule string encapsulating
+into the target URL. The example contains a sketcher applet to draw the structure to send. There are two forms, the first one (<code>molform</code>) will
+be posted. The second one contains the <strong>Send</strong> button and
+an selection box to choose output format.</p>
+<script type="text/javascript" src="../../../marvin.js"></script>
+<script type="text/javascript">
+<!--
+msketch_name="MSketch";
+msketch_begin("../../..",470,445);
+msketch_end();
+
+function getFormat() {
+    var sel = document.controlform.format;
+    var fmt = sel[sel.selectedIndex].value;
+    return fmt;
+}
+
+function getMol(format) {
+    var s = null;
+    if(document.MSketch != null) {
+        s = document.MSketch.getMol(format);
+    } else {
+        alert("Cannot get molecule:\n"+
+            "no JavaScript to Java communication in your browser.\n");
+    }
+    return s;
+}
+
+function sendMol() {
+    var m = getMol(getFormat());
+    if(m != null) {
+        document.molform.mol.value = m;
+        document.molform.submit();
+    } else {
+        alert("No molecule to post.");
+    }
+    return;
+}
+//-->
+</script>
+
+<p>
+<form name="molform" method="get" action="receivemol.html">
+    <input type="hidden" name="mol" value=""/>
+</form>
+
+<form name="controlform">
+    <select name="format">
+        <option VALUE="cml">cml</option>
+        <option VALUE="csmol">csmol</option>
+        <option VALUE="csrdf">csrdf</option>
+        <option VALUE="csrxn">csrxn</option>
+        <option VALUE="cssdf">cssdf</option>
+        <option SELECTED VALUE="mol">mol</option>
+        <option VALUE="mrv">mrv</option>
+        <option VALUE="name">name</option>
+        <option VALUE="rdf">rdf</option>
+        <option VALUE="rxn">rxn</option>
+        <option VALUE="smarts">smarts</option>
+        <option VALUE="smiles">smiles</option>
+        <option VALUE="sdf">sdf</option>
+        <option VALUE="sybyl">sybyl</option>
+    </select>
+    <input type="button" name="send" value="Send" onClick="sendMol()"/>
+</form>
+</p>
+
+</body>
+</html>

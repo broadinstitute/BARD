@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<ParameterPanel>
+<Group>
+    <Precision Key="precision" Label="Decimal places"/>
+</Group>
+<Group Title="Surface area">
+    <RadioButtonGroup Key="type">
+	<Choice Value="vanderwaals" Text="Van der Waals" Tooltip="Calculates the van der Waals surface of the molecule (in &#197;<sup>2</sup>)." Selected="true"/>
+	<Choice Value="solvent" Text="Solvent Accessible" Tooltip="Calculates the solvent accessible surface of the molecule (in &#197;<sup>2</sup>)."/>
+    </RadioButtonGroup>
+</Group>
+    <Number Key="solventradius" Label="Solvent radius" Tooltip="Setting here the radius of the solvent molecule (by default water, 1.4&#197;)." Range="[0.0,5.0]" Value="1.4">
+	<Dependencies>
+	    <Item Key="type" Range="solvent"/>
+	</Dependencies>
+    </Number>
+    <Boolean Key="increments" Label="Show surface area increments" Tooltip="The increment by each atom is displayed." Value="false"/>
+    <Boolean Key="microspecies" Label="Take major microspecies" Tooltip="The surface area of the major microspecies present at the given pH is calculated." Value="false"/>
+    <Number Key="pH" Label="at pH" Range="[0.0,14.0]" Value="7.4">
+	<Dependencies>
+	    <Item Key="microspecies" Range="true"/>
+	</Dependencies>
+    </Number>
+</ParameterPanel>

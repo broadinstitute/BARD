@@ -1,0 +1,158 @@
+<!-- 
+    Document   : cdx_export
+    Created on : Nov 16, 2009, 3:08:30 PM
+    Author     : Peter Cseh
+-->
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+    <title>CDX Export options details</title>
+    <link REL ="stylesheet" TYPE="text/css" HREF="../marvinmanuals.css" TITLE="Style">
+  </head>
+  <body>
+  <h1>CDX Export options details</h1>
+ 
+ <h2><a name="query">Atom properties</a></h2>
+ <p>The atom properties are exported to CDX file format the following way:</p>
+  
+  <p>  <table border="1">
+<thead>
+<tr>
+<th>Marvin</th>
+<th>ChemBioDraw</th>
+</tr>
+</thead>
+<tbody>
+
+<tr><td>Atomic charge</td><td>	Supported</td></tr>
+<tr><td>'s&#60;n&#62;' query property except 's*'</td><td>Substituents Exactly</td></tr>
+<tr><td> 's*' query property  </td><td>Free Sites '*0'</td></tr>
+<tr><td>'u' query property </td><td>Unsaturation </td></tr>
+<tr><td>Reaction Stereo	</td><td>Supported</td></tr>
+<tr><td>Enhanced Stereochemistry </td><td>Supported</td></tr>
+<tr><td>Radical	</td><td>Supported</td></tr>
+<tr><td>'h&#60;n&#62;' query property except 'h&#60;0&#62;'</td><td>Free Sites set to implicit hydrogens on the atom minus n.</td></tr>
+<tr><td>'h&#60;0&#62;' query property </td><td>Implicit Hydrogens not allowed.</td></tr>
+<tr><td>'rb&#60;n&#62;' query property</td><td>Ring Bond Count	</td></tr>
+<tr><td>'H', 'X', 'R', 'r' query properties and Query Valence</td><td>Written and read as user definied properties. ChemBioDraw removes them.</td></tr>
+</tbody>
+</table>
+</p>
+ 
+ <h2><a name="bonds">Bonds</a></h2>
+  <p>The following bond features exported to CDX file format from Marvin:</p>
+  
+  <p>  <table border="1">
+<thead>
+<tr>
+<th>Marvin</th>
+<th>ChemBioDraw</th>
+</tr>
+</thead>
+<tbody>
+<tr><td colspan="2"><b>Single bond</b>
+<tr><td>Single bond</td> <td>Plain</td></tr>
+<tr><td>	Single bond Down</td><td>Hashed Wedged</td></tr>
+<tr><td>Bold</td><td>	Bold bond</td></tr>
+<tr><td>Single bond Up</td><td>Hollow Wedged	</td></tr>
+<tr><td>Coordinative bond</td><td>Dative</td></tr>
+<tr><td>Single bond Up or Down</td><td>Wavy	</td></tr>
+<tr><td colspan="2"><b>Double bonds	</b></td></tr>
+<tr><td>Double bond</td><td>Plain</td></tr>
+<tr><td>Single or double query bond type</td><td>Tautomeric</td></tr>
+<tr><td>Aromatic</td><td>Aromatic bond</td></tr>
+<tr><td>Triple bond	</td><td>Triple bond</td></tr>
+<tr><td colspan="2">Bond properties	</td></tr>
+<tr><td colspan="2"><b>Query bonds</b>	</td></tr>
+<tr><td>Any</td><td>Any bond</td></tr>
+<tr><td>S/D</td><td>Single or double query bond type</td></tr>
+<tr><td>S/A</td><td>Single or aromatic query bond type</td></tr>
+<tr><td>D/A</td><td>Double or aromatic query bond type</td></tr>
+<tr><td colspan="2"><b>Topology</b>	</td></tr>
+<tr><td>Ring</td><td>	Bond is in ring</td></tr>
+<tr><td>Chain</td><td>	Bond is in chain</td></tr>
+<tr><td colspan="2"><b>Reaction center</b>	</td></tr>
+<tr><td>Center	</td><td>The bond is a reacting center.</td></tr>
+<tr><td>Make/Break</td><td>	The bond is made or broken in the reaction</td></tr>
+<tr><td>Change	</td><td>The bond (order) has changed in the reaction</td></tr>
+<tr><td>Make and Change</td><td>	The bond is created and changed</td></tr>
+<tr><td>Not Center</td><td>	The bond is not a reacting center</td></tr>
+<tr><td>Not modified</td><td>	The bond is not modified in the reaction</td></tr>
+</tbody>
+</table>
+</p>
+
+ <h2><a name="reaction">Reaction arrow</a></h2>
+<p>The following reaction arrows exported to CDX file format from Marvin:</p>
+
+<p>
+<table border="1">
+<thead>
+<tr>
+<th>Marvin</th>
+<th>ChemBioDraw</th>
+</tr>
+</thead>
+<tbody>
+<tr><td>Single reaction arrow type</td><td>Solid</td></tr>
+<tr><td>Double reaction arrow type</td><td>Retrosynthetic	</td></tr>
+<tr><td>Resonance arrow type</td><td>Resonance	</td></tr>
+<tr><td>Equilibrium arrow type</td><td>Equilibrium	</td></tr>
+</tbody>
+</table>
+ 
+ 
+ <h2><a name="groups">Groups</a></h2>
+
+<p>
+<table border="1">
+<thead>
+<tr>
+<th>Marvin</th>
+    <th>ChemBioDraw</th>
+</tr>
+</thead>
+<tbody>
+<tr><td>Any polymer S-group type</td><td>Anypolymer (anyp)	</td></tr>
+<tr><td>Component S-group type</td><td>Component (c)	</td></tr>
+<tr><td>Copolymer S-group type</td><td>Copolymer (co)	</td></tr>
+<tr><td>Copolymer S-group type with alternating polymer S-group subtype</td><td>Copolymer, alternating (alt)	</td></tr>
+<tr><td>Copolymer S-group type with block polymer S-group subtype</td><td>Copolymer, block (blk)	</td></tr>
+<tr><td>Copolymer S-group type with random polymer S-group subtype</td><td>Copolymer, random (ran)	</td></tr>
+<tr><td>Crosslink S-group type</td><td>Crosslink (xl)	</td></tr>
+<tr><td>Generic S-group type</td><td>Generic ()	</td></tr>
+<tr><td>Graft S-group type</td><td>Graft (grf)	</td></tr>
+<tr><td>Mer S-group type</td><td>Mer (mer)	</td></tr>
+<tr><td>Formulation S-group type.</td><td>Mixture, ordered (f)	</td></tr>
+<tr><td>Mixture S-group type</td><td>Mixture, unordered (mix)	</td></tr>
+<tr><td>Modification S-group type</td><td>Modification (mod)	</td></tr>
+<tr><td>Monomer S-group type</td><td>Monomer (mon)	</td></tr>
+<tr><td>Multiple group S-group type</td><td>Multiple Group (#)	</td></tr>
+<tr><td>SRU S-group type</td><td>SRU (n)	</td></tr>
+<tr><td colspan="2"><b>Repeat pattern</b>	</td></tr>
+<tr><td>Head-to-tail S-group connectivity</td><td>Head-to-Tail	</td></tr>
+<tr><td>Head-to-head S-group connectivity</td><td>Head-to-Head	</td></tr>
+<tr><td>Either unknown S-group connectivity</td><td>Either/Unknown	</td></tr>
+<tr><td>Flip Type</td><td>	Supported</td></tr>
+
+</tbody>
+</table>
+
+<h2>Symbols</h2>
+<table border="1">
+<thead>
+<tr>
+<th>Marvin</th>
+<th>ChemBioDraw</th>
+</tr>
+</thead>
+<tbody>
+    <tr><td>LP atoms</td><td>Exported as graphical Lone Pairs</td></tr>
+    <tr><td>Absolute stereo</td><td>Exported as 'Abs' label</td></tr>
+</tbody>
+</table>
+
+<p><center><a href="cdx-doc.html">Back to CDX file format page</a></center></p>
+
+  </body>
+</html>

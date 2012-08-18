@@ -1,0 +1,36 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+<head>
+<link rel=stylesheet type="text/css" href="../marvinmanuals.css">
+<title>Predictor Plugin</title>
+</head>
+
+<body>
+    <h1>Predictor plugin</h1>
+<p>Predictor can be applied for molecular property prediction based on structure. Experimental data sets are analyzed and a calculation method applied in cases where molecular properties can be expressed as the sum of atomic contributions. The method is based on QSAR algorithm using a multiple linear regression model and a least squares fitting.
+<p>The training of the calculator with your experimental data of your chemical compounds will create a trainig set file saved to your home directory, 
+that can be used by Marvin's predictor plugin. A dropdown list will contain all the training 
+sets you have created. For the training of the plugin, <a href="predictor_training.html">see this page</a>.
+
+
+<p>In the <b CLASS="buttonName">Predictor</b> panel you can choose the training you want to make 
+the prediction with:
+</p>
+<p>
+<table>
+	<tr>
+		<td><img src="images/predictor_inactive_panel.png" width="266" height="187"></td>
+		<td>The options are inactive and a short help text appears if you have not created any training sets.
+	</tr>
+	<tr>	<td><img src="images/predictor_active_panel.png" width="257" height="118"></td>
+		<td>The options are active. you can choose the training set to apply from the dropdown list.
+	</tr>
+</table>
+</p>
+<p><b>Options</b>
+<ul>
+<li><b>Decimal places:</b> setting the number of decimal places with which the result value is given.</p></li>
+<li><b>Training:</b> The dropdown list contains all training sets you created before. 
+<br>See <a href="predictor_training.html">Training set creation</a> or <a href="http://www.chemaxon.com/instantjchem/ijc_latest/docs/user/help/htmlfiles/chemistry_functions/training.html">Training in Instant JChem</a>.
+</body>
+</html>

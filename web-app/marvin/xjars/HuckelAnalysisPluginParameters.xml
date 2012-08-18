@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<ParameterPanel>
+    <Precision Key="precision" Label="Decimal places"/>
+    <SingleSelection Key="type" Label="Type" Tooltip="Type">
+	<Choice Value="hmoorder" Text="HMO E(+)/Nu(-) order" Tooltip="Numbers the aromatic atoms according to their likeliness of being attacked by electrophiles or nucleophiles." Selected="true"/>
+	<Choice Value="hmolocalizationEnergy" Text="HMO Localization energy L(+)/L(-)" Tooltip="Gives the localization energies of the aromatic center (dimension &beta;)."/>
+	<Choice Value="hmopiEnergy" Text="HMO Pi energy" Tooltip="Calculates the pi energy of the aromatic ring(s) (dimension &beta;)."/>
+	<Choice Value="hmoelectronDensity" Text="HMO Electron density" Tooltip="Calculates the pi electron density."/>
+	<Choice Value="hmochargeDensity" Text="HMO Charge density" Tooltip="Calculates the pi electron density."/>
+	<Choice Value="localizationEnergy" Text="Localization energy L(+)/L(-)" Tooltip="Gives the localization energies of the aromatic center (dimension &beta;)."/>
+	<Choice Value="electronDensity" Text="Electron density" Tooltip="Calculates the pi electron density."/>
+	<Choice Value="chargeDensity" Text="Charge density" Tooltip="Calculates the pi electron density."/>
+    </SingleSelection>
+    <MultipleSelection Key="subtype" Label="Subtype" Tooltip="For E(+)/Nu(-)order and Localization energy L(+)/L(-), the electrophilicity and nucleophilicity approaches can be selected (at least one fo them). Results for E(+) are coloured red, and Nu(-) blue.">
+	<Choice Value="E(+)" Text="E(+)" Selected="true"/>
+	<Choice Value="Nu(-)" Text="Nu(-)" Selected="true"/>
+        <Dependencies>
+	    <Item Key="type" Range="hmoorder,localizationEnergy,hmolocalizationEnergy"/>
+	</Dependencies>
+    </MultipleSelection>
+    <Boolean Key="microspecies" Label="Take major microspecies" Tooltip="Calculates the values for the major microspecies at the given pH." Value="false"/>
+    <Number Key="pH" Label="at pH" Range="[0.0,14.0]" Value="7.4">
+	<Dependencies>
+	    <Item Key="microspecies" Range="true"/>
+	</Dependencies>
+    </Number>
+</ParameterPanel>

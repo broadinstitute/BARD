@@ -1,0 +1,338 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=utf-8">
+<title>Geometry</title>
+<link rel=stylesheet type="text/css" href="../marvinmanuals.css">
+</head>
+<body>
+<h1>Geometry</h1>
+
+<h2><a class="anchor" NAME="topolanal">Topology Analysis Plugin</a></h2>
+<p>The Topology Analysis plugin provides characteristic values
+related to the topological structure of a molecule. These options can be set
+in the <b>Topology Analysis Options</b> panel, here shown with the Atom/bond tab opened:</p>
+<p>
+<table>
+	<tr>
+		<td><img src="images/topanal_panel1.png" width="416" height="481"></td>
+	</tr>
+</table>
+</p>
+
+<p><b><i>Atom/bond</i></b>
+<ul>
+    <li><b>Aliphatic atom count:</b> number of atoms in the molecule
+	having no aromatic bond (excluding hydrogens).</li>
+    <li><b>Aliphatic bond count:</b> number of non-aromatic bonds in
+	the molecule (excluding bonds of hydrogen atoms).</li>
+    <li><b>Aromatic atom count:</b> number of atoms in the molecule
+	having aromatic bonds.</li>
+    <li><b>Aromatic bond count:</b> number of aromatic bonds in the
+	molecule.</li>
+    <li><b>Asymmetric atom count:</b> the number of asymmetric atoms
+	(having four different ligands).</li>
+    <li><b>Atom count:</b> number of atoms in the molecule including
+	hydrogens.</li>
+    <li><b>Bond count:</b> number of bonds in the molecule includingbonds of
+	hydrogen atoms.</li>
+    <li><b>Chain atom count:</b> number of chain atoms (non-ring atoms
+	excluding hydrogens).</li>
+    <li><b>Chain bond count:</b> number of chain bonds (non-ring bonds
+	excluding bonds of hydrogen atoms).</li>
+    <li><b>Chiral center count:</b> the number of tetrahedral
+	stereogenic centers. This function identifies two chiral centers in
+	1,4-dimethylcyclohexane, which does not contain asymmetric atoms.</li>
+    <li><b>Ring atom count:</b> number of ring atoms.</li>
+    <li><b>Ring bond count:</b> number of ring bonds.</li>
+    <li><b>Rotatable bond count:</b> number of rotatable bonds in the
+	molecule. Unsaturated bonds, and single bonds connected to hydrogens or
+	terminal atoms, single bonds of amides, sulphonamides and those
+	connecting two hindered aromatic rings (having at least three ortho
+	substituents) are considered non-rotatable.</li>
+    <li><b>Stereo double bond count:</b> number of double bonds with defined stereochemistry.</li>
+    
+</ul>
+</p>
+
+<p><b><i>Ring</i></b>
+<ul>
+    <li><b>Aliphatic ring count:</b> number of those rings in the
+	molecule that have non-aromatic bonds (SSSR based).</li>
+    <li><b>Aromatic ring count:</b> number of aromatic rings in the
+	molecule. This number is calculated from the smallest set of smallest
+	aromatic rings (SSSAR), which might contain rings which are not part of
+	the standard SSSR ring set. As a consequence, the sum of the aliphatic
+	ring count and the aromatic ring count can sometimes be greater than the
+	ring count value. The difference is the signal of a macroaromatic ring
+	system.</li>
+    <li><b>Carbo ring count:</b> number of rings containing only carbon atoms.</li>
+    <li><b>Carboaliphatic ring count:</b> number of aliphatic rings containing
+        only carbon atoms.</li>
+    <li><b>Carbooaromatic ring count:</b> number of aromatic rings containing
+        only carbon atoms (SSSAR based).</li>
+    <li><b>Fused aliphatic ring count:</b> number of aliphatic rings
+	having common bonds with other rings.</li>
+    <li><b>Fused aromatic ring count:</b> number of aromatic rings
+	having common bonds with other rings.</li>
+    <li><b>Fused ring count:</b> number of fused rings in the molecule
+	(having common bonds).</li>
+    <li><b>Hetero ring count:</b> number of rings containing hetero atom(s).</li>
+    <li><b>Heteroaromatic ring count:</b> number of aromatic
+	heterocycles in the molecule.</li>
+    <li><b>Largest ring size:</b> size of the largest ring in the
+	molecule.</li>
+    <li><b>Largest ring system size:</b> number of rings in the largest ring system.</li>
+    <li><b>Ring count:</b> number of rings in the molecule. This
+	calculation is based on SSSR (Smallest Set of Smallest Rings).</li>
+    <li><b>Ring system count:</b> number of disjunct ring systems.</li>
+    <li><b>Smallest ring size:</b> size of the smallest ring in the
+	molecule.</li>
+    <li><b>Smallest ring system size:</b> number of rings in the smallest ring system.</li>
+</ul>
+</p>
+<p><b><i>Path based</i></b>
+<ul>
+	<li><b>Platt index:</b> sum of the edge degrees of a molecular
+	graph.</li>
+	<li><b>Randic index:</b> harmonic sum of the geometric means of
+	the node degrees for each edge.</li>
+</ul>
+</p>
+
+<p><b><i>Distance based</i></b>
+<ul>
+	<li><b>Balaban index:</b> the Balaban distance connectivity of the
+	molecule, which is the average distance sum connectivity.</li>
+	<li><b>Distance degree:</b> the sum of the corresponding row
+	values in the distance matrix for each atom.</li>
+	<li><b>Eccentricity:</b> the greatest value in the corresponding
+	row of the distance matrix for each atom.</li>
+	<li><b>Harary index:</b> half-sum of the off-diagonal elements of
+	the reciprocal molecular distance matrix of the molecule.</li>
+	<li><b>Hyper Wiener index:</b> a variant of the Wiener index.</li>
+	<li><b>Szeged index:</b> The Szeged index extends the Wiener index
+	for cyclic graphs by counting the number of atoms on both sides of each
+	bond (those atoms only which are nearer to the given side of the bond
+	than to the other), and sum these counts.</li>
+	<li><b>Wiener index:</b> the average topological atom distance
+	(half of the sum of all atom distances) in the molecule.</li>
+	<li><b>Wiener polarity:</b> the number of 3 bond length distances
+	in the molecule.</li>
+</ul>
+</p>
+
+<p><b><i>Other</i></b>
+<ul>
+	<li><b>Cyclomatic number:</b> the smallest number of bonds which
+	must be removed so that no circuit remains. Also known as circuit
+	rank.</li>
+        <li><b>Fragment count</b>: number of fragments in the sketch.</li>
+	<li><b>Steric effect index:</b> topological steric effect index
+	(TSEI) of an atom calculated from the covalent radii values and
+	topological distances. The stericEffectIndex is related to the steric
+	hindrance of the given atom.</li>
+</ul>
+</p>
+<p>The result is shown in a separate window:
+</p>
+<p>
+<table>
+	<tr>
+		<td><img src="images/topolanal.png" width="605" height="574"></td>
+	</tr>
+</table>
+</p>
+<p>The contents of text field can be copied to the clipboard as text,
+the structure fields offers a MarvinView context menu.
+</p>
+
+
+
+<h2><a class="anchor" NAME="geometry">Geometry Plugin</a></h2>
+<p>The Geometry plugin provides characteristic values related to the
+geometrical structure of a molecule. It can calculate steric hindrance and Dreiding
+energy. The calculation can predict and use the lowest energy conformer 
+of the input structure.</p><p>The calculation and the display options can be set in the <b>Geometry
+Options</b> panel:</p>
+<p>
+<table>
+	<tr>
+		<td><img src="images/geometry_panel.png" width="499" height="589"/></td>
+	</tr>
+</table>
+</p>
+
+<ul>
+  <li><b>Type</b>
+    <ul>
+      <li><b>Dreiding energy:</b> calculates the energy related to the 3D structure (conformation) of the molecule using dreiding force field.</li>
+      <li><b>MMFF94 energy:</b> calculates the energy related to the 3D structure (conformation) of the molecule using MMFF94 force field.</li>
+	  <li><b>Steric hindrance:</b> steric hindrance of an atom calculated from
+      the covalent radii values and geometrical distances.</li>
+      <li><b>Minimal projection area:</b> calculates the minimum of projection 
+      areas of the conformer, based on the van der Waals radius (in &#197;<sup>2</sup>).</li>
+      <li><b>Maximal projection area:</b> calculates the maximum of projection areas
+      of the conformer, based on the van der Waals radius (in &#197;<sup>2</sup>).</li>
+      <li><b>Minimal projection radius:</b> calculates the radius for the minimal 
+      projection area of the conformer (in &#197;).</li>
+      <li><b>Maximal projection radius:</b> calculates the radius for the
+      maximal projection area of the conformer (in &#197;).</li>
+	  <li><b>Maximal distance perpendicular to the min projection:</b> calculates the maximal extension of the conformer perpendicular to the minimal projection area (in &#197;).</li>
+	  <li><b>Maximal distance perpendicular to the max projection:</b> calculates the maximal extension of the conformer perpendicular to the maximal projection area (in &#197;).</li>
+	  <li><b>van der Waals volume:</b> calculates the van der Waals volume of the conformer (in &#197;<sup>3</sup>).</li>
+    </ul>
+  </li> 
+  
+  <li><b>Energy unit:</b> gives dreiding energy in kcal/mol or kJ/mol.</li>
+  <li><b>Decimal places:</b>setting the number of decimal places with which the 
+  result value is given.</li>
+  <li><b>Radius scale factor:</b> atom radii from the periodic system are multiplied 
+  by this number.</li>
+  <li><b>Set MMFF94 optimalization</b>: The structure is optimized before MMFF94 energy calculation.</li>
+  <li><b>Set projection optimalization</b> The structure is optimized before projection area and projection radius calculation(s).</li>
+  <li><b>Calculate for lowest energy conformer:</b> 
+    <ul>
+      <li>If molecule is in 2D: the lowest energy conformer of the 2D molecule is generated, and its parameters 
+      calculated. 3D input molecules are considered in the given conformation.</li>
+      <li>Never: the input molecule is used for calculation.</li>
+      <li>Always: the lowest energy conformer is generated (3D and 2D molecules as well),
+      and its geometry parameters calculated.</li>
+    </ul>
+    </li>
+    <li><b>Optimization limit:</b>
+		<ul>
+			<li>Very loose</li>
+			<li>Normal</li>
+			<li>Strict</li>
+			<li>Very strict</li>
+		</ul>
+	</li>
+</ul>
+
+<table cellpadding="4">
+	<tr>
+		<td><img src="images/geometry.png" width="777" height="581"></td>
+	</tr>
+</table>
+
+
+<h2><a class="anchor" name="TPSA">Polar Surface Area Plugin (2D)</a></h2>
+<p>Polar surface area (PSA) is formed by polar atoms of a molecule.
+It is a descriptor that shows good correlation with passive molecular
+transport through membranes, and so allows estimation of transport
+properties of drugs. Estimation of topoligical polar surface area (TPSA)
+is based on the method given in <a HREF="#ref4">this paper</a>. The
+method provides results which are practically identical with the 3D PSA,
+while calculation time of TPSA is approximately 100-times faster. This
+method is more suitable for fast bioavailability screening of large
+virtual libraries. The TPSA value can be calculated both for the neutral form and 
+the major microspecies.</p>
+<p>The calculation and the display options can be set in the <b>Polar Surface Area (2D)
+Options</b> panel:</p>
+<p>
+<table>
+	<tr>
+		<td><img src="images/polar_surface_panel.png" width="250" height="187"></td>
+	</tr>
+</table>
+</p>
+
+<ul>
+	<li><b>Decimal places:</b>setting the number of decimal places with which
+    the result values are given.</li>
+	<li><b>Exclude sulfur atoms from calculation</b></li>
+	<li><b>Exclude phosphorus atoms from calculation</b></li>
+	<li><b>Take major microspecies at pH:</b> calculates the polar surface area
+    for the major microspecies present at the given pH.</li>
+</ul>
+<p>The result appears in a separate window, if several structures were drawn
+navigation is possible with a scroll bar:
+<p>
+
+<table>
+	<tr>
+		<td><img src="images/tpsa1.png" width="388" height="429"></td>
+		<td><img src="images/tpsa2.png" width="388" height="446"></td>
+	</tr>
+</table>
+</p>
+<p>The contents of the text field can be copied to the clipboard by Ctrl+C, the
+structure field offers a context menu from MarvinView.
+</p>
+
+<h2><a class="anchor" name="MSA">Molecular Surface Area Plugin (3D)</a></h2>
+<p>There are two types of available molecular surface area
+calculations, van der Waals and solvent accessible. Calculation method
+is based on the <a HREF="#ref4">publication of Ferrara et al.</a></p>
+<p>The calculation and the display options can be set in the <b>Molecular Surface Area (3D)
+Options</b> panel:</p>
+<p>
+<table>
+	<tr>
+		<td><img src="images/mol_surf_panel.png" width="199" height="265"></td>
+	</tr>
+</table>
+</p>
+
+<ul>
+	<li><b>Decimal places:</b>setting the number of decimal places with which the result values are given.</li>
+	<li><b>Surface Area</b>
+	<ul><li><b>Van der Waals:</b> calculates the van der Waals surface of the molecule (in &#197;<sup>2</sup>).</li>
+	<li><b>Solvent Accessible:</b> calculates the solvent accessible surface of the molecule (in &#197;<sup>2</sup>).</li>
+	</ul>
+	<li><b>Solvent radius:</b> setting here the radius of the solvent molecule (by default water, 1.4 &#197;).</li>
+	<li><b>Show surface area increments:</b> the increment by each atom is displayed.</li>
+	<li><b>Take major microspecies at pH:</b> the surface area of the major
+    microspecies present at the given pH is calculated.</li>
+</ul>
+
+<p>The result window contains the area values and the molecule in 3D view.
+The left picture shows the van der Waals surface and the right window the solvent accessible surface area:
+</p>
+<p>
+<table>
+	<tr>
+		<td><img src="images/msa1.png" width="387" height="526"></td>
+		<td><img src="images/msa2.png" width="387" height="525"></td>
+	</tr>
+</table>
+</p>
+<p>
+The values indicated in the text field of the result window of the solvent
+accessible surface area calculations are the following (all in &#197;<sup>2</sup>):</p>
+<ul>
+<li><b>ASA:</b> solvent accessible surface area calculated using the radius of
+the solvent (1.4 &#197; for the water molecule).</li>
+<li><b>ASA+:</b> solvent accessible surface area of all atoms with positive partial
+charge (strictly greater than 0).</li>
+<li><b>ASA-:</b> solvent accessible surface area of all atoms with negative partial
+charge (strictly less than 0).</li>
+<li><b>ASA_H:</b> solvent accessible surface area of all hydrophobic
+(|q<sub>i</sub>|<0.125) atoms (|q<sub>i</sub>| is the absolute value of the partial charge of the atom).</li>
+<li><b>ASA_P:</b> solvent accessible surface area of all polar (|q<sub>i</sub>|>0.125)
+atoms (|q<sub>i</sub>| is the absolute value of the partial charge of the atom).</li>
+
+</ul>
+
+
+<h2>References</h2>
+<ul>
+<li>Randic,M.,<i> Chem. Phys. Lett.,</i> <b>1993</b>, <i>211,</i> pp 478-483;
+<a href="http://dx.doi.org/10.1016/0009-2614(93)87094-J">doi</a></li>
+
+<li>Lucic, B., Lukovits, I., Nikolic, S., Trinajstic, N., <i>J. Chem. Inf. Comput.
+Sci.,</i> <b>2001</b>, <i>41(3),</i> pp 527-535; <a href="http://dx.doi.org/10.1021/ci0000777">doi</a></li>
+
+<li>Wiener, H., <i>J. Am. Chem. Soc.,</i> <b>1947,</b> <i>69(1)</i> pp 17 - 20;
+<a href="http://dx.doi.org/10.1021/ja01193a005">doi</a></li>
+
+<li><a class="text" name="ref4">Ertl, P., Rohde, B., Selzer, P., <i>J.
+	Med. Chem.</i>, <b>2000,</b> <i>43,</i> pp. 3714-3717; <a href="http://dx.doi.org/10.1021/jm000942e">doi</a></a></li>
+
+<li><a class="text" name="ref6">Ferrara, P,. Apostolakis J., Caflisch A., <i>Proteins</i>
+	<b>2002,</b> <i>46,</i> 24-33; <a href="http://dx.doi.org/10.1002/prot.10001">doi</a></a></li>
+</ul>
+
+</body>
+</html>

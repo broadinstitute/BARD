@@ -1,0 +1,69 @@
+<html>
+<head>
+<meta NAME="author" CONTENT="Tamas Vertse">
+    <script type="text/javascript" src="../../sh_main.js"></script>
+    <script type="text/javascript" src="../../sh_javascript.js"></script>
+    <script type="text/javascript" src="../../sh_html.js"></script>
+    <link REL ="stylesheet" TYPE="text/css" HREF="../../sh_nedit.css" TITLE="Style">
+<link REL ="stylesheet" TYPE="text/css" HREF="../../../marvinmanuals.css" TITLE="Style">
+<title>MarvinSketch Example - Abbreviated groups</title>
+</head>
+<body onload="sh_highlightDocument();">
+
+<h1>MarvinSketch Example - Abbreviated groups</h1>
+
+<p><a href="../../../help/sketch/sketch-chem.html#sgroups">Abbreviated groups</a>,
+also called abbreviated S-groups in MarvinSketch are used to represent a part of a structure with a text abbreviation.</p>
+<p>The label of these abbreviations depend on the orientation. For example nitro
+is printed with O2N if connected from the left, or NO2 if connected from the
+right to its scaffold. The labels are updated dynamically upon the rotation of
+the molecule.</p>
+<p>A collection of predefined abbreviated S-groups are available in MarvinSketch.
+The complete set is accessible in the <b>Insert &gt; Groups</b> menu
+along with a shortcut for each group.</p>
+<p>It is possible to <em>replace the full built-in abbreviated group collection with a custom one</em>
+using the <a href="../../../help/developer/sketchman.html#parameters.abbrevgroups"><code>abbrevgroups</code></a> parameter as demonstrated by this example.
+</p>
+<p>
+<center>
+<script type="text/javascript" SRC="../../../marvin.js"></script>
+<script type="text/javascript">
+<!--
+msketch_begin("../../..", 540, 480);
+msketch_param("abbrevgroups", "examples/applets/sketch/rightName.abbrevgroup");
+msketch_end();
+//-->
+</script>
+</center>
+
+<p>This example applet above contains only those abbreviated groups that have <a href="../../../help/formats/abbrevgroup-doc.html">left and right abbreviations</a>.</p>
+
+<p>
+The desired definitions should be enumerated in a file in
+<a href="../../../help/formats/abbrevgroup-doc.html">ChemAxon SMILES Abbreviated Groups</a> format and the file should be uploaded to the server beside the applet.
+The value of the <code>abbrevgroups</code> parameter should be the location of this file.</p>
+<p>This example uses the custom abbreviated group file: <a href="rightName.abbrevgroup"><code>rightName.abbrevgroup</code></a>.<br>
+It is located in the same directory as the html file that contains the applet example itself.</p>
+
+<p>The source of the applet example is shown below:</p>
+<blockquote>
+<pre class="sh_html">
+&lt;script type=&quot;text/javascript&quot; SRC=&quot;../../../<a HREF="../marvin.js.txt">marvin.js</a>&quot;&gt;&lt;/script&gt;
+&lt;script type=&quot;text/javascript&quot;&gt;
+&lt;!--
+</pre><pre class="sh_javascript">msketch_begin(&quot;../../..&quot;, 540, 480);
+msketch_param(&quot;<a HREF="../../../help/developer/sketchman.html#parameters.abbrevgroups">abbrevgroups</a>&quot;, &quot;examples/applets/sketch/rightName.abbrevgroup&quot;);
+msketch_end();
+</pre><pre class="sh_html">//--&gt;
+&lt;/script&gt;
+</pre>
+</blockquote>
+
+<p>
+<center><div class="lenia">&nbsp;</div></center>
+
+<p>
+In the <a HREF="guicustomization.html">next example</a>, the Graphical User Interface is customized.
+</p>
+</body>
+</html>

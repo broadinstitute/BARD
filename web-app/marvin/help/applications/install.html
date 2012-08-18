@@ -1,0 +1,332 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+	<META HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=utf-8">
+        <META name="author" content="Tamas Vertse">
+	<TITLE>MarvinSketch Help</TITLE>
+ <link rel=stylesheet type="text/css" href="../marvinmanuals.css">
+</HEAD>
+<BODY>
+<H1>Installation &amp; System Requirements</H1>
+
+<h2>Contents</h2>
+<p>
+<ul>
+    <li><a href="#applets_and_applications">1. Marvin Applets or Marvin Beans?</a></li>
+    <li><a href="#requirements">2. System Requirements</a>
+        <ul>
+            <li><a href="#applet_req">2.1. Marvin Applets</a></li>
+            <li><a href="#beans_java_req">2.2. Marvin Beans for Java</a></li>
+            <li><a href="#beans_net_req">2.3. Marvin Beans for .NET</a></li>
+            <li><a href="#getJava">2.4. How to get Java?</a></li>
+            <li><a href="#getNET">2.5. How to get .NET Framework?</a></li>
+        </ul>
+    </li>
+    <li><a href="#installation">3. Installation</a>
+        <ul>
+            <li><a href="#install_applets">3.1. Marvin Applets</a></li>
+            <li><a href="#install_applications">3.2. Marvin Beans for Java</a>
+                <ul>
+                    <li><a href="#install_windows">3.2.1. Windows</a></li>
+                    <li><a href="#install_mac">3.2.2. MAC OS X</a></li>
+                    <li><a href="#install_linux">3.2.3. Linux / Solaris</a></li>
+                    <li><a href="#install_other">3.2.4. Other platforms</a></li>
+                    <li><a href="#uninstall">3.2.5. How to uninstall?</a></li>
+                    <li><a href="#signedjars">3.2.6. Additional package</a></li>
+                </ul>
+            </li>
+            <li><a href="#install_beans_net">3.3. Marvin Beans for .NET</a></li>
+        </ul>
+    </li>
+	<li><a href="#version_number">4. Version Number</a>
+</ul>
+
+<hr>
+
+<h2><a name="applets_and_applications" class="anchor">1. Marvin Applets or Marvin Beans?</a></h2>
+<P>Marvin is separated to two packages depending on how you want to use it</P>
+<ul>
+    <li><strong>Marvin Applets</strong> for the web developer</li>
+    <li><strong>Marvin Beans</strong> for the chemist's desktop and for the software developer</li>
+</ul>
+<p>
+    <b>Marvin Applets</b> are tools for building chemical web pages, which are compatible with most browsers
+    (Internet Explorer, Firefox, Safari, Opera, etc.). They offer access from/to JavaScript and are
+    customizable by applet parameters.<br>
+    Note, that the applets are <a href="../developer/applets/signing.html">signed</a> that allows the same feature set as the applications.
+</p>
+
+<p>
+<b>Marvin Beans</b> are easy-to-install applications for the desktop <em>and</em> tools for integrating
+    Marvin capabilities into any application.
+
+<h2><a name="requirements" class="anchor">2. System Requirements</a></h2>
+<h3><a name="applet_req">2.1. Marvin Applets</a></h3>
+<ul>
+    <li><a href="#getJava">Java</a> distributed by Sun (or Apple's Mac OS X built-in Java)</li>
+    <li>Version: Java 6 or higher version</li>
+    <li><A HREF="../developer/applets/browsers.html">Java 2 enabled browser</A></li>
+</ul>
+<h3><a name="beans_java_req">2.2. Marvin Beans for Java</a></h3>
+<ul>
+    <li><a href="#getJava">Java</a> distributed by Sun (or Apple's Mac OS X built-in Java)</li>
+    <li>Version: Java 6 or higher version</li>
+</ul>
+<h3><a name="beans_net_req">2.3. Marvin Beans for .NET</a></h3>
+<ul>
+    <li>.NET framework 2.0 SP2</li>
+</ul>
+
+<h3><a name="getJava" class="anchor">2.4. How to get Java?</a></h3>
+<p>You can download <strong>Sun's</strong> Java from Sun's <a HREF="http://java.sun.com/j2se/downloads.html">official site</a> or contact your OS manufacturer.</p>
+<p>If you use <strong>Mac OS X</strong>, probably Java is already installed on your machine. If not, select <strong>Java</strong> in the <strong>Software Update</strong> center to install or update.</p>
+<p><b>Which Java do I need?</b> You must have a copy of the Java Runtime Environment (JRE) on your system to <b>run</b> applications and applets. To <b>develop</b> applications and applets, you need the Java Development Kit, which includes the JRE.</p>
+
+<p>If you are not sure whether Java is installed or not on Windows, you can check it the following way:
+<ol>
+    <li>Select <em>Command Prompt</em> from the <em>Accessories</em>
+    sub-menu in the <em>Start</em> menu.</li>
+    <li>Type the following commands in the opened Command Prompt window:
+    <em>java -version</em></li>
+    <li>You will get the following error message if Java is not
+    available on your machine:
+    <em><pre>'java' is not recognized as internal or external command, operable program or batch file</pre></em>
+    If Java is installed, the version number of Java will be
+    printed:
+    <em><pre>java version "1.6.0_24"
+Java(TM) SE Runtime Environment (build 1.6.0_24-b07)
+Java HotSpot(TM) 64-Bit Server VM (build 19.1-b02, mixed mode)</pre></em></li>
+</ol>
+
+
+<h3><a name="getNET" class="anchor">2.5. How to get .NET framework?</a></h3>
+You can download the .NET framework from Microsoft's official site. The minimum requirement is version 2.0 SP2.
+<ul>
+    <li><a href="http://www.microsoft.com/downloads/details.aspx?FamilyID=0856eacb-4362-4b0d-8edd-aab15c5e04f5&displayLang=en"><b>.NET framework 2.0 SP2</b></a></li>
+    <li><a href="http://www.microsoft.com/downloads/details.aspx?FamilyId=333325FD-AE52-4E35-B531-508D977D32A6&displaylang=en">.NET framework 3.5</a></li>
+</ul>
+
+<h2><a name="installation" class="anchor">3. Installation</a></h2>
+
+<h3><a name="install_applets" class="anchor">3.1. Marvin Applets</a></h3>
+<ol>
+<li>Download the Marvin Applets package according to your platform from the <a href="../../download-dev.html#marvinapplets">Marvin download page</a>.<br>
+(<code>.tar.gz</code> is recommended for Unix-like platforms, <code>.zip</code> for others).</li>
+
+<li>You need a web server on the machine where you would like to install the
+      Marvin Applets package (because applets work properly only through HTTP
+      protocol). If there is no web server on the target machine, we suggest to use
+      <a href="http://tomcat.apache.org/index.html">Tomcat</a>.</li>
+      <li>Extract <code>marvin-all-VERSION.tar.gz</code> (in Unix or in Mac OS X) or
+      <code>marvin-all-VERSION.zip</code> (in MS Windows)
+      in the parent directory of "marvin", where <code>VERSION</code> is the current version number.</li>
+      <li>Modify the settings of the web server if the directory of Marvin is
+      not accessible from the web server root. Then restart it (if it is
+      necessary) to validate new settings. (Consult with the manual of the web server how to do it.)</li>
+      <li>Open the <code>index.html</code> file in a browser.</li>
+      </ol>
+      <p><strong>Removing any</strong> binary (<em>jar</em> or <em>zip</em>) or configuration (<em>properties</em> or <em>xml</em>) <strong>file</strong> from the applet <strong>package</strong> can <strong>cause</strong> unexcepted <strong>error or limitation in the usage.</strong></p>
+
+<h3><a name="install_applications" class="anchor">3.2. Marvin Beans for Java</a></h3>
+Download the package according to your platform from one of the links below:
+<ul>
+    <li><a href="../../download-user.html"><b>Download Marvin for End Users</b></a> to install desktop applications</li>
+    <li><a href="../../download-dev.html#marvinbeans"><b>Download Marvin for Developers</b></a> to use the tools for application development</li>
+</ul>
+
+<h4><a name="install_windows">3.2.1. Windows</a></h4>
+<p>If you have a 64-bit Windows, you can choose both the normal (32-bit) Marvin Beans installer or its 64-bit version.</p>
+<p>The following table helps you to choose which installer can you use on your platform.</p>
+<table  CELLSPACING=0 CELLPADDING=5 BORDER=1 id="colored" align="center">
+<tr align="center"><th rowspan=2>Installer</th>
+<th colspan=2>32-bit Windows</th>
+<th colspan=3>64-bit Windows</th></tr>
+<tr align="center"><th>without Java</th><th>with Java</th><th>without Java</th><th> with 32-bit Java</th><th>with 64-bit Java</th></tr>
+<tr align="center">
+<th align="left">marvinbeans-VERSION-windows.exe</th><td> NO </td><td> YES </td><td> NO </td><td> YES </td> <td> NO </td>
+</tr>
+<tr align="center">
+<th align="left">marvinbeans-VERSION-windows_with_jre.exe (bundled with 32-bit Java)</th><td> YES </td><td> YES </td><td> YES </td><td> YES </td> <td> YES </td>
+</tr>
+<tr align="center">
+<th align="left">marvinbeans_VERSION-windows_64bit.exe</th><td> NO </td><td> NO </td><td> NO </td><td> NO </td> <td> YES </td>
+</table>
+<p>If you have a 64-bit Windows, follow the instructions in the <a href="#install_windows64">64-bit Windows</a> section.</p>
+<ol>
+    <li>Double-click on
+    <b><code>marvinbeans-VERSION-windows.exe</code></b> or
+    <b><code>marvinbeans-VERSION-windows_with_jre.exe</code></b> to install.</li>
+    <li>You can add the <code>bin</code> folder of
+    Marvin Beans to the PATH environment variable to be able to run Marvin applications from any directory
+    in the command line. Details about editing environment variables is described in Windows Help.</li>
+</ol>
+<b>Notes:</b>
+<ul>
+<li>Please <b>make sure to close all running Marvin applications before starting the installer</b> otherwise
+it may not be able to perform the installation correctly (overwriting certain <code>.jar</code> files is not possible
+if they are being used by a running application).<br>
+Running applications may include:
+<ul>
+    <li>Marvin desktop applications</li>
+    <li>MS-Office documents where Marvin Objects are being edited</li>
+    <li>Running applications where Marvin is embedded, like Instant JChem</li>
+</ul>
+In <a href="../images/install-error.png">this image</a>, you can see an error message displayed during installation.
+Checking the running processes you can find that <code>marvinOLEServer.exe</code> is running, which means that an MS-Office document is just using Marvin.</li>
+<li>You can run the installer in <b>silent/non-interactive mode</b>, which means that in case Marvin is already installed, it will be overwritten with the update without the need of checking the "OK" and "Next" buttons on the installer dialogs.
+To enable this mode, use the <code>-q</code> option (for example open the command prompt with <code>cmd.exe</code> and type "<code>marvinbeans-5_3_0.exe -q</code>").
+</ul>
+
+<h5><a name="install_windows64">64-bit Windows</a></h5>
+<p><strong>System requirements:</strong> 64-bit Windows system having an installed Java for 64-bit architecture.</p>
+<ol>
+<li>After downloading <strong>marvinbeans-VERSION-windows_64bit.exe</strong>, take a
+double-click on the downloaded file (accept running if Windows expects verification).</li>
+<li>Installer is started: go through the installation wizard. The installer will setup the 64-bit version of JChem_NET_API automatically (that is wrapped into the installer).</li>
+</ol>
+<a name="notes_windows"><strong>Notes:</strong></a>
+<ul>
+	<li>JChem_NET_API is required to be able to insert Marvin OLE (embedded object) into MS-Office document or transfer it between Marvin and the MS-Office applications.</li>
+	<li>Earlier versions of MS-Office suites are not available in 64-bit format. If your Office does not
+support 64-bit platform, you cannot use the OLE functionality of 64-bit version of Marvin. In this case, install 32-bit version of Marvin Beans and JChem_NET_API that can incorporate with 32-bit Office applications.</li>
+	<li>When you edit an embedded Marvin Object in Office, the editor can be different depending on the platform.
+		<ul>
+			<li>MS-Office 32-bit requires 32-bit JChem .NET API for Marvin embedding. It uses 32-bit .NET implementation of MarvinSketch unless 32-bit Marvin Beans package is installed. In this case, it prefers the 32-bit Java implementation.</li>
+			<li>MS-Office 64-bit requires 64-bit JChem .NET API for Marvin embedding. The 64-bit .NET implentation of MarvinSketch is used in all cases.</li>
+		</ul>
+	</li>
+	<li>See further notes in 32-bit Windows section: 
+	<a href="#notes_windows">here</a>.
+</ul>
+
+<h4><a name="install_mac">3.2.2. MAC OS X</a></h4>
+<ol>
+    <li>Double-click<b>
+    <code>marvinbeans-VERSION-macos.dmg</code></b> to install.
+    <li>You can add the <code>bin</code>
+    folder of the Marvin Beans folder to the PATH to be able
+    to run Marvin applications from any directory in command line.
+</ol>
+<b>Notes:</b>
+    <ul>
+        <li>Requires Mac OS X 10.0 or later</li>
+        <li>The compressed installer should be recognized by Stuffit Expander
+        and should automatically be expanded after downloading.
+        If it is not expanded, you can expand it manually using
+        <a href="http://www.aladdinsys.com/expander/index.html">
+        StuffIt Expander 6.0 or later</a>.</li>
+        <li>If you have any problems launching the installer once it has been
+        expanded, make sure that the compressed installer was expanded using
+        Stuffit Expander.
+        If you still have problems, please contact our technical support.</li>
+		<li>You can run the installer in <b>silent/non-interactive mode</b>, which means that in case Marvin is already installed, it will be overwritten with the update without the need of confirmation.
+To enable this mode, use the <code>-q</code> option.</li>
+    </ul>
+
+
+
+<h4><a name="install_linux">3.2.3. Linux / Solaris</a></h4>
+    <ol>
+	<li>Open a shell and
+	<b><code>cd</code></b> to the directory where you downloaded
+	the installer.</li>
+	<li>Type the following to install: <b><code>sh marvinbeans-VERSION-linux.sh
+	</code></b> (or <strong><code>sh marvinbeans-VERSION-linux_with_jre.sh</code></strong> 
+	depend on which package has been downloaded).</li>
+	<li>You can add the <code>bin</code>
+	subdirectory of the Marvin Beans directory to the PATH to be able
+	to run Marvin applications from any directory.</li>
+    </ol>
+    <b>Notes:</b>
+    <ul>
+        <li>If the installer does not start, check whether <b>JAVA_HOME/bin</b>
+         is in PATH (where JAVA_HOME is the directory of Java).<br>
+        To check it, type the "<b>which&nbsp;java</b>" command that shows the
+        location of the Java launcher. You should get something like this:
+        <pre>/usr/java/jdk1.5/bin/java</pre>
+        If Java is missing from PATH, you will see something like that:
+        <pre>/usr/bin/which: no java in (/usr/java/jdk1.5/bin:/opt/apache-ant-1.6.1/bin:/usr/kerberos/bin:/usr/local/bin:/bin:/usr/bin:/usr/X11R6/bin:/home/vertset/bin)</pre></li>
+        <li>You can run the installer in <b>silent/non-interactive mode</b>, which means that in case Marvin is already installed, it will be overwritten with the update without the need of confirmation.
+        To enable this mode, use the <code>-q</code> option. If you are in terminal mode (GUI is not accessible), we recommend to use this option.</li>
+    </ul>
+
+
+<h4><a name="install_other">3.2.4. Other Platforms</a></h4>
+<ol>
+    <li>Go to the directory where
+    <b><code>marvinbeans-VERSION.zip</code></b> was downloaded then uncompress the zip file.
+    <li>You can start applications via scripts or batch files that you
+    can find in the <code>marvinbeans/bin</code> directory.
+</ol>
+<b>Notes:</b>
+<ul><li>You need an expander which can handle <code>zip</code>
+    extension.
+    <li>Batch files (<code>bin/*.bat</code>) have to be initialized before the
+    first use. Set the <code>MARVINBEANSHOME</code> variable in the files to
+    the full path of the directory where Marvin Beans is located.
+</ul>
+
+<h4><a name="uninstall">3.2.5. How to uninstall?</a></h4>
+Use the uninstaller to remove Marvin Beans from your machine. If you give the <strong>-q</strong> command line parameter 
+by running the uninstaller, it will run in silent mode (no GUI, non-interactive mode).
+	<ul>
+        <li><b>Windows: </b>
+        Double click on <code>uninstall.exe</code> in the Marvin Beans's home
+        folder or select Marvin Beans from the
+        <em>Add / Remove programs</em> list on
+        <em>Control Panel</em>.</li>
+	<li><b>OS X: </b>
+	Double click on <code>uninstall</code> in the Marvin Beans' home
+        directory.</li>
+	<li><b>Linux / Solaris: </b>
+	Launch the <code>uninstall</code> script in the Marvin Beans' home
+        directory.</li>
+	</ul>
+
+<h4><a class="anchor" name="signedjars">3.2.6. Additional package</a></h4>
+<blockquote>
+    <b>Who needs this package?</b>
+    <p>Install <code>marvinbeans-lib-VERSION-signed.zip</code> only
+    if you need the <em>signed version</em> of the Marvin Beans package.<br>
+    If you would like to launch Marvin applications via Java Web Start
+    from your server, you will need the signed version for security reasons.<br>
+    Please note that this archive can only be used as an extension of the already installed 
+    Marvin Beans package.
+    </p>
+    <b>Installation</b>
+<ol>
+    <li>Check the product version of the Marvin Beans package you have already installed.
+    You can find the product version of your installed disribution in the <em>Help > About dialog</em>
+    or in the <code>version.properties</code> file located in the Marvin Beans installation directory.</li>
+    <li>Download the additional package for exactly the same version:
+        <strong>marvinbeans-lib-VERSION-signed.zip</strong>.</li>
+    <li>Create a backup of the <strong>lib</strong> sub-directory of
+    your Marvin Beans package.</li>
+    <li>Extract the <strong>marvinbeans-lib-VERSION-signed.zip</strong>
+    archive file into the
+        Marvin Beans directory.
+        Your extractor tool (e.g. <em>unzip</em> or <em>WinZip</em>) may ask confirmation to
+        update all files by unwrapping. In this case let it overwrite all.
+        This operation will update the jar files (overwrite them with the signed versions)
+        in the <strong>lib</strong> sub-directory of
+        the installed Marvin Beans package.</li>
+</ol>
+</blockquote>
+
+<h3><a name="install_beans_net" class="anchor">3.3. Marvin Beans for .NET</a></h3>
+
+<p>The Marvin Beans package for .NET platform can be downloaded from <a href="../../download-dev-dotnet.html">this link</a>.<br>
+    
+</p>
+<h2><a name="version_number" class="anchor">4. Version Number</a></h2>
+From the Marvin version 5.7, in the file name of any downloadable artifacts, an identifier appears that indicates the internal build number of the file. This identifier begins with _b and continous with a number. It is automatically generated and help to identify the file in the build system of ChemAxon.
+
+<p>&nbsp;</p>
+
+<center><div class="lenia">&nbsp;</div></center>
+<p align="center"><small>Copyright &copy; 1998-2012
+<a href="http://www.chemaxon.com" target="_top">ChemAxon Ltd.</a>
+&nbsp;&nbsp;&nbsp;All rights reserved.</small></p>
+
+</BODY>
+</HTML>

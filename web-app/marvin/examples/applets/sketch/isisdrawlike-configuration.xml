@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<customization active="config1">
+  <scheme id="config1" name="ISIS/Draw-like">
+    <add path="menubar/object-menu/atom-menu">
+      <menu id="CustomMenu-0" name="Substitution count">
+        <item id="atomSubst.off"/>
+        <item id="atomSubst.s*"/>
+        <item id="atomSubst.s0"/>
+        <item id="atomSubst.s1"/>
+        <item id="atomSubst.s2"/>
+        <item id="atomSubst.s3"/>
+        <item id="atomSubst.s4"/>
+        <item id="atomSubst.s5"/>
+        <item id="atomSubst.s6"/>
+      </menu>
+    </add>
+    <order path="menubar/object-menu/atom-menu" itemorder="stereo-menu/atomCharge/radical-menu/atomIsotope/CustomMenu-0/atomMap/atomRgroup/group-menu/atomLinkNode/sep-1/branchAtom/removeAtom"/>
+    <add path="menubar/templates-menu">
+      <item id="generics"/>
+    </add>
+    <order path="menubar/templates-menu" itemorder="templates/generics/template.0/template.1/template.2/template.3/template.4/template.5/template.6/template.7/template.8/template.9/template.128/sep/abbrevGroups"/>
+    <modify path="toolbar/config1_1" row="0" index="0"/>
+    <modify path="toolbar/config1_2" row="0"/>
+    <add path="toolbar/config1_2">
+      <item id="generics"/>
+    </add>
+    <order path="toolbar/config1_2" itemorder="checkStructure/sep1/undo/redo/sep2/templates/generics"/>
+    <modify path="toolbar/mytemplates" row="0"/>
+    <add path="popup/atom/atom-popup-menu">
+      <menu id="CustomMenu-0" name="Substitution count">
+        <item id="atomSubst.off"/>
+        <item id="atomSubst.s*"/>
+        <item id="atomSubst.s0"/>
+        <item id="atomSubst.s1"/>
+        <item id="atomSubst.s2"/>
+        <item id="atomSubst.s3"/>
+        <item id="atomSubst.s4"/>
+        <item id="atomSubst.s5"/>
+        <item id="atomSubst.s6"/>
+      </menu>
+    </add>
+    <order path="popup/atom/atom-popup-menu" itemorder="stereo-menu/atomCharge/atom-valence/radical-menu/atomIsotope/CustomMenu-0/atomMap/atomRgroup/atomLinkNode/attachmentPoint/atom-sep-2/branchAtom/removeAtom"/>
+  </scheme>
+</customization>

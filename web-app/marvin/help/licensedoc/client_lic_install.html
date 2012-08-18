@@ -1,0 +1,102 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+    <link rel="stylesheet" href="../marvinmanuals.css" type="text/css">
+    <title>Installing Licenses to Desktops</title>
+</head>
+<body>
+    <h1>Installing Licenses to Desktops</h1>
+
+<p>The recommended method of installing licenses to desktops is through the</p>
+
+    <h2><a name="gui" class="anchor">ChemAxon License Manager GUI (CLM)</a></h2>
+    ChemAxon License Manager is a central place where you can manage the licenses of all ChemAxon products.
+    Three basic ways of launching:
+    <ul>
+        <li>Choose "Licenses..." from the <b>Help menu</b> of any ChemAxon application.</li>
+        <li>The <b>Start menu on Windows</b>: Start-&gt;Programs-&gt;ChemAxon contains several packages. <br>
+            You can find the same CLM in any package.</li>
+        <li>Launch using the <code>license</code> shell script (Unix) or <code>license.bat</code>
+batch file (Windows).</li>
+    </ul>
+    <h3>The CLM graphical user interface</h3>
+    <img src="clm.png" alt="The ChemAxon License Manager GUI">
+
+    <h3>Steps of installing the licenses</h3>
+    The licenses are usually stored in the <strong><code>license.cxl</code></strong> file
+    which you receive from ChemAxon.<br>
+    You don't need to open or edit the content of this file, just simply
+    save it to an arbitrary location of your file system.
+    <ul>
+        <li>Click on the Browse... button</li>
+        <li>Select the location where you have saved your license.cxl file.</li>
+        <li>Press the Install button</li>
+        <li>Installing licenses is complete, you will see a license overview where you can see the installed licenses.</li>
+    </ul>
+    You can overview your licenses any time by selecting the "License overview" panel.
+
+    <h2>Other ways of installing the license:</h2>
+
+  <ol>  <li><a name="variable" class="text"><b>Using system variables:</b></a><br>
+    The location of the license file can be set with:
+        <ul>
+            <li><code>chemaxon.license.url</code> <em>Java system property</em><br>
+                Example: <code>-Dchemaxon.license.url=C:\ChemAxon\license.cxl</code>
+            </li>
+            <li><code>CHEMAXON_LICENSE_URL</code> <em>environment variable</em></li>
+        </ul>
+    </li>
+    <li><a name="manual" class="text"><b>Manual install:</b></a><br>
+    The license.cxl file must be stored in the <code>.chemaxon</code> (Unix) or
+        <code>chemaxon</code> (Windows) sub-directory of the user's
+         home directory.
+    </li>
+    <li><a name="cmdline" class="text"><b>Command line install:</b></a><br>
+    Launch the <code>license</code> shell script (Unix) or <code>license.bat</code>
+batch file (Windows). <br>
+    Type <code>license -h</code> for the list of available options.
+
+    </li>
+    <li><a name="api" class="text"><b>Using API:</b></a><br>
+        <a href="../developer/beans/api/chemaxon/license/LicenseManager.html#setLicenseFile(java.lang.String)"><code>chemaxon.license.LicenseManager.setLicenseFile(String path)</code></a>
+    </li>
+</ol>
+
+<h4>License file location</h4>
+The license file should either be at the default location or in case of a custom
+location, the location should be configured to the license manager.
+
+<p>The <em>default location</em> is <code>.chemaxon/license.cxl</code> (Unix)
+or <code>chemaxon\license.cxl</code> (Windows) under the user's home directory.<br>
+On Unix systems - including most distributions of Linux -
+the home directory for each user takes the form <code>/home/username</code>
+(where <code>username</code> is the name of the user account).
+In newer versions of Microsoft Windows, based on the multi-user Windows NT,
+each user has a home directory which by default is located at
+<code>C:\Documents and Settings\username</code> when using the English language
+version of the OS (with <code>username</code> again replaced by the particular
+user's login name).</p>
+
+ <h4>   Notes </h4>
+ <ul><li>The License Manager only installs licenses for the current user.</li>
+ <li>To install license files for server-side applications please refer to
+ <a href="server_lic_install.html">this guide</a>.</li>
+ <li><a href="licensing_old.html">Read this documentation</a> for installing license files issued
+ for versions prior to 5.0.</li>
+ </ul>
+
+
+<!--    <h3>Steps of installing the old type licenses</h3>
+    These license keys are usually stored in the <strong><code>licenses.dat</code></strong> file.
+    If you only have the license keys in text form, please create a licenses.dat file,
+    and copy all of the keys to it. Save this file to an arbitrary location of your file system.
+    <ul>
+        <li>Click on the Browse... button</li>
+        <li>Change the "Files of Type" to "Old ChemAxon License Files (*.dat)"</li>
+        <li>Select the location where you have saved your licenses.dat file.</li>
+        <li>Press the Install button</li>
+        <li>Installing licenses is complete, you will see a license overview where you can see the installed licenses.</li>
+    </ul>
+    You can overview your licenses any time by selecting the "License overview" panel.-->
+</body>
+</html>
