@@ -7,14 +7,19 @@ import grails.test.mixin.TestFor
 import spock.lang.Specification
 import wslite.json.JSONArray
 import wslite.json.JSONObject
+import com.metasieve.shoppingcart.ShoppingCartService
+import grails.test.mixin.TestMixin
+import grails.test.mixin.support.GrailsUnitTestMixin
 
 /**
  * See the API for {@link grails.test.mixin.support.GrailsUnitTestMixin} for usage instructions
  */
+@TestMixin(GrailsUnitTestMixin)
 @TestFor(BardWebInterfaceController)
 class BardWebInterfaceControllerUnitSpec extends Specification {
 
     QueryService queryService
+    ShoppingCartService shoppingCartService
 
     final private static String compoundDocumentJson = '''{"probeId":"null","sids":[4243156,24368917],"smiles":"C-C","cid":"3237916"}'''
 
@@ -40,11 +45,26 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
     void setup() {
         queryService = Mock(QueryService)
         controller.queryService = this.queryService
+        shoppingCartService = Mock(ShoppingCartService)
+        controller.shoppingCartService = this.shoppingCartService
     }
 
     void tearDown() {
         // Tear down logic here
     }
+
+
+    void "Demonstrate that there are carts assays"() {
+        when:
+        assertNotNull shoppingCartService
+        CartAssay cartAssay = new CartAssay(assayTitle: "foo")
+
+        then:
+        assertNotNull cartAssay
+    }
+
+
+
 
     void "test showCompound #label"() {
         when:

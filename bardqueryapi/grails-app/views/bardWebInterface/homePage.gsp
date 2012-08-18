@@ -1,11 +1,10 @@
-<%@ page import="bardqueryapi.SearchType; bard.db.registration.*; com.metasieve.shoppingcart.*; com.metasieve.shoppingcart.Shoppable.*;" %>
+<%@ page import="bardqueryapi.CartAssay; bardqueryapi.SearchType; bard.db.registration.*; com.metasieve.shoppingcart.*; com.metasieve.shoppingcart.Shoppable.*;" %>
 <!DOCTYPE html>
 <html>
 <head>
     <meta name="layout" content="main"/>
     <r:require modules="core"/>
     <r:require modules="bootstrap"/>
-    <r:require modules="backbone_grid"/>
 
 
     <r:script>
@@ -159,14 +158,14 @@
     <sc:each>
         <tr>
             <td>
-                ${findByShoppingItem(it['item']) ?: ShoppingCartInterfaceTestProduct.findByShoppingItem(it['item'])}
+                ${CartAssay.findByShoppingItem(it['item'])}
             </td>
             <td>
                 ${it['qty']}
             </td>
             <td>
                 <g:remoteLink action="add"
-                              params="${[id:(findByShoppingItem(it['item']) ?: ShoppingCartInterfaceTestProduct.findByShoppingItem(it['item'])).id, class:(findByShoppingItem(it['item']) ?: ShoppingCartInterfaceTestProduct.findByShoppingItem(it['item'])).class, version:(findByShoppingItem(it['item']) ?: ShoppingCartInterfaceTestProduct.findByShoppingItem(it['item'])).version]}"
+                              params="${[id:CartAssay.findByShoppingItem(it['item']).id, class:(CartAssay.findByShoppingItem(it['item'])).class, version:(CartAssay.findByShoppingItem(it['item'])).version]}"
                               update="shoppingCartContent"
                               onComplete="Effect.Pulsate('shoppingCartContent', {pulses: 1, duration: 1.0});">
                     Add
@@ -174,7 +173,7 @@
             </td>
             <td>
                 <g:remoteLink action="remove"
-                              params="${[id:(findByShoppingItem(it['item']) ?: ShoppingCartInterfaceTestProduct.findByShoppingItem(it['item'])).id, class:(findByShoppingItem(it['item']) ?: ShoppingCartInterfaceTestProduct.findByShoppingItem(it['item'])).class, version:(findByShoppingItem(it['item']) ?: ShoppingCartInterfaceTestProduct.findByShoppingItem(it['item'])).version]}"
+                              params="${[id:CartAssay.findByShoppingItem(it['item']).id, class:(CartAssay.findByShoppingItem(it['item'])).class, version:(CartAssay.findByShoppingItem(it['item'])).version]}"
                               update="shoppingCartContent"
                               onComplete="Effect.Pulsate('shoppingCartContent', {pulses: 1, duration: 1.0});">
                     Remove
@@ -182,7 +181,7 @@
             </td>
             <td>
                 <g:remoteLink action="removeAll"
-                              params="${[id:(findByShoppingItem(it['item']) ?: ShoppingCartInterfaceTestProduct.findByShoppingItem(it['item'])).id, class:(findByShoppingItem(it['item']) ?: ShoppingCartInterfaceTestProduct.findByShoppingItem(it['item'])).class, version:(findByShoppingItem(it['item']) ?: ShoppingCartInterfaceTestProduct.findByShoppingItem(it['item'])).version]}"
+                              params="${[id:CartAssay.findByShoppingItem(it['item']).id, class:(CartAssay.findByShoppingItem(it['item'])).class, version:(CartAssay.findByShoppingItem(it['item'])).version]}"
                               update="shoppingCartContent"
                               onComplete="Effect.Pulsate('shoppingCartContent', {pulses: 1, duration: 1.0});">
                     Remove All
@@ -201,7 +200,7 @@
         <g:each in="${checkedOutItems}" var="item">
             <tr>
                 <td>
-                    ${com.metasieve.shoppingcart.Shoppable.findByShoppingItem(item['item']) ?: com.metasieve.shoppingcart.ShoppingCartInterfaceTestProduct.findByShoppingItem(item['item'])}
+                    ${com.metasieve.shoppingcart.Shoppable.findByShoppingItem(item['item']) ?: com.metasieve.shoppingcart.CartAssay.findByShoppingItem(item['item'])}
                 </td>
                 <td>
                     ${item['qty']}

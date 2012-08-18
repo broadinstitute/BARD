@@ -1,5 +1,10 @@
 <%@ page import="grails.converters.JSON" %>
 <g:set var="numberOfHeadersToDisplay" value="${0}"/>
+%{--<g:javascript library="prototype" />--}%
+%{--<g:javascript library="scriptaculous" />--}%
+<r:require modules="backbone_grid"/>
+
+
 <%
     // first build up the headers
     int counter = 0
@@ -21,6 +26,11 @@
         conciseCompoundList << oneRow
     }
 %>
+
+
+
+
+
 <script type="text/javascript">
     var compounds = ${conciseCompoundList as JSON}
     var additionalHeaders = ${header as JSON}

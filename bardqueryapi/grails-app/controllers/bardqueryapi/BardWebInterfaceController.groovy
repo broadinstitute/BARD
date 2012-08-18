@@ -1,5 +1,6 @@
 package bardqueryapi
-
+import com.metasieve.shoppingcart.*
+import com.metasieve.shoppingcart.Shoppable.*
 /**
  * Created with IntelliJ IDEA.
  * User: gwalzer
@@ -10,6 +11,8 @@ package bardqueryapi
 class BardWebInterfaceController {
 
     QueryService queryService
+    def   shoppingCartService
+
 
     def index() {
         homePage()
@@ -30,9 +33,11 @@ class BardWebInterfaceController {
         def searchString = params.searchString?.trim()
         if (searchString) {
             def result = this.queryService.search(searchString)
-            render(view: "homePage", model: result)
+            def cart = shoppingCartService.addToShoppingCart(new CartAssay(),1)
+            render(view: "homePage", model: result, cart: cart)
             return
         }
+        shoppingCartService.addToShoppingCart(new CartAssay(),1)
         flash.message = 'Search String is required'
         redirect(action: "homePage")
     }
