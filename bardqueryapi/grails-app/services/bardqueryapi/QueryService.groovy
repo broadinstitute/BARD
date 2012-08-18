@@ -1,23 +1,21 @@
 package bardqueryapi
 
 import bard.QueryServiceWrapper
-import bard.core.Compound
-import bard.core.MolecularData
-import bard.core.MolecularValue
-import bard.core.Value
+import bard.core.rest.RESTAssayService
 import bard.core.rest.RESTCompoundService
 import elasticsearchplugin.ESAssay
 import elasticsearchplugin.ESXCompound
 import elasticsearchplugin.ElasticSearchService
 import elasticsearchplugin.QueryExecutorService
 import wslite.json.JSONObject
+import bard.core.*
+import bard.core.rest.RESTExperimentService
+import bard.core.rest.RESTProjectService
 
 class QueryService {
     QueryServiceWrapper queryServiceWrapper
     ElasticSearchService elasticSearchService
     QueryExecutorService queryExecutorService
-
-
 
     //The following are configured in resources.groovy
     String ncgcSearchBaseUrl    //grailsApplication.config.ncgc.server.structureSearch.root.url
@@ -41,7 +39,42 @@ class QueryService {
   "size": 10
 }
 '''
-
+    /**
+     * Given an assayId, get detailed Assay information from the REST API
+     * @param assayId
+     * @return
+     */
+    Assay showAssay(final Integer assayId) {
+        if (assayId) {
+            final RESTAssayService restAssayService = this.queryServiceWrapper.getRestAssayService()
+            return restAssayService.get(assayId)
+        }
+        return null
+    }
+    /**
+     * Given an projectId, get detailed Project information from the REST API
+     * @param projectId
+     * @return
+     */
+    Project showProject(final Integer projectId) {
+        if (projectId) {
+            final RESTProjectService restProjectService = this.queryServiceWrapper.getRestProjectService()
+            return restProjectService.get(projectId)
+        }
+        return null
+    }
+    /**
+     * Given an experimentId, get detailed Experiment information from the REST API
+     * @param experimentId
+     * @return
+     */
+    Experiment showExperiment(final Integer experimentId){
+        if (experimentId) {
+            final RESTExperimentService restExperimentService = this.queryServiceWrapper.getRestExperimentService()
+            return restExperimentService.get(experimentId)
+        }
+        return null
+    }
     /**
      * Given a CID, get detailed compound information from REST API
      * @param compoundId
