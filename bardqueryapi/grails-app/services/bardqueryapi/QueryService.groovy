@@ -1,5 +1,11 @@
 package bardqueryapi
 
+import bard.QueryServiceWrapper
+import bard.core.Compound
+import bard.core.MolecularData
+import bard.core.MolecularValue
+import bard.core.Value
+import bard.core.rest.RESTCompoundService
 import elasticsearchplugin.ESAssay
 import elasticsearchplugin.ESXCompound
 import elasticsearchplugin.ElasticSearchService
@@ -7,8 +13,11 @@ import elasticsearchplugin.QueryExecutorService
 import wslite.json.JSONObject
 
 class QueryService {
+    QueryServiceWrapper queryServiceWrapper
     ElasticSearchService elasticSearchService
     QueryExecutorService queryExecutorService
+
+
 
     //The following are configured in resources.groovy
     String ncgcSearchBaseUrl    //grailsApplication.config.ncgc.server.structureSearch.root.url
@@ -33,31 +42,37 @@ class QueryService {
 }
 '''
 
-//    JSONObject showCompound(final Integer compoundId) {
-//        //TODO this should go to NCGC
-//        if (compoundId) {
-//            JSONObject compoundESDocument = elasticSearchService.getCompoundDocument(compoundId)
-//            JSONObject compoundJson = [cid: compoundESDocument?._id,
-//                    sids: compoundESDocument?._source?.sids,
-//                    probeId: compoundESDocument?._source?.probeId,
-//                    smiles: compoundESDocument?._source?.smiles] as JSONObject
-//
-//            return compoundJson
-//        }
-//        return null
-//
-//    }
-
+    /**
+     * Given a CID, get detailed compound information from REST API
+     * @param compoundId
+     * @return
+     */
     Map showCompound(final Integer compoundId) {
-        //TODO this should go to NCGC
         if (compoundId) {
-            JSONObject compoundESDocument = elasticSearchService.getCompoundDocument(compoundId)
-            return [cid: compoundESDocument?._id,
-                    sids: compoundESDocument?._source?.sids,
-                    probeId: compoundESDocument?._source?.probeId,
-                    smiles: compoundESDocument?._source?.smiles]
+            RESTCompoundService restCompoundService = this.queryServiceWrapper.getRestCompoundService()
+            Compound compound = restCompoundService.get(compoundId)
+            Value compoundValue = compound.getValue(Compound.MolecularData)
+            final Collection<Value> sidValues = compound.getValues(Compound.PubChemSID)
+            Value compoundProbeValue = compound.getValue(Compound.ProbeID)
 
-            //return compoundJson
+            List<String> compoundSids = []
+            String compoundSmiles = ""
+            String compoundProbeId = ""
+
+            if (compoundValue) {
+                compoundSmiles = ((MolecularValue) compoundValue).toFormat(MolecularData.Format.SMILES)
+            }
+            if (sidValues) {
+                compoundSids = sidValues.collect { it.value?.value?.toString()}
+            }
+            if (compoundProbeValue) {
+                compoundProbeId = compoundProbeValue.value.toString()
+            }
+            return [cid: compoundId,
+                    sids: compoundSids,
+                    probeId: compoundProbeId,
+                    smiles: compoundSmiles
+            ]
         }
         return [:]
     }
@@ -157,6 +172,8 @@ class QueryService {
      * @param structureSearchType
      * @param smiles
      * @return
+     *
+     * TODO: NCGC JDO is not yet implemented
      */
     protected List<String> getCIDsByStructure(final String smiles, final StructureSearchType searchType) {
         /**
