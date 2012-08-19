@@ -19,7 +19,7 @@ class BardWebInterfaceController {
     }
 
     def example() {
-
+       println 'test'
     }
 
     def homePage() {
