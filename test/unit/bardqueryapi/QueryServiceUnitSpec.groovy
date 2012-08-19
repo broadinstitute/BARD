@@ -1,25 +1,32 @@
 package bardqueryapi
 
 import bard.QueryServiceWrapper
-import bard.core.Compound
-import bard.core.MolecularValue
-import bard.core.Value
+import bard.core.adapter.CompoundAdapter
+import bard.core.rest.RESTAssayService
 import bard.core.rest.RESTCompoundService
+import bard.core.rest.RESTExperimentService
+import bard.core.rest.RESTProjectService
 import elasticsearchplugin.ElasticSearchService
 import elasticsearchplugin.QueryExecutorService
 import grails.test.mixin.TestFor
 import spock.lang.Specification
 import wslite.json.JSONObject
+import bard.core.*
+import spock.lang.Unroll
 
 /**
  * See the API for {@link grails.test.mixin.support.GrailsUnitTestMixin} for usage instructions
  */
+@Unroll
 @TestFor(QueryService)
 class QueryServiceUnitSpec extends Specification {
     QueryServiceWrapper queryServiceWrapper
     QueryExecutorService queryExecutorService
     ElasticSearchService elasticSearchService
     RESTCompoundService restCompoundService
+    RESTExperimentService restExperimentService
+    RESTProjectService restProjectService
+    RESTAssayService restAssayService
     final static String AUTO_COMPLETE_NAMES = '''
 {
     "hits": {
@@ -35,10 +42,13 @@ class QueryServiceUnitSpec extends Specification {
 '''
 
     void setup() {
-        queryExecutorService = Mock()
-        restCompoundService = Mock()
-        elasticSearchService = Mock()
-        queryServiceWrapper = Mock()
+        queryExecutorService = Mock(QueryExecutorService.class)
+        restCompoundService = Mock(RESTCompoundService.class)
+        restExperimentService = Mock(RESTExperimentService.class)
+        restProjectService = Mock(RESTProjectService.class)
+        restAssayService = Mock(RESTAssayService.class)
+        elasticSearchService = Mock(ElasticSearchService.class)
+        queryServiceWrapper = Mock(QueryServiceWrapper.class)
         service.queryExecutorService = queryExecutorService
         service.elasticSearchService = elasticSearchService
         service.queryServiceWrapper = queryServiceWrapper
@@ -149,21 +159,82 @@ class QueryServiceUnitSpec extends Specification {
     void "test Show Compound #label"() {
 
         given:
-        Compound compound = Mock()
-        MolecularValue compoundValue = Mock()
-        Value compoundProbeValue = Mock()
+        Compound compound = Mock(Compound.class)
         when: "Client enters a CID and the showCompound method is called"
-        final JSONObject response = service.showCompound(compoundId)
-        then: "The elastic search service get CompoundDocument is called"
+        CompoundAdapter compoundAdapter = service.showCompound(compoundId)
+        then: "The CompoundDocument is called"
         queryServiceWrapper.getRestCompoundService() >> { restCompoundService }
         restCompoundService.get(_) >> {compound}
-        1 * compound.getValues(_) >> {[]}
-        1 * compound.getValue(Compound.MolecularData) >> {compoundValue}
-        1 * compound.getValue(Compound.ProbeID) >> {compoundProbeValue}
-        assert response == expectedCompoundList
+        assert compoundAdapter
+        assert compoundAdapter.compound
 
         where:
-        label                         | compoundId       | expectedCompoundList
-        "Return an JSON Object"       | new Integer(872) | [probeId: "null", sids: [], cid: 872] as JSONObject
-     }
+        label                       | compoundId
+        "Return a Compound Adapter" | new Integer(872)
+    }
+
+    void "test Show Experiment"() {
+        given:
+        Experiment experiment = Mock(Experiment.class)
+        when: "Client enters an experiment ID and the showExperiment method is called"
+        Experiment foundExperiment = service.showExperiment(experimentId)
+        then: "The Experiment document is displayed"
+        queryServiceWrapper.getRestExperimentService() >> { restExperimentService }
+        restExperimentService.get(_) >> {experiment}
+        assert foundExperiment
+
+        where:
+        label                  | experimentId
+        "Return an Experiment" | new Integer(872)
+
+    }
+
+    void "test Show Project"() {
+        given:
+        Project project = Mock(Project.class)
+        when: "Client enters a project ID and the showProject method is called"
+        Project foundProject = service.showProject(projectId)
+        then: "The Project document is displayed"
+        queryServiceWrapper.getRestProjectService() >> { restProjectService }
+        restProjectService.get(_) >> {project}
+        assert foundProject
+
+        where:
+        label              | projectId
+        "Return a Project" | new Integer(872)
+
+    }
+
+    void "test Show Assay"() {
+        given:
+        Assay assay = Mock(Assay.class)
+        when: "Client enters a assay ID and the showAssay method is called"
+        Assay foundAssay = service.showAssay(assayId)
+        then: "The Assay document is displayed"
+        queryServiceWrapper.getRestAssayService() >> { restAssayService }
+        restAssayService.get(_) >> {assay}
+        assert foundAssay
+
+        where:
+        label              | assayId
+        "Return a Project" | new Integer(872)
+
+    }
+
+    void "test Structure Search #label"() {
+        given:
+        ServiceIterator<Compound> iter = Mock(ServiceIterator.class)
+        when:
+         service.structureSearch(smiles, structureSearchParamsType)
+        then:
+        queryServiceWrapper.getRestCompoundService() >> { restCompoundService }
+        restCompoundService.structureSearch(_) >> {iter}
+
+        where:
+        label                    | structureSearchParamsType                 | smiles
+        "Sub structure Search"   | StructureSearchParams.Type.Substructure   | "CC"
+        "Exact match Search"     | StructureSearchParams.Type.Exact          | "CC"
+        "Similarity Search"      | StructureSearchParams.Type.Similarity     | "CC"
+        "Super structure search" | StructureSearchParams.Type.Superstructure | "CC"
+    }
 }

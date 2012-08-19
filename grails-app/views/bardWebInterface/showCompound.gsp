@@ -10,13 +10,15 @@
 <html>
 <head>
     <r:require modules="bootstrap"/>
-    <title><g:message code="compound.show.label" args="[compoundId]" default="Show Compound ${compoundId}"/></title>
+    <title>Show Compound ${compound.pubChemCID}</title>
 </head>
 
 <body>
 <div class="row">
     <div class="span6"><h2>View compound showing results</h2></div> <br/>
-    <div class="span6"><a href="/bardqueryapi"><img src="${resource(dir: 'images', file: 'bardLogo.png')}" alt="BARD - Home Page"/></a></div>
+
+    <div class="span6"><a href="/bardwebquery"><img src="${resource(dir: 'images', file: 'bardLogo.png')}"
+                                                    alt="BARD - Home Page"/></a></div>
 </div>
 <br/>
 
@@ -25,10 +27,10 @@
 </div>
 
 <div class="row">
-    <div class="span4 offset1"><h2>CID  ${compoundId}</h2></div> <br/>
+    <div class="span4 offset1"><h2>CID  ${compound.pubChemCID}</h2></div> <br/>
 
     <div class="span2"><img
-            src="${createLink(controller: 'chemAxon', action: 'generateStructureImage', params: [smiles: compoundJson?.smiles, width: 150, height: 120])}"/>
+            src="${createLink(controller: 'chemAxon', action: 'generateStructureImage', params: [smiles: compound?.structureSMILES, width: 150, height: 120])}"/>
     </div> <br/>
 
     <div class="span6">
@@ -37,14 +39,12 @@
                 <th>SIDs</th>
                 <th>Source</th>
             </tr>
-            <g:if test="${compoundJson}">
-                <g:each in="${compoundJson?.sids}" var="sid">
-                    <tr>
-                        <td>${sid}</td>
-                        <td></td>
-                    </tr>
-                </g:each>
-            </g:if>
+            <g:each in="${compound?.pubChemSIDs}" var="sid">
+                <tr>
+                    <td>${sid}</td>
+                    <td></td>
+                </tr>
+            </g:each>
         </table>
     </div>
 </div>

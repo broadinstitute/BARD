@@ -3,6 +3,7 @@ package bardqueryapi
 import bard.core.Assay
 import bard.core.Project
 import bard.core.Experiment
+import bard.core.adapter.CompoundAdapter
 
 /**
  * Created with IntelliJ IDEA.
@@ -46,8 +47,8 @@ class BardWebInterfaceController {
         Integer compoundId = cid ?: params.id as Integer//if '' param is provided, use that; otherwise, try the default id one
 
         if (compoundId) {
-            Map compoundJson = this.queryService.showCompound(compoundId)
-            render(view: "showCompound", model: [compoundJson: compoundJson, compoundId: compoundId])
+            CompoundAdapter compoundAdapter = this.queryService.showCompound(compoundId)
+            render(view: "showCompound", model: [compound: compoundAdapter])
         }
         else {
             render "Compound ID (CID) parameter required"

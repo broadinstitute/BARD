@@ -1,12 +1,14 @@
 package bardqueryapi
 
-
+import bard.core.Compound
+import bard.core.DataSource
+import bard.core.LongValue
+import bard.core.adapter.CompoundAdapter
 import elasticsearchplugin.ESAssay
 import elasticsearchplugin.ESXCompound
 import grails.test.mixin.TestFor
 import spock.lang.Specification
 import wslite.json.JSONArray
-import wslite.json.JSONObject
 
 /**
  * See the API for {@link grails.test.mixin.support.GrailsUnitTestMixin} for usage instructions
@@ -51,18 +53,17 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
         request.method = 'GET'
         controller.showCompound(cid)
         then:
-        queryService.showCompound(_) >> { compoundJson }
+        queryService.showCompound(_) >> { compoundAdapter }
 
         "/bardWebInterface/showCompound" == view
-        872 == model.compoundId
-        def responseCompoundJSON = model.compoundJson
-        assert responseCompoundJSON == expectedCompoundJson
+        assert model.compound
+        expectedCID == model.compound.pubChemCID
+        expectedSIDs == model.compound.pubChemSIDs
 
 
         where:
-        label                                | cid              | compoundJson                         | expectedCompoundJson
-        "compound not found - error message" | new Integer(872) | new JSONObject()                     | [:]
-        "Return a compound"                  | new Integer(872) | new JSONObject(compoundDocumentJson) | [probeId: "null", sids: [4243156, 24368917], smiles: "C-C", cid: "3237916"]
+        label               | cid              | compoundAdapter                            | expectedCID | expectedSIDs
+        "Return a compound" | new Integer(872) | buildCompoundAdapter(872, [1, 2, 3], "CC") | 872         | [1, 2, 3]
     }
 
     void "test search #label"() {
@@ -101,5 +102,19 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
         label                | searchString | expectedList
         "Return two strings" | "Bro"        | ["Broad Institute MLPCN Platelet Activation"]
 
+    }
+
+    CompoundAdapter buildCompoundAdapter(Long cid, List<Long> sids, String smiles) {
+        Compound compound = new Compound()
+        DataSource source = new DataSource("stuff", "v1")
+        compound.setId(cid);
+        for (Long sid : sids) {
+            compound.add(new LongValue(source, Compound.PubChemSIDValue, sid));
+        }
+        // redundant
+        compound.add(new LongValue(source, Compound.PubChemCIDValue, cid));
+        // MolecularData md = Mock()
+        //compound.add(new MolecularValue(source, Compound.MolecularValue, md));
+        return new CompoundAdapter(compound)
     }
 }

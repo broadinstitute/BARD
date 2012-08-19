@@ -1,7 +1,9 @@
 package bardqueryapi
 
-import grails.plugin.spock.IntegrationSpec
 import elasticsearchplugin.QueryExecutorService
+import grails.plugin.spock.IntegrationSpec
+import wslite.json.JSONArray
+import wslite.json.JSONObject
 
 /**
  * See the API for {@link grails.test.mixin.support.GrailsUnitTestMixin} for usage instructions
@@ -12,6 +14,7 @@ class QueryAssayApiServiceIntegrationSpec extends IntegrationSpec {
     QueryAssayApiService queryAssayApiService
     QueryExecutorService queryExecutorService
     def grailsApplication
+
     void setup() {
         // Setup logic here
     }
@@ -27,7 +30,7 @@ class QueryAssayApiServiceIntegrationSpec extends IntegrationSpec {
         final def assay = queryAssayApiService.findAssayByAid(aidUrl)
         then:
         assert assay
-        println assay
+        //println assay
     }
 
     void testFindCompoundsByAssay() {
@@ -38,7 +41,7 @@ class QueryAssayApiServiceIntegrationSpec extends IntegrationSpec {
         then:
         assert compounds
         compounds.each {compound ->
-            println compound
+            //  println compound
         }
     }
 
@@ -50,7 +53,7 @@ class QueryAssayApiServiceIntegrationSpec extends IntegrationSpec {
         then:
         assert proteinTargetsByAssay
         proteinTargetsByAssay.each {target ->
-            println target
+            //println target
         }
     }
 
@@ -65,8 +68,37 @@ class QueryAssayApiServiceIntegrationSpec extends IntegrationSpec {
         int counter = 0
         assays.each {assay ->
             ++counter
-            println counter + ":" + assay
+            //println counter + ":" + assay
         }
+    }
+
+    void testAssaySummary() {
+        //http://bard.nih.gov/api/v1/search/assays?q="dna repair"&top=10
+        given:
+        def params = [query: [q: '"dna repair"', top: 10, expand: false, include_entities: true]]
+        //final String assaySearchUrl = "${grailsApplication.config.ncgc.server.root.url}/search/assays?q=\"dna repair\"&top=10"
+        final String assaySearchUrl = "${grailsApplication.config.ncgc.server.root.url}/search/assays"
+        when:
+        def assays = queryExecutorService.executeGetRequestJSON(assaySearchUrl, params)
+
+        then:
+        assert assays
+        final JSONArray docs = assays.docs
+        final List documentList = docs.subList(0, docs.length())
+        documentList.each {document ->
+            println document.assay_id.toString()
+            println document.name.toString()
+            println document.highlight.toString()
+
+            println ""
+            println ""
+        }
+        final String nextLink = assays.link
+        final JSONObject metaData = assays.metaData
+        final int numberOFHits = metaData.nhit
+        final JSONArray facets = metaData.facets
+        println assays.getClass().getName()
+
     }
 
 //    void testFindAssayByAid() {

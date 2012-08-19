@@ -1,16 +1,17 @@
 package bardqueryapi
 
 import bard.QueryServiceWrapper
+import bard.core.adapter.CompoundAdapter
 import bard.core.rest.RESTAssayService
 import bard.core.rest.RESTCompoundService
+import bard.core.rest.RESTExperimentService
+import bard.core.rest.RESTProjectService
 import elasticsearchplugin.ESAssay
 import elasticsearchplugin.ESXCompound
 import elasticsearchplugin.ElasticSearchService
 import elasticsearchplugin.QueryExecutorService
 import wslite.json.JSONObject
 import bard.core.*
-import bard.core.rest.RESTExperimentService
-import bard.core.rest.RESTProjectService
 
 class QueryService {
     QueryServiceWrapper queryServiceWrapper
@@ -40,17 +41,36 @@ class QueryService {
 }
 '''
 
-    def searchCompounds(String phrase, int top, int skip, List<String> filters){
-
-    }
-    def searchAssays(String phrase, int top, int skip, List<String> filters){
-
-    }
-    def searchProjects(String phrase, int top, int skip, List<String> filters){
-
-    }
-    def searchExperiments(String phrase, int top, int skip, List<String> filters){
-
+//    Map searchCompounds(final String phrase, final LinkedHashMap additionalParms = [:]) {
+//
+//    }
+//
+//    Map searchAssays(final String phrase, final LinkedHashMap additionalParms = [:]) {
+//
+//        this.queryExecutorService.executeGetRequestString(phrase, [:])
+//    }
+//
+//    Map searchProjects(final String phrase, final LinkedHashMap additionalParms = [:]) {
+//
+//
+//    }
+//
+//    Map searchExperiments(final String phrase, final LinkedHashMap additionalParms = [:]) {
+//
+//
+//    }
+    List<CompoundAdapter> structureSearch(final String smiles,final StructureSearchParams.Type structureSearchParamsType ){
+        List<CompoundAdapter> compounds = []
+        if (smiles) {
+            final RESTCompoundService restCompoundService = this.queryServiceWrapper.getRestCompoundService()
+            ServiceIterator<Compound> iter  = restCompoundService.structureSearch(new StructureSearchParams
+            (smiles,structureSearchParamsType));
+            while (iter.hasNext()) {
+                Compound compound = iter.next();
+                compounds.add(new CompoundAdapter(compound))
+             }
+        }
+        return compounds
     }
     /**
      * Given an assayId, get detailed Assay information from the REST API
@@ -81,7 +101,7 @@ class QueryService {
      * @param experimentId
      * @return
      */
-    Experiment showExperiment(final Integer experimentId){
+    Experiment showExperiment(final Integer experimentId) {
         if (experimentId) {
             final RESTExperimentService restExperimentService = this.queryServiceWrapper.getRestExperimentService()
             return restExperimentService.get(experimentId)
@@ -93,34 +113,15 @@ class QueryService {
      * @param compoundId
      * @return
      */
-    Map showCompound(final Integer compoundId) {
+    CompoundAdapter showCompound(final Integer compoundId) {
         if (compoundId) {
-            RESTCompoundService restCompoundService = this.queryServiceWrapper.getRestCompoundService()
-            Compound compound = restCompoundService.get(compoundId)
-            Value compoundValue = compound.getValue(Compound.MolecularData)
-            final Collection<Value> sidValues = compound.getValues(Compound.PubChemSID)
-            Value compoundProbeValue = compound.getValue(Compound.ProbeID)
-
-            List<String> compoundSids = []
-            String compoundSmiles = ""
-            String compoundProbeId = ""
-
-            if (compoundValue) {
-                compoundSmiles = ((MolecularValue) compoundValue).toFormat(MolecularData.Format.SMILES)
+            final RESTCompoundService restCompoundService = this.queryServiceWrapper.getRestCompoundService()
+            final Compound compound = restCompoundService.get(compoundId)
+            if (compound) {
+                return  new CompoundAdapter(compound)
             }
-            if (sidValues) {
-                compoundSids = sidValues.collect { it.value?.value?.toString()}
-            }
-            if (compoundProbeValue) {
-                compoundProbeId = compoundProbeValue.value.toString()
-            }
-            return [cid: compoundId,
-                    sids: compoundSids,
-                    probeId: compoundProbeId,
-                    smiles: compoundSmiles
-            ]
         }
-        return [:]
+        return null
     }
     /**
      * We pre-process the search String, to extract the type of search
