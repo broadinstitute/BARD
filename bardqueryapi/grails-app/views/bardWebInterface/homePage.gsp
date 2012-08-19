@@ -165,6 +165,7 @@
             </td>
             <td>
                 <g:remoteLink action="add"
+                              controller="SarCartController"
                               params="${[id:CartAssay.findByShoppingItem(it['item']).id, class:(CartAssay.findByShoppingItem(it['item'])).class, version:(CartAssay.findByShoppingItem(it['item'])).version]}"
                               update="shoppingCartContent"
                               onComplete="Effect.Pulsate('shoppingCartContent', {pulses: 1, duration: 1.0});">
@@ -173,6 +174,7 @@
             </td>
             <td>
                 <g:remoteLink action="remove"
+                              controller="SarCartController"
                               params="${[id:CartAssay.findByShoppingItem(it['item']).id, class:(CartAssay.findByShoppingItem(it['item'])).class, version:(CartAssay.findByShoppingItem(it['item'])).version]}"
                               update="shoppingCartContent"
                               onComplete="Effect.Pulsate('shoppingCartContent', {pulses: 1, duration: 1.0});">
@@ -181,6 +183,7 @@
             </td>
             <td>
                 <g:remoteLink action="removeAll"
+                              controller="SarCartController"
                               params="${[id:CartAssay.findByShoppingItem(it['item']).id, class:(CartAssay.findByShoppingItem(it['item'])).class, version:(CartAssay.findByShoppingItem(it['item'])).version]}"
                               update="shoppingCartContent"
                               onComplete="Effect.Pulsate('shoppingCartContent', {pulses: 1, duration: 1.0});">
