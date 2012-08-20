@@ -59,7 +59,7 @@ class QueryService {
 //
 //
 //    }
-    List<CompoundAdapter> structureSearch(final String smiles, final StructureSearchParams.Type structureSearchParamsType, int top = 10, int skip = 0) {
+    List<CompoundAdapter> structureSearch(final String smiles, final StructureSearchParams.Type structureSearchParamsType, final int top = 10, final int skip = 0) {
         List<CompoundAdapter> compounds = []
         if (smiles) {
             final RESTCompoundService restCompoundService = this.queryServiceWrapper.getRestCompoundService()
