@@ -1,12 +1,13 @@
 package bard.db.registration
 
 import grails.buildtestdata.mixin.Build
+import org.junit.Before
+import spock.lang.Specification
 import spock.lang.Unroll
 
 import static bard.db.registration.Assay.*
 import static test.TestUtils.assertFieldValidationExpectations
 import static test.TestUtils.createString
-import spock.lang.Specification
 
 /**
  * See the API for {@link grails.test.mixin.domain.DomainClassUnitTestMixin} for usage instructions
@@ -16,7 +17,8 @@ import spock.lang.Specification
 class AssayUnitSpec extends Specification {
     Assay domainInstance
 
-    void setup() {
+    @Before
+    void doSetup() {
         domainInstance = Assay.buildWithoutSave()
     }
 

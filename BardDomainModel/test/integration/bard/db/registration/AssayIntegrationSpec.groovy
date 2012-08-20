@@ -6,6 +6,7 @@ import spock.lang.Unroll
 import static bard.db.registration.Assay.*
 import static test.TestUtils.assertFieldValidationExpectations
 import static test.TestUtils.createString
+import org.junit.Before
 
 /**
  * Integration tests for Asssay
@@ -15,7 +16,9 @@ class AssayIntegrationSpec extends IntegrationSpec {
 
     Assay domainInstance
 
-    void setup() {
+
+    @Before
+    void doSetup() {
         domainInstance = Assay.buildWithoutSave()
     }
 

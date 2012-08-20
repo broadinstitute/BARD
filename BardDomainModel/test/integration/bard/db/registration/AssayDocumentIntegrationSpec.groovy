@@ -1,11 +1,12 @@
 package bard.db.registration
 
 import grails.plugin.spock.IntegrationSpec
+import org.junit.Before
+import spock.lang.Unroll
 
 import static bard.db.registration.AssayDocument.*
 import static test.TestUtils.assertFieldValidationExpectations
 import static test.TestUtils.createString
-import spock.lang.Unroll
 
 /**
  * Created with IntelliJ IDEA.
@@ -19,7 +20,8 @@ class AssayDocumentIntegrationSpec extends IntegrationSpec {
 
     AssayDocument domainInstance
 
-    void setup() {
+    @Before
+    void doSetup() {
         domainInstance = AssayDocument.buildWithoutSave()
     }
 

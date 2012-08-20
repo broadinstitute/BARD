@@ -22,7 +22,8 @@ class AssayDocumentUnitSpec extends Specification {
 
     AssayDocument domainInstance
 
-    void setup() {
+    @Before
+    void doSetup() {
         domainInstance = AssayDocument.buildWithoutSave(assay: Assay.buildWithoutSave(assayVersion: '2'))
     }
 
