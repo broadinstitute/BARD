@@ -106,6 +106,7 @@ class QueryServiceIntegrationSpec extends IntegrationSpec {
         assert assay.description
     }
     /**
+     * Do structure searches
      */
     void "test Structure Search #label"() {
         when:
