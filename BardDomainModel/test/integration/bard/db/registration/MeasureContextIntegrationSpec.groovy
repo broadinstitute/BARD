@@ -1,14 +1,14 @@
 package bard.db.registration
 
+import grails.plugin.spock.IntegrationSpec
 import org.junit.Before
-import spock.lang.Specification
+import spock.lang.Shared
 import spock.lang.Unroll
 
 import static bard.db.registration.MeasureContext.CONTEXT_NAME_MAX_SIZE
 import static bard.db.registration.MeasureContext.MODIFIED_BY_MAX_SIZE
 import static test.TestUtils.assertFieldValidationExpectations
 import static test.TestUtils.createString
-import grails.plugin.spock.IntegrationSpec
 
 /**
  * Created with IntelliJ IDEA.
@@ -57,6 +57,7 @@ class MeasureContextIntegrationSpec extends IntegrationSpec {
 
         when: 'a value is set for the field under test'
         domainInstance[(field)] = valueUnderTest
+        valueUnderTest?.save(flush: true) // hack to temporarily get around FK_MEASURE_CONTEXT_ASSAY) violated - parent key not found
         domainInstance.validate()
 
         then: 'verify valid or invalid for expected reason'
@@ -70,7 +71,7 @@ class MeasureContextIntegrationSpec extends IntegrationSpec {
         where:
         desc             | valueUnderTest | valid | errorCode
         'null not valid' | null           | false | 'nullable'
-        'valid assay'    | Assay.build()  | true  | null
+        'valid assay'    | Assay.buildWithoutSave()     | true  | null
 
     }
 
