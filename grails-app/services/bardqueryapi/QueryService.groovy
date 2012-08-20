@@ -68,6 +68,9 @@ class QueryService {
                 new StructureSearchParams(smiles)
           structureSearchParams.setSkip(skip).setTop(top);
 
+            if(structureSearchParamsType == StructureSearchParams.Type.Similarity){
+                structureSearchParams.setThreshold(0.9)
+            }
             ServiceIterator<Compound> iter = restCompoundService.structureSearch(structureSearchParams);
             while (iter.hasNext()) {
                 Compound compound = iter.next();
