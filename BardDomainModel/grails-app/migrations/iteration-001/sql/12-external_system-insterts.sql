@@ -1,1 +1,0 @@
-insert into external_system (external_system_id, system_name, owner, system_URL) values (1, 'PubChem', 'NIH', 'http://pubchem.ncbi.nlm.nih.gov/assay/assay.cgi?');

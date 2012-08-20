@@ -1,3 +1,7 @@
+--
+-- PACKAGE: MANAGE_ONTOLOGY
+--
+
 CREATE OR REPLACE package MANAGE_ONTOLOGY
 as
     pv_tree_assay_descriptor varchar2(31) := 'ASSAY_DESCRIPTOR';
@@ -37,10 +41,12 @@ as
                         avi_element_abbreviation in varchar2,
                         avi_element_synonyms in varchar2);
 
+    procedure swap_element_id (ani_element_id   in  number,
+                               ani_new_element_id   in   number,
+                               ab_delete_old    in boolean default false);
+
 end manage_ontology;
-
 /
-
 CREATE OR REPLACE package body Manage_Ontology
 as
 -- forward declaration, needed for the recursion to compile
@@ -469,6 +475,108 @@ as
 
     end add_element;
 
-end manage_ontology;
+    procedure swap_element_id (ani_element_id   in  number,
+                               ani_new_element_id   in   number,
+                               ab_delete_old    in boolean default false)
+    as
+    -- tables in this order
+    -- result_context_item, attribute, value
+    -- result, result_type_id
+    -- measure_context_item, attribute, value
+    -- measure, result_type_id
+    -- project_experiment, stage_id
+    -- experiment, laboratory_id
+    -- element_hierarchy, parent_element_id, child_element_id
+    -- unit_conversion, from_unit, to_unit
 
+    lv_old_label    element.label%type;
+    lv_new_label    element.label%type;
+
+    begin
+        select label into lv_old_label
+        from element
+        where element_id = ani_element_id;
+
+        select label into lv_new_label
+        from element
+        where element_id = ani_new_element_id;
+
+        update result_context_item
+           set attribute_id = ani_new_element_id
+         where attribute_id = ani_element_id;
+
+        update result_context_item
+           set value_id = ani_new_element_id,
+               value_display = replace(value_display, lv_old_label, lv_new_label)
+         where value_id = ani_element_id;
+
+        update result
+           set result_type_id = ani_new_element_id
+         where result_type_id = ani_element_id;
+
+        update measure_context_item
+           set attribute_id = ani_new_element_id
+         where attribute_id = ani_element_id;
+
+        update measure_context_item
+           set value_id = ani_new_element_id,
+               value_display = replace(value_display, lv_old_label, lv_new_label)
+         where value_id = ani_element_id;
+
+        update measure
+           set result_type_id = ani_new_element_id
+         where result_type_id = ani_element_id;
+
+        update project_experiment
+           set stage_id = ani_new_element_id
+         where stage_id = ani_element_id;
+
+        update experiment
+           set laboratory_id = ani_new_element_id
+         where laboratory_id = ani_element_id;
+
+        update unit_conversion uc
+          set uc.from_unit = lv_new_label
+        where uc.from_unit = lv_old_label
+          and not exists (select 1 from unit_conversion uc2
+            where uc2.from_unit = lv_new_label
+            and uc2.to_unit = uc.to_unit);
+
+        update unit_conversion uc
+          set uc.to_unit = lv_new_label
+        where uc.to_unit = lv_old_label
+          and not exists (select 1 from unit_conversion uc2
+            where uc2.to_unit = lv_new_label
+            and uc2.from_unit = uc.from_unit);
+
+        update element_hierarchy eh
+          set eh.parent_element_id = ani_new_element_id
+        where eh.parent_element_id = ani_element_id
+          and not exists (select 1 from element_hierarchy eh2
+            where eh2.parent_element_id = ani_new_element_id
+            and eh2.child_element_id = eh.child_element_id);
+
+        update element_hierarchy eh
+          set eh.child_element_id = ani_new_element_id
+        where eh.child_element_id = ani_element_id
+          and not exists (select 1 from element_hierarchy eh2
+            where eh2.child_element_id = ani_new_element_id
+            and eh2.parent_element_id = eh.parent_element_id);
+
+        if ab_delete_old
+        then
+            delete from element
+            where element_id = ani_element_id;
+
+            delete from identifier_mapping
+            where target_id = ani_element_id
+              and table_name = 'ELEMENT';
+        end if;
+
+        commit;
+
+    end swap_element_id;
+
+
+end manage_ontology;
 /

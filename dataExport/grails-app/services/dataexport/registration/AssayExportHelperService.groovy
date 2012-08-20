@@ -5,6 +5,7 @@ import bard.db.dictionary.Unit
 import groovy.xml.MarkupBuilder
 import org.codehaus.groovy.grails.web.mapping.LinkGenerator
 import bard.db.registration.*
+import bard.db.experiment.Experiment
 
 /**
  * Helper Service for handling generation for XML documents for Assay definition extraction
@@ -193,14 +194,18 @@ class AssayExportHelperService {
         }
     }
 
-    protected void generateLinksForAssay(final MarkupBuilder markupBuilder, BigDecimal assayId) {
-        final String assayHref = grailsLinkGenerator.link(mapping: 'assay', absolute: true, params: [id: assayId]).toString()
+    protected void generateLinksForAssay(final MarkupBuilder markupBuilder, final Assay assay) {
+        final String assayHref = grailsLinkGenerator.link(mapping: 'assay', absolute: true, params: [id: assay.id]).toString()
         final String assaysHref = grailsLinkGenerator.link(mapping: 'assays', absolute: true).toString()
 
         markupBuilder.link(rel: 'edit', href: "${assayHref}", type: "${this.mediaTypesDTO.assayMediaType}")
         markupBuilder.link(rel: 'self', href: "${assayHref}", type: "${this.mediaTypesDTO.assayMediaType}")
         markupBuilder.link(rel: 'up', href: "${assaysHref}", type: "${this.mediaTypesDTO.assaysMediaType}")
 
+        for(Experiment experiment : assay.experiments){
+            final String experimentHref = grailsLinkGenerator.link(mapping: 'experiment', absolute: true, params: [id: experiment.id]).toString()
+            markupBuilder.link(rel: 'related', type: "${this.mediaTypesDTO.experimentMediaType}", href: "${experimentHref}")
+        }
     }
 
     protected void generateMeasures(final MarkupBuilder markupBuilder, final Set<Measure> measures) {
@@ -262,7 +267,7 @@ class AssayExportHelperService {
             generateMeasures(markupBuilder, assay.measures)
             generateMeasureContextItems(markupBuilder, assay.measureContextItems)
             generateAssayDocuments(markupBuilder, assay.assayDocuments)
-            generateLinksForAssay(markupBuilder, assay.id)
+            generateLinksForAssay(markupBuilder, assay)
         }
     }
 }

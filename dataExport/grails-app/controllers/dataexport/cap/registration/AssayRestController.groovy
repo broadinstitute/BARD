@@ -130,7 +130,7 @@ class AssayRestController {
  * the RestController
  */
 class UpdateStatusHelper {
-    final List<String> statusList = ["Ready", "Started", "Complete"]
+    final List<String> statusList = ["Pending", "Ready", "Started", "Complete"]
     public BardHttpResponse updateDomainObject(final def service, final Long id) {
 
         try {

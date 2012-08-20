@@ -17,11 +17,13 @@ beans = {
     //url to get geneid's
     final String geneIdUrl = grailsApplication.config.ncgc.server.gene.root.url
 
-    queryTargetApiService(bardqueryapi.QueryTargetApiService,accessionUrl,geneIdUrl){
+    queryTargetApiService(bardqueryapi.QueryTargetApiService, accessionUrl, geneIdUrl) {
         queryExecutorInternalService = ref('queryExecutorInternalService')
     }
-    bardWebInterfaceController(bardqueryapi.BardWebInterfaceController) {
-        queryExecutorService = ref('queryExecutorService')
+    final String ncgcBaseURL = grailsApplication.config.ncgc.server.root.url
+
+    queryServiceWrapper(bard.QueryServiceWrapper,ncgcBaseURL){
+
     }
     elasticSearchService(elasticsearchplugin.ElasticSearchService) {
         elasticSearchBaseUrl = grailsApplication.config.bard.services.elasticSearchService.restNode.baseUrl
@@ -33,7 +35,15 @@ beans = {
         xcompoundIndexName = 'compound'
         xcompoundIndexTypeName = 'xcompound'
         defaultElementsPerPage = 500
-        eSsElasticSearchRequester  =  '/_search'
+        eSsElasticSearchRequester = '/_search'
+    }
+    queryService(bardqueryapi.QueryService) {
+        queryExecutorService = ref('queryExecutorService')
+        elasticSearchService = ref('elasticSearchService')
+        queryServiceWrapper= ref('queryServiceWrapper')
+        ncgcSearchBaseUrl = grailsApplication.config.ncgc.server.structureSearch.root.url
+        elasticSearchRootURL = grailsApplication.config.bard.services.elasticSearchService.restNode.baseUrl
+        bardAssayViewUrl = grailsApplication.config.bard.assay.view.url
     }
 
 }
