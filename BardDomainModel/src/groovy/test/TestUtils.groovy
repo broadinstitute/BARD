@@ -2,6 +2,7 @@ package test
 
 import org.apache.commons.lang.StringUtils
 import org.springframework.validation.FieldError
+import org.apache.commons.lang.BooleanUtils
 
 /**
  * Created with IntelliJ IDEA.
@@ -21,9 +22,9 @@ class TestUtils {
      * @param errorCode
      */
     static void assertFieldValidationExpectations(Object domainObject, String fieldName, Boolean valid, String errorCode) {
-//        println(domainObject.dump())
         String foundErrorCode = getErrorCode(domainObject, fieldName, errorCode)
         assert errorCode == foundErrorCode
+        logUnexpectedValidationErrors(domainObject, valid)
         assert domainObject.hasErrors() == !valid
         assert domainObject.errors.hasFieldErrors(fieldName) == !valid
     }
@@ -75,6 +76,20 @@ class TestUtils {
             foundErrorCode = domainObject.errors[fieldName]
         }
         return foundErrorCode
+    }
+
+    /**
+     * print any unexpected errors to make tracking them down easier
+     *
+     * @param domainObject
+     * @param valid
+     */
+    private static void logUnexpectedValidationErrors(domainObject, boolean valid) {
+        if (BooleanUtils.isFalse(domainObject.hasErrors() == !valid)) {
+            println("**************** Unexpected Validation Errors **********************")
+            println(domainObject.errors)
+            println("********************************************************************")
+        }
     }
 
 
