@@ -41,7 +41,7 @@ grails.project.dependency.resolution = {
         compile ('bard.jdo:ncgc-jdo-wrapper:1'){
             excludes "commons-logging", "groovy"
         }
-      //  compile "ChemAxon:ChemAxonJChemBase:5.10"
+       compile "ChemAxon:ChemAxonJChemBase:5.10"
 
 
 

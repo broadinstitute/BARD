@@ -66,7 +66,32 @@
     <orderEntry type="library" scope="PROVIDED" name="grails-2.0.4" level="application" />
     <orderEntry type="module-library" exported="">
       <library name="Grails User Library (Bard-web-query-grailsPlugins)">
-        <CLASSES />
+        <CLASSES>
+          <root url="jar://$USER_HOME$/.grails/ivy-cache/org.codehaus.groovy.modules.remote/remote-core/jars/remote-core-0.3.jar!/" />
+          <root url="jar://$USER_HOME$/.grails/ivy-cache/org.codehaus.groovy.modules.remote/remote-transport-http/jars/remote-transport-http-0.3.jar!/" />
+          <root url="jar://$USER_HOME$/.grails/ivy-cache/com.github.groovy-wslite/groovy-wslite/jars/groovy-wslite-0.7.0.jar!/" />
+          <root url="jar://$USER_HOME$/.grails/ivy-cache/org.hamcrest/hamcrest-core/jars/hamcrest-core-1.2.jar!/" />
+          <root url="jar://$USER_HOME$/.grails/ivy-cache/junit/junit-dep/jars/junit-dep-4.9.jar!/" />
+          <root url="jar://$USER_HOME$/.grails/ivy-cache/org.spockframework/spock-core/jars/spock-core-0.6-groovy-1.8.jar!/" />
+          <root url="jar://$USER_HOME$/.grails/ivy-cache/org.spockframework/spock-grails-support/jars/spock-grails-support-0.6-groovy-1.8.jar!/" />
+          <root url="jar://$USER_HOME$/.grails/ivy-cache/org.codehaus.jackson/jackson-core-asl/jars/jackson-core-asl-1.9.2.jar!/" />
+          <root url="jar://$USER_HOME$/.grails/ivy-cache/org.codehaus.jackson/jackson-mapper-asl/jars/jackson-mapper-asl-1.9.2.jar!/" />
+          <root url="jar://$USER_HOME$/.grails/ivy-cache/ChemAxon/ChemAxonJChemBase/jars/ChemAxonJChemBase-5.10.jar!/" />
+          <root url="jar://$USER_HOME$/.grails/ivy-cache/org.ncgc.jdo/bard-client/jars/bard-client-1.jar!/" />
+          <root url="jar://$USER_HOME$/.grails/ivy-cache/org.apache.httpcomponents/httpcore/jars/httpcore-4.1.jar!/" />
+          <root url="jar://$USER_HOME$/.grails/ivy-cache/org.apache.httpcomponents/httpclient/jars/httpclient-4.1.1.jar!/" />
+          <root url="jar://$USER_HOME$/.grails/ivy-cache/bard.jdo/ncgc-jdo-wrapper/jars/ncgc-jdo-wrapper-1.jar!/" />
+          <root url="jar://$USER_HOME$/.grails/ivy-cache/org.apache.commons/commons-lang3/jars/commons-lang3-3.1.jar!/" />
+          <root url="jar://$USER_HOME$/.grails/ivy-cache/xml-resolver/xml-resolver/jars/xml-resolver-1.2.jar!/" />
+          <root url="jar://$USER_HOME$/.grails/ivy-cache/xerces/xercesImpl/jars/xercesImpl-2.8.1.jar!/" />
+          <root url="jar://$USER_HOME$/.grails/ivy-cache/net.sourceforge.nekohtml/nekohtml/jars/nekohtml-1.9.9.jar!/" />
+          <root url="jar://$USER_HOME$/.grails/ivy-cache/net.sf.ezmorph/ezmorph/jars/ezmorph-1.0.6.jar!/" />
+          <root url="jar://$USER_HOME$/.grails/ivy-cache/net.sf.json-lib/json-lib/jars/json-lib-2.3-jdk15.jar!/" />
+          <root url="jar://$USER_HOME$/.grails/ivy-cache/org.codehaus.groovy.modules.http-builder/http-builder/jars/http-builder-0.5.2.jar!/" />
+          <root url="jar://$USER_HOME$/.grails/ivy-cache/org.objenesis/objenesis/jars/objenesis-1.2.jar!/" />
+          <root url="jar://$USER_HOME$/.grails/ivy-cache/org.gmetrics/GMetrics/jars/GMetrics-0.3.jar!/" />
+          <root url="jar://$USER_HOME$/.grails/ivy-cache/org.codenarc/CodeNarc/jars/CodeNarc-0.15.jar!/" />
+        </CLASSES>
         <JAVADOC />
         <SOURCES />
       </library>
