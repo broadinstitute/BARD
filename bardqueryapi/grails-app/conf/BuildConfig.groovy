@@ -36,9 +36,13 @@ grails.project.dependency.resolution = {
             excludes "commons-logging", "xml-apis", "groovy"
         }
 
-        compile "ChemAxon:ChemAxonJChemBase:5.10"
 
         compile 'org.apache.commons:commons-lang3:3.1'
+        compile ('bard.jdo:ncgc-jdo-wrapper:1'){
+            excludes "commons-logging", "groovy"
+        }
+        compile "ChemAxon:ChemAxonJChemBase:5.10"
+
     }
 
     plugins {
@@ -52,15 +56,9 @@ grails.project.dependency.resolution = {
         compile ":elastic-search:0.4.5-SNAPSHOT"
         compile ":twitter-bootstrap:2.0.2.25"
 
-        // Uncomment these (or add new ones) to enable additional resources capabilities
-        //runtime ":zipped-resources:1.0"
-        //runtime ":cached-resources:1.0"
-        //runtime ":yui-minify-resources:0.1.4"
-
         build ":tomcat:$grailsVersion"
 
         compile ":remote-control:1.2"
-//        test "org.grails.plugins:functional-spock-groovy18:0.2"
     }
 }
 

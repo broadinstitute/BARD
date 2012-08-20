@@ -1,5 +1,9 @@
 package bardqueryapi
 
+import bard.core.Assay
+import bard.core.Project
+import bard.core.Experiment
+
 /**
  * Created with IntelliJ IDEA.
  * User: gwalzer
@@ -39,7 +43,7 @@ class BardWebInterfaceController {
 
 
     def showCompound(Integer cid) {
-        Integer compoundId = cid ?: params.id as Integer//if 'assay' param is provided, use that; otherwise, try the default id one
+        Integer compoundId = cid ?: params.id as Integer//if '' param is provided, use that; otherwise, try the default id one
 
         if (compoundId) {
             Map compoundJson = this.queryService.showCompound(compoundId)
@@ -49,7 +53,42 @@ class BardWebInterfaceController {
             render "Compound ID (CID) parameter required"
         }
     }
+    //TODO: Whomever creates the gsp should also write unit tests for this method
+    def showAssay(Integer assayProtocolId) {
+        Integer assayId = assayProtocolId ?: params.id as Integer//if 'assay' param is provided, use that; otherwise, try the default id one
 
+        if (assayId) {
+            Assay assay = this.queryService.showAssay(assayId)
+            render(view: "showAssay", model: [assay:assay])
+        }
+        else {
+            render "Assay Protocol ID parameter required"
+        }
+    }
+    //TODO: Whomever creates the gsp should also write unit tests for this method
+    def showProject(Integer projectId) {
+        Integer projId = projectId ?: params.id as Integer//if 'project' param is provided, use that; otherwise, try the default id one
+
+        if (projId) {
+            Project project = this.queryService.showProject(projId)
+            render(view: "showProject", model: [project:project])
+        }
+        else {
+            render "Project ID parameter required"
+        }
+    }
+    //TODO: Whomever creates the gsp should also write unit tests for this method
+    def showExperiment(Integer experimentId) {
+        Integer exptId = experimentId ?: params.id as Integer//if 'project' param is provided, use that; otherwise, try the default id one
+
+        if (exptId) {
+            Experiment experiment = this.queryService.showExperiment(exptId)
+            render(view: "showExperiment", model: [experiment : experiment])
+        }
+        else {
+            render "Experiment ID parameter required"
+        }
+    }
     def autoCompleteAssayNames() {
         final List<String> assayNames = this.queryService.autoComplete(params?.term)
         render(contentType: "text/json") {

@@ -1,5 +1,10 @@
 package bardqueryapi
 
+import bard.QueryServiceWrapper
+import bard.core.Compound
+import bard.core.MolecularValue
+import bard.core.Value
+import bard.core.rest.RESTCompoundService
 import elasticsearchplugin.ElasticSearchService
 import elasticsearchplugin.QueryExecutorService
 import grails.test.mixin.TestFor
@@ -11,9 +16,10 @@ import wslite.json.JSONObject
  */
 @TestFor(QueryService)
 class QueryServiceUnitSpec extends Specification {
-
+    QueryServiceWrapper queryServiceWrapper
     QueryExecutorService queryExecutorService
     ElasticSearchService elasticSearchService
+    RESTCompoundService restCompoundService
     final static String AUTO_COMPLETE_NAMES = '''
 {
     "hits": {
@@ -30,9 +36,12 @@ class QueryServiceUnitSpec extends Specification {
 
     void setup() {
         queryExecutorService = Mock()
+        restCompoundService = Mock()
         elasticSearchService = Mock()
+        queryServiceWrapper = Mock()
         service.queryExecutorService = queryExecutorService
         service.elasticSearchService = elasticSearchService
+        service.queryServiceWrapper = queryServiceWrapper
         service.elasticSearchRootURL = 'httpMock://'
         service.bardAssayViewUrl = 'httpMock://'
         service.ncgcSearchBaseUrl = 'httpMock://'
@@ -139,15 +148,22 @@ class QueryServiceUnitSpec extends Specification {
      */
     void "test Show Compound #label"() {
 
+        given:
+        Compound compound = Mock()
+        MolecularValue compoundValue = Mock()
+        Value compoundProbeValue = Mock()
         when: "Client enters a CID and the showCompound method is called"
         final JSONObject response = service.showCompound(compoundId)
         then: "The elastic search service get CompoundDocument is called"
-        elasticSearchService.getCompoundDocument(_) >> { assayJson }
+        queryServiceWrapper.getRestCompoundService() >> { restCompoundService }
+        restCompoundService.get(_) >> {compound}
+        1 * compound.getValues(_) >> {[]}
+        1 * compound.getValue(Compound.MolecularData) >> {compoundValue}
+        1 * compound.getValue(Compound.ProbeID) >> {compoundProbeValue}
         assert response == expectedCompoundList
 
         where:
-        label                         | compoundId       | assayJson                                                                | expectedCompoundList
-        "Return an JSON Object"       | new Integer(872) | [_id: 872, _source: [sids: [], probeId: [], smiles: 'CC']] as JSONObject | [probeId: [], sids: [], smiles: 'CC', cid: 872]
-        "Return an empty JSON Object" | new Integer(8)   | [:] as JSONObject                                                        | [:]
-    }
+        label                         | compoundId       | expectedCompoundList
+        "Return an JSON Object"       | new Integer(872) | [probeId: "null", sids: [], cid: 872] as JSONObject
+     }
 }
