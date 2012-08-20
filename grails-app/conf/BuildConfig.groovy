@@ -37,11 +37,13 @@ grails.project.dependency.resolution = {
         }
 
 
-        compile 'org.apache.commons:commons-lang3:3.1'
+       compile 'org.apache.commons:commons-lang3:3.1'
         compile ('bard.jdo:ncgc-jdo-wrapper:1'){
             excludes "commons-logging", "groovy"
         }
         compile "ChemAxon:ChemAxonJChemBase:5.10"
+
+
 
     }
 

@@ -58,7 +58,7 @@ class QueryServiceIntegrationSpec extends IntegrationSpec {
         assert expectedSIDs == sids
         where:
         label                       | cid                 | expectedSIDs                                                                                        | expectedSmiles
-        "Return a Compound Adapter" | new Integer(658342) | [5274057, 47984903, 51638425, 113532087, 124777946, 970329, 6320599, 35591597, 76362856, 112834159] | "C(CN1CCCCC1)N2C(N=CC3=CC=CS3)=NC4=CC=CC=C24"
+        "Return a Compound Adapter" | new Integer(658342) | [5274057, 47984903, 51638425, 113532087, 124777946, 970329, 6320599, 35591597, 76362856, 112834159] | "C(CN1CCCCC1)N1C(N=CC2=CC=CS2)=NC2=CC=CC=C12"
     }
 
     void "test Show Experiment"() {
@@ -109,16 +109,19 @@ class QueryServiceIntegrationSpec extends IntegrationSpec {
      */
     void "test Structure Search #label"() {
         when:
-        final List<CompoundAdapter> compoundAdapters = queryService.structureSearch(smiles, structureSearchParamsType)
+        final List<CompoundAdapter> compoundAdapters = queryService.structureSearch(smiles, structureSearchParamsType,top,skip)
         then:
         assert compoundAdapters
         assert numberOfCompounds == compoundAdapters.size()
         where:
-        label                    | structureSearchParamsType                 | smiles                                        | numberOfCompounds
-        "Super structure search" | StructureSearchParams.Type.Superstructure | "O=S(*C)(Cc1ccc2ncc(CCNC)c2c1)=O"             | 3
-        "Similarity Search"      | StructureSearchParams.Type.Similarity     | "CN(C)CCC1=CNC2=C1C=C(CS(=O)(=O)N3CCCC3)C=C2" | 16
-        "Exact match Search"     | StructureSearchParams.Type.Exact          | "CN(C)CCC1=CNC2=C1C=C(CS(=O)(=O)N3CCCC3)C=C2" | 1
-        "Sub structure Search"   | StructureSearchParams.Type.Substructure   | "CN(C)CCC1=CNC2=C1C=C(CS(=O)(=O)N3CCCC3)C=C2" | 1
+        label                       | structureSearchParamsType                 | smiles                                        | skip | top | numberOfCompounds
+        "Super structure search"    | StructureSearchParams.Type.Superstructure | "O=S(*C)(Cc1ccc2ncc(CCNC)c2c1)=O"             | 0    | 10  | 3
+        "Similarity Search"         | StructureSearchParams.Type.Similarity     | "CN(C)CCC1=CNC2=C1C=C(CS(=O)(=O)N3CCCC3)C=C2" | 0    | 10  | 1
+        "Exact match Search"        | StructureSearchParams.Type.Exact          | "CN(C)CCC1=CNC2=C1C=C(CS(=O)(=O)N3CCCC3)C=C2" | 0    | 10  | 1
+        "Sub structure Search"      | StructureSearchParams.Type.Substructure   | "CN(C)CCC1=CNC2=C1C=C(CS(=O)(=O)N3CCCC3)C=C2" | 0    | 10  | 1
+        "Default (to Substructure)" | StructureSearchParams.Type.Substructure   | "n1cccc2ccccc12"                              | 0    | 10  | 10
+        "Skip 10, top 10"           | StructureSearchParams.Type.Substructure   | "n1cccc2ccccc12"                              | 10   | 10  | 10
+
     }
 
 }

@@ -59,16 +59,20 @@ class QueryService {
 //
 //
 //    }
-    List<CompoundAdapter> structureSearch(final String smiles,final StructureSearchParams.Type structureSearchParamsType ){
+    List<CompoundAdapter> structureSearch(final String smiles, final StructureSearchParams.Type structureSearchParamsType, int top = 10, int skip = 0) {
         List<CompoundAdapter> compounds = []
         if (smiles) {
             final RESTCompoundService restCompoundService = this.queryServiceWrapper.getRestCompoundService()
-            ServiceIterator<Compound> iter  = restCompoundService.structureSearch(new StructureSearchParams
-            (smiles,structureSearchParamsType));
+
+            final StructureSearchParams structureSearchParams =
+                new StructureSearchParams(smiles)
+          structureSearchParams.setSkip(skip).setTop(top);
+
+            ServiceIterator<Compound> iter = restCompoundService.structureSearch(structureSearchParams);
             while (iter.hasNext()) {
                 Compound compound = iter.next();
                 compounds.add(new CompoundAdapter(compound))
-             }
+            }
         }
         return compounds
     }
@@ -118,7 +122,7 @@ class QueryService {
             final RESTCompoundService restCompoundService = this.queryServiceWrapper.getRestCompoundService()
             final Compound compound = restCompoundService.get(compoundId)
             if (compound) {
-                return  new CompoundAdapter(compound)
+                return new CompoundAdapter(compound)
             }
         }
         return null
