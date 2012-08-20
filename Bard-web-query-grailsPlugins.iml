@@ -77,10 +77,8 @@
           <root url="jar://$USER_HOME$/.grails/ivy-cache/org.codehaus.jackson/jackson-core-asl/jars/jackson-core-asl-1.9.2.jar!/" />
           <root url="jar://$USER_HOME$/.grails/ivy-cache/org.codehaus.jackson/jackson-mapper-asl/jars/jackson-mapper-asl-1.9.2.jar!/" />
           <root url="jar://$USER_HOME$/.grails/ivy-cache/ChemAxon/ChemAxonJChemBase/jars/ChemAxonJChemBase-5.10.jar!/" />
-          <root url="jar://$USER_HOME$/.grails/ivy-cache/org.ncgc.jdo/bard-client/jars/bard-client-1.jar!/" />
           <root url="jar://$USER_HOME$/.grails/ivy-cache/org.apache.httpcomponents/httpcore/jars/httpcore-4.1.jar!/" />
           <root url="jar://$USER_HOME$/.grails/ivy-cache/org.apache.httpcomponents/httpclient/jars/httpclient-4.1.1.jar!/" />
-          <root url="jar://$USER_HOME$/.grails/ivy-cache/bard.jdo/ncgc-jdo-wrapper/jars/ncgc-jdo-wrapper-1.jar!/" />
           <root url="jar://$USER_HOME$/.grails/ivy-cache/org.apache.commons/commons-lang3/jars/commons-lang3-3.1.jar!/" />
           <root url="jar://$USER_HOME$/.grails/ivy-cache/xml-resolver/xml-resolver/jars/xml-resolver-1.2.jar!/" />
           <root url="jar://$USER_HOME$/.grails/ivy-cache/xerces/xercesImpl/jars/xercesImpl-2.8.1.jar!/" />
@@ -91,6 +89,7 @@
           <root url="jar://$USER_HOME$/.grails/ivy-cache/org.objenesis/objenesis/jars/objenesis-1.2.jar!/" />
           <root url="jar://$USER_HOME$/.grails/ivy-cache/org.gmetrics/GMetrics/jars/GMetrics-0.3.jar!/" />
           <root url="jar://$USER_HOME$/.grails/ivy-cache/org.codenarc/CodeNarc/jars/CodeNarc-0.15.jar!/" />
+          <root url="jar://$USER_HOME$/.grails/ivy-cache/commons-logging/commons-logging/jars/commons-logging-1.1.1.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />

@@ -1,3 +1,5 @@
+import bardqueryapi.QueryServiceWrapper
+
 // Place your Spring DSL code here
 beans = {
     clientBasicAuth(wslite.http.auth.HTTPBasicAuthorization) {
@@ -22,7 +24,7 @@ beans = {
     }
     final String ncgcBaseURL = grailsApplication.config.ncgc.server.root.url
 
-    queryServiceWrapper(bard.QueryServiceWrapper,ncgcBaseURL){
+    queryServiceWrapper(QueryServiceWrapper,ncgcBaseURL){
 
     }
     elasticSearchService(elasticsearchplugin.ElasticSearchService) {

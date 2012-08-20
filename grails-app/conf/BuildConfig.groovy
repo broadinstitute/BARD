@@ -36,13 +36,13 @@ grails.project.dependency.resolution = {
             excludes "commons-logging", "xml-apis", "groovy"
         }
 
-
-       compile 'org.apache.commons:commons-lang3:3.1'
-        compile ('bard.jdo:ncgc-jdo-wrapper:1'){
-            excludes "commons-logging", "groovy"
-        }
-       compile "ChemAxon:ChemAxonJChemBase:5.10"
-
+        compile 'org.apache.commons:commons-lang3:3.1'
+        compile 'ChemAxon:ChemAxonJChemBase:5.10'
+        compile 'org.apache.httpcomponents:httpcomponents-core:4.1.1'
+        compile 'org.apache.httpcomponents:httpclient:4.1.1'
+        compile 'org.codehaus.jackson:jackson-core-asl:1.9.2'
+        compile 'org.codehaus.jackson:jackson-mapper-asl:1.9.2'
+        compile "ChemAxon:ChemAxonJChemBase:5.10"
 
 
     }

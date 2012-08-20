@@ -1,6 +1,5 @@
 package bardqueryapi
 
-import bard.QueryServiceWrapper
 import bard.core.adapter.CompoundAdapter
 import bard.core.rest.RESTAssayService
 import bard.core.rest.RESTCompoundService
@@ -24,6 +23,7 @@ class QueryService {
     String bardAssayViewUrl // grailsApplication.config.bard.assay.view.url
     //read from properties file
     final String AUTO_COMPLETE_SEARCH_URL = "assays/_search"
+
 
     /**
      * The JSON representation that would be used for Autocompletion of assay names

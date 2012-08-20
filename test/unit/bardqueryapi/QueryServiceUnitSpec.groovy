@@ -1,6 +1,5 @@
 package bardqueryapi
 
-import bard.QueryServiceWrapper
 import bard.core.adapter.CompoundAdapter
 import bard.core.rest.RESTAssayService
 import bard.core.rest.RESTCompoundService
