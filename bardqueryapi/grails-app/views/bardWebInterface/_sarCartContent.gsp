@@ -16,54 +16,39 @@
         <td>
             ${shoppingCartService.getQuantity(elem)}
         </td>
+        %{--<td>--}%
+            %{--<a href="/bardqueryapi/sarCart/add/${shoppable.id}?class=class+bardqueryapi.CartAssay&version=0"--}%
+               %{--onclick="jQuery.ajax({  type:'POST',--}%
+                   %{--data:{'id': '2','class': 'class bardqueryapi.CartAssay','version': '0'},--}%
+                   %{--url:'/bardqueryapi/sarCart/add',--}%
+                   %{--success:function(data,textStatus){--}%
+                       %{--jQuery('#sarCartContent').html(data);--}%
+                       %{--alert('success');--}%
+                   %{--},--}%
+                   %{--error:function(XMLHttpRequest,textStatus,errorThrown){--}%
+                       %{--alert('error')--}%
+                   %{--}--}%
+                %{--});--}%
+               %{--return false;"--}%
+               %{--action="add"--}%
+               %{--controller="sarCart">add</a>--}%
+        %{--</td>--}%
         <td>
-            <a href="/bardqueryapi/sarCart/add/${shoppable.id}?class=class+bardqueryapi.CartAssay&version=0"
-               onclick="jQuery.ajax({  type:'POST',
-                   data:{'id': '2','class': 'class bardqueryapi.CartAssay','version': '0'},
-                   url:'/bardqueryapi/sarCart/add',
-                   success:function(data,textStatus){
-                       jQuery('#sarCartContent').html(data);
-                       alert('success');
-                   },
-                   error:function(XMLHttpRequest,textStatus,errorThrown){
-                       alert('error')
-                   },
-                   complete:function(XMLHttpRequest,textStatus){
-                       Effect.Pulsate('shoppingCartContent', {pulses: 1, duration: 1.0});
-                       alert('complete');
-                   }
-               });
-               return false;"
-               action="add"
-               controller="sarCart">add</a>
-            %{--<g:remoteLink action="add"--}%
-                          %{--controller="sarCart"--}%
-                          %{--params="${[id:CartAssay.findByShoppingItem(it['item']).id, class:(CartAssay.findByShoppingItem(it['item'])).class, version:(CartAssay.findByShoppingItem(it['item'])).version]}"--}%
-                          %{--update="sarCartContent"--}%
-                          %{--onComplete="Effect.Pulsate('shoppingCartContent', {pulses: 1, duration: 1.0});">--}%
-                %{--Add--}%
-            %{--</g:remoteLink>--}%
-        </td>
-        <td>
-            <a href="/bardqueryapi/sarCart/remove/${shoppable.id}?class=class+bardqueryapi.CartAssay&version=0"
+            <a href="/bardqueryapi/sarCart/remove/${shoppable.id}"
                onclick="jQuery.ajax({  type:'POST',
                    data:{'id': '${shoppable.id}','class': 'class bardqueryapi.CartAssay','version': '0'},
                    url:'/bardqueryapi/sarCart/remove',
                    success:function(data,textStatus){
                        jQuery('#sarCartContent').html(data);
-                       alert('success');
                    },
                    error:function(XMLHttpRequest,textStatus,errorThrown){
-                       alert('error')
-                   },
-                   complete:function(XMLHttpRequest,textStatus){
-                       Effect.Pulsate('shoppingCartContent', {pulses: 1, duration: 1.0});
-                       alert('complete');
+                       alert('problem removing assay')
                    }
                });
                return false;"
                action="remove"
-               controller="sarCart">remove</a>
+               class="removeXMark"
+               controller="sarCart">X</a>
         </td>
         <td>
             %{--<g:remoteLink action="removeAll"--}%

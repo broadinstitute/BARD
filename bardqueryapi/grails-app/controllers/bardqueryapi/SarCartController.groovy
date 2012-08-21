@@ -22,14 +22,13 @@ class SarCartController {
         } else {
             shoppingCartService.addToShoppingCart(cartAssay)
         }
-        render(template:'/bardWebInterface/sarCartContent',model:[data:shoppingCartService,textStatus:'foo'])
+        render(template:'/bardWebInterface/sarCartContent')
     }
     def remove() {
-        int idToRemove = params.id
-        def shoppingItem = Shoppable.findByShoppingItem(idToRemove)
+        int idToRemove = Integer.parseInt(params.id)
+        def shoppingItem = Shoppable.get(idToRemove)
         shoppingCartService.removeFromShoppingCart(shoppingItem)
-
-        render(template:'/bardWebInterface/sarCartContent',model:[data:shoppingCartService,textStatus:'foo'])
+        render(template:'/bardWebInterface/sarCartContent')
     }
     def removeAll() {
         shoppingCartService.emptyShoppingCart()
