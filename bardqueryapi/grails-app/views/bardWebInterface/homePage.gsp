@@ -154,66 +154,27 @@
 %{-- SAR cart itself goes here--}%
 <div class="panel">
     <h3>SAR Cart</h3>
+    <table>
+        <thead>
+        <tr>
 
-    <sc:each>
-        <tr>
-            <td>
-                ${CartAssay.findByShoppingItem(it['item'])}
-            </td>
-            <td>
-                ${it['qty']}
-            </td>
-            <td>
-                <g:remoteLink action="add"
-                              controller="sarCart"
-                              params="${[id:CartAssay.findByShoppingItem(it['item']).id, class:(CartAssay.findByShoppingItem(it['item'])).class, version:(CartAssay.findByShoppingItem(it['item'])).version]}"
-                              update="shoppingCartContent"
-                              onComplete="Effect.Pulsate('shoppingCartContent', {pulses: 1, duration: 1.0});">
-                    Add
-                </g:remoteLink>
-            </td>
-            <td>
-                <g:remoteLink action="remove"
-                              controller="sarCart"
-                              params="${[id:CartAssay.findByShoppingItem(it['item']).id, class:(CartAssay.findByShoppingItem(it['item'])).class, version:(CartAssay.findByShoppingItem(it['item'])).version]}"
-                              update="shoppingCartContent"
-                              onComplete="Effect.Pulsate('shoppingCartContent', {pulses: 1, duration: 1.0});">
-                    Remove
-                </g:remoteLink>
-            </td>
-            <td>
-                <g:remoteLink action="removeAll"
-                              controller="sarCart"
-                              params="${[id:CartAssay.findByShoppingItem(it['item']).id, class:(CartAssay.findByShoppingItem(it['item'])).class, version:(CartAssay.findByShoppingItem(it['item'])).version]}"
-                              update="shoppingCartContent"
-                              onComplete="Effect.Pulsate('shoppingCartContent', {pulses: 1, duration: 1.0});">
-                    Remove All
-                </g:remoteLink>
-            </td>
+            <th>Product</th>
+
+            <th>Qty</th>
+
+            <th>&nbsp;</th>
+
+            <th>&nbsp;</th>
+
+            <th>&nbsp;</th>
+
         </tr>
-    </sc:each>
-    <g:if test="${checkedOutItems}">
-        <tr>
-            <td><h2>Checked out items</h2></td>
-            <td>&nbsp;</td>
-            <td>&nbsp;</td>
-            <td>&nbsp;</td>
-            <td>&nbsp;</td>
-        </tr>
-        <g:each in="${checkedOutItems}" var="item">
-            <tr>
-                <td>
-                    ${com.metasieve.shoppingcart.Shoppable.findByShoppingItem(item['item']) ?: com.metasieve.shoppingcart.CartAssay.findByShoppingItem(item['item'])}
-                </td>
-                <td>
-                    ${item['qty']}
-                </td>
-                <td>&nbsp;</td>
-                <td>&nbsp;</td>
-                <td>&nbsp;</td>
-            </tr>
-        </g:each>
-    </g:if>
+        </thead>
+        <tbody id="sarCartContent">
+        <g:render plugin="shoppingCart" template="sarCartContent"/>
+        </tbody>
+    </table>
+
 
 </div>
 <a class="trigger" href="#">infos</a>
