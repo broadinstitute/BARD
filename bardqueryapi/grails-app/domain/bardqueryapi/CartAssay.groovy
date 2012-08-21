@@ -3,7 +3,8 @@ package bardqueryapi
 import com.metasieve.shoppingcart.Shoppable
 
 class CartAssay extends Shoppable {
-    String assayTitle = "unknown"
+
+    String assayTitle = "unknown assay name"
 
     @Override
     String toString() {
