@@ -9,9 +9,9 @@ import elasticsearchplugin.ElasticSearchService
 import elasticsearchplugin.QueryExecutorService
 import grails.test.mixin.TestFor
 import spock.lang.Specification
+import spock.lang.Unroll
 import wslite.json.JSONObject
 import bard.core.*
-import spock.lang.Unroll
 
 /**
  * See the API for {@link grails.test.mixin.support.GrailsUnitTestMixin} for usage instructions
@@ -224,7 +224,7 @@ class QueryServiceUnitSpec extends Specification {
         given:
         ServiceIterator<Compound> iter = Mock(ServiceIterator.class)
         when:
-         service.structureSearch(smiles, structureSearchParamsType)
+        service.structureSearch(smiles, structureSearchParamsType)
         then:
         queryServiceWrapper.getRestCompoundService() >> { restCompoundService }
         restCompoundService.structureSearch(_) >> {iter}
@@ -235,5 +235,53 @@ class QueryServiceUnitSpec extends Specification {
         "Exact match Search"     | StructureSearchParams.Type.Exact          | "CC"
         "Similarity Search"      | StructureSearchParams.Type.Similarity     | "CC"
         "Super structure search" | StructureSearchParams.Type.Superstructure | "CC"
+    }
+
+    void "test search type #label"() {
+
+
+        when:
+        QuerySearchType querySearchType = service.getQuerySearchType(searchString)
+        then:
+        assert expectedSearchType == querySearchType
+
+        where:
+        label                                                    | searchString                                                 | expectedSearchType
+        "Comma separated numbers"                                | "123,789"                                                    | QuerySearchType.ID
+        "Comma separated non-numbers"                            | "stuff,math"                                                 | QuerySearchType.REGULAR
+        "Mixture of number and non-non numbers"                  | "123,stuff,789,math"                                         | QuerySearchType.REGULAR
+        "Numbers separated by comma and then one or more spaces" | "123,   789,10"                                              | QuerySearchType.ID
+        "Exact Structure Search"                                 | "${StructureSearchParams.Type.Exact.toString()}:CC"          | QuerySearchType.STRUCTURE
+        "Exact Super Structure Search"                           | "${StructureSearchParams.Type.Superstructure.toString()}:CC" | QuerySearchType.STRUCTURE
+        "Exact Similarity Structure Search"                      | "${StructureSearchParams.Type.Similarity.toString()}:CC"     | QuerySearchType.STRUCTURE
+        "Exact Substructure Structure Search"                    | "${StructureSearchParams.Type.Substructure.toString()}:CC"   | QuerySearchType.STRUCTURE
+        "Number followed by structiure search"                   | "123,${StructureSearchParams.Type.Substructure.toString()}"  | QuerySearchType.REGULAR
+        "Number followed by structiure search"                   | "CC:${StructureSearchParams.Type.Substructure.toString()}"   | QuerySearchType.REGULAR
+        "Empty String"                                           | ""                                                           | QuerySearchType.REGULAR
+        "Looks like Structure search Format"                     | "Stuff:1235"                                                 | QuerySearchType.REGULAR
+
+
+    }
+    void "test is Structure Search #label"() {
+        when:
+        boolean isStructureSearch = service.isStructureSearch(searchString)
+        then:
+        assert expectedResults == isStructureSearch
+
+        where:
+        label                                                    | searchString                                                 | expectedResults
+        "Comma separated numbers"                                | "123,789"                                                    | false
+        "Comma separated non-numbers"                            | "stuff,math"                                                 | false
+        "Mixture of number and non-non numbers"                  | "123,stuff,789,math"                                         | false
+        "Numbers separated by comma and then one or more spaces" | "123,   789,10"                                              | false
+        "Exact Structure Search"                                 | "${StructureSearchParams.Type.Exact.toString()}:CC"          | true
+        "Exact Super Structure Search"                           | "${StructureSearchParams.Type.Superstructure.toString()}:CC" | true
+        "Exact Similarity Structure Search"                      | "${StructureSearchParams.Type.Similarity.toString()}:CC"     | true
+        "Exact Substructure Structure Search"                    | "${StructureSearchParams.Type.Substructure.toString()}:CC"   | true
+        "Number followed by structiure search"                   | "123,${StructureSearchParams.Type.Substructure.toString()}"  | false
+        "Number followed by structiure search"                   | "CC:${StructureSearchParams.Type.Substructure.toString()}"   | false
+        "Empty String"                                           | ""                                                           | false
+        "Looks like Structure search Format"                     | "Stuff:1235"                                                 | false
+
     }
 }

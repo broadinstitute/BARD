@@ -10,9 +10,16 @@ import elasticsearchplugin.ESXCompound
 import elasticsearchplugin.ElasticSearchService
 import elasticsearchplugin.QueryExecutorService
 import wslite.json.JSONObject
+
+import java.util.regex.Matcher
+import java.util.regex.Pattern
+
 import bard.core.*
 
 class QueryService {
+
+    final Pattern ID_PATTERN =
+        Pattern.compile("^([0-9]+,? *)+")
     QueryServiceWrapper queryServiceWrapper
     ElasticSearchService elasticSearchService
     QueryExecutorService queryExecutorService
@@ -23,7 +30,6 @@ class QueryService {
     String bardAssayViewUrl // grailsApplication.config.bard.assay.view.url
     //read from properties file
     final String AUTO_COMPLETE_SEARCH_URL = "assays/_search"
-
 
     /**
      * The JSON representation that would be used for Autocompletion of assay names
@@ -59,6 +65,50 @@ class QueryService {
 //
 //
 //    }
+
+    public QuerySearchType getQuerySearchType(String searchString) {
+
+        final Matcher matcher = ID_PATTERN.matcher(searchString)
+
+        if (matcher.matches()) { //matches an ID search
+            return QuerySearchType.ID
+        }
+        if (isStructureSearch(searchString)) {
+            return QuerySearchType.STRUCTURE
+        }
+        return QuerySearchType.REGULAR
+    }
+    /**
+     *
+     * @param searchString
+     * @return true if this is a structure search, false otherwise
+     * Structure searches are of the form
+     *  StructureSearchParams.Type:SMILES_STRING
+     */
+    protected boolean isStructureSearch(String searchString) {
+
+        try {
+            if (searchString) {
+                final String[] searchStringSplit = searchString.split(":")
+                final StructureSearchParams.Type searchType = searchStringSplit[0] as StructureSearchParams.Type
+
+                switch (searchType) {
+                    case StructureSearchParams.Type.Substructure:
+                    case StructureSearchParams.Type.Similarity:
+                    case StructureSearchParams.Type.Exact:
+                    case StructureSearchParams.Type.Superstructure:
+                        return true
+                    default:
+                        return false
+                }
+
+            }
+        } catch (Exception ee) {
+            log.error(ee)
+        }
+        return false
+    }
+
     List<CompoundAdapter> structureSearch(final String smiles, final StructureSearchParams.Type structureSearchParamsType, final int top = 10, final int skip = 0) {
         List<CompoundAdapter> compounds = []
         if (smiles) {
@@ -66,9 +116,9 @@ class QueryService {
 
             final StructureSearchParams structureSearchParams =
                 new StructureSearchParams(smiles)
-          structureSearchParams.setSkip(skip).setTop(top);
+            structureSearchParams.setSkip(skip).setTop(top);
 
-            if(structureSearchParamsType == StructureSearchParams.Type.Similarity){
+            if (structureSearchParamsType == StructureSearchParams.Type.Similarity) {
                 structureSearchParams.setThreshold(0.9)
             }
             ServiceIterator<Compound> iter = restCompoundService.structureSearch(structureSearchParams);
@@ -277,5 +327,21 @@ public enum StructureSearchType {
     String getDescription() {
         return this.description;
     }
+}
+public enum QuerySearchType {
+    STRUCTURE("Structure"),
+    ID("Id"),
+    REGULAR("Regular");
+
+    final String description
+
+    QuerySearchType(String description) {
+        this.description = description
+    }
+
+    String getDescription() {
+        return this.description;
+    }
+
 }
 
