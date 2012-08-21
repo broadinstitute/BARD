@@ -32,10 +32,9 @@ class BardWebInterfaceController {
         def searchString = params.searchString?.trim()
         if (searchString) {
             def result = this.queryService.search(searchString)
-            def cart = shoppingCartService.addToShoppingCart(new CartAssay(),1)
+            def cart = shoppingCartService.addToShoppingCart(new CartAssay(assayTitle:"assay1"),1)
             render(view: "homePage", model: result, cart: cart)
             def t =  shoppingCartService.findAll()
-            println 'bar'
             return
         }
         shoppingCartService.addToShoppingCart(new CartAssay(),1)
