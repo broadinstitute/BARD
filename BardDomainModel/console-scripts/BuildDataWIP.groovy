@@ -17,7 +17,7 @@ try{
     assay.save(flush:true)
     assert 5 == Assay.count()
 
-    MeasureContext mc = MeasureContext.build()
+    AssayContext mc = AssayContext.build()
     mc.assay = assay
     mc.save(flush:true)
     tx.rollback()

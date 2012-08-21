@@ -8,7 +8,7 @@ class Measure {
     Date dateCreated
     Date lastUpdated
     String modifiedBy
-    MeasureContext measureContext
+    AssayContext measureContext
     Unit entryUnit
     Element element
     Assay assay

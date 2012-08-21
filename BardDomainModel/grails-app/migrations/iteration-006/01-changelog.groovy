@@ -1,5 +1,6 @@
 databaseChangeLog = {
-
+    String bardDomainModelMigrationsDir = ctx.migrationResourceAccessor.baseDirectory
+    File migrationsDir = new File(bardDomainModelMigrationsDir)
 
     changeSet(author: 'ddurkin', id: 'set null assay_type to Regular', dbms: 'oracle', context: 'standard') {
         grailsChange {
@@ -11,8 +12,6 @@ databaseChangeLog = {
             }
         }
     }
-
-
 
     changeSet(author: 'ddurkin', id: 'assay_type NOT NULL', dbms: 'oracle', context: 'standard') {
         addNotNullConstraint(tableName: "ASSAY", columnName: "assay_type")
@@ -35,6 +34,22 @@ databaseChangeLog = {
             """)
 
 
+    }
+
+    changeSet(author: 'ddurkin', id: '01-assay-related-refactoring.sql', dbms: 'oracle', context: 'standard') {
+        sqlFile(path: "${migrationsDir}/iteration-006/sql/01-assay-related-refactoring.sql", stripComments: true)
+    }
+
+    changeSet(author: 'ddurkin', id: '02-element-related-refactoring.sql', dbms: 'oracle', context: 'standard') {
+        sqlFile(path: "${migrationsDir}/iteration-006/sql/02-element-related-refactoring.sql", stripComments: true)
+    }
+
+    changeSet(author: 'ddurkin', id: '03-project-related-refactoring.sql', dbms: 'oracle', context: 'standard') {
+        sqlFile(path: "${migrationsDir}/iteration-006/sql/03-project-related-refactoring.sql", stripComments: true)
+    }
+
+    changeSet(author: 'ddurkin', id: '04-result-related-refactoring.sql', dbms: 'oracle', context: 'standard') {
+        sqlFile(path: "${migrationsDir}/iteration-006/sql/04-result-related-refactoring.sql", stripComments: true)
     }
 
 

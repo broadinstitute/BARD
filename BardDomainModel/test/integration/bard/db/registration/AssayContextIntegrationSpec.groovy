@@ -1,13 +1,12 @@
 package bard.db.registration
 
-import grails.buildtestdata.mixin.Build
+import grails.plugin.spock.IntegrationSpec
 import org.junit.Before
-import spock.lang.Shared
-import spock.lang.Specification
+
 import spock.lang.Unroll
 
-import static bard.db.registration.MeasureContext.CONTEXT_NAME_MAX_SIZE
-import static bard.db.registration.MeasureContext.MODIFIED_BY_MAX_SIZE
+import static AssayContext.CONTEXT_NAME_MAX_SIZE
+import static AssayContext.MODIFIED_BY_MAX_SIZE
 import static test.TestUtils.assertFieldValidationExpectations
 import static test.TestUtils.createString
 
@@ -15,22 +14,16 @@ import static test.TestUtils.createString
  * Created with IntelliJ IDEA.
  * User: ddurkin
  * Date: 8/17/12
- * Time: 1:25 PM
+ * Time: 2:38 PM
  * To change this template use File | Settings | File Templates.
  */
-@Build([Assay, MeasureContext, Measure, MeasureContextItem])
 @Unroll
-class MeasureContextUnitSpec extends Specification {
-
-    MeasureContext domainInstance
-
-    // the build() method wasn't visible in the where block
-    @Shared Assay validAssay
+class AssayContextIntegrationSpec extends IntegrationSpec {
+    AssayContext domainInstance
 
     @Before
     void doSetup() {
-        domainInstance = MeasureContext.buildWithoutSave()
-        validAssay = Assay.build()
+        domainInstance = AssayContext.buildWithoutSave()
     }
 
     void "test contextName constraints #desc contextName: '#valueUnderTest'"() {
@@ -64,6 +57,7 @@ class MeasureContextUnitSpec extends Specification {
 
         when: 'a value is set for the field under test'
         domainInstance[(field)] = valueUnderTest
+        valueUnderTest?.save(flush: true) // hack to temporarily get around FK_MEASURE_CONTEXT_ASSAY) violated - parent key not found
         domainInstance.validate()
 
         then: 'verify valid or invalid for expected reason'
@@ -77,7 +71,7 @@ class MeasureContextUnitSpec extends Specification {
         where:
         desc             | valueUnderTest | valid | errorCode
         'null not valid' | null           | false | 'nullable'
-        'valid assay'    | validAssay     | true  | null
+        'valid assay'    | Assay.buildWithoutSave()     | true  | null
 
     }
 

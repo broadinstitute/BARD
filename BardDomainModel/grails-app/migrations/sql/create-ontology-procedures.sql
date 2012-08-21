@@ -87,35 +87,38 @@ as
                             ano_error out number,
                             avo_errmsg out varchar2)
     as
+    --
+    -- schatwin 8_17_12  added "_tree" to all the materialized view tables
+    --
     begin
         if avi_tree_name = pv_tree_assay_descriptor
         then
-            delete from assay_descriptor;
+            delete from assay_descriptor_tree;
 
 
         elsif avi_tree_name = pv_tree_biology_descriptor
         then
-            delete from biology_descriptor;
+            delete from biology_descriptor_tree;
 
         elsif avi_tree_name = pv_tree_instance_descriptor
         then
-            delete from instance_descriptor;
+            delete from instance_descriptor_tree;
 
         elsif avi_tree_name = pv_tree_result_type
         then
-            delete from result_type;
+            delete from result_type_tree;
 
         elsif avi_tree_name = pv_tree_unit
         then
-            delete from Unit;
+            delete from Unit_tree;
 
         elsif avi_tree_name = pv_tree_stage
         then
-            delete from Stage;
+            delete from Stage_tree;
 
         elsif avi_tree_name = pv_tree_laboratory
         then
-            delete from laboratory;
+            delete from laboratory_tree;
         end if;
 
         trace('Delete from ' || avi_tree_name || ' '|| to_char(sql%rowcount) || ' rows' );
@@ -131,11 +134,14 @@ as
                                 ano_error out number,
                                 avo_errmsg out varchar2)
     as
+    --
+    -- schatwin 8_17_12  added "_tree" to all the materialized view tables
+    --
 
     begin
         if avi_tree_name = pv_tree_assay_descriptor
         then
-            insert into assay_descriptor
+            insert into assay_descriptor_tree
                 (node_id,
                 parent_node_id,
                 element_id,
@@ -160,7 +166,7 @@ as
 
         elsif avi_tree_name = pv_tree_biology_descriptor
         then
-            insert into biology_descriptor
+            insert into biology_descriptor_tree
                 (node_id,
                 parent_node_id,
                 element_id,
@@ -185,7 +191,7 @@ as
 
         elsif avi_tree_name = pv_tree_instance_descriptor
         then
-            insert into instance_descriptor
+            insert into instance_descriptor_tree
                 (node_id,
                 parent_node_id,
                 element_id,
@@ -210,7 +216,7 @@ as
 
         elsif avi_tree_name = pv_tree_result_type
         then
-            insert into result_type
+            insert into result_type_tree
                 (node_id,
                 parent_node_id,
                 result_type_id,
@@ -233,7 +239,7 @@ as
 
         elsif avi_tree_name = pv_tree_unit
         then
-            insert into unit
+            insert into unit_tree
                 (node_id,
                 parent_node_id,
                 unit_id,
@@ -248,7 +254,7 @@ as
 
         elsif avi_tree_name = pv_tree_stage
         then
-            insert into stage
+            insert into stage_tree
                 (node_id,
                 parent_node_id,
                 stage_id,
@@ -265,7 +271,7 @@ as
 
         elsif avi_tree_name = pv_tree_laboratory
         then
-            insert into laboratory
+            insert into laboratory_tree
                 (node_id,
                 parent_node_id,
                 laboratory_id,
@@ -293,7 +299,7 @@ as
 
     end save_node;
 
-    --- edited schatwin, 6;25;12 --------------------------------------------------
+    --- edited schatwin, 6/25/12 --------------------------------------------------
     -- changedwhere clause in cursor in walk_down_the_tree to just use 1st 3 letters of the relationship (property)
     ---
     procedure walk_down_the_tree(ani_element_id in number,
@@ -382,12 +388,18 @@ as
 
 
      procedure make_trees (avi_tree_name in varchar2 default null)
+     --
+     -- schatwin
+     -- 8/16/12 -- changed the values for the root node in each tree to get them fom the element table
     as
     cursor cur_tree_root
-        is select *
-           from tree_root
-           where tree_name = upper(avi_tree_name)
-              or avi_tree_Name is null;
+        -- adds the Element as a join to get the label and descriptions (8/16/12)
+        is select tr.*, e.description, e.label
+           from tree_root tr,
+            element e
+           where e.element_id = tr.element_id
+             and (tree_name = upper(avi_tree_name)
+              or avi_tree_Name is null);
 
     lr_tree_root tree_root%rowtype;
     lr_element element%rowtype;
@@ -408,8 +420,8 @@ as
 
             -- put in the root row
             lr_element.element_id := lr_tree_root.element_id;
-            lr_element.label := lr_tree_root.tree_name;
-            lr_element.description := 'Singular root to ensure tree viewers work';
+            lr_element.label := lr_tree_root.label; --  was lr_tree_root.tree_name; (8/16/12)
+            lr_element.description := nvl(lr_tree_root.description, 'Placeholder til we get a definition'); --  was 'Singular root to ensure tree viewers work'; (8/16/12)
             lr_element.element_status := 'Published';
             lr_element.version := 0;
             lr_element.date_created := sysdate;
@@ -501,11 +513,11 @@ as
         from element
         where element_id = ani_new_element_id;
 
-        update result_context_item
+        update run_context_item
            set attribute_id = ani_new_element_id
          where attribute_id = ani_element_id;
 
-        update result_context_item
+        update run_context_item
            set value_id = ani_new_element_id,
                value_display = replace(value_display, lv_old_label, lv_new_label)
          where value_id = ani_element_id;
@@ -514,11 +526,11 @@ as
            set result_type_id = ani_new_element_id
          where result_type_id = ani_element_id;
 
-        update measure_context_item
+        update assay_context_item
            set attribute_id = ani_new_element_id
          where attribute_id = ani_element_id;
 
-        update measure_context_item
+        update assay_context_item
            set value_id = ani_new_element_id,
                value_display = replace(value_display, lv_old_label, lv_new_label)
          where value_id = ani_element_id;

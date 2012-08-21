@@ -23,10 +23,10 @@ class Assay {
     Date dateCreated
     Date lastUpdated
 
+
     static hasMany = [experiments: Experiment,
-            measureContextItems: MeasureContextItem,
             measures: Measure,
-            measureContexts: MeasureContext,
+            measureContexts: AssayContext,
             assayDocuments: AssayDocument]
 
     static mapping = {

@@ -3,9 +3,10 @@ package bard.db.registration
 import bard.db.dictionary.Element
 
 
-class MeasureContextItem {
+class AssayContextItem {
 
-    MeasureContextItem parentGroup
+
+
     AttributeType attributeType
     String extValueId
     String valueDisplay
@@ -17,24 +18,20 @@ class MeasureContextItem {
     String modifiedBy
     Element attributeElement
     Element valueElement
-    MeasureContext measureContext
-    Assay assay
     String qualifier
 
-    static hasMany = [children: MeasureContextItem]
+    AssayContext assayContext
 
-    static belongsTo = [Assay, MeasureContext]
+    static belongsTo = [assayContext:AssayContext]
 
     static mapping = {
-        id( column: 'MEASURE_CONTEXT_ITEM_ID', generator: 'sequence', params: [sequence: 'MEASURE_CONTEXT_ITEM_ID_SEQ'])
-        parentGroup column: "GROUP_MEASURE_CONTEXT_ITEM_ID"
+        id( column: 'ASSAY_CONTEXT_ITEM_ID', generator: 'sequence', params: [sequence: 'ASSAY_CONTEXT_ITEM_ID_SEQ'])
         valueElement column: "value_id"
         attributeElement column: "attribute_id"
         qualifier column: "qualifier", sqlType: "char", length: 2
     }
 
     static constraints = {
-        parentGroup nullable: true
         attributeType maxSize: 20
         extValueId(nullable: true, maxSize: 100)
         valueDisplay(nullable: true, maxSize: 512)
@@ -46,8 +43,6 @@ class MeasureContextItem {
         modifiedBy(nullable: true, maxSize: 40)
         attributeElement(nullable: false)
         valueElement(nullable: true)
-        measureContext(nullable: true)
-        assay(nullable: false)
         qualifier(nullable: true)
     }
 }

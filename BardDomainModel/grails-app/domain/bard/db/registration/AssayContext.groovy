@@ -1,6 +1,6 @@
 package bard.db.registration
 
-class MeasureContext {
+class AssayContext {
 
     private static final int CONTEXT_NAME_MAX_SIZE = 128
     private static final int MODIFIED_BY_MAX_SIZE = 40
@@ -9,17 +9,20 @@ class MeasureContext {
     Assay assay
 
     Set<Measure> measures = [] as Set<Measure>
-    Set<MeasureContextItem> measureContextItems = [] as Set<MeasureContextItem>
+    List<AssayContextItem> assayContextItems = []
 
     Date dateCreated
     Date lastUpdated
     String modifiedBy
 
-    static hasMany = [measureContextItems: MeasureContextItem,
+    static belongsTo = [assay: Assay]
+
+    static hasMany = [assayContextItems: AssayContextItem,
             measures: Measure]
 
     static mapping = {
-        id(column: "MEASURE_CONTEXT_ID", generator: "sequence", params: [sequence: 'MEASURE_CONTEXT_ID_SEQ'])
+        id(column: "ASSAY_CONTEXT_ID", generator: "sequence", params: [sequence: 'ASSAY_CONTEXT_ID_SEQ'])
+        assayContextItems(indexColumn: [name: 'display_order'])
     }
 
     static constraints = {
