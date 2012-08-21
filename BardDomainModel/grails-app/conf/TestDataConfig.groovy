@@ -12,9 +12,13 @@
 // */
 testDataConfig {
     sampleData {
-        'bard.db.registration.Assay'{
-            assayVersion = "1"
+        'bard.db.registration.Assay' {
         }
+        'bard.db.dictionary.Element' {
+            def i = 1
+            label = {-> "label${i++}"}
+        }
+
     }
 }
 

@@ -5,6 +5,8 @@ import spock.lang.Specification
 import spock.lang.Unroll
 import test.TestUtils
 
+import static bard.db.dictionary.Element.*
+
 /**
  * Created with IntelliJ IDEA.
  * User: balexand
@@ -13,6 +15,7 @@ import test.TestUtils
  * To change this template use File | Settings | File Templates.
  */
 @TestFor(Element)
+@Unroll
 class ElementUnitSpec extends Specification {
 
     ArrayList<Element> existingElement = [new Element(label: 'existingName')]
@@ -22,8 +25,6 @@ class ElementUnitSpec extends Specification {
         new Unit()
     }
 
-
-    @Unroll
     void "test constraints on label"() {
         given:
         mockForConstraintsTests(Element, existingElement)
@@ -37,16 +38,16 @@ class ElementUnitSpec extends Specification {
         TestUtils.assertFieldValidationExpectations(element, 'label', valid, errorCode)
 
         where:
-        name                       | valid | errorCode
-        TestUtils.createString(129)       | true  | null
-        TestUtils.createString(129) + "a" | false | 'maxSize'
-        null                       | false | 'nullable'
-        "foo"                      | true  | null
+        name                                         | valid | errorCode
+        TestUtils.createString(LABEL_MAX_SIZE)       | true  | null
+        TestUtils.createString(LABEL_MAX_SIZE) + "a" | false | 'maxSize'
+        null                                         | false | 'nullable'
+        "foo"                                        | true  | null
 
     }
 
 
-    @Unroll
+
     void "test constraints on description"() {
         given:
         mockForConstraintsTests(Element, existingElement)
@@ -60,18 +61,18 @@ class ElementUnitSpec extends Specification {
         TestUtils.assertFieldValidationExpectations(element, 'description', valid, errorCode)
 
         where:
-        name                        | valid | errorCode
-        null                        | true  | null
-        TestUtils.createString(1000)       | true  | null
-        TestUtils.createString(1000) + "a" | false | 'maxSize'
-        "foo"                       | true  | null
+        name                                               | valid | errorCode
+        null                                               | true  | null
+        TestUtils.createString(DESCRIPTION_MAX_SIZE)       | true  | null
+        TestUtils.createString(DESCRIPTION_MAX_SIZE) + "a" | false | 'maxSize'
+        "foo"                                              | true  | null
     }
 
 
 
 
 
-    @Unroll
+
     void "test constraints on abbreviation"() {
         given:
         mockForConstraintsTests(Element, existingElement)
@@ -85,14 +86,14 @@ class ElementUnitSpec extends Specification {
         TestUtils.assertFieldValidationExpectations(element, 'abbreviation', valid, errorCode)
 
         where:
-        name                                            | valid | errorCode
-        null                                            | true  | null
-        TestUtils.createString(20)        | true  | null
-        TestUtils.createString(20) + "1" | false | 'maxSize'
-        "foo"                                           | true  | null
+        name                                                | valid | errorCode
+        null                                                | true  | null
+        TestUtils.createString(ABBREVIATION_MAX_SIZE)       | true  | null
+        TestUtils.createString(ABBREVIATION_MAX_SIZE) + "1" | false | 'maxSize'
+        "foo"                                               | true  | null
     }
 
-    @Unroll
+
     void "test constraints on synonyms"() {
         given:
         mockForConstraintsTests(Element, existingElement)
@@ -106,15 +107,15 @@ class ElementUnitSpec extends Specification {
         TestUtils.assertFieldValidationExpectations(element, 'synonyms', valid, errorCode)
 
         where:
-        name                        | valid | errorCode
-        null                        | true  | null
-        TestUtils.createString(1000)       | true  | null
-        TestUtils.createString(1000) + "a" | false | 'maxSize'
-        "foo"                       | true  | null
+        name                                            | valid | errorCode
+        null                                            | true  | null
+        TestUtils.createString(SYNONYMS_MAX_SIZE)       | true  | null
+        TestUtils.createString(SYNONYMS_MAX_SIZE) + "a" | false | 'maxSize'
+        "foo"                                           | true  | null
     }
 
 
-    @Unroll
+
     void "test constraints on externalURL"() {
         given:
         mockForConstraintsTests(Element, existingElement)
@@ -128,14 +129,14 @@ class ElementUnitSpec extends Specification {
         TestUtils.assertFieldValidationExpectations(element, 'externalURL', valid, errorCode)
 
         where:
-        name                        | valid | errorCode
-        null                        | true  | null
-        TestUtils.createString(1000)       | true  | null
-        TestUtils.createString(1000) + "a" | false | 'maxSize'
-        "foo"                       | true  | null
+        name                                                | valid | errorCode
+        null                                                | true  | null
+        TestUtils.createString(EXTERNAL_URL_MAX_SIZE)       | true  | null
+        TestUtils.createString(EXTERNAL_URL_MAX_SIZE) + "a" | false | 'maxSize'
+        "foo"                                               | true  | null
     }
 
-    @Unroll
+
     void "test constraints on dateCreated"() {
         given:
         mockForConstraintsTests(Element, existingElement)
@@ -150,12 +151,12 @@ class ElementUnitSpec extends Specification {
 
         where:
         name       | valid | errorCode
+        null       | false  | 'nullable'
         new Date() | true  | null
-        null       | true  | null     // why isn't this false
     }
 
 
-    @Unroll
+
     void "test constraints on lastUpdated"() {
         given:
         mockForConstraintsTests(Element, existingElement)
@@ -175,7 +176,7 @@ class ElementUnitSpec extends Specification {
     }
 
 
-    @Unroll
+
     void "test constraints on modifiedBy"() {
         given:
         mockForConstraintsTests(Element, existingElement)
@@ -189,16 +190,16 @@ class ElementUnitSpec extends Specification {
         TestUtils.assertFieldValidationExpectations(element, 'modifiedBy', valid, errorCode)
 
         where:
-        name                             | valid | errorCode
-        null                             | true  | null
-        TestUtils.createString(40)       | true  | null
-        TestUtils.createString(40) + "a" | false | 'maxSize'
-        "joe"                            | true  | null
+        name                                               | valid | errorCode
+        null                                               | true  | null
+        TestUtils.createString(MODIFIED_BY_MAX_SIZE)       | true  | null
+        TestUtils.createString(MODIFIED_BY_MAX_SIZE) + "a" | false | 'maxSize'
+        "joe"                                              | true  | null
     }
 
 
 
-    @Unroll
+
     void "test constraints on unit"() {
         given:
         mockForConstraintsTests(Element, existingElement)
@@ -219,7 +220,7 @@ class ElementUnitSpec extends Specification {
     }
 
 
-    @Unroll
+
     void "test constraints on elementStatus"() {
         given:
         mockForConstraintsTests(Element, existingElement)
@@ -243,7 +244,7 @@ class ElementUnitSpec extends Specification {
 
 
 
-    @Unroll
+
     void "test constraints on readyForExtraction"() {
         given:
         mockForConstraintsTests(Element, existingElement)

@@ -12,7 +12,7 @@ import org.junit.Before
  * Integration tests for Asssay
  */
 @Unroll
-class AssayIntegrationSpec extends IntegrationSpec {
+class AssayConstraintIntegrationSpec extends IntegrationSpec {
 
     Assay domainInstance
 

@@ -14,7 +14,7 @@ import static test.TestUtils.createString
  */
 @Build(Assay)
 @Unroll
-class AssayUnitSpec extends Specification {
+class AssayConstraintUnitSpec extends Specification {
     Assay domainInstance
 
     @Before

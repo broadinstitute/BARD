@@ -23,8 +23,8 @@ class TestUtils {
      */
     static void assertFieldValidationExpectations(Object domainObject, String fieldName, Boolean valid, String errorCode) {
         String foundErrorCode = getErrorCode(domainObject, fieldName, errorCode)
+        logUnexpectedValidationErrors(domainObject, valid, errorCode, foundErrorCode)
         assert errorCode == foundErrorCode
-        logUnexpectedValidationErrors(domainObject, valid)
         assert domainObject.hasErrors() == !valid
         assert domainObject.errors.hasFieldErrors(fieldName) == !valid
     }
@@ -84,8 +84,20 @@ class TestUtils {
      * @param domainObject
      * @param valid
      */
-    private static void logUnexpectedValidationErrors(domainObject, boolean valid) {
-        if (BooleanUtils.isFalse(domainObject.hasErrors() == !valid)) {
+
+    /**
+     * print errors when we didn't expect any validation errors or
+     * when we were looking for a specific failure and didn't find it
+     * in order to may fixing it easier
+     *
+     * @param domainObject
+     * @param valid
+     * @param errorCode
+     * @param foundErrorCode
+     */
+    private static void logUnexpectedValidationErrors(domainObject, boolean valid, String errorCode, String foundErrorCode) {
+        if (BooleanUtils.isFalse(domainObject.hasErrors() == !valid) ||
+           errorCode != foundErrorCode) {
             println("**************** Unexpected Validation Errors **********************")
             println(domainObject.errors)
             println("********************************************************************")

@@ -16,7 +16,7 @@ import static test.TestUtils.createString
  * To change this template use File | Settings | File Templates.
  */
 @Unroll
-class AssayDocumentIntegrationSpec extends IntegrationSpec {
+class AssayDocumentConstraintIntegrationSpec extends IntegrationSpec {
 
     AssayDocument domainInstance
 

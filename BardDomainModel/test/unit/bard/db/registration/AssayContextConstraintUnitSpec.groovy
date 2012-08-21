@@ -20,7 +20,7 @@ import static test.TestUtils.createString
  */
 @Build([Assay, AssayContext, Measure, AssayContextItem])
 @Unroll
-class AssayContextUnitSpec extends Specification {
+class AssayContextConstraintUnitSpec extends Specification {
 
     AssayContext domainInstance
 

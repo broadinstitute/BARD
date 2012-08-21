@@ -18,7 +18,7 @@ import static test.TestUtils.createString
  */
 @Build([AssayDocument, Assay])
 @Unroll
-class AssayDocumentUnitSpec extends Specification {
+class AssayDocumentConstraintUnitSpec extends Specification {
 
     AssayDocument domainInstance
 
