@@ -41,7 +41,8 @@ class ShoppingCartServiceIntegrationSpec extends IntegrationSpec {
         then: "We get back a list assay ids"
           assert shoppingCartService.getQuantity(cartAssay)==1
           assert shoppingCartService.getQuantity(cartAssay1)==2
-        assert shoppingCartService.getQuantity(cartCompound)==2
+          assert shoppingCartService.getQuantity(cartCompound)==2
+        assert queryCartService.totalNumberOfUniqueItemsInCart()==3
 
         for (ShoppingItem shoppingItem  in shoppingCartService.getItems()) {
               def convertedShoppingItem = Shoppable.findByShoppingItem(shoppingItem)
@@ -56,8 +57,8 @@ class ShoppingCartServiceIntegrationSpec extends IntegrationSpec {
           }
         LinkedHashMap<String,List<CartElement>> groupedContents = queryCartService.groupUniqueContentsByType(  )
         assert groupedContents.size()==2
-        assert groupedContents["CartAssay"].size()==2
-        assert groupedContents["CartCompound"].size()==1
+        assert groupedContents[(QueryCartService.cartAssay)].size()==2
+        assert groupedContents[(QueryCartService.cartCompound)].size()==1
         queryCartService.groupUniqueContentsByType()[(QueryCartService.cartAssay)].each{
             print it.id
         }

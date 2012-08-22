@@ -37,6 +37,10 @@ class BardWebInterfaceController {
             for (assay in assays) {
                 shoppingCartService.addToShoppingCart(new CartAssay(assayTitle:assay["assayName"]),1)
             }
+            def compounds = result["compounds"]
+            for (compound in compounds) {
+                shoppingCartService.addToShoppingCart(new CartCompound(smiles:compound["smiles"]),1)
+            }
             render(view: "homePage", model: result)
             return
         }
