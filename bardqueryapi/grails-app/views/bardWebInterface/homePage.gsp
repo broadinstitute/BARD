@@ -57,6 +57,11 @@
 </head>
 
 <body>
+
+
+<table>
+<tr>
+<td width=80%  class="screenSection">
 <div>
     <div>
         <h1 style="text-align: center">BARD</h1>
@@ -129,6 +134,22 @@
     </div>
 </div>    <!-- End accordion -->
 
+</td>
+
+<td width=2%>
+</td>
+
+
+<td width=18%  class="screenSection">
+  %{-- SAR cart itself goes here--}%
+
+     <g:render template="sarCartContent"/>
+
+</td>
+
+</tr>
+</table>
+
 <%-- MarvinSketch's modal window --%>
 <div id="modalDiv">
     <iframe name="modalIFrame" id="modalIFrame" width="100%" height="100%" marginWidth="0"
@@ -147,37 +168,7 @@
     </g:form>
 </div>
 
-%{--container for the SAR cart goes here--}%
-<div id="container">
-</div>
 
-%{-- SAR cart itself goes here--}%
-<div class="panel">
-    <h3>SAR Cart</h3>
-    <table>
-        <thead>
-        <tr>
-
-            <th>Product</th>
-
-            <th>Qty</th>
-
-            <th>&nbsp;</th>
-
-            <th>&nbsp;</th>
-
-            <th>&nbsp;</th>
-
-        </tr>
-        </thead>
-        <tbody id="sarCartContent">
-        <g:render plugin="shoppingCart" template="sarCartContent"/>
-        </tbody>
-    </table>
-
-
-</div>
-<a class="trigger" href="#">infos</a>
 
 
 </body>

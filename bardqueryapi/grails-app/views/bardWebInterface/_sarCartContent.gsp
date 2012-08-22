@@ -4,9 +4,14 @@
     ShoppingCartService  shoppingCartService = grailsApplication.classLoader.loadClass('com.metasieve.shoppingcart.ShoppingCartService').newInstance()
     QueryCartService  queryCartService  = grailsApplication.classLoader.loadClass('bardqueryapi.QueryCartService').newInstance()
 %>
+
 <h2>Query Cart - Selected Results</h2>
-<h4>${queryCartService.totalNumberOfUniqueItemsInCart()} results selected</h4>
+<h4>${queryCartService.totalNumberOfUniqueItemsInCart(shoppingCartService)} results selected</h4>
 <h3>COMPOUNDS</h3>
+<table>
+    <tbody id="sarCartRefill">
+    <tr><td>
+    <table>
 <g:each in="${queryCartService.groupUniqueContentsByType(shoppingCartService)[(QueryCartService.cartCompound)]}" var="elem" status="item">
         <tr>
         <td>
@@ -15,13 +20,13 @@
         <td>
             <a href="/bardqueryapi/sarCart/remove/${elem.id}"
                onclick="jQuery.ajax({  type:'POST',
-                   data:{'id': '${elem.id}','class': 'class bardqueryapi.CartAssay','version': '0'},
+                   data:{'id': '${elem.id}','class': 'class bardqueryapi.CartCompound','version': '0'},
                    url:'/bardqueryapi/sarCart/remove',
                    success:function(data,textStatus){
-                       jQuery('#sarCartContent').html(data);
+                       jQuery('#sarCartRefill').html(data);
                    },
                    error:function(XMLHttpRequest,textStatus,errorThrown){
-                       alert('problem removing assay')
+                       alert('problem removing compound')
                    }
                });
                return false;"
@@ -31,8 +36,12 @@
         </td>
     </tr>
 </g:each>
+</table>
+    </td></tr>
+    <tr><td>
 <br/>
 <h3>ASSAY DEFINITIONS</h3>
+<table>
 <g:each in="${queryCartService.groupUniqueContentsByType(shoppingCartService)[(QueryCartService.cartAssay)]}" var="elem" status="item">
     <tr>
         <td>
@@ -44,7 +53,7 @@
                    data:{'id': '${elem.id}','class': 'class bardqueryapi.CartAssay','version': '0'},
                    url:'/bardqueryapi/sarCart/remove',
                    success:function(data,textStatus){
-                       jQuery('#sarCartContent').html(data);
+                       jQuery('#sarCartRefill').html(data);
                    },
                    error:function(XMLHttpRequest,textStatus,errorThrown){
                        alert('problem removing assay')
@@ -57,4 +66,9 @@
         </td>
     </tr>
 </g:each>
+</table>
 <br/>
+
+    </td></tr>
+        </tbody>
+</table>
