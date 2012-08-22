@@ -1,26 +1,29 @@
 package bardqueryapi
 
+import bard.core.StructureSearchParams
+import grails.plugin.remotecontrol.RemoteControl
+import groovyx.net.http.HttpResponseDecorator
+import groovyx.net.http.RESTClient
 import spock.lang.Specification
 import spock.lang.Unroll
-import groovyx.net.http.RESTClient
-import groovyx.net.http.HttpResponseDecorator
-import static groovyx.net.http.ContentType.JSON
-import static groovyx.net.http.Method.GET
+
 import javax.servlet.http.HttpServletResponse
-import grails.plugin.remotecontrol.RemoteControl
+
+import static groovyx.net.http.ContentType.JSON
 
 @Unroll
 class BardWebInterfaceFunctionalSpec extends Specification {
     RemoteControl remote = new RemoteControl()
     String baseUrl = remote { ctx.grailsApplication.config.grails.serverURL }
 
-    def "Test ElasticSearch querying: #label"() {
+
+    def "Test Search querying: #label"() {
         given: "there is a service end point to get the root elements"
-        String requestUrl = generateRequestUrl([param1])
+        String requestUrl = generateRequestUrl([searchString], searchAction)
         RESTClient http = new RESTClient(requestUrl)
 
         when: 'We send an HTTP GET request for the search action'
-        HttpResponseDecorator serverResponse = http.get(requestContentType: JSON)
+        HttpResponseDecorator serverResponse = (HttpResponseDecorator) http.get(requestContentType: JSON)
 
         then: 'We expect a JSON representation of the root elements'
         assert serverResponse.statusLine.statusCode == HttpServletResponse.SC_OK
@@ -29,10 +32,17 @@ class BardWebInterfaceFunctionalSpec extends Specification {
         assert !serverResponse.data.any { it.toString().contains("errorCode") }
 
         where:
-        label                  | param1
-        "Find assay by id"     | "644"
-        "Find assay by name"   | "Dose-response"
+        label                    | searchString                                                                             | searchAction
+        "Find Projects"          | "dna+repair"                                                                             | "searchProjects"
+        "Find Assays"            | "dna+repair"                                                                             | "searchAssays"
+        "Find Compounds"         | "dna+repair"                                                                             | "searchCompounds"
+        "Super structure search" | "${StructureSearchParams.Type.Superstructure}:O=S(*C)(Cc1ccc2ncc(CCNC)c2c1)=O"           | "searchStructures"
+        "Similarity Search"      | "${StructureSearchParams.Type.Similarity}:CN(C)CCC1=CNC2=C1C=C(CS(=O)(=O)N3CCCC3)C=C2"   | "searchStructures"
+        "Exact match Search"     | "${StructureSearchParams.Type.Exact}:CN(C)CCC1=CNC2=C1C=C(CS(=O)(=O)N3CCCC3)C=C2"        | "searchStructures"
+        "Sub structure Search"   | "${StructureSearchParams.Type.Substructure}:CN(C)CCC1=CNC2=C1C=C(CS(=O)(=O)N3CCCC3)C=C2" | "searchStructures"
+
     }
+
     def "Test Auto Complete querying"() {
         given: "there is a service end point to do autocomplete on Assay names"
 
@@ -44,7 +54,7 @@ class BardWebInterfaceFunctionalSpec extends Specification {
         RESTClient http = new RESTClient(requestUrl)
 
         when: 'We send an HTTP GET request for the auto complete action'
-        HttpResponseDecorator serverResponse = http.get(requestContentType: JSON)
+        HttpResponseDecorator serverResponse = (HttpResponseDecorator) http.get(requestContentType: JSON)
 
         then: 'We expect a JSON representation of the assay names'
         assert serverResponse.statusLine.statusCode == HttpServletResponse.SC_OK
@@ -57,14 +67,15 @@ class BardWebInterfaceFunctionalSpec extends Specification {
      * Chain together the test parameters to create a URL for the request
      */
 
-    private String generateRequestUrl(List<String> paramList) {
+    private String generateRequestUrl(final List<String> paramList, final String searchAction) {
         String allParams = paramList?.join("&")
 
         StringBuilder sb = new StringBuilder()
 
         sb.append(baseUrl)
-        sb.append("/bardWebInterface/search?searchString=${allParams}")
-
+        sb.append("/bardWebInterface/")
+        sb.append("${searchAction}")
+        sb.append("?searchString=${allParams}")
         return sb.toString()
     }
 }
