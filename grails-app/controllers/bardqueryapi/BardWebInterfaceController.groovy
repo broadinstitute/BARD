@@ -129,7 +129,7 @@ class BardWebInterfaceController {
 
         if (projId) {
             Project project = this.queryService.showProject(projId)
-            render(view: "showProject", model: [project: project])
+            render(view: "showProject", model: [projectInstance: project])
         }
         else {
             render "Project ID parameter required"
