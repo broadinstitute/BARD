@@ -19,7 +19,7 @@
         </g:if>
         <br/><br/>
 
-        <g:form name="aidForm" controller="bardWebInterface">
+        <g:form name="aidForm" id="aidForm" controller="bardWebInterface">
 
             <div class="content ">
                 <table class="skinnyTable">

@@ -178,95 +178,33 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="BardWebInterfaceController.groovy" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/grails-app/controllers/bardqueryapi/BardWebInterfaceController.groovy">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="131" column="0" selection-start="4957" selection-end="4957" vertical-scroll-proportion="-6.2173915">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="showProject.gsp" pinned="false" current="true" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/grails-app/views/bardWebInterface/showProject.gsp">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="19" column="53" selection-start="399" selection-end="399" vertical-scroll-proportion="0.37979093">
-              <folding>
-                <marker date="1345641436244" expanded="true" signature="254:312" placeholder="{...}" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="_projectDocuments.gsp" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/grails-app/views/bardWebInterface/_projectDocuments.gsp">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="15" column="34" selection-start="412" selection-end="412" vertical-scroll-proportion="-5.2040815">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="_projectSummary.gsp" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/grails-app/views/bardWebInterface/_projectSummary.gsp">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="29" column="26" selection-start="666" selection-end="666" vertical-scroll-proportion="-1.3636364">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="Assay.class" pinned="false" current="false" current-in-tab="false">
-        <entry file="jar://$PROJECT_DIR$/lib/bard-client-08202012v1.jar!/bard/core/Assay.class">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="39" column="152" selection-start="1627" selection-end="1627" vertical-scroll-proportion="-25.84">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="_assayDocuments.gsp" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/grails-app/views/bardWebInterface/_assayDocuments.gsp">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="12" column="34" selection-start="339" selection-end="339" vertical-scroll-proportion="-4.163265">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="showAssay.gsp" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/grails-app/views/bardWebInterface/showAssay.gsp">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="35" column="44" selection-start="910" selection-end="910" vertical-scroll-proportion="-2.510204">
-              <folding>
-                <marker date="1345637959708" expanded="true" signature="263:321" placeholder="{...}" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file leaf-file-name="homePage.gsp" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/grails-app/views/bardWebInterface/homePage.gsp">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="16" column="25" selection-start="573" selection-end="575" vertical-scroll-proportion="-2.7837837">
+            <state line="21" column="44" selection-start="723" selection-end="723" vertical-scroll-proportion="0.7567568">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="_assaySummary.gsp" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/grails-app/views/bardWebInterface/_assaySummary.gsp">
+      <file leaf-file-name="marvinSketch.gsp" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/grails-app/views/chemAxon/marvinSketch.gsp">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="29" column="9" selection-start="650" selection-end="650" vertical-scroll-proportion="-4.142857">
-              <folding />
+            <state line="16" column="13" selection-start="659" selection-end="659" vertical-scroll-proportion="0.14563107">
+              <folding>
+                <marker date="1345642081003" expanded="true" signature="170:1535" placeholder="{...}" />
+                <marker date="1345642081003" expanded="true" signature="541:1300" placeholder="{...}" />
+                <marker date="1345642081003" expanded="true" signature="1081:1194" placeholder="//..." />
+                <marker date="1345642081003" expanded="true" signature="1453:1523" placeholder="{...}" />
+              </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="_assays.gsp" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/grails-app/views/bardWebInterface/_assays.gsp">
+      <file leaf-file-name="_homePageHeader.gsp" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/grails-app/views/bardWebInterface/_homePageHeader.gsp">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="1" column="12" selection-start="44" selection-end="55" vertical-scroll-proportion="-0.3469388">
+            <state line="2" column="14" selection-start="55" selection-end="62" vertical-scroll-proportion="-0.6938776">
               <folding />
             </state>
           </provider>
@@ -282,7 +220,6 @@
   <component name="IdeDocumentHistory">
     <option name="changedFiles">
       <list>
-        <option value="$PROJECT_DIR$/grails-app/services/bardqueryapi/QueryService.groovy" />
         <option value="$PROJECT_DIR$/test/unit/bardqueryapi/QueryServiceUnitSpec.groovy" />
         <option value="$PROJECT_DIR$/grails-app/conf/BuildConfig.groovy" />
         <option value="$PROJECT_DIR$/grails-app/views/bardWebInterface/_paginate.gsp" />
@@ -291,13 +228,14 @@
         <option value="$PROJECT_DIR$/grails-app/views/bardWebInterface/_compounds.gsp" />
         <option value="$PROJECT_DIR$/grails-app/views/bardWebInterface/_projects.gsp" />
         <option value="$PROJECT_DIR$/grails-app/views/bardWebInterface/_homePageHeader.gsp" />
-        <option value="$PROJECT_DIR$/grails-app/views/bardWebInterface/homePage.gsp" />
         <option value="$PROJECT_DIR$/grails-app/views/bardWebInterface/showAssay.gsp" />
         <option value="$PROJECT_DIR$/grails-app/views/bardWebInterface/_assaySummary.gsp" />
         <option value="$PROJECT_DIR$/grails-app/controllers/bardqueryapi/BardWebInterfaceController.groovy" />
         <option value="$PROJECT_DIR$/grails-app/views/bardWebInterface/_projectDocuments.gsp" />
         <option value="$PROJECT_DIR$/grails-app/views/bardWebInterface/_projectSummary.gsp" />
         <option value="$PROJECT_DIR$/grails-app/views/bardWebInterface/showProject.gsp" />
+        <option value="$PROJECT_DIR$/grails-app/views/bardWebInterface/homePage.gsp" />
+        <option value="$PROJECT_DIR$/grails-app/views/chemAxon/marvinSketch.gsp" />
       </list>
     </option>
   </component>
@@ -825,15 +763,16 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1616" height="876" extended-state="6" />
-    <editor active="false" />
+    <editor active="true" />
     <layout>
       <window_info id="Data Sources" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="JetGradle" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Persistence" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.4831309" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Debug" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.45209175" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.45209175" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="IDEtalk Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
@@ -846,12 +785,11 @@
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="true" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.261875" sideWeight="0.54790825" order="0" side_tool="false" content_ui="combo" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3711201" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.118125" sideWeight="0.51686907" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.24561404" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25910932" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32928476" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
     </layout>
@@ -915,13 +853,6 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/target/plugins/elastic-search-0.4.5-SNAPSHOT/grails-app/services/elasticsearchplugin/QueryExecutorService.groovy">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="43" column="0" selection-start="1646" selection-end="1646" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/grails-app/views/bardWebInterface/_compounds.gsp">
       <provider selected="true" editor-type-id="text-editor">
         <state line="8" column="34" selection-start="451" selection-end="451" vertical-scroll-proportion="-2.7755103">
@@ -946,41 +877,6 @@
     <entry file="file://$PROJECT_DIR$/grails-app/services/bardqueryapi/QueryService.groovy">
       <provider selected="true" editor-type-id="text-editor">
         <state line="156" column="10" selection-start="5370" selection-end="5370" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/grails-app/views/bardWebInterface/_homePageHeader.gsp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="2" column="14" selection-start="55" selection-end="62" vertical-scroll-proportion="-0.45945945">
-          <folding>
-            <marker date="1345636741183" expanded="true" signature="-1:-1" placeholder="{...}" />
-            <marker date="1345636741183" expanded="true" signature="-1:-1" placeholder="{&quot;source&quot;: &quot;/bardwebquery/bardWebInterface/autoCompleteAssayNames&quot;...}" />
-            <marker date="1345636741183" expanded="true" signature="-1:-1" placeholder="{...}" />
-            <marker date="1345636741183" expanded="true" signature="-1:-1" placeholder="{...}" />
-            <marker date="1345636741183" expanded="true" signature="-1:-1" placeholder="{&quot;url&quot;: '/bardwebquery/bardWebInterface/searchAssays'...}" />
-            <marker date="1345636741183" expanded="true" signature="-1:-1" placeholder="{...}" />
-            <marker date="1345636741183" expanded="true" signature="-1:-1" placeholder="{&quot;url&quot;: '/bardwebquery/bardWebInterface/searchCompounds'...}" />
-            <marker date="1345636741183" expanded="true" signature="-1:-1" placeholder="{...}" />
-            <marker date="1345636741183" expanded="true" signature="-1:-1" placeholder="{&quot;url&quot;: '/bardwebquery/bardWebInterface/searchProjects'...}" />
-            <marker date="1345636741183" expanded="true" signature="-1:-1" placeholder="{...}" />
-            <marker date="1345636741183" expanded="true" signature="-1:-1" placeholder="{&quot;url&quot;: '/bardwebquery/bardWebInterface/searchStructures'...}" />
-            <marker date="1345636741183" expanded="true" signature="-1:-1" placeholder="{...}" />
-            <marker date="1345636741183" expanded="true" signature="-1:-1" placeholder="{...}" />
-            <marker date="1345636741183" expanded="true" signature="-1:-1" placeholder="{&quot;modal&quot;: true...}" />
-            <marker date="1345636741183" expanded="true" signature="-1:-1" placeholder="{...}" />
-            <marker date="1345636741183" expanded="true" signature="-1:-1" placeholder="{...}" />
-            <marker date="1345636741183" expanded="true" signature="-1:-1" placeholder="{...}" />
-            <marker date="1345636741183" expanded="true" signature="-1:-1" placeholder="{...}" />
-            <marker date="1345636741183" expanded="true" signature="-1:-1" placeholder="{...}" />
-            <marker date="1345636741183" expanded="true" signature="-1:-1" placeholder="{...}" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/grails-app/views/bardWebInterface/homePage.gsp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="16" column="25" selection-start="573" selection-end="575" vertical-scroll-proportion="-2.7837837">
           <folding />
         </state>
       </provider>
@@ -1010,7 +906,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state line="35" column="44" selection-start="910" selection-end="910" vertical-scroll-proportion="-2.510204">
           <folding>
-            <marker date="1345637959708" expanded="true" signature="263:321" placeholder="{...}" />
+            <marker date="1345637959708" expanded="true" signature="-1:-1" placeholder="{...}" />
           </folding>
         </state>
       </provider>
@@ -1036,18 +932,44 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/grails-app/views/bardWebInterface/showProject.gsp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="19" column="53" selection-start="399" selection-end="399" vertical-scroll-proportion="0.7021739">
+          <folding>
+            <marker date="1345641436244" expanded="true" signature="-1:-1" placeholder="{...}" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/grails-app/controllers/bardqueryapi/BardWebInterfaceController.groovy">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="131" column="0" selection-start="4957" selection-end="4957" vertical-scroll-proportion="-6.2173915">
+        <state line="131" column="0" selection-start="4957" selection-end="4957" vertical-scroll-proportion="0.27984345">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/grails-app/views/bardWebInterface/showProject.gsp">
+    <entry file="file://$PROJECT_DIR$/grails-app/views/bardWebInterface/_homePageHeader.gsp">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="19" column="53" selection-start="399" selection-end="399" vertical-scroll-proportion="0.37979093">
+        <state line="2" column="14" selection-start="55" selection-end="62" vertical-scroll-proportion="-0.6938776">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/grails-app/views/bardWebInterface/homePage.gsp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="21" column="44" selection-start="723" selection-end="723" vertical-scroll-proportion="0.7567568">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/grails-app/views/chemAxon/marvinSketch.gsp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="16" column="13" selection-start="659" selection-end="659" vertical-scroll-proportion="0.14563107">
           <folding>
-            <marker date="1345641436244" expanded="true" signature="254:312" placeholder="{...}" />
+            <marker date="1345642081003" expanded="true" signature="170:1535" placeholder="{...}" />
+            <marker date="1345642081003" expanded="true" signature="541:1300" placeholder="{...}" />
+            <marker date="1345642081003" expanded="true" signature="1081:1194" placeholder="//..." />
+            <marker date="1345642081003" expanded="true" signature="1453:1523" placeholder="{...}" />
           </folding>
         </state>
       </provider>

@@ -14,12 +14,16 @@
             4. Close (send-to-back) the MarvinSketch modal window --%>
         $('#searchButton').click(function () {
             var structureSearchTypeSelected = $('input:radio[name=structureSearchType]:checked').val()
-            parent.$('#hiddenFieldStructureSearchType').attr('value', structureSearchTypeSelected)
+           // parent.$('#hiddenFieldStructureSearchType').attr('value', structureSearchTypeSelected)
 
             var marvinSketch = $('#MarvinSketch')[0];
             var smiles = marvinSketch.getMol('smiles')
-            parent.$('#hiddenFieldSmiles').attr('value', smiles);
-            parent.$('#structureSearchForm').submit();
+            var constructedSearch =structureSearchTypeSelected + ":" + smiles
+           // parent.$('#searchString').attr('value', smiles);
+            parent.$('#searchString').attr('value', constructedSearch);
+           // parent.$('#hiddenFieldSmiles').attr('value', smiles);
+           // parent.$('#structureSearchForm').submit();
+             parent.$('#aidForm').submit();
 
             parent.$('#modalDiv').dialog("close");
         });
