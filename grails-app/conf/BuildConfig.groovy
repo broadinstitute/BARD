@@ -42,9 +42,7 @@ grails.project.dependency.resolution = {
         compile 'org.apache.httpcomponents:httpclient:4.1.1'
         compile 'org.codehaus.jackson:jackson-core-asl:1.9.2'
         compile 'org.codehaus.jackson:jackson-mapper-asl:1.9.2'
-        compile "ChemAxon:ChemAxonJChemBase:5.10"
-
-
+        compile 'ChemAxon:ChemAxonJChemBase:5.10'
     }
 
     plugins {

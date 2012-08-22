@@ -1,9 +1,12 @@
 package bardqueryapi
 
 import bard.core.Assay
-import bard.core.Project
 import bard.core.Experiment
+import bard.core.Project
+import bard.core.StructureSearchParams
 import bard.core.adapter.CompoundAdapter
+import elasticsearchplugin.QueryExecutorService
+import wslite.json.JSONObject
 
 /**
  * Created with IntelliJ IDEA.
@@ -15,27 +18,54 @@ import bard.core.adapter.CompoundAdapter
 class BardWebInterfaceController {
 
     QueryService queryService
+    QueryExecutorService queryExecutorService
+    final static String NCGC_ROOT_URL = "http://bard.nih.gov/api/v1"
 
     def index() {
         homePage()
     }
-
-    def example() {
-
-    }
-
     def homePage() {
-        render(view: "homePage", totalCompounds: 0, model: [assays: [], compounds: [], experiments: [], projects: []])
+        render(view: "homePage")
     }
     /**
      * @return
+     * TODO: We should remove in the next iteration, since we no longer use it
      */
+    @Deprecated
     def search() {
 
         def searchString = params.searchString?.trim()
         if (searchString) {
             def result = this.queryService.search(searchString)
             render(view: "homePage", model: result)
+            return
+        }
+        flash.message = 'Search String is required'
+        redirect(action: "homePage")
+    }
+    /**
+     * @return
+     */
+    def searchStructures() {
+
+        String searchString = params.searchString?.trim()
+        if (searchString) {
+            //we make the first character capitalized to match the ENUM
+            final String[] searchStringSplit = searchString.toLowerCase().capitalize().split(":")
+            final StructureSearchParams.Type searchType = searchStringSplit[0] as StructureSearchParams.Type
+            List<CompoundAdapter> compoundAdapters = queryService.structureSearch(searchStringSplit[1], searchType)
+            def metaDataMap = [nhit: compoundAdapters.size()]
+            def listDocs = []
+
+            for (CompoundAdapter compoundAdapter : compoundAdapters) {
+                def adapter = [:]
+                long cid = compoundAdapter.pubChemCID
+                adapter.put("cid", cid)
+                adapter.put("iupac_name", cid)
+                adapter.put("iso_smiles", compoundAdapter.structureSMILES)
+                listDocs.add(adapter)
+            }
+            render(template: 'compounds', model: [docs: listDocs, metaData: metaDataMap])
             return
         }
         flash.message = 'Search String is required'
@@ -54,25 +84,56 @@ class BardWebInterfaceController {
             render "Compound ID (CID) parameter required"
         }
     }
-    def searchCompounds(){
 
-    }
-    def searchAssays(){
+    def searchCompounds() {
+        String searchString = params.searchString?.trim()
 
-    }
-    def searchProjects(){
+        def map = [:]
 
-    }
-    def searchExperiments(){
+        map.put('path', '/search/compounds')
+        map.put('query', [top: 10, q: "${searchString}", include_entities: false])
+        map.put('connectTimeout', 5000)
+        map.put('readTimeout', 10000)
 
+        JSONObject resultJson = (JSONObject)queryExecutorService.executeGetRequestJSON(NCGC_ROOT_URL, map)
+        render(template: 'compounds', model: [docs: resultJson.docs, metaData: resultJson.metaData])
     }
+
+    def searchAssays() {
+         String searchString = params.searchString?.trim()
+
+        def map = [:]
+
+        map.put('path', '/search/assays')
+        map.put('query', [top: 10, q: "${searchString}", include_entities: false])
+        map.put('connectTimeout', 5000)
+        map.put('readTimeout', 10000)
+
+        JSONObject resultJson = (JSONObject)queryExecutorService.executeGetRequestJSON(NCGC_ROOT_URL, map)
+        render(template: 'assays', model: [docs: resultJson.docs, metaData: resultJson.metaData])
+    }
+
+    def searchProjects() {
+        String searchString = params.searchString?.trim()
+
+        def map = [:]
+
+        map.put('path', '/search/projects')
+        map.put('query', [top: 10, q: "${searchString}", include_entities: false])
+        map.put('connectTimeout', 5000)
+        map.put('readTimeout', 10000)
+
+        JSONObject resultJson = (JSONObject)queryExecutorService.executeGetRequestJSON(NCGC_ROOT_URL, map)
+        render(template: 'projects', model: [docs: resultJson.docs, metaData: resultJson.metaData])
+    }
+
     //TODO: Whomever creates the gsp should also write unit tests for this method
     def showAssay(Integer assayProtocolId) {
         Integer assayId = assayProtocolId ?: params.id as Integer//if 'assay' param is provided, use that; otherwise, try the default id one
 
         if (assayId) {
             Assay assay = this.queryService.showAssay(assayId)
-            render(view: "showAssay", model: [assay:assay])
+            render(view: "showAssay", model: [assay: assay])
         }
         else {
             render "Assay Protocol ID parameter required"
@@ -84,7 +145,7 @@ class BardWebInterfaceController {
 
         if (projId) {
             Project project = this.queryService.showProject(projId)
-            render(view: "showProject", model: [project:project])
+            render(view: "showProject", model: [project: project])
         }
         else {
             render "Project ID parameter required"
@@ -96,12 +157,13 @@ class BardWebInterfaceController {
 
         if (exptId) {
             Experiment experiment = this.queryService.showExperiment(exptId)
-            render(view: "showExperiment", model: [experiment : experiment])
+            render(view: "showExperiment", model: [experiment: experiment])
         }
         else {
             render "Experiment ID parameter required"
         }
     }
+
     def autoCompleteAssayNames() {
         final List<String> assayNames = this.queryService.autoComplete(params?.term)
         render(contentType: "text/json") {
@@ -121,12 +183,13 @@ class BardWebInterfaceController {
      * @return
      */
     def structureSearch(String smiles, String structureSearchType) {
-        final StructureSearchType searchType = structureSearchType as StructureSearchType
+        final StructureSearchParams.Type searchType = structureSearchType as StructureSearchParams.Type
         switch (searchType) {
-            case StructureSearchType.SUB_STRUCTURE:
-            case StructureSearchType.SIMILARITY:
-            case StructureSearchType.EXACT_MATCH:
-                redirect(action: "search", params: ['searchString': searchType.description + ":" + smiles])
+            case StructureSearchParams.Type.Similarity:
+            case StructureSearchParams.Type.Substructure:
+            case StructureSearchParams.Type.Superstructure:
+            case StructureSearchParams.Type.Exact:
+                redirect(action: "searchStructures", params: ['searchString': searchType.toString() + ":" + smiles])
                 break
             default:
                 throw new RuntimeException("Undeifined structure-search type")

@@ -78,25 +78,26 @@ class QueryServiceUnitSpec extends Specification {
         "Empty String"              | ""    | new JSONObject()                    | []
     }
 
-    /**
-     */
-    void "test Get CIDs By Structure #label"() {
-
-        when:
-        List<String> response = service.getCIDsByStructure(smiles, structureType)
-
-        then:
-        queryExecutorService.executeGetRequestJSON(_, _) >> {assayJson}
-
-        assert response == expectedResponse
-
-        where:
-        label                  | structureType                     | smiles | assayJson      | expectedResponse
-        "Sub structure Search" | StructureSearchType.SUB_STRUCTURE | "CC"   | ["223", "224"] | ["223", "224"]
-        "Exact match Search"   | StructureSearchType.EXACT_MATCH   | "C"    | ["225", "226"] | ["225", "226"]
-        "Similarity Search"    | StructureSearchType.SIMILARITY    | "CCC"  | ["111"]        | ["111"]
-
-    }
+//    /**
+    //No longer needed
+//     */
+//    void "test Get CIDs By Structure #label"() {
+//
+//        when:
+//        List<String> response = service.getCIDsByStructure(smiles, structureType)
+//
+//        then:
+//        queryExecutorService.executeGetRequestJSON(_, _) >> {assayJson}
+//
+//        assert response == expectedResponse
+//
+//        where:
+//        label                  | structureType                     | smiles | assayJson      | expectedResponse
+//        "Sub structure Search" | StructureSearchType.SUB_STRUCTURE | "CC"   | ["223", "224"] | ["223", "224"]
+//        "Exact match Search"   | StructureSearchType.EXACT_MATCH   | "C"    | ["225", "226"] | ["225", "226"]
+//        "Similarity Search"    | StructureSearchType.SIMILARITY    | "CCC"  | ["111"]        | ["111"]
+//
+//    }
     /**
      */
     void "test handleAutoComplete #label"() {
@@ -116,43 +117,40 @@ class QueryServiceUnitSpec extends Specification {
 
     /**
      */
-    void "test Search #label"() {
-
-        when:
-        def response = service.search(userInput)
-
-        then:
-        queryExecutorService.executeGetRequestJSON(_, _) >> {assayJson}
-        elasticSearchService.elasticSearchQuery(_) >> {[:]}
-        assert response == expectedResponse
-
-        where:
-        label                  | userInput                                             | assayJson      | expectedResponse
-        "Sub structure Search" | "${StructureSearchType.SUB_STRUCTURE.description}:CC" | ["223", "224"] | [totalCompounds: 0, assays: [], compounds: [], compoundHeaderInfo: null, experiments: [], projects: []]
-        "Exact match Search"   | "${StructureSearchType.EXACT_MATCH.description}:CC"   | ["223", "224"] | [totalCompounds: 0, assays: [], compounds: [], compoundHeaderInfo: null, experiments: [], projects: []]
-        "Similarity Search"    | "${StructureSearchType.SIMILARITY.description}:CC"    | ["223", "224"] | [totalCompounds: 0, assays: [], compounds: [], compoundHeaderInfo: null, experiments: [], projects: []]
-        "Regular Search"       | "Stuff"                                               | ["Stuff"]      | [totalCompounds: 0, assays: [], compounds: [], compoundHeaderInfo: null, experiments: [], projects: []]
-        "Empty Search"         | ""                                                    | []             | [totalCompounds: 0, assays: [], compounds: [], compoundHeaderInfo: null, experiments: [], projects: []]
-    }
+//    void "test Search #label"() {
+//
+//        when:
+//        def response = service.search(userInput)
+//
+//        then:
+//        queryExecutorService.executeGetRequestJSON(_, _) >> {assayJson}
+//        elasticSearchService.elasticSearchQuery(_) >> {[:]}
+//        assert response == expectedResponse
+//
+//        where:
+//        label                  | userInput                                             | assayJson      | expectedResponse
+//        "Regular Search"       | "Stuff"                                               | ["Stuff"]      | [totalCompounds: 0, assays: [], compounds: [], compoundHeaderInfo: null, experiments: [], projects: []]
+//        "Empty Search"         | ""                                                    | []             | [totalCompounds: 0, assays: [], compounds: [], compoundHeaderInfo: null, experiments: [], projects: []]
+//    }
     /**
      */
-    void "test pre Process Search #label"() {
-
-        when:
-        String response = service.preprocessSearch(searchString)
-
-        then:
-        queryExecutorService.executeGetRequestJSON(_, _) >> {assayJson}
-        assert response == expectedCompoundList
-
-        where:
-        label                  | searchString                                          | assayJson      | expectedCompoundList
-        "Sub structure Search" | "${StructureSearchType.SUB_STRUCTURE.description}:CC" | ["223", "224"] | "223 224"
-        "Exact match Search"   | "${StructureSearchType.EXACT_MATCH.description}:CC"   | ["223", "224"] | "223 224"
-        "Similarity Search"    | "${StructureSearchType.SIMILARITY.description}:CC"    | ["223", "224"] | "223 224"
-        "Regular Search"       | "Stuff"                                               | ["Stuff"]      | "Stuff"
-        "Empty Search"         | ""                                                    | []             | ""
-    }
+//    void "test pre Process Search #label"() {
+//
+//        when:
+//        String response = service.preprocessSearch(searchString)
+//
+//        then:
+//        queryExecutorService.executeGetRequestJSON(_, _) >> {assayJson}
+//        assert response == expectedCompoundList
+//
+//        where:
+//        label                  | searchString                                          | assayJson      | expectedCompoundList
+//        "Sub structure Search" | "${StructureSearchType.SUB_STRUCTURE.description}:CC" | ["223", "224"] | "223 224"
+//        "Exact match Search"   | "${StructureSearchType.EXACT_MATCH.description}:CC"   | ["223", "224"] | "223 224"
+//        "Similarity Search"    | "${StructureSearchType.SIMILARITY.description}:CC"    | ["223", "224"] | "223 224"
+//        "Regular Search"       | "Stuff"                                               | ["Stuff"]      | "Stuff"
+//        "Empty Search"         | ""                                                    | []             | ""
+//    }
     /**
      */
     void "test Show Compound #label"() {

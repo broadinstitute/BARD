@@ -91,17 +91,37 @@ class QueryService {
             if (searchString) {
                 final String[] searchStringSplit = searchString.split(":")
                 final StructureSearchParams.Type searchType = searchStringSplit[0] as StructureSearchParams.Type
-
-                switch (searchType) {
-                    case StructureSearchParams.Type.Substructure:
-                    case StructureSearchParams.Type.Similarity:
-                    case StructureSearchParams.Type.Exact:
-                    case StructureSearchParams.Type.Superstructure:
-                        return true
-                    default:
-                        return false
+                if (searchStringSplit.length == 2) {//must be if the form SubStructure:CC
+                    switch (searchType) {
+                        case StructureSearchParams.Type.Substructure:
+                        case StructureSearchParams.Type.Similarity:
+                        case StructureSearchParams.Type.Exact:
+                        case StructureSearchParams.Type.Superstructure:
+                            return true
+                        default:
+                            return false
+                    }
                 }
+            }
+        } catch (Exception ee) {
+            log.error(ee)
+        }
+        return false
+    }
+    /**
+     *
+     * @param searchString
+     * @return true if this is a structure search, false otherwise
+     * Structure searches are of the form
+     *  StructureSearchParams.Type:SMILES_STRING
+     */
+    public StructureSearchParams.Type getStructureSearchType(String searchString) {
 
+        try {
+            if (searchString) {
+                final String[] searchStringSplit = searchString.split(":")
+                final StructureSearchParams.Type searchType = searchStringSplit[0] as StructureSearchParams.Type
+                return searchType
             }
         } catch (Exception ee) {
             log.error(ee)
@@ -191,28 +211,28 @@ class QueryService {
     protected String preprocessSearch(String searchString) {
         //if the search string is a structure search, then do a structure search, otherwise
         //do a regular search
-        if (searchString) {
-            final String[] searchStringSplit = searchString.split(":")
-            final String searchType = searchStringSplit[0]
-            List<String> molecules = []
-            switch (searchType) {
-                case StructureSearchType.EXACT_MATCH.description:
-                    molecules = this.getCIDsByStructure(searchStringSplit[1], StructureSearchType.EXACT_MATCH)
-                    break
-                case StructureSearchType.SIMILARITY.description:
-                    molecules = this.getCIDsByStructure(searchStringSplit[1], StructureSearchType.SIMILARITY)
-                    break
-                case StructureSearchType.SUB_STRUCTURE.description:
-                    molecules = this.getCIDsByStructure(searchStringSplit[1], StructureSearchType.SUB_STRUCTURE)
-                    break
-                default:
-                    return searchString
-            }
-            if (molecules) {
-                return molecules.join(' ')
-            }
-        }
-        return ""
+//        if (searchString) {
+//            final String[] searchStringSplit = searchString.split(":")
+//            final String searchType = searchStringSplit[0]
+//            List<String> molecules = []
+//            switch (searchType) {
+//                case StructureSearchType.EXACT_MATCH.description:
+//                    molecules = this.getCIDsByStructure(searchStringSplit[1], StructureSearchType.EXACT_MATCH)
+//                    break
+//                case StructureSearchType.SIMILARITY.description:
+//                    molecules = this.getCIDsByStructure(searchStringSplit[1], StructureSearchType.SIMILARITY)
+//                    break
+//                case StructureSearchType.SUB_STRUCTURE.description:
+//                    molecules = this.getCIDsByStructure(searchStringSplit[1], StructureSearchType.SUB_STRUCTURE)
+//                    break
+//                default:
+//                    return searchString
+//            }
+//            if (molecules) {
+//                return molecules.join(' ')
+//            }
+//        }
+        return searchString
     }
     /**
      * 1. Collect all assay documents from assays/assay (goes as primary to assay tab)
@@ -279,55 +299,41 @@ class QueryService {
      *
      * TODO: NCGC JDO is not yet implemented
      */
-    protected List<String> getCIDsByStructure(final String smiles, final StructureSearchType searchType) {
-        /**
-         * Build the NCGC REST call-url.
-         * For example: http://assay.nih.gov/bard/rest/v1/compounds?filter=n1cccc2ccccc12[structure]&type=sim&cutoff=0.9
-         *  type - can be sub, super, exact or sim
-         *  cutoff - the similarity cutoff if a similarity search is desired
-         */
-        String searchModifiers = null
-        switch (searchType) {
-            case StructureSearchType.SUB_STRUCTURE:
-                searchModifiers = '&type=sub'
-                break
-            case StructureSearchType.SIMILARITY:
-                searchModifiers = "&type=sim&cutoff=0.9"
-                break
-            case StructureSearchType.EXACT_MATCH:
-                searchModifiers = '&type=exact'
-                break
-            default:
-                throw new RuntimeException("Undeifined structure-search type")
-                break
-        }
-
-        String searchUrl = "${ncgcSearchBaseUrl}?filter=${smiles}[structure]${searchModifiers}"
-        def resultJson = queryExecutorService.executeGetRequestJSON(searchUrl, [connectTimeout: 5000, readTimeout: 10000])
-
-        //now use this to call ElasticSearch
-        //Strip the CID from the end part of a compound's relative resource-url. e.g.: /bard/rest/v1/compounds/6796
-        final List<String> molecules = resultJson.collect { String compoundUri ->
-            compoundUri.split('/').last()
-        }
-        return molecules
-    }
+//    protected List<String> getCIDsByStructure(final String smiles, final StructureSearchType searchType) {
+//        /**
+//         * Build the NCGC REST call-url.
+//         * For example: http://assay.nih.gov/bard/rest/v1/compounds?filter=n1cccc2ccccc12[structure]&type=sim&cutoff=0.9
+//         *  type - can be sub, super, exact or sim
+//         *  cutoff - the similarity cutoff if a similarity search is desired
+//         */
+//        String searchModifiers = null
+//        switch (searchType) {
+//            case StructureSearchType.SUB_STRUCTURE:
+//                searchModifiers = '&type=sub'
+//                break
+//            case StructureSearchType.SIMILARITY:
+//                searchModifiers = "&type=sim&cutoff=0.9"
+//                break
+//            case StructureSearchType.EXACT_MATCH:
+//                searchModifiers = '&type=exact'
+//                break
+//            default:
+//                throw new RuntimeException("Undeifined structure-search type")
+//                break
+//        }
+//
+//        String searchUrl = "${ncgcSearchBaseUrl}?filter=${smiles}[structure]${searchModifiers}"
+//        def resultJson = queryExecutorService.executeGetRequestJSON(searchUrl, [connectTimeout: 5000, readTimeout: 10000])
+//
+//        //now use this to call ElasticSearch
+//        //Strip the CID from the end part of a compound's relative resource-url. e.g.: /bard/rest/v1/compounds/6796
+//        final List<String> molecules = resultJson.collect { String compoundUri ->
+//            compoundUri.split('/').last()
+//        }
+//        return molecules
+//    }
 }
-public enum StructureSearchType {
-    EXACT_MATCH("Structure"),
-    SUB_STRUCTURE("SubStructure"),
-    SIMILARITY("Similarity");
 
-    final String description
-
-    StructureSearchType(String description) {
-        this.description = description
-    }
-
-    String getDescription() {
-        return this.description;
-    }
-}
 public enum QuerySearchType {
     STRUCTURE("Structure"),
     ID("Id"),

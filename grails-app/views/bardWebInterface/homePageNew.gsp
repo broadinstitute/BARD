@@ -5,7 +5,7 @@
     <meta name="layout" content="main"/>
     <r:require modules="core"/>
     <r:require modules="bootstrap"/>
-    <r:require modules="backbone_grid"/>
+    %{--<r:require modules="backbone_grid"/>--}%
 
     <r:script>
         $(document).ready(function () {
@@ -14,30 +14,37 @@
                 minLength:2
             };
             $("#searchString").autocomplete(autoOpts);
-             $('#search').click(
-             function () {
-        for (var i = 0; i < 2; i++) {
+
+            $('#aidForm').submit(function(event){
+            //preprocess search string and decide where to go
             $.ajax({
                  url : '/bardqueryapi/bardWebInterface/searchAssays',
+                  data: $("#aidForm").serialize(),
                 cache: false,
                 success: function (data) {
-                alert("Assays: " + data)
-                    //$("#div1").append(data);
+                     $("#assays").html(data);
+                    var assayTotal = 'Assays (' + $("#totalAssays").val() + ')'
+                    $("#assaysTab").html(assayTotal);
                 }
             });
              $.ajax({
                  url : '/bardqueryapi/bardWebInterface/searchCompounds',
+                  data: $("#aidForm").serialize(),
                 cache: false,
                 success: function (data) {
-                alert(data)
-                   // $("#div1").append(data);
+                //alert("Compounds: " + data)
+                   $("#compounds").html(data);
+                    var compoundTotal = 'Compounds (' + $("#totalCompounds").val() + ')'
+                    $("#compoundsTab").html(compoundTotal);
                 }
             });
-        }
+            return false; //do not submit form the normal way
+
     });
+
             <%-- An even handler to open (bring-to-front) the MarvinSketch modal window. Opens MarvingSketch in a new gsp: marvinSketch.gsp --%>
         $('#structureModal').click(
-  function() {
+        function() {
       url = '${request.contextPath}/chemAxon/marvinSketch';
                     $("#modalDiv").dialog("open");
                     $("#modalIFrame").attr('src',url);
@@ -60,6 +67,12 @@ FALSE will prevent closing of the modal window. --%>
                     }
                 });
             });
+
+        function preprocessSearchString(){
+
+           var searchString = $("#searchString").val()
+           alert(searchString)
+        }
     </r:script>
 
     <title>BARD Home</title>
@@ -82,7 +95,7 @@ FALSE will prevent closing of the modal window. --%>
         </g:if>
         <br/><br/>
 
-        <g:form name="aidForm" controller="bardWebInterface" action="search">
+        <g:form name="aidForm" controller="bardWebInterface">
 
             <div class="content ">
                 <table class="skinnyTable">
@@ -113,19 +126,17 @@ FALSE will prevent closing of the modal window. --%>
 </div><!-- End body div -->
 <div id="resultTab">
     <ul id="resultTabUL" class="nav nav-tabs">
-        <li class="active"><a href="#assays" data-toggle="tab">Assays (${assays?.size()})</a></li>
-        <li><a href="#compounds" data-toggle="tab">Compounds (${compounds?.size()})</a></li>
-        <li><a href="#experiments" data-toggle="tab">Experiments (${experiments?.size()})</a></li>
-        <li><a href="#projects" data-toggle="tab">Projects (${projects?.size()})</a></li>
+        <li class="active"><a href="#assays" data-toggle="tab" id="assaysTab">Assays (${assays?.size()})</a></li>
+        <li><a href="#compounds" data-toggle="tab" id="compoundsTab">Compounds (${compounds?.size()})</a></li>
     </ul>
 
     <div id="resultTabContent" class="tab-content">
         <div class="tab-pane fade in active" id="assays">
-            <g:render template="assaysNew"/>
+            <g:render template="assays"/>
         </div>
 
         <div class="tab-pane fade" id="compounds">
-            <g:render template="compoundsNew"/>
+            <g:render template="compounds"/>
         </div>
 
     </div>
