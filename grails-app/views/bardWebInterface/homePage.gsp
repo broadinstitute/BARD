@@ -78,14 +78,5 @@
     </iframe>
 </div>
 
-<%-- Is used to capture the SMILES and search-type in the parent form (entered in the modal child window) before submit for searching --%>
-<div id="structureSearchDiv">
-    <g:form name="structureSearchForm" id="structureSearchForm" controller="bardWebInterface"
-            action="structureSearch">
-        <g:hiddenField name="smiles" id='hiddenFieldSmiles'/>
-        <g:hiddenField name="structureSearchType" id='hiddenFieldStructureSearchType'/>
-    </g:form>
-</div>
-
 </body>
 </html>
