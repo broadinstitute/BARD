@@ -190,12 +190,11 @@
       <file leaf-file-name="marvinSketch.gsp" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/grails-app/views/chemAxon/marvinSketch.gsp">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="16" column="13" selection-start="659" selection-end="659" vertical-scroll-proportion="0.14563107">
+            <state line="20" column="58" selection-start="815" selection-end="815" vertical-scroll-proportion="0.3656958">
               <folding>
-                <marker date="1345642081003" expanded="true" signature="170:1535" placeholder="{...}" />
-                <marker date="1345642081003" expanded="true" signature="541:1300" placeholder="{...}" />
-                <marker date="1345642081003" expanded="true" signature="1081:1194" placeholder="//..." />
-                <marker date="1345642081003" expanded="true" signature="1453:1523" placeholder="{...}" />
+                <marker date="1345642314910" expanded="true" signature="170:1305" placeholder="{...}" />
+                <marker date="1345642314910" expanded="true" signature="541:1070" placeholder="{...}" />
+                <marker date="1345642314910" expanded="true" signature="1223:1293" placeholder="{...}" />
               </folding>
             </state>
           </provider>
@@ -964,12 +963,11 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/grails-app/views/chemAxon/marvinSketch.gsp">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="16" column="13" selection-start="659" selection-end="659" vertical-scroll-proportion="0.14563107">
+        <state line="20" column="58" selection-start="815" selection-end="815" vertical-scroll-proportion="0.3656958">
           <folding>
-            <marker date="1345642081003" expanded="true" signature="170:1535" placeholder="{...}" />
-            <marker date="1345642081003" expanded="true" signature="541:1300" placeholder="{...}" />
-            <marker date="1345642081003" expanded="true" signature="1081:1194" placeholder="//..." />
-            <marker date="1345642081003" expanded="true" signature="1453:1523" placeholder="{...}" />
+            <marker date="1345642314910" expanded="true" signature="170:1305" placeholder="{...}" />
+            <marker date="1345642314910" expanded="true" signature="541:1070" placeholder="{...}" />
+            <marker date="1345642314910" expanded="true" signature="1223:1293" placeholder="{...}" />
           </folding>
         </state>
       </provider>
