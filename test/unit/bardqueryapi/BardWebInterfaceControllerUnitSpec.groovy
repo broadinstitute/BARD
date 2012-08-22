@@ -66,27 +66,27 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
         "Return a compound" | new Integer(872) | buildCompoundAdapter(872, [1, 2, 3], "CC") | 872         | [1, 2, 3]
     }
 
-    void "test search #label"() {
-        when:
-        request.method = 'GET'
-        controller.params.searchString = searchTerm
-        controller.search()
-
-        then:
-        queryService.search(searchTerm) >> { resultJson }
-
-        assert "/bardWebInterface/homePage" == view
-        assert model.totalCompounds == expectedTotalCompounds
-        assert model.assays.size == expectedAssays
-        assert model.compounds.size == expectedCompounds
-        assert model.experiments == []
-        assert model.projects == []
-
-        where:
-        label                                | searchTerm | resultJson                                                                                                          | expectedTotalCompounds | expectedAssays | expectedCompounds
-        "nothing was found"                  | '644'      | [totalCompounds: 0, assays: [], compounds: [], experiments: [], projects: []]                                       | 0                      | 0              | 0
-        "An Assay and a compound were found" | '644'      | [totalCompounds: 1, assays: [esAssay], compounds: ['CC'], xcompounds: [esxCompound], experiments: [], projects: []] | 1                      | 1              | 1
-    }
+//    void "test search #label"() {
+//        when:
+//        request.method = 'GET'
+//        controller.params.searchString = searchTerm
+//        controller.search()
+//
+//        then:
+//        queryService.search(searchTerm) >> { resultJson }
+//
+//        assert "/bardWebInterface/homePage" == view
+//        assert model.totalCompounds == expectedTotalCompounds
+//        assert model.assays.size == expectedAssays
+//        assert model.compounds.size == expectedCompounds
+//        assert model.experiments == []
+//        assert model.projects == []
+//
+//        where:
+//        label                                | searchTerm | resultJson                                                                                                          | expectedTotalCompounds | expectedAssays | expectedCompounds
+//        "nothing was found"                  | '644'      | [totalCompounds: 0, assays: [], compounds: [], experiments: [], projects: []]                                       | 0                      | 0              | 0
+//        "An Assay and a compound were found" | '644'      | [totalCompounds: 1, assays: [esAssay], compounds: ['CC'], xcompounds: [esxCompound], experiments: [], projects: []] | 1                      | 1              | 1
+//    }
 
 
     void "test autocomplete #label"() {

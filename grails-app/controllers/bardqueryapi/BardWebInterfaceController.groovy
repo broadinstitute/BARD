@@ -31,22 +31,6 @@ class BardWebInterfaceController {
     }
     /**
      * @return
-     * TODO: We should remove in the next iteration, since we no longer use it
-     */
-    @Deprecated
-    def search() {
-
-        def searchString = params.searchString?.trim()
-        if (searchString) {
-            def result = this.queryService.search(searchString)
-            render(view: "homePage", model: result)
-            return
-        }
-        flash.message = 'Search String is required'
-        redirect(action: "homePage")
-    }
-    /**
-     * @return
      */
     def searchStructures() {
 
@@ -91,22 +75,6 @@ class BardWebInterfaceController {
         def map = [:]
         String searchString = params.searchString?.trim()
         handleSearchParams('/search/compounds', map)
-//        String searchString = params.searchString?.trim()
-//
-//        params.max = Math.min(params.max ? params.int('max') : 10, 100)
-//        params.offset = Math.min(params.offset ? params.int('offset') : 0, 10)
-//        params.maxSteps = Math.min(params.maxSteps ? params.int('maxSteps') : 0, 10)
-//        int max = new Integer(params.max)
-//        int offset = new Integer(params.offset)
-//        //check for nulls
-//        def map = [:]
-//
-//
-//        map.put('query', [top: max, skip:"${offset}", q: "${searchString}", include_entities: false])
-//        map.put('path', '/search/compounds')
-//        map.put('connectTimeout', 5000)
-//        map.put('readTimeout', 10000)
-
         JSONObject resultJson = (JSONObject) queryExecutorService.executeGetRequestJSON(NCGC_ROOT_URL, map)
         render(template: 'compounds', model: [docs: resultJson.docs, metaData: resultJson.metaData, searchString: "${searchString}"])
     }
@@ -115,20 +83,6 @@ class BardWebInterfaceController {
         def map = [:]
         String searchString = params.searchString?.trim()
         handleSearchParams('/search/assays', map)
-//        params.max = Math.min(params.max ? params.int('max') : 10, 100)
-//        params.offset = params.int('offset') ?: 0
-//        int max = new Integer(params.max)
-//        int offset = new Integer(params.offset)
-//        //check for nulls
-//        def map = [:]
-//
-//
-//        map.put('query', [top: max, skip:"${offset}", q: "${searchString}", include_entities: false])
-//
-//        map.put('path', '/search/assays')
-//        map.put('connectTimeout', 5000)
-//        map.put('readTimeout', 10000)
-
         JSONObject resultJson = (JSONObject) queryExecutorService.executeGetRequestJSON(NCGC_ROOT_URL, map)
         render(template: 'assays', model: [docs: resultJson.docs, metaData: resultJson.metaData, searchString: "${searchString}"])
     }
@@ -137,22 +91,6 @@ class BardWebInterfaceController {
         String searchString = params.searchString?.trim()
         def map = [:]
         handleSearchParams('/search/projects',map)
-//        String searchString = params.searchString?.trim()
-//
-//        params.max = Math.min(params.max ? params.int('max') : 10, 100)
-//        params.offset = Math.min(params.offset ? params.int('offset') : 0, 10)
-//        params.maxSteps = Math.min(params.maxSteps ? params.int('maxSteps') : 0, 10)
-//        int max = new Integer(params.max)
-//        int offset = new Integer(params.offset)
-//        //check for nulls
-//        def map = [:]
-//
-//
-//        map.put('query', [top: max, skip:"${offset}", q: "${searchString}", include_entities: false])
-//        map.put('path', '/search/projects')
-//        map.put('connectTimeout', 5000)
-//        map.put('readTimeout', 10000)
-
         JSONObject resultJson = (JSONObject) queryExecutorService.executeGetRequestJSON(NCGC_ROOT_URL, map)
         render(template: 'projects', model: [docs: resultJson.docs, metaData: resultJson.metaData, searchString: "${searchString}"])
     }
@@ -163,7 +101,7 @@ class BardWebInterfaceController {
 
         if (assayId) {
             Assay assay = this.queryService.showAssay(assayId)
-            render(view: "showAssay", model: [assay: assay])
+            render(view: "showAssay", model: [assayInstance: assay])
         }
         else {
             render "Assay Protocol ID parameter required"
@@ -175,7 +113,7 @@ class BardWebInterfaceController {
 
         if (projId) {
             Project project = this.queryService.showProject(projId)
-            render(view: "showProject", model: [project: project])
+            render(view: "showProject", model: [projectInstance: project])
         }
         else {
             render "Project ID parameter required"
@@ -205,30 +143,6 @@ class BardWebInterfaceController {
             }
         }
     }
-
-    /**
-     * An Action to provide a search-call to NCGC REST API: find CIDs by structure (SMILES).
-     * @param smiles
-     * @param structureSearchType
-     * @return
-     */
-    def structureSearch(String smiles, String structureSearchType) {
-        final StructureSearchParams.Type searchType = structureSearchType as StructureSearchParams.Type
-        switch (searchType) {
-            case StructureSearchParams.Type.Similarity:
-            case StructureSearchParams.Type.Substructure:
-            case StructureSearchParams.Type.Superstructure:
-            case StructureSearchParams.Type.Exact:
-                redirect(action: "searchStructures", params: ['searchString': searchType.toString() + ":" + smiles])
-                break
-            default:
-                throw new RuntimeException("Undeifined structure-search type")
-                break
-        }
-
-
-    }
-
 }
 /**
  * We would use this helper class as Mixin for
