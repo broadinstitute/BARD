@@ -4,13 +4,14 @@
     ShoppingCartService  shoppingCartService = grailsApplication.classLoader.loadClass('com.metasieve.shoppingcart.ShoppingCartService').newInstance()
     QueryCartService  queryCartService  = grailsApplication.classLoader.loadClass('bardqueryapi.QueryCartService').newInstance()
 %>
-
-<h2>Query Cart - Selected Results</h2>
-<h4>${queryCartService.totalNumberOfUniqueItemsInCart(shoppingCartService)} results selected</h4>
-<h3>COMPOUNDS</h3>
 <table>
     <tbody id="sarCartRefill">
     <tr><td>
+
+<h3>Query Cart - Selected Results</h3>
+<h4>${queryCartService.totalNumberOfUniqueItemsInCart(shoppingCartService)} results selected</h4>
+<h3>COMPOUNDS</h3>
+
     <table>
 <g:each in="${queryCartService.groupUniqueContentsByType(shoppingCartService)[(QueryCartService.cartCompound)]}" var="elem" status="item">
         <tr>
@@ -68,6 +69,21 @@
 </g:each>
 </table>
 <br/>
+        <g:form name="aidForm" controller="bardWebInterface" action="search">
+
+            <div class="content ">
+                <table class="skinnyTable" width=100%>
+                    <tr>
+                        <td width=100%>
+                         </td>
+                        <td>
+                            <g:submitButton name="search"
+                                            value="Generate Molecular Spreadsheet"/>
+                        </td>
+                    </tr>
+                 </table>
+            </div>
+        </g:form>
 
     </td></tr>
         </tbody>
