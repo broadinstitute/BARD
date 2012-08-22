@@ -10,6 +10,7 @@
           <root url="file://$MODULE_DIR$/target/plugins/jquery-1.7.1/web-app" relative="/" />
           <root url="file://$MODULE_DIR$/target/plugins/remote-control-1.2/web-app" relative="/" />
           <root url="file://$MODULE_DIR$/target/plugins/jquery-ui-1.8.15/web-app" relative="/" />
+          <root url="file://$MODULE_DIR$/target/plugins/remote-pagination-0.3/web-app" relative="/" />
         </webroots>
         <sourceRoots />
       </configuration>
@@ -42,6 +43,9 @@
     </content>
     <content url="file://$MODULE_DIR$/target/plugins/remote-control-1.2">
       <sourceFolder url="file://$MODULE_DIR$/target/plugins/remote-control-1.2/src/groovy" isTestSource="false" />
+    </content>
+    <content url="file://$MODULE_DIR$/target/plugins/remote-pagination-0.3">
+      <sourceFolder url="file://$MODULE_DIR$/target/plugins/remote-pagination-0.3/grails-app/taglib" isTestSource="false" />
     </content>
     <content url="file://$MODULE_DIR$/target/plugins/resources-1.1.6">
       <sourceFolder url="file://$MODULE_DIR$/target/plugins/resources-1.1.6/src/java" isTestSource="false" />

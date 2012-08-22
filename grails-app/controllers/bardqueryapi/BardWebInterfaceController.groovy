@@ -88,43 +88,64 @@ class BardWebInterfaceController {
     def searchCompounds() {
         String searchString = params.searchString?.trim()
 
+        params.max = Math.min(params.max ? params.int('max') : 10, 100)
+        params.offset = Math.min(params.offset ? params.int('offset') : 0, 10)
+        params.maxSteps = Math.min(params.maxSteps ? params.int('maxSteps') : 0, 10)
+        int max = new Integer(params.max)
+        int offset = new Integer(params.offset)
+        //check for nulls
         def map = [:]
 
+
+        map.put('query', [top: max, skip:"${offset}", q: "${searchString}", include_entities: false])
         map.put('path', '/search/compounds')
-        map.put('query', [top: 10, q: "${searchString}", include_entities: false])
         map.put('connectTimeout', 5000)
         map.put('readTimeout', 10000)
 
         JSONObject resultJson = (JSONObject)queryExecutorService.executeGetRequestJSON(NCGC_ROOT_URL, map)
-        render(template: 'compounds', model: [docs: resultJson.docs, metaData: resultJson.metaData])
+        render(template: 'compounds', model: [docs: resultJson.docs, metaData: resultJson.metaData, searchString: "${searchString}"])
     }
 
     def searchAssays() {
-         String searchString = params.searchString?.trim()
-
+        String searchString = params.searchString?.trim()
+        params.max = Math.min(params.max ? params.int('max') : 10, 100)
+        params.offset = Math.min(params.offset ? params.int('offset') : 0, 10)
+        params.maxSteps = Math.min(params.maxSteps ? params.int('maxSteps') : 0, 10)
+        int max = new Integer(params.max)
+        int offset = new Integer(params.offset)
+        //check for nulls
         def map = [:]
 
+
+        map.put('query', [top: max, skip:"${offset}", q: "${searchString}", include_entities: false])
+
         map.put('path', '/search/assays')
-        map.put('query', [top: 10, q: "${searchString}", include_entities: false])
         map.put('connectTimeout', 5000)
         map.put('readTimeout', 10000)
 
         JSONObject resultJson = (JSONObject)queryExecutorService.executeGetRequestJSON(NCGC_ROOT_URL, map)
-        render(template: 'assays', model: [docs: resultJson.docs, metaData: resultJson.metaData])
+        render(template: 'assays', model: [docs: resultJson.docs, metaData: resultJson.metaData, searchString: "${searchString}"])
     }
 
     def searchProjects() {
         String searchString = params.searchString?.trim()
 
+        params.max = Math.min(params.max ? params.int('max') : 10, 100)
+        params.offset = Math.min(params.offset ? params.int('offset') : 0, 10)
+        params.maxSteps = Math.min(params.maxSteps ? params.int('maxSteps') : 0, 10)
+        int max = new Integer(params.max)
+        int offset = new Integer(params.offset)
+        //check for nulls
         def map = [:]
 
+
+        map.put('query', [top: max, skip:"${offset}", q: "${searchString}", include_entities: false])
         map.put('path', '/search/projects')
-        map.put('query', [top: 10, q: "${searchString}", include_entities: false])
         map.put('connectTimeout', 5000)
         map.put('readTimeout', 10000)
 
         JSONObject resultJson = (JSONObject)queryExecutorService.executeGetRequestJSON(NCGC_ROOT_URL, map)
-        render(template: 'projects', model: [docs: resultJson.docs, metaData: resultJson.metaData])
+        render(template: 'projects', model: [docs: resultJson.docs, metaData: resultJson.metaData, searchString: "${searchString}"])
     }
 
     //TODO: Whomever creates the gsp should also write unit tests for this method

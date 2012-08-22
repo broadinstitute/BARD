@@ -59,6 +59,7 @@ grails.project.dependency.resolution = {
         build ":tomcat:$grailsVersion"
 
         compile ":remote-control:1.2"
+        compile ':remote-pagination:0.3'
     }
 }
 

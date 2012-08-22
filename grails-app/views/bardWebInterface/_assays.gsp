@@ -6,5 +6,11 @@
         <br/>
     </g:each>
     <g:hiddenField name="totalAssays" id="totalAssays" value="${metaData?.nhit}"/>
-    <g:render template="paginate"/>
+    <div id="listAssaysPage">
+        <div class="paginateButtons">
+            <util:remotePaginate total="${metaData ? metaData.nhit : 0}" update="listAssaysPage" controller="bardWebInterface"
+                                 action="searchAssays" pageSizes="[10,50]"
+                                 params='[searchString: "${searchString}"]'/>
+        </div>
+    </div>
 </div>
