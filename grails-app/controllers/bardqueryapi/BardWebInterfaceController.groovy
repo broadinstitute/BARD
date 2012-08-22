@@ -31,22 +31,6 @@ class BardWebInterfaceController {
     }
     /**
      * @return
-     * TODO: We should remove in the next iteration, since we no longer use it
-     */
-    @Deprecated
-    def search() {
-
-        def searchString = params.searchString?.trim()
-        if (searchString) {
-            def result = this.queryService.search(searchString)
-            render(view: "homePage", model: result)
-            return
-        }
-        flash.message = 'Search String is required'
-        redirect(action: "homePage")
-    }
-    /**
-     * @return
      */
     def searchStructures() {
 
@@ -159,30 +143,6 @@ class BardWebInterfaceController {
             }
         }
     }
-
-    /**
-     * An Action to provide a search-call to NCGC REST API: find CIDs by structure (SMILES).
-     * @param smiles
-     * @param structureSearchType
-     * @return
-     */
-    def structureSearch(String smiles, String structureSearchType) {
-        final StructureSearchParams.Type searchType = structureSearchType as StructureSearchParams.Type
-        switch (searchType) {
-            case StructureSearchParams.Type.Similarity:
-            case StructureSearchParams.Type.Substructure:
-            case StructureSearchParams.Type.Superstructure:
-            case StructureSearchParams.Type.Exact:
-                redirect(action: "searchStructures", params: ['searchString': searchType.toString() + ":" + smiles])
-                break
-            default:
-                throw new RuntimeException("Undeifined structure-search type")
-                break
-        }
-
-
-    }
-
 }
 /**
  * We would use this helper class as Mixin for
