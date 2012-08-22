@@ -2,7 +2,6 @@ package bard.db.experiment
 
 import bard.db.registration.Assay
 import bard.db.registration.ExternalReference
-import bard.db.dictionary.Laboratory
 
 class Experiment {
 
@@ -17,8 +16,8 @@ class Experiment {
 	String experimentStatus
 	Assay assay
 	String readyForExtraction = 'Pending'
-    Laboratory laboratory
 
+    // TODO results can appearently be very large 10 million rows
     Set<Result> results = [] as Set<Result>
     Set<ExperimentContextItem> experimentContextItem = [] as Set<ExperimentContextItem>
     Set<ProjectExperiment> projectExperiments = [] as Set<ProjectExperiment>
@@ -47,6 +46,5 @@ class Experiment {
 		modifiedBy nullable: true, maxSize: 40
 		experimentStatus maxSize: 20, nullable: false, inList: ["Pending", "Approved", "Rejected", "Revised"]
 		readyForExtraction maxSize: 20, nullable: false, inList: [ "Pending","Ready", "Started", "Complete" ]
-        laboratory nullable: true
 	}
 }

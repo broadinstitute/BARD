@@ -5,13 +5,13 @@ import org.junit.Before
 import spock.lang.Unroll
 
 
-@Build(Element)
+@Build(AssayElement)
 @Unroll
-class ElementConstraintUnitSpec extends AbstractElementConstraintUnitSpec {
+class AssayElementConstraintUnitSpec extends AbstractElementConstraintUnitSpec {
 
     @Before
     void doSetup() {
-        domainInstance = Element.buildWithoutSave()
+        domainInstance = AssayElement.buildWithoutSave()
     }
 
 

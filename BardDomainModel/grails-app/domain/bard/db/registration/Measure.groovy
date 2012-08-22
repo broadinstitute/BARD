@@ -1,7 +1,6 @@
 package bard.db.registration
 
 import bard.db.dictionary.Element
-import bard.db.dictionary.Unit
 
 class Measure {
 
@@ -9,7 +8,7 @@ class Measure {
     Date lastUpdated
     String modifiedBy
     AssayContext measureContext
-    Unit entryUnit
+    String entryUnit
     Element element
     Assay assay
     Measure parentMeasure
@@ -18,7 +17,7 @@ class Measure {
     static hasMany = [children: Measure]
 
     static mapping = {
-        id( column: 'MEASURE_ID', generator: 'sequence', params: [sequence: 'MEASURE_ID_SEQ'])
+        id(column: 'MEASURE_ID', generator: 'sequence', params: [sequence: 'MEASURE_ID_SEQ'])
         parentMeasure column: "PARENT_MEASURE_ID"
         entryUnit column: "entry_unit"
         element column: 'result_type_id'

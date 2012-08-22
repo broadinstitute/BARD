@@ -7,6 +7,7 @@ import static bard.db.registration.Assay.*
 import static test.TestUtils.assertFieldValidationExpectations
 import static test.TestUtils.createString
 import org.junit.Before
+import bard.db.enums.ReadyForExtraction
 
 /**
  * Integration tests for Asssay

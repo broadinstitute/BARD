@@ -35,22 +35,8 @@ abstract class AbstractElement {
     Date lastUpdated = new Date()
     String modifiedBy
 
-    static hasMany = [treeRoots: TreeRoot,
-            ontologyItems: OntologyItem,
-            childElementRelationships: ElementHierarchy,
-            parentElementRelationships: ElementHierarchy]
-
-    static mappedBy = [childElementRelationships: "childElement",
-            parentElementRelationships: "parentElement"]
-
-    static mapping = {
-        id(column: 'ELEMENT_ID', generator: 'sequence', params: [sequence: 'ELEMENT_ID_SEQ'])
-        unit(column: 'unit')
-        externalURL(column: 'external_url')
-    }
-
     static constraints = {
-        elementStatus(nullable: false,maxSize: ELEMENT_STATUS_MAX_SIZE)
+        elementStatus(nullable: false, maxSize: ELEMENT_STATUS_MAX_SIZE)
 
         label(nullable: false, unique: true, maxSize: LABEL_MAX_SIZE)
         description(nullable: true, maxSize: DESCRIPTION_MAX_SIZE)
@@ -65,6 +51,10 @@ abstract class AbstractElement {
         dateCreated(nullable: false)
         lastUpdated(nullable: true)
         modifiedBy(nullable: true, blank: false, maxSize: MODIFIED_BY_MAX_SIZE)
+    }
+    static mapping = {
+        id(column: 'ELEMENT_ID', generator: 'sequence', params: [sequence: 'ELEMENT_ID_SEQ'])
+        externalURL(column: 'external_url')
     }
 }
 enum ElementStatus {

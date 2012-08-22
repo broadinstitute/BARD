@@ -10,9 +10,4 @@ class Element extends AbstractElement {
         static mappedBy = [childElementRelationships: "childElement",
                 parentElementRelationships: "parentElement"]
 
-        static mapping = {
-            id(column: 'ELEMENT_ID', generator: 'sequence', params: [sequence: 'ELEMENT_ID_SEQ'])
-            unit(column: 'unit')
-            externalURL(column: 'external_url')
-        }
 }

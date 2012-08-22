@@ -1,11 +1,13 @@
 package bard.db.experiment
 
-import bard.db.dictionary.Stage
+import bard.db.dictionary.Element
+
+
 
 class ProjectExperiment {
 
     Project project
-    Stage stage
+    Element stage
     Experiment experiment
     Experiment precedingExperiment // this current Experiment is a follow on to the preceding Experiment
     String description
