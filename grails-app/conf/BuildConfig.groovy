@@ -54,7 +54,7 @@ grails.project.dependency.resolution = {
         compile ":functional-spock:0.6"
         build ":codenarc:0.15"
         compile ":elastic-search:0.4.5-SNAPSHOT"
-        compile ":twitter-bootstrap:2.0.2.25"
+        compile ":twitter-bootstrap:2.1.0"
 
         build ":tomcat:$grailsVersion"
 

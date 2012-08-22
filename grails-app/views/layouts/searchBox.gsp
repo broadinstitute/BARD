@@ -1,4 +1,4 @@
-<%@ page import="bardqueryapi.StructureSearchType" %>
+<%@ page import="bard.core.StructureSearchParams" %>
 <!doctype html>
 <!--[if lt IE 7 ]> <html lang="en" class="no-js ie6"> <![endif]-->
 <!--[if IE 7 ]>    <html lang="en" class="no-js ie7"> <![endif]-->
@@ -30,9 +30,8 @@
     </r:script>
 
     <g:layoutHead/>
+    <r:require modules="bootstrap, search, common" />
     <r:layoutResources />
-    <r:require modules="bootstrap"/>
-    <link rel="stylesheet" href="${resource(dir: 'css', file: 'bard.css')}" type="text/css">
 </head>
 <body>
 <div class="container-fluid">
@@ -59,7 +58,7 @@
                         <h5><i class="icon-shopping-cart"></i> Query Cart</h5>
                         <div class="btn-group">
                             <a class="btn-small dropdown-toggle" data-toggle="dropdown" href="#">
-                                <i class="icon-eye-open"></i>
+                                <i class="icon-eye-open"></i> Visualize
                                 <span class="caret"></span>
                             </a>
                             <ul class="dropdown-menu">
@@ -72,6 +71,12 @@
             </div>
         </div>
     </div>
+    <g:if test="${flash.message}">
+        <div class="alert">
+            <button class="close" data-dismiss="alert">×</button>
+            ${flash.message}
+        </div>
+    </g:if>
     <g:layoutBody/>
     <div class="row-fluid">
         <div class="span12">
@@ -87,8 +92,8 @@
 </div>
 <div id="spinner" class="spinner" style="display:none;"><g:message code="spinner.alt" default="Loading&hellip;"/></div>
 <g:javascript library="application"/>
+<r:require modules="bootstrap, search, common"/>
 <r:layoutResources />
-<r:require modules="bootstrap"/>
 
 <%-- MarvinSketch's modal window --%>
 <div class="modal hide" id="modalDiv">
@@ -107,9 +112,9 @@
             <g:hiddenField name="smiles" id='hiddenFieldSmiles'/>
             <div class="control-group"><div class="controls">
                 <g:radioGroup name="structureSearchType"
-                              values="${StructureSearchType.values()}"
-                              value="${StructureSearchType.SUB_STRUCTURE}"
-                              labels="${StructureSearchType.values().collect{it.description}}">
+                              values="${StructureSearchParams.Type.values()}"
+                              value="${StructureSearchParams.Type.Substructure}"
+                              labels="${StructureSearchParams.Type.values()}">
                     <label class="radio">
                         ${it.radio} ${it.label}
                     </label>
