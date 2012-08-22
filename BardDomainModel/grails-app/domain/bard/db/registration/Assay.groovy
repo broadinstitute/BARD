@@ -1,6 +1,7 @@
 package bard.db.registration
 
 import bard.db.experiment.Experiment
+import bard.db.enums.ReadyForExtraction
 
 class Assay {
 
@@ -55,9 +56,3 @@ enum AssayStatus {
     Retired
 }
 
-enum ReadyForExtraction {
-    Pending,
-    Ready,
-    Started,
-    Complete
-}

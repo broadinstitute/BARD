@@ -8,6 +8,7 @@ import spock.lang.Unroll
 import static bard.db.registration.Assay.*
 import static test.TestUtils.assertFieldValidationExpectations
 import static test.TestUtils.createString
+import bard.db.enums.ReadyForExtraction
 
 /**
  * See the API for {@link grails.test.mixin.domain.DomainClassUnitTestMixin} for usage instructions
