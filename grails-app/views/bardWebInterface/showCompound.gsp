@@ -10,28 +10,93 @@
 <html>
 <head>
     <r:require modules="bootstrap"/>
-    <title>Show Compound ${compound.pubChemCID}</title>
+    <title>Compound Details ${compound.pubChemCID}</title>
 </head>
 
 <body>
 <div class="row">
-    <div class="span6"><h2>View compound showing results</h2></div> <br/>
-
     <div class="span6"><a href="/bardwebquery"><img src="${resource(dir: 'images', file: 'bardLogo.png')}"
                                                     alt="BARD - Home Page"/></a></div>
+
+    <div class="span6"><h1>Compound Details</h1></div> <br/>
+
 </div>
 <br/>
 
-<div class="row">
-    <div class="span4 offset1"><h1>View Compound</h1></div>
-</div>
+<div class="span6"><h2>CID ${compound.pubChemCID}</h2></div> <br/>
+<br/>
+<br/>
 
 <div class="row">
-    <div class="span4 offset1"><h2>CID  ${compound.pubChemCID}</h2></div> <br/>
-
-    <div class="span2"><img
+    <div class="span3"><img
             src="${createLink(controller: 'chemAxon', action: 'generateStructureImage', params: [smiles: compound?.structureSMILES, width: 150, height: 120])}"/>
     </div> <br/>
+
+    <div class="span6 table">
+        <table class="span5">
+            <tr>
+                <th>Compound Property</th>
+                <th>Value</th>
+            </tr>
+
+            <tr>
+                <td>Name</td>
+                <td>${compound.compound.name}</td>
+            </tr>
+
+            <tr>
+                <td>Description</td>
+                <td>${compound.compound.description}</td>
+            </tr>
+
+            <tr>
+                <td>Synonyms</td>
+                <td></td>
+            </tr>
+
+            <tr>
+                <td>Molecular formula</td>
+                <td>${compound.formula()}</td>
+            </tr>
+
+            <tr>
+                <td>IUAP name</td>
+                <td>${compound.compound.getValue(bard.core.Compound.IUPACNameValue)?.value as java.lang.String}</td>
+            </tr>
+
+            <tr>
+                <td>Canonical SIMLES</td>
+                <td>${compound.structureSMILES}</td>
+            </tr>
+
+            <tr>
+                <td>MW</td>
+                <td>${compound.mwt()}</td>
+            </tr>
+
+            <tr>
+                <td>Exact mass</td>
+                <td>${compound.exactMass()}</td>
+            </tr>
+
+            <tr>
+                <td>logP</td>
+                <td>${compound.logP()}</td>
+            </tr>
+
+            <tr>
+                <td>TPSA</td>
+                <td>${compound.TPSA()}</td>
+            </tr>
+
+            <tr>
+                <td>Probe ID</td>
+                <% String probeId = compound.compound.getValue(bard.core.Compound.ProbeIDValue)?.value as java.lang.String %>
+                <td>${probeId == 'null' ? '' : probeId}</td>
+            </tr>
+
+        </table>
+    </div>
 
     <div class="span6">
         <table>

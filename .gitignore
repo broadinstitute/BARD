@@ -13,3 +13,4 @@ out/
 *.hprof
 logs/
 *.*~
+*.ipr
