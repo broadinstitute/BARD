@@ -7,13 +7,13 @@ package bard.db.experiment
  * Time: 3:59 PM
  * To change this template use File | Settings | File Templates.
  */
-class ResultContextItem extends RunContextItem{
+class ExperimentContextItem extends RunContextItem{
 
-    Result result
+    Experiment experiment
 
-    static belongsTo = [result:Result]
+    static belongsTo = [experiment:Experiment]
 
     static mapping = {
-        discriminator(value:"Result")
+        discriminator( value:"Experiment")
     }
 }

@@ -19,10 +19,16 @@ class Experiment {
 	String readyForExtraction = 'Pending'
     Laboratory laboratory
 
-	static hasMany = [resultContextItems: ResultContextItem,
+    Set<Result> results = [] as Set<Result>
+    Set<ExperimentContextItem> experimentContextItem = [] as Set<ExperimentContextItem>
+    Set<ProjectExperiment> projectExperiments = [] as Set<ProjectExperiment>
+    Set<ExternalReference> externalReferences = [] as Set<ExternalReference>
+
+	static hasMany = [experimentContextItem: ExperimentContextItem,
 			results: Result,
             projectExperiments:ProjectExperiment,
             externalReferences:ExternalReference]
+
 	static belongsTo = [Assay]
 
 	static mapping = {

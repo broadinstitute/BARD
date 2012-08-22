@@ -5,7 +5,7 @@ import bard.db.dictionary.Element
 
 class AssayContextItem {
 
-    private static final int EXT_VALUE_MAX_SIZE = 60
+    private static final int EXT_VALUE_ID_MAX_SIZE = 60
     private static final int VALUE_DISPLAY_MAX_SIZE = 500
     private static final int MODIFIED_BY_MAX_SIZE = 40
     AssayContext assayContext
@@ -40,7 +40,7 @@ class AssayContextItem {
         //TODO look at making this an enum
         qualifier(nullable: true, blank: false, inList: ['= ', '< ', '<=', '> ', '>=', '<<', '>>', '~ '])
         valueElement(nullable: true)
-        extValueId(nullable: true, blank: false, maxSize: EXT_VALUE_MAX_SIZE)
+        extValueId(nullable: true, blank: false, maxSize: EXT_VALUE_ID_MAX_SIZE)
         valueDisplay(nullable: true, blank: false, maxSize: VALUE_DISPLAY_MAX_SIZE)
         valueNum(nullable: true)
         valueMin(nullable: true)

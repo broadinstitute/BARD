@@ -60,7 +60,10 @@ log4j = {
 
     warn   'org.mortbay.log'
 
+    // logs hibernate sql and params, slow but can be very helpful
 //    debug  'org.hibernate.SQL'
+//    trace  'org.hibernate.type'
+
 }
 grails.views.default.codec="none" // none, html, base64
 grails.views.gsp.encoding="UTF-8"

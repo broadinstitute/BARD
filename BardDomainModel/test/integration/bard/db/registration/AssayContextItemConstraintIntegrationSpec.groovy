@@ -107,11 +107,11 @@ class AssayContextItemConstraintIntegrationSpec extends IntegrationSpec {
 
         where:
         desc               | valueUnderTest                       | valid | errorCode
-        'too long'         | createString(EXT_VALUE_MAX_SIZE + 1) | false | 'maxSize.exceeded'
+        'too long'         | createString(EXT_VALUE_ID_MAX_SIZE + 1) | false | 'maxSize.exceeded'
         'blank valid'      | ''                                   | false | 'blank'
         'blank valid'      | '  '                                 | false | 'blank'
 
-        'exactly at limit' | createString(EXT_VALUE_MAX_SIZE)     | true  | null
+        'exactly at limit' | createString(EXT_VALUE_ID_MAX_SIZE)     | true  | null
         'null valid'       | null                                 | true  | null
     }
 

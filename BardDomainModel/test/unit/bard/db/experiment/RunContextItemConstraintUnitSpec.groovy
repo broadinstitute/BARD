@@ -1,33 +1,27 @@
-package bard.db.registration
+package bard.db.experiment
 
-import grails.buildtestdata.mixin.Build
 import org.junit.Before
 import spock.lang.Specification
-import spock.lang.Unroll
 
-import static bard.db.registration.AssayContextItem.EXT_VALUE_ID_MAX_SIZE
-import static bard.db.registration.AssayContextItem.VALUE_DISPLAY_MAX_SIZE
-import static bard.db.registration.AssayContextItem.MODIFIED_BY_MAX_SIZE
+import static bard.db.registration.AssayContextItem.*
 import static test.TestUtils.assertFieldValidationExpectations
 import static test.TestUtils.createString
+import spock.lang.Unroll
 
 /**
  * Created with IntelliJ IDEA.
  * User: ddurkin
  * Date: 8/21/12
- * Time: 9:18 AM
+ * Time: 5:52 PM
  * To change this template use File | Settings | File Templates.
  */
-@Build(AssayContextItem)
 @Unroll
-class AssayContextItemConstraintUnitSpec extends Specification {
+abstract class RunContextItemConstraintUnitSpec extends Specification {
 
-    AssayContextItem domainInstance
+    RunContextItem domainInstance
 
     @Before
-    void doSetup() {
-        domainInstance = AssayContextItem.buildWithoutSave()
-    }
+    abstract void doSetup()
 
     void "test qualifier constraints #desc qualifier: '#valueUnderTest'"() {
 
@@ -64,33 +58,6 @@ class AssayContextItemConstraintUnitSpec extends Specification {
 
     }
 
-    void "test attributeType constraints #desc attributeType: '#valueUnderTest'"() {
-
-        final String field = 'attributeType'
-
-        when: 'a value is set for the field under test'
-        domainInstance[(field)] = valueUnderTest
-        domainInstance.validate()
-
-        then: 'verify valid or invalid for expected reason'
-        assertFieldValidationExpectations(domainInstance, field, valid, errorCode)
-
-        and: 'verify the domain can be persisted to the db'
-        if (valid) {
-            domainInstance == domainInstance.save(flush: true)
-        }
-
-        where:
-        desc                   | valueUnderTest       | valid | errorCode
-        'null'                 | null                 | false | 'nullable'
-
-        'AttributeType.Fixed'  | AttributeType.Fixed  | true  | null
-        'AttributeType.List'   | AttributeType.List   | true  | null
-        'AttributeType.Range'  | AttributeType.Range  | true  | null
-        'AttributeType.Number' | AttributeType.Free | true  | null
-
-    }
-
     void "test extValueId constraints #desc extValueId: '#valueUnderTest'"() {
 
         final String field = 'extValueId'
@@ -108,13 +75,13 @@ class AssayContextItemConstraintUnitSpec extends Specification {
         }
 
         where:
-        desc               | valueUnderTest                       | valid | errorCode
+        desc               | valueUnderTest                          | valid | errorCode
         'too long'         | createString(EXT_VALUE_ID_MAX_SIZE + 1) | false | 'maxSize.exceeded'
-        'blank valid'      | ''                                   | false | 'blank'
-        'blank valid'      | '  '                                 | false | 'blank'
+        'blank valid'      | ''                                      | false | 'blank'
+        'blank valid'      | '  '                                    | false | 'blank'
 
         'exactly at limit' | createString(EXT_VALUE_ID_MAX_SIZE)     | true  | null
-        'null valid'       | null                                 | true  | null
+        'null valid'       | null                                    | true  | null
     }
 
     void "test valueDisplay constraints #desc valueDisplay: '#valueUnderTest'"() {
@@ -213,3 +180,4 @@ class AssayContextItemConstraintUnitSpec extends Specification {
 
 
 }
+
