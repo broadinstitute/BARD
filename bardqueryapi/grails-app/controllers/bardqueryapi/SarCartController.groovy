@@ -3,7 +3,6 @@ package bardqueryapi
 import com.metasieve.shoppingcart.Shoppable
 import com.metasieve.shoppingcart.ShoppingCartInterfaceTestProduct
 import com.metasieve.shoppingcart.ShoppingCartService
-import grails.converters.JSON
 
 class SarCartController {
     ShoppingCartService shoppingCartService
@@ -17,8 +16,13 @@ class SarCartController {
             cartAssay = Shoppable.get(params.id)
         }
         if(params.version) {
-                CartAssay newCartAssay = new CartAssay(assayTitle:"control_dummy")
+            if (params.class == 'class bardqueryapi.CartAssay') {
+                CartAssay newCartAssay = new CartAssay( assayTitle:params.assayTitle )
                 shoppingCartService.addToShoppingCart(newCartAssay)
+            }  else if (params.class == 'class bardqueryapi.CartCompound') {
+                CartCompound newCartCompound = new CartCompound( smiles:params.smiles )
+                shoppingCartService.addToShoppingCart(newCartCompound)
+            }
         } else {
             shoppingCartService.addToShoppingCart(cartAssay)
         }
@@ -32,6 +36,6 @@ class SarCartController {
     }
     def removeAll() {
         shoppingCartService.emptyShoppingCart()
-        render( CartAssay.findByShoppingItem(it['item']) as JSON )
+        render( template:'/bardWebInterface/sarCartContent' )
     }
 }

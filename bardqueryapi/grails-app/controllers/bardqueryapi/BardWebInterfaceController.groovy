@@ -32,20 +32,9 @@ class BardWebInterfaceController {
         def searchString = params.searchString?.trim()
         if (searchString) {
             def result = this.queryService.search(searchString)
-            shoppingCartService.emptyShoppingCart()
-            def assays = result["assays"]
-            for (assay in assays) {
-                shoppingCartService.addToShoppingCart(new CartAssay(assayTitle:assay["assayName"]),1)
-            }
-            def compounds = result["compounds"]
-            for (compound in compounds) {
-                shoppingCartService.addToShoppingCart(new CartCompound(smiles:compound["smiles"]),1)
-            }
             render(view: "homePage", model: result)
             return
         }
-        shoppingCartService.addToShoppingCart(new CartAssay(),1)
-        def t =  shoppingCartService.findAll()
         flash.message = 'Search String is required'
         redirect(action: "homePage")
     }
