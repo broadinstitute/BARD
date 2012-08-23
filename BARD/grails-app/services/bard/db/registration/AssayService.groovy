@@ -4,9 +4,9 @@ import bard.db.dictionary.*
 
 class AssayService {
 
-    Map getMeasureContextItemsForAssay(Assay assay) {
+    Map getAssayContextItemsForAssay(Assay assay) {
         Map map = [:]
-        map.'Assay Context' = assay.measureContextItems
+        map.'Assay Context' = assay.assayContextItems
         map.'Result Context' = getResultTypeMapForAssay(assay)
         return map
     }
@@ -47,7 +47,7 @@ class AssayService {
         //     then get measure context for parent measure
         //       then get measure context items for measure context
         //         if a list type, concatenate all the values together into a single line item (e.g. concentrations for dose)
-        assay.measureContexts.each {
+        assay.assayContexts.each {
             List info = []
             it.measures.each {
                 String measureText = ResultType.findByElement(Element.get(it.resultTypeId))?.resultTypeName
@@ -56,8 +56,8 @@ class AssayService {
                 }
                 info.add(measureText)
             }
-            if (it.measureContextItems != null) {
-                it.measureContextItems.each {
+            if (it.assayContextItems != null) {
+                it.assayContextItems.each {
                     if (it.parentGroup == null) {
                         info.add(it)
                     }
@@ -67,58 +67,6 @@ class AssayService {
         }
         return map
     }
-
-    Map getPathForAssayDescriptor(AssayDescriptor node, def value) {
-        Map map =[:]
-        map.put(node.label, value)
-        AssayDescriptor parent = node.getParent()
-        if (parent != null) {
-            map = getPathForAssayDescriptor(parent, map)
-        }
-        return map
-    }
-
-    Map getPathForBiologyDescriptor(BiologyDescriptor node, def value) {
-        Map map =[:]
-        map.put(node.label, value)
-        BiologyDescriptor parent = node.getParent()
-        if (parent != null) {
-            map = getPathForBiologyDescriptor(parent, map)
-        }
-        return map
-    }
-
-    Map getPathForInstanceDescriptor(InstanceDescriptor node, def value) {
-        Map map =[:]
-        map.put(node.label, value)
-        InstanceDescriptor parent = node.getParent()
-        if (parent != null) {
-            map = getPathForInstanceDescriptor(parent, map)
-        }
-        return map
-    }
-
-    // TODO get rid of path reconstruction
-    Map addItem(MeasureContextItem item) {
-        AssayDescriptor assayDescriptor = AssayDescriptor.findByElement(item.attributeElement)
-        if (assayDescriptor != null) {
-            return getPathForAssayDescriptor(assayDescriptor, item)
-        }
-        BiologyDescriptor biologyDescriptor = BiologyDescriptor.findByElement(item.attributeElement)
-        if (biologyDescriptor != null) {
-            return getPathForBiologyDescriptor(biologyDescriptor, item)
-        }
-        InstanceDescriptor instanceDescriptor = InstanceDescriptor.findByElement(item.attributeElement)
-        if (instanceDescriptor != null) {
-            return getPathForInstanceDescriptor(instanceDescriptor, item)
-        }
-        throw new RuntimeException("Unsupported Element Type: " + item)
-    }
-
-    // get an array of labels by navigating up through the parents
-    // need to handle each of the trees seperately (yuk)
-    // then create the nested maps using a loop and a put
-    // at the end put the measure context item into the bottom of the map
 
 
 }
