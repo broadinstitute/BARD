@@ -7,7 +7,7 @@ class Measure {
     Date dateCreated
     Date lastUpdated
     String modifiedBy
-    AssayContext measureContext
+    AssayContext assayContext
     String entryUnit
     Element element
     Assay assay
@@ -29,7 +29,7 @@ class Measure {
         lastUpdated nullable: true, maxSize: 19
         modifiedBy nullable: true, maxSize: 40
         element nullable: false
-        measureContext nullable: false
+        assayContext nullable: false
         entryUnit nullable: true
     }
 }

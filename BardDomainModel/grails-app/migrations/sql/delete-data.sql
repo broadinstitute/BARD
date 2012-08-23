@@ -21,7 +21,8 @@ delete from SUBSTANCE;
 
 -- experiments
 delete from EXTERNAL_REFERENCE;
-delete from PROJECT_EXPERIMENT;
+delete from PROJECT_CONTEXT_ITEM;
+delete from PROJECT_STEP;
 delete from EXPERIMENT;
 delete from PROJECT;
 

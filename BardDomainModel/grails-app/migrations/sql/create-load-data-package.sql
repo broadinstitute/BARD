@@ -136,7 +136,7 @@ as
                 EXPERIMENT_STATUS,
                 READY_FOR_EXTRACTION,
                 ASSAY_ID,
-                LABORATORY_ID,
+                --LABORATORY_ID,
                 RUN_DATE_FROM,
                 RUN_DATE_TO,
                 HOLD_UNTIL_DATE,
@@ -188,14 +188,14 @@ as
             from external_reference
             where project_id = an_identifier;
 
-        elsif av_table_name = 'PROJECT_EXPERIMENT'
+        elsif av_table_name = 'PROJECT_STEP'
         then
             -- beware this one, it may retrieve follows_experiments that you
             -- have not yet migrated
             open aco_cursor for
-            select PROJECT_EXPERIMENT_ID,
+            select PROJECT_STEP_ID,
                 PROJECT_ID,
-                STAGE_ID,
+                --STAGE_ID,
                 EXPERIMENT_ID,
                 FOLLOWS_EXPERIMENT_ID,
                 DESCRIPTION,
@@ -203,7 +203,7 @@ as
                 DATE_CREATED,
                 LAST_UPDATED,
                 MODIFIED_BY
-            from project_experiment
+            from project_step
             where experiment_id = an_identifier
                or nvl(follows_experiment_id, an_identifier) = an_identifier;
 
@@ -821,7 +821,7 @@ as
             insert into assay_context_item
                 (ASSAY_CONTEXT_ITEM_ID,
                 DISPLAY_ORDER,
-                MEASURE_CONTEXT_ID,
+                ASSAY_CONTEXT_ID,
                 ATTRIBUTE_TYPE,
                 ATTRIBUTE_ID,
                 QUALIFIER,
@@ -836,8 +836,8 @@ as
                 LAST_UPDATED,
                 MODIFIED_BY)
             select ASSAY_CONTEXT_ITEM_ID,
-                DISPLAY_ORDER
-                MEASURE_CONTEXT_ID,
+                DISPLAY_ORDER,
+                ASSAY_CONTEXT_ID,
                 ATTRIBUTE_TYPE,
                 ATTRIBUTE_ID,
                 QUALIFIER,
@@ -865,7 +865,6 @@ as
                     EXPERIMENT_STATUS,
                     READY_FOR_EXTRACTION,
                     ASSAY_ID,
-                    LABORATORY_ID,
                     RUN_DATE_FROM,
                     RUN_DATE_TO,
                     HOLD_UNTIL_DATE,
@@ -879,7 +878,6 @@ as
                     EXPERIMENT_STATUS,
                     READY_FOR_EXTRACTION,
                     ASSAY_ID,
-                    LABORATORY_ID,
                     RUN_DATE_FROM,
                     RUN_DATE_TO,
                     HOLD_UNTIL_DATE,
@@ -996,16 +994,15 @@ as
                     MODIFIED_BY
                 from data_mig.project dp
                 where project_id in
-                    (select project_id from data_mig.project_experiment
+                    (select project_id from data_mig.project_step
                      where experiment_id = rec_experiment.experiment_id
                      or follows_experiment_id = rec_experiment.experiment_id)
                  and not exists (select 1 from project p
                             where p.project_id = dp.project_id);
 
-                insert into project_experiment
-                    (PROJECT_EXPERIMENT_ID,
+                insert into project_step
+                    (PROJECT_STEP_ID,
                     PROJECT_ID,
-                    STAGE_ID,
                     EXPERIMENT_ID,
                     FOLLOWS_EXPERIMENT_ID,
                     DESCRIPTION,
@@ -1013,9 +1010,8 @@ as
                     DATE_CREATED,
                     LAST_UPDATED,
                     MODIFIED_BY)
-                select PROJECT_EXPERIMENT_ID,
+                select PROJECT_STEP_ID,
                     PROJECT_ID,
-                    STAGE_ID,
                     EXPERIMENT_ID,
                     FOLLOWS_EXPERIMENT_ID,
                     DESCRIPTION,
@@ -1023,7 +1019,7 @@ as
                     DATE_CREATED,
                     LAST_UPDATED,
                     MODIFIED_BY
-                from data_mig.project_experiment pe
+                from data_mig.project_step pe
                 where experiment_id = rec_experiment.experiment_id
                  and follows_experiment_id is null;
 
@@ -1111,10 +1107,10 @@ as
         loop
             for rec_experiment in cur_experiment(rec_assay.assay_id)
             loop
-                insert into project_experiment
-                    (PROJECT_EXPERIMENT_ID,
+                insert into project_step
+                    (PROJECT_STEP_ID,
                     PROJECT_ID,
-                    STAGE_ID,
+                    --STAGE_ID,
                     EXPERIMENT_ID,
                     FOLLOWS_EXPERIMENT_ID,
                     DESCRIPTION,
@@ -1122,9 +1118,9 @@ as
                     DATE_CREATED,
                     LAST_UPDATED,
                     MODIFIED_BY)
-                select PROJECT_EXPERIMENT_ID,
+                select PROJECT_STEP_ID,
                     PROJECT_ID,
-                    STAGE_ID,
+                    --STAGE_ID,
                     EXPERIMENT_ID,
                     FOLLOWS_EXPERIMENT_ID,
                     DESCRIPTION,
@@ -1132,7 +1128,7 @@ as
                     DATE_CREATED,
                     LAST_UPDATED,
                     MODIFIED_BY
-                from data_mig.project_experiment pe
+                from data_mig.project_step pe
                 where experiment_id = rec_experiment.experiment_id
                  and exists (select 1 from experiment e2
                         where e2.experiment_id = pe.follows_experiment_id);
@@ -1318,7 +1314,7 @@ as
                     EXPERIMENT_STATUS,
                     READY_FOR_EXTRACTION,
                     ASSAY_ID,
-                    LABORATORY_ID,
+                    --LABORATORY_ID,
                     RUN_DATE_FROM,
                     RUN_DATE_TO,
                     HOLD_UNTIL_DATE,
@@ -1332,7 +1328,7 @@ as
                     EXPERIMENT_STATUS,
                     READY_FOR_EXTRACTION,
                     ASSAY_ID,
-                    LABORATORY_ID,
+                    --LABORATORY_ID,
                     RUN_DATE_FROM,
                     RUN_DATE_TO,
                     HOLD_UNTIL_DATE,
@@ -1356,16 +1352,16 @@ as
                     MODIFIED_BY
                 from data_mig.project dp
                 where project_id in
-                    (select project_id from data_mig.project_experiment
+                    (select project_id from data_mig.project_step
                      where experiment_id = rec_experiment.experiment_id
                      or follows_experiment_id = rec_experiment.experiment_id)
                  and not exists (select 1 from project p
                             where p.project_id = dp.project_id);
 
-                insert into project_experiment
-                    (PROJECT_EXPERIMENT_ID,
+                insert into project_step
+                    (PROJECT_STEP_ID,
                     PROJECT_ID,
-                    STAGE_ID,
+                    --STAGE_ID,
                     EXPERIMENT_ID,
                     FOLLOWS_EXPERIMENT_ID,
                     DESCRIPTION,
@@ -1373,9 +1369,9 @@ as
                     DATE_CREATED,
                     LAST_UPDATED,
                     MODIFIED_BY)
-                select PROJECT_EXPERIMENT_ID,
+                select PROJECT_STEP_ID,
                     PROJECT_ID,
-                    STAGE_ID,
+                    --STAGE_ID,
                     EXPERIMENT_ID,
                     FOLLOWS_EXPERIMENT_ID,
                     DESCRIPTION,
@@ -1383,9 +1379,58 @@ as
                     DATE_CREATED,
                     LAST_UPDATED,
                     MODIFIED_BY
-                from data_mig.project_experiment pe
+                from data_mig.project_step pe
                 where experiment_id = rec_experiment.experiment_id
                  and follows_experiment_id is null;
+
+                -- insert project context
+                insert into project_context_item
+                    (PROJECT_CONTEXT_ITEM_ID,
+                    GROUP_PROJECT_CONTEXT_ID,
+                    PROJECT_ID,
+                    PROJECT_STEP_ID,
+                    DISCRIMINATOR,
+                    ATTRIBUTE_ID,
+                    VALUE_ID,
+                    EXT_VALUE_ID,
+                    QUALIFIER,
+                    VALUE_DISPLAY,
+                    VALUE_NUM,
+                    VALUE_MIN,
+                    VALUE_MAX,
+                    VERSION,
+                    DATE_CREATED,
+                    LAST_UPDATED,
+                    MODIFIED_BY
+                    )
+                select PROJECT_CONTEXT_ITEM_ID,
+                    GROUP_PROJECT_CONTEXT_ID,
+                    PROJECT_ID,
+                    PROJECT_STEP_ID,
+                    DISCRIMINATOR,
+                    ATTRIBUTE_ID,
+                    VALUE_ID,
+                    EXT_VALUE_ID,
+                    QUALIFIER,
+                    VALUE_DISPLAY,
+                    VALUE_NUM,
+                    VALUE_MIN,
+                    VALUE_MAX,
+                    VERSION,
+                    DATE_CREATED,
+                    LAST_UPDATED,
+                    MODIFIED_BY
+                from data_mig.project_context_item pci
+                where project_step_id in
+                        (select project_step_id
+                         from project_step
+                         where experiment_id = rec_experiment.experiment_id)
+                  and not exists (select 1
+                        from project_context_item pci2
+                        where pci2.project_context_item_id = pci.project_context_item_id)
+                ORDER by decode (project_context_item_id,
+                                group_project_context_id, 0,
+                                project_context_item_id);
 
                 insert into external_reference
                     (EXTERNAL_REFERENCE_ID,
@@ -1415,6 +1460,54 @@ as
             commit; -- for each assay
 
         end loop;
+
+        -- insert project context
+        insert into project_context_item
+            (PROJECT_CONTEXT_ITEM_ID,
+            GROUP_PROJECT_CONTEXT_ID,
+            PROJECT_ID,
+            PROJECT_STEP_ID,
+            DISCRIMINATOR,
+            ATTRIBUTE_ID,
+            VALUE_ID,
+            EXT_VALUE_ID,
+            QUALIFIER,
+            VALUE_DISPLAY,
+            VALUE_NUM,
+            VALUE_MIN,
+            VALUE_MAX,
+            VERSION,
+            DATE_CREATED,
+            LAST_UPDATED,
+            MODIFIED_BY
+            )
+        select PROJECT_CONTEXT_ITEM_ID,
+            GROUP_PROJECT_CONTEXT_ID,
+            PROJECT_ID,
+            PROJECT_STEP_ID,
+            DISCRIMINATOR,
+            ATTRIBUTE_ID,
+            VALUE_ID,
+            EXT_VALUE_ID,
+            QUALIFIER,
+            VALUE_DISPLAY,
+            VALUE_NUM,
+            VALUE_MIN,
+            VALUE_MAX,
+            VERSION,
+            DATE_CREATED,
+            LAST_UPDATED,
+            MODIFIED_BY
+        from data_mig.project_context_item pci
+        where project_id in
+                (select project_id
+                 from project)
+          and not exists (select 1
+                from project_context_item pci2
+                where pci2.project_context_item_id = pci.project_context_item_id)
+        ORDER by decode (project_context_item_id,
+                        group_project_context_id, 0,
+                        project_context_item_id);
 
         insert into external_reference
             (EXTERNAL_REFERENCE_ID,
@@ -1447,10 +1540,10 @@ as
         loop
             for rec_experiment in cur_experiment(rec_assay.assay_id)
             loop
-                insert into project_experiment
-                    (PROJECT_EXPERIMENT_ID,
+                insert into project_step
+                    (PROJECT_STEP_ID,
                     PROJECT_ID,
-                    STAGE_ID,
+                    --STAGE_ID,
                     EXPERIMENT_ID,
                     FOLLOWS_EXPERIMENT_ID,
                     DESCRIPTION,
@@ -1458,9 +1551,9 @@ as
                     DATE_CREATED,
                     LAST_UPDATED,
                     MODIFIED_BY)
-                select PROJECT_EXPERIMENT_ID,
+                select PROJECT_STEP_ID,
                     PROJECT_ID,
-                    STAGE_ID,
+                    --STAGE_ID,
                     EXPERIMENT_ID,
                     FOLLOWS_EXPERIMENT_ID,
                     DESCRIPTION,
@@ -1468,7 +1561,7 @@ as
                     DATE_CREATED,
                     LAST_UPDATED,
                     MODIFIED_BY
-                from data_mig.project_experiment pe
+                from data_mig.project_step pe
                 where experiment_id = rec_experiment.experiment_id
                  and exists (select 1 from experiment e2
                         where e2.experiment_id = pe.follows_experiment_id);
