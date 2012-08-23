@@ -12,13 +12,22 @@
             3. Submit the parent's form for searching
             4. Close (send-to-back) the MarvinSketch modal window --%>
         parent.$('#searchButton').click(function () {
+          var structureSearchTypeSelected = parent.$('input:radio[name=structureSearchType]:checked').val()
 
             var marvinSketch = $('#MarvinSketch')[0];
             var smiles = marvinSketch.getMol('smiles')
-            parent.$('#hiddenFieldSmiles').attr('value', smiles);
-            parent.$('#structureSearchForm').submit();
+            %{--parent.$('#hiddenFieldSmiles').attr('value', smiles);--}%
+            %{--parent.$('#structureSearchForm').submit();--}%
+
+            %{--parent.$('#modalDiv').modal("hide");--}%
+
+             //construct the query into a form that we want
+            var constructedSearch =structureSearchTypeSelected + ":" + smiles
+            parent.$('#searchString').attr('value', constructedSearch);
+            parent.$('#aidForm').submit();
 
             parent.$('#modalDiv').modal("hide");
+           //parent.$('#modalDiv').dialog("close");
         });
 
         });

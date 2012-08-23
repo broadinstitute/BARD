@@ -108,8 +108,6 @@
         </iframe>
     </div>
     <div class="modal-footer">
-        <g:form name="structureSearchForm" id="structureSearchForm" controller="bardWebInterface" action="structureSearch" class="form-inline">
-            <g:hiddenField name="smiles" id='hiddenFieldSmiles'/>
             <div class="control-group"><div class="controls">
                 <g:radioGroup name="structureSearchType"
                               values="${StructureSearchParams.Type.values()}"
@@ -122,7 +120,6 @@
             </div></div>
             <a href="#" class="btn" data-dismiss="modal">Close</a>
             <g:submitButton name="searchButton" id="searchButton" value="Search" class="btn btn-primary"/>
-        </g:form>
     </div>
 </div>
 </body>
