@@ -1,5 +1,6 @@
 $(document).ready(function () {
     var spinnerImageLink = '<img src="/bardwebquery/static/images/loading_icon.gif"  height="16" width="16" />';
+    var errorImageTwitterBootstrap = '<img src=""  class="icon-exclamation-sign" height="16" width="16" />';
     var autoOpts = {
         source:"/bardwebquery/bardWebInterface/autoCompleteAssayNames",
         minLength:2
@@ -70,11 +71,11 @@ $(document).ready(function () {
                 var assayTotal = 'Assays (' + $("#totalAssays").val() + ')'
                 $("#assaysTab").html(assayTotal);
             } ,
-            fail:function (request, status, error) {
-                //TODO put in some code handling here. Dealing with time outs etc
+            error:function (request, status, error) {
+                $('#assaysTab').html("Assays " + errorImageTwitterBootstrap);
+                $("#assays").html(error);
             },
-            always:function () {
-                $('#loadAssays').hide();
+            complete:function () {
             }
         });
     }
@@ -92,11 +93,11 @@ $(document).ready(function () {
                 var compoundTotal = 'Compounds (' + $("#totalCompounds").val() + ')'
                 $("#compoundsTab").html(compoundTotal);
             },
-            fail:function (request, status, error) {
-                //TODO put in some code handling here. Dealing with time outs etc
+            error:function (request, status, error) {
+                $('#compoundsTab').html("Compounds " + errorImageTwitterBootstrap);
+                $("#compounds").html(error);
             },
-            always:function () {
-                $('#loadCompounds').hide();
+            complete:function () {
             }
         });
     }
@@ -115,11 +116,11 @@ $(document).ready(function () {
                 var projectsTotal = 'Projects (' + $("#totalProjects").val() + ')'
                 $("#projectsTab").html(projectsTotal);
             },
-            fail:function (request, status, error) {
-                //TODO put in some code handling here. Dealing with time outs etc
+            error:function (request, status, error) {
+                $('#projectsTab').html("Projects " + errorImageTwitterBootstrap);
+                $("#projects").html(error);
             },
-            always:function () {
-                $('#loadProjects').hide();
+            complete:function () {
             }
         });
     }
@@ -131,25 +132,24 @@ $(document).ready(function () {
             cache:false,
             beforeSend:function () {
                 $('#compoundsTab').html("Compounds " + spinnerImageLink);
+                $('#compoundsTabLi').addClass('active')
+                $('#compounds').html('');
+                $("#assaysTab").html('Assays (0)');
+                $('#assays').html('');
+                $('#assaysTabLi').removeClass('active');
+                $("#projectsTab").html('Projects (0)');
+                $('#projects').html('');
+                $('#projectsTabLi').removeClass('active');
             },
-            done:function (data) {
-                $("#projects").html('');
-                var projectsTotal = 'Projects (0)'
-                $("#projectsTab").html(projectsTotal);
-
-                $("#assays").html('');
-                var assaysTotal = 'Assays (0)'
-                $("#assaysTab").html(assaysTotal);
-
+            success:function (data) {
                 $("#compounds").html(data);
                 var compoundTotal = 'Compounds (' + $("#totalCompounds").val() + ')'
                 $("#compoundsTab").html(compoundTotal);
             },
-            fail:function (request, status, error) {
+            error:function (request, status, error) {
                 //TODO put in some code handling here. Dealing with time outs etc
             },
-            always:function () {
-                $('#loadCompounds').hide();
+            complete:function () {
             }
         });
     }
