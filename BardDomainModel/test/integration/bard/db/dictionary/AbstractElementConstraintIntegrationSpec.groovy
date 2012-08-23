@@ -1,5 +1,6 @@
 package bard.db.dictionary
 
+import bard.db.enums.ReadyForExtraction
 import grails.plugin.spock.IntegrationSpec
 import org.junit.Before
 import spock.lang.Unroll
@@ -7,7 +8,6 @@ import spock.lang.Unroll
 import static bard.db.dictionary.AbstractElement.*
 import static test.TestUtils.assertFieldValidationExpectations
 import static test.TestUtils.createString
-import bard.db.enums.ReadyForExtraction
 
 /**
  * Created with IntelliJ IDEA.
@@ -121,7 +121,6 @@ abstract class AbstractElementConstraintIntegrationSpec extends IntegrationSpec 
         'valid value' | "foo"                                     | true  | null
     }
 
-
     void "test synonyms constraints #desc synonyms: '#valueUnderTest'"() {
         final String field = 'synonyms'
 
@@ -162,11 +161,35 @@ abstract class AbstractElementConstraintIntegrationSpec extends IntegrationSpec 
         }
 
         where:
-        desc          | valueUnderTest                    | valid | errorCode
-        'too long'    | createString(UNIT_MAX_SIZE) + "a" | false | 'maxSize.exceeded'
+        desc       | valueUnderTest                    | valid | errorCode
+        'too long' | createString(UNIT_MAX_SIZE) + "a" | false | 'maxSize.exceeded'
 
 //        'valid value' | createString(UNIT_MAX_SIZE, 'u')  | true  | null  // TODO needs existing row were label = unit for db constraint
-        'null value'  | null                              | true  | null
+        'null value' | null | true | null
+    }
+
+    void "test bardURI constraints #desc bardURI: '#valueUnderTest'"() {
+        final String field = 'bardURI'
+
+        when: 'a value is set for the field under test'
+        domainInstance[(field)] = valueUnderTest
+        domainInstance.save()
+
+        then: 'verify valid or invalid for expected reason'
+        assertFieldValidationExpectations(domainInstance, field, valid, errorCode)
+
+        and: 'verify the domain can be persisted to the db'
+        if (valid) {
+            domainInstance == domainInstance.save(flush: true)
+        }
+
+        where:
+        desc          | valueUnderTest                        | valid | errorCode
+        'too long'    | createString(BARD_URI_MAX_SIZE) + "a" | false | 'maxSize.exceeded'
+
+        'valid value' | createString(BARD_URI_MAX_SIZE)       | true  | null
+        'null value'  | null                                  | true  | null
+        'valid value' | "foo"                                 | true  | null
     }
 
     void "test externalURL constraints #desc externalURL: '#valueUnderTest'"() {

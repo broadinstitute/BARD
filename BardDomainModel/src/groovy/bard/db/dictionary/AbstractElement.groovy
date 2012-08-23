@@ -11,15 +11,16 @@ import bard.db.enums.ReadyForExtraction
  */
 abstract class AbstractElement {
 
-    private static final int MODIFIED_BY_MAX_SIZE = 40
     private static final int LABEL_MAX_SIZE = 128
     private static final int DESCRIPTION_MAX_SIZE = 1000
     private static final int ABBREVIATION_MAX_SIZE = 20
     private static final int SYNONYMS_MAX_SIZE = 1000
     private static final int UNIT_MAX_SIZE = 128
+    private static final int BARD_URI_MAX_SIZE = 250
     private static final int EXTERNAL_URL_MAX_SIZE = 1000
     private static final int READY_FOR_EXTRACTION_MAX_SIZE = 20
     private static final int ELEMENT_STATUS_MAX_SIZE = 20
+    private static final int MODIFIED_BY_MAX_SIZE = 40
 
 
     ElementStatus elementStatus = ElementStatus.Pending
@@ -28,6 +29,7 @@ abstract class AbstractElement {
     String abbreviation
     String synonyms
     String unit
+    String bardURI
     String externalURL
     ReadyForExtraction readyForExtraction = ReadyForExtraction.Pending
 
@@ -43,9 +45,9 @@ abstract class AbstractElement {
         abbreviation(nullable: true, maxSize: ABBREVIATION_MAX_SIZE)
         synonyms(nullable: true, maxSize: SYNONYMS_MAX_SIZE)
         unit(nullable: true, maxSize: UNIT_MAX_SIZE)
+        bardURI(nullable: true, maxSize: BARD_URI_MAX_SIZE)
         externalURL(nullable: true, maxSize: EXTERNAL_URL_MAX_SIZE)
 
-        // TODO make enum
         readyForExtraction(nullable: false, maxSize: READY_FOR_EXTRACTION_MAX_SIZE)
 
         dateCreated(nullable: false)
@@ -54,7 +56,8 @@ abstract class AbstractElement {
     }
     static mapping = {
         id(column: 'ELEMENT_ID', generator: 'sequence', params: [sequence: 'ELEMENT_ID_SEQ'])
-        externalURL(column: 'external_url')
+        bardURI(column: 'BARD_URI')
+        externalURL(column: 'EXTERNAL_URL')
     }
 }
 enum ElementStatus {

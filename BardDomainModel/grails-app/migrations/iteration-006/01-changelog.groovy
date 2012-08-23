@@ -58,6 +58,9 @@ databaseChangeLog = {
     changeSet(author: 'ddurkin', id: 'iteration-006/06-project-related-refactoring.sql', dbms: 'oracle', context: 'standard') {
         sqlFile(path: "${migrationsDir}/iteration-006/sql/06-project-related-refactoring.sql", stripComments: true)
     }
+    changeSet(author: 'ddurkin', id: 'iteration-006/07-more-element-changes.sql', dbms: 'oracle', context: 'standard') {
+        sqlFile(path: "${migrationsDir}/iteration-006/sql/07-more-element-changes.sql", stripComments: true)
+    }
 
 
 }

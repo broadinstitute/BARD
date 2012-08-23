@@ -438,6 +438,7 @@ as
                 ABBREVIATION,
                 SYNONYMS,
                 UNIT,
+                BARD_URI,
                 EXTERNAL_URL,
                 READY_FOR_EXTRACTION,
                 VERSION,
@@ -549,6 +550,7 @@ as
                 ABBREVIATION,
                 SYNONYMS,
                 UNIT,
+                BARD_URI,
                 EXTERNAL_URL,
                 READY_FOR_EXTRACTION,
                 VERSION,
@@ -562,6 +564,7 @@ as
                 ABBREVIATION,
                 SYNONYMS,
                 UNIT,
+                BARD_URI,
                 EXTERNAL_URL,
                 READY_FOR_EXTRACTION,
                 VERSION,
@@ -1423,8 +1426,8 @@ as
                 from data_mig.project_context_item pci
                 where project_step_id in
                         (select project_step_id
-                         from project_step
-                         where experiment_id = rec_experiment.experiment_id)
+                         from project_step e
+                         where e.experiment_id = rec_experiment.experiment_id)
                   and not exists (select 1
                         from project_context_item pci2
                         where pci2.project_context_item_id = pci.project_context_item_id)
