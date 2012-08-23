@@ -18,9 +18,6 @@
                  <div id="resultTabContent" class="tab-content">
 
                     <div class="tab-pane fade in active" id="assays">
-                        <div id='loadAssays'>
-                            <img src="${resource(dir: 'images', file: 'loading_icon.gif')}"/>
-                        </div>
                         <g:render template="assays"/>
                     </div>
 
