@@ -16,18 +16,14 @@
 
             var marvinSketch = $('#MarvinSketch')[0];
             var smiles = marvinSketch.getMol('smiles')
-            %{--parent.$('#hiddenFieldSmiles').attr('value', smiles);--}%
-            %{--parent.$('#structureSearchForm').submit();--}%
-
-            %{--parent.$('#modalDiv').modal("hide");--}%
 
              //construct the query into a form that we want
             var constructedSearch =structureSearchTypeSelected + ":" + smiles
             parent.$('#searchString').attr('value', constructedSearch);
             parent.$('#aidForm').submit();
 
-            parent.$('#modalDiv').modal("hide");
-           //parent.$('#modalDiv').dialog("close");
+           // parent.$('#modalDiv').modal("hide");
+           parent.$('#modalDiv').dialog("close");
         });
 
         });
