@@ -19,13 +19,13 @@ class Experiment {
 
     // TODO results can appearently be very large 10 million rows
     Set<Result> results = [] as Set<Result>
-    Set<ExperimentContextItem> experimentContextItem = [] as Set<ExperimentContextItem>
-    Set<ProjectExperiment> projectExperiments = [] as Set<ProjectExperiment>
+    Set<ExperimentContextItem> experimentContextItems = [] as Set<ExperimentContextItem>
+    Set<ProjectStep> projectExperiments = [] as Set<ProjectStep>
     Set<ExternalReference> externalReferences = [] as Set<ExternalReference>
 
-	static hasMany = [experimentContextItem: ExperimentContextItem,
+	static hasMany = [experimentContextItems: ExperimentContextItem,
 			results: Result,
-            projectExperiments:ProjectExperiment,
+            projectExperiments:ProjectStep,
             externalReferences:ExternalReference]
 
 	static belongsTo = [Assay]

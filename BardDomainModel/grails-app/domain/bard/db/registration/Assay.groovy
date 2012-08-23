@@ -1,7 +1,7 @@
 package bard.db.registration
 
-import bard.db.experiment.Experiment
 import bard.db.enums.ReadyForExtraction
+import bard.db.experiment.Experiment
 
 class Assay {
 
@@ -24,10 +24,14 @@ class Assay {
     Date dateCreated
     Date lastUpdated
 
+    Set<Experiment> experiments = [] as Set<Experiment>
+    Set<Measure> measures = [] as Set<Measure>
+    Set<AssayContext> assayContexts = [] as Set<AssayContext>
+    Set<AssayDocument> assayDocuments = [] as Set<AssayDocument>
 
     static hasMany = [experiments: Experiment,
             measures: Measure,
-            measureContexts: AssayContext,
+            assayContexts: AssayContext,
             assayDocuments: AssayDocument]
 
     static mapping = {

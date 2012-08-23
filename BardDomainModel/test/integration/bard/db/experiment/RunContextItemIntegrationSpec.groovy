@@ -2,26 +2,11 @@ package bard.db.experiment
 
 import grails.plugin.spock.IntegrationSpec
 import org.junit.Before
-
-import static test.TestUtils.assertFieldValidationExpectations
-import static test.TestUtils.assertFieldValidationExpectations
-import static test.TestUtils.createString
-import static bard.db.registration.AssayContextItem.EXT_VALUE_ID_MAX_SIZE
-import static test.TestUtils.createString
-import static bard.db.registration.AssayContextItem.EXT_VALUE_ID_MAX_SIZE
-import static test.TestUtils.assertFieldValidationExpectations
-import static test.TestUtils.createString
-import static bard.db.registration.AssayContextItem.VALUE_DISPLAY_MAX_SIZE
-import static test.TestUtils.createString
-import static bard.db.registration.AssayContextItem.VALUE_DISPLAY_MAX_SIZE
-import static test.TestUtils.assertFieldValidationExpectations
-import static test.TestUtils.createString
-import static bard.db.registration.AssayContextItem.MODIFIED_BY_MAX_SIZE
-import static test.TestUtils.createString
-import static bard.db.registration.AssayContextItem.MODIFIED_BY_MAX_SIZE
-import static test.TestUtils.assertFieldValidationExpectations
-import static test.TestUtils.assertFieldValidationExpectations
 import spock.lang.Unroll
+
+import static bard.db.registration.AssayContextItem.*
+import static test.TestUtils.assertFieldValidationExpectations
+import static test.TestUtils.createString
 
 /**
  * Created with IntelliJ IDEA.
