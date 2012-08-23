@@ -1,9 +1,15 @@
-<%@ page import="bardqueryapi.SearchType; bard.db.registration.*" %>
+<%@ page import="bardqueryapi.SearchType; bard.db.registration.*; com.metasieve.shoppingcart.*; com.metasieve.shoppingcart.Shoppable.*;" %>
 <!DOCTYPE html>
 <html>
 <g:render template="homePageHeader"/>
 <body>
-<div>
+
+
+<table>
+    <tr>
+        <td width=80%  class="screenSection">
+
+            <div>
     <div>
         <h1 style="text-align: center">BARD</h1>
 
@@ -68,6 +74,25 @@
         </div>
     </div>
 </div>    <!-- End accordion -->
+
+
+        </td>
+
+        <td width=2%>
+        </td>
+
+
+        <td width=18%  class="screenSection">
+            %{-- SAR cart itself goes here--}%
+
+            <g:render template="sarCartContent"/>
+
+        </td>
+
+    </tr>
+</table>
+
+
 
 <%-- MarvinSketch's modal window --%>
 <div id="modalDiv">

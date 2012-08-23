@@ -18,6 +18,7 @@ import wslite.json.JSONObject
 @Mixin(SearchHelper)
 class BardWebInterfaceController {
 
+    def   shoppingCartService
     QueryService queryService
     QueryExecutorService queryExecutorService
     final static String NCGC_ROOT_URL = "http://bard.nih.gov/api/v1"
