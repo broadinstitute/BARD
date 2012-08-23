@@ -17,15 +17,15 @@
 
                  <div id="resultTabContent" class="tab-content">
 
-                    <div class="tab-pane fade in active" id="assays">
+                    <div class="tab-pane fade in active" id="assays" data-target="#assays">
                         <g:render template="assays"/>
                     </div>
 
-                    <div class="tab-pane fade" id="compounds">
+                    <div class="tab-pane fade" id="compounds" data-target="#compounds">
                         <g:render template="compounds"/>
                     </div>
 
-                    <div class="tab-pane fade" id="projects">
+                    <div class="tab-pane fade" id="projects" data-target="#projects">
                         <g:render template="projects"/>
                     </div>
 
