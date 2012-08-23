@@ -33,7 +33,7 @@ class AssayDefinitionController {
         if (!assayInstance) {
 			flash.message = message(code: 'default.not.found.message', args: [message(code: 'assay.label', default: 'Assay'), params.id])
 			return
-		}
+		}		
 		else
 			flash.message = null
 

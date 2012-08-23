@@ -42,17 +42,19 @@ class CardFactoryService {
      * @return the appropriate title (with special handling for assay component role)
      */
     protected String generateCardTitle(MeasureContextItem item) {
-        if (item.attributeElement.label == ASSAY_COMPONENT_ROLE) {
-            return item.valueDisplay
-        }
-        else {
-            for (MeasureContextItem child : item.getChildren()) {
-                if (child.attributeElement.label == ASSAY_COMPONENT_ROLE) {
-                    return child.valueDisplay
-                }
-            }
-        }
-        return item.attributeElement.label
+//        if (item.attributeElement.label == ASSAY_COMPONENT_ROLE) {
+//            return item.valueDisplay
+//        }
+//        else {
+//            for (MeasureContextItem child : item.getChildren()) {
+//                if (child.attributeElement.label == ASSAY_COMPONENT_ROLE) {
+//                    return child.valueDisplay
+//                }
+//            }
+//        }
+//        return item.attributeElement.label
+		
+		return item.valueDisplay
     }
 
     private CardLineDto createCardLineDtoForMeasureContextItem(MeasureContextItem item) {
