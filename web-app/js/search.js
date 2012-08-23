@@ -1,4 +1,5 @@
 $(document).ready(function () {
+    var spinnerImageLink = '<img src="/bardwebquery/static/images/loading_icon.gif"  height="16" width="16" />';
     var autoOpts = {
         source:"/bardwebquery/bardWebInterface/autoCompleteAssayNames",
         minLength:2
@@ -62,7 +63,7 @@ $(document).ready(function () {
             data:$("#aidForm").serialize(),
             cache:false,
             beforeSend:function () {
-                $('#loadAssays').show();
+                $("#assaysTab").html("Assays " + spinnerImageLink);
             },
             success:function (data) {
                 $("#assays").html(data);
@@ -84,7 +85,7 @@ $(document).ready(function () {
             data:$("#aidForm").serialize(),
             cache:false,
             beforeSend:function () {
-                $('#loadCompounds').show();
+                $('#compoundsTab').html("Compounds " + spinnerImageLink);
             },
             success:function (data) {
                 $("#compounds").html(data);
@@ -106,9 +107,9 @@ $(document).ready(function () {
             data:$("#aidForm").serialize(),
             cache:false,
             beforeSend:function () {
-                $('#loadProjects').show();
+                $('#projectsTab').html("Projects " + spinnerImageLink);
             },
-            done:function (data) {
+            success:function (data) {
                 //alert("Compounds: " + data)
                 $("#projects").html(data);
                 var projectsTotal = 'Projects (' + $("#totalProjects").val() + ')'
@@ -129,7 +130,7 @@ $(document).ready(function () {
             data:$("#aidForm").serialize(),
             cache:false,
             beforeSend:function () {
-                $('#loadCompounds').show();
+                $('#compoundsTab').html("Compounds " + spinnerImageLink);
             },
             done:function (data) {
                 $("#projects").html('');
