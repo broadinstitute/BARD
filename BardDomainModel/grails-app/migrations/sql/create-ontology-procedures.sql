@@ -539,13 +539,13 @@ as
            set result_type_id = ani_new_element_id
          where result_type_id = ani_element_id;
 
-        update project_experiment
-           set stage_id = ani_new_element_id
-         where stage_id = ani_element_id;
-
-        update experiment
-           set laboratory_id = ani_new_element_id
-         where laboratory_id = ani_element_id;
+--         update project_experiment
+--            set stage_id = ani_new_element_id
+--          where stage_id = ani_element_id;
+--
+--         update experiment
+--            set laboratory_id = ani_new_element_id
+--          where laboratory_id = ani_element_id;
 
         update unit_conversion uc
           set uc.from_unit = lv_new_label
