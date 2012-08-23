@@ -33,7 +33,7 @@
         <option name="CONDITION" value="" />
         <option name="LOG_MESSAGE" value="" />
       </breakpoint>
-      <breakpoint url="file://$PROJECT_DIR$/test/integration/bardqueryapi/QueryProjectApiServiceIntegrationSpec.groovy" line="66" class="bardqueryapi.QueryProjectApiServiceIntegrationSpec" package="bardqueryapi">
+      <breakpoint url="file://$PROJECT_DIR$/test/integration/bardqueryapi/QueryProjectApiServiceIntegrationSpec.groovy" line="56" class="bardqueryapi.QueryProjectApiServiceIntegrationSpec" package="bardqueryapi">
         <option name="ENABLED" value="true" />
         <option name="LOG_ENABLED" value="false" />
         <option name="LOG_EXPRESSION_ENABLED" value="false" />
@@ -214,7 +214,7 @@
       <file leaf-file-name="homePage.gsp" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/grails-app/views/bardWebInterface/homePage.gsp">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="21" column="34" selection-start="834" selection-end="834" vertical-scroll-proportion="-7.285714">
+            <state line="21" column="34" selection-start="856" selection-end="856" vertical-scroll-proportion="-7.285714">
               <folding />
             </state>
           </provider>
@@ -232,7 +232,7 @@
       <file leaf-file-name="search.js" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/web-app/js/search.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="21" column="18" selection-start="833" selection-end="833" vertical-scroll-proportion="0.40855458">
+            <state line="22" column="165" selection-start="875" selection-end="875" vertical-scroll-proportion="0.5516224">
               <folding />
             </state>
           </provider>
@@ -1071,9 +1071,7 @@
     <entry file="file://$PROJECT_DIR$/test/integration/bardqueryapi/QueryProjectApiServiceIntegrationSpec.groovy">
       <provider selected="true" editor-type-id="text-editor">
         <state line="67" column="36" selection-start="2029" selection-end="2029" vertical-scroll-proportion="0.0">
-          <folding>
-            <element signature="e#22#69#0" expanded="true" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -1128,7 +1126,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/grails-app/views/bardWebInterface/homePage.gsp">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="21" column="34" selection-start="834" selection-end="834" vertical-scroll-proportion="-7.285714">
+        <state line="21" column="34" selection-start="856" selection-end="856" vertical-scroll-proportion="-7.285714">
           <folding />
         </state>
       </provider>
@@ -1144,7 +1142,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/web-app/js/search.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="21" column="18" selection-start="833" selection-end="833" vertical-scroll-proportion="0.40855458">
+        <state line="22" column="165" selection-start="875" selection-end="875" vertical-scroll-proportion="0.5516224">
           <folding />
         </state>
       </provider>
