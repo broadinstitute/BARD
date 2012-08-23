@@ -30,7 +30,7 @@
     </r:script>
 
     <g:layoutHead/>
-    <r:require modules="bootstrap, search, common" />
+    <r:require modules="core,bootstrap,search,common" />
     <r:layoutResources />
 </head>
 <body>
@@ -92,7 +92,7 @@
 </div>
 <div id="spinner" class="spinner" style="display:none;"><g:message code="spinner.alt" default="Loading&hellip;"/></div>
 <g:javascript library="application"/>
-<r:require modules="bootstrap, search, common"/>
+<r:require modules="core,bootstrap,search,common"/>
 <r:layoutResources />
 
 <%-- MarvinSketch's modal window --%>

@@ -3,7 +3,7 @@ $(document).ready(function () {
         source:"/bardwebquery/bardWebInterface/autoCompleteAssayNames",
         minLength:2
     };
-    $("#searchString").typeahead(autoOpts);
+    $("#searchString").autocomplete(autoOpts);
 
     $('#aidForm').submit(function(event){
         var searchType = findSearchType()
