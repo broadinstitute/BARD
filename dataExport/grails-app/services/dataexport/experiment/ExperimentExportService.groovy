@@ -5,13 +5,13 @@ package dataexport.experiment
 //import org.codehaus.groovy.grails.commons.GrailsApplication
 
 
-import bard.db.dictionary.Element
-import bard.db.dictionary.Stage
+import bard.db.dictionary.StageElement
 import bard.db.registration.ExternalReference
 import bard.db.registration.ExternalSystem
 import dataexport.registration.BardHttpResponse
 import dataexport.registration.MediaTypesDTO
 import dataexport.registration.UpdateType
+import dataexport.util.UtilityService
 import exceptions.NotFoundException
 import groovy.xml.MarkupBuilder
 import org.codehaus.groovy.grails.web.mapping.LinkGenerator
@@ -21,7 +21,6 @@ import javax.xml.datatype.DatatypeFactory
 import javax.xml.datatype.XMLGregorianCalendar
 
 import bard.db.experiment.*
-import dataexport.util.UtilityService
 
 /**
  * Class that generates Experiments as XML
@@ -59,7 +58,7 @@ class ExperimentExportService {
         if (outStandingResults > 0) {//this experiments has results that have not yet been consumed
             return new BardHttpResponse(httpResponseCode: HttpServletResponse.SC_NOT_ACCEPTABLE, ETag: experiment.version)
         }
-        return utilityService.update(experiment,id,clientVersion,latestStatus,"Experiment")
+        return utilityService.update(experiment, id, clientVersion, latestStatus, "Experiment")
     }
     /**
      *  offset is used for paging, it tells us where we are in the paging process
@@ -242,13 +241,10 @@ class ExperimentExportService {
                 link(rel: 'related', href: "${projectHref}", type: "${this.mediaTypeDTO.projectMediaType}")
 
             }
-            final Stage stage = projectExperiment.stage
-            if (stage) {
-                final Element element = stage.element
-                if (element) {
-                    final String href = grailsLinkGenerator.link(mapping: 'stage', absolute: true, params: [id: element.id]).toString()
-                    link(rel: 'related', href: "${href}", type: "${this.mediaTypeDTO.stageMediaType}")
-                }
+            final StageElement stageElement = projectExperiment.stage
+            if (stageElement) {
+                final String href = grailsLinkGenerator.link(mapping: 'stage', absolute: true, params: [id: stageElement.id]).toString()
+                link(rel: 'related', href: "${href}", type: "${this.mediaTypeDTO.stageMediaType}")
             }
         }
     }

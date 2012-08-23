@@ -1,7 +1,8 @@
 package dataexport.registration
 
-import bard.db.dictionary.Element
 import bard.db.dictionary.Unit
+
+import bard.db.dictionary.Element
 import common.tests.XmlTestAssertions
 import common.tests.XmlTestSamples
 import grails.test.mixin.Mock
@@ -17,7 +18,7 @@ import bard.db.registration.*
  * Time: 12:52 PM
  * To change this template use File | Settings | File Templates.
  */
-@Mock([Measure, MeasureContextItem, MeasureContext, Assay, AssayDocument])
+@Mock([Measure, AssayContextItem, AssayContext, Assay, AssayDocument])
 class AssayExportHelperServiceUnitSpec extends Specification {
     Writer writer
     MarkupBuilder markupBuilder
@@ -39,11 +40,11 @@ class AssayExportHelperServiceUnitSpec extends Specification {
         when: "We attempt to generate a measure in xml"
         this.assayExportHelperService.generateMeasure(this.markupBuilder, measure)
         then: "A valid xml measure is generated with the expected measure attributes, result type and entry unit"
-         XmlTestAssertions.assertResults(results, this.writer.toString())
+        XmlTestAssertions.assertResults(results, this.writer.toString())
         where:
-        label                                           | measure                                                                                                                                          | results
-        "Measure with Parent No Child Elements"         | new Measure(measureContext: new MeasureContext(contextName: "label"))                                                                            | XmlTestSamples.MEASURE_1_UNIT
-        "Measure with Parent,ResultType and Entry Unit" | new Measure(measureContext: new MeasureContext(contextName: "label"), element: new Element(label: "resultType"), entryUnit: new Unit(unit: "%")) | XmlTestSamples.MEASURE_2_UNIT
+        label                                           | measure                                                                                                                                        | results
+        "Measure with Parent No Child Elements"         | new Measure(assayContext: new AssayContext(contextName: "label"))                                                                            | XmlTestSamples.MEASURE_1_UNIT
+        "Measure with Parent,ResultType and Entry Unit" | new Measure(assayContext: new AssayContext(contextName: "label"), element: new Element(label: "resultType"), entryUnit: new Unit(unit: "%")) | XmlTestSamples.MEASURE_2_UNIT
 
     }
 
@@ -54,17 +55,17 @@ class AssayExportHelperServiceUnitSpec extends Specification {
         then: "A map with the expected key/value pairs is generated"
         results == attributes
         where:
-        label                             | measure                                                                                                                                                         | results
-        "Measure With Measure Context "   | new Measure(measureContext: new MeasureContext(contextName: "label"), element: new Element(label: "label"), entryUnit: new Unit(unit: "%"), modifiedBy: "Bard") | [measureContextRef: "label"]
-        "Measure with No Measure Context" | new Measure(element: new Element(label: "label"), entryUnit: new Unit(unit: "%"), modifiedBy: "Bard")                                                           | [:]
+        label                             | measure                                                                                                                                                       | results
+        "Measure With Measure Context "   | new Measure(assayContext: new AssayContext(contextName: "label"), element: new Element(label: "label"), entryUnit: new Unit(unit: "%"), modifiedBy: "Bard") | [assayContextRef: "label"]
+        "Measure with No Measure Context" | new Measure(element: new Element(label: "label"), entryUnit: new Unit(unit: "%"), modifiedBy: "Bard")                                                         | [:]
 
     }
 
     void "test Generate Measure Context #label"() {
         given:
-        MeasureContext measureContext = new MeasureContext(contextName: contextName)
+        AssayContext assayContext = new AssayContext(contextName: contextName)
         when: "We attempt to generate a measure context in xml"
-        this.assayExportHelperService.generateMeasureContext(this.markupBuilder, measureContext)
+        this.assayExportHelperService.generateAssayContext(this.markupBuilder, assayContext)
         then: "A valid xml measure context is generated with the expected measure context id and name"
         XmlTestAssertions.assertResults(results, this.writer.toString())
         where:
@@ -75,7 +76,7 @@ class AssayExportHelperServiceUnitSpec extends Specification {
 
     void "test generate Measure Context Item #label"() {
         given: "A DTO"
-        MeasureContextItem parentGroup = new MeasureContextItem()
+        AssayContextItem parentGroup = new AssayContextItem()
         AttributeType attributeType = AttributeType.Fixed
         String valueDisplay = "Display"
         Float valueNum = new Float("5.0")
@@ -88,12 +89,12 @@ class AssayExportHelperServiceUnitSpec extends Specification {
             valueElement = new Element(label: valueLabel)
         }
 
-        MeasureContext measureContext = new MeasureContext(contextName: "measureContext")
+        AssayContext assayContext = new AssayContext(contextName: "assayContext")
         final String qualifier = "<"
-        final MeasureContextItem measureContextItem =
-            new MeasureContextItem(attributeElement: attributeElement,
+        final AssayContextItem assayContextItem =
+            new AssayContextItem(attributeElement: attributeElement,
                     attributeType: attributeType,
-                    measureContext: measureContext,
+                    assayContext: assayContext,
                     valueElement: valueElement,
                     parentGroup: parentGroup,
                     valueDisplay: valueDisplay,
@@ -104,7 +105,7 @@ class AssayExportHelperServiceUnitSpec extends Specification {
                     qualifier: qualifier)
 
         when: "We pass in a measurce context item to create Measure Context Item xml document"
-        this.assayExportHelperService.generateMeasureContextItem(this.markupBuilder, measureContextItem)
+        this.assayExportHelperService.generateAssayContextItem(this.markupBuilder, assayContextItem)
         then: "We expect back an xml document"
         XmlTestAssertions.assertResults(results, this.writer.toString())
         where:
@@ -128,10 +129,10 @@ class AssayExportHelperServiceUnitSpec extends Specification {
 
     }
 
-    void "create Attributes For MeasureContextItem"() {
+    void "create Attributes For AssayContextItem"() {
         given: "A DTO"
-        final Map<String, String> results = [measureContextRef: "measureContext", qualifier: "<", valueDisplay: "Display", valueNum: "5.0", valueMin: "6.0", valueMax: "7.0"]
-        MeasureContextItem parentGroup = new MeasureContextItem()
+        final Map<String, String> results = [assayContextRef: "assayContext", qualifier: "<", valueDisplay: "Display", valueNum: "5.0", valueMin: "6.0", valueMax: "7.0"]
+        AssayContextItem parentGroup = new AssayContextItem()
         AttributeType attributeType = AttributeType.Fixed
         String valueDisplay = "Display"
         Float valueNum = new Float("5.0")
@@ -140,12 +141,12 @@ class AssayExportHelperServiceUnitSpec extends Specification {
         String modifiedBy = "Bard"
         Element attributeElement = new Element(label: "attributeLabel")
         Element valueElement = new Element(label: "valueLabel")
-        MeasureContext measureContext = new MeasureContext(contextName: "measureContext")
+        AssayContext assayContext = new AssayContext(contextName: "assayContext")
         final String qualifier = "<"
-        final MeasureContextItem measureContextItem =
-            new MeasureContextItem(attributeElement: attributeElement,
+        final AssayContextItem assayContextItem =
+            new AssayContextItem(attributeElement: attributeElement,
                     attributeType: attributeType,
-                    measureContext: measureContext,
+                    assayContext: assayContext,
                     valueElement: valueElement,
                     parentGroup: parentGroup,
                     valueDisplay: valueDisplay,
@@ -155,7 +156,7 @@ class AssayExportHelperServiceUnitSpec extends Specification {
                     modifiedBy: modifiedBy,
                     qualifier: qualifier)
         when: "We pass in a dto to create Measure Context Item Attributes"
-        Map<String, String> attributes = this.assayExportHelperService.createAttributesForMeasureContextItem(measureContextItem)
+        Map<String, String> attributes = this.assayExportHelperService.createAttributesForAssayContextItem(assayContextItem)
         then: "A map with the expected key/value pairs is generated"
         attributes == results
     }

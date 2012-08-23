@@ -253,36 +253,36 @@ class XmlTestSamples {
 '''
 
     static final String MEASURE_CONTEXT_ITEM_WITH_ATTRIBUTE_AND_VALUE_UNIT = '''
-<measureContextItem measureContextRef='measureContext' qualifier='&lt;' valueDisplay='Display' valueNum='5.0' valueMin='6.0' valueMax='7.0'>
+<assayContextItem assayContextRef='assayContext' qualifier='&lt;' valueDisplay='Display' valueNum='5.0' valueMin='6.0' valueMax='7.0'>
   <valueId label='valueLabel'>
     <link rel='related' href='null' type='xml' />
   </valueId>
   <attributeId attributeType='Fixed' label='attributeLabel'>
     <link rel='related' href='null' type='xml' />
   </attributeId>
-</measureContextItem>
+</assayContextItem>
 '''
 
     static final String MEASURE_CONTEXT_ITEM_WITH_ATTRIBUTE_UNIT = '''
-<measureContextItem measureContextRef='measureContext' qualifier='&lt;' valueDisplay='Display' valueNum='5.0' valueMin='6.0' valueMax='7.0'>
+<assayContextItem assayContextRef='assayContext' qualifier='&lt;' valueDisplay='Display' valueNum='5.0' valueMin='6.0' valueMax='7.0'>
   <attributeId attributeType='Fixed' label='attributeLabel'>
     <link rel='related' href='null' type='xml' />
   </attributeId>
-</measureContextItem>
+</assayContextItem>
 '''
 
-    static final String MEASURE_2_UNIT = '''<measure measureContextRef='label'>
+    static final String MEASURE_2_UNIT = '''<measure assayContextRef='label'>
   <resultTypeRef label='resultType'>
     <link rel='related' href='null' type='xml' />
   </resultTypeRef>
   <entryUnit unit='%' />
 </measure>
 '''
-    static final String MEASURE_1_UNIT = '''<measure measureContextRef='label'/>'''
+    static final String MEASURE_1_UNIT = '''<measure assayContextRef='label'/>'''
     static final String MEASURE_CONTEXT_1_UNIT = '''
-<measureContext>
+<assayContext>
   <contextName>TestName1</contextName>
-</measureContext>
+</assayContext>
 '''
 
     static String ASSAY_LINKS = '''
@@ -343,7 +343,7 @@ class XmlTestSamples {
     '''
     static String MEASURES = '''
 <measures>
-  <measure measureContextRef='Context for IC50'>
+  <measure assayContextRef='Context for IC50'>
     <resultTypeRef label='IC50'>
       <link rel='related' href='http://localhost:8080/dataExport/api/dictionary/resultType/341' type='application/vnd.bard.cap+xml;type=resultType' />
     </resultTypeRef>
@@ -355,33 +355,33 @@ class XmlTestSamples {
 '''
 
     static String MEASURE_CONTEXT_ITEMS = '''
-<measureContextItems>
-  <measureContextItem measureContextItemId='36' measureContextItemRef='34' measureContextRef='Context for IC50' valueDisplay='0 - 4' valueMax='4.0'>
+<assayContextItems>
+  <assayContextItem assayContextItemId='36' assayContextItemRef='34' assayContextRef='Context for IC50' valueDisplay='0 - 4' valueMax='4.0'>
     <attributeId attributeType='Range' label='Number of exclusions'>
       <link rel='related' href='http://localhost:8080/dataExport/api/dictionary/element/369' type='application/vnd.bard.cap+xml;type=element' />
     </attributeId>
-  </measureContextItem>
-  <measureContextItem measureContextItemId='34' measureContextRef='Context for IC50' valueDisplay='Assay Explorer '>
+  </assayContextItem>
+  <assayContextItem assayContextItemId='34' assayContextRef='Context for IC50' valueDisplay='Assay Explorer '>
     <valueId label='Assay Explorer'>
       <link rel='related' href='http://localhost:8080/dataExport/api/dictionary/element/372' type='application/vnd.bard.cap+xml;type=element' />
     </valueId>
     <attributeId attributeType='Fixed' label='software'>
       <link rel='related' href='http://localhost:8080/dataExport/api/dictionary/element/368' type='application/vnd.bard.cap+xml;type=element' />
     </attributeId>
-  </measureContextItem>
-  <measureContextItem measureContextItemId='35' measureContextItemRef='34' measureContextRef='Context for IC50' valueDisplay='30' valueNum='30.0'>
+  </assayContextItem>
+  <assayContextItem assayContextItemId='35' assayContextItemRef='34' assayContextRef='Context for IC50' valueDisplay='30' valueNum='30.0'>
     <attributeId attributeType='Fixed' label='Number of points'>
       <link rel='related' href='http://localhost:8080/dataExport/api/dictionary/element/370' type='application/vnd.bard.cap+xml;type=element' />
     </attributeId>
-  </measureContextItem>
-</measureContextItems>
+  </assayContextItem>
+</assayContextItems>
 '''
     static String MEASURE_CONTEXTS = '''
-<measureContexts>
-  <measureContext>
+<assayContexts>
+  <assayContext>
     <contextName>Context for IC50</contextName>
-  </measureContext>
-</measureContexts>
+  </assayContext>
+</assayContexts>
 '''
 
     static String BARD_DATA_EXPORT_UNIT = '''

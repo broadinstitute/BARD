@@ -148,12 +148,12 @@ class AssayRestControllerFunctionalSpec extends Specification {
         assert serverResponse.getFirstHeader('ETag').name == 'ETag'
         assert serverResponse.getFirstHeader('ETag').value == '0'
         final String responseData = serverResponse.data.readLines().join()
-        XMLAssert.assertXpathEvaluatesTo("1", "count(//measureContexts)", responseData)
-        XMLAssert.assertXpathEvaluatesTo("1", "count(//measureContext)", responseData)
+        XMLAssert.assertXpathEvaluatesTo("1", "count(//assayContexts)", responseData)
+        XMLAssert.assertXpathEvaluatesTo("1", "count(//assayContext)", responseData)
         XMLAssert.assertXpathEvaluatesTo("1", "count(//measures)", responseData)
         XMLAssert.assertXpathEvaluatesTo("1", "count(//measure)", responseData)
-        XMLAssert.assertXpathEvaluatesTo("1", "count(//measureContextItems)", responseData)
-        XMLAssert.assertXpathEvaluatesTo("3", "count(//measureContextItem)", responseData)
+        XMLAssert.assertXpathEvaluatesTo("1", "count(//assayContextItems)", responseData)
+        XMLAssert.assertXpathEvaluatesTo("3", "count(//assayContextItem)", responseData)
         XMLAssert.assertXpathEvaluatesTo("2", "count(//assayDocument)", responseData)
         XMLAssert.assertXpathEvaluatesTo("14", "count(//link)", responseData)
     }
