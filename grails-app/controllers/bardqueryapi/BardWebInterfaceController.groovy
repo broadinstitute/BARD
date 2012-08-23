@@ -7,6 +7,7 @@ import bard.core.StructureSearchParams
 import bard.core.adapter.CompoundAdapter
 import elasticsearchplugin.QueryExecutorService
 import wslite.json.JSONObject
+import javax.servlet.http.HttpServletResponse
 
 /**
  * Created with IntelliJ IDEA.
@@ -18,7 +19,7 @@ import wslite.json.JSONObject
 @Mixin(SearchHelper)
 class BardWebInterfaceController {
 
-    def   shoppingCartService
+    def shoppingCartService
     QueryService queryService
     QueryExecutorService queryExecutorService
     final static String NCGC_ROOT_URL = "http://bard.nih.gov/api/v1"
@@ -76,24 +77,42 @@ class BardWebInterfaceController {
         def map = [:]
         String searchString = params.searchString?.trim()
         handleSearchParams('/search/compounds', map)
-        JSONObject resultJson = (JSONObject) queryExecutorService.executeGetRequestJSON(NCGC_ROOT_URL, map)
-        render(template: 'compounds', model: [docs: resultJson.docs, metaData: resultJson.metaData, searchString: "${searchString}"])
+        try {
+            JSONObject resultJson = (JSONObject) queryExecutorService.executeGetRequestJSON(NCGC_ROOT_URL, map)
+            render(template: 'compounds', model: [docs: resultJson.docs, metaData: resultJson.metaData, searchString: "${searchString}"])
+        }
+        catch (Exception exp) {
+            return response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR,
+                    message(code: 'compound.search.error', args: [exp.message], default: "Compound search has encountered an error:\n${exp.message}"))
+        }
     }
 
     def searchAssays() {
         def map = [:]
         String searchString = params.searchString?.trim()
         handleSearchParams('/search/assays', map)
-        JSONObject resultJson = (JSONObject) queryExecutorService.executeGetRequestJSON(NCGC_ROOT_URL, map)
-        render(template: 'assays', model: [docs: resultJson.docs, metaData: resultJson.metaData, searchString: "${searchString}"])
+        try {
+            JSONObject resultJson = (JSONObject) queryExecutorService.executeGetRequestJSON(NCGC_ROOT_URL, map)
+            render(template: 'assays', model: [docs: resultJson.docs, metaData: resultJson.metaData, searchString: "${searchString}"])
+        }
+        catch (Exception exp) {
+            return response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR,
+                    message(code: 'assay.search.error', args: [exp.message], default: "Assay search has encountered an error:\n${exp.message}"))
+        }
     }
 
     def searchProjects() {
         String searchString = params.searchString?.trim()
         def map = [:]
-        handleSearchParams('/search/projects',map)
-        JSONObject resultJson = (JSONObject) queryExecutorService.executeGetRequestJSON(NCGC_ROOT_URL, map)
-        render(template: 'projects', model: [docs: resultJson.docs, metaData: resultJson.metaData, searchString: "${searchString}"])
+        handleSearchParams('/search/projects', map)
+        try {
+            JSONObject resultJson = (JSONObject) queryExecutorService.executeGetRequestJSON(NCGC_ROOT_URL, map)
+            render(template: 'projects', model: [docs: resultJson.docs, metaData: resultJson.metaData, searchString: "${searchString}"])
+        }
+        catch (Exception exp) {
+            return response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR,
+                    message(code: 'project.search.error', args: [exp.message], default: "Project search has encountered an error:\n${exp.message}"))
+        }
     }
 
     //TODO: Whomever creates the gsp should also write unit tests for this method
