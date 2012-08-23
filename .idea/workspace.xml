@@ -20,7 +20,7 @@
   </component>
   <component name="DebuggerManager">
     <line_breakpoints>
-      <breakpoint url="file://$PROJECT_DIR$/grails-app/services/bardqueryapi/QueryService.groovy" line="31" class="bardqueryapi.QueryService" package="bardqueryapi">
+      <breakpoint url="file://$PROJECT_DIR$/target/plugins/elastic-search-0.4.5-SNAPSHOT/grails-app/services/elasticsearchplugin/QueryExecutorService.groovy" line="113" class="elasticsearchplugin.QueryExecutorService" package="elasticsearchplugin">
         <option name="ENABLED" value="true" />
         <option name="LOG_ENABLED" value="false" />
         <option name="LOG_EXPRESSION_ENABLED" value="false" />
@@ -33,7 +33,7 @@
         <option name="CONDITION" value="" />
         <option name="LOG_MESSAGE" value="" />
       </breakpoint>
-      <breakpoint url="file://$PROJECT_DIR$/target/plugins/elastic-search-0.4.5-SNAPSHOT/grails-app/services/elasticsearchplugin/ElasticSearchService.groovy" line="145" class="elasticsearchplugin.ElasticSearchService" package="elasticsearchplugin">
+      <breakpoint url="file://$PROJECT_DIR$/test/integration/bardqueryapi/QueryProjectApiServiceIntegrationSpec.groovy" line="66" class="bardqueryapi.QueryProjectApiServiceIntegrationSpec" package="bardqueryapi">
         <option name="ENABLED" value="true" />
         <option name="LOG_ENABLED" value="false" />
         <option name="LOG_EXPRESSION_ENABLED" value="false" />
@@ -46,7 +46,7 @@
         <option name="CONDITION" value="" />
         <option name="LOG_MESSAGE" value="" />
       </breakpoint>
-      <breakpoint url="file://$PROJECT_DIR$/test/integration/bardqueryapi/QueryAssayApiServiceIntegrationSpec.groovy" line="99" class="bardqueryapi.QueryAssayApiServiceIntegrationSpec" package="bardqueryapi">
+      <breakpoint url="file://$PROJECT_DIR$/grails-app/controllers/bardqueryapi/BardWebInterfaceController.groovy" line="147" class="bardqueryapi.BardWebInterfaceController" package="bardqueryapi">
         <option name="ENABLED" value="true" />
         <option name="LOG_ENABLED" value="false" />
         <option name="LOG_EXPRESSION_ENABLED" value="false" />
@@ -59,7 +59,7 @@
         <option name="CONDITION" value="" />
         <option name="LOG_MESSAGE" value="" />
       </breakpoint>
-      <breakpoint url="file://$PROJECT_DIR$/test/unit/bardqueryapi/QueryServiceUnitSpec.groovy" line="165" class="bardqueryapi.QueryServiceUnitSpec" package="bardqueryapi">
+      <breakpoint url="file://$PROJECT_DIR$/grails-app/controllers/bardqueryapi/BardWebInterfaceController.groovy" line="150" class="bardqueryapi.BardWebInterfaceController" package="bardqueryapi">
         <option name="ENABLED" value="true" />
         <option name="LOG_ENABLED" value="false" />
         <option name="LOG_EXPRESSION_ENABLED" value="false" />
@@ -72,7 +72,7 @@
         <option name="CONDITION" value="" />
         <option name="LOG_MESSAGE" value="" />
       </breakpoint>
-      <breakpoint url="file://$PROJECT_DIR$/test/integration/bardqueryapi/QueryServiceIntegrationSpec.groovy" line="44" class="bardqueryapi.QueryServiceIntegrationSpec" package="bardqueryapi">
+      <breakpoint url="file://$PROJECT_DIR$/grails-app/controllers/bardqueryapi/BardWebInterfaceController.groovy" line="154" class="bardqueryapi.BardWebInterfaceController" package="bardqueryapi">
         <option name="ENABLED" value="true" />
         <option name="LOG_ENABLED" value="false" />
         <option name="LOG_EXPRESSION_ENABLED" value="false" />
@@ -85,7 +85,7 @@
         <option name="CONDITION" value="" />
         <option name="LOG_MESSAGE" value="" />
       </breakpoint>
-      <breakpoint url="file://$PROJECT_DIR$/grails-app/views/bardWebInterface/_assaySummary.gsp" line="35" class="gsp.default.bardWebInterface/_assaySummary_gsp" package="gsp.default">
+      <breakpoint url="file://$PROJECT_DIR$/grails-app/services/bardqueryapi/QueryService.groovy" line="111" class="bardqueryapi.QueryService" package="bardqueryapi">
         <option name="ENABLED" value="true" />
         <option name="LOG_ENABLED" value="false" />
         <option name="LOG_EXPRESSION_ENABLED" value="false" />
@@ -98,7 +98,7 @@
         <option name="CONDITION" value="" />
         <option name="LOG_MESSAGE" value="" />
       </breakpoint>
-      <breakpoint url="file://$PROJECT_DIR$/test/functional/bardqueryapi/BardWebInterfaceFunctionalSpec.groovy" line="21" class="bardqueryapi.BardWebInterfaceFunctionalSpec" package="bardqueryapi">
+      <breakpoint url="file://$PROJECT_DIR$/grails-app/services/bardqueryapi/QueryService.groovy" line="108" class="bardqueryapi.QueryService" package="bardqueryapi">
         <option name="ENABLED" value="true" />
         <option name="LOG_ENABLED" value="false" />
         <option name="LOG_EXPRESSION_ENABLED" value="false" />
@@ -111,111 +111,7 @@
         <option name="CONDITION" value="" />
         <option name="LOG_MESSAGE" value="" />
       </breakpoint>
-      <breakpoint url="file://$PROJECT_DIR$/test/functional/bardqueryapi/BardWebInterfaceFunctionalSpec.groovy" line="72" class="bardqueryapi.BardWebInterfaceFunctionalSpec" package="bardqueryapi">
-        <option name="ENABLED" value="true" />
-        <option name="LOG_ENABLED" value="false" />
-        <option name="LOG_EXPRESSION_ENABLED" value="false" />
-        <option name="SUSPEND_POLICY" value="SuspendAll" />
-        <option name="COUNT_FILTER_ENABLED" value="false" />
-        <option name="COUNT_FILTER" value="0" />
-        <option name="CONDITION_ENABLED" value="false" />
-        <option name="CLASS_FILTERS_ENABLED" value="false" />
-        <option name="INSTANCE_FILTERS_ENABLED" value="false" />
-        <option name="CONDITION" value="" />
-        <option name="LOG_MESSAGE" value="" />
-      </breakpoint>
-      <breakpoint url="file://$PROJECT_DIR$/grails-app/services/bardqueryapi/QueryService.groovy" line="43" class="bardqueryapi.QueryService" package="bardqueryapi">
-        <option name="ENABLED" value="true" />
-        <option name="LOG_ENABLED" value="false" />
-        <option name="LOG_EXPRESSION_ENABLED" value="false" />
-        <option name="SUSPEND_POLICY" value="SuspendAll" />
-        <option name="COUNT_FILTER_ENABLED" value="false" />
-        <option name="COUNT_FILTER" value="0" />
-        <option name="CONDITION_ENABLED" value="false" />
-        <option name="CLASS_FILTERS_ENABLED" value="false" />
-        <option name="INSTANCE_FILTERS_ENABLED" value="false" />
-        <option name="CONDITION" value="" />
-        <option name="LOG_MESSAGE" value="" />
-      </breakpoint>
-      <breakpoint url="file://$PROJECT_DIR$/grails-app/services/bardqueryapi/QueryService.groovy" line="45" class="bardqueryapi.QueryService" package="bardqueryapi">
-        <option name="ENABLED" value="true" />
-        <option name="LOG_ENABLED" value="false" />
-        <option name="LOG_EXPRESSION_ENABLED" value="false" />
-        <option name="SUSPEND_POLICY" value="SuspendAll" />
-        <option name="COUNT_FILTER_ENABLED" value="false" />
-        <option name="COUNT_FILTER" value="0" />
-        <option name="CONDITION_ENABLED" value="false" />
-        <option name="CLASS_FILTERS_ENABLED" value="false" />
-        <option name="INSTANCE_FILTERS_ENABLED" value="false" />
-        <option name="CONDITION" value="" />
-        <option name="LOG_MESSAGE" value="" />
-      </breakpoint>
-      <breakpoint url="file://$PROJECT_DIR$/grails-app/services/bardqueryapi/QueryService.groovy" line="60" class="bardqueryapi.QueryService" package="bardqueryapi">
-        <option name="ENABLED" value="true" />
-        <option name="LOG_ENABLED" value="false" />
-        <option name="LOG_EXPRESSION_ENABLED" value="false" />
-        <option name="SUSPEND_POLICY" value="SuspendAll" />
-        <option name="COUNT_FILTER_ENABLED" value="false" />
-        <option name="COUNT_FILTER" value="0" />
-        <option name="CONDITION_ENABLED" value="false" />
-        <option name="CLASS_FILTERS_ENABLED" value="false" />
-        <option name="INSTANCE_FILTERS_ENABLED" value="false" />
-        <option name="CONDITION" value="" />
-        <option name="LOG_MESSAGE" value="" />
-      </breakpoint>
-      <breakpoint url="file://$PROJECT_DIR$/grails-app/services/bardqueryapi/QueryService.groovy" line="51" class="bardqueryapi.QueryService" package="bardqueryapi">
-        <option name="ENABLED" value="true" />
-        <option name="LOG_ENABLED" value="false" />
-        <option name="LOG_EXPRESSION_ENABLED" value="false" />
-        <option name="SUSPEND_POLICY" value="SuspendAll" />
-        <option name="COUNT_FILTER_ENABLED" value="false" />
-        <option name="COUNT_FILTER" value="0" />
-        <option name="CONDITION_ENABLED" value="false" />
-        <option name="CLASS_FILTERS_ENABLED" value="false" />
-        <option name="INSTANCE_FILTERS_ENABLED" value="false" />
-        <option name="CONDITION" value="" />
-        <option name="LOG_MESSAGE" value="" />
-      </breakpoint>
-      <breakpoint url="file://$PROJECT_DIR$/grails-app/services/bardqueryapi/QueryService.groovy" line="52" class="bardqueryapi.QueryService" package="bardqueryapi">
-        <option name="ENABLED" value="true" />
-        <option name="LOG_ENABLED" value="false" />
-        <option name="LOG_EXPRESSION_ENABLED" value="false" />
-        <option name="SUSPEND_POLICY" value="SuspendAll" />
-        <option name="COUNT_FILTER_ENABLED" value="false" />
-        <option name="COUNT_FILTER" value="0" />
-        <option name="CONDITION_ENABLED" value="false" />
-        <option name="CLASS_FILTERS_ENABLED" value="false" />
-        <option name="INSTANCE_FILTERS_ENABLED" value="false" />
-        <option name="CONDITION" value="" />
-        <option name="LOG_MESSAGE" value="" />
-      </breakpoint>
-      <breakpoint url="file://$PROJECT_DIR$/grails-app/services/bardqueryapi/QueryService.groovy" line="54" class="bardqueryapi.QueryService" package="bardqueryapi">
-        <option name="ENABLED" value="true" />
-        <option name="LOG_ENABLED" value="false" />
-        <option name="LOG_EXPRESSION_ENABLED" value="false" />
-        <option name="SUSPEND_POLICY" value="SuspendAll" />
-        <option name="COUNT_FILTER_ENABLED" value="false" />
-        <option name="COUNT_FILTER" value="0" />
-        <option name="CONDITION_ENABLED" value="false" />
-        <option name="CLASS_FILTERS_ENABLED" value="false" />
-        <option name="INSTANCE_FILTERS_ENABLED" value="false" />
-        <option name="CONDITION" value="" />
-        <option name="LOG_MESSAGE" value="" />
-      </breakpoint>
-      <breakpoint url="file://$PROJECT_DIR$/grails-app/controllers/bardqueryapi/BardWebInterfaceController.groovy" line="91" class="bardqueryapi.BardWebInterfaceController" package="bardqueryapi">
-        <option name="ENABLED" value="true" />
-        <option name="LOG_ENABLED" value="false" />
-        <option name="LOG_EXPRESSION_ENABLED" value="false" />
-        <option name="SUSPEND_POLICY" value="SuspendAll" />
-        <option name="COUNT_FILTER_ENABLED" value="false" />
-        <option name="COUNT_FILTER" value="0" />
-        <option name="CONDITION_ENABLED" value="false" />
-        <option name="CLASS_FILTERS_ENABLED" value="false" />
-        <option name="INSTANCE_FILTERS_ENABLED" value="false" />
-        <option name="CONDITION" value="" />
-        <option name="LOG_MESSAGE" value="" />
-      </breakpoint>
-      <breakpoint url="file://$PROJECT_DIR$/grails-app/controllers/bardqueryapi/BardWebInterfaceController.groovy" line="95" class="bardqueryapi.BardWebInterfaceController" package="bardqueryapi">
+      <breakpoint url="file://$PROJECT_DIR$/grails-app/services/bardqueryapi/QueryService.groovy" line="107" class="bardqueryapi.QueryService" package="bardqueryapi">
         <option name="ENABLED" value="true" />
         <option name="LOG_ENABLED" value="false" />
         <option name="LOG_EXPRESSION_ENABLED" value="false" />
@@ -242,8 +138,8 @@
         <option name="CONDITION_ENABLED" value="false" />
         <option name="CLASS_FILTERS_ENABLED" value="false" />
         <option name="INSTANCE_FILTERS_ENABLED" value="false" />
-        <option name="CONDITION" value="" />
-        <option name="LOG_MESSAGE" value="" />
+        <option name="CONDITION" value="&#13;&#13;JAVA" />
+        <option name="LOG_MESSAGE" value="&#13;&#13;JAVA" />
       </breakpoint>
       <breakpoint>
         <option name="NOTIFY_CAUGHT" value="true" />
@@ -257,31 +153,68 @@
         <option name="CONDITION_ENABLED" value="false" />
         <option name="CLASS_FILTERS_ENABLED" value="false" />
         <option name="INSTANCE_FILTERS_ENABLED" value="false" />
-        <option name="CONDITION" value="" />
-        <option name="LOG_MESSAGE" value="" />
+        <option name="CONDITION" value="&#13;&#13;JAVA" />
+        <option name="LOG_MESSAGE" value="&#13;&#13;JAVA" />
       </breakpoint>
     </breakpoint_any>
     <breakpoint_rules />
-    <ui_properties />
+    <ui_properties>
+      <property name="line_breakpoints_groupByMethods" value="false" />
+      <property name="line_breakpoints_viewId" value="TABLE" />
+      <property name="exception_breakpoints_flattenPackages" value="true" />
+      <property name="method_breakpoints_flattenPackages" value="true" />
+      <property name="field_breakpoints_flattenPackages" value="true" />
+      <property name="exception_breakpoints_groupByMethods" value="false" />
+      <property name="line_breakpoints_groupByClasses" value="true" />
+      <property name="method_breakpoints_viewId" value="TABLE" />
+      <property name="field_breakpoints_groupByMethods" value="false" />
+      <property name="line_breakpoints_flattenPackages" value="true" />
+      <property name="field_breakpoints_groupByClasses" value="true" />
+      <property name="method_breakpoints_groupByClasses" value="true" />
+      <property name="exception_breakpoints_viewId" value="TABLE" />
+      <property name="exception_breakpoints_groupByClasses" value="true" />
+      <property name="field_breakpoints_viewId" value="TABLE" />
+      <property name="method_breakpoints_groupByMethods" value="false" />
+    </ui_properties>
   </component>
   <component name="FavoritesManager">
     <favorites_list name="bardqueryapi" />
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="homePage.gsp" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/grails-app/views/bardWebInterface/homePage.gsp">
+      <file leaf-file-name="BardWebInterfaceController.groovy" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/grails-app/controllers/bardqueryapi/BardWebInterfaceController.groovy">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="3" column="39" selection-start="69" selection-end="69" vertical-scroll-proportion="2.489796">
+            <state line="69" column="47" selection-start="2488" selection-end="2488" vertical-scroll-proportion="-45.826088">
+              <folding>
+                <element signature="e#22#44#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="QueryService.groovy" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/grails-app/services/bardqueryapi/QueryService.groovy">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="105" column="91" selection-start="3819" selection-end="3819" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="_projects.gsp" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/grails-app/views/bardWebInterface/_projects.gsp">
+      <file leaf-file-name="QueryServiceWrapper.groovy" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/grails-app/services/bardqueryapi/QueryServiceWrapper.groovy">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="-0.0">
+            <state line="27" column="31" selection-start="889" selection-end="889" vertical-scroll-proportion="0.0">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="homePage.gsp" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/grails-app/views/bardWebInterface/homePage.gsp">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="21" column="34" selection-start="834" selection-end="834" vertical-scroll-proportion="-7.285714">
               <folding />
             </state>
           </provider>
@@ -290,16 +223,8 @@
       <file leaf-file-name="searchBox.gsp" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/grails-app/views/layouts/searchBox.gsp">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="41" column="116" selection-start="2062" selection-end="2062" vertical-scroll-proportion="-1.2941177">
-              <folding>
-                <marker date="1345746913099" expanded="true" signature="1070:1474" placeholder="{...}" />
-                <marker date="1345746913099" expanded="true" signature="1109:1160" placeholder="{&quot;show&quot;: false...}" />
-                <marker date="1345746913099" expanded="true" signature="1166:1253" placeholder="{&quot;height&quot;: '655'...}" />
-                <marker date="1345746913099" expanded="true" signature="1210:1527" placeholder="{...}" />
-                <marker date="1345746913099" expanded="true" signature="1240:1273" placeholder="{&quot;show&quot;: false...}" />
-                <marker date="1345746913099" expanded="true" signature="1279:1458" placeholder="{&quot;height&quot;: '655'...}" />
-                <marker date="1345746913099" expanded="true" signature="1310:1458" placeholder="{...}" />
-              </folding>
+            <state line="10" column="68" selection-start="611" selection-end="611" vertical-scroll-proportion="-6.5384617">
+              <folding />
             </state>
           </provider>
         </entry>
@@ -307,28 +232,35 @@
       <file leaf-file-name="search.js" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/web-app/js/search.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="108" column="24" selection-start="3642" selection-end="3642" vertical-scroll-proportion="0.21621622">
+            <state line="21" column="18" selection-start="833" selection-end="833" vertical-scroll-proportion="0.40855458">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="_assays.gsp" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/grails-app/views/bardWebInterface/_assays.gsp">
+      <file leaf-file-name="HashMap.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="jar://C:/Program Files/Java/jdk1.6.0_26/src.zip!/java/util/HashMap.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="12" column="40" selection-start="729" selection-end="729" vertical-scroll-proportion="-4.163265">
+            <state line="371" column="0" selection-start="14301" selection-end="14301" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="BardWebInterfaceController.groovy" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/grails-app/controllers/bardqueryapi/BardWebInterfaceController.groovy">
+      <file leaf-file-name="JSONObject.class" pinned="false" current="false" current-in-tab="false">
+        <entry file="jar://$USER_HOME$/.grails/ivy-cache/com.github.groovy-wslite/groovy-wslite/jars/groovy-wslite-0.7.0.jar!/wslite/json/JSONObject.class">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="95" column="53" selection-start="3556" selection-end="3571" vertical-scroll-proportion="-8.782609">
-              <folding>
-                <element signature="e#22#44#0" expanded="true" />
-              </folding>
+            <state line="13" column="33" selection-start="466" selection-end="466" vertical-scroll-proportion="-8.16">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="JSONArray.class" pinned="false" current="false" current-in-tab="false">
+        <entry file="jar://$USER_HOME$/.grails/ivy-cache/com.github.groovy-wslite/groovy-wslite/jars/groovy-wslite-0.7.0.jar!/wslite/json/JSONArray.class">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="90" column="33" selection-start="4088" selection-end="4088" vertical-scroll-proportion="-19.0">
+              <folding />
             </state>
           </provider>
         </entry>
@@ -336,78 +268,8 @@
       <file leaf-file-name="_compounds.gsp" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/grails-app/views/bardWebInterface/_compounds.gsp">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="14" column="38" selection-start="888" selection-end="888" vertical-scroll-proportion="-4.857143">
+            <state line="11" column="66" selection-start="641" selection-end="654" vertical-scroll-proportion="-3.8163266">
               <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="QueryService.groovy" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/grails-app/services/bardqueryapi/QueryService.groovy">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="60" column="0" selection-start="2259" selection-end="2259" vertical-scroll-proportion="0.0">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="_homePageHeaderToMerge.gsp" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/_homePageHeaderToMerge.gsp">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="143" column="39" selection-start="5087" selection-end="5087" vertical-scroll-proportion="-1.4230769">
-              <folding>
-                <marker date="1345681839487" expanded="true" signature="222:2189" placeholder="{...}" />
-                <marker date="1345681839487" expanded="true" signature="365:488" placeholder="{&quot;source&quot;: &quot;/bardwebquery/bardWebInterface/autoCompleteAssayNames&quot;...}" />
-                <marker date="1345681839487" expanded="true" signature="594:1268" placeholder="{...}" />
-                <marker date="1345681839487" expanded="true" signature="779:1181" placeholder="{...}" />
-                <marker date="1345681839487" expanded="true" signature="1472:1687" placeholder="{...}" />
-                <marker date="1345681839487" expanded="true" signature="1790:2173" placeholder="{&quot;modal&quot;: true...}" />
-                <marker date="1345681839487" expanded="true" signature="1969:2155" placeholder="{...}" />
-                <marker date="1345681839487" expanded="true" signature="2226:3200" placeholder="{...}" />
-                <marker date="1345681839487" expanded="true" signature="2327:2399" placeholder="{...}" />
-                <marker date="1345681839487" expanded="true" signature="2485:2544" placeholder="{...}" />
-                <marker date="1345681839487" expanded="true" signature="2761:3138" placeholder="{...}" />
-                <marker date="1345681839487" expanded="true" signature="2872:3125" placeholder="{...}" />
-                <marker date="1345681839487" expanded="true" signature="3237:3943" placeholder="{...}" />
-                <marker date="1345681839487" expanded="true" signature="3262:3931" placeholder="{&quot;url&quot;: '/bardwebquery/bardWebInterface/searchAssays'...}" />
-                <marker date="1345681839487" expanded="true" signature="3454:3518" placeholder="{...}" />
-                <marker date="1345681839487" expanded="true" signature="3558:3756" placeholder="{...}" />
-                <marker date="1345681839487" expanded="true" signature="3811:3828" placeholder="{...}" />
-                <marker date="1345681839487" expanded="true" signature="3862:3917" placeholder="{...}" />
-                <marker date="1345681839487" expanded="true" signature="3983:4762" placeholder="{...}" />
-                <marker date="1345681839487" expanded="true" signature="4004:4750" placeholder="{&quot;url&quot;: '/bardwebquery/bardWebInterface/searchCompounds'...}" />
-                <marker date="1345681839487" expanded="true" signature="4200:4267" placeholder="{...}" />
-                <marker date="1345681839487" expanded="true" signature="4307:4568" placeholder="{...}" />
-                <marker date="1345681839487" expanded="true" signature="4627:4644" placeholder="{...}" />
-                <marker date="1345681839487" expanded="true" signature="4678:4736" placeholder="{...}" />
-                <marker date="1345681839487" expanded="true" signature="4801:5592" placeholder="{...}" />
-                <marker date="1345681839487" expanded="true" signature="4825:5580" placeholder="{&quot;url&quot;: '/bardwebquery/bardWebInterface/searchProjects'...}" />
-                <marker date="1345681839487" expanded="true" signature="5020:5086" placeholder="{...}" />
-                <marker date="1345681839487" expanded="true" signature="5126:5383" placeholder="{...}" />
-                <marker date="1345681839487" expanded="true" signature="5458:5475" placeholder="{...}" />
-                <marker date="1345681839487" expanded="true" signature="5509:5566" placeholder="{...}" />
-                <marker date="1345681839487" expanded="true" signature="5633:6697" placeholder="{...}" />
-                <marker date="1345681839487" expanded="true" signature="5658:6685" placeholder="{&quot;url&quot;: '/bardwebquery/bardWebInterface/searchStructures'...}" />
-                <marker date="1345681839487" expanded="true" signature="5854:5921" placeholder="{...}" />
-                <marker date="1345681839487" expanded="true" signature="5961:6487" placeholder="{...}" />
-                <marker date="1345681839487" expanded="true" signature="6562:6579" placeholder="{...}" />
-                <marker date="1345681839487" expanded="true" signature="6613:6671" placeholder="{...}" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="marvinSketch.gsp" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/grails-app/views/chemAxon/marvinSketch.gsp">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="24" column="13" selection-start="983" selection-end="983" vertical-scroll-proportion="-3.8163266">
-              <folding>
-                <marker date="1345747116298" expanded="true" signature="117:1093" placeholder="{...}" />
-                <marker date="1345747116298" expanded="true" signature="495:1080" placeholder="{...}" />
-                <marker date="1345747116298" expanded="true" signature="495:1080" placeholder="{...}" />
-                <marker date="1345747116298" expanded="true" signature="495:1080" placeholder="{...}" />
-                <marker date="1345747116298" expanded="true" signature="495:1080" placeholder="{...}" />
-              </folding>
             </state>
           </provider>
         </entry>
@@ -422,8 +284,6 @@
   <component name="IdeDocumentHistory">
     <option name="changedFiles">
       <list>
-        <option value="$PROJECT_DIR$/test/unit/bardqueryapi/BardWebInterfaceControllerUnitSpec.groovy" />
-        <option value="$PROJECT_DIR$/test/integration/bardqueryapi/QueryWebInterfaceControllerIntegrationSpec.groovy" />
         <option value="$PROJECT_DIR$/test/unit/bardqueryapi/QueryServiceUnitSpec.groovy" />
         <option value="$PROJECT_DIR$/grails-app/services/bardqueryapi/QueryService.groovy" />
         <option value="$PROJECT_DIR$/test/functional/bardqueryapi/BardWebInterfaceFunctionalSpec.groovy" />
@@ -432,20 +292,22 @@
         <option value="$PROJECT_DIR$/grails-app/views/bardWebInterface/showCompound.gsp" />
         <option value="$PROJECT_DIR$/grails-app/views/layouts/main.gsp" />
         <option value="$PROJECT_DIR$/grails-app/conf/bardqueryapiResources.groovy" />
-        <option value="$PROJECT_DIR$/grails-app/controllers/bardqueryapi/BardWebInterfaceController.groovy" />
         <option value="$PROJECT_DIR$/grails-app/conf/BuildConfig.groovy" />
-        <option value="$PROJECT_DIR$/web-app/js/search.js" />
         <option value="$PROJECT_DIR$/grails-app/views/bardWebInterface/homePage.gsp" />
-        <option value="$PROJECT_DIR$/grails-app/views/layouts/searchBox.gsp" />
         <option value="$PROJECT_DIR$/grails-app/views/chemAxon/marvinSketch.gsp" />
+        <option value="$PROJECT_DIR$/grails-app/views/layouts/searchBox.gsp" />
+        <option value="$PROJECT_DIR$/target/plugins/elastic-search-0.4.5-SNAPSHOT/grails-app/services/elasticsearchplugin/QueryExecutorService.groovy" />
+        <option value="$PROJECT_DIR$/test/integration/bardqueryapi/QueryProjectApiServiceIntegrationSpec.groovy" />
+        <option value="$PROJECT_DIR$/grails-app/controllers/bardqueryapi/BardWebInterfaceController.groovy" />
+        <option value="$PROJECT_DIR$/web-app/js/search.js" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="1592" />
+    <option name="x" value="-8" />
     <option name="y" value="-8" />
     <option name="width" value="1936" />
-    <option name="height" value="1096" />
+    <option name="height" value="1056" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="false">
     <OptionsSetting value="true" id="Add" />
@@ -514,6 +376,64 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="bard-web-query" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="bard-web-query" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="bard-web-query" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="test" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="bard-web-query" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="bard-web-query" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="test" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="integration" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="bardqueryapi" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="bard-web-query" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="bard-web-query" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="test" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="functional" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="bardqueryapi" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -600,40 +520,6 @@
     </key>
   </component>
   <component name="RunManager" selected="Grails.Grails:bard-web-query">
-    <configuration default="false" name="test Show Assay()" type="GrailsRunConfigurationType" factoryName="Grails" temporary="true">
-      <module name="Bard-web-query" />
-      <setting name="vmparams" value="" />
-      <setting name="cmdLine" value="test-app integration: bardqueryapi.QueryServiceIntegrationSpec.test Show Assay -echoOut" />
-      <setting name="depsClasspath" value="true" />
-      <setting name="passParentEnv" value="true" />
-      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
-      <setting name="launchBrowser" value="true" />
-      <RunnerSettings RunnerId="Debug">
-        <option name="DEBUG_PORT" value="" />
-        <option name="TRANSPORT" value="0" />
-        <option name="LOCAL" value="true" />
-      </RunnerSettings>
-      <RunnerSettings RunnerId="Run" />
-      <ConfigurationWrapper RunnerId="Debug" />
-      <ConfigurationWrapper RunnerId="Run" />
-      <method>
-        <option name="Make" enabled="false" />
-      </method>
-    </configuration>
-    <configuration default="false" name="test Structures()" type="GrailsRunConfigurationType" factoryName="Grails" temporary="true">
-      <module name="Bard-web-query" />
-      <setting name="vmparams" value="" />
-      <setting name="cmdLine" value="test-app integration: bardqueryapi.QueryServiceIntegrationSpec.test Structures -echoOut" />
-      <setting name="depsClasspath" value="true" />
-      <setting name="passParentEnv" value="true" />
-      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
-      <setting name="launchBrowser" value="true" />
-      <RunnerSettings RunnerId="Run" />
-      <ConfigurationWrapper RunnerId="Run" />
-      <method>
-        <option name="Make" enabled="false" />
-      </method>
-    </configuration>
     <configuration default="false" name="QueryServiceUnitSpec.test search type #label" type="JUnit" factoryName="JUnit" temporary="true">
       <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea">
         <pattern>
@@ -708,6 +594,43 @@
         <option name="DEBUG_PORT" value="" />
         <option name="TRANSPORT" value="0" />
         <option name="LOCAL" value="true" />
+      </RunnerSettings>
+      <RunnerSettings RunnerId="Run" />
+      <ConfigurationWrapper RunnerId="Debug" />
+      <ConfigurationWrapper RunnerId="Run" />
+      <method>
+        <option name="Make" enabled="false" />
+      </method>
+    </configuration>
+    <configuration default="false" name="Holiday Service get holidays by country, year and month()" type="GrailsRunConfigurationType" factoryName="Grails" temporary="true">
+      <module name="Bard-web-query" />
+      <setting name="vmparams" value="" />
+      <setting name="cmdLine" value="test-app integration: bardqueryapi.QueryProjectApiServiceIntegrationSpec.Holiday Service get holidays by country, year and month -echoOut" />
+      <setting name="depsClasspath" value="true" />
+      <setting name="passParentEnv" value="true" />
+      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
+      <setting name="launchBrowser" value="true" />
+      <RunnerSettings RunnerId="Run" />
+      <ConfigurationWrapper RunnerId="Run" />
+      <method>
+        <option name="Make" enabled="false" />
+      </method>
+    </configuration>
+    <configuration default="false" name="QueryProjectApiServiceIntegrationSpec" type="GrailsRunConfigurationType" factoryName="Grails" temporary="true">
+      <module name="Bard-web-query" />
+      <setting name="vmparams" value="" />
+      <setting name="cmdLine" value="test-app integration: bardqueryapi.QueryProjectApiServiceIntegrationSpec -echoOut" />
+      <setting name="depsClasspath" value="true" />
+      <setting name="passParentEnv" value="true" />
+      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
+      <setting name="launchBrowser" value="true" />
+      <RunnerSettings RunnerId="Debug">
+        <option name="DEBUG_PORT" value="" />
+        <option name="TRANSPORT" value="0" />
+        <option name="LOCAL" value="true" />
+      </RunnerSettings>
+      <RunnerSettings RunnerId="Profile ">
+        <option name="myExternalizedOptions" />
       </RunnerSettings>
       <RunnerSettings RunnerId="Run" />
       <ConfigurationWrapper RunnerId="Debug" />
@@ -940,14 +863,14 @@
       </method>
     </configuration>
     <list size="8">
-      <item index="0" class="java.lang.String" itemvalue="Grails.test Show Assay()" />
-      <item index="1" class="java.lang.String" itemvalue="Grails.test Structures()" />
-      <item index="2" class="java.lang.String" itemvalue="JUnit.QueryServiceUnitSpec.test search type #label" />
-      <item index="3" class="java.lang.String" itemvalue="JUnit.QueryServiceUnitSpec.test is Structure Search #label" />
-      <item index="4" class="java.lang.String" itemvalue="Grails.Test Search querying: #label()" />
-      <item index="5" class="java.lang.String" itemvalue="Grails.Grails:bard-web-query" />
-      <item index="6" class="java.lang.String" itemvalue="Grails.testAssaySummary()" />
-      <item index="7" class="java.lang.String" itemvalue="Grails.test Structure Search #label()" />
+      <item index="0" class="java.lang.String" itemvalue="JUnit.QueryServiceUnitSpec.test search type #label" />
+      <item index="1" class="java.lang.String" itemvalue="JUnit.QueryServiceUnitSpec.test is Structure Search #label" />
+      <item index="2" class="java.lang.String" itemvalue="Grails.Test Search querying: #label()" />
+      <item index="3" class="java.lang.String" itemvalue="Grails.Grails:bard-web-query" />
+      <item index="4" class="java.lang.String" itemvalue="Grails.testAssaySummary()" />
+      <item index="5" class="java.lang.String" itemvalue="Grails.test Structure Search #label()" />
+      <item index="6" class="java.lang.String" itemvalue="Grails.Holiday Service get holidays by country, year and month()" />
+      <item index="7" class="java.lang.String" itemvalue="Grails.QueryProjectApiServiceIntegrationSpec" />
     </list>
     <configuration name="&lt;template&gt;" type="WebApp" default="true" selected="false">
       <Host>localhost</Host>
@@ -982,7 +905,7 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="1592" y="-8" width="1936" height="1096" extended-state="6" />
+    <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
     <editor active="true" />
     <layout>
       <window_info id="Data Sources" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -992,7 +915,7 @@
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.38731444" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.3194589" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.61780673" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="IDEtalk Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
@@ -1005,8 +928,8 @@
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="true" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.16875" sideWeight="0.6805411" order="0" side_tool="false" content_ui="combo" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.31378937" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.16875" sideWeight="0.7633008" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.23669924" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
@@ -1073,158 +996,146 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/web-app/css/main.css">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="119" column="0" selection-start="2282" selection-end="2282" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/grails-app/views/layouts/main.gsp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="23" column="54" selection-start="1411" selection-end="1456" vertical-scroll-proportion="-15.038462">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/grails-app/conf/AppResources.groovy">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="1" column="4" selection-start="16" selection-end="16" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/grails-app/conf/bardqueryapiResources.groovy">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="4" column="18" selection-start="140" selection-end="140" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/grails-app/conf/BuildConfig.groovy">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="34" column="38" selection-start="1467" selection-end="1467" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/homePafeToMerge.gsp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="61" column="20" selection-start="2276" selection-end="2398" vertical-scroll-proportion="-6.6666665">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/_homePageHeaderToMerge.gsp">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="143" column="39" selection-start="5087" selection-end="5087" vertical-scroll-proportion="-1.4230769">
+        <state line="45" column="56" selection-start="1584" selection-end="1584" vertical-scroll-proportion="-10.807693">
           <folding>
-            <marker date="1345681839487" expanded="true" signature="222:2189" placeholder="{...}" />
-            <marker date="1345681839487" expanded="true" signature="365:488" placeholder="{&quot;source&quot;: &quot;/bardwebquery/bardWebInterface/autoCompleteAssayNames&quot;...}" />
-            <marker date="1345681839487" expanded="true" signature="594:1268" placeholder="{...}" />
-            <marker date="1345681839487" expanded="true" signature="779:1181" placeholder="{...}" />
-            <marker date="1345681839487" expanded="true" signature="1472:1687" placeholder="{...}" />
-            <marker date="1345681839487" expanded="true" signature="1790:2173" placeholder="{&quot;modal&quot;: true...}" />
-            <marker date="1345681839487" expanded="true" signature="1969:2155" placeholder="{...}" />
-            <marker date="1345681839487" expanded="true" signature="2226:3200" placeholder="{...}" />
-            <marker date="1345681839487" expanded="true" signature="2327:2399" placeholder="{...}" />
-            <marker date="1345681839487" expanded="true" signature="2485:2544" placeholder="{...}" />
-            <marker date="1345681839487" expanded="true" signature="2761:3138" placeholder="{...}" />
-            <marker date="1345681839487" expanded="true" signature="2872:3125" placeholder="{...}" />
-            <marker date="1345681839487" expanded="true" signature="3237:3943" placeholder="{...}" />
-            <marker date="1345681839487" expanded="true" signature="3262:3931" placeholder="{&quot;url&quot;: '/bardwebquery/bardWebInterface/searchAssays'...}" />
-            <marker date="1345681839487" expanded="true" signature="3454:3518" placeholder="{...}" />
-            <marker date="1345681839487" expanded="true" signature="3558:3756" placeholder="{...}" />
-            <marker date="1345681839487" expanded="true" signature="3811:3828" placeholder="{...}" />
-            <marker date="1345681839487" expanded="true" signature="3862:3917" placeholder="{...}" />
-            <marker date="1345681839487" expanded="true" signature="3983:4762" placeholder="{...}" />
-            <marker date="1345681839487" expanded="true" signature="4004:4750" placeholder="{&quot;url&quot;: '/bardwebquery/bardWebInterface/searchCompounds'...}" />
-            <marker date="1345681839487" expanded="true" signature="4200:4267" placeholder="{...}" />
-            <marker date="1345681839487" expanded="true" signature="4307:4568" placeholder="{...}" />
-            <marker date="1345681839487" expanded="true" signature="4627:4644" placeholder="{...}" />
-            <marker date="1345681839487" expanded="true" signature="4678:4736" placeholder="{...}" />
-            <marker date="1345681839487" expanded="true" signature="4801:5592" placeholder="{...}" />
-            <marker date="1345681839487" expanded="true" signature="4825:5580" placeholder="{&quot;url&quot;: '/bardwebquery/bardWebInterface/searchProjects'...}" />
-            <marker date="1345681839487" expanded="true" signature="5020:5086" placeholder="{...}" />
-            <marker date="1345681839487" expanded="true" signature="5126:5383" placeholder="{...}" />
-            <marker date="1345681839487" expanded="true" signature="5458:5475" placeholder="{...}" />
-            <marker date="1345681839487" expanded="true" signature="5509:5566" placeholder="{...}" />
-            <marker date="1345681839487" expanded="true" signature="5633:6697" placeholder="{...}" />
-            <marker date="1345681839487" expanded="true" signature="5658:6685" placeholder="{&quot;url&quot;: '/bardwebquery/bardWebInterface/searchStructures'...}" />
-            <marker date="1345681839487" expanded="true" signature="5854:5921" placeholder="{...}" />
-            <marker date="1345681839487" expanded="true" signature="5961:6487" placeholder="{...}" />
-            <marker date="1345681839487" expanded="true" signature="6562:6579" placeholder="{...}" />
-            <marker date="1345681839487" expanded="true" signature="6613:6671" placeholder="{...}" />
+            <marker date="1345681839487" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1345681839487" expanded="true" signature="-1:-1" placeholder="{&quot;source&quot;: &quot;/bardwebquery/bardWebInterface/autoCompleteAssayNames&quot;...}" />
+            <marker date="1345681839487" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1345681839487" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1345681839487" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1345681839487" expanded="true" signature="-1:-1" placeholder="{&quot;modal&quot;: true...}" />
+            <marker date="1345681839487" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1345681839487" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1345681839487" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1345681839487" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1345681839487" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1345681839487" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1345681839487" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1345681839487" expanded="true" signature="-1:-1" placeholder="{&quot;url&quot;: '/bardwebquery/bardWebInterface/searchAssays'...}" />
+            <marker date="1345681839487" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1345681839487" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1345681839487" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1345681839487" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1345681839487" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1345681839487" expanded="true" signature="-1:-1" placeholder="{&quot;url&quot;: '/bardwebquery/bardWebInterface/searchCompounds'...}" />
+            <marker date="1345681839487" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1345681839487" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1345681839487" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1345681839487" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1345681839487" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1345681839487" expanded="true" signature="-1:-1" placeholder="{&quot;url&quot;: '/bardwebquery/bardWebInterface/searchProjects'...}" />
+            <marker date="1345681839487" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1345681839487" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1345681839487" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1345681839487" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1345681839487" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1345681839487" expanded="true" signature="-1:-1" placeholder="{&quot;url&quot;: '/bardwebquery/bardWebInterface/searchStructures'...}" />
+            <marker date="1345681839487" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1345681839487" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1345681839487" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1345681839487" expanded="true" signature="-1:-1" placeholder="{...}" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/grails-app/views/layouts/searchBox.gsp">
+    <entry file="jar://$USER_HOME$/.grails/ivy-cache/com.github.groovy-wslite/groovy-wslite/jars/groovy-wslite-0.7.0.jar!/wslite/rest/RESTClient.class">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="41" column="116" selection-start="2062" selection-end="2062" vertical-scroll-proportion="-1.2941177">
-          <folding>
-            <marker date="1345746913099" expanded="true" signature="1070:1474" placeholder="{...}" />
-            <marker date="1345746913099" expanded="true" signature="1109:1160" placeholder="{&quot;show&quot;: false...}" />
-            <marker date="1345746913099" expanded="true" signature="1166:1253" placeholder="{&quot;height&quot;: '655'...}" />
-            <marker date="1345746913099" expanded="true" signature="1210:1527" placeholder="{...}" />
-            <marker date="1345746913099" expanded="true" signature="1240:1273" placeholder="{&quot;show&quot;: false...}" />
-            <marker date="1345746913099" expanded="true" signature="1279:1458" placeholder="{&quot;height&quot;: '655'...}" />
-            <marker date="1345746913099" expanded="true" signature="1310:1458" placeholder="{...}" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/grails-app/views/chemAxon/marvinSketch.gsp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="24" column="13" selection-start="983" selection-end="983" vertical-scroll-proportion="-3.8163266">
-          <folding>
-            <marker date="1345747116298" expanded="true" signature="117:1093" placeholder="{...}" />
-            <marker date="1345747116298" expanded="true" signature="495:1080" placeholder="{...}" />
-            <marker date="1345747116298" expanded="true" signature="495:1080" placeholder="{...}" />
-            <marker date="1345747116298" expanded="true" signature="495:1080" placeholder="{...}" />
-            <marker date="1345747116298" expanded="true" signature="495:1080" placeholder="{...}" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/grails-app/services/bardqueryapi/QueryService.groovy">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="60" column="0" selection-start="2259" selection-end="2259" vertical-scroll-proportion="0.0">
+        <state line="24" column="32" selection-start="1002" selection-end="1002" vertical-scroll-proportion="-11.6">
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/test/integration/bardqueryapi/QueryServiceIntegrationSpec.groovy">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="8" column="6" selection-start="165" selection-end="165" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/target/plugins/elastic-search-0.4.5-SNAPSHOT/grails-app/services/elasticsearchplugin/QueryExecutorService.groovy">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="102" column="64" selection-start="3844" selection-end="3844" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/test/functional/bardqueryapi/BardWebInterfaceFunctionalSpec.groovy">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="30" column="67" selection-start="1201" selection-end="1201" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/test/integration/bardqueryapi/QueryProjectApiServiceIntegrationSpec.groovy">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="67" column="36" selection-start="2029" selection-end="2029" vertical-scroll-proportion="0.0">
+          <folding>
+            <element signature="e#22#69#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/grails-app/views/bardWebInterface/_compounds.gsp">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="14" column="38" selection-start="888" selection-end="888" vertical-scroll-proportion="-4.857143">
+        <state line="11" column="66" selection-start="641" selection-end="654" vertical-scroll-proportion="-3.8163266">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$USER_HOME$/.grails/ivy-cache/com.github.groovy-wslite/groovy-wslite/jars/groovy-wslite-0.7.0.jar!/wslite/json/JSONObject.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="13" column="33" selection-start="466" selection-end="466" vertical-scroll-proportion="-8.16">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://C:/Program Files/Java/jdk1.6.0_26/src.zip!/java/util/HashMap.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="371" column="0" selection-start="14301" selection-end="14301" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$USER_HOME$/.grails/ivy-cache/com.github.groovy-wslite/groovy-wslite/jars/groovy-wslite-0.7.0.jar!/wslite/json/JSONArray.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="90" column="33" selection-start="4088" selection-end="4088" vertical-scroll-proportion="-19.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/grails-app/views/layouts/searchBox.gsp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="10" column="68" selection-start="611" selection-end="611" vertical-scroll-proportion="-6.5384617">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/grails-app/services/bardqueryapi/QueryService.groovy">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="105" column="91" selection-start="3819" selection-end="3819" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/grails-app/services/bardqueryapi/QueryServiceWrapper.groovy">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="27" column="31" selection-start="889" selection-end="889" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/grails-app/views/bardWebInterface/homePage.gsp">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="3" column="39" selection-start="69" selection-end="69" vertical-scroll-proportion="2.489796">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/grails-app/views/bardWebInterface/_projects.gsp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/grails-app/views/bardWebInterface/_assays.gsp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="12" column="40" selection-start="729" selection-end="729" vertical-scroll-proportion="-4.163265">
+        <state line="21" column="34" selection-start="834" selection-end="834" vertical-scroll-proportion="-7.285714">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/grails-app/controllers/bardqueryapi/BardWebInterfaceController.groovy">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="95" column="53" selection-start="3556" selection-end="3571" vertical-scroll-proportion="-8.782609">
+        <state line="69" column="47" selection-start="2488" selection-end="2488" vertical-scroll-proportion="-45.826088">
           <folding>
             <element signature="e#22#44#0" expanded="true" />
           </folding>
@@ -1233,7 +1144,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/web-app/js/search.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="108" column="24" selection-start="3642" selection-end="3642" vertical-scroll-proportion="0.21621622">
+        <state line="21" column="18" selection-start="833" selection-end="833" vertical-scroll-proportion="0.40855458">
           <folding />
         </state>
       </provider>

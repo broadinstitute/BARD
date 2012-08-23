@@ -6,7 +6,12 @@ import bard.core.Project
 import bard.core.StructureSearchParams
 import bard.core.adapter.CompoundAdapter
 import elasticsearchplugin.QueryExecutorService
+import elasticsearchplugin.RestClientFactoryService
+import wslite.json.JSONArray
 import wslite.json.JSONObject
+import wslite.rest.RESTClient
+import wslite.rest.RESTClientException
+
 import javax.servlet.http.HttpServletResponse
 
 /**
@@ -22,6 +27,7 @@ class BardWebInterfaceController {
     def shoppingCartService
     QueryService queryService
     QueryExecutorService queryExecutorService
+    RestClientFactoryService restClientFactoryService
     final static String NCGC_ROOT_URL = "http://bard.nih.gov/api/v1"
 
     def index() {
@@ -30,6 +36,82 @@ class BardWebInterfaceController {
 
     def homePage() {
         render(view: "homePage")
+    }
+
+    def searchCompoundsByIDs() {
+        String searchString = params.searchString?.trim()
+        if (searchString) {
+            try {
+                def parameterMap = [:]
+                parameterMap.put('path', "/compounds")
+                Map dataMap = [cids: "${searchString}"]
+                 JSONArray resultJson = (JSONArray) postFormRequest(this.restClientFactoryService, NCGC_ROOT_URL, dataMap, parameterMap)
+                List docs = []
+                int numberOfHits = 0
+                resultJson.each { result ->
+                    Map currentObject = [:]
+                    currentObject.put("iupac_name", result.name)
+                    currentObject.put("iso_smiles", result.smiles)
+                    currentObject.put("cid", result.cid)
+                    docs.add(currentObject)
+                    ++numberOfHits
+                }
+                JSONObject metaData = new JSONObject([nhit: numberOfHits])
+                render(template: 'compounds', model: [docs: docs, metaData: metaData, searchString: "${searchString}"])
+                return
+            }
+            catch (Exception exp) {
+                return response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR,
+                        message(code: 'compound.search.error', args: [exp.message], default: "Compound search has encountered an error:\n${exp.message}"))
+            }
+        }
+        flash.message = 'Search String is required'
+        redirect(action: "homePage")
+
+    }
+
+    def searchAssaysByIDs() {
+        String searchString = params.searchString?.trim()
+        if (searchString) {
+            try {
+                def parameterMap = [:]
+                parameterMap.put('path', "/assays")
+                Map dataMap = [ids: "${searchString}"]
+
+                JSONObject resultJson = (JSONObject) postFormRequest(this.restClientFactoryService, NCGC_ROOT_URL, dataMap, parameterMap)
+                render(template: 'compounds', model: [docs: resultJson.docs, metaData: resultJson.metaData, searchString: "${searchString}"])
+            }
+            catch (Exception exp) {
+                return response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR,
+                        message(code: 'assay.search.error', args: [exp.message], default: "Assay search has encountered an error:\n${exp.message}"))
+            }
+        }
+        flash.message = 'Search String is required'
+        redirect(action: "homePage")
+
+
+    }
+
+    def searchProjectsByIDs() {
+        String searchString = params.searchString?.trim()
+        if (searchString) {
+            try {
+                def parameterMap = [:]
+                parameterMap.put('path', "/projects")
+                Map dataMap = [ids: "${searchString}"]
+
+                JSONObject resultJson = (JSONObject) postFormRequest(this.restClientFactoryService, NCGC_ROOT_URL, dataMap, parameterMap)
+                render(template: 'compounds', model: [docs: resultJson.docs, metaData: resultJson.metaData, searchString: "${searchString}"])
+            }
+            catch (Exception exp) {
+                return response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR,
+                        message(code: 'project.search.error', args: [exp.message], default: "Project search has encountered an error:\n${exp.message}"))
+            }
+        }
+        flash.message = 'Search String is required'
+        redirect(action: "homePage")
+
+
     }
     /**
      * @return
@@ -53,6 +135,7 @@ class BardWebInterfaceController {
                 adapter.put("iso_smiles", compoundAdapter.structureSMILES)
                 listDocs.add(adapter)
             }
+
             render(template: 'compounds', model: [docs: listDocs, metaData: metaDataMap])
             return
         }
@@ -169,6 +252,25 @@ class BardWebInterfaceController {
  * the RestController
  */
 class SearchHelper {
+
+    /**
+     * TODO: We will squirell this here for now Since will not be needing it after the JDO is released
+     * @param url
+     * @param data
+     * @return
+     * @throws wslite.rest.RESTClientException
+     */
+    def postFormRequest(elasticsearchplugin.RestClientFactoryService restClientFactoryService, final String url, final Map dataMap, Map parameterMap = [:]) throws RESTClientException {
+        parameterMap.put('query', [expand: "TRUE", include_entities: false])
+        parameterMap.put('connectTimeout', 5000)
+        parameterMap.put('readTimeout', 10000)
+
+        final RESTClient restClientClone = restClientFactoryService.createNewRestClient(url)
+        def response = restClientClone.post(parameterMap) {
+            urlenc dataMap
+        }
+        return response.json
+    }
     /**
      *
      * @param relativePath for example /search/compounds
