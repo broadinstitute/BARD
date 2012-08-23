@@ -1,3 +1,4 @@
+//TODO : There is a lot of common code here. Need to refactor to make it DRY
 $(document).ready(function () {
     var spinnerImageLink = '<img src="/bardwebquery/static/images/loading_icon.gif"  height="16" width="16" />';
     var errorImageTwitterBootstrap = '<img src=""  class="icon-exclamation-sign" height="16" width="16" />';
@@ -17,9 +18,9 @@ $(document).ready(function () {
                 handleProjectSearch();
                 break;
             case 'ID':
-                //handleAIDSearch();
+                handleAIDSearch();
                 handleCIDSearch();
-                //handlePIDSearch();
+                handlePIDSearch();
                  break;
             case 'STRUCTURE':
                 handleStructureSearch()

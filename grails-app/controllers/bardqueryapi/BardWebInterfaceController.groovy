@@ -44,7 +44,7 @@ class BardWebInterfaceController {
             try {
                 def parameterMap = [:]
                 parameterMap.put('path', "/compounds")
-                Map dataMap = [cids: "${searchString}"]
+                Map dataMap = [ids: "${searchString}"]
                  JSONArray resultJson = (JSONArray) postFormRequest(this.restClientFactoryService, NCGC_ROOT_URL, dataMap, parameterMap)
                 List docs = []
                 int numberOfHits = 0

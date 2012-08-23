@@ -182,10 +182,10 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="BardWebInterfaceController.groovy" pinned="false" current="false" current-in-tab="false">
+      <file leaf-file-name="BardWebInterfaceController.groovy" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/grails-app/controllers/bardqueryapi/BardWebInterfaceController.groovy">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="69" column="47" selection-start="2488" selection-end="2488" vertical-scroll-proportion="-45.826088">
+            <state line="46" column="31" selection-start="1260" selection-end="1260" vertical-scroll-proportion="-0.23358779">
               <folding>
                 <element signature="e#22#44#0" expanded="true" />
               </folding>
@@ -229,10 +229,10 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="search.js" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="search.js" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/web-app/js/search.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="22" column="165" selection-start="875" selection-end="875" vertical-scroll-proportion="0.5516224">
+            <state line="148" column="13" selection-start="5427" selection-end="5427" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -298,8 +298,8 @@
         <option value="$PROJECT_DIR$/grails-app/views/layouts/searchBox.gsp" />
         <option value="$PROJECT_DIR$/target/plugins/elastic-search-0.4.5-SNAPSHOT/grails-app/services/elasticsearchplugin/QueryExecutorService.groovy" />
         <option value="$PROJECT_DIR$/test/integration/bardqueryapi/QueryProjectApiServiceIntegrationSpec.groovy" />
-        <option value="$PROJECT_DIR$/grails-app/controllers/bardqueryapi/BardWebInterfaceController.groovy" />
         <option value="$PROJECT_DIR$/web-app/js/search.js" />
+        <option value="$PROJECT_DIR$/grails-app/controllers/bardqueryapi/BardWebInterfaceController.groovy" />
       </list>
     </option>
   </component>
@@ -1131,19 +1131,19 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/grails-app/controllers/bardqueryapi/BardWebInterfaceController.groovy">
+    <entry file="file://$PROJECT_DIR$/web-app/js/search.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="69" column="47" selection-start="2488" selection-end="2488" vertical-scroll-proportion="-45.826088">
-          <folding>
-            <element signature="e#22#44#0" expanded="true" />
-          </folding>
+        <state line="148" column="13" selection-start="5427" selection-end="5427" vertical-scroll-proportion="0.0">
+          <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/web-app/js/search.js">
+    <entry file="file://$PROJECT_DIR$/grails-app/controllers/bardqueryapi/BardWebInterfaceController.groovy">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="22" column="165" selection-start="875" selection-end="875" vertical-scroll-proportion="0.5516224">
-          <folding />
+        <state line="46" column="31" selection-start="1260" selection-end="1260" vertical-scroll-proportion="-0.23358779">
+          <folding>
+            <element signature="e#22#44#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
