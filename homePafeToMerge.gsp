@@ -1,21 +1,9 @@
-<<<<<<< HEAD
-<%@ page import="bardqueryapi.SearchType; bard.db.registration.*; com.metasieve.shoppingcart.*; com.metasieve.shoppingcart.Shoppable.*;" %>
-=======
->>>>>>> 3b66c75ae23c87b5c722a09184457564ec76c27d
+<%@ page import="bardqueryapi.SearchType; bard.db.registration.*" %>
 <!DOCTYPE html>
 <html>
-<head>
-    <meta name="layout" content="searchBox"/>
-</head>
+<g:render template="homePageHeader"/>
 <body>
-<<<<<<< HEAD
-
-
-<table>
-    <tr>
-        <td width=80%  class="screenSection">
-
-            <div>
+<div>
     <div>
         <h1 style="text-align: center">BARD</h1>
 
@@ -54,51 +42,39 @@
                         <td/>
                     </tr>
                 </table>
-=======
-    <div class="row-fluid">
-        <div id="resultTab" class="span12">
-            <ul id="resultTabUL" class="nav nav-tabs">
-                <li class="active"><a href="#assays" data-toggle="tab" id="assaysTab">Assays (0)</a></li>
-                <li><a href="#compounds" data-toggle="tab" id="compoundsTab">Compounds (0)</a></li>
-                <li><a href="#projects" data-toggle="tab" id="projectsTab">Projects (0)</a></li>
-            </ul>
-
-            <div id="resultTabContent" class="tab-content">
-                <div class="tab-pane fade in active" id="assays">
-                    <g:render template="assays"/>
-                </div>
-
-                <div class="tab-pane fade" id="compounds">
-                    <g:render template="compounds"/>
-                </div>
-                <div class="tab-pane fade" id="projects">
-                    <g:render template="projects"/>
-                </div>
->>>>>>> 3b66c75ae23c87b5c722a09184457564ec76c27d
             </div>
+        </g:form>
+        <br/>
+        <br/>
+    </div>
+</div><!-- End body div -->
+<div id="resultTab">
+    <ul id="resultTabUL" class="nav nav-tabs">
+        <li class="active"><a href="#assays" data-toggle="tab" id="assaysTab">Assays (0)</a></li>
+        <li><a href="#compounds" data-toggle="tab" id="compoundsTab">Compounds (0)</a></li>
+        <li><a href="#projects" data-toggle="tab" id="projectsTab">Projects (0)</a></li>
+    </ul>
+
+    <div id="resultTabContent" class="tab-content">
+        <div class="tab-pane fade in active" id="assays">
+            <div id='loadAssays'>
+                <img src="${resource(dir: 'images', file: 'loading_icon.gif')}"/>
+            </div>
+            <g:render template="assays"/>
+        </div>
+
+        <div class="tab-pane fade" id="compounds">
+            <div id='loadCompounds'>
+                <img src="${resource(dir: 'images', file: 'loading_icon.gif')}"/></div>
+            <g:render template="compounds"/>
+        </div>
+        <div class="tab-pane fade" id="projects">
+            <div id='loadProjects'>
+                <img src="${resource(dir: 'images', file: 'loading_icon.gif')}"/></div>
+            <g:render template="projects"/>
         </div>
     </div>
-<<<<<<< HEAD
 </div>    <!-- End accordion -->
-
-
-        </td>
-
-        <td width=2%>
-        </td>
-
-
-        <td width=18%  class="screenSection">
-            %{-- SAR cart itself goes here--}%
-
-            <g:render template="sarCartContent"/>
-
-        </td>
-
-    </tr>
-</table>
-
-
 
 <%-- MarvinSketch's modal window --%>
 <div id="modalDiv">
@@ -109,7 +85,5 @@
     </iframe>
 </div>
 
-=======
->>>>>>> 3b66c75ae23c87b5c722a09184457564ec76c27d
 </body>
 </html>

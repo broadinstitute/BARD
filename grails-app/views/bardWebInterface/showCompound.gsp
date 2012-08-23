@@ -60,7 +60,7 @@
             </tr>
 
             <tr>
-                <td>IUAP name</td>
+                <td>IUPAC name</td>
                 <td>${compound.compound.getValue(bard.core.Compound.IUPACNameValue)?.value as java.lang.String}</td>
             </tr>
 
