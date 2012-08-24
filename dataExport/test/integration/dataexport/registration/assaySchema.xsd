@@ -25,9 +25,7 @@
     </xs:simpleType>
     <xs:element name="status">
         <xs:annotation>
-            <xs:documentation>Status of the current object. Consuming applications are allowed to change the value of
-                this object to 'Uploaded' once they have processed the object
-            </xs:documentation>
+            <xs:documentation>Status of the current object. Consuming applications are allowed to change the value of this object to 'Uploaded' once they have processed the object</xs:documentation>
         </xs:annotation>
         <xs:simpleType>
             <xs:restriction base="xs:string">
@@ -58,21 +56,19 @@
                         <xs:enumeration value="application/vnd.bard.cap+xml;type=resultType"/>
                         <xs:enumeration value="application/vnd.bard.cap+xml;type=project"/>
                         <xs:enumeration value="application/vnd.bard.cap+xml;type=assay"/>
-                        <xs:enumeration value="application/vnd.bard.cap+xml;type=assays"/>
                         <xs:enumeration value="application/vnd.bard.cap+xml;type=dictionary"/>
                         <xs:enumeration value="application/vnd.bard.cap+xml;type=bardexport"/>
                         <xs:enumeration value="application/vnd.bard.cap+xml;type=stage"/>
                         <xs:enumeration value="application/vnd.bard.cap+xml;type=element"/>
                         <xs:enumeration value="application/vnd.bard.cap+xml;type=projects"/>
                         <xs:enumeration value="application/vnd.bard.cap+xml;type=assayDoc"/>
+                        <xs:enumeration value="application/vnd.bard.cap+xml;type=assays"/>
                     </xs:restriction>
                 </xs:simpleType>
             </xs:attribute>
             <xs:attribute name="href" type="xs:anyURI" use="required">
                 <xs:annotation>
-                    <xs:documentation>The URI to the object whose relationship to the current object is described by the
-                        rel attribute
-                    </xs:documentation>
+                    <xs:documentation>The URI to the object whose relationship to the current object is described by the rel attribute</xs:documentation>
                 </xs:annotation>
             </xs:attribute>
             <xs:attribute name="rel" use="required">
@@ -108,17 +104,20 @@
         </xs:simpleType>
     </xs:attribute>
     <xs:element name="label" type="xs:string"/>
-    <xs:annotation>
-        <xs:documentation>All of the individual schema needed to do a data export</xs:documentation>
-    </xs:annotation>
     <xs:element name="assay">
         <xs:annotation>
             <xs:documentation>Models an assay in the CAP. Maps to a mime type of
-                application/vnd.bard.cap+xml;type=assay
-            </xs:documentation>
+                application/vnd.bard.cap+xml;type=assay</xs:documentation>
         </xs:annotation>
         <xs:complexType>
             <xs:sequence>
+                <xs:element default="" name="assayTitle">
+                    <xs:simpleType>
+                        <xs:restriction base="xs:string">
+                            <xs:maxLength value="250"/>
+                        </xs:restriction>
+                    </xs:simpleType>
+                </xs:element>
                 <xs:element name="assayName">
                     <xs:annotation>
                         <xs:documentation>Name of the assay. Is this required?
@@ -131,13 +130,14 @@
                     </xs:simpleType>
                 </xs:element>
                 <xs:element minOccurs="0" name="designedBy" type="xs:string"/>
-                <xs:element minOccurs="0" name="measureContexts">
+                <xs:element minOccurs="0" name="assayContexts">
                     <xs:complexType>
                         <xs:sequence>
-                            <xs:element maxOccurs="unbounded" name="measureContext">
+                            <xs:element maxOccurs="unbounded" name="assayContext">
                                 <xs:complexType>
                                     <xs:sequence>
                                         <xs:element name="contextName" type="xs:string"/>
+                                        <xs:element ref="assayContextItems"/>
                                     </xs:sequence>
                                 </xs:complexType>
                             </xs:element>
@@ -158,17 +158,14 @@
                                                 <xs:attribute name="label" type="xs:string"
                                                               use="required">
                                                     <xs:annotation>
-                                                        <xs:documentation>label on Element that this references
-                                                        </xs:documentation>
+                                                        <xs:documentation>label on Element that this references</xs:documentation>
                                                     </xs:annotation>
                                                 </xs:attribute>
                                             </xs:complexType>
                                         </xs:element>
                                         <xs:element minOccurs="0" name="entryUnit">
                                             <xs:annotation>
-                                                <xs:documentation>Unit and a link to the Unit element in the
-                                                    dictionary
-                                                </xs:documentation>
+                                                <xs:documentation>Unit and a link to the Unit element in the dictionary</xs:documentation>
                                             </xs:annotation>
                                             <xs:complexType>
                                                 <xs:sequence>
@@ -179,7 +176,7 @@
                                             </xs:complexType>
                                         </xs:element>
                                     </xs:sequence>
-                                    <xs:attribute name="measureContextRef" type="xs:string"
+                                    <xs:attribute name="assayContextRef" type="xs:string"
                                                   use="optional">
                                         <xs:annotation>
                                             <xs:documentation>References the measure context name</xs:documentation>
@@ -191,77 +188,7 @@
                         </xs:sequence>
                     </xs:complexType>
                 </xs:element>
-                <xs:element minOccurs="0" name="measureContextItems">
-                    <xs:complexType>
-                        <xs:sequence>
-                            <xs:element maxOccurs="unbounded" name="measureContextItem">
-                                <xs:complexType>
-                                    <xs:sequence>
-                                        <xs:element minOccurs="0" name="valueId">
-                                            <xs:annotation>
-                                                <xs:documentation>The label references the label of the element that it
-                                                    references
-                                                </xs:documentation>
-                                            </xs:annotation>
-                                            <xs:complexType>
-                                                <xs:sequence>
-                                                    <xs:element ref="link" minOccurs="0"/>
-                                                </xs:sequence>
-                                                <xs:attribute name="label" type="xs:string"
-                                                              use="required">
-                                                    <xs:annotation>
-                                                        <xs:documentation>Label on an element in the dictionary
-                                                        </xs:documentation>
-                                                    </xs:annotation>
-                                                </xs:attribute>
-                                            </xs:complexType>
-                                        </xs:element>
-                                        <xs:element minOccurs="0" name="attributeId">
-                                            <xs:annotation>
-                                                <xs:documentation>The label references the label of the element that it
-                                                    references
-                                                </xs:documentation>
-                                            </xs:annotation>
-                                            <xs:complexType>
-                                                <xs:sequence>
-                                                    <xs:element ref="link" maxOccurs="1" minOccurs="0"
-                                                            />
-                                                </xs:sequence>
-                                                <xs:attribute name="attributeType" use="required">
-                                                    <xs:simpleType>
-                                                        <xs:restriction base="xs:string">
-                                                            <xs:enumeration value="List"/>
-                                                            <xs:enumeration value="Range"/>
-                                                            <xs:enumeration value="Number"/>
-                                                            <xs:enumeration value="Fixed"/>
-                                                        </xs:restriction>
-                                                    </xs:simpleType>
-                                                </xs:attribute>
-                                                <xs:attribute name="label" type="xs:string"
-                                                              use="required"/>
-                                            </xs:complexType>
-                                        </xs:element>
-                                        <xs:element minOccurs="0" name="extValueId" type="xs:string"
-                                                />
-                                    </xs:sequence>
-                                    <xs:attribute name="measureContextItemId" type="bardID"
-                                                  use="required"/>
-                                    <xs:attribute name="measureContextItemRef" type="bardID">
-                                        <xs:annotation>
-                                            <xs:documentation>Points to the parent group</xs:documentation>
-                                        </xs:annotation>
-                                    </xs:attribute>
-                                    <xs:attribute name="measureContextRef" type="xs:string"/>
-                                    <xs:attribute name="qualifier" type="xs:string"/>
-                                    <xs:attribute name="valueNum" type="xs:double"/>
-                                    <xs:attribute name="valueMin" type="xs:double"/>
-                                    <xs:attribute name="valueMax" type="xs:double"/>
-                                    <xs:attribute name="valueDisplay" type="xs:string"/>
-                                </xs:complexType>
-                            </xs:element>
-                        </xs:sequence>
-                    </xs:complexType>
-                </xs:element>
+                <xs:element minOccurs="0" ref="assayContextItems"/>
                 <xs:element minOccurs="0" name="assayDocuments">
                     <xs:complexType>
                         <xs:sequence>
@@ -295,7 +222,7 @@
                 </xs:simpleType>
             </xs:attribute>
             <xs:attribute ref="readyForExtraction"/>
-            <xs:attribute name="assayType" use="optional">
+            <xs:attribute name="assayType">
                 <xs:simpleType>
                     <xs:restriction base="xs:string">
                         <xs:enumeration value="Regular"/>
@@ -344,6 +271,7 @@
             <xs:sequence>
 
 
+
                 <xs:element name="documentName">
                     <xs:annotation>
                         <xs:documentation>
@@ -371,6 +299,62 @@
                     </xs:restriction>
                 </xs:simpleType>
             </xs:attribute>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="assayContextItems">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element maxOccurs="unbounded" name="assayContextItem">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element minOccurs="0" name="valueId">
+                                <xs:annotation>
+                                    <xs:documentation>The label references the label of the element that it references</xs:documentation>
+                                </xs:annotation>
+                                <xs:complexType>
+                                    <xs:sequence>
+                                        <xs:element ref="link" minOccurs="0"/>
+                                    </xs:sequence>
+                                    <xs:attribute name="label" type="xs:string" use="required">
+                                        <xs:annotation>
+                                            <xs:documentation>Label on an element in the dictionary</xs:documentation>
+                                        </xs:annotation>
+                                    </xs:attribute>
+                                </xs:complexType>
+                            </xs:element>
+                            <xs:element minOccurs="0" name="attributeId">
+                                <xs:annotation>
+                                    <xs:documentation>The label references the label of the element that it references</xs:documentation>
+                                </xs:annotation>
+                                <xs:complexType>
+                                    <xs:sequence>
+                                        <xs:element ref="link" maxOccurs="1" minOccurs="0"/>
+                                    </xs:sequence>
+                                    <xs:attribute name="attributeType" use="required">
+                                        <xs:simpleType>
+                                            <xs:restriction base="xs:string">
+                                                <xs:enumeration value="List"/>
+                                                <xs:enumeration value="Range"/>
+                                                <xs:enumeration value="Number"/>
+                                                <xs:enumeration value="Fixed"/>
+                                            </xs:restriction>
+                                        </xs:simpleType>
+                                    </xs:attribute>
+                                    <xs:attribute name="label" type="xs:string" use="required"/>
+                                </xs:complexType>
+                            </xs:element>
+                            <xs:element minOccurs="0" name="extValueId" type="xs:string"/>
+                        </xs:sequence>
+                        <xs:attribute name="assayContextItemId" type="bardID" use="required"/>
+                        <xs:attribute name="assayContextRef" type="xs:string"/>
+                        <xs:attribute name="qualifier" type="xs:string"/>
+                        <xs:attribute name="valueNum" type="xs:double"/>
+                        <xs:attribute name="valueMin" type="xs:double"/>
+                        <xs:attribute name="valueMax" type="xs:double"/>
+                        <xs:attribute name="valueDisplay" type="xs:string"/>
+                    </xs:complexType>
+                </xs:element>
+            </xs:sequence>
         </xs:complexType>
     </xs:element>
 </xs:schema>

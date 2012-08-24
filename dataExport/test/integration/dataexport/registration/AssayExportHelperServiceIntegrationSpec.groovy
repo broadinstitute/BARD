@@ -99,6 +99,7 @@ class AssayExportHelperServiceIntegrationSpec extends IntegrationSpec {
         when: "A service call is made to generate the measures for that Assay"
         this.assayExportHelperService.generateAssay(this.markupBuilder, assay)
         then: "An XML is generated that conforms to the expected XML"
+        println(this.writer.toString())
         XMLAssert.assertXpathEvaluatesTo("1", "count(//assayContexts)", this.writer.toString());
         XMLAssert.assertXpathEvaluatesTo("1", "count(//assayContext)", this.writer.toString());
         XMLAssert.assertXpathEvaluatesTo("1", "count(//measures)", this.writer.toString());
@@ -122,6 +123,7 @@ class AssayExportHelperServiceIntegrationSpec extends IntegrationSpec {
         when: "A service call is made to generate a list of assays ready to be extracted"
         this.assayExportHelperService.generateAssays(this.markupBuilder)
         then: "An XML is generated that conforms to the expected XML"
+        println this.writer.toString()
         XmlTestAssertions.assertResultsWithOverrideAttributes(results, this.writer.toString())
         XMLAssert.assertXpathEvaluatesTo("1", "//assays/@count", this.writer.toString());
         XMLAssert.assertXpathEvaluatesTo("related", "//link/@rel", this.writer.toString());

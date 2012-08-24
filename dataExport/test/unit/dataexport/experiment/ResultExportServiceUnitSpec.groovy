@@ -127,10 +127,10 @@ class ResultExportServiceUnitSpec extends Specification {
         XMLAssert.assertXpathEvaluatesTo("3", "count(//link)", writer1.toString());
         XMLAssert.assertXpathEvaluatesTo("1", "count(//link[@type='experimentMediaType'])", writer1.toString())
         XMLAssert.assertXpathEvaluatesTo("1", "count(//link[@type='resultMediaType'])", writer1.toString())
-        XMLAssert.assertXpathEvaluatesTo("1", "count(//resultTypeRef)", writer1.toString())
+        XMLAssert.assertXpathEvaluatesTo("1", "count(//resultType)", writer1.toString())
         XMLAssert.assertXpathEvaluatesTo("1", "count(//resultContextItems)", writer1.toString())
         XMLAssert.assertXpathEvaluatesTo("1", "count(//resultContextItem)", writer1.toString())
-        XMLAssert.assertXpathEvaluatesTo("1", "count(//link[@type='resultTypeMediaType'])", writer1.toString())
+        XMLAssert.assertXpathEvaluatesTo("1", "count(//link[@type='elementMediaType'])", writer1.toString())
         XMLAssert.assertXpathEvaluatesTo("1", "count(//result)", writer1.toString())
     }
 

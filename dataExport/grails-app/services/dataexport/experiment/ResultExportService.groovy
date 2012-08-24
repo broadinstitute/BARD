@@ -78,7 +78,7 @@ class ResultExportService {
         Map<String, String> attributes = [:]
 
         if (result.readyForExtraction) {
-            attributes.put('readyForExtraction', result.readyForExtraction)
+            attributes.put('readyForExtraction', result.readyForExtraction.toString())
         }
         if (result.valueDisplay) {
             attributes.put('valueDisplay', result.valueDisplay)
@@ -111,11 +111,11 @@ class ResultExportService {
         final Map<String, String> attributes = generateAttributesForResult(currentResult)
 
         markupBuilder.result(attributes) {
-            final Element resultType = currentResult.resultType
-            if (resultType) { //this is the currentResult type
-                resultTypeRef(label: resultType.label) {
-                    final String href = grailsLinkGenerator.link(mapping: 'resultType', absolute: true, params: [id: resultType.id]).toString()
-                    link(rel: 'related', href: "${href}", type: "${this.mediaTypes.resultTypeMediaType}")
+            final Element resultTypeElement = currentResult.resultType
+            if (resultTypeElement) { //this is the currentResult type
+                resultType(label: resultTypeElement.label) {
+                    final String href = grailsLinkGenerator.link(mapping: 'element', absolute: true, params: [id: resultTypeElement.id]).toString()
+                    link(rel: 'related', href: "${href}", type: "${this.mediaTypes.elementMediaType}")
                 }
             }
             //TODO: The substance table, does not exist yet. We will need to fix the domain model plugin, but only after

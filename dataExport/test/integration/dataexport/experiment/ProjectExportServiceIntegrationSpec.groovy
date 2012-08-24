@@ -77,8 +77,6 @@ class ProjectExportServiceIntegrationSpec extends IntegrationSpec {
         when: "A service call is made to generate the project"
         this.projectExportService.generateProject(this.markupBuilder, new Long("1"))
         then: "An XML is generated that conforms to the expected XML"
-
-       // XmlTestAssertions.assertResults(XmlTestSamples.PROJECT, this.writer.toString())
         final SchemaFactory factory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI)
         final Schema schema = factory.newSchema(new StreamSource(new FileReader(BARD_PROJECT_EXPORT_SCHEMA)))
         final Validator validator = schema.newValidator()
@@ -92,12 +90,7 @@ class ProjectExportServiceIntegrationSpec extends IntegrationSpec {
         when: "A service call is made to generate a list of projects ready to be extracted"
         this.projectExportService.generateProjects(this.markupBuilder)
         then: "An XML is generated that conforms to the expected XML"
-        //println this.writer.toString()
-       // XmlTestAssertions.assertResultsWithOverrideAttributes(XmlTestSamples.PROJECTS, this.writer.toString())
         XMLAssert.assertXpathEvaluatesTo("2", "//projects/@count", this.writer.toString());
-       // XMLAssert.assertXpathEvaluatesTo("edit", "//link/@rel", this.writer.toString());
-        //XMLAssert.assertXpathEvaluatesTo("application/vnd.bard.cap+xml;type=project", "//link/@type", this.writer.toString());
-        //XMLAssert.assertXpathEvaluatesTo("http://localhost:8080/dataExport/api/projects/1", "//link/@href", this.writer.toString());
 
     }
 }

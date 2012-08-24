@@ -25,7 +25,6 @@ class DictionaryExportHelperServiceIntegrationSpec extends IntegrationSpec {
         when:
         this.dictionaryExportHelperService.generateUnits(this.markupBuilder)
         then:
-        println(this.writer.toString());
         XmlTestAssertions.assertResults(results, this.writer.toString())
         where:
         label       | results
@@ -47,7 +46,6 @@ class DictionaryExportHelperServiceIntegrationSpec extends IntegrationSpec {
         when:
         this.dictionaryExportHelperService.generateResultTypes(this.markupBuilder)
         then:
-        println(this.writer.toString())
         XmlTestAssertions.assertResults(results, this.writer.toString())
         where:
         label          | results
@@ -106,7 +104,6 @@ class DictionaryExportHelperServiceIntegrationSpec extends IntegrationSpec {
         when:
         this.dictionaryExportHelperService.generateStages(this.markupBuilder)
         then:
-        println(this.writer.toString())
         XmlTestAssertions.assertResultsWithOverrideAttributes(results, this.writer.toString())
         where:
         label    | results
@@ -131,7 +128,6 @@ class DictionaryExportHelperServiceIntegrationSpec extends IntegrationSpec {
         when:
         this.dictionaryExportHelperService.generateLabs(this.markupBuilder)
         then:
-        println(this.writer.toString())
         XmlTestAssertions.assertResults(results, this.writer.toString())
         where:
         label  | results
@@ -144,7 +140,6 @@ class DictionaryExportHelperServiceIntegrationSpec extends IntegrationSpec {
         when:
         this.dictionaryExportHelperService.generateDictionary(this.markupBuilder)
         then:
-        println this.writer.toString()
         XmlTestAssertions.assertResultsWithOverrideAttributes(results, this.writer.toString())
         where:
         label        | results

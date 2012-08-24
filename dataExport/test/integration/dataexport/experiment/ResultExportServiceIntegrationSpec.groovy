@@ -5,17 +5,24 @@ import bard.db.experiment.Result
 import dataexport.registration.BardHttpResponse
 import exceptions.NotFoundException
 import grails.plugin.spock.IntegrationSpec
+import groovy.xml.MarkupBuilder
 import spock.lang.Unroll
 
 import javax.servlet.http.HttpServletResponse
+import org.custommonkey.xmlunit.XMLAssert
 
 @Unroll
 class ResultExportServiceIntegrationSpec extends IntegrationSpec {
     ResultExportService resultExportService
+    Writer writer
+    MarkupBuilder markupBuilder
 
     void setup() {
+        this.writer = new StringWriter()
+        this.markupBuilder = new MarkupBuilder(this.writer)
 
     }
+
 
     void tearDown() {
         // Tear down logic here
@@ -40,6 +47,20 @@ class ResultExportServiceIntegrationSpec extends IntegrationSpec {
         where:
         resultId      | version | status
         new Long(532) | 0       | "InComplete"
+    }
+
+    void "test Generate Result"() {
+        given: "Given a Result with id #id and version #version"
+        when: "We call the result service to generate this result"
+        this.resultExportService.generateResult(this.markupBuilder, resultId)
+
+        then: "A result is generated"
+        XMLAssert.assertXpathEvaluatesTo("1", "count(//result)", this.writer.toString());
+        XMLAssert.assertXpathEvaluatesTo("1", "count(//resultContextItems)", this.writer.toString());
+        XMLAssert.assertXpathEvaluatesTo("1", "count(//resultContextItem)", this.writer.toString());
+        where:
+        resultId      | version | status
+        new Long(533) | 0       | "InComplete"
     }
 
     void "test update #label"() {

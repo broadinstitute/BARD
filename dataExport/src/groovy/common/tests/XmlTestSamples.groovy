@@ -460,7 +460,7 @@ class XmlTestSamples {
 
     static String STAGES = '''
 <stages>
-  <stage>
+  <stage stageElement='IC50'>
     <stageName>construct variant assay</stageName>
     <description>Description</description>
     <link rel='related' href='http://localhost:8080/dataExport/api/dictionary/element/341' type='application/vnd.bard.cap+xml;type=element' />
@@ -469,7 +469,7 @@ class XmlTestSamples {
 '''
 
     static String STAGE = '''
-<stage>
+<stage stageElement='IC50'>
   <stageName>construct variant assay</stageName>
   <description>Description</description>
   <link rel='related' href='http://localhost:8080/dataExport/api/dictionary/element/341' type='application/vnd.bard.cap+xml;type=element' />
@@ -482,11 +482,13 @@ class XmlTestSamples {
   <link rel='related' href='http://localhost:8080/dataExport/api/dictionary/element/341' type='application/vnd.bard.cap+xml;type=element' />
 </stage>
 '''
+
+
     static String RESULT_TYPE = '''
-<resultType baseUnit='uM' resultTypeStatus='Published'>
-  <resultTypeName>IC50</resultTypeName>
+    <resultType resultTypeElement='IC50' baseUnit='uM' resultTypeStatus='Published'>
+    <resultTypeName>IC50</resultTypeName>
   <link rel='related' href='http://localhost:8080/dataExport/api/dictionary/element/341' type='application/vnd.bard.cap+xml;type=element' />
-</resultType>
+    </resultType>
 '''
 
     static String RESULT_TYPE1 = '''
@@ -551,32 +553,32 @@ class XmlTestSamples {
     </elementHierarchy>
   </elementHierarchies>
   <resultTypes>
-    <resultType baseUnit='uM' resultTypeStatus='Published'>
+    <resultType resultTypeElement='IC50' baseUnit='uM' resultTypeStatus='Published'>
       <resultTypeName>IC50</resultTypeName>
       <link rel='related' href='http://localhost:8080/dataExport/api/dictionary/element/341' type='application/vnd.bard.cap+xml;type=element' />
     </resultType>
   </resultTypes>
   <stages>
-    <stage>
+    <stage stageElement='IC50'>
       <stageName>construct variant assay</stageName>
       <description>Description</description>
       <link rel='related' href='http://localhost:8080/dataExport/api/dictionary/element/341' type='application/vnd.bard.cap+xml;type=element' />
     </stage>
   </stages>
   <descriptors>
-    <descriptor descriptor='assay'>
+    <descriptor descriptorElement='uM' descriptor='assay'>
       <elementStatus>Published</elementStatus>
       <label>assay phase</label>
       <description>It refers to whether all the assay components are in solution or some are in solid phase, which determines their ability to scatter light.</description>
       <link rel='edit' href='http://localhost:8080/dataExport/api/dictionary/element/386' type='application/vnd.bard.cap+xml;type=element' />
     </descriptor>
-    <descriptor descriptor='biology'>
+    <descriptor descriptorElement='concentration' descriptor='biology'>
       <elementStatus>Published</elementStatus>
       <label>macromolecule description</label>
       <description>A long name for a gene or protein from a trusted international source (e.g., Entrez, UniProt).</description>
       <link rel='edit' href='http://localhost:8080/dataExport/api/dictionary/element/366' type='application/vnd.bard.cap+xml;type=element' />
     </descriptor>
-    <descriptor descriptor='instance'>
+    <descriptor descriptorElement='unit of measurement' descriptor='instance'>
       <elementStatus>Published</elementStatus>
       <label>macromolecule description</label>
       <description>A long name for a gene or protein from a trusted international source (e.g., Entrez, UniProt).</description>
@@ -584,17 +586,17 @@ class XmlTestSamples {
     </descriptor>
   </descriptors>
   <laboratories>
-    <laboratory laboratoryElement=''>
+    <laboratory laboratoryElement='IC50'>
       <laboratoryName>LABORATORY</laboratoryName>
       <description>Singular root to ensure tree viewers work</description>
     </laboratory>
   </laboratories>
   <units>
-    <unit unit='UNIT'>
+    <unit unitElement='unit of measurement' unit='UNIT'>
       <description>Singular root to ensure tree viewers work</description>
     </unit>
-    <unit unit='concentration' />
-    <unit parentUnit='concentration' unit='uM' />
+    <unit unitElement='concentration' unit='concentration' />
+    <unit unitElement='uM' parentUnit='concentration' unit='uM' />
   </units>
   <unitConversions>
     <unitConversion fromUnit='uM' toUnit='concentration' multiplier='2.5' offset='2.0'>
@@ -605,7 +607,7 @@ class XmlTestSamples {
 '''
     static String LABS = '''
 <laboratories>
-  <laboratory laboratoryElement=''>
+  <laboratory laboratoryElement='IC50'>
     <laboratoryName>LABORATORY</laboratoryName>
     <description>Singular root to ensure tree viewers work</description>
   </laboratory>
@@ -621,13 +623,13 @@ class XmlTestSamples {
 
 
     static String UNITS = '''
-    <units>
-    <unit unit='UNIT'>
+   <units>
+  <unit unitElement='unit of measurement' unit='UNIT'>
     <description>Singular root to ensure tree viewers work</description>
   </unit>
-    <unit unit='concentration' />
-    <unit parentUnit='concentration' unit='uM' />
-    </units>
+  <unit unitElement='concentration' unit='concentration' />
+  <unit unitElement='uM' parentUnit='concentration' unit='uM' />
+</units>
     '''
 
 
@@ -635,7 +637,7 @@ class XmlTestSamples {
 
     static String RESULT_TYPES = '''
 <resultTypes>
-  <resultType baseUnit='uM' resultTypeStatus='Published'>
+  <resultType resultTypeElement='IC50' baseUnit='uM' resultTypeStatus='Published'>
     <resultTypeName>IC50</resultTypeName>
     <link rel='related' href='http://localhost:8080/dataExport/api/dictionary/element/341' type='application/vnd.bard.cap+xml;type=element' />
   </resultType>
