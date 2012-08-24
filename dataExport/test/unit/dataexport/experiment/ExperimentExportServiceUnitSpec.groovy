@@ -1,9 +1,7 @@
 package dataexport.experiment
 
 import bard.db.dictionary.Element
-import bard.db.experiment.Experiment
-import bard.db.experiment.Project
-import bard.db.experiment.ResultContextItem
+import bard.db.enums.ReadyForExtraction
 import bard.db.registration.Assay
 import bard.db.registration.ExternalReference
 import bard.db.registration.ExternalSystem
@@ -16,7 +14,7 @@ import grails.test.mixin.TestFor
 import groovy.xml.MarkupBuilder
 import org.codehaus.groovy.grails.web.mapping.LinkGenerator
 import spock.lang.Specification
-import bard.db.experiment.ProjectContextItem
+import bard.db.experiment.*
 
 /**
  * Created with IntelliJ IDEA.
@@ -53,6 +51,7 @@ class ExperimentExportServiceUnitSpec extends Specification {
         this.writer = new StringWriter()
         this.markupBuilder = new MarkupBuilder(writer)
     }
+
     void "test Generate Experiment Links #label"() {
         given: "An Experiment"
         final Experiment experiment =
@@ -62,37 +61,32 @@ class ExperimentExportServiceUnitSpec extends Specification {
             this.experimentExportService.generateExperimentLinks(this.markupBuilder, experiment)
         }
         then: "The generated XML is the similar to the expected XML"
-        println this.writer.toString()
         XmlTestAssertions.assertResults(XmlTestSamples.EXPERIMENTS_LINK_UNIT, this.writer.toString())
     }
 
-    void "test generate Project Experiments #label"() {
-        given: " A Project Experiment"
+    void "test generate Project Steps #label"() {
+        given: " A Project Step"
         when: "We call the service method to generate the XML representation"
         this.experimentExportService.generateProjectSteps(this.markupBuilder, projectSteps)
-        then: "We get back a valid Project Experiments"
+        then: "We get back a valid Project Steps"
         XmlTestAssertions.assertResults(results, this.writer.toString())
         where:
-        label                             | projectSteps                                                                                         | results
-        "Full Document"                   | [new ProjectExperiment(project: new Project(id: 1),
-                precedingExperiment: new Experiment(id: 5), description: "description",
-                stage: new Stage(id: 1, element: new Element(label: "stageLabel")))] as Set<ProjectExperiment>                                         | XmlTestSamples.PROJECT_EXPERIMENTS_UNIT
-        "No Project/Stage/Preceding Exp " | [new ProjectExperiment(project: new Project(id: 1), description: "description")] as Set<ProjectExperiment> | XmlTestSamples.PROJECT_EXPERIMENTS_UNIT_NO_CHILD_ELEMENTS
+        label                             | projectSteps                                                                                                                               | results
+        "Full Document"                   | [new ProjectStep(project: new Project(id: 1), precedingExperiment: new Experiment(id: 5), description: "description")] as Set<ProjectStep> | XmlTestSamples.PROJECT_STEPS_UNIT
+        "No Project/Stage/Preceding Exp " | [new ProjectStep(project: new Project(id: 1), description: "description")] as Set<ProjectStep>                                             | XmlTestSamples.PROJECT_STEPS_UNIT_NO_CHILD_ELEMENTS
 
     }
 
-    void "test generate Project Experiment #label"() {
-        given: " A Project Experiment"
+    void "test generate Project Step #label"() {
+        given: " A Project Step"
         when: "We call the service method to generate the XML representation"
-        this.experimentExportService.generateProjectStep(this.markupBuilder, projectExperiment)
-        then: "We get back a valid Project Experiment"
+        this.experimentExportService.generateProjectStep(this.markupBuilder, projectStep)
+        then: "We get back a valid Project Step"
         XmlTestAssertions.assertResults(results, this.writer.toString())
         where:
-        label                             | projectExperiment                                                              | results
-        "Full Document"                   | new ProjectExperiment(project: new Project(id: 1),
-                precedingExperiment: new Experiment(id: 5), description: "description",
-                stage: new Stage(id: 1, element: new Element(label: "stageLabel")))                                        | XmlTestSamples.PROJECT_EXPERIMENT_UNIT
-        "No Project/Stage/Preceding Exp " | new ProjectExperiment(project: new Project(id: 1), description: "description") | XmlTestSamples.PROJECT_EXPERIMENT_UNIT_NO_CHILD_ELEMENTS
+        label                             | projectStep                                                                                                          | results
+        "Full Document"                   | new ProjectStep(project: new Project(id: 1), precedingExperiment: new Experiment(id: 5), description: "description") | XmlTestSamples.PROJECT_STEP_UNIT
+        "No Project/Stage/Preceding Exp " | new ProjectStep(project: new Project(id: 1), description: "description")                                             | XmlTestSamples.PROJECT_STEP_UNIT_NO_CHILD_ELEMENTS
 
     }
 
@@ -104,10 +98,10 @@ class ExperimentExportServiceUnitSpec extends Specification {
         then: "A valid xml document is generated and is similar to the expected document"
         XmlTestAssertions.assertResults(results, this.writer.toString())
         where:
-        label                                            | offset | expectedExperiments                                                                                                                                          | results
-        "System has 2 experiments ready for extraction"  | 0      | [new Experiment(id: 1, readyForExtraction: 'ready'), new Experiment(id: 2, readyForExtraction: 'ready')]                                                     | XmlTestSamples.EXPERIMENTS_2_RECORDS_UNIT
-        "System has 3 experiments ready for extraction"  | 0      | [new Experiment(id: 2, readyForExtraction: 'ready'), new Experiment(id: 3, readyForExtraction: 'ready')]                                                     | XmlTestSamples.EXPERIMENTS_2_RECORDS_WITH_NEXT_UNIT
-        "System has 3 experiments ready for extraction " | 2      | [new Experiment(id: 1, readyForExtraction: 'ready'), new Experiment(id: 2, readyForExtraction: 'ready'), new Experiment(id: 3, readyForExtraction: 'ready')] | XmlTestSamples.EXPERIMENT_SINGLE_RECORD_UNIT
+        label                                            | offset | expectedExperiments                                                                                                                                                                                             | results
+        "System has 2 experiments ready for extraction"  | 0      | [new Experiment(id: 1, readyForExtraction: ReadyForExtraction.Ready), new Experiment(id: 2, readyForExtraction: ReadyForExtraction.Ready)]                                                                      | XmlTestSamples.EXPERIMENTS_2_RECORDS_UNIT
+        "System has 3 experiments ready for extraction"  | 0      | [new Experiment(id: 2, readyForExtraction: ReadyForExtraction.Ready), new Experiment(id: 3, readyForExtraction: ReadyForExtraction.Ready)]                                                                      | XmlTestSamples.EXPERIMENTS_2_RECORDS_WITH_NEXT_UNIT
+        "System has 3 experiments ready for extraction " | 2      | [new Experiment(id: 1, readyForExtraction: ReadyForExtraction.Ready), new Experiment(id: 2, readyForExtraction: ReadyForExtraction.Ready), new Experiment(id: 3, readyForExtraction: ReadyForExtraction.Ready)] | XmlTestSamples.EXPERIMENT_SINGLE_RECORD_UNIT
 
     }
 
@@ -141,8 +135,8 @@ class ExperimentExportServiceUnitSpec extends Specification {
 
     void "test generate Experiment #label"() {
         given: "An Experiment"
-        Set<ResultContextItem> resultContextItems = [] as Set<ResultContextItem>
-        Set<ProjectExperiment> projectExperiments = [] as Set<ProjectExperiment>
+        Set<ExperimentContextItem> experimentContextItems = [] as Set<ExperimentContextItem>
+        Set<ProjectStep> projectSteps = [] as Set<ProjectStep>
         final Set<ExternalReference> externalReferences = [] as Set<ExternalReference>
 
         if (description) {
@@ -152,16 +146,16 @@ class ExperimentExportServiceUnitSpec extends Specification {
                         externalSystem: new ExternalSystem(systemUrl: "http://broad.org", systemName: "systemName", owner: "owner"))
             externalReferences.add(externalReference)
 
-            Element attribute = new Element(label: "attribute")
-            Element valueControlled = new Element(label: "valueControlled")
+            Element attributeElement = new Element(label: "attribute")
+            Element valueElement = new Element(label: "valueControlled")
 
-            resultContextItems.add(new ResultContextItem(qualifier: "<", valueDisplay: "< 20 uM", valueNum: 1, valueMin: 5,
-                    valueMax: 20, attribute: attribute, valueControlled: valueControlled))
+            experimentContextItems.add(new ExperimentContextItem(qualifier: "<", valueDisplay: "< 20 uM", valueNum: 1, valueMin: 5,
+                    valueMax: 20, attributeElement: attributeElement, valueElement: valueElement))
             final Experiment precedingExperiment = new Experiment(id: 5)
-            ProjectContextItem projectExperiment = new ProjectContextItem(project: new Project(id: 1),
-                    precedingExperiment: precedingExperiment, description: description,
-                    stage: new Stage(id: 1, element: new Element(label: "stageLabel")))
-            projectExperiments.add(projectExperiment)
+            ProjectStep projectStep = new ProjectStep(project: new Project(id: 1),
+                    precedingExperiment: precedingExperiment, description: description
+            )
+            projectSteps.add(projectStep)
 
         }
         final Experiment experiment =
@@ -172,19 +166,18 @@ class ExperimentExportServiceUnitSpec extends Specification {
                     runDateTo: new Date(0),
                     experimentStatus: 'Published',
                     description: description,
-                    resultContextItems: resultContextItems,
-                    projectSteps: projectExperiments,
+                    experimentContextItems: experimentContextItems,
+                    projectSteps: projectSteps,
                     externalReferences: externalReferences)
 
         when: "We attempt to generate an experiment XML document"
         this.experimentExportService.generateExperiment(this.markupBuilder, experiment)
         then: "A valid xml document is generated and is similar to the expected document"
-        println this.writer.toString()
         XmlTestAssertions.assertResults(results, this.writer.toString())
         where:
-        label                                                                       | experimentName | description | results
+        label                                                                 | experimentName | description | results
         "No description, resultContextItems, externalReferences,projectSteps" | "Experiment1"  | ""          | XmlTestSamples.EXPERIMENT_UNIT_ONLY_ATTRIBUTES
-        "Full Experiment"                                                           | "Experiment2"  | "Broad"     | XmlTestSamples.EXPERIMENT_UNIT_ATTRIBUTES_AND_ELEMENTS
+        "Full Experiment"                                                     | "Experiment2"  | "Broad"     | XmlTestSamples.EXPERIMENT_UNIT_ATTRIBUTES_AND_ELEMENTS
 
     }
 
@@ -197,8 +190,8 @@ class ExperimentExportServiceUnitSpec extends Specification {
         attributesForExperiment == results
         where:
         label                      | experiment                                                                                                                                                        | results
-        "Experiment with dates"    | new Experiment(id: 1, experimentName: "Experiment1", holdUntilDate: new Date(0), runDateFrom: new Date(0), runDateTo: new Date(0), experimentStatus: 'Published') | [experimentId: null, experimentName: 'Experiment1', status: 'Published', holdUntilDate: '1969-12-31T19:00:00.000-05:00', runDateFrom: '1969-12-31T19:00:00.000-05:00', runDateTo: '1969-12-31T19:00:00.000-05:00'] as Map<String, String>
-        "Experiment with no dates" | new Experiment(id: 2, experimentName: "Experiment2", experimentStatus: 'Published')                                                                               | [experimentId: null, experimentName: 'Experiment2', status: 'Published'] as Map<String, String>
+        "Experiment with dates"    | new Experiment(id: 1, experimentName: "Experiment1", holdUntilDate: new Date(0), runDateFrom: new Date(0), runDateTo: new Date(0), experimentStatus: 'Published') | [experimentId: null, experimentName: 'Experiment1', status: 'Published',readyForExtraction:'Pending', holdUntilDate: '1969-12-31T19:00:00.000-05:00', runDateFrom: '1969-12-31T19:00:00.000-05:00', runDateTo: '1969-12-31T19:00:00.000-05:00'] as Map<String, String>
+        "Experiment with no dates" | new Experiment(id: 2, experimentName: "Experiment2", experimentStatus: 'Published')                                                                               | [experimentId: null, experimentName: 'Experiment2', status: 'Published',readyForExtraction:'Pending'] as Map<String, String>
     }
 
     void "test Generate Experiment Not Found Exception"() {

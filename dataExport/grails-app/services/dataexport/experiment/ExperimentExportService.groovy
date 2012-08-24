@@ -1,16 +1,6 @@
 package dataexport.experiment
 
-//import groovy.sql.Sql
-
-//import org.codehaus.groovy.grails.commons.GrailsApplication
-
-
-import bard.db.dictionary.StageElement
 import bard.db.enums.ReadyForExtraction
-import bard.db.experiment.Experiment
-import bard.db.experiment.Project
-import bard.db.experiment.Result
-
 import bard.db.registration.ExternalReference
 import bard.db.registration.ExternalSystem
 import dataexport.registration.BardHttpResponse
@@ -24,8 +14,8 @@ import org.codehaus.groovy.grails.web.mapping.LinkGenerator
 import javax.servlet.http.HttpServletResponse
 import javax.xml.datatype.DatatypeFactory
 import javax.xml.datatype.XMLGregorianCalendar
-import bard.db.experiment.ExperimentContextItem
-import bard.db.experiment.ProjectStep
+
+import bard.db.experiment.*
 
 /**
  * Class that generates Experiments as XML
@@ -156,8 +146,22 @@ class ExperimentExportService {
     protected void generateExperimentContextItems(def markupBuilder, final Set<ExperimentContextItem> experimentContextItems) {
         markupBuilder.experimentContextItems() {
             for (ExperimentContextItem experimentContextItem : experimentContextItems) {
-                this.resultExportService.generateRunContextItem(markupBuilder, experimentContextItem)
+                generateExperimentContextItem(markupBuilder, experimentContextItem)
             }
+        }
+    }
+    /**
+     *
+     * @param markupBuilder
+     * @param resultContextItem
+     */
+    protected void generateExperimentContextItem(def markupBuilder, final ExperimentContextItem experimentContextItem) {
+
+        final Map<String, String> attributes = this.resultExportService.generateAttributesForRunContextItem(experimentContextItem)
+
+        markupBuilder.experimentContextItem(attributes) {
+            this.resultExportService.generateRunContextItemElements(markupBuilder, experimentContextItem)
+
         }
     }
     /**
@@ -186,9 +190,10 @@ class ExperimentExportService {
             if (externalReferences) {
                 generateExternalReferences(markupBuilder, externalReferences)
             }
-            if (experiment.laboratory) {
-                laboratory(experiment.laboratory.laboratory)
-            }
+            //TODO: There used to be a lab reference
+//            if (experiment.la) {
+//                laboratory(experiment.laboratory.laboratory)
+//            }
             generateExperimentLinks(markupBuilder, experiment)
         }
     }

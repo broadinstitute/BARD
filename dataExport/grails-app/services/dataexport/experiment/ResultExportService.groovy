@@ -262,26 +262,33 @@ class ResultExportService {
         final Map<String, String> attributes = generateAttributesForRunContextItem(runContextItem)
 
         markupBuilder.resultContextItem(attributes) {
+            generateRunContextItemElements(markupBuilder,runContextItem)
+        }
+    }
+    /**
+     *
+     * @param markupBuilder
+     * @param resultContextItem
+     */
+    protected void generateRunContextItemElements(def markupBuilder, final RunContextItem runContextItem) {
             if (runContextItem.attributeElement) {
                 final String attributeHref = grailsLinkGenerator.link(mapping: 'element', absolute: true, params: [id: "${runContextItem.attributeElement.id}"]).toString()
-                attribute(label: runContextItem.attributeElement.label) {
+                markupBuilder.attribute(label: runContextItem.attributeElement.label) {
                     link(rel: 'related', href: "${attributeHref}", type: "${this.mediaTypes.elementMediaType}")
                 }
             }
             if (runContextItem.valueElement) {
                 final String attributeHref = grailsLinkGenerator.link(mapping: 'element', absolute: true, params: [id: "${runContextItem.valueElement.id}"]).toString()
 
-                valueControlled(label: runContextItem.valueElement.label) {
+                markupBuilder.valueControlled(label: runContextItem.valueElement.label) {
                     link(rel: 'related', href: "${attributeHref}", type: "${this.mediaTypes.elementMediaType}")
                 }
             }
             if (runContextItem.extValueId) {
-                extValueId(runContextItem.extValueId)
+                markupBuilder.extValueId(runContextItem.extValueId)
             }
 
-        }
     }
-
     /**
      * Generate the RESULT_HIERARCHY element
      * @param markupBuilder
