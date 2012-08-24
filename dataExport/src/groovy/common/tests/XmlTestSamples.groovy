@@ -647,6 +647,8 @@ class XmlTestSamples {
   <synonyms>syn</synonyms>
 </descriptor>
 '''
+
+
     static String ASSAY_DESCRIPTOR_UNIT = '''
 <descriptor abbreviation='abb' externalUrl='http://broad.org' unit='cm' descriptor='assay'>
   <elementStatus>status</elementStatus>
@@ -676,7 +678,7 @@ class XmlTestSamples {
 
 
     static String ELEMENT_FULL = '''
-<element elementId='' readyForExtraction='ready' elementStatus='status' abbreviation='abb' unit='cm'>
+<element elementId='' readyForExtraction='Ready' elementStatus='Pending' abbreviation='abb' unit='cm'>
   <label>label</label>
   <description>desc</description>
   <synonyms>syn</synonyms>
@@ -685,7 +687,7 @@ class XmlTestSamples {
 </element>
 '''
     static String ELEMENT_NO_DESCRIPTION = '''
-<element elementId='' readyForExtraction='ready' elementStatus='status' unit='cm'>
+<element elementId='' readyForExtraction='Ready' elementStatus='Pending' unit='cm'>
   <label>label</label>
   <externalUrl>http://www.broad.org</externalUrl>
   <link rel='edit' href='null' type='xml' />
