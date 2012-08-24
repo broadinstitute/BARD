@@ -53,7 +53,7 @@ class ExperimentExportService {
         if (outStandingResults > 0) {//this experiments has results that have not yet been consumed
             return new BardHttpResponse(httpResponseCode: HttpServletResponse.SC_NOT_ACCEPTABLE, ETag: experiment.version)
         }
-        return utilityService.update(experiment, id, clientVersion, latestStatus, "Experiment")
+        return utilityService.update(experiment, id, clientVersion, latestStatus as ReadyForExtraction, "Experiment")
     }
     /**
      *  offset is used for paging, it tells us where we are in the paging process

@@ -159,10 +159,10 @@ class AssayExportHelperService {
      * @param markupBuilder
      * @param assayContextItems
      */
-    public void generateAssayContextItems(final MarkupBuilder markupBuilder, final List<AssayContextItem> assayContextItems) {
-        if (assayContextItems) {
+    public void generateAssayContextItems(final MarkupBuilder markupBuilder, final List<AssayContextItem> allAssayContextItems) {
+        if (allAssayContextItems) {
             markupBuilder.assayContextItems() {
-                for (AssayContextItem assayContextItem : assayContextItems) {
+                for (AssayContextItem assayContextItem : allAssayContextItems) {
                     generateAssayContextItem(markupBuilder, assayContextItem)
                 }
             }
@@ -250,6 +250,9 @@ class AssayExportHelperService {
         }
 
         markupBuilder.assay(attributes) {
+            if(assay.assayTitle){
+                assayTitle(assay.assayTitle)
+            }
             if (assay.assayName) {
                 assayName(assay.assayName)
             }

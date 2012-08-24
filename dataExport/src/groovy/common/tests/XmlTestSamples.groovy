@@ -340,17 +340,16 @@ class XmlTestSamples {
 </assayDocuments>
     '''
     static String MEASURES = '''
-<measures>
-  <measure assayContextRef='Context for IC50'>
+    <measures>
+    <measure assayContextRef='Context for IC50'>
     <resultTypeRef label='IC50'>
-      <link rel='related' href='http://localhost:8080/dataExport/api/dictionary/resultType/341' type='application/vnd.bard.cap+xml;type=resultType' />
+    <link rel='related' href='http://localhost:8080/dataExport/api/dictionary/resultType/341' type='application/vnd.bard.cap+xml;type=resultType' />
     </resultTypeRef>
-    <entryUnit unit='uM'>
-      <link rel='related' href='http://localhost:8080/dataExport/api/dictionary/element/386' type='application/vnd.bard.cap+xml;type=element' />
-    </entryUnit>
-  </measure>
+    <entryUnit unit='uM' />
+    </measure>
 </measures>
 '''
+
 
     static String MEASURE_CONTEXT_ITEMS = '''
 <assayContextItems>
@@ -374,10 +373,32 @@ class XmlTestSamples {
   </assayContextItem>
 </assayContextItems>
 '''
-    static String MEASURE_CONTEXTS = '''
+
+
+    static String ASSAY_CONTEXTS = '''
 <assayContexts>
   <assayContext>
     <contextName>Context for IC50</contextName>
+    <assayContextItems>
+      <assayContextItem assayContextItemId='34' assayContextRef='Context for IC50' valueDisplay='Assay Explorer '>
+        <valueId label='Assay Explorer'>
+          <link rel='related' href='http://localhost:8080/dataExport/api/dictionary/element/372' type='application/vnd.bard.cap+xml;type=element' />
+        </valueId>
+        <attributeId attributeType='Fixed' label='software'>
+          <link rel='related' href='http://localhost:8080/dataExport/api/dictionary/element/368' type='application/vnd.bard.cap+xml;type=element' />
+        </attributeId>
+      </assayContextItem>
+      <assayContextItem assayContextItemId='35' assayContextRef='Context for IC50' valueDisplay='30' valueNum='30.0'>
+        <attributeId attributeType='Fixed' label='Number of points'>
+          <link rel='related' href='http://localhost:8080/dataExport/api/dictionary/element/370' type='application/vnd.bard.cap+xml;type=element' />
+        </attributeId>
+      </assayContextItem>
+      <assayContextItem assayContextItemId='36' assayContextRef='Context for IC50' valueDisplay='0 - 4' valueMax='4.0'>
+        <attributeId attributeType='Range' label='Number of exclusions'>
+          <link rel='related' href='http://localhost:8080/dataExport/api/dictionary/element/369' type='application/vnd.bard.cap+xml;type=element' />
+        </attributeId>
+      </assayContextItem>
+    </assayContextItems>
   </assayContext>
 </assayContexts>
 '''

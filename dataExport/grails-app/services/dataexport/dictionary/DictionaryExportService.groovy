@@ -10,6 +10,7 @@ import groovy.sql.Sql
 import groovy.xml.MarkupBuilder
 
 import javax.sql.DataSource
+import bard.db.enums.ReadyForExtraction
 
 /**
  * Top Level service for handling the
@@ -37,7 +38,7 @@ class DictionaryExportService {
      */
     public BardHttpResponse update(final Long id, final Long clientVersion, final String latestStatus) {
         final Element element = Element.findById(id)
-        return utilityService.update(element, id, clientVersion, latestStatus, "Element")
+        return utilityService.update(element, id, clientVersion, latestStatus as ReadyForExtraction, "Element")
 
     }
     /**

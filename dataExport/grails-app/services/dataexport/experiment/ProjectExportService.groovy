@@ -36,7 +36,7 @@ class ProjectExportService {
      */
     public BardHttpResponse update(final Long id, final Long clientVersion, final String latestStatus) {
         final Project project = Project.findById(id)
-        return utilityService.update(project, id, clientVersion, latestStatus, "Project")
+        return utilityService.update(project, id, clientVersion, latestStatus as ReadyForExtraction, "Project")
     }
     /**
      * Generate a Project
