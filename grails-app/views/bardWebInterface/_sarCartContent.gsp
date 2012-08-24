@@ -9,8 +9,8 @@
     <tr><td>
 
 <h4>Query Cart - Selected Results</h4>
-<h5>${queryCartService.totalNumberOfUniqueItemsInCart(shoppingCartService)} results selected</h5>
-<h4>COMPOUNDS</h4>
+<h6>${queryCartService.totalNumberOfUniqueItemsInCart(shoppingCartService)} results selected</h6>
+<h5>COMPOUNDS</h5>
 
     <table>
 <g:each in="${queryCartService.groupUniqueContentsByType(shoppingCartService)[(QueryCartService.cartCompound)]}" var="elem" status="item">
@@ -40,8 +40,7 @@
 </table>
     </td></tr>
     <tr><td>
-<br/>
-<h4>ASSAY DEFINITIONS</h4>
+<h5>ASSAY DEFINITIONS</h5>
 <table>
 <g:each in="${queryCartService.groupUniqueContentsByType(shoppingCartService)[(QueryCartService.cartAssay)]}" var="elem" status="item">
     <tr>
@@ -68,7 +67,9 @@
     </tr>
 </g:each>
 </table>
-<br/>
+        <h5>PROJECTS</h5>
+
+        <br/>
         <div class="leftofline">
 
         <button>
@@ -87,7 +88,21 @@
 
         <div class="rightofline">
 
-        <button>Clear all</button>
+        <button><a href="/bardwebquery/sarCart/removeAll/0"
+                   onclick="jQuery.ajax({  type:'POST',
+                       data:{'id': '0','class': 'class bardqueryapi.CartAssay','version': '0'},
+                       url:'/bardwebquery/sarCart/removeAll',
+                       success:function(data,textStatus){
+                           jQuery('#sarCartRefill').html(data);
+                       },
+                       error:function(XMLHttpRequest,textStatus,errorThrown){
+                           alert('problem removing assay')
+                       }
+                   });
+                   return false;"
+                   action="removeAll"
+                   controller="sarCart">Clear all</a>
+            </button>
 
          </div>
 

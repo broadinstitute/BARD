@@ -1,7 +1,7 @@
 <div style="padding-left: 5px">
     <g:each var="assay" in="${docs}">
         <g:link action="showAssay" id="${assay.assay_id}" target="_blank">${assay.name}</g:link><br/>
-        ${assay.highlight}<br/>
+        ${assay.highlight}
         <a href="/bardwebquery/sarCart/add/${assay.assay_id}"
            onclick="jQuery.ajax({  type:'POST',
                data:{'id': '${assay.assay_id}','class': 'class bardqueryapi.CartAssay','assayTitle':'${assay.name}','version': '0'},
