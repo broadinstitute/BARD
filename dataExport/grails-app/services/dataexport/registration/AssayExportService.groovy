@@ -5,7 +5,6 @@ import bard.db.registration.AssayDocument
 import exceptions.NotFoundException
 import groovy.xml.MarkupBuilder
 
-import javax.servlet.http.HttpServletResponse
 import dataexport.util.UtilityService
 
 class AssayExportService {

@@ -12,16 +12,115 @@ class BootStrap {
             case "development":
                 if (Element.list().isEmpty()) {
                     final Sql sql = new Sql(dataSource)
+                    createTreeTables(sql)
                     insertDictionaryRecords(sql)
-                    insertAssayDefRecords(sql)
-                    insertProjectRecords(sql)
-                    insertExperiments(sql)
+//                    insertAssayDefRecords(sql)
+//                    insertProjectRecords(sql)
+//                    insertExperiments(sql)
                 }
                 break;
         }
 
     }
     def destroy = {
+    }
+    /**
+     * TODO: Don't use this for any production level testing
+     * @param sql
+     * @return
+     */
+    def createTreeTables(final Sql sql) {
+        def UNIT_TREE = '''CREATE TABLE UNIT_TREE
+        (
+        NODE_ID        NUMBER(19,0) NOT NULL,
+        PARENT_NODE_ID NUMBER(19,0),
+        UNIT_ID       NUMBER(19,0) NOT NULL,
+        UNIT           VARCHAR2(128) NOT NULL,
+        DESCRIPTION    VARCHAR2(1000)
+        )'''
+
+        sql.execute(UNIT_TREE)
+
+        def RESULT_TYPE_TREE = '''CREATE TABLE RESULT_TYPE_TREE
+        (	NODE_ID NUMBER(19,0),
+                PARENT_NODE_ID NUMBER(19,0),
+        RESULT_TYPE_ID NUMBER(19,0),
+                RESULT_TYPE_STATUS VARCHAR2(20),
+        RESULT_TYPE_NAME VARCHAR2(128),
+                DESCRIPTION VARCHAR2(1000),
+        ABBREVIATION VARCHAR2(20),
+                SYNONYMS VARCHAR2(1000),
+        BASE_UNIT VARCHAR2(128)
+        )'''
+        sql.execute(RESULT_TYPE_TREE)
+
+
+        def STAGE_TREE = '''CREATE TABLE STAGE_TREE
+        (	NODE_ID NUMBER(19,0),
+             PARENT_NODE_ID NUMBER(19,0),
+        STAGE_ID NUMBER(19,0),
+                STAGE_STATUS VARCHAR2(20),
+        STAGE VARCHAR2(128),
+                DESCRIPTION VARCHAR2(1000)
+        )'''
+        sql.execute(STAGE_TREE)
+
+
+        def LAB_TREE = '''CREATE TABLE LABORATORY_TREE
+        (	NODE_ID NUMBER(19,0),
+            PARENT_NODE_ID NUMBER(19,0),
+            LABORATORY_ID NUMBER(19,0),
+            LABORATORY_STATUS VARCHAR2(20),
+            LABORATORY VARCHAR2(128),
+            DESCRIPTION VARCHAR2(1000)
+        )'''
+        sql.execute(LAB_TREE)
+
+        def ASSAY_DESCRIPTOR_TREE = '''
+ CREATE TABLE ASSAY_DESCRIPTOR_TREE
+   (NODE_ID NUMBER(19,0),
+PARENT_NODE_ID NUMBER(19,0),
+ELEMENT_ID NUMBER(19,0),
+ELEMENT_STATUS VARCHAR2(20),
+LABEL VARCHAR2(128),
+DESCRIPTION VARCHAR2(1000),
+ABBREVIATION VARCHAR2(20),
+SYNONYMS VARCHAR2(1000),
+EXTERNAL_URL VARCHAR2(1000),
+UNIT VARCHAR2(128)
+   )'''
+        sql.execute(ASSAY_DESCRIPTOR_TREE)
+
+
+        def BIOLOGY_DESCRIPTOR_TREE = '''
+ CREATE TABLE BIOLOGY_DESCRIPTOR_TREE
+   (NODE_ID NUMBER(19,0),
+PARENT_NODE_ID NUMBER(19,0),
+ELEMENT_ID NUMBER(19,0),
+ELEMENT_STATUS VARCHAR2(20),
+LABEL VARCHAR2(128),
+DESCRIPTION VARCHAR2(1000),
+ABBREVIATION VARCHAR2(20),
+SYNONYMS VARCHAR2(1000),
+EXTERNAL_URL VARCHAR2(1000),
+UNIT VARCHAR2(128)
+   )'''
+        sql.execute(BIOLOGY_DESCRIPTOR_TREE)
+
+        def INSTANCE_DESCRIPTOR_TREE = '''
+ CREATE TABLE INSTANCE_DESCRIPTOR_TREE
+   (NODE_ID NUMBER(19,0),
+PARENT_NODE_ID NUMBER(19,0),
+ELEMENT_ID NUMBER(19,0),
+ELEMENT_STATUS VARCHAR2(20),
+LABEL VARCHAR2(128),
+DESCRIPTION VARCHAR2(1000),
+ABBREVIATION VARCHAR2(20),
+SYNONYMS VARCHAR2(1000),
+EXTERNAL_URL VARCHAR2(1000),
+UNIT VARCHAR2(128)
+   )'''
+        sql.execute(INSTANCE_DESCRIPTOR_TREE)
     }
 
     def insertExperiments(final Sql sql) {
@@ -90,23 +189,23 @@ class BootStrap {
         sql.execute "INSERT INTO ELEMENT (ELEMENT_ID,LABEL,ELEMENT_STATUS,READY_FOR_EXTRACTION,VERSION,DATE_CREATED) values (368,'software','Published','Complete',0,SYSDATE)"
 
 
-        sql.execute "Insert into UNIT (NODE_ID,PARENT_NODE_ID,UNIT_ID,UNIT,DESCRIPTION) values (0,0,123,'UNIT','Singular root to ensure tree viewers work')"
-        sql.execute "Insert into UNIT (NODE_ID,PARENT_NODE_ID,UNIT_ID,UNIT,DESCRIPTION) values (3,0,366,'concentration',null)"
-        sql.execute "Insert into UNIT (NODE_ID,PARENT_NODE_ID,UNIT_ID,UNIT,DESCRIPTION) values (4,3,386,'uM',null)"
+        sql.execute "Insert into UNIT_TREE (NODE_ID,PARENT_NODE_ID,UNIT_ID,UNIT,DESCRIPTION) values (0,0,123,'UNIT','Singular root to ensure tree viewers work')"
+        sql.execute "Insert into UNIT_TREE (NODE_ID,PARENT_NODE_ID,UNIT_ID,UNIT,DESCRIPTION) values (3,0,366,'concentration',null)"
+        sql.execute "Insert into UNIT_TREE (NODE_ID,PARENT_NODE_ID,UNIT_ID,UNIT,DESCRIPTION) values (4,3,386,'uM',null)"
 
         sql.execute "INSERT INTO ELEMENT (ELEMENT_ID,LABEL,UNIT,ELEMENT_STATUS,READY_FOR_EXTRACTION,VERSION, DATE_CREATED) values (341,'IC50','uM','Published','Ready',0,SYSDATE)"
 
         sql.execute "INSERT INTO ELEMENT_HIERARCHY (ELEMENT_HIERARCHY_ID,PARENT_ELEMENT_ID,CHILD_ELEMENT_ID,RELATIONSHIP_TYPE,VERSION, DATE_CREATED) values (651,341,366,'derives from',0,SYSDATE)"
 
-        sql.execute "INSERT INTO RESULT_TYPE (NODE_ID,RESULT_TYPE_ID,RESULT_TYPE_NAME,BASE_UNIT,RESULT_TYPE_STATUS) values (2,341,'IC50','uM','Published')"
+        sql.execute "INSERT INTO RESULT_TYPE_TREE (NODE_ID,RESULT_TYPE_ID,RESULT_TYPE_NAME,BASE_UNIT,RESULT_TYPE_STATUS) values (2,341,'IC50','uM','Published')"
 
-        sql.execute "INSERT INTO STAGE (NODE_ID,STAGE_ID,DESCRIPTION,STAGE) values (17,341,'Description','construct variant assay')"
+        sql.execute "INSERT INTO STAGE_TREE (NODE_ID,STAGE_ID,DESCRIPTION,STAGE) values (17,341,'Description','construct variant assay')"
 
-        sql.execute "INSERT INTO LABORATORY (NODE_ID,LABORATORY_ID,LABORATORY,DESCRIPTION) values (0,341,'LABORATORY','Singular root to ensure tree viewers work')"
+        sql.execute "INSERT INTO LABORATORY_TREE (NODE_ID,LABORATORY_ID,LABORATORY,DESCRIPTION) values (0,341,'LABORATORY','Singular root to ensure tree viewers work')"
 
-        sql.execute "INSERT INTO ASSAY_DESCRIPTOR (NODE_ID,ELEMENT_ID,ELEMENT_STATUS,LABEL,DESCRIPTION) values (287,386,'Published','assay phase','It refers to whether all the assay components are in solution or some are in solid phase, which determines their ability to scatter light.')"
-        sql.execute "INSERT INTO BIOLOGY_DESCRIPTOR (NODE_ID,ELEMENT_ID,ELEMENT_STATUS,LABEL,DESCRIPTION) values (4,366,'Published','macromolecule description','A long name for a gene or protein from a trusted international source (e.g., Entrez, UniProt).')"
-        sql.execute "INSERT INTO INSTANCE_DESCRIPTOR (NODE_ID,ELEMENT_ID,ELEMENT_STATUS,LABEL,DESCRIPTION) values (12,123,'Published','macromolecule description','A long name for a gene or protein from a trusted international source (e.g., Entrez, UniProt).')"
+        sql.execute "INSERT INTO ASSAY_DESCRIPTOR_TREE (NODE_ID,ELEMENT_ID,ELEMENT_STATUS,LABEL,DESCRIPTION) values (287,386,'Published','assay phase','It refers to whether all the assay components are in solution or some are in solid phase, which determines their ability to scatter light.')"
+        sql.execute "INSERT INTO BIOLOGY_DESCRIPTOR_TREE (NODE_ID,ELEMENT_ID,ELEMENT_STATUS,LABEL,DESCRIPTION) values (4,366,'Published','macromolecule description','A long name for a gene or protein from a trusted international source (e.g., Entrez, UniProt).')"
+        sql.execute "INSERT INTO INSTANCE_DESCRIPTOR_TREE (NODE_ID,ELEMENT_ID,ELEMENT_STATUS,LABEL,DESCRIPTION) values (12,123,'Published','macromolecule description','A long name for a gene or protein from a trusted international source (e.g., Entrez, UniProt).')"
 
         sql.execute "INSERT INTO UNIT_CONVERSION (FROM_UNIT,TO_UNIT,FORMULA,MULTIPLIER,OFFSET,VERSION,DATE_CREATED) values ('uM','concentration','2*2',2.5,2.0, 0,SYSDATE)"
 

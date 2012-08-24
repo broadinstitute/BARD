@@ -2,6 +2,7 @@ package bard.db.experiment
 
 import bard.db.registration.Assay
 import bard.db.registration.ExternalReference
+import bard.db.enums.ReadyForExtraction
 
 class Experiment {
 
@@ -15,17 +16,19 @@ class Experiment {
 	String modifiedBy
 	String experimentStatus
 	Assay assay
-	String readyForExtraction = 'Pending'
+    ReadyForExtraction readyForExtraction = ReadyForExtraction.Pending
+    private static final int READY_FOR_EXTRACTION_MAX_SIZE = 20
+
 
     // TODO results can appearently be very large 10 million rows
     Set<Result> results = [] as Set<Result>
     Set<ExperimentContextItem> experimentContextItems = [] as Set<ExperimentContextItem>
-    Set<ProjectStep> projectExperiments = [] as Set<ProjectStep>
+    Set<ProjectStep> projectSteps = [] as Set<ProjectStep>
     Set<ExternalReference> externalReferences = [] as Set<ExternalReference>
 
 	static hasMany = [experimentContextItems: ExperimentContextItem,
 			results: Result,
-            projectExperiments:ProjectStep,
+            projectSteps:ProjectStep,
             externalReferences:ExternalReference]
 
 	static belongsTo = [Assay]
@@ -45,6 +48,6 @@ class Experiment {
 		lastUpdated nullable: true, maxSize: 19
 		modifiedBy nullable: true, maxSize: 40
 		experimentStatus maxSize: 20, nullable: false, inList: ["Pending", "Approved", "Rejected", "Revised"]
-		readyForExtraction maxSize: 20, nullable: false, inList: [ "Pending","Ready", "Started", "Complete" ]
-	}
+        readyForExtraction(maxSize: READY_FOR_EXTRACTION_MAX_SIZE, nullable: false)
+    }
 }

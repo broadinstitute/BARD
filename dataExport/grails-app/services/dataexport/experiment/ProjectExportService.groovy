@@ -1,14 +1,13 @@
 package dataexport.experiment
 
+import bard.db.enums.ReadyForExtraction
 import bard.db.experiment.Project
+import dataexport.registration.BardHttpResponse
 import dataexport.registration.MediaTypesDTO
+import dataexport.util.UtilityService
 import exceptions.NotFoundException
 import groovy.xml.MarkupBuilder
 import org.codehaus.groovy.grails.web.mapping.LinkGenerator
-import dataexport.registration.BardHttpResponse
-import javax.servlet.http.HttpServletResponse
-import dataexport.registration.UpdateType
-import dataexport.util.UtilityService
 
 class ProjectExportService {
     LinkGenerator grailsLinkGenerator
@@ -21,7 +20,6 @@ class ProjectExportService {
         this.projectMediaType = mediaTypesDTO.projectMediaType
         this.projectsMediaType = mediaTypesDTO.projectsMediaType
     }
-
 
     /**
      * Set the ReadyForExtraction value on the element to 'Complete'
@@ -38,7 +36,7 @@ class ProjectExportService {
      */
     public BardHttpResponse update(final Long id, final Long clientVersion, final String latestStatus) {
         final Project project = Project.findById(id)
-        return utilityService.update(project,id,clientVersion,latestStatus,"Project")
+        return utilityService.update(project, id, clientVersion, latestStatus, "Project")
     }
     /**
      * Generate a Project
@@ -49,7 +47,7 @@ class ProjectExportService {
         def attributes = [:]
         attributes.put('projectId', project.id)
         if (project.readyForExtraction) {
-            attributes.put('readyForExtraction', project.readyForExtraction)
+            attributes.put('readyForExtraction', project.readyForExtraction.toString())
         }
         if (project.groupType) {
             attributes.put('groupType', project.groupType)
@@ -86,7 +84,7 @@ class ProjectExportService {
      * @param xml
      */
     public void generateProjects(def markupBuilder) {
-        final List<Project> projects = Project.findAllByReadyForExtraction('Ready')
+        final List<Project> projects = Project.findAllByReadyForExtraction(ReadyForExtraction.Ready)
         final int numberOfProjects = projects.size()
         markupBuilder.projects(count: numberOfProjects) {
             for (Project project : projects) {

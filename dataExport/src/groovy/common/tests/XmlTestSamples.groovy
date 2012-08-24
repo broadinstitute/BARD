@@ -56,41 +56,40 @@ class XmlTestSamples {
   <resultContextItem resultContextItemId='null' qualifier='%' valueDisplay='20 %' valueNum='2.0' valueMin='1.0' valueMax='3.0' />
 </resultContextItems>
 '''
-    static final String PROJECT_EXPERIMENTS_UNIT = '''
-<projectExperiments>
-  <projectExperiment>
+
+    static final String PROJECT_STEPS_UNIT = '''
+<projectSteps>
+  <projectStep>
     <description>description</description>
     <precedingExperiment id='null'>
       <link rel='related' href='null' type='experimentMediaType' />
     </precedingExperiment>
     <link rel='related' href='null' type='projectMediaType' />
-    <link rel='related' href='null' type='stageMediaType' />
-  </projectExperiment>
-</projectExperiments>
+  </projectStep>
+</projectSteps>
 '''
-    static final String PROJECT_EXPERIMENT_UNIT = '''
-  <projectExperiment>
+    static final String PROJECT_STEP_UNIT = '''
+  <projectStep>
     <description>description</description>
     <precedingExperiment id='null'>
       <link rel='related' href='null' type='experimentMediaType' />
     </precedingExperiment>
     <link rel='related' href='null' type='projectMediaType' />
-    <link rel='related' href='null' type='stageMediaType' />
-  </projectExperiment>
+   </projectStep>
 '''
-    static final String PROJECT_EXPERIMENT_UNIT_NO_CHILD_ELEMENTS = '''
-    <projectExperiment>
+    static final String PROJECT_STEP_UNIT_NO_CHILD_ELEMENTS = '''
+    <projectStep>
     <description>description</description>
     <link rel='related' href='null' type='projectMediaType' />
-    </projectExperiment>
+    </projectStep>
 '''
-    static final String PROJECT_EXPERIMENTS_UNIT_NO_CHILD_ELEMENTS = '''
-    <projectExperiments>
-    <projectExperiment>
+    static final String PROJECT_STEPS_UNIT_NO_CHILD_ELEMENTS = '''
+    <projectSteps>
+    <projectStep>
     <description>description</description>
     <link rel='related' href='null' type='projectMediaType' />
-    </projectExperiment>
-</projectExperiments>
+    </projectStep>
+</projectSteps>
 '''
     static final String EXTERNAL_REFERENCES_UNT = '''
 <externalReferences>
@@ -114,7 +113,7 @@ class XmlTestSamples {
     '''
 
     static final String EXPERIMENT_UNIT_ONLY_ATTRIBUTES = '''
-<experiment experimentId='' experimentName='Experiment1' status='Published' holdUntilDate='1969-12-31T19:00:00.000-05:00' runDateFrom='1969-12-31T19:00:00.000-05:00' runDateTo='1969-12-31T19:00:00.000-05:00'>
+<experiment experimentId='' experimentName='Experiment1' status='Published' readyForExtraction='Pending' holdUntilDate='1969-12-31T19:00:00.000-05:00' runDateFrom='1969-12-31T19:00:00.000-05:00' runDateTo='1969-12-31T19:00:00.000-05:00'>
   <link rel='related' title='Link to Assay' type='assayMediaType' href='null' />
   <link rel='up' title='List Experiments' type='experimentsMediaType' href='null' />
   <link rel='related' title='List Related Results' type='resultsMediaType' href='null' />
@@ -122,28 +121,27 @@ class XmlTestSamples {
 </experiment>
     '''
     static final String EXPERIMENT_UNIT_ATTRIBUTES_AND_ELEMENTS = '''
-<experiment experimentId='' experimentName='Experiment1' status='Published' holdUntilDate='1969-12-31T19:00:00.000-05:00' runDateFrom='1969-12-31T19:00:00.000-05:00' runDateTo='1969-12-31T19:00:00.000-05:00'>
+<experiment experimentId='' experimentName='Experiment1' status='Published' readyForExtraction='Pending' holdUntilDate='1969-12-31T19:00:00.000-05:00' runDateFrom='1969-12-31T19:00:00.000-05:00' runDateTo='1969-12-31T19:00:00.000-05:00'>
   <description>Broad</description>
-  <resultContextItems>
-    <resultContextItem resultContextItemId='' qualifier='&lt;' valueDisplay='&lt; 20 uM' valueNum='1.0' valueMin='5.0' valueMax='20.0'>
+  <experimentContextItems>
+    <experimentContextItem experimentContextItemId='' qualifier='&lt;' valueDisplay='&lt; 20 uM' valueNum='1.0' valueMin='5.0' valueMax='20.0'>
       <attribute label='attribute'>
         <link rel='related' href='null' type='elementMediaType' />
       </attribute>
       <valueControlled label='valueControlled'>
         <link rel='related' href='null' type='elementMediaType' />
       </valueControlled>
-    </resultContextItem>
-  </resultContextItems>
-  <projectExperiments>
-    <projectExperiment>
+    </experimentContextItem>
+  </experimentContextItems>
+  <projectSteps>
+    <projectStep>
       <description>Broad</description>
       <precedingExperiment id='null'>
         <link rel='related' href='null' type='experimentMediaType' />
       </precedingExperiment>
       <link rel='related' href='null' type='projectMediaType' />
-      <link rel='related' href='null' type='stageMediaType' />
-    </projectExperiment>
-  </projectExperiments>
+    </projectStep>
+  </projectSteps>
   <externalReferences>
     <externalReference>
       <externalAssayRef>External Assay Ref</externalAssayRef>
@@ -410,9 +408,11 @@ class XmlTestSamples {
     <formula>formula</formula>
 </unitConversion>
 '''
+
+
     static String STAGES = '''
 <stages>
-  <stage stageElement='IC50'>
+  <stage>
     <stageName>construct variant assay</stageName>
     <description>Description</description>
     <link rel='related' href='http://localhost:8080/dataExport/api/dictionary/element/341' type='application/vnd.bard.cap+xml;type=element' />
@@ -438,6 +438,7 @@ class XmlTestSamples {
       <link rel='edit' href='http://localhost:8080/dataExport/api/dictionary/element/386' type='application/vnd.bard.cap+xml;type=element' />
     </element>
     '''
+
     static String DICTIONARY = '''
 <dictionary>
   <elements>
@@ -487,32 +488,32 @@ class XmlTestSamples {
     </elementHierarchy>
   </elementHierarchies>
   <resultTypes>
-    <resultType resultTypeElement='IC50' baseUnit='uM' resultTypeStatus='Published'>
+    <resultType baseUnit='uM' resultTypeStatus='Published'>
       <resultTypeName>IC50</resultTypeName>
       <link rel='related' href='http://localhost:8080/dataExport/api/dictionary/element/341' type='application/vnd.bard.cap+xml;type=element' />
     </resultType>
   </resultTypes>
   <stages>
-    <stage stageElement='IC50'>
+    <stage>
       <stageName>construct variant assay</stageName>
       <description>Description</description>
       <link rel='related' href='http://localhost:8080/dataExport/api/dictionary/element/341' type='application/vnd.bard.cap+xml;type=element' />
     </stage>
   </stages>
   <descriptors>
-    <descriptor descriptorElement='uM' descriptor='assay'>
+    <descriptor descriptor='assay'>
       <elementStatus>Published</elementStatus>
       <label>assay phase</label>
       <description>It refers to whether all the assay components are in solution or some are in solid phase, which determines their ability to scatter light.</description>
       <link rel='edit' href='http://localhost:8080/dataExport/api/dictionary/element/386' type='application/vnd.bard.cap+xml;type=element' />
     </descriptor>
-    <descriptor descriptorElement='concentration' descriptor='biology'>
+    <descriptor descriptor='biology'>
       <elementStatus>Published</elementStatus>
       <label>macromolecule description</label>
       <description>A long name for a gene or protein from a trusted international source (e.g., Entrez, UniProt).</description>
       <link rel='edit' href='http://localhost:8080/dataExport/api/dictionary/element/366' type='application/vnd.bard.cap+xml;type=element' />
     </descriptor>
-    <descriptor descriptorElement='unit of measurement' descriptor='instance'>
+    <descriptor descriptor='instance'>
       <elementStatus>Published</elementStatus>
       <label>macromolecule description</label>
       <description>A long name for a gene or protein from a trusted international source (e.g., Entrez, UniProt).</description>
@@ -520,17 +521,17 @@ class XmlTestSamples {
     </descriptor>
   </descriptors>
   <laboratories>
-    <laboratory laboratoryElement='IC50'>
+    <laboratory laboratoryElement=''>
       <laboratoryName>LABORATORY</laboratoryName>
       <description>Singular root to ensure tree viewers work</description>
     </laboratory>
   </laboratories>
   <units>
-    <unit unitElement='unit of measurement' unit='UNIT'>
+    <unit unit='UNIT'>
       <description>Singular root to ensure tree viewers work</description>
     </unit>
-    <unit unitElement='concentration' unit='concentration' />
-    <unit unitElement='uM' parentUnit='concentration' unit='uM' />
+    <unit unit='concentration' />
+    <unit parentUnit='concentration' unit='uM' />
   </units>
   <unitConversions>
     <unitConversion fromUnit='uM' toUnit='concentration' multiplier='2.5' offset='2.0'>
@@ -541,7 +542,7 @@ class XmlTestSamples {
 '''
     static String LABS = '''
 <laboratories>
-  <laboratory laboratoryElement='IC50'>
+  <laboratory laboratoryElement=''>
     <laboratoryName>LABORATORY</laboratoryName>
     <description>Singular root to ensure tree viewers work</description>
   </laboratory>
@@ -554,22 +555,24 @@ class XmlTestSamples {
   </unitConversion>
 </unitConversions>
 '''
+
+
     static String UNITS = '''
-<units>
-  <unit unitElement='unit of measurement' unit='UNIT'>
+    <units>
+    <unit unit='UNIT'>
     <description>Singular root to ensure tree viewers work</description>
   </unit>
-  <unit unitElement='concentration' unit='concentration' />
-  <unit unitElement='uM' parentUnit='concentration' unit='uM' />
-</units>
-'''
+    <unit unit='concentration' />
+    <unit parentUnit='concentration' unit='uM' />
+    </units>
+    '''
 
 
 
 
     static String RESULT_TYPES = '''
 <resultTypes>
-  <resultType resultTypeElement='IC50' baseUnit='uM' resultTypeStatus='Published'>
+  <resultType baseUnit='uM' resultTypeStatus='Published'>
     <resultTypeName>IC50</resultTypeName>
     <link rel='related' href='http://localhost:8080/dataExport/api/dictionary/element/341' type='application/vnd.bard.cap+xml;type=element' />
   </resultType>
@@ -647,6 +650,8 @@ class XmlTestSamples {
   <synonyms>syn</synonyms>
 </descriptor>
 '''
+
+
     static String ASSAY_DESCRIPTOR_UNIT = '''
 <descriptor abbreviation='abb' externalUrl='http://broad.org' unit='cm' descriptor='assay'>
   <elementStatus>status</elementStatus>
@@ -676,7 +681,7 @@ class XmlTestSamples {
 
 
     static String ELEMENT_FULL = '''
-<element elementId='' readyForExtraction='ready' elementStatus='status' abbreviation='abb' unit='cm'>
+<element elementId='' readyForExtraction='Ready' elementStatus='Pending' abbreviation='abb' unit='cm'>
   <label>label</label>
   <description>desc</description>
   <synonyms>syn</synonyms>
@@ -685,7 +690,7 @@ class XmlTestSamples {
 </element>
 '''
     static String ELEMENT_NO_DESCRIPTION = '''
-<element elementId='' readyForExtraction='ready' elementStatus='status' unit='cm'>
+<element elementId='' readyForExtraction='Ready' elementStatus='Pending' unit='cm'>
   <label>label</label>
   <externalUrl>http://www.broad.org</externalUrl>
   <link rel='edit' href='null' type='xml' />

@@ -1,8 +1,6 @@
 package dataexport.dictionary
 
 import bard.db.dictionary.Element
-import bard.db.dictionary.ResultType
-import bard.db.dictionary.Stage
 import common.tests.XmlTestAssertions
 import common.tests.XmlTestSamples
 import grails.plugin.spock.IntegrationSpec
@@ -27,6 +25,7 @@ class DictionaryExportHelperServiceIntegrationSpec extends IntegrationSpec {
         when:
         this.dictionaryExportHelperService.generateUnits(this.markupBuilder)
         then:
+        println(this.writer.toString());
         XmlTestAssertions.assertResults(results, this.writer.toString())
         where:
         label       | results
@@ -48,7 +47,7 @@ class DictionaryExportHelperServiceIntegrationSpec extends IntegrationSpec {
         when:
         this.dictionaryExportHelperService.generateResultTypes(this.markupBuilder)
         then:
-        println this.writer.toString()
+        println(this.writer.toString())
         XmlTestAssertions.assertResults(results, this.writer.toString())
         where:
         label          | results
@@ -58,13 +57,11 @@ class DictionaryExportHelperServiceIntegrationSpec extends IntegrationSpec {
 
     void "test generate Result Type"() {
         given:
-        final Element element = Element.get(new BigDecimal("341"))
-        final ResultType resultType = ResultType.findByElement(element)
+        final ResultType resultType = new ResultType(resultTypeStatus: "Published", baseUnit: "uM", resultTypeLabel: "IC50", resultTypeName: "IC50", resultTypeId: 341)
         when:
         this.dictionaryExportHelperService.generateResultType(this.markupBuilder, resultType)
         then:
-        println this.writer.toString()
-        XmlTestAssertions.assertResults(results, this.writer.toString())
+         XmlTestAssertions.assertResults(results, this.writer.toString())
         where:
         label         | results
         "Result Type" | XmlTestSamples.RESULT_TYPE
@@ -75,7 +72,6 @@ class DictionaryExportHelperServiceIntegrationSpec extends IntegrationSpec {
         when:
         this.dictionaryExportHelperService.generateElementHierarchies(this.markupBuilder)
         then:
-        println this.writer.toString()
         XmlTestAssertions.assertResults(results, this.writer.toString())
         where:
         label         | results
@@ -110,7 +106,7 @@ class DictionaryExportHelperServiceIntegrationSpec extends IntegrationSpec {
         when:
         this.dictionaryExportHelperService.generateStages(this.markupBuilder)
         then:
-        println this.writer.toString()
+        println(this.writer.toString())
         XmlTestAssertions.assertResultsWithOverrideAttributes(results, this.writer.toString())
         where:
         label    | results
@@ -120,12 +116,10 @@ class DictionaryExportHelperServiceIntegrationSpec extends IntegrationSpec {
 
     void "test generate Stage"() {
         given:
-        final Element element = Element.get(new BigDecimal("341"))
-        final Stage stage = Stage.findByElement(element)
+        final Stage stage = new Stage(stageName: 'construct variant assay', description: 'Description', stageId: 341, label: 'IC50')
         when:
         this.dictionaryExportHelperService.generateStage(this.markupBuilder, stage)
         then:
-        println this.writer.toString()
         XmlTestAssertions.assertResults(results, this.writer.toString())
         where:
         label   | results
@@ -137,6 +131,7 @@ class DictionaryExportHelperServiceIntegrationSpec extends IntegrationSpec {
         when:
         this.dictionaryExportHelperService.generateLabs(this.markupBuilder)
         then:
+        println(this.writer.toString())
         XmlTestAssertions.assertResults(results, this.writer.toString())
         where:
         label  | results

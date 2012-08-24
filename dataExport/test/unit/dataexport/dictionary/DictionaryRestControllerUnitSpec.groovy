@@ -1,8 +1,6 @@
 package dataexport.dictionary
 
 import bard.db.dictionary.Element
-import bard.db.dictionary.ResultType
-import bard.db.dictionary.Stage
 import dataexport.cap.dictionary.DictionaryRestController
 import dataexport.cap.registration.UpdateStatusHelper
 import dataexport.registration.BardHttpResponse
@@ -21,7 +19,7 @@ import javax.servlet.http.HttpServletResponse
  */
 @Unroll
 @TestFor(DictionaryRestController)
-@Mock([Element, Stage, ResultType])
+@Mock([Element])
 class DictionaryRestControllerUnitSpec extends Specification {
 
     void setup() {
