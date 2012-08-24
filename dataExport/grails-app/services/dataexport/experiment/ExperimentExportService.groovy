@@ -157,7 +157,7 @@ class ExperimentExportService {
      */
     protected void generateExperimentContextItem(def markupBuilder, final ExperimentContextItem experimentContextItem) {
 
-        final Map<String, String> attributes = this.resultExportService.generateAttributesForRunContextItem(experimentContextItem)
+        final Map<String, String> attributes = this.resultExportService.generateAttributesForRunContextItem(experimentContextItem, "experimentContextItemId")
 
         markupBuilder.experimentContextItem(attributes) {
             this.resultExportService.generateRunContextItemElements(markupBuilder, experimentContextItem)
@@ -190,10 +190,6 @@ class ExperimentExportService {
             if (externalReferences) {
                 generateExternalReferences(markupBuilder, externalReferences)
             }
-            //TODO: There used to be a lab reference
-//            if (experiment.la) {
-//                laboratory(experiment.laboratory.laboratory)
-//            }
             generateExperimentLinks(markupBuilder, experiment)
         }
     }

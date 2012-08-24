@@ -124,7 +124,7 @@ class XmlTestSamples {
 <experiment experimentId='' experimentName='Experiment1' status='Published' readyForExtraction='Pending' holdUntilDate='1969-12-31T19:00:00.000-05:00' runDateFrom='1969-12-31T19:00:00.000-05:00' runDateTo='1969-12-31T19:00:00.000-05:00'>
   <description>Broad</description>
   <experimentContextItems>
-    <experimentContextItem bard.db.experiment.ExperimentContextItemId='' qualifier='&lt;' valueDisplay='&lt; 20 uM' valueNum='1.0' valueMin='5.0' valueMax='20.0'>
+    <experimentContextItem experimentContextItemId='' qualifier='&lt;' valueDisplay='&lt; 20 uM' valueNum='1.0' valueMin='5.0' valueMax='20.0'>
       <attribute label='attribute'>
         <link rel='related' href='null' type='elementMediaType' />
       </attribute>

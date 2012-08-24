@@ -219,7 +219,7 @@ class ResultExportService {
     protected void generateResultContextItems(def markupBuilder, final Set<ResultContextItem> resultContextItems) {
         markupBuilder.resultContextItems() {
             for (ResultContextItem resultContextItem : resultContextItems) {
-                generateResultContextItem(markupBuilder, resultContextItem)
+                generateRunContextItem(markupBuilder, resultContextItem)
             }
         }
     }
@@ -228,9 +228,9 @@ class ResultExportService {
      * @param runContextItem
      * @return
      */
-    protected Map<String, String> generateAttributesForRunContextItem(final RunContextItem runContextItem) {
+    protected Map<String, String> generateAttributesForRunContextItem(final RunContextItem runContextItem, final String runContextItemIdLabel) {
         Map<String, String> attributes = [:]
-        attributes.put(runContextItem.getClass().getName() + "Id", runContextItem.id?.toString())
+        attributes.put(runContextItemIdLabel, runContextItem.id?.toString())
         if (runContextItem.groupResultContext && runContextItem.groupResultContext.id.toString().isInteger()) {
             attributes.put('parentGroup', runContextItem.groupResultContext.id.toString())
         }
@@ -259,7 +259,7 @@ class ResultExportService {
      */
     protected void generateRunContextItem(def markupBuilder, final RunContextItem runContextItem) {
 
-        final Map<String, String> attributes = generateAttributesForRunContextItem(runContextItem)
+        final Map<String, String> attributes = generateAttributesForRunContextItem(runContextItem,"resultContextItemId")
 
         markupBuilder.resultContextItem(attributes) {
             generateRunContextItemElements(markupBuilder,runContextItem)
