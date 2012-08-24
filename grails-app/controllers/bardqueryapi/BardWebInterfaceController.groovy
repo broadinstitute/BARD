@@ -71,15 +71,27 @@ class BardWebInterfaceController {
     }
 
     def searchAssaysByIDs() {
+
         String searchString = params.searchString?.trim()
         if (searchString) {
             try {
                 def parameterMap = [:]
                 parameterMap.put('path', "/assays")
                 Map dataMap = [ids: "${searchString}"]
-
-                JSONObject resultJson = (JSONObject) postFormRequest(this.restClientFactoryService, NCGC_ROOT_URL, dataMap, parameterMap)
-                render(template: 'compounds', model: [docs: resultJson.docs, metaData: resultJson.metaData, searchString: "${searchString}"])
+                JSONArray resultJson = (JSONArray) postFormRequest(this.restClientFactoryService, NCGC_ROOT_URL, dataMap, parameterMap)
+                List docs = []
+                int numberOfHits = 0
+                resultJson.each { result ->
+                    Map currentObject = [:]
+                    currentObject.put("assay_id", result.aid)
+                    currentObject.put("name", result.name)
+                    currentObject.put("highlight", result.source)
+                    docs.add(currentObject)
+                    ++numberOfHits
+                }
+                JSONObject metaData = new JSONObject([nhit: numberOfHits])
+                render(template: 'assays', model: [docs: docs, metaData: metaData, searchString: "${searchString}"])
+                return
             }
             catch (Exception exp) {
                 return response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR,
@@ -88,8 +100,6 @@ class BardWebInterfaceController {
         }
         flash.message = 'Search String is required'
         redirect(action: "homePage")
-
-
     }
 
     def searchProjectsByIDs() {
@@ -99,9 +109,20 @@ class BardWebInterfaceController {
                 def parameterMap = [:]
                 parameterMap.put('path', "/projects")
                 Map dataMap = [ids: "${searchString}"]
-
-                JSONObject resultJson = (JSONObject) postFormRequest(this.restClientFactoryService, NCGC_ROOT_URL, dataMap, parameterMap)
-                render(template: 'compounds', model: [docs: resultJson.docs, metaData: resultJson.metaData, searchString: "${searchString}"])
+                JSONArray resultJson = (JSONArray) postFormRequest(this.restClientFactoryService, NCGC_ROOT_URL, dataMap, parameterMap)
+                List docs = []
+                int numberOfHits = 0
+                resultJson.each { result ->
+                    Map currentObject = [:]
+                    currentObject.put("proj_id", result.projectId)
+                    currentObject.put("name", result.name)
+                    currentObject.put("highlight", result.source)
+                    docs.add(currentObject)
+                    ++numberOfHits
+                }
+                JSONObject metaData = new JSONObject([nhit: numberOfHits])
+                render(template: 'projects', model: [docs: docs, metaData: metaData, searchString: "${searchString}"])
+                return
             }
             catch (Exception exp) {
                 return response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR,
