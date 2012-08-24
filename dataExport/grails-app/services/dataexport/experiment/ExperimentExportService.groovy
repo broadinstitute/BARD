@@ -1,11 +1,6 @@
 package dataexport.experiment
 
-//import groovy.sql.Sql
-
-//import org.codehaus.groovy.grails.commons.GrailsApplication
-
-
-import bard.db.dictionary.StageElement
+import bard.db.enums.ReadyForExtraction
 import bard.db.registration.ExternalReference
 import bard.db.registration.ExternalSystem
 import dataexport.registration.BardHttpResponse
@@ -74,7 +69,7 @@ class ExperimentExportService {
         int end = this.numberRecordsPerPage + 1  //A trick to know if there are more records
         boolean hasMoreExperiments = false //This is used for paging, if there are more experiments than the threshold, add next link and return true
 
-        List<Experiment> experiments = Experiment.findAllByReadyForExtraction('Ready', [sort: "id", order: "asc", offset: offset, max: end])
+        List<Experiment> experiments = Experiment.findAllByReadyForExtraction(ReadyForExtraction.Ready, [sort: "id", order: "asc", offset: offset, max: end])
         final int numberOfExperiments = experiments.size()
         if (numberOfExperiments > this.numberRecordsPerPage) {
             hasMoreExperiments = true
@@ -120,6 +115,7 @@ class ExperimentExportService {
         attributes.put("experimentId", experiment.id?.toString())
         attributes.put('experimentName', experiment.experimentName)
         attributes.put('status', experiment.experimentStatus)
+        attributes.put('readyForExtraction', experiment.readyForExtraction.toString())
 
         if (experiment.holdUntilDate) {   //convert date to XML date
             final GregorianCalendar gregorianCalendar = new GregorianCalendar();
@@ -141,6 +137,33 @@ class ExperimentExportService {
         }
         return attributes
     }
+
+    /**
+     *
+     * @param markupBuilder
+     * @param resultContextItems
+     */
+    protected void generateExperimentContextItems(def markupBuilder, final Set<ExperimentContextItem> experimentContextItems) {
+        markupBuilder.experimentContextItems() {
+            for (ExperimentContextItem experimentContextItem : experimentContextItems) {
+                generateExperimentContextItem(markupBuilder, experimentContextItem)
+            }
+        }
+    }
+    /**
+     *
+     * @param markupBuilder
+     * @param resultContextItem
+     */
+    protected void generateExperimentContextItem(def markupBuilder, final ExperimentContextItem experimentContextItem) {
+
+        final Map<String, String> attributes = this.resultExportService.generateAttributesForRunContextItem(experimentContextItem, "experimentContextItemId")
+
+        markupBuilder.experimentContextItem(attributes) {
+            this.resultExportService.generateRunContextItemElements(markupBuilder, experimentContextItem)
+
+        }
+    }
     /**
      * @param markupBuilder
      * @param experiment
@@ -148,26 +171,24 @@ class ExperimentExportService {
      * Serialize Experiment to XML
      */
     protected void generateExperiment(final MarkupBuilder markupBuilder, final Experiment experiment) {
+
         final Map<String, String> attributes = generateAttributesForExperiment(experiment)
 
         markupBuilder.experiment(attributes) {
             if (experiment.description) {
                 description(experiment.description)
             }
-            final Set<ResultContextItem> resultContextItems = experiment.resultContextItems
-            if (resultContextItems) {
-                resultExportService.generateResultContextItems(markupBuilder, resultContextItems)
+            final Set<ExperimentContextItem> experimentContextItems = experiment.experimentContextItems
+            if (experimentContextItems) {
+                generateExperimentContextItems(markupBuilder, experimentContextItems)
             }
-            final Set<ProjectExperiment> projectExperiments = experiment.projectExperiments
-            if (projectExperiments) {
-                generateProjectExperiments(markupBuilder, projectExperiments)
+            final Set<ProjectStep> projectSteps = experiment.projectSteps
+            if (projectSteps) {
+                generateProjectSteps(markupBuilder, projectSteps)
             }
             final Set<ExternalReference> externalReferences = experiment.externalReferences
             if (externalReferences) {
                 generateExternalReferences(markupBuilder, externalReferences)
-            }
-            if (experiment.laboratory) {
-                laboratory(experiment.laboratory.laboratory)
             }
             generateExperimentLinks(markupBuilder, experiment)
         }
@@ -208,43 +229,39 @@ class ExperimentExportService {
     /**
      * List of @ProjectExperiment associated to a given Experiment
      * @param markupBuilder
-     * @param projectExperiments
+     * @param projectSteps
      */
-    protected void generateProjectExperiments(final MarkupBuilder markupBuilder, final Set<ProjectExperiment> projectExperiments) {
-        markupBuilder.projectExperiments() {
-            for (ProjectExperiment projectExperiment : projectExperiments) {
-                generateProjectExperiment(markupBuilder, projectExperiment)
+    protected void generateProjectSteps(final MarkupBuilder markupBuilder, final Set<ProjectStep> projectSteps) {
+        markupBuilder.projectSteps() {
+            for (ProjectStep projectStep : projectSteps) {
+                generateProjectStep(markupBuilder, projectStep)
             }
         }
     }
     /**
-     * Generate projectExperiment
+     * Generate projectStep
      *
      * @param markupBuilder
-     * @param projectExperiment
+     * @param projectStep
      */
-    protected void generateProjectExperiment(final MarkupBuilder markupBuilder, ProjectExperiment projectExperiment) {
-        markupBuilder.projectExperiment() {
-            if (projectExperiment.description) {
-                description(projectExperiment.description)
+    protected void generateProjectStep(final MarkupBuilder markupBuilder, final ProjectStep projectStep) {
+        markupBuilder.projectStep() {
+            if (projectStep.description) {
+                description(projectStep.description)
             }
-            final Experiment precedingExperimentR = projectExperiment.precedingExperiment
+            final Experiment precedingExperimentR = projectStep.precedingExperiment
             if (precedingExperimentR) {
                 precedingExperiment(id: precedingExperimentR.id.toString()) {
                     final String precedingExperimentHref = grailsLinkGenerator.link(mapping: 'experiment', absolute: true, params: [id: "${precedingExperimentR.id}"]).toString()
                     link(rel: 'related', href: "${precedingExperimentHref}", type: "${this.mediaTypeDTO.experimentMediaType}")
                 }
             }
-            final Project project = projectExperiment.project
+            projectStep
+            final Project project = projectStep.project
             if (project) {
                 final String projectHref = grailsLinkGenerator.link(mapping: 'project', absolute: true, params: [id: "${project.id}"]).toString()
                 link(rel: 'related', href: "${projectHref}", type: "${this.mediaTypeDTO.projectMediaType}")
 
-            }
-            final StageElement stageElement = projectExperiment.stage
-            if (stageElement) {
-                final String href = grailsLinkGenerator.link(mapping: 'stage', absolute: true, params: [id: stageElement.id]).toString()
-                link(rel: 'related', href: "${href}", type: "${this.mediaTypeDTO.stageMediaType}")
             }
         }
     }

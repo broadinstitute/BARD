@@ -1,6 +1,5 @@
 package dataexport.registration
 
-import bard.db.dictionary.Unit
 
 import bard.db.dictionary.Element
 import common.tests.XmlTestAssertions
@@ -26,7 +25,7 @@ class AssayExportHelperServiceUnitSpec extends Specification {
     AssayExportHelperService assayExportHelperService
 
     void setup() {
-        grailsLinkGenerator = Mock()
+        grailsLinkGenerator = Mock(LinkGenerator.class)
         final MediaTypesDTO mediaTypesDTO = new MediaTypesDTO(resultTypeMediaType: "xml", elementMediaType: "xml", assaysMediaType: "xml", assayMediaType: "xml", assayDocMediaType: "xml")
         this.assayExportHelperService =
             new AssayExportHelperService(mediaTypesDTO)
@@ -42,9 +41,9 @@ class AssayExportHelperServiceUnitSpec extends Specification {
         then: "A valid xml measure is generated with the expected measure attributes, result type and entry unit"
         XmlTestAssertions.assertResults(results, this.writer.toString())
         where:
-        label                                           | measure                                                                                                                                        | results
-        "Measure with Parent No Child Elements"         | new Measure(assayContext: new AssayContext(contextName: "label"))                                                                            | XmlTestSamples.MEASURE_1_UNIT
-        "Measure with Parent,ResultType and Entry Unit" | new Measure(assayContext: new AssayContext(contextName: "label"), element: new Element(label: "resultType"), entryUnit: new Unit(unit: "%")) | XmlTestSamples.MEASURE_2_UNIT
+        label                                           | measure                                                                                                                      | results
+        "Measure with Parent No Child Elements"         | new Measure(assayContext: new AssayContext(contextName: "label"))                                                            | XmlTestSamples.MEASURE_1_UNIT
+        "Measure with Parent,ResultType and Entry Unit" | new Measure(assayContext: new AssayContext(contextName: "label"), element: new Element(label: "resultType"), entryUnit: "%") | XmlTestSamples.MEASURE_2_UNIT
 
     }
 
@@ -55,9 +54,9 @@ class AssayExportHelperServiceUnitSpec extends Specification {
         then: "A map with the expected key/value pairs is generated"
         results == attributes
         where:
-        label                             | measure                                                                                                                                                       | results
-        "Measure With Measure Context "   | new Measure(assayContext: new AssayContext(contextName: "label"), element: new Element(label: "label"), entryUnit: new Unit(unit: "%"), modifiedBy: "Bard") | [assayContextRef: "label"]
-        "Measure with No Measure Context" | new Measure(element: new Element(label: "label"), entryUnit: new Unit(unit: "%"), modifiedBy: "Bard")                                                         | [:]
+        label                             | measure                                                                                                                                     | results
+        "Measure With Measure Context "   | new Measure(assayContext: new AssayContext(contextName: "label"), element: new Element(label: "label"), entryUnit: "%", modifiedBy: "Bard") | [assayContextRef: "label"]
+        "Measure with No Measure Context" | new Measure(element: new Element(label: "label"), entryUnit: "%", modifiedBy: "Bard")                                                       | [:]
 
     }
 
@@ -76,7 +75,6 @@ class AssayExportHelperServiceUnitSpec extends Specification {
 
     void "test generate Measure Context Item #label"() {
         given: "A DTO"
-        AssayContextItem parentGroup = new AssayContextItem()
         AttributeType attributeType = AttributeType.Fixed
         String valueDisplay = "Display"
         Float valueNum = new Float("5.0")
@@ -96,7 +94,6 @@ class AssayExportHelperServiceUnitSpec extends Specification {
                     attributeType: attributeType,
                     assayContext: assayContext,
                     valueElement: valueElement,
-                    parentGroup: parentGroup,
                     valueDisplay: valueDisplay,
                     valueMax: valueMax,
                     valueMin: valueMin,
@@ -132,7 +129,6 @@ class AssayExportHelperServiceUnitSpec extends Specification {
     void "create Attributes For AssayContextItem"() {
         given: "A DTO"
         final Map<String, String> results = [assayContextRef: "assayContext", qualifier: "<", valueDisplay: "Display", valueNum: "5.0", valueMin: "6.0", valueMax: "7.0"]
-        AssayContextItem parentGroup = new AssayContextItem()
         AttributeType attributeType = AttributeType.Fixed
         String valueDisplay = "Display"
         Float valueNum = new Float("5.0")
@@ -148,7 +144,6 @@ class AssayExportHelperServiceUnitSpec extends Specification {
                     attributeType: attributeType,
                     assayContext: assayContext,
                     valueElement: valueElement,
-                    parentGroup: parentGroup,
                     valueDisplay: valueDisplay,
                     valueMax: valueMax,
                     valueMin: valueMin,

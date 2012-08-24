@@ -18,12 +18,13 @@ class Project {
     String modifiedBy
     ReadyForExtraction readyForExtraction = ReadyForExtraction.Pending
 
-
     Set<ProjectStep> projectSteps = [] as Set<ProjectStep>
     Set<ExternalReference> externalReferences = [] as Set<ProjectStep>
     Set<ProjectContextItem> projectContextItems = [] as Set<ProjectStep>
 
-    static hasMany = [projectSteps: ProjectStep, externalReferences: ExternalReference, projectContextItems:ProjectContextItem]
+    static hasMany = [projectSteps: ProjectStep,
+            externalReferences: ExternalReference,
+            projectContextItems:ProjectContextItem]
 
     static mapping = {
         id(column: "PROJECT_ID", generator: "sequence", params: [sequence: 'PROJECT_ID_SEQ'])
@@ -37,6 +38,6 @@ class Project {
         dateCreated(nullable: false)
         lastUpdated(nullable: true)
         modifiedBy(nullable: true, blank: false, maxSize: MODIFIED_BY_MAX_SIZE)
-        readyForExtraction( nullable: false, maxSize: READY_FOR_EXTRACTION_MAX_SIZE, )
+        readyForExtraction(maxSize: READY_FOR_EXTRACTION_MAX_SIZE, nullable: false)
     }
 }

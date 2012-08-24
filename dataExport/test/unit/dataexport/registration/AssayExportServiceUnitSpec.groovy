@@ -10,6 +10,8 @@ import grails.test.mixin.TestFor
 import groovy.xml.MarkupBuilder
 import org.codehaus.groovy.grails.web.mapping.LinkGenerator
 import spock.lang.Specification
+import bard.db.registration.AssayStatus
+import bard.db.enums.ReadyForExtraction
 
 /**
  * Created with IntelliJ IDEA.
@@ -42,7 +44,7 @@ class AssayExportServiceUnitSpec extends Specification {
 
     void "test generate Assay #label"() {
         given: "An Assay"
-        final Assay assay = new Assay(assayName: assayName, assayVersion: assayVersion, designedBy: designedBy, modifiedBy: "Bard", assayStatus: 'Pending', assayType: 'Regular', readyForExtraction: 'Ready')
+        final Assay assay = new Assay(assayName: assayName, assayVersion: assayVersion, designedBy: designedBy, modifiedBy: "Bard", assayStatus: AssayStatus.Pending, assayType: 'Regular', readyForExtraction: ReadyForExtraction.Ready)
         when: "We attempt to generate an Assay XML document"
         Assay.metaClass.static.get = {id -> assay }
         this.assayExportService.generateAssay(this.markupBuilder, assay.id)
