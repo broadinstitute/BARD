@@ -106,7 +106,7 @@ class AssayExportHelperServiceIntegrationSpec extends IntegrationSpec {
         XMLAssert.assertXpathEvaluatesTo("2", "count(//assayContextItems)", this.writer.toString());
         XMLAssert.assertXpathEvaluatesTo("6", "count(//assayContextItem)", this.writer.toString());
         XMLAssert.assertXpathEvaluatesTo("2", "count(//assayDocument)", this.writer.toString());
-        XMLAssert.assertXpathEvaluatesTo("14", "count(//link)", this.writer.toString());
+        XMLAssert.assertXpathEvaluatesTo("17", "count(//link)", this.writer.toString());
 
         final SchemaFactory factory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI)
         final Schema schema = factory.newSchema(new StreamSource(new FileReader(BARD_ASSAY_EXPORT_SCHEMA)))
@@ -144,7 +144,7 @@ class AssayExportHelperServiceIntegrationSpec extends IntegrationSpec {
             this.assayExportHelperService.generateLinksForAssay(this.markupBuilder, assay)
         }
         then: "An XML is generated that conforms to the expected XML"
-        XMLAssert.assertXpathEvaluatesTo("3", xpathTotalNumberOfLinks, this.writer.toString())
+        XMLAssert.assertXpathEvaluatesTo("6", xpathTotalNumberOfLinks, this.writer.toString())
         XMLAssert.assertXpathEvaluatesTo("2", xpathNumberOfLinksToAssay, this.writer.toString())
         XMLAssert.assertXpathEvaluatesTo("1", xpathNumberOfLinksToAssays, this.writer.toString())
         where:

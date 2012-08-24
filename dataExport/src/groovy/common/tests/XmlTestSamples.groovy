@@ -179,24 +179,46 @@ class XmlTestSamples {
 
  static final String PROJECTS = '''
 <projects count='2'>
-  <project projectId='1' readyForExtraction='Ready' groupType='Project'>
+    <project projectId='1' readyForExtraction='Ready' groupType='Project'>
     <projectName>Scripps special project #1</projectName>
+    <projectSteps>
+      <projectStep projectStepId='1'>
+        <description>2126 - MLPCN Malaria - Inhibitor</description>
+    <link rel='related' href='http://localhost:8080/dataExport/api/experiments/1' type='application/vnd.bard.cap+xml;type=experiment' />
+    </projectStep>
+      <projectStep projectStepId='2'>
+        <description>2127 - MLPCN Malaria2 - Inhibitor</description>
+    <link rel='related' href='http://localhost:8080/dataExport/api/experiments/2' type='application/vnd.bard.cap+xml;type=experiment' />
+    </projectStep>
+    </projectSteps>
     <link rel='edit' href='http://localhost:8080/dataExport/api/projects/1' type='application/vnd.bard.cap+xml;type=project' />
     <link rel='up' href='http://localhost:8080/dataExport/api/projects' type='application/vnd.bard.cap+xml;type=projects' />
-  </project>
+    </project>
   <project projectId='2' readyForExtraction='Ready' groupType='Project'>
     <projectName>2126 - MLPCN Malaria - Inhibitor</projectName>
     <link rel='edit' href='http://localhost:8080/dataExport/api/projects/2' type='application/vnd.bard.cap+xml;type=project' />
     <link rel='up' href='http://localhost:8080/dataExport/api/projects' type='application/vnd.bard.cap+xml;type=projects' />
-  </project>
+    </project>
 </projects>
 '''
+
+
     static final String PROJECT = '''
-<project projectId='1' readyForExtraction='Ready' groupType='Project'>
-  <projectName>Scripps special project #1</projectName>
-  <link rel='edit' href='http://localhost:8080/dataExport/api/projects/1' type='application/vnd.bard.cap+xml;type=project' />
-  <link rel='up' href='http://localhost:8080/dataExport/api/projects' type='application/vnd.bard.cap+xml;type=projects' />
-</project>
+    <project projectId='1' readyForExtraction='Ready' groupType='Project'>
+    <projectName>Scripps special project #1</projectName>
+  <projectSteps>
+    <projectStep projectStepId='1'>
+      <description>2126 - MLPCN Malaria - Inhibitor</description>
+    <link rel='related' href='http://localhost:8080/dataExport/api/experiments/1' type='application/vnd.bard.cap+xml;type=experiment' />
+    </projectStep>
+    <projectStep projectStepId='2'>
+      <description>2127 - MLPCN Malaria2 - Inhibitor</description>
+    <link rel='related' href='http://localhost:8080/dataExport/api/experiments/2' type='application/vnd.bard.cap+xml;type=experiment' />
+    </projectStep>
+  </projectSteps>
+    <link rel='edit' href='http://localhost:8080/dataExport/api/projects/1' type='application/vnd.bard.cap+xml;type=project' />
+    <link rel='up' href='http://localhost:8080/dataExport/api/projects' type='application/vnd.bard.cap+xml;type=projects' />
+    </project>
 '''
     static final String PROJECT_WITH_DESCRIPTION = '''
 <project projectId='' readyForExtraction='Ready' groupType='Panel'>
