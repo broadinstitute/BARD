@@ -2,6 +2,7 @@ package dataexport.dictionary
 
 import bard.db.dictionary.Element
 import bard.db.dictionary.ResultTypeElement
+import bard.db.dictionary.StageElement
 import dataexport.registration.BardHttpResponse
 import dataexport.util.UtilityService
 import exceptions.NotFoundException
@@ -9,7 +10,6 @@ import groovy.sql.Sql
 import groovy.xml.MarkupBuilder
 
 import javax.sql.DataSource
-import bard.db.dictionary.StageElement
 
 /**
  * Top Level service for handling the
@@ -50,22 +50,22 @@ class DictionaryExportService {
     public Long generateStage(final MarkupBuilder xml, final Long elementId) {
         String errorMessage
         final Sql sql = new Sql(dataSource)
-        sql.eachRow('SELECT * FROM STAGE_TREE WHERE STAGE_ID=:STAGEID', [STAGEID: elementId]) { stageRow ->
-
+        def stageRow = sql.firstRow("'SELECT * FROM STAGE_TREE WHERE STAGE_ID=?", [elementId])
+        if (stageRow) {
             String parentName = null
 
             final String label
             Long parentNodeId = stageRow.PARENT_NODE_ID
             if (parentNodeId) {
-                sql.eachRow('SELECT STAGE FROM STAGE_TREE WHERE NODE_ID=:parentNode', [parentNode: parentNodeId]) { parentRow ->
-                    parentName = parentRow.STAGE
-                }
+                def parentRow = sql.firstRow("SELECT STAGE FROM STAGE_TREE WHERE NODE_ID=?", [parentNodeId])
+                parentName = parentRow.STAGE
             }
             StageElement stageElement = StageElement.get(stageRow.STAGE_ID)
-            Stage stage = new Stage(stageRow,parentName, stageElement?.label)
+            Stage stage = new Stage(stageRow, parentName, stageElement?.label)
             this.dictionaryExportHelperService.generateStage(xml, stage)
             return 0
         }
+
         errorMessage = "Element with id ${elementId} does not exists"
         log.error(errorMessage)
         throw new NotFoundException(errorMessage)
@@ -83,13 +83,13 @@ class DictionaryExportService {
         String errorMessage
 
         final Sql sql = new Sql(dataSource)
-        sql.eachRow('SELECT * FROM RESULT_TYPE_TREE WHERE RESULT_TYPE_ID=:RESULT_TYPEID', [RESULT_TYPEID: elementId]) { resultTypeRow ->
+        def resultTypeRow = sql.firstRow("'SELECT * FROM RESULT_TYPE_TREE WHERE RESULT_TYPE_ID=?", [elementId])
+        if (resultTypeRow) {
             Long parentNodeId = resultTypeRow.PARENT_NODE_ID
             String parentResultTypeName = null
             if (parentNodeId) {
-                sql.eachRow('SELECT RESULT_TYPE_NAME FROM RESULT_TYPE_TREE WHERE NODE_ID=:parentNode', [parentNode: parentNodeId]) { parentRow ->
-                    parentResultTypeName = parentRow.parentRow.RESULT_TYPE_NAME
-                }
+                def parentRow = sql.firstRow("SELECT RESULT_TYPE_NAME FROM RESULT_TYPE_TREE WHERE NODE_ID=?", [parentNodeId])
+                parentResultTypeName = parentRow.LABEL
             }
             ResultTypeElement resultTypeElement = ResultTypeElement.get(resultTypeRow.RESULT_TYPE_ID)
             ResultType resultType = new ResultType(resultTypeRow, parentResultTypeName, resultTypeElement?.label)
@@ -125,19 +125,20 @@ class DictionaryExportService {
     }
 }
 public class ResultType {
-   String resultTypeName
-   String description
-   String synonyms
-   Long resultTypeId
-   String abbreviation
-   String baseUnit
-   String resultTypeStatus
-   String parentResultTypeName
-   String resultTypeLabel
+    String resultTypeName
+    String description
+    String synonyms
+    Long resultTypeId
+    String abbreviation
+    String baseUnit
+    String resultTypeStatus
+    String parentResultTypeName
+    String resultTypeLabel
 
-    public ResultType(){
+    public ResultType() {
 
     }
+
     public ResultType(row, final String parentResultTypeName, final String resultTypeLabel) {
         this.parentResultTypeName = parentResultTypeName
         this.resultTypeLabel = resultTypeLabel

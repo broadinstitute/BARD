@@ -37,6 +37,7 @@ beans = {
     //inject element mime type here
     dictionaryExportHelperService(dataexport.dictionary.DictionaryExportHelperService, mediaTypesDTO) {
         grailsLinkGenerator = ref('grailsLinkGenerator')
+        dataSource = ref('dataSource')
     }
 
     rootService(dataexport.util.RootService, mediaTypesDTO) {

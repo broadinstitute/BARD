@@ -408,9 +408,11 @@ class XmlTestSamples {
     <formula>formula</formula>
 </unitConversion>
 '''
+
+
     static String STAGES = '''
 <stages>
-  <stage stageElement='IC50'>
+  <stage>
     <stageName>construct variant assay</stageName>
     <description>Description</description>
     <link rel='related' href='http://localhost:8080/dataExport/api/dictionary/element/341' type='application/vnd.bard.cap+xml;type=element' />
@@ -436,6 +438,7 @@ class XmlTestSamples {
       <link rel='edit' href='http://localhost:8080/dataExport/api/dictionary/element/386' type='application/vnd.bard.cap+xml;type=element' />
     </element>
     '''
+
     static String DICTIONARY = '''
 <dictionary>
   <elements>
@@ -485,32 +488,32 @@ class XmlTestSamples {
     </elementHierarchy>
   </elementHierarchies>
   <resultTypes>
-    <resultType resultTypeElement='IC50' baseUnit='uM' resultTypeStatus='Published'>
+    <resultType baseUnit='uM' resultTypeStatus='Published'>
       <resultTypeName>IC50</resultTypeName>
       <link rel='related' href='http://localhost:8080/dataExport/api/dictionary/element/341' type='application/vnd.bard.cap+xml;type=element' />
     </resultType>
   </resultTypes>
   <stages>
-    <stage stageElement='IC50'>
+    <stage>
       <stageName>construct variant assay</stageName>
       <description>Description</description>
       <link rel='related' href='http://localhost:8080/dataExport/api/dictionary/element/341' type='application/vnd.bard.cap+xml;type=element' />
     </stage>
   </stages>
   <descriptors>
-    <descriptor descriptorElement='uM' descriptor='assay'>
+    <descriptor descriptor='assay'>
       <elementStatus>Published</elementStatus>
       <label>assay phase</label>
       <description>It refers to whether all the assay components are in solution or some are in solid phase, which determines their ability to scatter light.</description>
       <link rel='edit' href='http://localhost:8080/dataExport/api/dictionary/element/386' type='application/vnd.bard.cap+xml;type=element' />
     </descriptor>
-    <descriptor descriptorElement='concentration' descriptor='biology'>
+    <descriptor descriptor='biology'>
       <elementStatus>Published</elementStatus>
       <label>macromolecule description</label>
       <description>A long name for a gene or protein from a trusted international source (e.g., Entrez, UniProt).</description>
       <link rel='edit' href='http://localhost:8080/dataExport/api/dictionary/element/366' type='application/vnd.bard.cap+xml;type=element' />
     </descriptor>
-    <descriptor descriptorElement='unit of measurement' descriptor='instance'>
+    <descriptor descriptor='instance'>
       <elementStatus>Published</elementStatus>
       <label>macromolecule description</label>
       <description>A long name for a gene or protein from a trusted international source (e.g., Entrez, UniProt).</description>
@@ -518,17 +521,17 @@ class XmlTestSamples {
     </descriptor>
   </descriptors>
   <laboratories>
-    <laboratory laboratoryElement='IC50'>
+    <laboratory laboratoryElement=''>
       <laboratoryName>LABORATORY</laboratoryName>
       <description>Singular root to ensure tree viewers work</description>
     </laboratory>
   </laboratories>
   <units>
-    <unit unitElement='unit of measurement' unit='UNIT'>
+    <unit unit='UNIT'>
       <description>Singular root to ensure tree viewers work</description>
     </unit>
-    <unit unitElement='concentration' unit='concentration' />
-    <unit unitElement='uM' parentUnit='concentration' unit='uM' />
+    <unit unit='concentration' />
+    <unit parentUnit='concentration' unit='uM' />
   </units>
   <unitConversions>
     <unitConversion fromUnit='uM' toUnit='concentration' multiplier='2.5' offset='2.0'>
@@ -539,7 +542,7 @@ class XmlTestSamples {
 '''
     static String LABS = '''
 <laboratories>
-  <laboratory laboratoryElement='IC50'>
+  <laboratory laboratoryElement=''>
     <laboratoryName>LABORATORY</laboratoryName>
     <description>Singular root to ensure tree viewers work</description>
   </laboratory>
@@ -552,22 +555,24 @@ class XmlTestSamples {
   </unitConversion>
 </unitConversions>
 '''
+
+
     static String UNITS = '''
-<units>
-  <unit unitElement='unit of measurement' unit='UNIT'>
+    <units>
+    <unit unit='UNIT'>
     <description>Singular root to ensure tree viewers work</description>
   </unit>
-  <unit unitElement='concentration' unit='concentration' />
-  <unit unitElement='uM' parentUnit='concentration' unit='uM' />
-</units>
-'''
+    <unit unit='concentration' />
+    <unit parentUnit='concentration' unit='uM' />
+    </units>
+    '''
 
 
 
 
     static String RESULT_TYPES = '''
 <resultTypes>
-  <resultType resultTypeElement='IC50' baseUnit='uM' resultTypeStatus='Published'>
+  <resultType baseUnit='uM' resultTypeStatus='Published'>
     <resultTypeName>IC50</resultTypeName>
     <link rel='related' href='http://localhost:8080/dataExport/api/dictionary/element/341' type='application/vnd.bard.cap+xml;type=element' />
   </resultType>

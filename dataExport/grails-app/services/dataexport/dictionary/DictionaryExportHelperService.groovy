@@ -51,9 +51,8 @@ class DictionaryExportHelperService {
                 String parentDescriptorLabel = null
                 Long parentNodeId = assayDescriptorRow.PARENT_NODE_ID
                 if (parentNodeId) {
-                    sql.eachRow('SELECT LABEL FROM ASSAY_DESCRIPTOR_TREE WHERE NODE_ID=:parentNode', [parentNode: parentNodeId]) { parentRow ->
-                        parentDescriptorLabel = parentRow.LABEL
-                    }
+                    def parentRow = sql.firstRow("SELECT LABEL FROM ASSAY_DESCRIPTOR_TREE WHERE NODE_ID=?", [parentNodeId])
+                    parentDescriptorLabel = parentRow.LABEL
                 }
                 AssayElement assayElement = AssayElement.get(assayDescriptorRow.ELEMENT_ID)
                 final DescriptorDTO descriptorDTO = new DescriptorDTO(assayDescriptorRow, 'assay', parentDescriptorLabel, assayElement?.label)
@@ -64,9 +63,9 @@ class DictionaryExportHelperService {
                 String parentDescriptorLabel = null
                 Long parentNodeId = biologyDescriptorRow.PARENT_NODE_ID
                 if (parentNodeId) {
-                    sql.eachRow('SELECT LABEL FROM BIOLOGY_DESCRIPTOR_TREE WHERE NODE_ID=:parentNode', [parentNode: parentNodeId]) { parentRow ->
-                        parentDescriptorLabel = parentRow.LABEL
-                    }
+                    def parentRow = sql.firstRow("SELECT LABEL FROM BIOLOGY_DESCRIPTOR_TREE WHERE NODE_ID=?", [parentNodeId])
+                    parentDescriptorLabel = parentRow.LABEL
+
                 }
                 BiologyElement biologyElement = BiologyElement.get(biologyDescriptorRow.ELEMENT_ID)
 
@@ -78,10 +77,10 @@ class DictionaryExportHelperService {
                 String parentDescriptorLabel = null
                 Long parentNodeId = instanceDescriptorRow.PARENT_NODE_ID
                 if (parentNodeId) {
-                    sql.eachRow('SELECT LABEL FROM INSTANCE_DESCRIPTOR_TREE WHERE NODE_ID=:parentNode', [parentNode: parentNodeId]) { parentRow ->
-                        parentDescriptorLabel = parentRow.LABEL
-                    }
+                    def parentRow = sql.firstRow("SELECT LABEL FROM INSTANCE_DESCRIPTOR_TREE WHERE NODE_ID=?", [parentNodeId])
+                    parentDescriptorLabel = parentRow.LABEL
                 }
+
                 InstanceElement instanceElement = InstanceElement.get(instanceDescriptorRow.ELEMENT_ID)
                 final DescriptorDTO descriptorDTO = new DescriptorDTO(instanceDescriptorRow, 'instance', parentDescriptorLabel, instanceElement?.label)
                 generateDescriptor(xml, descriptorDTO)
@@ -104,9 +103,8 @@ class DictionaryExportHelperService {
                 final String label
                 Long parentNodeId = stageRow.PARENT_NODE_ID
                 if (parentNodeId) {
-                    sql.eachRow('SELECT STAGE FROM STAGE_TREE WHERE NODE_ID=:parentNode', [parentNode: parentNodeId]) { parentRow ->
-                        parentName = parentRow.STAGE
-                    }
+                    def parentRow = sql.firstRow("SELECT STAGE FROM STAGE_TREE WHERE NODE_ID=?", [parentNodeId])
+                    parentName = parentRow.UNIT
                 }
                 StageElement stageElement = StageElement.get(stageRow.STAGE_ID)
                 generateStage(xml, new Stage(stageRow, parentName, stageElement?.label))
@@ -117,16 +115,16 @@ class DictionaryExportHelperService {
  * @param xml
  */
     public void generateLabs(final MarkupBuilder xml) {
+        final Sql sql = new Sql(dataSource)
         xml.laboratories() {
             sql.eachRow('SELECT * FROM LABORATORY_TREE') { row ->
                 String parentName = null
 
                 final String label
-                Long parentNodeId = row.PARENT_NODE_ID
+                final Long parentNodeId = row.PARENT_NODE_ID
                 if (parentNodeId) {
-                    sql.eachRow('SELECT LABORATORY FROM LABORATORY_TREE WHERE NODE_ID=:parentNode', [parentNode: parentNodeId]) { parentRow ->
-                        parentName = parentRow.LABORATORY
-                    }
+                    def parentRow = sql.firstRow("SELECT LABORATORY FROM LABORATORY_TREE WHERE NODE_ID=?", [parentNodeId])
+                    parentName = parentRow.LABORATORY
                 }
                 LaboratoryElement laboratoryElement = LaboratoryElement.get(row.LABORATORY_ID)
                 generateLab(xml, new Laboratory(row, parentName, laboratoryElement?.label))
@@ -221,9 +219,8 @@ class DictionaryExportHelperService {
                 Long parentNodeId = row.PARENT_NODE_ID
                 String parentResultTypeName = null
                 if (parentNodeId) {
-                    sql.eachRow('SELECT RESULT_TYPE_NAME FROM RESULT_TYPE_TREE WHERE NODE_ID=:parentNode', [parentNode: parentNodeId]) { parentRow ->
-                        parentResultTypeName = parentRow.RESULT_TYPE_NAME
-                    }
+                    def parentRow = sql.firstRow("SELECT RESULT_TYPE_NAME FROM RESULT_TYPE_TREE WHERE NODE_ID=?", [parentNodeId])
+                    parentResultTypeName = parentRow.RESULT_TYPE_NAME
                 }
                 ResultTypeElement resultTypeElement = ResultTypeElement.get(row.RESULT_TYPE_ID)
                 generateResultType(xml, new ResultType(row, parentResultTypeName, resultTypeElement?.label))
@@ -255,9 +252,8 @@ class DictionaryExportHelperService {
                 Long parentNodeId = row.PARENT_NODE_ID
                 String parentUnit = null
                 if (parentNodeId) {
-                    sql.eachRow('SELECT UNIT FROM UNIT_TREE WHERE NODE_ID=:parentNode', [parentNode: parentNodeId]) { parentRow ->
-                        parentUnit = parentRow.UNIT
-                    }
+                    def parentRow = sql.firstRow("SELECT UNIT FROM UNIT_TREE WHERE NODE_ID=?", [parentNodeId])
+                    parentUnit = parentRow.UNIT
                 }
                 UnitElement unitElement = UnitElement.get(row.UNIT_ID)
                 generateUnit(xml, new Units(row, parentUnit, unitElement?.label))
@@ -565,8 +561,9 @@ class DescriptorDTO {
     String descriptor
     BigDecimal elementId
 
-    public DescriptorDTO(){
+    public DescriptorDTO() {
     }
+
     public DescriptorDTO(def descriptorRow, String descriptorLabel, String parentDescriptorLabel, String descriptorElementLabel) {
 
         this.parentDescriptorLabel = parentDescriptorLabel
@@ -611,9 +608,11 @@ public class Laboratory {
     String laboratoryName
     String description
     String laboratoryStatus
-    public Laboratory(){
+
+    public Laboratory() {
 
     }
+
     public Laboratory(def laboratoryRow, final String parentLaboratory, final String elementLabel) {
         this.parentLaboratory = parentLaboratory
         this.elementLabel = elementLabel
@@ -628,9 +627,11 @@ public class Units {
     String unit
     String elementLabel
     String parentUnit
-    public Units(){
+
+    public Units() {
 
     }
+
     public Units(def row, final String parentUnit, final String elementLabel) {
         this.parentUnit = parentUnit
         this.elementLabel = elementLabel
