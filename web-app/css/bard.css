@@ -75,4 +75,5 @@ div.rightofline {
 div.facets {
     background-color: rgba(157, 252, 157, 0.2);
     padding: 2px;
+    border: 1px solid #d3d3d3;
 }

@@ -1,19 +1,5 @@
 <div class="row-fluid">
-    <div class="span3 facets">
-        <h5>Filters</h5>
-        <g:if test="${metaData}">
-            <g:each in="${metaData.facets}" var="facet">
-                <ul class="unstyled">
-                    ${facet.facetName}
-                    <ul>
-                        <g:each in="${facet.counts.entrySet()}" var="entry">
-                            <li>${entry.key} (${entry.value})</li>
-                        </g:each>
-                    </ul>
-                </ul>
-            </g:each>
-        </g:if>
-    </div>
+    <g:render template="facets" model="['metaData': metaData]" />
 <div class="span9">
     <ul class="unstyled">
     <g:each var="assay" in="${docs}">

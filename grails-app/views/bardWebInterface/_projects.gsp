@@ -1,4 +1,6 @@
-<div style="padding-left: 5px">
+<div class="row-fluid">
+<g:render template="facets" model="['metaData': metaData]" />
+<div class="span9">
     <g:each var="project" in="${docs}">
         <g:link action="showProject" id="${project.proj_id}" target="_blank">${project.name}</g:link><br/>
         ${project.highlight}<br/>
@@ -13,4 +15,5 @@
                                  params='[searchString: "${searchString}"]'/>
         </div>
     </div>
+</div>
 </div>

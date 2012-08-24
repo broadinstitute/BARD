@@ -1,5 +1,7 @@
 <%@ page import="grails.converters.JSON" %>
-<div style="padding-left: 5px">
+<div class="row-fluid">
+    <g:render template="facets" model="['metaData': metaData]" />
+<div class="span9">
     <g:each var="compound" in="${docs}">
         <g:link action="showCompound" id="${compound.cid}" target="_blank">${compound.iupac_name}</g:link>
         <img src="${createLink(controller: 'chemAxon', action: 'generateStructureImage', params: [smiles: compound.iso_smiles, width: 150, height: 120])}"/><br/>
@@ -27,4 +29,5 @@
                                  params='[searchString: "${searchString}"]'/>
         </div>
     </div>
+</div>
 </div>
