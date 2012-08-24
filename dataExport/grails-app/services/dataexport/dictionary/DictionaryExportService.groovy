@@ -51,7 +51,7 @@ class DictionaryExportService {
     public Long generateStage(final MarkupBuilder xml, final Long elementId) {
         String errorMessage
         final Sql sql = new Sql(dataSource)
-        def stageRow = sql.firstRow("'SELECT * FROM STAGE_TREE WHERE STAGE_ID=?", [elementId])
+        def stageRow = sql.firstRow("SELECT * FROM STAGE_TREE WHERE STAGE_ID=?", [elementId])
         if (stageRow) {
             String parentName = null
 
@@ -84,7 +84,7 @@ class DictionaryExportService {
         String errorMessage
 
         final Sql sql = new Sql(dataSource)
-        def resultTypeRow = sql.firstRow("'SELECT * FROM RESULT_TYPE_TREE WHERE RESULT_TYPE_ID=?", [elementId])
+        def resultTypeRow = sql.firstRow("SELECT * FROM RESULT_TYPE_TREE WHERE RESULT_TYPE_ID=?", [elementId])
         if (resultTypeRow) {
             Long parentNodeId = resultTypeRow.PARENT_NODE_ID
             String parentResultTypeName = null

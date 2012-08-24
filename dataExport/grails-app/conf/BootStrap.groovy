@@ -15,7 +15,7 @@ class BootStrap {
                     createTreeTables(sql)
                     insertDictionaryRecords(sql)
                     insertAssayDefRecords(sql)
-//                    insertProjectRecords(sql)
+                    //insertProjectRecords(sql)
 //                    insertExperiments(sql)
                 }
                 break;

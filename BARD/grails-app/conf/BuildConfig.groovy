@@ -52,6 +52,8 @@ grails.project.dependency.resolution = {
         compile ":twitter-bootstrap:2.0.2.25"
         compile ":elastic-search:0.4.5-SNAPSHOT"
 
+        compile(":build-test-data:2.0.3")
+
         // runtime scope
         runtime ":hibernate:$grailsVersion"
         runtime ":jquery:1.7.1"
