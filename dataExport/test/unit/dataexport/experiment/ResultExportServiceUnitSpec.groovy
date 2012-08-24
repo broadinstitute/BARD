@@ -193,7 +193,7 @@ class ResultExportServiceUnitSpec extends Specification {
         given: "A Result Context Item"
         when: "We call the service method to generate Attributes"
         final Map<String, String> resultContextItemAttributes =
-            this.resultExportService.generateAttributesForResultContextItem(resultContextItem)
+            this.resultExportService.generateAttributesForRunContextItem(resultContextItem)
         then: "The generated map is equal to the expected map"
         resultContextItemAttributes == results
         where:

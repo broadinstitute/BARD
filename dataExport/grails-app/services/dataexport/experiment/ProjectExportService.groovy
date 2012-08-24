@@ -1,13 +1,13 @@
 package dataexport.experiment
 
+import bard.db.enums.ReadyForExtraction
 import bard.db.experiment.Project
+import dataexport.registration.BardHttpResponse
 import dataexport.registration.MediaTypesDTO
+import dataexport.util.UtilityService
 import exceptions.NotFoundException
 import groovy.xml.MarkupBuilder
 import org.codehaus.groovy.grails.web.mapping.LinkGenerator
-import dataexport.registration.BardHttpResponse
-import dataexport.util.UtilityService
-import bard.db.enums.ReadyForExtraction
 
 class ProjectExportService {
     LinkGenerator grailsLinkGenerator
@@ -20,7 +20,6 @@ class ProjectExportService {
         this.projectMediaType = mediaTypesDTO.projectMediaType
         this.projectsMediaType = mediaTypesDTO.projectsMediaType
     }
-
 
     /**
      * Set the ReadyForExtraction value on the element to 'Complete'
@@ -37,7 +36,7 @@ class ProjectExportService {
      */
     public BardHttpResponse update(final Long id, final Long clientVersion, final String latestStatus) {
         final Project project = Project.findById(id)
-        return utilityService.update(project,id,clientVersion,latestStatus,"Project")
+        return utilityService.update(project, id, clientVersion, latestStatus, "Project")
     }
     /**
      * Generate a Project
@@ -48,7 +47,7 @@ class ProjectExportService {
         def attributes = [:]
         attributes.put('projectId', project.id)
         if (project.readyForExtraction) {
-            attributes.put('readyForExtraction', project.readyForExtraction)
+            attributes.put('readyForExtraction', project.readyForExtraction.toString())
         }
         if (project.groupType) {
             attributes.put('groupType', project.groupType)

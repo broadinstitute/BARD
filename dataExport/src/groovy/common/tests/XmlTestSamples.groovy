@@ -57,7 +57,7 @@ class XmlTestSamples {
 </resultContextItems>
 '''
     static final String PROJECT_EXPERIMENTS_UNIT = '''
-<projectExperiments>
+<projectSteps>
   <projectExperiment>
     <description>description</description>
     <precedingExperiment id='null'>
@@ -66,7 +66,7 @@ class XmlTestSamples {
     <link rel='related' href='null' type='projectMediaType' />
     <link rel='related' href='null' type='stageMediaType' />
   </projectExperiment>
-</projectExperiments>
+</projectSteps>
 '''
     static final String PROJECT_EXPERIMENT_UNIT = '''
   <projectExperiment>
@@ -85,12 +85,12 @@ class XmlTestSamples {
     </projectExperiment>
 '''
     static final String PROJECT_EXPERIMENTS_UNIT_NO_CHILD_ELEMENTS = '''
-    <projectExperiments>
+    <projectSteps>
     <projectExperiment>
     <description>description</description>
     <link rel='related' href='null' type='projectMediaType' />
     </projectExperiment>
-</projectExperiments>
+</projectSteps>
 '''
     static final String EXTERNAL_REFERENCES_UNT = '''
 <externalReferences>
@@ -134,7 +134,7 @@ class XmlTestSamples {
       </valueControlled>
     </resultContextItem>
   </resultContextItems>
-  <projectExperiments>
+  <projectSteps>
     <projectExperiment>
       <description>Broad</description>
       <precedingExperiment id='null'>
@@ -143,7 +143,7 @@ class XmlTestSamples {
       <link rel='related' href='null' type='projectMediaType' />
       <link rel='related' href='null' type='stageMediaType' />
     </projectExperiment>
-  </projectExperiments>
+  </projectSteps>
   <externalReferences>
     <externalReference>
       <externalAssayRef>External Assay Ref</externalAssayRef>
