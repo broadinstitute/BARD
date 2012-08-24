@@ -440,7 +440,15 @@ class XmlTestSamples {
   </stage>
 </stages>
 '''
+
     static String STAGE = '''
+<stage>
+  <stageName>construct variant assay</stageName>
+  <description>Description</description>
+  <link rel='related' href='http://localhost:8080/dataExport/api/dictionary/element/341' type='application/vnd.bard.cap+xml;type=element' />
+</stage>
+'''
+    static String STAGE1 = '''
 <stage stageElement='IC50'>
   <stageName>construct variant assay</stageName>
   <description>Description</description>
@@ -448,6 +456,13 @@ class XmlTestSamples {
 </stage>
 '''
     static String RESULT_TYPE = '''
+<resultType baseUnit='uM' resultTypeStatus='Published'>
+  <resultTypeName>IC50</resultTypeName>
+  <link rel='related' href='http://localhost:8080/dataExport/api/dictionary/element/341' type='application/vnd.bard.cap+xml;type=element' />
+</resultType>
+'''
+
+    static String RESULT_TYPE1 = '''
 <resultType resultTypeElement='IC50' baseUnit='uM' resultTypeStatus='Published'>
   <resultTypeName>IC50</resultTypeName>
   <link rel='related' href='http://localhost:8080/dataExport/api/dictionary/element/341' type='application/vnd.bard.cap+xml;type=element' />

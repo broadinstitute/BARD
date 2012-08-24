@@ -61,10 +61,10 @@ class DictionaryExportHelperServiceIntegrationSpec extends IntegrationSpec {
         when:
         this.dictionaryExportHelperService.generateResultType(this.markupBuilder, resultType)
         then:
-         XmlTestAssertions.assertResults(results, this.writer.toString())
+        XmlTestAssertions.assertResults(results, this.writer.toString())
         where:
         label         | results
-        "Result Type" | XmlTestSamples.RESULT_TYPE
+        "Result Type" | XmlTestSamples.RESULT_TYPE1
 
     }
 
@@ -123,7 +123,7 @@ class DictionaryExportHelperServiceIntegrationSpec extends IntegrationSpec {
         XmlTestAssertions.assertResults(results, this.writer.toString())
         where:
         label   | results
-        "Stage" | XmlTestSamples.STAGE
+        "Stage" | XmlTestSamples.STAGE1
 
     }
 

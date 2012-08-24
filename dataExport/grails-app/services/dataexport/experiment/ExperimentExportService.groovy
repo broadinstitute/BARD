@@ -5,7 +5,6 @@ import bard.db.registration.ExternalReference
 import bard.db.registration.ExternalSystem
 import dataexport.registration.BardHttpResponse
 import dataexport.registration.MediaTypesDTO
-import dataexport.registration.UpdateType
 import dataexport.util.UtilityService
 import exceptions.NotFoundException
 import groovy.xml.MarkupBuilder
@@ -49,7 +48,7 @@ class ExperimentExportService {
     public BardHttpResponse update(final Long id, final Long clientVersion, final String latestStatus) {
         final Experiment experiment = Experiment.findById(id)
         //make sure there are no children with a status other than 'Complete'
-        final int outStandingResults = Result.countByExperimentAndReadyForExtractionNotEqual(experiment, UpdateType.COMPLETE.description)
+        final int outStandingResults = Result.countByExperimentAndReadyForExtractionNotEqual(experiment, ReadyForExtraction.Complete)
         if (outStandingResults > 0) {//this experiments has results that have not yet been consumed
             return new BardHttpResponse(httpResponseCode: HttpServletResponse.SC_NOT_ACCEPTABLE, ETag: experiment.version)
         }
@@ -256,7 +255,6 @@ class ExperimentExportService {
                     link(rel: 'related', href: "${precedingExperimentHref}", type: "${this.mediaTypeDTO.experimentMediaType}")
                 }
             }
-            projectStep
             final Project project = projectStep.project
             if (project) {
                 final String projectHref = grailsLinkGenerator.link(mapping: 'project', absolute: true, params: [id: "${project.id}"]).toString()
