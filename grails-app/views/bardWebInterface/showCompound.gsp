@@ -14,13 +14,12 @@
 </head>
 <body>
 <h1>Compound Details for PubChem CID ${compound.pubChemCID}</h1>
-<div class="row">
-    <div class="span3"><img
-            src="${createLink(controller: 'chemAxon', action: 'generateStructureImage', params: [smiles: compound?.structureSMILES, width: 150, height: 120])}"/>
-    </div> <br/>
-
-    <div class="span6 table">
-        <table class="span5">
+<div>
+    <img src="${createLink(controller: 'chemAxon', action: 'generateStructureImage', params: [smiles: compound?.structureSMILES, width: 200, height: 200])}"/>
+</div>
+<div class="row-fluid">
+    <div class="span9">
+        <table class="table">
             <tr>
                 <th>Compound Property</th>
                 <th>Value</th>
@@ -85,8 +84,8 @@
         </table>
     </div>
 
-    <div class="span6">
-        <table>
+    <div class="span3">
+        <table class="table">
             <tr>
                 <th>SIDs</th>
                 <th>Source</th>
@@ -100,7 +99,5 @@
         </table>
     </div>
 </div>
-<r:layoutResources/>
-<r:require modules="bootstrap"/>
 </body>
 </html>
