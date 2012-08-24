@@ -69,21 +69,27 @@
 </g:each>
 </table>
 <br/>
-        <g:form name="aidForm" controller="bardWebInterface" action="search">
+        <div class="leftofline">
 
-            <div class="content ">
-                <table class="skinnyTable" width=100%>
-                    <tr>
-                        <td width=100%>
-                         </td>
-                        <td>
-                            <g:submitButton name="search"
-                                            value="Generate Molecular Spreadsheet"/>
-                        </td>
-                    </tr>
-                 </table>
-            </div>
-        </g:form>
+        <button>
+        <div class="btn-group">
+            <a class="btn-small dropdown-toggle" data-toggle="dropdown" href="#">
+                <i class="icon-eye-open"></i> Visualize
+                <span class="caret"></span>
+            </a>
+            <ul class="dropdown-menu">
+                <li><a href="#">Visualize as Molecular Spreadsheet</a></li>
+                <li><a href="#">Visualize in Advanced Analysis Client</a></li>
+            </ul>
+        </div>
+        </button>
+        </div>
+
+        <div class="rightofline">
+
+        <button>Clear all</button>
+
+         </div>
 
     </td></tr>
         </tbody>
