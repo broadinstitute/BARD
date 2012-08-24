@@ -18,7 +18,7 @@ class CartCompoundSpec  extends Specification  {
         // Tear down logic here
     }
 
-    void "test shopping cart assay element"() {
+    void "test shopping cart compound element"() {
         when:
             CartCompound cartCompound = new CartCompound(smiles: "c1ccccc1")
             assertNotNull(cartCompound)
