@@ -19,8 +19,8 @@ class Project {
     ReadyForExtraction readyForExtraction = ReadyForExtraction.Pending
 
     Set<ProjectStep> projectSteps = [] as Set<ProjectStep>
-    Set<ExternalReference> externalReferences = [] as Set<ProjectStep>
-    Set<ProjectContextItem> projectContextItems = [] as Set<ProjectStep>
+    Set<ExternalReference> externalReferences = [] as Set<ExternalReference>
+    Set<ProjectContextItem> projectContextItems = [] as Set<ProjectContextItem>
 
     static hasMany = [projectSteps: ProjectStep,
             externalReferences: ExternalReference,
