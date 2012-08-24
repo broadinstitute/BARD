@@ -30,7 +30,7 @@ abstract class AbstractProjectContextItem {
     Date dateCreated
     Date lastUpdated
     String modifiedBy
-
+    ProjectContextItem parentGroupProjectContext
 
     static mapping = {
         table('PROJECT_CONTEXT_ITEM')
@@ -47,7 +47,7 @@ abstract class AbstractProjectContextItem {
     static constraints = {
         attributeElement()
         valueElement(nullable: true)
-
+        parentGroupProjectContext(nullable: true)
         extValueId(nullable: true, blank: false, maxSize: EXT_VALUE_ID_MAX_SIZE)
         qualifier(nullable: true, blank: false, inList: ['= ', '< ', '<=', '> ', '>=', '<<', '>>', '~ '])
 
