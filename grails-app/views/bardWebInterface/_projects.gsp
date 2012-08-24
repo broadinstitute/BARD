@@ -1,27 +1,32 @@
 <div class="row-fluid">
 <g:render template="facets" model="['metaData': metaData]" />
 <div class="span9">
-    <g:each var="project" in="${docs}">
-        <g:link action="showProject" id="${project.proj_id}" target="_blank">${project.name}</g:link><br/>
-        ${project.highlight}<br/>
-        <a href="/bardwebquery/sarCart/add/${project.proj_id}"
-           onclick="jQuery.ajax({  type:'POST',
-               data:{'id': '${project.proj_id}','class': 'class bardqueryapi.CartProject','projectName':'${project.name}','version': '0'},
-               url:'/bardwebquery/sarCart/add',
-               success:function(data,textStatus){
-                   jQuery('#sarCartRefill').html(data);
-               },
-               error:function(XMLHttpRequest,textStatus,errorThrown){
-                   alert('problem adding project')
-               }
-           });
-           return false;"
-           action="add"
-           controller="sarCart"><div class="cntrcart"><nobr>Add to Cart</nobr><br/><i class="icon-shopping-cart"></i></div></a>
-        <br/>
-
-        <br/>
-    </g:each>
+    <ul class="unstyled results">
+        <g:each var="project" in="${docs}">
+            <li>
+                <g:link action="showProject" id="${project.proj_id}" target="_blank">Project ID: ${project.proj_id} - ${project.name}</g:link>
+                <a href="/bardwebquery/sarCart/add/${project.proj_id}"
+                   onclick="jQuery.ajax({  type:'POST',
+                       data:{'id': '${project.proj_id}','class': 'class bardqueryapi.CartProject','projectName':'${project.name}','version': '0'},
+                       url:'/bardwebquery/sarCart/add',
+                       success:function(data,textStatus){
+                           jQuery('#sarCartRefill').html(data);
+                       },
+                       error:function(XMLHttpRequest,textStatus,errorThrown){
+                           alert('problem adding project')
+                       }
+                   });
+                   return false;"
+                   action="add"
+                   controller="sarCart"><div class="cntrcart"><nobr><i class="icon-shopping-cart"></i> Add to Cart</nobr></div></a>
+                <g:if test="${project.highlight}">
+                    <ul>
+                        <li>${project.highlight}</li>
+                    </ul>
+                </g:if>
+            </li>
+        </g:each>
+    </ul>
     <g:hiddenField name="totalProjects" id="totalProjects" value="${metaData?.nhit}"/>
     <div id="listProjectsPage">
         <div class="pagination">

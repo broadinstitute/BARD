@@ -1,7 +1,7 @@
 <div class="row-fluid">
     <g:render template="facets" model="['metaData': metaData]" />
 <div class="span9">
-    <ul class="unstyled">
+    <ul class="unstyled results">
     <g:each var="assay" in="${docs}">
         <li>
             <g:link action="showAssay" id="${assay.assay_id}" target="_blank">ADID: ${assay.assay_id} - ${assay.name}</g:link>
@@ -18,8 +18,7 @@
            });
            return false;"
            action="add"
-           class="removeXMark"
-           controller="sarCart"><div class="cntrcart"></div><i class="icon-shopping-cart"></i> <nobr>Add to Cart</nobr></a>
+           controller="sarCart"><div class="cntrcart"><nobr><i class="icon-shopping-cart"></i> Add to Cart</nobr></div></a>
     %{--ID: ${assayInstance?.id}, Target/pathway: Assay format: Date created:<br/> --}%
             <ul>
                 <li>${assay.highlight}</li>

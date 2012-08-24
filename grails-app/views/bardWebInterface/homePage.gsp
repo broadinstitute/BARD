@@ -7,7 +7,7 @@
 <body>
 <div class="row-fluid">
     <div class="span9">
-        <div id="resultTab" class="span12">
+        <div id="resultTab">
 
             <ul id="resultTabUL" class="nav nav-tabs">
                 <li class="active"  id="assaysTabLi"><a href="#assays" data-toggle="tab" id="assaysTab">Assays (0)</a></li>
