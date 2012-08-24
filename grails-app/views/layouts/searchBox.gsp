@@ -119,7 +119,7 @@
                 </g:radioGroup>
             </div></div>
             <a href="#" class="btn" data-dismiss="modal">Close</a>
-            <g:submitButton name="searchButton" id="searchButton" value="Search" class="btn btn-primary"/>
+            <g:submitButton name="searchButton" id="searchButton" value="Search" class="btn btn-primary" data-dismiss="modal"/>
     </div>
 </div>
 </body>
