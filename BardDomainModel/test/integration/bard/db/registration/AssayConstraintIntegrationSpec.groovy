@@ -1,13 +1,13 @@
 package bard.db.registration
 
+import bard.db.enums.ReadyForExtraction
 import grails.plugin.spock.IntegrationSpec
+import org.junit.Before
 import spock.lang.Unroll
 
 import static bard.db.registration.Assay.*
 import static test.TestUtils.assertFieldValidationExpectations
 import static test.TestUtils.createString
-import org.junit.Before
-import bard.db.enums.ReadyForExtraction
 
 /**
  * Integration tests for Asssay
@@ -47,6 +47,32 @@ class AssayConstraintIntegrationSpec extends IntegrationSpec {
         'valid value'    | AssayStatus.Retired    | true  | null
         // 'too long'         | createString(ASSAY_STATUS_MAX_SIZE) | false | 'maxSize.exceeded'  // can't seem to hit only getting not.inList
 
+    }
+
+    void "test assayTitle constraints #desc assayTitle: "() {
+
+        final String field = 'assayTitle'
+
+        when: 'a value is set for the field under test'
+        domainInstance[(field)] = valueUnderTest
+        domainInstance.validate()
+
+        then: 'verify valid or invalid for expected reason'
+        assertFieldValidationExpectations(domainInstance, field, valid, errorCode)
+
+        and: 'verify the domain can be persisted to the db'
+        if (valid) {
+            domainInstance == domainInstance.save(flush: true)
+        }
+
+        where:
+        desc               | valueUnderTest                         | valid | errorCode
+        'null not valid'   | null                                   | false | 'nullable'
+        'blank not valid'  | ''                                     | false | 'blank'
+        'blank not valid'  | '   '                                  | false | 'blank'
+
+        'too long'         | createString(ASSAY_TITLE_MAX_SIZE + 1) | false | 'maxSize.exceeded'
+        'exactly at limit' | createString(ASSAY_TITLE_MAX_SIZE)     | true  | null
     }
 
     void "test assayName constraints #desc assayName: "() {

@@ -11,8 +11,10 @@ class Assay {
     private static final int DESIGNED_BY_MAX_SIZE = 100
     private static final int READY_FOR_EXTRACTION_MAX_SIZE = 20
     private static final int MODIFIED_BY_MAX_SIZE = 40
+    private static final int ASSAY_TITLE_MAX_SIZE = 250
 
     AssayStatus assayStatus = AssayStatus.Pending
+    String assayTitle
     String assayName
     String assayVersion
     String designedBy
@@ -50,6 +52,7 @@ class Assay {
 
     static constraints = {
         assayStatus(maxSize: ASSAY_STATUS_MAX_SIZE, blank: false)
+        assayTitle(maxSize: ASSAY_TITLE_MAX_SIZE, blank: false)
         assayName(maxSize: ASSAY_NAME_MAX_SIZE, blank: false)
         assayVersion(maxSize: ASSAY_VERSION_MAX_SIZE, blank: false)
         designedBy(nullable: true, maxSize: DESIGNED_BY_MAX_SIZE)
