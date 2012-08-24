@@ -1,5 +1,6 @@
 package bard.db.registration
 
+import bard.db.enums.ReadyForExtraction
 import grails.buildtestdata.mixin.Build
 import org.junit.Before
 import spock.lang.Specification
@@ -8,7 +9,6 @@ import spock.lang.Unroll
 import static bard.db.registration.Assay.*
 import static test.TestUtils.assertFieldValidationExpectations
 import static test.TestUtils.createString
-import bard.db.enums.ReadyForExtraction
 
 /**
  * See the API for {@link grails.test.mixin.domain.DomainClassUnitTestMixin} for usage instructions
@@ -49,6 +49,32 @@ class AssayConstraintUnitSpec extends Specification {
 
     }
 
+    void "test assayTitle constraints #desc assayTitle: "() {
+
+        final String field = 'assayTitle'
+
+        when: 'a value is set for the field under test'
+        domainInstance[(field)] = valueUnderTest
+        domainInstance.validate()
+
+        then: 'verify valid or invalid for expected reason'
+        assertFieldValidationExpectations(domainInstance, field, valid, errorCode)
+
+        and: 'verify the domain can be persisted to the db'
+        if (valid) {
+            domainInstance == domainInstance.save(flush: true)
+        }
+
+        where:
+        desc               | valueUnderTest                         | valid | errorCode
+        'null not valid'   | null                                   | false | 'nullable'
+        'blank not valid'  | ''                                     | false | 'blank'
+        'blank not valid'  | '   '                                  | false | 'blank'
+
+        'too long'         | createString(ASSAY_TITLE_MAX_SIZE + 1) | false | 'maxSize.exceeded'
+        'exactly at limit' | createString(ASSAY_TITLE_MAX_SIZE)     | true  | null
+    }
+
     void "test assayName constraints #desc assayName: "() {
 
         final String field = 'assayName'
@@ -66,10 +92,10 @@ class AssayConstraintUnitSpec extends Specification {
         }
 
         where:
-        desc               | valueUnderTest                        | valid | errorCode
-        'null not valid'   | null                                  | false | 'nullable'
-        'blank not valid'  | ''                                    | false | 'blank'
-        'blank not valid'  | '   '                                 | false | 'blank'
+        desc               | valueUnderTest                         | valid | errorCode
+        'null not valid'   | null                                   | false | 'nullable'
+        'blank not valid'  | ''                                     | false | 'blank'
+        'blank not valid'  | '   '                                  | false | 'blank'
 
         'too long'         | createString(ASSAY_NAME_MAX_SIZE + 1) | false | 'maxSize.exceeded'
         'exactly at limit' | createString(ASSAY_NAME_MAX_SIZE)     | true  | null

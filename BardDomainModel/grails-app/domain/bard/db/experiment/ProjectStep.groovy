@@ -11,6 +11,9 @@ class ProjectStep {
     Date lastUpdated
     String modifiedBy
 
+    Set<StepContextItem> stepContextItems = [] as Set<StepContextItem>
+
+    static hasMany = [stepContextItems:StepContextItem]
     static constraints = {
         project()
         experiment()
