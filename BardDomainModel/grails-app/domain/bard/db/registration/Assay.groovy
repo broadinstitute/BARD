@@ -29,6 +29,16 @@ class Assay {
     Set<AssayContext> assayContexts = [] as Set<AssayContext>
     Set<AssayDocument> assayDocuments = [] as Set<AssayDocument>
 
+
+    List<AssayContextItem> getAssayContextItems() {
+        Set<AssayContextItem> assayContextItems = new HashSet<AssayContextItem>()
+        for (AssayContext assayContext : this.assayContexts){
+            assayContextItems.addAll(assayContext.assayContextItems)
+        }
+        return assayContextItems as List<AssayContextItem>
+    }
+
+    static transients = ['assayContextItems']
     static hasMany = [experiments: Experiment,
             measures: Measure,
             assayContexts: AssayContext,
