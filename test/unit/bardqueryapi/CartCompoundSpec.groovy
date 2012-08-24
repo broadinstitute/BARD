@@ -8,7 +8,7 @@ import spock.lang.Specification
  */
 //@TestMixin(GrailsUnitTestMixin)
 @TestFor(BardWebInterfaceController)
-class CartAssaySpec extends Specification  {
+class CartCompoundSpec  extends Specification  {
 
     void setup() {
         // Setup logic here
@@ -20,11 +20,11 @@ class CartAssaySpec extends Specification  {
 
     void "test shopping cart assay element"() {
         when:
-            CartAssay cartAssay = new CartAssay(assayTitle: "Assay title")
-            assertNotNull(cartAssay)
+            CartCompound cartCompound = new CartCompound(smiles: "c1ccccc1")
+            assertNotNull(cartCompound)
 
         then:
-            assert cartAssay.assayTitle=='Assay title'
-            assertNull cartAssay.shoppingItem
+            assert cartCompound.smiles=='c1ccccc1'
+            assertNull cartCompound.shoppingItem
     }
 }
