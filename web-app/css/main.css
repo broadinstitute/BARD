@@ -93,13 +93,6 @@ img {
     color: #255b17;
 }
 
-.screenSection {
-    border-bottom: 2px solid black;
-    border-top: 2px solid black;
-    border-right: 2px solid black;
-    border-left: 2px solid black;
-    padding: 10 10.25em;
-}
 
 .spinner {
     background: url(../images/spinner.gif) 50% 50% no-repeat transparent;
@@ -183,13 +176,6 @@ img {
 }
 
 /* CREATE/EDIT FORMS AND SHOW PAGES */
-a.removeXMark {
-    color: #EE0000;
-    outline: none;
-    text-decoration: none;
-    font-size: 16;
-    font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
-}
 fieldset,
 .property-list {
     margin: 0.6em 1.25em 0 1.25em;

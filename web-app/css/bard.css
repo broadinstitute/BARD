@@ -18,3 +18,32 @@
     margin-top: -1px;
     min-height: 200px;
 }
+
+
+div.screenSection {
+    border-bottom: 1px solid #aaaaaa;
+    border-top: 1px solid #aaaaaa;
+    border-right: 1px solid #aaaaaa;
+    border-left: 1px solid #aaaaaa;
+    padding: 15px;
+}
+a.removeXMark {
+    color: #EE0000;
+    outline: none;
+    text-decoration: none;
+    font-size: 16;
+    font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
+}
+
+div.cntrcart {
+    vertical-align: middle;
+    text-align: justify;
+    width: 30px;
+    margin-top: 0px;
+    margin-bottom: 0px;
+    padding: 0px;
+}
+div.cntrcart img {
+    display: block;
+    margin: 0 auto;
+}

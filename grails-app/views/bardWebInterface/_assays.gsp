@@ -16,7 +16,7 @@
            return false;"
            action="add"
            class="removeXMark"
-           controller="sarCart">O</a>
+           controller="sarCart"><div class="cntrcart"></div><nobr>Add to Cart</nobr><br/><i class="icon-shopping-cart"></i></div></a>
     %{--ID: ${assayInstance?.id}, Target/pathway: Assay format: Date created:<br/> --}%
         <br/>
         <br/>

@@ -8,9 +8,9 @@
     <tbody id="sarCartRefill">
     <tr><td>
 
-<h3>Query Cart - Selected Results</h3>
-<h4>${queryCartService.totalNumberOfUniqueItemsInCart(shoppingCartService)} results selected</h4>
-<h3>COMPOUNDS</h3>
+<h4>Query Cart - Selected Results</h4>
+<h5>${queryCartService.totalNumberOfUniqueItemsInCart(shoppingCartService)} results selected</h5>
+<h4>COMPOUNDS</h4>
 
     <table>
 <g:each in="${queryCartService.groupUniqueContentsByType(shoppingCartService)[(QueryCartService.cartCompound)]}" var="elem" status="item">
@@ -41,7 +41,7 @@
     </td></tr>
     <tr><td>
 <br/>
-<h3>ASSAY DEFINITIONS</h3>
+<h4>ASSAY DEFINITIONS</h4>
 <table>
 <g:each in="${queryCartService.groupUniqueContentsByType(shoppingCartService)[(QueryCartService.cartAssay)]}" var="elem" status="item">
     <tr>

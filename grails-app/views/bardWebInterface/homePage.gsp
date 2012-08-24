@@ -33,7 +33,7 @@
         </div>
     </div>
 
-    <div class="span3">
+    <div class="span3 screenSection">
 
             <g:render template="sarCartContent"/>
 
