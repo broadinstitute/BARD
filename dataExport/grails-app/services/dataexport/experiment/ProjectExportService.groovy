@@ -6,9 +6,8 @@ import exceptions.NotFoundException
 import groovy.xml.MarkupBuilder
 import org.codehaus.groovy.grails.web.mapping.LinkGenerator
 import dataexport.registration.BardHttpResponse
-import javax.servlet.http.HttpServletResponse
-import dataexport.registration.UpdateType
 import dataexport.util.UtilityService
+import bard.db.enums.ReadyForExtraction
 
 class ProjectExportService {
     LinkGenerator grailsLinkGenerator
@@ -86,7 +85,7 @@ class ProjectExportService {
      * @param xml
      */
     public void generateProjects(def markupBuilder) {
-        final List<Project> projects = Project.findAllByReadyForExtraction('Ready')
+        final List<Project> projects = Project.findAllByReadyForExtraction(ReadyForExtraction.Ready)
         final int numberOfProjects = projects.size()
         markupBuilder.projects(count: numberOfProjects) {
             for (Project project : projects) {

@@ -1,6 +1,6 @@
 package dataexport.experiment
 
-import bard.db.experiment.GroupType
+import bard.db.enums.ReadyForExtraction
 import bard.db.experiment.Project
 import common.tests.XmlTestAssertions
 import common.tests.XmlTestSamples
@@ -38,15 +38,15 @@ class ProjectExportServiceUnitSpec extends Specification {
 
     void "test generate Project #label"() {
         given: "A Project"
-        final Project project = new Project(projectName: projectName, groupType: groupType, description: description, readyForExtraction: 'Ready')
+        final Project project = new Project(projectName: projectName, groupType: groupType, description: description, readyForExtraction: ReadyForExtraction.Ready)
         when: "We attempt to generate a Project XML document"
         this.projectExportService.generateProject(this.markupBuilder, project)
         then: "A valid xml document is generated and is similar to the expected document"
-         XmlTestAssertions.assertResults(results, this.writer.toString())
+        XmlTestAssertions.assertResults(results, this.writer.toString())
         where:
-        label                         | projectName     | groupType         | description | results
-        "Project with no description" | "Project Name1" | GroupType.Project | ""          | XmlTestSamples.PROJECT_NO_DESCRIPTION
-        "Full Project"                | "Project Name2" | GroupType.Panel   | "Broad"     | XmlTestSamples.PROJECT_WITH_DESCRIPTION
+        label                         | projectName     | groupType | description | results
+        "Project with no description" | "Project Name1" | 'Project' | ""          | XmlTestSamples.PROJECT_NO_DESCRIPTION
+        "Full Project"                | "Project Name2" | 'Panel'   | "Broad"     | XmlTestSamples.PROJECT_WITH_DESCRIPTION
 
     }
 
