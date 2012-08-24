@@ -1,130 +1,82 @@
-<assay assayId='3926' readyForExtraction='Ready' assayVersion='2.1' status='Active'>
-  <assayName>Late stage results from the probe development efforts to identify selective inhibitors of VIM-2 metallo-beta-lactamase: Prior art results</assayName>
-  <designedBy>The Scripps Research Institute Molecular Screening Center</designedBy>
-  <measureContextItems>
-    <measureContextItem measureContextItemId='53549' measureContextItemRef='53549' valueDisplay='Pseudomonas aeruginosa'>
-      <attributeId attributeType='Fixed' label='taxonomy'>
-        <link rel='related' href='https://bard.broadinstitute.org/dataExport/api/dictionary/element/143' type='application/vnd.bard.cap+xml;type=element' />
-      </attributeId>
-      <extValueId>287</extValueId>
-    </measureContextItem>
-    <measureContextItem measureContextItemId='53572' measureContextItemRef='53572' valueDisplay='beta-lactamase [Salmonella enterica subsp. enterica serovar Choleraesuis str. SC-B67]'>
-      <attributeId attributeType='Fixed' label='gene'>
-        <link rel='related' href='https://bard.broadinstitute.org/dataExport/api/dictionary/element/496' type='application/vnd.bard.cap+xml;type=element' />
-      </attributeId>
-      <extValueId>3283447</extValueId>
-    </measureContextItem>
-    <measureContextItem measureContextItemId='53565' measureContextItemRef='53564' valueDisplay='target'>
-      <valueId label='target'>
-        <link rel='related' href='https://bard.broadinstitute.org/dataExport/api/dictionary/element/69' type='application/vnd.bard.cap+xml;type=element' />
-      </valueId>
-      <attributeId attributeType='Fixed' label='assay component role'>
-        <link rel='related' href='https://bard.broadinstitute.org/dataExport/api/dictionary/element/10' type='application/vnd.bard.cap+xml;type=element' />
-      </attributeId>
-    </measureContextItem>
-    <measureContextItem measureContextItemId='53564' measureContextItemRef='53564' valueDisplay='gi|114881106|ref|YP_758647.1|Beta lactamase [Pseudomonas aeruginosa]'>
-      <attributeId attributeType='Fixed' label='protein'>
-        <link rel='related' href='https://bard.broadinstitute.org/dataExport/api/dictionary/element/38' type='application/vnd.bard.cap+xml;type=element' />
-      </attributeId>
-      <extValueId>114881106</extValueId>
-    </measureContextItem>
-    <measureContextItem measureContextItemId='53574' measureContextItemRef='53573' valueDisplay='target'>
-      <valueId label='target'>
-        <link rel='related' href='https://bard.broadinstitute.org/dataExport/api/dictionary/element/69' type='application/vnd.bard.cap+xml;type=element' />
-      </valueId>
-      <attributeId attributeType='Fixed' label='assay component role'>
-        <link rel='related' href='https://bard.broadinstitute.org/dataExport/api/dictionary/element/10' type='application/vnd.bard.cap+xml;type=element' />
-      </attributeId>
-    </measureContextItem>
-    <measureContextItem measureContextItemId='53573' measureContextItemRef='53573' valueDisplay='gi|60115532|ref|YP_209323.1|beta-lactamase [Salmonella enterica subsp. enterica serovar Choleraesuis str. SC-B67]'>
-      <attributeId attributeType='Fixed' label='protein'>
-        <link rel='related' href='https://bard.broadinstitute.org/dataExport/api/dictionary/element/38' type='application/vnd.bard.cap+xml;type=element' />
-      </attributeId>
-      <extValueId>60115532</extValueId>
-    </measureContextItem>
-    <measureContextItem measureContextItemId='53548' measureContextItemRef='53547' valueDisplay='bla Beta lactamase [ Pseudomonas aeruginosa ]'>
-      <attributeId attributeType='Fixed' label='comment'>
-        <link rel='related' href='https://bard.broadinstitute.org/dataExport/api/dictionary/element/811' type='application/vnd.bard.cap+xml;type=element' />
-      </attributeId>
-    </measureContextItem>
-    <measureContextItem measureContextItemId='53547' measureContextItemRef='53547' valueDisplay='Beta lactamase [Pseudomonas aeruginosa]'>
-      <attributeId attributeType='Fixed' label='gene'>
-        <link rel='related' href='https://bard.broadinstitute.org/dataExport/api/dictionary/element/496' type='application/vnd.bard.cap+xml;type=element' />
-      </attributeId>
-      <extValueId>4290808</extValueId>
-    </measureContextItem>
-  </measureContextItems>
-  <assayDocuments>
-    <assayDocument documentType='Paper'>
-      <documentName>Koch AL. Bacterial wall as target for attack: past, present, and future research. Clin Microbiol Rev 2003 Oct; 16(4) 673-87</documentName>
-      <link rel='item' href='https://bard.broadinstitute.org/dataExport/api/assayDocument/30634' type='application/vnd.bard.cap+xml;type=assayDoc' />
-    </assayDocument>
-    <assayDocument documentType='Paper'>
-      <documentName>Walsh TR, Toleman MA, Poirel L, Nordmann P. Metallo-beta-lactamases: the quiet before the storm? Clin Microbiol Rev 2005 Apr; 18(2) 306-25</documentName>
-      <link rel='item' href='https://bard.broadinstitute.org/dataExport/api/assayDocument/30685' type='application/vnd.bard.cap+xml;type=assayDoc' />
-    </assayDocument>
-    <assayDocument documentType='Paper'>
-      <documentName>Wang CX, Mi ZH. Imipenem-resistant Pseudomonas aeruginosa producing IMP-1 metallo-beta-lactamases and lacking the outer-membrane protein OprD. J Med Microbiol 2006 Mar; 55(Pt 3) 353-4</documentName>
-      <link rel='item' href='https://bard.broadinstitute.org/dataExport/api/assayDocument/30688' type='application/vnd.bard.cap+xml;type=assayDoc' />
-    </assayDocument>
-    <assayDocument documentType='Paper'>
-      <documentName>Sacha P, Wieczorek P, Hauschild T, Zórawski M, Olsza?ska D, Tryniszewska E. Metallo-beta-lactamases of Pseudomonas aeruginosa--a novel mechanism resistance to beta-lactam antibiotics. Folia Histochem Cytobiol 2008; 46(2) 137-42</documentName>
-      <link rel='item' href='https://bard.broadinstitute.org/dataExport/api/assayDocument/30633' type='application/vnd.bard.cap+xml;type=assayDoc' />
-    </assayDocument>
-    <assayDocument documentType='Comments'>
-      <documentName>Comments</documentName>
-      <link rel='item' href='https://bard.broadinstitute.org/dataExport/api/assayDocument/11687' type='application/vnd.bard.cap+xml;type=assayDoc' />
-    </assayDocument>
-    <assayDocument documentType='Paper'>
-      <documentName>Abeylath SC, Turos E. Drug delivery approaches to overcome bacterial resistance to beta-lactam antibiotics. Expert Opin Drug Deliv 2008 Sep; 5(9) 931-49</documentName>
-      <link rel='item' href='https://bard.broadinstitute.org/dataExport/api/assayDocument/30636' type='application/vnd.bard.cap+xml;type=assayDoc' />
-    </assayDocument>
-    <assayDocument documentType='Paper'>
-      <documentName>Lauretti L, Riccio ML, Mazzariol A, Cornaglia G, Amicosante G, Fontana R, Rossolini GM. Cloning and characterization of blaVIM, a new integron-borne metallo-beta-lactamase gene from a Pseudomonas aeruginosa clinical isolate. Antimicrob Agents Chemother 1999 Jul; 43(7) 1584-90</documentName>
-      <link rel='item' href='https://bard.broadinstitute.org/dataExport/api/assayDocument/30687' type='application/vnd.bard.cap+xml;type=assayDoc' />
-    </assayDocument>
-    <assayDocument documentType='Paper'>
-      <documentName>Gupta V. An update on newer beta-lactamases. Indian J Med Res 2007 Nov; 126(5) 417-27</documentName>
-      <link rel='item' href='https://bard.broadinstitute.org/dataExport/api/assayDocument/30631' type='application/vnd.bard.cap+xml;type=assayDoc' />
-    </assayDocument>
-    <assayDocument documentType='Paper'>
-      <documentName>Minond D, Saldanha SA, Subramaniam P, Spaargaren M, Spicer T, Fotsing JR, Weide T, Fokin VV, Sharpless KB, Galleni M, Bebrone C, Lassaux P, Hodder P. Inhibitors of VIM-2 by screening pharmacologically active and click-chemistry compound libraries. Bioorg Med Chem 2009 Jul 15; 17(14) 5027-37</documentName>
-      <link rel='item' href='https://bard.broadinstitute.org/dataExport/api/assayDocument/30690' type='application/vnd.bard.cap+xml;type=assayDoc' />
-    </assayDocument>
-    <assayDocument documentType='Paper'>
-      <documentName>Siegel RE. Emerging gram-negative antibiotic resistance: daunting challenges, declining sensitivities, and dire consequences. Respir Care 2008 Apr; 53(4) 471-9</documentName>
-      <link rel='item' href='https://bard.broadinstitute.org/dataExport/api/assayDocument/30630' type='application/vnd.bard.cap+xml;type=assayDoc' />
-    </assayDocument>
-    <assayDocument documentType='Protocol'>
-      <documentName>Protocol</documentName>
-      <link rel='item' href='https://bard.broadinstitute.org/dataExport/api/assayDocument/11685' type='application/vnd.bard.cap+xml;type=assayDoc' />
-    </assayDocument>
-    <assayDocument documentType='Description'>
-      <documentName>Description</documentName>
-      <link rel='item' href='https://bard.broadinstitute.org/dataExport/api/assayDocument/11686' type='application/vnd.bard.cap+xml;type=assayDoc' />
-    </assayDocument>
-    <assayDocument documentType='Paper'>
-      <documentName>Wang Z, Fast W, Valentine AM, Benkovic SJ. Metallo-beta-lactamase: structure and mechanism. Curr Opin Chem Biol 1999 Oct; 3(5) 614-22</documentName>
-      <link rel='item' href='https://bard.broadinstitute.org/dataExport/api/assayDocument/30684' type='application/vnd.bard.cap+xml;type=assayDoc' />
-    </assayDocument>
-    <assayDocument documentType='Paper'>
-      <documentName>Zuck P, O'Donnell GT, Cassaday J, Chase P, Hodder P, Strulovici B, Ferrer M. Miniaturization of absorbance assays using the fluorescent properties of white microplates. Anal Biochem 2005 Jul 15; 342(2) 254-9</documentName>
-      <link rel='item' href='https://bard.broadinstitute.org/dataExport/api/assayDocument/30689' type='application/vnd.bard.cap+xml;type=assayDoc' />
-    </assayDocument>
-    <assayDocument documentType='Paper'>
-      <documentName>Jin W, Arakawa Y, Yasuzawa H, Taki T, Hashiguchi R, Mitsutani K, Shoga A, Yamaguchi Y, Kurosaki H, Shibata N, Ohta M, Goto M. Comparative study of the inhibition of metallo-beta-lactamases (IMP-1 and VIM-2) by thiol compounds that contain a hydrophobic group. Biol Pharm Bull 2004 Jun; 27(6) 851-6</documentName>
-      <link rel='item' href='https://bard.broadinstitute.org/dataExport/api/assayDocument/30635' type='application/vnd.bard.cap+xml;type=assayDoc' />
-    </assayDocument>
-    <assayDocument documentType='Paper'>
-      <documentName>Bradford PA. Extended-spectrum beta-lactamases in the 21st century: characterization, epidemiology, and detection of this important resistance threat. Clin Microbiol Rev 2001 Oct; 14(4) 933-51, table of contents</documentName>
-      <link rel='item' href='https://bard.broadinstitute.org/dataExport/api/assayDocument/30632' type='application/vnd.bard.cap+xml;type=assayDoc' />
-    </assayDocument>
-    <assayDocument documentType='Paper'>
-      <documentName>Hirakata Y, Izumikawa K, Yamaguchi T, Takemura H, Tanaka H, Yoshida R, Matsuda J, Nakano M, Tomono K, Maesaki S, Kaku M, Yamada Y, Kamihira S, Kohno S. Rapid detection and evaluation of clinical characteristics of emerging multiple-drug-resistant gram-negative rods carrying the metallo-beta-lactamase gene blaIMP. Antimicrob Agents Chemother 1998 Aug; 42(8) 2006-11</documentName>
-      <link rel='item' href='https://bard.broadinstitute.org/dataExport/api/assayDocument/30686' type='application/vnd.bard.cap+xml;type=assayDoc' />
-    </assayDocument>
-  </assayDocuments>
-  <link rel='edit' href='https://bard.broadinstitute.org/dataExport/api/assays/3926' type='application/vnd.bard.cap+xml;type=assay' />
-  <link rel='self' href='https://bard.broadinstitute.org/dataExport/api/assays/3926' type='application/vnd.bard.cap+xml;type=assay' />
-  <link rel='up' href='https://bard.broadinstitute.org/dataExport/api/assays' type='application/vnd.bard.cap+xml;type=assays' />
+<?xml version="1.0" encoding="UTF-8"?>
+<assay xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+ xsi:noNamespaceSchemaLocation="assaySchema.xsd"
+ assayId="1"
+ readyForExtraction="Ready"
+ assayVersion="1"
+ assayType="Regular"
+ status="Active">
+    <assayTitle>Title1</assayTitle>
+    <assayName>Dose-response biochemical assay of inhibitors of Rho kinase 2 (Rock2)</assayName>
+    <designedBy>Scripps Florida</designedBy>
+    <assayContexts>
+        <assayContext>
+            <contextName>Context for IC50</contextName>
+            <assayContextItems>
+                <assayContextItem assayContextItemId='34' assayContextRef='Context for IC50' valueDisplay='Assay Explorer '>
+                    <valueId label='Assay Explorer'>
+                        <link rel='related' href='http://localhost:8080/dataExport/api/dictionary/element/372' type='application/vnd.bard.cap+xml;type=element' />
+                    </valueId>
+                    <attributeId attributeType='Fixed' label='software'>
+                        <link rel='related' href='http://localhost:8080/dataExport/api/dictionary/element/368' type='application/vnd.bard.cap+xml;type=element' />
+                    </attributeId>
+                </assayContextItem>
+                <assayContextItem assayContextItemId='35' assayContextRef='Context for IC50' valueDisplay='30' valueNum='30.0'>
+                    <attributeId attributeType='Fixed' label='Number of points'>
+                        <link rel='related' href='http://localhost:8080/dataExport/api/dictionary/element/370' type='application/vnd.bard.cap+xml;type=element' />
+                    </attributeId>
+                </assayContextItem>
+                <assayContextItem assayContextItemId='36' assayContextRef='Context for IC50' valueDisplay='0 - 4' valueMax='4.0'>
+                    <attributeId attributeType='Range' label='Number of exclusions'>
+                        <link rel='related' href='http://localhost:8080/dataExport/api/dictionary/element/369' type='application/vnd.bard.cap+xml;type=element' />
+                    </attributeId>
+                </assayContextItem>
+            </assayContextItems>
+        </assayContext>
+    </assayContexts>
+    <measures>
+        <measure assayContextRef='Context for IC50'>
+            <resultTypeRef label='IC50'>
+                <link rel='related' href='http://localhost:8080/dataExport/api/dictionary/resultType/341' type='application/vnd.bard.cap+xml;type=resultType' />
+            </resultTypeRef>
+            <entryUnit unit='uM' />
+        </measure>
+    </measures>
+    <assayContextItems>
+        <assayContextItem assayContextItemId='35' assayContextRef='Context for IC50' valueDisplay='30' valueNum='30.0'>
+            <attributeId attributeType='Fixed' label='Number of points'>
+                <link rel='related' href='http://localhost:8080/dataExport/api/dictionary/element/370' type='application/vnd.bard.cap+xml;type=element' />
+            </attributeId>
+        </assayContextItem>
+        <assayContextItem assayContextItemId='34' assayContextRef='Context for IC50' valueDisplay='Assay Explorer '>
+            <valueId label='Assay Explorer'>
+                <link rel='related' href='http://localhost:8080/dataExport/api/dictionary/element/372' type='application/vnd.bard.cap+xml;type=element' />
+            </valueId>
+            <attributeId attributeType='Fixed' label='software'>
+                <link rel='related' href='http://localhost:8080/dataExport/api/dictionary/element/368' type='application/vnd.bard.cap+xml;type=element' />
+            </attributeId>
+        </assayContextItem>
+        <assayContextItem assayContextItemId='36' assayContextRef='Context for IC50' valueDisplay='0 - 4' valueMax='4.0'>
+            <attributeId attributeType='Range' label='Number of exclusions'>
+                <link rel='related' href='http://localhost:8080/dataExport/api/dictionary/element/369' type='application/vnd.bard.cap+xml;type=element' />
+            </attributeId>
+        </assayContextItem>
+    </assayContextItems>
+    <assayDocuments>
+        <assayDocument documentType='Protocol'>
+            <documentName>Dose-response biochemical assay of inhibitors of Rho kinase 2 (Rock2)</documentName>
+            <link rel='item' href='http://localhost:8080/dataExport/api/assayDocument/1' type='application/vnd.bard.cap+xml;type=assayDoc' />
+        </assayDocument>
+        <assayDocument documentType='Protocol'>
+            <documentName>Dose-response biochemical assay of inhibitors of Rho kinase 2 (Rock2) pt 2</documentName>
+            <link rel='item' href='http://localhost:8080/dataExport/api/assayDocument/2' type='application/vnd.bard.cap+xml;type=assayDoc' />
+        </assayDocument>
+    </assayDocuments>
+    <link rel='edit' href='http://localhost:8080/dataExport/api/assays/1' type='application/vnd.bard.cap+xml;type=assay' />
+    <link rel='self' href='http://localhost:8080/dataExport/api/assays/1' type='application/vnd.bard.cap+xml;type=assay' />
+    <link rel='up' href='http://localhost:8080/dataExport/api/assays' type='application/vnd.bard.cap+xml;type=assays' />
+    <link rel='related' type='application/vnd.bard.cap+xml;type=experiment' href='http://localhost:8080/dataExport/api/experiments/23' />
+    <link rel='related' type='application/vnd.bard.cap+xml;type=experiment' href='http://localhost:8080/dataExport/api/experiments/2' />
+    <link rel='related' type='application/vnd.bard.cap+xml;type=experiment' href='http://localhost:8080/dataExport/api/experiments/1' />
 </assay>
+

@@ -38,11 +38,53 @@ The link with 'edit' relation should be used to set the status of this experimen
         <xs:complexType>
             <xs:sequence>
                 <xs:element minOccurs="0" ref="description"/>
-                <xs:element minOccurs="0" ref="resultContextItems"/>
-                <xs:element minOccurs="0" name="projectExperiments">
+                <xs:element minOccurs="0" name="experimentContextItems">
                     <xs:complexType>
                         <xs:sequence>
-                            <xs:element maxOccurs="unbounded" name="projectExperiment">
+                            <xs:element name="experimentContextItem" maxOccurs="unbounded">
+                                <xs:annotation>
+                                    <xs:documentation>We include the group result context Id and the result context item Id so that the client can walk the tree from child to parent</xs:documentation>
+                                </xs:annotation>
+                                <xs:complexType>
+                                    <xs:sequence>
+                                        <xs:element name="attribute" minOccurs="0">
+                                            <xs:complexType>
+                                                <xs:sequence>
+                                                  <xs:element ref="link" minOccurs="0"/>
+                                                </xs:sequence>
+                                                <xs:attribute name="label" type="xs:string"
+                                                  use="required"/>
+                                            </xs:complexType>
+                                        </xs:element>
+                                        <xs:element minOccurs="0" name="valueControlled">
+                                            <xs:complexType>
+                                                <xs:sequence>
+                                                  <xs:element ref="link" minOccurs="0"/>
+                                                </xs:sequence>
+                                                <xs:attribute name="label" type="xs:string"
+                                                  use="required"/>
+                                            </xs:complexType>
+                                        </xs:element>
+                                        <xs:element minOccurs="0" name="extValueId" type="xs:string"
+                                        />
+                                    </xs:sequence>
+                                    <xs:attribute name="experimentContextItemId" type="bardID"
+                                        use="required"/>
+                                    <xs:attribute name="parentGroup" type="bardID"/>
+                                    <xs:attribute name="qualifier" type="xs:string"/>
+                                    <xs:attribute name="valueDisplay" type="xs:string"/>
+                                    <xs:attribute name="valueNum" type="xs:double"/>
+                                    <xs:attribute name="valueMin" type="xs:double"/>
+                                    <xs:attribute name="valueMax" type="xs:double"/>
+                                </xs:complexType>
+                            </xs:element>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element minOccurs="0" name="projectSteps">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element maxOccurs="unbounded" name="projectStep">
                                 <xs:complexType>
                                     <xs:sequence>
                                         <xs:element minOccurs="0" ref="description"/>
