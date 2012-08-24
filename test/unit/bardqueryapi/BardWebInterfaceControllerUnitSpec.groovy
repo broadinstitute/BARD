@@ -1,5 +1,8 @@
 package bardqueryapi
 
+import com.metasieve.shoppingcart.ShoppingCartService
+
+import bard.core.Assay
 import bard.core.Compound
 import bard.core.DataSource
 import bard.core.LongValue
@@ -7,11 +10,10 @@ import bard.core.adapter.CompoundAdapter
 import elasticsearchplugin.ESAssay
 import elasticsearchplugin.ESXCompound
 import grails.test.mixin.TestFor
-import spock.lang.Specification
-import wslite.json.JSONArray
 import grails.test.mixin.TestMixin
 import grails.test.mixin.support.GrailsUnitTestMixin
-import com.metasieve.shoppingcart.ShoppingCartService
+import spock.lang.Specification
+import wslite.json.JSONArray
 
 /**
  * See the API for {@link grails.test.mixin.support.GrailsUnitTestMixin} for usage instructions
@@ -84,6 +86,29 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
         "Return a compound" | new Integer(872) | buildCompoundAdapter(872, [1, 2, 3], "CC") | 872         | [1, 2, 3]
     }
 
+    void "test showAssay #label"() {
+
+        when:
+        request.method = 'GET'
+        controller.showAssay(adid)
+
+        then:
+        queryService.showAssay(_) >> { assay }
+
+        "/bardWebInterface/showAssay" == view
+        assert model.assayInstance
+        adid == model.assayInstance.id
+        name == model.assayInstance.name
+
+        where:
+
+        label             | adid                | name   | assay
+        "Return an assay" | new Integer(485349) | "Test" | buildAssay(485349, "Test")
+
+        // TODO What do we get back if assay isn't found?
+        // TODO What if the network is down?
+    }
+
 //    void "test search #label"() {
 //        when:
 //        request.method = 'GET'
@@ -134,5 +159,11 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
         // MolecularData md = Mock()
         //compound.add(new MolecularValue(source, Compound.MolecularValue, md));
         return new CompoundAdapter(compound)
+    }
+
+    Assay buildAssay(Long adid, String name) {
+        Assay assay = new Assay(name)
+        assay.setId(adid)
+        return assay
     }
 }

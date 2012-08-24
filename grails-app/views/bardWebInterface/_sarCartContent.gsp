@@ -68,8 +68,36 @@
 </g:each>
 </table>
         <h5>PROJECTS</h5>
+<table>
+    <g:each in="${queryCartService.groupUniqueContentsByType(shoppingCartService)[(QueryCartService.cartProject)]}" var="elem" status="item">
+        <tr>
+            <td>
+                ${elem.toString()}
+            </td>
+            <td>
+                <a href="/bardwebquery/sarCart/remove/${elem.id}"
+                   onclick="jQuery.ajax({  type:'POST',
+                       data:{'id': '${elem.id}','class': 'class bardqueryapi.CartProject','version': '0'},
+                       url:'/bardwebquery/sarCart/remove',
+                       success:function(data,textStatus){
+                           jQuery('#sarCartRefill').html(data);
+                       },
+                       error:function(XMLHttpRequest,textStatus,errorThrown){
+                           alert('problem removing assay')
+                       }
+                   });
+                   return false;"
+                   action="remove"
+                   class="removeXMark"
+                   controller="sarCart">X</a>
+            </td>
+        </tr>
+    </g:each>
+</table>
 
-        <br/>
+
+
+    <br/>
         <div class="leftofline">
 
         <button>

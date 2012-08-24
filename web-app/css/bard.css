@@ -19,6 +19,20 @@
     min-height: 200px;
 }
 
+h1.detail {
+    float: left;
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
+div.header > h3 {
+    margin: 5px;
+}
+
+.header dl {
+    margin-top: 0px;
+    margin-bottom: 5px;
+}
 
 div.screenSection {
     border-bottom: 1px solid #aaaaaa;
@@ -56,4 +70,10 @@ div.leftofline {
 div.rightofline {
     margin-right: 30px;
     float: right;
+}
+
+div.facets {
+    background-color: rgba(157, 252, 157, 0.2);
+    padding: 2px;
+    border: 1px solid #d3d3d3;
 }

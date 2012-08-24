@@ -223,7 +223,6 @@ class BardWebInterfaceController {
         }
     }
 
-    //TODO: Whomever creates the gsp should also write unit tests for this method
     def showAssay(Integer assayProtocolId) {
         Integer assayId = assayProtocolId ?: params.id as Integer//if 'assay' param is provided, use that; otherwise, try the default id one
 

@@ -113,7 +113,7 @@
                               values="${StructureSearchParams.Type.values()}"
                               value="${StructureSearchParams.Type.Substructure}"
                               labels="${StructureSearchParams.Type.values()}">
-                    <label class="radio">
+                    <label class="radio inline">
                         ${it.radio} ${it.label}
                     </label>
                 </g:radioGroup>
