@@ -148,7 +148,6 @@ $(document).ready(function () {
             cache:false,
             beforeSend:function () {
                 $('#compoundsTab').html("Compounds " + spinnerImageLink);
-                $('#compoundsTabLi').addClass('active') ;
                 $('#compounds').html('');
                 $("#assaysTab").html('Assays (0)');
                 $('#assays').html('');
@@ -161,6 +160,7 @@ $(document).ready(function () {
                 $("#compounds").html(data);
                 var compoundTotal = 'Compounds (' + $("#totalCompounds").val() + ')';
                 $("#compoundsTab").html(compoundTotal);
+                $("#compounds").tab('show');
             },
             error:function (request, status, error) {
                 //TODO put in some code handling here. Dealing with time outs etc
