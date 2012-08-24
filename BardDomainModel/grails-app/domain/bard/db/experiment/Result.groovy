@@ -1,15 +1,18 @@
 package bard.db.experiment
 
 import bard.db.dictionary.Element
+import bard.db.enums.ReadyForExtraction
 
 class Result {
 
     private static final int VALUE_DISPLAY_MAX_SIZE = 256
     private static final int MODIFIED_BY_MAX_SIZE = 40
     private static final int RESULT_STATUS_MAX_SIZE = 20
+    private static final int READY_FOR_EXTRACTION_MAX_SIZE = 20
+
 
     String resultStatus
-    String readyForExtraction = 'Pending'
+    ReadyForExtraction readyForExtraction =  ReadyForExtraction.Pending
 
     String valueDisplay
     Float valueNum
@@ -48,7 +51,7 @@ class Result {
 
     static constraints = {
         resultStatus(maxSize: RESULT_STATUS_MAX_SIZE, nullable: false, inList: ["Pending", "Approved", "Rejected", "Mark for Deletion"])
-        readyForExtraction(maxSize: 20, nullable: false, inList: ["Pending", "Ready", "Started", "Complete"])
+        readyForExtraction(maxSize: READY_FOR_EXTRACTION_MAX_SIZE, nullable: false)
 
         valueDisplay(nullable: true, blank: false, maxSize: VALUE_DISPLAY_MAX_SIZE)
         valueNum(nullable: true)
