@@ -2,32 +2,40 @@
 <!DOCTYPE html>
 <html>
 <head>
-
-    <meta name="layout" content="main"/>
-    <r:require modules="core"/>
-    <r:require modules="bootstrap"/>
-
-    <title>Assay Definition</title>
-<r:script>
-	$(document).ready(function() {
-		$( "#accordion" ).accordion({ autoHeight: false });
-	}) 
-</r:script>
-
+    <meta name="layout" content="searchBox"/>
+    <title>Assay Definition : ADID ${assayInstance?.id}</title>
 </head>
 <body>
+<div class="page-header">
+    <h1>Assay Definition Detail for ADID </h1>
+</div>
+<div class="row-fluid">
+    <div class="span12">
+        <h3 data-toggle="collapse" data-target="#project-info">Projects</h3>
+        <div id="project-info">
+
+        </div>
+        <h3 data-toggle="collapse" data-target="#assay-bio-info">Assay and Biology Details</h3>
+        <div id="assay-bio-info">
+
+        </div>
+        <h3 data-toggle="collapse" data-target="#document-info">Documents</h3>
+        <div id="document-info">
+            <g:render template="assayDocuments" model="['assayInstance': assayInstance]" />
+        </div>
+        <h3 data-toggle="collapse" data-target="#result-info">Results</h3>
+        <div id="result-info">
+
+        </div>
+        <h3 data-toggle="collapse" data-target="#registration-info">Registration Info</h3>
+        <div id="registration-info">
+
+        </div>
+    </div>
+</div>
 	<div>
 	  	<div class="ui-widget"><p><h1>Assay View</h1></p></div>
 	  	
-		<g:if test="${flash.message}">
-			<div class="ui-widget">
-			<div class="ui-state-error ui-corner-all" style="margin-top: 20px; padding: 0 .7em;">
-				<p><span class="ui-icon ui-icon-alert" style="float: left; margin-right: .3em;"></span>
-				<strong>${flash.message}</strong>
-			</div>
-			</div>
-		</g:if>
-		
 		<g:if test="${assayInstance?.id}">
 		<div id="accordion">
 		
