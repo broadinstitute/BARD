@@ -23,7 +23,6 @@ as
          aco_cursor in out r_cursor);
 
 end load_data;
-
 /
 
 create or replace package body load_data
@@ -31,7 +30,7 @@ as
     --------------------------------------------------------------------
     --  This depends on the source and targe schemas being identical (columns in same order in every table)
     --
-    --  schatwin 7;2;12 initial version
+    --  schatwin 7/2/12 initial version
     --
     --
     --
@@ -108,6 +107,7 @@ as
             open aco_cursor for
             select ASSAY_ID,
                 ASSAY_STATUS,
+                ASSAY_TITLE,
                 ASSAY_NAME,
                 ASSAY_VERSION,
                 ASSAY_TYPE,
@@ -136,7 +136,7 @@ as
                 EXPERIMENT_STATUS,
                 READY_FOR_EXTRACTION,
                 ASSAY_ID,
-                LABORATORY_ID,
+                --LABORATORY_ID,
                 RUN_DATE_FROM,
                 RUN_DATE_TO,
                 HOLD_UNTIL_DATE,
@@ -188,14 +188,14 @@ as
             from external_reference
             where project_id = an_identifier;
 
-        elsif av_table_name = 'PROJECT_EXPERIMENT'
+        elsif av_table_name = 'PROJECT_STEP'
         then
             -- beware this one, it may retrieve follows_experiments that you
             -- have not yet migrated
             open aco_cursor for
-            select PROJECT_EXPERIMENT_ID,
+            select PROJECT_STEP_ID,
                 PROJECT_ID,
-                STAGE_ID,
+                --STAGE_ID,
                 EXPERIMENT_ID,
                 FOLLOWS_EXPERIMENT_ID,
                 DESCRIPTION,
@@ -203,7 +203,7 @@ as
                 DATE_CREATED,
                 LAST_UPDATED,
                 MODIFIED_BY
-            from project_experiment
+            from project_step
             where experiment_id = an_identifier
                or nvl(follows_experiment_id, an_identifier) = an_identifier;
 
@@ -247,16 +247,17 @@ as
             from result
             where experiment_id = an_identifier;
 
-        elsif av_table_name = 'RESULT_CONTEXT_ITEM'
+        elsif av_table_name = 'RUN_CONTEXT_ITEM'
         then
             -- must sort these to ensure the parents go into the target first
             -- just ensure the group...ID is not nulled!
             --dbms_output.put_line ('open_src_cursor, result=' ||to_char(an_identifier));
             open aco_cursor for
-            select RESULT_CONTEXT_ITEM_ID,
-                nvl(GROUP_RESULT_CONTEXT_ID,RESULT_CONTEXT_ITEM_ID),
+            select RUN_CONTEXT_ITEM_ID,
+                nvl(GROUP_RUN_CONTEXT_ID,RUN_CONTEXT_ITEM_ID),
                 EXPERIMENT_ID,
                 RESULT_ID,
+                DISCRIMINATOR,
                 ATTRIBUTE_ID,
                 VALUE_ID,
                 EXT_VALUE_ID,
@@ -269,18 +270,19 @@ as
                 DATE_CREATED,
                 LAST_UPDATED,
                 MODIFIED_BY
-            from result_context_item
+            from run_context_item
             where result_id = an_identifier
-            order by decode(nvl(GROUP_RESULT_CONTEXT_ID,RESULT_CONTEXT_ITEM_ID),
-                     RESULT_CONTEXT_ITEM_ID, 0, RESULT_CONTEXT_ITEM_ID);
+            order by decode(nvl(GROUP_RUN_CONTEXT_ID,RUN_CONTEXT_ITEM_ID),
+                     RUN_CONTEXT_ITEM_ID, 0, RUN_CONTEXT_ITEM_ID);
 
-        elsif av_table_name = 'RESULT_CONTEXT_ITEM_experiment'
+        elsif av_table_name = 'RUN_CONTEXT_ITEM_experiment'
         then
              open aco_cursor for
-            select RESULT_CONTEXT_ITEM_ID,
-                nvl(GROUP_RESULT_CONTEXT_ID,RESULT_CONTEXT_ITEM_ID),
+            select RUN_CONTEXT_ITEM_ID,
+                nvl(GROUP_RUN_CONTEXT_ID,RUN_CONTEXT_ITEM_ID),
                 EXPERIMENT_ID,
                 RESULT_ID,
+                DISCRIMINATOR,
                 ATTRIBUTE_ID,
                 VALUE_ID,
                 EXT_VALUE_ID,
@@ -293,11 +295,11 @@ as
                 DATE_CREATED,
                 LAST_UPDATED,
                 MODIFIED_BY
-            from result_context_item
+            from run_context_item
             where experiment_id = an_identifier
               and result_id is null
-            order by decode(nvl(GROUP_RESULT_CONTEXT_ID,RESULT_CONTEXT_ITEM_ID),
-                     RESULT_CONTEXT_ITEM_ID, 0, RESULT_CONTEXT_ITEM_ID);
+            order by decode(nvl(GROUP_RUN_CONTEXT_ID,RUN_CONTEXT_ITEM_ID),
+                     RUN_CONTEXT_ITEM_ID, 0, RUN_CONTEXT_ITEM_ID);
 
 
         elsif av_table_name = 'RESULT_HIERARCHY'
@@ -350,15 +352,14 @@ as
             where project_id = an_identifier
                or an_identifier is null;
 
-        elsif av_table_name = 'MEASURE_CONTEXT_ITEM'
+        elsif av_table_name = 'ASSAY_CONTEXT_ITEM'
         then
             -- must sort these to ensure the parents go into the target first
             -- just ensure the group...ID is not nulled!
             open aco_cursor for
-            select MEASURE_CONTEXT_ITEM_ID,
-                nvl(GROUP_MEASURE_CONTEXT_ITEM_ID, MEASURE_CONTEXT_ITEM_ID),
-                ASSAY_ID,
-                MEASURE_CONTEXT_ID,
+            select ASSAY_CONTEXT_ITEM_ID, --was MEASURE_CONTEXT_ITEM_ID,-- SJC 8/17/12
+                DISPLAY_ORDER,   -- was nvl(GROUP_MEASURE_CONTEXT_ITEM_ID, ASSAY_CONTEXT_ITEM_ID) -- sjc 8/17/12
+                ASSAY_CONTEXT_ID,
                 ATTRIBUTE_TYPE,
                 ATTRIBUTE_ID,
                 QUALIFIER,
@@ -372,33 +373,32 @@ as
                 DATE_CREATED,
                 LAST_UPDATED,
                 MODIFIED_BY
-            from measure_context_item
-            where assay_id = an_identifier
-            order by decode(nvl(group_measure_context_item_id, measure_context_item_id),
-                     measure_context_item_id, 0, measure_context_item_id);
+            from assay_context_item
+            where assay_context_id = an_identifier;
+            -- don't need an order any more as there's no circular reference
 
-        elsif av_table_name = 'MEASURE_CONTEXT'
+        elsif av_table_name = 'ASSAY_CONTEXT'
         then
             open aco_cursor for
-            select MEASURE_CONTEXT_ID,
+            select ASSAY_CONTEXT_ID,
                 ASSAY_ID,
                 CONTEXT_NAME,
                 VERSION,
                 DATE_CREATED,
                 LAST_UPDATED,
                 MODIFIED_BY
-            from measure_context
+            from assay_context
             where assay_id = an_identifier;
 
         elsif av_table_name = 'MEASURE'
         then
             -- this has a parantage circular relationship
             -- so we need to be careful of the order of insertion
-            --DBMS_output.put_line('arrived in open src cursor, assay_id='  || to_char(an_identifier));
+            DBMS_output.put_line('arrived in open src cursor, assay_id='  || to_char(an_identifier));
             open aco_cursor for
             select MEASURE_ID,
                 ASSAY_ID,
-                MEASURE_CONTEXT_ID,
+                ASSAY_CONTEXT_ID,
                 PARENT_MEASURE_ID,
                 RESULT_TYPE_ID,
                 ENTRY_UNIT,
@@ -438,6 +438,7 @@ as
                 ABBREVIATION,
                 SYNONYMS,
                 UNIT,
+                BARD_URI,
                 EXTERNAL_URL,
                 READY_FOR_EXTRACTION,
                 VERSION,
@@ -549,6 +550,7 @@ as
                 ABBREVIATION,
                 SYNONYMS,
                 UNIT,
+                BARD_URI,
                 EXTERNAL_URL,
                 READY_FOR_EXTRACTION,
                 VERSION,
@@ -562,6 +564,7 @@ as
                 ABBREVIATION,
                 SYNONYMS,
                 UNIT,
+                BARD_URI,
                 EXTERNAL_URL,
                 READY_FOR_EXTRACTION,
                 VERSION,
@@ -729,6 +732,7 @@ as
             insert into assay
                 (ASSAY_ID,
                 ASSAY_STATUS,
+                ASSAY_TITLE,
                 ASSAY_NAME,
                 ASSAY_VERSION,
                 ASSAY_TYPE,
@@ -740,6 +744,7 @@ as
                 MODIFIED_BY)
             select ASSAY_ID,
                 ASSAY_STATUS,
+                ASSAY_TITLE,
                 ASSAY_NAME,
                 ASSAY_VERSION,
                 ASSAY_TYPE,
@@ -774,28 +779,28 @@ as
             from data_mig.assay_document
             where assay_id = rec_assay.assay_id;
 
-            insert into measure_context
-                (MEASURE_CONTEXT_ID,
+            insert into assay_context
+                (ASSAY_CONTEXT_ID,
                 ASSAY_ID,
                 CONTEXT_NAME,
                 VERSION,
                 DATE_CREATED,
                 LAST_UPDATED,
                 MODIFIED_BY)
-            select MEASURE_CONTEXT_ID,
+            select ASSAY_CONTEXT_ID,
                 ASSAY_ID,
                 CONTEXT_NAME,
                 VERSION,
                 DATE_CREATED,
                 LAST_UPDATED,
                 MODIFIED_BY
-            from data_mig.measure_context
+            from data_mig.assay_context
             where assay_id = rec_assay.assay_id;
 
             insert into measure
                 (MEASURE_ID,
                 ASSAY_ID,
-                MEASURE_CONTEXT_ID,
+                ASSAY_CONTEXT_ID,
                 PARENT_MEASURE_ID,
                 RESULT_TYPE_ID,
                 ENTRY_UNIT,
@@ -805,7 +810,7 @@ as
                 MODIFIED_BY)
             select MEASURE_ID,
                 ASSAY_ID,
-                MEASURE_CONTEXT_ID,
+                ASSAY_CONTEXT_ID,
                 PARENT_MEASURE_ID,
                 RESULT_TYPE_ID,
                 ENTRY_UNIT,
@@ -816,11 +821,10 @@ as
             from data_mig.measure
             where assay_id = rec_assay.assay_id;
 
-            insert into measure_context_item
-                (MEASURE_CONTEXT_ITEM_ID,
-                GROUP_MEASURE_CONTEXT_ITEM_ID,
-                ASSAY_ID,
-                MEASURE_CONTEXT_ID,
+            insert into assay_context_item
+                (ASSAY_CONTEXT_ITEM_ID,
+                DISPLAY_ORDER,
+                ASSAY_CONTEXT_ID,
                 ATTRIBUTE_TYPE,
                 ATTRIBUTE_ID,
                 QUALIFIER,
@@ -834,10 +838,9 @@ as
                 DATE_CREATED,
                 LAST_UPDATED,
                 MODIFIED_BY)
-            select MEASURE_CONTEXT_ITEM_ID,
-                GROUP_MEASURE_CONTEXT_ITEM_ID,
-                ASSAY_ID,
-                MEASURE_CONTEXT_ID,
+            select ASSAY_CONTEXT_ITEM_ID,
+                DISPLAY_ORDER,
+                ASSAY_CONTEXT_ID,
                 ATTRIBUTE_TYPE,
                 ATTRIBUTE_ID,
                 QUALIFIER,
@@ -851,8 +854,11 @@ as
                 DATE_CREATED,
                 LAST_UPDATED,
                 MODIFIED_BY
-            from data_mig.measure_context_item
-            where assay_id = rec_assay.assay_id;
+            from data_mig.assay_context_item
+            where assay_context_id in
+                (select assay_context_id
+                 from assay_context
+                 where assay_id = rec_assay.assay_id);
 
             for rec_experiment in cur_experiment(rec_assay.assay_id)
             loop
@@ -862,7 +868,6 @@ as
                     EXPERIMENT_STATUS,
                     READY_FOR_EXTRACTION,
                     ASSAY_ID,
-                    LABORATORY_ID,
                     RUN_DATE_FROM,
                     RUN_DATE_TO,
                     HOLD_UNTIL_DATE,
@@ -876,7 +881,6 @@ as
                     EXPERIMENT_STATUS,
                     READY_FOR_EXTRACTION,
                     ASSAY_ID,
-                    LABORATORY_ID,
                     RUN_DATE_FROM,
                     RUN_DATE_TO,
                     HOLD_UNTIL_DATE,
@@ -922,12 +926,13 @@ as
                 from data_mig.result
                 where experiment_id = rec_experiment.experiment_id;
 
-                insert into result_context_item
-                    (RESULT_CONTEXT_ITEM_ID,
-                    GROUP_RESULT_CONTEXT_ID,
+                insert into run_context_item
+                    (RUN_CONTEXT_ITEM_ID,
+                    GROUP_RUN_CONTEXT_ID,
                     EXPERIMENT_ID,
                     RESULT_ID,
                     ATTRIBUTE_ID,
+                    DISCRIMINATOR,
                     VALUE_ID,
                     EXT_VALUE_ID,
                     QUALIFIER,
@@ -939,10 +944,11 @@ as
                     DATE_CREATED,
                     LAST_UPDATED,
                     MODIFIED_BY)
-                select RESULT_CONTEXT_ITEM_ID,
-                    GROUP_RESULT_CONTEXT_ID,
+                select RUN_CONTEXT_ITEM_ID,
+                    GROUP_RUN_CONTEXT_ID,
                     EXPERIMENT_ID,
                     RESULT_ID,
+                    DISCRIMINATOR,
                     ATTRIBUTE_ID,
                     VALUE_ID,
                     EXT_VALUE_ID,
@@ -955,7 +961,7 @@ as
                     DATE_CREATED,
                     LAST_UPDATED,
                     MODIFIED_BY
-                from data_mig.result_context_item
+                from data_mig.run_context_item
                 where experiment_id = rec_experiment.experiment_id;
 
                 insert into result_hierarchy
@@ -991,16 +997,15 @@ as
                     MODIFIED_BY
                 from data_mig.project dp
                 where project_id in
-                    (select project_id from data_mig.project_experiment
+                    (select project_id from data_mig.project_step
                      where experiment_id = rec_experiment.experiment_id
                      or follows_experiment_id = rec_experiment.experiment_id)
                  and not exists (select 1 from project p
                             where p.project_id = dp.project_id);
 
-                insert into project_experiment
-                    (PROJECT_EXPERIMENT_ID,
+                insert into project_step
+                    (PROJECT_STEP_ID,
                     PROJECT_ID,
-                    STAGE_ID,
                     EXPERIMENT_ID,
                     FOLLOWS_EXPERIMENT_ID,
                     DESCRIPTION,
@@ -1008,9 +1013,8 @@ as
                     DATE_CREATED,
                     LAST_UPDATED,
                     MODIFIED_BY)
-                select PROJECT_EXPERIMENT_ID,
+                select PROJECT_STEP_ID,
                     PROJECT_ID,
-                    STAGE_ID,
                     EXPERIMENT_ID,
                     FOLLOWS_EXPERIMENT_ID,
                     DESCRIPTION,
@@ -1018,7 +1022,7 @@ as
                     DATE_CREATED,
                     LAST_UPDATED,
                     MODIFIED_BY
-                from data_mig.project_experiment pe
+                from data_mig.project_step pe
                 where experiment_id = rec_experiment.experiment_id
                  and follows_experiment_id is null;
 
@@ -1106,10 +1110,10 @@ as
         loop
             for rec_experiment in cur_experiment(rec_assay.assay_id)
             loop
-                insert into project_experiment
-                    (PROJECT_EXPERIMENT_ID,
+                insert into project_step
+                    (PROJECT_STEP_ID,
                     PROJECT_ID,
-                    STAGE_ID,
+                    --STAGE_ID,
                     EXPERIMENT_ID,
                     FOLLOWS_EXPERIMENT_ID,
                     DESCRIPTION,
@@ -1117,9 +1121,9 @@ as
                     DATE_CREATED,
                     LAST_UPDATED,
                     MODIFIED_BY)
-                select PROJECT_EXPERIMENT_ID,
+                select PROJECT_STEP_ID,
                     PROJECT_ID,
-                    STAGE_ID,
+                    --STAGE_ID,
                     EXPERIMENT_ID,
                     FOLLOWS_EXPERIMENT_ID,
                     DESCRIPTION,
@@ -1127,7 +1131,7 @@ as
                     DATE_CREATED,
                     LAST_UPDATED,
                     MODIFIED_BY
-                from data_mig.project_experiment pe
+                from data_mig.project_step pe
                 where experiment_id = rec_experiment.experiment_id
                  and exists (select 1 from experiment e2
                         where e2.experiment_id = pe.follows_experiment_id);
@@ -1177,6 +1181,7 @@ as
             insert into assay
                 (ASSAY_ID,
                 ASSAY_STATUS,
+                ASSAY_TITLE,
                 ASSAY_NAME,
                 ASSAY_VERSION,
                 ASSAY_TYPE,
@@ -1188,6 +1193,7 @@ as
                 MODIFIED_BY)
             select ASSAY_ID,
                 ASSAY_STATUS,
+                ASSAY_TITLE,
                 ASSAY_NAME,
                 ASSAY_VERSION,
                 ASSAY_TYPE,
@@ -1222,28 +1228,28 @@ as
             from data_mig.assay_document
             where assay_id = rec_assay.assay_id;
 
-            insert into measure_context
-                (MEASURE_CONTEXT_ID,
+            insert into assay_context
+                (ASSAY_CONTEXT_ID,
                 ASSAY_ID,
                 CONTEXT_NAME,
                 VERSION,
                 DATE_CREATED,
                 LAST_UPDATED,
                 MODIFIED_BY)
-            select MEASURE_CONTEXT_ID,
+            select ASSAY_CONTEXT_ID,
                 ASSAY_ID,
                 CONTEXT_NAME,
                 VERSION,
                 DATE_CREATED,
                 LAST_UPDATED,
                 MODIFIED_BY
-            from data_mig.measure_context
+            from data_mig.assay_context
             where assay_id = rec_assay.assay_id;
 
             insert into measure
                 (MEASURE_ID,
                 ASSAY_ID,
-                MEASURE_CONTEXT_ID,
+                ASSAY_CONTEXT_ID,
                 PARENT_MEASURE_ID,
                 RESULT_TYPE_ID,
                 ENTRY_UNIT,
@@ -1253,7 +1259,7 @@ as
                 MODIFIED_BY)
             select MEASURE_ID,
                 ASSAY_ID,
-                MEASURE_CONTEXT_ID,
+                ASSAY_CONTEXT_ID,
                 PARENT_MEASURE_ID,
                 RESULT_TYPE_ID,
                 ENTRY_UNIT,
@@ -1264,11 +1270,10 @@ as
             from data_mig.measure
             where assay_id = rec_assay.assay_id;
 
-            insert into measure_context_item
-                (MEASURE_CONTEXT_ITEM_ID,
-                GROUP_MEASURE_CONTEXT_ITEM_ID,
-                ASSAY_ID,
-                MEASURE_CONTEXT_ID,
+            insert into assay_context_item
+                (ASSAY_CONTEXT_ITEM_ID,
+                DISPLAY_ORDER,
+                ASSAY_CONTEXT_ID,
                 ATTRIBUTE_TYPE,
                 ATTRIBUTE_ID,
                 QUALIFIER,
@@ -1282,10 +1287,9 @@ as
                 DATE_CREATED,
                 LAST_UPDATED,
                 MODIFIED_BY)
-            select MEASURE_CONTEXT_ITEM_ID,
-                GROUP_MEASURE_CONTEXT_ITEM_ID,
-                ASSAY_ID,
-                MEASURE_CONTEXT_ID,
+            select ASSAY_CONTEXT_ITEM_ID,
+                DISPLAY_ORDER,
+                ASSAY_CONTEXT_ID,
                 ATTRIBUTE_TYPE,
                 ATTRIBUTE_ID,
                 QUALIFIER,
@@ -1299,8 +1303,11 @@ as
                 DATE_CREATED,
                 LAST_UPDATED,
                 MODIFIED_BY
-            from data_mig.measure_context_item
-            where assay_id = rec_assay.assay_id;
+            from data_mig.assay_context_item
+            where assay_context_id in
+                (select assay_context_id
+                 from assay_context
+                 where assay_id = rec_assay.assay_id);
 
              for rec_experiment in cur_experiment(rec_assay.assay_id)
             loop
@@ -1310,7 +1317,7 @@ as
                     EXPERIMENT_STATUS,
                     READY_FOR_EXTRACTION,
                     ASSAY_ID,
-                    LABORATORY_ID,
+                    --LABORATORY_ID,
                     RUN_DATE_FROM,
                     RUN_DATE_TO,
                     HOLD_UNTIL_DATE,
@@ -1324,7 +1331,7 @@ as
                     EXPERIMENT_STATUS,
                     READY_FOR_EXTRACTION,
                     ASSAY_ID,
-                    LABORATORY_ID,
+                    --LABORATORY_ID,
                     RUN_DATE_FROM,
                     RUN_DATE_TO,
                     HOLD_UNTIL_DATE,
@@ -1348,16 +1355,16 @@ as
                     MODIFIED_BY
                 from data_mig.project dp
                 where project_id in
-                    (select project_id from data_mig.project_experiment
+                    (select project_id from data_mig.project_step
                      where experiment_id = rec_experiment.experiment_id
                      or follows_experiment_id = rec_experiment.experiment_id)
                  and not exists (select 1 from project p
                             where p.project_id = dp.project_id);
 
-                insert into project_experiment
-                    (PROJECT_EXPERIMENT_ID,
+                insert into project_step
+                    (PROJECT_STEP_ID,
                     PROJECT_ID,
-                    STAGE_ID,
+                    --STAGE_ID,
                     EXPERIMENT_ID,
                     FOLLOWS_EXPERIMENT_ID,
                     DESCRIPTION,
@@ -1365,9 +1372,9 @@ as
                     DATE_CREATED,
                     LAST_UPDATED,
                     MODIFIED_BY)
-                select PROJECT_EXPERIMENT_ID,
+                select PROJECT_STEP_ID,
                     PROJECT_ID,
-                    STAGE_ID,
+                    --STAGE_ID,
                     EXPERIMENT_ID,
                     FOLLOWS_EXPERIMENT_ID,
                     DESCRIPTION,
@@ -1375,9 +1382,58 @@ as
                     DATE_CREATED,
                     LAST_UPDATED,
                     MODIFIED_BY
-                from data_mig.project_experiment pe
+                from data_mig.project_step pe
                 where experiment_id = rec_experiment.experiment_id
                  and follows_experiment_id is null;
+
+                -- insert project context
+                insert into project_context_item
+                    (PROJECT_CONTEXT_ITEM_ID,
+                    GROUP_PROJECT_CONTEXT_ID,
+                    PROJECT_ID,
+                    PROJECT_STEP_ID,
+                    DISCRIMINATOR,
+                    ATTRIBUTE_ID,
+                    VALUE_ID,
+                    EXT_VALUE_ID,
+                    QUALIFIER,
+                    VALUE_DISPLAY,
+                    VALUE_NUM,
+                    VALUE_MIN,
+                    VALUE_MAX,
+                    VERSION,
+                    DATE_CREATED,
+                    LAST_UPDATED,
+                    MODIFIED_BY
+                    )
+                select PROJECT_CONTEXT_ITEM_ID,
+                    GROUP_PROJECT_CONTEXT_ID,
+                    PROJECT_ID,
+                    PROJECT_STEP_ID,
+                    DISCRIMINATOR,
+                    ATTRIBUTE_ID,
+                    VALUE_ID,
+                    EXT_VALUE_ID,
+                    QUALIFIER,
+                    VALUE_DISPLAY,
+                    VALUE_NUM,
+                    VALUE_MIN,
+                    VALUE_MAX,
+                    VERSION,
+                    DATE_CREATED,
+                    LAST_UPDATED,
+                    MODIFIED_BY
+                from data_mig.project_context_item pci
+                where project_step_id in
+                        (select project_step_id
+                         from project_step e
+                         where e.experiment_id = rec_experiment.experiment_id)
+                  and not exists (select 1
+                        from project_context_item pci2
+                        where pci2.project_context_item_id = pci.project_context_item_id)
+                ORDER by decode (project_context_item_id,
+                                group_project_context_id, 0,
+                                project_context_item_id);
 
                 insert into external_reference
                     (EXTERNAL_REFERENCE_ID,
@@ -1407,6 +1463,54 @@ as
             commit; -- for each assay
 
         end loop;
+
+        -- insert project context
+        insert into project_context_item
+            (PROJECT_CONTEXT_ITEM_ID,
+            GROUP_PROJECT_CONTEXT_ID,
+            PROJECT_ID,
+            PROJECT_STEP_ID,
+            DISCRIMINATOR,
+            ATTRIBUTE_ID,
+            VALUE_ID,
+            EXT_VALUE_ID,
+            QUALIFIER,
+            VALUE_DISPLAY,
+            VALUE_NUM,
+            VALUE_MIN,
+            VALUE_MAX,
+            VERSION,
+            DATE_CREATED,
+            LAST_UPDATED,
+            MODIFIED_BY
+            )
+        select PROJECT_CONTEXT_ITEM_ID,
+            GROUP_PROJECT_CONTEXT_ID,
+            PROJECT_ID,
+            PROJECT_STEP_ID,
+            DISCRIMINATOR,
+            ATTRIBUTE_ID,
+            VALUE_ID,
+            EXT_VALUE_ID,
+            QUALIFIER,
+            VALUE_DISPLAY,
+            VALUE_NUM,
+            VALUE_MIN,
+            VALUE_MAX,
+            VERSION,
+            DATE_CREATED,
+            LAST_UPDATED,
+            MODIFIED_BY
+        from data_mig.project_context_item pci
+        where project_id in
+                (select project_id
+                 from project)
+          and not exists (select 1
+                from project_context_item pci2
+                where pci2.project_context_item_id = pci.project_context_item_id)
+        ORDER by decode (project_context_item_id,
+                        group_project_context_id, 0,
+                        project_context_item_id);
 
         insert into external_reference
             (EXTERNAL_REFERENCE_ID,
@@ -1439,10 +1543,10 @@ as
         loop
             for rec_experiment in cur_experiment(rec_assay.assay_id)
             loop
-                insert into project_experiment
-                    (PROJECT_EXPERIMENT_ID,
+                insert into project_step
+                    (PROJECT_STEP_ID,
                     PROJECT_ID,
-                    STAGE_ID,
+                    --STAGE_ID,
                     EXPERIMENT_ID,
                     FOLLOWS_EXPERIMENT_ID,
                     DESCRIPTION,
@@ -1450,9 +1554,9 @@ as
                     DATE_CREATED,
                     LAST_UPDATED,
                     MODIFIED_BY)
-                select PROJECT_EXPERIMENT_ID,
+                select PROJECT_STEP_ID,
                     PROJECT_ID,
-                    STAGE_ID,
+                    --STAGE_ID,
                     EXPERIMENT_ID,
                     FOLLOWS_EXPERIMENT_ID,
                     DESCRIPTION,
@@ -1460,7 +1564,7 @@ as
                     DATE_CREATED,
                     LAST_UPDATED,
                     MODIFIED_BY
-                from data_mig.project_experiment pe
+                from data_mig.project_step pe
                 where experiment_id = rec_experiment.experiment_id
                  and exists (select 1 from experiment e2
                         where e2.experiment_id = pe.follows_experiment_id);

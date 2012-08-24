@@ -10,10 +10,10 @@ import bard.db.dictionary.AssayDescriptor
  * See the API for {@link grails.test.mixin.services.ServiceUnitTestMixin} for usage instructions
  */
 @TestFor(AssayService)
-@Mock([MeasureContextItem, Assay, MeasureContext, Measure, ResultType, Element, AssayDescriptor])
+@Mock([AssayContextItem, Assay, AssayContext, Measure, ResultType, Element, AssayDescriptor])
 class AssayServiceUnitTests {
 
-    void testGetMeasureContextItemsForAssay() {
+    void testGetAssayContextItemsForAssay() {
 
         Element element = new Element(label: "Test", elementStatus: "Published", readyForExtraction: "Ready")
         element.setId(1)
@@ -24,12 +24,12 @@ class AssayServiceUnitTests {
         assayDescriptor.save()
         assert assayDescriptor.validate()
         assert AssayDescriptor.count() == 1
-        MeasureContextItem item1 = new MeasureContextItem(attributeElement: element)
+        AssayContextItem item1 = new AssayContextItem(attributeElement: element)
 
         Assay assay = new Assay()
-        assay.addToMeasureContextItems(item1)
+        assay.addToAssayContextItems(item1)
 
-        Map map = service.getMeasureContextItemsForAssay(assay)
+        Map map = service.getAssayContextItemsForAssay(assay)
 
         assert map["Assay Context"]
         assert map["Assay Context"].contains(item1)

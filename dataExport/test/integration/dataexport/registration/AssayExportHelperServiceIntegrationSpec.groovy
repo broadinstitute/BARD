@@ -34,7 +34,7 @@ class AssayExportHelperServiceIntegrationSpec extends IntegrationSpec {
         given: "Given an Assay Id"
         Assay assay = Assay.get(assayId)
         when: "A service call is made to generate measure contexts for that Assay"
-        this.assayExportHelperService.generateMeasureContexts(this.markupBuilder, assay.measureContexts)
+        this.assayExportHelperService.generateAssayContexts(this.markupBuilder, assay.assayContexts)
         then: "An XML is generated that conforms to the expected XML"
         XmlTestAssertions.assertResults(results, this.writer.toString())
         where:
@@ -47,10 +47,10 @@ class AssayExportHelperServiceIntegrationSpec extends IntegrationSpec {
         final Assay assay = Assay.get(assayId)
 
         when: "A service call is made to generate the measure context items for that Assay"
-        this.assayExportHelperService.generateMeasureContextItems(this.markupBuilder, assay.measureContextItems)
+        this.assayExportHelperService.generateAssayContextItems(this.markupBuilder, assay.assayContextItems)
         then: "An XML is generated that conforms to the expected XML"
-        XMLAssert.assertXpathEvaluatesTo("1", "count(//measureContextItems)", this.writer.toString());
-        XMLAssert.assertXpathEvaluatesTo("3", "count(//measureContextItem)", this.writer.toString());
+        XMLAssert.assertXpathEvaluatesTo("1", "count(//assayContextItems)", this.writer.toString());
+        XMLAssert.assertXpathEvaluatesTo("3", "count(//assayContextItem)", this.writer.toString());
         XMLAssert.assertXpathEvaluatesTo("4", "count(//link)", this.writer.toString());
         XMLAssert.assertXpathEvaluatesTo("3", "count(//attributeId)", this.writer.toString());
         XMLAssert.assertXpathEvaluatesTo("1", "count(//valueId)", this.writer.toString());
@@ -97,12 +97,12 @@ class AssayExportHelperServiceIntegrationSpec extends IntegrationSpec {
         when: "A service call is made to generate the measures for that Assay"
         this.assayExportHelperService.generateAssay(this.markupBuilder, assay)
         then: "An XML is generated that conforms to the expected XML"
-        XMLAssert.assertXpathEvaluatesTo("1", "count(//measureContexts)", this.writer.toString());
-        XMLAssert.assertXpathEvaluatesTo("1", "count(//measureContext)", this.writer.toString());
+        XMLAssert.assertXpathEvaluatesTo("1", "count(//assayContexts)", this.writer.toString());
+        XMLAssert.assertXpathEvaluatesTo("1", "count(//assayContext)", this.writer.toString());
         XMLAssert.assertXpathEvaluatesTo("1", "count(//measures)", this.writer.toString());
         XMLAssert.assertXpathEvaluatesTo("1", "count(//measure)", this.writer.toString());
-        XMLAssert.assertXpathEvaluatesTo("1", "count(//measureContextItems)", this.writer.toString());
-        XMLAssert.assertXpathEvaluatesTo("3", "count(//measureContextItem)", this.writer.toString());
+        XMLAssert.assertXpathEvaluatesTo("1", "count(//assayContextItems)", this.writer.toString());
+        XMLAssert.assertXpathEvaluatesTo("3", "count(//assayContextItem)", this.writer.toString());
         XMLAssert.assertXpathEvaluatesTo("2", "count(//assayDocument)", this.writer.toString());
         XMLAssert.assertXpathEvaluatesTo("14", "count(//link)", this.writer.toString());
 

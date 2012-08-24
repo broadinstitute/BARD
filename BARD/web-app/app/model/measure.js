@@ -25,7 +25,7 @@ Ext.define('BARD.model.measure', {
             name: 'entryUnit'
         },
         {
-            name: 'measureContext'
+            name: 'assayContext'
         }
     ],
 

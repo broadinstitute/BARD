@@ -1,12 +1,19 @@
 package bardqueryapi
 
+import bard.QueryServiceWrapper
+import bard.core.rest.RESTAssayService
+import bard.core.rest.RESTCompoundService
 import elasticsearchplugin.ESAssay
 import elasticsearchplugin.ESXCompound
 import elasticsearchplugin.ElasticSearchService
 import elasticsearchplugin.QueryExecutorService
 import wslite.json.JSONObject
+import bard.core.*
+import bard.core.rest.RESTExperimentService
+import bard.core.rest.RESTProjectService
 
 class QueryService {
+    QueryServiceWrapper queryServiceWrapper
     ElasticSearchService elasticSearchService
     QueryExecutorService queryExecutorService
 
@@ -32,32 +39,73 @@ class QueryService {
   "size": 10
 }
 '''
-
-//    JSONObject showCompound(final Integer compoundId) {
-//        //TODO this should go to NCGC
-//        if (compoundId) {
-//            JSONObject compoundESDocument = elasticSearchService.getCompoundDocument(compoundId)
-//            JSONObject compoundJson = [cid: compoundESDocument?._id,
-//                    sids: compoundESDocument?._source?.sids,
-//                    probeId: compoundESDocument?._source?.probeId,
-//                    smiles: compoundESDocument?._source?.smiles] as JSONObject
-//
-//            return compoundJson
-//        }
-//        return null
-//
-//    }
-
+    /**
+     * Given an assayId, get detailed Assay information from the REST API
+     * @param assayId
+     * @return
+     */
+    Assay showAssay(final Integer assayId) {
+        if (assayId) {
+            final RESTAssayService restAssayService = this.queryServiceWrapper.getRestAssayService()
+            return restAssayService.get(assayId)
+        }
+        return null
+    }
+    /**
+     * Given an projectId, get detailed Project information from the REST API
+     * @param projectId
+     * @return
+     */
+    Project showProject(final Integer projectId) {
+        if (projectId) {
+            final RESTProjectService restProjectService = this.queryServiceWrapper.getRestProjectService()
+            return restProjectService.get(projectId)
+        }
+        return null
+    }
+    /**
+     * Given an experimentId, get detailed Experiment information from the REST API
+     * @param experimentId
+     * @return
+     */
+    Experiment showExperiment(final Integer experimentId){
+        if (experimentId) {
+            final RESTExperimentService restExperimentService = this.queryServiceWrapper.getRestExperimentService()
+            return restExperimentService.get(experimentId)
+        }
+        return null
+    }
+    /**
+     * Given a CID, get detailed compound information from REST API
+     * @param compoundId
+     * @return
+     */
     Map showCompound(final Integer compoundId) {
-        //TODO this should go to NCGC
         if (compoundId) {
-            JSONObject compoundESDocument = elasticSearchService.getCompoundDocument(compoundId)
-            return [cid: compoundESDocument?._id,
-                    sids: compoundESDocument?._source?.sids,
-                    probeId: compoundESDocument?._source?.probeId,
-                    smiles: compoundESDocument?._source?.smiles]
+            RESTCompoundService restCompoundService = this.queryServiceWrapper.getRestCompoundService()
+            Compound compound = restCompoundService.get(compoundId)
+            Value compoundValue = compound.getValue(Compound.MolecularData)
+            final Collection<Value> sidValues = compound.getValues(Compound.PubChemSID)
+            Value compoundProbeValue = compound.getValue(Compound.ProbeID)
 
-            //return compoundJson
+            List<String> compoundSids = []
+            String compoundSmiles = ""
+            String compoundProbeId = ""
+
+            if (compoundValue) {
+                compoundSmiles = ((MolecularValue) compoundValue).toFormat(MolecularData.Format.SMILES)
+            }
+            if (sidValues) {
+                compoundSids = sidValues.collect { it.value?.value?.toString()}
+            }
+            if (compoundProbeValue) {
+                compoundProbeId = compoundProbeValue.value.toString()
+            }
+            return [cid: compoundId,
+                    sids: compoundSids,
+                    probeId: compoundProbeId,
+                    smiles: compoundSmiles
+            ]
         }
         return [:]
     }
@@ -157,6 +205,8 @@ class QueryService {
      * @param structureSearchType
      * @param smiles
      * @return
+     *
+     * TODO: NCGC JDO is not yet implemented
      */
     protected List<String> getCIDsByStructure(final String smiles, final StructureSearchType searchType) {
         /**

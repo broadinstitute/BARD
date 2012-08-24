@@ -4,31 +4,32 @@
 --delete from DATABASECHANGELOGLOCK;
 --delete from DATABASECHANGELOG;
 -- materialized views
-delete from ASSAY_DESCRIPTOR;
-delete from BIOLOGY_DESCRIPTOR;
-delete from INSTANCE_DESCRIPTOR;
-delete from RESULT_TYPE;
-delete from UNIT;
-delete from LABORATORY;
-delete from STAGE;
+delete from ASSAY_DESCRIPTOR_TREE;
+delete from BIOLOGY_DESCRIPTOR_TREE;
+delete from INSTANCE_DESCRIPTOR_TREE;
+delete from RESULT_TYPE_TREE;
+delete from UNIT_TREE;
+delete from LABORATORY_TREE;
+delete from STAGE_TREE;
 
 -- data tables in correct order
 -- results
 delete from RESULT_HIERARCHY;
-delete from RESULT_CONTEXT_ITEM;
+delete from RUN_CONTEXT_ITEM;
 delete from RESULT;
 delete from SUBSTANCE;
 
 -- experiments
 delete from EXTERNAL_REFERENCE;
-delete from PROJECT_EXPERIMENT;
+delete from PROJECT_CONTEXT_ITEM;
+delete from PROJECT_STEP;
 delete from EXPERIMENT;
 delete from PROJECT;
 
 -- assays
 delete from MEASURE;
-delete from MEASURE_CONTEXT_ITEM;
-delete from MEASURE_CONTEXT;
+delete from ASSAY_CONTEXT_ITEM;
+delete from ASSAY_CONTEXT;
 delete from ASSAY_DOCUMENT;
 delete from ASSAY;
 

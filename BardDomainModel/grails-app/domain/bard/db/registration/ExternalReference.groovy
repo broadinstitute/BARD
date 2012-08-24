@@ -33,7 +33,7 @@ class ExternalReference implements Serializable {
 	static belongsTo = [Assay, ExternalSystem]
 
 	static mapping = {
-		id column: "EXTERNAL_REFERENCE_ID", generator: "assigned"
+		id( column: 'EXTERNAL_REFERENCE_ID', generator: 'sequence', params: [sequence: 'EXTERNAL_REFERENCE_ID_SEQ'])
 	}
 
 	static constraints = {

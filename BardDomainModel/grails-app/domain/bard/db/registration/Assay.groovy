@@ -1,10 +1,9 @@
 package bard.db.registration
 
+import bard.db.enums.ReadyForExtraction
 import bard.db.experiment.Experiment
 
 class Assay {
-
-    static expose = 'assay'
 
     private static final int ASSAY_STATUS_MAX_SIZE = 20
     private static final int ASSAY_NAME_MAX_SIZE = 1000
@@ -13,11 +12,11 @@ class Assay {
     private static final int READY_FOR_EXTRACTION_MAX_SIZE = 20
     private static final int MODIFIED_BY_MAX_SIZE = 40
 
-    String assayStatus = 'Pending'
+    AssayStatus assayStatus = AssayStatus.Pending
     String assayName
     String assayVersion
     String designedBy
-    String readyForExtraction = 'Pending'
+    ReadyForExtraction readyForExtraction = ReadyForExtraction.Pending
     String assayType = 'Regular'
 
     String modifiedBy
@@ -25,26 +24,28 @@ class Assay {
     Date dateCreated
     Date lastUpdated
 
-
+    Set<Experiment> experiments = [] as Set<Experiment>
+    Set<Measure> measures = [] as Set<Measure>
+    Set<AssayContext> assayContexts = [] as Set<AssayContext>
+    Set<AssayDocument> assayDocuments = [] as Set<AssayDocument>
 
     static hasMany = [experiments: Experiment,
-            measureContextItems: MeasureContextItem,
             measures: Measure,
-            measureContexts: MeasureContext,
+            assayContexts: AssayContext,
             assayDocuments: AssayDocument]
 
     static mapping = {
-        id(column: "Assay_ID", generator: "sequence", params: [sequence: 'ASSAY_ID_SEQ'])
-
+        id(column: "ASSAY_ID", generator: "sequence", params: [sequence: 'ASSAY_ID_SEQ'])
     }
 
     static constraints = {
-        // TODO consider and Enum to replace the inListk
-        assayStatus(maxSize: ASSAY_STATUS_MAX_SIZE, blank: false, inList: ["Pending", "Active", "Superseded", "Retired"])
+        assayStatus(maxSize: ASSAY_STATUS_MAX_SIZE, blank: false)
         assayName(maxSize: ASSAY_NAME_MAX_SIZE, blank: false)
         assayVersion(maxSize: ASSAY_VERSION_MAX_SIZE, blank: false)
         designedBy(nullable: true, maxSize: DESIGNED_BY_MAX_SIZE)
-        readyForExtraction(maxSize: READY_FOR_EXTRACTION_MAX_SIZE, blank: false, inList: ["Pending","Ready", "Started", "Complete"])
+        readyForExtraction(maxSize: READY_FOR_EXTRACTION_MAX_SIZE, blank: false)
+        // TODO we can use enum mapping for this http://stackoverflow.com/questions/3748760/grails-enum-mapping
+        // the ' - ' is this issue in this case
         assayType(inList: ['Regular', 'Panel - Array', 'Panel - Group'])
 
         dateCreated(nullable: false)
@@ -52,3 +53,10 @@ class Assay {
         modifiedBy(nullable: true, blank: false, maxSize: MODIFIED_BY_MAX_SIZE)
     }
 }
+enum AssayStatus {
+    Pending,
+    Active,
+    Superseded,
+    Retired
+}
+

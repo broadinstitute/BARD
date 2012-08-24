@@ -56,7 +56,7 @@ Ext.define('BARD.view.ResultTypesForm', {
                                 },
                                 {
                                     xtype: 'gridcolumn',
-                                    dataIndex: 'measureContext',
+                                    dataIndex: 'assayContext',
                                     flex: 1,
                                     text: 'Context'
                                 }

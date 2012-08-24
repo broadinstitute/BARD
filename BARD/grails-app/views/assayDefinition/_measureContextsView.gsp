@@ -1,17 +1,17 @@
 <div>
-				<g:if test="${assayInstance?.measureContexts}">
+				<g:if test="${assayInstance?.assayContexts}">
 				<li>
-					<g:each in="${assayInstance.measureContexts.sort{it.id}}" var="measureContext">
-						<g:if test="${measureContext?.contextName}">
+					<g:each in="${assayInstance.assayContexts.sort{it.id}}" var="assayContext">
+						<g:if test="$assayContext?.contextName}">
 						<li>
 							<!--<span id="contextName-label"><g:message code="measureContext.contextName.label" default="Name: " /></span>	-->				
-							<span><g:fieldValue bean="${measureContext}" field="contextName"/></span>					
+							<span><g:fieldValue bean="${assayContext}" field="contextName"/></span>					
 						</li>
 						</g:if>									
 					</g:each>
 				</li>
 				</g:if>
 				<g:else>
-					<span>No Measure Contexts found</span>
+					<span>No Assay Contexts found</span>
 				</g:else>
 </div>

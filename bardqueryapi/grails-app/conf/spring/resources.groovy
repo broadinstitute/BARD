@@ -20,7 +20,11 @@ beans = {
     queryTargetApiService(bardqueryapi.QueryTargetApiService, accessionUrl, geneIdUrl) {
         queryExecutorInternalService = ref('queryExecutorInternalService')
     }
+    final String ncgcBaseURL = grailsApplication.config.ncgc.server.root.url
 
+    queryServiceWrapper(bard.QueryServiceWrapper,ncgcBaseURL){
+
+    }
     elasticSearchService(elasticsearchplugin.ElasticSearchService) {
         elasticSearchBaseUrl = grailsApplication.config.bard.services.elasticSearchService.restNode.baseUrl
         assayIndexName = 'assays'
@@ -36,6 +40,7 @@ beans = {
     queryService(bardqueryapi.QueryService) {
         queryExecutorService = ref('queryExecutorService')
         elasticSearchService = ref('elasticSearchService')
+        queryServiceWrapper= ref('queryServiceWrapper')
         ncgcSearchBaseUrl = grailsApplication.config.ncgc.server.structureSearch.root.url
         elasticSearchRootURL = grailsApplication.config.bard.services.elasticSearchService.restNode.baseUrl
         bardAssayViewUrl = grailsApplication.config.bard.assay.view.url

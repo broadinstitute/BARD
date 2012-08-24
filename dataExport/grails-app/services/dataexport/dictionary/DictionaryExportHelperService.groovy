@@ -11,7 +11,7 @@ import dataexport.registration.MediaTypesDTO
 class DictionaryExportHelperService {
     LinkGenerator grailsLinkGenerator
     String elementMediaType
-    List<Laboratory> laboratories
+    List<LaboratoryElement> laboratories
 
     DictionaryExportHelperService(final MediaTypesDTO mediaTypesDTO) {
         this.elementMediaType = mediaTypesDTO.elementMediaType
@@ -318,10 +318,10 @@ class DictionaryExportHelperService {
  * @param xml
  * @param laboratoryDTO
  */
-    public void generateLab(final MarkupBuilder xml, final Laboratory laboratory) {
+    public void generateLab(final MarkupBuilder xml, final LaboratoryElement laboratoryElement) {
         Map<String, String> attributes = [:]
-        if (laboratory.element) {
-            attributes.put('laboratoryElement', laboratory.element?.label)
+        if (laboratoryElement) {
+            attributes.put('laboratoryElement', laboratoryElement.label)
         }
 
         if (laboratory.parent) {

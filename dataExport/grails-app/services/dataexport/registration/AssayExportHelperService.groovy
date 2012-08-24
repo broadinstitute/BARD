@@ -1,7 +1,6 @@
 package dataexport.registration
 
 import bard.db.dictionary.Element
-import bard.db.dictionary.Unit
 import groovy.xml.MarkupBuilder
 import org.codehaus.groovy.grails.web.mapping.LinkGenerator
 import bard.db.registration.*
@@ -19,10 +18,10 @@ class AssayExportHelperService {
         this.mediaTypesDTO = mediaTypesDTO
     }
 
-    protected void generateMeasureContext(final MarkupBuilder markupBuilder, final MeasureContext measureContext) {
+    protected void generateAssayContext(final MarkupBuilder markupBuilder, final AssayContext assayContext) {
 
-        markupBuilder.measureContext() {
-            contextName(measureContext.contextName)
+        markupBuilder.assayContext() {
+            contextName(assayContext.contextName)
         }
     }
     /**
@@ -33,8 +32,8 @@ class AssayExportHelperService {
     protected Map<String, String> createAttributesForMeasure(final Measure measure) {
         final Map<String, String> attributes = [:]
 
-        if (measure.measureContext) {
-            attributes.put('measureContextRef', measure.measureContext.contextName)
+        if (measure.assayContext) {
+            attributes.put('assayContextRef', measure.assayContext.contextName)
         }
         if(measure.parentMeasure){
             attributes.put('parentMeasure', measure.parentMeasure.id.toString())
@@ -53,55 +52,56 @@ class AssayExportHelperService {
                     link(rel: 'related', href: "${href}", type: "${this.mediaTypesDTO.resultTypeMediaType}")
                 }
             }
-            final Unit unit = measure.entryUnit
-            if (unit) {
-                entryUnit(unit: unit.unit) {
-                    if (unit.element?.id) {
-                        final String href = grailsLinkGenerator.link(mapping: 'element', absolute: true, params: [id: unit.element.id]).toString()
-                        link(rel: 'related', href: "${href}", type: "${this.mediaTypesDTO.elementMediaType}")
-                    }
-                }
-            }
+            //TODO: this doesn't seem quite right
+//            final Unit unit = measure.entryUnit
+//            if (unit) {
+//                entryUnit(unit: unit.unit) {
+//                    if (unit.element?.id) {
+//                        final String href = grailsLinkGenerator.link(mapping: 'element', absolute: true, params: [id: unit.element.id]).toString()
+//                        link(rel: 'related', href: "${href}", type: "${this.mediaTypesDTO.elementMediaType}")
+//                    }
+//                }
+//            }
         }
     }
 
-    protected Map<String, String> createAttributesForMeasureContextItem(final MeasureContextItem measureContextItem) {
+    protected Map<String, String> createAttributesForAssayContextItem(final AssayContextItem assayContextItem) {
         final Map<String, String> attributes = [:]
 
-        if (measureContextItem.id) {
-            attributes.put('measureContextItemId', measureContextItem.id.toString())
+        if (assayContextItem.id) {
+            attributes.put('assayContextItemId', assayContextItem.id.toString())
         }
-        if (measureContextItem.parentGroup?.id) {
-            attributes.put('measureContextItemRef', measureContextItem.parentGroup.id.toString())
+        if (assayContextItem.parentGroup?.id) {
+            attributes.put('assayContextItemRef', assayContextItem.parentGroup.id.toString())
         }
-        if (measureContextItem.measureContext) {
-            attributes.put('measureContextRef', measureContextItem.measureContext?.contextName)
+        if (assayContextItem.assayContext) {
+            attributes.put('assayContextRef', assayContextItem.assayContext?.contextName)
         }
-        if (measureContextItem.qualifier) {
-            attributes.put('qualifier', measureContextItem.qualifier)
+        if (assayContextItem.qualifier) {
+            attributes.put('qualifier', assayContextItem.qualifier)
         }
 
-        if (measureContextItem.valueDisplay) {
-            attributes.put('valueDisplay', measureContextItem.valueDisplay)
+        if (assayContextItem.valueDisplay) {
+            attributes.put('valueDisplay', assayContextItem.valueDisplay)
         }
-        if (measureContextItem.valueNum || measureContextItem.valueNum.toString().isInteger()) {
-            attributes.put('valueNum', measureContextItem.valueNum.toString())
+        if (assayContextItem.valueNum || assayContextItem.valueNum.toString().isInteger()) {
+            attributes.put('valueNum', assayContextItem.valueNum.toString())
         }
-        if (measureContextItem.valueMin || measureContextItem.valueMin.toString().isInteger()) {
-            attributes.put('valueMin', measureContextItem.valueMin.toString())
+        if (assayContextItem.valueMin || assayContextItem.valueMin.toString().isInteger()) {
+            attributes.put('valueMin', assayContextItem.valueMin.toString())
         }
-        if (measureContextItem.valueMax || measureContextItem.valueMax.toString().isInteger()) {
-            attributes.put('valueMax', measureContextItem.valueMax.toString())
+        if (assayContextItem.valueMax || assayContextItem.valueMax.toString().isInteger()) {
+            attributes.put('valueMax', assayContextItem.valueMax.toString())
         }
         return attributes;
     }
 
-    protected void generateMeasureContextItem(final MarkupBuilder markupBuilder, final MeasureContextItem measureContextItem) {
-        final Map<String, String> attributes = createAttributesForMeasureContextItem(measureContextItem)
+    protected void generateAssayContextItem(final MarkupBuilder markupBuilder, final AssayContextItem assayContextItem) {
+        final Map<String, String> attributes = createAttributesForAssayContextItem(assayContextItem)
 
-        markupBuilder.measureContextItem(attributes) {
-            final Element valueElement = measureContextItem.valueElement
-            final Element attributeElement = measureContextItem.attributeElement
+        markupBuilder.assayContextItem(attributes) {
+            final Element valueElement = assayContextItem.valueElement
+            final Element attributeElement = assayContextItem.attributeElement
 
                         //add value id element
             if (valueElement) {
@@ -113,12 +113,12 @@ class AssayExportHelperService {
             //add attributeId element
             if (attributeElement) {
                 final String attributeHref = grailsLinkGenerator.link(mapping: 'element', absolute: true, params: [id: attributeElement.id]).toString()
-                attributeId(attributeType: measureContextItem.attributeType.value, label: attributeElement.label) {
+                attributeId(attributeType: assayContextItem.attributeType.value, label: attributeElement.label) {
                     link(rel: 'related', href: "${attributeHref}", type: "${this.mediaTypesDTO.elementMediaType}")
                 }
             }
-            if(measureContextItem.extValueId){
-                extValueId(measureContextItem.extValueId)
+            if(assayContextItem.extValueId){
+                extValueId(assayContextItem.extValueId)
             }
         }
 
@@ -149,13 +149,13 @@ class AssayExportHelperService {
     /**
      * Generate a measure contexts
      * @param markupBuilder
-     * @param measureContexts
+     * @param assayContexts
      */
-    protected void generateMeasureContexts(final MarkupBuilder markupBuilder, final Set<MeasureContext> measureContexts) {
-        if (measureContexts) {
-            markupBuilder.measureContexts() {
-                for (MeasureContext measureContext : measureContexts) {
-                    generateMeasureContext(markupBuilder, measureContext)
+    protected void generateAssayContexts(final MarkupBuilder markupBuilder, final Set<AssayContext> assayContexts) {
+        if (assayContexts) {
+            markupBuilder.assayContexts() {
+                for (AssayContext assayContext : assayContexts) {
+                    generateAssayContext(markupBuilder, assayContext)
                 }
             }
         }
@@ -163,13 +163,13 @@ class AssayExportHelperService {
     /**
      *
      * @param markupBuilder
-     * @param measureContextItems
+     * @param assayContextItems
      */
-    public void generateMeasureContextItems(final MarkupBuilder markupBuilder, final Set<MeasureContextItem> measureContextItems) {
-        if (measureContextItems) {
-            markupBuilder.measureContextItems() {
-                for (MeasureContextItem measureContextItem : measureContextItems) {
-                    generateMeasureContextItem(markupBuilder, measureContextItem)
+    public void generateAssayContextItems(final MarkupBuilder markupBuilder, final Set<AssayContextItem> assayContextItems) {
+        if (assayContextItems) {
+            markupBuilder.assayContextItems() {
+                for (AssayContextItem assayContextItem : assayContextItems) {
+                    generateAssayContextItem(markupBuilder, assayContextItem)
                 }
             }
         }
@@ -263,9 +263,9 @@ class AssayExportHelperService {
             if (assay.designedBy) {
                 designedBy(assay.designedBy)
             }
-            generateMeasureContexts(markupBuilder, assay.measureContexts)
+            generateAssayContexts(markupBuilder, assay.assayContexts)
             generateMeasures(markupBuilder, assay.measures)
-            generateMeasureContextItems(markupBuilder, assay.measureContextItems)
+            generateAssayContextItems(markupBuilder, assay.measureContextItems)
             generateAssayDocuments(markupBuilder, assay.assayDocuments)
             generateLinksForAssay(markupBuilder, assay)
         }

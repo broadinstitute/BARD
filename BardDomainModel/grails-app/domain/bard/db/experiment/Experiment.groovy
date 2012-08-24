@@ -2,7 +2,6 @@ package bard.db.experiment
 
 import bard.db.registration.Assay
 import bard.db.registration.ExternalReference
-import bard.db.dictionary.Laboratory
 
 class Experiment {
 
@@ -17,16 +16,22 @@ class Experiment {
 	String experimentStatus
 	Assay assay
 	String readyForExtraction = 'Pending'
-    Laboratory laboratory
 
-	static hasMany = [resultContextItems: ResultContextItem,
+    // TODO results can appearently be very large 10 million rows
+    Set<Result> results = [] as Set<Result>
+    Set<ExperimentContextItem> experimentContextItems = [] as Set<ExperimentContextItem>
+    Set<ProjectStep> projectExperiments = [] as Set<ProjectStep>
+    Set<ExternalReference> externalReferences = [] as Set<ExternalReference>
+
+	static hasMany = [experimentContextItems: ExperimentContextItem,
 			results: Result,
-            projectExperiments:ProjectExperiment,
+            projectExperiments:ProjectStep,
             externalReferences:ExternalReference]
+
 	static belongsTo = [Assay]
 
 	static mapping = {
-		id column: "Experiment_ID", generator: "assigned"
+        id(column: "EXPERIMENT_ID", generator: "sequence", params: [sequence: 'EXPERIMENT_ID_SEQ'])
 	}
 
 	static constraints = {
@@ -41,6 +46,5 @@ class Experiment {
 		modifiedBy nullable: true, maxSize: 40
 		experimentStatus maxSize: 20, nullable: false, inList: ["Pending", "Approved", "Rejected", "Revised"]
 		readyForExtraction maxSize: 20, nullable: false, inList: [ "Pending","Ready", "Started", "Complete" ]
-        laboratory nullable: true
 	}
 }

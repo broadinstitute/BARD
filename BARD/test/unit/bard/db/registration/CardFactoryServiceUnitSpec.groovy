@@ -9,7 +9,7 @@ import spock.lang.Specification
  * Unit tests for the CardFactoryService.
  */
 @TestFor(CardFactoryService)
-@Mock([Assay, MeasureContextItem])
+@Mock([Assay, AssayContextItem])
 class CardFactoryServiceUnitSpec extends Specification {
 
     void setup() {
@@ -27,7 +27,7 @@ class CardFactoryServiceUnitSpec extends Specification {
             assert cardDtos.size() == 0
     }
 
-    void "test createCardDtoListForAssay with Assay with no MeasureContextItems"() {
+    void "test createCardDtoListForAssay with Assay with no AssayContextItems"() {
         given:
         Assay assay = new Assay()
 
@@ -38,18 +38,18 @@ class CardFactoryServiceUnitSpec extends Specification {
         assert cardDtos.size() == 0
     }
 
-    void "test createCardDtoListForAssay with Assay having 1 MeasureContextItem"() {
+    void "test createCardDtoListForAssay with Assay having 1 AssayContextItem"() {
         given:
         Assay assay = new Assay()
-        assay.measureContextItems = new HashSet<MeasureContextItem>()
+        assay.assayContextItems = new HashSet<AssayContextItem>()
         String card1Label = "Label 1"
         String card1Value = "Value 1"
-        MeasureContextItem item1 = new MeasureContextItem()
+        AssayContextItem item1 = new AssayContextItem()
         item1.id = 1
         item1.parentGroup = item1
         item1.attributeElement = new Element(label: card1Label)
         item1.valueDisplay = card1Value
-        assay.measureContextItems.add(item1)
+        assay.assayContextItems.add(item1)
 
         when:
         List<CardDto> cardDtos = service.createCardDtoListForAssay(assay)
@@ -68,19 +68,19 @@ class CardFactoryServiceUnitSpec extends Specification {
         assert !line1.valueDefinitionAvailable
     }
 
-    void "test createCardDtoListForAssay with Assay having an assay-level MeasureContextItem and a result-specific MeasureContextItem"() {
+    void "test createCardDtoListForAssay with Assay having an assay-level AssayContextItem and a result-specific AssayContextItem"() {
         given:
         Assay assay = new Assay()
-        assay.measureContextItems = new HashSet<MeasureContextItem>()
+        assay.assayContextItems = new HashSet<AssayContextItem>()
         String card1Label = "Label 1"
         String card1Value = "Value 1"
-        MeasureContextItem item1 = new MeasureContextItem()
+        AssayContextItem item1 = new AssayContextItem()
         item1.parentGroup = null
         item1.attributeElement = new Element(label: card1Label)
         item1.valueDisplay = card1Value
-        assay.measureContextItems.add(item1)
-        MeasureContextItem item2 = new MeasureContextItem(measureContext: new MeasureContext())
-        assay.measureContextItems.add(item2)
+        assay.assayContextItems.add(item1)
+        AssayContextItem item2 = new AssayContextItem(assayContext: new AssayContext())
+        assay.assayContextItems.add(item2)
 
         when:
         List<CardDto> cardDtos = service.createCardDtoListForAssay(assay)
@@ -99,29 +99,29 @@ class CardFactoryServiceUnitSpec extends Specification {
         assert !line1.valueDefinitionAvailable
     }
 
-    void "test createCardDtoListForAssay with Assay having 2 MeasureContextItems one with child"() {
+    void "test createCardDtoListForAssay with Assay having 2 AssayContextItems one with child"() {
         given:
         Assay assay = new Assay()
-        assay.measureContextItems = new HashSet<MeasureContextItem>()
+        assay.assayContextItems = new HashSet<AssayContextItem>()
         String card1Label = "Label 1"
         String card1Value = "Value 1"
-        MeasureContextItem item1 = new MeasureContextItem()
+        AssayContextItem item1 = new AssayContextItem()
         item1.id = 1
         item1.parentGroup = item1
         item1.attributeElement = new Element(label: card1Label)
         item1.valueDisplay = card1Value
-        assay.measureContextItems.add(item1)
+        assay.assayContextItems.add(item1)
 
-        MeasureContextItem item2 = new MeasureContextItem()
+        AssayContextItem item2 = new AssayContextItem()
         String item2Label = "Label 2"
         String item2Value = "Value 2"
         item2.id = 2
         item2.parentGroup = item2
         item2.attributeElement = new Element(label: item2Label)
         item2.valueDisplay = item2Value
-        assay.measureContextItems.add(item2)
+        assay.assayContextItems.add(item2)
 
-        MeasureContextItem child = new MeasureContextItem()
+        AssayContextItem child = new AssayContextItem()
         String childLabel = "Child Label"
         String childValue = "Child Value"
         String childLabelDef = "Child Label Def"
@@ -130,7 +130,7 @@ class CardFactoryServiceUnitSpec extends Specification {
         child.valueDisplay = childValue
         child.valueElement = new Element(label: childValue, description: childValueDef)
         item2.addToChildren(child)
-        assay.measureContextItems.add(child)
+        assay.assayContextItems.add(child)
 
         when:
         List<CardDto> cardDtos = service.createCardDtoListForAssay(assay)

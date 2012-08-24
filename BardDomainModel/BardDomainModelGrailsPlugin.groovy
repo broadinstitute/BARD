@@ -19,6 +19,7 @@ class BardDomainModelGrailsPlugin {
     // resources that are excluded from plugin packaging
     def pluginExcludes = [
         "grails-app/views/error.gsp",
+        "src/groovy/test/"
     ]
 
     // TODO Fill in these fields
