@@ -45,7 +45,7 @@ class BardWebInterfaceController {
                 def parameterMap = [:]
                 parameterMap.put('path', "/compounds")
                 Map dataMap = [ids: "${searchString}"]
-                 JSONArray resultJson = (JSONArray) postFormRequest(this.restClientFactoryService, NCGC_ROOT_URL, dataMap, parameterMap)
+                JSONArray resultJson = (JSONArray) postFormRequest(this.restClientFactoryService, NCGC_ROOT_URL, dataMap, parameterMap)
                 List docs = []
                 int numberOfHits = 0
                 resultJson.each { result ->
@@ -168,12 +168,16 @@ class BardWebInterfaceController {
     def showCompound(Integer cid) {
         Integer compoundId = cid ?: params.id as Integer//if '' param is provided, use that; otherwise, try the default id one
 
+        CompoundAdapter compoundAdapter;
         if (compoundId) {
-            CompoundAdapter compoundAdapter = this.queryService.showCompound(compoundId)
+            compoundAdapter = this.queryService.showCompound(compoundId)
+        }
+
+        if (compoundAdapter) {
             render(view: "showCompound", model: [compound: compoundAdapter])
         }
         else {
-            render "Compound ID (CID) parameter required"
+            render "Could not find compound"
         }
     }
 
