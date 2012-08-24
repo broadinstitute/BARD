@@ -9,24 +9,11 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 <html>
 <head>
-    <r:require modules="bootstrap"/>
-    <title>Compound Details ${compound.pubChemCID}</title>
+    <meta name="layout" content="details"/>
+    <title>BARD : Compound Details : PubChem CID ${compound.pubChemCID}</title>
 </head>
-
 <body>
-<div class="row">
-    <div class="span6"><a href="/bardwebquery"><img src="${resource(dir: 'images', file: 'bardLogo.png')}"
-                                                    alt="BARD - Home Page"/></a></div>
-
-    <div class="span6"><h1>Compound Details</h1></div> <br/>
-
-</div>
-<br/>
-
-<div class="span6"><h2>CID ${compound.pubChemCID}</h2></div> <br/>
-<br/>
-<br/>
-
+<h1>Compound Details for PubChem CID ${compound.pubChemCID}</h1>
 <div class="row">
     <div class="span3"><img
             src="${createLink(controller: 'chemAxon', action: 'generateStructureImage', params: [smiles: compound?.structureSMILES, width: 150, height: 120])}"/>
