@@ -18,7 +18,12 @@ class Project {
     String modifiedBy
     ReadyForExtraction readyForExtraction = ReadyForExtraction.Pending
 
-    static hasMany = [projectExperiments: ProjectStep, externalReferences: ExternalReference]
+
+    Set<ProjectStep> projectSteps = [] as Set<ProjectStep>
+    Set<ExternalReference> externalReferences = [] as Set<ProjectStep>
+    Set<ProjectContextItem> projectContextItems = [] as Set<ProjectStep>
+
+    static hasMany = [projectSteps: ProjectStep, externalReferences: ExternalReference, projectContextItems:ProjectContextItem]
 
     static mapping = {
         id(column: "PROJECT_ID", generator: "sequence", params: [sequence: 'PROJECT_ID_SEQ'])
