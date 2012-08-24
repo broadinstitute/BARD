@@ -22,8 +22,8 @@
             parent.$('#searchString').attr('value', constructedSearch);
             parent.$('#aidForm').submit();
 
-           // parent.$('#modalDiv').modal("hide");
-           parent.$('#modalDiv').dialog("close");
+//           parent.$('#modalDiv').modal("hide");
+//           parent.$('#modalDiv').dialog("close");
         });
 
         });

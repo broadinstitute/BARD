@@ -17,4 +17,4 @@ logs/
 *.*~
 *.ipr
 *.iml
-
+/.idea
