@@ -6,8 +6,16 @@
     <title>BARD : Assay Definition : ADID ${assayInstance?.id}</title>
 </head>
 <body>
-<div class="page-header">
-    <h1>Assay Definition Detail for ADID ${assayInstance?.id}</h1>
+<h1 class="detail">Assay Definition Detail for ADID ${assayInstance?.id}</h1>
+<div class="row-fluid" style="clear:both;">
+    <div class="span12 header">
+        <h3>${assayInstance?.name}</h3>
+        <dl class="dl-horizontal">
+            <dt>Assay Format:</dt><dd></dd>
+            <dt>Assay Type:</dt><dd></dd>
+            <dt>Target:</dt><dd></dd>
+        </dl>
+    </div>
 </div>
 <div class="row-fluid">
     <div class="span12">

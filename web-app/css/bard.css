@@ -19,6 +19,20 @@
     min-height: 200px;
 }
 
+h1.detail {
+    float: left;
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
+div.header > h3 {
+    margin: 5px;
+}
+
+.header dl {
+    margin-top: 0px;
+    margin-bottom: 5px;
+}
 
 div.screenSection {
     border-bottom: 1px solid #aaaaaa;
