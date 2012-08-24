@@ -1,5 +1,6 @@
 <r:script>
 	var idCounter = 0;
+	var idItemsCounter = 0;
 	$(function(){
 		$("#addNewBtn").button({
 			icons: {
@@ -39,7 +40,7 @@
 			width: 450,
 			modal: true,
 			autoOpen: false,
-			title: "Delete card?",
+			title: "Delete item?",
 			buttons: {
 				"Delete card": function() {
 					$( this ).dialog( "close" );
@@ -85,13 +86,14 @@
 	<div id="dialog_confirm_delete_card">
 		<p>
 		<span class="ui-icon ui-icon-alert" style="float:left; margin:0 7px 20px 0;"></span>
-		This card will be permanently deleted and cannot be recovered. Are you sure?		
+		This item will be permanently deleted and cannot be recovered. Are you sure?		
 		</p>
 	</div>
 	
 	<button id="addNewBtn">Add New Card</button>
 	
 	<g:set var="cardIdCounter" value="${0}" />
+	<g:set var="itemId" value="${0}" />
 	<table>
 		<tr><td>
         	<g:each in="${cardDtoList}" status="cardIndex" var="card">
