@@ -152,10 +152,10 @@ class AssayRestControllerFunctionalSpec extends Specification {
         XMLAssert.assertXpathEvaluatesTo("1", "count(//assayContext)", responseData)
         XMLAssert.assertXpathEvaluatesTo("1", "count(//measures)", responseData)
         XMLAssert.assertXpathEvaluatesTo("1", "count(//measure)", responseData)
-        XMLAssert.assertXpathEvaluatesTo("1", "count(//assayContextItems)", responseData)
-        XMLAssert.assertXpathEvaluatesTo("3", "count(//assayContextItem)", responseData)
+        XMLAssert.assertXpathEvaluatesTo("2", "count(//assayContextItems)", responseData)
+        XMLAssert.assertXpathEvaluatesTo("6", "count(//assayContextItem)", responseData)
         XMLAssert.assertXpathEvaluatesTo("2", "count(//assayDocument)", responseData)
-        XMLAssert.assertXpathEvaluatesTo("14", "count(//link)", responseData)
+        XMLAssert.assertXpathEvaluatesTo("17", "count(//link)", responseData)
     }
 
 

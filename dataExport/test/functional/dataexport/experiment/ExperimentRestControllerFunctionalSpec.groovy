@@ -10,12 +10,10 @@ import spock.lang.Unroll
 import javax.servlet.http.HttpServletResponse
 
 import static groovyx.net.http.Method.GET
-import bard.db.dictionary.Element
 
 import static groovyx.net.http.Method.PUT
 import static groovyx.net.http.ContentType.TEXT
 import bard.db.experiment.Experiment
-import bard.db.experiment.Result
 
 /**
  * Created with IntelliJ IDEA.
@@ -152,13 +150,14 @@ class ExperimentRestControllerFunctionalSpec extends Specification {
         assert serverResponse.getFirstHeader('ETag').name == 'ETag'
         assert serverResponse.getFirstHeader('ETag').value == '0'
         final String responseData = serverResponse.data.readLines().join()
+        println responseData
         XMLAssert.assertXpathEvaluatesTo("1", "count(//experiment)", responseData)
         XMLAssert.assertXpathEvaluatesTo("0", "count(//experiments)", responseData)
-        XMLAssert.assertXpathEvaluatesTo("1", "count(//resultContextItems)", responseData)
-        XMLAssert.assertXpathEvaluatesTo("2", "count(//resultContextItem)", responseData)
-        XMLAssert.assertXpathEvaluatesTo("Number of points", "//resultContextItem/attribute/@label", responseData)
-        XMLAssert.assertXpathEvaluatesTo("application/vnd.bard.cap+xml;type=element", "//resultContextItem/attribute/link/@type", responseData)
-        XMLAssert.assertXpathEvaluatesTo("10", "count(//link)", responseData)
+        XMLAssert.assertXpathEvaluatesTo("1", "count(//experimentContextItems)", responseData)
+        XMLAssert.assertXpathEvaluatesTo("2", "count(//experimentContextItem)", responseData)
+        XMLAssert.assertXpathEvaluatesTo("Number of points", "//experimentContextItem/attribute/@label", responseData)
+        XMLAssert.assertXpathEvaluatesTo("application/vnd.bard.cap+xml;type=element", "//experimentContextItem/attribute/link/@type", responseData)
+        XMLAssert.assertXpathEvaluatesTo("8", "count(//link)", responseData)
     }
 
     def 'test Update Experiment Success'(){

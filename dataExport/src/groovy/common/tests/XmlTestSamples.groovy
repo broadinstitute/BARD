@@ -324,18 +324,23 @@ class XmlTestSamples {
 
     '''
     static String PROJECTS_FROM_SERVER = '''
-<projects count='2'>
-<project projectId='1' readyForExtraction='Ready' groupType='Project'>
-<projectName>Scripps special project #1</projectName>
-<link rel='edit' href='http://localhost:8080/dataExport/api/projects/1' type='application/vnd.bard.cap+xml;type=project' />
-<link rel='up' href='http://localhost:8080/dataExport/api/projects' type='application/vnd.bard.cap+xml;type=projects' />
+<projects count='2'>  <project projectId='1' readyForExtraction='Ready' groupType='Project'>
+    <projectName>Scripps special project #1</projectName>    <projectSteps>
+        <projectStep projectStepId='2'>        <description>2127 - MLPCN Malaria2 - Inhibitor</description>
+            <link rel='related' href='http://localhost:8080/dataExport/api/experiments/2' type='application/vnd.bard.cap+xml;type=experiment' />
+        </projectStep>      <projectStep projectStepId='1'>        <description>2126 - MLPCN Malaria - Inhibitor</description>
+            <link rel='related' href='http://localhost:8080/dataExport/api/experiments/1' type='application/vnd.bard.cap+xml;type=experiment' />
+        </projectStep>
+    </projectSteps>
+    <link rel='edit' href='http://localhost:8080/dataExport/api/projects/1' type='application/vnd.bard.cap+xml;type=project' />
+    <link rel='up' href='http://localhost:8080/dataExport/api/projects' type='application/vnd.bard.cap+xml;type=projects' />
 </project>
-<project projectId='2' groupType='Project' readyForExtraction='Ready'>
-<projectName>2126 - MLPCN Malaria - Inhibitor</projectName>
- <link rel='edit' href='http://localhost:8080/dataExport/api/projects/2' type='application/vnd.bard.cap+xml;type=project' />
- <link rel='up' href='http://localhost:8080/dataExport/api/projects' type='application/vnd.bard.cap+xml;type=projects' />
- </project>
- </projects>
+    <project projectId='2' readyForExtraction='Ready' groupType='Project'>
+        <projectName>2126 - MLPCN Malaria - Inhibitor</projectName>
+        <link rel='edit' href='http://localhost:8080/dataExport/api/projects/2' type='application/vnd.bard.cap+xml;type=project' />
+        <link rel='up' href='http://localhost:8080/dataExport/api/projects' type='application/vnd.bard.cap+xml;type=projects' />
+    </project>
+</projects>
 '''
     static String ASSAYS_FROM_SERVER = '''
     <assays count='1'>
