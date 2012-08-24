@@ -4,6 +4,7 @@ import grails.test.mixin.Mock
 import grails.test.mixin.TestFor
 import org.junit.Before
 import spock.lang.Specification
+import grails.buildtestdata.mixin.Build
 
 /**
  * See the API for {@link grails.test.mixin.support.GrailsUnitTestMixin} for usage instructions
@@ -11,17 +12,14 @@ import spock.lang.Specification
 
 
 @TestFor(AssayDefinitionController)
-@Mock(Assay)
+@Build(Assay)
 class AssayDefinitionControllerUnitSpec extends Specification {
 
     Assay assay
 
     @Before
     void setup() {
-        assay = new Assay(assayName: "Test", assayVersion: "1", assayStatus: 'Pending',
-                readyForExtraction: 'Ready', assayType: 'Regular',dateCreated: new Date())
-        assay.setId(4)
-        assay.save()
+        assay = Assay.build(assayName:'Test')
         assert assay.validate()
     }
 
@@ -32,7 +30,7 @@ class AssayDefinitionControllerUnitSpec extends Specification {
         }
 
         when:
-        params.id = 4
+        params.id = assay.id
         def model = controller.show()
 
         then:
@@ -43,7 +41,7 @@ class AssayDefinitionControllerUnitSpec extends Specification {
     void 'testFindById()'() {
 
         when:
-        params.assayId = '4'
+        params.assayId = "${assay.id}"
         controller.findById()
 
         then:
@@ -52,7 +50,7 @@ class AssayDefinitionControllerUnitSpec extends Specification {
 
 	void 'testFindByName'() {
         when:
-		params.assayName = "Test"
+		params.assayName = assay.assayName
 		controller.findByName()
 
         then:
