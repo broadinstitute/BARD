@@ -7,7 +7,7 @@ class QueryCartService {
     ShoppingCartService shoppingCartService
     static final  String  cartAssay = "CartAssay"
     static final  String  cartCompound = "CartCompound"
-
+    static final  String  cartProject = "CartProject"
 
     ShoppingCartService getQueryCart () {
         shoppingCartService
@@ -31,6 +31,7 @@ class QueryCartService {
         def  returnValue  = new LinkedHashMap<String,List> ()
         def  temporaryCartAssayHolder  = new ArrayList<CartAssay>()
         def  temporaryCartCompoundHolder  = new ArrayList<CartCompound>()
+        def  temporaryCartProjectHolder  = new ArrayList<CartProject>()
         if (shoppingCartSrvc?.getItems()) {
             shoppingCartSrvc.getItems().each { shoppingItemElement  ->
             def convertedShoppingItem = Shoppable.findByShoppingItem(shoppingItemElement)
@@ -38,11 +39,14 @@ class QueryCartService {
                  temporaryCartAssayHolder.add(convertedShoppingItem as CartAssay)
             } else if (convertedShoppingItem instanceof CartCompound) {
                   temporaryCartCompoundHolder.add(convertedShoppingItem as CartCompound)
+            } else if (convertedShoppingItem instanceof CartProject) {
+                temporaryCartProjectHolder.add(convertedShoppingItem as CartProject)
             }
         }
         }
         returnValue << [ (QueryCartService.cartAssay) : temporaryCartAssayHolder]
         returnValue << [ (QueryCartService.cartCompound) : temporaryCartCompoundHolder]
+        returnValue << [ (QueryCartService.cartProject) : temporaryCartProjectHolder]
         returnValue
     }
 }

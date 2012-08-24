@@ -78,6 +78,30 @@ class ShoppingCartServiceIntegrationSpec extends IntegrationSpec {
         }
     }
 
+    void "Does each cart type work"() {
+        given: "A shopping cart"
+        assertNotNull shoppingCartService
+        CartAssay cartAssay = new CartAssay(assayTitle:"Assay 1")
+        CartCompound cartCompound =  new  CartCompound(smiles: "c1ccccc1")
+        CartProject cartProject=  new  CartProject(projectName: "my project")
+
+        when: "We make a Query to NCGC's rest API to get a list of assays with that target"
+        shoppingCartService.addToShoppingCart(cartAssay)
+        shoppingCartService.addToShoppingCart(cartCompound)
+        shoppingCartService.addToShoppingCart(cartProject)
+
+        then: "We get back a list assay ids"
+        assert queryCartService.totalNumberOfUniqueItemsInCart()==3
+
+        LinkedHashMap<String,List> groupedContents = queryCartService.groupUniqueContentsByType(  )
+        assert groupedContents.size()==3
+        assert groupedContents[(QueryCartService.cartAssay)].size()==1
+        assert groupedContents[(QueryCartService.cartCompound)].size()==1
+        assert groupedContents[(QueryCartService.cartProject)].size()==1
+        queryCartService.groupUniqueContentsByType()[(QueryCartService.cartAssay)].each{  cartElement ->
+            assert cartElement.id > 0
+        }
+    }
 
 
     void "Make sure queryCartService detects unique elements as expected"() {
@@ -98,11 +122,12 @@ class ShoppingCartServiceIntegrationSpec extends IntegrationSpec {
             assert queryCartService.totalNumberOfUniqueItemsInCart()==3
 
             LinkedHashMap<String,List> groupedContents = queryCartService.groupUniqueContentsByType(  )
-            assert groupedContents.size()==2
+            assert groupedContents.size()==3
             assert groupedContents[(QueryCartService.cartAssay)].size()==2
             assert groupedContents[(QueryCartService.cartCompound)].size()==1
+            assert groupedContents[(QueryCartService.cartProject)].size()==0
             queryCartService.groupUniqueContentsByType()[(QueryCartService.cartAssay)].each{  cartElement ->
-                assert cartElement.id > 0
+                    assert cartElement.id > 0
             }
     }
 
