@@ -142,23 +142,7 @@ class BardWebInterfaceController {
         String searchString = params.searchString?.trim()
         if (searchString) {
             //we make the first character capitalized to match the ENUM
-<<<<<<< HEAD
-            final String[] searchStringSplit = searchString.toLowerCase().capitalize().split(":")
-            final StructureSearchParams.Type searchType = searchStringSplit[0] as StructureSearchParams.Type
-            List<CompoundAdapter> compoundAdapters = queryService.structureSearch(searchStringSplit[1], searchType)
-            def metaDataMap = [nhit: compoundAdapters.size()]
-            def listDocs = []
 
-            for (CompoundAdapter compoundAdapter : compoundAdapters) {
-                def adapter = [:]
-                long cid = compoundAdapter.pubChemCID
-                adapter.put("cid", cid)
-                final String iupacName = compoundAdapter.compound.getValue(bard.core.Compound.IUPACNameValue)?.value as java.lang.String
-
-                adapter.put("iupac_name", iupacName)
-                adapter.put("iso_smiles", compoundAdapter.structureSMILES)
-                listDocs.add(adapter)
-=======
             final String[] searchStringSplit = searchString.split(":")
             if (searchStringSplit.length == 2) {
                 final String searchTypeString = searchStringSplit[0]
@@ -180,7 +164,6 @@ class BardWebInterfaceController {
                 }
                 render(template: 'compounds', model: [docs: listDocs, metaData: metaDataMap])
                 return
->>>>>>> iteration.006
             }
         }
         flash.message = 'Search String is required must be of the form StructureSearchType:Smiles'
@@ -328,23 +311,7 @@ class SearchHelper {
         int max = new Integer(params.max)
         int offset = new Integer(params.offset)
 
-<<<<<<< HEAD
-
-        //We set this parameter so the UI knows to display faceting info
-        //If "Not paging" then display faceting information, otherwise do not
-        //This should handle the bug in 35019041
-        if(offset == 0){ //we are not paging yet
-            params.paging = "NotPaging"
-        }
-        else{
-            params.paging = "Paging"
-        }
-
-        parameterMap.put('query', [top: params.max, skip: "${params.offset}", q: "${searchString}", include_entities: false])
-=======
         parameterMap.put('query', [top: max, skip: "${offset}", q: "${searchString}", include_entities: false])
->>>>>>> iteration.006
-
         parameterMap.put('path', "${relativePath}")
         parameterMap.put('connectTimeout', 5000)
         parameterMap.put('readTimeout', 10000)
