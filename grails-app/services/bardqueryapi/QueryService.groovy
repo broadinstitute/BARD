@@ -8,7 +8,6 @@ import bard.core.rest.RESTProjectService
 import elasticsearchplugin.ElasticSearchService
 import elasticsearchplugin.QueryExecutorService
 import wslite.json.JSONObject
-
 import bard.core.*
 
 class QueryService {
@@ -39,7 +38,36 @@ class QueryService {
   "size": 10
 }
 '''
-
+    /**
+     * TODO: Should return facets and all other parameters as REST API
+     * We are not quite ready to use this method yet
+     * @param searchString
+     * @param top
+     * @param skip
+     * @return
+     */
+    List<CompoundAdapter> findCompoundsByTextSearch(final String searchString, final int top = 10, final int skip = 0) {
+        final List<CompoundAdapter> foundCompoundAdapters = []
+        if (searchString) {
+            final RESTCompoundService restCompoundService = this.queryServiceWrapper.getRestCompoundService()
+            final SearchParams params = new SearchParams(searchString).setSkip(skip).setTop(top);
+            final ServiceIterator<Compound> searchIterator = restCompoundService.search(params)
+            while (searchIterator.hasNext()) {
+                final Compound compound = searchIterator.next();
+                final CompoundAdapter compoundAdapter = new CompoundAdapter(compound)
+                foundCompoundAdapters.add(compoundAdapter)
+            }
+        }
+        return foundCompoundAdapters
+    }
+    /**
+     *  //TODO ask for paging? Perhaps not the client should just display all they get
+     * @param smiles
+     * @param structureSearchParamsType
+     * @param top
+     * @param skip
+     * @return of compounds
+     */
     List<CompoundAdapter> structureSearch(final String smiles, final StructureSearchParams.Type structureSearchParamsType, final int top = 10, final int skip = 0) {
         List<CompoundAdapter> compounds = []
         if (smiles) {
@@ -61,9 +89,81 @@ class QueryService {
         return compounds
     }
     /**
+     * Given a list of Compound Ids return all the compounds that were found
+     * @param compoundIds
+     * @return list
+     */
+    List<CompoundAdapter> findCompoundsByCIDs(final List<Long> compoundIds) {
+        List<CompoundAdapter> compoundAdapters = []
+        if (compoundIds) {
+            final RESTCompoundService restCompoundService = this.queryServiceWrapper.getRestCompoundService()
+            final Collection<Compound> compounds = restCompoundService.get(compoundIds)
+            for (Compound compound : compounds) {
+                final CompoundAdapter compoundAdapter = new CompoundAdapter(compound)
+                compoundAdapters.add(compoundAdapter)
+            }
+        }
+        return compoundAdapters
+    }
+    /**
+     * Given a CID, get detailed compound information from REST API
+     * @param compoundId
+     * @return
+     */
+    CompoundAdapter showCompound(final Integer compoundId) {
+        if (compoundId) {
+            final RESTCompoundService restCompoundService = this.queryServiceWrapper.getRestCompoundService()
+            final Compound compound = restCompoundService.get(compoundId)
+            if (compound) {
+                return new CompoundAdapter(compound)
+            }
+        }
+        return null
+    }
+    /**
+     * TODO: Should return facets and all other parameters as REST API
+     * TODO: Not ready for use
+     * We are not quite ready to use this method yet
+     * @param searchString
+     * @param top
+     * @param skip
+     * @return
+     */
+    List<Assay> findAssaysByTextSearch(final String searchString, final int top = 10, final int skip = 0) {
+        final List<Assay> foundAssays = []
+        if (searchString) {
+            final RESTAssayService restAssayService = this.queryServiceWrapper.getRestAssayService()
+            final SearchParams params = new SearchParams(searchString).setSkip(skip).setTop(top);
+            final ServiceIterator<Assay> searchIterator = restAssayService.search(params)
+            while (searchIterator.hasNext()) {
+                final Assay assay = searchIterator.next();
+                foundAssays.add(assay)
+            }
+        }
+        return foundAssays
+    }
+    /**
+     * Given a list of Assay Ids return all the assays that were found
+     * TODO: Not ready to use because it returns an empty list from NCGC
+     * TODO: Also need facet and hits information
+     * @param assayIds
+     * @return list
+     */
+    List<Assay> findAssaysByAPIDs(final List<Long> assayIds) {
+        final List<Assay> foundAssays = []
+        if (assayIds) {
+            final RESTAssayService restAssayService = this.queryServiceWrapper.getRestAssayService()
+            final Collection<Assay> assays = restAssayService.get(assayIds)
+            //TODO: add facet information
+            foundAssays.addAll(assays)
+        }
+        return foundAssays
+    }
+    /**
      * Given an assayId, get detailed Assay information from the REST API
      * @param assayId
      * @return
+     * TODO: switch to use #findAssaysByAPID
      */
     Assay showAssay(final Integer assayId) {
         if (assayId) {
@@ -73,9 +173,49 @@ class QueryService {
         return null
     }
     /**
+     * TODO: Should return facets hits and all other parameters as REST API
+     * TODO: Not ready for use
+     * We are not quite ready to use this method yet
+     * @param searchString
+     * @param top
+     * @param skip
+     * @return
+     */
+    List<Project> findProjectsByTextSearch(final String searchString, final int top = 10, final int skip = 0) {
+        final List<Project> foundProjects = []
+        if (searchString) {
+            final RESTProjectService restProjectService = this.queryServiceWrapper.getRestProjectService()
+            final SearchParams params = new SearchParams(searchString).setSkip(skip).setTop(top);
+            final ServiceIterator<Project> searchIterator = restProjectService.search(params)
+            while (searchIterator.hasNext()) {
+                final Project project = searchIterator.next();
+                foundProjects.add(project)
+            }
+        }
+        return foundProjects
+    }
+    /**
+     * TODO: Not ready to use because it returns an empty list from NCGC
+     * TODO: Also need facet and hits information
+     * Given a list of Project Ids return all the projects that were found
+     * @param projectIds
+     * @return list
+     */
+    List<Project> findProjectsByPIDs(final List<Long> projectIds) {
+        final List<Project> foundProjects = []
+        if (projectIds) {
+            final RESTProjectService restProjectService = this.queryServiceWrapper.getRestProjectService()
+            final Collection<Project> projects = restProjectService.get(projectIds)
+            //TODO: add facet information
+            foundProjects.addAll(projects)
+        }
+        return foundProjects
+    }
+    /**
      * Given an projectId, get detailed Project information from the REST API
      * @param projectId
      * @return
+     * TODO: switch to use #findProjectsByID
      */
     Project showProject(final Integer projectId) {
         if (projectId) {
@@ -96,21 +236,8 @@ class QueryService {
         }
         return null
     }
-    /**
-     * Given a CID, get detailed compound information from REST API
-     * @param compoundId
-     * @return
-     */
-    CompoundAdapter showCompound(final Integer compoundId) {
-        if (compoundId) {
-            final RESTCompoundService restCompoundService = this.queryServiceWrapper.getRestCompoundService()
-            final Compound compound = restCompoundService.get(compoundId)
-            if (compound) {
-                return new CompoundAdapter(compound)
-            }
-        }
-        return null
-    }
+
+
     public List<String> autoComplete(final String term) {
         final List<String> assayNames = handleAutoComplete(term)
         return assayNames

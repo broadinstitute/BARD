@@ -62,7 +62,7 @@ class BardWebInterfaceController {
             }
             catch (Exception exp) {
                 return response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR,
-                        message(code: 'compound.search.error', args: [exp.message], default: "Compound search has encountered an error:\n${exp.message}"))
+                        "Compound search has encountered an error:\n${exp.message}")
             }
         }
         flash.message = 'Search String is required'
@@ -95,7 +95,7 @@ class BardWebInterfaceController {
             }
             catch (Exception exp) {
                 return response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR,
-                        message(code: 'assay.search.error', args: [exp.message], default: "Assay search has encountered an error:\n${exp.message}"))
+                        "Assay search has encountered an error:\n${exp.message}")
             }
         }
         flash.message = 'Search String is required'
@@ -125,8 +125,8 @@ class BardWebInterfaceController {
                 return
             }
             catch (Exception exp) {
-                return response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR,
-                        message(code: 'project.search.error', args: [exp.message], default: "Project search has encountered an error:\n${exp.message}"))
+                return response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR.intValue(),
+                        "Project search has encountered an error:\n${exp.message}")
             }
         }
         flash.message = 'Search String is required'
@@ -152,7 +152,9 @@ class BardWebInterfaceController {
                 def adapter = [:]
                 long cid = compoundAdapter.pubChemCID
                 adapter.put("cid", cid)
-                adapter.put("iupac_name", cid)
+                final String iupacName = compoundAdapter.compound.getValue(bard.core.Compound.IUPACNameValue)?.value as java.lang.String
+
+                adapter.put("iupac_name", iupacName)
                 adapter.put("iso_smiles", compoundAdapter.structureSMILES)
                 listDocs.add(adapter)
             }
@@ -168,7 +170,7 @@ class BardWebInterfaceController {
     def showCompound(Integer cid) {
         Integer compoundId = cid ?: params.id as Integer//if '' param is provided, use that; otherwise, try the default id one
 
-        CompoundAdapter compoundAdapter;
+        CompoundAdapter compoundAdapter = null;
         if (compoundId) {
             compoundAdapter = this.queryService.showCompound(compoundId)
         }
@@ -191,7 +193,7 @@ class BardWebInterfaceController {
         }
         catch (Exception exp) {
             return response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR,
-                    message(code: 'compound.search.error', args: [exp.message], default: "Compound search has encountered an error:\n${exp.message}"))
+                    "Compound search has encountered an error:\n${exp.message}")
         }
     }
 
@@ -205,7 +207,7 @@ class BardWebInterfaceController {
         }
         catch (Exception exp) {
             return response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR,
-                    message(code: 'assay.search.error', args: [exp.message], default: "Assay search has encountered an error:\n${exp.message}"))
+                    "Assay search has encountered an error:\n${exp.message}")
         }
     }
 
@@ -219,7 +221,7 @@ class BardWebInterfaceController {
         }
         catch (Exception exp) {
             return response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR,
-                    message(code: 'project.search.error', args: [exp.message], default: "Project search has encountered an error:\n${exp.message}"))
+                    "Project search has encountered an error:\n${exp.message}")
         }
     }
 
@@ -278,7 +280,6 @@ class BardWebInterfaceController {
 class SearchHelper {
 
     /**
-     * TODO: We will squirell this here for now Since will not be needing it after the JDO is released
      * @param url
      * @param data
      * @return
@@ -303,11 +304,11 @@ class SearchHelper {
         String searchString = params.searchString?.trim()
         params.max = Math.min(params.max ? params.int('max') : 10, 100)
         params.offset = params.int('offset') ?: 0
-        int max = new Integer(params.max)
-        int offset = new Integer(params.offset)
-        //check for nulls
+//        int max = new Integer(params.max)
+//        int offset = new Integer(params.offset)
+//        //check for nulls
 
-        parameterMap.put('query', [top: max, skip: "${offset}", q: "${searchString}", include_entities: false])
+        parameterMap.put('query', [top: params.max, skip: "${params.offset}", q: "${searchString}", include_entities: false])
 
         parameterMap.put('path', "${relativePath}")
         parameterMap.put('connectTimeout', 5000)

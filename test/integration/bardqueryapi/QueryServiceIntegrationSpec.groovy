@@ -1,7 +1,10 @@
 package bardqueryapi
 
 import bard.core.adapter.CompoundAdapter
+import bard.core.rest.RESTEntityServiceManager
 import grails.plugin.spock.IntegrationSpec
+import org.junit.After
+import org.junit.Before
 import spock.lang.Unroll
 import bard.core.*
 
@@ -9,10 +12,19 @@ import bard.core.*
 class QueryServiceIntegrationSpec extends IntegrationSpec {
 
     QueryService queryService
+    EntityServiceManager esm
+    String baseURL = "http://bard.nih.gov/api/v1"
 
+    @Before
     void setup() {
+        this.esm = new RESTEntityServiceManager(baseURL);
+
     }
 
+    @After
+    void tearDown() {
+        this.esm.shutdown()
+    }
 
     void "test autoComplete #label"() {
 
@@ -105,12 +117,13 @@ class QueryServiceIntegrationSpec extends IntegrationSpec {
         assert assay.category == AssayValues.AssayCategory.MLSCN
         assert assay.description
     }
+
     /**
      * Do structure searches
      */
     void "test Structure Search #label"() {
-        when:
-        final List<CompoundAdapter> compoundAdapters = queryService.structureSearch(smiles, structureSearchParamsType,top,skip)
+        when: ""
+        final List<CompoundAdapter> compoundAdapters = queryService.structureSearch(smiles, structureSearchParamsType, top, skip)
         then:
         assert compoundAdapters
         assert numberOfCompounds == compoundAdapters.size()
@@ -125,4 +138,82 @@ class QueryServiceIntegrationSpec extends IntegrationSpec {
 
     }
 
+    void "test find Compounds By Text Search String #label"() {
+        when: ""
+        final List<CompoundAdapter> compoundAdapters = queryService.findCompoundsByTextSearch(searchString, top, skip)
+        then:
+        assert compoundAdapters
+        assert numberOfCompounds == compoundAdapters.size()
+        where:
+        label                     | searchString         | skip | top | numberOfCompounds
+        "dna repair"              | "dna repair"         | 0    | 10  | 10
+        "dna repair skip and top" | "dna repair"         | 10   | 10  | 10
+        "biological process"      | "biological process" | 0    | 10  | 10
+
+    }
+
+    void "test find Compounds By CIDs #label"() {
+        when: ""
+        final List<CompoundAdapter> compoundAdapters = queryService.findCompoundsByCIDs(cids)
+        then:
+        assert compoundAdapters
+        assert cids.size() == compoundAdapters.size()
+        where:
+        label                        | cids
+        "Single CID"                 | [3235555]
+        "Search with a list of CIDs" | [3235555, 3235556, 3235557, 3235558, 3235559, 3235560, 3235561, 3235562, 3235563, 3235564]
+    }
+
+    void "test find Assays By Text Search String #label"() {
+        when: ""
+        List<Assay> assays = queryService.findAssaysByTextSearch(searchString, top, skip)
+        then:
+        assert assays
+        assert numberOfAssays == assays.size()
+        where:
+        label                     | searchString         | skip | top | numberOfAssays
+        "dna repair"              | "dna repair"         | 0    | 10  | 10
+        "dna repair skip and top" | "dna repair"         | 10   | 10  | 10
+        "biological process"      | "biological process" | 0    | 10  | 10
+
+    }
+
+
+    void "test find Assays By APIDs #label"() {
+        when: ""
+        final List<Assay> assays = queryService.findAssaysByAPIDs(apids)
+        then:
+        assert assays
+        assert apids.size() == assays.size()
+        where:
+        label                         | apids
+        "Single APID"                 | [644]
+        "Search with a list of APIDs" | [644, 600, 666]
+    }
+
+    void "test find Projects By Text Search #label"() {
+        when: ""
+        List<Project> projects = queryService.findProjectsByTextSearch(searchString, top, skip)
+        then:
+        assert projects
+        assert numberOfProjects == projects.size()
+        where:
+        label                     | searchString         | skip | top | numberOfProjects
+        "dna repair"              | "dna repair"         | 0    | 10  | 10
+        "dna repair skip and top" | "dna repair"         | 10   | 10  | 10
+        "biological process"      | "biological process" | 0    | 10  | 10
+
+    }
+
+    void "test find Projects By PIDs #label"() {
+        when: ""
+        final List<Project> projects = queryService.findProjectsByPIDs(pids)
+        then:
+        assert projects
+        assert pids.size() == projects.size()
+        where:
+        label                        | pids
+        "Single PID"                 | [1772]
+        "Search with a list of PIDs" | [1771, 1772, 604]
+    }
 }
