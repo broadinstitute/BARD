@@ -1,6 +1,8 @@
 <%@ page import="grails.converters.JSON" %>
 <div class="row-fluid">
-    <g:render template="facets" model="['metaData': metaData]" />
+    <g:if test="${params.paging == 'NotPaging'}">
+        <g:render template="facets" model="['metaData': metaData]"/>
+    </g:if>
 <div class="span9">
     <table class="table">
     <g:each var="compound" in="${docs}">

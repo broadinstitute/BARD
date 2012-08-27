@@ -1,5 +1,7 @@
 <div class="row-fluid">
-    <g:render template="facets" model="['metaData': metaData]" />
+    <g:if test="${params.paging == 'NotPaging'}">
+        <g:render template="facets" model="['metaData': metaData]"/>
+    </g:if>
 <div class="span9">
     <ul class="unstyled results">
     <g:each var="assay" in="${docs}">

@@ -304,9 +304,19 @@ class SearchHelper {
         String searchString = params.searchString?.trim()
         params.max = Math.min(params.max ? params.int('max') : 10, 100)
         params.offset = params.int('offset') ?: 0
-//        int max = new Integer(params.max)
-//        int offset = new Integer(params.offset)
-//        //check for nulls
+        int max = new Integer(params.max)
+        int offset = new Integer(params.offset)
+
+
+        //We set this parameter so the UI knows to display faceting info
+        //If "Not paging" then display faceting information, otherwise do not
+        //This should handle the bug in 35019041
+        if(offset == 0){ //we are not paging yet
+            params.paging = "NotPaging"
+        }
+        else{
+            params.paging = "Paging"
+        }
 
         parameterMap.put('query', [top: params.max, skip: "${params.offset}", q: "${searchString}", include_entities: false])
 
