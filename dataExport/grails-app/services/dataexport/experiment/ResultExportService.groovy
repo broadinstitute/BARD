@@ -18,6 +18,8 @@ import org.codehaus.groovy.grails.web.mapping.LinkGenerator
 
 import javax.sql.DataSource
 import dataexport.util.UtilityService
+import bard.db.experiment.RunContextItem
+import bard.db.enums.ReadyForExtraction
 
 class ResultExportService {
     LinkGenerator grailsLinkGenerator
@@ -40,7 +42,7 @@ class ResultExportService {
      */
     public BardHttpResponse update(final Long id, final Long clientVersion, final String latestStatus) {
         final Result result = Result.findById(id)
-        return utilityService.update(result,id,clientVersion,latestStatus,"Result")
+        return utilityService.update(result,id,clientVersion,latestStatus as ReadyForExtraction,"Result")
     }
     /**
      * Generate the results for a given experiment
@@ -76,7 +78,7 @@ class ResultExportService {
         Map<String, String> attributes = [:]
 
         if (result.readyForExtraction) {
-            attributes.put('readyForExtraction', result.readyForExtraction)
+            attributes.put('readyForExtraction', result.readyForExtraction.toString())
         }
         if (result.valueDisplay) {
             attributes.put('valueDisplay', result.valueDisplay)
@@ -109,11 +111,11 @@ class ResultExportService {
         final Map<String, String> attributes = generateAttributesForResult(currentResult)
 
         markupBuilder.result(attributes) {
-            final Element resultType = currentResult.resultType
-            if (resultType) { //this is the currentResult type
-                resultTypeRef(label: resultType.label) {
-                    final String href = grailsLinkGenerator.link(mapping: 'resultType', absolute: true, params: [id: resultType.id]).toString()
-                    link(rel: 'related', href: "${href}", type: "${this.mediaTypes.resultTypeMediaType}")
+            final Element resultTypeElement = currentResult.resultType
+            if (resultTypeElement) { //this is the currentResult type
+                resultType(label: resultTypeElement.label) {
+                    final String href = grailsLinkGenerator.link(mapping: 'element', absolute: true, params: [id: resultTypeElement.id]).toString()
+                    link(rel: 'related', href: "${href}", type: "${this.mediaTypes.elementMediaType}")
                 }
             }
             //TODO: The substance table, does not exist yet. We will need to fix the domain model plugin, but only after
@@ -218,36 +220,36 @@ class ResultExportService {
     protected void generateResultContextItems(def markupBuilder, final Set<ResultContextItem> resultContextItems) {
         markupBuilder.resultContextItems() {
             for (ResultContextItem resultContextItem : resultContextItems) {
-                generateResultContextItem(markupBuilder, resultContextItem)
+                generateRunContextItem(markupBuilder, resultContextItem)
             }
         }
     }
     /**
      *
-     * @param resultContextItem
+     * @param runContextItem
      * @return
      */
-    protected Map<String, String> generateAttributesForResultContextItem(final ResultContextItem resultContextItem) {
+    protected Map<String, String> generateAttributesForRunContextItem(final RunContextItem runContextItem, final String runContextItemIdLabel) {
         Map<String, String> attributes = [:]
-        attributes.put('resultContextItemId', resultContextItem.id?.toString())
-        if (resultContextItem.parentGroup && resultContextItem.parentGroup.id.toString().isInteger()) {
-            attributes.put('parentGroup', resultContextItem.parentGroup.id.toString())
+        attributes.put(runContextItemIdLabel, runContextItem.id?.toString())
+        if (runContextItem.groupResultContext && runContextItem.groupResultContext.id.toString().isInteger()) {
+            attributes.put('parentGroup', runContextItem.groupResultContext.id.toString())
         }
 
-        if (resultContextItem.qualifier) {
-            attributes.put('qualifier', resultContextItem.qualifier)
+        if (runContextItem.qualifier) {
+            attributes.put('qualifier', runContextItem.qualifier)
         }
-        if (resultContextItem.valueDisplay) {
-            attributes.put('valueDisplay', resultContextItem.valueDisplay)
+        if (runContextItem.valueDisplay) {
+            attributes.put('valueDisplay', runContextItem.valueDisplay)
         }
-        if (resultContextItem.valueNum || resultContextItem.valueNum.toString().isInteger()) {
-            attributes.put('valueNum', resultContextItem.valueNum.toString())
+        if (runContextItem.valueNum || runContextItem.valueNum.toString().isInteger()) {
+            attributes.put('valueNum', runContextItem.valueNum.toString())
         }
-        if (resultContextItem.valueMin || resultContextItem.valueMin.toString().isInteger()) {
-            attributes.put('valueMin', resultContextItem.valueMin.toString())
+        if (runContextItem.valueMin || runContextItem.valueMin.toString().isInteger()) {
+            attributes.put('valueMin', runContextItem.valueMin.toString())
         }
-        if (resultContextItem.valueMax || resultContextItem.valueMax.toString().isInteger()) {
-            attributes.put('valueMax', resultContextItem.valueMax.toString())
+        if (runContextItem.valueMax || runContextItem.valueMax.toString().isInteger()) {
+            attributes.put('valueMax', runContextItem.valueMax.toString())
         }
         return attributes
     }
@@ -256,32 +258,38 @@ class ResultExportService {
      * @param markupBuilder
      * @param resultContextItem
      */
-    protected void generateResultContextItem(def markupBuilder, final ResultContextItem resultContextItem) {
+    protected void generateRunContextItem(def markupBuilder, final RunContextItem runContextItem) {
 
-        final Map<String, String> attributes = generateAttributesForResultContextItem(resultContextItem)
+        final Map<String, String> attributes = generateAttributesForRunContextItem(runContextItem,"resultContextItemId")
 
         markupBuilder.resultContextItem(attributes) {
-
-            if (resultContextItem.attribute) {
-                final String attributeHref = grailsLinkGenerator.link(mapping: 'element', absolute: true, params: [id: "${resultContextItem.attribute.id}"]).toString()
-                attribute(label: resultContextItem.attribute.label) {
-                    link(rel: 'related', href: "${attributeHref}", type: "${this.mediaTypes.elementMediaType}")
-                }
-            }
-            if (resultContextItem.valueControlled) {
-                final String attributeHref = grailsLinkGenerator.link(mapping: 'element', absolute: true, params: [id: "${resultContextItem.valueControlled.id}"]).toString()
-
-                valueControlled(label: resultContextItem.valueControlled.label) {
-                    link(rel: 'related', href: "${attributeHref}", type: "${this.mediaTypes.elementMediaType}")
-                }
-            }
-            if (resultContextItem.extValueId) {
-                extValueId(resultContextItem.extValueId)
-            }
-
+            generateRunContextItemElements(markupBuilder,runContextItem)
         }
     }
+    /**
+     *
+     * @param markupBuilder
+     * @param resultContextItem
+     */
+    protected void generateRunContextItemElements(def markupBuilder, final RunContextItem runContextItem) {
+            if (runContextItem.attributeElement) {
+                final String attributeHref = grailsLinkGenerator.link(mapping: 'element', absolute: true, params: [id: "${runContextItem.attributeElement.id}"]).toString()
+                markupBuilder.attribute(label: runContextItem.attributeElement.label) {
+                    link(rel: 'related', href: "${attributeHref}", type: "${this.mediaTypes.elementMediaType}")
+                }
+            }
+            if (runContextItem.valueElement) {
+                final String attributeHref = grailsLinkGenerator.link(mapping: 'element', absolute: true, params: [id: "${runContextItem.valueElement.id}"]).toString()
 
+                markupBuilder.valueControlled(label: runContextItem.valueElement.label) {
+                    link(rel: 'related', href: "${attributeHref}", type: "${this.mediaTypes.elementMediaType}")
+                }
+            }
+            if (runContextItem.extValueId) {
+                markupBuilder.extValueId(runContextItem.extValueId)
+            }
+
+    }
     /**
      * Generate the RESULT_HIERARCHY element
      * @param markupBuilder

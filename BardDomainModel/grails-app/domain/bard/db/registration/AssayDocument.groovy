@@ -2,7 +2,6 @@ package bard.db.registration
 
 class AssayDocument {
 
-    static expose = 'assay-document'
     private static final int DOCUMENT_NAME_MAX_SIZE = 500
     private static final int DOCUMENT_TYPE_MAX_SIZE = 20
     private static final int MODIFIED_BY_MAX_SIZE = 40
@@ -18,7 +17,7 @@ class AssayDocument {
     static belongsTo = [assay: Assay]
 
     static mapping = {
-        id column: "ASSAY_DOCUMENT_ID", generator: "assigned"
+        id( column: 'ASSAY_DOCUMENT_ID', generator: 'sequence', params: [sequence: 'ASSAY_DOCUMENT_ID_SEQ'])
         documentContent type: "text", sqlType: 'clob'
     }
 

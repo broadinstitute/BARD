@@ -3,6 +3,7 @@ package dataexport.util
 import dataexport.registration.BardHttpResponse
 import exceptions.NotFoundException
 import javax.servlet.http.HttpServletResponse
+import bard.db.enums.ReadyForExtraction
 
 class UtilityService {
 
@@ -19,9 +20,8 @@ class UtilityService {
      * @param version
      * Returns the HTTPStatus Code
      */
-    public BardHttpResponse update(def domainObject, final Long id, final Long clientVersion, final String latestStatus, final String domainObjectType) {
-
-        if (!domainObject) { //we could not find the element
+    public BardHttpResponse update(def domainObject, final Long id, final Long clientVersion, final ReadyForExtraction latestStatus, final String domainObjectType) {
+         if (!domainObject) { //we could not find the element
             throw new NotFoundException("Could not find ${domainObjectType} with ID: ${id}")
         }
         if (domainObject.version > clientVersion) { //There is a conflict, supplied version is less than the current version
@@ -32,7 +32,7 @@ class UtilityService {
         }
 
         //no-op if the status is already completed
-        final String currentStatus = domainObject.readyForExtraction
+        final ReadyForExtraction currentStatus = domainObject.readyForExtraction
         if (currentStatus != latestStatus) {
             domainObject.readyForExtraction = latestStatus
             domainObject.save(flush: true, failOnError:true)

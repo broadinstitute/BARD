@@ -56,41 +56,40 @@ class XmlTestSamples {
   <resultContextItem resultContextItemId='null' qualifier='%' valueDisplay='20 %' valueNum='2.0' valueMin='1.0' valueMax='3.0' />
 </resultContextItems>
 '''
-    static final String PROJECT_EXPERIMENTS_UNIT = '''
-<projectExperiments>
-  <projectExperiment>
+
+    static final String PROJECT_STEPS_UNIT = '''
+<projectSteps>
+  <projectStep>
     <description>description</description>
     <precedingExperiment id='null'>
       <link rel='related' href='null' type='experimentMediaType' />
     </precedingExperiment>
     <link rel='related' href='null' type='projectMediaType' />
-    <link rel='related' href='null' type='stageMediaType' />
-  </projectExperiment>
-</projectExperiments>
+  </projectStep>
+</projectSteps>
 '''
-    static final String PROJECT_EXPERIMENT_UNIT = '''
-  <projectExperiment>
+    static final String PROJECT_STEP_UNIT = '''
+  <projectStep>
     <description>description</description>
     <precedingExperiment id='null'>
       <link rel='related' href='null' type='experimentMediaType' />
     </precedingExperiment>
     <link rel='related' href='null' type='projectMediaType' />
-    <link rel='related' href='null' type='stageMediaType' />
-  </projectExperiment>
+   </projectStep>
 '''
-    static final String PROJECT_EXPERIMENT_UNIT_NO_CHILD_ELEMENTS = '''
-    <projectExperiment>
+    static final String PROJECT_STEP_UNIT_NO_CHILD_ELEMENTS = '''
+    <projectStep>
     <description>description</description>
     <link rel='related' href='null' type='projectMediaType' />
-    </projectExperiment>
+    </projectStep>
 '''
-    static final String PROJECT_EXPERIMENTS_UNIT_NO_CHILD_ELEMENTS = '''
-    <projectExperiments>
-    <projectExperiment>
+    static final String PROJECT_STEPS_UNIT_NO_CHILD_ELEMENTS = '''
+    <projectSteps>
+    <projectStep>
     <description>description</description>
     <link rel='related' href='null' type='projectMediaType' />
-    </projectExperiment>
-</projectExperiments>
+    </projectStep>
+</projectSteps>
 '''
     static final String EXTERNAL_REFERENCES_UNT = '''
 <externalReferences>
@@ -114,7 +113,7 @@ class XmlTestSamples {
     '''
 
     static final String EXPERIMENT_UNIT_ONLY_ATTRIBUTES = '''
-<experiment experimentId='' experimentName='Experiment1' status='Published' holdUntilDate='1969-12-31T19:00:00.000-05:00' runDateFrom='1969-12-31T19:00:00.000-05:00' runDateTo='1969-12-31T19:00:00.000-05:00'>
+<experiment experimentId='' experimentName='Experiment1' status='Published' readyForExtraction='Pending' holdUntilDate='1969-12-31T19:00:00.000-05:00' runDateFrom='1969-12-31T19:00:00.000-05:00' runDateTo='1969-12-31T19:00:00.000-05:00'>
   <link rel='related' title='Link to Assay' type='assayMediaType' href='null' />
   <link rel='up' title='List Experiments' type='experimentsMediaType' href='null' />
   <link rel='related' title='List Related Results' type='resultsMediaType' href='null' />
@@ -122,28 +121,27 @@ class XmlTestSamples {
 </experiment>
     '''
     static final String EXPERIMENT_UNIT_ATTRIBUTES_AND_ELEMENTS = '''
-<experiment experimentId='' experimentName='Experiment1' status='Published' holdUntilDate='1969-12-31T19:00:00.000-05:00' runDateFrom='1969-12-31T19:00:00.000-05:00' runDateTo='1969-12-31T19:00:00.000-05:00'>
+<experiment experimentId='' experimentName='Experiment1' status='Published' readyForExtraction='Pending' holdUntilDate='1969-12-31T19:00:00.000-05:00' runDateFrom='1969-12-31T19:00:00.000-05:00' runDateTo='1969-12-31T19:00:00.000-05:00'>
   <description>Broad</description>
-  <resultContextItems>
-    <resultContextItem resultContextItemId='' qualifier='&lt;' valueDisplay='&lt; 20 uM' valueNum='1.0' valueMin='5.0' valueMax='20.0'>
+  <experimentContextItems>
+    <experimentContextItem experimentContextItemId='' qualifier='&lt;' valueDisplay='&lt; 20 uM' valueNum='1.0' valueMin='5.0' valueMax='20.0'>
       <attribute label='attribute'>
         <link rel='related' href='null' type='elementMediaType' />
       </attribute>
       <valueControlled label='valueControlled'>
         <link rel='related' href='null' type='elementMediaType' />
       </valueControlled>
-    </resultContextItem>
-  </resultContextItems>
-  <projectExperiments>
-    <projectExperiment>
+    </experimentContextItem>
+  </experimentContextItems>
+  <projectSteps>
+    <projectStep>
       <description>Broad</description>
       <precedingExperiment id='null'>
         <link rel='related' href='null' type='experimentMediaType' />
       </precedingExperiment>
       <link rel='related' href='null' type='projectMediaType' />
-      <link rel='related' href='null' type='stageMediaType' />
-    </projectExperiment>
-  </projectExperiments>
+    </projectStep>
+  </projectSteps>
   <externalReferences>
     <externalReference>
       <externalAssayRef>External Assay Ref</externalAssayRef>
@@ -181,24 +179,46 @@ class XmlTestSamples {
 
  static final String PROJECTS = '''
 <projects count='2'>
-  <project projectId='1' readyForExtraction='Ready' groupType='Project'>
+    <project projectId='1' readyForExtraction='Ready' groupType='Project'>
     <projectName>Scripps special project #1</projectName>
+    <projectSteps>
+      <projectStep projectStepId='1'>
+        <description>2126 - MLPCN Malaria - Inhibitor</description>
+    <link rel='related' href='http://localhost:8080/dataExport/api/experiments/1' type='application/vnd.bard.cap+xml;type=experiment' />
+    </projectStep>
+      <projectStep projectStepId='2'>
+        <description>2127 - MLPCN Malaria2 - Inhibitor</description>
+    <link rel='related' href='http://localhost:8080/dataExport/api/experiments/2' type='application/vnd.bard.cap+xml;type=experiment' />
+    </projectStep>
+    </projectSteps>
     <link rel='edit' href='http://localhost:8080/dataExport/api/projects/1' type='application/vnd.bard.cap+xml;type=project' />
     <link rel='up' href='http://localhost:8080/dataExport/api/projects' type='application/vnd.bard.cap+xml;type=projects' />
-  </project>
+    </project>
   <project projectId='2' readyForExtraction='Ready' groupType='Project'>
     <projectName>2126 - MLPCN Malaria - Inhibitor</projectName>
     <link rel='edit' href='http://localhost:8080/dataExport/api/projects/2' type='application/vnd.bard.cap+xml;type=project' />
     <link rel='up' href='http://localhost:8080/dataExport/api/projects' type='application/vnd.bard.cap+xml;type=projects' />
-  </project>
+    </project>
 </projects>
 '''
+
+
     static final String PROJECT = '''
-<project projectId='1' readyForExtraction='Ready' groupType='Project'>
-  <projectName>Scripps special project #1</projectName>
-  <link rel='edit' href='http://localhost:8080/dataExport/api/projects/1' type='application/vnd.bard.cap+xml;type=project' />
-  <link rel='up' href='http://localhost:8080/dataExport/api/projects' type='application/vnd.bard.cap+xml;type=projects' />
-</project>
+    <project projectId='1' readyForExtraction='Ready' groupType='Project'>
+    <projectName>Scripps special project #1</projectName>
+  <projectSteps>
+    <projectStep projectStepId='1'>
+      <description>2126 - MLPCN Malaria - Inhibitor</description>
+    <link rel='related' href='http://localhost:8080/dataExport/api/experiments/1' type='application/vnd.bard.cap+xml;type=experiment' />
+    </projectStep>
+    <projectStep projectStepId='2'>
+      <description>2127 - MLPCN Malaria2 - Inhibitor</description>
+    <link rel='related' href='http://localhost:8080/dataExport/api/experiments/2' type='application/vnd.bard.cap+xml;type=experiment' />
+    </projectStep>
+  </projectSteps>
+    <link rel='edit' href='http://localhost:8080/dataExport/api/projects/1' type='application/vnd.bard.cap+xml;type=project' />
+    <link rel='up' href='http://localhost:8080/dataExport/api/projects' type='application/vnd.bard.cap+xml;type=projects' />
+    </project>
 '''
     static final String PROJECT_WITH_DESCRIPTION = '''
 <project projectId='' readyForExtraction='Ready' groupType='Panel'>
@@ -253,36 +273,36 @@ class XmlTestSamples {
 '''
 
     static final String MEASURE_CONTEXT_ITEM_WITH_ATTRIBUTE_AND_VALUE_UNIT = '''
-<measureContextItem measureContextRef='measureContext' qualifier='&lt;' valueDisplay='Display' valueNum='5.0' valueMin='6.0' valueMax='7.0'>
+<assayContextItem assayContextRef='assayContext' qualifier='&lt;' valueDisplay='Display' valueNum='5.0' valueMin='6.0' valueMax='7.0'>
   <valueId label='valueLabel'>
     <link rel='related' href='null' type='xml' />
   </valueId>
   <attributeId attributeType='Fixed' label='attributeLabel'>
     <link rel='related' href='null' type='xml' />
   </attributeId>
-</measureContextItem>
+</assayContextItem>
 '''
 
     static final String MEASURE_CONTEXT_ITEM_WITH_ATTRIBUTE_UNIT = '''
-<measureContextItem measureContextRef='measureContext' qualifier='&lt;' valueDisplay='Display' valueNum='5.0' valueMin='6.0' valueMax='7.0'>
+<assayContextItem assayContextRef='assayContext' qualifier='&lt;' valueDisplay='Display' valueNum='5.0' valueMin='6.0' valueMax='7.0'>
   <attributeId attributeType='Fixed' label='attributeLabel'>
     <link rel='related' href='null' type='xml' />
   </attributeId>
-</measureContextItem>
+</assayContextItem>
 '''
 
-    static final String MEASURE_2_UNIT = '''<measure measureContextRef='label'>
+    static final String MEASURE_2_UNIT = '''<measure assayContextRef='label'>
   <resultTypeRef label='resultType'>
     <link rel='related' href='null' type='xml' />
   </resultTypeRef>
   <entryUnit unit='%' />
 </measure>
 '''
-    static final String MEASURE_1_UNIT = '''<measure measureContextRef='label'/>'''
+    static final String MEASURE_1_UNIT = '''<measure assayContextRef='label'/>'''
     static final String MEASURE_CONTEXT_1_UNIT = '''
-<measureContext>
+<assayContext>
   <contextName>TestName1</contextName>
-</measureContext>
+</assayContext>
 '''
 
     static String ASSAY_LINKS = '''
@@ -304,18 +324,23 @@ class XmlTestSamples {
 
     '''
     static String PROJECTS_FROM_SERVER = '''
-<projects count='2'>
-<project projectId='1' readyForExtraction='Ready' groupType='Project'>
-<projectName>Scripps special project #1</projectName>
-<link rel='edit' href='http://localhost:8080/dataExport/api/projects/1' type='application/vnd.bard.cap+xml;type=project' />
-<link rel='up' href='http://localhost:8080/dataExport/api/projects' type='application/vnd.bard.cap+xml;type=projects' />
+<projects count='2'>  <project projectId='1' readyForExtraction='Ready' groupType='Project'>
+    <projectName>Scripps special project #1</projectName>    <projectSteps>
+        <projectStep projectStepId='2'>        <description>2127 - MLPCN Malaria2 - Inhibitor</description>
+            <link rel='related' href='http://localhost:8080/dataExport/api/experiments/2' type='application/vnd.bard.cap+xml;type=experiment' />
+        </projectStep>      <projectStep projectStepId='1'>        <description>2126 - MLPCN Malaria - Inhibitor</description>
+            <link rel='related' href='http://localhost:8080/dataExport/api/experiments/1' type='application/vnd.bard.cap+xml;type=experiment' />
+        </projectStep>
+    </projectSteps>
+    <link rel='edit' href='http://localhost:8080/dataExport/api/projects/1' type='application/vnd.bard.cap+xml;type=project' />
+    <link rel='up' href='http://localhost:8080/dataExport/api/projects' type='application/vnd.bard.cap+xml;type=projects' />
 </project>
-<project projectId='2' groupType='Project' readyForExtraction='Ready'>
-<projectName>2126 - MLPCN Malaria - Inhibitor</projectName>
- <link rel='edit' href='http://localhost:8080/dataExport/api/projects/2' type='application/vnd.bard.cap+xml;type=project' />
- <link rel='up' href='http://localhost:8080/dataExport/api/projects' type='application/vnd.bard.cap+xml;type=projects' />
- </project>
- </projects>
+    <project projectId='2' readyForExtraction='Ready' groupType='Project'>
+        <projectName>2126 - MLPCN Malaria - Inhibitor</projectName>
+        <link rel='edit' href='http://localhost:8080/dataExport/api/projects/2' type='application/vnd.bard.cap+xml;type=project' />
+        <link rel='up' href='http://localhost:8080/dataExport/api/projects' type='application/vnd.bard.cap+xml;type=projects' />
+    </project>
+</projects>
 '''
     static String ASSAYS_FROM_SERVER = '''
     <assays count='1'>
@@ -342,46 +367,67 @@ class XmlTestSamples {
 </assayDocuments>
     '''
     static String MEASURES = '''
-<measures>
-  <measure measureContextRef='Context for IC50'>
+    <measures>
+    <measure assayContextRef='Context for IC50'>
     <resultTypeRef label='IC50'>
-      <link rel='related' href='http://localhost:8080/dataExport/api/dictionary/resultType/341' type='application/vnd.bard.cap+xml;type=resultType' />
+    <link rel='related' href='http://localhost:8080/dataExport/api/dictionary/resultType/341' type='application/vnd.bard.cap+xml;type=resultType' />
     </resultTypeRef>
-    <entryUnit unit='uM'>
-      <link rel='related' href='http://localhost:8080/dataExport/api/dictionary/element/386' type='application/vnd.bard.cap+xml;type=element' />
-    </entryUnit>
-  </measure>
+    <entryUnit unit='uM' />
+    </measure>
 </measures>
 '''
 
+
     static String MEASURE_CONTEXT_ITEMS = '''
-<measureContextItems>
-  <measureContextItem measureContextItemId='36' measureContextItemRef='34' measureContextRef='Context for IC50' valueDisplay='0 - 4' valueMax='4.0'>
+<assayContextItems>
+  <assayContextItem assayContextItemId='36' assayContextItemRef='34' assayContextRef='Context for IC50' valueDisplay='0 - 4' valueMax='4.0'>
     <attributeId attributeType='Range' label='Number of exclusions'>
       <link rel='related' href='http://localhost:8080/dataExport/api/dictionary/element/369' type='application/vnd.bard.cap+xml;type=element' />
     </attributeId>
-  </measureContextItem>
-  <measureContextItem measureContextItemId='34' measureContextRef='Context for IC50' valueDisplay='Assay Explorer '>
+  </assayContextItem>
+  <assayContextItem assayContextItemId='34' assayContextRef='Context for IC50' valueDisplay='Assay Explorer '>
     <valueId label='Assay Explorer'>
       <link rel='related' href='http://localhost:8080/dataExport/api/dictionary/element/372' type='application/vnd.bard.cap+xml;type=element' />
     </valueId>
     <attributeId attributeType='Fixed' label='software'>
       <link rel='related' href='http://localhost:8080/dataExport/api/dictionary/element/368' type='application/vnd.bard.cap+xml;type=element' />
     </attributeId>
-  </measureContextItem>
-  <measureContextItem measureContextItemId='35' measureContextItemRef='34' measureContextRef='Context for IC50' valueDisplay='30' valueNum='30.0'>
+  </assayContextItem>
+  <assayContextItem assayContextItemId='35' assayContextItemRef='34' assayContextRef='Context for IC50' valueDisplay='30' valueNum='30.0'>
     <attributeId attributeType='Fixed' label='Number of points'>
       <link rel='related' href='http://localhost:8080/dataExport/api/dictionary/element/370' type='application/vnd.bard.cap+xml;type=element' />
     </attributeId>
-  </measureContextItem>
-</measureContextItems>
+  </assayContextItem>
+</assayContextItems>
 '''
-    static String MEASURE_CONTEXTS = '''
-<measureContexts>
-  <measureContext>
+
+
+    static String ASSAY_CONTEXTS = '''
+<assayContexts>
+  <assayContext>
     <contextName>Context for IC50</contextName>
-  </measureContext>
-</measureContexts>
+    <assayContextItems>
+      <assayContextItem assayContextItemId='34' assayContextRef='Context for IC50' valueDisplay='Assay Explorer '>
+        <valueId label='Assay Explorer'>
+          <link rel='related' href='http://localhost:8080/dataExport/api/dictionary/element/372' type='application/vnd.bard.cap+xml;type=element' />
+        </valueId>
+        <attributeId attributeType='Fixed' label='software'>
+          <link rel='related' href='http://localhost:8080/dataExport/api/dictionary/element/368' type='application/vnd.bard.cap+xml;type=element' />
+        </attributeId>
+      </assayContextItem>
+      <assayContextItem assayContextItemId='35' assayContextRef='Context for IC50' valueDisplay='30' valueNum='30.0'>
+        <attributeId attributeType='Fixed' label='Number of points'>
+          <link rel='related' href='http://localhost:8080/dataExport/api/dictionary/element/370' type='application/vnd.bard.cap+xml;type=element' />
+        </attributeId>
+      </assayContextItem>
+      <assayContextItem assayContextItemId='36' assayContextRef='Context for IC50' valueDisplay='0 - 4' valueMax='4.0'>
+        <attributeId attributeType='Range' label='Number of exclusions'>
+          <link rel='related' href='http://localhost:8080/dataExport/api/dictionary/element/369' type='application/vnd.bard.cap+xml;type=element' />
+        </attributeId>
+      </assayContextItem>
+    </assayContextItems>
+  </assayContext>
+</assayContexts>
 '''
 
     static String BARD_DATA_EXPORT_UNIT = '''
@@ -410,6 +456,8 @@ class XmlTestSamples {
     <formula>formula</formula>
 </unitConversion>
 '''
+
+
     static String STAGES = '''
 <stages>
   <stage stageElement='IC50'>
@@ -419,6 +467,7 @@ class XmlTestSamples {
   </stage>
 </stages>
 '''
+
     static String STAGE = '''
 <stage stageElement='IC50'>
   <stageName>construct variant assay</stageName>
@@ -426,7 +475,23 @@ class XmlTestSamples {
   <link rel='related' href='http://localhost:8080/dataExport/api/dictionary/element/341' type='application/vnd.bard.cap+xml;type=element' />
 </stage>
 '''
+    static String STAGE1 = '''
+<stage stageElement='IC50'>
+  <stageName>construct variant assay</stageName>
+  <description>Description</description>
+  <link rel='related' href='http://localhost:8080/dataExport/api/dictionary/element/341' type='application/vnd.bard.cap+xml;type=element' />
+</stage>
+'''
+
+
     static String RESULT_TYPE = '''
+    <resultType resultTypeElement='IC50' baseUnit='uM' resultTypeStatus='Published'>
+    <resultTypeName>IC50</resultTypeName>
+  <link rel='related' href='http://localhost:8080/dataExport/api/dictionary/element/341' type='application/vnd.bard.cap+xml;type=element' />
+    </resultType>
+'''
+
+    static String RESULT_TYPE1 = '''
 <resultType resultTypeElement='IC50' baseUnit='uM' resultTypeStatus='Published'>
   <resultTypeName>IC50</resultTypeName>
   <link rel='related' href='http://localhost:8080/dataExport/api/dictionary/element/341' type='application/vnd.bard.cap+xml;type=element' />
@@ -438,6 +503,7 @@ class XmlTestSamples {
       <link rel='edit' href='http://localhost:8080/dataExport/api/dictionary/element/386' type='application/vnd.bard.cap+xml;type=element' />
     </element>
     '''
+
     static String DICTIONARY = '''
 <dictionary>
   <elements>
@@ -554,15 +620,17 @@ class XmlTestSamples {
   </unitConversion>
 </unitConversions>
 '''
+
+
     static String UNITS = '''
-<units>
+   <units>
   <unit unitElement='unit of measurement' unit='UNIT'>
     <description>Singular root to ensure tree viewers work</description>
   </unit>
   <unit unitElement='concentration' unit='concentration' />
   <unit unitElement='uM' parentUnit='concentration' unit='uM' />
 </units>
-'''
+    '''
 
 
 
@@ -647,6 +715,8 @@ class XmlTestSamples {
   <synonyms>syn</synonyms>
 </descriptor>
 '''
+
+
     static String ASSAY_DESCRIPTOR_UNIT = '''
 <descriptor abbreviation='abb' externalUrl='http://broad.org' unit='cm' descriptor='assay'>
   <elementStatus>status</elementStatus>
@@ -676,7 +746,7 @@ class XmlTestSamples {
 
 
     static String ELEMENT_FULL = '''
-<element elementId='' readyForExtraction='ready' elementStatus='status' abbreviation='abb' unit='cm'>
+<element elementId='' readyForExtraction='Ready' elementStatus='Pending' abbreviation='abb' unit='cm'>
   <label>label</label>
   <description>desc</description>
   <synonyms>syn</synonyms>
@@ -685,7 +755,7 @@ class XmlTestSamples {
 </element>
 '''
     static String ELEMENT_NO_DESCRIPTION = '''
-<element elementId='' readyForExtraction='ready' elementStatus='status' unit='cm'>
+<element elementId='' readyForExtraction='Ready' elementStatus='Pending' unit='cm'>
   <label>label</label>
   <externalUrl>http://www.broad.org</externalUrl>
   <link rel='edit' href='null' type='xml' />

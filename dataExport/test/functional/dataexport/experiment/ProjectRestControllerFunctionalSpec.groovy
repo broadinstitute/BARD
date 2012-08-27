@@ -1,11 +1,10 @@
 package dataexport.experiment
 
 import bard.db.experiment.Project
-import common.tests.XmlTestAssertions
-import common.tests.XmlTestSamples
 import grails.converters.XML
 import grails.plugin.remotecontrol.RemoteControl
 import groovyx.net.http.RESTClient
+import org.custommonkey.xmlunit.XMLAssert
 import spock.lang.Specification
 import spock.lang.Unroll
 
@@ -56,10 +55,11 @@ class ProjectRestControllerFunctionalSpec extends Specification {
         }
         then: 'We expect an XML representation of the projects'
         assert serverResponse.statusLine.statusCode == HttpServletResponse.SC_OK
-
-
         final String responseData = serverResponse.data.readLines().join()
-        XmlTestAssertions.assertResults(XmlTestSamples.PROJECTS_FROM_SERVER, responseData)
+        XMLAssert.assertXpathEvaluatesTo("1", "count(//projects)", responseData)
+        XMLAssert.assertXpathEvaluatesTo("2", "count(//project)", responseData)
+        XMLAssert.assertXpathEvaluatesTo("2", "count(//projectStep)", responseData)
+        XMLAssert.assertXpathEvaluatesTo("6", "count(//link)", responseData)
     }
 
     def 'test GET unauthorized'() {
@@ -144,7 +144,10 @@ class ProjectRestControllerFunctionalSpec extends Specification {
         assert serverResponse.getFirstHeader('ETag').name == 'ETag'
         assert serverResponse.getFirstHeader('ETag').value == '0'
         final String responseData = serverResponse.data.readLines().join()
-        XmlTestAssertions.assertResults(XmlTestSamples.PROJECT_FROM_SERVER, responseData)
+        XMLAssert.assertXpathEvaluatesTo("1", "count(//project)", responseData)
+        XMLAssert.assertXpathEvaluatesTo("1", "count(//projectSteps)", responseData)
+        XMLAssert.assertXpathEvaluatesTo("2", "count(//projectStep)", responseData)
+        XMLAssert.assertXpathEvaluatesTo("4", "count(//link)", responseData)
     }
 
     def 'test Update Project Success'() {

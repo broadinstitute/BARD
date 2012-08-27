@@ -31,6 +31,13 @@ databaseChangeLog = {
                         load_data.load_assay(8);
                         load_data.load_assay(1432);
                         load_data.load_assay(1565);
+                        load_data.load_assay(1847);
+                        load_data.load_assay(186);
+                        load_data.load_assay(1246);
+                        --load_data.load_assay(99);
+                        --load_data.load_assay(1217);
+                        --load_data.load_assay(819);
+                        --load_data.load_assay(326);
                         end;
                     ''')
             }

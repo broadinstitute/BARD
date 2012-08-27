@@ -124,14 +124,13 @@ class ResultExportServiceUnitSpec extends Specification {
         this.resultExportService.generateResult(markupBuilder, result)
 
         then: "We obtain the expected XML object"
-        println writer1.toString()
         XMLAssert.assertXpathEvaluatesTo("3", "count(//link)", writer1.toString());
         XMLAssert.assertXpathEvaluatesTo("1", "count(//link[@type='experimentMediaType'])", writer1.toString())
         XMLAssert.assertXpathEvaluatesTo("1", "count(//link[@type='resultMediaType'])", writer1.toString())
-        XMLAssert.assertXpathEvaluatesTo("1", "count(//resultTypeRef)", writer1.toString())
+        XMLAssert.assertXpathEvaluatesTo("1", "count(//resultType)", writer1.toString())
         XMLAssert.assertXpathEvaluatesTo("1", "count(//resultContextItems)", writer1.toString())
         XMLAssert.assertXpathEvaluatesTo("1", "count(//resultContextItem)", writer1.toString())
-        XMLAssert.assertXpathEvaluatesTo("1", "count(//link[@type='resultTypeMediaType'])", writer1.toString())
+        XMLAssert.assertXpathEvaluatesTo("1", "count(//link[@type='elementMediaType'])", writer1.toString())
         XMLAssert.assertXpathEvaluatesTo("1", "count(//result)", writer1.toString())
     }
 
@@ -174,18 +173,17 @@ class ResultExportServiceUnitSpec extends Specification {
         then: "We get back a valid ResultContextItems"
         XmlTestAssertions.assertResults(results, this.writer.toString())
         where:
-        label                                      | resultContextItems                            | results
+        label                                      | resultContextItems                         | results
         "Full Document"                            | [new ResultContextItem(
-                attribute: new Element(label: "attrribute"),
-                experiment: new Experiment(id: 5),
+                attributeElement: new Element(label: "attrribute"),
                 qualifier: "%", valueDisplay: "20 %",
                 valueNum: 2.0, valueMin: 1.0,
                 valueMax: 3.0,
-                valueControlled: new Element(label: "valueControlled"))] as Set<ResultContextItem> | XmlTestSamples.RESULT_CONTEXT_ITEMS_UNIT
+                valueElement: new Element(label: "valueControlled"))] as Set<ResultContextItem> | XmlTestSamples.RESULT_CONTEXT_ITEMS_UNIT
         "No Experiment/attribute/valueControlled " | [new ResultContextItem(
                 qualifier: "%", valueDisplay: "20 %",
                 valueNum: 2.0, valueMin: 1.0,
-                valueMax: 3.0)] as Set<ResultContextItem>                                          | XmlTestSamples.RESULT_CONTEXT_ITEMS_UNIT_NO_CHILD_ELEMENTS
+                valueMax: 3.0)] as Set<ResultContextItem>                                       | XmlTestSamples.RESULT_CONTEXT_ITEMS_UNIT_NO_CHILD_ELEMENTS
 
     }
 
@@ -193,18 +191,17 @@ class ResultExportServiceUnitSpec extends Specification {
         given: "A Result Context Item"
         when: "We call the service method to generate Attributes"
         final Map<String, String> resultContextItemAttributes =
-            this.resultExportService.generateAttributesForResultContextItem(resultContextItem)
+            this.resultExportService.generateAttributesForRunContextItem(resultContextItem,"resultContextItemId")
         then: "The generated map is equal to the expected map"
         resultContextItemAttributes == results
         where:
         label                                      | resultContextItem  | results
         "Full Document"                            | new ResultContextItem(
-                attribute: new Element(label: "attrribute"),
-                experiment: new Experiment(id: 5),
+                attributeElement: new Element(label: "attrribute"),
                 qualifier: "%", valueDisplay: "20 %",
                 valueNum: 2.0, valueMin: 1.0,
                 valueMax: 3.0,
-                valueControlled: new Element(label: "valueControlled")) | [resultContextItemId: null, qualifier: '%', valueDisplay: '20 %', valueNum: '2.0', valueMin: '1.0', valueMax: '3.0']
+                valueElement: new Element(label: "valueControlled")) | [resultContextItemId: null, qualifier: '%', valueDisplay: '20 %', valueNum: '2.0', valueMin: '1.0', valueMax: '3.0']
         "No Experiment/attribute/valueControlled " | new ResultContextItem(
                 qualifier: "%", valueDisplay: "20 %",
                 valueNum: 2.0, valueMin: 1.0,
@@ -215,18 +212,17 @@ class ResultExportServiceUnitSpec extends Specification {
     void "test generate Result Context Item #label"() {
         given: "A Result Context Item"
         when: "We call the service method to generate the XML representation"
-        this.resultExportService.generateResultContextItem(this.staxBuilder, resultContextItem)
+        this.resultExportService.generateRunContextItem(this.staxBuilder, resultContextItem)
         then: "The generated XML is the similar to the expected XML"
         XmlTestAssertions.assertResults(results, this.writer.toString())
         where:
         label                                      | resultContextItem  | results
         "Full Document"                            | new ResultContextItem(
-                attribute: new Element(label: "attrribute"),
-                experiment: new Experiment(id: 5),
+                attributeElement: new Element(label: "attrribute"),
                 qualifier: "%", valueDisplay: "20 %",
                 valueNum: 2.0, valueMin: 1.0,
                 valueMax: 3.0,
-                valueControlled: new Element(label: "valueControlled")) | XmlTestSamples.RESULT_CONTEXT_ITEM_UNIT
+                valueElement: new Element(label: "valueControlled")) | XmlTestSamples.RESULT_CONTEXT_ITEM_UNIT
         "No Experiment/attribute/valueControlled " | new ResultContextItem(
                 qualifier: "%", valueDisplay: "20 %",
                 valueNum: 2.0, valueMin: 1.0,

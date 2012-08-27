@@ -12,6 +12,7 @@ import javax.xml.transform.stream.StreamSource
 import javax.xml.validation.Schema
 import javax.xml.validation.SchemaFactory
 import javax.xml.validation.Validator
+import bard.db.enums.ReadyForExtraction
 
 class AssayExportServiceIntegrationSpec extends IntegrationSpec {
     static final String BARD_ASSAY_EXPORT_SCHEMA = "test/integration/dataexport/registration/assaySchema.xsd"
@@ -33,7 +34,7 @@ class AssayExportServiceIntegrationSpec extends IntegrationSpec {
     void "test update Not Found Status"() {
         given: "Given a non-existing Assay"
         when: "We call the assay service to update this assay"
-        this.assayExportService.update(new Long(100000), 0, "assay")
+        this.assayExportService.update(new Long(100000), 0, ReadyForExtraction.Complete.toString())
 
         then: "An exception is thrown, indicating that the project does not exist"
         thrown(NotFoundException)
@@ -52,10 +53,10 @@ class AssayExportServiceIntegrationSpec extends IntegrationSpec {
 
         where:
         label                                           | expectedStatusCode                         | expectedETag | assayId     | version | status     | expectedStatus
-        "Return OK and ETag 1"                          | HttpServletResponse.SC_OK                  | new Long(1)  | new Long(1) | 0       | "Complete" | "Complete"
-        "Return CONFLICT and ETag 0"                    | HttpServletResponse.SC_CONFLICT            | new Long(0)  | new Long(1) | -1      | "Complete" | "Ready"
-        "Return PRECONDITION_FAILED and ETag 0"         | HttpServletResponse.SC_PRECONDITION_FAILED | new Long(0)  | new Long(1) | 2       | "Complete" | "Ready"
-        "Return OK and ETag 0, Already completed Assay" | HttpServletResponse.SC_OK                  | new Long(0)  | new Long(2) | 0       | "Complete" | "Complete"
+        "Return OK and ETag 1"                          | HttpServletResponse.SC_OK                  | new Long(1)  | new Long(1) | 0       | "Complete" | ReadyForExtraction.Complete
+        "Return CONFLICT and ETag 0"                    | HttpServletResponse.SC_CONFLICT            | new Long(0)  | new Long(1) | -1      | "Complete" | ReadyForExtraction.Ready
+        "Return PRECONDITION_FAILED and ETag 0"         | HttpServletResponse.SC_PRECONDITION_FAILED | new Long(0)  | new Long(1) | 2       | "Complete" | ReadyForExtraction.Ready
+        "Return OK and ETag 0, Already completed Assay" | HttpServletResponse.SC_OK                  | new Long(0)  | new Long(2) | 0       | "Complete" | ReadyForExtraction.Complete
     }
 
     void "test generate and validate AssayDocument #label"() {

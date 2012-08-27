@@ -11,8 +11,8 @@ class UnitConversion implements Serializable {
 	Date dateCreated
 	Date lastUpdated
 	String modifiedBy
-	Unit fromUnit
-	Unit toUnit
+	String fromUnit
+	String toUnit
 
 	int hashCode() {
 		def builder = new HashCodeBuilder()
@@ -28,8 +28,6 @@ class UnitConversion implements Serializable {
 		builder.append toUnit, other.toUnit
 		builder.isEquals()
 	}
-
-	static belongsTo = [Unit]
 
 	static mapping = {
 		id composite: ["fromUnit", "toUnit"]

@@ -5,8 +5,8 @@ import bard.db.registration.AssayDocument
 import exceptions.NotFoundException
 import groovy.xml.MarkupBuilder
 
-import javax.servlet.http.HttpServletResponse
 import dataexport.util.UtilityService
+import bard.db.enums.ReadyForExtraction
 
 class AssayExportService {
     AssayExportHelperService assayExportHelperService
@@ -42,7 +42,7 @@ class AssayExportService {
      * Returns the HTTPStatus Code
      */
     public BardHttpResponse update(final Long assayId, final Long clientVersion, final String latestStatus) {
-       return utilityService.update(Assay.get(assayId),assayId,clientVersion,latestStatus,"Assay")
+       return utilityService.update(Assay.get(assayId),assayId,clientVersion,latestStatus as ReadyForExtraction,"Assay")
     }
     /**
      * Stub for generating assays with status of Ready

@@ -13,13 +13,14 @@ dataSource.dbCreate = System.getProperty('dataSource.dbCreate') ?: 'validate'
 environments {
     development {
         dataSource {
-            dbCreate = "create-drop" // one of 'create', 'create-drop', 'update', 'validate', ''
-            url = "jdbc:h2:mem:devDB"
-            driverClassName = "org.h2.Driver"
-            username = "sa"
-            password = ""
+            url = "jdbc:oracle:thin:@vmbarddev:1521:barddev"
+            driverClassName = "oracle.jdbc.driver.OracleDriver"
+			dialect = bard.SequencePerTableOracleDialect
+			username = "ycruz"
+			password = "ch3mb10"
         }
     }
+	
     mysql {
         dataSource {
 //        	dialect = "org.hibernate.dialect.MySQLDialect"
