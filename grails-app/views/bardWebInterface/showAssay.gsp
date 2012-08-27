@@ -17,6 +17,18 @@
         </dl>
     </div>
 </div>
+<r:script>
+    $(document).ready(function () {
+        $('.collapse').on('show', function () {
+            var icon = $(this).siblings().find("i.icon-chevron-right");
+            icon.removeClass('icon-chevron-right').addClass('icon-chevron-down');
+        });
+        $('.collapse').on('hide', function () {
+            var icon = $(this).siblings().find("i.icon-chevron-down");
+            icon.removeClass('icon-chevron-down').addClass('icon-chevron-right');
+        });
+    })
+</r:script>
 <div class="row-fluid">
     <div class="span12">
         <div class="accordion">
