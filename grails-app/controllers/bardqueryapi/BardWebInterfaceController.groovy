@@ -138,29 +138,34 @@ class BardWebInterfaceController {
      * @return
      */
     def searchStructures() {
-
+        //TODO: Add more error handling here
         String searchString = params.searchString?.trim()
         if (searchString) {
             //we make the first character capitalized to match the ENUM
-            final String[] searchStringSplit = searchString.toLowerCase().capitalize().split(":")
-            final StructureSearchParams.Type searchType = searchStringSplit[0] as StructureSearchParams.Type
-            List<CompoundAdapter> compoundAdapters = queryService.structureSearch(searchStringSplit[1], searchType)
-            def metaDataMap = [nhit: compoundAdapters.size()]
-            def listDocs = []
+            final String[] searchStringSplit = searchString.split(":")
+            if (searchStringSplit.length == 2) {
+                final String searchTypeString = searchStringSplit[0]
+                final String smiles = searchStringSplit[1]
+                final StructureSearchParams.Type searchType = searchTypeString?.toLowerCase().capitalize() as StructureSearchParams.Type
 
-            for (CompoundAdapter compoundAdapter : compoundAdapters) {
-                def adapter = [:]
-                long cid = compoundAdapter.pubChemCID
-                adapter.put("cid", cid)
-                adapter.put("iupac_name", cid)
-                adapter.put("iso_smiles", compoundAdapter.structureSMILES)
-                listDocs.add(adapter)
+                List<CompoundAdapter> compoundAdapters = queryService.structureSearch(smiles, searchType)
+                def metaDataMap = [nhit: compoundAdapters.size()]
+                def listDocs = []
+
+                for (CompoundAdapter compoundAdapter : compoundAdapters) {
+                    def adapter = [:]
+                    long cid = compoundAdapter.pubChemCID
+                    String iupacName = compoundAdapter.compound.getValue(bard.core.Compound.IUPACNameValue)?.value as String
+                    adapter.put("cid", cid)
+                    adapter.put("iupac_name", iupacName)
+                    adapter.put("iso_smiles", compoundAdapter.structureSMILES)
+                    listDocs.add(adapter)
+                }
+                render(template: 'compounds', model: [docs: listDocs, metaData: metaDataMap])
+                return
             }
-
-            render(template: 'compounds', model: [docs: listDocs, metaData: metaDataMap])
-            return
         }
-        flash.message = 'Search String is required'
+        flash.message = 'Search String is required must be of the form StructureSearchType:Smiles'
         redirect(action: "homePage")
     }
 
@@ -306,14 +311,13 @@ class SearchHelper {
         int max = new Integer(params.max)
         int offset = new Integer(params.offset)
 
-
         //We set this parameter so the UI knows to display faceting info
         //If "Not paging" then display faceting information, otherwise do not
         //This should handle the bug in 35019041
-        if(offset == 0){ //we are not paging yet
+        if (offset == 0) { //we are not paging yet
             params.paging = "NotPaging"
         }
-        else{
+        else {
             params.paging = "Paging"
         }
 
