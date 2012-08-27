@@ -39,7 +39,7 @@
 
     });
 
-            <%-- An even handler to open (bring-to-front) the MarvinSketch modal window. Opens MarvingSketch in a new gsp: marvinSketch.gsp --%>
+            <%-- An even handler to open (bring-to-front) the MarvinSketch modal window. Opens MarvingSketch in a new gsp: _marvinSketch.gsp --%>
         $('#structureModal').click(
         function() {
       url = '${request.contextPath}/chemAxon/marvinSketch';
