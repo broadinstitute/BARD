@@ -1,21 +1,21 @@
 package bardqueryapi
 
-import bard.core.Assay
 import bard.core.Experiment
 import bard.core.Project
 import bard.core.StructureSearchParams
+import bard.core.adapter.AssayAdapter
 import bard.core.adapter.CompoundAdapter
 import elasticsearchplugin.QueryExecutorService
 import elasticsearchplugin.RestClientFactoryService
-import wslite.json.JSONArray
 import wslite.json.JSONObject
 import wslite.rest.RESTClient
 import wslite.rest.RESTClientException
 
 import javax.servlet.http.HttpServletResponse
-import bard.core.adapter.AssayAdapter
 
 /**
+ * TODO: Search by IDs now uses the JDO. Still requires some work. We would like to use the adpaters directly
+ *
  * Created with IntelliJ IDEA.
  * User: gwalzer
  * Date: 6/8/12
@@ -43,22 +43,24 @@ class BardWebInterfaceController {
         String searchString = params.searchString?.trim()
         if (searchString) {
             try {
-                def parameterMap = [:]
-                parameterMap.put('path', "/compounds")
-                Map dataMap = [ids: "${searchString}"]
-                JSONArray resultJson = (JSONArray) postFormRequest(this.restClientFactoryService, NCGC_ROOT_URL, dataMap, parameterMap)
-                List docs = []
-                int numberOfHits = 0
-                resultJson.each { result ->
-                    Map currentObject = [:]
-                    currentObject.put("iupac_name", result.name)
-                    currentObject.put("iso_smiles", result.smiles)
-                    currentObject.put("cid", result.cid)
-                    docs.add(currentObject)
-                    ++numberOfHits
+                final List<Long> cids = searchString.split(",") as List<Long>
+                Map compoundAdapterMap = this.queryService.findCompoundsByCIDs(cids)
+                List<CompoundAdapter> compoundAdapters = compoundAdapterMap.compounds
+                def listDocs = []
+                //TODO: we ought to use the adapter directly in the gsp
+                for (CompoundAdapter compoundAdapter : compoundAdapters) {
+                    def adapter = [:]
+                    long cid = compoundAdapter.pubChemCID
+                    String iupacName = compoundAdapter.compound.getValue(bard.core.Compound.IUPACNameValue)?.value as String
+                    adapter.put("cid", cid)
+                    adapter.put("iupac_name", iupacName)
+                    adapter.put("iso_smiles", compoundAdapter.structureSMILES)
+                    listDocs.add(adapter)
                 }
-                JSONObject metaData = new JSONObject([nhit: numberOfHits])
-                render(template: 'compounds', model: [docs: docs, metaData: metaData, searchString: "${searchString}"])
+
+
+                JSONObject metaData = new JSONObject([nhit: compoundAdapterMap.nHits])
+                render(template: 'compounds', model: [docs: listDocs, metaData: metaData, searchString: "${searchString}"])
                 return
             }
             catch (Exception exp) {
@@ -76,19 +78,18 @@ class BardWebInterfaceController {
         String searchString = params.searchString?.trim()
         if (searchString) {
             try {
-                def parameterMap = [:]
-                parameterMap.put('path', "/assays")
-                Map dataMap = [ids: "${searchString}"]
-                JSONArray resultJson = (JSONArray) postFormRequest(this.restClientFactoryService, NCGC_ROOT_URL, dataMap, parameterMap)
-                List docs = []
-                int numberOfHits = 0
-                resultJson.each { result ->
+                //TODO: Use the AssayAdapter directly
+                final List<Long> adids = searchString.split(",") as List<Long>
+                final Map assayAdapterMap = this.queryService.findAssaysByADIDs(adids)
+                final int numberOfHits = assayAdapterMap.nHits
+                final List<AssayAdapter> assays = assayAdapterMap.assays
+                final List docs = []
+                for (AssayAdapter assayAdapter : assays) {
                     Map currentObject = [:]
-                    currentObject.put("assay_id", result.aid)
-                    currentObject.put("name", result.name)
-                    currentObject.put("highlight", result.source)
+                    currentObject.put("assay_id", assayAdapter.assay.id)
+                    currentObject.put("name", assayAdapter.assay.name)
+                    currentObject.put("highlight", "")
                     docs.add(currentObject)
-                    ++numberOfHits
                 }
                 JSONObject metaData = new JSONObject([nhit: numberOfHits])
                 render(template: 'assays', model: [docs: docs, metaData: metaData, searchString: "${searchString}"])
@@ -107,19 +108,16 @@ class BardWebInterfaceController {
         String searchString = params.searchString?.trim()
         if (searchString) {
             try {
-                def parameterMap = [:]
-                parameterMap.put('path', "/projects")
-                Map dataMap = [ids: "${searchString}"]
-                JSONArray resultJson = (JSONArray) postFormRequest(this.restClientFactoryService, NCGC_ROOT_URL, dataMap, parameterMap)
+                final List<Long> projectIds = searchString.split(",") as List<Long>
+                List<Project> projects = this.queryService.findProjectsByPIDs(projectIds)
                 List docs = []
-                int numberOfHits = 0
-                resultJson.each { result ->
+                int numberOfHits = projects.size()
+                for (Project project : projects) {
                     Map currentObject = [:]
                     currentObject.put("proj_id", result.projectId)
                     currentObject.put("name", result.name)
                     currentObject.put("highlight", result.source)
                     docs.add(currentObject)
-                    ++numberOfHits
                 }
                 JSONObject metaData = new JSONObject([nhit: numberOfHits])
                 render(template: 'projects', model: [docs: docs, metaData: metaData, searchString: "${searchString}"])
@@ -149,11 +147,13 @@ class BardWebInterfaceController {
                 final String searchTypeString = searchStringSplit[0]
                 final String smiles = searchStringSplit[1]
                 final StructureSearchParams.Type searchType = searchTypeString?.toLowerCase().capitalize() as StructureSearchParams.Type
+                Map compoundAdapterMap = queryService.structureSearch(smiles, searchType)
+                List<CompoundAdapter> compoundAdapters = compoundAdapterMap.compounds
 
-                List<CompoundAdapter> compoundAdapters = queryService.structureSearch(smiles, searchType)
-                def metaDataMap = [nhit: compoundAdapters.size()]
+                def metaDataMap = [nhit: compoundAdapterMap.nHits]
                 def listDocs = []
 
+                //TODO: we ought to use the adapter directly in the gsp
                 for (CompoundAdapter compoundAdapter : compoundAdapters) {
                     def adapter = [:]
                     long cid = compoundAdapter.pubChemCID
