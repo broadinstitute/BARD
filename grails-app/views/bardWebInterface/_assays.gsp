@@ -1,7 +1,5 @@
 <div class="row-fluid">
-    <g:if test="${params.paging == 'NotPaging'}">
-        <g:render template="facets" model="['metaData': metaData]"/>
-    </g:if>
+         <g:render template="facets" model="['metaData': metaData]"/>
 <div class="span9">
     <ul class="unstyled results">
     <g:each var="assay" in="${docs}">
@@ -27,12 +25,12 @@
     </ul>
 
     <g:hiddenField name="totalAssays" id="totalAssays" value="${metaData?.nhit}"/>
-    <div id="listAssaysPage">
+    %{--<div id="listAssaysPage">--}%
         <div class="pagination">
-            <util:remotePaginate total="${metaData ? metaData.nhit : 0}" update="listAssaysPage" controller="bardWebInterface"
+            <util:remotePaginate total="${metaData ? metaData.nhit : 0}" update="assays" controller="bardWebInterface"
                                  action="searchAssays" pageSizes="[10,50]"
                                  params='[searchString: "${searchString}"]'/>
         </div>
-    </div>
+    %{--</div>--}%
 </div>
 </div>

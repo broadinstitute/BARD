@@ -1,8 +1,6 @@
 <%@ page import="grails.converters.JSON" %>
 <div class="row-fluid">
-    <g:if test="${params.paging == 'NotPaging'}">
         <g:render template="facets" model="['metaData': metaData]"/>
-    </g:if>
 <div class="span9">
     <table class="table">
     <g:each var="compound" in="${docs}">
@@ -33,12 +31,10 @@
     </g:each>
     </table>
     <g:hiddenField name="totalCompounds" id="totalCompounds" value="${metaData?.nhit}"/>
-    <div id="listCompoundsPage">
         <div class="pagination">
-            <util:remotePaginate total="${metaData ? metaData.nhit : 0}" update="listCompoundsPage" controller="bardWebInterface"
+            <util:remotePaginate total="${metaData ? metaData.nhit : 0}" update="compounds" controller="bardWebInterface"
                                  action="searchCompounds" pageSizes="[10,50]"
                                  params='[searchString: "${searchString}"]'/>
-        </div>
     </div>
 </div>
 </div>

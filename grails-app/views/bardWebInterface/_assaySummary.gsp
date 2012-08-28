@@ -19,7 +19,7 @@
         <dt>Type:</dt>
         <dd>${assayInstance.type}</dd>
     </g:if>
-    <g:each var="otherAssayProperty" in="${assayInstance.values}">
+    <g:each var="otherAssayProperty" in="${assayInstance?.values}">
         <dt>${otherAssayProperty.id}:</dt>
         <dd>${otherAssayProperty.value}</dd>
     </g:each>
