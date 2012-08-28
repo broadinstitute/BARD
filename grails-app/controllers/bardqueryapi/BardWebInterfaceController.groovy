@@ -13,6 +13,7 @@ import wslite.rest.RESTClient
 import wslite.rest.RESTClientException
 
 import javax.servlet.http.HttpServletResponse
+import bard.core.adapter.AssayAdapter
 
 /**
  * Created with IntelliJ IDEA.
@@ -233,8 +234,8 @@ class BardWebInterfaceController {
         Integer assayId = assayProtocolId ?: params.id as Integer//if 'assay' param is provided, use that; otherwise, try the default id one
 
         if (assayId) {
-            Assay assay = this.queryService.showAssay(assayId)
-            render(view: "showAssay", model: [assayInstance: assay])
+            AssayAdapter assayAdapter = this.queryService.showAssay(assayId)
+            render(view: "showAssay", model: [assayInstance: assayAdapter])
         }
         else {
             render "Assay Protocol ID parameter required"

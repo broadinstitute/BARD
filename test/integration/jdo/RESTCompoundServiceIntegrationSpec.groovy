@@ -3,6 +3,7 @@ package jdo
 import bard.core.adapter.CompoundAdapter
 import bard.core.rest.RESTEntityServiceManager
 import grails.plugin.spock.IntegrationSpec
+import org.apache.commons.lang.StringUtils
 import org.junit.After
 import org.junit.Before
 import bard.core.*
@@ -10,11 +11,10 @@ import bard.core.*
 /**
  * Tests for RESTCompoundService in JDO
  */
-
-class RESTCompoundServiceIntegrationSpec extends IntegrationSpec {
+@Mixin(RESTTestHelper)
+class RESTCompoundServiceIntegrationSpec extends IntegrationSpec implements RESTServiceInterface {
     EntityServiceManager esm
     CompoundService compoundService
-    final static String baseURL = "http://bard.nih.gov/api/v1"
 
     @Before
     void setup() {
@@ -32,10 +32,10 @@ class RESTCompoundServiceIntegrationSpec extends IntegrationSpec {
     void assertCompoundAdapter(CompoundAdapter compoundAdapter) {
         //TODO: only assert required fields
         assert compoundAdapter.pubChemCID
-        assert compoundAdapter.pubChemSIDs
         assert compoundAdapter.structureSMILES
         assert compoundAdapter.exactMass()
         assert compoundAdapter.formula()
+
     }
     /**
      * TODO: Find out why no annotations
@@ -47,6 +47,7 @@ class RESTCompoundServiceIntegrationSpec extends IntegrationSpec {
         final CompoundAdapter compoundAdapter = new CompoundAdapter(compound)
         then: "A Compound is returned with the expected information"
         assert compoundAdapter
+        compoundAdapter.setCompound(compound)
         assertCompoundAdapter(compoundAdapter)
         assert cid == compoundAdapter.pubChemCID
         assert expectedSmiles == compoundAdapter.structureSMILES
@@ -83,16 +84,17 @@ class RESTCompoundServiceIntegrationSpec extends IntegrationSpec {
         for (Compound compound : compounds) {
             final CompoundAdapter compoundAdapter = new CompoundAdapter(compound)
             assertCompoundAdapter(compoundAdapter)
+            assert compoundAdapter.pubChemSIDs
         }
         assert cids.size() == compounds.size()
         where:
         label                         | cids
         "Search with a list of CIDs"  | [3235555, 3235556, 3235557, 3235558, 3235559, 3235560, 3235561, 3235562, 3235563, 3235564]
-        "Search with a single of CID" | [3235555]
+         "Search with a single of CID" | [3235555]
 
     }
     /**
-     * TODO: Ask NCGC that this search should return the same thing as the REST API
+     *
      */
     void "test REST Compound Service #label #seachString question"() {
         given: "A search string, #searchString, and asking to retrieve the first #top search results"
@@ -104,23 +106,50 @@ class RESTCompoundServiceIntegrationSpec extends IntegrationSpec {
         while (searchIterator.hasNext()) {
             final Compound compound = searchIterator.next();
             final CompoundAdapter compoundAdapter = new CompoundAdapter(compound)
+            compoundAdapter.setCompound(compound)
             assertCompoundAdapter(compoundAdapter)
             assert compoundAdapter.annotations
+            assert compoundAdapter.searchHighlight
             ++numberOfCompounds
         }
         assert expectedNumberOfCompounds == numberOfCompounds
-
+        assertFacets(searchIterator)
         searchIterator.done();
         where:
         label    | searchString | skip | top | expectedNumberOfCompounds
         "Search" | "dna repair" | 0    | 10  | 10
+        "Search" | "dna repair" | 10   | 10  | 10
 
+    }
+    /**
+     *  TODO: This should fail. We have filed a bug with NCGC
+     */
+    void "test Facet keys (ids) are non-blank"() {
+        given: "That we have created a valid search params object"
+        final SearchParams params = new SearchParams("dna repair").setSkip(0).setTop(10);
+        when: "We we call search method of the the RESTCompoundService"
+        final ServiceIterator<Compound> searchIterator = this.compoundService.search(params)
+        then: "We expected to get back unique facets"
+        assertFacetIdsAreNonBlank(searchIterator)
+        searchIterator.done();
+    }
+    /**
+     *  TODO: This should fail. We have filed a bug with NCGC
+     */
+    void "test Facet keys (ids) are unique"() {
+        given: "That we have created a valid search params object"
+        final SearchParams params = new SearchParams("dna repair").setSkip(0).setTop(10);
+        when: "We we call search method of the the RESTCompoundService"
+        final ServiceIterator<Compound> searchIterator = this.compoundService.search(params)
+        then: "We expected to get back unique facets"
+        assertFacetIdsAreUnique(searchIterator)
+        searchIterator.done();
     }
 
 /**
  * Do structure searches
  */
-    void "test #label"() {
+    void "test Structure Search : #label"() {
         given:
         final StructureSearchParams structureSearchParams =
             new StructureSearchParams(smiles)
@@ -133,10 +162,13 @@ class RESTCompoundServiceIntegrationSpec extends IntegrationSpec {
         while (searchIterator.hasNext()) {
             final Compound compound = searchIterator.next();
             final CompoundAdapter compoundAdapter = new CompoundAdapter(compound)
+            compoundAdapter.setCompound(compound)
             assertCompoundAdapter(compoundAdapter)
             ++numberOfCompounds
         }
         assert expectedNumberOfCompounds == numberOfCompounds
+        assertFacets(searchIterator)
+
         searchIterator.done()
         where:
         label                           | structureSearchParamsType                 | smiles                                        | skip | top | expectedNumberOfCompounds
@@ -147,5 +179,65 @@ class RESTCompoundServiceIntegrationSpec extends IntegrationSpec {
         "Default (to Substructure)"     | StructureSearchParams.Type.Substructure   | "n1cccc2ccccc12"                              | 0    | 10  | 10
         "Substructure, Skip 10, top 10" | StructureSearchParams.Type.Substructure   | "n1cccc2ccccc12"                              | 10   | 10  | 10
 
+    }
+
+
+}
+class RESTTestHelper {
+    /**
+     * Assert that facets exists
+     * @param serviceIterator
+     */
+    void assertFacets(final ServiceIterator<? extends Entity> serviceIterator) {
+        final Collection<Value> facets = serviceIterator.facets
+        assert facets
+        for (Value facet : facets) {
+            assert facet.children()
+        }
+    }
+    /**
+     * Test that every facet has a key (No nulls or blanks).
+     * Address issue iwth facet keys being blank
+     * @param serviceIterator
+     */
+    void assertFacetIdsAreNonBlank(final ServiceIterator<? extends Entity> serviceIterator) {
+
+        //We need to do this, otherwise the facets method returns 0
+        while (serviceIterator.hasNext()) {
+            serviceIterator.next();
+        }
+        final Collection<Value> facets = serviceIterator.facets;
+        for (Value facet : facets) {
+            assert StringUtils.isNotBlank(facet.getId())
+            for (Iterator<Value> it = facet.children(); it.hasNext();) {
+                Value iv = it.next();
+                assert StringUtils.isNotBlank(iv?.getId())
+            }
+        }
+    }
+    /**
+     * Assert that there are no duplicate keys in facets (We skip blank and nulll keys those are tested #assertFacetIdsAreNonBlank)
+     * @param serviceIterator
+     */
+    void assertFacetIdsAreUnique(final ServiceIterator<? extends Entity> serviceIterator) {
+        //we keep the facet keys here to check for duplicates
+        final Set<String> facetKeys = new HashSet<String>()
+
+        //We need to do this, otherwise the facets method returns 0
+        while (serviceIterator.hasNext()) {
+            serviceIterator.next();
+        }
+        final Collection<Value> facets = serviceIterator.facets
+        for (Value facet : facets) {
+            assert !facetKeys.contains(facet.getId())
+            for (Iterator<Value> it = facet.children(); it.hasNext();) {
+                Value iv = it.next();
+                String id = iv.getId()
+                if (id) {
+                    assert !facetKeys.contains(id)
+                    facetKeys.add(iv.getId())
+                }
+            }
+        }
     }
 }
