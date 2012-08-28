@@ -79,7 +79,7 @@ class QueryService {
             final RESTCompoundService restCompoundService = this.queryServiceWrapper.getRestCompoundService()
 
             final StructureSearchParams structureSearchParams =
-                new StructureSearchParams(smiles)
+                new StructureSearchParams(smiles, structureSearchParamsType)
             structureSearchParams.setSkip(skip).setTop(top);
 
             if (structureSearchParamsType == StructureSearchParams.Type.Similarity) {
