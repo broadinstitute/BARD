@@ -4,10 +4,7 @@ hibernate {
     cache.provider_class = 'net.sf.ehcache.hibernate.EhCacheProvider'
     cache.region.factory_class = 'org.hibernate.cache.RegionFactory'
 }
-// defaulting to using validate unless we specify something different on command line
-// you can't always use the validation option for database migration dbm- commmands
-// say bootstrapping a fresh schema, in this case you can turn off validation
-dataSource.dbCreate = System.getProperty('dataSource.dbCreate') ?: 'validate'
+dataSource.dbCreate = System.getProperty('dataSource.dbCreate') ?: 'none'
 
 // environment specific settings
 environments {
