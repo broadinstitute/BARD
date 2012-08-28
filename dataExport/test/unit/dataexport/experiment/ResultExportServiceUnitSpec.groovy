@@ -14,6 +14,7 @@ import org.codehaus.groovy.grails.web.mapping.LinkGenerator
 import org.custommonkey.xmlunit.XMLAssert
 import spock.lang.Specification
 
+
 import javax.sql.DataSource
 import javax.xml.stream.XMLOutputFactory
 
@@ -64,38 +65,6 @@ class ResultExportServiceUnitSpec extends Specification {
         this.resultExportService.dataSource = dataSource
     }
 
-    void "test generate Results #label"() {
-        given: "An Experiment with results"
-        this.resultExportService.maxResultsRecordsPerPage = resultsPerPageResult
-        final Experiment experiment =
-            new Experiment(experimentName: experimentName, results: result)
-        when: "We attempt to generate a results XML document"
-
-        Result.metaClass.static.Result.findAllByExperimentAndReadyForExtraction = {exp, ready, map -> result }
-        this.resultExportService.generateResults(this.staxBuilder, experiment, 0)
-        then: "A valid xml document is generated and is similar to the expected document"
-
-        XMLAssert.assertXpathEvaluatesTo("3", "count(//link)", writer.toString());
-        XMLAssert.assertXpathEvaluatesTo("1", "count(//link[@type='experimentMediaType'])", writer.toString())
-        XMLAssert.assertXpathEvaluatesTo(resultsPerPageResult.toString(), "/results/@count", writer.toString())
-
-        if (resultsPerPageResult == 1) {
-            XMLAssert.assertXpathEvaluatesTo("1", "count(//link[@rel='next'])", writer.toString())
-            XMLAssert.assertXpathEvaluatesTo("1", "count(//link[@type='resultMediaType'])", writer.toString())
-            XMLAssert.assertXpathEvaluatesTo("1", "count(//link[@type='resultsMediaType'])", writer.toString())
-        }
-        if (resultsPerPageResult == 2) {
-            XMLAssert.assertXpathEvaluatesTo("2", "count(//link[@type='resultMediaType'])", writer.toString())
-            XMLAssert.assertXpathEvaluatesTo("0", "count(//link[@type='resultsMediaType'])", writer.toString())
-        }
-        where:
-        label     | experimentName | resultsPerPageResult | result
-        "Results" | "Exp Name1"    | 2                    | [new Result(readyForExtraction: 'Ready', valueMax: 2.0, valueMin: 2.0, resultStatus: 'status'),
-                new Result(readyForExtraction: 'Ready', valueMax: 3.0, valueMin: 2.0, resultStatus: 'status')] as List<Result>
-        "Results" | "Exp Name1"    | 1                    | [new Result(readyForExtraction: 'Ready', valueMax: 2.0, valueMin: 2.0, resultStatus: 'status'),
-                new Result(readyForExtraction: 'Ready', valueMax: 3.0, valueMin: 2.0, resultStatus: 'status')] as List<Result>
-
-    }
 
     void "test Generate result"() {
         given: "A Result"

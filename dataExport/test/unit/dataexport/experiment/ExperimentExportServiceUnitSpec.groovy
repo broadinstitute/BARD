@@ -90,20 +90,7 @@ class ExperimentExportServiceUnitSpec extends Specification {
 
     }
 
-    void "test generate Experiments #label starting from #offset"() {
-        given: "A list of experiments and that the maximum list of experiments per page is ${this.maxNumberOfExperimentsPerPage} and we offset from ${offset}"
-        when: "We attempt to generate an experiments XML document"
-        Experiment.metaClass.static.findAllByReadyForExtraction = {status, map -> expectedExperiments }
-        this.experimentExportService.generateExperiments(this.markupBuilder, offset)
-        then: "A valid xml document is generated and is similar to the expected document"
-        XmlTestAssertions.assertResults(results, this.writer.toString())
-        where:
-        label                                            | offset | expectedExperiments                                                                                                                                                                                             | results
-        "System has 2 experiments ready for extraction"  | 0      | [new Experiment(id: 1, readyForExtraction: ReadyForExtraction.Ready), new Experiment(id: 2, readyForExtraction: ReadyForExtraction.Ready)]                                                                      | XmlTestSamples.EXPERIMENTS_2_RECORDS_UNIT
-        "System has 3 experiments ready for extraction"  | 0      | [new Experiment(id: 2, readyForExtraction: ReadyForExtraction.Ready), new Experiment(id: 3, readyForExtraction: ReadyForExtraction.Ready)]                                                                      | XmlTestSamples.EXPERIMENTS_2_RECORDS_WITH_NEXT_UNIT
-        "System has 3 experiments ready for extraction " | 2      | [new Experiment(id: 1, readyForExtraction: ReadyForExtraction.Ready), new Experiment(id: 2, readyForExtraction: ReadyForExtraction.Ready), new Experiment(id: 3, readyForExtraction: ReadyForExtraction.Ready)] | XmlTestSamples.EXPERIMENT_SINGLE_RECORD_UNIT
 
-    }
 
     void "test generate External Reference"() {
         given: "An External Reference object"
