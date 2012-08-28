@@ -13,14 +13,11 @@
                url:'/bardwebquery/sarCart/add',
                success:function(data,textStatus){
                    jQuery('#sarCartRefill').html(data);
-               },
-               error:function(XMLHttpRequest,textStatus,errorThrown){
-                   alert('problem adding assay')
                }
            });
            return false;"
            action="add"
-           controller="sarCart"><div class="cntrcart"><nobr><i class="icon-shopping-cart"></i> Add to Cart</nobr></div></a>
+           controller="sarCart"><div class="cntrcart"><nobr><i class="icon-shopping-cart"></i>Add to Cart</nobr></div></a>
     %{--ID: ${assayInstance?.id}, Target/pathway: Assay format: Date created:<br/> --}%
             <ul>
                 <li>${assay.highlight}</li>

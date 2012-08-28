@@ -13,9 +13,6 @@
                        url:'/bardwebquery/sarCart/add',
                        success:function(data,textStatus){
                            jQuery('#sarCartRefill').html(data);
-                       },
-                       error:function(XMLHttpRequest,textStatus,errorThrown){
-                           alert('problem adding project')
                        }
                    });
                    return false;"

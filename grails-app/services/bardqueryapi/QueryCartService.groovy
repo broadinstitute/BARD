@@ -53,8 +53,14 @@ class QueryCartService {
         returnValue
     }
 
-
-
+    /**
+     * Add to shopping cart, but do not allow duplicate items. This is a business rule for us ( the cart never
+     * contains identical items) but doesn't seem to be well supported by the plug-in, requiring us to step through
+     * all the items looking for duplicates )
+     * @param shoppingCartSrvc
+     * @param product
+     * @return
+     */
     def addToShoppingCart( ShoppingCartService shoppingCartSrvc = shoppingCartService, IShoppable product ) {
         boolean foundIt=false
         def returnValue
@@ -63,17 +69,34 @@ class QueryCartService {
                 def convertedShoppingItem = Shoppable.findByShoppingItem(shoppingItemElement)
                 if ((convertedShoppingItem!=null)&&(product.equals(convertedShoppingItem)))
                     foundIt=true
-//                if ( convertedShoppingItem instanceof CartAssay ) {
-//                    temporaryCartAssayHolder.add(convertedShoppingItem as CartAssay)
-//                } else if (convertedShoppingItem instanceof CartCompound) {
-//                    temporaryCartCompoundHolder.add(convertedShoppingItem as CartCompound)
-//                } else if (convertedShoppingItem instanceof CartProject) {
-//                    temporaryCartProjectHolder.add(convertedShoppingItem as CartProject)
-//                }
             }
         }
         if (!foundIt)
             returnValue = shoppingCartSrvc.addToShoppingCart(product)
         returnValue
     }
+
+    /**
+     * This wrapper is only here to allow us to treat the shopping cart consistently within the QueryCartService.  Since
+     * we add from this service we should also be able to removeFromShoppingCart
+     * @param shoppingCartSrvc
+     * @return
+     */
+    def removeFromShoppingCart( ShoppingCartService shoppingCartSrvc = shoppingCartService, IShoppable product ) {
+        shoppingCartSrvc?.removeFromShoppingCart(product)
+    }
+
+
+    /**
+     * This wrapper is only here to allow us to treat the shopping cart consistently within the QueryCartService. Since
+     * we add from this service we should also be able to emptyShoppingCart
+     * @param shoppingCartSrvc
+     * @return
+     */
+    def emptyShoppingCart( ShoppingCartService shoppingCartSrvc = shoppingCartService ) {
+        shoppingCartSrvc?.emptyShoppingCart()
+    }
+
+
+
 }
