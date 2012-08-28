@@ -114,9 +114,9 @@ class BardWebInterfaceController {
                 int numberOfHits = projects.size()
                 for (Project project : projects) {
                     Map currentObject = [:]
-                    currentObject.put("proj_id", result.projectId)
-                    currentObject.put("name", result.name)
-                    currentObject.put("highlight", result.source)
+                    currentObject.put("proj_id", project.id)
+                    currentObject.put("name", project.name ?project.name:"" )
+                    currentObject.put("highlight", "")
                     docs.add(currentObject)
                 }
                 JSONObject metaData = new JSONObject([nhit: numberOfHits])
@@ -253,18 +253,7 @@ class BardWebInterfaceController {
             render "Project ID parameter required"
         }
     }
-    //TODO: Whomever creates the gsp should also write unit tests for this method
-    def showExperiment(Integer experimentId) {
-        Integer exptId = experimentId ?: params.id as Integer//if 'project' param is provided, use that; otherwise, try the default id one
 
-        if (exptId) {
-            Experiment experiment = this.queryService.showExperiment(exptId)
-            render(view: "showExperiment", model: [experiment: experiment])
-        }
-        else {
-            render "Experiment ID parameter required"
-        }
-    }
 
     def autoCompleteAssayNames() {
         final List<String> assayNames = this.queryService.autoComplete(params?.term)
