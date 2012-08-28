@@ -1,5 +1,6 @@
 package bardqueryapi
 
+import com.metasieve.shoppingcart.IShoppable
 import com.metasieve.shoppingcart.Shoppable
 import com.metasieve.shoppingcart.ShoppingCartService
 
@@ -24,9 +25,11 @@ class QueryCartService {
         shoppingCartSrvc?.getItems()?.size() ?: 0
      }
 
-
-
-
+    /**
+     *
+     * @param shoppingCartSrvc
+     * @return
+     */
     LinkedHashMap<String,List> groupUniqueContentsByType( ShoppingCartService shoppingCartSrvc = shoppingCartService ) {
         def  returnValue  = new LinkedHashMap<String,List> ()
         def  temporaryCartAssayHolder  = new ArrayList<CartAssay>()
@@ -47,6 +50,30 @@ class QueryCartService {
         returnValue << [ (QueryCartService.cartAssay) : temporaryCartAssayHolder]
         returnValue << [ (QueryCartService.cartCompound) : temporaryCartCompoundHolder]
         returnValue << [ (QueryCartService.cartProject) : temporaryCartProjectHolder]
+        returnValue
+    }
+
+
+
+    def addToShoppingCart( ShoppingCartService shoppingCartSrvc = shoppingCartService, IShoppable product ) {
+        boolean foundIt=false
+        def returnValue
+        if (shoppingCartSrvc?.getItems()) {
+            shoppingCartSrvc.getItems().each { shoppingItemElement  ->
+                def convertedShoppingItem = Shoppable.findByShoppingItem(shoppingItemElement)
+                if ((convertedShoppingItem!=null)&&(product.equals(convertedShoppingItem)))
+                    foundIt=true
+//                if ( convertedShoppingItem instanceof CartAssay ) {
+//                    temporaryCartAssayHolder.add(convertedShoppingItem as CartAssay)
+//                } else if (convertedShoppingItem instanceof CartCompound) {
+//                    temporaryCartCompoundHolder.add(convertedShoppingItem as CartCompound)
+//                } else if (convertedShoppingItem instanceof CartProject) {
+//                    temporaryCartProjectHolder.add(convertedShoppingItem as CartProject)
+//                }
+            }
+        }
+        if (!foundIt)
+            returnValue = shoppingCartSrvc.addToShoppingCart(product)
         returnValue
     }
 }

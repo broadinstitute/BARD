@@ -112,8 +112,9 @@ class ShoppingCartServiceIntegrationSpec extends IntegrationSpec {
             CartCompound cartCompound =  new  CartCompound(smiles: "c1ccccc1")
 
         when: "We make a Query to NCGC's rest API to get a list of assays with that target"
-            shoppingCartService.addToShoppingCart(cartAssay)
-            2.times {
+        shoppingCartService.addToShoppingCart(cartAssay)
+        shoppingCartService.addToShoppingCart(cartAssay)
+        2.times {
                 shoppingCartService.addToShoppingCart(cartCompound)
             }
             shoppingCartService.addToShoppingCart(cartAssay1,2)
@@ -131,7 +132,68 @@ class ShoppingCartServiceIntegrationSpec extends IntegrationSpec {
             }
     }
 
+    /**
+     * Equality between shopping cart items should be dependent on a field we choose.
+     *
+     */
+    void "Exploring the nature of assay uniqueness"() {
+        given: "A shopping cart"
+           assertNotNull shoppingCartService
+           CartAssay cartAssay1 = new CartAssay(assayTitle:"Assay 1")
+           CartAssay cartAssay2 = new CartAssay(assayTitle:"Assay 1")
 
+        when: "We make a Query to NCGC's rest API to get a list of assays with that target"
+
+        queryCartService.addToShoppingCart(cartAssay1)
+        queryCartService.addToShoppingCart(cartAssay2)
+
+        then: "We get back a list assay ids"
+           assert queryCartService.totalNumberOfUniqueItemsInCart()==1
+    }
+
+    void "Exploring the nature of compound uniqueness"() {
+        given: "A shopping cart"
+        assertNotNull shoppingCartService
+        CartCompound cartCompound1 =  new  CartCompound(smiles: "c1ccccc1")
+        CartCompound cartCompound2 =  new  CartCompound(smiles: "c1ccccc1")
+
+        when: "We make a Query to NCGC's rest API to get a list of assays with that target"
+
+        queryCartService.addToShoppingCart(cartCompound1)
+        queryCartService.addToShoppingCart(cartCompound2)
+
+        then: "We get back a list assay ids"
+        assert queryCartService.totalNumberOfUniqueItemsInCart()==1
+    }
+
+    void "Exploring the nature of project uniqueness"() {
+        given: "A shopping cart and a couple of objects"
+        assertNotNull shoppingCartService
+        CartProject cartProject1 =  new  CartProject( projectName : "project")
+        CartProject cartProject2 =  new  CartProject( projectName : "project")
+
+        when: "we had two objects which we would consider to be identical"
+        queryCartService.addToShoppingCart(cartProject1)
+        queryCartService.addToShoppingCart(cartProject2)
+
+        then: "Did the card correctly reject one of those identical objects?"
+        assert queryCartService.totalNumberOfUniqueItemsInCart()==1
+    }
+
+
+    void "Exploring the nature of project uniqueness2"() {
+        given: "A shopping cart and a couple of objects"
+        assertNotNull shoppingCartService
+        CartProject cartProject1 =  new  CartProject( projectName : "project")
+        CartProject cartProject2 =  new  CartProject( projectName : "project")
+
+        when: "we had two objects which we would consider to be identical"
+        queryCartService.addToShoppingCart(cartProject1)
+        queryCartService.addToShoppingCart(cartProject2)
+
+        then: "Did the card correctly reject one of those identical objects?"
+        assert queryCartService.totalNumberOfUniqueItemsInCart()==1
+    }
 
 
 }
