@@ -8,6 +8,13 @@ $(document).ready(function () {
         minLength:2
     };
     $("#searchString").autocomplete(autoOpts);
+    $("#searchString").bind("autocompleteselect", function(event, ui) {
+       $("#searchButton").click();
+    });
+    // make sure to close the autocomplete box when the search button is clicked
+    $("#searchButton").click(function() {
+        $("#searchString").autocomplete("close");
+    });
 
     $('#aidForm').submit(function (event) {
         var searchType = findSearchType();

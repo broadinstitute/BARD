@@ -57,7 +57,7 @@
                 </div>
             </div>
             <div class="span1" style="margin-top: 20px;">
-                <g:submitButton name="search" value="Search" class="btn btn-primary"/>
+                <g:submitButton name="search" value="Search" class="btn btn-primary" id="searchButton"/>
             </div>
         </g:form>
         <div class="span2">
