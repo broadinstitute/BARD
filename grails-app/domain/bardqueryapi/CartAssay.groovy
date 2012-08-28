@@ -13,8 +13,8 @@ class CartAssay extends Shoppable {
     }
 
     boolean equals(o) {
-        if(o==null)  return false
         if (this.is(o)) return true
+        if (!(o instanceof CartAssay)) return false
 
         CartAssay cartAssay = (CartAssay) o
 
@@ -24,10 +24,7 @@ class CartAssay extends Shoppable {
     }
 
     int hashCode() {
-        int result
-        result = (assayTitle != null ? assayTitle.hashCode() : 0)
-        result = 31 * result + (version != null ? version.hashCode() : 0)
-        return result
+        return (assayTitle != null ? assayTitle.hashCode() : 0)
     }
 
     static constraints = {

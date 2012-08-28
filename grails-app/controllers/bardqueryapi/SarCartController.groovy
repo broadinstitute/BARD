@@ -21,7 +21,7 @@ class SarCartController {
                 CartProject newCartProject = new CartProject( projectName:params.projectName )
                 somethingWasAdded = queryCartService.addToShoppingCart(newCartProject)
             }
-        if (somethingWasAdded != null)
+       if (somethingWasAdded != null)
            render(template:'/bardWebInterface/sarCartContent')  // refresh the cart display
     }
 
