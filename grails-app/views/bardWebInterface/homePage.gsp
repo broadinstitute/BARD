@@ -6,7 +6,7 @@
 
 <body>
 <div class="row-fluid">
-    <div class="span9">
+    <div class="span12">
         <div id="resultTab">
 
             <ul id="resultTabUL" class="nav nav-tabs">
@@ -33,11 +33,6 @@
         </div>
     </div>
 
-    <div class="span3 screenSection">
-
-            <g:render template="sarCartContent"/>
-
-    </div>
 
 </div>
 </body>

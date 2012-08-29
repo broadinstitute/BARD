@@ -38,6 +38,17 @@
         });
     </r:script>
 
+    <r:script>
+
+        $(document).ready(function(){
+            $(".trigger").click(function(){
+                $(".panel").toggle("fast");
+                $(this).toggleClass("active");
+                return false;
+            });
+        });
+    </r:script>
+
     <g:layoutHead/>
     <r:require modules="core,bootstrap,search,common" />
     <r:layoutResources />
@@ -62,7 +73,7 @@
         </g:form>
         <div class="span2">
             <div class="well">
-                <h5><i class="icon-shopping-cart"></i> Query Cart</h5>
+                <h5><i class="icon-shopping-cart"></i><a class="trigger" href="#">Query Cart</a></h5>
                 <div class="btn-group">
                     <a class="btn-small dropdown-toggle" data-toggle="dropdown" href="#">
                         <i class="icon-eye-open"></i> Visualize
@@ -124,5 +135,14 @@
             <g:submitButton name="searchButton" id="searchButton" value="Search" class="btn btn-primary" data-dismiss="modal"/>
     </div>
 </div>
+
+
+
+<div class="panel">
+    <g:render template="sarCartContent"/>
+</div>
+
+
+
 </body>
 </html>
