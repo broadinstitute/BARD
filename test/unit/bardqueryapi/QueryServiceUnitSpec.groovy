@@ -3,7 +3,6 @@ package bardqueryapi
 import bard.core.adapter.CompoundAdapter
 import bard.core.rest.RESTAssayService
 import bard.core.rest.RESTCompoundService
-import bard.core.rest.RESTExperimentService
 import bard.core.rest.RESTProjectService
 import elasticsearchplugin.ElasticSearchService
 import elasticsearchplugin.QueryExecutorService
@@ -12,6 +11,7 @@ import spock.lang.Specification
 import spock.lang.Unroll
 import wslite.json.JSONObject
 import bard.core.*
+import bard.core.adapter.AssayAdapter
 
 /**
  * See the API for {@link grails.test.mixin.support.GrailsUnitTestMixin} for usage instructions
@@ -23,7 +23,6 @@ class QueryServiceUnitSpec extends Specification {
     QueryExecutorService queryExecutorService
     ElasticSearchService elasticSearchService
     RESTCompoundService restCompoundService
-    RESTExperimentService restExperimentService
     RESTProjectService restProjectService
     RESTAssayService restAssayService
     final static String AUTO_COMPLETE_NAMES = '''
@@ -43,7 +42,6 @@ class QueryServiceUnitSpec extends Specification {
     void setup() {
         queryExecutorService = Mock(QueryExecutorService.class)
         restCompoundService = Mock(RESTCompoundService.class)
-        restExperimentService = Mock(RESTExperimentService.class)
         restProjectService = Mock(RESTProjectService.class)
         restAssayService = Mock(RESTAssayService.class)
         elasticSearchService = Mock(ElasticSearchService.class)
@@ -77,27 +75,6 @@ class QueryServiceUnitSpec extends Specification {
         "Partial match of a String" | "Bro" | new JSONObject(AUTO_COMPLETE_NAMES) | ["Broad Institute MLPCN Platelet Activation"]
         "Empty String"              | ""    | new JSONObject()                    | []
     }
-
-//    /**
-    //No longer needed
-//     */
-//    void "test Get CIDs By Structure #label"() {
-//
-//        when:
-//        List<String> response = service.getCIDsByStructure(smiles, structureType)
-//
-//        then:
-//        queryExecutorService.executeGetRequestJSON(_, _) >> {assayJson}
-//
-//        assert response == expectedResponse
-//
-//        where:
-//        label                  | structureType                     | smiles | assayJson      | expectedResponse
-//        "Sub structure Search" | StructureSearchType.SUB_STRUCTURE | "CC"   | ["223", "224"] | ["223", "224"]
-//        "Exact match Search"   | StructureSearchType.EXACT_MATCH   | "C"    | ["225", "226"] | ["225", "226"]
-//        "Similarity Search"    | StructureSearchType.SIMILARITY    | "CCC"  | ["111"]        | ["111"]
-//
-//    }
     /**
      */
     void "test handleAutoComplete #label"() {
@@ -114,43 +91,6 @@ class QueryServiceUnitSpec extends Specification {
         "Partial match of a String" | "Bro" | new JSONObject(AUTO_COMPLETE_NAMES) | ["Broad Institute MLPCN Platelet Activation"]
         "Empty String"              | ""    | new JSONObject()                    | []
     }
-
-    /**
-     */
-//    void "test Search #label"() {
-//
-//        when:
-//        def response = service.search(userInput)
-//
-//        then:
-//        queryExecutorService.executeGetRequestJSON(_, _) >> {assayJson}
-//        elasticSearchService.elasticSearchQuery(_) >> {[:]}
-//        assert response == expectedResponse
-//
-//        where:
-//        label                  | userInput                                             | assayJson      | expectedResponse
-//        "Regular Search"       | "Stuff"                                               | ["Stuff"]      | [totalCompounds: 0, assays: [], compounds: [], compoundHeaderInfo: null, experiments: [], projects: []]
-//        "Empty Search"         | ""                                                    | []             | [totalCompounds: 0, assays: [], compounds: [], compoundHeaderInfo: null, experiments: [], projects: []]
-//    }
-    /**
-     */
-//    void "test pre Process Search #label"() {
-//
-//        when:
-//        String response = service.preprocessSearch(searchString)
-//
-//        then:
-//        queryExecutorService.executeGetRequestJSON(_, _) >> {assayJson}
-//        assert response == expectedCompoundList
-//
-//        where:
-//        label                  | searchString                                          | assayJson      | expectedCompoundList
-//        "Sub structure Search" | "${StructureSearchType.SUB_STRUCTURE.description}:CC" | ["223", "224"] | "223 224"
-//        "Exact match Search"   | "${StructureSearchType.EXACT_MATCH.description}:CC"   | ["223", "224"] | "223 224"
-//        "Similarity Search"    | "${StructureSearchType.SIMILARITY.description}:CC"    | ["223", "224"] | "223 224"
-//        "Regular Search"       | "Stuff"                                               | ["Stuff"]      | "Stuff"
-//        "Empty Search"         | ""                                                    | []             | ""
-//    }
     /**
      */
     void "test Show Compound #label"() {
@@ -170,21 +110,7 @@ class QueryServiceUnitSpec extends Specification {
         "Return a Compound Adapter" | new Integer(872)
     }
 
-    void "test Show Experiment"() {
-        given:
-        Experiment experiment = Mock(Experiment.class)
-        when: "Client enters an experiment ID and the showExperiment method is called"
-        Experiment foundExperiment = service.showExperiment(experimentId)
-        then: "The Experiment document is displayed"
-        queryServiceWrapper.getRestExperimentService() >> { restExperimentService }
-        restExperimentService.get(_) >> {experiment}
-        assert foundExperiment
 
-        where:
-        label                  | experimentId
-        "Return an Experiment" | new Integer(872)
-
-    }
 
     void "test Show Project"() {
         given:
@@ -206,7 +132,7 @@ class QueryServiceUnitSpec extends Specification {
         given:
         Assay assay = Mock(Assay.class)
         when: "Client enters a assay ID and the showAssay method is called"
-        Assay foundAssay = service.showAssay(assayId)
+        AssayAdapter foundAssay = service.showAssay(assayId)
         then: "The Assay document is displayed"
         queryServiceWrapper.getRestAssayService() >> { restAssayService }
         restAssayService.get(_) >> {assay}

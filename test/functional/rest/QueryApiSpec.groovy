@@ -1,4 +1,4 @@
-package bardqueryapi
+package rest
 
 import spock.lang.Specification
 import spock.lang.Unroll

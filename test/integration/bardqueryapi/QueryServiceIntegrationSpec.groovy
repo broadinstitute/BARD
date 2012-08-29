@@ -7,6 +7,7 @@ import org.junit.After
 import org.junit.Before
 import spock.lang.Unroll
 import bard.core.*
+import bard.core.adapter.AssayAdapter
 
 @Unroll
 class QueryServiceIntegrationSpec extends IntegrationSpec {
@@ -73,19 +74,7 @@ class QueryServiceIntegrationSpec extends IntegrationSpec {
         "Return a Compound Adapter" | new Integer(658342) | [5274057, 47984903, 51638425, 113532087, 124777946, 970329, 6320599, 35591597, 76362856, 112834159] | "C(CN1CCCCC1)N1C(N=CC2=CC=CS2)=NC2=CC=CC=C12"
     }
 
-    void "test Show Experiment"() {
-        when: "Client enters an experiment ID and the showExperiment method is called"
-        Experiment experiment = queryService.showExperiment(experimentId)
-        then: "The Experiment is found"
-        assert experiment
-        assert experimentId == experiment.id
-        assert experimentName == experiment.name
 
-        where:
-        label                  | experimentId     | experimentName
-        "Return an Experiment" | new Integer(346) | "HIV Nucleocapsid"
-
-    }
 
     void "test Show Project"() {
         given:
@@ -106,16 +95,16 @@ class QueryServiceIntegrationSpec extends IntegrationSpec {
         given:
         Integer assayId = new Integer(644)
         when: "Client enters a assay ID and the showAssay method is called"
-        Assay assay = queryService.showAssay(assayId)
+        AssayAdapter assayAdapter = queryService.showAssay(assayId)
         then: "The Assay document is found"
-        assert assay
-        assert assayId == assay.id
-        assert assay.protocol
-        assert assay.comments
-        assert assay.type == AssayValues.AssayType.Confirmatory
-        assert assay.role == AssayValues.AssayRole.Primary
-        assert assay.category == AssayValues.AssayCategory.MLSCN
-        assert assay.description
+        assert assayAdapter
+        assert assayId == assayAdapter.assay.id
+        assert assayAdapter.assay.protocol
+        assert assayAdapter.assay.comments
+        assert assayAdapter.assay.type == AssayValues.AssayType.Confirmatory
+        assert assayAdapter.assay.role == AssayValues.AssayRole.Primary
+        assert assayAdapter.assay.category == AssayValues.AssayCategory.MLSCN
+        assert assayAdapter.assay.description
     }
 
     /**
@@ -123,8 +112,10 @@ class QueryServiceIntegrationSpec extends IntegrationSpec {
      */
     void "test Structure Search #label"() {
         when: ""
-        final List<CompoundAdapter> compoundAdapters = queryService.structureSearch(smiles, structureSearchParamsType, top, skip)
+        final Map compoundAdapterMap = queryService.structureSearch(smiles, structureSearchParamsType, top, skip)
         then:
+        assert compoundAdapterMap
+        final List<CompoundAdapter> compoundAdapters = compoundAdapterMap.compounds
         assert compoundAdapters
         assert numberOfCompounds == compoundAdapters.size()
         where:
@@ -135,14 +126,18 @@ class QueryServiceIntegrationSpec extends IntegrationSpec {
         "Sub structure Search"      | StructureSearchParams.Type.Substructure   | "CN(C)CCC1=CNC2=C1C=C(CS(=O)(=O)N3CCCC3)C=C2" | 0    | 10  | 1
         "Default (to Substructure)" | StructureSearchParams.Type.Substructure   | "n1cccc2ccccc12"                              | 0    | 10  | 10
         "Skip 10, top 10"           | StructureSearchParams.Type.Substructure   | "n1cccc2ccccc12"                              | 10   | 10  | 10
-
+        "salicylic acid substruct"  | StructureSearchParams.Type.Substructure   | "OC(=O)C1=C(O)C=CC=C1"                        | 0    | 10  | 10
+        "salicylic acid exact"      | StructureSearchParams.Type.Exact          | "OC(=O)C1=C(O)C=CC=C1"                        | 0    | 10  | 1
     }
 
     void "test find Compounds By Text Search String #label"() {
         when: ""
-        final List<CompoundAdapter> compoundAdapters = queryService.findCompoundsByTextSearch(searchString, top, skip)
+        final Map compoundAdapterMap = queryService.findCompoundsByTextSearch(searchString, top, skip)
         then:
+        assert compoundAdapterMap
+        final List<CompoundAdapter> compoundAdapters = compoundAdapterMap.compounds
         assert compoundAdapters
+
         assert numberOfCompounds == compoundAdapters.size()
         where:
         label                     | searchString         | skip | top | numberOfCompounds
@@ -154,8 +149,10 @@ class QueryServiceIntegrationSpec extends IntegrationSpec {
 
     void "test find Compounds By CIDs #label"() {
         when: ""
-        final List<CompoundAdapter> compoundAdapters = queryService.findCompoundsByCIDs(cids)
+        final Map compoundAdapterMap = queryService.findCompoundsByCIDs(cids)
         then:
+        assert compoundAdapterMap
+        final List<CompoundAdapter> compoundAdapters = compoundAdapterMap.compounds
         assert compoundAdapters
         assert cids.size() == compoundAdapters.size()
         where:
@@ -166,8 +163,9 @@ class QueryServiceIntegrationSpec extends IntegrationSpec {
 
     void "test find Assays By Text Search String #label"() {
         when: ""
-        List<Assay> assays = queryService.findAssaysByTextSearch(searchString, top, skip)
+        final Map assayAdapterMap = queryService.findAssaysByTextSearch(searchString, top, skip)
         then:
+        List<AssayAdapter> assays = assayAdapterMap.assays
         assert assays
         assert numberOfAssays == assays.size()
         where:
@@ -181,8 +179,9 @@ class QueryServiceIntegrationSpec extends IntegrationSpec {
 
     void "test find Assays By APIDs #label"() {
         when: ""
-        final List<Assay> assays = queryService.findAssaysByAPIDs(apids)
+        final Map assayAdapterMap = queryService.findAssaysByADIDs(apids)
         then:
+        List<AssayAdapter> assays = assayAdapterMap.assays
         assert assays
         assert apids.size() == assays.size()
         where:

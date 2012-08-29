@@ -9,11 +9,11 @@ import bard.core.*
 /**
  * Tests for RESTProjectService in JDO
  */
-
-class RESTProjectServiceIntegrationSpec extends IntegrationSpec {
+@Mixin(RESTTestHelper)
+class RESTProjectServiceIntegrationSpec extends IntegrationSpec implements RESTServiceInterface {
     EntityServiceManager esm
     ProjectService projectService
-    final static String baseURL = "http://bard.nih.gov/api/v1"
+
     @Before
     void setup() {
         this.esm = new RESTEntityServiceManager(baseURL);
@@ -43,12 +43,12 @@ class RESTProjectServiceIntegrationSpec extends IntegrationSpec {
         assertProject(project)
         where:
         label                      | pid
-        "Find an existing Project" | new Integer(644)
+        "Find an existing Project" | new Integer(1772)
     }
     /**
      *
      */
-    void "test Fail #label"() {
+    void "test Fail project Id does not exist #label"() {
 
         when: "The get method is called with the given PID: #pid"
         final Project project = this.projectService.get(pid)
@@ -59,8 +59,6 @@ class RESTProjectServiceIntegrationSpec extends IntegrationSpec {
         "Find a non-existing Project" | new Integer(-1)
     }
     /**
-     * TODO" Not yet implemented. Currently only implemented for CIDs
-     * TODO: Ask NCGC that this should include a highlight option even if it is a default String
      * TODO: Ask Steve, do we need facet information, paging information etc?
      */
     void "test Get Projects #label"() {
@@ -73,14 +71,16 @@ class RESTProjectServiceIntegrationSpec extends IntegrationSpec {
         assert pids.size() == projects.size()
         where:
         label                               | pids
-        "Search with a list of project ids" | [600, 644, 666]
+        "Search with a list of project ids" | [1772, 805, 1074]
+        "Search with a single project id"   | [1772]
     }
     /**
-     * TODO: Ask NCGC that this search should return the same thing as the REST API
      */
     void "test REST Project Service #label #seachString question"() {
         given: "A search string, #searchString, and asking to retrieve the first #top search results"
-        final SearchParams params = new SearchParams(searchString).setSkip(skip).setTop(top);
+        final SearchParams params = new SearchParams(searchString)
+        params.setSkip(skip)
+        params.setTop(top);
         when: "We we call search method of the the RestProjectService"
         final ServiceIterator<Project> searchIterator = this.projectService.search(params)
         then: "We expected to get back a list of 10 results"
@@ -90,12 +90,28 @@ class RESTProjectServiceIntegrationSpec extends IntegrationSpec {
             assertProject(project)
             ++numberOfProjects
         }
+        assert searchIterator.count >= 10
         assert expectedNumberOfProjects == numberOfProjects
-
+        assertFacets(searchIterator)
         searchIterator.done();
         where:
         label    | searchString | skip | top | expectedNumberOfProjects
         "Search" | "dna repair" | 0    | 10  | 10
 
+    }
+
+    /**
+     *
+     */
+    void "test Facet keys (ids) are unique"() {
+        given: "That we have created a valid search params object"
+        final SearchParams params = new SearchParams("dna repair")
+        params.setSkip(0)
+        params.setTop(1);
+        when: "We we call search method of the the RESTCompoundService"
+        final ServiceIterator<Project> searchIterator = this.projectService.search(params)
+        then: "We expected to get back unique facets"
+        assertFacetIdsAreUnique(searchIterator)
+        searchIterator.done();
     }
 }

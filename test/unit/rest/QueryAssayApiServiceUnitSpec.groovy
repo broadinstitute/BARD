@@ -1,8 +1,10 @@
-package bardqueryapi
+package rest
 
 import grails.converters.JSON
 import grails.test.mixin.TestFor
 import spock.lang.Specification
+import bardqueryapi.QueryAssayApiService
+import bardqueryapi.QueryExecutorInternalService
 
 /**
  * See the API for {@link grails.test.mixin.support.GrailsUnitTestMixin} for usage instructions

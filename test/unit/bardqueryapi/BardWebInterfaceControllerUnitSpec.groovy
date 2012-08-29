@@ -1,14 +1,12 @@
 package bardqueryapi
 
-import com.metasieve.shoppingcart.ShoppingCartService
-
 import bard.core.Assay
 import bard.core.Compound
 import bard.core.DataSource
 import bard.core.LongValue
+import bard.core.adapter.AssayAdapter
 import bard.core.adapter.CompoundAdapter
-import elasticsearchplugin.ESAssay
-import elasticsearchplugin.ESXCompound
+import com.metasieve.shoppingcart.ShoppingCartService
 import grails.test.mixin.TestFor
 import grails.test.mixin.TestMixin
 import grails.test.mixin.support.GrailsUnitTestMixin
@@ -24,26 +22,6 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
 
     QueryService queryService
     ShoppingCartService shoppingCartService
-
-    final private static String compoundDocumentJson = '''{"probeId":"null","sids":[4243156,24368917],"smiles":"C-C","cid":"3237916"}'''
-
-
-    final private static ESAssay esAssay = new ESAssay(
-            _index: 'index',
-            _type: 'type',
-            _id: 'id',
-            assayNumber: 'assayNumber',
-            assayName: 'assayName'
-    )
-
-
-
-    final private static ESXCompound esxCompound = new ESXCompound(
-            _index: 'index',
-            _type: 'type',
-            _id: 'id',
-            cid: '1234567890'
-    )
 
 
     void setup() {
@@ -97,16 +75,31 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
 
         "/bardWebInterface/showAssay" == view
         assert model.assayInstance
-        adid == model.assayInstance.id
+        adid == model.assayInstance.assay.id
         name == model.assayInstance.name
 
         where:
 
-        label             | adid                | name   | assay
-        "Return an assay" | new Integer(485349) | "Test" | buildAssay(485349, "Test")
+        label                   | adid                | name   | assay
+        "Return an assay"       | new Integer(485349) | "Test" | buildAssay(485349, "Test")
+    }
 
-        // TODO What do we get back if assay isn't found?
-        // TODO What if the network is down?
+    void "test showAssay fail #label"() {
+
+        when:
+        request.method = 'GET'
+        controller.showAssay(adid)
+
+        then:
+        queryService.showAssay(_) >> { assay }
+
+        "/bardWebInterface/showAssay" == view
+        assert !model.assayInstance
+
+        where:
+
+        label                   | adid            | name   | assay
+        "Assay does not exists" | new Integer(-1) | "Test" | null
     }
 
 //    void "test search #label"() {
@@ -161,9 +154,10 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
         return new CompoundAdapter(compound)
     }
 
-    Assay buildAssay(Long adid, String name) {
+    AssayAdapter buildAssay(Long adid, String name) {
         Assay assay = new Assay(name)
         assay.setId(adid)
-        return assay
+        AssayAdapter assayAdapter = new AssayAdapter(assay)
+        return assayAdapter
     }
 }

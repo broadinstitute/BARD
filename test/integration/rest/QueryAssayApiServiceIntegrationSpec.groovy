@@ -1,9 +1,10 @@
-package bardqueryapi
+package rest
 
 import elasticsearchplugin.QueryExecutorService
 import grails.plugin.spock.IntegrationSpec
 import wslite.json.JSONArray
 import wslite.json.JSONObject
+import bardqueryapi.QueryAssayApiService
 
 /**
  * See the API for {@link grails.test.mixin.support.GrailsUnitTestMixin} for usage instructions
@@ -100,38 +101,4 @@ class QueryAssayApiServiceIntegrationSpec extends IntegrationSpec {
         println assays.getClass().getName()
 
     }
-
-//    void testFindAssayByAid() {
-//        given:
-//        String aid = 493159
-//        when:
-//        final Response assays = queryAssayApiService.findAssayByAid(aid)
-//        final json = assays.json
-//        then:
-//        assert json
-//        println "Aid: ${json.aid}"
-//        println "Category : ${json.category}"
-//        println "Type: ${json.type}"
-//        println "Summary: ${json.summary}"
-//        println "Assays: ${json.assays}"
-//        println "Classification: ${json.classification}"
-//        println "Samples: ${json.samples}"
-//        println "Name: ${json.name}"
-//        println "Description: ${json.description}"
-//        println "Source: ${json.source}"
-//        println "Grant #: ${json.grantNo}"
-//        println "Deposited: ${json.deposited}"
-//        println "Updated: ${json.updated}"
-//        println "Targets: ${json.targets}"
-//        println "Data : ${json.data}"
-//        println "Publications :"
-//        json.publications.each{ publication ->
-//            println "\t ${publication.resourcePath}"
-//        }
-//        assays.json.each{ assay ->
-//            println assay
-//        }
-//
-//
-//    }
 }

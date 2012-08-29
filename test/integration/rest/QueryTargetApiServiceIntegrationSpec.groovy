@@ -1,6 +1,7 @@
-package bardqueryapi
+package rest
 
 import grails.plugin.spock.IntegrationSpec
+import bardqueryapi.QueryTargetApiService
 
 /**
  * See the API for {@link grails.test.mixin.support.GrailsUnitTestMixin} for usage instructions

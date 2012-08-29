@@ -45,37 +45,33 @@
 <body>
 <div class="container-fluid">
     <div class="row-fluid">
-        <div class="span12">
-            <div class="row-fluid">
-                <div class="span3"><a href="${createLink(controller:'BardWebInterface',action:'index')}"><img src="${resource(dir: 'images', file: 'bardLogo.png')}" alt="BioAssay Research Database" /></a></div>
-                <g:form name="aidForm" controller="bardWebInterface" action="search" class="form-search" id="aidForm">
-                    <div class="span6" style="margin-top: 20px;">
-                        <div class="control-group">
-                            <div class="controls">
-                                <g:textField id="searchString" name="searchString" value="${params?.searchString}"
-                                             class="input-block-level"/>
-                                <p class="right-aligned"><i class="icon-search"></i> <a data-toggle="modal" href="#modalDiv">Create a structure for a search</a></p>
-                            </div>
-                        </div>
+        <div class="span3"><a href="${createLink(controller:'BardWebInterface',action:'index')}"><img src="${resource(dir: 'images', file: 'bardLogo.png')}" alt="BioAssay Research Database" /></a></div>
+        <g:form name="aidForm" controller="bardWebInterface" action="search" class="form-search" id="aidForm">
+            <div class="span6" style="margin-top: 20px;">
+                <div class="control-group">
+                    <div class="controls">
+                        <g:textField id="searchString" name="searchString" value="${params?.searchString}"
+                                     class="input-block-level"/>
+                        <p class="right-aligned"><i class="icon-search"></i> <a data-toggle="modal" href="#modalDiv">Create a structure for a search</a></p>
                     </div>
-                    <div class="span1" style="margin-top: 20px;">
-                        <g:submitButton name="search" value="Search" class="btn btn-primary"/>
-                    </div>
-                </g:form>
-                <div class="span2">
-                    <div class="well">
-                        <h5><i class="icon-shopping-cart"></i> Query Cart</h5>
-                        <div class="btn-group">
-                            <a class="btn-small dropdown-toggle" data-toggle="dropdown" href="#">
-                                <i class="icon-eye-open"></i> Visualize
-                                <span class="caret"></span>
-                            </a>
-                            <ul class="dropdown-menu">
-                                <li><a href="#">Visualize as Molecular Spreadsheet</a></li>
-                                <li><a href="#">Visualize in Advanced Analysis Client</a></li>
-                            </ul>
-                        </div>
-                    </div>
+                </div>
+            </div>
+            <div class="span1" style="margin-top: 20px;">
+                <g:submitButton name="search" value="Search" class="btn btn-primary"/>
+            </div>
+        </g:form>
+        <div class="span2">
+            <div class="well">
+                <h5><i class="icon-shopping-cart"></i> Query Cart</h5>
+                <div class="btn-group">
+                    <a class="btn-small dropdown-toggle" data-toggle="dropdown" href="#">
+                        <i class="icon-eye-open"></i> Visualize
+                        <span class="caret"></span>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a href="#">Visualize as Molecular Spreadsheet</a></li>
+                        <li><a href="#">Visualize in Advanced Analysis Client</a></li>
+                    </ul>
                 </div>
             </div>
         </div>
@@ -88,14 +84,10 @@
     </g:if>
     <g:layoutBody/>
     <div class="row-fluid">
-        <div class="span12">
-            <div class="row-fluid">
-                <div class="span2 offset10">
-                    <p class="right-aligned">
-                        <a href="http://www.chemaxon.com/"><img src="${resource(dir: 'images', file: 'chemaxon_logo.gif')}" alt="Powered by ChemAxon" /></a>
-                    </p>
-                </div>
-            </div>
+        <div class="span2 offset10">
+            <p class="right-aligned">
+                <a href="http://www.chemaxon.com/"><img src="${resource(dir: 'images', file: 'chemaxon_logo.gif')}" alt="Powered by ChemAxon" /></a>
+            </p>
         </div>
     </div>
 </div>
