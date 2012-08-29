@@ -27,4 +27,25 @@ class CartAssaySpec extends Specification  {
             assert cartAssay.assayTitle=='Assay title'
             assertNull cartAssay.shoppingItem
     }
+
+
+
+    void "test constraints on CartAssay object"() {
+        setup:
+        mockForConstraintsTests(CartAssay)
+
+        when:
+        CartAssay cartAssay = new CartAssay(assayTitle: assayTitle)
+        cartAssay.validate()
+
+        then:
+        cartAssay.hasErrors() == !valid
+
+        where:
+        assayTitle      |   valid
+        ""              |   false
+        "Some assay"    |   true
+    }
+
+
 }

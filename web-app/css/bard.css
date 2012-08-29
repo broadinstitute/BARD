@@ -91,6 +91,11 @@ ul.results > li {
     height: auto;
     padding: 30px 30px 30px 30px;
     background-color: #E4F1DF;
+    -moz-border-radius-topleft: 5px;
+    -webkit-border-top-left-radius: 5px;
+    -moz-border-radius-bottomleft: 5px;
+    -webkit-border-bottom-left-radius: 5px;
+
 }
 
 
@@ -125,6 +130,17 @@ input, select, textarea {
 
 div.qcart  {
     background-color: #ddd;
+}
+
+span.qcartTitle  {
+    font-family: Helvetica, Arial, "Lucida Grande", sans-serif;
+    font-size: x-large;
+    font-weight: normal;
+}
+span.qcartResults  {
+    font-family: Helvetica, Arial, "Lucida Grande", sans-serif;
+    font-size: medium;
+    font-weight: bold;
 }
 
 table.QcartSubsection{

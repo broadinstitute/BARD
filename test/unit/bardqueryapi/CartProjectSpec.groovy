@@ -8,7 +8,6 @@ import grails.test.mixin.TestFor
 /**
  * See the API for {@link grails.test.mixin.support.GrailsUnitTestMixin} for usage instructions
  */
-@TestMixin(GrailsUnitTestMixin)
 @TestFor(BardWebInterfaceController)
 class CartProjectSpec  extends Specification {
 
@@ -29,4 +28,28 @@ class CartProjectSpec  extends Specification {
         assert cartProject.projectName=='my project name'
         assertNull cartProject.shoppingItem
     }
+
+
+
+
+    void "test constraints on CartProject object"() {
+        setup:
+        mockForConstraintsTests(CartProject)
+
+        when:
+        CartProject cartProject = new CartProject(projectName: projectName)
+        cartProject.validate()
+
+        then:
+        cartProject.hasErrors() == !valid
+
+        where:
+        projectName      |   valid
+        ""               |   false
+        "Some Project"   |   true
+    }
+
+
+
+
 }

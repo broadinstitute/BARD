@@ -12,6 +12,11 @@ class CartAssay extends Shoppable {
         assayTitle
     }
 
+    /**
+     *  equals
+     * @param o
+     * @return
+     */
     boolean equals(o) {
         if (this.is(o)) return true
         if (!(o instanceof CartAssay)) return false
@@ -23,6 +28,10 @@ class CartAssay extends Shoppable {
         return true
     }
 
+    /**
+     *  hashCode
+     * @return
+     */
     int hashCode() {
         return (assayTitle != null ? assayTitle.hashCode() : 0)
     }

@@ -10,7 +10,7 @@
     <tr>
         <td>
 
-         <h4>Query Cart - Selected Results</h4>
+         <h5><span class="qcartTitle">Query Cart -</span> <span class="qcartResults">Selected Results</span></h5>
          <h6>${queryCartService.totalNumberOfUniqueItemsInCart(shoppingCartService)} results selected</h6>
          <h5>COMPOUNDS</h5>
 

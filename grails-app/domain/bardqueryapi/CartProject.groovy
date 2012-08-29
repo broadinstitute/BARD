@@ -28,6 +28,6 @@ class CartProject extends Shoppable {
 
 
     static constraints = {
-        projectName  :  blank: false;
+        projectName    blank: false;
     }
 }

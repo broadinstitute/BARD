@@ -27,4 +27,26 @@ class CartCompoundSpec  extends Specification  {
             assert cartCompound.smiles=='c1ccccc1'
             assertNull cartCompound.shoppingItem
     }
+
+
+
+    void "test constraints on Kurt compound object"() {
+        setup:
+        mockForConstraintsTests(CartCompound)
+
+        when:
+        CartCompound cartCompound = new CartCompound(smiles: smiles)
+        cartCompound.validate()
+
+        then:
+        cartCompound.hasErrors() == !valid
+
+        where:
+        smiles          |   valid
+        null            |   false
+        ""              |   true
+        "Some assay"    |   true
+    }
+
+
 }
