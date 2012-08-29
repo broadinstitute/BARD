@@ -30,14 +30,24 @@
 						icons: {
 							primary: "ui-icon-trash"
 						}
-					}).click(function(event){     		
-			     		$("#dialog_confirm_delete_card").dialog("open");
-			   		});
+					});
             	</r:script>
             	<tr>
                 	<td>${line.attributeLabel}</td>
                     <td>${line.valueLabel}</td>
-                    <td><button id="deleteBtn_${itemId}">Delete</button></td>
+                    <td>
+                    	<g:if test="${line.id}">
+                    		<g:formRemote name="${line.id}" before="deleteCardItem(${line.id}, deleteBtn_${itemId})" update="assayView" url="[controller: 'assayDefinition', action: 'deleteItem']" action="deleteItem">
+		                    	<input type="hidden" name="assayId" value="${card.assayId}"/>
+		                    	<input type="hidden" name="assayContextItemId" value="${line.id}"/>
+		                    	<button id="deleteBtn_${itemId}">Delete</button>
+	                    	</g:formRemote>
+                    	</g:if>
+						<g:else>
+							<button id="deleteBtn_${itemId}">Delete</button>
+						</g:else>
+	                    
+                    </td>
            		</tr>
     		</g:each>
 		</tbody>

@@ -67,5 +67,24 @@ class AssayDefinitionController {
 				
 		}
 	}
+	
+	def deleteItem(){
+		if(params.assayContextItemId && params.assayId){
+			def assayContextItem = AssayContextItem.get(params.assayContextItemId)
+			if (!assayContextItem) {
+				flash.message = "Unable to delete item with id: ${params.assayContextItemId}"
+				return
+			}
+			else
+				flash.message = null
+			try {
+				assayContextItem.delete(flush: true)
+			}
+			catch (org.springframework.dao.DataIntegrityViolationException e) {
+				flash.message = "Could not delete item with id: ${params.assayContextItemId}"
+			}
+			redirect(action: "show" , id: params.assayId)
+		}				
+	}
 
 }

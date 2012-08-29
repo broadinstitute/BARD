@@ -12,15 +12,33 @@
 		$( "#dialog:ui-dialog" ).dialog( "destroy" );
 	}); 
 	
-	$(document).ready(function() {
-		$( "#accordion" ).accordion({ autoHeight: false });
-	})
+	function deleteCardItem(formId, buttonId){
+		
+		$("#dialog_confirm_delete_card").dialog("option", "buttons",[
+		{
+			text: "Delete",
+			click: function(){
+				alert("You clicked Delete! ItemId: " + buttonId);				
+			}
+		},
+		{
+			text: "Cancel",
+			click: function(){
+				$( this ).dialog( "close" );
+			}
+		}
+		]);
+		if($("#dialog_confirm_delete_card").dialog("open")){
+							
+		}
+		
+	}
 </r:script>
 
 </head>
 <body>
 
-<div>
+<div id="assayView">
   	<div class="ui-widget"><p><h1>Assay View</h1></p></div>
 
 	<g:if test="${flash.message}">

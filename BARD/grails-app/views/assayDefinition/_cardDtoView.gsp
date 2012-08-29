@@ -40,19 +40,11 @@
 			width: 450,
 			modal: true,
 			autoOpen: false,
-			title: "Delete item?",
-			buttons: {
-				"Delete card": function() {
-					$( this ).dialog( "close" );
-				},
-				Cancel: function() {
-					$( this ).dialog( "close" );
-				}
-			}
+			title: "Delete item?",			
 		});
 	});
 </r:script>
-<div class="cardView">
+<div class="cardView" id="cardView">
 
 	<div id="dialog_card">
 		<h3>Edit card</h3>
@@ -92,6 +84,7 @@
 	
 	<button id="addNewBtn">Add New Card</button>
 	
+	<div id="cardTable">
 	<g:set var="cardIdCounter" value="${0}" />
 	<g:set var="itemId" value="${0}" />
 	<table>
@@ -104,5 +97,6 @@
             	<g:render template="cardDto" model="['card': card, 'cardId': cardIdCounter]" />
         	</g:each>
     	</td></tr>
-	</table>	
+	</table>
+	</div>
 </div>

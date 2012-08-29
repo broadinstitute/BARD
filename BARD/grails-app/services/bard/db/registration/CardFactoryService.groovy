@@ -15,6 +15,7 @@ class CardFactoryService {
         for (AssayContext assayContext in assay.assayContexts) {
             CardDto cardDto = new CardDto()
             cardDto.title = assayContext.contextName
+			cardDto.assayId = assay.id;
             for (AssayContextItem assayContextItem : assayContext.assayContextItems) {
                 cardDto.lines.add(createCardLineDtoForAssayContextItem(assayContextItem))
             }
@@ -43,6 +44,7 @@ class CardFactoryService {
 
 class CardDto {
     String title
+	Long assayId
     List<CardLineDto> lines = new ArrayList<CardLineDto>()
 }
 
