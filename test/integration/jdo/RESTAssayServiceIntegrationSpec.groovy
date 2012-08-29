@@ -26,13 +26,7 @@ class RESTAssayServiceIntegrationSpec extends IntegrationSpec implements RESTSer
         this.esm.shutdown()
     }
 
-    void assertAssay(final Assay assay) {
-        assert assay.protocol
-        assert assay.id
-        assert assay.comments
-        assert assay.name
-        assert assay.description
-    }
+
 
     void assertAssayAdapter(final AssayAdapter assayAdapter) {
         assert assayAdapter.assay
@@ -49,7 +43,7 @@ class RESTAssayServiceIntegrationSpec extends IntegrationSpec implements RESTSer
         then: "An Assay is returned with the expected information"
         assert assay
         assert apid == assay.id
-        assertAssayAdapter(new AssayAdapter(assay))
+        assertAssay(assay,false)
         where:
         label                    | apid
         "Find an existing Assay" | new Integer(644)
@@ -71,18 +65,51 @@ class RESTAssayServiceIntegrationSpec extends IntegrationSpec implements RESTSer
      *
      */
     void "test Get Assays #label"() {
-        when: "We call the get method of the the RESTAssayService"
-        final Collection<Assay> assays = this.assayService.get(apids)
+        when: "We call the get method of the the RESTAssayService with a list of assay ids"
+        final Collection<Assay> assays = this.assayService.get(adids)
         then: "We expect to get back a list of 3 results"
-        for (Assay assay : assays) {
-            AssayAdapter assayAdapter = new AssayAdapter(assay)
-            assertAssayAdapter(assayAdapter)
-        }
-        assert apids.size() == assays.size()
+        assertAssays(assays, false)
+        assert adids.size() == assays.size()
         where:
-        label                             | apids
+        label                             | adids
         "Search with a list of assay ids" | [600, 644, 666]
         "Search with a single assay id"   | [600]
+    }
+    /**
+     *
+     * @param assays
+     * @param isStringSearch - Means that this is a result of a string search and not an id search
+     * string searches do not have sids, but they do have highlights and annotations
+     */
+    void assertAssays(Collection<Assay> assays, boolean isStringSearch = false) {
+        for (Assay assay : assays) {
+            assertAssay(assay, isStringSearch)
+        }
+    }
+
+    /**
+     *
+     * @param assay
+     * @param isStringSearch
+     */
+    void assertAssay(final Assay assay, final boolean isStringSearch = false) {
+        AssayAdapter assayAdapter = new AssayAdapter(assay)
+        assert assay.protocol
+        assert assay.id == assayAdapter.assay.id
+        assert assay.comments == assayAdapter.assay.comments
+        assert assay.name == assayAdapter.assay.name
+        assert assay.description == assayAdapter.assay.description
+        assert assay.category == assayAdapter.assay.category
+        assert assay.type == assayAdapter.assay.type
+        assert assay.role == assayAdapter.assay.role
+
+        if (isStringSearch) {
+            final Collection<Value> annotations = assayAdapter.getAnnotations()
+            assert annotations
+            assert !annotations.isEmpty()
+            assert assayAdapter.searchHighlight
+        }
+
     }
     /**
      *
@@ -94,17 +121,11 @@ class RESTAssayServiceIntegrationSpec extends IntegrationSpec implements RESTSer
         params.setTop(top);
         when: "We we call search method of the the RestAssayService"
         final ServiceIterator<Assay> searchIterator = this.assayService.search(params)
-        then: "We expected to get back a list of 10 results"
-        int numberOfAssays = 0
-        while (searchIterator.hasNext()) {
-            final Assay assay = searchIterator.next();
-            AssayAdapter assayAdapter = new AssayAdapter(assay)
-            assertAssayAdapter(assayAdapter)
-            assert assayAdapter.searchHighlight
-            ++numberOfAssays
-        }
+        then: "We expected to get back a list of #expectedNumberOfAssays assays"
+        Collection<Assay> assays = searchIterator.collect()
+        assertAssays(assays,false)
         assert searchIterator.count >= expectedNumberOfAssays
-        assert expectedNumberOfAssays == numberOfAssays
+        assert expectedNumberOfAssays ==assays.size()
         searchIterator.done();
         where:
         label    | searchString | skip | top | expectedNumberOfAssays
@@ -123,6 +144,24 @@ class RESTAssayServiceIntegrationSpec extends IntegrationSpec implements RESTSer
         then: "We expected to get back unique facets"
         assertFacetIdsAreUnique(searchIterator)
         searchIterator.done();
+    }
+    /**
+     *
+     */
+    void "test Get Assays with facets, #label"() {
+        given:
+        final Object etag = assayService.newETag("My awesome assay collection", adids);
+        when: "We call the getFactest matehod"
+        final Collection<Value> facets = this.assayService.getFacets(etag)
+        and: "A list of assays"
+        final Collection<Assay> assays = this.assayService.get(adids)
+        then: "We expect to get back a list of facets"
+        assert facets
+        assertFacetIdsAreUnique(facets)
+        assertAssays(assays, false)
+        where:
+        label                             | adids
+        "Search with a list of assay ids" | [600, 644, 666]
     }
 
 }

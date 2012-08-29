@@ -1,5 +1,6 @@
 package jdo
 
+import bard.core.adapter.EntityAdapter
 import bard.core.rest.RESTEntityServiceManager
 import grails.plugin.spock.IntegrationSpec
 import org.junit.After
@@ -25,11 +26,6 @@ class RESTProjectServiceIntegrationSpec extends IntegrationSpec implements RESTS
         this.esm.shutdown()
     }
 
-    void assertProject(final Project project) {
-        assert project.id
-        assert project.name
-        assert project.description
-    }
     /**
      *
      */
@@ -59,15 +55,12 @@ class RESTProjectServiceIntegrationSpec extends IntegrationSpec implements RESTS
         "Find a non-existing Project" | new Integer(-1)
     }
     /**
-     * TODO: Ask Steve, do we need facet information, paging information etc?
      */
     void "test Get Projects #label"() {
         when: "We call the get method of the the RESTProjectService"
         final Collection<Project> projects = this.projectService.get(pids)
         then: "We expect to get back a list of 3 results"
-        for (Project project : projects) {
-            assertProject(project)
-        }
+        assertProjects(projects,false)
         assert pids.size() == projects.size()
         where:
         label                               | pids
@@ -84,14 +77,10 @@ class RESTProjectServiceIntegrationSpec extends IntegrationSpec implements RESTS
         when: "We we call search method of the the RestProjectService"
         final ServiceIterator<Project> searchIterator = this.projectService.search(params)
         then: "We expected to get back a list of 10 results"
-        int numberOfProjects = 0
-        while (searchIterator.hasNext()) {
-            final Project project = searchIterator.next();
-            assertProject(project)
-            ++numberOfProjects
-        }
+        final Collection<Project> projects = searchIterator.collect()
+        assertProjects(projects,true)
         assert searchIterator.count >= 10
-        assert expectedNumberOfProjects == numberOfProjects
+        assert expectedNumberOfProjects == projects.size()
         assertFacets(searchIterator)
         searchIterator.done();
         where:
@@ -113,5 +102,46 @@ class RESTProjectServiceIntegrationSpec extends IntegrationSpec implements RESTS
         then: "We expected to get back unique facets"
         assertFacetIdsAreUnique(searchIterator)
         searchIterator.done();
+    }
+    /**
+     *
+     */
+    void "test Get Projects with facets, #label"() {
+        given:
+        final Object etag = projectService.newETag("My awesome project collection", pids);
+        when: "We call the getFacets matehod"
+        final Collection<Value> facets = this.projectService.getFacets(etag)
+        and: "A list of assays"
+        final Collection<Project> projects = this.projectService.get(pids)
+        then: "We expect to get back a list of facets"
+        assert facets
+        assertFacetIdsAreUnique(facets)
+        assertProjects(projects, false)
+        where:
+        label                               | pids
+        "Search with a list of project ids" | [1772, 805, 1074]
+    }
+    /**
+     *
+     * @param assays
+     * @param isStringSearch - Means that this is a result of a string search and not an id search
+     * string searches do not have sids, but they do have highlights and annotations
+     */
+    void assertProjects(Collection<Project> projects, boolean isStringSearch = false) {
+        for (Project project : projects) {
+            assertProject(project, isStringSearch)
+        }
+    }
+
+    void assertProject(final Project project, boolean isStringSearch = false) {
+        assert project.id
+        assert project.name
+        assert project.description
+        if (isStringSearch) {
+            EntityAdapter<Project> projectAdapter = new EntityAdapter<Project>(project)
+            final Collection<Value> annotations = projectAdapter.getAnnotations()
+            assert annotations != null
+            assert projectAdapter.searchHighlight
+        }
     }
 }

@@ -16,8 +16,9 @@ public class QueryServiceWrapper {
     final RESTProjectService restProjectService;
     final RESTAssayService restAssayService;
     final RESTExperimentService restExperimentService;
-
+    final String baseURL
     public QueryServiceWrapper(final String baseURL) {
+        this.baseURL = baseURL
         EntityServiceManager esm = new RESTEntityServiceManager(baseURL);
         this.restCompoundService = esm.getService(Compound.class);
         this.restAssayService = esm.getService(Assay.class);
