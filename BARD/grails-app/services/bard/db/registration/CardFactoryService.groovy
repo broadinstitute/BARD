@@ -16,7 +16,10 @@ class CardFactoryService {
             CardDto cardDto = new CardDto()
             cardDto.title = assayContext.contextName
             for (AssayContextItem assayContextItem : assayContext.assayContextItems) {
-                cardDto.lines.add(createCardLineDtoForAssayContextItem(assayContextItem))
+                CardLineDto line =createCardLineDtoForAssayContextItem(assayContextItem)
+                if(line) {
+                    cardDto.lines.add(line)
+                }
             }
             cards.add(cardDto)
         }
@@ -26,9 +29,10 @@ class CardFactoryService {
 
 
     private CardLineDto createCardLineDtoForAssayContextItem(AssayContextItem item) {
-        CardLineDto line = new CardLineDto()
+        CardLineDto line = null
         // TODO change this to call out to Dictionary REST API by adding a DictionaryLookupService
         if (item) {
+            line = new CardLineDto()
             line.id = item.id
             line.attributeLabel = item.attributeElement.label
             line.attributeDefinition = item.attributeElement.description
