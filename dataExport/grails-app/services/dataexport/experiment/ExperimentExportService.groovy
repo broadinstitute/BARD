@@ -64,28 +64,29 @@ class ExperimentExportService {
      * For instance, if we are generating just one experiment, we should just use MarkUpBuilder
      */
     public boolean generateExperiments(def markupBuilder, int offset) {
-
         int end = this.numberRecordsPerPage + 1  //A trick to know if there are more records
         boolean hasMoreExperiments = false //This is used for paging, if there are more experiments than the threshold, add next link and return true
 
-        List<Experiment> experiments = Experiment.findAllByReadyForExtraction(ReadyForExtraction.Ready, [sort: "id", order: "asc", offset: offset, max: end])
-        final int numberOfExperiments = experiments.size()
+        List<Long> experimentIds = Result.executeQuery("select distinct experiment.id from Experiment experiment where experiment.readyForExtraction=:ready order by experiment.id asc", [ready: ReadyForExtraction.Ready, offset: offset, max: end])
+
+        final int numberOfExperiments  = experimentIds.size()
         if (numberOfExperiments > this.numberRecordsPerPage) {
             hasMoreExperiments = true
-            experiments = experiments.subList(0, this.numberRecordsPerPage)
+            experimentIds = experimentIds.subList(0, this.numberRecordsPerPage)
 
         }
-        offset = this.numberRecordsPerPage
+        int currentoffSet = offset + this.numberRecordsPerPage  //reset this to the max number of records
 
-        markupBuilder.experiments(count: experiments.size()) {
-            for (Experiment experiment : experiments) {
-                final String experimentHref = grailsLinkGenerator.link(mapping: 'experiment', absolute: true, params: [id: experiment.id]).toString()
+
+        markupBuilder.experiments(count: experimentIds.size()) {
+            for (Long experimentId : experimentIds) {
+                final String experimentHref = grailsLinkGenerator.link(mapping: 'experiment', absolute: true, params: [id: experimentId]).toString()
                 link(rel: 'related', type: "${this.mediaTypeDTO.experimentMediaType}", href: "${experimentHref}")
             }
             //if there are more records that can fit on a page then add the next link, with the offset parameter
             //being the end variable in this method
             if (hasMoreExperiments) {
-                final String experimentsHref = grailsLinkGenerator.link(mapping: 'experiments', absolute: true, params: [offset: offset]).toString()
+                final String experimentsHref = grailsLinkGenerator.link(mapping: 'experiments', absolute: true, params: [offset: currentoffSet]).toString()
                 link(rel: 'next', title: 'List Experiments', type: "${this.mediaTypeDTO.experimentsMediaType}", href: "${experimentsHref}")
             }
         }

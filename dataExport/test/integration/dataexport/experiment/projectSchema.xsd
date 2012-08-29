@@ -25,9 +25,7 @@
     </xs:simpleType>
     <xs:element name="status">
         <xs:annotation>
-            <xs:documentation>Status of the current object. Consuming applications are allowed to change the value of
-                this object to 'Uploaded' once they have processed the object
-            </xs:documentation>
+            <xs:documentation>Status of the current object. Consuming applications are allowed to change the value of this object to 'Uploaded' once they have processed the object</xs:documentation>
         </xs:annotation>
         <xs:simpleType>
             <xs:restriction base="xs:string">
@@ -70,9 +68,7 @@
             </xs:attribute>
             <xs:attribute name="href" type="xs:anyURI" use="required">
                 <xs:annotation>
-                    <xs:documentation>The URI to the object whose relationship to the current object is described by the
-                        rel attribute
-                    </xs:documentation>
+                    <xs:documentation>The URI to the object whose relationship to the current object is described by the rel attribute</xs:documentation>
                 </xs:annotation>
             </xs:attribute>
             <xs:attribute name="rel" use="required">
@@ -111,8 +107,7 @@
     <xs:element name="projects">
         <xs:annotation>
             <xs:documentation>The list of projects in the CAP.
-                These can be filtered to a specific project depending on the query
-            </xs:documentation>
+                These can be filtered to a specific project depending on the query</xs:documentation>
         </xs:annotation>
         <xs:complexType>
             <xs:sequence>
@@ -124,8 +119,7 @@
     <xs:element name="project">
         <xs:annotation>
             <xs:documentation>Models a project in the cap. Maps to
-                application/vnd.bard.cap+xml;type=project
-            </xs:documentation>
+                application/vnd.bard.cap+xml;type=project</xs:documentation>
         </xs:annotation>
         <xs:complexType>
             <xs:sequence>
@@ -146,7 +140,66 @@
                         </xs:documentation>
                     </xs:annotation>
                 </xs:element>
+                <xs:element minOccurs="0" name="projectSteps">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element maxOccurs="unbounded" name="projectStep">
+                                <xs:complexType>
+                                    <xs:sequence>
+                                        <xs:element ref="description"/>
+                                        <xs:element maxOccurs="unbounded" minOccurs="0" ref="link"/>
+                                    </xs:sequence>
+                                    <xs:attribute name="projectStepId" type="bardID" use="required"
+                                            />
+                                </xs:complexType>
+                            </xs:element>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
                 <xs:element maxOccurs="unbounded" minOccurs="0" ref="link"/>
+                <xs:element minOccurs="0" name="projectContextItems">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element maxOccurs="unbounded" name="projectContextItem">
+                                <xs:annotation>
+                                    <xs:documentation>We include the group result context Id and the result context item Id so that the client can walk the tree from child to parent</xs:documentation>
+                                </xs:annotation>
+                                <xs:complexType>
+                                    <xs:sequence>
+                                        <xs:element name="attribute" minOccurs="0">
+                                            <xs:complexType>
+                                                <xs:sequence>
+                                                    <xs:element ref="link" minOccurs="0"/>
+                                                </xs:sequence>
+                                                <xs:attribute name="label" type="xs:string"
+                                                              use="required"/>
+                                            </xs:complexType>
+                                        </xs:element>
+                                        <xs:element minOccurs="0" name="valueControlled">
+                                            <xs:complexType>
+                                                <xs:sequence>
+                                                    <xs:element ref="link" minOccurs="0"/>
+                                                </xs:sequence>
+                                                <xs:attribute name="label" type="xs:string"
+                                                              use="required"/>
+                                            </xs:complexType>
+                                        </xs:element>
+                                        <xs:element minOccurs="0" name="extValueId" type="xs:string"
+                                                />
+                                    </xs:sequence>
+                                    <xs:attribute name="projectContextItemId" type="bardID"
+                                                  use="required"/>
+                                    <xs:attribute name="parentGroup" type="bardID"/>
+                                    <xs:attribute name="qualifier" type="xs:string"/>
+                                    <xs:attribute name="valueDisplay" type="xs:string"/>
+                                    <xs:attribute name="valueNum" type="xs:double"/>
+                                    <xs:attribute name="valueMin" type="xs:double"/>
+                                    <xs:attribute name="valueMax" type="xs:double"/>
+                                </xs:complexType>
+                            </xs:element>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
             </xs:sequence>
             <xs:attribute name="projectId" type="bardID" use="required"/>
             <xs:attribute name="groupType" use="required">

@@ -18,9 +18,9 @@ beans = {
     mediaTypesDTO.resultMediaType = grailsApplication.config.bard.data.export.result.xml
 
     final int maxExperimentsRecordsPerPage = grailsApplication.config.bard.experiments.max.per.page
-
+    final int resultsRecordsPerPage = grailsApplication.config.bard.results.max.per.page
     resultExportService(dataexport.experiment.ResultExportService) {
-        maxResultsRecordsPerPage = maxExperimentsRecordsPerPage
+        maxResultsRecordsPerPage = resultsRecordsPerPage
         mediaTypes = mediaTypesDTO
         grailsLinkGenerator = ref('grailsLinkGenerator')
         dataSource=ref('dataSource')

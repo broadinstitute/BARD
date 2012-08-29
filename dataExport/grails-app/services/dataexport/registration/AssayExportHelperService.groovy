@@ -163,7 +163,9 @@ class AssayExportHelperService {
         if (allAssayContextItems) {
             markupBuilder.assayContextItems() {
                 for (AssayContextItem assayContextItem : allAssayContextItems) {
-                    generateAssayContextItem(markupBuilder, assayContextItem)
+                    if(assayContextItem != null){
+                        generateAssayContextItem(markupBuilder, assayContextItem)
+                    }
                 }
             }
         }

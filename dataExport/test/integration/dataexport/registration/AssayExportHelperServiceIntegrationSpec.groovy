@@ -99,6 +99,7 @@ class AssayExportHelperServiceIntegrationSpec extends IntegrationSpec {
         when: "A service call is made to generate the measures for that Assay"
         this.assayExportHelperService.generateAssay(this.markupBuilder, assay)
         then: "An XML is generated that conforms to the expected XML"
+        println(this.writer.toString())
         XMLAssert.assertXpathEvaluatesTo("1", "count(//assayContexts)", this.writer.toString());
         XMLAssert.assertXpathEvaluatesTo("1", "count(//assayContext)", this.writer.toString());
         XMLAssert.assertXpathEvaluatesTo("1", "count(//measures)", this.writer.toString());
@@ -106,7 +107,7 @@ class AssayExportHelperServiceIntegrationSpec extends IntegrationSpec {
         XMLAssert.assertXpathEvaluatesTo("2", "count(//assayContextItems)", this.writer.toString());
         XMLAssert.assertXpathEvaluatesTo("6", "count(//assayContextItem)", this.writer.toString());
         XMLAssert.assertXpathEvaluatesTo("2", "count(//assayDocument)", this.writer.toString());
-        XMLAssert.assertXpathEvaluatesTo("14", "count(//link)", this.writer.toString());
+        XMLAssert.assertXpathEvaluatesTo("17", "count(//link)", this.writer.toString());
 
         final SchemaFactory factory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI)
         final Schema schema = factory.newSchema(new StreamSource(new FileReader(BARD_ASSAY_EXPORT_SCHEMA)))
@@ -122,6 +123,7 @@ class AssayExportHelperServiceIntegrationSpec extends IntegrationSpec {
         when: "A service call is made to generate a list of assays ready to be extracted"
         this.assayExportHelperService.generateAssays(this.markupBuilder)
         then: "An XML is generated that conforms to the expected XML"
+        println this.writer.toString()
         XmlTestAssertions.assertResultsWithOverrideAttributes(results, this.writer.toString())
         XMLAssert.assertXpathEvaluatesTo("1", "//assays/@count", this.writer.toString());
         XMLAssert.assertXpathEvaluatesTo("related", "//link/@rel", this.writer.toString());
@@ -144,7 +146,7 @@ class AssayExportHelperServiceIntegrationSpec extends IntegrationSpec {
             this.assayExportHelperService.generateLinksForAssay(this.markupBuilder, assay)
         }
         then: "An XML is generated that conforms to the expected XML"
-        XMLAssert.assertXpathEvaluatesTo("3", xpathTotalNumberOfLinks, this.writer.toString())
+        XMLAssert.assertXpathEvaluatesTo("6", xpathTotalNumberOfLinks, this.writer.toString())
         XMLAssert.assertXpathEvaluatesTo("2", xpathNumberOfLinksToAssay, this.writer.toString())
         XMLAssert.assertXpathEvaluatesTo("1", xpathNumberOfLinksToAssays, this.writer.toString())
         where:

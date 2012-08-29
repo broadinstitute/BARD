@@ -90,7 +90,7 @@ class DictionaryExportService {
             String parentResultTypeName = null
             if (parentNodeId) {
                 def parentRow = sql.firstRow("SELECT RESULT_TYPE_NAME FROM RESULT_TYPE_TREE WHERE NODE_ID=?", [parentNodeId])
-                parentResultTypeName = parentRow.LABEL
+                parentResultTypeName = parentRow.RESULT_TYPE_NAME
             }
             ResultTypeElement resultTypeElement = ResultTypeElement.get(resultTypeRow.RESULT_TYPE_ID)
             ResultType resultType = new ResultType(resultTypeRow, parentResultTypeName, resultTypeElement?.label)

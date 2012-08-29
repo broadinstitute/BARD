@@ -104,7 +104,7 @@ class DictionaryExportHelperService {
                 Long parentNodeId = stageRow.PARENT_NODE_ID
                 if (parentNodeId) {
                     def parentRow = sql.firstRow("SELECT STAGE FROM STAGE_TREE WHERE NODE_ID=?", [parentNodeId])
-                    parentName = parentRow.UNIT
+                    parentName = parentRow.STAGE
                 }
                 StageElement stageElement = StageElement.get(stageRow.STAGE_ID)
                 generateStage(xml, new Stage(stageRow, parentName, stageElement?.label))

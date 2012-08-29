@@ -1,20 +1,28 @@
 package dataexport.experiment
 
+import bard.db.enums.ReadyForExtraction
 import bard.db.experiment.Result
 import dataexport.registration.BardHttpResponse
 import exceptions.NotFoundException
 import grails.plugin.spock.IntegrationSpec
+import groovy.xml.MarkupBuilder
 import spock.lang.Unroll
 
 import javax.servlet.http.HttpServletResponse
+import org.custommonkey.xmlunit.XMLAssert
 
 @Unroll
 class ResultExportServiceIntegrationSpec extends IntegrationSpec {
     ResultExportService resultExportService
+    Writer writer
+    MarkupBuilder markupBuilder
 
     void setup() {
+        this.writer = new StringWriter()
+        this.markupBuilder = new MarkupBuilder(this.writer)
 
     }
+
 
     void tearDown() {
         // Tear down logic here
@@ -41,6 +49,20 @@ class ResultExportServiceIntegrationSpec extends IntegrationSpec {
         new Long(532) | 0       | "InComplete"
     }
 
+    void "test Generate Result"() {
+        given: "Given a Result with id #id and version #version"
+        when: "We call the result service to generate this result"
+        this.resultExportService.generateResult(this.markupBuilder, resultId)
+
+        then: "A result is generated"
+        XMLAssert.assertXpathEvaluatesTo("1", "count(//result)", this.writer.toString());
+        XMLAssert.assertXpathEvaluatesTo("1", "count(//resultContextItems)", this.writer.toString());
+        XMLAssert.assertXpathEvaluatesTo("1", "count(//resultContextItem)", this.writer.toString());
+        where:
+        resultId      | version | status
+        new Long(533) | 0       | "InComplete"
+    }
+
     void "test update #label"() {
         given: "Given a Result with id #id and version #version"
         when: "We call the result service to update this result"
@@ -53,10 +75,10 @@ class ResultExportServiceIntegrationSpec extends IntegrationSpec {
         assert Result.get(resultId).readyForExtraction == expectedStatus
         where:
         label                                            | expectedStatusCode                         | expectedETag | resultId      | version | status     | expectedStatus
-        "Return OK and ETag 1"                           | HttpServletResponse.SC_OK                  | new Long(1)  | new Long(533) | 0       | "Complete" | "Complete"
-        "Return CONFLICT and ETag 0"                     | HttpServletResponse.SC_CONFLICT            | new Long(0)  | new Long(533) | -1      | "Complete" | "Ready"
-        "Return PRECONDITION_FAILED and ETag 0"          | HttpServletResponse.SC_PRECONDITION_FAILED | new Long(0)  | new Long(533) | 2       | "Complete" | "Ready"
-        "Return OK and ETag 0, Already completed Result" | HttpServletResponse.SC_OK                  | new Long(0)  | new Long(532) | 0       | "Complete" | "Complete"
+        "Return OK and ETag 1"                           | HttpServletResponse.SC_OK                  | new Long(1)  | new Long(533) | 0       | "Complete" | ReadyForExtraction.Complete
+        "Return CONFLICT and ETag 0"                     | HttpServletResponse.SC_CONFLICT            | new Long(0)  | new Long(533) | -1      | "Complete" | ReadyForExtraction.Ready
+        "Return PRECONDITION_FAILED and ETag 0"          | HttpServletResponse.SC_PRECONDITION_FAILED | new Long(0)  | new Long(533) | 2       | "Complete" | ReadyForExtraction.Ready
+        "Return OK and ETag 0, Already completed Result" | HttpServletResponse.SC_OK                  | new Long(0)  | new Long(532) | 0       | "Complete" | ReadyForExtraction.Complete
 
     }
 

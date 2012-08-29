@@ -4,12 +4,10 @@ package dataexport.experiment
 
 
 import bard.db.dictionary.Element
-import bard.db.experiment.Experiment
-import bard.db.experiment.Result
-import bard.db.experiment.ResultContextItem
-import bard.db.experiment.ResultHierarchy
+import bard.db.enums.ReadyForExtraction
 import dataexport.registration.BardHttpResponse
 import dataexport.registration.MediaTypesDTO
+import dataexport.util.UtilityService
 import exceptions.NotFoundException
 import groovy.sql.Sql
 import groovy.xml.MarkupBuilder
@@ -17,9 +15,8 @@ import groovy.xml.StaxBuilder
 import org.codehaus.groovy.grails.web.mapping.LinkGenerator
 
 import javax.sql.DataSource
-import dataexport.util.UtilityService
-import bard.db.experiment.RunContextItem
-import bard.db.enums.ReadyForExtraction
+
+import bard.db.experiment.*
 
 class ResultExportService {
     LinkGenerator grailsLinkGenerator
@@ -78,7 +75,7 @@ class ResultExportService {
         Map<String, String> attributes = [:]
 
         if (result.readyForExtraction) {
-            attributes.put('readyForExtraction', result.readyForExtraction)
+            attributes.put('readyForExtraction', result.readyForExtraction.toString())
         }
         if (result.valueDisplay) {
             attributes.put('valueDisplay', result.valueDisplay)
@@ -111,11 +108,11 @@ class ResultExportService {
         final Map<String, String> attributes = generateAttributesForResult(currentResult)
 
         markupBuilder.result(attributes) {
-            final Element resultType = currentResult.resultType
-            if (resultType) { //this is the currentResult type
-                resultTypeRef(label: resultType.label) {
-                    final String href = grailsLinkGenerator.link(mapping: 'resultType', absolute: true, params: [id: resultType.id]).toString()
-                    link(rel: 'related', href: "${href}", type: "${this.mediaTypes.resultTypeMediaType}")
+            final Element resultTypeElement = currentResult.resultType
+            if (resultTypeElement) { //this is the currentResult type
+                resultType(label: resultTypeElement.label) {
+                    final String href = grailsLinkGenerator.link(mapping: 'element', absolute: true, params: [id: resultTypeElement.id]).toString()
+                    link(rel: 'related', href: "${href}", type: "${this.mediaTypes.elementMediaType}")
                 }
             }
             //TODO: The substance table, does not exist yet. We will need to fix the domain model plugin, but only after
@@ -178,19 +175,22 @@ class ResultExportService {
         int end = this.maxResultsRecordsPerPage + 1  //A trick to know if there are more records
         boolean hasMoreResults = false //This is used for paging, if there are more results than the threshold, add next link and return true
 
-        List<Result> results = Result.findAllByExperimentAndReadyForExtraction(experiment, 'Ready', [sort: "id", order: "asc", offset: offset, max: end])
-        final int numberOfResults = results.size()
+         List<Long> resultIds = Result.executeQuery("select distinct result.id from Result result where result.readyForExtraction=:ready and result.experiment.id=:experiment order by result.id asc", [experiment: experiment.id, ready: ReadyForExtraction.Ready, offset: offset, max: end])
+
+
+        // List<Result> results = Result.findAllByExperimentAndReadyForExtraction(experiment, 'Ready', [sort: "id", order: "asc", offset: offset, max: end])
+        final int numberOfResults = resultIds.size()
         if (numberOfResults > this.maxResultsRecordsPerPage) {
             hasMoreResults = true
-            results = results.subList(0, this.maxResultsRecordsPerPage) //we will leave one record behind but that is OK, since now we know there are more records
+            resultIds = resultIds.subList(0, this.maxResultsRecordsPerPage) //we will leave one record behind but that is OK, since now we know there are more records
         }
-        offset = this.maxResultsRecordsPerPage  //reset this to the max number of records
-        markupBuilder.results(count: results.size()) {
-            for (Result result : results) {
-                final String resultHref = grailsLinkGenerator.link(mapping: 'result', absolute: true, params: [id: result.id]).toString()
+        int currentoffSet = offset + this.maxResultsRecordsPerPage  //reset this to the max number of records
+        markupBuilder.results(count: resultIds.size()) {
+            for (Long resultId : resultIds) {
+                final String resultHref = grailsLinkGenerator.link(mapping: 'result', absolute: true, params: [id: resultId]).toString()
                 link(rel: 'related', type: "${this.mediaTypes.resultMediaType}", href: "${resultHref}")
             }
-            generateResultsLinks(markupBuilder, experiment.id, hasMoreResults, offset)
+            generateResultsLinks(markupBuilder, experiment.id, hasMoreResults, currentoffSet)
         }
         return hasMoreResults
     }
