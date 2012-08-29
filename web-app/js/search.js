@@ -75,15 +75,15 @@ $(document).ready(function () {
             data:$("#aidForm").serialize(),
             cache:false,
             beforeSend:function () {
-                $("#assaysTab").html("Assays " + spinnerImageLink);
+                $("#assaysTab").html("Assay Definitions " + spinnerImageLink);
             },
             success:function (data) {
                 $("#assays").html(data);
-                var assayTotal = 'Assays (' + $("#totalAssays").val() + ')' ;
+                var assayTotal = 'Assay Definitions (' + $("#totalAssays").val() + ')' ;
                 $("#assaysTab").html(assayTotal);
             } ,
             error:function (request, status, error) {
-                $('#assaysTab').html("Assays " + errorImageTwitterBootstrap);
+                $('#assaysTab').html("Assay Definitions " + errorImageTwitterBootstrap);
                 $("#assays").html(error);
             },
             complete:function () {
@@ -149,7 +149,7 @@ $(document).ready(function () {
             beforeSend:function () {
                 $('#compoundsTab').html("Compounds " + spinnerImageLink);
                 $('#compounds').html('');
-                $("#assaysTab").html('Assays (0)');
+                $("#assaysTab").html('Assay Definitions (0)');
                 $('#assays').html('');
                 $('#assaysTabLi').removeClass('active');
                 $("#projectsTab").html('Projects (0)');
@@ -173,7 +173,7 @@ $(document).ready(function () {
         $('#compoundsTab').html("Compounds " + spinnerImageLink);
         $('#compoundsTabLi').addClass('active') ;
         $('#compounds').html('');
-        $("#assaysTab").html('Assays (0)');
+        $("#assaysTab").html('Assay Definitions (0)');
         $('#assays').html('');
         $('#assaysTabLi').removeClass('active');
         $("#projectsTab").html('Projects (0)');
@@ -181,7 +181,7 @@ $(document).ready(function () {
         $('#projectsTabLi').removeClass('active');
     }
     function resetTabsForAssaySearches(){
-        $('#compoundsTab').html("Assays " + spinnerImageLink);
+        $('#compoundsTab').html("Assay Definitions " + spinnerImageLink);
         $('#assaysTabLi').addClass('active') ;
         $('#assays').html('');
         $("#compoundsTab").html('Compounds (0)');
