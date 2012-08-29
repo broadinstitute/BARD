@@ -4,7 +4,6 @@ import bard.core.adapter.AssayAdapter
 import bard.core.adapter.CompoundAdapter
 import bard.core.rest.RESTAssayService
 import bard.core.rest.RESTCompoundService
-import bard.core.rest.RESTExperimentService
 import bard.core.rest.RESTProjectService
 import elasticsearchplugin.ElasticSearchService
 import elasticsearchplugin.QueryExecutorService
@@ -52,7 +51,9 @@ class QueryService {
         Collection<Value> facets = []
         if (searchString) {
             final RESTCompoundService restCompoundService = this.queryServiceWrapper.getRestCompoundService()
-            final SearchParams params = new SearchParams(searchString).setSkip(skip).setTop(top);
+            final SearchParams params = new SearchParams(searchString)
+            params.setSkip(skip)
+            params.setTop(top);
             final ServiceIterator<Compound> searchIterator = restCompoundService.search(params)
             while (searchIterator.hasNext()) {
                 final Compound compound = searchIterator.next();
@@ -128,7 +129,7 @@ class QueryService {
      * @param compoundId
      * @return
      */
-    CompoundAdapter showCompound(final Integer compoundId) {
+    CompoundAdapter showCompound(final Long compoundId) {
         if (compoundId) {
             final RESTCompoundService restCompoundService = this.queryServiceWrapper.getRestCompoundService()
             final Compound compound = restCompoundService.get(compoundId)
@@ -155,7 +156,9 @@ class QueryService {
         Collection<Value> facets = []
         if (searchString) {
             final RESTAssayService restAssayService = this.queryServiceWrapper.getRestAssayService()
-            final SearchParams params = new SearchParams(searchString).setSkip(skip).setTop(top);
+            final SearchParams params = new SearchParams(searchString)
+            params.setSkip(skip)
+            params.setTop(top);
             final ServiceIterator<Assay> searchIterator = restAssayService.search(params)
             while (searchIterator.hasNext()) {
                 final Assay assay = searchIterator.next();
@@ -172,7 +175,7 @@ class QueryService {
      * @return list
      */
     Map findAssaysByADIDs(final List<Long> assayIds) {
-        final List<Assay> foundAssays = []
+        final List<AssayAdapter> foundAssays = []
         if (assayIds) {
             final RESTAssayService restAssayService = this.queryServiceWrapper.getRestAssayService()
             final Collection<Assay> assays = restAssayService.get(assayIds)
@@ -208,7 +211,9 @@ class QueryService {
         final List<Project> foundProjects = []
         if (searchString) {
             final RESTProjectService restProjectService = this.queryServiceWrapper.getRestProjectService()
-            final SearchParams params = new SearchParams(searchString).setSkip(skip).setTop(top);
+            final SearchParams params = new SearchParams(searchString)
+            params.setSkip(skip)
+            params.setTop(top);
             final ServiceIterator<Project> searchIterator = restProjectService.search(params)
             while (searchIterator.hasNext()) {
                 final Project project = searchIterator.next();

@@ -3,7 +3,6 @@ package jdo
 import bard.core.adapter.CompoundAdapter
 import bard.core.rest.RESTEntityServiceManager
 import grails.plugin.spock.IntegrationSpec
-import org.apache.commons.lang.StringUtils
 import org.junit.After
 import org.junit.Before
 import bard.core.*
@@ -30,7 +29,6 @@ class RESTCompoundServiceIntegrationSpec extends IntegrationSpec implements REST
     }
 
     void assertCompoundAdapter(CompoundAdapter compoundAdapter) {
-        //TODO: only assert required fields
         assert compoundAdapter.pubChemCID
         assert compoundAdapter.structureSMILES
         assert compoundAdapter.exactMass()
@@ -60,9 +58,9 @@ class RESTCompoundServiceIntegrationSpec extends IntegrationSpec implements REST
     }
 
     /**
-     * TODO: Find out why no annotations
+     *
      */
-    void "test Fail, Get a Single #label"() {
+    void "test Fail, CID does not exists: #label"() {
 
         when: "The get method is called with the given CID: #cid"
         final Compound compound = this.compoundService.get(cid)
@@ -73,9 +71,7 @@ class RESTCompoundServiceIntegrationSpec extends IntegrationSpec implements REST
         "Find a non-existing compound" | new Integer(-658342)
     }
     /**
-     * TODO: Ask NCGC that this should include a highlight option even if it is a default String
-     * TODO: Ask Steve, do we need facet information?
-     * TODO: What is the maximum number of ids that one can send?
+     *
      */
     void "test Get Compounds, #label"() {
         when: "We call the get method of the the RESTCompoundService"
@@ -90,7 +86,7 @@ class RESTCompoundServiceIntegrationSpec extends IntegrationSpec implements REST
         where:
         label                         | cids
         "Search with a list of CIDs"  | [3235555, 3235556, 3235557, 3235558, 3235559, 3235560, 3235561, 3235562, 3235563, 3235564]
-         "Search with a single of CID" | [3235555]
+        "Search with a single of CID" | [3235555]
 
     }
     /**
@@ -98,7 +94,9 @@ class RESTCompoundServiceIntegrationSpec extends IntegrationSpec implements REST
      */
     void "test REST Compound Service #label #seachString question"() {
         given: "A search string, #searchString, and asking to retrieve the first #top search results"
-        final SearchParams params = new SearchParams(searchString).setSkip(skip).setTop(top);
+        final SearchParams params = new SearchParams(searchString)
+        params.setSkip(skip)
+        params.setTop(top);
         when: "We we call search method of the the RESTCompoundService"
         final ServiceIterator<Compound> searchIterator = this.compoundService.search(params)
         then: "We expected to get back a list of 10 results"
@@ -112,6 +110,7 @@ class RESTCompoundServiceIntegrationSpec extends IntegrationSpec implements REST
             assert compoundAdapter.searchHighlight
             ++numberOfCompounds
         }
+        assert searchIterator.count >= 10
         assert expectedNumberOfCompounds == numberOfCompounds
         assertFacets(searchIterator)
         searchIterator.done();
@@ -121,24 +120,14 @@ class RESTCompoundServiceIntegrationSpec extends IntegrationSpec implements REST
         "Search" | "dna repair" | 10   | 10  | 10
 
     }
+
     /**
-     *  TODO: This should fail. We have filed a bug with NCGC
-     */
-    void "test Facet keys (ids) are non-blank"() {
-        given: "That we have created a valid search params object"
-        final SearchParams params = new SearchParams("dna repair").setSkip(0).setTop(10);
-        when: "We we call search method of the the RESTCompoundService"
-        final ServiceIterator<Compound> searchIterator = this.compoundService.search(params)
-        then: "We expected to get back unique facets"
-        assertFacetIdsAreNonBlank(searchIterator)
-        searchIterator.done();
-    }
-    /**
-     *  TODO: This should fail. We have filed a bug with NCGC
      */
     void "test Facet keys (ids) are unique"() {
         given: "That we have created a valid search params object"
-        final SearchParams params = new SearchParams("dna repair").setSkip(0).setTop(10);
+        final SearchParams params = new SearchParams("dna repair")
+        params.setSkip(0)
+        params.setTop(10);
         when: "We we call search method of the the RESTCompoundService"
         final ServiceIterator<Compound> searchIterator = this.compoundService.search(params)
         then: "We expected to get back unique facets"
@@ -166,6 +155,7 @@ class RESTCompoundServiceIntegrationSpec extends IntegrationSpec implements REST
             assertCompoundAdapter(compoundAdapter)
             ++numberOfCompounds
         }
+        assert searchIterator.count >= expectedNumberOfCompounds
         assert expectedNumberOfCompounds == numberOfCompounds
         assertFacets(searchIterator)
 
@@ -193,26 +183,6 @@ class RESTTestHelper {
         assert facets
         for (Value facet : facets) {
             assert facet.children()
-        }
-    }
-    /**
-     * Test that every facet has a key (No nulls or blanks).
-     * Address issue iwth facet keys being blank
-     * @param serviceIterator
-     */
-    void assertFacetIdsAreNonBlank(final ServiceIterator<? extends Entity> serviceIterator) {
-
-        //We need to do this, otherwise the facets method returns 0
-        while (serviceIterator.hasNext()) {
-            serviceIterator.next();
-        }
-        final Collection<Value> facets = serviceIterator.facets;
-        for (Value facet : facets) {
-            assert StringUtils.isNotBlank(facet.getId())
-            for (Iterator<Value> it = facet.children(); it.hasNext();) {
-                Value iv = it.next();
-                assert StringUtils.isNotBlank(iv?.getId())
-            }
         }
     }
     /**

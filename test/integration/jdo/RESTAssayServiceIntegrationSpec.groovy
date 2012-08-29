@@ -85,11 +85,13 @@ class RESTAssayServiceIntegrationSpec extends IntegrationSpec implements RESTSer
         "Search with a single assay id"   | [600]
     }
     /**
-     * TODO: Ask NCGC that this search should return the same thing as the REST API
+     *
      */
     void "test REST Assay Service #label #seachString question"() {
         given: "A search string, #searchString, and asking to retrieve the first #top search results"
-        final SearchParams params = new SearchParams(searchString).setSkip(skip).setTop(top);
+        final SearchParams params = new SearchParams(searchString)
+        params.setSkip(skip)
+        params.setTop(top);
         when: "We we call search method of the the RestAssayService"
         final ServiceIterator<Assay> searchIterator = this.assayService.search(params)
         then: "We expected to get back a list of 10 results"
@@ -101,6 +103,7 @@ class RESTAssayServiceIntegrationSpec extends IntegrationSpec implements RESTSer
             assert assayAdapter.searchHighlight
             ++numberOfAssays
         }
+        assert searchIterator.count >= expectedNumberOfAssays
         assert expectedNumberOfAssays == numberOfAssays
         searchIterator.done();
         where:
@@ -108,23 +111,13 @@ class RESTAssayServiceIntegrationSpec extends IntegrationSpec implements RESTSer
         "Search" | "dna repair" | 0    | 10  | 10
     }
     /**
-     *  TODO: This should fail. We have filed a bug with NCGC
-     */
-    void "test Facet keys (ids) are non-blank"() {
-        given: "That we have created a valid search params object"
-        final SearchParams params = new SearchParams("dna repair").setSkip(0).setTop(10);
-        when: "We we call search method of the the RESTCompoundService"
-        final ServiceIterator<Assay> searchIterator = this.assayService.search(params)
-        then: "We expected to get back unique facets"
-        assertFacetIdsAreNonBlank(searchIterator)
-        searchIterator.done();
-    }
-    /**
-     *  TODO: This should fail. We have filed a bug with NCGC
+     *
      */
     void "test Facet keys (ids) are unique"() {
         given: "That we have created a valid search params object"
-        final SearchParams params = new SearchParams("dna repair").setSkip(0).setTop(10);
+        final SearchParams params = new SearchParams("dna repair")
+        params.setSkip(0)
+        params.setTop(10);
         when: "We we call search method of the the RESTCompoundService"
         final ServiceIterator<Assay> searchIterator = this.assayService.search(params)
         then: "We expected to get back unique facets"

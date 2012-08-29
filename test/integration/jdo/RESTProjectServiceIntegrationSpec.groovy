@@ -43,7 +43,7 @@ class RESTProjectServiceIntegrationSpec extends IntegrationSpec implements RESTS
         assertProject(project)
         where:
         label                      | pid
-        "Find an existing Project" | new Integer(644)
+        "Find an existing Project" | new Integer(1772)
     }
     /**
      *
@@ -71,14 +71,16 @@ class RESTProjectServiceIntegrationSpec extends IntegrationSpec implements RESTS
         assert pids.size() == projects.size()
         where:
         label                               | pids
-        "Search with a list of project ids" | [600, 644, 666]
-        "Search with a single project id"   | [644]
+        "Search with a list of project ids" | [1772, 805, 1074]
+        "Search with a single project id"   | [1772]
     }
     /**
      */
     void "test REST Project Service #label #seachString question"() {
         given: "A search string, #searchString, and asking to retrieve the first #top search results"
-        final SearchParams params = new SearchParams(searchString).setSkip(skip).setTop(top);
+        final SearchParams params = new SearchParams(searchString)
+        params.setSkip(skip)
+        params.setTop(top);
         when: "We we call search method of the the RestProjectService"
         final ServiceIterator<Project> searchIterator = this.projectService.search(params)
         then: "We expected to get back a list of 10 results"
@@ -88,6 +90,7 @@ class RESTProjectServiceIntegrationSpec extends IntegrationSpec implements RESTS
             assertProject(project)
             ++numberOfProjects
         }
+        assert searchIterator.count >= 10
         assert expectedNumberOfProjects == numberOfProjects
         assertFacets(searchIterator)
         searchIterator.done();
@@ -98,23 +101,13 @@ class RESTProjectServiceIntegrationSpec extends IntegrationSpec implements RESTS
     }
 
     /**
-     *  TODO: This should fail. We have filed a bug with NCGC
-     */
-    void "test Facet keys (ids) are non-blank"() {
-        given: "That we have created a valid search params object"
-        final SearchParams params = new SearchParams("dna repair").setSkip(0).setTop(1);
-        when: "We we call search method of the the RESTCompoundService"
-        final ServiceIterator<Project> searchIterator = this.projectService.search(params)
-        then: "We expected to get back unique facets"
-        assertFacetIdsAreNonBlank(searchIterator)
-        searchIterator.done();
-    }
-    /**
-     *  TODO: This should fail. We have filed a bug with NCGC
+     *
      */
     void "test Facet keys (ids) are unique"() {
         given: "That we have created a valid search params object"
-        final SearchParams params = new SearchParams("dna repair").setSkip(0).setTop(1);
+        final SearchParams params = new SearchParams("dna repair")
+        params.setSkip(0)
+        params.setTop(1);
         when: "We we call search method of the the RESTCompoundService"
         final ServiceIterator<Project> searchIterator = this.projectService.search(params)
         then: "We expected to get back unique facets"
