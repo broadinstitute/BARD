@@ -1,3 +1,4 @@
+<%@ page import="bardqueryapi.JavaScriptUtility" %>
 <div class="row-fluid">
          <g:render template="facets" model="['metaData': metaData]"/>
 <div class="span9">
@@ -7,7 +8,7 @@
             <g:link action="showAssay" id="${assay.assay_id}" target="_blank">ADID: ${assay.assay_id} - ${assay.name}</g:link>
         <a href="/bardwebquery/sarCart/add/${assay.assay_id}"
            onclick="jQuery.ajax({  type:'POST',
-               data:{'id': '${assay.assay_id}','class': 'class bardqueryapi.CartAssay','assayTitle':'${assay.name}','version': '0'},
+               data:{'id': '${JavaScriptUtility.cleanup(assay.assay_id)}','class': 'class bardqueryapi.CartAssay','assayTitle':'${JavaScriptUtility.cleanup(assay.name)}','version': '0'},
                url:'/bardwebquery/sarCart/add',
                success:function(data,textStatus){
                    jQuery('#sarCartRefill').html(data);
