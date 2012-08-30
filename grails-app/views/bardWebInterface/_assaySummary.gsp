@@ -1,25 +1,25 @@
 <dl class="dl-horizontal">
-    <g:if test="${assayInstance?.id}">
+    <g:if test="${assayAdapter?.assay.id}">
         <dt>ID:</dt>
-        <dd>${assayInstance.id}</dd>
+        <dd>${assayAdapter.assay.id}</dd>
     </g:if>
-    <g:if test="${assayInstance?.name}">
+    <g:if test="${assayAdapter?.assay.name}">
         <dt>Name:</dt>
-        <dd>${assayInstance.name}</dd>
+        <dd>${assayAdapter.assay.name}</dd>
     </g:if>
-    <g:if test="${assayInstance?.category}">
+    <g:if test="${assayAdapter?.assay.category}">
         <dt>Category:</dt>
-        <dd>${assayInstance.category}</dd>
+        <dd>${assayAdapter.assay.category}</dd>
     </g:if>
-    <g:if test="${assayInstance?.role}">
+    <g:if test="${assayAdapter?.assay.role}">
         <dt>Role:</dt>
-        <dd>${assayInstance.role}</dd>
+        <dd>${assayAdapter?.assay.role}</dd>
     </g:if>
-    <g:if test="${assayInstance?.type}">
+    <g:if test="${assayAdapter?.assay.type}">
         <dt>Type:</dt>
-        <dd>${assayInstance.type}</dd>
+        <dd>${assayAdapter?.assay.type}</dd>
     </g:if>
-    <g:each var="otherAssayProperty" in="${assayInstance?.values}">
+    <g:each var="otherAssayProperty" in="${assayAdapter?.assay.values}">
         <dt>${otherAssayProperty.id}:</dt>
         <dd>${otherAssayProperty.value}</dd>
     </g:each>

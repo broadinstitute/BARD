@@ -235,7 +235,7 @@ class BardWebInterfaceController {
 
         if (assayId) {
             AssayAdapter assayAdapter = this.queryService.showAssay(assayId)
-            render(view: "showAssay", model: [assayInstance: assayAdapter])
+            render(view: "showAssay", model: [assayAdapter: assayAdapter])
         }
         else {
             render "Assay Protocol ID parameter required"

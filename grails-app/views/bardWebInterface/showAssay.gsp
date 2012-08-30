@@ -3,13 +3,13 @@
 <html>
 <head>
     <meta name="layout" content="details"/>
-    <title>BARD : Assay Definition : ADID ${assayInstance?.id}</title>
+    <title>BARD : Assay Definition : ADID ${assayAdapter?.assay.id}</title>
 </head>
 <body>
-<h1 class="detail">Assay Definition Detail for ADID ${assayInstance?.id}</h1>
+<h1 class="detail">Assay Definition Detail for ADID ${assayAdapter?.assay.id}</h1>
 <div class="row-fluid" style="clear:both;">
     <div class="span12 header">
-        <h3>${assayInstance?.name}</h3>
+        <h3>${assayAdapter?.assay.name}</h3>
         <dl class="dl-horizontal">
             <dt>Assay Format:</dt><dd></dd>
             <dt>Assay Type:</dt><dd></dd>
@@ -56,7 +56,7 @@
                 <a href="#document-header" id="document-header" class="accordion-toggle" data-toggle="collapse" data-target="#document-info"><i class="icon-chevron-right"></i> Documents</a>
                 <div id="document-info" class="accordion-body collapse">
                     <div class="accordion-inner">
-                        <g:render template="assayDocuments" model="['assayInstance': assayInstance]" />
+                        <g:render template="assayDocuments" model="['assayAdapter': assayAdapter]" />
                     </div>
                 </div>
             </div>
@@ -76,7 +76,7 @@
                 <a href="#registration-header" id="registration-header" class="accordion-toggle" data-toggle="collapse" data-target="#registration-info"><i class="icon-chevron-right"></i> Registration Info</a>
                 <div id="registration-info" class="accordion-body collapse">
                     <div class="accordion-inner">
-                        <g:render template="assaySummary" model="['assayInstance': assayInstance]" />
+                        <g:render template="assaySummary" model="['assayAdapter': assayAdapter]" />
                     </div>
                 </div>
             </div>
