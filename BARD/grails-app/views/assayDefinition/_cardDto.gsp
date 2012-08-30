@@ -17,8 +17,9 @@
             cursor: 'move',
             scroll: true,
             revert: true,
+            appendTo: 'body',
             helper: function(event) {
-                    return $('<div><table width="33%"></table></div>').find('table').append($(event.target).closest('tr').clone());
+                    return $('<div class="cardView"><table class="gridtable"></table></div>').find('table').append($(event.target).closest('tr').clone());
             }
         });
     });
@@ -26,23 +27,25 @@
         $("tr.context_item_row").droppable({
             hoverClass: "drophover",
             drop:function (event, ui) {
-                alert('src assay_context_item_id : ' + ui.draggable.attr('id') + ' target assay_context_item_id : ' + $(this).attr('id') );
+                var src_assay_context_item_id = ui.draggable.attr('id');
+                var target_assay_context_item_id = $(this).attr('id');
+                var data = {'src_assay_context_item_id' : src_assay_context_item_id,
+                            'target_assay_context_item_id': target_assay_context_item_id};
+                alert(data.src_assay_context_item_id + " : " + data.target_assay_context_item_id);
+                $.ajax({
+                  type: 'POST',
+                  url: '../updateCardItems',
+                  data: data,
+                  success: function(data){
+                      $("div.cardView").html(data)
+                  }
+                });
                 ui.helper.remove()
+
             }
         });
     });
-//    $(document).ready(function () {
-//        $("tr.context_item_row").droppable({
-//            drop: function(event, ui) {
-//                    var id = ui.helper.find('tr').attr('id');
-//                    var name = ui.helper.find('.attributeLabel').html();
-//                    $(this).insertAfter('<tr id="' + id + '"><td>' + name + '</td><td></td></tr>');
-//                    // Remove original row from table
-//                    var row = $(ui.draggable).closest("tr");
-//                    row.fadeOut(function(){ row.remove(); });
-//                }
-//        });
-//    });
+
 
 </r:script>
 
