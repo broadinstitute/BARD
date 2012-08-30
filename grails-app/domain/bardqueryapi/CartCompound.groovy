@@ -26,6 +26,7 @@ class CartCompound extends Shoppable {
     String toString() {
         smiles
     }
+
     static constraints = {
         smiles: nullable: false
     }

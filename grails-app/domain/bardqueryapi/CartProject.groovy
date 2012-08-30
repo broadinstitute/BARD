@@ -6,6 +6,11 @@ class CartProject extends Shoppable {
 
     String projectName = "no project name yet specified"
 
+    /**
+     *
+     * @param o
+     * @return
+     */
     boolean equals(o) {
         if (this.is(o)) return true
         if (!(o instanceof CartProject)) return false
@@ -17,9 +22,14 @@ class CartProject extends Shoppable {
         return true
     }
 
+    /**
+     *
+     * @return
+     */
     int hashCode() {
         return (projectName != null ? projectName.hashCode() : 0)
     }
+
 
     @Override
     String toString() {

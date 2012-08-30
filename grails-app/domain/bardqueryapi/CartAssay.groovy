@@ -5,7 +5,7 @@ import com.metasieve.shoppingcart.Shoppable
 
 class CartAssay extends Shoppable {
 
-    String assayTitle = "unknown assay name"
+    String assayTitle
 
     @Override
     String toString() {

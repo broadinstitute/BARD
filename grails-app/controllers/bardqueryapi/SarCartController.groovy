@@ -11,18 +11,26 @@ class SarCartController {
     def add() {
 
         def somethingWasAdded
-            if (params.class == 'class bardqueryapi.CartAssay') {
-                CartAssay newCartAssay = new CartAssay( assayTitle:params.assayTitle )
-                somethingWasAdded = queryCartService.addToShoppingCart(newCartAssay)
-            }  else if (params.class == 'class bardqueryapi.CartCompound') {
-                CartCompound newCartCompound = new CartCompound( smiles:params.smiles )
-                somethingWasAdded = queryCartService.addToShoppingCart(newCartCompound)
-            } else if (params.class == 'class bardqueryapi.CartProject') {
-                CartProject newCartProject = new CartProject( projectName:params.projectName )
-                somethingWasAdded = queryCartService.addToShoppingCart(newCartProject)
-            }
-       if (somethingWasAdded != null)
-           render(template:'/bardWebInterface/sarCartContent')  // refresh the cart display
+        if (params.class == 'class bardqueryapi.CartAssay') {
+
+            somethingWasAdded = queryCartService.addToShoppingCart( new CartAssay( assayTitle:params.assayTitle ) )
+
+        }  else if (params.class == 'class bardqueryapi.CartCompound') {
+
+            somethingWasAdded = queryCartService.addToShoppingCart( new CartCompound( smiles:params.smiles ) )
+
+        } else if (params.class == 'class bardqueryapi.CartProject') {
+
+            somethingWasAdded = queryCartService.addToShoppingCart( new CartProject( projectName:params.projectName ) )
+
+        }
+
+       if (somethingWasAdded != null)  // something was added, so the display must change
+
+           render(template:'/bardWebInterface/sarCartContent')  // refresh the cart display via Ajax
+
+        return
+
     }
 
     // remove a single element
