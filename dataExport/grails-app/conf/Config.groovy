@@ -13,7 +13,7 @@ import grails.util.Environment
 // }
 
 //Number of experiments per page
-bard.experiments.max.per.page = 1000000
+bard.experiments.max.per.page = 10000
 
 //number of results per page
 bard.results.max.per.page = 5000
