@@ -74,9 +74,9 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
         queryService.showAssay(_) >> { assay }
 
         "/bardWebInterface/showAssay" == view
-        assert model.assayInstance
-        adid == model.assayInstance.assay.id
-        name == model.assayInstance.name
+        assert model.assayAdapter
+        adid == model.assayAdapter.assay.id
+        name == model.assayAdapter.name
 
         where:
 
