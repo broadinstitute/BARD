@@ -23,6 +23,7 @@ beans = {
         maxResultsRecordsPerPage = resultsRecordsPerPage
         mediaTypes = mediaTypesDTO
         grailsLinkGenerator = ref('grailsLinkGenerator')
+        sessionFactory=ref('sessionFactory')
         dataSource=ref('dataSource')
         utilityService=ref('utilityService')
     }

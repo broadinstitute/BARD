@@ -69,6 +69,7 @@ class ProjectExportServiceIntegrationSpec extends IntegrationSpec {
         this.projectExportService.generateProject(this.markupBuilder, project.id)
         then: "An XML is generated that conforms to the expected XML"
 
+
         final SchemaFactory factory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI)
         final Schema schema = factory.newSchema(new StreamSource(new FileReader(BARD_PROJECT_EXPORT_SCHEMA)))
         final Validator validator = schema.newValidator()
