@@ -6,41 +6,19 @@ hibernate {
 }
 dataSource.dbCreate = System.getProperty('dataSource.dbCreate') ?: 'none'
 
-// environment specific settings
-environments {
-    development {
-        dataSource {
-            url = "jdbc:oracle:thin:@vmbarddev:1521:barddev"
-            driverClassName = "oracle.jdbc.driver.OracleDriver"
-			dialect = bard.SequencePerTableOracleDialect
-			username = "ycruz"
-			password = "ch3mb10"
-        }
-    }
-	
-    mysql {
-        dataSource {
-//        	dialect = "org.hibernate.dialect.MySQLDialect"
-            pooled = true
-            driverClassName = "com.mysql.jdbc.Driver"
-            url = "jdbc:mysql://dbserver:3306/schema"
-            username = "user"
-            password = "pwd"
-        }
-    }
-    test {
-        dataSource {
-            dbCreate = "create-drop" // one of 'create', 'create-drop', 'update', 'validate', ''
-            url = "jdbc:h2:mem:devDB"
-            driverClassName = "org.h2.Driver"
-            username = "sa"
-            password = ""
-        }
-    }
-    production {
-        dataSource {
-            url = "jdbc:mysql://dbserver:3306/mlbd"
-            dialect = "org.hibernate.dialect.MySQLDialect"
-        }
+/**
+ * Set default connection pooling config
+ */
+dataSource {
+    pooled = true
+    properties {
+        maxActive = 50
+        maxIdle = 25
+        minIdle = 5
+        initialSize = 5
+        minEvictableIdleTimeMillis = 60000
+        timeBetweenEvictionRunsMillis = 60000
+        maxWait = 10000
+        validationQuery = "select 1 from dual"
     }
 }
