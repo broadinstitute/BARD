@@ -10,7 +10,7 @@
         <div id="resultTab">
 
             <ul id="resultTabUL" class="nav nav-tabs">
-                <li class="active"  id="assaysTabLi"><a href="#assays" data-toggle="tab" id="assaysTab">Assays (0)</a></li>
+                <li class="active"  id="assaysTabLi"><a href="#assays" data-toggle="tab" id="assaysTab">Assay Definitions (0)</a></li>
                 <li id="compoundsTabLi"><a href="#compounds" data-toggle="tab" id="compoundsTab">Compounds (0)</a></li>
                 <li id="projectsTabLi"><a href="#projects" data-toggle="tab" id="projectsTab">Projects (0)</a></li>
             </ul>

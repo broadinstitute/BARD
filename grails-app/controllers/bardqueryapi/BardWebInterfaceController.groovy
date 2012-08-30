@@ -1,15 +1,11 @@
 package bardqueryapi
 
-import bard.core.Experiment
 import bard.core.Project
 import bard.core.StructureSearchParams
 import bard.core.adapter.AssayAdapter
 import bard.core.adapter.CompoundAdapter
 import elasticsearchplugin.QueryExecutorService
-import elasticsearchplugin.RestClientFactoryService
 import wslite.json.JSONObject
-import wslite.rest.RESTClient
-import wslite.rest.RESTClientException
 
 import javax.servlet.http.HttpServletResponse
 
@@ -28,8 +24,7 @@ class BardWebInterfaceController {
     def shoppingCartService
     QueryService queryService
     QueryExecutorService queryExecutorService
-    RestClientFactoryService restClientFactoryService
-    final static String NCGC_ROOT_URL = "http://bard.nih.gov/api/v1"
+    QueryServiceWrapper queryServiceWrapper
 
     def index() {
         homePage()
@@ -193,6 +188,7 @@ class BardWebInterfaceController {
         String searchString = params.searchString?.trim()
         handleSearchParams('/search/compounds', map)
         try {
+            final String NCGC_ROOT_URL =  queryServiceWrapper.baseURL
             JSONObject resultJson = (JSONObject) queryExecutorService.executeGetRequestJSON(NCGC_ROOT_URL, map)
             render(template: 'compounds', model: [docs: resultJson.docs, metaData: resultJson.metaData, searchString: "${searchString}"])
         }
@@ -207,6 +203,8 @@ class BardWebInterfaceController {
         String searchString = params.searchString?.trim()
         handleSearchParams('/search/assays', map)
         try {
+            final String NCGC_ROOT_URL =  queryServiceWrapper.baseURL
+
             JSONObject resultJson = (JSONObject) queryExecutorService.executeGetRequestJSON(NCGC_ROOT_URL, map)
             render(template: 'assays', model: [docs: resultJson.docs, metaData: resultJson.metaData, searchString: "${searchString}"])
         }
@@ -221,6 +219,8 @@ class BardWebInterfaceController {
         def map = [:]
         handleSearchParams('/search/projects', map)
         try {
+            final String NCGC_ROOT_URL =  queryServiceWrapper.baseURL
+
             JSONObject resultJson = (JSONObject) queryExecutorService.executeGetRequestJSON(NCGC_ROOT_URL, map)
             render(template: 'projects', model: [docs: resultJson.docs, metaData: resultJson.metaData, searchString: "${searchString}"])
         }
@@ -273,23 +273,6 @@ class BardWebInterfaceController {
  */
 class SearchHelper {
 
-    /**
-     * @param url
-     * @param data
-     * @return
-     * @throws wslite.rest.RESTClientException
-     */
-    def postFormRequest(elasticsearchplugin.RestClientFactoryService restClientFactoryService, final String url, final Map dataMap, Map parameterMap = [:]) throws RESTClientException {
-        parameterMap.put('query', [expand: "TRUE", include_entities: false])
-        parameterMap.put('connectTimeout', 5000)
-        parameterMap.put('readTimeout', 10000)
-
-        final RESTClient restClientClone = restClientFactoryService.createNewRestClient(url)
-        def response = restClientClone.post(parameterMap) {
-            urlenc dataMap
-        }
-        return response.json
-    }
     /**
      *
      * @param relativePath for example /search/compounds

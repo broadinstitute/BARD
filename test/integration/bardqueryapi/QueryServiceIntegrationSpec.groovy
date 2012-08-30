@@ -1,13 +1,16 @@
 package bardqueryapi
 
+import bard.core.AssayValues
+import bard.core.EntityServiceManager
+import bard.core.Project
+import bard.core.StructureSearchParams
+import bard.core.adapter.AssayAdapter
 import bard.core.adapter.CompoundAdapter
 import bard.core.rest.RESTEntityServiceManager
 import grails.plugin.spock.IntegrationSpec
 import org.junit.After
 import org.junit.Before
 import spock.lang.Unroll
-import bard.core.*
-import bard.core.adapter.AssayAdapter
 
 @Unroll
 class QueryServiceIntegrationSpec extends IntegrationSpec {
@@ -211,8 +214,8 @@ class QueryServiceIntegrationSpec extends IntegrationSpec {
         assert projects
         assert pids.size() == projects.size()
         where:
-        label                        | pids
-        "Single PID"                 | [1772]
-        "Search with a list of PIDs" | [1771, 1772, 604]
+        label                               | pids
+        "Single PID"                        | [1772]
+        "Search with a list of project ids" | [1772, 805, 1074]
     }
 }

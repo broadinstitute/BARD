@@ -1,24 +1,12 @@
 import grails.util.Environment
 import org.apache.log4j.DailyRollingFileAppender
 
-// locations to search for config files that get merged into the main config
-// config files can either be Java properties files or ConfigSlurper scripts
 
-// grails.config.locations = [ "classpath:${appName}-config.properties",
-//                             "classpath:${appName}-config.groovy",
-//                             "file:${userHome}/.grails/${appName}-config.properties",
-//                             "file:${userHome}/.grails/${appName}-config.groovy"]
-
-// if (System.properties["${appName}.config.location"]) {
-//    grails.config.locations << "file:" + System.properties["${appName}.config.location"]
-// }
-//Defaults
-
+//TODO: Still using Elastic Search here
 bard.services.elasticSearchService.restNode.baseUrl = "http://bard-dev-vm:9200"
 
 //TODO: Override in dev, qa and prod to point to the current stable realse
-ncgc.server.root.url = "http://bard.nih.gov/api/latest"
-//ncgc.server.root.url = "http://bard.nih.gov/api/v1"
+ncgc.server.root.url = "http://bard.nih.gov/api/v2"
 ncgc.server.username = "bogus"
 ncgs.server.password = "bogus"
 ncgc.server.projects.url = "${ncgc.server.root.url}/projects/"
@@ -92,7 +80,6 @@ grails.serverURL = System.properties.get('grails.serverUrl') ?: getServerUrl()
 String getServerUrl() {
     switch (Environment.current.name) {
         case ('production'):
-            //TODO
             "http://bard.broadinstitute.org/bardwebquery"
             break
         case ('oracleqa'):
