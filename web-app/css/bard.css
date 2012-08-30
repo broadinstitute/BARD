@@ -159,3 +159,45 @@ table.QcartAppearance  {
     color: black;
     text-decoration: none;
 }
+
+div.addtocartholder{
+    padding: 0;
+    border: 0 none;
+}
+a.addtocart { //right
+    width:200px;
+    height: 200px;
+}
+img.addtocart {  //left
+    width:200px;
+    float:left;
+}
+
+span.addtocartholder{
+    padding: 0;
+    border: 0 none;
+    overflow: hidden;
+}
+h3.addtocart {
+    font-family: Helvetica, Arial, "Lucida Grande", sans-serif;
+    font-size: x-large;
+    font-weight: normal;
+    margin-right: 100px;
+    height: 100px;
+    overflow: hidden;
+    float:left;
+}
+span.addtocart {
+    width:100px;
+    float:right;
+    font-size: medium;
+    font-weight: normal;
+    height: 100px;
+    background-color:#ccf;
+}
+span.addtocartfont {
+    margin-left: 20;
+    font-family: Helvetica, Arial, "Lucida Grande", sans-serif;
+    font-size: medium;
+    font-weight: bold;
+}
