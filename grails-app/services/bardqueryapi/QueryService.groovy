@@ -47,46 +47,44 @@ class QueryService {
      * @param skip
      * @return
      */
-    Map findCompoundsByTextSearch(final String searchString, final int top = 50, final int skip = 0) {
+    Map findCompoundsByTextSearch(final String searchString, final int top = 50, final int skip = 0, final List<SearchFilter> searchFilters = []) {
         final List<CompoundAdapter> foundCompoundAdapters = []
         Collection<Value> facets = []
 
         if (searchString) {
             final RESTCompoundService restCompoundService = this.queryServiceWrapper.getRestCompoundService()
-            final SearchParams params = new SearchParams(searchString)
-            params.setSkip(skip)
-            params.setTop(top);
+            final SearchParams searchParams = constructSearchParams(searchString, top, skip, searchFilters)
             //do the search
-            final ServiceIterator<Compound> searchIterator = restCompoundService.search(params)
+            final ServiceIterator<Compound> searchIterator = restCompoundService.search(searchParams)
             //collect results
             final Collection<Compound> compounds = searchIterator.collect()
 
             //convert to adapters
             foundCompoundAdapters.addAll(compoundsToAdapters(compounds))
             facets = searchIterator.facets
-         }
+        }
         final int nhits = foundCompoundAdapters.size()
         return [compoundAdapters: foundCompoundAdapters, facets: facets, nHits: nhits]
     }
 
     /**
-      * We can use a trick to get more than 50 records
+     * We can use a trick to get more than 50 records
      * We are not quite ready to use this method yet
      * @param searchString
      * @param top
      * @param skip
      * @return
      */
-    Map findAssaysByTextSearch(final String searchString, final int top = 50, final int skip = 0) {
+    Map findAssaysByTextSearch(final String searchString, final int top = 50, final int skip = 0, final List<SearchFilter> searchFilters = []) {
         final List<AssayAdapter> foundAssayAdapters = []
         Collection<Value> facets = []
 
         if (searchString) {
             final RESTAssayService restAssayService = this.queryServiceWrapper.getRestAssayService()
-            final SearchParams params = new SearchParams(searchString)
-            params.setSkip(skip)
-            params.setTop(top);
-            final ServiceIterator<Assay> searchIterator = restAssayService.search(params)
+            final SearchParams searchParams = constructSearchParams(searchString, top, skip, searchFilters)
+
+
+            final ServiceIterator<Assay> searchIterator = restAssayService.search(searchParams)
             final Collection assays = searchIterator.collect()
             foundAssayAdapters.addAll(assaysToAdapters(assays))
             facets = searchIterator.facets
@@ -96,22 +94,20 @@ class QueryService {
     }
 
     /**
-      * We are not quite ready to use this method yet
+     * We are not quite ready to use this method yet
      * @param searchString
      * @param top
      * @param skip
      * @return
      */
-    Map findProjectsByTextSearch(final String searchString, final int top = 50, final int skip = 0) {
+    Map findProjectsByTextSearch(final String searchString, final int top = 50, final int skip = 0, final List<SearchFilter> searchFilters = []) {
         List<ProjectAdapter> foundProjectAdapters = []
         Collection<Value> facets = []
         if (searchString) {
             //query for count
             final RESTProjectService restProjectService = this.queryServiceWrapper.getRestProjectService()
-            final SearchParams params = new SearchParams(searchString)
-            params.setSkip(skip)
-            params.setTop(top);
-            final ServiceIterator<Project> searchIterator = restProjectService.search(params)
+            final SearchParams searchParams = constructSearchParams(searchString, top, skip, searchFilters)
+            final ServiceIterator<Project> searchIterator = restProjectService.search(searchParams)
             final Collection projects = searchIterator.collect()
             foundProjectAdapters.addAll(projectsToAdapters(projects))
             facets = searchIterator.facets
@@ -120,6 +116,7 @@ class QueryService {
 
         return [projectAdapters: foundProjectAdapters, facets: facets, nHits: nhits]
     }
+
     //====================================== Structure Searches ========================================
     /**
      * @param smiles
@@ -128,9 +125,9 @@ class QueryService {
      * @param skip
      * @return of compounds
      */
-    Map structureSearch(final String smiles, final StructureSearchParams.Type structureSearchParamsType, final int top = 50, final int skip = 0) {
+    Map structureSearch(final String smiles, final StructureSearchParams.Type structureSearchParamsType, final int top = 50, final int skip = 0, final List<SearchFilter> searchFilters = []) {
         final List<CompoundAdapter> compoundAdapters = []
-        Collection<Value> facets =[]
+        Collection<Value> facets = []
 
         if (smiles) {
             final RESTCompoundService restCompoundService = this.queryServiceWrapper.getRestCompoundService()
@@ -142,7 +139,13 @@ class QueryService {
             if (structureSearchParamsType == StructureSearchParams.Type.Similarity) {
                 structureSearchParams.setThreshold(0.9)
             }
-
+            if (searchFilters) {
+                List<String[]> filters = []
+                for (SearchFilter searchFilter : searchFilters) {
+                    filters.add([searchFilter.filterName, searchFilter.filterValue] as String[])
+                }
+                structureSearchParams.setFilters(filters)
+            }
             //do the search
             final ServiceIterator<Compound> searchIterator = restCompoundService.structureSearch(structureSearchParams);
             //collect the results
@@ -165,7 +168,7 @@ class QueryService {
      */
     Map findCompoundsByCIDs(final List<Long> compoundIds) {
         final List<CompoundAdapter> compoundAdapters = []
-        Collection<Value> facets =  []
+        Collection<Value> facets = []
 
         if (compoundIds) {
             final RESTCompoundService restCompoundService = this.queryServiceWrapper.getRestCompoundService()
@@ -186,7 +189,7 @@ class QueryService {
      */
     Map findAssaysByADIDs(final List<Long> assayIds) {
         final List<AssayAdapter> foundAssayAdapters = []
-        Collection<Value> facets =  []
+        Collection<Value> facets = []
 
         if (assayIds) {
             final RESTAssayService restAssayService = this.queryServiceWrapper.getRestAssayService()
@@ -205,7 +208,7 @@ class QueryService {
      * @return list
      */
     Map findProjectsByPIDs(final List<Long> projectIds) {
-        Collection<Value> facets =  []
+        Collection<Value> facets = []
         final List<ProjectAdapter> foundProjectAdapters = []
         if (projectIds) {
             final RESTProjectService restProjectService = this.queryServiceWrapper.getRestProjectService()
@@ -268,32 +271,37 @@ class QueryService {
     }
 
     //============= Utility method for extracting facets =============
+
+    /**
+     * Apply the filters to the SearchParams
+     * @param searchParams
+     * @param searchFilters
+     */
+    void applySearchFilters(final SearchParams searchParams, final List<SearchFilter> searchFilters) {
+        if (searchFilters) {
+            List<String[]> filters = []
+            for (SearchFilter searchFilter : searchFilters) {
+                filters.add([searchFilter.filterName, searchFilter.filterValue] as String[])
+            }
+            searchParams.setFilters(filters)
+        }
+    }
+
     /**
      *
-     * @param facets
-     * @return List of facets
+     * @param searchString
+     * @param top
+     * @param skip
+     * @param searchFilters
+     * @return SearchParams
      */
-    List extractAllFacets(final Collection<Value> facets) {
-        final List facetMapList = []
+    SearchParams constructSearchParams(final String searchString, final int top, final int skip, final List<SearchFilter> searchFilters) {
+        final SearchParams searchParams = new SearchParams(searchString)
+        searchParams.setSkip(skip)
+        searchParams.setTop(top);
+        applySearchFilters(searchParams,searchFilters)
+        return searchParams
 
-        int counterForNoNameFacets = 0 //allow us to have unique names in the map
-        for (Value parentFacet : facets) {
-            final Map facetMap = [:]
-            final String parentFacetName = parentFacet.id
-            if (!parentFacetName) {
-                parentFacetName = "NoName${counterForNoNameFacets}"
-                ++counterForNoNameFacets
-            }
-            final Collection<Value> childFacets = parentFacet.children().collect()
-            final Map<String, String> childFacetMap = extractChildFacets(childFacets)
-
-            //add the parent facet
-            facetMap.put("facetName", parentFacetName)
-            //counts is the key to the child facets
-            facetMap.put("counts", childFacetMap)
-            facetMapList.add(facetMap)
-        }
-        return facetMapList;
     }
     /**
      * Convert the list of compounds to the list of adapters
@@ -323,27 +331,6 @@ class QueryService {
             projectAdapters.add(new ProjectAdapter(project))
         }
         return projectAdapters
-    }
-    /**
-     * TODO: When the JDO becomes the only source of information for the Controller,
-     * this method would not be needed. We would display the facets directly on the page
-     * Extract the child facets into a map
-     * @param childFacets
-     * @return Map of child facets
-     */
-    Map extractChildFacets(final Collection<Value> childFacets) {
-        int counterForNoNameFacets = 0
-        final Map<String, String> childFacetMap = [:]
-        for (Value childFacet : childFacets) {
-            String childFacetName = childFacet.id
-            final String childFacetValue = childFacet.value
-            if (!childFacetName) {
-                childFacetName = "NoName${counterForNoNameFacets}"
-                ++counterForNoNameFacets
-            }
-            childFacetMap.put(childFacetName, childFacetValue)
-        }
-        return childFacetMap
     }
     //==============================================Elastic Search resources ======
 
