@@ -7,7 +7,7 @@
     <g:each var="compoundAdapter" in="${compoundAdapters}">
         <tr>
         <td>
-            <img src="${createLink(controller: 'chemAxon', action: 'generateStructureImage', params: [smiles: compoundAdapter.structureSMILES, width: 150, height: 120])}"/>
+            <img alt="${compoundAdapter.structureSMILES}" title="${compoundAdapter.name}" src="${createLink(controller: 'chemAxon', action: 'generateStructureImage', params: [smiles: compoundAdapter.structureSMILES, width: 150, height: 120])}"/>
         </td>
         <td>
             <g:link action="showCompound" id="${compoundAdapter.pubChemCID}" target="_blank">
