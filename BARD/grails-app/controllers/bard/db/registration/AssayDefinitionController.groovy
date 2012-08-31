@@ -77,7 +77,9 @@ class AssayDefinitionController {
 
         target.assayContext.addToAssayContextItems(source)
         List<CardDto> cardDtoList = cardFactoryService.createCardDtoListForAssay(target.assayContext.assay)
-        render(template:"cardDtoView", model:cardDtoList)
+        println("cardDtoList.size(): ${cardDtoList.size()}")
+        render(template:"cards", model:[cardDtoList: cardDtoList])
+
     }
 
 }
