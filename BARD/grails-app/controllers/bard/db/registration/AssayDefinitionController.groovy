@@ -1,11 +1,15 @@
 package bard.db.registration
 
+import org.hibernate.SessionFactory
+import org.hibernate.Session
+
 
 class AssayDefinitionController {
 
     static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
 
     CardFactoryService cardFactoryService
+    SessionFactory sessionFactory
 
     def index() {
         redirect(action: "description", params: params)
@@ -71,12 +75,19 @@ class AssayDefinitionController {
     def updateCardItems(Long src_assay_context_item_id, Long target_assay_context_item_id) {
         println(src_assay_context_item_id)
         println(target_assay_context_item_id)
-
         AssayContextItem target = AssayContextItem.findById(target_assay_context_item_id)
         AssayContextItem source = AssayContextItem.findById(src_assay_context_item_id)
+        AssayContext targetAssayContext = target.assayContext
+        AssayContext sourceAssayContext = source.assayContext
 
-        target.assayContext.addToAssayContextItems(source)
-        List<CardDto> cardDtoList = cardFactoryService.createCardDtoListForAssay(target.assayContext.assay)
+        sourceAssayContext.removeFromAssayContextItems(source)
+        targetAssayContext.addToAssayContextItems(source)
+//        Session session = sessionFactory.currentSession
+//        session.flush()
+//        session.clear()
+        Assay targetAssay = targetAssayContext.assay
+
+        List<CardDto> cardDtoList = cardFactoryService.createCardDtoListForAssay(targetAssay)
         println("cardDtoList.size(): ${cardDtoList.size()}")
         render(template:"cards", model:[cardDtoList: cardDtoList])
 
