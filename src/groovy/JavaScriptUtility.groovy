@@ -14,6 +14,15 @@ class JavaScriptUtility {
      * @return
      */
     static String cleanup (String incoming){
-        return incoming.replace("'","\\'")
+        if (incoming==null)
+            return ""
+        else
+            return incoming.replace("'","\\'")
     }
+    static String cleanup (Long incoming){
+        return incoming?.toString()
+    }
+
+
+
 }

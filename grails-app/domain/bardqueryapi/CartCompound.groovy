@@ -4,8 +4,14 @@ import com.metasieve.shoppingcart.Shoppable
 
 class CartCompound extends Shoppable {
 
+    int compoundId  = 0
+    String smiles
 
-    String smiles = "no Smiles definition"
+
+    CartCompound( String smiles, int compoundId ) {
+        this.smiles = smiles
+        this.compoundId = compoundId
+    }
 
     boolean equals(o) {
         if (this.is(o)) return true
@@ -14,9 +20,11 @@ class CartCompound extends Shoppable {
         CartCompound that = (CartCompound) o
 
         if (smiles != that.smiles) return false
+        if (compoundId != that.compoundId) return false
 
         return true
     }
+
 
     int hashCode() {
         return (smiles != null ? smiles.hashCode() : 0)
@@ -24,10 +32,14 @@ class CartCompound extends Shoppable {
 
     @Override
     String toString() {
-        smiles
+        if (smiles?.length() == 0)
+           "PubChem CID=${compoundId.toString()}"
+        else
+            smiles
     }
 
     static constraints = {
-        smiles: nullable: false
+        smiles (nullable: false)
+        compoundId (min : 1)
     }
 }

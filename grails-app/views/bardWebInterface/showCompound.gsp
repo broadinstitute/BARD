@@ -18,7 +18,7 @@
     <img class="addtocart" src="${createLink(controller: 'chemAxon', action: 'generateStructureImage', params: [smiles: compound?.structureSMILES, width: 200, height: 200])}"/>
     <a href="/bardwebquery/sarCart/add/1"  class="addtocart"
    onclick="jQuery.ajax({  type:'POST',
-       data:{'id': '${compound.compound.name}','class': 'class bardqueryapi.CartCompound','smiles':'${JavaScriptUtility.cleanup(compound.compound.name)}','version': '0'},
+       data:{'id': '${compound.compound.name}','class': 'class bardqueryapi.CartCompound','smiles':'${JavaScriptUtility.cleanup(compound.compound.name)}','cid':'${compound.pubChemCID}','version': '0'},
        url:'/bardwebquery/sarCart/add',
        success:function(data,textStatus){
            jQuery('#sarCartRefill').html(data);
