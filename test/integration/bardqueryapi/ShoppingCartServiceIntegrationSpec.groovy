@@ -83,7 +83,7 @@ class ShoppingCartServiceIntegrationSpec extends IntegrationSpec {
         given: "A shopping cart"
         assertNotNull shoppingCartService
         CartAssay cartAssay = new CartAssay(assayTitle:"Assay 1")
-        CartCompound cartCompound =  new  CartCompound(smiles: "c1ccccc1")
+        CartCompound cartCompound =  new  CartCompound(smiles: "c1ccccc1", compoundId: 47 )
         CartProject cartProject=  new  CartProject(projectName: "my project")
 
         when: "We make a Query to NCGC's rest API to get a list of assays with that target"
@@ -110,7 +110,7 @@ class ShoppingCartServiceIntegrationSpec extends IntegrationSpec {
             assertNotNull shoppingCartService
             CartAssay cartAssay = new CartAssay(assayTitle:"Assay 1")
             CartAssay cartAssay1 = new CartAssay(assayTitle:"Assay 2")
-            CartCompound cartCompound =  new  CartCompound(smiles: "c1ccccc1")
+            CartCompound cartCompound =  new  CartCompound(smiles: "c1ccccc1", compoundId: 47)
 
         when: "We make a Query to NCGC's rest API to get a list of assays with that target"
         shoppingCartService.addToShoppingCart(cartAssay)
@@ -188,12 +188,12 @@ class ShoppingCartServiceIntegrationSpec extends IntegrationSpec {
     void "Exploring the nature of CartCompound uniqueness"() {
         given: "A shopping cart and some testing objects"
         assertNotNull shoppingCartService
-        CartCompound cartCompound_identical1 =  new  CartCompound(smiles: "c1ccccc1")
+        CartCompound cartCompound_identical1 =  new  CartCompound(smiles: "c1ccccc1", compoundId: 47)
         CartCompound cartCompound_identical2 =  cartCompound_identical1
-        CartCompound cartCompound_sameName1 =  new  CartCompound( smiles: "c2ccccc2")
-        CartCompound cartCompound_sameName2 =  new  CartCompound( smiles: "c2ccccc2")
-        CartCompound cartCompound_differentName1 =  new  CartCompound( smiles: "c3ccccc3")
-        CartCompound cartCompound_differentName2 =  new  CartCompound( smiles: "c4ccccc4")
+        CartCompound cartCompound_sameName1 =  new  CartCompound( smiles: "c2ccccc2", compoundId: 47)
+        CartCompound cartCompound_sameName2 =  new  CartCompound( smiles: "c2ccccc2", compoundId: 47)
+        CartCompound cartCompound_differentName1 =  new  CartCompound( smiles: "c3ccccc3", compoundId: 47)
+        CartCompound cartCompound_differentName2 =  new  CartCompound( smiles: "c4ccccc4", compoundId: 47)
 
         when: "the shopping cart is functional and ready for testing"
         queryCartService.emptyShoppingCart()

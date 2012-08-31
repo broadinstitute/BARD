@@ -21,11 +21,10 @@ class CartCompoundSpec  extends Specification  {
     void "test shopping cart compound element"() {
         given:
              String moleculeDefinition =  "c1ccccc1"
-             def compdId = 47
+             Integer compdId = 47
 
         when:
-        CartCompound cartCompound = new CartCompound( moleculeDefinition)
-        cartCompound.compoundId= compdId
+        CartCompound cartCompound = new CartCompound(  smiles: moleculeDefinition, compoundId: compdId)
         // CartCompound cartCompound = new CartCompound( moleculeDefinition,  compoundId)
 // WHY NOT? -->       CartCompound cartCompound =   new CartCompound( smiles:moleculeDefinition,  compoundId:compdId)
         assertNotNull(cartCompound)
