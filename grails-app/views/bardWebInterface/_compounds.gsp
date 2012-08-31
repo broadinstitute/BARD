@@ -18,7 +18,7 @@
             </g:link>
             <a href="/bardwebquery/sarCart/add/${compoundAdapter.pubChemCID}"
                onclick="jQuery.ajax({  type:'POST',
-                   data:{'id': '${compoundAdapter.pubChemCID}','class': 'class bardqueryapi.CartCompound','smiles':'${JavaScriptUtility.cleanup(compoundAdapter.name)}','version': '0'},
+                   data:{'id': '${compoundAdapter.pubChemCID}','class': 'class bardqueryapi.CartCompound','cid':'${compoundAdapter.pubChemCID}','smiles':'${JavaScriptUtility.cleanup(compoundAdapter.name)}','version': '0'},
                    url:'/bardwebquery/sarCart/add',
                    success:function(data,textStatus){
                        jQuery('#sarCartRefill').html(data);
@@ -32,10 +32,5 @@
     </g:each>
     </table>
     <g:hiddenField name="totalCompounds" id="totalCompounds" value="${nhits}"/>
-        %{--<div class="pagination">--}%
-            %{--<util:remotePaginate total="${metaData ? metaData.nhit : 0}" update="compounds" controller="bardWebInterface"--}%
-                                 %{--action="searchCompounds" pageSizes="[10,50]"--}%
-                                 %{--params='[searchString: "${searchString}"]'/>--}%
-    %{--</div>--}%
 </div>
 </div>

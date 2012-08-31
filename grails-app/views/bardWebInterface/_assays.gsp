@@ -23,12 +23,6 @@
         </li>
     </g:each>
     </ul>
-
     <g:hiddenField name="totalAssays" id="totalAssays" value="${nhits}"/>
-    %{--<div class="pagination">--}%
-        %{--<util:remotePaginate total="${nhits ? nhits : 0}" update="assays" controller="bardWebInterface"--}%
-                             %{--action="searchAssays"--}%
-                             %{--params='[searchString: "${searchString}"]'/>--}%
-    %{--</div>--}%
 </div>
 </div>

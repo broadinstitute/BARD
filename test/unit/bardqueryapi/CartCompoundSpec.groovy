@@ -19,33 +19,43 @@ class CartCompoundSpec  extends Specification  {
     }
 
     void "test shopping cart compound element"() {
+        given:
+             String moleculeDefinition =  "c1ccccc1"
+             Integer compdId = 47
+
         when:
-            CartCompound cartCompound = new CartCompound(smiles: "c1ccccc1")
-            assertNotNull(cartCompound)
+        CartCompound cartCompound = new CartCompound(  smiles: moleculeDefinition, compoundId: compdId)
+        // CartCompound cartCompound = new CartCompound( moleculeDefinition,  compoundId)
+// WHY NOT? -->       CartCompound cartCompound =   new CartCompound( smiles:moleculeDefinition,  compoundId:compdId)
+        assertNotNull(cartCompound)
 
         then:
-            assert cartCompound.smiles=='c1ccccc1'
+            assert cartCompound.smiles==moleculeDefinition
+            assert cartCompound.compoundId==compdId
             assertNull cartCompound.shoppingItem
     }
 
 
 
-    void "test constraints on Kurt compound object"() {
+    void "test constraints on compound object"() {
         setup:
         mockForConstraintsTests(CartCompound)
 
         when:
-        CartCompound cartCompound = new CartCompound(smiles: smiles)
+        CartCompound cartCompound = new CartCompound(smiles,compoundId)
         cartCompound.validate()
 
         then:
         cartCompound.hasErrors() == !valid
 
         where:
-        smiles          |   valid
-        null            |   false
-        ""              |   true
-        "Some assay"    |   true
+        compoundId  |   smiles          |   valid
+        47          |   null            |   false
+        47          |   ""              |   true
+        47          |   "Some assay"    |   true
+        0           |   null            |   false
+        0           |   ""              |   false
+        0           |   "Some assay"    |   false
     }
 
 

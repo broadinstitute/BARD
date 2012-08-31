@@ -47,7 +47,7 @@ class QueryService {
      * @param skip
      * @return
      */
-    Map findCompoundsByTextSearch(final String searchString, final int top = 10, final int skip = 0) {
+    Map findCompoundsByTextSearch(final String searchString, final int top = 50, final int skip = 0) {
         final List<CompoundAdapter> foundCompoundAdapters = []
         Collection<Value> facets = []
 
@@ -70,7 +70,7 @@ class QueryService {
     }
 
     /**
-      * We can use a trick to get more than 10 records
+      * We can use a trick to get more than 50 records
      * We are not quite ready to use this method yet
      * @param searchString
      * @param top

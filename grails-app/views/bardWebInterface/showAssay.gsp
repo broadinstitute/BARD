@@ -1,6 +1,6 @@
-<%@ page import="bard.db.registration.*" %>
+<%@ page import="bardqueryapi.JavaScriptUtility; bard.db.registration.*" %>
 <!DOCTYPE html>
-<html>
+<html xmlns="http://www.w3.org/1999/html">
 <head>
     <meta name="layout" content="details"/>
     <title>BARD : Assay Definition : ADID ${assayAdapter?.assay.id}</title>
@@ -9,7 +9,22 @@
 <h1 class="detail">Assay Definition Detail for ADID ${assayAdapter?.assay.id}</h1>
 <div class="row-fluid" style="clear:both;">
     <div class="span12 header">
-        <h3>${assayAdapter?.assay.name}</h3>
+        <span class="addtocartholder">
+            <h3 class="addtocart">${assayAdapter?.assay.name}
+                <a href="/bardwebquery/sarCart/add/${assayAdapter?.assay.id}"
+                   onclick="jQuery.ajax({  type:'POST',
+                       data:{'id': '${assayAdapter?.assay.id}','class': 'class bardqueryapi.CartAssay','assayTitle':'${JavaScriptUtility.cleanup(assayAdapter?.assay.name)}','version': '0'},
+                       url:'/bardwebquery/sarCart/add',
+                       success:function(data,textStatus){
+                           jQuery('#sarCartRefill').html(data);
+                       }
+                   });
+                   return false;"
+                   action="add"
+                   controller="sarCart"><i class="icon-shopping-cart"></i><span class="addtocartfont">&nbsp;Add to Cart</span>
+                </a>
+            </h3>
+        </span>
         <dl class="dl-horizontal">
             <dt>Assay Format:</dt><dd></dd>
             <dt>Assay Type:</dt><dd></dd>

@@ -5,7 +5,7 @@
   Time: 3:30 PM
   To change this template use File | Settings | File Templates.
 --%>
-
+<%@ page import="bardqueryapi.JavaScriptUtility" %>
 <%@ page contentType="text/html;charset=UTF-8" %>
 <html>
 <head>
@@ -14,8 +14,20 @@
 </head>
 <body>
 <h1>Compound Details for PubChem CID ${compound.pubChemCID}</h1>
-<div>
-    <img src="${createLink(controller: 'chemAxon', action: 'generateStructureImage', params: [smiles: compound?.structureSMILES, width: 200, height: 200])}"/>
+<div class="addtocartholder">
+    <img class="addtocart" src="${createLink(controller: 'chemAxon', action: 'generateStructureImage', params: [smiles: compound?.structureSMILES, width: 200, height: 200])}"/>
+    <a href="/bardwebquery/sarCart/add/1"  class="addtocart"
+   onclick="jQuery.ajax({  type:'POST',
+       data:{'id': '${compound.compound.name}','class': 'class bardqueryapi.CartCompound','smiles':'${JavaScriptUtility.cleanup(compound.compound.name)}','cid':'${compound.pubChemCID}','version': '0'},
+       url:'/bardwebquery/sarCart/add',
+       success:function(data,textStatus){
+           jQuery('#sarCartRefill').html(data);
+       }
+   });
+   return false;"
+   action="add"
+   controller="sarCart"><i class="icon-shopping-cart"></i><span class="addtocartfont">&nbsp;Add to Cart</span>
+   </a>
 </div>
 <div class="row-fluid">
     <div class="span9">

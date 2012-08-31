@@ -19,4 +19,11 @@ class JavaScriptUtility {
         }
         return ""
     }
+
+    static String cleanup (Long incoming){
+        return incoming?.toString()
+    }
+
+
+
 }
