@@ -26,7 +26,7 @@
 </TR>
 <TR>
 <TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">DDL Code&nbsp;</FONT></B></TD>
-<TD><TT><TT>CREATE VIEW Result_Type_Element</TT><BR><TT>(Element_ID, Element_Status, Label, Description, Abbreviation, Synonyms, Unit, External_URL, ready_for_extraction, Version, Date_Created, Last_Updated, Modified_by) AS</TT><BR><TT>SELECT El.Element_ID, El.Element_Status, El.Label, El.Description, El.Abbreviation, El.Synonyms, El.Unit, El.External_URL, El.ready_for_extraction, El.Version, El.Date_Created, El.Last_Updated, El.Modified_by</TT><BR><TT>FROM Element El</TT><BR><TT>WHERE el.element_id in (select result_type_id from result_type_tree)</TT><BR>&nbsp;</TT></TD>
+<TD><TT><TT>CREATE VIEW Result_Type_Element</TT><BR><TT>(Element_ID, Element_Status, Label, Description, Abbreviation, Synonyms, Unit, BARD_URI, External_URL, ready_for_extraction, Version, Date_Created, Last_Updated, Modified_by) AS</TT><BR><TT>SELECT El.Element_ID, El.Element_Status, El.Label, El.Description, El.Abbreviation, El.Synonyms, El.Unit, El.BARD_URI, El.External_URL, El.ready_for_extraction, El.Version, El.Date_Created, El.Last_Updated, El.Modified_by</TT><BR><TT>FROM Element El</TT><BR><TT>WHERE el.element_id in (select result_type_id from result_type_tree)</TT><BR>&nbsp;</TT></TD>
 </TR>
 </TABLE>
 <P>
@@ -74,6 +74,11 @@
 <TR>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">Unit&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">Unit&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "Tbl_45161811eb2b406580ee8b9a0ddaa131.htm">Element</A>&nbsp;</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">BARD_URI&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">BARD_URI&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "Tbl_45161811eb2b406580ee8b9a0ddaa131.htm">Element</A>&nbsp;</FONT></TD>
 </TR>
 <TR>
