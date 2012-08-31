@@ -112,7 +112,7 @@ environments {
     }
 }
 
-grails.serverURL = System.properties.get('grails.serverUrl') ?: getServerUrl()
+grails.serverURL = System.properties.get('grails.serverURL') ?: getServerUrl()
 
 String getServerUrl() {
     switch (Environment.current.name) {

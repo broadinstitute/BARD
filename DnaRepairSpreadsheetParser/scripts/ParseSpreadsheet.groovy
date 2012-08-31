@@ -79,58 +79,41 @@ Map attributeNameMapping = ['[detector] assay component (type in)': 'assay compo
         'assay detection': 'detection method type',
         'assay target type': 'assay type',
         'component name (type in)': 'assay component name',
+        'assay readout content': 'assay readout',
+        'assay readout type': 'readout type',
+        'biochemical': 'biochemical format',
+        'biorad chemidocxrs imaging system': 'Biorad Chemidocxrs Imaging System',
+        'cell based: lysed cell': 'cell-based format',
+        'cell-based: live cell': 'cell-based format',
+        'cells/ml': 'cells per milliliter',
+        'chemically labeled protein': 'chemically labeled protein',
+        'cid': 'PubChem CID',
+        'detection instrument': 'detection instrument name',
+        'fluorescence:other': 'fluorescence',
+        'fm': 'femtomolar',
+        'grams-per-liter': ',gram per liter',
+        'imaging methods': 'imaging method',
+        'in cell analyzer': 'IN cell analyzer',
+        'kodak biomax mr-1': 'Kodak Biomax MR-1',
+        'luminescence:other': 'luminescence',
+        'microscope cover slip  22 m^2': 'Microscope Cover Slip  22 mm^2',
+        'mm': 'millimolar',
+        'moles-per-liter': 'molar',
+        'ng/ml': 'nanogram per milliliter',
+        'nm': 'nanomolar',
+        'optical densitometry': 'optical densitometry',
+        'oryctolagus cuniculus': 'Oryctolagus Cuniculus',
+        'pm': 'picomolar',
+        'radiometric': 'radiometry method',
+        'signal direction': 'readout signal direction',
+        'spectramax plus 384 microplate reader': 'Spectramax Plus 384 Microplate Reader',
+        'typhoon 8600 variable mode imager': 'Typhoon 8600 Variable Mode Imager',
+        'um': 'micromolar',
+        'µm': 'micromolar',
+        '# concentration points': 'number of points',
+        '# replicates': 'number of replicates',
+        'uniprot': 'UniProt',
         '--': '']
-//Delete from here
-/*        '# concentration points': 'assay component name',
-        '# replicates': 'assay component name',
-        'assay readout content': 'assay component name',
-        'assay readout type': 'assay component name',
-        'biochemical': 'assay component name',
-        'biorad chemidocxrs imaging system': 'assay component name',
-        'cell based: lysed cell': 'assay component name',
-        'cell-based: live cell': 'assay component name',
-        'cells/ml': 'assay component name',
-        'cellular pathway': 'assay component name',
-        'chemically labeled protein': 'assay component name',
-        'compound profiling': 'assay component name',
-        'detection instrument': 'assay component name',
-        'fluorescence:other': 'assay component name',
-        'fm': 'assay component name',
-        'fret/bret': 'assay component name',
-        'grams-per-liter': 'assay component name',
-        'htrf': 'assay component name',
-        'hydrolase': 'assay component name',
-        'imaging methods': 'assay component name',
-        'in cell analyzer': 'assay component name',
-        'kinase': 'assay component name',
-        'kodak biomax mr-1': 'assay component name',
-        'log10 molar': 'assay component name',
-        'luminescence:other': 'assay component name',
-        'microscope cover slip  22 m^2': 'assay component name',
-        'miscellaneous': 'assay component name',
-        'mm': 'assay component name',
-        'moles-per-liter': 'assay component name',
-        'negative log10 molar': 'assay component name',
-        'ng/ml': 'assay component name',
-        'nm': 'assay component name',
-        'nmr': 'assay component name',
-        'nucleic acid binding': 'assay component name',
-        'number-per-liter': 'assay component name',
-        'number-per-well': 'assay component name',
-        'optical densitometry': 'assay component name',
-        'oryctolagus cuniculus': 'assay component name',
-        'phosphatase': 'assay component name',
-        'pm': 'assay component name',
-        'protease': 'assay component name',
-        'radiometric': 'assay component name',
-        'signal direction': 'assay component name',
-        'spectramax plus 384 microplate reader': 'assay component name',
-        'transcription factor': 'assay component name',
-        'typhoon 8600 variable mode imager': 'assay component name',
-        'uiu/ml': 'assay component name',
-        'um': 'assay component name',
-        'µm': 'assay component name']
-*/
 
 final Integer START_ROW = 3 //1-based
 InputStream inp = new FileInputStream("C:/Users/gwalzer/Desktop/NCGC-DNA repair + comments.xlsx");
@@ -317,9 +300,8 @@ def getCellContentByRowAndColumnIds(Row row, String columnString) {
  * Clean up all the key/value pairs names to:
  * 1. remove the '| | |' prefix
  * 2. trim
- * 3. move to lower case
- * 4. convert to standard names based on the attributeNameMapping map
- * 5. Convert text field to numerical values where appropriate (e.g, '680 nm' --> 680, and the 'nm' part is discarded)
+ * 3. convert to standard names based on the attributeNameMapping map
+ * 4. Convert text field to numerical values where appropriate (e.g, '680 nm' --> 680, and the 'nm' part is discarded)
  */
 private List<AssayContextDTO> cleanAttributeContents(List<AssayContextDTO> assayContextList, Map attributeNameMapping) {
     List<AssayContextDTO> assayContextListCleaned = []
@@ -328,13 +310,15 @@ private List<AssayContextDTO> cleanAttributeContents(List<AssayContextDTO> assay
         assayCtxDTO.name = assayContextDTO.name
         assayCtxDTO.aid = assayContextDTO.aid
         assayContextDTO.attributes.each {Attribute attribute ->
-            String ky = StringUtils.split(attribute.key, '|').toList().last().trim().toLowerCase()
-            ky = attributeNameMapping.containsKey(ky) ? attributeNameMapping.get(ky) : ky
+            String ky = StringUtils.split(attribute.key, '|').toList().last().trim()
+            String matchedKey = attributeNameMapping.keySet().find { String key -> return StringUtils.equalsIgnoreCase(key, ky)}
+            ky = matchedKey ? attributeNameMapping.get(matchedKey) : ky
 
             def val = attribute.value
             if (attribute.value instanceof String) {
-                String valStr = StringUtils.split(attribute.value as String, '|').toList().last().trim().toLowerCase()
-                valStr = attributeNameMapping.containsKey(valStr) ? attributeNameMapping.get(valStr) : valStr
+                String valStr = StringUtils.split(attribute.value as String, '|').toList().last().trim()
+                String matchedValue = attributeNameMapping.keySet().find { String key -> return StringUtils.equalsIgnoreCase(key, valStr)}
+                valStr = matchedValue ? attributeNameMapping.get(matchedValue) : valStr
                 //if val could be number value, replace it ('650 nM' --> 650)
                 val = (valStr && valStr.split()[0].isNumber()) ? new BigDecimal(valStr.split()[0]) : valStr
             }
@@ -361,13 +345,13 @@ private void validateAttributeContentAgainstElementTable(List<AssayContextDTO> a
     assayContextList.each {AssayContextDTO assayContextDTO ->
         assayContextDTO.attributes.each {Attribute attribute ->
             //Add all keys
-            attributeVocabulary.add(attribute.key.toLowerCase())
+            attributeVocabulary.add(attribute.key)
             //Add all the values, except for the ones that are numeric values or a type-in field or a Free-type field
             if (attribute.value &&
                     (attribute.value instanceof String) &&
                     !attribute.typeIn &&
                     (attribute.attributeType != AttributeType.Free)) {
-                attributeVocabulary.add(attribute.value.toLowerCase())
+                attributeVocabulary.add(attribute.value)
             }
         }
     }
@@ -377,7 +361,7 @@ private void validateAttributeContentAgainstElementTable(List<AssayContextDTO> a
     attributeVocabulary.each {String attr ->
 //    println("Attribute: '${attr}'")
         //Swap the attribute name with the mapping we have (e.g., '[detector] assay component (type in)' --> 'assay component'
-        attr = attributeNameMapping.containsKey(attr) ? attributeNameMapping.get(attr) : attr
+//        attr = attributeNameMapping.containsKey(attr) ? attributeNameMapping.get(attr) : attr
         Element element = Element.findByLabelIlike(attr)
 //    println("Element: ${element}")
         if (element) {
@@ -448,75 +432,80 @@ private Assay getAssayFromAid(long AID) {
  * @return
  */
 private List<AssayContextDTO> createAndPersistAssayContexts(List<AssayContextDTO> assayContextListCleaned) {
-//    def out = new File('DnaSpreadsheetParsingAssayContextValidationErrors' + '_' + System.currentTimeMillis() + '.txt')
-//    out.withWriterAppend { writer ->
-    assayContextListCleaned.each { AssayContextDTO assayContextDTO ->
-        AssayContext.withTransaction { TransactionStatus status ->
-            //create the assay-context
-            AssayContext assayContext = new AssayContext()
-            assayContext.assay = getAssayFromAid(assayContextDTO.aid)
-            //TODO DELETE DELETE DELETE the following line should be deleted once all assays have been uploaded to CAP
-            if (!assayContext.assay) return //skip this assay context
-            assayContext.contextName = assayContextDTO.name
+    def out = new File('DnaSpreadsheetParserResults' + '_' + System.currentTimeMillis() + '.txt')
+    out.withWriterAppend { writer ->
+        Integer totalAssayContextItems = 0
+        assayContextListCleaned.each { AssayContextDTO assayContextDTO -> totalAssayContextItems += assayContextDTO.attributes.size()}
+        Integer tally = 0
 
-            //create the assay-context-item and add them to assay-context
-            assayContextDTO.attributes.each { Attribute attribute ->
-                AssayContextItem assayContextItem = new AssayContextItem()
-                assayContextItem.assayContext = assayContext
-                assayContextItem.attributeType = attribute.attributeType
-                //populate the attribute key's element
-                Element element = Element.findByLabelIlike(attribute.key)
-                assert element, "We must have an element for the assay-context-item attribute"
-                assayContextItem.attributeElement = element
+        assayContextListCleaned.each { AssayContextDTO assayContextDTO ->
+            AssayContext.withTransaction { TransactionStatus status ->
+                //create the assay-context
+                AssayContext assayContext = new AssayContext()
+                assayContext.assay = getAssayFromAid(assayContextDTO.aid)
+                //TODO DELETE DELETE DELETE the following line should be deleted once all assays have been uploaded to CAP
+                if (!assayContext.assay) return //skip this assay context
+                assayContext.contextName = assayContextDTO.name
 
-                //populate attribute-value type and value
-                element = attribute.value ? Element.findByLabelIlike(attribute.value) : null
-                if (element) {//if the value string could be matched against an element then add it to the valueElement
-                    assayContextItem.valueElement = element
-                    assayContextItem.valueDisplay = element.label
-                } else if (attribute.value && (!(attribute.value instanceof String) || attribute.value.isNumber())) {//if the attribute's value is a number value, store it in the valueNum field
-                    Float val = new Float(attribute.value)
-                    assayContextItem.valueNum = val
-                    assayContextItem.valueDisplay = val.toString()
-                } else if (attribute.typeIn || (attribute.attributeType == AttributeType.Free)) {//if the attribute's value is a type-in or attribute-type is Free, then simply store it the valueDisplay field
-                    assayContextItem.valueDisplay = attribute.value
+                //create the assay-context-item and add them to assay-context
+                assayContextDTO.attributes.each { Attribute attribute ->
+                    AssayContextItem assayContextItem = new AssayContextItem()
+                    assayContextItem.assayContext = assayContext
+                    assayContextItem.attributeType = attribute.attributeType
+                    //populate the attribute key's element
+                    Element element = Element.findByLabelIlike(attribute.key)
+                    assert element, "We must have an element for the assay-context-item attribute"
+                    assayContextItem.attributeElement = element
+
+                    //populate attribute-value type and value
+                    element = attribute.value ? Element.findByLabelIlike(attribute.value) : null
+                    if (element) {//if the value string could be matched against an element then add it to the valueElement
+                        assayContextItem.valueElement = element
+                        assayContextItem.valueDisplay = element.label
+                    } else if (attribute.value && (!(attribute.value instanceof String) || attribute.value.isNumber())) {//if the attribute's value is a number value, store it in the valueNum field
+                        Float val = new Float(attribute.value)
+                        assayContextItem.valueNum = val
+                        assayContextItem.valueDisplay = val.toString()
+                    } else if (attribute.typeIn || (attribute.attributeType == AttributeType.Free)) {//if the attribute's value is a type-in or attribute-type is Free, then simply store it the valueDisplay field
+                        assayContextItem.valueDisplay = attribute.value
+                    } else {
+                        //throw an error
+                        println("Illage attribute value: '${attribute.key}'/'${attribute.value}'")
+                        assert false, "Illage attribute value"
+                    }
+
+                    //populate the qualifier field, if exists
+                    if (attribute.qualifier) {
+                        assayContextItem.qualifier = String.format('%-2s', attribute.qualifier)
+                    }
+
+                    assayContext.addToAssayContextItems(assayContextItem)
+                }
+
+                assayContext.save()
+                if (assayContext.hasErrors()) {
+                    println("AssayContext errors")
+                    writer.writeLine("AssayContext Errors: ${assayContext.errors}")
                 } else {
-                    //throw an error
-                    println("Illage attribute value: '${attribute.key}'/'${attribute.value}'")
-                    assert false, "Illage attribute value"
+                    writer.writeLine("Assay ID: ${assayContext.assay.id}")
+                    writer.writeLine("ContextName: ${assayContext.contextName}")
+                    assayContext.assayContextItems.each { AssayContextItem assayContextItem ->
+                        writer.writeLine("new attribute")
+                        writer.writeLine("\tAttributeElement: '${assayContextItem?.attributeElement?.label}'")
+                        writer.writeLine("\tValueElement: '${assayContextItem?.valueElement?.label}'")
+                        writer.writeLine("\tAttributeType: '${assayContextItem?.attributeType}'")
+                        writer.writeLine("\tValueDisplay: '${assayContextItem?.valueDisplay}'")
+                        writer.writeLine("\tValueNum: '${assayContextItem?.valueNum}'")
+                        writer.writeLine("\tQualifier: '${assayContextItem?.qualifier}'")
+                    }
+                    println("Assay ID: ${assayContext.assay.id} (${tally++}/${totalAssayContextItems})")
                 }
 
-                //populate the qualifier field, if exists
-                if (attribute.qualifier) {
-                    assayContextItem.qualifier = String.format('%-2s', attribute.qualifier)
-                }
-
-                assayContext.addToAssayContextItems(assayContextItem)
+                //comment out to commit the transaction
+                status.setRollbackOnly()
             }
-
-            assayContext.save()
-            if (assayContext.hasErrors()) {
-                println("AssayContext errors")
-                writer.writeLine("AssayContext Errors: ${assayContext.errors}")
-            } else {
-                println("Assay ID: ${assayContext.assay.id}")
-                println("ContextName: ${assayContext.contextName}")
-                assayContext.assayContextItems.each { AssayContextItem assayContextItem ->
-                    println("new attribute")
-                    println("\tAttributeElement: '${assayContextItem?.attributeElement?.label}'")
-                    println("\tValueElement: '${assayContextItem?.valueElement?.label}'")
-                    println("\tAttributeType: '${assayContextItem?.attributeType}'")
-                    println("\tValueDisplay: '${assayContextItem?.valueDisplay}'")
-                    println("\tValueNum: '${assayContextItem?.valueNum}'")
-                    println("\tQualifier: '${assayContextItem?.qualifier}'")
-                }
-            }
-
-            //comment out to commit the transaction
-            //status.setRollbackOnly()
         }
     }
-//    }
 }
 
 /**
