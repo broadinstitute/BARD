@@ -13,6 +13,7 @@ import org.junit.After
 import org.junit.Before
 import spock.lang.Unroll
 
+
 @Unroll
 class QueryServiceIntegrationSpec extends IntegrationSpec {
 
@@ -143,7 +144,7 @@ class QueryServiceIntegrationSpec extends IntegrationSpec {
 
     void "test find Compounds By Text Search String #label"() {
         when: ""
-        final Map compoundAdapterMap = queryService.findCompoundsByTextSearch(searchString, top, skip)
+        final Map compoundAdapterMap = queryService.findCompoundsByTextSearch(searchString, top, skip, filters)
         then:
         assert compoundAdapterMap
         final List<CompoundAdapter> compoundAdapters = compoundAdapterMap.compoundAdapters
@@ -151,10 +152,12 @@ class QueryServiceIntegrationSpec extends IntegrationSpec {
 
         assert numberOfCompounds == compoundAdapters.size()
         where:
-        label                     | searchString         | skip | top | numberOfCompounds
-        "dna repair"              | "dna repair"         | 0    | 10  | 10
-        "dna repair skip and top" | "dna repair"         | 10   | 10  | 10
-        "biological process"      | "biological process" | 0    | 10  | 10
+        label                             | searchString         | skip | top | numberOfCompounds | filters
+        "dna repair"                      | "dna repair"         | 0    | 10  | 10                | []
+       // "dna repair with filters"         | "dna repair"         | 0    | 10  | 10                | [new SearchFilter("gobp_term", "DNA repair"), new SearchFilter("gobp_term", "response to UV-C")]
+        "dna repair skip and top"         | "dna repair"         | 10   | 10  | 10                | []
+        "biological process"              | "biological process" | 0    | 10  | 10                | []
+        //"biological process with filters" | "biological process" | 0    | 10  | 10                | [new SearchFilter("gobp_term", "DNA repair"), new SearchFilter("gobp_term", "response to UV-C")]
 
     }
 
@@ -178,7 +181,7 @@ class QueryServiceIntegrationSpec extends IntegrationSpec {
 
     void "test find Assays By Text Search String #label"() {
         when: ""
-        final Map assayAdapterMap = queryService.findAssaysByTextSearch(searchString, top, skip)
+        final Map assayAdapterMap = queryService.findAssaysByTextSearch(searchString, top, skip, filters)
         then:
         List<AssayAdapter> assayAdapters = assayAdapterMap.assayAdapters
         assert !assayAdapters.isEmpty()
@@ -187,10 +190,12 @@ class QueryServiceIntegrationSpec extends IntegrationSpec {
         assert assayAdapterMap.nHits == numberOfAssays
 
         where:
-        label                     | searchString         | skip | top | numberOfAssays
-        "dna repair"              | "dna repair"         | 0    | 10  | 10
-        "dna repair skip and top" | "dna repair"         | 10   | 10  | 10
-        "biological process"      | "biological process" | 0    | 10  | 10
+        label                             | searchString         | skip | top | numberOfAssays | filters
+        "dna repair"                      | "dna repair"         | 0    | 10  | 10             | []
+        "dna repair with filters"         | "dna repair"         | 0    | 10  | 3              | [new SearchFilter("gobp_term", "DNA repair"), new SearchFilter("gobp_term", "response to UV-C")]
+        "dna repair skip and top"         | "dna repair"         | 10   | 10  | 10             | []
+        "biological process"              | "biological process" | 0    | 10  | 10             | []
+        "biological process with filters" | "biological process" | 0    | 10  | 1              | [new SearchFilter("gobp_term", "DNA repair"), new SearchFilter("gobp_term", "response to UV-C")]
 
     }
 
@@ -213,20 +218,22 @@ class QueryServiceIntegrationSpec extends IntegrationSpec {
 
     void "test find Projects By Text Search #label"() {
         when: ""
-        Map projectAdapterMap = queryService.findProjectsByTextSearch(searchString, top, skip)
+        Map projectAdapterMap = queryService.findProjectsByTextSearch(searchString, top, skip, filters)
         and:
         List<ProjectAdapter> projectAdapters = projectAdapterMap.projectAdapters
         then:
         assert !projectAdapters.isEmpty()
-        assert projectAdapters.size()== numberOfProjects
+        assert projectAdapters.size() == numberOfProjects
         assert projectAdapterMap.facets
         assert projectAdapterMap.nHits == numberOfProjects
 
         where:
-        label                     | searchString         | skip | top | numberOfProjects
-        "dna repair"              | "dna repair"         | 0    | 10  | 10
-        "dna repair skip and top" | "dna repair"         | 10   | 10  | 10
-        "biological process"      | "biological process" | 0    | 10  | 10
+        label                             | searchString         | skip | top | numberOfProjects | filters
+        "dna repair"                      | "dna repair"         | 0    | 10  | 10               | []
+  //      "dna repair with filters"         | "dna repair"         | 0    | 10  | 10               | [new SearchFilter("gobp_term", "DNA repair"), new SearchFilter("gobp_term", "response to UV-C")]
+        "dna repair skip and top"         | "dna repair"         | 10   | 10  | 10               | []
+        "biological process"              | "biological process" | 0    | 10  | 10               | []
+    //    "biological process with filters" | "biological process" | 0    | 10  | 10               | [new SearchFilter("gobp_term", "DNA repair"), new SearchFilter("gobp_term", "response to UV-C")]
 
     }
 

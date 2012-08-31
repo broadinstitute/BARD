@@ -45,6 +45,7 @@ class QueryService {
      * @param searchString
      * @param top
      * @param skip
+     * @param searchFilters - TODO: Not yet supported by JDO
      * @return
      */
     Map findCompoundsByTextSearch(final String searchString, final int top = 50, final int skip = 0, final List<SearchFilter> searchFilters = []) {
@@ -73,7 +74,8 @@ class QueryService {
      * @param searchString
      * @param top
      * @param skip
-     * @return
+     * @param searchFilters
+     * @return Map
      */
     Map findAssaysByTextSearch(final String searchString, final int top = 50, final int skip = 0, final List<SearchFilter> searchFilters = []) {
         final List<AssayAdapter> foundAssayAdapters = []
@@ -98,7 +100,8 @@ class QueryService {
      * @param searchString
      * @param top
      * @param skip
-     * @return
+     * @param searchFilters - TODO: Not yet supported by JDO
+     * @return   Map
      */
     Map findProjectsByTextSearch(final String searchString, final int top = 50, final int skip = 0, final List<SearchFilter> searchFilters = []) {
         List<ProjectAdapter> foundProjectAdapters = []
@@ -299,7 +302,7 @@ class QueryService {
         final SearchParams searchParams = new SearchParams(searchString)
         searchParams.setSkip(skip)
         searchParams.setTop(top);
-        applySearchFilters(searchParams,searchFilters)
+        applySearchFilters(searchParams, searchFilters)
         return searchParams
 
     }
