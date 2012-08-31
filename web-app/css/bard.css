@@ -77,9 +77,6 @@ ul.results > li {
     border-top: 1px solid #d3d3d3;
 }
 
-
-
-
 .panel {
     position: absolute;
     top: 150px;
@@ -95,37 +92,7 @@ ul.results > li {
     -webkit-border-top-left-radius: 5px;
     -moz-border-radius-bottomleft: 5px;
     -webkit-border-bottom-left-radius: 5px;
-
 }
-
-
-ul{
-    padding: 0;
-    margin: 0;
-    list-style-type: none;
-}
-
-ul li{
-    padding: 0;
-    margin: 0;
-    list-style-type: none;
-}
-
-
-
-/*FONT STACK */
-
-
-body,
-input, select, textarea {
-    font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
-    height: 100%;
-    width: 100%;
-    padding: 0;
-    margin: 0;
-}
-
-/* BASE LAYOUT */
 
 
 div.qcart  {
@@ -165,11 +132,11 @@ div.addtocartholder{
     border: 0 none;
 }
 a.addtocart { //right
-    width:200px;
+width:200px;
     height: 200px;
 }
 img.addtocart {  //left
-    width:200px;
+width:200px;
     float:left;
 }
 
