@@ -3,7 +3,7 @@
 <html>
 <head>
     <meta name="layout" content="details"/>
-    <title>BARD : Project : ID ${projectInstance?.id}</title>
+    <title>BARD : Project : ID ${projectAdapter?.project?.id}</title>
     <r:script>
 	$(document).ready(function() {
 		$( "#accordion" ).accordion({ autoHeight: false });
@@ -12,10 +12,10 @@
 
 </head>
 <body>
-<h1 class="detail">Project Detail for ID ${projectInstance?.id}</h1>
+<h1 class="detail">Project Detail for ID ${projectAdapter?.project?.id}</h1>
 <div class="row-fluid" style="clear:both;">
     <div class="span12 header">
-        <h3>${projectInstance?.name}</h3>
+        <h3>${projectAdapter?.name}</h3>
     </div>
 </div>
 <r:script>
@@ -37,7 +37,7 @@
                 <a href="#summary-header" id="summary-header" class="accordion-toggle" data-toggle="collapse" data-target="#summary-info"><i class="icon-chevron-down"></i> Summary Info</a>
                 <div id="summary-info" class="accordion-body in collapse">
                     <div class="accordion-inner">
-                        <g:render template="projectSummary" model="['projectInstance': projectInstance]" />
+                        <g:render template="projectSummary" model="['projectAdapter': projectAdapter]" />
                     </div>
                 </div>
             </div>
@@ -47,7 +47,7 @@
                 <a href="#document-header" id="document-header" class="accordion-toggle" data-toggle="collapse" data-target="#document-info"><i class="icon-chevron-right"></i> Documents</a>
                 <div id="document-info" class="accordion-body collapse">
                     <div class="accordion-inner">
-                        <g:render template="projectDocuments" model="['projectInstance': projectInstance]" />
+                        <g:render template="projectDocuments" model="['projectAdapter': projectAdapter]" />
                     </div>
                 </div>
             </div>

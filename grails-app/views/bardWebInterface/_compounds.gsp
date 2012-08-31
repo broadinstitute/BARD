@@ -18,7 +18,7 @@
             </g:link>
             <a href="/bardwebquery/sarCart/add/${compound.cid}"
                onclick="jQuery.ajax({  type:'POST',
-                   data:{'id': '${JavaScriptUtility.cleanup(compound.cid)}','class': 'class bardqueryapi.CartCompound','smiles':'${JavaScriptUtility.cleanup(compound.iupac_name)}','version': '0'},
+                   data:{'id': '${compound.cid}','class': 'class bardqueryapi.CartCompound','smiles':'${JavaScriptUtility.cleanup(compound.iupac_name)}','version': '0'},
                    url:'/bardwebquery/sarCart/add',
                    success:function(data,textStatus){
                        jQuery('#sarCartRefill').html(data);

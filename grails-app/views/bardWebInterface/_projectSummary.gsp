@@ -1,25 +1,25 @@
 <dl class="dl-horizontal">
-    <g:if test="${projectInstance?.id}">
+    <g:if test="${projectAdapter?.project?.id}">
         <dt>ID:</dt>
-        <dd>${projectInstance.id}</dd>
+        <dd>${projectAdapter.project.id}</dd>
     </g:if>
-    <g:if test="${projectInstance?.name}">
+    <g:if test="${projectAdapter?.name}">
         <dt>Name:</dt>
-        <dd>${projectInstance.name}</dd>
+        <dd>${projectAdapter.name}</dd>
     </g:if>
-    <g:if test="${projectInstance?.category}">
+    <g:if test="${projectAdapter?.project?.category}">
         <dt>Category:</dt>
-        <dd>${projectInstance.category}</dd>
+        <dd>${projectAdapter.project.category}</dd>
     </g:if>
-    <g:if test="${projectInstance?.role}">
+    <g:if test="${projectAdapter?.project?.role}">
         <dt>Role:</dt>
-        <dd>${projectInstance.role}</dd>
+        <dd>${projectAdapter.project.role}</dd>
     </g:if>
-    <g:if test="${projectInstance?.type}">
+    <g:if test="${projectAdapter?.project?.type}">
         <dt>Type:</dt>
-        <dd>${projectInstance.type}</dd>
+        <dd>${projectAdapter.project.type}</dd>
     </g:if>
-    <g:each var="otherProjectProperty" in="${projectInstance?.values}">
+    <g:each var="otherProjectProperty" in="${projectAdapter?.project?.values}">
         <dt>${otherProjectProperty.id}:</dt>
         <dd>${otherProjectProperty.value}</dd>
     </g:each>

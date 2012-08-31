@@ -2,10 +2,11 @@ package bardqueryapi
 
 import bard.core.AssayValues
 import bard.core.EntityServiceManager
-import bard.core.Project
 import bard.core.StructureSearchParams
+import bard.core.Value
 import bard.core.adapter.AssayAdapter
 import bard.core.adapter.CompoundAdapter
+import bard.core.adapter.ProjectAdapter
 import bard.core.rest.RESTEntityServiceManager
 import grails.plugin.spock.IntegrationSpec
 import org.junit.After
@@ -17,10 +18,10 @@ class QueryServiceIntegrationSpec extends IntegrationSpec {
 
     QueryService queryService
     EntityServiceManager esm
-    String baseURL = "http://bard.nih.gov/api/v1"
 
     @Before
     void setup() {
+        String baseURL = queryService.ncgcSearchBaseUrl
         this.esm = new RESTEntityServiceManager(baseURL);
 
     }
@@ -83,15 +84,16 @@ class QueryServiceIntegrationSpec extends IntegrationSpec {
         given:
         final Integer projectId = new Integer(1772)
         when: "Client enters a project ID and the showProject method is called"
-        Project project = queryService.showProject(projectId)
+        ProjectAdapter projectAdapter = queryService.showProject(projectId)
         then: "The Project is found"
-        assert project
-        assert projectId == project.id
-        assert project.name
-        assert project.type == AssayValues.AssayType.Other
-        assert project.role == AssayValues.AssayRole.Primary
-        assert project.category == AssayValues.AssayCategory.Unknown
-        assert project.description
+        assert projectAdapter
+        assert projectAdapter.project
+        assert projectId == projectAdapter.project.id
+        assert projectAdapter.name
+        assert projectAdapter.project.type == AssayValues.AssayType.Other
+        assert projectAdapter.project.role == AssayValues.AssayRole.Primary
+        assert projectAdapter.project.category == AssayValues.AssayCategory.Unknown
+        assert projectAdapter.project.description
     }
 
     void "test Show Assay"() {
@@ -156,8 +158,12 @@ class QueryServiceIntegrationSpec extends IntegrationSpec {
         then:
         assert compoundAdapterMap
         final List<CompoundAdapter> compoundAdapters = compoundAdapterMap.compounds
-        assert compoundAdapters
+        Collection<Value> facets = compoundAdapterMap.facets
+        assert compoundAdapters != null
+        assert compoundAdapterMap
         assert cids.size() == compoundAdapters.size()
+        assert facets != null
+        assert !facets.isEmpty()
         where:
         label                        | cids
         "Single CID"                 | [3235555]
@@ -168,9 +174,12 @@ class QueryServiceIntegrationSpec extends IntegrationSpec {
         when: ""
         final Map assayAdapterMap = queryService.findAssaysByTextSearch(searchString, top, skip)
         then:
-        List<AssayAdapter> assays = assayAdapterMap.assays
-        assert assays
-        assert numberOfAssays == assays.size()
+        List<AssayAdapter> assayAdapters = assayAdapterMap.assays
+        assert !assayAdapters.isEmpty()
+        assert numberOfAssays == assayAdapters.size()
+        assert assayAdapterMap.facets
+        assert assayAdapterMap.nHits == numberOfAssays
+
         where:
         label                     | searchString         | skip | top | numberOfAssays
         "dna repair"              | "dna repair"         | 0    | 10  | 10
@@ -183,10 +192,13 @@ class QueryServiceIntegrationSpec extends IntegrationSpec {
     void "test find Assays By APIDs #label"() {
         when: ""
         final Map assayAdapterMap = queryService.findAssaysByADIDs(apids)
+
+        and:
+        List<AssayAdapter> assayAdapters = assayAdapterMap.assays
         then:
-        List<AssayAdapter> assays = assayAdapterMap.assays
-        assert assays
-        assert apids.size() == assays.size()
+        assert !assayAdapters.isEmpty()
+        assert assayAdapterMap.facets.isEmpty()
+        assert assayAdapters.size() == apids.size()
         where:
         label                         | apids
         "Single APID"                 | [644]
@@ -195,10 +207,15 @@ class QueryServiceIntegrationSpec extends IntegrationSpec {
 
     void "test find Projects By Text Search #label"() {
         when: ""
-        List<Project> projects = queryService.findProjectsByTextSearch(searchString, top, skip)
+        Map projectAdapterMap = queryService.findProjectsByTextSearch(searchString, top, skip)
+        and:
+        List<ProjectAdapter> projectAdapters = projectAdapterMap.projects
         then:
-        assert projects
-        assert numberOfProjects == projects.size()
+        assert !projectAdapters.isEmpty()
+        assert projectAdapters.size()== numberOfProjects
+        assert projectAdapterMap.facets
+        assert projectAdapterMap.nHits == numberOfProjects
+
         where:
         label                     | searchString         | skip | top | numberOfProjects
         "dna repair"              | "dna repair"         | 0    | 10  | 10
@@ -209,10 +226,14 @@ class QueryServiceIntegrationSpec extends IntegrationSpec {
 
     void "test find Projects By PIDs #label"() {
         when: ""
-        final List<Project> projects = queryService.findProjectsByPIDs(pids)
+        final Map projectAdapterMap = queryService.findProjectsByPIDs(pids)
+
+        and:
+        final List<ProjectAdapter> projectAdapters = projectAdapterMap.projects
         then:
-        assert projects
-        assert pids.size() == projects.size()
+        assert projectAdapters
+        assert projectAdapterMap.facets.isEmpty()
+        assert projectAdapters.size() == pids.size()
         where:
         label                               | pids
         "Single PID"                        | [1772]

@@ -14,6 +14,9 @@ class JavaScriptUtility {
      * @return
      */
     static String cleanup (String incoming){
-        return incoming.replace("'","\\'")
+        if(incoming){
+            return incoming?.replace("'","\\'")
+        }
+        return ""
     }
 }
