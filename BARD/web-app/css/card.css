@@ -8,6 +8,8 @@ div.cardView table.gridtable caption {
     font-size: larger;
     font-weight: bolder;
     margin: 4px;
+    border: 1px;
+    border-color: #000000;
 }
 
 div.cardView div.card {
@@ -25,3 +27,12 @@ div.cardView table.gridtable td {
     width: 50%;
     border-color: #d3d3d3;
 }
+
+.drophover{
+    background-color: yellow;
+}
+
+.drophoverCaption{
+    background-color: green;
+}
+

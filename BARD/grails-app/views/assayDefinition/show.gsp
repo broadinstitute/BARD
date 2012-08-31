@@ -138,7 +138,7 @@
                 revert:true,
                 appendTo:'body',
                 helper:function (event) {
-                    return $('<div class="cardView"><table class="gridtable"></table></div>').find('table').append($(event.target).closest('tr').clone());
+                    return $('<div class="cardView"><table style="width:33%;" class="gridtable"></table></div>').find('table').append($(event.target).closest('tr').clone());
                 }
             });
         });
@@ -163,10 +163,30 @@
                 }
             });
         });
-
-    }
+        $(document).ready(function () {
+            $("caption.assay_context").droppable({
+                hoverClass:"drophoverCaption",
+                drop:function (event, ui) {
+                    var src_assay_context_item_id = ui.draggable.attr('id');
+                    var target_assay_context_id = $(this).attr('id');
+                    var data = {'src_assay_context_item_id':src_assay_context_item_id,
+                        'target_assay_context_id':target_assay_context_id};
+                    $.ajax({
+                        type:'POST',
+                        url:'../updateCardTitle',
+                        data:data,
+                        success:function (data) {
+                            $("div#card-" + target_assay_context_id).replaceWith(data);
+                            initDnd();
+                        }
+                    });
+                    ui.helper.remove();
+                }
+            });
+        });
+    };
     $(document).ready(function () {
-       initDnd();
+        initDnd();
     });
 </r:script>
 </body>
