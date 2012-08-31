@@ -1,24 +1,24 @@
 <%@ page import="bardqueryapi.JavaScriptUtility" %>
 <%@ page import="grails.converters.JSON" %>
 <div class="row-fluid">
-        <g:render template="facets" model="['metaData': metaData]"/>
+    <g:render template="facets" model="['facets': facets]"/>
 <div class="span9">
     <table class="table">
-    <g:each var="compound" in="${docs}">
+    <g:each var="compoundAdapter" in="${compoundAdapters}">
         <tr>
         <td>
-            <img src="${createLink(controller: 'chemAxon', action: 'generateStructureImage', params: [smiles: compound.iso_smiles, width: 150, height: 120])}"/>
+            <img src="${createLink(controller: 'chemAxon', action: 'generateStructureImage', params: [smiles: compoundAdapter.structureSMILES, width: 150, height: 120])}"/>
         </td>
         <td>
-            <g:link action="showCompound" id="${compound.cid}" target="_blank">
-                PubChem CID: ${compound.cid}
-                <g:if test="${compound.iupac_name}">
-                    - ${compound.iupac_name}
+            <g:link action="showCompound" id="${compoundAdapter.pubChemCID}" target="_blank">
+                PubChem CID: ${compoundAdapter.pubChemCID}
+                <g:if test="${compoundAdapter.name}">
+                    - ${compoundAdapter.name}
                 </g:if>
             </g:link>
-            <a href="/bardwebquery/sarCart/add/${compound.cid}"
+            <a href="/bardwebquery/sarCart/add/${compoundAdapter.pubChemCID}"
                onclick="jQuery.ajax({  type:'POST',
-                   data:{'id': '${compound.cid}','class': 'class bardqueryapi.CartCompound','smiles':'${JavaScriptUtility.cleanup(compound.iupac_name)}','version': '0'},
+                   data:{'id': '${compoundAdapter.pubChemCID}','class': 'class bardqueryapi.CartCompound','smiles':'${JavaScriptUtility.cleanup(compoundAdapter.name)}','version': '0'},
                    url:'/bardwebquery/sarCart/add',
                    success:function(data,textStatus){
                        jQuery('#sarCartRefill').html(data);
@@ -31,11 +31,11 @@
         </tr>
     </g:each>
     </table>
-    <g:hiddenField name="totalCompounds" id="totalCompounds" value="${metaData?.nhit}"/>
-        <div class="pagination">
-            <util:remotePaginate total="${metaData ? metaData.nhit : 0}" update="compounds" controller="bardWebInterface"
-                                 action="searchCompounds" pageSizes="[10,50]"
-                                 params='[searchString: "${searchString}"]'/>
-    </div>
+    <g:hiddenField name="totalCompounds" id="totalCompounds" value="${nhits}"/>
+        %{--<div class="pagination">--}%
+            %{--<util:remotePaginate total="${metaData ? metaData.nhit : 0}" update="compounds" controller="bardWebInterface"--}%
+                                 %{--action="searchCompounds" pageSizes="[10,50]"--}%
+                                 %{--params='[searchString: "${searchString}"]'/>--}%
+    %{--</div>--}%
 </div>
 </div>

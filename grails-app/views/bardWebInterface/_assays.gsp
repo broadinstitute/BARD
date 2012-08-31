@@ -1,14 +1,14 @@
 <%@ page import="bardqueryapi.JavaScriptUtility" %>
 <div class="row-fluid">
-         <g:render template="facets" model="['metaData': metaData]"/>
+    <g:render template="facets" model="['facets': facets]"/>
 <div class="span9">
     <ul class="unstyled results">
-    <g:each var="assay" in="${docs}">
+    <g:each var="assayAdapter" in="${assayAdapters}">
         <li>
-            <g:link action="showAssay" id="${assay.assay_id}" target="_blank">ADID: ${assay.assay_id} - ${assay.name}</g:link>
-        <a href="/bardwebquery/sarCart/add/${assay.assay_id}"
+            <g:link action="showAssay" id="${assayAdapter.assay.id}" target="_blank">ADID: ${assayAdapter.assay.id} - ${assayAdapter.name}</g:link>
+        <a href="/bardwebquery/sarCart/add/${assayAdapter.assay.id}"
            onclick="jQuery.ajax({  type:'POST',
-               data:{'id': '${assay.assay_id}','class': 'class bardqueryapi.CartAssay','assayTitle':'${JavaScriptUtility.cleanup(assay.name)}','version': '0'},
+               data:{'id': '${assayAdapter.assay.id}','class': 'class bardqueryapi.CartAssay','assayTitle':'${JavaScriptUtility.cleanup(assayAdapter.name)}','version': '0'},
                url:'/bardwebquery/sarCart/add',
                success:function(data,textStatus){
                    jQuery('#sarCartRefill').html(data);
@@ -18,17 +18,17 @@
            action="add"
            controller="sarCart"><div class="cntrcart"><nobr><i class="icon-shopping-cart"></i>Add to Cart</nobr></div></a>
               <ul>
-                <li>${assay.highlight}</li>
+                <li>${assayAdapter.searchHighlight}</li>
             </ul>
         </li>
     </g:each>
     </ul>
 
-    <g:hiddenField name="totalAssays" id="totalAssays" value="${metaData?.nhit}"/>
-        <div class="pagination">
-            <util:remotePaginate total="${metaData ? metaData.nhit : 0}" update="assays" controller="bardWebInterface"
-                                 action="searchAssays" pageSizes="[10,50]"
-                                 params='[searchString: "${searchString}"]'/>
-        </div>
+    <g:hiddenField name="totalAssays" id="totalAssays" value="${nhits}"/>
+    %{--<div class="pagination">--}%
+        %{--<util:remotePaginate total="${nhits ? nhits : 0}" update="assays" controller="bardWebInterface"--}%
+                             %{--action="searchAssays"--}%
+                             %{--params='[searchString: "${searchString}"]'/>--}%
+    %{--</div>--}%
 </div>
 </div>

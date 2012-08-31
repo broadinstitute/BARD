@@ -1,17 +1,17 @@
 <div class="span3">
-    <g:if test="${metaData}">
+    <g:if test="${facets}">
         <div class="facets">
             <h5>FILTERS</h5>
-            <g:each in="${metaData.facets}" var="facet">
+            <g:each in="${facets}" var="facet">
                 <ul class="unstyled">
-                    <h6>${facet.facetName}</h6>
+                    <h6>${facet.id}</h6>
                     <ul>
-                        <g:each in="${facet.counts.entrySet()}" var="entry">
-                            <li>${entry.key} (${entry.value})</li>
+                        <g:each in="${facet.children}" var="entry">
+                            <li>${entry.id} (${entry.value})</li>
                         </g:each>
                     </ul>
                 </ul>
             </g:each>
-            </div>
+        </div>
     </g:if>
 </div>

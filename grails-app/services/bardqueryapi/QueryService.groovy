@@ -41,7 +41,6 @@ class QueryService {
 
     //========================================================== Free Text Searches ================================
     /**
-     * TODO: Ask for number of hits
      * We are not quite ready to use this method yet
      * @param searchString
      * @param top
@@ -50,7 +49,7 @@ class QueryService {
      */
     Map findCompoundsByTextSearch(final String searchString, final int top = 10, final int skip = 0) {
         final List<CompoundAdapter> foundCompoundAdapters = []
-        final List facetMapList = []
+        Collection<Value> facets = []
 
         if (searchString) {
             final RESTCompoundService restCompoundService = this.queryServiceWrapper.getRestCompoundService()
@@ -64,24 +63,23 @@ class QueryService {
 
             //convert to adapters
             foundCompoundAdapters.addAll(compoundsToAdapters(compounds))
-            final Collection<Value> facets = searchIterator.facets
-            facetMapList.addAll(extractAllFacets(facets))
-        }
-        return [compounds: foundCompoundAdapters, facets: facetMapList, nHits: foundCompoundAdapters.size()]
+            facets = searchIterator.facets
+         }
+        final int nhits = foundCompoundAdapters.size()
+        return [compoundAdapters: foundCompoundAdapters, facets: facets, nHits: nhits]
     }
 
     /**
-     * TODO: Still need number of hits
-     * We can use a trick to get more than 10 records
+      * We can use a trick to get more than 10 records
      * We are not quite ready to use this method yet
      * @param searchString
      * @param top
      * @param skip
      * @return
      */
-    Map findAssaysByTextSearch(final String searchString, final int top = 10, final int skip = 0) {
+    Map findAssaysByTextSearch(final String searchString, final int top = 50, final int skip = 0) {
         final List<AssayAdapter> foundAssayAdapters = []
-        final List facetMapList = []
+        Collection<Value> facets = []
 
         if (searchString) {
             final RESTAssayService restAssayService = this.queryServiceWrapper.getRestAssayService()
@@ -91,24 +89,24 @@ class QueryService {
             final ServiceIterator<Assay> searchIterator = restAssayService.search(params)
             final Collection assays = searchIterator.collect()
             foundAssayAdapters.addAll(assaysToAdapters(assays))
-            final Collection<Value> facets = searchIterator.facets
-            facetMapList.addAll(extractAllFacets(facets))
+            facets = searchIterator.facets
         }
-        return [assays: foundAssayAdapters, facets: facetMapList, nHits: foundAssayAdapters.size()]
+        final int nhits = foundAssayAdapters.size()
+        return [assayAdapters: foundAssayAdapters, facets: facets, nHits: nhits]
     }
 
     /**
-     * TODO: Still need number of hits
-     * We are not quite ready to use this method yet
+      * We are not quite ready to use this method yet
      * @param searchString
      * @param top
      * @param skip
      * @return
      */
-    Map findProjectsByTextSearch(final String searchString, final int top = 10, final int skip = 0) {
-        final List<ProjectAdapter> foundProjectAdapters = []
-        final List facetMapList = []
+    Map findProjectsByTextSearch(final String searchString, final int top = 50, final int skip = 0) {
+        List<ProjectAdapter> foundProjectAdapters = []
+        Collection<Value> facets = []
         if (searchString) {
+            //query for count
             final RESTProjectService restProjectService = this.queryServiceWrapper.getRestProjectService()
             final SearchParams params = new SearchParams(searchString)
             params.setSkip(skip)
@@ -116,23 +114,23 @@ class QueryService {
             final ServiceIterator<Project> searchIterator = restProjectService.search(params)
             final Collection projects = searchIterator.collect()
             foundProjectAdapters.addAll(projectsToAdapters(projects))
-            final Collection<Value> facets = searchIterator.facets
-            facetMapList.addAll(extractAllFacets(facets))
+            facets = searchIterator.facets
         }
-        return [projects: foundProjectAdapters, facets: facetMapList, nHits: foundProjectAdapters.size()]
+        int nhits = foundProjectAdapters.size()
+
+        return [projectAdapters: foundProjectAdapters, facets: facets, nHits: nhits]
     }
     //====================================== Structure Searches ========================================
     /**
-     *  //TODO ask for hits
      * @param smiles
      * @param structureSearchParamsType
      * @param top
      * @param skip
      * @return of compounds
      */
-    Map structureSearch(final String smiles, final StructureSearchParams.Type structureSearchParamsType, final int top = 10, final int skip = 0) {
+    Map structureSearch(final String smiles, final StructureSearchParams.Type structureSearchParamsType, final int top = 50, final int skip = 0) {
         final List<CompoundAdapter> compoundAdapters = []
-        final List facetMapList = []
+        Collection<Value> facets =[]
 
         if (smiles) {
             final RESTCompoundService restCompoundService = this.queryServiceWrapper.getRestCompoundService()
@@ -153,10 +151,10 @@ class QueryService {
             compoundAdapters.addAll(compoundsToAdapters(compounds))
 
             //collect the facets
-            Collection<Value> facets = searchIterator.facets.collect()
-            facetMapList.addAll(extractAllFacets(facets))
+            facets = searchIterator.facets
         }
-        return [compounds: compoundAdapters, facets: facetMapList, nHits: compoundAdapters.size()]
+        int nhits = compoundAdapters.size()
+        return [compoundAdapters: compoundAdapters, facets: facets, nHits: nhits]
     }
 
     //===================== Find Resources given a list of IDs ================================
@@ -167,35 +165,37 @@ class QueryService {
      */
     Map findCompoundsByCIDs(final List<Long> compoundIds) {
         final List<CompoundAdapter> compoundAdapters = []
-        final List facetMapList = []
+        Collection<Value> facets =  []
 
         if (compoundIds) {
             final RESTCompoundService restCompoundService = this.queryServiceWrapper.getRestCompoundService()
             //create ETAG using a random name
             final Object etag = restCompoundService.newETag("Compound ETags", compoundIds);
-            final Collection<Value> facets = restCompoundService.getFacets(etag)
-            facetMapList.addAll(extractAllFacets(facets))
+            facets = restCompoundService.getFacets(etag)
             final Collection<Compound> compounds = restCompoundService.get(compoundIds)
             compoundAdapters.addAll(compoundsToAdapters(compounds))
         }
-        return [compounds: compoundAdapters, facets: facetMapList, nHits: compoundAdapters.size()]
+        int nhits = compoundAdapters.size()
+        return [compoundAdapters: compoundAdapters, facets: facets, nHits: nhits]
     }
 
     /**
      * Given a list of Assay Ids return all the assays that were found
-     * TODO: Facet needed. Not yet ready in JDO
      * @param assayIds
      * @return list
      */
     Map findAssaysByADIDs(final List<Long> assayIds) {
         final List<AssayAdapter> foundAssayAdapters = []
+        Collection<Value> facets =  []
+
         if (assayIds) {
             final RESTAssayService restAssayService = this.queryServiceWrapper.getRestAssayService()
             final Collection<Assay> assays = restAssayService.get(assayIds)
             foundAssayAdapters.addAll(assaysToAdapters(assays))
             //TODO: add facet information
         }
-        return [assays: foundAssayAdapters, facets: [], nHits: foundAssayAdapters.size()]
+        final int nhits = foundAssayAdapters.size()
+        return [assayAdapters: foundAssayAdapters, facets: facets, nHits: nhits]
     }
 
     /**
@@ -205,6 +205,7 @@ class QueryService {
      * @return list
      */
     Map findProjectsByPIDs(final List<Long> projectIds) {
+        Collection<Value> facets =  []
         final List<ProjectAdapter> foundProjectAdapters = []
         if (projectIds) {
             final RESTProjectService restProjectService = this.queryServiceWrapper.getRestProjectService()
@@ -212,7 +213,9 @@ class QueryService {
             foundProjectAdapters.addAll(projectsToAdapters(projects))
             //TODO: add facet information
         }
-        return [projects: foundProjectAdapters, facets: [], nHits: foundProjectAdapters.size()]
+        final int nhits = foundProjectAdapters.size()
+        return [projectAdapters: foundProjectAdapters, facets: facets, nHits: nhits]
+
     }
     //=============== Show Resources Given a Single ID ================
 

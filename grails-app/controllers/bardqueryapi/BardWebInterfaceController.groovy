@@ -4,8 +4,6 @@ import bard.core.StructureSearchParams
 import bard.core.adapter.AssayAdapter
 import bard.core.adapter.CompoundAdapter
 import bard.core.adapter.ProjectAdapter
-import elasticsearchplugin.QueryExecutorService
-import wslite.json.JSONObject
 
 import javax.servlet.http.HttpServletResponse
 
@@ -22,7 +20,6 @@ class BardWebInterfaceController {
 
     def shoppingCartService
     QueryService queryService
-    QueryExecutorService queryExecutorService
 
     def index() {
         homePage()
@@ -38,17 +35,19 @@ class BardWebInterfaceController {
      * Given a list of Compound ids, invoke this method
      */
     def searchCompoundsByIDs() {
-        String searchString = params.searchString?.trim()
+        final String searchString = params.searchString?.trim()
         if (searchString) {
             try {
                 final List<Long> cids = searchString.split(",") as List<Long>
                 Map compoundAdapterMap = this.queryService.findCompoundsByCIDs(cids)
-                List<CompoundAdapter> compoundAdapters = compoundAdapterMap.compounds
-                //TODO: we ought to use the adapter directly in the gsp, but only after we are able to do paging from JDO
-                def listDocs = compoundAdaptersToMap(compoundAdapters)
-
-                JSONObject metaData = new JSONObject([nhit: compoundAdapterMap.nHits, facets: compoundAdapterMap.facets])
-                render(template: 'compounds', model: [docs: listDocs, metaData: metaData, searchString: "${searchString}"])
+                List<CompoundAdapter> compoundAdapters = compoundAdapterMap.compoundAdapters
+                render(template: 'compounds', model: [
+                        compoundAdapters: compoundAdapters,
+                        facets: compoundAdapterMap.facets,
+                        nhits: compoundAdapterMap.nHits,
+                        searchString: "${searchString}"
+                ]
+                )
                 return
             }
             catch (Exception exp) {
@@ -66,15 +65,17 @@ class BardWebInterfaceController {
      */
     def searchAssaysByIDs() {
 
-        String searchString = params.searchString?.trim()
+        final String searchString = params.searchString?.trim()
         if (searchString) {
             try {
                 final List<Long> adids = searchString.split(",") as List<Long>
                 final Map assayAdapterMap = this.queryService.findAssaysByADIDs(adids)
-                final List<AssayAdapter> assayAdapters = assayAdapterMap.assays
-                final List docs = assayAdapterMap(assayAdapters)
-                JSONObject metaData = new JSONObject([nhit: assayAdapterMap.nHits, facets: assayAdapterMap.facets])
-                render(template: 'assays', model: [docs: docs, metaData: metaData, searchString: "${searchString}"])
+
+                render(template: 'assays', model: [
+                        assayAdapters: assayAdapterMap.assayAdapters,
+                        facets: assayAdapterMap.facets,
+                        nhits: assayAdapterMap.nHits,
+                        searchString: "${searchString}"])
                 return
             }
             catch (Exception exp) {
@@ -89,15 +90,17 @@ class BardWebInterfaceController {
      * Given a list of Project ids, invoke this action
      */
     def searchProjectsByIDs() {
-        String searchString = params.searchString?.trim()
+        final String searchString = params.searchString?.trim()
         if (searchString) {
             try {
                 final List<Long> projectIds = searchString.split(",") as List<Long>
                 Map projectAdapterMap = this.queryService.findProjectsByPIDs(projectIds)
-                final List<ProjectAdapter> projectAdapters = projectAdapterMap.projects
-                final List docs = projectAdapterMap(projectAdapters)
-                final JSONObject metaData = new JSONObject([nhit: projectAdapterMap.nHits, facets: projectAdapterMap.facets])
-                render(template: 'projects', model: [docs: docs, metaData: metaData, searchString: "${searchString}"])
+                render(template: 'projects', model: [
+                        projectAdapters: projectAdapterMap.projectAdapters,
+                        facets: projectAdapterMap.facets,
+                        nhits: projectAdapterMap.nHits,
+                        searchString: "${searchString}"])
+
                 return
             }
             catch (Exception exp) {
@@ -126,12 +129,16 @@ class BardWebInterfaceController {
                     final String searchTypeString = searchStringSplit[0]
                     final String smiles = searchStringSplit[1]
                     //we make the first character capitalized to match the ENUM
-                    final StructureSearchParams.Type searchType = searchTypeString?.toLowerCase().capitalize() as StructureSearchParams.Type
+                    final StructureSearchParams.Type searchType = searchTypeString?.toLowerCase()?.capitalize() as StructureSearchParams.Type
                     Map compoundAdapterMap = queryService.structureSearch(smiles, searchType)
-                    List<CompoundAdapter> compoundAdapters = compoundAdapterMap.compounds
-                    def listDocs = compoundAdaptersToMap(compoundAdapters)
-                    JSONObject metaData = new JSONObject([nhit: compoundAdapterMap.nHits, facets: compoundAdapterMap.facets])
-                    render(template: 'compounds', model: [docs: listDocs, metaData: metaData, searchString: "${searchString}"])
+                    List<CompoundAdapter> compoundAdapters = compoundAdapterMap.compoundAdapters
+                    render(template: 'compounds', model: [
+                            compoundAdapters: compoundAdapters,
+                            facets: compoundAdapterMap.facets,
+                            nhits: compoundAdapterMap.nHits,
+                            searchString: "${searchString}"
+                    ]
+                    )
                     return
                 }
             }
@@ -191,8 +198,7 @@ class BardWebInterfaceController {
                     "Structure search has encountered an error:\n${exp.message}")
         }
     }
-    //TODO: Whomever creates the gsp should also write unit tests for this method
-    def showProject(Integer projectId) {
+     def showProject(Integer projectId) {
         Integer projId = projectId ?: params.id as Integer//if 'project' param is provided, use that; otherwise, try the default id one
         try {
             if (projId) {
@@ -210,43 +216,62 @@ class BardWebInterfaceController {
     }
 
     //================= Free Text Searches ======================================================
-    //TODO: We are using the REST API directly, until we can figure out how to do paging through the JDO
     /**
      *
      * Find Compounds annotated with Search String
      */
     def searchCompounds() {
-        def map = [:]
         String searchString = params.searchString?.trim()
-        handleSearchParams('/search/compounds', map)
-        try {
-            final String NCGC_ROOT_URL = queryService.ncgcSearchBaseUrl
-            JSONObject resultJson = (JSONObject) queryExecutorService.executeGetRequestJSON(NCGC_ROOT_URL, map)
-            render(template: 'compounds', model: [docs: resultJson.docs, metaData: resultJson.metaData, searchString: "${searchString}"])
+        if (searchString) {
+            try {
+                int top = 50
+                int skip = 0
+                final Map compoundsByTextSearchResultsMap = this.queryService.findCompoundsByTextSearch(searchString, top, skip)
+                render(template: 'compounds',
+                        model: [
+                                compoundAdapters: compoundsByTextSearchResultsMap.compoundAdapters,
+                                facets: compoundsByTextSearchResultsMap.facets,
+                                nhits: compoundsByTextSearchResultsMap.nHits,
+                                searchString: "${searchString}"
+                        ]
+                )
+                return
+            }
+            catch (Exception exp) {
+                return response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR,
+                        "Compound search has encountered an error:\n${exp.message}")
+            }
         }
-        catch (Exception exp) {
-            return response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR,
-                    "Compound search has encountered an error:\n${exp.message}")
-        }
+        flash.message = 'Search String is required'
+        redirect(action: "homePage")
     }
     /**
      *
      * Find Assays annotated with Search String
      */
     def searchAssays() {
-        def map = [:]
         String searchString = params.searchString?.trim()
-        handleSearchParams('/search/assays', map)
-        try {
-            final String NCGC_ROOT_URL = queryService.ncgcSearchBaseUrl
+        if (searchString) {
+            try {
+                int top = 50
+                int skip = 0
+                final Map assaysByTextSearchResultsMap = this.queryService.findAssaysByTextSearch(searchString, top, skip)
+                render(template: 'assays', model: [
+                        assayAdapters: assaysByTextSearchResultsMap.assayAdapters,
+                        facets: assaysByTextSearchResultsMap.facets,
+                        nhits: assaysByTextSearchResultsMap.nHits,
+                        searchString: "${searchString}"])
+                return
 
-            JSONObject resultJson = (JSONObject) queryExecutorService.executeGetRequestJSON(NCGC_ROOT_URL, map)
-            render(template: 'assays', model: [docs: resultJson.docs, metaData: resultJson.metaData, searchString: "${searchString}"])
+            }
+            catch (Exception exp) {
+                return response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR,
+                        "Assay search has encountered an error:\n${exp.message}")
+            }
         }
-        catch (Exception exp) {
-            return response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR,
-                    "Assay search has encountered an error:\n${exp.message}")
-        }
+        flash.message = 'Search String is required '
+        redirect(action: "homePage")
+
     }
     /**
      *
@@ -254,18 +279,26 @@ class BardWebInterfaceController {
      */
     def searchProjects() {
         String searchString = params.searchString?.trim()
-        def map = [:]
-        handleSearchParams('/search/projects', map)
-        try {
-            final String NCGC_ROOT_URL = queryService.ncgcSearchBaseUrl
+        if (searchString) {
+            try {
+                int top = 50
+                int skip = 0
+                final Map projectsByTextSearch = this.queryService.findProjectsByTextSearch(searchString, top, skip)
+                render(template: 'projects', model: [
+                        projectAdapters: projectsByTextSearch.projectAdapters,
+                        facets: projectsByTextSearch.facets,
+                        nhits: projectsByTextSearch.nHits,
+                        searchString: "${searchString}"])
+                return
+            }
+            catch (Exception exp) {
+                return response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR,
+                        "Project search has encountered an error:\n${exp.message}")
+            }
+        }
+        flash.message = 'Search String is required'
+        redirect(action: "homePage")
 
-            JSONObject resultJson = (JSONObject) queryExecutorService.executeGetRequestJSON(NCGC_ROOT_URL, map)
-            render(template: 'projects', model: [docs: resultJson.docs, metaData: resultJson.metaData, searchString: "${searchString}"])
-        }
-        catch (Exception exp) {
-            return response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR,
-                    "Project search has encountered an error:\n${exp.message}")
-        }
     }
 
     /**
@@ -300,73 +333,73 @@ class SearchHelper {
      *
      * @param relativePath for example /search/compounds
      */
-    public void handleSearchParams(String relativePath, def parameterMap) {
-        String searchString = params.searchString?.trim()
-        params.max = Math.min(params.max ? params.int('max') : 10, 100)
-        params.offset = params.int('offset') ?: 0
-        int max = new Integer(params.max)
-        int offset = new Integer(params.offset)
-
-        parameterMap.put('query', [top: max, skip: "${offset}", q: "${searchString}", include_entities: false])
-        parameterMap.put('path', "${relativePath}")
-        parameterMap.put('connectTimeout', 5000)
-        parameterMap.put('readTimeout', 10000)
-
-    }
+//    public void handleSearchParams(String relativePath, def parameterMap) {
+//        String searchString = params.searchString?.trim()
+//        params.max = Math.min(params.max ? params.int('max') : 10, 100)
+//        params.offset = params.int('offset') ?: 0
+//        int max = new Integer(params.max)
+//        int offset = new Integer(params.offset)
+//
+//        parameterMap.put('query', [top: max, skip: "${offset}", q: "${searchString}", include_entities: false])
+//        parameterMap.put('path', "${relativePath}")
+//        parameterMap.put('connectTimeout', 5000)
+//        parameterMap.put('readTimeout', 10000)
+//
+//    }
     /**
      * Convert to a map, so we can use in UI
      *
      * @param compoundAdapters
      * @return list of docs
      */
-    List compoundAdaptersToMap(final List<CompoundAdapter> compoundAdapters) {
-        def listDocs = []
-
-        for (CompoundAdapter compoundAdapter : compoundAdapters) {
-            def adapter = [:]
-            long cid = compoundAdapter.pubChemCID
-            String iupacName = compoundAdapter.compound.getValue(bard.core.Compound.IUPACNameValue)?.value as String
-            adapter.put("cid", cid)
-            adapter.put("iupac_name", iupacName ? iupacName : compoundAdapter.name)
-            adapter.put("iso_smiles", compoundAdapter.structureSMILES)
-            adapter.put("highlight", compoundAdapter.searchHighlight ? compoundAdapter.searchHighlight : "")
-            listDocs.add(adapter)
-        }
-        return listDocs
-    }
+//    List compoundAdaptersToMap(final List<CompoundAdapter> compoundAdapters) {
+//        def listDocs = []
+//
+//        for (CompoundAdapter compoundAdapter : compoundAdapters) {
+//            def adapter = [:]
+//            long cid = compoundAdapter.pubChemCID
+//            String iupacName = compoundAdapter.compound.getValue(bard.core.Compound.IUPACNameValue)?.value as String
+//            adapter.put("cid", cid)
+//            adapter.put("iupac_name", iupacName ? iupacName : compoundAdapter.name)
+//            adapter.put("iso_smiles", compoundAdapter.structureSMILES)
+//            adapter.put("highlight", compoundAdapter.searchHighlight ? compoundAdapter.searchHighlight : "")
+//            listDocs.add(adapter)
+//        }
+//        return listDocs
+//    }
     /**
      * Convert to a map, so we can use in UI
      *
      * @param assayAdapters
      * @return list
      */
-    List assayAdaptersToMap(final List<AssayAdapter> assayAdapters) {
-        def listDocs = []
-        for (AssayAdapter assayAdapter : assayAdapters) {
-            Map currentObject = [:]
-            currentObject.put("assay_id", assayAdapter.assay.id)
-            currentObject.put("name", assayAdapter.assay.name)
-            currentObject.put("highlight", assayAdapter.searchHighlight ? assayAdapter.searchHighlight : "")
-            listDocs.add(currentObject)
-        }
-        return listDocs
-    }
+//    List assayAdaptersToMap(final List<AssayAdapter> assayAdapters) {
+//        def listDocs = []
+//        for (AssayAdapter assayAdapter : assayAdapters) {
+//            Map currentObject = [:]
+//            currentObject.put("assay_id", assayAdapter.assay.id)
+//            currentObject.put("name", assayAdapter.assay.name)
+//            currentObject.put("highlight", assayAdapter.searchHighlight ? assayAdapter.searchHighlight : "")
+//            listDocs.add(currentObject)
+//        }
+//        return listDocs
+//    }
     /**
      * Convert to a map, so we can use in UI
      *
      * @param projectAdapters
      * @return list
      */
-    List projectAdaptersToMap(final List<ProjectAdapter> projectAdapters) {
-        def listDocs = []
-        for (ProjectAdapter projectAdapter : projectAdapters) {
-            Map currentObject = [:]
-            currentObject.put("proj_id", projectAdapter.project.id)
-            currentObject.put("name", projectAdapter.project.name ? projectAdapter.project.name : "")
-            currentObject.put("highlight", projectAdapter.searchHighlight ? projectAdapter.searchHighlight : "")
-            listDocs.add(currentObject)
-        }
-        return listDocs
-
-    }
+//    List projectAdaptersToMap(final List<ProjectAdapter> projectAdapters) {
+//        def listDocs = []
+//        for (ProjectAdapter projectAdapter : projectAdapters) {
+//            Map currentObject = [:]
+//            currentObject.put("proj_id", projectAdapter.project.id)
+//            currentObject.put("name", projectAdapter.project.name ? projectAdapter.project.name : "")
+//            currentObject.put("highlight", projectAdapter.searchHighlight ? projectAdapter.searchHighlight : "")
+//            listDocs.add(currentObject)
+//        }
+//        return listDocs
+//
+//    }
 }
