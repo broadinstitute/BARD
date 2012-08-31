@@ -70,39 +70,39 @@ class AssayDefinitionController {
         }
     }
 
-    def updateCardItems(Long src_assay_context_item_id, Long target_assay_context_item_id) {
-        println(src_assay_context_item_id)
-        println(target_assay_context_item_id)
+    def addItemToCardAfterItem(Long src_assay_context_item_id, Long target_assay_context_item_id) {
         AssayContextItem target = AssayContextItem.findById(target_assay_context_item_id)
         AssayContextItem source = AssayContextItem.findById(src_assay_context_item_id)
         AssayContext targetAssayContext = target.assayContext
         AssayContext sourceAssayContext = source.assayContext
-
         sourceAssayContext.removeFromAssayContextItems(source)
-        targetAssayContext.addToAssayContextItems(source)
-        //        Session session = sessionFactory.currentSession
-        //        session.flush()
-        //        session.clear()
+        int indexAfterTargetItem = targetAssayContext.assayContextItems.indexOf(target) + 1
+        source.assayContext = targetAssayContext
+        targetAssayContext.assayContextItems.add(indexAfterTargetItem, source)
         Assay targetAssay = targetAssayContext.assay
-
         List<CardDto> cardDtoList = cardFactoryService.createCardDtoListForAssay(targetAssay)
-        println("cardDtoList.size(): ${cardDtoList.size()}")
         render(template: "cards", model: [cardDtoList: cardDtoList])
 
     }
 
-    def updateCardTitle(Long src_assay_context_item_id, Long target_assay_context_id) {
-        println("src_assay_context_item_id: ${src_assay_context_item_id}")
-        println("target_assay_context_id : ${target_assay_context_id}")
+    def addItemToCard(Long src_assay_context_item_id, Long target_assay_context_id) {
+        AssayContext targetAssayContext = AssayContext.findById(target_assay_context_id)
+        AssayContextItem source = AssayContextItem.findById(src_assay_context_item_id)
+        AssayContext sourceAssayContext = source.assayContext
+        sourceAssayContext.removeFromAssayContextItems(source)
+        targetAssayContext.addToAssayContextItems(source)
+        Assay targetAssay = targetAssayContext.assay
+        List<CardDto> cardDtoList = cardFactoryService.createCardDtoListForAssay(targetAssay)
+        render(template: "cards", model: [cardDtoList: cardDtoList])
+    }
 
+    def updateCardTitle(Long src_assay_context_item_id, Long target_assay_context_id) {
         AssayContextItem sourceAssayContextItem = AssayContextItem.findById(src_assay_context_item_id)
         AssayContext targetAssayContext = AssayContext.findById(target_assay_context_id)
         if (targetAssayContext && targetAssayContext.assayContextItems.contains(sourceAssayContextItem)) {
             targetAssayContext.contextName = sourceAssayContextItem.valueDisplay
         }
         CardDto cardDto = cardFactoryService.createCardDto(targetAssayContext)
-
         render(template: "cardDto", model: [card: cardDto])
-
     }
 }
