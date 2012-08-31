@@ -12,6 +12,7 @@ import spock.lang.Unroll
 import wslite.json.JSONObject
 import bard.core.*
 import bard.core.adapter.AssayAdapter
+import bard.core.adapter.ProjectAdapter
 
 /**
  * See the API for {@link grails.test.mixin.support.GrailsUnitTestMixin} for usage instructions
@@ -50,7 +51,6 @@ class QueryServiceUnitSpec extends Specification {
         service.elasticSearchService = elasticSearchService
         service.queryServiceWrapper = queryServiceWrapper
         service.elasticSearchRootURL = 'httpMock://'
-        service.bardAssayViewUrl = 'httpMock://'
         service.ncgcSearchBaseUrl = 'httpMock://'
     }
 
@@ -116,11 +116,11 @@ class QueryServiceUnitSpec extends Specification {
         given:
         Project project = Mock(Project.class)
         when: "Client enters a project ID and the showProject method is called"
-        Project foundProject = service.showProject(projectId)
+        ProjectAdapter foundProjectAdpater = service.showProject(projectId)
         then: "The Project document is displayed"
         queryServiceWrapper.getRestProjectService() >> { restProjectService }
         restProjectService.get(_) >> {project}
-        assert foundProject
+        assert foundProjectAdpater
 
         where:
         label              | projectId

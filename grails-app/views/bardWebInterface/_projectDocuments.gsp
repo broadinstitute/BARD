@@ -1,14 +1,14 @@
 <dl>
-    <g:if test="${projectInstance?.protocol}">
+    <g:if test="${projectAdapter?.project?.protocol}">
         <dt>Protocol</dt>
-        <dd>${projectInstance.protocol}</dd>
+        <dd>${projectAdapter.project.protocol}</dd>
     </g:if>
-    <g:if test="${projectInstance?.description}">
+    <g:if test="${projectAdapter?.project?.description}">
         <dt>Description</dt>
-        <dd>${projectInstance.description}</dd>
+        <dd>${projectAdapter.project.description}</dd>
     </g:if>
-    <g:if test="${projectInstance?.comments}">
+    <g:if test="${projectAdapter?.project?.comments}">
         <dt>Comments</dt><br>
-        <dd>${projectInstance.comments}</dd>
+        <dd>${projectAdapter.project.comments}</dd>
     </g:if>
 </dl>

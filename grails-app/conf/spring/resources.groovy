@@ -43,9 +43,8 @@ beans = {
         queryExecutorService = ref('queryExecutorService')
         elasticSearchService = ref('elasticSearchService')
         queryServiceWrapper= ref('queryServiceWrapper')
-        ncgcSearchBaseUrl = grailsApplication.config.ncgc.server.structureSearch.root.url
+        ncgcSearchBaseUrl = ncgcBaseURL
         elasticSearchRootURL = grailsApplication.config.bard.services.elasticSearchService.restNode.baseUrl
-        bardAssayViewUrl = grailsApplication.config.bard.assay.view.url
     }
 
 }

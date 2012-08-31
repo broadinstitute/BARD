@@ -14,11 +14,12 @@ class JavaScriptUtility {
      * @return
      */
     static String cleanup (String incoming){
-        if (incoming==null)
-            return ""
-        else
-            return incoming.replace("'","\\'")
+        if(incoming){
+            return incoming?.replace("'","\\'")
+        }
+        return ""
     }
+
     static String cleanup (Long incoming){
         return incoming?.toString()
     }
