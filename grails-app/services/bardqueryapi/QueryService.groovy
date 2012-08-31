@@ -51,7 +51,7 @@ class QueryService {
     Map findCompoundsByTextSearch(final String searchString, final int top = 50, final int skip = 0, final List<SearchFilter> searchFilters = []) {
         final List<CompoundAdapter> foundCompoundAdapters = []
         Collection<Value> facets = []
-
+        int nhits = 0
         if (searchString) {
             final RESTCompoundService restCompoundService = this.queryServiceWrapper.getRestCompoundService()
             final SearchParams searchParams = constructSearchParams(searchString, top, skip, searchFilters)
@@ -63,9 +63,9 @@ class QueryService {
             //convert to adapters
             foundCompoundAdapters.addAll(compoundsToAdapters(compounds))
             facets = searchIterator.facets
+            nhits = searchIterator.count
         }
-        final int nhits = foundCompoundAdapters.size()
-        return [compoundAdapters: foundCompoundAdapters, facets: facets, nHits: nhits]
+         return [compoundAdapters: foundCompoundAdapters, facets: facets, nHits: nhits]
     }
 
     /**
@@ -80,7 +80,7 @@ class QueryService {
     Map findAssaysByTextSearch(final String searchString, final int top = 50, final int skip = 0, final List<SearchFilter> searchFilters = []) {
         final List<AssayAdapter> foundAssayAdapters = []
         Collection<Value> facets = []
-
+        int nhits = 0
         if (searchString) {
             final RESTAssayService restAssayService = this.queryServiceWrapper.getRestAssayService()
             final SearchParams searchParams = constructSearchParams(searchString, top, skip, searchFilters)
@@ -90,9 +90,9 @@ class QueryService {
             final Collection assays = searchIterator.collect()
             foundAssayAdapters.addAll(assaysToAdapters(assays))
             facets = searchIterator.facets
+            nhits = searchIterator.count
         }
-        final int nhits = foundAssayAdapters.size()
-        return [assayAdapters: foundAssayAdapters, facets: facets, nHits: nhits]
+         return [assayAdapters: foundAssayAdapters, facets: facets, nHits: nhits]
     }
 
     /**
@@ -106,6 +106,7 @@ class QueryService {
     Map findProjectsByTextSearch(final String searchString, final int top = 50, final int skip = 0, final List<SearchFilter> searchFilters = []) {
         List<ProjectAdapter> foundProjectAdapters = []
         Collection<Value> facets = []
+        int nhits = 0
         if (searchString) {
             //query for count
             final RESTProjectService restProjectService = this.queryServiceWrapper.getRestProjectService()
@@ -114,9 +115,8 @@ class QueryService {
             final Collection projects = searchIterator.collect()
             foundProjectAdapters.addAll(projectsToAdapters(projects))
             facets = searchIterator.facets
+            nhits = searchIterator.count
         }
-        int nhits = foundProjectAdapters.size()
-
         return [projectAdapters: foundProjectAdapters, facets: facets, nHits: nhits]
     }
 
