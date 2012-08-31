@@ -12,7 +12,7 @@ class CardFactoryService {
             return cards
         }
 
-        for (AssayContext assayContext in assay.assayContexts) {
+        for (AssayContext assayContext : assay.assayContexts.sort { a,b -> a.id <=> b.id}) {
             CardDto cardDto = new CardDto()
             cardDto.title = assayContext.contextName
             for (AssayContextItem assayContextItem : assayContext.assayContextItems) {
