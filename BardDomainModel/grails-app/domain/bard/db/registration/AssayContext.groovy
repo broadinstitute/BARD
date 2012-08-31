@@ -11,7 +11,7 @@ class AssayContext {
     Set<Measure> measures = [] as Set<Measure>
     List<AssayContextItem> assayContextItems = []
 
-    Date dateCreated
+    Date dateCreated = new Date()
     Date lastUpdated
     String modifiedBy
 

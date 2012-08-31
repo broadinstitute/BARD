@@ -21,7 +21,7 @@ class AssayContextItem {
     Float valueMin
     Float valueMax
 
-    Date dateCreated
+    Date dateCreated = new Date()
     Date lastUpdated
     String modifiedBy
 
