@@ -27,6 +27,9 @@
                return false;"
                action="add"
                controller="sarCart"><div class="cntrcart"><nobr><i class="icon-shopping-cart"></i> Add to Cart</nobr></div></a>
+             <ul>
+                <li>${compoundAdapter.searchHighlight}</li>
+            </ul>
         </td>
         </tr>
     </g:each>
