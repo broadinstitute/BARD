@@ -20,3 +20,7 @@ table.gridtable td {
 	border-color: #666666;
 	background-color: #ffffff;
 }
+table.gridtable tr.drophover td{
+    background-color: yellow;
+    border-color: red;
+}
