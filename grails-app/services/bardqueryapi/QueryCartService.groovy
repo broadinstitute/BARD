@@ -26,6 +26,29 @@ class QueryCartService {
      }
 
     /**
+     * If you already have an amount then here's a utility routine to count the elements
+     * @param mapOfUniqueItems
+     * @return
+     */
+    int totalNumberOfUniqueItemsInCart(LinkedHashMap<String, List> mapOfUniqueItems, String elementType = null) {
+        int counter = 0
+        if (mapOfUniqueItems) {
+            if (elementType) {
+                mapOfUniqueItems[elementType]?.each {
+                    counter++
+                }
+            } else {
+                mapOfUniqueItems.each { key, value ->
+                    value?.each {
+                        counter++
+                    }
+                }
+            }
+        }
+        return counter
+    }
+
+    /**
      *
      * @param shoppingCartSrvc
      * @return

@@ -1,3 +1,9 @@
+<%@ page import="com.metasieve.shoppingcart.ShoppingCartService; bardqueryapi.QueryCartService" %>
+<%
+   ShoppingCartService  shoppingCartService = grailsApplication.classLoader.loadClass('com.metasieve.shoppingcart.ShoppingCartService').newInstance()
+   QueryCartService  queryCartService  = grailsApplication.classLoader.loadClass('bardqueryapi.QueryCartService').newInstance()
+   def mapOfUniqueItems = queryCartService.totalNumberOfUniqueItemsInCart(shoppingCartService)
+%>
 <div class="span2">
     <div class="well">
         <h5><i class="icon-shopping-cart"></i><a class="trigger" href="#">Query Cart</a></h5>

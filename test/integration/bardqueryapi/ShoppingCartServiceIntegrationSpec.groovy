@@ -168,6 +168,9 @@ class ShoppingCartServiceIntegrationSpec extends IntegrationSpec {
         assertNotNull queryCartService.addToShoppingCart(cartAssay_differentName1)
         assert queryCartService.totalNumberOfUniqueItemsInCart()==3
         assertNotNull queryCartService.addToShoppingCart(cartAssay_differentName2)
+        LinkedHashMap<String,List> objectMap = queryCartService.groupUniqueContentsByType()
+        queryCartService.totalNumberOfUniqueItemsInCart(objectMap)==4
+        queryCartService.totalNumberOfUniqueItemsInCart(objectMap,QueryCartService.cartAssay)==4
         assert queryCartService.totalNumberOfUniqueItemsInCart()==4
     }
 
@@ -211,6 +214,9 @@ class ShoppingCartServiceIntegrationSpec extends IntegrationSpec {
         assertNotNull queryCartService.addToShoppingCart(cartCompound_differentName1)
         assert queryCartService.totalNumberOfUniqueItemsInCart()==3
         assertNotNull queryCartService.addToShoppingCart(cartCompound_differentName2)
+        LinkedHashMap<String,List> objectMap = queryCartService.groupUniqueContentsByType()
+        queryCartService.totalNumberOfUniqueItemsInCart(objectMap)==4
+        queryCartService.totalNumberOfUniqueItemsInCart(objectMap,QueryCartService.cartCompound)==4
         assert queryCartService.totalNumberOfUniqueItemsInCart()==4
     }
 
@@ -251,6 +257,10 @@ class ShoppingCartServiceIntegrationSpec extends IntegrationSpec {
         assert queryCartService.totalNumberOfUniqueItemsInCart()==3
         assertNotNull queryCartService.addToShoppingCart(cartProject_differentName2)
         assert queryCartService.totalNumberOfUniqueItemsInCart()==4
+        LinkedHashMap<String,List> objectMap = queryCartService.groupUniqueContentsByType()
+        queryCartService.totalNumberOfUniqueItemsInCart(objectMap)==4
+        queryCartService.totalNumberOfUniqueItemsInCart(objectMap,QueryCartService.cartProject)==4
+        queryCartService.totalNumberOfUniqueItemsInCart()==4
     }
 
 
