@@ -187,7 +187,7 @@ class QueryServiceIntegrationSpec extends IntegrationSpec {
         assert !assayAdapters.isEmpty()
         assert numberOfAssays == assayAdapters.size()
         assert assayAdapterMap.facets
-        assert assayAdapterMap.nHits == numberOfAssays
+        assert assayAdapterMap.nHits >= numberOfAssays
 
         where:
         label                             | searchString         | skip | top | numberOfAssays | filters
@@ -225,7 +225,7 @@ class QueryServiceIntegrationSpec extends IntegrationSpec {
         assert !projectAdapters.isEmpty()
         assert projectAdapters.size() == numberOfProjects
         assert projectAdapterMap.facets
-        assert projectAdapterMap.nHits == numberOfProjects
+        assert projectAdapterMap.nHits > numberOfProjects
 
         where:
         label                             | searchString         | skip | top | numberOfProjects | filters
