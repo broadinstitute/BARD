@@ -198,7 +198,8 @@ class BardWebInterfaceController {
                     "Structure search has encountered an error:\n${exp.message}")
         }
     }
-     def showProject(Integer projectId) {
+
+    def showProject(Integer projectId) {
         Integer projId = projectId ?: params.id as Integer//if 'project' param is provided, use that; otherwise, try the default id one
         try {
             if (projId) {
@@ -224,8 +225,9 @@ class BardWebInterfaceController {
         String searchString = params.searchString?.trim()
         if (searchString) {
             try {
-                int top = 50
-                int skip = 0
+                Map<String, Integer> searchParams = handleSearchParams()
+                int top = searchParams.top
+                int skip = searchParams.skip
                 final Map compoundsByTextSearchResultsMap = this.queryService.findCompoundsByTextSearch(searchString, top, skip)
                 render(template: 'compounds',
                         model: [
@@ -253,8 +255,10 @@ class BardWebInterfaceController {
         String searchString = params.searchString?.trim()
         if (searchString) {
             try {
-                int top = 50
-                int skip = 0
+                Map<String, Integer> searchParams = handleSearchParams()
+                int top = searchParams.top
+                int skip = searchParams.skip
+
                 final Map assaysByTextSearchResultsMap = this.queryService.findAssaysByTextSearch(searchString, top, skip)
                 render(template: 'assays', model: [
                         assayAdapters: assaysByTextSearchResultsMap.assayAdapters,
@@ -281,8 +285,9 @@ class BardWebInterfaceController {
         String searchString = params.searchString?.trim()
         if (searchString) {
             try {
-                int top = 50
-                int skip = 0
+                Map<String, Integer> searchParams = handleSearchParams()
+                int top = searchParams.top
+                int skip = searchParams.skip
                 final Map projectsByTextSearch = this.queryService.findProjectsByTextSearch(searchString, top, skip)
                 render(template: 'projects', model: [
                         projectAdapters: projectsByTextSearch.projectAdapters,
@@ -333,73 +338,10 @@ class SearchHelper {
      *
      * @param relativePath for example /search/compounds
      */
-//    public void handleSearchParams(String relativePath, def parameterMap) {
-//        String searchString = params.searchString?.trim()
-//        params.max = Math.min(params.max ? params.int('max') : 10, 100)
-//        params.offset = params.int('offset') ?: 0
-//        int max = new Integer(params.max)
-//        int offset = new Integer(params.offset)
-//
-//        parameterMap.put('query', [top: max, skip: "${offset}", q: "${searchString}", include_entities: false])
-//        parameterMap.put('path', "${relativePath}")
-//        parameterMap.put('connectTimeout', 5000)
-//        parameterMap.put('readTimeout', 10000)
-//
-//    }
-    /**
-     * Convert to a map, so we can use in UI
-     *
-     * @param compoundAdapters
-     * @return list of docs
-     */
-//    List compoundAdaptersToMap(final List<CompoundAdapter> compoundAdapters) {
-//        def listDocs = []
-//
-//        for (CompoundAdapter compoundAdapter : compoundAdapters) {
-//            def adapter = [:]
-//            long cid = compoundAdapter.pubChemCID
-//            String iupacName = compoundAdapter.compound.getValue(bard.core.Compound.IUPACNameValue)?.value as String
-//            adapter.put("cid", cid)
-//            adapter.put("iupac_name", iupacName ? iupacName : compoundAdapter.name)
-//            adapter.put("iso_smiles", compoundAdapter.structureSMILES)
-//            adapter.put("highlight", compoundAdapter.searchHighlight ? compoundAdapter.searchHighlight : "")
-//            listDocs.add(adapter)
-//        }
-//        return listDocs
-//    }
-    /**
-     * Convert to a map, so we can use in UI
-     *
-     * @param assayAdapters
-     * @return list
-     */
-//    List assayAdaptersToMap(final List<AssayAdapter> assayAdapters) {
-//        def listDocs = []
-//        for (AssayAdapter assayAdapter : assayAdapters) {
-//            Map currentObject = [:]
-//            currentObject.put("assay_id", assayAdapter.assay.id)
-//            currentObject.put("name", assayAdapter.assay.name)
-//            currentObject.put("highlight", assayAdapter.searchHighlight ? assayAdapter.searchHighlight : "")
-//            listDocs.add(currentObject)
-//        }
-//        return listDocs
-//    }
-    /**
-     * Convert to a map, so we can use in UI
-     *
-     * @param projectAdapters
-     * @return list
-     */
-//    List projectAdaptersToMap(final List<ProjectAdapter> projectAdapters) {
-//        def listDocs = []
-//        for (ProjectAdapter projectAdapter : projectAdapters) {
-//            Map currentObject = [:]
-//            currentObject.put("proj_id", projectAdapter.project.id)
-//            currentObject.put("name", projectAdapter.project.name ? projectAdapter.project.name : "")
-//            currentObject.put("highlight", projectAdapter.searchHighlight ? projectAdapter.searchHighlight : "")
-//            listDocs.add(currentObject)
-//        }
-//        return listDocs
-//
-//    }
+    public Map<String, Integer> handleSearchParams() {
+        params.max = Math.min(params.max ? params.int('max') : 10, 100)
+        params.offset = params.int('offset') ?: 0
+        Map<String, Integer> map = [top: new Integer(params.max), skip: new Integer(params.offset)]
+        return map
+   }
 }

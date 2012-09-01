@@ -48,7 +48,7 @@ class QueryService {
      * @param searchFilters - TODO: Not yet supported by JDO
      * @return
      */
-    Map findCompoundsByTextSearch(final String searchString, final int top = 50, final int skip = 0, final List<SearchFilter> searchFilters = []) {
+    Map findCompoundsByTextSearch(final String searchString, final int top = 10, final int skip = 0, final List<SearchFilter> searchFilters = []) {
         final List<CompoundAdapter> foundCompoundAdapters = []
         Collection<Value> facets = []
         int nhits = 0
@@ -69,7 +69,7 @@ class QueryService {
     }
 
     /**
-     * We can use a trick to get more than 50 records
+     * We can use a trick to get more than 10 records
      * We are not quite ready to use this method yet
      * @param searchString
      * @param top
@@ -77,7 +77,7 @@ class QueryService {
      * @param searchFilters
      * @return Map
      */
-    Map findAssaysByTextSearch(final String searchString, final int top = 50, final int skip = 0, final List<SearchFilter> searchFilters = []) {
+    Map findAssaysByTextSearch(final String searchString, final int top = 10, final int skip = 0, final List<SearchFilter> searchFilters = []) {
         final List<AssayAdapter> foundAssayAdapters = []
         Collection<Value> facets = []
         int nhits = 0
@@ -103,7 +103,7 @@ class QueryService {
      * @param searchFilters - TODO: Not yet supported by JDO
      * @return   Map
      */
-    Map findProjectsByTextSearch(final String searchString, final int top = 50, final int skip = 0, final List<SearchFilter> searchFilters = []) {
+    Map findProjectsByTextSearch(final String searchString, final int top = 10, final int skip = 0, final List<SearchFilter> searchFilters = []) {
         List<ProjectAdapter> foundProjectAdapters = []
         Collection<Value> facets = []
         int nhits = 0
@@ -198,14 +198,14 @@ class QueryService {
             final RESTAssayService restAssayService = this.queryServiceWrapper.getRestAssayService()
             final Collection<Assay> assays = restAssayService.get(assayIds)
             foundAssayAdapters.addAll(assaysToAdapters(assays))
-            //TODO: add facet information
+            //TODO: Facet needed. Not yet ready in JDO
         }
         final int nhits = foundAssayAdapters.size()
         return [assayAdapters: foundAssayAdapters, facets: facets, nHits: nhits]
     }
 
     /**
-     * TODO: Facet needed. Not yet ready in JDO
+     *
      * Given a list of Project Ids return all the projects that were found
      * @param projectIds
      * @return list
@@ -217,7 +217,7 @@ class QueryService {
             final RESTProjectService restProjectService = this.queryServiceWrapper.getRestProjectService()
             final Collection<Project> projects = restProjectService.get(projectIds)
             foundProjectAdapters.addAll(projectsToAdapters(projects))
-            //TODO: add facet information
+            //TODO: Facet needed. Not yet ready in JDO
         }
         final int nhits = foundProjectAdapters.size()
         return [projectAdapters: foundProjectAdapters, facets: facets, nHits: nhits]
