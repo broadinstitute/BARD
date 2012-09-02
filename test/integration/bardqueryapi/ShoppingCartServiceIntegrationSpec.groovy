@@ -241,6 +241,8 @@ class ShoppingCartServiceIntegrationSpec extends IntegrationSpec {
         CartProject cartProject_differentName2 =  new  CartProject( projectName : "projectname4")
 
         when: "the shopping cart is functional and ready for testing"
+        LinkedHashMap<String,List> objectMap = queryCartService.groupUniqueContentsByType()
+        queryCartService.totalNumberOfUniqueItemsInCart(objectMap)==0
         queryCartService.emptyShoppingCart()
         queryCartService.addToShoppingCart(cartProject_identical1)
         assert queryCartService.totalNumberOfUniqueItemsInCart()==1
@@ -257,9 +259,9 @@ class ShoppingCartServiceIntegrationSpec extends IntegrationSpec {
         assert queryCartService.totalNumberOfUniqueItemsInCart()==3
         assertNotNull queryCartService.addToShoppingCart(cartProject_differentName2)
         assert queryCartService.totalNumberOfUniqueItemsInCart()==4
-        LinkedHashMap<String,List> objectMap = queryCartService.groupUniqueContentsByType()
-        queryCartService.totalNumberOfUniqueItemsInCart(objectMap)==4
-        queryCartService.totalNumberOfUniqueItemsInCart(objectMap,QueryCartService.cartProject)==4
+        LinkedHashMap<String,List> objectMap2 = queryCartService.groupUniqueContentsByType()
+        queryCartService.totalNumberOfUniqueItemsInCart(objectMap2)==4
+        queryCartService.totalNumberOfUniqueItemsInCart(objectMap2,QueryCartService.cartProject)==4
         queryCartService.totalNumberOfUniqueItemsInCart()==4
     }
 
