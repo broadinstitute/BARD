@@ -92,7 +92,7 @@ class QueryService {
             facets = searchIterator.facets
             nhits = searchIterator.count
         }
-         return [assayAdapters: foundAssayAdapters, facets: facets, nHits: nhits]
+        return [assayAdapters: foundAssayAdapters, facets: facets, nHits: nhits]
     }
 
     /**
@@ -101,7 +101,7 @@ class QueryService {
      * @param top
      * @param skip
      * @param searchFilters - TODO: Not yet supported by JDO
-     * @return   Map
+     * @return Map
      */
     Map findProjectsByTextSearch(final String searchString, final Integer top = 10, final Integer skip = 0, final List<SearchFilter> searchFilters = []) {
         List<ProjectAdapter> foundProjectAdapters = []
@@ -228,18 +228,14 @@ class QueryService {
     /**
      * Given a CID, get detailed compound information from REST API
      * @param compoundId
-     * @return
+     * @return CompoundAdapter
      */
     CompoundAdapter showCompound(final Long compoundId) {
         if (compoundId) {
             final RESTCompoundService restCompoundService = this.queryServiceWrapper.getRestCompoundService()
             final Compound compound = restCompoundService.get(compoundId)
             if (compound) {
-                CompoundAdapter compoundAdapter = new CompoundAdapter(compound)
-
-                //Bug in JDO. You need to also set Compound for it to work
-                compoundAdapter.setCompound(compound)
-                return compoundAdapter
+                return new CompoundAdapter(compound)
             }
         }
         return null
@@ -247,13 +243,15 @@ class QueryService {
     /**
      * Given an assayId, get detailed Assay information from the REST API
      * @param assayId
-     * @return
+     * @return AssayAdapter
      */
     AssayAdapter showAssay(final Integer assayId) {
         if (assayId) {
             final RESTAssayService restAssayService = this.queryServiceWrapper.getRestAssayService()
             Assay assay = restAssayService.get(assayId)
-            return new AssayAdapter(assay)
+            if (assay) {
+                return new AssayAdapter(assay)
+            }
         }
         return null
     }
@@ -280,7 +278,7 @@ class QueryService {
      * @param searchParams
      * @param searchFilters
      */
-    void applySearchFilters(final SearchParams searchParams, final List<SearchFilter> searchFilters) {
+    void applySearchFiltersToSearchParams(final SearchParams searchParams, final List<SearchFilter> searchFilters) {
         if (searchFilters) {
             List<String[]> filters = []
             for (SearchFilter searchFilter : searchFilters) {
@@ -298,14 +296,15 @@ class QueryService {
      * @param searchFilters
      * @return SearchParams
      */
-    SearchParams constructSearchParams(final String searchString, final int top, final int skip, final List<SearchFilter> searchFilters) {
+    SearchParams constructSearchParams(final String searchString, final Integer top, final Integer skip, final List<SearchFilter> searchFilters) {
         final SearchParams searchParams = new SearchParams(searchString)
         searchParams.setSkip(skip)
         searchParams.setTop(top);
-        applySearchFilters(searchParams, searchFilters)
+        applySearchFiltersToSearchParams(searchParams, searchFilters)
         return searchParams
 
     }
+    //=========== Construct adapters ===================
     /**
      * Convert the list of compounds to the list of adapters
      * @param compounds
@@ -319,7 +318,11 @@ class QueryService {
         }
         return compoundAdapters
     }
-
+    /**
+     * convert Assay's to AssayAdapter's
+     * @param assays
+     * @return list of AssayAdapter's
+     */
     final List<AssayAdapter> assaysToAdapters(final Collection<Assay> assays) {
         final List<AssayAdapter> assayAdapters = []
         for (Assay assay : assays) {
@@ -327,7 +330,11 @@ class QueryService {
         }
         return assayAdapters
     }
-
+    /**
+     * convert Project's to ProjectAdapter's
+     * @param projects
+     * @return list of ProjectAdapter's
+     */
     final List<ProjectAdapter> projectsToAdapters(final Collection<Project> projects) {
         final List<ProjectAdapter> projectAdapters = []
         for (Project project : projects) {
