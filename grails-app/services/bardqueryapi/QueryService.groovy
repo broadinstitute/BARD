@@ -48,7 +48,7 @@ class QueryService {
      * @param searchFilters - TODO: Not yet supported by JDO
      * @return
      */
-    Map findCompoundsByTextSearch(final String searchString, final int top = 10, final int skip = 0, final List<SearchFilter> searchFilters = []) {
+    Map findCompoundsByTextSearch(final String searchString, final Integer top = 10, final Integer skip = 0, final List<SearchFilter> searchFilters = []) {
         final List<CompoundAdapter> foundCompoundAdapters = []
         Collection<Value> facets = []
         int nhits = 0
@@ -65,7 +65,7 @@ class QueryService {
             facets = searchIterator.facets
             nhits = searchIterator.count
         }
-         return [compoundAdapters: foundCompoundAdapters, facets: facets, nHits: nhits]
+        return [compoundAdapters: foundCompoundAdapters, facets: facets, nHits: nhits]
     }
 
     /**
@@ -77,7 +77,7 @@ class QueryService {
      * @param searchFilters
      * @return Map
      */
-    Map findAssaysByTextSearch(final String searchString, final int top = 10, final int skip = 0, final List<SearchFilter> searchFilters = []) {
+    Map findAssaysByTextSearch(final String searchString, final Integer top = 10, final Integer skip = 0, final List<SearchFilter> searchFilters = []) {
         final List<AssayAdapter> foundAssayAdapters = []
         Collection<Value> facets = []
         int nhits = 0
@@ -103,7 +103,7 @@ class QueryService {
      * @param searchFilters - TODO: Not yet supported by JDO
      * @return   Map
      */
-    Map findProjectsByTextSearch(final String searchString, final int top = 10, final int skip = 0, final List<SearchFilter> searchFilters = []) {
+    Map findProjectsByTextSearch(final String searchString, final Integer top = 10, final Integer skip = 0, final List<SearchFilter> searchFilters = []) {
         List<ProjectAdapter> foundProjectAdapters = []
         Collection<Value> facets = []
         int nhits = 0

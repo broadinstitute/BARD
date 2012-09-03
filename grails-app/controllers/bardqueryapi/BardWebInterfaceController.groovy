@@ -225,9 +225,9 @@ class BardWebInterfaceController {
         String searchString = params.searchString?.trim()
         if (searchString) {
             try {
-                Map<String, Integer> searchParams = handleSearchParams()
-                int top = searchParams.top
-                int skip = searchParams.skip
+                final Map<String, Integer> searchParams = handleSearchParams()
+                final int top = searchParams.top
+                final int skip = searchParams.skip
                 final Map compoundsByTextSearchResultsMap = this.queryService.findCompoundsByTextSearch(searchString, top, skip)
                 render(template: 'compounds',
                         model: [
@@ -273,7 +273,7 @@ class BardWebInterfaceController {
                         "Assay search has encountered an error:\n${exp.message}")
             }
         }
-        flash.message = 'Search String is required '
+        flash.message = 'Search String is required'
         redirect(action: "homePage")
 
     }
