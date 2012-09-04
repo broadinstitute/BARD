@@ -87,16 +87,15 @@ Map attributeNameMapping = ['[detector] assay component (type in)': 'assay compo
         'cell-based: live cell': 'cell-based format',
         'cells/ml': 'cells per milliliter',
         'chemically labeled protein': 'chemically labeled protein',
-        'cid': 'PubChem CID',
         'detection instrument': 'detection instrument name',
         'fluorescence:other': 'fluorescence',
         'fm': 'femtomolar',
-        'grams-per-liter': ',gram per liter',
+        'grams-per-liter': 'gram per liter',
         'imaging methods': 'imaging method',
         'in cell analyzer': 'IN cell analyzer',
         'kodak biomax mr-1': 'Kodak Biomax MR-1',
         'luminescence:other': 'luminescence',
-        'microscope cover slip  22 m^2': 'Microscope Cover Slip  22 mm^2',
+        'Microscope cover slip  22 m^2': 'Microscope Cover Slip  22 mm^2',
         'mm': 'millimolar',
         'moles-per-liter': 'molar',
         'ng/ml': 'nanogram per milliliter',
@@ -113,13 +112,38 @@ Map attributeNameMapping = ['[detector] assay component (type in)': 'assay compo
         '# concentration points': 'number of points',
         '# replicates': 'number of replicates',
         'uniprot': 'UniProt',
+        'Aequorea Victoria': 'Aequorea victoria',
+        'DNA-small molecule': 'DNA-small molecule',
+        'DNA-small molecule interaction assay': 'DNA-small molecule interaction assay',
+        'IMAP Kinase assay kit': 'IMAP Kinase assay kit',
+        'SUMOylation assay': 'SUMOylation assay',
+        'fluorescence interference assay': 'fluorescence interference assay',
+        'ubiquitination assay': 'ubiquitination assay',
+        'CID': 'PubChem CID',
+        'BD Bioscience LSR II': 'BD Bioscience LSR II',
+        'BioTek Synergy II plate reader': 'BioTek Synergy II plate reader',
+        'MOI': 'mode of infection',
+        'Microbeta scintillation counter': 'Microbeta scintillation counter',
+        'Streptomyces Avidinii': 'Streptomyces avidinii',
+        't-4 bacteriophage': 't-4 bacteriophage',
+        'ChemBank': 'ChemBank',
+        'DTP.NCI': 'Developmental Therapeutics Program, National Cancer Institute',
+        'Vanderbilt, Vanderbilt Chemistry': 'Vanderbilt Screening Center for GPCRs, Ion Channels and Transporters',
+        'SRI, SRI Screening': 'Southern Research Institute',
+        'gram per liter': 'milligram per milliliter',
+        '47-mer dsDNA': '47-mer dsDNA',
+        'log10 molar': 'log10 molar',
+        'negative log10 molar': 'negative log10 molar',
+        'number-per-liter': 'number per liter',
+        'number-per-well': 'number per well',
+        'uIU/mL': 'micro interational unit per milliliter',
         '--': '']
 
 final Integer START_ROW = 3 //1-based
-//InputStream inp = new FileInputStream("C:/Users/gwalzer/Desktop/DnaRepairSpreadsheets/Broad+others-DNA_repair.xlsx");
-//InputStream inp = new FileInputStream("C:/Users/gwalzer/Desktop/DnaRepairSpreadsheets/Burnham Center for Chemical Genomics-DNA repair only.xlsx");
-//InputStream inp = new FileInputStream("C:/Users/gwalzer/Desktop/DnaRepairSpreadsheets/NCGC-DNA repair.xlsx");
-InputStream inp = new FileInputStream("C:/Users/gwalzer/Desktop/DnaRepairSpreadsheets/The Scripps Research Institute Molecular Screening Center-DNA repair.xlsx");
+InputStream inp = new FileInputStream("C:/Users/gwalzer/Desktop/Simon/Broad+others-DNA_repair.xlsx");
+//InputStream inp = new FileInputStream("C:/Users/gwalzer/Desktop/Simon/Burnham Center for Chemical Genomics-DNA repair only.xlsx");
+//InputStream inp = new FileInputStream("C:/Users/gwalzer/Desktop/Simon/NCGC-DNA repair.xlsx");
+//InputStream inp = new FileInputStream("C:/Users/gwalzer/Desktop/Simon/The Scripps Research Institute Molecular Screening Center-DNA repair.xlsx");
 
 //Build assay-context (groups) and populate their attribute from the spreadsheet cell contents.
 List<AssayContextDTO> assayContextList = parseSpreadsheetAndBuildAttributeGroups(inp, START_ROW, spreadsheetAssayContextGroups)
@@ -180,6 +204,7 @@ private List<AssayContextDTO> parseSpreadsheetAndBuildAttributeGroups(FileInputS
             rowCount++
             continue
         }
+        if (rowCount++ > 6000) break //don't parse into the vocabulary section
 
         //Get the current AID
         String aidFromCell = getCellContentByRowAndColumnIds(row, 'A')
