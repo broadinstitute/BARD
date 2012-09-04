@@ -86,5 +86,9 @@ class AssayDefinitionController {
 			redirect(action: "show" , id: params.assayId)
 		}				
 	}
+	
+	def removeItem(){
+		render(template: "test");
+	}
 
 }

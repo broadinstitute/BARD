@@ -36,6 +36,9 @@
                 	<td>${line.attributeLabel}</td>
                     <td>${line.valueLabel}</td>
                     <td>
+                    	<button id="deleteBtn_${itemId}" onclick="removeCardItem();">Delete</button>
+                    	
+                    	%{--                   	
                     	<g:if test="${line.id}">
                     		<g:formRemote name="${line.id}" before="deleteCardItem(${line.id}, deleteBtn_${itemId})" update="assayView" url="[controller: 'assayDefinition', action: 'deleteItem']" action="deleteItem">
 		                    	<input type="hidden" name="assayId" value="${card.assayId}"/>
@@ -44,9 +47,16 @@
 	                    	</g:formRemote>
                     	</g:if>
 						<g:else>
-							<button id="deleteBtn_${itemId}">Delete</button>
+							<button id="deleteBtn_${itemId}" on>Delete</button>
 						</g:else>
-	                    
+	                 	
+	                 	
+	                 	<a href="/BARD/assayDefinition/removeItem/${line.id}"
+	                 	onclick="sendAjaxRequest(data, successFunction); alert('testing'); return false;"
+	                 	action="removeItem"
+	                 	controller="assayDefinition">
+	                 	Delete</a>
+	                 	--}% 
                     </td>
            		</tr>
     		</g:each>

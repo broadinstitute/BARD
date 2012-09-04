@@ -10,7 +10,29 @@
 	$(document).ready(function() {		
 		$( "#accordion" ).accordion({ autoHeight: false });	
 		$( "#dialog:ui-dialog" ).dialog( "destroy" );
-	}); 
+	});
+	
+	function removeCardItem(){
+		
+		$("#dialog_confirm_delete_card").dialog("option", "buttons",[
+		{
+			text: "Delete",
+			click: function(){
+				alert("You clicked Delete!");				
+			}
+		},
+		{
+			text: "Cancel",
+			click: function(){
+				$( this ).dialog( "close" );
+			}
+		}
+		]);
+		if($("#dialog_confirm_delete_card").dialog("open")){
+							
+		}
+		
+	}
 	
 	function deleteCardItem(formId, buttonId){
 		
@@ -28,10 +50,30 @@
 			}
 		}
 		]);
-		if($("#dialog_confirm_delete_card").dialog("open")){
-							
-		}
+		$("#dialog_confirm_delete_card").dialog("open");
 		
+	}
+	
+	function sendAjaxRequest(data, successFunction){
+		$("#dialog_confirm_delete_card").dialog("option", "buttons",[
+		{
+			text: "Delete",
+			click: function(){
+				alert("You clicked Delete! ItemId: " + buttonId);
+				$( this ).dialog( "close" );
+				return true;			
+			}
+		},
+		{
+			text: "Cancel",
+			click: function(){
+				$( this ).dialog( "close" );
+				return false;
+			}
+		}
+		]);
+		$("#dialog_confirm_delete_card").dialog("open");
+
 	}
 </r:script>
 
