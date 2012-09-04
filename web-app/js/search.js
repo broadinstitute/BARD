@@ -1,205 +1,193 @@
-//TODO : There is a lot of common code here. Need to refactor to make it DRY
 //use GLOBAL params here
+var spinnerImageLink = '<img src="/bardwebquery/static/images/loading_icon.gif" alt="loading" title="loading" height="16" width="16"/>';
+var errorImageTwitterBootstrap = '<img src=""  class="icon-exclamation-sign" alt="error" height="16" width="16" />';
+
 $(document).ready(function () {
-    var spinnerImageLink = '<img src="/bardwebquery/static/images/loading_icon.gif"  height="16" width="16" />';
-    var errorImageTwitterBootstrap = '<img src=""  class="icon-exclamation-sign" height="16" width="16" />';
     var autoOpts = {
         source:"/bardwebquery/bardWebInterface/autoCompleteAssayNames",
         minLength:2
     };
     $("#searchString").autocomplete(autoOpts);
+    $("#searchString").bind("autocompleteselect", function(event, ui) {
+       $("#searchButton").click();
+    });
+    // make sure to close the autocomplete box when the search button is clicked
+    $("#searchButton").click(function() {
+        $("#searchString").autocomplete("close");
+    });
 
     $('#aidForm').submit(function (event) {
-        var searchType = findSearchType();
-
-        switch (searchType.toUpperCase()) {
-            case 'REGULAR':
-                handleAssaySearch('searchAssays');
-                handleCompoundSearch('searchCompounds');
-                handleProjectSearch('searchProjects');
-                break;
-            case 'ID':
-                //TODO: Right now we are treating Id searches like regular searches
-                //i.e we send the ids to all 3 resources
-                //We intend to change to a modal view, where a user picks
-                //the type of id (like we do with structure searches) so that we
-                //can only send the query to the resource of interest
-                //we are also not intentionally paging here
-                //subsequent iterations should support paging
-                 handleAssaySearch('searchAssaysByIDs');
-                handleCompoundSearch('searchCompoundsByIDs');
-                handleProjectSearch('searchProjectsByIDs');
-                break;
-            case 'STRUCTURE':
-                handleStructureSearch();
-                break;
-
-
-        }
+        var searchString = $("#searchString").val();
+        handleFormSubmit(searchString);
         return false; //do not submit form the normal way, use Ajax instead
 
     });
-
-    function findSearchType() {
-
-        var searchString = $("#searchString").val();
-        if (!$.trim(searchString).length) {  //if this is an empty string
-            return "Empty";
-        }
-        var regex = /^\d+(?:, *\d+ *)*$/;
-        if (searchString.match(regex)) {//this is an id match
-            return "ID";
-        }
-        //we want to find out if this is a Structure search
-        var searchStringSplit = searchString.split(":");
-        var searchType = searchStringSplit[0];
-        if (searchStringSplit.length == 2) { //is this a structure search
-            searchType = searchType.toLowerCase();
-            switch (searchType) { //must be one of these to qualify as a structure search
-                case 'exact':
-                case 'substructure':
-                case 'superstructure':
-                case 'similarity':
-                    return 'STRUCTURE';
-                    break;
-            }
-        }
-        return "REGULAR"; //this a regular search
-    }
-
-
-    function handleAssaySearch(searchAssays) {
-        var fullURL ='/bardwebquery/bardWebInterface/'+ searchAssays;
-        $.ajax({
-            url:fullURL,
-            data:$("#aidForm").serialize(),
-            cache:false,
-            beforeSend:function () {
-                $("#assaysTab").html("Assay Definitions " + spinnerImageLink);
-            },
-            success:function (data) {
-                $("#assays").html(data);
-                var assayTotal = 'Assay Definitions (' + $("#totalAssays").val() + ')' ;
-                $("#assaysTab").html(assayTotal);
-            } ,
-            error:function (request, status, error) {
-                $('#assaysTab').html("Assay Definitions " + errorImageTwitterBootstrap);
-                $("#assays").html(error);
-            },
-            complete:function () {
-            }
-        });
-    }
-
-    function handleCompoundSearch(searchCompounds) {
-        var fullURL ='/bardwebquery/bardWebInterface/'+ searchCompounds;
-        $.ajax({
-            url:fullURL,
-            data:$("#aidForm").serialize(),
-            cache:false,
-            beforeSend:function () {
-                $('#compoundsTab').html("Compounds " + spinnerImageLink);
-            },
-            success:function (data) {
-                $("#compounds").html(data);
-                var compoundTotal = 'Compounds (' + $("#totalCompounds").val() + ')';
-                $("#compoundsTab").html(compoundTotal);
-            },
-            error:function (request, status, error) {
-                $('#compoundsTab').html("Compounds " + errorImageTwitterBootstrap);
-                $("#compounds").html(error);
-            },
-            complete:function () {
-            }
-        });
-    }
-    function handleProjectSearch(searchProjects) {
-        var fullURL = '/bardwebquery/bardWebInterface/' + searchProjects;
-        $.ajax({
-            url:fullURL,
-            data:$("#aidForm").serialize(),
-            cache:false,
-            beforeSend:function () {
-                $('#projectsTab').html("Projects " + spinnerImageLink);
-            },
-            success:function (data) {
-                //alert("Compounds: " + data)
-                $("#projects").html(data);
-                var projectsTotal = 'Projects (' + $("#totalProjects").val() + ')';
-                $("#projectsTab").html(projectsTotal);
-            },
-            error:function (request, status, error) {
-                $('#projectsTab').html("Projects " + errorImageTwitterBootstrap);
-                $("#projects").html(error);
-            },
-            complete:function () {
-            }
-        });
-    }
-
-    /**
-     * Handle structure searches { exact, Substructure, superstructure and similarity searches}
-     */
-    function handleStructureSearch() {
-        var fullURL ='/bardwebquery/bardWebInterface/searchStructures';
-        $.ajax({
-            url:fullURL,
-            data:$("#aidForm").serialize(),
-            cache:false,
-            beforeSend:function () {
-                $('#compoundsTab').html("Compounds " + spinnerImageLink);
-                $('#compounds').html('');
-                $("#assaysTab").html('Assay Definitions (0)');
-                $('#assays').html('');
-                $('#assaysTabLi').removeClass('active');
-                $("#projectsTab").html('Projects (0)');
-                $('#projects').html('');
-                $('#projectsTabLi').removeClass('active');
-            },
-            success:function (data) {
-                $("#compounds").html(data);
-                var compoundTotal = 'Compounds (' + $("#totalCompounds").val() + ')';
-                $("#compoundsTab").html(compoundTotal);
-                $("#compounds").tab('show');
-            },
-            error:function (request, status, error) {
-                //TODO put in some code handling here. Dealing with time outs etc
-            },
-            complete:function () {
-            }
-        });
-    }
-    function resetTabsForStructureSearches(){
-        $('#compoundsTab').html("Compounds " + spinnerImageLink);
-        $('#compoundsTabLi').addClass('active') ;
-        $('#compounds').html('');
-        $("#assaysTab").html('Assay Definitions (0)');
-        $('#assays').html('');
-        $('#assaysTabLi').removeClass('active');
-        $("#projectsTab").html('Projects (0)');
-        $('#projects').html('');
-        $('#projectsTabLi').removeClass('active');
-    }
-    function resetTabsForAssaySearches(){
-        $('#compoundsTab').html("Assay Definitions " + spinnerImageLink);
-        $('#assaysTabLi').addClass('active') ;
-        $('#assays').html('');
-        $("#compoundsTab").html('Compounds (0)');
-        $('#compounds').html('');
-        $('#compoundsTabLi').removeClass('active');
-        $("#projectsTab").html('Projects (0)');
-        $('#projects').html('');
-        $('#projectsTabLi').removeClass('active');
-    }
-    function resetTabsForProjectSearches(){
-        $('#compoundsTab').html("Projects " + spinnerImageLink);
-        $('#projectsTabLi').addClass('active') ;
-        $('#projects').html('');
-        $("#compoundsTab").html('Compounds (0)');
-        $('#compounds').html('');
-        $('#compoundsTabLi').removeClass('active');
-        $("#assaysTab").html('Projects (0)');
-        $('#assays').html('');
-        $('#assaysTabLi').removeClass('active');
-    }
 });
+function handleFormSubmit(searchString){
+
+    var searchType = findSearchType(searchString);
+
+    switch (searchType.toUpperCase()) {
+        case 'FREE_TEXT':
+            handleAllFreeTextSearches();
+            break;
+        case 'ID':
+            //TODO: Right now we are treating Id searches like regular searches
+            //i.e we send the ids to all 3 resources
+            //We intend to change to a modal view, where a user picks
+            //the type of id (like we do with structure searches) so that we
+            //can only send the query to the resource of interest
+            handleAllIdSearches();
+            break;
+        case 'STRUCTURE':
+            handleStructureSearch();
+            break;
+    }
+}
+
+/**
+ * Handle structure searches { exact, Substructure, superstructure and similarity searches}
+ */
+function handleStructureSearch() {
+    var fullURL = '/bardwebquery/bardWebInterface/searchStructures';
+    $.ajax({
+        url:fullURL,
+        data:$("#aidForm").serialize(),
+        cache:false,
+        beforeSend:function () {
+            resetTabsForStructureSearches();
+        },
+        success:function (data) {
+            $("#compounds").html(data);
+            var compoundTotal = 'Compounds (' + $("#totalCompounds").val() + ')';
+            $("#compoundsTab").html(compoundTotal);
+            $("#compounds").tab('show');
+        },
+        error:function (request, status, error) {
+            $("#compoundsTab").html('Compounds ' + errorImageTwitterBootstrap);
+            $("#compounds").html(error);
+        },
+        complete:function () {
+        }
+    });
+}
+/**
+ *
+ * @param controllerAction - The name of the controller action that would handle this request e.g 'searchAssays'
+ * @param tabId - The ID of the tab where the results should be displayed  e.g 'assaysTab'
+ * @param totalHitsForResourceId  - The ID of the hidden field that would hold the total number of hits
+ * @param displayStringPrefix - The start of the string to display on the tab e.g 'Assay Definitions '
+ * @param updateDiv - Where the results will be displayed
+ */
+function handleSearch(controllerAction, tabId, totalHitsForResourceId, displayStringPrefix, updateDiv) {
+    var fullURL = '/bardwebquery/bardWebInterface/' + controllerAction;
+    var tabDivElement = '#' + tabId;
+    var totalHitsElement = '#' + totalHitsForResourceId;
+    var updateDivId = '#' + updateDiv;
+
+    $.ajax({
+        url:fullURL,
+        data:$("#aidForm").serialize(),
+        cache:false,
+        beforeSend:function () {
+            $(tabDivElement).html(displayStringPrefix + spinnerImageLink);
+        },
+        success:function (data) {
+            $(updateDivId).html(data);
+            var total = displayStringPrefix + '(' + $(totalHitsElement).val() + ')';
+            $(tabDivElement).html(total);
+        },
+        error:function (request, status, error) {
+            $(tabDivElement).html(displayStringPrefix + errorImageTwitterBootstrap);
+            $(updateDivId).html(error);
+        },
+        complete:function () {
+        }
+    });
+}
+/**
+ * Handle all free text searches
+ */
+function handleAllFreeTextSearches() {
+    handleSearch('searchAssays', 'assaysTab', 'totalAssays', 'Assay Definitions ', 'assays');
+    handleSearch('searchCompounds', 'compoundsTab', 'totalCompounds', 'Compounds ', 'compounds');
+    handleSearch('searchProjects', 'projectsTab', 'totalProjects', 'Projects ', 'projects');
+}
+
+/**
+ * Handle all ID searches
+ */
+function handleAllIdSearches() {
+    handleSearch('searchAssaysByIDs', 'assaysTab', 'totalAssays', 'Assay Definitions ', 'assays');
+    handleSearch('searchCompoundsByIDs', 'compoundsTab', 'totalCompounds', 'Compounds ', 'compounds');
+    handleSearch('searchProjectsByIDs', 'projectsTab', 'totalProjects', 'Projects ', 'projects');
+}
+/**
+ * Make Tabs inactive
+ * @param tabId - The ID of the tab
+ * @param tabListId - The ID of the tab list li element
+ * @param resourceId - The ID of the resource (assays, compounds or projects)
+ * @param tabDisplayPrefix - The prefix to display on tab
+ */
+function deActivateTabs(tabId, tabListId, resourceId, tabDisplayPrefix) {
+    var tabIdElement = '#' + tabId;
+    var resourceIdElement = '#' + resourceId;
+    var tabListIdElement = '#' + tabListId;
+
+    $(tabIdElement).html(tabDisplayPrefix);
+    $(resourceIdElement).html('');
+    $(tabListIdElement).removeClass('active');
+}
+/**
+ * Make Tabs active
+ * @param tabId - The ID of the tab
+ * @param tabListId - The ID of the tab list li element
+ * @param resourceId - The ID of the resource (assays, compounds or projects)
+ * @param tabDisplayPrefix - The prefix to display on tab
+ */
+function activateTabs(tabId, tabListId, resourceId, tabDisplayPrefix) {
+    var tabIdElement = '#' + tabId;
+    var tabListIdElement = '#' + tabListId;
+    var resourceIdElement = '#' + resourceId;
+
+    $(tabIdElement).html(tabDisplayPrefix + spinnerImageLink);
+    $(resourceIdElement).html('');
+    $(tabListIdElement).addClass('active');
+}
+/**
+ * Reset the tabs for structure searches
+ * Make the counts zero for each tab, before you start the search
+ */
+function resetTabsForStructureSearches() {
+    activateTabs('compoundsTab', 'compoundsTabLi', 'compounds', "Compounds ");
+    deActivateTabs('assaysTab', 'assaysTabLi', 'assays', 'Assay Definitions (0)');
+    deActivateTabs('projectsTab', 'projectsTabLi', 'projects', 'Projects (0)');
+}
+/**
+ * Find the search type
+ * @return {String} - One of 'FREE_TEXT', 'STRUCTURE', 'EMPTY' or 'ID'
+ */
+function findSearchType(searchString) {
+
+    if (!$.trim(searchString).length) {  //if this is an empty string, do nothing
+        return "EMPTY";
+    }
+    var numberMatchingRegex = /^\d+(?:, *\d+ *)*$/; //-- Potential performance issue, because we look at every thing
+    if (searchString.match(numberMatchingRegex)) {//this is an id match
+        return "ID";
+    }
+    //we want to find out if this is a Structure search
+    var searchStringSplit = searchString.split(":");
+    var searchType = searchStringSplit[0];
+    if (searchStringSplit.length == 2 && $.trim(searchStringSplit[1]).length) { //has to be of the form Exact:CCC so there must be 2 things in the array
+        searchType = searchType.toLowerCase();
+        switch (searchType) { //must be one of these to qualify as a structure search
+            case 'exact':
+            case 'substructure':
+            case 'superstructure':
+            case 'similarity':
+                return 'STRUCTURE';
+        }
+    }
+    return "FREE_TEXT"; //this a Free Text Search
+}

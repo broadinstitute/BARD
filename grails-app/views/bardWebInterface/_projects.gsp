@@ -26,10 +26,10 @@
         </g:each>
     </ul>
     <g:hiddenField name="totalProjects" id="totalProjects" value="${nhits}"/>
-         %{--<div class="pagination">--}%
-            %{--<util:remotePaginate total="${nhits ? nhits : 0}" update="projects" controller="bardWebInterface"--}%
-                                 %{--action="searchProjects"--}%
-                                 %{--params='[searchString: "${searchString}"]'/>--}%
-        %{--</div>--}%
+         <div class="pagination">
+            <util:remotePaginate total="${nhits?nhits : 0}" update="projects" controller="bardWebInterface"
+                                 action="searchProjects"  pageSizes="[10,50]"
+                                 params='[searchString: "${searchString}"]'/>
+        </div>
 </div>
 </div>

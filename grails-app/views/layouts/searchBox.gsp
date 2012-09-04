@@ -24,12 +24,12 @@
                 });
                 $('#modalDiv').on('show', function () {
                     parent.$('#searchButton').click(function () {
-                        var structureSearchTypeSelected = parent.$('input:radio[name=structureSearchType]:checked').val()
+                        var structureSearchTypeSelected = parent.$('input:radio[name=structureSearchType]:checked').val();
                         var marvinSketch = $('#MarvinSketch')[0];
-                        var smiles = marvinSketch.getMol('smiles')
+                        var smiles = marvinSketch.getMol('smiles');
 
                         //construct the query into a form that we want
-                        var constructedSearch =structureSearchTypeSelected + ":" + smiles
+                        var constructedSearch =structureSearchTypeSelected + ":" + smiles;
                         parent.$('#searchString').attr('value', constructedSearch);
                         parent.$('#aidForm').submit();
 
@@ -68,7 +68,7 @@
                 </div>
             </div>
             <div class="span1" style="margin-top: 20px;">
-                <g:submitButton name="search" value="Search" class="btn btn-primary"/>
+                <g:submitButton name="search" value="Search" class="btn btn-primary" id="searchButton"/>
             </div>
         </g:form>
         <g:render template="queryCartIndicator"/>
@@ -100,10 +100,6 @@
         <h3>Draw or paste a structure</h3>
     </div>
     <div class="modal-body">
-        %{--<iframe name="modalIFrame" id="modalIFrame" width="550px" height="485px" marginWidth="0"--}%
-                %{--marginHeight="0" frameBorder="0"--}%
-                %{--scrolling="auto">--}%
-        %{--</iframe>--}%
         <g:render template="/chemAxon/marvinSketch" />
     </div>
     <div class="modal-footer">
