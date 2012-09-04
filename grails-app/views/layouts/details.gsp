@@ -20,7 +20,10 @@
 <body>
 <div class="container-fluid">
     <a style="float: left;" href="${createLink(controller:'BardWebInterface',action:'index')}"><img src="${resource(dir: 'images', file: 'bardLogo.png')}" alt="BioAssay Research Database" /></a>
-    <div class="well" style="float: right;"><h5>Query Cart</h5></div>
+    <div style="float: right;">
+        <g:render template="queryCartIndicator"/>
+    </div>
+
     <g:if test="${flash.message}">
         <div class="alert">
             <button class="close" data-dismiss="alert">×</button>

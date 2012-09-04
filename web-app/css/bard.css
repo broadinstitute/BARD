@@ -43,6 +43,17 @@ a.removeXMark {
     font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
 }
 
+.qcartDescriber {
+    display: block;
+    outline: none;
+    text-decoration: none;
+    font-size: 14;
+    font-weight: bold;
+    font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
+
+
+}
+
 div.cntrcart {
     vertical-align: middle;
     text-align: justify;
