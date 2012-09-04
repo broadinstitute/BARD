@@ -8,11 +8,11 @@ $(document).ready(function () {
         minLength:2
     };
     $("#searchString").autocomplete(autoOpts);
-    $("#searchString").bind("autocompleteselect", function(event, ui) {
-       $("#searchButton").click();
+    $("#searchString").bind("autocompleteselect", function (event, ui) {
+        $("#searchButton").click();
     });
     // make sure to close the autocomplete box when the search button is clicked
-    $("#searchButton").click(function() {
+    $("#searchButton").click(function () {
         $("#searchString").autocomplete("close");
     });
 
@@ -23,27 +23,7 @@ $(document).ready(function () {
 
     });
 });
-function handleFormSubmit(searchString){
 
-    var searchType = findSearchType(searchString);
-
-    switch (searchType.toUpperCase()) {
-        case 'FREE_TEXT':
-            handleAllFreeTextSearches();
-            break;
-        case 'ID':
-            //TODO: Right now we are treating Id searches like regular searches
-            //i.e we send the ids to all 3 resources
-            //We intend to change to a modal view, where a user picks
-            //the type of id (like we do with structure searches) so that we
-            //can only send the query to the resource of interest
-            handleAllIdSearches();
-            break;
-        case 'STRUCTURE':
-            handleStructureSearch();
-            break;
-    }
-}
 
 /**
  * Handle structure searches { exact, Substructure, superstructure and similarity searches}
@@ -104,6 +84,31 @@ function handleSearch(controllerAction, tabId, totalHitsForResourceId, displaySt
         complete:function () {
         }
     });
+}
+/**
+ * Handles form submission
+ * @param searchString
+ */
+function handleFormSubmit(searchString) {
+
+    var searchType = findSearchType(searchString);
+
+    switch (searchType.toUpperCase()) {
+        case 'FREE_TEXT':
+            handleAllFreeTextSearches();
+            break;
+        case 'ID':
+            //TODO: Right now we are treating Id searches like regular searches
+            //i.e we send the ids to all 3 resources
+            //We intend to change to a modal view, where a user picks
+            //the type of id (like we do with structure searches) so that we
+            //can only send the query to the resource of interest
+            handleAllIdSearches();
+            break;
+        case 'STRUCTURE':
+            handleStructureSearch();
+            break;
+    }
 }
 /**
  * Handle all free text searches
