@@ -9,30 +9,32 @@ package bard.db.registration
  */
 class AssayContextService {
 
-    public AssayContext addItem(AssayContextItem source, AssayContext targetAssayContext) {
-        AssayContext sourceAssayContext = source.assayContext
-        if (source.valueDisplay == sourceAssayContext.contextName) {
-            AssayContextItem another = sourceAssayContext.assayContextItems.find {it.valueDisplay != sourceAssayContext.contextName}
-            sourceAssayContext.contextName = another?.valueDisplay
-        }
-        sourceAssayContext.removeFromAssayContextItems(source)
-        targetAssayContext.addToAssayContextItems(source)
+    public AssayContext addItem(AssayContextItem sourceItem, AssayContext targetAssayContext) {
+        return addItem(targetAssayContext.assayContextItems.size(), sourceItem, targetAssayContext)
+    }
+
+    public AssayContext addItem(int index, AssayContextItem sourceItem, AssayContext targetAssayContext) {
+        AssayContext sourceAssayContext = sourceItem.assayContext
+        sourceAssayContext.removeFromAssayContextItems(sourceItem)
+        sourceItem.assayContext = targetAssayContext
+        targetAssayContext.assayContextItems.add(index, sourceItem)
+        optionallyChangeContextName(sourceAssayContext)
+        optionallyChangeContextName(targetAssayContext)
         return targetAssayContext
     }
 
-    public AssayContext addItemAfter(AssayContextItem source, AssayContextItem target, AssayContext targetAssayContext) {
-        AssayContext sourceAssayContext = source.assayContext
-        if (source.valueDisplay == sourceAssayContext.contextName) {
-            AssayContextItem another = sourceAssayContext.assayContextItems.find {it.valueDisplay != sourceAssayContext.contextName}
-            sourceAssayContext.contextName = another?.valueDisplay
+    /**
+     * If we can find a match for the contextName in the existing assayContextItems, do nothing
+     * if we can't find a match use the first assayContextItem if it exists
+     * @param sourceAssayContext
+     */
+    public void optionallyChangeContextName(AssayContext sourceAssayContext) {
+        if (sourceAssayContext.assayContextItems.find {sourceAssayContext.contextName == it.valueDisplay}) {
+            // item responsible for contextName found in assayContextItems
         }
-        sourceAssayContext.removeFromAssayContextItems(source)
-
-        int indexAfterTargetItem = targetAssayContext.assayContextItems.indexOf(target) + 1
-        source.assayContext = targetAssayContext
-        targetAssayContext.assayContextItems.add(indexAfterTargetItem, source)
-        return targetAssayContext
+        else {
+            AssayContextItem first = sourceAssayContext.assayContextItems[0]
+            sourceAssayContext.contextName = first?.valueDisplay?: 'Empty Card, consider deleting!'
+        }
     }
-
-
 }

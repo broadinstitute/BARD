@@ -74,12 +74,10 @@ class AssayDefinitionController {
         AssayContextItem target = AssayContextItem.findById(target_assay_context_item_id)
         AssayContextItem source = AssayContextItem.findById(src_assay_context_item_id)
         AssayContext targetAssayContext = target.assayContext
-        AssayContext sourceAssayContext = source.assayContext
-
-        assayContextService.addItemAfter(source,target,targetAssayContext)
+        int index = targetAssayContext.assayContextItems.indexOf(target)
+        assayContextService.addItem(index, source,targetAssayContext)
         List<CardDto> cardDtoList = cardFactoryService.createCardDtoListForAssay(targetAssayContext.assay)
         render(template: "cards", model: [cardDtoList: cardDtoList])
-
     }
 
     def addItemToCard(Long src_assay_context_item_id, Long target_assay_context_id) {
