@@ -116,7 +116,10 @@ Map attributeNameMapping = ['[detector] assay component (type in)': 'assay compo
         '--': '']
 
 final Integer START_ROW = 3 //1-based
-InputStream inp = new FileInputStream("C:/Users/gwalzer/Desktop/NCGC-DNA repair + comments.xlsx");
+//InputStream inp = new FileInputStream("C:/Users/gwalzer/Desktop/DnaRepairSpreadsheets/Broad+others-DNA_repair.xlsx");
+//InputStream inp = new FileInputStream("C:/Users/gwalzer/Desktop/DnaRepairSpreadsheets/Burnham Center for Chemical Genomics-DNA repair only.xlsx");
+//InputStream inp = new FileInputStream("C:/Users/gwalzer/Desktop/DnaRepairSpreadsheets/NCGC-DNA repair.xlsx");
+InputStream inp = new FileInputStream("C:/Users/gwalzer/Desktop/DnaRepairSpreadsheets/The Scripps Research Institute Molecular Screening Center-DNA repair.xlsx");
 
 //Build assay-context (groups) and populate their attribute from the spreadsheet cell contents.
 List<AssayContextDTO> assayContextList = parseSpreadsheetAndBuildAttributeGroups(inp, START_ROW, spreadsheetAssayContextGroups)
@@ -137,7 +140,7 @@ List<AssayContextDTO> assayContextListCleaned = cleanAttributeContents(assayCont
 ////Print out the cleaned grouped attributes (key/value pairs)
 //out = new File('DnaSpreadsheetParsingCleaned' + '_' + System.currentTimeMillis() + '.txt')
 //out.withWriterAppend { writer ->
-//    assayContextListCleaned.each {AssayContextDTO assayContextDTO ->
+//    assayContextList.each {AssayContextDTO assayContextDTO ->
 //        writer.writeLine("\nAID=${assayContextDTO.aid}; ${assayContextDTO.name}")
 //        assayContextDTO.attributes.each {Attribute attribute ->
 //            writer.writeLine("\t'${attribute.key}'/'${attribute.value}'; typeIn=${attribute.typeIn}; qualifier='${attribute.qualifier}' type=${attribute.attributeType}")
@@ -428,17 +431,17 @@ private Assay getAssayFromAid(long AID) {
  * 3. Always update valueDisplay
  * 4. If the attribute is a qualifier, update the qualifier field
  *
- * @param assayContextListCleaned
+ * @param assayContextList
  * @return
  */
-private List<AssayContextDTO> createAndPersistAssayContexts(List<AssayContextDTO> assayContextListCleaned) {
+private List<AssayContextDTO> createAndPersistAssayContexts(List<AssayContextDTO> assayContextList) {
     def out = new File('DnaSpreadsheetParserResults' + '_' + System.currentTimeMillis() + '.txt')
     out.withWriterAppend { writer ->
         Integer totalAssayContextItems = 0
-        assayContextListCleaned.each { AssayContextDTO assayContextDTO -> totalAssayContextItems += assayContextDTO.attributes.size()}
+        assayContextList.each { AssayContextDTO assayContextDTO -> totalAssayContextItems += assayContextDTO.attributes.size()}
         Integer tally = 0
 
-        assayContextListCleaned.each { AssayContextDTO assayContextDTO ->
+        assayContextList.each { AssayContextDTO assayContextDTO ->
             AssayContext.withTransaction { TransactionStatus status ->
                 //create the assay-context
                 AssayContext assayContext = new AssayContext()
@@ -479,7 +482,10 @@ private List<AssayContextDTO> createAndPersistAssayContexts(List<AssayContextDTO
                         assayContextItem.qualifier = String.format('%-2s', attribute.qualifier)
                     }
 
+                    postProcessAssayContextItem(assayContextItem)
+
                     assayContext.addToAssayContextItems(assayContextItem)
+                    println("Assay ID: ${assayContext.assay.id} (${tally++}/${totalAssayContextItems})")
                 }
 
                 assayContext.save()
@@ -498,7 +504,6 @@ private List<AssayContextDTO> createAndPersistAssayContexts(List<AssayContextDTO
                         writer.writeLine("\tValueNum: '${assayContextItem?.valueNum}'")
                         writer.writeLine("\tQualifier: '${assayContextItem?.qualifier}'")
                     }
-                    println("Assay ID: ${assayContext.assay.id} (${tally++}/${totalAssayContextItems})")
                 }
 
                 //comment out to commit the transaction
@@ -508,6 +513,33 @@ private List<AssayContextDTO> createAndPersistAssayContexts(List<AssayContextDTO
     }
 }
 
+/**
+ *  if the value field is of the format 'cid:12345678' then:
+ *  1. lookup in the Element table for the element.label='PubChem CID' and take the element.externalUrl value from it
+ *  2. Strip out the 'cid:' part and use the numeric value to concatenate: externalUrl + cid_number (e.g., 'http://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?cid=12345678'
+ *  3. Use that to populate the valueDisplay
+ *  4. Use the element.id as the ValueElement.id
+ *
+ *  if the value field is of the format 'Uniprot:Q03164' do same as above but for 'UniProt' in the element table
+ */
+private void postProcessAssayContextItem(AssayContextItem assayContextItem) {
+    String valueDisplay = assayContextItem.valueDisplay
+    if (valueDisplay && valueDisplay.toLowerCase().matches(/^cid\W*:\W*\d+\W*/)) {//'cid:12345678'
+        String cid = StringUtils.split(valueDisplay, ':').toList().last().trim()
+        Element element = Element.findByLabelIlike('PubChem CID')
+        assert element, "Element 'PubChem CID' must exist"
+        String newValueDisplay = "${element.externalURL}${cid}"
+        assayContextItem.valueElement = element
+        assayContextItem.valueDisplay = newValueDisplay
+    } else if (valueDisplay && valueDisplay.toLowerCase().matches(/^uniprot\W*:/)) {//'Uniprot:Q03164'
+        String proteinId = StringUtils.split(valueDisplay, ':').toList().last().trim()
+        Element element = Element.findByLabelIlike('UniProt')
+        assert element, "Element 'UniProt' must exist"
+        String newValueDisplay = "${element.externalURL}${proteinId}"
+        assayContextItem.valueElement = element
+        assayContextItem.valueDisplay = newValueDisplay
+    }
+}
 /**
  * Holds a single attribute (a key/value pair) value.
  * This should correspond to an Element in the data model
