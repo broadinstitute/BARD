@@ -98,7 +98,7 @@
             <div class="span2">
                 <div class="well" style="width: 100%">
                     <div class="row-fluid">
-                        <h5><nobr><i class="icon-shopping-cart"></i><a class="trigger" href="#">Query Cart<span class="tinyclickfordetails">(click to expand)</span></nobr></a></h5>
+                        <h5><nobr><i class="icon-shopping-cart"></i><a class="trigger" href="#">Query Cart<span class="tinyclickfordetails">(click to expand)</span></a></nobr></h5>
                     </div>
                     <g:render template="queryCartIndicator"/>
                 </div>

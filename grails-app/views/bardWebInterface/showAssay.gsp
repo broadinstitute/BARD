@@ -13,10 +13,10 @@
             <h3 class="addtocart">${assayAdapter?.assay.name}
                 <a href="/bardwebquery/sarCart/add/${assayAdapter?.assay.id}"
                    onclick="jQuery.ajax({  type:'POST',
-                       data:{'id': '${assayAdapter?.assay.id}','class': 'class bardqueryapi.CartAssay','assayTitle':'${JavaScriptUtility.cleanup(assayAdapter?.assay.name)}','version': '0'},
+                       data:{'id': '${assayAdapter?.assay.id}','class': 'class bardqueryapi.CartAssay','assayTitle':'${JavaScriptUtility.cleanup(assayAdapter?.assay.name)}','version': '0', 'stt':'0'},
                        url:'/bardwebquery/sarCart/add',
                        success:function(data,textStatus){
-                           jQuery('#sarCartRefill').html(data);
+                           jQuery('#cartIdentRefill').html(data);
                        }
                    });
                    return false;"

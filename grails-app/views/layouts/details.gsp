@@ -19,9 +19,18 @@
 </head>
 <body>
 <div class="container-fluid">
+    <div class="row-fluid">
+        <div class="span6">
     <a style="float: left;" href="${createLink(controller:'BardWebInterface',action:'index')}"><img src="${resource(dir: 'images', file: 'bardLogo.png')}" alt="BioAssay Research Database" /></a>
-    <div style="float: right;">
-        <g:render template="queryCartIndicator"/>
+        </div>
+        <div class="span6">
+        <div class="well" style="width: 100%">
+            <div class="row-fluid">
+               <h5><nobr><i class="icon-shopping-cart"></i>Query Cart</nobr></h5>
+            </div>
+            <g:render template="queryCartIndicator"/>
+        </div>
+    </div>
     </div>
 
     <g:if test="${flash.message}">
