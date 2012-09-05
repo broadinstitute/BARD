@@ -10,6 +10,7 @@ class BootStrap {
     def init = { servletContext ->
         switch (Environment.current.name) {
             case "bambooDataExport":
+            case "branch":
             case "test":
             case "development":
                 if (Element.list().isEmpty()) {
