@@ -3,47 +3,32 @@ var spinnerImageLink = '<img src="/bardwebquery/static/images/loading_icon.gif" 
 var errorImageTwitterBootstrap = '<img src=""  class="icon-exclamation-sign" alt="error" height="16" width="16" />';
 
 $(document).ready(function () {
+
+    //set up auto complete
     var autoOpts = {
         source:"/bardwebquery/bardWebInterface/autoCompleteAssayNames",
         minLength:2
     };
     $("#searchString").autocomplete(autoOpts);
-    $("#searchString").bind("autocompleteselect", function(event, ui) {
-       $("#searchButton").click();
+    $("#searchString").bind("autocompleteselect", function (event, ui) {
+        $("#searchButton").click();
     });
     // make sure to close the autocomplete box when the search button is clicked
-    $("#searchButton").click(function() {
+    $("#searchButton").click(function () {
         $("#searchString").autocomplete("close");
     });
 
-    $('#aidForm').submit(function (event) {
+
+
+     //set up form submission
+    $('#searchForm').submit(function (event) {
         var searchString = $("#searchString").val();
         handleFormSubmit(searchString);
         return false; //do not submit form the normal way, use Ajax instead
 
     });
 });
-function handleFormSubmit(searchString){
 
-    var searchType = findSearchType(searchString);
-
-    switch (searchType.toUpperCase()) {
-        case 'FREE_TEXT':
-            handleAllFreeTextSearches();
-            break;
-        case 'ID':
-            //TODO: Right now we are treating Id searches like regular searches
-            //i.e we send the ids to all 3 resources
-            //We intend to change to a modal view, where a user picks
-            //the type of id (like we do with structure searches) so that we
-            //can only send the query to the resource of interest
-            handleAllIdSearches();
-            break;
-        case 'STRUCTURE':
-            handleStructureSearch();
-            break;
-    }
-}
 
 /**
  * Handle structure searches { exact, Substructure, superstructure and similarity searches}
@@ -52,7 +37,7 @@ function handleStructureSearch() {
     var fullURL = '/bardwebquery/bardWebInterface/searchStructures';
     $.ajax({
         url:fullURL,
-        data:$("#aidForm").serialize(),
+        data:$("#searchForm").serialize(),
         cache:false,
         beforeSend:function () {
             resetTabsForStructureSearches();
@@ -76,10 +61,10 @@ function handleStructureSearch() {
  * @param controllerAction - The name of the controller action that would handle this request e.g 'searchAssays'
  * @param tabId - The ID of the tab where the results should be displayed  e.g 'assaysTab'
  * @param totalHitsForResourceId  - The ID of the hidden field that would hold the total number of hits
- * @param displayStringPrefix - The start of the string to display on the tab e.g 'Assay Definitions '
+ * @param prefixOfTextToAppearOnTab - The start of the string to display on the tab e.g 'Assay Definitions '
  * @param updateDiv - Where the results will be displayed
  */
-function handleSearch(controllerAction, tabId, totalHitsForResourceId, displayStringPrefix, updateDiv) {
+function handleSearch(controllerAction, tabId, totalHitsForResourceId, prefixOfTextToAppearOnTab, updateDiv) {
     var fullURL = '/bardwebquery/bardWebInterface/' + controllerAction;
     var tabDivElement = '#' + tabId;
     var totalHitsElement = '#' + totalHitsForResourceId;
@@ -87,23 +72,48 @@ function handleSearch(controllerAction, tabId, totalHitsForResourceId, displaySt
 
     $.ajax({
         url:fullURL,
-        data:$("#aidForm").serialize(),
+        data:$("#searchForm").serialize(),
         cache:false,
         beforeSend:function () {
-            $(tabDivElement).html(displayStringPrefix + spinnerImageLink);
+            $(tabDivElement).html(prefixOfTextToAppearOnTab + spinnerImageLink);
         },
         success:function (data) {
             $(updateDivId).html(data);
-            var total = displayStringPrefix + '(' + $(totalHitsElement).val() + ')';
+            var total = prefixOfTextToAppearOnTab + '(' + $(totalHitsElement).val() + ')';
             $(tabDivElement).html(total);
         },
         error:function (request, status, error) {
-            $(tabDivElement).html(displayStringPrefix + errorImageTwitterBootstrap);
+            $(tabDivElement).html(prefixOfTextToAppearOnTab + errorImageTwitterBootstrap);
             $(updateDivId).html(error);
         },
         complete:function () {
         }
     });
+}
+/**
+ * Handles form submission
+ * @param searchString
+ */
+function handleFormSubmit(searchString) {
+
+    var searchType = findSearchType(searchString);
+
+    switch (searchType.toUpperCase()) {
+        case 'FREE_TEXT':
+            handleAllFreeTextSearches();
+            break;
+        case 'ID':
+            //TODO: Right now we are treating Id searches like regular searches
+            //i.e we send the ids to all 3 resources
+            //We intend to change to a modal view, where a user picks
+            //the type of id (like we do with structure searches) so that we
+            //can only send the query to the resource of interest
+            handleAllIdSearches();
+            break;
+        case 'STRUCTURE':
+            handleStructureSearch();
+            break;
+    }
 }
 /**
  * Handle all free text searches

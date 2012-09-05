@@ -31,7 +31,7 @@
                         //construct the query into a form that we want
                         var constructedSearch =structureSearchTypeSelected + ":" + smiles;
                         parent.$('#searchString').attr('value', constructedSearch);
-                        parent.$('#aidForm').submit();
+                        parent.$('#searchForm').submit();
 
                    });
             });
@@ -80,7 +80,7 @@
 <div class="container-fluid">
     <div class="row-fluid">
         <div class="span3"><a href="${createLink(controller:'BardWebInterface',action:'index')}"><img src="${resource(dir: 'images', file: 'bardLogo.png')}" alt="BioAssay Research Database" /></a></div>
-        <g:form name="aidForm" controller="bardWebInterface" action="search" class="form-search" id="aidForm">
+        <g:form name="searchForm" controller="bardWebInterface" action="search" class="form-search" id="searchForm">
             <div class="span6" style="margin-top: 20px;">
                 <div class="control-group">
                     <div class="controls">

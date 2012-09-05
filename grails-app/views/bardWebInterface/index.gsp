@@ -22,7 +22,7 @@
     </ul>
 </div>
 
-<g:form name="aidForm" controller="bardWebInterface" action="findCompoundsForAssay">
+<g:form name="searchForm" controller="bardWebInterface" action="findCompoundsForAssay">
     <div class="listHeader">
         <div class="listTitle">
             <h1><g:message code="assay.query.text" args="[]"/></h1><br>

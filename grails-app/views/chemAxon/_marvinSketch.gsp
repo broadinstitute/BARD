@@ -2,31 +2,6 @@
 <html>
 <head>
     <r:require modules="core"/>
-
-    %{--<r:script>--}%
-
-        %{--$(document).ready(function () {--}%
-            %{--<%-- Sets the event-handler for the submit button in the form:--}%
-            %{--1. Get the search-type value from the radio buttons.--}%
-            %{--2. Update the search type in the parent window--}%
-            %{--3. Submit the parent's form for searching --%>--}%
-        %{--parent.$('#searchButton').click(function () {--}%
-          %{--var structureSearchTypeSelected = parent.$('input:radio[name=structureSearchType]:checked').val()--}%
-
-            %{--var marvinSketch = $('#MarvinSketch')[0];--}%
-            %{--var smiles = marvinSketch.getMol('smiles')--}%
-
-             %{--//construct the query into a form that we want--}%
-            %{--var constructedSearch =structureSearchTypeSelected + ":" + smiles--}%
-            %{--parent.$('#searchString').attr('value', constructedSearch);--}%
-            %{--parent.$('#aidForm').submit();--}%
-
-%{--//           parent.$('#modalDiv').modal("hide");--}%
-%{--//           parent.$('#modalDiv').dialog("close");--}%
-        %{--});--}%
-
-        %{--});--}%
-    %{--</r:script>--}%
     <r:layoutResources/>
     <r:require modules="bootstrap"/>
 
