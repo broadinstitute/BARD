@@ -46,11 +46,26 @@
                 $(".panel").toggle("fast");
                 $(this).toggleClass("active");
                 if (trackStatus==1){
-                    trackStatus = 0;
                     ajaxLocation='#cartIdentRefill';
+                    trackStatus = 0;
+                    jQuery.ajax({  type:'POST',
+                                   data:{'stt':trackStatus},
+                                   url:'/bardwebquery/sarCart/updateOnscreenCart',
+                                   success:function(data,textStatus){
+                                                 jQuery(ajaxLocation).html(data);
+                                   }
+                                });
+
                 } else   {
-                    trackStatus = 1;
                     ajaxLocation='#sarCartRefill';
+                    trackStatus = 1;
+                    jQuery.ajax({  type:'POST',
+                        data:{'stt':trackStatus},
+                        url:'/bardwebquery/sarCart/updateOnscreenCart',
+                        success:function(data,textStatus){
+                            jQuery(ajaxLocation).html(data);
+                        }
+                    });
                 }
                 return false;
             });
@@ -81,9 +96,9 @@
         </g:form>
 
             <div class="span2">
-                <div class="well">
+                <div class="well" style="width: 100%">
                     <div class="row-fluid">
-                        <h5><i class="icon-shopping-cart"></i><a class="trigger" href="#">Query Cart<span class="tinyclickfordetails">(click for details)</span></a></h5>
+                        <h5><nobr><i class="icon-shopping-cart"></i><a class="trigger" href="#">Query Cart<span class="tinyclickfordetails">(click to expand)</span></nobr></a></h5>
                     </div>
                     <g:render template="queryCartIndicator"/>
                 </div>

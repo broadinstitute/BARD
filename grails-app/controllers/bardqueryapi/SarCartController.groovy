@@ -28,16 +28,28 @@ class SarCartController {
 
         }
 
-       if (somethingWasAdded != null)  // something was added, so the display must change
-           if (stt==0)
-               render(template: '/bardWebInterface/queryCartIndicator')
-           else
-              render(template:'/bardWebInterface/sarCartContent')  // refresh the cart display via Ajax
+        if (somethingWasAdded != null)  // something was added, so the display must change
+            if (stt==0)
+                render(template: '/bardWebInterface/queryCartIndicator')
+            else
+                render(template:'/bardWebInterface/sarCartContent')  // refresh the cart display via Ajax
 
 
         return
 
     }
+
+
+
+    def updateOnscreenCart() {
+        int stt = Integer.parseInt(params.stt)
+        if (stt==0)
+            render(template: '/bardWebInterface/queryCartIndicator')
+        else
+            render(template:'/bardWebInterface/sarCartContent')  // refresh the cart display via Ajax
+    }
+
+
 
     // remove a single element
     def remove() {
