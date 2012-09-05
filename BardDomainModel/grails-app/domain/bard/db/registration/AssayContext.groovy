@@ -2,6 +2,8 @@ package bard.db.registration
 
 class AssayContext {
 
+    public static final String CONTEXT_NAME_WITH_NO_ITEMS = 'Empty Card, consider deleting!'
+
     private static final int CONTEXT_NAME_MAX_SIZE = 128
     private static final int MODIFIED_BY_MAX_SIZE = 40
 
