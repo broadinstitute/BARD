@@ -500,6 +500,7 @@ private Assay getAssayFromAid(long AID) {
  * @return
  */
 void createAndPersistAssayContexts(List<ContextDTO> assayContextList) {
+    final String MODIFIED_BY = 'jbittker'
     def out = new File('DnaSpreadsheetParserResultAssayContext' + '_' + System.currentTimeMillis() + '.txt')
     out.withWriterAppend { writer ->
         Integer totalAssayContextItems = 0
@@ -511,6 +512,7 @@ void createAndPersistAssayContexts(List<ContextDTO> assayContextList) {
                 //create the assay-context
                 AssayContext assayContext = new AssayContext()
                 assayContext.assay = getAssayFromAid(assayContextDTO.aid)
+                assayContext.modifiedBy = MODIFIED_BY
                 //TODO DELETE DELETE DELETE the following line should be deleted once all assays have been uploaded to CAP
                 if (!assayContext.assay) {//skip this assay context
                     totalAssayContextItems -= assayContextDTO.attributes.size()
@@ -524,6 +526,7 @@ void createAndPersistAssayContexts(List<ContextDTO> assayContextList) {
                     AssayContextItem assayContextItem = new AssayContextItem()
                     assayContextItem.assayContext = assayContext
                     assayContextItem.attributeType = attribute.attributeType
+                    assayContextItem.modifiedBy = MODIFIED_BY
                     //populate the attribute key's element
                     Element element = Element.findByLabelIlike(attribute.key)
                     assert element, "We must have an element for the assay-context-item attribute"
@@ -570,6 +573,7 @@ void createAndPersistAssayContexts(List<ContextDTO> assayContextList) {
                         writer.writeLine("\tAttributeElement: '${assayContextItem?.attributeElement?.label}'")
                         writer.writeLine("\tValueElement: '${assayContextItem?.valueElement?.label}'")
                         writer.writeLine("\tAttributeType: '${assayContextItem?.attributeType}'")
+                        writer.writeLine("\tExtValueId: '${assayContextItem?.extValueId}'")
                         writer.writeLine("\tValueDisplay: '${assayContextItem?.valueDisplay}'")
                         writer.writeLine("\tValueNum: '${assayContextItem?.valueNum}'")
                         writer.writeLine("\tQualifier: '${assayContextItem?.qualifier}'")
@@ -577,7 +581,7 @@ void createAndPersistAssayContexts(List<ContextDTO> assayContextList) {
                 }
 
                 //comment out to commit the transaction
-//                status.setRollbackOnly()
+                //status.setRollbackOnly()
             }
         }
     }
@@ -593,22 +597,23 @@ void createAndPersistAssayContexts(List<ContextDTO> assayContextList) {
  *  if the value field is of the format 'Uniprot:Q03164' do same as above but for 'UniProt' in the element table
  */
 private void postProcessAssayContextItem(AssayContextItem assayContextItem) {
-    String valueDisplay = assayContextItem.valueDisplay
-    if (valueDisplay && valueDisplay.toLowerCase().matches(/^cid\W*:\W*\d+\W*/)) {//'cid:12345678'
-        String cid = StringUtils.split(valueDisplay, ':').toList().last().trim()
-        Element element = Element.findByLabelIlike('PubChem CID')
-        assert element, "Element 'PubChem CID' must exist"
-        String newValueDisplay = "${element.externalURL}${cid}"
-        assayContextItem.valueElement = element
-        assayContextItem.valueDisplay = newValueDisplay
-    } else if (valueDisplay && valueDisplay.toLowerCase().matches(/^uniprot\W*:/)) {//'Uniprot:Q03164'
-        String proteinId = StringUtils.split(valueDisplay, ':').toList().last().trim()
-        Element element = Element.findByLabelIlike('UniProt')
-        assert element, "Element 'UniProt' must exist"
-        String newValueDisplay = "${element.externalURL}${proteinId}"
-        assayContextItem.valueElement = element
-        assayContextItem.valueDisplay = newValueDisplay
+    if (assayContextItem.valueDisplay && assayContextItem.valueDisplay.toLowerCase().find(/^cid\W*:\W*\d+\W*/)) {//'cid:12345678'
+        rebuildAssayContextItem(assayContextItem, 'PubChem CID')
+    } else if (assayContextItem.valueDisplay && assayContextItem.valueDisplay.toLowerCase().find(/^uniprot\W*:/)) {//'Uniprot:Q03164'
+        rebuildAssayContextItem(assayContextItem, 'UniProt')
+    } else if (assayContextItem.valueDisplay && assayContextItem.valueDisplay.toLowerCase().find(/^gi\W*:/)) {//'gi:10140845'
+        rebuildAssayContextItem(assayContextItem, 'protein')
     }
+}
+
+private void rebuildAssayContextItem(AssayContextItem assayContextItem, String findByLabelIlike) {
+    String extValueId = StringUtils.split(assayContextItem.valueDisplay, ':').toList().last().trim()
+    Element element = Element.findByLabelIlike(findByLabelIlike)
+    assert element, "Element '${findByLabelIlike}' must exist"
+    String newValueDisplay = "${element.externalURL}${extValueId}"
+    assayContextItem.attributeElement = element
+    assayContextItem.extValueId = extValueId
+    assayContextItem.valueDisplay = newValueDisplay
 }
 
 /**
@@ -619,6 +624,7 @@ private void postProcessAssayContextItem(AssayContextItem assayContextItem) {
  * @param measureContextListCleaned
  */
 private void createAndPersistMeasureContexts(List<ContextDTO> measureContextList) {
+    final String MODIFIED_BY = 'jbittker'
     def out = new File('DnaSpreadsheetParserResultMeasure' + '_' + System.currentTimeMillis() + '.txt')
     out.withWriterAppend { writer ->
         Integer totalMeasureContext = 0
@@ -630,6 +636,7 @@ private void createAndPersistMeasureContexts(List<ContextDTO> measureContextList
                 //create the assay-context
                 Measure measureContext = new Measure()
                 measureContext.assay = getAssayFromAid(measureContextDTO.aid)
+                measureContext.modifiedBy = MODIFIED_BY
                 //TODO DELETE DELETE DELETE the following line should be deleted once all assays have been uploaded to CAP
                 if (!measureContext.assay) {//skip this assay context
                     totalMeasureContext -= measureContextDTO.attributes.size()
@@ -643,6 +650,12 @@ private void createAndPersistMeasureContexts(List<ContextDTO> measureContextList
                 measureContext.element = element
                 println("Measure's Assay ID: ${measureContext.assay.id} (${tally++}/${totalMeasureContext})")
 
+                //Validate that the assay_id/result_type_id (element) combination is not already in the DB
+                def existingMeasures = Measure.findAll("from Measure as m \
+                            where m.assay = :assay and m.element = :resultType",
+                            [assay: measureContext.assay, resultType: measureContext.element])
+                if (existingMeasures) return
+
                 measureContext.save()
                 if (measureContext.hasErrors()) {
                     println("MeasureContext errors")
@@ -653,7 +666,7 @@ private void createAndPersistMeasureContexts(List<ContextDTO> measureContextList
                 }
 
                 //comment out to commit the transaction
-//                status.setRollbackOnly()
+                //status.setRollbackOnly()
             }
         }
     }
