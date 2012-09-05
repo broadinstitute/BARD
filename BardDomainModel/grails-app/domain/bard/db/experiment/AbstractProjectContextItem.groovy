@@ -30,7 +30,7 @@ abstract class AbstractProjectContextItem {
     Date dateCreated
     Date lastUpdated
     String modifiedBy
-    ProjectContextItem parentGroupProjectContext
+    AbstractProjectContextItem parentGroupProjectContext
 
     static mapping = {
         table('PROJECT_CONTEXT_ITEM')
