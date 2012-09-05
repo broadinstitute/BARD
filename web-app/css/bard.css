@@ -161,6 +161,17 @@ table.QcartAppearance  {
     text-decoration: none;
 }
 
+div.QcartAppearance  {
+    font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
+    height: 100%;
+    width: 100%;
+    padding: 0;
+    margin: 0;
+    color: black;
+    text-decoration: none;
+    display: block;
+}
+
 div.addtocartholder{
     padding: 0;
     border: 0 none;
@@ -177,16 +188,11 @@ width:200px;
 span.addtocartholder{
     padding: 0;
     border: 0 none;
-    overflow: hidden;
 }
 h3.addtocart {
     font-family: Helvetica, Arial, "Lucida Grande", sans-serif;
     font-size: x-large;
     font-weight: normal;
-    margin-right: 100px;
-    height: 100px;
-    overflow: hidden;
-    float:left;
 }
 span.addtocart {
     width:100px;

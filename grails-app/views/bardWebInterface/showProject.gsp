@@ -1,4 +1,4 @@
-<%@ page import="bard.db.registration.*" %>
+<%@ page import="bardqueryapi.JavaScriptUtility; bard.db.registration.*" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -12,12 +12,51 @@
 
 </head>
 <body>
-<h1 class="detail">Project Detail for ID ${projectAdapter?.project?.id}</h1>
+
 <div class="row-fluid" style="clear:both;">
-    <div class="span12 header">
-        <h3>${projectAdapter?.name}</h3>
+    <div class="span3">
+        <a style="float: left;" href="${createLink(controller:'BardWebInterface',action:'index')}"><img src="${resource(dir: 'images', file: 'bardLogo.png')}" alt="BioAssay Research Database" /></a>
+    </div>
+
+    <div class="span7">
+        <h1>Project Detail for ID ${projectAdapter?.project?.id}</h1></br>
+           <div class="addtocartholder">
+                <h3>${projectAdapter?.name}
+                    <a href="/bardwebquery/sarCart/add/1"  class="addtocart"
+                       onclick="jQuery.ajax({  type:'POST',
+                           data:{'id': '${projectAdapter.project.id}','class': 'class bardqueryapi.CartProject','projectName':'${JavaScriptUtility.cleanup(projectAdapter.project.name)}','version': '0','stt':'0'},
+                           url:'/bardwebquery/sarCart/add',
+                           success:function(data,textStatus){
+                               jQuery('#cartIdentRefill').html(data);
+                           }
+                       });
+                       return false;"
+                       action="add"
+                       controller="sarCart"><i class="icon-shopping-cart"></i><span class="addtocartfont">&nbsp;Add to Cart</span>
+                    </a>
+                </h3>
+           </div>
+    </div>
+
+    <div class="span2">
+        <div class="well">
+            <div class="row-fluid">
+                <h5><nobr><i class="icon-shopping-cart"></i>Query Cart</nobr></h5>
+            </div>
+            <g:render template="queryCartIndicator"/>
+        </div>
     </div>
 </div>
+
+
+
+
+
+
+
+
+
+
 <r:script>
     $(document).ready(function () {
         $('.collapse').on('show', function () {

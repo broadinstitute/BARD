@@ -13,22 +13,43 @@
     <title>BARD : Compound Details : PubChem CID ${compound.pubChemCID}</title>
 </head>
 <body>
-<h1>Compound Details for PubChem CID ${compound.pubChemCID}</h1>
-<div class="addtocartholder">
-    <img class="addtocart" alt="${compound?.structureSMILES}" title="${compound.name}" src="${createLink(controller: 'chemAxon', action: 'generateStructureImage', params: [smiles: compound?.structureSMILES, width: 200, height: 200])}"/>
-    <a href="/bardwebquery/sarCart/add/1"  class="addtocart"
-   onclick="jQuery.ajax({  type:'POST',
-       data:{'id': '${compound.name}','class': 'class bardqueryapi.CartCompound','smiles':'${JavaScriptUtility.cleanup(compound.name)}','cid':'${compound.pubChemCID}','version': '0', 'stt':'0'},
-       url:'/bardwebquery/sarCart/add',
-       success:function(data,textStatus){
-           jQuery('#cartIdentRefill').html(data);
-       }
-   });
-   return false;"
-   action="add"
-   controller="sarCart"><i class="icon-shopping-cart"></i><span class="addtocartfont">&nbsp;Add to Cart</span>
-   </a>
+<div class="row-fluid">
+    <div class="span3">
+        <a style="float: left;" href="${createLink(controller:'BardWebInterface',action:'index')}"><img src="${resource(dir: 'images', file: 'bardLogo.png')}" alt="BioAssay Research Database" /></a>
+    </div>
+
+    <div class="span7">
+        <div><h1>Compound Details for PubChem CID ${compound.pubChemCID}</h1></div>
+        <div class="QcartAppearance">
+            <img class="addtocart" alt="${compound?.structureSMILES}" title="${compound.name}" src="${createLink(controller: 'chemAxon', action: 'generateStructureImage', params: [smiles: compound?.structureSMILES, width: 200, height: 200])}"/>
+            <a href="/bardwebquery/sarCart/add/1"  class="addtocart"
+               onclick="jQuery.ajax({  type:'POST',
+                   data:{'id': '${compound.name}','class': 'class bardqueryapi.CartCompound','smiles':'${JavaScriptUtility.cleanup(compound.name)}','cid':'${compound.pubChemCID}','version': '0', 'stt':'0'},
+                   url:'/bardwebquery/sarCart/add',
+                   success:function(data,textStatus){
+                       jQuery('#cartIdentRefill').html(data);
+                   }
+               });
+               return false;"
+               action="add"
+               controller="sarCart"><i class="icon-shopping-cart"></i><span class="addtocartfont">&nbsp;Add to Cart</span>
+            </a>
+        </div>
+
+    </div>
+
+    <div class="span2">
+        <div class="well">
+            <div class="row-fluid">
+                <h5><nobr><i class="icon-shopping-cart"></i>Query Cart</nobr></h5>
+            </div>
+            <g:render template="queryCartIndicator"/>
+        </div>
+    </div>
 </div>
+
+
+
 <div class="row-fluid">
     <div class="span9">
         <table class="table">

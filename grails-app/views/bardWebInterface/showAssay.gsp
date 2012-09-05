@@ -6,11 +6,15 @@
     <title>BARD : Assay Definition : ADID ${assayAdapter?.assay.id}</title>
 </head>
 <body>
-<h1 class="detail">Assay Definition Detail for ADID ${assayAdapter?.assay.id}</h1>
 <div class="row-fluid" style="clear:both;">
-    <div class="span12 header">
-        <span class="addtocartholder">
-            <h3 class="addtocart">${assayAdapter?.assay.name}
+    <div class="span3">
+        <a style="float: left;" href="${createLink(controller:'BardWebInterface',action:'index')}"><img src="${resource(dir: 'images', file: 'bardLogo.png')}" alt="BioAssay Research Database" /></a>
+    </div>
+
+    <div class="span7">
+        <h1>Assay Definition Detail for ADID ${assayAdapter?.assay.id}</h1>
+
+            <h3>${assayAdapter?.assay.name}
                 <a href="/bardwebquery/sarCart/add/${assayAdapter?.assay.id}"
                    onclick="jQuery.ajax({  type:'POST',
                        data:{'id': '${assayAdapter?.assay.id}','class': 'class bardqueryapi.CartAssay','assayTitle':'${JavaScriptUtility.cleanup(assayAdapter?.assay.name)}','version': '0', 'stt':'0'},
@@ -24,12 +28,25 @@
                    controller="sarCart"><i class="icon-shopping-cart"></i><span class="addtocartfont">&nbsp;Add to Cart</span>
                 </a>
             </h3>
-        </span>
+
         <dl class="dl-horizontal">
             <dt>Assay Format:</dt><dd></dd>
             <dt>Assay Type:</dt><dd></dd>
             <dt>Target:</dt><dd></dd>
         </dl>
+
+    </div>
+
+    <div class="span2">
+        <div class="well">
+            <div class="row-fluid">
+                <h5><nobr><i class="icon-shopping-cart"></i>Query Cart</nobr></h5>
+            </div>
+            <g:render template="queryCartIndicator"/>
+        </div>
+    </div>
+
+    <div class="span12 header">
     </div>
 </div>
 <r:script>
