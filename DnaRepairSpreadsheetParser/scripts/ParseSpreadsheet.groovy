@@ -15,6 +15,7 @@ import bard.db.registration.AssayContext
 import org.springframework.transaction.TransactionStatus
 import bard.db.registration.AssayContextItem
 import bard.db.registration.AttributeType
+import bard.db.registration.Measure
 
 def out = new File('DnaSpreadsheetParsing' + '_' + System.currentTimeMillis() + '.txt')
 
@@ -52,23 +53,26 @@ List<Attribute> assayReplicates = [new Attribute('2/AI', '$/AI', AttributeType.F
 //List<Attribute> assayTargetType = [new Attribute('2/AS', '$/AS', AttributeType.Fixed)]
 //List<Attribute> assayDetection2 = [new Attribute('2/AT', '$/AT', AttributeType.Fixed)]
 
-List<contextGroup> spreadsheetAssayContextGroups = [new contextGroup(name: 'processOrTarget', attributes: processOrTarget),
-        new contextGroup(name: 'assayFormat', attributes: assayFormat),
-        new contextGroup(name: 'assayType', attributes: assayType),
-        new contextGroup(name: 'assayComponent', attributes: assayComponent),
-        new contextGroup(name: 'assayComponentCustom', attributes: assayComponentCustom),
-        new contextGroup(name: 'assayDetection', attributes: assayDetection),
-        new contextGroup(name: 'assayReadout', attributes: assayReadout),
-        new contextGroup(name: 'assayDetector', attributes: assayDetector),
-        new contextGroup(name: 'assayFootprint', attributes: assayFootprint),
-        new contextGroup(name: 'assayExcitation', attributes: assayExcitation),
-        new contextGroup(name: 'assayAbsorbance', attributes: assayAbsorbance),
-        new contextGroup(name: 'resultActivityThreshold', attributes: resultActivityThreshold),
-        new contextGroup(name: 'assayConcentrationPoint', attributes: assayConcentrationPoint),
-        new contextGroup(name: 'assayReplicates', attributes: assayReplicates)]
-//        new contextGroup(name: 'assayFormat2', attributes: assayFormat2),
-//        new contextGroup(name: 'assayTargetType', attributes: assayTargetType),
-//        new contextGroup(name: 'assayDetection2', attributes: assayDetection2)]
+List<ContextGroup> spreadsheetAssayContextGroups = [new ContextGroup(name: 'processOrTarget', attributes: processOrTarget),
+        new ContextGroup(name: 'assayFormat', attributes: assayFormat),
+        new ContextGroup(name: 'assayType', attributes: assayType),
+        new ContextGroup(name: 'assayComponent', attributes: assayComponent),
+        new ContextGroup(name: 'assayComponentCustom', attributes: assayComponentCustom),
+        new ContextGroup(name: 'assayDetection', attributes: assayDetection),
+        new ContextGroup(name: 'assayReadout', attributes: assayReadout),
+        new ContextGroup(name: 'assayDetector', attributes: assayDetector),
+        new ContextGroup(name: 'assayFootprint', attributes: assayFootprint),
+        new ContextGroup(name: 'assayExcitation', attributes: assayExcitation),
+        new ContextGroup(name: 'assayAbsorbance', attributes: assayAbsorbance),
+        new ContextGroup(name: 'resultActivityThreshold', attributes: resultActivityThreshold),
+        new ContextGroup(name: 'assayConcentrationPoint', attributes: assayConcentrationPoint),
+        new ContextGroup(name: 'assayReplicates', attributes: assayReplicates)]
+//        new ContextGroup(name: 'assayFormat2', attributes: assayFormat2),
+//        new ContextGroup(name: 'assayTargetType', attributes: assayTargetType),
+//        new ContextGroup(name: 'assayDetection2', attributes: assayDetection2)]
+
+List<Attribute> resultType = [new Attribute('2/Y', '$/Y', AttributeType.Fixed)]
+List<ContextGroup> spreadsheetResultTypeContextGroups = [new ContextGroup(name: 'resultType', attributes: resultType)]
 
 Map attributeNameMapping = ['[detector] assay component (type in)': 'assay component',
         '[detector] assay component role': 'assay component role',
@@ -87,16 +91,15 @@ Map attributeNameMapping = ['[detector] assay component (type in)': 'assay compo
         'cell-based: live cell': 'cell-based format',
         'cells/ml': 'cells per milliliter',
         'chemically labeled protein': 'chemically labeled protein',
-        'cid': 'PubChem CID',
         'detection instrument': 'detection instrument name',
         'fluorescence:other': 'fluorescence',
         'fm': 'femtomolar',
-        'grams-per-liter': ',gram per liter',
+        'grams-per-liter': 'gram per liter',
         'imaging methods': 'imaging method',
         'in cell analyzer': 'IN cell analyzer',
         'kodak biomax mr-1': 'Kodak Biomax MR-1',
         'luminescence:other': 'luminescence',
-        'microscope cover slip  22 m^2': 'Microscope Cover Slip  22 mm^2',
+        'Microscope cover slip  22 m^2': 'Microscope Cover Slip  22 mm^2',
         'mm': 'millimolar',
         'moles-per-liter': 'molar',
         'ng/ml': 'nanogram per milliliter',
@@ -113,16 +116,46 @@ Map attributeNameMapping = ['[detector] assay component (type in)': 'assay compo
         '# concentration points': 'number of points',
         '# replicates': 'number of replicates',
         'uniprot': 'UniProt',
-        '--': '']
+        'Aequorea Victoria': 'Aequorea victoria',
+        'DNA-small molecule': 'DNA-small molecule',
+        'DNA-small molecule interaction assay': 'DNA-small molecule interaction assay',
+        'IMAP Kinase assay kit': 'IMAP Kinase assay kit',
+        'SUMOylation assay': 'SUMOylation assay',
+        'fluorescence interference assay': 'fluorescence interference assay',
+        'ubiquitination assay': 'ubiquitination assay',
+        'CID': 'PubChem CID',
+        'BD Bioscience LSR II': 'BD Bioscience LSR II',
+        'BioTek Synergy II plate reader': 'BioTek Synergy II plate reader',
+        'MOI': 'mode of infection',
+        'Microbeta scintillation counter': 'Microbeta scintillation counter',
+        'Streptomyces Avidinii': 'Streptomyces avidinii',
+        't-4 bacteriophage': 't-4 bacteriophage',
+        'ChemBank': 'ChemBank',
+        'DTP.NCI': 'Developmental Therapeutics Program, National Cancer Institute',
+        'Vanderbilt, Vanderbilt Chemistry': 'Vanderbilt Screening Center for GPCRs, Ion Channels and Transporters',
+        'SRI, SRI Screening': 'Southern Research Institute',
+        'gram per liter': 'milligram per milliliter',
+        '47-mer dsDNA': '47-mer dsDNA',
+        'log10 molar': 'log10 molar',
+        'negative log10 molar': 'negative log10 molar',
+        'number-per-liter': 'number per liter',
+        'number-per-well': 'number per well',
+        'uIU/mL': 'micro interational unit per milliliter',
+        '--': '',
+        'Result type': 'result detail']
 
 final Integer START_ROW = 3 //1-based
-//InputStream inp = new FileInputStream("C:/Users/gwalzer/Desktop/DnaRepairSpreadsheets/Broad+others-DNA_repair.xlsx");
-//InputStream inp = new FileInputStream("C:/Users/gwalzer/Desktop/DnaRepairSpreadsheets/Burnham Center for Chemical Genomics-DNA repair only.xlsx");
-//InputStream inp = new FileInputStream("C:/Users/gwalzer/Desktop/DnaRepairSpreadsheets/NCGC-DNA repair.xlsx");
-InputStream inp = new FileInputStream("C:/Users/gwalzer/Desktop/DnaRepairSpreadsheets/The Scripps Research Institute Molecular Screening Center-DNA repair.xlsx");
+InputStream inp = new FileInputStream("C:/Users/gwalzer/Desktop/Simon/Broad+others-DNA_repair.xlsx");
+//InputStream inp = new FileInputStream("C:/Users/gwalzer/Desktop/Simon/Burnham Center for Chemical Genomics-DNA repair only.xlsx");
+//InputStream inp = new FileInputStream("C:/Users/gwalzer/Desktop/Simon/NCGC-DNA repair.xlsx");
+//InputStream inp = new FileInputStream("C:/Users/gwalzer/Desktop/Simon/The Scripps Research Institute Molecular Screening Center-DNA repair.xlsx");
 
-//Build assay-context (groups) and populate their attribute from the spreadsheet cell contents.
-List<AssayContextDTO> assayContextList = parseSpreadsheetAndBuildAttributeGroups(inp, START_ROW, spreadsheetAssayContextGroups)
+//Build assay and measure-context (groups) and populate their attribute from the spreadsheet cell contents.
+List<List<ContextDTO>> contextDTOGroups = parseSpreadsheetAndBuildAttributeGroups(inp, START_ROW, [spreadsheetAssayContextGroups, spreadsheetResultTypeContextGroups])
+List<ContextDTO> assayContextList = contextDTOGroups[0]
+println("assayContextList size: ${assayContextList.size()}")
+List<ContextDTO> measureContextList = contextDTOGroups[1]
+println("measureContextList size: ${measureContextList.size()}")
 
 ////print out to a file the raw grouped attributes (key/value pairs)
 //out.withWriterAppend { writer ->
@@ -135,7 +168,8 @@ List<AssayContextDTO> assayContextList = parseSpreadsheetAndBuildAttributeGroups
 //}
 
 
-List<AssayContextDTO> assayContextListCleaned = cleanAttributeContents(assayContextList, attributeNameMapping)
+List<ContextDTO> assayContextListCleaned = cleanAttributeContents(assayContextList, attributeNameMapping)
+List<ContextDTO> measureContextListCleaned = cleanAttributeContents(measureContextList, attributeNameMapping)
 
 ////Print out the cleaned grouped attributes (key/value pairs)
 //out = new File('DnaSpreadsheetParsingCleaned' + '_' + System.currentTimeMillis() + '.txt')
@@ -150,12 +184,15 @@ List<AssayContextDTO> assayContextListCleaned = cleanAttributeContents(assayCont
 
 
 validateAttributeContentAgainstElementTable(assayContextListCleaned, attributeNameMapping)
+validateAttributeContentAgainstElementTable(measureContextListCleaned, attributeNameMapping)
 
 
 validateAssayExistence(assayContextListCleaned)
+validateAssayExistence(measureContextListCleaned)
 
 
 createAndPersistAssayContexts(assayContextListCleaned)
+createAndPersistMeasureContexts(measureContextListCleaned)
 
 return false
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -168,18 +205,23 @@ return false
  * @param assayGroup
  * @return
  */
-private List<AssayContextDTO> parseSpreadsheetAndBuildAttributeGroups(FileInputStream inp, int START_ROW, ArrayList<contextGroup> assayGroup) {
+private List<List<ContextDTO>> parseSpreadsheetAndBuildAttributeGroups(FileInputStream inp, int START_ROW, List<List<ContextGroup>> contextGroupList) {
     Workbook wb = new XSSFWorkbook(inp);
     Sheet sheet = wb.getSheetAt(0);
     Integer aid
     Integer rowCount = 0 //rows in spreadsheet are zero-based
-    List<AssayContextDTO> contextDtoList = []
+    List<ContextDTO> assayContextDtoList = []
+    List<ContextDTO> measureContextDtoList = []
+
+    List<ContextGroup> assayGroup = contextGroupList[0]
+    List<ContextGroup> measureContextGroups = contextGroupList[1]
 
     for (Row row : sheet) {
         if (rowCount < START_ROW - 1) {//skip the header rows
             rowCount++
             continue
         }
+        if (rowCount++ > 6000) break //don't parse into the vocabulary section
 
         //Get the current AID
         String aidFromCell = getCellContentByRowAndColumnIds(row, 'A')
@@ -191,40 +233,63 @@ private List<AssayContextDTO> parseSpreadsheetAndBuildAttributeGroups(FileInputS
         assert aid, "Couldn't find AID"
 
         //Iterate over all assay-groups' contexts
-        assayGroup.each {contextGroup contextGroup ->
-            //Iterate over all the attribute-pairs in each context
-            AssayContextDTO assayContextDTO = new AssayContextDTO()
+        assayGroup.each {ContextGroup contextGroup ->
+            ContextDTO assayContextDTO = createContextDtoFromContextGroup(contextGroup, row, sheet)
 
-            contextGroup.attributes.each {Attribute attribute ->
-                //Get the attribute's key-content from cell
-                String attKeyCellId = attribute.key
-                def attrKey = getCellContent(attKeyCellId, row, sheet)
-                if (attrKey)
-                    assert attrKey instanceof String, "Key must be a string"
-
-                //Get the attribute's qualifier-content from cell
-                String attQualifierCellId = attribute.qualifier
-                def attrQualifier = attQualifierCellId ? getCellContent(attQualifierCellId, row, sheet) : attQualifierCellId
-                if (attrQualifier)
-                    assert attrQualifier instanceof String, "Qualifier must be a string"
-
-                //Get the attribute's value-content from cell
-                String attValueCell = attribute.value
-                def attrValue = getCellContent(attValueCell, row, sheet)
-
-                if (!attrKey || (attribute.attributeType != AttributeType.Free) && !attrValue) return
-                Attribute attr = new Attribute(attrKey, attrValue, attribute.attributeType, attribute.typeIn, attrQualifier)
-                assayContextDTO.attributes << attr
-            }
             if (assayContextDTO.attributes) {
                 assayContextDTO.aid = aid
                 assayContextDTO.name = contextGroup.name
-                contextDtoList << assayContextDTO
+                assayContextDtoList << assayContextDTO
+            }
+        }
+
+        //Iterate over all assay-groups' contexts
+        measureContextGroups.each {ContextGroup contextGroup ->
+            ContextDTO measureContextDTO = createContextDtoFromContextGroup(contextGroup, row, sheet)
+
+            if (measureContextDTO.attributes) {
+                measureContextDTO.aid = aid
+                measureContextDTO.name = contextGroup.name
+                measureContextDtoList << measureContextDTO
             }
         }
     }
 
-    return contextDtoList
+    return [assayContextDtoList, measureContextDtoList]
+}
+
+/**
+ * Iterates over all the attribute-pairs in each context and build a contextDTO
+ *
+ * @param row
+ * @param sheet
+ * @return
+ */
+private ContextDTO createContextDtoFromContextGroup(ContextGroup contextGroup, Row row, Sheet sheet) {
+    ContextDTO contextDTO = new ContextDTO()
+
+    contextGroup.attributes.each {Attribute attribute ->
+        //Get the attribute's key-content from cell
+        String attKeyCellId = attribute.key
+        def attrKey = getCellContent(attKeyCellId, row, sheet)
+        if (attrKey)
+            assert attrKey instanceof String, "Key must be a string"
+
+        //Get the attribute's qualifier-content from cell
+        String attQualifierCellId = attribute.qualifier
+        def attrQualifier = attQualifierCellId ? getCellContent(attQualifierCellId, row, sheet) : attQualifierCellId
+        if (attrQualifier)
+            assert attrQualifier instanceof String, "Qualifier must be a string"
+
+        //Get the attribute's value-content from cell
+        String attValueCell = attribute.value
+        def attrValue = getCellContent(attValueCell, row, sheet)
+
+        if (!attrKey || (!attrValue && (attribute.attributeType != AttributeType.Free))) return
+        Attribute attr = new Attribute(attrKey, attrValue, attribute.attributeType, attribute.typeIn, attrQualifier)
+        contextDTO.attributes << attr
+    }
+    return contextDTO
 }
 
 /**
@@ -306,10 +371,10 @@ def getCellContentByRowAndColumnIds(Row row, String columnString) {
  * 3. convert to standard names based on the attributeNameMapping map
  * 4. Convert text field to numerical values where appropriate (e.g, '680 nm' --> 680, and the 'nm' part is discarded)
  */
-private List<AssayContextDTO> cleanAttributeContents(List<AssayContextDTO> assayContextList, Map attributeNameMapping) {
-    List<AssayContextDTO> assayContextListCleaned = []
-    assayContextList.each {AssayContextDTO assayContextDTO ->
-        AssayContextDTO assayCtxDTO = new AssayContextDTO()
+private List<ContextDTO> cleanAttributeContents(List<ContextDTO> assayContextList, Map attributeNameMapping) {
+    List<ContextDTO> assayContextListCleaned = []
+    assayContextList.each {ContextDTO assayContextDTO ->
+        ContextDTO assayCtxDTO = new ContextDTO()
         assayCtxDTO.name = assayContextDTO.name
         assayCtxDTO.aid = assayContextDTO.aid
         assayContextDTO.attributes.each {Attribute attribute ->
@@ -342,10 +407,10 @@ private List<AssayContextDTO> cleanAttributeContents(List<AssayContextDTO> assay
  *
  * @param assayContextList
  */
-private void validateAttributeContentAgainstElementTable(List<AssayContextDTO> assayContextList, Map attributeNameMapping) {
+private void validateAttributeContentAgainstElementTable(List<ContextDTO> assayContextList, Map attributeNameMapping) {
 //Move all the attributes into a sorted-set to search against the database
     SortedSet<String> attributeVocabulary = [] as SortedSet
-    assayContextList.each {AssayContextDTO assayContextDTO ->
+    assayContextList.each {ContextDTO assayContextDTO ->
         assayContextDTO.attributes.each {Attribute attribute ->
             //Add all keys
             attributeVocabulary.add(attribute.key)
@@ -386,7 +451,7 @@ private void validateAttributeContentAgainstElementTable(List<AssayContextDTO> a
  *
  * @param assayContextListCleaned
  */
-private void validateAssayExistence(List<AssayContextDTO> assayContextListCleaned) {
+private void validateAssayExistence(List<ContextDTO> assayContextListCleaned) {
 //Build aid-to-AssayId mapping and validate that all aid exist
     Map<Long, Assay> aidToAssayMap = [:]
     assayContextListCleaned*.aid.unique().each { Long AID ->
@@ -434,20 +499,24 @@ private Assay getAssayFromAid(long AID) {
  * @param assayContextList
  * @return
  */
-private List<AssayContextDTO> createAndPersistAssayContexts(List<AssayContextDTO> assayContextList) {
-    def out = new File('DnaSpreadsheetParserResults' + '_' + System.currentTimeMillis() + '.txt')
+void createAndPersistAssayContexts(List<ContextDTO> assayContextList) {
+    def out = new File('DnaSpreadsheetParserResultAssayContext' + '_' + System.currentTimeMillis() + '.txt')
     out.withWriterAppend { writer ->
         Integer totalAssayContextItems = 0
-        assayContextList.each { AssayContextDTO assayContextDTO -> totalAssayContextItems += assayContextDTO.attributes.size()}
+        assayContextList.each { ContextDTO assayContextDTO -> totalAssayContextItems += assayContextDTO.attributes.size()}
         Integer tally = 0
 
-        assayContextList.each { AssayContextDTO assayContextDTO ->
+        assayContextList.each { ContextDTO assayContextDTO ->
             AssayContext.withTransaction { TransactionStatus status ->
                 //create the assay-context
                 AssayContext assayContext = new AssayContext()
                 assayContext.assay = getAssayFromAid(assayContextDTO.aid)
                 //TODO DELETE DELETE DELETE the following line should be deleted once all assays have been uploaded to CAP
-                if (!assayContext.assay) return //skip this assay context
+                if (!assayContext.assay) {//skip this assay context
+                    totalAssayContextItems -= assayContextDTO.attributes.size()
+                    return
+                }
+
                 assayContext.contextName = assayContextDTO.name
 
                 //create the assay-context-item and add them to assay-context
@@ -485,13 +554,14 @@ private List<AssayContextDTO> createAndPersistAssayContexts(List<AssayContextDTO
                     postProcessAssayContextItem(assayContextItem)
 
                     assayContext.addToAssayContextItems(assayContextItem)
-                    println("Assay ID: ${assayContext.assay.id} (${tally++}/${totalAssayContextItems})")
+                    println("AssayContext Assay ID: ${assayContext.assay.id} (${tally++}/${totalAssayContextItems})")
                 }
 
                 assayContext.save()
                 if (assayContext.hasErrors()) {
                     println("AssayContext errors")
                     writer.writeLine("AssayContext Errors: ${assayContext.errors}")
+                    assert false, "Errors during AssayContext saving"
                 } else {
                     writer.writeLine("Assay ID: ${assayContext.assay.id}")
                     writer.writeLine("ContextName: ${assayContext.contextName}")
@@ -507,7 +577,7 @@ private List<AssayContextDTO> createAndPersistAssayContexts(List<AssayContextDTO
                 }
 
                 //comment out to commit the transaction
-                status.setRollbackOnly()
+//                status.setRollbackOnly()
             }
         }
     }
@@ -540,6 +610,55 @@ private void postProcessAssayContextItem(AssayContextItem assayContextItem) {
         assayContextItem.valueDisplay = newValueDisplay
     }
 }
+
+/**
+ * * Creates and persists a Measure object from the group of attributes we created earlier.
+ * 1. Element (result-type - Measure.element) is taken from the context's value (the key is always 'Result type')
+ * 2. Assay is taken from the context's aid
+ *
+ * @param measureContextListCleaned
+ */
+private void createAndPersistMeasureContexts(List<ContextDTO> measureContextList) {
+    def out = new File('DnaSpreadsheetParserResultMeasure' + '_' + System.currentTimeMillis() + '.txt')
+    out.withWriterAppend { writer ->
+        Integer totalMeasureContext = 0
+        measureContextList.each { ContextDTO measureContextDTO -> totalMeasureContext += measureContextDTO.attributes.size()}
+        Integer tally = 0
+
+        measureContextList.each { ContextDTO measureContextDTO ->
+            Measure.withTransaction { TransactionStatus status ->
+                //create the assay-context
+                Measure measureContext = new Measure()
+                measureContext.assay = getAssayFromAid(measureContextDTO.aid)
+                //TODO DELETE DELETE DELETE the following line should be deleted once all assays have been uploaded to CAP
+                if (!measureContext.assay) {//skip this assay context
+                    totalMeasureContext -= measureContextDTO.attributes.size()
+                    return
+                }
+
+                assert measureContextDTO.attributes.size() == 1, "There could be only one attribure for a measure-context"
+//                println("Measure attribute: key='${measureContextDTO.attributes.first().key}'; value='${measureContextDTO.attributes.first().value}'")
+                Element element = Element.findByLabelIlike(measureContextDTO.attributes.first().value) //The value is the result-type
+                assert element, "We must have an element for the measure-context-item attribute"
+                measureContext.element = element
+                println("Measure's Assay ID: ${measureContext.assay.id} (${tally++}/${totalMeasureContext})")
+
+                measureContext.save()
+                if (measureContext.hasErrors()) {
+                    println("MeasureContext errors")
+                    writer.writeLine("MeasureContext Errors: ${measureContext.errors}")
+                    assert false, "Measure-context errros"
+                } else {
+                    writer.writeLine("Assay ID: ${measureContext.assay.id}; Element: ${measureContext.element.label}")
+                }
+
+                //comment out to commit the transaction
+//                status.setRollbackOnly()
+            }
+        }
+    }
+}
+
 /**
  * Holds a single attribute (a key/value pair) value.
  * This should correspond to an Element in the data model
@@ -571,11 +690,11 @@ class Attribute {
 /**
  * Corresponds to an assay-context element that usually groups together few attributes
  */
-class contextGroup {
+class ContextGroup {
     String name;
     List<Attribute> attributes = [];
 }
 
-class AssayContextDTO extends contextGroup {
+class ContextDTO extends ContextGroup {
     Long aid
 }

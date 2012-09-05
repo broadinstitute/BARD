@@ -4,7 +4,7 @@ import bard.db.dictionary.Element
 
 class Measure {
 
-    Date dateCreated
+    Date dateCreated = new Date()
     Date lastUpdated
     String modifiedBy
     AssayContext assayContext
@@ -29,7 +29,7 @@ class Measure {
         lastUpdated nullable: true, maxSize: 19
         modifiedBy nullable: true, maxSize: 40
         element nullable: false
-        assayContext nullable: false
+        assayContext nullable: true
         entryUnit nullable: true
     }
 }
