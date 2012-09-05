@@ -84,11 +84,11 @@ class AssayContextServiceUnitSpec extends Specification {
         expectedContextName == sourceContext.contextName
 
         where:
-        desc                                                             | expectedContextName   | existingAssayContextItems
-        'change contextName to null when assayContextItems empty'        | null                  | []
-        'contextName not changed with assayContextItem matches title'    | ORIGINAL_CONTEXT_NAME | [new AssayContextItem(valueDisplay: ORIGINAL_CONTEXT_NAME)]
-        'contextName not changed with assayContextItem matches title'    | ORIGINAL_CONTEXT_NAME | [new AssayContextItem(valueDisplay: NEW_CONTEXT_NAME), new AssayContextItem(valueDisplay: ORIGINAL_CONTEXT_NAME)]
-        'contextName updated when assayContextItem does not match title' | NEW_CONTEXT_NAME      | [new AssayContextItem(valueDisplay: NEW_CONTEXT_NAME)]
+        desc                                                             | expectedContextName                     | existingAssayContextItems
+        'change contextName to null when assayContextItems empty'        | AssayContext.CONTEXT_NAME_WITH_NO_ITEMS | []
+        'contextName not changed with assayContextItem matches title'    | ORIGINAL_CONTEXT_NAME                   | [new AssayContextItem(valueDisplay: ORIGINAL_CONTEXT_NAME)]
+        'contextName not changed with assayContextItem matches title'    | ORIGINAL_CONTEXT_NAME                   | [new AssayContextItem(valueDisplay: NEW_CONTEXT_NAME), new AssayContextItem(valueDisplay: ORIGINAL_CONTEXT_NAME)]
+        'contextName updated when assayContextItem does not match title' | NEW_CONTEXT_NAME                        | [new AssayContextItem(valueDisplay: NEW_CONTEXT_NAME)]
     }
 
     public void assertItemAdded(AssayContext targetAssayContext, AssayContextItem draggedAssayContextItem, int sizeAfterAdd, int indexOfAddedItem) {
