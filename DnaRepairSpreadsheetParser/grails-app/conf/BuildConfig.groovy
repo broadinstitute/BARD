@@ -53,5 +53,5 @@ grails.project.dependency.resolution = {
     }
 }
 
-// making the domain plugin an in-place plugin
-grails.plugin.location.'bard-domain-model' = "../BardDomainModel"
+// making the domainspreadsheetmapping plugin an in-place plugin
+grails.plugin.location.'bard-domainspreadsheetmapping-model' = "../BardDomainModel"
