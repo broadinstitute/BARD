@@ -11,12 +11,13 @@ class SarCartController {
     def add() {
 
         def somethingWasAdded
-        int stt =0
+        int stt = Integer.parseInt(params.stt)
         if (params.class == 'class bardqueryapi.CartAssay') {
-            stt=Integer.parseInt(params.stt)
+
             somethingWasAdded = queryCartService.addToShoppingCart( new CartAssay( assayTitle:params.assayTitle ) )
 
         }  else if (params.class == 'class bardqueryapi.CartCompound') {
+
             CartCompound cartCompound = new CartCompound( smiles:params.smiles )
             if ( params.cid != null )
                 cartCompound.compoundId =  Integer.parseInt(params.cid)

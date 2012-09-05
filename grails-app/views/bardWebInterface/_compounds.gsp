@@ -18,10 +18,10 @@
             </g:link>
             <a href="/bardwebquery/sarCart/add/${compoundAdapter.pubChemCID}"
                onclick="jQuery.ajax({  type:'POST',
-                   data:{'id': '${compoundAdapter.pubChemCID}','class': 'class bardqueryapi.CartCompound','cid':'${compoundAdapter.pubChemCID}','smiles':'${JavaScriptUtility.cleanup(compoundAdapter.name)}','version': '0'},
+                   data:{'id': '${compoundAdapter.pubChemCID}','class': 'class bardqueryapi.CartCompound','cid':'${compoundAdapter.pubChemCID}','smiles':'${JavaScriptUtility.cleanup(compoundAdapter.name)}','version': '0','stt':trackStatus},
                    url:'/bardwebquery/sarCart/add',
                    success:function(data,textStatus){
-                       jQuery('#sarCartRefill').html(data);
+                       jQuery(ajaxLocation).html(data);
                    }
                });
                return false;"

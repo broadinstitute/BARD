@@ -8,10 +8,10 @@
                 <g:link action="showProject" id="${projectAdapter.project.id}" target="_blank">Project ID: ${projectAdapter.project.id} - ${projectAdapter.project.name}</g:link>
                 <a href="/bardwebquery/sarCart/add/${projectAdapter.project.id}"
                    onclick="jQuery.ajax({  type:'POST',
-                       data:{'id': '${projectAdapter.project.id}','class': 'class bardqueryapi.CartProject','projectName':'${JavaScriptUtility.cleanup(projectAdapter.project.name)}','version': '0'},
+                       data:{'id': '${projectAdapter.project.id}','class': 'class bardqueryapi.CartProject','projectName':'${JavaScriptUtility.cleanup(projectAdapter.project.name)}','version': '0','stt':trackStatus},
                        url:'/bardwebquery/sarCart/add',
                        success:function(data,textStatus){
-                           jQuery('#sarCartRefill').html(data);
+                           jQuery(ajaxLocation).html(data);
                        }
                    });
                    return false;"
