@@ -11,23 +11,25 @@ class CardFactoryService {
         if (assay == null || assay.getAssayContexts() == null) {
             return cards
         }
-
-        for (AssayContext assayContext in assay.assayContexts) {
-            CardDto cardDto = new CardDto()
-            cardDto.title = assayContext.contextName
-			cardDto.assayId = assay.id;
-            for (AssayContextItem assayContextItem : assayContext.assayContextItems) {
-                CardLineDto line =createCardLineDtoForAssayContextItem(assayContextItem)
-                if(line) {
-                    cardDto.lines.add(line)
-                }
-            }
+        for (AssayContext assayContext : assay.assayContexts.sort { a,b -> a.id <=> b.id}) {
+            CardDto cardDto = createCardDto(assayContext)
             cards.add(cardDto)
         }
         return cards
     }
 
-
+    public CardDto createCardDto(AssayContext assayContext) {
+        CardDto cardDto = new CardDto()
+        cardDto.id = assayContext.id
+        cardDto.title = assayContext.contextName
+        for (AssayContextItem assayContextItem : assayContext.assayContextItems) {
+            CardLineDto line = createCardLineDtoForAssayContextItem(assayContextItem)
+            if (line) {
+                cardDto.lines.add(line)
+            }
+        }
+        cardDto
+    }
 
     private CardLineDto createCardLineDtoForAssayContextItem(AssayContextItem item) {
         CardLineDto line = null
@@ -47,6 +49,7 @@ class CardFactoryService {
 }
 
 class CardDto {
+    Long id
     String title
 	Long assayId
     List<CardLineDto> lines = new ArrayList<CardLineDto>()

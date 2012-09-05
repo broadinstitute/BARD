@@ -17,6 +17,9 @@ import org.codehaus.groovy.grails.web.mapping.LinkGenerator
 import javax.sql.DataSource
 
 import bard.db.experiment.*
+import org.apache.commons.lang.time.StopWatch
+import org.hibernate.SessionFactory
+import org.hibernate.Session
 
 class ResultExportService {
     LinkGenerator grailsLinkGenerator
@@ -24,6 +27,7 @@ class ResultExportService {
     int maxResultsRecordsPerPage
     DataSource dataSource
     UtilityService utilityService
+    SessionFactory sessionFactory
     /**
      * Set the ReadyForExtraction value on the element to 'Complete'
      *
@@ -171,14 +175,29 @@ class ResultExportService {
      * @return true if there are more results than can fit on a page
      */
     protected boolean generateResults(final StaxBuilder markupBuilder, final Experiment experiment, int offset) {
+        int max = offset + this.maxResultsRecordsPerPage + 1  //A trick to know if there are more records
 
-        int end = this.maxResultsRecordsPerPage + 1  //A trick to know if there are more records
         boolean hasMoreResults = false //This is used for paging, if there are more results than the threshold, add next link and return true
 
-         List<Long> resultIds = Result.executeQuery("select distinct result.id from Result result where result.readyForExtraction=:ready and result.experiment.id=:experiment order by result.id asc", [experiment: experiment.id, ready: ReadyForExtraction.Ready, offset: offset, max: end])
+        String RESULTS_BY_ID_QUERY = """
+          SELECT RESULT_ID
+        FROM (SELECT RESULT_ID, ROWNUM AS RESULT_ROW_NUM
+                FROM ( SELECT RESULT_ID
+                        FROM RESULT
+                        WHERE RESULT.EXPERIMENT_ID = ${experiment.id}
+                        AND READY_FOR_EXTRACTION='Ready'
+                        ORDER BY RESULT_ID ASC
+                )
+        )
+        WHERE RESULT_ROW_NUM BETWEEN ${offset} AND ${max}
+        """
 
-
-        // List<Result> results = Result.findAllByExperimentAndReadyForExtraction(experiment, 'Ready', [sort: "id", order: "asc", offset: offset, max: end])
+        final Session currentSession = sessionFactory.currentSession
+        StopWatch stopWatch = new StopWatch()
+        stopWatch.start()
+        List<Long> resultIds = currentSession.createSQLQuery(RESULTS_BY_ID_QUERY).list()
+        stopWatch.stop()
+        log.info("Query ${RESULTS_BY_ID_QUERY} took ${stopWatch.toString()}")
         final int numberOfResults = resultIds.size()
         if (numberOfResults > this.maxResultsRecordsPerPage) {
             hasMoreResults = true
