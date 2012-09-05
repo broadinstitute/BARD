@@ -59,8 +59,6 @@
 </div><!-- End body div -->
 
 <r:script>
-    var idCounter = 0;
-    var idItemsCounter = 0;
     $(function () {
         $("#addNewBtn").button({
             icons:{
@@ -122,19 +120,19 @@
             }
         }).click(function (event) {
         		var itemId = $(this).attr('id');
-        		var assayContextId = $("caption.assay_context").attr('id');
+        		var assayContextId =$(this).parents("div.card").attr('id');
         		$("#dialog_confirm_delete_card").dialog("option", "buttons",[
 				{
 					text: "Delete",
 					click: function(){
-						alert("You clicked delete item with id: " + itemId + " and assayContext: " + assayContextId);
+						//alert("You clicked delete item with id: " + itemId + " and assayContext: " + assayContextId);
 						var data = {'assay_context_item_id':itemId };
 						$.ajax({
 	                        type:'POST',
 	                        url:'../deleteItemFromCard',
 	                        data:data,
 	                        success:function (data) {
-	                            $("div#card-" + assayContextId).replaceWith(data);
+	                            $("div#" + assayContextId).replaceWith(data);
 	                            initDnd();
 	                        }
                     	});	

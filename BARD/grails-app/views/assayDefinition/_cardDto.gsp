@@ -2,7 +2,6 @@
 <table class="gridtable">
     <caption id="${card.id}" class="assay_context">
         ${card.title} - [${card.id}]
-        <button id="${cardId}">Edit</button></div>
     </caption>
     <tbody>
     <g:each in="${card.lines}" status="i" var="line">

@@ -3,15 +3,19 @@ import grails.util.Environment
 import groovy.sql.Sql
 
 import javax.sql.DataSource
+import java.sql.SQLException
 
 class BootStrap {
     DataSource dataSource
     def init = { servletContext ->
         switch (Environment.current.name) {
+            case "bambooDataExport":
+            case "branch":
             case "test":
             case "development":
                 if (Element.list().isEmpty()) {
                     final Sql sql = new Sql(dataSource)
+                    verifyTrees(sql)
                     createTreeTables(sql)
                     insertDictionaryRecords(sql)
                     insertAssayDefRecords(sql)
@@ -26,53 +30,89 @@ class BootStrap {
     def destroy = {
     }
 
+    /*
+     * This method is solely here so the tests will run -- the "createTreeTables" method is creating tables that are unknown
+     * to the BardDomainModel plugin, so when we use dbCreate mode = 'create-drop', these tree tables are not getting dropped.
+     * This causes issues when we try to start the tests, because when this Bootstrap executes, it tries to create the tree tables
+     * again without having dropped them first.
+     *
+     * Instead, if we are in a test or development environment, we will see whether these tree tables exist, and if they do, drop them.
+     * If the tables do NOT exist, we don't have to do anything -- just catch the exception and continue.
+     */
+    private void verifyTrees(final Sql sql) {
+        if(Environment.current == Environment.PRODUCTION) {
+            println "Do not execute this method in a production environment."
+            return
+        }
+
+        try {
+            def firstRow = sql.firstRow("SELECT * FROM UNIT_TREE")
+            if(firstRow){
+                final List<String> tableList = ["UNIT_TREE", "RESULT_TYPE_TREE", "LABORATORY_TREE", "ASSAY_DESCRIPTOR_TREE", "BIOLOGY_DESCRIPTOR_TREE", "INSTANCE_DESCRIPTOR_TREE", "STAGE_TREE"]
+                dropTreeTables(sql, tableList)
+            }
+        }
+        catch(SQLException e) {
+            println "Tree tables do not exist"
+        }
+    }
+
+    private void dropTreeTables(final Sql sql, List<String> tableList){
+        tableList.each{ tableName ->
+            println "Dropping table ${tableName}"
+            String queryString = "DROP TABLE ${tableName}"
+            println "Executing query: ${queryString}"
+            sql.execute(queryString)
+        }
+    }
+
     def createViews(final Sql sql) {
         def RESULT_TYPE_ELEMENT = '''
         INSERT INTO RESULT_TYPE_ELEMENT (ELEMENT_ID, ELEMENT_STATUS, LABEL, DESCRIPTION, ABBREVIATION, SYNONYMS, UNIT, BARD_URI, EXTERNAL_URL, READY_FOR_EXTRACTION, VERSION, DATE_CREATED, LAST_UPDATED, MODIFIED_BY)
         SELECT El.ELEMENT_ID, El.ELEMENT_STATUS, El.LABEL, El.DESCRIPTION, El.ABBREVIATION, El.SYNONYMS, El.UNIT, El.BARD_URI, El.EXTERNAL_URL, El.READY_FOR_EXTRACTION, El.VERSION, El.DATE_CREATED, El.LAST_UPDATED, El.MODIFIED_BY
         FROM ELEMENT El
-        WHERE EL.ELEMENT_ID IN (SELECT RESULT_TYPE_ID FROM RESULT_TYPE_TREE);
+        WHERE EL.ELEMENT_ID IN (SELECT RESULT_TYPE_ID FROM RESULT_TYPE_TREE)
         '''
 
         def STAGE_ELEMENT = '''
         INSERT INTO STAGE_ELEMENT (ELEMENT_ID, ELEMENT_STATUS, LABEL, DESCRIPTION, ABBREVIATION, SYNONYMS, UNIT, BARD_URI, EXTERNAL_URL, READY_FOR_EXTRACTION, VERSION, DATE_CREATED, LAST_UPDATED, MODIFIED_BY)
         SELECT El.ELEMENT_ID, El.ELEMENT_STATUS, El.LABEL, El.DESCRIPTION, El.ABBREVIATION, El.SYNONYMS, El.UNIT, El.BARD_URI, El.EXTERNAL_URL, El.READY_FOR_EXTRACTION, El.VERSION, El.DATE_CREATED, El.LAST_UPDATED, El.MODIFIED_BY
         FROM ELEMENT El
-        WHERE EL.ELEMENT_ID IN (SELECT STAGE_ID FROM STAGE_TREE);
+        WHERE EL.ELEMENT_ID IN (SELECT STAGE_ID FROM STAGE_TREE)
         '''
 
         def ASSAY_DESCRIPTORE_ELEMENT = '''
        INSERT INTO ASSAY_ELEMENT (ELEMENT_ID, ELEMENT_STATUS, LABEL, DESCRIPTION, ABBREVIATION, SYNONYMS, UNIT, BARD_URI, EXTERNAL_URL, READY_FOR_EXTRACTION, VERSION, DATE_CREATED, LAST_UPDATED, MODIFIED_BY)
         SELECT El.ELEMENT_ID, El.ELEMENT_STATUS, El.LABEL, El.DESCRIPTION, El.ABBREVIATION, El.SYNONYMS, El.UNIT, El.BARD_URI, El.EXTERNAL_URL, El.READY_FOR_EXTRACTION, El.VERSION, El.DATE_CREATED, El.LAST_UPDATED, El.MODIFIED_BY
         FROM ELEMENT El
-        WHERE ELEMENT_ID IN (SELECT ELEMENT_ID FROM ASSAY_DESCRIPTOR_TREE);
+        WHERE ELEMENT_ID IN (SELECT ELEMENT_ID FROM ASSAY_DESCRIPTOR_TREE)
         '''
 
         def BIOLOGY_DESCRIPTOR_ELEMENT = '''
         INSERT INTO BIOLOGY_ELEMENT (ELEMENT_ID, ELEMENT_STATUS, LABEL, DESCRIPTION, ABBREVIATION, SYNONYMS, UNIT, BARD_URI, EXTERNAL_URL, READY_FOR_EXTRACTION, VERSION, DATE_CREATED, LAST_UPDATED, MODIFIED_BY)
         SELECT El.ELEMENT_ID, El.ELEMENT_STATUS, El.LABEL, El.DESCRIPTION, El.ABBREVIATION, El.SYNONYMS, El.UNIT, El.BARD_URI, El.EXTERNAL_URL, El.READY_FOR_EXTRACTION, El.VERSION, El.DATE_CREATED, El.LAST_UPDATED, El.MODIFIED_BY
         FROM ELEMENT El
-        WHERE ELEMENT_ID IN (SELECT ELEMENT_ID FROM BIOLOGY_DESCRIPTOR_TREE);
+        WHERE ELEMENT_ID IN (SELECT ELEMENT_ID FROM BIOLOGY_DESCRIPTOR_TREE)
         '''
         def INSTANCE_DESCRIPTOR_ELEMENT = '''
         INSERT INTO INSTANCE_ELEMENT (ELEMENT_ID, ELEMENT_STATUS, LABEL, DESCRIPTION, ABBREVIATION, SYNONYMS, UNIT, BARD_URI, EXTERNAL_URL, READY_FOR_EXTRACTION, VERSION, DATE_CREATED, LAST_UPDATED, MODIFIED_BY)
         SELECT El.ELEMENT_ID, El.ELEMENT_STATUS, El.LABEL, El.DESCRIPTION, El.ABBREVIATION, El.SYNONYMS, El.UNIT, El.BARD_URI, El.EXTERNAL_URL, El.READY_FOR_EXTRACTION, El.VERSION, El.DATE_CREATED, El.LAST_UPDATED, El.MODIFIED_BY
         FROM ELEMENT El
-        WHERE ELEMENT_ID IN (SELECT ELEMENT_ID FROM INSTANCE_DESCRIPTOR_TREE);
+        WHERE ELEMENT_ID IN (SELECT ELEMENT_ID FROM INSTANCE_DESCRIPTOR_TREE)
        '''
 
         def LABORATORY_ELEMENT = '''
          INSERT INTO LABORATORY_ELEMENT (ELEMENT_ID, ELEMENT_STATUS, LABEL, DESCRIPTION, ABBREVIATION, SYNONYMS, UNIT, BARD_URI, EXTERNAL_URL, READY_FOR_EXTRACTION, VERSION, DATE_CREATED, LAST_UPDATED, MODIFIED_BY)
         SELECT El.ELEMENT_ID, El.ELEMENT_STATUS, El.LABEL, El.DESCRIPTION, El.ABBREVIATION, El.SYNONYMS, El.UNIT, El.BARD_URI, El.EXTERNAL_URL, El.READY_FOR_EXTRACTION, El.VERSION, El.DATE_CREATED, El.LAST_UPDATED, El.MODIFIED_BY
         FROM ELEMENT El
-        WHERE ELEMENT_ID IN (SELECT LABORATORY_ID FROM LABORATORY_TREE);
+        WHERE ELEMENT_ID IN (SELECT LABORATORY_ID FROM LABORATORY_TREE)
          '''
 
         def UNIT_ELEMENT = '''
       INSERT INTO UNIT_ELEMENT (ELEMENT_ID, ELEMENT_STATUS, LABEL, DESCRIPTION, ABBREVIATION, SYNONYMS, UNIT, BARD_URI, EXTERNAL_URL, READY_FOR_EXTRACTION, VERSION, DATE_CREATED, LAST_UPDATED, MODIFIED_BY)
         SELECT El.ELEMENT_ID, El.ELEMENT_STATUS, El.LABEL, El.DESCRIPTION, El.ABBREVIATION, El.SYNONYMS, El.UNIT, El.BARD_URI, El.EXTERNAL_URL, El.READY_FOR_EXTRACTION, El.VERSION, El.DATE_CREATED, El.LAST_UPDATED, El.MODIFIED_BY
         FROM ELEMENT El
-        WHERE ELEMENT_ID IN (SELECT UNIT_ID FROM UNIT_TREE);
+        WHERE ELEMENT_ID IN (SELECT UNIT_ID FROM UNIT_TREE)
         '''
 
         sql.execute(RESULT_TYPE_ELEMENT)
@@ -84,6 +124,7 @@ class BootStrap {
         sql.execute(LABORATORY_ELEMENT)
 
     }
+
     /**
      * TODO: Don't use this for any production level testing
      * @param sql
