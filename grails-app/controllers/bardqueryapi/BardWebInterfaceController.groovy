@@ -306,6 +306,16 @@ class BardWebInterfaceController {
 
     }
 
+    def applyFilters(SearchCommand searchCommand) {
+
+        def temp = params
+
+        if (searchCommand.hasErrors()) {
+            flash.message = searchCommand.errors
+        }
+        redirect(action: "homePage")
+    }
+
     /**
      * TODO: Should redirect to NCGC
      * Autocomplete

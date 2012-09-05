@@ -1,7 +1,7 @@
-<%@ page import="bardqueryapi.JavaScriptUtility" %>
+<%@ page import="bardqueryapi.FacetFormType; bardqueryapi.JavaScriptUtility" %>
 <%@ page import="grails.converters.JSON" %>
 <div class="row-fluid">
-    <g:render template="facets" model="['facets': facets]"/>
+    <g:render template="facets" model="['facets': facets, 'formName' : FacetFormType.CompoundFacetForm]"/>
 <div class="span9">
     <table class="table">
     <g:each var="compoundAdapter" in="${compoundAdapters}">

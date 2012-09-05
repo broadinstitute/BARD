@@ -1,6 +1,6 @@
-<%@ page import="bardqueryapi.JavaScriptUtility" %>
+<%@ page import="bardqueryapi.FacetFormType; bardqueryapi.JavaScriptUtility" %>
 <div class="row-fluid">
-    <g:render template="facets" model="['facets': facets]"/>
+    <g:render template="facets" model="['facets': facets, 'formName' : FacetFormType.AssayFacetForm]"/>
 <div class="span9">
     <ul class="unstyled results">
     <g:each var="assayAdapter" in="${assayAdapters}">
