@@ -34,7 +34,7 @@ class AssayContextService {
         }
         else {
             AssayContextItem first = sourceAssayContext.assayContextItems[0]
-            sourceAssayContext.contextName = first?.valueDisplay?: 'Empty Card, consider deleting!'
+            sourceAssayContext.contextName = first?.valueDisplay?: AssayContext.CONTEXT_NAME_WITH_NO_ITEMS
         }
     }
 }
