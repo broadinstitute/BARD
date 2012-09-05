@@ -4,6 +4,7 @@
     ShoppingCartService  shoppingCartService = grailsApplication.classLoader.loadClass('com.metasieve.shoppingcart.ShoppingCartService').newInstance()
     QueryCartService  queryCartService  = grailsApplication.classLoader.loadClass('bardqueryapi.QueryCartService').newInstance()
 %>
+
 <table class="QcartAppearance">
 %{-- hold everything that Ajax will refill--}%
     <tbody id="sarCartRefill">

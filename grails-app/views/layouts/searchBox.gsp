@@ -39,11 +39,19 @@
     </r:script>
 
     <r:script>
-
+        var trackStatus=0;
+        var ajaxLocation='#cartIdentRefill'
         $(document).ready(function(){
             $(".trigger").click(function(){
                 $(".panel").toggle("fast");
                 $(this).toggleClass("active");
+                if (trackStatus==1){
+                    trackStatus = 0;
+                    ajaxLocation='#cartIdentRefill';
+                } else   {
+                    trackStatus = 1;
+                    ajaxLocation='#sarCartRefill';
+                }
                 return false;
             });
         });
@@ -71,7 +79,16 @@
                 <g:submitButton name="search" value="Search" class="btn btn-primary" id="searchButton"/>
             </div>
         </g:form>
-        <g:render template="queryCartIndicator"/>
+
+            <div class="span2">
+                <div class="well">
+                    <div class="row-fluid">
+                        <h5><i class="icon-shopping-cart"></i><a class="trigger" href="#">Query Cart<span class="tinyclickfordetails">(click for details)</span></a></h5>
+                    </div>
+                    <g:render template="queryCartIndicator"/>
+                </div>
+            </div>
+
     </div>
     <g:if test="${flash.message}">
         <div class="alert">
@@ -121,6 +138,7 @@
 
 
 <div class="panel">
+    <a class="trigger" href="#">Click to hide query cart</a>
     <g:render template="sarCartContent"/>
 </div>
 

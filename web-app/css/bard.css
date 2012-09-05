@@ -88,9 +88,22 @@ ul.results > li {
     border-top: 1px solid #d3d3d3;
 }
 
+
+.indicatorpanel {
+    position: absolute;
+    top: 50px;
+    right: 0;
+    display: none;
+    background: #ffffff;
+    border:1px solid #111111;
+    width: 200px;
+    height: auto;
+}
+
+
 .panel {
     position: absolute;
-    top: 150px;
+    top: 50px;
     right: 0;
     display: none;
     background: #ffffff;
@@ -104,7 +117,17 @@ ul.results > li {
     -moz-border-radius-bottomleft: 5px;
     -webkit-border-bottom-left-radius: 5px;
 }
-
+.tinyclickfordetails {
+    font-family: Helvetica, Arial, "Lucida Grande", sans-serif;
+    font-size: xx-small;
+    font-weight: bold;
+    padding-left: 2px;
+    margin: 2px;
+}
+.clicktohidequerycart {
+    text-decoration: none;
+    margin: 2px;
+}
 
 div.qcart  {
     background-color: #ddd;
@@ -143,7 +166,7 @@ div.addtocartholder{
     border: 0 none;
 }
 a.addtocart { //right
-width:200px;
+    width:200px;
     height: 200px;
 }
 img.addtocart {  //left

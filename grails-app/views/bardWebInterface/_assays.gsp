@@ -8,10 +8,10 @@
             <g:link action="showAssay" id="${assayAdapter.assay.id}" target="_blank">ADID: ${assayAdapter.assay.id} - ${assayAdapter.name}</g:link>
         <a href="/bardwebquery/sarCart/add/${assayAdapter.assay.id}"
            onclick="jQuery.ajax({  type:'POST',
-               data:{'id': '${assayAdapter.assay.id}','class': 'class bardqueryapi.CartAssay','assayTitle':'${JavaScriptUtility.cleanup(assayAdapter.name)}','version': '0'},
+               data:{'id': '${assayAdapter.assay.id}','class': 'class bardqueryapi.CartAssay','assayTitle':'${JavaScriptUtility.cleanup(assayAdapter.name)}','version': '0','stt':trackStatus},
                url:'/bardwebquery/sarCart/add',
                success:function(data,textStatus){
-                   jQuery('#sarCartRefill').html(data);
+                   jQuery(ajaxLocation).html(data);
                }
            });
            return false;"

@@ -11,8 +11,9 @@ class SarCartController {
     def add() {
 
         def somethingWasAdded
+        int stt =0
         if (params.class == 'class bardqueryapi.CartAssay') {
-
+            stt=Integer.parseInt(params.stt)
             somethingWasAdded = queryCartService.addToShoppingCart( new CartAssay( assayTitle:params.assayTitle ) )
 
         }  else if (params.class == 'class bardqueryapi.CartCompound') {
@@ -28,8 +29,11 @@ class SarCartController {
         }
 
        if (somethingWasAdded != null)  // something was added, so the display must change
+           if (stt==0)
+               render(template: '/bardWebInterface/queryCartIndicator')
+           else
+              render(template:'/bardWebInterface/sarCartContent')  // refresh the cart display via Ajax
 
-           render(template:'/bardWebInterface/sarCartContent')  // refresh the cart display via Ajax
 
         return
 
