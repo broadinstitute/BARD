@@ -111,4 +111,17 @@ class AssayDefinitionController {
 			render(template: "cardDto", model: [card: cardDto])
 		}
 	}
+	
+	def deleteEmptyCard(Long assay_context_id){
+		AssayContext assayContext = AssayContext.findById(assay_context_id)
+		println "AssayContext with id: ${assay_context_id} has ${assayContext.measures.size()} measures"
+		println "AssayContextItems size: ${assayContext.assayContextItems.size()}"
+		Assay assay = assayContext.assay
+		if(assayContext.assayContextItems.size() == 0 && assayContext.measures.empty){			
+			assay.removeFromAssayContexts(assayContext)
+			assayContext.delete()			
+		}
+		List<CardDto> cardDtoList = cardFactoryService.createCardDtoListForAssay(assay)
+		render(template: "cards", model: [cardDtoList: cardDtoList])
+	}
 }

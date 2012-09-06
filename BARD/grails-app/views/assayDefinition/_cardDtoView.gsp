@@ -29,10 +29,17 @@
 		</form>
 	</div>
 
-	<div id="dialog_confirm_delete_card">
+	<div id="dialog_confirm_delete_item">
 		<p>
 		<span class="ui-icon ui-icon-alert" style="float:left; margin:0 7px 20px 0;"></span>
 		This item will be permanently deleted and cannot be recovered. Are you sure?
+		</p>
+	</div>
+	
+	<div id="dialog_confirm_delete_card">
+		<p>
+		<span class="ui-icon ui-icon-alert" style="float:left; margin:0 7px 20px 0;"></span>
+		This card will be permanently deleted and cannot be recovered. Are you sure?
 		</p>
 	</div>
 

@@ -84,15 +84,15 @@
             }
         });
 
-        $("#dialog_card").dialog({
-            height:350,
-            width:350,
-            title:"Edit Card",
+        $("#dialog_confirm_delete_card").dialog({
+            height:250,
+            width:450,
+            title:"Delete card?",
             autoOpen:false,
-            modal:true
+            modal:true 
         });
 
-        $("#dialog_confirm_delete_card").dialog({
+        $("#dialog_confirm_delete_item").dialog({
             resizable:false,
             height:250,
             width:450,
@@ -114,14 +114,49 @@
     
     var initDnd = function () {
     	
-    	$("button", ".deleteButton").button({
+    	$("button", ".deleteCardButton").button({
+            icons:{
+                primary:"ui-icon-pencil"
+            }
+        }).click(function(event){
+        	var cardId = $(this).attr('id');
+        	$("#dialog_confirm_delete_card").dialog("option", "buttons",[
+        		{
+					text: "Delete",
+					click: function(){
+						var data = {'assay_context_id':cardId };
+						$.ajax({
+	                        type:'POST',
+	                        url:'../deleteEmptyCard',
+	                        data:data,
+	                        success:function (data) {
+	                            $("div#cardHolder").html(data);
+	                            initDnd();
+	                        }
+                    	});	
+                    	$( this ).dialog( "close" );	
+					}
+				},
+				{
+					text: "Cancel",
+					click: function(){
+						$( this ).dialog( "close" );
+					}
+				}
+        	]);
+        	
+        	$("#dialog_confirm_delete_card").dialog("open");
+        	
+        });
+    	
+    	$("button", ".deleteItemButton").button({
             icons:{
                 primary:"ui-icon-pencil"
             }
         }).click(function (event) {
         		var itemId = $(this).attr('id');
         		var assayContextId =$(this).parents("div.card").attr('id');
-        		$("#dialog_confirm_delete_card").dialog("option", "buttons",[
+        		$("#dialog_confirm_delete_item").dialog("option", "buttons",[
 				{
 					text: "Delete",
 					click: function(){
@@ -147,7 +182,7 @@
 				}
 		]);
 		
-		$("#dialog_confirm_delete_card").dialog("open");
+		$("#dialog_confirm_delete_item").dialog("open");
 			
         });
     	
