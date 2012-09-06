@@ -3,10 +3,11 @@ import grails.util.Environment
 import groovy.sql.Sql
 
 import javax.sql.DataSource
-import java.sql.SQLException
 
 class BootStrap {
     DataSource dataSource
+    def grailsApplication
+
     def init = { servletContext ->
         switch (Environment.current.name) {
             case "bambooDataExport":
@@ -45,23 +46,21 @@ class BootStrap {
             return
         }
 
-        try {
-            def firstRow = sql.firstRow("SELECT * FROM UNIT_TREE")
-            if(firstRow){
-                final List<String> tableList = ["UNIT_TREE", "RESULT_TYPE_TREE", "LABORATORY_TREE", "ASSAY_DESCRIPTOR_TREE", "BIOLOGY_DESCRIPTOR_TREE", "INSTANCE_DESCRIPTOR_TREE", "STAGE_TREE"]
-                dropTreeTables(sql, tableList)
-            }
+        String schemaOwner = grailsApplication.config.dataSource.username
+        String treeTablesQuery = "select table_name from all_tables where table_name like '%_TREE' and owner = '${schemaOwner.toUpperCase()}'"
+        List<String> treeTables = []
+
+        sql.eachRow(treeTablesQuery) { row ->
+            treeTables << row.table_name
         }
-        catch(SQLException e) {
-            println "Tree tables do not exist"
-        }
+
+        dropTreeTables(sql, treeTables)
     }
 
     private void dropTreeTables(final Sql sql, List<String> tableList){
         tableList.each{ tableName ->
             println "Dropping table ${tableName}"
             String queryString = "DROP TABLE ${tableName}"
-            println "Executing query: ${queryString}"
             sql.execute(queryString)
         }
     }

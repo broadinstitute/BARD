@@ -6,6 +6,7 @@ import bard.db.experiment.Experiment
 import bard.db.experiment.Project
 
 class ExternalReference implements Serializable {
+    private static final int MODIFIED_BY_MAX_SIZE = 40
 
 	String extAssayRef
 	Date dateCreated
@@ -37,9 +38,13 @@ class ExternalReference implements Serializable {
 	}
 
 	static constraints = {
-        extAssayRef maxSize: 128
-		dateCreated maxSize: 19
-		lastUpdated nullable: true, maxSize: 19
-		modifiedBy nullable: true, maxSize: 40
-	}
+        experiment(nullable: true)
+        project(nullable: true)
+        extAssayRef(maxSize: 128)
+        externalSystem()
+
+        dateCreated(nullable: false)
+        lastUpdated(nullable: true)
+        modifiedBy(nullable: true, blank: false, maxSize: MODIFIED_BY_MAX_SIZE)
+    }
 }

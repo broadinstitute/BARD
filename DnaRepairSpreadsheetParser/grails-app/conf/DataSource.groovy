@@ -8,6 +8,7 @@ hibernate {
     cache.use_second_level_cache = true
     cache.use_query_cache = false
     cache.region.factory_class = 'net.sf.ehcache.hibernate.EhCacheRegionFactory'
+//    show_sql = true
 }
 // environment specific settings
 environments {
@@ -69,6 +70,50 @@ environments {
             dialect = bard.SequencePerTableOracleDialect
             username = "bard_qa"
             password="kU7radrASaD4"
+            pooled = true
+            properties {
+                maxActive = -1
+                minEvictableIdleTimeMillis=1800000
+                timeBetweenEvictionRunsMillis=1800000
+                numTestsPerEvictionRun=3
+                testOnBorrow=true
+                testWhileIdle=true
+                testOnReturn=true
+                validationQuery="SELECT 1 from dual"
+            }
+        }
+    }
+
+    schatwin {
+        dataSource {
+            //dbCreate = "update"
+            url = "jdbc:oracle:thin:@vmbarddev:1521:barddev"
+            driverClassName = "oracle.jdbc.driver.OracleDriver"
+            dialect = bard.SequencePerTableOracleDialect
+            username = "schatwin"
+            password="ch3mb10"
+            pooled = true
+            properties {
+                maxActive = -1
+                minEvictableIdleTimeMillis=1800000
+                timeBetweenEvictionRunsMillis=1800000
+                numTestsPerEvictionRun=3
+                testOnBorrow=true
+                testWhileIdle=true
+                testOnReturn=true
+                validationQuery="SELECT 1 from dual"
+            }
+        }
+    }
+
+    dlahr {
+        dataSource {
+            //dbCreate = "update"
+            url = "jdbc:oracle:thin:@vmbarddev:1521:barddev"
+            driverClassName = "oracle.jdbc.driver.OracleDriver"
+            dialect = bard.SequencePerTableOracleDialect
+            username = "dlahr_bard"
+            password="ch3mb10"
             pooled = true
             properties {
                 maxActive = -1
