@@ -45,7 +45,7 @@ class QueryService {
      * @param searchString
      * @param top
      * @param skip
-     * @param searchFilters - TODO: Not yet supported by JDO
+     * @param searchFilters
      * @return
      */
     Map findCompoundsByTextSearch(final String searchString, final Integer top = 10, final Integer skip = 0, final List<SearchFilter> searchFilters = []) {
@@ -100,7 +100,7 @@ class QueryService {
      * @param searchString
      * @param top
      * @param skip
-     * @param searchFilters - TODO: Not yet supported by JDO
+     * @param searchFilters
      * @return Map
      */
     Map findProjectsByTextSearch(final String searchString, final Integer top = 10, final Integer skip = 0, final List<SearchFilter> searchFilters = []) {

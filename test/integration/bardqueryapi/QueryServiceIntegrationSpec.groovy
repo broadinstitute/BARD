@@ -152,12 +152,11 @@ class QueryServiceIntegrationSpec extends IntegrationSpec {
 
         assert compoundAdapterMap.nHits >= numberOfCompounds
         where:
-        label        | searchString | skip | top | numberOfCompounds | filters
-        "dna repair" | "dna repair" | 0    | 10  | 10                | []
-        // "dna repair with filters"         | "dna repair"         | 0    | 10  | 10                | [new SearchFilter("gobp_term", "DNA repair"), new SearchFilter("gobp_term", "response to UV-C")]
-        "dna repair skip and top" | "dna repair" | 10 | 10 | 10 | []
-        "biological process" | "biological process" | 0 | 10 | 10 | []
-        //"biological process with filters" | "biological process" | 0    | 10  | 10                | [new SearchFilter("gobp_term", "DNA repair"), new SearchFilter("gobp_term", "response to UV-C")]
+        label                     | searchString         | skip | top | numberOfCompounds | filters
+        "dna repair"              | "dna repair"         | 0    | 10  | 10                | []
+        "dna repair with filters" | "dna repair"         | 0    | 10  | 1                 | [new SearchFilter("tpsa", "55.1")]
+        "dna repair skip and top" | "dna repair"         | 10   | 10  | 10                | []
+        "biological process"      | "biological process" | 0    | 10  | 10                | []
 
     }
 
@@ -225,15 +224,14 @@ class QueryServiceIntegrationSpec extends IntegrationSpec {
         assert !projectAdapters.isEmpty()
         assert projectAdapters.size() == numberOfProjects
         assert projectAdapterMap.facets
-        assert projectAdapterMap.nHits > numberOfProjects
-
+        assert projectAdapterMap.nHits >= numberOfProjects
         where:
-        label        | searchString | skip | top | numberOfProjects | filters
-        "dna repair" | "dna repair" | 0    | 10  | 10               | []
-        //      "dna repair with filters"         | "dna repair"         | 0    | 10  | 10               | [new SearchFilter("gobp_term", "DNA repair"), new SearchFilter("gobp_term", "response to UV-C")]
-        "dna repair skip and top" | "dna repair" | 10 | 10 | 10 | []
-        "biological process" | "biological process" | 0 | 10 | 10 | []
-        //    "biological process with filters" | "biological process" | 0    | 10  | 10               | [new SearchFilter("gobp_term", "DNA repair"), new SearchFilter("gobp_term", "response to UV-C")]
+        label                             | searchString         | skip | top | numberOfProjects | filters
+        "dna repair"                      | "dna repair"         | 0    | 10  | 10               | []
+        "dna repair with filters"         | "dna repair"         | 0    | 10  | 8                | [new SearchFilter("num_expt", "6")]
+        "dna repair skip and top"         | "dna repair"         | 10   | 10  | 10               | []
+        "biological process"              | "biological process" | 0    | 10  | 10               | []
+        "biological process with filters" | "biological process" | 0    | 10  | 10               | [new SearchFilter("num_expt", "6")]
 
     }
 
