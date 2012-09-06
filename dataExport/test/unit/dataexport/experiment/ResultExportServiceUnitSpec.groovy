@@ -13,7 +13,7 @@ import groovy.xml.StaxBuilder
 import org.codehaus.groovy.grails.web.mapping.LinkGenerator
 import org.custommonkey.xmlunit.XMLAssert
 import spock.lang.Specification
-
+import spock.lang.Unroll
 
 import javax.sql.DataSource
 import javax.xml.stream.XMLOutputFactory
@@ -29,6 +29,7 @@ import bard.db.experiment.*
  */
 @TestFor(ResultExportService)
 @Mock([Experiment, Result])
+@Unroll
 class ResultExportServiceUnitSpec extends Specification {
     Writer writer
     StaxBuilder staxBuilder
