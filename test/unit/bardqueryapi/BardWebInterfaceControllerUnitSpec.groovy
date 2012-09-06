@@ -46,7 +46,7 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
         request.method = 'GET'
         controller.searchAssays()
         then:
-        _ * this.queryService.findAssaysByTextSearch(_, _, _) >> {assayAdapterMap}
+        _ * this.queryService.findAssaysByTextSearch(_, _, _, _) >> {assayAdapterMap}
 //        and:
         response.redirectedUrl == expectedRedirectURL
         flash.message == flashMessage
