@@ -116,7 +116,7 @@ log4j = {
     }
 
     //Capture the response time (round-trip + response parsing time) from NCGC API requests.
-    info NCGCResponseTimeAppender: 'grails.app.services.elasticsearchplugin.QueryExecutorService'
+    info NCGCResponseTimeAppender: ['grails.app.services.bardqueryapi.QueryService', 'grails.app.services.elasticsearchplugin.QueryExecutorService']
 
     error 'org.codehaus.groovy.grails.web.servlet',  //  controllers
             'org.codehaus.groovy.grails.web.pages', //  GSP
