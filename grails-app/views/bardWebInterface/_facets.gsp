@@ -1,10 +1,10 @@
 <div class="span3">
     <g:if test="${facets}">
         <div class="facets">
-            <h2>Filters</h2>
             <g:form name="${formName}" controller="bardWebInterface" action="applyFilters">
-                <g:hiddenField name="searchString" value="${params?.searchString}"/>
                 <g:submitButton name="Apply Filters" class="btn"/>
+                <h2>Filters</h2>
+                <g:hiddenField name="searchString" value="${params?.searchString}"/>
                 <g:set var="childIndex" value="${0}"/>
                 <g:each in="${facets}" var="facet">
                     <fieldset>

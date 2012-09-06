@@ -78,8 +78,28 @@ div.rightofline {
 
 div.facets {
     background-color: rgba(157, 252, 157, 0.2);
-    padding: 2px;
+    padding: 10px;
     border: 1px solid #d3d3d3;
+}
+
+.facets h2 {
+    font-size: 1em;
+    line-height: 2em;
+    margin: 0;
+    text-decoration: underline;
+}
+
+.facets form fieldset h3 {
+    font-size: .9em;
+    margin: 0;
+    line-height: 2em;
+}
+.facets form fieldset label {
+    margin: 0 10px 0 10px;
+    font-size: .9em;
+}
+.facets input[type="submit"] {
+    float: right;
 }
 
 ul.results > li {
