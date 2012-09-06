@@ -1,7 +1,7 @@
 package bardqueryapi
 
-import java.util.regex.Matcher
-import java.util.regex.Pattern
+import org.apache.commons.collections.FactoryUtils
+import org.apache.commons.collections.ListUtils
 
 /**
  * Command object used to parse all the search parameters coming in from the client.
@@ -9,15 +9,12 @@ import java.util.regex.Pattern
 @grails.validation.Validateable
 class SearchCommand {
     String searchString
-    List<SearchFilter> filters
+    List<SearchFilter> filters = ListUtils.lazyList([], FactoryUtils.instantiateFactory(SearchFilter))
 
     List<SearchFilter> getAppliedFilters() {
-        Pattern pattern = ~/\w([\s]+):['"]?(.+)['"]?/
-        List<String> appliedFilterStrings = filters.collect { MapEntry it -> if (it.value == "on") return it.key }
-        appliedFilterStrings.collectMany {
-            Matcher m = pattern.matcher(it)
-            return m.collect {
-                return new SearchFilter(it[1],it[2])
+        return filters.collect() { SearchFilter filter ->
+            if (filter.filterValue) {
+                return filter
             }
         }
     }

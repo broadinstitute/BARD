@@ -11,8 +11,12 @@ import org.apache.commons.lang.builder.EqualsBuilder
  * To change this template use File | Settings | File Templates.
  */
 class SearchFilter {
-    final String filterName
-    final String filterValue
+    String filterName
+    String filterValue
+
+    public SearchFilter() {
+
+    }
 
     public SearchFilter(final String filterName, final String filterValue) {
         this.filterName = filterName

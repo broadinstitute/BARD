@@ -5,14 +5,16 @@
             <g:form name="${formName}" controller="bardWebInterface" action="applyFilters">
                 <g:hiddenField name="searchString" value="${params?.searchString}"/>
                 <g:submitButton name="Apply Filters" class="btn"/>
+                <g:set var="childIndex" value="${0}"/>
                 <g:each in="${facets}" var="facet">
                     <fieldset>
                         <h3>${facet.id}</h3>
-                        <g:each in="${facet.children}" var="entry" status="i">
+                        <g:each in="${facet.children}" var="entry">
                             <label class="checkbox">
-                                <g:checkBox name="filters[i].filterValue" value="${entry.id}" checked="${params?.filters[i]?.filterValue == entry.id}"/> ${entry.id} (${entry.value})
+                                <g:checkBox name="filters[${childIndex}].filterValue" value="${entry.id}" checked=""/> ${entry.id} (${entry.value})
                             </label>
-                            <g:hiddenField name="filters[i].filterName" value="${facet.id}"/>
+                            <g:hiddenField name="filters[${childIndex}].filterName" value="${facet.id}"/>
+                            <g:set var="childIndex" value="${childIndex+1}"/>
                         </g:each>
                     </fieldset>
                 </g:each>

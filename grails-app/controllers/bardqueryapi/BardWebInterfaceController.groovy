@@ -21,6 +21,9 @@ class BardWebInterfaceController {
     def shoppingCartService
     QueryService queryService
 
+    List<SearchFilter> filters = []
+
+
     def index() {
         homePage()
     }
@@ -259,7 +262,9 @@ class BardWebInterfaceController {
                 int top = searchParams.top
                 int skip = searchParams.skip
 
-                final Map assaysByTextSearchResultsMap = this.queryService.findAssaysByTextSearch(searchString, top, skip)
+                List<SearchFilter> searchFilters = params.searchFilters ?: []
+
+                final Map assaysByTextSearchResultsMap = this.queryService.findAssaysByTextSearch(searchString, top, skip, searchFilters)
                 render(template: 'assays', model: [
                         assayAdapters: assaysByTextSearchResultsMap.assayAdapters,
                         facets: assaysByTextSearchResultsMap.facets,
@@ -308,12 +313,21 @@ class BardWebInterfaceController {
 
     def applyFilters(SearchCommand searchCommand) {
 
-        def temp = params
-
         if (searchCommand.hasErrors()) {
             flash.message = searchCommand.errors
         }
-        redirect(action: "homePage")
+
+        if (params.searchFilters) {
+            List searchFilters = params.searchFilters
+            searchFilters.addAll(searchCommand.getAppliedFilters())
+        }
+        else {
+            params.searchFilters = searchCommand.getAppliedFilters()
+        }
+
+        if (params.formName == FacetFormType.AssayFacetForm) {
+            return this.searchAssays()
+        }
     }
 
     /**
