@@ -8,6 +8,7 @@ import grails.test.mixin.TestFor
 import grails.test.mixin.TestMixin
 import grails.test.mixin.support.GrailsUnitTestMixin
 import spock.lang.Specification
+import spock.lang.Unroll
 import wslite.json.JSONArray
 
 import javax.servlet.http.HttpServletResponse
@@ -19,6 +20,7 @@ import bard.core.*
  */
 @TestMixin(GrailsUnitTestMixin)
 @TestFor(BardWebInterfaceController)
+@Unroll
 class BardWebInterfaceControllerUnitSpec extends Specification {
 
     QueryService queryService
@@ -45,7 +47,7 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
         controller.searchAssays()
         then:
         _ * this.queryService.findAssaysByTextSearch(_, _, _) >> {assayAdapterMap}
-        and:
+//        and:
         response.redirectedUrl == expectedRedirectURL
         flash.message == flashMessage
         response.status == statusCode

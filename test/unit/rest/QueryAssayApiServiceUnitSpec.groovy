@@ -3,6 +3,7 @@ package rest
 import grails.converters.JSON
 import grails.test.mixin.TestFor
 import spock.lang.Specification
+import spock.lang.Unroll
 import bardqueryapi.QueryAssayApiService
 import bardqueryapi.QueryExecutorInternalService
 
@@ -10,6 +11,7 @@ import bardqueryapi.QueryExecutorInternalService
  * See the API for {@link grails.test.mixin.support.GrailsUnitTestMixin} for usage instructions
  */
 @TestFor(QueryAssayApiService)
+@Unroll
 class QueryAssayApiServiceUnitSpec extends Specification {
 
     QueryExecutorInternalService queryExecutorInternalService

@@ -2,6 +2,7 @@ package rest
 
 import grails.converters.JSON
 import spock.lang.Specification
+import spock.lang.Unroll
 import bardqueryapi.QueryTargetApiService
 import bardqueryapi.QueryExecutorInternalService
 

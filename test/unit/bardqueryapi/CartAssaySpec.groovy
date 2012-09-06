@@ -2,12 +2,14 @@ package bardqueryapi
 
 import grails.test.mixin.TestFor
 import spock.lang.Specification
+import spock.lang.Unroll
 
 /**
  * See the API for {@link grails.test.mixin.support.GrailsUnitTestMixin} for usage instructions
  */
 //@TestMixin(GrailsUnitTestMixin)
 @TestFor(BardWebInterfaceController)
+@Unroll
 class CartAssaySpec extends Specification  {
 
     void setup() {
