@@ -2,7 +2,7 @@
     <g:if test="${facets}">
         <div class="facets">
             <g:form name="${formName.toString()}" controller="bardWebInterface" id="${formName.toString()}" action="applyFilters">
-                <g:submitButton name="applyFilters" value="Apply Filters" id="${formName}_Button"/>
+                <g:submitButton name="applyFilters" value="Apply Filters" id="${formName}_Button" class="btn btn-small"/>
                 <h2>Filters</h2>
                 <g:hiddenField name="searchString" value="${params?.searchString}"/>
 
