@@ -40,7 +40,7 @@
             <g:render template="assaySummaryView" model="['assayInstance': assayInstance]"/>
 
             <h3><a href="#">Assay and Biology Details</a></h3>
-            <g:render template="cardDtoView" model="['cardDtoList': cardDtoList]"/>
+            <g:render template="cardDtoView" model="['cardDtoList': cardDtoList, 'assayId': assayInstance.id]"/>
 
             <h3><a href="#">Documents</a></h3>
             <g:render template="assayDocumentsView" model="['assayInstance': assayInstance]"/>
@@ -69,13 +69,14 @@
                 });
 
         $("#dialog_new_card").dialog({
-            height:300,
-            width:550,
+            height:180,
+            width:500,
             title:"New Card",
             autoOpen:false,
             modal:true,
             buttons:{
-                "Add new attribute-value pair":function () {
+                Save:function () {
+                	$("#new_card_form").submit();
                     $(this).dialog("close");
                 },
                 Cancel:function () {
@@ -83,6 +84,23 @@
                 }
             }
         });
+        
+        $("#new_card_form").ajaxForm({
+    		url:'../addNewEmptyCard',
+    		type:'POST',
+    		beforeSubmit:function(formData, jqForm, options){
+    			var form = jqForm[0];
+    			var nameValue = form.card_name.value;
+    			if(!nameValue || 0 === nameValue || (/^\s*$/).test(nameValue)){
+    				alert("Name field is required and cannot be empty");
+    				return false;
+    			}
+    		},
+    		success:function(responseText, statusText, xhr, $form){
+    			$("div#cardHolder").html(responseText);
+	            initDnd();
+    		}
+    	});
 
         $("#dialog_confirm_delete_card").dialog({
             height:250,
@@ -112,7 +130,7 @@
 </r:script>
 <r:script>
     
-    var initDnd = function () {
+    var initDnd = function () {   	
     	
     	$("button", ".deleteCardButton").button({
             icons:{

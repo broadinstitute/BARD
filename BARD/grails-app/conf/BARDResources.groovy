@@ -5,7 +5,7 @@ modules = {
 		}
 	}
 	core {
-		dependsOn 'jquery, jquery-ui, jquery-theme, datatables'
+		dependsOn 'jquery, jquery-ui, jquery-theme, datatables, jqueryform'
 		//resource url:'/css/main.css'
 		//resource url:'/css/mobile.css'
 		resource url:'/css/datatables/demo_table_jui.css'
@@ -13,6 +13,9 @@ modules = {
 	}
 	datatables {
 		resource url: '/js/DataTables-1.9.3/media/js/jquery.dataTables.js'
+	}
+	jqueryform {
+		resource url: '/js/jquery.form.js'
 	}
 	images {
 	}
