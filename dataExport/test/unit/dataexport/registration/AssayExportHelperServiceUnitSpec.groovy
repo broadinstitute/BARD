@@ -8,6 +8,7 @@ import grails.test.mixin.Mock
 import groovy.xml.MarkupBuilder
 import org.codehaus.groovy.grails.web.mapping.LinkGenerator
 import spock.lang.Specification
+import spock.lang.Unroll
 import bard.db.registration.*
 
 /**
@@ -18,6 +19,7 @@ import bard.db.registration.*
  * To change this template use File | Settings | File Templates.
  */
 @Mock([Measure, AssayContextItem, AssayContext, Assay, AssayDocument])
+@Unroll
 class AssayExportHelperServiceUnitSpec extends Specification {
     Writer writer
     MarkupBuilder markupBuilder

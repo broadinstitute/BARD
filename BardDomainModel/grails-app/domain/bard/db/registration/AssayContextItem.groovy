@@ -29,8 +29,8 @@ class AssayContextItem {
 
     static mapping = {
         id(column: 'ASSAY_CONTEXT_ITEM_ID', generator: 'sequence', params: [sequence: 'ASSAY_CONTEXT_ITEM_ID_SEQ'])
-        valueElement column: "value_id"
-        attributeElement column: "attribute_id"
+        valueElement( column: "value_id", fetch: 'join')
+        attributeElement(column: "attribute_id", fetch: 'join')
         qualifier column: "qualifier", sqlType: "char", length: 2
     }
 

@@ -10,6 +10,7 @@ import grails.test.mixin.Mock
 import groovy.xml.MarkupBuilder
 import org.codehaus.groovy.grails.web.mapping.LinkGenerator
 import spock.lang.Specification
+import spock.lang.Unroll
 
 /**
  * Created with IntelliJ IDEA.
@@ -19,6 +20,7 @@ import spock.lang.Specification
  * To change this template use File | Settings | File Templates.
  */
 @Mock([Project])
+@Unroll
 class ProjectExportServiceUnitSpec extends Specification {
     Writer writer
     MarkupBuilder markupBuilder

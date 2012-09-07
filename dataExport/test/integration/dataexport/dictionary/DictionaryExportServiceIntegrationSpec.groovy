@@ -15,7 +15,9 @@ import javax.xml.transform.stream.StreamSource
 import javax.xml.validation.Schema
 import javax.xml.validation.SchemaFactory
 import javax.xml.validation.Validator
+import spock.lang.Unroll
 
+@Unroll
 class DictionaryExportServiceIntegrationSpec extends IntegrationSpec {
     static final String BARD_DICTIONARY_EXPORT_SCHEMA = "test/integration/dataexport/dictionary/dictionarySchema.xsd"
     DictionaryExportService dictionaryExportService

@@ -15,7 +15,9 @@ import groovy.xml.MarkupBuilder
 import org.codehaus.groovy.grails.web.mapping.LinkGenerator
 import spock.lang.Specification
 import bard.db.experiment.*
+import spock.lang.Unroll
 
+@Unroll
 /**
  * Created with IntelliJ IDEA.
  * User: jasiedu

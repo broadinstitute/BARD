@@ -37,11 +37,12 @@ class AssayContextService {
             sourceAssayContext.contextName = first?.valueDisplay?: AssayContext.CONTEXT_NAME_WITH_NO_ITEMS
         }
     }
-	
+
 	public AssayContext deleteItem(AssayContextItem assayContextItem){
 		AssayContext assayContext =  assayContextItem.assayContext
 		assayContext.removeFromAssayContextItems(assayContextItem)
 		assayContextItem.delete()
+        optionallyChangeContextName(assayContext)
 		return assayContext
 	}
 }

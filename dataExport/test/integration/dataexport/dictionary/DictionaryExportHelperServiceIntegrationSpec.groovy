@@ -5,7 +5,9 @@ import common.tests.XmlTestAssertions
 import common.tests.XmlTestSamples
 import grails.plugin.spock.IntegrationSpec
 import groovy.xml.MarkupBuilder
+import spock.lang.Unroll
 
+@Unroll
 class DictionaryExportHelperServiceIntegrationSpec extends IntegrationSpec {
     DictionaryExportHelperService dictionaryExportHelperService
     Writer writer

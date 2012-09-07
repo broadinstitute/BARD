@@ -13,7 +13,9 @@ import javax.xml.validation.Schema
 import javax.xml.validation.SchemaFactory
 import javax.xml.validation.Validator
 import bard.db.enums.ReadyForExtraction
+import spock.lang.Unroll
 
+@Unroll
 class AssayExportServiceIntegrationSpec extends IntegrationSpec {
     static final String BARD_ASSAY_EXPORT_SCHEMA = "test/integration/dataexport/registration/assaySchema.xsd"
 

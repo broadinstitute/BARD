@@ -16,7 +16,9 @@ import javax.xml.transform.stream.StreamSource
 import javax.xml.validation.Schema
 import javax.xml.validation.SchemaFactory
 import javax.xml.validation.Validator
+import spock.lang.Unroll
 
+@Unroll
 class ProjectExportServiceIntegrationSpec extends IntegrationSpec {
     static final String BARD_PROJECT_EXPORT_SCHEMA = "test/integration/dataexport/experiment/projectSchema.xsd"
 

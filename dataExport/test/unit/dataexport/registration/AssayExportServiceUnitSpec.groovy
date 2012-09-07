@@ -10,6 +10,7 @@ import grails.test.mixin.TestFor
 import groovy.xml.MarkupBuilder
 import org.codehaus.groovy.grails.web.mapping.LinkGenerator
 import spock.lang.Specification
+import spock.lang.Unroll
 import bard.db.registration.AssayStatus
 import bard.db.enums.ReadyForExtraction
 
@@ -22,6 +23,7 @@ import bard.db.enums.ReadyForExtraction
  */
 @TestFor(AssayExportService)
 @Mock([Assay, AssayDocument])
+@Unroll
 class AssayExportServiceUnitSpec extends Specification {
     Writer writer
     MarkupBuilder markupBuilder
