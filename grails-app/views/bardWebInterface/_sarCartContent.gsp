@@ -120,8 +120,8 @@
 
             <br/>
             <div class="leftofline">
-            <button>
-            <div class="btn-group">
+            <button class="visualizebiggerbutton">
+            <div class="btn-group" style="vertical-align: bottom;">
                 <a class="btn-small dropdown-toggle" data-toggle="dropdown" href="#">
                     <i class="icon-eye-open"></i> Visualize
                     <span class="caret"></span>
@@ -136,7 +136,7 @@
 
             <div class="rightofline">
 
-            <button><a href="/bardwebquery/sarCart/removeAll/0"
+            <button  class="visualizebiggerbutton"><a href="/bardwebquery/sarCart/removeAll/0"
                        onclick="jQuery.ajax({  type:'POST',
                            data:{'id': '0','class': 'class bardqueryapi.CartAssay','version': '0'},
                            url:'/bardwebquery/sarCart/removeAll',

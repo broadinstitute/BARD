@@ -38,11 +38,8 @@
     </div>
 
     <div class="span2">
-        <div class="well">
-            <div class="row-fluid">
-                <h5><nobr><i class="icon-shopping-cart"></i>Query Cart</nobr></h5>
-            </div>
-            <g:render template="queryCartIndicator"/>
+        <div class="well wellmod">
+           <g:render template="queryCartIndicator"/>
             <div class="row-fluid">
                 <h5><nobr><a class="trigger" href="#">View details/edit</a></nobr></h5>
             </div>

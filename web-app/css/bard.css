@@ -50,8 +50,6 @@ a.removeXMark {
     font-size: 14;
     font-weight: bold;
     font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
-
-
 }
 
 div.cntrcart {
@@ -131,7 +129,7 @@ ul.results > li {
     width: 330px;
     height: auto;
     padding: 30px 30px 30px 30px;
-    background-color: #E4F1DF;
+    background-color: #efe8d8;
     -moz-border-radius-topleft: 5px;
     -webkit-border-top-left-radius: 5px;
     -moz-border-radius-bottomleft: 5px;
@@ -201,7 +199,7 @@ a.addtocart { //right
     height: 200px;
 }
 img.addtocart {  //left
-width:200px;
+    width:200px;
     float:left;
 }
 
@@ -223,8 +221,38 @@ span.addtocart {
     background-color:#ccf;
 }
 span.addtocartfont {
-    margin-left: 20;
+    margin-left: 8;
     font-family: Helvetica, Arial, "Lucida Grande", sans-serif;
-    font-size: medium;
+    font-size: medium ;
     font-weight: bold;
+}
+
+button.visualizebutton  {
+    height: 24px;
+    width: 60px;
+    text-align: left;
+}
+button.visualizebiggerbutton  {
+    height:30px;
+    text-align: center;
+    vertical-align: middle;
+}
+table.leftofcenter {
+    margin-left: 10px;
+}
+td.leftofcenter {
+    margin-left: 50px;
+    height: 26px;
+}
+div.wellmod {
+    width: 100%;
+    border-top-width: 0px;
+    border-bottom-width: 0px;
+    border-left-width: 0px;
+    border-right-width: 0px;
+    padding-top: 0px;
+    padding-bottom: 0px;
+    padding-left: 10px;
+    padding-top: 10px;
+    background-color: #efe8d8;
 }
