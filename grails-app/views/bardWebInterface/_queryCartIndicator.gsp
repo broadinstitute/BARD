@@ -4,21 +4,21 @@
    QueryCartService  queryCartService  = grailsApplication.classLoader.loadClass('bardqueryapi.QueryCartService').newInstance()
    def mapOfUniqueItems = queryCartService.groupUniqueContentsByType(shoppingCartService)
 %>
-        <table>
+        <table width="100%" style="border: 0px">
             <tbody id="cartIdentRefill">
             <tr><td>
 
                 <div class="row-fluid" style="height: 20px">
+                    <nobr>
                     <div class="clear-fix">
                         <div class="pull-left">
                             <span class="addtocartfont"><i class="icon-shopping-cart"></i>Query Cart </span>
                         </div>
-                        <div class="pull-right" style="padding-left: 20px;">
+                        <div class="pull-right" style="padding-left: 3px;">
                             <button class="visualizebutton">
                                 <div class="btn-group" style="vertical-align: middle;">
-                                    <a class="btn-small dropdown-toggle" data-toggle="dropdown" href="#">
+                                    <a class="btn-small dropdown-toggle" data-toggle="dropdown" href="#" style="margin-left: -14px">
                                         Visualize
-                                        <span class="caret"></span>
                                     </a>
                                     <ul class="dropdown-menu">
                                         <li><a href="#">Visualize as Molecular Spreadsheet</a></li>
@@ -28,6 +28,7 @@
                             </button>
                         </div>
                     </div>
+                    </nobr>
                 </div>
                 <div class="row-fluid" style="height: 28px">
                     <hr width="100%" style="border-color: black">
@@ -49,7 +50,7 @@
                                     <tr>
                                         <td class="leftofcenter"><%=numberOfAssays%></td>
                                         <td class="leftofcenter">
-                                            <g:if test="${numberOfAssays=1}">
+                                            <g:if test="${numberOfAssays==1}">
                                                assay definition
                                             </g:if>
                                             <g:else>
@@ -61,7 +62,7 @@
                                     <tr>
                                         <td><%=numberOfCompounds%></td>
                                         <td>
-                                            <g:if test="${numberOfCompounds=1}">
+                                            <g:if test="${numberOfCompounds==1}">
                                                  compound
                                             </g:if>
                                             <g:else>
@@ -74,7 +75,7 @@
                                     <tr>
                                         <td> <%=numberOfProjects%></td>
                                         <td>
-                                            <g:if test="${numberOfProjects=1}">
+                                            <g:if test="${numberOfProjects==1}">
                                                  project
                                             </g:if>
                                             <g:else>
@@ -84,9 +85,6 @@
                                     </tr>
                                 </g:if>
                             </table>
-
-
-
                         </g:else>
                     </div>
                 </div>

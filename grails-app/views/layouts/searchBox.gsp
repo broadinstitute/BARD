@@ -96,9 +96,9 @@
         </g:form>
 
             <div class="span2">
-                <div class="well" style="width: 100%">
+                <div class="well wellmod">
                     <g:render template="queryCartIndicator"/>
-                    <div class="row-fluid">
+                    <div class="row-fluid" style="height: 30px">
                         <h5><nobr><a class="trigger" href="#">View details/edit</a></nobr></h5>
                     </div>
 
