@@ -418,36 +418,6 @@ describe("Testing search.js", function () {
             searchType=""
         });
 
-//        switch (searchType.toUpperCase()) {
-//            case 'FREE_TEXT':
-//                if (facetFormType == 'AssayFacetForm') {
-//                    return "searchAssays"
-//                }
-//                if (facetFormType == 'ProjectFacetForm') {
-//                    return "searchProjects"
-//                }
-//                if (facetFormType == 'CompoundFacetForm') {
-//                    return "searchCompounds"
-//                }
-//                break;
-//            case 'ID':
-//                if (facetFormType == 'AssayFacetForm') {
-//                    return 'searchAssaysByIDs'
-//                }
-//                if (facetFormType == 'ProjectFacetForm') {
-//                    return 'searchProjectsByIDs'
-//                }
-//                if (facetFormType == 'CompoundFacetForm') {
-//                    return 'searchCompoundsByIDs'
-//                }
-//                break;
-//            case 'STRUCTURE':
-//                if (facetFormType == 'CompoundFacetForm') {
-//                    return  'structureSearch'
-//                }
-//                break;
-//        }
-//        return "EMPTY"
         it("Should handle Empty Search Type", function () {
             var controllerAction = findTheAppropriateControllerActionFromFacetType(searchType, facetFormType);
             expect(controllerAction).toEqual("EMPTY");

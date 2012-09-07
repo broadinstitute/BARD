@@ -24,7 +24,6 @@ class BardWebInterfaceController {
 
     List<SearchFilter> filters = []
 
-
     def index() {
         homePage()
     }
@@ -290,31 +289,6 @@ class BardWebInterfaceController {
         handleProjectSearches(this.queryService, searchCommand)
     }
 
-//    def applyFilters(SearchCommand searchCommand) {
-//
-//        if (searchCommand.hasErrors()) {
-//            flash.message = searchCommand.errors
-//        }
-//        else {
-//            final List<SearchFilter> searchFilters = searchCommand.getAppliedFilters()
-//            String searchString = params.searchString?.trim()
-//            if (params.formName == FacetFormType.AssayFacetForm.toString()) {
-//                handleAssaySearches(this.queryService, searchString, searchFilters);
-//                return
-//            }
-//            else if (params.formName == FacetFormType.ProjectFacetForm.toString()) {
-//                handleProjectSearches(this.queryService, searchString, searchFilters);
-//                return
-//            }
-//            else if (params.formName == FacetFormType.CompoundFacetForm.toString()) {
-//                handleCompoundSearches(this.queryService, searchString, searchFilters);
-//                return
-//            }
-//        }
-//        return response.sendError(HttpServletResponse.SC_BAD_REQUEST,
-//                "Select at least one facet")
-//    }
-
     /**
      * TODO: Should redirect to NCGC
      * Autocomplete
@@ -342,20 +316,17 @@ class BardWebInterfaceController {
  * the RestController
  */
 class SearchHelper {
+    final static String GO_BIOLOGICAL_PROCESS_TERM = "gobp_term"
+
+    boolean isGoBiologicalTerm(String searchString) {
+        return searchString.toLowerCase().trim().startsWith(GO_BIOLOGICAL_PROCESS_TERM)
+    }
 
     def handleAssaySearches(final bardqueryapi.QueryService queryService, final SearchCommand searchCommand) {
-        List<SearchFilter> searchFilters = []
-        if (searchCommand.formName) {//user SearchCommand
-            searchFilters = searchCommand.getAppliedFilters()
-        } else {
-            searchFilters = params.filters
-            if (!searchFilters) {
-                searchFilters = []
-            }
-
-        }
         if (StringUtils.isNotBlank(searchCommand.searchString)) {
+             final List<SearchFilter> searchFilters = findFiltersInSearchBox(searchCommand)
             final String searchString = searchCommand.searchString.trim()
+
             try {
                 Map<String, Integer> searchParams = handleSearchParams()
                 int top = searchParams.top
@@ -380,19 +351,14 @@ class SearchHelper {
     }
 
     def handleCompoundSearches(final bardqueryapi.QueryService queryService, final SearchCommand searchCommand) {
-        List<SearchFilter> searchFilters = []
-        if (searchCommand.formName) {//user SearchCommand
-            searchFilters = searchCommand.getAppliedFilters()
-        } else {
-            searchFilters = params.filters
-            if (!searchFilters) {
-                searchFilters = []
-            }
 
-        }
         if (StringUtils.isNotBlank(searchCommand.searchString)) {
-            final String searchString = searchCommand.searchString.trim()
+
+
+            final List<SearchFilter> searchFilters = findFiltersInSearchBox(searchCommand)
+
             try {
+                final String searchString = searchCommand.searchString.trim()
                 final Map<String, Integer> searchParams = handleSearchParams()
                 final int top = searchParams.top
                 final int skip = searchParams.skip
@@ -418,19 +384,12 @@ class SearchHelper {
     }
 
     def handleProjectSearches(final bardqueryapi.QueryService queryService, final SearchCommand searchCommand) {
-        List<SearchFilter> searchFilters = []
-        if (searchCommand.formName) {//user SearchCommand
-            searchFilters = searchCommand.getAppliedFilters()
-        } else {
-            searchFilters = params.filters
-            if (!searchFilters) {
-                searchFilters = []
-            }
 
-        }
         if (StringUtils.isNotBlank(searchCommand.searchString)) {
-            final String searchString = searchCommand.searchString.trim()
+
+            final List<SearchFilter> searchFilters = findFiltersInSearchBox(searchCommand)
             try {
+                final String searchString = searchCommand.searchString.trim()
                 Map<String, Integer> searchParams = handleSearchParams()
                 int top = searchParams.top
                 int skip = searchParams.skip
@@ -467,5 +426,29 @@ class SearchHelper {
     public List<Long> searchStringToIdList(String searchString) {
         List<Long> ids = searchString.replaceAll("\\s+", "").split(",") as List<Long>
         return ids
+    }
+
+    /**
+     *
+     * @param searchCommand
+     * @return list of filters from search String
+     */
+    public List<SearchFilter> findFiltersInSearchBox(SearchCommand searchCommand) {
+
+        List<SearchFilter> searchFilters = searchCommand.getAppliedFilters()
+        if (!searchFilters) {//user SearchCommand
+            searchFilters = []
+        }
+
+        final String searchString = searchCommand.searchString
+        //now parse the GO TERMS out of it
+        if (isGoBiologicalTerm(searchString)) {
+            String[] split = searchString.split(":")
+            String searchValue = split[1].trim()
+            SearchFilter searchFilter = new SearchFilter(filterName: GO_BIOLOGICAL_PROCESS_TERM, filterValue: searchValue.trim())
+            searchCommand.searchString = searchValue.trim()
+            searchFilters.add(searchFilter)
+        }
+        return searchFilters
     }
 }

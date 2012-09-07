@@ -326,12 +326,14 @@ function findSearchType(searchString) {
     var searchType = searchStringSplit[0];
     if (searchStringSplit.length == 2 && $.trim(searchStringSplit[1]).length) { //has to be of the form Exact:CCC so there must be 2 things in the array
         searchType = searchType.toLowerCase();
+
         switch (searchType) { //must be one of these to qualify as a structure search
             case 'exact':
             case 'substructure':
             case 'superstructure':
             case 'similarity':
                 return 'STRUCTURE';
+
         }
     }
     return "FREE_TEXT"; //this a Free Text Search
