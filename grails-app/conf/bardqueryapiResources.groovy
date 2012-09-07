@@ -8,7 +8,12 @@ modules = {
         dependsOn 'jquery, jquery-ui, jquery-theme'
         //resource url:'/css/mobile.css'
         resource url:'/js/application.js'
+        resource url:"css/bard.css"
     }
     images {
+    }
+    search {
+        resource url:"js/search.js"
+        resource url:"js/structureSearchDialog.js"
     }
 }

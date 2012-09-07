@@ -1,4 +1,3 @@
-<%@ page import="bard.core.StructureSearchParams" %>
 <!doctype html>
 <!--[if lt IE 7 ]> <html lang="en" class="no-js ie6"> <![endif]-->
 <!--[if IE 7 ]>    <html lang="en" class="no-js ie7"> <![endif]-->
@@ -13,30 +12,6 @@
     <link rel="shortcut icon" href="${resource(dir: 'images', file: 'favicon.ico')}" type="image/x-icon">
     <link rel="apple-touch-icon" href="${resource(dir: 'images', file: 'apple-touch-icon.png')}">
     <link rel="apple-touch-icon" sizes="114x114" href="${resource(dir: 'images', file: 'apple-touch-icon-retina.png')}">
-
-    <r:script>
-            $(document).ready(function () {
-                $('#modalDiv').modal({
-                    show: false
-                }).css({
-                    height: '655',
-                    width: '565'
-                });
-                $('#modalDiv').on('show', function () {
-                    parent.$('#searchButton').click(function () {
-                        var structureSearchTypeSelected = parent.$('input:radio[name=structureSearchType]:checked').val();
-                        var marvinSketch = $('#MarvinSketch')[0];
-                        var smiles = marvinSketch.getMol('smiles');
-
-                        //construct the query into a form that we want
-                        var constructedSearch =structureSearchTypeSelected + ":" + smiles;
-                        parent.$('#searchString').attr('value', constructedSearch);
-                        parent.$('#searchForm').submit();
-
-                   });
-            });
-        });
-    </r:script>
 
     <r:script>
         var trackStatus=0;
@@ -73,7 +48,7 @@
     </r:script>
 
     <g:layoutHead/>
-    <r:require modules="core,bootstrap,search,common" />
+    <r:require modules="core,bootstrap,search" />
     <r:layoutResources />
 </head>
 <body>
@@ -125,36 +100,11 @@
     </div>
 </div>
 <div id="spinner" class="spinner" style="display:none;"><g:message code="spinner.alt" default="Loading&hellip;"/></div>
-<g:javascript library="application"/>
-<r:require modules="core,bootstrap,search,common"/>
+
+<g:render template="structureSearchBox"/>
+
+<r:require modules="core,bootstrap,search"/>
 <r:layoutResources />
-
-<%-- MarvinSketch's modal window --%>
-<div class="modal hide" id="modalDiv">
-    <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal">×</button>
-        <h3>Draw or paste a structure</h3>
-    </div>
-    <div class="modal-body">
-        <g:render template="/chemAxon/marvinSketch" />
-    </div>
-    <div class="modal-footer">
-            <div class="control-group"><div class="controls">
-                <g:radioGroup name="structureSearchType"
-                              values="${StructureSearchParams.Type.values()}"
-                              value="${StructureSearchParams.Type.Substructure}"
-                              labels="${StructureSearchParams.Type.values()}">
-                    <label class="radio inline">
-                        ${it.radio} ${it.label}
-                    </label>
-                </g:radioGroup>
-            </div></div>
-            <a href="#" class="btn" data-dismiss="modal">Close</a>
-            <g:submitButton name="searchButton" id="searchButton" value="Search" class="btn btn-primary" data-dismiss="modal"/>
-    </div>
-</div>
-
-
 
 <div class="panel">
     <a class="trigger" href="#">Click to hide query cart</a>
