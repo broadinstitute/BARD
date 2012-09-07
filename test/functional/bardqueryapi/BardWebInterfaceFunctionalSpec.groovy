@@ -81,11 +81,6 @@ class BardWebInterfaceFunctionalSpec extends Specification {
         "Find Projects"  | "dna+repair" | "searchProjects"  | "filters[0].filterName=num_expt"  | "filters[0].filterValue=6"                    | "formName=" + FacetFormType.ProjectFacetForm.toString()
         "Find Assays"    | "dna+repair" | "searchAssays"    | "filters[0].filterName=gobp_term" | "filters[0].filterValue=response%20to%20UV-C" | "formName=" + FacetFormType.AssayFacetForm.toString()
         "Find Compounds" | "dna+repair" | "searchCompounds" | "filters[0].filterName=tpsa"      | "filters[0].filterValue=55.1"                 | "formName=" + FacetFormType.CompoundFacetForm.toString()
-//        "Super structure search" | "${StructureSearchParams.Type.Superstructure}:O=S(*C)(Cc1ccc2ncc(CCNC)c2c1)=O"           | "searchStructures"
-//        "Similarity Search"      | "${StructureSearchParams.Type.Similarity}:CN(C)CCC1=CNC2=C1C=C(CS(=O)(=O)N3CCCC3)C=C2"   | "searchStructures"
-//        "Exact match Search"     | "${StructureSearchParams.Type.Exact}:CN(C)CCC1=CNC2=C1C=C(CS(=O)(=O)N3CCCC3)C=C2"        | "searchStructures"
-//        "Sub structure Search"   | "${StructureSearchParams.Type.Substructure}:CN(C)CCC1=CNC2=C1C=C(CS(=O)(=O)N3CCCC3)C=C2" | "searchStructures"
-
     }
 
     def "Test Auto Complete querying"() {

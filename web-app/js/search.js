@@ -151,10 +151,16 @@ function handleSearch(controllerAction, currentFormId, tabId, totalHitsForResour
         }
     });
 }
+
 /**
- * TODO: There ought to be a better way of doing this. Please refactor
- * Handles form submission
- * @param searchString
+ * Handles filtered form submission
+ * @param searchString - The search string started by the user
+ * @param facetFormType - The facet form type
+ * @param currentFormId - The id of the currently selected form
+ * @param currentTabId  -   The id of the currently selected tab
+ * @param numberOfHitsDivId  - The id of the div where we would display the total number of hits
+ * @param updateId    - The id of the div where we would display the results of the ajax call
+ * @param tabDisplayPrefix   The prefix for the string that we would display on the currently selected tab (for example 'Assay Definitions')
  */
 function handleFilteredQuery(searchString, facetFormType, currentFormId, currentTabId, numberOfHitsDivId, updateId, tabDisplayPrefix) {
 
@@ -167,11 +173,25 @@ function handleFilteredQuery(searchString, facetFormType, currentFormId, current
     }
 
 }
+/**
+ * Based on the search String and the facetFormType figure out the Controller action to call
+ * @param searchString
+ * @param facetFormType
+ * @return {String}
+ */
 function findTheAppropriateControllerActionForRequest(searchString, facetFormType) {
 
     var searchType = findSearchType(searchString);
+    return findTheAppropriateControllerActionFromFacetType(searchType,facetFormType)
+}
+function findTheAppropriateControllerActionFromFacetType(searchType,facetFormType) {
+    if (!$.trim(searchType).length){ //if empty search string
+        return "EMPTY"
+    }
+    if (!$.trim(facetFormType).length){  //if empty facet form type
+        return "EMPTY"
+    }
 
-    //find the right controller to send request to
     switch (searchType.toUpperCase()) {
         case 'FREE_TEXT':
             if (facetFormType == 'AssayFacetForm') {
@@ -206,8 +226,8 @@ function findTheAppropriateControllerActionForRequest(searchString, facetFormTyp
 }
 
 /**
- * Handles form submission
- * @param searchString
+ * Handles form submission from the main form
+ * @param searchString  - The string entered into the main form's search box
  */
 function handleMainFormSubmit(searchString) {
 
@@ -289,7 +309,7 @@ function resetTabsForStructureSearches() {
     deActivateTabs('projectsTab', 'projectsTabLi', 'projects', 'Projects (0)');
 }
 /**
- * Find the search type
+ * Find the search type based on the search string supplied by the user
  * @return {String} - One of 'FREE_TEXT', 'STRUCTURE', 'EMPTY' or 'ID'
  */
 function findSearchType(searchString) {

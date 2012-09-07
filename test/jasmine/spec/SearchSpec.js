@@ -109,10 +109,9 @@ describe("Testing search.js", function () {
             handleAllIdSearches();
             expect(handleSearch).toHaveBeenCalled();
             expect(handleSearch.calls.length).toEqual(3);
-
-            expect(handleSearch).toHaveBeenCalledWith('searchAssaysByIDs', 'assaysTab', 'totalAssays', 'Assay Definitions ', 'assays');
-            expect(handleSearch).toHaveBeenCalledWith('searchCompoundsByIDs', 'compoundsTab', 'totalCompounds', 'Compounds ', 'compounds');
-            expect(handleSearch).toHaveBeenCalledWith('searchProjectsByIDs', 'projectsTab', 'totalProjects', 'Projects ', 'projects');
+            expect(handleSearch).toHaveBeenCalledWith('searchAssaysByIDs', 'searchForm', 'assaysTab', 'totalAssays', 'Assay Definitions ', 'assays');
+            expect(handleSearch).toHaveBeenCalledWith('searchCompoundsByIDs', 'searchForm', 'compoundsTab', 'totalCompounds', 'Compounds ', 'compounds');
+            expect(handleSearch).toHaveBeenCalledWith('searchProjectsByIDs', 'searchForm', 'projectsTab', 'totalProjects', 'Projects ', 'projects');
 
             //should not have been called with any of the calls for a free text search
             expect(handleSearch).not.toHaveBeenCalledWith('searchProjects', 'projectsTab', 'totalProjects', 'Projects ', 'projects');
@@ -126,12 +125,12 @@ describe("Testing search.js", function () {
             expect(handleSearch).toHaveBeenCalled();
             expect(handleSearch.calls.length).toEqual(3);
 
-            expect(handleSearch).toHaveBeenCalledWith('searchAssays', 'assaysTab', 'totalAssays', 'Assay Definitions ', 'assays');
-            expect(handleSearch).toHaveBeenCalledWith('searchCompounds', 'compoundsTab', 'totalCompounds', 'Compounds ', 'compounds');
-            expect(handleSearch).toHaveBeenCalledWith('searchProjects', 'projectsTab', 'totalProjects', 'Projects ', 'projects');
+            expect(handleSearch).toHaveBeenCalledWith('searchAssays', 'searchForm', 'assaysTab', 'totalAssays', 'Assay Definitions ', 'assays');
+            expect(handleSearch).toHaveBeenCalledWith('searchCompounds', 'searchForm', 'compoundsTab', 'totalCompounds', 'Compounds ', 'compounds');
+            expect(handleSearch).toHaveBeenCalledWith('searchProjects', 'searchForm', 'projectsTab', 'totalProjects', 'Projects ', 'projects');
 
             //should not have been called with any of the calls for an id search
-            expect(handleSearch).not.toHaveBeenCalledWith('searchProjectsByIDs', 'projectsTab', 'totalProjects', 'Projects ', 'projects');
+            expect(handleSearch).not.toHaveBeenCalledWith('searchProjectsByIDs', 'searchForm', 'projectsTab', 'totalProjects', 'Projects ', 'projects');
         });
     });
     describe("Test resetTabsForStructureSearches()", function () {
@@ -226,7 +225,7 @@ describe("Testing search.js", function () {
 
             expect(handleStructureSearch).toHaveBeenCalled();
             expect(handleStructureSearch.calls.length).toEqual(1);
-            expect(handleStructureSearch).toHaveBeenCalledWith();
+            expect(handleStructureSearch).toHaveBeenCalledWith('searchForm');
 
         });
     });
@@ -323,54 +322,200 @@ describe("Testing search.js", function () {
             expect($('#projectsTabLi')).not.toHaveClass('active')
         });
     });
-    describe("test handleFilterFormSubmit()", function () {
-        var fakeData;
-        var errorData;
+    describe("test handleFilteredQuery()", function () {
+        var searchString;
 
         beforeEach(function () {
-            fakeData = "Fake Data From Server";
-            errorData = "You can put your errorData Here";
-            appendSetFixtures('<li id="tabId"></li>');
-            appendSetFixtures('<li id="totalHitsForResourceId"></li>');
-            appendSetFixtures('<li id="updateDiv"></li>');
-
+            spyOn(window, "handleSearch");
+            spyOn(window, "handleStructureSearch");
+            searchString = ""
         });
 
 
-        it("Should be a successful call", function () {
-            //mocking ajax call with Jasmine Spies
-            spyOn($, "ajax").andCallFake(function (params) {
-                params.success(fakeData);
-            });
-
-            //we expect these to be empty
-            expect($('#tabId')).toBeEmpty();
-            expect($('#updateDiv')).toBeEmpty();
-
-            handleFilterFormSubmit('currentFormId', 'tabId', 'totalHitsForResourceId','updateDiv', 'displayStringPrefix');
-
-            //do assertions
-            expect($('#tabId')).toHaveText('displayStringPrefix (0)');
-            expect($('#updateDiv')).toHaveText(fakeData);
+        it("Should handle empty String", function () {
+            spyOn(window, "findTheAppropriateControllerActionForRequest").andReturn("EMPTY")
+            handleFilteredQuery(searchString, 'facetFormType', 'currentFormId', 'currentTabId', 'numberOfHitsDivId', 'updateId', 'tabDisplayPrefix');
+            expect(handleSearch).not.toHaveBeenCalled();
+            expect(handleStructureSearch).not.toHaveBeenCalled();
         });
 
-        it("Should be an Error condition", function () {
-            //mocking ajax call with Jasmine Spies
-            spyOn($, "ajax").andCallFake(function (params) {
-                params.error(errorData)
-            });
+        it("Should handle Structure String", function () {
+            searchString = "Stuff"
+            spyOn(window, "findTheAppropriateControllerActionForRequest").andReturn("structureSearch")
+            handleFilteredQuery(searchString, 'facetFormType', 'currentFormId', 'currentTabId', 'numberOfHitsDivId', 'updateId', 'tabDisplayPrefix');
+            expect(handleSearch).not.toHaveBeenCalled();
+            expect(handleStructureSearch).toHaveBeenCalledWith('currentFormId');
+        });
+        it("Should handle any other search", function () {
+            searchString = "Stuff"
+            spyOn(window, "findTheAppropriateControllerActionForRequest").andReturn("Default")
+            handleFilteredQuery(searchString, 'facetFormType', 'currentFormId', 'currentTabId', 'numberOfHitsDivId', 'updateId', 'tabDisplayPrefix');
+            expect(handleSearch).toHaveBeenCalledWith("Default", 'currentFormId', 'currentTabId', 'numberOfHitsDivId', 'tabDisplayPrefix', 'updateId');
+            expect(handleStructureSearch).not.toHaveBeenCalled();
+        });
+    });
 
-            //we expect these to be empty
-            expect($('#tabId')).toBeEmpty();
-            expect($('#updateDiv')).toBeEmpty();
+    describe("test findTheAppropriateControllerActionForRequest()", function () {
+        var searchString
+        var facetFormType;
+        var searchType
+        beforeEach(function () {
+            facetFormType = ""
+            searchType=""
+            searchString =""
+            spyOn(window, "findTheAppropriateControllerActionFromFacetType")
+        });
+        it("Should handle Free Text Search", function () {
+            searchString = "Free"
+            facetFormType = "Text"
+            searchType="FREE_TEXT"
+            spyOn(window, "findSearchType").andReturn(searchType);
+            findTheAppropriateControllerActionForRequest(searchString, facetFormType);
 
-            handleFilterFormSubmit('currentFormId', 'tabId', 'totalHitsForResourceId','updateDiv' ,'displayStringPrefix');
-            //do assertions
-            expect($('#tabId')).toHaveText('displayStringPrefix');
+            expect(findSearchType).toHaveBeenCalledWith(searchString)
+            expect(findTheAppropriateControllerActionFromFacetType).toHaveBeenCalledWith(searchType,facetFormType);
+        });
+        it("Should handle ID Search", function () {
+            searchString = "123"
+            facetFormType = "Text"
+            searchType="ID"
 
-            //Here is what we get back in the error. displayStringPrefix<img src="" class="icon-exclamation-sign" alt="error" height="16" width="16">
-            expect($('#tabId')).toContain('img.icon-exclamation-sign');
-            expect($('#updateDiv')).toBeEmpty();
+            spyOn(window, "findSearchType").andReturn(searchType);
+            findTheAppropriateControllerActionForRequest(searchString, facetFormType);
+
+            expect(findSearchType).toHaveBeenCalledWith(searchString)
+            expect(findTheAppropriateControllerActionFromFacetType).toHaveBeenCalledWith(searchType,facetFormType);
+        });
+        it("Should handle Structure Search", function () {
+            searchString = "Exact:CC"
+            facetFormType = "Text"
+            searchType="STRUCTURE"
+            spyOn(window, "findSearchType").andReturn(searchType);
+            findTheAppropriateControllerActionForRequest(searchString, facetFormType);
+
+            expect(findSearchType).toHaveBeenCalledWith(searchString)
+            expect(findTheAppropriateControllerActionFromFacetType).toHaveBeenCalledWith(searchType,facetFormType);
+        });
+        it("Should handle Empty", function () {
+            searchString = ""
+            facetFormType = "Text"
+            searchType="EMPTY"
+            spyOn(window, "findSearchType").andReturn(searchType);
+            findTheAppropriateControllerActionForRequest(searchString, facetFormType);
+
+            expect(findSearchType).toHaveBeenCalledWith(searchString)
+            expect(findTheAppropriateControllerActionFromFacetType).toHaveBeenCalledWith(searchType,facetFormType);
+
+        });
+    });
+
+
+    describe("test findTheAppropriateControllerActionFromFacetType()", function () {
+        var facetFormType;
+        var searchType
+        beforeEach(function () {
+            facetFormType = ""
+            searchType=""
+        });
+
+//        switch (searchType.toUpperCase()) {
+//            case 'FREE_TEXT':
+//                if (facetFormType == 'AssayFacetForm') {
+//                    return "searchAssays"
+//                }
+//                if (facetFormType == 'ProjectFacetForm') {
+//                    return "searchProjects"
+//                }
+//                if (facetFormType == 'CompoundFacetForm') {
+//                    return "searchCompounds"
+//                }
+//                break;
+//            case 'ID':
+//                if (facetFormType == 'AssayFacetForm') {
+//                    return 'searchAssaysByIDs'
+//                }
+//                if (facetFormType == 'ProjectFacetForm') {
+//                    return 'searchProjectsByIDs'
+//                }
+//                if (facetFormType == 'CompoundFacetForm') {
+//                    return 'searchCompoundsByIDs'
+//                }
+//                break;
+//            case 'STRUCTURE':
+//                if (facetFormType == 'CompoundFacetForm') {
+//                    return  'structureSearch'
+//                }
+//                break;
+//        }
+//        return "EMPTY"
+        it("Should handle Empty Search Type", function () {
+            var controllerAction = findTheAppropriateControllerActionFromFacetType(searchType, facetFormType);
+            expect(controllerAction).toEqual("EMPTY");
+        });
+        it("Should handle Empty Form Type", function () {
+            searchType="Some String"
+            var controllerAction = findTheAppropriateControllerActionFromFacetType(searchType, facetFormType);
+            expect(controllerAction).toEqual("EMPTY");
+        });
+        it("Should handle Free Text and AssayFacetForm type", function () {
+            facetFormType = "AssayFacetForm"
+            searchType="FREE_TEXT"
+            var controllerAction = findTheAppropriateControllerActionFromFacetType(searchType, facetFormType);
+            expect(controllerAction).toEqual("searchAssays");
+        });
+        it("Should handle Free Text and ProjectFacetForm type", function () {
+            facetFormType = "ProjectFacetForm"
+            searchType="FREE_TEXT"
+            var controllerAction = findTheAppropriateControllerActionFromFacetType(searchType, facetFormType);
+            expect(controllerAction).toEqual("searchProjects");
+        });
+        it("Should handle Free Text and CompoundFacetForm type", function () {
+            facetFormType = "CompoundFacetForm"
+            searchType="FREE_TEXT"
+            var controllerAction = findTheAppropriateControllerActionFromFacetType(searchType, facetFormType);
+            expect(controllerAction).toEqual("searchCompounds");
+        });
+        it("Should handle ID and AssayFacetForm type", function () {
+            facetFormType = "AssayFacetForm"
+            searchType="ID"
+            var controllerAction = findTheAppropriateControllerActionFromFacetType(searchType, facetFormType);
+            expect(controllerAction).toEqual("searchAssaysByIDs");
+        });
+        it("Should handle ID and ProjectFacetForm type", function () {
+            facetFormType = "ProjectFacetForm"
+            searchType="ID"
+            var controllerAction = findTheAppropriateControllerActionFromFacetType(searchType, facetFormType);
+            expect(controllerAction).toEqual("searchProjectsByIDs");
+        });
+        it("Should handle ID and CompoundFacetForm type", function () {
+            facetFormType = "CompoundFacetForm"
+            searchType="ID"
+            var controllerAction = findTheAppropriateControllerActionFromFacetType(searchType, facetFormType);
+            expect(controllerAction).toEqual("searchCompoundsByIDs");
+        });
+        it("Should handle STRUCTURE and AssayFacetForm type", function () {
+            facetFormType = "AssayFacetForm"
+            searchType="STRUCTURE"
+            var controllerAction = findTheAppropriateControllerActionFromFacetType(searchType, facetFormType);
+            expect(controllerAction).toEqual("EMPTY");
+        });
+        it("Should handle STRUCTURE and ProjectFacetForm type", function () {
+            facetFormType = "ProjectFacetForm"
+            searchType="STRUCTURE"
+            var controllerAction = findTheAppropriateControllerActionFromFacetType(searchType, facetFormType);
+            expect(controllerAction).toEqual("EMPTY");
+        });
+        it("Should handle STRUCTURE and CompoundFacetForm type", function () {
+            facetFormType = "CompoundFacetForm"
+            searchType="STRUCTURE"
+            var controllerAction = findTheAppropriateControllerActionFromFacetType(searchType, facetFormType);
+            expect(controllerAction).toEqual("structureSearch");
+        });
+        it("Should handle Any Other String and facet type", function () {
+            facetFormType = "CompoundFacetForm"
+            searchType="I_DO_NOT_EXIST"
+            var controllerAction = findTheAppropriateControllerActionFromFacetType(searchType, facetFormType);
+            expect(controllerAction).toEqual("EMPTY");
         });
     });
     describe("test handleSearch()", function () {
@@ -382,6 +527,7 @@ describe("Testing search.js", function () {
             errorData = "You can put your errorData Here";
 
             appendSetFixtures('<li id="tabId"></li>');
+            appendSetFixtures('<li id="currentFormId"></li>');
             appendSetFixtures('<li id="totalHitsForResourceId"></li>');
             appendSetFixtures('<li id="updateDiv"></li>');
 
@@ -397,7 +543,7 @@ describe("Testing search.js", function () {
             expect($('#tabId')).toBeEmpty();
             expect($('#updateDiv')).toBeEmpty();
 
-            handleSearch('controllerAction', 'tabId', 'totalHitsForResourceId', 'displayStringPrefix', 'updateDiv');
+            handleSearch('controllerAction', 'currentFormId', 'tabId', 'totalHitsForResourceId', 'displayStringPrefix', 'updateDiv');
 
             //do assertions
             expect($('#tabId')).toHaveText('displayStringPrefix(0)');
@@ -414,7 +560,7 @@ describe("Testing search.js", function () {
             expect($('#tabId')).toBeEmpty();
             expect($('#updateDiv')).toBeEmpty();
 
-            handleSearch('controllerAction', 'tabId', 'totalHitsForResourceId', 'displayStringPrefix', 'updateDiv');
+            handleSearch('controllerAction', 'currentFormId', 'tabId', 'totalHitsForResourceId', 'displayStringPrefix', 'updateDiv');
             //do assertions
             expect($('#tabId')).toHaveText('displayStringPrefix');
 
@@ -431,6 +577,7 @@ describe("Testing search.js", function () {
             fakeData = "Fake Data From Server";
             errorData = "You can put your return data here";
             appendSetFixtures('<li id="tabId"></li>');
+            appendSetFixtures('<li id="currentFormId"></li>');
             appendSetFixtures('<li id="totalHitsForResourceId"></li>');
             appendSetFixtures('<li id="updateDiv"></li>');
 
@@ -446,7 +593,7 @@ describe("Testing search.js", function () {
                 params.success(fakeData);
             });
 
-            handleSearch('controllerAction', 'tabId', 'totalHitsForResourceId', 'displayStringPrefix', 'updateDiv');
+            handleSearch('controllerAction', 'currentFormId', 'tabId', 'totalHitsForResourceId', 'displayStringPrefix', 'updateDiv');
             expect($('#tabId')).toHaveText('displayStringPrefix(0)');
             expect($('#updateDiv')).toHaveText(fakeData);
 
@@ -462,7 +609,7 @@ describe("Testing search.js", function () {
                 params.error(errorData);
             });
 
-            handleSearch('controllerAction', 'tabId', 'totalHitsForResourceId', 'displayStringPrefix', 'updateDiv');
+            handleSearch('controllerAction', 'currentFormId', 'tabId', 'totalHitsForResourceId', 'displayStringPrefix', 'updateDiv');
             //do assertions
             expect($('#tabId')).toHaveText('displayStringPrefix');
 
