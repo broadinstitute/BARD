@@ -170,7 +170,7 @@ describe("Testing search.js", function () {
             spyOn(window, "findSearchType").andReturn("FREE_TEXT");
 
             //call the method under test
-            handleFormSubmit(searchString);
+            handleMainFormSubmit(searchString);
 
             expect(findSearchType).toHaveBeenCalled();
             expect(findSearchType.calls.length).toEqual(1);
@@ -190,7 +190,7 @@ describe("Testing search.js", function () {
         it("should verify that only handleAllIdSearches() is called", function () {
             spyOn(window, "findSearchType").andReturn("ID");
             //call the method under test
-            handleFormSubmit(searchString);
+            handleMainFormSubmit(searchString);
 
             expect(findSearchType).toHaveBeenCalled();
             expect(findSearchType.calls.length).toEqual(1);
@@ -211,7 +211,7 @@ describe("Testing search.js", function () {
         it("should verify that only handleAllIdSearches() is called", function () {
             spyOn(window, "findSearchType").andReturn("STRUCTURE");
             //call the method under test
-            handleFormSubmit(searchString);
+            handleMainFormSubmit(searchString);
 
             expect(findSearchType).toHaveBeenCalled();
             expect(findSearchType.calls.length).toEqual(1);

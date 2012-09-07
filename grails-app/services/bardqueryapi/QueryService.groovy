@@ -135,7 +135,7 @@ class QueryService {
      * @param skip
      * @return of compounds
      */
-    Map structureSearch(final String smiles, final StructureSearchParams.Type structureSearchParamsType, final int top = 50, final int skip = 0, final List<SearchFilter> searchFilters = []) {
+    Map structureSearch(final String smiles, final StructureSearchParams.Type structureSearchParamsType, final List<SearchFilter> searchFilters = [], final int top = 50, final int skip = 0) {
         final List<CompoundAdapter> compoundAdapters = []
         Collection<Value> facets = []
 
@@ -178,7 +178,7 @@ class QueryService {
      * @param compoundIds
      * @return list
      */
-    Map findCompoundsByCIDs(final List<Long> compoundIds) {
+    Map findCompoundsByCIDs(final List<Long> compoundIds, List<SearchFilter> filters=[]) {
         final List<CompoundAdapter> compoundAdapters = []
         Collection<Value> facets = []
 
@@ -201,7 +201,7 @@ class QueryService {
      * @param assayIds
      * @return list
      */
-    Map findAssaysByADIDs(final List<Long> assayIds) {
+    Map findAssaysByADIDs(final List<Long> assayIds, List<SearchFilter> filters=[]) {
         final List<AssayAdapter> foundAssayAdapters = []
         Collection<Value> facets = []
 
@@ -223,7 +223,7 @@ class QueryService {
      * @param projectIds
      * @return list
      */
-    Map findProjectsByPIDs(final List<Long> projectIds) {
+    Map findProjectsByPIDs(final List<Long> projectIds, List<SearchFilter> filters=[]) {
         Collection<Value> facets = []
         final List<ProjectAdapter> foundProjectAdapters = []
         if (projectIds) {

@@ -118,7 +118,7 @@ class QueryServiceIntegrationSpec extends IntegrationSpec {
      */
     void "test Structure Search #label"() {
         when: ""
-        final Map compoundAdapterMap = queryService.structureSearch(smiles, structureSearchParamsType, top, skip)
+        final Map compoundAdapterMap = queryService.structureSearch(smiles, structureSearchParamsType,[], top, skip)
         then:
         assert compoundAdapterMap
         final List<CompoundAdapter> compoundAdapters = compoundAdapterMap.compoundAdapters

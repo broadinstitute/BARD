@@ -22,7 +22,7 @@ $(document).ready(function () {
     //set up form submission
     $('#searchForm').submit(function (event) {
         var searchString = $("#searchString").val();
-        handleFormSubmit(searchString);
+        handleMainFormSubmit(searchString);
         return false; //do not submit form the normal way, use Ajax instead
 
     });
@@ -33,67 +33,71 @@ $(document).ready(function () {
     //these forms would not exist when the document first loads
     $('#AssayFacetForm').live('submit', function (event) {
         var searchString = $("#searchString").val();
-        handleFilterFormSubmit('AssayFacetForm', 'assaysTab', 'totalAssays', 'assays', 'Assay Definitions ');
+        handleFilteredQuery(searchString, 'AssayFacetForm', 'AssayFacetForm', 'assaysTab', 'totalAssays', 'assays', 'Assay Definitions ');
         return false; //do not submit form the normal way, use Ajax instead
 
     });
     $('#ProjectFacetForm').live('submit', function (event) {
         var searchString = $("#searchString").val();
-        handleFilterFormSubmit('ProjectFacetForm', 'projectsTab', 'totalProjects', 'projects', 'Projects ');
+        handleFilteredQuery(searchString, 'ProjectFacetForm', 'ProjectFacetForm', 'projectsTab', 'totalProjects', 'projects', 'Projects ');
         return false; //do not submit form the normal way, use Ajax instead
     });
     $('#CompoundFacetForm').live('submit', function (event) {
         var searchString = $("#searchString").val();
-        handleFilterFormSubmit('CompoundFacetForm', 'compoundsTab', 'totalCompounds', 'compounds', 'Compounds ');
+        handleFilteredQuery(searchString, 'CompoundFacetForm', 'CompoundFacetForm', 'compoundsTab', "totalCompounds", 'compounds', 'Compounds ')
         return false; //do not submit form the normal way, use Ajax instead
 
     });
 });
 
-/**
- * @param currentFormId - The id of the currently selected form
- * @param currentTabId - The id of the currently selected tab
- * @param numberOfHitsDivId - The id of the div where we would display the total number of hits
- * @param updateId - The id of the div where we would display the results of the ajax call
- * @param tabDisplayPrefix - The prefix for the string that we would display on the currently selected tab (for example 'Assay Definitions')
- */
-function handleFilterFormSubmit(currentFormId, currentTabId, numberOfHitsDivId, updateId, tabDisplayPrefix) {
-
-    var fullURL = '/bardwebquery/bardWebInterface/applyFilters';
-    var currentTabDivId = '#' + currentTabId;
-    var totalHitsElement = '#' + numberOfHitsDivId;
-    var updateDivId = '#' + updateId;
-    var formId = '#' + currentFormId;
-
-    $.ajax({
-        url:fullURL,
-        type:'POST',
-        data:$(formId).serialize(),
-        cache:false,
-        beforeSend:function () {
-            $(currentTabDivId).html(tabDisplayPrefix + spinnerImageLink);
-        },
-        success:function (data) {
-            $(updateDivId).html(data);
-            var total = tabDisplayPrefix + ' (' + $(totalHitsElement).val() + ')';
-            $(currentTabDivId).html(total);
-        },
-        error:function (request, status, error) {
-            $(currentTabDivId).html(tabDisplayPrefix + errorImageTwitterBootstrap);
-            $(updateDivId).html(error);
-        },
-        complete:function () {
-        }
-    });
-}
+///**
+// * @param controllerAction -
+// * @param currentFormId - The id of the currently selected form
+// * @param currentTabId - The id of the currently selected tab
+// * @param numberOfHitsDivId - The id of the div where we would display the total number of hits
+// * @param updateId - The id of the div where we would display the results of the ajax call
+// * @param tabDisplayPrefix - The prefix for the string that we would display on the currently selected tab (for example 'Assay Definitions')
+// */
+//function handleFilterFormSubmit(controllerAction, currentFormId, currentTabId, numberOfHitsDivId, updateId, tabDisplayPrefix) {
+//
+//    var fullURL = '/bardwebquery/bardWebInterface/' + controllerAction;
+//    var currentTabDivId = '#' + currentTabId;
+//    var totalHitsElement = '#' + numberOfHitsDivId;
+//    var updateDivId = '#' + updateId;
+//    var formId = '#' + currentFormId;
+//
+//    $.ajax({
+//        url:fullURL,
+//        type:'POST',
+//        data:$(formId).serialize(),
+//        cache:false,
+//        beforeSend:function () {
+//            $(currentTabDivId).html(tabDisplayPrefix + spinnerImageLink);
+//        },
+//        success:function (data) {
+//            $(updateDivId).html(data);
+//            var total = tabDisplayPrefix + ' (' + $(totalHitsElement).val() + ')';
+//            $(currentTabDivId).html(total);
+//        },
+//        error:function (request, status, error) {
+//            $(currentTabDivId).html(tabDisplayPrefix + errorImageTwitterBootstrap);
+//            $(updateDivId).html(error);
+//        },
+//        complete:function () {
+//        }
+//    });
+//}
 /**
  * Handle structure searches { exact, Substructure, superstructure and similarity searches}
  */
-function handleStructureSearch() {
+function handleStructureSearch(currentFormId) {
+    var searchForm = "#" + currentFormId;
+
     var fullURL = '/bardwebquery/bardWebInterface/searchStructures';
     $.ajax({
         url:fullURL,
-        data:$("#searchForm").serialize(),
+        type:'POST',
+        data:$(searchForm).serialize(),
         cache:false,
         beforeSend:function () {
             resetTabsForStructureSearches();
@@ -120,15 +124,16 @@ function handleStructureSearch() {
  * @param prefixOfTextToAppearOnTab - The start of the string to display on the tab e.g 'Assay Definitions '
  * @param updateDiv - Where the results will be displayed
  */
-function handleSearch(controllerAction, tabId, totalHitsForResourceId, prefixOfTextToAppearOnTab, updateDiv) {
+function handleSearch(controllerAction, currentFormId, tabId, totalHitsForResourceId, prefixOfTextToAppearOnTab, updateDiv) {
     var fullURL = '/bardwebquery/bardWebInterface/' + controllerAction;
     var tabDivElement = '#' + tabId;
     var totalHitsElement = '#' + totalHitsForResourceId;
     var updateDivId = '#' + updateDiv;
-
+    var searchForm = "#" + currentFormId;
     $.ajax({
         url:fullURL,
-        data:$("#searchForm").serialize(),
+        type:'POST',
+        data:$(searchForm).serialize(),
         cache:false,
         beforeSend:function () {
             $(tabDivElement).html(prefixOfTextToAppearOnTab + spinnerImageLink);
@@ -146,13 +151,65 @@ function handleSearch(controllerAction, tabId, totalHitsForResourceId, prefixOfT
         }
     });
 }
+/**
+ * TODO: There ought to be a better way of doing this. Please refactor
+ * Handles form submission
+ * @param searchString
+ */
+function handleFilteredQuery(searchString, facetFormType, currentFormId, currentTabId, numberOfHitsDivId, updateId, tabDisplayPrefix) {
 
+    var controllerAction = findTheAppropriateControllerActionForRequest(searchString, facetFormType)
+    if (controllerAction == 'structureSearch') {
+        handleStructureSearch(currentFormId)
+    }
+    else if (controllerAction != 'EMPTY') {
+        handleSearch(controllerAction, currentFormId, currentTabId, numberOfHitsDivId, tabDisplayPrefix, updateId);
+    }
+
+}
+function findTheAppropriateControllerActionForRequest(searchString, facetFormType) {
+
+    var searchType = findSearchType(searchString);
+
+    //find the right controller to send request to
+    switch (searchType.toUpperCase()) {
+        case 'FREE_TEXT':
+            if (facetFormType == 'AssayFacetForm') {
+                return "searchAssays"
+            }
+            if (facetFormType == 'ProjectFacetForm') {
+                return "searchProjects"
+            }
+            if (facetFormType == 'CompoundFacetForm') {
+                return "searchCompounds"
+            }
+            break;
+        case 'ID':
+            if (facetFormType == 'AssayFacetForm') {
+                return 'searchAssaysByIDs'
+            }
+            if (facetFormType == 'ProjectFacetForm') {
+                return 'searchProjectsByIDs'
+            }
+            if (facetFormType == 'CompoundFacetForm') {
+                return 'searchCompoundsByIDs'
+            }
+            break;
+        case 'STRUCTURE':
+            if (facetFormType == 'CompoundFacetForm') {
+                return  'structureSearch'
+            }
+            break;
+    }
+    return "EMPTY"
+
+}
 
 /**
  * Handles form submission
  * @param searchString
  */
-function handleFormSubmit(searchString) {
+function handleMainFormSubmit(searchString) {
 
     var searchType = findSearchType(searchString);
 
@@ -169,7 +226,7 @@ function handleFormSubmit(searchString) {
             handleAllIdSearches();
             break;
         case 'STRUCTURE':
-            handleStructureSearch();
+            handleStructureSearch('searchForm');
             break;
     }
 }
@@ -177,18 +234,18 @@ function handleFormSubmit(searchString) {
  * Handle all free text searches
  */
 function handleAllFreeTextSearches() {
-    handleSearch('searchAssays', 'assaysTab', 'totalAssays', 'Assay Definitions ', 'assays');
-    handleSearch('searchCompounds', 'compoundsTab', 'totalCompounds', 'Compounds ', 'compounds');
-    handleSearch('searchProjects', 'projectsTab', 'totalProjects', 'Projects ', 'projects');
+    handleSearch('searchAssays', 'searchForm', 'assaysTab', 'totalAssays', 'Assay Definitions ', 'assays');
+    handleSearch('searchCompounds', 'searchForm', 'compoundsTab', 'totalCompounds', 'Compounds ', 'compounds');
+    handleSearch('searchProjects', 'searchForm', 'projectsTab', 'totalProjects', 'Projects ', 'projects');
 }
 
 /**
  * Handle all ID searches
  */
 function handleAllIdSearches() {
-    handleSearch('searchAssaysByIDs', 'assaysTab', 'totalAssays', 'Assay Definitions ', 'assays');
-    handleSearch('searchCompoundsByIDs', 'compoundsTab', 'totalCompounds', 'Compounds ', 'compounds');
-    handleSearch('searchProjectsByIDs', 'projectsTab', 'totalProjects', 'Projects ', 'projects');
+    handleSearch('searchAssaysByIDs', 'searchForm', 'assaysTab', 'totalAssays', 'Assay Definitions ', 'assays');
+    handleSearch('searchCompoundsByIDs', 'searchForm', 'compoundsTab', 'totalCompounds', 'Compounds ', 'compounds');
+    handleSearch('searchProjectsByIDs', 'searchForm', 'projectsTab', 'totalProjects', 'Projects ', 'projects');
 }
 /**
  * Make Tabs inactive

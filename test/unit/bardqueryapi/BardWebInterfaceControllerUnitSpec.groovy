@@ -41,12 +41,16 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
 
     void "test handle Assay Searches #label"() {
         given:
-        final List<SearchFilter> filters = [new SearchFilter(filterName: "a", filterValue: "b")]
+        mockCommandObject(SearchCommand)
+        params.formName = FacetFormType.AssayFacetForm.toString()
+        Map paramMap = [formName: FacetFormType.AssayFacetForm.toString(), searchString: searchString, filters: [new SearchFilter(filterName: "a", filterValue: "b")]]
+        controller.metaClass.getParams {-> paramMap}
+        SearchCommand searchCommand = new SearchCommand(paramMap)
 
         when:
         params.skip = "0"
         params.top = "10"
-        controller.handleAssaySearches(this.queryService, searchString, filters)
+        controller.handleAssaySearches(this.queryService, searchCommand)
         then:
         _ * this.queryService.findAssaysByTextSearch(_, _, _, _) >> {assayAdapterMap}
         assert response.status == statusCode
@@ -61,12 +65,16 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
     }
 
     void "test handle Project Searches #label"() {
-        final List<SearchFilter> filters = [new SearchFilter(filterName: "a", filterValue: "b")]
+        mockCommandObject(SearchCommand)
+        params.formName = FacetFormType.ProjectFacetForm.toString()
+        Map paramMap = [formName: FacetFormType.ProjectFacetForm.toString(), searchString: searchString, filters: [new SearchFilter(filterName: "a", filterValue: "b")]]
+        controller.metaClass.getParams {-> paramMap}
+        SearchCommand searchCommand = new SearchCommand(paramMap)
 
         when:
         params.skip = "0"
         params.top = "10"
-        controller.handleProjectSearches(this.queryService, searchString, filters)
+        controller.handleProjectSearches(this.queryService, searchCommand)
         then:
         _ * this.queryService.findProjectsByTextSearch(_, _, _, _) >> {projectAdapterMap}
         assert response.status == statusCode
@@ -80,12 +88,16 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
     }
 
     void "test handle Compound Searches #label"() {
-        final List<SearchFilter> filters = [new SearchFilter(filterName: "a", filterValue: "b")]
+        mockCommandObject(SearchCommand)
+        params.formName = FacetFormType.CompoundFacetForm.toString()
+        Map paramMap = [formName: FacetFormType.CompoundFacetForm.toString(), searchString: searchString, filters: [new SearchFilter(filterName: "a", filterValue: "b")]]
+        controller.metaClass.getParams {-> paramMap}
+        SearchCommand searchCommand = new SearchCommand(paramMap)
 
         when:
         params.skip = "0"
         params.top = "10"
-        controller.handleCompoundSearches(this.queryService, searchString, filters)
+        controller.handleCompoundSearches(this.queryService, searchCommand)
         then:
         _ * this.queryService.findCompoundsByTextSearch(_, _, _, _) >> {compoundAdapterMap}
         assert response.status == statusCode
@@ -106,7 +118,7 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
         SearchCommand searchCommand = new SearchCommand(paramMap)
 
         when:
-        controller.applyFilters(searchCommand)
+        controller.searchProjects(searchCommand)
         then:
         _ * this.queryService.findProjectsByTextSearch(_, _, _, _) >> {projectAdapterMap}
         assert response.status == statusCode
@@ -125,7 +137,7 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
         SearchCommand searchCommand = new SearchCommand(paramMap)
 
         when:
-        controller.applyFilters(searchCommand)
+        controller.searchCompounds(searchCommand)
         then:
         _ * this.queryService.findCompoundsByTextSearch(_, _, _, _) >> {compoundAdapterMap}
         assert response.status == statusCode
@@ -144,7 +156,7 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
         SearchCommand searchCommand = new SearchCommand(paramMap)
 
         when:
-        controller.applyFilters(searchCommand)
+        controller.searchAssays(searchCommand)
         then:
         _ * this.queryService.findAssaysByTextSearch(_, _, _, _) >> {assayAdapterMap}
         assert response.status == statusCode
@@ -246,12 +258,16 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
 
     void "test structure search #label"() {
         given:
-        params.searchString = searchString
+        mockCommandObject(SearchCommand)
+        params.formName = FacetFormType.CompoundFacetForm.toString()
+        Map paramMap = [formName: FacetFormType.CompoundFacetForm.toString(), searchString: searchString, filters: [new SearchFilter(filterName: "a", filterValue: "b")]]
+        controller.metaClass.getParams {-> paramMap}
+        SearchCommand searchCommand = new SearchCommand(paramMap)
         when:
         request.method = 'GET'
-        controller.searchStructures()
+        controller.searchStructures(searchCommand)
         then:
-        _ * this.queryService.structureSearch(_, _) >> {compoundAdapterMap}
+        _ * this.queryService.structureSearch(_, _,_) >> {compoundAdapterMap}
         and:
         response.redirectedUrl == expectedRedirectURL
         flash.message == flashMessage
@@ -283,12 +299,16 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
 
     void "test searchProjectsByIDs action"() {
         given:
-        controller.params.searchString = searchString
+        mockCommandObject(SearchCommand)
+        params.formName = FacetFormType.ProjectFacetForm.CompoundFacetForm.toString()
+        Map paramMap = [formName: FacetFormType.ProjectFacetForm.toString(), searchString: searchString, filters: [new SearchFilter(filterName: "a", filterValue: "b")]]
+        controller.metaClass.getParams {-> paramMap}
+        SearchCommand searchCommand = new SearchCommand(paramMap)
         when:
         request.method = 'GET'
-        controller.searchProjectsByIDs()
+        controller.searchProjectsByIDs(searchCommand)
         then:
-        queryService.findProjectsByPIDs(_) >> {projectAdapterMap}
+        queryService.findProjectsByPIDs(_,_) >> {projectAdapterMap}
         and:
         if (responseTextLength > 0) {
             assert response.text
@@ -305,12 +325,17 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
 
     void "test searchAssaysByIDs action #label"() {
         given:
-        controller.params.searchString = searchString
+        mockCommandObject(SearchCommand)
+        params.formName = FacetFormType.AssayFacetForm.CompoundFacetForm.toString()
+        Map paramMap = [formName: FacetFormType.AssayFacetForm.toString(), searchString: searchString, filters: [new SearchFilter(filterName: "a", filterValue: "b")]]
+        controller.metaClass.getParams {-> paramMap}
+        SearchCommand searchCommand = new SearchCommand(paramMap)
+
         when:
         request.method = 'GET'
         controller.searchAssaysByIDs()
         then:
-        queryService.findAssaysByADIDs(_) >> {assayAdapterMap}
+        queryService.findAssaysByADIDs(_,_) >> {assayAdapterMap}
         and:
         if (responseTextLength > 0) {
             assert response.text
@@ -327,12 +352,16 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
 
     void "test searchCompoundsByIDs action"() {
         given:
-        controller.params.searchString = searchString
+        mockCommandObject(SearchCommand)
+        params.formName = FacetFormType.CompoundFacetForm.CompoundFacetForm.toString()
+        Map paramMap = [formName: FacetFormType.CompoundFacetForm.toString(), searchString: searchString, filters: [new SearchFilter(filterName: "a", filterValue: "b")]]
+        controller.metaClass.getParams {-> paramMap}
+        SearchCommand searchCommand = new SearchCommand(paramMap)
         when:
         request.method = 'GET'
-        controller.searchCompoundsByIDs()
+        controller.searchCompoundsByIDs(searchCommand)
         then:
-        queryService.findCompoundsByCIDs(_) >> {compoundAdapterMap}
+        queryService.findCompoundsByCIDs(_,_) >> {compoundAdapterMap}
         and:
         if (responseTextLength > 0) {
             assert response.text
