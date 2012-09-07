@@ -323,6 +323,56 @@ describe("Testing search.js", function () {
             expect($('#projectsTabLi')).not.toHaveClass('active')
         });
     });
+    describe("test handleFilterFormSubmit()", function () {
+        var fakeData;
+        var errorData;
+
+        beforeEach(function () {
+            fakeData = "Fake Data From Server";
+            errorData = "You can put your errorData Here";
+            appendSetFixtures('<li id="tabId"></li>');
+            appendSetFixtures('<li id="totalHitsForResourceId"></li>');
+            appendSetFixtures('<li id="updateDiv"></li>');
+
+        });
+
+
+        it("Should be a successful call", function () {
+            //mocking ajax call with Jasmine Spies
+            spyOn($, "ajax").andCallFake(function (params) {
+                params.success(fakeData);
+            });
+
+            //we expect these to be empty
+            expect($('#tabId')).toBeEmpty();
+            expect($('#updateDiv')).toBeEmpty();
+
+            handleFilterFormSubmit('currentFormId', 'tabId', 'totalHitsForResourceId','updateDiv', 'displayStringPrefix');
+
+            //do assertions
+            expect($('#tabId')).toHaveText('displayStringPrefix (0)');
+            expect($('#updateDiv')).toHaveText(fakeData);
+        });
+
+        it("Should be an Error condition", function () {
+            //mocking ajax call with Jasmine Spies
+            spyOn($, "ajax").andCallFake(function (params) {
+                params.error(errorData)
+            });
+
+            //we expect these to be empty
+            expect($('#tabId')).toBeEmpty();
+            expect($('#updateDiv')).toBeEmpty();
+
+            handleFilterFormSubmit('currentFormId', 'tabId', 'totalHitsForResourceId','updateDiv' ,'displayStringPrefix');
+            //do assertions
+            expect($('#tabId')).toHaveText('displayStringPrefix');
+
+            //Here is what we get back in the error. displayStringPrefix<img src="" class="icon-exclamation-sign" alt="error" height="16" width="16">
+            expect($('#tabId')).toContain('img.icon-exclamation-sign');
+            expect($('#updateDiv')).toBeEmpty();
+        });
+    });
     describe("test handleSearch()", function () {
         var fakeData;
         var errorData;

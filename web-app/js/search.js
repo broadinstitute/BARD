@@ -19,17 +19,73 @@ $(document).ready(function () {
     });
 
 
-
-     //set up form submission
+    //set up form submission
     $('#searchForm').submit(function (event) {
         var searchString = $("#searchString").val();
         handleFormSubmit(searchString);
         return false; //do not submit form the normal way, use Ajax instead
 
     });
+
+
+    //set up filter form submissions
+    //We are using live because we want to do late binding
+    //these forms would not exist when the document first loads
+    $('#AssayFacetForm').live('submit', function (event) {
+        var searchString = $("#searchString").val();
+        handleFilterFormSubmit('AssayFacetForm', 'assaysTab', 'totalAssays', 'assays', 'Assay Definitions ');
+        return false; //do not submit form the normal way, use Ajax instead
+
+    });
+    $('#ProjectFacetForm').live('submit', function (event) {
+        var searchString = $("#searchString").val();
+        handleFilterFormSubmit('ProjectFacetForm', 'projectsTab', 'totalProjects', 'projects', 'Projects ');
+        return false; //do not submit form the normal way, use Ajax instead
+    });
+    $('#CompoundFacetForm').live('submit', function (event) {
+        var searchString = $("#searchString").val();
+        handleFilterFormSubmit('CompoundFacetForm', 'compoundsTab', 'totalCompounds', 'compounds', 'Compounds ');
+        return false; //do not submit form the normal way, use Ajax instead
+
+    });
 });
 
+/**
+ * @param currentFormId - The id of the currently selected form
+ * @param currentTabId - The id of the currently selected tab
+ * @param numberOfHitsDivId - The id of the div where we would display the total number of hits
+ * @param updateId - The id of the div where we would display the results of the ajax call
+ * @param tabDisplayPrefix - The prefix for the string that we would display on the currently selected tab (for example 'Assay Definitions')
+ */
+function handleFilterFormSubmit(currentFormId, currentTabId, numberOfHitsDivId, updateId, tabDisplayPrefix) {
 
+    var fullURL = '/bardwebquery/bardWebInterface/applyFilters';
+    var currentTabDivId = '#' + currentTabId;
+    var totalHitsElement = '#' + numberOfHitsDivId;
+    var updateDivId = '#' + updateId;
+    var formId = '#' + currentFormId;
+
+    $.ajax({
+        url:fullURL,
+        type:'POST',
+        data:$(formId).serialize(),
+        cache:false,
+        beforeSend:function () {
+            $(currentTabDivId).html(tabDisplayPrefix + spinnerImageLink);
+        },
+        success:function (data) {
+            $(updateDivId).html(data);
+            var total = tabDisplayPrefix + ' (' + $(totalHitsElement).val() + ')';
+            $(currentTabDivId).html(total);
+        },
+        error:function (request, status, error) {
+            $(currentTabDivId).html(tabDisplayPrefix + errorImageTwitterBootstrap);
+            $(updateDivId).html(error);
+        },
+        complete:function () {
+        }
+    });
+}
 /**
  * Handle structure searches { exact, Substructure, superstructure and similarity searches}
  */
@@ -90,6 +146,8 @@ function handleSearch(controllerAction, tabId, totalHitsForResourceId, prefixOfT
         }
     });
 }
+
+
 /**
  * Handles form submission
  * @param searchString

@@ -9,18 +9,17 @@ import org.apache.commons.collections.ListUtils
 @grails.validation.Validateable
 class SearchCommand {
     String searchString
+    String formName
     List<SearchFilter> filters = ListUtils.lazyList([], FactoryUtils.instantiateFactory(SearchFilter))
 
     List<SearchFilter> getAppliedFilters() {
-        return filters.collect() { SearchFilter filter ->
-            if (filter.filterValue) {
-                return filter
-            }
-        }
+        filters.findAll {SearchFilter filter ->  filter.filterValue}
     }
+
 
     static constraints = {
         searchString(blank: false)
+        formName(blank: false)
     }
 }
 
