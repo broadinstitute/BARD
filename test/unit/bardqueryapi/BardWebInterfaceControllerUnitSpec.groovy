@@ -39,6 +39,160 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
         // Tear down logic here
     }
 
+    void "test handle Assay Searches #label"() {
+        given:
+        final List<SearchFilter> filters = [new SearchFilter(filterName: "a", filterValue: "b")]
+
+        when:
+        params.skip = "0"
+        params.top = "10"
+        controller.handleAssaySearches(this.queryService, searchString, filters)
+        then:
+        _ * this.queryService.findAssaysByTextSearch(_, _, _, _) >> {assayAdapterMap}
+        assert response.status == statusCode
+
+        where:
+        label                                  | searchString  | statusCode                                   | assayAdapterMap
+        "Empty Search String - Bad Request"    | ""            | HttpServletResponse.SC_BAD_REQUEST           | null
+        "Search String- Internal Server Error" | "Some String" | HttpServletResponse.SC_INTERNAL_SERVER_ERROR | null
+        "Success"                              | "1234,5678"   | HttpServletResponse.SC_OK                    | [assayAdapters: [buildAssayAdapter(1234, "assay1"), buildAssayAdapter(1234, "assay2")], facets: [], nHits: 2]
+
+
+    }
+
+    void "test handle Project Searches #label"() {
+        final List<SearchFilter> filters = [new SearchFilter(filterName: "a", filterValue: "b")]
+
+        when:
+        params.skip = "0"
+        params.top = "10"
+        controller.handleProjectSearches(this.queryService, searchString, filters)
+        then:
+        _ * this.queryService.findProjectsByTextSearch(_, _, _, _) >> {projectAdapterMap}
+        assert response.status == statusCode
+
+        where:
+        label                                  | searchString  | statusCode                                   | projectAdapterMap
+        "Empty Search String"                  | ""            | HttpServletResponse.SC_BAD_REQUEST           | null
+        "Search String- Internal Server Error" | "Some String" | HttpServletResponse.SC_INTERNAL_SERVER_ERROR | null
+        "Success"                              | "1234,5678"   | HttpServletResponse.SC_OK                    | [projectAdapters: [buildProjectAdapter(1234, "assay1"), buildProjectAdapter(1234, "assay2")], facets: [], nHits: 2]
+
+    }
+
+    void "test handle Compound Searches #label"() {
+        final List<SearchFilter> filters = [new SearchFilter(filterName: "a", filterValue: "b")]
+
+        when:
+        params.skip = "0"
+        params.top = "10"
+        controller.handleCompoundSearches(this.queryService, searchString, filters)
+        then:
+        _ * this.queryService.findCompoundsByTextSearch(_, _, _, _) >> {compoundAdapterMap}
+        assert response.status == statusCode
+
+        where:
+        label                                  | searchString  | statusCode                                   | compoundAdapterMap
+        "Empty Search String"                  | ""            | HttpServletResponse.SC_BAD_REQUEST           | null
+        "Search String- Internal Server Error" | "Some String" | HttpServletResponse.SC_INTERNAL_SERVER_ERROR | null
+        "Success"                              | "1234,5678"   | HttpServletResponse.SC_OK                    | [compoundAdapters: [buildCompoundAdapter(1234, [], "CC"), buildCompoundAdapter(4567, [], "CCC")], facets: [], nHits: 2]
+    }
+
+    void "test apply Filters to projects #label"() {
+        given:
+        mockCommandObject(SearchCommand)
+        params.formName = FacetFormType.ProjectFacetForm.toString()
+        Map paramMap = [formName: FacetFormType.ProjectFacetForm.toString(), searchString: searchString, filters: [new SearchFilter(filterName: "a", filterValue: "b")]]
+        controller.metaClass.getParams {-> paramMap}
+        SearchCommand searchCommand = new SearchCommand(paramMap)
+
+        when:
+        controller.applyFilters(searchCommand)
+        then:
+        _ * this.queryService.findProjectsByTextSearch(_, _, _, _) >> {projectAdapterMap}
+        assert response.status == statusCode
+        where:
+        label                 | searchString | statusCode                         | projectAdapterMap
+        "Empty Search String" | ""           | HttpServletResponse.SC_BAD_REQUEST | null
+        "Success"             | "1234,5678"  | HttpServletResponse.SC_OK          | [projectAdapters: [buildProjectAdapter(1234, "assay1"), buildProjectAdapter(1234, "assay2")], facets: [], nHits: 2]
+    }
+
+    void "test apply Filters to compounds #label"() {
+        given:
+        mockCommandObject(SearchCommand)
+        params.formName = FacetFormType.CompoundFacetForm.toString()
+        Map paramMap = [formName: FacetFormType.CompoundFacetForm.toString(), searchString: searchString, filters: [new SearchFilter(filterName: "a", filterValue: "b")]]
+        controller.metaClass.getParams {-> paramMap}
+        SearchCommand searchCommand = new SearchCommand(paramMap)
+
+        when:
+        controller.applyFilters(searchCommand)
+        then:
+        _ * this.queryService.findCompoundsByTextSearch(_, _, _, _) >> {compoundAdapterMap}
+        assert response.status == statusCode
+        where:
+        label                 | searchString | statusCode                         | compoundAdapterMap
+        "Empty Search String" | ""           | HttpServletResponse.SC_BAD_REQUEST | null
+        "Success"             | "1234,5678"  | HttpServletResponse.SC_OK          | [compoundAdapters: [buildCompoundAdapter(1234, [], "CC"), buildCompoundAdapter(4567, [], "CCC")], facets: [], nHits: 2]
+    }
+
+    void "test apply Filters to assays #label"() {
+        given:
+        mockCommandObject(SearchCommand)
+        params.formName = FacetFormType.AssayFacetForm.toString()
+        Map paramMap = [formName: FacetFormType.AssayFacetForm.toString(), searchString: searchString, filters: [new SearchFilter(filterName: "a", filterValue: "b")]]
+        controller.metaClass.getParams {-> paramMap}
+        SearchCommand searchCommand = new SearchCommand(paramMap)
+
+        when:
+        controller.applyFilters(searchCommand)
+        then:
+        _ * this.queryService.findAssaysByTextSearch(_, _, _, _) >> {assayAdapterMap}
+        assert response.status == statusCode
+        where:
+        label                 | searchString | statusCode                         | assayAdapterMap
+        "Empty Search String" | ""           | HttpServletResponse.SC_BAD_REQUEST | null
+        "Success"             | "1234,5678"  | HttpServletResponse.SC_OK          | [assayAdapters: [buildAssayAdapter(1234, "assay1"), buildAssayAdapter(1234, "assay2")], facets: [], nHits: 2]
+    }
+
+    void "test handle search Params #label"() {
+        given:
+        params.searchString = searchString
+        if (offset) {
+            params.offset = offset
+        }
+        if (max) {
+            params.max = max
+        }
+        when:
+        Map map = controller.handleSearchParams()
+        then:
+        map.skip == expectedSkip
+        map.top == expectedTop
+        where:
+        label                 | searchString | offset | max  | expectedSkip | expectedTop
+        "Empty Search String" | ""           | "0"    | "10" | 0            | 10
+        "No offset Param"     | "1234,5678"  | ""     | "10" | 0            | 10
+        "No max Param"        | "1234,5678"  | "10"   | ""   | 10           | 10
+        "All Params"          | "1234,5678"  | "10"   | "10" | 10           | 10
+
+    }
+
+    void "test search String To Id List #label"() {
+        when:
+        List<Long> results = controller.searchStringToIdList(searchString)
+        then:
+        results.size() == expectedResults.size()
+        for (int index = 0; index < expectedResults.size(); index++) {
+            assert results.get(index) as Long == expectedResults.get(index);
+        }
+        where:
+        label                                            | searchString              | expectedResults
+        "Single id"                                      | "1234"                    | [new Long(1234)]
+        "Multiple ids, comma separated with some spaces" | "1234, 5678, 898,    445" | [new Long(1234), new Long(5678), new Long(898), new Long(445)]
+        "Two ids with spaces"                            | "1234,        5678"       | [new Long(1234), new Long(5678)]
+
+    }
+
     void "test free text search assays #label"() {
         given:
         params.searchString = searchString
@@ -47,15 +201,12 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
         controller.searchAssays()
         then:
         _ * this.queryService.findAssaysByTextSearch(_, _, _, _) >> {assayAdapterMap}
-//        and:
-        response.redirectedUrl == expectedRedirectURL
-        flash.message == flashMessage
+        and:
         response.status == statusCode
         where:
-        label                 | searchString | expectedRedirectURL          | flashMessage                | statusCode                                   | assayAdapterMap
-        "Empty Search String" | ""           | '/bardWebInterface/homePage' | 'Search String is required' | HttpServletResponse.SC_MOVED_TEMPORARILY     | null
-        "Throws Exception"    | "1234,5678"  | null                         | null                        | HttpServletResponse.SC_INTERNAL_SERVER_ERROR | null
-        "Success"             | "1234,5678"  | null                         | null                        | HttpServletResponse.SC_OK                    | [assayAdapters: [buildAssayAdapter(1234, "assay1"), buildAssayAdapter(1234, "assay2")], facets: [], nHits: 2]
+        label                 | searchString | statusCode                         | assayAdapterMap
+        "Empty Search String" | ""           | HttpServletResponse.SC_BAD_REQUEST | null
+        "Success"             | "1234,5678"  | HttpServletResponse.SC_OK          | [assayAdapters: [buildAssayAdapter(1234, "assay1"), buildAssayAdapter(1234, "assay2")], facets: [], nHits: 2]
 
     }
 
@@ -66,16 +217,13 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
         request.method = 'GET'
         controller.searchProjects()
         then:
-        _ * this.queryService.findProjectsByTextSearch(_, _, _) >> {projectAdapterMap}
+        _ * this.queryService.findProjectsByTextSearch(_, _, _, _) >> {projectAdapterMap}
         and:
-        response.redirectedUrl == expectedRedirectURL
-        flash.message == flashMessage
         response.status == statusCode
         where:
-        label                 | searchString | expectedRedirectURL          | flashMessage                | statusCode                                   | projectAdapterMap
-        "Empty Search String" | ""           | '/bardWebInterface/homePage' | 'Search String is required' | HttpServletResponse.SC_MOVED_TEMPORARILY     | null
-        "Throws Exception"    | "1234,5678"  | null                         | null                        | HttpServletResponse.SC_INTERNAL_SERVER_ERROR | null
-        "Success"             | "1234,5678"  | null                         | null                        | HttpServletResponse.SC_OK                    | [projectAdapters: [buildProjectAdapter(1234, "assay1"), buildProjectAdapter(1234, "assay2")], facets: [], nHits: 2]
+        label                 | searchString | statusCode                         | projectAdapterMap
+        "Empty Search String" | ""           | HttpServletResponse.SC_BAD_REQUEST | null
+        "Success"             | "1234,5678"  | HttpServletResponse.SC_OK          | [projectAdapters: [buildProjectAdapter(1234, "assay1"), buildProjectAdapter(1234, "assay2")], facets: [], nHits: 2]
 
     }
 
@@ -86,16 +234,13 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
         request.method = 'GET'
         controller.searchCompounds()
         then:
-        _ * this.queryService.findCompoundsByTextSearch(_, _, _) >> {compoundAdapterMap}
+        _ * this.queryService.findCompoundsByTextSearch(_, _, _, _) >> {compoundAdapterMap}
         and:
-        response.redirectedUrl == expectedRedirectURL
-        flash.message == flashMessage
         response.status == statusCode
         where:
-        label                 | searchString | expectedRedirectURL          | flashMessage                | statusCode                                   | compoundAdapterMap
-        "Empty Search String" | ""           | '/bardWebInterface/homePage' | 'Search String is required' | HttpServletResponse.SC_MOVED_TEMPORARILY     | null
-        "Throws Exception"    | "1234,5678"  | null                         | null                        | HttpServletResponse.SC_INTERNAL_SERVER_ERROR | null
-        "Success"             | "1234,5678"  | null                         | null                        | HttpServletResponse.SC_OK                    | [compoundAdapters: [buildCompoundAdapter(1234, [], "CC"), buildCompoundAdapter(4567, [], "CCC")], facets: [], nHits: 2]
+        label                 | searchString | statusCode                         | compoundAdapterMap
+        "Empty Search String" | ""           | HttpServletResponse.SC_BAD_REQUEST | null
+        "Success"             | "1234,5678"  | HttpServletResponse.SC_OK          | [compoundAdapters: [buildCompoundAdapter(1234, [], "CC"), buildCompoundAdapter(4567, [], "CCC")], facets: [], nHits: 2]
 
     }
 
@@ -289,28 +434,6 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
         "Project PID is null"     | null                | "Test" | buildProjectAdapter(485349, "Test") | null
         "Project Adapter is null" | null                | "Test" | null                                | null
     }
-
-//    void "test search #label"() {
-//        when:
-//        request.method = 'GET'
-//        controller.params.searchString = searchTerm
-//        controller.search()
-//
-//        then:
-//        queryService.search(searchTerm) >> { resultJson }
-//
-//        assert "/bardWebInterface/homePage" == view
-//        assert model.totalCompounds == expectedTotalCompounds
-//        assert model.assays.size == expectedAssays
-//        assert model.compounds.size == expectedCompounds
-//        assert model.experiments == []
-//        assert model.projects == []
-//
-//        where:
-//        label                                | searchTerm | resultJson                                                                                                          | expectedTotalCompounds | expectedAssays | expectedCompounds
-//        "nothing was found"                  | '644'      | [totalCompounds: 0, assays: [], compounds: [], experiments: [], projects: []]                                       | 0                      | 0              | 0
-//        "An Assay and a compound were found" | '644'      | [totalCompounds: 1, assays: [esAssay], compounds: ['CC'], xcompounds: [esxCompound], experiments: [], projects: []] | 1                      | 1              | 1
-//    }
 
 
     void "test autocomplete #label"() {

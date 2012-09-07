@@ -1,10 +1,11 @@
 <div class="span3">
     <g:if test="${facets}">
         <div class="facets">
-            <g:form name="${formName}" controller="bardWebInterface" action="applyFilters">
-                <g:submitButton name="Apply Filters" class="btn"/>
-                <h2>Filters</h2>
+            <h2>Filters</h2>
+            <g:form name="${formName.toString()}" controller="bardWebInterface" id="${formName.toString()}" action="applyFilters">
                 <g:hiddenField name="searchString" value="${params?.searchString}"/>
+                 <g:submitButton name="applyFilters" value="Apply Filters" id="${formName}_Button"/>
+
                 <g:set var="childIndex" value="${0}"/>
                 <g:each in="${facets}" var="facet">
                     <fieldset>
@@ -18,6 +19,7 @@
                         </g:each>
                     </fieldset>
                 </g:each>
+                <g:hiddenField name="formName" value="${formName.toString()}"/>
             </g:form>
         </div>
     </g:if>
