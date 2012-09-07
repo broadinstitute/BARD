@@ -50,8 +50,6 @@ a.removeXMark {
     font-size: 14;
     font-weight: bold;
     font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
-
-
 }
 
 div.cntrcart {
@@ -181,7 +179,7 @@ a.addtocart { //right
     height: 200px;
 }
 img.addtocart {  //left
-width:200px;
+    width:200px;
     float:left;
 }
 
@@ -203,8 +201,25 @@ span.addtocart {
     background-color:#ccf;
 }
 span.addtocartfont {
-    margin-left: 20;
+    margin-left: 22;
     font-family: Helvetica, Arial, "Lucida Grande", sans-serif;
     font-size: medium;
     font-weight: bold;
+}
+
+button.visualizebutton  {
+    height: 24px;
+    text-align: left;
+
+}
+button.visualizebiggerbutton  {
+    height:30px;
+    text-align: center;
+    vertical-align: middle;
+}
+table.leftofcenter {
+    margin-left: 10px;
+}
+td.leftofcenter {
+    margin-left: 50px;
 }
