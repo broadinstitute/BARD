@@ -24,10 +24,10 @@
             <img class="addtocart" alt="${compound?.structureSMILES}" title="${compound.name}" src="${createLink(controller: 'chemAxon', action: 'generateStructureImage', params: [smiles: compound?.structureSMILES, width: 200, height: 200])}"/>
             <a href="/bardwebquery/sarCart/add/1"  class="addtocart"
                onclick="jQuery.ajax({  type:'POST',
-                   data:{'id': '${compound.name}','class': 'class bardqueryapi.CartCompound','smiles':'${JavaScriptUtility.cleanup(compound.name)}','cid':'${compound.pubChemCID}','version': '0', 'stt':'0'},
+                   data:{'id': '${compound.name}','class': 'class bardqueryapi.CartCompound','smiles':'${JavaScriptUtility.cleanup(compound.name)}','cid':'${compound.pubChemCID}','version': '0', 'stt':trackStatus},
                    url:'/bardwebquery/sarCart/add',
                    success:function(data,textStatus){
-                       jQuery('#cartIdentRefill').html(data);
+                       jQuery(ajaxLocation).html(data);
                    }
                });
                return false;"
@@ -41,7 +41,7 @@
     <div class="span2">
         <div class="well">
             <div class="row-fluid">
-                <h5><nobr><i class="icon-shopping-cart"></i>Query Cart</nobr></h5>
+                <h5><nobr><i class="icon-shopping-cart"></i><a class="trigger" href="#">Query Cart<span class="tinyclickfordetails">(click to expand)</span></a></nobr></h5>
             </div>
             <g:render template="queryCartIndicator"/>
         </div>
