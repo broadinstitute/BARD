@@ -10,6 +10,9 @@ import org.apache.commons.collections.ListUtils
 class SearchCommand {
     String searchString
     String formName
+    String offset
+    String max
+
     List<SearchFilter> filters = ListUtils.lazyList([], FactoryUtils.instantiateFactory(SearchFilter))
 
     List<SearchFilter> getAppliedFilters() {
@@ -19,7 +22,6 @@ class SearchCommand {
 
     static constraints = {
         searchString(blank: false)
-        formName(blank: false)
     }
 }
 

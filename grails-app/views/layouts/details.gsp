@@ -16,6 +16,40 @@
     <g:layoutHead/>
     <r:require modules="core,bootstrap,search,common" />
     <r:layoutResources />
+
+    <r:script>
+        var trackStatus=0;
+        var ajaxLocation='#cartIdentRefill'
+        $(document).ready(function(){
+            $(".trigger").click(function(){
+                $(".panel").toggle("fast");
+                $(this).toggleClass("active");
+                if (trackStatus==1){
+                    ajaxLocation='#cartIdentRefill';
+                    trackStatus = 0;
+                    jQuery.ajax({  type:'POST',
+                        data:{'stt':trackStatus},
+                        url:'/bardwebquery/sarCart/updateOnscreenCart',
+                        success:function(data,textStatus){
+                            jQuery(ajaxLocation).html(data);
+                        }
+                    });
+
+                } else   {
+                    ajaxLocation='#sarCartRefill';
+                    trackStatus = 1;
+                    jQuery.ajax({  type:'POST',
+                        data:{'stt':trackStatus},
+                        url:'/bardwebquery/sarCart/updateOnscreenCart',
+                        success:function(data,textStatus){
+                            jQuery(ajaxLocation).html(data);
+                        }
+                    });
+                }
+                return false;
+            });
+        });
+    </r:script>
 </head>
 <body>
 <div class="container-fluid">
@@ -39,5 +73,14 @@
 <g:javascript library="application"/>
 <r:require modules="core,bootstrap,search,common"/>
 <r:layoutResources />
+
+
+<div class="panel">
+    <a class="trigger" href="#">Click to hide query cart</a>
+    <g:render template="sarCartContent"/>
+</div>
+
+
+
 </body>
 </html>

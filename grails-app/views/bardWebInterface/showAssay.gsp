@@ -17,10 +17,10 @@
             <h3>${assayAdapter?.assay.name}
                 <a href="/bardwebquery/sarCart/add/${assayAdapter?.assay.id}"
                    onclick="jQuery.ajax({  type:'POST',
-                       data:{'id': '${assayAdapter?.assay.id}','class': 'class bardqueryapi.CartAssay','assayTitle':'${JavaScriptUtility.cleanup(assayAdapter?.assay.name)}','version': '0', 'stt':'0'},
+                       data:{'id': '${assayAdapter?.assay.id}','class': 'class bardqueryapi.CartAssay','assayTitle':'${JavaScriptUtility.cleanup(assayAdapter?.assay.name)}','version': '0', 'stt':trackStatus},
                        url:'/bardwebquery/sarCart/add',
                        success:function(data,textStatus){
-                           jQuery('#cartIdentRefill').html(data);
+                           jQuery(ajaxLocation).html(data);
                        }
                    });
                    return false;"
@@ -43,6 +43,9 @@
                 <h5><nobr><i class="icon-shopping-cart"></i>Query Cart</nobr></h5>
             </div>
             <g:render template="queryCartIndicator"/>
+            <div class="row-fluid">
+                <h5><nobr><a class="trigger" href="#">View details/edit</a></nobr></h5>
+            </div>
         </div>
     </div>
 

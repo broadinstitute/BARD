@@ -24,10 +24,10 @@
                 <h3>${projectAdapter?.name}
                     <a href="/bardwebquery/sarCart/add/1"  class="addtocart"
                        onclick="jQuery.ajax({  type:'POST',
-                           data:{'id': '${projectAdapter.project.id}','class': 'class bardqueryapi.CartProject','projectName':'${JavaScriptUtility.cleanup(projectAdapter.project.name)}','version': '0','stt':'0'},
+                           data:{'id': '${projectAdapter.project.id}','class': 'class bardqueryapi.CartProject','projectName':'${JavaScriptUtility.cleanup(projectAdapter.project.name)}','version': '0','stt':trackStatus},
                            url:'/bardwebquery/sarCart/add',
                            success:function(data,textStatus){
-                               jQuery('#cartIdentRefill').html(data);
+                               jQuery(ajaxLocation).html(data);
                            }
                        });
                        return false;"
@@ -44,6 +44,9 @@
                 <h5><nobr><i class="icon-shopping-cart"></i>Query Cart</nobr></h5>
             </div>
             <g:render template="queryCartIndicator"/>
+            <div class="row-fluid">
+                <h5><nobr><a class="trigger" href="#">View details/edit</a></nobr></h5>
+            </div>
         </div>
     </div>
 </div>

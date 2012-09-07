@@ -4,6 +4,7 @@ import bard.core.StructureSearchParams
 import bard.core.adapter.AssayAdapter
 import bard.core.adapter.CompoundAdapter
 import bard.core.adapter.ProjectAdapter
+import org.apache.commons.lang3.StringUtils
 
 import javax.servlet.http.HttpServletResponse
 
@@ -37,13 +38,24 @@ class BardWebInterfaceController {
      *
      * Given a list of Compound ids, invoke this method
      */
-    def searchCompoundsByIDs() {
-        final String searchString = params.searchString?.trim()
-        if (searchString) {
+    def searchCompoundsByIDs(SearchCommand searchCommand) {
+        List<SearchFilter> searchFilters = []
+        if (searchCommand.formName) {//user SearchCommand
+            searchFilters = searchCommand.getAppliedFilters()
+        } else {
+            searchFilters = params.filters
+            if (!searchFilters) {
+                searchFilters = []
+            }
+
+        }
+        if (searchCommand.searchString) {
+            final String searchString = searchCommand.searchString.trim()
             try {
                 //strip out all spaces
                 final List<Long> cids = searchStringToIdList(searchString)
-                Map compoundAdapterMap = this.queryService.findCompoundsByCIDs(cids)
+
+                Map compoundAdapterMap = this.queryService.findCompoundsByCIDs(cids, searchFilters)
                 List<CompoundAdapter> compoundAdapters = compoundAdapterMap.compoundAdapters
                 render(template: 'compounds', model: [
                         compoundAdapters: compoundAdapters,
@@ -67,13 +79,23 @@ class BardWebInterfaceController {
     /**
      * Given a list of assays ids, invoke this action
      */
-    def searchAssaysByIDs() {
+    def searchAssaysByIDs(SearchCommand searchCommand) {
+        List<SearchFilter> searchFilters = []
+        if (searchCommand.formName) {//user SearchCommand
+            searchFilters = searchCommand.getAppliedFilters()
+        } else {
+            searchFilters = params.filters
+            if (!searchFilters) {
+                searchFilters = []
+            }
 
-        final String searchString = params.searchString?.trim()
-        if (searchString) {
+        }
+        if (StringUtils.isNotBlank(searchCommand.searchString)) {
+            String searchString = searchCommand.searchString.trim()
+
             try {
                 final List<Long> adids = searchStringToIdList(searchString)
-                final Map assayAdapterMap = this.queryService.findAssaysByADIDs(adids)
+                final Map assayAdapterMap = this.queryService.findAssaysByADIDs(adids, searchFilters)
 
                 render(template: 'assays', model: [
                         assayAdapters: assayAdapterMap.assayAdapters,
@@ -93,12 +115,23 @@ class BardWebInterfaceController {
     /**
      * Given a list of Project ids, invoke this action
      */
-    def searchProjectsByIDs() {
-        final String searchString = params.searchString?.trim()
-        if (searchString) {
+    def searchProjectsByIDs(SearchCommand searchCommand) {
+        List<SearchFilter> searchFilters = []
+        if (searchCommand.formName) {//user SearchCommand
+            searchFilters = searchCommand.getAppliedFilters()
+        } else {
+            searchFilters = params.filters
+            if (!searchFilters) {
+                searchFilters = []
+            }
+
+        }
+        if (StringUtils.isNotBlank(searchCommand.searchString)) {
+            String searchString = searchCommand.searchString.trim()
+
             try {
                 final List<Long> projectIds = searchStringToIdList(searchString)
-                Map projectAdapterMap = this.queryService.findProjectsByPIDs(projectIds)
+                Map projectAdapterMap = this.queryService.findProjectsByPIDs(projectIds, filters)
                 render(template: 'projects', model: [
                         projectAdapters: projectAdapterMap.projectAdapters,
                         facets: projectAdapterMap.facets,
@@ -120,12 +153,22 @@ class BardWebInterfaceController {
 
     //=================== Structure Searches (Exact, Similarity, SubStructure, Exact and SupeStructure Searches ===================
     /**
-     * TODO: Add filters
+     *
      * Do structure searches
      */
-    def searchStructures() {
-        String searchString = params.searchString?.trim()
-        if (searchString) {
+    def searchStructures(SearchCommand searchCommand) {
+        List<SearchFilter> searchFilters = []
+        if (searchCommand.formName) {//user SearchCommand
+            searchFilters = searchCommand.getAppliedFilters()
+        } else {
+            searchFilters = params.filters
+            if (!searchFilters) {
+                searchFilters = []
+            }
+
+        }
+        if (StringUtils.isNotBlank(searchCommand.searchString)) {
+            String searchString = searchCommand.searchString.trim()
 
             try {
 
@@ -135,7 +178,7 @@ class BardWebInterfaceController {
                     final String smiles = searchStringSplit[1]
                     //we make the first character capitalized to match the ENUM
                     final StructureSearchParams.Type searchType = searchTypeString?.toLowerCase()?.capitalize() as StructureSearchParams.Type
-                    Map compoundAdapterMap = queryService.structureSearch(smiles, searchType)
+                    Map compoundAdapterMap = queryService.structureSearch(smiles, searchType, filters)
                     List<CompoundAdapter> compoundAdapters = compoundAdapterMap.compoundAdapters
                     render(template: 'compounds', model: [
                             compoundAdapters: compoundAdapters,
@@ -226,54 +269,51 @@ class BardWebInterfaceController {
      *
      * Find Compounds annotated with Search String
      */
-    def searchCompounds() {
-        String searchString = params.searchString?.trim()
-        List<SearchFilter> searchFilters = []
-        handleCompoundSearches(this.queryService, searchString, searchFilters)
+    def searchCompounds(SearchCommand searchCommand) {
+
+        handleCompoundSearches(this.queryService, searchCommand)
+
     }
     /**
      *
      * Find Assays annotated with Search String
      */
-    def searchAssays() {
-        String searchString = params.searchString?.trim()
-        List<SearchFilter> searchFilters = []
-        handleAssaySearches(this.queryService, searchString, searchFilters)
+    def searchAssays(SearchCommand searchCommand) {
+
+        handleAssaySearches(this.queryService, searchCommand)
     }
     /**
      *
      * Find Projects annotated with Search String
      */
-    def searchProjects() {
-        String searchString = params.searchString?.trim()
-        List<SearchFilter> searchFilters = []
-        handleProjectSearches(this.queryService, searchString, searchFilters)
+    def searchProjects(SearchCommand searchCommand) {
+        handleProjectSearches(this.queryService, searchCommand)
     }
 
-    def applyFilters(SearchCommand searchCommand) {
-
-        if (searchCommand.hasErrors()) {
-            flash.message = searchCommand.errors
-        }
-        else {
-            final List<SearchFilter> searchFilters = searchCommand.getAppliedFilters()
-            String searchString = params.searchString?.trim()
-            if (params.formName == FacetFormType.AssayFacetForm.toString()) {
-                handleAssaySearches(this.queryService, searchString, searchFilters);
-                return
-            }
-            else if (params.formName == FacetFormType.ProjectFacetForm.toString()) {
-                handleProjectSearches(this.queryService, searchString, searchFilters);
-                return
-            }
-            else if (params.formName == FacetFormType.CompoundFacetForm.toString()) {
-                handleCompoundSearches(this.queryService, searchString, searchFilters);
-                return
-            }
-        }
-        return response.sendError(HttpServletResponse.SC_BAD_REQUEST,
-                "Select at least one facet")
-    }
+//    def applyFilters(SearchCommand searchCommand) {
+//
+//        if (searchCommand.hasErrors()) {
+//            flash.message = searchCommand.errors
+//        }
+//        else {
+//            final List<SearchFilter> searchFilters = searchCommand.getAppliedFilters()
+//            String searchString = params.searchString?.trim()
+//            if (params.formName == FacetFormType.AssayFacetForm.toString()) {
+//                handleAssaySearches(this.queryService, searchString, searchFilters);
+//                return
+//            }
+//            else if (params.formName == FacetFormType.ProjectFacetForm.toString()) {
+//                handleProjectSearches(this.queryService, searchString, searchFilters);
+//                return
+//            }
+//            else if (params.formName == FacetFormType.CompoundFacetForm.toString()) {
+//                handleCompoundSearches(this.queryService, searchString, searchFilters);
+//                return
+//            }
+//        }
+//        return response.sendError(HttpServletResponse.SC_BAD_REQUEST,
+//                "Select at least one facet")
+//    }
 
     /**
      * TODO: Should redirect to NCGC
@@ -303,8 +343,19 @@ class BardWebInterfaceController {
  */
 class SearchHelper {
 
-    def handleAssaySearches(final bardqueryapi.QueryService queryService, final String searchString, final List<SearchFilter> searchFilters) {
-        if (searchString) {
+    def handleAssaySearches(final bardqueryapi.QueryService queryService, final SearchCommand searchCommand) {
+        List<SearchFilter> searchFilters = []
+        if (searchCommand.formName) {//user SearchCommand
+            searchFilters = searchCommand.getAppliedFilters()
+        } else {
+            searchFilters = params.filters
+            if (!searchFilters) {
+                searchFilters = []
+            }
+
+        }
+        if (StringUtils.isNotBlank(searchCommand.searchString)) {
+            final String searchString = searchCommand.searchString.trim()
             try {
                 Map<String, Integer> searchParams = handleSearchParams()
                 int top = searchParams.top
@@ -328,8 +379,19 @@ class SearchHelper {
 
     }
 
-    def handleCompoundSearches(final bardqueryapi.QueryService queryService, final String searchString, final List<SearchFilter> searchFilters) {
-        if (searchString) {
+    def handleCompoundSearches(final bardqueryapi.QueryService queryService, final SearchCommand searchCommand) {
+        List<SearchFilter> searchFilters = []
+        if (searchCommand.formName) {//user SearchCommand
+            searchFilters = searchCommand.getAppliedFilters()
+        } else {
+            searchFilters = params.filters
+            if (!searchFilters) {
+                searchFilters = []
+            }
+
+        }
+        if (StringUtils.isNotBlank(searchCommand.searchString)) {
+            final String searchString = searchCommand.searchString.trim()
             try {
                 final Map<String, Integer> searchParams = handleSearchParams()
                 final int top = searchParams.top
@@ -355,8 +417,19 @@ class SearchHelper {
 
     }
 
-    def handleProjectSearches(final bardqueryapi.QueryService queryService, final String searchString, final List<SearchFilter> searchFilters) {
-        if (searchString) {
+    def handleProjectSearches(final bardqueryapi.QueryService queryService, final SearchCommand searchCommand) {
+        List<SearchFilter> searchFilters = []
+        if (searchCommand.formName) {//user SearchCommand
+            searchFilters = searchCommand.getAppliedFilters()
+        } else {
+            searchFilters = params.filters
+            if (!searchFilters) {
+                searchFilters = []
+            }
+
+        }
+        if (StringUtils.isNotBlank(searchCommand.searchString)) {
+            final String searchString = searchCommand.searchString.trim()
             try {
                 Map<String, Integer> searchParams = handleSearchParams()
                 int top = searchParams.top
@@ -391,7 +464,7 @@ class SearchHelper {
     /**
      * Strip out all empty spaces, split on ',' and return as a list of longs
      */
-    public List<Long>  searchStringToIdList(String searchString){
+    public List<Long> searchStringToIdList(String searchString) {
         List<Long> ids = searchString.replaceAll("\\s+", "").split(",") as List<Long>
         return ids
     }
