@@ -267,7 +267,7 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
         request.method = 'GET'
         controller.searchStructures(searchCommand)
         then:
-        _ * this.queryService.structureSearch(_, _,_) >> {compoundAdapterMap}
+        _ * this.queryService.structureSearch(_, _, _) >> {compoundAdapterMap}
         and:
         response.redirectedUrl == expectedRedirectURL
         flash.message == flashMessage
@@ -308,7 +308,7 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
         request.method = 'GET'
         controller.searchProjectsByIDs(searchCommand)
         then:
-        queryService.findProjectsByPIDs(_,_) >> {projectAdapterMap}
+        queryService.findProjectsByPIDs(_, _) >> {projectAdapterMap}
         and:
         if (responseTextLength > 0) {
             assert response.text
@@ -335,7 +335,7 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
         request.method = 'GET'
         controller.searchAssaysByIDs()
         then:
-        queryService.findAssaysByADIDs(_,_) >> {assayAdapterMap}
+        queryService.findAssaysByADIDs(_, _) >> {assayAdapterMap}
         and:
         if (responseTextLength > 0) {
             assert response.text
@@ -361,7 +361,7 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
         request.method = 'GET'
         controller.searchCompoundsByIDs(searchCommand)
         then:
-        queryService.findCompoundsByCIDs(_,_) >> {compoundAdapterMap}
+        queryService.findCompoundsByCIDs(_, _) >> {compoundAdapterMap}
         and:
         if (responseTextLength > 0) {
             assert response.text
@@ -479,6 +479,41 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
         "Return two strings" | "Bro"        | ["Broad Institute MLPCN Platelet Activation"]
 
     }
+
+    void "test isGoBiologicalTerm #label"() {
+
+        when:
+        boolean term = controller.isGoBiologicalTerm(searchString)
+        then:
+        assert term == expectedResult
+        where:
+        label                               | searchString            | expectedResult
+        "Match GO_TERM, same case as story" | "gobp_term:DNA Repair"  | true
+        "Match GO_TERM mixed case"          | "GOBP_TERM: DNA REPAIR" | true
+        "Should not Match GO_TERM"          | "smestring:DNA Repair"  | false
+
+    }
+
+    void "test findFiltersInSearchBox #label"() {
+        given:
+        mockCommandObject(SearchCommand)
+        Map paramMap = [searchString: searchString]
+        controller.metaClass.getParams {-> paramMap}
+        SearchCommand searchCommand = new SearchCommand(paramMap)
+
+
+        when:
+        List<SearchFilter> searchFilters = controller.findFiltersInSearchBox(searchCommand)
+        then:
+        assert searchFilters.size() == expectedResult.size()
+        searchFilters.get(0).filterName == expectedResult.get(0).filterName
+        searchFilters.get(0).filterValue == expectedResult.get(0).filterValue
+        where:
+        label                          | searchString           | expectedResult
+        "Should return a SearchFilter" | "gobp_term:DNA Repair" | [new SearchFilter(filterName: "gobp_term", filterValue: "DNA Repair")]
+
+    }
+
 
     CompoundAdapter buildCompoundAdapter(final Long cid, final List<Long> sids, final String smiles) {
         final Compound compound = new Compound()
