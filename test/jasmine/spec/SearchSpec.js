@@ -109,9 +109,9 @@ describe("Testing search.js", function () {
             handleAllIdSearches();
             expect(handleSearch).toHaveBeenCalled();
             expect(handleSearch.calls.length).toEqual(3);
-            expect(handleSearch).toHaveBeenCalledWith('searchAssaysByIDs', 'searchForm', 'assaysTab', 'totalAssays', 'Assay Definitions ', 'assays');
-            expect(handleSearch).toHaveBeenCalledWith('searchCompoundsByIDs', 'searchForm', 'compoundsTab', 'totalCompounds', 'Compounds ', 'compounds');
-            expect(handleSearch).toHaveBeenCalledWith('searchProjectsByIDs', 'searchForm', 'projectsTab', 'totalProjects', 'Projects ', 'projects');
+            expect(handleSearch).toHaveBeenCalledWith('/bardwebquery/bardWebInterface/searchAssaysByIDs', 'searchForm', 'assaysTab', 'totalAssays', 'Assay Definitions ', 'assays');
+            expect(handleSearch).toHaveBeenCalledWith('/bardwebquery/bardWebInterface/searchCompoundsByIDs', 'searchForm', 'compoundsTab', 'totalCompounds', 'Compounds ', 'compounds');
+            expect(handleSearch).toHaveBeenCalledWith('/bardwebquery/bardWebInterface/searchProjectsByIDs', 'searchForm', 'projectsTab', 'totalProjects', 'Projects ', 'projects');
 
             //should not have been called with any of the calls for a free text search
             expect(handleSearch).not.toHaveBeenCalledWith('searchProjects', 'projectsTab', 'totalProjects', 'Projects ', 'projects');
@@ -125,9 +125,9 @@ describe("Testing search.js", function () {
             expect(handleSearch).toHaveBeenCalled();
             expect(handleSearch.calls.length).toEqual(3);
 
-            expect(handleSearch).toHaveBeenCalledWith('searchAssays', 'searchForm', 'assaysTab', 'totalAssays', 'Assay Definitions ', 'assays');
-            expect(handleSearch).toHaveBeenCalledWith('searchCompounds', 'searchForm', 'compoundsTab', 'totalCompounds', 'Compounds ', 'compounds');
-            expect(handleSearch).toHaveBeenCalledWith('searchProjects', 'searchForm', 'projectsTab', 'totalProjects', 'Projects ', 'projects');
+            expect(handleSearch).toHaveBeenCalledWith('/bardwebquery/bardWebInterface/searchAssays', 'searchForm', 'assaysTab', 'totalAssays', 'Assay Definitions ', 'assays');
+            expect(handleSearch).toHaveBeenCalledWith('/bardwebquery/bardWebInterface/searchCompounds', 'searchForm', 'compoundsTab', 'totalCompounds', 'Compounds ', 'compounds');
+            expect(handleSearch).toHaveBeenCalledWith('/bardwebquery/bardWebInterface/searchProjects', 'searchForm', 'projectsTab', 'totalProjects', 'Projects ', 'projects');
 
             //should not have been called with any of the calls for an id search
             expect(handleSearch).not.toHaveBeenCalledWith('searchProjectsByIDs', 'searchForm', 'projectsTab', 'totalProjects', 'Projects ', 'projects');
@@ -225,7 +225,7 @@ describe("Testing search.js", function () {
 
             expect(handleStructureSearch).toHaveBeenCalled();
             expect(handleStructureSearch.calls.length).toEqual(1);
-            expect(handleStructureSearch).toHaveBeenCalledWith('searchForm');
+            expect(handleStructureSearch).toHaveBeenCalledWith('/bardwebquery/bardWebInterface/searchStructures', 'searchForm');
 
         });
     });
@@ -333,78 +333,125 @@ describe("Testing search.js", function () {
 
 
         it("Should handle empty String", function () {
-            spyOn(window, "findTheAppropriateControllerActionForRequest").andReturn("EMPTY")
+            spyOn(window, "findTheAppropriateControllerActionForRequest").andReturn("EMPTY");
             handleFilteredQuery(searchString, 'facetFormType', 'currentFormId', 'currentTabId', 'numberOfHitsDivId', 'updateId', 'tabDisplayPrefix');
             expect(handleSearch).not.toHaveBeenCalled();
             expect(handleStructureSearch).not.toHaveBeenCalled();
         });
 
         it("Should handle Structure String", function () {
-            searchString = "Stuff"
-            spyOn(window, "findTheAppropriateControllerActionForRequest").andReturn("structureSearch")
+            searchString = "Stuff";
+            spyOn(window, "findTheAppropriateControllerActionForRequest").andReturn("structureSearch");
             handleFilteredQuery(searchString, 'facetFormType', 'currentFormId', 'currentTabId', 'numberOfHitsDivId', 'updateId', 'tabDisplayPrefix');
             expect(handleSearch).not.toHaveBeenCalled();
-            expect(handleStructureSearch).toHaveBeenCalledWith('currentFormId');
+            expect(handleStructureSearch).toHaveBeenCalledWith('/bardwebquery/bardWebInterface/searchStructures', 'currentFormId');
         });
         it("Should handle any other search", function () {
-            searchString = "Stuff"
-            spyOn(window, "findTheAppropriateControllerActionForRequest").andReturn("Default")
+            searchString = "Stuff";
+            spyOn(window, "findTheAppropriateControllerActionForRequest").andReturn("Default");
             handleFilteredQuery(searchString, 'facetFormType', 'currentFormId', 'currentTabId', 'numberOfHitsDivId', 'updateId', 'tabDisplayPrefix');
-            expect(handleSearch).toHaveBeenCalledWith("Default", 'currentFormId', 'currentTabId', 'numberOfHitsDivId', 'tabDisplayPrefix', 'updateId');
+            expect(handleSearch).toHaveBeenCalledWith("/bardwebquery/bardWebInterface/Default", 'currentFormId', 'currentTabId', 'numberOfHitsDivId', 'tabDisplayPrefix', 'updateId');
             expect(handleStructureSearch).not.toHaveBeenCalled();
         });
     });
 
-    describe("test findTheAppropriateControllerActionForRequest()", function () {
-        var searchString
-        var facetFormType;
-        var searchType
+    describe("test handlePaging()", function () {
+        var url;
+
         beforeEach(function () {
-            facetFormType = ""
-            searchType=""
-            searchString =""
+            spyOn(window, "handleSearch");
+            spyOn(window, "handleStructureSearch");
+            url = "";
+        });
+        it("Should call method with an empty url", function () {
+            handlePaging(url);
+            expect(handleSearch).not.toHaveBeenCalled();
+            expect(handleStructureSearch).not.toHaveBeenCalled();
+        });
+        it("Should Call method with 'searchAssays'", function () {
+            url = 'searchAssays';
+            handlePaging(url);
+            expect(handleSearch).toHaveBeenCalledWith(url, 'searchForm', 'assaysTab', 'totalAssays', 'Assay Definitions ', 'assays');
+            expect(handleStructureSearch).not.toHaveBeenCalled();
+
+        });
+        it("Should Call method with 'searchProjects'", function () {
+            url = 'searchProjects';
+            handlePaging(url);
+            expect(handleSearch).toHaveBeenCalledWith(url, 'searchForm', 'projectsTab', 'totalProjects', 'Projects ', 'projects');
+            expect(handleStructureSearch).not.toHaveBeenCalled();
+
+        });
+        it("Should Call method with 'searchCompounds'", function () {
+            url = 'searchCompounds';
+            handlePaging(url);
+            expect(handleSearch).toHaveBeenCalledWith(url, 'searchForm', 'compoundsTab', 'totalCompounds', 'Compounds ', 'compounds');
+            expect(handleStructureSearch).not.toHaveBeenCalled();
+
+        });
+        it("Should Call method with 'searchStructures'", function () {
+            url = 'searchStructures';
+            handlePaging(url);
+            expect(handleStructureSearch).toHaveBeenCalledWith(url, 'searchForm');
+            expect(handleSearch).not.toHaveBeenCalledWith();
+        });
+        it("Should Call method with some unhandled string'", function () {
+            url = 'bogus';
+            handlePaging(url);
+            expect(handleSearch).not.toHaveBeenCalled();
+            expect(handleStructureSearch).not.toHaveBeenCalled();
+        });
+    });
+    describe("test findTheAppropriateControllerActionForRequest()", function () {
+        var searchString;
+        var facetFormType;
+        var searchType;
+        beforeEach(function () {
+            facetFormType = "";
+            searchType = "";
+            searchString = "";
             spyOn(window, "findTheAppropriateControllerActionFromFacetType")
         });
         it("Should handle Free Text Search", function () {
-            searchString = "Free"
-            facetFormType = "Text"
-            searchType="FREE_TEXT"
+            searchString = "Free";
+            facetFormType = "Text";
+            searchType = "FREE_TEXT";
             spyOn(window, "findSearchType").andReturn(searchType);
             findTheAppropriateControllerActionForRequest(searchString, facetFormType);
 
-            expect(findSearchType).toHaveBeenCalledWith(searchString)
-            expect(findTheAppropriateControllerActionFromFacetType).toHaveBeenCalledWith(searchType,facetFormType);
+            expect(findSearchType).toHaveBeenCalledWith(searchString);
+            expect(findTheAppropriateControllerActionFromFacetType).toHaveBeenCalledWith(searchType, facetFormType);
         });
         it("Should handle ID Search", function () {
-            searchString = "123"
-            facetFormType = "Text"
-            searchType="ID"
+            searchString = "123";
+            facetFormType = "Text";
+            searchType = "ID";
 
             spyOn(window, "findSearchType").andReturn(searchType);
             findTheAppropriateControllerActionForRequest(searchString, facetFormType);
 
-            expect(findSearchType).toHaveBeenCalledWith(searchString)
-            expect(findTheAppropriateControllerActionFromFacetType).toHaveBeenCalledWith(searchType,facetFormType);
+            expect(findSearchType).toHaveBeenCalledWith(searchString);
+            expect(findTheAppropriateControllerActionFromFacetType).toHaveBeenCalledWith(searchType, facetFormType);
         });
         it("Should handle Structure Search", function () {
-            searchString = "Exact:CC"
-            facetFormType = "Text"
-            searchType="STRUCTURE"
+            searchString = "Exact:CC";
+            facetFormType = "Text";
+            searchType = "STRUCTURE";
             spyOn(window, "findSearchType").andReturn(searchType);
             findTheAppropriateControllerActionForRequest(searchString, facetFormType);
 
-            expect(findSearchType).toHaveBeenCalledWith(searchString)
-            expect(findTheAppropriateControllerActionFromFacetType).toHaveBeenCalledWith(searchType,facetFormType);
+            expect(findSearchType).toHaveBeenCalledWith(searchString);
+            expect(findTheAppropriateControllerActionFromFacetType).toHaveBeenCalledWith(searchType, facetFormType);
         });
         it("Should handle Empty", function () {
-            searchString = ""
-            facetFormType = "Text"
-            searchType="EMPTY"
+            searchString = "";
+            facetFormType = "Text";
+            searchType = "EMPTY";
             spyOn(window, "findSearchType").andReturn(searchType);
             findTheAppropriateControllerActionForRequest(searchString, facetFormType);
 
-            expect(findSearchType).toHaveBeenCalledWith(searchString)
-            expect(findTheAppropriateControllerActionFromFacetType).toHaveBeenCalledWith(searchType,facetFormType);
+            expect(findSearchType).toHaveBeenCalledWith(searchString);
+            expect(findTheAppropriateControllerActionFromFacetType).toHaveBeenCalledWith(searchType, facetFormType);
 
         });
     });
@@ -412,10 +459,10 @@ describe("Testing search.js", function () {
 
     describe("test findTheAppropriateControllerActionFromFacetType()", function () {
         var facetFormType;
-        var searchType
+        var searchType;
         beforeEach(function () {
-            facetFormType = ""
-            searchType=""
+            facetFormType = "";
+            searchType = "";
         });
 
         it("Should handle Empty Search Type", function () {
@@ -423,67 +470,67 @@ describe("Testing search.js", function () {
             expect(controllerAction).toEqual("EMPTY");
         });
         it("Should handle Empty Form Type", function () {
-            searchType="Some String"
+            searchType = "Some String";
             var controllerAction = findTheAppropriateControllerActionFromFacetType(searchType, facetFormType);
             expect(controllerAction).toEqual("EMPTY");
         });
         it("Should handle Free Text and AssayFacetForm type", function () {
-            facetFormType = "AssayFacetForm"
-            searchType="FREE_TEXT"
+            facetFormType = "AssayFacetForm";
+            searchType = "FREE_TEXT";
             var controllerAction = findTheAppropriateControllerActionFromFacetType(searchType, facetFormType);
             expect(controllerAction).toEqual("searchAssays");
         });
         it("Should handle Free Text and ProjectFacetForm type", function () {
-            facetFormType = "ProjectFacetForm"
-            searchType="FREE_TEXT"
+            facetFormType = "ProjectFacetForm";
+            searchType = "FREE_TEXT";
             var controllerAction = findTheAppropriateControllerActionFromFacetType(searchType, facetFormType);
             expect(controllerAction).toEqual("searchProjects");
         });
         it("Should handle Free Text and CompoundFacetForm type", function () {
-            facetFormType = "CompoundFacetForm"
-            searchType="FREE_TEXT"
+            facetFormType = "CompoundFacetForm";
+            searchType = "FREE_TEXT";
             var controllerAction = findTheAppropriateControllerActionFromFacetType(searchType, facetFormType);
             expect(controllerAction).toEqual("searchCompounds");
         });
         it("Should handle ID and AssayFacetForm type", function () {
-            facetFormType = "AssayFacetForm"
-            searchType="ID"
+            facetFormType = "AssayFacetForm";
+            searchType = "ID";
             var controllerAction = findTheAppropriateControllerActionFromFacetType(searchType, facetFormType);
             expect(controllerAction).toEqual("searchAssaysByIDs");
         });
         it("Should handle ID and ProjectFacetForm type", function () {
-            facetFormType = "ProjectFacetForm"
-            searchType="ID"
+            facetFormType = "ProjectFacetForm";
+            searchType = "ID";
             var controllerAction = findTheAppropriateControllerActionFromFacetType(searchType, facetFormType);
             expect(controllerAction).toEqual("searchProjectsByIDs");
         });
         it("Should handle ID and CompoundFacetForm type", function () {
-            facetFormType = "CompoundFacetForm"
-            searchType="ID"
+            facetFormType = "CompoundFacetForm";
+            searchType = "ID";
             var controllerAction = findTheAppropriateControllerActionFromFacetType(searchType, facetFormType);
             expect(controllerAction).toEqual("searchCompoundsByIDs");
         });
         it("Should handle STRUCTURE and AssayFacetForm type", function () {
-            facetFormType = "AssayFacetForm"
-            searchType="STRUCTURE"
+            facetFormType = "AssayFacetForm";
+            searchType = "STRUCTURE";
             var controllerAction = findTheAppropriateControllerActionFromFacetType(searchType, facetFormType);
             expect(controllerAction).toEqual("EMPTY");
         });
         it("Should handle STRUCTURE and ProjectFacetForm type", function () {
-            facetFormType = "ProjectFacetForm"
-            searchType="STRUCTURE"
+            facetFormType = "ProjectFacetForm";
+            searchType = "STRUCTURE";
             var controllerAction = findTheAppropriateControllerActionFromFacetType(searchType, facetFormType);
             expect(controllerAction).toEqual("EMPTY");
         });
         it("Should handle STRUCTURE and CompoundFacetForm type", function () {
-            facetFormType = "CompoundFacetForm"
-            searchType="STRUCTURE"
+            facetFormType = "CompoundFacetForm";
+            searchType = "STRUCTURE";
             var controllerAction = findTheAppropriateControllerActionFromFacetType(searchType, facetFormType);
             expect(controllerAction).toEqual("structureSearch");
         });
         it("Should handle Any Other String and facet type", function () {
-            facetFormType = "CompoundFacetForm"
-            searchType="I_DO_NOT_EXIST"
+            facetFormType = "CompoundFacetForm";
+            searchType = "I_DO_NOT_EXIST";
             var controllerAction = findTheAppropriateControllerActionFromFacetType(searchType, facetFormType);
             expect(controllerAction).toEqual("EMPTY");
         });

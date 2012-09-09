@@ -44,58 +44,55 @@ $(document).ready(function () {
     });
     $('#CompoundFacetForm').live('submit', function (event) {
         var searchString = $("#searchString").val();
-        handleFilteredQuery(searchString, 'CompoundFacetForm', 'CompoundFacetForm', 'compoundsTab', "totalCompounds", 'compounds', 'Compounds ')
+        handleFilteredQuery(searchString, 'CompoundFacetForm', 'CompoundFacetForm', 'compoundsTab', "totalCompounds", 'compounds', 'Compounds ');
         return false; //do not submit form the normal way, use Ajax instead
 
     });
-});
 
-///**
-// * @param controllerAction -
-// * @param currentFormId - The id of the currently selected form
-// * @param currentTabId - The id of the currently selected tab
-// * @param numberOfHitsDivId - The id of the div where we would display the total number of hits
-// * @param updateId - The id of the div where we would display the results of the ajax call
-// * @param tabDisplayPrefix - The prefix for the string that we would display on the currently selected tab (for example 'Assay Definitions')
-// */
-//function handleFilterFormSubmit(controllerAction, currentFormId, currentTabId, numberOfHitsDivId, updateId, tabDisplayPrefix) {
-//
-//    var fullURL = '/bardwebquery/bardWebInterface/' + controllerAction;
-//    var currentTabDivId = '#' + currentTabId;
-//    var totalHitsElement = '#' + numberOfHitsDivId;
-//    var updateDivId = '#' + updateId;
-//    var formId = '#' + currentFormId;
-//
-//    $.ajax({
-//        url:fullURL,
-//        type:'POST',
-//        data:$(formId).serialize(),
-//        cache:false,
-//        beforeSend:function () {
-//            $(currentTabDivId).html(tabDisplayPrefix + spinnerImageLink);
-//        },
-//        success:function (data) {
-//            $(updateDivId).html(data);
-//            var total = tabDisplayPrefix + ' (' + $(totalHitsElement).val() + ')';
-//            $(currentTabDivId).html(total);
-//        },
-//        error:function (request, status, error) {
-//            $(currentTabDivId).html(tabDisplayPrefix + errorImageTwitterBootstrap);
-//            $(updateDivId).html(error);
-//        },
-//        complete:function () {
-//        }
-//    });
-//}
+    //=== Handle Paging. We bind to all of the paging css classes on the anchor tag ===
+    $("a.step,a.nextLink,a.prevLink").live('click', function (event) {
+        event.preventDefault();	// prevent the default action behaviour to happen
+        var url = $(this).attr('href');
+
+        handlePaging(url)
+    });
+
+});
+/**
+ * Handle paging using Ajax
+ * TODO: Only paging on the main form is supported.
+ * Paging with filters is not yet supported
+ * @param url
+ */
+function handlePaging(url) {
+    var assayIndex = url.indexOf("Assays");
+    var compoundIndex = url.indexOf("Compounds");
+    var projectIndex = url.indexOf("Projects");
+    var structureSearchIndex = url.indexOf("Structure");
+
+    //to find the right search to perform
+    if (assayIndex >= 0) {
+        handleSearch(url, 'searchForm', 'assaysTab', 'totalAssays', 'Assay Definitions ', 'assays');
+    }
+    else if (compoundIndex >= 0) {
+        handleSearch(url, 'searchForm', 'compoundsTab', 'totalCompounds', 'Compounds ', 'compounds');
+    }
+    else if (projectIndex >= 0) {
+        handleSearch(url, 'searchForm', 'projectsTab', 'totalProjects', 'Projects ', 'projects');
+    }
+    else if (structureSearchIndex >= 0) {
+        handleStructureSearch(url, 'searchForm');
+    }
+}
 /**
  * Handle structure searches { exact, Substructure, superstructure and similarity searches}
  */
-function handleStructureSearch(currentFormId) {
+function handleStructureSearch(url, currentFormId) {
     var searchForm = "#" + currentFormId;
 
-    var fullURL = '/bardwebquery/bardWebInterface/searchStructures';
+
     $.ajax({
-        url:fullURL,
+        url:url,
         type:'POST',
         data:$(searchForm).serialize(),
         cache:false,
@@ -125,13 +122,12 @@ function handleStructureSearch(currentFormId) {
  * @param updateDiv - Where the results will be displayed
  */
 function handleSearch(controllerAction, currentFormId, tabId, totalHitsForResourceId, prefixOfTextToAppearOnTab, updateDiv) {
-    var fullURL = '/bardwebquery/bardWebInterface/' + controllerAction;
     var tabDivElement = '#' + tabId;
     var totalHitsElement = '#' + totalHitsForResourceId;
     var updateDivId = '#' + updateDiv;
     var searchForm = "#" + currentFormId;
     $.ajax({
-        url:fullURL,
+        url:controllerAction,
         type:'POST',
         data:$(searchForm).serialize(),
         cache:false,
@@ -164,12 +160,12 @@ function handleSearch(controllerAction, currentFormId, tabId, totalHitsForResour
  */
 function handleFilteredQuery(searchString, facetFormType, currentFormId, currentTabId, numberOfHitsDivId, updateId, tabDisplayPrefix) {
 
-    var controllerAction = findTheAppropriateControllerActionForRequest(searchString, facetFormType)
+    var controllerAction = findTheAppropriateControllerActionForRequest(searchString, facetFormType);
     if (controllerAction == 'structureSearch') {
-        handleStructureSearch(currentFormId)
+        handleStructureSearch('/bardwebquery/bardWebInterface/searchStructures', currentFormId)
     }
     else if (controllerAction != 'EMPTY') {
-        handleSearch(controllerAction, currentFormId, currentTabId, numberOfHitsDivId, tabDisplayPrefix, updateId);
+        handleSearch('/bardwebquery/bardWebInterface/' + controllerAction, currentFormId, currentTabId, numberOfHitsDivId, tabDisplayPrefix, updateId);
     }
 
 }
@@ -182,13 +178,13 @@ function handleFilteredQuery(searchString, facetFormType, currentFormId, current
 function findTheAppropriateControllerActionForRequest(searchString, facetFormType) {
 
     var searchType = findSearchType(searchString);
-    return findTheAppropriateControllerActionFromFacetType(searchType,facetFormType)
+    return findTheAppropriateControllerActionFromFacetType(searchType, facetFormType)
 }
-function findTheAppropriateControllerActionFromFacetType(searchType,facetFormType) {
-    if (!$.trim(searchType).length){ //if empty search string
+function findTheAppropriateControllerActionFromFacetType(searchType, facetFormType) {
+    if (!$.trim(searchType).length) { //if empty search string
         return "EMPTY"
     }
-    if (!$.trim(facetFormType).length){  //if empty facet form type
+    if (!$.trim(facetFormType).length) {  //if empty facet form type
         return "EMPTY"
     }
 
@@ -246,7 +242,7 @@ function handleMainFormSubmit(searchString) {
             handleAllIdSearches();
             break;
         case 'STRUCTURE':
-            handleStructureSearch('searchForm');
+            handleStructureSearch('/bardwebquery/bardWebInterface/searchStructures', 'searchForm');
             break;
     }
 }
@@ -254,18 +250,18 @@ function handleMainFormSubmit(searchString) {
  * Handle all free text searches
  */
 function handleAllFreeTextSearches() {
-    handleSearch('searchAssays', 'searchForm', 'assaysTab', 'totalAssays', 'Assay Definitions ', 'assays');
-    handleSearch('searchCompounds', 'searchForm', 'compoundsTab', 'totalCompounds', 'Compounds ', 'compounds');
-    handleSearch('searchProjects', 'searchForm', 'projectsTab', 'totalProjects', 'Projects ', 'projects');
+    handleSearch('/bardwebquery/bardWebInterface/searchAssays', 'searchForm', 'assaysTab', 'totalAssays', 'Assay Definitions ', 'assays');
+    handleSearch('/bardwebquery/bardWebInterface/searchCompounds', 'searchForm', 'compoundsTab', 'totalCompounds', 'Compounds ', 'compounds');
+    handleSearch('/bardwebquery/bardWebInterface/searchProjects', 'searchForm', 'projectsTab', 'totalProjects', 'Projects ', 'projects');
 }
 
 /**
  * Handle all ID searches
  */
 function handleAllIdSearches() {
-    handleSearch('searchAssaysByIDs', 'searchForm', 'assaysTab', 'totalAssays', 'Assay Definitions ', 'assays');
-    handleSearch('searchCompoundsByIDs', 'searchForm', 'compoundsTab', 'totalCompounds', 'Compounds ', 'compounds');
-    handleSearch('searchProjectsByIDs', 'searchForm', 'projectsTab', 'totalProjects', 'Projects ', 'projects');
+    handleSearch('/bardwebquery/bardWebInterface/searchAssaysByIDs', 'searchForm', 'assaysTab', 'totalAssays', 'Assay Definitions ', 'assays');
+    handleSearch('/bardwebquery/bardWebInterface/searchCompoundsByIDs', 'searchForm', 'compoundsTab', 'totalCompounds', 'Compounds ', 'compounds');
+    handleSearch('/bardwebquery/bardWebInterface/searchProjectsByIDs', 'searchForm', 'projectsTab', 'totalProjects', 'Projects ', 'projects');
 }
 /**
  * Make Tabs inactive
