@@ -72,13 +72,13 @@ function handlePaging(url) {
 
     //to find the right search to perform
     if (assayIndex >= 0) {
-        handleSearch(url, 'searchForm', 'assaysTab', 'totalAssays', 'Assay Definitions ', 'assays');
+        handleSearch(url, 'AssayFacetForm', 'assaysTab', 'totalAssays', 'Assay Definitions ', 'assays');
     }
     else if (compoundIndex >= 0) {
-        handleSearch(url, 'searchForm', 'compoundsTab', 'totalCompounds', 'Compounds ', 'compounds');
+        handleSearch(url, 'CompoundFacetForm', 'compoundsTab', 'totalCompounds', 'Compounds ', 'compounds');
     }
     else if (projectIndex >= 0) {
-        handleSearch(url, 'searchForm', 'projectsTab', 'totalProjects', 'Projects ', 'projects');
+        handleSearch(url, 'ProjectFacetForm', 'projectsTab', 'totalProjects', 'Projects ', 'projects');
     }
     else if (structureSearchIndex >= 0) {
         handleStructureSearch(url, 'searchForm');

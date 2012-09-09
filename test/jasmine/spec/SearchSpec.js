@@ -371,21 +371,21 @@ describe("Testing search.js", function () {
         it("Should Call method with 'searchAssays'", function () {
             url = 'searchAssays';
             handlePaging(url);
-            expect(handleSearch).toHaveBeenCalledWith(url, 'searchForm', 'assaysTab', 'totalAssays', 'Assay Definitions ', 'assays');
+            expect(handleSearch).toHaveBeenCalledWith(url, 'AssayFacetForm', 'assaysTab', 'totalAssays', 'Assay Definitions ', 'assays');
             expect(handleStructureSearch).not.toHaveBeenCalled();
 
         });
         it("Should Call method with 'searchProjects'", function () {
             url = 'searchProjects';
             handlePaging(url);
-            expect(handleSearch).toHaveBeenCalledWith(url, 'searchForm', 'projectsTab', 'totalProjects', 'Projects ', 'projects');
+            expect(handleSearch).toHaveBeenCalledWith(url, 'ProjectFacetForm', 'projectsTab', 'totalProjects', 'Projects ', 'projects');
             expect(handleStructureSearch).not.toHaveBeenCalled();
 
         });
         it("Should Call method with 'searchCompounds'", function () {
             url = 'searchCompounds';
             handlePaging(url);
-            expect(handleSearch).toHaveBeenCalledWith(url, 'searchForm', 'compoundsTab', 'totalCompounds', 'Compounds ', 'compounds');
+            expect(handleSearch).toHaveBeenCalledWith(url, 'CompoundFacetForm', 'compoundsTab', 'totalCompounds', 'Compounds ', 'compounds');
             expect(handleStructureSearch).not.toHaveBeenCalled();
 
         });
