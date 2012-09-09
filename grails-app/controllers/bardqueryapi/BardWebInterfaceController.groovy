@@ -7,6 +7,7 @@ import bard.core.adapter.ProjectAdapter
 import org.apache.commons.lang3.StringUtils
 
 import javax.servlet.http.HttpServletResponse
+import bard.core.Value
 
 /**
  *
@@ -324,7 +325,7 @@ class SearchHelper {
 
     def handleAssaySearches(final bardqueryapi.QueryService queryService, final SearchCommand searchCommand) {
         if (StringUtils.isNotBlank(searchCommand.searchString)) {
-             final List<SearchFilter> searchFilters = findFiltersInSearchBox(searchCommand)
+            final List<SearchFilter> searchFilters = findFiltersInSearchBox(searchCommand)
             final String searchString = searchCommand.searchString.trim()
 
             try {
@@ -333,11 +334,33 @@ class SearchHelper {
                 int skip = searchParams.skip
 
                 final Map assaysByTextSearchResultsMap = queryService.findAssaysByTextSearch(searchString, top, skip, searchFilters)
+//                //Includes all the applied search-filters (selected previously) that were also returned with the new filtering faceting.
+//                List<SearchFilter> appliedFiltersAlreadyInFacets = searchFilters.findAll { SearchFilter filter ->
+//                    Value parent = assaysByTextSearchResultsMap.facets.find {Value parent -> parent.id == filter.filterName}
+//                    return parent?.children.find { Value child -> child.id == filter.filterValue}
+//                }
+//                //Groups all the applied search-filters in facets into a parent-facet/children-facets map. We use this group to display the applied search filters WITHIN the facet groups
+//                //If the facet-group exists but the applied-filter's corresponding facet didn't come back after the filtering, we still want to display the filter in its appropriate (facet) group, if we can.
+//                Map appliedFiltersNotInFacetsGrouped = (searchFilters - appliedFiltersAlreadyInFacets) ?
+//                    (searchFilters - appliedFiltersAlreadyInFacets).groupBy { SearchFilter filter -> filter.filterName} : [:]
+//
+//                //Includes all the applied filters we know would not have any facet group since no facet in this group came back after the filtering was applied.
+//                //We need to group these filters, rebuild their groups (parent) and display them next to the facets
+//                List<SearchFilter> appliedFiltersDisplayedOutsideFacets = (searchFilters - appliedFiltersAlreadyInFacets)?.findAll { SearchFilter filter ->
+//                    //filter.filterName is not in any of the parents' ids
+//                    return !(assaysByTextSearchResultsMap.facets.find { Value parent -> parent.id == filter.filterName})
+//                }
+//
+//                //Group all the applied filters so we can use the keys as group (parent) names.
+//                Map appliedFiltersDisplayedOutsideFacetsGrouped = appliedFiltersDisplayedOutsideFacets ?
+//                    appliedFiltersDisplayedOutsideFacets.groupBy { SearchFilter filter -> filter.filterName} : [:]
+//
                 render(template: 'assays', model: [
                         assayAdapters: assaysByTextSearchResultsMap.assayAdapters,
                         facets: assaysByTextSearchResultsMap.facets,
                         nhits: assaysByTextSearchResultsMap.nHits,
-                        searchString: "${searchString}"])
+                        searchString: "${searchString}",
+                        searchFilters: searchFilters])
                 return
             }
             catch (Exception exp) {
@@ -347,7 +370,6 @@ class SearchHelper {
         }
         return response.sendError(HttpServletResponse.SC_BAD_REQUEST,
                 "Search String required")
-
     }
 
     def handleCompoundSearches(final bardqueryapi.QueryService queryService, final SearchCommand searchCommand) {
@@ -368,8 +390,8 @@ class SearchHelper {
                                 compoundAdapters: compoundsByTextSearchResultsMap.compoundAdapters,
                                 facets: compoundsByTextSearchResultsMap.facets,
                                 nhits: compoundsByTextSearchResultsMap.nHits,
-                                searchString: "${searchString}"
-                        ]
+                                searchString: "${searchString}",
+                                searchFilters: searchFilters]
                 )
                 return
             }
@@ -398,7 +420,8 @@ class SearchHelper {
                         projectAdapters: projectsByTextSearch.projectAdapters,
                         facets: projectsByTextSearch.facets,
                         nhits: projectsByTextSearch.nHits,
-                        searchString: "${searchString}"])
+                        searchString: "${searchString}",
+                        searchFilters: searchFilters])
                 return
             }
             catch (Exception exp) {
