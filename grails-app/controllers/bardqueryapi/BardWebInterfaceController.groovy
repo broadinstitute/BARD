@@ -52,7 +52,8 @@ class BardWebInterfaceController {
                         compoundAdapters: compoundAdapters,
                         facets: compoundAdapterMap.facets,
                         nhits: compoundAdapterMap.nHits,
-                        searchString: "${searchCommand.searchString}"
+                        searchString: "${searchCommand.searchString}",
+                        appliedFilters: getAppliedFilters(searchFilters, compoundAdapterMap.facets)
                 ]
                 )
             }
@@ -84,7 +85,8 @@ class BardWebInterfaceController {
                         assayAdapters: assayAdapterMap.assayAdapters,
                         facets: assayAdapterMap.facets,
                         nhits: assayAdapterMap.nHits,
-                        searchString: "${searchCommand.searchString}"])
+                        searchString: "${searchCommand.searchString}",
+                        appliedFilters: getAppliedFilters(searchFilters, assayAdapterMap.facets)])
             }
             catch (Exception exp) {
                 log.error(exp)
@@ -112,7 +114,8 @@ class BardWebInterfaceController {
                         projectAdapters: projectAdapterMap.projectAdapters,
                         facets: projectAdapterMap.facets,
                         nhits: projectAdapterMap.nHits,
-                        searchString: "${searchCommand.searchString}"])
+                        searchString: "${searchCommand.searchString}",
+                        appliedFilters: getAppliedFilters(searchFilters, projectAdapterMap.facets)])
             }
             catch (Exception exp) {
                 log.error(exp)
@@ -152,7 +155,8 @@ class BardWebInterfaceController {
                             compoundAdapters: compoundAdapters,
                             facets: compoundAdapterMap.facets,
                             nhits: compoundAdapterMap.nHits,
-                            searchString: "${searchCommand.searchString}"
+                            searchString: "${searchCommand.searchString}",
+                            appliedFilters: getAppliedFilters(searchFilters, compoundAdapterMap.facets)
                     ]
                     )
                 }
