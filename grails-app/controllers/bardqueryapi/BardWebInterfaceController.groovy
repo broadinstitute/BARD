@@ -67,6 +67,7 @@ class BardWebInterfaceController {
                 return
             }
             catch (Exception exp) {
+                log.error(exp)
                 return response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR,
                         "Compound search has encountered an error:\n${exp.message}")
             }
@@ -105,6 +106,7 @@ class BardWebInterfaceController {
                 return
             }
             catch (Exception exp) {
+                log.error(exp)
                 return response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR,
                         "Assay search has encountered an error:\n${exp.message}")
             }
@@ -141,6 +143,7 @@ class BardWebInterfaceController {
                 return
             }
             catch (Exception exp) {
+                log.error(exp)
                 return response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR.intValue(),
                         "Project search has encountered an error:\n${exp.message}")
             }
@@ -191,6 +194,7 @@ class BardWebInterfaceController {
                 }
             }
             catch (Exception exp) {
+                log.error(exp)
                 return response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR.intValue(),
                         "Structure search has encountered an error:\n${exp.message}")
             }
@@ -222,6 +226,7 @@ class BardWebInterfaceController {
             }
         }
         catch (Exception exp) {
+            log.error(exp)
             return response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR.intValue(),
                     "Structure search has encountered an error:\n${exp.message}")
         }
@@ -242,6 +247,7 @@ class BardWebInterfaceController {
             }
         }
         catch (Exception exp) {
+            log.error(exp)
             return response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR.intValue(),
                     "Structure search has encountered an error:\n${exp.message}")
         }
@@ -259,6 +265,7 @@ class BardWebInterfaceController {
             }
         }
         catch (Exception exp) {
+            log.error(exp)
             return response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR.intValue(),
                     "Structure search has encountered an error:\n${exp.message}")
         }
@@ -307,6 +314,7 @@ class BardWebInterfaceController {
             }
         }
         catch (Exception exp) {
+            log.error(exp)
             return response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR.intValue(),
                     "Structure search has encountered an error:\n${exp.message}")
         }
@@ -364,6 +372,7 @@ class SearchHelper {
                 return
             }
             catch (Exception exp) {
+                log.error(exp)
                 return response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR,
                         "Assay search has encountered an error:\n${exp.message}")
             }
@@ -396,6 +405,7 @@ class SearchHelper {
                 return
             }
             catch (Exception exp) {
+                log.error(exp)
                 return response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR,
                         "Compound search has encountered an error:\n${exp.message}")
             }
@@ -425,6 +435,7 @@ class SearchHelper {
                 return
             }
             catch (Exception exp) {
+                log.error(exp)
                 return response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR,
                         "Project search has encountered an error:\n${exp.message}")
             }

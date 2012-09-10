@@ -54,7 +54,7 @@
 <body>
 <div class="container-fluid">
     <div class="row-fluid">
-        <div class="span3"><a href="${createLink(controller:'BardWebInterface',action:'index')}"><img src="${resource(dir: 'images', file: 'bardLogo.png')}" alt="BioAssay Research Database" /></a></div>
+        <div class="span3"><a href="${createLink(controller:'BardWebInterface',action:'index')}"><img src="${resource(dir: 'images', file: 'bard_logo_small.png')}" alt="BioAssay Research Database" /></a></div>
         <g:form name="searchForm" controller="bardWebInterface" action="search" class="form-search" id="searchForm">
             <div class="span6" style="margin-top: 20px;">
                 <div class="control-group">

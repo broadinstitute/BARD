@@ -7,6 +7,9 @@ class CartCompound extends Shoppable {
     int compoundId  = 0
     String smiles
 
+    CartCompound() {
+
+    }
 
     CartCompound( String smiles, int compoundId ) {
         this.smiles = smiles
