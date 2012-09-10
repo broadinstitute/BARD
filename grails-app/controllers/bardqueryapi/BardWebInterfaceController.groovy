@@ -425,8 +425,11 @@ class SearchHelper {
         if (!searchFilters) {//user SearchCommand
             searchFilters = []
         }
-        String[] searchCommandSplit = searchCommand.searchString.trim().split(",")
-        searchCommand.searchString = searchCommandSplit[0].trim()
+        //String[] searchCommandSplit = searchCommand.searchString.trim().split(",")
+        //we need to remove duplicates
+        Set<String> searchCommandSplit = searchCommand.searchString.trim().split(",") as Set<String>
+
+        searchCommand.searchString = searchCommandSplit.join(",")
         params.searchString = searchCommand.searchString
         final String searchString = searchCommand.searchString
         //now parse the GO TERMS out of it
