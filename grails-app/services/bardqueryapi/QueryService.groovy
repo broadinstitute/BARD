@@ -186,8 +186,9 @@ class QueryService {
             final RESTCompoundService restCompoundService = this.queryServiceWrapper.getRestCompoundService()
             //create ETAG using a random name
             StopWatch sw = startStopWatch()
-            final Object etag = restCompoundService.newETag("Compound ETags", compoundIds);
-            facets = restCompoundService.getFacets(etag)
+            //final Object etag = restCompoundService.newETag("Compound ETags", compoundIds);
+            //commenting out facets until we figure out how to apply filters to ID searches
+            //facets = restCompoundService.getFacets(etag)
             final Collection<Compound> compounds = restCompoundService.get(compoundIds)
             stopStopWatch(sw, "find compounds by CIDs ${compoundIds.toString()}")
             compoundAdapters.addAll(compoundsToAdapters(compounds))
