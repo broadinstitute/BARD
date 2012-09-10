@@ -6,7 +6,7 @@ import org.apache.log4j.DailyRollingFileAppender
 bard.services.elasticSearchService.restNode.baseUrl = "http://bard-dev-vm:9200"
 
 //TODO: Override in dev, qa and prod to point to the current stable realse
-ncgc.server.root.url = "http://bard.nih.gov/api/v2"
+ncgc.server.root.url = "http://bard.nih.gov/api/v3"
 ncgc.server.username = "bogus"
 ncgs.server.password = "bogus"
 ncgc.server.projects.url = "${ncgc.server.root.url}/projects/"
@@ -75,24 +75,7 @@ environments {
     }
 }
 
-grails.serverURL = System.properties.get('grails.serverUrl') ?: getServerUrl()
-
-String getServerUrl() {
-    switch (Environment.current.name) {
-        case ('production'):
-            "http://bard.broadinstitute.org/bardwebquery"
-            break
-        case ('oracleqa'):
-            "http://bard-qa.broadinstitute.org/bardwebquery"
-            break
-        case ('oracledev'):
-            "http://bard-dev.broadinstitute.org/bardwebquery"
-            break
-        default:
-            "http://localhost:8080/bardwebquery"
-            break
-    }
-}
+grails.serverURL ="http://localhost:8080/bardwebquery"
 
 // log4j configuration
 log4j = {

@@ -91,9 +91,6 @@ class QueryServiceIntegrationSpec extends IntegrationSpec {
         assert projectAdapter.project
         assert projectId == projectAdapter.project.id
         assert projectAdapter.name
-        assert projectAdapter.project.type == AssayValues.AssayType.Other
-        assert projectAdapter.project.role == AssayValues.AssayRole.Primary
-        assert projectAdapter.project.category == AssayValues.AssayCategory.Unknown
         assert projectAdapter.project.description
     }
 
@@ -118,7 +115,7 @@ class QueryServiceIntegrationSpec extends IntegrationSpec {
      */
     void "test Structure Search #label"() {
         when: ""
-        final Map compoundAdapterMap = queryService.structureSearch(smiles, structureSearchParamsType,[], top, skip)
+        final Map compoundAdapterMap = queryService.structureSearch(smiles, structureSearchParamsType, [], top, skip)
         then:
         assert compoundAdapterMap
         final List<CompoundAdapter> compoundAdapters = compoundAdapterMap.compoundAdapters
@@ -191,10 +188,9 @@ class QueryServiceIntegrationSpec extends IntegrationSpec {
         where:
         label                             | searchString         | skip | top | numberOfAssays | filters
         "dna repair"                      | "dna repair"         | 0    | 10  | 10             | []
-        "dna repair with filters"         | "dna repair"         | 0    | 10  | 3              | [new SearchFilter("gobp_term", "DNA repair"), new SearchFilter("gobp_term", "response to UV-C")]
+        "dna repair with filters"         | "dna repair"         | 0    | 10  | 2              | [new SearchFilter("gobp_term", "DNA repair"), new SearchFilter("gobp_term", "response to UV-C")]
         "dna repair skip and top"         | "dna repair"         | 10   | 10  | 10             | []
         "biological process"              | "biological process" | 0    | 10  | 10             | []
-        "biological process with filters" | "biological process" | 0    | 10  | 1              | [new SearchFilter("gobp_term", "DNA repair"), new SearchFilter("gobp_term", "response to UV-C")]
 
     }
 
