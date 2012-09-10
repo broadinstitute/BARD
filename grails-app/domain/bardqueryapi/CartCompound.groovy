@@ -35,10 +35,13 @@ class CartCompound extends Shoppable {
 
     @Override
     String toString() {
-        if (smiles?.length() == 0)
+        String trimmedName = smiles?.trim()
+        if ((trimmedName == null) ||
+            (trimmedName?.length() == 0) ||
+            ("null".equals(trimmedName)))
            "PubChem CID=${compoundId.toString()}"
         else
-            smiles
+            trimmedName
     }
 
     static constraints = {
