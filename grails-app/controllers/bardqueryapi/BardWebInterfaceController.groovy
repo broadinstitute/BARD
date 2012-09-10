@@ -7,6 +7,7 @@ import bard.core.adapter.ProjectAdapter
 import org.apache.commons.lang3.StringUtils
 
 import javax.servlet.http.HttpServletResponse
+import bard.core.Value
 
 /**
  *
@@ -38,21 +39,12 @@ class BardWebInterfaceController {
      * Given a list of Compound ids, invoke this method
      */
     def searchCompoundsByIDs(SearchCommand searchCommand) {
-        List<SearchFilter> searchFilters = []
-        if (searchCommand.formName) {//user SearchCommand
-            searchFilters = searchCommand.getAppliedFilters()
-        } else {
-            searchFilters = params.filters
-            if (!searchFilters) {
-                searchFilters = []
-            }
-
-        }
         if (searchCommand.searchString) {
-            final String searchString = searchCommand.searchString.trim()
+            final List<SearchFilter> searchFilters = findFiltersInSearchBox(searchCommand)
+
             try {
                 //strip out all spaces
-                final List<Long> cids = searchStringToIdList(searchString)
+                final List<Long> cids = searchStringToIdList(searchCommand.searchString)
 
                 Map compoundAdapterMap = this.queryService.findCompoundsByCIDs(cids, searchFilters)
                 List<CompoundAdapter> compoundAdapters = compoundAdapterMap.compoundAdapters
@@ -60,95 +52,79 @@ class BardWebInterfaceController {
                         compoundAdapters: compoundAdapters,
                         facets: compoundAdapterMap.facets,
                         nhits: compoundAdapterMap.nHits,
-                        searchString: "${searchString}"
+                        searchString: "${searchCommand.searchString}"
                 ]
                 )
-                return
             }
             catch (Exception exp) {
                 log.error(exp)
                 return response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR,
                         "Compound search has encountered an error:\n${exp.message}")
             }
+        } else {
+            flash.message = 'Search String is required'
+            return response.sendError(HttpServletResponse.SC_BAD_REQUEST,
+                    "Search String is required")
         }
-        flash.message = 'Search String is required'
-        redirect(action: "homePage")
-
 
     }
     /**
      * Given a list of assays ids, invoke this action
      */
     def searchAssaysByIDs(SearchCommand searchCommand) {
-        List<SearchFilter> searchFilters = []
-        if (searchCommand.formName) {//user SearchCommand
-            searchFilters = searchCommand.getAppliedFilters()
-        } else {
-            searchFilters = params.filters
-            if (!searchFilters) {
-                searchFilters = []
-            }
 
-        }
         if (StringUtils.isNotBlank(searchCommand.searchString)) {
-            String searchString = searchCommand.searchString.trim()
+            final List<SearchFilter> searchFilters = findFiltersInSearchBox(searchCommand)
 
             try {
-                final List<Long> adids = searchStringToIdList(searchString)
+                final List<Long> adids = searchStringToIdList(searchCommand.searchString)
                 final Map assayAdapterMap = this.queryService.findAssaysByADIDs(adids, searchFilters)
 
                 render(template: 'assays', model: [
                         assayAdapters: assayAdapterMap.assayAdapters,
                         facets: assayAdapterMap.facets,
                         nhits: assayAdapterMap.nHits,
-                        searchString: "${searchString}"])
-                return
+                        searchString: "${searchCommand.searchString}"])
             }
             catch (Exception exp) {
                 log.error(exp)
                 return response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR,
                         "Assay search has encountered an error:\n${exp.message}")
             }
+        } else {
+            flash.message = 'Search String is required'
+            return response.sendError(HttpServletResponse.SC_BAD_REQUEST,
+                    "Search String is required")
         }
-        flash.message = 'Search String is required'
-        redirect(action: "homePage")
     }
     /**
      * Given a list of Project ids, invoke this action
      */
     def searchProjectsByIDs(SearchCommand searchCommand) {
-        List<SearchFilter> searchFilters = []
-        if (searchCommand.formName) {//user SearchCommand
-            searchFilters = searchCommand.getAppliedFilters()
-        } else {
-            searchFilters = params.filters
-            if (!searchFilters) {
-                searchFilters = []
-            }
 
-        }
         if (StringUtils.isNotBlank(searchCommand.searchString)) {
-            String searchString = searchCommand.searchString.trim()
+            final List<SearchFilter> searchFilters = findFiltersInSearchBox(searchCommand)
 
             try {
-                final List<Long> projectIds = searchStringToIdList(searchString)
-                Map projectAdapterMap = this.queryService.findProjectsByPIDs(projectIds, filters)
+                final List<Long> projectIds = searchStringToIdList(searchCommand.searchString)
+                Map projectAdapterMap = this.queryService.findProjectsByPIDs(projectIds, searchFilters)
                 render(template: 'projects', model: [
                         projectAdapters: projectAdapterMap.projectAdapters,
                         facets: projectAdapterMap.facets,
                         nhits: projectAdapterMap.nHits,
-                        searchString: "${searchString}"])
-
-                return
+                        searchString: "${searchCommand.searchString}"])
             }
             catch (Exception exp) {
                 log.error(exp)
                 return response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR.intValue(),
                         "Project search has encountered an error:\n${exp.message}")
             }
+        } else {
+            flash.message = 'Search String is required'
+            return response.sendError(HttpServletResponse.SC_BAD_REQUEST,
+                    "Search String is required")
+
         }
-        flash.message = 'Search String is required'
-        redirect(action: "homePage")
 
 
     }
@@ -159,37 +135,26 @@ class BardWebInterfaceController {
      * Do structure searches
      */
     def searchStructures(SearchCommand searchCommand) {
-        List<SearchFilter> searchFilters = []
-        if (searchCommand.formName) {//user SearchCommand
-            searchFilters = searchCommand.getAppliedFilters()
-        } else {
-            searchFilters = params.filters
-            if (!searchFilters) {
-                searchFilters = []
-            }
-
-        }
         if (StringUtils.isNotBlank(searchCommand.searchString)) {
-            String searchString = searchCommand.searchString.trim()
+            final List<SearchFilter> searchFilters = findFiltersInSearchBox(searchCommand)
 
             try {
 
-                final String[] searchStringSplit = searchString.split(":")
+                final String[] searchStringSplit = searchCommand.searchString.split(":")
                 if (searchStringSplit.length == 2) {
                     final String searchTypeString = searchStringSplit[0]
                     final String smiles = searchStringSplit[1]
                     //we make the first character capitalized to match the ENUM
                     final StructureSearchParams.Type searchType = searchTypeString?.toLowerCase()?.capitalize() as StructureSearchParams.Type
-                    Map compoundAdapterMap = queryService.structureSearch(smiles, searchType, filters)
+                    Map compoundAdapterMap = queryService.structureSearch(smiles, searchType, searchFilters)
                     List<CompoundAdapter> compoundAdapters = compoundAdapterMap.compoundAdapters
                     render(template: 'compounds', model: [
                             compoundAdapters: compoundAdapters,
                             facets: compoundAdapterMap.facets,
                             nhits: compoundAdapterMap.nHits,
-                            searchString: "${searchString}"
+                            searchString: "${searchCommand.searchString}"
                     ]
                     )
-                    return
                 }
             }
             catch (Exception exp) {
@@ -197,9 +162,11 @@ class BardWebInterfaceController {
                 return response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR.intValue(),
                         "Structure search has encountered an error:\n${exp.message}")
             }
+        } else {
+            flash.message = 'Search String is required must be of the form StructureSearchType:Smiles'
+            return response.sendError(HttpServletResponse.SC_BAD_REQUEST,
+                    "Search String is required")
         }
-        flash.message = 'Search String is required must be of the form StructureSearchType:Smiles'
-        redirect(action: "homePage")
     }
     //============================================ Show Pages ===================================================================
 
@@ -315,7 +282,7 @@ class BardWebInterfaceController {
         catch (Exception exp) {
             log.error(exp)
             return response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR.intValue(),
-                    "Structure search has encountered an error:\n${exp.message}")
+                    "AutoComplete encoutered and error :\n${exp.message}")
         }
     }
 }
@@ -332,7 +299,7 @@ class SearchHelper {
 
     def handleAssaySearches(final bardqueryapi.QueryService queryService, final SearchCommand searchCommand) {
         if (StringUtils.isNotBlank(searchCommand.searchString)) {
-             final List<SearchFilter> searchFilters = findFiltersInSearchBox(searchCommand)
+            final List<SearchFilter> searchFilters = findFiltersInSearchBox(searchCommand)
             final String searchString = searchCommand.searchString.trim()
 
             try {
@@ -345,7 +312,8 @@ class SearchHelper {
                         assayAdapters: assaysByTextSearchResultsMap.assayAdapters,
                         facets: assaysByTextSearchResultsMap.facets,
                         nhits: assaysByTextSearchResultsMap.nHits,
-                        searchString: "${searchString}"])
+                        searchString: "${searchString}",
+                        searchFilters: searchFilters])
                 return
             }
             catch (Exception exp) {
@@ -353,10 +321,13 @@ class SearchHelper {
                 return response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR,
                         "Assay search has encountered an error:\n${exp.message}")
             }
+        } else {
+            log.error("Search String required")
+            return response.sendError(HttpServletResponse.SC_BAD_REQUEST,
+                    "Search String required")
         }
         return response.sendError(HttpServletResponse.SC_BAD_REQUEST,
                 "Search String required")
-
     }
 
     def handleCompoundSearches(final bardqueryapi.QueryService queryService, final SearchCommand searchCommand) {
@@ -377,19 +348,20 @@ class SearchHelper {
                                 compoundAdapters: compoundsByTextSearchResultsMap.compoundAdapters,
                                 facets: compoundsByTextSearchResultsMap.facets,
                                 nhits: compoundsByTextSearchResultsMap.nHits,
-                                searchString: "${searchString}"
-                        ]
+                                searchString: "${searchString}",
+                                searchFilters: searchFilters]
                 )
-                return
             }
             catch (Exception exp) {
                 log.error(exp)
                 return response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR,
                         "Compound search has encountered an error:\n${exp.message}")
             }
+        } else {
+            log.error('Search String required for Compound Searches')
+            return response.sendError(HttpServletResponse.SC_BAD_REQUEST,
+                    "Search String required cor Compound Searches")
         }
-        return response.sendError(HttpServletResponse.SC_BAD_REQUEST,
-                "Search String required")
 
     }
 
@@ -408,7 +380,8 @@ class SearchHelper {
                         projectAdapters: projectsByTextSearch.projectAdapters,
                         facets: projectsByTextSearch.facets,
                         nhits: projectsByTextSearch.nHits,
-                        searchString: "${searchString}"])
+                        searchString: "${searchString}",
+                        searchFilters: searchFilters])
                 return
             }
             catch (Exception exp) {
@@ -416,9 +389,11 @@ class SearchHelper {
                 return response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR,
                         "Project search has encountered an error:\n${exp.message}")
             }
+        } else {
+            log.error("Search String required for Project searches");
+            return response.sendError(HttpServletResponse.SC_BAD_REQUEST,
+                    "Search String required")
         }
-        return response.sendError(HttpServletResponse.SC_BAD_REQUEST,
-                "Search String required")
 
     }
     /**
@@ -428,8 +403,8 @@ class SearchHelper {
     public Map<String, Integer> handleSearchParams() {
         params.max = Math.min(params.max ? params.int('max') : 10, 100)
         params.offset = params.offset ? params.int('offset') : 0
-        Map<String, Integer> map = [top: new Integer(params.max), skip: new Integer(params.offset)]
-        return map
+
+        Map<String, Integer> map = [top: new Integer(params?.max), skip: new Integer(params?.offset)]
     }
     /**
      * Strip out all empty spaces, split on ',' and return as a list of longs
@@ -450,14 +425,16 @@ class SearchHelper {
         if (!searchFilters) {//user SearchCommand
             searchFilters = []
         }
-
+        String[] searchCommandSplit = searchCommand.searchString.trim().split(",")
+        searchCommand.searchString = searchCommandSplit[0].trim()
+        params.searchString = searchCommand.searchString
         final String searchString = searchCommand.searchString
         //now parse the GO TERMS out of it
-        if (isGoBiologicalTerm(searchString)) {
-            String[] split = searchString.split(":")
-            String searchValue = split[1].trim()
-            SearchFilter searchFilter = new SearchFilter(filterName: GO_BIOLOGICAL_PROCESS_TERM, filterValue: searchValue.trim())
-            searchCommand.searchString = searchValue.trim()
+        if (isGoBiologicalTerm(searchString?.trim())) {
+            String[] split = searchString.trim().split(":")
+            String searchValue = split[1]?.trim()
+            SearchFilter searchFilter = new SearchFilter(filterName: GO_BIOLOGICAL_PROCESS_TERM, filterValue: searchValue?.trim())
+            searchCommand.searchString = searchValue?.trim()
             searchFilters.add(searchFilter)
         }
         return searchFilters

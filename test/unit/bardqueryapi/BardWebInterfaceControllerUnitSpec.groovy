@@ -269,14 +269,13 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
         then:
         _ * this.queryService.structureSearch(_, _, _) >> {compoundAdapterMap}
         and:
-        response.redirectedUrl == expectedRedirectURL
         flash.message == flashMessage
         response.status == statusCode
         where:
-        label                 | searchString | expectedRedirectURL          | flashMessage                                                               | statusCode                               | compoundAdapterMap
-        "Empty Search String" | ""           | '/bardWebInterface/homePage' | 'Search String is required must be of the form StructureSearchType:Smiles' | HttpServletResponse.SC_MOVED_TEMPORARILY | null
-        "Throws Exception"    | "1234,5678"  | '/bardWebInterface/homePage' | 'Search String is required must be of the form StructureSearchType:Smiles' | HttpServletResponse.SC_MOVED_TEMPORARILY | null
-        "Success"             | "Exact:CCC"  | null                         | null                                                                       | HttpServletResponse.SC_OK                | [compoundAdapters: [buildCompoundAdapter(1234, [], "CC"), buildCompoundAdapter(4567, [], "CCC")], facets: [], nHits: 2]
+        label                 | searchString | flashMessage                                                               | statusCode                         | compoundAdapterMap
+        "Empty Search String" | ""           | 'Search String is required must be of the form StructureSearchType:Smiles' | HttpServletResponse.SC_BAD_REQUEST | null
+        "Throws Exception"    | "1234,5678"  | null                                                                       | HttpServletResponse.SC_OK          | null
+        "Success"             | "Exact:CCC"  | null                                                                       | HttpServletResponse.SC_OK          | [compoundAdapters: [buildCompoundAdapter(1234, [], "CC"), buildCompoundAdapter(4567, [], "CCC")], facets: [], nHits: 2]
 
     }
 
