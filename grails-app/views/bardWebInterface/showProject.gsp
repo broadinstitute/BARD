@@ -15,7 +15,7 @@
 
 <div class="row-fluid" style="clear:both;">
     <div class="span3">
-        <a style="float: left;" href="${createLink(controller:'BardWebInterface',action:'index')}"><img src="${resource(dir: 'images', file: 'bardLogo.png')}" alt="BioAssay Research Database" /></a>
+        <a style="float: left;" href="${createLink(controller:'BardWebInterface',action:'index')}"><img src="${resource(dir: 'images', file: 'bard_logo_small.png')}" alt="BioAssay Research Database" /></a>
     </div>
 
     <div class="span7">
