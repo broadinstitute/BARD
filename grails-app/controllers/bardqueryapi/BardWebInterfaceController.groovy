@@ -7,6 +7,7 @@ import bard.core.adapter.ProjectAdapter
 import org.apache.commons.lang3.StringUtils
 
 import javax.servlet.http.HttpServletResponse
+import bard.core.Value
 
 /**
  *
@@ -298,7 +299,7 @@ class SearchHelper {
 
     def handleAssaySearches(final bardqueryapi.QueryService queryService, final SearchCommand searchCommand) {
         if (StringUtils.isNotBlank(searchCommand.searchString)) {
-             final List<SearchFilter> searchFilters = findFiltersInSearchBox(searchCommand)
+            final List<SearchFilter> searchFilters = findFiltersInSearchBox(searchCommand)
             final String searchString = searchCommand.searchString.trim()
 
             try {
@@ -311,7 +312,9 @@ class SearchHelper {
                         assayAdapters: assaysByTextSearchResultsMap.assayAdapters,
                         facets: assaysByTextSearchResultsMap.facets,
                         nhits: assaysByTextSearchResultsMap.nHits,
-                        searchString: "${searchString}"])
+                        searchString: "${searchString}",
+                        searchFilters: searchFilters])
+                return
             }
             catch (Exception exp) {
                 log.error(exp)
@@ -323,7 +326,8 @@ class SearchHelper {
             return response.sendError(HttpServletResponse.SC_BAD_REQUEST,
                     "Search String required")
         }
-
+        return response.sendError(HttpServletResponse.SC_BAD_REQUEST,
+                "Search String required")
     }
 
     def handleCompoundSearches(final bardqueryapi.QueryService queryService, final SearchCommand searchCommand) {
@@ -344,8 +348,8 @@ class SearchHelper {
                                 compoundAdapters: compoundsByTextSearchResultsMap.compoundAdapters,
                                 facets: compoundsByTextSearchResultsMap.facets,
                                 nhits: compoundsByTextSearchResultsMap.nHits,
-                                searchString: "${searchString}"
-                        ]
+                                searchString: "${searchString}",
+                                searchFilters: searchFilters]
                 )
             }
             catch (Exception exp) {
@@ -376,7 +380,9 @@ class SearchHelper {
                         projectAdapters: projectsByTextSearch.projectAdapters,
                         facets: projectsByTextSearch.facets,
                         nhits: projectsByTextSearch.nHits,
-                        searchString: "${searchString}"])
+                        searchString: "${searchString}",
+                        searchFilters: searchFilters])
+                return
             }
             catch (Exception exp) {
                 log.error(exp);
@@ -420,7 +426,7 @@ class SearchHelper {
             searchFilters = []
         }
         String[] searchCommandSplit = searchCommand.searchString.trim().split(",")
-        searchCommand.searchString =searchCommandSplit[0].trim()
+        searchCommand.searchString = searchCommandSplit[0].trim()
         params.searchString = searchCommand.searchString
         final String searchString = searchCommand.searchString
         //now parse the GO TERMS out of it
