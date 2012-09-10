@@ -70,7 +70,6 @@
     </div>
 </div>
 <div id="spinner" class="spinner" style="display:none;"><g:message code="spinner.alt" default="Loading&hellip;"/></div>
-<g:javascript library="application"/>
 <r:require modules="core,bootstrap,search"/>
 <r:layoutResources />
 
