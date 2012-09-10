@@ -61,4 +61,25 @@ class CartCompoundSpec  extends Specification  {
     }
 
 
+
+    void "test toString special cases"() {
+        setup:
+        mockForConstraintsTests(CartCompound)
+
+        when:
+        CartCompound cartCompound = new CartCompound(smiles,compoundId)
+
+        then:
+        cartCompound.toString() == properName
+
+        where:
+        compoundId  |   smiles                  |   properName
+        47          |   null                    |   "PubChem CID=47"
+        47          |   ""                      |   "PubChem CID=47"
+        47          |   "null"                  |   "PubChem CID=47"
+        47          |   "dimethyl tryptamine"   |   "dimethyl tryptamine"
+        47          |   "undifferentiated goo"  |   "undifferentiated goo"
+    }
+
+
 }
