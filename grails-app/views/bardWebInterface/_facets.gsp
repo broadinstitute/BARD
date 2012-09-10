@@ -38,8 +38,6 @@
                 %{--Display the filters already selected in previous search/filter session (but not part of the facets section) --}%
                 <g:each in="${appliedFiltersDisplayedOutsideFacetsGrouped.keySet()}" var="groupName">
                     <fieldset>
-                        <p>test</p>
-
                         <h3>${groupName}</h3>
                         <g:each in="${appliedFiltersDisplayedOutsideFacetsGrouped[groupName]}" var="filter">
                             <label class="checkbox">
