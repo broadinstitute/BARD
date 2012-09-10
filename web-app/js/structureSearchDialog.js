@@ -1,10 +1,7 @@
 $(document).ready(function () {
     $('#modalDiv').modal({
         show: false
-    }).css({
-            height: '655',
-            width: '565'
-        });
+    });
     $('#structureSearchButton').click(function() {
         var structureSearchTypeSelected = $('input:radio[name=structureSearchType]:checked').val();
         var marvinSketch = $('#MarvinSketch')[0];
