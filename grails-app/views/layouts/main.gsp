@@ -23,9 +23,8 @@
 		<g:layoutBody/>
 		<div class="footer" role="contentinfo"></div>
 		<div id="spinner" class="spinner" style="display:none;"><g:message code="spinner.alt" default="Loading&hellip;"/></div>
-		<g:javascript library="application"/>
         <r:layoutResources />
-        <r:require modules="bootstrap"/>
+        <r:require modules="bootstrap, core"/>
 
     </body>
 </html>
