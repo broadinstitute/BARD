@@ -14,6 +14,7 @@ import wslite.json.JSONArray
 import javax.servlet.http.HttpServletResponse
 
 import bard.core.*
+import spock.lang.Shared
 
 /**
  * See the API for {@link grails.test.mixin.support.GrailsUnitTestMixin} for usage instructions
@@ -25,6 +26,10 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
 
     QueryService queryService
     ShoppingCartService shoppingCartService
+
+    @Shared List<SearchFilter> searchFilters = [new SearchFilter(filterName: 'group1', filterValue: 'facet1'), new SearchFilter(filterName: 'group2', filterValue: 'facet2')]
+    @Shared Value facet1 = new IntValue(source: new DataSource(), id: 'group1', value: null, children: [new IntValue(source: new DataSource(), id: 'facet1', value: new Integer(1))])
+    @Shared Value facet3 = new IntValue(source: new DataSource(), id: 'group3', value: null, children: [new IntValue(source: new DataSource(), id: 'facet3', value: new Integer(1))])
 
 
     void setup() {
@@ -511,6 +516,28 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
         label                          | searchString           | expectedResult
         "Should return a SearchFilter" | "gobp_term:DNA Repair" | [new SearchFilter(filterName: "gobp_term", filterValue: "DNA Repair")]
 
+    }
+
+
+    void "test getAppliedFilters #label"() {
+        given:
+
+        when:
+        Map appliedFilters = controller.getAppliedFilters(testSearchFilters, facets)
+
+        then:
+        assert appliedFilters.searchFilters == testSearchFilters
+        assert appliedFilters?.appliedFiltersNotInFacetsGrouped?.get(groupNameA) == expectedTestFilters
+        assert appliedFilters?.appliedFiltersDisplayedOutsideFacetsGrouped?.get(groupNameB) == expectedTestFilters
+
+        where:
+        facets           | testSearchFilters  | groupNameA | groupNameB | expectedTestFilters | label
+        [facet1]         | searchFilters      | 'group2'   | 'group2'   | [searchFilters[1]]  | "one filter; two facets; one overlapping"
+        [facet1, facet3] | searchFilters      | 'group2'   | 'group2'   | [searchFilters[1]]  | "two filters; two facets; one overlapping"
+        [facet1]         | [searchFilters[0]] | null       | null       | null                | "one filter; one facet; no overlapping"
+        []               | [searchFilters[0]] | null       | null       | null                | "no (empty) filter; one facet; no overlapping"
+        [facet1]         | []                 | null       | null       | null                | "one filter; no (empty) facet; no overlapping"
+        []               | []                 | null       | null       | null                | "no (empty) filter; no (empty) facet; no overlapping"
     }
 
 
