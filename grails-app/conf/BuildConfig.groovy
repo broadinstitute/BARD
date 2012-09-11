@@ -57,7 +57,7 @@ grails.project.dependency.resolution = {
         compile ":shopping-cart:0.8.2"
 
         build ":tomcat:$grailsVersion"
-
+        compile ":geb:0.7.2"
         compile ":remote-control:1.2"
         compile ':remote-pagination:0.3'
     }
