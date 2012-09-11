@@ -2,6 +2,7 @@ package bardqueryapi
 
 import org.apache.commons.lang.builder.HashCodeBuilder
 import org.apache.commons.lang.builder.EqualsBuilder
+import org.apache.commons.lang3.builder.CompareToBuilder
 
 /**
  * Created with IntelliJ IDEA.
@@ -10,7 +11,7 @@ import org.apache.commons.lang.builder.EqualsBuilder
  * Time: 6:02 PM
  * To change this template use File | Settings | File Templates.
  */
-class SearchFilter {
+class SearchFilter implements Comparable<SearchFilter> {
     String filterName
     String filterValue
 
@@ -30,6 +31,14 @@ class SearchFilter {
                 toHashCode();
     }
 
+    //Note: in Groovy, when compareTo() is implemented, .equals() would use compareTo to test for equality.
+    int compareTo(SearchFilter thatSearchFilter) {
+        return new CompareToBuilder()
+                .append(this.filterName, thatSearchFilter.filterName)
+                .append(this.filterValue, thatSearchFilter.filterValue)
+                .toComparison()
+    }
+
     public boolean equals(Object obj) {
         if (obj == null)
             return false;
@@ -45,5 +54,4 @@ class SearchFilter {
                 append(this.filterValue, rhs.filterValue).
                 isEquals();
     }
-
 }
