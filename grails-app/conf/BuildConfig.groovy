@@ -35,7 +35,7 @@ grails.project.dependency.resolution = {
         test('org.codehaus.groovy.modules.http-builder:http-builder:0.5.2') {
             excludes "commons-logging", "xml-apis", "groovy"
         }
-
+        test "org.codehaus.geb:geb-spock:0.7.2"
         compile 'org.apache.commons:commons-lang3:3.1'
         compile 'org.apache.httpcomponents:httpcomponents-core:4.1.1'
         compile 'org.apache.httpcomponents:httpclient:4.1.1'
