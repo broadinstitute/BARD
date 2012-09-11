@@ -11,6 +11,11 @@ class QueryAssayApiService {
         def outputList = inputString.split()
         return outputList.findAll { it.size() > 0 }.unique()
     }
+
+    def performSearchGivenAString(String searchSpecification) {
+        final String url = grailsApplication.config.ncgc.server.root.url + searchSpecification
+        return queryExecutorInternalService.executeGetRequestJSON(url, null)
+    }
     /**
      * v1/assays/{aid} - JSON representation of an assay, identified by its AID.
      * @param assayId
