@@ -35,7 +35,7 @@ grails.project.dependency.resolution = {
         test('org.codehaus.groovy.modules.http-builder:http-builder:0.5.2') {
             excludes "commons-logging", "xml-apis", "groovy"
         }
-
+        test "org.codehaus.geb:geb-spock:0.7.2"
         compile 'org.apache.commons:commons-lang3:3.1'
         compile 'org.apache.httpcomponents:httpcomponents-core:4.1.1'
         compile 'org.apache.httpcomponents:httpclient:4.1.1'
@@ -57,7 +57,7 @@ grails.project.dependency.resolution = {
         compile ":shopping-cart:0.8.2"
 
         build ":tomcat:$grailsVersion"
-
+        compile ":geb:0.7.2"
         compile ":remote-control:1.2"
         compile ':remote-pagination:0.3'
     }
