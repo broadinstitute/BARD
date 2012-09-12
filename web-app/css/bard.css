@@ -214,7 +214,7 @@ a.addtocart { //right
 }
 img.addtocart {  //left
     width:200px;
-    float:left;
+    text-align: center;
 }
 
 span.addtocartholder{
@@ -234,6 +234,11 @@ span.addtocart {
     height: 100px;
     background-color:#ccf;
 }
+h3.addtocartdet {
+    font-family: Helvetica, Arial, "Lucida Grande", sans-serif;
+    font-size: x-large;
+    font-weight: normal;
+}
 span.addtocartfont {
     margin-left: 8;
     font-family: Helvetica, Arial, "Lucida Grande", sans-serif;
@@ -245,6 +250,7 @@ button.visualizebutton  {
     height: 24px;
     width: 60px;
     text-align: left;
+    border: 1px;
 }
 button.visualizebiggerbutton  {
     height:30px;
@@ -269,4 +275,11 @@ div.wellmod {
     padding-left: 10px;
     padding-top: 10px;
     background-color: #efe8d8;
+}
+.vis-btn-group {
+    text-decoration: none; font: menu;
+    display: inline-block; padding: 2px 8px;
+    background: ButtonFace; color: ButtonText;
+    border-style: solid; border-width: 2px;
+    border-color: ButtonHighlight ButtonShadow ButtonShadow ButtonHighlight;
 }

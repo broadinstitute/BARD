@@ -76,7 +76,6 @@ environments {
 }
 
 grails.serverURL ="http://localhost:8080/bardwebquery"
-
 // log4j configuration
 log4j = {
     // Example of changing the log pattern for the default console
