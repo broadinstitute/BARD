@@ -14,18 +14,18 @@
                         <div class="pull-left">
                             <span class="addtocartfont"><i class="icon-shopping-cart"></i>Query Cart </span>
                         </div>
-                        <div class="pull-right" style="padding-left: 3px;">
-                            <button class="visualizebutton">
-                                <div class="btn-group" style="vertical-align: middle;">
-                                    <a class="btn-small dropdown-toggle" data-toggle="dropdown" href="#" style="margin-left: -14px">
-                                        Visualize
-                                    </a>
-                                    <ul class="dropdown-menu">
-                                        <li><a href="#">Visualize as Molecular Spreadsheet</a></li>
-                                        <li><a href="#">Visualize in Advanced Analysis Client</a></li>
-                                    </ul>
-                                </div>
-                            </button>
+                        <div class="float:right">
+
+                            <div class="dropdown">&nbsp; &nbsp;
+                            <a class="btn-small dropdown-toggle vis-btn-group" data-toggle="dropdown" role="button" data-target="#">
+                                Visualize
+                            </a>
+                               <ul class="dropdown-menu" role="menu">
+                                   <li><a href="#">Molecular Spreadsheet</a></li>
+                                   <li><a href="#">Advanced Analysis Client</a></li>
+                              </ul>
+                            </div>
+
                         </div>
                     </div>
                     </nobr>

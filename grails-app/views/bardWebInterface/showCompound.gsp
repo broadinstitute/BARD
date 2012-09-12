@@ -19,22 +19,34 @@
     </div>
 
     <div class="span7">
-        <div><h1>Compound Details for PubChem CID ${compound.pubChemCID}</h1></div>
-        <div class="QcartAppearance">
-            <img class="addtocart" alt="${compound?.structureSMILES}" title="${compound.name}" src="${createLink(controller: 'chemAxon', action: 'generateStructureImage', params: [smiles: compound?.structureSMILES, width: 200, height: 200])}"/>
-            <a href="/bardwebquery/sarCart/add/1"  class="addtocart"
-               onclick="jQuery.ajax({  type:'POST',
-                   data:{'id': '${compound.name}','class': 'class bardqueryapi.CartCompound','smiles':'${JavaScriptUtility.cleanup(compound.name)}','cid':'${compound.pubChemCID}','version': '0', 'stt':trackStatus},
-                   url:'/bardwebquery/sarCart/add',
-                   success:function(data,textStatus){
-                       jQuery(ajaxLocation).html(data);
-                   }
-               });
-               return false;"
-               action="add"
-               controller="sarCart"><i class="icon-shopping-cart"></i><span class="addtocartfont">&nbsp;Add to Cart</span>
-            </a>
-        </div>
+        <table>
+            <tr>
+                <td colspan="2">
+                    <span></span><div><h1>Compound Details for PubChem CID ${compound.pubChemCID}</h1></div> </span>
+                </td>
+            </tr>
+            <tr>
+                <td width="80%" style="text-align: center">
+                    <img class="addtocart" alt="${compound?.structureSMILES}" title="${compound.name}"
+                         src="${createLink(controller: 'chemAxon', action: 'generateStructureImage', params: [smiles: compound?.structureSMILES, width: 200, height: 200])}"/>
+                </td>
+                <td  style="text-align: right" width="20%"  style="float: right">
+                    <a href="/bardwebquery/sarCart/add/1" class="addtocart"
+                       onclick="jQuery.ajax({  type:'POST',
+                           data:{'id':'${compound.name}', 'class':'class bardqueryapi.CartCompound', 'smiles':'${JavaScriptUtility.cleanup(compound.name)}', 'cid':'${compound.pubChemCID}', 'version':'0', 'stt':trackStatus},
+                           url:'/bardwebquery/sarCart/add',
+                           success:function (data, textStatus) {
+                               jQuery(ajaxLocation).html(data);
+                           }
+                       });
+                       return false;"
+                       action="add"
+                       controller="sarCart"><i class="icon-shopping-cart"></i><span
+                            class="addtocartfont">&nbsp;Add to Cart</span>
+                    </a>
+                </td>
+            </tr>
+        </table>
 
     </div>
 
