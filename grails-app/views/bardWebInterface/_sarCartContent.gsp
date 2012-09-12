@@ -127,8 +127,8 @@
                     <span class="caret"></span>
                 </a>
                 <ul class="dropdown-menu">
-                    <li><a href="#">Visualize as Molecular Spreadsheet</a></li>
-                    <li><a href="#">Visualize in Advanced Analysis Client</a></li>
+                    <li><a href="#">Molecular Spreadsheet</a></li>
+                    <li><a href="#">Advanced Analysis Client</a></li>
                 </ul>
             </div>
             </button>

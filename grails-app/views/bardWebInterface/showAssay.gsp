@@ -12,28 +12,46 @@
     </div>
 
     <div class="span7">
-        <h1>Assay Definition Detail for ADID ${assayAdapter?.assay.id}</h1>
+        <table>
+            <tr>
+                <td colspan="2">
+                    <h1>Assay Definition Detail for ADID ${assayAdapter?.assay.id}</h1>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <h3>${assayAdapter?.assay.name}</h3>
+                </td>
+                <td>
+                    <a href="/bardwebquery/sarCart/add/${assayAdapter?.assay.id}"
+                        onclick="jQuery.ajax({  type:'POST',
+                            data:{'id': '${assayAdapter?.assay.id}','class': 'class bardqueryapi.CartAssay','assayTitle':'${JavaScriptUtility.cleanup(assayAdapter?.assay.name)}','version': '0', 'stt':trackStatus},
+                            url:'/bardwebquery/sarCart/add',
+                            success:function(data,textStatus){
+                                jQuery(ajaxLocation).html(data);
+                            }
+                        });
+                        return false;"
+                        action="add"
+                        controller="sarCart"><i class="icon-shopping-cart"></i><span class="addtocartfont">&nbsp;Add to Cart</span>
+                    </a>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <dl class="dl-horizontal">
+                        <dt>Assay Format:</dt><dd></dd>
+                        <dt>Assay Type:</dt><dd></dd>
+                        <dt>Target:</dt><dd></dd>
+                    </dl>
+                </td>
+            </tr>
 
-            <h3>${assayAdapter?.assay.name}
-                <a href="/bardwebquery/sarCart/add/${assayAdapter?.assay.id}"
-                   onclick="jQuery.ajax({  type:'POST',
-                       data:{'id': '${assayAdapter?.assay.id}','class': 'class bardqueryapi.CartAssay','assayTitle':'${JavaScriptUtility.cleanup(assayAdapter?.assay.name)}','version': '0', 'stt':trackStatus},
-                       url:'/bardwebquery/sarCart/add',
-                       success:function(data,textStatus){
-                           jQuery(ajaxLocation).html(data);
-                       }
-                   });
-                   return false;"
-                   action="add"
-                   controller="sarCart"><i class="icon-shopping-cart"></i><span class="addtocartfont">&nbsp;Add to Cart</span>
-                </a>
-            </h3>
+        </table>
 
-        <dl class="dl-horizontal">
-            <dt>Assay Format:</dt><dd></dd>
-            <dt>Assay Type:</dt><dd></dd>
-            <dt>Target:</dt><dd></dd>
-        </dl>
+
+
+
 
     </div>
 
