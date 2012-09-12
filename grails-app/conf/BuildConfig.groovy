@@ -6,7 +6,8 @@ grails.project.work.dir = "target"
 grails.project.target.level = 1.6
 grails.project.source.level = 1.6
 //grails.project.war.file = "target/${appName}-${appVersion}.war"
-
+def gebVersion = "0.7.2"
+def seleniumVersion = "2.21.0"
 grails.project.dependency.resolution = {
     // inherit Grails' default dependencies
     inherits("global") {
@@ -35,7 +36,13 @@ grails.project.dependency.resolution = {
         test('org.codehaus.groovy.modules.http-builder:http-builder:0.5.2') {
             excludes "commons-logging", "xml-apis", "groovy"
         }
-        test "org.codehaus.geb:geb-spock:0.7.2"
+        test "org.codehaus.geb:geb-spock:$gebVersion"
+        test("org.seleniumhq.selenium:selenium-htmlunit-driver:$seleniumVersion") {
+            exclude "xml-apis"
+        }
+        test("org.seleniumhq.selenium:selenium-chrome-driver:$seleniumVersion")
+        test("org.seleniumhq.selenium:selenium-firefox-driver:$seleniumVersion")
+
         compile 'org.apache.commons:commons-lang3:3.1'
         compile 'org.apache.httpcomponents:httpcomponents-core:4.1.1'
         compile 'org.apache.httpcomponents:httpclient:4.1.1'
@@ -57,7 +64,7 @@ grails.project.dependency.resolution = {
         compile ":shopping-cart:0.8.2"
 
         build ":tomcat:$grailsVersion"
-        compile ":geb:0.7.2"
+        compile ":geb:$gebVersion"
         compile ":remote-control:1.2"
         compile ':remote-pagination:0.3'
     }
