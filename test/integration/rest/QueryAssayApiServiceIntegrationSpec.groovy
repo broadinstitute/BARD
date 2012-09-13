@@ -12,6 +12,7 @@ import bardqueryapi.QueryExecutorInternalService
 
 class QueryAssayApiServiceIntegrationSpec extends IntegrationSpec {
 
+    QueryAssayApiService queryAssayApiService
     QueryExecutorInternalService queryExecutorInternalService
     def grailsApplication
 
@@ -22,6 +23,41 @@ class QueryAssayApiServiceIntegrationSpec extends IntegrationSpec {
     void tearDown() {
         // Tear down logic here
     }
+
+    void testFindAssayByAid() {
+        given:
+        final String aidUrl = "/assays/1772"
+        when:
+        final def assay = queryAssayApiService.findAssayByAid(aidUrl)
+        then:
+        assert assay
+        //println assay
+    }
+
+    void testFindCompoundsByAssay() {
+        given:
+        final String aidUrl = "/assays/1772"
+        when:
+        final def compounds = queryAssayApiService.findCompoundsByAssay(aidUrl, null)
+        then:
+        assert compounds
+        compounds.each {compound ->
+            //  println compound
+        }
+    }
+
+    void testFindProteinTargetsByAssay() {
+        given:
+        final String aidUrl = "/assays/1772"
+        when:
+        final def proteinTargetsByAssay = queryAssayApiService.findProteinTargetsByAssay(aidUrl)
+        then:
+        assert proteinTargetsByAssay
+        proteinTargetsByAssay.each {target ->
+            //println target
+        }
+    }
+
 
 
     void testAssaySummary() {
