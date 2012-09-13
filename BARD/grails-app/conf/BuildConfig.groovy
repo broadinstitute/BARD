@@ -38,6 +38,7 @@ grails.project.dependency.resolution = {
 
         // test scope
         test "org.spockframework:spock-core:0.6-groovy-1.8"
+        test "org.objenesis:objenesis:1.2" // used by spock for Mocking object that lack no args constructor
 
         // provided  scope
     }

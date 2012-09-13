@@ -1,5 +1,7 @@
 import bard.login.TemporaryAuthenticationProvider
 import bard.login.TemporaryUserDetailsService
+import hibernate.ModifiedByListener
+import org.codehaus.groovy.grails.orm.hibernate.HibernateEventListeners
 
 // Place your Spring DSL code here
 beans = {
@@ -28,6 +30,15 @@ beans = {
 
     temporaryAuthenticationProvider(TemporaryAuthenticationProvider) {
         userDetailsService = ref('temporaryUserDetailsService')
+    }
+
+    modifiedByListener(ModifiedByListener) {
+        springSecurityService = ref('springSecurityService')
+    }
+    hibernateEventListeners(HibernateEventListeners) {
+        listenerMap = ['pre-insert': modifiedByListener,
+                'pre-update': modifiedByListener,
+        ]
     }
 
 
