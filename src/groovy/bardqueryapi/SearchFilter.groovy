@@ -25,7 +25,6 @@ class SearchFilter implements Comparable<SearchFilter> {
     }
     public int hashCode() {
         return new HashCodeBuilder(17, 31). // two randomly chosen prime numbers
-        // if deriving: appendSuper(super.hashCode()).
                 append(this.filterName).
                 append(this.filterValue).
                 toHashCode();
@@ -49,7 +48,6 @@ class SearchFilter implements Comparable<SearchFilter> {
 
         SearchFilter rhs = (SearchFilter) obj;
         return new EqualsBuilder().
-        // if deriving: appendSuper(super.equals(obj)).
                 append(this.filterName, rhs.filterName).
                 append(this.filterValue, rhs.filterValue).
                 isEquals();

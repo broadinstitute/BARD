@@ -9,12 +9,12 @@ import grails.test.mixin.TestMixin
 import grails.test.mixin.support.GrailsUnitTestMixin
 import spock.lang.Specification
 import spock.lang.Unroll
-import wslite.json.JSONArray
 
 import javax.servlet.http.HttpServletResponse
 
 import bard.core.*
 import spock.lang.Shared
+import org.json.JSONArray
 
 /**
  * See the API for {@link grails.test.mixin.support.GrailsUnitTestMixin} for usage instructions
@@ -498,27 +498,6 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
 
     }
 
-    void "test findFiltersInSearchBox #label"() {
-        given:
-        mockCommandObject(SearchCommand)
-        Map paramMap = [searchString: searchString]
-        controller.metaClass.getParams {-> paramMap}
-        SearchCommand searchCommand = new SearchCommand(paramMap)
-
-
-        when:
-        List<SearchFilter> searchFilters = controller.findFiltersInSearchBox(searchCommand)
-        then:
-        assert searchFilters.size() == expectedResult.size()
-        searchFilters.get(0).filterName == expectedResult.get(0).filterName
-        searchFilters.get(0).filterValue == expectedResult.get(0).filterValue
-        where:
-        label                          | searchString           | expectedResult
-        "Should return a SearchFilter" | "gobp_term:DNA Repair" | [new SearchFilter(filterName: "gobp_term", filterValue: "DNA Repair")]
-
-    }
-
-
     void "test getAppliedFilters #label"() {
         given:
 
@@ -541,7 +520,7 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
     }
 
 
-    CompoundAdapter buildCompoundAdapter(final Long cid, final List<Long> sids, final String smiles) {
+        CompoundAdapter buildCompoundAdapter(final Long cid, final List<Long> sids, final String smiles) {
         final Compound compound = new Compound()
         final DataSource source = new DataSource("stuff", "v1")
         compound.setId(cid);

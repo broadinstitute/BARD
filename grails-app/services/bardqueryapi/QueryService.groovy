@@ -3,42 +3,13 @@ package bardqueryapi
 import bard.core.adapter.AssayAdapter
 import bard.core.adapter.CompoundAdapter
 import bard.core.adapter.ProjectAdapter
-import bard.core.rest.RESTAssayService
-import bard.core.rest.RESTCompoundService
-import bard.core.rest.RESTProjectService
-import elasticsearchplugin.ElasticSearchService
-import elasticsearchplugin.QueryExecutorService
-import wslite.json.JSONObject
-import bard.core.*
 import org.apache.commons.lang3.time.StopWatch
+import bard.core.*
 
 class QueryService {
 
     QueryServiceWrapper queryServiceWrapper
-    ElasticSearchService elasticSearchService
-    QueryExecutorService queryExecutorService
-
-    //The following are configured in resources.groovy
-    String ncgcSearchBaseUrl
-    String elasticSearchRootURL   //grailsApplication.config.bard.services.elasticSearchService.restNode.baseUrl
-    //read from properties file
-    final String AUTO_COMPLETE_SEARCH_URL = "assays/_search"
-
-    /**
-     * The JSON representation that would be used for Autocompletion of assay names
-     * We  return the first ten matched objects
-     */
-    final String ELASTIC_AUTO_COMPLETE_SEARCH = '''{
-  "fields": ["name"],
-  "query": {
-    "query_string": {
-      "default_field": "name",
-      "query": "*"
-    }
-  },
-  "size": 10
-}
-'''
+    QueryHelperService queryHelperService
 
     //========================================================== Free Text Searches ================================
     /**
@@ -54,17 +25,16 @@ class QueryService {
         Collection<Value> facets = []
         int nhits = 0
         if (searchString) {
-            final RESTCompoundService restCompoundService = this.queryServiceWrapper.getRestCompoundService()
-            final SearchParams searchParams = constructSearchParams(searchString, top, skip, searchFilters)
+            final SearchParams searchParams = this.queryHelperService.constructSearchParams(searchString, top, skip, searchFilters)
             //do the search
-            StopWatch sw = startStopWatch()
-            final ServiceIterator<Compound> searchIterator = restCompoundService.search(searchParams)
-            stopStopWatch(sw, "find compounds by text search ${searchParams.toString()}")
+            StopWatch sw = this.queryHelperService.startStopWatch()
+            final ServiceIterator<Compound> searchIterator = this.queryServiceWrapper.getRestCompoundService().search(searchParams)
+            this.queryHelperService.stopStopWatch(sw, "find compounds by text search ${searchParams.toString()}")
             //collect results
             final Collection<Compound> compounds = searchIterator.collect()
 
             //convert to adapters
-            foundCompoundAdapters.addAll(compoundsToAdapters(compounds))
+            foundCompoundAdapters.addAll(this.queryHelperService.compoundsToAdapters(compounds))
             facets = searchIterator.facets
             nhits = searchIterator.count
         }
@@ -85,15 +55,14 @@ class QueryService {
         Collection<Value> facets = []
         int nhits = 0
         if (searchString) {
-            final RESTAssayService restAssayService = this.queryServiceWrapper.getRestAssayService()
-            final SearchParams searchParams = constructSearchParams(searchString, top, skip, searchFilters)
+            final SearchParams searchParams = this.queryHelperService.constructSearchParams(searchString, top, skip, searchFilters)
 
-            StopWatch sw = startStopWatch()
-            final ServiceIterator<Assay> searchIterator = restAssayService.search(searchParams)
-            stopStopWatch(sw, "find assays by text search ${searchParams.toString()}")
+            StopWatch sw = this.queryHelperService.startStopWatch()
+            final ServiceIterator<Assay> searchIterator = this.queryServiceWrapper.getRestAssayService().search(searchParams)
+            this.queryHelperService.stopStopWatch(sw, "find assays by text search ${searchParams.toString()}")
 
             final Collection assays = searchIterator.collect()
-            foundAssayAdapters.addAll(assaysToAdapters(assays))
+            foundAssayAdapters.addAll(this.queryHelperService.assaysToAdapters(assays))
             facets = searchIterator.facets
             nhits = searchIterator.count
         }
@@ -114,13 +83,12 @@ class QueryService {
         int nhits = 0
         if (searchString) {
             //query for count
-            final RESTProjectService restProjectService = this.queryServiceWrapper.getRestProjectService()
-            final SearchParams searchParams = constructSearchParams(searchString, top, skip, searchFilters)
-            StopWatch sw = startStopWatch()
-            final ServiceIterator<Project> searchIterator = restProjectService.search(searchParams)
-            stopStopWatch(sw, "find projects by text search ${searchParams.toString()}")
+            final SearchParams searchParams = this.queryHelperService.constructSearchParams(searchString, top, skip, searchFilters)
+            StopWatch sw = this.queryHelperService.startStopWatch()
+            final ServiceIterator<Project> searchIterator = this.queryServiceWrapper.getRestProjectService().search(searchParams)
+            this.queryHelperService.stopStopWatch(sw, "find projects by text search ${searchParams.toString()}")
             final Collection projects = searchIterator.collect()
-            foundProjectAdapters.addAll(projectsToAdapters(projects))
+            foundProjectAdapters.addAll(this.queryHelperService.projectsToAdapters(projects))
             facets = searchIterator.facets
             nhits = searchIterator.count
         }
@@ -140,8 +108,6 @@ class QueryService {
         Collection<Value> facets = []
 
         if (smiles) {
-            final RESTCompoundService restCompoundService = this.queryServiceWrapper.getRestCompoundService()
-
             //construct search parameters
             final StructureSearchParams structureSearchParams =
                 new StructureSearchParams(smiles, structureSearchParamsType).setSkip(skip).setTop(top);
@@ -157,16 +123,16 @@ class QueryService {
                 structureSearchParams.setFilters(filters)
             }
             //do the search
-            StopWatch sw = startStopWatch()
-            final ServiceIterator<Compound> searchIterator = restCompoundService.structureSearch(structureSearchParams);
-            stopStopWatch(sw, "structure search ${structureSearchParams.toString()}")
+            StopWatch sw = this.queryHelperService.startStopWatch()
+            final ServiceIterator<Compound> searchIterator = this.queryServiceWrapper.getRestCompoundService().structureSearch(structureSearchParams);
+            this.queryHelperService.stopStopWatch(sw, "structure search ${structureSearchParams.toString()}")
             //collect the results
             final Collection<Compound> compounds = searchIterator.collect()
             //convert to adapters
-            compoundAdapters.addAll(compoundsToAdapters(compounds))
+            compoundAdapters.addAll(this.queryHelperService.compoundsToAdapters(compounds))
 
             //collect the facets
-           // facets = searchIterator.facets
+            facets = searchIterator.facets
         }
         int nhits = compoundAdapters.size()
         return [compoundAdapters: compoundAdapters, facets: facets, nHits: nhits]
@@ -178,20 +144,19 @@ class QueryService {
      * @param compoundIds
      * @return list
      */
-    Map findCompoundsByCIDs(final List<Long> compoundIds, List<SearchFilter> filters=[]) {
+    Map findCompoundsByCIDs(final List<Long> compoundIds, List<SearchFilter> filters = []) {
         final List<CompoundAdapter> compoundAdapters = []
         Collection<Value> facets = []
 
         if (compoundIds) {
-            final RESTCompoundService restCompoundService = this.queryServiceWrapper.getRestCompoundService()
             //create ETAG using a random name
-            StopWatch sw = startStopWatch()
+            StopWatch sw = this.queryHelperService.startStopWatch()
             //final Object etag = restCompoundService.newETag("Compound ETags", compoundIds);
             //commenting out facets until we figure out how to apply filters to ID searches
             //facets = restCompoundService.getFacets(etag)
-            final Collection<Compound> compounds = restCompoundService.get(compoundIds)
-            stopStopWatch(sw, "find compounds by CIDs ${compoundIds.toString()}")
-            compoundAdapters.addAll(compoundsToAdapters(compounds))
+            final Collection<Compound> compounds = this.queryServiceWrapper.getRestCompoundService().get(compoundIds)
+            this.queryHelperService.stopStopWatch(sw, "find compounds by CIDs ${compoundIds.toString()}")
+            compoundAdapters.addAll(this.queryHelperService.compoundsToAdapters(compounds))
         }
         int nhits = compoundAdapters.size()
         return [compoundAdapters: compoundAdapters, facets: facets, nHits: nhits]
@@ -202,16 +167,16 @@ class QueryService {
      * @param assayIds
      * @return list
      */
-    Map findAssaysByADIDs(final List<Long> assayIds, List<SearchFilter> filters=[]) {
+    Map findAssaysByADIDs(final List<Long> assayIds, List<SearchFilter> filters = []) {
         final List<AssayAdapter> foundAssayAdapters = []
         Collection<Value> facets = []
 
         if (assayIds) {
-            final RESTAssayService restAssayService = this.queryServiceWrapper.getRestAssayService()
-            StopWatch sw = startStopWatch()
-            final Collection<Assay> assays = restAssayService.get(assayIds)
-            stopStopWatch(sw, "find assays by ADIDs ${assayIds.toString()}")
-            foundAssayAdapters.addAll(assaysToAdapters(assays))
+            StopWatch sw = this.queryHelperService.startStopWatch()
+            final Collection<Assay> assays = this.queryServiceWrapper.getRestAssayService().get(assayIds)
+            this.queryHelperService.stopStopWatch(sw, "find assays by ADIDs ${assayIds.toString()}")
+            if (assays)
+                foundAssayAdapters.addAll(this.queryHelperService.assaysToAdapters(assays))
             //TODO: Facet needed. Not yet ready in JDO
         }
         final int nhits = foundAssayAdapters.size()
@@ -224,16 +189,17 @@ class QueryService {
      * @param projectIds
      * @return list
      */
-    Map findProjectsByPIDs(final List<Long> projectIds, List<SearchFilter> filters=[]) {
+    Map findProjectsByPIDs(final List<Long> projectIds, List<SearchFilter> filters = []) {
         Collection<Value> facets = []
         final List<ProjectAdapter> foundProjectAdapters = []
         if (projectIds) {
-            final RESTProjectService restProjectService = this.queryServiceWrapper.getRestProjectService()
-            StopWatch sw = startStopWatch()
-            final Collection<Project> projects = restProjectService.get(projectIds)
-            stopStopWatch(sw, "find projects by PIDs ${projectIds.toString()}")
-            foundProjectAdapters.addAll(projectsToAdapters(projects))
-            //TODO: Facet needed. Not yet ready in JDO
+            StopWatch sw = this.queryHelperService.startStopWatch()
+            final Collection<Project> projects = this.queryServiceWrapper.getRestProjectService().get(projectIds)
+            this.queryHelperService.stopStopWatch(sw, "find projects by PIDs ${projectIds.toString()}")
+            if (projects) {
+                foundProjectAdapters.addAll(this.queryHelperService.projectsToAdapters(projects))
+                //TODO: Facet needed. Not yet ready in JDO
+            }
         }
         final int nhits = foundProjectAdapters.size()
         return [projectAdapters: foundProjectAdapters, facets: facets, nHits: nhits]
@@ -248,16 +214,16 @@ class QueryService {
      */
     CompoundAdapter showCompound(final Long compoundId) {
         if (compoundId) {
-            final RESTCompoundService restCompoundService = this.queryServiceWrapper.getRestCompoundService()
-            StopWatch sw = startStopWatch()
-            final Compound compound = restCompoundService.get(compoundId)
-            stopStopWatch(sw, "show compound ${compoundId.toString()}")
+            StopWatch sw = this.queryHelperService.startStopWatch()
+            final Compound compound = this.queryServiceWrapper.getRestCompoundService().get(compoundId)
+            this.queryHelperService.stopStopWatch(sw, "show compound ${compoundId.toString()}")
             if (compound) {
                 return new CompoundAdapter(compound)
             }
         }
         return null
     }
+
     /**
      * Given an assayId, get detailed Assay information from the REST API
      * @param assayId
@@ -265,10 +231,9 @@ class QueryService {
      */
     AssayAdapter showAssay(final Integer assayId) {
         if (assayId) {
-            final RESTAssayService restAssayService = this.queryServiceWrapper.getRestAssayService()
-            StopWatch sw = startStopWatch()
-            Assay assay = restAssayService.get(assayId)
-            stopStopWatch(sw, "show assay ${assayId.toString()}")
+            StopWatch sw = this.queryHelperService.startStopWatch()
+            Assay assay = this.queryServiceWrapper.getRestAssayService().get(assayId)
+            this.queryHelperService.stopStopWatch(sw, "show assay ${assayId.toString()}")
             if (assay) {
                 return new AssayAdapter(assay)
             }
@@ -282,10 +247,9 @@ class QueryService {
      */
     ProjectAdapter showProject(final Integer projectId) {
         if (projectId) {
-            final RESTProjectService restProjectService = this.queryServiceWrapper.getRestProjectService()
-            StopWatch sw = startStopWatch()
-            final Project project = restProjectService.get(projectId)
-            stopStopWatch(sw, "show project ${projectId.toString()}")
+            StopWatch sw = this.queryHelperService.startStopWatch()
+            final Project project = this.queryServiceWrapper.getRestProjectService().get(projectId)
+            this.queryHelperService.stopStopWatch(sw, "show project ${projectId.toString()}")
             if (project) {
                 return new ProjectAdapter(project)
             }
@@ -293,123 +257,29 @@ class QueryService {
         return null
     }
 
-    //============= Utility method for extracting facets =============
-
-    /**
-     * Apply the filters to the SearchParams
-     * @param searchParams
-     * @param searchFilters
-     */
-    void applySearchFiltersToSearchParams(final SearchParams searchParams, final List<SearchFilter> searchFilters) {
-        if (searchFilters) {
-            List<String[]> filters = []
-            for (SearchFilter searchFilter : searchFilters) {
-                filters.add([searchFilter.filterName, searchFilter.filterValue] as String[])
-            }
-            searchParams.setFilters(filters)
-        }
-    }
-
+    //==============================================Auto Complete ======
     /**
      *
-     * @param searchString
-     * @param top
-     * @param skip
-     * @param searchFilters
-     * @return SearchParams
+     * @param term
+     * @return the list of maps to use for auto suggest
      */
-    SearchParams constructSearchParams(final String searchString, final Integer top, final Integer skip, final List<SearchFilter> searchFilters) {
-        final SearchParams searchParams = new SearchParams(searchString)
-        searchParams.setSkip(skip)
-        searchParams.setTop(top);
-        applySearchFiltersToSearchParams(searchParams, searchFilters)
-        return searchParams
+    public List<Map<String, String>> autoComplete(final String term) {
 
-    }
-    //=========== Construct adapters ===================
-    /**
-     * Convert the list of compounds to the list of adapters
-     * @param compounds
-     * @return List < CompoundAdapter > 's
-     */
-    final List<CompoundAdapter> compoundsToAdapters(final Collection<Compound> compounds) {
-        final List<CompoundAdapter> compoundAdapters = []
-        for (Compound compound : compounds) {
-            final CompoundAdapter compoundAdapter = new CompoundAdapter(compound)
-            compoundAdapters.add(compoundAdapter)
-        }
-        return compoundAdapters
+        //the number of items to retrieve per category
+        final int numberOfTermsToRetrieve = 3
+
+        final SuggestParams suggestParams = new SuggestParams(term, numberOfTermsToRetrieve)
+        //we only use the terms in the assay service, because the other suggest services do not seem to
+        //have useful things
+        final Map<String, List<String>> autoSuggestResponseFromJDO = this.queryServiceWrapper.getRestAssayService().suggest(suggestParams);
+        final List<Map<String, String>> autoSuggestTerms = this.queryHelperService.autoComplete(term, autoSuggestResponseFromJDO)
+        return autoSuggestTerms
     }
     /**
-     * convert Assay's to AssayAdapter's
-     * @param assays
-     * @return list of AssayAdapter's
+     * Extract filters from the search string if any
+     * @return list of filters from search String
      */
-    final List<AssayAdapter> assaysToAdapters(final Collection<Assay> assays) {
-        final List<AssayAdapter> assayAdapters = []
-        for (Assay assay : assays) {
-            assayAdapters.add(new AssayAdapter(assay))
-        }
-        return assayAdapters
-    }
-    /**
-     * convert Project's to ProjectAdapter's
-     * @param projects
-     * @return list of ProjectAdapter's
-     */
-    final List<ProjectAdapter> projectsToAdapters(final Collection<Project> projects) {
-        final List<ProjectAdapter> projectAdapters = []
-        for (Project project : projects) {
-            projectAdapters.add(new ProjectAdapter(project))
-        }
-        return projectAdapters
-    }
-    //==============================================Elastic Search resources ======
-
-    public List<String> autoComplete(final String term) {
-        final List<String> assayNames = handleAutoComplete(term)
-        return assayNames
-
-    }
-    /**
-     * Construct a query String query and pass it on to Elastic Search
-     * @param elasticSearchService
-     * @param elasticSearchRootURL
-     * @return
-     */
-    protected List<String> handleAutoComplete(final String term) {
-
-        //TODO, this should go to NCGC, once their stuff is ready
-        final String urlToElastic = "${this.elasticSearchRootURL}/${AUTO_COMPLETE_SEARCH_URL}"
-        final String request = ELASTIC_AUTO_COMPLETE_SEARCH
-        if (term) {
-            request = ELASTIC_AUTO_COMPLETE_SEARCH.replaceAll("\\*", "${term}*")
-        }
-        final JSONObject jsonObject = new JSONObject(request)
-
-        final JSONObject responseObject = this.elasticSearchService.searchQueryStringQuery(urlToElastic, jsonObject)
-        return responseObject?.hits?.hits.collect { it.fields }.collect { it.name }
-
-    }
-
-    /**
-     * Start the stop-watch that measure network traffic time for any of the JDO services.
-     * @return
-     */
-    private StopWatch startStopWatch() {
-        StopWatch sw = new StopWatch()
-        sw.start()
-        return sw
-    }
-
-    /**
-     * Stop the stop-watch and log the time.
-     * @param sw
-     */
-    private void stopStopWatch(StopWatch sw, String loggingString) {
-        sw.stop()
-        Date now = new Date()
-        Map loggingMap = [time: now.format('MM/dd/yyyy  HH:mm:ss.S'), responseTimeInMilliSeconds: sw.time, info: loggingString]
-        log.info(loggingMap.toString())
+    public void findFiltersInSearchBox(final List<SearchFilter> searchFilters, final String searchString) {
+        queryHelperService.findFiltersInSearchBox(searchFilters, searchString)
     }
 }

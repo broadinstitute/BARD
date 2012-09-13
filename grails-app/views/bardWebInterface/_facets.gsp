@@ -32,7 +32,7 @@
                                 <g:if test="${childFacet.id}">
                                     <label class="checkbox">
                                         <g:checkBox name="filters[${childIndex}].filterValue" value="${childFacet.id}"
-                                                    checked="${appliedFilters?.searchFilters?.find { SearchFilter filter -> ((filter.filterName == parentFacet.id) && (filter.filterValue == childFacet.id))}}"/> ${childFacet.id} (${childFacet.value})
+                                                    checked="${appliedFilters?.searchFilters?.find { SearchFilter filter -> ((filter.filterName.trim().equalsIgnoreCase(parentFacet.id.trim())) && (filter.filterValue.trim().equalsIgnoreCase(childFacet.id)))}}"/> ${childFacet.id} (${childFacet.value})
                                     </label>
                                     <g:hiddenField name="filters[${childIndex}].filterName" value="${parentFacet.id}"/>
                                     <g:set var="childIndex" value="${childIndex + 1}"/>
