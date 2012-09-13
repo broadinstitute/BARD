@@ -9,12 +9,12 @@ import grails.test.mixin.TestMixin
 import grails.test.mixin.support.GrailsUnitTestMixin
 import spock.lang.Specification
 import spock.lang.Unroll
-import wslite.json.JSONArray
 
 import javax.servlet.http.HttpServletResponse
 
 import bard.core.*
 import spock.lang.Shared
+import org.json.JSONArray
 
 /**
  * See the API for {@link grails.test.mixin.support.GrailsUnitTestMixin} for usage instructions
