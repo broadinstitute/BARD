@@ -64,10 +64,10 @@ class QueryServiceHelperUnitSpec extends Specification {
 
         where:
         label                                          | currentAutoSuggestKey | term         | expectedResults
-        "Term exist in filters Map"                    | "gobp_term"           | "DNA Repair" | [[label: "DNA Repair", value: "DNA Repair"], [label: "Go Biological Process as GO Biological Process Term", value: "gobp_term:Go Biological Process"]]
-        "Current Suggest Key is null"                  | ""                    | "gobp_term"  | [[label: "gobp_term", value: "gobp_term"], [label: "Go Biological Process as GO Biological Process Term", value: "gobp_term:Go Biological Process"]]
-        "Term is null"                                 | "target_name:String"  | ""           | [[label: "", value: ""], [label: "Go Biological Process as GO Biological Process Term", value: "gobp_term:Go Biological Process"]]
-        "Current Suggest Key is null and Term is null" | ""                    | ""           | [[label: "", value: ""], [label: "Go Biological Process as GO Biological Process Term", value: "gobp_term:Go Biological Process"]]
+        "Term exist in filters Map"                    | "gobp_term"           | "DNA Repair" | [[label: "DNA Repair", value: "DNA Repair"], [label: "Go Biological Process as GO Biological Process Term", value: "gobp_term:\"Go Biological Process\""]]
+        "Current Suggest Key is null"                  | ""                    | "gobp_term"  | [[label: "gobp_term", value: "gobp_term"], [label: "Go Biological Process as GO Biological Process Term", value: "gobp_term:\"Go Biological Process\""]]
+        "Term is null"                                 | "target_name:String"  | ""           | [[label: "", value: ""], [label: "Go Biological Process as GO Biological Process Term", value: "gobp_term:\"Go Biological Process\""]]
+        "Current Suggest Key is null and Term is null" | ""                    | ""           | [[label: "", value: ""], [label: "Go Biological Process as GO Biological Process Term", value: "gobp_term:\"Go Biological Process\""]]
 
     }
     /**
@@ -84,7 +84,7 @@ class QueryServiceHelperUnitSpec extends Specification {
 
         where:
         label                                          | currentAutoSuggestKey | term         | expectedResults
-        "Term exist in filters Map"                    | "gobp_term"           | "DNA Repair" | [label: "DNA Repair as Go Biological Process", value: "gobp_term:DNA Repair"]
+        "Term exist in filters Map"                    | "gobp_term"           | "DNA Repair" | [label: "DNA Repair as Go Biological Process", value: "gobp_term:\"DNA Repair\""]
         "Current Suggest Key is null"                  | ""                    | "gobp_term"  | null
         "Term is null"                                 | "target_name:String"  | ""           | null
         "Current Suggest Key is null and Term is null" | ""                    | ""           | null
