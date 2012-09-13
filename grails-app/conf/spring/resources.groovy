@@ -27,24 +27,9 @@ beans = {
     queryServiceWrapper(QueryServiceWrapper,ncgcBaseURL){
 
     }
-    elasticSearchService(elasticsearchplugin.ElasticSearchService) {
-        elasticSearchBaseUrl = grailsApplication.config.bard.services.elasticSearchService.restNode.baseUrl
-        assayIndexName = 'assays'
-        assayIndexTypeName = 'assay'
-        compoundIndexName = 'compounds'
-        compoundIndexTypeName = 'compound'
-        queryExecutorService = ref('queryExecutorService')
-        xcompoundIndexName = 'compound'
-        xcompoundIndexTypeName = 'xcompound'
-        defaultElementsPerPage = 500
-        eSsElasticSearchRequester = '/_search'
-    }
-    queryService(bardqueryapi.QueryService) {
-        queryExecutorService = ref('queryExecutorService')
-        elasticSearchService = ref('elasticSearchService')
-        queryServiceWrapper= ref('queryServiceWrapper')
-        ncgcSearchBaseUrl = ncgcBaseURL
-        elasticSearchRootURL = grailsApplication.config.bard.services.elasticSearchService.restNode.baseUrl
-    }
 
+    queryService(bardqueryapi.QueryService) {
+        queryHelperService = ref('queryHelperService')
+        queryServiceWrapper= ref('queryServiceWrapper')
+    }
 }

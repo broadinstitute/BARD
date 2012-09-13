@@ -18,15 +18,15 @@ class QueryTargetApiServiceIntegrationSpec extends IntegrationSpec {
     void tearDown() {
         // Tear down logic here
     }
-    void testGetAssaysForAccessionTarget() {
-        given: "An accession number for a target"
-        final String accessionId = "P01112"
-        when: "We make a Query to NCGC's rest API to get a list of assays with that target"
-        final List<String> assays = queryTargetApiService.findAssaysForAccessionTarget(accessionId)
-        then: "We get back a list assay ids"
-        assert assays
-        println assays
-    }
+//    void testGetAssaysForAccessionTarget() {
+//        given: "An accession number for a target"
+//        final String accessionId = "P01112"
+//        when: "We make a Query to NCGC's rest API to get a list of assays with that target"
+//        final List<String> assays = queryTargetApiService.findAssaysForAccessionTarget(accessionId)
+//        then: "We get back a list assay ids"
+//        assert assays
+//        println assays
+//    }
     void "test Get Assays For Accession Target, return Empty list"() {
         given: "An accession number for a target"
         final String accessionId = "XXY"

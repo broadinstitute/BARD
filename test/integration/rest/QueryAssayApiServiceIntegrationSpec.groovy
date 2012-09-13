@@ -1,10 +1,10 @@
 package rest
 
-import elasticsearchplugin.QueryExecutorService
 import grails.plugin.spock.IntegrationSpec
 import wslite.json.JSONArray
 import wslite.json.JSONObject
 import bardqueryapi.QueryAssayApiService
+import bardqueryapi.QueryExecutorInternalService
 
 /**
  * See the API for {@link grails.test.mixin.support.GrailsUnitTestMixin} for usage instructions
@@ -13,7 +13,7 @@ import bardqueryapi.QueryAssayApiService
 class QueryAssayApiServiceIntegrationSpec extends IntegrationSpec {
 
     QueryAssayApiService queryAssayApiService
-    QueryExecutorService queryExecutorService
+    QueryExecutorInternalService queryExecutorInternalService
     def grailsApplication
 
     void setup() {
@@ -58,20 +58,7 @@ class QueryAssayApiServiceIntegrationSpec extends IntegrationSpec {
         }
     }
 
-    void testAssays() {
-        given:
-        final String publicationUrl = "${grailsApplication.config.ncgc.server.root.url}/assays"
-        when:
-        def assays = queryExecutorService.executeGetRequestJSON(publicationUrl)
 
-        then:
-        assert assays
-        int counter = 0
-        assays.each {assay ->
-            ++counter
-            //println counter + ":" + assay
-        }
-    }
 
     void testAssaySummary() {
         //http://bard.nih.gov/api/v1/search/assays?q="dna repair"&top=10
@@ -80,7 +67,7 @@ class QueryAssayApiServiceIntegrationSpec extends IntegrationSpec {
         //final String assaySearchUrl = "${grailsApplication.config.ncgc.server.root.url}/search/assays?q=\"dna repair\"&top=10"
         final String assaySearchUrl = "${grailsApplication.config.ncgc.server.root.url}/search/assays"
         when:
-        def assays = queryExecutorService.executeGetRequestJSON(assaySearchUrl, params)
+        def assays = queryExecutorInternalService.executeGetJSON(assaySearchUrl, params)
 
         then:
         assert assays
