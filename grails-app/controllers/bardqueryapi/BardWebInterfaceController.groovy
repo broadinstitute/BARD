@@ -150,6 +150,11 @@ class BardWebInterfaceController {
      */
     def searchStructures(SearchCommand searchCommand) {
         if (StringUtils.isNotBlank(searchCommand.searchString)) {
+            //we are capping this at 50
+            params.max = 50
+            params.offset =  0
+
+
             normalizeSearchString(searchCommand)
             final List<SearchFilter> searchFilters = searchCommand.getAppliedFilters()
             if (!searchFilters) {//user SearchCommand
