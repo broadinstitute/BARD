@@ -50,7 +50,7 @@ class QueryHelperService {
         if (searchFilters) {
             List<String[]> filters = []
             for (SearchFilter searchFilter : searchFilters) {
-                filters.add([searchFilter.filterName, searchFilter.filterValue] as String[])
+                filters.add([searchFilter.filterName, "\"" + searchFilter.filterValue + "\""] as String[])
             }
             searchParams.setFilters(filters)
         }
