@@ -1,7 +1,9 @@
 package bard.db.registration
 
 import org.hibernate.SessionFactory
+import grails.plugins.springsecurity.Secured
 
+@Secured(['isFullyAuthenticated()'])
 class AssayDefinitionController {
 
     static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
@@ -99,36 +101,36 @@ class AssayDefinitionController {
         CardDto cardDto = cardFactoryService.createCardDto(targetAssayContext)
         render(template: "cardDto", model: [card: cardDto])
     }
-	
-	
+
+
 	def deleteItemFromCard(Long assay_context_item_id){
 		def assayContextItem = AssayContextItem.get(assay_context_item_id)
 		if(assayContextItem){
-			AssayContext assayContext = assayContextService.deleteItem(assayContextItem)		
+			AssayContext assayContext = assayContextService.deleteItem(assayContextItem)
 			CardDto cardDto = cardFactoryService.createCardDto(assayContext)
 			render(template: "cardDto", model: [card: cardDto])
 		}
 	}
-	
+
 	def deleteEmptyCard(Long assay_context_id){
 		AssayContext assayContext = AssayContext.findById(assay_context_id)
 		Assay assay = assayContext.assay
-		if(assayContext.assayContextItems.size() == 0 && assayContext.measures.empty){			
+		if(assayContext.assayContextItems.size() == 0 && assayContext.measures.empty){
 			assay.removeFromAssayContexts(assayContext)
-			assayContext.delete()			
+			assayContext.delete()
 		}
 		List<CardDto> cardDtoList = cardFactoryService.createCardDtoListForAssay(assay)
 		render(template: "cards", model: [cardDtoList: cardDtoList])
 	}
-	
+
 	def addNewEmptyCard(String card_name, Long assay_id){
 		def assayInstance = Assay.get(assay_id)
 		if(assayInstance){
 			def assayContextInstance = new AssayContext()
 			assayContextInstance.contextName = card_name
-			assayContextInstance.assay = assayInstance			
+			assayContextInstance.assay = assayInstance
 			assayInstance.addToAssayContexts(assayContextInstance);
-			assayContextInstance.save()			
+			assayContextInstance.save()
 		}
 		List<CardDto> cardDtoList = cardFactoryService.createCardDtoListForAssay(assayInstance)
 		render(template: "cards", model: [cardDtoList: cardDtoList])

@@ -106,6 +106,9 @@ grails.plugin.reveng.jdbcDriverJarDep = 'mysql:mysql-connector-java:5.1.16'
 bard.services.elasticSearchService.restNode.baseUrl = 'http://bard-dev-vm:9200'
 bard.home.page='http://localhost:8080/bardqueryapi'
 
+//grails.plugins.springsecurity.successHandler.defaultTargetUrl = '/home'
+grails.plugins.springsecurity.providerNames = ['anonymousAuthenticationProvider','temporaryAuthenticationProvider']
+
 /**
  * Loads external config files from the .grails subfolder in the user's home directory
  * Home directory in Windows is usually: C:\Users\<username>\.grails

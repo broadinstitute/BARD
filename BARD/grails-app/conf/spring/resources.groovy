@@ -1,3 +1,6 @@
+import bard.login.TemporaryAuthenticationProvider
+import bard.login.TemporaryUserDetailsService
+
 // Place your Spring DSL code here
 beans = {
     clientBasicAuth(wslite.http.auth.HTTPBasicAuthorization) {
@@ -20,4 +23,12 @@ beans = {
         compoundIndexTypeName = 'compound'
         queryExecutorService = ref('queryExecutorService')
     }
+
+    temporaryUserDetailsService(TemporaryUserDetailsService)
+
+    temporaryAuthenticationProvider(TemporaryAuthenticationProvider) {
+        userDetailsService = ref('temporaryUserDetailsService')
+    }
+
+
 }
