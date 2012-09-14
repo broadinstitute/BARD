@@ -87,7 +87,7 @@
             </div>
             <div id="project-info" class="accordion-body collapse">
                 <div class="accordion-inner">
-                    TBD
+                    <g:render template="assayProjects" model="['assayAdapter': assayAdapter]" />
                 </div>
             </div>
         </div>
