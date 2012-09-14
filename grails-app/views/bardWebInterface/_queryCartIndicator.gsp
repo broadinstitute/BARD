@@ -21,7 +21,7 @@
                                 Visualize
                             </a>
                                <ul class="dropdown-menu" role="menu">
-                                   <li><a href="#">Molecular Spreadsheet</a></li>
+                                   <li><a href="/bardwebquery/MolSpreadSheet">Molecular Spreadsheet</a></li>
                                    <li><a href="#">Advanced Analysis Client</a></li>
                               </ul>
                             </div>
