@@ -282,4 +282,25 @@ class QueryService {
     public void findFiltersInSearchBox(final List<SearchFilter> searchFilters, final String searchString) {
         queryHelperService.findFiltersInSearchBox(searchFilters, searchString)
     }
+
+    //=================================================== Molecular SpreeadSheet related =========================
+//    public void a(final List<Long> cids) {
+//        StopWatch sw = this.queryHelperService.startStopWatch()
+//        final String eTagName = "ETAG_" + sw.getStartTime().toString()
+//        Object etag = queryServiceWrapper.getRestCompoundService().newETag(eTagName, cids);
+//        this.queryHelperService.stopStopWatch(sw, "Create ETag ${eTagName}")
+//
+//        final Experiment experiment = this.experimentService.get(experimentid)
+//        Collection<Compound> compounds = this.compoundService.get(cids)
+//        then: "We expect to get back a list of facets"
+//        ServiceIterator<Value> eiter = this.experimentService.activities(experiment, etag);
+//        assertNotNull eiter
+//        ExperimentHolder experimentHolder = new ExperimentHolder()
+//        while (eiter.hasNext() && eiter.getConsumedCount() < 1000000) {
+//            Value v = eiter.next();
+//            assert v
+//            experimentHolder.appendValue(v)
+//        }
+//        assert experimentHolder.dataHolder.size() == cids.size()
+//    }
 }
