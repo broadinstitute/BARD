@@ -48,7 +48,7 @@ class Assay {
 
     static mapping = {
         id(column: "ASSAY_ID", generator: "sequence", params: [sequence: 'ASSAY_ID_SEQ'])
-        assayContexts(fetch: 'join')
+        assayContexts(lazy: false)
     }
 
     static constraints = {
