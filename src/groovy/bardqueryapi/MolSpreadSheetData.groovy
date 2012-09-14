@@ -9,5 +9,6 @@ package bardqueryapi
  */
 class MolSpreadSheetData {
     def mssData = new LinkedHashMap<String,MolSpreadSheetCell> ()
+    int getRowCount(){ return 2;}
     List mssHeaders = new ArrayList()
 }

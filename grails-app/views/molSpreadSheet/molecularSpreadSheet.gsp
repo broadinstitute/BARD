@@ -1,4 +1,9 @@
 <%@ page import="bardqueryapi.FacetFormType" %>
+<%@ page import="bardqueryapi.MolSpreadSheetCell; bardqueryapi.MolSpreadSheetCellType; bardqueryapi.ExperimentalResultsService; bardqueryapi.MolSpreadSheetData;" %>
+<%@ page import="com.metasieve.shoppingcart.ShoppingCartService" %>
+<%
+    ExperimentalResultsService  experimentalResultsService = grailsApplication.classLoader.loadClass('bardqueryapi.ExperimentalResultsService').newInstance()
+%>
 <html>
 <head>
 
@@ -116,11 +121,11 @@
         </div>
         <div class="span8">
             <table width=100% height=100%>
-                    <g:each in="[1,2,3,4,5]">
+                    <g:each var="rowCnt" in="${0..experimentalResultsService.fakeMe().getRowCount()}">
                         <tr>
-                           <g:each in="[1,2,3,4,5]">
+                           <g:each  var="colCnt" in="${0..experimentalResultsService.fakeMe().mssHeaders.size()}">
                                <td>
-                                    XX
+                                   "${experimentalResultsService.fakeMe().mssData["${rowCnt}_${colCnt}"]}
                                </td>
                            </g:each>
                          </tr>
