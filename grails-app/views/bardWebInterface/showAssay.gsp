@@ -40,9 +40,13 @@
             <tr>
                 <td colspan="2">
                     <dl class="dl-horizontal">
-                        <dt>Assay Format:</dt><dd></dd>
-                        <dt>Assay Type:</dt><dd></dd>
-                        <dt>Target:</dt><dd></dd>
+                        %{--<dt>Assay Format:</dt><dd></dd>--}%
+                        %{--<dt>Assay Type:</dt><dd></dd>--}%
+                        %{--<dt>Target:</dt><dd></dd>--}%
+                        <g:each in="${assayAdapter.annotations}" var="annotation">
+                            <dt>${annotation.id}</dt>
+                            <dd>${annotation.value}</dd>
+                        </g:each>
                     </dl>
                 </td>
             </tr>
