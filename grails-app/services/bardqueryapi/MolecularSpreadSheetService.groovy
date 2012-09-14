@@ -1,31 +1,83 @@
 package bardqueryapi
 
-import bard.core.Experiment
-import bard.core.HillCurveValue
-import bard.core.ServiceIterator
-import bard.core.Value
+import bard.core.rest.RESTCompoundService
+import org.apache.commons.lang3.time.StopWatch
+import bard.core.*
 
 class MolecularSpreadSheetService {
 
     QueryServiceWrapper queryServiceWrapper
+    QueryHelperService queryHelperService
+
+
+    protected List<Long> cartCompoundsToCIDS(final List<CartCompound> cartCompounds) {
+        List<Long> cids = []
+        for (CartCompound cartCompound : cartCompounds) {
+            long cid = cartCompound.compoundId
+            cids.add(cid)
+        }
+
+        return cids
+    }
+
+    protected List<Experiment> cartAssaysToExperiments(final List<CartAssay> cartAssays) {
+        List<Long> assayIds = []
+        for (CartAssay cartAssay : cartAssays) {
+            long assayId = cartAssay.getId()
+            assayIds.add(assayId)
+        }
+        List<Experiment> allExperiments = []
+        Collection<Assay> assays = queryServiceWrapper.getRestAssayService().get(assayIds)
+        for (Assay assay : assays) {
+            Collection<Experiment> experiments = assay.getExperiments()
+            allExperiments.addAll(experiments)
+        }
+        return allExperiments
+    }
+
+    protected List<Experiment> cartProjectsToExperiments(final List<CartProject> cartProjects) {
+        List<Long> projectIds = []
+        for (CartProject cartProject : cartProjects) {
+            long projectId = cartProject.getId()
+            projectIds.add(projectId)
+        }
+        List<Experiment> allExperiments = []
+        Collection<Project> projects = queryServiceWrapper.getRestProjectService().get(projectIds)
+        for (Project project : projects) {
+            Collection<Experiment> experiments = project.getExperiments()
+            allExperiments.addAll(experiments)
+        }
+        return allExperiments
+    }
     /**
      *
      * @param experimentId
      * @param compoundETags - Just wish these etags were typed
      * @return List of activities
      */
-    public List<SpreadSheetActivity> getMolecularSpreadSheet(List<Long> cids) {
+    public List<SpreadSheetActivity> getMolecularSpreadSheet(List<CartCompound> cartCompounds, List<CartAssay> cartAssays, List<CartProject> cartProjects) {
 
-//        final List<SpreadSheetActivity> spreadSheetActivities = new ArrayList<SpreadSheetActivity>()
-//        ServiceIterator<Value> experimentIterator = this.queryServiceWrapper.restExperimentService.activities(experiment, compoundETag);
-//        while (experimentIterator.hasNext()) {
-//            Value experimentValue = experimentIterator.next()
-//            if (experimentValue) {
-//                SpreadSheetActivity spreadSheetActivity = extractActivitiesFromExperiment(experimentValue)
-//                spreadSheetActivities.add(spreadSheetActivity)
-//            }
-//        }
-        return []
+        //TODO: add assertions here
+        List<Experiment> experiments = []
+
+        experiments.addAll(cartAssaysToExperiments(cartAssays))
+        experiments.addAll(cartProjectsToExperiments(cartProjects))
+        List<Long> cids = cartCompoundsToCIDS(cartCompounds)
+
+
+
+        StopWatch stopWatch = queryHelperService.startStopWatch()
+        //TODO: create the ETAG, we should randomize this to support multithreading
+        final String eTagName = "ETAG_" + stopWatch.getStartTime().toString()
+        final RESTCompoundService restCompoundService = queryServiceWrapper.getRestCompoundService()
+        Object etag = restCompoundService.newETag(eTagName, cids)
+
+        List<SpreadSheetActivity> spreadSheetActivities = []
+        for (Experiment experiment : experiments) {
+            spreadSheetActivities.addAll(findActivitiesForCompounds(experiment, etag))
+        }
+
+        return spreadSheetActivities
     }
     /**
      *
@@ -43,6 +95,7 @@ class MolecularSpreadSheetService {
                 spreadSheetActivities.add(spreadSheetActivity)
             }
         }
+        return spreadSheetActivities
     }
 
     SpreadSheetActivity extractActivitiesFromExperiment(Value experimentValue) {
