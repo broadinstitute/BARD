@@ -1,4 +1,4 @@
-<%@ page import="bardqueryapi.JavaScriptUtility; bard.db.registration.*" %>
+<%@ page import="bard.core.AssayValues; bardqueryapi.JavaScriptUtility; bard.db.registration.*" %>
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/html">
 <head>
@@ -87,7 +87,8 @@
     <div class="span12 accordion">
         <div class="accordion-group">
             <div class="accordion-heading">
-                <a href="#project-header" id="project-header" class="accordion-toggle" data-toggle="collapse" data-target="#project-info"><i class="icon-chevron-right"></i> Projects</a>
+                <a href="#project-header" id="project-header" class="accordion-toggle" data-toggle="collapse" data-target="#project-info"><i class="icon-chevron-right">
+                </i> Projects <small>(${assayAdapter.assay.projects.size()} Project(s))</small></a>
             </div>
             <div id="project-info" class="accordion-body collapse">
                 <div class="accordion-inner">
@@ -127,7 +128,8 @@
         </div>
         <div class="accordion-group">
             <div class="accordion-heading">
-                <a href="#registration-header" id="registration-header" class="accordion-toggle" data-toggle="collapse" data-target="#registration-info"><i class="icon-chevron-right"></i> Registration Info</a>
+                <a href="#registration-header" id="registration-header" class="accordion-toggle" data-toggle="collapse" data-target="#registration-info"><i class="icon-chevron-right">
+                </i> Registration Info <small>(ID: ${assayAdapter?.assay.id}, Created by: ${assayAdapter.assay.getValue(AssayValues.AssaySourceValue).value})</small></a>
                 <div id="registration-info" class="accordion-body collapse">
                     <div class="accordion-inner">
                         <g:render template="assaySummary" model="['assayAdapter': assayAdapter]" />
