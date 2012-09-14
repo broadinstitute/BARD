@@ -10,6 +10,9 @@ import grails.plugin.spock.IntegrationSpec
 import org.junit.After
 import org.junit.Before
 import spock.lang.Unroll
+import bard.core.EntityNamedSources
+import bard.core.DataSource
+import bard.core.Assay
 
 @Unroll
 class QueryServiceIntegrationSpec extends IntegrationSpec {
@@ -159,14 +162,14 @@ class QueryServiceIntegrationSpec extends IntegrationSpec {
         then:
         List<AssayAdapter> assayAdapters = assayAdapterMap.assayAdapters
         assert !assayAdapters.isEmpty()
-        assert assayAdapters.size()  >=0
+        assert assayAdapters.size() >= 0
         assert assayAdapterMap.facets
         assert assayAdapterMap.nHits >= 0
 
         where:
         label                     | searchString         | skip | top | numberOfAssays | filters
         "dna repair"              | "dna repair"         | 0    | 10  | 10             | []
-        "dna repair with filters" | "dna repair"         | 0    | 10  | 10              | [new SearchFilter("gobp_term", "DNA repair"), new SearchFilter("gobp_term", "response to UV-C")]
+        "dna repair with filters" | "dna repair"         | 0    | 10  | 10             | [new SearchFilter("gobp_term", "DNA repair"), new SearchFilter("gobp_term", "response to UV-C")]
         "dna repair skip and top" | "dna repair"         | 10   | 10  | 10             | []
         "biological process"      | "biological process" | 0    | 10  | 10             | []
 
