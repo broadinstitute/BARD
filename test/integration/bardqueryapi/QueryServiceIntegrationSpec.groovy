@@ -127,6 +127,8 @@ class QueryServiceIntegrationSpec extends IntegrationSpec {
         assert numberOfCompounds == compoundAdapters.size()
 
 
+
+
         where:
         label                            | structureSearchParamsType               | smiles                    | skip | top | numberOfCompounds
         "square planar"                  | StructureSearchParams.Type.Substructure | "F[Po@SP1](Cl)(Br)I"      | 0    | 2   | 0
@@ -147,6 +149,9 @@ class QueryServiceIntegrationSpec extends IntegrationSpec {
         "tetrahedral stereo without H 1" | StructureSearchParams.Type.Substructure | "C[C@@](N)(O)F"           | 0    | 2   | 0
         "tetrahedral stereo without H 1" | StructureSearchParams.Type.Substructure | "C[C@](N)(O)F"            | 0    | 2   | 0
         "ions 2"                         | StructureSearchParams.Type.Substructure | "[Cl-][Ca++][Cl-]"        | 0    | 2   | 0
+        "with H"                         | StructureSearchParams.Type.Substructure | "C[C@H](N)C=C"            | 0    | 2   | 2
+        "without H"                      | StructureSearchParams.Type.Substructure | "CC[C@@](C)(N)C=C"        | 0    | 2   | 2
+
         //  "ions 1"                         | StructureSearchParams.Type.Substructure | "[O-]c1ccccc1"            | 0    | 2   | 2
         //"isotopes"                       | StructureSearchParams.Type.Substructure | "C[14C]C"                 | 0    | 2   | 0
 
@@ -237,7 +242,7 @@ class QueryServiceIntegrationSpec extends IntegrationSpec {
         where:
         label                             | searchString         | skip | top | numberOfProjects | filters
         "dna repair"                      | "dna repair"         | 0    | 10  | 10               | []
-        "dna repair with filters"         | "dna repair"         | 0    | 10  | 10                | [new SearchFilter("num_expt", "6")]
+        "dna repair with filters"         | "dna repair"         | 0    | 10  | 10               | [new SearchFilter("num_expt", "6")]
         "dna repair skip and top"         | "dna repair"         | 10   | 10  | 10               | []
         "biological process"              | "biological process" | 0    | 10  | 10               | []
         "biological process with filters" | "biological process" | 0    | 10  | 10               | [new SearchFilter("num_expt", "6")]
