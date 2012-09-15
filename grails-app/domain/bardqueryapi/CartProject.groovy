@@ -5,6 +5,21 @@ import com.metasieve.shoppingcart.Shoppable
 class CartProject extends Shoppable {
 
     String projectName = "no project name yet specified"
+    Long projectId = 0L
+
+
+
+    CartProject (String projectName, String projectIdStr)   {
+        this.projectName =  projectName
+        this.projectId =  Long.parseLong(projectIdStr)
+    }
+
+    CartProject (String projectName, Long projectIdStr)   {
+        this.projectName =  projectName
+        this.projectId =  projectIdStr
+    }
+
+
 
     /**
      *

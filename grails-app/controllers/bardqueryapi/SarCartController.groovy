@@ -25,7 +25,7 @@ class SarCartController {
 
         } else if (params.class == 'class bardqueryapi.CartProject') {
 
-            somethingWasAdded = queryCartService.addToShoppingCart( new CartProject( projectName:params.projectName ) )
+            somethingWasAdded = queryCartService.addToShoppingCart( new CartProject( params.projectName,params.id  ) )
 
         }
 

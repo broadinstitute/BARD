@@ -16,12 +16,11 @@ class CartAssay extends Shoppable {
 
     CartAssay (String assayTitle, String assayIdStr)   {
         this.assayTitle =  assayTitle
-        Integer assayId  = Integer.parseInt(assayIdStr)
-        this.assayId =  assayId as Long
+        this.assayId =  Long.parseLong(assayIdStr)
     }
 
-        CartAssay (String assayTitle, int assayId)   {
-            this.assayTitle =  assayTitle
+   CartAssay (String assayTitle, int assayId)   {
+        this.assayTitle =  assayTitle
         this.assayId =  assayId as Long
     }
 
