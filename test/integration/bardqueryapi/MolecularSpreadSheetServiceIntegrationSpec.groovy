@@ -7,6 +7,8 @@ import org.junit.After
 import org.junit.Before
 import spock.lang.Unroll
 
+import static junit.framework.Assert.assertNotNull
+
 @Unroll
 class MolecularSpreadSheetServiceIntegrationSpec extends IntegrationSpec {
 
@@ -14,11 +16,13 @@ class MolecularSpreadSheetServiceIntegrationSpec extends IntegrationSpec {
     QueryServiceWrapper queryServiceWrapper
     RESTCompoundService restCompoundService
     RESTExperimentService restExperimentService
+    MolSpreadSheetData molSpreadSheetData = generateFakeData()
 
     @Before
     void setup() {
         this.restCompoundService = queryServiceWrapper.getRestCompoundService()
         this.restExperimentService = queryServiceWrapper.getRestExperimentService()
+
     }
 
     @After
@@ -38,6 +42,55 @@ class MolecularSpreadSheetServiceIntegrationSpec extends IntegrationSpec {
         "Search with a list of CIDs" | new Long(346) | [3232584, 3232585, 3232586]
 
     }
+
+
+
+
+    void "tests retrieveExperimentalData"() {
+        when:
+        assertNotNull molSpreadSheetData
+        then:
+        assertDataForSpreadSheetExist( molSpreadSheetData)
+     }
+
+
+void assertDataForSpreadSheetExist(MolSpreadSheetData molSpreadSheetData){
+    assert  molSpreadSheetData!= null
+    for (int rowCnt in 0..(molSpreadSheetData.getRowCount()-1)) {
+        for (int colCnt in 0..(molSpreadSheetData.mssHeaders.size()-1)) {
+              String key= "${rowCnt}_${colCnt}"
+            assertNotNull(molSpreadSheetData.mssData["${rowCnt}_${colCnt}"])
+        }
+
+    }
+}
+
+
+    MolSpreadSheetData generateFakeData(){
+        MolSpreadSheetData molSpreadSheetData = new MolSpreadSheetData()
+        molSpreadSheetData = new MolSpreadSheetData()
+        molSpreadSheetData.mssHeaders = ["Chemical Structure",
+                "CID",
+                "DNA polymerase (Q9Y253) ADID : 1 IC50",
+                "Serine-protein kinase (Q13315) ADID : 1 IC50",
+                "Tyrosine-DNA phosphodiesterase 1 (Q9NUW8) ADID: 514789"]
+        molSpreadSheetData.mssData.put("0_0",new MolSpreadSheetCell("1",MolSpreadSheetCellType.string))
+        molSpreadSheetData.mssData.put("0_1",new MolSpreadSheetCell("3888711",MolSpreadSheetCellType.identifier))
+        molSpreadSheetData.mssData.put("0_2",new MolSpreadSheetCell("3888711",MolSpreadSheetCellType.greaterThanNumeric))
+        molSpreadSheetData.mssData.put("0_3",new MolSpreadSheetCell("3888711",MolSpreadSheetCellType.percentageNumeric))
+        molSpreadSheetData.mssData.put("0_4",new MolSpreadSheetCell("3888711",MolSpreadSheetCellType.lessThanNumeric))
+        molSpreadSheetData.mssData.put("1_0",new MolSpreadSheetCell("1",MolSpreadSheetCellType.string))
+        molSpreadSheetData.mssData.put("1_1",new MolSpreadSheetCell("3888711",MolSpreadSheetCellType.identifier))
+        molSpreadSheetData.mssData.put("1_2",new MolSpreadSheetCell("3888711",MolSpreadSheetCellType.greaterThanNumeric))
+        molSpreadSheetData.mssData.put("1_3",new MolSpreadSheetCell("3888711",MolSpreadSheetCellType.percentageNumeric))
+        molSpreadSheetData.mssData.put("1_4",new MolSpreadSheetCell("3888711",MolSpreadSheetCellType.lessThanNumeric))
+        molSpreadSheetData
+    }
+
+
+
+
+
 //    /**
 //     * Copied from JDO Wrapper tests
 //     */
