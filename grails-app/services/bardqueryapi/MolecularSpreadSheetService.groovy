@@ -34,6 +34,7 @@ class MolecularSpreadSheetService {
             for (CartCompound cartCompound in cartCompoundList)
                 cartCompoundIdList.add(cartCompound.compoundId)
             // build the etag
+            //TODO: Use a Unique name for the Etag here
             Object etag = queryServiceWrapper.restCompoundService.newETag("My awesome compound collection", cartCompoundIdList);
 
             // now get a list of expts.  Start with the assays, then conert to experiments with Jacob's method

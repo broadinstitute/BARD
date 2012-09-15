@@ -34,7 +34,7 @@ class MolecularSpreadSheetServiceIntegrationSpec extends IntegrationSpec {
 
     }
 
-
+     //TODO: Uncomment once NCGC fix the server issues they are having
 //    void "tests cartAssaysToExperiments #label"() {
 //        given: "That a list of CartAssay objects have been created"
 //        final List<CartAssay> givenCartAssays = cartAssays
@@ -45,8 +45,8 @@ class MolecularSpreadSheetServiceIntegrationSpec extends IntegrationSpec {
 //
 //
 //        where:
-//        label                                | cartAssays                              | expectedExperimentIds
-//        "An existing assay with experiments" | [new CartAssay(assayId: new Long(604))] | [604]
+//        label                                | cartAssays
+//        "An existing assay with experiments" | [new CartAssay(assayId: new Long(519))]
 //    }
 
     void "tests extractActivitiesFromExperiment #label"() {
