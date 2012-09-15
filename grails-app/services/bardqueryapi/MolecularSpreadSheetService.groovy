@@ -96,8 +96,7 @@ class MolecularSpreadSheetService {
     protected List<Experiment> cartAssaysToExperiments(final List<CartAssay> cartAssays) {
         List<Long> assayIds = []
         for (CartAssay cartAssay : cartAssays) {
-            //TODO: Use the assay Id once it is ready
-            long assayId = cartAssay.getId()
+            long assayId = cartAssay.assayId
             assayIds.add(assayId)
         }
         List<Experiment> allExperiments = []
@@ -116,8 +115,7 @@ class MolecularSpreadSheetService {
     protected List<Experiment> cartProjectsToExperiments(final List<CartProject> cartProjects) {
         List<Long> projectIds = []
         for (CartProject cartProject : cartProjects) {
-            //TODO: Use the project Id once it is ready
-            long projectId = cartProject.getId()
+            long projectId = cartProject.projectId
             projectIds.add(projectId)
         }
         List<Experiment> allExperiments = []
