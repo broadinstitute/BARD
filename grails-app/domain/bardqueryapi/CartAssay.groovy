@@ -5,12 +5,27 @@ import com.metasieve.shoppingcart.Shoppable
 
 class CartAssay extends Shoppable {
 
+    Long assayId  = 0
     String assayTitle
 
     @Override
     String toString() {
         assayTitle
     }
+
+
+    CartAssay (String assayTitle, String assayIdStr)   {
+        this.assayTitle =  assayTitle
+        Integer assayId  = Integer.parseInt(assayIdStr)
+        this.assayId =  assayId as Long
+    }
+
+        CartAssay (String assayTitle, int assayId)   {
+            this.assayTitle =  assayTitle
+        this.assayId =  assayId as Long
+    }
+
+
 
     /**
      *  equals

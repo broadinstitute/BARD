@@ -1,8 +1,8 @@
-<%@ page import="bardqueryapi.FacetFormType" %>
-<%@ page import="bardqueryapi.MolSpreadSheetCell; bardqueryapi.MolSpreadSheetCellType; bardqueryapi.ExperimentalResultsService; bardqueryapi.MolSpreadSheetData;" %>
-<%@ page import="com.metasieve.shoppingcart.ShoppingCartService" %>
+<%@ page import="bardqueryapi.MolecularSpreadSheetService; bardqueryapi.FacetFormType" %>
+<%@ page import="bardqueryapi.MolSpreadSheetCell; bardqueryapi.MolSpreadSheetCellType; bardqueryapi.MolSpreadSheetData;" %>
+<%@ page import="com.metasieve.shoppingcart.ShoppingCartService;" %>
 <%
-    ExperimentalResultsService  experimentalResultsService = grailsApplication.classLoader.loadClass('bardqueryapi.ExperimentalResultsService').newInstance()
+    MolecularSpreadSheetService   molecularSpreadSheetService = grailsApplication.classLoader.loadClass('bardqueryapi.MolecularSpreadSheetService').newInstance()
 %>
 <html>
 <head>
@@ -121,16 +121,27 @@
         </div>
         <div class="span8">
             <table width=100% height=100%>
-                    <g:each var="rowCnt" in="${0..experimentalResultsService.fakeMe().getRowCount()}">
-                        <tr>
-                           <g:each  var="colCnt" in="${0..experimentalResultsService.fakeMe().mssHeaders.size()}">
-                               <td>
-                                   "${experimentalResultsService.fakeMe().mssData["${rowCnt}_${colCnt}"]}
-                               </td>
-                           </g:each>
-                         </tr>
-                    </g:each>
-                    </table>
+                <g:each var="rowCnt" in="${0..molSpreadSheetData.getRowCount()}">
+                    <tr>
+                        <g:each  var="colCnt" in="${0..molSpreadSheetData.mssHeaders.size()}">
+                            <td>
+                                "${molSpreadSheetData.mssData["${rowCnt}_${colCnt}"]}
+                            </td>
+                        </g:each>
+                    </tr>
+                </g:each>
+            </table>
+            %{--<table width=100% height=100%>--}%
+                %{--<g:each var="rowCnt" in="${0..molecularSpreadSheetService.fakeMe().getRowCount()}">--}%
+                    %{--<tr>--}%
+                        %{--<g:each  var="colCnt" in="${0..molecularSpreadSheetService.fakeMe().mssHeaders.size()}">--}%
+                            %{--<td>--}%
+                                %{--"${molecularSpreadSheetService.fakeMe().mssData["${rowCnt}_${colCnt}"]}--}%
+                            %{--</td>--}%
+                        %{--</g:each>--}%
+                    %{--</tr>--}%
+                %{--</g:each>--}%
+            %{--</table>--}%
         </div>
         <div class="span2">
                     <g:render template="../bardWebInterface/sarCartContent"/>

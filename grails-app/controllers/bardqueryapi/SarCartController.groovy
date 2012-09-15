@@ -14,7 +14,7 @@ class SarCartController {
         int stt = Integer.parseInt(params.stt)
         if (params.class == 'class bardqueryapi.CartAssay') {
 
-            somethingWasAdded = queryCartService.addToShoppingCart( new CartAssay( assayTitle:params.assayTitle ) )
+            somethingWasAdded = queryCartService.addToShoppingCart( new CartAssay( params.assayTitle, params.id ) )
 
         }  else if (params.class == 'class bardqueryapi.CartCompound') {
 
