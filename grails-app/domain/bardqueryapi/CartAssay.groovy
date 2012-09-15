@@ -12,7 +12,9 @@ class CartAssay extends Shoppable {
     String toString() {
         assayTitle
     }
+    CartAssay(){
 
+    }
 
     CartAssay (String assayTitle, String assayIdStr)   {
         this.assayTitle =  assayTitle

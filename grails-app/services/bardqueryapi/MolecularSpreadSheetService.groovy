@@ -1,48 +1,44 @@
 package bardqueryapi
 
 import bard.core.rest.RESTCompoundService
+import com.metasieve.shoppingcart.ShoppingCartService
 import org.apache.commons.lang3.time.StopWatch
 import bard.core.*
-import bard.core.rest.RESTExperimentService
-import com.metasieve.shoppingcart.ShoppingCartService
-
 
 class MolecularSpreadSheetService {
 
     static MolSpreadSheetData molSpreadSheetData
-    QueryCartService  queryCartService
+    QueryCartService queryCartService
     QueryServiceWrapper queryServiceWrapper
-    ShoppingCartService  shoppingCartService
-    RESTExperimentService restExperimentService
-    RESTCompoundService restCompoundService
+    ShoppingCartService shoppingCartService
     QueryHelperService queryHelperService
 
 
 
-    MolSpreadSheetData retrieveExperimentalData(){
-        if (queryCartService.totalNumberOfUniqueItemsInCart(shoppingCartService)> 0){
+    MolSpreadSheetData retrieveExperimentalData() {
+        if (queryCartService.totalNumberOfUniqueItemsInCart(shoppingCartService) > 0) {
 
             // we want to fill this variable
             molSpreadSheetData = new MolSpreadSheetData()
 
             // start by working through the compounds. First gather CartCompound
-            List<Integer>  cartCompoundList  = new  ArrayList<CartCompound>()
+            List<Integer> cartCompoundList = new ArrayList<CartCompound>()
             int rowPointer = 0
-            for (CartCompound cartCompound in (queryCartService.groupUniqueContentsByType(shoppingCartService)[(QueryCartService.cartCompound)]) ){
+            for (CartCompound cartCompound in (queryCartService.groupUniqueContentsByType(shoppingCartService)[(QueryCartService.cartCompound)])) {
                 cartCompoundList.add(cartCompound)
-                molSpreadSheetData.rowPointer.put(cartCompound.compoundId,rowPointer )
+                molSpreadSheetData.rowPointer.put(cartCompound.compoundId, rowPointer)
                 rowPointer++
             }
             // extract cmpd ids
-            List<Integer>  cartCompoundIdList = new ArrayList<Integer>()
-            for (CartCompound cartCompound in  cartCompoundList)
-                cartCompoundIdList.add (cartCompound.compoundId)
+            List<Integer> cartCompoundIdList = new ArrayList<Integer>()
+            for (CartCompound cartCompound in cartCompoundList)
+                cartCompoundIdList.add(cartCompound.compoundId)
             // build the etag
-            Object etag =  queryServiceWrapper.restCompoundService.newETag("My awesome compound collection", cartCompoundIdList);
+            Object etag = queryServiceWrapper.restCompoundService.newETag("My awesome compound collection", cartCompoundIdList);
 
             // now get a list of expts.  Start with the assays, then conert to experiments with Jacob's method
-            List<CartAssay>  cartAssayList  = new  ArrayList<CartAssay>()
-            for (CartAssay cartAssay in (queryCartService.groupUniqueContentsByType(shoppingCartService)[(QueryCartService.cartAssay)]) ){
+            List<CartAssay> cartAssayList = new ArrayList<CartAssay>()
+            for (CartAssay cartAssay in (queryCartService.groupUniqueContentsByType(shoppingCartService)[(QueryCartService.cartAssay)])) {
                 cartAssayList.add(cartAssay)
                 molSpreadSheetData.mssHeaders.add(cartAssay.assayTitle)
             }
@@ -51,14 +47,14 @@ class MolecularSpreadSheetService {
             // now step through the data and place into molSpreadSheetData
             List<SpreadSheetActivity> spreadSheetActivityList
             int columnPointer = 0
-            for (Experiment experiment in  experimentList) {
-                spreadSheetActivityList = findActivitiesForCompounds( experiment,etag)
+            for (Experiment experiment in experimentList) {
+                spreadSheetActivityList = findActivitiesForCompounds(experiment, etag)
                 // how to aggregate activity values -- for now do something (very) simple
-                for ( SpreadSheetActivity spreadSheetActivity in  spreadSheetActivityList ) {
-                    if (molSpreadSheetData.rowPointer.containsKey(spreadSheetActivity.cid))  {
-                        int innerRowPointer =  molSpreadSheetData.rowPointer[spreadSheetActivity.cid]
+                for (SpreadSheetActivity spreadSheetActivity in spreadSheetActivityList) {
+                    if (molSpreadSheetData.rowPointer.containsKey(spreadSheetActivity.cid)) {
+                        int innerRowPointer = molSpreadSheetData.rowPointer[spreadSheetActivity.cid]
                         String arrayKey = "${innerRowPointer}_${columnPointer}"
-                        molSpreadSheetData.mssData.put(arrayKey,new MolSpreadSheetCell(spreadSheetActivity.hillCurveValue,MolSpreadSheetCellType.numeric))
+                        molSpreadSheetData.mssData.put(arrayKey, new MolSpreadSheetCell(spreadSheetActivity.hillCurveValue, MolSpreadSheetCellType.numeric))
                     }
                     else
                         assert false, "did not expect cid = ${spreadSheetActivity.cid}"
@@ -71,15 +67,10 @@ class MolecularSpreadSheetService {
         molSpreadSheetData
     }
 
-
-
-
-
-
     /**
      *
      * @param cartCompounds
-     * @return  list of Experiment's from a list of CartCompound's
+     * @return list of Experiment's from a list of CartCompound's
      */
     protected List<Long> cartCompoundsToCIDS(final List<CartCompound> cartCompounds) {
         List<Long> cids = []
@@ -128,7 +119,7 @@ class MolecularSpreadSheetService {
     }
     /**
      *
-      * @param cartCompounds
+     * @param cartCompounds
      * @param cartAssays
      * @param cartProjects
      * @return list of SpreadSheetActivities
@@ -137,10 +128,10 @@ class MolecularSpreadSheetService {
                                                              final List<CartAssay> cartAssays,
                                                              final List<CartProject> cartProjects) {
 
-        if(!cartCompounds){
+        if (!cartCompounds) {
             throw new RuntimeException("There must be at least one Compound in the cart")
         }
-        if(!cartAssays && !cartProjects){
+        if (!cartAssays && !cartProjects) {
             throw new RuntimeException("At least one Project or Assay must be in the Cart")
         }
 
@@ -202,8 +193,12 @@ class MolecularSpreadSheetService {
      * @param spreadSheetActivity
      * @param childValue
      */
-    void addCurrentActivityToSpreadSheet(final SpreadSheetActivity spreadSheetActivity,final Value childValue) {
+    void addCurrentActivityToSpreadSheet(final SpreadSheetActivity spreadSheetActivity, final Value childValue) {
         String identifier = childValue.id
+        if (childValue instanceof HillCurveValue) {
+            spreadSheetActivity.hillCurveValue = childValue
+            return
+        }
         switch (identifier) {
             case "eid":
                 spreadSheetActivity.eid = childValue.value
@@ -252,5 +247,14 @@ public class SpreadSheetActivity {
         this.cid = cid
         this.sid = sid
         this.hillCurveValue = hillCurveValue
+    }
+
+    public String toString() {
+        final List<String> stringBuilder = []
+        stringBuilder.add("CID: ${this.cid}")
+        stringBuilder.add("EID: ${this.eid}")
+        stringBuilder.add("SID: ${this.sid}")
+        stringBuilder.add("Hill Curve Value:\n ${this.hillCurveValue}")
+        return stringBuilder.join("\n").toString()
     }
 }
