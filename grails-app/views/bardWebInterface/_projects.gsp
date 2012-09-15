@@ -6,10 +6,10 @@
             <g:each var="projectAdapter" in="${projectAdapters}">
                 <li>
                     <g:link action="showProject" id="${projectAdapter.project.id}"
-                            target="_blank">Project ID: ${projectAdapter.project.id} - ${projectAdapter.project.name}</g:link>
+                            target="_blank">Project ID: ${projectAdapter.project.id} - ${projectAdapter.name}</g:link>
                     <a href="/bardwebquery/sarCart/add/${projectAdapter.project.id}"
                        onclick="jQuery.ajax({  type:'POST',
-                           data:{'id':'${projectAdapter.project.id}', 'class':'class bardqueryapi.CartProject', 'projectName':'${JavaScriptUtility.cleanup(projectAdapter.project.name)}', 'version':'0', 'stt':trackStatus},
+                           data:{'id':'${projectAdapter.project.id}', 'class':'class bardqueryapi.CartProject', 'projectName':'${JavaScriptUtility.cleanup(projectAdapter.name)}', 'version':'0', 'stt':trackStatus},
                            url:'/bardwebquery/sarCart/add',
                            success:function (data, textStatus) {
                                jQuery(ajaxLocation).html(data);

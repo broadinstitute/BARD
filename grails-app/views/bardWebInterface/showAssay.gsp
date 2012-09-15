@@ -129,7 +129,7 @@
         <div class="accordion-group">
             <div class="accordion-heading">
                 <a href="#registration-header" id="registration-header" class="accordion-toggle" data-toggle="collapse" data-target="#registration-info"><i class="icon-chevron-right">
-                </i> Registration Info <small>(ID: ${assayAdapter?.assay.id}, Created by: ${assayAdapter.assay.getValue(AssayValues.AssaySourceValue).value})</small></a>
+                </i> Registration Info <small>(ID: ${assayAdapter?.assay.id}, Created by: ${assayAdapter?.assay?.getValue(AssayValues.AssaySourceValue)?.value})</small></a>
                 <div id="registration-info" class="accordion-body collapse">
                     <div class="accordion-inner">
                         <g:render template="assaySummary" model="['assayAdapter': assayAdapter]" />

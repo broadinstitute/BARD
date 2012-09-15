@@ -6,7 +6,7 @@ import bard.core.adapter.ProjectAdapter
 import org.apache.commons.lang3.time.StopWatch
 import bard.core.*
 
-class QueryService {
+class QueryService implements IQueryService {
 
     QueryServiceWrapper queryServiceWrapper
     QueryHelperService queryHelperService
@@ -229,7 +229,7 @@ class QueryService {
      * @param assayId
      * @return AssayAdapter
      */
-    AssayAdapter showAssay(final Integer assayId) {
+    AssayAdapter showAssay(final Long assayId) {
         if (assayId) {
             StopWatch sw = this.queryHelperService.startStopWatch()
             Assay assay = this.queryServiceWrapper.getRestAssayService().get(assayId)
@@ -245,7 +245,7 @@ class QueryService {
      * @param projectId
      * @return ProjectAdapter
      */
-    ProjectAdapter showProject(final Integer projectId) {
+    ProjectAdapter showProject(final Long projectId) {
         if (projectId) {
             StopWatch sw = this.queryHelperService.startStopWatch()
             final Project project = this.queryServiceWrapper.getRestProjectService().get(projectId)

@@ -1,4 +1,6 @@
 dataSource {
+    dbCreate = "create-drop" // one of 'create', 'create-drop', 'update', 'validate', ''
+    url = "jdbc:h2:mem:devDb;MVCC=TRUE"
     pooled = true
     driverClassName = "org.h2.Driver"
     username = "sa"

@@ -30,11 +30,12 @@
                 <td width="80%">
                     <div class="addtocartholder">
                         <h3>${projectAdapter?.name}</h3>
+                    </div>
                 </td>
                 <td>
                     <a href="/bardwebquery/sarCart/add/1" class="addtocart"
                        onclick="jQuery.ajax({  type:'POST',
-                           data:{'id':'${projectAdapter.project.id}', 'class':'class bardqueryapi.CartProject', 'projectName':'${JavaScriptUtility.cleanup(projectAdapter.project.name)}', 'version':'0', 'stt':trackStatus},
+                           data:{'id':'${projectAdapter.project.id}', 'class':'class bardqueryapi.CartProject', 'projectName':'${JavaScriptUtility.cleanup(projectAdapter.name)}', 'version':'0', 'stt':trackStatus},
                            url:'/bardwebquery/sarCart/add',
                            success:function (data, textStatus) {
                                jQuery(ajaxLocation).html(data);
