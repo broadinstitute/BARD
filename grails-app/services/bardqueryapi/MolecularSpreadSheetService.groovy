@@ -164,7 +164,7 @@ class MolecularSpreadSheetService {
      */
     List<SpreadSheetActivity> findActivitiesForCompounds(final Experiment experiment, final Object compoundETag) {
         final List<SpreadSheetActivity> spreadSheetActivities = new ArrayList<SpreadSheetActivity>()
-        ServiceIterator<Value> experimentIterator = this.queryServiceWrapper.restExperimentService.activities(experiment, compoundETag);
+        final ServiceIterator<Value> experimentIterator = this.queryServiceWrapper.restExperimentService.activities(experiment, compoundETag);
         while (experimentIterator.hasNext()) {
             Value experimentValue = experimentIterator.next()
             if (experimentValue) {
