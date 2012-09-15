@@ -9,7 +9,11 @@ class MolecularSpreadSheetService {
     QueryServiceWrapper queryServiceWrapper
     QueryHelperService queryHelperService
 
-
+    /**
+     *
+     * @param cartCompounds
+     * @return  list of Experiment's from a list of CartCompound's
+     */
     protected List<Long> cartCompoundsToCIDS(final List<CartCompound> cartCompounds) {
         List<Long> cids = []
         for (CartCompound cartCompound : cartCompounds) {
@@ -19,10 +23,15 @@ class MolecularSpreadSheetService {
 
         return cids
     }
-
+    /**
+     *
+     * @param cartAssays
+     * @return list of Experiment's from a list of CartAssay's
+     */
     protected List<Experiment> cartAssaysToExperiments(final List<CartAssay> cartAssays) {
         List<Long> assayIds = []
         for (CartAssay cartAssay : cartAssays) {
+            //TODO: Use the assay Id once it is ready
             long assayId = cartAssay.getId()
             assayIds.add(assayId)
         }
@@ -34,10 +43,15 @@ class MolecularSpreadSheetService {
         }
         return allExperiments
     }
-
+    /**
+     *
+     * @param cartProjects
+     * @return list of Experiment's from a list of CartProject's
+     */
     protected List<Experiment> cartProjectsToExperiments(final List<CartProject> cartProjects) {
         List<Long> projectIds = []
         for (CartProject cartProject : cartProjects) {
+            //TODO: Use the project Id once it is ready
             long projectId = cartProject.getId()
             projectIds.add(projectId)
         }
@@ -51,11 +65,21 @@ class MolecularSpreadSheetService {
     }
     /**
      *
-     * @param experimentId
-     * @param compoundETags - Just wish these etags were typed
-     * @return List of activities
+      * @param cartCompounds
+     * @param cartAssays
+     * @param cartProjects
+     * @return list of SpreadSheetActivities
      */
-    public List<SpreadSheetActivity> getMolecularSpreadSheet(List<CartCompound> cartCompounds, List<CartAssay> cartAssays, List<CartProject> cartProjects) {
+    public List<SpreadSheetActivity> getMolecularSpreadSheet(final List<CartCompound> cartCompounds,
+                                                             final List<CartAssay> cartAssays,
+                                                             final List<CartProject> cartProjects) {
+
+        if(!cartCompounds){
+            throw new RuntimeException("There must be at least one Compound in the cart")
+        }
+        if(!cartAssays && !cartProjects){
+            throw new RuntimeException("At least one Project or Assay must be in the Cart")
+        }
 
         //TODO: add assertions here
         List<Experiment> experiments = []
@@ -63,8 +87,6 @@ class MolecularSpreadSheetService {
         experiments.addAll(cartAssaysToExperiments(cartAssays))
         experiments.addAll(cartProjectsToExperiments(cartProjects))
         List<Long> cids = cartCompoundsToCIDS(cartCompounds)
-
-
 
         StopWatch stopWatch = queryHelperService.startStopWatch()
         //TODO: create the ETAG, we should randomize this to support multithreading
@@ -85,7 +107,7 @@ class MolecularSpreadSheetService {
      * @param compoundETags - Just wish these etags were typed
      * @return List of activities
      */
-    public List<SpreadSheetActivity> findActivitiesForCompounds(final Experiment experiment, final Object compoundETag) {
+    List<SpreadSheetActivity> findActivitiesForCompounds(final Experiment experiment, final Object compoundETag) {
         final List<SpreadSheetActivity> spreadSheetActivities = new ArrayList<SpreadSheetActivity>()
         ServiceIterator<Value> experimentIterator = this.queryServiceWrapper.restExperimentService.activities(experiment, compoundETag);
         while (experimentIterator.hasNext()) {
@@ -97,8 +119,12 @@ class MolecularSpreadSheetService {
         }
         return spreadSheetActivities
     }
-
-    SpreadSheetActivity extractActivitiesFromExperiment(Value experimentValue) {
+    /**
+     *
+     * @param experimentValue
+     * @return SpreadSheetActivity
+     */
+    SpreadSheetActivity extractActivitiesFromExperiment(final Value experimentValue) {
         final Iterator<Value> experimentValueIterator = experimentValue.children()
         SpreadSheetActivity spreadSheetActivity = new SpreadSheetActivity()
         while (experimentValueIterator.hasNext()) {
@@ -107,8 +133,12 @@ class MolecularSpreadSheetService {
         }
         return spreadSheetActivity
     }
-
-    void addCurrentActivityToSpreadSheet(SpreadSheetActivity spreadSheetActivity, Value childValue) {
+    /**
+     *
+     * @param spreadSheetActivity
+     * @param childValue
+     */
+    void addCurrentActivityToSpreadSheet(final SpreadSheetActivity spreadSheetActivity,final Value childValue) {
         String identifier = childValue.id
         switch (identifier) {
             case "eid":
