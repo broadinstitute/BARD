@@ -23,7 +23,8 @@
                                <ul class="dropdown-menu" role="menu">
                                    <li><a href="/bardwebquery/MolSpreadSheet">Molecular Spreadsheet</a></li>
                                    <li><a href="#">Advanced Analysis Client</a></li>
-                              </ul>
+                                   <li><a href="/bardwebquery/MolSpreadSheet/demo">[Molecular Spreadsheet demo]</a></li>
+                               </ul>
                             </div>
 
                         </div>
