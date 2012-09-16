@@ -7,7 +7,6 @@ import bard.core.*
 
 class MolecularSpreadSheetService {
 
-    static MolSpreadSheetData molSpreadSheetData
     QueryCartService queryCartService
     QueryServiceWrapper queryServiceWrapper
     ShoppingCartService shoppingCartService
@@ -37,36 +36,6 @@ class MolecularSpreadSheetService {
     }
 
 
-//        // now step through the data and place into molSpreadSheetData
-//            List<SpreadSheetActivity> spreadSheetActivityList   = new ArrayList<SpreadSheetActivity>()
-//            int columnPointer = 0
-//            for (Experiment experiment in experimentList) {
-//                ServiceIterator<Value> experimentIterator = queryServiceWrapper.restExperimentService.activities(experiment, etag )
-//                // how to aggregate activity values -- for now do something (very) simple
-//                Value experimentValue
-//                while (experimentIterator.hasNext()) {
-//                    experimentValue = experimentIterator.next()
-//                    spreadSheetActivityList.add(extractActivitiesFromExperiment(experimentValue))
-//                }
-//                //SpreadSheetActivity spreadSheetActivity2 = extractActivitiesFromExperiment(experimentValue)
-//
-//                for (SpreadSheetActivity spreadSheetActivity in spreadSheetActivityList) {
-//                    if (molSpreadSheetData.rowPointer.containsKey(spreadSheetActivity.cid)) {
-//                        int innerRowPointer = molSpreadSheetData.rowPointer[spreadSheetActivity.cid]
-//                        String arrayKey = "${innerRowPointer}_${columnPointer}"
-//                        MolSpreadSheetCell molSpreadSheetCell = new MolSpreadSheetCell(spreadSheetActivity.interpretHillCurveValue().toString(), MolSpreadSheetCellType.numeric)
-//                        molSpreadSheetData.mssData.put(arrayKey,molSpreadSheetCell)
-//                    }
-//                    else
-//                        assert false, "did not expect cid = ${spreadSheetActivity.cid}"
-//
-//                }
-//                columnPointer++
-//            }
-//
-//        }
-//        molSpreadSheetData
-//    }
 
 
     protected void populateMolSpreadSheetData(MolSpreadSheetData molSpreadSheetData, List<Experiment> experimentList, Object etag) {

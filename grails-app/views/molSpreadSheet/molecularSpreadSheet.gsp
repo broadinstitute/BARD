@@ -2,7 +2,8 @@
 <%@ page import="bardqueryapi.MolSpreadSheetCell; bardqueryapi.MolSpreadSheetCellType; bardqueryapi.MolSpreadSheetData;" %>
 <%@ page import="com.metasieve.shoppingcart.ShoppingCartService;" %>
 <%
-    MolecularSpreadSheetService   molecularSpreadSheetService = grailsApplication.classLoader.loadClass('bardqueryapi.MolecularSpreadSheetService').newInstance()
+    MolSpreadSheetData   molSpreadSheetData1 = new MolSpreadSheetData("f")
+        //grailsApplication.classLoader.loadClass('bardqueryapi.MolecularSpreadSheetService').newInstance()
 %>
 <html>
 <head>
@@ -121,11 +122,11 @@
         </div>
         <div class="span8">
             <table width=100% height=100%>
-                <g:each var="rowCnt" in="${0..(molSpreadSheetData.getRowCount()-1)}">
+                <g:each var="rowCnt" in="${0..(molSpreadSheetData1.getRowCount()-1)}">
                     <tr>
-                        <g:each  var="colCnt" in="${0..(molSpreadSheetData.mssHeaders.size()-1)}">
+                        <g:each  var="colCnt" in="${0..(molSpreadSheetData1.mssHeaders.size()-1)}">
                             <td>
-                                "${molSpreadSheetData.mssData["${rowCnt}_${colCnt}"]}
+                                ${molSpreadSheetData1.displayValue(  colCnt, rowCnt)}
                             </td>
                         </g:each>
                     </tr>

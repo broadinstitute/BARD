@@ -9,51 +9,62 @@ package bardqueryapi
  */
 class MolSpreadSheetCell {
     MolSpreadSheetCellType molSpreadSheetCellType = MolSpreadSheetCellType.unknown
-    def internalValue = ""
+    Object objInternalValue
+    String strInternalValue = "f"
+    BigDecimal numInternalValue = 1.2
+    Integer  intInternalValue = 0
     MolSpreadSheetCell( String value, MolSpreadSheetCellType molSpreadSheetCellType ){
-        switch (molSpreadSheetCellType) {
+        this.molSpreadSheetCellType = molSpreadSheetCellType
+        switch (this.molSpreadSheetCellType) {
             case MolSpreadSheetCellType.numeric :
-                internalValue = new BigDecimal(value)
+                numInternalValue = new BigDecimal(value)
                 break;
             case MolSpreadSheetCellType.percentageNumeric :
-                internalValue = new BigDecimal(value)
+                numInternalValue = new BigDecimal(value)
                 break;
             case MolSpreadSheetCellType.greaterThanNumeric :
-                internalValue = new BigDecimal(value)
+                numInternalValue = new BigDecimal(value)
                 break;
             case MolSpreadSheetCellType.lessThanNumeric :
-                internalValue = new BigDecimal(value)
+                numInternalValue = new BigDecimal(value)
                 break;
             case MolSpreadSheetCellType.identifier :
-                internalValue = new Integer(value)
+                intInternalValue = new Integer(value)
+                break;
+            case MolSpreadSheetCellType.string :
+                strInternalValue = new String(value)
                 break;
             default:
-                internalValue = value
+                objInternalValue = value
         }
+
     }
     @Override
     String toString() {
         String returnValue = ""
         switch (molSpreadSheetCellType) {
             case MolSpreadSheetCellType.numeric :
-                returnValue = "${internalValue}"
+                returnValue = "${numInternalValue}"
                 break;
             case MolSpreadSheetCellType.percentageNumeric :
-                returnValue = "${internalValue} %"
+                returnValue = "${numInternalValue} %"
                 break;
             case MolSpreadSheetCellType.greaterThanNumeric :
-                returnValue = "> ${internalValue}"
+                returnValue = "> ${numInternalValue}"
                 break;
             case MolSpreadSheetCellType.lessThanNumeric :
-                returnValue = "< ${internalValue}"
+                returnValue = "< ${numInternalValue}"
                 break;
             case MolSpreadSheetCellType.identifier :
-                returnValue = "${internalValue}"
+                returnValue = "${intInternalValue}"
+                break;
+            case MolSpreadSheetCellType.string :
+                returnValue = "${strInternalValue}"
                 break;
             default:
-                returnValue = "${internalValue}"
+                returnValue = "${objInternalValue}"
         }
-        return internalValue.toString()    //To change body of overridden methods use File | Settings | File Templates.
+        returnValue
     }
 
 }
