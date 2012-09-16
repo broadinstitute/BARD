@@ -122,6 +122,26 @@
         </div>
         <div class="span8">
             <table width=100% height=100%>
+                <thead>
+                <tr>
+                    <g:sortableColumn property="struct" title="struct"
+                                      style="max-width: 50px" />
+                    <g:sortableColumn property="cid" title="cid"
+                                      style="max-width: 50px" />
+                    <% int looper = 0 %>
+                    <g:each  var="colHeader" in="${molSpreadSheetData1.mssHeaders}">
+                        <g:if test="${looper>1}">
+                            <g:sortableColumn property="var${looper++}" title="${colHeader}"
+                                              style="max-width: 50px; word-wrap: break-word; height: 100px; overflow-x: hidden;" />
+                        </g:if>
+                        <g:else>
+                           <% looper++ %>
+                        </g:else>
+                    </g:each>
+
+                </tr>
+                </thead>
+                <tbody>
                 <g:each var="rowCnt" in="${0..(molSpreadSheetData1.getRowCount()-1)}">
                     <tr>
                         <g:each  var="colCnt" in="${0..(molSpreadSheetData1.mssHeaders.size()-1)}">
@@ -131,18 +151,8 @@
                         </g:each>
                     </tr>
                 </g:each>
+                </tbody>
             </table>
-            %{--<table width=100% height=100%>--}%
-                %{--<g:each var="rowCnt" in="${0..molecularSpreadSheetService.fakeMe().getRowCount()}">--}%
-                    %{--<tr>--}%
-                        %{--<g:each  var="colCnt" in="${0..molecularSpreadSheetService.fakeMe().mssHeaders.size()}">--}%
-                            %{--<td>--}%
-                                %{--"${molecularSpreadSheetService.fakeMe().mssData["${rowCnt}_${colCnt}"]}--}%
-                            %{--</td>--}%
-                        %{--</g:each>--}%
-                    %{--</tr>--}%
-                %{--</g:each>--}%
-            %{--</table>--}%
         </div>
         <div class="span2">
                     <g:render template="../bardWebInterface/sarCartContent"/>
