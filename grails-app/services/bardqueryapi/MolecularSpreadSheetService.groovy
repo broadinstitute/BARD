@@ -26,16 +26,17 @@ class MolecularSpreadSheetService {
             int rowPointer = 0
             for (CartCompound cartCompound in (queryCartService.groupUniqueContentsByType(shoppingCartService)[(QueryCartService.cartCompound)])) {
                 cartCompoundList.add(cartCompound)
-                molSpreadSheetData.rowPointer.put(cartCompound.compoundId, rowPointer)
+                molSpreadSheetData.rowPointer.put(cartCompound.compoundId as Long, rowPointer)
                 rowPointer++
             }
+
             // extract cmpd ids
-            List<Integer> cartCompoundIdList = new ArrayList<Integer>()
+            List<Long> cartCompoundIdList = new ArrayList<Long>()
             for (CartCompound cartCompound in cartCompoundList)
-                cartCompoundIdList.add(cartCompound.compoundId)
+                cartCompoundIdList.add(new Long(cartCompound.compoundId))
             // build the etag
             //TODO: Use a Unique name for the Etag here
-            Object etag = queryServiceWrapper.restCompoundService.newETag("My awesome compound collection", cartCompoundIdList);
+            Object etag = queryServiceWrapper.restCompoundService.newETag("My compound collection", cartCompoundIdList/*[new Long(1051569), new Long(2917647), new Long(3494575)]*/);
 
             // now get a list of expts.  Start with the assays, then conert to experiments with Jacob's method
             List<CartAssay> cartAssayList = new ArrayList<CartAssay>()
@@ -43,19 +44,33 @@ class MolecularSpreadSheetService {
                 cartAssayList.add(cartAssay)
                 molSpreadSheetData.mssHeaders.add(cartAssay.assayTitle)
             }
-            List<Experiment> experimentList = cartAssaysToExperiments(cartAssayList)
+            // one day we'll do it this way
+            // List<Experiment> experimentList = cartAssaysToExperiments(cartAssayList)
+            List<Experiment> experimentList = new ArrayList<Experiment>()
+            for (CartAssay cartAssay in cartAssayList)  {
+                Long experimentID = cartAssay.assayId // for now make this assumption, that assayid=exptid
+                experimentList.add(queryServiceWrapper.restExperimentService.get(experimentID/*new Long(519)*/))
+            }
 
             // now step through the data and place into molSpreadSheetData
-            List<SpreadSheetActivity> spreadSheetActivityList
+            List<SpreadSheetActivity> spreadSheetActivityList   = new ArrayList<SpreadSheetActivity>()
             int columnPointer = 0
             for (Experiment experiment in experimentList) {
-                spreadSheetActivityList = findActivitiesForCompounds(experiment, etag)
+                ServiceIterator<Value> experimentIterator = queryServiceWrapper.restExperimentService.activities(experiment, etag )
                 // how to aggregate activity values -- for now do something (very) simple
+                Value experimentValue
+                while (experimentIterator.hasNext()) {
+                    experimentValue = experimentIterator.next()
+                    spreadSheetActivityList.add(extractActivitiesFromExperiment(experimentValue))
+                }
+                //SpreadSheetActivity spreadSheetActivity2 = extractActivitiesFromExperiment(experimentValue)
+
                 for (SpreadSheetActivity spreadSheetActivity in spreadSheetActivityList) {
                     if (molSpreadSheetData.rowPointer.containsKey(spreadSheetActivity.cid)) {
                         int innerRowPointer = molSpreadSheetData.rowPointer[spreadSheetActivity.cid]
                         String arrayKey = "${innerRowPointer}_${columnPointer}"
-                        molSpreadSheetData.mssData.put(arrayKey, new MolSpreadSheetCell(spreadSheetActivity.hillCurveValue, MolSpreadSheetCellType.numeric))
+                        MolSpreadSheetCell molSpreadSheetCell = new MolSpreadSheetCell(spreadSheetActivity.interpretHillCurveValue().toString(), MolSpreadSheetCellType.numeric)
+                        molSpreadSheetData.mssData.put(arrayKey,molSpreadSheetCell)
                     }
                     else
                         assert false, "did not expect cid = ${spreadSheetActivity.cid}"
@@ -257,5 +272,22 @@ public class SpreadSheetActivity {
         stringBuilder.add("SID: ${this.sid}")
         stringBuilder.add("Hill Curve Value:\n ${this.hillCurveValue}")
         return stringBuilder.join("\n").toString()
+    }
+
+    // we need a real valued iterpretation of the hillCurveValue.  Someday this must be meaningful, but
+    // for now we need a placeholder
+    public double interpretHillCurveValue(){
+        double retValue = 0d
+        if (this.hillCurveValue!=null) {
+           if (this.hillCurveValue.getValue()!=null)
+               retValue = this.hillCurveValue.getValue()
+            else if (this.hillCurveValue.getConc()!=null){
+               if (this.hillCurveValue.getConc().size()>1) {
+                   int midpoint =  this.hillCurveValue.getConc().size()/2
+                   retValue = this.hillCurveValue.getConc()[midpoint]
+               }
+           }
+        }
+        retValue
     }
 }

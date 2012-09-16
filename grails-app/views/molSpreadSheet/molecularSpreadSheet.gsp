@@ -121,9 +121,9 @@
         </div>
         <div class="span8">
             <table width=100% height=100%>
-                <g:each var="rowCnt" in="${0..molSpreadSheetData.getRowCount()}">
+                <g:each var="rowCnt" in="${0..(molSpreadSheetData.getRowCount()-1)}">
                     <tr>
-                        <g:each  var="colCnt" in="${0..molSpreadSheetData.mssHeaders.size()}">
+                        <g:each  var="colCnt" in="${0..(molSpreadSheetData.mssHeaders.size()-1)}">
                             <td>
                                 "${molSpreadSheetData.mssData["${rowCnt}_${colCnt}"]}
                             </td>
