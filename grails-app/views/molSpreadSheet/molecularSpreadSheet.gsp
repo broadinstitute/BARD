@@ -129,7 +129,7 @@
                     <g:sortableColumn property="cid" title="cid"
                                       style="max-width: 50px" />
                     <% int looper = 0 %>
-                    <g:each  var="colHeader" in="${molSpreadSheetData1.mssHeaders}">
+                    <g:each  var="colHeader" in="${molSpreadSheetData.mssHeaders}">
                         <g:if test="${looper>1}">
                             <g:sortableColumn property="var${looper++}" title="${colHeader}"
                                               style="max-width: 50px; word-wrap: break-word; height: 100px; overflow-x: hidden;" />
@@ -142,11 +142,11 @@
                 </tr>
                 </thead>
                 <tbody>
-                <g:each var="rowCnt" in="${0..(molSpreadSheetData1.getRowCount()-1)}">
+                <g:each var="rowCnt" in="${0..(molSpreadSheetData.getRowCount()-1)}">
                     <tr>
-                        <g:each  var="colCnt" in="${0..(molSpreadSheetData1.mssHeaders.size()-1)}">
+                        <g:each  var="colCnt" in="${0..(molSpreadSheetData.mssHeaders.size()-1)}">
                             <td>
-                                ${molSpreadSheetData1.displayValue(  colCnt, rowCnt)}
+                                ${molSpreadSheetData.displayValue(  colCnt, rowCnt)}
                             </td>
                         </g:each>
                     </tr>
