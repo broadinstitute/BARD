@@ -132,7 +132,7 @@ class QueryService implements IQueryService {
             compoundAdapters.addAll(this.queryHelperService.compoundsToAdapters(compounds))
 
             //collect the facets
-            facets = searchIterator.facets
+            //facets = searchIterator.facets
         }
         int nhits = compoundAdapters.size()
         return [compoundAdapters: compoundAdapters, facets: facets, nHits: nhits]
