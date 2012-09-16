@@ -7,7 +7,7 @@ class MolSpreadSheetController {
     }
      def molecularSpreadSheet(){
          MolSpreadSheetData molSpreadSheetData = molecularSpreadSheetService.retrieveExperimentalData()
-        render (view:"molecularSpreadSheet", MolSpreadSheetData:molSpreadSheetData )
+        render (view:"molecularSpreadSheet", molSpreadSheetData:molSpreadSheetData )
     }
 
 }

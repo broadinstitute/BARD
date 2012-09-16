@@ -16,72 +16,152 @@ class MolecularSpreadSheetService {
 
 
     MolSpreadSheetData retrieveExperimentalData() {
+        MolSpreadSheetData molSpreadSheetData
+
         if (queryCartService.totalNumberOfUniqueItemsInCart(shoppingCartService) > 0) {
 
-            // we want to fill this variable
-            molSpreadSheetData = new MolSpreadSheetData()
+            List<CartCompound> cartCompoundList = retrieveCartCompoundFromShoppingCart()
+            List<CartAssay> cartAssayList = retrieveCartAssayFromShoppingCart()
+            List<CartProject> cartProjectList = retrieveCartProjectFromShoppingCart()
 
-            // start by working through the compounds. First gather CartCompound
-            List<Integer> cartCompoundList = new ArrayList<CartCompound>()
-            int rowPointer = 0
-            for (CartCompound cartCompound in (queryCartService.groupUniqueContentsByType(shoppingCartService)[(QueryCartService.cartCompound)])) {
-                cartCompoundList.add(cartCompound)
-                molSpreadSheetData.rowPointer.put(cartCompound.compoundId as Long, rowPointer)
-                rowPointer++
+            molSpreadSheetData =  populateMolSpreadSheetMetadata(cartCompoundList,cartAssayList,cartProjectList)
+            Object etag =  generateETagFromCartCompounds( cartCompoundList )
+            List<Experiment> experimentList = cartAssaysToExperiments(cartAssayList)
+
+            populateMolSpreadSheetData( molSpreadSheetData,  experimentList,  etag)
+
+        }  else
+            molSpreadSheetData  = new MolSpreadSheetData()
+
+        molSpreadSheetData
+    }
+
+
+//        // now step through the data and place into molSpreadSheetData
+//            List<SpreadSheetActivity> spreadSheetActivityList   = new ArrayList<SpreadSheetActivity>()
+//            int columnPointer = 0
+//            for (Experiment experiment in experimentList) {
+//                ServiceIterator<Value> experimentIterator = queryServiceWrapper.restExperimentService.activities(experiment, etag )
+//                // how to aggregate activity values -- for now do something (very) simple
+//                Value experimentValue
+//                while (experimentIterator.hasNext()) {
+//                    experimentValue = experimentIterator.next()
+//                    spreadSheetActivityList.add(extractActivitiesFromExperiment(experimentValue))
+//                }
+//                //SpreadSheetActivity spreadSheetActivity2 = extractActivitiesFromExperiment(experimentValue)
+//
+//                for (SpreadSheetActivity spreadSheetActivity in spreadSheetActivityList) {
+//                    if (molSpreadSheetData.rowPointer.containsKey(spreadSheetActivity.cid)) {
+//                        int innerRowPointer = molSpreadSheetData.rowPointer[spreadSheetActivity.cid]
+//                        String arrayKey = "${innerRowPointer}_${columnPointer}"
+//                        MolSpreadSheetCell molSpreadSheetCell = new MolSpreadSheetCell(spreadSheetActivity.interpretHillCurveValue().toString(), MolSpreadSheetCellType.numeric)
+//                        molSpreadSheetData.mssData.put(arrayKey,molSpreadSheetCell)
+//                    }
+//                    else
+//                        assert false, "did not expect cid = ${spreadSheetActivity.cid}"
+//
+//                }
+//                columnPointer++
+//            }
+//
+//        }
+//        molSpreadSheetData
+//    }
+
+
+    protected void populateMolSpreadSheetData(MolSpreadSheetData molSpreadSheetData, List<Experiment> experimentList, Object etag) {
+        // now step through the data and place into molSpreadSheetData
+        List<SpreadSheetActivity> spreadSheetActivityList = new ArrayList<SpreadSheetActivity>()
+        int columnPointer = 0
+        // we need to handle each experiment separately ( until NCGC can do this in the background )
+        // Note that each experiment corresponds to a column in our spreadsheet
+        for (Experiment experiment in experimentList) {
+
+            ServiceIterator<Value> experimentIterator = queryServiceWrapper.restExperimentService.activities(experiment, etag)
+
+            // Now step through the result set and pull back  one value for each compound
+            Value experimentValue
+            while (experimentIterator.hasNext()) {
+                experimentValue = experimentIterator.next()
+                spreadSheetActivityList.add(extractActivitiesFromExperiment(experimentValue))
             }
+            //SpreadSheetActivity spreadSheetActivity2 = extractActivitiesFromExperiment(experimentValue)
 
-            // extract cmpd ids
-            List<Long> cartCompoundIdList = new ArrayList<Long>()
-            for (CartCompound cartCompound in cartCompoundList)
-                cartCompoundIdList.add(new Long(cartCompound.compoundId))
-            // build the etag
-            //TODO: Use a Unique name for the Etag here
-            Object etag = queryServiceWrapper.restCompoundService.newETag("My compound collection", cartCompoundIdList/*[new Long(1051569), new Long(2917647), new Long(3494575)]*/);
-
-            // now get a list of expts.  Start with the assays, then conert to experiments with Jacob's method
-            List<CartAssay> cartAssayList = new ArrayList<CartAssay>()
-            for (CartAssay cartAssay in (queryCartService.groupUniqueContentsByType(shoppingCartService)[(QueryCartService.cartAssay)])) {
-                cartAssayList.add(cartAssay)
-                molSpreadSheetData.mssHeaders.add(cartAssay.assayTitle)
-            }
-            // one day we'll do it this way
-            // List<Experiment> experimentList = cartAssaysToExperiments(cartAssayList)
-            List<Experiment> experimentList = new ArrayList<Experiment>()
-            for (CartAssay cartAssay in cartAssayList)  {
-                Long experimentID = cartAssay.assayId // for now make this assumption, that assayid=exptid
-                experimentList.add(queryServiceWrapper.restExperimentService.get(experimentID/*new Long(519)*/))
-            }
-
-            // now step through the data and place into molSpreadSheetData
-            List<SpreadSheetActivity> spreadSheetActivityList   = new ArrayList<SpreadSheetActivity>()
-            int columnPointer = 0
-            for (Experiment experiment in experimentList) {
-                ServiceIterator<Value> experimentIterator = queryServiceWrapper.restExperimentService.activities(experiment, etag )
-                // how to aggregate activity values -- for now do something (very) simple
-                Value experimentValue
-                while (experimentIterator.hasNext()) {
-                    experimentValue = experimentIterator.next()
-                    spreadSheetActivityList.add(extractActivitiesFromExperiment(experimentValue))
+            for (SpreadSheetActivity spreadSheetActivity in spreadSheetActivityList) {
+                if (molSpreadSheetData.rowPointer.containsKey(spreadSheetActivity.cid)) {
+                    int innerRowPointer = molSpreadSheetData.rowPointer[spreadSheetActivity.cid]
+                    String arrayKey = "${innerRowPointer}_${columnPointer}"
+                    MolSpreadSheetCell molSpreadSheetCell = new MolSpreadSheetCell(spreadSheetActivity.interpretHillCurveValue().toString(), MolSpreadSheetCellType.numeric)
+                    molSpreadSheetData.mssData.put(arrayKey, molSpreadSheetCell)
                 }
-                //SpreadSheetActivity spreadSheetActivity2 = extractActivitiesFromExperiment(experimentValue)
+                else
+                    assert false, "did not expect cid = ${spreadSheetActivity.cid}"
 
-                for (SpreadSheetActivity spreadSheetActivity in spreadSheetActivityList) {
-                    if (molSpreadSheetData.rowPointer.containsKey(spreadSheetActivity.cid)) {
-                        int innerRowPointer = molSpreadSheetData.rowPointer[spreadSheetActivity.cid]
-                        String arrayKey = "${innerRowPointer}_${columnPointer}"
-                        MolSpreadSheetCell molSpreadSheetCell = new MolSpreadSheetCell(spreadSheetActivity.interpretHillCurveValue().toString(), MolSpreadSheetCellType.numeric)
-                        molSpreadSheetData.mssData.put(arrayKey,molSpreadSheetCell)
-                    }
-                    else
-                        assert false, "did not expect cid = ${spreadSheetActivity.cid}"
-
-                }
-                columnPointer++
             }
-
+            columnPointer++
         }
         molSpreadSheetData
     }
+
+
+
+
+    protected List<CartCompound> retrieveCartCompoundFromShoppingCart() {
+        List<CartCompound> cartCompoundList = new ArrayList<CartCompound>()
+        for (CartCompound cartCompound in (queryCartService.groupUniqueContentsByType(shoppingCartService)[(QueryCartService.cartCompound)])) {
+            cartCompoundList.add(cartCompound)
+        }
+        cartCompoundList
+    }
+
+    protected List<CartAssay> retrieveCartAssayFromShoppingCart() {
+        List<CartAssay> cartAssayList = new ArrayList<CartAssay>()
+        for (CartAssay cartAssay in (queryCartService.groupUniqueContentsByType(shoppingCartService)[(QueryCartService.cartAssay)])) {
+            cartAssayList.add(cartAssay)
+        }
+        cartAssayList
+    }
+
+    protected List<CartProject> retrieveCartProjectFromShoppingCart() {
+        List<CartProject> cartProjectList = new ArrayList<CartProject>()
+        for (CartProject cartProject in (queryCartService.groupUniqueContentsByType(shoppingCartService)[(QueryCartService.cartProject)])) {
+            cartProjectList.add(cartProject)
+        }
+        cartProjectList
+    }
+
+
+    protected  MolSpreadSheetData populateMolSpreadSheetMetadata(List<CartCompound> cartCompoundList, List<CartAssay> cartAssayList,List<CartProject> cartProjectList) {
+        // we want to fill this variable
+        MolSpreadSheetData molSpreadSheetData = new MolSpreadSheetData()
+
+        // need to be able to map from CID to row location
+        int rowPointer = 0
+        for (CartCompound cartCompound in cartCompoundList){
+            molSpreadSheetData.rowPointer.put(cartCompound.compoundId as Long, rowPointer++)
+        }
+
+        // get the header names from the assays
+        for (CartAssay cartAssay in cartAssayList){
+            molSpreadSheetData.mssHeaders.add(cartAssay.assayTitle)
+        }
+
+        molSpreadSheetData
+    }
+
+
+    protected Object generateETagFromCartCompounds(List<CartCompound> cartCompoundList) {
+        List<Long> cartCompoundIdList = new ArrayList<Long>()
+        for (CartCompound cartCompound in cartCompoundList)
+            cartCompoundIdList.add(new Long(cartCompound.compoundId))
+        Date date = new Date()
+
+        queryServiceWrapper.restCompoundService.newETag(date.toString(), cartCompoundIdList);
+    }
+
+    // start by working through the compounds. First gather CartCompound
+
+
 
     /**
      *
@@ -98,22 +178,30 @@ class MolecularSpreadSheetService {
         return cids
     }
 
-
-
-    protected List<Experiment> cartAssaysToExperiments(final List<CartAssay> cartAssays) {
-        List<Long> assayIds = []
-        for (CartAssay cartAssay : cartAssays) {
-            long assayId = cartAssay.assayId
-            assayIds.add(assayId)
+    // Will do this the right way eventually, but for now we are forced to assume that assayids == experimentids
+    protected List<Experiment> cartAssaysToExperiments(final List<CartAssay> cartAssayList) {
+        List<Experiment> experimentList = new ArrayList<Experiment>()
+        for (CartAssay cartAssay in cartAssayList) {
+            Long experimentID = cartAssay.assayId // for now make this assumption, that assayid=exptid
+            experimentList.add(queryServiceWrapper.restExperimentService.get(experimentID))
         }
-        List<Experiment> allExperiments = []
-        Collection<Assay> assays = queryServiceWrapper.getRestAssayService().get(assayIds)
-        for (Assay assay : assays) {
-            Collection<Experiment> experiments = assay.getExperiments()
-            allExperiments.addAll(experiments)
-        }
-        return allExperiments
+        experimentList
     }
+
+//    protected List<Experiment> cartAssaysToExperiments(final List<CartAssay> cartAssays) {
+//        List<Long> assayIds = []
+//        for (CartAssay cartAssay : cartAssays) {
+//            long assayId = cartAssay.assayId
+//            assayIds.add(assayId)
+//        }
+//        List<Experiment> allExperiments = []
+//        Collection<Assay> assays = queryServiceWrapper.getRestAssayService().get(assayIds)
+//        for (Assay assay : assays) {
+//            Collection<Experiment> experiments = assay.getExperiments()
+//            allExperiments.addAll(experiments)
+//        }
+//        return allExperiments
+//    }
     /**
      *
      * @param cartProjects
