@@ -8,7 +8,7 @@ fi
 echo $FIREFOX 
 
 # run the tests
-java -jar JsTestDriver-1.3.4.b.jar --port 9876 --config jsTestDriver.conf --browser "$FIREFOX" --tests all --testOutput "../target"
+java -jar JsTestDriver-1.3.4.b.jar --port 9876 --config jsTestDriver.conf --browser "$FIREFOX" --tests all --testOutput "../target/js-test-reports"
 RESULT=$?
  
 exit $RESULT
