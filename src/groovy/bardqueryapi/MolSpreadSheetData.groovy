@@ -52,7 +52,7 @@ class MolSpreadSheetData {
         String returnValue
         String key = "${rowCnt}_${colCnt}"
         if (mssData.containsKey(key)) {
-            returnValue = mssData["${rowCnt}_${colCnt}"].toString()
+            returnValue = mssData[key].toString()
         } else
             returnValue = "error: val unknown"
         returnValue
