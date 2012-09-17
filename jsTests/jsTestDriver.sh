@@ -27,8 +27,9 @@ echo $FIREFOX
 java -jar JsTestDriver-1.3.4.b.jar --port 9876 --config jsTestDriver.conf --browser "$FIREFOX" --raiseOnFailure --tests all --testOutput "$OUTPUT_DIR"
 RESULT=$?
 
-exit $RESULT
-
 
 kill $PID_XVFB     # shut down xvfb (firefox will shut down cleanly by JsTestDriver)
 echo "Done."
+
+exit $RESULT
+
