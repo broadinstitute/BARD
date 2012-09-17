@@ -178,7 +178,7 @@ class QueryHelperService {
      */
     protected Map<String, String> constructSingleAutoSuggestTerm(final Map<String, String> filtersMap, final String currentAutoSuggestKey, final String term) {
         if (currentAutoSuggestKey && term) {
-            final String label = "<strong>${term}</strong> as " + filtersMap.get(currentAutoSuggestKey)
+            final String label = "${term} as <strong>" + filtersMap.get(currentAutoSuggestKey)+"</strong>"
             final String value = currentAutoSuggestKey + ":\"" + term + "\""
             return [label: label, value: value]
         }
