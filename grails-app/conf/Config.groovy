@@ -2,11 +2,9 @@ import grails.util.Environment
 import org.apache.log4j.DailyRollingFileAppender
 
 
-//TODO: Still using Elastic Search here
-bard.services.elasticSearchService.restNode.baseUrl = "http://bard-dev-vm:9200"
 
 //TODO: Override in dev, qa and prod to point to the current stable realse
-ncgc.server.root.url = "http://bard.nih.gov/api/v3"
+ncgc.server.root.url = "http://bard.nih.gov/api/v4"
 ncgc.server.username = "bogus"
 ncgs.server.password = "bogus"
 ncgc.server.projects.url = "${ncgc.server.root.url}/projects/"

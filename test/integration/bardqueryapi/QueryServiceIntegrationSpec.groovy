@@ -36,7 +36,7 @@ class QueryServiceIntegrationSpec extends IntegrationSpec {
 
         where:
         label                       | term  | expectedResponseSize
-        "Partial match of a String" | "Dna" | 10
+        "Partial match of a String" | "Dna" | 12
     }
 
     /**
@@ -61,7 +61,7 @@ class QueryServiceIntegrationSpec extends IntegrationSpec {
 
     void "test Show Project"() {
         given:
-        final Integer projectId = new Integer(1772)
+        final Integer projectId = new Integer(129)
         when: "Client enters a project ID and the showProject method is called"
         ProjectAdapter projectAdapter = queryService.showProject(projectId)
         then: "The Project is found"
@@ -82,9 +82,9 @@ class QueryServiceIntegrationSpec extends IntegrationSpec {
         assert assayId == assayAdapter.assay.id
         assert assayAdapter.assay.protocol
         assert assayAdapter.assay.comments
-        assert assayAdapter.assay.type == AssayValues.AssayType.Confirmatory
+        assert assayAdapter.assay.type == AssayValues.AssayType.Other
         assert assayAdapter.assay.role == AssayValues.AssayRole.Primary
-        assert assayAdapter.assay.category == AssayValues.AssayCategory.MLSCN
+        assert assayAdapter.assay.category == AssayValues.AssayCategory.MLPCN
         assert assayAdapter.assay.description
     }
 
@@ -242,7 +242,7 @@ class QueryServiceIntegrationSpec extends IntegrationSpec {
         where:
         label                             | searchString         | skip | top | numberOfProjects | filters
         "dna repair"                      | "dna repair"         | 0    | 10  | 10               | []
-        "dna repair with filters"         | "dna repair"         | 0    | 10  | 10               | [new SearchFilter("num_expt", "6")]
+        "dna repair with filters"         | "dna repair"         | 0    | 10  | 8               | [new SearchFilter("num_expt", "6")]
         "dna repair skip and top"         | "dna repair"         | 10   | 10  | 10               | []
         "biological process"              | "biological process" | 0    | 10  | 10               | []
         "biological process with filters" | "biological process" | 0    | 10  | 10               | [new SearchFilter("num_expt", "6")]
@@ -261,7 +261,7 @@ class QueryServiceIntegrationSpec extends IntegrationSpec {
         assert projectAdapters.size() == pids.size()
         where:
         label                               | pids
-        "Single PID"                        | [1772]
-        "Search with a list of project ids" | [1772, 805, 1074]
+        "Single PID"                        | [129]
+        "Search with a list of project ids" | [129, 102, 100]
     }
 }
