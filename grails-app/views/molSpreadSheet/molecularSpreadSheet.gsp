@@ -120,38 +120,43 @@
             <g:render template="../bardWebInterface/facets"
             model="['facets': facets, 'formName': FacetFormType.AssayFacetForm]"/>
         </div>
-        <div class="span8">
-            <table width=100% height=100%>
+        <div class="span10">
+            <table class="molSpreadSheet">
                 <thead>
-                <tr>
+                <tr class="molSpreadSheetHead">
                     <g:sortableColumn property="struct" title="struct"
-                                      style="max-width: 50px" />
+                                      class="molSpreadSheetImg"/>
                     <g:sortableColumn property="cid" title="cid"
-                                      style="max-width: 50px" />
+                                     class="molSpreadSheetHeadCid" />
                     <% int looper = 0 %>
                     <g:each  var="colHeader" in="${molSpreadSheetData.mssHeaders}">
                         <g:if test="${looper>1}">
                             <g:sortableColumn property="var${looper++}" title="${colHeader}"
-                                              style="max-width: 50px; word-wrap: break-word; height: 100px; overflow-x: hidden;" />
+                                              class="molSpreadSheetHeadData" />
                         </g:if>
                         <g:else>
                            <% looper++ %>
                         </g:else>
                     </g:each>
-
                 </tr>
                 </thead>
                 <tbody>
+                <% Integer rowCount = 0 %>
                 <g:each var="rowCnt" in="${0..(molSpreadSheetData.getRowCount()-1)}">
-                    <tr>
-                        <td>
-                            <% String retrievedName = """${molSpreadSheetData?.displayValue( rowCnt, 0 )["name"]}""".toString()  %>
-                            <% String retrievedSmiles = """${molSpreadSheetData?.displayValue( rowCnt, 0 )["smiles"]}""".toString()  %>
-                            <img alt="${retrievedSmiles}" title="${retrievedName}"
+                    <% String retrievedName = """${molSpreadSheetData?.displayValue( rowCnt, 0 )["name"]}""".toString()  %>
+                    <% String retrievedSmiles = """${molSpreadSheetData?.displayValue( rowCnt, 0 )["smiles"]}""".toString()  %>
+                    <g:if test="${((rowCount++)%2)==0}">
+                        <tr class="molSpreadSheet">
+                    </g:if>
+                    <g:else>
+                        <tr class="molSpreadSheetGray">
+                    </g:else>
+                        <td class="molSpreadSheetImg">
+                             <img alt="${retrievedSmiles}" title="${retrievedName}"
                                  src="${createLink(controller: 'chemAxon', action: 'generateStructureImage', params: [smiles: retrievedSmiles, width: 150, height: 120])}"/>
                          </td>
                         <g:each  var="colCnt" in="${1..(molSpreadSheetData.getColumnCount()-1)}">
-                            <td>
+                            <td class="molSpreadSheet">
                                 ${molSpreadSheetData?.displayValue( rowCnt, colCnt )?."value"}
                             </td>
                         </g:each>
@@ -160,11 +165,16 @@
                 </tbody>
             </table>
         </div>
-        <div class="span2">
-                    <g:render template="../bardWebInterface/sarCartContent"/>
-        </div>
     </div>
 </div>
+
+
+
+<div class="panel">
+    <a class="trigger" href="#">Click to hide query cart</a>
+    <g:render template="../bardWebInterface/sarCartContent"/>
+</div>
+
 
 </body>
 </html>
