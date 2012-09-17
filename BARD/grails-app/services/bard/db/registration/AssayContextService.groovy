@@ -10,7 +10,9 @@ package bard.db.registration
 class AssayContextService {
 
     public AssayContext addItem(AssayContextItem sourceItem, AssayContext targetAssayContext) {
-        return addItem(targetAssayContext.assayContextItems.size(), sourceItem, targetAssayContext)
+        if(sourceItem && sourceItem.assayContext != targetAssayContext){
+            return addItem(targetAssayContext.assayContextItems.size(), sourceItem, targetAssayContext)
+        }
     }
 
     public AssayContext addItem(int index, AssayContextItem sourceItem, AssayContext targetAssayContext) {

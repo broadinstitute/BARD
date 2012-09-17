@@ -20,8 +20,7 @@ class AssayContextServiceUnitSpec extends Specification {
     @Shared String ORIGINAL_CONTEXT_NAME = 'original title'
     @Shared String NEW_CONTEXT_NAME = 'new title'
 
-
-    void "test addItem #desc"() {
+    void "test addItemToEndOfList #desc"() {
         given: 'an a'
         AssayContext targetAssayContext = AssayContext.build(assayContextItems: existingAssayContextItems)
         AssayContext sourceAssayContext = AssayContext.build(contextName: ORIGINAL_CONTEXT_NAME)
@@ -45,7 +44,23 @@ class AssayContextServiceUnitSpec extends Specification {
 
     }
 
-    void "test addItemAfter #desc"() {
+    void "test addItemToEndOfList when item is already in list"() {
+        given: 'an item already in an AssayContext'
+        AssayContext assayContext = AssayContext.build()
+        AssayContextItem item = new AssayContextItem()
+        assayContext.addToAssayContextItems(item)
+
+
+        when: 'it is added to the assayContext again'
+        service.addItem(assayContext.assayContextItems.first(), assayContext)
+
+        then:'do nothing, particulary throw an IOOBE' // if you didn't guess the earlier code was resulting in a IOOBE
+        notThrown(IndexOutOfBoundsException)
+        assayContext.assayContextItems.size() == 1
+        item == assayContext.assayContextItems.first()
+    }
+
+    void "test addItemAtIndex #desc"() {
         given:
         AssayContext targetAssayContext = AssayContext.build(assayContextItems: existingAssayContextItems)
         AssayContext sourceAssayContext = AssayContext.build(contextName: ORIGINAL_CONTEXT_NAME)
