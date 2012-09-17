@@ -7,14 +7,14 @@ import com.metasieve.shoppingcart.ShoppingCartService
 import grails.test.mixin.TestFor
 import grails.test.mixin.TestMixin
 import grails.test.mixin.support.GrailsUnitTestMixin
+import org.json.JSONArray
+import spock.lang.Shared
 import spock.lang.Specification
 import spock.lang.Unroll
 
 import javax.servlet.http.HttpServletResponse
 
 import bard.core.*
-import spock.lang.Shared
-import org.json.JSONArray
 
 /**
  * See the API for {@link grails.test.mixin.support.GrailsUnitTestMixin} for usage instructions
@@ -272,7 +272,7 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
         request.method = 'GET'
         controller.searchStructures(searchCommand)
         then:
-        _ * this.queryService.structureSearch(_, _, _) >> {compoundAdapterMap}
+        _ * this.queryService.structureSearch(_, _, _, _, _) >> {compoundAdapterMap}
         and:
         flash.message == flashMessage
         response.status == statusCode
@@ -520,7 +520,7 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
     }
 
 
-        CompoundAdapter buildCompoundAdapter(final Long cid, final List<Long> sids, final String smiles) {
+    CompoundAdapter buildCompoundAdapter(final Long cid, final List<Long> sids, final String smiles) {
         final Compound compound = new Compound()
         final DataSource source = new DataSource("stuff", "v1")
         compound.setId(cid);

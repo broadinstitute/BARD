@@ -21,7 +21,7 @@ import org.apache.commons.lang.StringUtils
 class BardWebInterfaceController {
 
     def shoppingCartService
-    QueryService queryService
+    IQueryService queryService
 
     List<SearchFilter> filters = []
 
@@ -170,7 +170,7 @@ class BardWebInterfaceController {
                     final String smiles = searchStringSplit[1]
                     //we make the first character capitalized to match the ENUM
                     final StructureSearchParams.Type searchType = searchTypeString?.toLowerCase()?.capitalize() as StructureSearchParams.Type
-                    Map compoundAdapterMap = queryService.structureSearch(smiles, searchType, searchFilters)
+                    Map compoundAdapterMap = queryService.structureSearch(smiles, searchType, searchFilters,50,0)
                     List<CompoundAdapter> compoundAdapters = compoundAdapterMap.compoundAdapters
                     render(template: 'compounds', model: [
                             compoundAdapters: compoundAdapters,
@@ -298,12 +298,6 @@ class BardWebInterfaceController {
             // return assayNames as JSON
             render(contentType: "text/json") {
                 assayNames
-//                for (String assayName : assayNames) {
-//                    element assayName
-//                }
-//                if (!assayNames) {
-//                    element ""
-//                }
             }
         }
         catch (Exception exp) {
@@ -324,7 +318,7 @@ class SearchHelper {
         return searchString.toLowerCase().trim().startsWith(GO_BIOLOGICAL_PROCESS_TERM)
     }
 
-    def handleAssaySearches(final bardqueryapi.QueryService queryService, final SearchCommand searchCommand) {
+    def handleAssaySearches(final bardqueryapi.IQueryService queryService, final SearchCommand searchCommand) {
         if (StringUtils.isNotBlank(searchCommand.searchString)) {
             normalizeSearchString(searchCommand)
             final List<SearchFilter> searchFilters = searchCommand.getAppliedFilters()
@@ -359,7 +353,7 @@ class SearchHelper {
         }
     }
 
-    def handleCompoundSearches(final bardqueryapi.QueryService queryService, final SearchCommand searchCommand) {
+    def handleCompoundSearches(final bardqueryapi.IQueryService queryService, final SearchCommand searchCommand) {
 
         if (StringUtils.isNotBlank(searchCommand.searchString)) {
 
@@ -397,7 +391,7 @@ class SearchHelper {
 
     }
 
-    def handleProjectSearches(final bardqueryapi.QueryService queryService, final SearchCommand searchCommand) {
+    def handleProjectSearches(final bardqueryapi.IQueryService queryService, final SearchCommand searchCommand) {
 
         if (StringUtils.isNotBlank(searchCommand.searchString)) {
             normalizeSearchString(searchCommand)
