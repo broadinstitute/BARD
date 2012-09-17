@@ -1,12 +1,5 @@
 package bardqueryapi
 
-import bard.core.Experiment
-import bard.core.Compound
-import bard.core.Value
-import bard.core.ServiceIterator
-
-import static junit.framework.Assert.assertNotNull
-
 class ExperimentalResultsService {
 
     static MolSpreadSheetData molSpreadSheetData
@@ -18,6 +11,8 @@ class ExperimentalResultsService {
                 "DNA polymerase (Q9Y253) ADID : 1 IC50",
                 "Serine-protein kinase (Q13315) ADID : 1 IC50",
                 "Tyrosine-DNA phosphodiesterase 1 (Q9NUW8) ADID: 514789"]
+        molSpreadSheetData.rowPointer.put(5342L,0)
+        molSpreadSheetData.rowPointer.put(5345L,0)
         molSpreadSheetData.mssData.put("0_0",new MolSpreadSheetCell("1",MolSpreadSheetCellType.string))
         molSpreadSheetData.mssData.put("0_1",new MolSpreadSheetCell("3888711",MolSpreadSheetCellType.identifier))
         molSpreadSheetData.mssData.put("0_2",new MolSpreadSheetCell("3888711",MolSpreadSheetCellType.greaterThanNumeric))
