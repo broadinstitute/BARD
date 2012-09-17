@@ -19,7 +19,7 @@
 <div class="container-fluid">
 
     <div class="row-fluid">
-        <div class="span2 offset10">
+        <div class="span3 offset9">
             <g:render template="/layouts/templates/queryCart"/>
         </div>
     </div>
