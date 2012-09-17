@@ -51,11 +51,12 @@ var QueryCart = (function() {
     function addCompoundToCartHandler() {
         var id = $(this).attr('data-cart-id');
         var name = $(this).attr('data-cart-name');
+        var smiles = $(this).attr('data-cart-smiles');
         jQuery.ajax({  type:'POST',
             data:{'id': id,
                 'class':'class bardqueryapi.CartCompound',
-                'cid': id,
-                'smiles': name,
+                'name': name,
+                'smiles': smiles,
                 'version':'0',
                 'stt':showingCartDetails},
             url:'/bardwebquery/queryCart/add',

@@ -6,6 +6,14 @@
     margin-top: 10px;
 }
 
+h1 {
+    font-size: 2em;
+}
+
+.page-header {
+    margin-top: 5px;
+}
+
 .nav-tabs {
     margin-bottom: 0;
     padding-left: 20%;
@@ -38,7 +46,7 @@ div.header > h3 {
 }
 
 .header dl {
-    margin-top: 0px;
+    margin-top: 0;
     margin-bottom: 5px;
 }
 

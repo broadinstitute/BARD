@@ -17,7 +17,8 @@
                                 - ${compoundAdapter.name}
                             </g:if>
                         </g:link>
-                        <a href="#" class="addCompoundToCart btn btn-mini" data-cart-name="${JavaScriptUtility.cleanup(compoundAdapter.name)}" data-cart-id="${compoundAdapter.pubChemCID}">
+                        <a href="#" class="addCompoundToCart btn btn-mini" data-cart-name="${JavaScriptUtility.cleanup(compoundAdapter.name)}"
+                                 data-cart-id="${compoundAdapter.pubChemCID}" data-cart-smiles="${compoundAdapter.getStructureSMILES()}">
                             Save for later analysis
                         </a>
                         <ul>

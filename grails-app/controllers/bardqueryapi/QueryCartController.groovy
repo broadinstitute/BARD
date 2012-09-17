@@ -18,9 +18,7 @@ class QueryCartController {
 
         }  else if (params.class == 'class bardqueryapi.CartCompound') {
 
-            CartCompound cartCompound = new CartCompound( smiles:params.smiles, name: params.name )
-            if ( params.cid != null )
-                cartCompound.compoundId =  Integer.parseInt(params.cid)
+            CartCompound cartCompound = new CartCompound( smiles:params.smiles, name: params.name, compoundId: params.id )
             somethingWasAdded = queryCartService.addToShoppingCart( cartCompound )
 
         } else if (params.class == 'class bardqueryapi.CartProject') {

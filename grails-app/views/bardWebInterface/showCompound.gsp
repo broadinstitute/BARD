@@ -9,48 +9,26 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 <html>
 <head>
-    <meta name="layout" content="details"/>
+    <meta name="layout" content="logoSearchCartAndFooter"/>
     <title>BARD : Compound Details : PubChem CID ${compound.pubChemCID}</title>
 </head>
 <body>
 <div class="row-fluid">
-    <div class="span3">
-        <a style="float: left;" href="${createLink(controller:'BardWebInterface',action:'index')}"><img src="${resource(dir: 'images', file: 'bard_logo_small.png')}" alt="BioAssay Research Database" /></a>
-    </div>
-
-    <div class="span7">
-        <table>
-            <tr>
-                <td colspan="2">
-                    <span></span><div><h1>Compound Details for PubChem CID ${compound.pubChemCID}</h1></div> </span>
-                </td>
-            </tr>
-            <tr>
-                <td width="80%" style="text-align: center">
-                    <img class="addtocart" alt="${compound?.structureSMILES}" title="${compound.name}"
-                         src="${createLink(controller: 'chemAxon', action: 'generateStructureImage', params: [smiles: compound?.structureSMILES, width: 200, height: 200])}"/>
-                </td>
-                <td  style="text-align: right" width="20%"  style="float: right">
-                    <a href="#" class="addCompoundToCart btn btn-mini" data-cart-name="${JavaScriptUtility.cleanup(compound.name)}" data-cart-id="${compound.pubChemCID}">
-                        Save for later analysis
-                    </a>
-                </td>
-            </tr>
-        </table>
-
-    </div>
-
-    <div class="span2">
-        <div class="well  wellmod">
-            <g:render template="queryCartIndicator"/>
-            <div class="row-fluid">
-                <h5><nobr><a class="trigger" href="#">View details/edit</a></nobr></h5>
-            </div>
-        </div>
+    <div class="span12 page-header">
+        <h1>Compound: ${compound?.compound?.preferredName} <small>(PubChem CID: ${compound?.pubChemCID})</small></h1>
+        <a href="#" class="addCompoundToCart btn btn-mini" data-cart-name="${JavaScriptUtility.cleanup(compound?.compound?.preferredName)}"
+           data-cart-id="${compound?.pubChemCID}" data-cart-smiles="${compound?.getStructureSMILES()}">
+            Save for later analysis
+        </a>
     </div>
 </div>
 
-
+<div class="row-fluid">
+    <div class="span6 offset3">
+        <img class="addtocart" alt="${compound?.structureSMILES}" title="${compound.name}"
+             src="${createLink(controller: 'chemAxon', action: 'generateStructureImage', params: [smiles: compound?.structureSMILES, width: 300, height: 200])}"/>
+    </div>
+</div>
 
 <div class="row-fluid">
     <div class="span9">
