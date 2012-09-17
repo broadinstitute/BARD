@@ -3,9 +3,9 @@
         <dt>ID:</dt>
         <dd>${assayAdapter.assay.id}</dd>
     </g:if>
-    <g:if test="${assayAdapter?.assay.name}">
+    <g:if test="${assayAdapter?.name}">
         <dt>Name:</dt>
-        <dd>${assayAdapter.assay.name}</dd>
+        <dd>${assayAdapter.name}</dd>
     </g:if>
     <g:if test="${assayAdapter?.assay.category}">
         <dt>Category:</dt>

@@ -2,22 +2,9 @@ import grails.util.Environment
 import org.apache.log4j.DailyRollingFileAppender
 
 
-//TODO: Still using Elastic Search here
-bard.services.elasticSearchService.restNode.baseUrl = "http://bard-dev-vm:9200"
 
 //TODO: Override in dev, qa and prod to point to the current stable realse
-ncgc.server.root.url = "http://bard.nih.gov/api/v3"
-ncgc.server.username = "bogus"
-ncgs.server.password = "bogus"
-ncgc.server.projects.url = "${ncgc.server.root.url}/projects/"
-ncgc.server.assays.root.url = "${ncgc.server.root.url}/assays/"
-ncgc.server.compounds.root.url = "${ncgc.server.root.url}/compounds/"
-ncgc.server.projects.root.url = "${ncgc.server.root.url}/projects/"
-ncgc.server.accession.root.url = "${ncgc.server.root.url}/targets/accession/"
-ncgc.server.gene.root.url = "${ncgc.server.root.url}/targets/geneid/"
-ncgc.server.structureSearch.root.url = "${ncgc.server.root.url}/compounds"
-bard.assay.view.url = 'http://localhost:8081/BARD/ESAssay/show'
-bard.cap.home='http://localhost:8081/BARD'
+ncgc.server.root.url = "http://bard.nih.gov/api/v4"
 grails.project.groupId = appName // change this to alter the default package name and Maven publishing destination
 grails.mime.file.extensions = true // enables the parsing of file extensions from URLs into the request format
 grails.mime.use.accept.header = false

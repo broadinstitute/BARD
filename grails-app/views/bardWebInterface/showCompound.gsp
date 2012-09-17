@@ -72,12 +72,12 @@
 
             <tr>
                 <td>Name</td>
-                <td>${compound.compound.name}</td>
+                <td>${compound.name}</td>
             </tr>
 
             <tr>
                 <td>Description</td>
-                <td>${compound.compound.description}</td>
+                <td>${compound?.compound?.description}</td>
             </tr>
 
             <tr>
@@ -92,7 +92,7 @@
 
             <tr>
                 <td>IUPAC name</td>
-                <td>${compound.compound.getValue(bard.core.Compound.IUPACNameValue)?.value as java.lang.String}</td>
+                <td>${compound?.compound?.getValue(bard.core.Compound.IUPACNameValue)?.value as java.lang.String}</td>
             </tr>
 
             <tr>
@@ -122,7 +122,7 @@
 
             <tr>
                 <td>Probe ID</td>
-                <% String probeId = compound.compound.getValue(bard.core.Compound.ProbeIDValue)?.value as java.lang.String %>
+                <% String probeId = compound?.compound?.getValue(bard.core.Compound.ProbeIDValue)?.value as java.lang.String %>
                 <td>${probeId == 'null' ? '' : probeId}</td>
             </tr>
 
