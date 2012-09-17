@@ -5,17 +5,20 @@ import com.metasieve.shoppingcart.Shoppable
 class CartCompound extends Shoppable {
 
     static int MAXIMUM_NAME_FIELD_LENGTH = 255
+    static int MAXIMUM_SMILES_FIELD_LENGTH = 1024
 
     int compoundId  = 0
     String smiles
+    String name
     Boolean nameWasTruncated = false
 
     CartCompound() {
 
     }
 
-    CartCompound( String smiles, int compoundId ) {
+    CartCompound( String smiles, String name, int compoundId ) {
         this.smiles = smiles
+        this.name = name
         this.compoundId = compoundId
     }
 
@@ -24,13 +27,28 @@ class CartCompound extends Shoppable {
         if (smiles != null)  {
             Integer lengthOfSmiles
             Integer incomingStringLength = smiles.length()
-            if  (incomingStringLength<=MAXIMUM_NAME_FIELD_LENGTH) {
+            if  (incomingStringLength<=MAXIMUM_SMILES_FIELD_LENGTH) {
                 lengthOfSmiles = incomingStringLength
             }  else {
-                lengthOfSmiles = MAXIMUM_NAME_FIELD_LENGTH
+                lengthOfSmiles = MAXIMUM_SMILES_FIELD_LENGTH
                 nameWasTruncated = true
             }
             this.smiles = smiles.substring(0,lengthOfSmiles)
+        }
+    }
+
+
+    public void setName(String name)    {
+        if (name != null)  {
+            Integer lengthOfName
+            Integer incomingStringLength = name.length()
+            if  (incomingStringLength<=MAXIMUM_NAME_FIELD_LENGTH) {
+                lengthOfName = incomingStringLength
+            }  else {
+                lengthOfName = MAXIMUM_NAME_FIELD_LENGTH
+                nameWasTruncated = true
+            }
+            this.name = name.substring(0,lengthOfName)
         }
     }
 
@@ -42,6 +60,7 @@ class CartCompound extends Shoppable {
         CartCompound that = (CartCompound) o
 
         if (smiles != that.smiles) return false
+        if (name != that.name) return false
         if (compoundId != that.compoundId) return false
 
         return true
@@ -55,7 +74,7 @@ class CartCompound extends Shoppable {
     @Override
     String toString() {
         String returnValue
-        String trimmedName = smiles?.trim()
+        String trimmedName = name?.trim()
         if ((trimmedName == null) ||
             (trimmedName?.length() == 0) ||
             ("null".equals(trimmedName)))
@@ -71,7 +90,8 @@ class CartCompound extends Shoppable {
     }
 
     static constraints = {
-        smiles (nullable: false, maxSize: MAXIMUM_NAME_FIELD_LENGTH)
+        smiles (nullable: false, maxSize: MAXIMUM_SMILES_FIELD_LENGTH)
+        name (nullable: false, maxSize: MAXIMUM_NAME_FIELD_LENGTH)
         compoundId (min : 1)
     }
 }

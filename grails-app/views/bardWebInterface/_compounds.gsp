@@ -19,7 +19,7 @@
                         </g:link>
                         <a href="/bardwebquery/sarCart/add/${compoundAdapter.pubChemCID}"
                            onclick="jQuery.ajax({  type:'POST',
-                               data:{'id':'${compoundAdapter.pubChemCID}', 'class':'class bardqueryapi.CartCompound', 'cid':'${compoundAdapter.pubChemCID}', 'smiles':'${JavaScriptUtility.cleanup(compoundAdapter.name)}', 'version':'0', 'stt':trackStatus},
+                               data:{'id':'${compoundAdapter.pubChemCID}', 'class':'class bardqueryapi.CartCompound', 'cid':'${compoundAdapter.pubChemCID}', 'name':'${JavaScriptUtility.cleanup(compoundAdapter.name)}', 'smiles':'${JavaScriptUtility.cleanup(compoundAdapter.structureSMILES)}', 'version':'0', 'stt':trackStatus},
                                url:'/bardwebquery/sarCart/add',
                                success:function (data, textStatus) {
                                    jQuery(ajaxLocation).html(data);

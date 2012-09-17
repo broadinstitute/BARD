@@ -34,11 +34,15 @@ class MolSpreadSheetCell {
             case MolSpreadSheetCellType.string :
                 strInternalValue = new String(value)
                 break;
+            case  MolSpreadSheetCellType.image :
+                strInternalValue = new String(value)
+                break;
             default:
                 objInternalValue = value
         }
 
     }
+
     @Override
     String toString() {
         String returnValue = ""
@@ -61,14 +65,25 @@ class MolSpreadSheetCell {
             case MolSpreadSheetCellType.string :
                 returnValue = "${strInternalValue}"
                 break;
+            case MolSpreadSheetCellType.image :
+                returnValue = "${strInternalValue}"
+                break;
             default:
                 returnValue = "${objInternalValue}"
         }
         returnValue
     }
 
+
+static String imageConvert ( String name, String smiles )   {
+    String retVal =
+"""<img alt="${smiles}" title="${name}"
+  src="\${createLink(controller: 'chemAxon', action: 'generateStructureImage', params: [smiles: '${smiles}', width: 150, height: 120])}"/>"""
+    retVal
 }
-//MolSpreadSheetCell molSpreadSheetCell = new MolSpreadSheetCell("4.2",MolSpreadSheetCellType.numeric)
+
+}
+
 
 enum  MolSpreadSheetCellType {
     lessThanNumeric,
