@@ -33,7 +33,7 @@
                 <td  style="text-align: right" width="20%"  style="float: right">
                     <a href="/bardwebquery/sarCart/add/1" class="addtocart"
                        onclick="jQuery.ajax({  type:'POST',
-                           data:{'id':'${compound.name}', 'class':'class bardqueryapi.CartCompound', 'smiles':'${JavaScriptUtility.cleanup(compound.name)}', 'cid':'${compound.pubChemCID}', 'version':'0', 'stt':trackStatus},
+                           data:{'id':'${compound.name}', 'class':'class bardqueryapi.CartCompound', 'smiles':'${compoundAdapter.structureSMILES}', 'name':'${JavaScriptUtility.cleanup(compound.name)}', 'cid':'${compound.pubChemCID}', 'version':'0', 'stt':trackStatus},
                            url:'/bardwebquery/sarCart/add',
                            success:function (data, textStatus) {
                                jQuery(ajaxLocation).html(data);

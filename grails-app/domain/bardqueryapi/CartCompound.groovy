@@ -11,6 +11,7 @@ class CartCompound extends Shoppable {
     String smiles
     String name
     Boolean nameWasTruncated = false
+    Boolean smileWasTruncated = false
 
     CartCompound() {
 
@@ -31,7 +32,7 @@ class CartCompound extends Shoppable {
                 lengthOfSmiles = incomingStringLength
             }  else {
                 lengthOfSmiles = MAXIMUM_SMILES_FIELD_LENGTH
-                nameWasTruncated = true
+                smileWasTruncated = true
             }
             this.smiles = smiles.substring(0,lengthOfSmiles)
         }

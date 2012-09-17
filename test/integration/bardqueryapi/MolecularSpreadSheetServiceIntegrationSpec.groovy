@@ -1,8 +1,5 @@
 package bardqueryapi
 
-import bard.core.Experiment
-import bard.core.ServiceIterator
-import bard.core.Value
 import bard.core.rest.RESTCompoundService
 import bard.core.rest.RESTExperimentService
 import grails.plugin.spock.IntegrationSpec
@@ -49,48 +46,48 @@ class MolecularSpreadSheetServiceIntegrationSpec extends IntegrationSpec {
 //        "An existing assay with experiments" | [new CartAssay(assayId: new Long(519))]
 //    }
 
-    void "tests extractActivitiesFromExperiment #label"() {
-        given: "That we have created an ETag from a list of CIDs"
-        final Object compoundETag = restCompoundService.newETag("Compound ETags", cids);
-        and: "That we have an Experiment Object"
-        Experiment experiment = restExperimentService.get(experimentId)
+//    void "tests extractActivitiesFromExperiment #label"() {
+//        given: "That we have created an ETag from a list of CIDs"
+//        final Object compoundETag = restCompoundService.newETag("Compound ETags", cids);
+//        and: "That we have an Experiment Object"
+//        Experiment experiment = restExperimentService.get(experimentId)
+//
+//        and: "We call the activities method on the restExperimentService"
+//        final ServiceIterator<Value> experimentIterator = this.restExperimentService.activities(experiment, compoundETag);
+//
+//        and: "We extract the first element in the collection"
+//        Value experimentValue
+//        while (experimentIterator.hasNext()) {
+//            experimentValue = experimentIterator.next()
+//            break;
+//        }
+//        when: "We call the extractActivitiesFromExperiment method with the experimentValue"
+//        SpreadSheetActivity spreadSheetActivity = molecularSpreadSheetService.extractActivitiesFromExperiment(experimentValue)
+//        then: "We a spreadSheetActivity"
+//        assert spreadSheetActivity
+//        assert spreadSheetActivity.cid
+//        assert spreadSheetActivity.eid
+//        assert spreadSheetActivity.sid
+//        assert spreadSheetActivity.hillCurveValue
+//        where:
+//        label                                    | cids                                                      | experimentId
+//        "An existing experiment witha ctivities" | [new Long(1051569), new Long(2917647), new Long(3494575)] | new Long(519)
+//
+//    }
 
-        and: "We call the activities method on the restExperimentService"
-        final ServiceIterator<Value> experimentIterator = this.restExperimentService.activities(experiment, compoundETag);
-
-        and: "We extract the first element in the collection"
-        Value experimentValue
-        while (experimentIterator.hasNext()) {
-            experimentValue = experimentIterator.next()
-            break;
-        }
-        when: "We call the extractActivitiesFromExperiment method with the experimentValue"
-        SpreadSheetActivity spreadSheetActivity = molecularSpreadSheetService.extractActivitiesFromExperiment(experimentValue)
-        then: "We a spreadSheetActivity"
-        assert spreadSheetActivity
-        assert spreadSheetActivity.cid
-        assert spreadSheetActivity.eid
-        assert spreadSheetActivity.sid
-        assert spreadSheetActivity.hillCurveValue
-        where:
-        label                                    | cids                                                      | experimentId
-        "An existing experiment witha ctivities" | [new Long(1051569), new Long(2917647), new Long(3494575)] | new Long(519)
-
-    }
-
-    void "tests findActivitiesForCompounds #label"() {
-        given: "That we have created an ETag from a list of CIDs"
-        final Object etag = restCompoundService.newETag("Compound ETags", cids);
-        and: "That we have an Experiment Object"
-        Experiment experiment = restExperimentService.get(experimentId)
-        when: "We call the findActivitiesForCompounds() method with the experiment and the ETag"
-        final List<SpreadSheetActivity> activities = molecularSpreadSheetService.findActivitiesForCompounds(experiment, etag)
-        then: "We expect experiments for each of the assays to be found"
-        assert activities
-        where:
-        label                                    | cids                                                      | experimentId  | expectedExperimentIds
-        "An existing experiment witha ctivities" | [new Long(1051569), new Long(2917647), new Long(3494575)] | new Long(519) | []
-    }
+//    void "tests findActivitiesForCompounds #label"() {
+//        given: "That we have created an ETag from a list of CIDs"
+//        final Object etag = restCompoundService.newETag("Compound ETags", cids);
+//        and: "That we have an Experiment Object"
+//        Experiment experiment = restExperimentService.get(experimentId)
+//        when: "We call the findActivitiesForCompounds() method with the experiment and the ETag"
+//        final List<SpreadSheetActivity> activities = molecularSpreadSheetService.findActivitiesForCompounds(experiment, etag)
+//        then: "We expect experiments for each of the assays to be found"
+//        assert activities
+//        where:
+//        label                                    | cids                                                      | experimentId  | expectedExperimentIds
+//        "An existing experiment witha ctivities" | [new Long(1051569), new Long(2917647), new Long(3494575)] | new Long(519) | []
+//    }
 
     void "tests retrieveExperimentalData"() {
         when:

@@ -60,7 +60,7 @@ class MolSpreadSheetData {
                 returnValue["value"] = mssData[key].toString()
             }
         }   else {  // This is a critical error.  Try to cover all the bases so we don't crash at least.
-            returnValue.put("value","Unknown value")
+            returnValue.put("value","-")
             returnValue.put("name", "Unknown name")
             returnValue.put("smiles","Unknown smiles")
         }

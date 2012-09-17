@@ -157,29 +157,29 @@ class MolecularSpreadSheetService {
     }
 
     // Will do this the right way eventually, but for now we are forced to assume that assayids == experimentids
-    protected List<Experiment> cartAssaysToExperiments(final List<CartAssay> cartAssayList) {
-        List<Experiment> experimentList = new ArrayList<Experiment>()
-        for (CartAssay cartAssay in cartAssayList) {
-            Long experimentID = cartAssay.assayId // for now make this assumption, that assayid=exptid
-            experimentList.add(queryServiceWrapper.restExperimentService.get(experimentID))
-        }
-        experimentList
-    }
-
-//    protected List<Experiment> cartAssaysToExperiments(final List<CartAssay> cartAssays) {
-//        List<Long> assayIds = []
-//        for (CartAssay cartAssay : cartAssays) {
-//            long assayId = cartAssay.assayId
-//            assayIds.add(assayId)
+//    protected List<Experiment> cartAssaysToExperiments(final List<CartAssay> cartAssayList) {
+//        List<Experiment> experimentList = new ArrayList<Experiment>()
+//        for (CartAssay cartAssay in cartAssayList) {
+//            Long experimentID = cartAssay.assayId // for now make this assumption, that assayid=exptid
+//            experimentList.add(queryServiceWrapper.restExperimentService.get(experimentID))
 //        }
-//        List<Experiment> allExperiments = []
-//        Collection<Assay> assays = queryServiceWrapper.getRestAssayService().get(assayIds)
-//        for (Assay assay : assays) {
-//            Collection<Experiment> experiments = assay.getExperiments()
-//            allExperiments.addAll(experiments)
-//        }
-//        return allExperiments
+//        experimentList
 //    }
+
+    protected List<Experiment> cartAssaysToExperiments(final List<CartAssay> cartAssays) {
+        List<Long> assayIds = []
+        for (CartAssay cartAssay : cartAssays) {
+            long assayId = cartAssay.assayId
+            assayIds.add(assayId)
+        }
+        List<Experiment> allExperiments = []
+        Collection<Assay> assays = queryServiceWrapper.getRestAssayService().get(assayIds)
+        for (Assay assay : assays) {
+            Collection<Experiment> experiments = assay.getExperiments()
+            allExperiments.addAll(experiments)
+        }
+        return allExperiments
+    }
     /**
      *
      * @param cartProjects
