@@ -6,17 +6,7 @@
     <g:each var="assayAdapter" in="${assayAdapters}">
         <li>
             <g:link action="showAssay" id="${assayAdapter.assay.id}" target="_blank">ADID: ${assayAdapter.assay.id} - ${assayAdapter.name}</g:link>
-        <a href="/bardwebquery/sarCart/add/${assayAdapter.assay.id}"
-           onclick="jQuery.ajax({  type:'POST',
-               data:{'id': '${assayAdapter.assay.id}','class': 'class bardqueryapi.CartAssay','assayTitle':'${JavaScriptUtility.cleanup(assayAdapter.name)}','version': '0','stt':trackStatus},
-               url:'/bardwebquery/sarCart/add',
-               success:function(data,textStatus){
-                   jQuery(ajaxLocation).html(data);
-               }
-           });
-           return false;"
-           action="add"
-           controller="sarCart"><div class="cntrcart"><nobr><i class="icon-shopping-cart"></i>Add to Cart</nobr></div></a>
+            <a href="#" class="addAssayToCart btn btn-mini" data-cart-name="${JavaScriptUtility.cleanup(assayAdapter.name)}" data-cart-id="${assayAdapter.assay.id}">Save for later analysis</a>
               <ul>
                 <li>${assayAdapter.searchHighlight}</li>
             </ul>

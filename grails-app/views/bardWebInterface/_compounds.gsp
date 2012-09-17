@@ -17,18 +17,9 @@
                                 - ${compoundAdapter.name}
                             </g:if>
                         </g:link>
-                        <a href="/bardwebquery/sarCart/add/${compoundAdapter.pubChemCID}"
-                           onclick="jQuery.ajax({  type:'POST',
-                               data:{'id':'${compoundAdapter.pubChemCID}', 'class':'class bardqueryapi.CartCompound', 'cid':'${compoundAdapter.pubChemCID}', 'name':'${JavaScriptUtility.cleanup(compoundAdapter.name)}', 'smiles':'${JavaScriptUtility.cleanup(compoundAdapter.structureSMILES)}', 'version':'0', 'stt':trackStatus},
-                               url:'/bardwebquery/sarCart/add',
-                               success:function (data, textStatus) {
-                                   jQuery(ajaxLocation).html(data);
-                               }
-                           });
-                           return false;"
-                           action="add"
-                           controller="sarCart"><div class="cntrcart"><nobr><i
-                                class="icon-shopping-cart"></i> Add to Cart</nobr></div></a>
+                        <a href="#" class="addCompoundToCart btn btn-mini" data-cart-name="${JavaScriptUtility.cleanup(compoundAdapter.name)}" data-cart-id="${compoundAdapter.pubChemCID}">
+                            Save for later analysis
+                        </a>
                         <ul>
                             <li>${compoundAdapter.searchHighlight}</li>
                         </ul>

@@ -6,19 +6,10 @@
             <g:each var="projectAdapter" in="${projectAdapters}">
                 <li>
                     <g:link action="showProject" id="${projectAdapter.project.id}"
-                            target="_blank">Project ID: ${projectAdapter.project.id} - ${projectAdapter.name}</g:link>
-                    <a href="/bardwebquery/sarCart/add/${projectAdapter.project.id}"
-                       onclick="jQuery.ajax({  type:'POST',
-                           data:{'id':'${projectAdapter.project.id}', 'class':'class bardqueryapi.CartProject', 'projectName':'${JavaScriptUtility.cleanup(projectAdapter.name)}', 'version':'0', 'stt':trackStatus},
-                           url:'/bardwebquery/sarCart/add',
-                           success:function (data, textStatus) {
-                               jQuery(ajaxLocation).html(data);
-                           }
-                       });
-                       return false;"
-                       action="add"
-                       controller="sarCart"><div class="cntrcart"><nobr><i class="icon-shopping-cart"></i> Add to Cart
-                    </nobr></div></a>
+                            target="_blank">Project ID: ${projectAdapter.project.id} - ${projectAdapter.project.name}</g:link>
+                    <a href="#" class="addProjectToCart btn btn-mini" data-cart-name="${JavaScriptUtility.cleanup(projectAdapter.project.name)}" data-cart-id="${projectAdapter.project.id}">
+                        Save for later analysis
+                    </a>
                     <g:if test="${projectAdapter.searchHighlight}">
                         <ul>
                             <li>${projectAdapter.searchHighlight}</li>

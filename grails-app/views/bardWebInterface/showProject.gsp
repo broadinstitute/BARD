@@ -33,20 +33,9 @@
                     </div>
                 </td>
                 <td>
-                    <a href="/bardwebquery/sarCart/add/1" class="addtocart"
-                       onclick="jQuery.ajax({  type:'POST',
-                           data:{'id':'${projectAdapter.project.id}', 'class':'class bardqueryapi.CartProject', 'projectName':'${JavaScriptUtility.cleanup(projectAdapter.name)}', 'version':'0', 'stt':trackStatus},
-                           url:'/bardwebquery/sarCart/add',
-                           success:function (data, textStatus) {
-                               jQuery(ajaxLocation).html(data);
-                           }
-                       });
-                       return false;"
-                       action="add"
-                       controller="sarCart"><i class="icon-shopping-cart"></i><span
-                            class="addtocartfont">&nbsp;Add to Cart</span>
+                    <a href="#" class="addProjectToCart btn btn-mini" data-cart-name="${JavaScriptUtility.cleanup(projectAdapter?.project?.name)}" data-cart-id="${projectAdapter?.project?.id}">
+                        Save for later analysis
                     </a>
-
                 </td>
             </tr>
         </table>

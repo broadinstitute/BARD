@@ -5,7 +5,7 @@
     QueryCartService  queryCartService  = grailsApplication.classLoader.loadClass('bardqueryapi.QueryCartService').newInstance()
 %>
 
-<table class="QcartAppearance">
+<table class="QcartAppearance" id="detailView">
 %{-- hold everything that Ajax will refill--}%
     <tbody id="sarCartRefill">
     <tr>
@@ -24,21 +24,7 @@
                         ${elem.toString()}
                     </td>
                     <td>
-                        <a href="/bardwebquery/sarCart/remove/${elem.id}"
-                           onclick="jQuery.ajax({  type:'POST',
-                               data:{'id':'${elem.id}', 'class':'class bardqueryapi.CartCompound', 'version':'0'},
-                               url:'/bardwebquery/sarCart/remove',
-                               success:function (data, textStatus) {
-                                   jQuery('#sarCartRefill').html(data);
-                               },
-                               error:function (XMLHttpRequest, textStatus, errorThrown) {
-                                   alert('problem removing compound')
-                               }
-                           });
-                           return false;"
-                           action="remove"
-                           class="removeXMark"
-                           controller="sarCart">X</a>
+                        <a href="/bardwebquery/queryCart/remove/${elem.id}" class="removeXMark removeItemFromCart">X</a>
                     </td>
                 </tr>
             </g:each>
@@ -58,21 +44,7 @@
                         ${elem.toString()}
                     </td>
                     <td>
-                        <a href="/bardwebquery/sarCart/remove/${elem.id}"
-                           onclick="jQuery.ajax({  type:'POST',
-                               data:{'id': '${elem.id}','class': 'class bardqueryapi.CartAssay','version': '0'},
-                               url:'/bardwebquery/sarCart/remove',
-                               success:function(data,textStatus){
-                                   jQuery('#sarCartRefill').html(data);
-                               },
-                               error:function(XMLHttpRequest,textStatus,errorThrown){
-                                   alert('problem removing assay')
-                               }
-                           });
-                           return false;"
-                           action="remove"
-                           class="removeXMark"
-                           controller="sarCart">X</a>
+                        <a href="/bardwebquery/queryCart/remove/${elem.id}" class="removeXMark removeItemFromCart">X</a>
                     </td>
                 </tr>
              </g:each>
@@ -92,21 +64,7 @@
                             ${elem.toString()}
                         </td>
                         <td>
-                            <a href="/bardwebquery/sarCart/remove/${elem.id}"
-                               onclick="jQuery.ajax({  type:'POST',
-                                   data:{'id': '${elem.id}','class': 'class bardqueryapi.CartProject','version': '0'},
-                                   url:'/bardwebquery/sarCart/remove',
-                                   success:function(data,textStatus){
-                                       jQuery('#sarCartRefill').html(data);
-                                   },
-                                   error:function(XMLHttpRequest,textStatus,errorThrown){
-                                       alert('problem removing assay')
-                                   }
-                               });
-                               return false;"
-                               action="remove"
-                               class="removeXMark"
-                               controller="sarCart">X</a>
+                            <a href="/bardwebquery/queryCart/remove/${elem.id}" class="removeXMark removeItemFromCart">X</a>
                         </td>
                     </tr>
                 </g:each>
@@ -136,20 +94,7 @@
 
             <div class="rightofline">
 
-            <button  class="visualizebiggerbutton"><a href="/bardwebquery/sarCart/removeAll/0"
-                       onclick="jQuery.ajax({  type:'POST',
-                           data:{'id': '0','class': 'class bardqueryapi.CartAssay','version': '0'},
-                           url:'/bardwebquery/sarCart/removeAll',
-                           success:function(data,textStatus){
-                               jQuery('#sarCartRefill').html(data);
-                           },
-                           error:function(XMLHttpRequest,textStatus,errorThrown){
-                               alert('problem removing assay')
-                           }
-                       });
-                       return false;"
-                       action="removeAll"
-                       controller="sarCart">Clear all</a>
+            <button  class="visualizebiggerbutton"><a href="#" class="removeAllFromCart">Clear all</a>
                 </button>
 
              </div>

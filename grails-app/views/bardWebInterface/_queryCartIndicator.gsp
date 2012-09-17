@@ -4,7 +4,7 @@
    QueryCartService  queryCartService  = grailsApplication.classLoader.loadClass('bardqueryapi.QueryCartService').newInstance()
    def mapOfUniqueItems = queryCartService.groupUniqueContentsByType(shoppingCartService)
 %>
-        <table width="100%" style="border: 0px">
+        <table width="100%" style="border: 0px" id="summaryView">
             <tbody id="cartIdentRefill">
             <tr><td>
 

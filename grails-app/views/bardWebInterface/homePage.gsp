@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta name="layout" content="searchBox"/>
+    <meta name="layout" content="logoAndFooter"/>
 </head>
 
 <body>

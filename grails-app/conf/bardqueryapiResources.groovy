@@ -16,4 +16,7 @@ modules = {
         resource url:"js/search.js"
         resource url:"js/structureSearchDialog.js"
     }
+    cart {
+        resource url:"js/cart.js", disposition: 'head'
+    }
 }

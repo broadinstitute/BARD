@@ -3,7 +3,7 @@ package bardqueryapi
 import com.metasieve.shoppingcart.Shoppable
 import com.metasieve.shoppingcart.ShoppingCartService
 
-class SarCartController {
+class QueryCartController {
     ShoppingCartService shoppingCartService
     QueryCartService queryCartService
 

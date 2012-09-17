@@ -3,7 +3,7 @@
 <html xmlns="http://www.w3.org/1999/html">
 <head>
     <meta name="layout" content="details"/>
-    <title>BARD : Assay Definition : ADID ${assayAdapter?.assay.id}</title>
+    <title>BARD : Assay Definition : ADID ${assayAdapter?.assay?.id}</title>
 </head>
 <body>
 <div class="row-fluid" style="clear:both;">
@@ -15,25 +15,16 @@
         <table>
             <tr>
                 <td colspan="2">
-                    <h1>Assay Definition Detail for ADID ${assayAdapter?.assay.id}</h1>
+                    <h1>Assay Definition Detail for ADID ${assayAdapter?.assay?.id}</h1>
                 </td>
             </tr>
             <tr>
                 <td>
-                    <h3>${assayAdapter?.assay.name}</h3>
+                    <h3>${assayAdapter?.assay?.name}</h3>
                 </td>
                 <td>
-                    <a href="/bardwebquery/sarCart/add/${assayAdapter?.assay.id}"
-                        onclick="jQuery.ajax({  type:'POST',
-                            data:{'id': '${assayAdapter?.assay.id}','class': 'class bardqueryapi.CartAssay','assayTitle':'${JavaScriptUtility.cleanup(assayAdapter?.assay.name)}','version': '0', 'stt':trackStatus},
-                            url:'/bardwebquery/sarCart/add',
-                            success:function(data,textStatus){
-                                jQuery(ajaxLocation).html(data);
-                            }
-                        });
-                        return false;"
-                        action="add"
-                        controller="sarCart"><i class="icon-shopping-cart"></i><span class="addtocartfont">&nbsp;Add to Cart</span>
+                    <a href="#" class="addAssayToCart btn btn-mini" data-cart-name="${JavaScriptUtility.cleanup(assayAdapter?.assay?.name)}" data-cart-id="${assayAdapter?.assay?.id}">
+                        Save for later analysis
                     </a>
                 </td>
             </tr>
@@ -43,7 +34,7 @@
                         %{--<dt>Assay Format:</dt><dd></dd>--}%
                         %{--<dt>Assay Type:</dt><dd></dd>--}%
                         %{--<dt>Target:</dt><dd></dd>--}%
-                        <g:each in="${assayAdapter.annotations}" var="annotation">
+                        <g:each in="${assayAdapter?.annotations}" var="annotation">
                             <dt>${annotation.id}</dt>
                             <dd>${annotation.value}</dd>
                         </g:each>
