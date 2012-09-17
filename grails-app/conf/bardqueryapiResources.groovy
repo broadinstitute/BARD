@@ -9,14 +9,26 @@ modules = {
         //resource url:'/css/mobile.css'
         resource url:'/js/application.js'
         resource url:"css/bard.css"
+
+        resource url:'/js/jquery-ui-extensions/autocomplete/jquery.ui.autocomplete.accentFolding.js'
+        resource url:'/js/jquery-ui-extensions/autocomplete/jquery.ui.autocomplete.autoSelect.js'
+        resource url:'/js/jquery-ui-extensions/autocomplete/jquery.ui.autocomplete.html.js'
+        resource url:'/js/jquery-ui-extensions/autocomplete/jquery.ui.autocomplete.selectFirst.js'
+        resource url:'/js/jquery-ui-extensions/dialog/jquery.ui.dialog.autoReposition.js'
     }
     images {
     }
     search {
         resource url:"js/search.js"
+    }
+    structureSearch {
         resource url:"js/structureSearchDialog.js"
+    }
+    autocomplete {
+        resource url:"js/autocomplete.js"
     }
     cart {
         resource url:"js/cart.js", disposition: 'head'
+        resource url:"css/cart.css"
     }
 }

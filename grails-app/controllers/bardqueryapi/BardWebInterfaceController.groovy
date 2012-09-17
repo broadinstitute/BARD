@@ -26,12 +26,17 @@ class BardWebInterfaceController {
     List<SearchFilter> filters = []
 
     def index() {
-        homePage()
+
     }
 
-    def homePage() {
-        render(view: "homePage")
+    def search() {
+        redirect(action: 'searchResults', params: [searchString: params.searchString])
     }
+
+    def searchResults() {
+
+    }
+
     //================ Search By IDs ================================
 
     /**

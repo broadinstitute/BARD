@@ -1,5 +1,7 @@
 <%@ page import="bard.core.StructureSearchParams" %>
 
+<r:require module="structureSearch"/>
+
 <%-- MarvinSketch's modal window --%>
 <div class="modal hide" id="modalDiv">
     <div class="modal-header">

@@ -2,6 +2,10 @@
     text-align: right;
 }
 
+.header {
+    margin-top: 10px;
+}
+
 .nav-tabs {
     margin-bottom: 0;
     padding-left: 20%;
@@ -17,6 +21,10 @@
     display: block;
     margin-top: -1px;
     min-height: 200px;
+}
+
+.well {
+    background-color: #efe8d8;
 }
 
 h1.detail {
@@ -57,14 +65,6 @@ a.removeXMark {
     font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
 }
 
-.qcartDescriber {
-    display: block;
-    outline: none;
-    text-decoration: none;
-    font-size: 14;
-    font-weight: bold;
-    font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
-}
 
 div.cntrcart {
     vertical-align: middle;

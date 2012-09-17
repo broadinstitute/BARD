@@ -1,4 +1,5 @@
-<r:require module="search"/>
+
+<r:require module="autocomplete"/>
 
 <g:form name="searchForm" controller="bardWebInterface" action="search" id="searchForm">
     <div class="row-fluid" style="margin-top: 15px;">

@@ -2,64 +2,29 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/html">
 <head>
-    <meta name="layout" content="details"/>
+    <meta name="layout" content="logoSearchCartAndFooter"/>
     <title>BARD : Assay Definition : ADID ${assayAdapter?.assay?.id}</title>
 </head>
 <body>
-<div class="row-fluid" style="clear:both;">
-    <div class="span3">
-        <a style="float: left;" href="${createLink(controller:'BardWebInterface',action:'index')}"><img src="${resource(dir: 'images', file: 'bard_logo_small.png')}" alt="BioAssay Research Database" /></a>
+<div class="row-fluid">
+    <div class="span12 page-header">
+        <h1>Assay Definition: ${assayAdapter?.assay?.name} <small>(ADID: ${assayAdapter?.assay?.id})</small></h1>
+        <a href="#" class="addAssayToCart btn btn-mini" data-cart-name="${JavaScriptUtility.cleanup(assayAdapter?.assay?.name)}" data-cart-id="${assayAdapter?.assay?.id}">
+            Save for later analysis
+        </a>
     </div>
-
-    <div class="span7">
-        <table>
-            <tr>
-                <td colspan="2">
-                    <h1>Assay Definition Detail for ADID ${assayAdapter?.assay?.id}</h1>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <h3>${assayAdapter?.assay?.name}</h3>
-                </td>
-                <td>
-                    <a href="#" class="addAssayToCart btn btn-mini" data-cart-name="${JavaScriptUtility.cleanup(assayAdapter?.assay?.name)}" data-cart-id="${assayAdapter?.assay?.id}">
-                        Save for later analysis
-                    </a>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="2">
-                    <dl class="dl-horizontal">
-                        %{--<dt>Assay Format:</dt><dd></dd>--}%
-                        %{--<dt>Assay Type:</dt><dd></dd>--}%
-                        %{--<dt>Target:</dt><dd></dd>--}%
-                        <g:each in="${assayAdapter?.annotations}" var="annotation">
-                            <dt>${annotation.id}</dt>
-                            <dd>${annotation.value}</dd>
-                        </g:each>
-                    </dl>
-                </td>
-            </tr>
-
-        </table>
-
-
-
-
-
-    </div>
-
-    <div class="span2">
-        <div class="well wellmod">
-           <g:render template="queryCartIndicator"/>
-            <div class="row-fluid">
-                <h5><nobr><a class="trigger" href="#">View details/edit</a></nobr></h5>
-            </div>
-        </div>
-    </div>
-
-    <div class="span12 header">
+</div>
+<div class="row-fluid">
+    <div class="span12">
+        <dl class="dl-horizontal">
+        %{--<dt>Assay Format:</dt><dd></dd>--}%
+        %{--<dt>Assay Type:</dt><dd></dd>--}%
+        %{--<dt>Target:</dt><dd></dd>--}%
+            <g:each in="${assayAdapter?.annotations}" var="annotation">
+                <dt>${annotation.id}</dt>
+                <dd>${annotation.value}</dd>
+            </g:each>
+        </dl>
     </div>
 </div>
 <r:script>

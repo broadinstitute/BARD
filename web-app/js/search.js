@@ -4,26 +4,6 @@ var errorImageTwitterBootstrap = '<img src=""  class="icon-exclamation-sign" alt
 
 $(document).ready(function () {
 
-    //set up auto complete
-    var autoOpts = {
-        source:"/bardwebquery/bardWebInterface/autoCompleteAssayNames",
-        minLength:2
-    };
-    $("#searchString").autocomplete(autoOpts);
-    $("#searchString").bind("autocompleteselect", function (event, ui) {
-        $("#searchButton").click();
-    });
-    // make sure to close the autocomplete box when the search button or ENTER are clicked
-    $("#searchButton").click(function () {
-        $("#searchString").autocomplete("close");
-    });
-    $('#searchButton').keypress(function(eventData) {
-        if(eventData.which == 13) {
-            $("#searchString").autocomplete("close");
-        }
-    });
-
-
     //set up form submission
     $('#searchForm').submit(function (event) {
         var searchString = $("#searchString").val();
@@ -61,6 +41,11 @@ $(document).ready(function () {
 
         handlePaging(url)
     });
+
+    // If there's a string in the search box, then submit it (used for redirect from home page)
+    if ($("#searchString").val() != null) {
+        $('#searchForm').submit();
+    }
 
 });
 /**

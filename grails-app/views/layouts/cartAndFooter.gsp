@@ -17,18 +17,9 @@
 </head>
 <body>
 <div class="container-fluid">
+
     <div class="row-fluid">
-        <div class="span2">
-            <a href="${createLink(controller:'BardWebInterface',action:'index')}">
-                <img src="${resource(dir: 'images', file: 'bard_logo_small.png')}" alt="BioAssay Research Database" />
-            </a>
-        </div>
-
-        <div class="span8">
-            <g:render template="/layouts/templates/searchBox"/>
-        </div>
-
-        <div class="span2">
+        <div class="span2 offset10">
             <g:render template="/layouts/templates/queryCart"/>
         </div>
     </div>

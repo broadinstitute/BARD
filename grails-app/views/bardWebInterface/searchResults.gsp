@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta name="layout" content="logoAndFooter"/>
+    <meta name="layout" content="logoSearchCartAndFooter"/>
+    <r:require module="search"/>
 </head>
 
 <body>
@@ -33,6 +34,7 @@
         </div>
     </div>
 
+    <r:require module="search"/>
 
 </div>
 </body>
