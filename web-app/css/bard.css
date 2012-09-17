@@ -296,13 +296,18 @@ table.molSpreadSheet{
 }
 thead.molSpreadSheetHead{
     height: 60px;
+    color: black;
 }
 tr.molSpreadSheetHead{
     height: 60px;
+    color: black;
+    font-weight: bold;
 }
 th.molSpreadSheetHead{
     height: 60px;
     width:  50px;
+    font-weight: bold;
+    color: black;
 }
 th.molSpreadSheetImg{
     text-align: center;
@@ -315,6 +320,7 @@ th.molSpreadSheetHeadCid{
     height: 60px;
     width:  80px;
     border-left: 1px solid;
+    font-weight: bold;
     background: #d3d3d3;
 }
 th.molSpreadSheetHeadData{
@@ -323,13 +329,13 @@ th.molSpreadSheetHeadData{
     word-wrap: break-word;
     height: 60px;
     width:  150px;
+    font-weight: bold;
     border-left: 1px solid;
     background: #d3d3d3;
 }
 
 tr.molSpreadSheet{
     height: 120px;
-    text-align: center;
 }
 tr.molSpreadSheetGray{
     height: 120px;
@@ -338,9 +344,11 @@ tr.molSpreadSheetGray{
 td.molSpreadSheetImg{
     width: 150px;
     height: 120px;
+    text-align: center;
 }
 td.molSpreadSheet{
     width: 50px;
     height: 120px;
     border-left: 1px solid;
+    text-align: center;
 }
