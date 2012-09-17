@@ -10,9 +10,10 @@ package bardqueryapi
 class MolSpreadSheetCell {
     MolSpreadSheetCellType molSpreadSheetCellType = MolSpreadSheetCellType.unknown
     Object objInternalValue
-    String strInternalValue = "f"
-    BigDecimal numInternalValue = 1.2
+    String strInternalValue = "null"
+    BigDecimal numInternalValue = 0.0
     Integer  intInternalValue = 0
+    String supplementalInternalValue = null
     MolSpreadSheetCell( String value, MolSpreadSheetCellType molSpreadSheetCellType ){
         this.molSpreadSheetCellType = molSpreadSheetCellType
         switch (this.molSpreadSheetCellType) {
@@ -35,13 +36,25 @@ class MolSpreadSheetCell {
                 strInternalValue = new String(value)
                 break;
             case  MolSpreadSheetCellType.image :
-                strInternalValue = new String(value)
+                assert "Images should Not go through the two parameter constructor"
                 break;
             default:
                 objInternalValue = value
         }
-
     }
+    MolSpreadSheetCell( String value1,String value2, MolSpreadSheetCellType molSpreadSheetCellType ){
+            this.molSpreadSheetCellType = molSpreadSheetCellType
+            switch (this.molSpreadSheetCellType) {
+                case  MolSpreadSheetCellType.image :
+                    strInternalValue = new String(value1)
+                    supplementalInternalValue =  new String(value2)
+                    break;
+                default:
+                    assert "Non-images should Not go through the three parameter constructor"
+
+            }
+
+        }
 
     @Override
     String toString() {
@@ -66,6 +79,7 @@ class MolSpreadSheetCell {
                 returnValue = "${strInternalValue}"
                 break;
             case MolSpreadSheetCellType.image :
+                assert "Images should not be retrieved using toString"
                 returnValue = "${strInternalValue}"
                 break;
             default:
@@ -74,8 +88,15 @@ class MolSpreadSheetCell {
         returnValue
     }
 
+    LinkedHashMap<String, String> retrieveValues() {
+        def returnValue = new LinkedHashMap<String, String>()
+        returnValue.put("name",strInternalValue )
+        returnValue.put("smiles",supplementalInternalValue)
+        returnValue
+    }
 
-static String imageConvert ( String name, String smiles )   {
+
+        static String imageConvert ( String name, String smiles )   {
     String retVal =
 """<img alt="${smiles}" title="${name}"
   src="\${createLink(controller: 'chemAxon', action: 'generateStructureImage', params: [smiles: '${smiles}', width: 150, height: 120])}"/>"""

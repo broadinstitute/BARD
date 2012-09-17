@@ -23,17 +23,17 @@ class MolSpreadSheetData {
         mssData = new LinkedHashMap<String,MolSpreadSheetCell> ()
         rowPointer = new LinkedHashMap<Long,Integer>()
         mssHeaders = new ArrayList()
-        mssData.put("0_0", new MolSpreadSheetCell(MolSpreadSheetCell.imageConvert("3-methyl-2-oxopentanoic acid","CCC(C)C(=O)C(O)=O"),MolSpreadSheetCellType.image))
+        mssData.put("0_0", new MolSpreadSheetCell("3-methyl-2-oxopentanoic acid","CCC(C)C(=O)C(O)=O",MolSpreadSheetCellType.image))
         mssData.put("0_1", new MolSpreadSheetCell("3888711",MolSpreadSheetCellType.identifier))
         mssData.put("0_2", new MolSpreadSheetCell("0.0000144",MolSpreadSheetCellType.numeric))
         mssData.put("0_3", new MolSpreadSheetCell("0.00000529",MolSpreadSheetCellType.numeric))
         mssData.put("0_4", new MolSpreadSheetCell("0.000000823",MolSpreadSheetCellType.numeric))
-        mssData.put("1_0", new MolSpreadSheetCell(MolSpreadSheetCell.imageConvert("5-amino-2,5-dioxopentanoic acid","NC(=O)CCC(=O)C(O)=O"),MolSpreadSheetCellType.image))
+        mssData.put("1_0", new MolSpreadSheetCell("5-amino-2,5-dioxopentanoic acid","NC(=O)CCC(=O)C(O)=O",MolSpreadSheetCellType.image))
         mssData.put("1_1", new MolSpreadSheetCell("3888712",MolSpreadSheetCellType.identifier))
         mssData.put("1_2", new MolSpreadSheetCell("0.0000543",MolSpreadSheetCellType.numeric))
         mssData.put("1_3", new MolSpreadSheetCell("0.00000566",MolSpreadSheetCellType.numeric))
         mssData.put("1_4", new MolSpreadSheetCell("0.00000101",MolSpreadSheetCellType.numeric))
-        mssData.put("2_0", new MolSpreadSheetCell(MolSpreadSheetCell.imageConvert("2-oxoethylphosphonic acid","OP(O)(=O)CC=O"),MolSpreadSheetCellType.image))
+        mssData.put("2_0", new MolSpreadSheetCell("2-oxoethylphosphonic acid","OP(O)(=O)CC=O",MolSpreadSheetCellType.image))
         mssData.put("2_1", new MolSpreadSheetCell("3888713",MolSpreadSheetCellType.identifier))
         mssData.put("2_2", new MolSpreadSheetCell("0.0000657",MolSpreadSheetCellType.numeric))
         mssData.put("2_3", new MolSpreadSheetCell("0.00000721",MolSpreadSheetCellType.numeric))
@@ -48,13 +48,22 @@ class MolSpreadSheetData {
         rowPointer.put(5346L,0)
     }
 
-    String displayValue(int rowCnt, int colCnt) {
-        String returnValue
+    LinkedHashMap displayValue(int rowCnt, int colCnt) {
+        def returnValue = new  LinkedHashMap<String, String>()
         String key = "${rowCnt}_${colCnt}"
+        MolSpreadSheetCell molSpreadSheetCell
         if (mssData.containsKey(key)) {
-            returnValue = mssData[key].toString()
-        } else
-            returnValue = "error: val unknown"
+            molSpreadSheetCell = mssData[key]
+            if (molSpreadSheetCell.molSpreadSheetCellType == MolSpreadSheetCellType.image) {
+                returnValue = molSpreadSheetCell.retrieveValues()
+            }  else {
+                returnValue["value"] = mssData[key].toString()
+            }
+        }   else {  // This is a critical error.  Try to cover all the bases so we don't crash at least.
+            returnValue.put("value","Unknown value")
+            returnValue.put("name", "Unknown name")
+            returnValue.put("smiles","Unknown smiles")
+        }
         returnValue
     }
 

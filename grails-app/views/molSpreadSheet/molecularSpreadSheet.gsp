@@ -144,9 +144,15 @@
                 <tbody>
                 <g:each var="rowCnt" in="${0..(molSpreadSheetData.getRowCount()-1)}">
                     <tr>
-                        <g:each  var="colCnt" in="${0..(molSpreadSheetData.getColumnCount()-1)}">
+                        <td>
+                            <% String retrievedName = """${molSpreadSheetData?.displayValue( rowCnt, 0 )["name"]}""".toString()  %>
+                            <% String retrievedSmiles = """${molSpreadSheetData?.displayValue( rowCnt, 0 )["smiles"]}""".toString()  %>
+                            <img alt="${retrievedSmiles}" title="${retrievedName}"
+                                 src="${createLink(controller: 'chemAxon', action: 'generateStructureImage', params: [smiles: retrievedSmiles, width: 150, height: 120])}"/>
+                         </td>
+                        <g:each  var="colCnt" in="${1..(molSpreadSheetData.getColumnCount()-1)}">
                             <td>
-                                ${molSpreadSheetData.displayValue( rowCnt, colCnt )}
+                                ${molSpreadSheetData?.displayValue( rowCnt, colCnt )?."value"}
                             </td>
                         </g:each>
                     </tr>

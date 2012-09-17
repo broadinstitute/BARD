@@ -120,7 +120,7 @@ class MolecularSpreadSheetService {
         // add values for the cid column
         int rowCount = 0
         for (CartCompound cartCompound in cartCompoundList){
-            molSpreadSheetData.mssData.put("${rowCount}_0".toString(), new MolSpreadSheetCell(MolSpreadSheetCell.imageConvert(cartCompound.name,cartCompound.smiles),MolSpreadSheetCellType.image))
+            molSpreadSheetData.mssData.put("${rowCount}_0".toString(), new MolSpreadSheetCell(cartCompound.name,cartCompound.smiles,MolSpreadSheetCellType.image))
             molSpreadSheetData.mssData.put("${rowCount++}_1".toString(), new MolSpreadSheetCell("${cartCompound.compoundId}".toString(),MolSpreadSheetCellType.identifier))
         }
 
