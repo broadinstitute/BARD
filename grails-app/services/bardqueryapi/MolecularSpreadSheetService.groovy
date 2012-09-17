@@ -59,7 +59,7 @@ class MolecularSpreadSheetService {
             for (SpreadSheetActivity spreadSheetActivity in spreadSheetActivityList) {
                 if (molSpreadSheetData.rowPointer.containsKey(spreadSheetActivity.cid)) {
                     int innerRowPointer = molSpreadSheetData.rowPointer[spreadSheetActivity.cid]
-                    String arrayKey = "${innerRowPointer+2}_${columnPointer}"
+                    String arrayKey = "${innerRowPointer}_${columnPointer+2}"
                     MolSpreadSheetCell molSpreadSheetCell = new MolSpreadSheetCell(spreadSheetActivity.interpretHillCurveValue().toString(), MolSpreadSheetCellType.numeric)
                     molSpreadSheetData.mssData.put(arrayKey, molSpreadSheetCell)
                 }
@@ -119,9 +119,9 @@ class MolecularSpreadSheetService {
 
         // add values for the cid column
         int rowCount = 0
-        for (CartAssay cartAssay in cartAssayList){
-            molSpreadSheetData.mssData.put("0_${rowCount}".toString(), new MolSpreadSheetCell("1",MolSpreadSheetCellType.string))
-            molSpreadSheetData.mssData.put("1_${rowCount++}".toString(), new MolSpreadSheetCell("1",MolSpreadSheetCellType.identifier))
+        for (CartCompound cartCompound in cartCompoundList){
+            molSpreadSheetData.mssData.put("${rowCount}_0".toString(), new MolSpreadSheetCell("1",MolSpreadSheetCellType.string))
+            molSpreadSheetData.mssData.put("${rowCount++}_1".toString(), new MolSpreadSheetCell("${cartCompound.compoundId}".toString(),MolSpreadSheetCellType.identifier))
         }
 
         molSpreadSheetData

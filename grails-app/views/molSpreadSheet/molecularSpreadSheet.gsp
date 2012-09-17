@@ -144,9 +144,9 @@
                 <tbody>
                 <g:each var="rowCnt" in="${0..(molSpreadSheetData.getRowCount()-1)}">
                     <tr>
-                        <g:each  var="colCnt" in="${0..(molSpreadSheetData.mssHeaders.size()-1)}">
+                        <g:each  var="colCnt" in="${0..(molSpreadSheetData.getColumnCount()-1)}">
                             <td>
-                                ${molSpreadSheetData.displayValue(  colCnt, rowCnt)}
+                                ${molSpreadSheetData.displayValue( rowCnt, colCnt )}
                             </td>
                         </g:each>
                     </tr>
