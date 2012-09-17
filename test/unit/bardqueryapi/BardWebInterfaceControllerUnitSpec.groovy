@@ -284,22 +284,6 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
 
     }
 
-    void "test index action"() {
-        when:
-        request.method = 'GET'
-        controller.index()
-        then:
-        "/bardWebInterface/homePage" == view
-
-    }
-
-    void "test homePage action"() {
-        when:
-        request.method = 'GET'
-        controller.homePage()
-        then:
-        "/bardWebInterface/homePage" == view
-    }
 
     void "test searchProjectsByIDs action"() {
         given:

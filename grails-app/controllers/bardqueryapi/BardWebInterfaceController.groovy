@@ -5,9 +5,9 @@ import bard.core.Value
 import bard.core.adapter.AssayAdapter
 import bard.core.adapter.CompoundAdapter
 import bard.core.adapter.ProjectAdapter
+import org.apache.commons.lang.StringUtils
 
 import javax.servlet.http.HttpServletResponse
-import org.apache.commons.lang.StringUtils
 
 /**
  *
@@ -157,7 +157,7 @@ class BardWebInterfaceController {
         if (StringUtils.isNotBlank(searchCommand.searchString)) {
             //we are capping this at 50
             params.max = 50
-            params.offset =  0
+            params.offset = 0
 
 
             normalizeSearchString(searchCommand)
@@ -175,7 +175,7 @@ class BardWebInterfaceController {
                     final String smiles = searchStringSplit[1]
                     //we make the first character capitalized to match the ENUM
                     final StructureSearchParams.Type searchType = searchTypeString?.toLowerCase()?.capitalize() as StructureSearchParams.Type
-                    Map compoundAdapterMap = queryService.structureSearch(smiles, searchType, searchFilters,50,0)
+                    Map compoundAdapterMap = queryService.structureSearch(smiles, searchType, searchFilters, 50, 0)
                     List<CompoundAdapter> compoundAdapters = compoundAdapterMap.compoundAdapters
                     render(template: 'compounds', model: [
                             compoundAdapters: compoundAdapters,
@@ -236,7 +236,21 @@ class BardWebInterfaceController {
         try {
             if (assayId) {
                 AssayAdapter assayAdapter = this.queryService.showAssay(assayId)
-                render(view: "showAssay", model: [assayAdapter: assayAdapter])
+                Collection<Value> annotations = assayAdapter.annotations
+                String assayDetectionMethod = ""
+                String assayDetectionInstrument=""
+                Iterator<Value> annotationsIterator = annotations.iterator()
+                while(annotationsIterator.hasNext()){
+                    final Value value = annotationsIterator.next()
+                    if (value.id=='detection method type') {
+                       assayDetectionMethod=value.value
+                    }
+                    else if (value.id=='detection instrument') {
+                        assayDetectionInstrument=value.value
+                    }
+                }
+
+                render(view: "showAssay", model: [assayAdapter: assayAdapter, assayDetectionMethod: assayDetectionMethod, assayDetectionInstrument: assayDetectionInstrument])
             }
             else {
                 render "Assay Protocol ID parameter required"
