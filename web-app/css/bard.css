@@ -36,6 +36,14 @@ h1 {
     background-color: #efe8d8;
 }
 
+.big-spinner {
+    display: block;
+    text-align: center;
+    width: 100%;
+    margin-top: 50px;
+    margin-bottom: 50px;
+}
+
 h1.detail {
     float: left;
     padding-left: 20px;
