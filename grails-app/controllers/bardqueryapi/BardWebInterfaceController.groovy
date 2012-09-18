@@ -30,7 +30,8 @@ class BardWebInterfaceController {
     }
 
     def search() {
-        redirect(action: 'searchResults', params: [searchString: params.searchString])
+        flash.searchString = params.searchString
+        redirect(action: 'searchResults')
     }
 
     def searchResults() {
