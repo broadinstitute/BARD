@@ -1,12 +1,3 @@
-<%@ page import="com.metasieve.shoppingcart.ShoppingCartService; bardqueryapi.QueryCartService" %>
-<%
-   ShoppingCartService  shoppingCartService = grailsApplication.classLoader.loadClass('com.metasieve.shoppingcart.ShoppingCartService').newInstance()
-   QueryCartService  queryCartService  = grailsApplication.classLoader.loadClass('bardqueryapi.QueryCartService').newInstance()
-   def mapOfUniqueItems = queryCartService.groupUniqueContentsByType(shoppingCartService)
-   Integer numberOfAssays = queryCartService.totalNumberOfUniqueItemsInCart(mapOfUniqueItems,QueryCartService.cartAssay)
-   Integer numberOfCompounds = queryCartService.totalNumberOfUniqueItemsInCart(mapOfUniqueItems,QueryCartService.cartCompound)
-   Integer numberOfProjects = queryCartService.totalNumberOfUniqueItemsInCart(mapOfUniqueItems,QueryCartService.cartProject)
-%>
 <div id="summaryView">
     <div class="row-fluid">
         <div class="span12 center">
@@ -14,7 +5,7 @@
             <a class="trigger btn btn-mini" href="#">View/edit</a>
             <div class="dropdown">
                 <a class="btn btn-mini dropdown-toggle" data-toggle="dropdown" role="button" data-target="#">
-                    Visualize <b class="caret"></b>
+                    Visualize <span class="caret"></span>
                 </a>
                 <ul class="dropdown-menu pull-right" role="menu">
                     <li><a href="/bardwebquery/MolSpreadSheet">Molecular Spreadsheet</a></li>
@@ -27,17 +18,17 @@
     <div class="row-fluid">
         <div class="span12">
             <ul class="unstyled horizontal-list">
-                <g:if test="${queryCartService.totalNumberOfUniqueItemsInCart(mapOfUniqueItems)==0}">
+                <g:if test="${!totalItemCount}">
                     <li>Empty</li>
                 </g:if>
                 <g:if test="${numberOfAssays>0}">
-                    <li><%=numberOfAssays%> ${numberOfAssays==1?'assay definition':'assay definitions'}</li>
+                    <li>${numberOfAssays} ${numberOfAssays==1?'assay definition':'assay definitions'}</li>
                 </g:if>
                 <g:if test="${numberOfCompounds>0}">
-                    <li><%=numberOfCompounds%> ${numberOfCompounds==1?'compound':'compounds'}</li>
+                    <li>${numberOfCompounds} ${numberOfCompounds==1?'compound':'compounds'}</li>
                 </g:if>
                 <g:if test="${numberOfProjects>0}">
-                    <li><%=numberOfProjects%> ${numberOfProjects==1?'project':'projects'}</li>
+                    <li>${numberOfProjects} ${numberOfProjects==1?'project':'projects'}</li>
                 </g:if>
             </ul>
         </div>

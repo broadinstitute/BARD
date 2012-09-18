@@ -1,4 +1,5 @@
 <%@ page import="bardqueryapi.FacetFormType; bardqueryapi.JavaScriptUtility" %>
+<g:hiddenField name="totalProjects" id="totalProjects" value="${nhits}"/>
 <div class="row-fluid">
 <g:if test="${facets}">
     <g:render template="facets" model="['facets': facets, 'formName': FacetFormType.ProjectFacetForm]"/>
@@ -24,13 +25,12 @@
                 </li>
             </g:each>
         </ul>
-        <g:hiddenField name="totalProjects" id="totalProjects" value="${nhits}"/>
         <div class="pagination">
             <g:paginate total="${nhits ? nhits : 0}" params='[searchString: "${searchString}"]'/>
         </div>
-    </div>
 </g:if>
 <g:else>
-    <div class="tab-message">No search results found</div>
+        <div class="tab-message">No search results found</div>
 </g:else>
+    </div>
 </div>

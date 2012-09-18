@@ -1,10 +1,10 @@
 <r:require module="cart"/>
 
 <div class="well well-small">
-    <g:render template="/bardWebInterface/queryCartIndicator"/>
+    <g:include controller="queryCart" action="updateSummary" />
 </div>
 
 <div class="panel">
     <a class="trigger" href="#">Click to hide query cart</a>
-    <g:render template="/bardWebInterface/sarCartContent"/>
+    <g:include controller="queryCart" action="updateDetails" />
 </div>

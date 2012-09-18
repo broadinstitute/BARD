@@ -1,4 +1,5 @@
 <%@ page import="bardqueryapi.FacetFormType; bardqueryapi.JavaScriptUtility" %>
+<g:hiddenField name="totalAssays" id="totalAssays" value="${nhits}"/>
 <div class="row-fluid">
 <g:if test="${facets}">
     <g:render template="facets" model="['facets': facets, 'formName' : FacetFormType.AssayFacetForm]"/>
@@ -21,7 +22,6 @@
             </li>
         </g:each>
         </ul>
-        <g:hiddenField name="totalAssays" id="totalAssays" value="${nhits}"/>
         <div class="pagination">
             <g:paginate total="${nhits?nhits:0}" params='[searchString:"${searchString}"]'/>
         </div>
