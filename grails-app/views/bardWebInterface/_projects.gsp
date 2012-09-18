@@ -1,7 +1,13 @@
 <%@ page import="bardqueryapi.FacetFormType; bardqueryapi.JavaScriptUtility" %>
 <div class="row-fluid">
+<g:if test="${facets}">
     <g:render template="facets" model="['facets': facets, 'formName': FacetFormType.ProjectFacetForm]"/>
     <div class="span9">
+</g:if>
+<g:else>
+    <div class="span12">
+</g:else>
+<g:if test="${nhits > 0}">
         <ul class="unstyled results">
             <g:each var="projectAdapter" in="${projectAdapters}">
                 <li>
@@ -23,4 +29,8 @@
             <g:paginate total="${nhits ? nhits : 0}" params='[searchString: "${searchString}"]'/>
         </div>
     </div>
+</g:if>
+<g:else>
+    <div class="tab-message">No search results found</div>
+</g:else>
 </div>
