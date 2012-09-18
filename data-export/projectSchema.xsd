@@ -66,7 +66,7 @@ application/vnd.bard.cap+xml;type=project</xs:documentation>
                                 </xs:annotation>
                                 <xs:complexType>
                                     <xs:sequence>
-                                        <xs:element name="attribute" minOccurs="0">
+                                        <xs:element minOccurs="0" name="valueId">
                                             <xs:complexType>
                                                 <xs:sequence>
                                                   <xs:element ref="link" minOccurs="0"/>
@@ -75,7 +75,7 @@ application/vnd.bard.cap+xml;type=project</xs:documentation>
                                                   use="required"/>
                                             </xs:complexType>
                                         </xs:element>
-                                        <xs:element minOccurs="0" name="valueControlled">
+                                        <xs:element name="attributeId" minOccurs="0">
                                             <xs:complexType>
                                                 <xs:sequence>
                                                   <xs:element ref="link" minOccurs="0"/>
