@@ -45,7 +45,6 @@
     <g:render template="/layouts/templates/footer"/>
 
 </div>
-<div id="spinner" class="spinner" style="display:none;"><g:message code="spinner.alt" default="Loading&hellip;"/></div>
 
 <r:require modules="core,bootstrap,cart"/>
 <r:layoutResources />
