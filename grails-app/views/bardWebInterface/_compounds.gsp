@@ -12,9 +12,9 @@
         <table class="table">
             <g:each var="compoundAdapter" in="${compoundAdapters}">
                 <tr>
-                    <td>
+                    <td style="min-width: 180px;">
                         <img alt="${compoundAdapter.structureSMILES}" title="${compoundAdapter.compound.preferredName}"
-                             src="${createLink(controller: 'chemAxon', action: 'generateStructureImage', params: [smiles: compoundAdapter.structureSMILES, width: 150, height: 120])}"/>
+                             src="${createLink(controller: 'chemAxon', action: 'generateStructureImage', params: [smiles: compoundAdapter.structureSMILES, width: 180, height: 150])}"/>
                     </td>
                     <td>
                         <g:link action="showCompound" id="${compoundAdapter.pubChemCID}" target="_blank">
