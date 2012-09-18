@@ -11,9 +11,7 @@ modules = {
         resource url:"css/bard.css"
 
         resource url:'/js/jquery-ui-extensions/autocomplete/jquery.ui.autocomplete.accentFolding.js'
-        resource url:'/js/jquery-ui-extensions/autocomplete/jquery.ui.autocomplete.autoSelect.js'
         resource url:'/js/jquery-ui-extensions/autocomplete/jquery.ui.autocomplete.html.js'
-        resource url:'/js/jquery-ui-extensions/autocomplete/jquery.ui.autocomplete.selectFirst.js'
         resource url:'/js/jquery-ui-extensions/dialog/jquery.ui.dialog.autoReposition.js'
     }
     images {

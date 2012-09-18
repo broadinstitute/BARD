@@ -1,6 +1,6 @@
 //use GLOBAL params here
 var spinnerImageLink = '<img src="/bardwebquery/static/images/loading_icon.gif" alt="loading" title="loading" height="16" width="16"/>';
-var bigSpinnerImage = '<div class="big-spinner"><img src="/bardwebquery/static/images/ajax-loader.gif" alt="loading" title="loading"/></div>';
+var bigSpinnerImage = '<div class="tab-message"><img src="/bardwebquery/static/images/ajax-loader.gif" alt="loading" title="loading"/></div>';
 var errorImageTwitterBootstrap = '<img src=""  class="icon-exclamation-sign" alt="error" height="16" width="16" />';
 
 $(document).ready(function () {
