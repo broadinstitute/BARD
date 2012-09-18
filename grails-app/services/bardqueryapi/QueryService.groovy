@@ -263,10 +263,12 @@ class QueryService implements IQueryService {
      * @param term
      * @return the list of maps to use for auto suggest
      */
-    public List<Map<String, String>> autoComplete(final String term) {
+    public List<Map<String, String>> autoComplete(String term) {
 
         //the number of items to retrieve per category
         final int numberOfTermsToRetrieve = 3
+        //if string is already quoted strip it
+        term = term.replaceAll("\"", "");
 
         final SuggestParams suggestParams = new SuggestParams(term, numberOfTermsToRetrieve)
         //we only use the terms in the assay service, because the other suggest services do not seem to

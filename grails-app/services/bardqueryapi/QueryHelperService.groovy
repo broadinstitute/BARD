@@ -9,6 +9,9 @@ import bard.core.adapter.CompoundAdapter
 import bard.core.adapter.ProjectAdapter
 import org.apache.commons.lang3.time.StopWatch
 
+import java.util.regex.Matcher
+import java.util.regex.Pattern
+
 class QueryHelperService {
 
     //These are the terms that we would use for autosuggest
@@ -20,6 +23,9 @@ class QueryHelperService {
             'gomf_term': 'GO Molecular Function Term',
             'target_name': 'Target Name'
     ]
+
+    //filters that starts with a number or '[' to denote ranges
+    final static Pattern FILTER_NUMBER_RANGES = Pattern.compile("^(\\d+.*|-\\d+.*)");
 
     /**
      *
@@ -33,7 +39,7 @@ class QueryHelperService {
         for (String key : autoSuggestResponseFromJDO.keySet()) {
             if (AUTO_SUGGEST_FILTERS.containsKey(key)) {
                 final List<String> terms = autoSuggestResponseFromJDO.get(key)
-                List<Map<String, String>> terms1 = this.getAutoSuggestTerms(AUTO_SUGGEST_FILTERS, terms,key)
+                List<Map<String, String>> terms1 = this.getAutoSuggestTerms(AUTO_SUGGEST_FILTERS, terms, key)
                 autoSuggestTerms.addAll(terms1)
             }
         }
@@ -51,10 +57,14 @@ class QueryHelperService {
             List<String[]> filters = []
             for (SearchFilter searchFilter : searchFilters) {
                 //if the filter starts with a [, then do not quote
-                final String filterValue = searchFilter.filterValue
-                if(filterValue.startsWith("[")){
+                String filterValue = searchFilter.filterValue
+                Matcher matcher = FILTER_NUMBER_RANGES.matcher(filterValue);
+                if (matcher.matches() || filterValue.startsWith("[")) {
                     filters.add([searchFilter.filterName, filterValue] as String[])
-               } else{
+                }
+                else {  //quote string
+                    //if string is already quoted strip it
+                    filterValue = filterValue.replaceAll("\"", "");
                     filters.add([searchFilter.filterName, "\"" + filterValue + "\""] as String[])
                 }
             }
@@ -184,7 +194,7 @@ class QueryHelperService {
      */
     protected Map<String, String> constructSingleAutoSuggestTerm(final Map<String, String> filtersMap, final String currentAutoSuggestKey, final String term) {
         if (currentAutoSuggestKey && term) {
-            final String label = "${term} as <strong>" + filtersMap.get(currentAutoSuggestKey)+"</strong>"
+            final String label = "${term} as <strong>" + filtersMap.get(currentAutoSuggestKey) + "</strong>"
             final String value = currentAutoSuggestKey + ":\"" + term + "\""
             return [label: label, value: value]
         }
