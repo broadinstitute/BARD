@@ -13,7 +13,10 @@ class MolSpreadSheetCell {
     String strInternalValue = "null"
     BigDecimal numInternalValue = 0.0
     Integer  intInternalValue = 0
+    MolSpreadSheetCellUnit molSpreadSheetCellUnit =  MolSpreadSheetCellUnit.unknown
+
     String supplementalInternalValue = null
+    // non image, no known units
     MolSpreadSheetCell( String value, MolSpreadSheetCellType molSpreadSheetCellType ){
         this.molSpreadSheetCellType = molSpreadSheetCellType
         switch (this.molSpreadSheetCellType) {
@@ -42,6 +45,40 @@ class MolSpreadSheetCell {
                 objInternalValue = value
         }
     }
+
+    // numeric elements with unit specifications
+    MolSpreadSheetCell( String value, MolSpreadSheetCellType molSpreadSheetCellType, MolSpreadSheetCellUnit molSpreadSheetCellUnit ){
+        this.molSpreadSheetCellType = molSpreadSheetCellType
+        switch (this.molSpreadSheetCellType) {
+            case MolSpreadSheetCellType.numeric :
+                numInternalValue = new BigDecimal(value)
+                this.molSpreadSheetCellUnit = molSpreadSheetCellUnit
+                break;
+            case MolSpreadSheetCellType.percentageNumeric :
+                numInternalValue = new BigDecimal(value)
+                this.molSpreadSheetCellUnit = molSpreadSheetCellUnit
+                break;
+            case MolSpreadSheetCellType.greaterThanNumeric :
+                numInternalValue = new BigDecimal(value)
+                this.molSpreadSheetCellUnit = molSpreadSheetCellUnit
+                break;
+            case MolSpreadSheetCellType.lessThanNumeric :
+                numInternalValue = new BigDecimal(value)
+                this.molSpreadSheetCellUnit = molSpreadSheetCellUnit
+                break;
+            case MolSpreadSheetCellType.identifier :
+                assert "identifier should Not go through the constructor with unit type"
+                break;
+            case MolSpreadSheetCellType.string :
+                assert "string should Not go through the constructor with unit type"
+                break;
+            case  MolSpreadSheetCellType.image :
+                assert "Images should Not go through the constructor with unit type"
+                break;
+            default:
+                objInternalValue = value
+        }
+    }
     MolSpreadSheetCell( String value1,String value2, MolSpreadSheetCellType molSpreadSheetCellType ){
             this.molSpreadSheetCellType = molSpreadSheetCellType
             switch (this.molSpreadSheetCellType) {
@@ -58,34 +95,36 @@ class MolSpreadSheetCell {
 
     @Override
     String toString() {
-        String returnValue = ""
+        StringBuilder stringBuilder = new StringBuilder()
         switch (molSpreadSheetCellType) {
             case MolSpreadSheetCellType.numeric :
-                returnValue = "${numInternalValue}"
+                stringBuilder.append( "${numInternalValue}" )
                 break;
             case MolSpreadSheetCellType.percentageNumeric :
-                returnValue = "${numInternalValue} %"
+                stringBuilder.append( "${numInternalValue} %" )
                 break;
             case MolSpreadSheetCellType.greaterThanNumeric :
-                returnValue = "> ${numInternalValue}"
+                stringBuilder.append( "> ${numInternalValue}" )
                 break;
             case MolSpreadSheetCellType.lessThanNumeric :
-                returnValue = "< ${numInternalValue}"
+                stringBuilder.append( "< ${numInternalValue}" )
                 break;
             case MolSpreadSheetCellType.identifier :
-                returnValue = "${intInternalValue}"
+                stringBuilder.append( "${intInternalValue}" )
                 break;
             case MolSpreadSheetCellType.string :
-                returnValue = "${strInternalValue}"
+                stringBuilder.append( "${strInternalValue}" )
                 break;
             case MolSpreadSheetCellType.image :
                 assert "Images should not be retrieved using toString"
-                returnValue = "${strInternalValue}"
+                stringBuilder.append( "${strInternalValue}" )
                 break;
             default:
-                returnValue = "${objInternalValue}"
+                stringBuilder.append( "${objInternalValue}" )
         }
-        returnValue
+        if (molSpreadSheetCellUnit  != MolSpreadSheetCellUnit.unknown)
+            stringBuilder.append( " ${molSpreadSheetCellUnit.toString()}" )
+        stringBuilder.toString()
     }
 
     LinkedHashMap<String, String> retrieveValues() {
@@ -115,4 +154,38 @@ enum  MolSpreadSheetCellType {
     image,
     string,
     unknown
+}
+
+
+enum  MolSpreadSheetCellUnit {
+    Molar ("M"),
+    Millimolar ("mM"),
+    Micromolar ("uM"),
+    Nanomolar ("nM"),
+    Picomolar ("pM"),
+    Femtomolar ("fM"),
+    Attamolar ("aM"),
+    Zeptomolar ("aM"),
+    unknown  ("U") ;
+
+    private String value
+
+    MolSpreadSheetCellUnit(String value){
+        this.value = value;
+    }
+
+    public String toString(){
+        return value;
+    }
+
+    public static MolSpreadSheetCellUnit getByValue(String value){
+        for (final MolSpreadSheetCellUnit element : EnumSet.allOf(MolSpreadSheetCellUnit.class)) {
+            if (element.toString().equals(value)) {
+                return element;
+            }
+        }
+        return null;
+    }
+
+
 }
