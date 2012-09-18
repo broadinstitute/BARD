@@ -11,30 +11,9 @@ describe("Testing cart.js", function () {
         jQuery.fx.off = false;
     });
 
-    describe("Test wiring of event handlers", function(){
-        it("should wire up the show details trigger", function(){
-            var spyEvent = spyOnEvent('.trigger', 'click');
-
-            $('.trigger').click();
-
-            expect('click').toHaveBeenTriggeredOn('.trigger');
-            expect(spyEvent).toHaveBeenTriggered();
-        });
-        it("should have all add buttons wired up", function(){
-            appendSetFixtures('<a class="addAssayToCart" href="#">Add Assay</a>');
-            spyOn(QueryCart, 'addAssayToCartHandler');
-            $('.addAssayToCart').click();
-            expect(QueryCart.addAssayToCartHandler).toHaveBeenCalled();
-        });
-    });
-
     describe("Test QueryCart.toggleDetailsHandler", function(){
-        var mockEvent;
         var fakeData;
         beforeEach(function() {
-            mockEvent = {
-                target : $(".trigger").first()
-            };
             fakeData = "Fake Data From Server";
         });
 
@@ -46,11 +25,10 @@ describe("Testing cart.js", function () {
             spyOn($, "ajax").andCallFake(function (params) {
                 params.success(fakeData);
             });
-            QueryCart.toggleDetailsHandler(mockEvent);
+            queryCart.toggleDetailsHandler();
             expect($(".panel")).toBeVisible();
-            expect($(".trigger")).toHaveClass("active");
             expect(ajaxLocation).toEqual('#detailView');
-            expect(showingCartDetails).toEqual(true);
+            expect(showingCartDetails).toEqual(1);
             expect($('#detailView')).toHaveText(fakeData);
         });
 
@@ -62,11 +40,10 @@ describe("Testing cart.js", function () {
             spyOn($, "ajax").andCallFake(function (params) {
                 params.success(fakeData);
             });
-            QueryCart.toggleDetailsHandler(mockEvent);
+            queryCart.toggleDetailsHandler();
             expect($(".panel")).toBeHidden();
-            expect($(".trigger")).not.toHaveClass("active");
             expect(ajaxLocation).toEqual('#summaryView');
-            expect(showingCartDetails).toEqual(false);
+            expect(showingCartDetails).toEqual(0);
             expect($('#summaryView')).toHaveText(fakeData);
         });
     });
@@ -84,7 +61,7 @@ describe("Testing cart.js", function () {
             showingCartDetails = false;
             ajaxLocation = '#summaryView';
 
-            QueryCart.addAssayToCartHandler();
+            queryCart.addAssayToCartHandler();
 
             expect($('#summaryView')).toHaveText(fakeData);
         });
@@ -96,7 +73,7 @@ describe("Testing cart.js", function () {
             showingCartDetails = true;
             ajaxLocation = '#detailView';
 
-            QueryCart.addAssayToCartHandler();
+            queryCart.addAssayToCartHandler();
 
             expect($('#detailView')).toHaveText(fakeData);
         });
@@ -115,7 +92,7 @@ describe("Testing cart.js", function () {
             showingCartDetails = false;
             ajaxLocation = '#summaryView';
 
-            QueryCart.addCompoundToCartHandler();
+            queryCart.addCompoundToCartHandler();
 
             expect($('#summaryView')).toHaveText(fakeData);
         });
@@ -127,7 +104,7 @@ describe("Testing cart.js", function () {
             showingCartDetails = true;
             ajaxLocation = '#detailView';
 
-            QueryCart.addCompoundToCartHandler();
+            queryCart.addCompoundToCartHandler();
 
             expect($('#detailView')).toHaveText(fakeData);
         });
@@ -146,7 +123,7 @@ describe("Testing cart.js", function () {
             showingCartDetails = false;
             ajaxLocation = '#summaryView';
 
-            QueryCart.addProjectToCartHandler();
+            queryCart.addProjectToCartHandler();
 
             expect($('#summaryView')).toHaveText(fakeData);
         });
@@ -158,10 +135,46 @@ describe("Testing cart.js", function () {
             showingCartDetails = true;
             ajaxLocation = '#detailView';
 
-            QueryCart.addProjectToCartHandler();
+            queryCart.addProjectToCartHandler();
 
             expect($('#detailView')).toHaveText(fakeData);
         });
+    });
+
+    describe("Test QueryCart.removeItem", function(){
+        var fakeData;
+        beforeEach(function() {
+            fakeData = "Fake Data From Server";
+        });
+
+        it("should update the detail view if it is showing", function(){
+            spyOn($, "ajax").andCallFake(function (params) {
+                params.success(fakeData);
+            });
+
+            queryCart.removeItem();
+
+            expect($('#detailView')).toHaveText(fakeData);
+        });
+
+    });
+
+    describe("Test QueryCart.removeAll", function(){
+        var fakeData;
+        beforeEach(function() {
+            fakeData = "Fake Data From Server";
+        });
+
+        it("should update the detail view if it is showing", function(){
+            spyOn($, "ajax").andCallFake(function (params) {
+                params.success(fakeData);
+            });
+
+            queryCart.removeAll();
+
+            expect($('#detailView')).toHaveText(fakeData);
+        });
+
     });
 
 });
