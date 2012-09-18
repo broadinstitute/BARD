@@ -1,4 +1,4 @@
-package hibernate
+package bard.hibernate
 
 import grails.plugins.springsecurity.SpringSecurityService
 import org.hibernate.event.PreInsertEvent

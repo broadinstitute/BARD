@@ -1,6 +1,6 @@
 import bard.login.TemporaryAuthenticationProvider
 import bard.login.TemporaryUserDetailsService
-import hibernate.ModifiedByListener
+import bard.hibernate.ModifiedByListener
 import org.codehaus.groovy.grails.orm.hibernate.HibernateEventListeners
 
 // Place your Spring DSL code here
