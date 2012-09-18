@@ -468,19 +468,7 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
 
     }
 
-    void "test isGoBiologicalTerm #label"() {
 
-        when:
-        boolean term = controller.isGoBiologicalTerm(searchString)
-        then:
-        assert term == expectedResult
-        where:
-        label                               | searchString            | expectedResult
-        "Match GO_TERM, same case as story" | "gobp_term:DNA Repair"  | true
-        "Match GO_TERM mixed case"          | "GOBP_TERM: DNA REPAIR" | true
-        "Should not Match GO_TERM"          | "smestring:DNA Repair"  | false
-
-    }
 
     void "test getAppliedFilters #label"() {
         given:

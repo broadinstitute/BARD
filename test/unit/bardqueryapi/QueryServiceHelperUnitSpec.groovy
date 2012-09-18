@@ -186,19 +186,46 @@ class QueryServiceHelperUnitSpec extends Specification {
         service.applySearchFiltersToSearchParams(searchParams, searchFilters)
 
         then:
-        if (searchFilters.size() > 0) {
-            searchParams.filters.size() == searchFilters.size()
-        }
-        else {
-            assert !searchParams.filters
+        searchParams.filters.size() == searchFilters.size()
+        List<String[]> filters = searchParams.filters
+        for (String[] filter : filters) {
+            assert filter[1].startsWith("\"")
         }
 
         where:
         label                     | searchParams       | searchFilters
-        "No Search Filters"       | new SearchParams() | []
         "Multiple Search Filters" | new SearchParams() | [new SearchFilter("name1", "value1"), new SearchFilter("name2", "value2")]
         "Single Search Filter"    | new SearchParams() | [new SearchFilter("name1", "value1")]
 
+    }
+
+    void "test applySearchFiltersToSearchParams with filter ranges #label"() {
+        when:
+        service.applySearchFiltersToSearchParams(searchParams, searchFilters)
+
+
+        then:
+        searchParams.filters.size() == searchFilters.size()
+        List<String[]> filters = searchParams.filters
+        for (String[] filter : filters) {
+            assert !filter[1].startsWith("\"")
+        }
+        where:
+        label                              | searchParams       | searchFilters
+        "Search Filter with number ranges" | new SearchParams() | [new SearchFilter("name1", "[* To 100]")]
+
+    }
+
+    void "test applySearchFiltersToSearchParams No Filters"() {
+        when:
+        service.applySearchFiltersToSearchParams(searchParams, searchFilters)
+
+        then:
+        assert !searchParams.filters
+
+        where:
+        label               | searchParams       | searchFilters
+        "No Search Filters" | new SearchParams() | []
     }
 
     void "test constructSearchParams #label"() {
