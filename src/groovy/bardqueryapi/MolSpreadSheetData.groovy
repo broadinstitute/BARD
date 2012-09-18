@@ -19,7 +19,7 @@ class MolSpreadSheetData {
     }
 
     // test data
-    MolSpreadSheetData(String s)  {
+    MolSpreadSheetData(String s)  {     // temp fake data
         mssData = new LinkedHashMap<String,MolSpreadSheetCell> ()
         rowPointer = new LinkedHashMap<Long,Integer>()
         mssHeaders = new ArrayList()
@@ -29,21 +29,28 @@ class MolSpreadSheetData {
         mssData.put("0_3", new MolSpreadSheetCell("20",MolSpreadSheetCellType.percentageNumeric))
         mssData.put("0_4", new MolSpreadSheetCell("10",MolSpreadSheetCellType.percentageNumeric))
         mssData.put("0_5", new MolSpreadSheetCell("2.1",MolSpreadSheetCellType.greaterThanNumeric, MolSpreadSheetCellUnit.Micromolar))
-        mssData.put("0_6", new MolSpreadSheetCell("2.1",MolSpreadSheetCellType.greaterThanNumeric, MolSpreadSheetCellUnit.Micromolar))
+        mssData.put("0_6", new MolSpreadSheetCell("800",MolSpreadSheetCellType.numeric, MolSpreadSheetCellUnit.Nanomolar))
         mssData.put("1_0", new MolSpreadSheetCell("5-amino-2,5-dioxopentanoic acid","NC(=O)CCC(=O)C(O)=O",MolSpreadSheetCellType.image))
         mssData.put("1_1", new MolSpreadSheetCell("3888712",MolSpreadSheetCellType.identifier))
         mssData.put("1_2", new MolSpreadSheetCell("11",MolSpreadSheetCellType.greaterThanNumeric, MolSpreadSheetCellUnit.Micromolar))
         mssData.put("1_3", new MolSpreadSheetCell("25",MolSpreadSheetCellType.percentageNumeric))
         mssData.put("1_4", new MolSpreadSheetCell("30",MolSpreadSheetCellType.percentageNumeric))
         mssData.put("1_5", new MolSpreadSheetCell("1.0",MolSpreadSheetCellType.greaterThanNumeric, MolSpreadSheetCellUnit.Micromolar))
-        mssData.put("1_6", new MolSpreadSheetCell("1.0",MolSpreadSheetCellType.greaterThanNumeric, MolSpreadSheetCellUnit.Micromolar))
-        mssData.put("2_0", new MolSpreadSheetCell("2-oxoethylphosphonic acid","OP(O)(=O)CC=O",MolSpreadSheetCellType.image))
+        mssData.put("1_6", new MolSpreadSheetCell("640",MolSpreadSheetCellType.numeric, MolSpreadSheetCellUnit.Nanomolar))
+        mssData.put("2_0", new MolSpreadSheetCell("4-benzhydryloxy-1-methylpiperidine hydrochloride","Cl.CN1CCC(CC1)OC(C1=CC=CC=C1)C1=CC=CC=C1",MolSpreadSheetCellType.image))
         mssData.put("2_1", new MolSpreadSheetCell("3888713",MolSpreadSheetCellType.identifier))
         mssData.put("2_2", new MolSpreadSheetCell("6.2",MolSpreadSheetCellType.greaterThanNumeric, MolSpreadSheetCellUnit.Micromolar))
         mssData.put("2_3", new MolSpreadSheetCell("10",MolSpreadSheetCellType.percentageNumeric))
         mssData.put("2_4", new MolSpreadSheetCell("15",MolSpreadSheetCellType.percentageNumeric))
-        mssData.put("2_5", new MolSpreadSheetCell("880",MolSpreadSheetCellType.greaterThanNumeric, MolSpreadSheetCellUnit.Nanomolar))
+        mssData.put("2_5", new MolSpreadSheetCell("760",MolSpreadSheetCellType.greaterThanNumeric, MolSpreadSheetCellUnit.Nanomolar))
         mssData.put("2_6", new MolSpreadSheetCell("880",MolSpreadSheetCellType.greaterThanNumeric, MolSpreadSheetCellUnit.Nanomolar))
+        mssData.put("3_0", new MolSpreadSheetCell("2-oxoethylphosphonic acid","OP(O)(=O)CC=O",MolSpreadSheetCellType.image))
+        mssData.put("3_1", new MolSpreadSheetCell("3888713",MolSpreadSheetCellType.identifier))
+        mssData.put("3_2", new MolSpreadSheetCell("3.0",MolSpreadSheetCellType.greaterThanNumeric, MolSpreadSheetCellUnit.Micromolar))
+        mssData.put("3_3", new MolSpreadSheetCell("8",MolSpreadSheetCellType.percentageNumeric))
+        mssData.put("3_4", new MolSpreadSheetCell("10",MolSpreadSheetCellType.percentageNumeric))
+        mssData.put("3_5", new MolSpreadSheetCell("550",MolSpreadSheetCellType.greaterThanNumeric, MolSpreadSheetCellUnit.Nanomolar))
+        mssData.put("3_6", new MolSpreadSheetCell("600",MolSpreadSheetCellType.greaterThanNumeric, MolSpreadSheetCellUnit.Nanomolar))
         mssHeaders.add("Struct")
         mssHeaders.add("CID")
         mssHeaders.add("DNA polymerase (Q9Y253) ADID : 1 <br/>IC50")
@@ -52,9 +59,12 @@ class MolSpreadSheetData {
         mssHeaders.add("Tyrosine-DNA phosphodiesterase 1 (Q9NUW8) ADID: 514789<br/>AC50")
         mssHeaders.add("Flop endonuclease 1 (P 39748) ADID: 96789844<br/>IC50")
         rowPointer.put(5342L,0)
-        rowPointer.put(5345L,0)
-        rowPointer.put(5346L,0)
+        rowPointer.put(5345L,1)
+        rowPointer.put(5346L,2)
+        rowPointer.put(5347L,3)
     }
+
+
 
     LinkedHashMap displayValue(int rowCnt, int colCnt) {
         def returnValue = new  LinkedHashMap<String, String>()

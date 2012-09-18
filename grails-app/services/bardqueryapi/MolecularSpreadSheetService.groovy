@@ -35,10 +35,25 @@ class MolecularSpreadSheetService {
         molSpreadSheetData
     }
 
+    /**
+     * we can't display a molecular spreadsheet with out at least one assay and one compound
+     *
+     * @return
+     */
+    Boolean weHaveEnoughDataToMakeASpreadsheet() {
+        boolean returnValue = true
+        LinkedHashMap<String,List> itemsInShoppingCart = queryCartService.groupUniqueContentsByType(shoppingCartService)
+        if (queryCartService?.totalNumberOfUniqueItemsInCart(itemsInShoppingCart,QueryCartService.cartAssay)<1)
+            returnValue = false
+        if (queryCartService?.totalNumberOfUniqueItemsInCart(itemsInShoppingCart,QueryCartService.cartCompound)<1)
+            returnValue = false
+        returnValue
+    }
 
 
 
-    protected void populateMolSpreadSheetData(MolSpreadSheetData molSpreadSheetData, List<Experiment> experimentList, Object etag) {
+
+            protected void populateMolSpreadSheetData(MolSpreadSheetData molSpreadSheetData, List<Experiment> experimentList, Object etag) {
         // now step through the data and place into molSpreadSheetData
         List<SpreadSheetActivity> spreadSheetActivityList = new ArrayList<SpreadSheetActivity>()
         int columnPointer = 0
@@ -156,16 +171,11 @@ class MolecularSpreadSheetService {
         return cids
     }
 
-    // Will do this the right way eventually, but for now we are forced to assume that assayids == experimentids
-//    protected List<Experiment> cartAssaysToExperiments(final List<CartAssay> cartAssayList) {
-//        List<Experiment> experimentList = new ArrayList<Experiment>()
-//        for (CartAssay cartAssay in cartAssayList) {
-//            Long experimentID = cartAssay.assayId // for now make this assumption, that assayid=exptid
-//            experimentList.add(queryServiceWrapper.restExperimentService.get(experimentID))
-//        }
-//        experimentList
-//    }
-
+    /**
+     * Convert Assay ODs to expt ids
+     * @param cartAssays
+     * @return
+     */
     protected List<Experiment> cartAssaysToExperiments(final List<CartAssay> cartAssays) {
         List<Long> assayIds = []
         for (CartAssay cartAssay : cartAssays) {

@@ -345,7 +345,7 @@ th.molSpreadSheetHeadData{
     white-space: normal;
     word-wrap: break-word;
     height: 60px;
-    width:  150px;
+    width:  120px;
     font-weight: bold;
     border-left: 1px solid;
     background: #d3d3d3;
@@ -364,7 +364,7 @@ td.molSpreadSheetImg{
     text-align: center;
 }
 td.molSpreadSheet{
-    width: 50px;
+    width: 45px;
     height: 120px;
     border-left: 1px solid;
     text-align: center;
