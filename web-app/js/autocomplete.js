@@ -8,6 +8,7 @@ $(document).ready(function () {
     };
     $("#searchString").autocomplete(autoOpts);
     $("#searchString").bind("autocompleteselect", function (event, ui) {
+        $("#searchString").val(ui.item.value)
         $("#searchButton").click();
     });
     // make sure to close the autocomplete box when the search button or ENTER are clicked
