@@ -30,7 +30,8 @@ class BardWebInterfaceController {
     }
 
     def search() {
-        redirect(action: 'searchResults', params: [searchString: params.searchString])
+        flash.searchString = params.searchString
+        redirect(action: 'searchResults')
     }
 
     def searchResults() {
@@ -331,11 +332,6 @@ class BardWebInterfaceController {
  * the RestController
  */
 class SearchHelper {
-    final static String GO_BIOLOGICAL_PROCESS_TERM = "gobp_term"
-
-    boolean isGoBiologicalTerm(String searchString) {
-        return searchString.toLowerCase().trim().startsWith(GO_BIOLOGICAL_PROCESS_TERM)
-    }
 
     def handleAssaySearches(final bardqueryapi.IQueryService queryService, final SearchCommand searchCommand) {
         if (StringUtils.isNotBlank(searchCommand.searchString)) {

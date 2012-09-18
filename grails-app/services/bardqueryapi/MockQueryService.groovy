@@ -410,6 +410,15 @@ class MockCompoundAdapter extends CompoundAdapter {
 
     public MockCompoundAdapter() {
     }
+
+    public Compound getCompound() {
+        return new Compound() {
+            String getPreferredName() {
+                return name
+            }
+        }
+    }
+
     /*
     * MolecularData interface
     */
