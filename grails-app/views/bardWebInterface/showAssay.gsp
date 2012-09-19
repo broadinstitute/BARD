@@ -59,7 +59,9 @@
         <div class="accordion-group">
             <div class="accordion-heading">
                 <a href="#assay-header" id="assay-header" class="accordion-toggle" data-toggle="collapse"
-                   data-target="#assay-bio-info"><i class="icon-chevron-right"></i> Assay and Biology Details<small> ( Assay Detection Method Type: ${assayDetectionMethod}, Assay Detection Instrument: ${assayDetectionInstrument})</small></a>
+                   data-target="#assay-bio-info"><i
+                        class="icon-chevron-right"></i> Assay and Biology Details<small>( Assay Detection Method Type: ${assayDetectionMethod}, Assay Detection Instrument: ${assayDetectionInstrument})</small>
+                </a>
 
                 <div id="assay-bio-info" class="accordion-body collapse">
                     <div class="accordion-inner">
@@ -75,7 +77,11 @@
         <div class="accordion-group">
             <div class="accordion-heading">
                 <a href="#document-header" id="document-header" class="accordion-toggle" data-toggle="collapse"
-                   data-target="#document-info"><i class="icon-chevron-right"></i> Documents</a>
+                   data-target="#document-info"><i class="icon-chevron-right"></i> Documents
+                    <small>(${[(assayAdapter.assay.protocol ? 'protocol' : null),
+                            (assayAdapter.assay.description ? 'description' : null),
+                            (assayAdapter.assay.comments ? 'comments' : null)].join(', ')})</small>
+                </a>
 
                 <div id="document-info" class="accordion-body collapse">
                     <div class="accordion-inner">
