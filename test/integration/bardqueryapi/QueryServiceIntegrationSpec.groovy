@@ -89,6 +89,24 @@ class QueryServiceIntegrationSpec extends IntegrationSpec {
         assert projectAdapter.project.description
     }
 
+    void "test Show Compound common name"() {
+        given: //compound?.compound?.preferredName
+        queryService.showCompound()
+        Integer assayId = new Integer(644)
+        when: "Client enters a assay ID and the showAssay method is called"
+        AssayAdapter assayAdapter = queryService.showAssay(assayId)
+        then: "The Assay document is found"
+        assert assayAdapter
+        assert assayId == assayAdapter.assay.id
+        assert assayAdapter.assay.protocol
+        assert assayAdapter.assay.comments
+        assert assayAdapter.assay.type == AssayValues.AssayType.Other
+        assert assayAdapter.assay.role == AssayValues.AssayRole.Primary
+        assert assayAdapter.assay.category == AssayValues.AssayCategory.MLPCN
+        assert assayAdapter.assay.description
+    }
+
+
     void "test Show Assay"() {
         given:
         Integer assayId = new Integer(644)

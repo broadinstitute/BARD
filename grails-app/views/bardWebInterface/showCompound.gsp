@@ -15,8 +15,8 @@
 <body>
 <div class="row-fluid">
     <div class="span12 page-header">
-        <h1>Compound: ${compound?.compound?.preferredName} <small>(PubChem CID: ${compound?.pubChemCID})</small></h1>
-        <a href="#" class="addCompoundToCart btn btn-mini" data-cart-name="${JavaScriptUtility.cleanup(compound?.compound?.preferredName)}"
+        <h1>Compound: ${compound?.name} <small>(PubChem CID: ${compound?.pubChemCID})</small></h1>
+        <a href="#" class="addCompoundToCart btn btn-mini" data-cart-name="${JavaScriptUtility.cleanup(compound?.name)}"
            data-cart-id="${compound?.pubChemCID}" data-cart-smiles="${compound?.getStructureSMILES()}">
             Save for later analysis
         </a>
