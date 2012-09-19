@@ -1,7 +1,8 @@
 package bard.db.registration
 
-import org.hibernate.SessionFactory
+import grails.plugins.springsecurity.Secured
 
+@Secured(['isFullyAuthenticated()'])
 class AssayDefinitionController {
 
     static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
@@ -75,7 +76,7 @@ class AssayDefinitionController {
         AssayContextItem source = AssayContextItem.findById(src_assay_context_item_id)
         AssayContext targetAssayContext = target.assayContext
         int index = targetAssayContext.assayContextItems.indexOf(target)
-        assayContextService.addItem(index, source,targetAssayContext)
+        assayContextService.addItem(index, source, targetAssayContext)
         List<CardDto> cardDtoList = cardFactoryService.createCardDtoListForAssay(targetAssayContext.assay)
         render(template: "cards", model: [cardDtoList: cardDtoList])
     }
@@ -89,48 +90,45 @@ class AssayDefinitionController {
     }
 
 
-
     def updateCardTitle(Long src_assay_context_item_id, Long target_assay_context_id) {
         AssayContextItem sourceAssayContextItem = AssayContextItem.findById(src_assay_context_item_id)
         AssayContext targetAssayContext = AssayContext.findById(target_assay_context_id)
-        if (targetAssayContext && targetAssayContext.assayContextItems.contains(sourceAssayContextItem)) {
-            targetAssayContext.contextName = sourceAssayContextItem.valueDisplay
-        }
+        assayContextService.updateContextName(targetAssayContext, sourceAssayContextItem)
         CardDto cardDto = cardFactoryService.createCardDto(targetAssayContext)
         render(template: "cardDto", model: [card: cardDto])
     }
-	
-	
-	def deleteItemFromCard(Long assay_context_item_id){
-		def assayContextItem = AssayContextItem.get(assay_context_item_id)
-		if(assayContextItem){
-			AssayContext assayContext = assayContextService.deleteItem(assayContextItem)		
-			CardDto cardDto = cardFactoryService.createCardDto(assayContext)
-			render(template: "cardDto", model: [card: cardDto])
-		}
-	}
-	
-	def deleteEmptyCard(Long assay_context_id){
-		AssayContext assayContext = AssayContext.findById(assay_context_id)
-		Assay assay = assayContext.assay
-		if(assayContext.assayContextItems.size() == 0 && assayContext.measures.empty){			
-			assay.removeFromAssayContexts(assayContext)
-			assayContext.delete()			
-		}
-		List<CardDto> cardDtoList = cardFactoryService.createCardDtoListForAssay(assay)
-		render(template: "cards", model: [cardDtoList: cardDtoList])
-	}
-	
-	def addNewEmptyCard(String card_name, Long assay_id){
-		def assayInstance = Assay.get(assay_id)
-		if(assayInstance){
-			def assayContextInstance = new AssayContext()
-			assayContextInstance.contextName = card_name
-			assayContextInstance.assay = assayInstance			
-			assayInstance.addToAssayContexts(assayContextInstance);
-			assayContextInstance.save()			
-		}
-		List<CardDto> cardDtoList = cardFactoryService.createCardDtoListForAssay(assayInstance)
-		render(template: "cards", model: [cardDtoList: cardDtoList])
-	}
+
+
+    def deleteItemFromCard(Long assay_context_item_id) {
+        def assayContextItem = AssayContextItem.get(assay_context_item_id)
+        if (assayContextItem) {
+            AssayContext assayContext = assayContextService.deleteItem(assayContextItem)
+            CardDto cardDto = cardFactoryService.createCardDto(assayContext)
+            render(template: "cardDto", model: [card: cardDto])
+        }
+    }
+
+    def deleteEmptyCard(Long assay_context_id) {
+        AssayContext assayContext = AssayContext.findById(assay_context_id)
+        Assay assay = assayContext.assay
+        if (assayContext.assayContextItems.size() == 0 && assayContext.measures.empty) {
+            assay.removeFromAssayContexts(assayContext)
+            assayContext.delete()
+        }
+        List<CardDto> cardDtoList = cardFactoryService.createCardDtoListForAssay(assay)
+        render(template: "cards", model: [cardDtoList: cardDtoList])
+    }
+
+    def addNewEmptyCard(String card_name, Long assay_id) {
+        def assayInstance = Assay.get(assay_id)
+        if (assayInstance) {
+            def assayContextInstance = new AssayContext()
+            assayContextInstance.contextName = card_name
+            assayContextInstance.assay = assayInstance
+            assayInstance.addToAssayContexts(assayContextInstance);
+            assayContextInstance.save()
+        }
+        List<CardDto> cardDtoList = cardFactoryService.createCardDtoListForAssay(assayInstance)
+        render(template: "cards", model: [cardDtoList: cardDtoList])
+    }
 }

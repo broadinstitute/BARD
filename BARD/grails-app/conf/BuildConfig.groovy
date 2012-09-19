@@ -38,6 +38,7 @@ grails.project.dependency.resolution = {
 
         // test scope
         test "org.spockframework:spock-core:0.6-groovy-1.8"
+        test "org.objenesis:objenesis:1.2" // used by spock for Mocking object that lack no args constructor
 
         // provided  scope
     }
@@ -51,7 +52,7 @@ grails.project.dependency.resolution = {
         compile ":yui:2.8.2.1"
         compile ":twitter-bootstrap:2.1.0"
         compile ":elastic-search:0.4.5-SNAPSHOT"
-
+        compile ":spring-security-core:1.2.7.3"
         compile(":build-test-data:2.0.3")
 
         // runtime scope

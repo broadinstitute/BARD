@@ -10,7 +10,9 @@ package bard.db.registration
 class AssayContextService {
 
     public AssayContext addItem(AssayContextItem sourceItem, AssayContext targetAssayContext) {
-        return addItem(targetAssayContext.assayContextItems.size(), sourceItem, targetAssayContext)
+        if(sourceItem && sourceItem.assayContext != targetAssayContext){
+            return addItem(targetAssayContext.assayContextItems.size(), sourceItem, targetAssayContext)
+        }
     }
 
     public AssayContext addItem(int index, AssayContextItem sourceItem, AssayContext targetAssayContext) {
@@ -34,15 +36,21 @@ class AssayContextService {
         }
         else {
             AssayContextItem first = sourceAssayContext.assayContextItems[0]
-            sourceAssayContext.contextName = first?.valueDisplay?: AssayContext.CONTEXT_NAME_WITH_NO_ITEMS
+            sourceAssayContext.contextName = first?.valueDisplay ?: AssayContext.CONTEXT_NAME_WITH_NO_ITEMS
         }
     }
 
-	public AssayContext deleteItem(AssayContextItem assayContextItem){
-		AssayContext assayContext =  assayContextItem.assayContext
-		assayContext.removeFromAssayContextItems(assayContextItem)
-		assayContextItem.delete()
+    public void updateContextName(AssayContext targetAssayContext, AssayContextItem sourceAssayContextItem) {
+        if (targetAssayContext && targetAssayContext == sourceAssayContextItem.assayContext) {
+            targetAssayContext.contextName = sourceAssayContextItem.valueDisplay
+        }
+    }
+
+    public AssayContext deleteItem(AssayContextItem assayContextItem) {
+        AssayContext assayContext = assayContextItem.assayContext
+        assayContext.removeFromAssayContextItems(assayContextItem)
+        assayContextItem.delete()
         optionallyChangeContextName(assayContext)
-		return assayContext
-	}
+        return assayContext
+    }
 }
