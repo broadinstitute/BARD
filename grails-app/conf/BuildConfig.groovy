@@ -32,7 +32,7 @@ grails.project.dependency.resolution = {
         test "org.spockframework:spock-core:0.6-groovy-1.8"
         test "org.objenesis:objenesis:1.2" // used by spock for Mocking objects that have no args constructor
 
-        test('org.codehaus.groovy.modules.http-builder:http-builder:0.5.2') {
+        compile('org.codehaus.groovy.modules.http-builder:http-builder:0.5.2') {
             excludes "commons-logging", "xml-apis", "groovy"
         }
         test "org.codehaus.geb:geb-spock:$gebVersion"

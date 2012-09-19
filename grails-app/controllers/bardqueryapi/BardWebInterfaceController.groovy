@@ -5,6 +5,8 @@ import bard.core.Value
 import bard.core.adapter.AssayAdapter
 import bard.core.adapter.CompoundAdapter
 import bard.core.adapter.ProjectAdapter
+import groovyx.net.http.RESTClient
+import net.sf.json.JSON
 import org.apache.commons.lang.StringUtils
 
 import javax.servlet.http.HttpServletResponse
@@ -19,10 +21,9 @@ import javax.servlet.http.HttpServletResponse
  */
 @Mixin(SearchHelper)
 class BardWebInterfaceController {
-
+    def grailsApplication
     def shoppingCartService
     IQueryService queryService
-
     List<SearchFilter> filters = []
 
     def index() {
@@ -35,9 +36,39 @@ class BardWebInterfaceController {
     }
 
     def searchResults() {
-
     }
 
+    def promiscuity(Long cid) {
+        if (cid) {
+            //Get the Promiscuity score for this CID
+
+            String promiscuityScoreURL = grailsApplication.config.promiscuityscrores.root.url + cid
+
+            try {
+                RESTClient http = new RESTClient(promiscuityScoreURL)
+                def resp = http.get(requestContentType: JSON)
+                if (resp.status == 200) {
+                    render resp.data.pScores as JSON
+                }else{
+                    return response.sendError(resp.status,
+                            "Error getting ${promiscuityScoreURL}")
+
+
+                }
+            } catch (Exception ee) {
+                return response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR,
+                        "Could not get promiscuity score for ${promiscuityScoreURL}")
+
+
+            }
+        } else {
+            return response.sendError(HttpServletResponse.SC_BAD_REQUEST,
+                    "A valid CID is required")
+
+        }
+
+
+    }
     //================ Search By IDs ================================
 
     /**
@@ -239,15 +270,15 @@ class BardWebInterfaceController {
                 AssayAdapter assayAdapter = this.queryService.showAssay(assayId)
                 Collection<Value> annotations = assayAdapter.annotations
                 String assayDetectionMethod = ""
-                String assayDetectionInstrument=""
+                String assayDetectionInstrument = ""
                 Iterator<Value> annotationsIterator = annotations.iterator()
-                while(annotationsIterator.hasNext()){
+                while (annotationsIterator.hasNext()) {
                     final Value value = annotationsIterator.next()
-                    if (value.id=='detection method type') {
-                       assayDetectionMethod=value.value
+                    if (value.id == 'detection method type') {
+                        assayDetectionMethod = value.value
                     }
-                    else if (value.id=='detection instrument') {
-                        assayDetectionInstrument=value.value
+                    else if (value.id == 'detection instrument') {
+                        assayDetectionInstrument = value.value
                     }
                 }
 
