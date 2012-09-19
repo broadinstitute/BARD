@@ -98,8 +98,17 @@ function handleStructureSearch(url, currentFormId) {
             $("#compounds").tab('show');
 
             $(".promiscuity").each(function (i) {
-                $(this).addClass('active');
+                var promiscuityDivId = $(this).attr('id');
 
+                var url = $(this).attr('href');
+                $.ajax({
+                    url:url,
+                    type:'GET',
+                    cache:false,
+                    success:function (promData) {
+                        $('#' + promiscuityDivId).html(promData);
+                    }
+                });
             });
         },
         error:function (request, status, error) {
@@ -138,7 +147,7 @@ function handleSearch(controllerAction, currentFormId, tabId, totalHitsForResour
             $(tabDivElement).html(total);
 
             $(".promiscuity").each(function (i) {
-                var promiscuityDivId  = $(this).attr('id');
+                var promiscuityDivId = $(this).attr('id');
 
                 var url = $(this).attr('href');
                 $.ajax({
@@ -146,7 +155,7 @@ function handleSearch(controllerAction, currentFormId, tabId, totalHitsForResour
                     type:'GET',
                     cache:false,
                     success:function (promData) {
-                         $('#' + promiscuityDivId).html(promData);
+                        $('#' + promiscuityDivId).html(promData);
                     }
                 });
             });
