@@ -2,13 +2,24 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <r:require modules="core"/>
+    <r:require modules="core,bootstrap"/>
     <meta name="layout" content="basic"/>
     <link rel="stylesheet" href="${resource(dir: 'css', file: 'card.css')}" type="text/css">
+    <link rel="stylesheet" href="${resource(dir: 'css', file: 'bootstrap-plus.css')}" type="text/css">
     <title>Assay Definition</title>
     <r:script>
         $(document).ready(function () {
-            $("#accordion").accordion({ autoHeight:false });
+        
+        	$('.collapse').on('show', function () {
+            var icon = $(this).siblings().find("i.icon-chevron-right");
+            icon.removeClass('icon-chevron-right').addClass('icon-chevron-down');
+	        });
+	        $('.collapse').on('hide', function () {
+	            var icon = $(this).siblings().find("i.icon-chevron-down");
+	            icon.removeClass('icon-chevron-down').addClass('icon-chevron-right');
+	        });
+        
+            // $("#accordion").accordion({ autoHeight:false });
             $("#dialog:ui-dialog").dialog("destroy");
         });
 
@@ -19,43 +30,100 @@
 </head>
 
 <body>
-<div>
-    <div class="ui-widget"><p>
-
-        <h1>Assay View</h1></p></div>
+	<div class="row-fluid">
+	    <div class="span12">
+	    	<div class="hero-unit-v1">
+	        	<h4>Assay View</h4>
+	        </div>
+	    </div>
+	</div>
 
     <g:if test="${flash.message}">
-        <div class="ui-widget">
-            <div class="ui-state-error ui-corner-all" style="margin-top: 20px; padding: 0 .7em;">
-                <p><span class="ui-icon ui-icon-alert" style="float: left; margin-right: .3em;"></span>
-                    <strong>${flash.message}</strong>
-            </div>
-        </div>
+	    <div class="row-fluid">
+		    <div class="span12">
+		        <div class="ui-widget">
+		            <div class="ui-state-error ui-corner-all" style="margin-top: 20px; padding: 0 .7em;">
+		                <p><span class="ui-icon ui-icon-alert" style="float: left; margin-right: .3em;"></span>
+		                    <strong>${flash.message}</strong>
+		            </div>
+		        </div>
+		    </div>
+	    </div>
     </g:if>
 
     <g:if test="${assayInstance?.id}">
-        <div id="accordion">
-
-            <h3><a href="#">Summary for Assay ID: ${assayInstance?.id}</a></h3>
-            <g:render template="assaySummaryView" model="['assayInstance': assayInstance]"/>
-
-            <h3><a href="#">Assay and Biology Details</a></h3>
-            <g:render template="cardDtoView" model="['cardDtoList': cardDtoList, 'assayId': assayInstance.id]"/>
-
-            <h3><a href="#">Documents</a></h3>
-            <g:render template="assayDocumentsView" model="['assayInstance': assayInstance]"/>
-
-            <h3><a href="#">Assay Contexts</a></h3>
-            <g:render template="measureContextsView" model="['assayInstance': assayInstance]"/>
-
-            <h3><a href="#">Measures</a></h3>
-            <g:render template="measuresView" model="['assayInstance': assayInstance]"/>
-
-            <h3><a href="#">Assay Context Items</a></h3>
-            <g:render template="measureContextItemsView" model="['assayInstance': assayInstance]"/>
-
-        </div>    <!-- End accordion -->
+	    <div class="row-fluid">
+	        <div id="accordion" class="span12">
+	        	
+	        	%{-- 
+	        	
+	        	<div class="accordion-group">
+		            <div class="accordion-heading">
+		                <a href="#summary-header" id="summary-header" class="accordion-toggle" data-toggle="collapse"
+		                   data-target="#summary-info"><i class="icon-chevron-right">
+		                </i> Summary for Assay ID: ${assayInstance?.id}</a>
+		            </div>
+		
+		            <div id="summary-info" class="accordion-body collapse">
+		                <div class="accordion-inner">
+		                    <g:render template="assaySummaryView" model="['assayInstance': assayInstance]"/>
+		                </div>
+		            </div>
+        		</div>
+        		
+        		<div class="accordion-group">
+		            <div class="accordion-heading">
+		                <a href="#assaybio-header" id="assaybio-header" class="accordion-toggle" data-toggle="collapse"
+		                   data-target="#assaybio-info"><i class="icon-chevron-right">
+		                </i> Assay and Biology Details</a>
+		            </div>
+		
+		            <div id="assaybio-info" class="accordion-body collapse">
+		                <div class="accordion-inner">
+		                    <g:render template="cardDtoView" model="['cardDtoList': cardDtoList, 'assayId': assayInstance.id]"/>
+		                </div>
+		            </div>
+        		</div>
+        		
+        		<div class="accordion-group">
+		            <div class="accordion-heading">
+		                <a href="#measures-header" id="measures-header" class="accordion-toggle" data-toggle="collapse"
+		                   data-target="#measures-info"><i class="icon-chevron-right">
+		                </i> Measures</a>
+		            </div>
+		
+		            <div id="measures-info" class="accordion-body collapse">
+		                <div class="accordion-inner">
+		                    <g:render template="measuresView" model="['assayInstance': assayInstance]"/>
+		                </div>
+		            </div>
+        		</div>
+	        	
+	        	--}%
+	
+	            <h3><a href="#">Summary for Assay ID: ${assayInstance?.id}</a></h3>
+	            <g:render template="assaySummaryView" model="['assayInstance': assayInstance]"/>
+	
+	            <h3><a href="#">Assay and Biology Details</a></h3>
+	            <g:render template="cardDtoView" model="['cardDtoList': cardDtoList, 'assayId': assayInstance.id]"/>
+	
+	            <h3><a href="#">Documents</a></h3>
+	            <g:render template="assayDocumentsView" model="['assayInstance': assayInstance]"/>
+	
+	            <h3><a href="#">Assay Contexts</a></h3>
+	            <g:render template="measureContextsView" model="['assayInstance': assayInstance]"/>
+	
+	            <h3><a href="#">Measures</a></h3>
+	            <g:render template="measuresView" model="['assayInstance': assayInstance]"/>
+	
+	            <h3><a href="#">Assay Context Items</a></h3>
+	            <g:render template="measureContextItemsView" model="['assayInstance': assayInstance]"/>
+	            	             
+	
+	        </div>    <!-- End accordion -->
+	    </div>
     </g:if>
+
 </div><!-- End body div -->
 
 <r:script>
@@ -74,6 +142,7 @@
             title:"New Card",
             autoOpen:false,
             modal:true,
+            zIndex: 3999,
             buttons:{
                 Save:function () {
                 	$("#new_card_form").submit();
@@ -107,6 +176,7 @@
             width:450,
             title:"Delete card?",
             autoOpen:false,
+            zIndex: 3999,
             modal:true 
         });
 
@@ -116,6 +186,7 @@
             width:450,
             modal:true,
             autoOpen:false,
+            zIndex: 3999,
             title:"Delete item?",
             buttons:{
                 "Delete card":function () {
@@ -134,8 +205,9 @@
     	
     	$("button", ".deleteCardButton").button({
             icons:{
-                primary:"ui-icon-pencil"
-            }
+                primary:"ui-icon-trash"
+            },
+            text: false
         }).click(function(event){
         	var cardId = $(this).attr('id');
         	$("#dialog_confirm_delete_card").dialog("option", "buttons",[
@@ -168,12 +240,13 @@
         });
     	
     	$("button", ".deleteItemButton").button({
-            icons:{
-                primary:"ui-icon-pencil"
-            }
+             icons:{
+                primary:"ui-icon-trash"
+            },
+            text: false
         }).click(function (event) {
         		var itemId = $(this).attr('id');
-        		var assayContextId =$(this).parents("div.card").attr('id');
+        		var assayContextId =$(this).parents("div.span4").attr('id');
         		$("#dialog_confirm_delete_item").dialog("option", "buttons",[
 				{
 					text: "Delete",
@@ -185,6 +258,8 @@
 	                        url:'../deleteItemFromCard',
 	                        data:data,
 	                        success:function (data) {
+	                        	alert("div#" + assayContextId);
+	                        	alert(data);
 	                            $("div#" + assayContextId).replaceWith(data);
 	                            initDnd();
 	                        }

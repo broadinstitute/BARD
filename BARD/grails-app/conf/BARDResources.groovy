@@ -1,7 +1,15 @@
 modules = {
+//	overrides {
+//		'jquery-theme' {
+//			resource id:'theme', url:'/css/flick/jquery-ui-1.8.20.custom.css'
+//		}
+//	}
 	overrides {
 		'jquery-theme' {
-			resource id:'theme', url:'/css/flick/jquery-ui-1.8.20.custom.css'
+			resource id:'theme', url:'/js/jquery-ui-bootstrap/css/custom-theme/jquery-ui-1.8.16.custom.css'
+		}
+		'bootstrap' {
+			resource id:'bootstrap-css', url:'/js/jquery-ui-bootstrap/bootstrap/bootstrap.css'
 		}
 	}
 	core {

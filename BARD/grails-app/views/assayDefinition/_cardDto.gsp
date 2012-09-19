@@ -1,9 +1,10 @@
-<div id="card-${card.id}" class="card">
-<table class="gridtable">
-    <caption id="${card.id}" class="assay_context">
+<div id="card-${card.id}" class="span4">
+<div class="bs-docs">
+<table class="table table-hover">
+    <caption id="${card.id}" class="assay_context" style="background-color: #87CEFA; font-weight:bold;">
         ${card.title} - [${card.id}]
         <g:if test="${card.lines.size() == 0}">
-        	<div class="deleteCardButton"><button id="${card.id}">Delete</button></div>
+        	<div class="deleteCardButton"><button id="${card.id}" class="btn btn-mini"><span style="color: red; font-weight:bold;">x</span></button></div>
         </g:if>
     </caption>
     <tbody>
@@ -11,9 +12,10 @@
         <tr id="${line.id}" class='context_item_row'>
             <td class="attributeLabel">${line.attributeLabel}-[${line.id}]</td>
             <td class="valuedLabel">${line.valueLabel}</td>
-            <td><div class="deleteItemButton"><button id="${line.id}">Delete</button></div></td>
+            <td><div class="deleteItemButton"><button id="${line.id}" class="btn btn-mini"><span style="color: red; font-weight:bold;">x</span></button></div></td>
         </tr>
     </g:each>
     </tbody>
 </table>
+</div>
 </div>

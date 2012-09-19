@@ -49,7 +49,7 @@ grails.project.dependency.resolution = {
         // compile scope
         compile ":grails-ui:1.2.3"
         compile ":yui:2.8.2.1"
-        compile ":twitter-bootstrap:2.0.2.25"
+        compile ":twitter-bootstrap:2.1.0"
         compile ":elastic-search:0.4.5-SNAPSHOT"
 
         compile(":build-test-data:2.0.3")

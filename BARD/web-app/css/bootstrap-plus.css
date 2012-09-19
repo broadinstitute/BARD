@@ -1,0 +1,43 @@
+.hero-unit-v1 {
+  background-color: #f5f5f5;
+  margin-bottom: 10px;
+  padding: 10px;
+  -webkit-border-radius: 6px;
+  -moz-border-radius: 6px;
+  border-radius: 6px;
+}
+.hero-unit-v1 h1 {
+  margin-bottom: 0;
+  font-size: 60px;
+  line-height: 1;
+  letter-spacing: -1px;
+}
+
+.hero-unit-v1 h4 {
+  margin-top: 0;
+  margin-bottom: 0;
+  line-height: 1;
+  letter-spacing: -1px;
+}
+
+.hero-unit-v1 p {
+  font-size: 18px;
+  font-weight: 200;
+  line-height: 27px;
+}
+
+table.card caption {
+	
+}
+
+.bs-docs {
+  position: relative;
+  margin: 5px 0;
+  padding: 10px 10px 10px;
+  *padding-top: 10px;
+  background-color: #fff;
+  border: 1px solid #ddd;
+  -webkit-border-radius: 4px;
+     -moz-border-radius: 4px;
+          border-radius: 4px;
+}
