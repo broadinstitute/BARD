@@ -10,12 +10,52 @@ import spock.lang.Unroll
 import javax.servlet.http.HttpServletResponse
 
 import static groovyx.net.http.ContentType.JSON
+import groovyx.net.http.HttpResponseException
 
 @Unroll
 class BardWebInterfaceFunctionalSpec extends Specification {
     RemoteControl remote = new RemoteControl()
     String baseUrl = remote { ctx.grailsApplication.config.grails.serverURL }
 
+    def "test promiscuity action #label"() {
+        given: "That we have a valid cid #cid"
+        String requestUrl = "${baseUrl}/bardWebInterface/promiscuity?cid=${cid}"
+        RESTClient http = new RESTClient(requestUrl)
+
+        when: 'We send an HTTP GET request to the promiscuity action with cid #cid'
+        HttpResponseDecorator serverResponse = (HttpResponseDecorator) http.get(requestContentType: JSON)
+
+        then: 'We expect a JSON representation of the promiscuity scores'
+        assert serverResponse.statusLine.statusCode == HttpServletResponse.SC_OK
+        assert serverResponse.data.toString() == promiscuityScore
+        assert serverResponse.data.size() > 0
+        assert !serverResponse.data.any { it.toString().contains("errorCode") }
+
+        where:
+        label       | cid   | promiscuityScore
+        "CID 38911" | 38911 | "[1291, 825, 102]"
+        "CID 2722"  | 2722  | "[3851]"
+
+
+    }
+
+    def "test promiscuity action with exception #label"() {
+        given:
+        String requestUrl = "${baseUrl}/bardWebInterface/promiscuity?cid=${cid}"
+        RESTClient http = new RESTClient(requestUrl)
+
+        when: 'We send an HTTP GET request for the search action'
+        HttpResponseDecorator serverResponse = (HttpResponseDecorator) http.get(requestContentType: JSON)
+
+        then: 'We expect an error'
+        def e = thrown(HttpResponseException)
+        e.statusCode == statusCode
+
+        where:
+        label                 | cid  | statusCode
+        "Empty CID String"    | null | HttpServletResponse.SC_BAD_REQUEST
+        "CID- Does not exist" | -1   | HttpServletResponse.SC_NOT_FOUND
+    }
 
     def "Test Search querying: #label"() {
         given: "there is a service end point to get the root elements"

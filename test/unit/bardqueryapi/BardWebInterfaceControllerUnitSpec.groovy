@@ -44,6 +44,24 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
         // Tear down logic here
     }
 
+    void "test promiscuity action #label"() {
+        given:
+
+        when:
+        controller.promiscuity(cid)
+        then:
+        _ * this.queryService.findPromiscuityScoreForCID(_) >> {promiscuityScore}
+        assert response.status == statusCode
+
+        where:
+        label                          | cid  | statusCode                                   | promiscuityScore
+        "Empty Null CID - Bad Request" | null | HttpServletResponse.SC_BAD_REQUEST           | null
+        "CID- Internal Server Error"   | 234  | HttpServletResponse.SC_INTERNAL_SERVER_ERROR | [scores: [20, 30], status: 500, message: "Success"]
+        "Success"                      | 567  | HttpServletResponse.SC_OK                    | [scores: [20, 30], status: 200, message: "Success"]
+
+
+    }
+
     void "test handle Assay Searches #label"() {
         given:
         mockCommandObject(SearchCommand)

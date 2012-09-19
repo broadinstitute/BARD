@@ -5,7 +5,6 @@ import bard.core.Value
 import bard.core.adapter.AssayAdapter
 import bard.core.adapter.CompoundAdapter
 import bard.core.adapter.ProjectAdapter
-import groovyx.net.http.RESTClient
 import net.sf.json.JSON
 import org.apache.commons.lang.StringUtils
 
@@ -21,7 +20,6 @@ import javax.servlet.http.HttpServletResponse
  */
 @Mixin(SearchHelper)
 class BardWebInterfaceController {
-    def grailsApplication
     def shoppingCartService
     IQueryService queryService
     List<SearchFilter> filters = []
@@ -41,33 +39,25 @@ class BardWebInterfaceController {
     def promiscuity(Long cid) {
         if (cid) {
             //Get the Promiscuity score for this CID
-
-            String promiscuityScoreURL = grailsApplication.config.promiscuityscrores.root.url + cid
-
             try {
-                RESTClient http = new RESTClient(promiscuityScoreURL)
-                def resp = http.get(requestContentType: JSON)
-                if (resp.status == 200) {
-                    render resp.data.pScores as JSON
-                }else{
-                    return response.sendError(resp.status,
-                            "Error getting ${promiscuityScoreURL}")
-
-
+                Map results = queryService.findPromiscuityScoreForCID(cid)
+                if (results.status == 200) {
+                    render results.scores as JSON
                 }
-            } catch (Exception ee) {
-                return response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR,
-                        "Could not get promiscuity score for ${promiscuityScoreURL}")
-
-
+                else { //status code of NOT OK returned. Usually CID has no promiscuity score
+                    return response.sendError(results.status,
+                            "${results.message}")
+                }
+            } catch (Exception ee) { //error is thrown
+                log.error(ee)
+                return response.sendError(ee.statusCode,
+                        "Could not get promiscuity score for ${cid}")
             }
         } else {
             return response.sendError(HttpServletResponse.SC_BAD_REQUEST,
                     "A valid CID is required")
 
         }
-
-
     }
     //================ Search By IDs ================================
 

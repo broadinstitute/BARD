@@ -19,6 +19,10 @@ class MockQueryService implements IQueryService {
         constructMockAssayAdapter()
         constructMockProjectAdapter()
     }
+    Map findPromiscuityScoreForCID(final Long cid){
+        return [scores: [20,30], status: 200, message: "Success"]
+
+    }
 
     //========================================================== Free Text Searches ================================
     /**

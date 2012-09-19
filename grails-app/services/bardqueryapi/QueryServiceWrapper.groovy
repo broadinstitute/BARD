@@ -17,8 +17,10 @@ public class QueryServiceWrapper {
     final RESTAssayService restAssayService;
     final RESTExperimentService restExperimentService;
     final String baseURL
-    public QueryServiceWrapper(final String baseURL) {
+    final String promiscuityScoreURL
+    public QueryServiceWrapper(final String baseURL, final String promiscuityScoreURL) {
         this.baseURL = baseURL
+        this.promiscuityScoreURL = promiscuityScoreURL;
         EntityServiceManager esm = new RESTEntityServiceManager(baseURL);
         this.restCompoundService = esm.getService(Compound.class);
         this.restAssayService = esm.getService(Assay.class);

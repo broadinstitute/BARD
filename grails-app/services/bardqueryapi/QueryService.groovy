@@ -3,6 +3,8 @@ package bardqueryapi
 import bard.core.adapter.AssayAdapter
 import bard.core.adapter.CompoundAdapter
 import bard.core.adapter.ProjectAdapter
+import groovyx.net.http.RESTClient
+import net.sf.json.JSON
 import org.apache.commons.lang3.time.StopWatch
 import bard.core.*
 
@@ -283,5 +285,19 @@ class QueryService implements IQueryService {
      */
     public void findFiltersInSearchBox(final List<SearchFilter> searchFilters, final String searchString) {
         queryHelperService.findFiltersInSearchBox(searchFilters, searchString)
+    }
+
+    public Map findPromiscuityScoreForCID(Long cid) {
+        if (cid == null) {
+            return [scores: [], status: 400, message: "CID must not be null"]
+        }
+        final String scoreURL = "${queryServiceWrapper.promiscuityScoreURL}${cid}"
+        final RESTClient http = new RESTClient(scoreURL)
+        def resp = http.get(requestContentType: JSON)
+        if (resp.status == 200) {
+            return [scores: resp.data.pScores, status: resp.status, message: 'success']
+        } else {
+            return [scores: resp.data.pScores, status: resp.status, message: "Error getting ${scoreURL}"]
+        }
     }
 }
