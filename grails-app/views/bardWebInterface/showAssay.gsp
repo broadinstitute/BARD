@@ -22,9 +22,9 @@
     <div class="span12">
         <dl class="dl-horizontal">
             <dt>Assay Type:</dt><dd>${assayAdapter.assay.type}</dd>
-            <dt>Assay Format:</dt><dd></dd>
-            <dt>Biological Process:</dt><dd></dd>
-            <dt>Target:</dt><dd></dd>
+            %{--<dt>Assay Format:</dt><dd></dd>--}%
+            %{--<dt>Biological Process:</dt><dd></dd>--}%
+            %{--<dt>Target:</dt><dd></dd>--}%
         </dl>
     </div>
 </div>
