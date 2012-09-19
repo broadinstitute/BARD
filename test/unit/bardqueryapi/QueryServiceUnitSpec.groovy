@@ -41,21 +41,6 @@ class QueryServiceUnitSpec extends Specification {
         // Tear down logic here
     }
 
-    //  /**
-//     */
-//    void "test handleAutoComplete #label"() {
-//
-//        when:
-//        final List<String> response = service.autoComplete()
-//
-//        then:
-//        assert response == expectedResponse
-//
-//        where:
-//        label                       | term  | jsonResponse                        | expectedResponse
-//        "Partial match of a String" | "Bro" | new JSONObject(AUTO_COMPLETE_NAMES) | ["Broad Institute MLPCN Platelet Activation"]
-//        "Empty String"              | ""    | new JSONObject()                    | []
-//    }
     /**
      */
     void "test Show Compound #label"() {

@@ -213,6 +213,7 @@ class QueryServiceHelperUnitSpec extends Specification {
         where:
         label                              | searchParams       | searchFilters
         "Search Filter with number ranges" | new SearchParams() | [new SearchFilter("name1", "[* To 100]")]
+        "Search Filter with number ranges" | new SearchParams() | [new SearchFilter("name1", "100")]
 
     }
 

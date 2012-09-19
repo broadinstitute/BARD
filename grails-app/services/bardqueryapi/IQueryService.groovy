@@ -7,6 +7,8 @@ import bard.core.adapter.ProjectAdapter
 
 public interface IQueryService {
 
+
+ Map findPromiscuityScoreForCID(final Long cid);
     //========================================================== Free Text Searches ================================
     /**
      * We are not quite ready to use this method yet

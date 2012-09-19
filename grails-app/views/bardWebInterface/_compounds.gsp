@@ -34,6 +34,9 @@
                             </ul>
                         </g:if>
                     </td>
+                    <td>
+                        Promiscuity Scores: <div class="promiscuity" href="${createLink(controller: 'bardWebInterface', action: 'promiscuity', params: [cid: compoundAdapter.pubChemCID])}" id="${compoundAdapter.pubChemCID}_prom"></div>
+                     </td>
                 </tr>
             </g:each>
         </table>

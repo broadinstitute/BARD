@@ -9,6 +9,7 @@ import grails.plugin.spock.IntegrationSpec
 import org.junit.After
 import org.junit.Before
 import spock.lang.Unroll
+import net.sf.json.JSONArray
 
 @Unroll
 class QueryServiceIntegrationSpec extends IntegrationSpec {
@@ -23,6 +24,22 @@ class QueryServiceIntegrationSpec extends IntegrationSpec {
     @After
     void tearDown() {
 
+    }
+
+    void "test findPromiscuityScoreForCID #label"() {
+        given:
+
+        when:
+        final Map<String, String> results = queryService.findPromiscuityScoreForCID(cid)
+        then:
+        assert results.scores == promiscuityScoreMap.scores
+        assert results.status == promiscuityScoreMap.status
+        assert results.message == promiscuityScoreMap.message
+        where:
+        label                          | cid   | promiscuityScoreMap
+        "Empty Null CID - Bad Request" | null  | [scores: [], status: 400, message: "CID must not be null"]
+        "CID 38911"                    | 38911 | [scores: [1291, 825, 102] as JSONArray, status: 200, message: "success"]
+        "CID 2722"                     | 2722  | [scores: [3851] as JSONArray, status: 200, message: "success"]
     }
 
     void "test autoComplete #label"() {
@@ -258,12 +275,12 @@ class QueryServiceIntegrationSpec extends IntegrationSpec {
         assert projectAdapterMap.facets
         assert projectAdapterMap.nHits >= numberOfProjects
         where:
-        label                             | searchString         | skip | top | numberOfProjects | filters
-        "dna repair"                      | "dna repair"         | 0    | 10  | 10               | []
+        label        | searchString | skip | top | numberOfProjects | filters
+        "dna repair" | "dna repair" | 0    | 10  | 10               | []
 //        "dna repair with filters"         | "dna repair"         | 0    | 10  | 8               | [new SearchFilter("num_expt", "6")]
-        "dna repair skip and top"         | "dna repair"         | 10   | 10  | 10               | []
-        "biological process"              | "biological process" | 0    | 10  | 10               | []
-        "biological process with filters" | "biological process" | 0    | 10  | 10               | [new SearchFilter("num_expt", "6")]
+        "dna repair skip and top" | "dna repair" | 10 | 10 | 10 | []
+        "biological process" | "biological process" | 0 | 10 | 10 | []
+        "biological process with filters" | "biological process" | 0 | 10 | 10 | [new SearchFilter("num_expt", "6")]
 
     }
 
