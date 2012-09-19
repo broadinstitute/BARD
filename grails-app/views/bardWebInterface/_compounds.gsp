@@ -14,17 +14,17 @@
             <g:each var="compoundAdapter" in="${compoundAdapters}">
                 <tr>
                     <td style="min-width: 180px;">
-                        <img alt="${compoundAdapter.structureSMILES}" title="${compoundAdapter.compound.preferredName}"
+                        <img alt="${compoundAdapter.structureSMILES}" title="${compoundAdapter.name}"
                              src="${createLink(controller: 'chemAxon', action: 'generateStructureImage', params: [smiles: compoundAdapter.structureSMILES, width: 180, height: 150])}"/>
                     </td>
                     <td>
                         <g:link action="showCompound" id="${compoundAdapter.pubChemCID}" target="_blank">
                             PubChem CID: ${compoundAdapter.pubChemCID}
-                            <g:if test="${compoundAdapter.compound.preferredName}">
-                                - ${compoundAdapter.compound.preferredName}
+                            <g:if test="${compoundAdapter.name}">
+                                - ${compoundAdapter.name}
                             </g:if>
                         </g:link>
-                        <a href="#" class="addCompoundToCart btn btn-mini" data-cart-name="${JavaScriptUtility.cleanup(compoundAdapter.compound.preferredName)}"
+                        <a href="#" class="addCompoundToCart btn btn-mini" data-cart-name="${JavaScriptUtility.cleanup(compoundAdapter.name)}"
                                  data-cart-id="${compoundAdapter.pubChemCID}" data-cart-smiles="${compoundAdapter.getStructureSMILES()}">
                             Save for later analysis
                         </a>

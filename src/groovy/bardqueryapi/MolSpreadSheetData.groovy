@@ -1,5 +1,7 @@
 package bardqueryapi
 
+import java.math.MathContext
+
 /**
  * Created with IntelliJ IDEA.
  * User: balexand
@@ -63,6 +65,10 @@ class MolSpreadSheetData {
         rowPointer.put(5346L,2)
         rowPointer.put(5347L,3)
     }
+
+
+    MathContext mathContext
+
 
 
 

@@ -8,6 +8,7 @@ package bardqueryapi
  * To change this template use File | Settings | File Templates.
  */
 class MolSpreadSheetCell {
+    static final int SPREAD_SHEET_PRECISION = 3
     MolSpreadSheetCellType molSpreadSheetCellType = MolSpreadSheetCellType.unknown
     Object objInternalValue
     String strInternalValue = "null"
@@ -98,16 +99,16 @@ class MolSpreadSheetCell {
         StringBuilder stringBuilder = new StringBuilder()
         switch (molSpreadSheetCellType) {
             case MolSpreadSheetCellType.numeric :
-                stringBuilder.append( "${numInternalValue}" )
+                stringBuilder.append( "${numInternalValue.toEngineeringString()}" )
                 break;
             case MolSpreadSheetCellType.percentageNumeric :
-                stringBuilder.append( "${numInternalValue} %" )
+                stringBuilder.append( "${numInternalValue.toEngineeringString()} %" )
                 break;
             case MolSpreadSheetCellType.greaterThanNumeric :
-                stringBuilder.append( "> ${numInternalValue}" )
+                stringBuilder.append( "> ${numInternalValue.toEngineeringString()}" )
                 break;
             case MolSpreadSheetCellType.lessThanNumeric :
-                stringBuilder.append( "< ${numInternalValue}" )
+                stringBuilder.append( "< ${numInternalValue.toEngineeringString()}" )
                 break;
             case MolSpreadSheetCellType.identifier :
                 stringBuilder.append( "${intInternalValue}" )

@@ -19,6 +19,7 @@ class MolecularSpreadSheetServiceIntegrationSpec extends IntegrationSpec {
     MolSpreadSheetData molSpreadSheetData = generateFakeData()
     RESTCompoundService restCompoundService
     RESTExperimentService restExperimentService
+    QueryServiceWrapper queryServiceWrapper
 
 
 
@@ -72,6 +73,30 @@ class MolecularSpreadSheetServiceIntegrationSpec extends IntegrationSpec {
         "An existing experiment with activities" | [new Long(164981), new Long(411519), new Long(483860)] | new Long(1326)
 
     }
+
+//    void "test assay to experiment mapping"(){
+//        given:
+//        Long assayId = 1326L
+//        Assay assayOriginatingFromScalarId =  queryServiceWrapper.getRestAssayService().get( assayId )
+//        and:
+//        List<Long> assayListWithOneId = [1326L]
+//        Collection<Assay> assaysFromListWithOneId = queryServiceWrapper.getRestAssayService().get( assayListWithOneId)
+//        assert assaysFromListWithOneId.size()==1
+//        Assay assayOriginatingFromIdsInAList = assaysFromListWithOneId[0]
+//        when:
+//        Collection<Experiment> experiments1 = assayOriginatingFromIdsInAList.getExperiments()
+//        Collection<Experiment> experiments2 = assayOriginatingFromScalarId.getExperiments()
+//        println experiments2.getClass().name
+//            then:
+//        if ((experiments1.size()==1)   && (experiments2.size()==1)) {
+//            assert experiments1.iterator().next() ==  experiments2.iterator().next()
+//        }
+//        else
+//            assert true
+//    }
+
+
+
 
     void "tests findActivitiesForCompounds #label"() {
         given: "That we have created an ETag from a list of CIDs"

@@ -182,12 +182,16 @@ class MolecularSpreadSheetService {
             long assayId = cartAssay.assayId
             assayIds.add(assayId)
         }
+
         List<Experiment> allExperiments = []
-        Collection<Assay> assays = queryServiceWrapper.getRestAssayService().get(assayIds)
-        for (Assay assay : assays) {
-            Collection<Experiment> experiments = assay.getExperiments()
-            allExperiments.addAll(experiments)
+        for (Long individualAssayIds in assayIds) {
+            Assay assay = queryServiceWrapper.getRestAssayService().get(individualAssayIds)
+            Collection<Experiment> experimentList = assay.getExperiments()
+            for (Experiment experiment in experimentList) {
+                allExperiments.add(experiment)
+            }
         }
+
         return allExperiments
     }
     /**
