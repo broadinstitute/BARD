@@ -106,7 +106,7 @@ function handleStructureSearch(url, currentFormId) {
                     type:'GET',
                     cache:false,
                     success:function (promData) {
-                        $('#' + promiscuityDivId).html(promData);
+                        $('#' + promiscuityDivId).html(promData.pScore);
                     }
                 });
             });
@@ -155,7 +155,7 @@ function handleSearch(controllerAction, currentFormId, tabId, totalHitsForResour
                     type:'GET',
                     cache:false,
                     success:function (promData) {
-                        $('#' + promiscuityDivId).html(promData);
+                        $('#' + promiscuityDivId).html(promData.pScore);
                     }
                 });
             });

@@ -9,7 +9,6 @@ import grails.plugin.spock.IntegrationSpec
 import org.junit.After
 import org.junit.Before
 import spock.lang.Unroll
-import net.sf.json.JSONArray
 
 @Unroll
 class QueryServiceIntegrationSpec extends IntegrationSpec {
@@ -27,19 +26,17 @@ class QueryServiceIntegrationSpec extends IntegrationSpec {
     }
 
     void "test findPromiscuityScoreForCID #label"() {
-        given:
-
         when:
-        final Map<String, String> results = queryService.findPromiscuityScoreForCID(cid)
+        final Map resultMap = queryService.findPromiscuityScoreForCID(cid)
         then:
-        assert results.scores == promiscuityScoreMap.scores
-        assert results.status == promiscuityScoreMap.status
-        assert results.message == promiscuityScoreMap.message
+        assert resultMap.promiscuityScore
+        assert resultMap.promiscuityScore.scaffolds
+        assert resultMap.status == promiscuityScoreMap.status
+        assert resultMap.message == promiscuityScoreMap.message
         where:
-        label                          | cid   | promiscuityScoreMap
-        "Empty Null CID - Bad Request" | null  | [scores: [], status: 400, message: "CID must not be null"]
-        "CID 38911"                    | 38911 | [scores: [1291, 825, 102] as JSONArray, status: 200, message: "success"]
-        "CID 2722"                     | 2722  | [scores: [3851] as JSONArray, status: 200, message: "success"]
+        label       | cid   | promiscuityScoreMap
+        "CID 38911" | 38911 | [status: 200, message: "Success"]
+        "CID 2722"  | 2722  | [status: 200, message: "Success"]
     }
 
     void "test autoComplete #label"() {
