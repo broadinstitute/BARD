@@ -1,5 +1,5 @@
 #!/bin/bash
-#
+# Start this before you run the tests
 # Author: Brian Connolly (LabKey.org)
 #
 # chkconfig: 345 98 90
