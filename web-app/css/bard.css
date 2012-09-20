@@ -229,10 +229,9 @@ a.addtocart { //right
     width:200px;
     height: 200px;
 }
-a:link    {text-decoration: underline; color:blue;}
-a:visited {text-decoration: underline; color:purple;}
-a:hover   {text-decoration: underline overline; color:red;}
-a:active  {text-decoration: none; color:yellow;}
+#resultTab a:visited {
+    color:purple;
+}
 
 img.addtocart {  //left
     width:200px;

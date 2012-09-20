@@ -37,20 +37,20 @@
     <div class="span12 accordion">
         <div class="accordion-group">
             <div class="accordion-heading">
-                <a href="#summary-header" id="summary-header" class="accordion-toggle" data-toggle="collapse" data-target="#summary-info"><i class="icon-chevron-down"></i> Summary Info</a>
-                <div id="summary-info" class="accordion-body in collapse">
+                <a href="#document-header" id="document-header" class="accordion-toggle" data-toggle="collapse" data-target="#document-info"><i class="icon-chevron-down"></i> Description</a>
+                <div id="document-info" class="accordion-body in collapse">
                     <div class="accordion-inner">
-                        <g:render template="projectSummary" model="['projectAdapter': projectAdapter]" />
+                        <g:textBlock>${projectAdapter.project.description}</g:textBlock>
                     </div>
                 </div>
             </div>
         </div>
         <div class="accordion-group">
             <div class="accordion-heading">
-                <a href="#document-header" id="document-header" class="accordion-toggle" data-toggle="collapse" data-target="#document-info"><i class="icon-chevron-right"></i> Documents</a>
-                <div id="document-info" class="accordion-body collapse">
+                <a href="#experiments-header" id="experiments-header" class="accordion-toggle" data-toggle="collapse" data-target="#experiments-info"><i class="icon-chevron-right"></i> Experiments (${projectAdapter.numberOfExperiments})</a>
+                <div id="experiments-info" class="accordion-body collapse">
                     <div class="accordion-inner">
-                        <g:render template="projectDocuments" model="['projectAdapter': projectAdapter]" />
+                        <g:render template="experiments" model="['experiments': projectAdapter?.project?.experiments]" />
                     </div>
                 </div>
             </div>
