@@ -147,6 +147,36 @@ class DoseCurveRenderingServiceIntegrationSpec extends IntegrationSpec {
         "An existing experiment with activities" | [new Long(2836861), new Long(5882673), new Long(5604367)] | new Long(346)
 
     }
+    void "tests findDrcData No AC50"() {
+        given: "That we have an Experiment"
+        Experiment experiment = restExperimentService.get(1326)
 
+        and: "We call the activities method on the restExperimentService with the experiment and the ETag"
+        final ServiceIterator<Value> experimentIterator = this.restExperimentService.activities(experiment);
+        Collection collect = experimentIterator.collect()
+
+        and: "We extract the first experimen tValue in the resulting collection"
+        Value experimentValue = collect.iterator().next()
+
+        and: "We call the extractActivitiesFromExperiment method with the experiment Value to get the SpreadSheetActivity"
+        SpreadSheetActivity spreadSheetActivity = molecularSpreadSheetService.extractActivitiesFromExperiment(experimentValue)
+
+        when: "We call the findDrcData method with the spreadSheetActivity.hillCurveValue value"
+        final HillCurveValue hillCurveValue = spreadSheetActivity.hillCurveValue
+        JFreeChart jFreeChart = this.doseCurveRenderingService.createDoseCurve(hillCurveValue.getConc() as List<Double>,
+                hillCurveValue.getResponse() as List<Double>, hillCurveValue.slope, hillCurveValue.coef, hillCurveValue.s0, hillCurveValue.sinf,
+                null, null, null, null)
+
+        then: "We expect to get back a JFreeChart back"
+        assert jFreeChart
+        try {
+            final File file = new File("testCharNoFit.jpg")
+            ChartUtilities.saveChartAsJPEG(file, jFreeChart, 500, 500);
+            assert file.exists()
+        } catch (IOException e) {
+            System.err.println("Problem occurred creating chart.");
+        }
+
+    }
 
 }
