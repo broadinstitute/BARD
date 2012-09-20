@@ -8,6 +8,8 @@ import grails.test.mixin.TestFor
 import grails.test.mixin.TestMixin
 import grails.test.mixin.support.GrailsUnitTestMixin
 import org.json.JSONArray
+import promiscuity.PromiscuityScore
+import promiscuity.Scaffold
 import spock.lang.Shared
 import spock.lang.Specification
 import spock.lang.Unroll
@@ -46,18 +48,26 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
 
     void "test promiscuity action #label"() {
         given:
+        PromiscuityScore promiscuityScore = null
+        if (statusCode == 200) {
+            List<Scaffold> scaffolds = new ArrayList<Scaffold>()
+            Scaffold scaffold = new Scaffold(pScore: 222)
+            scaffolds.add(scaffold)
+            promiscuityScore = new PromiscuityScore(cid: cid, scaffolds: scaffolds)
+        }
+        Map promiscuityScoreMap =  [status: statusCode, promiscuityScore: promiscuityScore]
 
         when:
         controller.promiscuity(cid)
         then:
-        _ * this.queryService.findPromiscuityScoreForCID(_) >> {promiscuityScore}
+        _ * this.queryService.findPromiscuityScoreForCID(_) >> {promiscuityScoreMap}
         assert response.status == statusCode
 
         where:
-        label                          | cid  | statusCode                                   | promiscuityScore
-        "Empty Null CID - Bad Request" | null | HttpServletResponse.SC_BAD_REQUEST           | null
-        "CID- Internal Server Error"   | 234  | HttpServletResponse.SC_INTERNAL_SERVER_ERROR | [scores: [20, 30], status: 500, message: "Success"]
-        "Success"                      | 567  | HttpServletResponse.SC_OK                    | [scores: [20, 30], status: 200, message: "Success"]
+        label                          | cid  | statusCode
+        "Empty Null CID - Bad Request" | null | HttpServletResponse.SC_BAD_REQUEST
+        "CID- Internal Server Error"   | 234  | HttpServletResponse.SC_INTERNAL_SERVER_ERROR
+        "Success"                      | 567  | HttpServletResponse.SC_OK
 
 
     }

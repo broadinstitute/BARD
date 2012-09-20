@@ -47,6 +47,9 @@ grails.project.dependency.resolution = {
         compile 'org.codehaus.jackson:jackson-core-asl:1.9.2'
         compile 'org.codehaus.jackson:jackson-mapper-asl:1.9.2'
         compile 'ChemAxon:ChemAxonJChemBase:5.10'
+        compile 'jfree:jfreechart:1.0.13'
+        compile 'com.thoughtworks.xstream:xstream:1.4.2'
+
     }
 
     plugins {

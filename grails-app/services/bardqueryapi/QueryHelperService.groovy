@@ -7,7 +7,7 @@ import bard.core.SearchParams
 import bard.core.adapter.AssayAdapter
 import bard.core.adapter.CompoundAdapter
 import bard.core.adapter.ProjectAdapter
-import org.apache.commons.lang3.time.StopWatch
+import org.apache.commons.lang.time.StopWatch
 
 import java.util.regex.Matcher
 import java.util.regex.Pattern
