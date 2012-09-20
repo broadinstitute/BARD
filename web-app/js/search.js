@@ -87,6 +87,7 @@ function handleStructureSearch(url, currentFormId) {
         type:'POST',
         data:$(searchForm).serialize(),
         cache:false,
+        timeout: 10000,
         beforeSend:function () {
             resetTabsForStructureSearches();
             $("#compounds").html(bigSpinnerImage);
@@ -105,6 +106,7 @@ function handleStructureSearch(url, currentFormId) {
                     url:url,
                     type:'GET',
                     cache:false,
+                    timeout: 10000,
                     success:function (promData) {
                         $('#' + promiscuityDivId).html(promData.pScore);
                     }
@@ -137,6 +139,7 @@ function handleSearch(controllerAction, currentFormId, tabId, totalHitsForResour
         type:'POST',
         data:$(searchForm).serialize(),
         cache:false,
+        timeout: 10000,
         beforeSend:function () {
             $(tabDivElement).html(prefixOfTextToAppearOnTab + spinnerImageLink);
             $(updateDivId).html(bigSpinnerImage);
@@ -154,6 +157,7 @@ function handleSearch(controllerAction, currentFormId, tabId, totalHitsForResour
                     url:url,
                     type:'GET',
                     cache:false,
+                    timeout: 10000,
                     success:function (promData) {
                         $('#' + promiscuityDivId).html(promData.pScore);
                     }
