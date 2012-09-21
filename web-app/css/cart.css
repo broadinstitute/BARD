@@ -25,3 +25,7 @@ ul.horizontal-list li {
 ul.horizontal-list li:not(:first-child):before {
     content: ' | ';
 }
+div.plot {
+    width: 200px;
+    height: 300px;
+}

@@ -61,7 +61,7 @@
                         </td>
                     <g:each  var="colCnt" in="${2..(molSpreadSheetData.getColumnCount()-1)}">
                         <td class="molSpreadSheet" property="var${colCnt}">
-                            ${molSpreadSheetData?.displayValue( rowCnt, colCnt )?."value"}
+                            <a href="#" class="requestDoseResponseImage" concs="foo" resps="fi">${molSpreadSheetData?.displayValue( rowCnt, colCnt )?."value"}</a>
                         </td>
                     </g:each>
                     </tr>
@@ -70,6 +70,6 @@
             </table>
         </div>
     </div>
-
+    <div class="plot" id="plot"></div>
 </body>
 </html>

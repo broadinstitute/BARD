@@ -114,6 +114,26 @@ QueryCart.prototype.removeAll = function() {
     return false;
 }
 
+
+QueryCart.prototype.requestDoseResponseImageHandler = function() {
+    var id = $(this).attr('concs');
+    var name = $(this).attr('resps');
+    jQuery.ajax({  type:'POST',
+        data:{'id': id,
+            'class': 'class DrcCurveCommand'},
+        contentType: "image/png",
+        url:'/bardwebquery/doseResponseCurve/doseResponseCurve',
+        success:function(data,textStatus){
+            jQuery('#plot').html('<img src="' + data + '" />');
+        }
+    });
+    return false;
+}
+
+
+
+
+
 QueryCart.prototype.init = function() {
     $(document).on('click', '.trigger', this.toggleDetailsHandler);
     $(document).on('click', '.addAssayToCart', this.addAssayToCartHandler);
@@ -121,6 +141,7 @@ QueryCart.prototype.init = function() {
     $(document).on('click', '.addProjectToCart', this.addProjectToCartHandler);
     $(document).on('click', '.removeItemFromCart', this.removeItem);
     $(document).on('click', '.removeAllFromCart', this.removeAll);
+    $(document).on('click', '.requestDoseResponseImage', this.requestDoseResponseImageHandler);
 }
 
 var queryCart = new QueryCart();
