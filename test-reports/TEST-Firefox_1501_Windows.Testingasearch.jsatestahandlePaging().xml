@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="Firefox_1501_Windows.Testing search.js test handlePaging()" errors="0" failures="0" tests="6" time="0.0030">
+<testcase classname="Firefox_1501_Windows.Testing search.js test handlePaging()" name="Should call method with an empty url" time="0.0010"/>
+<testcase classname="Firefox_1501_Windows.Testing search.js test handlePaging()" name="Should Call method with 'searchAssays'" time="0.0"/>
+<testcase classname="Firefox_1501_Windows.Testing search.js test handlePaging()" name="Should Call method with 'searchProjects'" time="0.0"/>
+<testcase classname="Firefox_1501_Windows.Testing search.js test handlePaging()" name="Should Call method with 'searchCompounds'" time="0.0010"/>
+<testcase classname="Firefox_1501_Windows.Testing search.js test handlePaging()" name="Should Call method with 'searchStructures'" time="0.0"/>
+<testcase classname="Firefox_1501_Windows.Testing search.js test handlePaging()" name="Should Call method with some unhandled string'" time="0.0010"/>
+</testsuite>

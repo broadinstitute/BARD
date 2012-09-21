@@ -23,7 +23,7 @@ NEW_FIRE_FOX_PATH=${FIREFOX/\/cygdrive\/c/C:};
 echo $FIREFOX
 echo $NEW_FIRE_FOX_PATH
 # run the tests
-java -jar test/jasmine/lib/JsTestDriver-1.3.4.b.jar --server http://127.0.0.1:9876 --config test/jasmine/jsTestDriver.conf --tests all --testOutput "$OUTPUT_DIR"
+java -jar test/jasmine/lib/JsTestDriver-1.3.4.b.jar --port 9876 --browser "$NEW_FIRE_FOX_PATH"
 RESULT=$?
 echo $RESULT
 

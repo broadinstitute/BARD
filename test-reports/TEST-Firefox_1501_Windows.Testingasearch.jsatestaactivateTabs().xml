@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="Firefox_1501_Windows.Testing search.js test activateTabs()" errors="0" failures="0" tests="3" time="0.0090">
+<testcase classname="Firefox_1501_Windows.Testing search.js test activateTabs()" name="Should activate assay definitions tab" time="0.0030"/>
+<testcase classname="Firefox_1501_Windows.Testing search.js test activateTabs()" name="Should activate compounds tab" time="0.0030"/>
+<testcase classname="Firefox_1501_Windows.Testing search.js test activateTabs()" name="Should activate projects tab" time="0.0030"/>
+</testsuite>

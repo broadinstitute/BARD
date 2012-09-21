@@ -12,11 +12,13 @@ import java.math.MathContext
 class MolSpreadSheetData {
     LinkedHashMap<String,MolSpreadSheetCell> mssData
     LinkedHashMap<Long,Integer> rowPointer
+    LinkedHashMap<Long,Integer> columnPointer
     List mssHeaders = new ArrayList()
 
     MolSpreadSheetData()  {
         mssData = new LinkedHashMap<String,MolSpreadSheetCell> ()
         rowPointer = new LinkedHashMap<Long,Integer>()
+        columnPointer = new LinkedHashMap<Long,Integer>()
         mssHeaders = new ArrayList()
     }
 

@@ -26,6 +26,7 @@ import grails.converters.JSON
 class BardWebInterfaceController {
     def shoppingCartService
     IQueryService queryService
+    MolecularSpreadSheetService molecularSpreadSheetService
     List<SearchFilter> filters = []
 
     def index() {
@@ -39,7 +40,14 @@ class BardWebInterfaceController {
 
     def searchResults() {
     }
+    def showResult(Long experimentId) {
+        int top = 0
+        int skip = 10
+        final Map<Long, List<SpreadSheetActivity>> map = molecularSpreadSheetService.findExperimentDataById(experimentId, top, skip)
+        render(template: 'compounds', model: [
+                resultsMap: map ])
 
+    }
     def promiscuity(Long cid) {
         if (cid) {
             //Get the Promiscuity score for this CID

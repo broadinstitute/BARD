@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="Firefox_1501_Windows.Testing search.js Test handleAllIdSearches()" errors="0" failures="0" tests="1" time="0.0030">
+<testcase classname="Firefox_1501_Windows.Testing search.js Test handleAllIdSearches()" name="should call the handleSearch function 3 times" time="0.0030"/>
+</testsuite>
