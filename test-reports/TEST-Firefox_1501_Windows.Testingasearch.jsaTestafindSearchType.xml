@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="Firefox_1501_Windows.Testing search.js Test findSearchType" errors="0" failures="0" tests="19" time="0.0060000005">
+<testcase classname="Firefox_1501_Windows.Testing search.js Test findSearchType" name="should return the string 'EMPTY', when we pass in an empty search string" time="0.0010"/>
+<testcase classname="Firefox_1501_Windows.Testing search.js Test findSearchType" name="should return the string 'ID' when we pass in a list of comma separated integers" time="0.0"/>
+<testcase classname="Firefox_1501_Windows.Testing search.js Test findSearchType" name="should return the string 'ID' when we pass in a single integers" time="0.0010"/>
+<testcase classname="Firefox_1501_Windows.Testing search.js Test findSearchType" name="should not return the string 'ID' when we pass in a list of comma separated values containing alphanumeric characters" time="0.0"/>
+<testcase classname="Firefox_1501_Windows.Testing search.js Test findSearchType" name="should return the string 'STRUCTURE' when we pass in Exact:CC" time="0.0010"/>
+<testcase classname="Firefox_1501_Windows.Testing search.js Test findSearchType" name="should return the string 'STRUCTURE' when we pass in SubStructure:CC" time="0.0"/>
+<testcase classname="Firefox_1501_Windows.Testing search.js Test findSearchType" name="should return the string 'STRUCTURE' when we pass in SuperStructure:CC" time="0.0010"/>
+<testcase classname="Firefox_1501_Windows.Testing search.js Test findSearchType" name="should return the string 'STRUCTURE' when we pass in Similarity:CC" time="0.0"/>
+<testcase classname="Firefox_1501_Windows.Testing search.js Test findSearchType" name="should return the string 'STRUCTURE' when we pass in one of 'eXact:CC','subSTRUCTURE:CC','superstructure:CC','similarity:CC', case insensitive" time="0.0"/>
+<testcase classname="Firefox_1501_Windows.Testing search.js Test findSearchType" name="should return the string 'STRUCTURE' when we pass in one of 'eXact:CC',case insensitive" time="0.0"/>
+<testcase classname="Firefox_1501_Windows.Testing search.js Test findSearchType" name="should return the string 'STRUCTURE' when we pass in 'subSTRUCTURE:CC', case insensitive" time="0.0"/>
+<testcase classname="Firefox_1501_Windows.Testing search.js Test findSearchType" name="should return the string 'STRUCTURE' when we pass in 'superstructure:CC'case, insensitive" time="0.0"/>
+<testcase classname="Firefox_1501_Windows.Testing search.js Test findSearchType" name="should return the string 'STRUCTURE' when we pass in 'similarity:CC', case insensitive" time="0.0"/>
+<testcase classname="Firefox_1501_Windows.Testing search.js Test findSearchType" name="should return the string 'FREE_TEXT' for everything else, 'Bogus:Me' " time="0.0"/>
+<testcase classname="Firefox_1501_Windows.Testing search.js Test findSearchType" name="should return the string 'FREE_TEXT' for everything else. '123,456:456'" time="0.0"/>
+<testcase classname="Firefox_1501_Windows.Testing search.js Test findSearchType" name="should return the string 'FREE_TEXT' for everything else. 'GO:BIOLOGICAL_PROCESS'" time="0.0010"/>
+<testcase classname="Firefox_1501_Windows.Testing search.js Test findSearchType" name="should return the string 'FREE_TEXT' for everything else. 'ADID:1,234,567'" time="0.0010"/>
+<testcase classname="Firefox_1501_Windows.Testing search.js Test findSearchType" name="should return the string 'FREE_TEXT' for everything else. 'PID:1,234,567'" time="0.0"/>
+<testcase classname="Firefox_1501_Windows.Testing search.js Test findSearchType" name="should return the string 'FREE_TEXT' for everything else. 'CID:1,234,567'" time="0.0"/>
+</testsuite>

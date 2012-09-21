@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="Firefox_1501_Windows.Testing cart.js Test QueryCart.addProjectToCartHandler" errors="0" failures="0" tests="2" time="0.0020">
+<testcase classname="Firefox_1501_Windows.Testing cart.js Test QueryCart.addProjectToCartHandler" name="should update the summary view if it is showing" time="0.0010"/>
+<testcase classname="Firefox_1501_Windows.Testing cart.js Test QueryCart.addProjectToCartHandler" name="should update the detail view if it is showing" time="0.0010"/>
+</testsuite>

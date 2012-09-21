@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="Firefox_1501_Windows.Testing search.js test deActivateTabs()" errors="0" failures="0" tests="3" time="0.0080">
+<testcase classname="Firefox_1501_Windows.Testing search.js test deActivateTabs()" name="Should deactivate assay definitions tab" time="0.0020"/>
+<testcase classname="Firefox_1501_Windows.Testing search.js test deActivateTabs()" name="Should deactivate compounds tab" time="0.0020"/>
+<testcase classname="Firefox_1501_Windows.Testing search.js test deActivateTabs()" name="Should deactivate projects tab" time="0.0040"/>
+</testsuite>

@@ -10,7 +10,7 @@
  
 XVFB_OUTPUT=/tmp/Xvfb.out
 XVFB=/usr/bin/Xvfb
-XVFB_OPTIONS=":99 -ac"
+XVFB_OPTIONS=":99 -ac &"
  
 start() {
         echo -n "Starting : X Virtual Frame Buffer "

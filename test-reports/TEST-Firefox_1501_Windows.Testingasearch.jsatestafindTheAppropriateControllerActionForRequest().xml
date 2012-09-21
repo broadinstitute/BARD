@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="Firefox_1501_Windows.Testing search.js test findTheAppropriateControllerActionForRequest()" errors="0" failures="0" tests="4" time="0.0010">
+<testcase classname="Firefox_1501_Windows.Testing search.js test findTheAppropriateControllerActionForRequest()" name="Should handle Free Text Search" time="0.0"/>
+<testcase classname="Firefox_1501_Windows.Testing search.js test findTheAppropriateControllerActionForRequest()" name="Should handle ID Search" time="0.0"/>
+<testcase classname="Firefox_1501_Windows.Testing search.js test findTheAppropriateControllerActionForRequest()" name="Should handle Structure Search" time="0.0010"/>
+<testcase classname="Firefox_1501_Windows.Testing search.js test findTheAppropriateControllerActionForRequest()" name="Should handle Empty" time="0.0"/>
+</testsuite>
