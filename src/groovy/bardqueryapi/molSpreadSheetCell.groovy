@@ -23,19 +23,39 @@ class MolSpreadSheetCell {
         this.molSpreadSheetCellType = molSpreadSheetCellType
         switch (this.molSpreadSheetCellType) {
             case MolSpreadSheetCellType.numeric :
-                numInternalValue = new BigDecimal(value)
+                if ("NaN".equals(value)) {
+                    activity  = false;
+                    numInternalValue =  new BigDecimal(0)
+                }  else
+                   numInternalValue = new BigDecimal(value)
                 break;
             case MolSpreadSheetCellType.percentageNumeric :
-                numInternalValue = new BigDecimal(value)
+                if ("NaN".equals(value)) {
+                    activity  = false;
+                    numInternalValue =  new BigDecimal(0)
+                }  else
+                    numInternalValue = new BigDecimal(value)
                 break;
             case MolSpreadSheetCellType.greaterThanNumeric :
-                numInternalValue = new BigDecimal(value)
+                if ("NaN".equals(value)) {
+                    activity  = false;
+                    numInternalValue =  new BigDecimal(0)
+                }  else
+                    numInternalValue = new BigDecimal(value)
                 break;
             case MolSpreadSheetCellType.lessThanNumeric :
-                numInternalValue = new BigDecimal(value)
+                if ("NaN".equals(value)) {
+                    activity  = false;
+                    numInternalValue =  new BigDecimal(0)
+                }  else
+                    numInternalValue = new BigDecimal(value)
                 break;
             case MolSpreadSheetCellType.identifier :
-                intInternalValue = new Integer(value)
+                if ("NaN".equals(value)) {
+                    activity  = false;
+                    intInternalValue =  new Integer(0)
+                }  else
+                    intInternalValue = new Integer(value)
                 break;
             case MolSpreadSheetCellType.string :
                 strInternalValue = new String(value)
@@ -53,19 +73,35 @@ class MolSpreadSheetCell {
         this.molSpreadSheetCellType = molSpreadSheetCellType
         switch (this.molSpreadSheetCellType) {
             case MolSpreadSheetCellType.numeric :
-                numInternalValue = new BigDecimal(value)
+                if ("NaN".equals(value)) {
+                    activity  = false;
+                    numInternalValue =  new BigDecimal(0)
+                }  else
+                    numInternalValue = new BigDecimal(value)
                 this.molSpreadSheetCellUnit = molSpreadSheetCellUnit
                 break;
             case MolSpreadSheetCellType.percentageNumeric :
-                numInternalValue = new BigDecimal(value)
+                if ("NaN".equals(value)) {
+                    activity  = false;
+                    numInternalValue =  new BigDecimal(0)
+                }  else
+                    numInternalValue = new BigDecimal(value)
                 this.molSpreadSheetCellUnit = molSpreadSheetCellUnit
                 break;
             case MolSpreadSheetCellType.greaterThanNumeric :
-                numInternalValue = new BigDecimal(value)
+                if ("NaN".equals(value)) {
+                    activity  = false;
+                    numInternalValue =  new BigDecimal(0)
+                }  else
+                    numInternalValue = new BigDecimal(value)
                 this.molSpreadSheetCellUnit = molSpreadSheetCellUnit
                 break;
             case MolSpreadSheetCellType.lessThanNumeric :
-                numInternalValue = new BigDecimal(value)
+                if ("NaN".equals(value)) {
+                    activity  = false;
+                    numInternalValue =  new BigDecimal(0)
+                }  else
+                    numInternalValue = new BigDecimal(value)
                 this.molSpreadSheetCellUnit = molSpreadSheetCellUnit
                 break;
             case MolSpreadSheetCellType.identifier :

@@ -29,11 +29,11 @@ class MolecularSpreadSheetService {
             List<CartAssay> cartAssayList = retrieveCartAssayFromShoppingCart()
             List<CartProject> cartProjectList = retrieveCartProjectFromShoppingCart()
 
+
             if ((cartAssayList.size() > 0) &&
                     (cartCompoundList.size() > 0)) {
-
+                // Explicitly specified assays and explicitly specified compounds
                 List<Experiment> experimentList = cartAssaysToExperiments(cartAssayList)
-                // we want to fill this variable
                 molSpreadSheetData = populateMolSpreadSheetRowMetadata(molSpreadSheetData,cartCompoundList)
                 molSpreadSheetData = populateMolSpreadSheetColumnMetadata(molSpreadSheetData,cartAssayList)
                 Object etag = generateETagFromCartCompounds(cartCompoundList)
@@ -42,7 +42,7 @@ class MolecularSpreadSheetService {
 
             } else if ((cartAssayList.size() > 0) &&
                     (cartCompoundList.size() == 0)) {
-
+                // Explicitly specified assay, for which we will retrieve all compounds
                 List<Experiment> experimentList = cartAssaysToExperiments(cartAssayList)
                 Object etag =  retrieveImpliedCompoundsEtagFromAssaySpecification(experimentList)
                 molSpreadSheetData = populateMolSpreadSheetColumnMetadata(molSpreadSheetData,cartAssayList)
@@ -50,8 +50,6 @@ class MolecularSpreadSheetService {
                 Map map = convertSpreadSheetActivityToCompoundInformation(SpreadSheetActivityList)
                 molSpreadSheetData = populateMolSpreadSheetRowMetadata(molSpreadSheetData,map)
                 populateMolSpreadSheetData(molSpreadSheetData, experimentList, SpreadSheetActivityList)
-//                populateMolSpreadSheetData(molSpreadSheetData, experimentList, etag)
-//                molSpreadSheetData = populateMolSpreadSheetColumnMetadata(molSpreadSheetData,cartAssayList)
             }
 
 
@@ -61,10 +59,12 @@ class MolecularSpreadSheetService {
         molSpreadSheetData
     }
 
-
-
+    /**
+     * For a given SpreadSheetActivityList, pull back a map specifying all compounds, along with structures, CIDs, etc
+     * @param SpreadSheetActivityList
+     * @return
+     */
     Map convertSpreadSheetActivityToCompoundInformation(List<SpreadSheetActivity> SpreadSheetActivityList) {
-           // make a list of CIDs
         def compoundIds = new ArrayList<Long> ()
         for (SpreadSheetActivity spreadSheetActivity in SpreadSheetActivityList) {
             compoundIds.add(spreadSheetActivity.cid)
@@ -76,7 +76,7 @@ class MolecularSpreadSheetService {
 
 
     /**
-     * we can't display a molecular spreadsheet with out at least one assay and one compound
+     * When do we have sufficient data to charge often try to build a spreadsheet?
      *
      * @return
      */
@@ -90,9 +90,12 @@ class MolecularSpreadSheetService {
         returnValue
     }
 
-
-
-
+    /**
+     * For a set of experiments
+     * @param experimentList
+     * @param etag
+     * @return
+     */
       protected List<SpreadSheetActivity> extractMolSpreadSheetData(List<Experiment> experimentList, Object etag) {
         // now step through the data and place into molSpreadSheetData
         List<SpreadSheetActivity> spreadSheetActivityList = new ArrayList<SpreadSheetActivity>()
@@ -155,17 +158,18 @@ class MolecularSpreadSheetService {
 
 
     protected Object retrieveImpliedCompoundsEtagFromAssaySpecification(List<Experiment> experimentList) {
-        int  numVals = 1
+        int  numVals = 1000
         Object etag
         def compoundList = new ArrayList<Compound>()
         for (Experiment experiment in experimentList) {
             final ServiceIterator<Compound> compoundServiceIterator = this.queryServiceWrapper.restExperimentService.compounds(experiment)
-            List<Compound> singleExperimentCompoundList = compoundServiceIterator.next(numVals)
+            numVals  = 1000
+            List<Compound> singleExperimentCompoundList = compoundServiceIterator.next(numVals-1)
             etag = this.queryServiceWrapper.restCompoundService.newETag("dsa", singleExperimentCompoundList*.id);
         }
         etag
     }
-
+                                                                             the
 
 
 
