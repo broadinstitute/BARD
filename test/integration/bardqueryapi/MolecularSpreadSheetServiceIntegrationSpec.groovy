@@ -11,6 +11,8 @@ import org.junit.Before
 import spock.lang.Unroll
 
 import static junit.framework.Assert.assertNotNull
+import bard.core.Compound
+import bard.core.HillCurveValue
 
 @Unroll
 class MolecularSpreadSheetServiceIntegrationSpec extends IntegrationSpec {
@@ -95,8 +97,46 @@ class MolecularSpreadSheetServiceIntegrationSpec extends IntegrationSpec {
 //            assert true
 //    }
 
+    void  "test retrieve single value"() {
+        given: "That we have created"
+        Experiment experiment = restExperimentService.get(new Long(883))
+        final ServiceIterator<Compound> compoundServiceIterator = restExperimentService.compounds(experiment)
+        when: "We call the findAct"
+        assert experiment
+        List<Compound> compoundList = compoundServiceIterator.next(2)
+        Object etag = restCompoundService.newETag("find an experiment", compoundList*.id);
+        ServiceIterator<Value> eiter = this.restExperimentService.activities(experiment, etag);
+        assertNotNull eiter
+        eiter.hasNext()
+        Value value = eiter.next()
+        assert value
+        //final List<SpreadSheetActivity> activities = experiment.
+        then: "We expect experiments for each of the assays to be found"
+        assert true
+    }
 
-
+    void  "test retrieve multiple values"() {
+        given: "That we have identified experiemnt 346"
+        Experiment experiment = restExperimentService.get(new Long(346))
+        final ServiceIterator<Compound> compoundServiceIterator = restExperimentService.compounds(experiment)
+        when: "We call for the activities"
+        assert experiment
+        List<Compound> compoundList = compoundServiceIterator.next(3)
+        Object etag = restCompoundService.newETag("find experiment 346 data", compoundList*.id); // etag for 3 compounds
+        ServiceIterator<Value> experimentIterator = this.restExperimentService.activities(experiment, etag);
+        then: "We expect to see non-null activitiy for each compound"
+        int countValues  = 0
+        while (experimentIterator.hasNext()) {
+            Value experimentValue = experimentIterator.next()
+            SpreadSheetActivity spreadSheetActivity = molecularSpreadSheetService.extractActivitiesFromExperiment(experimentValue)
+            HillCurveValue hillCurveValue =  spreadSheetActivity.hillCurveValue
+            if ((hillCurveValue.s0 != null) &&
+                (hillCurveValue.sinf != null)&&
+                (hillCurveValue.coef != null))
+                countValues++;
+        }
+        assert countValues>1
+    }
 
     void "tests findActivitiesForCompounds #label"() {
         given: "That we have created an ETag from a list of CIDs"
@@ -154,4 +194,10 @@ class MolecularSpreadSheetServiceIntegrationSpec extends IntegrationSpec {
         molSpreadSheetData.rowPointer.put(5344L, 0)
         molSpreadSheetData
     }
+
+
+
+
+
+
 }
