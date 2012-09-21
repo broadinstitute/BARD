@@ -18,8 +18,12 @@ class MolSpreadSheetCell {
     MolSpreadSheetCellUnit molSpreadSheetCellUnit = MolSpreadSheetCellUnit.unknown
     SpreadSheetActivity spreadSheetActivity
     String supplementalInternalValue = null
-    // non image, no known units
-    MolSpreadSheetCell(String value, MolSpreadSheetCellType molSpreadSheetCellType, SpreadSheetActivity spreadSheetActivity=null) {
+    /**
+     *  non image, no known units
+     * @param value
+     * @param molSpreadSheetCellType
+     */
+    MolSpreadSheetCell(String value, MolSpreadSheetCellType molSpreadSheetCellType, SpreadSheetActivity spreadSheetActivity = null) {
         this.spreadSheetActivity = spreadSheetActivity
         this.molSpreadSheetCellType = molSpreadSheetCellType
         switch (this.molSpreadSheetCellType) {
@@ -69,8 +73,13 @@ class MolSpreadSheetCell {
         }
     }
 
-    // numeric elements with unit specifications
-    MolSpreadSheetCell(String value, MolSpreadSheetCellType molSpreadSheetCellType, MolSpreadSheetCellUnit molSpreadSheetCellUnit,SpreadSheetActivity spreadSheetActivity = null) {
+    /**
+     *  numeric elements with unit specifications
+     * @param value
+     * @param molSpreadSheetCellType
+     * @param molSpreadSheetCellUnit
+     */
+    MolSpreadSheetCell(String value, MolSpreadSheetCellType molSpreadSheetCellType, MolSpreadSheetCellUnit molSpreadSheetCellUnit, SpreadSheetActivity spreadSheetActivity = null) {
         this.spreadSheetActivity = spreadSheetActivity
         this.molSpreadSheetCellType = molSpreadSheetCellType
         switch (this.molSpreadSheetCellType) {
@@ -120,6 +129,12 @@ class MolSpreadSheetCell {
         }
     }
 
+    /**
+     * ctor for images
+     * @param value1
+     * @param value2
+     * @param molSpreadSheetCellType
+     */
     MolSpreadSheetCell(String value1, String value2, MolSpreadSheetCellType molSpreadSheetCellType, SpreadSheetActivity spreadSheetActivity = null) {
         this.molSpreadSheetCellType = molSpreadSheetCellType
         this.spreadSheetActivity = spreadSheetActivity
@@ -240,6 +255,4 @@ enum MolSpreadSheetCellUnit {
         }
         return null;
     }
-
-
 }

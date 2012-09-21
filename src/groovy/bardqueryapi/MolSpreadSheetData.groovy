@@ -71,9 +71,12 @@ class MolSpreadSheetData {
 
     MathContext mathContext
 
-
-
-
+    /**
+     * Display a cell, as specified by a row and column
+     * @param rowCnt
+     * @param colCnt
+     * @return
+     */
     LinkedHashMap displayValue(int rowCnt, int colCnt) {
         def returnValue = new  LinkedHashMap<String, String>()
         String key = "${rowCnt}_${colCnt}"
@@ -92,6 +95,7 @@ class MolSpreadSheetData {
         }
         returnValue
     }
+
     SpreadSheetActivity findSpreadSheetActivity(int rowCnt, int colCnt){
         SpreadSheetActivity spreadSheetActivity = null
         String key = "${rowCnt}_${colCnt}"
@@ -103,6 +107,11 @@ class MolSpreadSheetData {
         return spreadSheetActivity
     }
 
+
+    /**
+     *
+     * @return
+     */
     int getRowCount(){
         if (rowPointer == null)
             return 0
@@ -110,6 +119,10 @@ class MolSpreadSheetData {
             return rowPointer.size()
     }
 
+    /**
+     *
+     * @return
+     */
     int getColumnCount(){
         if (mssHeaders == null)
             return 0
