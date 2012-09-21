@@ -2,7 +2,7 @@
 # directory to write output XML (if this doesn't exist, the results will not be generated!)
 echo `pwd`
 
-OUTPUT_DIR="../../target/test-reports"
+OUTPUT_DIR="test-reports"
 mkdir $OUTPUT_DIR
 
 
