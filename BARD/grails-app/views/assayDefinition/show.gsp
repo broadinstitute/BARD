@@ -124,7 +124,7 @@
 	    </div>
     </g:if>
 
-</div><!-- End body div -->
+<!-- </div> End body div -->
 
 <r:script>
     $(function () {
@@ -142,17 +142,26 @@
             title:"New Card",
             autoOpen:false,
             modal:true,
-            zIndex: 3999,
-            buttons:{
-                Save:function () {
-                	$("#new_card_form").submit();
-                    $(this).dialog("close");
-                },
-                Cancel:function () {
-                    $(this).dialog("close");
-                }
-            }
+            draggable: false,
+            zIndex: 3999                        
         });
+        $("#dialog_new_card").dialog("option", "buttons", [
+            	{
+	            	text: "Save",
+	            	class: "btn btn-primary",
+	            	click: function(){
+	            		$("#new_card_form").submit();
+	                    $(this).dialog("close");
+	                }
+            	},
+            	{
+            		text: "Cancel",
+            		class: "btn",
+	            	click: function(){
+	                    $(this).dialog("close");
+            		}
+            	}        
+         ]);
         
         $("#new_card_form").ajaxForm({
     		url:'../addNewEmptyCard',
@@ -176,6 +185,7 @@
             width:450,
             title:"Delete card?",
             autoOpen:false,
+            draggable: false,
             zIndex: 3999,
             modal:true 
         });
@@ -186,16 +196,9 @@
             width:450,
             modal:true,
             autoOpen:false,
+            draggable: false,
             zIndex: 3999,
-            title:"Delete item?",
-            buttons:{
-                "Delete card":function () {
-                    $(this).dialog("close");
-                },
-                Cancel:function () {
-                    $(this).dialog("close");
-                }
-            }
+            title:"Delete item?",            
         });
     });
 </r:script>
@@ -213,6 +216,7 @@
         	$("#dialog_confirm_delete_card").dialog("option", "buttons",[
         		{
 					text: "Delete",
+					class: "btn btn-danger",
 					click: function(){
 						var data = {'assay_context_id':cardId };
 						$.ajax({
@@ -227,8 +231,9 @@
                     	$( this ).dialog( "close" );	
 					}
 				},
-				{
+				{					
 					text: "Cancel",
+					class: "btn",
 					click: function(){
 						$( this ).dialog( "close" );
 					}
@@ -250,6 +255,7 @@
         		$("#dialog_confirm_delete_item").dialog("option", "buttons",[
 				{
 					text: "Delete",
+					class: "btn btn-danger",
 					click: function(){
 						//alert("You clicked delete item with id: " + itemId + " and assayContext: " + assayContextId);
 						var data = {'assay_context_item_id':itemId };
@@ -269,6 +275,7 @@
 				},
 				{
 					text: "Cancel",
+					class: "btn",
 					click: function(){
 						$( this ).dialog( "close" );
 					}

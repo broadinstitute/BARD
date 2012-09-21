@@ -26,14 +26,23 @@
   line-height: 27px;
 }
 
-table.card caption {
-	
+.table caption {
+	font-size: 14px;
+	background-color: #C3D9FF;
+	font-weight:bold;
+	-webkit-border-radius: 4px;
+     -moz-border-radius: 4px;
+          border-radius: 4px;
+}
+
+.table tbody {
+	font-size: 14px;
 }
 
 .bs-docs {
   position: relative;
   margin: 5px 0;
-  padding: 10px 10px 10px;
+  padding: 7px 7px 7px;
   *padding-top: 10px;
   background-color: #fff;
   border: 1px solid #ddd;

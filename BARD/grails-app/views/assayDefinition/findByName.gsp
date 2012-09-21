@@ -2,9 +2,10 @@
 <!DOCTYPE html>
 <html>
 <head>
-<r:require modules="core"/>
+<r:require modules="core,bootstrap"/>
 <meta name="layout" content="basic"/>
-<title>Find Assay</title>
+<link rel="stylesheet" href="${resource(dir: 'css', file: 'bootstrap-plus.css')}" type="text/css">
+<title>CAP - Find assay by name</title>
 <r:script>
 	$(document).ready(function() {
 		var autoOpts = {
@@ -18,31 +19,43 @@
 
 </head>
 <body>
-<div>
-	<div class="ui-widget">
-		<formset>
-			<legend><h3>Search assay by name</h3></legend>
-			<g:if test="${flash.message}">
-				<div class="ui-widget">
-					<div class="ui-state-error ui-corner-all" style="margin-top: 20px; padding: 0 .7em;">
-					<p><span class="ui-icon ui-icon-alert" style="float: left; margin-right: .3em;"></span>
-					<strong>${flash.message}</strong></p>
-					</div>
-				</div>
-			</g:if>
-			<g:form action="findByName">
-				<label for="assayId">Enter Name:</label>
-				<g:textField id="name" name="assayName" value="${params.assayName}"/>
-				
-				<g:submitButton name="search" value="Search"/>
-			</g:form>
-		</formset>
+	<div class="row-fluid">
+	    <div class="span12">
+	    	<div class="hero-unit-v1">
+	        	<h4>Search assay by name</h4>
+	        </div>
+	    </div>
 	</div>
-	<div class="ui-widget">
-		<g:if test="${assays}">
-			<div id="results_accordion">
-			
-				<h3><a href="#">Assays (${assays.size()})</a></a></h3>
+
+    <g:if test="${flash.message}">
+	    <div class="row-fluid">
+		    <div class="span12">
+		        <div class="ui-widget">
+		            <div class="ui-state-error ui-corner-all" style="margin-top: 20px; padding: 0 .7em;">
+		                <p><span class="ui-icon ui-icon-alert" style="float: left; margin-right: .3em;"></span>
+		                    <strong>${flash.message}</strong>
+		            </div>
+		        </div>
+		    </div>
+	    </div>
+    </g:if>
+    
+    <div class="row-fluid">
+	    <div class="span12">
+	    	<div class="bs-docs" style="padding: 20px 20px 20px;">
+	        	<g:form action="findByName" class="form-inline">	
+	        		<label class="control-label" for="assayName">Enter Assay Name:</label>
+	        		<input type="text" size="50" id="name" name='assayName' value="${params.assayName}">														
+					<g:submitButton name="search" value="Search" class="btn btn-primary"/>
+				</g:form>
+	        </div>
+	    </div>
+	</div>
+	
+	<g:if test="${assays}">
+	<div class="row-fluid">
+	    <div class="span12" id="results_accordion">
+	    		<h3><a href="#">Assays (${assays.size()})</a></a></h3>
 				<div>
 					<g:if test="${assays.size() > 0}">
 						<div>		
@@ -76,13 +89,8 @@
 				
 				<h3><a href="#">Projects</a></h3>
 				<div>No data</div>
-					
-			</div>
-					
-		</g:if>
-		
+	    </div>
 	</div>
-	
-</div><!-- End body div -->
+	</g:if>
 </body>
 </html>
