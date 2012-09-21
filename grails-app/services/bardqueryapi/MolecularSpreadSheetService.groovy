@@ -37,7 +37,7 @@ class MolecularSpreadSheetService {
                 molSpreadSheetData = populateMolSpreadSheetRowMetadata(molSpreadSheetData,cartCompoundList)
                 molSpreadSheetData = populateMolSpreadSheetColumnMetadata(molSpreadSheetData,cartAssayList)
                 Object etag = generateETagFromCartCompounds(cartCompoundList)
-                List<SpreadSheetActivity> SpreadSheetActivityList = extractMolSpreadSheetData( experimentList, etag)
+                List<SpreadSheetActivity> SpreadSheetActivityList = extractMolSpreadSheetData(molSpreadSheetData,  experimentList, etag)
                 populateMolSpreadSheetData(molSpreadSheetData, experimentList, SpreadSheetActivityList)
 
             } else if ((cartAssayList.size() > 0) &&
@@ -46,7 +46,7 @@ class MolecularSpreadSheetService {
                 List<Experiment> experimentList = cartAssaysToExperiments(cartAssayList)
                 Object etag =  retrieveImpliedCompoundsEtagFromAssaySpecification(experimentList)
                 molSpreadSheetData = populateMolSpreadSheetColumnMetadata(molSpreadSheetData,cartAssayList)
-                List<SpreadSheetActivity> SpreadSheetActivityList = extractMolSpreadSheetData( experimentList, etag )
+                List<SpreadSheetActivity> SpreadSheetActivityList = extractMolSpreadSheetData(molSpreadSheetData, experimentList, etag )
                 Map map = convertSpreadSheetActivityToCompoundInformation(SpreadSheetActivityList)
                 molSpreadSheetData = populateMolSpreadSheetRowMetadata(molSpreadSheetData,map)
                 populateMolSpreadSheetData(molSpreadSheetData, experimentList, SpreadSheetActivityList)
@@ -96,12 +96,13 @@ class MolecularSpreadSheetService {
      * @param etag
      * @return
      */
-      protected List<SpreadSheetActivity> extractMolSpreadSheetData(List<Experiment> experimentList, Object etag) {
+      protected List<SpreadSheetActivity> extractMolSpreadSheetData(MolSpreadSheetData molSpreadSheetData,List<Experiment> experimentList, Object etag) {
         // now step through the data and place into molSpreadSheetData
         List<SpreadSheetActivity> spreadSheetActivityList = new ArrayList<SpreadSheetActivity>()
 
         // we need to handle each experiment separately ( until NCGC can do this in the background )
         // Note that each experiment corresponds to a column in our spreadsheet
+        int columnCount = 0
         for (Experiment experiment in experimentList) {
 
             ServiceIterator<Value> experimentIterator = queryServiceWrapper.restExperimentService.activities(experiment, etag)
@@ -110,9 +111,13 @@ class MolecularSpreadSheetService {
             Value experimentValue
             while (experimentIterator.hasNext()) {
                 experimentValue = experimentIterator.next()
+                Long translation = new Long(experimentValue.id.split("\\.")[0])
+                if (!molSpreadSheetData.columnPointer.containsKey(translation)) {
+                   molSpreadSheetData.columnPointer.put(translation,columnCount)
+                }
                 spreadSheetActivityList.add(extractActivitiesFromExperiment(experimentValue))
             }
-
+            columnCount++
         }
         spreadSheetActivityList
     }
@@ -134,7 +139,8 @@ class MolecularSpreadSheetService {
             for (SpreadSheetActivity spreadSheetActivity in spreadSheetActivityList) {
                 if (molSpreadSheetData.rowPointer.containsKey(spreadSheetActivity.cid)) {
                     int innerRowPointer = molSpreadSheetData.rowPointer[spreadSheetActivity.cid]
-                    String arrayKey = "${innerRowPointer}_${columnPointer+2}"
+                    int innerColumnCount = molSpreadSheetData.columnPointer[spreadSheetActivity.eid]
+                    String arrayKey = "${innerRowPointer}_${innerColumnCount+2}"
                     Double activityValue =  spreadSheetActivity.interpretHillCurveValue()
                     MolSpreadSheetCell molSpreadSheetCell = new MolSpreadSheetCell(activityValue.toString(), MolSpreadSheetCellType.numeric)
                     if (activityValue == Double.NaN)
@@ -159,13 +165,16 @@ class MolecularSpreadSheetService {
 
     protected Object retrieveImpliedCompoundsEtagFromAssaySpecification(List<Experiment> experimentList) {
         int  numVals = 1000
-        Object etag
+        Object etag = null
         def compoundList = new ArrayList<Compound>()
         for (Experiment experiment in experimentList) {
             final ServiceIterator<Compound> compoundServiceIterator = this.queryServiceWrapper.restExperimentService.compounds(experiment)
             numVals  = 1000
             List<Compound> singleExperimentCompoundList = compoundServiceIterator.next(numVals-1)
-            etag = this.queryServiceWrapper.restCompoundService.newETag("dsa", singleExperimentCompoundList*.id);
+            if  ( etag == null )
+                etag = this.queryServiceWrapper.restCompoundService.newETag("dsa", singleExperimentCompoundList*.id);
+            else
+                this.queryServiceWrapper.restCompoundService.putETag(etag, singleExperimentCompoundList*.id);
         }
         etag
     }
