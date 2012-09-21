@@ -14,6 +14,8 @@ class MolecularSpreadSheetService {
     QueryHelperService queryHelperService
     IQueryService queryService
 
+    final static Integer MAXIMUM_NUMBER_OF_COMPOUNDS = 1000
+
     /**
      * High-level routine to pull information out of the query cart and store it into a data structure suitable
      * for passing to the molecular spreadsheet.
@@ -29,13 +31,23 @@ class MolecularSpreadSheetService {
             List<CartAssay> cartAssayList = retrieveCartAssayFromShoppingCart()
             List<CartProject> cartProjectList = retrieveCartProjectFromShoppingCart()
 
+            // need a list of experiments to work with.  Build up that list...
+            List<Experiment> experimentList =  new ArrayList<Experiment>()
+
+            // Any projects can be converted to assays, then assays to experiments
+
+            Collection <Assay> assayCollection
+            if (cartProjectList.size() > 0)   {
+                assayCollection = cartProjectsToAssays( cartProjectList)
+            }
+
 
             if ((cartAssayList.size() > 0) &&
                     (cartCompoundList.size() > 0)) {
                 // Explicitly specified assays and explicitly specified compounds
-                List<Experiment> experimentList = cartAssaysToExperiments(cartAssayList)
+                experimentList = cartAssaysToExperiments(cartAssayList)
                 molSpreadSheetData = populateMolSpreadSheetRowMetadata(molSpreadSheetData,cartCompoundList)
-                molSpreadSheetData = populateMolSpreadSheetColumnMetadata(molSpreadSheetData,cartAssayList)
+                molSpreadSheetData = populateMolSpreadSheetColumnMetadata(molSpreadSheetData,experimentList)
                 Object etag = generateETagFromCartCompounds(cartCompoundList)
                 List<SpreadSheetActivity> SpreadSheetActivityList = extractMolSpreadSheetData(molSpreadSheetData,  experimentList, etag)
                 populateMolSpreadSheetData(molSpreadSheetData, experimentList, SpreadSheetActivityList)
@@ -43,9 +55,9 @@ class MolecularSpreadSheetService {
             } else if ((cartAssayList.size() > 0) &&
                     (cartCompoundList.size() == 0)) {
                 // Explicitly specified assay, for which we will retrieve all compounds
-                List<Experiment> experimentList = cartAssaysToExperiments(cartAssayList)
+                experimentList = cartAssaysToExperiments(cartAssayList)
                 Object etag =  retrieveImpliedCompoundsEtagFromAssaySpecification(experimentList)
-                molSpreadSheetData = populateMolSpreadSheetColumnMetadata(molSpreadSheetData,cartAssayList)
+                molSpreadSheetData = populateMolSpreadSheetColumnMetadata(molSpreadSheetData,experimentList)
                 List<SpreadSheetActivity> SpreadSheetActivityList = extractMolSpreadSheetData(molSpreadSheetData, experimentList, etag )
                 Map map = convertSpreadSheetActivityToCompoundInformation(SpreadSheetActivityList)
                 molSpreadSheetData = populateMolSpreadSheetRowMetadata(molSpreadSheetData,map)
@@ -81,14 +93,15 @@ class MolecularSpreadSheetService {
      * @return
      */
     Boolean weHaveEnoughDataToMakeASpreadsheet() {
-        boolean returnValue = true
+        boolean returnValue = false
         LinkedHashMap<String,List> itemsInShoppingCart = queryCartService.groupUniqueContentsByType(shoppingCartService)
-        if (queryCartService?.totalNumberOfUniqueItemsInCart(itemsInShoppingCart,QueryCartService.cartAssay)<1)
-            returnValue = false
-        if (queryCartService?.totalNumberOfUniqueItemsInCart(itemsInShoppingCart,QueryCartService.cartCompound)<0)
-            returnValue = false
+        if (queryCartService?.totalNumberOfUniqueItemsInCart(itemsInShoppingCart,QueryCartService.cartProject)>0)
+            returnValue = true
+        else if (queryCartService?.totalNumberOfUniqueItemsInCart(itemsInShoppingCart,QueryCartService.cartAssay)>0)
+            returnValue = true
         returnValue
     }
+
 
     /**
      * For a set of experiments
@@ -122,13 +135,12 @@ class MolecularSpreadSheetService {
         spreadSheetActivityList
     }
 
-
-
-
-
-
-
-
+    /**
+     *
+     * @param molSpreadSheetData
+     * @param experimentList
+     * @param spreadSheetActivityList
+     */
     protected void populateMolSpreadSheetData(MolSpreadSheetData molSpreadSheetData, List<Experiment> experimentList, List<SpreadSheetActivity> spreadSheetActivityList) {
         // now step through the data and place into molSpreadSheetData
         int columnPointer = 0
@@ -156,21 +168,17 @@ class MolecularSpreadSheetService {
         molSpreadSheetData
     }
 
-
-
-
-
-
-
-
+    /**
+     *
+     * @param experimentList
+     * @return
+     */
     protected Object retrieveImpliedCompoundsEtagFromAssaySpecification(List<Experiment> experimentList) {
-        int  numVals = 1000
         Object etag = null
         def compoundList = new ArrayList<Compound>()
         for (Experiment experiment in experimentList) {
             final ServiceIterator<Compound> compoundServiceIterator = this.queryServiceWrapper.restExperimentService.compounds(experiment)
-            numVals  = 1000
-            List<Compound> singleExperimentCompoundList = compoundServiceIterator.next(numVals-1)
+            List<Compound> singleExperimentCompoundList = compoundServiceIterator.next(MAXIMUM_NUMBER_OF_COMPOUNDS)
             if  ( etag == null )
                 etag = this.queryServiceWrapper.restCompoundService.newETag("dsa", singleExperimentCompoundList*.id);
             else
@@ -180,24 +188,6 @@ class MolecularSpreadSheetService {
     }
 
 
-
-
-//    protected List<Compound> retrieveCartCompoundFromAssaySpecification(List<Experiment> experimentList) {
-//        int  numVals = 1
-//        def compoundList = new ArrayList<Compound>()
-//        for (Experiment experiment in experimentList) {
-//            final ServiceIterator<Compound> compoundServiceIterator = this.queryServiceWrapper.restExperimentService.compounds(experiment)
-//            List<Compound> singleExperimentCompoundList = compoundServiceIterator.next(numVals)
-//            Object etag = this.queryServiceWrapper.restCompoundService.newETag("dsa", singleExperimentCompoundList*.id);
-//            this.queryServiceWrapper.restExperimentService.activities(experiment, etag);
-//            ServiceIterator<Value> eiter = this.queryServiceWrapper.restExperimentService.activities(experiment, etag);
-//            while (eiter.hasNext()) {
-//                Value value = eiter.next()
-//                println  value
-//            }
-//        }
-//        compoundList
-//    }
 
     protected List<CartCompound> retrieveCartCompoundFromShoppingCart() {
         List<CartCompound> cartCompoundList = new ArrayList<CartCompound>()
@@ -269,17 +259,29 @@ class MolecularSpreadSheetService {
     }
 
 
+//
+//    protected  MolSpreadSheetData populateMolSpreadSheetColumnMetadata(MolSpreadSheetData molSpreadSheetData,List<CartAssay> cartAssayList) {
+//        // get the header names from the assays
+//        molSpreadSheetData.mssHeaders.add("Struct")
+//        molSpreadSheetData.mssHeaders.add("CID")
+//        for (CartAssay cartAssay in cartAssayList){
+//            molSpreadSheetData.mssHeaders.add(cartAssay.assayTitle)
+//        }
+//
+//        molSpreadSheetData
+//    }
 
-    protected  MolSpreadSheetData populateMolSpreadSheetColumnMetadata(MolSpreadSheetData molSpreadSheetData,List<CartAssay> cartAssayList) {
+
+    protected  MolSpreadSheetData populateMolSpreadSheetColumnMetadata(MolSpreadSheetData molSpreadSheetData,List<Experiment> experimentList ) {
         // get the header names from the assays
         molSpreadSheetData.mssHeaders.add("Struct")
         molSpreadSheetData.mssHeaders.add("CID")
-        for (CartAssay cartAssay in cartAssayList){
-            molSpreadSheetData.mssHeaders.add(cartAssay.assayTitle)
-        }
+        for (Experiment experiment in experimentList)
+            molSpreadSheetData.mssHeaders.add(experiment.name)
 
         molSpreadSheetData
     }
+
 
 
     protected Object generateETagFromCartCompounds(List<CartCompound> cartCompoundList) {
@@ -290,9 +292,6 @@ class MolecularSpreadSheetService {
 
         queryServiceWrapper.restCompoundService.newETag(date.toString(), cartCompoundIdList);
     }
-
-    // start by working through the compounds. First gather CartCompound
-
 
 
     /**
@@ -334,6 +333,27 @@ class MolecularSpreadSheetService {
         }
         new ArrayList<Long> ()
     }
+
+
+
+
+
+     protected Collection<Assay> cartProjectsToAssays( List<CartProject> cartProjects) {
+
+        List<Long> projectIds = []
+        for (CartProject cartProject  : cartProjects) {
+            long ProjectId = cartProject.projectId
+            projectIds.add(ProjectId)
+        }
+
+        final Collection<Project> projects = queryServiceWrapper.getRestProjectService().get(projectIds)
+
+        final Collection<Assay> assays =  projects*.assays()
+
+         assays
+    }
+
+
 
 
 
