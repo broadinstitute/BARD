@@ -18,7 +18,13 @@ class MolSpreadSheetCell {
     MolSpreadSheetCellUnit molSpreadSheetCellUnit =  MolSpreadSheetCellUnit.unknown
 
     String supplementalInternalValue = null
-    // non image, no known units
+
+
+    /**
+     *  non image, no known units
+     * @param value
+     * @param molSpreadSheetCellType
+     */
     MolSpreadSheetCell( String value, MolSpreadSheetCellType molSpreadSheetCellType ){
         this.molSpreadSheetCellType = molSpreadSheetCellType
         switch (this.molSpreadSheetCellType) {
@@ -68,7 +74,13 @@ class MolSpreadSheetCell {
         }
     }
 
-    // numeric elements with unit specifications
+
+    /**
+     *  numeric elements with unit specifications
+     * @param value
+     * @param molSpreadSheetCellType
+     * @param molSpreadSheetCellUnit
+     */
     MolSpreadSheetCell( String value, MolSpreadSheetCellType molSpreadSheetCellType, MolSpreadSheetCellUnit molSpreadSheetCellUnit ){
         this.molSpreadSheetCellType = molSpreadSheetCellType
         switch (this.molSpreadSheetCellType) {
@@ -117,6 +129,13 @@ class MolSpreadSheetCell {
                 objInternalValue = value
         }
     }
+
+    /**
+     * ctor for images
+     * @param value1
+     * @param value2
+     * @param molSpreadSheetCellType
+     */
     MolSpreadSheetCell( String value1,String value2, MolSpreadSheetCellType molSpreadSheetCellType ){
             this.molSpreadSheetCellType = molSpreadSheetCellType
             switch (this.molSpreadSheetCellType) {

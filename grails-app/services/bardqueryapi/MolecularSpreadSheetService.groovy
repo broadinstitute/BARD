@@ -30,43 +30,46 @@ class MolecularSpreadSheetService {
             List<CartCompound> cartCompoundList = retrieveCartCompoundFromShoppingCart()
             List<CartAssay> cartAssayList = retrieveCartAssayFromShoppingCart()
             List<CartProject> cartProjectList = retrieveCartProjectFromShoppingCart()
+            Object etag
+            List<SpreadSheetActivity> SpreadSheetActivityList
 
             // need a list of experiments to work with.  Build up that list...
             List<Experiment> experimentList =  new ArrayList<Experiment>()
 
             // Any projects can be converted to assays, then assays to experiments
-
-            Collection <Assay> assayCollection
             if (cartProjectList.size() > 0)   {
-                assayCollection = cartProjectsToAssays( cartProjectList)
+                Collection <Assay> assayCollection = cartProjectsToAssays( cartProjectList)
+                experimentList =  assaysToExperiments(assayCollection)
             }
 
+            // Any assays explicitly selected on the cart are added to the  experimentList
+            if (cartAssayList.size() > 0)
+                experimentList = cartAssaysToExperiments(experimentList,cartAssayList)
 
-            if ((cartAssayList.size() > 0) &&
-                    (cartCompoundList.size() > 0)) {
-                // Explicitly specified assays and explicitly specified compounds
-                experimentList = cartAssaysToExperiments(cartAssayList)
-                molSpreadSheetData = populateMolSpreadSheetRowMetadata(molSpreadSheetData,cartCompoundList)
-                molSpreadSheetData = populateMolSpreadSheetColumnMetadata(molSpreadSheetData,experimentList)
-                Object etag = generateETagFromCartCompounds(cartCompoundList)
-                List<SpreadSheetActivity> SpreadSheetActivityList = extractMolSpreadSheetData(molSpreadSheetData,  experimentList, etag)
+            // next deal with the compounds
+            if (experimentList.size() > 0) {
+
+                if (cartCompoundList.size() > 0) {
+                    // Explicitly specified assays and explicitly specified compounds
+                    molSpreadSheetData = populateMolSpreadSheetRowMetadata(molSpreadSheetData, cartCompoundList)
+                    molSpreadSheetData = populateMolSpreadSheetColumnMetadata(molSpreadSheetData, experimentList)
+                    etag = generateETagFromCartCompounds(cartCompoundList)
+                    SpreadSheetActivityList = extractMolSpreadSheetData(molSpreadSheetData, experimentList, etag)
+                } else if (cartCompoundList.size() == 0) {
+                    // Explicitly specified assay, for which we will retrieve all compounds
+                    etag = retrieveImpliedCompoundsEtagFromAssaySpecification(experimentList)
+                    molSpreadSheetData = populateMolSpreadSheetColumnMetadata(molSpreadSheetData, experimentList)
+                    SpreadSheetActivityList = extractMolSpreadSheetData(molSpreadSheetData, experimentList, etag)
+                    Map map = convertSpreadSheetActivityToCompoundInformation(SpreadSheetActivityList)
+                    molSpreadSheetData = populateMolSpreadSheetRowMetadata(molSpreadSheetData, map)
+                }
+
+                // finally deal with the data
                 populateMolSpreadSheetData(molSpreadSheetData, experimentList, SpreadSheetActivityList)
+            } else
 
-            } else if ((cartAssayList.size() > 0) &&
-                    (cartCompoundList.size() == 0)) {
-                // Explicitly specified assay, for which we will retrieve all compounds
-                experimentList = cartAssaysToExperiments(cartAssayList)
-                Object etag =  retrieveImpliedCompoundsEtagFromAssaySpecification(experimentList)
-                molSpreadSheetData = populateMolSpreadSheetColumnMetadata(molSpreadSheetData,experimentList)
-                List<SpreadSheetActivity> SpreadSheetActivityList = extractMolSpreadSheetData(molSpreadSheetData, experimentList, etag )
-                Map map = convertSpreadSheetActivityToCompoundInformation(SpreadSheetActivityList)
-                molSpreadSheetData = populateMolSpreadSheetRowMetadata(molSpreadSheetData,map)
-                populateMolSpreadSheetData(molSpreadSheetData, experimentList, SpreadSheetActivityList)
-            }
-
-
-        }  else
-            molSpreadSheetData  = new MolSpreadSheetData()
+                molSpreadSheetData = new MolSpreadSheetData()
+        }
 
         molSpreadSheetData
     }
@@ -84,6 +87,9 @@ class MolecularSpreadSheetService {
         List<SearchFilter> filters = new ArrayList<SearchFilter> ()
         queryService.findCompoundsByCIDs(compoundIds,filters)
     }
+
+
+
 
 
 
@@ -335,10 +341,13 @@ class MolecularSpreadSheetService {
     }
 
 
-
-
-
-     protected Collection<Assay> cartProjectsToAssays( List<CartProject> cartProjects) {
+    /**
+     * Turn projects into assays
+     *
+     * @param cartProjects
+     * @return
+     */
+     protected List<Assay> cartProjectsToAssays( List<CartProject> cartProjects) {
 
         List<Long> projectIds = []
         for (CartProject cartProject  : cartProjects) {
@@ -346,30 +355,62 @@ class MolecularSpreadSheetService {
             projectIds.add(ProjectId)
         }
 
-        final Collection<Project> projects = queryServiceWrapper.getRestProjectService().get(projectIds)
-
-        final Collection<Assay> assays =  projects*.assays()
-
-         assays
+        final List<Project> projectList = queryServiceWrapper.getRestProjectService().get(projectIds)
+         List<Assay> returnAssayList = new ArrayList<Assay>()
+        for (Project project in projectList)  {
+            def assayList =  project.assays()
+            if (assayList.hasNext())  {
+                Iterator<Assay> assayIterator = assayList.iterator()
+                while (assayIterator.hasNext()) {
+                    Assay assay = assayIterator.next()
+                    returnAssayList.add(assay )
+               }
+            }
+        }
+        returnAssayList
     }
-
-
-
-
 
     /**
      * Convert Assay ODs to expt ids
      * @param cartAssays
      * @return
      */
-    protected List<Experiment> cartAssaysToExperiments(final List<CartAssay> cartAssays) {
+    protected List<Experiment> assaysToExperiments(final Collection<Assay> assays) {
+        List<Experiment> allExperiments = []
+        if (!assays.isEmpty())  {
+           Iterator<Assay> assayIterator = assays.iterator()
+           while (assayIterator.hasNext()) {
+               Assay assay = assayIterator.next()
+               Collection<Experiment> experimentList = assay.getExperiments()
+               for (Experiment experiment in experimentList) {
+                   allExperiments.add(experiment)
+               }
+           }
+        }
+
+        return allExperiments
+    }
+
+
+
+
+    /**
+     * Convert Cart assays to Experiments
+     * @param cartAssays
+     * @return
+     */
+    protected List<Experiment> cartAssaysToExperiments(List<Experiment> incomingExperimentList, final List<CartAssay> cartAssays) {
         List<Long> assayIds = []
         for (CartAssay cartAssay : cartAssays) {
             long assayId = cartAssay.assayId
             assayIds.add(assayId)
         }
 
-        List<Experiment> allExperiments = []
+        List<Experiment> allExperiments
+        if (incomingExperimentList ==null)
+            allExperiments = []
+        else
+            allExperiments =  incomingExperimentList
         for (Long individualAssayIds in assayIds) {
             Assay assay = queryServiceWrapper.getRestAssayService().get(individualAssayIds)
             Collection<Experiment> experimentList = assay.getExperiments()
