@@ -92,7 +92,16 @@ class MolSpreadSheetData {
         }
         returnValue
     }
-
+    SpreadSheetActivity findSpreadSheetActivity(int rowCnt, int colCnt){
+        SpreadSheetActivity spreadSheetActivity = null
+        String key = "${rowCnt}_${colCnt}"
+        MolSpreadSheetCell molSpreadSheetCell
+        if (mssData.containsKey(key)) {
+            molSpreadSheetCell = mssData[key]
+            spreadSheetActivity = molSpreadSheetCell.spreadSheetActivity
+        }
+        return spreadSheetActivity
+    }
 
     int getRowCount(){
         if (rowPointer == null)

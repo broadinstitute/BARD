@@ -141,7 +141,7 @@ class MolecularSpreadSheetService {
                     int innerColumnCount = molSpreadSheetData.columnPointer[spreadSheetActivity.eid]
                     String arrayKey = "${innerRowPointer}_${innerColumnCount + 2}"
                     Double activityValue = spreadSheetActivity.interpretHillCurveValue()
-                    MolSpreadSheetCell molSpreadSheetCell = new MolSpreadSheetCell(activityValue.toString(), MolSpreadSheetCellType.numeric)
+                    MolSpreadSheetCell molSpreadSheetCell = new MolSpreadSheetCell(activityValue.toString(), MolSpreadSheetCellType.numeric,spreadSheetActivity)
                     if (activityValue == Double.NaN)
                         molSpreadSheetCell.activity = false
                     molSpreadSheetData.mssData.put(arrayKey, molSpreadSheetCell)

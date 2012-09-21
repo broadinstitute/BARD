@@ -1,4 +1,4 @@
-<%@ page import="bardqueryapi.MolecularSpreadSheetService; bardqueryapi.FacetFormType" %>
+<%@ page import="bardqueryapi.SpreadSheetActivity; bardqueryapi.MolecularSpreadSheetService; bardqueryapi.FacetFormType" %>
 <%@ page import="bardqueryapi.MolSpreadSheetCell; bardqueryapi.MolSpreadSheetCellType; bardqueryapi.MolSpreadSheetData;" %>
 <%@ page import="com.metasieve.shoppingcart.ShoppingCartService;" %>
 <%
@@ -61,6 +61,13 @@
                         </td>
                     <g:each  var="colCnt" in="${2..(molSpreadSheetData.getColumnCount()-1)}">
                         <td class="molSpreadSheet" property="var${colCnt}">
+
+                           <% SpreadSheetActivity experimentData = molSpreadSheetData?.findSpreadSheetActivity( rowCnt, colCnt )  %>
+                            <img alt="" title=""
+                                 src="${createLink(controller: 'doseResponseCurve', action: 'doseResponseCurve', params: [sinf: experimentData?.hillCurveValue?.sInf, s0: experimentData?.hillCurveValue?.s0, ac50: experimentData?.hillCurveValue?.slope, hillSlope: experimentData?.hillCurveValue?.coef, concentrations: experimentData?.hillCurveValue?.conc, activities: experimentData?.hillCurveValue?.response])}"/>
+                            <br/><br/>
+                            %{--<p>AC50 = ${experimentData?.hillCurveValue?.slope}</p>--}%
+
                             <a href="#" class="requestDoseResponseImage" concs="foo" resps="fi">${molSpreadSheetData?.displayValue( rowCnt, colCnt )?."value"}</a>
                         </td>
                     </g:each>
@@ -70,6 +77,6 @@
             </table>
         </div>
     </div>
-    <div class="plot" id="plot"></div>
+    %{--<div class="plot" id="plot"></div>--}%
 </body>
 </html>
