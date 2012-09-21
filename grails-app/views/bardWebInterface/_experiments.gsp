@@ -6,6 +6,7 @@
             </h3>
             <div><g:textBlock>${experiment.description}</g:textBlock></div>
             <p>TODO: Display Results Summary</p>
+            <g:link controller="bardWebInterface" action="showExperimentResult" id="${experiment.id}">Results</g:link>
         </div>
     </g:each>
 </div>

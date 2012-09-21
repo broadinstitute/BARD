@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="Firefox_1501_Windows.Testing cart.js Test QueryCart.toggleDetailsHandler" errors="0" failures="0" tests="2" time="0.017">
+<testcase classname="Firefox_1501_Windows.Testing cart.js Test QueryCart.toggleDetailsHandler" name="should switch to the expanded view after toggle if summary was being displayed" time="0.0090"/>
+<testcase classname="Firefox_1501_Windows.Testing cart.js Test QueryCart.toggleDetailsHandler" name="should switch to the summary view after toggle if details view was being displayed" time="0.0080"/>
+</testsuite>

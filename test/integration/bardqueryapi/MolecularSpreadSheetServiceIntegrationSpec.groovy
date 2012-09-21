@@ -1,18 +1,14 @@
 package bardqueryapi
 
-import bard.core.Experiment
-import bard.core.ServiceIterator
-import bard.core.Value
 import bard.core.rest.RESTCompoundService
 import bard.core.rest.RESTExperimentService
 import grails.plugin.spock.IntegrationSpec
 import org.junit.After
 import org.junit.Before
 import spock.lang.Unroll
+import bard.core.*
 
 import static junit.framework.Assert.assertNotNull
-import bard.core.Compound
-import bard.core.HillCurveValue
 
 @Unroll
 class MolecularSpreadSheetServiceIntegrationSpec extends IntegrationSpec {
@@ -35,6 +31,34 @@ class MolecularSpreadSheetServiceIntegrationSpec extends IntegrationSpec {
     @After
     void tearDown() {
 
+    }
+
+    void "test findExperimentDataById #label"() {
+
+        when: "We call the findExperimentDataById method with the experimentId #experimentId"
+        final Map<Long, List<SpreadSheetActivity>> experimentDataMap = molecularSpreadSheetService.findExperimentDataById(experimentId, top, skip)
+
+        then: "We get back the expected map"
+        assert experimentDataMap
+        final Long totalActivities = experimentDataMap.total
+        final AssayValues.AssayRole role = experimentDataMap.role
+        println role
+        println totalActivities
+        assert totalActivities
+        final List<SpreadSheetActivity> activities = experimentDataMap.spreadSheetActivities
+        assert activities
+        assert activities.size() == 10
+        for (SpreadSheetActivity spreadSheetActivity : activities) {
+            assert spreadSheetActivity
+            assert spreadSheetActivity.cid
+            assert spreadSheetActivity.eid
+            assert spreadSheetActivity.sid
+            assert spreadSheetActivity.hillCurveValue
+        }
+        where:
+        label                                              | experimentId   | top | skip
+        "An existing experiment with activities - skip 0"  | new Long(1326) | 10  | 0
+        "An existing experiment with activities - skip 10" | new Long(1326) | 10  | 10
     }
 
     void "tests cartAssaysToExperiments #label"() {
@@ -97,7 +121,7 @@ class MolecularSpreadSheetServiceIntegrationSpec extends IntegrationSpec {
 //            assert true
 //    }
 
-    void  "test retrieve single value"() {
+    void "test retrieve single value"() {
         given: "That we have created"
         Experiment experiment = restExperimentService.get(new Long(883))
         final ServiceIterator<Compound> compoundServiceIterator = restExperimentService.compounds(experiment)
@@ -115,7 +139,7 @@ class MolecularSpreadSheetServiceIntegrationSpec extends IntegrationSpec {
         assert true
     }
 
-    void  "test retrieve multiple values"() {
+    void "test retrieve multiple values"() {
         given: "That we have identified experiemnt 346"
         Experiment experiment = restExperimentService.get(new Long(346))
         final ServiceIterator<Compound> compoundServiceIterator = restExperimentService.compounds(experiment)
@@ -125,17 +149,17 @@ class MolecularSpreadSheetServiceIntegrationSpec extends IntegrationSpec {
         Object etag = restCompoundService.newETag("find experiment 346 data", compoundList*.id); // etag for 3 compounds
         ServiceIterator<Value> experimentIterator = this.restExperimentService.activities(experiment, etag);
         then: "We expect to see non-null activitiy for each compound"
-        int countValues  = 0
+        int countValues = 0
         while (experimentIterator.hasNext()) {
             Value experimentValue = experimentIterator.next()
             SpreadSheetActivity spreadSheetActivity = molecularSpreadSheetService.extractActivitiesFromExperiment(experimentValue)
-            HillCurveValue hillCurveValue =  spreadSheetActivity.hillCurveValue
+            HillCurveValue hillCurveValue = spreadSheetActivity.hillCurveValue
             if ((hillCurveValue.s0 != null) &&
-                (hillCurveValue.sinf != null)&&
-                (hillCurveValue.coef != null))
+                    (hillCurveValue.sinf != null) &&
+                    (hillCurveValue.coef != null))
                 countValues++;
         }
-        assert countValues>1
+        assert countValues > 1
     }
 
     void "tests findActivitiesForCompounds #label"() {
@@ -194,10 +218,6 @@ class MolecularSpreadSheetServiceIntegrationSpec extends IntegrationSpec {
         molSpreadSheetData.rowPointer.put(5344L, 0)
         molSpreadSheetData
     }
-
-
-
-
 
 
 }

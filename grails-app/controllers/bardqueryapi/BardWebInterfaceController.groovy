@@ -11,7 +11,7 @@ import promiscuity.PromiscuityScore
 import promiscuity.Scaffold
 
 import javax.servlet.http.HttpServletResponse
-import org.json.XML
+
 import grails.converters.JSON
 
 /**
@@ -26,6 +26,7 @@ import grails.converters.JSON
 class BardWebInterfaceController {
     def shoppingCartService
     IQueryService queryService
+    MolecularSpreadSheetService molecularSpreadSheetService
     List<SearchFilter> filters = []
 
     def index() {
@@ -38,6 +39,13 @@ class BardWebInterfaceController {
     }
 
     def searchResults() {
+    }
+
+    def showExperimentResult(Long id) {
+        int top = 10
+        int skip = 0
+        final Map experimentDataMap = molecularSpreadSheetService.findExperimentDataById(id, top, skip)
+        return experimentDataMap
     }
 
     def promiscuity(Long cid) {

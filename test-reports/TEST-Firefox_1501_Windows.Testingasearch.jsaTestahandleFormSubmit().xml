@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="Firefox_1501_Windows.Testing search.js Test handleFormSubmit()" errors="0" failures="0" tests="3" time="0.0020">
+<testcase classname="Firefox_1501_Windows.Testing search.js Test handleFormSubmit()" name="should verify that only handleAllFreeTextSearches() is called" time="0.0010"/>
+<testcase classname="Firefox_1501_Windows.Testing search.js Test handleFormSubmit()" name="should verify that only handleAllIdSearches() is called" time="0.0010"/>
+<testcase classname="Firefox_1501_Windows.Testing search.js Test handleFormSubmit()" name="should verify that only handleAllIdSearches() is called" time="0.0"/>
+</testsuite>
