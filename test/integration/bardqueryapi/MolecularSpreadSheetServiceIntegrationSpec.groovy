@@ -11,6 +11,7 @@ import org.junit.Before
 import spock.lang.Unroll
 
 import static junit.framework.Assert.assertNotNull
+import bard.core.Compound
 
 @Unroll
 class MolecularSpreadSheetServiceIntegrationSpec extends IntegrationSpec {
@@ -95,7 +96,25 @@ class MolecularSpreadSheetServiceIntegrationSpec extends IntegrationSpec {
 //            assert true
 //    }
 
-
+    void  "test retrieve compounds"() {
+        given: "That we have created"
+        Experiment experiment = restExperimentService.get(new Long(883))
+        final ServiceIterator<Compound> compoundServiceIterator = restExperimentService.compounds(experiment)
+        when: "We call the findAct"
+        assert experiment
+//        assert compoundServiceIterator
+        List<Compound> compoundList = compoundServiceIterator.next(2)
+        Object etag = restCompoundService.newETag("find an experiment", compoundList*.id);
+        ServiceIterator<Value> eiter = this.restExperimentService.activities(experiment, etag);
+        assertNotNull eiter
+        eiter.hasNext()
+        Value value = eiter.next()
+        assert value
+        println "heidi Ho"
+        //final List<SpreadSheetActivity> activities = experiment.
+        then: "We expect experiments for each of the assays to be found"
+        assert true
+    }
 
 
     void "tests findActivitiesForCompounds #label"() {

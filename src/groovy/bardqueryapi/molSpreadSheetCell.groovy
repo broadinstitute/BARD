@@ -9,6 +9,7 @@ package bardqueryapi
  */
 class MolSpreadSheetCell {
     static final int SPREAD_SHEET_PRECISION = 3
+    Boolean activity = true
     MolSpreadSheetCellType molSpreadSheetCellType = MolSpreadSheetCellType.unknown
     Object objInternalValue
     String strInternalValue = "null"
@@ -99,16 +100,28 @@ class MolSpreadSheetCell {
         StringBuilder stringBuilder = new StringBuilder()
         switch (molSpreadSheetCellType) {
             case MolSpreadSheetCellType.numeric :
-                stringBuilder.append( "${numInternalValue.toEngineeringString()}" )
+                if (!activity)
+                   stringBuilder.append( "(no activity)" )
+                else
+                   stringBuilder.append( "${numInternalValue.toEngineeringString()}" )
                 break;
             case MolSpreadSheetCellType.percentageNumeric :
-                stringBuilder.append( "${numInternalValue.toEngineeringString()} %" )
+                if (!activity)
+                    stringBuilder.append( "(no activity)" )
+                else
+                    stringBuilder.append( "${numInternalValue.toEngineeringString()} %" )
                 break;
             case MolSpreadSheetCellType.greaterThanNumeric :
-                stringBuilder.append( "> ${numInternalValue.toEngineeringString()}" )
+                if (!activity)
+                    stringBuilder.append( "(no activity)" )
+                else
+                    stringBuilder.append( "> ${numInternalValue.toEngineeringString()}" )
                 break;
             case MolSpreadSheetCellType.lessThanNumeric :
-                stringBuilder.append( "< ${numInternalValue.toEngineeringString()}" )
+                if (!activity)
+                    stringBuilder.append( "(no activity)" )
+                else
+                    stringBuilder.append( "< ${numInternalValue.toEngineeringString()}" )
                 break;
             case MolSpreadSheetCellType.identifier :
                 stringBuilder.append( "${intInternalValue}" )
