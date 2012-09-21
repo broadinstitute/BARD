@@ -11,7 +11,7 @@ import promiscuity.PromiscuityScore
 import promiscuity.Scaffold
 
 import javax.servlet.http.HttpServletResponse
-import org.json.XML
+
 import grails.converters.JSON
 
 /**
@@ -40,14 +40,14 @@ class BardWebInterfaceController {
 
     def searchResults() {
     }
-    def showResult(Long experimentId) {
-        int top = 0
-        int skip = 10
-        final Map<Long, List<SpreadSheetActivity>> map = molecularSpreadSheetService.findExperimentDataById(experimentId, top, skip)
-        render(template: 'compounds', model: [
-                resultsMap: map ])
 
+    def showExperimentResult(Long id) {
+        int top = 10
+        int skip = 0
+        final Map experimentDataMap = molecularSpreadSheetService.findExperimentDataById(id, top, skip)
+        return experimentDataMap
     }
+
     def promiscuity(Long cid) {
         if (cid) {
             //Get the Promiscuity score for this CID
