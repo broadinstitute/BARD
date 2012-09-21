@@ -1,4 +1,4 @@
-*.iws
+test-reports
 *.iml
 *.ipr
 *Db.properties

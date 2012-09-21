@@ -5,10 +5,14 @@ import bard.core.Value
 import bard.core.adapter.AssayAdapter
 import bard.core.adapter.CompoundAdapter
 import bard.core.adapter.ProjectAdapter
-import net.sf.json.JSON
+
 import org.apache.commons.lang.StringUtils
+import promiscuity.PromiscuityScore
+import promiscuity.Scaffold
 
 import javax.servlet.http.HttpServletResponse
+import org.json.XML
+import grails.converters.JSON
 
 /**
  *
@@ -42,15 +46,18 @@ class BardWebInterfaceController {
             try {
                 Map results = queryService.findPromiscuityScoreForCID(cid)
                 if (results.status == 200) {
-                    render results.scores as JSON
+                    final PromiscuityScore promiscuityScore = results.promiscuityScore
+                    //get the max scaffold and get its pScore.
+                    final Scaffold maxPscoreScaffold = promiscuityScore.scaffolds.max { Scaffold scaffold -> scaffold.pScore }
+                    render maxPscoreScaffold as JSON
                 }
                 else { //status code of NOT OK returned. Usually CID has no promiscuity score
-                    return response.sendError(results.status,
-                            "${results.message}")
+                    return response.sendError(results?.status,
+                            "${results?.message}")
                 }
             } catch (Exception ee) { //error is thrown
                 log.error(ee)
-                return response.sendError(ee.statusCode,
+                return response.sendError(ee?.undeclaredThrowable.statusCode,
                         "Could not get promiscuity score for ${cid}")
             }
         } else {
