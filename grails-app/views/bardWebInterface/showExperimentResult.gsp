@@ -53,6 +53,9 @@
             </tr>
         </g:each>
     </table>
+    <div class="pagination">
+        <g:paginate total="${total ? total : 0}" params='[id: "${params?.id}"]'/>
+    </div>
 </div>
 </body>
 </html>

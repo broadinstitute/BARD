@@ -46,11 +46,11 @@ class QueryServiceIntegrationSpec extends IntegrationSpec {
 
         then:
         assert response
-        assert response.size() == expectedResponseSize
+        assert response.size() >= expectedResponseSize
 
         where:
         label                       | term  | expectedResponseSize
-        "Partial match of a String" | "Dna" | 12
+        "Partial match of a String" | "Dna" | 1
     }
 
     /**
@@ -67,8 +67,8 @@ class QueryServiceIntegrationSpec extends IntegrationSpec {
         assert expectedSIDs.size() == sids.length
         assert expectedSIDs == sids
         where:
-        label                       | cid                 | expectedSIDs                                                                                        | expectedSmiles
-        "Return a Compound Adapter" | new Integer(658342) | [5274057, 47984903, 51638425, 113532087, 124777946, 970329, 6320599, 35591597, 76362856, 112834159] | "C(CN1CCCCC1)N1C(N=CC2=CC=CS2)=NC2=CC=CC=C12"
+        label                       | cid               | expectedSIDs                                                                                        | expectedSmiles
+        "Return a Compound Adapter" | new Integer(2722) | [5274057, 47984903, 51638425, 113532087, 124777946, 970329, 6320599, 35591597, 76362856, 112834159] | "C(CN1CCCCC1)N1C(N=CC2=CC=CS2)=NC2=CC=CC=C12"
     }
 
 
@@ -84,23 +84,6 @@ class QueryServiceIntegrationSpec extends IntegrationSpec {
         assert projectId == projectAdapter.project.id
         assert projectAdapter.name
         assert projectAdapter.project.description
-    }
-
-    void "test Show Compound common name"() {
-        given: //compound?.compound?.preferredName
-        queryService.showCompound()
-        Integer assayId = new Integer(644)
-        when: "Client enters a assay ID and the showAssay method is called"
-        AssayAdapter assayAdapter = queryService.showAssay(assayId)
-        then: "The Assay document is found"
-        assert assayAdapter
-        assert assayId == assayAdapter.assay.id
-        assert assayAdapter.assay.protocol
-        assert assayAdapter.assay.comments
-        assert assayAdapter.assay.type == AssayValues.AssayType.Other
-        assert assayAdapter.assay.role == AssayValues.AssayRole.Primary
-        assert assayAdapter.assay.category == AssayValues.AssayCategory.MLPCN
-        assert assayAdapter.assay.description
     }
 
 
