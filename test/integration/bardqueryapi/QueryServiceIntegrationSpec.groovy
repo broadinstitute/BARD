@@ -67,8 +67,8 @@ class QueryServiceIntegrationSpec extends IntegrationSpec {
         assert expectedSIDs.size() == sids.length
         assert expectedSIDs == sids
         where:
-        label                       | cid               | expectedSIDs                                                                                        | expectedSmiles
-        "Return a Compound Adapter" | new Integer(2722) | [5274057, 47984903, 51638425, 113532087, 124777946, 970329, 6320599, 35591597, 76362856, 112834159] | "C(CN1CCCCC1)N1C(N=CC2=CC=CS2)=NC2=CC=CC=C12"
+        label                       | cid                 | expectedSIDs                                                                                        | expectedSmiles
+        "Return a Compound Adapter" | new Integer(658342) | [5274057, 47984903, 51638425, 113532087, 124777946, 970329, 6320599, 35591597, 76362856, 112834159] | "C(CN1CCCCC1)N1C(N=CC2=CC=CS2)=NC2=CC=CC=C12"
     }
 
 
@@ -255,12 +255,11 @@ class QueryServiceIntegrationSpec extends IntegrationSpec {
         assert projectAdapterMap.facets
         assert projectAdapterMap.nHits >= numberOfProjects
         where:
-        label        | searchString | skip | top | numberOfProjects | filters
-        "dna repair" | "dna repair" | 0    | 10  | 10               | []
-//        "dna repair with filters"         | "dna repair"         | 0    | 10  | 8               | [new SearchFilter("num_expt", "6")]
-        "dna repair skip and top" | "dna repair" | 10 | 10 | 10 | []
-        "biological process" | "biological process" | 0 | 10 | 10 | []
-        "biological process with filters" | "biological process" | 0 | 10 | 10 | [new SearchFilter("num_expt", "6")]
+        label                             | searchString         | skip | top | numberOfProjects | filters
+        "dna repair"                      | "dna repair"         | 0    | 10  | 10               | []
+        "dna repair skip and top"         | "dna repair"         | 10   | 10  | 10               | []
+        "biological process"              | "biological process" | 0    | 10  | 10               | []
+        "biological process with filters" | "biological process" | 0    | 10  | 10               | [new SearchFilter("num_expt", "6")]
 
     }
 
