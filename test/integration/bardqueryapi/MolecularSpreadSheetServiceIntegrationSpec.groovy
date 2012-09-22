@@ -65,11 +65,9 @@ class MolecularSpreadSheetServiceIntegrationSpec extends IntegrationSpec {
         given: "That a list of CartAssay objects have been created"
         final List<CartAssay> givenCartAssays = cartAssays
         when: "We call the cartAssaysToExperiments() with the given list of assay carty objects"
-        List<Experiment> experiments = molecularSpreadSheetService.cartAssaysToExperiments(givenCartAssays)
+        List<Experiment> experiments = molecularSpreadSheetService.cartAssaysToExperiments(null,givenCartAssays)
         then: "We expect experiments for each of the assays to be found"
         assert experiments
-
-
         where:
         label                                | cartAssays
         "An existing assay with experiments" | [new CartAssay(assayId: new Long(519))]
