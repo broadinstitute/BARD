@@ -13,7 +13,7 @@
             <g:each in="${compounds}" var="elem" status="item">
                 <tr>
                     <td>
-                        ${elem.toString()}
+                        <a href="${createLink(controller:'bardWebInterface' , action: 'showCompound', id:elem.compoundId)}">${elem.toString()}</a>
                     </td>
                     <td>
                         <a href="/bardwebquery/queryCart/remove/${elem.id}" class="removeXMark removeItemFromCart">X</a>
@@ -33,7 +33,7 @@
             <g:each in="${assayDefinitions}" var="elem" status="item">
                 <tr>
                     <td>
-                        ${elem.toString()}
+                        <a href="${createLink(controller:'bardWebInterface' , action: 'showAssay', id:elem.assayId)}">${elem.toString()}</a>
                     </td>
                     <td>
                         <a href="/bardwebquery/queryCart/remove/${elem.id}" class="removeXMark removeItemFromCart">X</a>
@@ -53,7 +53,7 @@
                 <g:each in="${projects}" var="elem" status="item">
                     <tr>
                         <td>
-                            ${elem.toString()}
+                            <a href="${createLink(controller:'bardWebInterface' , action: 'showProject', id:elem.projectId)}">${elem.toString()}</a>
                         </td>
                         <td>
                             <a href="/bardwebquery/queryCart/remove/${elem.id}" class="removeXMark removeItemFromCart">X</a>

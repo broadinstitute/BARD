@@ -282,7 +282,7 @@ class BardWebInterfaceController {
                     if (value.id == 'detection method type') {
                         assayDetectionMethod = value.value
                     }
-                    else if (value.id == 'detection instrument') {
+                    if (value.id == 'detection instrument') {
                         assayDetectionInstrument = value.value
                     }
                 }
