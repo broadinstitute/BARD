@@ -28,6 +28,10 @@ public class Scaffold implements Comparable<Scaffold> {
 
     }
 
+    public WarningLevel getWarningLevel() {
+        return WarningLevel.getWarningLevel(pScore)
+    }
+
     public int hashCode() {
         return new HashCodeBuilder(17, 31). // two randomly chosen prime numbers
                 append(this.pScore).
@@ -85,4 +89,35 @@ public class Scaffold implements Comparable<Scaffold> {
                 isEquals();
     }
 
+}
+
+public enum WarningLevel {
+    none(0,4000),
+    moderate(4000,10000),
+    severe(10000,Double.MAX_VALUE)
+
+    WarningLevel(Double minThreshold, Double maxThreshold) {
+        this.minThreshold = minThreshold
+        this.maxThreshold = maxThreshold
+    }
+
+    String getDescription() {
+        if (this.maxThreshold != Double.MAX_VALUE) {
+            return this.name() + " (between " + this.minThreshold + " and " + this.maxThreshold + ")"
+        }
+        else {
+            return this.name() + " (> " + this.minThreshold + ")"
+        }
+    }
+
+    static WarningLevel getWarningLevel(Double pScore) {
+        WarningLevel.values().find {
+            if (pScore >= it.minThreshold && pScore < it.maxThreshold) {
+                return it
+            }
+        }
+    }
+
+    Double minThreshold
+    Double maxThreshold
 }

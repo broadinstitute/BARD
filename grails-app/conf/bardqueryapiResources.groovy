@@ -29,4 +29,8 @@ modules = {
         resource url:"js/cart.js", disposition: 'head'
         resource url:"css/cart.css"
     }
+    promiscuity {
+        resource url:"js/promiscuity.js"
+        resource url:"css/promiscuity.css"
+    }
 }
