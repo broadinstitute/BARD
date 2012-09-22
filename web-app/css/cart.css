@@ -9,10 +9,6 @@
     display: inline-block;
 }
 
-#summaryView .center {
-    text-align:        center;
-}
-
 ul.horizontal-list {
     list-style-type:   none;
     text-align:        center;

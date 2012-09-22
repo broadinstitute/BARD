@@ -5,14 +5,10 @@ import bard.core.Value
 import bard.core.adapter.AssayAdapter
 import bard.core.adapter.CompoundAdapter
 import bard.core.adapter.ProjectAdapter
-
 import org.apache.commons.lang.StringUtils
 import promiscuity.PromiscuityScore
-import promiscuity.Scaffold
 
 import javax.servlet.http.HttpServletResponse
-
-import grails.converters.JSON
 
 /**
  *
@@ -42,10 +38,29 @@ class BardWebInterfaceController {
     }
 
     def showExperimentResult(Long id) {
-        int top = 10
-        int skip = 0
-        final Map experimentDataMap = molecularSpreadSheetService.findExperimentDataById(id, top, skip)
-        return experimentDataMap
+        try {
+            if (id) {
+                Map<String, Integer> searchParams = handleSearchParams()
+                final int top = searchParams.top
+                final int skip = searchParams.skip
+                final Map experimentDataMap = molecularSpreadSheetService.findExperimentDataById(id, top, skip)
+                if (experimentDataMap){
+                    return experimentDataMap
+                } else{
+                    return response.sendError(HttpServletResponse.SC_NOT_FOUND,
+                            "Experiment ID ${id} not found")
+
+                }
+            } else {
+                return response.sendError(HttpServletResponse.SC_BAD_REQUEST,
+                        "Experiment ID is required")
+            }
+        } catch (Exception ee) {
+            log.error(ee)
+            return response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR,
+                    ee.message)
+        }
+
     }
 
     def promiscuity(Long cid) {
@@ -55,9 +70,7 @@ class BardWebInterfaceController {
                 Map results = queryService.findPromiscuityScoreForCID(cid)
                 if (results.status == 200) {
                     final PromiscuityScore promiscuityScore = results.promiscuityScore
-                    //get the max scaffold and get its pScore.
-                    final Scaffold maxPscoreScaffold = promiscuityScore.scaffolds.max { Scaffold scaffold -> scaffold.pScore }
-                    render maxPscoreScaffold as JSON
+                    render(template: 'promiscuity', model: [scaffolds: promiscuityScore.scaffolds])
                 }
                 else { //status code of NOT OK returned. Usually CID has no promiscuity score
                     return response.sendError(results?.status,
@@ -282,7 +295,7 @@ class BardWebInterfaceController {
                     if (value.id == 'detection method type') {
                         assayDetectionMethod = value.value
                     }
-                    else if (value.id == 'detection instrument') {
+                    if (value.id == 'detection instrument') {
                         assayDetectionInstrument = value.value
                     }
                 }

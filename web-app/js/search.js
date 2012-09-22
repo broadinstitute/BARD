@@ -97,27 +97,13 @@ function handleStructureSearch(url, currentFormId) {
             var compoundTotal = 'Compounds (' + $("#totalCompounds").val() + ')';
             $("#compoundsTab").html(compoundTotal);
             $("#compounds").tab('show');
-
-            $(".promiscuity").each(function (i) {
-                var promiscuityDivId = $(this).attr('id');
-
-                var url = $(this).attr('href');
-                $.ajax({
-                    url:url,
-                    type:'GET',
-                    cache:false,
-                    timeout: 10000,
-                    success:function (promData) {
-                        $('#' + promiscuityDivId).html(promData.pScore);
-                    }
-                });
-            });
         },
         error:function (request, status, error) {
             $("#compoundsTab").html('Compounds ' + errorImageTwitterBootstrap);
             $("#compounds").html(error);
         },
         complete:function () {
+            $("#compounds").trigger('search.complete');
         }
     });
 }
@@ -148,34 +134,17 @@ function handleSearch(controllerAction, currentFormId, tabId, totalHitsForResour
             $(updateDivId).html(data);
             var total = prefixOfTextToAppearOnTab + '(' + $(totalHitsElement).val() + ')';
             $(tabDivElement).html(total);
-
-            $(".promiscuity").each(function (i) {
-                var promiscuityDivId = $(this).attr('id');
-
-                var url = $(this).attr('href');
-                $.ajax({
-                    url:url,
-                    type:'GET',
-                    cache:false,
-                    timeout: 10000,
-                    success:function (promData) {
-                        $('#' + promiscuityDivId).html(promData.pScore);
-                    }
-                });
-            });
         },
         error:function (request, status, error) {
             $(tabDivElement).html(prefixOfTextToAppearOnTab + errorImageTwitterBootstrap);
             $(updateDivId).html(error);
         },
         complete:function () {
+            $(updateDivId).trigger('search.complete');
         }
     });
 }
-function addPromiscuityScore(cid) {
-    var updateDivId = '#' + cid
 
-}
 /**
  * Handles filtered form submission
  * @param searchString - The search string started by the user

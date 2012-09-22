@@ -1,6 +1,6 @@
 <div id="summaryView">
     <div class="row-fluid">
-        <div class="span12 center">
+        <div class="span12 center-aligned">
             <h3>Query Cart</h3>
             <a class="trigger btn btn-mini" href="#">View/edit</a>
             <div class="dropdown">

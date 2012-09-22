@@ -6,7 +6,6 @@ import grails.plugin.remotecontrol.RemoteControl
 import groovyx.net.http.HttpResponseDecorator
 import groovyx.net.http.HttpResponseException
 import groovyx.net.http.RESTClient
-import net.sf.json.JSONObject
 import spock.lang.Specification
 import spock.lang.Unroll
 
@@ -27,16 +26,13 @@ class BardWebInterfaceFunctionalSpec extends Specification {
 
         then: 'We expect a JSON representation of the promiscuity scores'
         assert serverResponse.statusLine.statusCode == HttpServletResponse.SC_OK
-        assert serverResponse.data
-        assert serverResponse.data == expectedJSONResponse
         assert serverResponse.data.size() > 0
         assert !serverResponse.data.any { it.toString().contains("errorCode") }
 
         where:
-        label       | cid   | expectedJSONResponse
-        "CID 38911" | 38911 | [aActive: 622, aTested: 692, cActive: 7765, cTested: 12476, inDrug: true, pScore: 1291, sActive: 27185, sTested: 5309103, scafid: 43, scafsmi: "C1CCCCC1"] as JSONObject
-        "CID 2722"  | 2722  | [aActive: 623, aTested: 692, cActive: 5007, cTested: 6163, inDrug: true, pScore: 3851, sActive: 32288, sTested: 2762378, scafid: 49, scafsmi: "c1ccc2cccnc2c1"] as JSONObject
-
+        label       | cid
+        "CID 38911" | 38911
+        "CID 2722"  | 2722
 
     }
 
@@ -46,7 +42,7 @@ class BardWebInterfaceFunctionalSpec extends Specification {
         RESTClient http = new RESTClient(requestUrl)
 
         when: 'We send an HTTP GET request for the search action'
-        HttpResponseDecorator serverResponse = (HttpResponseDecorator) http.get(requestContentType: JSON)
+        (HttpResponseDecorator) http.get(requestContentType: JSON)
 
         then: 'We expect an error'
         def e = thrown(HttpResponseException)
@@ -68,7 +64,6 @@ class BardWebInterfaceFunctionalSpec extends Specification {
 
         then: 'We expect a JSON representation of the root elements'
         assert serverResponse.statusLine.statusCode == HttpServletResponse.SC_OK
-        println serverResponse.data.toString()
         assert serverResponse.data.size() > 0
         assert !serverResponse.data.any { it.toString().contains("errorCode") }
 
@@ -94,7 +89,6 @@ class BardWebInterfaceFunctionalSpec extends Specification {
 
         then: 'We expect a JSON representation of the root elements'
         assert serverResponse.statusLine.statusCode == HttpServletResponse.SC_OK
-        println serverResponse.data.toString()
         assert serverResponse.data.size() > 0
         assert !serverResponse.data.any { it.toString().contains("errorCode") }
 
@@ -139,7 +133,6 @@ class BardWebInterfaceFunctionalSpec extends Specification {
 
         then: 'We expect a JSON representation of the assay names'
         assert serverResponse.statusLine.statusCode == HttpServletResponse.SC_OK
-        println serverResponse.data.toString()
         assert serverResponse.data.size() > 0
         assert !serverResponse.data.any { it.toString().contains("errorCode") }
     }

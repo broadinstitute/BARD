@@ -2,6 +2,10 @@
     text-align: right;
 }
 
+.center-aligned {
+    text-align: center;
+}
+
 .header {
     margin-top: 10px;
 }
@@ -9,6 +13,14 @@
 h1 {
     font-size: 2em;
     margin-top: 0;
+}
+
+.popover {
+    width: 400px;
+}
+
+.popover-content ul {
+    margin-bottom: 5px;
 }
 
 .page-header {
@@ -103,6 +115,15 @@ div.leftofline {
 div.rightofline {
     margin-right: 30px;
     float: right;
+}
+
+#resultTabContent h3 {
+    font-size: 16px;
+    line-height: 20px;
+}
+
+#resultTabContent h3 small {
+    font-size: 13px;
 }
 
 div.facets {
