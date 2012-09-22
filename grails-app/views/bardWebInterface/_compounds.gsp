@@ -1,4 +1,4 @@
-<%@ page import="bardqueryapi.FacetFormType; bardqueryapi.JavaScriptUtility" %>
+<%@ page import="bard.core.CompoundValues; bardqueryapi.FacetFormType; bardqueryapi.JavaScriptUtility" %>
 <%@ page import="grails.converters.JSON" %>
 <g:hiddenField name="totalCompounds" id="totalCompounds" value="${nhits}"/>
 <div class="row-fluid">
@@ -18,25 +18,32 @@
                              src="${createLink(controller: 'chemAxon', action: 'generateStructureImage', params: [smiles: compoundAdapter.structureSMILES, width: 180, height: 150])}"/>
                     </td>
                     <td>
-                        <g:link action="showCompound" id="${compoundAdapter.pubChemCID}" target="_blank">
-                            PubChem CID: ${compoundAdapter.pubChemCID}
-                            <g:if test="${compoundAdapter.name}">
-                                - ${compoundAdapter.name}
-                            </g:if>
-                        </g:link>
+                        <h3>
+                            <g:link action="showCompound" id="${compoundAdapter.pubChemCID}" target="_blank">
+                                <g:if test="${compoundAdapter.name}">
+                                    ${compoundAdapter.name} <small>(PubChem CID: ${compoundAdapter.pubChemCID})</small>
+                                </g:if>
+                                <g:else>
+                                    PubChem CID: ${compoundAdapter.pubChemCID}
+                                </g:else>
+                            </g:link>
+                        </h3>
+                        ${compoundAdapter.compound.getValue('MolecularType')}
                         <a href="#" class="addCompoundToCart btn btn-mini" data-cart-name="${JavaScriptUtility.cleanup(compoundAdapter.name)}"
                                  data-cart-id="${compoundAdapter.pubChemCID}" data-cart-smiles="${compoundAdapter.getStructureSMILES()}">
                             Save for later analysis
                         </a>
-                        <g:if test="${compoundAdapter.searchHighlight}">
-                            <ul>
-                                <li>${compoundAdapter.searchHighlight}</li>
-                            </ul>
-                        </g:if>
+                        <dl>
+                            <g:if test="${compoundAdapter.searchHighlight}">
+                                <dt>Search Match (highlighted in bold):</dt>
+                                <dd>${compoundAdapter.searchHighlight}</dd>
+                            </g:if>
+                            <dt>Scaffold Promiscuity Analysis:</dt>
+                            <dd>
+                                <div class="promiscuity" href="${createLink(controller: 'bardWebInterface', action: 'promiscuity', params: [cid: compoundAdapter.pubChemCID])}" id="${compoundAdapter.pubChemCID}_prom"></div>
+                            </dd>
+                        </dl>
                     </td>
-                    <td>
-                        Promiscuity Scores: <div class="promiscuity" href="${createLink(controller: 'bardWebInterface', action: 'promiscuity', params: [cid: compoundAdapter.pubChemCID])}" id="${compoundAdapter.pubChemCID}_prom"></div>
-                     </td>
                 </tr>
             </g:each>
         </table>
