@@ -4,7 +4,7 @@ import org.apache.log4j.DailyRollingFileAppender
 
 
 //TODO: Override in dev, qa and prod to point to the current stable realse
-ncgc.server.root.url = "http://bard.nih.gov/api/v5"
+ncgc.server.root.url = "http://bard.nih.gov/api/v4"
 promiscuityscrores.root.url="${ncgc.server.root.url}/plugins/badapple/prom/cid/"
 grails.project.groupId = appName // change this to alter the default package name and Maven publishing destination
 grails.mime.file.extensions = true // enables the parsing of file extensions from URLs into the request format
