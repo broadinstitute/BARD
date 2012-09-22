@@ -25,7 +25,7 @@ import bard.core.*
 @TestFor(BardWebInterfaceController)
 @Unroll
 class BardWebInterfaceControllerUnitSpec extends Specification {
-
+    MolecularSpreadSheetService molecularSpreadSheetService
     QueryService queryService
     ShoppingCartService shoppingCartService
 
@@ -37,7 +37,9 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
     void setup() {
         controller.metaClass.mixin(SearchHelper)
         queryService = Mock(QueryService)
+        molecularSpreadSheetService = Mock(MolecularSpreadSheetService)
         controller.queryService = this.queryService
+        controller.molecularSpreadSheetService = this.molecularSpreadSheetService
         shoppingCartService = Mock(ShoppingCartService)
         controller.shoppingCartService = this.shoppingCartService
     }
@@ -46,16 +48,39 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
         // Tear down logic here
     }
 
+    void "test showExperimentResult #label"() {
+        given: "An Experiment ID"
+        Map experimentData = null
+        if (statusCode == HttpServletResponse.SC_OK) {
+            experimentData = [total: 2, spreadSheetActivities: [
+                    new SpreadSheetActivity(eid: new Long(eid), cid: new Long(1), sid: new Long(20))],
+                    role: AssayValues.AssayRole.Counterscreen
+            ]
+        }
+
+        when:
+        controller.showExperimentResult(eid)
+        then:
+        _ * this.molecularSpreadSheetService.findExperimentDataById(_, _, _) >> {experimentData}
+        assert response.status == statusCode
+
+        where:
+        label                          | eid  | statusCode
+        "Empty Null EID - Bad Request" | null | HttpServletResponse.SC_BAD_REQUEST
+        "EID- Not Found"               | 234  | HttpServletResponse.SC_NOT_FOUND
+        "Success"                      | 567  | HttpServletResponse.SC_OK
+    }
+
     void "test promiscuity action #label"() {
         given:
         PromiscuityScore promiscuityScore = null
-        if (statusCode == 200) {
+        if (statusCode == HttpServletResponse.SC_OK) {
             List<Scaffold> scaffolds = new ArrayList<Scaffold>()
             Scaffold scaffold = new Scaffold(pScore: 222)
             scaffolds.add(scaffold)
             promiscuityScore = new PromiscuityScore(cid: cid, scaffolds: scaffolds)
         }
-        Map promiscuityScoreMap =  [status: statusCode, promiscuityScore: promiscuityScore]
+        Map promiscuityScoreMap = [status: statusCode, promiscuityScore: promiscuityScore]
 
         when:
         controller.promiscuity(cid)

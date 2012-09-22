@@ -38,10 +38,29 @@ class BardWebInterfaceController {
     }
 
     def showExperimentResult(Long id) {
-        int top = 10
-        int skip = 0
-        final Map experimentDataMap = molecularSpreadSheetService.findExperimentDataById(id, top, skip)
-        return experimentDataMap
+        try {
+            if (id) {
+                Map<String, Integer> searchParams = handleSearchParams()
+                final int top = searchParams.top
+                final int skip = searchParams.skip
+                final Map experimentDataMap = molecularSpreadSheetService.findExperimentDataById(id, top, skip)
+                if (experimentDataMap){
+                    return experimentDataMap
+                } else{
+                    return response.sendError(HttpServletResponse.SC_NOT_FOUND,
+                            "Experiment ID ${id} not found")
+
+                }
+            } else {
+                return response.sendError(HttpServletResponse.SC_BAD_REQUEST,
+                        "Experiment ID is required")
+            }
+        } catch (Exception ee) {
+            log.error(ee)
+            return response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR,
+                    ee.message)
+        }
+
     }
 
     def promiscuity(Long cid) {
