@@ -117,17 +117,17 @@ div.rightofline {
     float: right;
 }
 
-#resultTabContent h3 {
+.tab-content h3 {
     font-size: 16px;
     line-height: 20px;
 }
 
-#resultTabContent h3 small {
+.tab-content h3 small {
     font-size: 13px;
 }
 
 div.facets {
-    background-color: rgba(157, 252, 157, 0.2);
+    background-color: #d4efcf;
     padding: 10px;
     border: 1px solid #d3d3d3;
 }

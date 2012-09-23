@@ -36,7 +36,7 @@
                         <dl>
                             <g:if test="${compoundAdapter.searchHighlight}">
                                 <dt>Search Match (highlighted in bold):</dt>
-                                <dd>${compoundAdapter.searchHighlight}</dd>
+                                <dd>&hellip;${compoundAdapter.searchHighlight}&hellip;</dd>
                             </g:if>
                             <dt>Scaffold Promiscuity Analysis:</dt>
                             <dd>

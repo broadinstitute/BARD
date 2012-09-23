@@ -12,15 +12,16 @@
         <ul class="unstyled results">
             <g:each var="projectAdapter" in="${projectAdapters}">
                 <li>
-                    <g:link action="showProject" id="${projectAdapter.project.id}"
-                            target="_blank">Project ID: ${projectAdapter.project.id} - ${projectAdapter.project.name}</g:link>
+                    <h3><g:link action="showProject" id="${projectAdapter.project.id}"
+                            target="_blank">${projectAdapter.project.name} <small>(Project ID: ${projectAdapter.project.id})</small></g:link></h3>
                     <a href="#" class="addProjectToCart btn btn-mini" data-cart-name="${JavaScriptUtility.cleanup(projectAdapter.project.name)}" data-cart-id="${projectAdapter.project.id}">
                         Save for later analysis
                     </a>
                     <g:if test="${projectAdapter.searchHighlight}">
-                        <ul>
-                            <li>${projectAdapter.searchHighlight}</li>
-                        </ul>
+                        <dl>
+                            <dt>Search Match (highlighted in bold):</dt>
+                            <dd>&hellip;${projectAdapter.searchHighlight}&hellip;</dd>
+                        </dl>
                     </g:if>
                 </li>
             </g:each>
