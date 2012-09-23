@@ -1,5 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="Firefox_1501_Windows.Testing search.js test handleSearch()" errors="0" failures="0" tests="2" time="0.0070">
-<testcase classname="Firefox_1501_Windows.Testing search.js test handleSearch()" name="Should be a successful call" time="0.0040"/>
-<testcase classname="Firefox_1501_Windows.Testing search.js test handleSearch()" name="Should be an Error condition" time="0.0030"/>
-</testsuite>

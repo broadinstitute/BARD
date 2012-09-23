@@ -1,4 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="Firefox_1501_Windows.Testing cart.js Test QueryCart.removeAll" errors="0" failures="0" tests="1" time="0.0010">
-<testcase classname="Firefox_1501_Windows.Testing cart.js Test QueryCart.removeAll" name="should update the detail view if it is showing" time="0.0010"/>
-</testsuite>

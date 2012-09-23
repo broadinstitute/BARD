@@ -20,3 +20,4 @@ logs/
 /.idea
 testChar*.*
 testDRC*.*
+emacs-*.*.*

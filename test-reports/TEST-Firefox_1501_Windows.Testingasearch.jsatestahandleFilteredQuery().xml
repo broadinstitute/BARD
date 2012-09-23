@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="Firefox_1501_Windows.Testing search.js test handleFilteredQuery()" errors="0" failures="0" tests="3" time="0.0010">
-<testcase classname="Firefox_1501_Windows.Testing search.js test handleFilteredQuery()" name="Should handle empty String" time="0.0"/>
-<testcase classname="Firefox_1501_Windows.Testing search.js test handleFilteredQuery()" name="Should handle Structure String" time="0.0010"/>
-<testcase classname="Firefox_1501_Windows.Testing search.js test handleFilteredQuery()" name="Should handle any other search" time="0.0"/>
-</testsuite>
