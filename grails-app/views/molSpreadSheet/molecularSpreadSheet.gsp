@@ -63,12 +63,19 @@
                         <td class="molSpreadSheet" property="var${colCnt}">
 
                            <% SpreadSheetActivity experimentData = molSpreadSheetData?.findSpreadSheetActivity( rowCnt, colCnt )  %>
-                            <img alt="" title=""
-                                 src="${createLink(controller: 'doseResponseCurve', action: 'doseResponseCurve', params: [sinf: experimentData?.hillCurveValue?.sInf, s0: experimentData?.hillCurveValue?.s0, ac50: experimentData?.hillCurveValue?.slope, hillSlope: experimentData?.hillCurveValue?.coef, concentrations: experimentData?.hillCurveValue?.conc, activities: experimentData?.hillCurveValue?.response])}"/>
-                            <br/><br/>
+                            <g:if test="${experimentData!=null}">
+                                <img alt="" title=""
+                                     src="${createLink(controller: 'doseResponseCurve', action: 'doseResponseCurve', params: [sinf: experimentData?.hillCurveValue?.sInf, s0: experimentData?.hillCurveValue?.s0, ac50: experimentData?.hillCurveValue?.slope, hillSlope: experimentData?.hillCurveValue?.coef, concentrations: experimentData?.hillCurveValue?.conc, activities: experimentData?.hillCurveValue?.response])}"/>
+                                <br/><br/>
+                                <a href="#" class="requestDoseResponseImage">${molSpreadSheetData?.displayValue( rowCnt, colCnt )?."value"}</a>
+                            </g:if>
+                            <g:else>
+                                Not tested in this experiment
+                            </g:else>
+
                             %{--<p>AC50 = ${experimentData?.hillCurveValue?.slope}</p>--}%
 
-                            <a href="#" class="requestDoseResponseImage" concs="foo" resps="fi">${molSpreadSheetData?.displayValue( rowCnt, colCnt )?."value"}</a>
+
                         </td>
                     </g:each>
                     </tr>
