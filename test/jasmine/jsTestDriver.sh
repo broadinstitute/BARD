@@ -1,6 +1,7 @@
 #!/bin/bash
 # directory to write output XML (if this doesn't exist, the results will not be generated!)
 OUTPUT_DIR="target/test-reports"
+mkdir "target"
 mkdir $OUTPUT_DIR
 
 XVFB=`which Xvfb`
