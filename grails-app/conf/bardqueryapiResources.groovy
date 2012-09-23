@@ -33,4 +33,7 @@ modules = {
         resource url:"js/promiscuity.js"
         resource url:"css/promiscuity.css"
     }
+    molecularSpreadSheet {
+        resource url:"js/molecularSpreadSheet.js"
+    }
 }
