@@ -152,7 +152,7 @@ class MolecularSpreadSheetService {
                     int innerColumnCount = molSpreadSheetData.columnPointer[spreadSheetActivity.eid]
                     String arrayKey = "${innerRowPointer}_${innerColumnCount + 2}"
                     Double activityValue = spreadSheetActivity.interpretHillCurveValue()
-                    MolSpreadSheetCell molSpreadSheetCell = new MolSpreadSheetCell(activityValue.toString(), MolSpreadSheetCellType.numeric, spreadSheetActivity)
+                    MolSpreadSheetCell molSpreadSheetCell = new MolSpreadSheetCell(activityValue.toString(), MolSpreadSheetCellType.numeric, MolSpreadSheetCellUnit.Micromolar, spreadSheetActivity)
                     if (activityValue == Double.NaN)
                         molSpreadSheetCell.activity = false
                     molSpreadSheetData.mssData.put(arrayKey, molSpreadSheetCell)
@@ -393,68 +393,6 @@ class MolecularSpreadSheetService {
         }
         return allExperiments
     }
-    /**
-     *
-     * @param cartCompounds
-     * @param cartAssays
-     * @param cartProjects
-     * @return list of SpreadSheetActivities
-     */
-    public List<SpreadSheetActivity> getMolecularSpreadSheet(final List<CartCompound> cartCompounds,
-                                                             final List<CartAssay> cartAssays,
-                                                             final List<CartProject> cartProjects) {
-
-        if (!cartCompounds) {
-            throw new RuntimeException("There must be at least one Compound in the cart")
-        }
-        if (!cartAssays && !cartProjects) {
-            throw new RuntimeException("At least one Project or Assay must be in the Cart")
-        }
-
-        //TODO: add assertions here
-        List<Experiment> experiments = []
-
-        experiments.addAll(cartAssaysToExperiments(cartAssays))
-        experiments.addAll(cartProjectsToExperiments(cartProjects))
-        List<Long> cids = cartCompoundsToCIDS(cartCompounds)
-
-        StopWatch stopWatch = queryHelperService.startStopWatch()
-        //TODO: create the ETAG, we should randomize this to support multithreading
-        final String eTagName = "ETAG_" + stopWatch.getStartTime().toString()
-        final RESTCompoundService restCompoundService = queryServiceWrapper.getRestCompoundService()
-        Object etag = restCompoundService.newETag(eTagName, cids)
-
-        List<SpreadSheetActivity> spreadSheetActivities = []
-        for (Experiment experiment : experiments) {
-            spreadSheetActivities.addAll(findActivitiesForCompounds(experiment, etag))
-        }
-
-        return spreadSheetActivities
-
-    }
-    /**
-     *
-     * @param experimentId
-     * @param compoundETags - Just wish these etags were typed
-     * @return List of activities
-     */
-    List<SpreadSheetActivity> findActivitiesForCompounds(MolSpreadSheetData molSpreadSheetData, final Experiment experiment, final Object compoundETag) {
-        final List<SpreadSheetActivity> spreadSheetActivities = new ArrayList<SpreadSheetActivity>()
-        final ServiceIterator<Value> experimentIterator = this.queryServiceWrapper.restExperimentService.activities(experiment, compoundETag);
-        int rowPointer = 0
-        while (experimentIterator.hasNext()) {
-            Value experimentValue = experimentIterator.next()
-            if (experimentValue) {
-                SpreadSheetActivity spreadSheetActivity = extractActivitiesFromExperiment(experimentValue)
-                updateMolSpreadSheetDataToReferenceCompound(molSpreadSheetData, rowPointer, spreadSheetActivity.cid as Long, spreadSheetActivity.cid, spreadSheetActivity.cid)
-                spreadSheetActivities.add(spreadSheetActivity)
-            }
-        }
-        return spreadSheetActivities
-    }
-
-
-
 
 
 
@@ -470,6 +408,7 @@ class MolecularSpreadSheetService {
         }
         return spreadSheetActivities
     }
+
 
     public Map findExperimentDataById(final Long experimentId, final int top = 10, final int skip = 0) {
         List<SpreadSheetActivity> spreadSheetActivities = []
@@ -582,32 +521,14 @@ public class SpreadSheetActivity {
         return stringBuilder.join("\n").toString()
     }
 
-    // we need a real valued iterpretation of the hillCurveValue.  Someday this must be meaningful, but
-    // for now we need a placeholder
-//    public double interpretHillCurveValue(){
-//        double retValue = 0d
-//        if (this.hillCurveValue!=null) {
-//           if (this.hillCurveValue.getValue()!=null)
-//               retValue = this.hillCurveValue.getValue()
-//            else if (this.hillCurveValue.getConc()!=null){
-//               if (this.hillCurveValue.getConc().size()>1) {
-//                   int midpoint =  this.hillCurveValue.getConc().size()/2
-//                   retValue = this.hillCurveValue.getConc()[midpoint]
-//               }
-//           }
-//        }
-//        retValue
-//    }
 
 
-    public double interpretHillCurveValue() {
-        double retValue = 0d
-        if (this.hillCurveValue != null) {
-            if (this.hillCurveValue.getS0() == null)
-                retValue = Double.NaN
-            else
-                retValue = this.hillCurveValue.getS0()
-        }
+    public Double interpretHillCurveValue() {
+        Double retValue = Double.NaN
+
+        if (this.hillCurveValue != null)
+            retValue = (this.hillCurveValue.getSlope() == null) ? Double.NaN : this.hillCurveValue.getSlope()
+
         retValue
     }
 

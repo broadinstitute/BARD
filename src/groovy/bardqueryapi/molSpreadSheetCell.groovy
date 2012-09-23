@@ -191,7 +191,8 @@ class MolSpreadSheetCell {
             default:
                 stringBuilder.append("${objInternalValue}")
         }
-        if (molSpreadSheetCellUnit != MolSpreadSheetCellUnit.unknown)
+        if ( (molSpreadSheetCellUnit != MolSpreadSheetCellUnit.unknown) &&
+             (activity) )
             stringBuilder.append(" ${molSpreadSheetCellUnit.toString()}")
         stringBuilder.toString()
     }
