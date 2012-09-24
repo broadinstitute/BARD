@@ -21,53 +21,17 @@ class MolecularSpreadSheetService {
      * @return MolSpreadSheetData
      */
     MolSpreadSheetData retrieveExperimentalData() {
-        MolSpreadSheetData molSpreadSheetData = new MolSpreadSheetData()
 
-        if (queryCartService.totalNumberOfUniqueItemsInCart(shoppingCartService) > 0) {
+        MolSpreadSheetDataBuilderDirector molSpreadSheetDataBuilderDirector = new MolSpreadSheetDataBuilderDirector()
 
-            List<CartCompound> cartCompoundList = retrieveCartCompoundFromShoppingCart()
-            List<CartAssay> cartAssayList = retrieveCartAssayFromShoppingCart()
-            List<CartProject> cartProjectList = retrieveCartProjectFromShoppingCart()
-            Object etag
-            List<SpreadSheetActivity> spreadSheetActivityList = []
+        MolSpreadSheetDataBuilder molSpreadSheetDataBuilder = new MolSpreadSheetDataBuilder(this)
 
-            // need a list of experiments to work with.  Build up that list...
-            List<Experiment> experimentList = new ArrayList<Experiment>()
+        molSpreadSheetDataBuilderDirector.setMolSpreadSheetDataBuilder( molSpreadSheetDataBuilder )
+        molSpreadSheetDataBuilderDirector.constructMolSpreadSheetData( retrieveCartCompoundFromShoppingCart(),
+                                                                       retrieveCartAssayFromShoppingCart(),
+                                                                       retrieveCartProjectFromShoppingCart() )
 
-            // Any projects can be converted to assays, then assays to experiments
-            if (cartProjectList.size() > 0) {
-                Collection<Assay> assayCollection = cartProjectsToAssays(cartProjectList)
-                experimentList = assaysToExperiments(assayCollection)
-            }
-
-            // Any assays explicitly selected on the cart are added to the  experimentList
-            if (cartAssayList.size() > 0)
-                experimentList = cartAssaysToExperiments(experimentList, cartAssayList)
-
-            // next deal with the compounds
-            if (experimentList.size() > 0) {
-
-                if (cartCompoundList.size() > 0) {
-                    // Explicitly specified assays and explicitly specified compounds
-                    molSpreadSheetData = populateMolSpreadSheetRowMetadata(molSpreadSheetData, cartCompoundList)
-                    molSpreadSheetData = populateMolSpreadSheetColumnMetadata(molSpreadSheetData, experimentList)
-                    etag = generateETagFromCartCompounds(cartCompoundList)
-                    spreadSheetActivityList = extractMolSpreadSheetData(molSpreadSheetData, experimentList, etag)
-                } else if (cartCompoundList.size() == 0) {
-                    // Explicitly specified assay, for which we will retrieve all compounds
-                    etag = retrieveImpliedCompoundsEtagFromAssaySpecification(experimentList)
-                    molSpreadSheetData = populateMolSpreadSheetColumnMetadata(molSpreadSheetData, experimentList)
-                    spreadSheetActivityList = extractMolSpreadSheetData(molSpreadSheetData, experimentList, etag)
-                    Map map = convertSpreadSheetActivityToCompoundInformation(spreadSheetActivityList)
-                    molSpreadSheetData = populateMolSpreadSheetRowMetadata(molSpreadSheetData, map)
-                }
-                // finally deal with the data
-                populateMolSpreadSheetData(molSpreadSheetData, experimentList, spreadSheetActivityList)
-            } else {
-                molSpreadSheetData = new MolSpreadSheetData()
-            }
-        }
-        molSpreadSheetData
+        molSpreadSheetDataBuilderDirector.getMolSpreadSheetData()
     }
 
     /**
@@ -367,7 +331,7 @@ class MolecularSpreadSheetService {
      * @param cartProjects
      * @return list of Experiment's from a list of CartProject's
      */
-    protected List<Experiment> cartProjectsToExperiments(final List<CartProject> cartProjects) {
+    protected List<Assay> cartProjectsToExperiments(final List<CartProject> cartProjects) {
         List<Long> projectIds = []
         for (CartProject cartProject : cartProjects) {
             long projectId = cartProject.projectId
@@ -376,8 +340,17 @@ class MolecularSpreadSheetService {
         List<Experiment> allExperiments = []
         Collection<Project> projects = queryServiceWrapper.getRestProjectService().get(projectIds)
         for (Project project : projects) {
-            Collection<Experiment> experiments = project.getExperiments()
-            allExperiments.addAll(experiments)
+            Collection<Assay> assays = project.getAssays()
+            if (!assays.isEmpty()) {
+                Iterator<Assay> assayIterator = assays.iterator()
+                while (assayIterator.hasNext()) {
+                    Assay assay = assayIterator.next()
+                    Collection<Experiment> experimentList = assay.getExperiments()
+                    for (Experiment experiment in experimentList) {
+                        allExperiments.add(experiment)
+                    }
+                }
+            }
         }
         return allExperiments
     }
