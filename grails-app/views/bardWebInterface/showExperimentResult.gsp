@@ -11,7 +11,7 @@
 <html>
 <head>
     <meta name="layout" content="logoSearchCartAndFooter"/>
-    <title>BARD : Experiment Result : EID</title>
+    <title>BARD : Experiment Result : ${params?.id}</title>
 </head>
 
 <body>
