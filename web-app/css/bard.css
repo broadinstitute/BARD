@@ -88,6 +88,13 @@ div.header > h3 {
     width: 100px;
 }
 
+.examples {
+    font-size: .9em;
+}
+.examples a {
+    font-family: "Courier New", monospace;
+}
+
 #modalDiv {
     height: 640px;
     width: 560px;
