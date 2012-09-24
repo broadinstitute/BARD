@@ -1,10 +1,6 @@
-<%@ page import="bardqueryapi.SpreadSheetActivity; bardqueryapi.MolecularSpreadSheetService; bardqueryapi.FacetFormType" %>
-<%@ page import="bardqueryapi.MolSpreadSheetCell; bardqueryapi.MolSpreadSheetCellType; bardqueryapi.MolSpreadSheetData;" %>
-<%@ page import="com.metasieve.shoppingcart.ShoppingCartService;" %>
-<%
-    MolSpreadSheetData molSpreadSheetData1 = new MolSpreadSheetData("f")
-    //grailsApplication.classLoader.loadClass('bardqueryapi.MolecularSpreadSheetService').newInstance()
-%>
+<%@ page import="molspreadsheet.SpreadSheetActivityStorage; molspreadsheet.MolSpreadSheetData; bardqueryapi.SpreadSheetActivity; bardqueryapi.MolecularSpreadSheetService; bardqueryapi.FacetFormType" %>
+<%@ page import="bardqueryapi.MolSpreadSheetCellType;" %>
+<%@ page import="com.metasieve.shoppingcart.ShoppingCartService; molspreadsheet.MolSpreadSheetCell;" %>
 <html>
 <head>
     <meta name="layout" content="logoSearchCartAndFooter"/>
@@ -31,7 +27,7 @@
             <tr class="molSpreadSheetHead">
                 <g:sortableColumn property="struct" title="Molecular structure"
                                   class="molSpreadSheetImg"/>
-                <g:sortableColumn property="cid" title="CID"
+                <g:sortableColumn property="molSpreadSheetCell.spreadSheetActivityStorage.cid" title="CID"
                                   class="molSpreadSheetHeadCid"/>
                 <% int looper = 2 %>
                 <g:each var="colHeader" in="${molSpreadSheetData.mssHeaders}">
@@ -75,29 +71,29 @@
                 </td>
                 <g:each var="colCnt" in="${3..(molSpreadSheetData.getColumnCount() - 1)}">
                     <td class="molSpreadSheet" property="var${colCnt}">
-                    <% SpreadSheetActivity experimentData = molSpreadSheetData?.findSpreadSheetActivity(rowCnt, colCnt) %>
-                    <g:if test="${experimentData != null}">
+                    <% SpreadSheetActivityStorage spreadSheetActivityStorage = molSpreadSheetData?.findSpreadSheetActivity(rowCnt, colCnt) %>
+                    <g:if test="${spreadSheetActivityStorage != null}">
                         <p>
 
-                        <div data-detail-id="drc_${experimentData.sid}" class="drc-popover-link btn btn-link"
-                             data-original-title="${experimentData.hillCurveValue.id}" data-html="true"
+                        <div data-detail-id="drc_${spreadSheetActivityStorage.sid}" class="drc-popover-link btn btn-link"
+                             data-original-title="${spreadSheetActivityStorage.hillCurveValueId}" data-html="true"
                              data-trigger="hover">
                             ${molSpreadSheetData?.displayValue(rowCnt, colCnt)?."value"}</div>
                         </p>
 
-                        <div class='popover-content-wrapper' id='drc_${experimentData.sid}' style="display: none;">
+                        <div class='popover-content-wrapper' id='drc_${spreadSheetActivityStorage.sid}' style="display: none;">
                             <div class="center-aligned">
-                                <img alt="${experimentData.sid}" title="Substance Id : ${experimentData.sid}"
+                                <img alt="${spreadSheetActivityStorage.sid}" title="Substance Id : ${spreadSheetActivityStorage.sid}"
                                      src="${createLink(
                                              controller: 'doseResponseCurve',
                                              action: 'doseResponseCurve',
                                              params: [
-                                                     sinf: experimentData?.hillCurveValue?.sInf,
-                                                     s0: experimentData?.hillCurveValue?.s0,
-                                                     ac50: experimentData?.hillCurveValue?.slope,
-                                                     hillSlope: experimentData?.hillCurveValue?.coef,
-                                                     concentrations: experimentData?.hillCurveValue?.conc,
-                                                     activities: experimentData?.hillCurveValue?.response
+                                                     sinf: spreadSheetActivityStorage?.hillCurveValueSInf,
+                                                     s0: spreadSheetActivityStorage?.hillCurveValueS0,
+                                                     ac50: spreadSheetActivityStorage?.hillCurveValueSlope,
+                                                     hillSlope: spreadSheetActivityStorage?.hillCurveValueCoef,
+                                                     concentrations: spreadSheetActivityStorage?.hillCurveValueConc,
+                                                     activities: spreadSheetActivityStorage?.hillCurveValueResponse
                                              ]
                                      )}"/>
                             </div>

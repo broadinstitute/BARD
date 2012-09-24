@@ -3,6 +3,8 @@ package bardqueryapi
 import bard.core.rest.RESTCompoundService
 import bard.core.rest.RESTExperimentService
 import grails.plugin.spock.IntegrationSpec
+import molspreadsheet.MolSpreadSheetCell
+import molspreadsheet.MolSpreadSheetData
 import org.junit.After
 import org.junit.Before
 import spock.lang.Unroll

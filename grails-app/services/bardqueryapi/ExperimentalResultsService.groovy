@@ -1,5 +1,8 @@
 package bardqueryapi
 
+import molspreadsheet.MolSpreadSheetCell
+import molspreadsheet.MolSpreadSheetData
+
 class ExperimentalResultsService {
 
     static MolSpreadSheetData molSpreadSheetData
