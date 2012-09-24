@@ -1,18 +1,28 @@
-<!doctype html>
+<!DOCTYPE html>
 <html>
 <head>
-    <r:require modules="bootstrap"/>
-    <title>CAP - Catalog of Assay Protocols</title>
+<r:require modules="core,bootstrap"/>
+<meta name="layout" content="basic"/>
+<link rel="stylesheet" href="${resource(dir: 'css', file: 'bootstrap-plus.css')}" type="text/css">
+<title>CAP - Find assay by id</title>
+<r:script>
+	 
+</r:script>
 </head>
 
 <body>
-<br/>
-<br/>
-<div class="row">
-    <div class="span2"><a href="${grailsApplication.config.bard.home.page}"><img src="${resource(dir: 'images', file: 'bardLogo.png')}" alt="To BARD Home" title="To BARD Home"/></a></div>
-    <div class="span6"><h1 style="text-align: center">CAP - Catalog of Assay Protocols</h1><br/><br/>
-        <div class="span6">
-            <p>CAP allows you to define assays, which can subsequently be used to upload data into the BioAssay Research Database (BARD).
+
+	<div class="row-fluid">
+	    <div class="span12">
+	    	<div class="hero-unit-v1" style="text-align:center; color: black;">
+	        	<h3>CAP - Catalog of Assay Protocols</h4>
+	        </div>
+	    </div>
+	</div>
+	
+	<div class="row-fluid">
+	    <div class="span8 offset2">
+	    	<p>CAP allows you to define assays, which can subsequently be used to upload data into the BioAssay Research Database (BARD).
             There are several ways you can create a new assay: <br/>
             You may wish to create a new assay from scratch.<br/>
             You can find an existing assay to clone and then modify**  <br/>
@@ -22,16 +32,15 @@
 
             ** If you find an existing assay that matches your experiment, no need to clone and modify and create a new assay!
             You can proceed to upload data against it immediately. <br/>
-           </p>
-            <br/><br/>
+           	</p>
+            <br/>
             <p>
-                <a href="#"><img src="${resource(dir: 'images', file: 'lightBulbIcon.png')}" alt="Create New Assay" title="Create New Assay"/> Create a new assay from scratch</a> <br/><br/>
-                <a href="#"><img src="${resource(dir: 'images', file: 'magnifyingGlassIcon.png')}" alt="Find Exiting Assay" title="Find Exiting Assay"/> Find an existing assay to clone</a><br/> <br/>
+                <a href="/BARD/assayDefinition/description"><img src="${resource(dir: 'images', file: 'lightBulbIcon.png')}" alt="Create New Assay" title="Create New Assay"/> Create a new assay from scratch</a> <br/><br/>
+                <a href="/BARD/assayDefinition/findById"><img src="${resource(dir: 'images', file: 'magnifyingGlassIcon.png')}" alt="Find Exiting Assay" title="Find Exiting Assay"/> Find an existing assay to clone</a><br/> <br/>
                 <a href="#"><img src="${resource(dir: 'images', file: 'starIcon.png')}" alt="View Favorite Assay" title="View Favorite Assay"/> View favorite assays</a><br/><br/>
                 <a href="#"><img src="${resource(dir: 'images', file: 'openBookIcon.png')}" alt="Read about assay terminology" title=" Read about assay terminology"/> Read about assay terminology in more detail</a><br/><br/>
             </p>
-            <br/>
-            <br/>
+	
             <p> <b>Background</b><br/> <br/>
                 For our purposes, an assay describes an experiment carried out to test the effect of a perturbagen on a biological entity, measuring one or more readouts facilitated by an assay design and assay format, and recording the results of one or more endpoints that quantify or qualify the extent of perturbation.
                 <br/><br/>
@@ -41,11 +50,7 @@
                 The Catalog of Assay Protocols (CAP) serves to catalog assays using a structured, well-defined language so that scientists can make meaningful comparisons between their assays and experiments.  These well-defined assays form the foundation for the BioAssay Research Database (BARD), allowing scientists to carrying out data analysis and visualization of the experimental results for the assays.
 
             </p>
-        </div>
-    </div>
-    <div class="span2"><a href="${grailsApplication.config.bard.home.page}"><img src="${resource(dir: 'images', file: 'bardLogo.png')}" alt="CAP - Catalog of Assay Protocols"/></a></div>
-</div>
-<r:layoutResources />
-<r:require modules="bootstrap"/>
+	    </div>
+	</div>
 </body>
 </html>

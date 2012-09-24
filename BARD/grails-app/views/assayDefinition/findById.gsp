@@ -2,9 +2,10 @@
 <!DOCTYPE html>
 <html>
 <head>
-<r:require modules="core"/>
+<r:require modules="core,bootstrap"/>
 <meta name="layout" content="basic"/>
-<title>Find Assay</title>
+<link rel="stylesheet" href="${resource(dir: 'css', file: 'bootstrap-plus.css')}" type="text/css">
+<title>CAP - Find assay by id</title>
 <r:script>
 	 
 </r:script>
@@ -12,27 +13,43 @@
 </head>
 <body>
 <div>
-	<div class="ui-widget">
-		<formset>
-			<legend><h3>Search assay by ID</h3></legend>
-			<g:if test="${flash.message}">
-				<div class="ui-widget">
-					<div class="ui-state-error ui-corner-all" style="margin-top: 20px; padding: 0 .7em;">
-					<p><span class="ui-icon ui-icon-alert" style="float: left; margin-right: .3em;"></span>
-					<strong>${flash.message}</strong></p>
-					</div>
-				</div>
-			</g:if>
-			<g:form action="findById">
-				<label for="assayId">Enter ID:</label>
-				<g:textField name="assayId" value="${params.assayId}"/>
-				
-				<g:submitButton name="search" value="Search"/>
-			</g:form>
-		</formset>
+	<div class="row-fluid">
+	    <div class="span12">
+	    	<div class="hero-unit-v1">
+	        	<h4>Search assay by ID</h4>
+	        </div>
+	    </div>
 	</div>
-	<div>
-		<g:if test="${assayInstance?.id}">
+
+    <g:if test="${flash.message}">
+	    <div class="row-fluid">
+		    <div class="span12">
+		        <div class="ui-widget">
+		            <div class="ui-state-error ui-corner-all" style="margin-top: 20px; padding: 0 .7em;">
+		                <p><span class="ui-icon ui-icon-alert" style="float: left; margin-right: .3em;"></span>
+		                    <strong>${flash.message}</strong>
+		            </div>
+		        </div>
+		    </div>
+	    </div>
+    </g:if>
+    
+    <div class="row-fluid">
+	    <div class="span12">
+	    	<div class="bs-docs" style="padding: 20px 20px 20px;">
+	        	<g:form action="findById" class="form-inline">	
+	        		<label class="control-label" for="assayId">Enter Assay ID:</label>
+	        		<input type="text" name='assayId'>														
+					<g:submitButton name="search" value="Search" class="btn btn-primary"/>
+				</g:form>
+	        </div>
+	    </div>
+	</div>  
+	
+	
+	<g:if test="${assayInstance?.id}">
+		<div class="row-fluid">
+			<div class="span12">
 			<h3>Results</h3>			
 					<table class="gridtable">
 						<thead>
@@ -49,10 +66,12 @@
 								<td>${fieldValue(bean: assayInstance, field: "designedBy")}</td>
 							</tr>
 						</tbody>
-					</table>			
-		</g:if>
+					</table>
+			</div>
+		</div>						
+	</g:if>
 		
-	</div>
+	
 	
 </div><!-- End body div -->
 </body>
