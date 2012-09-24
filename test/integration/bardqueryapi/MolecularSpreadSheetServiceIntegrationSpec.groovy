@@ -219,25 +219,4 @@ class MolecularSpreadSheetServiceIntegrationSpec extends IntegrationSpec {
         molSpreadSheetData.rowPointer.put(5344L, 0)
         molSpreadSheetData
     }
-
-    @Timeout(10)
-    void "tests getExperimentActivities #label"() {
-        given: "Experiment ID"
-        final Experiment experiment = restExperimentService.get(experimentId)
-
-        when: "We call the restExperimentService.activities method with the experiment"
-        final ServiceIterator<Value> experimentIterator = restExperimentService.activities(experiment);
-        List<Value> activityValues = []
-        if (experimentIterator.hasNext()) {
-            activityValues = experimentIterator.next(10)
-        }
-
-        then: "We expect activities for each of the experiments to be found"
-        assert activityValues
-
-        where:
-        label                                    | experimentId
-        "An existing experiment with activities" | new Long(346)
-    }
-
 }
