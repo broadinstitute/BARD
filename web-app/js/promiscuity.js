@@ -37,3 +37,8 @@ var PromiscuityHandler = {
 };
 
 $(document).on('search.complete', '.promiscuity', PromiscuityHandler.setup);
+$(document).on('search.complete', '#compounds', PromiscuityHandler.setup);
+
+$(document).ready(function () {
+    PromiscuityHandler.setup();
+});

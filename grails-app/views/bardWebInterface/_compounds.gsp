@@ -28,7 +28,7 @@
                                 </g:else>
                             </g:link>
                         </h3>
-                        ${compoundAdapter.compound.getValue('MolecularType')}
+                        ${compoundAdapter.compound.getValue(CompoundValues.MolecularTypeValue)}
                         <a href="#" class="addCompoundToCart btn btn-mini" data-cart-name="${JavaScriptUtility.cleanup(compoundAdapter.name)}"
                                  data-cart-id="${compoundAdapter.pubChemCID}" data-cart-smiles="${compoundAdapter.getStructureSMILES()}">
                             Save for later analysis
