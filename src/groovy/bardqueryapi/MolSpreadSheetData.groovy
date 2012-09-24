@@ -1,6 +1,8 @@
 package bardqueryapi
 
 import java.math.MathContext
+import bard.core.Experiment
+import bard.core.Assay
 
 /**
  * Created with IntelliJ IDEA.
@@ -10,6 +12,7 @@ import java.math.MathContext
  * To change this template use File | Settings | File Templates.
  */
 class MolSpreadSheetData {
+
     LinkedHashMap<String,MolSpreadSheetCell> mssData
     LinkedHashMap<Long,Integer> rowPointer
     LinkedHashMap<Long,Integer> columnPointer
@@ -128,6 +131,104 @@ class MolSpreadSheetData {
             return 0
         else
             return mssHeaders.size()
+    }
+
+}
+
+
+
+class MolSpreadSheetDataBuilder{
+
+    MolecularSpreadSheetService molecularSpreadSheetService
+
+    protected  MolSpreadSheetData molSpreadSheetData
+    List<CartCompound> cartCompoundList
+    List<CartAssay> cartAssayList
+    List<CartProject> cartProjectList
+    Object etag
+    List<SpreadSheetActivity> SpreadSheetActivityList
+
+    public  MolSpreadSheetData getMolSpreadSheetData() {    molSpreadSheetData  }
+    public void createNewMolSpreadSheetData() {
+        molSpreadSheetData=new MolSpreadSheetData()
+    }
+
+    public void holdCartResults(List<CartCompound> cartCompoundList,List<CartAssay> cartAssayList,List<CartProject> cartProjectList){
+        this.cartCompoundList = cartCompoundList
+        this.cartAssayList =  cartAssayList
+        this.cartProjectList = cartProjectList
+    }
+
+
+
+    public List<Experiment> deriveListOfExperiments() {
+        List<Experiment> experimentList
+
+        // Any projects can be converted to assays, then assays to experiments
+        if (this.cartProjectList?.size() > 0) {
+//            Collection<Assay> assayCollection = molecularSpreadSheetService.cartProjectsToAssays(cartProjectList)
+//            experimentList = molecularSpreadSheetService.assaysToExperiments(assayCollection)
+            experimentList = molecularSpreadSheetService.cartProjectsToExperiments(this.cartProjectList)
+        }
+
+        // Any assays explicitly selected on the cart are added to the  experimentList
+        if (this.cartAssayList?.size() > 0)
+            experimentList = molecularSpreadSheetService.cartAssaysToExperiments(experimentList, this.cartAssayList)
+
+        experimentList
+    }
+
+
+
+
+    public void populateMolSpreadSheet(List<Experiment> experimentList) {
+        molSpreadSheetData = new MolSpreadSheetData()
+        // next deal with the compounds
+        if (experimentList.size() > 0) {
+
+            if (cartCompoundList.size() > 0) {
+                // Explicitly specified assays and explicitly specified compounds
+                molSpreadSheetData = molecularSpreadSheetService.populateMolSpreadSheetRowMetadata(molSpreadSheetData, cartCompoundList)
+                molSpreadSheetData = molecularSpreadSheetService.populateMolSpreadSheetColumnMetadata(molSpreadSheetData, experimentList)
+                etag = molecularSpreadSheetService.generateETagFromCartCompounds(cartCompoundList)
+                SpreadSheetActivityList = molecularSpreadSheetService.extractMolSpreadSheetData(molSpreadSheetData, experimentList, etag)
+            } else if (cartCompoundList.size() == 0) {
+                // Explicitly specified assay, for which we will retrieve all compounds
+                etag = molecularSpreadSheetService.retrieveImpliedCompoundsEtagFromAssaySpecification(experimentList)
+                molSpreadSheetData = molecularSpreadSheetService.populateMolSpreadSheetColumnMetadata(molSpreadSheetData, experimentList)
+                SpreadSheetActivityList = molecularSpreadSheetService.extractMolSpreadSheetData(molSpreadSheetData, experimentList, etag)
+                Map map = molecularSpreadSheetService.convertSpreadSheetActivityToCompoundInformation(SpreadSheetActivityList)
+                molSpreadSheetData = molecularSpreadSheetService.populateMolSpreadSheetRowMetadata(molSpreadSheetData, map)
+            }
+            // finally deal with the data
+            molecularSpreadSheetService.populateMolSpreadSheetData(molSpreadSheetData, experimentList, SpreadSheetActivityList)
+        }
+    }
+
+
+}
+
+class MolSpreadSheetDataBuilderDirector {
+    private MolSpreadSheetDataBuilder molSpreadSheetDataBuilder
+
+    public setMolSpreadSheetDataBuilder(MolSpreadSheetDataBuilder molSpreadSheetDataBuilder) {
+        this.molSpreadSheetDataBuilder = molSpreadSheetDataBuilder
+    }
+
+    public MolSpreadSheetData getMolSpreadSheetData() {
+        molSpreadSheetDataBuilder.getMolSpreadSheetData()
+    }
+
+    public void constructMolSpreadSheetData(List<CartCompound> cartCompoundList,
+                                            List<CartAssay> cartAssayList,
+                                            List<CartProject> cartProjectList) {
+
+        molSpreadSheetDataBuilder.holdCartResults(cartCompoundList, cartAssayList, cartProjectList)
+
+        List<Experiment> experimentList = molSpreadSheetDataBuilder.deriveListOfExperiments()
+
+        molSpreadSheetDataBuilder.populateMolSpreadSheet(experimentList)
+
     }
 
 }

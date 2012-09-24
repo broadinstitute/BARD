@@ -24,6 +24,24 @@ class MolecularSpreadSheetService {
      * @return MolSpreadSheetData
      */
     MolSpreadSheetData retrieveExperimentalData() {
+
+        MolSpreadSheetDataBuilderDirector molSpreadSheetDataBuilderDirector = new MolSpreadSheetDataBuilderDirector()
+
+        MolSpreadSheetDataBuilder molSpreadSheetDataBuilder = new MolSpreadSheetDataBuilder()
+
+        molSpreadSheetDataBuilderDirector.setMolSpreadSheetDataBuilder( molSpreadSheetDataBuilder )
+        molSpreadSheetDataBuilderDirector.constructMolSpreadSheetData( retrieveCartCompoundFromShoppingCart(),
+                                                                       retrieveCartAssayFromShoppingCart(),
+                                                                       retrieveCartProjectFromShoppingCart() )
+
+        MolSpreadSheetData molSpreadSheetData = molSpreadSheetDataBuilderDirector.getMolSpreadSheetData()
+/*
+
+        MolSpreadSheetDataBuilderDirector molSpreadSheetDataBuilderDirector = new MolSpreadSheetDataBuilderDirector()
+
+        molSpreadSheetDataBuilderDirector.setMolSpreadSheetDataBuilder(new MolSpreadSheetDataBuilder())
+        molSpreadSheetDataBuilderDirector.constructMolSpreadSheetData()
+
         MolSpreadSheetData molSpreadSheetData = new MolSpreadSheetData()
 
         if (queryCartService.totalNumberOfUniqueItemsInCart(shoppingCartService) > 0) {
@@ -71,6 +89,7 @@ class MolecularSpreadSheetService {
             }
         }
         molSpreadSheetData
+*/
     }
 
     /**
