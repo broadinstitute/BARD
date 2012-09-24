@@ -6,12 +6,6 @@ class MolSpreadSheetController {
         molecularSpreadSheet()
     }
 
-    def demo(){        // fake data for now.
-                       //  TODO: remove this option!
-        MolSpreadSheetData molSpreadSheetData = new MolSpreadSheetData("demo!")
-        render (view:"molecularSpreadSheet", model:  [ molSpreadSheetData: molSpreadSheetData ])
-    }
-
     def molecularSpreadSheet(){
         if (molecularSpreadSheetService.weHaveEnoughDataToMakeASpreadsheet()) {
             MolSpreadSheetData molSpreadSheetData = molecularSpreadSheetService.retrieveExperimentalData()
