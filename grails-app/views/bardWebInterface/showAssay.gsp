@@ -85,9 +85,9 @@
             <div class="accordion-heading">
                 <a href="#document-header" id="document-header" class="accordion-toggle" data-toggle="collapse"
                    data-target="#document-info"><i class="icon-chevron-right"></i> Documents
-                    <small>(${[(assayAdapter.assay.protocol ? 'protocol' : null),
-                            (assayAdapter.assay.description ? 'description' : null),
-                            (assayAdapter.assay.comments ? 'comments' : null)].join(', ')})</small>
+                    <small>(${[(assayAdapter.assay.protocol ? 'protocol' : 'no protocol'),
+                            (assayAdapter.assay.description ? 'description' : 'no description'),
+                            (assayAdapter.assay.comments ? 'comments' : 'no comments')].join(', ')})</small>
                 </a>
 
                 <div id="document-info" class="accordion-body collapse">
