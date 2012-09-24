@@ -295,7 +295,7 @@
                 revert:true,
                 appendTo:'body',
                 helper:function (event) {
-                    return $('<div class="cardView"><table style="width:33%;" class="gridtable"></table></div>').find('table').append($(event.target).closest('tr').clone());
+                    return $('<div class="cardView"><table style="width:33%; z-index:3999;" class="gridtable"></table></div>').find('table').append($(event.target).closest('tr').clone());
                 }
             });
         });
@@ -333,6 +333,7 @@
                         url:'../updateCardTitle',
                         data:data,
                         success:function (data) {
+                        	/*alert("caption.assay_context updateCardTitle  " + data);*/
                             $("div#card-" + target_assay_context_id).replaceWith(data);
                             initDnd();
                         }
@@ -342,7 +343,7 @@
             });
         });
         $(document).ready(function () {
-            $("div.card").droppable({
+            $("div.span4").droppable({
                 hoverClass:"drophoverCard",
                 drop:function (event, ui) {
                     var src_assay_context_item_id = ui.draggable.attr('id');
@@ -354,6 +355,7 @@
                         url:'../addItemToCard',
                         data:data,
                         success:function (data) {
+                        	/*alert("div.span4 addItemToCard  " + data);*/
                             $("div#cardHolder").html(data);
                             initDnd();
                         }
