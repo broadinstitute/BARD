@@ -52,8 +52,9 @@ grails.project.dependency.resolution = {
         compile ":yui:2.8.2.1"
         compile ":twitter-bootstrap:2.1.0"
         compile ":elastic-search:0.4.5-SNAPSHOT"
-        compile ":spring-security-core:1.2.7.3"
+        compile ":cbipcrowdauthentication:0.3.0"
         compile(":build-test-data:2.0.3")
+        //compile ":console:1.2"
 
         // runtime scope
         runtime ":hibernate:$grailsVersion"

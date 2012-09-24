@@ -1,5 +1,3 @@
-import bard.login.TemporaryAuthenticationProvider
-import bard.login.TemporaryUserDetailsService
 import bard.hibernate.ModifiedByListener
 import org.codehaus.groovy.grails.orm.hibernate.HibernateEventListeners
 
@@ -26,12 +24,6 @@ beans = {
         queryExecutorService = ref('queryExecutorService')
     }
 
-    temporaryUserDetailsService(TemporaryUserDetailsService)
-
-    temporaryAuthenticationProvider(TemporaryAuthenticationProvider) {
-        userDetailsService = ref('temporaryUserDetailsService')
-    }
-
     modifiedByListener(ModifiedByListener) {
         springSecurityService = ref('springSecurityService')
     }
@@ -39,6 +31,11 @@ beans = {
         listenerMap = ['pre-insert': modifiedByListener,
                 'pre-update': modifiedByListener,
         ]
+    }
+
+    crowdAuthenticationProvider(org.broadinstitute.cbip.crowd.CrowdAuthenticationProviderService) {// beans here
+        crowdClient = ref('crowdClient')
+        grailsApplication = application
     }
 
 
