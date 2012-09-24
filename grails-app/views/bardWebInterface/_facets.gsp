@@ -30,7 +30,7 @@
                 <g:each in="${facets}" var="parentFacet">
                 %{--<g:if test="${parentFacet.children}">--}%
                     %{--We currently can't support the COLLECTION facet group. Please refer to: https://www.pivotaltracker.com/story/show/35813409--}%
-                    <g:if test="${(FacetFormType.CompoundFacetForm && parentFacet.id.trim().equalsIgnoreCase('collection')) == false}">
+                    %{--<g:if test="${(FacetFormType.CompoundFacetForm && parentFacet.id.trim().equalsIgnoreCase('collection')) == false}">--}%
                         <fieldset>
                             <h3>${parentFacet.id.replaceAll("_", " ").toLowerCase().capitalize()}</h3>
                             <g:each in="${parentFacet.children}" var="childFacet">
@@ -56,8 +56,7 @@
                                 <g:set var="childIndex" value="${childIndex + 1}"/>
                             </g:each>
                         </fieldset>
-                    </g:if>
-                %{--</g:if>--}%
+                    %{--</g:if>--}%
                 </g:each>
                 <g:hiddenField name="formName" value="${formName.toString()}"/>
             </g:form>
