@@ -62,8 +62,11 @@ environments {
         grails.logging.jul.usebridge = false
     }
 }
-
+//override in config file for environment
 grails.serverURL ="http://localhost:8080/bardwebquery"
+//URL to the ROOT of the cap server
+cap.server.home="http://localhost:8081/BARD/"
+cap.assay.home="${cap.server.home}/assayDefinition/show/"
 // log4j configuration
 log4j = {
     // Example of changing the log pattern for the default console
