@@ -6,7 +6,7 @@
   To change this template use File | Settings | File Templates.
 --%>
 
-<%@ page import="bard.core.AssayValues" contentType="text/html;charset=UTF-8" %>
+<%@ page import="org.springframework.context.annotation.Primary; bard.core.ExperimentValues; bard.core.AssayValues" contentType="text/html;charset=UTF-8" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -24,7 +24,7 @@
             <th>Structure</th>
             <th>Readout</th>
             <th>Outcome</th>
-            <g:if test="${role && (role != AssayValues.AssayRole.Primary)}">
+            <g:if test="${role && (role != ExperimentValues.ExperimentRole.Primary)}">
                 <th>Curve</th>
             </g:if>
         </tr>
@@ -45,7 +45,7 @@
                 </td>
                 <td>${experimentData.hillCurveValue.id}</td>
                 <td>
-                    <g:if test="${role && (role != AssayValues.AssayRole.Primary)}">
+                    <g:if test="${role && (role != ExperimentValues.ExperimentRole.Primary)}">
                         <img alt="" title=""
                              src="${createLink(controller: 'doseResponseCurve', action: 'doseResponseCurve', params: [sinf: experimentData.hillCurveValue.sInf, s0: experimentData.hillCurveValue.s0, ac50: experimentData.hillCurveValue.slope, hillSlope: experimentData.hillCurveValue.coef, concentrations: experimentData.hillCurveValue.conc, activities: experimentData.hillCurveValue.response])}"/>
                         <br/><br/>

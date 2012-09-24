@@ -11,6 +11,7 @@ import spock.lang.Unroll
 import bard.core.*
 
 import static junit.framework.Assert.assertNotNull
+import spock.lang.Timeout
 
 @Unroll
 class MolecularSpreadSheetServiceIntegrationSpec extends IntegrationSpec {
@@ -43,7 +44,7 @@ class MolecularSpreadSheetServiceIntegrationSpec extends IntegrationSpec {
         then: "We get back the expected map"
         assert experimentDataMap
         final Long totalActivities = experimentDataMap.total
-        final AssayValues.AssayRole role = experimentDataMap.role
+        final ExperimentValues.ExperimentRole role = experimentDataMap.role
         println role
         println totalActivities
         assert totalActivities
@@ -67,7 +68,7 @@ class MolecularSpreadSheetServiceIntegrationSpec extends IntegrationSpec {
         given: "That a list of CartAssay objects have been created"
         final List<CartAssay> givenCartAssays = cartAssays
         when: "We call the cartAssaysToExperiments() with the given list of assay carty objects"
-        List<Experiment> experiments = molecularSpreadSheetService.cartAssaysToExperiments(null,givenCartAssays)
+        List<Experiment> experiments = molecularSpreadSheetService.cartAssaysToExperiments(null, givenCartAssays)
         then: "We expect experiments for each of the assays to be found"
         assert experiments
         where:
@@ -219,5 +220,24 @@ class MolecularSpreadSheetServiceIntegrationSpec extends IntegrationSpec {
         molSpreadSheetData
     }
 
+    @Timeout(10)
+    void "tests getExperimentActivities #label"() {
+        given: "Experiment ID"
+        final Experiment experiment = restExperimentService.get(experimentId)
+
+        when: "We call the restExperimentService.activities method with the experiment"
+        final ServiceIterator<Value> experimentIterator = restExperimentService.activities(experiment);
+        List<Value> activityValues = []
+        if (experimentIterator.hasNext()) {
+            activityValues = experimentIterator.next(10)
+        }
+
+        then: "We expect activities for each of the experiments to be found"
+        assert activityValues
+
+        where:
+        label                                    | experimentId
+        "An existing experiment with activities" | new Long(346)
+    }
 
 }
