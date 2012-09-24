@@ -1,7 +1,5 @@
 package webtests
 
-import geb.Module
-
 class HomePage extends ScaffoldPage {
 
     static url = ""
@@ -13,7 +11,7 @@ class HomePage extends ScaffoldPage {
     static content = {
         searchBox() {$("#searchString")}
         searchButton(to: HomePage) {$("#searchButton")}
-        structureSearchLink {$("a", text:"Create a structure for a search")}
+        structureSearchLink {$("a", text:"Draw or paste a structure for a search")}
 
 
         //do confirmation here
