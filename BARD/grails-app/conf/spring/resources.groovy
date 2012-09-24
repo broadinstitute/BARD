@@ -37,6 +37,7 @@ beans = {
         crowdClient = ref('crowdClient')
         grailsApplication = application
     }
+    inMemMapAuthenticationProviderService(org.broadinstitute.cbip.crowd.noServer.MockCrowdAuthenticationProviderService)
 
 
 }
