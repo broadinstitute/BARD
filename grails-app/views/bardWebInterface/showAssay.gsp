@@ -9,12 +9,17 @@
 <body>
 <div class="row-fluid">
     <div class="span12 page-header">
-        <h1>Assay Definition: ${assayAdapter?.assay?.name} <small>(ADID: ${assayAdapter?.assay?.id})</small></h1>
+        <h1>Assay Definition: ${assayAdapter?.assay?.name}
+            <small>(ADID: ${assayAdapter?.assay?.id})</small>
+        </h1>
+
         <a href="#" class="addAssayToCart btn btn-mini"
            data-cart-name="${JavaScriptUtility.cleanup(assayAdapter?.assay?.name)}"
            data-cart-id="${assayAdapter?.assay?.id}">
             Save for later analysis
         </a>
+        <a class="btn btn-mini" href="${grailsApplication.config.bard.cap.assay}${assayAdapter?.assay?.capAssayId}"
+           title="Click To Edit Assay Definition In Cap" rel="tooltip">Edit in CAP</a>
     </div>
 </div>
 
@@ -78,9 +83,9 @@
             <div class="accordion-heading">
                 <a href="#document-header" id="document-header" class="accordion-toggle" data-toggle="collapse"
                    data-target="#document-info"><i class="icon-chevron-right"></i> Documents
-                    <small>(${[(assayAdapter.assay.protocol ? 'protocol' : null),
-                            (assayAdapter.assay.description ? 'description' : null),
-                            (assayAdapter.assay.comments ? 'comments' : null)].join(', ')})</small>
+                    <small>(${[(assayAdapter.assay.protocol ? 'protocol' : 'no protocol'),
+                            (assayAdapter.assay.description ? 'description' : 'no description'),
+                            (assayAdapter.assay.comments ? 'comments' : 'no comments')].join(', ')})</small>
                 </a>
 
                 <div id="document-info" class="accordion-body collapse">
@@ -98,7 +103,7 @@
 
                 <div id="result-info" class="accordion-body collapse">
                     <div class="accordion-inner">
-                        TBD
+                        <g:render template="experiments" model="['experiments': assayAdapter?.assay?.experiments]" />
                     </div>
                 </div>
             </div>

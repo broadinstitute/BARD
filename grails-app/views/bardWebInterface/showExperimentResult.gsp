@@ -24,7 +24,9 @@
             <th>Structure</th>
             <th>Readout</th>
             <th>Outcome</th>
-            <th>Curve</th>
+            <g:if test="${role && (role != AssayValues.AssayRole.Primary)}">
+                <th>Curve</th>
+            </g:if>
         </tr>
         </thead>
         <g:each in="${spreadSheetActivities}" var="experimentData">
@@ -43,16 +45,18 @@
                 </td>
                 <td>${experimentData.hillCurveValue.id}</td>
                 <td>
-                    <g:if test="${role != AssayValues.AssayRole.Primary}">
+                    <g:if test="${role && (role != AssayValues.AssayRole.Primary)}">
                         <img alt="" title=""
                              src="${createLink(controller: 'doseResponseCurve', action: 'doseResponseCurve', params: [sinf: experimentData.hillCurveValue.sInf, s0: experimentData.hillCurveValue.s0, ac50: experimentData.hillCurveValue.slope, hillSlope: experimentData.hillCurveValue.coef, concentrations: experimentData.hillCurveValue.conc, activities: experimentData.hillCurveValue.response])}"/>
                         <br/><br/>
+
                         <p>AC50 = ${experimentData.hillCurveValue.slope}</p>
                     </g:if>
                 </td>
             </tr>
         </g:each>
     </table>
+
     <div class="pagination">
         <g:paginate total="${total ? total : 0}" params='[id: "${params?.id}"]'/>
     </div>

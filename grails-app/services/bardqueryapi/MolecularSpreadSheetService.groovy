@@ -26,10 +26,10 @@ class MolecularSpreadSheetService {
 
         MolSpreadSheetDataBuilder molSpreadSheetDataBuilder = new MolSpreadSheetDataBuilder(this)
 
-        molSpreadSheetDataBuilderDirector.setMolSpreadSheetDataBuilder( molSpreadSheetDataBuilder )
-        molSpreadSheetDataBuilderDirector.constructMolSpreadSheetData( retrieveCartCompoundFromShoppingCart(),
-                                                                       retrieveCartAssayFromShoppingCart(),
-                                                                       retrieveCartProjectFromShoppingCart() )
+        molSpreadSheetDataBuilderDirector.setMolSpreadSheetDataBuilder(molSpreadSheetDataBuilder)
+        molSpreadSheetDataBuilderDirector.constructMolSpreadSheetData(retrieveCartCompoundFromShoppingCart(),
+                retrieveCartAssayFromShoppingCart(),
+                retrieveCartProjectFromShoppingCart())
 
         molSpreadSheetDataBuilderDirector.getMolSpreadSheetData()
     }
@@ -374,28 +374,33 @@ class MolecularSpreadSheetService {
     public Map findExperimentDataById(final Long experimentId, final int top = 10, final int skip = 0) {
         List<SpreadSheetActivity> spreadSheetActivities = []
         final RESTExperimentService restExperimentService = queryServiceWrapper.getRestExperimentService()
+        long totalNumberOfRecords = 0
+        AssayValues.AssayRole role = null
         Experiment experiment = restExperimentService.get(experimentId)
-        final AssayValues.AssayRole role = experiment?.getAssay()?.getRole()
-        final ServiceIterator<Value> experimentIterator = restExperimentService.activities(experiment);
+        if (experiment) {
+            role = experiment?.getAssay()?.getRole()
+            final ServiceIterator<Value> experimentIterator = restExperimentService.activities(experiment);
 
-        List<Value> activityValues = []
-        if (experimentIterator.hasNext()) {
-            if (skip == 0) {
-                activityValues = experimentIterator.next(top)
+            List<Value> activityValues = []
+            if (experimentIterator.hasNext()) {
+                if (skip == 0) {
+                    activityValues = experimentIterator.next(top)
+                }
+                else { //There is no way to pass in skip and top to the iterator so we have to do this hack
+                    //which is not perfect
+                    activityValues = experimentIterator.next(top + skip)
+                    activityValues = activityValues.subList(skip, activityValues.size())
+                }
             }
-            else { //There is no way to pass in skip and top to the iterator so we have to do this hack
-                //which is not perfect
-                activityValues = experimentIterator.next(top + skip)
-                activityValues = activityValues.subList(skip, activityValues.size())
+            final Iterator<Value> iterator = activityValues.iterator()
+            while (iterator.hasNext()) {
+                Value experimentValue = iterator.next()
+                SpreadSheetActivity spreadSheetActivity = extractActivitiesFromExperiment(experimentValue)
+                spreadSheetActivities.add(spreadSheetActivity)
             }
+
+            totalNumberOfRecords = experimentIterator.getCount()
         }
-        final Iterator<Value> iterator = activityValues.iterator()
-        while (iterator.hasNext()) {
-            Value experimentValue = iterator.next()
-            SpreadSheetActivity spreadSheetActivity = extractActivitiesFromExperiment(experimentValue)
-            spreadSheetActivities.add(spreadSheetActivity)
-        }
-        final long totalNumberOfRecords = experimentIterator.getCount()
         return [total: totalNumberOfRecords, spreadSheetActivities: spreadSheetActivities, role: role]
     }
 

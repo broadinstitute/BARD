@@ -1,3 +1,15 @@
+a {
+    color: #51528a;
+}
+
+a:visited {
+    color: #805575;
+}
+
+a.btn {
+    color: #000000;
+}
+
 .right-aligned {
     text-align: right;
 }
@@ -88,6 +100,14 @@ div.header > h3 {
     width: 100px;
 }
 
+.examples {
+    font-size: .9em;
+}
+.examples a {
+    font-family: "Courier New", monospace;
+    font-weight: bold;
+}
+
 #modalDiv {
     height: 640px;
     width: 560px;
@@ -100,6 +120,18 @@ div.header > h3 {
     max-height: 500px;
     overflow: hidden;
     padding: 5px;
+}
+
+.bard-footer {
+    margin-top: 30px;
+    background-color: #f2f5f1;
+    border: 1px solid #f2f5f1;
+    margin-bottom: 20px;
+}
+
+.bard-footer .horizontal-block-list {
+    margin-top: 10px;
+    margin-left: 20px;
 }
 
 a.removeXMark {
@@ -266,9 +298,6 @@ div.addtocartholder{
 a.addtocart { //right
     width:200px;
     height: 200px;
-}
-#resultTab a:visited {
-    color:purple;
 }
 
 img.addtocart {  //left
