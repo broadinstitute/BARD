@@ -1,8 +1,8 @@
 package bardqueryapi
 
-import java.math.MathContext
 import bard.core.Experiment
-import bard.core.Assay
+
+import java.math.MathContext
 
 /**
  * Created with IntelliJ IDEA.
@@ -138,15 +138,17 @@ class MolSpreadSheetData {
 
 
 class MolSpreadSheetDataBuilder{
-
-    MolecularSpreadSheetService molecularSpreadSheetService
-
+    protected MolecularSpreadSheetService molecularSpreadSheetService
     protected  MolSpreadSheetData molSpreadSheetData
     List<CartCompound> cartCompoundList
     List<CartAssay> cartAssayList
     List<CartProject> cartProjectList
     Object etag
     List<SpreadSheetActivity> SpreadSheetActivityList
+
+    public MolSpreadSheetDataBuilder(MolecularSpreadSheetService molecularSpreadSheetService){
+        this.molecularSpreadSheetService = molecularSpreadSheetService
+    }
 
     public  MolSpreadSheetData getMolSpreadSheetData() {    molSpreadSheetData  }
     public void createNewMolSpreadSheetData() {
@@ -172,8 +174,10 @@ class MolSpreadSheetDataBuilder{
         }
 
         // Any assays explicitly selected on the cart are added to the  experimentList
-        if (this.cartAssayList?.size() > 0)
+        if (this.cartAssayList?.size() > 0) {
             experimentList = molecularSpreadSheetService.cartAssaysToExperiments(experimentList, this.cartAssayList)
+        }
+
 
         experimentList
     }
