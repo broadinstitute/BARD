@@ -22,7 +22,7 @@
         <p>BARD is a free, public platform funded by the <a href="http://mli.nih.gov">NIH Molecular Libraries Program</a> that enables
         scientists to store and analyze well-annotated small-molecule bioassay results.  You can use
         BARD to search across X projects, Y experiments, Z assay definitions, N compounds, and M results.
-        For further analytical power, <a href="http://bard.nih.gov">download our thick client</a> or access the
+        For further analytical power, <a href="http://bard.nih.gov">download our desktop client</a> or access the
             <a href="http://bard.nih.gov/api">REST API</a> directly.  You can
         also <a href="http://bard.nih.gov">contribute</a> your own bioassay data, <a href="http://bard.nih.gov">install</a>
             a local copy of BARD, or extend the system by writing a <a href="http://bard.nih.gov">plug-in</a>.
