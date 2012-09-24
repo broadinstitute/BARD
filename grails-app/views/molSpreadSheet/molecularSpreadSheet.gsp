@@ -9,7 +9,7 @@
 <head>
     <meta name="layout" content="logoSearchCartAndFooter"/>
     <title>Molecular spreadsheet</title>
-    <r:require module="molecularSpreadSheet"/>
+    <r:require modules="molecularSpreadSheet,promiscuity"/>
 </head>
 
 <body>
@@ -50,6 +50,7 @@
             <g:each var="rowCnt" in="${0..(molSpreadSheetData.getRowCount() - 1)}">
                 <% String retrievedName = """${molSpreadSheetData?.displayValue(rowCnt, 0)["name"]}""".toString() %>
                 <% String retrievedSmiles = """${molSpreadSheetData?.displayValue(rowCnt, 0)["smiles"]}""".toString() %>
+                <% String cid = """${molSpreadSheetData?.displayValue(rowCnt, 1)?."value"}""".toString() %>
                 <g:if test="${((rowCount++) % 2) == 0}">
                     <tr class="molSpreadSheet">
                 </g:if>
@@ -61,9 +62,12 @@
                          src="${createLink(controller: 'chemAxon', action: 'generateStructureImage', params: [smiles: retrievedSmiles, width: 150, height: 120])}"/>
                 </td>
                 <td class="molSpreadSheet" propert="cid">
-                    ${molSpreadSheetData?.displayValue(rowCnt, 1)?."value"}
+                    ${cid}
                 </td>
-                <g:each var="colCnt" in="${2..(molSpreadSheetData.getColumnCount() - 1)}">
+                <td class="molSpreadSheet">
+                    <div class="promiscuity" href="${createLink(controller: 'bardWebInterface', action: 'promiscuity', params: [cid: cid])}" id="${cid}_prom"></div>
+                </td>
+                <g:each var="colCnt" in="${3..(molSpreadSheetData.getColumnCount() - 1)}">
                     <td class="molSpreadSheet" property="var${colCnt}">
                     <% SpreadSheetActivity experimentData = molSpreadSheetData?.findSpreadSheetActivity(rowCnt, colCnt) %>
                     <g:if test="${experimentData != null}">
