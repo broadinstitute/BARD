@@ -145,7 +145,8 @@ class MolecularSpreadSheetService {
             List<Compound> singleExperimentCompoundList = compoundServiceIterator.next(MAXIMUM_NUMBER_OF_COMPOUNDS)
             if (etag == null)
                 etag = this.queryServiceWrapper.restCompoundService.newETag("dsa", singleExperimentCompoundList*.id);
-            else
+            else if ( (singleExperimentCompoundList != null) &&
+                      (singleExperimentCompoundList.size() > 0) )
                 this.queryServiceWrapper.restCompoundService.putETag(etag, singleExperimentCompoundList*.id);
         }
         etag
