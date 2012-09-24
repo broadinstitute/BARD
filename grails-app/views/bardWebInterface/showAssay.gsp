@@ -9,7 +9,14 @@
 <body>
 <div class="row-fluid">
     <div class="span12 page-header">
-        <h1>Assay Definition: ${assayAdapter?.assay?.name} <small>(ADID: ${assayAdapter?.assay?.id})</small></h1>
+        <h1>Assay Definition: ${assayAdapter?.assay?.name}
+            <small>
+                <a href="${grailsApplication.config.bard.cap.assay}${assayAdapter?.assay?.capAssayId}"
+                   title="Click To Edit Assay Definition In Cap" rel="tooltip">
+                        (ADID: ${assayAdapter?.assay?.id} )
+                </a></small>
+
+        </h1>
         <a href="#" class="addAssayToCart btn btn-mini"
            data-cart-name="${JavaScriptUtility.cleanup(assayAdapter?.assay?.name)}"
            data-cart-id="${assayAdapter?.assay?.id}">
