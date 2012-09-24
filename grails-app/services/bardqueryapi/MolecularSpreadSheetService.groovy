@@ -3,7 +3,10 @@ package bardqueryapi
 import bard.core.adapter.CompoundAdapter
 import bard.core.rest.RESTExperimentService
 import com.metasieve.shoppingcart.ShoppingCartService
+import molspreadsheet.MolSpreadSheetCell
+import molspreadsheet.MolSpreadSheetData
 import bard.core.*
+import molspreadsheet.SpreadSheetActivityStorage
 
 class MolecularSpreadSheetService {
 
@@ -112,9 +115,12 @@ class MolecularSpreadSheetService {
                     int innerRowPointer = molSpreadSheetData.rowPointer[spreadSheetActivity.cid]
                     int innerColumnCount = molSpreadSheetData.columnPointer[spreadSheetActivity.eid]
                     String arrayKey = "${innerRowPointer}_${innerColumnCount + 3}"
-                    Double activityValue = spreadSheetActivity.interpretHillCurveValue()
-                    MolSpreadSheetCell molSpreadSheetCell = new MolSpreadSheetCell(activityValue.toString(), MolSpreadSheetCellType.numeric, MolSpreadSheetCellUnit.Micromolar, spreadSheetActivity)
-                    if (activityValue == Double.NaN)
+                    SpreadSheetActivityStorage spreadSheetActivityStorage = spreadSheetActivity.toSpreadSheetActivityStorage()
+                    MolSpreadSheetCell molSpreadSheetCell = new MolSpreadSheetCell( spreadSheetActivity.interpretHillCurveValue().toString(),
+                                                                                    MolSpreadSheetCellType.numeric,
+                                                                                    MolSpreadSheetCellUnit.Micromolar,
+                                                                                    spreadSheetActivityStorage)
+                    if (spreadSheetActivityStorage == null)
                         molSpreadSheetCell.activity = false
                     molSpreadSheetData.mssData.put(arrayKey, molSpreadSheetCell)
                 }
@@ -139,7 +145,8 @@ class MolecularSpreadSheetService {
             List<Compound> singleExperimentCompoundList = compoundServiceIterator.next(MAXIMUM_NUMBER_OF_COMPOUNDS)
             if (etag == null)
                 etag = this.queryServiceWrapper.restCompoundService.newETag("dsa", singleExperimentCompoundList*.id);
-            else
+            else if ( (singleExperimentCompoundList != null) &&
+                      (singleExperimentCompoundList.size() > 0) )
                 this.queryServiceWrapper.restCompoundService.putETag(etag, singleExperimentCompoundList*.id);
         }
         etag
@@ -453,6 +460,7 @@ class MolecularSpreadSheetService {
 /**
  * Since there is no experimentAdapter I had to make a method to open up the experiment
  */
+
 public class SpreadSheetActivity {
     Long eid
     Long cid
@@ -462,6 +470,26 @@ public class SpreadSheetActivity {
     public SpreadSheetActivity() {
 
     }
+
+
+
+    SpreadSheetActivityStorage toSpreadSheetActivityStorage () {
+        SpreadSheetActivityStorage spreadSheetActivityStorage  = new SpreadSheetActivityStorage ()
+        spreadSheetActivityStorage.sid =  sid
+        spreadSheetActivityStorage.eid =  eid
+        spreadSheetActivityStorage.cid =  cid
+        if (hillCurveValue != null)     {
+            spreadSheetActivityStorage.hillCurveValueId =  hillCurveValue.id
+            spreadSheetActivityStorage.hillCurveValueSInf =  hillCurveValue.setSinf()
+            spreadSheetActivityStorage.hillCurveValueS0 =  hillCurveValue.s0
+            spreadSheetActivityStorage.hillCurveValueSlope =  hillCurveValue.slope
+            spreadSheetActivityStorage.hillCurveValueCoef =  hillCurveValue.coef
+            spreadSheetActivityStorage.hillCurveValueConc =  hillCurveValue.conc
+            spreadSheetActivityStorage.hillCurveValueResponse =  hillCurveValue.response
+        }
+        spreadSheetActivityStorage
+    }
+
     /**
      *
      * @param eid

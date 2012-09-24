@@ -1,15 +1,11 @@
 package bardqueryapi
 
+import molspreadsheet.MolSpreadSheetData
+
 class MolSpreadSheetController {
     MolecularSpreadSheetService molecularSpreadSheetService
     def index() {
         molecularSpreadSheet()
-    }
-
-    def demo(){        // fake data for now.
-                       //  TODO: remove this option!
-        MolSpreadSheetData molSpreadSheetData = new MolSpreadSheetData("demo!")
-        render (view:"molecularSpreadSheet", model:  [ molSpreadSheetData: molSpreadSheetData ])
     }
 
     def molecularSpreadSheet(){
@@ -21,11 +17,6 @@ class MolSpreadSheetController {
             render (view:"../bardWebInterface/index")
         }
 
-    }
-
-    def sortMe(){
-        println 'foo'
-        render (view:"molecularSpreadSheet", model:  [ molSpreadSheetData: molSpreadSheetData ])
     }
 
     def list = {
