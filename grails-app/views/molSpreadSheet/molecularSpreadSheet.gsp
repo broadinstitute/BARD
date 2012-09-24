@@ -58,8 +58,14 @@
                     <tr class="molSpreadSheetGray">
                 </g:else>
                 <td class="molSpreadSheetImg" property="struct">
-                    <img alt="${retrievedSmiles}" title="${retrievedName}"
+
+                    <div data-detail-id="smiles_${cid}" class="pop_smiles btn btn-link"
+                         data-original-title="Copy SMILES for structure to clipboard"
+                         data-title="Copy SMILES for structure to clipboard"
+                         data-trigger="click" data-placement="left" data-content="${retrievedSmiles}">
+                     <img alt="${retrievedSmiles}" title="${retrievedName}"
                          src="${createLink(controller: 'chemAxon', action: 'generateStructureImage', params: [smiles: retrievedSmiles, width: 150, height: 120])}"/>
+                    </div>
                 </td>
                 <td class="molSpreadSheet" propert="cid">
                     ${cid}

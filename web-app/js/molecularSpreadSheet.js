@@ -5,7 +5,8 @@ $(document).ready(function () {
             var popId = $(this).attr('data-detail-id');
             return $('#' + popId).html();
         },
-        placement:'top'
+        placement:'left'
     });
     $(".promiscuity").trigger('search.complete');
+    $(".pop_smiles").popover();
 });
