@@ -7,4 +7,5 @@ $(document).ready(function () {
         },
         placement:'top'
     });
+    $(".promiscuity").trigger('search.complete');
 });
