@@ -33,10 +33,13 @@ div.cardView table.gridtable td {
     border-color: red;
 }
 
-.drophoverCaption{
+.table caption.drophoverCaption{
     background-color: green;
 }
-div.card div.drophover{
-    border-color: red;
+
+.table drophoverCard {
+	
+	border: 1px solid red;
+    /* border-color: red; */
 }
 

@@ -1,10 +1,21 @@
+<!DOCTYPE html>
+<html>
 <head>
-<meta name='layout' content='main' />
-<title><g:message code="springSecurity.denied.title" /></title>
+    <r:require modules="core,bootstrap"/>
+    <meta name="layout" content="basic"/>
+    <link rel="stylesheet" href="${resource(dir: 'css', file: 'card.css')}" type="text/css">
+    <link rel="stylesheet" href="${resource(dir: 'css', file: 'bootstrap-plus.css')}" type="text/css">
+    <title>CAP-Login</title>
+    <r:script>
+        
+    </r:script>
 </head>
 
 <body>
-<div class='body'>
-	<div class='errors'><g:message code="springSecurity.denied.message" /></div>
-</div>
+	<br/>
+	<div class="row-fluid">
+	    <div class="span12">
+	    	<div class='errors'><g:message code="springSecurity.denied.message" /></div>
+	    </div>
+	</div>
 </body>
