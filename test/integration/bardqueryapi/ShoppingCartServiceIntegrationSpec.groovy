@@ -44,7 +44,27 @@ class ShoppingCartServiceIntegrationSpec extends IntegrationSpec {
     }
 
 
+    void "Test isInShoppingCart"() {
+        given: "A shopping cart"
+        assertNotNull shoppingCartService
+        CartAssay cartAssay = new CartAssay(assayTitle:"This is an assay")
 
+        when: "item is added to cart"
+        shoppingCartService.addToShoppingCart(cartAssay)
+
+        then: "item is in shopping cart"
+        assert queryCartService.isInShoppingCart(cartAssay)
+    }
+
+    void "Test isInShoppingCart for empty cart"() {
+        given: "An empty shopping cart"
+        assertNotNull shoppingCartService
+        CartAssay cartAssay = new CartAssay(assayTitle:"This is an assay")
+
+
+        then: "item is not in shopping cart"
+        assert !queryCartService.isInShoppingCart(cartAssay)
+    }
 
 
     void "Make sure shopping cart handles all data types"() {
