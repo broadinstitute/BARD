@@ -8,24 +8,11 @@
     <link rel="stylesheet" href="${resource(dir: 'css', file: 'bootstrap-plus.css')}" type="text/css">
     <title>Assay Definition</title>
     <r:script>
-        $(document).ready(function () {
-
-        	$('.collapse').on('show', function () {
-            var icon = $(this).siblings().find("i.icon-chevron-right");
-            icon.removeClass('icon-chevron-right').addClass('icon-chevron-down');
-	        });
-	        $('.collapse').on('hide', function () {
-	            var icon = $(this).siblings().find("i.icon-chevron-down");
-	            icon.removeClass('icon-chevron-down').addClass('icon-chevron-right');
-	        });
-
-            // $("#accordion").accordion({ autoHeight:false });
+        $(document).ready(function () {        	
+            $("#accordion").accordion({ autoHeight:false});
             $("#dialog:ui-dialog").dialog("destroy");
         });
-
-        $(document).ready(function () {
-            $("#accordion").accordion({ autoHeight:false });
-        })
+        
     </r:script>
 </head>
 
@@ -53,54 +40,7 @@
 
     <g:if test="${assayInstance?.id}">
 	    <div class="row-fluid">
-	        <div id="accordion" class="span12">
-
-	        	%{--
-
-	        	<div class="accordion-group">
-		            <div class="accordion-heading">
-		                <a href="#summary-header" id="summary-header" class="accordion-toggle" data-toggle="collapse"
-		                   data-target="#summary-info"><i class="icon-chevron-right">
-		                </i> Summary for Assay ID: ${assayInstance?.id}</a>
-		            </div>
-
-		            <div id="summary-info" class="accordion-body collapse">
-		                <div class="accordion-inner">
-		                    <g:render template="assaySummaryView" model="['assayInstance': assayInstance]"/>
-		                </div>
-		            </div>
-        		</div>
-
-        		<div class="accordion-group">
-		            <div class="accordion-heading">
-		                <a href="#assaybio-header" id="assaybio-header" class="accordion-toggle" data-toggle="collapse"
-		                   data-target="#assaybio-info"><i class="icon-chevron-right">
-		                </i> Assay and Biology Details</a>
-		            </div>
-
-		            <div id="assaybio-info" class="accordion-body collapse">
-		                <div class="accordion-inner">
-		                    <g:render template="cardDtoView" model="['cardDtoList': cardDtoList, 'assayId': assayInstance.id]"/>
-		                </div>
-		            </div>
-        		</div>
-
-        		<div class="accordion-group">
-		            <div class="accordion-heading">
-		                <a href="#measures-header" id="measures-header" class="accordion-toggle" data-toggle="collapse"
-		                   data-target="#measures-info"><i class="icon-chevron-right">
-		                </i> Measures</a>
-		            </div>
-
-		            <div id="measures-info" class="accordion-body collapse">
-		                <div class="accordion-inner">
-		                    <g:render template="measuresView" model="['assayInstance': assayInstance]"/>
-		                </div>
-		            </div>
-        		</div>
-
-	        	--}%
-
+	        <div id="accordion" class="span12">	        	
 	            <h3><a href="#">Summary for Assay ID: ${assayInstance?.id}</a></h3>
 	            <g:render template="assaySummaryView" model="['assayInstance': assayInstance]"/>
 

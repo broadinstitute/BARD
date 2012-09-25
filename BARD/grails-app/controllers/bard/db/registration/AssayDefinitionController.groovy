@@ -131,4 +131,5 @@ class AssayDefinitionController {
         List<CardDto> cardDtoList = cardFactoryService.createCardDtoListForAssay(assayInstance)
         render(template: "cards", model: [cardDtoList: cardDtoList])
     }
+		
 }
