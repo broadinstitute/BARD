@@ -11,6 +11,7 @@ import spock.lang.Unroll
 import bard.core.*
 
 import static junit.framework.Assert.assertNotNull
+import spock.lang.Timeout
 
 @Unroll
 class MolecularSpreadSheetServiceIntegrationSpec extends IntegrationSpec {
@@ -43,7 +44,7 @@ class MolecularSpreadSheetServiceIntegrationSpec extends IntegrationSpec {
         then: "We get back the expected map"
         assert experimentDataMap
         final Long totalActivities = experimentDataMap.total
-        final AssayValues.AssayRole role = experimentDataMap.role
+        final ExperimentValues.ExperimentRole role = experimentDataMap.role
         println role
         println totalActivities
         assert totalActivities
@@ -67,7 +68,7 @@ class MolecularSpreadSheetServiceIntegrationSpec extends IntegrationSpec {
         given: "That a list of CartAssay objects have been created"
         final List<CartAssay> givenCartAssays = cartAssays
         when: "We call the cartAssaysToExperiments() with the given list of assay carty objects"
-        List<Experiment> experiments = molecularSpreadSheetService.cartAssaysToExperiments(null,givenCartAssays)
+        List<Experiment> experiments = molecularSpreadSheetService.cartAssaysToExperiments(null, givenCartAssays)
         then: "We expect experiments for each of the assays to be found"
         assert experiments
         where:
@@ -218,6 +219,4 @@ class MolecularSpreadSheetServiceIntegrationSpec extends IntegrationSpec {
         molSpreadSheetData.rowPointer.put(5344L, 0)
         molSpreadSheetData
     }
-
-
 }
