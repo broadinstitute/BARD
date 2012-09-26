@@ -243,8 +243,12 @@ class QueryService implements IQueryService {
                 final ServiceIterator<Experiment> experimentIterator = restAssayService.iterator(assay,Experiment.class)
                 Collection<Experiment> experiments = experimentIterator.collect()
 
+                final ServiceIterator<Project> projectIterator = restAssayService.iterator(assay,Project.class)
+                Collection<Project> projects = projectIterator.collect()
+
+
                 final AssayAdapter assayAdapter = new AssayAdapter(assay)
-                return [assayAdapter:assayAdapter,experiments:experiments]
+                return [assayAdapter:assayAdapter,experiments:experiments, projects:projects]
             }
         }
         return null
@@ -263,8 +267,10 @@ class QueryService implements IQueryService {
             if (project) {
                 final ServiceIterator<Experiment> experimentIterator = restProjectService.iterator(project,Experiment.class)
                 Collection<Experiment> experiments = experimentIterator.collect()
+                final ServiceIterator<Assay> assayIterator = restProjectService.iterator(project, Assay.class)
+                Collection<Assay> assays = assayIterator.collect()
                 ProjectAdapter projectAdapter =  new ProjectAdapter(project)
-                return [projectAdapter:projectAdapter, experiments: experiments]
+                return [projectAdapter:projectAdapter, experiments: experiments, assays:assays]
             }
         }
         return null

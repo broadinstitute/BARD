@@ -302,7 +302,7 @@ class BardWebInterfaceController {
                 }
                 //grab ex
 
-                render(view: "showAssay", model: [assayAdapter: assayAdapter, assayDetectionMethod: assayDetectionMethod, assayDetectionInstrument: assayDetectionInstrument, experiments: assayMap.experiments])
+                render(view: "showAssay", model: [assayAdapter: assayAdapter, assayDetectionMethod: assayDetectionMethod, assayDetectionInstrument: assayDetectionInstrument, experiments: assayMap.experiment, projects:assayMap.projects])
             }
             else {
                 render "Assay Protocol ID parameter required"
@@ -321,7 +321,7 @@ class BardWebInterfaceController {
             if (projId) {
                 Map projectMap = this.queryService.showProject(projId)
                 ProjectAdapter projectAdapter = projectMap.projectAdapter
-                render(view: "showProject", model: [projectAdapter: projectAdapter, experiments: projectMap.experiments])
+                render(view: "showProject", model: [projectAdapter: projectAdapter, experiments: projectMap.experiments, assays:projectMap.assays])
             }
             else {
                 render "Project ID parameter required"

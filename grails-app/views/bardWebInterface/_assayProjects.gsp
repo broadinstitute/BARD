@@ -1,8 +1,8 @@
 <dl>
-    <g:if test="${assayAdapter?.assay.projects}">
-        <g:each in="${assayAdapter?.assay.projects}" var="project">
+    <g:if test="${projects}">
+        <g:each in="${projects}" var="project">
             <dt>Name</dt>
-            <dd>${project.name}</dd>
+            <dd><g:link controller="bardWebInterface" action="showProject" id="${project.id}">${project.name}</g:link></dd>
             <dt>Description</dt>
             <dd>${project.description}</dd>
             <dt>Created</dt>

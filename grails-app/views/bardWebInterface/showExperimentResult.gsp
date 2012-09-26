@@ -11,10 +11,15 @@
 <html>
 <head>
     <meta name="layout" content="logoSearchCartAndFooter"/>
-    <title>BARD : Experiment Result : ${params?.id}</title>
+    <title>BARD : Experiment Result : ${experiment?.id}</title>
 </head>
 
 <body>
+<p><b>Title: ${experiment?.name}</b></p>
+
+<p><b>Assay ID:<g:link controller="bardWebInterface" action="showAssay"
+                       id="${experiment?.assay?.id}">${experiment?.assay?.id}</g:link></b></p>
+
 <div class="row-fluid">
     <table class="table table-condensed">
         <thead>
@@ -31,8 +36,10 @@
         </thead>
         <g:each in="${spreadSheetActivities}" var="experimentData">
             <tr>
-                <td><a href="http://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=${experimentData.sid}">${experimentData.sid}</a></td>
-                <td><a href="${createLink(controller: 'bardWebInterface', action: 'showCompound', params: [cid:experimentData.cid])}">${experimentData.cid}</a></td>
+                <td><a href="http://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=${experimentData.sid}">${experimentData.sid}</a>
+                </td>
+                <td><a href="${createLink(controller: 'bardWebInterface', action: 'showCompound', params: [cid: experimentData.cid])}">${experimentData.cid}</a>
+                </td>
                 <td style="min-width: 180px;">
                     <img alt="SID: ${experimentData.sid}" title="SID: ${experimentData.sid}"
                          src="${createLink(controller: 'chemAxon', action: 'generateStructureImage', params: [cid: experimentData.cid, width: 180, height: 150])}"/>

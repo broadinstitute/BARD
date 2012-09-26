@@ -412,7 +412,7 @@ class MolecularSpreadSheetService {
 
             totalNumberOfRecords = experimentIterator.getCount()
         }
-        return [total: totalNumberOfRecords, spreadSheetActivities: spreadSheetActivities, role: role]
+        return [total: totalNumberOfRecords, spreadSheetActivities: spreadSheetActivities, role: role, experiment:experiment]
     }
 
     /**

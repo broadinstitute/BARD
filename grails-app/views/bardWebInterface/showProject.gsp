@@ -5,17 +5,20 @@
     <meta name="layout" content="logoSearchCartAndFooter"/>
     <title>BARD : Project : ID ${projectAdapter?.project?.id}</title>
     <r:script>
-	$(document).ready(function() {
-		$( "#accordion" ).accordion({ autoHeight: false });
-	}) 
-</r:script>
+        $(document).ready(function () {
+            $("#accordion").accordion({ autoHeight:false });
+        })
+    </r:script>
 
 </head>
+
 <body>
 <div class="row-fluid">
     <div class="span12 page-header">
         <h1>Project: ${projectAdapter?.name} <small>(Project ID: ${projectAdapter?.project?.id})</small></h1>
-        <a href="#" class="addProjectToCart btn btn-mini" data-cart-name="${JavaScriptUtility.cleanup(projectAdapter?.name)}" data-cart-id="${projectAdapter?.project?.id}">
+        <a href="#" class="addProjectToCart btn btn-mini"
+           data-cart-name="${JavaScriptUtility.cleanup(projectAdapter?.name)}"
+           data-cart-id="${projectAdapter?.project?.id}">
             Save for later analysis
         </a>
     </div>
@@ -34,10 +37,32 @@
     })
 </r:script>
 <div class="row-fluid">
+
     <div class="span12 accordion">
         <div class="accordion-group">
             <div class="accordion-heading">
-                <a href="#document-header" id="document-header" class="accordion-toggle" data-toggle="collapse" data-target="#document-info"><i class="icon-chevron-down"></i> Description</a>
+                <a href="#document-header" id="assays-header" class="accordion-toggle" data-toggle="collapse"
+                   data-target="#assays-info"><i class="icon-chevron-down"></i> Assays</a>
+
+                <div id="assays-info" class="accordion-body in collapse">
+                    <div class="accordion-inner">
+                        <g:each var="assay" in="${assays}" status="i">
+                            <div>
+                                 <p>
+                                    <g:link controller="bardWebInterface" action="showAssay" id="${assay.id}">${assay.name}</g:link>
+                                </p>
+                            </div>
+                        </g:each>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                <a href="#document-header" id="document-header" class="accordion-toggle" data-toggle="collapse"
+                   data-target="#document-info"><i class="icon-chevron-down"></i> Description</a>
+
                 <div id="document-info" class="accordion-body in collapse">
                     <div class="accordion-inner">
                         <g:textBlock>${projectAdapter.project.description}</g:textBlock>
@@ -45,12 +70,16 @@
                 </div>
             </div>
         </div>
+
         <div class="accordion-group">
             <div class="accordion-heading">
-                <a href="#experiments-header" id="experiments-header" class="accordion-toggle" data-toggle="collapse" data-target="#experiments-info"><i class="icon-chevron-right"></i> Experiments (${projectAdapter.numberOfExperiments})</a>
+                <a href="#experiments-header" id="experiments-header" class="accordion-toggle" data-toggle="collapse"
+                   data-target="#experiments-info"><i
+                        class="icon-chevron-right"></i> Experiments (${projectAdapter.numberOfExperiments})</a>
+
                 <div id="experiments-info" class="accordion-body collapse">
                     <div class="accordion-inner">
-                        <g:render template="experiments" model="['experiments': projectAdapter?.project?.experiments]" />
+                        <g:render template="experiments" model="['experiments': experiments]"/>
                     </div>
                 </div>
             </div>
