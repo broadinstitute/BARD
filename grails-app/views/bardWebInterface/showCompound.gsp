@@ -130,7 +130,7 @@
 <g:if test="${compound?.compound?.getValue('CompoundDrugLabelRx')}">
     <div class="row-fluid">
         <div class="span12">
-            <h3>Perscription Drug Label</h3>
+            <h3>Prescription Drug Label</h3>
             <ul class="unstyled">
                 <g:each in="${compound?.compound?.getValues('CompoundDrugLabelRx')?.collect {it.value}}" var="rxlabel">
                     <li>${rxlabel}</li>
