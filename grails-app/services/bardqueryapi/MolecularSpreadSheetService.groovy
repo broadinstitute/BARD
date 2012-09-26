@@ -395,7 +395,7 @@ class MolecularSpreadSheetService {
             if (compound != null)  {
                 Collection<Assay> activeAssaysForThisCompound = queryServiceWrapper.getRestCompoundService().getTestedAssays(compound,true)
                 for (Assay assay in activeAssaysForThisCompound) {
-                    allAssays << assay
+                    allAssayIds << assay
                 }
             }
         }
