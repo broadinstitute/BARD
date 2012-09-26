@@ -2,6 +2,7 @@ package bard.dm.assaycompare
 
 import bard.db.registration.AssayContextItem
 import bard.db.registration.AttributeType
+import bard.dm.Log
 
 /**
  * Created with IntelliJ IDEA.
@@ -17,6 +18,8 @@ class AssayContextItemCompare {
     double eps = 1e-4
 
     public ContextItemComparisonResultEnum compareContextItems(AssayContextItem aci1, AssayContextItem aci2) {
+
+        Log.logger.info("\t\t\t\taci1 aci2 ${aci1.id} ${aci2.id}")
 
         //first check if they have the same attribute
         if (aci1.attributeElement.equals(aci2.attributeElement)) {

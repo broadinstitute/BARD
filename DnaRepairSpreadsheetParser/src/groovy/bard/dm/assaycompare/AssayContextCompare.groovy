@@ -2,6 +2,7 @@ package bard.dm.assaycompare
 
 import bard.db.registration.AssayContext
 import bard.db.registration.AssayContextItem
+import bard.dm.Log
 
 /**
  * Created with IntelliJ IDEA.
@@ -14,36 +15,7 @@ class AssayContextCompare {
     private CompareUsingMatches<AssayContextItem, ContextItemComparisonResultEnum> compareUsingMatches
 
     public AssayContextCompare() {
-        MatchTripleBuilder<AssayContextItem, ContextItemComparisonResultEnum> matchTripleBuilder = new MatchTripleBuilder<AssayContextItem, ContextItemComparisonResultEnum>() {
-            private final AssayContextItemCompare assayContextItemCompare = new AssayContextItemCompare()
-
-            MatchTriple build(AssayContextItem item1, AssayContextItem item2) {
-                ContextItemComparisonResultEnum resultEnum = assayContextItemCompare.compareContextItems(item1, item2)
-
-                if (resultEnum.equals(ContextItemComparisonResultEnum.ExactMatch) || resultEnum.equals(ContextItemComparisonResultEnum.EpsMatch)) {
-                    return new MatchTriple<AssayContextItem, ContextItemComparisonResultEnum>(item1: item1, item2: item2, matchCondition: resultEnum)
-                } else {
-                    return null
-                }
-            }
-
-            ContextItemComparisonResultEnum determineMatchCondition(Collection<MatchTriple<AssayContextItem, ContextItemComparisonResultEnum>> matchTripleColl) {
-                boolean epsMatch = false
-                Iterator<MatchTriple<AssayContextItem, ContextItemComparisonResultEnum>> iter = matchTripleColl.iterator()
-                while ((!epsMatch) && iter.hasNext()) {
-                    //check to see if the current matchTriple was matched by an EPS match
-                    epsMatch = iter.next().matchCondition.equals(ContextItemComparisonResultEnum.EpsMatch)
-                }
-
-                if (epsMatch) {
-                    return ContextItemComparisonResultEnum.EpsMatch
-                } else {
-                    return ContextItemComparisonResultEnum.ExactMatch
-                }
-            }
-        }
-
-        compareUsingMatches = new CompareUsingMatches<AssayContextItem, ContextItemComparisonResultEnum>(matchTripleBuilder)
+        compareUsingMatches = new CompareUsingMatches<AssayContextItem, ContextItemComparisonResultEnum>(new AssayContextItemMatchTripleBuilder())
     }
 
     /**

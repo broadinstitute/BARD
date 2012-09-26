@@ -20,8 +20,9 @@ class AssayCompareIntegrationTest extends GroovyTestCase {
      * Edit DataSource.groovy, environments.test
      */
     void testWhat() {
-        Assay assay1 = Assay.findById(113)
-        Assay assay2 = Assay.findById(692)
+        Assay assay1 = Assay.findById(112)
+        Assay assay2 = Assay.findById(86)
+        //113, 692
 
         assayCompare.compareAssays(assay1, assay2)
     }
