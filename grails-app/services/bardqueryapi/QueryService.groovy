@@ -6,6 +6,8 @@ import bard.core.adapter.ProjectAdapter
 import promiscuity.PromiscuityScoreService
 import bard.core.*
 import org.apache.commons.lang.time.StopWatch
+import bard.core.rest.RESTAssayService
+import bard.core.rest.RESTProjectService
 
 class QueryService implements IQueryService {
 
@@ -231,13 +233,18 @@ class QueryService implements IQueryService {
      * @param assayId
      * @return AssayAdapter
      */
-    AssayAdapter showAssay(final Long assayId) {
+    Map showAssay(final Long assayId) {
         if (assayId) {
             StopWatch sw = this.queryHelperService.startStopWatch()
-            Assay assay = this.queryServiceWrapper.getRestAssayService().get(assayId)
+            final RESTAssayService restAssayService = this.queryServiceWrapper.getRestAssayService()
+            Assay assay = restAssayService.get(assayId)
             this.queryHelperService.stopStopWatch(sw, "show assay ${assayId.toString()}")
             if (assay) {
-                return new AssayAdapter(assay)
+                final ServiceIterator<Experiment> experimentIterator = restAssayService.iterator(assay,Experiment.class)
+                Collection<Experiment> experiments = experimentIterator.collect()
+
+                final AssayAdapter assayAdapter = new AssayAdapter(assay)
+                return [assayAdapter:assayAdapter,experiments:experiments]
             }
         }
         return null
@@ -247,13 +254,17 @@ class QueryService implements IQueryService {
      * @param projectId
      * @return ProjectAdapter
      */
-    ProjectAdapter showProject(final Long projectId) {
+    Map showProject(final Long projectId) {
         if (projectId) {
             StopWatch sw = this.queryHelperService.startStopWatch()
-            final Project project = this.queryServiceWrapper.getRestProjectService().get(projectId)
+            final RESTProjectService restProjectService = this.queryServiceWrapper.getRestProjectService()
+            final Project project = restProjectService.get(projectId)
             this.queryHelperService.stopStopWatch(sw, "show project ${projectId.toString()}")
             if (project) {
-                return new ProjectAdapter(project)
+                final ServiceIterator<Experiment> experimentIterator = restProjectService.iterator(project,Experiment.class)
+                Collection<Experiment> experiments = experimentIterator.collect()
+                ProjectAdapter projectAdapter =  new ProjectAdapter(project)
+                return [projectAdapter:projectAdapter, experiments: experiments]
             }
         }
         return null

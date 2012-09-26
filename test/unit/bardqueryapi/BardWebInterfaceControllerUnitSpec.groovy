@@ -473,10 +473,10 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
             assert response.text == 'Assay Protocol ID parameter required'
         }
         where:
-        label                    | adid                | name   | assayAdapter                      | expectedAssayView
-        "Return an assayAdapter" | new Integer(485349) | "Test" | buildAssayAdapter(485349, "Test") | "/bardWebInterface/showAssay"
-        "Assay ADID is null"     | null                | "Test" | buildAssayAdapter(485349, "Test") | null
-        "Assay Adapter is null"  | null                | "Test" | null                              | null
+        label                    | adid                | name   | assayAdapter                                                       | expectedAssayView
+        "Return an assayAdapter" | new Integer(485349) | "Test" | [assayAdapter: buildAssayAdapter(485349, "Test"), experiments: []] | "/bardWebInterface/showAssay"
+        "Assay ADID is null"     | null                | "Test" | [assayAdapter: buildAssayAdapter(485349, "Test"), experiments: []] | null
+        "Assay Adapter is null"  | null                | "Test" | null                                                               | null
 
     }
 
@@ -499,10 +499,10 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
             assert response.text == 'Project ID parameter required'
         }
         where:
-        label                     | pid                 | name   | projectAdapter                      | expectedProjectView
-        "Return a Project"        | new Integer(485349) | "Test" | buildProjectAdapter(485349, "Test") | "/bardWebInterface/showProject"
-        "Project PID is null"     | null                | "Test" | buildProjectAdapter(485349, "Test") | null
-        "Project Adapter is null" | null                | "Test" | null                                | null
+        label                     | pid                 | name   | projectAdapter                                                         | expectedProjectView
+        "Return a Project"        | new Integer(485349) | "Test" | [projectAdapter: buildProjectAdapter(485349, "Test"), experiments: []] | "/bardWebInterface/showProject"
+        "Project PID is null"     | null                | "Test" | [projectAdapter: buildProjectAdapter(485349, "Test"), experiments: []] | null
+        "Project Adapter is null" | null                | "Test" | null                                                                   | null
     }
 
 

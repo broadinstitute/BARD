@@ -87,13 +87,13 @@ public interface IQueryService {
      * @param assayId
      * @return AssayAdapter
      */
-    AssayAdapter showAssay(final Long assayId);
+    Map showAssay(final Long assayId);
     /**
      * Given a projectId, get detailed Project information from the JDO
      * @param projectId
      * @return ProjectAdapter
      */
-    ProjectAdapter showProject(final Long projectId);
+    Map showProject(final Long projectId);
 
     //==============================================Auto Complete ======
     /**

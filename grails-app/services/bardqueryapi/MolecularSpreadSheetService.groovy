@@ -7,6 +7,9 @@ import molspreadsheet.MolSpreadSheetCell
 import molspreadsheet.MolSpreadSheetData
 import molspreadsheet.SpreadSheetActivityStorage
 import bard.core.*
+import bard.core.rest.RESTAssayService
+import bard.core.rest.RESTProjectService
+
 
 class MolecularSpreadSheetService {
 
@@ -303,14 +306,14 @@ class MolecularSpreadSheetService {
             long assayId = cartAssay.assayId
             assayIds.add(assayId)
         }
-
+        final RESTAssayService restAssayService = queryServiceWrapper.getRestAssayService()
         List<Experiment> allExperiments = []
         for (Long individualAssayIds in assayIds) {
-            Assay assay = queryServiceWrapper.getRestAssayService().get(individualAssayIds)
-            Collection<Experiment> experimentList = assay.getExperiments()
-            for (Experiment experiment in experimentList) {
-                allExperiments.add(experiment)
-            }
+
+            Assay assay = restAssayService.get(individualAssayIds)
+            final ServiceIterator<Experiment> serviceIterator = restAssayService.iterator(assay, Experiment.class)
+            Collection<Experiment> experimentList = serviceIterator.collect()
+            allExperiments.addAll(experimentList)
         }
         new ArrayList<Long>()
     }
@@ -321,15 +324,15 @@ class MolecularSpreadSheetService {
      * @return
      */
     protected List<Experiment> assaysToExperiments(final Collection<Assay> assays) {
+        final RESTAssayService restAssayService = this.queryServiceWrapper.getRestAssayService()
         List<Experiment> allExperiments = []
         if (!assays.isEmpty()) {
             Iterator<Assay> assayIterator = assays.iterator()
             while (assayIterator.hasNext()) {
                 Assay assay = assayIterator.next()
-                Collection<Experiment> experimentList = assay.getExperiments()
-                for (Experiment experiment in experimentList) {
-                    allExperiments.add(experiment)
-                }
+                final ServiceIterator<Experiment> serviceIterator = restAssayService.iterator(assay, Experiment.class)
+                Collection<Experiment> experimentList = serviceIterator.collect()
+                allExperiments.addAll(experimentList)
             }
         }
 
@@ -344,16 +347,19 @@ class MolecularSpreadSheetService {
     protected List<Experiment> assaysToExperiments( List<Experiment> incomingExperimentList, final List<Long> assayIds) {
 
         List<Experiment> allExperiments
-        if (incomingExperimentList == null)
+        if (incomingExperimentList == null){
             allExperiments = []
-        else
+        }
+        else{
             allExperiments = incomingExperimentList
+        }
+        final RESTAssayService restAssayService = queryServiceWrapper.getRestAssayService()
+
         for (Long individualAssayIds in assayIds) {
-            Assay assay = queryServiceWrapper.getRestAssayService().get(individualAssayIds)
-            Collection<Experiment> experimentList = assay.getExperiments()
-            for (Experiment experiment in experimentList) {
-                allExperiments.add(experiment)
-            }
+            Assay assay = restAssayService.get(individualAssayIds)
+            final ServiceIterator<Experiment> serviceIterator = restAssayService.iterator(assay, Experiment.class)
+            Collection<Experiment> experimentList = serviceIterator.collect()
+            allExperiments.addAll(experimentList)
         }
 
         return allExperiments
@@ -389,19 +395,17 @@ class MolecularSpreadSheetService {
         }
 
 
-        List<Long> allAssayIds = []
+        List<Assay> allAssays = []
         for (Long individualCompoundId in compoundIds) {
             Compound compound = queryServiceWrapper.getRestCompoundService().get(individualCompoundId)
             if (compound != null)  {
-                Collection<Assay> activeAssaysForThisCompound = queryServiceWrapper.getRestCompoundService().getTestedAssays(compound,true)
+                Collection<Assay> activeAssaysForThisCompound = queryServiceWrapper.getRestCompoundService().getTestedAssays(compound,true)  // true = active only
                 for (Assay assay in activeAssaysForThisCompound) {
-                    allAssayIds << assay
+                    allAssays << assay
                 }
             }
         }
-
-        assaysToExperiments( incomingExperimentList, allAssayIds)
-
+        assaysToExperiments(allAssays)
     }
 
 
@@ -421,18 +425,17 @@ class MolecularSpreadSheetService {
             projectIds.add(projectId)
         }
         List<Experiment> allExperiments = []
-        Collection<Project> projects = queryServiceWrapper.getRestProjectService().get(projectIds)
+        final RESTProjectService restProjectService = queryServiceWrapper.getRestProjectService()
+        final RESTAssayService restAssayService = queryServiceWrapper.getRestAssayService()
+        final Collection<Project> projects = restProjectService.get(projectIds)
+
         for (Project project : projects) {
-            Collection<Assay> assays = project.getAssays()
-            if (!assays.isEmpty()) {
-                Iterator<Assay> assayIterator = assays.iterator()
-                while (assayIterator.hasNext()) {
-                    Assay assay = assayIterator.next()
-                    Collection<Experiment> experimentList = assay.getExperiments()
-                    for (Experiment experiment in experimentList) {
-                        allExperiments.add(experiment)
-                    }
-                }
+            final ServiceIterator<Assay> serviceIterator = restProjectService.iterator(project,Assay.class)
+            Collection<Assay> assays = serviceIterator.collect()
+            for(Assay assay: assays){
+                final ServiceIterator<Experiment> experimentIterator = restAssayService.iterator(assay,Experiment.class)
+                Collection<Experiment> experimentList = experimentIterator.collect()
+                allExperiments.addAll(experimentList)
             }
         }
         return allExperiments

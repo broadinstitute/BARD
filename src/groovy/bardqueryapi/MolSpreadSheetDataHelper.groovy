@@ -78,7 +78,7 @@ class MolSpreadSheetDataBuilder{
         molecularSpreadSheetService.populateMolSpreadSheetColumnMetadata (molSpreadSheetData, experimentList)
 
         // next deal with the compounds
-        if (experimentList.size() > 0) {
+     //   if (experimentList.size() > 0) {
 
             if (cartCompoundList.size() > 0) {
 
@@ -98,7 +98,7 @@ class MolSpreadSheetDataBuilder{
              }
             // finally deal with the data
             molecularSpreadSheetService.populateMolSpreadSheetData(molSpreadSheetData, experimentList, spreadSheetActivityList)
-        }
+     //   }
     }
 
 
