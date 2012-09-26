@@ -12,7 +12,7 @@ class MolSpreadSheetData {
     LinkedHashMap<String,MolSpreadSheetCell> mssData
     LinkedHashMap<Long,Integer> rowPointer
     LinkedHashMap<Long,Integer> columnPointer
-    List mssHeaders = new ArrayList()
+    List<String> mssHeaders
 
     MolSpreadSheetData()  {
         mssData = new LinkedHashMap<String,MolSpreadSheetCell> ()
@@ -84,6 +84,10 @@ class MolSpreadSheetData {
     }
 
     static constraints = {
+        mssData  (nullable: false)
+        rowPointer  (nullable: false)
+        mssHeaders (nullable: false)
+        columnPointer  (nullable: false)
     }
 }
 

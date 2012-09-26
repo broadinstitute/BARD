@@ -69,6 +69,7 @@
                 <td class="molSpreadSheet">
                     <div class="promiscuity" href="${createLink(controller: 'bardWebInterface', action: 'promiscuity', params: [cid: cid])}" id="${cid}_prom"></div>
                 </td>
+                <g:if test="${molSpreadSheetData.getColumnCount()>3}">
                 <g:each var="colCnt" in="${3..(molSpreadSheetData.getColumnCount() - 1)}">
                     <td class="molSpreadSheet" property="var${colCnt}">
                     <% SpreadSheetActivityStorage spreadSheetActivityStorage = molSpreadSheetData?.findSpreadSheetActivity(rowCnt, colCnt) %>
@@ -105,6 +106,7 @@
 
                     </td>
                 </g:each>
+                </g:if>
                 </tr>
             </g:each>
             </tbody>

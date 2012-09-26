@@ -14,84 +14,6 @@ import molspreadsheet.MolSpreadSheetData
 
 class MolSpreadSheetDataHelper{
 }
-//class MolSpreadSheetData {
-//
-//    LinkedHashMap<String,MolSpreadSheetCell> mssData
-//    LinkedHashMap<Long,Integer> rowPointer
-//    LinkedHashMap<Long,Integer> columnPointer
-//    List mssHeaders = new ArrayList()
-//
-//    MolSpreadSheetData()  {
-//        mssData = new LinkedHashMap<String,MolSpreadSheetCell> ()
-//        rowPointer = new LinkedHashMap<Long,Integer>()
-//        columnPointer = new LinkedHashMap<Long,Integer>()
-//        mssHeaders = new ArrayList()
-//    }
-//
-//
-//    MathContext mathContext
-//
-//    /**
-//     * Display a cell, as specified by a row and column
-//     * @param rowCnt
-//     * @param colCnt
-//     * @return
-//     */
-//    LinkedHashMap displayValue(int rowCnt, int colCnt) {
-//        def returnValue = new  LinkedHashMap<String, String>()
-//        String key = "${rowCnt}_${colCnt}"
-//        MolSpreadSheetCell molSpreadSheetCell
-//        if (mssData.containsKey(key)) {
-//            molSpreadSheetCell = mssData[key]
-//            if (molSpreadSheetCell.molSpreadSheetCellType == MolSpreadSheetCellType.image) {
-//                returnValue = molSpreadSheetCell.retrieveValues()
-//            }  else {
-//                returnValue["value"] = mssData[key].toString()
-//            }
-//        }   else {  // This is a critical error.  Try to cover all the bases so we don't crash at least.
-//            returnValue.put("value","-")
-//            returnValue.put("name", "Unknown name")
-//            returnValue.put("smiles","Unknown smiles")
-//        }
-//        returnValue
-//    }
-//
-//    SpreadSheetActivity findSpreadSheetActivity(int rowCnt, int colCnt){
-//        SpreadSheetActivity spreadSheetActivity = null
-//        String key = "${rowCnt}_${colCnt}"
-//        MolSpreadSheetCell molSpreadSheetCell
-//        if (mssData.containsKey(key)) {
-//            molSpreadSheetCell = mssData[key]
-//            spreadSheetActivity = molSpreadSheetCell.spreadSheetActivity
-//        }
-//        return spreadSheetActivity
-//    }
-//
-//
-//    /**
-//     *
-//     * @return
-//     */
-//    int getRowCount(){
-//        if (rowPointer == null)
-//            return 0
-//        else
-//            return rowPointer.size()
-//    }
-//
-//    /**
-//     *
-//     * @return
-//     */
-//    int getColumnCount(){
-//        if (mssHeaders == null)
-//            return 0
-//        else
-//            return mssHeaders.size()
-//    }
-//
-//}
-//
 
 
 class MolSpreadSheetDataBuilder{
@@ -101,7 +23,7 @@ class MolSpreadSheetDataBuilder{
     List<CartAssay> cartAssayList
     List<CartProject> cartProjectList
     Object etag
-    List<SpreadSheetActivity> SpreadSheetActivityList
+    List<SpreadSheetActivity> spreadSheetActivityList
 
     public MolSpreadSheetDataBuilder(MolecularSpreadSheetService molecularSpreadSheetService){
         this.molecularSpreadSheetService = molecularSpreadSheetService
@@ -118,15 +40,15 @@ class MolSpreadSheetDataBuilder{
         this.cartProjectList = cartProjectList
     }
 
-
-
+    /**
+     *
+     * @return
+     */
     public List<Experiment> deriveListOfExperiments() {
-        List<Experiment> experimentList
+        List<Experiment> experimentList = []
 
         // Any projects can be converted to assays, then assays to experiments
         if (this.cartProjectList?.size() > 0) {
-//            Collection<Assay> assayCollection = molecularSpreadSheetService.cartProjectsToAssays(cartProjectList)
-//            experimentList = molecularSpreadSheetService.assaysToExperiments(assayCollection)
             experimentList = molecularSpreadSheetService.cartProjectsToExperiments(this.cartProjectList)
         }
 
@@ -135,6 +57,11 @@ class MolSpreadSheetDataBuilder{
             experimentList = molecularSpreadSheetService.cartAssaysToExperiments(experimentList, this.cartAssayList)
         }
 
+        // If we get to this point and have no experiments selected but we DO have a compound (s), then the user
+        //  may be looking to derive their assays on the basis of compounds. We can do that.
+        if ((experimentList.size() == 0)  && (this.cartCompoundList?.size() > 0)) {
+            experimentList = molecularSpreadSheetService.cartCompoundsToExperiments (experimentList, this.cartCompoundList)
+        }
 
         experimentList
     }
@@ -143,27 +70,35 @@ class MolSpreadSheetDataBuilder{
 
 
     public void populateMolSpreadSheet(List<Experiment> experimentList) {
+
+        // this is the variable we plan to fill
         molSpreadSheetData = new MolSpreadSheetData()
+
+        // use experiment names to provide names for the columns
+        molecularSpreadSheetService.populateMolSpreadSheetColumnMetadata (molSpreadSheetData, experimentList)
+
         // next deal with the compounds
-        if (experimentList.size() > 0) {
+     //   if (experimentList.size() > 0) {
 
             if (cartCompoundList.size() > 0) {
+
                 // Explicitly specified assays and explicitly specified compounds
-                molSpreadSheetData = molecularSpreadSheetService.populateMolSpreadSheetRowMetadata(molSpreadSheetData, cartCompoundList)
-                molSpreadSheetData = molecularSpreadSheetService.populateMolSpreadSheetColumnMetadata(molSpreadSheetData, experimentList)
+                molecularSpreadSheetService.populateMolSpreadSheetRowMetadata(molSpreadSheetData, cartCompoundList)
                 etag = molecularSpreadSheetService.generateETagFromCartCompounds(cartCompoundList)
-                SpreadSheetActivityList = molecularSpreadSheetService.extractMolSpreadSheetData(molSpreadSheetData, experimentList, etag)
+                spreadSheetActivityList = molecularSpreadSheetService.extractMolSpreadSheetData(molSpreadSheetData, experimentList, etag)
+
             } else if (cartCompoundList.size() == 0) {
+
                 // Explicitly specified assay, for which we will retrieve all compounds
                 etag = molecularSpreadSheetService.retrieveImpliedCompoundsEtagFromAssaySpecification(experimentList)
-                molSpreadSheetData = molecularSpreadSheetService.populateMolSpreadSheetColumnMetadata(molSpreadSheetData, experimentList)
-                SpreadSheetActivityList = molecularSpreadSheetService.extractMolSpreadSheetData(molSpreadSheetData, experimentList, etag)
-                Map map = molecularSpreadSheetService.convertSpreadSheetActivityToCompoundInformation(SpreadSheetActivityList)
-                molSpreadSheetData = molecularSpreadSheetService.populateMolSpreadSheetRowMetadata(molSpreadSheetData, map)
-            }
+                spreadSheetActivityList = molecularSpreadSheetService.extractMolSpreadSheetData(molSpreadSheetData, experimentList, etag)
+                Map map = molecularSpreadSheetService.convertSpreadSheetActivityToCompoundInformation(spreadSheetActivityList)
+                molecularSpreadSheetService.populateMolSpreadSheetRowMetadata(molSpreadSheetData, map)
+
+             }
             // finally deal with the data
-            molecularSpreadSheetService.populateMolSpreadSheetData(molSpreadSheetData, experimentList, SpreadSheetActivityList)
-        }
+            molecularSpreadSheetService.populateMolSpreadSheetData(molSpreadSheetData, experimentList, spreadSheetActivityList)
+     //   }
     }
 
 
