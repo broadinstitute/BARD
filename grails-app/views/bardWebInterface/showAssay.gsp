@@ -103,7 +103,7 @@
 
                 <div id="result-info" class="accordion-body collapse">
                     <div class="accordion-inner">
-                        <g:render template="experiments" model="['experiments': experiments]" />
+                        <g:render template="experiments" model="[experiments: experiments]" />
                     </div>
                 </div>
             </div>

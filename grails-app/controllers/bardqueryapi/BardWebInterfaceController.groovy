@@ -302,7 +302,7 @@ class BardWebInterfaceController {
                 }
                 //grab ex
 
-                render(view: "showAssay", model: [assayAdapter: assayAdapter, assayDetectionMethod: assayDetectionMethod, assayDetectionInstrument: assayDetectionInstrument, experiments: assayMap.experiment, projects:assayMap.projects])
+                render(view: "showAssay", model: [assayAdapter: assayAdapter, assayDetectionMethod: assayDetectionMethod, assayDetectionInstrument: assayDetectionInstrument, experiments: assayMap.experiments, projects:assayMap.projects])
             }
             else {
                 render "Assay Protocol ID parameter required"
