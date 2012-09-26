@@ -1,8 +1,7 @@
 package bardqueryapi
 
-import org.apache.commons.collections.FactoryUtils
 import org.apache.commons.collections.ListUtils
-
+import org.apache.commons.collections.Factory
 /**
  * Command object used to parse all the search parameters coming in from the client.
  */
@@ -20,7 +19,7 @@ class DrcCurveCommand {
 //        searchString(blank: false)
 //    }
 }
-class ListUtilsFactory implements org.apache.commons.collections.Factory {
+class ListUtilsFactory implements Factory {
     public Object create() {
         return new Double(0);
     }

@@ -458,10 +458,10 @@ class MolecularSpreadSheetService {
         List<SpreadSheetActivity> spreadSheetActivities = []
         final RESTExperimentService restExperimentService = queryServiceWrapper.getRestExperimentService()
         long totalNumberOfRecords = 0
-        AssayValues.AssayRole role = null
+        ExperimentValues.ExperimentRole role = null
         Experiment experiment = restExperimentService.get(experimentId)
         if (experiment) {
-            role = experiment?.getAssay()?.getRole()
+            role = experiment?.role
             final ServiceIterator<Value> experimentIterator = restExperimentService.activities(experiment);
 
             List<Value> activityValues = []

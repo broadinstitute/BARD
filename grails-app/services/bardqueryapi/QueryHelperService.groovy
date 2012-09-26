@@ -21,7 +21,13 @@ class QueryHelperService {
             'gobp_term': 'GO Biological Process Term',
             'gocc_term': 'GO Cellular Component Term',
             'gomf_term': 'GO Molecular Function Term',
-            'target_name': 'Target Name'
+            'target_name': 'Target Name',
+            'kegg_disease_cat': 'KEGG Disease Category',
+            'kegg_disease_names': 'KEGG Disease Name',
+            'assay_type': 'Assay Type',
+            'iso_smiles':'ISO SMILES',
+            'iupac_name':'IUPAC Name',
+            'preferred_term':'Preferred Term'
     ]
 
     //filters that starts with a number or '[' to denote ranges

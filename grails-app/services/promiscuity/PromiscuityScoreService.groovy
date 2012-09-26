@@ -4,7 +4,7 @@ import bardqueryapi.QueryHelperService
 import com.thoughtworks.xstream.XStream
 import groovyx.net.http.RESTClient
 import org.apache.commons.lang.time.StopWatch
-import org.json.XML
+import grails.converters.XML
 import util.RestClientFactoryService
 
 class PromiscuityScoreService {
