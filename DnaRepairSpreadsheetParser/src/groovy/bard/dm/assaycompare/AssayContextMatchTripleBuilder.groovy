@@ -18,7 +18,7 @@ class AssayContextMatchTripleBuilder implements MatchTripleBuilder<AssayContext,
     }
 
     MatchTriple<AssayContext, ComparisonResultEnum> build(AssayContext item1, AssayContext item2) {
-        Log.logger.info("\t\tAssayCompare MatchTripleBuilder build AssayContext s item1 item2 ${item1.id} ${item2.id}")
+        Log.logger.trace("\t\tAssayCompare MatchTripleBuilder build AssayContext s item1 item2 ${item1.id} ${item2.id}")
 
         ComparisonResult<ContextItemComparisonResultEnum> result = assayContextCompare.compareContext(item1, item2)
 

@@ -34,9 +34,9 @@ class AssayDuplicateFinder {
             Map<Assay, AssayMatch> assayAssayMatchMap = new HashMap<Assay, AssayMatch>()
 
             for (int assayIndex = 0; assayIndex < assayList.size(); assayIndex++) {
-                Log.logger.info("assayIndex ${assayIndex}")
+                Log.logger.debug("assayIndex ${assayIndex}")
                 Assay assay1 = assayList.get(assayIndex)
-                Log.logger.info("assay1 ${assay1.id}")
+                Log.logger.debug("assay1 ${assay1.id}")
 
                 if (! exactMatches.contains(assay1)) {
 
@@ -49,31 +49,31 @@ class AssayDuplicateFinder {
                     checkForDuplicateContexts(new ArrayList<AssayContext>(assay1.assayContexts), contextCompare, assay1.id, itemCompare)
 
                     for (int j = assayIndex + 1; j < assayList.size(); j++) {
-                        Log.logger.info("\tj ${j}")
+                        Log.logger.debug("\tj ${j}")
                         Assay assay2 = assayList.get(j)
-                        Log.logger.info("\tassay2 ${assay2.id}")
+                        Log.logger.debug("\tassay2 ${assay2.id}")
 
                         if (!exactMatches.contains(assay2)) {
                             ComparisonResult<ComparisonResultEnum> result = assayCompare.compareAssays(assay1, assay2)
 
                             if (result != null) {
-                                //                        String matchString = null
+                                String matchString = null
                                 if (result.resultEnum.equals(ComparisonResultEnum.ExactMatch)) {
-                                    //                            matchString = "exact match"
+                                    matchString = "exact match"
                                     assay1Match.exactMatches.add(assay2)
                                     exactMatches.add(assay2)
                                 } else if (result.resultEnum.equals(ComparisonResultEnum.SubsetMatch)) {
-                                    //                            matchString = "subset match"
+                                    matchString = "subset match"
                                     if (assay1.assayContexts.size() > assay2.assayContexts.size()) {
                                         assay1Match.subsetOfThis.add(assay2)
                                     }
                                 } else if (result.resultEnum.equals(ComparisonResultEnum.PartialMatch)) {
-                                    //                            matchString = "partial match"
+                                    matchString = "partial match"
                                 }
 
-                                //                                if (matchString != null) {
-                                //                                    Log.logger.info("assays \t ${assay1.id} \t ${assay2.id} \t ${matchString} \t match item count \t ${result.matchedItemCount}")
-                                //                                }
+                                if (matchString != null) {
+                                    Log.logger.debug("assays \t ${assay1.id} \t ${assay2.id} \t ${matchString} \t match item count \t ${result.matchedItemCount}")
+                                }
                             }
 
                         }
