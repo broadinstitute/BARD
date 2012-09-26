@@ -31,8 +31,8 @@
         </thead>
         <g:each in="${spreadSheetActivities}" var="experimentData">
             <tr>
-                <td>${experimentData.sid}</td>
-                <td>${experimentData.cid}</td>
+                <td><a href="http://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=${experimentData.sid}">${experimentData.sid}</a></td>
+                <td><a href="${createLink(controller: 'bardWebInterface', action: 'showCompound', params: [cid:experimentData.cid])}">${experimentData.cid}</a></td>
                 <td style="min-width: 180px;">
                     <img alt="SID: ${experimentData.sid}" title="SID: ${experimentData.sid}"
                          src="${createLink(controller: 'chemAxon', action: 'generateStructureImage', params: [cid: experimentData.cid, width: 180, height: 150])}"/>
