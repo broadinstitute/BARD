@@ -176,22 +176,38 @@ class MolecularSpreadSheetService {
         cartProjectList
     }
 
+    /**
+     *
+     * @param molSpreadSheetData
+     * @param cartCompoundList
+     */
+    protected void populateMolSpreadSheetRowMetadata( final MolSpreadSheetData molSpreadSheetData, final List<CartCompound> cartCompoundList) {
 
+        // Make sure that the variable we're filling  leaves this routine with something in
+        if (molSpreadSheetData.rowPointer == null) molSpreadSheetData.rowPointer = new LinkedHashMap<Long,Integer>()
+        if (molSpreadSheetData.mssData == null) molSpreadSheetData.rowPointer =  new LinkedHashMap<Long,Integer>()
 
-
-    protected MolSpreadSheetData populateMolSpreadSheetRowMetadata(MolSpreadSheetData molSpreadSheetData, List<CartCompound> cartCompoundList) {
-
-        // add values for the cid column
+        // add specific values for the cid column
         int rowCount = 0
         for (CartCompound cartCompound in cartCompoundList) {
             updateMolSpreadSheetDataToReferenceCompound(molSpreadSheetData, rowCount++, cartCompound.compoundId as Long, cartCompound.name, cartCompound.smiles)
         }
 
-        molSpreadSheetData
     }
 
+    /**
+     *
+     * @param molSpreadSheetData
+     * @param compoundAdapterMap
+     * @return
+     */
+    protected void populateMolSpreadSheetRowMetadata( final MolSpreadSheetData molSpreadSheetData, final Map compoundAdapterMap) {
 
-    protected MolSpreadSheetData populateMolSpreadSheetRowMetadata(MolSpreadSheetData molSpreadSheetData, Map compoundAdapterMap) {
+        // Make sure that the variable we're filling  leaves this routine with something in
+        if (molSpreadSheetData.rowPointer == null) molSpreadSheetData.rowPointer = new LinkedHashMap<Long,Integer>()
+        if (molSpreadSheetData.mssData == null) molSpreadSheetData.rowPointer =  new LinkedHashMap<Long,Integer>()
+
+        // Add every compound we can find in the compound adapters map
         List<CompoundAdapter> compoundAdaptersList = compoundAdapterMap.compoundAdapters
         int rowCount = 0
         for (CompoundAdapter compoundAdapter in compoundAdaptersList) {
@@ -200,40 +216,52 @@ class MolecularSpreadSheetService {
             String name = compoundAdapter.name
             updateMolSpreadSheetDataToReferenceCompound(molSpreadSheetData, rowCount++, cid, name, smiles)
         }
-        molSpreadSheetData
+
     }
 
-
-
-    protected MolSpreadSheetData updateMolSpreadSheetDataToReferenceCompound(MolSpreadSheetData molSpreadSheetData,
-                                                                             int rowCount,
-                                                                             Long compoundId,
-                                                                             String compoundName,
-                                                                             String compoundSmiles) {
+    /**
+     *  add a pointer to a row along with the first two columns
+     * @param molSpreadSheetData
+     * @param rowCount
+     * @param compoundId
+     * @param compoundName
+     * @param compoundSmiles
+     * @return
+     */
+    protected MolSpreadSheetData updateMolSpreadSheetDataToReferenceCompound( final MolSpreadSheetData molSpreadSheetData,
+                                                                              final int rowCount,
+                                                                              final Long compoundId,
+                                                                              final String compoundName,
+                                                                              final String compoundSmiles) {
         // need to be able to map from CID to row location
         molSpreadSheetData.rowPointer.put(compoundId, rowCount)
 
         // add values for the cid column
         molSpreadSheetData.mssData.put("${rowCount}_0".toString(), new MolSpreadSheetCell(compoundName, compoundSmiles, MolSpreadSheetCellType.image))
-        molSpreadSheetData.mssData.put("${rowCount++}_1".toString(), new MolSpreadSheetCell(compoundId.toString(), MolSpreadSheetCellType.identifier))
+        molSpreadSheetData.mssData.put("${rowCount}_1".toString(), new MolSpreadSheetCell(compoundId.toString(), MolSpreadSheetCellType.identifier))
         //we will use this to get the promiscuity score
-        molSpreadSheetData.mssData.put("${rowCount++}_1".toString(), new MolSpreadSheetCell(compoundId.toString(), MolSpreadSheetCellType.identifier))
+        molSpreadSheetData.mssData.put("${rowCount}_2".toString(), new MolSpreadSheetCell(compoundId.toString(), MolSpreadSheetCellType.identifier))
 
         molSpreadSheetData
 
     }
 
+    /**
+     *
+     * @param molSpreadSheetData
+     * @param experimentList
+     */
+    protected void  populateMolSpreadSheetColumnMetadata(  MolSpreadSheetData molSpreadSheetData, List<Experiment> experimentList) {
 
+        // Check variable that we plan to modify
+        if (molSpreadSheetData.mssHeaders == null) molSpreadSheetData.mssHeaders =  new ArrayList<String>()
 
-    protected MolSpreadSheetData populateMolSpreadSheetColumnMetadata(MolSpreadSheetData molSpreadSheetData, List<Experiment> experimentList) {
-        // get the header names from the assays
+        // now retrieve the header names from the assays
         molSpreadSheetData.mssHeaders.add("Struct")
         molSpreadSheetData.mssHeaders.add("CID")
         molSpreadSheetData.mssHeaders.add("UNM Promiscuity Analysis")
         for (Experiment experiment in experimentList)
             molSpreadSheetData.mssHeaders.add(experiment.name)
-
-        molSpreadSheetData
     }
 
 

@@ -4,15 +4,14 @@ import bardqueryapi.MolSpreadSheetCellType
 import bardqueryapi.MolSpreadSheetCellUnit
 
 class MolSpreadSheetCell {
+    static final int SPREAD_SHEET_PRECISION = 3
 
     static hasOne = [ spreadSheetActivityStorage : SpreadSheetActivityStorage ]
 
     static belongsTo = [ molSpreadSheetData : MolSpreadSheetData ]
 
-    static final int SPREAD_SHEET_PRECISION = 3
     Boolean activity = true
     MolSpreadSheetCellType molSpreadSheetCellType = MolSpreadSheetCellType.unknown
-    Object objInternalValue
     String strInternalValue = "null"
     BigDecimal numInternalValue = 0.0
     Integer intInternalValue = 0
@@ -20,6 +19,16 @@ class MolSpreadSheetCell {
     String supplementalInternalValue = null
     SpreadSheetActivityStorage spreadSheetActivityStorage
 
+    static constraints = {
+         activity()
+         molSpreadSheetCellType(blank: false)
+         strInternalValue (nullable: false)
+         numInternalValue (nullable: false)
+         intInternalValue(nullable: false)
+         molSpreadSheetCellUnit (blank: false)
+         supplementalInternalValue ()
+         spreadSheetActivityStorage ()
+    }
 
     /**
      *  non image, no known units
@@ -72,7 +81,7 @@ class MolSpreadSheetCell {
                 assert "Images should Not go through the two parameter constructor"
                 break;
             default:
-                objInternalValue = value
+                log "You should never hit the default trap on MolSpreadSheetCell ctor1"
         }
     }
 
@@ -128,7 +137,7 @@ class MolSpreadSheetCell {
                 assert "Images should Not go through the constructor with unit type"
                 break;
             default:
-                objInternalValue = value
+                log "You should never hit the default trap on MolSpreadSheetCell ctor2"
         }
     }
 
@@ -192,7 +201,7 @@ class MolSpreadSheetCell {
                 stringBuilder.append("${strInternalValue}")
                 break;
             default:
-                stringBuilder.append("${objInternalValue}")
+                log "You should never hit the default trap on MolSpreadSheetCell ctor3"
         }
         if ( (molSpreadSheetCellUnit != MolSpreadSheetCellUnit.unknown) &&
                 (activity) )
@@ -213,9 +222,6 @@ class MolSpreadSheetCell {
             """<img alt="${smiles}" title="${name}"
   src="\${createLink(controller: 'chemAxon', action: 'generateStructureImage', params: [smiles: '${smiles}', width: 150, height: 120])}"/>"""
         retVal
-    }
-
-    static constraints = {
     }
 
 
