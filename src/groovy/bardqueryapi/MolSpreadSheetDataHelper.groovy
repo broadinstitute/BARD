@@ -40,15 +40,15 @@ class MolSpreadSheetDataBuilder{
         this.cartProjectList = cartProjectList
     }
 
-
-
+    /**
+     *
+     * @return
+     */
     public List<Experiment> deriveListOfExperiments() {
-        List<Experiment> experimentList
+        List<Experiment> experimentList = []
 
         // Any projects can be converted to assays, then assays to experiments
         if (this.cartProjectList?.size() > 0) {
-//            Collection<Assay> assayCollection = molecularSpreadSheetService.cartProjectsToAssays(cartProjectList)
-//            experimentList = molecularSpreadSheetService.assaysToExperiments(assayCollection)
             experimentList = molecularSpreadSheetService.cartProjectsToExperiments(this.cartProjectList)
         }
 
@@ -57,6 +57,11 @@ class MolSpreadSheetDataBuilder{
             experimentList = molecularSpreadSheetService.cartAssaysToExperiments(experimentList, this.cartAssayList)
         }
 
+        // If we get to this point and have no experiments selected but we DO have a compound (s), then the user
+        //  may be looking to derive their assays on the basis of compounds. We can do that.
+        if ((experimentList.size() == 0)  && (this.cartCompoundList?.size() > 0)) {
+            experimentList = molecularSpreadSheetService.cartCompoundsToExperiments (experimentList, this.cartCompoundList)
+        }
 
         experimentList
     }

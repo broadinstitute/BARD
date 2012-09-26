@@ -5,8 +5,8 @@ import bard.core.rest.RESTExperimentService
 import com.metasieve.shoppingcart.ShoppingCartService
 import molspreadsheet.MolSpreadSheetCell
 import molspreadsheet.MolSpreadSheetData
-import bard.core.*
 import molspreadsheet.SpreadSheetActivityStorage
+import bard.core.*
 
 class MolecularSpreadSheetService {
 
@@ -61,6 +61,8 @@ class MolecularSpreadSheetService {
         if (queryCartService?.totalNumberOfUniqueItemsInCart(itemsInShoppingCart, QueryCartService.cartProject) > 0)
             returnValue = true
         else if (queryCartService?.totalNumberOfUniqueItemsInCart(itemsInShoppingCart, QueryCartService.cartAssay) > 0)
+            returnValue = true
+        else if (queryCartService?.totalNumberOfUniqueItemsInCart(itemsInShoppingCart, QueryCartService.cartCompound) > 0)
             returnValue = true
         returnValue
     }
@@ -335,16 +337,11 @@ class MolecularSpreadSheetService {
     }
 
     /**
-     * Convert Cart assays to Experiments
+     * Convert Cart assays to Experiments starting with a list of Assay IDs
      * @param cartAssays
      * @return
      */
-    protected List<Experiment> cartAssaysToExperiments(List<Experiment> incomingExperimentList, final List<CartAssay> cartAssays) {
-        List<Long> assayIds = []
-        for (CartAssay cartAssay : cartAssays) {
-            long assayId = cartAssay.assayId
-            assayIds.add(assayId)
-        }
+    protected List<Experiment> assaysToExperiments( List<Experiment> incomingExperimentList, final List<Long> assayIds) {
 
         List<Experiment> allExperiments
         if (incomingExperimentList == null)
@@ -361,6 +358,57 @@ class MolecularSpreadSheetService {
 
         return allExperiments
     }
+
+
+    /**
+     * Convert Cart assays to Experiments, starting this time with cart Assays
+     * @param cartAssays
+     * @return
+     */
+    protected List<Experiment> cartAssaysToExperiments(List<Experiment> incomingExperimentList, final List<CartAssay> cartAssays) {
+        List<Long> assayIds = []
+        for (CartAssay cartAssay : cartAssays) {
+            long assayId = cartAssay.assayId
+            assayIds.add(assayId)
+        }
+
+        assaysToExperiments( incomingExperimentList, assayIds)
+    }
+
+    /**
+     *
+     * @param incomingExperimentList
+     * @param cartCompounds
+     * @return
+     */
+    protected List<Experiment> cartCompoundsToExperiments( List<Experiment> incomingExperimentList, final List<CartCompound> cartCompounds ) {
+        List<Long> compoundIds = []
+        for (CartCompound cartCompound in cartCompounds) {
+            int compoundId = cartCompound.compoundId
+            compoundIds.add(compoundId as Long)
+        }
+
+
+        List<Long> allAssayIds = []
+        for (Long individualCompoundId in compoundIds) {
+            Compound compound = queryServiceWrapper.getRestCompoundService().get(individualCompoundId)
+            if (compound != null)  {
+                Collection<Assay> activeAssaysForThisCompound = queryServiceWrapper.getRestCompoundService().getTestedAssays(compound,true)
+                for (Assay assay in activeAssaysForThisCompound) {
+                    allAssays << assay
+                }
+            }
+        }
+
+        assaysToExperiments( incomingExperimentList, allAssayIds)
+
+    }
+
+
+
+
+
+
     /**
      *
      * @param cartProjects
