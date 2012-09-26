@@ -50,7 +50,7 @@
                         <br/>
                     </g:each>
                 </td>
-                <td>${experimentData.hillCurveValue.id}</td>
+                <td></td>
                 <td>
                     <g:if test="${role && (role != ExperimentValues.ExperimentRole.Primary)}">
                         <img alt="" title=""
