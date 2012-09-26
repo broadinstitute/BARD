@@ -107,7 +107,26 @@ bard.services.elasticSearchService.restNode.baseUrl = 'http://bard-dev-vm:9200'
 bard.home.page='http://localhost:8080/bardqueryapi'
 
 //grails.plugins.springsecurity.successHandler.defaultTargetUrl = '/home'
-grails.plugins.springsecurity.providerNames = ['anonymousAuthenticationProvider','temporaryAuthenticationProvider']
+grails {
+    plugins {
+        springsecurity {
+            providerNames = ['inMemMapAuthenticationProviderService', 'crowdAuthenticationProvider']
+            controllerAnnotations.staticRules = [
+                    '/console/**': ['isFullyAuthenticated()']
+            ]
+        }
+    }
+}
+
+CbipCrowd {
+  application.url = 'https://crowd.somewhere.com/crowd/'
+  application.username = 'bard'
+  application.password = 'ChangeMe'
+  applicationSpecificRoles = ['ROLE_USER', 'ROLE_NO_ROLE']
+
+}
+
+
 
 /**
  * Loads external config files from the .grails subfolder in the user's home directory

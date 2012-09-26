@@ -12,7 +12,7 @@
 
 </head>
 <body>
-<div>
+
 	<div class="row-fluid">
 	    <div class="span12">
 	    	<div class="hero-unit-v1">
@@ -72,7 +72,5 @@
 	</g:if>
 		
 	
-	
-</div><!-- End body div -->
 </body>
 </html>

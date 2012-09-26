@@ -7,11 +7,12 @@
     <link rel="stylesheet" href="${resource(dir: 'css', file: 'bootstrap-plus.css')}" type="text/css">
     <title>CAP-Login</title>
     <r:script>
-        
+
     </r:script>
 </head>
 
 <body>
+
 	<div class="row-fluid">
 	    <div class="span12">
 	    	<div class="hero-unit-v1" style="text-align:center;">
@@ -19,7 +20,7 @@
 	        </div>
 	    </div>
 	</div>
-	
+
 	<g:if test="${flash.message}">
 	    <div class="row-fluid">
 		    <div class="span12">
@@ -32,7 +33,7 @@
 		    </div>
 	    </div>
     </g:if>
-       
+
 	<div class="row-fluid">
 		<div class="span4 offset4">
 			<div class="bs-docs" style="padding: 20px 20px 20px;">
@@ -44,14 +45,14 @@
 		      				<input type="text" name='j_username' id='username' placeholder="Username">
 		    			</div>
 		  			</div>
-		  			%{--
+
 		  			<div class="control-group">
 		    			<label class="control-label" for="password"><g:message code="springSecurity.login.password.label"/>:</label>
 		    			<div class="controls">
 		      				<input type="password" name='j_password' id='password' placeholder="Password">
 		    			</div>
 		  			</div>
-		  			--}%
+
 		  			<div class="control-group">
 		    			<div class="controls">
 		    				%{--
@@ -61,7 +62,7 @@
      	 					--}%
 		      				<button id="submit" type="submit" class="btn btn-primary">Sign in</button>
 		    			</div>
-	  				</div>						
+	  				</div>
 				</form>
 			</div>
 		</div>
