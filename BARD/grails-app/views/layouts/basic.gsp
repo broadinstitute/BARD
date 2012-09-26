@@ -7,16 +7,12 @@
         <r:layoutResources />
 	</head>
 	<body>
+		<div class="container-fluid">
+		<div class="row-fluid">
+	    <div class="span12">
 		<div class="navbar navbar-inverse navbar-fixed-top">
 	      <div class="navbar-inner">
 	        <div class="container">
-	        	<!--
-	          <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
-	            <span class="icon-bar"></span>
-	            <span class="icon-bar"></span>
-	            <span class="icon-bar"></span>
-	          </a>
-	          -->
 
 	          <a class="brand" style="margin-left: -10px;" href="#">
 	          	<img width="140" height="43" src="${resource(dir: 'images', file: 'bard_logo_small.png')}" alt="BioAssay Research Database" />
@@ -73,10 +69,15 @@
 	        </div>
 	      </div>
         </div>
-		<div class="container-fluid">
+		</div>
+		</div>
+		
+		<div class="row-fluid">
+		<div class="span12"><br><br>
 			<g:layoutBody/>
 		</div>
-
+		</div>
+		</div>
 		<div id="spinner" class="spinner" style="display:none;"><g:message code="spinner.alt" default="Loading&hellip;"/></div>
         <r:layoutResources />
 	</body>

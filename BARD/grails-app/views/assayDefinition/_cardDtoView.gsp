@@ -1,4 +1,4 @@
-<div id="cardView" class="cardView" class="row-fluid" style="overflow:scroll;">
+<div id="cardView" class="cardView" class="row-fluid">
 <div class="span12" >
 	
 	<div class="row-fluid">
