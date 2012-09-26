@@ -51,7 +51,7 @@
             <div class="accordion-heading">
                 <a href="#project-header" id="project-header" class="accordion-toggle" data-toggle="collapse"
                    data-target="#project-info"><i class="icon-chevron-right">
-                </i> Projects <small>(${assayAdapter.assay.projects.size()} Project(s))</small></a>
+                </i> Projects <small>(${assayAdapter.assay.projectCount} Project(s))</small></a>
             </div>
 
             <div id="project-info" class="accordion-body collapse">
@@ -103,7 +103,7 @@
 
                 <div id="result-info" class="accordion-body collapse">
                     <div class="accordion-inner">
-                        <g:render template="experiments" model="['experiments': assayAdapter?.assay?.experiments]" />
+                        <g:render template="experiments" model="['experiments': experiments]" />
                     </div>
                 </div>
             </div>

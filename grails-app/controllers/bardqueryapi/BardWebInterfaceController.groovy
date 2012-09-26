@@ -285,7 +285,8 @@ class BardWebInterfaceController {
         Integer assayId = assayProtocolId ?: params.id as Integer//if 'assay' param is provided, use that; otherwise, try the default id one
         try {
             if (assayId) {
-                AssayAdapter assayAdapter = this.queryService.showAssay(assayId)
+                Map assayMap =  this.queryService.showAssay(assayId)
+                AssayAdapter assayAdapter = assayMap.assayAdapter
                 Collection<Value> annotations = assayAdapter.annotations
                 String assayDetectionMethod = ""
                 String assayDetectionInstrument = ""
@@ -299,8 +300,9 @@ class BardWebInterfaceController {
                         assayDetectionInstrument = value.value
                     }
                 }
+                //grab ex
 
-                render(view: "showAssay", model: [assayAdapter: assayAdapter, assayDetectionMethod: assayDetectionMethod, assayDetectionInstrument: assayDetectionInstrument])
+                render(view: "showAssay", model: [assayAdapter: assayAdapter, assayDetectionMethod: assayDetectionMethod, assayDetectionInstrument: assayDetectionInstrument, experiments: assayMap.experiments])
             }
             else {
                 render "Assay Protocol ID parameter required"
@@ -317,8 +319,9 @@ class BardWebInterfaceController {
         Integer projId = projectId ?: params.id as Integer//if 'project' param is provided, use that; otherwise, try the default id one
         try {
             if (projId) {
-                ProjectAdapter projectAdapter = this.queryService.showProject(projId)
-                render(view: "showProject", model: [projectAdapter: projectAdapter])
+                Map projectMap = this.queryService.showProject(projId)
+                ProjectAdapter projectAdapter = projectMap.projectAdapter
+                render(view: "showProject", model: [projectAdapter: projectAdapter, experiments: projectMap.experiments])
             }
             else {
                 render "Project ID parameter required"

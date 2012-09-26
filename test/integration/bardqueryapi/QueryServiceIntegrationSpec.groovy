@@ -77,8 +77,10 @@ class QueryServiceIntegrationSpec extends IntegrationSpec {
         given:
         final Integer projectId = new Integer(129)
         when: "Client enters a project ID and the showProject method is called"
-        ProjectAdapter projectAdapter = queryService.showProject(projectId)
+        Map projectAdapterMap = queryService.showProject(projectId)
         then: "The Project is found"
+        assert projectAdapterMap
+        ProjectAdapter projectAdapter = projectAdapterMap.projectAdapter
         assert projectAdapter
         assert projectAdapter.project
         assert projectId == projectAdapter.project.id
@@ -92,8 +94,11 @@ class QueryServiceIntegrationSpec extends IntegrationSpec {
 
         Integer assayId = new Integer(644)
         when: "Client enters a assay ID and the showAssay method is called"
-        AssayAdapter assayAdapter = queryService.showAssay(assayId)
+        Map assayMap = queryService.showAssay(assayId)
+
         then: "The Assay document is found"
+        assert assayMap
+        AssayAdapter assayAdapter = assayMap.assayAdapter
         assert assayAdapter
         assert assayId == assayAdapter.assay.id
         assert assayAdapter.assay.protocol

@@ -68,15 +68,17 @@ class QueryServiceUnitSpec extends Specification {
 
     void "test Show Project"() {
         when: "Client enters a project ID and the showProject method is called"
-        ProjectAdapter foundProjectAdpater = service.showProject(projectId)
+        Map foundProjectAdapterMap = service.showProject(projectId)
         then: "The Project document is displayed"
         queryServiceWrapper.getRestProjectService() >> { restProjectService }
         restProjectService.get(_) >> {project}
         if (project) {
-            assert foundProjectAdpater
-            assert foundProjectAdpater.project
+            assert foundProjectAdapterMap
+            ProjectAdapter foundProjectAdapter = foundProjectAdapterMap.projectAdapter
+            assert foundProjectAdapter
+            assert foundProjectAdapter.project
         } else {
-            assert !foundProjectAdpater
+            assert !foundProjectAdapterMap
         }
 
         where:
@@ -88,15 +90,16 @@ class QueryServiceUnitSpec extends Specification {
 
     void "test Show Assay"() {
         when: "Client enters a assay ID and the showAssay method is called"
-        AssayAdapter foundAssayAdapter = service.showAssay(assayId)
+        Map foundAssayMap = service.showAssay(assayId)
         then: "The Assay document is displayed"
         queryServiceWrapper.getRestAssayService() >> { restAssayService }
         restAssayService.get(_) >> {assay}
         if (assay) {
-            assert foundAssayAdapter
-            assert foundAssayAdapter.assay
+            assert foundAssayMap
+            assert foundAssayMap.assayAdapter
+            assert foundAssayMap.assayAdapter.assay
         } else {
-            assert !foundAssayAdapter
+            assert !foundAssayMap
         }
         where:
         label                     | assayId          | assay

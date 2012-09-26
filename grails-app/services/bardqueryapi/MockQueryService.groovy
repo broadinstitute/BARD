@@ -142,7 +142,7 @@ class MockQueryService implements IQueryService {
      * @param assayId
      * @return AssayAdapter
      */
-    AssayAdapter showAssay(final Long assayId) {
+    Map showAssay(final Long assayId) {
 
         return MockQueryService.mockAssayAdapterMap.get(assayId)
     }
@@ -151,9 +151,8 @@ class MockQueryService implements IQueryService {
      * @param projectId
      * @return ProjectAdapter
      */
-    ProjectAdapter showProject(final Long projectId) {
-
-        return MockQueryService.mockProjectAdapterMap.get(projectId)
+    Map showProject(final Long projectId) {
+        return [projectAdapter: MockQueryService.mockProjectAdapterMap.get(projectId), experiments:[]]
     }
 
     //==============================================Auto Complete ======
