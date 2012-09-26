@@ -89,6 +89,7 @@ class QueryServiceIntegrationSpec extends IntegrationSpec {
 
     void "test Show Assay"() {
         given:
+
         Integer assayId = new Integer(644)
         when: "Client enters a assay ID and the showAssay method is called"
         AssayAdapter assayAdapter = queryService.showAssay(assayId)
