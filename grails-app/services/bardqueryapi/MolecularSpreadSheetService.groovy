@@ -1,15 +1,14 @@
 package bardqueryapi
 
 import bard.core.adapter.CompoundAdapter
+import bard.core.rest.RESTAssayService
 import bard.core.rest.RESTExperimentService
+import bard.core.rest.RESTProjectService
 import com.metasieve.shoppingcart.ShoppingCartService
 import molspreadsheet.MolSpreadSheetCell
 import molspreadsheet.MolSpreadSheetData
 import molspreadsheet.SpreadSheetActivityStorage
 import bard.core.*
-import bard.core.rest.RESTAssayService
-import bard.core.rest.RESTProjectService
-
 
 class MolecularSpreadSheetService {
 
@@ -121,10 +120,10 @@ class MolecularSpreadSheetService {
                     int innerColumnCount = molSpreadSheetData.columnPointer[spreadSheetActivity.eid]
                     String arrayKey = "${innerRowPointer}_${innerColumnCount + 3}"
                     SpreadSheetActivityStorage spreadSheetActivityStorage = spreadSheetActivity.toSpreadSheetActivityStorage()
-                    MolSpreadSheetCell molSpreadSheetCell = new MolSpreadSheetCell( spreadSheetActivity.interpretHillCurveValue().toString(),
-                                                                                    MolSpreadSheetCellType.numeric,
-                                                                                    MolSpreadSheetCellUnit.Micromolar,
-                                                                                    spreadSheetActivityStorage)
+                    MolSpreadSheetCell molSpreadSheetCell = new MolSpreadSheetCell(spreadSheetActivity.interpretHillCurveValue().toString(),
+                            MolSpreadSheetCellType.numeric,
+                            MolSpreadSheetCellUnit.Micromolar,
+                            spreadSheetActivityStorage)
                     if (spreadSheetActivityStorage == null)
                         molSpreadSheetCell.activity = false
                     molSpreadSheetData.mssData.put(arrayKey, molSpreadSheetCell)
@@ -150,8 +149,8 @@ class MolecularSpreadSheetService {
             List<Compound> singleExperimentCompoundList = compoundServiceIterator.next(MAXIMUM_NUMBER_OF_COMPOUNDS)
             if (etag == null)
                 etag = this.queryServiceWrapper.restCompoundService.newETag("dsa", singleExperimentCompoundList*.id);
-            else if ( (singleExperimentCompoundList != null) &&
-                      (singleExperimentCompoundList.size() > 0) )
+            else if ((singleExperimentCompoundList != null) &&
+                    (singleExperimentCompoundList.size() > 0))
                 this.queryServiceWrapper.restCompoundService.putETag(etag, singleExperimentCompoundList*.id);
         }
         etag
@@ -186,11 +185,11 @@ class MolecularSpreadSheetService {
      * @param molSpreadSheetData
      * @param cartCompoundList
      */
-    protected void populateMolSpreadSheetRowMetadata( final MolSpreadSheetData molSpreadSheetData, final List<CartCompound> cartCompoundList) {
+    protected void populateMolSpreadSheetRowMetadata(final MolSpreadSheetData molSpreadSheetData, final List<CartCompound> cartCompoundList) {
 
         // Make sure that the variable we're filling  leaves this routine with something in
-        if (molSpreadSheetData.rowPointer == null) molSpreadSheetData.rowPointer = new LinkedHashMap<Long,Integer>()
-        if (molSpreadSheetData.mssData == null) molSpreadSheetData.rowPointer =  new LinkedHashMap<Long,Integer>()
+        if (molSpreadSheetData.rowPointer == null) molSpreadSheetData.rowPointer = new LinkedHashMap<Long, Integer>()
+        if (molSpreadSheetData.mssData == null) molSpreadSheetData.rowPointer = new LinkedHashMap<Long, Integer>()
 
         // add specific values for the cid column
         int rowCount = 0
@@ -206,11 +205,11 @@ class MolecularSpreadSheetService {
      * @param compoundAdapterMap
      * @return
      */
-    protected void populateMolSpreadSheetRowMetadata( final MolSpreadSheetData molSpreadSheetData, final Map compoundAdapterMap) {
+    protected void populateMolSpreadSheetRowMetadata(final MolSpreadSheetData molSpreadSheetData, final Map compoundAdapterMap) {
 
         // Make sure that the variable we're filling  leaves this routine with something in
-        if (molSpreadSheetData.rowPointer == null) molSpreadSheetData.rowPointer = new LinkedHashMap<Long,Integer>()
-        if (molSpreadSheetData.mssData == null) molSpreadSheetData.rowPointer =  new LinkedHashMap<Long,Integer>()
+        if (molSpreadSheetData.rowPointer == null) molSpreadSheetData.rowPointer = new LinkedHashMap<Long, Integer>()
+        if (molSpreadSheetData.mssData == null) molSpreadSheetData.rowPointer = new LinkedHashMap<Long, Integer>()
 
         // Add every compound we can find in the compound adapters map
         List<CompoundAdapter> compoundAdaptersList = compoundAdapterMap.compoundAdapters
@@ -233,11 +232,11 @@ class MolecularSpreadSheetService {
      * @param compoundSmiles
      * @return
      */
-    protected MolSpreadSheetData updateMolSpreadSheetDataToReferenceCompound( final MolSpreadSheetData molSpreadSheetData,
-                                                                              final int rowCount,
-                                                                              final Long compoundId,
-                                                                              final String compoundName,
-                                                                              final String compoundSmiles) {
+    protected MolSpreadSheetData updateMolSpreadSheetDataToReferenceCompound(final MolSpreadSheetData molSpreadSheetData,
+                                                                             final int rowCount,
+                                                                             final Long compoundId,
+                                                                             final String compoundName,
+                                                                             final String compoundSmiles) {
         // need to be able to map from CID to row location
         molSpreadSheetData.rowPointer.put(compoundId, rowCount)
 
@@ -256,10 +255,10 @@ class MolecularSpreadSheetService {
      * @param molSpreadSheetData
      * @param experimentList
      */
-    protected void  populateMolSpreadSheetColumnMetadata(  MolSpreadSheetData molSpreadSheetData, List<Experiment> experimentList) {
+    protected void populateMolSpreadSheetColumnMetadata(MolSpreadSheetData molSpreadSheetData, List<Experiment> experimentList) {
 
         // Check variable that we plan to modify
-        if (molSpreadSheetData.mssHeaders == null) molSpreadSheetData.mssHeaders =  new ArrayList<String>()
+        if (molSpreadSheetData.mssHeaders == null) molSpreadSheetData.mssHeaders = new ArrayList<String>()
 
         // now retrieve the header names from the assays
         molSpreadSheetData.mssHeaders.add("Struct")
@@ -344,13 +343,13 @@ class MolecularSpreadSheetService {
      * @param cartAssays
      * @return
      */
-    protected List<Experiment> assaysToExperiments( List<Experiment> incomingExperimentList, final List<Long> assayIds) {
+    protected List<Experiment> assaysToExperiments(List<Experiment> incomingExperimentList, final List<Long> assayIds) {
 
         List<Experiment> allExperiments
-        if (incomingExperimentList == null){
+        if (incomingExperimentList == null) {
             allExperiments = []
         }
-        else{
+        else {
             allExperiments = incomingExperimentList
         }
         final RESTAssayService restAssayService = queryServiceWrapper.getRestAssayService()
@@ -365,7 +364,6 @@ class MolecularSpreadSheetService {
         return allExperiments
     }
 
-
     /**
      * Convert Cart assays to Experiments, starting this time with cart Assays
      * @param cartAssays
@@ -378,7 +376,7 @@ class MolecularSpreadSheetService {
             assayIds.add(assayId)
         }
 
-        assaysToExperiments( incomingExperimentList, assayIds)
+        assaysToExperiments(incomingExperimentList, assayIds)
     }
 
     /**
@@ -387,7 +385,7 @@ class MolecularSpreadSheetService {
      * @param cartCompounds
      * @return
      */
-    protected List<Experiment> cartCompoundsToExperiments( List<Experiment> incomingExperimentList, final List<CartCompound> cartCompounds ) {
+    protected List<Experiment> cartCompoundsToExperiments(List<Experiment> incomingExperimentList, final List<CartCompound> cartCompounds) {
         List<Long> compoundIds = []
         for (CartCompound cartCompound in cartCompounds) {
             int compoundId = cartCompound.compoundId
@@ -398,8 +396,8 @@ class MolecularSpreadSheetService {
         List<Assay> allAssays = []
         for (Long individualCompoundId in compoundIds) {
             Compound compound = queryServiceWrapper.getRestCompoundService().get(individualCompoundId)
-            if (compound != null)  {
-                Collection<Assay> activeAssaysForThisCompound = queryServiceWrapper.getRestCompoundService().getTestedAssays(compound,true)  // true = active only
+            if (compound != null) {
+                Collection<Assay> activeAssaysForThisCompound = queryServiceWrapper.getRestCompoundService().getTestedAssays(compound, true)  // true = active only
                 for (Assay assay in activeAssaysForThisCompound) {
                     allAssays << assay
                 }
@@ -408,17 +406,12 @@ class MolecularSpreadSheetService {
         assaysToExperiments(allAssays)
     }
 
-
-
-
-
-
     /**
      *
      * @param cartProjects
      * @return list of Experiment's from a list of CartProject's
      */
-    protected List<Assay> cartProjectsToExperiments(final List<CartProject> cartProjects) {
+    protected List<Experiment> cartProjectsToExperiments(final List<CartProject> cartProjects) {
         List<Long> projectIds = []
         for (CartProject cartProject : cartProjects) {
             long projectId = cartProject.projectId
@@ -430,10 +423,10 @@ class MolecularSpreadSheetService {
         final Collection<Project> projects = restProjectService.get(projectIds)
 
         for (Project project : projects) {
-            final ServiceIterator<Assay> serviceIterator = restProjectService.iterator(project,Assay.class)
+            final ServiceIterator<Assay> serviceIterator = restProjectService.iterator(project, Assay.class)
             Collection<Assay> assays = serviceIterator.collect()
-            for(Assay assay: assays){
-                final ServiceIterator<Experiment> experimentIterator = restAssayService.iterator(assay,Experiment.class)
+            for (Assay assay : assays) {
+                final ServiceIterator<Experiment> experimentIterator = restAssayService.iterator(assay, Experiment.class)
                 Collection<Experiment> experimentList = experimentIterator.collect()
                 allExperiments.addAll(experimentList)
             }
@@ -487,7 +480,7 @@ class MolecularSpreadSheetService {
 
             totalNumberOfRecords = experimentIterator.getCount()
         }
-        return [total: totalNumberOfRecords, spreadSheetActivities: spreadSheetActivities, role: role, experiment:experiment]
+        return [total: totalNumberOfRecords, spreadSheetActivities: spreadSheetActivities, role: role, experiment: experiment]
     }
 
     /**
@@ -511,100 +504,35 @@ class MolecularSpreadSheetService {
      */
     void addCurrentActivityToSpreadSheet(final SpreadSheetActivity spreadSheetActivity, final Value childValue) {
         String identifier = childValue.id
+
         if (childValue instanceof HillCurveValue) {
             spreadSheetActivity.hillCurveValue = childValue
             return
         }
         switch (identifier) {
+            case "potency":
+                spreadSheetActivity.potency = (Double) childValue.value
+                break
+            case "outcome":
+                spreadSheetActivity.activityOutcome = ActivityOutcome.findActivityOutcome((Integer) childValue.value)
+                break
             case "eid":
-                spreadSheetActivity.eid = childValue.value
+                spreadSheetActivity.eid = (Long) childValue.value
                 break
             case "cid":
 
-                spreadSheetActivity.cid = childValue.value
+                spreadSheetActivity.cid = (Long) childValue.value
                 break
             case "sid":
-                spreadSheetActivity.sid = childValue.value
-                break
-            case "Activity":
-                spreadSheetActivity.hillCurveValue = childValue.value
+                spreadSheetActivity.sid = (Long) childValue.value
                 break
             default:
-                println "unknown value"
+               throw new RuntimeException("Experiment Identifier: ${identifier} is unknown")
         }
     }
 
 }
 
-/**
- * Since there is no experimentAdapter I had to make a method to open up the experiment
- */
-
-public class SpreadSheetActivity {
-    Long eid
-    Long cid
-    Long sid
-    HillCurveValue hillCurveValue
-
-    public SpreadSheetActivity() {
-
-    }
 
 
 
-    SpreadSheetActivityStorage toSpreadSheetActivityStorage () {
-        SpreadSheetActivityStorage spreadSheetActivityStorage  = new SpreadSheetActivityStorage ()
-        spreadSheetActivityStorage.sid =  sid
-        spreadSheetActivityStorage.eid =  eid
-        spreadSheetActivityStorage.cid =  cid
-        if (hillCurveValue != null)     {
-            spreadSheetActivityStorage.hillCurveValueId =  hillCurveValue.id
-            spreadSheetActivityStorage.hillCurveValueSInf =  hillCurveValue.setSinf()
-            spreadSheetActivityStorage.hillCurveValueS0 =  hillCurveValue.s0
-            spreadSheetActivityStorage.hillCurveValueSlope =  hillCurveValue.slope
-            spreadSheetActivityStorage.hillCurveValueCoef =  hillCurveValue.coef
-            spreadSheetActivityStorage.hillCurveValueConc =  hillCurveValue.conc
-            spreadSheetActivityStorage.hillCurveValueResponse =  hillCurveValue.response
-        }
-        spreadSheetActivityStorage
-    }
-
-    /**
-     *
-     * @param eid
-     * @param cid
-     * @param sid
-     * @param hillCurveValue
-     */
-    public SpreadSheetActivity(Long eid,
-                               Long cid,
-                               Long sid,
-                               HillCurveValue hillCurveValue) {
-        this.eid = eid
-        this.cid = cid
-        this.sid = sid
-        this.hillCurveValue = hillCurveValue
-    }
-
-    public String toString() {
-        final List<String> stringBuilder = []
-        stringBuilder.add("CID: ${this.cid}")
-        stringBuilder.add("EID: ${this.eid}")
-        stringBuilder.add("SID: ${this.sid}")
-        stringBuilder.add("Hill Curve Value:\n ${this.hillCurveValue}")
-        return stringBuilder.join("\n").toString()
-    }
-
-
-
-    public Double interpretHillCurveValue() {
-        Double retValue = Double.NaN
-
-        if (this.hillCurveValue != null)
-            retValue = (this.hillCurveValue.getSlope() == null) ? Double.NaN : this.hillCurveValue.getSlope()
-
-        retValue
-    }
-
-
-}

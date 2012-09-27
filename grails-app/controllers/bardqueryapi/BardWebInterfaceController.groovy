@@ -44,9 +44,9 @@ class BardWebInterfaceController {
                 final int top = searchParams.top
                 final int skip = searchParams.skip
                 final Map experimentDataMap = molecularSpreadSheetService.findExperimentDataById(id, top, skip)
-                if (experimentDataMap){
+                if (experimentDataMap) {
                     return experimentDataMap
-                } else{
+                } else {
                     return response.sendError(HttpServletResponse.SC_NOT_FOUND,
                             "Experiment ID ${id} not found")
 
@@ -285,7 +285,7 @@ class BardWebInterfaceController {
         Integer assayId = assayProtocolId ?: params.id as Integer//if 'assay' param is provided, use that; otherwise, try the default id one
         try {
             if (assayId) {
-                Map assayMap =  this.queryService.showAssay(assayId)
+                Map assayMap = this.queryService.showAssay(assayId)
                 AssayAdapter assayAdapter = assayMap.assayAdapter
                 Collection<Value> annotations = assayAdapter.annotations
                 String assayDetectionMethod = ""
@@ -302,7 +302,7 @@ class BardWebInterfaceController {
                 }
                 //grab ex
 
-                render(view: "showAssay", model: [assayAdapter: assayAdapter, assayDetectionMethod: assayDetectionMethod, assayDetectionInstrument: assayDetectionInstrument, experiments: assayMap.experiments, projects:assayMap.projects])
+                render(view: "showAssay", model: [assayAdapter: assayAdapter, assayDetectionMethod: assayDetectionMethod, assayDetectionInstrument: assayDetectionInstrument, experiments: assayMap.experiments, projects: assayMap.projects])
             }
             else {
                 render "Assay Protocol ID parameter required"
@@ -321,7 +321,7 @@ class BardWebInterfaceController {
             if (projId) {
                 Map projectMap = this.queryService.showProject(projId)
                 ProjectAdapter projectAdapter = projectMap.projectAdapter
-                render(view: "showProject", model: [projectAdapter: projectAdapter, experiments: projectMap.experiments, assays:projectMap.assays])
+                render(view: "showProject", model: [projectAdapter: projectAdapter, experiments: projectMap.experiments, assays: projectMap.assays])
             }
             else {
                 render "Project ID parameter required"
@@ -361,7 +361,6 @@ class BardWebInterfaceController {
     }
 
     /**
-     * TODO: Should redirect to NCGC
      * Autocomplete
      */
     def autoCompleteAssayNames() {

@@ -15,7 +15,6 @@ class DoseResponseCurveController {
      * @return render the jsp
      */
     def doseResponseCurve(DrcCurveCommand drcCurveCommand) {
-        //TODO: Tune this as you see fit. Consider adding to the Command object
         if (drcCurveCommand==null)   then    drcCurveCommand=    DoseResponseCurveController.testPostBody()
         Double width = new Double(300);
         Double height = new Double(200);

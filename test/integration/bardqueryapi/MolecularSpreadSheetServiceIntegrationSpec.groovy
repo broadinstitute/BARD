@@ -11,7 +11,6 @@ import spock.lang.Unroll
 import bard.core.*
 
 import static junit.framework.Assert.assertNotNull
-import spock.lang.Timeout
 
 @Unroll
 class MolecularSpreadSheetServiceIntegrationSpec extends IntegrationSpec {
@@ -20,7 +19,6 @@ class MolecularSpreadSheetServiceIntegrationSpec extends IntegrationSpec {
     MolSpreadSheetData molSpreadSheetData = generateFakeData()
     RESTCompoundService restCompoundService
     RESTExperimentService restExperimentService
-    QueryServiceWrapper queryServiceWrapper
 
 
 
@@ -39,7 +37,7 @@ class MolecularSpreadSheetServiceIntegrationSpec extends IntegrationSpec {
     void "test findExperimentDataById #label"() {
 
         when: "We call the findExperimentDataById method with the experimentId #experimentId"
-        final Map<Long, List<SpreadSheetActivity>> experimentDataMap = molecularSpreadSheetService.findExperimentDataById(experimentId, top, skip)
+        final Map experimentDataMap = molecularSpreadSheetService.findExperimentDataById(experimentId, top, skip)
 
         then: "We get back the expected map"
         assert experimentDataMap
@@ -86,7 +84,7 @@ class MolecularSpreadSheetServiceIntegrationSpec extends IntegrationSpec {
         final ServiceIterator<Value> experimentIterator = this.restExperimentService.activities(experiment, compoundETag);
         Collection collect = experimentIterator.collect()
         and: "We extract the first element in the collection"
-        Value experimentValue = collect.iterator().next()
+        Value experimentValue = (Value)collect.iterator().next()
         when: "We call the extractActivitiesFromExperiment method with the experimentValue"
         SpreadSheetActivity spreadSheetActivity = molecularSpreadSheetService.extractActivitiesFromExperiment(experimentValue)
         then: "We a spreadSheetActivity"
@@ -189,7 +187,6 @@ class MolecularSpreadSheetServiceIntegrationSpec extends IntegrationSpec {
         assert molSpreadSheetData != null
         for (int rowCnt in 0..(molSpreadSheetData.getRowCount() - 1)) {
             for (int colCnt in 0..(molSpreadSheetData.mssHeaders.size() - 1)) {
-                String key = "${rowCnt}_${colCnt}"
                 assertNotNull(molSpreadSheetData.mssData["${rowCnt}_${colCnt}"])
             }
 
@@ -198,7 +195,6 @@ class MolecularSpreadSheetServiceIntegrationSpec extends IntegrationSpec {
 
 
     MolSpreadSheetData generateFakeData() {
-        MolSpreadSheetData molSpreadSheetData = new MolSpreadSheetData()
         molSpreadSheetData = new MolSpreadSheetData()
         molSpreadSheetData.mssHeaders = ["Chemical Structure",
                 "CID",
