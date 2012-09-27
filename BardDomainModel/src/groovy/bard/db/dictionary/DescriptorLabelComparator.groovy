@@ -14,10 +14,14 @@ class DescriptorLabelComparator implements Comparator<Descriptor> {
 
     int compare(Descriptor lhs, Descriptor rhs) {
         CompareToBuilder compareToBuilder = new CompareToBuilder()
-        def lhsLowerCaseLabels = lhs.getPath().collect {it.label.toLowerCase()}
-        def rhsLowerCaseLabels = rhs.getPath().collect {it.label.toLowerCase()}
+        def lhsLowerCaseLabels = collectLabels(lhs)
+        def rhsLowerCaseLabels = collectLabels(rhs)
         compareToBuilder.append(lhsLowerCaseLabels.toString(), rhsLowerCaseLabels.toString())
         return compareToBuilder.toComparison()
+    }
+
+    public List collectLabels(Descriptor lhs) {
+        lhs?.getPath()?.collect {it.label.toLowerCase()}
     }
 }
 
