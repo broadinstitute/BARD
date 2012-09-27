@@ -10,6 +10,7 @@ import org.apache.poi.ss.usermodel.Row
  * an attribute group represents a group of key/value pairs (attributes) that should all be group together in a single assay or project context.
  */
 class ParseAndBuildAttributeGroups {
+    private static final int maxRowNum = 6000
 
     /**
      * Parses the input-stream spreadsheet and extracts all the values from the cells based on the list of attribute-groups.
@@ -36,7 +37,7 @@ class ParseAndBuildAttributeGroups {
                 rowCount++
                 continue
             }
-            if (rowCount++ > 6000) break //don't parse into the vocabulary section
+            if (rowCount++ > maxRowNum) break //don't parse into the vocabulary section
 
 
             ContextDtoFromContextGroupCreator contextDtoFromContextGroupCreator = new ContextDtoFromContextGroupCreator()

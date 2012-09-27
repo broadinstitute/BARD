@@ -24,13 +24,18 @@ class AttributesContentsCleaner {
             ContextDTO assayCtxDTO = new ContextDTO()
             assayCtxDTO.name = assayContextDTO.name
             assayCtxDTO.aid = assayContextDTO.aid
+
             assayContextDTO.attributes.each {Attribute attribute ->
+
                 String ky = StringUtils.split(attribute.key, '|').toList().last().trim()
+
                 String matchedKey = attributeNameMapping.keySet().find { String key -> return StringUtils.equalsIgnoreCase(key, ky)}
                 ky = matchedKey ? attributeNameMapping.get(matchedKey) : ky
 
+
                 def val = attribute.value
                 if (attribute.value instanceof String) {
+                    //remove '| | |' prefix
                     String valStr = StringUtils.split(attribute.value as String, '|').toList().last().trim()
                     String matchedValue = attributeNameMapping.keySet().find { String key -> return StringUtils.equalsIgnoreCase(key, valStr)}
                     valStr = matchedValue ? attributeNameMapping.get(matchedValue) : valStr
@@ -42,10 +47,12 @@ class AttributesContentsCleaner {
                 Attribute attr = new Attribute(attribute)
                 attr.key = ky
                 attr.value = val
+
                 assayCtxDTO.attributes << attr
             }
             assayContextListCleaned << assayCtxDTO
         }
-        assayContextListCleaned
+
+        return assayContextListCleaned
     }
 }

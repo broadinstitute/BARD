@@ -32,6 +32,7 @@ class ContextDtoFromContextGroupCreator {
             if (attrKey)
                 assert attrKey instanceof String, "Key must be a string"
 
+
             //Get the attribute's qualifier-content from cell
             String attQualifierCellId = attribute.qualifier
             def attrQualifier = attQualifierCellId ? getCellContent(attQualifierCellId, row, sheet) : attQualifierCellId
@@ -42,8 +43,10 @@ class ContextDtoFromContextGroupCreator {
             String attValueCell = attribute.value
             def attrValue = getCellContent(attValueCell, row, sheet)
 
-            if (!attrKey || (!attrValue && (attribute.attributeType != AttributeType.Free))) return
+            if ((!attrKey) || (!attrValue && (attribute.attributeType != AttributeType.Free))) return
+
             Attribute attr = new Attribute(attrKey, attrValue, attribute.attributeType, attribute.typeIn, attrQualifier)
+
             contextDTO.attributes << attr
         }
         return contextDTO
@@ -121,3 +124,5 @@ class ContextDtoFromContextGroupCreator {
         }
     }
 }
+
+

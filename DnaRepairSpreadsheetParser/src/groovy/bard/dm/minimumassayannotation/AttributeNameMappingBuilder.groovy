@@ -10,7 +10,7 @@ package bard.dm.minimumassayannotation
 class AttributeNameMappingBuilder {
     Map build() {
         Map attributeNameMapping = ['[detector] assay component (type in)': 'assay component',
-                '[detector] assay component role': 'assay component role',
+                '[detector] assay component role': 'detection role',
                 'assay component concentration (type in)': 'assay component concentration',
                 'assay component concentration units': 'concentration unit',
                 'biological component base name': 'assay component',
