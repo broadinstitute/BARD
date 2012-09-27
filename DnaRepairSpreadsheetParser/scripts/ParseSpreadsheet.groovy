@@ -53,16 +53,16 @@ List<ContextDTO> measureContextListCleaned = attributesContentsCleaner.clean(mea
 println("cleaned sizes ${assayContextListCleaned.size()} ${measureContextListCleaned.size()}")
 
 
-
+println("validate loaded attributes")
 AttributeContentAgainstElementTableValidator attributeContentAgainstElementTableValidator = new AttributeContentAgainstElementTableValidator()
 attributeContentAgainstElementTableValidator.validate(assayContextListCleaned, attributeNameMapping)
 attributeContentAgainstElementTableValidator.validate(measureContextListCleaned, attributeNameMapping)
 
+println("create and persist domain objects")
 (new AssayContextsValidatorCreatorAndPersistor(modifiedBy)).createAndPersist(assayContextListCleaned)
 (new MeasureContextsValidatorCreatorAndPersistor(modifiedBy)).createAndPersist(measureContextListCleaned)
 
 return false
-
 
 
 

@@ -11,33 +11,43 @@ import bard.dm.minimumassayannotation.Attribute
 
 /**
  * Creates and persists AssayContexts and AssayContextItems from the group of attributes we created earlier.
-  * 1. Attribute key are taken always from Element (AssayContextItem.attributeElement), unless it's a qualifier attribute.
-  * 2. Attribute value is taken from:
-  *  i. if an element exist, use that and update AssayContextItem.valueElement
-  *  ii. if the value is a numeric value, update valueNum
-  *  iii. if the value is type-in, update valueDisplay only
-  *  iv. if the attribute-type is Free, accept empty values
-  *  v. otherwise, throw an error
-  * 3. Always update valueDisplay
-  * 4. If the attribute is a qualifier, update the qualifier field
+ * 1. Attribute key are taken always from Element (AssayContextItem.attributeElement), unless it's a qualifier attribute.
+ * 2. Attribute value is taken from:
+ *  i. if an element exist, use that and update AssayContextItem.valueElement
+ *  ii. if the value is a numeric value, update valueNum
+ *  iii. if the value is type-in, update valueDisplay only
+ *  iv. if the attribute-type is Free, accept empty values
+ *  v. otherwise, throw an error
+ * 3. Always update valueDisplay
+ * 4. If the attribute is a qualifier, update the qualifier field
  */
 class AssayContextsValidatorCreatorAndPersistor extends ValidatorCreatorAndPersistor {
+    private static final String goElementLabel = "GO process term"
+
+    private Map<String, String> goLookupMap
 
     AssayContextsValidatorCreatorAndPersistor(String modifiedBy) {
         super(modifiedBy)
+
+        goLookupMap = ["dna damage response, signal transduction by p53 class mediator":"0030330",
+                    "histone serine kinase activity":"0035174",
+                    "cell proliferation":"0008283",
+                    "drug metabolic process":"0017144",
+                    "drug transport":"0015893",
+                    "cell death":"0008219"]
     }
 
     /**
      * Creates and persists AssayContexts and AssayContextItems from the group of attributes we created earlier.
-      * 1. Attribute key are taken always from Element (AssayContextItem.attributeElement), unless it's a qualifier attribute.
-      * 2. Attribute value is taken from:
-      *  i. if an element exist, use that and update AssayContextItem.valueElement
-      *  ii. if the value is a numeric value, update valueNum
-      *  iii. if the value is type-in, update valueDisplay only
-      *  iv. if the attribute-type is Free, accept empty values
-      *  v. otherwise, throw an error
-      * 3. Always update valueDisplay
-      * 4. If the attribute is a qualifier, update the qualifier field
+     * 1. Attribute key are taken always from Element (AssayContextItem.attributeElement), unless it's a qualifier attribute.
+     * 2. Attribute value is taken from:
+     *  i. if an element exist, use that and update AssayContextItem.valueElement
+     *  ii. if the value is a numeric value, update valueNum
+     *  iii. if the value is type-in, update valueDisplay only
+     *  iv. if the attribute-type is Free, accept empty values
+     *  v. otherwise, throw an error
+     * 3. Always update valueDisplay
+     * 4. If the attribute is a qualifier, update the qualifier field
      *
      * @param assayContextList
      */
@@ -131,31 +141,42 @@ class AssayContextsValidatorCreatorAndPersistor extends ValidatorCreatorAndPersi
     }
 
     /**
-         *  if the value field is of the format 'cid:12345678' then:
-         *  1. lookup in the Element table for the element.label='PubChem CID' and take the element.externalUrl value from it
-         *  2. Strip out the 'cid:' part and use the numeric value to concatenate: externalUrl + cid_number (e.g., 'http://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?cid=12345678'
-         *  3. Use that to populate the valueDisplay
-         *  4. Use the element.id as the ValueElement.id
-         *
-         *  if the value field is of the format 'Uniprot:Q03164' do same as above but for 'UniProt' in the element table
-         */
-        private void postProcessAssayContextItem(AssayContextItem assayContextItem) {
-            if (assayContextItem.valueDisplay && assayContextItem.valueDisplay.toLowerCase().find(/^cid\W*:\W*\d+\W*/)) {//'cid:12345678'
-                rebuildAssayContextItem(assayContextItem, 'PubChem CID')
-            } else if (assayContextItem.valueDisplay && assayContextItem.valueDisplay.toLowerCase().find(/^uniprot\W*:/)) {//'Uniprot:Q03164'
-                rebuildAssayContextItem(assayContextItem, 'UniProt')
-            } else if (assayContextItem.valueDisplay && assayContextItem.valueDisplay.toLowerCase().find(/^gi\W*:/)) {//'gi:10140845'
-                rebuildAssayContextItem(assayContextItem, 'protein')
+     *  if the value field is of the format 'cid:12345678' then:
+     *  1. lookup in the Element table for the element.label='PubChem CID' and take the element.externalUrl value from it
+     *  2. Strip out the 'cid:' part and use the numeric value to concatenate: externalUrl + cid_number (e.g., 'http://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?cid=12345678'
+     *  3. Use that to populate the valueDisplay
+     *  4. Use the element.id as the ValueElement.id
+     *
+     *  if the value field is of the format 'Uniprot:Q03164' do same as above but for 'UniProt' in the element table
+     */
+    private void postProcessAssayContextItem(AssayContextItem assayContextItem) {
+        if (assayContextItem.valueDisplay && assayContextItem.valueDisplay.toLowerCase().find(/^cid\W*:\W*\d+\W*/)) {//'cid:12345678'
+            rebuildAssayContextItem(assayContextItem, 'PubChem CID')
+        } else if (assayContextItem.valueDisplay && assayContextItem.valueDisplay.toLowerCase().find(/^uniprot\W*:/)) {//'Uniprot:Q03164'
+            rebuildAssayContextItem(assayContextItem, 'UniProt')
+        } else if (assayContextItem.valueDisplay && assayContextItem.valueDisplay.toLowerCase().find(/^gi\W*:/)) {//'gi:10140845'
+            rebuildAssayContextItem(assayContextItem, 'protein')
+        } else if (assayContextItem.valueDisplay && assayContextItem.valueDisplay.toLowerCase().indexOf("go:") >= 0) {//'go:
+            rebuildAssayContextItem(assayContextItem, goElementLabel)
+        }
+    }
+
+    private void rebuildAssayContextItem(AssayContextItem assayContextItem, String findByLabelIlike) {
+        String extValueId = StringUtils.split(assayContextItem.valueDisplay, ':').toList().last().trim()
+
+        if (findByLabelIlike.equals(goElementLabel)) {
+            if (goLookupMap.containsKey(extValueId.toLowerCase())) {
+                extValueId = goLookupMap.get(extValueId.toLowerCase())
+            } else if (!extValueId.isNumber()) {
+                println("possible GO term that is not mapped: ${extValueId}")
             }
         }
 
-        private void rebuildAssayContextItem(AssayContextItem assayContextItem, String findByLabelIlike) {
-            String extValueId = StringUtils.split(assayContextItem.valueDisplay, ':').toList().last().trim()
-            Element element = Element.findByLabelIlike(findByLabelIlike)
-            assert element, "Element '${findByLabelIlike}' must exist"
-            String newValueDisplay = "${element.externalURL}${extValueId}"
-            assayContextItem.attributeElement = element
-            assayContextItem.extValueId = extValueId
-            assayContextItem.valueDisplay = newValueDisplay
-        }
+        Element element = Element.findByLabelIlike(findByLabelIlike)
+        assert element, "Element '${findByLabelIlike}' must exist"
+        String newValueDisplay = "${element.externalURL}${extValueId}"
+        assayContextItem.attributeElement = element
+        assayContextItem.extValueId = extValueId
+        assayContextItem.valueDisplay = newValueDisplay
+    }
 }
