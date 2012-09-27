@@ -8,6 +8,11 @@ import bard.db.registration.AttributeType
 import org.apache.commons.lang.StringUtils
 import bard.dm.minimumassayannotation.ContextDTO
 import bard.dm.minimumassayannotation.Attribute
+import bard.dm.assaycompare.AssayContextCompare
+import bard.dm.assaycompare.ComparisonResult
+import bard.dm.assaycompare.ContextItemComparisonResultEnum
+import bard.dm.assaycompare.ComparisonResultEnum
+import bard.dm.Log
 
 /**
  * Creates and persists AssayContexts and AssayContextItems from the group of attributes we created earlier.
@@ -26,6 +31,8 @@ class AssayContextsValidatorCreatorAndPersistor extends ValidatorCreatorAndPersi
 
     private Map<String, String> goLookupMap
 
+    private AssayContextCompare assayContextCompare
+
     AssayContextsValidatorCreatorAndPersistor(String modifiedBy) {
         super(modifiedBy)
 
@@ -35,6 +42,8 @@ class AssayContextsValidatorCreatorAndPersistor extends ValidatorCreatorAndPersi
                     "drug metabolic process":"0017144",
                     "drug transport":"0015893",
                     "cell death":"0008219"]
+
+        assayContextCompare = new AssayContextCompare()
     }
 
     /**
@@ -113,7 +122,8 @@ class AssayContextsValidatorCreatorAndPersistor extends ValidatorCreatorAndPersi
                         println("AssayContext Assay ID: ${assayContext.assay.id} (${tally++}/${totalAssayContextItems})")
                     }
 
-                    assayContext.save()
+                    checkForDuplicateOrSubsetAndSave(assayContext)
+
                     if (assayContext.hasErrors()) {
                         println("AssayContext errors")
                         writer.writeLine("AssayContext Errors: ${assayContext.errors}")
@@ -139,6 +149,8 @@ class AssayContextsValidatorCreatorAndPersistor extends ValidatorCreatorAndPersi
             }
         }
     }
+
+
 
     /**
      *  if the value field is of the format 'cid:12345678' then:
@@ -178,5 +190,47 @@ class AssayContextsValidatorCreatorAndPersistor extends ValidatorCreatorAndPersi
         assayContextItem.attributeElement = element
         assayContextItem.extValueId = extValueId
         assayContextItem.valueDisplay = newValueDisplay
+    }
+
+    private void checkForDuplicateOrSubsetAndSave(AssayContext assayContext) {
+        boolean doSave = true
+
+        Set<AssayContext> assayContextOrigSet = new HashSet<AssayContext>(assayContext.assay.assayContexts)
+
+        for (AssayContext assayContextOrig : assayContextOrigSet) {
+            if (! assayContextOrig.equals(assayContext)) {
+                ComparisonResult<ContextItemComparisonResultEnum> compResult = assayContextCompare.compareContext(assayContextOrig, assayContext)
+
+                if (compResult.resultEnum) {
+                    if (compResult.resultEnum.equals(ComparisonResultEnum.ExactMatch)) {
+                        //do not save the assayContext because there is an exact match already present for this assay in the database
+                        Log.logger.info("assay: ${assayContext.assay.id} not saving a new assay context because it is a duplicate of existing assay context in the database ${assayContextOrig.id}")
+                        doSave = false
+                        break;
+                    } else if (compResult.resultEnum.equals(ComparisonResultEnum.SubsetMatch)) {
+                        if (assayContext.assayContextItems.size() > assayContextOrig.assayContextItems.size()) {
+                            Log.logger.info("assay: ${assayContext.assay.id} deleting original assay context ${assayContextOrig.id} since it is a subset of the new one")
+                            assayContext.assay.assayContextItems.removeAll(assayContextOrig.assayContextItems)
+                            assayContext.assay.assayContexts.remove(assayContextOrig)
+                            assayContextOrig.delete() //the original assay context from the database is a subset of the new one, so delete it
+                        } else {
+                            //do not save the assayContext because it is a subset of one that is already in the database
+                            Log.logger.info("assay: ${assayContext.assay.id} not saving a new assay context because it is a subset of existing assay context in the database ${assayContextOrig.id}")
+                            doSave = false
+                            break
+                        }
+                    } else {
+                        //it was either a partial match or not a match, so save it
+                    }
+                } else {
+                    //no context items to compare, so it is not a duplicate, so it can be saved
+                }
+            }
+        }
+
+        if (doSave) {
+            assayContext.save()
+        }
+
     }
 }

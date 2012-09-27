@@ -9,9 +9,12 @@ import bard.dm.minimumassayannotation.AttributesContentsCleaner
 import bard.dm.minimumassayannotation.validateCreatePersist.AttributeContentAgainstElementTableValidator
 import bard.dm.minimumassayannotation.validateCreatePersist.AssayContextsValidatorCreatorAndPersistor
 import bard.dm.minimumassayannotation.validateCreatePersist.MeasureContextsValidatorCreatorAndPersistor
+import bard.dm.Log
+import org.apache.log4j.Level
 
 
 final String modifiedBy = "dlahr-dna"
+Log.logger.setLevel(Level.INFO)
 final String inputFilePath = "test/exampleData/dnarepairmindataspreadsheets/Broad+others-DNA_repair.xlsx"
 //"test/exampleData/dnarepairmindataspreadsheets/The Scripps Research Institute Molecular Screening Center-DNA repair.xlsx"
 //"test/exampleData/dnarepairmindataspreadsheets/NCGC-DNA repair.xlsx"
