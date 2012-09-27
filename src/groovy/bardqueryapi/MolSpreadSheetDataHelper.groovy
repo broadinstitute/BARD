@@ -75,30 +75,27 @@ class MolSpreadSheetDataBuilder{
         molSpreadSheetData = new MolSpreadSheetData()
 
         // use experiment names to provide names for the columns
-        molecularSpreadSheetService.populateMolSpreadSheetColumnMetadata (molSpreadSheetData, experimentList)
+        molecularSpreadSheetService.populateMolSpreadSheetColumnMetadata(molSpreadSheetData, experimentList)
 
         // next deal with the compounds
-     //   if (experimentList.size() > 0) {
+        if (cartCompoundList.size() > 0) {
 
-            if (cartCompoundList.size() > 0) {
+            // Explicitly specified assays and explicitly specified compounds
+            molecularSpreadSheetService.populateMolSpreadSheetRowMetadata(molSpreadSheetData, cartCompoundList)
+            etag = molecularSpreadSheetService.generateETagFromCartCompounds(cartCompoundList)
+            spreadSheetActivityList = molecularSpreadSheetService.extractMolSpreadSheetData(molSpreadSheetData, experimentList, etag)
 
-                // Explicitly specified assays and explicitly specified compounds
-                molecularSpreadSheetService.populateMolSpreadSheetRowMetadata(molSpreadSheetData, cartCompoundList)
-                etag = molecularSpreadSheetService.generateETagFromCartCompounds(cartCompoundList)
-                spreadSheetActivityList = molecularSpreadSheetService.extractMolSpreadSheetData(molSpreadSheetData, experimentList, etag)
+        } else if (cartCompoundList.size() == 0) {
 
-            } else if (cartCompoundList.size() == 0) {
+            // Explicitly specified assay, for which we will retrieve all compounds
+            etag = molecularSpreadSheetService.retrieveImpliedCompoundsEtagFromAssaySpecification(experimentList)
+            spreadSheetActivityList = molecularSpreadSheetService.extractMolSpreadSheetData(molSpreadSheetData, experimentList, etag)
+            Map map = molecularSpreadSheetService.convertSpreadSheetActivityToCompoundInformation(spreadSheetActivityList)
+            molecularSpreadSheetService.populateMolSpreadSheetRowMetadata(molSpreadSheetData, map)
 
-                // Explicitly specified assay, for which we will retrieve all compounds
-                etag = molecularSpreadSheetService.retrieveImpliedCompoundsEtagFromAssaySpecification(experimentList)
-                spreadSheetActivityList = molecularSpreadSheetService.extractMolSpreadSheetData(molSpreadSheetData, experimentList, etag)
-                Map map = molecularSpreadSheetService.convertSpreadSheetActivityToCompoundInformation(spreadSheetActivityList)
-                molecularSpreadSheetService.populateMolSpreadSheetRowMetadata(molSpreadSheetData, map)
-
-             }
-            // finally deal with the data
-            molecularSpreadSheetService.populateMolSpreadSheetData(molSpreadSheetData, experimentList, spreadSheetActivityList)
-     //   }
+        }
+        // finally deal with the data
+        molecularSpreadSheetService.populateMolSpreadSheetData(molSpreadSheetData, experimentList, spreadSheetActivityList)
     }
 
 

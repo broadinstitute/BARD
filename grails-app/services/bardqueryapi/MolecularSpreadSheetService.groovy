@@ -123,7 +123,7 @@ class MolecularSpreadSheetService {
                     SpreadSheetActivityStorage spreadSheetActivityStorage = spreadSheetActivity.toSpreadSheetActivityStorage()
                     MolSpreadSheetCell molSpreadSheetCell = new MolSpreadSheetCell( spreadSheetActivity.interpretHillCurveValue().toString(),
                                                                                     MolSpreadSheetCellType.numeric,
-                                                                                    MolSpreadSheetCellUnit.Micromolar,
+                                                                                    MolSpreadSheetCellUnit.Molar,
                                                                                     spreadSheetActivityStorage)
                     if (spreadSheetActivityStorage == null)
                         molSpreadSheetCell.activity = false
@@ -441,8 +441,12 @@ class MolecularSpreadSheetService {
         return allExperiments
     }
 
-
-
+    /**
+     *
+     * @param experiment
+     * @param compoundETag
+     * @return
+     */
     List<SpreadSheetActivity> findActivitiesForCompounds(final Experiment experiment, final Object compoundETag) {
         final List<SpreadSheetActivity> spreadSheetActivities = new ArrayList<SpreadSheetActivity>()
         final ServiceIterator<Value> experimentIterator = this.queryServiceWrapper.restExperimentService.activities(experiment, compoundETag);
@@ -550,8 +554,11 @@ public class SpreadSheetActivity {
 
     }
 
-
-
+    /**
+     * Copy the values from the form provided in the JDO client into a form we can store in the domain object, namely
+     * the SpreadSheetActivityStorage
+     * @return
+     */
     SpreadSheetActivityStorage toSpreadSheetActivityStorage () {
         SpreadSheetActivityStorage spreadSheetActivityStorage  = new SpreadSheetActivityStorage ()
         spreadSheetActivityStorage.sid =  sid
@@ -559,7 +566,7 @@ public class SpreadSheetActivity {
         spreadSheetActivityStorage.cid =  cid
         if (hillCurveValue != null)     {
             spreadSheetActivityStorage.hillCurveValueId =  hillCurveValue.id
-            spreadSheetActivityStorage.hillCurveValueSInf =  hillCurveValue.setSinf()
+            spreadSheetActivityStorage.hillCurveValueSInf =  hillCurveValue.sinf
             spreadSheetActivityStorage.hillCurveValueS0 =  hillCurveValue.s0
             spreadSheetActivityStorage.hillCurveValueSlope =  hillCurveValue.slope
             spreadSheetActivityStorage.hillCurveValueCoef =  hillCurveValue.coef

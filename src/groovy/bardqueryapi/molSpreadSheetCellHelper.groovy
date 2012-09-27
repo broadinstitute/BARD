@@ -25,20 +25,26 @@ enum MolSpreadSheetCellType {
 
 
 enum MolSpreadSheetCellUnit {
-    Molar("M"),
-    Millimolar("mM"),
-    Micromolar("uM"),
-    Nanomolar("nM"),
-    Picomolar("pM"),
-    Femtomolar("fM"),
-    Attamolar("aM"),
-    Zeptomolar("aM"),
-    unknown("U");
+    Molar("M", 0),
+    Millimolar("mM", 3),
+    Micromolar("uM", 6),
+    Nanomolar("nM", 9),
+    Picomolar("pM", 12),
+    Femtomolar("fM", 15),
+    Attamolar("aM", 18),
+    Zeptomolar("aM", 21),
+    unknown("U", 0);
 
     private String value
+    private  int decimalPlacesFromMolar
 
-    MolSpreadSheetCellUnit(String value) {
+    MolSpreadSheetCellUnit(String value,int decimalPlacesFromMolar) {
         this.value = value;
+        this.decimalPlacesFromMolar = decimalPlacesFromMolar;
+    }
+
+    public int getDecimalPlacesFromMolar() {
+        decimalPlacesFromMolar
     }
 
     public String toString() {
