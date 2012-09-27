@@ -37,6 +37,10 @@ class BardWebInterfaceController {
     def searchResults() {
     }
 
+    def showExperiment() {
+        render(view: "showExperimentResult", model: [experimentId: params.id])
+    }
+
     def showExperimentResult(Long id) {
         try {
             if (id) {
@@ -45,20 +49,19 @@ class BardWebInterfaceController {
                 final int skip = searchParams.skip
                 final Map experimentDataMap = molecularSpreadSheetService.findExperimentDataById(id, top, skip)
                 if (experimentDataMap) {
-                    return experimentDataMap
+                    render(template: "experimentResult", model: [experimentDataMap: experimentDataMap])
                 } else {
-                    return response.sendError(HttpServletResponse.SC_NOT_FOUND,
-                            "Experiment ID ${id} not found")
-
+                    flash.message = "Experiment ID ${id} not found"
+                    render(template: "experimentResult")
                 }
             } else {
-                return response.sendError(HttpServletResponse.SC_BAD_REQUEST,
-                        "Experiment ID is required")
+                flash.message = "ID is a required Field"
+                render(template: "experimentResult")
             }
         } catch (Exception ee) {
             log.error(ee)
-            return response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR,
-                    ee.message)
+            flash.message = ee.message
+            render(template: "experimentResult")
         }
 
     }
@@ -78,7 +81,7 @@ class BardWebInterfaceController {
                 }
             } catch (Exception ee) { //error is thrown
                 log.error(ee)
-                return response.sendError(ee?.undeclaredThrowable.statusCode,
+                return response.sendError(HttpServletResponse.SC_NOT_FOUND,
                         "Could not get promiscuity score for ${cid}")
             }
         } else {

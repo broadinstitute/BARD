@@ -50,13 +50,6 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
 
     void "test showExperimentResult #label"() {
         given: "An Experiment ID"
-        Map experimentData = null
-        if (statusCode == HttpServletResponse.SC_OK) {
-            experimentData = [total: 2, spreadSheetActivities: [
-                    new SpreadSheetActivity(eid: new Long(eid), cid: new Long(1), sid: new Long(20))],
-                    role: AssayValues.AssayRole.Counterscreen
-            ]
-        }
 
         when:
         controller.showExperimentResult(eid)
@@ -65,21 +58,16 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
         assert response.status == statusCode
 
         where:
-        label                          | eid  | statusCode
-        "Empty Null EID - Bad Request" | null | HttpServletResponse.SC_BAD_REQUEST
-        "EID- Not Found"               | 234  | HttpServletResponse.SC_NOT_FOUND
-        "Success"                      | 567  | HttpServletResponse.SC_OK
+        label                          | eid  | statusCode                | experimentData
+        "Empty Null EID - Bad Request" | null | HttpServletResponse.SC_OK | null
+        "EID- Not Found"               | 234  | HttpServletResponse.SC_OK | null
+        "Success"                      | 567  | HttpServletResponse.SC_OK | [total: 2, spreadSheetActivities: [
+                new SpreadSheetActivity(eid: new Long(567), cid: new Long(1), sid: new Long(20))],
+                role: ExperimentValues.ExperimentRole.Counterscreen, experiment: new Experiment(name: 'name')]
     }
 
     void "test promiscuity action #label"() {
         given:
-        PromiscuityScore promiscuityScore = null
-        if (statusCode == HttpServletResponse.SC_OK) {
-            List<Scaffold> scaffolds = new ArrayList<Scaffold>()
-            Scaffold scaffold = new Scaffold(pScore: 222)
-            scaffolds.add(scaffold)
-            promiscuityScore = new PromiscuityScore(cid: cid, scaffolds: scaffolds)
-        }
         Map promiscuityScoreMap = [status: statusCode, promiscuityScore: promiscuityScore]
 
         when:
@@ -89,10 +77,10 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
         assert response.status == statusCode
 
         where:
-        label                          | cid  | statusCode
-        "Empty Null CID - Bad Request" | null | HttpServletResponse.SC_BAD_REQUEST
-        "CID- Internal Server Error"   | 234  | HttpServletResponse.SC_INTERNAL_SERVER_ERROR
-        "Success"                      | 567  | HttpServletResponse.SC_OK
+        label                          | cid  | statusCode                                   | scaffolds                   | promiscuityScore
+        "Empty Null CID - Bad Request" | null | HttpServletResponse.SC_BAD_REQUEST           | null                        | null
+        "CID- Internal Server Error"   | 234  | HttpServletResponse.SC_INTERNAL_SERVER_ERROR | null                        | null
+        "Success"                      | 567  | HttpServletResponse.SC_OK                    | [new Scaffold(pScore: 222)] | new PromiscuityScore(cid: 567, scaffolds: [new Scaffold(pScore: 222)])
 
 
     }
@@ -268,7 +256,7 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
         params.searchString = searchString
         when:
         request.method = 'GET'
-        controller.searchAssays()
+        controller.searchAssays(new SearchCommand(searchString: searchString))
         then:
         _ * this.queryService.findAssaysByTextSearch(_, _, _, _) >> {assayAdapterMap}
         and:
@@ -285,7 +273,7 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
         params.searchString = searchString
         when:
         request.method = 'GET'
-        controller.searchProjects()
+        controller.searchProjects(new SearchCommand(searchString: searchString))
         then:
         _ * this.queryService.findProjectsByTextSearch(_, _, _, _) >> {projectAdapterMap}
         and:
@@ -302,7 +290,7 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
         params.searchString = searchString
         when:
         request.method = 'GET'
-        controller.searchCompounds()
+        controller.searchCompounds(new SearchCommand(searchString: searchString))
         then:
         _ * this.queryService.findCompoundsByTextSearch(_, _, _, _) >> {compoundAdapterMap}
         and:
@@ -374,7 +362,7 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
 
         when:
         request.method = 'GET'
-        controller.searchAssaysByIDs()
+        controller.searchAssaysByIDs(searchCommand)
         then:
         queryService.findAssaysByADIDs(_, _) >> {assayAdapterMap}
         and:

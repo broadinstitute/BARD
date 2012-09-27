@@ -6,7 +6,7 @@
             </h4>
             <div><g:textBlock>${experiment.description}</g:textBlock></div>
             <p>
-                <g:link controller="bardWebInterface" action="showExperimentResult" id="${experiment.id}">View Results</g:link>
+                <g:link controller="bardWebInterface" action="showExperiment" id="${experiment.id}">View Results</g:link>
             </p>
         </div>
     </g:each>
