@@ -4,6 +4,7 @@ import bard.db.registration.Measure
 import org.springframework.transaction.TransactionStatus
 import bard.db.dictionary.Element
 import bard.dm.minimumassayannotation.ContextDTO
+import bard.dm.Log
 
 /**
  * Creates and persists a Measure object from the group of attributes we created earlier.
@@ -45,11 +46,11 @@ class MeasureContextsValidatorCreatorAndPersistor extends ValidatorCreatorAndPer
                     }
 
                     assert measureContextDTO.attributes.size() == 1, "There could be only one attribure for a measure-context"
-                    //                println("Measure attribute: key='${measureContextDTO.attributes.first().key}'; value='${measureContextDTO.attributes.first().value}'")
+                    //                Log.logger.info("Measure attribute: key='${measureContextDTO.attributes.first().key}'; value='${measureContextDTO.attributes.first().value}'")
                     Element element = Element.findByLabelIlike(measureContextDTO.attributes.first().value) //The value is the result-type
                     assert element, "We must have an element for the measure-context-item attribute"
                     measureContext.element = element
-                    println("Measure's Assay ID: ${measureContext.assay.id} (${tally++}/${totalMeasureContext})")
+                    Log.logger.info("Measure's Assay ID: ${measureContext.assay.id} (${tally++}/${totalMeasureContext})")
 
                     //Validate that the assay_id/result_type_id (element) combination is not already in the DB
                     def existingMeasures = Measure.findAll("from Measure as m \
@@ -59,7 +60,7 @@ class MeasureContextsValidatorCreatorAndPersistor extends ValidatorCreatorAndPer
 
                     measureContext.save()
                     if (measureContext.hasErrors()) {
-                        println("MeasureContext errors")
+                        Log.logger.info("MeasureContext errors")
                         writer.writeLine("MeasureContext Errors: ${measureContext.errors}")
                         assert false, "Measure-context errros"
                     } else {

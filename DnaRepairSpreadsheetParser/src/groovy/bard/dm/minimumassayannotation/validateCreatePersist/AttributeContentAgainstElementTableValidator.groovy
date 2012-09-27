@@ -4,6 +4,7 @@ import bard.db.registration.AttributeType
 import bard.db.dictionary.Element
 import bard.dm.minimumassayannotation.ContextDTO
 import bard.dm.minimumassayannotation.Attribute
+import bard.dm.Log
 
 /**
  * Make sure that all the attribute's key and value match against valid values in the Element table
@@ -34,11 +35,11 @@ class AttributeContentAgainstElementTableValidator {
         List<Element> foundElements = []
         List<String> missingAttributes = []
         attributeVocabulary.each {String attr ->
-    //    println("Attribute: '${attr}'")
+    //    Log.logger.info("Attribute: '${attr}'")
             //Swap the attribute name with the mapping we have (e.g., '[detector] assay component (type in)' --> 'assay component'
     //        attr = attributeNameMapping.containsKey(attr) ? attributeNameMapping.get(attr) : attr
             Element element = Element.findByLabelIlike(attr)
-    //    println("Element: ${element}")
+    //    Log.logger.info("Element: ${element}")
             if (element) {
                 foundElements << element
             }
@@ -48,8 +49,8 @@ class AttributeContentAgainstElementTableValidator {
         }
 
 
-        println("Found elements: ${foundElements.collect {Element element -> [element.id, element.label]}}")
-        println("Missing attributes: ${missingAttributes}")
+        Log.logger.info("Found elements: ${foundElements.collect {Element element -> [element.id, element.label]}}")
+        Log.logger.info("Missing attributes: ${missingAttributes}")
         assert missingAttributes.isEmpty(), "We could not have missing attributes - all attributes should be validatied against the Element table"
     }
 }

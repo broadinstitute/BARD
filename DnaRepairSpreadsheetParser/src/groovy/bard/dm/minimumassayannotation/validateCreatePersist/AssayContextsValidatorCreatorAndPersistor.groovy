@@ -107,7 +107,7 @@ class AssayContextsValidatorCreatorAndPersistor extends ValidatorCreatorAndPersi
                             assayContextItem.valueDisplay = attribute.value
                         } else {
                             //throw an error
-                            println("Illage attribute value: '${attribute.key}'/'${attribute.value}'")
+                            Log.logger.info("Illage attribute value: '${attribute.key}'/'${attribute.value}'")
                             assert false, "Illage attribute value"
                         }
 
@@ -119,13 +119,13 @@ class AssayContextsValidatorCreatorAndPersistor extends ValidatorCreatorAndPersi
                         postProcessAssayContextItem(assayContextItem)
 
                         assayContext.addToAssayContextItems(assayContextItem)
-                        println("AssayContext Assay ID: ${assayContext.assay.id} (${tally++}/${totalAssayContextItems})")
+                        Log.logger.info("AssayContext Assay ID: ${assayContext.assay.id} (${tally++}/${totalAssayContextItems})")
                     }
 
                     checkForDuplicateOrSubsetAndSave(assayContext)
 
                     if (assayContext.hasErrors()) {
-                        println("AssayContext errors")
+                        Log.logger.info("AssayContext errors")
                         writer.writeLine("AssayContext Errors: ${assayContext.errors}")
                         assert false, "Errors during AssayContext saving"
                     } else {
@@ -180,7 +180,7 @@ class AssayContextsValidatorCreatorAndPersistor extends ValidatorCreatorAndPersi
             if (goLookupMap.containsKey(extValueId.toLowerCase())) {
                 extValueId = goLookupMap.get(extValueId.toLowerCase())
             } else if (!extValueId.isNumber()) {
-                println("possible GO term that is not mapped: ${extValueId}")
+                Log.logger.info("possible GO term that is not mapped: ${extValueId}")
             }
         }
 
@@ -201,7 +201,7 @@ class AssayContextsValidatorCreatorAndPersistor extends ValidatorCreatorAndPersi
             if (! assayContextOrig.equals(assayContext)) {
                 ComparisonResult<ContextItemComparisonResultEnum> compResult = assayContextCompare.compareContext(assayContextOrig, assayContext)
 
-                if (compResult.resultEnum) {
+                if (compResult) {
                     if (compResult.resultEnum.equals(ComparisonResultEnum.ExactMatch)) {
                         //do not save the assayContext because there is an exact match already present for this assay in the database
                         Log.logger.info("assay: ${assayContext.assay.id} not saving a new assay context because it is a duplicate of existing assay context in the database ${assayContextOrig.id}")

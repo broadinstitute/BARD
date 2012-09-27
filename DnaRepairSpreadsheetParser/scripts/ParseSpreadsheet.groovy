@@ -15,7 +15,24 @@ import org.apache.log4j.Level
 
 final String modifiedBy = "dlahr-dna"
 Log.logger.setLevel(Level.INFO)
-final String inputFilePath = "test/exampleData/dnarepairmindataspreadsheets/Broad+others-DNA_repair.xlsx"
+final Integer START_ROW = 3 //1-based
+
+List<File> inputFileList = new LinkedList<File>()
+
+FilenameFilter xlsxExtensionFilenameFilter = new FilenameFilter() {
+    boolean accept(File dir, String name) {
+        return name.toLowerCase().endsWith(".xlsx")
+    }
+}
+List<String> inputDirPathArray = ["test/exampleData/minAssayAnnotationSpreadsheets/", "test/exampleData/dnarepairmindataspreadsheets/"]
+for (String inputDirPath : inputDirPathArray) {
+    File inputDirFile = new File(inputDirPath)
+    inputFileList.addAll(inputDirFile.listFiles(xlsxExtensionFilenameFilter))
+}
+Log.logger.info("loading ${inputFileList.size()} files found in ${inputDirPathArray.size()} directories")
+
+
+//final String inputFilePath = "test/exampleData/dnarepairmindataspreadsheets/Broad+others-DNA_repair.xlsx"
 //"test/exampleData/dnarepairmindataspreadsheets/The Scripps Research Institute Molecular Screening Center-DNA repair.xlsx"
 //"test/exampleData/dnarepairmindataspreadsheets/NCGC-DNA repair.xlsx"
 //"test/exampleData/dnarepairmindataspreadsheets/Burnham Center for Chemical Genomics-DNA repair only.xlsx"
@@ -34,36 +51,38 @@ List<Attribute> resultType = [new Attribute('2/Y', '$/Y', AttributeType.Fixed)]
 List<ContextGroup> spreadsheetResultTypeContextGroups = [new ContextGroup(name: 'resultType', attributes: resultType)]
 
 
-final Integer START_ROW = 3 //1-based
-InputStream inp = new FileInputStream(inputFilePath);
+for (File inputFile : inputFileList) {
+    Log.logger.info("processing file ${inputFile.absolutePath}")
+    InputStream inp = new FileInputStream(inputFile)
+
+    println("Build assay and measure-context (groups) and populate their attribute from the spreadsheet cell contents.")
+    List<List<ContextDTO>> contextDTOGroups = (new ParseAndBuildAttributeGroups()).build(inp, START_ROW, [spreadsheetAssayContextGroups, spreadsheetResultTypeContextGroups])
+    List<ContextDTO> assayContextList = contextDTOGroups[0]
+    println("assayContextList size: ${assayContextList.size()}")
+    List<ContextDTO> measureContextList = contextDTOGroups[1]
+    println("measureContextList size: ${measureContextList.size()}")
 
 
-println("Build assay and measure-context (groups) and populate their attribute from the spreadsheet cell contents.")
-List<List<ContextDTO>> contextDTOGroups = (new ParseAndBuildAttributeGroups()).build(inp, START_ROW, [spreadsheetAssayContextGroups, spreadsheetResultTypeContextGroups])
-List<ContextDTO> assayContextList = contextDTOGroups[0]
-println("assayContextList size: ${assayContextList.size()}")
-List<ContextDTO> measureContextList = contextDTOGroups[1]
-println("measureContextList size: ${measureContextList.size()}")
+    final Map attributeNameMapping = (new AttributeNameMappingBuilder()).build()
 
 
-final Map attributeNameMapping = (new AttributeNameMappingBuilder()).build()
+    println("Clean loaded attributes")
+    AttributesContentsCleaner attributesContentsCleaner = new AttributesContentsCleaner()
+    List<ContextDTO> assayContextListCleaned = attributesContentsCleaner.clean(assayContextList, attributeNameMapping)
+    List<ContextDTO> measureContextListCleaned = attributesContentsCleaner.clean(measureContextList, attributeNameMapping)
+    println("cleaned sizes ${assayContextListCleaned.size()} ${measureContextListCleaned.size()}")
 
 
-println("Clean loaded attributes")
-AttributesContentsCleaner attributesContentsCleaner = new AttributesContentsCleaner()
-List<ContextDTO> assayContextListCleaned = attributesContentsCleaner.clean(assayContextList, attributeNameMapping)
-List<ContextDTO> measureContextListCleaned = attributesContentsCleaner.clean(measureContextList, attributeNameMapping)
-println("cleaned sizes ${assayContextListCleaned.size()} ${measureContextListCleaned.size()}")
+    println("validate loaded attributes")
+    AttributeContentAgainstElementTableValidator attributeContentAgainstElementTableValidator = new AttributeContentAgainstElementTableValidator()
+    attributeContentAgainstElementTableValidator.validate(assayContextListCleaned, attributeNameMapping)
+    attributeContentAgainstElementTableValidator.validate(measureContextListCleaned, attributeNameMapping)
 
+    println("create, check for duplicates, and persist domain objects")
+    (new AssayContextsValidatorCreatorAndPersistor(modifiedBy)).createAndPersist(assayContextListCleaned)
+    (new MeasureContextsValidatorCreatorAndPersistor(modifiedBy)).createAndPersist(measureContextListCleaned)
+}
 
-println("validate loaded attributes")
-AttributeContentAgainstElementTableValidator attributeContentAgainstElementTableValidator = new AttributeContentAgainstElementTableValidator()
-attributeContentAgainstElementTableValidator.validate(assayContextListCleaned, attributeNameMapping)
-attributeContentAgainstElementTableValidator.validate(measureContextListCleaned, attributeNameMapping)
-
-println("create and persist domain objects")
-(new AssayContextsValidatorCreatorAndPersistor(modifiedBy)).createAndPersist(assayContextListCleaned)
-(new MeasureContextsValidatorCreatorAndPersistor(modifiedBy)).createAndPersist(measureContextListCleaned)
 
 return false
 

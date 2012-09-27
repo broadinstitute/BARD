@@ -46,7 +46,13 @@ class ParseAndBuildAttributeGroups {
             String aidFromCell = contextDtoFromContextGroupCreator.getCellContentByRowAndColumnIds(row, 'A')
             //if we encountered a new AID, update the current-aid with the new one. Else, leave the existing one.
             if (aidFromCell) {
-                Integer newAid = new Integer(aidFromCell.trim())
+                aidFromCell = aidFromCell.trim()
+                Integer newAid = null
+                if (aidFromCell.isDouble()) {
+                    newAid = new Integer((int)new Double(aidFromCell))
+                } else if (aidFromCell.isInteger()) {
+                    newAid = new Integer(aidFromCell)
+                }
                 aid = newAid
             }
             assert aid, "Couldn't find AID"
