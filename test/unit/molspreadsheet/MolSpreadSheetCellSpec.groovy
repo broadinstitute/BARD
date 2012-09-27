@@ -39,7 +39,7 @@ class MolSpreadSheetCellSpec extends  Specification {
         given: "incoming value"
         SpreadSheetActivityStorage spreadSheetActivityStorage = new  SpreadSheetActivityStorage ()
         when: "#label"
-        MolSpreadSheetCell molSpreadSheetCell = new MolSpreadSheetCell("1.23",MolSpreadSheetCellType.numeric,spreadSheetActivityStorage)
+        MolSpreadSheetCell molSpreadSheetCell = new MolSpreadSheetCell(initialValue,MolSpreadSheetCellType.numeric,spreadSheetActivityStorage)
         molSpreadSheetCell.molSpreadSheetCellUnit =  initialUnit
         assertNotNull(molSpreadSheetCell)
 
@@ -53,5 +53,29 @@ class MolSpreadSheetCellSpec extends  Specification {
         "converting unit values"        | MolSpreadSheetCellUnit.Millimolar |  "1.23"       |   "1.23E3"
         "converting unit values"        | MolSpreadSheetCellUnit.Molar      |  "1.23"       |   "1.23E6"
     }
+
+
+
+    void "test MolSpreadSheetCell to see number formatting works for #label"() {
+        given: "incoming value"
+        SpreadSheetActivityStorage spreadSheetActivityStorage = new  SpreadSheetActivityStorage ()
+        when: "#label"
+        MolSpreadSheetCell molSpreadSheetCell = new MolSpreadSheetCell(initialValue,MolSpreadSheetCellType.numeric,spreadSheetActivityStorage)
+        molSpreadSheetCell.molSpreadSheetCellUnit =  initialUnit
+        assertNotNull(molSpreadSheetCell)
+
+        then: "The resulting search filters size must equal the expected value"
+        println molSpreadSheetCell.toString()
+        assert molSpreadSheetCell.toString()  ==  stringValue
+
+        where:
+        label                           | initialUnit                       |  initialValue |   stringValue
+        "number formatting values"      | MolSpreadSheetCellUnit.Micromolar |  "0.1234"       |  "0.12 uM"
+        "number formatting values"      | MolSpreadSheetCellUnit.Micromolar |  "1.234"       |   "1.23 uM"
+        "number formatting values"      | MolSpreadSheetCellUnit.Micromolar |  "12.34"       |   "12.34 uM"
+        "number formatting values"      | MolSpreadSheetCellUnit.Micromolar |  "123.4"       |   "123.4 uM"
+    }
+
+
 
 }

@@ -244,7 +244,7 @@ class MolSpreadSheetCell {
         BigDecimal bigDecimal = bardDecimal( precision )
         BigDecimal displayVal =bigDecimal.setScale(2,RoundingMode.HALF_UP)
         NumberFormat usdCostFormat = NumberFormat.getInstance()
-        usdCostFormat.setMinimumFractionDigits( 1 )
+        usdCostFormat.setMinimumFractionDigits( 0 )
         usdCostFormat.setMaximumFractionDigits( precision-1 )
         usdCostFormat.format(displayVal.doubleValue())
     }
