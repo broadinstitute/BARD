@@ -3,6 +3,9 @@ package molspreadsheet
 import bardqueryapi.MolSpreadSheetCellType
 import bardqueryapi.MolSpreadSheetCellUnit
 
+import java.math.RoundingMode
+import java.text.NumberFormat
+
 class MolSpreadSheetCell {
     static final int SPREAD_SHEET_PRECISION = 3
 
@@ -162,6 +165,22 @@ class MolSpreadSheetCell {
 
     }
 
+
+    LinkedHashMap<String, String> mapForMolecularSpreadsheet () {
+        def returnValue = new  LinkedHashMap<String, String>()
+        if (molSpreadSheetCellType == MolSpreadSheetCellType.image) {
+            returnValue = retrieveValues()
+        } else {
+            returnValue["value"] = toString()
+        }
+        returnValue
+    }
+
+
+
+
+
+
     @Override
     String toString() {
         StringBuilder stringBuilder = new StringBuilder()
@@ -170,25 +189,25 @@ class MolSpreadSheetCell {
                 if (!activity)
                     stringBuilder.append("(no activity)")
                 else
-                    stringBuilder.append("${numInternalValue.toEngineeringString()}")
+                    stringBuilder.append("${bardDecimalToString()}")
                 break;
             case MolSpreadSheetCellType.percentageNumeric:
                 if (!activity)
                     stringBuilder.append("(no activity)")
                 else
-                    stringBuilder.append("${numInternalValue.toEngineeringString()} %")
+                    stringBuilder.append("${bardDecimalToString()} %")
                 break;
             case MolSpreadSheetCellType.greaterThanNumeric:
                 if (!activity)
                     stringBuilder.append("(no activity)")
                 else
-                    stringBuilder.append("> ${numInternalValue.toEngineeringString()}")
+                    stringBuilder.append("> ${bardDecimalToString()}")
                 break;
             case MolSpreadSheetCellType.lessThanNumeric:
                 if (!activity)
                     stringBuilder.append("(no activity)")
                 else
-                    stringBuilder.append("< ${numInternalValue.toEngineeringString()}")
+                    stringBuilder.append("< ${bardDecimalToString()}")
                 break;
             case MolSpreadSheetCellType.identifier:
                 stringBuilder.append("${intInternalValue}")
@@ -215,6 +234,53 @@ class MolSpreadSheetCell {
         returnValue.put("smiles", supplementalInternalValue)
         returnValue
     }
+
+    /**
+     *
+     * @param precision
+     * @return
+     */
+    String  bardDecimalToString(  int precision = 3 )  {
+        BigDecimal bigDecimal = bardDecimal( precision )
+        BigDecimal displayVal =bigDecimal.setScale(2,RoundingMode.HALF_UP)
+        NumberFormat usdCostFormat = NumberFormat.getInstance()
+        usdCostFormat.setMinimumFractionDigits( 0 )
+        usdCostFormat.setMaximumFractionDigits( precision-1 )
+        usdCostFormat.format(displayVal.doubleValue())
+    }
+
+     /**
+     * By convention we will print in micromolar
+     * @param numberToPrint
+     * @param precision
+     * @return
+     */
+     BigDecimal  bardDecimal(  int precision = 3 )  {
+         BigDecimal returnValue = performUnitNormalization (molSpreadSheetCellUnit,MolSpreadSheetCellUnit.Micromolar,numInternalValue)
+         molSpreadSheetCellUnit = MolSpreadSheetCellUnit.Micromolar
+         returnValue
+    }
+
+    /**
+     *
+     * @param inComingUnit
+     * @param outGoingUnit
+     * @param numberToConvert
+     * @return
+     */
+    static BigDecimal performUnitNormalization( MolSpreadSheetCellUnit inComingUnit, MolSpreadSheetCellUnit outGoingUnit,  BigDecimal numberToConvert )  {
+        BigDecimal returnValue = null
+        if ((numberToConvert != null) &&
+                (inComingUnit != MolSpreadSheetCellUnit.unknown) &&
+                (outGoingUnit != MolSpreadSheetCellUnit.unknown)){
+            int unitSwap =  outGoingUnit.decimalPlacesFromMolar-inComingUnit.decimalPlacesFromMolar
+            returnValue =  numberToConvert.scaleByPowerOfTen(unitSwap)
+        }
+        returnValue
+    }
+
+
+
 
 
     static String imageConvert(String name, String smiles) {

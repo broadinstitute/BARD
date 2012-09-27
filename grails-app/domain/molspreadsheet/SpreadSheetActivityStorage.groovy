@@ -27,7 +27,7 @@ class SpreadSheetActivityStorage {
         this.sid = spreadSheetActivity.sid
         this.eid = eid
         this.cid = cid
-        this.outcome = spreadSheetActivity.outcome
+        this.activityOutcome = spreadSheetActivity.activityOutcome
         this.potency = spreadSheetActivity.potency
 
         if (spreadSheetActivity.hillCurveValue) {

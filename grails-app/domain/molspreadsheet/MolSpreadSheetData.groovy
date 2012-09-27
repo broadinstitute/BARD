@@ -1,9 +1,6 @@
 package molspreadsheet
 
-import bardqueryapi.MolSpreadSheetCellType
-
 import java.math.MathContext
-
 
 class MolSpreadSheetData {
 
@@ -36,11 +33,15 @@ class MolSpreadSheetData {
         MolSpreadSheetCell molSpreadSheetCell
         if (mssData.containsKey(key)) {
             molSpreadSheetCell = mssData[key]
-            if (molSpreadSheetCell.molSpreadSheetCellType == MolSpreadSheetCellType.image) {
-                returnValue = molSpreadSheetCell.retrieveValues()
-            }  else {
-                returnValue["value"] = mssData[key].toString()
-            }
+            returnValue = molSpreadSheetCell.mapForMolecularSpreadsheet ()
+
+//            if (molSpreadSheetCell.molSpreadSheetCellType == MolSpreadSheetCellType.image) {
+//                returnValue = molSpreadSheetCell.retrieveValues()
+//            }  else if (molSpreadSheetCell.molSpreadSheetCellType == MolSpreadSheetCellType.numeric) {
+//                returnValue["value"] = mssData[key].bardDecimal(3)
+//            } else {
+//                returnValue["value"] = mssData[key].toString()
+//            }
         }   else {  // This is a critical error.  Try to cover all the bases so we don't crash at least.
             returnValue.put("value","-")
             returnValue.put("name", "Unknown name")

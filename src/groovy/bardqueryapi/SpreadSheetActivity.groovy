@@ -77,8 +77,9 @@ public class SpreadSheetActivity {
     public Double interpretHillCurveValue() {
         Double retValue = Double.NaN
 
-        if (this.hillCurveValue != null)
+        if (this.hillCurveValue) {
             retValue = (this.hillCurveValue.getSlope() == null) ? Double.NaN : this.hillCurveValue.getSlope()
+        }
 
         retValue
     }

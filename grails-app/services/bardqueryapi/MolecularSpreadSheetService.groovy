@@ -119,11 +119,12 @@ class MolecularSpreadSheetService {
                     int innerRowPointer = molSpreadSheetData.rowPointer[spreadSheetActivity.cid]
                     int innerColumnCount = molSpreadSheetData.columnPointer[spreadSheetActivity.eid]
                     String arrayKey = "${innerRowPointer}_${innerColumnCount + 3}"
-                    SpreadSheetActivityStorage spreadSheetActivityStorage = spreadSheetActivity.toSpreadSheetActivityStorage()
-                    MolSpreadSheetCell molSpreadSheetCell = new MolSpreadSheetCell(spreadSheetActivity.interpretHillCurveValue().toString(),
-                            MolSpreadSheetCellType.numeric,
-                            MolSpreadSheetCellUnit.Micromolar,
-                            spreadSheetActivityStorage)
+                    SpreadSheetActivityStorage spreadSheetActivityStorage = new SpreadSheetActivityStorage(spreadSheetActivity)
+
+                    MolSpreadSheetCell molSpreadSheetCell = new MolSpreadSheetCell( spreadSheetActivity.interpretHillCurveValue().toString(),
+                                                                                    MolSpreadSheetCellType.numeric,
+                                                                                    MolSpreadSheetCellUnit.Molar,
+                                                                                    spreadSheetActivityStorage)
                     if (spreadSheetActivityStorage == null)
                         molSpreadSheetCell.activity = false
                     molSpreadSheetData.mssData.put(arrayKey, molSpreadSheetCell)
@@ -434,8 +435,12 @@ class MolecularSpreadSheetService {
         return allExperiments
     }
 
-
-
+    /**
+     *
+     * @param experiment
+     * @param compoundETag
+     * @return
+     */
     List<SpreadSheetActivity> findActivitiesForCompounds(final Experiment experiment, final Object compoundETag) {
         final List<SpreadSheetActivity> spreadSheetActivities = new ArrayList<SpreadSheetActivity>()
         final ServiceIterator<Value> experimentIterator = this.queryServiceWrapper.restExperimentService.activities(experiment, compoundETag);
@@ -532,7 +537,3 @@ class MolecularSpreadSheetService {
     }
 
 }
-
-
-
-
