@@ -29,6 +29,8 @@ databaseChangeLog = {
                         load_data.load_reference;
                         load_data.load_assay(7);
                         load_data.load_assay(8);
+                        load_data.load_assay(726);
+
                         load_data.load_assay(1432);
                         load_data.load_assay(1565);
                         load_data.load_assay(1847);
