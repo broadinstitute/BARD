@@ -77,7 +77,7 @@
                     <span class="caret"></span>
                 </a>
                 <ul class="dropdown-menu">
-                    <li><a href="/bardwebquery/MolSpreadSheet">Molecular Spreadsheet</a></li>
+                    <li><g:link controller="molSpreadSheet">Molecular Spreadsheet</g:link></li>
                     <li><a href="#">Advanced Analysis Client</a></li>
                 </ul>
             </div>

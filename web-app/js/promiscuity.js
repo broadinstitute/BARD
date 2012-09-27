@@ -11,7 +11,7 @@ var PromiscuityHandler = {
                 url:url,
                 type:'GET',
                 cache:false,
-                timeout: 10000,
+                //timeout: 10000,
                 beforeSend: function() {
                     $('#' + promiscuityDivId).html(waitingImage);
                 },

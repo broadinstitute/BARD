@@ -87,7 +87,7 @@ function handleStructureSearch(url, currentFormId) {
         type:'POST',
         data:$(searchForm).serialize(),
         cache:false,
-        timeout: 10000,
+        //timeout: 10000,
         beforeSend:function () {
             resetTabsForStructureSearches();
             $("#compounds").html(bigSpinnerImage);
@@ -125,7 +125,7 @@ function handleSearch(controllerAction, currentFormId, tabId, totalHitsForResour
         type:'POST',
         data:$(searchForm).serialize(),
         cache:false,
-        timeout: 10000,
+        //timeout: 10000,
         beforeSend:function () {
             $(tabDivElement).html(prefixOfTextToAppearOnTab + spinnerImageLink);
             $(updateDivId).html(bigSpinnerImage);

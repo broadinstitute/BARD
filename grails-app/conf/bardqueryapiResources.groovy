@@ -16,24 +16,25 @@ modules = {
     }
     images {
     }
+    //Adding version allows clients to not cache javascript
     search {
-        resource url:"js/search.js"
+        resource url:"js/search.js?version=1"
     }
     structureSearch {
-        resource url:"js/structureSearchDialog.js"
+        resource url:"js/structureSearchDialog.js?version=1"
     }
     autocomplete {
-        resource url:"js/autocomplete.js"
+        resource url:"js/autocomplete.js?version=1"
     }
     cart {
-        resource url:"js/cart.js", disposition: 'head'
+        resource url:"js/cart.js?version=1", disposition: 'head'
         resource url:"css/cart.css"
     }
     promiscuity {
-        resource url:"js/promiscuity.js"
+        resource url:"js/promiscuity.js?version=1"
         resource url:"css/promiscuity.css"
     }
     molecularSpreadSheet {
-        resource url:"js/molecularSpreadSheet.js"
+        resource url:"js/molecularSpreadSheet.js?version=1"
     }
 }

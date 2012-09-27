@@ -5,16 +5,16 @@ import molspreadsheet.MolSpreadSheetData
 class MolSpreadSheetController {
     MolecularSpreadSheetService molecularSpreadSheetService
     def index() {
-        molecularSpreadSheet()
+        render (view:"molecularSpreadSheet")
     }
 
     def molecularSpreadSheet(){
         if (molecularSpreadSheetService.weHaveEnoughDataToMakeASpreadsheet()) {
             MolSpreadSheetData molSpreadSheetData = molecularSpreadSheetService.retrieveExperimentalData()
-            render (view:"molecularSpreadSheet", model:  [ molSpreadSheetData: molSpreadSheetData ])
+            render (template: "spreadSheet", model:  [ molSpreadSheetData: molSpreadSheetData ])
         }  else {
             flash.message = "Cannot display molecular spreadsheet without at least one assay and at least one compound"
-            render (view:"../bardWebInterface/index")
+            render (template: "spreadSheet")
         }
 
     }
