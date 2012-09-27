@@ -13,24 +13,24 @@ public enum ActivityOutcome {
     /**
      *
      */
-    INACTIVE("inactive",1),
+    INACTIVE("Inactive",1),
     /**
      *
      */
-    ACTIVE("active",2),
+    ACTIVE("Active",2),
 
     /**
      *
      */
-    INCONCLUSIVE("inconclusive",3),
+    INCONCLUSIVE("Inconclusive",3),
     /**
      *
      */
-    UNSPECIFIED("unspecified",4),
+    UNSPECIFIED("Unspecified",4),
     /**
      *
      */
-    PROBE("probe",5);
+    PROBE("Probe",5);
 
     static final private Map<Integer,ActivityOutcome> activityOutcomes;
     static{

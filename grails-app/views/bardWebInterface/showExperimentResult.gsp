@@ -27,8 +27,9 @@
             <th>SID</th>
             <th>CID</th>
             <th>Structure</th>
-            <th>Readout</th>
+            <th>Activity</th>
             <th>Outcome</th>
+            <th>Potency</th>
             <g:if test="${role && (role != ExperimentValues.ExperimentRole.Primary)}">
                 <th>Curve</th>
             </g:if>
@@ -50,7 +51,8 @@
                         <br/>
                     </g:each>
                 </td>
-                <td></td>
+                <td>${experimentData.activityOutcome?.label}</td>
+                <td>${experimentData.potency}</td>
                 <td>
                     <g:if test="${role && (role != ExperimentValues.ExperimentRole.Primary)}">
                         <img alt="" title=""
