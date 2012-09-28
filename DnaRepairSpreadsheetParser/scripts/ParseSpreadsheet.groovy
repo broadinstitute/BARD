@@ -25,7 +25,7 @@ FilenameFilter xlsxExtensionFilenameFilter = new FilenameFilter() {
     }
 }
 //List<String> inputDirPathArray = ["test/exampleData/minAssayAnnotationSpreadsheets/", "test/exampleData/dnarepairmindataspreadsheets/"]
-List<String> inputDirPathArray = ["test/exampleData/test/"]
+List<String> inputDirPathArray = ["test/exampleData/dnarepairmindataspreadsheets/"]
 for (String inputDirPath : inputDirPathArray) {
     File inputDirFile = new File(inputDirPath)
     inputFileList.addAll(inputDirFile.listFiles(xlsxExtensionFilenameFilter))

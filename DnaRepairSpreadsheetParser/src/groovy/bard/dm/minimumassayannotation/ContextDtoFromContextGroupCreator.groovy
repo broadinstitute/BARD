@@ -1,22 +1,18 @@
 package bard.dm.minimumassayannotation
 
-import bard.dm.minimumassayannotation.ContextDTO
-import bard.dm.minimumassayannotation.ContextGroup
+import org.apache.poi.ss.usermodel.Cell
+import org.apache.poi.ss.usermodel.DateUtil
 import org.apache.poi.ss.usermodel.Row
 import org.apache.poi.ss.usermodel.Sheet
-import bard.dm.minimumassayannotation.Attribute
-import bard.db.registration.AttributeType
-import org.apache.poi.ss.usermodel.Cell
-import org.apache.poi.ss.util.CellUtil
 import org.apache.poi.ss.util.CellReference
-import org.apache.poi.ss.usermodel.DateUtil
+import org.apache.poi.ss.util.CellUtil
 
 /**
  * Iterates over all the attribute-pairs in each context and build a contextDTO
  */
 class ContextDtoFromContextGroupCreator {
     /**
-     * Iterates over all the attribute-pairs in each context and build a contextDTO
+     * Iterates over all the attribute-pairs in each context and builds a contextDTO
      *
      * @param row
      * @param sheet
@@ -32,7 +28,6 @@ class ContextDtoFromContextGroupCreator {
             if (attrKey)
                 assert attrKey instanceof String, "Key must be a string"
 
-
             //Get the attribute's qualifier-content from cell
             String attQualifierCellId = attribute.qualifier
             def attrQualifier = attQualifierCellId ? getCellContent(attQualifierCellId, row, sheet) : attQualifierCellId
@@ -43,8 +38,10 @@ class ContextDtoFromContextGroupCreator {
             String attValueCell = attribute.value
             def attrValue = getCellContent(attValueCell, row, sheet)
 
-            //Attribute key must exist; attribute value must exist UNLESS it is of type Free
-            if ((!attrKey) || (!attrValue && (attribute.attributeType != AttributeType.Free))) return
+//            //Attribute key must exist; attribute value must exist UNLESS it is of type Free
+//            if ((!attrKey) || (!attrValue && (attribute.attributeType != AttributeType.Free))) return
+            //Attribute ket and value must exist
+            if (!attrKey || !attrValue) return
 
             //Get the attribute's concentration-unit value from cell
             String attConcentrationUnitsCellId = attribute.concentrationUnits

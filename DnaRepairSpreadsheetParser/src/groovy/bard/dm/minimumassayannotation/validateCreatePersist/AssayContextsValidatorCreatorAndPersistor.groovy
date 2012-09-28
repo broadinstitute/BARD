@@ -114,9 +114,10 @@ class AssayContextsValidatorCreatorAndPersistor extends ValidatorCreatorAndPersi
                             assert false, "Illage attribute value"
                         }
 
-                        //populate the qualifier field, if exists
+                        //populate the qualifier field, if exists, and prefix the valueDisplay with it
                         if (attribute.qualifier) {
                             assayContextItem.qualifier = String.format('%-2s', attribute.qualifier)
+                            assayContextItem.valueDisplay = "${attribute.qualifier}${assayContextItem.valueDisplay}"
                         }
 
                         postProcessAssayContextItem(assayContextItem)
