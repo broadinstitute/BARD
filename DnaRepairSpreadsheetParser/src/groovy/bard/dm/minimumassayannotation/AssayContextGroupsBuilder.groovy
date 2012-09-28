@@ -1,7 +1,7 @@
 package bard.dm.minimumassayannotation
 
-import bard.db.registration.AttributeType
 import bard.db.dictionary.Element
+import bard.db.registration.AttributeType
 
 /**
  * Created with IntelliJ IDEA.
@@ -20,23 +20,23 @@ class AssayContextGroupsBuilder {
     }
 
     List<ContextGroup> build() {
-        List<Attribute> processOrTarget = [new Attribute('2/C', '$/C', AttributeType.Fixed, true, null),
-                new Attribute('$/C', '$/D', AttributeType.Fixed, true, null)]
+        List<Attribute> processOrTarget = [new Attribute('2/C', '$/C', AttributeType.Fixed, true, null, null),
+                new Attribute('$/C', '$/D', AttributeType.Fixed, true, null, null)]
 
         List<Attribute> assayFormat = [new Attribute('1/E', '$/E', AttributeType.Fixed), new Attribute('2/F', '$/F', AttributeType.Fixed)]
 
         List<Attribute> assayComponent = [
                 new Attribute('2/G', '$/G', AttributeType.Fixed),
                 new Attribute('2/H', '$/H', AttributeType.Fixed),
-                new Attribute('2/I', '$/I', AttributeType.Fixed, true, null),
-                new Attribute('2/J', '$/J', AttributeType.Fixed, true, null),
-                new Attribute('2/K', '$/K', AttributeType.Fixed),
-                new Attribute('2/L', '$/L', AttributeType.Fixed, true, null),
+                new Attribute('2/I', '$/I', AttributeType.Fixed, true, null, null),
+                new Attribute('2/J', '$/J', AttributeType.Fixed, true, null, '$/K'), //concentration + units
+//                new Attribute('2/K', '$/K', AttributeType.Fixed),
+                new Attribute('2/L', '$/L', AttributeType.Fixed, true, null, null),
                 new Attribute('2/M', '$/M', AttributeType.Fixed)]
 
         List<Attribute> assayDetector = [
                 new Attribute('2/O', '$/O', AttributeType.Fixed),
-                new Attribute('$/O', '$/N', AttributeType.Fixed, true, null)]
+                new Attribute('$/O', '$/N', AttributeType.Fixed, true, null, null)]
 
         List<Attribute> assayDetection = [
                 new Attribute('2/P', '$/P', AttributeType.Fixed),
@@ -55,14 +55,10 @@ class AssayContextGroupsBuilder {
 
         List<Attribute> assayAbsorbance = [new Attribute('2/X', '$/X', AttributeType.Fixed)]
 
-        List<Attribute> resultActivityThreshold = [new Attribute('2/AA', '$/AA', AttributeType.Fixed, false, '$/Z')]//the qualifier belongs to the Activity-threshold attribute
+        List<Attribute> resultActivityThreshold = [new Attribute('2/AA', '$/AA', AttributeType.Fixed, false, '$/Z', null)]//the qualifier belongs to the Activity-threshold attribute
 
         List<Attribute> resultDetails = [new Attribute('2/AH', '$/AH', AttributeType.Free),
                 new Attribute('2/AI', '$/AI', AttributeType.Free)]
-
-        //List<Attribute> assayFormat2 = [new Attribute('2/AQ', '$/AQ', AttributeType.Fixed)]
-        //List<Attribute> assayTargetType = [new Attribute('2/AS', '$/AS', AttributeType.Fixed)]
-        //List<Attribute> assayDetection2 = [new Attribute('2/AT', '$/AT', AttributeType.Fixed)]
 
         List<ContextGroup> spreadsheetAssayContextGroups = [new ContextGroup(name: 'processOrTarget', attributes: processOrTarget),
                 new ContextGroup(name: 'assayFormat', attributes: assayFormat),
@@ -75,9 +71,6 @@ class AssayContextGroupsBuilder {
                 new ContextGroup(name: 'assayAbsorbance', attributes: assayAbsorbance),
                 new ContextGroup(name: 'resultActivityThreshold', attributes: resultActivityThreshold),
                 new ContextGroup(name: 'resultDetails', attributes: resultDetails)]
-        //        new ContextGroup(name: 'assayFormat2', attributes: assayFormat2),
-        //        new ContextGroup(name: 'assayTargetType', attributes: assayTargetType),
-        //        new ContextGroup(name: 'assayDetection2', attributes: assayDetection2)]
 
         return spreadsheetAssayContextGroups
     }

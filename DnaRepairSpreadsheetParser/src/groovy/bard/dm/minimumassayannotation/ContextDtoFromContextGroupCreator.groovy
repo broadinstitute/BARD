@@ -43,9 +43,17 @@ class ContextDtoFromContextGroupCreator {
             String attValueCell = attribute.value
             def attrValue = getCellContent(attValueCell, row, sheet)
 
+            //Attribute key must exist; attribute value must exist UNLESS it is of type Free
             if ((!attrKey) || (!attrValue && (attribute.attributeType != AttributeType.Free))) return
 
-            Attribute attr = new Attribute(attrKey, attrValue, attribute.attributeType, attribute.typeIn, attrQualifier)
+            //Get the attribute's concentration-unit value from cell
+            String attConcentrationUnitsCellId = attribute.concentrationUnits
+            def attrConcentrationUnits = attConcentrationUnitsCellId ? getCellContent(attConcentrationUnitsCellId, row, sheet) : attConcentrationUnitsCellId
+            if (attrConcentrationUnits)
+                assert attrConcentrationUnits instanceof String, "ConcentrationUnits must be a string"
+
+            //Create a new attribute and add it to the context's attributes collection.
+            Attribute attr = new Attribute(attrKey, attrValue, attribute.attributeType, attribute.typeIn, attrQualifier, attrConcentrationUnits)
 
             contextDTO.attributes << attr
         }

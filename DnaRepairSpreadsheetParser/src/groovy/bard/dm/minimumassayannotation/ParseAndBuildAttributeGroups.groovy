@@ -69,7 +69,7 @@ class ParseAndBuildAttributeGroups {
                 }
             }
 
-            //Iterate over all assay-groups' contexts
+            //Iterate over all measure-groups' contexts
             measureContextGroups.each {ContextGroup contextGroup ->
                 ContextDTO measureContextDTO = contextDtoFromContextGroupCreator.create(contextGroup, row, sheet)
 

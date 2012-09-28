@@ -27,10 +27,7 @@ class AttributesContentsCleaner {
 
             assayContextDTO.attributes.each {Attribute attribute ->
 
-                String ky = StringUtils.split(attribute.key, '|').toList().last().trim()
-
-                String matchedKey = attributeNameMapping.keySet().find { String key -> return StringUtils.equalsIgnoreCase(key, ky)}
-                ky = matchedKey ? attributeNameMapping.get(matchedKey) : ky
+                String ky = trimAndMapKey(attribute.key, attributeNameMapping)
 
 
                 def val = attribute.value
@@ -44,9 +41,13 @@ class AttributesContentsCleaner {
                 }
 
                 if ((attribute.attributeType != AttributeType.Free) && !val) return //Unless the attribute-type is Free, skip attributes with empty value
+
+                String concentrationUnits = trimAndMapKey(attribute.concentrationUnits, attributeNameMapping)
+
                 Attribute attr = new Attribute(attribute)
                 attr.key = ky
                 attr.value = val
+                attr.concentrationUnits = concentrationUnits
 
                 assayCtxDTO.attributes << attr
             }
@@ -54,5 +55,14 @@ class AttributesContentsCleaner {
         }
 
         return assayContextListCleaned
+    }
+
+
+    private String trimAndMapKey(String key, Map attributeNameMapping) {
+        String trimmedKey = StringUtils?.split(key, '|')?.toList()?.last()?.trim()
+
+        String matchedKey = attributeNameMapping.keySet().find { String keyInMap -> return StringUtils.equalsIgnoreCase(keyInMap, trimmedKey)}
+        trimmedKey = matchedKey ? attributeNameMapping.get(matchedKey) : trimmedKey
+        return trimmedKey
     }
 }

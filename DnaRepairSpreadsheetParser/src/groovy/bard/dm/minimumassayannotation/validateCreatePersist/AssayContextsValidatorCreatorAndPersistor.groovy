@@ -102,7 +102,10 @@ class AssayContextsValidatorCreatorAndPersistor extends ValidatorCreatorAndPersi
                         } else if (attribute.value && (!(attribute.value instanceof String) || attribute.value.isNumber())) {//if the attribute's value is a number value, store it in the valueNum field
                             Float val = new Float(attribute.value)
                             assayContextItem.valueNum = val
-                            assayContextItem.valueDisplay = val.toString()
+                            //If the value is a number and also has concentration-units, we need to find the units element ID and update the valueDisplay accrdingly
+                            Element concentrationUnitsElement = attribute.concentrationUnits ? Element.findByLabelIlike(attribute.concentrationUnits) : null
+                            String concentrationUnitsAbbreviation = concentrationUnitsElement ? " ${concentrationUnitsElement.abbreviation}" : ""
+                            assayContextItem.valueDisplay = val.toString() + concentrationUnitsAbbreviation
                         } else if (attribute.typeIn || (attribute.attributeType == AttributeType.Free)) {//if the attribute's value is a type-in or attribute-type is Free, then simply store it the valueDisplay field
                             assayContextItem.valueDisplay = attribute.value
                         } else {

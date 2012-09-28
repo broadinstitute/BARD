@@ -1,10 +1,10 @@
 package bard.dm.minimumassayannotation.validateCreatePersist
 
-import bard.db.registration.AttributeType
 import bard.db.dictionary.Element
-import bard.dm.minimumassayannotation.ContextDTO
-import bard.dm.minimumassayannotation.Attribute
+import bard.db.registration.AttributeType
 import bard.dm.Log
+import bard.dm.minimumassayannotation.Attribute
+import bard.dm.minimumassayannotation.ContextDTO
 
 /**
  * Make sure that all the attribute's key and value match against valid values in the Element table
@@ -28,6 +28,10 @@ class AttributeContentAgainstElementTableValidator {
                         !attribute.typeIn &&
                         (attribute.attributeType != AttributeType.Free)) {
                     attributeVocabulary.add(attribute.value)
+                }
+                //Add the concentration-units if exists
+                if (attribute.concentrationUnits) {
+                    attributeVocabulary.add(attribute.concentrationUnits)
                 }
             }
         }
