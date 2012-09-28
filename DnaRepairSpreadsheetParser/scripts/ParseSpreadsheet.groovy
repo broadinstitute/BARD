@@ -87,5 +87,3 @@ for (File inputFile : inputFileList) {
 
 return false
 
-
-
