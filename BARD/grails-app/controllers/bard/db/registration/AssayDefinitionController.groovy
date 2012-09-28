@@ -19,8 +19,11 @@ class AssayDefinitionController {
     }
 
     def save() {
+		println "Params: " + params
         def assayInstance = new Assay(params)
+		println "Assay: " + assayInstance
         if (!assayInstance.save(flush: true)) {
+			println "Unable to save assay"
             render(view: "description", model: [assayInstance: assayInstance])
             return
         }

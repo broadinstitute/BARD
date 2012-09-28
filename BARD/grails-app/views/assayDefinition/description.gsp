@@ -50,24 +50,28 @@
 				<div id="tabs-1">				
 					<div class="bs-docs">
 						<g:form class="form-horizontal" action="save" >
+							%{--
 							<div class="control-group">
 								<label class="control-label" for="id"><g:message code="assay.id.label" default="ID #:" /></label>
 								<div class="controls">
 									<g:textField name="id" maxlength="100" value="${assayInstance?.id}"/>
 								</div>
 							</div>
+							--}%
 							<div class="control-group">
 								<label class="control-label" for="assayStatus"><g:message code="assay.assayStatus.label" default="Status:" /></label>
 								<div class="controls">
 									<g:select name="assayStatus" from="${AssayStatus}" value="${AssayStatus}" valueMessagePrefix="assay.assayStatus" noSelection="['': '']"/>
 								</div>
 							</div>
+							%{--
 							<div class="control-group">
 								<label class="control-label" for="lastUpdated"><g:message code="assay.lastUpdated.label" default="Last Updated:" /></label>
 								<div class="controls">
 									<g:textField name="lastUpdated" id="datepicker" maxlength="100" value="${assayInstance?.lastUpdated}"/>
 								</div>
 							</div>
+							--}%
 							<div class="control-group">
 								<label class="control-label" for="assayName"><g:message code="assay.assayName.label" default="Name:" /></label>
 								<div class="controls">
