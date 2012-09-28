@@ -2,7 +2,9 @@
 <div class="bs-docs">
 <table class="table table-hover">
     <caption id="${card.id}" class="assay_context">
-        <div>${card.title}</div>
+        <div>
+            <p>${card.label}</p>
+        </div>
         %{-- <div><button id="b-${card.id}" class="btn btn-mini">Edit</button></div> --}%
         <g:if test="${card.lines.size() == 0}">
         	<div class="deleteCardButton"><button id="${card.id}" class="btn btn-mini"><span style="color: red; font-weight:bold;">x</span></button></div>
