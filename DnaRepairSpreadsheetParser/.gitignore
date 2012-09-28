@@ -1,0 +1,8 @@
+DnaSpreadsheetParserResultAssayContext*
+DnaSpreadsheetParserResultMeasure*
+out/
+test/exampleData/assayDeDuplication 2012-09-25.log
+test/exampleData/assayDeDuplication.log
+test/exampleData/duplication analysis.xlsx
+test/exampleData/parseCarsSpreadsheet.log
+test/exampleData/dnaRepairLoad.log

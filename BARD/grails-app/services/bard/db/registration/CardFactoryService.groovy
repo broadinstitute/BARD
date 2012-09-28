@@ -1,27 +1,42 @@
 package bard.db.registration
 
+import bard.db.dictionary.Descriptor
+import bard.db.dictionary.DescriptorLabelComparator
 import org.apache.commons.lang.StringUtils
 
 class CardFactoryService {
 
     private static final String ASSAY_COMPONENT_ROLE = "assay component role"
 
-    List<CardDto> createCardDtoListForAssay(Assay assay) {
+    Map<String, CardDto> createCardDtoMapForAssay(Assay assay) {
         List<CardDto> cards = new ArrayList<CardDto>()
         if (assay == null || assay.getAssayContexts() == null) {
-            return cards
+            return cards.groupBy {it.assaySection}
         }
-        for (AssayContext assayContext : assay.assayContexts.sort { a,b -> a.id <=> b.id}) {
+        List<AssayContext> assayContexts = assay.assayContexts.sort {a, b ->
+            new DescriptorLabelComparator().compare(a.preferredDescriptor, b.preferredDescriptor)
+        }
+        for (AssayContext assayContext : assayContexts) {
             CardDto cardDto = createCardDto(assayContext)
             cards.add(cardDto)
         }
-        return cards
+        return cards.groupBy {it.assaySection}
     }
 
     public CardDto createCardDto(AssayContext assayContext) {
         CardDto cardDto = new CardDto()
         cardDto.id = assayContext.id
         cardDto.title = assayContext.contextName
+        cardDto.label = assayContext.preferredName
+
+        Descriptor descriptor = assayContext.preferredDescriptor
+        if(descriptor){
+            cardDto.assaySection = descriptor.getPath()[0..1].collect{ it.label }.join(' > ')
+        }
+        else {
+            cardDto.assaySection = 'unknown section'
+        }
+
         for (AssayContextItem assayContextItem : assayContext.assayContextItems) {
             CardLineDto line = createCardLineDtoForAssayContextItem(assayContextItem)
             if (line) {
@@ -51,7 +66,8 @@ class CardFactoryService {
 class CardDto {
     Long id
     String title
-	Long assayId
+    String label
+    String assaySection
     List<CardLineDto> lines = new ArrayList<CardLineDto>()
 }
 

@@ -28,18 +28,35 @@ div.cardView table.gridtable td {
     border-color: #d3d3d3;
 }
 
-.drophover{
+.drophover {
     background-color: yellow;
     border-color: red;
 }
 
-.table caption.drophoverCaption{
+.table caption.drophoverCaption {
     background-color: green;
 }
 
 .table drophoverCard {
-	
-	border: 1px solid red;
+
+    border: 1px solid red;
     /* border-color: red; */
 }
 
+.roundedBorder {
+    border: 1px solid #ddd;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    border-radius: 4px;
+}
+table.table{
+    margin-bottom: 0px;
+    padding: 0px;
+}
+table.table th, table.table td {
+padding: 0px;
+line-height: 20px;
+text-align: left;
+vertical-align: top;
+border-top: 1px solid #DDD;
+}

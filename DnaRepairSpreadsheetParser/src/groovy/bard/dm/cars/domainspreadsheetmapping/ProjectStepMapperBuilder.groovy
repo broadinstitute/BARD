@@ -119,6 +119,10 @@ class ProjectStepMapperBuilder {
                             Log.logger.warn("\t\tmatching step to cars experiment, cars experiment does not have value element but cars does - no match made")
                         }
                     }
+                }  else {
+                    //The carsMatchingPropertyName was not found in the map indicates that we do not have a mapping
+                    //for the attribute of this context item, so it cannot be used to match information in the
+                    //CARS spreadsheeet
                 }
             }
         }

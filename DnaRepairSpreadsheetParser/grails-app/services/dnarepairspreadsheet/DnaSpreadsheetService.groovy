@@ -37,7 +37,7 @@ class DnaSpreadsheetService {
 
         final Integer START_ROW = 3 //1-based
 
-        InputStream inp = new FileInputStream("C:/Users/gwalzer/Desktop/NCGC-DNA repair.xlsx");
+        InputStream inp = new FileInputStream("C:/Users/gwalzer/Desktop/NCGC-DNA repair.short.xlsx");
         Workbook wb = new XSSFWorkbook(inp);
         Sheet sheet1 = wb.getSheetAt(0);
 

@@ -43,9 +43,9 @@ class AssayDefinitionController {
         else
             flash.message = null
 
-        List<CardDto> cardDtoList = cardFactoryService.createCardDtoListForAssay(assayInstance)
+        Map<String , CardDto> cardDtoMap = cardFactoryService.createCardDtoMapForAssay(assayInstance)
 
-        [assayInstance: assayInstance, cardDtoList: cardDtoList]
+        [assayInstance: assayInstance, cardDtoMap: cardDtoMap]
     }
 
     def findById() {
@@ -80,16 +80,16 @@ class AssayDefinitionController {
         AssayContext targetAssayContext = target.assayContext
         int index = targetAssayContext.assayContextItems.indexOf(target)
         assayContextService.addItem(index, source, targetAssayContext)
-        List<CardDto> cardDtoList = cardFactoryService.createCardDtoListForAssay(targetAssayContext.assay)
-        render(template: "cards", model: [cardDtoList: cardDtoList])
+        Map<String , CardDto> cardDtoMap = cardFactoryService.createCardDtoMapForAssay(targetAssayContext.assay)
+        render(template: "cards", model: [cardDtoMap: cardDtoMap])
     }
 
     def addItemToCard(Long src_assay_context_item_id, Long target_assay_context_id) {
         AssayContext targetAssayContext = AssayContext.findById(target_assay_context_id)
         AssayContextItem source = AssayContextItem.findById(src_assay_context_item_id)
         assayContextService.addItem(source, targetAssayContext)
-        List<CardDto> cardDtoList = cardFactoryService.createCardDtoListForAssay(targetAssayContext.assay)
-        render(template: "cards", model: [cardDtoList: cardDtoList])
+        Map<String , CardDto> cardDtoMap = cardFactoryService.createCardDtoMapForAssay(targetAssayContext.assay)
+        render(template: "cards", model: [cardDtoMap: cardDtoMap])
     }
 
 
@@ -118,8 +118,8 @@ class AssayDefinitionController {
             assay.removeFromAssayContexts(assayContext)
             assayContext.delete()
         }
-        List<CardDto> cardDtoList = cardFactoryService.createCardDtoListForAssay(assay)
-        render(template: "cards", model: [cardDtoList: cardDtoList])
+        Map<String , CardDto> cardDtoMap = cardFactoryService.createCardDtoMapForAssay(assay)
+        render(template: "cards", model: [cardDtoMap: cardDtoMap])
     }
 
     def addNewEmptyCard(String card_name, Long assay_id) {
@@ -131,8 +131,8 @@ class AssayDefinitionController {
             assayInstance.addToAssayContexts(assayContextInstance);
             assayContextInstance.save()
         }
-        List<CardDto> cardDtoList = cardFactoryService.createCardDtoListForAssay(assayInstance)
-        render(template: "cards", model: [cardDtoList: cardDtoList])
+        Map<String , CardDto> cardDtoMap = cardFactoryService.createCardDtoMapForAssay(assayInstance)
+        render(template: "cards", model: [cardDtoMap: cardDtoMap])
     }
 		
 }

@@ -45,7 +45,7 @@
 	            <g:render template="assaySummaryView" model="['assayInstance': assayInstance]"/>
 
 	            <h3><a href="#">Assay and Biology Details</a></h3>
-	            <g:render template="cardDtoView" model="['cardDtoList': cardDtoList, 'assayId': assayInstance.id]"/>
+	            <g:render template="cardDtoView" model="['cardDtoMap': cardDtoMap, 'assayId': assayInstance.id]"/>
 
 	            <h3><a href="#">Documents</a></h3>
 	            <g:render template="assayDocumentsView" model="['assayInstance': assayInstance]"/>
@@ -253,28 +253,6 @@
                         data:data,
                         success:function (data) {
                             $("div#cardHolder").html(data);
-                            initDnd();
-                        }
-                    });
-                    ui.helper.remove();
-                }
-            });
-        });
-        $(document).ready(function () {
-            $("caption.assay_context").droppable({
-                hoverClass:"drophoverCaption",
-                drop:function (event, ui) {
-                    var src_assay_context_item_id = ui.draggable.attr('id');
-                    var target_assay_context_id = $(this).attr('id');
-                    var data = {'src_assay_context_item_id':src_assay_context_item_id,
-                        'target_assay_context_id':target_assay_context_id};
-                    $.ajax({
-                        type:'POST',
-                        url:'../updateCardTitle',
-                        data:data,
-                        success:function (data) {
-                        	/*alert("caption.assay_context updateCardTitle  " + data);*/
-                            $("div#card-" + target_assay_context_id).replaceWith(data);
                             initDnd();
                         }
                     });

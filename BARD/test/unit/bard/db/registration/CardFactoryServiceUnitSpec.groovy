@@ -21,10 +21,10 @@ class CardFactoryServiceUnitSpec extends Specification {
         Assay assay = null
 
         when:
-        List<CardDto> cardDtos = service.createCardDtoListForAssay(assay)
+        Map<String, CardDto> cardDtoMap = service.createCardDtoMapForAssay(assay)
 
         then:
-        assert cardDtos.size() == 0
+        assert cardDtoMap.size() == 0
     }
 
     void "test createCardDtoListForAssay with Assay with no AssayContextItems"() {
@@ -32,10 +32,10 @@ class CardFactoryServiceUnitSpec extends Specification {
         Assay assay = new Assay()
 
         when:
-        List<CardDto> cardDtos = service.createCardDtoListForAssay(assay)
+        Map<String, CardDto> cardDtoMap = service.createCardDtoMapForAssay(assay)
 
         then:
-        assert cardDtos.size() == 0
+        assert cardDtoMap.size() == 0
     }
 
     void "test createCardDtoListForAssay with Assay having 1 AssayContextItem"() {
@@ -50,9 +50,10 @@ class CardFactoryServiceUnitSpec extends Specification {
         assayContext.addToAssayContextItems(new AssayContextItem(attributeElement: new Element(label: card1Label), valueDisplay: card1Value))
 
         when:
-        List<CardDto> cardDtos = service.createCardDtoListForAssay(assay)
-        assert cardDtos.size() == 1
-        CardDto card1 = cardDtos.get(0)
+        Map<String, CardDto> cardDtoMap = service.createCardDtoMapForAssay(assay)
+        println(cardDtoMap)
+        assert cardDtoMap.size() == 1
+        CardDto card1 = cardDtoMap.values().flatten().first()
 
         then:
         cardTitle == card1.title
@@ -68,7 +69,7 @@ class CardFactoryServiceUnitSpec extends Specification {
         false == line1.valueDefinitionAvailable
     }
 
-//    void "test createCardDtoListForAssay with Assay having an assay-level AssayContextItem and a result-specific AssayContextItem"() {
+//    void "test createCardDtoMapForAssay with Assay having an assay-level AssayContextItem and a result-specific AssayContextItem"() {
 //        given:
 //        Assay assay = new Assay()
 //        assay.assayContextItems = new HashSet<AssayContextItem>()
@@ -83,7 +84,7 @@ class CardFactoryServiceUnitSpec extends Specification {
 //        assay.assayContextItems.add(item2)
 //
 //        when:
-//        List<CardDto> cardDtos = service.createCardDtoListForAssay(assay)
+//        List<CardDto> cardDtos = service.createCardDtoMapForAssay(assay)
 //
 //        then:
 //        assert cardDtos.size() == 1
@@ -99,7 +100,7 @@ class CardFactoryServiceUnitSpec extends Specification {
 //        assert !line1.valueDefinitionAvailable
 //    }
 //
-//    void "test createCardDtoListForAssay with Assay having 2 AssayContextItems one with child"() {
+//    void "test createCardDtoMapForAssay with Assay having 2 AssayContextItems one with child"() {
 //        given:
 //        Assay assay = new Assay()
 //        assay.assayContextItems = new HashSet<AssayContextItem>()
@@ -133,7 +134,7 @@ class CardFactoryServiceUnitSpec extends Specification {
 //        assay.assayContextItems.add(child)
 //
 //        when:
-//        List<CardDto> cardDtos = service.createCardDtoListForAssay(assay)
+//        List<CardDto> cardDtos = service.createCardDtoMapForAssay(assay)
 //
 //        then:
 //        assert cardDtos.size() == 2
