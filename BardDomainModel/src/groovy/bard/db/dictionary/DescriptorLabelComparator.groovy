@@ -1,6 +1,6 @@
 package bard.db.dictionary
 
-import org.apache.commons.lang3.builder.CompareToBuilder
+import org.apache.commons.lang.builder.CompareToBuilder
 
 /**
  * Created with IntelliJ IDEA.
