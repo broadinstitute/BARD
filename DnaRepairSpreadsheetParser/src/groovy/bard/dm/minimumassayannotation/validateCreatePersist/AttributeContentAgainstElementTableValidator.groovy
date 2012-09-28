@@ -16,7 +16,7 @@ class AttributeContentAgainstElementTableValidator {
      * @param assayContextList
      */
     void validate(List<ContextDTO> assayContextList, Map attributeNameMapping) {
-    //Move all the attributes into a sorted-set to search against the database
+        //Move all the attributes into a sorted-set to search against the database
         SortedSet<String> attributeVocabulary = [] as SortedSet
         assayContextList.each {ContextDTO assayContextDTO ->
             assayContextDTO.attributes.each {Attribute attribute ->
@@ -35,11 +35,11 @@ class AttributeContentAgainstElementTableValidator {
         List<Element> foundElements = []
         List<String> missingAttributes = []
         attributeVocabulary.each {String attr ->
-    //    Log.logger.info("Attribute: '${attr}'")
+//            Log.logger.info("Attribute: '${attr}'")
             //Swap the attribute name with the mapping we have (e.g., '[detector] assay component (type in)' --> 'assay component'
-    //        attr = attributeNameMapping.containsKey(attr) ? attributeNameMapping.get(attr) : attr
+//            attr = attributeNameMapping.containsKey(attr) ? attributeNameMapping.get(attr) : attr
             Element element = Element.findByLabelIlike(attr)
-    //    Log.logger.info("Element: ${element}")
+            //    Log.logger.info("Element: ${element}")
             if (element) {
                 foundElements << element
             }

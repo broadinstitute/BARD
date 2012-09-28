@@ -24,7 +24,8 @@ FilenameFilter xlsxExtensionFilenameFilter = new FilenameFilter() {
         return name.toLowerCase().endsWith(".xlsx")
     }
 }
-List<String> inputDirPathArray = ["test/exampleData/minAssayAnnotationSpreadsheets/", "test/exampleData/dnarepairmindataspreadsheets/"]
+//List<String> inputDirPathArray = ["test/exampleData/minAssayAnnotationSpreadsheets/", "test/exampleData/dnarepairmindataspreadsheets/"]
+List<String> inputDirPathArray = ["test/exampleData/test/"]
 for (String inputDirPath : inputDirPathArray) {
     File inputDirFile = new File(inputDirPath)
     inputFileList.addAll(inputDirFile.listFiles(xlsxExtensionFilenameFilter))
@@ -34,13 +35,13 @@ Log.logger.info("loading ${inputFileList.size()} files found in ${inputDirPathAr
 
 //final String inputFilePath = "test/exampleData/dnarepairmindataspreadsheets/Broad+others-DNA_repair.xlsx"
 //"test/exampleData/dnarepairmindataspreadsheets/The Scripps Research Institute Molecular Screening Center-DNA repair.xlsx"
-//"test/exampleData/dnarepairmindataspreadsheets/NCGC-DNA repair.xlsx"
+//"test/exampleData/dnarepairmindataspreadsheets/NCGC-DNA repair.short.xlsx"
 //"test/exampleData/dnarepairmindataspreadsheets/Burnham Center for Chemical Genomics-DNA repair only.xlsx"
 //"test/exampleData/dnarepairmindataspreadsheets/Broad+others-DNA_repair.xlsx"
 
 //InputStream inp = new FileInputStream("C:/Users/gwalzer/Desktop/Simon/Broad+others-DNA_repair.xlsx");
 //InputStream inp = new FileInputStream("C:/Users/gwalzer/Desktop/Simon/Burnham Center for Chemical Genomics-DNA repair only.xlsx");
-//InputStream inp = new FileInputStream("C:/Users/gwalzer/Desktop/Simon/NCGC-DNA repair.xlsx");
+//InputStream inp = new FileInputStream("C:/Users/gwalzer/Desktop/Simon/NCGC-DNA repair.short.xlsx");
 //InputStream inp = new FileInputStream("C:/Users/gwalzer/Desktop/Simon/The Scripps Research Institute Molecular Screening Center-DNA repair.xlsx");
 
 

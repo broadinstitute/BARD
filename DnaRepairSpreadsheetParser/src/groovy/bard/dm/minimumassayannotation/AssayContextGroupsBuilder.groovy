@@ -23,9 +23,7 @@ class AssayContextGroupsBuilder {
         List<Attribute> processOrTarget = [new Attribute('2/C', '$/C', AttributeType.Fixed, true, null),
                 new Attribute('$/C', '$/D', AttributeType.Fixed, true, null)]
 
-        List<Attribute> assayFormat = [new Attribute('1/E', '$/E', AttributeType.Fixed)]
-
-        List<Attribute> assayType = [new Attribute('2/F', '$/F', AttributeType.Fixed)]
+        List<Attribute> assayFormat = [new Attribute('1/E', '$/E', AttributeType.Fixed), new Attribute('2/F', '$/F', AttributeType.Fixed)]
 
         List<Attribute> assayComponent = [
                 new Attribute('2/G', '$/G', AttributeType.Fixed),
@@ -59,16 +57,15 @@ class AssayContextGroupsBuilder {
 
         List<Attribute> resultActivityThreshold = [new Attribute('2/AA', '$/AA', AttributeType.Fixed, false, '$/Z')]//the qualifier belongs to the Activity-threshold attribute
 
-        List<Attribute> assayConcentrationPoint = [new Attribute('2/AH', '$/AH', AttributeType.Free)]
+        List<Attribute> resultDetails = [new Attribute('2/AH', '$/AH', AttributeType.Free),
+                new Attribute('2/AI', '$/AI', AttributeType.Free)]
 
-        List<Attribute> assayReplicates = [new Attribute('2/AI', '$/AI', AttributeType.Free)]
         //List<Attribute> assayFormat2 = [new Attribute('2/AQ', '$/AQ', AttributeType.Fixed)]
         //List<Attribute> assayTargetType = [new Attribute('2/AS', '$/AS', AttributeType.Fixed)]
         //List<Attribute> assayDetection2 = [new Attribute('2/AT', '$/AT', AttributeType.Fixed)]
 
         List<ContextGroup> spreadsheetAssayContextGroups = [new ContextGroup(name: 'processOrTarget', attributes: processOrTarget),
                 new ContextGroup(name: 'assayFormat', attributes: assayFormat),
-                new ContextGroup(name: 'assayType', attributes: assayType),
                 new ContextGroup(name: 'assayComponent', attributes: assayComponent),
                 new ContextGroup(name: 'assayDetection', attributes: assayDetection),
                 new ContextGroup(name: 'assayReadout', attributes: assayReadout),
@@ -77,8 +74,7 @@ class AssayContextGroupsBuilder {
                 new ContextGroup(name: 'assayExcitation', attributes: assayExcitation),
                 new ContextGroup(name: 'assayAbsorbance', attributes: assayAbsorbance),
                 new ContextGroup(name: 'resultActivityThreshold', attributes: resultActivityThreshold),
-                new ContextGroup(name: 'assayConcentrationPoint', attributes: assayConcentrationPoint),
-                new ContextGroup(name: 'assayReplicates', attributes: assayReplicates)]
+                new ContextGroup(name: 'resultDetails', attributes: resultDetails)]
         //        new ContextGroup(name: 'assayFormat2', attributes: assayFormat2),
         //        new ContextGroup(name: 'assayTargetType', attributes: assayTargetType),
         //        new ContextGroup(name: 'assayDetection2', attributes: assayDetection2)]
