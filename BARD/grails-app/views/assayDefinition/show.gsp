@@ -151,8 +151,9 @@
                 primary:"ui-icon-trash"
             },
             text: false
-        }).click(function(event){
+        }).click(function(event){        	
         	var cardId = $(this).attr('id');
+        	alert("A click has been registered. Card ID: " + cardId);
         	$("#dialog_confirm_delete_card").dialog("option", "buttons",[
         		{
 					text: "Delete",

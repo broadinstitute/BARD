@@ -49,29 +49,81 @@
 				
 				<div id="tabs-1">				
 					<div class="bs-docs">
+					
 						<g:form class="form-horizontal" action="save" >
-							%{--
+							<div class="control-group">
+								<label class="control-label" for="assayStatus"><g:message code="assay.assayStatus.label" default="Assay Status:" /></label>
+								<div class="controls">
+									<g:select name="assayStatus" from="${bard.db.registration.AssayStatus?.values()}" keys="${bard.db.registration.AssayStatus.values()*.name()}" required="" value="${assayInstance?.assayStatus?.name()}"/>
+								</div>
+							</div>
+							
+							<div class="control-group">
+								<label class="control-label" for="assayTitle"><g:message code="assay.assayTitle.label" default="Assay Title:" /></label>
+								<div class="controls">
+									<g:textField name="assayTitle" maxlength="250" required="" value="${assayInstance?.assayTitle}"/>
+								</div>
+							</div>
+							
+							<div class="control-group">
+								<label class="control-label" for="assayName"><g:message code="assay.assayName.label" default="Assay Name" /></label>
+								<div class="controls">
+									<g:textArea name="assayName" cols="40" rows="5" maxlength="1000" required="" value="${assayInstance?.assayName}"/>
+								</div>
+							</div>
+							
+							<div class="control-group">
+								<label class="control-label" for="assayVersion"><g:message code="assay.assayVersion.label" default="Assay Version" /></label>
+								<div class="controls">
+									<g:textField name="assayVersion" maxlength="10" required="" value="${assayInstance?.assayVersion}"/>
+								</div>
+							</div>
+							
+							<div class="control-group">
+								<label class="control-label" for="designedBy"><g:message code="assay.designedBy.label" default="Designed By" /></label>
+								<div class="controls">
+									<g:textField name="designedBy" maxlength="100" value="${assayInstance?.designedBy}"/>
+								</div>
+							</div>
+							
+							<div class="control-group">
+								<label class="control-label" for="assayType"><g:message code="assay.assayType.label" default="Assay Type" /></label>
+								<div class="controls">
+									<g:select name="assayType" from="${assayInstance.constraints.assayType.inList}" value="${assayInstance?.assayType}" valueMessagePrefix="assay.assayType" noSelection="['': '']"/>
+								</div>
+							</div>
+							
+							<div class="control-group">
+								<div class="controls">
+									<g:submitButton name="create" class="btn btn-primary" value="Create Assay" />
+								</div>
+							</div>
+						</g:form>
+						
+						%{--
+						<g:form class="form-horizontal" action="save" >
+							
 							<div class="control-group">
 								<label class="control-label" for="id"><g:message code="assay.id.label" default="ID #:" /></label>
 								<div class="controls">
 									<g:textField name="id" maxlength="100" value="${assayInstance?.id}"/>
 								</div>
 							</div>
-							--}%
+							
 							<div class="control-group">
 								<label class="control-label" for="assayStatus"><g:message code="assay.assayStatus.label" default="Status:" /></label>
 								<div class="controls">
 									<g:select name="assayStatus" from="${AssayStatus}" value="${AssayStatus}" valueMessagePrefix="assay.assayStatus" noSelection="['': '']"/>
 								</div>
 							</div>
-							%{--
+							
 							<div class="control-group">
 								<label class="control-label" for="lastUpdated"><g:message code="assay.lastUpdated.label" default="Last Updated:" /></label>
 								<div class="controls">
 									<g:textField name="lastUpdated" id="datepicker" maxlength="100" value="${assayInstance?.lastUpdated}"/>
 								</div>
 							</div>
-							--}%
+							
 							<div class="control-group">
 								<label class="control-label" for="assayName"><g:message code="assay.assayName.label" default="Name:" /></label>
 								<div class="controls">
@@ -103,6 +155,7 @@
 								</div>
 							</div>
 						</g:form>
+						--}%
 					</div>
 				</div>	
 				<div id="tabs-2">
