@@ -12,8 +12,10 @@ import bard.dm.minimumassayannotation.validateCreatePersist.MeasureContextsValid
 import bard.dm.Log
 import org.apache.log4j.Level
 
+final Date startDate = new Date()
+Log.logger.info("Start load of minimum assay annotation spreadsheets ${startDate}")
 
-final String modifiedBy = "dlahr-dna"
+final String modifiedBy = "jbittker"
 Log.logger.setLevel(Level.INFO)
 final Integer START_ROW = 3 //1-based
 
@@ -25,7 +27,7 @@ FilenameFilter xlsxExtensionFilenameFilter = new FilenameFilter() {
     }
 }
 //List<String> inputDirPathArray = ["test/exampleData/minAssayAnnotationSpreadsheets/", "test/exampleData/dnarepairmindataspreadsheets/"]
-List<String> inputDirPathArray = ["test/exampleData/dnarepairmindataspreadsheets/"]
+List<String> inputDirPathArray = ["test/exampleData/minAssayAnnotationSpreadsheets/"]
 for (String inputDirPath : inputDirPathArray) {
     File inputDirFile = new File(inputDirPath)
     inputFileList.addAll(inputDirFile.listFiles(xlsxExtensionFilenameFilter))
@@ -53,7 +55,7 @@ List<ContextGroup> spreadsheetResultTypeContextGroups = [new ContextGroup(name: 
 
 
 for (File inputFile : inputFileList) {
-    Log.logger.info("processing file ${inputFile.absolutePath}")
+    Log.logger.info("${new Date()} processing file ${inputFile.absolutePath}")
     InputStream inp = new FileInputStream(inputFile)
 
     println("Build assay and measure-context (groups) and populate their attribute from the spreadsheet cell contents.")
@@ -83,6 +85,10 @@ for (File inputFile : inputFileList) {
     (new AssayContextsValidatorCreatorAndPersistor(modifiedBy)).createAndPersist(assayContextListCleaned)
     (new MeasureContextsValidatorCreatorAndPersistor(modifiedBy)).createAndPersist(measureContextListCleaned)
 }
+
+final Date endDate = new Date()
+final double durationMin = (endDate.time - startDate.time) / 60000.0
+Log.logger.info("finished at ${endDate}   duration[min]: ${durationMin}")
 
 
 return false

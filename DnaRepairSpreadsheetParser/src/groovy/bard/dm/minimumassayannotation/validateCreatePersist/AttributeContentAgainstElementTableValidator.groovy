@@ -54,7 +54,7 @@ class AttributeContentAgainstElementTableValidator {
 
 
         Log.logger.info("Found elements: ${foundElements.collect {Element element -> [element.id, element.label]}}")
-        Log.logger.info("Missing attributes: ${missingAttributes}")
+        Log.logger.error("Missing attributes: ${missingAttributes}")
         assert missingAttributes.isEmpty(), "We could not have missing attributes - all attributes should be validatied against the Element table"
     }
 }
