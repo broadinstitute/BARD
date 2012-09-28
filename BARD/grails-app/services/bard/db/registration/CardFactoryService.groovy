@@ -13,7 +13,8 @@ class CardFactoryService {
         if (assay == null || assay.getAssayContexts() == null) {
             return cards.groupBy {it.assaySection}
         }
-        List<AssayContext> assayContexts = assay.assayContexts.sort {a, b ->
+        List<AssayContext> assayContexts = assay.assayContexts.sort {a, b -> a.id <=> b.id}
+        assayContexts = assay.assayContexts.sort {a, b ->
             new DescriptorLabelComparator().compare(a.preferredDescriptor, b.preferredDescriptor)
         }
         for (AssayContext assayContext : assayContexts) {
