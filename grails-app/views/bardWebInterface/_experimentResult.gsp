@@ -6,7 +6,7 @@
   To change this template use File | Settings | File Templates.
 --%>
 
-<%@ page import="molspreadsheet.MolSpreadSheetCell; bard.core.ExperimentValues; bard.core.AssayValues" contentType="text/html;charset=UTF-8" %>
+<%@ page import="results.ExperimentalValueType; results.ExperimentalValueUnit; results.ExperimentalValue; molspreadsheet.MolSpreadSheetCell; bard.core.ExperimentValues; bard.core.AssayValues" contentType="text/html;charset=UTF-8" %>
 
 <p><b>Title: ${experimentDataMap?.experiment?.name}</b></p>
 
@@ -41,17 +41,20 @@
                 </td>
                 <td>
                     <g:each in="${0..(experimentData.hillCurveValue.size() - 1)}" var="i">
-                        <% String response = MolSpreadSheetCell.convertToString(experimentData.hillCurveValue.response[i], 3)
+                        <%
+                            ExperimentalValue resp = new  ExperimentalValue(experimentData.hillCurveValue.response[i],false)
+                            ExperimentalValue conc = new  ExperimentalValue(experimentData.hillCurveValue.conc[i], ExperimentalValueUnit.Molar, ExperimentalValueType.numeric )
                         %>
-                        ${response} @ ${experimentData.hillCurveValue.conc[i]}
+                        ${resp.toString()} @ ${conc.toString()}
                         <br/>
                     </g:each>
                 </td>
                 <td>${experimentData.activityOutcome?.label}</td>
                 <td>
-                    <% String potency = MolSpreadSheetCell.convertToString(experimentData.potency, 3)
+                    <%
+                        ExperimentalValue potency = new  ExperimentalValue(experimentData.potency, ExperimentalValueUnit.Micromolar, ExperimentalValueType.numeric )
                     %>
-                    ${potency}</td>
+                    ${potency.toString()}</td>
                 <td>
                     <g:if test="${experimentDataMap?.role && (experimentDataMap?.role != ExperimentValues.ExperimentRole.Primary)}">
                         <img alt="" title=""
@@ -65,10 +68,10 @@
                         <br/>
                         <g:if test="${experimentData.hillCurveValue.slope}">
                             <p>
-                                AC50 : ${experimentData.hillCurveValue.slope} <br/>
-                                sInf : ${experimentData.hillCurveValue.sInf}<br/>
-                                s0 : ${experimentData.hillCurveValue.s0}<br/>
-                                HillSlope : ${experimentData.hillCurveValue.slope}<br/>
+                                AC50 : ${(new  ExperimentalValue(experimentData.hillCurveValue.slope,false)).toString()} <br/>
+                                sInf : ${(new  ExperimentalValue(experimentData.hillCurveValue.sInf,false)).toString()}<br/>
+                                s0 : ${(new  ExperimentalValue(experimentData.hillCurveValue.s0,false)).toString()}<br/>
+                                HillSlope : ${(new  ExperimentalValue(experimentData.hillCurveValue.slope,false)).toString()}<br/>
                             </p>
                             <br/>
                             <br/>

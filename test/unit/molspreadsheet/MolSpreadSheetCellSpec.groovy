@@ -64,6 +64,22 @@ class MolSpreadSheetCellSpec extends  Specification {
     }
 
 
+    void "test other ctor" (){
+        when: "#label"
+        ExperimentalValue experimentalValue = new  ExperimentalValue(initialValue,printUnits)
+        assertNotNull(experimentalValue)
+
+        then: "The resulting search filters size must equal the expected value"
+        assert experimentalValue.toString()  ==  stringValue
+
+        where:
+        label                           | printUnits    |  initialValue                  | stringValue
+        "converting unit values"        | true |  1       |   "1M"
+        "converting unit values"        | true |  1.2     |   "1.2M"
+        "converting unit values"        | false |  1.23    |   "1.23"
+        "converting unit values"        | false |  1.234   |   "1.23"
+    }
+
 
     void "test handling of precision conversions" (){
         when: "#label"

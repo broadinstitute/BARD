@@ -20,17 +20,34 @@ class ExperimentalValue {
     Boolean activity = true
     ExperimentalValueType experimentalValueType = ExperimentalValueType.unknown
     Boolean printUnits = true
+    Boolean valueNegative = false
 
 
 
     public ExperimentalValue(BigDecimal value,
                              ExperimentalValueUnit experimentalValueUnit,
                              ExperimentalValueType experimentalValueType,
-                             Boolean activity ) {
+                             Boolean activity = true ) {
         this.value = value
         this.experimentalValueUnit = experimentalValueUnit
         this.experimentalValueType = experimentalValueType
         this.activity = activity
+        if (this.value < 0) {
+            this.value = 0 - this.value
+            valueNegative = true
+        }
+    }
+
+    public ExperimentalValue(BigDecimal value,
+                             Boolean printUnits ) {
+        this.value = value
+        this.experimentalValueUnit = ExperimentalValueUnit.Molar
+        this.experimentalValueType = ExperimentalValueType.numeric
+        this.printUnits = printUnits
+        if (this.value < 0) {
+            this.value = 0 - this.value
+            valueNegative = true
+        }
     }
 
 
@@ -43,13 +60,14 @@ class ExperimentalValue {
                 (experimentalValueType==ExperimentalValueType.greaterThanNumeric) ||
                 (experimentalValueType==ExperimentalValueType.percentageNumeric) ||
                 (experimentalValueType==ExperimentalValueType.numeric)) {
-            stringBuilder.append(prepend(experimentalValueType))
+            stringBuilder.append(prepend(experimentalValueType,valueNegative))
             stringBuilder.append("${roundoffToDesiredPrecision(deliverDesiredValue())}")
             stringBuilder.append(append(experimentalValueType))
             if (printUnits)
                 stringBuilder.append (experimentalValueUnit.toString())
         } else
             stringBuilder.append(deliverDesiredValue())
+        stringBuilder.toString()
     }
 
 
@@ -142,19 +160,21 @@ class ExperimentalValue {
     }
 
 
-    String prepend(ExperimentalValueType experimentalValueType) {
-        String returnValue
+    String prepend(ExperimentalValueType experimentalValueType,Boolean valueNegative) {
+        StringBuffer stringBuffer = new StringBuffer()
         switch (experimentalValueType) {
             case ExperimentalValueType.lessThanNumeric:
-                returnValue = "< "
+                stringBuffer.append("< ")
                 break;
             case ExperimentalValueType.greaterThanNumeric:
-                returnValue = "> "
+                stringBuffer.append("> ")
                 break;
             default:
-                returnValue = ""
+                stringBuffer.append("")
         }
-        returnValue
+        if (valueNegative)
+            stringBuffer.append("-")
+        stringBuffer.toString()
     }
 
     String append(ExperimentalValueType experimentalValueType) {
