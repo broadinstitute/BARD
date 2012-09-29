@@ -3,11 +3,14 @@ var bigSpinnerImage = '<div class="tab-message"><img src="/bardwebquery/static/i
 $(document).ready(function () {
     var url = $('#experimentalResults').attr('href');
     populatePage(url);
+    // Add jQuery Address functionality to the paging links
 
     //=== Handle Paging. We bind to all of the paging css classes on the anchor tag ===
     $("a.step,a.nextLink,a.prevLink").live('click', function (event) {
         event.preventDefault();	// prevent the default action behaviour to happen
+       // $.address.value($(this).attr('href'));
         var pagingurl = $(this).attr('href');
+
         populatePage(pagingurl);
     });
 

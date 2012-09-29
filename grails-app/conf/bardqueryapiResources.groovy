@@ -31,19 +31,19 @@ modules = {
     cart {
         resource url:"js/cart.js", disposition: 'head'
         resource url:"css/cart.css"
-        resource url:'/js/jquery.address-1.4/jquery.address-1.4.js?state=/'
+        //resource url:'/js/jquery.address-1.4/jquery.address-1.4.js?state=/'
     }
     promiscuity {
         resource url:"js/promiscuity.js"
-        resource url:'/js/jquery.address-1.4/jquery.address-1.4.js?state=/'
+        //resource url:'/js/jquery.address-1.4/jquery.address-1.4.js?state=/'
         resource url:"css/promiscuity.css"
     }
     molecularSpreadSheet {
         resource url:"js/molecularSpreadSheet.js"
-        resource url:'/js/jquery.address-1.4/jquery.address-1.4.js?state=/'
+        //resource url:'/js/jquery.address-1.4/jquery.address-1.4.js?state=/'
     }
     experimentData {
         resource url:"js/experimentalResults.js"
-        resource url:'/js/jquery.address-1.4/jquery.address-1.4.js?state=/'
+       // resource url:'/js/jquery.address-1.4/jquery.address-1.4.js?autoUpdate=1&crawling=1&history=1&tracker=trackFunction&state=/&strict=0&wrap=1'
     }
 }
