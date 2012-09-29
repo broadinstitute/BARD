@@ -5,6 +5,9 @@ import bardqueryapi.MolSpreadSheetCellUnit
 
 import java.math.RoundingMode
 import java.text.NumberFormat
+import results.ExperimentalValue
+import results.ExperimentalValueType
+import results.ExperimentalValueUnit
 
 class MolSpreadSheetCell {
     static final int SPREAD_SHEET_PRECISION = 3
@@ -97,50 +100,19 @@ class MolSpreadSheetCell {
     MolSpreadSheetCell(String value, MolSpreadSheetCellType molSpreadSheetCellType, MolSpreadSheetCellUnit molSpreadSheetCellUnit, SpreadSheetActivityStorage spreadSheetActivityStorage = null) {
         this.spreadSheetActivityStorage = spreadSheetActivityStorage
         this.molSpreadSheetCellType = molSpreadSheetCellType
-        switch (this.molSpreadSheetCellType) {
-            case MolSpreadSheetCellType.numeric:
-                if ("NaN".equals(value)) {
-                    activity = false;
-                    numInternalValue = new BigDecimal(0)
-                } else
-                    numInternalValue = new BigDecimal(value)
-                this.molSpreadSheetCellUnit = molSpreadSheetCellUnit
-                break;
-            case MolSpreadSheetCellType.percentageNumeric:
-                if ("NaN".equals(value)) {
-                    activity = false;
-                    numInternalValue = new BigDecimal(0)
-                } else
-                    numInternalValue = new BigDecimal(value)
-                this.molSpreadSheetCellUnit = molSpreadSheetCellUnit
-                break;
-            case MolSpreadSheetCellType.greaterThanNumeric:
-                if ("NaN".equals(value)) {
-                    activity = false;
-                    numInternalValue = new BigDecimal(0)
-                } else
-                    numInternalValue = new BigDecimal(value)
-                this.molSpreadSheetCellUnit = molSpreadSheetCellUnit
-                break;
-            case MolSpreadSheetCellType.lessThanNumeric:
-                if ("NaN".equals(value)) {
-                    activity = false;
-                    numInternalValue = new BigDecimal(0)
-                } else
-                    numInternalValue = new BigDecimal(value)
-                this.molSpreadSheetCellUnit = molSpreadSheetCellUnit
-                break;
-            case MolSpreadSheetCellType.identifier:
-                assert "identifier should Not go through the constructor with unit type"
-                break;
-            case MolSpreadSheetCellType.string:
-                assert "string should Not go through the constructor with unit type"
-                break;
-            case MolSpreadSheetCellType.image:
-                assert "Images should Not go through the constructor with unit type"
-                break;
-            default:
-                log "You should never hit the default trap on MolSpreadSheetCell ctor2"
+        if ( (this.molSpreadSheetCellType==MolSpreadSheetCellType.numeric) ||
+                (this.molSpreadSheetCellType==MolSpreadSheetCellType.percentageNumeric) ||
+                (this.molSpreadSheetCellType==MolSpreadSheetCellType.greaterThanNumeric) ||
+                (this.molSpreadSheetCellType==MolSpreadSheetCellType.lessThanNumeric) ||
+                (this.molSpreadSheetCellType==MolSpreadSheetCellType.numeric) ){
+            if ("NaN".equals(value)) {
+                activity = false;
+                numInternalValue = new BigDecimal(0)
+            } else
+                numInternalValue = new BigDecimal(value)
+            this.molSpreadSheetCellUnit = molSpreadSheetCellUnit
+        } else {
+            assert "identifier should Not go through the constructor with type = ${this.molSpreadSheetCellType}"
         }
     }
 
@@ -165,7 +137,10 @@ class MolSpreadSheetCell {
 
     }
 
-
+    /**
+     *
+     * @return
+     */
     LinkedHashMap<String, String> mapForMolecularSpreadsheet() {
         def returnValue = new LinkedHashMap<String, String>()
         if (molSpreadSheetCellType == MolSpreadSheetCellType.image) {
@@ -176,58 +151,10 @@ class MolSpreadSheetCell {
         returnValue
     }
 
-
-
-
-
-
-    @Override
-    String toString() {
-        StringBuilder stringBuilder = new StringBuilder()
-        switch (molSpreadSheetCellType) {
-            case MolSpreadSheetCellType.numeric:
-                if (!activity)
-                    stringBuilder.append("(no activity)")
-                else
-                    stringBuilder.append("${bardDecimalToString()}")
-                break;
-            case MolSpreadSheetCellType.percentageNumeric:
-                if (!activity)
-                    stringBuilder.append("(no activity)")
-                else
-                    stringBuilder.append("${bardDecimalToString()} %")
-                break;
-            case MolSpreadSheetCellType.greaterThanNumeric:
-                if (!activity)
-                    stringBuilder.append("(no activity)")
-                else
-                    stringBuilder.append("> ${bardDecimalToString()}")
-                break;
-            case MolSpreadSheetCellType.lessThanNumeric:
-                if (!activity)
-                    stringBuilder.append("(no activity)")
-                else
-                    stringBuilder.append("< ${bardDecimalToString()}")
-                break;
-            case MolSpreadSheetCellType.identifier:
-                stringBuilder.append("${intInternalValue}")
-                break;
-            case MolSpreadSheetCellType.string:
-                stringBuilder.append("${strInternalValue}")
-                break;
-            case MolSpreadSheetCellType.image:
-                assert "Images should not be retrieved using toString"
-                stringBuilder.append("${strInternalValue}")
-                break;
-            default:
-                log "You should never hit the default trap on MolSpreadSheetCell ctor3"
-        }
-        if ((molSpreadSheetCellUnit != MolSpreadSheetCellUnit.unknown) &&
-                (activity))
-            stringBuilder.append(" ${molSpreadSheetCellUnit.toString()}")
-        stringBuilder.toString()
-    }
-
+    /**
+     *
+     * @return
+     */
     LinkedHashMap<String, String> retrieveValues() {
         def returnValue = new LinkedHashMap<String, String>()
         returnValue.put("name", strInternalValue)
@@ -235,54 +162,25 @@ class MolSpreadSheetCell {
         returnValue
     }
 
-    /**
-     *
-     * @param precision
-     * @return
-     */
-    String bardDecimalToString(int precision = 3) {
-        BigDecimal bigDecimal = bardDecimal(precision)
-        return convertToString(bigDecimal, precision)
-    }
 
-    public static String convertToString(final BigDecimal valueToConvert, int precision = 3) {
-        BigDecimal displayVal = valueToConvert.setScale(2, RoundingMode.HALF_UP)
-        NumberFormat numberFormat = NumberFormat.getInstance()
-        numberFormat.setMinimumFractionDigits(0)
-        numberFormat.setMaximumFractionDigits(precision - 1)
-        return numberFormat.format(displayVal.doubleValue())
-    }
 
-    /**
-     * By convention we will print in micromolar
-     * @param numberToPrint
-     * @param precision
-     * @return
-     */
-    BigDecimal bardDecimal(int precision = 3) {
-        BigDecimal returnValue = performUnitNormalization(molSpreadSheetCellUnit, MolSpreadSheetCellUnit.Micromolar, numInternalValue)
-        molSpreadSheetCellUnit = MolSpreadSheetCellUnit.Micromolar
-        returnValue
-    }
-
-    /**
-     *
-     * @param inComingUnit
-     * @param outGoingUnit
-     * @param numberToConvert
-     * @return
-     */
-    static BigDecimal performUnitNormalization(MolSpreadSheetCellUnit inComingUnit, MolSpreadSheetCellUnit outGoingUnit, BigDecimal numberToConvert) {
-        BigDecimal returnValue = null
-        if ((numberToConvert != null) &&
-                (inComingUnit != MolSpreadSheetCellUnit.unknown) &&
-                (outGoingUnit != MolSpreadSheetCellUnit.unknown)) {
-            int unitSwap = outGoingUnit.decimalPlacesFromMolar - inComingUnit.decimalPlacesFromMolar
-            returnValue = numberToConvert.scaleByPowerOfTen(unitSwap)
+    @Override
+    String toString() {
+        String returnValue
+        if ((molSpreadSheetCellType==MolSpreadSheetCellType.lessThanNumeric) ||
+                (molSpreadSheetCellType==MolSpreadSheetCellType.greaterThanNumeric) ||
+                (molSpreadSheetCellType==MolSpreadSheetCellType.percentageNumeric) ||
+                (molSpreadSheetCellType==MolSpreadSheetCellType.numeric))    {
+        ExperimentalValue experimentalValue = new  ExperimentalValue( numInternalValue,
+                                                                     ExperimentalValueUnit.convert(molSpreadSheetCellUnit),
+                                                                     ExperimentalValueType.convert(molSpreadSheetCellType),activity)
+            returnValue = experimentalValue.toString()
+        } else if (molSpreadSheetCellType==MolSpreadSheetCellType.identifier)  {
+            returnValue =   intInternalValue
         }
         returnValue
-    }
 
+    }
 
 
 

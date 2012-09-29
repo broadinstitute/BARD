@@ -1,6 +1,8 @@
 package results
 
 import java.text.NumberFormat
+import bardqueryapi.MolSpreadSheetCellType
+import bardqueryapi.MolSpreadSheetCellUnit
 
 /**
  * Created with IntelliJ IDEA.
@@ -20,19 +22,34 @@ class ExperimentalValue {
     Boolean printUnits = true
 
 
+
+    public ExperimentalValue(BigDecimal value,
+                             ExperimentalValueUnit experimentalValueUnit,
+                             ExperimentalValueType experimentalValueType,
+                             Boolean activity ) {
+        this.value = value
+        this.experimentalValueUnit = experimentalValueUnit
+        this.experimentalValueType = experimentalValueType
+        this.activity = activity
+    }
+
+
     @Override
     String toString() {
         StringBuilder stringBuilder = new StringBuilder()
         if (!activity)
             stringBuilder.append(NO_ACTIVITY_STRING)
-        else {
-
+        else if ((experimentalValueType==ExperimentalValueType.lessThanNumeric) ||
+                (experimentalValueType==ExperimentalValueType.greaterThanNumeric) ||
+                (experimentalValueType==ExperimentalValueType.percentageNumeric) ||
+                (experimentalValueType==ExperimentalValueType.numeric)) {
             stringBuilder.append(prepend(experimentalValueType))
             stringBuilder.append("${roundoffToDesiredPrecision(deliverDesiredValue())}")
             stringBuilder.append(append(experimentalValueType))
             if (printUnits)
                 stringBuilder.append (experimentalValueUnit.toString())
-        }
+        } else
+            stringBuilder.append(deliverDesiredValue())
     }
 
 
@@ -170,6 +187,31 @@ enum ExperimentalValueUnit {
     Zeptomolar("aM", -21),
     unknown("U", 0);
 
+    static ExperimentalValueUnit convert(MolSpreadSheetCellUnit molSpreadSheetCellUnit){
+        switch (molSpreadSheetCellUnit){
+            case MolSpreadSheetCellUnit.Molar :
+                return ExperimentalValueUnit.Molar;
+            case MolSpreadSheetCellUnit.Millimolar :
+                return ExperimentalValueUnit.Millimolar;
+            case MolSpreadSheetCellUnit.Micromolar :
+                return ExperimentalValueUnit.Micromolar;
+            case MolSpreadSheetCellUnit.Nanomolar :
+                return ExperimentalValueUnit.Nanomolar;
+            case MolSpreadSheetCellUnit.Picomolar :
+                return ExperimentalValueUnit.Picomolar;
+            case MolSpreadSheetCellUnit.Femtomolar :
+                return ExperimentalValueUnit.Femtomolar;
+            case MolSpreadSheetCellUnit.Attamolar :
+                return ExperimentalValueUnit.Attamolar;
+            case MolSpreadSheetCellUnit.Zeptomolar :
+                return ExperimentalValueUnit.Zeptomolar;
+            case MolSpreadSheetCellUnit.unknown :
+                return ExperimentalValueUnit.unknown;
+            default:
+                assert false;
+        }
+    }
+
     private String value
     private int decimalPlacesFromMolar
 
@@ -222,6 +264,28 @@ enum ExperimentalValueType {
     identifier,
     image,
     string,
-    unknown
+    unknown;
+
+static ExperimentalValueType convert(MolSpreadSheetCellType molSpreadSheetCellType){
+    switch (molSpreadSheetCellType){
+        case MolSpreadSheetCellType.lessThanNumeric :
+            return ExperimentalValueType.lessThanNumeric;
+        case MolSpreadSheetCellType.greaterThanNumeric :
+            return ExperimentalValueType.greaterThanNumeric;
+        case MolSpreadSheetCellType.percentageNumeric :
+            return ExperimentalValueType.percentageNumeric;
+        case MolSpreadSheetCellType.numeric :
+            return ExperimentalValueType.numeric;
+        case MolSpreadSheetCellType.image :
+            return ExperimentalValueType.image;
+        case MolSpreadSheetCellType.string :
+            return ExperimentalValueType.string;
+        case MolSpreadSheetCellType.unknown :
+            return ExperimentalValueType.unknown;
+        default:
+            assert false;
+    }
+}
+
 }
 

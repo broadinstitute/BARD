@@ -40,7 +40,7 @@ class MolSpreadSheetCellSpec extends  Specification {
 
     void "test handling of unit conversions" (){
         when: "#label"
-        ExperimentalValue experimentalValue = new  ExperimentalValue(value:initialValue,experimentalValueUnit:initialUnit,experimentalValueType: ExperimentalValueType.numeric)
+        ExperimentalValue experimentalValue = new  ExperimentalValue(initialValue,initialUnit,ExperimentalValueType.numeric, true)
         assertNotNull(experimentalValue)
 
         then: "The resulting search filters size must equal the expected value"
@@ -67,7 +67,7 @@ class MolSpreadSheetCellSpec extends  Specification {
 
     void "test handling of precision conversions" (){
         when: "#label"
-        ExperimentalValue experimentalValue = new  ExperimentalValue(value:initialValue,experimentalValueUnit:initialUnit,experimentalValueType: ExperimentalValueType.numeric)
+        ExperimentalValue experimentalValue = new  ExperimentalValue(initialValue,initialUnit,ExperimentalValueType.numeric, true)
         assertNotNull(experimentalValue)
 
         then: "The resulting search filters size must equal the expected value"
@@ -93,47 +93,6 @@ class MolSpreadSheetCellSpec extends  Specification {
     }
 
 
-
-
-    void "test MolSpreadSheetCell to see how unit conversion works #label"() {
-        given: "incoming value"
-        SpreadSheetActivityStorage spreadSheetActivityStorage = new  SpreadSheetActivityStorage ()
-        when: "#label"
-        MolSpreadSheetCell molSpreadSheetCell = new MolSpreadSheetCell(initialValue,MolSpreadSheetCellType.numeric,spreadSheetActivityStorage)
-        molSpreadSheetCell.molSpreadSheetCellUnit =  initialUnit
-        assertNotNull(molSpreadSheetCell)
-
-        then: "The resulting search filters size must equal the expected value"
-        BigDecimal testValue =  new BigDecimal(stringValue)
-        assert molSpreadSheetCell.bardDecimal(3)  ==  testValue
-
-        where:
-        label                           | initialUnit                       |  initialValue |   stringValue
-        "converting unit values"        | MolSpreadSheetCellUnit.Micromolar |  "1.23"       |   "1.23"
-        "converting unit values"        | MolSpreadSheetCellUnit.Millimolar |  "1.23"       |   "1.23E3"
-        "converting unit values"        | MolSpreadSheetCellUnit.Molar      |  "1.23"       |   "1.23E6"
-    }
-
-
-
-    void "test MolSpreadSheetCell to see number formatting works for #label"() {
-        given: "incoming value"
-        SpreadSheetActivityStorage spreadSheetActivityStorage = new  SpreadSheetActivityStorage ()
-        when: "#label"
-        MolSpreadSheetCell molSpreadSheetCell = new MolSpreadSheetCell(initialValue,MolSpreadSheetCellType.numeric,spreadSheetActivityStorage)
-        molSpreadSheetCell.molSpreadSheetCellUnit =  initialUnit
-        assertNotNull(molSpreadSheetCell)
-
-        then: "The resulting search filters size must equal the expected value"
-        assert molSpreadSheetCell.toString()  ==  stringValue
-
-        where:
-        label                           | initialUnit                       |  initialValue |   stringValue
-        "number formatting values"      | MolSpreadSheetCellUnit.Micromolar |  "0.1234"       |  "0.12 uM"
-        "number formatting values"      | MolSpreadSheetCellUnit.Micromolar |  "1.234"       |   "1.23 uM"
-        "number formatting values"      | MolSpreadSheetCellUnit.Micromolar |  "12.34"       |   "12.34 uM"
-        "number formatting values"      | MolSpreadSheetCellUnit.Micromolar |  "123.4"       |   "123.4 uM"
-    }
 
 
 
