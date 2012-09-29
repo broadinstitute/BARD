@@ -19,6 +19,10 @@
 <div class="row-fluid">
     <div class="span12">
         <dl class="dl-horizontal dl-horizontal-wide">
+            <g:if test="${compound?.compound?.getValue(bard.core.Compound.IUPACNameValue)}">
+                <dt>IUPAC Name:</dt>
+                <dd>${compound?.compound?.getValue(bard.core.Compound.IUPACNameValue)?.value}</dd>
+            </g:if>
             <g:if test="${compound?.compound?.getValue(bard.core.Compound.ProbeIDValue)}">
                 <dt>Probe ID:</dt>
                 <dd>${compound?.compound?.getValue(bard.core.Compound.ProbeIDValue)?.value}</dd>

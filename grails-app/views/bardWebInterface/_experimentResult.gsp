@@ -6,12 +6,13 @@
   To change this template use File | Settings | File Templates.
 --%>
 
-<%@ page import="bard.core.ExperimentValues; bard.core.AssayValues" contentType="text/html;charset=UTF-8" %>
+<%@ page import="molspreadsheet.MolSpreadSheetCell; bard.core.ExperimentValues; bard.core.AssayValues" contentType="text/html;charset=UTF-8" %>
 
 <p><b>Title: ${experimentDataMap?.experiment?.name}</b></p>
 
-<p><b>Assay ID:<g:link controller="bardWebInterface" action="showAssay"
-                       id="${experimentDataMap?.experiment?.assay?.id}">${experimentDataMap?.experiment?.assay?.id}</g:link></b></p>
+<p><b>Assay ID : <g:link controller="bardWebInterface" action="showAssay"
+                       id="${experimentDataMap?.experiment?.assay?.id}">${experimentDataMap?.experiment?.assay?.id}</g:link></b>
+</p>
 
 <div class="row-fluid">
     <table class="table table-condensed">
@@ -20,7 +21,7 @@
             <th>SID</th>
             <th>CID</th>
             <th>Structure</th>
-            <th>Activity</th>
+            <th>Activity (uM)</th>
             <th>Outcome</th>
             <th>Potency</th>
             <g:if test="${experimentDataMap?.role && (experimentDataMap?.role != ExperimentValues.ExperimentRole.Primary)}">
@@ -40,19 +41,38 @@
                 </td>
                 <td>
                     <g:each in="${0..(experimentData.hillCurveValue.size() - 1)}" var="i">
-                        ${experimentData.hillCurveValue.response[i]} @ ${experimentData.hillCurveValue.conc[i]}
+                        <% String response = MolSpreadSheetCell.convertToString(experimentData.hillCurveValue.response[i], 3)
+                        %>
+                        ${response} @ ${experimentData.hillCurveValue.conc[i]}
                         <br/>
                     </g:each>
                 </td>
                 <td>${experimentData.activityOutcome?.label}</td>
-                <td>${experimentData.potency}</td>
+                <td>
+                    <% String potency = MolSpreadSheetCell.convertToString(experimentData.potency, 3)
+                    %>
+                    ${potency}</td>
                 <td>
                     <g:if test="${experimentDataMap?.role && (experimentDataMap?.role != ExperimentValues.ExperimentRole.Primary)}">
                         <img alt="" title=""
-                             src="${createLink(controller: 'doseResponseCurve', action: 'doseResponseCurve', params: [sinf: experimentData.hillCurveValue.sInf, s0: experimentData.hillCurveValue.s0, ac50: experimentData.hillCurveValue.slope, hillSlope: experimentData.hillCurveValue.coef, concentrations: experimentData.hillCurveValue.conc, activities: experimentData.hillCurveValue.response])}"/>
-                        <br/><br/>
-
-                        <p>AC50 = ${experimentData.hillCurveValue.slope}</p>
+                             src="${createLink(controller: 'doseResponseCurve', action: 'doseResponseCurve',
+                                     params: [sinf: experimentData.hillCurveValue.sInf,
+                                             s0: experimentData.hillCurveValue.s0,
+                                             ac50: experimentData.hillCurveValue.slope,
+                                             hillSlope: experimentData.hillCurveValue.coef,
+                                             concentrations: experimentData.hillCurveValue.conc,
+                                             activities: experimentData.hillCurveValue.response])}"/>
+                        <br/>
+                        <g:if test="${experimentData.hillCurveValue.slope}">
+                            <p>
+                                AC50 : ${experimentData.hillCurveValue.slope} <br/>
+                                sInf : ${experimentData.hillCurveValue.sInf}<br/>
+                                s0 : ${experimentData.hillCurveValue.s0}<br/>
+                                HillSlope : ${experimentData.hillCurveValue.slope}<br/>
+                            </p>
+                            <br/>
+                            <br/>
+                        </g:if>
                     </g:if>
                 </td>
             </tr>

@@ -9,9 +9,9 @@ import java.text.NumberFormat
 class MolSpreadSheetCell {
     static final int SPREAD_SHEET_PRECISION = 3
 
-    static hasOne = [ spreadSheetActivityStorage : SpreadSheetActivityStorage ]
+    static hasOne = [spreadSheetActivityStorage: SpreadSheetActivityStorage]
 
-    static belongsTo = [ molSpreadSheetData : MolSpreadSheetData ]
+    static belongsTo = [molSpreadSheetData: MolSpreadSheetData]
 
     Boolean activity = true
     MolSpreadSheetCellType molSpreadSheetCellType = MolSpreadSheetCellType.unknown
@@ -23,14 +23,14 @@ class MolSpreadSheetCell {
     SpreadSheetActivityStorage spreadSheetActivityStorage
 
     static constraints = {
-         activity()
-         molSpreadSheetCellType(blank: false)
-         strInternalValue (nullable: false)
-         numInternalValue (nullable: false)
-         intInternalValue(nullable: false)
-         molSpreadSheetCellUnit (blank: false)
-         supplementalInternalValue ()
-         spreadSheetActivityStorage ()
+        activity()
+        molSpreadSheetCellType(blank: false)
+        strInternalValue(nullable: false)
+        numInternalValue(nullable: false)
+        intInternalValue(nullable: false)
+        molSpreadSheetCellUnit(blank: false)
+        supplementalInternalValue()
+        spreadSheetActivityStorage()
     }
 
     /**
@@ -166,8 +166,8 @@ class MolSpreadSheetCell {
     }
 
 
-    LinkedHashMap<String, String> mapForMolecularSpreadsheet () {
-        def returnValue = new  LinkedHashMap<String, String>()
+    LinkedHashMap<String, String> mapForMolecularSpreadsheet() {
+        def returnValue = new LinkedHashMap<String, String>()
         if (molSpreadSheetCellType == MolSpreadSheetCellType.image) {
             returnValue = retrieveValues()
         } else {
@@ -222,8 +222,8 @@ class MolSpreadSheetCell {
             default:
                 log "You should never hit the default trap on MolSpreadSheetCell ctor3"
         }
-        if ( (molSpreadSheetCellUnit != MolSpreadSheetCellUnit.unknown) &&
-                (activity) )
+        if ((molSpreadSheetCellUnit != MolSpreadSheetCellUnit.unknown) &&
+                (activity))
             stringBuilder.append(" ${molSpreadSheetCellUnit.toString()}")
         stringBuilder.toString()
     }
@@ -240,25 +240,29 @@ class MolSpreadSheetCell {
      * @param precision
      * @return
      */
-    String  bardDecimalToString(  int precision = 3 )  {
-        BigDecimal bigDecimal = bardDecimal( precision )
-        BigDecimal displayVal =bigDecimal.setScale(2,RoundingMode.HALF_UP)
-        NumberFormat usdCostFormat = NumberFormat.getInstance()
-        usdCostFormat.setMinimumFractionDigits( 0 )
-        usdCostFormat.setMaximumFractionDigits( precision-1 )
-        usdCostFormat.format(displayVal.doubleValue())
+    String bardDecimalToString(int precision = 3) {
+        BigDecimal bigDecimal = bardDecimal(precision)
+        return convertToString(bigDecimal, precision)
     }
 
-     /**
+    public static String convertToString(final BigDecimal valueToConvert, int precision = 3) {
+        BigDecimal displayVal = valueToConvert.setScale(2, RoundingMode.HALF_UP)
+        NumberFormat numberFormat = NumberFormat.getInstance()
+        numberFormat.setMinimumFractionDigits(0)
+        numberFormat.setMaximumFractionDigits(precision - 1)
+        return numberFormat.format(displayVal.doubleValue())
+    }
+
+    /**
      * By convention we will print in micromolar
      * @param numberToPrint
      * @param precision
      * @return
      */
-     BigDecimal  bardDecimal(  int precision = 3 )  {
-         BigDecimal returnValue = performUnitNormalization (molSpreadSheetCellUnit,MolSpreadSheetCellUnit.Micromolar,numInternalValue)
-         molSpreadSheetCellUnit = MolSpreadSheetCellUnit.Micromolar
-         returnValue
+    BigDecimal bardDecimal(int precision = 3) {
+        BigDecimal returnValue = performUnitNormalization(molSpreadSheetCellUnit, MolSpreadSheetCellUnit.Micromolar, numInternalValue)
+        molSpreadSheetCellUnit = MolSpreadSheetCellUnit.Micromolar
+        returnValue
     }
 
     /**
@@ -268,13 +272,13 @@ class MolSpreadSheetCell {
      * @param numberToConvert
      * @return
      */
-    static BigDecimal performUnitNormalization( MolSpreadSheetCellUnit inComingUnit, MolSpreadSheetCellUnit outGoingUnit,  BigDecimal numberToConvert )  {
+    static BigDecimal performUnitNormalization(MolSpreadSheetCellUnit inComingUnit, MolSpreadSheetCellUnit outGoingUnit, BigDecimal numberToConvert) {
         BigDecimal returnValue = null
         if ((numberToConvert != null) &&
                 (inComingUnit != MolSpreadSheetCellUnit.unknown) &&
-                (outGoingUnit != MolSpreadSheetCellUnit.unknown)){
-            int unitSwap =  outGoingUnit.decimalPlacesFromMolar-inComingUnit.decimalPlacesFromMolar
-            returnValue =  numberToConvert.scaleByPowerOfTen(unitSwap)
+                (outGoingUnit != MolSpreadSheetCellUnit.unknown)) {
+            int unitSwap = outGoingUnit.decimalPlacesFromMolar - inComingUnit.decimalPlacesFromMolar
+            returnValue = numberToConvert.scaleByPowerOfTen(unitSwap)
         }
         returnValue
     }
