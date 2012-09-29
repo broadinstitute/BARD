@@ -50,7 +50,7 @@ public class SpreadSheetActivity {
     public SpreadSheetActivity(Long eid,
                                Long cid,
                                Long sid,
-                               Long potency,
+                               Double potency,
                                ActivityOutcome activityOutcome,
                                HillCurveValue hillCurveValue) {
         this.eid = eid
