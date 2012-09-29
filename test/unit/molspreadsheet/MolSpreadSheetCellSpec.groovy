@@ -71,7 +71,6 @@ class MolSpreadSheetCellSpec extends  Specification {
         assertNotNull(experimentalValue)
 
         then: "The resulting search filters size must equal the expected value"
-        println experimentalValue.toString()
         assert experimentalValue.toString()  ==  stringValue
 
         where:
@@ -126,7 +125,6 @@ class MolSpreadSheetCellSpec extends  Specification {
         assertNotNull(molSpreadSheetCell)
 
         then: "The resulting search filters size must equal the expected value"
-        println molSpreadSheetCell.toString()
         assert molSpreadSheetCell.toString()  ==  stringValue
 
         where:

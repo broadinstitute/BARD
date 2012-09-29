@@ -37,33 +37,27 @@ class ExperimentalValue {
 
 
     String  roundoffToDesiredPrecision( BigDecimal bigDecimal  )  {
-   //     BigDecimal displayVal =bigDecimal.setScale(3,RoundingMode.HALF_UP)
         BigDecimal displayVal =bigDecimal
         NumberFormat numberFormat = NumberFormat.getInstance()
         if (((new BigDecimal(0.1)).compareTo(bigDecimal) <= 0) &&
                 ((new BigDecimal(1)).compareTo(bigDecimal) > 0)){
             numberFormat.setMinimumFractionDigits( 0 )
             numberFormat.setMaximumFractionDigits( DESIRED_PRECISION )
-            println("F2=${bigDecimal}")
         } else if (((new BigDecimal(1)).compareTo(bigDecimal) <= 0) &&
                 ((new BigDecimal(10)).compareTo(bigDecimal) > 0)){
             numberFormat.setMinimumFractionDigits( 0 )
             numberFormat.setMaximumFractionDigits( DESIRED_PRECISION-1 )
-            println("F3=${bigDecimal}")
         } else if (((new BigDecimal(10)).compareTo(bigDecimal) <= 0) &&
                 ((new BigDecimal(100)).compareTo(bigDecimal) > 0)){
             numberFormat.setMinimumFractionDigits( 0 )
             numberFormat.setMaximumFractionDigits( DESIRED_PRECISION-2 )
-            println("F4=${bigDecimal}")
         } else if (((new BigDecimal(100)).compareTo(bigDecimal) <= 0) &&
                 ((new BigDecimal(1000)).compareTo(bigDecimal) > 0)){
             numberFormat.setMinimumFractionDigits( 0 )
             numberFormat.setMaximumFractionDigits( DESIRED_PRECISION-3 )
-            println("F5=${bigDecimal}")
         } else {      //should not happen
             numberFormat.setMinimumFractionDigits( 2 )
             numberFormat.setMaximumFractionDigits( 2 )
-            println("F6=${bigDecimal}")
          }
         numberFormat.format(displayVal.doubleValue())
     }
