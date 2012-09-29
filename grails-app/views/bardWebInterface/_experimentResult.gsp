@@ -11,7 +11,7 @@
 <p><b>Title: ${experimentDataMap?.experiment?.name}</b></p>
 
 <p><b>Assay ID : <g:link controller="bardWebInterface" action="showAssay"
-                       id="${experimentDataMap?.experiment?.assay?.id}">${experimentDataMap?.experiment?.assay?.id}</g:link></b>
+                         id="${experimentDataMap?.experiment?.assay?.id}">${experimentDataMap?.experiment?.assay?.id}</g:link></b>
 </p>
 
 <div class="row-fluid">
@@ -21,7 +21,7 @@
             <th>SID</th>
             <th>CID</th>
             <th>Structure</th>
-            <th>Activity (uM)</th>
+            <th>Activity</th>
             <th>Outcome</th>
             <th>Potency</th>
             <g:if test="${experimentDataMap?.role && (experimentDataMap?.role != ExperimentValues.ExperimentRole.Primary)}">
@@ -42,8 +42,8 @@
                 <td>
                     <g:each in="${0..(experimentData.hillCurveValue.size() - 1)}" var="i">
                         <%
-                            ExperimentalValue resp = new  ExperimentalValue(experimentData.hillCurveValue.response[i],false)
-                            ExperimentalValue conc = new  ExperimentalValue(experimentData.hillCurveValue.conc[i], ExperimentalValueUnit.Molar, ExperimentalValueType.numeric )
+                            ExperimentalValue resp = new ExperimentalValue(experimentData.hillCurveValue.response[i], false)
+                            ExperimentalValue conc = new ExperimentalValue(experimentData.hillCurveValue.conc[i], ExperimentalValueUnit.Molar, ExperimentalValueType.numeric)
                         %>
                         ${resp.toString()} @ ${conc.toString()}
                         <br/>
@@ -52,7 +52,7 @@
                 <td>${experimentData.activityOutcome?.label}</td>
                 <td>
                     <%
-                        ExperimentalValue potency = new  ExperimentalValue(experimentData.potency, ExperimentalValueUnit.Micromolar, ExperimentalValueType.numeric )
+                        ExperimentalValue potency = new ExperimentalValue(experimentData.potency, false)
                     %>
                     ${potency.toString()}</td>
                 <td>
@@ -68,10 +68,10 @@
                         <br/>
                         <g:if test="${experimentData.hillCurveValue.slope}">
                             <p>
-                                AC50 : ${(new  ExperimentalValue(experimentData.hillCurveValue.slope,false)).toString()} <br/>
-                                sInf : ${(new  ExperimentalValue(experimentData.hillCurveValue.sInf,false)).toString()}<br/>
-                                s0 : ${(new  ExperimentalValue(experimentData.hillCurveValue.s0,false)).toString()}<br/>
-                                HillSlope : ${(new  ExperimentalValue(experimentData.hillCurveValue.slope,false)).toString()}<br/>
+                                AC50 : ${(new ExperimentalValue(experimentData.hillCurveValue.slope, false)).toString()} <br/>
+                                sInf : ${(new ExperimentalValue(experimentData.hillCurveValue.sInf, false)).toString()}<br/>
+                                s0 : ${(new ExperimentalValue(experimentData.hillCurveValue.s0, false)).toString()}<br/>
+                                HillSlope : ${(new ExperimentalValue(experimentData.hillCurveValue.slope, false)).toString()}<br/>
                             </p>
                             <br/>
                             <br/>
