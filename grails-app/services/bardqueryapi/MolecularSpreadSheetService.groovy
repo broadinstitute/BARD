@@ -512,6 +512,7 @@ class MolecularSpreadSheetService {
 
         if (childValue instanceof HillCurveValue) {
             spreadSheetActivity.hillCurveValue = childValue
+            spreadSheetActivity.readouts.push(childValue)
             return
         }
         switch (identifier) {

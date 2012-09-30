@@ -21,12 +21,14 @@
             <th>SID</th>
             <th>CID</th>
             <th>Structure</th>
-            <th>Activity</th>
             <th>Outcome</th>
             <th>Potency</th>
-            <g:if test="${experimentDataMap?.role && (experimentDataMap?.role != ExperimentValues.ExperimentRole.Primary)}">
-                <th>Curve</th>
-            </g:if>
+            <g:each in="${experimentDataMap?.spreadSheetActivities?.get(0)?.readouts}" var="readout">
+                <th>${readout.id}</th>
+                <g:if test="${readout.response.length > 1}">
+                    <th>${readout.id} Plot</th>
+                </g:if>
+            </g:each>
         </tr>
         </thead>
         <g:each in="${experimentDataMap?.spreadSheetActivities}" var="experimentData">
@@ -39,45 +41,54 @@
                     <img alt="SID: ${experimentData.sid}" title="SID: ${experimentData.sid}"
                          src="${createLink(controller: 'chemAxon', action: 'generateStructureImage', params: [cid: experimentData.cid, width: 180, height: 150])}"/>
                 </td>
-                <td>
-                    <g:each in="${0..(experimentData.hillCurveValue.size() - 1)}" var="i">
-                        <%
-                            ExperimentalValue resp = new ExperimentalValue(experimentData.hillCurveValue.response[i], false)
-                            ExperimentalValue conc = new ExperimentalValue(experimentData.hillCurveValue.conc[i], ExperimentalValueUnit.Molar, ExperimentalValueType.numeric)
-                        %>
-                        ${resp.toString()} @ ${conc.toString()}
-                        <br/>
-                    </g:each>
-                </td>
                 <td>${experimentData.activityOutcome?.label}</td>
                 <td>
-                    <%
-                        ExperimentalValue potency = new ExperimentalValue(experimentData.potency, false)
-                    %>
-                    ${potency.toString()}</td>
-                <td>
-                    <g:if test="${experimentDataMap?.role && (experimentDataMap?.role != ExperimentValues.ExperimentRole.Primary)}">
-                        <img alt="" title=""
-                             src="${createLink(controller: 'doseResponseCurve', action: 'doseResponseCurve',
-                                     params: [sinf: experimentData.hillCurveValue.sInf,
-                                             s0: experimentData.hillCurveValue.s0,
-                                             ac50: experimentData.hillCurveValue.slope,
-                                             hillSlope: experimentData.hillCurveValue.coef,
-                                             concentrations: experimentData.hillCurveValue.conc,
-                                             activities: experimentData.hillCurveValue.response])}"/>
-                        <br/>
-                        <g:if test="${experimentData.hillCurveValue.slope}">
-                            <p>
-                                AC50 : ${(new ExperimentalValue(experimentData.hillCurveValue.slope, false)).toString()} <br/>
-                                sInf : ${(new ExperimentalValue(experimentData.hillCurveValue.sInf, false)).toString()}<br/>
-                                s0 : ${(new ExperimentalValue(experimentData.hillCurveValue.s0, false)).toString()}<br/>
-                                HillSlope : ${(new ExperimentalValue(experimentData.hillCurveValue.slope, false)).toString()}<br/>
-                            </p>
-                            <br/>
-                            <br/>
-                        </g:if>
+                    <g:if test="${experimentData.potency}">
+                        <%
+                            ExperimentalValue potency = new ExperimentalValue(experimentData.potency, false)
+                        %>
+                        ${potency.toString()}
                     </g:if>
                 </td>
+                <g:each in="${experimentData.readouts}" var="readout">
+
+                    <td>
+                        <g:each in="${0..(readout.size() - 1)}" var="i">
+                            <%
+                                ExperimentalValue resp = new ExperimentalValue(readout.response[i], false)
+                                ExperimentalValue conc = new ExperimentalValue(readout.conc[i], ExperimentalValueUnit.Molar, ExperimentalValueType.numeric)
+                            %>
+                            ${resp.toString()}
+                            <g:if test="${readout.conc[i]}">
+                                @ ${conc.toString()}
+                            </g:if>
+                            <br/>
+                        </g:each>
+                    </td>
+                    <g:if test="${readout.response.length > 1}">
+                        <td>
+                            <img alt="Plot for CID ${experimentData.cid}" title="Plot for CID ${experimentData.cid}"
+                                src="${createLink(controller: 'doseResponseCurve', action: 'doseResponseCurve',
+                                             params: [sinf: readout.sInf,
+                                                     s0: readout.s0,
+                                                     ac50: readout.slope,
+                                                     hillSlope: readout.coef,
+                                                     concentrations: readout.conc,
+                                                     activities: readout.response])}"/>
+                            <br/>
+                            <g:if test="${readout.slope}">
+                                <p>
+                                    AC50 : ${(new ExperimentalValue(readout.slope, false)).toString()} <br/>
+                                    sInf : ${(new ExperimentalValue(readout.sInf, false)).toString()}<br/>
+                                    s0 : ${(new ExperimentalValue(readout.s0, false)).toString()}<br/>
+                                    HillSlope : ${(new ExperimentalValue(readout.slope, false)).toString()}<br/>
+                                </p>
+                                <br/>
+                                <br/>
+                            </g:if>
+                        </td>
+                    </g:if>
+                </g:each>
             </tr>
         </g:each>
     </table>

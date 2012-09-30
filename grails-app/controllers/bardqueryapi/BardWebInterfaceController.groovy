@@ -59,7 +59,7 @@ class BardWebInterfaceController {
                 render(template: "experimentResult")
             }
         } catch (Exception ee) {
-            log.error(ee)
+            log.error("Error showing experimental results for experiment ID " + id, ee)
             flash.message = ee.message
             render(template: "experimentResult")
         }
@@ -80,7 +80,7 @@ class BardWebInterfaceController {
                             "${results?.message}")
                 }
             } catch (Exception ee) { //error is thrown
-                log.error(ee)
+                log.error("Error getting promiscuity for CID " + cid, ee)
                 return response.sendError(HttpServletResponse.SC_NOT_FOUND,
                         "Could not get promiscuity score for ${cid}")
             }
@@ -121,7 +121,7 @@ class BardWebInterfaceController {
                 )
             }
             catch (Exception exp) {
-                log.error(exp)
+                log.error("Error searching for compounds by IDs", exp)
                 return response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR,
                         "Compound search has encountered an error:\n${exp.message}")
             }
@@ -155,7 +155,7 @@ class BardWebInterfaceController {
                         appliedFilters: getAppliedFilters(searchFilters, assayAdapterMap.facets)])
             }
             catch (Exception exp) {
-                log.error(exp)
+                log.error("Error searching for assays by IDs", exp)
                 return response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR,
                         "Assay search has encountered an error:\n${exp.message}")
             }
@@ -187,7 +187,7 @@ class BardWebInterfaceController {
                         appliedFilters: getAppliedFilters(searchFilters, projectAdapterMap.facets)])
             }
             catch (Exception exp) {
-                log.error(exp)
+                log.error("Error searching for projects by IDs", exp)
                 return response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR.intValue(),
                         "Project search has encountered an error:\n${exp.message}")
             }
@@ -241,7 +241,7 @@ class BardWebInterfaceController {
                 }
             }
             catch (Exception exp) {
-                log.error(exp)
+                log.error("Error performing structure search", exp)
                 return response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR.intValue(),
                         "Structure search has encountered an error:\n${exp.message}")
             }
@@ -275,7 +275,7 @@ class BardWebInterfaceController {
             }
         }
         catch (Exception exp) {
-            log.error(exp)
+            log.error("Error showing compound with CID " + cid, exp)
             return response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR.intValue(),
                     "Structure search has encountered an error:\n${exp.message}")
         }
@@ -312,7 +312,7 @@ class BardWebInterfaceController {
             }
         }
         catch (Exception exp) {
-            log.error(exp)
+            log.error("Error showing assay with ID " + assayProtocolId, exp)
             return response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR.intValue(),
                     "Structure search has encountered an error:\n${exp.message}")
         }
@@ -331,7 +331,7 @@ class BardWebInterfaceController {
             }
         }
         catch (Exception exp) {
-            log.error(exp)
+            log.error("Error showing project with ID " + projectId, exp)
             return response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR.intValue(),
                     "Structure search has encountered an error:\n${exp.message}")
         }
@@ -375,7 +375,7 @@ class BardWebInterfaceController {
             }
         }
         catch (Exception exp) {
-            log.error(exp)
+            log.error("Error with autocomplete", exp)
             return response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR.intValue(),
                     "AutoComplete encoutered and error :\n${exp.message}")
         }
@@ -411,7 +411,7 @@ class SearchHelper {
                         appliedFilters: getAppliedFilters(searchFilters, assaysByTextSearchResultsMap.facets)])
             }
             catch (Exception exp) {
-                log.error(exp)
+                log.error("Error performing assay search", exp)
                 return response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR,
                         "Assay search has encountered an error:\n${exp.message}")
             }
@@ -448,7 +448,7 @@ class SearchHelper {
                 )
             }
             catch (Exception exp) {
-                log.error(exp)
+                log.error("Error performing compound search", exp)
                 return response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR,
                         "Compound search has encountered an error:\n${exp.message}")
             }
@@ -483,7 +483,7 @@ class SearchHelper {
                         appliedFilters: getAppliedFilters(searchFilters, projectsByTextSearch.facets)])
             }
             catch (Exception exp) {
-                log.error(exp)
+                log.error("Error performing project search", exp)
                 return response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR,
                         "Project search has encountered an error:\n${exp.message}")
             }
