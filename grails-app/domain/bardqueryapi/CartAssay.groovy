@@ -5,13 +5,12 @@ import com.metasieve.shoppingcart.Shoppable
 
 class CartAssay extends Shoppable {
 
+    static int MAXIMUM_ASSAY_TITLE_FIELD_LENGTH = 255
+
     Long assayId  = 0
     String assayTitle
+    Boolean assayTitleWasTruncated = false
 
-    @Override
-    String toString() {
-        assayTitle
-    }
     CartAssay(){
 
     }
@@ -21,12 +20,50 @@ class CartAssay extends Shoppable {
         this.assayId =  Long.parseLong(assayIdStr)
     }
 
-   CartAssay (String assayTitle, int assayId)   {
+    CartAssay (String assayTitle, int assayId)   {
         this.assayTitle =  assayTitle
         this.assayId =  assayId as Long
     }
 
+    CartAssay (String assayTitle, Long assayId)   {
+        this.assayTitle =  assayTitle
+        this.assayId =  assayId
+    }
 
+
+    @Override
+    String toString() {
+        StringBuilder stringBuilder  = new StringBuilder()
+        String trimmedName = assayTitle?.trim()
+        if ( (trimmedName == null) ||
+                (trimmedName?.length() == 0) ||
+                ("null".equals(trimmedName)))
+            stringBuilder << ""
+        else
+            stringBuilder << trimmedName
+
+        // if name was truncated, then add in ellipses
+        if (assayTitleWasTruncated)
+            stringBuilder <<= "..."
+
+        stringBuilder.toString()
+    }
+
+
+
+    public void setAssayTitle(String assayTitle)    {
+        if (assayTitle != null)  {
+            Integer lengthOfName
+            Integer incomingStringLength = assayTitle.length()
+            if  (incomingStringLength<=MAXIMUM_ASSAY_TITLE_FIELD_LENGTH) {
+                lengthOfName = incomingStringLength
+            }  else {
+                lengthOfName =MAXIMUM_ASSAY_TITLE_FIELD_LENGTH
+                assayTitleWasTruncated = true
+            }
+            this.assayTitle = assayTitle.substring(0,lengthOfName)
+        }
+    }
 
     /**
      *  equals
@@ -53,6 +90,6 @@ class CartAssay extends Shoppable {
     }
 
     static constraints = {
-        assayTitle   blank: false
+        assayTitle  ( blank: false, maxSize: MAXIMUM_ASSAY_TITLE_FIELD_LENGTH)
     }
 }
