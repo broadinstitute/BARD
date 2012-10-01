@@ -23,12 +23,15 @@
             <th>Structure</th>
             <th>Outcome</th>
             <th>Potency</th>
-            <g:each in="${experimentDataMap?.spreadSheetActivities?.get(0)?.readouts}" var="readout">
-                <th>${readout.id}</th>
-                <g:if test="${readout.response.length > 1}">
-                    <th>${readout.id} Plot</th>
-                </g:if>
-            </g:each>
+            <g:if test="${!experimentDataMap?.spreadSheetActivities.isEmpty()}">
+
+                <g:each in="${experimentDataMap?.spreadSheetActivities?.get(0)?.readouts}" var="readout">
+                    <th>${readout.id}</th>
+                    <g:if test="${readout.response.length > 1}">
+                        <th>${readout.id} Plot</th>
+                    </g:if>
+                </g:each>
+            </g:if>
         </tr>
         </thead>
         <g:each in="${experimentDataMap?.spreadSheetActivities}" var="experimentData">
@@ -68,13 +71,13 @@
                     <g:if test="${readout.response.length > 1}">
                         <td>
                             <img alt="Plot for CID ${experimentData.cid}" title="Plot for CID ${experimentData.cid}"
-                                src="${createLink(controller: 'doseResponseCurve', action: 'doseResponseCurve',
-                                             params: [sinf: readout.sInf,
-                                                     s0: readout.s0,
-                                                     ac50: readout.slope,
-                                                     hillSlope: readout.coef,
-                                                     concentrations: readout.conc,
-                                                     activities: readout.response])}"/>
+                                 src="${createLink(controller: 'doseResponseCurve', action: 'doseResponseCurve',
+                                         params: [sinf: readout.sInf,
+                                                 s0: readout.s0,
+                                                 ac50: readout.slope,
+                                                 hillSlope: readout.coef,
+                                                 concentrations: readout.conc,
+                                                 activities: readout.response])}"/>
                             <br/>
                             <g:if test="${readout.slope}">
                                 <p>
