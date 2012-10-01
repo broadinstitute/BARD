@@ -48,15 +48,73 @@ div.cardView table.gridtable td {
     -webkit-border-radius: 4px;
     -moz-border-radius: 4px;
     border-radius: 4px;
+    padding: 5px;
 }
-table.table{
+
+table.table {
     margin-bottom: 0px;
     padding: 0px;
 }
+
 table.table th, table.table td {
-padding: 0px;
-line-height: 20px;
-text-align: left;
-vertical-align: top;
-border-top: 1px solid #DDD;
+    padding: 0px;
+    line-height: 20px;
+    text-align: left;
+    vertical-align: top;
+    border-top: 1px solid #DDD;
+}
+
+.card-group {
+    border: 1px solid #000000;
+    border-color: #a9a9a9;
+    margin: 5px;
+}
+
+
+
+.assay-protocol--assay-component {
+    background-color: #ddeeff;
+}
+
+.assay-protocol--assay-design {
+    background-color: #d2e3f4;
+}
+
+.assay-protocol--assay-format {
+    background-color: #c8d9ea;
+}
+
+.assay-protocol--assay-readout {
+    background-color: #becfe0;
+}
+
+.assay-protocol--assay-type {
+    background-color: #b4c5d6;
+}
+
+.biology--biological-process {
+    background-color: #90ee90;
+}
+
+.biology--molecular-interaction {
+    background-color:  #a8eea8;
+}
+
+.biology--molecular-target {
+    background-color:  #c0eec0;
+}
+
+.project-management--experiment {
+    background-color: #EEEE99;
+}
+
+.project-management--experiment-panel-name {
+    background-color: #F6F6B7;
+}
+
+.project-management--project-information {
+    background-color: #FFFFD5;
+}
+.unknown-section {
+
 }

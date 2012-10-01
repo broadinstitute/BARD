@@ -1,5 +1,5 @@
 <g:each in="${cardDtoMap}" var="entry">
-    <div id="${entry.key}"  class="bs-docs"  style="border: 1px solid #000000; border-color: #a9a9a9; margin: 5px;">
+    <div id="${entry.key}"  class="roundedBorder card-group ${entry.key.replaceAll(/( |> )/, '-')}">
 
 
         <div class="row-fluid">
