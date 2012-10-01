@@ -8,11 +8,11 @@
     <link rel="stylesheet" href="${resource(dir: 'css', file: 'bootstrap-plus.css')}" type="text/css">
     <title>Assay Definition</title>
     <r:script>
-        $(document).ready(function () {        	
+        $(document).ready(function () {
             $("#accordion").accordion({ autoHeight:false});
             $("#dialog:ui-dialog").dialog("destroy");
         });
-        
+
     </r:script>
 </head>
 
@@ -40,7 +40,7 @@
 
     <g:if test="${assayInstance?.id}">
 	    <div class="row-fluid">
-	        <div id="accordion" class="span12">	        	
+	        <div id="accordion" class="span12">
 	            <h3><a href="#">Summary for Assay ID: ${assayInstance?.id}</a></h3>
 	            <g:render template="assaySummaryView" model="['assayInstance': assayInstance]"/>
 
@@ -151,9 +151,9 @@
                 primary:"ui-icon-trash"
             },
             text: false
-        }).click(function(event){        	
+        }).click(function(event){
         	var cardId = $(this).attr('id');
-        	alert("A click has been registered. Card ID: " + cardId);
+
         	$("#dialog_confirm_delete_card").dialog("option", "buttons",[
         		{
 					text: "Delete",
