@@ -427,7 +427,7 @@ class SearchHelper {
         if (StringUtils.isNotBlank(searchCommand.searchString)) {
 
             normalizeSearchString(searchCommand)
-            final List<SearchFilter> searchFilters = searchCommand.getAppliedFilters()
+            List<SearchFilter> searchFilters = searchCommand.getAppliedFilters()
             if (!searchFilters) {//user SearchCommand
                 searchFilters = []
             }

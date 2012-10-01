@@ -25,9 +25,9 @@ class QueryHelperService {
             'kegg_disease_cat': 'KEGG Disease Category',
             'kegg_disease_names': 'KEGG Disease Name',
             'assay_type': 'Assay Type',
-            'iso_smiles':'ISO SMILES',
-            'iupac_name':'IUPAC Name',
-            'preferred_term':'Preferred Term'
+            'iso_smiles': 'ISO SMILES',
+            'iupac_name': 'IUPAC Name',
+            'preferred_term': 'Preferred Term'
     ]
 
     //filters that starts with a number or '[' to denote ranges
@@ -215,12 +215,35 @@ class QueryHelperService {
      */
     protected SearchFilter constructFilter(final String filterName, final String searchString) {
         if (filterName && searchString) {
+            final String searchValue = stripCustomFiltersFromSearchString(searchString)
+            if (searchValue) {
+                return new SearchFilter(filterName: filterName, filterValue: searchValue)
+            }
+        }
+        return null
+    }
+    /**
+     *  Remove custom syntax from search string
+     *  re-normalize the search string to strip out custom syntax (e.g gobp:SearchString now become SearchString)
+     * @param searchString
+     * @return updated string
+     */
+    protected String stripCustomStringFromSearchString(final String searchString) {
+        final String updatedSearchString = stripCustomFiltersFromSearchString(searchString)
+        if(!updatedSearchString){
+          updatedSearchString = searchString
+        }
+        return updatedSearchString
+    }
+    /**
+     * If this string has custom search paramaters, remove them
+     * @param searchString
+     */
+    protected String stripCustomFiltersFromSearchString(final String searchString) {
+        if (searchString) {
             final int firstIndexOfColon = searchString.trim().indexOf(":")
             if (firstIndexOfColon > -1) { //if we found any string that has a colon in it, we assume that it is a filter
-                final String searchValue = searchString.substring(firstIndexOfColon + 1, searchString.length())
-                if (searchValue) {
-                    return new SearchFilter(filterName: filterName, filterValue: searchValue)
-                }
+                return searchString.substring(firstIndexOfColon + 1, searchString.length())
             }
         }
         return null

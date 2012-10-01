@@ -252,39 +252,31 @@ class QueryServiceHelperUnitSpec extends Specification {
         "Single Search Filter"    | "stuff"      | 10  | 10   | [new SearchFilter("name1", "value1")]
 
     }
-//    /**
-//     */
-//    void "test autoComplete #label"() {
-//
-//        when:
-//        final List<String> response = service.autoComplete(term)
-//
-//        then:
-//        elasticSearchService.searchQueryStringQuery(_, _) >> { jsonResponse }
-//
-//        assert response == expectedResponse
-//
-//        where:
-//        label                       | term  | jsonResponse                        | expectedResponse
-//        "Partial match of a String" | "Bro" | new JSONObject(AUTO_COMPLETE_NAMES) | ["Broad Institute MLPCN Platelet Activation"]
-//        "Empty String"              | ""    | new JSONObject()                    | []
-//    }
-//    /**
-//     */
-//    void "test handleAutoComplete #label"() {
-//
-//        when:
-//        final List<String> response = service.handleAutoComplete(term)
-//
-//        then:
-//        elasticSearchService.searchQueryStringQuery(_, _) >> { jsonResponse }
-//        assert response == expectedResponse
-//
-//        where:
-//        label                       | term  | jsonResponse                        | expectedResponse
-//        "Partial match of a String" | "Bro" | new JSONObject(AUTO_COMPLETE_NAMES) | ["Broad Institute MLPCN Platelet Activation"]
-//        "Empty String"              | ""    | new JSONObject()                    | []
-//    }
-//    /**
 
+    void "testStripCustomFiltersFromSearchString #label"() {
+        when:
+        final String updateSearchString = service.stripCustomFiltersFromSearchString(searchString)
+
+        then:
+        assert updateSearchString == expectedSearchString
+
+        where:
+        label                 | searchString      | expectedSearchString
+        "No custom Filters"   | "stuff"           | null
+        "With Custom Filters" | "gobp_term:stuff" | "stuff"
+        "Empty String"        | ""                | null
+    }
+    void "testStripCustomStringFromSearchString #label"() {
+        when:
+        final String updateSearchString = service.stripCustomStringFromSearchString(searchString)
+
+        then:
+        assert updateSearchString == expectedSearchString
+
+        where:
+        label                 | searchString      | expectedSearchString
+        "No custom Filters"   | "stuff"           | "stuff"
+        "With Custom Filters" | "gobp_term:stuff" | "stuff"
+        "Empty String"        | ""                | ""
+    }
 }
