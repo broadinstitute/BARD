@@ -24,12 +24,20 @@
 </div>
 
 <div class="row-fluid">
-    <div class="span12">
-        <dl class="dl-horizontal">
-            <dt>Assay Type:</dt><dd>${assayAdapter.assay.type}</dd>
-            %{--<dt>Assay Format:</dt><dd></dd>--}%
-            %{--<dt>Biological Process:</dt><dd></dd>--}%
-            %{--<dt>Target:</dt><dd></dd>--}%
+    <div class="span6">
+        <g:render template="assaySummary" model="[assay:assayAdapter.assay]"/>
+    </div>
+    <div class="span6">
+        <dl>
+            <dt>Associated Projects:</dt>
+            <dd>
+                <ul>
+                    <g:each in="${projects}" var="project">
+                        <li><g:link controller="bardWebInterface" action="showProject" id="${project.id}">${project.name} <small>(Project ID: ${project.id})</small></g:link>
+                        </li>
+                    </g:each>
+                </ul>
+            </dd>
         </dl>
     </div>
 </div>
@@ -47,33 +55,22 @@
 </r:script>
 <div class="row-fluid">
     <div class="span12 accordion">
-        <div class="accordion-group">
-            <div class="accordion-heading">
-                <a href="#project-header" id="project-header" class="accordion-toggle" data-toggle="collapse"
-                   data-target="#project-info"><i class="icon-chevron-right">
-                </i> Projects <small>(${projects?.size()} Project(s))</small></a>
-            </div>
-
-            <div id="project-info" class="accordion-body collapse">
-                <div class="accordion-inner">
-                    <g:render template="assayProjects" model="['projects': projects]"/>
-                </div>
-            </div>
-        </div>
 
         <div class="accordion-group">
             <div class="accordion-heading">
                 <a href="#assay-header" id="assay-header" class="accordion-toggle" data-toggle="collapse"
                    data-target="#assay-bio-info"><i
-                        class="icon-chevron-right"></i> Assay and Biology Details<small>( Assay Detection Method Type: ${assayDetectionMethod}, Assay Detection Instrument: ${assayDetectionInstrument})</small>
+                        class="icon-chevron-right"></i> Assay and Biology Details
                 </a>
 
                 <div id="assay-bio-info" class="accordion-body collapse">
                     <div class="accordion-inner">
+                        <dl>
                         <g:each in="${assayAdapter?.annotations}" var="annotation">
                             <dt>${annotation.id}</dt>
                             <dd>${annotation.value}</dd>
                         </g:each>
+                        </dl>
                     </div>
                 </div>
             </div>
@@ -99,30 +96,16 @@
         <div class="accordion-group">
             <div class="accordion-heading">
                 <a href="#results-header" id="results-header" class="accordion-toggle" data-toggle="collapse"
-                   data-target="#result-info"><i class="icon-chevron-right"></i> Results</a>
+                   data-target="#result-info"><i class="icon-chevron-right"></i> Experiments</a>
 
                 <div id="result-info" class="accordion-body collapse">
                     <div class="accordion-inner">
-                        <g:render template="experiments" model="[experiments: experiments]" />
+                        <g:render template="experiments" model="[experiments: experiments, showAssaySummary: false]" />
                     </div>
                 </div>
             </div>
         </div>
 
-        <div class="accordion-group">
-            <div class="accordion-heading">
-                <a href="#registration-header" id="registration-header" class="accordion-toggle" data-toggle="collapse"
-                   data-target="#registration-info"><i class="icon-chevron-right">
-                </i> Registration Info <small>(ID: ${assayAdapter?.assay.id}, Created by: ${assayAdapter?.assay?.getValue(AssayValues.AssaySourceValue)?.value})</small>
-                </a>
-
-                <div id="registration-info" class="accordion-body collapse">
-                    <div class="accordion-inner">
-                        <g:render template="assaySummary" model="['assayAdapter': assayAdapter]"/>
-                    </div>
-                </div>
-            </div>
-        </div>
     </div>
 </div>
 </body>

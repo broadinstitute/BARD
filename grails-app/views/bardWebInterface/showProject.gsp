@@ -24,6 +24,22 @@
     </div>
 </div>
 
+<div class="row-fluid">
+    <div class="span12">
+        <dl class="dl-horizontal dl-horizontal-wide">
+            <g:if test="${projectAdapter.project.getValue('grant number')}">
+                <dt>Grant Number:</dt>
+                <dd>${projectAdapter.project.getValue('grant number').value}</dd>
+            </g:if>
+            <g:if test="${projectAdapter.project.getValue('laboratory name')}">
+                <dt>Laboratory Name:</dt>
+                <dd>${projectAdapter.project.getValue('laboratory name').value}</dd>
+            </g:if>
+        </dl>
+    </div>
+</div>
+
+
 <r:script>
     $(document).ready(function () {
         $('.collapse').on('show', function () {
@@ -39,20 +55,21 @@
 <div class="row-fluid">
 
     <div class="span12 accordion">
+
         <div class="accordion-group">
             <div class="accordion-heading">
-                <a href="#document-header" id="assays-header" class="accordion-toggle" data-toggle="collapse"
-                   data-target="#assays-info"><i class="icon-chevron-down"></i> Assays</a>
+                <a href="#annotations-header" id="annotations-header" class="accordion-toggle" data-toggle="collapse"
+                   data-target="#annotations-info"><i
+                        class="icon-chevron-right"></i> Annotations (${projectAdapter.annotations.size()})</a>
 
-                <div id="assays-info" class="accordion-body in collapse">
+                <div id="annotations-info" class="accordion-body collapse">
                     <div class="accordion-inner">
-                        <g:each var="assay" in="${assays}" status="i">
-                            <div>
-                                 <p>
-                                    <g:link controller="bardWebInterface" action="showAssay" id="${assay.id}">${assay.name}</g:link>
-                                </p>
-                            </div>
-                        </g:each>
+                        <dl>
+                            <g:each in="${projectAdapter?.annotations}" var="annotation">
+                                <dt>${annotation.id}</dt>
+                                <dd>${annotation.value}</dd>
+                            </g:each>
+                        </dl>
                     </div>
                 </div>
             </div>
@@ -79,11 +96,31 @@
 
                 <div id="experiments-info" class="accordion-body collapse">
                     <div class="accordion-inner">
-                        <g:render template="experiments" model="['experiments': experiments]"/>
+                        <g:render template="experiments" model="['experiments': experiments, showAssaySummary: false]"/>
                     </div>
                 </div>
             </div>
         </div>
+
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                <a href="#document-header" id="assays-header" class="accordion-toggle" data-toggle="collapse"
+                   data-target="#assays-info"><i class="icon-chevron-right"></i> Assays</a>
+
+                <div id="assays-info" class="accordion-body collapse">
+                    <div class="accordion-inner">
+                        <g:each var="assay" in="${assays}" status="i">
+                            <div>
+                                <p>
+                                    <g:link controller="bardWebInterface" action="showAssay" id="${assay.id}">${assay.name}</g:link>
+                                </p>
+                            </div>
+                        </g:each>
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </div>
 </div>
 </body>

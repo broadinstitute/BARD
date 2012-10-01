@@ -266,7 +266,8 @@ class QueryService implements IQueryService {
             this.queryHelperService.stopStopWatch(sw, "show project ${projectId.toString()}")
             if (project) {
                 final ServiceIterator<Experiment> experimentIterator = restProjectService.iterator(project,Experiment.class)
-                Collection<Experiment> experiments = experimentIterator.collect()
+                List<Experiment> experiments = experimentIterator.collect()
+                experiments.sort { it.role }
                 final ServiceIterator<Assay> assayIterator = restProjectService.iterator(project, Assay.class)
                 Collection<Assay> assays = assayIterator.collect()
                 ProjectAdapter projectAdapter =  new ProjectAdapter(project)
