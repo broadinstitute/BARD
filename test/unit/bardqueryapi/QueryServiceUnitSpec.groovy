@@ -8,6 +8,7 @@ import bard.core.rest.RESTCompoundService
 import bard.core.rest.RESTExperimentService
 import bard.core.rest.RESTProjectService
 import grails.test.mixin.TestFor
+import org.apache.commons.lang.time.StopWatch
 import spock.lang.Specification
 import spock.lang.Unroll
 import bard.core.*
@@ -188,4 +189,85 @@ class QueryServiceUnitSpec extends Specification {
         "Similarity Search"      | StructureSearchParams.Type.Similarity     | "CC"
         "Super structure search" | StructureSearchParams.Type.Superstructure | "CC"
     }
+
+
+    void "test Find Compounds By Text Search"() {
+        given:
+        StopWatch sw = Mock(StopWatch)
+        ServiceIterator<Compound> iter = Mock(ServiceIterator.class)
+        when:
+        Map map = service.findCompoundsByTextSearch(searchString, 0, 10, [])
+        then:
+        queryHelperService.startStopWatch() >> {sw}
+        queryHelperService.stopStopWatch(_, _) >> {}
+        queryServiceWrapper.getRestCompoundService() >> { restCompoundService }
+        restCompoundService.search(_) >> {iter}
+        queryHelperService.stripCustomStringFromSearchString(_) >> {"stuff"}
+        queryHelperService.constructSearchParams(_, _, _, _) >> { new SearchParams(searchString)}
+        queryHelperService.compoundsToAdapters(_) >> {[new CompoundAdapter(new Compound("name"))]}
+        assert map == foundMap
+        where:
+        searchString         | foundMap
+        "Some Search String" | [compoundAdapters: [], facets: null, nHits: 0]
+        ""                   | [compoundAdapters: [], facets: [], nHits: 0]
+
+    }
+
+    void "test Find Assays By Text Search"() {
+        given:
+        StopWatch sw = Mock(StopWatch)
+        ServiceIterator<Assay> iter = Mock(ServiceIterator.class)
+        when:
+        Map map = service.findAssaysByTextSearch(searchString, 0, 10, [])
+        then:
+        queryHelperService.startStopWatch() >> {sw}
+        queryHelperService.stopStopWatch(_, _) >> {}
+        queryServiceWrapper.getRestAssayService() >> { restAssayService }
+        restAssayService.search(_) >> {iter}
+        queryHelperService.stripCustomStringFromSearchString(_) >> {"stuff"}
+        queryHelperService.constructSearchParams(_, _, _, _) >> { new SearchParams(searchString)}
+        queryHelperService.assaysToAdapters(_) >> {assayAdapter}
+        assert map.assayAdapters.size() == foundMap.assayAdapters.size()
+        where:
+        searchString         | foundMap                                                                     | assayAdapter
+        "Some Search String" | [assayAdapters: [new AssayAdapter(new Assay("name"))], facets: [], nHits: 0] | [new AssayAdapter(new Assay("name"))]
+        ""                   | [assayAdapters: [], facets: null, nHits: 0]                                  | null
+
+    }
+
+    void "test Find Projects By Text Search"() {
+        given:
+        StopWatch sw = Mock(StopWatch)
+        ServiceIterator<Project> iter = Mock(ServiceIterator.class)
+        when:
+        Map map = service.findProjectsByTextSearch(searchString, 0, 10, [])
+        then:
+        _ * queryHelperService.startStopWatch() >> {sw}
+        _ * queryHelperService.stopStopWatch(_, _) >> {}
+        _ * queryServiceWrapper.getRestProjectService() >> { restProjectService }
+        _ * restProjectService.search(_) >> {iter}
+        _ * queryHelperService.stripCustomStringFromSearchString(_) >> {"stuff"}
+        _ * queryHelperService.constructSearchParams(_, _, _, _) >> { new SearchParams(searchString)}
+        _ * queryHelperService.projectsToAdapters(_) >> {projectAdapter}
+        assert map.projectAdapters.size() == foundMap.projectAdapters.size()
+        where:
+        searchString         | foundMap                                                                             | projectAdapter
+        "Some Search String" | [projectAdapters: [new ProjectAdapter(new Project("name"))], facets: null, nHits: 0] | [new ProjectAdapter(new Project("name"))]
+        ""                   | [projectAdapters: [], facets: [], nHits: 0]                                          | null
+    }
+    /**
+     *
+     * @param term
+     * @return the list of maps to use for auto suggest
+     */
+    void "test auto Complete"() {
+        when:
+        List list= service.autoComplete("Some Search String")
+        then:
+        1 * queryServiceWrapper.getRestAssayService() >> { restAssayService }
+        1 * restAssayService.suggest(_) >> {[a:"b"]}
+        1 * queryHelperService.autoComplete(_,_) >> {[[a: "b"]]}
+        assert list
+    }
+
 }
