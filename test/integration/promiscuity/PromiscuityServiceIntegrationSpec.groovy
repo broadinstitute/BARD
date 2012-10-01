@@ -42,8 +42,11 @@ class PromiscuityServiceIntegrationSpec extends IntegrationSpec {
         Long cid = new Long(-1)
         final String fullURL = "${queryServiceWrapper.promiscuityScoreURL}${cid}"
         when: "We call the Promiscuity Service with the URL"
-        this.promiscuityScoreService.findPromiscuityScoreForCID(fullURL)
+        Map promiscuityScoreMap = this.promiscuityScoreService.findPromiscuityScoreForCID(fullURL)
         then:
-        thrown(Exception)
+        assert promiscuityScoreMap
+        assert promiscuityScoreMap.status == 404
+        assert !promiscuityScoreMap.promiscuityScore
+        assert promiscuityScoreMap.message
     }
 }
