@@ -23,7 +23,7 @@
             <th>Structure</th>
             <th>Outcome</th>
             <th>Potency</th>
-            <g:if test="${!experimentDataMap?.spreadSheetActivities.isEmpty()}">
+            <g:if test="${!experimentDataMap?.spreadSheetActivities?.isEmpty()}">
 
                 <g:each in="${experimentDataMap?.spreadSheetActivities?.get(0)?.readouts}" var="readout">
                     <th>${readout.id}</th>
