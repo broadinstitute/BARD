@@ -4,7 +4,7 @@ import com.metasieve.shoppingcart.Shoppable
 
 class CartCompound extends Shoppable {
 
-    static int MAXIMUM_NAME_FIELD_LENGTH = 255
+    static int MAXIMUM_NAME_FIELD_LENGTH = 4000
     static int MAXIMUM_SMILES_FIELD_LENGTH = 1024
 
     int compoundId  = 0
