@@ -1,6 +1,7 @@
 package bardqueryapi
 
 import grails.test.mixin.TestFor
+import org.apache.commons.lang.RandomStringUtils
 import spock.lang.Specification
 import spock.lang.Unroll
 
@@ -10,7 +11,7 @@ import spock.lang.Unroll
 //@TestMixin(GrailsUnitTestMixin)
 @TestFor(BardWebInterfaceController)
 @Unroll
-class CartAssaySpec extends Specification  {
+class CartAssaySpec extends Specification {
 
     void setup() {
         // Setup logic here
@@ -22,55 +23,57 @@ class CartAssaySpec extends Specification  {
 
     void "test shopping cart assay element"() {
         when:
-            CartAssay cartAssay = new CartAssay(assayTitle: "Assay title")
-            assertNotNull(cartAssay)
+        CartAssay cartAssay = new CartAssay(assayTitle: "Assay title")
+        assertNotNull(cartAssay)
 
         then:
-            assert cartAssay.assayTitle=='Assay title'
-            assertNull cartAssay.shoppingItem
+        assert cartAssay.assayTitle == 'Assay title'
+        assertNull cartAssay.shoppingItem
     }
 
     /**
      * constraint test.  Note that the choice of ctor makes a difference in whether the setter is used
      */
     void "test constraints on CartAssay object"() {
-        setup:
+        given:
         mockForConstraintsTests(CartAssay)
 
+        final String assayTitle = RandomStringUtils.randomAlphabetic(stringLength)
+
         when:
-        CartAssay cartAssay = new CartAssay( assayTitle, 47 as Long)
+        CartAssay cartAssay = new CartAssay(assayTitle, 47 as Long)
         cartAssay.validate()
 
         then:
         cartAssay.hasErrors() == !valid
 
         where:
-        assayTitle      |   valid
-        ""              |   false
-        "Some assay"    |   true
-        "012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234"  |  true
-        "0123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345" |  false
+        stringLength | valid
+        0            | false
+        20           | true
+        4000         | true
+        40001        | false
     }
-
 
     // Note: In this case we are using a setter, and therefore we must NOT mockForConstraintsTests (otherwise
     // the setter will never be hit.
     void "test adding ellipses when the assay title is too long"() {
+        given:
+        final String assayTitle = RandomStringUtils.randomAlphabetic(stringLength)
+
         when:
         CartAssay cartAssay = new CartAssay(assayTitle, 47 as Long)
         cartAssay.setAssayTitle(assayTitle)
 
         then:
-        cartAssay.toString() == properName
+        cartAssay.toString().length() == properStringLength
 
         where:
-        compoundId  |   assayTitle                 | properName
-        47          |   "01234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123"    | "01234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123"
-        47          |   "012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234"   |   "012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234"
-        47          |   "0123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345"  |   "012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234..."
+        compoundId | stringLength | properStringLength
+        47         | 4001         | 4003
+        47         | 80000        | 4003
+        47         | 25           | 25
     }
-
-
 
 
 }
