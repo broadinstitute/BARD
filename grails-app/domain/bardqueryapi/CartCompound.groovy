@@ -23,6 +23,12 @@ class CartCompound extends Shoppable {
         this.compoundId = compoundId
     }
 
+    static constraints = {
+        smiles (nullable: false, maxSize: MAXIMUM_SMILES_FIELD_LENGTH)
+        name (nullable: false, maxSize: MAXIMUM_NAME_FIELD_LENGTH)
+        compoundId (min : 1)
+    }
+
 
     public void setSmiles(String smiles)    {
         if (smiles != null)  {
@@ -90,9 +96,4 @@ class CartCompound extends Shoppable {
         returnValue
     }
 
-    static constraints = {
-        smiles (nullable: false, maxSize: MAXIMUM_SMILES_FIELD_LENGTH)
-        name (nullable: false, maxSize: MAXIMUM_NAME_FIELD_LENGTH)
-        compoundId (min : 1)
-    }
 }

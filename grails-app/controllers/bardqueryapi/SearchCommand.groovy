@@ -19,6 +19,9 @@ class SearchCommand {
         filters.findAll {SearchFilter filter ->  filter.filterValue}
     }
 
+    void setSearchString (String searchString) {
+        this.searchString =  searchString?.trim()
+    }
 
     static constraints = {
         searchString(blank: false)
