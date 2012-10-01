@@ -1,9 +1,8 @@
 <g:each in="${cardDtoMap}" var="entry">
     <div id="${entry.key}"  class="roundedBorder card-group ${entry.key.replaceAll(/( |> )/, '-')}">
 
-
         <div class="row-fluid">
-            <h2  class="span12">${entry.key}</h2>
+            <h5 class="span12">${entry.key}</h5>
         </div>
 
         <div class="row-fluid">
