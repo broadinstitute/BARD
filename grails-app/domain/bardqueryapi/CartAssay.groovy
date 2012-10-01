@@ -5,7 +5,7 @@ import com.metasieve.shoppingcart.Shoppable
 
 class CartAssay extends Shoppable {
 
-    static int MAXIMUM_ASSAY_TITLE_FIELD_LENGTH = 255
+    static int MAXIMUM_ASSAY_TITLE_FIELD_LENGTH = 4000
 
     Long assayId  = 0
     String assayTitle
