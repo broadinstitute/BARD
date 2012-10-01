@@ -2,10 +2,11 @@ package promiscuity
 
 import bardqueryapi.QueryHelperService
 import com.thoughtworks.xstream.XStream
+import grails.converters.XML
 import groovyx.net.http.RESTClient
 import org.apache.commons.lang.time.StopWatch
-import grails.converters.XML
 import util.RestClientFactoryService
+import groovyx.net.http.HttpResponseException
 
 class PromiscuityScoreService {
     final XStream xstream
@@ -28,20 +29,25 @@ class PromiscuityScoreService {
      * @return Map
      */
     public Map findPromiscuityScoreForCID(final String fullURL) {
+        def resp = null
+        try {
+            final RESTClient restClient = this.restClientFactoryService.createRestClient(fullURL)
+            final StopWatch sw = queryHelperService.startStopWatch()
 
-        final RESTClient restClient = this.restClientFactoryService.createRestClient(fullURL)
-        final StopWatch sw = queryHelperService.startStopWatch()
+            resp = restClient.get(query: [expand: 'true'], contentType: XML,
+                    headers: [Accept: 'application/xml'])
+            final Map loggingMap = [url: "${fullURL}?expand=true"]
+            this.queryHelperService.stopStopWatch(sw, loggingMap.toString())
 
-        def resp = restClient.get(query: [expand: 'true'], contentType: XML,
-                headers: [Accept: 'application/xml'])
-        final Map loggingMap = [url: "${fullURL}?expand=true"]
-        this.queryHelperService.stopStopWatch(sw, loggingMap.toString())
+            if (resp.status == 200) {
+                final PromiscuityScore promiscuityScore = (PromiscuityScore) xstream.fromXML(resp.data);
+                return [status: resp.status, message: 'Success', promiscuityScore: promiscuityScore]
+            }
+            return [status: resp.status, message: "Error getting Promiscuity Score for ${fullURL}", promiscuityScore: null]
+        } catch (HttpResponseException ee) {
 
-        if (resp.status == 200) {
-            final PromiscuityScore promiscuityScore = (PromiscuityScore) xstream.fromXML(resp.data);
-            return [status: resp.status, message: 'Success', promiscuityScore: promiscuityScore]
+            return [status: ee.statusCode, message: "Error getting Promiscuity Score for ${fullURL}", promiscuityScore: null]
         }
-        return [status: resp.status, message: "Error getting Promiscuity Score for ${fullURL}", promiscuityScore: null]
     }
 
 }
