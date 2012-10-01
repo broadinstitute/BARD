@@ -13,8 +13,7 @@ class MolSpreadSheetController {
             MolSpreadSheetData molSpreadSheetData = molecularSpreadSheetService.retrieveExperimentalData()
             render (template: "spreadSheet", model:  [ molSpreadSheetData: molSpreadSheetData ])
         }  else {
-            flash.message = "Cannot display molecular spreadsheet without at least one assay and at least one compound"
-            render (template: "spreadSheet")
+            render (template: "spreadSheet", model:  [ molSpreadSheetData: new MolSpreadSheetData() ])
         }
 
     }

@@ -8,6 +8,7 @@
     </div>
 
     <div class="span10">
+        <g:if test="${molSpreadSheetData?.mssHeaders?.size()>0}">
         <table class="molSpreadSheet">
             <thead>
             <tr class="molSpreadSheetHead">
@@ -16,7 +17,7 @@
                 <g:sortableColumn property="molSpreadSheetCell.spreadSheetActivityStorage.cid" title="CID"
                                   class="molSpreadSheetHeadCid"/>
                 <% int looper = 2 %>
-                <g:each var="colHeader" in="${molSpreadSheetData.mssHeaders}">
+                <g:each var="colHeader" in="${molSpreadSheetData?.mssHeaders}">
                     <g:if test="${looper > 3}">
                         <g:sortableColumn property="var${looper++}" title="${colHeader}"
                                           class="molSpreadSheetHeadData"/>
@@ -103,6 +104,14 @@
             </g:each>
             </tbody>
         </table>
+        </g:if>
+        <g:else>
+            <div class="alert">
+                <button class="close" data-dismiss="alert">×</button>
+                Cannot display molecular spreadsheet without at least one assay or one compound
+            </div>
+        </g:else>
+
     </div>
 
 </div>
