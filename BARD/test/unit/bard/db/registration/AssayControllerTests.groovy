@@ -1,19 +1,21 @@
 package bard.db.registration
 
-
-
-import org.junit.*
-import grails.test.mixin.*
+import grails.buildtestdata.mixin.Build
+import grails.test.mixin.TestFor
 
 @TestFor(AssayController)
-@Mock(Assay)
+@Build(Assay)
 class AssayControllerTests {
 
 
     def populateValidParams(params) {
-      assert params != null
-      // TODO: Populate valid properties like...
-      //params["name"] = 'someValidName'
+        assert params != null
+
+        Assay assay = Assay.buildWithoutSave()
+        params['assayTitle'] = assay.assayTitle
+        params['assayName'] = assay.assayName
+        params['assayVersion'] = '1.1'
+        params['dateCreated'] = assay.dateCreated
     }
 
     void testIndex() {
@@ -30,9 +32,9 @@ class AssayControllerTests {
     }
 
     void testCreate() {
-       def model = controller.create()
+        def model = controller.create()
 
-       assert model.assayInstance != null
+        assert model.assayInstance != null
     }
 
     void testSave() {
@@ -105,8 +107,7 @@ class AssayControllerTests {
 
         // test invalid parameters in update
         params.id = assay.id
-        //TODO: add invalid values to params object
-
+        params.'assayTitle' = null
         controller.update()
 
         assert view == "/assay/edit"
