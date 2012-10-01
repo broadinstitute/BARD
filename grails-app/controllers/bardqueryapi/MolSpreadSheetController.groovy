@@ -5,7 +5,7 @@ import molspreadsheet.MolSpreadSheetData
 class MolSpreadSheetController {
     MolecularSpreadSheetService molecularSpreadSheetService
     def index() {
-        render (view:"molecularSpreadSheet")
+         render (view:"molecularSpreadSheet")
     }
 
     def molecularSpreadSheet(){

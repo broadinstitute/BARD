@@ -4,7 +4,7 @@ import org.apache.log4j.DailyRollingFileAppender
 
 
 //TODO: Override in dev, qa and prod to point to the current stable realse
-ncgc.server.root.url = "http://bard.nih.gov/api/v5"
+ncgc.server.root.url = "http://bard.nih.gov/api/v6"
 promiscuityscrores.root.url="${ncgc.server.root.url}/plugins/badapple/prom/cid/"
 //override in config file for environment
 grails.serverURL ="http://localhost:8080/bardwebquery"
