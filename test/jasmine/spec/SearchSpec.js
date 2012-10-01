@@ -12,6 +12,10 @@ describe("Testing search.js", function () {
         it("should return the string 'EMPTY', when we pass in an empty search string", function () {
             expect(findSearchType(searchString)).toEqual("EMPTY");
         });
+        it("should return the string 'ID' when we pass in a single number followed by a space", function () {
+            searchString = "123 ";
+            expect(findSearchType(searchString)).toEqual("ID");
+        });
         it("should return the string 'ID' when we pass in a list of comma separated integers", function () {
             searchString = "123,456,789";
             expect(findSearchType(searchString)).toEqual("ID");

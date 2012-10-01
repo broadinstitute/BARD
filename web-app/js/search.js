@@ -3,6 +3,13 @@ var spinnerImageLink = '<img src="/bardwebquery/static/images/loading_icon.gif" 
 var bigSpinnerImage = '<div class="tab-message"><img src="/bardwebquery/static/images/ajax-loader.gif" alt="loading" title="loading"/></div>';
 var errorImageTwitterBootstrap = '<img src=""  class="icon-exclamation-sign" alt="error" height="16" width="16" />';
 
+//matches a number followed by a zero or more spaces, followed by max of one comma
+//The question mark and the colon after the opening round bracket are the special syntax that
+// you can use to tell the regex engine that this pair of brackets should not create a backreference
+//You do that to optimize this regular expression
+//see http://www.regular-expressions.info/brackets.html
+var NUMBER_MATCHING_REGEX = /^\d+ *(?:, *\d+ *)*$/;
+
 $(document).ready(function () {
 
     //set up form submission
@@ -310,8 +317,7 @@ function findSearchType(searchString) {
     if (!$.trim(searchString).length) {  //if this is an empty string, do nothing
         return "EMPTY";
     }
-    var numberMatchingRegex = /^\d+(?:, *\d+ *)*$/; //-- Potential performance issue, because we look at every thing
-    if (searchString.match(numberMatchingRegex)) {//this is an id match
+    if (searchString.match(NUMBER_MATCHING_REGEX)) {//this is an id match
         return "ID";
     }
     //we want to find out if this is a Structure search
