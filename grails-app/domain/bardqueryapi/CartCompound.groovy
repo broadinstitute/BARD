@@ -1,6 +1,7 @@
 package bardqueryapi
 
 import com.metasieve.shoppingcart.Shoppable
+import org.apache.commons.lang.StringUtils
 
 class CartCompound extends Shoppable {
 
@@ -44,7 +45,7 @@ class CartCompound extends Shoppable {
 
 
     public void setName(String name)    {
-        if (name != null)  {
+        if (StringUtils.isNotBlank(name))  {
             Integer lengthOfName
             Integer incomingStringLength = name.length()
             if  (incomingStringLength<=MAXIMUM_NAME_FIELD_LENGTH) {
@@ -93,8 +94,4 @@ class CartCompound extends Shoppable {
 
         returnValue
     }
-
-
-
-
 }

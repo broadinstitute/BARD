@@ -53,8 +53,8 @@ class CartCompoundSpec extends Specification {
 
         where:
         compoundId | nameLength | smiles     | valid
-        47         | 0          | "c1ccccc1" | false
-        47         | 0          | "c1ccccc1" | false
+        47         | 0          | "c1ccccc1" | true
+        47         | 0          | "c1ccccc1" | true
         47         | 10         | "c1ccccc1" | true
         0          | 0          | "c1ccccc1" | false
         0          | 0          | "c1ccccc1" | false

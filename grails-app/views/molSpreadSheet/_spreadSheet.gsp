@@ -22,7 +22,6 @@
             <input type="checkbox" defaultChecked="unchecked" name="showPromiscuityScores" id="showPromiscuityScores">
             Hide Promiscuity Scores
         </label>
-
         <g:if test="${molSpreadSheetData?.mssHeaders?.size() > 0}">
             <table class="molSpreadSheet">
                 <thead>
