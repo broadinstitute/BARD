@@ -9,7 +9,7 @@
                 </a>
                 <ul class="dropdown-menu pull-right" role="menu">
                     <li><a href="/bardwebquery/MolSpreadSheet">Molecular Spreadsheet</a></li>
-                    <li><a href="#">Advanced Analysis Client</a></li>
+                    <li><a href="http://bard.nih.gov/bard/compounds/44552613?view=Record" target="_blank">Desktop Client</a></li>
                 </ul>
             </div>
         </div>
