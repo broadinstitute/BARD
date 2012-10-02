@@ -13,6 +13,7 @@ import spock.lang.Unroll
 import bard.core.*
 
 import static junit.framework.Assert.assertNotNull
+import bard.core.adapter.CompoundAdapter
 
 @Unroll
 class MolecularSpreadSheetServiceIntegrationSpec extends IntegrationSpec {
@@ -23,6 +24,7 @@ class MolecularSpreadSheetServiceIntegrationSpec extends IntegrationSpec {
     RESTExperimentService restExperimentService
     RESTProjectService restProjectService
     RESTAssayService restAssayService
+    QueryServiceWrapper queryServiceWrapper
 
 
 
@@ -89,7 +91,7 @@ class MolecularSpreadSheetServiceIntegrationSpec extends IntegrationSpec {
         final ServiceIterator<Value> experimentIterator = this.restExperimentService.activities(experiment, compoundETag);
         Collection collect = experimentIterator.collect()
         and: "We extract the first element in the collection"
-        Value experimentValue = (Value)collect.iterator().next()
+        Value experimentValue = (Value) collect.iterator().next()
         when: "We call the extractActivitiesFromExperiment method with the experimentValue"
         SpreadSheetActivity spreadSheetActivity = molecularSpreadSheetService.extractActivitiesFromExperiment(experimentValue)
         then: "We a spreadSheetActivity"
@@ -189,9 +191,62 @@ class MolecularSpreadSheetServiceIntegrationSpec extends IntegrationSpec {
         assert countValues > 1
     }
 
+    // an example of a problem
+    void "test indirect accumulation of expts2"() {
+
+        given: "That we casn retrieve the expts for project 274" //////////
+
+//        List<Long> cartProjectIdList = new ArrayList<Long>()
+//        cartProjectIdList.add(new Long(274))
+        final Project project = queryServiceWrapper.restProjectService.get(new Long(274))
+        List<Experiment> allExperiments = []
+        //for (Project project : projects) {
+        final ServiceIterator<Assay> serviceIterator = queryServiceWrapper.restProjectService.iterator(project, Assay.class)
+        Collection<Assay> assays = serviceIterator.collect()
+        for (Assay assay : assays) {
+            println "ASSAY: " + assay.id
+            final ServiceIterator<Experiment> experimentIterator = queryServiceWrapper.restAssayService.iterator(assay, Experiment.class)
+            Collection<Experiment> experimentList = experimentIterator.collect()
+            allExperiments.addAll(experimentList)
+
+        }
+        //}
+        List<Long> cartCompoundIdList = new ArrayList<Long>()
+        cartCompoundIdList.add(new Long(5281847))
+       // Object etag = queryServiceWrapper.restCompoundService.newETag("Test", cartCompoundIdList);
+        when: "We define an etag for a compound used in this project"  /////////////
+        int dataCount = 0
+        for (Experiment experiment in allExperiments) {
+            //Experiment newExp = queryServiceWrapper.restExperimentService.get(experiment.id)
+            final ServiceIterator<Compound> compoundIterators = restExperimentService.compounds(experiment)
+            final Collection<Compound> compoundsThatWereTestedInThisExperiment = compoundIterators.collect()
+            for(Compound comp : compoundsThatWereTestedInThisExperiment){
+                CompoundAdapter c = new CompoundAdapter(comp)
+                if(cartCompoundIdList.contains(new Long(c.pubChemCID))){
+                    ServiceIterator<Value> experimentIterator = queryServiceWrapper.restExperimentService.activities(experiment)
+
+                    Value experimentValue
+                    while (experimentIterator.hasNext()) {
+                        experimentValue = experimentIterator.next()
+                        dataCount++
+                    }
+                }
+            }
+
+
+        }
+
+
+
+        then: "when we step through the value in the expt"    ////////
+
+        // we expect tyo see some data
+        assert dataCount > 0
+        println dataCount
+    }
 
     // an example of a problem
-    void "test indirect accumulation of expts"() {
+    void "test indirect accumulation of expts use Assays"() {
 
         given: "That we casn retrieve the expts for project 274" //////////
 
@@ -203,9 +258,10 @@ class MolecularSpreadSheetServiceIntegrationSpec extends IntegrationSpec {
             final ServiceIterator<Assay> serviceIterator = restProjectService.iterator(project, Assay.class)
             Collection<Assay> assays = serviceIterator.collect()
             for (Assay assay : assays) {
-                final ServiceIterator<Experiment> experimentIterator = restAssayService.iterator(assay, Experiment.class)
+                 final ServiceIterator<Experiment> experimentIterator = restAssayService.iterator(assay, Experiment.class)
                 Collection<Experiment> experimentList = experimentIterator.collect()
                 allExperiments.addAll(experimentList)
+
             }
         }
 
@@ -216,7 +272,7 @@ class MolecularSpreadSheetServiceIntegrationSpec extends IntegrationSpec {
         Object etag = restCompoundService.newETag((new Date()).toString(), cartCompoundIdList);
 
 
-        then:  "when we step through the value in the expt"    ////////
+        then: "when we step through the value in the expt"    ////////
 
         int dataCount = 0
         for (Experiment experiment in allExperiments) {
@@ -231,7 +287,52 @@ class MolecularSpreadSheetServiceIntegrationSpec extends IntegrationSpec {
         }
 
         // we expect tyo see some data
-        assert dataCount>0
+        assert dataCount > 0
+    }
+    // an example of a problem
+    void "test indirect accumulation of expts"() {
+
+        given: "That we casn retrieve the expts for project 274" //////////
+
+        List<Long> cartProjectIdList = new ArrayList<Long>()
+        cartProjectIdList.add(new Long(274))
+        final Collection<Project> projects = restProjectService.get(cartProjectIdList)
+        List<Experiment> allExperiments = []
+        for (Project project : projects) {
+            final ServiceIterator<Assay> serviceIterator = restProjectService.iterator(project, Assay.class)
+            Collection<Assay> assays = serviceIterator.collect()
+            for (Assay assay : assays) {
+                println "ASSAY: " + assay.id
+                final ServiceIterator<Experiment> experimentIterator = restAssayService.iterator(assay, Experiment.class)
+                Collection<Experiment> experimentList = experimentIterator.collect()
+                allExperiments.addAll(experimentList)
+
+            }
+        }
+
+        when: "We define an etag for a compound used in this project"  /////////////
+
+        List<Long> cartCompoundIdList = new ArrayList<Long>()
+        cartCompoundIdList.add(new Long(5281847))
+        Object etag = restCompoundService.newETag((new Date()).toString(), cartCompoundIdList);
+
+
+        then: "when we step through the value in the expt"    ////////
+
+        int dataCount = 0
+        for (Experiment experiment in allExperiments) {
+
+            ServiceIterator<Value> experimentIterator = restExperimentService.activities(experiment, etag)
+            Value experimentValue
+            while (experimentIterator.hasNext()) {
+                experimentValue = experimentIterator.next()
+                dataCount++
+            }
+
+        }
+
+        // we expect tyo see some data
+        assert dataCount > 0
     }
 
 
