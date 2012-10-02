@@ -5,17 +5,18 @@ import java.math.MathContext
 class MolSpreadSheetData {
 
     static hasMany = [ molSpreadSheetCell : MolSpreadSheetCell ]
+    static transients = ['rowCount','columnCount']
 
-    LinkedHashMap<String,MolSpreadSheetCell> mssData
-    LinkedHashMap<Long,Integer> rowPointer
-    LinkedHashMap<Long,Integer> columnPointer
-    List<String> mssHeaders
+    LinkedHashMap<String,MolSpreadSheetCell> mssData   = new LinkedHashMap<String,MolSpreadSheetCell> ()
+    LinkedHashMap<Long,Integer> rowPointer  = new LinkedHashMap<Long,Integer>()
+    LinkedHashMap<Long,Integer> columnPointer   = new LinkedHashMap<Long,Integer>()
+    List<String> mssHeaders   = new ArrayList<String>()
 
     MolSpreadSheetData()  {
-        mssData = new LinkedHashMap<String,MolSpreadSheetCell> ()
-        rowPointer = new LinkedHashMap<Long,Integer>()
-        columnPointer = new LinkedHashMap<Long,Integer>()
-        mssHeaders = new ArrayList()
+//        mssData = new LinkedHashMap<String,MolSpreadSheetCell> ()
+//        rowPointer = new LinkedHashMap<Long,Integer>()
+//        columnPointer = new LinkedHashMap<Long,Integer>()
+//        mssHeaders = new ArrayList()
     }
 
 
@@ -79,8 +80,8 @@ class MolSpreadSheetData {
     static constraints = {
         mssData  (nullable: false)
         rowPointer  (nullable: false)
-        mssHeaders (nullable: false)
         columnPointer  (nullable: false)
+        //mssHeaders (nullable: false)
     }
 }
 
