@@ -30,8 +30,8 @@
 	                  <li><a href="/BARD/assayDefinition/findByName">Find assay by Name</a></li>
 	                  <li class="divider"></li>
 	                  <li class="nav-header">BARD Web Query links</li>
-	                  <li><a href="#">Home</a></li>
-	                </ul>
+                      <li><g:link url="${grailsApplication.config.bard.home.page}">Home</g:link></li>
+                    </ul>
 	              </li>
 	            </ul>
 	            <sec:ifLoggedIn>
