@@ -175,9 +175,9 @@ class MolecularSpreadSheetService {
                         molSpreadSheetCell.activity = false
                     map.put(arrayKey, molSpreadSheetCell)
                 }
-                else {
-                    println "did not expect cid = ${spreadSheetActivity.cid}"
-                }
+               // else {
+                    //println "did not expect cid = ${spreadSheetActivity.cid}"
+                //}
 
             }
             columnPointer++
@@ -495,7 +495,7 @@ class MolecularSpreadSheetService {
         while (experimentIterator.hasNext()) {
             Value experimentValue = experimentIterator.next()
             if (experimentValue) {
-                SpreadSheetActivity spreadSheetActivity = extractActivitiesFromExperiment(experimentValue)
+                SpreadSheetActivity spreadSheetActivity = extractActivitiesFromExperiment(experimentValue, new Long(experiment.id))
                 spreadSheetActivities.add(spreadSheetActivity)
             }
         }
@@ -527,7 +527,7 @@ class MolecularSpreadSheetService {
             final Iterator<Value> iterator = activityValues.iterator()
             while (iterator.hasNext()) {
                 Value experimentValue = iterator.next()
-                SpreadSheetActivity spreadSheetActivity = extractActivitiesFromExperiment(experimentValue)
+                SpreadSheetActivity spreadSheetActivity = extractActivitiesFromExperiment(experimentValue, experimentId)
                 spreadSheetActivities.add(spreadSheetActivity)
             }
 

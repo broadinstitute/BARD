@@ -53,7 +53,7 @@ class DoseCurveRenderingServiceIntegrationSpec extends IntegrationSpec {
         Value experimentValue = collect.iterator().next()
 
         and: "We call the extractActivitiesFromExperiment method with the experiment Value to get the SpreadSheetActivity"
-        SpreadSheetActivity spreadSheetActivity = molecularSpreadSheetService.extractActivitiesFromExperiment(experimentValue)
+        SpreadSheetActivity spreadSheetActivity = molecularSpreadSheetService.extractActivitiesFromExperiment(experimentValue,experimentId)
 
         when: "We call the createDoseCurve method with the spreadSheetActivity.hillCurveValue value and the other parameters"
         JFreeChart jFreeChart = this.doseCurveRenderingService.createDoseCurve(spreadSheetActivity.hillCurveValue, null, null, null, null)
@@ -88,7 +88,7 @@ class DoseCurveRenderingServiceIntegrationSpec extends IntegrationSpec {
         Value experimentValue = collect.iterator().next()
 
         and: "We call the extractActivitiesFromExperiment method with the experiment Value to get the SpreadSheetActivity"
-        SpreadSheetActivity spreadSheetActivity = molecularSpreadSheetService.extractActivitiesFromExperiment(experimentValue)
+        SpreadSheetActivity spreadSheetActivity = molecularSpreadSheetService.extractActivitiesFromExperiment(experimentValue,experimentId)
 
         when: "We call the createDoseCurve method with the spreadSheetActivity.hillCurveValue value and the other parameters"
         final HillCurveValue hillCurveValue = spreadSheetActivity.hillCurveValue
@@ -126,7 +126,7 @@ class DoseCurveRenderingServiceIntegrationSpec extends IntegrationSpec {
         Value experimentValue = collect.iterator().next()
 
         and: "We call the extractActivitiesFromExperiment method with the experiment Value to get the SpreadSheetActivity"
-        SpreadSheetActivity spreadSheetActivity = molecularSpreadSheetService.extractActivitiesFromExperiment(experimentValue)
+        SpreadSheetActivity spreadSheetActivity = molecularSpreadSheetService.extractActivitiesFromExperiment(experimentValue,experimentId)
 
         when: "We call the findDrcData method with the spreadSheetActivity.hillCurveValue value"
         final HillCurveValue hillCurveValue = spreadSheetActivity.hillCurveValue
@@ -149,7 +149,8 @@ class DoseCurveRenderingServiceIntegrationSpec extends IntegrationSpec {
     }
     void "tests findDrcData No AC50"() {
         given: "That we have an Experiment"
-        Experiment experiment = restExperimentService.get(1326)
+        final Long experimentId = new Long(1326)
+        Experiment experiment = restExperimentService.get(experimentId)
 
         and: "We call the activities method on the restExperimentService with the experiment and the ETag"
         final ServiceIterator<Value> experimentIterator = this.restExperimentService.activities(experiment);
@@ -159,7 +160,7 @@ class DoseCurveRenderingServiceIntegrationSpec extends IntegrationSpec {
         Value experimentValue = collect.iterator().next()
 
         and: "We call the extractActivitiesFromExperiment method with the experiment Value to get the SpreadSheetActivity"
-        SpreadSheetActivity spreadSheetActivity = molecularSpreadSheetService.extractActivitiesFromExperiment(experimentValue)
+        SpreadSheetActivity spreadSheetActivity = molecularSpreadSheetService.extractActivitiesFromExperiment(experimentValue,experimentId)
 
         when: "We call the findDrcData method with the spreadSheetActivity.hillCurveValue value"
         final HillCurveValue hillCurveValue = spreadSheetActivity.hillCurveValue
