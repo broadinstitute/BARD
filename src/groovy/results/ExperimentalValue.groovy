@@ -73,8 +73,12 @@ class ExperimentalValue {
 
     String  roundoffToDesiredPrecision( BigDecimal bigDecimal  )  {
         BigDecimal displayVal =bigDecimal
+        Boolean defaultToEngineeringNotation  = false
         NumberFormat numberFormat = NumberFormat.getInstance()
-        if (((new BigDecimal(0.1)).compareTo(bigDecimal) <= 0) &&
+        if (((new BigDecimal(0.01)).compareTo(bigDecimal) <= 0) &&
+                ((new BigDecimal(0.1)).compareTo(bigDecimal) > 0)){
+            defaultToEngineeringNotation  = true
+        } else if (((new BigDecimal(0.1)).compareTo(bigDecimal) <= 0) &&
                 ((new BigDecimal(1)).compareTo(bigDecimal) > 0)){
             numberFormat.setMinimumFractionDigits( 0 )
             numberFormat.setMaximumFractionDigits( DESIRED_PRECISION )
@@ -90,11 +94,16 @@ class ExperimentalValue {
                 ((new BigDecimal(1000)).compareTo(bigDecimal) > 0)){
             numberFormat.setMinimumFractionDigits( 0 )
             numberFormat.setMaximumFractionDigits( DESIRED_PRECISION-3 )
-        } else {      //should not happen
-            numberFormat.setMinimumFractionDigits( 2 )
-            numberFormat.setMaximumFractionDigits( 2 )
-         }
-        numberFormat.format(displayVal.doubleValue())
+        } else {      // If someone insists on an output format, or else if the numbers are absurdly big or small
+                      //  then give up on trying to be pretty and put that number into engineering format
+            defaultToEngineeringNotation  = true
+        }
+        if (!defaultToEngineeringNotation)
+           numberFormat.format(displayVal.doubleValue())
+        else {
+            displayVal.toEngineeringString()
+        }
+
     }
 
 
@@ -135,7 +144,7 @@ class ExperimentalValue {
             if ( ( experimentalValueUnit.decimalPlacesFromMolar > insistOnOutputUnits.decimalPlacesFromMolar )  &&
                   ( experimentalValueUnit.decimalPlacesFromMolar > ExperimentalValueUnit.SmallestPossibleUnit.decimalPlacesFromMolar)){
                 performUnitNormalization( ExperimentalValueUnit.getByDecimalValue(experimentalValueUnit.decimalPlacesFromMolar),
-                        ExperimentalValueUnit.getByDecimalValue(experimentalValueUnit.decimalPlacesFromMolar),ExperimentalValueUnit.getByDecimalValue(experimentalValueUnit.decimalPlacesFromMolar-3) )
+                        ExperimentalValueUnit.getByDecimalValue(experimentalValueUnit.decimalPlacesFromMolar-3) )
             } else if (( experimentalValueUnit.decimalPlacesFromMolar < insistOnOutputUnits.decimalPlacesFromMolar )  &&
                     ( experimentalValueUnit.decimalPlacesFromMolar < ExperimentalValueUnit.LargestPossibleUnit.decimalPlacesFromMolar)) {
                 performUnitNormalization(  ExperimentalValueUnit.getByDecimalValue(experimentalValueUnit.decimalPlacesFromMolar),
@@ -204,7 +213,8 @@ enum ExperimentalValueUnit {
     Picomolar("pM", -12),
     Femtomolar("fM", -15),
     Attamolar("aM", -18),
-    Zeptomolar("aM", -21),
+    Zeptomolar("zM", -21),
+    Yoctomolar("yM", -24),
     unknown("U", 0);
 
     static ExperimentalValueUnit convert(MolSpreadSheetCellUnit molSpreadSheetCellUnit){
@@ -236,7 +246,7 @@ enum ExperimentalValueUnit {
     private int decimalPlacesFromMolar
 
     static ExperimentalValueUnit  LargestPossibleUnit =  Molar
-    static ExperimentalValueUnit  SmallestPossibleUnit =  Zeptomolar
+    static ExperimentalValueUnit  SmallestPossibleUnit =  Yoctomolar
 
     ExperimentalValueUnit(String value, int decimalPlacesFromMolar) {
         this.value = value;

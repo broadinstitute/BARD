@@ -7,6 +7,7 @@ import molspreadsheet.SpreadSheetActivityStorage
  * Since there is no experimentAdapter I had to make a method to open up the experiment
  */
 public class SpreadSheetActivity {
+    Long experimentId
     Long eid
     Long cid
     Long sid

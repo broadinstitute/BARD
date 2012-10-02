@@ -30,6 +30,10 @@ class CartAssay extends Shoppable {
         this.assayId =  assayId
     }
 
+    static constraints = {
+        assayTitle  ( blank: false, maxSize: MAXIMUM_ASSAY_TITLE_FIELD_LENGTH)
+    }
+
 
     @Override
     String toString() {
@@ -89,7 +93,4 @@ class CartAssay extends Shoppable {
         return (assayTitle != null ? assayTitle.hashCode() : 0)
     }
 
-    static constraints = {
-        assayTitle  ( blank: false, maxSize: MAXIMUM_ASSAY_TITLE_FIELD_LENGTH)
-    }
 }

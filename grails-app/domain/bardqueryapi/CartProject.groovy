@@ -7,7 +7,9 @@ class CartProject extends Shoppable {
     String projectName = "no project name yet specified"
     Long projectId = 0L
 
-
+    static constraints = {
+        projectName    blank: false;
+    }
 
     CartProject (String projectName, String projectIdStr)   {
         this.projectName =  projectName
@@ -52,7 +54,4 @@ class CartProject extends Shoppable {
     }
 
 
-    static constraints = {
-        projectName    blank: false;
-    }
-}
+ }
