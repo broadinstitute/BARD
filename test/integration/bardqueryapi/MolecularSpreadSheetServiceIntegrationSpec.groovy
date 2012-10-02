@@ -1,7 +1,9 @@
 package bardqueryapi
 
+import bard.core.rest.RESTAssayService
 import bard.core.rest.RESTCompoundService
 import bard.core.rest.RESTExperimentService
+import bard.core.rest.RESTProjectService
 import grails.plugin.spock.IntegrationSpec
 import molspreadsheet.MolSpreadSheetCell
 import molspreadsheet.MolSpreadSheetData
@@ -19,6 +21,8 @@ class MolecularSpreadSheetServiceIntegrationSpec extends IntegrationSpec {
     MolSpreadSheetData molSpreadSheetData = generateFakeData()
     RESTCompoundService restCompoundService
     RESTExperimentService restExperimentService
+    RESTProjectService restProjectService
+    RESTAssayService restAssayService
 
 
 
@@ -26,7 +30,8 @@ class MolecularSpreadSheetServiceIntegrationSpec extends IntegrationSpec {
     void setup() {
         this.restExperimentService = molecularSpreadSheetService.queryServiceWrapper.restExperimentService
         this.restCompoundService = molecularSpreadSheetService.queryServiceWrapper.restCompoundService
-
+        this.restProjectService = molecularSpreadSheetService.queryServiceWrapper.restProjectService
+        this.restAssayService = molecularSpreadSheetService.queryServiceWrapper.restAssayService
     }
 
     @After
@@ -160,6 +165,77 @@ class MolecularSpreadSheetServiceIntegrationSpec extends IntegrationSpec {
         }
         assert countValues > 1
     }
+
+    void "test retrieve multiple values from specific expt"() {
+        given: "That we have identified project 274"
+        Experiment experiment = restExperimentService.get(new Long(1140))
+        final ServiceIterator<Compound> compoundServiceIterator = restExperimentService.compounds(experiment)
+        when: "We call for the activities"
+        assert experiment
+        List<Compound> compoundList = compoundServiceIterator.next(1)
+        Object etag = restCompoundService.newETag("find experiment 346 data", compoundList*.id); // etag for 3 compounds
+        ServiceIterator<Value> experimentIterator = this.restExperimentService.activities(experiment, etag);
+        then: "We expect to see non-null activitiy for each compound"
+        int countValues = 0
+        while (experimentIterator.hasNext()) {
+            Value experimentValue = experimentIterator.next()
+            SpreadSheetActivity spreadSheetActivity = molecularSpreadSheetService.extractActivitiesFromExperiment(experimentValue)
+            HillCurveValue hillCurveValue = spreadSheetActivity.hillCurveValue
+            if ((hillCurveValue.s0 != null) &&
+                    (hillCurveValue.sinf != null) &&
+                    (hillCurveValue.coef != null))
+                countValues++;
+        }
+        assert countValues > 1
+    }
+
+
+    // an example of a problem
+    void "test indirect accumulation of expts"() {
+
+        given: "That we casn retrieve the expts for project 274" //////////
+
+        List<Long> cartProjectIdList = new ArrayList<Long>()
+        cartProjectIdList.add(new Long(274))
+        final Collection<Project> projects = restProjectService.get(cartProjectIdList)
+        List<Experiment> allExperiments = []
+        for (Project project : projects) {
+            final ServiceIterator<Assay> serviceIterator = restProjectService.iterator(project, Assay.class)
+            Collection<Assay> assays = serviceIterator.collect()
+            for (Assay assay : assays) {
+                final ServiceIterator<Experiment> experimentIterator = restAssayService.iterator(assay, Experiment.class)
+                Collection<Experiment> experimentList = experimentIterator.collect()
+                allExperiments.addAll(experimentList)
+            }
+        }
+
+        when: "We define an etag for a compound used in this project"  /////////////
+
+        List<Long> cartCompoundIdList = new ArrayList<Long>()
+        cartCompoundIdList.add(new Long(5281847))
+        Object etag = restCompoundService.newETag((new Date()).toString(), cartCompoundIdList);
+
+
+        then:  "when we step through the value in the expt"    ////////
+
+        int dataCount = 0
+        for (Experiment experiment in allExperiments) {
+
+            ServiceIterator<Value> experimentIterator = restExperimentService.activities(experiment, etag)
+            Value experimentValue
+            while (experimentIterator.hasNext()) {
+                experimentValue = experimentIterator.next()
+                dataCount++
+            }
+
+        }
+
+        // we expect tyo see some data
+        assert dataCount>0
+    }
+
+
+
 
     void "tests findActivitiesForCompounds #label"() {
         given: "That we have created an ETag from a list of CIDs"
