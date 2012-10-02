@@ -17,14 +17,11 @@
     </div>
 
     <div class="span10">
-
-        <label class="checkbox">
-            <input type="checkbox" defaultChecked="unchecked" name="showPromiscuityScores" id="showPromiscuityScores">
-            Hide Promiscuity Scores
-        </label>
-
-
         <g:if test="${molSpreadSheetData?.mssHeaders?.size() > 0}">
+            <label class="checkbox">
+                <input type="checkbox" defaultChecked="unchecked" name="showPromiscuityScores" id="showPromiscuityScores">
+                Hide Promiscuity Scores
+            </label>
             <table class="molSpreadSheet">
                 <thead>
                 <tr class="molSpreadSheetHead">
