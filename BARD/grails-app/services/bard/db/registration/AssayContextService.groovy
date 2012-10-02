@@ -32,8 +32,20 @@ class AssayContextService {
     public AssayContext deleteItem(AssayContextItem assayContextItem) {
         AssayContext assayContext = assayContextItem.assayContext
         assayContext.removeFromAssayContextItems(assayContextItem)
-        assayContextItem.delete()
-        optionallyChangeContextName(assayContext)
+        assayContextItem.delete(flush: true)
+        return assayContext
+    }
+
+    public AssayContext createOrEditCardName(Long assayId, Long assayContextId, String name){
+        AssayContext assayContext = AssayContext.get(assayContextId)
+        Assay assay = Assay.get(assayId)
+        if(assayContext && assayContext.contextName != name){
+            assayContext.contextName = name
+        }
+        else{
+            assayContext = new AssayContext(contextName: name)
+            assay.addToAssayContexts(assayContext)
+        }
         return assayContext
     }
 }

@@ -119,17 +119,10 @@ class AssayDefinitionController {
         render(template: "cards", model: [cardDtoMap: cardDtoMap])
     }
 
-    def addNewEmptyCard(String card_name, Long assay_id) {
-        def assayInstance = Assay.get(assay_id)
-        if (assayInstance) {
-            def assayContextInstance = new AssayContext()
-            assayContextInstance.contextName = card_name
-            assayContextInstance.assay = assayInstance
-            assayInstance.addToAssayContexts(assayContextInstance);
-            assayContextInstance.save()
-        }
-        Map<String , CardDto> cardDtoMap = cardFactoryService.createCardDtoMapForAssay(assayInstance)
+    def createOrEditCardName(String edit_card_name, Long assayId, Long assayContextId){
+        AssayContext assayContext = assayContextService.createOrEditCardName(assayId, assayContextId, edit_card_name)
+        Map<String , CardDto> cardDtoMap = cardFactoryService.createCardDtoMapForAssay(assayContext.assay)
         render(template: "cards", model: [cardDtoMap: cardDtoMap])
     }
-		
+
 }

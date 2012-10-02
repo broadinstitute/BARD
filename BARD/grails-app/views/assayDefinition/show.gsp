@@ -73,55 +73,60 @@
                 primary:"ui-icon-plus"
             }
         }).click(function (event) {
-                    $("#dialog_new_card").dialog("open");
-                });
-
-        $("#dialog_new_card").dialog({
-            height:180,
-            width:500,
-            title:"New Card",
-            autoOpen:false,
-            modal:true,
-            draggable: false,
-            zIndex: 3999
+            $("#dialog_edit_card").dialog( {title: "Create Card" });
+            $("#dialog_edit_card").dialog("open");
         });
-        $("#dialog_new_card").dialog("option", "buttons", [
-            	{
-	            	text: "Save",
-	            	class: "btn btn-primary",
-	            	click: function(){
-	            		$("#new_card_form").submit();
-	                }
-            	},
-            	{
-            		text: "Cancel",
-            		class: "btn",
-	            	click: function(){
-	                    $(this).dialog("close");
-            		}
-            	}
-         ]);
+        $("#dialog_edit_card").dialog({
+                    height:180,
+                    width:500,
+                    autoOpen:false,
+                    modal:true,
+                    draggable: false,
+                    zIndex: 3999
+                });
+                $("#dialog_edit_card").dialog("option", "buttons", [
+                    	{
+        	            	text: "Save",
+        	            	class: "btn btn-primary",
+        	            	click: function(){
+        	            		$("#edit_card_form").submit();
+        	                }
+                    	},
+                    	{
+                    		text: "Cancel",
+                    		class: "btn",
+        	            	click: function(){
+        	                    $(this).dialog("close");
+                                $("#edit_card_form").clearForm();
+                                $("#assayContextId").val('');
+                    		}
+                    	}
+                 ]);
 
-        $("#new_card_form").ajaxForm({
-    		url:'../addNewEmptyCard',
-    		type:'POST',
-    		beforeSubmit:function(formData, jqForm, options){
-    			var form = jqForm[0];
-    			var nameValue = form.card_name.value;
-    			if(!nameValue || 0 === nameValue || (/^\s*$/).test(nameValue)){
-    				alert("Name field is required and cannot be empty");
-    				return false;
-    			}
-                else {
-                    $("#dialog_new_card").dialog("close");
-                }
-    		},
-    		success:function(responseText, statusText, xhr, jqForm){
-                $("#new_card_form").clearForm();
-    			$("div#cardHolder").html(responseText);
-	            initDnd();
-    		}
-    	});
+                $("#edit_card_form").ajaxForm({
+            		url:'../createOrEditCardName',
+            		type:'POST',
+            		beforeSubmit:function(formData, jqForm, options){
+            			var form = jqForm[0];
+            			var nameValue = form.edit_card_name.value;
+            			if(!nameValue || 0 === nameValue || (/^\s*$/).test(nameValue)){
+            				alert("Name field is required and cannot be empty");
+            				return false;
+            			}
+                        else {
+                            $("#dialog_edit_card").dialog("close");
+                        }
+
+            		},
+            		success:function(responseText, statusText, xhr, jqForm){
+                        $("#edit_card_form").clearForm();
+                        $("#assayContextId").val('');
+            			$("div#cardHolder").html(responseText);
+        	            initDnd();
+            		}
+            	});
+
+
 
         $("#dialog_confirm_delete_card").dialog({
             height:250,
@@ -148,6 +153,14 @@
 <r:script>
 
     var initDnd = function () {
+        $("caption.assay_context").dblclick(function () {
+            var assayContextId = $(this).attr('id');
+            var name = $(this).find('p').text();
+            $("#edit_card_name").val(name);
+            $("#assayContextId").val(assayContextId);
+            $("#dialog_edit_card").dialog({title:"Edit Card Name"});
+            $("#dialog_edit_card").dialog("open");
+        });
 
     	$("button", ".deleteCardButton").button({
             icons:{

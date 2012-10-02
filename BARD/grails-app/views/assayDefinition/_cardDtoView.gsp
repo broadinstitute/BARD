@@ -12,19 +12,17 @@
             </div>
         </div>
 
-        <div id="dialog_new_card">
-            <form id="new_card_form" class="form-horizontal" >
+        <div id="dialog_edit_card">
+            <form id="edit_card_form" class="form-horizontal" >
                 <div class="control-group">
-                    <label class="control-label" for="card_name">Name:</label>
+                    <label class="control-label" for="edit_card_name">Name:</label>
 
                     <div class="controls">
-                        <input type="text" id="card_name" name="card_name" size="${bard.db.registration.AssayContext.CONTEXT_NAME_MAX_SIZE}" placeholder="Enter Card Name" >
+                        <input type="text" id="edit_card_name" name="edit_card_name" size="${bard.db.registration.AssayContext.CONTEXT_NAME_MAX_SIZE}" placeholder="Enter Card Name" >
                     </div>
                 </div>
-
-                <div>
-                    <input type="hidden" id="assay_id" name="assay_id" value="${assayId}"/>
-                </div>
+                <input type="hidden" id="assayContextId" name="assayContextId" value=""/>
+                <input type="hidden" id="assayId" name="assayId" value="${assayId}"/>
             </form>
         </div>
 
