@@ -155,6 +155,7 @@ class MolecularSpreadSheetService {
     protected void populateMolSpreadSheetData(MolSpreadSheetData molSpreadSheetData, List<Experiment> experimentList, List<SpreadSheetActivity> spreadSheetActivityList) {
         // now step through the data and place into molSpreadSheetData
         int columnPointer = 0
+        Map<String,MolSpreadSheetCell> map   = new HashMap<String,MolSpreadSheetCell> ()
         // we need to handle each experiment separately ( until NCGC can do this in the background )
         // Note that each experiment corresponds to a column in our spreadsheet
         for (Experiment experiment in experimentList) {
@@ -163,7 +164,7 @@ class MolecularSpreadSheetService {
                 if (molSpreadSheetData.rowPointer.containsKey(spreadSheetActivity.cid)) {
                     int innerRowPointer = molSpreadSheetData.rowPointer[spreadSheetActivity.cid]
                     int innerColumnCount = molSpreadSheetData.columnPointer[spreadSheetActivity.experimentId]
-                    String arrayKey = "${innerRowPointer}_${innerColumnCount + 3}"
+                    String arrayKey = innerRowPointer.toString() + "_" + (innerColumnCount + 3).toString()
                     SpreadSheetActivityStorage spreadSheetActivityStorage = new SpreadSheetActivityStorage(spreadSheetActivity)
 
                     MolSpreadSheetCell molSpreadSheetCell = new MolSpreadSheetCell(spreadSheetActivity.interpretHillCurveValue().toString(),
@@ -172,7 +173,7 @@ class MolecularSpreadSheetService {
                             spreadSheetActivityStorage)
                     if (spreadSheetActivityStorage == null)
                         molSpreadSheetCell.activity = false
-                    molSpreadSheetData.mssData.put(arrayKey, molSpreadSheetCell)
+                    map.put(arrayKey, molSpreadSheetCell)
                 }
                 else {
                     println "did not expect cid = ${spreadSheetActivity.cid}"
@@ -181,6 +182,7 @@ class MolecularSpreadSheetService {
             }
             columnPointer++
         }
+        molSpreadSheetData.mssData.putAll(map)
         molSpreadSheetData
     }
 
