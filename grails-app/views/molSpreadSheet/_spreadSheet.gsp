@@ -1,6 +1,15 @@
 <%@ page import="molspreadsheet.SpreadSheetActivityStorage; molspreadsheet.MolSpreadSheetData; bardqueryapi.SpreadSheetActivity; bardqueryapi.MolecularSpreadSheetService; bardqueryapi.FacetFormType" %>
 <%@ page import="bardqueryapi.MolSpreadSheetCellType;" %>
 <%@ page import="com.metasieve.shoppingcart.ShoppingCartService; molspreadsheet.MolSpreadSheetCell;" %>
+
+<script type="text/javascript">
+    $(document).ready(function() {
+        $('#showPromiscuityScores').click(function() {
+            $('td:nth-child(3), th:nth-child(3)').toggle();
+        });
+    });
+</script>
+
 <div class="row-fluid">
 <div class="span2">
         <g:render template="../bardWebInterface/facets"
@@ -8,6 +17,11 @@
     </div>
 
     <div class="span10">
+        <label class="checkbox">
+            <input type="checkbox" defaultChecked="unchecked" name="showPromiscuityScores" id="showPromiscuityScores">
+            Hide Promiscuity Scores
+        </label>
+
         <g:if test="${molSpreadSheetData?.mssHeaders?.size()>0}">
         <table class="molSpreadSheet">
             <thead>
