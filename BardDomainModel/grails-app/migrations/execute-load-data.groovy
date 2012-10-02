@@ -27,19 +27,7 @@ databaseChangeLog = {
                 sql.call('''
                         begin
                         load_data.load_reference;
-                        load_data.load_assay(7);
-                        load_data.load_assay(8);
-                        load_data.load_assay(726);
-
-                        load_data.load_assay(1432);
-                        load_data.load_assay(1565);
-                        load_data.load_assay(1847);
-                        load_data.load_assay(186);
-                        load_data.load_assay(1246);
-                        --load_data.load_assay(99);
-                        --load_data.load_assay(1217);
-                        --load_data.load_assay(819);
-                        --load_data.load_assay(326);
+                        load_data.load_assay_without_result();
                         end;
                     ''')
             }

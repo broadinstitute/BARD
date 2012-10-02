@@ -32,7 +32,7 @@ class CardFactoryService {
 
         Descriptor descriptor = assayContext.preferredDescriptor
         if(descriptor){
-            cardDto.assaySection = descriptor.getPath()[0..1].collect{ it.label }.join(' > ')
+            cardDto.assaySection = descriptor.getPath().subList(0,1).collect{ it.label }.join(' > ')
         }
         else {
             cardDto.assaySection = 'unknown section'

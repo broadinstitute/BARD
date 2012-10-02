@@ -71,7 +71,9 @@ table.table th, table.table td {
 }
 
 
-
+.assay-protocol {
+    background-color: #ddeeff;
+}
 .assay-protocol--assay-component {
     background-color: #ddeeff;
 }
@@ -92,6 +94,10 @@ table.table th, table.table td {
     background-color: #b4c5d6;
 }
 
+.biology{
+    background-color: #90ee90;
+}
+
 .biology--biological-process {
     background-color: #90ee90;
 }
@@ -103,7 +109,9 @@ table.table th, table.table td {
 .biology--molecular-target {
     background-color:  #c0eec0;
 }
-
+.project-management {
+    background-color: #EEEE99;
+}
 .project-management--experiment {
     background-color: #EEEE99;
 }
