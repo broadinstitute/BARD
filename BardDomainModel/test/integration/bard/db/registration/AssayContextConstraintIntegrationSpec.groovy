@@ -2,7 +2,6 @@ package bard.db.registration
 
 import grails.plugin.spock.IntegrationSpec
 import org.junit.Before
-
 import spock.lang.Unroll
 
 import static AssayContext.CONTEXT_NAME_MAX_SIZE
@@ -44,8 +43,8 @@ class AssayContextConstraintIntegrationSpec extends IntegrationSpec {
         where:
         desc               | valueUnderTest                          | valid | errorCode
         'null not valid'   | null                                    | false | 'nullable'
-        'blank not valid'  | ''                                      | false | 'blank'
-        'blank not valid'  | '   '                                   | false | 'blank'
+        'blank not valid'  | ' '                                      | true  | null
+        'blank not valid'  | '   '                                   | true  | null
 
         'too long'         | createString(CONTEXT_NAME_MAX_SIZE + 1) | false | 'maxSize.exceeded'
         'exactly at limit' | createString(CONTEXT_NAME_MAX_SIZE)     | true  | null
@@ -69,9 +68,9 @@ class AssayContextConstraintIntegrationSpec extends IntegrationSpec {
         }
 
         where:
-        desc             | valueUnderTest | valid | errorCode
-        'null not valid' | null           | false | 'nullable'
-        'valid assay'    | Assay.buildWithoutSave()     | true  | null
+        desc             | valueUnderTest           | valid | errorCode
+        'null not valid' | null                     | false | 'nullable'
+        'valid assay'    | Assay.buildWithoutSave() | true  | null
 
     }
 
