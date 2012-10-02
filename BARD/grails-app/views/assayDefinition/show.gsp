@@ -91,7 +91,6 @@
 	            	class: "btn btn-primary",
 	            	click: function(){
 	            		$("#new_card_form").submit();
-	                    $(this).dialog("close");
 	                }
             	},
             	{
@@ -113,8 +112,12 @@
     				alert("Name field is required and cannot be empty");
     				return false;
     			}
+                else {
+                    $("#dialog_new_card").dialog("close");
+                }
     		},
-    		success:function(responseText, statusText, xhr, $form){
+    		success:function(responseText, statusText, xhr, jqForm){
+                $("#new_card_form").clearForm();
     			$("div#cardHolder").html(responseText);
 	            initDnd();
     		}

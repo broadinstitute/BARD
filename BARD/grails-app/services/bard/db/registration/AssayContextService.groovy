@@ -20,24 +20,7 @@ class AssayContextService {
         sourceAssayContext.removeFromAssayContextItems(sourceItem)
         sourceItem.assayContext = targetAssayContext
         targetAssayContext.assayContextItems.add(index, sourceItem)
-        optionallyChangeContextName(sourceAssayContext)
-        optionallyChangeContextName(targetAssayContext)
         return targetAssayContext
-    }
-
-    /**
-     * If we can find a match for the contextName in the existing assayContextItems, do nothing
-     * if we can't find a match use the first assayContextItem if it exists
-     * @param sourceAssayContext
-     */
-    public void optionallyChangeContextName(AssayContext sourceAssayContext) {
-        if (sourceAssayContext.assayContextItems.find {sourceAssayContext.contextName == it.valueDisplay}) {
-            // item responsible for contextName found in assayContextItems
-        }
-        else {
-            AssayContextItem first = sourceAssayContext.assayContextItems[0]
-            sourceAssayContext.contextName = first?.valueDisplay ?: AssayContext.CONTEXT_NAME_WITH_NO_ITEMS
-        }
     }
 
     public void updateContextName(AssayContext targetAssayContext, AssayContextItem sourceAssayContextItem) {

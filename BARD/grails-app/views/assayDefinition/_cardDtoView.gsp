@@ -13,12 +13,12 @@
         </div>
 
         <div id="dialog_new_card">
-            <form id="new_card_form" class="form-horizontal">
+            <form id="new_card_form" class="form-horizontal" >
                 <div class="control-group">
                     <label class="control-label" for="card_name">Name:</label>
 
                     <div class="controls">
-                        <input type="text" id="card_name" name="card_name" size="30" placeholder="Enter Card Name">
+                        <input type="text" id="card_name" name="card_name" size="${bard.db.registration.AssayContext.CONTEXT_NAME_MAX_SIZE}" placeholder="Enter Card Name" >
                     </div>
                 </div>
 
@@ -35,7 +35,7 @@
                 This item will be permanently deleted and cannot be recovered. Are you sure?
             </p>
         </div>
-        
+
         	<div id="dialog_confirm_delete_card">
 				<p>
 				<span class="ui-icon ui-icon-alert" style="float:left; margin:0 7px 20px 0;"></span>
