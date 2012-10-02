@@ -55,7 +55,7 @@ class AssayContext {
     Descriptor getPreferredDescriptor() {
         Descriptor preferredDescriptor
         List<Descriptor> preferredDescriptors = assayContextItems.collect {it.attributeElement.ontologyBreadcrumb.preferedDescriptor}
-
+        preferredDescriptors = preferredDescriptors.findAll() // hack to eliminate any nulls (Elements (971 and 1329)
         for (String keyLabel in KEY_LABELS) {
             if (preferredDescriptors.any {it?.label?.contains(keyLabel)}) {
                 preferredDescriptor = preferredDescriptors.find { it.label.contains(keyLabel)}
