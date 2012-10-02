@@ -246,7 +246,7 @@
 
         $(document).ready(function () {
 
-            $(".context_item_row").draggable({
+            $(".attributeLabel").draggable({
                 cursor:'move',
                 scroll:true,
                 revert:true,
@@ -260,7 +260,7 @@
             $("tr.context_item_row").droppable({
                 hoverClass:"drophover",
                 drop:function (event, ui) {
-                    var src_assay_context_item_id = ui.draggable.attr('id');
+                    var src_assay_context_item_id = ui.draggable.closest('tr').attr('id');
                     var target_assay_context_item_id = $(this).attr('id');
                     var data = {'src_assay_context_item_id':src_assay_context_item_id,
                         'target_assay_context_item_id':target_assay_context_item_id};
