@@ -38,7 +38,7 @@ class CardFactoryService {
             cardDto.assaySection = path.subList(0,toIndexExclusive).collect{ it.label }.join(' > ')
         }
         else {
-            cardDto.assaySection = 'unknown section'
+            cardDto.assaySection = 'uncategorized cards'
         }
 
         for (AssayContextItem assayContextItem : assayContext.assayContextItems) {

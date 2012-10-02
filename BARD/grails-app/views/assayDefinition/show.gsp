@@ -73,52 +73,60 @@
                 primary:"ui-icon-plus"
             }
         }).click(function (event) {
-                    $("#dialog_new_card").dialog("open");
-                });
-
-        $("#dialog_new_card").dialog({
-            height:180,
-            width:500,
-            title:"New Card",
-            autoOpen:false,
-            modal:true,
-            draggable: false,
-            zIndex: 3999
+            $("#dialog_edit_card").dialog( {title: "Create Card" });
+            $("#dialog_edit_card").dialog("open");
         });
-        $("#dialog_new_card").dialog("option", "buttons", [
-            	{
-	            	text: "Save",
-	            	class: "btn btn-primary",
-	            	click: function(){
-	            		$("#new_card_form").submit();
-	                    $(this).dialog("close");
-	                }
-            	},
-            	{
-            		text: "Cancel",
-            		class: "btn",
-	            	click: function(){
-	                    $(this).dialog("close");
-            		}
-            	}
-         ]);
+        $("#dialog_edit_card").dialog({
+                    height:180,
+                    width:500,
+                    autoOpen:false,
+                    modal:true,
+                    draggable: false,
+                    zIndex: 3999
+                });
+                $("#dialog_edit_card").dialog("option", "buttons", [
+                    	{
+        	            	text: "Save",
+        	            	class: "btn btn-primary",
+        	            	click: function(){
+        	            		$("#edit_card_form").submit();
+        	                }
+                    	},
+                    	{
+                    		text: "Cancel",
+                    		class: "btn",
+        	            	click: function(){
+        	                    $(this).dialog("close");
+                                $("#edit_card_form").clearForm();
+                                $("#assayContextId").val('');
+                    		}
+                    	}
+                 ]);
 
-        $("#new_card_form").ajaxForm({
-    		url:'../addNewEmptyCard',
-    		type:'POST',
-    		beforeSubmit:function(formData, jqForm, options){
-    			var form = jqForm[0];
-    			var nameValue = form.card_name.value;
-    			if(!nameValue || 0 === nameValue || (/^\s*$/).test(nameValue)){
-    				alert("Name field is required and cannot be empty");
-    				return false;
-    			}
-    		},
-    		success:function(responseText, statusText, xhr, $form){
-    			$("div#cardHolder").html(responseText);
-	            initDnd();
-    		}
-    	});
+                $("#edit_card_form").ajaxForm({
+            		url:'../createOrEditCardName',
+            		type:'POST',
+            		beforeSubmit:function(formData, jqForm, options){
+            			var form = jqForm[0];
+            			var nameValue = form.edit_card_name.value;
+            			if(!nameValue || 0 === nameValue || (/^\s*$/).test(nameValue)){
+            				alert("Name field is required and cannot be empty");
+            				return false;
+            			}
+                        else {
+                            $("#dialog_edit_card").dialog("close");
+                        }
+
+            		},
+            		success:function(responseText, statusText, xhr, jqForm){
+                        $("#edit_card_form").clearForm();
+                        $("#assayContextId").val('');
+            			$("div#cardHolder").html(responseText);
+        	            initDnd();
+            		}
+            	});
+
+
 
         $("#dialog_confirm_delete_card").dialog({
             height:250,
@@ -145,6 +153,14 @@
 <r:script>
 
     var initDnd = function () {
+        $("caption.assay_context").dblclick(function () {
+            var assayContextId = $(this).attr('id');
+            var name = $(this).find('p').text();
+            $("#edit_card_name").val(name);
+            $("#assayContextId").val(assayContextId);
+            $("#dialog_edit_card").dialog({title:"Edit Card Name"});
+            $("#dialog_edit_card").dialog("open");
+        });
 
     	$("button", ".deleteCardButton").button({
             icons:{
@@ -230,7 +246,7 @@
 
         $(document).ready(function () {
 
-            $(".context_item_row").draggable({
+            $(".attributeLabel").draggable({
                 cursor:'move',
                 scroll:true,
                 revert:true,
@@ -244,7 +260,7 @@
             $("tr.context_item_row").droppable({
                 hoverClass:"drophover",
                 drop:function (event, ui) {
-                    var src_assay_context_item_id = ui.draggable.attr('id');
+                    var src_assay_context_item_id = ui.draggable.closest('tr').attr('id');
                     var target_assay_context_item_id = $(this).attr('id');
                     var data = {'src_assay_context_item_id':src_assay_context_item_id,
                         'target_assay_context_item_id':target_assay_context_item_id};

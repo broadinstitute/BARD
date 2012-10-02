@@ -1,10 +1,9 @@
 package bard.db.registration
 
 import bard.db.dictionary.Descriptor
+import org.apache.commons.lang.StringUtils
 
 class AssayContext {
-
-    public static final String CONTEXT_NAME_WITH_NO_ITEMS = 'Empty Card, consider deleting!'
 
     private static final int CONTEXT_NAME_MAX_SIZE = 128
     private static final int MODIFIED_BY_MAX_SIZE = 40
@@ -41,7 +40,7 @@ class AssayContext {
     }
 
     static constraints = {
-        contextName(maxSize: CONTEXT_NAME_MAX_SIZE, blank: false)
+        contextName(maxSize: CONTEXT_NAME_MAX_SIZE)
         assay()
         dateCreated(nullable: false)
         lastUpdated(nullable: true)
@@ -70,13 +69,19 @@ class AssayContext {
     }
 
     String getPreferredName() {
-        String preferredName = getPreferredDescriptor()?.label
-        for (Map.Entry entry in KEY_LABEL_NAME_MAP) {
-            if (preferredName && preferredName.contains(entry.key)) {
-                if ('label' != entry.value) {
-                    preferredName = entry.value
+        String preferredName = 'undefined'
+        if (StringUtils.isNotBlank(this.contextName)) {
+            preferredName = this.contextName
+        }
+        else {
+            preferredName = getPreferredDescriptor()?.label
+            for (Map.Entry entry in KEY_LABEL_NAME_MAP) {
+                if (preferredName && preferredName.contains(entry.key)) {
+                    if ('label' != entry.value) {
+                        preferredName = entry.value
+                    }
+                    break
                 }
-                break
             }
         }
         return preferredName
