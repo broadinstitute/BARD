@@ -201,14 +201,14 @@
 
         });
 
-    	$("button", ".deleteItemButton").button({
+    	$(".deleteItemButton button" ).button({
              icons:{
                 primary:"ui-icon-trash"
             },
             text: false
         }).click(function (event) {
         		var itemId = $(this).attr('id');
-        		var assayContextId =$(this).parents("div.span4").attr('id');
+        		var assayContextId =$(this).parents("div.card").attr('id');
         		$("#dialog_confirm_delete_item").dialog("option", "buttons",[
 				{
 					text: "Delete",
@@ -278,19 +278,19 @@
             });
         });
         $(document).ready(function () {
-            $("div.span4").droppable({
+            $("div.card").droppable({
                 hoverClass:"drophoverCard",
                 drop:function (event, ui) {
-                    var src_assay_context_item_id = ui.draggable.attr('id');
+                    var src_assay_context_item_id = ui.draggable.closest('tr').attr('id');
                     var target_assay_context_id = $(this).find('caption').attr('id');
                     var data = {'src_assay_context_item_id':src_assay_context_item_id,
                         'target_assay_context_id':target_assay_context_id};
+//                    alert(data.src_assay_context_item_id + ' ' + data.target_assay_context_id );
                     $.ajax({
                         type:'POST',
                         url:'../addItemToCard',
                         data:data,
                         success:function (data) {
-                        	/*alert("div.span4 addItemToCard  " + data);*/
                             $("div#cardHolder").html(data);
                             initDnd();
                         }
