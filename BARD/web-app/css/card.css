@@ -1,31 +1,6 @@
-div.cardView table.gridtable {
-    width: 100%;
-    table-layout: fixed;
-}
-
-div.cardView table.gridtable caption {
-    text-align: left;
-    font-size: larger;
-    font-weight: bolder;
-    margin: 4px;
-    border: 1px;
-    border-color: #000000;
-}
-
-div.cardView div.card {
-    border: 1px solid black;
-    width: 30%;
-    padding: 1%;
-    float: left;
-    word-wrap: break-word;
-    min-height: 100px;
-    margin: 5px;
-    background-color: #e0ffff;
-}
-
-div.cardView table.gridtable td {
-    width: 50%;
-    border-color: #d3d3d3;
+.btn-tiny {
+  padding: 0px 0px;
+  line-height: 0px;
 }
 
 .drophover {
@@ -37,10 +12,13 @@ div.cardView table.gridtable td {
     background-color: green;
 }
 
-.table drophoverCard {
-
-    border: 1px solid red;
-    /* border-color: red; */
+div.drophoverCard{
+    border: 2px solid green;
+    padding-left: 5px;
+    padding-right: 10px;
+}
+div.drophoverCard table.table{
+    margin-right: 5px;
 }
 
 .roundedBorder {
@@ -57,13 +35,26 @@ table.table {
 }
 
 table.table th, table.table td {
-    padding: 0px;
-    line-height: 20px;
+    margin-left: 1px;
+    margin-right: 1px;
+    line-height: 14px;
+    padding: 1px;
     text-align: left;
     vertical-align: top;
-    border-top: 1px solid #DDD;
+    border: 1px solid #DDD;
 }
-
+table.table td.attributeLabel {
+    width: 25%;
+}
+table.table td.valuedLabel {
+    width: 73%;
+}
+table.table td.deleteItemButton {
+    width: 2%;
+}
+.card-table-container{
+    background-color: #ffffff;
+}
 .card-group {
     border: 1px solid #000000;
     border-color: #a9a9a9;
