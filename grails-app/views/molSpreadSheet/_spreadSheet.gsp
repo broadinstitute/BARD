@@ -17,7 +17,6 @@
     </div>
 
     <div class="span10">
-
         <g:if test="${molSpreadSheetData?.mssHeaders?.size() > 0}">
             <label class="checkbox">
                 <input type="checkbox" defaultChecked="unchecked" name="showPromiscuityScores" id="showPromiscuityScores">
@@ -83,7 +82,7 @@
                             <g:if test="${spreadSheetActivityStorage != null}">
                                 <p>
 
-                                <div data-detail-id="drc_${spreadSheetActivityStorage.sid}"
+                                <div data-detail-id="drc_${spreadSheetActivityStorage.sid}_${colCnt}"
                                      class="drc-popover-link btn btn-link"
                                      data-original-title="${spreadSheetActivityStorage.hillCurveValueId}"
                                      data-html="true"
@@ -91,7 +90,7 @@
                                     ${molSpreadSheetData?.displayValue(rowCnt, colCnt)?."value"}</div>
                                 </p>
 
-                                <div class='popover-content-wrapper' id='drc_${spreadSheetActivityStorage.sid}'
+                                <div class='popover-content-wrapper' id="drc_${spreadSheetActivityStorage.sid}_${colCnt}"
                                      style="display: none;">
                                     <div class="center-aligned">
                                         <img alt="${spreadSheetActivityStorage.sid}"
