@@ -240,6 +240,7 @@
                 }
             });
         });
+        
         $(document).ready(function () {
             $("tr.context_item_row").droppable({
                 hoverClass:"drophover",
@@ -283,6 +284,8 @@
                 }
             });
         });
+
+        
     };
     $(document).ready(function () {
         initDnd();
