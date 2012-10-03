@@ -51,8 +51,8 @@ class AssayContextConstraintUnitSpec extends Specification {
         where:
         desc               | valueUnderTest                          | valid | errorCode
         'null not valid'   | null                                    | false | 'nullable'
-        'blank not valid'  | ''                                      | false | 'blank'
-        'blank not valid'  | '   '                                   | false | 'blank'
+        'blank not valid'  | ''                                      | true  | null
+        'blank not valid'  | '   '                                   | true  | null
 
         'too long'         | createString(CONTEXT_NAME_MAX_SIZE + 1) | false | 'maxSize.exceeded'
         'exactly at limit' | createString(CONTEXT_NAME_MAX_SIZE)     | true  | null
