@@ -48,22 +48,14 @@ class ShoppingCartServiceIntegrationSpec extends IntegrationSpec {
         given: "A shopping cart"
         assertNotNull shoppingCartService
         CartAssay cartAssay = new CartAssay(assayTitle:"This is an assay")
+        CartAssay cartAssay2 = new CartAssay(assayTitle:"This is another assay")
 
-        when: "item is added to cart"
+        when: "The first assay is added to cart"
         shoppingCartService.addToShoppingCart(cartAssay)
 
-        then: "item is in shopping cart"
+        then: "One item is in shopping cart and the other isn't"
         assert queryCartService.isInShoppingCart(cartAssay)
-    }
-
-    void "Test isInShoppingCart for empty cart"() {
-        given: "An empty shopping cart"
-        assertNotNull shoppingCartService
-        CartAssay cartAssay = new CartAssay(assayTitle:"This is an assay")
-
-
-        then: "item is not in shopping cart"
-        assert !queryCartService.isInShoppingCart(cartAssay)
+        assert !queryCartService.isInShoppingCart(cartAssay2)
     }
 
 

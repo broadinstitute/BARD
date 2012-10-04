@@ -2,6 +2,7 @@ package bardqueryapi
 
 import com.metasieve.shoppingcart.Shoppable
 import com.metasieve.shoppingcart.ShoppingCartService
+import grails.converters.JSON
 
 class QueryCartController {
     ShoppingCartService shoppingCartService
@@ -86,5 +87,12 @@ class QueryCartController {
     def removeAll() {
         queryCartService.emptyShoppingCart()
         render( template:'/bardWebInterface/sarCartContent', model: getModelForDetails() ) // refresh the cart display
+    }
+
+    def isInCart() {
+        int idToRemove = Integer.parseInt(params.id)
+        def shoppingItem = Shoppable.get(idToRemove)
+        Boolean result = queryCartService.isInShoppingCart(shoppingItem)
+        render result as JSON
     }
 }
