@@ -1,4 +1,4 @@
-package webtests
+
 /*
 	This is the Geb configuration file.
 	
