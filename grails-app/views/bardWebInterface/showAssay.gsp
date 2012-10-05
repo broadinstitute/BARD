@@ -96,7 +96,7 @@
         <div class="accordion-group">
             <div class="accordion-heading">
                 <a href="#results-header" id="results-header" class="accordion-toggle" data-toggle="collapse"
-                   data-target="#result-info"><i class="icon-chevron-right"></i> Experiments</a>
+                   data-target="#result-info"><i class="icon-chevron-right"></i> Experiments (${experiments.size()})</a>
 
                 <div id="result-info" class="accordion-body collapse">
                     <div class="accordion-inner">

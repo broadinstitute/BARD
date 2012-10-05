@@ -26,5 +26,11 @@ beans = {
                 promiscuityScoreService = ref('promiscuityScoreService')
             }
     }
+    crowdAuthenticationProvider(org.broadinstitute.cbip.crowd.CrowdAuthenticationProviderService) {// beans here
+        crowdClient = ref('crowdClient')
+        grailsApplication = application
+    }
+    inMemMapAuthenticationProviderService(org.broadinstitute.cbip.crowd.noServer.MockCrowdAuthenticationProviderService)
+
 
 }

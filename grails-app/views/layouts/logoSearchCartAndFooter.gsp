@@ -12,15 +12,20 @@
     <link rel="shortcut icon" href="${resource(dir: 'images', file: 'favicon.ico')}" type="image/x-icon">
 
     <g:layoutHead/>
-    <r:require modules="core,bootstrap,cart" />
-    <r:layoutResources />
+    <r:require modules="core,bootstrap,cart"/>
+    <r:layoutResources/>
 </head>
+
 <body>
 <div class="container-fluid">
     <div class="row-fluid header">
+        <g:render template="/layouts/templates/loginStrip"/>
+    </div>
+
+    <div class="row-fluid header">
         <div class="span3">
-            <a href="${createLink(controller:'BardWebInterface',action:'index')}">
-                <img src="${resource(dir: 'images', file: 'bard_logo_small.png')}" alt="BioAssay Research Database" />
+            <a href="${createLink(controller: 'BardWebInterface', action: 'index')}">
+                <img src="${resource(dir: 'images', file: 'bard_logo_small.png')}" alt="BioAssay Research Database"/>
             </a>
         </div>
 
@@ -47,7 +52,7 @@
 </div>
 
 <r:require modules="core,bootstrap,cart"/>
-<r:layoutResources />
+<r:layoutResources/>
 
 </body>
 </html>

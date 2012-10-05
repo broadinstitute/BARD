@@ -17,7 +17,9 @@
 </head>
 <body>
 <div class="container-fluid">
-
+    <div class="row-fluid">
+        <g:render template="/layouts/templates/loginStrip"/>
+    </div>
     <div class="row-fluid">
         <div class="span3 offset9">
             <g:render template="/layouts/templates/queryCart"/>

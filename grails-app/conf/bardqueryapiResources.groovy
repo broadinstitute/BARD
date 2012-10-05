@@ -20,7 +20,7 @@ modules = {
     //Adding version allows clients to not cache javascript
     search {
         resource url:"js/search.js"
-        resource url:'/js/jquery.address-1.4/jquery.address-1.4.js?state=/'
+      //  resource url:'/js/jquery.address-1.4/jquery.address-1.4.js?state=/'
     }
     structureSearch {
         resource url:"js/structureSearchDialog.js"

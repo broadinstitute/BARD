@@ -62,7 +62,7 @@ grails.project.dependency.resolution = {
         build ":codenarc:0.15"
         compile ":twitter-bootstrap:2.1.0"
         compile ":shopping-cart:0.8.2"
-
+        compile ":cbipcrowdauthentication:0.3.0"
         build ":tomcat:$grailsVersion"
         compile ":geb:$gebVersion"
         compile ":remote-control:1.2"

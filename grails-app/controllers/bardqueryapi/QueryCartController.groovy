@@ -2,7 +2,9 @@ package bardqueryapi
 
 import com.metasieve.shoppingcart.Shoppable
 import com.metasieve.shoppingcart.ShoppingCartService
+import grails.plugins.springsecurity.Secured
 
+@Secured(['isFullyAuthenticated()'])
 class QueryCartController {
     ShoppingCartService shoppingCartService
     QueryCartService queryCartService

@@ -1,16 +1,14 @@
 import grails.util.Environment
 import org.apache.log4j.DailyRollingFileAppender
 
-
-
 //TODO: Override in dev, qa and prod to point to the current stable realse
 ncgc.server.root.url = "http://bard.nih.gov/api/v6"
-promiscuityscrores.root.url="${ncgc.server.root.url}/plugins/badapple/prom/cid/"
+promiscuityscrores.root.url = "${ncgc.server.root.url}/plugins/badapple/prom/cid/"
 //override in config file for environment
-grails.serverURL ="http://localhost:8080/bardwebquery"
+grails.serverURL = "http://localhost:8080/bardwebquery"
 //URL to the ROOT of the cap server
-bard.cap.home="http://localhost:8081/BARD/"
-bard.cap.assay="${bard.cap.home}assayDefinition/show/"
+bard.cap.home = "http://localhost:8081/BARD/"
+bard.cap.assay = "${bard.cap.home}assayDefinition/show/"
 
 
 grails.project.groupId = appName // change this to alter the default package name and Maven publishing destination
@@ -105,6 +103,27 @@ log4j = {
             'org.springframework',
             'org.hibernate',
             'net.sf.ehcache.hibernate'
+}
+CbipCrowd {
+    application.url = 'https://crowd.somewhere.com/crowd/'
+    application.username = 'bard'
+    application.password = 'ChangeMe'
+    applicationSpecificRoles = ['ROLE_USER', 'ROLE_NO_ROLE']
+}
+grails {
+    plugins {
+        springsecurity {
+            roleHierarchy = '''ROLE_USER > ROLE_NO_ROLE'''
+            providerNames = ['inMemMapAuthenticationProviderService', 'crowdAuthenticationProvider']
+            useBasicAuth = true
+            basic.realmName = 'WEBQUERY'
+            filterChain.chainMap = [
+                    '/bardWebInterface/**': 'JOINED_FILTERS,-exceptionTranslationFilter',
+                    '/**': 'JOINED_FILTERS,-basicAuthenticationFilter,-basicExceptionTranslationFilter'
+            ]
+
+        }
+    }
 }
 
 /**
