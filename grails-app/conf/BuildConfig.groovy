@@ -39,8 +39,13 @@ grails.project.dependency.resolution = {
         test("org.seleniumhq.selenium:selenium-htmlunit-driver:$seleniumVersion") {
             exclude "xml-apis"
         }
-        test("org.seleniumhq.selenium:selenium-chrome-driver:$seleniumVersion")
-        test("org.seleniumhq.selenium:selenium-firefox-driver:$seleniumVersion")
+        test("org.seleniumhq.selenium:selenium-chrome-driver:$seleniumVersion") {
+            exclude "xml-apis"
+        }
+
+        test("org.seleniumhq.selenium:selenium-firefox-driver:$seleniumVersion")  {
+            exclude "xml-apis"
+        }
         compile 'org.apache.commons:commons-lang3:3.1'
         compile 'org.apache.httpcomponents:httpcomponents-core:4.1.1'
         compile 'org.apache.httpcomponents:httpclient:4.1.1'
