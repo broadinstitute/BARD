@@ -1,4 +1,4 @@
-package webtests
+
 /*
 	This is the Geb configuration file.
 	
@@ -7,6 +7,7 @@ package webtests
 
 
 import org.openqa.selenium.firefox.FirefoxDriver
+import org.openqa.selenium.firefox.FirefoxProfile
 import org.openqa.selenium.chrome.ChromeDriver
 import org.openqa.selenium.htmlunit.HtmlUnitDriver
 
@@ -16,7 +17,6 @@ driver = {
 	def driver = new HtmlUnitDriver()
 	driver.javascriptEnabled = true
     driver
-    //def driver = { new FirefoxDriver() }
 }
 environments {
 	
@@ -29,7 +29,11 @@ environments {
 	// run as “grails -Dgeb.env=firefox test-app”
 	// See: http://code.google.com/p/selenium/wiki/FirefoxDriver
 	firefox {
-		driver = { new FirefoxDriver() }
+        File profileDir = new File("target/firefoxProfile")
+        if (!profileDir.exists()) { profileDir.mkdir() }
+
+        FirefoxProfile profile = new FirefoxProfile(profileDir)
+		driver = { new FirefoxDriver(profile) }
 	}
 
 }
