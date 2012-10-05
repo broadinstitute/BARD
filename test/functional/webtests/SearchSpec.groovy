@@ -7,10 +7,13 @@ import spock.lang.Stepwise
 class SearchSpec extends GebReportingSpec {
 
     def "Go to home page"() {
+        given:
+        int x = 0
         when:
-        to HomePage
+        //to HomePage
+        int y = x + 1
         then:
-        println("")
+        println("x")
         //at HomePage
     }
 
