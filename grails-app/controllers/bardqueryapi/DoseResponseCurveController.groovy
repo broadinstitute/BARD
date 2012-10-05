@@ -15,7 +15,6 @@ class DoseResponseCurveController {
      * @return render the jsp
      */
     def doseResponseCurve(DrcCurveCommand drcCurveCommand) {
-        if (drcCurveCommand==null)   then    drcCurveCommand=    DoseResponseCurveController.testPostBody()
         Double width = new Double(300);
         Double height = new Double(200);
 
@@ -37,7 +36,7 @@ class DoseResponseCurveController {
                             "Compound search has encountered an error:\n${exp.message}")
                 }
 
-            }else{ //TODO: return a sensible error
+            } else { //TODO: return a sensible error
                 drcCurveCommand.errors.allErrors.each {
                     println it
                 }
@@ -73,10 +72,10 @@ class DoseResponseCurveController {
                 0.000035000000934815034f]
         int index = 0
         def concentrationMap = [:]
-        for(Double concentration:concentrations){
+        for (Double concentration : concentrations) {
             String key = "concentrations[" + index + "]"
             Double value = concentration
-            concentrationMap.put(key,value)
+            concentrationMap.put(key, value)
             ++index
         }
         requestMap.putAll(concentrationMap)
@@ -101,28 +100,28 @@ class DoseResponseCurveController {
                 -85.94784545898438f,
                 -92.01828002929688f,
                 -95.36405181884766f]
-        for(Double activity:activities){
+        for (Double activity : activities) {
             String key = "activities[" + index + "]"
-            Double value =activity
-            activityMap.put(key,value)
+            Double value = activity
+            activityMap.put(key, value)
             ++index
         }
         requestMap.putAll(activityMap)
 
 
         Double ac50 = 0.00000124934001632937;
-        requestMap.put("ac50",ac50)
+        requestMap.put("ac50", ac50)
 
 
 
         Double hillSlope = 0.9267182946205139;
-        requestMap.put("hillSlope",hillSlope)
+        requestMap.put("hillSlope", hillSlope)
 
         Double s0 = 0.15947775542736053;
-        requestMap.put("s0",s0)
+        requestMap.put("s0", s0)
 
         Double sinf = -98.35183715820312;
-        requestMap.put("sinf",sinf)
+        requestMap.put("sinf", sinf)
 
         return requestMap
     }

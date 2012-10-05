@@ -9,6 +9,7 @@ import org.apache.commons.lang.StringUtils
 import promiscuity.PromiscuityScore
 
 import javax.servlet.http.HttpServletResponse
+import grails.plugins.springsecurity.Secured
 
 /**
  *
@@ -19,6 +20,7 @@ import javax.servlet.http.HttpServletResponse
  * To change this template use File | Settings | File Templates.
  */
 @Mixin(SearchHelper)
+@Secured(['isFullyAuthenticated()'])
 class BardWebInterfaceController {
     def shoppingCartService
     IQueryService queryService

@@ -3,11 +3,8 @@ package bardqueryapi
 import grails.plugin.remotecontrol.RemoteControl
 import groovyx.net.http.HttpResponseDecorator
 import groovyx.net.http.RESTClient
-import net.sf.json.JSONObject
 import spock.lang.Specification
 import spock.lang.Unroll
-
-import javax.servlet.http.HttpServletResponse
 
 import static groovyx.net.http.ContentType.URLENC
 
@@ -17,27 +14,32 @@ class DoseResponseCurveFunctionalSpec extends Specification {
     String baseUrl = remote { ctx.grailsApplication.config.grails.serverURL }
 
     def "test Render a dose response Curve #label"() {
-        given: "That we have created a valid data set"
-         def postBody =createPostBody()
-
+        given: "That we have successfully logged into the system and created a valid request"
         String requestUrl = "${baseUrl}/"
         RESTClient http = new RESTClient(requestUrl)
+        def postBody = createPostBody()
+
 
         when: 'We send an HTTP POST request to the Dose response curve service'
-        HttpResponseDecorator serverResponse = (HttpResponseDecorator) http.post(path: 'doseResponseCurve',
-                body: postBody,
-                requestContentType: URLENC)
-        then: 'We expect the a dose response curve would be generated'
+        HttpResponseDecorator serverResponse =
+            (HttpResponseDecorator) http.post(
+                    path: 'doseResponseCurve',
+                    body: postBody,
+                    requestContentType: URLENC
+            )
+        then: 'We expect that a dose response curve would be generated'
         assert serverResponse.success
-        assert serverResponse.contentType=='image/png'
-        download(serverResponse.data,"drc2")
+        assert serverResponse.contentType == 'image/png'
+        download(serverResponse.data, "drc2")
     }
+
     private void download(final ByteArrayInputStream stream, String fileName) {
 
         new File("testDRC_${fileName}.png").withOutputStream { out ->
             out << stream
         }
     }
+
     private Map createPostBody() {
         def requestMap = [:]
         //== Create Concentration values
@@ -61,10 +63,10 @@ class DoseResponseCurveFunctionalSpec extends Specification {
                 0.000035000000934815034f]
         int index = 0
         def concentrationMap = [:]
-        for(Double concentration:concentrations){
+        for (Double concentration : concentrations) {
             String key = "concentrations[" + index + "]"
             Double value = concentration
-            concentrationMap.put(key,value)
+            concentrationMap.put(key, value)
             ++index
         }
         requestMap.putAll(concentrationMap)
@@ -89,28 +91,28 @@ class DoseResponseCurveFunctionalSpec extends Specification {
                 -85.94784545898438f,
                 -92.01828002929688f,
                 -95.36405181884766f]
-        for(Double activity:activities){
+        for (Double activity : activities) {
             String key = "activities[" + index + "]"
-            Double value =activity
-            activityMap.put(key,value)
+            Double value = activity
+            activityMap.put(key, value)
             ++index
         }
         requestMap.putAll(activityMap)
 
 
         Double ac50 = 0.00000124934001632937;
-        requestMap.put("ac50",ac50)
+        requestMap.put("ac50", ac50)
 
 
 
         Double hillSlope = 0.9267182946205139;
-        requestMap.put("hillSlope",hillSlope)
+        requestMap.put("hillSlope", hillSlope)
 
         Double s0 = 0.15947775542736053;
-        requestMap.put("s0",s0)
+        requestMap.put("s0", s0)
 
         Double sinf = -98.35183715820312;
-        requestMap.put("sinf",sinf)
+        requestMap.put("sinf", sinf)
 
         return requestMap
     }

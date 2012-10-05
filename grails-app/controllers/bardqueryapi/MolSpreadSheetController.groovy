@@ -1,7 +1,9 @@
 package bardqueryapi
 
 import molspreadsheet.MolSpreadSheetData
+import grails.plugins.springsecurity.Secured
 
+@Secured(['isFullyAuthenticated()'])
 class MolSpreadSheetController {
     MolecularSpreadSheetService molecularSpreadSheetService
     def index() {
