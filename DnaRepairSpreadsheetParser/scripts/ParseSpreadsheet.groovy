@@ -27,7 +27,7 @@ FilenameFilter xlsxExtensionFilenameFilter = new FilenameFilter() {
     }
 }
 //List<String> inputDirPathArray = ["test/exampleData/minAssayAnnotationSpreadsheets/", "test/exampleData/dnarepairmindataspreadsheets/"]
-List<String> inputDirPathArray = ["test/exampleData/minAssayAnnotationSpreadsheets/"]
+List<String> inputDirPathArray = ["test/exampleData/singleFile/"]
 for (String inputDirPath : inputDirPathArray) {
     File inputDirFile = new File(inputDirPath)
     inputFileList.addAll(inputDirFile.listFiles(xlsxExtensionFilenameFilter))
@@ -92,4 +92,3 @@ Log.logger.info("finished at ${endDate}   duration[min]: ${durationMin}")
 
 
 return false
-

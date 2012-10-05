@@ -77,7 +77,32 @@ class AttributeNameMappingBuilder {
                 'number-per-well': 'number per well',
                 'uIU/mL': 'micro interational unit per milliliter',
                 '--': '',
-                'Result type': 'result detail']
+                'Result type': 'result detail',
+                'cell line':	'cell line',
+                'Fa2N-4':	'Fa2N-4',
+                'flow cytometry |  side scatter':	'flow cytometry | side scatter',
+                'purified Salmon sperm DNA':	'purified DNA',
+                'µL/well':	'uL/well',
+                'µci/mL':	'micro curie per milliliter',
+                'µg protein/mL':	'microgram per milliliter',
+                'HDAC fluorometric detection Assay Kit':	'HDAC fluorometric detection assay kit',
+                'ImageXpress Micro ':	'ImageXpress Micro',
+                'single-feature extraction':	'single-feature extraction',
+                'tracer':	'tracer',
+                'Tecan Safire 2':	'Tecan Safire 2 ',
+                'Amoracia rusticana':	'Amoracia rusticana',
+                'Differientated cultured cells':	'differentiated cultured cell',
+                'IPTG':	'IPTG',
+                'SuperSignal ELISA Femto Luminol/Enhancer Solution':	'SuperSignal ELISA Femto Luminol/Enhancer Solution',
+                'U/ml':	'unit per milliliter',
+                'ampicillin':	'ampicillin',
+                'arabinose':	'arabinose',
+                'chloramphenicol':	'chloramphenicol',
+                'glucose':	'glucose',
+                'uCi':	'microcurie',
+                'uL':	'microliter',
+                'ug/ml':	'microgram per milliliter',
+                'number-per-well':	'number per well']
 
         return attributeNameMapping
     }
