@@ -165,6 +165,7 @@ application/vnd.bard.cap+xml;type=dictionary should give the client the entire d
                                                   <xs:enumeration value="child of"/>
                                                   <xs:enumeration value="has_a"/>
                                                   <xs:enumeration value="derives from"/>
+                                                  <xs:enumeration value="subClassOf"/>
                                                   <xs:enumeration value="is_a"/>
                                                 </xs:restriction>
                                             </xs:simpleType>
