@@ -70,26 +70,25 @@
 
             <br/>
             <div class="leftofline">
-            <button class="visualizebiggerbutton">
-            <div class="btn-group" style="vertical-align: bottom;">
-                <a class="btn-small dropdown-toggle" data-toggle="dropdown" href="#">
-                    <i class="icon-eye-open"></i> Visualize
-                    <span class="caret"></span>
-                </a>
-                <ul class="dropdown-menu">
-                    <li><g:link controller="molSpreadSheet">Molecular Spreadsheet</g:link></li>
-                    <li><a href="http://bard.nih.gov/bard/compounds/44552613?view=Record" target="_blank">Desktop Client</a></li>
-                </ul>
-            </div>
-            </button>
+                <div class="btn-group" style="vertical-align: bottom;">
+                    <a class="btn dropdown-toggle" data-toggle="dropdown"  role="button" data-target="#">
+                        <i class="icon-eye-open"></i> Visualize
+                        <span class="caret"></span>
+                    </a>
+                    <ul class="dropdown-menu pull-left"  role="menu">
+                        <li><g:link controller="molSpreadSheet">Molecular Spreadsheet</g:link></li>
+                        <li><a href="http://bard.nih.gov/bard/compounds/44552613?view=Record" target="_blank">Desktop Client</a></li>
+                    </ul>
+                </div>
             </div>
 
             <div class="rightofline">
 
-            <button  class="visualizebiggerbutton"><a href="#" class="removeAllFromCart">Clear all</a>
-                </button>
+                <a class="removeAllFromCart btn" role="button" href="#" >
+                    Clear all
+                </a>
 
-             </div>
+            </div>
 
         </td>
     </tr>
