@@ -72,6 +72,7 @@ grails.project.dependency.resolution = {
         compile ":geb:$gebVersion"
         compile ":remote-control:1.2"
         compile ':remote-pagination:0.3'
+        compile ":clover:3.1.6"
     }
 }
 
