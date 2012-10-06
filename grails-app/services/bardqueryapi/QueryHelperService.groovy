@@ -14,9 +14,11 @@ import java.util.regex.Pattern
 
 class QueryHelperService {
 
-    //These are the terms that we would use for autosuggest
-    //Add more terms as we go along
-    //We should store this in a database so it becomes easy to manage
+    /**
+     *  These are the terms that we would use for autosuggest
+     *   Add more terms as we go along
+     *  We should store this in a database so it becomes easy to manage
+     */
     final static Map<String, String> AUTO_SUGGEST_FILTERS = [
             'gobp_term': 'GO Biological Process Term',
             'gocc_term': 'GO Cellular Component Term',
@@ -36,6 +38,7 @@ class QueryHelperService {
     /**
      *
      * @param term
+     * @param autoSuggestResponseFromJDO
      * @return the list of maps to use for auto suggest
      */
     public List<Map<String, String>> autoComplete(final String term, final Map<String, List<String>> autoSuggestResponseFromJDO) {
@@ -83,7 +86,7 @@ class QueryHelperService {
      * @param searchString
      * @param top
      * @param skip
-     * @param searchFilters
+     * @param searchFilters {@link SearchFilter}'s
      * @return SearchParams
      */
     public SearchParams constructSearchParams(final String searchString, final Integer top, final Integer skip, final List<SearchFilter> searchFilters) {
@@ -97,8 +100,8 @@ class QueryHelperService {
     //=========== Construct adapters ===================
     /**
      * Convert the list of compounds to the list of adapters
-     * @param compounds
-     * @return List < CompoundAdapter > 's
+     * @param compounds {@link Compound}'s
+     * @return List of {@link CompoundAdapter}'s
      */
     final List<CompoundAdapter> compoundsToAdapters(final Collection<Compound> compounds) {
         final List<CompoundAdapter> compoundAdapters = []
@@ -109,9 +112,9 @@ class QueryHelperService {
         return compoundAdapters
     }
     /**
-     * convert Assay's to AssayAdapter's
-     * @param assays
-     * @return list of AssayAdapter's
+     * convert a list Assay's to a list of AssayAdapter's
+     * @param assays {@link Assay}
+     * @return list of {@link AssayAdapter}'s
      */
     public List<AssayAdapter> assaysToAdapters(final Collection<Assay> assays) {
         final List<AssayAdapter> assayAdapters = []
@@ -122,8 +125,8 @@ class QueryHelperService {
     }
     /**
      * convert Project's to ProjectAdapter's
-     * @param projects
-     * @return list of ProjectAdapter's
+     * @param projects {@link Project}'s
+     * @return list of {@link ProjectAdapter}'s
      */
     public List<ProjectAdapter> projectsToAdapters(final Collection<Project> projects) {
         final List<ProjectAdapter> projectAdapters = []
@@ -135,6 +138,8 @@ class QueryHelperService {
 
     /**
      * Extract filters from the search string if any
+     * @param searchFilters {@link SearchFilter}'s
+     * @param searchString
      * @return list of filters from search String
      */
     public void findFiltersInSearchBox(final List<SearchFilter> searchFilters, final String searchString) {
@@ -152,7 +157,7 @@ class QueryHelperService {
      * @param filtersMap
      * @param terms
      * @param currentAutoSuggestKey
-     * @return list of auto suggest terms
+     * @return Map of auto suggest terms
      */
     protected List<Map<String, String>> getAutoSuggestTerms(final Map<String, String> filtersMap,
                                                             final List<String> terms,
@@ -170,10 +175,10 @@ class QueryHelperService {
     }
 
     /**
-     * Return true if the string contains filtered terms
+     * Return the part of the searchString that matched the filtered terms
      *
      * For example gobp_term:"Dna repair"
-     * Is a filtered term
+     * Is a filtered term and we should return  gobp_term
      * @param searchString
      * @return String
      */
@@ -230,14 +235,15 @@ class QueryHelperService {
      */
     protected String stripCustomStringFromSearchString(final String searchString) {
         final String updatedSearchString = stripCustomFiltersFromSearchString(searchString)
-        if(!updatedSearchString){
-          updatedSearchString = searchString
+        if (!updatedSearchString) {
+            updatedSearchString = searchString
         }
         return updatedSearchString
     }
     /**
      * If this string has custom search paramaters, remove them
      * @param searchString
+     * @return String
      */
     protected String stripCustomFiltersFromSearchString(final String searchString) {
         if (searchString) {

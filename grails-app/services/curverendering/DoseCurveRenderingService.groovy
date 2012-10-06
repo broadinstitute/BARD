@@ -12,8 +12,8 @@ public class DoseCurveRenderingService {
      *
      * @param concentrations
      * @param activities
-     * @param slope  - ac50
-     * @param coef   - hillSlope
+     * @param slope - ac50
+     * @param coef - hillSlope
      * @param s0
      * @param sinf
      * @param xNormMin
@@ -48,8 +48,8 @@ public class DoseCurveRenderingService {
      * @return JFreeChart
      */
     public JFreeChart createDoseCurve(final HillCurveValue hillCurveValue, Double xNormMin, Double xNormMax, Double yNormMin, Double yNormMax) {
-        return createDoseCurve(hillCurveValue.getConc() as List<Double>, hillCurveValue.getResponse() as List<Double>,hillCurveValue.slope,hillCurveValue.coef,  hillCurveValue.s0,
-                hillCurveValue.sinf, xNormMin, xNormMax, yNormMin, yNormMax )
+        return createDoseCurve(hillCurveValue.getConc() as List<Double>, hillCurveValue.getResponse() as List<Double>, hillCurveValue.slope, hillCurveValue.coef, hillCurveValue.s0,
+                hillCurveValue.sinf, xNormMin, xNormMax, yNormMin, yNormMax)
     }
 
     /**
@@ -62,17 +62,16 @@ public class DoseCurveRenderingService {
      * @param sinf
      * @return Drc
      */
-    protected Drc findDrcData(final List<Double> concentrations, final List<Double> activities, final Double ac50, final Double hillSlope,
+    public Drc findDrcData(final List<Double> concentrations, final List<Double> activities, final Double ac50, final Double hillSlope,
                               final Double s0, final Double sinf) {
         try {
 
             final List<Boolean> isValid = new ArrayList<Boolean>()
             //pre-populate, we are doing this because the DRC requires an array of booleans
             //I could change it but it would require too many changes
-            for (Double activity: activities) {
+            for (Double activity : activities) {
                 isValid.add(Boolean.TRUE)
             }
-            //public CurveParameters(Double ac50, Date resultTime, Double hill_slope, Double s0, Double sinf, Double lower95CL, Double upper95CL) {
             //ac50 is the slope
             CurveParameters curveParameters = new CurveParameters(
                     ac50,

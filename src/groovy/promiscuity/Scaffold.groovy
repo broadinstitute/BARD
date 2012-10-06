@@ -91,6 +91,9 @@ public class Scaffold implements Comparable<Scaffold> {
 
 }
 
+/**
+ * Warning Levels
+ */
 public enum WarningLevel {
     none(0,4000),
     moderate(4000,10000),

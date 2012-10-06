@@ -12,33 +12,52 @@ import bard.core.*
 import bard.core.rest.*
 
 public class QueryServiceWrapper {
+    /**
+     * {@link RESTCompoundService}
+     */
     final RESTCompoundService restCompoundService;
+    /**
+     * {@link RESTProjectService}
+     */
     final RESTProjectService restProjectService;
+    /**
+     * {@link RESTAssayService}
+     */
     final RESTAssayService restAssayService;
+    /**
+     * {@link RESTExperimentService}
+     */
     final RESTExperimentService restExperimentService;
     final String baseURL
     final String promiscuityScoreURL
+    /**
+     *
+     * @param baseURL
+     * @param promiscuityScoreURL
+     */
     public QueryServiceWrapper(final String baseURL, final String promiscuityScoreURL) {
         this.baseURL = baseURL
         this.promiscuityScoreURL = promiscuityScoreURL;
         EntityServiceManager esm = new RESTEntityServiceManager(baseURL);
         this.restCompoundService = esm.getService(Compound.class);
         this.restAssayService = esm.getService(Assay.class);
-        this.restProjectService= esm.getService(Project.class);
+        this.restProjectService = esm.getService(Project.class);
         this.restExperimentService = esm.getService(Experiment.class);
     }
 
-    public RESTCompoundService getRestCompoundService(){
+    public RESTCompoundService getRestCompoundService() {
         return this.restCompoundService;
     }
-    public RESTProjectService getRestProjectService(){
+
+    public RESTProjectService getRestProjectService() {
         return this.restProjectService;
     }
 
-    public RESTAssayService getRestAssayService(){
+    public RESTAssayService getRestAssayService() {
         return this.restAssayService;
     }
-    public RESTExperimentService getRestExperimentService(){
+
+    public RESTExperimentService getRestExperimentService() {
         return this.restExperimentService;
     }
 }

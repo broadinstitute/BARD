@@ -1,42 +1,44 @@
 package bardqueryapi
 
 import bard.core.StructureSearchParams
-import bard.core.adapter.AssayAdapter
 import bard.core.adapter.CompoundAdapter
-import bard.core.adapter.ProjectAdapter
 
 public interface IQueryService {
 
-
- Map findPromiscuityScoreForCID(final Long cid);
+    /**
+     *
+     * @param cid
+     * return Map
+     * Success would return [status: resp.status, message: 'Success', promiscuityScore: promiscuityScore]
+     * Failure would return [status: HHTTP Error Code, message: "Error getting Promiscuity Score for ${fullURL}", promiscuityScore: null]
+     */
+    Map findPromiscuityScoreForCID(final Long cid);
     //========================================================== Free Text Searches ================================
     /**
-     * We are not quite ready to use this method yet
+     * Find Compounds by Text search
+     *
      * @param searchString
      * @param top
      * @param skip
-     * @param searchFilters
-     * @return
+     * @param searchFilters {@link SearchFilter}'s
+     * @return Map of results
      */
     Map findCompoundsByTextSearch(final String searchString, final Integer top, final Integer skip, final List<SearchFilter> searchFilters);
 
     /**
-     * We can use a trick to get more than 10 records
-     * We are not quite ready to use this method yet
      * @param searchString
      * @param top
      * @param skip
-     * @param searchFilters
-     * @return Map
+     * @param searchFilters {@link SearchFilter}'s
+     * @return Map of results
      */
     Map findAssaysByTextSearch(final String searchString, final Integer top, final Integer skip, final List<SearchFilter> searchFilters);
 
     /**
-     * We are not quite ready to use this method yet
      * @param searchString
      * @param top
      * @param skip
-     * @param searchFilters
+     * @param searchFilters  {@link SearchFilter}'s
      * @return Map
      */
     Map findProjectsByTextSearch(final String searchString, final Integer top, final Integer skip, final List<SearchFilter> searchFilters);
@@ -44,10 +46,10 @@ public interface IQueryService {
     //====================================== Structure Searches ========================================
     /**
      * @param smiles
-     * @param structureSearchParamsType
+     * @param structureSearchParamsType {@link StructureSearchParams}
      * @param top
      * @param skip
-     * @return of compounds
+     * @return Map
      */
     Map structureSearch(final String smiles, final StructureSearchParams.Type structureSearchParamsType, final List<SearchFilter> searchFilters, final int top, final int skip);
 
@@ -55,14 +57,16 @@ public interface IQueryService {
     /**
      * Given a list of Compound Ids return all the compounds that were found
      * @param compoundIds
-     * @return list
+     * @param filters {@link SearchFilter}'s
+     * @return Map
      */
     Map findCompoundsByCIDs(final List<Long> compoundIds, List<SearchFilter> filters);
 
     /**
      * Given a list of Assay Ids return all the assays that were found
      * @param assayIds
-     * @return list
+     * @param filters {@link SearchFilter}'s
+     * @return map
      */
     Map findAssaysByADIDs(final List<Long> assayIds, List<SearchFilter> filters);
 
@@ -70,7 +74,8 @@ public interface IQueryService {
      *
      * Given a list of Project Ids return all the projects that were found
      * @param projectIds
-     * @return list
+     * @param filters {@link SearchFilter}'s
+     * @return Map
      */
     Map findProjectsByPIDs(final List<Long> projectIds, List<SearchFilter> filters);
     //=============== Show Resources Given a Single ID ================
@@ -78,20 +83,20 @@ public interface IQueryService {
     /**
      * Given a CID, get detailed compound information from REST API
      * @param compoundId
-     * @return CompoundAdapter
+     * @return {@link CompoundAdapter}
      */
     CompoundAdapter showCompound(final Long compoundId);
 
     /**
      * Given an assayId, get detailed Assay information from the REST API
      * @param assayId
-     * @return AssayAdapter
+     * @return Map
      */
     Map showAssay(final Long assayId);
     /**
      * Given a projectId, get detailed Project information from the JDO
      * @param projectId
-     * @return ProjectAdapter
+     * @return Map
      */
     Map showProject(final Long projectId);
 
@@ -103,7 +108,10 @@ public interface IQueryService {
      */
     public List<Map<String, String>> autoComplete(final String term);
     /**
+     *
      * Extract filters from the search string if any
+     * @param searchFilters {@link SearchFilter}'s
+     * @param searchString
      * @return list of filters from search String
      */
     public void findFiltersInSearchBox(final List<SearchFilter> searchFilters, final String searchString);

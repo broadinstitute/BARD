@@ -2,8 +2,9 @@ import bardqueryapi.QueryServiceWrapper
 import grails.util.GrailsUtil
 import bardqueryapi.QueryService
 import bardqueryapi.MockQueryService
-
-// Place your Spring DSL code here
+/**
+ * Spring Configuration of resources
+ */
 beans = {
 
     switch (GrailsUtil.environment) {

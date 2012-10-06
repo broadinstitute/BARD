@@ -3,10 +3,10 @@ package promiscuity
 import bardqueryapi.QueryHelperService
 import com.thoughtworks.xstream.XStream
 import grails.converters.XML
+import groovyx.net.http.HttpResponseException
 import groovyx.net.http.RESTClient
 import org.apache.commons.lang.time.StopWatch
 import util.RestClientFactoryService
-import groovyx.net.http.HttpResponseException
 
 class PromiscuityScoreService {
     final XStream xstream
@@ -23,10 +23,11 @@ class PromiscuityScoreService {
     }
     /**
      *
-     * @param fullURL -  something like //'http://bard.nih.gov/api/v4/plugins/badapple/prom/cid/233'
-
-     * @param cid
-     * @return Map
+     * @param fullURL -  something like 'http://bard.nih.gov/api/v4/plugins/badapple/prom/cid/233'
+     * @return Map of objects
+     *
+     * Success would return [status: resp.status, message: 'Success', promiscuityScore: promiscuityScore]
+     * Failure would return  eturn [status: HHTTP Error Code, message: "Error getting Promiscuity Score for ${fullURL}", promiscuityScore: null]
      */
     public Map findPromiscuityScoreForCID(final String fullURL) {
         def resp = null

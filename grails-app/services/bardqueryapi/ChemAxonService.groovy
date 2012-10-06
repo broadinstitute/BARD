@@ -1,18 +1,29 @@
 package bardqueryapi
 
-import chemaxon.struc.Molecule
-import chemaxon.formats.MolImporter
 import chemaxon.formats.MolExporter
-import org.apache.commons.lang3.StringUtils
+import chemaxon.formats.MolImporter
 import chemaxon.marvin.io.MolExportException
+import chemaxon.struc.Molecule
+import org.apache.commons.lang3.StringUtils
 
 class ChemAxonService {
-
+    /**
+     *
+     * @param smiles
+     * @param width
+     * @param height
+     * @return a byte array representation of the Structure
+     */
     byte[] generateStructurePNG(String smiles, Integer width, Integer height) {
         JChemBinFormat jchemBinFormat = new JChemBinFormat(width: width, height: height, imageFormat: 'png', transparencyBackground: true);
         return generateImageBytes(smiles, jchemBinFormat);
     }
-
+    /**
+     *
+     * @param smiles
+     * @param jchemBinFormat {@link JChemBinFormat}
+     * @return a byte array representation of the Structure
+     */
     private byte[] generateImageBytes(String smiles, JChemBinFormat jchemBinFormat) {
         Molecule mol;
         try {

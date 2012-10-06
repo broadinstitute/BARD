@@ -4,7 +4,7 @@ import bard.core.HillCurveValue
 import molspreadsheet.SpreadSheetActivityStorage
 
 /**
- * Since there is no experimentAdapter I had to make a method to open up the experiment
+ *
  */
 public class SpreadSheetActivity {
     Long experimentId
@@ -15,7 +15,7 @@ public class SpreadSheetActivity {
     ActivityOutcome activityOutcome
     HillCurveValue hillCurveValue
 
-    List<HillCurveValue> readouts = [] // TODO this is a hack to get multiple displayed in showExperimentResult for demo; FIXME
+    List<HillCurveValue> readouts = [] // TODO this is a hack to get multiple readouts displayed in showExperimentResult for demo; FIXME
 
     public SpreadSheetActivity() {
 
