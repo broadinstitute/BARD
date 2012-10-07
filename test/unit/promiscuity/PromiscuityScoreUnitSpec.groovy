@@ -45,8 +45,8 @@ class PromiscuityScoreUnitSpec extends Specification {
 
     void "promiscuityScore.compareTo #label"() {
         given: "A valid PromiscuityScore Object"
-        PromiscuityScore promiscuityScore1 = new PromiscuityScore(cid: cid1)
-        PromiscuityScore promiscuityScore2 = new PromiscuityScore(cid: cid2)
+        PromiscuityScore promiscuityScore1 = new PromiscuityScore(cid: cid1, scaffolds: null)
+        PromiscuityScore promiscuityScore2 = new PromiscuityScore(cid: cid2, scaffolds: null)
         when: "We call the compareTo method with promiscuityScore1 and promiscuityScore1"
         final int compareToVal = promiscuityScore1.compareTo(promiscuityScore2)
         then: "We expected the method to return the expected value"

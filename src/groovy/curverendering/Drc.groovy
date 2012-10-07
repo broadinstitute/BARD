@@ -16,9 +16,7 @@ public class Drc
     List<Boolean> isValid=[];
     CurveParameters curveParameters;
     Color color;
-    public Drc(){
 
-    }
     public Drc(List<Double> concentrations, List<Double> activities, List<Boolean> isValid, CurveParameters curveParameters, Color color) {
         this.concentrations = concentrations;
         this.activities = activities;

@@ -113,7 +113,6 @@ class ExperimentalValueSpec  extends  Specification {
         assertNotNull(experimentalValue)
 
         then: "The resulting search filters size must equal the expected value"
-        println experimentalValue.toString()
         assert experimentalValue.toString()  ==  stringValue
 
         where:

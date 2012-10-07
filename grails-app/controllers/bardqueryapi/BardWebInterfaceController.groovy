@@ -277,7 +277,7 @@ class BardWebInterfaceController {
             }
         }
         catch (Exception exp) {
-            log.error("Error showing compound with CID " + cid, exp)
+            log.error(exp)
             return response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR.intValue(),
                     "Structure search has encountered an error:\n${exp.message}")
         }
@@ -504,7 +504,7 @@ class SearchHelper {
         params.max = Math.min(params.max ? params.int('max') : 10, 100)
         params.offset = params.offset ? params.int('offset') : 0
 
-        return [top: new Integer(params?.max), skip: new Integer(params?.offset)]
+        return [top: new Integer(params.max), skip: new Integer(params.offset)]
     }
     /**
      * Strip out all empty spaces, split on ',' and return as a list of longs

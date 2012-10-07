@@ -63,29 +63,23 @@ public class DoseCurveRenderingService {
      * @return Drc
      */
     public Drc findDrcData(final List<Double> concentrations, final List<Double> activities, final Double ac50, final Double hillSlope,
-                              final Double s0, final Double sinf) {
-        try {
+                           final Double s0, final Double sinf) {
 
-            final List<Boolean> isValid = new ArrayList<Boolean>()
-            //pre-populate, we are doing this because the DRC requires an array of booleans
-            //I could change it but it would require too many changes
-            for (Double activity : activities) {
-                isValid.add(Boolean.TRUE)
-            }
-            //ac50 is the slope
-            CurveParameters curveParameters = new CurveParameters(
-                    ac50,
-                    new Date(), hillSlope,
-                    s0,
-                    sinf,
-                    new Double(0), new Double(0));
-
-            return new Drc(concentrations, activities, isValid, curveParameters, Color.BLACK);
-
-        } catch (Exception e) {
-            throw new RuntimeException(
-                    "Problem generating DRC curve", e);
+        final List<Boolean> isValid = new ArrayList<Boolean>()
+        //pre-populate, we are doing this because the DRC requires an array of booleans
+        //I could change it but it would require too many changes
+        for (Double activity : activities) {
+            isValid.add(Boolean.TRUE)
         }
+        //ac50 is the slope
+        CurveParameters curveParameters = new CurveParameters(
+                ac50,
+                new Date(), hillSlope,
+                s0,
+                sinf,
+                new Double(0), new Double(0));
+
+        return new Drc(concentrations, activities, isValid, curveParameters, Color.BLACK);
     }
 }
 

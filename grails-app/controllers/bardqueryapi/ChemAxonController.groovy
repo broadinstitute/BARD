@@ -22,7 +22,7 @@ class ChemAxonController {
         Integer height = (params.height ?: 300) as Integer
 
         if (params.smiles) {
-            bytes = generateStructurePNG(params.smiles, width, height)
+            bytes = chemAxonService.generateStructurePNG(params.smiles, width, height)
         }
         else if (params.cid && params.cid?.isLong()) {
             Long cid = new Long(params.cid)
@@ -37,10 +37,5 @@ class ChemAxonController {
         response.contentType = 'image/png'
         response.outputStream.setBytes(bytes)
     }
-
-    private byte[] generateStructurePNG(String smiles, int width, int height) {
-        return chemAxonService.generateStructurePNG(smiles, width, height)
-    }
-
     def marvinSketch() {}
 }

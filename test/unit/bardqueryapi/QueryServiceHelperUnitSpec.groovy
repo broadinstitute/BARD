@@ -73,7 +73,24 @@ class QueryServiceHelperUnitSpec extends Specification {
 
 
     }
+    void "test get Auto Suggest Terms No Terms"() {
+        when:
+        List<Map<String, String>> autoCompleteResults = service.getAutoSuggestTerms(QueryHelperService.AUTO_SUGGEST_FILTERS, [], "gobp_term")
 
+        then:
+        assert !autoCompleteResults
+
+
+    }
+    void "test get Auto Suggest Terms No autoSuggest Key"() {
+        when:
+        List<Map<String, String>> autoCompleteResults = service.getAutoSuggestTerms(QueryHelperService.AUTO_SUGGEST_FILTERS, [], "")
+
+        then:
+        assert !autoCompleteResults
+
+
+    }
     void "test Auto Complete #label"() {
         given: "map of possible filters"
         final Map<String, List<String>> autoSuggestResponseFromJDO = [gobp_term: ["Go Biological Process"]]

@@ -209,6 +209,23 @@ class QueryServiceUnitSpec extends Specification {
         "Super structure search" | StructureSearchParams.Type.Superstructure | "CC"
     }
     /**
+     * {@link QueryService#structureSearch(String, StructureSearchParams.Type)}
+     *
+     */
+    void "test Structure Search Empty Smiles"() {
+        given:
+        ServiceIterator<Compound> iter = Mock(ServiceIterator.class)
+
+        when:
+        final Map searchResults = service.structureSearch("", StructureSearchParams.Type.Substructure)
+        then:
+        0*queryServiceWrapper.getRestCompoundService() >> { restCompoundService }
+        0*restCompoundService.structureSearch(_) >> {iter}
+        assert searchResults.nHits == 0
+        assert searchResults.compoundAdapters.isEmpty()
+        assert searchResults.facets.isEmpty()
+    }
+    /**
      * {@link QueryService#structureSearch(String, StructureSearchParams.Type, List, int, int)}
      *
      */

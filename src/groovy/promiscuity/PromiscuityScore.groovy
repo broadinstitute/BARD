@@ -13,7 +13,7 @@ import org.apache.commons.lang.builder.EqualsBuilder
  */
 public class PromiscuityScore implements Comparable<PromiscuityScore> {
     Long cid
-    List<Scaffold> scaffolds
+    List<Scaffold> scaffolds = []
     public PromiscuityScore(){
 
     }
@@ -36,7 +36,7 @@ public class PromiscuityScore implements Comparable<PromiscuityScore> {
     int compareTo(PromiscuityScore thatPromiscuityScore) {
         return new CompareToBuilder()
                 .append(this.cid, thatPromiscuityScore.cid)
-                .append(this?.scaffolds, thatPromiscuityScore?.scaffolds)
+                .append(this.scaffolds, thatPromiscuityScore.scaffolds)
                 .toComparison()
     }
 

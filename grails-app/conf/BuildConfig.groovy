@@ -72,7 +72,7 @@ grails.project.dependency.resolution = {
         test ":geb:$gebVersion"
         test ":remote-control:1.2"
         // compile ':remote-pagination:0.3'
-        // compile ":clover:3.1.6"
+        compile ":clover:3.1.6"
     }
 }
 
@@ -85,4 +85,11 @@ codenarc.reports = {
 }
 codenarc {
     exclusions = ['**/grails-app/migrations/*']
+}
+
+clover {
+    //initstring = "bardwebclover.db"
+    directories: ['src/java','src/groovy', 'grails-app']
+    includes = ['**/*.groovy', '**/*.java']
+    excludes = ['**/bardwebquery/**.*', '**/*Spec*.*', '**/mockServices/**.*', '**/conf/**', '**/GridController.*']
 }
