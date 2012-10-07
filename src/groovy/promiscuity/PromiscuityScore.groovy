@@ -36,7 +36,7 @@ public class PromiscuityScore implements Comparable<PromiscuityScore> {
     int compareTo(PromiscuityScore thatPromiscuityScore) {
         return new CompareToBuilder()
                 .append(this.cid, thatPromiscuityScore.cid)
-                .append(this.scaffolds, thatPromiscuityScore.scaffolds)
+                .append(this?.scaffolds, thatPromiscuityScore?.scaffolds)
                 .toComparison()
     }
 

@@ -134,10 +134,7 @@ class QueryService implements IQueryService {
                 structureSearchParams.setThreshold(0.9)
             }
             if (searchFilters) {
-                List<String[]> filters = []
-                for (SearchFilter searchFilter : searchFilters) {
-                    filters.add([searchFilter.filterName, searchFilter.filterValue] as String[])
-                }
+                final List<String[]> filters = queryHelperService.convertSearchFiltersToFilters(searchFilters)
                 structureSearchParams.setFilters(filters)
             }
             //do the search

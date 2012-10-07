@@ -1,7 +1,7 @@
 import bardqueryapi.QueryServiceWrapper
 import grails.util.GrailsUtil
 import bardqueryapi.QueryService
-import bardqueryapi.MockQueryService
+import mockServices.MockQueryService
 /**
  * Spring Configuration of resources
  */

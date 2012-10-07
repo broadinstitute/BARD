@@ -97,6 +97,17 @@ class QueryHelperService {
         return searchParams
 
     }
+    /**
+     * @param searchFilters {@link SearchFilter}'s
+     * return List<String[]>
+     */
+    public List<String[]> convertSearchFiltersToFilters(final List<SearchFilter> searchFilters){
+        List<String[]> filters = []
+        for (SearchFilter searchFilter : searchFilters) {
+            filters.add([searchFilter.filterName, searchFilter.filterValue] as String[])
+        }
+        return filters
+    }
     //=========== Construct adapters ===================
     /**
      * Convert the list of compounds to the list of adapters

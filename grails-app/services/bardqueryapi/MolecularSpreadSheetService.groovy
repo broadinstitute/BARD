@@ -75,7 +75,7 @@ class MolecularSpreadSheetService {
      * @param etag
      * @return
      */
-    protected List<SpreadSheetActivity> extractMolSpreadSheetData(MolSpreadSheetData molSpreadSheetData, List<Experiment> experimentList, Object etag) {
+    public List<SpreadSheetActivity> extractMolSpreadSheetData(MolSpreadSheetData molSpreadSheetData, List<Experiment> experimentList, Object etag) {
         // now step through the data and place into molSpreadSheetData
         List<SpreadSheetActivity> spreadSheetActivityList = new ArrayList<SpreadSheetActivity>()
 
@@ -94,7 +94,7 @@ class MolecularSpreadSheetService {
                 if (!molSpreadSheetData.columnPointer.containsKey(translation)) {
                     molSpreadSheetData.columnPointer.put(translation, columnCount)
                 }
-                spreadSheetActivityList.add(extractActivitiesFromExperiment(experimentValue))
+                spreadSheetActivityList.add(extractActivitiesFromExperiment(experimentValue,new Long(experiment.id.toString())))
             }
             columnCount++
         }
@@ -137,7 +137,7 @@ class MolecularSpreadSheetService {
                     if (!molSpreadSheetData.columnPointer.containsKey(translation)) {
                         molSpreadSheetData.columnPointer.put(translation, columnCount)
                     }
-                    spreadSheetActivityList.add(extractActivitiesFromExperiment(experimentValue, experiment.id))
+                    spreadSheetActivityList.add(extractActivitiesFromExperiment(experimentValue, new Long(experiment.id.toString())))
                 }
             } else {
                 molSpreadSheetData.columnPointer.put(experiment.id as Long, columnCount)
@@ -191,7 +191,7 @@ class MolecularSpreadSheetService {
      * @param experimentList
      * @return
      */
-    protected Object retrieveImpliedCompoundsEtagFromAssaySpecification(List<Experiment> experimentList) {
+    public Object retrieveImpliedCompoundsEtagFromAssaySpecification(List<Experiment> experimentList) {
         Object etag = null
         for (Experiment experiment in experimentList) {
             final ServiceIterator<Compound> compoundServiceIterator = this.queryServiceWrapper.restExperimentService.compounds(experiment)
@@ -495,7 +495,7 @@ class MolecularSpreadSheetService {
         while (experimentIterator.hasNext()) {
             Value experimentValue = experimentIterator.next()
             if (experimentValue) {
-                SpreadSheetActivity spreadSheetActivity = extractActivitiesFromExperiment(experimentValue, new Long(experiment.id))
+                SpreadSheetActivity spreadSheetActivity = extractActivitiesFromExperiment(experimentValue, new Long(experiment.id.toString()))
                 spreadSheetActivities.add(spreadSheetActivity)
             }
         }

@@ -19,7 +19,7 @@
                     </td>
                     <td>
                         <h3>
-                            <g:link action="showCompound" id="${compoundAdapter.pubChemCID}" target="_blank">
+                            <g:link action="showCompound" id="${compoundAdapter.pubChemCID}">
                                 <g:if test="${compoundAdapter.name}">
                                     ${compoundAdapter.name} <small>(PubChem CID: ${compoundAdapter.pubChemCID})</small>
                                 </g:if>

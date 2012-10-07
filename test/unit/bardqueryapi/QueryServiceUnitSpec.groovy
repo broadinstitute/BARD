@@ -43,6 +43,8 @@ class QueryServiceUnitSpec extends Specification {
     }
 
     /**
+     * {@link QueryService#showCompound(Long)}
+     *
      */
     void "test Show Compound #label"() {
 
@@ -65,8 +67,10 @@ class QueryServiceUnitSpec extends Specification {
         "Null CompoundId"           | null             | null
     }
 
-
-
+    /**
+     * {@link QueryService#showProject(Long)}
+     *
+     */
     void "test Show Project"() {
         when: "Client enters a project ID and the showProject method is called"
         Map foundProjectAdapterMap = service.showProject(projectId)
@@ -88,7 +92,10 @@ class QueryServiceUnitSpec extends Specification {
         "Unknown Project"          | new Integer(872) | null
         "Null projectId"           | null             | null
     }
-
+    /**
+     * {@link QueryService#showAssay(Long)}
+     *
+     */
     void "test Show Assay"() {
         when: "Client enters a assay ID and the showAssay method is called"
         Map foundAssayMap = service.showAssay(assayId)
@@ -109,7 +116,10 @@ class QueryServiceUnitSpec extends Specification {
         "Null assayId"            | null             | null
 
     }
-
+    /**
+     * {@link QueryService#findCompoundsByCIDs(List, List)}
+     *
+     */
     void "test findCompoundsByCIDs #label"() {
         when:
         Map responseMap = service.findCompoundsByCIDs(cids)
@@ -129,7 +139,10 @@ class QueryServiceUnitSpec extends Specification {
         "Empty Compound Id list" | []                             | null                                                 | 0                     | 0
 
     }
-
+    /**
+     * {@link QueryService#findAssaysByADIDs(List, List)}
+     *
+     */
     void "test findAssaysByPIDs #label"() {
         when:
         Map responseMap = service.findAssaysByADIDs(assayIds)
@@ -150,7 +163,10 @@ class QueryServiceUnitSpec extends Specification {
         "Empty Assay Id list" | []                             | null                                           | 0                     | 0                    | null
 
     }
-
+    /**
+     * {@link QueryService#findProjectsByPIDs(List, List)}
+     *
+     */
     void "test findProjectsByPIDs #label"() {
         when:
         Map responseMap = service.findProjectsByPIDs(projectIds)
@@ -172,14 +188,41 @@ class QueryServiceUnitSpec extends Specification {
 
     }
 
-    void "test Structure Search #label"() {
+    /**
+     * {@link QueryService#structureSearch(String, StructureSearchParams.Type)}
+     *
+     */
+    void "test Structure Search No Filters #label"() {
         given:
         ServiceIterator<Compound> iter = Mock(ServiceIterator.class)
         when:
         service.structureSearch(smiles, structureSearchParamsType)
         then:
         queryServiceWrapper.getRestCompoundService() >> { restCompoundService }
+        restCompoundService.structureSearch(_) >> {iter}
 
+        where:
+        label                    | structureSearchParamsType                 | smiles
+        "Sub structure Search"   | StructureSearchParams.Type.Substructure   | "CC"
+        "Exact match Search"     | StructureSearchParams.Type.Exact          | "CC"
+        "Similarity Search"      | StructureSearchParams.Type.Similarity     | "CC"
+        "Super structure search" | StructureSearchParams.Type.Superstructure | "CC"
+    }
+    /**
+     * {@link QueryService#structureSearch(String, StructureSearchParams.Type, List, int, int)}
+     *
+     */
+    void "test Structure Search #label"() {
+        given:
+        ServiceIterator<Compound> iter = Mock(ServiceIterator.class)
+        List<SearchFilter> searchFilters = [new SearchFilter(filterName: "a", filterValue: "b")]
+
+        List<String[]> filters = [["a", "b"] as String[]]
+        when:
+        service.structureSearch(smiles, structureSearchParamsType, searchFilters)
+        then:
+        queryServiceWrapper.getRestCompoundService() >> { restCompoundService }
+        queryHelperService.convertSearchFiltersToFilters(_) >> {filters}
         restCompoundService.structureSearch(_) >> {iter}
 
         where:
@@ -190,13 +233,16 @@ class QueryServiceUnitSpec extends Specification {
         "Super structure search" | StructureSearchParams.Type.Superstructure | "CC"
     }
 
-
+    /**
+     * {@link QueryService#findCompoundsByTextSearch(String, Integer, Integer, List)}
+     *
+     */
     void "test Find Compounds By Text Search"() {
         given:
         StopWatch sw = Mock(StopWatch)
         ServiceIterator<Compound> iter = Mock(ServiceIterator.class)
         when:
-        Map map = service.findCompoundsByTextSearch(searchString, 0, 10, [])
+        Map map = service.findCompoundsByTextSearch(searchString, 10, 0, [])
         then:
         queryHelperService.startStopWatch() >> {sw}
         queryHelperService.stopStopWatch(_, _) >> {}
@@ -212,13 +258,41 @@ class QueryServiceUnitSpec extends Specification {
         ""                   | [compoundAdapters: [], facets: [], nHits: 0]
 
     }
+    /**
+     * {@link QueryService#findCompoundsByTextSearch(String)}
+     *
+     */
+    void "test Find Compounds By Text Search with defaults #searchString"() {
+        given:
+        StopWatch sw = Mock(StopWatch)
+        ServiceIterator<Compound> iter = Mock(ServiceIterator.class)
+        when:
+        Map map = service.findCompoundsByTextSearch(searchString)
+        then:
+        queryHelperService.startStopWatch() >> {sw}
+        queryHelperService.stopStopWatch(_, _) >> {}
+        queryServiceWrapper.getRestCompoundService() >> { restCompoundService }
+        restCompoundService.search(_) >> {iter}
+        queryHelperService.stripCustomStringFromSearchString(_) >> {"stuff"}
+        queryHelperService.constructSearchParams(_, _, _, _) >> { new SearchParams(searchString)}
+        queryHelperService.compoundsToAdapters(_) >> {[new CompoundAdapter(new Compound("name"))]}
+        assert map == foundMap
+        where:
+        searchString         | foundMap
+        "Some Search String" | [compoundAdapters: [], facets: null, nHits: 0]
+        ""                   | [compoundAdapters: [], facets: [], nHits: 0]
 
-    void "test Find Assays By Text Search"() {
+    }
+    /**
+     * {@link QueryService#findAssaysByTextSearch(String)}
+     *
+     */
+    void "test Find Assays By Text Search with defaults"() {
         given:
         StopWatch sw = Mock(StopWatch)
         ServiceIterator<Assay> iter = Mock(ServiceIterator.class)
         when:
-        Map map = service.findAssaysByTextSearch(searchString, 0, 10, [])
+        Map map = service.findAssaysByTextSearch(searchString)
         then:
         queryHelperService.startStopWatch() >> {sw}
         queryHelperService.stopStopWatch(_, _) >> {}
@@ -234,13 +308,66 @@ class QueryServiceUnitSpec extends Specification {
         ""                   | [assayAdapters: [], facets: null, nHits: 0]                                  | null
 
     }
+    /**
+     * {@link QueryService#findAssaysByTextSearch(String, Integer, Integer, List)}
+     *
+     */
+    void "test Find Assays By Text Search"() {
+        given:
+        StopWatch sw = Mock(StopWatch)
+        ServiceIterator<Assay> iter = Mock(ServiceIterator.class)
+        when:
+        Map map = service.findAssaysByTextSearch(searchString, 10, 0, [])
+        then:
+        queryHelperService.startStopWatch() >> {sw}
+        queryHelperService.stopStopWatch(_, _) >> {}
+        queryServiceWrapper.getRestAssayService() >> { restAssayService }
+        restAssayService.search(_) >> {iter}
+        queryHelperService.stripCustomStringFromSearchString(_) >> {"stuff"}
+        queryHelperService.constructSearchParams(_, _, _, _) >> { new SearchParams(searchString)}
+        queryHelperService.assaysToAdapters(_) >> {assayAdapter}
+        assert map.assayAdapters.size() == foundMap.assayAdapters.size()
+        where:
+        searchString         | foundMap                                                                     | assayAdapter
+        "Some Search String" | [assayAdapters: [new AssayAdapter(new Assay("name"))], facets: [], nHits: 0] | [new AssayAdapter(new Assay("name"))]
+        ""                   | [assayAdapters: [], facets: null, nHits: 0]                                  | null
 
+    }
+    /**
+     * {@link QueryService#findProjectsByTextSearch(String, Integer, Integer, List)}
+     *
+     */
     void "test Find Projects By Text Search"() {
         given:
         StopWatch sw = Mock(StopWatch)
         ServiceIterator<Project> iter = Mock(ServiceIterator.class)
         when:
-        Map map = service.findProjectsByTextSearch(searchString, 0, 10, [])
+        Map map = service.findProjectsByTextSearch(searchString, 10, 0, [])
+        then:
+        _ * queryHelperService.startStopWatch() >> {sw}
+        _ * queryHelperService.stopStopWatch(_, _) >> {}
+        _ * queryServiceWrapper.getRestProjectService() >> { restProjectService }
+        _ * restProjectService.search(_) >> {iter}
+        _ * queryHelperService.stripCustomStringFromSearchString(_) >> {"stuff"}
+        _ * queryHelperService.constructSearchParams(_, _, _, _) >> { new SearchParams(searchString)}
+        _ * queryHelperService.projectsToAdapters(_) >> {projectAdapter}
+        assert map.projectAdapters.size() == foundMap.projectAdapters.size()
+        where:
+        searchString         | foundMap                                                                             | projectAdapter
+        "Some Search String" | [projectAdapters: [new ProjectAdapter(new Project("name"))], facets: null, nHits: 0] | [new ProjectAdapter(new Project("name"))]
+        ""                   | [projectAdapters: [], facets: [], nHits: 0]                                          | null
+    }
+
+    /**
+     * {@link QueryService#findProjectsByTextSearch(String)}
+     *
+     */
+    void "test Find Projects By Text Search with defaults"() {
+        given:
+        StopWatch sw = Mock(StopWatch)
+        ServiceIterator<Project> iter = Mock(ServiceIterator.class)
+        when:
+        Map map = service.findProjectsByTextSearch(searchString)
         then:
         _ * queryHelperService.startStopWatch() >> {sw}
         _ * queryHelperService.stopStopWatch(_, _) >> {}
@@ -256,18 +383,26 @@ class QueryServiceUnitSpec extends Specification {
         ""                   | [projectAdapters: [], facets: [], nHits: 0]                                          | null
     }
     /**
+     * {@link QueryService#autoComplete(String)}
      *
-     * @param term
-     * @return the list of maps to use for auto suggest
      */
     void "test auto Complete"() {
         when:
-        List list= service.autoComplete("Some Search String")
+        List list = service.autoComplete("Some Search String")
         then:
         1 * queryServiceWrapper.getRestAssayService() >> { restAssayService }
-        1 * restAssayService.suggest(_) >> {[a:"b"]}
-        1 * queryHelperService.autoComplete(_,_) >> {[[a: "b"]]}
+        1 * restAssayService.suggest(_) >> {[a: "b"]}
+        1 * queryHelperService.autoComplete(_, _) >> {[[a: "b"]]}
         assert list
     }
-
+    /**
+     * {@link QueryService#findFiltersInSearchBox(List, String)}
+     */
+    void "test find Filters in search box"() {
+        when:
+        List<SearchFilter> searchFilters = []
+        service.findFiltersInSearchBox(searchFilters, "gobp_term:DNA Repair")
+        then:
+        1 * queryHelperService.findFiltersInSearchBox(_, _) >> {}
+    }
 }

@@ -13,11 +13,6 @@ class DrcCurveCommand {
     Double hillSlope
     List<Double> concentrations = ListUtils.lazyList([], new ListUtilsFactory() )
     List<Double> activities = ListUtils.lazyList([],new ListUtilsFactory() )
-
-    //TODO: Add  the needed validations here. Command object need to be valid to do request
-//    static constraints = {
-//        searchString(blank: false)
-//    }
 }
 class ListUtilsFactory implements Factory {
     public Object create() {

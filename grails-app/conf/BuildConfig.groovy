@@ -43,7 +43,7 @@ grails.project.dependency.resolution = {
             exclude "xml-apis"
         }
 
-        test("org.seleniumhq.selenium:selenium-firefox-driver:$seleniumVersion")  {
+        test("org.seleniumhq.selenium:selenium-firefox-driver:$seleniumVersion") {
             exclude "xml-apis"
         }
         compile 'org.apache.commons:commons-lang3:3.1'
@@ -62,17 +62,17 @@ grails.project.dependency.resolution = {
         runtime ":jquery:1.7.1"
         compile ":jquery-ui:1.8.15"
         runtime ":resources:1.1.6"
-        compile ":spock:0.6"
         compile ":functional-spock:0.6"
-        build ":codenarc:0.15"
         compile ":twitter-bootstrap:2.1.0"
         compile ":shopping-cart:0.8.2"
         compile ":cbipcrowdauthentication:0.3.0"
         build ":tomcat:$grailsVersion"
-        compile ":geb:$gebVersion"
-        compile ":remote-control:1.2"
-        compile ':remote-pagination:0.3'
-        compile ":clover:3.1.6"
+        test ":spock:0.6"
+        test ":codenarc:0.15"
+        test ":geb:$gebVersion"
+        test ":remote-control:1.2"
+        // compile ':remote-pagination:0.3'
+        // compile ":clover:3.1.6"
     }
 }
 

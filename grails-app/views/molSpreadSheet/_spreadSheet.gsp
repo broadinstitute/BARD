@@ -67,7 +67,7 @@
                     </td>
                     <td class="molSpreadSheet" propert="cid">
                         <g:link controller="bardWebInterface" action="showCompound" id="${cid}"
-                                target="_blank">${cid}</g:link>
+                               >${cid}</g:link>
 
                     </td>
                     <td class="molSpreadSheet">

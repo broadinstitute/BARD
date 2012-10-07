@@ -14,7 +14,7 @@ class ChemAxonService {
      * @param height
      * @return a byte array representation of the Structure
      */
-    byte[] generateStructurePNG(String smiles, Integer width, Integer height) {
+    public byte[] generateStructurePNG(final String smiles, final Integer width, final Integer height) {
         JChemBinFormat jchemBinFormat = new JChemBinFormat(width: width, height: height, imageFormat: 'png', transparencyBackground: true);
         return generateImageBytes(smiles, jchemBinFormat);
     }
@@ -24,7 +24,7 @@ class ChemAxonService {
      * @param jchemBinFormat {@link JChemBinFormat}
      * @return a byte array representation of the Structure
      */
-    private byte[] generateImageBytes(String smiles, JChemBinFormat jchemBinFormat) {
+    public byte[] generateImageBytes(final String smiles, final JChemBinFormat jchemBinFormat) {
         Molecule mol;
         try {
             mol = MolImporter.importMol(smiles);

@@ -24,7 +24,28 @@ class QueryServiceHelperUnitSpec extends Specification {
     void tearDown() {
         // Tear down logic here
     }
+    /**
+     * {@link QueryHelperService#convertSearchFiltersToFilters(List)}
+     */
+    void "test convert SearchFilters To Filters"() {
+        given: "A list of search filters"
+        final String filterName = "a"
+        final String filterValue = "b"
+        final List<SearchFilter> searchFilters = [new SearchFilter(filterName: filterName, filterValue: filterValue)]
+        when: "We call the convertSearchFilters method with the given list of filters"
+        final List<String[]> filters = service.convertSearchFiltersToFilters(searchFilters)
 
+        then: ""
+        assert filters
+        assert filters.size() == 1
+        final String[] filter = filters.get(0)
+        assert filter.length == 2
+        assert filter[0] == filterName
+        assert filter[1] == filterValue
+    }
+    /**
+     * {@link QueryHelperService#findFiltersInSearchBox(List, String)}
+     */
     void "test find Filters In SearchBox #label"() {
         given: "A list of search filters"
         final List<SearchFilter> searchFilters = []
@@ -266,6 +287,7 @@ class QueryServiceHelperUnitSpec extends Specification {
         "With Custom Filters" | "gobp_term:stuff" | "stuff"
         "Empty String"        | ""                | null
     }
+
     void "testStripCustomStringFromSearchString #label"() {
         when:
         final String updateSearchString = service.stripCustomStringFromSearchString(searchString)
