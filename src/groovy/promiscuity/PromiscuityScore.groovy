@@ -13,7 +13,7 @@ import org.apache.commons.lang.builder.EqualsBuilder
  */
 public class PromiscuityScore implements Comparable<PromiscuityScore> {
     Long cid
-    List<Scaffold> scaffolds = []
+    List<Scaffold> scaffolds
     public PromiscuityScore(){
 
     }
