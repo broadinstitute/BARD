@@ -13,10 +13,6 @@ class MolSpreadSheetData {
     List<String> mssHeaders   = new ArrayList<String>()
 
     MolSpreadSheetData()  {
-//        mssData = new LinkedHashMap<String,MolSpreadSheetCell> ()
-//        rowPointer = new LinkedHashMap<Long,Integer>()
-//        columnPointer = new LinkedHashMap<Long,Integer>()
-//        mssHeaders = new ArrayList()
     }
 
 
