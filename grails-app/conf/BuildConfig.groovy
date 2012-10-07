@@ -91,5 +91,5 @@ clover {
     //initstring = "bardwebclover.db"
     directories: ['src/java','src/groovy', 'grails-app']
     includes = ['**/*.groovy', '**/*.java']
-    excludes = ['**/bardwebquery/**.*', '**/*Spec*.*', '**/mockServices/**.*', '**/conf/**', '**/GridController.*']
+    excludes = ['**/bardwebquery/**.*', '**/*Spec*.*', '**/mockServices/**.*', '**/conf/**', '**/GridController.*', '**/mockServices/**.*']
 }
