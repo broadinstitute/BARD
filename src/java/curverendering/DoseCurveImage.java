@@ -17,7 +17,7 @@ public class DoseCurveImage {
     public final static Color[] colors = new Color[]{Color.BLUE, Color.GREEN, Color.MAGENTA, Color.ORANGE, Color.PINK, Color.RED};
 
 
-    private static NumberAxis createAndConfigureYAxis(Bounds bounds,Color axisColor){
+    public static NumberAxis createAndConfigureYAxis(Bounds bounds, Color axisColor) {
         final NumberAxis rangeAxis = new NumberAxis(null);
         rangeAxis.setAutoRangeIncludesZero(true);
         rangeAxis.setAxisLinePaint(axisColor);
@@ -28,9 +28,11 @@ public class DoseCurveImage {
             rangeAxis.setLowerBound(bounds.yMin - inset);
             rangeAxis.setUpperBound(bounds.yMax + inset);
         }
-       return rangeAxis;
+        rangeAxis.setLabel("Activities");
+        return rangeAxis;
     }
-    private static NumberAxis createAndConfigureXAxis(Bounds bounds,Color axisColor){
+
+    public static NumberAxis createAndConfigureXAxis(Bounds bounds, Color axisColor) {
         final NumberAxis domainAxis = new NumberAxis(null);
         domainAxis.setAutoRangeIncludesZero(false);
         domainAxis.setAxisLinePaint(axisColor);
@@ -41,9 +43,11 @@ public class DoseCurveImage {
             domainAxis.setLowerBound(Math.log10(bounds.xMin) - inset);
             domainAxis.setUpperBound(Math.log10(bounds.xMax) + inset);
         }
+        domainAxis.setLabel("Concentration (uM)");
         return domainAxis;
     }
-    private static void addCurves(Map<String, Drc> curves,DefaultXYDataset dataset,XYLineAndShapeRenderer renderer,XYPlot plot ){
+
+    public static void addCurves(Map<String, Drc> curves, DefaultXYDataset dataset, XYLineAndShapeRenderer renderer, XYPlot plot) {
         // int curveIndex = 0;
         for (Map.Entry<String, Drc> curve : curves.entrySet()) {
             Drc drc = curve.getValue();
@@ -56,20 +60,21 @@ public class DoseCurveImage {
             addCurve(name, dataset, renderer, plot, x, y, isValid, drc.getCurveParameters(), drc.getColor());
         }
     }
+
     public static JFreeChart createChart(Map<String, Drc> curves, Bounds bounds, Color axisColor) {
 
         // create and configure x axis
-        final NumberAxis domainAxis = createAndConfigureXAxis(bounds,axisColor);
+        final NumberAxis domainAxis = createAndConfigureXAxis(bounds, axisColor);
 
         // create and configure y axis
-        final NumberAxis rangeAxis =createAndConfigureYAxis(bounds,axisColor);
+        final NumberAxis rangeAxis = createAndConfigureYAxis(bounds, axisColor);
 
         DefaultXYDataset dataset = new DefaultXYDataset();
 
         XYLineAndShapeRenderer renderer = new XYLineAndShapeRenderer(false, true);
         final XYPlot plot = new XYPlot(dataset, domainAxis, rangeAxis, renderer);
 
-        addCurves(curves,dataset,renderer,plot);
+        addCurves(curves, dataset, renderer, plot);
 
         final JFreeChart chart = new JFreeChart("Dose response curve", plot);
 
@@ -81,7 +86,7 @@ public class DoseCurveImage {
         return chart;
     }
 
-    private static void aggregateValidAndInvalidPoints(List<Boolean> isValid, List<Double> x, List<Double> y, double validX[], double validY[], double invalidX[], double invalidY[]) {
+    public static void aggregateValidAndInvalidPoints(List<Boolean> isValid, List<Double> x, List<Double> y, double validX[], double validY[], double invalidX[], double invalidY[]) {
         int validCount = 0;
         int invalidCount = 0;
 
@@ -99,7 +104,7 @@ public class DoseCurveImage {
         }
     }
 
-    private static void setRenderingSeriesForValidPoints(XYLineAndShapeRenderer renderer, int seriesIndex, Color curveColor) {
+    public static void setRenderingSeriesForValidPoints(XYLineAndShapeRenderer renderer, int seriesIndex, Color curveColor) {
         renderer.setSeriesLinesVisible(seriesIndex, false);
         renderer.setSeriesShapesVisible(seriesIndex, true);
         renderer.setSeriesVisibleInLegend(seriesIndex, true);
@@ -122,7 +127,32 @@ public class DoseCurveImage {
         renderer.setSeriesShape(seriesIndex, xShape);
     }
 
-    private static void addFittedCurve(String name, DefaultXYDataset dataset, XYLineAndShapeRenderer renderer, CurveParameters curveParameters, Color curveColor, double[] validX) {
+    /**
+     * Find where to start and stop on the X-Axis
+     *
+     * @param validX - The array of valid values to appear on X-Axis
+     * @return MutablePair
+     *         The left value = xStart
+     *         The right value == xStop
+     */
+    static MutablePair<Double, Double> findWhereToStartAndStopOnXAxis(double[] validX) {
+        double xStart = 0;
+        double xStop = 0;
+        for (int i = 0; i < validX.length; i++) {
+            if (i == 0 || validX[i] < xStart) {
+                xStart = validX[i];
+            }
+            if (i == 0 || validX[i] > xStop) {
+                xStop = validX[i];
+            }
+        }
+        MutablePair<Double, Double> startStop = new MutablePair<Double, Double>();
+        startStop.setLeft(xStart);
+        startStop.setRight(xStop);
+        return startStop;
+    }
+
+    public static void addFittedCurve(String name, DefaultXYDataset dataset, XYLineAndShapeRenderer renderer, CurveParameters curveParameters, Color curveColor, double[] validX) {
         // add the fitted curve (if possible)
         if (curveParameters != null
                 && curveParameters.S0 != null
@@ -130,16 +160,9 @@ public class DoseCurveImage {
                 && curveParameters.AC50 != null
                 && curveParameters.HILL_SLOPE != null) {
 
-            double xStart = 0;
-            double xStop = 0;
-            for (int i = 0; i < validX.length; i++) {
-                if (i == 0 || validX[i] < xStart) {
-                    xStart = validX[i];
-                }
-                if (i == 0 || validX[i] > xStop) {
-                    xStop = validX[i];
-                }
-            }
+            MutablePair<Double, Double> whereToStartAndStopOnXAxis = findWhereToStartAndStopOnXAxis(validX);
+            double xStart = whereToStartAndStopOnXAxis.getLeft();
+            double xStop = whereToStartAndStopOnXAxis.getRight();
 
             int seriesIndex = dataset.getSeriesCount();
             dataset.addSeries(name + " fit", generateDataForSigmoidCurve(curveParameters.S0, curveParameters.SINF, curveParameters.AC50, curveParameters.HILL_SLOPE, xStart, xStop, 50));
@@ -224,15 +247,15 @@ public class DoseCurveImage {
         return points;
     }
 
-    private static Bounds adjustBounds(Drc cell, Bounds bounds, Double xNormMin, Double xNormMax, Double yNormMin, Double yNormMax) {
+    public static Bounds adjustBounds(Drc cell, Bounds bounds, Double xNormMin, Double xNormMax, Double yNormMin, Double yNormMax) {
         if (cell.getActivities().size() > 0 && cell.getConcentrations().size() > 0) {
+
             double maxActivity = cell.getActivities().get(0);
             double minActivity = cell.getActivities().get(0);
             double maxConcentration = cell.getConcentrations().get(0);
             double minConcentration = cell.getConcentrations().get(0);
 
             MutablePair<Double, Double> activity = findMinMax(cell.getActivities());
-
 
             if (yNormMax == null) {
                 maxActivity = activity.getRight();
@@ -290,7 +313,7 @@ public class DoseCurveImage {
      * @param yNormMax - The maximum normalized Y value
      * @return {@link Bounds}
      */
-    private static Bounds adjustBounds(List<Drc> drcs, Double xNormMin, Double xNormMax, Double yNormMin, Double yNormMax) {
+    public static Bounds adjustBounds(List<Drc> drcs, Double xNormMin, Double xNormMax, Double yNormMin, Double yNormMax) {
         // users specify data range they would like to show in the image. Concentrations (xAxis) should be
         // logarithm values, so need to convert to real values.
         Bounds bounds = null;
@@ -315,7 +338,7 @@ public class DoseCurveImage {
      * @param yNormMin - The minimum normalized Y value
      * @param yNormMax - The maximum normalized Y value
      */
-    private static void setBoundParameters(Bounds bounds, Double xNormMin, Double xNormMax, Double yNormMin, Double yNormMax) {
+    public static void setBoundParameters(Bounds bounds, Double xNormMin, Double xNormMax, Double yNormMin, Double yNormMax) {
         if (xNormMin != null) {
             bounds.xMin = Math.pow(10, xNormMin);
         }
@@ -345,14 +368,9 @@ public class DoseCurveImage {
         List<Drc> drcs = new ArrayList<Drc>();
         int colorIndex = 0;
         if (drc != null) {
-
-            if (colorIndex >= colors.length) {
-                colorIndex = 0;
-            }
             drc.setColor(colors[colorIndex]);
             curves.put(colorIndex + ":" + drc.getCurveParameters().resultTime.toString(), drc);
             drcs.add(drc);
-            //colorIndex++;
             Bounds bounds = findBounds(drcs, xNormMin, xNormMax, yNormMin, yNormMax);
             return DoseCurveImage.createChart(curves, bounds, Color.BLACK);
         }
@@ -367,7 +385,7 @@ public class DoseCurveImage {
      * @param yNormMax - The maximum normalized Y value
      * @return {@link Bounds}
      */
-    private static Bounds findBounds(List<Drc> drcs, Double xNormMin, Double xNormMax, Double yNormMin, Double yNormMax) {
+    static Bounds findBounds(List<Drc> drcs, Double xNormMin, Double xNormMax, Double yNormMin, Double yNormMax) {
         if (xNormMin != null && xNormMax != null && yNormMin != null && yNormMax != null) {
             return new Bounds(Math.pow(10, xNormMin), Math.pow(10, xNormMax), yNormMin, yNormMax);
         }

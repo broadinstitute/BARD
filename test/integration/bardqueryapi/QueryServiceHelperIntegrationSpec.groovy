@@ -32,5 +32,11 @@ class QueryServiceHelperIntegrationSpec extends IntegrationSpec {
         assert !searchFilters.isEmpty()
 
     }
+    void "test get Auto Suggest Term with null values"(){
+        when:
+        final List<Map<String, String>> terms = this.queryHelperService.getAutoSuggestTerms(null, [null, null], null)
+        then:
+        assert terms.isEmpty()
+    }
 
 }

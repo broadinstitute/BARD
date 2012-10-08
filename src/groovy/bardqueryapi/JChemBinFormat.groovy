@@ -53,23 +53,22 @@ class JChemBinFormat {
     @Override
     public String toString() {
         String exportOptions = getExportOptions();
-        String format = this.imageFormat + FORMAT_SEPARATOR;
-        return format + exportOptions;
+        return "${this.imageFormat}${FORMAT_SEPARATOR}${exportOptions}";
     }
 
     /**
-     * @return
+     * @return String of options to use for JChem
      */
-    private String getExportOptions() {
+    public String getExportOptions() {
         List<String> options = new ArrayList<String>();
-        options.add(WIDTH_PREFIX + this.width);
-        options.add(HEIGTH_PREFIX + this.height);
-        options.add(DEFAULT_IMPLICIT_HYDROGEN);
-        options.add(DEFAULT_CHIRAL_SELECTION);
-        options.add(SHOW_EZ);
+        options.add("${WIDTH_PREFIX}${this.width}");
+        options.add("${HEIGTH_PREFIX}${this.height}");
+        options.add("${DEFAULT_IMPLICIT_HYDROGEN}");
+        options.add("${DEFAULT_CHIRAL_SELECTION}");
+        options.add("${SHOW_EZ}");
         if (this.transparencyBackground) {
             options.add(DEFAULT_TRANSPARENCY_BACKGROUND)
         }
-        return StringUtils.join(options.toArray(), ",");
+        return StringUtils.join(options,",");
     }
 }
