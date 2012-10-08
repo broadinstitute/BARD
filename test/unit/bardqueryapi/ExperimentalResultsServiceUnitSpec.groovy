@@ -7,7 +7,7 @@ import grails.test.mixin.support.GrailsUnitTestMixin
  * See the API for {@link grails.test.mixin.support.GrailsUnitTestMixin} for usage instructions
  */
 @TestMixin(GrailsUnitTestMixin)
-class ExperimentalResultsServiceSpec {
+class ExperimentalResultsServiceUnitSpec {
 
     void setUp() {
         // Setup logic here

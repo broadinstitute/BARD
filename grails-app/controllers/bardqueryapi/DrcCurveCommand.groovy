@@ -7,6 +7,8 @@ import org.apache.commons.collections.Factory
  */
 @grails.validation.Validateable
 class DrcCurveCommand {
+    Double width
+    Double height
     Double s0
     Double sinf
     Double ac50

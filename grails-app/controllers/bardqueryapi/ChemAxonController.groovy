@@ -32,6 +32,8 @@ class ChemAxonController {
                 String smiles = compoundAdapters.first().structureSMILES
                 bytes = chemAxonService.generateStructurePNG(smiles, width, height)
             }
+            //TODO; What if more than one?
+            //It seems that we should separate this into 2 different methods
         }
 
         response.contentType = 'image/png'

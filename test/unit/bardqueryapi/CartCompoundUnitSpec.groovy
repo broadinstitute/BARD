@@ -11,7 +11,7 @@ import spock.lang.Unroll
 //@TestMixin(GrailsUnitTestMixin)
 @TestFor(BardWebInterfaceController)
 @Unroll
-class CartCompoundSpec extends Specification {
+class CartCompoundUnitSpec extends Specification {
 
     void setup() {
         // Setup logic here

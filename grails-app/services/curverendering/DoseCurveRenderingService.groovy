@@ -5,9 +5,28 @@ import bard.core.HillCurveValue
 import org.jfree.chart.JFreeChart
 
 import java.awt.Color
+import org.jfree.chart.encoders.EncoderUtil
+import org.jfree.chart.encoders.ImageFormat
+import bardqueryapi.DrcCurveCommand
 
 public class DoseCurveRenderingService {
 
+    public  byte[] createDoseCurve(DrcCurveCommand drcCurveCommand){
+        JFreeChart chart =
+            this.createDoseCurve(
+                    drcCurveCommand.concentrations,
+                    drcCurveCommand.activities,
+                    drcCurveCommand.ac50,
+                    drcCurveCommand.hillSlope,
+                    drcCurveCommand.s0,
+                    drcCurveCommand.sinf,
+                    null,
+                    null,
+                    null,
+                    null)
+        // write the image byte array to the binding
+       return EncoderUtil.encode(chart.createBufferedImage(drcCurveCommand.width.intValue(), drcCurveCommand.height.intValue()), ImageFormat.PNG);
+    }
     /**
      *
      * @param concentrations

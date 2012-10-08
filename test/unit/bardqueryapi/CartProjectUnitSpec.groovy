@@ -11,7 +11,7 @@ import grails.test.mixin.TestFor
  */
 @TestFor(BardWebInterfaceController)
 @Unroll
-class CartProjectSpec  extends Specification {
+class CartProjectUnitSpec extends Specification {
 
     void setup() {
         // Setup logic here

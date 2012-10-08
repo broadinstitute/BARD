@@ -16,7 +16,7 @@ import results.ExperimentalValueType
 //@TestFor(MolSpreadSheetController)
 @TestMixin(GrailsUnitTestMixin)
 @Unroll
-class MolSpreadSheetCellSpec extends  Specification {
+class MolSpreadSheetCellUnitSpec extends  Specification {
 
     void setup() {
 

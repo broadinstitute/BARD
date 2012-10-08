@@ -8,7 +8,7 @@ import org.junit.Test
  * See the API for {@link grails.test.mixin.support.GrailsUnitTestMixin} for usage instructions
  */
 @TestMixin(GrailsUnitTestMixin)
-class TextBlockTagLibSpec {
+class TextBlockTagLibUnitSpec {
 
     void setUp() {
         // Setup logic here
