@@ -5,11 +5,11 @@ import bard.core.Value
 import bard.core.adapter.AssayAdapter
 import bard.core.adapter.CompoundAdapter
 import bard.core.adapter.ProjectAdapter
+import grails.plugins.springsecurity.Secured
 import org.apache.commons.lang.StringUtils
 import promiscuity.PromiscuityScore
 
 import javax.servlet.http.HttpServletResponse
-import grails.plugins.springsecurity.Secured
 
 /**
  *
@@ -54,16 +54,19 @@ class BardWebInterfaceController {
                     render(template: "experimentResult", model: [experimentDataMap: experimentDataMap])
                 } else {
                     flash.message = "Experiment ID ${id} not found"
-                    render(template: "experimentResult")
+                    return response.sendError(HttpServletResponse.SC_NOT_FOUND,
+                            "${flash.message}")
                 }
             } else {
                 flash.message = "ID is a required Field"
-                render(template: "experimentResult")
+                return response.sendError(HttpServletResponse.SC_BAD_REQUEST,
+                        "${flash.message}")
             }
         } catch (Exception ee) {
-            log.error("Error showing experimental results for experiment ID " + id, ee)
-            flash.message = ee.message
-            render(template: "experimentResult")
+            log.error(ee)
+            flash.message = "Problem finding Experiment ${id}"
+            return response.sendError(HttpServletResponse.SC_NOT_FOUND,
+                    "${flash.message}")
         }
 
     }
@@ -78,17 +81,19 @@ class BardWebInterfaceController {
                     render(template: 'promiscuity', model: [scaffolds: promiscuityScore.scaffolds])
                 }
                 else { //status code of NOT OK returned. Usually CID has no promiscuity score
-                    return response.sendError(results?.status,
-                            "${results?.message}")
+                    return response.sendError(results.status,
+                            "${results.message}")
                 }
             } catch (Exception ee) { //error is thrown
-                log.error("Error getting promiscuity for CID " + cid, ee)
-                return response.sendError(HttpServletResponse.SC_NOT_FOUND,
-                        "Could not get promiscuity score for ${cid}")
+                log.error(ee)
+                flash.message = "Could not get promiscuity score for ${cid}"
+                return response.sendError(HttpServletResponse.SC_BAD_REQUEST,
+                        "${flash.message}")
             }
         } else {
+            flash.message = "A valid CID is required"
             return response.sendError(HttpServletResponse.SC_BAD_REQUEST,
-                    "A valid CID is required")
+                    "${flash.message}")
 
         }
     }
@@ -99,10 +104,10 @@ class BardWebInterfaceController {
      * Given a list of Compound ids, invoke this method
      */
     def searchCompoundsByIDs(SearchCommand searchCommand) {
-        if (searchCommand.searchString) {
-            normalizeSearchString(searchCommand)
+        if (StringUtils.isNotBlank(searchCommand.searchString)) {
+            removeDuplicatesFromSearchString(searchCommand)
             final List<SearchFilter> searchFilters = searchCommand.getAppliedFilters()
-            if (!searchFilters) {//user SearchCommand
+            if (!searchFilters) {
                 searchFilters = []
             }
             this.queryService.findFiltersInSearchBox(searchFilters, searchCommand.searchString)
@@ -140,7 +145,7 @@ class BardWebInterfaceController {
     def searchAssaysByIDs(SearchCommand searchCommand) {
 
         if (StringUtils.isNotBlank(searchCommand.searchString)) {
-            normalizeSearchString(searchCommand)
+            removeDuplicatesFromSearchString(searchCommand)
             final List<SearchFilter> searchFilters = searchCommand.getAppliedFilters()
             if (!searchFilters) {//user SearchCommand
                 searchFilters = []
@@ -173,7 +178,7 @@ class BardWebInterfaceController {
     def searchProjectsByIDs(SearchCommand searchCommand) {
 
         if (StringUtils.isNotBlank(searchCommand.searchString)) {
-            normalizeSearchString(searchCommand)
+            removeDuplicatesFromSearchString(searchCommand)
             final List<SearchFilter> searchFilters = searchCommand.getAppliedFilters()
             if (!searchFilters) {//user SearchCommand
                 searchFilters = []
@@ -189,7 +194,7 @@ class BardWebInterfaceController {
                         appliedFilters: getAppliedFilters(searchFilters, projectAdapterMap.facets)])
             }
             catch (Exception exp) {
-                log.error("Error searching for projects by IDs", exp)
+                log.error(exp)
                 return response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR.intValue(),
                         "Project search has encountered an error:\n${exp.message}")
             }
@@ -209,48 +214,22 @@ class BardWebInterfaceController {
      * Do structure searches
      */
     def searchStructures(SearchCommand searchCommand) {
-        if (StringUtils.isNotBlank(searchCommand.searchString)) {
-            //we are capping this at 50
-            params.max = 50
-            params.offset = 0
-
-
-            normalizeSearchString(searchCommand)
-            final List<SearchFilter> searchFilters = searchCommand.getAppliedFilters()
-            if (!searchFilters) {//user SearchCommand
-                searchFilters = []
-            }
-            this.queryService.findFiltersInSearchBox(searchFilters, searchCommand.searchString)
-
-            try {
-
-                final String[] searchStringSplit = searchCommand.searchString.split(":")
-                if (searchStringSplit.length == 2) {
-                    final String searchTypeString = searchStringSplit[0]
-                    final String smiles = searchStringSplit[1]
-                    //we make the first character capitalized to match the ENUM
-                    final StructureSearchParams.Type searchType = searchTypeString?.toLowerCase()?.capitalize() as StructureSearchParams.Type
-                    Map compoundAdapterMap = queryService.structureSearch(smiles, searchType, searchFilters, 50, 0)
-                    List<CompoundAdapter> compoundAdapters = compoundAdapterMap.compoundAdapters
-                    render(template: 'compounds', model: [
-                            compoundAdapters: compoundAdapters,
-                            facets: compoundAdapterMap.facets,
-                            nhits: compoundAdapterMap.nHits,
-                            searchString: "${searchCommand.searchString}",
-                            appliedFilters: getAppliedFilters(searchFilters, compoundAdapterMap.facets)
-                    ]
-                    )
+        try {
+            if (StringUtils.isNotBlank(searchCommand.searchString)) {
+                Map map = handleStructureSearch(queryService, searchCommand)
+                if (map) {
+                    render(template: 'compounds', model: map)
+                    return
                 }
             }
-            catch (Exception exp) {
-                log.error("Error performing structure search", exp)
-                return response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR.intValue(),
-                        "Structure search has encountered an error:\n${exp.message}")
-            }
-        } else {
-            flash.message = 'Search String is required must be of the form StructureSearchType:Smiles'
-            return response.sendError(HttpServletResponse.SC_BAD_REQUEST,
-                    "Search String is required")
+            flash.message = "Search String is required, must be of the form StructureSearchType:Smiles"
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST,
+                    "${flash.message}")
+        }
+        catch (Exception exp) {
+            log.error(exp)
+            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR.intValue(),
+                    "Structure search has encountered an error:\n${exp.message}")
         }
     }
     //============================================ Show Pages ===================================================================
@@ -264,16 +243,15 @@ class BardWebInterfaceController {
         try {
             Integer compoundId = cid ?: params.id as Integer//if '' param is provided, use that; otherwise, try the default id one
 
-            CompoundAdapter compoundAdapter = null;
-            if (compoundId) {
-                compoundAdapter = this.queryService.showCompound(compoundId)
-            }
-
+            final CompoundAdapter compoundAdapter = this.queryService.showCompound(compoundId)
             if (compoundAdapter) {
                 render(view: "showCompound", model: [compound: compoundAdapter])
             }
             else {
-                render "Could not find compound"
+                final String message = "Could not find Compound Id ${cid}"
+                flash.message = message
+                return response.sendError(HttpServletResponse.SC_NOT_FOUND,
+                        message)
             }
         }
         catch (Exception exp) {
@@ -289,34 +267,27 @@ class BardWebInterfaceController {
     def showAssay(Integer assayProtocolId) {
         Integer assayId = assayProtocolId ?: params.id as Integer//if 'assay' param is provided, use that; otherwise, try the default id one
         try {
-            if (assayId) {
-                Map assayMap = this.queryService.showAssay(assayId)
-                AssayAdapter assayAdapter = assayMap.assayAdapter
-                Collection<Value> annotations = assayAdapter.annotations
-                String assayDetectionMethod = ""
-                String assayDetectionInstrument = ""
-                Iterator<Value> annotationsIterator = annotations.iterator()
-                while (annotationsIterator.hasNext()) {
-                    final Value value = annotationsIterator.next()
-                    if (value.id == 'detection method type') {
-                        assayDetectionMethod = value.value
-                    }
-                    if (value.id == 'detection instrument') {
-                        assayDetectionInstrument = value.value
-                    }
-                }
-                //grab ex
-
-                render(view: "showAssay", model: [assayAdapter: assayAdapter, assayDetectionMethod: assayDetectionMethod, assayDetectionInstrument: assayDetectionInstrument, experiments: assayMap.experiments, projects: assayMap.projects])
+            Map assayMap = this.queryService.showAssay(assayId)
+            AssayAdapter assayAdapter = assayMap.assayAdapter
+            if (assayAdapter) {
+                render(view: "showAssay", model: [
+                        assayAdapter: assayAdapter,
+                        experiments: assayMap.experiments,
+                        projects: assayMap.projects
+                ]
+                )
             }
             else {
-                render "Assay Protocol ID parameter required"
+                final String message = "Could not find Assay Id ${assayId}"
+                flash.message = message
+                return response.sendError(HttpServletResponse.SC_NOT_FOUND,
+                        message)
             }
         }
         catch (Exception exp) {
-            log.error("Error showing assay with ID " + assayProtocolId, exp)
+            log.error(exp)
             return response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR.intValue(),
-                    "Structure search has encountered an error:\n${exp.message}")
+                    "Search For Assay Id ${assayId}:\n${exp.message}")
         }
     }
 
@@ -329,13 +300,17 @@ class BardWebInterfaceController {
                 render(view: "showProject", model: [projectAdapter: projectAdapter, experiments: projectMap.experiments, assays: projectMap.assays])
             }
             else {
-                render "Project ID parameter required"
+                final String message = "Could not find Project Id ${projectId}"
+                flash.message = message
+                return response.sendError(HttpServletResponse.SC_NOT_FOUND,
+                        message)
+
             }
         }
         catch (Exception exp) {
-            log.error("Error showing project with ID " + projectId, exp)
+            log.error(exp)
             return response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR.intValue(),
-                    "Structure search has encountered an error:\n${exp.message}")
+                    "Search For Project Id ${projectId}:\n${exp.message}")
         }
     }
 
@@ -370,16 +345,16 @@ class BardWebInterfaceController {
      */
     def autoCompleteAssayNames() {
         try {
-            final List<Map<String, String>> assayNames = this.queryService.autoComplete(params?.term)
+            final List<Map<String, String>> assayNames = this.queryService.autoComplete(params.term)
             // return assayNames as JSON
             render(contentType: "text/json") {
                 assayNames
             }
         }
         catch (Exception exp) {
-            log.error("Error with autocomplete", exp)
+            log.error(exp)
             return response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR.intValue(),
-                    "AutoComplete encoutered and error :\n${exp.message}")
+                    "AutoComplete encoutered an error :\n${exp.message}")
         }
     }
 }
@@ -389,9 +364,39 @@ class BardWebInterfaceController {
  */
 class SearchHelper {
 
+    Map handleStructureSearch(final bardqueryapi.IQueryService queryService, final SearchCommand searchCommand) {
+        Map structureSearchResultsMap = [:]
+        params.max = 50
+        params.offset = 0
+        removeDuplicatesFromSearchString(searchCommand)
+        final String[] searchStringSplit = searchCommand.searchString.split(":")
+        if (searchStringSplit.length == 2) {
+            final List<SearchFilter> searchFilters = searchCommand.getAppliedFilters()
+            if (!searchFilters) {//user SearchCommand
+                searchFilters = []
+            }
+            queryService.findFiltersInSearchBox(searchFilters, searchCommand.searchString)
+
+            final String searchTypeString = searchStringSplit[0]
+            final String smiles = searchStringSplit[1]
+            //we make the first character capitalized to match the ENUM
+            final StructureSearchParams.Type searchType = searchTypeString.toLowerCase().capitalize() as StructureSearchParams.Type
+            Map compoundAdapterMap = queryService.structureSearch(smiles, searchType, searchFilters, 50, 0)
+            List<CompoundAdapter> compoundAdapters = compoundAdapterMap.compoundAdapters
+            structureSearchResultsMap = [
+                    compoundAdapters: compoundAdapters,
+                    facets: compoundAdapterMap.facets,
+                    nhits: compoundAdapterMap.nHits,
+                    searchString: "${searchCommand.searchString}",
+                    appliedFilters: getAppliedFilters(searchFilters, compoundAdapterMap.facets)
+            ]
+        }
+        return structureSearchResultsMap
+    }
+
     def handleAssaySearches(final bardqueryapi.IQueryService queryService, final SearchCommand searchCommand) {
         if (StringUtils.isNotBlank(searchCommand.searchString)) {
-            normalizeSearchString(searchCommand)
+            removeDuplicatesFromSearchString(searchCommand)
             final List<SearchFilter> searchFilters = searchCommand.getAppliedFilters()
             if (!searchFilters) {//user SearchCommand
                 searchFilters = []
@@ -428,7 +433,7 @@ class SearchHelper {
 
         if (StringUtils.isNotBlank(searchCommand.searchString)) {
 
-            normalizeSearchString(searchCommand)
+            removeDuplicatesFromSearchString(searchCommand)
             List<SearchFilter> searchFilters = searchCommand.getAppliedFilters()
             if (!searchFilters) {//user SearchCommand
                 searchFilters = []
@@ -465,7 +470,7 @@ class SearchHelper {
     def handleProjectSearches(final bardqueryapi.IQueryService queryService, final SearchCommand searchCommand) {
 
         if (StringUtils.isNotBlank(searchCommand.searchString)) {
-            normalizeSearchString(searchCommand)
+            removeDuplicatesFromSearchString(searchCommand)
             final List<SearchFilter> searchFilters = searchCommand.getAppliedFilters()
             if (!searchFilters) {//user SearchCommand
                 searchFilters = []
@@ -521,7 +526,7 @@ class SearchHelper {
      * this would go away if NCGC supports filters for all searches, then we would
      * not need to add the search string to the paging object
      */
-    protected void normalizeSearchString(SearchCommand searchCommand) {
+    protected void removeDuplicatesFromSearchString(SearchCommand searchCommand) {
         Set<String> searchCommandSplit = searchCommand.searchString.trim().split(",") as Set<String>
         searchCommand.searchString = searchCommandSplit.join(",")
         params.searchString = searchCommand.searchString

@@ -46,20 +46,11 @@ class ConfidenceBoundAnnotation extends AbstractXYAnnotation {
 
         RectangleEdge rangeEdge = Plot.resolveRangeAxisLocation(
                 plot.getRangeAxisLocation(), orientation);
+        final Map<String, Float> edges = compute2DEdges(orientation, domainEdge, rangeEdge, dataArea, domainAxis, rangeAxis)
 
-        float j2DX1 = 0.0f;
-        float j2DX2 = 0.0f;
-        float j2DY1 = 0.0f;
-        if (orientation == PlotOrientation.VERTICAL) {
-            j2DX1 = (float) domainAxis.valueToJava2D(
-                    confidenceX1, dataArea, domainEdge);
-            j2DX2 = (float) domainAxis.valueToJava2D(
-                    confidenceX2, dataArea, domainEdge);
-            j2DY1 = (float) rangeAxis.valueToJava2D(
-                    confidenceY, dataArea, rangeEdge);
-        } else if (orientation == PlotOrientation.HORIZONTAL) {
-            throw new RuntimeException("unimplemented");
-        }
+        float j2DX1 = edges.j2DX1
+        float j2DX2 = edges.j2DX2
+        float j2DY1 = edges.j2DY1
         gd.setPaint(this.color);
         gd.setStroke(new BasicStroke());
 
@@ -68,12 +59,27 @@ class ConfidenceBoundAnnotation extends AbstractXYAnnotation {
         bar.moveTo(j2DX1, j2DY1);
         bar.lineTo(j2DX2, j2DY1);
         // the left vertical line
-        bar.moveTo(j2DX1, j2DY1 - confidenceAnnotationHeight / 2);
-        bar.lineTo(j2DX1, j2DY1 + confidenceAnnotationHeight / 2);
+        bar.moveTo(j2DX1, j2DY1 - this.confidenceAnnotationHeight / 2);
+        bar.lineTo(j2DX1, j2DY1 + this.confidenceAnnotationHeight / 2);
         // the right vertical line
-        bar.moveTo(j2DX2, j2DY1 - confidenceAnnotationHeight / 2);
-        bar.lineTo(j2DX2, j2DY1 + confidenceAnnotationHeight / 2);
+        bar.moveTo(j2DX2, j2DY1 - this.confidenceAnnotationHeight / 2);
+        bar.lineTo(j2DX2, j2DY1 + this.confidenceAnnotationHeight / 2);
 
         gd.draw(bar);
+    }
+
+    Map<String, Float> compute2DEdges(PlotOrientation orientation, RectangleEdge domainEdge, RectangleEdge rangeEdge, Rectangle2D dataArea, ValueAxis domainAxis, ValueAxis rangeAxis) {
+        if (orientation == PlotOrientation.VERTICAL) {
+            float j2DX1 = (float) domainAxis.valueToJava2D(
+                    this.confidenceX1, dataArea, domainEdge);
+            float j2DX2 = (float) domainAxis.valueToJava2D(
+                    this.confidenceX2, dataArea, domainEdge);
+            float j2DY1 = (float) rangeAxis.valueToJava2D(
+                    this.confidenceY, dataArea, rangeEdge);
+            return [j2DX1: j2DX1, j2DX2: j2DX2, j2DY1: j2DY1]
+        }
+        throw new RuntimeException("Orientation ${orientation}, Not Yet Implemented");
+
+
     }
 }

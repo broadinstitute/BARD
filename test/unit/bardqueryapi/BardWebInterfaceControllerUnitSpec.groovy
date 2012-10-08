@@ -44,13 +44,45 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
         controller.shoppingCartService = this.shoppingCartService
     }
 
-    void tearDown() {
-        // Tear down logic here
+    void "test index"() {
+
+        when:
+        controller.index()
+        then:
+        //request.makeAjaxRequest()
+        assert response.status == 200
+    }
+
+    void "test search"() {
+        given:
+        final String searchString = "Search String"
+        params.searchString = searchString
+        when:
+        controller.search()
+        then:
+        assert response.status == 302
+        assert response.redirectedUrl == '/bardWebInterface/searchResults'
+    }
+
+    void "test searchResults"() {
+        when:
+        controller.searchResults()
+        then:
+        assert response.status == 200
+    }
+
+    void "test showExperiment #label"() {
+        given:
+        params.id = "222"
+        when:
+        controller.showExperiment()
+        then:
+        assert response.status == 200
+        assert view == '/bardWebInterface/showExperimentResult'
+        assert model.experimentId == "222"
     }
 
     void "test showExperimentResult #label"() {
-        given: "An Experiment ID"
-
         when:
         controller.showExperimentResult(eid)
         then:
@@ -58,12 +90,24 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
         assert response.status == statusCode
 
         where:
-        label                          | eid  | statusCode                | experimentData
-        "Empty Null EID - Bad Request" | null | HttpServletResponse.SC_OK | null
-        "EID- Not Found"               | 234  | HttpServletResponse.SC_OK | null
-        "Success"                      | 567  | HttpServletResponse.SC_OK | [total: 2, spreadSheetActivities: [
+        label                          | eid  | statusCode                         | experimentData
+        "Empty Null EID - Bad Request" | null | HttpServletResponse.SC_BAD_REQUEST | null
+        "EID- Not Found"               | 234  | HttpServletResponse.SC_NOT_FOUND   | null
+        "Success"                      | 567  | HttpServletResponse.SC_OK          | [total: 2, spreadSheetActivities: [
                 new SpreadSheetActivity(eid: new Long(567), cid: new Long(1), sid: new Long(20))],
                 role: ExperimentValues.ExperimentRole.Counterscreen, experiment: new Experiment(name: 'name')]
+    }
+
+    void "test showExperimentResult With Exception"() {
+        given:
+        Long id = 234
+        when:
+        controller.showExperimentResult(id)
+        then:
+        _ * this.molecularSpreadSheetService.findExperimentDataById(_, _, _) >> {throw new RuntimeException("Some message")}
+        assert response.status == 404
+        assert flash.message == "Problem finding Experiment ${id}"
+
     }
 
     void "test promiscuity action #label"() {
@@ -81,9 +125,30 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
         "Empty Null CID - Bad Request" | null | HttpServletResponse.SC_BAD_REQUEST           | null                        | null
         "CID- Internal Server Error"   | 234  | HttpServletResponse.SC_INTERNAL_SERVER_ERROR | null                        | null
         "Success"                      | 567  | HttpServletResponse.SC_OK                    | [new Scaffold(pScore: 222)] | new PromiscuityScore(cid: 567, scaffolds: [new Scaffold(pScore: 222)])
-
-
     }
+
+    void "test promiscuity action with exception"() {
+        given:
+        final Long cid = 222
+        when:
+        controller.promiscuity(cid)
+        then:
+        _ * this.queryService.findPromiscuityScoreForCID(_) >> {throw new RuntimeException("Error Message")}
+        assert response.status == HttpServletResponse.SC_BAD_REQUEST
+        assert flash.message == "Could not get promiscuity score for ${cid}"
+    }
+
+    void "test promiscuity action with status code 404"() {
+        given:
+        Map map = [status: 404, message: 'Success', promiscuityScore: null]
+        final Long cid = 222
+        when:
+        controller.promiscuity(cid)
+        then:
+        _ * this.queryService.findPromiscuityScoreForCID(_) >> {map}
+        assert response.status == HttpServletResponse.SC_NOT_FOUND
+    }
+    // return [status: resp.status, message: 'Success', promiscuityScore: promiscuityScore]
 
     void "test handle Assay Searches #label"() {
         given:
@@ -302,11 +367,20 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
 
     }
 
+    void "test get Applied Filters Empty Filters"() {
+        when:
+        final Map filters = controller.getAppliedFilters([], [])
+        then:
+        assert !filters.searchFilters
+        assert !filters.appliedFiltersDisplayedOutsideFacetsGrouped
+        assert !filters.appliedFiltersNotInFacetsGrouped
+    }
+
     void "test structure search #label"() {
         given:
         mockCommandObject(SearchCommand)
         params.formName = FacetFormType.CompoundFacetForm.toString()
-        Map paramMap = [formName: FacetFormType.CompoundFacetForm.toString(), searchString: searchString, filters: [new SearchFilter(filterName: "a", filterValue: "b")]]
+        Map paramMap = [formName: FacetFormType.CompoundFacetForm.toString(), searchString: searchString, filters: filters]
         controller.metaClass.getParams {-> paramMap}
         SearchCommand searchCommand = new SearchCommand(paramMap)
         when:
@@ -318,19 +392,83 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
         flash.message == flashMessage
         response.status == statusCode
         where:
-        label                 | searchString | flashMessage                                                               | statusCode                         | compoundAdapterMap
-        "Empty Search String" | ""           | 'Search String is required must be of the form StructureSearchType:Smiles' | HttpServletResponse.SC_BAD_REQUEST | null
-        "Throws Exception"    | "1234,5678"  | null                                                                       | HttpServletResponse.SC_OK          | null
-        "Success"             | "Exact:CCC"  | null                                                                       | HttpServletResponse.SC_OK          | [compoundAdapters: [buildCompoundAdapter(1234, [], "CC"), buildCompoundAdapter(4567, [], "CCC")], facets: [], nHits: 2]
+        label                 | searchString | flashMessage                                                                | filters                                               | statusCode                         | compoundAdapterMap
+        "Empty Search String" | ""           | 'Search String is required, must be of the form StructureSearchType:Smiles' | [new SearchFilter(filterName: "a", filterValue: "b")] | HttpServletResponse.SC_BAD_REQUEST | null
+        "Throws Exception"    | "1234,5678"  | 'Search String is required, must be of the form StructureSearchType:Smiles' | [new SearchFilter(filterName: "a", filterValue: "b")] | HttpServletResponse.SC_BAD_REQUEST | null
+        "Success"             | "Exact:CCC"  | null                                                                        | [new SearchFilter(filterName: "a", filterValue: "b")] | HttpServletResponse.SC_OK          | [compoundAdapters: [buildCompoundAdapter(4567, [], "CCC")], facets: [], nHits: 2]
+        "Success No Filters"  | "Exact:CCC"  | null                                                                        | []                                                    | HttpServletResponse.SC_OK          | [compoundAdapters: [buildCompoundAdapter(4567, [], "CCC")], facets: [], nHits: 2]
 
     }
 
+    void "test structure search throws Exception"() {
+        given:
+        mockCommandObject(SearchCommand)
+        SearchCommand searchCommand = null
+        when:
+        request.method = 'GET'
+        controller.searchStructures(searchCommand)
+        then:
+        _ * this.queryService.structureSearch(_, _, _, _, _) >> {new RuntimeException("Error Message")}
+        and:
+        response.status == HttpServletResponse.SC_INTERNAL_SERVER_ERROR
+    }
+    /**
+     *
+     * {@link SearchHelper#handleSearchParams()}
+     */
+    void "test handleSearchParams"() {
+        given:
+        params.max = max
+        params.offset = offset
+        when:
+        Map results = controller.handleSearchParams()
+        then:
+        assert results.top == expectedMax
+        assert results.skip == expectedOffset
+
+        where:
+        label                              | max  | offset | expectedMax | expectedOffset
+        "With No max and No offset params" | ""   | ""     | 10          | 0
+        "With max params only"             | "20" | ""     | 20          | 0
+        "With offset params only"          | ""   | "20"   | 10          | 20
+        "With max and offset params"       | "20" | "10"   | 20          | 10
+    }
+    /**
+     * {@link SearchHelper#searchStringToIdList(String)}
+     */
+    void "test searchStringToIdList"() {
+        given: " As search string with comma separated list of integers"
+        final String searchString = "21,34,44"
+        when: "We call the removeDuplicates method with the given search string"
+        final List<Long> ids = controller.searchStringToIdList(searchString)
+        then: "We expected to get back a new search string with the duplicates removed"
+        assert ids.size() == 3
+
+    }
+    /**
+     * {@link SearchHelper#removeDuplicatesFromSearchString(SearchCommand)}
+     */
+    void "test removeDuplicatesFromSearchString"() {
+        given: " As search string with duplicate values"
+        String searchStringWithDuplicates = "abc,efg,abc"
+
+        mockCommandObject(SearchCommand)
+        params.formName = FacetFormType.ProjectFacetForm.CompoundFacetForm.toString()
+        Map paramMap = [formName: FacetFormType.ProjectFacetForm.toString(), searchString: searchStringWithDuplicates, filters: []]
+        controller.metaClass.getParams {-> paramMap}
+        SearchCommand searchCommand = new SearchCommand(paramMap)
+
+        when: "We call the removeDuplicates method with the given search string"
+        controller.removeDuplicatesFromSearchString(searchCommand)
+        then: "We expected to get back a new search string with the duplicates removed"
+        assert searchCommand.searchString == "abc,efg"
+    }
 
     void "test searchProjectsByIDs action"() {
         given:
         mockCommandObject(SearchCommand)
         params.formName = FacetFormType.ProjectFacetForm.CompoundFacetForm.toString()
-        Map paramMap = [formName: FacetFormType.ProjectFacetForm.toString(), searchString: searchString, filters: [new SearchFilter(filterName: "a", filterValue: "b")]]
+        Map paramMap = [formName: FacetFormType.ProjectFacetForm.toString(), searchString: searchString, filters: filters]
         controller.metaClass.getParams {-> paramMap}
         SearchCommand searchCommand = new SearchCommand(paramMap)
         when:
@@ -339,16 +477,12 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
         then:
         queryService.findProjectsByPIDs(_, _) >> {projectAdapterMap}
         and:
-        if (responseTextLength > 0) {
-            assert response.text
-        } else {
-            assert !response.text
-        }
+        response.status == statusCode
         where:
-        label                                 | searchString | projectAdapterMap                                                                                                       | responseTextLength
-        "Search Projects By Id"               | "1234, 4567" | [projectAdapters: [buildProjectAdapter(1234, "project1"), buildProjectAdapter(1234, "project2")], facets: [], nHits: 2] | 20
-        "Search Projects By non existing Ids" | "12,67"      | null                                                                                                                    | 0
-
+        label                                 | searchString | projectAdapterMap                                          | statusCode                                   | filters
+        "Search Projects By Ids"              | "1234, 4567" | [projectAdapters: [buildProjectAdapter(1234, "project1")]] | HttpServletResponse.SC_OK                    | [new SearchFilter(filterName: "a", filterValue: "b")]
+        "Search Projects By Non existing Ids" | "12, 47"     | null                                                       | HttpServletResponse.SC_INTERNAL_SERVER_ERROR | [new SearchFilter(filterName: "a", filterValue: "b")]
+        "Search Projects By Id No Filters"    | "1234, 4567" | [projectAdapters: [buildProjectAdapter(1234, "project1")]] | HttpServletResponse.SC_OK                    | []
 
     }
 
@@ -356,7 +490,7 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
         given:
         mockCommandObject(SearchCommand)
         params.formName = FacetFormType.AssayFacetForm.CompoundFacetForm.toString()
-        Map paramMap = [formName: FacetFormType.AssayFacetForm.toString(), searchString: searchString, filters: [new SearchFilter(filterName: "a", filterValue: "b")]]
+        Map paramMap = [formName: FacetFormType.AssayFacetForm.toString(), searchString: searchString, filters: filters]
         controller.metaClass.getParams {-> paramMap}
         SearchCommand searchCommand = new SearchCommand(paramMap)
 
@@ -366,15 +500,12 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
         then:
         queryService.findAssaysByADIDs(_, _) >> {assayAdapterMap}
         and:
-        if (responseTextLength > 0) {
-            assert response.text
-        } else {
-            assert !response.text
-        }
+        assert response.status == statusCode
         where:
-        label                               | searchString | assayAdapterMap                                                                                               | responseTextLength
-        "Search Assays By Ids"              | "1234, 4567" | [assayAdapters: [buildAssayAdapter(1234, "assay1"), buildAssayAdapter(1234, "assay2")], facets: [], nHits: 2] | 20
-        "Search Assays By Non existing Ids" | "12, 47"     | null                                                                                                          | 0
+        label                               | searchString | assayAdapterMap                                                            | statusCode                                   | filters
+        "Search Assays By Ids"              | "1234, 4567" | [assayAdapters: [buildAssayAdapter(1234, "assay2")], facets: [], nHits: 2] | HttpServletResponse.SC_OK                    | [new SearchFilter(filterName: "a", filterValue: "b")]
+        "Search Assays By Non existing Ids" | "12, 47"     | null                                                                       | HttpServletResponse.SC_INTERNAL_SERVER_ERROR | [new SearchFilter(filterName: "a", filterValue: "b")]
+        "Search Assays By Id No Filters"    | "1234, 4567" | [assayAdapters: [buildAssayAdapter(1234, "assay2")], facets: [], nHits: 2] | HttpServletResponse.SC_OK                    | []
 
 
     }
@@ -383,7 +514,7 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
         given:
         mockCommandObject(SearchCommand)
         params.formName = FacetFormType.CompoundFacetForm.CompoundFacetForm.toString()
-        Map paramMap = [formName: FacetFormType.CompoundFacetForm.toString(), searchString: searchString, filters: [new SearchFilter(filterName: "a", filterValue: "b")]]
+        Map paramMap = [formName: FacetFormType.CompoundFacetForm.toString(), searchString: searchString, filters: filters]
         controller.metaClass.getParams {-> paramMap}
         SearchCommand searchCommand = new SearchCommand(paramMap)
         when:
@@ -392,17 +523,49 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
         then:
         queryService.findCompoundsByCIDs(_, _) >> {compoundAdapterMap}
         and:
-        if (responseTextLength > 0) {
-            assert response.text
-        } else {
-            assert !response.text
-        }
+        assert response.status == statusCode
         where:
-        label                               | searchString | compoundAdapterMap                                                                                                      | responseTextLength
-        "Search Compounds By Id"            | "1234, 4567" | [compoundAdapters: [buildCompoundAdapter(1234, [], "CC"), buildCompoundAdapter(4567, [], "CCC")], facets: [], nHits: 2] | 20
-        "Search Compounds Non existing Ids" | "12, 45"     | null                                                                                                                    | 0
+        label                               | searchString | compoundAdapterMap                                                                | statusCode                                   | filters
+        "Search Compounds By Id"            | "1234, 4567" | [compoundAdapters: [buildCompoundAdapter(4567, [], "CCC")], facets: [], nHits: 2] | HttpServletResponse.SC_OK                    | [new SearchFilter(filterName: "a", filterValue: "b")]
+        "Search Compounds Non existing Ids" | "12, 45"     | null                                                                              | HttpServletResponse.SC_INTERNAL_SERVER_ERROR | [new SearchFilter(filterName: "a", filterValue: "b")]
+        "Search Compounds By Id No Filters" | "1234, 4567" | [compoundAdapters: [buildCompoundAdapter(4567, [], "CCC")], facets: [], nHits: 2] | HttpServletResponse.SC_OK                    | []
 
 
+    }
+
+    void "test searchProjectsByIDs Empty SearchString"() {
+        given:
+        mockCommandObject(SearchCommand)
+        SearchCommand searchCommand = new SearchCommand(searchString: "")
+        when:
+        request.method = 'GET'
+        controller.searchProjectsByIDs(searchCommand)
+        then:
+        assert response.status == HttpServletResponse.SC_BAD_REQUEST
+
+    }
+
+    void "test searchAssaysByIDs Empty SearchString"() {
+        given:
+        mockCommandObject(SearchCommand)
+        SearchCommand searchCommand = new SearchCommand(searchString: "")
+        when:
+        request.method = 'GET'
+        controller.searchAssaysByIDs(searchCommand)
+        then:
+        assert response.status == HttpServletResponse.SC_BAD_REQUEST
+
+    }
+
+    void "test searchCompoundsByIDs Empty SearchString"() {
+        given:
+        mockCommandObject(SearchCommand)
+        SearchCommand searchCommand = new SearchCommand(searchString: "")
+        when:
+        request.method = 'GET'
+        controller.searchCompoundsByIDs(searchCommand)
+        then:
+        assert response.status == HttpServletResponse.SC_BAD_REQUEST
     }
 
     void "Demonstrate that there are carts assays"() {
@@ -414,7 +577,16 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
         assertNotNull cartAssay
     }
 
-
+    void "test showCompound with Exception"() {
+        given:
+        Integer cid = 872
+        when:
+        request.method = 'GET'
+        controller.showCompound(cid)
+        then:
+        queryService.showCompound(_) >> { new RuntimeException("ee") }
+        response.status == HttpServletResponse.SC_INTERNAL_SERVER_ERROR
+    }
 
     void "test showCompound #label"() {
         when:
@@ -428,19 +600,28 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
             assert model.compound
             expectedCID == model.compound.pubChemCID
             expectedSIDs == model.compound.pubChemSIDs
-        } else {
-            assert response.text == 'Could not find compound'
         }
+        response.status == statusCode
 
         where:
-        label                                             | cid              | compoundAdapter                            | expectedCID | expectedSIDs | expectedView
-        "Render show compound page"                       | new Integer(872) | buildCompoundAdapter(872, [1, 2, 3], "CC") | 872         | [1, 2, 3]    | "/bardWebInterface/showCompound"
-        "Render not found Compound string, null Adapter"  | null             | null                                       | null        | null         | null
-        "Render not found Compound with Compound Adpater" | null             | buildCompoundAdapter(872, [1, 2, 3], "CC") | null        | null         | null
-        "Compound does not exist"                         | new Integer(-1)  | null                                       | null        | null         | null
+        label                                             | cid              | compoundAdapter                            | expectedCID | expectedSIDs | expectedView                     | statusCode
+        "Render show compound page"                       | new Integer(872) | buildCompoundAdapter(872, [1, 2, 3], "CC") | 872         | [1, 2, 3]    | "/bardWebInterface/showCompound" | 200
+        "Render not found Compound string, null Adapter"  | null             | null                                       | null        | null         | null                             | 404
+        "Render not found Compound with Compound Adpater" | null             | buildCompoundAdapter(872, [1, 2, 3], "CC") | null        | null         | "/bardWebInterface/showCompound" | 200
+        "Compound does not exist"                         | new Integer(-1)  | null                                       | null        | null         | null                             | 404
 
     }
 
+    void "test showAssay with Exception"() {
+        given:
+        Integer adid = 872
+        when:
+        request.method = 'GET'
+        controller.showAssay(adid)
+        then:
+        queryService.showAssay(_) >> { new RuntimeException("ee") }
+        response.status == HttpServletResponse.SC_INTERNAL_SERVER_ERROR
+    }
 
     void "test showAssay #label"() {
 
@@ -457,15 +638,25 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
             adid == model.assayAdapter.assay.id
             name == model.assayAdapter.name
         }
-        else {
-            assert response.text == 'Assay Protocol ID parameter required'
-        }
+        assert response.status == statusCode
         where:
-        label                    | adid                | name   | assayAdapter                                                       | expectedAssayView
-        "Return an assayAdapter" | new Integer(485349) | "Test" | [assayAdapter: buildAssayAdapter(485349, "Test"), experiments: []] | "/bardWebInterface/showAssay"
-        "Assay ADID is null"     | null                | "Test" | [assayAdapter: buildAssayAdapter(485349, "Test"), experiments: []] | null
-        "Assay Adapter is null"  | null                | "Test" | null                                                               | null
+        label                    | adid                | name   | assayAdapter                                                       | expectedAssayView             | statusCode
+        "Return an assayAdapter" | new Integer(485349) | "Test" | [assayAdapter: buildAssayAdapter(485349, "Test"), experiments: []] | "/bardWebInterface/showAssay" | 200
+        "A null AssayAdapter"    | null                | "Test" | [assayAdapter: null, experiments: []]                              | null                          | 404
+        "Assay ADID is null"     | null                | "Test" | [assayAdapter: buildAssayAdapter(485349, "Test"), experiments: []] | "/bardWebInterface/showAssay" | 200
+        "Assay Adapter is null"  | null                | "Test" | null                                                               | null                          | 500
 
+    }
+
+    void "test showProject with Exception"() {
+        given:
+        Integer pid = 872
+        when:
+        request.method = 'GET'
+        controller.showProject(pid)
+        then:
+        queryService.showProject(_) >> { new RuntimeException("ee") }
+        response.status == HttpServletResponse.SC_INTERNAL_SERVER_ERROR
     }
 
     void "test showProject #label"() {
@@ -483,14 +674,12 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
             pid == model.projectAdapter.project.id
             name == model.projectAdapter.name
         }
-        else {
-            assert response.text == 'Project ID parameter required'
-        }
+        assert response.status == statusCode
         where:
-        label                     | pid                 | name   | projectAdapter                                                         | expectedProjectView
-        "Return a Project"        | new Integer(485349) | "Test" | [projectAdapter: buildProjectAdapter(485349, "Test"), experiments: []] | "/bardWebInterface/showProject"
-        "Project PID is null"     | null                | "Test" | [projectAdapter: buildProjectAdapter(485349, "Test"), experiments: []] | null
-        "Project Adapter is null" | null                | "Test" | null                                                                   | null
+        label                     | pid                 | name   | projectAdapter                                                         | expectedProjectView             | statusCode
+        "Return a Project"        | new Integer(485349) | "Test" | [projectAdapter: buildProjectAdapter(485349, "Test"), experiments: []] | "/bardWebInterface/showProject" | 200
+        "Project PID is null"     | null                | "Test" | [projectAdapter: buildProjectAdapter(485349, "Test"), experiments: []] | null                            | 404
+        "Project Adapter is null" | null                | "Test" | null                                                                   | null                            | 404
     }
 
 
@@ -509,6 +698,20 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
 
     }
 
+    void "test autocomplete throw exception"() {
+        when:
+        request.method = 'GET'
+        controller.params.term = searchString
+        controller.autoCompleteAssayNames()
+        then:
+        queryService.autoComplete(_) >> { throw new RuntimeException("Error") }
+        response.status == HttpServletResponse.SC_INTERNAL_SERVER_ERROR
+
+        where:
+        label                | searchString
+        "Return two strings" | ""
+
+    }
 
 
     void "test getAppliedFilters #label"() {
