@@ -134,13 +134,13 @@ class MolecularSpreadSheetServiceUnitSpec  extends Specification {
         then: "prove that the active values are available"
         assertNotNull molSpreadSheetData
         assertNotNull  molSpreadSheetData.mssHeaders
-        assert  molSpreadSheetData.mssHeaders.size() == 3
+        assert  molSpreadSheetData.mssHeaders.size() == 6
         assert  molSpreadSheetData.mssHeaders.contains("Struct")
         assert  molSpreadSheetData.mssHeaders.contains("CID")
         assert  molSpreadSheetData.mssHeaders.contains("UNM Promiscuity Analysis")
         assert  molSpreadSheetData.mssHeaders.contains("a")
-        assert  molSpreadSheetData.mssHeaders.contains("bs")
-        assert  molSpreadSheetData.mssHeaders.contains("UNM Promiscuity Analysis")
+        assert  molSpreadSheetData.mssHeaders.contains("b")
+        assert  molSpreadSheetData.mssHeaders.contains("c")
     }
 
 
