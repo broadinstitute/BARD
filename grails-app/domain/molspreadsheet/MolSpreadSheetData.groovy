@@ -1,7 +1,5 @@
 package molspreadsheet
 
-import java.math.MathContext
-
 class MolSpreadSheetData {
 
     static hasMany = [ molSpreadSheetCell : MolSpreadSheetCell ]
@@ -16,7 +14,6 @@ class MolSpreadSheetData {
     }
 
 
-    MathContext mathContext
 
     /**
      * Display a cell, as specified by a row and column
