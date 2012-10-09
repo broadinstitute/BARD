@@ -9,7 +9,7 @@ class ScaffoldPage extends Page {
 		message { $("i.icon-shopping-cart")}
 	}
     def logout() {
-        def logoutLink = $("a", text: "Logout")
+        def logoutLink = $("#logoutButton")
         assert logoutLink
         def firstLink = logoutLink[0]
         firstLink.click();
@@ -22,7 +22,7 @@ class ScaffoldPage extends Page {
     }
 
     boolean isLoggedInAsUser(String username) {
-        checkFor($(id: "loginLink"), "Logged in as $username")
+        checkFor($(id: "logoutForm"), "Logged in as") && checkFor($(id: "logoutForm"), "$username")
     }
 
     boolean checkFor(Navigator element, String condition) {
@@ -37,8 +37,7 @@ class ScaffoldPage extends Page {
         return false
     }
     void waitForPageToLoad() {
-
-       // waitFor(5, 0.5) { $("p").text().contains("BARD is a free") }
+      waitFor(5, 0.5) { title.contains("BioAssay Research Database") }
     }
 
 }

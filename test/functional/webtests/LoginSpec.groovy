@@ -1,0 +1,80 @@
+package webtests
+
+import webtests.pages.HomePage
+import webtests.pages.LoginPage
+
+/**
+ * Created by IntelliJ IDEA.
+ * User: jlev
+ * Date: 10/18/11
+ * Time: 10:40 AM
+ * To change this template use File | Settings | File Templates.
+ */
+class LoginSpec extends BardReportingSpec {
+    String invalidUserName = "baduser"
+    String invalidPassword = "badpassword"
+
+    def "Test login with invalid username"() {
+        given: "User visits the Login page"
+        to LoginPage
+
+        when: "User attempts to login with an invalid username"
+        at LoginPage
+        logInNoValidation(invalidUserName, usernameUserPropsMap.user.password)
+
+        then: "The system should redirect the user to the login page"
+        at LoginPage
+        assert !isLoggedIn()
+        waitFor {
+            errorMessage.text() ==~ 'Sorry, we were not able to find a user with that username and password.'
+        }
+        !loginForm.j_username
+        !loginForm.j_password
+    }
+
+    def "Test login with invalid password"() {
+        given: "User visits the Login page"
+        to LoginPage
+
+        when: "User attempts to login with an invalid password"
+        at LoginPage
+        logInNoValidation(usernameUserPropsMap.user.username, invalidPassword)
+
+        then: "The system should redirect the user to the login page"
+        at LoginPage
+        assert !isLoggedIn()
+        waitFor {
+            errorMessage.text() ==~ 'Sorry, we were not able to find a user with that username and password.'
+        }
+        !loginForm.j_username
+        !loginForm.j_password
+    }
+
+    def "Test login with valid credentials"() {
+        given: "User visits the Login page"
+        to LoginPage
+
+        when: "User attempts to login with an invalid username"
+        at LoginPage
+        logInNoValidation(usernameUserPropsMap.user.username, usernameUserPropsMap.user.password)
+
+        then: "The system should display a message stating that the user is logged in"
+        at HomePage
+        assert isLoggedInAsUser(usernameUserPropsMap.user.username)
+    }
+
+    def "Test logout"() {
+        given: "User is logged in to the system"
+        to LoginPage
+        logInNoValidation(usernameUserPropsMap.user.username, usernameUserPropsMap.user.password)
+        assert isLoggedInAsUser(usernameUserPropsMap.user.username)
+
+        when: "User clicks the 'Log Out' link"
+        at HomePage
+        logout()
+
+        then: "The user should be logged out of the system"
+        assert !isLoggedIn()
+
+    }
+}

@@ -23,7 +23,7 @@
                     </label>
                 </g:radioGroup>
             </div></div>
-            <a href="#" class="btn" data-dismiss="modal">Close</a>
+            <a href="#" class="btn" data-dismiss="modal" id="closeButton">Close</a>
             <a id="structureSearchButton" href="#" class="btn btn-primary" data-dismiss="modal">Search</a>
         </g:form>
     </div>

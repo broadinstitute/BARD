@@ -19,7 +19,7 @@
 </div>
 <div class="row-fluid">
     <div class="span6 offset3 well well-small">
-        <p>BARD is a free, public platform funded by the <a href="http://mli.nih.gov">NIH Molecular Libraries Program</a> that enables
+        <p id="bardisfree">BARD is a free, public platform funded by the <a href="http://mli.nih.gov">NIH Molecular Libraries Program</a> that enables
         scientists to store and analyze well-annotated small-molecule bioassay results.  You can use
         BARD to search across X projects, Y experiments, Z assay definitions, N compounds, and M results.
         For further analytical power, <a href="http://bard.nih.gov">download our desktop client</a> or access the
