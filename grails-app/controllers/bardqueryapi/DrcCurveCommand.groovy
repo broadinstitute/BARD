@@ -2,11 +2,14 @@ package bardqueryapi
 
 import org.apache.commons.collections.ListUtils
 import org.apache.commons.collections.Factory
+import org.omg.CORBA.StringHolder
 /**
  * Command object used to parse all the search parameters coming in from the client.
  */
 @grails.validation.Validateable
 class DrcCurveCommand {
+    String xAxisLabel = "Concentration (uM)"
+    String yAxisLabel
     Double width
     Double height
     Double s0

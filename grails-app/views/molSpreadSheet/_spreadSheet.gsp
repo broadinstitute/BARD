@@ -105,6 +105,7 @@
                                                              hillSlope: spreadSheetActivityStorage?.hillCurveValueCoef,
                                                              concentrations: spreadSheetActivityStorage?.hillCurveValueConc,
                                                              activities: spreadSheetActivityStorage?.hillCurveValueResponse
+                                                             yAxisLabel: spreadSheetActivityStorage?.hillCurveValueId
                                                      ]
                                              )}"/>
                                     </div>

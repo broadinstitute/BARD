@@ -77,7 +77,9 @@
                                                  ac50: readout.slope,
                                                  hillSlope: readout.coef,
                                                  concentrations: readout.conc,
-                                                 activities: readout.response])}"/>
+                                                 activities: readout.response,
+                                                 yAxisLabel: experimentData.hillCurveValue.id
+                                         ])}"/>
                             <br/>
                             <g:if test="${readout.slope}">
                                 <p>
