@@ -5,6 +5,7 @@ import grails.test.mixin.TestFor
 import spock.lang.Specification
 import spock.lang.Unroll
 import bardqueryapi.*
+import bard.core.Experiment
 
 /**
  * Created with IntelliJ IDEA.
@@ -96,6 +97,52 @@ class MolecularSpreadSheetServiceUnitSpec  extends Specification {
         }
         returnValue
     }
+
+
+
+
+    void "test populateMolSpreadSheetColumnMetadata when experiment list is empty"() {
+        given:  "we have an experiment"
+        final MolSpreadSheetData molSpreadSheetData  = new MolSpreadSheetData()
+        final List<Experiment> experimentList  = []
+
+        when: "we want to pull out the active values"
+        service.populateMolSpreadSheetColumnMetadata(molSpreadSheetData,experimentList)
+
+        then: "prove that the active values are available"
+        assertNotNull molSpreadSheetData
+        assertNotNull  molSpreadSheetData.mssHeaders
+        assert  molSpreadSheetData.mssHeaders.size() == 3
+        assert  molSpreadSheetData.mssHeaders.contains("Struct")
+        assert  molSpreadSheetData.mssHeaders.contains("CID")
+        assert  molSpreadSheetData.mssHeaders.contains("UNM Promiscuity Analysis")
+    }
+
+
+
+    void "test populateMolSpreadSheetColumnMetadata when experiment list is not empty"() {
+        given:  "we have an experiment"
+        final MolSpreadSheetData molSpreadSheetData  = new MolSpreadSheetData()
+        final List<Experiment> experimentList  = []
+        experimentList << new bard.core.Experiment("a")
+        experimentList << new bard.core.Experiment("b")
+        experimentList << new bard.core.Experiment("c")
+
+        when: "we want to pull out the active values"
+        service.populateMolSpreadSheetColumnMetadata(molSpreadSheetData,experimentList)
+
+        then: "prove that the active values are available"
+        assertNotNull molSpreadSheetData
+        assertNotNull  molSpreadSheetData.mssHeaders
+        assert  molSpreadSheetData.mssHeaders.size() == 3
+        assert  molSpreadSheetData.mssHeaders.contains("Struct")
+        assert  molSpreadSheetData.mssHeaders.contains("CID")
+        assert  molSpreadSheetData.mssHeaders.contains("UNM Promiscuity Analysis")
+        assert  molSpreadSheetData.mssHeaders.contains("a")
+        assert  molSpreadSheetData.mssHeaders.contains("bs")
+        assert  molSpreadSheetData.mssHeaders.contains("UNM Promiscuity Analysis")
+    }
+
 
 
 
