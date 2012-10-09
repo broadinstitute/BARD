@@ -155,17 +155,20 @@ public class DoseCurveImage {
     public static void addFittedCurve(String name, DefaultXYDataset dataset, XYLineAndShapeRenderer renderer, CurveParameters curveParameters, Color curveColor, double[] validX) {
         // add the fitted curve (if possible)
         if (curveParameters != null
-                && curveParameters.S0 != null
-                && curveParameters.SINF != null
-                && curveParameters.AC50 != null
-                && curveParameters.HILL_SLOPE != null) {
+                && curveParameters.getS0() != null
+                && curveParameters.getSINF() != null
+                && curveParameters.getAC50() != null
+                && curveParameters.getHILL_SLOPE() != null) {
 
             MutablePair<Double, Double> whereToStartAndStopOnXAxis = findWhereToStartAndStopOnXAxis(validX);
             double xStart = whereToStartAndStopOnXAxis.getLeft();
             double xStop = whereToStartAndStopOnXAxis.getRight();
 
             int seriesIndex = dataset.getSeriesCount();
-            dataset.addSeries(name + " fit", generateDataForSigmoidCurve(curveParameters.S0, curveParameters.SINF, curveParameters.AC50, curveParameters.HILL_SLOPE, xStart, xStop, 50));
+            dataset.addSeries(name + " fit",
+                    generateDataForSigmoidCurve(curveParameters.getS0(),
+                            curveParameters.getSINF(), curveParameters.getAC50(),
+                            curveParameters.getHILL_SLOPE(), xStart, xStop, 50));
             renderer.setSeriesLinesVisible(seriesIndex, true);
             renderer.setSeriesShapesVisible(seriesIndex, false);
             renderer.setSeriesVisibleInLegend(seriesIndex, false);
@@ -205,13 +208,13 @@ public class DoseCurveImage {
     private static void addConfidenceBounds(CurveParameters curveParameters, Color curveColor, XYPlot plot) {
         // add confidence bounds
         if (curveParameters != null
-                && curveParameters.S0 != null
-                && curveParameters.SINF != null
-                && curveParameters.lower95CL != null
-                && curveParameters.upper95CL != null) {
-            final float confidenceY = (float) (curveParameters.S0 + curveParameters.SINF) / 2;
-            final float confidenceX1 = (float) Math.log10(curveParameters.lower95CL);
-            final float confidenceX2 = (float) Math.log10(curveParameters.upper95CL);
+                && curveParameters.getS0() != null
+                && curveParameters.getSINF() != null
+                && curveParameters.getLower95CL() != null
+                && curveParameters.getUpper95CL() != null) {
+            final float confidenceY = (float) (curveParameters.getS0() + curveParameters.getSINF()) / 2;
+            final float confidenceX1 = (float) Math.log10(curveParameters.getLower95CL());
+            final float confidenceX2 = (float) Math.log10(curveParameters.getUpper95CL());
 
             // add an "annotation" which renders the confidence bounds.  Based
             // on XYLineAnnotation in the JFreeChart codebase
@@ -369,7 +372,7 @@ public class DoseCurveImage {
         int colorIndex = 0;
         if (drc != null) {
             drc.setColor(colors[colorIndex]);
-            curves.put(colorIndex + ":" + drc.getCurveParameters().resultTime.toString(), drc);
+            curves.put(colorIndex + ":" + drc.getCurveParameters().getResultTime().toString(), drc);
             drcs.add(drc);
             Bounds bounds = findBounds(drcs, xNormMin, xNormMax, yNormMin, yNormMax);
             return DoseCurveImage.createChart(curves, bounds, Color.BLACK);

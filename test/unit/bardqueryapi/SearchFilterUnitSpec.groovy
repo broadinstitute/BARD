@@ -47,23 +47,13 @@ class SearchFilterUnitSpec extends Specification {
         "searchFilter1 > searchFilter2" | new SearchFilter(filterName: "BFN", filterValue: "BFV") | new SearchFilter(filterName: "AFN", filterValue: "AFV") | 1
         "searchFilter1 < searchFilter2" | new SearchFilter(filterName: "AFN", filterValue: "AFV") | new SearchFilter(filterName: "BFN", filterValue: "BFV") | -1
     }
-    /**
-     * {@link SearchFilter#equals}
-     */
-    void "searchFilter.equals with same object"() {
-        given: "A valid SearchFilter Object"
-        SearchFilter searchFilter = new SearchFilter(filterName: "AFN", filterValue: "AFV")
-        when: "We call the equals method"
-        final boolean returnedValue = searchFilter.equals(searchFilter)
-        then: "We expected method to return the expected value"
-        assert returnedValue
-    }
+
     /**
      * {@link SearchFilter#equals}
      */
     void "searchFilter.equals #label"() {
         when: "We call the equals method"
-        final boolean returnedValue = searchFilter1.equals(searchFilter2)
+        final boolean returnedValue = searchFilter1 == searchFilter2
         then: "We expected method to return the expected value"
         assert returnedValue == expectedAnswer
         where:
@@ -71,7 +61,7 @@ class SearchFilterUnitSpec extends Specification {
         "this equals that"         | new SearchFilter(filterName: "AFN", filterValue: "AFV") | new SearchFilter(filterName: "AFN", filterValue: "AFV") | true
         "that is null"             | new SearchFilter(filterName: "BFN", filterValue: "BFV") | null                                                    | false
         "this != that"             | new SearchFilter(filterName: "AFN", filterValue: "AFV") | new SearchFilter(filterName: "BFN", filterValue: "BFV") | false
-        "this.class != that.class" | new SearchFilter(filterName: "AFN", filterValue: "AFV") | new Long("2")                                           | false
+        "this.class != that.class" | new SearchFilter(filterName: "AFN", filterValue: "AFV") | 2                                                       | false
     }
 }
 

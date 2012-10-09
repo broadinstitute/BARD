@@ -1,10 +1,9 @@
 package bardqueryapi
 
 import chemaxon.formats.MolExporter
-import chemaxon.formats.MolImporter
-import chemaxon.marvin.io.MolExportException
-import chemaxon.struc.Molecule
 import chemaxon.formats.MolFormatException
+import chemaxon.formats.MolImporter
+import chemaxon.struc.Molecule
 
 class ChemAxonService {
     /**
@@ -33,7 +32,7 @@ class ChemAxonService {
             return MolExporter.exportToBinFormat(mol, jchemBinFormat.toString());
         }
         catch (MolFormatException e) {
-             log.error(e)
+            log.error(e)
             throw e;
         }
     }

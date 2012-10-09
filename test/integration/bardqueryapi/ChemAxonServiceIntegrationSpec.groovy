@@ -4,7 +4,6 @@ import grails.plugin.spock.IntegrationSpec
 import org.junit.After
 import org.junit.Before
 import spock.lang.Unroll
-import chemaxon.formats.MolFormatException
 
 @Unroll
 class ChemAxonServiceIntegrationSpec extends IntegrationSpec {

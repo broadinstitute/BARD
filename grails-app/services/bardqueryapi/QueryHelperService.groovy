@@ -43,7 +43,7 @@ class QueryHelperService {
      */
     public List<Map<String, String>> autoComplete(final String term, final Map<String, List<String>> autoSuggestResponseFromJDO) {
 
-        final List<Map<String, String>> autoSuggestTerms = new ArrayList<Map<String, String>>();
+        final List<Map<String, String>> autoSuggestTerms = []
 
         for (String key : autoSuggestResponseFromJDO.keySet()) {
             if (AUTO_SUGGEST_FILTERS.containsKey(key)) {
@@ -101,7 +101,7 @@ class QueryHelperService {
      * @param searchFilters {@link SearchFilter}'s
      * return List<String[]>
      */
-    public List<String[]> convertSearchFiltersToFilters(final List<SearchFilter> searchFilters){
+    public List<String[]> convertSearchFiltersToFilters(final List<SearchFilter> searchFilters) {
         List<String[]> filters = []
         for (SearchFilter searchFilter : searchFilters) {
             filters.add([searchFilter.filterName, searchFilter.filterValue] as String[])
@@ -174,7 +174,7 @@ class QueryHelperService {
                                                             final List<String> terms,
                                                             final String currentAutoSuggestKey) {
 
-        final List<Map<String, String>> currentAutoSuggestTerms = new ArrayList<Map<String, String>>()
+        final List<Map<String, String>> currentAutoSuggestTerms = []
 
         for (String term : terms) {
             final Map<String, String> termMap = constructSingleAutoSuggestTerm(filtersMap, currentAutoSuggestKey, term)
@@ -220,7 +220,7 @@ class QueryHelperService {
             final String value = currentAutoSuggestKey + ":\"" + term + "\""
             return [label: label, value: value]
         }
-        return null
+        return [:]
     }
 
     /**

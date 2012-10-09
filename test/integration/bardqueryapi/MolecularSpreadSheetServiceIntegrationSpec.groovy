@@ -1,5 +1,6 @@
 package bardqueryapi
 
+import bard.core.adapter.CompoundAdapter
 import bard.core.rest.RESTAssayService
 import bard.core.rest.RESTCompoundService
 import bard.core.rest.RESTExperimentService
@@ -13,7 +14,6 @@ import spock.lang.Unroll
 import bard.core.*
 
 import static junit.framework.Assert.assertNotNull
-import bard.core.adapter.CompoundAdapter
 
 @Unroll
 class MolecularSpreadSheetServiceIntegrationSpec extends IntegrationSpec {
@@ -163,8 +163,9 @@ class MolecularSpreadSheetServiceIntegrationSpec extends IntegrationSpec {
             HillCurveValue hillCurveValue = spreadSheetActivity.hillCurveValue
             if ((hillCurveValue.s0 != null) &&
                     (hillCurveValue.sinf != null) &&
-                    (hillCurveValue.coef != null))
+                    (hillCurveValue.coef != null)) {
                 countValues++;
+            }
         }
         assert countValues > 1
     }
@@ -183,12 +184,13 @@ class MolecularSpreadSheetServiceIntegrationSpec extends IntegrationSpec {
         int countValues = 0
         while (experimentIterator.hasNext()) {
             Value experimentValue = experimentIterator.next()
-            SpreadSheetActivity spreadSheetActivity = molecularSpreadSheetService.extractActivitiesFromExperiment(experimentValue,experimentId)
+            SpreadSheetActivity spreadSheetActivity = molecularSpreadSheetService.extractActivitiesFromExperiment(experimentValue, experimentId)
             HillCurveValue hillCurveValue = spreadSheetActivity.hillCurveValue
             if ((hillCurveValue.s0 != null) &&
                     (hillCurveValue.sinf != null) &&
-                    (hillCurveValue.coef != null))
+                    (hillCurveValue.coef != null)) {
                 countValues++;
+            }
         }
         assert countValues > 1
     }
@@ -203,11 +205,11 @@ class MolecularSpreadSheetServiceIntegrationSpec extends IntegrationSpec {
         final Project project = queryServiceWrapper.restProjectService.get(new Long(274))
         List<Experiment> allExperiments = []
         //for (Project project : projects) {
-        final ServiceIterator<Assay> serviceIterator = queryServiceWrapper.restProjectService.iterator(project, Assay.class)
+        final ServiceIterator<Assay> serviceIterator = queryServiceWrapper.restProjectService.iterator(project, Assay)
         Collection<Assay> assays = serviceIterator.collect()
         for (Assay assay : assays) {
             //println "ASSAY: " + assay.id
-            final ServiceIterator<Experiment> experimentIterator = queryServiceWrapper.restAssayService.iterator(assay, Experiment.class)
+            final ServiceIterator<Experiment> experimentIterator = queryServiceWrapper.restAssayService.iterator(assay, Experiment)
             Collection<Experiment> experimentList = experimentIterator.collect()
             allExperiments.addAll(experimentList)
 
@@ -215,16 +217,16 @@ class MolecularSpreadSheetServiceIntegrationSpec extends IntegrationSpec {
         //}
         List<Long> cartCompoundIdList = new ArrayList<Long>()
         cartCompoundIdList.add(new Long(5281847))
-       // Object etag = queryServiceWrapper.restCompoundService.newETag("Test", cartCompoundIdList);
+        // Object etag = queryServiceWrapper.restCompoundService.newETag("Test", cartCompoundIdList);
         when: "We define an etag for a compound used in this project"  /////////////
         int dataCount = 0
         for (Experiment experiment in allExperiments) {
             //Experiment newExp = queryServiceWrapper.restExperimentService.get(experiment.id)
             final ServiceIterator<Compound> compoundIterators = restExperimentService.compounds(experiment)
             final Collection<Compound> compoundsThatWereTestedInThisExperiment = compoundIterators.collect()
-            for(Compound comp : compoundsThatWereTestedInThisExperiment){
+            for (Compound comp : compoundsThatWereTestedInThisExperiment) {
                 CompoundAdapter c = new CompoundAdapter(comp)
-                if(cartCompoundIdList.contains(new Long(c.pubChemCID))){
+                if (cartCompoundIdList.contains(new Long(c.pubChemCID))) {
                     ServiceIterator<Value> experimentIterator = queryServiceWrapper.restExperimentService.activities(experiment)
 
                     Value experimentValue
@@ -336,8 +338,6 @@ class MolecularSpreadSheetServiceIntegrationSpec extends IntegrationSpec {
 //        // we expect tyo see some data
 //        assert dataCount > 0
 //    }
-
-
 
 
     void "tests findActivitiesForCompounds #label"() {

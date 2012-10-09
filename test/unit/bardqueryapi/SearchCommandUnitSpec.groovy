@@ -1,9 +1,9 @@
 package bardqueryapi
 
-import spock.lang.Specification
+import grails.test.mixin.TestFor
 import grails.test.mixin.TestMixin
 import grails.test.mixin.support.GrailsUnitTestMixin
-import grails.test.mixin.TestFor
+import spock.lang.Specification
 
 /**
  * Created with IntelliJ IDEA.
@@ -27,7 +27,7 @@ class SearchCommandUnitSpec extends Specification {
         then:
         assert !searchCommand.searchString
         assert !searchCommand.validate()
-        assert !searchCommand.getAppliedFilters()
+        assert !searchCommand.appliedFilters
     }
     /**
      * {@link SearchCommand#getAppliedFilters()}
@@ -36,17 +36,17 @@ class SearchCommandUnitSpec extends Specification {
         given:
         final String filterName = "a"
         final String filterValue = "b"
-       final String searchString = "test"
+        final String searchString = "test"
         List<SearchFilter> searchFilters = [new SearchFilter(filterName: filterName, filterValue: filterValue),
                 new SearchFilter(filterName: filterName, filterValue: "")]
         when:
         SearchCommand searchCommand = new SearchCommand(searchString: searchString, filters: searchFilters)
 
         then:
-        assert searchCommand.getAppliedFilters().size() == 1
-        assert searchCommand.searchString ==searchString
-        assert searchCommand.getAppliedFilters().get(0).filterName == filterName
-        assert searchCommand.getAppliedFilters().get(0).filterValue == filterValue
+        assert searchCommand.appliedFilters.size() == 1
+        assert searchCommand.searchString == searchString
+        assert searchCommand.appliedFilters.get(0).filterName == filterName
+        assert searchCommand.appliedFilters.get(0).filterValue == filterValue
         assert searchCommand.validate()
     }
 }

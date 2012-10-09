@@ -9,9 +9,9 @@ import org.jfree.chart.encoders.EncoderUtil
 import org.jfree.chart.encoders.ImageFormat
 import bardqueryapi.DrcCurveCommand
 
-public class DoseCurveRenderingService {
+class DoseCurveRenderingService {
 
-    public  byte[] createDoseCurve(DrcCurveCommand drcCurveCommand){
+    byte[] createDoseCurve(DrcCurveCommand drcCurveCommand){
         JFreeChart chart =
             this.createDoseCurve(
                     drcCurveCommand.concentrations,
@@ -25,7 +25,8 @@ public class DoseCurveRenderingService {
                     null,
                     null)
         // write the image byte array to the binding
-       return EncoderUtil.encode(chart.createBufferedImage(drcCurveCommand.width.intValue(), drcCurveCommand.height.intValue()), ImageFormat.PNG);
+       return EncoderUtil.encode(chart.createBufferedImage(drcCurveCommand.width.intValue(),
+               drcCurveCommand.height.intValue()), ImageFormat.PNG)
     }
     /**
      *
@@ -41,7 +42,7 @@ public class DoseCurveRenderingService {
      * @param yNormMax
      * @return JFreeChart
      */
-    public JFreeChart createDoseCurve(
+    JFreeChart createDoseCurve(
             final List<Double> concentrations,
             final List<Double> activities,
             final Double slope,
@@ -54,7 +55,7 @@ public class DoseCurveRenderingService {
             final Double yNormMax) {
 
         final Drc doseResponseCurve = findDrcData(concentrations, activities, slope, coef, s0, sinf)
-        return DoseCurveImage.createDoseCurve(doseResponseCurve, xNormMin, xNormMax, yNormMin, yNormMax);
+        return DoseCurveImage.createDoseCurve(doseResponseCurve, xNormMin, xNormMax, yNormMin, yNormMax)
     }
 
     /**
@@ -66,8 +67,8 @@ public class DoseCurveRenderingService {
      * @param yNormMax
      * @return JFreeChart
      */
-    public JFreeChart createDoseCurve(final HillCurveValue hillCurveValue, Double xNormMin, Double xNormMax, Double yNormMin, Double yNormMax) {
-        return createDoseCurve(hillCurveValue.getConc() as List<Double>, hillCurveValue.getResponse() as List<Double>, hillCurveValue.slope, hillCurveValue.coef, hillCurveValue.s0,
+    JFreeChart createDoseCurve(final HillCurveValue hillCurveValue, Double xNormMin, Double xNormMax, Double yNormMin, Double yNormMax) {
+        return createDoseCurve(hillCurveValue.conc as List<Double>, hillCurveValue.response as List<Double>, hillCurveValue.slope, hillCurveValue.coef, hillCurveValue.s0,
                 hillCurveValue.sinf, xNormMin, xNormMax, yNormMin, yNormMax)
     }
 
@@ -81,10 +82,10 @@ public class DoseCurveRenderingService {
      * @param sinf
      * @return Drc
      */
-    public Drc findDrcData(final List<Double> concentrations, final List<Double> activities, final Double ac50, final Double hillSlope,
+    Drc findDrcData(final List<Double> concentrations, final List<Double> activities, final Double ac50, final Double hillSlope,
                            final Double s0, final Double sinf) {
 
-        final List<Boolean> isValid = new ArrayList<Boolean>()
+        final List<Boolean> isValid = []
         //pre-populate, we are doing this because the DRC requires an array of booleans
         //I could change it but it would require too many changes
         for (Double activity : activities) {
@@ -96,9 +97,9 @@ public class DoseCurveRenderingService {
                 new Date(), hillSlope,
                 s0,
                 sinf,
-                new Double(0), new Double(0));
+                new Double(0), new Double(0))
 
-        return new Drc(concentrations, activities, isValid, curveParameters, Color.BLACK);
+        return new Drc(concentrations, activities, isValid, curveParameters, Color.BLACK)
     }
 }
 

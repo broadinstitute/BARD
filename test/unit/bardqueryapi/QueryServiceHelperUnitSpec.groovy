@@ -73,6 +73,7 @@ class QueryServiceHelperUnitSpec extends Specification {
 
 
     }
+
     void "test get Auto Suggest Terms No Terms"() {
         when:
         List<Map<String, String>> autoCompleteResults = service.getAutoSuggestTerms(QueryHelperService.AUTO_SUGGEST_FILTERS, [], "gobp_term")
@@ -82,6 +83,7 @@ class QueryServiceHelperUnitSpec extends Specification {
 
 
     }
+
     void "test get Auto Suggest Terms No autoSuggest Key"() {
         when:
         List<Map<String, String>> autoCompleteResults = service.getAutoSuggestTerms(QueryHelperService.AUTO_SUGGEST_FILTERS, [], "")
@@ -91,6 +93,7 @@ class QueryServiceHelperUnitSpec extends Specification {
 
 
     }
+
     void "test Auto Complete #label"() {
         given: "map of possible filters"
         final Map<String, List<String>> autoSuggestResponseFromJDO = [gobp_term: ["Go Biological Process"]]
@@ -123,9 +126,9 @@ class QueryServiceHelperUnitSpec extends Specification {
         where:
         label                                          | currentAutoSuggestKey | term         | expectedResults
         "Term exist in filters Map"                    | "gobp_term"           | "DNA Repair" | [label: "DNA Repair as <strong>Go Biological Process</strong>", value: "gobp_term:\"DNA Repair\""]
-        "Current Suggest Key is null"                  | ""                    | "gobp_term"  | null
-        "Term is null"                                 | "target_name:String"  | ""           | null
-        "Current Suggest Key is null and Term is null" | ""                    | ""           | null
+        "Current Suggest Key is null"                  | ""                    | "gobp_term"  | [:]
+        "Term is null"                                 | "target_name:String"  | ""           | [:]
+        "Current Suggest Key is null and Term is null" | ""                    | ""           | [:]
     }
     /**
      *

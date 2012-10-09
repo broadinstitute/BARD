@@ -15,7 +15,7 @@ class ScaffoldUnitSpec extends Specification {
 
     void "test Get WarningLevel #label"() {
         when: "We call the getWarningLevel() method on the given scaffold"
-        final WarningLevel warningLevel = scaffold.getWarningLevel()
+        final WarningLevel warningLevel = scaffold.warningLevel
         then: "The expected to get back the expected warning level"
         assert warningLevel
         warningLevel == expectedWarningLevel
@@ -61,20 +61,11 @@ class ScaffoldUnitSpec extends Specification {
         "cTested1 < cTested2" | 201      | 205      | -1
     }
 
-    void "promiscuityScore.equals with same object"() {
-        given: "A valid Scaffold Object"
-        Scaffold scaffold1 =
-            new Scaffold(scafsmi: "CC", pScore: new Double(0), cTested: 1, scafid: 1, cActive: 1,
-                    aTested: 1, aActive: 1, sTested: 1, sActive: 1, inDrug: false)
-        when: "We call the equals method with the same object"
-        final boolean returnedValue = scaffold1.equals(scaffold1)
-        then: "We expected method to return the expected value"
-        assert returnedValue
-    }
+
 
     void "scaffold.equals #label"() {
         when: "We call the equals method with scaffold1 and scaffold2"
-        final boolean returnedValue = scaffold1.equals(scaffold2)
+        final boolean returnedValue = scaffold1 == scaffold2
         then: "We expected method to return the expected value"
         assert returnedValue == expectedAnswer
         where:
@@ -82,7 +73,7 @@ class ScaffoldUnitSpec extends Specification {
         "this equals that"         | new Scaffold(cTested: 200) | new Scaffold(cTested: 200) | true
         "that is null"             | new Scaffold(cTested: 201) | null                       | false
         "this != that"             | new Scaffold(cTested: 201) | new Scaffold(cTested: 205) | false
-        "this.class != that.class" | new Scaffold(cTested: 201) | new Long("200")            | false
+        "this.class != that.class" | new Scaffold(cTested: 201) | 200                        | false
     }
 
 }

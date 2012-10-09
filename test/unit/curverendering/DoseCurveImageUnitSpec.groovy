@@ -28,11 +28,11 @@ class DoseCurveImageUnitSpec extends Specification {
         final NumberAxis yAxis = DoseCurveImage.createAndConfigureYAxis(null, axisColor)
         then:
         assert yAxis
-        assert yAxis.getAutoRangeIncludesZero()
-        assert yAxis.getAxisLinePaint() == axisColor
-        assert yAxis.getLabelPaint() == axisColor
-        assert yAxis.getTickLabelPaint() == axisColor
-        assert yAxis.getLabel() == "Activities"
+        assert yAxis.autoRangeIncludesZero
+        assert yAxis.axisLinePaint == axisColor
+        assert yAxis.labelPaint == axisColor
+        assert yAxis.tickLabelPaint == axisColor
+        assert yAxis.label == "Activities"
     }
     /**
      * {@link DoseCurveImage#createAndConfigureXAxis(Bounds, Color)}
@@ -45,11 +45,11 @@ class DoseCurveImageUnitSpec extends Specification {
         final NumberAxis xAxis = DoseCurveImage.createAndConfigureXAxis(null, axisColor)
         then:
         assert xAxis
-        assert !xAxis.getAutoRangeIncludesZero()
-        assert xAxis.getAxisLinePaint() == axisColor
-        assert xAxis.getLabelPaint() == axisColor
-        assert xAxis.getTickLabelPaint() == axisColor
-        assert xAxis.getLabel() == "Concentration (uM)"
+        assert !xAxis.autoRangeIncludesZero
+        assert xAxis.axisLinePaint == axisColor
+        assert xAxis.labelPaint == axisColor
+        assert xAxis.tickLabelPaint == axisColor
+        assert xAxis.label == "Concentration (uM)"
     }
     /**
      * {@link DoseCurveImage#aggregateValidAndInvalidPoints}
@@ -92,8 +92,8 @@ class DoseCurveImageUnitSpec extends Specification {
         final MutablePair<Double, Double> axis = DoseCurveImage.findWhereToStartAndStopOnXAxis(validX as double[])
         then:
         assert axis
-        axis.getLeft() == expectedLeftValue
-        axis.getRight() == expectedRightValue
+        axis.left == expectedLeftValue
+        axis.right == expectedRightValue
 
         where:
         label                              | validX         | expectedLeftValue | expectedRightValue
@@ -101,7 +101,7 @@ class DoseCurveImageUnitSpec extends Specification {
         "Smallest value at last position"  | [10, -20, -30] | new Double(-30)   | new Double(10)
     }
     /**
-     * {@link DoseCurveImage.adjustBounds}
+     * {@link DoseCurveImage}
      */
     void "test adjust Bounds no concentration or activities"() {
         given: "That the Drc object has no concentration or activities"
@@ -117,7 +117,7 @@ class DoseCurveImageUnitSpec extends Specification {
         assert !bounds
     }
     /**
-     * {@link DoseCurveImage.adjustBounds}
+     * {@link DoseCurveImage}
      */
     void "test adjust Bounds"() {
         given:
@@ -141,7 +141,7 @@ class DoseCurveImageUnitSpec extends Specification {
 
     }
     /**
-     * {@link DoseCurveImage.adjustBounds}
+     * {@link DoseCurveImage}
      */
     void "test adjust Bounds With Empty List of Drcs"() {
         given:
@@ -152,7 +152,7 @@ class DoseCurveImageUnitSpec extends Specification {
         assert !returnedBounds
     }
     /**
-     * {@link DoseCurveImage.setBoundParameters (Bounds,Double,Double,Double,Double )}
+     * {@link DoseCurveImage}
      */
     void "test set Bound Parameters"() {
         given:
@@ -166,7 +166,7 @@ class DoseCurveImageUnitSpec extends Specification {
         assert bounds.yMin == 1
     }
     /**
-     * {@link DoseCurveImage.createDoseCurve}
+     * {@link DoseCurveImage}
      */
     void "test create Dose Curve with null DRC"(){
         when:"We call the createDoseCurve method with a null Drc object"
@@ -175,7 +175,7 @@ class DoseCurveImageUnitSpec extends Specification {
         assert !curve
     }
     /**
-     * {@link DoseCurveImage.findBounds(List,Double,Double,Double,Double)}
+     * {@link DoseCurveImage}
      */
     void "test find Bounds with non-null Normalized values"(){
         when:

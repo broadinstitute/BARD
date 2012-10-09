@@ -1,7 +1,7 @@
 package bardqueryapi
 
-import org.apache.commons.lang.builder.HashCodeBuilder
 import org.apache.commons.lang.builder.EqualsBuilder
+import org.apache.commons.lang.builder.HashCodeBuilder
 import org.apache.commons.lang3.builder.CompareToBuilder
 
 /**
@@ -23,6 +23,7 @@ class SearchFilter implements Comparable<SearchFilter> {
         this.filterName = filterName
         this.filterValue = filterValue
     }
+
     public int hashCode() {
         return new HashCodeBuilder(17, 31). // two randomly chosen prime numbers
                 append(this.filterName).
@@ -39,12 +40,12 @@ class SearchFilter implements Comparable<SearchFilter> {
     }
 
     public boolean equals(Object obj) {
-        if (obj == null)
+        if (obj == null) {
             return false;
-        if (obj == this)
-            return true;
-        if (obj.getClass() != getClass())
+        }
+        if (obj.getClass() != getClass()) {
             return false;
+        }
 
         SearchFilter rhs = (SearchFilter) obj;
         return new EqualsBuilder().

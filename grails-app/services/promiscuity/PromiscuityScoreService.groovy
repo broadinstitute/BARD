@@ -17,9 +17,9 @@ class PromiscuityScoreService {
         //initialize xstream
         this.xstream = new XStream()
         //step up deserialization. Read XStream docs if you get confused here
-        this.xstream.alias("compound", PromiscuityScore.class);
-        this.xstream.alias("hscaf", Scaffold.class);
-        this.xstream.addImplicitCollection(PromiscuityScore.class, "scaffolds");
+        this.xstream.alias("compound", PromiscuityScore);
+        this.xstream.alias("hscaf", Scaffold);
+        this.xstream.addImplicitCollection(PromiscuityScore, "scaffolds");
     }
     /**
      *

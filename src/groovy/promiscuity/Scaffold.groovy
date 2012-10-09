@@ -24,9 +24,8 @@ public class Scaffold implements Comparable<Scaffold> {
     Long sActive
     Boolean inDrug
 
-    public Scaffold() {
+    private static final long serialVersionUID = -5026866790981516562L;
 
-    }
 
     public WarningLevel getWarningLevel() {
         return WarningLevel.getWarningLevel(pScore)
@@ -67,9 +66,7 @@ public class Scaffold implements Comparable<Scaffold> {
         if (obj == null) {
             return false;
         }
-        if (obj == this) {
-            return true;
-        }
+
         if (obj.getClass() != getClass()) {
             return false;
         }
@@ -95,9 +92,9 @@ public class Scaffold implements Comparable<Scaffold> {
  * Warning Levels
  */
 public enum WarningLevel {
-    none(0,4000),
-    moderate(4000,10000),
-    severe(10000,Double.MAX_VALUE)
+    none(0, 4000),
+    moderate(4000, 10000),
+    severe(10000, Double.MAX_VALUE)
 
     WarningLevel(Double minThreshold, Double maxThreshold) {
         this.minThreshold = minThreshold
@@ -108,9 +105,8 @@ public enum WarningLevel {
         if (this.maxThreshold != Double.MAX_VALUE) {
             return this.name() + " (between " + this.minThreshold + " and " + this.maxThreshold + ")"
         }
-        else {
-            return this.name() + " (> " + this.minThreshold + ")"
-        }
+        return this.name() + " (> " + this.minThreshold + ")"
+
     }
 
     static WarningLevel getWarningLevel(Double pScore) {

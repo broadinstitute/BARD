@@ -1,8 +1,5 @@
 package bardqueryapi
 
-import chemaxon.formats.MolExporter
-import chemaxon.struc.Molecule
-import chemaxon.formats.MolImporter
 import bard.core.adapter.CompoundAdapter
 import grails.plugins.springsecurity.Secured
 
@@ -39,5 +36,6 @@ class ChemAxonController {
         response.contentType = 'image/png'
         response.outputStream.setBytes(bytes)
     }
+
     def marvinSketch() {}
 }

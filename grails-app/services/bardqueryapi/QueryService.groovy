@@ -44,7 +44,7 @@ class QueryService implements IQueryService {
             final SearchParams searchParams = this.queryHelperService.constructSearchParams(updatedSearchString, top, skip, searchFilters)
             //do the search
             StopWatch sw = this.queryHelperService.startStopWatch()
-            final ServiceIterator<Compound> searchIterator = this.queryServiceWrapper.getRestCompoundService().search(searchParams)
+            final ServiceIterator<Compound> searchIterator = this.queryServiceWrapper.restCompoundService.search(searchParams)
             this.queryHelperService.stopStopWatch(sw, "find compounds by text search ${searchParams.toString()}")
             //collect results
             final Collection<Compound> compounds = searchIterator.collect()
@@ -75,7 +75,7 @@ class QueryService implements IQueryService {
             final SearchParams searchParams = this.queryHelperService.constructSearchParams(updatedSearchString, top, skip, searchFilters)
 
             StopWatch sw = this.queryHelperService.startStopWatch()
-            final ServiceIterator<Assay> searchIterator = this.queryServiceWrapper.getRestAssayService().search(searchParams)
+            final ServiceIterator<Assay> searchIterator = this.queryServiceWrapper.restAssayService.search(searchParams)
             this.queryHelperService.stopStopWatch(sw, "find assays by text search ${searchParams.toString()}")
 
             final Collection assays = searchIterator.collect()
@@ -103,7 +103,7 @@ class QueryService implements IQueryService {
             String updatedSearchString = this.queryHelperService.stripCustomStringFromSearchString(searchString)
             final SearchParams searchParams = this.queryHelperService.constructSearchParams(updatedSearchString, top, skip, searchFilters)
             StopWatch sw = this.queryHelperService.startStopWatch()
-            final ServiceIterator<Project> searchIterator = this.queryServiceWrapper.getRestProjectService().search(searchParams)
+            final ServiceIterator<Project> searchIterator = this.queryServiceWrapper.restProjectService.search(searchParams)
             this.queryHelperService.stopStopWatch(sw, "find projects by text search ${searchParams.toString()}")
             final Collection projects = searchIterator.collect()
             foundProjectAdapters.addAll(this.queryHelperService.projectsToAdapters(projects))
@@ -139,7 +139,7 @@ class QueryService implements IQueryService {
             }
             //do the search
             StopWatch sw = this.queryHelperService.startStopWatch()
-            final ServiceIterator<Compound> searchIterator = this.queryServiceWrapper.getRestCompoundService().structureSearch(structureSearchParams);
+            final ServiceIterator<Compound> searchIterator = this.queryServiceWrapper.restCompoundService.structureSearch(structureSearchParams);
             this.queryHelperService.stopStopWatch(sw, "structure search ${structureSearchParams.toString()}")
             //collect the results
             final Collection<Compound> compounds = searchIterator.collect()
@@ -170,7 +170,7 @@ class QueryService implements IQueryService {
             //final Object etag = restCompoundService.newETag("Compound ETags", compoundIds);
             //commenting out facets until we figure out how to apply filters to ID searches
             //facets = restCompoundService.getFacets(etag)
-            final Collection<Compound> compounds = this.queryServiceWrapper.getRestCompoundService().get(compoundIds)
+            final Collection<Compound> compounds = this.queryServiceWrapper.restCompoundService.get(compoundIds)
             this.queryHelperService.stopStopWatch(sw, "find compounds by CIDs ${compoundIds.toString()}")
             compoundAdapters.addAll(this.queryHelperService.compoundsToAdapters(compounds))
             //TODO: Eben though facets are available they cannnot be used for filtering
@@ -191,11 +191,12 @@ class QueryService implements IQueryService {
 
         if (assayIds) {
             StopWatch sw = this.queryHelperService.startStopWatch()
-            final Collection<Assay> assays = this.queryServiceWrapper.getRestAssayService().get(assayIds)
+            final Collection<Assay> assays = this.queryServiceWrapper.restAssayService.get(assayIds)
             this.queryHelperService.stopStopWatch(sw, "find assays by ADIDs ${assayIds.toString()}")
-            if (assays)
+            if (assays) {
                 foundAssayAdapters.addAll(this.queryHelperService.assaysToAdapters(assays))
-            //TODO: Facet needed. Not yet ready in JDO
+                //TODO: Facet needed. Not yet ready in JDO
+            }
         }
         final int nhits = foundAssayAdapters.size()
         return [assayAdapters: foundAssayAdapters, facets: facets, nHits: nhits]
@@ -213,7 +214,7 @@ class QueryService implements IQueryService {
         final List<ProjectAdapter> foundProjectAdapters = []
         if (projectIds) {
             StopWatch sw = this.queryHelperService.startStopWatch()
-            final Collection<Project> projects = this.queryServiceWrapper.getRestProjectService().get(projectIds)
+            final Collection<Project> projects = this.queryServiceWrapper.restProjectService.get(projectIds)
             this.queryHelperService.stopStopWatch(sw, "find projects by PIDs ${projectIds.toString()}")
             if (projects) {
                 foundProjectAdapters.addAll(this.queryHelperService.projectsToAdapters(projects))
@@ -234,7 +235,7 @@ class QueryService implements IQueryService {
     CompoundAdapter showCompound(final Long compoundId) {
         if (compoundId) {
             StopWatch sw = this.queryHelperService.startStopWatch()
-            final Compound compound = this.queryServiceWrapper.getRestCompoundService().get(compoundId)
+            final Compound compound = this.queryServiceWrapper.restCompoundService.get(compoundId)
             this.queryHelperService.stopStopWatch(sw, "show compound ${compoundId.toString()}")
             if (compound) {
                 return new CompoundAdapter(compound)
@@ -251,14 +252,14 @@ class QueryService implements IQueryService {
     Map showAssay(final Long assayId) {
         if (assayId) {
             StopWatch sw = this.queryHelperService.startStopWatch()
-            final RESTAssayService restAssayService = this.queryServiceWrapper.getRestAssayService()
+            final RESTAssayService restAssayService = this.queryServiceWrapper.restAssayService
             Assay assay = restAssayService.get(assayId)
             this.queryHelperService.stopStopWatch(sw, "show assay ${assayId.toString()}")
             if (assay) {
-                final ServiceIterator<Experiment> experimentIterator = restAssayService.iterator(assay, Experiment.class)
+                final ServiceIterator<Experiment> experimentIterator = restAssayService.iterator(assay, Experiment)
                 Collection<Experiment> experiments = experimentIterator.collect()
 
-                final ServiceIterator<Project> projectIterator = restAssayService.iterator(assay, Project.class)
+                final ServiceIterator<Project> projectIterator = restAssayService.iterator(assay, Project)
                 Collection<Project> projects = projectIterator.collect()
 
 
@@ -266,7 +267,7 @@ class QueryService implements IQueryService {
                 return [assayAdapter: assayAdapter, experiments: experiments, projects: projects]
             }
         }
-        return null
+        return [:]
     }
     /**
      * Given a projectId, get detailed Project information from the JDO
@@ -276,20 +277,20 @@ class QueryService implements IQueryService {
     Map showProject(final Long projectId) {
         if (projectId) {
             StopWatch sw = this.queryHelperService.startStopWatch()
-            final RESTProjectService restProjectService = this.queryServiceWrapper.getRestProjectService()
+            final RESTProjectService restProjectService = this.queryServiceWrapper.restProjectService
             final Project project = restProjectService.get(projectId)
             this.queryHelperService.stopStopWatch(sw, "show project ${projectId.toString()}")
             if (project) {
-                final ServiceIterator<Experiment> experimentIterator = restProjectService.iterator(project, Experiment.class)
+                final ServiceIterator<Experiment> experimentIterator = restProjectService.iterator(project, Experiment)
                 List<Experiment> experiments = experimentIterator.collect()
                 experiments.sort { it.role }
-                final ServiceIterator<Assay> assayIterator = restProjectService.iterator(project, Assay.class)
+                final ServiceIterator<Assay> assayIterator = restProjectService.iterator(project, Assay)
                 Collection<Assay> assays = assayIterator.collect()
                 ProjectAdapter projectAdapter = new ProjectAdapter(project)
                 return [projectAdapter: projectAdapter, experiments: experiments, assays: assays]
             }
         }
-        return null
+        return [:]
     }
 
     //==============================================Auto Complete ======
@@ -308,7 +309,7 @@ class QueryService implements IQueryService {
         final SuggestParams suggestParams = new SuggestParams(term, numberOfTermsToRetrieve)
         //we only use the terms in the assay service, because the other suggest services do not seem to
         //have useful things
-        final Map<String, List<String>> autoSuggestResponseFromJDO = this.queryServiceWrapper.getRestAssayService().suggest(suggestParams);
+        final Map<String, List<String>> autoSuggestResponseFromJDO = this.queryServiceWrapper.restAssayService.suggest(suggestParams);
         final List<Map<String, String>> autoSuggestTerms = this.queryHelperService.autoComplete(term, autoSuggestResponseFromJDO)
         return autoSuggestTerms
     }

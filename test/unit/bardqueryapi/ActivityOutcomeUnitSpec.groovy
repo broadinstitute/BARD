@@ -15,7 +15,7 @@ class ActivityOutcomeUnitSpec extends Specification {
      */
     void "test getLabel"() {
         when:
-        final String returnedLabel = activityOutcome.getLabel()
+        final String returnedLabel = activityOutcome.label
         then:
         assert returnedLabel == expectedLabel
         where:
@@ -49,7 +49,7 @@ class ActivityOutcomeUnitSpec extends Specification {
     void "test getPubChemValue"() {
         given:
         when:
-        final int pubChemValue = activityOutcome.getPubChemValue()
+        final int pubChemValue = activityOutcome.pubChemValue
         then:
         assert pubChemValue == expectedPubChemValue
         where:

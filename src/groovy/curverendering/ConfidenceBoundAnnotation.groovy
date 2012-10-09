@@ -40,12 +40,12 @@ class ConfidenceBoundAnnotation extends AbstractXYAnnotation {
     @Override
     public void draw(Graphics2D gd, XYPlot plot, Rectangle2D dataArea, ValueAxis domainAxis, ValueAxis rangeAxis, int i, PlotRenderingInfo info) {
 
-        PlotOrientation orientation = plot.getOrientation();
+        PlotOrientation orientation = plot.orientation
         RectangleEdge domainEdge = Plot.resolveDomainAxisLocation(
-                plot.getDomainAxisLocation(), orientation);
+                plot.domainAxisLocation, orientation);
 
         RectangleEdge rangeEdge = Plot.resolveRangeAxisLocation(
-                plot.getRangeAxisLocation(), orientation);
+                plot.rangeAxisLocation, orientation);
         final Map<String, Float> edges = compute2DEdges(orientation, domainEdge, rangeEdge, dataArea, domainAxis, rangeAxis)
 
         float j2DX1 = edges.j2DX1

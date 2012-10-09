@@ -73,7 +73,7 @@ class DoseCurveRenderingServiceIntegrationSpec extends IntegrationSpec {
         Collection collect = experimentIterator.collect()
 
         and: "We extract the first experimen tValue in the resulting collection"
-        Value experimentValue = collect.iterator().next()
+        Value experimentValue = (Value) collect.iterator().next()
 
         and: "We call the extractActivitiesFromExperiment method with the experiment Value to get the SpreadSheetActivity"
         SpreadSheetActivity spreadSheetActivity = molecularSpreadSheetService.extractActivitiesFromExperiment(experimentValue, experimentId)
@@ -83,13 +83,10 @@ class DoseCurveRenderingServiceIntegrationSpec extends IntegrationSpec {
 
         then: "We expect to get back a JFreeChart back"
         assert jFreeChart
-        try {
-            final File file = new File("testChar.jpg")
-            ChartUtilities.saveChartAsJPEG(file, jFreeChart, 500, 500);
-            assert file.exists()
-        } catch (IOException e) {
-            System.err.println("Problem occurred creating chart.");
-        }
+        final File file = new File("testChar.jpg")
+        ChartUtilities.saveChartAsJPEG(file, jFreeChart, 500, 500);
+        assert file.exists()
+
 
         where:
         label                                    | cids                                                      | experimentId
@@ -109,26 +106,23 @@ class DoseCurveRenderingServiceIntegrationSpec extends IntegrationSpec {
         Collection collect = experimentIterator.collect()
 
         and: "We extract the first experimen tValue in the resulting collection"
-        Value experimentValue = collect.iterator().next()
+        Value experimentValue = (Value) collect.iterator().next()
 
         and: "We call the extractActivitiesFromExperiment method with the experiment Value to get the SpreadSheetActivity"
         SpreadSheetActivity spreadSheetActivity = molecularSpreadSheetService.extractActivitiesFromExperiment(experimentValue, experimentId)
 
         when: "We call the createDoseCurve method with the spreadSheetActivity.hillCurveValue value and the other parameters"
         final HillCurveValue hillCurveValue = spreadSheetActivity.hillCurveValue
-        JFreeChart jFreeChart = this.doseCurveRenderingService.createDoseCurve(hillCurveValue.getConc() as List<Double>,
-                hillCurveValue.getResponse() as List<Double>, hillCurveValue.slope, hillCurveValue.coef, hillCurveValue.s0, hillCurveValue.sinf,
+        JFreeChart jFreeChart = this.doseCurveRenderingService.createDoseCurve(hillCurveValue.conc as List<Double>,
+                hillCurveValue.response as List<Double>, hillCurveValue.slope, hillCurveValue.coef, hillCurveValue.s0, hillCurveValue.sinf,
                 null, null, null, null)
 
         then: "We expect to get back a JFreeChart back"
         assert jFreeChart
-        try {
-            final File file = new File("testChar.jpg")
-            ChartUtilities.saveChartAsJPEG(file, jFreeChart, 500, 500);
-            assert file.exists()
-        } catch (IOException e) {
-            System.err.println("Problem occurred creating chart.");
-        }
+        final File file = new File("testChar.jpg")
+        ChartUtilities.saveChartAsJPEG(file, jFreeChart, 500, 500);
+        assert file.exists()
+
 
         where:
         label                                    | cids                                                      | experimentId
@@ -148,7 +142,7 @@ class DoseCurveRenderingServiceIntegrationSpec extends IntegrationSpec {
         Collection collect = experimentIterator.collect()
 
         and: "We extract the first experimen tValue in the resulting collection"
-        Value experimentValue = collect.iterator().next()
+        Value experimentValue = (Value) collect.iterator().next()
 
         and: "We call the extractActivitiesFromExperiment method with the experiment Value to get the SpreadSheetActivity"
         SpreadSheetActivity spreadSheetActivity = molecularSpreadSheetService.extractActivitiesFromExperiment(experimentValue, experimentId)
@@ -156,8 +150,8 @@ class DoseCurveRenderingServiceIntegrationSpec extends IntegrationSpec {
         when: "We call the findDrcData method with the spreadSheetActivity.hillCurveValue value"
         final HillCurveValue hillCurveValue = spreadSheetActivity.hillCurveValue
         final Drc drc =
-            this.doseCurveRenderingService.findDrcData(hillCurveValue.getConc() as List<Double>,
-                    hillCurveValue.getResponse() as List<Double>, hillCurveValue.slope, hillCurveValue.coef, hillCurveValue.s0, hillCurveValue.sinf)
+            this.doseCurveRenderingService.findDrcData(hillCurveValue.conc as List<Double>,
+                    hillCurveValue.response as List<Double>, hillCurveValue.slope, hillCurveValue.coef, hillCurveValue.s0, hillCurveValue.sinf)
 
         then: "We expect to get back a Drc object with the number of activities matching the number of concentrations"
         assert drc
@@ -183,27 +177,22 @@ class DoseCurveRenderingServiceIntegrationSpec extends IntegrationSpec {
         Collection collect = experimentIterator.collect()
 
         and: "We extract the first experimen tValue in the resulting collection"
-        Value experimentValue = collect.iterator().next()
+        Value experimentValue = (Value) collect.iterator().next()
 
         and: "We call the extractActivitiesFromExperiment method with the experiment Value to get the SpreadSheetActivity"
         SpreadSheetActivity spreadSheetActivity = molecularSpreadSheetService.extractActivitiesFromExperiment(experimentValue, experimentId)
 
         when: "We call the findDrcData method with the spreadSheetActivity.hillCurveValue value"
         final HillCurveValue hillCurveValue = spreadSheetActivity.hillCurveValue
-        JFreeChart jFreeChart = this.doseCurveRenderingService.createDoseCurve(hillCurveValue.getConc() as List<Double>,
-                hillCurveValue.getResponse() as List<Double>, hillCurveValue.slope, hillCurveValue.coef, hillCurveValue.s0, hillCurveValue.sinf,
+        JFreeChart jFreeChart = this.doseCurveRenderingService.createDoseCurve(hillCurveValue.conc as List<Double>,
+                hillCurveValue.response as List<Double>, hillCurveValue.slope, hillCurveValue.coef, hillCurveValue.s0, hillCurveValue.sinf,
                 null, null, null, null)
 
         then: "We expect to get back a JFreeChart back"
         assert jFreeChart
-        try {
-            final File file = new File("testCharNoFit.jpg")
-            ChartUtilities.saveChartAsJPEG(file, jFreeChart, 500, 500);
-            assert file.exists()
-        } catch (IOException e) {
-            System.err.println("Problem occurred creating chart.");
-        }
-
+        final File file = new File("testCharNoFit.jpg")
+        ChartUtilities.saveChartAsJPEG(file, jFreeChart, 500, 500);
+        assert file.exists()
     }
 
 }

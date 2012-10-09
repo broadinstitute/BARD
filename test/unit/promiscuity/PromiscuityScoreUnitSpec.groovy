@@ -58,18 +58,10 @@ class PromiscuityScoreUnitSpec extends Specification {
         "CID1 < CID2" | 201  | 205  | -1
     }
 
-    void "promiscuityScore.equals with same object"() {
-        given: "A valid PromiscuityScore Object"
-        PromiscuityScore promiscuityScore = new PromiscuityScore(cid: 1)
-        when: "We call the equals method with promiscuityScore1 and promiscuityScore1"
-        final boolean returnedValue = promiscuityScore.equals(promiscuityScore)
-        then: "We expected method to return the expected value"
-        assert returnedValue
-    }
 
     void "promiscuityScore.equals #label"() {
         when: "We call the equals method with promiscuityScore1 and promiscuityScore1"
-        final boolean returnedValue = promiscuityScore1.equals(promiscuityScore2)
+        final boolean returnedValue = promiscuityScore1 == promiscuityScore2
         then: "We expected method to return the expected value"
         assert returnedValue == expectedAnswer
         where:
@@ -77,7 +69,7 @@ class PromiscuityScoreUnitSpec extends Specification {
         "this equals that"         | new PromiscuityScore(cid: 200) | new PromiscuityScore(cid: 200) | true
         "that is null"             | new PromiscuityScore(cid: 201) | null                           | false
         "this != that"             | new PromiscuityScore(cid: 201) | new PromiscuityScore(cid: 205) | false
-        "this.class != that.class" | new PromiscuityScore(cid: 201) | new Long("200")                | false
+        "this.class != that.class" | new PromiscuityScore(cid: 201) | 200                            | false
     }
 }
 

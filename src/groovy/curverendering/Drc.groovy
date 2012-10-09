@@ -9,8 +9,7 @@ import java.awt.Color
 * Time: 12:28 PM
 * To change this template use File | Settings | File Templates.
 */
-public class Drc
-{
+public class Drc {
     List<Double> concentrations=[];
     List<Double> activities = [];
     List<Boolean> isValid=[];

@@ -19,15 +19,15 @@ class SearchCommand {
     List<SearchFilter> filters = ListUtils.lazyList([], FactoryUtils.instantiateFactory(SearchFilter))
 
     /**
-     * Return all of teh filters that have been currently applied by client
+     * Return all of the filters that have been currently applied by client
      * @return {@link SearchFilter}'s
      */
     List<SearchFilter> getAppliedFilters() {
         filters.findAll {SearchFilter filter ->  filter.filterValue}
     }
 
-    void setSearchString (String searchString) {
-        this.searchString =  searchString?.trim()
+    void setSearchString(String searchString) {
+        this.searchString = searchString?.trim()
     }
 
     static constraints = {

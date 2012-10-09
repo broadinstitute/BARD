@@ -67,15 +67,15 @@ class QueryServiceIntegrationSpec extends IntegrationSpec {
         assert expectedSIDs.size() == sids.length
         assert expectedSIDs == sids
         where:
-        label                       | cid                 | expectedSIDs                                                                                        | expectedSmiles
-        "Return a Compound Adapter" | new Integer(658342) | [5274057, 47984903, 51638425, 113532087, 124777946, 970329, 6320599, 35591597, 76362856, 112834159] | "C(CN1CCCCC1)N1C(N=CC2=CC=CS2)=NC2=CC=CC=C12"
+        label                       | cid    | expectedSIDs                                                                                        | expectedSmiles
+        "Return a Compound Adapter" | 658342 | [5274057, 47984903, 51638425, 113532087, 124777946, 970329, 6320599, 35591597, 76362856, 112834159] | "C(CN1CCCCC1)N1C(N=CC2=CC=CS2)=NC2=CC=CC=C12"
     }
 
 
 
     void "test Show Project"() {
         given:
-        final Integer projectId = new Integer(129)
+        final Integer projectId = 129
         when: "Client enters a project ID and the showProject method is called"
         Map projectAdapterMap = queryService.showProject(projectId)
         then: "The Project is found"
@@ -92,7 +92,7 @@ class QueryServiceIntegrationSpec extends IntegrationSpec {
     void "test Show Assay"() {
         given:
 
-        Integer assayId = new Integer(644)
+        Integer assayId = 644
         when: "Client enters a assay ID and the showAssay method is called"
         Map assayMap = queryService.showAssay(assayId)
 

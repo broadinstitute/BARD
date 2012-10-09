@@ -106,7 +106,7 @@ class BardWebInterfaceController {
     def searchCompoundsByIDs(SearchCommand searchCommand) {
         if (StringUtils.isNotBlank(searchCommand.searchString)) {
             removeDuplicatesFromSearchString(searchCommand)
-            final List<SearchFilter> searchFilters = searchCommand.getAppliedFilters()
+            final List<SearchFilter> searchFilters = searchCommand.appliedFilters
             if (!searchFilters) {
                 searchFilters = []
             }
@@ -146,7 +146,7 @@ class BardWebInterfaceController {
 
         if (StringUtils.isNotBlank(searchCommand.searchString)) {
             removeDuplicatesFromSearchString(searchCommand)
-            final List<SearchFilter> searchFilters = searchCommand.getAppliedFilters()
+            final List<SearchFilter> searchFilters = searchCommand.appliedFilters
             if (!searchFilters) {//user SearchCommand
                 searchFilters = []
             }
@@ -179,7 +179,7 @@ class BardWebInterfaceController {
 
         if (StringUtils.isNotBlank(searchCommand.searchString)) {
             removeDuplicatesFromSearchString(searchCommand)
-            final List<SearchFilter> searchFilters = searchCommand.getAppliedFilters()
+            final List<SearchFilter> searchFilters = searchCommand.appliedFilters
             if (!searchFilters) {//user SearchCommand
                 searchFilters = []
             }
@@ -371,7 +371,7 @@ class SearchHelper {
         removeDuplicatesFromSearchString(searchCommand)
         final String[] searchStringSplit = searchCommand.searchString.split(":")
         if (searchStringSplit.length == 2) {
-            final List<SearchFilter> searchFilters = searchCommand.getAppliedFilters()
+            final List<SearchFilter> searchFilters = searchCommand.appliedFilters
             if (!searchFilters) {//user SearchCommand
                 searchFilters = []
             }
@@ -397,7 +397,7 @@ class SearchHelper {
     def handleAssaySearches(final bardqueryapi.IQueryService queryService, final SearchCommand searchCommand) {
         if (StringUtils.isNotBlank(searchCommand.searchString)) {
             removeDuplicatesFromSearchString(searchCommand)
-            final List<SearchFilter> searchFilters = searchCommand.getAppliedFilters()
+            final List<SearchFilter> searchFilters = searchCommand.appliedFilters
             if (!searchFilters) {//user SearchCommand
                 searchFilters = []
             }
@@ -434,7 +434,7 @@ class SearchHelper {
         if (StringUtils.isNotBlank(searchCommand.searchString)) {
 
             removeDuplicatesFromSearchString(searchCommand)
-            List<SearchFilter> searchFilters = searchCommand.getAppliedFilters()
+            List<SearchFilter> searchFilters = searchCommand.appliedFilters
             if (!searchFilters) {//user SearchCommand
                 searchFilters = []
             }
@@ -471,7 +471,7 @@ class SearchHelper {
 
         if (StringUtils.isNotBlank(searchCommand.searchString)) {
             removeDuplicatesFromSearchString(searchCommand)
-            final List<SearchFilter> searchFilters = searchCommand.getAppliedFilters()
+            final List<SearchFilter> searchFilters = searchCommand.appliedFilters
             if (!searchFilters) {//user SearchCommand
                 searchFilters = []
             }

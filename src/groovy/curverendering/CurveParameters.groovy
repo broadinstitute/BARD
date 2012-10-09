@@ -11,15 +11,21 @@ package curverendering;
 */
 public class CurveParameters {
 
-    public final Double AC50;
-    public final Double HILL_SLOPE;
-    public final Double S0;
-    public final Double SINF;
-    public final Double lower95CL;
-    public final Double upper95CL;
-    public final Date resultTime;
+    final Double AC50;
+    final Double HILL_SLOPE;
+    final Double S0;
+    final Double SINF;
+    final Double lower95CL;
+    final Double upper95CL;
+    final Date resultTime;
 
-    public CurveParameters(Double ac50, Date resultTime, Double hill_slope, Double s0, Double sinf, Double lower95CL, Double upper95CL) {
+    public CurveParameters(final Double ac50,
+                           final Date resultTime,
+                           final Double hill_slope,
+                           final Double s0,
+                           final Double sinf,
+                           final Double lower95CL,
+                           final Double upper95CL) {
         AC50 = ac50;
         this.resultTime = resultTime;
         HILL_SLOPE = hill_slope;

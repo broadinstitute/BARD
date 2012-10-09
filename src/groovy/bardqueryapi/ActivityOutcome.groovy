@@ -8,7 +8,7 @@ package bardqueryapi
  * Time: 3:04 PM
  * To change this template use File | Settings | File Templates.
  */
-public enum ActivityOutcome {
+enum ActivityOutcome {
 
     /**
      *
@@ -34,9 +34,9 @@ public enum ActivityOutcome {
 
     static final private Map<Integer,ActivityOutcome> activityOutcomes;
     static{
-        activityOutcomes = new HashMap<Integer, ActivityOutcome>();
+        activityOutcomes = [:];
         for (ActivityOutcome activityOutcome : ActivityOutcome.values()) {
-            activityOutcomes.put(new Integer(activityOutcome.getPubChemValue()),activityOutcome);
+            activityOutcomes.put(new Integer(activityOutcome.pubChemValue),activityOutcome);
         }
     }
     private final String label;

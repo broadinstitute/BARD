@@ -20,7 +20,7 @@ class JChemBinFormatUnitSpec extends Specification {
         JChemBinFormat jChemBinFormat = new JChemBinFormat(transparencyBackground: transparencyBackground)
 
         when:
-        final String options = jChemBinFormat.getExportOptions()
+        final String options = jChemBinFormat.exportOptions
         then: "The expected hashCode is returned"
         assert options
         assert options == expectedOptions

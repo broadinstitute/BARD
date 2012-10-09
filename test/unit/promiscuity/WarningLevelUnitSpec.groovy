@@ -15,7 +15,7 @@ class WarningLevelUnitSpec extends Specification {
 
     void "test Get Description() #label"() {
         when: "We call the getDescription() method on the given #warningLevel"
-        final String description = warningLevel.getDescription()
+        final String description = warningLevel.description
         then: "The expected to get back the description at that warning level"
         assert description
         description == expectedDescription

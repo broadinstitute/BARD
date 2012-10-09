@@ -38,7 +38,6 @@ ruleset {
     EmptyForStatement
     EmptyIfStatement
     EmptyInstanceInitializer
-    EmptyMethod
     EmptyStaticInitializer
     EmptySwitchStatement
     EmptySynchronizedStatement
@@ -48,7 +47,7 @@ ruleset {
     EqualsOverloaded
     ExplicitArrayListInstantiation
     ExplicitCallToAndMethod
-    ExplicitCallToCompareToMethod
+   // ExplicitCallToCompareToMethod
     ExplicitCallToDivMethod
     ExplicitCallToEqualsMethod
     ExplicitCallToGetAtMethod
@@ -128,13 +127,13 @@ ruleset {
     StatelessSingleton
     
     // rulesets/dry.xml
-    DuplicateNumberLiteral
+   // DuplicateNumberLiteral
     //DuplicateStringLiteral
     
     // rulesets/exceptions.xml
     CatchArrayIndexOutOfBoundsException
     CatchError
-    CatchException
+    //CatchException
     CatchIllegalMonitorStateException
     CatchIndexOutOfBoundsException
     CatchNullPointerException
@@ -158,8 +157,7 @@ ruleset {
     BracesForMethod
     BracesForTryCatchFinally
     ClassJavadoc
-    LineLength
-    
+
     // rulesets/generic.xml
     IllegalClassReference
     IllegalPackageReference
@@ -226,19 +224,18 @@ ruleset {
     AbstractClassName
     ClassName
     ConfusingMethodName
-    FieldName
+    //FieldName
     InterfaceName
-    MethodName
+    //MethodName
     ObjectOverrideMisspelledMethodName
-    PackageName
-    ParameterName
-    PropertyName
-    VariableName
-    
+    //PackageName
+    //ParameterName
+    //PropertyName
+
     // rulesets/security.xml
     FileCreateTempFile
     InsecureRandom
-    JavaIoPackageAccess
+   // JavaIoPackageAccess
     NonFinalPublicField
     NonFinalSubclassOfSensitiveInterface
     ObjectFinalize
@@ -249,7 +246,7 @@ ruleset {
     // rulesets/serialization.xml
     SerialPersistentFields
     SerialVersionUID
-    SerializableClassMustDefineSerialVersionUID
+   // SerializableClassMustDefineSerialVersionUID
     
     // rulesets/size.xml
     AbcComplexity
@@ -270,14 +267,14 @@ ruleset {
     UnnecessaryCollectCall
     UnnecessaryCollectionCall
     UnnecessaryConstructor
-    UnnecessaryDefInMethodDeclaration
+    //UnnecessaryDefInMethodDeclaration
     UnnecessaryDefInVariableDeclaration
     UnnecessaryDotClass
     UnnecessaryDoubleInstantiation
     UnnecessaryElseStatement
     UnnecessaryFinalOnPrivateMethod
     UnnecessaryFloatInstantiation
-    UnnecessaryGString
+    //UnnecessaryGString
     UnnecessaryGetter
     UnnecessaryIfStatement
     UnnecessaryInstanceOfCheck
@@ -287,16 +284,13 @@ ruleset {
     UnnecessaryModOne
     UnnecessaryNullCheck
     UnnecessaryNullCheckBeforeInstanceOf
-    UnnecessaryObjectReferences
+   // UnnecessaryObjectReferences
     UnnecessaryOverridingMethod
-    UnnecessaryPackageReference
+   // UnnecessaryPackageReference
     UnnecessaryParenthesesForMethodCallWithClosure
-    UnnecessaryPublicModifier
-    UnnecessaryReturnKeyword
     UnnecessarySelfAssignment
-    UnnecessarySemicolon
     UnnecessaryStringInstantiation
-    UnnecessarySubstring
+    //UnnecessarySubstring
     UnnecessaryTernaryExpression
     UnnecessaryTransientModifier
     

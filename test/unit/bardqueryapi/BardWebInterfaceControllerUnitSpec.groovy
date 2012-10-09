@@ -30,8 +30,8 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
     ShoppingCartService shoppingCartService
 
     @Shared List<SearchFilter> searchFilters = [new SearchFilter(filterName: 'group1', filterValue: 'facet1'), new SearchFilter(filterName: 'group2', filterValue: 'facet2')]
-    @Shared Value facet1 = new IntValue(source: new DataSource(), id: 'group1', value: null, children: [new IntValue(source: new DataSource(), id: 'facet1', value: new Integer(1))])
-    @Shared Value facet3 = new IntValue(source: new DataSource(), id: 'group3', value: null, children: [new IntValue(source: new DataSource(), id: 'facet3', value: new Integer(1))])
+    @Shared Value facet1 = new IntValue(source: new DataSource(), id: 'group1', value: null, children: [new IntValue(source: new DataSource(), id: 'facet1', value: 1)])
+    @Shared Value facet3 = new IntValue(source: new DataSource(), id: 'group3', value: null, children: [new IntValue(source: new DataSource(), id: 'facet3', value: 1)])
 
 
     void setup() {
@@ -604,11 +604,11 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
         response.status == statusCode
 
         where:
-        label                                             | cid              | compoundAdapter                            | expectedCID | expectedSIDs | expectedView                     | statusCode
-        "Render show compound page"                       | new Integer(872) | buildCompoundAdapter(872, [1, 2, 3], "CC") | 872         | [1, 2, 3]    | "/bardWebInterface/showCompound" | 200
-        "Render not found Compound string, null Adapter"  | null             | null                                       | null        | null         | null                             | 404
-        "Render not found Compound with Compound Adpater" | null             | buildCompoundAdapter(872, [1, 2, 3], "CC") | null        | null         | "/bardWebInterface/showCompound" | 200
-        "Compound does not exist"                         | new Integer(-1)  | null                                       | null        | null         | null                             | 404
+        label                                             | cid  | compoundAdapter                            | expectedCID | expectedSIDs | expectedView                     | statusCode
+        "Render show compound page"                       | 872  | buildCompoundAdapter(872, [1, 2, 3], "CC") | 872         | [1, 2, 3]    | "/bardWebInterface/showCompound" | 200
+        "Render not found Compound string, null Adapter"  | null | null                                       | null        | null         | null                             | 404
+        "Render not found Compound with Compound Adpater" | null | buildCompoundAdapter(872, [1, 2, 3], "CC") | null        | null         | "/bardWebInterface/showCompound" | 200
+        "Compound does not exist"                         | -1   | null                                       | null        | null         | null                             | 404
 
     }
 
@@ -640,11 +640,11 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
         }
         assert response.status == statusCode
         where:
-        label                    | adid                | name   | assayAdapter                                                       | expectedAssayView             | statusCode
-        "Return an assayAdapter" | new Integer(485349) | "Test" | [assayAdapter: buildAssayAdapter(485349, "Test"), experiments: []] | "/bardWebInterface/showAssay" | 200
-        "A null AssayAdapter"    | null                | "Test" | [assayAdapter: null, experiments: []]                              | null                          | 404
-        "Assay ADID is null"     | null                | "Test" | [assayAdapter: buildAssayAdapter(485349, "Test"), experiments: []] | "/bardWebInterface/showAssay" | 200
-        "Assay Adapter is null"  | null                | "Test" | null                                                               | null                          | 500
+        label                    | adid   | name   | assayAdapter                                                       | expectedAssayView             | statusCode
+        "Return an assayAdapter" | 485349 | "Test" | [assayAdapter: buildAssayAdapter(485349, "Test"), experiments: []] | "/bardWebInterface/showAssay" | 200
+        "A null AssayAdapter"    | null   | "Test" | [assayAdapter: null, experiments: []]                              | null                          | 404
+        "Assay ADID is null"     | null   | "Test" | [assayAdapter: buildAssayAdapter(485349, "Test"), experiments: []] | "/bardWebInterface/showAssay" | 200
+        "Assay Adapter is null"  | null   | "Test" | null                                                               | null                          | 500
 
     }
 
@@ -676,10 +676,10 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
         }
         assert response.status == statusCode
         where:
-        label                     | pid                 | name   | projectAdapter                                                         | expectedProjectView             | statusCode
-        "Return a Project"        | new Integer(485349) | "Test" | [projectAdapter: buildProjectAdapter(485349, "Test"), experiments: []] | "/bardWebInterface/showProject" | 200
-        "Project PID is null"     | null                | "Test" | [projectAdapter: buildProjectAdapter(485349, "Test"), experiments: []] | null                            | 404
-        "Project Adapter is null" | null                | "Test" | null                                                                   | null                            | 404
+        label                     | pid    | name   | projectAdapter                                                         | expectedProjectView             | statusCode
+        "Return a Project"        | 485349 | "Test" | [projectAdapter: buildProjectAdapter(485349, "Test"), experiments: []] | "/bardWebInterface/showProject" | 200
+        "Project PID is null"     | null   | "Test" | [projectAdapter: buildProjectAdapter(485349, "Test"), experiments: []] | null                            | 404
+        "Project Adapter is null" | null   | "Test" | null                                                                   | null                            | 404
     }
 
 

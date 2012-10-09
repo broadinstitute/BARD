@@ -14,11 +14,9 @@ import org.apache.commons.lang.builder.EqualsBuilder
 public class PromiscuityScore implements Comparable<PromiscuityScore> {
     Long cid
     List<Scaffold> scaffolds
-    public PromiscuityScore(){
 
-    }
     public String toString(){
-        List<String> list = new ArrayList<String>()
+        List<String> list = []
         list.add("CID: ${cid}")
         for(Scaffold scaffold : scaffolds){
             list.add("${scaffold.scafsmi}")
@@ -41,12 +39,12 @@ public class PromiscuityScore implements Comparable<PromiscuityScore> {
     }
 
     public boolean equals(Object obj) {
-        if (obj == null)
+        if (obj == null){
             return false;
-        if (obj == this)
-            return true;
-        if (obj.getClass() != getClass())
+        }
+        if (obj.getClass() != getClass()){
             return false;
+        }
 
         PromiscuityScore rhs = (PromiscuityScore) obj;
         return new EqualsBuilder().

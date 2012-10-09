@@ -52,15 +52,15 @@ class JChemBinFormat {
      */
     @Override
     public String toString() {
-        String exportOptions = getExportOptions();
-        return "${this.imageFormat}${FORMAT_SEPARATOR}${exportOptions}";
+        String exportOptionsAsString = this.exportOptions
+        return "${this.imageFormat}${FORMAT_SEPARATOR}${exportOptionsAsString}"
     }
 
     /**
      * @return String of options to use for JChem
      */
     public String getExportOptions() {
-        List<String> options = new ArrayList<String>();
+        List<String> options = [];
         options.add("${WIDTH_PREFIX}${this.width}");
         options.add("${HEIGTH_PREFIX}${this.height}");
         options.add("${DEFAULT_IMPLICIT_HYDROGEN}");

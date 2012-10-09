@@ -11,11 +11,11 @@ import bardqueryapi.SearchFilter
 class MockQueryService implements IQueryService {
     QueryHelperService queryHelperService
 
-    static Map<Long, MockCompoundAdapter> mockCompoundAdapterMap = new HashMap<Long, MockCompoundAdapter>()
+    static final Map<Long, MockCompoundAdapter> mockCompoundAdapterMap =[:]
 
-    static Map<Long, MockAssayAdapter> mockAssayAdapterMap = new HashMap<Long, MockAssayAdapter>()
+    static final Map<Long, MockAssayAdapter> mockAssayAdapterMap = [:]
 
-    static Map<Long, MockProjectAdapter> mockProjectAdapterMap = new HashMap<Long, MockProjectAdapter>()
+    static final Map<Long, MockProjectAdapter> mockProjectAdapterMap = [:]
 
     static {
         constructMockCompoundAdapter()
@@ -387,9 +387,6 @@ class MockAssayAdapter extends AssayAdapter {
     String searchHighlight
     String name
 
-    public MockAssayAdapter() {
-    }
-
     public Collection<Value> getAnnotations() {
         return [];
     }
@@ -399,9 +396,6 @@ class MockProjectAdapter extends ProjectAdapter {
     String name
     Integer numberOfExperiments = 3
 
-    public MockProjectAdapter() {
-
-    }
 
     public Collection<Value> getAnnotations() {
         return [];
@@ -414,8 +408,7 @@ class MockCompoundAdapter extends CompoundAdapter {
     String searchHighlight
     String name
 
-    public MockCompoundAdapter() {
-    }
+
 
     public Compound getCompound() {
         return new Compound() {

@@ -39,10 +39,10 @@ public class QueryServiceWrapper {
         this.baseURL = baseURL
         this.promiscuityScoreURL = promiscuityScoreURL;
         EntityServiceManager esm = new RESTEntityServiceManager(baseURL);
-        this.restCompoundService = esm.getService(Compound.class);
-        this.restAssayService = esm.getService(Assay.class);
-        this.restProjectService = esm.getService(Project.class);
-        this.restExperimentService = esm.getService(Experiment.class);
+        this.restCompoundService = esm.getService(Compound);
+        this.restAssayService = esm.getService(Assay);
+        this.restProjectService = esm.getService(Project);
+        this.restExperimentService = esm.getService(Experiment);
     }
 
     public RESTCompoundService getRestCompoundService() {
