@@ -10,7 +10,7 @@ package webtests.pages
 class LoginPage extends ScaffoldPage {
     static url = "login/auth"
 
-    static at = { title == "Login" }
+    static at = { title == "BioAssay Research Database" }
 
     static content = {
         loginForm { $("form") }

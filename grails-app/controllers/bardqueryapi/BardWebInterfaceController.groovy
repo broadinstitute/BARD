@@ -532,7 +532,17 @@ class SearchHelper {
         params.searchString = searchCommand.searchString
 
     }
+    void findFiltersAlreadyApplied(List<SearchFilter> searchFilters, Collection<Value> facets){
+        //Includes all the applied search-filters (selected previously) that were also returned with the new filtering faceting.
+        //1. Check if the facet group-names (a.k.a., parent.id) match
+        //2. Check if the facet/filter name (a.k.a., child.id) match
 
+        List<SearchFilter> appliedFiltersAlreadyInFacets = searchFilters.findAll { SearchFilter filter ->
+            Value parent = facets.find {Value parent -> parent.id.trim().equalsIgnoreCase(filter.filterName.trim())}
+            return parent?.children.find { Value child -> child.id.trim().equalsIgnoreCase(filter.filterValue.trim().replace('"', ''))}
+        }
+
+    }
     Map getAppliedFilters(List<SearchFilter> searchFilters, Collection<Value> facets) {
         //Includes all the applied search-filters (selected previously) that were also returned with the new filtering faceting.
         //1. Check if the facet group-names (a.k.a., parent.id) match
