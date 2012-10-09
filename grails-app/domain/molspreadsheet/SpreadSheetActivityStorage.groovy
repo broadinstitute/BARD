@@ -83,5 +83,15 @@ class SpreadSheetActivityStorage {
     }
 
     static constraints = {
+         eid (nullable: true)
+         cid (nullable: true)
+         sid (nullable: true)
+         activityOutcome (nullable: true)
+         potency (nullable: true)
+         hillCurveValueId (nullable: true)
+         hillCurveValueSInf (nullable: true)
+         hillCurveValueS0 (nullable: true)
+         hillCurveValueSlope (nullable: true)
+         hillCurveValueCoef (nullable: true)
     }
 }
