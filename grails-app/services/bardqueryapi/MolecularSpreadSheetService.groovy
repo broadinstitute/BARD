@@ -545,14 +545,16 @@ class MolecularSpreadSheetService {
         final Iterator<Value> experimentValueIterator = experimentValue.children()
         SpreadSheetActivity spreadSheetActivity = new SpreadSheetActivity()
         spreadSheetActivity.experimentId = experimentId
-        while (experimentValueIterator.hasNext()) {
+        while (experimentValueIterator?.hasNext()) {
             Value childValue = experimentValueIterator.next()
             addCurrentActivityToSpreadSheet(spreadSheetActivity, childValue)
         }
         return spreadSheetActivity
     }
     /**
-     *
+     * The ideais to fill up a spreadsheet activity based on
+     *  Note hack -- this method has been short-circuited so that a HillCurveValue will cause the method to
+     *  push a value back onto readouts and then return
      * @param spreadSheetActivity
      * @param childValue
      */
