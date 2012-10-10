@@ -8,6 +8,7 @@ import bard.core.adapter.AssayAdapter
 import bard.core.adapter.CompoundAdapter
 import bard.core.adapter.ProjectAdapter
 import grails.test.mixin.TestFor
+import spock.lang.Shared
 import spock.lang.Specification
 import spock.lang.Unroll
 
@@ -17,6 +18,9 @@ import spock.lang.Unroll
 @Unroll
 @TestFor(QueryHelperService)
 class QueryServiceHelperUnitSpec extends Specification {
+    @Shared Map<String, String> EMPTY_LABEL = [label: "", value: ""]
+    @Shared Map<String, String> GO_TERM = [label: "Go Biological Process as <strong>GO Biological Process Term</strong>", value: "gobp_term:\"Go Biological Process\""]
+    @Shared List<SearchFilter> searchFilters = [new SearchFilter(filterName: "a", filterValue: "b")]
 
     void setup() {
     }
@@ -29,9 +33,6 @@ class QueryServiceHelperUnitSpec extends Specification {
      */
     void "test convert SearchFilters To Filters"() {
         given: "A list of search filters"
-        final String filterName = "a"
-        final String filterValue = "b"
-        final List<SearchFilter> searchFilters = [new SearchFilter(filterName: filterName, filterValue: filterValue)]
         when: "We call the convertSearchFilters method with the given list of filters"
         final List<String[]> filters = service.convertSearchFiltersToFilters(searchFilters)
 
@@ -40,8 +41,8 @@ class QueryServiceHelperUnitSpec extends Specification {
         assert filters.size() == 1
         final String[] filter = filters.get(0)
         assert filter.length == 2
-        assert filter[0] == filterName
-        assert filter[1] == filterValue
+        assert filter[0] == searchFilters[0].filterName
+        assert filter[1] == searchFilters[0].filterValue
     }
     /**
      * {@link QueryHelperService#findFiltersInSearchBox(List, String)}
@@ -105,10 +106,10 @@ class QueryServiceHelperUnitSpec extends Specification {
 
         where:
         label                                          | currentAutoSuggestKey | term         | expectedResults
-        "Term exist in filters Map"                    | "gobp_term"           | "DNA Repair" | [[label: "DNA Repair", value: "DNA Repair"], [label: "Go Biological Process as <strong>GO Biological Process Term</strong>", value: "gobp_term:\"Go Biological Process\""]]
-        "Current Suggest Key is null"                  | ""                    | "gobp_term"  | [[label: "gobp_term", value: "gobp_term"], [label: "Go Biological Process as <strong>GO Biological Process Term</strong>", value: "gobp_term:\"Go Biological Process\""]]
-        "Term is null"                                 | "target_name:String"  | ""           | [[label: "", value: ""], [label: "Go Biological Process as <strong>GO Biological Process Term</strong>", value: "gobp_term:\"Go Biological Process\""]]
-        "Current Suggest Key is null and Term is null" | ""                    | ""           | [[label: "", value: ""], [label: "Go Biological Process as <strong>GO Biological Process Term</strong>", value: "gobp_term:\"Go Biological Process\""]]
+        "Term exist in filters Map"                    | "gobp_term"           | "DNA Repair" | [[label: "DNA Repair", value: "DNA Repair"], GO_TERM]
+        "Current Suggest Key is null"                  | ""                    | "gobp_term"  | [[label: "gobp_term", value: "gobp_term"], GO_TERM]
+        "Term is null"                                 | "target_name:String"  | ""           | [EMPTY_LABEL, GO_TERM]
+        "Current Suggest Key is null and Term is null" | ""                    | ""           | [EMPTY_LABEL, GO_TERM]
 
     }
     /**

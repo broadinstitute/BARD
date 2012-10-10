@@ -35,7 +35,7 @@ class DoseResponseCurveControllerUnitSpec extends Specification {
         controller.doseResponseCurve(drcCurveCommand)
 
         then:
-        0 * doseCurveRenderingService.createDoseCurve(_) >> {array}
+        _ * doseCurveRenderingService.createDoseCurve(_) >> {array}
         assert flash.message == 'Points required in order to draw a Dose Response Curve'
         assert response.status == 500
     }

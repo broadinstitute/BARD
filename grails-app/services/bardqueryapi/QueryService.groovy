@@ -121,7 +121,7 @@ class QueryService implements IQueryService {
      * @param skip
      * @return Map
      */
-    Map structureSearch(final String smiles, final StructureSearchParams.Type structureSearchParamsType, final List<SearchFilter> searchFilters = [], final int top = 50, final int skip = 0) {
+    Map structureSearch(final String smiles, final StructureSearchParams.Type structureSearchParamsType, final List<SearchFilter> searchFilters = [], final Integer top = 50, final Integer skip = 0) {
         final List<CompoundAdapter> compoundAdapters = []
         Collection<Value> facets = []
 
@@ -157,7 +157,7 @@ class QueryService implements IQueryService {
     /**
      * Given a list of Compound Ids return all the compounds that were found
      * @param compoundIds
-     * @param filters {@link SearchFilter}'s
+     * @param filters {@link SearchFilter}'s  - We do not use filters because the JDO does not use them for ID searches yet
      * @return Map
      */
     Map findCompoundsByCIDs(final List<Long> compoundIds, List<SearchFilter> filters = []) {
@@ -182,7 +182,7 @@ class QueryService implements IQueryService {
     /**
      * Given a list of Assay Ids return all the assays that were found
      * @param assayIds
-     * @param filters {@link SearchFilter}'s
+     * @param filters {@link SearchFilter}'s  - We do not use filters because the JDO does not use them for ID searches yet
      * @return map
      */
     Map findAssaysByADIDs(final List<Long> assayIds, List<SearchFilter> filters = []) {
@@ -206,7 +206,7 @@ class QueryService implements IQueryService {
      *
      * Given a list of Project Ids return all the projects that were found
      * @param projectIds
-     * @param filters {@link SearchFilter}'s
+     * @param filters {@link SearchFilter}'s   - We do not use filters because the JDO does not use them for ID searches yet
      * @return Map
      */
     Map findProjectsByPIDs(final List<Long> projectIds, List<SearchFilter> filters = []) {

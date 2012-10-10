@@ -51,7 +51,7 @@ public interface IQueryService {
      * @param skip
      * @return Map
      */
-    Map structureSearch(final String smiles, final StructureSearchParams.Type structureSearchParamsType, final List<SearchFilter> searchFilters, final int top, final int skip);
+    Map structureSearch(final String smiles, final StructureSearchParams.Type structureSearchParamsType, final List<SearchFilter> searchFilters, final Integer top, final Integer skip);
 
     //===================== Find Resources given a list of IDs ================================
     /**
