@@ -104,7 +104,7 @@
                                                              ac50: spreadSheetActivityStorage?.hillCurveValueSlope,
                                                              hillSlope: spreadSheetActivityStorage?.hillCurveValueCoef,
                                                              concentrations: spreadSheetActivityStorage?.hillCurveValueConc,
-                                                             activities: spreadSheetActivityStorage?.hillCurveValueResponse
+                                                             activities: spreadSheetActivityStorage?.hillCurveValueResponse,
                                                              yAxisLabel: spreadSheetActivityStorage?.hillCurveValueId
                                                      ]
                                              )}"/>

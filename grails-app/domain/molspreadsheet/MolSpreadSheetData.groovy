@@ -5,10 +5,10 @@ class MolSpreadSheetData {
     static hasMany = [ molSpreadSheetCell : MolSpreadSheetCell ]
     static transients = ['rowCount','columnCount']
 
-    LinkedHashMap<String,MolSpreadSheetCell> mssData   = new LinkedHashMap<String,MolSpreadSheetCell> ()
-    LinkedHashMap<Long,Integer> rowPointer  = new LinkedHashMap<Long,Integer>()
-    LinkedHashMap<Long,Integer> columnPointer   = new LinkedHashMap<Long,Integer>()
-    List<String> mssHeaders   = new ArrayList<String>()
+    LinkedHashMap<String,MolSpreadSheetCell> mssData   = [:]
+    LinkedHashMap<Long,Integer> rowPointer  = [:]
+    LinkedHashMap<Long,Integer> columnPointer   = [:]
+    List<String> mssHeaders   = []
 
     MolSpreadSheetData()  {
     }
@@ -53,10 +53,11 @@ class MolSpreadSheetData {
      * @return
      */
     int getRowCount(){
-        if (rowPointer == null)
+        if (rowPointer == null) {
             return 0
-        else
-            return rowPointer.size()
+        }
+        return rowPointer.size()
+
     }
 
     /**
@@ -64,10 +65,12 @@ class MolSpreadSheetData {
      * @return
      */
     int getColumnCount(){
-        if (mssHeaders == null)
+        if (mssHeaders == null) {
             return 0
-        else
-            return mssHeaders.size()
+        }
+        return mssHeaders.size()
+
+
     }
 
     static constraints = {

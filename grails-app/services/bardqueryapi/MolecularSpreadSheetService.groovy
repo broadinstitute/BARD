@@ -45,11 +45,11 @@ class MolecularSpreadSheetService {
      * @return
      */
     Map convertSpreadSheetActivityToCompoundInformation(List<SpreadSheetActivity> SpreadSheetActivityList) {
-        def compoundIds = new ArrayList<Long>()
+        List<Long> compoundIds = []
         for (SpreadSheetActivity spreadSheetActivity in SpreadSheetActivityList) {
             compoundIds.add(spreadSheetActivity.cid)
         }
-        List<SearchFilter> filters = new ArrayList<SearchFilter>()
+        List<SearchFilter> filters = []
         queryService.findCompoundsByCIDs(compoundIds, filters)
     }
     /**
@@ -77,7 +77,7 @@ class MolecularSpreadSheetService {
      */
     protected List<SpreadSheetActivity> extractMolSpreadSheetData(MolSpreadSheetData molSpreadSheetData, List<Experiment> experimentList, List<Long> compounds) {
         // now step through the data and place into molSpreadSheetData
-        List<SpreadSheetActivity> spreadSheetActivityList = new ArrayList<SpreadSheetActivity>()
+        List<SpreadSheetActivity> spreadSheetActivityList = []
 
         // we need to handle each experiment separately ( until NCGC can do this in the background )
         // Note that each experiment corresponds to a column in our spreadsheet
@@ -124,7 +124,7 @@ class MolecularSpreadSheetService {
     protected void populateMolSpreadSheetData(MolSpreadSheetData molSpreadSheetData, List<Experiment> experimentList, List<SpreadSheetActivity> spreadSheetActivityList) {
         // now step through the data and place into molSpreadSheetData
         int columnPointer = 0
-        Map<String,MolSpreadSheetCell> map   = new HashMap<String,MolSpreadSheetCell> ()
+        Map<String,MolSpreadSheetCell> map   = [:]
         // we need to handle each experiment separately ( until NCGC can do this in the background )
         // Note that each experiment corresponds to a column in our spreadsheet
         for (Experiment experiment in experimentList) {
@@ -188,8 +188,12 @@ class MolecularSpreadSheetService {
     protected void populateMolSpreadSheetRowMetadata(final MolSpreadSheetData molSpreadSheetData, final List<CartCompound> cartCompoundList) {
 
         // Make sure that the variable we're filling  leaves this routine with something in
-        if (molSpreadSheetData.rowPointer == null) molSpreadSheetData.rowPointer = new LinkedHashMap<Long, Integer>()
-        if (molSpreadSheetData.mssData == null) molSpreadSheetData.rowPointer = new LinkedHashMap<Long, Integer>()
+        if (molSpreadSheetData.rowPointer == null) {
+            molSpreadSheetData.rowPointer = [:]
+        }
+        if (molSpreadSheetData.mssData == null) {
+            molSpreadSheetData.rowPointer = [:]
+        }
 
         // add specific values for the cid column
         int rowCount = 0
@@ -208,8 +212,12 @@ class MolecularSpreadSheetService {
     protected void populateMolSpreadSheetRowMetadata(final MolSpreadSheetData molSpreadSheetData, final Map compoundAdapterMap) {
 
         // Make sure that the variable we're filling  leaves this routine with something in
-        if (molSpreadSheetData.rowPointer == null) molSpreadSheetData.rowPointer = new LinkedHashMap<Long, Integer>()
-        if (molSpreadSheetData.mssData == null) molSpreadSheetData.rowPointer = new LinkedHashMap<Long, Integer>()
+        if (molSpreadSheetData.rowPointer == null) {
+            molSpreadSheetData.rowPointer = [:]
+        }
+        if (molSpreadSheetData.mssData == null){
+            molSpreadSheetData.rowPointer = [:]
+        }
 
         // Add every compound we can find in the compound adapters map
         List<CompoundAdapter> compoundAdaptersList = compoundAdapterMap.compoundAdapters
@@ -394,7 +402,7 @@ class MolecularSpreadSheetService {
      * @return
      */
     List<SpreadSheetActivity> findActivitiesForCompounds(final Experiment experiment, final Object compoundETag) {
-        final List<SpreadSheetActivity> spreadSheetActivities = new ArrayList<SpreadSheetActivity>()
+        final List<SpreadSheetActivity> spreadSheetActivities = []
         final ServiceIterator<Value> experimentIterator = this.queryServiceWrapper.restExperimentService.activities(experiment, compoundETag);
         while (experimentIterator.hasNext()) {
             Value experimentValue = experimentIterator.next()

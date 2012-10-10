@@ -13,6 +13,8 @@ import webtests.pages.LoginPage
 class LoginSpec extends BardReportingSpec {
     String invalidUserName = "baduser"
     String invalidPassword = "badpassword"
+    String validUserName = getCredentialsForTest().username
+    String validPassword = getCredentialsForTest().password
 
     def "Test login with invalid username"() {
         given: "User visits the Login page"
@@ -20,7 +22,7 @@ class LoginSpec extends BardReportingSpec {
 
         when: "User attempts to login with an invalid username"
         at LoginPage
-        logInNoValidation(invalidUserName, usernameUserPropsMap.user.password)
+        logInNoValidation(invalidUserName, validPassword)
 
         then: "The system should redirect the user to the login page"
         at LoginPage
@@ -38,7 +40,7 @@ class LoginSpec extends BardReportingSpec {
 
         when: "User attempts to login with an invalid password"
         at LoginPage
-        logInNoValidation(usernameUserPropsMap.user.username, invalidPassword)
+        logInNoValidation(validUserName, invalidPassword)
 
         then: "The system should redirect the user to the login page"
         at LoginPage
@@ -56,18 +58,18 @@ class LoginSpec extends BardReportingSpec {
 
         when: "User attempts to login with an invalid username"
         at LoginPage
-        logInNoValidation(usernameUserPropsMap.user.username, usernameUserPropsMap.user.password)
+        logInNoValidation(validUserName, validPassword)
 
         then: "The system should display a message stating that the user is logged in"
         at HomePage
-        assert isLoggedInAsUser(usernameUserPropsMap.user.username)
+        assert isLoggedInAsUser(validUserName)
     }
 
     def "Test logout"() {
         given: "User is logged in to the system"
         to LoginPage
-        logInNoValidation(usernameUserPropsMap.user.username, usernameUserPropsMap.user.password)
-        assert isLoggedInAsUser(usernameUserPropsMap.user.username)
+        logInNoValidation(validUserName, validPassword)
+        assert isLoggedInAsUser(validUserName)
 
         when: "User clicks the 'Log Out' link"
         at HomePage
@@ -75,6 +77,5 @@ class LoginSpec extends BardReportingSpec {
 
         then: "The user should be logged out of the system"
         assert !isLoggedIn()
-
     }
 }

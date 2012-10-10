@@ -42,4 +42,8 @@ abstract class BardReportingSpec extends GebReportingSpec {
         to LoginPage
         return logIn(username, usernameUserPropsMap.get(username).password)
     }
+
+    Map<String, String> getCredentialsForTest() {
+        return usernameUserPropsMap.find{it}.value    // returns the first entry
+    }
 }
