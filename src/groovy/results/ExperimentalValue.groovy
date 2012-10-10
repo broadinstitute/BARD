@@ -215,7 +215,7 @@ enum ExperimentalValueUnit {
     Attamolar("aM", -18),
     Zeptomolar("zM", -21),
     Yoctomolar("yM", -24),
-    unknown("U", 0);
+    unknown("", 0);
 
     static ExperimentalValueUnit convert(MolSpreadSheetCellUnit molSpreadSheetCellUnit){
         switch (molSpreadSheetCellUnit){
