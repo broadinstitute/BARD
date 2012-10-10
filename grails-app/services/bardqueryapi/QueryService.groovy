@@ -121,7 +121,7 @@ class QueryService implements IQueryService {
      * @param skip
      * @return Map
      */
-    Map structureSearch(final String smiles, final StructureSearchParams.Type structureSearchParamsType, final List<SearchFilter> searchFilters = [], final int top = 50, final int skip = 0) {
+    Map structureSearch(final String smiles, final StructureSearchParams.Type structureSearchParamsType, final List<SearchFilter> searchFilters = [], final Integer top = 50, final Integer skip = 0) {
         final List<CompoundAdapter> compoundAdapters = []
         Collection<Value> facets = []
 

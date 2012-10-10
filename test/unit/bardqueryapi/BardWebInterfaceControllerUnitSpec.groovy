@@ -7,6 +7,7 @@ import com.metasieve.shoppingcart.ShoppingCartService
 import grails.test.mixin.TestFor
 import grails.test.mixin.TestMixin
 import grails.test.mixin.support.GrailsUnitTestMixin
+import org.apache.http.HttpException
 import org.json.JSONArray
 import promiscuity.PromiscuityScore
 import promiscuity.Scaffold
@@ -32,8 +33,8 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
     @Shared List<SearchFilter> searchFilters = [new SearchFilter(filterName: 'group1', filterValue: 'facet1'), new SearchFilter(filterName: 'group2', filterValue: 'facet2')]
     @Shared Value facet1 = new IntValue(source: new DataSource(), id: 'group1', value: null, children: [new IntValue(source: new DataSource(), id: 'facet1', value: 1)])
     @Shared Value facet3 = new IntValue(source: new DataSource(), id: 'group3', value: null, children: [new IntValue(source: new DataSource(), id: 'facet3', value: 1)])
-
-
+    @Shared List<SearchFilter> searchFilters1 = [new SearchFilter(filterName: "a", filterValue: "b")]
+    @Shared String EMPTY_STRING=''
     void setup() {
         controller.metaClass.mixin(SearchHelper)
         queryService = Mock(QueryService)
@@ -104,7 +105,7 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
         when:
         controller.showExperimentResult(id)
         then:
-        _ * this.molecularSpreadSheetService.findExperimentDataById(_, _, _) >> {throw new RuntimeException("Some message")}
+        _ * this.molecularSpreadSheetService.findExperimentDataById(_, _, _) >> {throw new HttpException("Some message")}
         assert response.status == 404
         assert flash.message == "Problem finding Experiment ${id}"
 
@@ -121,10 +122,10 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
         assert response.status == statusCode
 
         where:
-        label                          | cid  | statusCode                                   | scaffolds                   | promiscuityScore
-        "Empty Null CID - Bad Request" | null | HttpServletResponse.SC_BAD_REQUEST           | null                        | null
-        "CID- Internal Server Error"   | 234  | HttpServletResponse.SC_INTERNAL_SERVER_ERROR | null                        | null
-        "Success"                      | 567  | HttpServletResponse.SC_OK                    | [new Scaffold(pScore: 222)] | new PromiscuityScore(cid: 567, scaffolds: [new Scaffold(pScore: 222)])
+        label                          | cid  | statusCode                                   | scaffolds                  | promiscuityScore
+        "Empty Null CID - Bad Request" | null | HttpServletResponse.SC_BAD_REQUEST           | null                       | null
+        "CID- Internal Server Error"   | 234  | HttpServletResponse.SC_INTERNAL_SERVER_ERROR | null                       | null
+        "Success"                      | 567  | HttpServletResponse.SC_OK                    | [new Scaffold(pScore: 22)] | new PromiscuityScore(cid: 567, scaffolds: [new Scaffold(pScore: 222)])
     }
 
     void "test promiscuity action with exception"() {
@@ -133,7 +134,7 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
         when:
         controller.promiscuity(cid)
         then:
-        _ * this.queryService.findPromiscuityScoreForCID(_) >> {throw new RuntimeException("Error Message")}
+        _ * this.queryService.findPromiscuityScoreForCID(_) >> {throw new HttpException("Error Message")}
         assert response.status == HttpServletResponse.SC_BAD_REQUEST
         assert flash.message == "Could not get promiscuity score for ${cid}"
     }
@@ -154,7 +155,7 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
         given:
         mockCommandObject(SearchCommand)
         params.formName = FacetFormType.AssayFacetForm.toString()
-        Map paramMap = [formName: FacetFormType.AssayFacetForm.toString(), searchString: searchString, filters: [new SearchFilter(filterName: "a", filterValue: "b")]]
+        Map paramMap = [formName: FacetFormType.AssayFacetForm.toString(), searchString: searchString, filters: searchFilters1]
         controller.metaClass.getParams {-> paramMap}
         SearchCommand searchCommand = new SearchCommand(paramMap)
 
@@ -178,7 +179,11 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
     void "test handle Project Searches #label"() {
         mockCommandObject(SearchCommand)
         params.formName = FacetFormType.ProjectFacetForm.toString()
-        Map paramMap = [formName: FacetFormType.ProjectFacetForm.toString(), searchString: searchString, filters: [new SearchFilter(filterName: "a", filterValue: "b")]]
+        Map paramMap = [
+                formName: FacetFormType.ProjectFacetForm.toString(),
+                searchString: searchString,
+                filters: searchFilters1
+        ]
         controller.metaClass.getParams {-> paramMap}
         SearchCommand searchCommand = new SearchCommand(paramMap)
 
@@ -201,7 +206,7 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
     void "test handle Compound Searches #label"() {
         mockCommandObject(SearchCommand)
         params.formName = FacetFormType.CompoundFacetForm.toString()
-        Map paramMap = [formName: FacetFormType.CompoundFacetForm.toString(), searchString: searchString, filters: [new SearchFilter(filterName: "a", filterValue: "b")]]
+        Map paramMap = [formName: FacetFormType.CompoundFacetForm.toString(), searchString: searchString, filters: searchFilters1]
         controller.metaClass.getParams {-> paramMap}
         SearchCommand searchCommand = new SearchCommand(paramMap)
 
@@ -217,14 +222,14 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
         label                                  | searchString  | statusCode                                   | compoundAdapterMap
         "Empty Search String"                  | ""            | HttpServletResponse.SC_BAD_REQUEST           | null
         "Search String- Internal Server Error" | "Some String" | HttpServletResponse.SC_INTERNAL_SERVER_ERROR | null
-        "Success"                              | "1234,5678"   | HttpServletResponse.SC_OK                    | [compoundAdapters: [buildCompoundAdapter(1234, [], "CC"), buildCompoundAdapter(4567, [], "CCC")], facets: [], nHits: 2]
+        "Success"                              | "1234,5678"   | HttpServletResponse.SC_OK                    | [compoundAdapters: [buildCompoundAdapter(1234, []), buildCompoundAdapter(4567, [])], facets: [], nHits: 2]
     }
 
     void "test apply Filters to projects #label"() {
         given:
         mockCommandObject(SearchCommand)
         params.formName = FacetFormType.ProjectFacetForm.toString()
-        Map paramMap = [formName: FacetFormType.ProjectFacetForm.toString(), searchString: searchString, filters: [new SearchFilter(filterName: "a", filterValue: "b")]]
+        Map paramMap = [formName: FacetFormType.ProjectFacetForm.toString(), searchString: searchString, filters: searchFilters1]
         controller.metaClass.getParams {-> paramMap}
         SearchCommand searchCommand = new SearchCommand(paramMap)
 
@@ -243,7 +248,7 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
         given:
         mockCommandObject(SearchCommand)
         params.formName = FacetFormType.CompoundFacetForm.toString()
-        Map paramMap = [formName: FacetFormType.CompoundFacetForm.toString(), searchString: searchString, filters: [new SearchFilter(filterName: "a", filterValue: "b")]]
+        Map paramMap = [formName: FacetFormType.CompoundFacetForm.toString(), searchString: searchString, filters: searchFilters1]
         controller.metaClass.getParams {-> paramMap}
         SearchCommand searchCommand = new SearchCommand(paramMap)
 
@@ -255,14 +260,14 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
         where:
         label                 | searchString | statusCode                         | compoundAdapterMap
         "Empty Search String" | ""           | HttpServletResponse.SC_BAD_REQUEST | null
-        "Success"             | "1234,5678"  | HttpServletResponse.SC_OK          | [compoundAdapters: [buildCompoundAdapter(1234, [], "CC"), buildCompoundAdapter(4567, [], "CCC")], facets: [], nHits: 2]
+        "Success"             | "1234,5678"  | HttpServletResponse.SC_OK          | [compoundAdapters: [buildCompoundAdapter(1234, []), buildCompoundAdapter(4567, [])], facets: [], nHits: 2]
     }
 
     void "test apply Filters to assays #label"() {
         given:
         mockCommandObject(SearchCommand)
         params.formName = FacetFormType.AssayFacetForm.toString()
-        Map paramMap = [formName: FacetFormType.AssayFacetForm.toString(), searchString: searchString, filters: [new SearchFilter(filterName: "a", filterValue: "b")]]
+        Map paramMap = [formName: FacetFormType.AssayFacetForm.toString(), searchString: searchString, filters: searchFilters1]
         controller.metaClass.getParams {-> paramMap}
         SearchCommand searchCommand = new SearchCommand(paramMap)
 
@@ -363,7 +368,7 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
         where:
         label                 | searchString | statusCode                         | compoundAdapterMap
         "Empty Search String" | ""           | HttpServletResponse.SC_BAD_REQUEST | null
-        "Success"             | "1234,5678"  | HttpServletResponse.SC_OK          | [compoundAdapters: [buildCompoundAdapter(1234, [], "CC"), buildCompoundAdapter(4567, [], "CCC")], facets: [], nHits: 2]
+        "Success"             | "1234,5678"  | HttpServletResponse.SC_OK          | [compoundAdapters: [buildCompoundAdapter(1234, []), buildCompoundAdapter(4567, [])], facets: [], nHits: 2]
 
     }
 
@@ -392,11 +397,11 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
         flash.message == flashMessage
         response.status == statusCode
         where:
-        label                 | searchString | flashMessage                                                                | filters                                               | statusCode                         | compoundAdapterMap
-        "Empty Search String" | ""           | 'Search String is required, must be of the form StructureSearchType:Smiles' | [new SearchFilter(filterName: "a", filterValue: "b")] | HttpServletResponse.SC_BAD_REQUEST | null
-        "Throws Exception"    | "1234,5678"  | 'Search String is required, must be of the form StructureSearchType:Smiles' | [new SearchFilter(filterName: "a", filterValue: "b")] | HttpServletResponse.SC_BAD_REQUEST | null
-        "Success"             | "Exact:CCC"  | null                                                                        | [new SearchFilter(filterName: "a", filterValue: "b")] | HttpServletResponse.SC_OK          | [compoundAdapters: [buildCompoundAdapter(4567, [], "CCC")], facets: [], nHits: 2]
-        "Success No Filters"  | "Exact:CCC"  | null                                                                        | []                                                    | HttpServletResponse.SC_OK          | [compoundAdapters: [buildCompoundAdapter(4567, [], "CCC")], facets: [], nHits: 2]
+        label                 | searchString | flashMessage                                                                | filters        | statusCode                         | compoundAdapterMap
+        "Empty Search String" | ""           | 'Search String is required, must be of the form StructureSearchType:Smiles' | searchFilters1 | HttpServletResponse.SC_BAD_REQUEST | null
+        "Throws Exception"    | "1234,5678"  | 'Search String is required, must be of the form StructureSearchType:Smiles' | searchFilters1 | HttpServletResponse.SC_BAD_REQUEST | null
+        "Success"             | "Exact:CCC"  | null                                                                        | searchFilters1 | HttpServletResponse.SC_OK          | [compoundAdapters: [buildCompoundAdapter(4567, [])], facets: [], nHits: 2]
+        "Success No Filters"  | "Exact:CCC"  | null                                                                        | []             | HttpServletResponse.SC_OK          | [compoundAdapters: [buildCompoundAdapter(4567, [])], facets: [], nHits: 2]
 
     }
 
@@ -480,8 +485,8 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
         response.status == statusCode
         where:
         label                                 | searchString | projectAdapterMap                                          | statusCode                                   | filters
-        "Search Projects By Ids"              | "1234, 4567" | [projectAdapters: [buildProjectAdapter(1234, "project1")]] | HttpServletResponse.SC_OK                    | [new SearchFilter(filterName: "a", filterValue: "b")]
-        "Search Projects By Non existing Ids" | "12, 47"     | null                                                       | HttpServletResponse.SC_INTERNAL_SERVER_ERROR | [new SearchFilter(filterName: "a", filterValue: "b")]
+        "Search Projects By Ids"              | "1234, 4567" | [projectAdapters: [buildProjectAdapter(1234, "project1")]] | HttpServletResponse.SC_OK                    | searchFilters1
+        "Search Projects By Non existing Ids" | "12, 47"     | null                                                       | HttpServletResponse.SC_INTERNAL_SERVER_ERROR | searchFilters1
         "Search Projects By Id No Filters"    | "1234, 4567" | [projectAdapters: [buildProjectAdapter(1234, "project1")]] | HttpServletResponse.SC_OK                    | []
 
     }
@@ -503,8 +508,8 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
         assert response.status == statusCode
         where:
         label                               | searchString | assayAdapterMap                                                            | statusCode                                   | filters
-        "Search Assays By Ids"              | "1234, 4567" | [assayAdapters: [buildAssayAdapter(1234, "assay2")], facets: [], nHits: 2] | HttpServletResponse.SC_OK                    | [new SearchFilter(filterName: "a", filterValue: "b")]
-        "Search Assays By Non existing Ids" | "12, 47"     | null                                                                       | HttpServletResponse.SC_INTERNAL_SERVER_ERROR | [new SearchFilter(filterName: "a", filterValue: "b")]
+        "Search Assays By Ids"              | "1234, 4567" | [assayAdapters: [buildAssayAdapter(1234, "assay2")], facets: [], nHits: 2] | HttpServletResponse.SC_OK                    | searchFilters1
+        "Search Assays By Non existing Ids" | "12, 47"     | null                                                                       | HttpServletResponse.SC_INTERNAL_SERVER_ERROR | searchFilters1
         "Search Assays By Id No Filters"    | "1234, 4567" | [assayAdapters: [buildAssayAdapter(1234, "assay2")], facets: [], nHits: 2] | HttpServletResponse.SC_OK                    | []
 
 
@@ -525,15 +530,15 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
         and:
         assert response.status == statusCode
         where:
-        label                               | searchString | compoundAdapterMap                                                                | statusCode                                   | filters
-        "Search Compounds By Id"            | "1234, 4567" | [compoundAdapters: [buildCompoundAdapter(4567, [], "CCC")], facets: [], nHits: 2] | HttpServletResponse.SC_OK                    | [new SearchFilter(filterName: "a", filterValue: "b")]
-        "Search Compounds Non existing Ids" | "12, 45"     | null                                                                              | HttpServletResponse.SC_INTERNAL_SERVER_ERROR | [new SearchFilter(filterName: "a", filterValue: "b")]
-        "Search Compounds By Id No Filters" | "1234, 4567" | [compoundAdapters: [buildCompoundAdapter(4567, [], "CCC")], facets: [], nHits: 2] | HttpServletResponse.SC_OK                    | []
+        label                               | searchString | compoundAdapterMap                                                         | statusCode                                   | filters
+        "Search Compounds By Id"            | "1234, 4567" | [compoundAdapters: [buildCompoundAdapter(4567, [])], facets: [], nHits: 2] | HttpServletResponse.SC_OK                    | searchFilters1
+        "Search Compounds Non existing Ids" | "12, 45"     | null                                                                       | HttpServletResponse.SC_INTERNAL_SERVER_ERROR | searchFilters1
+        "Search Compounds By Id No Filters" | "1234, 4567" | [compoundAdapters: [buildCompoundAdapter(4567, [])], facets: [], nHits: 2] | HttpServletResponse.SC_OK                    | []
 
 
     }
 
-    void "test searchProjectsByIDs Empty SearchString"() {
+    void "test searchProjectsByIDs Empty Search String"() {
         given:
         mockCommandObject(SearchCommand)
         SearchCommand searchCommand = new SearchCommand(searchString: "")
@@ -545,10 +550,10 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
 
     }
 
-    void "test searchAssaysByIDs Empty SearchString"() {
+    void "test searchAssaysByIDs Empty Search String"() {
         given:
         mockCommandObject(SearchCommand)
-        SearchCommand searchCommand = new SearchCommand(searchString: "")
+        SearchCommand searchCommand = new SearchCommand(searchString: EMPTY_STRING)
         when:
         request.method = 'GET'
         controller.searchAssaysByIDs(searchCommand)
@@ -557,10 +562,10 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
 
     }
 
-    void "test searchCompoundsByIDs Empty SearchString"() {
+    void "test searchCompoundsByIDs Empty Search String"() {
         given:
         mockCommandObject(SearchCommand)
-        SearchCommand searchCommand = new SearchCommand(searchString: "")
+        SearchCommand searchCommand = new SearchCommand(searchString: EMPTY_STRING)
         when:
         request.method = 'GET'
         controller.searchCompoundsByIDs(searchCommand)
@@ -604,11 +609,11 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
         response.status == statusCode
 
         where:
-        label                                             | cid  | compoundAdapter                            | expectedCID | expectedSIDs | expectedView                     | statusCode
-        "Render show compound page"                       | 872  | buildCompoundAdapter(872, [1, 2, 3], "CC") | 872         | [1, 2, 3]    | "/bardWebInterface/showCompound" | 200
-        "Render not found Compound string, null Adapter"  | null | null                                       | null        | null         | null                             | 404
-        "Render not found Compound with Compound Adpater" | null | buildCompoundAdapter(872, [1, 2, 3], "CC") | null        | null         | "/bardWebInterface/showCompound" | 200
-        "Compound does not exist"                         | -1   | null                                       | null        | null         | null                             | 404
+        label                                             | cid  | compoundAdapter                      | expectedCID | expectedSIDs | expectedView                     | statusCode
+        "Render show compound page"                       | 872  | buildCompoundAdapter(872, [1, 3, 2]) | 872         | [1, 2, 3]    | "/bardWebInterface/showCompound" | 200
+        "Render not found Compound string, null Adapter"  | null | null                                 | null        | null         | null                             | 404
+        "Render not found Compound with Compound Adpater" | null | buildCompoundAdapter(872, [3, 2, 1]) | null        | null         | "/bardWebInterface/showCompound" | 200
+        "Compound does not exist"                         | -1   | null                                 | null        | null         | null                             | 404
 
     }
 
@@ -704,7 +709,7 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
         controller.params.term = searchString
         controller.autoCompleteAssayNames()
         then:
-        queryService.autoComplete(_) >> { throw new RuntimeException("Error") }
+        queryService.autoComplete(_) >> { throw new HttpException("Error") }
         response.status == HttpServletResponse.SC_INTERNAL_SERVER_ERROR
 
         where:
@@ -736,7 +741,7 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
     }
 
 
-    CompoundAdapter buildCompoundAdapter(final Long cid, final List<Long> sids, final String smiles) {
+    CompoundAdapter buildCompoundAdapter(final Long cid, final List<Long> sids) {
         final Compound compound = new Compound()
         final DataSource source = new DataSource("stuff", "v1")
         compound.setId(cid);

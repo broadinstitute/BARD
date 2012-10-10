@@ -96,7 +96,7 @@ class MockQueryService implements IQueryService {
      * @param skip
      * @return of compounds
      */
-    Map structureSearch(final String smiles, final StructureSearchParams.Type structureSearchParamsType, final List<SearchFilter> searchFilters = [], final int top = 50, final int skip = 0) {
+    Map structureSearch(final String smiles, final StructureSearchParams.Type structureSearchParamsType, final List<SearchFilter> searchFilters = [], final Integer top = 50, final Integer skip = 0) {
         return findCompoundsByTextSearch("", 10, 0, searchFilters)
     }
 

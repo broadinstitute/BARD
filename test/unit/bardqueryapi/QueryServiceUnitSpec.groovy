@@ -9,6 +9,7 @@ import bard.core.rest.RESTExperimentService
 import bard.core.rest.RESTProjectService
 import grails.test.mixin.TestFor
 import org.apache.commons.lang.time.StopWatch
+import spock.lang.Shared
 import spock.lang.Specification
 import spock.lang.Unroll
 import bard.core.*
@@ -25,6 +26,19 @@ class QueryServiceUnitSpec extends Specification {
     RESTExperimentService restExperimentService
     QueryHelperService queryHelperService
     QueryServiceWrapper queryServiceWrapper
+
+    @Shared Assay assay1 = new Assay(name: "A1")
+    @Shared Assay assay2 = new Assay(name: "A2")
+    @Shared Compound compound1 = new Compound(name: "C1")
+    @Shared Compound compound2 = new Compound(name: "C2")
+    @Shared Project project1 = new Project(name: "P1")
+    @Shared Project project2 = new Project(name: "P2")
+    @Shared Map compoundAdapterMap1 = [compoundAdapters: [], facets: null, nHits: 0]
+    @Shared Map compoundAdapterMap2 = [compoundAdapters: [], facets: [], nHits: 0]
+    @Shared Map assayAdapterMap1 = [assayAdapters: [new AssayAdapter(assay1)], facets: [], nHits: 0]
+    @Shared Map assayAdapterMap2 = [assayAdapters: [], facets: null, nHits: 0]
+    @Shared Map projectAdapterMap1 = [projectAdapters: [new ProjectAdapter(project1)], facets: null, nHits: 0]
+    @Shared Map projectAdapterMap2 = [projectAdapters: [], facets: [], nHits: 0]
 
     void setup() {
         restCompoundService = Mock(RESTCompoundService)
@@ -62,7 +76,7 @@ class QueryServiceUnitSpec extends Specification {
 
         where:
         label                       | compoundId | compound
-        "Return a Compound Adapter" | 872        | new Compound(name: "C1")
+        "Return a Compound Adapter" | 872        | compound1
         "Unknown Compound"          | 872        | null
         "Null CompoundId"           | null       | null
     }
@@ -88,7 +102,7 @@ class QueryServiceUnitSpec extends Specification {
 
         where:
         label                      | projectId | project
-        "Return a Project Adapter" | 872       | new Project(name: "C1")
+        "Return a Project Adapter" | 872       | project1
         "Unknown Project"          | 872       | null
         "Null projectId"           | null      | null
     }
@@ -111,7 +125,7 @@ class QueryServiceUnitSpec extends Specification {
         }
         where:
         label                     | assayId | assay
-        "Return an Assay Adapter" | 872     | new Assay(name: "C1")
+        "Return an Assay Adapter" | 872     | assay1
         "Unknown Assay"           | 872     | null
         "Null assayId"            | null    | null
 
@@ -132,11 +146,11 @@ class QueryServiceUnitSpec extends Specification {
         assert !responseMap.facets
         assert responseMap.compoundAdapters.size() == expectedNumberOfHits
         where:
-        label                    | cids                           | compound                                             | expectedNumberOfCalls | expectedNumberOfHits
-        "Multiple Compound Ids"  | [new Long(872), new Long(111)] | [new Compound(name: "C1"), new Compound(name: "C2")] | 1                     | 2
-        "Unknown Compound Id"    | [new Long(802)]                | null                                                 | 1                     | 0
-        "Single Compound Id"     | [new Long(872)]                | [new Compound(name: "C1")]                           | 1                     | 1
-        "Empty Compound Id list" | []                             | null                                                 | 0                     | 0
+        label                    | cids                           | compound               | expectedNumberOfCalls | expectedNumberOfHits
+        "Multiple Compound Ids"  | [new Long(872), new Long(111)] | [compound1, compound2] | 1                     | 2
+        "Unknown Compound Id"    | [new Long(802)]                | null                   | 1                     | 0
+        "Single Compound Id"     | [new Long(872)]                | [compound1]            | 1                     | 1
+        "Empty Compound Id list" | []                             | null                   | 0                     | 0
 
     }
     /**
@@ -156,11 +170,11 @@ class QueryServiceUnitSpec extends Specification {
         assert !responseMap.facets
         assert responseMap.assayAdapters.size() == expectedNumberOfHits
         where:
-        label                 | assayIds                       | assay                                          | expectedNumberOfCalls | expectedNumberOfHits | assayAdapters
-        "Multiple Assay Ids"  | [new Long(872), new Long(111)] | [new Assay(name: "C1"), new Assay(name: "C2")] | 1                     | 2                    | [new AssayAdapter(new Assay(name: "C1")), new AssayAdapter(new Assay(name: "C2"))]
-        "Unknown Assay Id"    | [new Long(802)]                | null                                           | 1                     | 0                    | null
-        "Single Assay Id"     | [new Long(872)]                | [new Assay(name: "C1")]                        | 1                     | 1                    | [new AssayAdapter(new Assay(name: "C1"))]
-        "Empty Assay Id list" | []                             | null                                           | 0                     | 0                    | null
+        label                 | assayIds                       | assay            | expectedNumberOfCalls | expectedNumberOfHits | assayAdapters
+        "Multiple Assay Ids"  | [new Long(872), new Long(111)] | [assay1, assay2] | 1                     | 2                    | [new AssayAdapter(assay1), new AssayAdapter(assay2)]
+        "Unknown Assay Id"    | [new Long(802)]                | null             | 1                     | 0                    | null
+        "Single Assay Id"     | [new Long(872)]                | [assay1]         | 1                     | 1                    | [new AssayAdapter(assay1)]
+        "Empty Assay Id list" | []                             | null             | 0                     | 0                    | null
 
     }
     /**
@@ -180,11 +194,11 @@ class QueryServiceUnitSpec extends Specification {
         assert !responseMap.facets
         assert responseMap.projectAdapters.size() == expectedNumberOfHits
         where:
-        label                   | projectIds                     | project                                            | expectedNumberOfCalls | expectedNumberOfHits | projectAdapters
-        "Multiple Project Ids"  | [new Long(872), new Long(111)] | [new Project(name: "C1"), new Project(name: "C2")] | 1                     | 2                    | [new ProjectAdapter(new Project(name: "C1")), new ProjectAdapter(new Project(name: "C2"))]
-        "Unknown Project Id"    | [new Long(802)]                | null                                               | 1                     | 0                    | null
-        "Single Project Id"     | [new Long(872)]                | [new Project(name: "C1")]                          | 1                     | 1                    | [new ProjectAdapter(new Project(name: "C1"))]
-        "Empty Project Id list" | []                             | null                                               | 0                     | 0                    | null
+        label                   | projectIds                     | project              | expectedNumberOfCalls | expectedNumberOfHits | projectAdapters
+        "Multiple Project Ids"  | [new Long(872), new Long(111)] | [project1, project2] | 1                     | 2                    | [new ProjectAdapter(project1), new ProjectAdapter(project2)]
+        "Unknown Project Id"    | [new Long(802)]                | null                 | 1                     | 0                    | null
+        "Single Project Id"     | [new Long(872)]                | [project1]           | 1                     | 1                    | [new ProjectAdapter(project2)]
+        "Empty Project Id list" | []                             | null                 | 0                     | 0                    | null
 
     }
 
@@ -267,12 +281,12 @@ class QueryServiceUnitSpec extends Specification {
         restCompoundService.search(_) >> {iter}
         queryHelperService.stripCustomStringFromSearchString(_) >> {"stuff"}
         queryHelperService.constructSearchParams(_, _, _, _) >> { new SearchParams(searchString)}
-        queryHelperService.compoundsToAdapters(_) >> {[new CompoundAdapter(new Compound("name"))]}
+        queryHelperService.compoundsToAdapters(_) >> {[new CompoundAdapter(compound1)]}
         assert map == foundMap
         where:
         searchString         | foundMap
-        "Some Search String" | [compoundAdapters: [], facets: null, nHits: 0]
-        ""                   | [compoundAdapters: [], facets: [], nHits: 0]
+        "Some Search String" | compoundAdapterMap1
+        ""                   | compoundAdapterMap2
 
     }
     /**
@@ -292,12 +306,12 @@ class QueryServiceUnitSpec extends Specification {
         restCompoundService.search(_) >> {iter}
         queryHelperService.stripCustomStringFromSearchString(_) >> {"stuff"}
         queryHelperService.constructSearchParams(_, _, _, _) >> { new SearchParams(searchString)}
-        queryHelperService.compoundsToAdapters(_) >> {[new CompoundAdapter(new Compound("name"))]}
+        queryHelperService.compoundsToAdapters(_) >> {[new CompoundAdapter(compound1)]}
         assert map == foundMap
         where:
         searchString         | foundMap
-        "Some Search String" | [compoundAdapters: [], facets: null, nHits: 0]
-        ""                   | [compoundAdapters: [], facets: [], nHits: 0]
+        "Some Search String" | compoundAdapterMap1
+        ""                   | compoundAdapterMap2
 
     }
     /**
@@ -320,9 +334,9 @@ class QueryServiceUnitSpec extends Specification {
         queryHelperService.assaysToAdapters(_) >> {assayAdapter}
         assert map.assayAdapters.size() == foundMap.assayAdapters.size()
         where:
-        searchString         | foundMap                                                                     | assayAdapter
-        "Some Search String" | [assayAdapters: [new AssayAdapter(new Assay("name"))], facets: [], nHits: 0] | [new AssayAdapter(new Assay("name"))]
-        ""                   | [assayAdapters: [], facets: null, nHits: 0]                                  | null
+        searchString         | foundMap         | assayAdapter
+        "Some Search String" | assayAdapterMap1 | [new AssayAdapter(assay1)]
+        ""                   | assayAdapterMap2 | null
 
     }
     /**
@@ -345,9 +359,9 @@ class QueryServiceUnitSpec extends Specification {
         queryHelperService.assaysToAdapters(_) >> {assayAdapter}
         assert map.assayAdapters.size() == foundMap.assayAdapters.size()
         where:
-        searchString         | foundMap                                                                     | assayAdapter
-        "Some Search String" | [assayAdapters: [new AssayAdapter(new Assay("name"))], facets: [], nHits: 0] | [new AssayAdapter(new Assay("name"))]
-        ""                   | [assayAdapters: [], facets: null, nHits: 0]                                  | null
+        searchString         | foundMap         | assayAdapter
+        "Some Search String" | assayAdapterMap1 | [new AssayAdapter(assay1)]
+        ""                   | assayAdapterMap2 | null
 
     }
     /**
@@ -370,9 +384,9 @@ class QueryServiceUnitSpec extends Specification {
         _ * queryHelperService.projectsToAdapters(_) >> {projectAdapter}
         assert map.projectAdapters.size() == foundMap.projectAdapters.size()
         where:
-        searchString         | foundMap                                                                             | projectAdapter
-        "Some Search String" | [projectAdapters: [new ProjectAdapter(new Project("name"))], facets: null, nHits: 0] | [new ProjectAdapter(new Project("name"))]
-        ""                   | [projectAdapters: [], facets: [], nHits: 0]                                          | null
+        searchString         | foundMap           | projectAdapter
+        "Some Search String" | projectAdapterMap1 | [new ProjectAdapter(project1)]
+        ""                   | projectAdapterMap2 | null
     }
 
     /**
@@ -395,21 +409,23 @@ class QueryServiceUnitSpec extends Specification {
         _ * queryHelperService.projectsToAdapters(_) >> {projectAdapter}
         assert map.projectAdapters.size() == foundMap.projectAdapters.size()
         where:
-        searchString         | foundMap                                                                             | projectAdapter
-        "Some Search String" | [projectAdapters: [new ProjectAdapter(new Project("name"))], facets: null, nHits: 0] | [new ProjectAdapter(new Project("name"))]
-        ""                   | [projectAdapters: [], facets: [], nHits: 0]                                          | null
+        searchString         | foundMap           | projectAdapter
+        "Some Search String" | projectAdapterMap1 | [new ProjectAdapter(project1)]
+        ""                   | projectAdapterMap2 | null
     }
     /**
      * {@link QueryService#autoComplete(String)}
      *
      */
     void "test auto Complete"() {
+        given:
+        Map map = [a: "b"]
         when:
         List list = service.autoComplete("Some Search String")
         then:
         queryServiceWrapper.restAssayService >> { restAssayService }
-        restAssayService.suggest(_) >> {[a: "b"]}
-        queryHelperService.autoComplete(_, _) >> {[[a: "b"]]}
+        restAssayService.suggest(_) >> {map}
+        queryHelperService.autoComplete(_, _) >> {[map]}
         assert list
     }
     /**
@@ -420,6 +436,6 @@ class QueryServiceUnitSpec extends Specification {
         List<SearchFilter> searchFilters = []
         service.findFiltersInSearchBox(searchFilters, "gobp_term:DNA Repair")
         then:
-        1 * queryHelperService.findFiltersInSearchBox(_, _) >> {}
+        queryHelperService.findFiltersInSearchBox(_, _) >> {}
     }
 }

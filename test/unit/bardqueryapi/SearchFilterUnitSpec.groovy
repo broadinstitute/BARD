@@ -1,10 +1,14 @@
 package bardqueryapi
 
+import spock.lang.Shared
 import spock.lang.Specification
 import spock.lang.Unroll
 
 @Unroll
 class SearchFilterUnitSpec extends Specification {
+    @Shared SearchFilter filter1 = new SearchFilter(filterName: "AFN", filterValue: "AFV")
+    @Shared SearchFilter filter2 = new SearchFilter(filterName: "BFN", filterValue: "BFV")
+
     void setup() {
 
     }
@@ -42,10 +46,10 @@ class SearchFilterUnitSpec extends Specification {
         then: "We expect the method to return the expected value"
         assert compareToVal == expectedAnswer
         where:
-        label                           | searchFilter1                                           | searchFilter2                                           | expectedAnswer
-        "searchFilter1==searchFilter2"  | new SearchFilter(filterName: "AFN", filterValue: "AFV") | new SearchFilter(filterName: "AFN", filterValue: "AFV") | 0
-        "searchFilter1 > searchFilter2" | new SearchFilter(filterName: "BFN", filterValue: "BFV") | new SearchFilter(filterName: "AFN", filterValue: "AFV") | 1
-        "searchFilter1 < searchFilter2" | new SearchFilter(filterName: "AFN", filterValue: "AFV") | new SearchFilter(filterName: "BFN", filterValue: "BFV") | -1
+        label                           | searchFilter1 | searchFilter2 | expectedAnswer
+        "searchFilter1==searchFilter2"  | filter1       | filter1       | 0
+        "searchFilter1 > searchFilter2" | filter2       | filter1       | 1
+        "searchFilter1 < searchFilter2" | filter1       | filter2       | -1
     }
 
     /**
@@ -57,11 +61,11 @@ class SearchFilterUnitSpec extends Specification {
         then: "We expected method to return the expected value"
         assert returnedValue == expectedAnswer
         where:
-        label                      | searchFilter1                                           | searchFilter2                                           | expectedAnswer
-        "this equals that"         | new SearchFilter(filterName: "AFN", filterValue: "AFV") | new SearchFilter(filterName: "AFN", filterValue: "AFV") | true
-        "that is null"             | new SearchFilter(filterName: "BFN", filterValue: "BFV") | null                                                    | false
-        "this != that"             | new SearchFilter(filterName: "AFN", filterValue: "AFV") | new SearchFilter(filterName: "BFN", filterValue: "BFV") | false
-        "this.class != that.class" | new SearchFilter(filterName: "AFN", filterValue: "AFV") | 2                                                       | false
+        label                      | searchFilter1 | searchFilter2 | expectedAnswer
+        "this equals that"         | filter1       | filter1       | true
+        "that is null"             | filter2       | null          | false
+        "this != that"             | filter1       | filter2       | false
+        "this.class != that.class" | filter1       | 2             | false
     }
 }
 

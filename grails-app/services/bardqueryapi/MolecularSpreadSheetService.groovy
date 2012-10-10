@@ -407,7 +407,7 @@ class MolecularSpreadSheetService {
     }
 
 
-    public Map findExperimentDataById(final Long experimentId, final int top = 10, final int skip = 0) {
+    public Map findExperimentDataById(final Long experimentId, final Integer top = 10, final Integer skip = 0) {
         List<SpreadSheetActivity> spreadSheetActivities = []
         final RESTExperimentService restExperimentService = queryServiceWrapper.getRestExperimentService()
         long totalNumberOfRecords = 0
