@@ -21,16 +21,16 @@ class JChemBinFormat {
      */
     private static final String FORMAT_SEPARATOR = ":";
 
-    private static String WIDTH_PREFIX = "w";
-    private static String HEIGTH_PREFIX = "h";
+    private final static String WIDTH_PREFIX = "w";
+    private final static String HEIGTH_PREFIX = "h";
     /**
      * Show R/S for any molecule.
      */
-    private static String DEFAULT_CHIRAL_SELECTION = "chiral_all";
+    private final static String DEFAULT_CHIRAL_SELECTION = "chiral_all";
     /**
      * Shoe E/Z for double bonds
      */
-    private static String SHOW_EZ = "ez";
+    private final static String SHOW_EZ = "ez";
     /**
      * Implicit Hydrogen labels on heteroatoms only.
      */

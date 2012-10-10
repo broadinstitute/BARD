@@ -40,7 +40,7 @@ class BardWebInterfaceController {
     }
 
     def showExperiment() {
-        render(view: "showExperimentResult", model: [experimentId: params.id])
+        render(view: 'showExperimentResult', model: [experimentId: params.id])
     }
 
     def showExperimentResult(Long id) {
@@ -51,14 +51,14 @@ class BardWebInterfaceController {
                 final int skip = searchParams.skip
                 final Map experimentDataMap = molecularSpreadSheetService.findExperimentDataById(id, top, skip)
                 if (experimentDataMap) {
-                    render(template: "experimentResult", model: [experimentDataMap: experimentDataMap])
+                    render(template: 'experimentResult', model: [experimentDataMap: experimentDataMap])
                 } else {
                     flash.message = "Experiment ID ${id} not found"
                     return response.sendError(HttpServletResponse.SC_NOT_FOUND,
                             "${flash.message}")
                 }
             } else {
-                flash.message = "ID is a required Field"
+                flash.message = 'ID is a required Field'
                 return response.sendError(HttpServletResponse.SC_BAD_REQUEST,
                         "${flash.message}")
             }
@@ -81,7 +81,7 @@ class BardWebInterfaceController {
                     render(template: 'promiscuity', model: [scaffolds: promiscuityScore.scaffolds])
                 }
                 else { //status code of NOT OK returned. Usually CID has no promiscuity score
-                    return response.sendError(results.status,
+                    return response.sendError(results?.status,
                             "${results.message}")
                 }
             } catch (Exception ee) { //error is thrown
@@ -106,10 +106,7 @@ class BardWebInterfaceController {
     def searchCompoundsByIDs(SearchCommand searchCommand) {
         if (StringUtils.isNotBlank(searchCommand.searchString)) {
             removeDuplicatesFromSearchString(searchCommand)
-            final List<SearchFilter> searchFilters = searchCommand.appliedFilters
-            if (!searchFilters) {
-                searchFilters = []
-            }
+            final List<SearchFilter> searchFilters = searchCommand.appliedFilters ?:[]
             this.queryService.findFiltersInSearchBox(searchFilters, searchCommand.searchString)
 
             try {
@@ -146,10 +143,7 @@ class BardWebInterfaceController {
 
         if (StringUtils.isNotBlank(searchCommand.searchString)) {
             removeDuplicatesFromSearchString(searchCommand)
-            final List<SearchFilter> searchFilters = searchCommand.appliedFilters
-            if (!searchFilters) {//user SearchCommand
-                searchFilters = []
-            }
+            final List<SearchFilter> searchFilters = searchCommand.appliedFilters?:[]
             try {
                 final List<Long> adids = searchStringToIdList(searchCommand.searchString)
                 final Map assayAdapterMap = this.queryService.findAssaysByADIDs(adids, searchFilters)
@@ -179,10 +173,10 @@ class BardWebInterfaceController {
 
         if (StringUtils.isNotBlank(searchCommand.searchString)) {
             removeDuplicatesFromSearchString(searchCommand)
-            final List<SearchFilter> searchFilters = searchCommand.appliedFilters
-            if (!searchFilters) {//user SearchCommand
-                searchFilters = []
-            }
+            final List<SearchFilter> searchFilters = searchCommand.appliedFilters ?:[]
+//            if (!searchFilters) {//user SearchCommand
+//                searchFilters = []
+//            }
             try {
                 final List<Long> projectIds = searchStringToIdList(searchCommand.searchString)
                 Map projectAdapterMap = this.queryService.findProjectsByPIDs(projectIds, searchFilters)
@@ -371,10 +365,7 @@ class SearchHelper {
         removeDuplicatesFromSearchString(searchCommand)
         final String[] searchStringSplit = searchCommand.searchString.split(":")
         if (searchStringSplit.length == 2) {
-            final List<SearchFilter> searchFilters = searchCommand.appliedFilters
-            if (!searchFilters) {//user SearchCommand
-                searchFilters = []
-            }
+            final List<SearchFilter> searchFilters = searchCommand.appliedFilters ?:[]
             queryService.findFiltersInSearchBox(searchFilters, searchCommand.searchString)
 
             final String searchTypeString = searchStringSplit[0]
@@ -397,10 +388,7 @@ class SearchHelper {
     def handleAssaySearches(final bardqueryapi.IQueryService queryService, final SearchCommand searchCommand) {
         if (StringUtils.isNotBlank(searchCommand.searchString)) {
             removeDuplicatesFromSearchString(searchCommand)
-            final List<SearchFilter> searchFilters = searchCommand.appliedFilters
-            if (!searchFilters) {//user SearchCommand
-                searchFilters = []
-            }
+            final List<SearchFilter> searchFilters = searchCommand.appliedFilters?:[]
             queryService.findFiltersInSearchBox(searchFilters, searchCommand.searchString)
             final String searchString = searchCommand.searchString.trim()
 
@@ -434,10 +422,7 @@ class SearchHelper {
         if (StringUtils.isNotBlank(searchCommand.searchString)) {
 
             removeDuplicatesFromSearchString(searchCommand)
-            List<SearchFilter> searchFilters = searchCommand.appliedFilters
-            if (!searchFilters) {//user SearchCommand
-                searchFilters = []
-            }
+            List<SearchFilter> searchFilters = searchCommand.appliedFilters?:[]
             queryService.findFiltersInSearchBox(searchFilters, searchCommand.searchString)
             try {
                 final String searchString = searchCommand.searchString.trim()
@@ -471,10 +456,7 @@ class SearchHelper {
 
         if (StringUtils.isNotBlank(searchCommand.searchString)) {
             removeDuplicatesFromSearchString(searchCommand)
-            final List<SearchFilter> searchFilters = searchCommand.appliedFilters
-            if (!searchFilters) {//user SearchCommand
-                searchFilters = []
-            }
+            final List<SearchFilter> searchFilters = searchCommand.appliedFilters?:[]
             queryService.findFiltersInSearchBox(searchFilters, searchCommand.searchString)
             try {
                 final String searchString = searchCommand.searchString.trim()
@@ -532,24 +514,20 @@ class SearchHelper {
         params.searchString = searchCommand.searchString
 
     }
-    void findFiltersAlreadyApplied(List<SearchFilter> searchFilters, Collection<Value> facets){
-        //Includes all the applied search-filters (selected previously) that were also returned with the new filtering faceting.
-        //1. Check if the facet group-names (a.k.a., parent.id) match
-        //2. Check if the facet/filter name (a.k.a., child.id) match
 
-        List<SearchFilter> appliedFiltersAlreadyInFacets = searchFilters.findAll { SearchFilter filter ->
-            Value parent = facets.find {Value parent -> parent.id.trim().equalsIgnoreCase(filter.filterName.trim())}
-            return parent?.children.find { Value child -> child.id.trim().equalsIgnoreCase(filter.filterValue.trim().replace('"', ''))}
-        }
-
-    }
     Map getAppliedFilters(List<SearchFilter> searchFilters, Collection<Value> facets) {
         //Includes all the applied search-filters (selected previously) that were also returned with the new filtering faceting.
         //1. Check if the facet group-names (a.k.a., parent.id) match
         //2. Check if the facet/filter name (a.k.a., child.id) match
-        List<SearchFilter> appliedFiltersAlreadyInFacets = searchFilters.findAll { SearchFilter filter ->
-            Value parent = facets.find {Value parent -> parent.id.trim().equalsIgnoreCase(filter.filterName.trim())}
-            return parent?.children.find { Value child -> child.id.trim().equalsIgnoreCase(filter.filterValue.trim().replace('"', ''))}
+        List<SearchFilter> appliedFiltersAlreadyInFacets = searchFilters.findAll {
+            SearchFilter filter ->
+            Value parent = facets.find {Value parent ->
+                parent.id.trim().equalsIgnoreCase(filter.filterName.trim())
+            }
+            return parent?.children?.find {
+                Value child ->
+                child.id.trim().equalsIgnoreCase(filter.filterValue.trim().replace('"', ''))
+            }
         }
 
         //Groups all the applied search-filters in facets into a parent-facet/children-facets map. We use this group to display the applied search filters WITHIN the facet groups
@@ -559,7 +537,9 @@ class SearchHelper {
 
         //Includes all the applied filters we know would not have any facet group since no facet in this group came back after the filtering was applied.
         //We need to group these filters, rebuild their groups (parent) and display them next to the facets
-        List<SearchFilter> appliedFiltersDisplayedOutsideFacets = ((searchFilters ?: []) - appliedFiltersAlreadyInFacets)?.findAll { SearchFilter filter ->
+        List<SearchFilter> appliedFiltersDisplayedOutsideFacets = (
+        (searchFilters ?: []) - appliedFiltersAlreadyInFacets)?.findAll {
+            SearchFilter filter ->
             //filter.filterName is not in any of the parents' ids
             return !(facets.find { Value parent -> parent.id.trim().equalsIgnoreCase(filter.filterName.trim())})
         }
@@ -568,6 +548,10 @@ class SearchHelper {
         Map appliedFiltersDisplayedOutsideFacetsGrouped = appliedFiltersDisplayedOutsideFacets ?
             appliedFiltersDisplayedOutsideFacets.groupBy { SearchFilter filter -> filter.filterName.trim()} : [:]
 
-        return [searchFilters: searchFilters, appliedFiltersDisplayedOutsideFacetsGrouped: appliedFiltersDisplayedOutsideFacetsGrouped, appliedFiltersNotInFacetsGrouped: appliedFiltersNotInFacetsGrouped]
+        return [
+                searchFilters: searchFilters,
+                appliedFiltersDisplayedOutsideFacetsGrouped: appliedFiltersDisplayedOutsideFacetsGrouped,
+                appliedFiltersNotInFacetsGrouped: appliedFiltersNotInFacetsGrouped
+        ]
     }
 }

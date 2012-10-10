@@ -42,7 +42,7 @@ class DoseCurveRenderingServiceIntegrationSpec extends IntegrationSpec {
         given:
         final Map map = [activities: [new Double(1), new Double(2)],
                 concentrations: [new Double(1), new Double(2)],
-                s0: 0.2, sinf: 2.2, ac50: 2.1, hillSlope: 2.0, height: 200, width: 200]
+                s0: 0.2, sinf: 2.2, ac50: 2.1, hillSlope: 2.0, height: 200, width: 200, xAxisLabel: 'X', yAxisLabel: 'Y']
         DrcCurveCommand drcCurveCommand = new DrcCurveCommand()
         drcCurveCommand.ac50 = map.ac50
         drcCurveCommand.activities = map.activities
@@ -52,7 +52,8 @@ class DoseCurveRenderingServiceIntegrationSpec extends IntegrationSpec {
         drcCurveCommand.s0 = map.s0
         drcCurveCommand.sinf = map.sinf
         drcCurveCommand.width = map.width
-
+        drcCurveCommand.xAxisLabel = map.xAxisLabel
+        drcCurveCommand.yAxisLabel = map.yAxisLabel
         when:
         final byte[] doseCurve = this.doseCurveRenderingService.createDoseCurve(drcCurveCommand)
         then:
@@ -77,9 +78,28 @@ class DoseCurveRenderingServiceIntegrationSpec extends IntegrationSpec {
 
         and: "We call the extractActivitiesFromExperiment method with the experiment Value to get the SpreadSheetActivity"
         SpreadSheetActivity spreadSheetActivity = molecularSpreadSheetService.extractActivitiesFromExperiment(experimentValue, experimentId)
-
+//        final List<Double> concentrations,
+//        final List<Double> activities,
+//        final Double slope,
+//        final Double coef,
+//        final Double s0,
+//        final Double sinf,
+//        final String xAxisLabel,
+//        final String yAxisLabel,
+//        final Double xNormMin,
+//        final Double xNormMax,
+//        final Double yNormMin,
+//        final Double yNormMax
         when: "We call the createDoseCurve method with the spreadSheetActivity.hillCurveValue value and the other parameters"
-        JFreeChart jFreeChart = this.doseCurveRenderingService.createDoseCurve(spreadSheetActivity.hillCurveValue, null, null, null, null)
+        JFreeChart jFreeChart =
+            this.doseCurveRenderingService.
+                    createDoseCurve(spreadSheetActivity.hillCurveValue.conc as List<Double>,
+                            spreadSheetActivity.hillCurveValue.response as List<Double>,
+                            spreadSheetActivity.hillCurveValue.slope,
+                            spreadSheetActivity.hillCurveValue.coef,
+                            spreadSheetActivity.hillCurveValue.s0,
+                            spreadSheetActivity.hillCurveValue.sinf,
+                            'X', 'Y', null, null, null, null)
 
         then: "We expect to get back a JFreeChart back"
         assert jFreeChart
@@ -114,7 +134,7 @@ class DoseCurveRenderingServiceIntegrationSpec extends IntegrationSpec {
         when: "We call the createDoseCurve method with the spreadSheetActivity.hillCurveValue value and the other parameters"
         final HillCurveValue hillCurveValue = spreadSheetActivity.hillCurveValue
         JFreeChart jFreeChart = this.doseCurveRenderingService.createDoseCurve(hillCurveValue.conc as List<Double>,
-                hillCurveValue.response as List<Double>, hillCurveValue.slope, hillCurveValue.coef, hillCurveValue.s0, hillCurveValue.sinf,
+                hillCurveValue.response as List<Double>, hillCurveValue.slope, hillCurveValue.coef, hillCurveValue.s0, hillCurveValue.sinf, 'X', 'Y',
                 null, null, null, null)
 
         then: "We expect to get back a JFreeChart back"
@@ -185,7 +205,7 @@ class DoseCurveRenderingServiceIntegrationSpec extends IntegrationSpec {
         when: "We call the findDrcData method with the spreadSheetActivity.hillCurveValue value"
         final HillCurveValue hillCurveValue = spreadSheetActivity.hillCurveValue
         JFreeChart jFreeChart = this.doseCurveRenderingService.createDoseCurve(hillCurveValue.conc as List<Double>,
-                hillCurveValue.response as List<Double>, hillCurveValue.slope, hillCurveValue.coef, hillCurveValue.s0, hillCurveValue.sinf,
+                hillCurveValue.response as List<Double>, hillCurveValue.slope, hillCurveValue.coef, hillCurveValue.s0, hillCurveValue.sinf, 'X', 'Y',
                 null, null, null, null)
 
         then: "We expect to get back a JFreeChart back"

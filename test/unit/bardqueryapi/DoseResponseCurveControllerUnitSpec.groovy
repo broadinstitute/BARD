@@ -35,7 +35,7 @@ class DoseResponseCurveControllerUnitSpec extends Specification {
         controller.doseResponseCurve(drcCurveCommand)
 
         then:
-        0*doseCurveRenderingService.createDoseCurve(_) >> {array}
+        _ * doseCurveRenderingService.createDoseCurve(_) >> {array}
         assert flash.message == 'Points required in order to draw a Dose Response Curve'
         assert response.status == 500
     }
@@ -45,7 +45,7 @@ class DoseResponseCurveControllerUnitSpec extends Specification {
         byte[] array = null
         mockCommandObject(DrcCurveCommand)
         Map paramMap = [activities: [new Double(1), new Double(2)],
-                concentrations: [new Double(1), new Double(2)], s0: 0.2, sinf: 2.2, ac50: 2.1, hillSlope: 2.0]
+                concentrations: [new Double(1), new Double(2)], s0: 0.2, sinf: 2.2, ac50: 2.1, hillSlope: 2.0, xAxisLabel:'X',  yAxisLabel:'Y']
 
         controller.metaClass.getParams {-> paramMap}
         DrcCurveCommand drcCurveCommand = new DrcCurveCommand(paramMap)
@@ -63,7 +63,7 @@ class DoseResponseCurveControllerUnitSpec extends Specification {
         def array = [0, 0, 0, 0, 0] as byte[]
         mockCommandObject(DrcCurveCommand)
         Map paramMap = [activities: [new Double(1), new Double(2)],
-                concentrations: [new Double(1), new Double(2)], s0: 0.2, sinf: 2.2, ac50: 2.1, hillSlope: 2.0]
+                concentrations: [new Double(1), new Double(2)], s0: 0.2, sinf: 2.2, ac50: 2.1, hillSlope: 2.0, xAxisLabel:'X',  yAxisLabel:'Y']
 
         controller.metaClass.getParams {-> paramMap}
         DrcCurveCommand drcCurveCommand = new DrcCurveCommand(paramMap)

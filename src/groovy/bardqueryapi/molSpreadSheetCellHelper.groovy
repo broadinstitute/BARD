@@ -32,7 +32,8 @@ enum MolSpreadSheetCellUnit {
     Picomolar("pM", 12),
     Femtomolar("fM", 15),
     Attamolar("aM", 18),
-    Zeptomolar("aM", 21),
+    Zeptomolar("zM", 21),
+    Yoctomolar("yM", 24),
     unknown("U", 0);
 
     private String value

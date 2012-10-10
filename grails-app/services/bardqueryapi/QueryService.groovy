@@ -121,7 +121,7 @@ class QueryService implements IQueryService {
      * @param skip
      * @return Map
      */
-    Map structureSearch(final String smiles, final StructureSearchParams.Type structureSearchParamsType, final List<SearchFilter> searchFilters = [], final int top = 50, final int skip = 0) {
+    Map structureSearch(final String smiles, final StructureSearchParams.Type structureSearchParamsType, final List<SearchFilter> searchFilters = [], final Integer top = 50, final Integer skip = 0) {
         final List<CompoundAdapter> compoundAdapters = []
         Collection<Value> facets = []
 
@@ -157,7 +157,7 @@ class QueryService implements IQueryService {
     /**
      * Given a list of Compound Ids return all the compounds that were found
      * @param compoundIds
-     * @param filters {@link SearchFilter}'s
+     * @param filters {@link SearchFilter}'s  - We do not use filters because the JDO does not use them for ID searches yet
      * @return Map
      */
     Map findCompoundsByCIDs(final List<Long> compoundIds, List<SearchFilter> filters = []) {
@@ -173,7 +173,7 @@ class QueryService implements IQueryService {
             final Collection<Compound> compounds = this.queryServiceWrapper.restCompoundService.get(compoundIds)
             this.queryHelperService.stopStopWatch(sw, "find compounds by CIDs ${compoundIds.toString()}")
             compoundAdapters.addAll(this.queryHelperService.compoundsToAdapters(compounds))
-            //TODO: Eben though facets are available they cannnot be used for filtering
+            //TODO: Even though facets are available they cannot be used for filtering
         }
         int nhits = compoundAdapters.size()
         return [compoundAdapters: compoundAdapters, facets: facets, nHits: nhits]
@@ -182,7 +182,7 @@ class QueryService implements IQueryService {
     /**
      * Given a list of Assay Ids return all the assays that were found
      * @param assayIds
-     * @param filters {@link SearchFilter}'s
+     * @param filters {@link SearchFilter}'s  - We do not use filters because the JDO does not use them for ID searches yet
      * @return map
      */
     Map findAssaysByADIDs(final List<Long> assayIds, List<SearchFilter> filters = []) {
@@ -206,7 +206,7 @@ class QueryService implements IQueryService {
      *
      * Given a list of Project Ids return all the projects that were found
      * @param projectIds
-     * @param filters {@link SearchFilter}'s
+     * @param filters {@link SearchFilter}'s   - We do not use filters because the JDO does not use them for ID searches yet
      * @return Map
      */
     Map findProjectsByPIDs(final List<Long> projectIds, List<SearchFilter> filters = []) {
@@ -299,14 +299,14 @@ class QueryService implements IQueryService {
      * @param term
      * @return the list of maps to use for auto suggest
      */
-    public List<Map<String, String>> autoComplete(String term) {
+    public List<Map<String, String>> autoComplete(final String term) {
 
         //the number of items to retrieve per category
         final int numberOfTermsToRetrieve = 3
         //if string is already quoted strip it
-        term = term.replaceAll("\"", "");
+        final String normalizedTerm = term.replaceAll("\"", "");
 
-        final SuggestParams suggestParams = new SuggestParams(term, numberOfTermsToRetrieve)
+        final SuggestParams suggestParams = new SuggestParams(normalizedTerm, numberOfTermsToRetrieve)
         //we only use the terms in the assay service, because the other suggest services do not seem to
         //have useful things
         final Map<String, List<String>> autoSuggestResponseFromJDO = this.queryServiceWrapper.restAssayService.suggest(suggestParams);

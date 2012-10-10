@@ -18,38 +18,38 @@ class DoseCurveImageUnitSpec extends Specification {
         // Tear down logic here
     }
     /**
-     * {@link DoseCurveImage#createAndConfigureYAxis(Bounds, Color)}
+     * {@link DoseCurveImage#createAndConfigureYAxis(Bounds, Color,String)}
      */
     void "test Create and Configure Y-Axis"() {
         given:
         Color axisColor = Color.BLACK
 
         when:
-        final NumberAxis yAxis = DoseCurveImage.createAndConfigureYAxis(null, axisColor)
+        final NumberAxis yAxis = DoseCurveImage.createAndConfigureYAxis(null, axisColor,"Y")
         then:
         assert yAxis
         assert yAxis.autoRangeIncludesZero
         assert yAxis.axisLinePaint == axisColor
         assert yAxis.labelPaint == axisColor
         assert yAxis.tickLabelPaint == axisColor
-        assert yAxis.label == "Activities"
+        assert yAxis.label == "Y"
     }
     /**
-     * {@link DoseCurveImage#createAndConfigureXAxis(Bounds, Color)}
+     * {@link DoseCurveImage#createAndConfigureXAxis(Bounds, Color,String)}
      */
     void "test Create and Configure X-Axis"() {
         given:
         Color axisColor = Color.BLACK
 
         when:
-        final NumberAxis xAxis = DoseCurveImage.createAndConfigureXAxis(null, axisColor)
+        final NumberAxis xAxis = DoseCurveImage.createAndConfigureXAxis(null, axisColor,"X")
         then:
         assert xAxis
         assert !xAxis.autoRangeIncludesZero
         assert xAxis.axisLinePaint == axisColor
         assert xAxis.labelPaint == axisColor
         assert xAxis.tickLabelPaint == axisColor
-        assert xAxis.label == "Concentration (uM)"
+        assert xAxis.label == "X"
     }
     /**
      * {@link DoseCurveImage#aggregateValidAndInvalidPoints}
@@ -170,7 +170,7 @@ class DoseCurveImageUnitSpec extends Specification {
      */
     void "test create Dose Curve with null DRC"(){
         when:"We call the createDoseCurve method with a null Drc object"
-        final JFreeChart curve = DoseCurveImage.createDoseCurve(null, null, null, null, null)
+        final JFreeChart curve = DoseCurveImage.createDoseCurve(null,null,null, null, null, null, null)
         then: "We expect a null curve back"
         assert !curve
     }

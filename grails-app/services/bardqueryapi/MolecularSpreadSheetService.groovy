@@ -69,38 +69,7 @@ class MolecularSpreadSheetService {
         returnValue
     }
 
-    /**
-     * For a set of experiments
-     * @param experimentList
-     * @param etag
-     * @return
-     */
-    public List<SpreadSheetActivity> extractMolSpreadSheetData(MolSpreadSheetData molSpreadSheetData, List<Experiment> experimentList, Object etag) {
-        // now step through the data and place into molSpreadSheetData
-        List<SpreadSheetActivity> spreadSheetActivityList = new ArrayList<SpreadSheetActivity>()
-
-        // we need to handle each experiment separately ( until NCGC can do this in the background )
-        // Note that each experiment corresponds to a column in our spreadsheet
-        int columnCount = 0
-        for (Experiment experiment in experimentList) {
-
-            ServiceIterator<Value> experimentIterator = queryServiceWrapper.restExperimentService.activities(experiment, etag)
-
-            // Now step through the result set and pull back  one value for each compound
-            Value experimentValue
-            while (experimentIterator.hasNext()) {
-                experimentValue = experimentIterator.next()
-                Long translation = new Long(experimentValue.id.split("\\.")[0])
-                if (!molSpreadSheetData.columnPointer.containsKey(translation)) {
-                    molSpreadSheetData.columnPointer.put(translation, columnCount)
-                }
-                spreadSheetActivityList.add(extractActivitiesFromExperiment(experimentValue,new Long(experiment.id.toString())))
-            }
-            columnCount++
-        }
-        spreadSheetActivityList
-    }
-    /**
+     /**
      * For a set of experiments
      * @param experimentList
      * @param etag
@@ -186,24 +155,6 @@ class MolecularSpreadSheetService {
         molSpreadSheetData
     }
 
-    /**
-     *
-     * @param experimentList
-     * @return
-     */
-    public Object retrieveImpliedCompoundsEtagFromAssaySpecification(List<Experiment> experimentList) {
-        Object etag = null
-        for (Experiment experiment in experimentList) {
-            final ServiceIterator<Compound> compoundServiceIterator = this.queryServiceWrapper.restExperimentService.compounds(experiment)
-            List<Compound> singleExperimentCompoundList = compoundServiceIterator.next(MAXIMUM_NUMBER_OF_COMPOUNDS)
-            if (etag == null)
-                etag = this.queryServiceWrapper.restCompoundService.newETag("dsa", singleExperimentCompoundList*.id);
-            else if ((singleExperimentCompoundList != null) &&
-                    (singleExperimentCompoundList.size() > 0))
-                this.queryServiceWrapper.restCompoundService.putETag(etag, singleExperimentCompoundList*.id);
-        }
-        etag
-    }
 
     protected List<CartCompound> retrieveCartCompoundFromShoppingCart() {
         List<CartCompound> cartCompoundList = new ArrayList<CartCompound>()
@@ -318,53 +269,6 @@ class MolecularSpreadSheetService {
     }
 
 
-
-    protected Object generateETagFromCartCompounds(List<CartCompound> cartCompoundList) {
-        List<Long> cartCompoundIdList = new ArrayList<Long>()
-        for (CartCompound cartCompound in cartCompoundList)
-            cartCompoundIdList.add(new Long(cartCompound.compoundId))
-        Date date = new Date()
-
-        queryServiceWrapper.restCompoundService.newETag(date.toString(), cartCompoundIdList);
-    }
-
-    /**
-     *
-     * @param cartCompounds
-     * @return list of Experiment's from a list of CartCompound's
-     */
-    protected List<Long> cartCompoundsToCIDS(final List<CartCompound> cartCompounds) {
-        List<Long> cids = []
-        for (CartCompound cartCompound : cartCompounds) {
-            long cid = cartCompound.compoundId
-            cids.add(cid)
-        }
-
-        return cids
-    }
-
-    /**
-     * Convert Assay ODs to expt ids
-     * @param cartAssays
-     * @return
-     */
-    protected List<Long> generateCompoundListFromAssays(final List<CartAssay> cartAssays) {
-        List<Long> assayIds = []
-        for (CartAssay cartAssay : cartAssays) {
-            long assayId = cartAssay.assayId
-            assayIds.add(assayId)
-        }
-        final RESTAssayService restAssayService = queryServiceWrapper.getRestAssayService()
-        List<Experiment> allExperiments = []
-        for (Long individualAssayIds in assayIds) {
-
-            Assay assay = restAssayService.get(individualAssayIds)
-            final ServiceIterator<Experiment> serviceIterator = restAssayService.iterator(assay, Experiment.class)
-            Collection<Experiment> experimentList = serviceIterator.collect()
-            allExperiments.addAll(experimentList)
-        }
-        new ArrayList<Long>()
-    }
 
     /**
      * Convert Assay ODs to expt ids
@@ -503,7 +407,7 @@ class MolecularSpreadSheetService {
     }
 
 
-    public Map findExperimentDataById(final Long experimentId, final int top = 10, final int skip = 0) {
+    public Map findExperimentDataById(final Long experimentId, final Integer top = 10, final Integer skip = 0) {
         List<SpreadSheetActivity> spreadSheetActivities = []
         final RESTExperimentService restExperimentService = queryServiceWrapper.getRestExperimentService()
         long totalNumberOfRecords = 0
@@ -545,14 +449,16 @@ class MolecularSpreadSheetService {
         final Iterator<Value> experimentValueIterator = experimentValue.children()
         SpreadSheetActivity spreadSheetActivity = new SpreadSheetActivity()
         spreadSheetActivity.experimentId = experimentId
-        while (experimentValueIterator.hasNext()) {
+        while (experimentValueIterator?.hasNext()) {
             Value childValue = experimentValueIterator.next()
             addCurrentActivityToSpreadSheet(spreadSheetActivity, childValue)
         }
         return spreadSheetActivity
     }
     /**
-     *
+     * The ideais to fill up a spreadsheet activity based on
+     *  Note hack -- this method has been short-circuited so that a HillCurveValue will cause the method to
+     *  push a value back onto readouts and then return
      * @param spreadSheetActivity
      * @param childValue
      */

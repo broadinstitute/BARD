@@ -1,8 +1,11 @@
 package results
+
+import bardqueryapi.MolSpreadSheetCellUnit
 import grails.test.mixin.TestMixin
 import grails.test.mixin.support.GrailsUnitTestMixin
 import spock.lang.Specification
 import spock.lang.Unroll
+
 @TestMixin(GrailsUnitTestMixin)
 @Unroll
 class ExperimentalValueSpec  extends  Specification {
@@ -126,6 +129,33 @@ class ExperimentalValueSpec  extends  Specification {
         "conversions with negative numbers"| ExperimentalValueUnit.Micromolar  |  ExperimentalValueUnit.Millimolar  |  -12345E-9   |  "-12.345E-9mM"
         "conversions with negative numbers"| ExperimentalValueUnit.Micromolar  |  ExperimentalValueUnit.Molar       |  -12345E-9   |  "-12.345E-12M"
     }
+
+
+
+    void "test type conversions" (){
+        when:
+        MolSpreadSheetCellUnit molSpreadSheetCellUnit = MolSpreadSheetCellUnit.unknown
+        assertNotNull(molSpreadSheetCellUnit)
+        ExperimentalValueUnit experimentalValueUnit = ExperimentalValueUnit.unknown
+        assertNotNull(experimentalValueUnit)
+
+        then: "The resulting search filters size must equal the expected value"
+        assert outUnit  ==   ExperimentalValueUnit.convert(inUnit)
+
+        where:
+        inUnit                              |  outUnit
+        MolSpreadSheetCellUnit.Molar        |  ExperimentalValueUnit.Molar
+        MolSpreadSheetCellUnit.Millimolar   |  ExperimentalValueUnit.Millimolar
+        MolSpreadSheetCellUnit.Micromolar   |  ExperimentalValueUnit.Micromolar
+        MolSpreadSheetCellUnit.Nanomolar    |  ExperimentalValueUnit.Nanomolar
+        MolSpreadSheetCellUnit.Picomolar    |  ExperimentalValueUnit.Picomolar
+        MolSpreadSheetCellUnit.Femtomolar   |  ExperimentalValueUnit.Femtomolar
+        MolSpreadSheetCellUnit.Attamolar    |  ExperimentalValueUnit.Attamolar
+        MolSpreadSheetCellUnit.Zeptomolar   |  ExperimentalValueUnit.Zeptomolar
+        MolSpreadSheetCellUnit.Yoctomolar   |  ExperimentalValueUnit.Yoctomolar
+        MolSpreadSheetCellUnit.unknown      |  ExperimentalValueUnit.unknown
+    }
+
 
 
 

@@ -2,9 +2,6 @@ package molspreadsheet
 
 import bardqueryapi.MolSpreadSheetCellType
 import bardqueryapi.MolSpreadSheetCellUnit
-
-import java.math.RoundingMode
-import java.text.NumberFormat
 import results.ExperimentalValue
 import results.ExperimentalValueType
 import results.ExperimentalValueUnit
@@ -25,6 +22,7 @@ class MolSpreadSheetCell {
     String supplementalInternalValue = null
     SpreadSheetActivityStorage spreadSheetActivityStorage
 
+
     static constraints = {
         activity()
         molSpreadSheetCellType(blank: false)
@@ -36,58 +34,36 @@ class MolSpreadSheetCell {
         spreadSheetActivityStorage()
     }
 
+
     /**
-     *  non image, no known units
+     *  non image, no units  specified
      * @param value
      * @param molSpreadSheetCellType
      */
     MolSpreadSheetCell(String value, MolSpreadSheetCellType molSpreadSheetCellType, SpreadSheetActivityStorage spreadSheetActivityStorage = null) {
         this.spreadSheetActivityStorage = spreadSheetActivityStorage
         this.molSpreadSheetCellType = molSpreadSheetCellType
-        switch (this.molSpreadSheetCellType) {
-            case MolSpreadSheetCellType.numeric:
-                if ("NaN".equals(value)) {
-                    activity = false;
-                    numInternalValue = new BigDecimal(0)
-                } else
-                    numInternalValue = new BigDecimal(value)
-                break;
-            case MolSpreadSheetCellType.percentageNumeric:
-                if ("NaN".equals(value)) {
-                    activity = false;
-                    numInternalValue = new BigDecimal(0)
-                } else
-                    numInternalValue = new BigDecimal(value)
-                break;
-            case MolSpreadSheetCellType.greaterThanNumeric:
-                if ("NaN".equals(value)) {
-                    activity = false;
-                    numInternalValue = new BigDecimal(0)
-                } else
-                    numInternalValue = new BigDecimal(value)
-                break;
-            case MolSpreadSheetCellType.lessThanNumeric:
-                if ("NaN".equals(value)) {
-                    activity = false;
-                    numInternalValue = new BigDecimal(0)
-                } else
-                    numInternalValue = new BigDecimal(value)
-                break;
-            case MolSpreadSheetCellType.identifier:
-                if ("NaN".equals(value)) {
-                    activity = false;
-                    intInternalValue = new Integer(0)
-                } else
-                    intInternalValue = new Integer(value)
-                break;
-            case MolSpreadSheetCellType.string:
-                strInternalValue = new String(value)
-                break;
-            case MolSpreadSheetCellType.image:
-                assert "Images should Not go through the two parameter constructor"
-                break;
-            default:
-                log "You should never hit the default trap on MolSpreadSheetCell ctor1"
+        if ( (this.molSpreadSheetCellType == MolSpreadSheetCellType.numeric) ||
+             (this.molSpreadSheetCellType == MolSpreadSheetCellType.percentageNumeric) ||
+             (this.molSpreadSheetCellType == MolSpreadSheetCellType.greaterThanNumeric) ||
+             (this.molSpreadSheetCellType == MolSpreadSheetCellType.lessThanNumeric)) {
+            if ("NaN".equals(value)) {
+                activity = false;
+                numInternalValue = new BigDecimal(0)
+            } else {
+                numInternalValue = new BigDecimal(value)
+            }
+        } else if (this.molSpreadSheetCellType == MolSpreadSheetCellType.string) {
+            strInternalValue = new String(value)
+        } else if (this.molSpreadSheetCellType == MolSpreadSheetCellType.identifier) {
+            if ("NaN".equals(value)) {
+                activity = false;
+                intInternalValue = new Integer(0)
+            } else {
+                intInternalValue = new Integer(value)
+            }
+        } else {
+            log.error "We should never see mole spreadsheet type ${this.molSpreadSheetCellType} in this three parameter constructor"
         }
     }
 
@@ -108,11 +84,12 @@ class MolSpreadSheetCell {
             if ("NaN".equals(value)) {
                 activity = false;
                 numInternalValue = new BigDecimal(0)
-            } else
+            } else {
                 numInternalValue = new BigDecimal(value)
+            }
             this.molSpreadSheetCellUnit = molSpreadSheetCellUnit
         } else {
-            assert "identifier should Not go through the constructor with type = ${this.molSpreadSheetCellType}"
+            log.error "We should never see mole spreadsheet type ${this.molSpreadSheetCellType} in this four parameter constructor"
         }
     }
 
@@ -125,14 +102,11 @@ class MolSpreadSheetCell {
     MolSpreadSheetCell(String value1, String value2, MolSpreadSheetCellType molSpreadSheetCellType, SpreadSheetActivityStorage spreadSheetActivityStorage = null) {
         this.molSpreadSheetCellType = molSpreadSheetCellType
         this.spreadSheetActivityStorage = spreadSheetActivityStorage
-        switch (this.molSpreadSheetCellType) {
-            case MolSpreadSheetCellType.image:
-                strInternalValue = new String(value1)
-                supplementalInternalValue = new String(value2)
-                break;
-            default:
-                assert "Non-images should Not go through the three parameter constructor"
-
+        if (this.molSpreadSheetCellType == MolSpreadSheetCellType.image) {
+            strInternalValue = new String(value1)
+            supplementalInternalValue = new String(value2)
+        } else {
+            log.error "We should never see mole spreadsheet type ${this.molSpreadSheetCellType} in this four parameter constructor specialized for images"
         }
 
     }
@@ -177,19 +151,11 @@ class MolSpreadSheetCell {
             returnValue = experimentalValue.toString()
         } else if (molSpreadSheetCellType==MolSpreadSheetCellType.identifier)  {
             returnValue =   intInternalValue
+        } else if (molSpreadSheetCellType==MolSpreadSheetCellType.string)  {
+            returnValue =   strInternalValue
         }
         returnValue
 
-    }
-
-
-
-
-    static String imageConvert(String name, String smiles) {
-        String retVal =
-            """<img alt="${smiles}" title="${name}"
-  src="\${createLink(controller: 'chemAxon', action: 'generateStructureImage', params: [smiles: '${smiles}', width: 150, height: 120])}"/>"""
-        retVal
     }
 
 

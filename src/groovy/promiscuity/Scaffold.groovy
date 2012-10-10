@@ -24,7 +24,6 @@ public class Scaffold implements Comparable<Scaffold> {
     Long sActive
     Boolean inDrug
 
-    private static final long serialVersionUID = -5026866790981516562L;
 
 
     public WarningLevel getWarningLevel() {

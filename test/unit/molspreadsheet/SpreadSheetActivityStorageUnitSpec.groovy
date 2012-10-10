@@ -1,10 +1,13 @@
 package molspreadsheet
 
-import bardqueryapi.MolSpreadSheetController
-import grails.test.mixin.TestFor
-import spock.lang.Unroll
-import spock.lang.Specification
+import bard.core.HillCurveValue
 import bardqueryapi.MolSpreadSheetCellType
+import bardqueryapi.MolSpreadSheetController
+import bardqueryapi.SpreadSheetActivity
+import grails.test.mixin.TestFor
+import spock.lang.Specification
+import spock.lang.Unroll
+import bardqueryapi.ActivityOutcome
 
 /**
  * See the API for {@link grails.test.mixin.support.GrailsUnitTestMixin} for usage instructions
@@ -44,8 +47,79 @@ class SpreadSheetActivityStorageUnitSpec   extends Specification {
         spreadSheetActivityStorage.hasErrors() == false
     }
 
+    /**
+     * Demonstrate that we can go through 1000 values without encountering a duplicate hash code
+     */
 
-    void "Test equals and hash code"() {
+    void "Test hash code and demonstrate that it gives us a nice spread"() {
+        when:
+        ArrayList<SpreadSheetActivityStorage> activityStorageArrayList = []
+        for (i in 1..10) {
+            for (j in 1..10) {
+                for (k in 1..10) {
+                    SpreadSheetActivityStorage spreadSheetActivityStorage = new  SpreadSheetActivityStorage()
+                    spreadSheetActivityStorage.eid = i as Long
+                    spreadSheetActivityStorage.cid = j as Long
+                    spreadSheetActivityStorage.sid = k as Long
+                    activityStorageArrayList << spreadSheetActivityStorage
+                }
+            }
+        }
+        LinkedHashMap<Integer,Integer>  sheetActivityStorageIntegerLinkedHashMap = []
+        for (SpreadSheetActivityStorage spreadSheetActivityStorage in activityStorageArrayList) {
+            int hashCode =  spreadSheetActivityStorage.hashCode()
+            if (!sheetActivityStorageIntegerLinkedHashMap.containsKey(hashCode)) {
+                sheetActivityStorageIntegerLinkedHashMap[hashCode] = 0
+            }  else {
+                sheetActivityStorageIntegerLinkedHashMap[hashCode] =  sheetActivityStorageIntegerLinkedHashMap[hashCode]+1
+            }
+        }
+
+        then:
+        for (Integer key in sheetActivityStorageIntegerLinkedHashMap.keySet()) {
+            assert  sheetActivityStorageIntegerLinkedHashMap[key] <    1
+        }
+    }
+
+
+
+
+    void "Test constructor"() {
+        given:
+
+//        SpreadSheetActivityStorage spreadSheetActivityStorage = new SpreadSheetActivityStorage( )
+//        spreadSheetActivityStorage.eid = 4
+//        spreadSheetActivityStorage.cid = 5
+        final SpreadSheetActivity spreadSheetActivity = new SpreadSheetActivity()
+        spreadSheetActivity.sid = 1 as Long
+        spreadSheetActivity.activityOutcome = ActivityOutcome.ACTIVE
+        spreadSheetActivity.potency = 3 as Double
+        final HillCurveValue hillCurveValue = new  HillCurveValue()
+        hillCurveValue.id = 1
+        hillCurveValue.sinf = 1d
+        hillCurveValue.s0  = 1d
+        hillCurveValue.slope = 1d
+        hillCurveValue.coef = 1d
+        hillCurveValue.conc  = [1d]
+        hillCurveValue.response = [1d]
+        spreadSheetActivity.hillCurveValue = hillCurveValue
+
+        when:
+        SpreadSheetActivityStorage spreadSheetActivityStorage = new SpreadSheetActivityStorage( spreadSheetActivity )
+
+        then:
+        assertNotNull(spreadSheetActivityStorage)
+        assert spreadSheetActivityStorage.sid==1
+        assert spreadSheetActivityStorage.activityOutcome==ActivityOutcome.ACTIVE
+        assertNotNull( spreadSheetActivityStorage.hillCurveValueS0)
+        assertNotNull( spreadSheetActivityStorage.hillCurveValueResponse)
+        assertNotNull( spreadSheetActivityStorage.hillCurveValueSlope)
+    }
+
+
+
+
+        void "Test equals"() {
         given:
         final SpreadSheetActivityStorage spreadSheetActivityStorage1 = new SpreadSheetActivityStorage(eid: 47l, cid: 47l, sid: 47l )
 

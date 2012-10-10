@@ -65,7 +65,7 @@ class ScaffoldUnitSpec extends Specification {
 
     void "scaffold.equals #label"() {
         when: "We call the equals method with scaffold1 and scaffold2"
-        final boolean returnedValue = scaffold1 == scaffold2
+        final boolean returnedValue = scaffold1.equals(scaffold2)
         then: "We expected method to return the expected value"
         assert returnedValue == expectedAnswer
         where:

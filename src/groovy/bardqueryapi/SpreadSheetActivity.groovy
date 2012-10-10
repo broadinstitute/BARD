@@ -5,7 +5,7 @@ import bard.core.HillCurveValue
 /**
  *
  */
-public class SpreadSheetActivity {
+class SpreadSheetActivity {
     Long experimentId
     Long eid
     Long cid
@@ -13,13 +13,13 @@ public class SpreadSheetActivity {
     Double potency
     ActivityOutcome activityOutcome
     HillCurveValue hillCurveValue
-
-    List<HillCurveValue> readouts = [] // TODO this is a hack to get multiple readouts displayed in showExperimentResult for demo; FIXME
-
-
+    // TODO this is a hack to get multiple readouts displayed in showExperimentResult for demo; FIXME
+    List<HillCurveValue> readouts = []
 
 
-    public Double interpretHillCurveValue() {
+
+
+    Double interpretHillCurveValue() {
         Double retValue = Double.NaN
 
         if (this.hillCurveValue) {
