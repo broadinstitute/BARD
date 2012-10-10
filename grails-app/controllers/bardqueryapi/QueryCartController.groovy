@@ -13,7 +13,7 @@ class QueryCartController {
     def add() {
 
         def somethingWasAdded
-        int stt = Integer.parseInt(params.stt)
+        int somethingReallyChanged = Integer.parseInt(params.stt)
         if (params.class == 'class bardqueryapi.CartAssay') {
 
             somethingWasAdded = queryCartService.addToShoppingCart( new CartAssay( params.assayTitle, params.id ) )
@@ -30,10 +30,11 @@ class QueryCartController {
         }
 
         if (somethingWasAdded != null)  // something was added, so the display must change
-            if (stt==0)
+            if (somethingReallyChanged==0)  {
                 render(template: '/bardWebInterface/queryCartIndicator', model: getModelForSummary())
-            else
+            } else {
                 render(template:'/bardWebInterface/sarCartContent', model: getModelForDetails())  // refresh the cart display via Ajax
+            }
 
 
         return
@@ -43,11 +44,13 @@ class QueryCartController {
 
 
     def updateOnscreenCart() {
-        int stt = Integer.parseInt(params.stt)
-        if (stt==0)
+        int somethingReallyChanged = Integer.parseInt(params.stt)
+        if (somethingReallyChanged==0)  {
             return updateSummary()
-        else
+        } else  {
             return updateDetails()  // refresh the cart display via Ajax
+        }
+
     }
 
     def updateSummary() {

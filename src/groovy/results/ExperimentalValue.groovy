@@ -75,23 +75,23 @@ class ExperimentalValue {
         BigDecimal displayVal =bigDecimal
         Boolean defaultToEngineeringNotation  = false
         NumberFormat numberFormat = NumberFormat.getInstance()
-        if (((new BigDecimal(0.01)).compareTo(bigDecimal) <= 0) &&
-                ((new BigDecimal(0.1)).compareTo(bigDecimal) > 0)){
+        if (((new BigDecimal("0.01")).compareTo(bigDecimal) <= 0) &&
+                ((new BigDecimal("0.1")).compareTo(bigDecimal) > 0)){
             defaultToEngineeringNotation  = true
-        } else if (((new BigDecimal(0.1)).compareTo(bigDecimal) <= 0) &&
-                ((new BigDecimal(1)).compareTo(bigDecimal) > 0)){
+        } else if (((new BigDecimal("0.1")).compareTo(bigDecimal) <= 0) &&
+                ((new BigDecimal("1")).compareTo(bigDecimal) > 0)){
             numberFormat.setMinimumFractionDigits( 0 )
             numberFormat.setMaximumFractionDigits( DESIRED_PRECISION )
-        } else if (((new BigDecimal(1)).compareTo(bigDecimal) <= 0) &&
-                ((new BigDecimal(10)).compareTo(bigDecimal) > 0)){
+        } else if (((new BigDecimal("1")).compareTo(bigDecimal) <= 0) &&
+                ((new BigDecimal("10")).compareTo(bigDecimal) > 0)){
             numberFormat.setMinimumFractionDigits( 0 )
             numberFormat.setMaximumFractionDigits( DESIRED_PRECISION-1 )
-        } else if (((new BigDecimal(10)).compareTo(bigDecimal) <= 0) &&
-                ((new BigDecimal(100)).compareTo(bigDecimal) > 0)){
+        } else if (((new BigDecimal("10")).compareTo(bigDecimal) <= 0) &&
+                ((new BigDecimal("100")).compareTo(bigDecimal) > 0)){
             numberFormat.setMinimumFractionDigits( 0 )
             numberFormat.setMaximumFractionDigits( DESIRED_PRECISION-2 )
-        } else if (((new BigDecimal(100)).compareTo(bigDecimal) <= 0) &&
-                ((new BigDecimal(1000)).compareTo(bigDecimal) > 0)){
+        } else if (((new BigDecimal("100")).compareTo(bigDecimal) <= 0) &&
+                ((new BigDecimal("1000")).compareTo(bigDecimal) > 0)){
             numberFormat.setMinimumFractionDigits( 0 )
             numberFormat.setMaximumFractionDigits( DESIRED_PRECISION-3 )
         } else {      // If someone insists on an output format, or else if the numbers are absurdly big or small
@@ -266,7 +266,7 @@ enum ExperimentalValueUnit {
 
     public static ExperimentalValueUnit getByDecimalValue(int value) {
         for (final ExperimentalValueUnit element : EnumSet.allOf(ExperimentalValueUnit.class)) {
-            if (element.decimalPlacesFromMolar.equals(value)) {
+            if (element.decimalPlacesFromMolar == value) {
                 return element;
             }
         }
@@ -274,14 +274,6 @@ enum ExperimentalValueUnit {
     }
 
 
-    public static ExperimentalValueUnit getByValue(String value) {
-        for (final ExperimentalValueUnit element : EnumSet.allOf(ExperimentalValueUnit.class)) {
-            if (element.toString().equals(value)) {
-                return element;
-            }
-        }
-        return null;
-    }
 }
 
 
