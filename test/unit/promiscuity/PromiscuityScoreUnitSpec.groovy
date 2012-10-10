@@ -61,7 +61,7 @@ class PromiscuityScoreUnitSpec extends Specification {
 
     void "promiscuityScore.equals #label"() {
         when: "We call the equals method with promiscuityScore1 and promiscuityScore1"
-        final boolean returnedValue = promiscuityScore1 == promiscuityScore2
+        final boolean returnedValue = promiscuityScore1.equals(promiscuityScore2)
         then: "We expected method to return the expected value"
         assert returnedValue == expectedAnswer
         where:

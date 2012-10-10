@@ -30,12 +30,11 @@ class PromiscuityScoreService {
      * Failure would return  eturn [status: HHTTP Error Code, message: "Error getting Promiscuity Score for ${fullURL}", promiscuityScore: null]
      */
     public Map findPromiscuityScoreForCID(final String fullURL) {
-        def resp = null
         try {
             final RESTClient restClient = this.restClientFactoryService.createRestClient(fullURL)
             final StopWatch sw = queryHelperService.startStopWatch()
 
-            resp = restClient.get(query: [expand: 'true'], contentType: XML,
+            def resp = restClient.get(query: [expand: 'true'], contentType: XML,
                     headers: [Accept: 'application/xml'])
             final Map loggingMap = [url: "${fullURL}?expand=true"]
             this.queryHelperService.stopStopWatch(sw, loggingMap.toString())

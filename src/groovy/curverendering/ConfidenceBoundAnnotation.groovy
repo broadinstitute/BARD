@@ -1,6 +1,7 @@
 package curverendering;
 
 
+import org.hibernate.cfg.NotYetImplementedException
 import org.jfree.chart.annotations.AbstractXYAnnotation
 import org.jfree.chart.axis.ValueAxis
 import org.jfree.chart.plot.Plot
@@ -38,32 +39,49 @@ class ConfidenceBoundAnnotation extends AbstractXYAnnotation {
     }
 
     @Override
-    public void draw(Graphics2D gd, XYPlot plot, Rectangle2D dataArea, ValueAxis domainAxis, ValueAxis rangeAxis, int i, PlotRenderingInfo info) {
+    public void draw(Graphics2D gd, XYPlot plot,
+                     Rectangle2D dataArea,
+                     ValueAxis domainAxis, ValueAxis rangeAxis,
+                     int i, PlotRenderingInfo info) {
 
         PlotOrientation orientation = plot.orientation
         RectangleEdge domainEdge = Plot.resolveDomainAxisLocation(
-                plot.domainAxisLocation, orientation);
+                plot.domainAxisLocation, orientation)
 
         RectangleEdge rangeEdge = Plot.resolveRangeAxisLocation(
-                plot.rangeAxisLocation, orientation);
-        final Map<String, Float> edges = compute2DEdges(orientation, domainEdge, rangeEdge, dataArea, domainAxis, rangeAxis)
+                plot.rangeAxisLocation, orientation)
+        final Map<String, Float> edges =
+            compute2DEdges(orientation, domainEdge, rangeEdge, dataArea, domainAxis, rangeAxis)
 
         float j2DX1 = edges.j2DX1
         float j2DX2 = edges.j2DX2
         float j2DY1 = edges.j2DY1
-        gd.setPaint(this.color);
-        gd.setStroke(new BasicStroke());
+        gd.setPaint(this.color)
+        gd.setStroke(new BasicStroke())
 
-        GeneralPath bar = new GeneralPath();
-        // the horizontal line
-        bar.moveTo(j2DX1, j2DY1);
-        bar.lineTo(j2DX2, j2DY1);
-        // the left vertical line
-        bar.moveTo(j2DX1, j2DY1 - this.confidenceAnnotationHeight / 2);
-        bar.lineTo(j2DX1, j2DY1 + this.confidenceAnnotationHeight / 2);
-        // the right vertical line
-        bar.moveTo(j2DX2, j2DY1 - this.confidenceAnnotationHeight / 2);
-        bar.lineTo(j2DX2, j2DY1 + this.confidenceAnnotationHeight / 2);
+
+
+        GeneralPath bar = new GeneralPath().with {
+            moveTo(j2DX1, j2DY1)
+            lineTo(j2DX2, j2DY1)
+            //the left vertical line
+            moveTo(j2DX1, j2DY1 - this.confidenceAnnotationHeight / 2)
+            lineTo(j2DX1, j2DY1 + this.confidenceAnnotationHeight / 2)
+            // the right vertical line
+            moveTo(j2DX2, j2DY1 - this.confidenceAnnotationHeight / 2)
+            lineTo(j2DX2, j2DY1 + this.confidenceAnnotationHeight / 2)
+            return it
+        }
+//        GeneralPath bar = new GeneralPath()
+//        // the horizontal line
+//        bar.moveTo(j2DX1, j2DY1)
+//        bar.lineTo(j2DX2, j2DY1)
+//        // the left vertical line
+//        bar.moveTo(j2DX1, j2DY1 - this.confidenceAnnotationHeight / 2)
+//        bar.lineTo(j2DX1, j2DY1 + this.confidenceAnnotationHeight / 2)
+//        // the right vertical line
+//        bar.moveTo(j2DX2, j2DY1 - this.confidenceAnnotationHeight / 2)
+//        bar.lineTo(j2DX2, j2DY1 + this.confidenceAnnotationHeight / 2)
 
         gd.draw(bar);
     }
@@ -71,15 +89,13 @@ class ConfidenceBoundAnnotation extends AbstractXYAnnotation {
     Map<String, Float> compute2DEdges(PlotOrientation orientation, RectangleEdge domainEdge, RectangleEdge rangeEdge, Rectangle2D dataArea, ValueAxis domainAxis, ValueAxis rangeAxis) {
         if (orientation == PlotOrientation.VERTICAL) {
             float j2DX1 = (float) domainAxis.valueToJava2D(
-                    this.confidenceX1, dataArea, domainEdge);
+                    this.confidenceX1, dataArea, domainEdge)
             float j2DX2 = (float) domainAxis.valueToJava2D(
-                    this.confidenceX2, dataArea, domainEdge);
+                    this.confidenceX2, dataArea, domainEdge)
             float j2DY1 = (float) rangeAxis.valueToJava2D(
-                    this.confidenceY, dataArea, rangeEdge);
+                    this.confidenceY, dataArea, rangeEdge)
             return [j2DX1: j2DX1, j2DX2: j2DX2, j2DY1: j2DY1]
         }
-        throw new RuntimeException("Orientation ${orientation}, Not Yet Implemented");
-
-
+        throw new NotYetImplementedException("Orientation ${orientation}, Not Yet Implemented")
     }
 }

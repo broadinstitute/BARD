@@ -245,10 +245,7 @@ class QueryHelperService {
      * @return updated string
      */
     protected String stripCustomStringFromSearchString(final String searchString) {
-        final String updatedSearchString = stripCustomFiltersFromSearchString(searchString)
-        if (!updatedSearchString) {
-            updatedSearchString = searchString
-        }
+        final String updatedSearchString = stripCustomFiltersFromSearchString(searchString) ?: searchString
         return updatedSearchString
     }
     /**

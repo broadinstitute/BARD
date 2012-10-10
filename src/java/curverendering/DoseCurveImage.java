@@ -1,6 +1,5 @@
 package curverendering;
 
-import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang3.tuple.MutablePair;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.axis.NumberAxis;
@@ -15,8 +14,7 @@ import java.util.*;
 import java.util.List;
 
 public class DoseCurveImage {
-    public final static Color[] colors = new Color[]{Color.BLUE, Color.GREEN, Color.MAGENTA, Color.ORANGE, Color.PINK, Color.RED};
-
+    public static final Color[] colors = new Color[]{Color.BLUE, Color.GREEN, Color.MAGENTA, Color.ORANGE, Color.PINK, Color.RED};
 
 
     public static NumberAxis createAndConfigureYAxis(Bounds bounds, Color axisColor, String label) {
@@ -45,7 +43,7 @@ public class DoseCurveImage {
             domainAxis.setLowerBound(Math.log10(bounds.xMin) - inset);
             domainAxis.setUpperBound(Math.log10(bounds.xMax) + inset);
         }
-         domainAxis.setLabel(label);
+        domainAxis.setLabel(label);
         return domainAxis;
     }
 
@@ -62,13 +60,14 @@ public class DoseCurveImage {
             addCurve(name, dataset, renderer, plot, x, y, isValid, drc.getCurveParameters(), drc.getColor());
         }
     }
-    public static JFreeChart createChart(Map<String, Drc> curves, Bounds bounds, Color axisColor, String xAxisLabel, String yAxisLabel){
+
+    public static JFreeChart createChart(Map<String, Drc> curves, Bounds bounds, Color axisColor, String xAxisLabel, String yAxisLabel) {
 
         // create and configure x axis
-        final NumberAxis domainAxis = createAndConfigureXAxis(bounds, axisColor,xAxisLabel);
+        final NumberAxis domainAxis = createAndConfigureXAxis(bounds, axisColor, xAxisLabel);
 
         // create and configure y axis
-        final NumberAxis rangeAxis = createAndConfigureYAxis(bounds, axisColor,yAxisLabel);
+        final NumberAxis rangeAxis = createAndConfigureYAxis(bounds, axisColor, yAxisLabel);
 
         DefaultXYDataset dataset = new DefaultXYDataset();
 
@@ -357,6 +356,7 @@ public class DoseCurveImage {
             bounds.yMax = yNormMax;
         }
     }
+
     /**
      * Construct a JFreeChart from the given data
      *
@@ -367,7 +367,7 @@ public class DoseCurveImage {
      * @param yNormMax - The maximum normalized Y value
      * @return {@link JFreeChart}
      */
-    public static JFreeChart createDoseCurve(Drc drc, String xAxisLabel, String yAxisLabel,Double xNormMin, Double xNormMax, Double yNormMin, Double yNormMax) {
+    public static JFreeChart createDoseCurve(Drc drc, String xAxisLabel, String yAxisLabel, Double xNormMin, Double xNormMax, Double yNormMin, Double yNormMax) {
         Map<String, Drc> curves = new HashMap<String, Drc>();
         List<Drc> drcs = new ArrayList<Drc>();
         int colorIndex = 0;
@@ -376,10 +376,11 @@ public class DoseCurveImage {
             curves.put(colorIndex + ":" + drc.getCurveParameters().getResultTime().toString(), drc);
             drcs.add(drc);
             Bounds bounds = findBounds(drcs, xNormMin, xNormMax, yNormMin, yNormMax);
-            return DoseCurveImage.createChart(curves, bounds, Color.BLACK,xAxisLabel,yAxisLabel);
+            return DoseCurveImage.createChart(curves, bounds, Color.BLACK, xAxisLabel, yAxisLabel);
         }
         return null;
     }
+
     /**
      * @param drcs     - Dose response points
      * @param xNormMin - The minimum normalized x value
@@ -388,9 +389,11 @@ public class DoseCurveImage {
      * @param yNormMax - The maximum normalized Y value
      * @return {@link Bounds}
      */
-    static Bounds findBounds(List<Drc> drcs, Double xNormMin, Double xNormMax, Double yNormMin, Double yNormMax) {
+    static Bounds findBounds(final List<Drc> drcs, final Double xNormMin, final Double xNormMax, final Double yNormMin, final Double yNormMax) {
         if (xNormMin != null && xNormMax != null && yNormMin != null && yNormMax != null) {
-            return new Bounds(Math.pow(10, xNormMin), Math.pow(10, xNormMax), yNormMin, yNormMax);
+            final double powerXMin = Math.pow(10, xNormMin);
+            final double powerXMax = Math.pow(10, xNormMax);
+            return new Bounds(powerXMin, powerXMax, yNormMin, yNormMax);
         }
         return adjustBounds(drcs, xNormMin, xNormMax, yNormMin, yNormMax);
 

@@ -13,24 +13,24 @@ enum ActivityOutcome {
     /**
      *
      */
-    INACTIVE("Inactive",1),
+    INACTIVE('Inactive',1),
     /**
      *
      */
-    ACTIVE("Active",2),
+    ACTIVE('Active',2),
 
     /**
      *
      */
-    INCONCLUSIVE("Inconclusive",3),
+    INCONCLUSIVE('Inconclusive',3),
     /**
      *
      */
-    UNSPECIFIED("Unspecified",4),
+    UNSPECIFIED('Unspecified',4),
     /**
      *
      */
-    PROBE("Probe",5);
+    PROBE('Probe',5);
 
     static final private Map<Integer,ActivityOutcome> activityOutcomes;
     static{
@@ -48,20 +48,20 @@ enum ActivityOutcome {
     /**
      * @return the name
      */
-    public String getLabel() {
+    String getLabel() {
         return this.label;
     }
     /**
      * @return the pub chem value in the PC schema
      */
-    public int getPubChemValue() {
+    int getPubChemValue() {
         return this.pubChemValue;
     }
     /**
      * @param outComeValue
      * @return {@link ActivityOutcome}
      */
-    public static ActivityOutcome  findActivityOutcome(int outComeValue){
+    static ActivityOutcome  findActivityOutcome(int outComeValue){
 
         return activityOutcomes.get(new Integer(outComeValue));
     }
