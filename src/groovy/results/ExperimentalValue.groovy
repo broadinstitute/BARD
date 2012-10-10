@@ -235,6 +235,8 @@ enum ExperimentalValueUnit {
                 return ExperimentalValueUnit.Attamolar;
             case MolSpreadSheetCellUnit.Zeptomolar :
                 return ExperimentalValueUnit.Zeptomolar;
+            case MolSpreadSheetCellUnit.Yoctomolar :
+                return ExperimentalValueUnit.Yoctomolar;
             case MolSpreadSheetCellUnit.unknown :
                 return ExperimentalValueUnit.unknown;
             default:
