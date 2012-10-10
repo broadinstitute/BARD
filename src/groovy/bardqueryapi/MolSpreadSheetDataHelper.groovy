@@ -12,10 +12,6 @@ import molspreadsheet.MolSpreadSheetData
  * To change this template use File | Settings | File Templates.
  */
 
-class MolSpreadSheetDataHelper{
-}
-
-
 class MolSpreadSheetDataBuilder{
     protected MolecularSpreadSheetService molecularSpreadSheetService
     protected  MolSpreadSheetData molSpreadSheetData
@@ -30,9 +26,7 @@ class MolSpreadSheetDataBuilder{
     }
 
     public  MolSpreadSheetData getMolSpreadSheetData() {    molSpreadSheetData  }
-    public void createNewMolSpreadSheetData() {
-        molSpreadSheetData=new MolSpreadSheetData()
-    }
+
 
     public void holdCartResults(List<CartCompound> cartCompoundList,List<CartAssay> cartAssayList,List<CartProject> cartProjectList){
         this.cartCompoundList = cartCompoundList
