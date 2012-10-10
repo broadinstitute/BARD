@@ -1,8 +1,8 @@
 package bardqueryapi
 
-import org.apache.commons.collections.ListUtils
 import org.apache.commons.collections.Factory
-import org.omg.CORBA.StringHolder
+import org.apache.commons.collections.ListUtils
+
 /**
  * Command object used to parse all the search parameters coming in from the client.
  */
@@ -16,8 +16,8 @@ class DrcCurveCommand {
     Double sinf
     Double ac50
     Double hillSlope
-    List<Double> concentrations = ListUtils.lazyList([], new ListUtilsFactory() )
-    List<Double> activities = ListUtils.lazyList([],new ListUtilsFactory() )
+    List<Double> concentrations = ListUtils.lazyList([], new ListUtilsFactory())
+    List<Double> activities = ListUtils.lazyList([], new ListUtilsFactory())
 }
 class ListUtilsFactory implements Factory {
     public Object create() {

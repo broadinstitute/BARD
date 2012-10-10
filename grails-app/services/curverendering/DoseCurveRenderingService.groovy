@@ -1,17 +1,16 @@
 package curverendering;
 
 
-import bard.core.HillCurveValue
+import bardqueryapi.DrcCurveCommand
 import org.jfree.chart.JFreeChart
-
-import java.awt.Color
 import org.jfree.chart.encoders.EncoderUtil
 import org.jfree.chart.encoders.ImageFormat
-import bardqueryapi.DrcCurveCommand
+
+import java.awt.Color
 
 class DoseCurveRenderingService {
 
-    byte[] createDoseCurve(DrcCurveCommand drcCurveCommand){
+    byte[] createDoseCurve(DrcCurveCommand drcCurveCommand) {
         JFreeChart chart =
             this.createDoseCurve(
                     drcCurveCommand.concentrations,
@@ -27,8 +26,8 @@ class DoseCurveRenderingService {
                     null,
                     null)
         // write the image byte array to the binding
-       return EncoderUtil.encode(chart.createBufferedImage(drcCurveCommand.width.intValue(),
-               drcCurveCommand.height.intValue()), ImageFormat.PNG)
+        return EncoderUtil.encode(chart.createBufferedImage(drcCurveCommand.width.intValue(),
+                drcCurveCommand.height.intValue()), ImageFormat.PNG)
     }
 
     /**
@@ -60,7 +59,7 @@ class DoseCurveRenderingService {
             final Double yNormMax) {
 
         final Drc doseResponseCurve = findDrcData(concentrations, activities, slope, coef, s0, sinf)
-        return DoseCurveImage.createDoseCurve(doseResponseCurve, xAxisLabel,yAxisLabel,xNormMin, xNormMax, yNormMin, yNormMax)
+        return DoseCurveImage.createDoseCurve(doseResponseCurve, xAxisLabel, yAxisLabel, xNormMin, xNormMax, yNormMin, yNormMax)
     }
     /**
      *
@@ -73,7 +72,7 @@ class DoseCurveRenderingService {
      * @return Drc
      */
     Drc findDrcData(final List<Double> concentrations, final List<Double> activities, final Double ac50, final Double hillSlope,
-                           final Double s0, final Double sinf) {
+                    final Double s0, final Double sinf) {
 
         final List<Boolean> isValid = []
         //pre-populate, we are doing this because the DRC requires an array of booleans

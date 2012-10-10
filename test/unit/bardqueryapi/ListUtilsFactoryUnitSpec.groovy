@@ -9,7 +9,7 @@ import spock.lang.Unroll
 @Unroll
 class ListUtilsFactoryUnitSpec extends Specification {
     /**
-     * {@link ListUtilsFactory.create ( )}
+     * {@link ListUtilsFactory.create()}
      */
     void "test create"() {
         given:

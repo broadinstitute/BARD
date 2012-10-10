@@ -173,7 +173,7 @@ class QueryService implements IQueryService {
             final Collection<Compound> compounds = this.queryServiceWrapper.restCompoundService.get(compoundIds)
             this.queryHelperService.stopStopWatch(sw, "find compounds by CIDs ${compoundIds.toString()}")
             compoundAdapters.addAll(this.queryHelperService.compoundsToAdapters(compounds))
-            //TODO: Eben though facets are available they cannnot be used for filtering
+            //TODO: Even though facets are available they cannot be used for filtering
         }
         int nhits = compoundAdapters.size()
         return [compoundAdapters: compoundAdapters, facets: facets, nHits: nhits]
@@ -299,14 +299,14 @@ class QueryService implements IQueryService {
      * @param term
      * @return the list of maps to use for auto suggest
      */
-    public List<Map<String, String>> autoComplete(String term) {
+    public List<Map<String, String>> autoComplete(final String term) {
 
         //the number of items to retrieve per category
         final int numberOfTermsToRetrieve = 3
         //if string is already quoted strip it
-        term = term.replaceAll("\"", "");
+        final String normalizedTerm = term.replaceAll("\"", "");
 
-        final SuggestParams suggestParams = new SuggestParams(term, numberOfTermsToRetrieve)
+        final SuggestParams suggestParams = new SuggestParams(normalizedTerm, numberOfTermsToRetrieve)
         //we only use the terms in the assay service, because the other suggest services do not seem to
         //have useful things
         final Map<String, List<String>> autoSuggestResponseFromJDO = this.queryServiceWrapper.restAssayService.suggest(suggestParams);
