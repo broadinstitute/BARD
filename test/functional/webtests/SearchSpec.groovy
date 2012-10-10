@@ -8,11 +8,10 @@ import webtests.pages.StructureSearchPage
 
 @Stepwise
 class SearchSpec extends BardReportingSpec {
-
     def "Go to home page"() {
         given: "The user is logged in"
         to LoginPage
-        logInNoValidation(usernameUserPropsMap.user.username, usernameUserPropsMap.user.password)
+        logInWithRole('ROLE_USER')
 
         when: "The user searches for DNA repair"
         at HomePage
@@ -27,7 +26,7 @@ class SearchSpec extends BardReportingSpec {
 //        when:
 //        structureSearchLink.click()
 //        at StructureSearchPage
-//        closeButton.click()
+//        $("form#structureSearchForm a#structureSearchButton.btn.btn-primary").click()
 //
 //        then:
 //        at HomePage
