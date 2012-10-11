@@ -41,6 +41,26 @@ class MolecularSpreadSheetServiceIntegrationSpec extends IntegrationSpec {
 
     }
 
+
+    void "test retrieveExperimentalData degenerate case"() {
+        when:  "we have a molecularSpreadSheetService"
+        assertNotNull molecularSpreadSheetService
+        MolSpreadSheetData molSpreadSheetData = molecularSpreadSheetService.retrieveExperimentalData()
+
+        then: "we should be able to generate the core molSpreadSheetData, with valid empty data holders"
+        assertNotNull molSpreadSheetData
+        assertNotNull molSpreadSheetData.mssData
+        assertNotNull molSpreadSheetData.rowPointer
+        assertNotNull molSpreadSheetData.columnPointer
+        assertNotNull molSpreadSheetData.mssHeaders
+        assert molSpreadSheetData.mssData.size() == 0
+        assert molSpreadSheetData.rowPointer.size() == 0
+        assert molSpreadSheetData.columnPointer.size() == 0
+        assert molSpreadSheetData.mssHeaders.size() == 3
+    }
+
+
+
     void "test findExperimentDataById #label"() {
 
         when: "We call the findExperimentDataById method with the experimentId #experimentId"
