@@ -11,7 +11,7 @@ ruleset {
     AssignCollectionSort
     AssignCollectionUnique
     AssignmentInConditional
-    BigDecimalInstantiation
+    //BigDecimalInstantiation
     BitwiseOperatorInConditional
     BooleanGetBoolean
     BooleanMethodReturnsNull
