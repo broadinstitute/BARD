@@ -14,6 +14,7 @@ import bard.db.registration.AssayContextItem
 import bard.db.dictionary.Element
 
 class ContextGroupService {
+    final String MODIFIED_BY = "gwalzer"
     ContextDtoFromContextGroupCreator contextDtoFromContextGroupCreator = new ContextDtoFromContextGroupCreator()
 
     List<ContextChangeDTO> parseFile(File inputFile, Integer START_ROW) {
@@ -24,6 +25,7 @@ class ContextGroupService {
 
         List<ContextChangeDTO> contextChangeDTOList = []
 
+        ContextChangeDTO contextChangeDTO
         for (Row row : sheet) {
             if (rowCount < START_ROW - 1) {//skip the header rows
                 rowCount++
@@ -41,7 +43,6 @@ class ContextGroupService {
             Boolean newGroup = contextDtoFromContextGroupCreator.getCellContentByRowAndColumnIds(row, 'G')
 
             Boolean newChangeParagraph = sourceAttributeLabel //every time we encounter a new source-attribute, a new change-group (a 'paragraph' in the spreadsheet) begins
-            ContextChangeDTO contextChangeDTO
 
             //If we are starting a new context-change paragraph, we should create a new ContextChangeDTO. Otherwise, we simply adding consecutive modified-items to the existing ContextChangeDTO
             if (newChangeParagraph) {
@@ -52,8 +53,8 @@ class ContextGroupService {
 
                 //Create a new ContextChangeDTO and update its relevant properties
                 contextChangeDTO = new ContextChangeDTO()
-                contextChangeDTO.adid = adid ? AssayContext.findById(adid as Long) : null
-                contextChangeDTO.sourceAssayContextId = sourceAssayContextId ? AssayContext.findById(sourceAssayContextId) : null
+                contextChangeDTO.adid = adid
+                contextChangeDTO.sourceAssayContextId = sourceAssayContextId
                 ContextItem sourceContextItem = new ContextItem(attributeLabel: sourceAttributeLabel, valueLabel: sourceValueLabel)
                 contextChangeDTO.sourceContextItem = sourceContextItem
                 ContextItem modifiedContextItem = new ContextItem(attributeLabel: modifiedAttributeLabel, valueLabel: modifiedValueLabel)
@@ -73,6 +74,8 @@ class ContextGroupService {
 //                contextChangeDTO.newGroup = newGroup
             }
         }
+
+        return contextChangeDTOList
     }
 
     /**
@@ -120,7 +123,7 @@ class ContextGroupService {
                 )
             }
         }
-        else if(!sourceAssayContextId) {// #2
+        else if (!sourceAssayContextId) {// #2
             Assay assay = Assay.findById(adid)
             assert assay, 'At this point, assay must be defined'
             assay.assayContexts.each {AssayContext assayContext ->
@@ -136,13 +139,51 @@ class ContextGroupService {
             Assay assay = Assay.findById(adid)
             AssayContext assayContext = AssayContext.findById(sourceAssayContextId)
             assert assay.assayContexts.contains(assayContext), 'assayContext is not associated with the provided assay'
-            Element sourceAttributeElement = Element.findByLabelIlike(sourceAttributeLabel.toLowerCase().trim())
+            Element sourceAttributeElement = Element.findByLabelIlike(sourceContextItem.attributeLabel.toLowerCase().trim())
             assert sourceAttributeElement, 'source-attribute-element must exist'
             AssayContextItem sourceAssayContextItem = AssayContextItem.findByAttributeElementAndAssayContext(sourceAttributeElement, assayContext)
             assert sourceAssayContextItem, 'sourceAssayContext must exist'
 
-            //create the ContextChange from the ContextChangeDTO
+            //Iterate over all the modified items and create a list of AssayContextItems out of them
+            List<AssayContextItem> modifiedAssayContextItems = modifiedContextItems.collect {ContextItem modifiedContextItem ->
+                AssayContextItem newAssayContextItem = new AssayContextItem()
+//                assayContext.addToAssayContextItems(newAssayContextItem)
+                newAssayContextItem.assayContext = assayContext
+                newAssayContextItem.dateCreated = new Date()
+                newAssayContextItem.modifiedBy = MODIFIED_BY
 
+                Element attributeElement = Element.findByLabelIlike(modifiedContextItem.attributeLabel.trim())
+                assert attributeElement, 'The Modified Attribute element must exist'
+                newAssayContextItem.attributeElement = attributeElement
+                //If the value-element exist, use valueElement in the AssayContextItem; otherwise, use the valueNum property instead
+                if (modifiedContextItem.valueLabel.trim()) {
+                    Element valueElement = Element.findByLabelIlike(modifiedContextItem.valueLabel.trim())
+                    assert valueElement, 'The Modified Value element must exist'
+                    newAssayContextItem.valueElement = valueElement
+                    newAssayContextItem.valueDisplay = newAssayContextItem.valueElement.label
+                }
+                else {
+                    newAssayContextItem.valueNum = sourceAssayContextItem.valueNum
+                    newAssayContextItem.valueDisplay = sourceAssayContextItem.valueDisplay
+                    newAssayContextItem.valueMax = sourceAssayContextItem.valueMax
+                    newAssayContextItem.valueMin = sourceAssayContextItem.valueMin
+                    newAssayContextItem.qualifier = sourceAssayContextItem.qualifier
+                    newAssayContextItem.extValueId = sourceAssayContextItem.extValueId
+                }
+                newAssayContextItem.attributeType = sourceAssayContextItem.attributeType
+
+//                assert newAssayContextItem.save(flush: true)
+                return newAssayContextItem
+            }
+
+//            assert assayContext.save()
+            //create the ContextChange from the ContextChangeDTO
+            ContextChange contextChange = new ContextChange(assay: assay,
+                    sourceAssayContext: assayContext,
+                    sourceItem: sourceAssayContextItem,
+                    modifiedItems: modifiedAssayContextItems,
+                    newGroup: newGroup)
+            contextChangeList.add(contextChange)
         }
 
         return contextChangeList

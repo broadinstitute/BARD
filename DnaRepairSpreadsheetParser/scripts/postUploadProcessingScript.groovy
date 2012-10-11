@@ -19,7 +19,7 @@ Log.logger.info("Start post-processing the spreadsheet uplaods ${startDate}")
 
 final String modifiedBy = "jbittker"
 Log.logger.setLevel(Level.INFO)
-final Integer START_ROW = 2 //1-based
+final Integer START_ROW = 3 //1-based
 
 ContextGroupService contextGroupService = ctx.getBean("contextGroupService")
 

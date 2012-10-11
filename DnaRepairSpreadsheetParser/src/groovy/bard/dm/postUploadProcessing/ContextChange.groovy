@@ -19,7 +19,7 @@ class ContextChange {
     Assay assay
     AssayContext sourceAssayContext
     AssayContextItem sourceItem
-    List<AssayContextItem> modifiedItems
+    List<AssayContextItem> modifiedItems = []
     Boolean newGroup
     private Boolean changed = false
 
@@ -56,7 +56,7 @@ class ContextChangeDTO {
     Double adid
     Double sourceAssayContextId
     ContextItem sourceContextItem
-    List<ContextItem> modifiedContextItems
+    List<ContextItem> modifiedContextItems = []
     Boolean newGroup
 }
 
