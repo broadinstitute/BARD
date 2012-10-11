@@ -108,7 +108,7 @@ class MolSpreadSheetDataBuilderDirector {
     }
 
     public MolSpreadSheetData getMolSpreadSheetData() {
-        molSpreadSheetDataBuilder.getMolSpreadSheetData()
+        this.molSpreadSheetDataBuilder.getMolSpreadSheetData()
     }
 
     public void constructMolSpreadSheetData(List<CartCompound> cartCompoundList,
