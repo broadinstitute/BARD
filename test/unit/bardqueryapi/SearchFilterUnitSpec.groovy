@@ -57,7 +57,7 @@ class SearchFilterUnitSpec extends Specification {
      */
     void "searchFilter.equals #label"() {
         when: "We call the equals method"
-        final boolean returnedValue = searchFilter1 == searchFilter2
+        final boolean returnedValue = searchFilter1.equals(searchFilter2)
         then: "We expected method to return the expected value"
         assert returnedValue == expectedAnswer
         where:
