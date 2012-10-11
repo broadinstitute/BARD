@@ -97,6 +97,60 @@ class MolecularSpreadSheetServiceIntegrationSpec extends IntegrationSpec {
     }
 
 
+    void "test extractMolSpreadSheetData"() {
+        when: "we have a molecularSpreadSheetService"
+        assertNotNull molecularSpreadSheetService
+        Assay assay = restAssayService.get(519 as Long)
+        final ServiceIterator<Experiment> serviceIterator = restAssayService.iterator(assay, Experiment.class)
+        Collection<Experiment> experimentList = serviceIterator.collect()
+        MolSpreadSheetData molSpreadSheetData = new MolSpreadSheetData()
+        List<Long> compounds = []
+        //compounds << 364 as Long
+        List<SpreadSheetActivity> spreadSheetActivityList = molecularSpreadSheetService.extractMolSpreadSheetData( molSpreadSheetData,
+                                                                                                                   experimentList,
+                                                                                                                   compounds )
+
+        then: "we should be able to generate a list of spreadsheet activity elements"
+        assertNotNull spreadSheetActivityList
+        spreadSheetActivityList.size() > 0
+        spreadSheetActivityList.each {  SpreadSheetActivity spreadSheetActivity ->
+            assertNotNull  spreadSheetActivity.eid
+            assertNotNull  spreadSheetActivity.cid
+            assertNotNull  spreadSheetActivity.sid
+        }
+    }
+
+
+
+
+    void "test cartCompoundsToExperiments"() {
+        when: "we have a molecularSpreadSheetService"
+        assertNotNull molecularSpreadSheetService
+        List<CartCompound> cartCompoundList = []
+        cartCompoundList.add(new CartCompound(smiles:"CC(=O)C1=C(O)C(C)=C(O)C(CC2=C(O)C3=C(OC(C)(C)C=C3)C(C(=O)\\C=C\\C3=CC=CC=C3)=C2O)=C1O",name:"Rottlerin",compoundId:5281847))
+        List<Experiment> originalExperimentList =  []
+        List<Experiment> finalExperimentList   =  molecularSpreadSheetService.cartCompoundsToExperiments(originalExperimentList,cartCompoundList)
+
+        then: "we should be able to generate a list of spreadsheet activity elements"
+        assertNotNull finalExperimentList
+        assert finalExperimentList.size()==0
+    }
+
+
+    void "test cartProjectsToExperiments"() {
+        when: "we have a molecularSpreadSheetService"
+        assertNotNull molecularSpreadSheetService
+        List<CartProject> cartProjectList = []
+        cartProjectList.add(new CartProject("Summary of Flow Cytometry HTS of Small Molecules that Regulate V-ATPase Proton Transport in Yeast", 364 as Long))
+        List<Experiment> finalExperimentList   =  molecularSpreadSheetService. cartProjectsToExperiments(cartProjectList)
+
+        then: "we should be able to generate a list of spreadsheet activity elements"
+        assertNotNull finalExperimentList
+        assert finalExperimentList.size()>1
+    }
+
+
+
 
     void "test findExperimentDataById #label"() {
 
