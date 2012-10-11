@@ -1,8 +1,10 @@
 package results
 
-import java.text.NumberFormat
 import bardqueryapi.MolSpreadSheetCellType
 import bardqueryapi.MolSpreadSheetCellUnit
+
+import java.text.NumberFormat
+import org.hibernate.cfg.NotYetImplementedException
 
 /**
  * Created with IntelliJ IDEA.
@@ -16,7 +18,7 @@ class ExperimentalValue {
     final int DESIRED_PRECISION = 3
     BigDecimal value = 0.0
     ExperimentalValueUnit experimentalValueUnit = ExperimentalValueUnit.unknown  // describes what we hold
-    ExperimentalValueUnit insistOnOutputUnits  = ExperimentalValueUnit.unknown   // if not unknown then force output to this unit
+    ExperimentalValueUnit insistOnOutputUnits = ExperimentalValueUnit.unknown   // if not unknown then force output to this unit
     Boolean activity = true
     ExperimentalValueType experimentalValueType = ExperimentalValueType.unknown
     Boolean printUnits = true
@@ -27,7 +29,7 @@ class ExperimentalValue {
     public ExperimentalValue(BigDecimal value,
                              ExperimentalValueUnit experimentalValueUnit,
                              ExperimentalValueType experimentalValueType,
-                             Boolean activity = true ) {
+                             Boolean activity = true) {
         this.value = value
         this.experimentalValueUnit = experimentalValueUnit
         this.experimentalValueType = experimentalValueType
@@ -39,7 +41,7 @@ class ExperimentalValue {
     }
 
     public ExperimentalValue(BigDecimal value,
-                             Boolean printUnits ) {
+                             Boolean printUnits) {
         this.value = value
         this.experimentalValueUnit = ExperimentalValueUnit.Molar
         this.experimentalValueType = ExperimentalValueType.numeric
@@ -54,52 +56,56 @@ class ExperimentalValue {
     @Override
     String toString() {
         StringBuilder stringBuilder = new StringBuilder()
-        if (!activity)
+        if (!activity){
             stringBuilder.append(NO_ACTIVITY_STRING)
-        else if ((experimentalValueType==ExperimentalValueType.lessThanNumeric) ||
-                (experimentalValueType==ExperimentalValueType.greaterThanNumeric) ||
-                (experimentalValueType==ExperimentalValueType.percentageNumeric) ||
-                (experimentalValueType==ExperimentalValueType.numeric)) {
-            stringBuilder.append(prepend(experimentalValueType,valueNegative))
+        }
+        else if ((experimentalValueType == ExperimentalValueType.lessThanNumeric) ||
+                (experimentalValueType == ExperimentalValueType.greaterThanNumeric) ||
+                (experimentalValueType == ExperimentalValueType.percentageNumeric) ||
+                (experimentalValueType == ExperimentalValueType.numeric)) {
+            stringBuilder.append(prepend(experimentalValueType, valueNegative))
             stringBuilder.append("${roundoffToDesiredPrecision(deliverDesiredValue())}")
             stringBuilder.append(append(experimentalValueType))
-            if (printUnits)
-                stringBuilder.append (experimentalValueUnit.toString())
-        } else
+            if (printUnits) {
+                stringBuilder.append(experimentalValueUnit.toString())
+            }
+        } else {
             stringBuilder.append(deliverDesiredValue())
+        }
         stringBuilder.toString()
     }
 
 
-    String  roundoffToDesiredPrecision( BigDecimal bigDecimal  )  {
-        BigDecimal displayVal =bigDecimal
-        Boolean defaultToEngineeringNotation  = false
-        NumberFormat numberFormat = NumberFormat.getInstance()
+    String roundoffToDesiredPrecision(BigDecimal bigDecimal) {
+        BigDecimal displayVal = bigDecimal
+        Boolean defaultToEngineeringNotation = false
+        NumberFormat numberFormat = NumberFormat.instance
         if (((new BigDecimal("0.01")).compareTo(bigDecimal) <= 0) &&
-                ((new BigDecimal("0.1")).compareTo(bigDecimal) > 0)){
-            defaultToEngineeringNotation  = true
+                ((new BigDecimal("0.1")).compareTo(bigDecimal) > 0)) {
+            defaultToEngineeringNotation = true
         } else if (((new BigDecimal("0.1")).compareTo(bigDecimal) <= 0) &&
-                ((new BigDecimal("1")).compareTo(bigDecimal) > 0)){
-            numberFormat.setMinimumFractionDigits( 0 )
-            numberFormat.setMaximumFractionDigits( DESIRED_PRECISION )
+                ((new BigDecimal("1")).compareTo(bigDecimal) > 0)) {
+            numberFormat.setMinimumFractionDigits(0)
+            numberFormat.setMaximumFractionDigits(DESIRED_PRECISION)
         } else if (((new BigDecimal("1")).compareTo(bigDecimal) <= 0) &&
-                ((new BigDecimal("10")).compareTo(bigDecimal) > 0)){
-            numberFormat.setMinimumFractionDigits( 0 )
-            numberFormat.setMaximumFractionDigits( DESIRED_PRECISION-1 )
+                ((new BigDecimal("10")).compareTo(bigDecimal) > 0)) {
+            numberFormat.setMinimumFractionDigits(0)
+            numberFormat.setMaximumFractionDigits(DESIRED_PRECISION - 1)
         } else if (((new BigDecimal("10")).compareTo(bigDecimal) <= 0) &&
-                ((new BigDecimal("100")).compareTo(bigDecimal) > 0)){
-            numberFormat.setMinimumFractionDigits( 0 )
-            numberFormat.setMaximumFractionDigits( DESIRED_PRECISION-2 )
+                ((new BigDecimal("100")).compareTo(bigDecimal) > 0)) {
+            numberFormat.setMinimumFractionDigits(0)
+            numberFormat.setMaximumFractionDigits(DESIRED_PRECISION - 2)
         } else if (((new BigDecimal("100")).compareTo(bigDecimal) <= 0) &&
-                ((new BigDecimal("1000")).compareTo(bigDecimal) > 0)){
-            numberFormat.setMinimumFractionDigits( 0 )
-            numberFormat.setMaximumFractionDigits( DESIRED_PRECISION-3 )
+                ((new BigDecimal("1000")).compareTo(bigDecimal) > 0)) {
+            numberFormat.setMinimumFractionDigits(0)
+            numberFormat.setMaximumFractionDigits(DESIRED_PRECISION - 3)
         } else {      // If someone insists on an output format, or else if the numbers are absurdly big or small
-                      //  then give up on trying to be pretty and put that number into engineering format
-            defaultToEngineeringNotation  = true
+            //  then give up on trying to be pretty and put that number into engineering format
+            defaultToEngineeringNotation = true
         }
-        if (!defaultToEngineeringNotation)
-           numberFormat.format(displayVal.doubleValue())
+        if (!defaultToEngineeringNotation){
+            numberFormat.format(displayVal.doubleValue())
+        }
         else {
             displayVal.toEngineeringString()
         }
@@ -112,45 +118,48 @@ class ExperimentalValue {
 
 
     BigDecimal deliverDesiredValue() {
-        if ( insistOnOutputUnits  != ExperimentalValueUnit.unknown )  // the calling routine wants to set the output units
+        if (insistOnOutputUnits != ExperimentalValueUnit.unknown){  // the calling routine wants to set the output units
             insistOnOutputUnit()
-        else // pick the optimum units based on the value of the number
+        }else{ // pick the optimum units based on the value of the number
             chooseOutputUnit()
+        }
         value
     }
 
 
 
-    Boolean chooseOutputUnit(){
-        Boolean keepGoing  =  (value < 0.1)    ||   (value >= 1000)
+    Boolean chooseOutputUnit() {
+        Boolean keepGoing = (value < 0.1) || (value >= 1000)
         while (keepGoing) {
-            if ( ( value < 0.1 )  &&
-                 ( experimentalValueUnit.decimalPlacesFromMolar > ExperimentalValueUnit.SmallestPossibleUnit.decimalPlacesFromMolar)){
-                performUnitNormalization(  ExperimentalValueUnit.getByDecimalValue(experimentalValueUnit.decimalPlacesFromMolar),
-                        ExperimentalValueUnit.getByDecimalValue(experimentalValueUnit.decimalPlacesFromMolar-3) )
-            } else if ((value >= 1000)  &&
-                    ( experimentalValueUnit.decimalPlacesFromMolar < ExperimentalValueUnit.LargestPossibleUnit.decimalPlacesFromMolar)) {
-                performUnitNormalization( ExperimentalValueUnit.getByDecimalValue(experimentalValueUnit.decimalPlacesFromMolar),
-                        ExperimentalValueUnit.getByDecimalValue(experimentalValueUnit.decimalPlacesFromMolar+3) )
-            }  else
+            if ((value < 0.1) &&
+                    (experimentalValueUnit.decimalPlacesFromMolar > ExperimentalValueUnit.SmallestPossibleUnit.decimalPlacesFromMolar)) {
+                performUnitNormalization(ExperimentalValueUnit.getByDecimalValue(experimentalValueUnit.decimalPlacesFromMolar),
+                        ExperimentalValueUnit.getByDecimalValue(experimentalValueUnit.decimalPlacesFromMolar - 3))
+            } else if ((value >= 1000) &&
+                    (experimentalValueUnit.decimalPlacesFromMolar < ExperimentalValueUnit.LargestPossibleUnit.decimalPlacesFromMolar)) {
+                performUnitNormalization(ExperimentalValueUnit.getByDecimalValue(experimentalValueUnit.decimalPlacesFromMolar),
+                        ExperimentalValueUnit.getByDecimalValue(experimentalValueUnit.decimalPlacesFromMolar + 3))
+            } else {
                 keepGoing = false
+            }
         }
         keepGoing
     }
 
-    Boolean insistOnOutputUnit(){
-        Boolean keepGoing = ( insistOnOutputUnits  != ExperimentalValueUnit.unknown ) ? ( experimentalValueUnit != insistOnOutputUnits ) : false
+    Boolean insistOnOutputUnit() {
+        Boolean keepGoing = (insistOnOutputUnits == ExperimentalValueUnit.unknown) ? false : (experimentalValueUnit != insistOnOutputUnits)
         while (keepGoing) {
-            if ( ( experimentalValueUnit.decimalPlacesFromMolar > insistOnOutputUnits.decimalPlacesFromMolar )  &&
-                  ( experimentalValueUnit.decimalPlacesFromMolar > ExperimentalValueUnit.SmallestPossibleUnit.decimalPlacesFromMolar)){
-                performUnitNormalization( ExperimentalValueUnit.getByDecimalValue(experimentalValueUnit.decimalPlacesFromMolar),
-                        ExperimentalValueUnit.getByDecimalValue(experimentalValueUnit.decimalPlacesFromMolar-3) )
-            } else if (( experimentalValueUnit.decimalPlacesFromMolar < insistOnOutputUnits.decimalPlacesFromMolar )  &&
-                    ( experimentalValueUnit.decimalPlacesFromMolar < ExperimentalValueUnit.LargestPossibleUnit.decimalPlacesFromMolar)) {
-                performUnitNormalization(  ExperimentalValueUnit.getByDecimalValue(experimentalValueUnit.decimalPlacesFromMolar),
-                        ExperimentalValueUnit.getByDecimalValue(experimentalValueUnit.decimalPlacesFromMolar+3) )
-            } else
+            if ((experimentalValueUnit.decimalPlacesFromMolar > insistOnOutputUnits.decimalPlacesFromMolar) &&
+                    (experimentalValueUnit.decimalPlacesFromMolar > ExperimentalValueUnit.SmallestPossibleUnit.decimalPlacesFromMolar)) {
+                performUnitNormalization(ExperimentalValueUnit.getByDecimalValue(experimentalValueUnit.decimalPlacesFromMolar),
+                        ExperimentalValueUnit.getByDecimalValue(experimentalValueUnit.decimalPlacesFromMolar - 3))
+            } else if ((experimentalValueUnit.decimalPlacesFromMolar < insistOnOutputUnits.decimalPlacesFromMolar) &&
+                    (experimentalValueUnit.decimalPlacesFromMolar < ExperimentalValueUnit.LargestPossibleUnit.decimalPlacesFromMolar)) {
+                performUnitNormalization(ExperimentalValueUnit.getByDecimalValue(experimentalValueUnit.decimalPlacesFromMolar),
+                        ExperimentalValueUnit.getByDecimalValue(experimentalValueUnit.decimalPlacesFromMolar + 3))
+            } else {
                 keepGoing = false
+            }
         }
         keepGoing
     }
@@ -158,7 +167,7 @@ class ExperimentalValue {
 
 
 
-    void performUnitNormalization( ExperimentalValueUnit inComingUnit, ExperimentalValueUnit outGoingUnit ) {
+    void performUnitNormalization(ExperimentalValueUnit inComingUnit, ExperimentalValueUnit outGoingUnit) {
         if ((value != null) &&
                 (inComingUnit != ExperimentalValueUnit.unknown) &&
                 (outGoingUnit != ExperimentalValueUnit.unknown)) {
@@ -169,7 +178,7 @@ class ExperimentalValue {
     }
 
 
-    String prepend(ExperimentalValueType experimentalValueType,Boolean valueNegative) {
+    String prepend(ExperimentalValueType experimentalValueType, Boolean valueNegative) {
         StringBuffer stringBuffer = new StringBuffer()
         switch (experimentalValueType) {
             case ExperimentalValueType.lessThanNumeric:
@@ -181,8 +190,9 @@ class ExperimentalValue {
             default:
                 stringBuffer.append("")
         }
-        if (valueNegative)
+        if (valueNegative){
             stringBuffer.append("-")
+        }
         stringBuffer.toString()
     }
 
@@ -197,9 +207,6 @@ class ExperimentalValue {
         }
         returnValue
     }
-
-
-
 
 
 }
@@ -217,38 +224,38 @@ enum ExperimentalValueUnit {
     Yoctomolar("yM", -24),
     unknown("", 0);
 
-    static ExperimentalValueUnit convert(MolSpreadSheetCellUnit molSpreadSheetCellUnit){
-        switch (molSpreadSheetCellUnit){
-            case MolSpreadSheetCellUnit.Molar :
+    static ExperimentalValueUnit convert(MolSpreadSheetCellUnit molSpreadSheetCellUnit) {
+        switch (molSpreadSheetCellUnit) {
+            case MolSpreadSheetCellUnit.Molar:
                 return ExperimentalValueUnit.Molar;
-            case MolSpreadSheetCellUnit.Millimolar :
+            case MolSpreadSheetCellUnit.Millimolar:
                 return ExperimentalValueUnit.Millimolar;
-            case MolSpreadSheetCellUnit.Micromolar :
+            case MolSpreadSheetCellUnit.Micromolar:
                 return ExperimentalValueUnit.Micromolar;
-            case MolSpreadSheetCellUnit.Nanomolar :
+            case MolSpreadSheetCellUnit.Nanomolar:
                 return ExperimentalValueUnit.Nanomolar;
-            case MolSpreadSheetCellUnit.Picomolar :
+            case MolSpreadSheetCellUnit.Picomolar:
                 return ExperimentalValueUnit.Picomolar;
-            case MolSpreadSheetCellUnit.Femtomolar :
+            case MolSpreadSheetCellUnit.Femtomolar:
                 return ExperimentalValueUnit.Femtomolar;
-            case MolSpreadSheetCellUnit.Attamolar :
+            case MolSpreadSheetCellUnit.Attamolar:
                 return ExperimentalValueUnit.Attamolar;
-            case MolSpreadSheetCellUnit.Zeptomolar :
+            case MolSpreadSheetCellUnit.Zeptomolar:
                 return ExperimentalValueUnit.Zeptomolar;
-            case MolSpreadSheetCellUnit.Yoctomolar :
+            case MolSpreadSheetCellUnit.Yoctomolar:
                 return ExperimentalValueUnit.Yoctomolar;
-            case MolSpreadSheetCellUnit.unknown :
+            case MolSpreadSheetCellUnit.unknown:
                 return ExperimentalValueUnit.unknown;
             default:
-                assert false;
+                throw new NotYetImplementedException(molSpreadSheetCellUnit + " not yet implemented");
         }
     }
 
-    private String value
-    private int decimalPlacesFromMolar
+    private final String value
+    private final int decimalPlacesFromMolar
 
-    static ExperimentalValueUnit  LargestPossibleUnit =  Molar
-    static ExperimentalValueUnit  SmallestPossibleUnit =  Yoctomolar
+    static ExperimentalValueUnit LargestPossibleUnit = Molar
+    static ExperimentalValueUnit SmallestPossibleUnit = Yoctomolar
 
     ExperimentalValueUnit(String value, int decimalPlacesFromMolar) {
         this.value = value;
@@ -265,7 +272,7 @@ enum ExperimentalValueUnit {
 
 
     public static ExperimentalValueUnit getByDecimalValue(int value) {
-        for (final ExperimentalValueUnit element : EnumSet.allOf(ExperimentalValueUnit.class)) {
+        for (final ExperimentalValueUnit element : EnumSet.allOf(ExperimentalValueUnit)) {
             if (element.decimalPlacesFromMolar == value) {
                 return element;
             }
@@ -290,26 +297,26 @@ enum ExperimentalValueType {
     string,
     unknown;
 
-static ExperimentalValueType convert(MolSpreadSheetCellType molSpreadSheetCellType){
-    switch (molSpreadSheetCellType){
-        case MolSpreadSheetCellType.lessThanNumeric :
-            return ExperimentalValueType.lessThanNumeric;
-        case MolSpreadSheetCellType.greaterThanNumeric :
-            return ExperimentalValueType.greaterThanNumeric;
-        case MolSpreadSheetCellType.percentageNumeric :
-            return ExperimentalValueType.percentageNumeric;
-        case MolSpreadSheetCellType.numeric :
-            return ExperimentalValueType.numeric;
-        case MolSpreadSheetCellType.image :
-            return ExperimentalValueType.image;
-        case MolSpreadSheetCellType.string :
-            return ExperimentalValueType.string;
-        case MolSpreadSheetCellType.unknown :
-            return ExperimentalValueType.unknown;
-        default:
-            assert false;
+    static ExperimentalValueType convert(MolSpreadSheetCellType molSpreadSheetCellType) {
+        switch (molSpreadSheetCellType) {
+            case MolSpreadSheetCellType.lessThanNumeric:
+                return ExperimentalValueType.lessThanNumeric;
+            case MolSpreadSheetCellType.greaterThanNumeric:
+                return ExperimentalValueType.greaterThanNumeric;
+            case MolSpreadSheetCellType.percentageNumeric:
+                return ExperimentalValueType.percentageNumeric;
+            case MolSpreadSheetCellType.numeric:
+                return ExperimentalValueType.numeric;
+            case MolSpreadSheetCellType.image:
+                return ExperimentalValueType.image;
+            case MolSpreadSheetCellType.string:
+                return ExperimentalValueType.string;
+            case MolSpreadSheetCellType.unknown:
+                return ExperimentalValueType.unknown;
+            default:
+                throw new NotYetImplementedException(molSpreadSheetCellType + " not yet implemented");
+        }
     }
-}
 
 }
 
