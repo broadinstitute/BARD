@@ -10,10 +10,6 @@ class QueryCartService {
     static final  String  cartCompound = "CartCompound"
     static final  String  cartProject = "CartProject"
 
-    ShoppingCartService getQueryCart () {
-        shoppingCartService
-    }
-
     /**
      * Count up all the elements of all different types. Do NOT attempt to detect overlap ( that is,
      * if you have a compound record, and you also have an assay record, but the assay also happens
@@ -54,10 +50,10 @@ class QueryCartService {
      * @return
      */
     LinkedHashMap<String,List> groupUniqueContentsByType( ShoppingCartService shoppingCartSrvc = shoppingCartService ) {
-        def  returnValue  = new LinkedHashMap<String,List> ()
-        def  temporaryCartAssayHolder  = new ArrayList<CartAssay>()
-        def  temporaryCartCompoundHolder  = new ArrayList<CartCompound>()
-        def  temporaryCartProjectHolder  = new ArrayList<CartProject>()
+        LinkedHashMap<String,List>  returnValue  = [:]
+        ArrayList<CartAssay>  temporaryCartAssayHolder  = []
+        ArrayList<CartCompound>  temporaryCartCompoundHolder  = []
+        ArrayList<CartProject>  temporaryCartProjectHolder  = []
         if (shoppingCartSrvc?.getItems()) {
             shoppingCartSrvc.getItems().each { shoppingItemElement  ->
             def convertedShoppingItem = Shoppable.findByShoppingItem(shoppingItemElement)

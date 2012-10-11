@@ -14,6 +14,7 @@ import spock.lang.Unroll
 import bard.core.*
 
 import static junit.framework.Assert.assertNotNull
+import com.metasieve.shoppingcart.ShoppingCartService
 
 @Unroll
 class MolecularSpreadSheetServiceIntegrationSpec extends IntegrationSpec {
@@ -25,7 +26,8 @@ class MolecularSpreadSheetServiceIntegrationSpec extends IntegrationSpec {
     RESTProjectService restProjectService
     RESTAssayService restAssayService
     QueryServiceWrapper queryServiceWrapper
-
+    QueryCartService queryCartService
+    ShoppingCartService shoppingCartService
 
 
     @Before
@@ -34,6 +36,8 @@ class MolecularSpreadSheetServiceIntegrationSpec extends IntegrationSpec {
         this.restCompoundService = molecularSpreadSheetService.queryServiceWrapper.restCompoundService
         this.restProjectService = molecularSpreadSheetService.queryServiceWrapper.restProjectService
         this.restAssayService = molecularSpreadSheetService.queryServiceWrapper.restAssayService
+        this.queryCartService =  molecularSpreadSheetService.queryCartService
+        this.shoppingCartService = molecularSpreadSheetService.shoppingCartService
     }
 
     @After
@@ -57,6 +61,39 @@ class MolecularSpreadSheetServiceIntegrationSpec extends IntegrationSpec {
         assert molSpreadSheetData.rowPointer.size() == 0
         assert molSpreadSheetData.columnPointer.size() == 0
         assert molSpreadSheetData.mssHeaders.size() == 3
+    }
+
+
+    void "test weHaveEnoughDataToMakeASpreadsheet()"() {
+        when:  "we have a molecularSpreadSheetService"
+        assertNotNull molecularSpreadSheetService
+        assertNotNull queryCartService
+
+
+        then: "we should be able to generate the core molSpreadSheetData, with valid empty data holders"
+        if (cartAssay) {
+            shoppingCartService.addToShoppingCart(cartAssay)
+        }
+        if (cartCompound) {
+            shoppingCartService.addToShoppingCart(cartCompound)
+        }
+        if (cartProject) {
+            shoppingCartService.addToShoppingCart(cartProject)
+        }
+       assert dataIsSufficient == molecularSpreadSheetService.weHaveEnoughDataToMakeASpreadsheet ()
+
+
+        where:
+        dataIsSufficient    | cartAssay                     | cartProject                       | cartCompound
+        false               | null                          | null                              | null
+        true                | new CartAssay(assayTitle:"A") | null                              | null
+        true                | null                          | new CartProject(projectName:"P")  | null
+        true                | null                          | null                              | new CartCompound(smiles:"C",name:"c",compoundId:1)
+        true                | null                          | new CartProject(projectName:"P")  | new CartCompound(smiles:"C",name:"c",compoundId:1)
+        true                | new CartAssay(assayTitle:"A") | null                              | new CartCompound(smiles:"C",name:"c",compoundId:1)
+        true                | new CartAssay(assayTitle:"A") | new CartProject(projectName:"P")  | null
+        true                | new CartAssay(assayTitle:"A") | new CartProject(projectName:"P")  | new CartCompound(smiles:"C",name:"c",compoundId:1)
+        false               | null                          | null                              | null
     }
 
 

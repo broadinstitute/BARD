@@ -17,8 +17,6 @@ class MolecularSpreadSheetService {
     ShoppingCartService shoppingCartService
     IQueryService queryService
 
-    final static Integer MAXIMUM_NUMBER_OF_COMPOUNDS = 1000
-
     /**
      * High-level routine to pull information out of the query cart and store it into a data structure suitable
      * for passing to the molecular spreadsheet.
