@@ -16,6 +16,14 @@ class LoginSpec extends BardReportingSpec {
     String validUserName = getCredentialsForTest().username
     String validPassword = getCredentialsForTest().password
 
+    void setup() { // pre-condition of each test: user not currently logged in
+        to LoginPage
+        if(isLoggedIn()) {
+            logout()
+        }
+        assert !isLoggedIn()
+    }
+
     def "Test login with invalid username"() {
         given: "User visits the Login page"
         to LoginPage
