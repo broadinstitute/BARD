@@ -10,7 +10,7 @@ import spock.lang.Shared
 import bard.core.Compound
 import bard.core.DataSource
 import bard.core.LongValue
-import bard.core.StringValue
+
 import bard.core.MolecularValue
 import bard.core.MolecularData
 import bard.core.impl.MolecularDataJChemImpl
@@ -41,24 +41,25 @@ class ChemAxonControllerUnitSpec extends Specification {
     /**
      * {@link ActivityOutcome#getLabel()}
      */
-    void "test generateStructureImage from smiles #label"() {
+    void "test generateStructureImageFromSmiles #label"() {
         when:
-        controller.params.smiles = smiles
-        controller.params.width = width
-        controller.params.height = height
-        controller.generateStructureImage()
+//        controller.params.smiles = smiles
+//        controller.params.width = width
+//        controller.params.height = height
+        controller.generateStructureImageFromSmiles(smiles, width, height)
         final byte[] returnedImage = response.contentAsByteArray
 
         then:
-        chemAxonService.generateStructurePNG(smiles, _, _) >> {bytesArra}
+        chemAxonService.generateStructurePNG(_, _, _) >> {bytesArra}
         assert returnedImage.size() == expectedByteArraySize
 
         where:
-        label                          | smiles                  | width | height | bytesArra           | expectedByteArraySize
-        "get back a byte array"        | 'C1=CC2=C(C=C1)C=CC=C2' | 300   | 300    | [1, 2, 3] as byte[] | 3
-        "default image size"           | 'C1=CC2=C(C=C1)C=CC=C2' | null  | null   | [1, 2, 3] as byte[] | 3
-        "get back an empty byte array" | 'C1=CC2=C(C=C1)C=CC=C2' | 200   | 200    | [] as byte[]        | 0
-
+        label                          | smiles                  | width          | height         | bytesArra           | expectedByteArraySize
+        "get back a byte array"        | 'C1=CC2=C(C=C1)C=CC=C2' | 300 as Integer | 300 as Integer | [1, 2, 3] as byte[] | 3
+        "default image size"           | 'C1=CC2=C(C=C1)C=CC=C2' | null           | null           | [1, 2, 3] as byte[] | 3
+        "default image size"           | 'C1=CC2=C(C=C1)C=CC=C2' | 0 as Integer   | 0 as Integer   | [1, 2, 3] as byte[] | 3
+        "get back an empty byte array" | 'C1=CC2=C(C=C1)C=CC=C2' | 200 as Integer | 200 as Integer | [] as byte[]        | 0
+        "smiles is null"               | ''                      | 200 as Integer | 200 as Integer | [1, 2, 3] as byte[] | 0
     }
 
     /**
@@ -66,23 +67,23 @@ class ChemAxonControllerUnitSpec extends Specification {
      */
     void "test generateStructureImage from CID #label"() {
         when:
-        controller.params.cid = cid
-        controller.params.width = width
-        controller.params.height = height
-        controller.generateStructureImage()
+//        controller.params.cid = cid
+//        controller.params.width = width
+//        controller.params.height = height
+        controller.generateStructureImageFromCID(cid, width, height)
         final byte[] returnedImage = response.contentAsByteArray
 
         then:
         queryService.showCompound(_) >> {compoundAdptr}
-        chemAxonService.generateStructurePNG(smiles, width, height) >> {bytesArra}
+        chemAxonService.generateStructurePNG(_, _, _) >> {bytesArra}
         assert returnedImage.size() == expectedByteArraySize
 
         where:
-        label                          | smiles                  | width | height | bytesArra           | cid    | expectedByteArraySize | compoundAdptr
-        "get back a byte array"        | 'C1=CC2=C(C=C1)C=CC=C2' | 300   | 300    | [1, 2, 3] as byte[] | '1234' | 3                     | compoundAdapter
-        "no compoundAdapters"          | 'C1=CC2=C(C=C1)C=CC=C2' | 300   | 300    | [1, 2, 3] as byte[] | '1234' | 0                     | null
-        "get back an empty byte array" | 'C1=CC2=C(C=C1)C=CC=C2' | 200   | 200    | [] as byte[]        | '1234' | 0                     | compoundAdapter
-        "cid is null"                  | 'C1=CC2=C(C=C1)C=CC=C2' | 300   | 300    | [1, 2, 3] as byte[] | null   | 0                     | compoundAdapter
+        label                          | smiles                  | width          | height         | bytesArra           | cid          | expectedByteArraySize | compoundAdptr
+        "get back a byte array"        | 'C1=CC2=C(C=C1)C=CC=C2' | 300 as Integer | 300 as Integer | [1, 2, 3] as byte[] | 1234 as Long | 3                     | compoundAdapter
+        "no compoundAdapters"          | 'C1=CC2=C(C=C1)C=CC=C2' | 300 as Integer | 300 as Integer | [1, 2, 3] as byte[] | 1234 as Long | 0                     | null
+        "get back an empty byte array" | 'C1=CC2=C(C=C1)C=CC=C2' | 200 as Integer | 200 as Integer | [] as byte[]        | 1234 as Long | 0                     | compoundAdapter
+        "cid is null"                  | 'C1=CC2=C(C=C1)C=CC=C2' | 300 as Integer | 300 as Integer | [1, 2, 3] as byte[] | null         | 0                     | compoundAdapter
     }
 
     CompoundAdapter buildCompoundAdapter(final Long cid, final String smiles) {

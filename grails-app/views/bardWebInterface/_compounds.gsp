@@ -15,7 +15,7 @@
                 <tr>
                     <td style="min-width: 180px;">
                         <img alt="${compoundAdapter.structureSMILES}" title="${compoundAdapter.name}"
-                             src="${createLink(controller: 'chemAxon', action: 'generateStructureImage', params: [smiles: compoundAdapter.structureSMILES, width: 180, height: 150])}"/>
+                             src="${createLink(controller: 'chemAxon', action: 'generateStructureImageFromSmiles', params: [smiles: compoundAdapter.structureSMILES, width: 180, height: 150])}"/>
                     </td>
                     <td>
                         <h3>

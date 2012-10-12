@@ -79,9 +79,9 @@
     <div class="span5">
         <ul class="thumbnails">
             <li>
-                <g:link class="thumbnail" controller="chemAxon" action="generateStructureImage" params="[smiles: compound?.structureSMILES, width: 600, height: 600]" target="_blank">
+                <g:link class="thumbnail" controller="chemAxon" action="generateStructureImageFromSmiles" params="[smiles: compound?.structureSMILES, width: 600, height: 600]" target="_blank">
                     <img alt="${compound?.structureSMILES}" title="${compound.name}"
-                         src="${createLink(controller: 'chemAxon', action: 'generateStructureImage', params: [smiles: compound?.structureSMILES, width: 400, height: 300])}"/>
+                         src="${createLink(controller: 'chemAxon', action: 'generateStructureImageFromSmiles', params: [smiles: compound?.structureSMILES, width: 400, height: 300])}"/>
                 </g:link>
             </li>
         </ul>

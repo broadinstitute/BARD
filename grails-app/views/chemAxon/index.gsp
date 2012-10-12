@@ -38,8 +38,8 @@
 </div>
 
 <div style="background: #808080">
-    %{--<img src="${createLink(controller: 'chemAxon', action: 'generateStructureImage')}" alt="Structure"/>--}%
-    <img src="${createLink(controller: 'chemAxon', action: 'generateStructureImage')}" alt="Structure"/>
+    %{--<img src="${createLink(controller: 'chemAxon', action: 'generateStructureImageFromSmiles')}" alt="Structure"/>--}%
+    <img src="${createLink(controller: 'chemAxon', action: 'generateStructureImageFromSmiles')}" alt="Structure"/>
 </div>
 
 <div>
