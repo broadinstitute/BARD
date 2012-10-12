@@ -2,9 +2,9 @@ package results
 
 import bardqueryapi.MolSpreadSheetCellType
 import bardqueryapi.MolSpreadSheetCellUnit
+import org.apache.commons.lang.NotImplementedException
 
 import java.text.NumberFormat
-import org.hibernate.cfg.NotYetImplementedException
 
 /**
  * Created with IntelliJ IDEA.
@@ -56,7 +56,7 @@ class ExperimentalValue {
     @Override
     String toString() {
         StringBuilder stringBuilder = new StringBuilder()
-        if (!activity){
+        if (!activity) {
             stringBuilder.append(NO_ACTIVITY_STRING)
         }
         else if ((experimentalValueType == ExperimentalValueType.lessThanNumeric) ||
@@ -103,7 +103,7 @@ class ExperimentalValue {
             //  then give up on trying to be pretty and put that number into engineering format
             defaultToEngineeringNotation = true
         }
-        if (!defaultToEngineeringNotation){
+        if (!defaultToEngineeringNotation) {
             numberFormat.format(displayVal.doubleValue())
         }
         else {
@@ -118,9 +118,9 @@ class ExperimentalValue {
 
 
     BigDecimal deliverDesiredValue() {
-        if (insistOnOutputUnits != ExperimentalValueUnit.unknown){  // the calling routine wants to set the output units
+        if (insistOnOutputUnits != ExperimentalValueUnit.unknown) {  // the calling routine wants to set the output units
             insistOnOutputUnit()
-        }else{ // pick the optimum units based on the value of the number
+        } else { // pick the optimum units based on the value of the number
             chooseOutputUnit()
         }
         value
@@ -168,8 +168,7 @@ class ExperimentalValue {
 
 
     void performUnitNormalization(ExperimentalValueUnit inComingUnit, ExperimentalValueUnit outGoingUnit) {
-        if ((value != null) &&
-                (inComingUnit != ExperimentalValueUnit.unknown) &&
+        if ((inComingUnit != ExperimentalValueUnit.unknown) &&
                 (outGoingUnit != ExperimentalValueUnit.unknown)) {
             int unitSwap = inComingUnit.decimalPlacesFromMolar - outGoingUnit.decimalPlacesFromMolar
             value = value.scaleByPowerOfTen(unitSwap)
@@ -190,7 +189,7 @@ class ExperimentalValue {
             default:
                 stringBuffer.append("")
         }
-        if (valueNegative){
+        if (valueNegative) {
             stringBuffer.append("-")
         }
         stringBuffer.toString()
@@ -247,7 +246,7 @@ enum ExperimentalValueUnit {
             case MolSpreadSheetCellUnit.unknown:
                 return ExperimentalValueUnit.unknown;
             default:
-                throw new NotYetImplementedException(molSpreadSheetCellUnit + " not yet implemented");
+                throw new NotImplementedException(molSpreadSheetCellUnit + " not yet implemented");
         }
     }
 
@@ -314,7 +313,7 @@ enum ExperimentalValueType {
             case MolSpreadSheetCellType.unknown:
                 return ExperimentalValueType.unknown;
             default:
-                throw new NotYetImplementedException(molSpreadSheetCellType + " not yet implemented");
+                throw new NotImplementedException("${molSpreadSheetCellType} not yet implemented");
         }
     }
 

@@ -4,6 +4,7 @@ import bardqueryapi.MolSpreadSheetController
 import grails.test.mixin.TestFor
 import spock.lang.Specification
 import spock.lang.Unroll
+import bardqueryapi.MolSpreadSheetCellType
 
 /**
  * See the API for {@link grails.test.mixin.support.GrailsUnitTestMixin} for usage instructions
@@ -30,6 +31,35 @@ class MolSpreadSheetDataUnitSpec  extends Specification {
         assertNotNull molSpreadSheetData.rowPointer
         assertNotNull molSpreadSheetData.rowPointer
     }
+
+
+    void "Test displayValue method"() {
+        when:
+        MolSpreadSheetData molSpreadSheetData = new MolSpreadSheetData()
+        assertNotNull(molSpreadSheetData)
+
+        molSpreadSheetData.mssData["0_0"] = new MolSpreadSheetCell(incoming,MolSpreadSheetCellType.identifier)
+        molSpreadSheetData.mssData["0_1"] = new MolSpreadSheetCell(incoming,MolSpreadSheetCellType.image)
+        molSpreadSheetData.mssData["1_0"] = new MolSpreadSheetCell(incoming,MolSpreadSheetCellType.numeric)
+        molSpreadSheetData.mssData["1_1"] = new MolSpreadSheetCell(incoming,MolSpreadSheetCellType.string)
+
+
+        then:
+        assert molSpreadSheetData.displayValue (row, column)["value"]== returnValue
+
+        where:
+        row     |   column  |   incoming    |   returnValue
+        0       |   0       |   "123"       |   "123"
+        0       |   1       |   "123"       |   null
+        1       |   0       |   "123"       |   "123"
+        1       |   1       |   "123"       |   "123"
+
+
+
+    }
+
+
+
 
     void "Test constraints for molecular spreadsheet data"() {
         given:

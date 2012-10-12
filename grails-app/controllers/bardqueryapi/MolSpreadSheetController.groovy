@@ -21,10 +21,8 @@ class MolSpreadSheetController {
     }
 
     def list = {
-
-        if (params.sort == null) {
-            params.sort = 'name'
-        }
+        // eventually we will perform a sort here and then return something useful, but for now we redirect
+        redirect(action: 'index')
     }
 
 

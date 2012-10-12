@@ -23,6 +23,7 @@ class ChemAxonController {
         }
         else if (params.cid && params.cid?.isLong()) {
             Long cid = new Long(params.cid)
+            //TODO: Use  queryService.showCompound() instead so you are guaranteed only one result, also this is faster
             Map compoundsMap = this.queryService.findCompoundsByCIDs([cid])
             List<CompoundAdapter> compoundAdapters = compoundsMap.compoundAdapters
             if (compoundAdapters.size()) {
