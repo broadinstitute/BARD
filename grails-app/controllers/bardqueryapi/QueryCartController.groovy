@@ -12,71 +12,68 @@ class QueryCartController {
     // add a single element the shopping cart
     def add() {
 
-        def somethingWasAdded
+        def somethingWasAdded = null
         int somethingReallyChanged = Integer.parseInt(params.stt)
         if (params.class == 'class bardqueryapi.CartAssay') {
 
-            somethingWasAdded = queryCartService.addToShoppingCart( new CartAssay( params.assayTitle, params.id ) )
+            somethingWasAdded = queryCartService.addToShoppingCart(new CartAssay(params.assayTitle, params.id))
 
-        }  else if (params.class == 'class bardqueryapi.CartCompound') {
+        } else if (params.class == 'class bardqueryapi.CartCompound') {
 
-            CartCompound cartCompound = new CartCompound( smiles:params.smiles, name: params.name, compoundId: params.id )
-            somethingWasAdded = queryCartService.addToShoppingCart( cartCompound )
+            CartCompound cartCompound = new CartCompound(smiles: params.smiles, name: params.name, compoundId: params.id)
+            somethingWasAdded = queryCartService.addToShoppingCart(cartCompound)
 
         } else if (params.class == 'class bardqueryapi.CartProject') {
 
-            somethingWasAdded = queryCartService.addToShoppingCart( new CartProject( params.projectName,params.id  ) )
+            somethingWasAdded = queryCartService.addToShoppingCart(new CartProject(params.projectName, params.id))
 
         }
 
-        if (somethingWasAdded != null)  // something was added, so the display must change
-            if (somethingReallyChanged==0)  {
-                render(template: '/bardWebInterface/queryCartIndicator', model: getModelForSummary())
+        if (somethingWasAdded != null) {  // something was added, so the display must change
+            if (somethingReallyChanged == 0) {
+                render(template: '/bardWebInterface/queryCartIndicator', model: modelForSummary)
             } else {
-                render(template:'/bardWebInterface/sarCartContent', model: getModelForDetails())  // refresh the cart display via Ajax
+                render(template: '/bardWebInterface/sarCartContent', model: modelForDetails)  // refresh the cart display via Ajax
             }
-
-
-        return
-
+        }
     }
 
 
 
     def updateOnscreenCart() {
         int somethingReallyChanged = Integer.parseInt(params.stt)
-        if (somethingReallyChanged==0)  {
+        if (somethingReallyChanged == 0) {
             return updateSummary()
-        } else  {
-            return updateDetails()  // refresh the cart display via Ajax
         }
+        return updateDetails()  // refresh the cart display via Ajax
+
 
     }
 
     def updateSummary() {
-        render(template: '/bardWebInterface/queryCartIndicator', model: getModelForSummary())
+        render(template: '/bardWebInterface/queryCartIndicator', model: modelForSummary)
     }
 
     def updateDetails() {
-        render(template:'/bardWebInterface/sarCartContent', model: getModelForDetails())
+        render(template: '/bardWebInterface/sarCartContent', model: modelForDetails)
     }
 
     Map getModelForSummary() {
-        Map<String,List> mapOfUniqueItems = queryCartService.groupUniqueContentsByType(shoppingCartService)
+        Map<String, List> mapOfUniqueItems = queryCartService.groupUniqueContentsByType(shoppingCartService)
         Integer totalItemCount = queryCartService.totalNumberOfUniqueItemsInCart(mapOfUniqueItems)
-        Integer numberOfAssays = queryCartService.totalNumberOfUniqueItemsInCart(mapOfUniqueItems,QueryCartService.cartAssay)
-        Integer numberOfCompounds = queryCartService.totalNumberOfUniqueItemsInCart(mapOfUniqueItems,QueryCartService.cartCompound)
-        Integer numberOfProjects = queryCartService.totalNumberOfUniqueItemsInCart(mapOfUniqueItems,QueryCartService.cartProject)
-        return ['totalItemCount':totalItemCount, 'numberOfAssays':numberOfAssays, 'numberOfCompounds': numberOfCompounds, 'numberOfProjects': numberOfProjects];
+        Integer numberOfAssays = queryCartService.totalNumberOfUniqueItemsInCart(mapOfUniqueItems, QueryCartService.cartAssay)
+        Integer numberOfCompounds = queryCartService.totalNumberOfUniqueItemsInCart(mapOfUniqueItems, QueryCartService.cartCompound)
+        Integer numberOfProjects = queryCartService.totalNumberOfUniqueItemsInCart(mapOfUniqueItems, QueryCartService.cartProject)
+        return ['totalItemCount': totalItemCount, 'numberOfAssays': numberOfAssays, 'numberOfCompounds': numberOfCompounds, 'numberOfProjects': numberOfProjects];
     }
 
     Map getModelForDetails() {
-        Map<String,List> mapOfUniqueItems = queryCartService.groupUniqueContentsByType(shoppingCartService)
+        Map<String, List> mapOfUniqueItems = queryCartService.groupUniqueContentsByType(shoppingCartService)
         Integer totalItemCount = queryCartService.totalNumberOfUniqueItemsInCart(mapOfUniqueItems)
         List compounds = mapOfUniqueItems.get(QueryCartService.cartCompound)
         List assayDefinitions = mapOfUniqueItems.get(QueryCartService.cartAssay)
         List projects = mapOfUniqueItems.get(QueryCartService.cartProject)
-        return ['totalItemCount':totalItemCount, 'compounds':compounds, 'assayDefinitions':assayDefinitions, 'projects':projects]
+        return ['totalItemCount': totalItemCount, 'compounds': compounds, 'assayDefinitions': assayDefinitions, 'projects': projects]
     }
 
     // remove a single element
@@ -84,12 +81,12 @@ class QueryCartController {
         int idToRemove = Integer.parseInt(params.id)
         def shoppingItem = Shoppable.get(idToRemove)
         queryCartService.removeFromShoppingCart(shoppingItem)
-        render(template:'/bardWebInterface/sarCartContent', model: getModelForDetails())  // refresh the cart display
+        render(template: '/bardWebInterface/sarCartContent', model: modelForDetails)  // refresh the cart display
     }
 
     // empty out everything from the shopping cart
     def removeAll() {
         queryCartService.emptyShoppingCart()
-        render( template:'/bardWebInterface/sarCartContent', model: getModelForDetails() ) // refresh the cart display
+        render(template: '/bardWebInterface/sarCartContent', model: modelForDetails) // refresh the cart display
     }
 }

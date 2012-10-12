@@ -8,7 +8,7 @@ class CartCompound extends Shoppable {
     static int MAXIMUM_NAME_FIELD_LENGTH = 4000
     static int MAXIMUM_SMILES_FIELD_LENGTH = 1024
 
-    int compoundId  = 0
+    int compoundId = 0
     String smiles
     String name
     Boolean nameWasTruncated = false
@@ -18,56 +18,57 @@ class CartCompound extends Shoppable {
 
     }
 
-    CartCompound( String smiles, String name, int compoundId ) {
+    CartCompound(String smiles, String name, int compoundId) {
         this.smiles = smiles
         this.name = name
         this.compoundId = compoundId
     }
 
     static constraints = {
-        smiles (nullable: false, maxSize: MAXIMUM_SMILES_FIELD_LENGTH)
-        name (nullable: false, blank: false, maxSize: MAXIMUM_NAME_FIELD_LENGTH)
-        compoundId (min : 1)
+        smiles(nullable: false, maxSize: MAXIMUM_SMILES_FIELD_LENGTH)
+        name(nullable: false, blank: false, maxSize: MAXIMUM_NAME_FIELD_LENGTH)
+        compoundId(min: 1)
     }
-    public void setSmiles(String smiles)    {
-        if (smiles != null)  {
+
+    public void setSmiles(String smiles) {
+        if (smiles != null) {
             Integer lengthOfSmiles
             Integer incomingStringLength = smiles.length()
-            if  (incomingStringLength<=MAXIMUM_SMILES_FIELD_LENGTH) {
+            if (incomingStringLength <= MAXIMUM_SMILES_FIELD_LENGTH) {
                 lengthOfSmiles = incomingStringLength
-            }  else {
+            } else {
                 lengthOfSmiles = MAXIMUM_SMILES_FIELD_LENGTH
                 smileWasTruncated = true
             }
-            this.smiles = smiles.substring(0,lengthOfSmiles)
+            this.smiles = smiles.substring(0, lengthOfSmiles)
         }
     }
 
 
-    public void setName(String name)    {
-        if (StringUtils.isNotBlank(name))  {
+    public void setName(String name) {
+        if (StringUtils.isNotBlank(name)) {
             Integer lengthOfName
             Integer incomingStringLength = name.length()
-            if  (incomingStringLength<=MAXIMUM_NAME_FIELD_LENGTH) {
+            if (incomingStringLength <= MAXIMUM_NAME_FIELD_LENGTH) {
                 lengthOfName = incomingStringLength
-            }  else {
+            } else {
                 lengthOfName = MAXIMUM_NAME_FIELD_LENGTH
                 nameWasTruncated = true
             }
-            this.name = name.substring(0,lengthOfName)
+            this.name = name.substring(0, lengthOfName)
         }
     }
 
 
     boolean equals(o) {
-        if (this.is(o)) return true
-        if (!(o instanceof CartCompound)) return false
+        if (this.is(o)) {return true}
+        if (!(o instanceof CartCompound)) { return false}
 
         CartCompound that = (CartCompound) o
 
-        if (smiles != that.smiles) return false
-        if (name != that.name) return false
-        if (compoundId != that.compoundId) return false
+        if (smiles != that.smiles) { return false}
+        if (name != that.name) {return false}
+        if (compoundId != that.compoundId) {return false}
 
         return true
     }
@@ -82,15 +83,18 @@ class CartCompound extends Shoppable {
         String returnValue
         String trimmedName = name?.trim()
         if ((trimmedName == null) ||
-            (trimmedName?.length() == 0) ||
-            ("null".equals(trimmedName)))
+                (trimmedName?.length() == 0) ||
+                ("null".equals(trimmedName))) {
             returnValue = "PubChem CID=${compoundId.toString()}"
-        else
+        }
+        else {
             returnValue = trimmedName
+        }
 
         // if name was truncated, then add in ellipses
-        if (nameWasTruncated)
+        if (nameWasTruncated) {
             returnValue += "..."
+        }
 
         returnValue
     }

@@ -7,7 +7,7 @@ import results.ExperimentalValueType
 import results.ExperimentalValueUnit
 
 class MolSpreadSheetCell {
-    static final int SPREAD_SHEET_PRECISION = 3
+   // static final int SPREAD_SHEET_PRECISION = 3
 
     static hasOne = [spreadSheetActivityStorage: SpreadSheetActivityStorage]
 
@@ -34,7 +34,6 @@ class MolSpreadSheetCell {
         spreadSheetActivityStorage()
     }
 
-
     /**
      *  non image, no units  specified
      * @param value
@@ -43,10 +42,10 @@ class MolSpreadSheetCell {
     MolSpreadSheetCell(String value, MolSpreadSheetCellType molSpreadSheetCellType, SpreadSheetActivityStorage spreadSheetActivityStorage = null) {
         this.spreadSheetActivityStorage = spreadSheetActivityStorage
         this.molSpreadSheetCellType = molSpreadSheetCellType
-        if ( (this.molSpreadSheetCellType == MolSpreadSheetCellType.numeric) ||
-             (this.molSpreadSheetCellType == MolSpreadSheetCellType.percentageNumeric) ||
-             (this.molSpreadSheetCellType == MolSpreadSheetCellType.greaterThanNumeric) ||
-             (this.molSpreadSheetCellType == MolSpreadSheetCellType.lessThanNumeric)) {
+        if ((this.molSpreadSheetCellType == MolSpreadSheetCellType.numeric) ||
+                (this.molSpreadSheetCellType == MolSpreadSheetCellType.percentageNumeric) ||
+                (this.molSpreadSheetCellType == MolSpreadSheetCellType.greaterThanNumeric) ||
+                (this.molSpreadSheetCellType == MolSpreadSheetCellType.lessThanNumeric)) {
             if ("NaN".equals(value)) {
                 activity = false;
                 numInternalValue = new BigDecimal(0)
@@ -58,7 +57,7 @@ class MolSpreadSheetCell {
         } else if (this.molSpreadSheetCellType == MolSpreadSheetCellType.identifier) {
             if ("NaN".equals(value)) {
                 activity = false;
-                intInternalValue = new Integer(0)
+                intInternalValue = 0
             } else {
                 intInternalValue = new Integer(value)
             }
@@ -76,11 +75,11 @@ class MolSpreadSheetCell {
     MolSpreadSheetCell(String value, MolSpreadSheetCellType molSpreadSheetCellType, MolSpreadSheetCellUnit molSpreadSheetCellUnit, SpreadSheetActivityStorage spreadSheetActivityStorage = null) {
         this.spreadSheetActivityStorage = spreadSheetActivityStorage
         this.molSpreadSheetCellType = molSpreadSheetCellType
-        if ( (this.molSpreadSheetCellType==MolSpreadSheetCellType.numeric) ||
-                (this.molSpreadSheetCellType==MolSpreadSheetCellType.percentageNumeric) ||
-                (this.molSpreadSheetCellType==MolSpreadSheetCellType.greaterThanNumeric) ||
-                (this.molSpreadSheetCellType==MolSpreadSheetCellType.lessThanNumeric) ||
-                (this.molSpreadSheetCellType==MolSpreadSheetCellType.numeric) ){
+        if ((this.molSpreadSheetCellType == MolSpreadSheetCellType.numeric) ||
+                (this.molSpreadSheetCellType == MolSpreadSheetCellType.percentageNumeric) ||
+                (this.molSpreadSheetCellType == MolSpreadSheetCellType.greaterThanNumeric) ||
+                (this.molSpreadSheetCellType == MolSpreadSheetCellType.lessThanNumeric) ||
+                (this.molSpreadSheetCellType == MolSpreadSheetCellType.numeric)) {
             if ("NaN".equals(value)) {
                 activity = false;
                 numInternalValue = new BigDecimal(0)
@@ -115,8 +114,8 @@ class MolSpreadSheetCell {
      *
      * @return
      */
-    LinkedHashMap<String, String> mapForMolecularSpreadsheet() {
-        def returnValue = new LinkedHashMap<String, String>()
+    Map<String, String> mapForMolecularSpreadsheet() {
+        Map<String, String> returnValue = [:]
         if (molSpreadSheetCellType == MolSpreadSheetCellType.image) {
             returnValue = retrieveValues()
         } else {
@@ -129,30 +128,27 @@ class MolSpreadSheetCell {
      *
      * @return
      */
-    LinkedHashMap<String, String> retrieveValues() {
-        def returnValue = new LinkedHashMap<String, String>()
-        returnValue.put("name", strInternalValue)
-        returnValue.put("smiles", supplementalInternalValue)
-        returnValue
+    Map<String, String> retrieveValues() {
+        return ["name":strInternalValue,"smiles": supplementalInternalValue]
     }
 
 
 
     @Override
     String toString() {
-        String returnValue
-        if ((molSpreadSheetCellType==MolSpreadSheetCellType.lessThanNumeric) ||
-                (molSpreadSheetCellType==MolSpreadSheetCellType.greaterThanNumeric) ||
-                (molSpreadSheetCellType==MolSpreadSheetCellType.percentageNumeric) ||
-                (molSpreadSheetCellType==MolSpreadSheetCellType.numeric))    {
-        ExperimentalValue experimentalValue = new  ExperimentalValue( numInternalValue,
-                                                                     ExperimentalValueUnit.convert(molSpreadSheetCellUnit),
-                                                                     ExperimentalValueType.convert(molSpreadSheetCellType),activity)
+        String returnValue = null
+        if ((molSpreadSheetCellType == MolSpreadSheetCellType.lessThanNumeric) ||
+                (molSpreadSheetCellType == MolSpreadSheetCellType.greaterThanNumeric) ||
+                (molSpreadSheetCellType == MolSpreadSheetCellType.percentageNumeric) ||
+                (molSpreadSheetCellType == MolSpreadSheetCellType.numeric)) {
+            ExperimentalValue experimentalValue = new ExperimentalValue(numInternalValue,
+                    ExperimentalValueUnit.convert(molSpreadSheetCellUnit),
+                    ExperimentalValueType.convert(molSpreadSheetCellType), activity)
             returnValue = experimentalValue.toString()
-        } else if (molSpreadSheetCellType==MolSpreadSheetCellType.identifier)  {
-            returnValue =   intInternalValue
-        } else if (molSpreadSheetCellType==MolSpreadSheetCellType.string)  {
-            returnValue =   strInternalValue
+        } else if (molSpreadSheetCellType == MolSpreadSheetCellType.identifier) {
+            returnValue = intInternalValue
+        } else if (molSpreadSheetCellType == MolSpreadSheetCellType.string) {
+            returnValue = strInternalValue
         }
         returnValue
 
