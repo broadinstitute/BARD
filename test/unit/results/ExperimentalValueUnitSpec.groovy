@@ -17,7 +17,32 @@ class ExperimentalValueUnitSpec extends Specification {
         // Tear down logic here
     }
 
-    void "test roudnOff to Desired Precision"() {
+    void "test performUnitNormalization"() {
+        given:
+        ExperimentalValue experimentalValue = new ExperimentalValue(0.02, ExperimentalValueUnit.Micromolar, ExperimentalValueType.unknown, true)
+        final ExperimentalValueUnit originalUnit = experimentalValue.experimentalValueUnit
+        experimentalValue.insistOnOutputUnits = ExperimentalValueUnit.unknown
+        when:
+        experimentalValue.performUnitNormalization(ExperimentalValueUnit.unknown, ExperimentalValueUnit.unknown)
+
+        then:
+        assert originalUnit == experimentalValue.experimentalValueUnit
+
+    }
+
+    void "test insistOnOutputUnit is False"() {
+        given:
+        ExperimentalValue experimentalValue = new ExperimentalValue(0.02, ExperimentalValueUnit.Micromolar, ExperimentalValueType.unknown, true)
+        experimentalValue.insistOnOutputUnits = ExperimentalValueUnit.unknown
+        when: "#label"
+        Boolean bool = experimentalValue.insistOnOutputUnit()
+
+        then: "The resulting search filters size must equal the expected value"
+        assert !bool
+
+    }
+
+    void "test roundOff to Desired Precision"() {
         given:
         ExperimentalValue experimentalValue = new ExperimentalValue(initialValue, initialUnit, ExperimentalValueType.numeric, true)
         when: "#label"
@@ -39,7 +64,6 @@ class ExperimentalValueUnitSpec extends Specification {
         assertNotNull(experimentalValue)
 
         then: "The resulting search filters size must equal the expected value"
-        println experimentalValue.toString()
         assert experimentalValue.toString() == stringValue
 
         where:
@@ -75,9 +99,6 @@ class ExperimentalValueUnitSpec extends Specification {
         "converting unit values"                | false      | 1.234        | "1.23"
         "converting unit values negative value" | false      | -1.234       | "-1.23"
     }
-
-
-
 
     void "test what we do when there is nothing to print"() {
         when: "#label"
@@ -149,19 +170,21 @@ class ExperimentalValueUnitSpec extends Specification {
     }
 
     void "test toString #label"() {
-        when: "#label"
-        ExperimentalValue experimentalValue = new ExperimentalValue(new BigDecimal("2.0"), new Boolean(false))
+        given:
+        ExperimentalValue experimentalValue = new ExperimentalValue(new BigDecimal("2.0"), Boolean.FALSE)
         experimentalValue.activity = activity
         experimentalValue.experimentalValueType = experimentValueType
 
+        when: "#label"
+        final String stringRepresentation = experimentalValue.toString()
         then: "The resulting search filters size must equal the expected value"
-        assert experimentalValue.toString() == expectedStringValue
+        assert stringRepresentation == expectedStringValue
 
         where:
         label                                                         | activity | experimentValueType                      | expectedStringValue
         "No Activity"                                                 | false    | ExperimentalValueType.greaterThanNumeric | "(no activity)"
         "Experiment Value Type == lessThanNumeric and activity==true" | true     | ExperimentalValueType.lessThanNumeric    | "< 2"
-        "No ExperimentalValueType and No activity"                    | false    | null                                     | "(no activity)"
+        "No ExperimentalValueType and No activity"                    | true     | null                                     | "2.0"
     }
 
     void "test type conversions"() {
@@ -171,7 +194,7 @@ class ExperimentalValueUnitSpec extends Specification {
         ExperimentalValueUnit experimentalValueUnit = ExperimentalValueUnit.unknown
         assertNotNull(experimentalValueUnit)
 
-        then: "The resulting search filters size must equal the expected value"
+        then:
         assert outUnit == ExperimentalValueUnit.convert(inUnit)
 
         where:
