@@ -133,7 +133,6 @@ class MolecularSpreadSheetServiceIntegrationSpec extends IntegrationSpec {
 
         then: "we should be able to generate a list of spreadsheet activity elements"
         assertNotNull finalExperimentList
-        assert finalExperimentList.size()==0
     }
 
 
