@@ -29,26 +29,30 @@ grails.project.dependency.resolution = {
         // specify dependencies here under either 'build', 'compile', 'runtime', 'test' or 'provided' scopes eg.
 
         // runtime 'mysql:mysql-connector-java:5.1.16'
-        test "org.spockframework:spock-core:0.6-groovy-1.8"
+        test ("org.spockframework:spock-core:0.6-groovy-1.8") {
+            exclude "groovy-all"
+        }
         test "org.objenesis:objenesis:1.2" // used by spock for Mocking objects that have no args constructor
 
-        compile('org.codehaus.groovy.modules.http-builder:http-builder:0.5.2') {
-            excludes "commons-logging", "xml-apis", "groovy"
+        runtime('org.codehaus.groovy.modules.http-builder:http-builder:0.5.2') {
+            excludes "commons-logging", "xml-apis", "groovy", "httpclient", "httpcore", "nekohtml"
         }
         test "org.codehaus.geb:geb-spock:$gebVersion"
         test("org.seleniumhq.selenium:selenium-htmlunit-driver:$seleniumVersion") {
-            exclude "xml-apis"
+            excludes "xml-apis", "commons-io"
         }
         test("org.seleniumhq.selenium:selenium-chrome-driver:$seleniumVersion") {
             exclude "xml-apis"
         }
 
         test("org.seleniumhq.selenium:selenium-firefox-driver:$seleniumVersion") {
-            exclude "xml-apis"
+            excludes "xml-apis", "commons-io"
         }
         compile 'org.apache.commons:commons-lang3:3.1'
-        compile 'org.apache.httpcomponents:httpcomponents-core:4.1.1'
-        compile 'org.apache.httpcomponents:httpclient:4.1.1'
+        provided 'org.apache.httpcomponents:httpcomponents-core:4.1.3'
+        provided ('org.apache.httpcomponents:httpclient:4.1.2') {
+            excludes "commons-codec", "commons-logging"
+        }
         compile 'org.codehaus.jackson:jackson-core-asl:1.9.2'
         compile 'org.codehaus.jackson:jackson-mapper-asl:1.9.2'
         compile 'ChemAxon:ChemAxonJChemBase:5.10'
