@@ -73,17 +73,16 @@ class ChemAxonControllerUnitSpec extends Specification {
         final byte[] returnedImage = response.contentAsByteArray
 
         then:
-        queryService.findCompoundsByCIDs([1234]) >> {[compoundAdapters: compoundAdapters, facets: null, nHits: 0]}
+        queryService.showCompound(_) >> {compoundAdptr}
         chemAxonService.generateStructurePNG(smiles, width, height) >> {bytesArra}
         assert returnedImage.size() == expectedByteArraySize
 
         where:
-        label                          | smiles                  | width | height | bytesArra           | cid    | expectedByteArraySize | compoundAdapters
-        "get back a byte array"        | 'C1=CC2=C(C=C1)C=CC=C2' | 300   | 300    | [1, 2, 3] as byte[] | '1234' | 3                     | [compoundAdapter]
-        "multiple compoundAdapters"    | 'C1=CC2=C(C=C1)C=CC=C2' | 300   | 300    | [1, 2, 3] as byte[] | '1234' | 3                     | [compoundAdapter, compoundAdapter]
-        "no compoundAdapters"          | 'C1=CC2=C(C=C1)C=CC=C2' | 300   | 300    | [1, 2, 3] as byte[] | '1234' | 0                     | []
-        "get back an empty byte array" | 'C1=CC2=C(C=C1)C=CC=C2' | 200   | 200    | [] as byte[]        | '1234' | 0                     | [compoundAdapter]
-        "cid is null"                  | 'C1=CC2=C(C=C1)C=CC=C2' | 300   | 300    | [1, 2, 3] as byte[] | null   | 0                     | [compoundAdapter]
+        label                          | smiles                  | width | height | bytesArra           | cid    | expectedByteArraySize | compoundAdptr
+        "get back a byte array"        | 'C1=CC2=C(C=C1)C=CC=C2' | 300   | 300    | [1, 2, 3] as byte[] | '1234' | 3                     | compoundAdapter
+        "no compoundAdapters"          | 'C1=CC2=C(C=C1)C=CC=C2' | 300   | 300    | [1, 2, 3] as byte[] | '1234' | 0                     | null
+        "get back an empty byte array" | 'C1=CC2=C(C=C1)C=CC=C2' | 200   | 200    | [] as byte[]        | '1234' | 0                     | compoundAdapter
+        "cid is null"                  | 'C1=CC2=C(C=C1)C=CC=C2' | 300   | 300    | [1, 2, 3] as byte[] | null   | 0                     | compoundAdapter
     }
 
     CompoundAdapter buildCompoundAdapter(final Long cid, final String smiles) {
