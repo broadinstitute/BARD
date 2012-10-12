@@ -25,12 +25,11 @@ class ChemAxonController {
             Long cid = new Long(params.cid)
             Map compoundsMap = this.queryService.findCompoundsByCIDs([cid])
             List<CompoundAdapter> compoundAdapters = compoundsMap.compoundAdapters
-            if (compoundAdapters.size() == 1) {
+            if (compoundAdapters.size()) {
                 String smiles = compoundAdapters.first().structureSMILES
                 bytes = chemAxonService.generateStructurePNG(smiles, width, height)
             }
-            //TODO; What if more than one?
-            //It seems that we should separate this into 2 different methods
+            //TODO: It seems that we should separate this into 2 different methods
         }
 
         response.contentType = 'image/png'
