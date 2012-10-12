@@ -3,7 +3,7 @@
         <li>
             <div class="thumbnail">
                 <img alt="${scaffold.scafsmi}" title="Scaffold Id: ${scaffold.scafid}"
-                     src="${createLink(controller: 'chemAxon', action: 'generateStructureImage', params: [smiles: scaffold.scafsmi, width: 50, height: 50])}"/>
+                     src="${createLink(controller: 'chemAxon', action: 'generateStructureImageFromSmiles', params: [smiles: scaffold.scafsmi, width: 50, height: 50])}"/>
                 <div class="warning-level warning-level-${scaffold.warningLevel}">
                     ${scaffold.pScore}
                 </div>
@@ -13,7 +13,7 @@
                 <div class='popover-content-wrapper' id='scaffold_${scaffold.scafid}' style="display: none;">
                     <div class="center-aligned">
                         <img alt="${scaffold.scafsmi}" title="Scaffold Id: ${scaffold.scafid}"
-                             src="${createLink(controller: 'chemAxon', action: 'generateStructureImage', params: [smiles: scaffold.scafsmi, width: 200, height: 200])}"/>
+                             src="${createLink(controller: 'chemAxon', action: 'generateStructureImageFromSmiles', params: [smiles: scaffold.scafsmi, width: 200, height: 200])}"/>
                     </div>
                     <ul>
                         <li>Promiscuity Score: ${scaffold.pScore}</li>

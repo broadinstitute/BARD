@@ -13,26 +13,26 @@ class ChemAxonController {
         session.putValue('smiles', params.smiles)
     }
 
-    def generateStructureImage() {
+    def generateStructureImageFromSmiles(String smiles, Integer width, Integer height) {
         byte[] bytes = []
-        Integer width = (params.width ?: 300) as Integer
-        Integer height = (params.height ?: 300) as Integer
+        Integer w = (width ?: 300) as Integer
+        Integer h = (height ?: 300) as Integer
 
-        if (params.smiles) {
-            bytes = chemAxonService.generateStructurePNG(params.smiles, width, height)
-        }
-        else if (params.cid && params.cid?.isLong()) {
-            Long cid = new Long(params.cid)
-            CompoundAdapter compoundAdapter = this.queryService.showCompound(cid)
-            if (compoundAdapter) {
-                String smiles = compoundAdapter.structureSMILES
-                bytes = chemAxonService.generateStructurePNG(smiles, width, height)
-                //TODO: It seems that we should separate this into 2 different methods
-            }
+        if (smiles) {
+            bytes = chemAxonService.generateStructurePNG(smiles, w, h)
         }
 
         response.contentType = 'image/png'
         response.outputStream.setBytes(bytes)
+    }
+
+
+    def generateStructureImageFromCID(Long cid, Integer width, Integer height) {
+        CompoundAdapter compoundAdapter = cid ? this.queryService.showCompound(cid) : null
+        if (compoundAdapter) {
+            String smiles = compoundAdapter.structureSMILES
+            generateStructureImageFromSmiles(smiles, width, height)
+        }
     }
 
     def marvinSketch() {}

@@ -60,7 +60,7 @@
                                  data-title="Copy SMILES for structure to clipboard"
                                  data-trigger="click" data-placement="left" data-content="${retrievedSmiles}">
                                 <img alt="${retrievedSmiles}" title="Click to Copy SMILES"
-                                     src="${createLink(controller: 'chemAxon', action: 'generateStructureImage', params: [smiles: retrievedSmiles, width: 150, height: 120])}"/>
+                                     src="${createLink(controller: 'chemAxon', action: 'generateStructureImageFromSmiles', params: [smiles: retrievedSmiles, width: 150, height: 120])}"/>
                             </div>
                         </g:else>
 

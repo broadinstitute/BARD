@@ -42,7 +42,7 @@
                 </td>
                 <td style="min-width: 180px;">
                     <img alt="SID: ${experimentData.sid}" title="SID: ${experimentData.sid}"
-                         src="${createLink(controller: 'chemAxon', action: 'generateStructureImage', params: [cid: experimentData.cid, width: 180, height: 150])}"/>
+                         src="${createLink(controller: 'chemAxon', action: 'generateStructureImageFromCID', params: [cid: experimentData.cid, width: 180, height: 150])}"/>
                 </td>
                 <td>${experimentData.activityOutcome?.label}</td>
                 <td>
