@@ -5,7 +5,8 @@ import org.apache.log4j.DailyRollingFileAppender
 ncgc.server.root.url = "http://bard.nih.gov/api/v6"
 promiscuityscrores.root.url = "${ncgc.server.root.url}/plugins/badapple/prom/cid/"
 //override in config file for environment
-grails.serverURL = "http://localhost:8080/bardwebquery"
+server.port=8080
+grails.serverURL = "http://localhost:${server.port}/bardwebquery"
 //URL to the ROOT of the cap server
 bard.cap.home = "http://localhost:8081/BARD/"
 bard.cap.assay = "${bard.cap.home}assayDefinition/show/"
