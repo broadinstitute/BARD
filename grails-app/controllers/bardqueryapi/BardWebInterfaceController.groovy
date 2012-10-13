@@ -81,7 +81,7 @@ class BardWebInterfaceController {
                     render(template: 'promiscuity', model: [scaffolds: promiscuityScore.scaffolds])
                 }
                 else { //status code of NOT OK returned. Usually CID has no promiscuity score
-                    return response.sendError(results?.status,
+                    return response.sendError(results.status,
                             "${results.message}")
                 }
             } catch (Exception ee) { //error is thrown
@@ -106,7 +106,7 @@ class BardWebInterfaceController {
     def searchCompoundsByIDs(SearchCommand searchCommand) {
         if (StringUtils.isNotBlank(searchCommand.searchString)) {
             removeDuplicatesFromSearchString(searchCommand)
-            final List<SearchFilter> searchFilters = searchCommand.appliedFilters ?:[]
+            final List<SearchFilter> searchFilters = searchCommand.appliedFilters ?: []
             this.queryService.findFiltersInSearchBox(searchFilters, searchCommand.searchString)
 
             try {
@@ -143,7 +143,7 @@ class BardWebInterfaceController {
 
         if (StringUtils.isNotBlank(searchCommand.searchString)) {
             removeDuplicatesFromSearchString(searchCommand)
-            final List<SearchFilter> searchFilters = searchCommand.appliedFilters?:[]
+            final List<SearchFilter> searchFilters = searchCommand.appliedFilters ?: []
             try {
                 final List<Long> adids = searchStringToIdList(searchCommand.searchString)
                 final Map assayAdapterMap = this.queryService.findAssaysByADIDs(adids, searchFilters)
@@ -173,7 +173,7 @@ class BardWebInterfaceController {
 
         if (StringUtils.isNotBlank(searchCommand.searchString)) {
             removeDuplicatesFromSearchString(searchCommand)
-            final List<SearchFilter> searchFilters = searchCommand.appliedFilters ?:[]
+            final List<SearchFilter> searchFilters = searchCommand.appliedFilters ?: []
 //            if (!searchFilters) {//user SearchCommand
 //                searchFilters = []
 //            }
@@ -365,7 +365,7 @@ class SearchHelper {
         removeDuplicatesFromSearchString(searchCommand)
         final String[] searchStringSplit = searchCommand.searchString.split(":")
         if (searchStringSplit.length == 2) {
-            final List<SearchFilter> searchFilters = searchCommand.appliedFilters ?:[]
+            final List<SearchFilter> searchFilters = searchCommand.appliedFilters ?: []
             queryService.findFiltersInSearchBox(searchFilters, searchCommand.searchString)
 
             final String searchTypeString = searchStringSplit[0]
@@ -388,7 +388,7 @@ class SearchHelper {
     def handleAssaySearches(final bardqueryapi.IQueryService queryService, final SearchCommand searchCommand) {
         if (StringUtils.isNotBlank(searchCommand.searchString)) {
             removeDuplicatesFromSearchString(searchCommand)
-            final List<SearchFilter> searchFilters = searchCommand.appliedFilters?:[]
+            final List<SearchFilter> searchFilters = searchCommand.appliedFilters ?: []
             queryService.findFiltersInSearchBox(searchFilters, searchCommand.searchString)
             final String searchString = searchCommand.searchString.trim()
 
@@ -422,7 +422,7 @@ class SearchHelper {
         if (StringUtils.isNotBlank(searchCommand.searchString)) {
 
             removeDuplicatesFromSearchString(searchCommand)
-            List<SearchFilter> searchFilters = searchCommand.appliedFilters?:[]
+            List<SearchFilter> searchFilters = searchCommand.appliedFilters ?: []
             queryService.findFiltersInSearchBox(searchFilters, searchCommand.searchString)
             try {
                 final String searchString = searchCommand.searchString.trim()
@@ -456,7 +456,7 @@ class SearchHelper {
 
         if (StringUtils.isNotBlank(searchCommand.searchString)) {
             removeDuplicatesFromSearchString(searchCommand)
-            final List<SearchFilter> searchFilters = searchCommand.appliedFilters?:[]
+            final List<SearchFilter> searchFilters = searchCommand.appliedFilters ?: []
             queryService.findFiltersInSearchBox(searchFilters, searchCommand.searchString)
             try {
                 final String searchString = searchCommand.searchString.trim()
