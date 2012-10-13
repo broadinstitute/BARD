@@ -16,16 +16,19 @@ class QueryCartController {
         int somethingReallyChanged = Integer.parseInt(params.stt)
         if (params.class == 'class bardqueryapi.CartAssay') {
 
-            somethingWasAdded = queryCartService.addToShoppingCart(new CartAssay(params.assayTitle, params.id))
+           // somethingWasAdded = queryCartService.addToShoppingCart(new CartAssay(params.assayTitle, params.id))
+            somethingWasAdded = handleAddingToShoppingCart(new CartAssay(params.assayTitle, params.id) )
 
         } else if (params.class == 'class bardqueryapi.CartCompound') {
 
             CartCompound cartCompound = new CartCompound(smiles: params.smiles, name: params.name, compoundId: params.id)
-            somethingWasAdded = queryCartService.addToShoppingCart(cartCompound)
+//            somethingWasAdded = queryCartService.addToShoppingCart(cartCompound)
+            somethingWasAdded = handleAddingToShoppingCart(cartCompound)
 
         } else if (params.class == 'class bardqueryapi.CartProject') {
 
-            somethingWasAdded = queryCartService.addToShoppingCart(new CartProject(params.projectName, params.id))
+//            somethingWasAdded = queryCartService.addToShoppingCart(new CartProject(params.projectName, params.id))
+            somethingWasAdded = handleAddingToShoppingCart(new CartProject(params.projectName, params.id))
 
         }
 
@@ -38,7 +41,19 @@ class QueryCartController {
         }
     }
 
-
+    def handleAddingToShoppingCart(Shoppable shoppable) {
+        def returnValue
+        if (shoppable) {
+            try {
+                returnValue = queryCartService.addToShoppingCart(shoppable)
+            } catch (Exception exception) {
+                log.error("Error performing assay search", exception)
+            }
+        } else {
+            log.error("Received unexpected null shoppable")
+        }
+        returnValue
+    }
 
     def updateOnscreenCart() {
         int somethingReallyChanged = Integer.parseInt(params.stt)
@@ -59,13 +74,13 @@ class QueryCartController {
     }
 
     Map getModelForSummary() {
-        Map<String, List> mapOfUniqueItems = queryCartService.groupUniqueContentsByType(shoppingCartService)
-        Integer totalItemCount = queryCartService.totalNumberOfUniqueItemsInCart(mapOfUniqueItems)
-        Integer numberOfAssays = queryCartService.totalNumberOfUniqueItemsInCart(mapOfUniqueItems, QueryCartService.cartAssay)
-        Integer numberOfCompounds = queryCartService.totalNumberOfUniqueItemsInCart(mapOfUniqueItems, QueryCartService.cartCompound)
-        Integer numberOfProjects = queryCartService.totalNumberOfUniqueItemsInCart(mapOfUniqueItems, QueryCartService.cartProject)
-        return ['totalItemCount': totalItemCount, 'numberOfAssays': numberOfAssays, 'numberOfCompounds': numberOfCompounds, 'numberOfProjects': numberOfProjects];
-    }
+            Map<String, List> mapOfUniqueItems = queryCartService.groupUniqueContentsByType(shoppingCartService)
+            Integer totalItemCount = queryCartService.totalNumberOfUniqueItemsInCart(mapOfUniqueItems)
+            Integer numberOfAssays = queryCartService.totalNumberOfUniqueItemsInCart(mapOfUniqueItems, QueryCartService.cartAssay)
+            Integer numberOfCompounds = queryCartService.totalNumberOfUniqueItemsInCart(mapOfUniqueItems, QueryCartService.cartCompound)
+            Integer numberOfProjects = queryCartService.totalNumberOfUniqueItemsInCart(mapOfUniqueItems, QueryCartService.cartProject)
+            return ['totalItemCount': totalItemCount, 'numberOfAssays': numberOfAssays, 'numberOfCompounds': numberOfCompounds, 'numberOfProjects': numberOfProjects];
+     }
 
     Map getModelForDetails() {
         Map<String, List> mapOfUniqueItems = queryCartService.groupUniqueContentsByType(shoppingCartService)
@@ -79,8 +94,12 @@ class QueryCartController {
     // remove a single element
     def remove() {
         int idToRemove = Integer.parseInt(params.id)
-        def shoppingItem = Shoppable.get(idToRemove)
-        queryCartService.removeFromShoppingCart(shoppingItem)
+        try{
+            def shoppingItem = Shoppable.get(idToRemove)
+            queryCartService.removeFromShoppingCart(shoppingItem)
+        } catch (Exception e) {
+            log.error("Problem removing item $idToRemove")
+        }
         render(template: '/bardWebInterface/sarCartContent', model: modelForDetails)  // refresh the cart display
     }
 
