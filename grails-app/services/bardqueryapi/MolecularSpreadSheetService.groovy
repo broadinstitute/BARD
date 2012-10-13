@@ -13,10 +13,10 @@ import org.apache.commons.lang.NotImplementedException
 
 class MolecularSpreadSheetService {
 
-    final QueryCartService queryCartService
-    final QueryServiceWrapper queryServiceWrapper
-    final ShoppingCartService shoppingCartService
-    final IQueryService queryService
+    QueryCartService queryCartService
+    QueryServiceWrapper queryServiceWrapper
+    ShoppingCartService shoppingCartService
+    IQueryService queryService
 
     /**
      * High-level routine to pull information out of the query cart and store it into a data structure suitable
