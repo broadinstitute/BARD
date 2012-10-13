@@ -307,10 +307,7 @@ class MolecularSpreadSheetServiceIntegrationSpec extends IntegrationSpec {
     // an example of a problem
     void "test indirect accumulation of expts2"() {
 
-        given: "That we casn retrieve the expts for project 274" //////////
-
-//        List<Long> cartProjectIdList = new ArrayList<Long>()
-//        cartProjectIdList.add(new Long(274))
+        given: "That we casn retrieve the expts for project 274"
         final Project project = queryServiceWrapper.restProjectService.get(new Long(274))
         List<Experiment> allExperiments = []
         //for (Project project : projects) {
@@ -340,7 +337,7 @@ class MolecularSpreadSheetServiceIntegrationSpec extends IntegrationSpec {
 
                     // Value experimentValue
                     while (experimentIterator.hasNext()) {
-                        //experimentValue = experimentIterator.next()
+                        experimentIterator.next()
                         dataCount++
                     }
                 }

@@ -8,20 +8,18 @@ class CartProject extends Shoppable {
     Long projectId = 0L
 
     static constraints = {
-        projectName    blank: false;
+        projectName blank: false;
     }
 
-    CartProject (String projectName, String projectIdStr)   {
-        this.projectName =  projectName
-        this.projectId =  Long.parseLong(projectIdStr)
+    CartProject(String projectName, String projectIdStr) {
+        this.projectName = projectName
+        this.projectId = Long.parseLong(projectIdStr)
     }
 
-    CartProject (String projectName, Long projectIdStr)   {
-        this.projectName =  projectName
-        this.projectId =  projectIdStr
+    CartProject(String projectName, Long projectIdStr) {
+        this.projectName = projectName
+        this.projectId = projectIdStr
     }
-
-
 
     /**
      *
@@ -54,4 +52,4 @@ class CartProject extends Shoppable {
     }
 
 
- }
+}
