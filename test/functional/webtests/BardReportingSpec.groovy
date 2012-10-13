@@ -13,13 +13,12 @@ import webtests.pages.LoginPage
  * Time: 2:46 PM
  * To change this template use File | Settings | File Templates.
  */
-abstract class BardReportingSpec extends GebReportingSpec {
-    //TODO Consider using a literal map here -- if someone tries to assign a user with more than one role this whole thing can break
+class BardReportingSpec extends GebReportingSpec {
     @Shared protected Map<String, Map> usernameUserPropsMap = [:]
 
     void setupSpec() {
         RemoteControl remote = new RemoteControl()
-        String baseUrl = remote { ctx.grailsApplication.config.grails.serverURL }
+      //  String baseUrl = remote { ctx.grailsApplication.config.grails.serverURL }
 
         def mockUsers = remote { ctx.grailsApplication.config.CbipCrowd.mockUsers }
         //Map userProps =[:]
@@ -27,8 +26,7 @@ abstract class BardReportingSpec extends GebReportingSpec {
             Map userProps = user.value
             usernameUserPropsMap.put(userProps.username, userProps)
         }
-        println usernameUserPropsMap
-    }
+     }
 
     HomePage logInWithRole(String role) {
         Map.Entry<String, Map> userInfoMap = usernameUserPropsMap.find { k, v ->

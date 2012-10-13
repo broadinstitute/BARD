@@ -9,6 +9,7 @@ import molspreadsheet.MolSpreadSheetCell
 import molspreadsheet.MolSpreadSheetData
 import molspreadsheet.SpreadSheetActivityStorage
 import bard.core.*
+import org.apache.commons.lang.NotImplementedException
 
 class MolecularSpreadSheetService {
 
@@ -34,7 +35,7 @@ class MolecularSpreadSheetService {
                 retrieveCartAssayFromShoppingCart(),
                 retrieveCartProjectFromShoppingCart())
 
-        molSpreadSheetDataBuilderDirector.getMolSpreadSheetData()
+        molSpreadSheetDataBuilderDirector.molSpreadSheetData
     }
 
     /**
@@ -57,17 +58,22 @@ class MolecularSpreadSheetService {
      */
     Boolean weHaveEnoughDataToMakeASpreadsheet() {
         boolean returnValue = false
-        LinkedHashMap<String, List> itemsInShoppingCart = queryCartService.groupUniqueContentsByType(shoppingCartService)
-        if (queryCartService?.totalNumberOfUniqueItemsInCart(itemsInShoppingCart, QueryCartService.cartProject) > 0)
+        Map<String, List> itemsInShoppingCart = queryCartService.groupUniqueContentsByType(shoppingCartService)
+        if (queryCartService?.totalNumberOfUniqueItemsInCart(itemsInShoppingCart, QueryCartService.cartProject) > 0) {
             returnValue = true
-        else if (queryCartService?.totalNumberOfUniqueItemsInCart(itemsInShoppingCart, QueryCartService.cartAssay) > 0)
+        }
+        else if (queryCartService?.totalNumberOfUniqueItemsInCart(itemsInShoppingCart,
+                QueryCartService.cartAssay) > 0) {
             returnValue = true
-        else if (queryCartService?.totalNumberOfUniqueItemsInCart(itemsInShoppingCart, QueryCartService.cartCompound) > 0)
+        }
+        else if (queryCartService?.totalNumberOfUniqueItemsInCart(itemsInShoppingCart,
+                QueryCartService.cartCompound) > 0) {
             returnValue = true
+        }
         returnValue
     }
 
-     /**
+    /**
      * For a set of experiments
      * @param experimentList
      * @param etag
@@ -81,14 +87,14 @@ class MolecularSpreadSheetService {
         // Note that each experiment corresponds to a column in our spreadsheet
         int columnCount = 0
         for (Experiment experiment in experimentList) {
-           // List<Long> collectCompounds = []
+            // List<Long> collectCompounds = []
             final ServiceIterator<Compound> compoundsTestedInExperimentIter = queryServiceWrapper.restExperimentService.compounds(experiment)
 //            while (compoundsTestedInExperimentIter.hasNext()) {
 //                final Compound compound = compoundsTestedInExperimentIter.next()
 //                CompoundAdapter c = new CompoundAdapter(compound)
 //                collectCompounds.add(c.pubChemCID)
 //            }
-            List<Long> collectCompounds = compoundsTestedInExperimentIter.collect{Compound compound -> new CompoundAdapter(compound).pubChemCID }
+            List<Long> collectCompounds = compoundsTestedInExperimentIter.collect {Compound compound -> new CompoundAdapter(compound).pubChemCID }
             //only do this if compounds is not empty
             if (!compounds.isEmpty()) {
                 //find the intersection of the two Compound lists
@@ -122,7 +128,7 @@ class MolecularSpreadSheetService {
     protected void populateMolSpreadSheetData(MolSpreadSheetData molSpreadSheetData, List<Experiment> experimentList, List<SpreadSheetActivity> spreadSheetActivityList) {
         // now step through the data and place into molSpreadSheetData
         int columnPointer = 0
-        Map<String,MolSpreadSheetCell> map   = [:]
+        Map<String, MolSpreadSheetCell> map = [:]
         // we need to handle each experiment separately ( until NCGC can do this in the background )
         // Note that each experiment corresponds to a column in our spreadsheet
         for (Experiment experiment in experimentList) {
@@ -138,12 +144,13 @@ class MolecularSpreadSheetService {
                             MolSpreadSheetCellType.numeric,
                             MolSpreadSheetCellUnit.Molar,
                             spreadSheetActivityStorage)
-                    if (spreadSheetActivityStorage == null)
+                    if (spreadSheetActivityStorage == null) {
                         molSpreadSheetCell.activity = false
+                    }
                     map.put(arrayKey, molSpreadSheetCell)
                 }
-               // else {
-                    //println "did not expect cid = ${spreadSheetActivity.cid}"
+                // else {
+                //println "did not expect cid = ${spreadSheetActivity.cid}"
                 //}
 
             }
@@ -155,7 +162,7 @@ class MolecularSpreadSheetService {
 
 
     protected List<CartCompound> retrieveCartCompoundFromShoppingCart() {
-        List<CartCompound> cartCompoundList = new ArrayList<CartCompound>()
+        List<CartCompound> cartCompoundList = []
         for (CartCompound cartCompound in (queryCartService.groupUniqueContentsByType(shoppingCartService)[(QueryCartService.cartCompound)])) {
             cartCompoundList.add(cartCompound)
         }
@@ -163,7 +170,7 @@ class MolecularSpreadSheetService {
     }
 
     protected List<CartAssay> retrieveCartAssayFromShoppingCart() {
-        List<CartAssay> cartAssayList = new ArrayList<CartAssay>()
+        List<CartAssay> cartAssayList = []
         for (CartAssay cartAssay in (queryCartService.groupUniqueContentsByType(shoppingCartService)[(QueryCartService.cartAssay)])) {
             cartAssayList.add(cartAssay)
         }
@@ -171,7 +178,7 @@ class MolecularSpreadSheetService {
     }
 
     protected List<CartProject> retrieveCartProjectFromShoppingCart() {
-        List<CartProject> cartProjectList = new ArrayList<CartProject>()
+        List<CartProject> cartProjectList = []
         for (CartProject cartProject in (queryCartService.groupUniqueContentsByType(shoppingCartService)[(QueryCartService.cartProject)])) {
             cartProjectList.add(cartProject)
         }
@@ -196,7 +203,13 @@ class MolecularSpreadSheetService {
         // add specific values for the cid column
         int rowCount = 0
         for (CartCompound cartCompound in cartCompoundList) {
-            updateMolSpreadSheetDataToReferenceCompound(molSpreadSheetData, rowCount++, cartCompound.compoundId as Long, cartCompound.name, cartCompound.smiles)
+            updateMolSpreadSheetDataToReferenceCompound(
+                    molSpreadSheetData,
+                    rowCount++,
+                    cartCompound.compoundId as Long,
+                    cartCompound.name,
+                    cartCompound.smiles
+            )
         }
 
     }
@@ -213,7 +226,7 @@ class MolecularSpreadSheetService {
         if (molSpreadSheetData.rowPointer == null) {
             molSpreadSheetData.rowPointer = [:]
         }
-        if (molSpreadSheetData.mssData == null){
+        if (molSpreadSheetData.mssData == null) {
             molSpreadSheetData.rowPointer = [:]
         }
 
@@ -264,17 +277,18 @@ class MolecularSpreadSheetService {
     protected void populateMolSpreadSheetColumnMetadata(MolSpreadSheetData molSpreadSheetData, List<Experiment> experimentList) {
 
         // Check variable that we plan to modify
-        if (molSpreadSheetData.mssHeaders == null) molSpreadSheetData.mssHeaders = new ArrayList<String>()
+        if (molSpreadSheetData.mssHeaders == null) {
+            molSpreadSheetData.mssHeaders = []
+        }
 
         // now retrieve the header names from the assays
         molSpreadSheetData.mssHeaders.add("Struct")
         molSpreadSheetData.mssHeaders.add("CID")
         molSpreadSheetData.mssHeaders.add("UNM Promiscuity Analysis")
-        for (Experiment experiment in experimentList)
+        for (Experiment experiment in experimentList) {
             molSpreadSheetData.mssHeaders.add(experiment.name)
+        }
     }
-
-
 
     /**
      * Convert Assay ODs to expt ids
@@ -282,13 +296,13 @@ class MolecularSpreadSheetService {
      * @return
      */
     protected List<Experiment> assaysToExperiments(final Collection<Assay> assays) {
-        final RESTAssayService restAssayService = this.queryServiceWrapper.getRestAssayService()
+        final RESTAssayService restAssayService = this.queryServiceWrapper.restAssayService
         List<Experiment> allExperiments = []
         if (!assays.isEmpty()) {
             Iterator<Assay> assayIterator = assays.iterator()
             while (assayIterator.hasNext()) {
                 Assay assay = assayIterator.next()
-                final ServiceIterator<Experiment> serviceIterator = restAssayService.iterator(assay, Experiment.class)
+                final ServiceIterator<Experiment> serviceIterator = restAssayService.iterator(assay, Experiment)
                 Collection<Experiment> experimentList = serviceIterator.collect()
                 allExperiments.addAll(experimentList)
             }
@@ -311,11 +325,11 @@ class MolecularSpreadSheetService {
         else {
             allExperiments = incomingExperimentList
         }
-        final RESTAssayService restAssayService = queryServiceWrapper.getRestAssayService()
+        final RESTAssayService restAssayService = queryServiceWrapper.restAssayService
 
         for (Long individualAssayIds in assayIds) {
             Assay assay = restAssayService.get(individualAssayIds)
-            final ServiceIterator<Experiment> serviceIterator = restAssayService.iterator(assay, Experiment.class)
+            final ServiceIterator<Experiment> serviceIterator = restAssayService.iterator(assay, Experiment)
             Collection<Experiment> experimentList = serviceIterator.collect()
             allExperiments.addAll(experimentList)
         }
@@ -344,7 +358,7 @@ class MolecularSpreadSheetService {
      * @param cartCompounds
      * @return
      */
-    protected List<Experiment> cartCompoundsToExperiments(List<Experiment> incomingExperimentList, final List<CartCompound> cartCompounds) {
+    protected List<Experiment> cartCompoundsToExperiments(final List<CartCompound> cartCompounds) {
         List<Long> compoundIds = []
         for (CartCompound cartCompound in cartCompounds) {
             int compoundId = cartCompound.compoundId
@@ -354,9 +368,9 @@ class MolecularSpreadSheetService {
 
         List<Assay> allAssays = []
         for (Long individualCompoundId in compoundIds) {
-            Compound compound = queryServiceWrapper.getRestCompoundService().get(individualCompoundId)
+            Compound compound = queryServiceWrapper.restCompoundService.get(individualCompoundId)
             if (compound != null) {
-                Collection<Assay> activeAssaysForThisCompound = queryServiceWrapper.getRestCompoundService().getTestedAssays(compound, true)  // true = active only
+                Collection<Assay> activeAssaysForThisCompound = queryServiceWrapper.restCompoundService.getTestedAssays(compound, true)  // true = active only
                 for (Assay assay in activeAssaysForThisCompound) {
                     allAssays << assay
                 }
@@ -377,15 +391,15 @@ class MolecularSpreadSheetService {
             projectIds.add(projectId)
         }
         List<Experiment> allExperiments = []
-        final RESTProjectService restProjectService = queryServiceWrapper.getRestProjectService()
-        final RESTAssayService restAssayService = queryServiceWrapper.getRestAssayService()
+        final RESTProjectService restProjectService = queryServiceWrapper.restProjectService
+        final RESTAssayService restAssayService = queryServiceWrapper.restAssayService
         final Collection<Project> projects = restProjectService.get(projectIds)
 
         for (Project project : projects) {
-            final ServiceIterator<Assay> serviceIterator = restProjectService.iterator(project, Assay.class)
+            final ServiceIterator<Assay> serviceIterator = restProjectService.iterator(project, Assay)
             Collection<Assay> assays = serviceIterator.collect()
             for (Assay assay : assays) {
-                final ServiceIterator<Experiment> experimentIterator = restAssayService.iterator(assay, Experiment.class)
+                final ServiceIterator<Experiment> experimentIterator = restAssayService.iterator(assay, Experiment)
                 Collection<Experiment> experimentList = experimentIterator.collect()
                 allExperiments.addAll(experimentList)
             }
@@ -413,9 +427,9 @@ class MolecularSpreadSheetService {
     }
 
 
-    public Map findExperimentDataById(final Long experimentId, final Integer top = 10, final Integer skip = 0) {
+    Map findExperimentDataById(final Long experimentId, final Integer top = 10, final Integer skip = 0) {
         List<SpreadSheetActivity> spreadSheetActivities = []
-        final RESTExperimentService restExperimentService = queryServiceWrapper.getRestExperimentService()
+        final RESTExperimentService restExperimentService = queryServiceWrapper.restExperimentService
         long totalNumberOfRecords = 0
         ExperimentValues.ExperimentRole role = null
         Experiment experiment = restExperimentService.get(experimentId)
@@ -441,7 +455,7 @@ class MolecularSpreadSheetService {
                 spreadSheetActivities.add(spreadSheetActivity)
             }
 
-            totalNumberOfRecords = experimentIterator.getCount()
+            totalNumberOfRecords = experimentIterator.count
         }
         return [total: totalNumberOfRecords, spreadSheetActivities: spreadSheetActivities, role: role, experiment: experiment]
     }
@@ -494,7 +508,7 @@ class MolecularSpreadSheetService {
                 spreadSheetActivity.sid = (Long) childValue.value
                 break
             default:
-                throw new RuntimeException("Experiment Identifier: ${identifier} is unknown")
+                throw new NotImplementedException("Experiment Identifier: ${identifier} is unknown")
         }
     }
 

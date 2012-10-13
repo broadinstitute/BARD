@@ -1,9 +1,9 @@
 package bardqueryapi
+import static org.junit.Assert.assertNotNull
 
 import spock.lang.Specification
 import spock.lang.Unroll
 
-import static org.junit.Assert.assertNotNull
 import bard.core.Experiment
 
 /**
