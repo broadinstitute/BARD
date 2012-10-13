@@ -13,15 +13,15 @@ class QueryService implements IQueryService {
     /**
      * {@link QueryServiceWrapper}
      */
-    QueryServiceWrapper queryServiceWrapper
+    final QueryServiceWrapper queryServiceWrapper
     /**
      * {@link QueryHelperService}
      */
-    QueryHelperService queryHelperService
+    final QueryHelperService queryHelperService
     /**
      * {@link PromiscuityScoreService}
      */
-    PromiscuityScoreService promiscuityScoreService
+    final PromiscuityScoreService promiscuityScoreService
 
     //========================================================== Free Text Searches ================================
     /**

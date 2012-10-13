@@ -20,7 +20,7 @@ class SpreadSheetActivityStorage {
     List<Double>  hillCurveValueConc
     List<Double>  hillCurveValueResponse
 
-    public SpreadSheetActivityStorage(){
+    SpreadSheetActivityStorage(){
 
     }
 
@@ -30,17 +30,33 @@ class SpreadSheetActivityStorage {
      * @return
      */
     boolean equals(o) {
-        if (this.is(o)) return true
-        if (!(o instanceof SpreadSheetActivityStorage)) return false
+        if (this.is(o)){
+            return true
+        }
+        if (!(o instanceof SpreadSheetActivityStorage)){
+            return false
+        }
 
         SpreadSheetActivityStorage that = (SpreadSheetActivityStorage) o
 
-        if (cid != that.cid) return false
-        if (eid != that.eid) return false
-        if (id != that.id) return false
-        if (molSpreadSheetCell != that.molSpreadSheetCell) return false
-        if (sid != that.sid) return false
-        if (version != that.version) return false
+        if (cid != that.cid){
+            return false
+        }
+        if (eid != that.eid){
+            return false
+        }
+        if (id != that.id){
+            return false
+        }
+        if (molSpreadSheetCell != that.molSpreadSheetCell){
+            return false
+        }
+        if (sid != that.sid){
+            return false
+        }
+        if (version != that.version){
+            return false
+        }
 
         return true
     }
@@ -64,7 +80,7 @@ class SpreadSheetActivityStorage {
      *
      * @param spreadSheetActivity
      */
-    public SpreadSheetActivityStorage(SpreadSheetActivity spreadSheetActivity){
+    SpreadSheetActivityStorage(SpreadSheetActivity spreadSheetActivity){
         this.sid = spreadSheetActivity.sid
         this.eid = eid
         this.cid = cid

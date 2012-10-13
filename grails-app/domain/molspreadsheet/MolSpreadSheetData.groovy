@@ -5,15 +5,10 @@ class MolSpreadSheetData {
     static hasMany = [ molSpreadSheetCell : MolSpreadSheetCell ]
     static transients = ['rowCount','columnCount']
 
-    LinkedHashMap<String,MolSpreadSheetCell> mssData   = [:]
-    LinkedHashMap<Long,Integer> rowPointer  = [:]
-    LinkedHashMap<Long,Integer> columnPointer   = [:]
+    Map<String,MolSpreadSheetCell> mssData   = [:]
+    Map<Long,Integer> rowPointer  = [:]
+    Map<Long,Integer> columnPointer   = [:]
     List<String> mssHeaders   = []
-
-    MolSpreadSheetData()  {
-    }
-
-
 
     /**
      * Display a cell, as specified by a row and column
@@ -21,8 +16,8 @@ class MolSpreadSheetData {
      * @param colCnt
      * @return
      */
-    LinkedHashMap displayValue(int rowCnt, int colCnt) {
-        def returnValue = new  LinkedHashMap<String, String>()
+    Map displayValue(int rowCnt, int colCnt) {
+        Map<String, String> returnValue = [:]
         String key = "${rowCnt}_${colCnt}"
         MolSpreadSheetCell molSpreadSheetCell
         if (mssData.containsKey(key)) {

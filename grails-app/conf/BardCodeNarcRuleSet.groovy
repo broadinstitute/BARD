@@ -49,7 +49,7 @@ ruleset {
     ExplicitCallToAndMethod
    // ExplicitCallToCompareToMethod
     ExplicitCallToDivMethod
-    ExplicitCallToEqualsMethod
+    //ExplicitCallToEqualsMethod
     ExplicitCallToGetAtMethod
     ExplicitCallToLeftShiftMethod
     ExplicitCallToMinusMethod
@@ -73,7 +73,7 @@ ruleset {
     HardCodedWindowsFileSeparator
     HardcodedWindowsRootDirectory
     IntegerGetInteger
-    InvertedIfElse
+    //InvertedIfElse
     RandomDoubleCoercedToZero
     RemoveAllOnSelf
     ReturnFromFinallyBlock
@@ -167,8 +167,8 @@ ruleset {
     StatelessClass
     
     // rulesets/grails.xml
-    GrailsDomainHasEquals
-    GrailsDomainHasToString
+    //GrailsDomainHasEquals
+    //GrailsDomainHasToString
     //GrailsPublicControllerMethod in 2.0 controllers recommended to have methods not closures
     GrailsServletContextReference
     GrailsSessionReference
@@ -252,12 +252,12 @@ ruleset {
     AbcComplexity
     ClassSize
     CyclomaticComplexity
-    MethodCount
+    //MethodCount
     MethodSize
     NestedBlockDepth
     
     // rulesets/unnecessary.xml
-    UnnecessaryBigDecimalInstantiation
+    //UnnecessaryBigDecimalInstantiation
     UnnecessaryBigIntegerInstantiation
     UnnecessaryBooleanExpression
     UnnecessaryBooleanInstantiation

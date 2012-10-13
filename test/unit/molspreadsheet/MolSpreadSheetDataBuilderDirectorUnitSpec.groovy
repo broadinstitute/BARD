@@ -1,9 +1,10 @@
 package molspreadsheet
 
+import bardqueryapi.MolSpreadSheetDataBuilder
+import bardqueryapi.MolSpreadSheetDataBuilderDirector
 import spock.lang.Specification
-import bardqueryapi.*
 
-import static org.junit.Assert.assertNotNull
+//import static org.junit.Assert.assertNotNull
 
 /**
  * Created with IntelliJ IDEA.
@@ -12,7 +13,7 @@ import static org.junit.Assert.assertNotNull
  * Time: 2:24 PM
  * To change this template use File | Settings | File Templates.
  */
-class MolSpreadSheetDataBuilderDirectorUnitSpec  extends Specification {
+class MolSpreadSheetDataBuilderDirectorUnitSpec extends Specification {
 
     void setup() {
     }
@@ -23,18 +24,17 @@ class MolSpreadSheetDataBuilderDirectorUnitSpec  extends Specification {
 
     void "test set mol spreadsheet data builder"() {
         when:
-        MolSpreadSheetDataBuilder molSpreadSheetDataBuilder = new  MolSpreadSheetDataBuilder ()
+        MolSpreadSheetDataBuilder molSpreadSheetDataBuilder = new MolSpreadSheetDataBuilder()
         MolSpreadSheetData molSpreadSheetData = new MolSpreadSheetData()
-        molSpreadSheetDataBuilder.molSpreadSheetData =  molSpreadSheetData
-        MolSpreadSheetDataBuilderDirector molSpreadSheetDataBuilderDirector =  new MolSpreadSheetDataBuilderDirector()
+        molSpreadSheetDataBuilder.molSpreadSheetData = molSpreadSheetData
+        MolSpreadSheetDataBuilderDirector molSpreadSheetDataBuilderDirector = new MolSpreadSheetDataBuilderDirector()
         molSpreadSheetDataBuilderDirector.setMolSpreadSheetDataBuilder(molSpreadSheetDataBuilder)
 
         then:
-        assertNotNull molSpreadSheetDataBuilderDirector.getMolSpreadSheetData()
-        assert   molSpreadSheetDataBuilderDirector.getMolSpreadSheetData()==molSpreadSheetDataBuilder.getMolSpreadSheetData()
+        assertNotNull molSpreadSheetDataBuilderDirector.molSpreadSheetData
+        assert molSpreadSheetDataBuilderDirector.molSpreadSheetData == molSpreadSheetDataBuilder.molSpreadSheetData
 
     }
-
 
 
 }

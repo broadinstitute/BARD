@@ -1,10 +1,8 @@
 package bardqueryapi
 
-import grails.test.mixin.TestMixin
-import grails.test.mixin.support.GrailsUnitTestMixin
+import grails.test.mixin.TestFor
 import spock.lang.Specification
 import spock.lang.Unroll
-import grails.test.mixin.TestFor
 
 /**
  * See the API for {@link grails.test.mixin.support.GrailsUnitTestMixin} for usage instructions
@@ -27,7 +25,7 @@ class CartProjectUnitSpec extends Specification {
         assertNotNull(cartProject)
 
         then:
-        assert cartProject.projectName=='my project name'
+        assert cartProject.projectName == 'my project name'
         assertNull cartProject.shoppingItem
     }
 
@@ -46,12 +44,10 @@ class CartProjectUnitSpec extends Specification {
         cartProject.hasErrors() == !valid
 
         where:
-        projectName      |   valid
-        ""               |   false
-        "Some Project"   |   true
+        projectName    | valid
+        ""             | false
+        "Some Project" | true
     }
-
-
 
 
 }
