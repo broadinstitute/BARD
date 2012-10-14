@@ -18,7 +18,7 @@ class QueryCartService {
      * @return
      */
     int totalNumberOfUniqueItemsInCart(ShoppingCartService shoppingCartSrvc = shoppingCartService) {
-        shoppingCartSrvc?.items?.size() ?: 0
+        shoppingCartSrvc.items?.size() ?: 0
     }
 
     /**
@@ -104,7 +104,7 @@ class QueryCartService {
      * @return
      */
     def removeFromShoppingCart(ShoppingCartService shoppingCartSrvc = shoppingCartService, IShoppable product) {
-        shoppingCartSrvc?.removeFromShoppingCart(product)
+        shoppingCartSrvc.removeFromShoppingCart(product)
     }
 
     /**
@@ -114,7 +114,7 @@ class QueryCartService {
      * @return
      */
     def emptyShoppingCart(ShoppingCartService shoppingCartSrvc = shoppingCartService) {
-        shoppingCartSrvc?.emptyShoppingCart()
+        shoppingCartSrvc.emptyShoppingCart()
     }
 
 
