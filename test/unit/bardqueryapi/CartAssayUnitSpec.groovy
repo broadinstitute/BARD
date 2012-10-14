@@ -21,6 +21,60 @@ class CartAssayUnitSpec extends Specification {
         // Tear down logic here
     }
 
+    void "test constructor with integer"() {
+        given:
+        int assayId = 2
+        when:
+        CartAssay cartAssay = new CartAssay("Assay title", assayId)
+
+        then:
+        assert cartAssay.assayTitle == 'Assay title'
+        assert cartAssay.assayId
+    }
+
+    void "test toString"() {
+
+        when:
+        final String assayAsString = cartAssay.toString()
+        then:
+        assert assayAsString == expectedTitle
+        where:
+        label                  | cartAssay                               | expectedTitle
+        "Empty Title"          | new CartAssay()                         | ""
+        "Null String as title" | new CartAssay(assayTitle: "null")       | ""
+        "With title"           | new CartAssay(assayTitle: "Some Title") | "Some Title"
+    }
+
+    void "Test equals #label"() {
+        when:
+        final boolean equals = cartAssay.equals(otherCartAssay)
+
+        then:
+        equals == equality
+        where:
+        label               | cartAssay                               | otherCartAssay                          | equality
+        "Other is null"     | new CartAssay()                         | null                                    | false
+        "Different classes" | new CartAssay()                         | 20                                      | false
+        "Equality"          | new CartAssay(assayTitle: "Some Title") | new CartAssay(assayTitle: "Some Title") | true
+
+
+    }
+
+    void "Test hashCode #label"() {
+        when:
+        final int code = cartAssay.hashCode()
+
+        then:
+        assert code
+        where:
+        label               | cartAssay
+        "Other is null"     | new CartAssay()
+        "Different classes" | new CartAssay()
+        "Equality"          | new CartAssay(assayTitle: "Some Title")
+
+
+    }
+
     void "test shopping cart assay element"() {
         when:
         CartAssay cartAssay = new CartAssay(assayTitle: "Assay title")
@@ -60,19 +114,20 @@ class CartAssayUnitSpec extends Specification {
     void "test adding ellipses when the assay title is too long"() {
         given:
         final String assayTitle = RandomStringUtils.randomAlphabetic(stringLength)
+        CartAssay cartAssay = new CartAssay(assayTitle, assayId)
 
         when:
-        CartAssay cartAssay = new CartAssay(assayTitle, 47 as Long)
         cartAssay.setAssayTitle(assayTitle)
 
         then:
         cartAssay.toString().length() == properStringLength
 
         where:
-        compoundId | stringLength | properStringLength
-        47         | 4001         | 4003
-        47         | 80000        | 4003
-        47         | 25           | 25
+        assayId | stringLength | properStringLength
+        47      | 4001         | 4003
+        47      | 80000        | 4003
+        47      | 25           | 25
+        2       | 0            | 0
     }
 
 

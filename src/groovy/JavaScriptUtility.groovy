@@ -13,15 +13,18 @@ class JavaScriptUtility {
      * @param incoming
      * @return
      */
-    static String cleanup (String incoming){
-        if(incoming){
-            return incoming?.replace("'","\\'")
+    static String cleanup(String incoming) {
+        if (incoming) {
+            return incoming.replace("'", "\\'")
         }
         return ""
     }
 
-    static String cleanup (Long incoming){
-        return incoming?.toString()
+    static String cleanup(Long incoming) {
+        if (incoming) {
+            return incoming.toString()
+        }
+        return ""
     }
 
 

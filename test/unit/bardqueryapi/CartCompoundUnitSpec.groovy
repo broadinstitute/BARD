@@ -38,7 +38,67 @@ class CartCompoundUnitSpec extends Specification {
         assertNull cartCompound.shoppingItem
     }
 
+    void "test setSmiles #label"() {
+        given:
+        final String smiles = RandomStringUtils.randomAlphabetic(smilesLength)
+        CartCompound cartCompound = new CartCompound()
 
+        when:
+        cartCompound.setSmiles(smiles)
+
+        then:
+        assert cartCompound.smileWasTruncated == smilesWasTruncated
+
+        where:
+        label                  | smilesLength                                 | smilesWasTruncated
+        "Empty Smiles"         | 0                                            | false
+        "More than Max Length" | CartCompound.MAXIMUM_SMILES_FIELD_LENGTH + 1 | true
+        "Equals Max Length"    | CartCompound.MAXIMUM_SMILES_FIELD_LENGTH     | false
+        "Less Than Max Length" | 2                                            | false
+    }
+
+    void "test setName #label"() {
+        given:
+        final String name = RandomStringUtils.randomAlphabetic(nameLength)
+        CartCompound cartCompound = new CartCompound()
+
+        when:
+        cartCompound.setName(name)
+
+        then:
+        assert cartCompound.nameWasTruncated == nameWasTruncated
+
+        where:
+        label                  | nameLength                                 | nameWasTruncated
+        "Empty Name"           | 0                                          | false
+        "More than Max Length" | CartCompound.MAXIMUM_NAME_FIELD_LENGTH + 1 | true
+        "Equals Max Length"    | CartCompound.MAXIMUM_NAME_FIELD_LENGTH     | false
+        "Less Than Max Length" | 2                                          | false
+    }
+
+    void "Test equals #label"() {
+        when:
+        final boolean equals = cartCompound.equals(otherCartCompound)
+
+        then:
+        equals == equality
+        where:
+        label               | cartCompound                                 | otherCartCompound                            | equality
+        "Other is null"     | new CartCompound()                           | null                                         | false
+        "Different classes" | new CartCompound()                           | 20                                           | false
+        "Equality"            | new CartCompound(smiles: "CC", name: "Name") | new CartCompound(smiles: "CC", name: "Name") | true
+
+
+    }
+
+    void "test hashCode"() {
+        given:
+        CartCompound cartCompound = new CartCompound()
+        when:
+        final int hashCode = cartCompound.hashCode()
+        then:
+        assert hashCode
+    }
 
     void "test constraints on compound object"() {
         given:

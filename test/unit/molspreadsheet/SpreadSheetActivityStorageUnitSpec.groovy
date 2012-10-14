@@ -47,6 +47,16 @@ class SpreadSheetActivityStorageUnitSpec extends Specification {
         !spreadSheetActivityStorage.hasErrors()
     }
 
+    void "test hashCode all branches"() {
+        given:
+        SpreadSheetActivityStorage spreadSheetActivityStorage =
+            new SpreadSheetActivityStorage(version: 2, id: 2,
+                    molSpreadSheetCell: new MolSpreadSheetCell())
+        when:
+        final int hashCode = spreadSheetActivityStorage.hashCode()
+        then:
+        assert hashCode
+    }
     /**
      * Demonstrate that we can go through 1000 values without encountering a duplicate hash code
      */
@@ -81,15 +91,28 @@ class SpreadSheetActivityStorageUnitSpec extends Specification {
         }
     }
 
+    void "Test constructor No HillCurve"() {
+        given:
+        final SpreadSheetActivity spreadSheetActivity = new SpreadSheetActivity()
+        spreadSheetActivity.sid = 1 as Long
+        spreadSheetActivity.activityOutcome = ActivityOutcome.ACTIVE
+        spreadSheetActivity.potency = 3 as Double
 
+        when:
+        SpreadSheetActivityStorage spreadSheetActivityStorage = new SpreadSheetActivityStorage(spreadSheetActivity)
+
+        then:
+        assertNotNull(spreadSheetActivityStorage)
+        assert spreadSheetActivityStorage.sid == 1
+        assert spreadSheetActivityStorage.activityOutcome == ActivityOutcome.ACTIVE
+        assertNull(spreadSheetActivityStorage.hillCurveValueS0)
+        assertNull(spreadSheetActivityStorage.hillCurveValueResponse)
+        assertNull(spreadSheetActivityStorage.hillCurveValueSlope)
+    }
 
 
     void "Test constructor"() {
         given:
-
-//        SpreadSheetActivityStorage spreadSheetActivityStorage = new SpreadSheetActivityStorage( )
-//        spreadSheetActivityStorage.eid = 4
-//        spreadSheetActivityStorage.cid = 5
         final SpreadSheetActivity spreadSheetActivity = new SpreadSheetActivity()
         spreadSheetActivity.sid = 1 as Long
         spreadSheetActivity.activityOutcome = ActivityOutcome.ACTIVE
@@ -139,6 +162,19 @@ class SpreadSheetActivityStorageUnitSpec extends Specification {
         47 as Long | 48 as Long | 47 as Long | false
         47 as Long | 47 as Long | 48 as Long | false
         47 as Long | 47 as Long | 47 as Long | true
+
+    }
+
+    void "Test extended equals #label"() {
+        when:
+        final boolean equals = spreadSheetActivityStorage.equals(otherSpreadSheetActivityStorage)
+
+        then:
+        equals == equality
+        where:
+        label               | spreadSheetActivityStorage       | otherSpreadSheetActivityStorage | equality
+        "Other is null"     | new SpreadSheetActivityStorage() | null                            | false
+        "Different classes" | new SpreadSheetActivityStorage() | 20                              | false
 
     }
 

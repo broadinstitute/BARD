@@ -1,7 +1,9 @@
 package bardqueryapi
 
-
 import com.metasieve.shoppingcart.Shoppable
+import org.apache.commons.lang.StringUtils
+import org.apache.commons.lang.builder.EqualsBuilder
+import org.apache.commons.lang.builder.HashCodeBuilder
 
 class CartAssay extends Shoppable {
 
@@ -37,55 +39,53 @@ class CartAssay extends Shoppable {
 
     @Override
     String toString() {
-        StringBuilder stringBuilder = new StringBuilder()
         String trimmedName = assayTitle?.trim()
-        if ((trimmedName == null) ||
-                (trimmedName?.length() == 0) ||
-                ("null".equals(trimmedName))) {
-            stringBuilder << ""
-        } else {
-            stringBuilder << trimmedName
+        if (StringUtils.isBlank(assayTitle) || ("null".equals(trimmedName))) {
+            return ""
         }
+        StringBuilder stringBuilder = new StringBuilder()
+        stringBuilder << trimmedName
+
         // if name was truncated, then add in ellipses
         if (assayTitleWasTruncated) {
             stringBuilder <<= "..."
         }
-
         stringBuilder.toString()
     }
 
 
 
     public void setAssayTitle(String assayTitle) {
-        if (assayTitle != null) {
-            Integer lengthOfName
-            Integer incomingStringLength = assayTitle.length()
-            if (incomingStringLength <= MAXIMUM_ASSAY_TITLE_FIELD_LENGTH) {
-                lengthOfName = incomingStringLength
-            } else {
+        if (StringUtils.isNotBlank(assayTitle)) {
+            Integer lengthOfName = assayTitle.length()
+            if (lengthOfName > MAXIMUM_ASSAY_TITLE_FIELD_LENGTH) {
                 lengthOfName = MAXIMUM_ASSAY_TITLE_FIELD_LENGTH
                 assayTitleWasTruncated = true
             }
             this.assayTitle = assayTitle.substring(0, lengthOfName)
         }
+        else{
+            this.assayTitle=assayTitle
+        }
     }
-
     /**
      *  equals
      * @param o
      * @return
      */
-    boolean equals(o) {
-        if (this.is(o)){ return true }
-        if (!(o instanceof CartAssay)){
-            return false
+    boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (obj.getClass() != getClass()) {
+            return false;
         }
 
-        CartAssay cartAssay = (CartAssay) o
-
-        if (assayTitle != cartAssay.assayTitle){ return false}
-
-        return true
+        CartAssay that = (CartAssay) obj;
+        return new EqualsBuilder().
+                append(this.assayId, that.assayId).
+                append(this.assayTitle, that.assayTitle).
+                isEquals();
     }
 
     /**
@@ -93,7 +93,10 @@ class CartAssay extends Shoppable {
      * @return
      */
     int hashCode() {
-        return (assayTitle != null ? assayTitle.hashCode() : 0)
+        return new HashCodeBuilder(17, 31). // two randomly chosen prime numbers
+                append(this.assayTitle).
+                append(this.assayId).
+                toHashCode();
     }
 
 }

@@ -2,10 +2,12 @@ package molspreadsheet
 
 import bardqueryapi.ActivityOutcome
 import bardqueryapi.SpreadSheetActivity
+import org.apache.commons.lang.builder.EqualsBuilder
+import org.apache.commons.lang.builder.HashCodeBuilder
 
 class SpreadSheetActivityStorage {
 
-    static belongsTo = [molSpreadSheetCell : MolSpreadSheetCell]
+    static belongsTo = [molSpreadSheetCell: MolSpreadSheetCell]
 
     Long eid
     Long cid
@@ -13,14 +15,14 @@ class SpreadSheetActivityStorage {
     ActivityOutcome activityOutcome
     Double potency
     String hillCurveValueId
-    Double  hillCurveValueSInf
-    Double  hillCurveValueS0
-    Double  hillCurveValueSlope
-    Double  hillCurveValueCoef
-    List<Double>  hillCurveValueConc
-    List<Double>  hillCurveValueResponse
+    Double hillCurveValueSInf
+    Double hillCurveValueS0
+    Double hillCurveValueSlope
+    Double hillCurveValueCoef
+    List<Double> hillCurveValueConc
+    List<Double> hillCurveValueResponse
 
-    SpreadSheetActivityStorage(){
+    SpreadSheetActivityStorage() {
 
     }
 
@@ -29,58 +31,37 @@ class SpreadSheetActivityStorage {
      * @param o
      * @return
      */
-    boolean equals(o) {
-        if (this.is(o)){
-            return true
-        }
-        if (!(o instanceof SpreadSheetActivityStorage)){
-            return false
-        }
+    boolean equals(Object o) {
 
+        if (o == null) {
+            return false;
+        }
+        if (o.getClass() != this.getClass()) {
+            return false;
+        }
         SpreadSheetActivityStorage that = (SpreadSheetActivityStorage) o
 
-        if (cid != that.cid){
-            return false
-        }
-        if (eid != that.eid){
-            return false
-        }
-        if (id != that.id){
-            return false
-        }
-        if (molSpreadSheetCell != that.molSpreadSheetCell){
-            return false
-        }
-        if (sid != that.sid){
-            return false
-        }
-        if (version != that.version){
-            return false
-        }
-
-        return true
+        return new EqualsBuilder().
+                append(this.cid, that.cid).
+                append(this.eid, that.eid).
+                append(this.sid, that.sid).
+                append(this.molSpreadSheetCell, that.molSpreadSheetCell).
+                isEquals();
     }
 
-    /**
-     *
-     * @return
-     */
     int hashCode() {
-        int result
-        result = (eid != null ? eid.hashCode() : 0)
-        result = 31 * result + (cid != null ? cid.hashCode() : 0)
-        result = 31 * result + (sid != null ? sid.hashCode() : 0)
-        result = 31 * result + (id != null ? id.hashCode() : 0)
-        result = 31 * result + (version != null ? version.hashCode() : 0)
-        result = 31 * result + (molSpreadSheetCell != null ? molSpreadSheetCell.hashCode() : 0)
-        return result
+        return new HashCodeBuilder(17, 31). // two randomly chosen prime numbers
+                append(this.eid).
+                append(this.cid).
+                append(this.sid).
+                append(this.molSpreadSheetCell?.hashCode()).
+                toHashCode();
     }
-
     /**
      *
      * @param spreadSheetActivity
      */
-    SpreadSheetActivityStorage(SpreadSheetActivity spreadSheetActivity){
+    SpreadSheetActivityStorage(SpreadSheetActivity spreadSheetActivity) {
         this.sid = spreadSheetActivity.sid
         this.eid = eid
         this.cid = cid
@@ -99,15 +80,15 @@ class SpreadSheetActivityStorage {
     }
 
     static constraints = {
-         eid (nullable: true)
-         cid (nullable: true)
-         sid (nullable: true)
-         activityOutcome (nullable: true)
-         potency (nullable: true)
-         hillCurveValueId (nullable: true)
-         hillCurveValueSInf (nullable: true)
-         hillCurveValueS0 (nullable: true)
-         hillCurveValueSlope (nullable: true)
-         hillCurveValueCoef (nullable: true)
+        eid(nullable: true)
+        cid(nullable: true)
+        sid(nullable: true)
+        activityOutcome(nullable: true)
+        potency(nullable: true)
+        hillCurveValueId(nullable: true)
+        hillCurveValueSInf(nullable: true)
+        hillCurveValueS0(nullable: true)
+        hillCurveValueSlope(nullable: true)
+        hillCurveValueCoef(nullable: true)
     }
 }

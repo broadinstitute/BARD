@@ -2,6 +2,8 @@ package bardqueryapi
 
 import com.metasieve.shoppingcart.Shoppable
 import org.apache.commons.lang.StringUtils
+import org.apache.commons.lang.builder.HashCodeBuilder
+import org.apache.commons.lang.builder.EqualsBuilder
 
 class CartCompound extends Shoppable {
 
@@ -31,12 +33,10 @@ class CartCompound extends Shoppable {
     }
 
     public void setSmiles(String smiles) {
-        if (smiles != null) {
-            Integer lengthOfSmiles
+        if (StringUtils.isNotBlank(smiles)) {
+            Integer lengthOfSmiles = smiles.length()
             Integer incomingStringLength = smiles.length()
-            if (incomingStringLength <= MAXIMUM_SMILES_FIELD_LENGTH) {
-                lengthOfSmiles = incomingStringLength
-            } else {
+            if (incomingStringLength > MAXIMUM_SMILES_FIELD_LENGTH) {
                 lengthOfSmiles = MAXIMUM_SMILES_FIELD_LENGTH
                 smileWasTruncated = true
             }
@@ -47,11 +47,9 @@ class CartCompound extends Shoppable {
 
     public void setName(String name) {
         if (StringUtils.isNotBlank(name)) {
-            Integer lengthOfName
+            Integer lengthOfName = name.length()
             Integer incomingStringLength = name.length()
-            if (incomingStringLength <= MAXIMUM_NAME_FIELD_LENGTH) {
-                lengthOfName = incomingStringLength
-            } else {
+            if (incomingStringLength > MAXIMUM_NAME_FIELD_LENGTH) {
                 lengthOfName = MAXIMUM_NAME_FIELD_LENGTH
                 nameWasTruncated = true
             }
@@ -60,22 +58,27 @@ class CartCompound extends Shoppable {
     }
 
 
-    boolean equals(o) {
-        if (this.is(o)) {return true}
-        if (!(o instanceof CartCompound)) { return false}
+    boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (obj.getClass() != getClass()) {
+            return false;
+        }
 
-        CartCompound that = (CartCompound) o
-
-        if (smiles != that.smiles) { return false}
-        if (name != that.name) {return false}
-        if (compoundId != that.compoundId) {return false}
-
-        return true
+        CartCompound that = (CartCompound) obj;
+        return new EqualsBuilder().
+                append(this.smiles, that.smiles).
+                append(this.name, that.name).
+                append(this.compoundId, that.compoundId).
+                isEquals();
     }
 
 
     int hashCode() {
-        return (smiles != null ? smiles.hashCode() : 0)
+        return new HashCodeBuilder(17, 31). // two randomly chosen prime numbers
+                append(this.smiles).
+                toHashCode();
     }
 
     @Override
