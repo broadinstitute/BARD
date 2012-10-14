@@ -53,9 +53,82 @@ class MolSpreadSheetDataUnitSpec  extends Specification {
         0       |   1       |   "123"       |   null
         1       |   0       |   "123"       |   "123"
         1       |   1       |   "123"       |   "123"
+        47      |   47      |   "123"       |   "-"
+    }
 
 
 
+
+
+    void "Test findSpreadSheetActivity method"() {
+        given:
+        SpreadSheetActivityStorage spreadSheetActivityStorage = new SpreadSheetActivityStorage(eid: 1 as Long, cid:  2 as Long, sid: 3 as Long)
+
+        when:
+        MolSpreadSheetData molSpreadSheetData = new MolSpreadSheetData()
+        assertNotNull(molSpreadSheetData)
+
+        MolSpreadSheetCell molSpreadSheetCell_0_0 = new MolSpreadSheetCell("1",MolSpreadSheetCellType.identifier)
+        molSpreadSheetCell_0_0.setSpreadSheetActivityStorage(spreadSheetActivityStorage)
+
+        MolSpreadSheetCell molSpreadSheetCell_0_1 = new MolSpreadSheetCell("1",MolSpreadSheetCellType.image)
+        molSpreadSheetCell_0_1.setSpreadSheetActivityStorage(spreadSheetActivityStorage)
+
+        MolSpreadSheetCell molSpreadSheetCell_1_0 = new MolSpreadSheetCell("1",MolSpreadSheetCellType.numeric)
+        molSpreadSheetCell_1_0.setSpreadSheetActivityStorage(spreadSheetActivityStorage)
+
+        MolSpreadSheetCell molSpreadSheetCell_1_1 = new MolSpreadSheetCell("1",MolSpreadSheetCellType.string)
+        molSpreadSheetCell_1_1.setSpreadSheetActivityStorage(spreadSheetActivityStorage)
+
+        molSpreadSheetData.mssData["0_0"] = molSpreadSheetCell_0_0
+        molSpreadSheetData.mssData["0_1"] = molSpreadSheetCell_0_1
+        molSpreadSheetData.mssData["1_0"] = molSpreadSheetCell_1_0
+        molSpreadSheetData.mssData["1_1"] = molSpreadSheetCell_1_1
+
+
+        then:
+        assert molSpreadSheetData.findSpreadSheetActivity (row, column).eid== 1 as Long
+        assert molSpreadSheetData.findSpreadSheetActivity (row, column).cid== 2 as Long
+        assert molSpreadSheetData.findSpreadSheetActivity (row, column).sid== 3 as Long
+
+        where:
+        row     |   column
+        0       |   0
+        0       |   1
+        1       |   0
+        1       |   1
+    }
+
+
+
+
+    void "Test rowCount and colCount method"() {
+        when:
+        MolSpreadSheetData molSpreadSheetData = new MolSpreadSheetData()
+        assertNotNull(molSpreadSheetData)
+
+        molSpreadSheetData.mssHeaders << "col 1"
+        molSpreadSheetData.mssHeaders << "col 2"
+        molSpreadSheetData.mssHeaders << "col 3"
+        molSpreadSheetData.rowPointer[1 as Long] = 47
+        molSpreadSheetData.rowPointer[2 as Long] = 48
+
+        then:
+        assert molSpreadSheetData.rowCount==2
+        assert molSpreadSheetData.columnCount==3
+    }
+
+
+
+    void "Test should never happen -- empty rowPointer"() {
+        when:
+        MolSpreadSheetData molSpreadSheetData = new MolSpreadSheetData()
+        assertNotNull(molSpreadSheetData)
+
+        molSpreadSheetData.rowPointer = null
+
+        then:
+        assert molSpreadSheetData.rowCount==0
     }
 
 
@@ -68,7 +141,7 @@ class MolSpreadSheetDataUnitSpec  extends Specification {
         when:
         MolSpreadSheetData molSpreadSheetData = new MolSpreadSheetData()
         molSpreadSheetData.validate()
-        molSpreadSheetData.hasErrors() == false
+        !molSpreadSheetData.hasErrors()
 
         then:
         def mssData = molSpreadSheetData.mssData
