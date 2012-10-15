@@ -7,8 +7,8 @@ import bard.core.Value
 import bard.core.rest.RESTCompoundService
 import bard.core.rest.RESTExperimentService
 import bardqueryapi.DrcCurveCommand
-import bardqueryapi.MolecularSpreadSheetService
-import bardqueryapi.SpreadSheetActivity
+import molspreadsheet.MolecularSpreadSheetService
+import molspreadsheet.SpreadSheetActivity
 import grails.plugin.spock.IntegrationSpec
 import org.jfree.chart.ChartUtilities
 import org.jfree.chart.JFreeChart

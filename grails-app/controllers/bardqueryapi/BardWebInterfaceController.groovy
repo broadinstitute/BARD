@@ -10,6 +10,7 @@ import org.apache.commons.lang.StringUtils
 import promiscuity.PromiscuityScore
 
 import javax.servlet.http.HttpServletResponse
+import molspreadsheet.MolecularSpreadSheetService
 
 /**
  *

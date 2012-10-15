@@ -1,4 +1,4 @@
-package bardqueryapi
+package molspreadsheet
 
 
 enum MolSpreadSheetCellType {

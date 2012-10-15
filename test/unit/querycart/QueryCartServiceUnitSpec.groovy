@@ -1,10 +1,12 @@
-package bardqueryapi
+package querycart
 
 import com.metasieve.shoppingcart.ShoppingCartService
 import com.metasieve.shoppingcart.ShoppingItem
 import grails.test.mixin.TestFor
 import spock.lang.Specification
 import spock.lang.Unroll
+import querycart.CartProject
+import querycart.QueryCartService
 
 /**
  * See the API for {@link grails.test.mixin.support.GrailsUnitTestMixin} for usage instructions

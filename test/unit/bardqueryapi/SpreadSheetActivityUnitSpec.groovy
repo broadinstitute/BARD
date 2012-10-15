@@ -3,6 +3,7 @@ package bardqueryapi
 import bard.core.HillCurveValue
 import spock.lang.Specification
 import spock.lang.Unroll
+import molspreadsheet.SpreadSheetActivity
 
 /**
  * See the API for {@link grails.test.mixin.support.GrailsUnitTestMixin} for usage instructions

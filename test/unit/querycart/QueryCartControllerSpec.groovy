@@ -1,4 +1,4 @@
-package bardqueryapi
+package querycart
 
 import grails.test.mixin.TestFor
 import grails.test.mixin.TestMixin

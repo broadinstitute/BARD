@@ -1,15 +1,23 @@
-package bardqueryapi
+package molspreadsheet
 
 import bard.core.adapter.CompoundAdapter
 import bard.core.rest.RESTAssayService
 import bard.core.rest.RESTExperimentService
 import bard.core.rest.RESTProjectService
 import com.metasieve.shoppingcart.ShoppingCartService
-import molspreadsheet.MolSpreadSheetCell
-import molspreadsheet.MolSpreadSheetData
-import molspreadsheet.SpreadSheetActivityStorage
+
 import bard.core.*
 import org.apache.commons.lang.NotImplementedException
+import querycart.CartAssay
+import querycart.CartCompound
+import querycart.CartProject
+import querycart.QueryCartService
+import bardqueryapi.QueryServiceWrapper
+import bardqueryapi.IQueryService
+
+import bardqueryapi.SearchFilter
+
+import bardqueryapi.ActivityOutcome
 
 class MolecularSpreadSheetService {
 

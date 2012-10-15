@@ -1,6 +1,6 @@
 package results
 
-import bardqueryapi.MolSpreadSheetCellType
+import molspreadsheet.MolSpreadSheetCellType
 import grails.test.mixin.TestMixin
 import grails.test.mixin.support.GrailsUnitTestMixin
 import spock.lang.Specification

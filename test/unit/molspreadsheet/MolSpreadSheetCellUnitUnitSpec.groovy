@@ -1,6 +1,7 @@
-package bardqueryapi
+package molspreadsheet
 
 import spock.lang.Specification
+import molspreadsheet.MolSpreadSheetCellUnit
 
 /**
  * Created with IntelliJ IDEA.

@@ -1,10 +1,15 @@
-package bardqueryapi
+package molspreadsheet
 import static org.junit.Assert.assertNotNull
 
 import spock.lang.Specification
 import spock.lang.Unroll
 
 import bard.core.Experiment
+import querycart.CartAssay
+import querycart.CartCompound
+import querycart.CartProject
+import molspreadsheet.MolecularSpreadSheetService
+import molspreadsheet.MolSpreadSheetDataBuilder
 
 /**
  * Created with IntelliJ IDEA.

@@ -1,7 +1,10 @@
-package bardqueryapi
+package molspreadsheet
 
 import bard.core.Experiment
-import molspreadsheet.MolSpreadSheetData
+
+import querycart.CartAssay
+import querycart.CartCompound
+import querycart.CartProject
 
 /**
  * Created with IntelliJ IDEA.
@@ -43,22 +46,29 @@ class MolSpreadSheetDataBuilder {
     List<Experiment> deriveListOfExperiments() {
         List<Experiment> experimentList = []
 
-        // Any projects can be converted to assays, then assays to experiments
-        if (this.cartProjectList?.size() > 0) {
-            experimentList = molecularSpreadSheetService.cartProjectsToExperiments(this.cartProjectList)
-        }
 
-        // Any assays explicitly selected on the cart are added to the  experimentList
-        if (this.cartAssayList?.size() > 0) {
-            experimentList = molecularSpreadSheetService.cartAssaysToExperiments(experimentList, this.cartAssayList)
-        }
+        try {
+            // Any projects can be converted to assays, then assays to experiments
+            if (this.cartProjectList?.size() > 0) {
+                experimentList = molecularSpreadSheetService.cartProjectsToExperiments(this.cartProjectList)
+            }
 
-        // If we get to this point and have no experiments selected but we DO have a compound (s), then the user
-        //  may be looking to derive their assays on the basis of compounds. We can do that.
-        if ((experimentList.size() == 0) && (this.cartCompoundList?.size() > 0)) {
-            experimentList = molecularSpreadSheetService.cartCompoundsToExperiments(this.cartCompoundList)
-        }
+            // Any assays explicitly selected on the cart are added to the  experimentList
+            if (this.cartAssayList?.size() > 0) {
+                experimentList = molecularSpreadSheetService.cartAssaysToExperiments(experimentList, this.cartAssayList)
+            }
 
+            // If we get to this point and have no experiments selected but we DO have a compound (s), then the user
+            //  may be looking to derive their assays on the basis of compounds. We can do that.
+            if ((experimentList.size() == 0) && (this.cartCompoundList?.size() > 0)) {
+                experimentList = molecularSpreadSheetService.cartCompoundsToExperiments(this.cartCompoundList)
+            }
+
+
+        }  catch (Exception exception) {
+            // The shopping cart plugins sometimes throwns an exception though it seems to always keep working
+            exception.printStackTrace()
+        }
         experimentList
     }
 
