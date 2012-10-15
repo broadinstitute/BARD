@@ -1,4 +1,5 @@
 package molspreadsheet
+
 import static org.junit.Assert.assertNotNull
 
 import spock.lang.Specification
@@ -10,6 +11,9 @@ import querycart.CartCompound
 import querycart.CartProject
 import molspreadsheet.MolecularSpreadSheetService
 import molspreadsheet.MolSpreadSheetDataBuilder
+import grails.test.mixin.TestMixin
+import grails.test.mixin.support.GrailsUnitTestMixin
+import grails.test.mixin.TestFor
 
 /**
  * Created with IntelliJ IDEA.
@@ -19,13 +23,14 @@ import molspreadsheet.MolSpreadSheetDataBuilder
  * To change this template use File | Settings | File Templates.
  */
 
+@TestMixin(GrailsUnitTestMixin)
 @Unroll
-class MolSpreadSheetDataBuilderUnitSpec  extends Specification {
+class MolSpreadSheetDataBuilderUnitSpec extends Specification {
 
     MolecularSpreadSheetService molecularSpreadSheetService
 
     void setup() {
-         this.molecularSpreadSheetService = Mock(MolecularSpreadSheetService)
+        this.molecularSpreadSheetService = Mock(MolecularSpreadSheetService)
     }
 
     void tearDown() {
@@ -34,11 +39,11 @@ class MolSpreadSheetDataBuilderUnitSpec  extends Specification {
 
     void "test holdCartResults, choose one of the data accumulation methods in this Builder"() {
         when:
-        List<CartCompound> cartCompoundList  = []
-        List<CartAssay> cartAssayList  = []
+        List<CartCompound> cartCompoundList = []
+        List<CartAssay> cartAssayList = []
         List<CartProject> cartProjectList = []
         MolSpreadSheetDataBuilder molSpreadSheetDataBuilder = new MolSpreadSheetDataBuilder()
-        assertNotNull  molSpreadSheetDataBuilder
+        assertNotNull molSpreadSheetDataBuilder
 
         then: "The expected hashCode is returned"
         molSpreadSheetDataBuilder.holdCartResults(cartCompoundList, cartAssayList, cartProjectList)
@@ -51,8 +56,8 @@ class MolSpreadSheetDataBuilderUnitSpec  extends Specification {
 
     void "test deriveListOfExperiments in the degenerate case"() {
         when:
-        List<CartCompound> cartCompoundList  = []
-        List<CartAssay> cartAssayList  = []
+        List<CartCompound> cartCompoundList = []
+        List<CartAssay> cartAssayList = []
         List<CartProject> cartProjectList = []
         MolSpreadSheetDataBuilder molSpreadSheetDataBuilder = new MolSpreadSheetDataBuilder()
         molSpreadSheetDataBuilder.holdCartResults(cartCompoundList, cartAssayList, cartProjectList)
@@ -63,5 +68,20 @@ class MolSpreadSheetDataBuilderUnitSpec  extends Specification {
         assert experimentList.size() == 0
     }
 
+    void "test populateMolSpreadSheet #label"() {
+        when:
+//        List<Experiment> experimentList = []
+        MolSpreadSheetDataBuilder molSpreadSheetDataBuilder = new MolSpreadSheetDataBuilder()
+        molSpreadSheetDataBuilder.populateMolSpreadSheet(experimentList)
 
+        then:
+        1 * molecularSpreadSheetService.populateMolSpreadSheetColumnMetadata(_, _)
+        molecularSpreadSheetService.populateMolSpreadSheetRowMetadata(_, _) >> {null}
+        molecularSpreadSheetService.convertSpreadSheetActivityToCompoundInformation(_) > {null}
+        molecularSpreadSheetService.extractMolSpreadSheetData(_, _) >> {null}
+
+        where:
+        label                      | experimentList
+        'experiment-list is empty' | []
+    }
 }
