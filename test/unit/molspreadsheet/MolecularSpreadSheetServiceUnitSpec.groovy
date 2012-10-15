@@ -1,12 +1,15 @@
 package molspreadsheet
 
+import bard.core.Experiment
+import bardqueryapi.IQueryService
+import bardqueryapi.QueryServiceWrapper
 import com.metasieve.shoppingcart.ShoppingCartService
 import grails.test.mixin.TestFor
+import querycart.QueryCartService
 import spock.lang.Specification
 import spock.lang.Unroll
-import bardqueryapi.*
-import bard.core.Experiment
-import querycart.QueryCartService
+import querycart.CartCompound
+import spock.lang.Shared
 
 /**
  * Created with IntelliJ IDEA.
@@ -23,14 +26,13 @@ class MolecularSpreadSheetServiceUnitSpec  extends Specification {
     QueryServiceWrapper queryServiceWrapper
     ShoppingCartService shoppingCartService
     IQueryService queryService
+    @Shared Map compoundAdapterMap = [compoundAdapters: [], facets: null, nHits: 0]
 
     void setup() {
         this.queryCartService = Mock(QueryCartService)
         this.queryServiceWrapper = Mock(QueryServiceWrapper)
         this.shoppingCartService = Mock(ShoppingCartService)
         this.queryService = Mock(IQueryService)
-//        this.service.restClientFactoryService = this.restClientFactoryService
-//        this.service.queryHelperService = this.queryHelperService
     }
 
     void tearDown() {
@@ -120,6 +122,25 @@ class MolecularSpreadSheetServiceUnitSpec  extends Specification {
     }
 
 
+    void "test populateMolSpreadSheetColumnMetadata when experiment list is empty and mssheader is null"() {
+        given:  "we have an experiment"
+        final MolSpreadSheetData molSpreadSheetData  = new MolSpreadSheetData()
+        molSpreadSheetData.mssHeaders = null
+        final List<Experiment> experimentList  = []
+
+        when: "we want to pull out the active values"
+        service.populateMolSpreadSheetColumnMetadata(molSpreadSheetData,experimentList)
+
+        then: "prove that the active values are available"
+        assertNotNull molSpreadSheetData
+        assertNotNull  molSpreadSheetData.mssHeaders
+        assert  molSpreadSheetData.mssHeaders.size() == 3
+        assert  molSpreadSheetData.mssHeaders.contains("Struct")
+        assert  molSpreadSheetData.mssHeaders.contains("CID")
+        assert  molSpreadSheetData.mssHeaders.contains("UNM Promiscuity Analysis")
+    }
+
+
 
     void "test populateMolSpreadSheetColumnMetadata when experiment list is not empty"() {
         given:  "we have an experiment"
@@ -142,6 +163,41 @@ class MolecularSpreadSheetServiceUnitSpec  extends Specification {
         assert  molSpreadSheetData.mssHeaders.contains("a")
         assert  molSpreadSheetData.mssHeaders.contains("b")
         assert  molSpreadSheetData.mssHeaders.contains("c")
+    }
+
+
+
+    void "test populateMolSpreadSheetRowMetadata"() {
+        given:  "we have an experiment"
+        final MolSpreadSheetData molSpreadSheetData  = new MolSpreadSheetData()
+        molSpreadSheetData.rowPointer = new LinkedHashMap<Long,Integer>()
+        molSpreadSheetData.mssData = new LinkedHashMap<String,MolSpreadSheetCell>()
+        List <CartCompound> cartCompoundList = []
+        cartCompoundList.add(new CartCompound("c1ccccc1", "benzene", 47))
+
+        when: "we want to pull out the active values"
+        service.populateMolSpreadSheetRowMetadata(molSpreadSheetData,cartCompoundList)
+
+        then: "prove that the active values are available"
+        assertNotNull molSpreadSheetData
+        assertNotNull  molSpreadSheetData.mssHeaders
+        assert  molSpreadSheetData.mssHeaders.size() == 0
+    }
+
+
+    void "test populateMolSpreadSheetRowMetadata compoundAdapterMap"() {
+        given:  "we have an experiment"
+        final MolSpreadSheetData molSpreadSheetData  = new MolSpreadSheetData()
+        molSpreadSheetData.rowPointer = new LinkedHashMap<Long,Integer>()
+        molSpreadSheetData.mssData = new LinkedHashMap<String,MolSpreadSheetCell>()
+
+        when: "we want to pull out the active values"
+        service.populateMolSpreadSheetRowMetadata(molSpreadSheetData,compoundAdapterMap)
+
+        then: "prove that the active values are available"
+        assertNotNull molSpreadSheetData
+        assertNotNull  molSpreadSheetData.mssHeaders
+        assert  molSpreadSheetData.mssHeaders.size() == 0
     }
 
 
