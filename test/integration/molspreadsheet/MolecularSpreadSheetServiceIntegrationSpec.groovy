@@ -118,6 +118,9 @@ class MolecularSpreadSheetServiceIntegrationSpec extends IntegrationSpec {
         List<SpreadSheetActivity> spreadSheetActivityList = molecularSpreadSheetService.extractMolSpreadSheetData(molSpreadSheetData,
                 finalExperimentList,
                 compounds)
+        molSpreadSheetData.rowPointer[1377840 as Long]  =0
+        molSpreadSheetData.rowPointer[727017 as Long]  =1
+        molSpreadSheetData.rowPointer[1622396 as Long]  =2
 
 
         molecularSpreadSheetService.populateMolSpreadSheetData(molSpreadSheetData,
@@ -128,8 +131,9 @@ class MolecularSpreadSheetServiceIntegrationSpec extends IntegrationSpec {
 
         then: "we should be able to generate a list of spreadsheet activity elements"
         assertNotNull molSpreadSheetData.mssData
-        assert molSpreadSheetData.mssData.size()==0 // demonstrate that there is no crossover in compounds
-        assert molSpreadSheetData.columnCount==9 // demonstrate that there ARE nine assays in this project
+        assert molSpreadSheetData.mssData.size()==3 // demonstrate that there are 3 identified compounds compounds
+        assert molSpreadSheetData.rowPointer.size()==3 // demonstrate that there are 3 identified compounds compounds
+        assert molSpreadSheetData.columnPointer.size()==9 // demonstrate that there ARE nine assays in this project
     }
 
 
