@@ -1,6 +1,7 @@
 package bardqueryapi
 
 import spock.lang.Specification
+import spock.lang.Unroll
 
 /**
  * Created with IntelliJ IDEA.
@@ -9,6 +10,7 @@ import spock.lang.Specification
  * Time: 10:35 PM
  * To change this template use File | Settings | File Templates.
  */
+@Unroll
 class JavaScriptUtilityUnitSpec extends Specification {
     /**
      * {@link bardqueryapi.JavaScriptUtility.cleanup ( String )}
@@ -39,14 +41,15 @@ class JavaScriptUtilityUnitSpec extends Specification {
     /**
      * {@link bardqueryapi.JavaScriptUtility.cleanup ( Long )}
      */
-    void "test cleanup with Long arg"() {
-         when:
+    void "test cleanup with Long arg #label"() {
+        when:
         String cleanedUp = bardqueryapi.JavaScriptUtility.cleanup(cleanedUpLong)
         then:
         assert cleanedUp == expectedLabel
         where:
         label    | cleanedUpLong | expectedLabel
-        "Null"   | null          | ""
+        "Null"   | null as Long  | ""
+        "Zero"   | 0 as Long     | ""
         "A Long" | 20            | "20"
     }
 
