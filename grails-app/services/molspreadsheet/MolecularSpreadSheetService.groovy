@@ -169,7 +169,7 @@ class MolecularSpreadSheetService {
     }
 
 
-    protected List<CartCompound> retrieveCartCompoundFromShoppingCart() {
+    List<CartCompound> retrieveCartCompoundFromShoppingCart() {
         List<CartCompound> cartCompoundList = []
         for (CartCompound cartCompound in (queryCartService.groupUniqueContentsByType(shoppingCartService)[(QueryCartService.cartCompound)])) {
             cartCompoundList.add(cartCompound)
@@ -177,7 +177,7 @@ class MolecularSpreadSheetService {
         cartCompoundList
     }
 
-    protected List<CartAssay> retrieveCartAssayFromShoppingCart() {
+    List<CartAssay> retrieveCartAssayFromShoppingCart() {
         List<CartAssay> cartAssayList = []
         for (CartAssay cartAssay in (queryCartService.groupUniqueContentsByType(shoppingCartService)[(QueryCartService.cartAssay)])) {
             cartAssayList.add(cartAssay)
@@ -185,7 +185,7 @@ class MolecularSpreadSheetService {
         cartAssayList
     }
 
-    protected List<CartProject> retrieveCartProjectFromShoppingCart() {
+    List<CartProject> retrieveCartProjectFromShoppingCart() {
         List<CartProject> cartProjectList = []
         for (CartProject cartProject in (queryCartService.groupUniqueContentsByType(shoppingCartService)[(QueryCartService.cartProject)])) {
             cartProjectList.add(cartProject)
@@ -199,14 +199,6 @@ class MolecularSpreadSheetService {
      * @param cartCompoundList
      */
     protected void populateMolSpreadSheetRowMetadata(final MolSpreadSheetData molSpreadSheetData, final List<CartCompound> cartCompoundList) {
-
-        // Make sure that the variable we're filling  leaves this routine with something in
-        if (molSpreadSheetData.rowPointer == null) {
-            molSpreadSheetData.rowPointer = [:]
-        }
-        if (molSpreadSheetData.mssData == null) {
-            molSpreadSheetData.rowPointer = [:]
-        }
 
         // add specific values for the cid column
         int rowCount = 0
@@ -229,14 +221,6 @@ class MolecularSpreadSheetService {
      * @return
      */
     protected void populateMolSpreadSheetRowMetadata(final MolSpreadSheetData molSpreadSheetData, final Map compoundAdapterMap) {
-
-        // Make sure that the variable we're filling  leaves this routine with something in
-        if (molSpreadSheetData.rowPointer == null) {
-            molSpreadSheetData.rowPointer = [:]
-        }
-        if (molSpreadSheetData.mssData == null) {
-            molSpreadSheetData.rowPointer = [:]
-        }
 
         // Add every compound we can find in the compound adapters map
         List<CompoundAdapter> compoundAdaptersList = compoundAdapterMap.compoundAdapters
@@ -283,11 +267,6 @@ class MolecularSpreadSheetService {
      * @param experimentList
      */
     protected void populateMolSpreadSheetColumnMetadata(MolSpreadSheetData molSpreadSheetData, List<Experiment> experimentList) {
-
-        // Check variable that we plan to modify
-        if (molSpreadSheetData.mssHeaders == null) {
-            molSpreadSheetData.mssHeaders = []
-        }
 
         // now retrieve the header names from the assays
         molSpreadSheetData.mssHeaders.add("Struct")
