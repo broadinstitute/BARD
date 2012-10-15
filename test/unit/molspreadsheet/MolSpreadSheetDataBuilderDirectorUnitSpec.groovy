@@ -1,7 +1,5 @@
 package molspreadsheet
 
-import bardqueryapi.MolSpreadSheetDataBuilder
-import bardqueryapi.MolSpreadSheetDataBuilderDirector
 import spock.lang.Specification
 
 //import static org.junit.Assert.assertNotNull

@@ -1,7 +1,5 @@
 package molspreadsheet
 
-import bardqueryapi.MolSpreadSheetCellType
-import bardqueryapi.MolSpreadSheetCellUnit
 import results.ExperimentalValue
 import results.ExperimentalValueType
 import results.ExperimentalValueUnit

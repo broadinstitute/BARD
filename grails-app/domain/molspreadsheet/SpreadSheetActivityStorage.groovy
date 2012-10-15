@@ -1,7 +1,7 @@
 package molspreadsheet
 
 import bardqueryapi.ActivityOutcome
-import bardqueryapi.SpreadSheetActivity
+
 import org.apache.commons.lang.builder.EqualsBuilder
 import org.apache.commons.lang.builder.HashCodeBuilder
 

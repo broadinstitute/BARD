@@ -1,10 +1,8 @@
 package molspreadsheet
 
-import bardqueryapi.MolSpreadSheetController
 import grails.test.mixin.TestFor
 import spock.lang.Specification
 import spock.lang.Unroll
-import bardqueryapi.MolSpreadSheetCellType
 
 /**
  * See the API for {@link grails.test.mixin.support.GrailsUnitTestMixin} for usage instructions

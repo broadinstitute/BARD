@@ -1,8 +1,12 @@
-package bardqueryapi
+package querycart
 
 import com.metasieve.shoppingcart.Shoppable
 import com.metasieve.shoppingcart.ShoppingCartService
 import grails.plugins.springsecurity.Secured
+import querycart.CartAssay
+import querycart.CartCompound
+import querycart.CartProject
+import querycart.QueryCartService
 
 @Secured(['isFullyAuthenticated()'])
 class QueryCartController {
@@ -14,18 +18,18 @@ class QueryCartController {
 
         def somethingWasAdded = null
         int somethingReallyChanged = Integer.parseInt(params.stt)
-        if (params.class == 'class bardqueryapi.CartAssay') {
+        if (params.class == 'class querycart.CartAssay') {
 
            // somethingWasAdded = queryCartService.addToShoppingCart(new CartAssay(params.assayTitle, params.id))
             somethingWasAdded = handleAddingToShoppingCart(new CartAssay(params.assayTitle, params.id) )
 
-        } else if (params.class == 'class bardqueryapi.CartCompound') {
+        } else if (params.class == 'class querycart.CartCompound') {
 
             CartCompound cartCompound = new CartCompound(smiles: params.smiles, name: params.name, compoundId: params.id)
 //            somethingWasAdded = queryCartService.addToShoppingCart(cartCompound)
             somethingWasAdded = handleAddingToShoppingCart(cartCompound)
 
-        } else if (params.class == 'class bardqueryapi.CartProject') {
+        } else if (params.class == 'class querycart.CartProject') {
 
 //            somethingWasAdded = queryCartService.addToShoppingCart(new CartProject(params.projectName, params.id))
             somethingWasAdded = handleAddingToShoppingCart(new CartProject(params.projectName, params.id))

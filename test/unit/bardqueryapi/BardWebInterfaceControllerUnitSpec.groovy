@@ -18,6 +18,9 @@ import spock.lang.Unroll
 import javax.servlet.http.HttpServletResponse
 
 import bard.core.*
+import querycart.CartAssay
+import molspreadsheet.MolecularSpreadSheetService
+import molspreadsheet.SpreadSheetActivity
 
 /**
  * See the API for {@link grails.test.mixin.support.GrailsUnitTestMixin} for usage instructions

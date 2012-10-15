@@ -2,9 +2,7 @@ package molspreadsheet
 
 import bard.core.HillCurveValue
 import bardqueryapi.ActivityOutcome
-import bardqueryapi.MolSpreadSheetCellType
-import bardqueryapi.MolSpreadSheetController
-import bardqueryapi.SpreadSheetActivity
+
 import grails.test.mixin.TestFor
 import spock.lang.Specification
 import spock.lang.Unroll

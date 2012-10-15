@@ -1,7 +1,10 @@
-package bardqueryapi
+package molspreadsheet
 
 import bard.core.Experiment
-import molspreadsheet.MolSpreadSheetData
+
+import querycart.CartAssay
+import querycart.CartCompound
+import querycart.CartProject
 
 /**
  * Created with IntelliJ IDEA.

@@ -1,6 +1,5 @@
-package bardqueryapi
+package molspreadsheet
 
-import molspreadsheet.MolSpreadSheetData
 import grails.plugins.springsecurity.Secured
 
 @Secured(['isFullyAuthenticated()'])

@@ -37,7 +37,7 @@ QueryCart.prototype.addAssayToCartHandler = function() {
     var name = $(this).attr('data-cart-name');
     jQuery.ajax({  type:'POST',
         data:{'id': id,
-            'class': 'class bardqueryapi.CartAssay',
+            'class': 'class querycart.CartAssay',
             'assayTitle':name,
             'version': '0',
             'stt':showingCartDetails},
@@ -55,7 +55,7 @@ QueryCart.prototype.addCompoundToCartHandler = function() {
     var smiles = $(this).attr('data-cart-smiles');
     jQuery.ajax({  type:'POST',
         data:{'id': id,
-            'class':'class bardqueryapi.CartCompound',
+            'class':'class querycart.CartCompound',
             'name': name,
             'smiles': smiles,
             'version':'0',
@@ -73,7 +73,7 @@ QueryCart.prototype.addProjectToCartHandler = function() {
     var name = $(this).attr('data-cart-name');
     jQuery.ajax({  type:'POST',
         data:{'id': id,
-            'class':'class bardqueryapi.CartProject',
+            'class':'class querycart.CartProject',
             'projectName': name,
             'version':'0',
             'stt':showingCartDetails},

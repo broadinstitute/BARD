@@ -1,4 +1,4 @@
-package bardqueryapi
+package molspreadsheet
 import static junit.framework.Assert.assertNotNull
 
 import bard.core.adapter.CompoundAdapter
@@ -8,13 +8,17 @@ import bard.core.rest.RESTExperimentService
 import bard.core.rest.RESTProjectService
 import com.metasieve.shoppingcart.ShoppingCartService
 import grails.plugin.spock.IntegrationSpec
-import molspreadsheet.MolSpreadSheetCell
-import molspreadsheet.MolSpreadSheetData
+
 import org.junit.After
 import org.junit.Before
 import spock.lang.Unroll
 import bard.core.*
+import querycart.CartAssay
+import querycart.CartCompound
+import querycart.CartProject
+import querycart.QueryCartService
 
+import bardqueryapi.QueryServiceWrapper
 
 @Unroll
 class MolecularSpreadSheetServiceIntegrationSpec extends IntegrationSpec {

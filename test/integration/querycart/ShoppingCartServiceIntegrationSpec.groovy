@@ -1,4 +1,4 @@
-package bardqueryapi
+package querycart
 import static org.junit.Assert.assertNotNull
 import static org.junit.Assert.assertNull
 
@@ -6,6 +6,10 @@ import com.metasieve.shoppingcart.Shoppable
 import com.metasieve.shoppingcart.ShoppingCartService
 import com.metasieve.shoppingcart.ShoppingItem
 import grails.plugin.spock.IntegrationSpec
+import querycart.CartAssay
+import querycart.CartCompound
+import querycart.CartProject
+import querycart.QueryCartService
 
 
 class ShoppingCartServiceIntegrationSpec extends IntegrationSpec {

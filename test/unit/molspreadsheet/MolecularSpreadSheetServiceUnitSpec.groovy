@@ -6,6 +6,7 @@ import spock.lang.Specification
 import spock.lang.Unroll
 import bardqueryapi.*
 import bard.core.Experiment
+import querycart.QueryCartService
 
 /**
  * Created with IntelliJ IDEA.

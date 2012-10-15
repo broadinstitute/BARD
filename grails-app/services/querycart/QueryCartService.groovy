@@ -1,4 +1,4 @@
-package bardqueryapi
+package querycart
 
 import com.metasieve.shoppingcart.IShoppable
 import com.metasieve.shoppingcart.Shoppable

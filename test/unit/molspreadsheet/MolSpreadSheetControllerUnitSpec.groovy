@@ -1,4 +1,4 @@
-package bardqueryapi
+package molspreadsheet
 
 import grails.test.mixin.TestFor
 import grails.test.mixin.TestMixin
@@ -6,6 +6,8 @@ import grails.test.mixin.support.GrailsUnitTestMixin
 import spock.lang.Specification
 import spock.lang.Unroll
 import molspreadsheet.MolSpreadSheetData
+import molspreadsheet.MolSpreadSheetController
+import molspreadsheet.MolecularSpreadSheetService
 
 /**
  * See the API for {@link grails.test.mixin.support.GrailsUnitTestMixin} for usage instructions

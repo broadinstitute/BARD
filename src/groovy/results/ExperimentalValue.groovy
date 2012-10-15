@@ -1,7 +1,7 @@
 package results
 
-import bardqueryapi.MolSpreadSheetCellType
-import bardqueryapi.MolSpreadSheetCellUnit
+import molspreadsheet.MolSpreadSheetCellType
+import molspreadsheet.MolSpreadSheetCellUnit
 import org.apache.commons.lang.NotImplementedException
 
 import java.text.NumberFormat
