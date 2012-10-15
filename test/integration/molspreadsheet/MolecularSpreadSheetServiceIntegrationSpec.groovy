@@ -109,8 +109,8 @@ class MolecularSpreadSheetServiceIntegrationSpec extends IntegrationSpec {
         List<CartProject> cartProjectList = []
         cartProjectList.add(new CartProject("Summary of Flow Cytometry HTS of Small Molecules that Regulate V-ATPase Proton Transport in Yeast", 364 as Long))
         List<Experiment> finalExperimentList = molecularSpreadSheetService.cartProjectsToExperiments(cartProjectList)
-   ////////////////////////
-        Assay assay = restAssayService.get(519 as Long)
+
+        Assay assay = restAssayService.get(2199 as Long)
         final ServiceIterator<Experiment> serviceIterator = restAssayService.iterator(assay, Experiment)
         Collection<Experiment> experimentList = serviceIterator.collect()
         MolSpreadSheetData molSpreadSheetData = new MolSpreadSheetData()
@@ -128,7 +128,8 @@ class MolecularSpreadSheetServiceIntegrationSpec extends IntegrationSpec {
 
         then: "we should be able to generate a list of spreadsheet activity elements"
         assertNotNull molSpreadSheetData.mssData
-        assert molSpreadSheetData.mssData.size()==0 // demonstrate that there is no crossover between project ID = 364 and assay id=519
+        assert molSpreadSheetData.mssData.size()==0 // demonstrate that there is no crossover in compounds
+        assert molSpreadSheetData.columnCount==9 // demonstrate that there ARE nine assays in this project
     }
 
 
