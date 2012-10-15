@@ -22,25 +22,14 @@ class SearchSpec extends BardReportingSpec {
         at ResultsPage
     }
 
-//    def "Go to Structure search page"() {
-//        when:
-//        structureSearchLink.click()
-//        at StructureSearchPage
-//        $("form#structureSearchForm a#structureSearchButton.btn.btn-primary").click()
-//
-//        then:
-//        at HomePage
-//
-//    }
+    def "Go to Structure search page"() {
+        when:
+        structureSearchLink.click()
+        at StructureSearchPage
+        $('#searchForm').submit()
 
-//    def "start a substructure search with no structure"() {
-//        when:
-//        withFrame(structureModalDialog) {
-//            at StructureSearchPage
-//            structureSearchButton.click()
-//        }
-//        then:
-//        at ResultsPage
-//    }
+        then:
+        at HomePage
 
+    }
 }
