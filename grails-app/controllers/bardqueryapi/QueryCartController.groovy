@@ -16,8 +16,8 @@ class QueryCartController {
         int somethingReallyChanged = Integer.parseInt(params.stt)
         if (params.class == 'class bardqueryapi.CartAssay') {
 
-           // somethingWasAdded = queryCartService.addToShoppingCart(new CartAssay(params.assayTitle, params.id))
-            somethingWasAdded = handleAddingToShoppingCart(new CartAssay(params.assayTitle, params.id) )
+            // somethingWasAdded = queryCartService.addToShoppingCart(new CartAssay(params.assayTitle, params.id))
+            somethingWasAdded = handleAddingToShoppingCart(new CartAssay(params.assayTitle, params.id))
 
         } else if (params.class == 'class bardqueryapi.CartCompound') {
 
@@ -74,13 +74,13 @@ class QueryCartController {
     }
 
     Map getModelForSummary() {
-            Map<String, List> mapOfUniqueItems = queryCartService.groupUniqueContentsByType(shoppingCartService)
-            Integer totalItemCount = queryCartService.totalNumberOfUniqueItemsInCart(mapOfUniqueItems)
-            Integer numberOfAssays = queryCartService.totalNumberOfUniqueItemsInCart(mapOfUniqueItems, QueryCartService.cartAssay)
-            Integer numberOfCompounds = queryCartService.totalNumberOfUniqueItemsInCart(mapOfUniqueItems, QueryCartService.cartCompound)
-            Integer numberOfProjects = queryCartService.totalNumberOfUniqueItemsInCart(mapOfUniqueItems, QueryCartService.cartProject)
-            return ['totalItemCount': totalItemCount, 'numberOfAssays': numberOfAssays, 'numberOfCompounds': numberOfCompounds, 'numberOfProjects': numberOfProjects];
-     }
+        Map<String, List> mapOfUniqueItems = queryCartService.groupUniqueContentsByType(shoppingCartService)
+        Integer totalItemCount = queryCartService.totalNumberOfUniqueItemsInCart(mapOfUniqueItems)
+        Integer numberOfAssays = queryCartService.totalNumberOfUniqueItemsInCart(mapOfUniqueItems, QueryCartService.cartAssay)
+        Integer numberOfCompounds = queryCartService.totalNumberOfUniqueItemsInCart(mapOfUniqueItems, QueryCartService.cartCompound)
+        Integer numberOfProjects = queryCartService.totalNumberOfUniqueItemsInCart(mapOfUniqueItems, QueryCartService.cartProject)
+        return ['totalItemCount': totalItemCount, 'numberOfAssays': numberOfAssays, 'numberOfCompounds': numberOfCompounds, 'numberOfProjects': numberOfProjects];
+    }
 
     Map getModelForDetails() {
         Map<String, List> mapOfUniqueItems = queryCartService.groupUniqueContentsByType(shoppingCartService)
@@ -94,7 +94,7 @@ class QueryCartController {
     // remove a single element
     def remove() {
         int idToRemove = Integer.parseInt(params.id)
-        try{
+        try {
             def shoppingItem = Shoppable.get(idToRemove)
             queryCartService.removeFromShoppingCart(shoppingItem)
         } catch (Exception e) {
