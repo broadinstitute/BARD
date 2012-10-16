@@ -533,21 +533,29 @@ class SearchHelper {
 
         //Groups all the applied search-filters in facets into a parent-facet/children-facets map. We use this group to display the applied search filters WITHIN the facet groups
         //If the facet-group exists but the applied-filter's corresponding facet didn't come back after the filtering, we still want to display the filter in its appropriate (facet) group, if we can.
-        Map appliedFiltersNotInFacetsGrouped = ((searchFilters ?: []) - appliedFiltersAlreadyInFacets) ?
-            (searchFilters - appliedFiltersAlreadyInFacets).groupBy { SearchFilter filter -> filter.filterName.trim()} : [:]
+//        Map appliedFiltersNotInFacetsGrouped = ((searchFilters ?: []) - appliedFiltersAlreadyInFacets) ?
+//            (searchFilters - appliedFiltersAlreadyInFacets).groupBy { SearchFilter filter -> filter.filterName.trim()} : [:]
+        List<SearchFilter> searchFiltersNotYetApplied = (searchFilters ?: []) - appliedFiltersAlreadyInFacets
+        Map appliedFiltersNotInFacetsGrouped = [:]
+        if (searchFiltersNotYetApplied) {
+            appliedFiltersNotInFacetsGrouped = searchFiltersNotYetApplied.groupBy { SearchFilter filter -> filter.filterName.trim()}
+        }
 
         //Includes all the applied filters we know would not have any facet group since no facet in this group came back after the filtering was applied.
         //We need to group these filters, rebuild their groups (parent) and display them next to the facets
-        List<SearchFilter> appliedFiltersDisplayedOutsideFacets = (
-        (searchFilters ?: []) - appliedFiltersAlreadyInFacets)?.findAll {
-            SearchFilter filter ->
-            //filter.filterName is not in any of the parents' ids
-            return !(facets.find { Value parent -> parent.id.trim().equalsIgnoreCase(filter.filterName.trim())})
+        List<SearchFilter> appliedFiltersDisplayedOutsideFacets = []
+        if (searchFiltersNotYetApplied) {
+            appliedFiltersDisplayedOutsideFacets = searchFiltersNotYetApplied.findAll {SearchFilter filter ->
+                //filter.filterName is not in any of the parents' ids
+                return !(facets.find { Value parent -> parent.id.trim().equalsIgnoreCase(filter.filterName.trim())})
+            }
         }
 
         //Group all the applied filters so we can use the keys as group (parent) names.
-        Map appliedFiltersDisplayedOutsideFacetsGrouped = appliedFiltersDisplayedOutsideFacets ?
-            appliedFiltersDisplayedOutsideFacets.groupBy { SearchFilter filter -> filter.filterName.trim()} : [:]
+        Map appliedFiltersDisplayedOutsideFacetsGrouped = [:]
+        if (appliedFiltersDisplayedOutsideFacets) {
+            appliedFiltersDisplayedOutsideFacetsGrouped = appliedFiltersDisplayedOutsideFacets.groupBy { SearchFilter filter -> filter.filterName.trim()}
+        }
 
         return [
                 searchFilters: searchFilters,
