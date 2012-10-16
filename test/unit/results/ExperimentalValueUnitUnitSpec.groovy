@@ -1,8 +1,9 @@
 package results
 
-import molspreadsheet.MolSpreadSheetCellUnit
 import grails.test.mixin.TestMixin
 import grails.test.mixin.support.GrailsUnitTestMixin
+import molspreadsheet.MolSpreadSheetCellUnit
+import org.apache.commons.lang.NotImplementedException
 import spock.lang.Specification
 import spock.lang.Unroll
 
@@ -60,5 +61,22 @@ class ExperimentalValueUnitUnitSpec extends Specification {
 
     }
 
+    void "test convert with Exception"() {
+
+
+        when: "We call the convert method"
+        ExperimentalValueUnit.convert(molSpreadSheetCellUnit)
+
+        then: "We expect an error to  be thrown"
+        Exception ee = thrown()
+        assert ee instanceof NotImplementedException
+
+
+        where:
+        label            | molSpreadSheetCellUnit
+        "Unhandled Enum" | MolSpreadSheetCellUnit.unhandled
+
+
+    }
 }
 

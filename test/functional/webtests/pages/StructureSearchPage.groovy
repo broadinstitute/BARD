@@ -1,25 +1,31 @@
 package webtests.pages
 
-import geb.Module
+import grails.plugin.remotecontrol.RemoteControl
+import bard.core.StructureSearchParams
 
 class StructureSearchPage extends ScaffoldPage {
 
-   static url = ""
+    static url = ""
 
     static at = {
-       assert title ==~ /BioAssay Research Database/
-       List<String> structureTypes = ["Substructure", "Superstructure", "Exact", "Similarity"]
-       assert $("input", name: "structureSearchType").collect{
-           structureTypes.contains(it.value())
-       }
-       assert $("#structureSearchButton")
+        assert title ==~ /BioAssay Research Database/
 
-       return true
+        // Make sure all of the structure search types are there
+        RemoteControl remote = new RemoteControl()
+        List<String> structureSearchTypes = remote { StructureSearchParams.Type.findAll() }
+        structureSearchTypes.each { structureSearchType ->
+            println structureSearchType
+            assert $("input", name:"structureSearchType", value: "$structureSearchType")
+        }
+
+        assert $("#structureSearchButton")
+
+        return true
     }
 
     static content = {
         structureModalDialog(required: true) { $("#modalDiv") }
-        structureRadioButton(required: true)  { $("form").structureSearchType }
+        structureRadioButton(required: true) { $("form").structureSearchType }
         closeButton(required: true, to: HomePage) { $("a#closeButton.btn") }
         structureSearchButton(required: true, to: ResultsPage) { $("#structureSearchButton") }
         //do confirmation here

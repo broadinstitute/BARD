@@ -61,7 +61,7 @@ class QueryCartService {
                     temporaryCartAssayHolder.add(convertedShoppingItem as CartAssay)
                 } else if (convertedShoppingItem instanceof CartCompound) {
                     temporaryCartCompoundHolder.add(convertedShoppingItem as CartCompound)
-                } else if (convertedShoppingItem instanceof CartProject) {
+                } else { //It must be a CartProject.
                     temporaryCartProjectHolder.add(convertedShoppingItem as CartProject)
                 }
             }

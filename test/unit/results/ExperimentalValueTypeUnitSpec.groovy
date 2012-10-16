@@ -1,11 +1,11 @@
 package results
 
-import molspreadsheet.MolSpreadSheetCellType
 import grails.test.mixin.TestMixin
 import grails.test.mixin.support.GrailsUnitTestMixin
+import molspreadsheet.MolSpreadSheetCellType
+import org.apache.commons.lang.NotImplementedException
 import spock.lang.Specification
 import spock.lang.Unroll
-import org.apache.commons.lang.NotImplementedException
 
 @TestMixin(GrailsUnitTestMixin)
 @Unroll
@@ -43,9 +43,9 @@ class ExperimentalValueTypeUnitSpec extends Specification {
 
 
         when: "We call the convert method"
-       ExperimentalValueType.convert(cellType)
+        ExperimentalValueType.convert(cellType)
 
-        then: "The resulting experimental value type should much the expected one"
+        then: "The resulting experimental value type should match the expected one"
         Exception ee = thrown()
         assert ee instanceof NotImplementedException
 
@@ -53,6 +53,19 @@ class ExperimentalValueTypeUnitSpec extends Specification {
         label        | cellType
         "Identifier" | MolSpreadSheetCellType.identifier
 
+    }
+
+    void "test default switch"() {
+        when: "We call the convert method"
+        ExperimentalValueType.convert(cellType)
+
+        then: "The resulting experimental value type should match the expected one"
+        Exception ee = thrown()
+        assert ee instanceof NotImplementedException
+
+        where:
+        label                 | cellType
+        "UnHandled Exception" | MolSpreadSheetCellType.unhandled
     }
 
 

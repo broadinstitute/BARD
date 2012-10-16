@@ -48,11 +48,10 @@ class MolSpreadSheetData {
      * @return
      */
     int getRowCount(){
-        if (rowPointer == null) {
-            return 0
+        if (rowPointer) {
+            return rowPointer.size()
         }
-        return rowPointer.size()
-
+        return 0
     }
 
     /**
@@ -60,11 +59,10 @@ class MolSpreadSheetData {
      * @return
      */
     int getColumnCount(){
-        if (mssHeaders == null) {
-            return 0
+        if (mssHeaders) {
+            return mssHeaders.size()
         }
-        return mssHeaders.size()
-
+        return 0
 
     }
 

@@ -5,8 +5,6 @@ import com.metasieve.shoppingcart.ShoppingItem
 import grails.test.mixin.TestFor
 import spock.lang.Specification
 import spock.lang.Unroll
-import querycart.CartProject
-import querycart.QueryCartService
 
 /**
  * See the API for {@link grails.test.mixin.support.GrailsUnitTestMixin} for usage instructions
@@ -44,14 +42,14 @@ class QueryCartServiceUnitSpec extends Specification {
         then:
         assert uniqueItems == expectedNumberOfUniqueItems
         where:
-        label                                                               | expectedNumberOfUniqueItems | mapOfUniqueItems | elementType
-        "Empty Cart No Element Type"                                        | 0                           | [:]              | ""
-        "Empty Cart with Element Type"                                      | 0                           | [:]              | "SomeElementType"
-        "Single Item in Cart with no Element Type"                          | 2                           | [a: ["c", "d"]]  | ""
-        "Single Item in Cart with Element Type in Map"                      | 2                           | [a: ["c", "d"]]  | "a"
-        "Single Item in Cart with Element Type in Map with null values"     | 0                           | [a: null]        | "a"
-        "Single Item in Cart with Element Type Not in Map"                  | 0                           | [a: ["c", "d"]]  | "z"
-        "Single Item in Cart with Element Type Not in Map with null values" | 0                           | [a: null]        | "z"
+        label                                                               | expectedNumberOfUniqueItems | mapOfUniqueItems    | elementType
+        "Empty Cart No Element Type"                                        | 0                           | [:]                 | ""
+        "Empty Cart with Element Type"                                      | 0                           | [:]                 | "SomeElementType"
+        "Single Item in Cart with no Element Type"                          | 2                           | [a: ["c", "d"]]     | ""
+        "Single Item in Cart with Element Type in Map"                      | 2                           | [a: ["c", "d"]]     | "a"
+        "Single Item in Cart with Element Type in Map with null values"     | 1                           | [a: null, c: ["x"]] | ""
+        "Single Item in Cart with Element Type Not in Map"                  | 0                           | [a: ["c", "d"]]     | "z"
+        "Single Item in Cart with Element Type Not in Map with null values" | 0                           | [a: null]           | "z"
 
 
     }

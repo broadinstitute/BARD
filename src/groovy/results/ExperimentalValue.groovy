@@ -246,7 +246,7 @@ enum ExperimentalValueUnit {
             case MolSpreadSheetCellUnit.unknown:
                 return ExperimentalValueUnit.unknown;
             default:
-                throw new NotImplementedException(molSpreadSheetCellUnit + " not yet implemented");
+                throw new NotImplementedException(molSpreadSheetCellUnit.toString() + " not yet implemented");
         }
     }
 
@@ -294,7 +294,8 @@ enum ExperimentalValueType {
     identifier,
     image,
     string,
-    unknown;
+    unknown,
+    unhandled;
 
     static ExperimentalValueType convert(MolSpreadSheetCellType molSpreadSheetCellType) {
         switch (molSpreadSheetCellType) {

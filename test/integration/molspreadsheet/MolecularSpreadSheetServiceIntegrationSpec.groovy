@@ -1,24 +1,23 @@
 package molspreadsheet
-import static junit.framework.Assert.assertNotNull
 
 import bard.core.adapter.CompoundAdapter
 import bard.core.rest.RESTAssayService
 import bard.core.rest.RESTCompoundService
 import bard.core.rest.RESTExperimentService
 import bard.core.rest.RESTProjectService
+import bardqueryapi.QueryServiceWrapper
 import com.metasieve.shoppingcart.ShoppingCartService
 import grails.plugin.spock.IntegrationSpec
-
 import org.junit.After
 import org.junit.Before
-import spock.lang.Unroll
-import bard.core.*
 import querycart.CartAssay
 import querycart.CartCompound
 import querycart.CartProject
 import querycart.QueryCartService
+import spock.lang.Unroll
+import bard.core.*
 
-import bardqueryapi.QueryServiceWrapper
+import static junit.framework.Assert.assertNotNull
 
 @Unroll
 class MolecularSpreadSheetServiceIntegrationSpec extends IntegrationSpec {
@@ -68,6 +67,9 @@ class MolecularSpreadSheetServiceIntegrationSpec extends IntegrationSpec {
     }
 
 
+
+
+
     void "test weHaveEnoughDataToMakeASpreadsheet()"() {
         when: "we have a molecularSpreadSheetService"
         assertNotNull molecularSpreadSheetService
@@ -107,8 +109,8 @@ class MolecularSpreadSheetServiceIntegrationSpec extends IntegrationSpec {
         List<CartProject> cartProjectList = []
         cartProjectList.add(new CartProject("Summary of Flow Cytometry HTS of Small Molecules that Regulate V-ATPase Proton Transport in Yeast", 364 as Long))
         List<Experiment> finalExperimentList = molecularSpreadSheetService.cartProjectsToExperiments(cartProjectList)
-   ////////////////////////
-        Assay assay = restAssayService.get(519 as Long)
+
+        Assay assay = restAssayService.get(2199 as Long)
         final ServiceIterator<Experiment> serviceIterator = restAssayService.iterator(assay, Experiment)
         Collection<Experiment> experimentList = serviceIterator.collect()
         MolSpreadSheetData molSpreadSheetData = new MolSpreadSheetData()
@@ -116,6 +118,9 @@ class MolecularSpreadSheetServiceIntegrationSpec extends IntegrationSpec {
         List<SpreadSheetActivity> spreadSheetActivityList = molecularSpreadSheetService.extractMolSpreadSheetData(molSpreadSheetData,
                 finalExperimentList,
                 compounds)
+        molSpreadSheetData.rowPointer[1377840 as Long]  =0
+        molSpreadSheetData.rowPointer[727017 as Long]  =1
+        molSpreadSheetData.rowPointer[1622396 as Long]  =2
 
 
         molecularSpreadSheetService.populateMolSpreadSheetData(molSpreadSheetData,
@@ -126,7 +131,9 @@ class MolecularSpreadSheetServiceIntegrationSpec extends IntegrationSpec {
 
         then: "we should be able to generate a list of spreadsheet activity elements"
         assertNotNull molSpreadSheetData.mssData
-        assert molSpreadSheetData.mssData.size()==0 // demonstrate that there is no crossover between project ID = 364 and assay id=519
+        assert molSpreadSheetData.mssData.size()==3 // demonstrate that there are 3 identified compounds compounds
+        assert molSpreadSheetData.rowPointer.size()==3 // demonstrate that there are 3 identified compounds compounds
+        assert molSpreadSheetData.columnPointer.size()==9 // demonstrate that there ARE nine assays in this project
     }
 
 

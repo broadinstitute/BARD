@@ -5,11 +5,11 @@ import bardqueryapi.IQueryService
 import bardqueryapi.QueryServiceWrapper
 import com.metasieve.shoppingcart.ShoppingCartService
 import grails.test.mixin.TestFor
+import querycart.CartCompound
 import querycart.QueryCartService
+import spock.lang.Shared
 import spock.lang.Specification
 import spock.lang.Unroll
-import querycart.CartCompound
-import spock.lang.Shared
 
 /**
  * Created with IntelliJ IDEA.
@@ -22,6 +22,7 @@ import spock.lang.Shared
 @Unroll
 @TestFor(MolecularSpreadSheetService)
 class MolecularSpreadSheetServiceUnitSpec  extends Specification {
+
     QueryCartService queryCartService
     QueryServiceWrapper queryServiceWrapper
     ShoppingCartService shoppingCartService
@@ -125,8 +126,7 @@ class MolecularSpreadSheetServiceUnitSpec  extends Specification {
     void "test populateMolSpreadSheetColumnMetadata when experiment list is empty and mssheader is null"() {
         given:  "we have an experiment"
         final MolSpreadSheetData molSpreadSheetData  = new MolSpreadSheetData()
-        molSpreadSheetData.mssHeaders = null
-        final List<Experiment> experimentList  = []
+         final List<Experiment> experimentList  = []
 
         when: "we want to pull out the active values"
         service.populateMolSpreadSheetColumnMetadata(molSpreadSheetData,experimentList)
@@ -164,6 +164,7 @@ class MolecularSpreadSheetServiceUnitSpec  extends Specification {
         assert  molSpreadSheetData.mssHeaders.contains("b")
         assert  molSpreadSheetData.mssHeaders.contains("c")
     }
+
 
 
 
