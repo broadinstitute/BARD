@@ -47,7 +47,7 @@ class QueryCartServiceUnitSpec extends Specification {
         "Empty Cart with Element Type"                                      | 0                           | [:]                 | "SomeElementType"
         "Single Item in Cart with no Element Type"                          | 2                           | [a: ["c", "d"]]     | ""
         "Single Item in Cart with Element Type in Map"                      | 2                           | [a: ["c", "d"]]     | "a"
-        "Single Item in Cart with Element Type in Map with null values"     | 0                           | [a: null, c: ["x"]] | ""
+        "Single Item in Cart with Element Type in Map with null values"     | 1                           | [a: null, c: ["x"]] | ""
         "Single Item in Cart with Element Type Not in Map"                  | 0                           | [a: ["c", "d"]]     | "z"
         "Single Item in Cart with Element Type Not in Map with null values" | 0                           | [a: null]           | "z"
 

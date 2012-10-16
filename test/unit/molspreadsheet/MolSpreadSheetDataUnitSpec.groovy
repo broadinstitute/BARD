@@ -7,7 +7,7 @@ import spock.lang.Unroll
 /**
  * See the API for {@link grails.test.mixin.support.GrailsUnitTestMixin} for usage instructions
  */
-@TestFor(MolSpreadSheetController)
+@TestFor(MolSpreadSheetData)
 @Unroll
 class MolSpreadSheetDataUnitSpec  extends Specification {
 
@@ -54,7 +54,15 @@ class MolSpreadSheetDataUnitSpec  extends Specification {
         47      |   47      |   "123"       |   "-"
     }
 
+    void "Test findSpreadSheetActivity method - return null"() {
+        given:
+        MolSpreadSheetData molSpreadSheetData = new MolSpreadSheetData()
+        when:
+        final SpreadSheetActivityStorage activity = molSpreadSheetData.findSpreadSheetActivity(1, 1)
+        then:
+        assert !activity
 
+    }
 
 
 
@@ -114,6 +122,21 @@ class MolSpreadSheetDataUnitSpec  extends Specification {
         then:
         assert molSpreadSheetData.rowCount==2
         assert molSpreadSheetData.columnCount==3
+    }
+    void "Test rowCount and colCount method with null maps"() {
+        given:
+        MolSpreadSheetData molSpreadSheetData = new MolSpreadSheetData()
+        molSpreadSheetData.mssHeaders = null
+        molSpreadSheetData.rowPointer = null
+
+        when:
+        final int columnCount = molSpreadSheetData.columnCount
+
+        and:
+        final int rowCount =molSpreadSheetData.rowCount
+        then:
+        assert columnCount == 0
+        assert rowCount == 0
     }
 
 

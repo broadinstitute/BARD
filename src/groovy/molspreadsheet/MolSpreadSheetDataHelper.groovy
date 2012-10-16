@@ -1,7 +1,6 @@
 package molspreadsheet
 
 import bard.core.Experiment
-
 import querycart.CartAssay
 import querycart.CartCompound
 import querycart.CartProject
@@ -23,9 +22,10 @@ class MolSpreadSheetDataBuilder {
     Object etag
     List<SpreadSheetActivity> spreadSheetActivityList
 
-    MolSpreadSheetDataBuilder(){
+    MolSpreadSheetDataBuilder() {
 
     }
+
     MolSpreadSheetDataBuilder(MolecularSpreadSheetService molecularSpreadSheetService) {
         this.molecularSpreadSheetService = molecularSpreadSheetService
     }
@@ -49,24 +49,25 @@ class MolSpreadSheetDataBuilder {
 
         try {
             // Any projects can be converted to assays, then assays to experiments
-            if (this.cartProjectList?.size() > 0) {
+            if (!this.cartProjectList?.isEmpty()) {
                 experimentList = molecularSpreadSheetService.cartProjectsToExperiments(this.cartProjectList)
             }
 
             // Any assays explicitly selected on the cart are added to the  experimentList
-            if (this.cartAssayList?.size() > 0) {
+            if (!this.cartAssayList?.isEmpty()) {
                 experimentList = molecularSpreadSheetService.cartAssaysToExperiments(experimentList, this.cartAssayList)
             }
 
             // If we get to this point and have no experiments selected but we DO have a compound (s), then the user
             //  may be looking to derive their assays on the basis of compounds. We can do that.
-            if ((experimentList.size() == 0) && (this.cartCompoundList?.size() > 0)) {
+            if ((experimentList.isEmpty()) && (!this.cartCompoundList?.isEmpty())) {
                 experimentList = molecularSpreadSheetService.cartCompoundsToExperiments(this.cartCompoundList)
             }
 
 
-        }  catch (Exception exception) {
+        } catch (Exception exception) {
             // The shopping cart plugins sometimes throwns an exception though it seems to always keep working
+            //TODO: If we know the specific exception that it throws then we should catch the specific one
             exception.printStackTrace()
         }
         experimentList
@@ -84,7 +85,15 @@ class MolSpreadSheetDataBuilder {
         molecularSpreadSheetService.populateMolSpreadSheetColumnMetadata(molSpreadSheetData, experimentList)
 
         // next deal with the compounds
-        if (cartCompoundList.size() > 0) {
+        if (cartCompoundList.isEmpty()) {
+            // Explicitly specified assay, for which we will retrieve all compounds
+            // etag = molecularSpreadSheetService.retrieveImpliedCompoundsEtagFromAssaySpecification(experimentList)
+            // spreadSheetActivityList = molecularSpreadSheetService.extractMolSpreadSheetData(molSpreadSheetData, experimentList, etag)
+            spreadSheetActivityList = molecularSpreadSheetService.extractMolSpreadSheetData(molSpreadSheetData, experimentList, [])
+            Map map = molecularSpreadSheetService.convertSpreadSheetActivityToCompoundInformation(spreadSheetActivityList)
+            molecularSpreadSheetService.populateMolSpreadSheetRowMetadata(molSpreadSheetData, map)
+
+        } else {
 
             // Explicitly specified assays and explicitly specified compounds
             molecularSpreadSheetService.populateMolSpreadSheetRowMetadata(molSpreadSheetData, cartCompoundList)
@@ -94,16 +103,6 @@ class MolSpreadSheetDataBuilder {
             }
             //spreadSheetActivityList = molecularSpreadSheetService.extractMolSpreadSheetData(molSpreadSheetData, experimentList, etag)
             spreadSheetActivityList = molecularSpreadSheetService.extractMolSpreadSheetData(molSpreadSheetData, experimentList, compoundsSelected)
-
-        } else if (cartCompoundList.size() == 0) {
-
-            // Explicitly specified assay, for which we will retrieve all compounds
-            // etag = molecularSpreadSheetService.retrieveImpliedCompoundsEtagFromAssaySpecification(experimentList)
-            // spreadSheetActivityList = molecularSpreadSheetService.extractMolSpreadSheetData(molSpreadSheetData, experimentList, etag)
-            spreadSheetActivityList = molecularSpreadSheetService.extractMolSpreadSheetData(molSpreadSheetData, experimentList, [])
-            Map map = molecularSpreadSheetService.convertSpreadSheetActivityToCompoundInformation(spreadSheetActivityList)
-            molecularSpreadSheetService.populateMolSpreadSheetRowMetadata(molSpreadSheetData, map)
-
         }
         // finally deal with the data
         molecularSpreadSheetService.populateMolSpreadSheetData(molSpreadSheetData, experimentList, spreadSheetActivityList)

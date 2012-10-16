@@ -1,15 +1,13 @@
 package molspreadsheet
-import static org.junit.Assert.assertNotNull
-
-import spock.lang.Specification
-import spock.lang.Unroll
 
 import bard.core.Experiment
 import querycart.CartAssay
 import querycart.CartCompound
 import querycart.CartProject
-import molspreadsheet.MolecularSpreadSheetService
-import molspreadsheet.MolSpreadSheetDataBuilder
+import spock.lang.Specification
+import spock.lang.Unroll
+
+import static org.junit.Assert.assertNotNull
 
 /**
  * Created with IntelliJ IDEA.
@@ -20,25 +18,39 @@ import molspreadsheet.MolSpreadSheetDataBuilder
  */
 
 @Unroll
-class MolSpreadSheetDataBuilderUnitSpec  extends Specification {
+class MolSpreadSheetDataBuilderUnitSpec extends Specification {
 
     MolecularSpreadSheetService molecularSpreadSheetService
 
     void setup() {
-         this.molecularSpreadSheetService = Mock(MolecularSpreadSheetService)
+        this.molecularSpreadSheetService = Mock(MolecularSpreadSheetService)
     }
 
     void tearDown() {
         // Tear down logic here
     }
 
+    void "test populateMolSpreadSheet Non_Empty Compound Cart"() {
+        given:
+        MolSpreadSheetDataBuilder molSpreadSheetDataBuilder = new MolSpreadSheetDataBuilder()
+        molSpreadSheetDataBuilder.molecularSpreadSheetService = this.molecularSpreadSheetService
+        molSpreadSheetDataBuilder.cartCompoundList = [new CartCompound(compoundId: 200)]
+        when:
+        molSpreadSheetDataBuilder.populateMolSpreadSheet([])
+        then:
+        1 * molecularSpreadSheetService.populateMolSpreadSheetColumnMetadata(_, _) >> {}
+        molecularSpreadSheetService.extractMolSpreadSheetData(_, _, _)>>{[]}
+
+
+    }
+
     void "test holdCartResults, choose one of the data accumulation methods in this Builder"() {
         when:
-        List<CartCompound> cartCompoundList  = []
-        List<CartAssay> cartAssayList  = []
+        List<CartCompound> cartCompoundList = []
+        List<CartAssay> cartAssayList = []
         List<CartProject> cartProjectList = []
         MolSpreadSheetDataBuilder molSpreadSheetDataBuilder = new MolSpreadSheetDataBuilder()
-        assertNotNull  molSpreadSheetDataBuilder
+        assertNotNull molSpreadSheetDataBuilder
 
         then: "The expected hashCode is returned"
         molSpreadSheetDataBuilder.holdCartResults(cartCompoundList, cartAssayList, cartProjectList)
@@ -51,8 +63,8 @@ class MolSpreadSheetDataBuilderUnitSpec  extends Specification {
 
     void "test deriveListOfExperiments in the degenerate case"() {
         when:
-        List<CartCompound> cartCompoundList  = []
-        List<CartAssay> cartAssayList  = []
+        List<CartCompound> cartCompoundList = []
+        List<CartAssay> cartAssayList = []
         List<CartProject> cartProjectList = []
         MolSpreadSheetDataBuilder molSpreadSheetDataBuilder = new MolSpreadSheetDataBuilder()
         molSpreadSheetDataBuilder.holdCartResults(cartCompoundList, cartAssayList, cartProjectList)
