@@ -1,4 +1,5 @@
 package molspreadsheet
+
 import bard.core.Experiment
 import querycart.CartAssay
 import querycart.CartCompound
@@ -40,7 +41,7 @@ class MolSpreadSheetDataBuilderUnitSpec extends Specification {
         molSpreadSheetDataBuilder.populateMolSpreadSheet([])
         then:
         1 * molecularSpreadSheetService.populateMolSpreadSheetColumnMetadata(_, _) >> {}
-        molecularSpreadSheetService.extractMolSpreadSheetData(_, _, _)>>{[]}
+        molecularSpreadSheetService.extractMolSpreadSheetData(_, _, _) >> {[]}
 
 
     }
@@ -90,8 +91,9 @@ class MolSpreadSheetDataBuilderUnitSpec extends Specification {
         1 * molecularSpreadSheetService.populateMolSpreadSheetRowMetadata(_, _) >> {null}
 
         where:
-        label                      | cartCompoundList     | numOfInvocations
-        'compound-list is empty'   | []                   | 1
-        'one compound in the list' | [new CartCompound()] | 0
+        label                       | cartCompoundList                         | numOfInvocations
+        'compound-list is empty'    | []                                       | 1
+        'one compound in the list'  | [new CartCompound()]                     | 0
+        'two compounds in the list' | [new CartCompound(), new CartCompound()] | 0
     }
 }
