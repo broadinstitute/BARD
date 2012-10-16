@@ -21,6 +21,7 @@ import bard.core.*
 import querycart.CartAssay
 import molspreadsheet.MolecularSpreadSheetService
 import molspreadsheet.SpreadSheetActivity
+import spock.lang.Ignore
 
 /**
  * See the API for {@link grails.test.mixin.support.GrailsUnitTestMixin} for usage instructions
@@ -37,7 +38,8 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
     @Shared Value facet1 = new IntValue(source: new DataSource(), id: 'group1', value: null, children: [new IntValue(source: new DataSource(), id: 'facet1', value: 1)])
     @Shared Value facet3 = new IntValue(source: new DataSource(), id: 'group3', value: null, children: [new IntValue(source: new DataSource(), id: 'facet3', value: 1)])
     @Shared List<SearchFilter> searchFilters1 = [new SearchFilter(filterName: "a", filterValue: "b")]
-    @Shared String EMPTY_STRING=''
+    @Shared String EMPTY_STRING = ''
+
     void setup() {
         controller.metaClass.mixin(SearchHelper)
         queryService = Mock(QueryService)
@@ -721,7 +723,6 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
 
     }
 
-
     void "test getAppliedFilters #label"() {
         given:
 
@@ -741,6 +742,62 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
         []               | [searchFilters[0]] | null       | null       | null                | "no (empty) filter; one facet; no overlapping"
         [facet1]         | []                 | null       | null       | null                | "one filter; no (empty) facet; no overlapping"
         []               | []                 | null       | null       | null                | "no (empty) filter; no (empty) facet; no overlapping"
+    }
+
+    void "test getAppliedFiltersAlreadyInFacets #label"() {
+        given:
+
+        when:
+        List<SearchFilter> result = controller.getAppliedFiltersAlreadyInFacets(testSearchFilters, facets)
+
+        then:
+        assert result == expectedTestFilters
+
+        where:
+        facets           | testSearchFilters  | expectedTestFilters | label
+        [facet1]         | searchFilters      | [searchFilters[0]]  | "one filter; two facets; one overlapping"
+        [facet1, facet3] | searchFilters      | [searchFilters[0]]  | "two filters; two facets; one overlapping"
+        [facet1]         | [searchFilters[0]] | [searchFilters[0]]  | "one filter; one facet; no overlapping"
+        []               | [searchFilters[0]] | []                  | "no (empty) filter; one facet; no overlapping"
+        [facet1]         | []                 | []                  | "one filter; no (empty) facet; no overlapping"
+        []               | []                 | []                  | "no (empty) filter; no (empty) facet; no overlapping"
+    }
+
+    void "test getAppliedFiltersNotInFacetsGrouped #label"() {
+        given:
+
+        when:
+        Map<String, List<SearchFilter>> result = controller.groupSearchFilters(testSearchFilters)
+
+        then:
+        assert result.keySet().toList() == expectedKeys
+
+        where:
+        testSearchFilters  | expectedKeys         | label
+        searchFilters      | ['group1', 'group2'] | "two filters"
+        [searchFilters[0]] | ['group1']           | "one filter"
+        []                 | []                   | "no filter"
+    }
+
+    //This test is very similar to 'test getAppliedFiltersAlreadyInFacets()' because this one tests for parent (group) name while the other one test for child (filter/facet) name.
+    //The searchFilter/facets objects were set up to match both on parent and child names.
+    void "test getAppliedFiltersDisplayedOutsideFacets #label"() {
+        given:
+
+        when:
+        List<SearchFilter> result = controller.getAppliedFiltersAlreadyInFacets(testSearchFilters, facets)
+
+        then:
+        assert result == expectedTestFilters
+
+        where:
+        facets           | testSearchFilters  | expectedTestFilters | label
+        [facet1]         | searchFilters      | [searchFilters[0]]  | "one filter; two facets; one overlapping"
+        [facet1, facet3] | searchFilters      | [searchFilters[0]]  | "two filters; two facets; one overlapping"
+        [facet1]         | [searchFilters[0]] | [searchFilters[0]]  | "one filter; one facet; no overlapping"
+        []               | [searchFilters[0]] | []                  | "no (empty) filter; one facet; no overlapping"
+        [facet1]         | []                 | []                  | "one filter; no (empty) facet; no overlapping"
+        []               | []                 | []                  | "no (empty) filter; no (empty) facet; no overlapping"
     }
 
 

@@ -520,6 +520,32 @@ class SearchHelper {
         //Includes all the applied search-filters (selected previously) that were also returned with the new filtering faceting.
         //1. Check if the facet group-names (a.k.a., parent.id) match
         //2. Check if the facet/filter name (a.k.a., child.id) match
+        List<SearchFilter> appliedFiltersAlreadyInFacets = getAppliedFiltersAlreadyInFacets(searchFilters, facets)
+
+        //Groups all the applied search-filters in facets into a parent-facet/children-facets map. We use this group to display the applied search filters WITHIN the facet groups
+        //If the facet-group exists but the applied-filter's corresponding facet didn't come back after the filtering, we still want to display the filter in its appropriate (facet) group, if we can.
+//        Map appliedFiltersNotInFacetsGrouped = ((searchFilters ?: []) - appliedFiltersAlreadyInFacets) ?
+//            (searchFilters - appliedFiltersAlreadyInFacets).groupBy { SearchFilter filter -> filter.filterName.trim()} : [:]
+        List<SearchFilter> searchFiltersNotYetApplied = (searchFilters ?: []) - appliedFiltersAlreadyInFacets
+
+        Map<String, List<SearchFilter>> appliedFiltersNotInFacetsGrouped = groupSearchFilters(searchFiltersNotYetApplied)
+
+        //Includes all the applied filters we know would not have any facet group since no facet in this group came back after the filtering was applied.
+        //We need to group these filters, rebuild their groups (parent) and display them next to the facets
+        List<SearchFilter> appliedFiltersDisplayedOutsideFacets = getAppliedFiltersDisplayedOutsideFacets(searchFiltersNotYetApplied, facets)
+
+        //Group all the applied filters so we can use the keys as group (parent) names.
+        Map<String, List<SearchFilter>> appliedFiltersDisplayedOutsideFacetsGrouped = groupSearchFilters(appliedFiltersDisplayedOutsideFacets)
+
+        return [
+                searchFilters: searchFilters,
+                appliedFiltersDisplayedOutsideFacetsGrouped: appliedFiltersDisplayedOutsideFacetsGrouped,
+                appliedFiltersNotInFacetsGrouped: appliedFiltersNotInFacetsGrouped
+        ]
+    }
+
+    //Compares based on child (facet) name between SearchFilter and facet
+    protected List<SearchFilter> getAppliedFiltersAlreadyInFacets(List<SearchFilter> searchFilters, Collection<Value> facets) {
         List<SearchFilter> appliedFiltersAlreadyInFacets = searchFilters.findAll {
             SearchFilter filter ->
             Value parent = facets.find {Value parent ->
@@ -531,18 +557,20 @@ class SearchHelper {
             }
         }
 
-        //Groups all the applied search-filters in facets into a parent-facet/children-facets map. We use this group to display the applied search filters WITHIN the facet groups
-        //If the facet-group exists but the applied-filter's corresponding facet didn't come back after the filtering, we still want to display the filter in its appropriate (facet) group, if we can.
-//        Map appliedFiltersNotInFacetsGrouped = ((searchFilters ?: []) - appliedFiltersAlreadyInFacets) ?
-//            (searchFilters - appliedFiltersAlreadyInFacets).groupBy { SearchFilter filter -> filter.filterName.trim()} : [:]
-        List<SearchFilter> searchFiltersNotYetApplied = (searchFilters ?: []) - appliedFiltersAlreadyInFacets
-        Map appliedFiltersNotInFacetsGrouped = [:]
+        return appliedFiltersAlreadyInFacets
+    }
+
+    protected Map<String, List<SearchFilter>> groupSearchFilters(List<SearchFilter> searchFiltersNotYetApplied) {
+        Map<String, List<SearchFilter>> appliedFiltersNotInFacetsGrouped = [:]
         if (searchFiltersNotYetApplied) {
             appliedFiltersNotInFacetsGrouped = searchFiltersNotYetApplied.groupBy { SearchFilter filter -> filter.filterName.trim()}
         }
 
-        //Includes all the applied filters we know would not have any facet group since no facet in this group came back after the filtering was applied.
-        //We need to group these filters, rebuild their groups (parent) and display them next to the facets
+        return appliedFiltersNotInFacetsGrouped
+    }
+
+    //Compares based on parent (group) name between SearchFilter and facet
+    protected List<SearchFilter> getAppliedFiltersDisplayedOutsideFacets(List<SearchFilter> searchFiltersNotYetApplied, Collection<Value> facets) {
         List<SearchFilter> appliedFiltersDisplayedOutsideFacets = []
         if (searchFiltersNotYetApplied) {
             appliedFiltersDisplayedOutsideFacets = searchFiltersNotYetApplied.findAll {SearchFilter filter ->
@@ -551,16 +579,6 @@ class SearchHelper {
             }
         }
 
-        //Group all the applied filters so we can use the keys as group (parent) names.
-        Map appliedFiltersDisplayedOutsideFacetsGrouped = [:]
-        if (appliedFiltersDisplayedOutsideFacets) {
-            appliedFiltersDisplayedOutsideFacetsGrouped = appliedFiltersDisplayedOutsideFacets.groupBy { SearchFilter filter -> filter.filterName.trim()}
-        }
-
-        return [
-                searchFilters: searchFilters,
-                appliedFiltersDisplayedOutsideFacetsGrouped: appliedFiltersDisplayedOutsideFacetsGrouped,
-                appliedFiltersNotInFacetsGrouped: appliedFiltersNotInFacetsGrouped
-        ]
+        return appliedFiltersDisplayedOutsideFacets
     }
 }
