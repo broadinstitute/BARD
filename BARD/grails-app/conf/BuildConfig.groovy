@@ -55,6 +55,7 @@ grails.project.dependency.resolution = {
         compile ":cbipcrowdauthentication:0.3.0"
         compile(":build-test-data:2.0.3")
         //compile ":console:1.2"
+        compile ":clover:3.1.6"
 
         // runtime scope
         runtime ":hibernate:$grailsVersion"
@@ -79,4 +80,11 @@ codenarc.reports = {
 }
 codenarc {
     exclusions = ['**/grails-app/migrations/*']
+}
+
+clover {
+    //initstring = "bardwebclover.db"
+    directories: ['src/java','src/groovy', 'grails-app']
+    includes = ['**/*.groovy', '**/*.java']
+    excludes = ['**/bardwebquery/**.*', '**/*Spec*.*', '**/mockServices/**.*', '**/conf/**', '**/GridController.*', '**/mockServices/**.*']
 }
