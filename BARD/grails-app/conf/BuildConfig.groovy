@@ -46,6 +46,7 @@ grails.project.dependency.resolution = {
     plugins {
         // build scope
         build ":tomcat:$grailsVersion"
+        compile ":hibernate:$grailsVersion"
         build ":codenarc:0.15"
         // compile scope
         compile ":grails-ui:1.2.3"
@@ -53,11 +54,11 @@ grails.project.dependency.resolution = {
         compile ":twitter-bootstrap:2.1.0"
         compile ":elastic-search:0.4.5-SNAPSHOT"
         compile ":cbipcrowdauthentication:0.3.0"
-        compile(":build-test-data:2.0.3")
+        compile ":build-test-data:2.0.3"
         //compile ":console:1.2"
 
         // runtime scope
-        runtime ":hibernate:$grailsVersion"
+
         runtime ":jquery:1.7.1"
         runtime ":jquery-ui:1.8.15"
         runtime ":resources:1.1.6"
