@@ -1,5 +1,6 @@
 package bard.db.registration
 
+import bard.db.dictionary.Element
 import grails.buildtestdata.mixin.Build
 import spock.lang.Shared
 import spock.lang.Specification
@@ -37,10 +38,10 @@ class AssayContextServiceUnitSpec extends Specification {
 
 
         where:
-        desc                            | existingAssayContextItems                        | indexOfAddedItem | sizeAfterAdd
-        'add item to empty list'        | []                                               | 0                | 1
-        'add item to list with 1 item'  | [new AssayContextItem()]                         | 1                | 2
-        'add item to list with 2 items' | [new AssayContextItem(), new AssayContextItem()] | 2                | 3
+        desc                            | existingAssayContextItems                                                                                                                                                              | indexOfAddedItem | sizeAfterAdd
+        'add item to empty list'        | []                                                                                                                                                                                     | 0                | 1
+        'add item to list with 1 item'  | [new AssayContextItem(attributeType: AttributeType.Fixed, attributeElement: new Element())]                                                                                            | 1                | 2
+        'add item to list with 2 items' | [new AssayContextItem(attributeType: AttributeType.Fixed, attributeElement: new Element()), new AssayContextItem(attributeType: AttributeType.Fixed, attributeElement: new Element())] | 2                | 3
 
     }
 
@@ -54,7 +55,7 @@ class AssayContextServiceUnitSpec extends Specification {
         when: 'it is added to the assayContext again'
         service.addItem(assayContext.assayContextItems.first(), assayContext)
 
-        then:'do nothing, particulary throw an IOOBE' // if you didn't guess the earlier code was resulting in a IOOBE
+        then: 'do nothing, particulary throw an IOOBE' // if you didn't guess the earlier code was resulting in a IOOBE
         notThrown(IndexOutOfBoundsException)
         assayContext.assayContextItems.size() == 1
         item == assayContext.assayContextItems.first()
@@ -77,10 +78,10 @@ class AssayContextServiceUnitSpec extends Specification {
 
 
         where:
-        desc                    | existingAssayContextItems                        | indexOfAddedItem | sizeAfterAdd
-        'addItem to empty list' | []                                               | 0                | 1
-        'addItem at index 0'    | [new AssayContextItem()]                         | 0                | 2
-        'addItem at index 1'    | [new AssayContextItem(), new AssayContextItem()] | 1                | 3
+        desc                    | existingAssayContextItems                                                                                                                                                              | indexOfAddedItem | sizeAfterAdd
+        'addItem to empty list' | []                                                                                                                                                                                     | 0                | 1
+        'addItem at index 0'    | [new AssayContextItem(attributeType: AttributeType.Fixed, attributeElement: new Element())]                                                                                            | 0                | 2
+        'addItem at index 1'    | [new AssayContextItem(attributeType: AttributeType.Fixed, attributeElement: new Element()), new AssayContextItem(attributeType: AttributeType.Fixed, attributeElement: new Element())] | 1                | 3
 
     }
 
