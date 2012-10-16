@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-<title>Result</title>
+<title>Query processing middleware</title>
 <link href="../../../css/ea.css" rel="stylesheet" type="text/css" />
 <script>
 function initPage(src) {	
@@ -34,15 +34,15 @@ function nameClassifier(name, separator)
 <div class="pageHeader"></div>
 <div class="PageBody">
 	<div id="name_classifier" style="display: none;"></div>
-	<span class="ObjectTitle"><script type="text/javascript">document.write(nameClassifier("Result", " : "))</script>  : Public  &lt;&lt;CSV file&gt;&gt; Object</span>
+	<span class="ObjectTitle"><script type="text/javascript">document.write(nameClassifier("Query processing middleware", " : "))</script>  : Public   Component</span>
 	<table border="0" cellpadding="0" cellspacing="0" class="ObjectDetails">
 		<tr>
 			<td width="15%" class="ObjectDetailsTopic">Created:</td>
-			<td width="85%" class="ObjectDetailsValue">5/16/2012 9:54:44 AM</td>
+			<td width="85%" class="ObjectDetailsValue">5/10/2012 7:36:26 PM</td>
 		</tr>
 		<tr>
 			<td class="ObjectDetailsTopic">Modified:</td>
-			<td class="ObjectDetailsValue">5/16/2012 9:55:06 AM</td>
+			<td class="ObjectDetailsValue">5/10/2012 7:36:40 PM</td>
 		</tr>
 		<tr style="height: 10px"><td colspan="2"></td></tr>
 		<tr>
@@ -87,28 +87,30 @@ function nameClassifier(name, separator)
 		</tr>
 		<tr id="adv00" style="display: none;">
 			<td class="ObjectDetailsTopic" style="padding-left: 18px;">UUID:</td>
-			<td class="ObjectDetailsValue">{218F3AD3-C714-452a-B188-A3E00F506A19}</td>
+			<td class="ObjectDetailsValue">{49AF1458-14D9-402d-B93F-594B6EE55B28}</td>
 		</tr>
 		<tr id="adv01" style="display: none;">
 			<td class="ObjectDetailsTopic" style="padding-left: 18px;">Appears In:</td>
-			<td class="ObjectDetailsValue"><a href="EA931.htm">MLBD overview</a>, <a href="EA925.htm">MLBD data upload</a>, <a href="EA917.htm">File processing</a></td>
+			<td class="ObjectDetailsValue"><a href="EA934.htm">MLBD overview</a>, <a href="EA932.htm">MLBD migration</a>, <a href="EA926.htm">MLBD Data Consumers</a>, <a href="EA922.htm">get data for a SAR table</a></td>
 		</tr>
 	</table>
 	
 	<div class="TableGroup" id="TableGroup">
 		<ul class="ItemTitle">
+			<li onClick="parent.toggleItem('MessagesTo');" id="MessagesToTitle">Messages To</li>
 			<li onClick="parent.toggleItem('MessagesFrom');" id="MessagesFromTitle">Messages From</li>
+			<li onClick="parent.toggleItem('CustomProperties');" id="CustomPropertiesTitle">Advanced</li>
 			<li onClick="parent.toggleItem('Links');" id="LinksTitle">Other Links</li>
 		</ul>
-		<div class="ItemBody" id="MessagesFromTable">
+		<div class="ItemBody" id="MessagesToTable">
 			<table border="0" cellspacing="0" cellpadding="0" class="Table">
 				<tr>
 					<td width="50%" class="TableHeading">Element</td>
 					<td width="50%" class="TableHeading">Message</td>
 				</tr>
 				<tr>
-					<td width="50%" class="TableRow" valign="top"><a href="EA974.htm">File Reader</a></td>
-					<td width="50%" class="TableRow" valign="top">Open</td>
+					<td width="50%" class="TableRow" valign="top"><a href="EA987.htm">«Interface» Query API</a></td>
+					<td width="50%" class="TableRow" valign="top">PUT(compound)</td>
 				</tr>
 		   		<tr>
 					<td class="TableRowBottomDashed"  colspan="2">
@@ -121,8 +123,8 @@ function nameClassifier(name, separator)
 					</td>
 				</tr>
 				<tr>
-					<td width="50%" class="TableRow" valign="top"><a href="EA974.htm">File Reader</a></td>
-					<td width="50%" class="TableRow" valign="top">getHeaderLines</td>
+					<td width="50%" class="TableRow" valign="top"><a href="EA987.htm">«Interface» Query API</a></td>
+					<td width="50%" class="TableRow" valign="top">PUT(assay)</td>
 				</tr>
 		   		<tr>
 					<td class="TableRowBottomDashed"  colspan="2">
@@ -135,8 +137,8 @@ function nameClassifier(name, separator)
 					</td>
 				</tr>
 				<tr>
-					<td width="50%" class="TableRow" valign="top"><a href="EA974.htm">File Reader</a></td>
-					<td width="50%" class="TableRow" valign="top">getResultLine</td>
+					<td width="50%" class="TableRow" valign="top"><a href="EA987.htm">«Interface» Query API</a></td>
+					<td width="50%" class="TableRow" valign="top">PUT(result_type)</td>
 				</tr>
 		   		<tr>
 					<td class="TableRowBottomDashed"  colspan="2">
@@ -149,8 +151,8 @@ function nameClassifier(name, separator)
 					</td>
 				</tr>
 				<tr>
-					<td width="50%" class="TableRow" valign="top"><a href="EA974.htm">File Reader</a></td>
-					<td width="50%" class="TableRow" valign="top">close</td>
+					<td width="50%" class="TableRow" valign="top"><a href="EA987.htm">«Interface» Query API</a></td>
+					<td width="50%" class="TableRow" valign="top">GET(string,  token,  token,  token)</td>
 				</tr>
 		   		<tr>
 					<td class="TableRowBottomDashed"  colspan="2">
@@ -163,8 +165,8 @@ function nameClassifier(name, separator)
 					</td>
 				</tr>
 				<tr>
-					<td width="50%" class="TableRow" valign="top"><a href="EA974.htm">File Reader</a></td>
-					<td width="50%" class="TableRow" valign="top">archive</td>
+					<td width="50%" class="TableRow" valign="top"><a href="EA988.htm">Query processing middleware</a></td>
+					<td width="50%" class="TableRow" valign="top">formatPage</td>
 				</tr>
 		   		<tr>
 					<td class="TableRowBottomDashed"  colspan="2">
@@ -176,9 +178,18 @@ function nameClassifier(name, separator)
 						</div>
 					</td>
 				</tr>
+
+			</table>
+		</div>
+		<div class="ItemBody" id="MessagesFromTable">
+			<table border="0" cellspacing="0" cellpadding="0" class="Table">
 				<tr>
-					<td width="50%" class="TableRow" valign="top"><a href="EA974.htm">File Reader</a></td>
-					<td width="50%" class="TableRow" valign="top">getColumnHeaders</td>
+					<td width="50%" class="TableHeading">Element</td>
+					<td width="50%" class="TableHeading">Message</td>
+				</tr>
+				<tr>
+					<td width="50%" class="TableRow" valign="top"><a href="EA988.htm">Query processing middleware</a></td>
+					<td width="50%" class="TableRow" valign="top">formatPage</td>
 				</tr>
 		   		<tr>
 					<td class="TableRowBottomDashed"  colspan="2">
@@ -193,7 +204,20 @@ function nameClassifier(name, separator)
 
 			</table>
 		</div>
-		<div class="ItemBody" id="LinksTable">
+		<div class="ItemBody" id="CustomPropertiesTable">
+			<table border="0" cellspacing="0" cellpadding="0" class="Table">
+				<tr>
+					<td width="30%" class="TableHeading">Property</td>
+					<td width="70%" class="TableHeading">Value</td>
+				</tr>
+			<tr>
+				<td width="30%" class="TableRow">isIndirectlyInstantiated:</td>
+				<td width="70%" class="TableRow">true</td>
+			</tr>
+
+
+			</table>
+		</div>		<div class="ItemBody" id="LinksTable">
 			<table align="center" border="0" cellspacing="0" cellpadding="0" class="Table">
 				<tr>
 					<td width="30%" class="TableHeading">Object</td>
@@ -202,13 +226,19 @@ function nameClassifier(name, separator)
 					<td width="40%" class="TableHeading">Notes</td>
 				</tr>
 				<tr>
-					<td width="30%" class="TableRow" valign="top"><a href="EA971.htm">«temporary» External Data Source in a center</a></td>
+					<td width="30%" class="TableRow" valign="top"><a href="EA987.htm">«Interface» Query API</a></td>
 					<td width="15%" class="TableRow" valign="top">Component</td>
 					<td width="15%" class="TableRow" valign="top">Information Flow</td>
 					<td width="40%" class="TableRow" valign="top">&nbsp;</td>
 				</tr>
 				<tr>
-					<td width="30%" class="TableRow" valign="top"><a href="EA959.htm">Data Deposition CSV file API</a></td>
+					<td width="30%" class="TableRow" valign="top"><a href="EA951.htm">«Web» Basic Query UI</a></td>
+					<td width="15%" class="TableRow" valign="top">Component</td>
+					<td width="15%" class="TableRow" valign="top">Information Flow</td>
+					<td width="40%" class="TableRow" valign="top">&nbsp;</td>
+				</tr>
+				<tr>
+					<td width="30%" class="TableRow" valign="top"><a href="EA987.htm">«Interface» Query API</a></td>
 					<td width="15%" class="TableRow" valign="top">Component</td>
 					<td width="15%" class="TableRow" valign="top">Information Flow</td>
 					<td width="40%" class="TableRow" valign="top">&nbsp;</td>
