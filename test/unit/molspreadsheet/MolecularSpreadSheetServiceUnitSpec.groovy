@@ -1,6 +1,7 @@
 package molspreadsheet
 
 import bard.core.Experiment
+import bardqueryapi.BardWebInterfaceControllerUnitSpec
 import bardqueryapi.IQueryService
 import bardqueryapi.QueryServiceWrapper
 import com.metasieve.shoppingcart.ShoppingCartService
@@ -10,6 +11,10 @@ import querycart.QueryCartService
 import spock.lang.Shared
 import spock.lang.Specification
 import spock.lang.Unroll
+import bard.core.adapter.CompoundAdapter
+import bard.core.Compound
+import bard.core.DataSource
+import bard.core.LongValue
 
 /**
  * Created with IntelliJ IDEA.
@@ -21,15 +26,20 @@ import spock.lang.Unroll
 
 @Unroll
 @TestFor(MolecularSpreadSheetService)
+@Mixin(BardWebInterfaceControllerUnitSpec)
 class MolecularSpreadSheetServiceUnitSpec  extends Specification {
 
     QueryCartService queryCartService
     QueryServiceWrapper queryServiceWrapper
     ShoppingCartService shoppingCartService
     IQueryService queryService
-    @Shared Map compoundAdapterMap = [compoundAdapters: [], facets: null, nHits: 0]
+    CompoundAdapter compoundAdapter = buildCompoundAdapter(6 as Long,[842121 as Long])
+    @Shared Map compoundAdapterMap = [compoundAdapters: [buildCompoundAdapter(6 as Long,[842121 as Long])], facets: null, nHits: 0]
 
     void setup() {
+        compoundAdapter.metaClass.structureSMILES = 'c1ccccc1'
+        compoundAdapter.metaClass.pubChemCID = 1 as Long
+        compoundAdapter.metaClass.name = 'name'
         this.queryCartService = Mock(QueryCartService)
         this.queryServiceWrapper = Mock(QueryServiceWrapper)
         this.shoppingCartService = Mock(ShoppingCartService)
@@ -75,6 +85,19 @@ class MolecularSpreadSheetServiceUnitSpec  extends Specification {
         47 as Long      | "eid"         | 47 as Long
         47 as Long      | "cid"         | 47 as Long
         47 as Long      | "sid"         | 47 as Long
+    }
+
+
+    void "test error value of addCurrentActivityToSpreadSheet "() {
+        given:  "we have an experiment"
+        SpreadSheetActivity spreadSheetActivity = new SpreadSheetActivity()
+        final bard.core.Value experimentalValue  = new bard.core.Value()
+
+        when: "we want to pull out the active values"
+        experimentalValue.id = "foo"
+
+        then: "prove that the active values are available"
+        shouldFail {service.addCurrentActivityToSpreadSheet(spreadSheetActivity,experimentalValue)}
     }
 
 
@@ -200,6 +223,22 @@ class MolecularSpreadSheetServiceUnitSpec  extends Specification {
         assertNotNull  molSpreadSheetData.mssHeaders
         assert  molSpreadSheetData.mssHeaders.size() == 0
     }
+
+
+
+
+    CompoundAdapter buildCompoundAdapter(final Long cid, final List<Long> sids) {
+        final Compound compound = new Compound()
+        final DataSource source = new DataSource("stuff", "v1")
+        compound.setId(cid);
+        for (Long sid : sids) {
+            compound.add(new LongValue(source, Compound.PubChemSIDValue, sid));
+        }
+        // redundant
+        compound.add(new LongValue(source, Compound.PubChemCIDValue, cid));
+        return new CompoundAdapter(compound)
+    }
+
 
 
 

@@ -106,8 +106,6 @@ class MolSpreadSheetCellUnitUnitSpec extends Specification {
     }
 
 
-
-
     void "test MolSpreadSheetCell constructor, three parameters, no units, unknown type error condition"() {
         when:
         MolSpreadSheetCell molSpreadSheetCell = new MolSpreadSheetCell("NaN",MolSpreadSheetCellType.unknown,MolSpreadSheetCellUnit.Micromolar)

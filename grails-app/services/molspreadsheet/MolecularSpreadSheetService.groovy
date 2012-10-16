@@ -152,9 +152,6 @@ class MolecularSpreadSheetService {
                             MolSpreadSheetCellType.numeric,
                             MolSpreadSheetCellUnit.Molar,
                             spreadSheetActivityStorage)
-                    if (spreadSheetActivityStorage == null) {
-                        molSpreadSheetCell.activity = false
-                    }
                     map.put(arrayKey, molSpreadSheetCell)
                 }
                 // else {

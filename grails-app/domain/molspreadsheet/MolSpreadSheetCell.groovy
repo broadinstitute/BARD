@@ -100,8 +100,8 @@ class MolSpreadSheetCell {
         this.molSpreadSheetCellType = molSpreadSheetCellType
         this.spreadSheetActivityStorage = spreadSheetActivityStorage
         if (this.molSpreadSheetCellType == MolSpreadSheetCellType.image) {
-            strInternalValue = new String(value1)
-            supplementalInternalValue = new String(value2)
+            strInternalValue = new String(value1?:"")
+            supplementalInternalValue = new String(value2?:"")
         } else {
             log.error "We should never see mole spreadsheet type ${this.molSpreadSheetCellType} in this four parameter constructor specialized for images"
         }

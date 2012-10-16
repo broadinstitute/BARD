@@ -138,7 +138,6 @@ class MolecularSpreadSheetServiceIntegrationSpec extends IntegrationSpec {
 
 
 
-
     void "test extractMolSpreadSheetData"() {
         when: "we have a molecularSpreadSheetService"
         assertNotNull molecularSpreadSheetService
@@ -199,6 +198,20 @@ class MolecularSpreadSheetServiceIntegrationSpec extends IntegrationSpec {
     }
 
 
+
+    void "test empty cartCompoundsToExperiments"() {
+        when: "we have a molecularSpreadSheetService"
+        assertNotNull molecularSpreadSheetService
+        List<CartCompound> cartCompoundList = []
+        List<Experiment> finalExperimentList = molecularSpreadSheetService.cartCompoundsToExperiments(cartCompoundList)
+
+        then: "we should be able to generate a list of spreadsheet activity elements"
+        assert finalExperimentList.size()==0
+    }
+
+
+
+
     void "test cartProjectsToExperiments"() {
         when: "we have a molecularSpreadSheetService"
         assertNotNull molecularSpreadSheetService
@@ -252,6 +265,16 @@ class MolecularSpreadSheetServiceIntegrationSpec extends IntegrationSpec {
         where:
         label                                | cartAssays
         "An existing assay with experiments" | [new CartAssay(assayId: new Long(519))]
+    }
+
+    void "tests empty cartAssaysToExperiments"() {
+        given: "That a list of CartAssay objects have been created"
+        final List<CartAssay> givenCartAssays = []
+        when: "We call the cartAssaysToExperiments() with the given list of assay carty objects"
+        List<Experiment> experiments = molecularSpreadSheetService.cartAssaysToExperiments(null, givenCartAssays)
+        then: "We expect experiments for each of the assays to be found"
+        assert experiments.size()==0
+
     }
 
     void "tests extractActivitiesFromExperiment #label"() {
