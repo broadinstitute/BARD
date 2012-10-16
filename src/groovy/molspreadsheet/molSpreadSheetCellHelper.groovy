@@ -9,7 +9,8 @@ enum MolSpreadSheetCellType {
     identifier,
     image,
     string,
-    unknown
+    unknown,
+    unhandled;
 }
 
 
@@ -23,7 +24,8 @@ enum MolSpreadSheetCellUnit {
     Attamolar("aM", 18),
     Zeptomolar("zM", 21),
     Yoctomolar("yM", 24),
-    unknown("U", 0);
+    unknown("U", 0),
+    unhandled("Unhandled Exception",-5)  ;//We should never use this. This is for exception handling and allows us to test all branches of the code
 
     private String value
     private  int decimalPlacesFromMolar
