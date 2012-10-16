@@ -17,11 +17,11 @@ import querycart.CartProject
 class MolSpreadSheetDataBuilder {
     protected MolecularSpreadSheetService molecularSpreadSheetService
     MolSpreadSheetData molSpreadSheetData
-    List<CartCompound> cartCompoundList
-    List<CartAssay> cartAssayList
-    List<CartProject> cartProjectList
+    List<CartCompound> cartCompoundList = []
+    List<CartAssay> cartAssayList = []
+    List<CartProject> cartProjectList = []
     Object etag
-    List<SpreadSheetActivity> spreadSheetActivityList
+    List<SpreadSheetActivity> spreadSheetActivityList = []
 
     MolSpreadSheetDataBuilder(){
 

@@ -1,7 +1,5 @@
 package molspreadsheet
 
-import static org.junit.Assert.assertNotNull
-
 import spock.lang.Specification
 import spock.lang.Unroll
 
@@ -9,11 +7,9 @@ import bard.core.Experiment
 import querycart.CartAssay
 import querycart.CartCompound
 import querycart.CartProject
-import molspreadsheet.MolecularSpreadSheetService
-import molspreadsheet.MolSpreadSheetDataBuilder
+
 import grails.test.mixin.TestMixin
 import grails.test.mixin.support.GrailsUnitTestMixin
-import grails.test.mixin.TestFor
 
 /**
  * Created with IntelliJ IDEA.
@@ -70,18 +66,20 @@ class MolSpreadSheetDataBuilderUnitSpec extends Specification {
 
     void "test populateMolSpreadSheet #label"() {
         when:
-//        List<Experiment> experimentList = []
         MolSpreadSheetDataBuilder molSpreadSheetDataBuilder = new MolSpreadSheetDataBuilder()
-        molSpreadSheetDataBuilder.populateMolSpreadSheet(experimentList)
+        molSpreadSheetDataBuilder.molecularSpreadSheetService = this.molecularSpreadSheetService
+        molSpreadSheetDataBuilder.cartCompoundList = cartCompoundList
+        molSpreadSheetDataBuilder.populateMolSpreadSheet([])
 
         then:
-        1 * molecularSpreadSheetService.populateMolSpreadSheetColumnMetadata(_, _)
-        molecularSpreadSheetService.populateMolSpreadSheetRowMetadata(_, _) >> {null}
-        molecularSpreadSheetService.convertSpreadSheetActivityToCompoundInformation(_) > {null}
-        molecularSpreadSheetService.extractMolSpreadSheetData(_, _) >> {null}
+        1 * molecularSpreadSheetService.extractMolSpreadSheetData(_, _, _) >> {[]}
+        numOfInvocations * molecularSpreadSheetService.convertSpreadSheetActivityToCompoundInformation(_) >> {[:] as Map}
+        //molecularSpreadSheetService.populateMolSpreadSheetColumnMetadata(_, _) >> {null}
+        1 * molecularSpreadSheetService.populateMolSpreadSheetRowMetadata(_, _) >> {null}
 
         where:
-        label                      | experimentList
-        'experiment-list is empty' | []
+        label                      | cartCompoundList     | numOfInvocations
+        'compound-list is empty'   | []                   | 1
+        'one compound in the list' | [new CartCompound()] | 0
     }
 }
