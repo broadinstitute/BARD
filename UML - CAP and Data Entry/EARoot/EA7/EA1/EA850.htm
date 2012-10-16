@@ -1,0 +1,92 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>MLBD Data Consumers</title>
+<link href="../../../css/ea.css" rel="stylesheet" type="text/css" />
+<script>
+function initPage(src) {	
+	if(parent==this&&(this.location+"").indexOf('EARoot')!=-1)
+		document.location=(this.location+"").substring(0,(this.location+"").indexOf('EARoot'))+"index"+(this.location+"").substring((this.location+"").lastIndexOf('.'))+"?goto="+((this.location+"").substring((this.location+"").indexOf('EARoot')+7,(this.location+"").lastIndexOf('.')).replace(/\//g,':').replace(/EA/g,""));
+	else
+		parent.initPage(src);
+}
+
+function nameClassifier(name, separator)
+{
+  var str = name;
+  var classifierName;
+  var node = document.getElementById('name_classifier');
+  if(node != null)
+  {
+    classifierName = node.innerHTML;
+  }
+  if(classifierName != "")
+  {
+   str += separator + classifierName;
+  }
+  
+  return str;
+}
+</script>
+</head>
+<body onload="initPage(this);" class="Content">
+<div class="PageBody">
+	
+<img src="EA851.png" usemap="#EA851" border="0" />
+
+<MAP NAME="EA851">
+<area shape="rect" coords="680,22,801,98" href="EA904.htm" target="_self">
+<area shape="rect" coords="93,165,203,225" href="EA912.htm" target="_self">
+<area shape="rect" coords="702,163,791,199" href="EA868.htm" target="_self">
+<area shape="rect" coords="166,447,243,571" href="EA923.htm" target="_self">
+<area shape="rect" coords="600,351,710,403" href="EA885.htm" target="_self">
+<area shape="rect" coords="600,291,710,343" href="EA919.htm" target="_self">
+<area shape="rect" coords="601,234,711,286" href="EA917.htm" target="_self">
+<area shape="rect" coords="444,264,554,324" href="EA871.htm" target="_self">
+<area shape="rect" coords="268,444,378,504" href="EA929.htm" target="_self">
+<area shape="rect" coords="111,274,208,372" href="EA911.htm" target="_self">
+<area shape="rect" coords="283,35,396,103" href="EA869.htm" target="_self">
+<area shape="rect" coords="95,31,205,91" href="EA875.htm" target="_self">
+<area shape="rect" coords="278,267,366,327" href="EA891.htm" target="_self">
+<area shape="rect" coords="33,444,143,573" href="EA892.htm" target="_self">
+<area shape="rect" coords="344,468,454,528" href="EA927.htm" target="_self">
+<area shape="rect" coords="420,497,530,557" href="EA928.htm" target="_self">
+</MAP>
+
+	<div class="ObjectTitle">MLBD Data Consumers : Component diagram</div>
+	<table border="0" cellpadding="0" cellspacing="0" class="ObjectDetails">
+		<tr>
+			<td width="15%" class="ObjectDetailsTopic">Created:</td>
+			<td width="85%" class="ObjectDetailsValue">9/30/2011 11:31:46 PM</td>
+		</tr>
+		<tr>
+			<td width="15%" class="ObjectDetailsTopic">Modified:</td>
+			<td width="85%" class="ObjectDetailsValue">5/16/2012 10:05:11 AM</td>
+		</tr>
+		<tr style="padding-top: 10px;">
+			<td width="15%" class="ObjectDetailsTopic"><img src="../../../images/plus03.gif" align="absmiddle" id="proj" onclick="parent.toggleData(this.id)" />Project:</td>
+			<td width="85%" class="ObjectDetailsValue"></td>			
+		</tr>
+		<tr id="proj00" style="display: none;">
+			<td width="15%" class="ObjectDetailsTopic" style="padding-left: 18px;">Author:</td>
+			<td width="85%" class="ObjectDetailsValue">Owner</td>
+		</tr>
+		<tr id="proj01" style="display: none;">
+			<td width="15%" class="ObjectDetailsTopic" style="padding-left: 18px;">Version:</td>
+			<td width="85%" class="ObjectDetailsValue">1.0</td>
+		</tr>
+		<tr>
+			<td width="15%" class="ObjectDetailsTopic"><img src="../../../images/plus03.gif" align="absmiddle" id="adv" onclick="parent.toggleData(this.id)" />Advanced:</td>
+			<td width="85%" class="ObjectDetailsValue"></td>			
+		</tr>
+		<tr id="adv00" style="display: none;">
+			<td width="15%" class="ObjectDetailsTopic" style="padding-left: 18px;">ID:</td>
+			<td width="85%" class="ObjectDetailsValue">{B869E9BD-AED3-4d1a-916D-51A64E505BBA}</td>
+		</tr>
+	</table>
+	
+</div>
+ 
+</body>
+</html>

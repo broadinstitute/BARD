@@ -42,7 +42,7 @@ function changeCSS(theClass, element, value, target)
 	if (browser == 'ie6' || browser == 'ie7')
 	{
 		cssRules = 'rules';
-	} else if (browser == 'ff' || browser == 'op')
+	} else
 	{
 		cssRules = 'cssRules';
 	}
