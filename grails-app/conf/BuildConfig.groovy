@@ -44,9 +44,11 @@ grails.project.dependency.resolution = {
         test("org.seleniumhq.selenium:selenium-chrome-driver:$seleniumVersion") {
             exclude "xml-apis"
         }
-
         test("org.seleniumhq.selenium:selenium-firefox-driver:$seleniumVersion") {
             excludes "xml-apis", "commons-io"
+        }
+        test("org.seleniumhq.selenium:selenium-remote-driver:$seleniumVersion") {
+            excludes "xml-apis"
         }
         provided('net.sourceforge.nekohtml:nekohtml:1.9.15') {
             exclude "xml-api"
