@@ -13,7 +13,7 @@ import webtests.pages.LoginPage
  * Time: 2:46 PM
  * To change this template use File | Settings | File Templates.
  */
-class BardReportingSpec extends GebReportingSpec {
+abstract class BardFunctionalSpec extends GebReportingSpec {
     @Shared protected Map<String, Map> usernameUserPropsMap = [:]
 
     void setupSpec() {

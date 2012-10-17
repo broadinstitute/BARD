@@ -104,19 +104,19 @@ div.header > h3 {
     font-weight: bold;
 }
 
-#modalDiv {
-    height: 640px;
-    width: 560px;
-    overflow: hidden;
-}
+/*#modalDiv {*/
+    /*height: 640px;*/
+    /*width: 560px;*/
+    /*overflow: hidden;*/
+/*}*/
 
-#modalDiv div.modal-body {
-    width: 550px;
-    height: 480px;
-    max-height: 500px;
-    overflow: hidden;
-    padding: 5px;
-}
+/*#modalDiv div.modal-body {*/
+    /*width: 550px;*/
+    /*height: 480px;*/
+    /*max-height: 500px;*/
+    /*overflow: hidden;*/
+    /*padding: 5px;*/
+/*}*/
 
 .bard-footer {
     margin-top: 30px;
