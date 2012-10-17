@@ -7,7 +7,7 @@ import webtests.pages.ResultsPage
 import webtests.pages.StructureSearchPage
 
 @Stepwise
-class SearchSpec extends BardReportingSpec {
+class SearchFunctionalSpec extends BardFunctionalSpec {
     def "Go to home page"() {
         given: "The user is logged in"
         to LoginPage

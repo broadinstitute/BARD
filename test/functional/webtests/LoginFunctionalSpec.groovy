@@ -10,7 +10,7 @@ import webtests.pages.LoginPage
  * Time: 10:40 AM
  * To change this template use File | Settings | File Templates.
  */
-class LoginSpec extends BardReportingSpec {
+class LoginFunctionalSpec extends BardFunctionalSpec {
     String invalidUserName = "baduser"
     String invalidPassword = "badpassword"
     String validUserName = getCredentialsForTest().username
