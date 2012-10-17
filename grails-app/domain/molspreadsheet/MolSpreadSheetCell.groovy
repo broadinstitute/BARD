@@ -5,7 +5,7 @@ import results.ExperimentalValueType
 import results.ExperimentalValueUnit
 
 class MolSpreadSheetCell {
-   // static final int SPREAD_SHEET_PRECISION = 3
+    // static final int SPREAD_SHEET_PRECISION = 3
 
     static hasOne = [spreadSheetActivityStorage: SpreadSheetActivityStorage]
 
@@ -105,7 +105,6 @@ class MolSpreadSheetCell {
         } else {
             log.error "We should never see mole spreadsheet type ${this.molSpreadSheetCellType} in this four parameter constructor specialized for images"
         }
-
     }
 
     /**
@@ -127,7 +126,7 @@ class MolSpreadSheetCell {
      * @return
      */
     Map<String, String> retrieveValues() {
-        return ["name":strInternalValue,"smiles": supplementalInternalValue]
+        return ["name": strInternalValue, "smiles": supplementalInternalValue]
     }
 
 

@@ -28,17 +28,17 @@ class MolSpreadSheetCellUnitUnitSpec extends Specification {
         given:
 
         when: "#label"
-        MolSpreadSheetCellUnit molSpreadSheetCellUnit =  expectedMolSpreadSheetUnit
+        MolSpreadSheetCellUnit molSpreadSheetCellUnit = expectedMolSpreadSheetUnit
 
         then: "Should equal the expected"
         assert molSpreadSheetCellUnit.toString() == value
 
         where:
         label        | value | expectedMolSpreadSheetUnit
-        "Molar"      | "M"    | MolSpreadSheetCellUnit.Molar
-        "MilliMolar" | "mM"   | MolSpreadSheetCellUnit.Millimolar
-        "Micromolar" | "uM"   | MolSpreadSheetCellUnit.Micromolar
-        "Nanomolar"  | "nM"   | MolSpreadSheetCellUnit.Nanomolar
+        "Molar"      | "M"   | MolSpreadSheetCellUnit.Molar
+        "MilliMolar" | "mM"  | MolSpreadSheetCellUnit.Millimolar
+        "Micromolar" | "uM"  | MolSpreadSheetCellUnit.Micromolar
+        "Nanomolar"  | "nM"  | MolSpreadSheetCellUnit.Nanomolar
         "Picomolar"  | "pM"  | MolSpreadSheetCellUnit.Picomolar
         "Femtomolar" | "fM"  | MolSpreadSheetCellUnit.Femtomolar
         "Attamolar"  | "aM"  | MolSpreadSheetCellUnit.Attamolar
@@ -50,7 +50,7 @@ class MolSpreadSheetCellUnitUnitSpec extends Specification {
 
     void "test MolSpreadSheetCell constructor, two parameters, no units"() {
         when:
-        MolSpreadSheetCell molSpreadSheetCell = new MolSpreadSheetCell(inputString,molSpreadSheetCellType)
+        MolSpreadSheetCell molSpreadSheetCell = new MolSpreadSheetCell(inputString, molSpreadSheetCellType)
         assertNotNull(molSpreadSheetCell)
 
         then:
@@ -58,23 +58,23 @@ class MolSpreadSheetCellUnitUnitSpec extends Specification {
         assert molSpreadSheetCell.activity == activity
 
         where:
-        molSpreadSheetCellType                      | inputString   |   resultingString |   activity
-        MolSpreadSheetCellType.numeric              | "0.123"       |   "0.123"         |   true
-        MolSpreadSheetCellType.numeric              | "NaN"         |   "(no activity)" |   false
-        MolSpreadSheetCellType.percentageNumeric    | "0.123"       |   "0.123 %"       |   true
-        MolSpreadSheetCellType.percentageNumeric    | "NaN"         |   "(no activity)" |   false
-        MolSpreadSheetCellType.greaterThanNumeric   | "0.123"       |   "> 0.123"       |   true
-        MolSpreadSheetCellType.greaterThanNumeric   | "NaN"         |   "(no activity)" |   false
-        MolSpreadSheetCellType.lessThanNumeric      | "0.123"       |   "< 0.123"       |   true
-        MolSpreadSheetCellType.lessThanNumeric      | "NaN"         |   "(no activity)" |   false
-        MolSpreadSheetCellType.string               | "0.123"       |   "0.123"         |   true
-        MolSpreadSheetCellType.identifier           | "3"           |   "3"             |   true
+        molSpreadSheetCellType                    | inputString | resultingString | activity
+        MolSpreadSheetCellType.numeric            | "0.123"     | "0.123"         | true
+        MolSpreadSheetCellType.numeric            | "NaN"       | "(no activity)" | false
+        MolSpreadSheetCellType.percentageNumeric  | "0.123"     | "0.123 %"       | true
+        MolSpreadSheetCellType.percentageNumeric  | "NaN"       | "(no activity)" | false
+        MolSpreadSheetCellType.greaterThanNumeric | "0.123"     | "> 0.123"       | true
+        MolSpreadSheetCellType.greaterThanNumeric | "NaN"       | "(no activity)" | false
+        MolSpreadSheetCellType.lessThanNumeric    | "0.123"     | "< 0.123"       | true
+        MolSpreadSheetCellType.lessThanNumeric    | "NaN"       | "(no activity)" | false
+        MolSpreadSheetCellType.string             | "0.123"     | "0.123"         | true
+        MolSpreadSheetCellType.identifier         | "3"         | "3"             | true
     }
 
 
     void "test MolSpreadSheetCell constructor, two parameters, no units, error condition"() {
         when:
-        MolSpreadSheetCell molSpreadSheetCell = new MolSpreadSheetCell("NaN",MolSpreadSheetCellType.identifier)
+        MolSpreadSheetCell molSpreadSheetCell = new MolSpreadSheetCell("NaN", MolSpreadSheetCellType.identifier)
         assertNotNull(molSpreadSheetCell)
 
         then:
@@ -86,7 +86,7 @@ class MolSpreadSheetCellUnitUnitSpec extends Specification {
 
     void "test MolSpreadSheetCell constructor, three parameters, no units"() {
         when:
-        MolSpreadSheetCell molSpreadSheetCell = new MolSpreadSheetCell(inputString,molSpreadSheetCellType,molSpreadSheetCellUnit)
+        MolSpreadSheetCell molSpreadSheetCell = new MolSpreadSheetCell(inputString, molSpreadSheetCellType, molSpreadSheetCellUnit)
         assertNotNull(molSpreadSheetCell)
 
         then:
@@ -94,38 +94,74 @@ class MolSpreadSheetCellUnitUnitSpec extends Specification {
         assert molSpreadSheetCell.activity == activity
 
         where:
-        molSpreadSheetCellType                      | inputString   |   resultingString     |   molSpreadSheetCellUnit              |   activity
-        MolSpreadSheetCellType.numeric              | "0.123"       |   "0.123uM"           |   MolSpreadSheetCellUnit.Micromolar   |   true
-        MolSpreadSheetCellType.numeric              | "NaN"         |   "(no activity)"     |   MolSpreadSheetCellUnit.Micromolar   |   false
-        MolSpreadSheetCellType.percentageNumeric    | "0.123"       |   "0.123 %"           |   MolSpreadSheetCellUnit.unknown      |   true
-        MolSpreadSheetCellType.percentageNumeric    | "NaN"         |   "(no activity)"     |   MolSpreadSheetCellUnit.unknown      |   false
-        MolSpreadSheetCellType.greaterThanNumeric   | "0.123"       |   "> 0.123uM"         |   MolSpreadSheetCellUnit.Micromolar   |   true
-        MolSpreadSheetCellType.greaterThanNumeric   | "NaN"         |   "(no activity)"     |   MolSpreadSheetCellUnit.Micromolar   |   false
-        MolSpreadSheetCellType.lessThanNumeric      | "0.123"       |   "< 0.123uM"         |   MolSpreadSheetCellUnit.Micromolar   |   true
-        MolSpreadSheetCellType.lessThanNumeric      | "NaN"         |   "(no activity)"     |   MolSpreadSheetCellUnit.Micromolar   |   false
+        molSpreadSheetCellType                    | inputString | resultingString | molSpreadSheetCellUnit            | activity
+        MolSpreadSheetCellType.numeric            | "0.123"     | "0.123uM"       | MolSpreadSheetCellUnit.Micromolar | true
+        MolSpreadSheetCellType.numeric            | "NaN"       | "(no activity)" | MolSpreadSheetCellUnit.Micromolar | false
+        MolSpreadSheetCellType.percentageNumeric  | "0.123"     | "0.123 %"       | MolSpreadSheetCellUnit.unknown    | true
+        MolSpreadSheetCellType.percentageNumeric  | "NaN"       | "(no activity)" | MolSpreadSheetCellUnit.unknown    | false
+        MolSpreadSheetCellType.greaterThanNumeric | "0.123"     | "> 0.123uM"     | MolSpreadSheetCellUnit.Micromolar | true
+        MolSpreadSheetCellType.greaterThanNumeric | "NaN"       | "(no activity)" | MolSpreadSheetCellUnit.Micromolar | false
+        MolSpreadSheetCellType.lessThanNumeric    | "0.123"     | "< 0.123uM"     | MolSpreadSheetCellUnit.Micromolar | true
+        MolSpreadSheetCellType.lessThanNumeric    | "NaN"       | "(no activity)" | MolSpreadSheetCellUnit.Micromolar | false
     }
 
 
     void "test MolSpreadSheetCell constructor, three parameters, no units, unknown type error condition"() {
         when:
-        MolSpreadSheetCell molSpreadSheetCell = new MolSpreadSheetCell("NaN",MolSpreadSheetCellType.unknown,MolSpreadSheetCellUnit.Micromolar)
+        MolSpreadSheetCell molSpreadSheetCell = new MolSpreadSheetCell("NaN", MolSpreadSheetCellType.unknown, MolSpreadSheetCellUnit.Micromolar)
         assertNotNull(molSpreadSheetCell)
 
         then:
-        assert molSpreadSheetCell.molSpreadSheetCellType ==  MolSpreadSheetCellType.unknown
+        assert molSpreadSheetCell.molSpreadSheetCellType == MolSpreadSheetCellType.unknown
     }
 
 
     void "test MolSpreadSheetCell constructor, three parameters, no units, string error condition"() {
         when:
-        MolSpreadSheetCell molSpreadSheetCell = new MolSpreadSheetCell("0",MolSpreadSheetCellType.string,MolSpreadSheetCellUnit.Micromolar)
+        MolSpreadSheetCell molSpreadSheetCell = new MolSpreadSheetCell("0", MolSpreadSheetCellType.string, MolSpreadSheetCellUnit.Micromolar)
         assertNotNull(molSpreadSheetCell)
 
         then:
-        assert molSpreadSheetCell.toString()=="null"
+        assert molSpreadSheetCell.toString() == "null"
     }
 
+    void "test MolSpreadSheetCell constructor, three parameters: String value1, String value2, MolSpreadSheetCellType molSpreadSheetCellType: #label"() {
+        when:
+        MolSpreadSheetCell molSpreadSheetCell = new MolSpreadSheetCell("0", "1", molSpreadSheetCellType)
+
+        then:
+        assertNotNull(molSpreadSheetCell)
+        assert molSpreadSheetCell.strInternalValue == expectedStrInternalValue
 
 
+        where:
+        label                           | molSpreadSheetCellType        | expectedStrInternalValue
+        'MolSpreadSheetCellType.string' | MolSpreadSheetCellType.string | "null"
+        'MolSpreadSheetCellType.image'  | MolSpreadSheetCellType.image  | "0"
+    }
 
+    void "test overriden toString(): #label"() {
+        when:
+        MolSpreadSheetCell molSpreadSheetCell = new MolSpreadSheetCell()
+        molSpreadSheetCell.activity = true
+        molSpreadSheetCell.molSpreadSheetCellType = molSpreadSheetCellType
+        molSpreadSheetCell.strInternalValue = 'something'
+        molSpreadSheetCell.numInternalValue = 1
+        molSpreadSheetCell.intInternalValue = 2
+
+        then:
+        assertNotNull(molSpreadSheetCell)
+        assert molSpreadSheetCell.toString() == expectedToString
+
+
+        where:
+        label                                       | molSpreadSheetCellType                    | expectedToString
+        'MolSpreadSheetCellType.lessThanNumeric'    | MolSpreadSheetCellType.lessThanNumeric    | "< 1"
+        'MolSpreadSheetCellType.greaterThanNumeric' | MolSpreadSheetCellType.greaterThanNumeric | "> 1"
+        'MolSpreadSheetCellType.percentageNumeric'  | MolSpreadSheetCellType.percentageNumeric  | "1 %"
+        'MolSpreadSheetCellType.numeric'            | MolSpreadSheetCellType.numeric            | "1"
+        'MolSpreadSheetCellType.identifier'         | MolSpreadSheetCellType.identifier         | "2"
+        'MolSpreadSheetCellType.string'             | MolSpreadSheetCellType.string             | "something"
+        'MolSpreadSheetCellType.image'              | MolSpreadSheetCellType.image              | null
+    }
 }
