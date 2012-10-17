@@ -8,7 +8,7 @@ var errorImageTwitterBootstrap = '<img src=""  class="icon-exclamation-sign" alt
 // you can use to tell the regex engine that this pair of brackets should not create a backreference
 //You do that to optimize this regular expression
 //see http://www.regular-expressions.info/brackets.html
-var NUMBER_MATCHING_REGEX = /^\d+ *(?:, *\d+ *)*$/;
+var NUMBER_MATCHING_REGEX = /^\s*\d+\s*(?:,\s*\d+\s*)*$/;
 
 $(document).ready(function () {
 

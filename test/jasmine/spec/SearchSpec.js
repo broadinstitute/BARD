@@ -24,6 +24,9 @@ describe("Testing search.js", function () {
             searchString = "123";
             expect(findSearchType(searchString)).toEqual("ID");
 
+            searchString = "  234 , 123 ";
+            expect(findSearchType(searchString)).toEqual("ID");
+
             searchString = "AB,123,560";
             expect(findSearchType(searchString)).not.toEqual("ID");
         });
