@@ -33,7 +33,7 @@
             <dd>
                 <ul>
                     <g:each in="${projects}" var="project">
-                        <li><g:link controller="bardWebInterface" action="showProject" id="${project.id}">${project.name} <small>(Project ID: ${project.id})</small></g:link>
+                        <li><g:link controller="bardWebInterface" action="showProject" id="${project.id}" params='[searchString:"${searchString}"]'>${project.name} <small>(Project ID: ${project.id})</small></g:link>
                         </li>
                     </g:each>
                 </ul>

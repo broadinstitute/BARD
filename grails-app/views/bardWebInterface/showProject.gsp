@@ -112,7 +112,7 @@
                         <g:each var="assay" in="${assays}" status="i">
                             <div>
                                 <p>
-                                    <g:link controller="bardWebInterface" action="showAssay" id="${assay.id}">${assay.name}</g:link>
+                                    <g:link controller="bardWebInterface" action="showAssay" id="${assay.id}" params='[searchString:"${searchString}"]'>${assay.name}</g:link>
                                 </p>
                             </div>
                         </g:each>

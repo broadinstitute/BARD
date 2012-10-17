@@ -10,7 +10,7 @@
                 ${experiment.getValue(ExperimentValues.ExperimentSubstanceCountValue).value} substance(s) tested
             </p>
             <p>
-                <g:link controller="bardWebInterface" action="showExperiment" id="${experiment.id}">View Results</g:link>
+                <g:link controller="bardWebInterface" action="showExperiment" id="${experiment.id}" params='[searchString:"${searchString}"]'>View Results</g:link>
             </p>
             <g:if test="${showAssaySummary}">
                 <div><g:render template="assaySummary" model="[assayAdapter:experiment.getAssay()]"/></div>

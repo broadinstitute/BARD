@@ -16,7 +16,7 @@
 </head>
 
 <body>
-    <div id="experimentalResults" href="${createLink(controller:'bardWebInterface' , action: 'showExperimentResult', id:experimentId)}">
+    <div id="experimentalResults" href='${createLink(controller:"bardWebInterface", action: "showExperimentResult", id:experimentId)}?searchString=${searchString}'>
 
     </div>
 </body>
