@@ -50,6 +50,8 @@ class MolecularSpreadSheetServiceUnitSpec  extends Specification {
         // Tear down logic here
     }
 
+
+
     void "test extractActivitiesFromExperiment when experimentValue has no children"() {
         given:  "we have an experiment"
         final bard.core.Value experimentalValue  = new bard.core.Value()

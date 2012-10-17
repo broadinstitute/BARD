@@ -353,17 +353,16 @@ class MolecularSpreadSheetService {
         List<Assay> allAssays = []
         for (Long individualCompoundId in compoundIds) {
             Compound compound = queryServiceWrapper.restCompoundService.get(individualCompoundId)
-            if (compound != null) {
-                Collection<Assay> activeAssaysForThisCompound = queryServiceWrapper.restCompoundService.getTestedAssays(compound, true)  // true = active only
-                for (Assay assay in activeAssaysForThisCompound) {
-                    allAssays << assay
-                }
+            Collection<Assay> activeAssaysForThisCompound = queryServiceWrapper.restCompoundService.getTestedAssays(compound, true)  // true = active only
+            for (Assay assay in activeAssaysForThisCompound) {
+                allAssays << assay
             }
         }
+
         assaysToExperiments(allAssays)
     }
 
-    /**
+/**
      *
      * @param cartProjects
      * @return list of Experiment's from a list of CartProject's
@@ -418,7 +417,7 @@ class MolecularSpreadSheetService {
         ExperimentValues.ExperimentRole role = null
         Experiment experiment = restExperimentService.get(experimentId)
         if (experiment) {
-            role = experiment?.role
+            role = experiment.role
             final ServiceIterator<Value> experimentIterator = restExperimentService.activities(experiment);
 
             List<Value> activityValues = []

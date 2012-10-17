@@ -211,7 +211,6 @@ class MolecularSpreadSheetServiceIntegrationSpec extends IntegrationSpec {
 
 
 
-
     void "test cartProjectsToExperiments"() {
         when: "we have a molecularSpreadSheetService"
         assertNotNull molecularSpreadSheetService
@@ -274,8 +273,23 @@ class MolecularSpreadSheetServiceIntegrationSpec extends IntegrationSpec {
         List<Experiment> experiments = molecularSpreadSheetService.cartAssaysToExperiments(null, givenCartAssays)
         then: "We expect experiments for each of the assays to be found"
         assert experiments.size()==0
-
     }
+
+
+
+    void "tests empty cartAssaysToExperiments with pre-existing experiment"() {
+        given: "That a list of CartAssay objects have been created"
+        List<Experiment> experimentList = []
+        Experiment experiment = new Experiment ()
+        experimentList << experiment
+        final List<CartAssay> givenCartAssays = []
+        when: "We call the cartAssaysToExperiments() with the given list of assay carty objects"
+        List<Experiment> experiments = molecularSpreadSheetService.cartAssaysToExperiments(experimentList, givenCartAssays)
+        then: "We expect experiments for each of the assays to be found"
+        assert experiments.size()==1
+    }
+
+
 
     void "tests extractActivitiesFromExperiment #label"() {
         given: "That we have created an ETag from a list of CIDs"

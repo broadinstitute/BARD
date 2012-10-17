@@ -1,21 +1,19 @@
 package querycart
-import static org.junit.Assert.assertNotNull
-import static org.junit.Assert.assertNull
 
 import com.metasieve.shoppingcart.Shoppable
 import com.metasieve.shoppingcart.ShoppingCartService
 import com.metasieve.shoppingcart.ShoppingItem
 import grails.plugin.spock.IntegrationSpec
-import querycart.CartAssay
-import querycart.CartCompound
-import querycart.CartProject
-import querycart.QueryCartService
 
+import static org.junit.Assert.assertNotNull
+import static org.junit.Assert.assertNull
+import molspreadsheet.MolecularSpreadSheetService
 
 class ShoppingCartServiceIntegrationSpec extends IntegrationSpec {
 
     ShoppingCartService shoppingCartService
     QueryCartService queryCartService
+    MolecularSpreadSheetService molecularSpreadSheetService
 
     void setup() {
         // Setup logic here
@@ -45,6 +43,65 @@ class ShoppingCartServiceIntegrationSpec extends IntegrationSpec {
         for (cartAssay1 in shoppingCartService.checkOut()) {
             assertNotNull(cartAssay1["item"])
         }
+    }
+
+
+
+    void "Test retrieveCartAssayFromShoppingCart"() {
+        given: "A shopping cart"
+        assertNotNull shoppingCartService
+        assertNotNull  molecularSpreadSheetService
+
+        CartAssay cartAssay = new CartAssay(assayTitle: "This is an assay")
+
+        when: "We make a Query to NCGC's rest API to get a list of assays with that target"
+        shoppingCartService.addToShoppingCart(cartAssay)
+        2.times {
+            shoppingCartService.addToShoppingCart(cartAssay)
+        }
+
+        then: "We get back a list assay ids"
+        List<CartAssay> cartAssayList =  molecularSpreadSheetService.retrieveCartAssayFromShoppingCart()
+        assert cartAssayList.size() == 1   // these are unique entries
+    }
+
+
+    void "Test retrieveCartCompoundFromShoppingCart"() {
+        given: "A shopping cart"
+        assertNotNull shoppingCartService
+        assertNotNull  molecularSpreadSheetService
+
+        CartCompound cartCompound = new CartCompound(smiles: "c1ccccc1", name: "cmpd name", compoundId: 47)
+
+        when: "We make a Query to NCGC's rest API to get a list of assays with that target"
+        shoppingCartService.addToShoppingCart(cartCompound)
+        2.times {
+            shoppingCartService.addToShoppingCart(cartCompound)
+        }
+
+        then: "We get back a list assay ids"
+        List<CartCompound> cartCompoundList =  molecularSpreadSheetService.retrieveCartCompoundFromShoppingCart()
+        assert cartCompoundList.size() == 1   // these are unique entries
+    }
+
+
+
+    void "Test retrieveCartProjectFromShoppingCart"() {
+        given: "A shopping cart"
+        assertNotNull shoppingCartService
+        assertNotNull  molecularSpreadSheetService
+
+        CartProject cartProject = new CartProject(projectName: "my project")
+
+        when: "We make a Query to NCGC's rest API to get a list of assays with that target"
+        shoppingCartService.addToShoppingCart(cartProject)
+        2.times {
+            shoppingCartService.addToShoppingCart(cartProject)
+        }
+
+        then: "We get back a list assay ids"
+        List<CartProject> cartProjectList =  molecularSpreadSheetService.retrieveCartProjectFromShoppingCart()
+        assert cartProjectList.size() == 1   // these are unique entries
     }
 
 
