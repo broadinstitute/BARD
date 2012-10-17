@@ -234,9 +234,6 @@ class MolecularSpreadSheetServiceIntegrationSpec extends IntegrationSpec {
         then: "We get back the expected map"
         assert experimentDataMap
         final Long totalActivities = experimentDataMap.total
-//        /final ExperimentValues.ExperimentRole role = experimentDataMap.role
-        //println role
-        //println totalActivities
         assert totalActivities
         final List<SpreadSheetActivity> activities = experimentDataMap.spreadSheetActivities
         assert activities
@@ -253,6 +250,35 @@ class MolecularSpreadSheetServiceIntegrationSpec extends IntegrationSpec {
         "An existing experiment with activities - skip 0"  | new Long(1326) | 10  | 0
         "An existing experiment with activities - skip 10" | new Long(1326) | 10  | 10
     }
+
+
+    void "test convertSpreadSheetActivityToCompoundInformation"() {
+
+        when: "We call the findExperimentDataById method with the experimentId #experimentId"
+        final Map experimentDataMap = molecularSpreadSheetService.findExperimentDataById(experimentId, top, skip)
+
+        then: "We get back the expected map"
+        assert experimentDataMap
+        final Long totalActivities = experimentDataMap.total
+        assert totalActivities
+        final List<SpreadSheetActivity> activities = experimentDataMap.spreadSheetActivities
+        def returnMap = molecularSpreadSheetService.convertSpreadSheetActivityToCompoundInformation(activities)
+        assertNotNull returnMap
+        assertNotNull returnMap."compoundAdapters"
+        assertNotNull returnMap."facets"
+        assertNotNull returnMap."nHits"
+
+        where:
+        label                                              | experimentId   | top | skip
+        "An existing experiment with activities - skip 0"  | new Long(1326) | 10  | 0
+        "An existing experiment with activities - skip 10" | new Long(1326) | 10  | 10
+    }
+
+
+
+
+
+
 
     void "tests cartAssaysToExperiments #label"() {
         given: "That a list of CartAssay objects have been created"
