@@ -138,7 +138,6 @@ class MolecularSpreadSheetServiceIntegrationSpec extends IntegrationSpec {
 
 
 
-
     void "test extractMolSpreadSheetData"() {
         when: "we have a molecularSpreadSheetService"
         assertNotNull molecularSpreadSheetService
@@ -199,6 +198,19 @@ class MolecularSpreadSheetServiceIntegrationSpec extends IntegrationSpec {
     }
 
 
+
+    void "test empty cartCompoundsToExperiments"() {
+        when: "we have a molecularSpreadSheetService"
+        assertNotNull molecularSpreadSheetService
+        List<CartCompound> cartCompoundList = []
+        List<Experiment> finalExperimentList = molecularSpreadSheetService.cartCompoundsToExperiments(cartCompoundList)
+
+        then: "we should be able to generate a list of spreadsheet activity elements"
+        assert finalExperimentList.size()==0
+    }
+
+
+
     void "test cartProjectsToExperiments"() {
         when: "we have a molecularSpreadSheetService"
         assertNotNull molecularSpreadSheetService
@@ -222,9 +234,6 @@ class MolecularSpreadSheetServiceIntegrationSpec extends IntegrationSpec {
         then: "We get back the expected map"
         assert experimentDataMap
         final Long totalActivities = experimentDataMap.total
-//        /final ExperimentValues.ExperimentRole role = experimentDataMap.role
-        //println role
-        //println totalActivities
         assert totalActivities
         final List<SpreadSheetActivity> activities = experimentDataMap.spreadSheetActivities
         assert activities
@@ -242,6 +251,35 @@ class MolecularSpreadSheetServiceIntegrationSpec extends IntegrationSpec {
         "An existing experiment with activities - skip 10" | new Long(1326) | 10  | 10
     }
 
+
+    void "test convertSpreadSheetActivityToCompoundInformation"() {
+
+        when: "We call the findExperimentDataById method with the experimentId #experimentId"
+        final Map experimentDataMap = molecularSpreadSheetService.findExperimentDataById(experimentId, top, skip)
+
+        then: "We get back the expected map"
+        assert experimentDataMap
+        final Long totalActivities = experimentDataMap.total
+        assert totalActivities
+        final List<SpreadSheetActivity> activities = experimentDataMap.spreadSheetActivities
+        def returnMap = molecularSpreadSheetService.convertSpreadSheetActivityToCompoundInformation(activities)
+        assertNotNull returnMap
+        assertNotNull returnMap."compoundAdapters"
+        assertNotNull returnMap."facets"
+        assertNotNull returnMap."nHits"
+
+        where:
+        label                                              | experimentId   | top | skip
+        "An existing experiment with activities - skip 0"  | new Long(1326) | 10  | 0
+        "An existing experiment with activities - skip 10" | new Long(1326) | 10  | 10
+    }
+
+
+
+
+
+
+
     void "tests cartAssaysToExperiments #label"() {
         given: "That a list of CartAssay objects have been created"
         final List<CartAssay> givenCartAssays = cartAssays
@@ -253,6 +291,31 @@ class MolecularSpreadSheetServiceIntegrationSpec extends IntegrationSpec {
         label                                | cartAssays
         "An existing assay with experiments" | [new CartAssay(assayId: new Long(519))]
     }
+
+    void "tests empty cartAssaysToExperiments"() {
+        given: "That a list of CartAssay objects have been created"
+        final List<CartAssay> givenCartAssays = []
+        when: "We call the cartAssaysToExperiments() with the given list of assay carty objects"
+        List<Experiment> experiments = molecularSpreadSheetService.cartAssaysToExperiments(null, givenCartAssays)
+        then: "We expect experiments for each of the assays to be found"
+        assert experiments.size()==0
+    }
+
+
+
+    void "tests empty cartAssaysToExperiments with pre-existing experiment"() {
+        given: "That a list of CartAssay objects have been created"
+        List<Experiment> experimentList = []
+        Experiment experiment = new Experiment ()
+        experimentList << experiment
+        final List<CartAssay> givenCartAssays = []
+        when: "We call the cartAssaysToExperiments() with the given list of assay carty objects"
+        List<Experiment> experiments = molecularSpreadSheetService.cartAssaysToExperiments(experimentList, givenCartAssays)
+        then: "We expect experiments for each of the assays to be found"
+        assert experiments.size()==1
+    }
+
+
 
     void "tests extractActivitiesFromExperiment #label"() {
         given: "That we have created an ETag from a list of CIDs"
