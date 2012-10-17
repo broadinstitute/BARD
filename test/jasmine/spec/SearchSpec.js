@@ -78,8 +78,18 @@ describe("Testing search.js", function () {
             searchString = "similarity:CC";
             expect(findSearchType(searchString)).toEqual("STRUCTURE");
         });
-
-
+        it("should return the string 'EMPTY' when we pass in 'similarity:'", function () {
+            searchString = "similarity:";
+            expect(findSearchType(searchString)).toEqual("EMPTY");
+        });
+        it("should return 'EMPTY' when we pass in any string terminated by ':'", function () {
+            searchString = "ANY_STRING:";
+            expect(findSearchType(searchString)).toEqual("EMPTY");
+        });
+        it("should return 'EMPTY' when we pass in any string with one or more spaces after ':'", function () {
+            searchString = "ANY_STRING:     ";
+            expect(findSearchType(searchString)).toEqual("EMPTY");
+        });
         it("should return the string 'FREE_TEXT' for everything else, 'Bogus:Me' ", function () {
             searchString = "Bogus:Me";
             expect(findSearchType(searchString)).toEqual("FREE_TEXT");

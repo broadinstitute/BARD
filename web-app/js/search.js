@@ -334,6 +334,8 @@ function findSearchType(searchString) {
                 return 'STRUCTURE';
 
         }
+    }else if(searchStringSplit.length == 2 && !$.trim(searchStringSplit[1]).length) { //e.g Exact: with no smile string
+        return "EMPTY";
     }
     return "FREE_TEXT"; //this a Free Text Search
 }
