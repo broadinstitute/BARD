@@ -2,6 +2,6 @@
 <script type="text/javascript" SRC="${request.contextPath}/marvin/marvin.js"></script>
 <script type="text/javascript">
     msketch_name = "MarvinSketch";
-    msketch_begin("${request.contextPath}/marvin", 540, 480);
+    msketch_begin("${request.contextPath}/marvin", window.innerWidth / 2, window.innerHeight / 2);
     msketch_end();
 </script>

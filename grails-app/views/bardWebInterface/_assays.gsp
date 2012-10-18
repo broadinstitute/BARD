@@ -12,7 +12,7 @@
         <ul class="unstyled results">
         <g:each var="assayAdapter" in="${assayAdapters}">
             <li>
-                <h3><g:link action="showAssay" id="${assayAdapter.assay.id}">${assayAdapter.name} <small>(ADID: ${assayAdapter.assay.id})</small></g:link></h3>
+                <h3><g:link action="showAssay" id="${assayAdapter.assay.id}" params='[searchString:"${searchString}"]'>${assayAdapter.name} <small>(ADID: ${assayAdapter.assay.id})</small></g:link></h3>
                 <a href="#" class="addAssayToCart btn btn-mini" data-cart-name="${JavaScriptUtility.cleanup(assayAdapter.name)}" data-cart-id="${assayAdapter.assay.id}">Save for later analysis</a>
                 <g:if test="${assayAdapter.searchHighlight}">
                     <dl>

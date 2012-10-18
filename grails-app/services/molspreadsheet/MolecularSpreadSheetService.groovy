@@ -4,20 +4,17 @@ import bard.core.adapter.CompoundAdapter
 import bard.core.rest.RESTAssayService
 import bard.core.rest.RESTExperimentService
 import bard.core.rest.RESTProjectService
+import bardqueryapi.ActivityOutcome
+import bardqueryapi.IQueryService
+import bardqueryapi.QueryServiceWrapper
+import bardqueryapi.SearchFilter
 import com.metasieve.shoppingcart.ShoppingCartService
-
-import bard.core.*
 import org.apache.commons.lang.NotImplementedException
 import querycart.CartAssay
 import querycart.CartCompound
 import querycart.CartProject
 import querycart.QueryCartService
-import bardqueryapi.QueryServiceWrapper
-import bardqueryapi.IQueryService
-
-import bardqueryapi.SearchFilter
-
-import bardqueryapi.ActivityOutcome
+import bard.core.*
 
 class MolecularSpreadSheetService {
 
@@ -363,10 +360,10 @@ class MolecularSpreadSheetService {
     }
 
 /**
-     *
-     * @param cartProjects
-     * @return list of Experiment's from a list of CartProject's
-     */
+ *
+ * @param cartProjects
+ * @return list of Experiment's from a list of CartProject's
+ */
     protected List<Experiment> cartProjectsToExperiments(final List<CartProject> cartProjects) {
         List<Long> projectIds = []
         for (CartProject cartProject : cartProjects) {
@@ -418,31 +415,49 @@ class MolecularSpreadSheetService {
         Experiment experiment = restExperimentService.get(experimentId)
         if (experiment) {
             role = experiment.role
-            final ServiceIterator<Value> experimentIterator = restExperimentService.activities(experiment);
+            final Map activityValuesMap = extractActivityValues(experiment, top, skip)
+            final List<Value> activityValues = activityValuesMap.activityValues
+            totalNumberOfRecords = activityValuesMap.totalNumberOfRecords
+            spreadSheetActivities = createSpreadSheetActivitiesFromActivityValues(experimentId, activityValues)
 
-            List<Value> activityValues = []
-            if (experimentIterator.hasNext()) {
-                if (skip == 0) {
-                    activityValues = experimentIterator.next(top)
-                }
-                else { //There is no way to pass in skip and top to the iterator so we have to do this hack
-                    //which is not perfect
-                    activityValues = experimentIterator.next(top + skip)
-                    activityValues = activityValues.subList(skip, activityValues.size())
-                }
-            }
-            final Iterator<Value> iterator = activityValues.iterator()
-            while (iterator.hasNext()) {
-                Value experimentValue = iterator.next()
-                SpreadSheetActivity spreadSheetActivity = extractActivitiesFromExperiment(experimentValue, experimentId)
-                spreadSheetActivities.add(spreadSheetActivity)
-            }
-
-            totalNumberOfRecords = experimentIterator.count
         }
         return [total: totalNumberOfRecords, spreadSheetActivities: spreadSheetActivities, role: role, experiment: experiment]
     }
 
+    protected List<SpreadSheetActivity> createSpreadSheetActivitiesFromActivityValues(final Long experimentId, final List<Value> activityValues) {
+        List<SpreadSheetActivity> spreadSheetActivities = []
+        final Iterator<Value> iterator = activityValues.iterator()
+        while (iterator.hasNext()) {
+            Value experimentValue = iterator.next()
+            SpreadSheetActivity spreadSheetActivity = extractActivitiesFromExperiment(experimentValue, experimentId)
+            spreadSheetActivities.add(spreadSheetActivity)
+        }
+        return spreadSheetActivities
+    }
+
+    protected Map extractActivityValues(final Experiment experiment, final Integer top = 10, final Integer skip = 0) {
+        final RESTExperimentService restExperimentService = queryServiceWrapper.restExperimentService
+        final ServiceIterator<Value> experimentValueIterator = restExperimentService.activities(experiment);
+        return extractActivityValuesFromExperimentValueIterator(experimentValueIterator, top, skip)
+    }
+
+    protected Map extractActivityValuesFromExperimentValueIterator(final ServiceIterator<Value> experimentValueIterator, final Integer top = 10, final Integer skip = 0) {
+        List<Value> activityValues = []
+        long totalNumberOfRecords = 0
+        if (experimentValueIterator?.hasNext()) {
+            if (skip == 0) {
+                activityValues = experimentValueIterator.next(top)
+            }
+            else { //There is no way to pass in skip and top to the iterator so we have to do this hack
+                //which is not perfect
+                activityValues = experimentValueIterator.next(top + skip)
+                activityValues = activityValues.subList(skip, activityValues.size())
+
+            }
+            totalNumberOfRecords = experimentValueIterator.count
+        }
+        return [totalNumberOfRecords: totalNumberOfRecords, activityValues: activityValues]
+    }
     /**
      *
      * @param experimentValue

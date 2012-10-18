@@ -11,7 +11,7 @@
 <p><b>Title: ${experimentDataMap?.experiment?.name}</b></p>
 
 <p><b>Assay ID : <g:link controller="bardWebInterface" action="showAssay"
-                         id="${experimentDataMap?.experiment?.assay?.id}">${experimentDataMap?.experiment?.assay?.id}</g:link></b>
+                         id="${experimentDataMap?.experiment?.assay?.id}" params='[searchString:"${searchString}"]'>${experimentDataMap?.experiment?.assay?.id}</g:link></b>
 </p>
 
 <div class="row-fluid">
@@ -38,7 +38,7 @@
             <tr>
                 <td><a href="http://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=${experimentData.sid}">${experimentData.sid}</a>
                 </td>
-                <td><a href="${createLink(controller: 'bardWebInterface', action: 'showCompound', params: [cid: experimentData.cid])}">${experimentData.cid}</a>
+                <td><a href="${createLink(controller: 'bardWebInterface', action: 'showCompound', params: [cid: experimentData.cid,searchString:"${searchString}"])}">${experimentData.cid}</a>
                 </td>
                 <td style="min-width: 180px;">
                     <img alt="SID: ${experimentData.sid}" title="SID: ${experimentData.sid}"

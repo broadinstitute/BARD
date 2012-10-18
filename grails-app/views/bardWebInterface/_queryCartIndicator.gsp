@@ -8,7 +8,7 @@
                     Visualize <span class="caret"></span>
                 </a>
                 <ul class="dropdown-menu pull-right" role="menu">
-                    <li><a href="/bardwebquery/MolSpreadSheet">Molecular Spreadsheet</a></li>
+                    <li><g:link controller="molSpreadSheet" params='[searchString:"${searchString}"]'>Molecular Spreadsheet</g:link></li>
                     <li><a href="http://bard.nih.gov/bard/compounds/44552613?view=Record" target="_blank">Desktop Client</a></li>
                 </ul>
             </div>

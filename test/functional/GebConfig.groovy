@@ -9,7 +9,9 @@
 import org.openqa.selenium.firefox.FirefoxDriver
 import org.openqa.selenium.firefox.FirefoxProfile
 import org.openqa.selenium.chrome.ChromeDriver
+import org.openqa.selenium.chrome.ChromeOptions
 import org.openqa.selenium.htmlunit.HtmlUnitDriver
+import org.openqa.selenium.remote.DesiredCapabilities
 
 // Use htmlunit as the default
 // See: http://code.google.com/p/selenium/wiki/HtmlUnitDriver
@@ -23,7 +25,15 @@ environments {
 	// run as “grails -Dgeb.env=chrome test-app”
 	// See: http://code.google.com/p/selenium/wiki/ChromeDriver
 	chrome {
-		driver = { new ChromeDriver() }
+        // Set the location of the chromedriver executable
+        System.setProperty("webdriver.chrome.driver", "test/resources/chromedriver.exe")
+
+        // Workaround that causes Chrome not to start up properly
+        // see http://code.google.com/p/selenium/issues/detail?id=2681
+        DesiredCapabilities capabilities = new DesiredCapabilities()
+        capabilities.setCapability("chrome.switches", Arrays.asList("--ignore-certificate-errors"))
+
+		driver = { new ChromeDriver(capabilities) }
 	}
 	
 	// run as “grails -Dgeb.env=firefox test-app”

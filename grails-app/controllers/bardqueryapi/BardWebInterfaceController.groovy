@@ -41,7 +41,7 @@ class BardWebInterfaceController {
     }
 
     def showExperiment() {
-        render(view: 'showExperimentResult', model: [experimentId: params.id])
+        render(view: 'showExperimentResult', model: [experimentId: params.id, searchString: params.searchString])
     }
 
     def showExperimentResult(Long id) {
@@ -52,7 +52,7 @@ class BardWebInterfaceController {
                 final int skip = searchParams.skip
                 final Map experimentDataMap = molecularSpreadSheetService.findExperimentDataById(id, top, skip)
                 if (experimentDataMap) {
-                    render(template: 'experimentResult', model: [experimentDataMap: experimentDataMap])
+                    render(template: 'experimentResult', model: [experimentDataMap: experimentDataMap,searchString: params.searchString])
                 } else {
                     flash.message = "Experiment ID ${id} not found"
                     return response.sendError(HttpServletResponse.SC_NOT_FOUND,
@@ -240,7 +240,7 @@ class BardWebInterfaceController {
 
             final CompoundAdapter compoundAdapter = this.queryService.showCompound(compoundId)
             if (compoundAdapter) {
-                render(view: "showCompound", model: [compound: compoundAdapter])
+                render(view: "showCompound", model: [compound: compoundAdapter, searchString: params.searchString])
             }
             else {
                 final String message = "Could not find Compound Id ${cid}"
@@ -268,7 +268,7 @@ class BardWebInterfaceController {
                 render(view: "showAssay", model: [
                         assayAdapter: assayAdapter,
                         experiments: assayMap.experiments,
-                        projects: assayMap.projects
+                        projects: assayMap.projects,searchString: params.searchString
                 ]
                 )
             }
@@ -292,7 +292,8 @@ class BardWebInterfaceController {
             if (projId) {
                 Map projectMap = this.queryService.showProject(projId)
                 ProjectAdapter projectAdapter = projectMap.projectAdapter
-                render(view: "showProject", model: [projectAdapter: projectAdapter, experiments: projectMap.experiments, assays: projectMap.assays])
+                render(view: "showProject", model: [projectAdapter: projectAdapter, experiments: projectMap.experiments, assays: projectMap.assays,
+                        searchString: params.searchString])
             }
             else {
                 final String message = "Could not find Project Id ${projectId}"

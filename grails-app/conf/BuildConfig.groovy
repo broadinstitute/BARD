@@ -44,16 +44,18 @@ grails.project.dependency.resolution = {
         test("org.seleniumhq.selenium:selenium-chrome-driver:$seleniumVersion") {
             exclude "xml-apis"
         }
-
         test("org.seleniumhq.selenium:selenium-firefox-driver:$seleniumVersion") {
             excludes "xml-apis", "commons-io"
+        }
+        test("org.seleniumhq.selenium:selenium-remote-driver:$seleniumVersion") {
+            excludes "xml-apis"
         }
         provided('net.sourceforge.nekohtml:nekohtml:1.9.15') {
             exclude "xml-api"
         }
         compile 'org.apache.commons:commons-lang3:3.1'
         provided 'org.apache.httpcomponents:httpcomponents-core:4.1.3'
-        provided ('org.apache.httpcomponents:httpclient:4.1.2') {
+        compile ('org.apache.httpcomponents:httpclient:4.1.2') {
             excludes "commons-codec", "commons-logging"
         }
         compile 'org.codehaus.jackson:jackson-core-asl:1.9.2'
