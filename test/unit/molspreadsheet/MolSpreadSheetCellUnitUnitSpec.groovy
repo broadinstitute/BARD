@@ -95,13 +95,13 @@ class MolSpreadSheetCellUnitUnitSpec extends Specification {
 
         where:
         molSpreadSheetCellType                    | inputString | resultingString | molSpreadSheetCellUnit            | activity
-        MolSpreadSheetCellType.numeric            | "0.123"     | "0.123uM"       | MolSpreadSheetCellUnit.Micromolar | true
+        MolSpreadSheetCellType.numeric            | "0.123"     | "0.123 uM"       | MolSpreadSheetCellUnit.Micromolar | true
         MolSpreadSheetCellType.numeric            | "NaN"       | "(no activity)" | MolSpreadSheetCellUnit.Micromolar | false
         MolSpreadSheetCellType.percentageNumeric  | "0.123"     | "0.123 %"       | MolSpreadSheetCellUnit.unknown    | true
         MolSpreadSheetCellType.percentageNumeric  | "NaN"       | "(no activity)" | MolSpreadSheetCellUnit.unknown    | false
-        MolSpreadSheetCellType.greaterThanNumeric | "0.123"     | "> 0.123uM"     | MolSpreadSheetCellUnit.Micromolar | true
+        MolSpreadSheetCellType.greaterThanNumeric | "0.123"     | "> 0.123 uM"     | MolSpreadSheetCellUnit.Micromolar | true
         MolSpreadSheetCellType.greaterThanNumeric | "NaN"       | "(no activity)" | MolSpreadSheetCellUnit.Micromolar | false
-        MolSpreadSheetCellType.lessThanNumeric    | "0.123"     | "< 0.123uM"     | MolSpreadSheetCellUnit.Micromolar | true
+        MolSpreadSheetCellType.lessThanNumeric    | "0.123"     | "< 0.123 uM"     | MolSpreadSheetCellUnit.Micromolar | true
         MolSpreadSheetCellType.lessThanNumeric    | "NaN"       | "(no activity)" | MolSpreadSheetCellUnit.Micromolar | false
     }
 
