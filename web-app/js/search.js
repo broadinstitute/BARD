@@ -20,7 +20,6 @@ $(document).ready(function () {
 
     });
 
-
     //set up filter form submissions
     //We are using live because we want to do late binding
     //these forms would not exist when the document first loads
@@ -30,17 +29,32 @@ $(document).ready(function () {
         return false; //do not submit form the normal way, use Ajax instead
 
     });
+    $('#AssayFacetForm_ResetButton').live('click', function() {
+        resetAllFilters('AssayFacetForm');
+    });
     $('#ProjectFacetForm').live('submit', function (event) {
         var searchString = $("#searchString").val();
         handleFilteredQuery(searchString, 'ProjectFacetForm', 'ProjectFacetForm', 'projectsTab', 'totalProjects', 'projects', 'Projects ');
         return false; //do not submit form the normal way, use Ajax instead
     });
+    $('#ProjectFacetForm_ResetButton').live('click', function() {
+        resetAllFilters('ProjectFacetForm');
+    });
     $('#CompoundFacetForm').live('submit', function (event) {
         var searchString = $("#searchString").val();
         handleFilteredQuery(searchString, 'CompoundFacetForm', 'CompoundFacetForm', 'compoundsTab', "totalCompounds", 'compounds', 'Compounds ');
         return false; //do not submit form the normal way, use Ajax instead
-
     });
+    $('#CompoundFacetForm_ResetButton').live('click', function() {
+        resetAllFilters('CompoundFacetForm');
+    });
+
+    function resetAllFilters(facetForm) {
+        //Uncheck all filters
+        $('#' + facetForm + ' input[type="checkbox"]').attr('checked', false);
+        //Resubmit the form
+        $('#' + facetForm).submit()
+    }
 
     //=== Handle Paging. We bind to all of the paging css classes on the anchor tag ===
     $("a.step,a.nextLink,a.prevLink").live('click', function (event) {

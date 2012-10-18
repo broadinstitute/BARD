@@ -6,6 +6,7 @@
                     action="applyFilters">
                 <g:submitButton name="applyFilters" value="Apply Filters" id="${formName}_Button"
                                 class="btn btn-small"/>
+                <input type="button" class="btn btn-small" id="${formName}_ResetButton" value="Clear All Filters" name="resetFilters">
                 <h2>Filters</h2>
                 <g:hiddenField name="searchString" value="${params?.searchString}"/>
 
