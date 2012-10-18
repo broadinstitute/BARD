@@ -97,12 +97,12 @@ class MolSpreadSheetDataBuilder {
 
             // Explicitly specified assays and explicitly specified compounds
             molecularSpreadSheetService.populateMolSpreadSheetRowMetadata(molSpreadSheetData, cartCompoundList)
-            //etag = molecularSpreadSheetService.generateETagFromCartCompounds(cartCompoundList)
-            List<Long> compoundsSelected = cartCompoundList.collect {CartCompound cartCompound ->
-                cartCompound.compoundId.toLong()
-            }
-            //spreadSheetActivityList = molecularSpreadSheetService.extractMolSpreadSheetData(molSpreadSheetData, experimentList, etag)
-            spreadSheetActivityList = molecularSpreadSheetService.extractMolSpreadSheetData(molSpreadSheetData, experimentList, compoundsSelected)
+            etag = molecularSpreadSheetService.generateETagFromCartCompounds(cartCompoundList)
+//            List<Long> compoundsSelected = cartCompoundList.collect {CartCompound cartCompound ->
+//                cartCompound.compoundId.toLong()
+//            }
+            spreadSheetActivityList = molecularSpreadSheetService.extractMolSpreadSheetData(molSpreadSheetData, experimentList, etag)
+            //spreadSheetActivityList = molecularSpreadSheetService.extractMolSpreadSheetData(molSpreadSheetData, experimentList, compoundsSelected)
         }
         // finally deal with the data
         molecularSpreadSheetService.populateMolSpreadSheetData(molSpreadSheetData, experimentList, spreadSheetActivityList)

@@ -84,46 +84,85 @@ class MolecularSpreadSheetService {
      * @param etag
      * @return
      */
-    protected List<SpreadSheetActivity> extractMolSpreadSheetData(MolSpreadSheetData molSpreadSheetData, List<Experiment> experimentList, List<Long> compounds) {
+    protected List<SpreadSheetActivity> extractMolSpreadSheetData(MolSpreadSheetData molSpreadSheetData, List<Experiment> experimentList, Object etag) {
         // now step through the data and place into molSpreadSheetData
-        List<SpreadSheetActivity> spreadSheetActivityList = []
+        List<SpreadSheetActivity> spreadSheetActivityList = new ArrayList<SpreadSheetActivity>()
 
         // we need to handle each experiment separately ( until NCGC can do this in the background )
         // Note that each experiment corresponds to a column in our spreadsheet
         int columnCount = 0
         for (Experiment experiment in experimentList) {
-            // List<Long> collectCompounds = []
-            final ServiceIterator<Compound> compoundsTestedInExperimentIter = queryServiceWrapper.restExperimentService.compounds(experiment)
-//            while (compoundsTestedInExperimentIter.hasNext()) {
-//                final Compound compound = compoundsTestedInExperimentIter.next()
-//                CompoundAdapter c = new CompoundAdapter(compound)
-//                collectCompounds.add(c.pubChemCID)
-//            }
-            List<Long> collectCompounds = compoundsTestedInExperimentIter.collect {Compound compound -> new CompoundAdapter(compound).pubChemCID }
-            //only do this if compounds is not empty
-            if (!compounds.isEmpty()) {
-                //find the intersection of the two Compound lists
-                collectCompounds = compounds.intersect(collectCompounds)
-            }
-            if (!collectCompounds.isEmpty()) {
-                ServiceIterator<Value> experimentIterator = queryServiceWrapper.restExperimentService.activities(experiment)
-                // Now step through the result set and pull back  one value for each compound
-                Value experimentValue
-                while (experimentIterator.hasNext()) {
-                    experimentValue = experimentIterator.next()
-                    Long translation = new Long(experimentValue.id.split("\\.")[0])
-                    if (!molSpreadSheetData.columnPointer.containsKey(translation)) {
-                        molSpreadSheetData.columnPointer.put(translation, columnCount)
-                    }
-                    spreadSheetActivityList.add(extractActivitiesFromExperiment(experimentValue, new Long(experiment.id.toString())))
+
+            ServiceIterator<Value> experimentIterator = queryServiceWrapper.restExperimentService.activities(experiment, etag)
+
+            // Now step through the result set and pull back  one value for each compound
+            Value experimentValue
+            while (experimentIterator.hasNext()) {
+                experimentValue = experimentIterator.next()
+                Long translation = new Long(experimentValue.id.split("\\.")[0])
+                if (!molSpreadSheetData.columnPointer.containsKey(translation)) {
+                    molSpreadSheetData.columnPointer.put(translation, columnCount)
                 }
-            } else {
-                molSpreadSheetData.columnPointer.put(experiment.id as Long, columnCount)
+                spreadSheetActivityList.add(extractActivitiesFromExperiment(experimentValue))
             }
             columnCount++
         }
         spreadSheetActivityList
     }
+
+
+
+
+    protected Object generateETagFromCartCompounds(List<CartCompound> cartCompoundList) {
+        List<Long> cartCompoundIdList = new ArrayList<Long>()
+        for (CartCompound cartCompound in cartCompoundList)
+            cartCompoundIdList.add(new Long(cartCompound.compoundId))
+        Date date = new Date()
+
+        queryServiceWrapper.restCompoundService.newETag(date.toString(), cartCompoundIdList);
+    }
+
+
+
+
+
+
+//
+//    protected List<SpreadSheetActivity> extractMolSpreadSheetData(MolSpreadSheetData molSpreadSheetData, List<Experiment> experimentList, List<Long> compounds) {
+//        // now step through the data and place into molSpreadSheetData
+//        List<SpreadSheetActivity> spreadSheetActivityList = []
+//
+//        // we need to handle each experiment separately ( until NCGC can do this in the background )
+//        // Note that each experiment corresponds to a column in our spreadsheet
+//        int columnCount = 0
+//        for (Experiment experiment in experimentList) {
+//             List<Long> collectCompounds2 = []
+//            final ServiceIterator<Compound> compoundsTestedInExperimentIter = queryServiceWrapper.restExperimentService.compounds(experiment)
+//            List<Long> collectCompounds = compoundsTestedInExperimentIter.collect {Compound compound -> new CompoundAdapter(compound).pubChemCID }
+//            //only do this if compounds is not empty
+//            if (!compounds.isEmpty()) {
+//                //find the intersection of the two Compound lists
+//                collectCompounds = compounds.intersect(collectCompounds)
+//            }
+//            if (!collectCompounds.isEmpty()) {
+//                ServiceIterator<Value> experimentIterator = queryServiceWrapper.restExperimentService.activities(experiment)
+//                // Now step through the result set and pull back  one value for each compound
+//                Value experimentValue
+//                while (experimentIterator.hasNext()) {
+//                    experimentValue = experimentIterator.next()
+//                    Long translation = new Long(experimentValue.id.split("\\.")[0])
+//                    if (!molSpreadSheetData.columnPointer.containsKey(translation)) {
+//                        molSpreadSheetData.columnPointer.put(translation, columnCount)
+//                    }
+//                    spreadSheetActivityList.add(extractActivitiesFromExperiment(experimentValue, new Long(experiment.id.toString())))
+//                }
+//            } else {
+//                molSpreadSheetData.columnPointer.put(experiment.id as Long, columnCount)
+//            }
+//            columnCount++
+//        }
+//        spreadSheetActivityList
+//    }
     /**
      *
      * @param molSpreadSheetData
