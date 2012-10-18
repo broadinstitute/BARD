@@ -4,7 +4,7 @@
 <r:require modules="core,bootstrap"/>
 <meta name="layout" content="basic"/>
 <link rel="stylesheet" href="${resource(dir: 'css', file: 'bootstrap-plus.css')}" type="text/css">
-<title>CAP - Find assay by id</title>
+<title>BARD: Catalog of Assay Protocols</title>
 <r:script>
 	 
 </r:script>

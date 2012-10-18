@@ -5,7 +5,8 @@
 		<link rel="stylesheet" href="${resource(dir: 'css', file: 'table.css')}" type="text/css">
 		<g:layoutHead/>
         <r:layoutResources />
-	</head>
+        <title>BARD: Catalog of Assay Protocols</title>
+    </head>
 	<body>
 		<div class="container-fluid">
 		<div class="row-fluid">
