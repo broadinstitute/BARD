@@ -45,7 +45,7 @@ class ExperimentalValueTypeUnitSpec extends Specification {
         when: "We call the convert method"
         ExperimentalValueType.convert(cellType)
 
-        then: "The resulting experimental value type should match the expected one"
+        then: "The resulting experimental value is completely unexpected, so throw an exception"
         Exception ee = thrown()
         assert ee instanceof NotImplementedException
 
@@ -56,10 +56,10 @@ class ExperimentalValueTypeUnitSpec extends Specification {
     }
 
     void "test default switch"() {
-        when: "We call the convert method"
+        when: "We call the convert method for something we don't handle"
         ExperimentalValueType.convert(cellType)
 
-        then: "The resulting experimental value type should match the expected one"
+        then: "The code should throw an exception"
         Exception ee = thrown()
         assert ee instanceof NotImplementedException
 

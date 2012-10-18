@@ -468,11 +468,12 @@ class MolecularSpreadSheetService {
     void addCurrentActivityToSpreadSheet(final SpreadSheetActivity spreadSheetActivity, final Value childValue) {
         String identifier = childValue.id
 
-        if (childValue instanceof HillCurveValue) {
+         if (childValue instanceof HillCurveValue) {
             spreadSheetActivity.hillCurveValue = childValue
             spreadSheetActivity.readouts.push(childValue)
             return
         }
+
         switch (identifier) {
             case "potency":
                 spreadSheetActivity.potency = (Double) childValue.value
@@ -484,7 +485,6 @@ class MolecularSpreadSheetService {
                 spreadSheetActivity.eid = (Long) childValue.value
                 break
             case "cid":
-
                 spreadSheetActivity.cid = (Long) childValue.value
                 break
             case "sid":

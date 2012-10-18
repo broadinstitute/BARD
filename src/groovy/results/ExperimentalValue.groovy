@@ -5,13 +5,11 @@ import molspreadsheet.MolSpreadSheetCellUnit
 import org.apache.commons.lang.NotImplementedException
 
 import java.text.NumberFormat
+import java.math.MathContext
 
 /**
- * Created with IntelliJ IDEA.
- * User: balexand
- * Date: 9/28/12
- * Time: 6:50 AM
- * To change this template use File | Settings | File Templates.
+ * ExperimentalValue is designed to present numbers with a number of significant digits
+ * that is suitable for scientists likely to use Bard
  */
 class ExperimentalValue {
     final String NO_ACTIVITY_STRING = "(no activity)"
@@ -26,6 +24,13 @@ class ExperimentalValue {
 
 
 
+    /**
+     * ExperimentalValue ctor
+     * @param value
+     * @param experimentalValueUnit
+     * @param experimentalValueType
+     * @param activity
+     */
     public ExperimentalValue(BigDecimal value,
                              ExperimentalValueUnit experimentalValueUnit,
                              ExperimentalValueType experimentalValueType,
@@ -40,6 +45,11 @@ class ExperimentalValue {
         }
     }
 
+    /**
+     *  ExperimentalValue ctor
+     * @param value
+     * @param printUnits
+     */
     public ExperimentalValue(BigDecimal value,
                              Boolean printUnits) {
         this.value = value
@@ -52,7 +62,11 @@ class ExperimentalValue {
         }
     }
 
-
+    /**
+     * The rest of the methods are here to support toString, since this is the one that converts
+     * a numerical value into a string with the right degree of precision
+     * @return
+     */
     @Override
     String toString() {
         StringBuilder stringBuilder = new StringBuilder()
@@ -75,7 +89,14 @@ class ExperimentalValue {
         stringBuilder.toString()
     }
 
-
+    /**
+     * Treat values differently based on the number of digits. Values are reaching
+     * this routine must already have undergone unit conversion so that they are neither
+     * < .01 or else > 1000.
+     *
+     * @param bigDecimal
+     * @return
+     */
     String roundoffToDesiredPrecision(BigDecimal bigDecimal) {
         BigDecimal displayVal = bigDecimal
         Boolean defaultToEngineeringNotation = false
@@ -107,16 +128,16 @@ class ExperimentalValue {
             numberFormat.format(displayVal.doubleValue())
         }
         else {
-            displayVal.toEngineeringString()
+            MathContext mathContext = new MathContext(DESIRED_PRECISION)
+            displayVal.round(mathContext).toEngineeringString()
         }
 
     }
 
-
-
-
-
-
+    /**
+     *  deliverDesiredValue checks to see whether the user is insisting on output units are not.
+     * @return
+     */
     BigDecimal deliverDesiredValue() {
         if (insistOnOutputUnits != ExperimentalValueUnit.unknown) {  // the calling routine wants to set the output units
             insistOnOutputUnit()
@@ -126,9 +147,12 @@ class ExperimentalValue {
         value
     }
 
-
-
-    Boolean chooseOutputUnit() {
+    /**
+     * Select a suitable output unit based on the value of the number. Note the plan is to iterate through the different options
+     * rather than trying to jump to the right one.
+     * @return
+     */
+    void chooseOutputUnit() {
         Boolean keepGoing = (value < 0.1) || (value >= 1000)
         while (keepGoing) {
             if ((value < 0.1) &&
@@ -143,10 +167,13 @@ class ExperimentalValue {
                 keepGoing = false
             }
         }
-        keepGoing
     }
 
-    Boolean insistOnOutputUnit() {
+    /**
+     * What to do with the calling routine knows what units it wants to use
+     * @return
+     */
+    void insistOnOutputUnit() {
         Boolean keepGoing = (insistOnOutputUnits == ExperimentalValueUnit.unknown) ? false : (experimentalValueUnit != insistOnOutputUnits)
         while (keepGoing) {
             if ((experimentalValueUnit.decimalPlacesFromMolar > insistOnOutputUnits.decimalPlacesFromMolar) &&
@@ -161,12 +188,14 @@ class ExperimentalValue {
                 keepGoing = false
             }
         }
-        keepGoing
     }
 
-
-
-
+    /**
+     *  The routine we call each time we want to move up or down the scale, changing the magnitude of the results by
+     *  a factor of 1000
+     * @param inComingUnit
+     * @param outGoingUnit
+     */
     void performUnitNormalization(ExperimentalValueUnit inComingUnit, ExperimentalValueUnit outGoingUnit) {
         if ((inComingUnit != ExperimentalValueUnit.unknown) &&
                 (outGoingUnit != ExperimentalValueUnit.unknown)) {
@@ -176,25 +205,39 @@ class ExperimentalValue {
         }
     }
 
-
+    /**
+     * for some of the values we want to display we might want to pretend they < or >.  Note also
+     * that this is where a number becomes negative -- the numbers restore inside this class are
+     * greater than zero, but may utilize the switch valueNegative to indicate that the value should
+     * considered to be less than zero.
+     *
+     * @param experimentalValueType
+     * @param valueNegative
+     * @return
+     */
     String prepend(ExperimentalValueType experimentalValueType, Boolean valueNegative) {
-        StringBuffer stringBuffer = new StringBuffer()
+        StringBuilder stringBuilder = new StringBuilder()
         switch (experimentalValueType) {
             case ExperimentalValueType.lessThanNumeric:
-                stringBuffer.append("< ")
+                stringBuilder.append("< ")
                 break;
             case ExperimentalValueType.greaterThanNumeric:
-                stringBuffer.append("> ")
+                stringBuilder.append("> ")
                 break;
             default:
-                stringBuffer.append("")
+                stringBuilder.append("")
         }
         if (valueNegative) {
-            stringBuffer.append("-")
+            stringBuilder.append("-")
         }
-        stringBuffer.toString()
+        stringBuilder.toString()
     }
 
+    /**
+     * Anything that might go after the number. Right now it's only a percentage sign.
+     * @param experimentalValueType
+     * @return
+     */
     String append(ExperimentalValueType experimentalValueType) {
         String returnValue
         switch (experimentalValueType) {
@@ -207,20 +250,21 @@ class ExperimentalValue {
         returnValue
     }
 
-
 }
 
-
+/**
+ * enumeration to hold units
+ */
 enum ExperimentalValueUnit {
-    Molar("M", 0),
-    Millimolar("mM", -3),
-    Micromolar("uM", -6),
-    Nanomolar("nM", -9),
-    Picomolar("pM", -12),
-    Femtomolar("fM", -15),
-    Attamolar("aM", -18),
-    Zeptomolar("zM", -21),
-    Yoctomolar("yM", -24),
+    Molar(" M", 0),
+    Millimolar(" mM", -3),
+    Micromolar(" uM", -6),
+    Nanomolar(" nM", -9),
+    Picomolar(" pM", -12),
+    Femtomolar(" fM", -15),
+    Attamolar(" aM", -18),
+    Zeptomolar(" zM", -21),
+    Yoctomolar(" yM", -24),
     unknown("", 0);
 
     static ExperimentalValueUnit convert(MolSpreadSheetCellUnit molSpreadSheetCellUnit) {
@@ -282,10 +326,9 @@ enum ExperimentalValueUnit {
 
 }
 
-
-
-
-
+/**
+ * Enumeration to hold the type of the value
+ */
 enum ExperimentalValueType {
     lessThanNumeric,
     greaterThanNumeric,
