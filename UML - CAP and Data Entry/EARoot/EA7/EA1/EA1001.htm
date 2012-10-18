@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-<title>VM Server B</title>
+<title>Data Deposition UI</title>
 <link href="../../../css/ea.css" rel="stylesheet" type="text/css" />
 <script>
 function initPage(src) {	
@@ -34,15 +34,15 @@ function nameClassifier(name, separator)
 <div class="pageHeader"></div>
 <div class="PageBody">
 	<div id="name_classifier" style="display: none;"></div>
-	<span class="ObjectTitle"><script type="text/javascript">document.write(nameClassifier("VM Server B", " : "))</script>  : Public   ExecutionEnvironment</span>
+	<span class="ObjectTitle"><script type="text/javascript">document.write(nameClassifier("Data Deposition UI", " : "))</script>  : Public  &lt;&lt;Web&gt;&gt; Component</span>
 	<table border="0" cellpadding="0" cellspacing="0" class="ObjectDetails">
 		<tr>
 			<td width="15%" class="ObjectDetailsTopic">Created:</td>
-			<td width="85%" class="ObjectDetailsValue">9/30/2011 11:59:31 PM</td>
+			<td width="85%" class="ObjectDetailsValue">9/9/2011 9:33:16 AM</td>
 		</tr>
 		<tr>
 			<td class="ObjectDetailsTopic">Modified:</td>
-			<td class="ObjectDetailsValue">9/30/2011 11:59:40 PM</td>
+			<td class="ObjectDetailsValue">9/9/2011 9:45:10 AM</td>
 		</tr>
 		<tr style="height: 10px"><td colspan="2"></td></tr>
 		<tr>
@@ -87,19 +87,57 @@ function nameClassifier(name, separator)
 		</tr>
 		<tr id="adv00" style="display: none;">
 			<td class="ObjectDetailsTopic" style="padding-left: 18px;">UUID:</td>
-			<td class="ObjectDetailsValue">{26FEB828-FC4D-454d-8CCF-5DCE8E158D33}</td>
+			<td class="ObjectDetailsValue">{2ABAEAEE-1B99-4447-85D4-D9052CABC7BB}</td>
 		</tr>
 		<tr id="adv01" style="display: none;">
 			<td class="ObjectDetailsTopic" style="padding-left: 18px;">Appears In:</td>
-			<td class="ObjectDetailsValue"><a href="EA930.htm">MLBD Hardware</a></td>
+			<td class="ObjectDetailsValue"><a href="EA972.htm">MLBD overview</a>, <a href="EA956.htm">Data entry info flow</a>, <a href="EA966.htm">MLBD data upload</a>, <a href="EA958.htm">File processing</a>, <a href="EA962.htm">MLBD Application stacks</a>, <a href="EA954.htm">BARD application interactions</a></td>
 		</tr>
 	</table>
 	
 	<div class="TableGroup" id="TableGroup">
 		<ul class="ItemTitle">
+			<li onClick="parent.toggleItem('MessagesTo');" id="MessagesToTitle">Messages To</li>
 			<li onClick="parent.toggleItem('CustomProperties');" id="CustomPropertiesTitle">Advanced</li>
 			<li onClick="parent.toggleItem('Links');" id="LinksTitle">Other Links</li>
 		</ul>
+		<div class="ItemBody" id="MessagesToTable">
+			<table border="0" cellspacing="0" cellpadding="0" class="Table">
+				<tr>
+					<td width="50%" class="TableHeading">Element</td>
+					<td width="50%" class="TableHeading">Message</td>
+				</tr>
+				<tr>
+					<td width="50%" class="TableRow" valign="top"><a href="EA1015.htm">File Reader</a></td>
+					<td width="50%" class="TableRow" valign="top">Start Upload</td>
+				</tr>
+		   		<tr>
+					<td class="TableRowBottomDashed"  colspan="2">
+						<div class="DetailsDivParent"><img src="../../../images/minus03.gif" align="absmiddle" id="DetailsImageMessage1117" onclick="parent.toggleDiv('detailsDIVMessage1117', 'DetailsImageMessage1117')" />Details:
+							<div id="detailsDIVMessage1117" class="DetailsDiv" >
+							<strong>Type:</strong> Sequence Synchronous Call<br />
+							&nbsp;
+							</div>
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<td width="50%" class="TableRow" valign="top"><a href="EA1052.htm">«Web» Upload Dashboard UI</a></td>
+					<td width="50%" class="TableRow" valign="top">showDashboard</td>
+				</tr>
+		   		<tr>
+					<td class="TableRowBottomDashed"  colspan="2">
+						<div class="DetailsDivParent"><img src="../../../images/minus03.gif" align="absmiddle" id="DetailsImageMessage1118" onclick="parent.toggleDiv('detailsDIVMessage1118', 'DetailsImageMessage1118')" />Details:
+							<div id="detailsDIVMessage1118" class="DetailsDiv" >
+							<strong>Type:</strong> Sequence Synchronous Call<br />
+							&nbsp;
+							</div>
+						</div>
+					</td>
+				</tr>
+
+			</table>
+		</div>
 		<div class="ItemBody" id="CustomPropertiesTable">
 			<table border="0" cellspacing="0" cellpadding="0" class="Table">
 				<tr>
@@ -107,8 +145,8 @@ function nameClassifier(name, separator)
 					<td width="70%" class="TableHeading">Value</td>
 				</tr>
 			<tr>
-				<td width="30%" class="TableRow">isExecutionEnvironment:</td>
-				<td width="70%" class="TableRow">False</td>
+				<td width="30%" class="TableRow">isIndirectlyInstantiated:</td>
+				<td width="70%" class="TableRow">true</td>
 			</tr>
 
 
@@ -122,14 +160,38 @@ function nameClassifier(name, separator)
 					<td width="40%" class="TableHeading">Notes</td>
 				</tr>
 				<tr>
-					<td width="30%" class="TableRow" valign="top"><a href="EA989.htm">«engine» RDMS</a></td>
-					<td width="15%" class="TableRow" valign="top">Component</td>
-					<td width="15%" class="TableRow" valign="top">Dependency</td>
+					<td width="30%" class="TableRow" valign="top"><a href="../../EA3/EA1/EA511.htm">Assay Registrar</a></td>
+					<td width="15%" class="TableRow" valign="top">Actor</td>
+					<td width="15%" class="TableRow" valign="top">Information Flow</td>
 					<td width="40%" class="TableRow" valign="top">&nbsp;</td>
 				</tr>
 				<tr>
-					<td width="30%" class="TableRow" valign="top"><a href="EA978.htm">HW Cluster</a></td>
-					<td width="15%" class="TableRow" valign="top">ExecutionEnvironment</td>
+					<td width="30%" class="TableRow" valign="top"><a href="EA987.htm">«Web» Assay Catalog Registry</a></td>
+					<td width="15%" class="TableRow" valign="top">Component</td>
+					<td width="15%" class="TableRow" valign="top">Information Flow</td>
+					<td width="40%" class="TableRow" valign="top">&nbsp;</td>
+				</tr>
+				<tr>
+					<td width="30%" class="TableRow" valign="top"><a href="EA994.htm">Catalog Rules Engine</a></td>
+					<td width="15%" class="TableRow" valign="top">Component</td>
+					<td width="15%" class="TableRow" valign="top">Information Flow</td>
+					<td width="40%" class="TableRow" valign="top">&nbsp;</td>
+				</tr>
+				<tr>
+					<td width="30%" class="TableRow" valign="top"><a href="EA1009.htm">ETL Engine</a></td>
+					<td width="15%" class="TableRow" valign="top">Component</td>
+					<td width="15%" class="TableRow" valign="top">Information Flow</td>
+					<td width="40%" class="TableRow" valign="top">&nbsp;</td>
+				</tr>
+				<tr>
+					<td width="30%" class="TableRow" valign="top"><a href="EA987.htm">«Web» Assay Catalog Registry</a></td>
+					<td width="15%" class="TableRow" valign="top">Component</td>
+					<td width="15%" class="TableRow" valign="top">Information Flow</td>
+					<td width="40%" class="TableRow" valign="top">&nbsp;</td>
+				</tr>
+				<tr>
+					<td width="30%" class="TableRow" valign="top"><a href="EA1007.htm">«grails» DD file import</a></td>
+					<td width="15%" class="TableRow" valign="top">Component</td>
 					<td width="15%" class="TableRow" valign="top">Dependency</td>
 					<td width="40%" class="TableRow" valign="top">&nbsp;</td>
 				</tr>

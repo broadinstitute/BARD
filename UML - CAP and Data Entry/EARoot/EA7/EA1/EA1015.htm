@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-<title>Validation</title>
+<title>File Reader</title>
 <link href="../../../css/ea.css" rel="stylesheet" type="text/css" />
 <script>
 function initPage(src) {	
@@ -34,15 +34,15 @@ function nameClassifier(name, separator)
 <div class="pageHeader"></div>
 <div class="PageBody">
 	<div id="name_classifier" style="display: none;"></div>
-	<span class="ObjectTitle"><script type="text/javascript">document.write(nameClassifier("Validation", " : "))</script>  : Public   Component</span>
+	<span class="ObjectTitle"><script type="text/javascript">document.write(nameClassifier("File Reader", " : "))</script>  : Public   Component</span>
 	<table border="0" cellpadding="0" cellspacing="0" class="ObjectDetails">
 		<tr>
 			<td width="15%" class="ObjectDetailsTopic">Created:</td>
-			<td width="85%" class="ObjectDetailsValue">5/16/2012 9:40:12 AM</td>
+			<td width="85%" class="ObjectDetailsValue">5/16/2012 11:06:05 AM</td>
 		</tr>
 		<tr>
 			<td class="ObjectDetailsTopic">Modified:</td>
-			<td class="ObjectDetailsValue">5/16/2012 9:40:19 AM</td>
+			<td class="ObjectDetailsValue">5/16/2012 11:06:05 AM</td>
 		</tr>
 		<tr style="height: 10px"><td colspan="2"></td></tr>
 		<tr>
@@ -87,22 +87,20 @@ function nameClassifier(name, separator)
 		</tr>
 		<tr id="adv00" style="display: none;">
 			<td class="ObjectDetailsTopic" style="padding-left: 18px;">UUID:</td>
-			<td class="ObjectDetailsValue">{1519AA1D-F151-43ea-B426-4752B713C9BC}</td>
+			<td class="ObjectDetailsValue">{E08F0927-8684-4b8b-BAE5-22111F12DF98}</td>
 		</tr>
 		<tr id="adv01" style="display: none;">
 			<td class="ObjectDetailsTopic" style="padding-left: 18px;">Appears In:</td>
-			<td class="ObjectDetailsValue"><a href="EA920.htm">File processing</a>, <a href="EA924.htm">MLBD Application stacks</a>, <a href="EA916.htm">BARD application interactions</a>, <a href="EA938.htm">ValidateSID</a></td>
+			<td class="ObjectDetailsValue"><a href="EA958.htm">File processing</a></td>
 		</tr>
 	</table>
 	
 	<div class="TableGroup" id="TableGroup">
 		<ul class="ItemTitle">
 			<li onClick="parent.toggleItem('Operations');" id="OperationsTitle">Operations</li>
-			<li onClick="parent.toggleItem('AssociationsFrom');" id="AssociationsFromTitle">Associations From</li>
 			<li onClick="parent.toggleItem('MessagesTo');" id="MessagesToTitle">Messages To</li>
 			<li onClick="parent.toggleItem('MessagesFrom');" id="MessagesFromTitle">Messages From</li>
 			<li onClick="parent.toggleItem('CustomProperties');" id="CustomPropertiesTitle">Advanced</li>
-			<li onClick="parent.toggleItem('Links');" id="LinksTitle">Other Links</li>
 		</ul>
 <div class="ItemBody" id="OperationsTable">
 	<table border="0" cellspacing="0" cellpadding="0" class="Table">
@@ -112,51 +110,13 @@ function nameClassifier(name, separator)
 						<tr>
 				<td width="100%" class="TableRow">
 					<i>Public</i><br />
-					<strong>matchLaboratory</strong>(					<a href="#" onclick="parent.toggleData('param{8237DAAD-1883-4752-9E3A-452BC42C07A4}')" style="text-decoration: none; color: #000000;"><img src="../../../images/plus03.gif" align="absmiddle" id="param{8237DAAD-1883-4752-9E3A-452BC42C07A4}" border="0" />SIDlaboratory: string</a>, 
-					<table border="0" cellspacing="0" cellpadding="0" class="Table" style="padding: 4px 18px;">
-						<tr id="param{8237DAAD-1883-4752-9E3A-452BC42C07A4}00" style="display: none;">
-							<td width="50"><strong>Default:</strong></td>
-							<td></td>
-						</tr>
-						<tr id="param{8237DAAD-1883-4752-9E3A-452BC42C07A4}01" style="display: none;">
-							<td width="50"><strong>Kind:</strong></td>
-							<td>in</td>
-						</tr>
-						<tr id="param{8237DAAD-1883-4752-9E3A-452BC42C07A4}02" style="display: none;">
-							<td width="50"><strong>Stereotype: </strong></td>
-							<td></td>
-						</tr>
-						<tr id="param{8237DAAD-1883-4752-9E3A-452BC42C07A4}03" style="display: none;">
-							<td width="50"></td>
-							<td></td>
-						</tr>
-					</table>
-					<a href="#" onclick="parent.toggleData('param{9D927F26-F056-4705-AAE7-FC4D45D60335}')" style="text-decoration: none; color: #000000;"><img src="../../../images/plus03.gif" align="absmiddle" id="param{9D927F26-F056-4705-AAE7-FC4D45D60335}" border="0" />exprtLaboratory: string</a>, 
-					<table border="0" cellspacing="0" cellpadding="0" class="Table" style="padding: 4px 18px;">
-						<tr id="param{9D927F26-F056-4705-AAE7-FC4D45D60335}00" style="display: none;">
-							<td width="50"><strong>Default:</strong></td>
-							<td></td>
-						</tr>
-						<tr id="param{9D927F26-F056-4705-AAE7-FC4D45D60335}01" style="display: none;">
-							<td width="50"><strong>Kind:</strong></td>
-							<td>in</td>
-						</tr>
-						<tr id="param{9D927F26-F056-4705-AAE7-FC4D45D60335}02" style="display: none;">
-							<td width="50"><strong>Stereotype: </strong></td>
-							<td></td>
-						</tr>
-						<tr id="param{9D927F26-F056-4705-AAE7-FC4D45D60335}03" style="display: none;">
-							<td width="50"></td>
-							<td></td>
-						</tr>
-					</table>
-):boolean
+					<strong>parseHeader</strong>():void
 				</td>
 			</tr>
 			<tr>
 				<td class="TableRowBottomDashed"  colspan="1">
-					<div class="DetailsDivParent"><img src="../../../images/minus03.gif" align="absmiddle" id="DetailsImageOperations1139" onclick="parent.toggleDiv('detailsDIVOperations1139','DetailsImageOperations1139')" />Details:
-						<div id="detailsDIVOperations1139" class="DetailsDiv" >
+					<div class="DetailsDivParent"><img src="../../../images/minus03.gif" align="absmiddle" id="DetailsImageOperations1126" onclick="parent.toggleDiv('detailsDIVOperations1126','DetailsImageOperations1126')" />Details:
+						<div id="detailsDIVOperations1126" class="DetailsDiv" >
 					<i>Sequential  </i>
 					<table>
 						<tr>
@@ -174,13 +134,13 @@ function nameClassifier(name, separator)
 			<tr>
 				<td width="100%" class="TableRow">
 					<i>Public</i><br />
-					<strong>validateAttrributeValuePair</strong>():void
+					<strong>parseResultRow</strong>():void
 				</td>
 			</tr>
 			<tr>
 				<td class="TableRowBottomDashed"  colspan="1">
-					<div class="DetailsDivParent"><img src="../../../images/minus03.gif" align="absmiddle" id="DetailsImageOperations1140" onclick="parent.toggleDiv('detailsDIVOperations1140','DetailsImageOperations1140')" />Details:
-						<div id="detailsDIVOperations1140" class="DetailsDiv" >
+					<div class="DetailsDivParent"><img src="../../../images/minus03.gif" align="absmiddle" id="DetailsImageOperations1127" onclick="parent.toggleDiv('detailsDIVOperations1127','DetailsImageOperations1127')" />Details:
+						<div id="detailsDIVOperations1127" class="DetailsDiv" >
 					<i>Sequential  </i>
 					<table>
 						<tr>
@@ -191,150 +151,194 @@ function nameClassifier(name, separator)
 					
 					
 					
-						</div>
-					</div>
-				</td>
-			</tr>
-			<tr>
-				<td width="100%" class="TableRow">
-					<i>Public</i><br />
-					<strong>validateSID</strong>(					<a href="#" onclick="parent.toggleData('param{0688AC7B-EFA1-44cb-818E-1B56E366941F}')" style="text-decoration: none; color: #000000;"><img src="../../../images/plus03.gif" align="absmiddle" id="param{0688AC7B-EFA1-44cb-818E-1B56E366941F}" border="0" />SID: int</a>, 
-					<table border="0" cellspacing="0" cellpadding="0" class="Table" style="padding: 4px 18px;">
-						<tr id="param{0688AC7B-EFA1-44cb-818E-1B56E366941F}00" style="display: none;">
-							<td width="50"><strong>Default:</strong></td>
-							<td></td>
-						</tr>
-						<tr id="param{0688AC7B-EFA1-44cb-818E-1B56E366941F}01" style="display: none;">
-							<td width="50"><strong>Kind:</strong></td>
-							<td>in</td>
-						</tr>
-						<tr id="param{0688AC7B-EFA1-44cb-818E-1B56E366941F}02" style="display: none;">
-							<td width="50"><strong>Stereotype: </strong></td>
-							<td></td>
-						</tr>
-						<tr id="param{0688AC7B-EFA1-44cb-818E-1B56E366941F}03" style="display: none;">
-							<td width="50"></td>
-							<td></td>
-						</tr>
-					</table>
-					<a href="#" onclick="parent.toggleData('param{309D9847-52D7-4c87-9EDD-32F07E121A56}')" style="text-decoration: none; color: #000000;"><img src="../../../images/plus03.gif" align="absmiddle" id="param{309D9847-52D7-4c87-9EDD-32F07E121A56}" border="0" />laboratory: string</a>, 
-					<table border="0" cellspacing="0" cellpadding="0" class="Table" style="padding: 4px 18px;">
-						<tr id="param{309D9847-52D7-4c87-9EDD-32F07E121A56}00" style="display: none;">
-							<td width="50"><strong>Default:</strong></td>
-							<td></td>
-						</tr>
-						<tr id="param{309D9847-52D7-4c87-9EDD-32F07E121A56}01" style="display: none;">
-							<td width="50"><strong>Kind:</strong></td>
-							<td>in</td>
-						</tr>
-						<tr id="param{309D9847-52D7-4c87-9EDD-32F07E121A56}02" style="display: none;">
-							<td width="50"><strong>Stereotype: </strong></td>
-							<td></td>
-						</tr>
-						<tr id="param{309D9847-52D7-4c87-9EDD-32F07E121A56}03" style="display: none;">
-							<td width="50"></td>
-							<td></td>
-						</tr>
-					</table>
-					<a href="#" onclick="parent.toggleData('param{83DE70D1-A1F1-4e97-B305-DD3280AEFAD6}')" style="text-decoration: none; color: #000000;"><img src="../../../images/plus03.gif" align="absmiddle" id="param{83DE70D1-A1F1-4e97-B305-DD3280AEFAD6}" border="0" />newSID: int</a>, 
-					<table border="0" cellspacing="0" cellpadding="0" class="Table" style="padding: 4px 18px;">
-						<tr id="param{83DE70D1-A1F1-4e97-B305-DD3280AEFAD6}00" style="display: none;">
-							<td width="50"><strong>Default:</strong></td>
-							<td></td>
-						</tr>
-						<tr id="param{83DE70D1-A1F1-4e97-B305-DD3280AEFAD6}01" style="display: none;">
-							<td width="50"><strong>Kind:</strong></td>
-							<td>out</td>
-						</tr>
-						<tr id="param{83DE70D1-A1F1-4e97-B305-DD3280AEFAD6}02" style="display: none;">
-							<td width="50"><strong>Stereotype: </strong></td>
-							<td></td>
-						</tr>
-						<tr id="param{83DE70D1-A1F1-4e97-B305-DD3280AEFAD6}03" style="display: none;">
-							<td width="50"></td>
-							<td></td>
-						</tr>
-					</table>
-):void
-				</td>
-			</tr>
-			<tr>
-				<td class="TableRowBottomDashed"  colspan="1">
-					<div class="DetailsDivParent"><img src="../../../images/minus03.gif" align="absmiddle" id="DetailsImageOperations1141" onclick="parent.toggleDiv('detailsDIVOperations1141','DetailsImageOperations1141')" />Details:
-						<div id="detailsDIVOperations1141" class="DetailsDiv" >
-					<i>Sequential  </i>
-					<table>
-						<tr>
-							<td valign = "top"><i></i><span style="margin-left: .7cm;"> </span></td>
-							<td></td>
-						</tr>
-					</table>
-					
-					
-					<div class="ObjectDetailsNotes"><table>
-	<tr>
-		<td valign="top">
-			<i>Notes: </i><span style="margin-left: .4cm;"> </span>
-		</td>
-		<td>
-			check that the SID is in PubChem and that it is owned by the correct center
-		</td>
-	</tr>
-</table></div>
-
 						</div>
 					</div>
 				</td>
 			</tr>
 
 		</table>
-</div>		<div class="ItemBody" id="AssociationsFromTable">
-			<table border="0" cellspacing="0" cellpadding="0" class="Table">
-				<tr>
-					<td width="40%" class="TableHeading">Element</td>
-					<td width="30%" class="TableHeading">Source Role</td>
-					<td width="30%" class="TableHeading">Target Role</td>
-				</tr>
-				<tr>
-					<td width="40%" class="TableRow" valign="top">
-						<a href="EA969.htm">«grails» DD file import</a><br />
-						Component &nbsp;
-					</td>
-					<td width="30%" class="TableRow" valign="top">
-						<strong>Name:</strong> &nbsp;<br />
-						&nbsp;
-					</td>
-					<td width="30%" class="TableRow" valign="top">
-						<strong>Name:</strong> &nbsp;<br />
-						&nbsp;	
-					</td>
-				</tr>
-				<tr>
-					<td class="TableRowBottomDashed"  colspan="3">
-						<div class="DetailsDivParent"><img src="../../../images/minus03.gif" align="absmiddle" id="DetailsImageLink1142" onclick="parent.toggleDiv('detailsDIVLink1142','DetailsImageLink1142')" />Details:
-							<div id="detailsDIVLink1142" class="DetailsDiv" >
-							&nbsp;
-							</div>
-						</div>
-					</td>
-				</tr>
-
-			</table>
-		</div>
-		<div class="ItemBody" id="MessagesToTable">
+</div>		<div class="ItemBody" id="MessagesToTable">
 			<table border="0" cellspacing="0" cellpadding="0" class="Table">
 				<tr>
 					<td width="50%" class="TableHeading">Element</td>
 					<td width="50%" class="TableHeading">Message</td>
 				</tr>
 				<tr>
-					<td width="50%" class="TableRow" valign="top"><a href="EA1012.htm">Message Store</a></td>
+					<td width="50%" class="TableRow" valign="top"><a href="EA1029.htm">«CSV file» Result</a></td>
+					<td width="50%" class="TableRow" valign="top">Open</td>
+				</tr>
+		   		<tr>
+					<td class="TableRowBottomDashed"  colspan="2">
+						<div class="DetailsDivParent"><img src="../../../images/minus03.gif" align="absmiddle" id="DetailsImageMessage1128" onclick="parent.toggleDiv('detailsDIVMessage1128', 'DetailsImageMessage1128')" />Details:
+							<div id="detailsDIVMessage1128" class="DetailsDiv" >
+							<strong>Type:</strong> Sequence Synchronous Call<br />
+							&nbsp;
+							</div>
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<td width="50%" class="TableRow" valign="top"><a href="EA1029.htm">«CSV file» Result</a></td>
+					<td width="50%" class="TableRow" valign="top">getHeaderLines</td>
+				</tr>
+		   		<tr>
+					<td class="TableRowBottomDashed"  colspan="2">
+						<div class="DetailsDivParent"><img src="../../../images/minus03.gif" align="absmiddle" id="DetailsImageMessage1129" onclick="parent.toggleDiv('detailsDIVMessage1129', 'DetailsImageMessage1129')" />Details:
+							<div id="detailsDIVMessage1129" class="DetailsDiv" >
+							<strong>Type:</strong> Sequence Synchronous Call<br />
+							&nbsp;
+							</div>
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<td width="50%" class="TableRow" valign="top"><a href="../../EA4/EA1/EA794.htm">Assay</a></td>
+					<td width="50%" class="TableRow" valign="top">getAssayDefinition()</td>
+				</tr>
+		   		<tr>
+					<td class="TableRowBottomDashed"  colspan="2">
+						<div class="DetailsDivParent"><img src="../../../images/minus03.gif" align="absmiddle" id="DetailsImageMessage1130" onclick="parent.toggleDiv('detailsDIVMessage1130', 'DetailsImageMessage1130')" />Details:
+							<div id="detailsDIVMessage1130" class="DetailsDiv" >
+							<strong>Type:</strong> Sequence Synchronous Call<br />
+							&nbsp;
+							</div>
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<td width="50%" class="TableRow" valign="top"><a href="EA1015.htm">File Reader</a></td>
+					<td width="50%" class="TableRow" valign="top">parseHeader()</td>
+				</tr>
+		   		<tr>
+					<td class="TableRowBottomDashed"  colspan="2">
+						<div class="DetailsDivParent"><img src="../../../images/minus03.gif" align="absmiddle" id="DetailsImageMessage1131" onclick="parent.toggleDiv('detailsDIVMessage1131', 'DetailsImageMessage1131')" />Details:
+							<div id="detailsDIVMessage1131" class="DetailsDiv" >
+							<strong>Type:</strong> Sequence Synchronous Call<br />
+							&nbsp;
+							</div>
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<td width="50%" class="TableRow" valign="top"><a href="../../EA4/EA1/EA808.htm">Experiment</a></td>
+					<td width="50%" class="TableRow" valign="top">updateExperiment(experiment)</td>
+				</tr>
+		   		<tr>
+					<td class="TableRowBottomDashed"  colspan="2">
+						<div class="DetailsDivParent"><img src="../../../images/minus03.gif" align="absmiddle" id="DetailsImageMessage1132" onclick="parent.toggleDiv('detailsDIVMessage1132', 'DetailsImageMessage1132')" />Details:
+							<div id="detailsDIVMessage1132" class="DetailsDiv" >
+							<strong>Type:</strong> Sequence Synchronous Call<br />
+							&nbsp;
+							</div>
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<td width="50%" class="TableRow" valign="top"><a href="EA1029.htm">«CSV file» Result</a></td>
+					<td width="50%" class="TableRow" valign="top">getResultLine</td>
+				</tr>
+		   		<tr>
+					<td class="TableRowBottomDashed"  colspan="2">
+						<div class="DetailsDivParent"><img src="../../../images/minus03.gif" align="absmiddle" id="DetailsImageMessage1133" onclick="parent.toggleDiv('detailsDIVMessage1133', 'DetailsImageMessage1133')" />Details:
+							<div id="detailsDIVMessage1133" class="DetailsDiv" >
+							<strong>Type:</strong> Sequence Synchronous Call<br />
+							&nbsp;
+							</div>
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<td width="50%" class="TableRow" valign="top"><a href="EA1015.htm">File Reader</a></td>
+					<td width="50%" class="TableRow" valign="top">parseResultRow()</td>
+				</tr>
+		   		<tr>
+					<td class="TableRowBottomDashed"  colspan="2">
+						<div class="DetailsDivParent"><img src="../../../images/minus03.gif" align="absmiddle" id="DetailsImageMessage1134" onclick="parent.toggleDiv('detailsDIVMessage1134', 'DetailsImageMessage1134')" />Details:
+							<div id="detailsDIVMessage1134" class="DetailsDiv" >
+							<strong>Type:</strong> Sequence Synchronous Call<br />
+							&nbsp;
+							</div>
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<td width="50%" class="TableRow" valign="top"><a href="../../EA4/EA1/EA829.htm">Result</a></td>
+					<td width="50%" class="TableRow" valign="top">writeResultWithContext()</td>
+				</tr>
+		   		<tr>
+					<td class="TableRowBottomDashed"  colspan="2">
+						<div class="DetailsDivParent"><img src="../../../images/minus03.gif" align="absmiddle" id="DetailsImageMessage1135" onclick="parent.toggleDiv('detailsDIVMessage1135', 'DetailsImageMessage1135')" />Details:
+							<div id="detailsDIVMessage1135" class="DetailsDiv" >
+							<strong>Type:</strong> Sequence Synchronous Call<br />
+							&nbsp;
+							</div>
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<td width="50%" class="TableRow" valign="top"><a href="EA1029.htm">«CSV file» Result</a></td>
+					<td width="50%" class="TableRow" valign="top">close</td>
+				</tr>
+		   		<tr>
+					<td class="TableRowBottomDashed"  colspan="2">
+						<div class="DetailsDivParent"><img src="../../../images/minus03.gif" align="absmiddle" id="DetailsImageMessage1136" onclick="parent.toggleDiv('detailsDIVMessage1136', 'DetailsImageMessage1136')" />Details:
+							<div id="detailsDIVMessage1136" class="DetailsDiv" >
+							<strong>Type:</strong> Sequence Synchronous Call<br />
+							&nbsp;
+							</div>
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<td width="50%" class="TableRow" valign="top"><a href="EA1029.htm">«CSV file» Result</a></td>
+					<td width="50%" class="TableRow" valign="top">archive</td>
+				</tr>
+		   		<tr>
+					<td class="TableRowBottomDashed"  colspan="2">
+						<div class="DetailsDivParent"><img src="../../../images/minus03.gif" align="absmiddle" id="DetailsImageMessage1137" onclick="parent.toggleDiv('detailsDIVMessage1137', 'DetailsImageMessage1137')" />Details:
+							<div id="detailsDIVMessage1137" class="DetailsDiv" >
+							<strong>Type:</strong> Sequence Synchronous Call<br />
+							&nbsp;
+							</div>
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<td width="50%" class="TableRow" valign="top"><a href="EA1029.htm">«CSV file» Result</a></td>
+					<td width="50%" class="TableRow" valign="top">getColumnHeaders</td>
+				</tr>
+		   		<tr>
+					<td class="TableRowBottomDashed"  colspan="2">
+						<div class="DetailsDivParent"><img src="../../../images/minus03.gif" align="absmiddle" id="DetailsImageMessage1138" onclick="parent.toggleDiv('detailsDIVMessage1138', 'DetailsImageMessage1138')" />Details:
+							<div id="detailsDIVMessage1138" class="DetailsDiv" >
+							<strong>Type:</strong> Sequence Synchronous Call<br />
+							&nbsp;
+							</div>
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<td width="50%" class="TableRow" valign="top"><a href="../../EA4/EA1/EA808.htm">Experiment</a></td>
+					<td width="50%" class="TableRow" valign="top">setStatus(int)</td>
+				</tr>
+		   		<tr>
+					<td class="TableRowBottomDashed"  colspan="2">
+						<div class="DetailsDivParent"><img src="../../../images/minus03.gif" align="absmiddle" id="DetailsImageMessage1139" onclick="parent.toggleDiv('detailsDIVMessage1139', 'DetailsImageMessage1139')" />Details:
+							<div id="detailsDIVMessage1139" class="DetailsDiv" >
+							<strong>Type:</strong> Sequence Synchronous Call<br />
+							&nbsp;
+							</div>
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<td width="50%" class="TableRow" valign="top"><a href="EA1050.htm">Message Store</a></td>
 					<td width="50%" class="TableRow" valign="top">writeMessage(int,  string)</td>
 				</tr>
 		   		<tr>
 					<td class="TableRowBottomDashed"  colspan="2">
-						<div class="DetailsDivParent"><img src="../../../images/minus03.gif" align="absmiddle" id="DetailsImageMessage1143" onclick="parent.toggleDiv('detailsDIVMessage1143', 'DetailsImageMessage1143')" />Details:
-							<div id="detailsDIVMessage1143" class="DetailsDiv" >
+						<div class="DetailsDivParent"><img src="../../../images/minus03.gif" align="absmiddle" id="DetailsImageMessage1140" onclick="parent.toggleDiv('detailsDIVMessage1140', 'DetailsImageMessage1140')" />Details:
+							<div id="detailsDIVMessage1140" class="DetailsDiv" >
 							<strong>Type:</strong> Sequence Synchronous Call<br />
 							&nbsp;
 							</div>
@@ -342,98 +346,14 @@ function nameClassifier(name, separator)
 					</td>
 				</tr>
 				<tr>
-					<td width="50%" class="TableRow" valign="top"><a href="EA1012.htm">Message Store</a></td>
-					<td width="50%" class="TableRow" valign="top">writeMessage(int,  string)</td>
+					<td width="50%" class="TableRow" valign="top"><a href="EA1053.htm">Validation</a></td>
+					<td width="50%" class="TableRow" valign="top">comprehensiveValidation</td>
 				</tr>
 		   		<tr>
 					<td class="TableRowBottomDashed"  colspan="2">
-						<div class="DetailsDivParent"><img src="../../../images/minus03.gif" align="absmiddle" id="DetailsImageMessage1144" onclick="parent.toggleDiv('detailsDIVMessage1144', 'DetailsImageMessage1144')" />Details:
-							<div id="detailsDIVMessage1144" class="DetailsDiv" >
-							<strong>Type:</strong> Sequence Synchronous Call<br />
-							&nbsp;
-							</div>
-						</div>
-					</td>
-				</tr>
-				<tr>
-					<td width="50%" class="TableRow" valign="top"><a href="EA1012.htm">Message Store</a></td>
-					<td width="50%" class="TableRow" valign="top">writeMessage(int,  string)</td>
-				</tr>
-		   		<tr>
-					<td class="TableRowBottomDashed"  colspan="2">
-						<div class="DetailsDivParent"><img src="../../../images/minus03.gif" align="absmiddle" id="DetailsImageMessage1145" onclick="parent.toggleDiv('detailsDIVMessage1145', 'DetailsImageMessage1145')" />Details:
-							<div id="detailsDIVMessage1145" class="DetailsDiv" >
-							<strong>Type:</strong> Sequence Synchronous Call<br />
-							&nbsp;
-							</div>
-						</div>
-					</td>
-				</tr>
-				<tr>
-					<td width="50%" class="TableRow" valign="top"><a href="EA984.htm">«hibernate» Ontology Data Access</a></td>
-					<td width="50%" class="TableRow" valign="top">getSubstance(int)</td>
-				</tr>
-		   		<tr>
-					<td class="TableRowBottomDashed"  colspan="2">
-						<div class="DetailsDivParent"><img src="../../../images/minus03.gif" align="absmiddle" id="DetailsImageMessage1146" onclick="parent.toggleDiv('detailsDIVMessage1146', 'DetailsImageMessage1146')" />Details:
-							<div id="detailsDIVMessage1146" class="DetailsDiv" >
-							<strong>Type:</strong> Sequence Synchronous Call<br />
-							&nbsp;
-							</div>
-						</div>
-					</td>
-				</tr>
-				<tr>
-					<td width="50%" class="TableRow" valign="top"><a href="EA1015.htm">Validation</a></td>
-					<td width="50%" class="TableRow" valign="top">matchLaboratory(string,  string)</td>
-				</tr>
-		   		<tr>
-					<td class="TableRowBottomDashed"  colspan="2">
-						<div class="DetailsDivParent"><img src="../../../images/minus03.gif" align="absmiddle" id="DetailsImageMessage1147" onclick="parent.toggleDiv('detailsDIVMessage1147', 'DetailsImageMessage1147')" />Details:
-							<div id="detailsDIVMessage1147" class="DetailsDiv" >
-							<strong>Type:</strong> Sequence Synchronous Call<br />
-							&nbsp;
-							</div>
-						</div>
-					</td>
-				</tr>
-				<tr>
-					<td width="50%" class="TableRow" valign="top"><a href="EA986.htm">PubChem</a></td>
-					<td width="50%" class="TableRow" valign="top">registerSubstance(Substance)</td>
-				</tr>
-		   		<tr>
-					<td class="TableRowBottomDashed"  colspan="2">
-						<div class="DetailsDivParent"><img src="../../../images/minus03.gif" align="absmiddle" id="DetailsImageMessage1148" onclick="parent.toggleDiv('detailsDIVMessage1148', 'DetailsImageMessage1148')" />Details:
-							<div id="detailsDIVMessage1148" class="DetailsDiv" >
-							<strong>Type:</strong> Sequence Synchronous Call<br />
-							&nbsp;
-							</div>
-						</div>
-					</td>
-				</tr>
-				<tr>
-					<td width="50%" class="TableRow" valign="top"><a href="EA969.htm">«grails» DD file import</a></td>
-					<td width="50%" class="TableRow" valign="top">&nbsp;</td>
-				</tr>
-		   		<tr>
-					<td class="TableRowBottomDashed"  colspan="2">
-						<div class="DetailsDivParent"><img src="../../../images/minus03.gif" align="absmiddle" id="DetailsImageMessage1149" onclick="parent.toggleDiv('detailsDIVMessage1149', 'DetailsImageMessage1149')" />Details:
-							<div id="detailsDIVMessage1149" class="DetailsDiv" >
-							<strong>Type:</strong> Sequence Synchronous Call<br />
-							&nbsp;
-							</div>
-						</div>
-					</td>
-				</tr>
-				<tr>
-					<td width="50%" class="TableRow" valign="top"><a href="EA984.htm">«hibernate» Ontology Data Access</a></td>
-					<td width="50%" class="TableRow" valign="top">addSubstance(Substance)</td>
-				</tr>
-		   		<tr>
-					<td class="TableRowBottomDashed"  colspan="2">
-						<div class="DetailsDivParent"><img src="../../../images/minus03.gif" align="absmiddle" id="DetailsImageMessage1150" onclick="parent.toggleDiv('detailsDIVMessage1150', 'DetailsImageMessage1150')" />Details:
-							<div id="detailsDIVMessage1150" class="DetailsDiv" >
-							<strong>Type:</strong> Sequence Synchronous Call<br />
+						<div class="DetailsDivParent"><img src="../../../images/minus03.gif" align="absmiddle" id="DetailsImageMessage1141" onclick="parent.toggleDiv('detailsDIVMessage1141', 'DetailsImageMessage1141')" />Details:
+							<div id="detailsDIVMessage1141" class="DetailsDiv" >
+							<strong>Type:</strong> Sequence Asynchronous Call<br />
 							&nbsp;
 							</div>
 						</div>
@@ -449,13 +369,13 @@ function nameClassifier(name, separator)
 					<td width="50%" class="TableHeading">Message</td>
 				</tr>
 				<tr>
-					<td width="50%" class="TableRow" valign="top"><a href="../../EA4/EA1/EA797.htm">Result Context</a></td>
-					<td width="50%" class="TableRow" valign="top">validateAttrributeValuePair()</td>
+					<td width="50%" class="TableRow" valign="top"><a href="EA1001.htm">«Web» Data Deposition UI</a></td>
+					<td width="50%" class="TableRow" valign="top">Start Upload</td>
 				</tr>
 		   		<tr>
 					<td class="TableRowBottomDashed"  colspan="2">
-						<div class="DetailsDivParent"><img src="../../../images/minus03.gif" align="absmiddle" id="DetailsImageMessage1151" onclick="parent.toggleDiv('detailsDIVMessage1151', 'DetailsImageMessage1151')" />Details:
-							<div id="detailsDIVMessage1151" class="DetailsDiv" >
+						<div class="DetailsDivParent"><img src="../../../images/minus03.gif" align="absmiddle" id="DetailsImageMessage1142" onclick="parent.toggleDiv('detailsDIVMessage1142', 'DetailsImageMessage1142')" />Details:
+							<div id="detailsDIVMessage1142" class="DetailsDiv" >
 							<strong>Type:</strong> Sequence Synchronous Call<br />
 							&nbsp;
 							</div>
@@ -463,13 +383,13 @@ function nameClassifier(name, separator)
 					</td>
 				</tr>
 				<tr>
-					<td width="50%" class="TableRow" valign="top"><a href="../../EA4/EA1/EA797.htm">Result Context</a></td>
-					<td width="50%" class="TableRow" valign="top">validateAttrributeValuePair()</td>
+					<td width="50%" class="TableRow" valign="top"><a href="EA1015.htm">File Reader</a></td>
+					<td width="50%" class="TableRow" valign="top">parseHeader()</td>
 				</tr>
 		   		<tr>
 					<td class="TableRowBottomDashed"  colspan="2">
-						<div class="DetailsDivParent"><img src="../../../images/minus03.gif" align="absmiddle" id="DetailsImageMessage1152" onclick="parent.toggleDiv('detailsDIVMessage1152', 'DetailsImageMessage1152')" />Details:
-							<div id="detailsDIVMessage1152" class="DetailsDiv" >
+						<div class="DetailsDivParent"><img src="../../../images/minus03.gif" align="absmiddle" id="DetailsImageMessage1143" onclick="parent.toggleDiv('detailsDIVMessage1143', 'DetailsImageMessage1143')" />Details:
+							<div id="detailsDIVMessage1143" class="DetailsDiv" >
 							<strong>Type:</strong> Sequence Synchronous Call<br />
 							&nbsp;
 							</div>
@@ -477,41 +397,13 @@ function nameClassifier(name, separator)
 					</td>
 				</tr>
 				<tr>
-					<td width="50%" class="TableRow" valign="top"><a href="EA977.htm">File Reader</a></td>
-					<td width="50%" class="TableRow" valign="top">comprehensiveValidation</td>
+					<td width="50%" class="TableRow" valign="top"><a href="EA1015.htm">File Reader</a></td>
+					<td width="50%" class="TableRow" valign="top">parseResultRow()</td>
 				</tr>
 		   		<tr>
 					<td class="TableRowBottomDashed"  colspan="2">
-						<div class="DetailsDivParent"><img src="../../../images/minus03.gif" align="absmiddle" id="DetailsImageMessage1153" onclick="parent.toggleDiv('detailsDIVMessage1153', 'DetailsImageMessage1153')" />Details:
-							<div id="detailsDIVMessage1153" class="DetailsDiv" >
-							<strong>Type:</strong> Sequence Asynchronous Call<br />
-							&nbsp;
-							</div>
-						</div>
-					</td>
-				</tr>
-				<tr>
-					<td width="50%" class="TableRow" valign="top"><a href="EA969.htm">«grails» DD file import</a></td>
-					<td width="50%" class="TableRow" valign="top">validateSID(int,  string,  int*)</td>
-				</tr>
-		   		<tr>
-					<td class="TableRowBottomDashed"  colspan="2">
-						<div class="DetailsDivParent"><img src="../../../images/minus03.gif" align="absmiddle" id="DetailsImageMessage1154" onclick="parent.toggleDiv('detailsDIVMessage1154', 'DetailsImageMessage1154')" />Details:
-							<div id="detailsDIVMessage1154" class="DetailsDiv" >
-							<strong>Type:</strong> Sequence Synchronous Call<br />
-							&nbsp;
-							</div>
-						</div>
-					</td>
-				</tr>
-				<tr>
-					<td width="50%" class="TableRow" valign="top"><a href="EA1015.htm">Validation</a></td>
-					<td width="50%" class="TableRow" valign="top">matchLaboratory(string,  string)</td>
-				</tr>
-		   		<tr>
-					<td class="TableRowBottomDashed"  colspan="2">
-						<div class="DetailsDivParent"><img src="../../../images/minus03.gif" align="absmiddle" id="DetailsImageMessage1155" onclick="parent.toggleDiv('detailsDIVMessage1155', 'DetailsImageMessage1155')" />Details:
-							<div id="detailsDIVMessage1155" class="DetailsDiv" >
+						<div class="DetailsDivParent"><img src="../../../images/minus03.gif" align="absmiddle" id="DetailsImageMessage1144" onclick="parent.toggleDiv('detailsDIVMessage1144', 'DetailsImageMessage1144')" />Details:
+							<div id="detailsDIVMessage1144" class="DetailsDiv" >
 							<strong>Type:</strong> Sequence Synchronous Call<br />
 							&nbsp;
 							</div>
@@ -534,42 +426,7 @@ function nameClassifier(name, separator)
 
 
 			</table>
-		</div>		<div class="ItemBody" id="LinksTable">
-			<table align="center" border="0" cellspacing="0" cellpadding="0" class="Table">
-				<tr>
-					<td width="30%" class="TableHeading">Object</td>
-					<td width="15%" class="TableHeading">Type</td>
-					<td width="15%" class="TableHeading">Connection</td>
-					<td width="40%" class="TableHeading">Notes</td>
-				</tr>
-				<tr>
-					<td width="30%" class="TableRow" valign="top"><a href="EA1013.htm">Quick Validation</a></td>
-					<td width="15%" class="TableRow" valign="top">Component</td>
-					<td width="15%" class="TableRow" valign="top">Generalization</td>
-					<td width="40%" class="TableRow" valign="top">&nbsp;</td>
-				</tr>
-				<tr>
-					<td width="30%" class="TableRow" valign="top"><a href="EA1008.htm">Comprehensive validation</a></td>
-					<td width="15%" class="TableRow" valign="top">Component</td>
-					<td width="15%" class="TableRow" valign="top">Generalization</td>
-					<td width="40%" class="TableRow" valign="top">&nbsp;</td>
-				</tr>
-				<tr>
-					<td width="30%" class="TableRow" valign="top"><a href="EA1012.htm">Message Store</a></td>
-					<td width="15%" class="TableRow" valign="top">Component</td>
-					<td width="15%" class="TableRow" valign="top">Information Flow</td>
-					<td width="40%" class="TableRow" valign="top">&nbsp;</td>
-				</tr>
-				<tr>
-					<td width="30%" class="TableRow" valign="top"><a href="EA984.htm">«hibernate» Ontology Data Access</a></td>
-					<td width="15%" class="TableRow" valign="top">Component</td>
-					<td width="15%" class="TableRow" valign="top">Dependency</td>
-					<td width="40%" class="TableRow" valign="top">&nbsp;</td>
-				</tr>
-
-			</table>
-		</div>
-	</div>
+		</div>	</div>
 <div class="pageFooter"></div>
  
 </body>
