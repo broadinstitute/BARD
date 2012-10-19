@@ -8,6 +8,9 @@ grails.project.source.level = 1.6
 grails.server.port.http = 8081
 //grails.project.war.file = "target/${appName}-${appVersion}.war"
 
+def gebVersion = "0.7.2"
+def seleniumVersion = "2.25.0"
+
 grails.project.dependency.resolution = {
     // inherit Grails' default dependencies
     inherits("global") {
@@ -39,6 +42,19 @@ grails.project.dependency.resolution = {
         // test scope
         test "org.spockframework:spock-core:0.6-groovy-1.8"
         test "org.objenesis:objenesis:1.2" // used by spock for Mocking object that lack no args constructor
+        test "org.codehaus.geb:geb-spock:$gebVersion"
+        test("org.seleniumhq.selenium:selenium-htmlunit-driver:$seleniumVersion") {
+            excludes "xml-apis"
+        }
+        test("org.seleniumhq.selenium:selenium-chrome-driver:$seleniumVersion") {
+            exclude "xml-apis"
+        }
+        test("org.seleniumhq.selenium:selenium-firefox-driver:$seleniumVersion") {
+            excludes "xml-apis"
+        }
+        test("org.seleniumhq.selenium:selenium-remote-driver:$seleniumVersion") {
+            excludes "xml-apis"
+        }
 
         // provided  scope
     }
@@ -65,6 +81,9 @@ grails.project.dependency.resolution = {
         runtime ":resources:1.1.6"
         // test scope
         test ":spock:0.6"
+        test ":geb:$gebVersion"
+        test ":remote-control:1.2"
+
         // provided  scope
     }
 }
