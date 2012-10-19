@@ -3,10 +3,6 @@ package querycart
 import com.metasieve.shoppingcart.Shoppable
 import com.metasieve.shoppingcart.ShoppingCartService
 import grails.plugins.springsecurity.Secured
-import querycart.CartAssay
-import querycart.CartCompound
-import querycart.CartProject
-import querycart.QueryCartService
 
 @Secured(['isFullyAuthenticated()'])
 class QueryCartController {
@@ -56,7 +52,7 @@ class QueryCartController {
         } else {
             log.error("Received unexpected null shoppable")
         }
-        returnValue
+        return returnValue
     }
 
     def updateOnscreenCart() {
@@ -101,8 +97,8 @@ class QueryCartController {
         try {
             def shoppingItem = Shoppable.get(idToRemove)
             queryCartService.removeFromShoppingCart(shoppingItem)
-        } catch (Exception e) {
-            log.error("Problem removing item $idToRemove")
+        } catch (Exception exception) {
+            log.error("Problem removing item $idToRemove. Message = ${exception.message}")
         }
         render(template: '/bardWebInterface/sarCartContent', model: modelForDetails)  // refresh the cart display
     }

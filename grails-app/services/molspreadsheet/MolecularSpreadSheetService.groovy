@@ -85,11 +85,16 @@ class MolecularSpreadSheetService {
         for (Experiment experiment in experimentList) {
             final ServiceIterator<Compound> compoundServiceIterator = this.queryServiceWrapper.restExperimentService.compounds(experiment)
             List<Compound> singleExperimentCompoundList = compoundServiceIterator.next(MAXIMUM_NUMBER_OF_COMPOUNDS)
-            if (etag == null)
-                etag = this.queryServiceWrapper.restCompoundService.newETag("${new Date().toString()}", singleExperimentCompoundList*.id);
+            if (etag == null)  {
+                etag = this.queryServiceWrapper.restCompoundService.newETag("${new Date().toString()}",
+                        singleExperimentCompoundList*.id);
+            }
             else if ((singleExperimentCompoundList != null) &&
-                    (singleExperimentCompoundList.size() > 0))
-                this.queryServiceWrapper.restCompoundService.putETag(etag, singleExperimentCompoundList*.id);
+                    (singleExperimentCompoundList.size() > 0)) {
+                this.queryServiceWrapper.restCompoundService.putETag(etag,
+                        singleExperimentCompoundList*.id);
+            }
+
         }
         etag
     }
@@ -207,8 +212,6 @@ class MolecularSpreadSheetService {
                             MolSpreadSheetCellType.numeric,
                             MolSpreadSheetCellUnit.Molar,
                             spreadSheetActivityStorage)
-                    if (spreadSheetActivityStorage == null)
-                        molSpreadSheetCell.activity = false
                     molSpreadSheetData.mssData.put(arrayKey, molSpreadSheetCell)
                     //    map.put(arrayKey, molSpreadSheetCell)
                 }

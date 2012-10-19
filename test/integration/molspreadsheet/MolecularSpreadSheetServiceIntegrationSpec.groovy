@@ -106,27 +106,30 @@ class MolecularSpreadSheetServiceIntegrationSpec extends IntegrationSpec {
     void "test populateMolSpreadSheetData"() {
         when: "we have a molecularSpreadSheetService"
         assertNotNull molecularSpreadSheetService
-        List<CartProject> cartProjectList = []
-        cartProjectList.add(new CartProject("Summary of Flow Cytometry HTS of Small Molecules that Regulate V-ATPase Proton Transport in Yeast", 364 as Long))
-        List<Experiment> finalExperimentList = molecularSpreadSheetService.cartProjectsToExperiments(cartProjectList)
+//        List<CartProject> cartProjectList = []
+//        cartProjectList << new CartProject("Summary of Flow Cytometry HTS of Small Molecules that Regulate V-ATPase Proton Transport in Yeast", 364 as Long)
+//        List<Experiment> finalExperimentList = molecularSpreadSheetService.cartProjectsToExperiments(cartProjectList)
 
         Assay assay = restAssayService.get(2199 as Long)
         final ServiceIterator<Experiment> serviceIterator = restAssayService.iterator(assay, Experiment)
-        Collection<Experiment> experimentList = serviceIterator.collect()
+        Collection<Experiment> finalExperimentList = serviceIterator.collect()
+        assay = restAssayService.get(730 as Long)
+        serviceIterator = restAssayService.iterator(assay, Experiment)
+        finalExperimentList.addAll(serviceIterator.collect())
         MolSpreadSheetData molSpreadSheetData = new MolSpreadSheetData()
 
-        Object etag = this.restCompoundService.newETag((new Date()).toTimestamp().toString(), [364 as Long])
+        Object etag = this.restCompoundService.newETag((new Date()).toTimestamp().toString(), [4540 as Long,4544 as Long,4549 as Long,4552 as Long])
 
         List<SpreadSheetActivity> spreadSheetActivityList = molecularSpreadSheetService.extractMolSpreadSheetData(molSpreadSheetData,
                 finalExperimentList,
                 etag)
-        molSpreadSheetData.rowPointer[1377840 as Long]  =0
-        molSpreadSheetData.rowPointer[727017 as Long]  =1
-        molSpreadSheetData.rowPointer[1622396 as Long]  =2
+        molSpreadSheetData.rowPointer[4540 as Long]  =0
+        molSpreadSheetData.rowPointer[4544 as Long]  =1
+        molSpreadSheetData.rowPointer[4549 as Long]  =2
 
 
         molecularSpreadSheetService.populateMolSpreadSheetData(molSpreadSheetData,
-                experimentList,
+                finalExperimentList,
                 spreadSheetActivityList)
 
 
@@ -183,6 +186,38 @@ class MolecularSpreadSheetServiceIntegrationSpec extends IntegrationSpec {
         assertNotNull spreadSheetActivityList
         assert spreadSheetActivityList.size() == 0
      }
+
+
+
+
+    void "test that we can create an ETag from a list of experiments"() {
+        when: "we have list of cart compounds"
+
+
+        assertNotNull molecularSpreadSheetService
+        List<CartProject> cartProjectList = []
+        cartProjectList << new CartProject("Summary of Flow Cytometry HTS of Small Molecules that Regulate V-ATPase Proton Transport in Yeast", 364 as Long)
+        List<Experiment> finalExperimentList = molecularSpreadSheetService.cartProjectsToExperiments(cartProjectList)
+        Object eTag = molecularSpreadSheetService.retrieveImpliedCompoundsEtagFromAssaySpecification (finalExperimentList)
+
+        then: "we should be able to build and Etag from them"
+        assertNotNull eTag
+    }
+
+
+
+
+    void "test that we can create an ETag from a list of  current compounds"() {
+        when: "we have list of cart compounds"
+        assertNotNull molecularSpreadSheetService
+        List<CartCompound> cartCompoundList = []
+        cartCompoundList.add(new CartCompound(smiles: "CC(=O)C1=C(O)C(C)=C(O)C(CC2=C(O)C3=C(OC(C)(C)C=C3)C(C(=O)\\C=C\\C3=CC=CC=C3)=C2O)=C1O", name: "Rottlerin", compoundId: 5281847))
+        Object eTag = molecularSpreadSheetService.generateETagFromCartCompounds(cartCompoundList)
+
+        then: "we should be able to build and Etag from them"
+        assertNotNull eTag
+    }
+
 
 
 
@@ -433,50 +468,50 @@ class MolecularSpreadSheetServiceIntegrationSpec extends IntegrationSpec {
     }
 
 
-//    // an example of a problem
-//    void "test indirect accumulation of expts use Assays"() {
-//
-//        given: "That we casn retrieve the expts for project 274" //////////
-//
-//        List<Long> cartProjectIdList = new ArrayList<Long>()
-//        cartProjectIdList.add(new Long(274))
-//        final Collection<Project> projects = restProjectService.get(cartProjectIdList)
-//        List<Experiment> allExperiments = []
-//        for (Project project : projects) {
-//            final ServiceIterator<Assay> serviceIterator = restProjectService.iterator(project, Assay.class)
-//            Collection<Assay> assays = serviceIterator.collect()
-//            for (Assay assay : assays) {
-//                 final ServiceIterator<Experiment> experimentIterator = restAssayService.iterator(assay, Experiment.class)
-//                Collection<Experiment> experimentList = experimentIterator.collect()
-//                allExperiments.addAll(experimentList)
-//
-//            }
-//        }
-//
-//        when: "We define an etag for a compound used in this project"  /////////////
-//
-//        List<Long> cartCompoundIdList = new ArrayList<Long>()
-//        cartCompoundIdList.add(new Long(5281847))
-//        Object etag = restCompoundService.newETag((new Date()).toString(), cartCompoundIdList);
-//
-//
-//        then: "when we step through the value in the expt"    ////////
-//
-//        int dataCount = 0
-//        for (Experiment experiment in allExperiments) {
-//
-//            ServiceIterator<Value> experimentIterator = restExperimentService.activities(experiment, etag)
-//            Value experimentValue
-//            while (experimentIterator.hasNext()) {
-//                experimentValue = experimentIterator.next()
-//                dataCount++
-//            }
-//
-//        }
-//
-//        // we expect tyo see some data
-//        assert dataCount > 0
-//    }
+    // an example of a problem
+    void "test indirect accumulation of expts use Assays"() {
+
+        given: "That we casn retrieve the expts for project 274" //////////
+
+        List<Long> cartProjectIdList = new ArrayList<Long>()
+        cartProjectIdList.add(new Long(274))
+        final Collection<Project> projects = restProjectService.get(cartProjectIdList)
+        List<Experiment> allExperiments = []
+        for (Project project : projects) {
+            final ServiceIterator<Assay> serviceIterator = restProjectService.iterator(project, Assay.class)
+            Collection<Assay> assays = serviceIterator.collect()
+            for (Assay assay : assays) {
+                 final ServiceIterator<Experiment> experimentIterator = restAssayService.iterator(assay, Experiment.class)
+                Collection<Experiment> experimentList = experimentIterator.collect()
+                allExperiments.addAll(experimentList)
+
+            }
+        }
+
+        when: "We define an etag for a compound used in this project"  /////////////
+
+        List<Long> cartCompoundIdList = new ArrayList<Long>()
+        cartCompoundIdList.add(new Long(5281847))
+        Object etag = restCompoundService.newETag((new Date()).toString(), cartCompoundIdList);
+
+
+        then: "when we step through the value in the expt"    ////////
+
+        int dataCount = 0
+        for (Experiment experiment in allExperiments) {
+
+            ServiceIterator<Value> experimentIterator = restExperimentService.activities(experiment, etag)
+            Value experimentValue
+            while (experimentIterator.hasNext()) {
+                experimentValue = experimentIterator.next()
+                dataCount++
+            }
+
+        }
+
+        // we expect to see some data
+        assert dataCount > 0
+    }
     // an example of a problem
 //    void "test indirect accumulation of expts"() {
 //

@@ -1,11 +1,10 @@
 package querycart
 
+import bardqueryapi.BardWebInterfaceController
 import grails.test.mixin.TestFor
 import org.apache.commons.lang.RandomStringUtils
 import spock.lang.Specification
 import spock.lang.Unroll
-import querycart.CartProject
-import bardqueryapi.BardWebInterfaceController
 
 /**
  * See the API for {@link grails.test.mixin.support.GrailsUnitTestMixin} for usage instructions

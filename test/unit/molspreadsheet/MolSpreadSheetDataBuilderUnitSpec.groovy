@@ -6,7 +6,6 @@ import querycart.CartCompound
 import querycart.CartProject
 import grails.test.mixin.support.GrailsUnitTestMixin
 import spock.lang.Specification
-import static org.junit.Assert.assertNotNull
 import grails.test.mixin.TestMixin
 import spock.lang.Unroll
 

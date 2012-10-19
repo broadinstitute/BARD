@@ -143,7 +143,7 @@ class MolecularSpreadSheetServiceUnitSpec extends Specification {
 
     void "test extractActivitiesFromExperiment when experimentValue has no children"() {
         given: "we have an experiment"
-        final bard.core.Value experimentalValue = new bard.core.Value()
+        final Value experimentalValue = new Value()
         final experimentId = 47 as Long
 
         when: "we want to pull out the active values"
@@ -159,7 +159,7 @@ class MolecularSpreadSheetServiceUnitSpec extends Specification {
     void "test addCurrentActivityToSpreadSheet when experimentValue has no children"() {
         given: "we have an experiment"
         SpreadSheetActivity spreadSheetActivity = new SpreadSheetActivity()
-        final bard.core.Value experimentalValue = new bard.core.Value()
+        final Value experimentalValue = new Value()
         experimentalValue.id = identifier
         experimentalValue.metaClass.value = incomingValue
 
@@ -182,7 +182,7 @@ class MolecularSpreadSheetServiceUnitSpec extends Specification {
     void "test error value of addCurrentActivityToSpreadSheet "() {
         given: "we have an experiment"
         SpreadSheetActivity spreadSheetActivity = new SpreadSheetActivity()
-        final bard.core.Value experimentalValue = new bard.core.Value()
+        final Value experimentalValue = new Value()
 
         when: "we want to pull out the active values"
         experimentalValue.id = "foo"
