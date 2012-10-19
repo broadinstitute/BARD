@@ -65,7 +65,7 @@
                         </g:else>
 
                     </td>
-                    <td class="molSpreadSheet" propert="cid">
+                    <td class="molSpreadSheet" property="cid">
                         <g:link controller="bardWebInterface" action="showCompound" id="${cid}"
                                >${cid}</g:link>
 
