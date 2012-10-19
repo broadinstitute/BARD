@@ -75,20 +75,20 @@ class MolecularSpreadSheetServiceUnitSpec extends Specification {
 
     }
 
-    void "test createSpreadSheetActivitiesFromActivityValues #label"() {
-        given:
-
-        service.metaClass.extractActivitiesFromExperiment = {new SpreadSheetActivity()}
-        when:
-        List<SpreadSheetActivity> spreadSheetActivities = service.createSpreadSheetActivitiesFromActivityValues(experimentId, activityValues)
-        then:
-        assert spreadSheetActivities.size() == numberOfSpreadSheetActivities
-        where:
-        label                       | experimentId | activityValues | numberOfSpreadSheetActivities
-        "Empty Activity Values"     | 1            | []             | 0
-        "Non-Empty Activity Values" | 1            | [new Value()]  | 1
-
-    }
+//    void "test createSpreadSheetActivitiesFromActivityValues #label"() {
+//        given:
+//
+//        service.metaClass.extractActivitiesFromExperiment = {new SpreadSheetActivity()}
+//        when:
+//        List<SpreadSheetActivity> spreadSheetActivities = service.createSpreadSheetActivitiesFromActivityValues(experimentId, activityValues)
+//        then:
+//        assert spreadSheetActivities.size() == numberOfSpreadSheetActivities
+//        where:
+//        label                       | experimentId | activityValues | numberOfSpreadSheetActivities
+//        "Empty Activity Values"     | 1            | []             | 0
+//        "Non-Empty Activity Values" | 1            | [new Value()]  | 1
+//
+//    }
 
     void "test extractActivityValues #label"() {
         given:

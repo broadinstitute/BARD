@@ -87,9 +87,9 @@ class MolSpreadSheetDataBuilder {
         // next deal with the compounds
         if (cartCompoundList.isEmpty()) {
             // Explicitly specified assay, for which we will retrieve all compounds
-            // etag = molecularSpreadSheetService.retrieveImpliedCompoundsEtagFromAssaySpecification(experimentList)
-            // spreadSheetActivityList = molecularSpreadSheetService.extractMolSpreadSheetData(molSpreadSheetData, experimentList, etag)
-            spreadSheetActivityList = molecularSpreadSheetService.extractMolSpreadSheetData(molSpreadSheetData, experimentList, [])
+            etag = molecularSpreadSheetService.retrieveImpliedCompoundsEtagFromAssaySpecification(experimentList)
+            spreadSheetActivityList = molecularSpreadSheetService.extractMolSpreadSheetData(molSpreadSheetData, experimentList, etag)
+           // spreadSheetActivityList = molecularSpreadSheetService.extractMolSpreadSheetData(molSpreadSheetData, experimentList, [])
             Map map = molecularSpreadSheetService.convertSpreadSheetActivityToCompoundInformation(spreadSheetActivityList)
             molecularSpreadSheetService.populateMolSpreadSheetRowMetadata(molSpreadSheetData, map)
 

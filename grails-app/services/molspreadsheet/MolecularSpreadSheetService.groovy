@@ -17,7 +17,7 @@ import querycart.QueryCartService
 import bard.core.*
 
 class MolecularSpreadSheetService {
-
+    int MAXIMUM_NUMBER_OF_COMPOUNDS =500
     QueryCartService queryCartService
     QueryServiceWrapper queryServiceWrapper
     ShoppingCartService shoppingCartService
@@ -78,6 +78,24 @@ class MolecularSpreadSheetService {
         returnValue
     }
 
+
+
+    protected Object retrieveImpliedCompoundsEtagFromAssaySpecification(List<Experiment> experimentList) {
+        Object etag = null
+        for (Experiment experiment in experimentList) {
+            final ServiceIterator<Compound> compoundServiceIterator = this.queryServiceWrapper.restExperimentService.compounds(experiment)
+            List<Compound> singleExperimentCompoundList = compoundServiceIterator.next(MAXIMUM_NUMBER_OF_COMPOUNDS)
+            if (etag == null)
+                etag = this.queryServiceWrapper.restCompoundService.newETag("${new Date().toString()}", singleExperimentCompoundList*.id);
+            else if ((singleExperimentCompoundList != null) &&
+                    (singleExperimentCompoundList.size() > 0))
+                this.queryServiceWrapper.restCompoundService.putETag(etag, singleExperimentCompoundList*.id);
+        }
+        etag
+    }
+
+
+
     /**
      * For a set of experiments
      * @param experimentList
@@ -119,7 +137,7 @@ class MolecularSpreadSheetService {
             cartCompoundIdList.add(new Long(cartCompound.compoundId))
         Date date = new Date()
 
-        queryServiceWrapper.restCompoundService.newETag(date.toString(), cartCompoundIdList);
+        queryServiceWrapper.restCompoundService.newETag(date.toTimestamp().toString(), cartCompoundIdList);
     }
 
 
@@ -172,7 +190,7 @@ class MolecularSpreadSheetService {
     protected void populateMolSpreadSheetData(MolSpreadSheetData molSpreadSheetData, List<Experiment> experimentList, List<SpreadSheetActivity> spreadSheetActivityList) {
         // now step through the data and place into molSpreadSheetData
         int columnPointer = 0
-        Map<String, MolSpreadSheetCell> map = [:]
+//        Map<String, MolSpreadSheetCell> map = [:]
         // we need to handle each experiment separately ( until NCGC can do this in the background )
         // Note that each experiment corresponds to a column in our spreadsheet
         for (Experiment experiment in experimentList) {
@@ -180,24 +198,28 @@ class MolecularSpreadSheetService {
             for (SpreadSheetActivity spreadSheetActivity in spreadSheetActivityList) {
                 if (molSpreadSheetData.rowPointer.containsKey(spreadSheetActivity.cid)) {
                     int innerRowPointer = molSpreadSheetData.rowPointer[spreadSheetActivity.cid]
-                    int innerColumnCount = molSpreadSheetData.columnPointer[spreadSheetActivity.experimentId]
-                    String arrayKey = innerRowPointer.toString() + "_" + (innerColumnCount + 3).toString()
+                    int innerColumnCount = molSpreadSheetData.columnPointer[spreadSheetActivity.eid]
+                    // String arrayKey = innerRowPointer.toString() + "_" + (innerColumnCount + 3).toString()
+                    String arrayKey = "${innerRowPointer}_${innerColumnCount + 3}"
                     SpreadSheetActivityStorage spreadSheetActivityStorage = new SpreadSheetActivityStorage(spreadSheetActivity)
 
                     MolSpreadSheetCell molSpreadSheetCell = new MolSpreadSheetCell(spreadSheetActivity.interpretHillCurveValue().toString(),
                             MolSpreadSheetCellType.numeric,
                             MolSpreadSheetCellUnit.Molar,
                             spreadSheetActivityStorage)
-                    map.put(arrayKey, molSpreadSheetCell)
+                    if (spreadSheetActivityStorage == null)
+                        molSpreadSheetCell.activity = false
+                    molSpreadSheetData.mssData.put(arrayKey, molSpreadSheetCell)
+                    //    map.put(arrayKey, molSpreadSheetCell)
                 }
-                // else {
-                //println "did not expect cid = ${spreadSheetActivity.cid}"
-                //}
+                else {
+                    println "did not expect cid = ${spreadSheetActivity.cid}"
+                }
 
             }
             columnPointer++
         }
-        molSpreadSheetData.mssData.putAll(map)
+//         molSpreadSheetData.mssData.putAll(map)
         molSpreadSheetData
     }
 
@@ -350,8 +372,12 @@ class MolecularSpreadSheetService {
         for (Long individualAssayIds in assayIds) {
             Assay assay = restAssayService.get(individualAssayIds)
             final ServiceIterator<Experiment> serviceIterator = restAssayService.iterator(assay, Experiment)
-            Collection<Experiment> experimentList = serviceIterator.collect()
-            allExperiments.addAll(experimentList)
+            while (serviceIterator.hasNext()) {
+                Experiment experiment = serviceIterator.next()
+                allExperiments <<  experiment
+            }
+            //Collection<Experiment> experimentList = serviceIterator.collect()   <-------- NOTE: this approach does not work. You need to iterate through explicitly
+            //allExperiments.addAll(experimentList)
         }
 
         return allExperiments
@@ -438,7 +464,7 @@ class MolecularSpreadSheetService {
         while (experimentIterator.hasNext()) {
             Value experimentValue = experimentIterator.next()
             if (experimentValue) {
-                SpreadSheetActivity spreadSheetActivity = extractActivitiesFromExperiment(experimentValue, new Long(experiment.id.toString()))
+                SpreadSheetActivity spreadSheetActivity = extractActivitiesFromExperiment(experimentValue)
                 spreadSheetActivities.add(spreadSheetActivity)
             }
         }
@@ -457,18 +483,18 @@ class MolecularSpreadSheetService {
             final Map activityValuesMap = extractActivityValues(experiment, top, skip)
             final List<Value> activityValues = activityValuesMap.activityValues
             totalNumberOfRecords = activityValuesMap.totalNumberOfRecords
-            spreadSheetActivities = createSpreadSheetActivitiesFromActivityValues(experimentId, activityValues)
+            spreadSheetActivities = createSpreadSheetActivitiesFromActivityValues(activityValues)
 
         }
         return [total: totalNumberOfRecords, spreadSheetActivities: spreadSheetActivities, role: role, experiment: experiment]
     }
 
-    protected List<SpreadSheetActivity> createSpreadSheetActivitiesFromActivityValues(final Long experimentId, final List<Value> activityValues) {
+    protected List<SpreadSheetActivity> createSpreadSheetActivitiesFromActivityValues(final List<Value> activityValues) {
         List<SpreadSheetActivity> spreadSheetActivities = []
         final Iterator<Value> iterator = activityValues.iterator()
         while (iterator.hasNext()) {
             Value experimentValue = iterator.next()
-            SpreadSheetActivity spreadSheetActivity = extractActivitiesFromExperiment(experimentValue, experimentId)
+            SpreadSheetActivity spreadSheetActivity = extractActivitiesFromExperiment(experimentValue)
             spreadSheetActivities.add(spreadSheetActivity)
         }
         return spreadSheetActivities
@@ -502,6 +528,17 @@ class MolecularSpreadSheetService {
      * @param experimentValue
      * @return SpreadSheetActivity
      */
+    SpreadSheetActivity extractActivitiesFromExperiment(final Value experimentValue) {
+        final Iterator<Value> experimentValueIterator = experimentValue.children()
+        SpreadSheetActivity spreadSheetActivity = new SpreadSheetActivity()
+        while (experimentValueIterator?.hasNext()) {
+            Value childValue = experimentValueIterator.next()
+            addCurrentActivityToSpreadSheet(spreadSheetActivity, childValue)
+        }
+        return spreadSheetActivity
+    }
+
+
     SpreadSheetActivity extractActivitiesFromExperiment(final Value experimentValue, final Long experimentId) {
         final Iterator<Value> experimentValueIterator = experimentValue.children()
         SpreadSheetActivity spreadSheetActivity = new SpreadSheetActivity()
@@ -512,6 +549,7 @@ class MolecularSpreadSheetService {
         }
         return spreadSheetActivity
     }
+
     /**
      * The ideais to fill up a spreadsheet activity based on
      *  Note hack -- this method has been short-circuited so that a HillCurveValue will cause the method to
