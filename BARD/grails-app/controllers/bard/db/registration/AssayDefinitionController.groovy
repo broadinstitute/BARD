@@ -141,7 +141,7 @@ class AssayDefinitionController {
 		AssayContextItem source = AssayContextItem.findById(assayContextItemId)
 		assayContextService.addItem(source, targetAssayContext)
 		Map<String , CardDto> cardDtoMap = cardFactoryService.createCardDtoMapForAssay(targetAssayContext.assay)
-		render(template: "cards", model: [cardDtoMap: cardDtoMap])
+		render(template: "cards", model: [cardDtoMap: cardDtoMap, assayId: assayId])
 	}
 
 }
