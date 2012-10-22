@@ -21,7 +21,7 @@ class QueryCartController {
 
         } else if (params.class == 'class querycart.CartCompound') {
 
-            CartCompound cartCompound = new CartCompound(smiles: params.smiles, name: params.name, compoundId: params.id)
+            CartCompound cartCompound = new CartCompound(params.smiles, params.name, params.id)
 //            somethingWasAdded = queryCartService.addToShoppingCart(cartCompound)
             somethingWasAdded = handleAddingToShoppingCart(cartCompound)
 
@@ -110,9 +110,9 @@ class QueryCartController {
     }
 
     def isInCart() {
-        int idToRemove = Integer.parseInt(params.id)
+        Long idToRemove = Long.parseLong(params.externalId)
         Boolean result = false
-        def shoppingItem = Shoppable.get(idToRemove)
+        QueryItem shoppingItem = QueryItem.findByExternalIdAndQueryItemType(idToRemove)
         if (shoppingItem) {
             result = queryCartService.isInShoppingCart(shoppingItem)
         }
