@@ -13,6 +13,7 @@ import spock.lang.Shared
 import spock.lang.Specification
 import spock.lang.Unroll
 import bard.core.*
+import bard.core.rest.RESTCompoundService
 
 /**
  * Created with IntelliJ IDEA.
@@ -32,6 +33,7 @@ class MolecularSpreadSheetServiceUnitSpec extends Specification {
     ShoppingCartService shoppingCartService
     IQueryService queryService
     RESTExperimentService restExperimentService
+    RESTCompoundService restCompoundService
     CompoundAdapter compoundAdapter = buildCompoundAdapter(6 as Long, [842121 as Long])
     @Shared Map compoundAdapterMap = [compoundAdapters: [buildCompoundAdapter(6 as Long, [842121 as Long])], facets: null, nHits: 0]
 
@@ -41,6 +43,7 @@ class MolecularSpreadSheetServiceUnitSpec extends Specification {
         compoundAdapter.metaClass.pubChemCID = 1 as Long
         compoundAdapter.metaClass.name = 'name'
         this.restExperimentService = Mock(RESTExperimentService)
+        this.restCompoundService = Mock(RESTCompoundService)
         this.queryCartService = Mock(QueryCartService)
         this.queryServiceWrapper = Mock(QueryServiceWrapper)
         this.shoppingCartService = Mock(ShoppingCartService)
@@ -75,20 +78,29 @@ class MolecularSpreadSheetServiceUnitSpec extends Specification {
 
     }
 
-//    void "test createSpreadSheetActivitiesFromActivityValues #label"() {
-//        given:
-//
-//        service.metaClass.extractActivitiesFromExperiment = {new SpreadSheetActivity()}
-//        when:
-//        List<SpreadSheetActivity> spreadSheetActivities = service.createSpreadSheetActivitiesFromActivityValues(experimentId, activityValues)
-//        then:
-//        assert spreadSheetActivities.size() == numberOfSpreadSheetActivities
-//        where:
-//        label                       | experimentId | activityValues | numberOfSpreadSheetActivities
-//        "Empty Activity Values"     | 1            | []             | 0
-//        "Non-Empty Activity Values" | 1            | [new Value()]  | 1
-//
-//    }
+
+    void "test null cmp iterator in retrieveImpliedCompoundsEtagFromAssaySpecification"() {
+        given:
+        final List <Experiment>  experimentList = []
+
+        ServiceIterator<Compound> compoundServiceIterator  = Mock()
+        experimentList << new Experiment()
+
+        when:
+        Object eTag = service.retrieveImpliedCompoundsEtagFromAssaySpecification(experimentList)
+
+        then:
+        queryServiceWrapper.restExperimentService >> { restExperimentService }
+        and:
+        queryServiceWrapper.restCompoundService >> { restCompoundService }
+        and:
+        restCompoundService.newETag(_) >> { new Object() }
+        and:
+        restExperimentService.compounds(_) >> {compoundServiceIterator}
+
+        assertNull eTag
+    }
+
 
     void "test extractActivityValues #label"() {
         given:

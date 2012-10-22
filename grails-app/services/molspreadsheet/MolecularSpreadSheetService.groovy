@@ -81,22 +81,23 @@ class MolecularSpreadSheetService {
 
 
     protected Object retrieveImpliedCompoundsEtagFromAssaySpecification(List<Experiment> experimentList) {
-        Object etag = null
+        Object etag =null
         for (Experiment experiment in experimentList) {
             final ServiceIterator<Compound> compoundServiceIterator = this.queryServiceWrapper.restExperimentService.compounds(experiment)
             List<Compound> singleExperimentCompoundList = compoundServiceIterator.next(MAXIMUM_NUMBER_OF_COMPOUNDS)
+            List <Long> idList = singleExperimentCompoundList*.id as List <Long>
             if (etag == null)  {
                 etag = this.queryServiceWrapper.restCompoundService.newETag("${new Date().toString()}",
-                        singleExperimentCompoundList*.id);
+                        idList);
             }
             else if ((singleExperimentCompoundList != null) &&
                     (singleExperimentCompoundList.size() > 0)) {
                 this.queryServiceWrapper.restCompoundService.putETag(etag,
-                        singleExperimentCompoundList*.id);
+                        idList);
             }
 
         }
-        etag
+        return etag
     }
 
 

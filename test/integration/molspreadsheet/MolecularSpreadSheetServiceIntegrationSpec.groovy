@@ -1,6 +1,5 @@
 package molspreadsheet
 
-import bard.core.adapter.CompoundAdapter
 import bard.core.rest.RESTAssayService
 import bard.core.rest.RESTCompoundService
 import bard.core.rest.RESTExperimentService
@@ -199,6 +198,18 @@ class MolecularSpreadSheetServiceIntegrationSpec extends IntegrationSpec {
         cartProjectList << new CartProject("Summary of Flow Cytometry HTS of Small Molecules that Regulate V-ATPase Proton Transport in Yeast", 364 as Long)
         List<Experiment> finalExperimentList = molecularSpreadSheetService.cartProjectsToExperiments(cartProjectList)
         Object eTag = molecularSpreadSheetService.retrieveImpliedCompoundsEtagFromAssaySpecification (finalExperimentList)
+
+        then: "we should be able to build and Etag from them"
+        assertNotNull eTag
+    }
+
+
+    void "test an empty ETag from a list of null experiments"() {
+        when: "we have list of cart compounds"
+        assertNotNull molecularSpreadSheetService
+        List<Experiment> experimentList = []
+        experimentList << new Experiment()
+        Object eTag = molecularSpreadSheetService.retrieveImpliedCompoundsEtagFromAssaySpecification (experimentList)
 
         then: "we should be able to build and Etag from them"
         assertNotNull eTag
