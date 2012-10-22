@@ -108,4 +108,15 @@ class QueryCartController {
         queryCartService.emptyShoppingCart()
         render(template: '/bardWebInterface/sarCartContent', model: modelForDetails) // refresh the cart display
     }
+
+    def isInCart() {
+        int idToRemove = Integer.parseInt(params.id)
+        Boolean result = false
+        def shoppingItem = Shoppable.get(idToRemove)
+        if (shoppingItem) {
+            result = queryCartService.isInShoppingCart(shoppingItem)
+        }
+        render result
+    }
+
 }

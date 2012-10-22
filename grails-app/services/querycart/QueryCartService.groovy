@@ -117,5 +117,14 @@ class QueryCartService {
         shoppingCartSrvc.emptyShoppingCart()
     }
 
+    /**
+     * This wrapper checks the shopping cart for the given product and returns true if it's in there
+     * @param shoppingCartSrvc
+     * @param product
+     * @return true if product is in shopping cart
+     */
+    boolean isInShoppingCart(ShoppingCartService shoppingCartSrvc = shoppingCartService, IShoppable product) {
+        return shoppingCartSrvc?.getQuantity(product) > 0
+    }
 
 }

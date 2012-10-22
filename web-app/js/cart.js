@@ -114,6 +114,9 @@ QueryCart.prototype.removeAll = function() {
     return false;
 }
 
+QueryCart.prototype.updateItemSavedIndicator = function() {
+
+}
 
 QueryCart.prototype.requestDoseResponseImageHandler = function() {
     var id = $(this).attr('concs');

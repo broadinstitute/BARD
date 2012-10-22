@@ -46,6 +46,19 @@ class ShoppingCartServiceIntegrationSpec extends IntegrationSpec {
     }
 
 
+    void "Test isInShoppingCart"() {
+        given: "A shopping cart"
+        assertNotNull shoppingCartService
+        CartAssay cartAssay = new CartAssay(assayTitle:"This is an assay")
+        CartAssay cartAssay2 = new CartAssay(assayTitle:"This is another assay")
+
+        when: "The first assay is added to cart"
+        shoppingCartService.addToShoppingCart(cartAssay)
+
+        then: "One item is in shopping cart and the other isn't"
+        assert queryCartService.isInShoppingCart(cartAssay)
+        assert !queryCartService.isInShoppingCart(cartAssay2)
+    }
 
     void "Test retrieveCartAssayFromShoppingCart"() {
         given: "A shopping cart"
@@ -103,10 +116,6 @@ class ShoppingCartServiceIntegrationSpec extends IntegrationSpec {
         List<CartProject> cartProjectList =  molecularSpreadSheetService.retrieveCartProjectFromShoppingCart()
         assert cartProjectList.size() == 1   // these are unique entries
     }
-
-
-
-
 
     void "Make sure shopping cart handles all data types"() {
         given: "A shopping cart"
