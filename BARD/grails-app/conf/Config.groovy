@@ -163,3 +163,81 @@ if (appName) {
         }
     }
 }
+
+// Added by the JQuery Validation UI plugin:
+jqueryValidationUi {
+	errorClass = 'error'
+	validClass = 'valid'
+	onsubmit = true
+	renderErrorsOnTop = false
+	
+	qTip {
+		packed = true
+	  classes = 'ui-tooltip-red ui-tooltip-shadow ui-tooltip-rounded'  
+	}
+	
+	/*
+	  Grails constraints to JQuery Validation rules mapping for client side validation.
+	  Constraint not found in the ConstraintsMap will trigger remote AJAX validation.
+	*/
+	StringConstraintsMap = [
+		blank:'required', // inverse: blank=false, required=true
+		creditCard:'creditcard',
+		email:'email',
+		inList:'inList',
+		minSize:'minlength',
+		maxSize:'maxlength',
+		size:'rangelength',
+		matches:'matches',
+		notEqual:'notEqual',
+		url:'url',
+		nullable:'required',
+		unique:'unique',
+		validator:'validator'
+	]
+	
+	// Long, Integer, Short, Float, Double, BigInteger, BigDecimal
+	NumberConstraintsMap = [
+		min:'min',
+		max:'max',
+		range:'range',
+		notEqual:'notEqual',
+		nullable:'required',
+		inList:'inList',
+		unique:'unique',
+		validator:'validator'
+	]
+	
+	CollectionConstraintsMap = [
+		minSize:'minlength',
+		maxSize:'maxlength',
+		size:'rangelength',
+		nullable:'required',
+		validator:'validator'
+	]
+	
+	DateConstraintsMap = [
+		min:'minDate',
+		max:'maxDate',
+		range:'rangeDate',
+		notEqual:'notEqual',
+		nullable:'required',
+		inList:'inList',
+		unique:'unique',
+		validator:'validator'
+	]
+	
+	ObjectConstraintsMap = [
+		nullable:'required',
+		validator:'validator'
+	]
+	
+	CustomConstraintsMap = [
+		phone:'true', // International phone number validation
+		phoneUS:'true',
+		alphanumeric:'true',
+		letterswithbasicpunc:'true',
+    lettersonly:'true'
+	]	
+}
+

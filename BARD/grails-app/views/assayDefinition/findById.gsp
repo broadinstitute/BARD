@@ -35,11 +35,22 @@
     </g:if>
     
     <div class="row-fluid">
+    	<div class="span12">
+    		<g:hasErrors bean="${assayInstance}">
+			<div class="alert alert-error">
+				<g:renderErrors bean="${assayInstance}" as="list" />
+			</div>
+			</g:hasErrors>
+    	</div>
+    </div>
+    
+    <div class="row-fluid">
 	    <div class="span12">
 	    	<div class="bs-docs" style="padding: 20px 20px 20px;">
 	        	<g:form action="findById" class="form-inline">	
 	        		<label class="control-label" for="assayId">Enter Assay ID:</label>
-	        		<input type="text" name='assayId'>														
+	        		<g:textField name="assayId"/>
+	        		<span class="help-inline">${hasErrors(bean: personInstance, field: 'assayId', 'error')}</span>														
 					<g:submitButton name="search" value="Search" class="btn btn-primary"/>
 				</g:form>
 	        </div>

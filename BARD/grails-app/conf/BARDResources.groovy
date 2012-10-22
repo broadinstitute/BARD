@@ -13,7 +13,7 @@ modules = {
 		}
 	}
 	core {
-		dependsOn 'jquery, jquery-ui, jquery-theme, datatables, jqueryform'
+		dependsOn 'jquery, jquery-ui, jquery-theme, jquery-validation-ui, datatables, jqueryform'
 		//resource url:'/css/main.css'
 		//resource url:'/css/mobile.css'
 		resource url:'/css/datatables/demo_table_jui.css'
@@ -24,6 +24,9 @@ modules = {
 	}
 	jqueryform {
 		resource url: '/js/jquery.form.js'
+	}
+	assaycards {
+		resource url: '/js/cap/assay.cards.js'
 	}
 	images {
 	}

@@ -36,7 +36,7 @@
 
 	<div class="row-fluid">
 		<div class="span4 offset4">
-			<div class="bs-docs" style="padding: 20px 20px 20px;">
+			<div class="bs-docs" style="padding: 20px 20px 20px; width: 400px;">
 				<form class="form-horizontal" action='${postUrl}' method='POST' id='loginForm' autocomplete='off'>
 					<legend>Login:</legend>
 					<div class="control-group">

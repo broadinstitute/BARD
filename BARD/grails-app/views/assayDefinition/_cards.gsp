@@ -10,7 +10,7 @@
                 <g:if test="${(cardIndex % 2) == 0 && cardIndex != 0}">
                     </div><div class="row-fluid">
                 </g:if>
-                <g:render template="cardDto" model="['card': card]"/>
+                <g:render template="cardDto" model="['card': card, assayId: assayId]"/>
             </g:each>
         </div>
 

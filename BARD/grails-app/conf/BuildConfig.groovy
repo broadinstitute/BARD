@@ -54,13 +54,14 @@ grails.project.dependency.resolution = {
         compile ":elastic-search:0.4.5-SNAPSHOT"
         compile ":cbipcrowdauthentication:0.3.0"
         compile(":build-test-data:2.0.3")
+		compile(":jquery-validation-ui:latest.release")
         //compile ":console:1.2"
 
         // runtime scope
         runtime ":hibernate:$grailsVersion"
         runtime ":jquery:1.7.1"
         runtime ":jquery-ui:1.8.15"
-        runtime ":resources:1.1.6"
+        runtime ":resources:1.1.6"		
         // test scope
         test ":spock:0.6"
         // provided  scope
