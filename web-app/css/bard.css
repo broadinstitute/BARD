@@ -125,6 +125,11 @@ div.header > h3 {
     margin-bottom: 20px;
 }
 
+.bard-footer-versioninfo {
+    margin-top: 10px;
+    vertical-align: middle;
+}
+
 .bard-footer .horizontal-block-list {
     margin-top: 10px;
     margin-left: 20px;

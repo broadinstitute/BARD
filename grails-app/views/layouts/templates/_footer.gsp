@@ -9,7 +9,7 @@
         </div>
     </div>
 
-    <div class="span5">
+    <div class="span5 bard-footer-versioninfo muted">
         <div>
             <b>Version:</b> ${grailsApplication.metadata['app.version']} <b>branch:</b> ${grailsApplication?.metadata['git.branch.name']} <b>revision:</b> ${grailsApplication?.metadata['git.branch.version']}
         </div>
