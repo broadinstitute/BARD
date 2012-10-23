@@ -13,6 +13,8 @@ import bard.dm.Log
 import org.apache.log4j.Level
 import postUploadProcessing.ContextGroupService
 import bard.dm.postUploadProcessing.ContextChange
+import bard.db.registration.AssayContext
+import org.springframework.transaction.TransactionStatus
 
 final Date startDate = new Date()
 Log.logger.info("Start post-processing the spreadsheet uplaods ${startDate}")
@@ -45,8 +47,12 @@ for (File inputFile : inputFileList) {
 
 List<ContextChange> contextChangeList = contextGroupService.buildContextChangeListFromDTOs(contextChangeDTOs)
 
-for (ContextChange contextChange : contextChangeList) {
-    contextChange.doChange()
+AssayContext.withTransaction { TransactionStatus status ->
+    for (ContextChange contextChange : contextChangeList) {
+        contextChange.doChange()
+    }
+    //comment out to commit the transaction
+    status.setRollbackOnly()
 }
 
 final Date endDate = new Date()

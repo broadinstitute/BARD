@@ -11,12 +11,18 @@ import bard.dm.minimumassayannotation.validateCreatePersist.AssayContextsValidat
 import bard.dm.minimumassayannotation.validateCreatePersist.MeasureContextsValidatorCreatorAndPersistor
 import bard.dm.Log
 import org.apache.log4j.Level
+import org.apache.log4j.Appender
+import org.apache.log4j.DailyRollingFileAppender
+import org.apache.log4j.Layout
+import org.apache.log4j.PatternLayout
 
 final Date startDate = new Date()
 Log.logger.info("Start load of minimum assay annotation spreadsheets ${startDate}")
 
 final String modifiedBy = "jbittker"
 Log.logger.setLevel(Level.INFO)
+//org.apache.log4j.Appender fileAppender = new DailyRollingFileAppender(new PatternLayout('%m%n'), "logs/ParseSpreadsheetLogger.log", "'.'yyyy-MM-dd")
+//Log.logger.addAppender(fileAppender)
 final Integer START_ROW = 3 //1-based
 
 List<File> inputFileList = new LinkedList<File>()
@@ -27,13 +33,12 @@ FilenameFilter xlsxExtensionFilenameFilter = new FilenameFilter() {
     }
 }
 //List<String> inputDirPathArray = ["test/exampleData/minAssayAnnotationSpreadsheets/", "test/exampleData/dnarepairmindataspreadsheets/"]
-List<String> inputDirPathArray = ["test/exampleData/singleFile/"]
+List<String> inputDirPathArray = ["test/exampleData/minAssayAnnotationSpreadsheets/"]
 for (String inputDirPath : inputDirPathArray) {
     File inputDirFile = new File(inputDirPath)
     inputFileList.addAll(inputDirFile.listFiles(xlsxExtensionFilenameFilter))
 }
 Log.logger.info("loading ${inputFileList.size()} files found in ${inputDirPathArray.size()} directories")
-
 
 //final String inputFilePath = "test/exampleData/dnarepairmindataspreadsheets/Broad+others-DNA_repair.xlsx"
 //"test/exampleData/dnarepairmindataspreadsheets/The Scripps Research Institute Molecular Screening Center-DNA repair.xlsx"
@@ -45,7 +50,6 @@ Log.logger.info("loading ${inputFileList.size()} files found in ${inputDirPathAr
 //InputStream inp = new FileInputStream("C:/Users/gwalzer/Desktop/Simon/Burnham Center for Chemical Genomics-DNA repair only.xlsx");
 //InputStream inp = new FileInputStream("C:/Users/gwalzer/Desktop/Simon/NCGC-DNA repair.short.xlsx");
 //InputStream inp = new FileInputStream("C:/Users/gwalzer/Desktop/Simon/The Scripps Research Institute Molecular Screening Center-DNA repair.xlsx");
-
 
 
 println("build mapping of columns to attributes and values")

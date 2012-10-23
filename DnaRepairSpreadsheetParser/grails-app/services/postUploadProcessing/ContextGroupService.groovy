@@ -12,10 +12,13 @@ import bard.dm.postUploadProcessing.ContextChange
 import bard.db.registration.Assay
 import bard.db.registration.AssayContextItem
 import bard.db.dictionary.Element
+import registration.AssayService
+import bard.dm.Log
 
 class ContextGroupService {
     final String MODIFIED_BY = "gwalzer"
     ContextDtoFromContextGroupCreator contextDtoFromContextGroupCreator = new ContextDtoFromContextGroupCreator()
+    AssayService assayService
 
     List<ContextChangeDTO> parseFile(File inputFile, Integer START_ROW) {
         InputStream inp = new FileInputStream(inputFile)
@@ -47,13 +50,13 @@ class ContextGroupService {
             //If we are starting a new context-change paragraph, we should create a new ContextChangeDTO. Otherwise, we simply adding consecutive modified-items to the existing ContextChangeDTO
             if (newChangeParagraph) {
                 //do some basic validations
-                if (sourceAttributeLabel) {
-                    assert sourceAssayContextId, 'In a new line/context-paragraph, if sourceAssayContextId id defined then adid must be defined as well'
+                if (sourceAssayContextId) {
+                    assert adid, 'In a new-line/context-paragraph, if sourceAssayContextId id defined then aid must be defined as well'
                 }
 
                 //Create a new ContextChangeDTO and update its relevant properties
                 contextChangeDTO = new ContextChangeDTO()
-                contextChangeDTO.adid = adid
+                contextChangeDTO.aid = adid
                 contextChangeDTO.sourceAssayContextId = sourceAssayContextId
                 ContextItem sourceContextItem = new ContextItem(attributeLabel: sourceAttributeLabel, valueLabel: sourceValueLabel)
                 contextChangeDTO.sourceContextItem = sourceContextItem
@@ -87,7 +90,8 @@ class ContextGroupService {
     List<ContextChange> buildContextChangeListFromDTOs(List<ContextChangeDTO> contextChangeDTOs) {
         List<ContextChange> contextChangeList = []
         for (ContextChangeDTO contextChangeDTO : contextChangeDTOs) {
-            List<ContextChange> contextChanges = buildContextChangeRecursive(contextChangeDTO.adid as Long,
+            List<ContextChange> contextChanges = buildContextChangeRecursive(null as Long, //CAP's ADID
+                    contextChangeDTO.aid as Long, //PubChem's AID
                     contextChangeDTO.sourceAssayContextId,
                     contextChangeDTO.sourceContextItem,
                     contextChangeDTO.modifiedContextItems,
@@ -110,12 +114,14 @@ class ContextGroupService {
      * @param newGroup
      * @return
      */
-    List<ContextChange> buildContextChangeRecursive(Long adid, Double sourceAssayContextId, ContextItem sourceContextItem, List<ContextItem> modifiedContextItems, Boolean newGroup) {
+    List<ContextChange> buildContextChangeRecursive(Long adid, Long PubChemAid, Double sourceAssayContextId, ContextItem sourceContextItem, List<ContextItem> modifiedContextItems, Boolean newGroup) {
         List<ContextChange> contextChangeList = []
         // #1
-        if (!adid) {
+        if (!PubChemAid && !adid) {
             Assay.list().each {Assay assay ->
-                contextChangeList.addAll(buildContextChangeRecursive(assay.id,
+                Log.logger.info("Checking assay: ${assay.id}")
+                contextChangeList.addAll(buildContextChangeRecursive(assay.id, //CAP's ADID
+                        null as Long, //PubChem's AID
                         sourceAssayContextId,
                         sourceContextItem,
                         modifiedContextItems,
@@ -124,10 +130,12 @@ class ContextGroupService {
             }
         }
         else if (!sourceAssayContextId) {// #2
-            Assay assay = Assay.findById(adid)
-            assert assay, 'At this point, assay must be defined'
+            List<Assay> assays = adid ? Assay.findAllById(adid) : assayService.findByPubChemAid(PubChemAid)
+            assert assays?.size() == 1, "At this point, assay must be defined, and unique ${adid ? 'CAP ADID=' + adid : 'PubChemAID=' + PubChemAid}"
+            Assay assay = assays.first()
             assay.assayContexts.each {AssayContext assayContext ->
-                contextChangeList.addAll(buildContextChangeRecursive(assay.id,
+                contextChangeList.addAll(buildContextChangeRecursive(assay.id, //CAP's ADID
+                        null as Long, //PubChem's AID
                         assayContext.id,
                         sourceContextItem,
                         modifiedContextItems,
@@ -138,11 +146,17 @@ class ContextGroupService {
         else {// #3
             Assay assay = Assay.findById(adid)
             AssayContext assayContext = AssayContext.findById(sourceAssayContextId)
-            assert assay.assayContexts.contains(assayContext), 'assayContext is not associated with the provided assay'
+            assert assay.assayContexts.contains(assayContext), "assayContext is not associated with the provided assay: assay=${assay.id}; assayContext=${assayContext.id}"
             Element sourceAttributeElement = Element.findByLabelIlike(sourceContextItem.attributeLabel.toLowerCase().trim())
-            assert sourceAttributeElement, 'source-attribute-element must exist'
+            assert sourceAttributeElement, "source-attribute-element must exist: '${sourceContextItem.attributeLabel}'"
             AssayContextItem sourceAssayContextItem = AssayContextItem.findByAttributeElementAndAssayContext(sourceAttributeElement, assayContext)
-            assert sourceAssayContextItem, 'sourceAssayContext must exist'
+            if (!sourceAssayContextItem) {
+                return []
+            }
+            //Make sure the sourceValue (if exists) matches the AssayContextItem
+            if (sourceContextItem.valueLabel.trim() && (sourceContextItem.valueLabel.trim() != sourceAssayContextItem?.valueElement?.label)) {
+                return []
+            }
 
             //Iterate over all the modified items and create a list of AssayContextItems out of them
             List<AssayContextItem> modifiedAssayContextItems = modifiedContextItems.collect {ContextItem modifiedContextItem ->
@@ -153,12 +167,12 @@ class ContextGroupService {
                 newAssayContextItem.modifiedBy = MODIFIED_BY
 
                 Element attributeElement = Element.findByLabelIlike(modifiedContextItem.attributeLabel.trim())
-                assert attributeElement, 'The Modified Attribute element must exist'
+                assert attributeElement, "The Modified Attribute element must exist: '${modifiedContextItem.attributeLabel}'"
                 newAssayContextItem.attributeElement = attributeElement
                 //If the value-element exist, use valueElement in the AssayContextItem; otherwise, use the valueNum property instead
                 if (modifiedContextItem.valueLabel.trim()) {
                     Element valueElement = Element.findByLabelIlike(modifiedContextItem.valueLabel.trim())
-                    assert valueElement, 'The Modified Value element must exist'
+                    assert valueElement, "The Modified Value element must exist: '${modifiedContextItem.valueLabel}'"
                     newAssayContextItem.valueElement = valueElement
                     newAssayContextItem.valueDisplay = newAssayContextItem.valueElement.label
                 }

@@ -23,6 +23,7 @@ environments {
 
     test {
         dataSource {
+            dbCreate = "create-drop"
             url = "jdbc:h2:mem:testDb;MVCC=TRUE"
         }
     }
