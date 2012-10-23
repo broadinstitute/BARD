@@ -71,7 +71,7 @@ grails.project.dependency.resolution = {
         compile ":elastic-search:0.4.5-SNAPSHOT"
         compile ":cbipcrowdauthentication:0.3.0"
         compile(":build-test-data:2.0.3")
-		compile(":jquery-validation-ui:latest.release")
+		compile(":jquery-validation-ui:1.4")
         //compile ":console:1.2"
         compile ":clover:3.1.6"
 
