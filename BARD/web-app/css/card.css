@@ -54,7 +54,7 @@ table.table td.deleteItemButton {
 }
 .card-table-container{
     background-color: #ffffff;
-    overflow-x:auto;
+    //overflow-x:auto;
 }
 .card-group {
     border: 1px solid #000000;

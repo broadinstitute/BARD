@@ -124,5 +124,24 @@ class AssayDefinitionController {
         Map<String , CardDto> cardDtoMap = cardFactoryService.createCardDtoMapForAssay(assayContext.assay)
         render(template: "cards", model: [cardDtoMap: cardDtoMap])
     }
+	
+	def showMoveItemForm(Long assayId, Long itemId){
+		def assayInstance = Assay.get(assayId)
+		if (!assayInstance) {
+			flash.message = message(code: 'default.not.found.message', args: [message(code: 'assay.label', default: 'Assay'), assayId])
+            return
+		}
+		Map<String , CardDto> cardDtoMap = cardFactoryService.createCardDtoMapForAssay(assayInstance)
+		render(template: "moveItemForm", model: [cardDtoMap: cardDtoMap, assayId: assayId, itemId: itemId])
+	}
+	
+	def moveCardItem(Long cardId, Long assayContextItemId, Long assayId){
+//		println "moveCardItem form params -> CardId: " + cardId + "	AssayContextItemId: " + assayContextItemId + "	assayId: " + assayId
+		AssayContext targetAssayContext = AssayContext.findById(cardId)
+		AssayContextItem source = AssayContextItem.findById(assayContextItemId)
+		assayContextService.addItem(source, targetAssayContext)
+		Map<String , CardDto> cardDtoMap = cardFactoryService.createCardDtoMapForAssay(targetAssayContext.assay)
+		render(template: "cards", model: [cardDtoMap: cardDtoMap, assayId: assayId])
+	}
 
 }

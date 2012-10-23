@@ -21,7 +21,7 @@ grails.project.dependency.resolution = {
     checksums true // Whether to verify checksums on resolve
 
     repositories {
-        inherits true // Whether to inherit repository definitions from plugins
+        inherits false // Whether to inherit repository definitions from plugins
         grailsPlugins()
         grailsHome()
         mavenRepo "http://bard-repo.broadinstitute.org:8081/artifactory/bard-virtual-repo"
@@ -70,7 +70,8 @@ grails.project.dependency.resolution = {
         compile ":twitter-bootstrap:2.1.0"
         compile ":elastic-search:0.4.5-SNAPSHOT"
         compile ":cbipcrowdauthentication:0.3.0"
-        compile ":build-test-data:2.0.3"
+        compile(":build-test-data:2.0.3")
+		compile(":jquery-validation-ui:1.4")
         //compile ":console:1.2"
         compile ":clover:3.1.6"
 
@@ -78,7 +79,7 @@ grails.project.dependency.resolution = {
 
         runtime ":jquery:1.7.1"
         runtime ":jquery-ui:1.8.15"
-        runtime ":resources:1.1.6"
+        runtime ":resources:1.1.6"		
         // test scope
         test ":spock:0.6"
         test ":geb:$gebVersion"

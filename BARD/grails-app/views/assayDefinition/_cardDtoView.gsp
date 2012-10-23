@@ -8,7 +8,7 @@
 
         <div class="row-fluid">
             <div id="cardHolder" class="span12">
-                <g:render template="cards" model="[cardDtoMap: cardDtoMap]"/>
+                <g:render template="cards" model="[cardDtoMap: cardDtoMap, assayId: assayId]"/>
             </div>
         </div>
 
@@ -25,7 +25,10 @@
                 <input type="hidden" id="assayId" name="assayId" value="${assayId}"/>
             </form>
         </div>
-
+		
+		<div id="dialog_move_item">
+			
+		</div>
 
         <div id="dialog_confirm_delete_item">
             <p>
@@ -34,12 +37,12 @@
             </p>
         </div>
 
-        	<div id="dialog_confirm_delete_card">
-				<p>
+        <div id="dialog_confirm_delete_card">
+			<p>
 				<span class="ui-icon ui-icon-alert" style="float:left; margin:0 7px 20px 0;"></span>
 				This card will be permanently deleted and cannot be recovered. Are you sure?
-				</p>
-			</div>
+			</p>
+		</div>
 
     </div>
 </div>
