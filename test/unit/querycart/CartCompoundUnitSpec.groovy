@@ -2,16 +2,15 @@ package querycart
 
 import grails.test.mixin.TestFor
 import org.apache.commons.lang.RandomStringUtils
+import org.apache.commons.lang.StringUtils
 import spock.lang.Specification
 import spock.lang.Unroll
-import querycart.CartCompound
-import bardqueryapi.BardWebInterfaceController
 
 /**
  * See the API for {@link grails.test.mixin.support.GrailsUnitTestMixin} for usage instructions
  */
 //@TestMixin(GrailsUnitTestMixin)
-@TestFor(BardWebInterfaceController)
+@TestFor(CartCompound)
 @Unroll
 class CartCompoundUnitSpec extends Specification {
 
@@ -26,56 +25,60 @@ class CartCompoundUnitSpec extends Specification {
     void "test shopping cart compound element"() {
         given:
         String moleculeDefinition = "c1ccccc1"
+        String name = "test"
         Integer compdId = 47
 
         when:
-        CartCompound cartCompound = new CartCompound(smiles: moleculeDefinition, compoundId: compdId)
-        // CartCompound cartCompound = new CartCompound( moleculeDefinition,  compoundId)
-// WHY NOT? -->       CartCompound cartCompound =   new CartCompound( smiles:moleculeDefinition,  compoundId:compdId)
+        CartCompound cartCompound = new CartCompound(moleculeDefinition, name, compdId)
         assertNotNull(cartCompound)
 
         then:
         assert cartCompound.smiles == moleculeDefinition
-        assert cartCompound.compoundId == compdId
+        assert cartCompound.externalId == compdId
         assertNull cartCompound.shoppingItem
     }
 
-    void "test setSmiles #label"() {
+    void "test truncate smiles #label"() {
         given:
+        mockForConstraintsTests(CartCompound)
         final String smiles = RandomStringUtils.randomAlphabetic(smilesLength)
-        CartCompound cartCompound = new CartCompound()
+        final String truncatedSmiles = StringUtils.abbreviate(smiles, CartCompound.MAXIMUM_SMILES_FIELD_LENGTH)
 
         when:
-        cartCompound.setSmiles(smiles)
+        CartCompound cartCompound = new CartCompound(smiles, "test", 3)
+        cartCompound.validate()
 
         then:
-        assert cartCompound.smileWasTruncated == smilesWasTruncated
+        assert cartCompound.smiles == truncatedSmiles
 
         where:
-        label                  | smilesLength                                 | smilesWasTruncated
-        "Empty Smiles"         | 0                                            | false
-        "More than Max Length" | CartCompound.MAXIMUM_SMILES_FIELD_LENGTH + 1 | true
-        "Equals Max Length"    | CartCompound.MAXIMUM_SMILES_FIELD_LENGTH     | false
-        "Less Than Max Length" | 2                                            | false
+        label                  | smilesLength
+        "Empty Smiles"         | 0
+        "More than Max Length" | CartCompound.MAXIMUM_SMILES_FIELD_LENGTH + 1
+        "Equals Max Length"    | CartCompound.MAXIMUM_SMILES_FIELD_LENGTH
+        "Less Than Max Length" | 2
     }
 
     void "test setName #label"() {
         given:
-        final String name = RandomStringUtils.randomAlphabetic(nameLength)
-        CartCompound cartCompound = new CartCompound()
+        mockForConstraintsTests(CartCompound)
+        String name = RandomStringUtils.randomAlphabetic(nameLength)
+        String truncatedName = StringUtils.abbreviate(name, CartCompound.MAXIMUM_NAME_FIELD_LENGTH)
+        Long compoundId = 3
 
         when:
-        cartCompound.setName(name)
+        CartCompound cartCompound = new CartCompound("CC", name, compoundId)
+        cartCompound.validate()
 
         then:
-        assert cartCompound.nameWasTruncated == nameWasTruncated
+        assert cartCompound.name == truncatedName
 
         where:
-        label                  | nameLength                                 | nameWasTruncated
-        "Empty Name"           | 0                                          | false
-        "More than Max Length" | CartCompound.MAXIMUM_NAME_FIELD_LENGTH + 1 | true
-        "Equals Max Length"    | CartCompound.MAXIMUM_NAME_FIELD_LENGTH     | false
-        "Less Than Max Length" | 2                                          | false
+        label                  | nameLength
+        "Empty Name"           | 0
+        "More than Max Length" | CartCompound.MAXIMUM_NAME_FIELD_LENGTH + 1
+        "Equals Max Length"    | CartCompound.MAXIMUM_NAME_FIELD_LENGTH
+        "Less Than Max Length" | 2
     }
 
     void "Test equals #label"() {
@@ -88,7 +91,7 @@ class CartCompoundUnitSpec extends Specification {
         label               | cartCompound                                 | otherCartCompound                            | equality
         "Other is null"     | new CartCompound()                           | null                                         | false
         "Different classes" | new CartCompound()                           | 20                                           | false
-        "Equality"            | new CartCompound(smiles: "CC", name: "Name") | new CartCompound(smiles: "CC", name: "Name") | true
+        "Equality"          | new CartCompound("CC", "Name", 3)            | new CartCompound("CC", "Name", 3)            | true
 
 
     }
@@ -122,49 +125,49 @@ class CartCompoundUnitSpec extends Specification {
         0          | 0          | "c1ccccc1" | false
         0          | 10         | "c1ccccc1" | false
         47         | 4000       | "c1ccccc1" | true
-        47         | 40001      | "c1ccccc1" | false
+        47         | 40001      | "c1ccccc1" | true
 
     }
 
-    // Note: In this case we are using a setter, and therefore we must NOT mockForConstraintsTests (otherwise
-    // the setter will never be hit.
-    void "test toString special cases"() {
+    void "test toString special cases #label"() {
         given:
+        mockForConstraintsTests(CartCompound)
+        Long compoundId = 47
 
         when:
         CartCompound cartCompound = new CartCompound(smiles, name, compoundId)
-        cartCompound.setName(name)
+        cartCompound.validate()
 
         then:
         cartCompound.toString() == properName
 
         where:
-        compoundId | name                   | smiles     | properName
-        47         | null                   | "c1ccccc1" | "PubChem CID=47"
-        47         | ""                     | "c1ccccc1" | "PubChem CID=47"
-        47         | "null"                 | "c1ccccc1" | "PubChem CID=47"
-        47         | "dimethyl tryptamine"  | "c1ccccc1" | "dimethyl tryptamine"
-        47         | "undifferentiated goo" | "c1ccccc1" | "undifferentiated goo"
+        label              | name                   | smiles     | properName
+        "null name"        | null                   | "c1ccccc1" | "PubChem CID=47"
+        "blank name"       | ""                     | "c1ccccc1" | "PubChem CID=47"
+        "null string name" | "null"                 | "c1ccccc1" | "PubChem CID=47"
+        "good name 1"      | "dimethyl tryptamine"  | "c1ccccc1" | "dimethyl tryptamine"
+        "good name 2"      | "undifferentiated goo" | "c1ccccc1" | "undifferentiated goo"
     }
 
-    // Note: In this case we are using a setter, and therefore we must NOT mockForConstraintsTests (otherwise
-    // the setter will never be hit.
     void "test toString special cases with ellipsis"() {
         given:
-        final String name = RandomStringUtils.randomAlphabetic(stringLength)
+        mockForConstraintsTests(CartCompound)
+        String name = RandomStringUtils.randomAlphabetic(stringLength)
+        String truncatedName = StringUtils.abbreviate(name, CartCompound.MAXIMUM_NAME_FIELD_LENGTH)
 
         when:
         CartCompound cartCompound = new CartCompound(smiles, name, compoundId)
-        cartCompound.setName(name)
+        cartCompound.validate()
 
         then:
-        cartCompound.toString().length() == properNameLength
+        cartCompound.toString() == truncatedName
 
         where:
-        compoundId | stringLength | smiles     | properNameLength
-        47         | 1000         | "c1ccccc1" | 1000
-        47         | 4000         | "c1ccccc1" | 4000
-        47         | 4001         | "c1ccccc1" | 4003
+        compoundId | stringLength | smiles
+        47         | 1000         | "c1ccccc1"
+        47         | 4000         | "c1ccccc1"
+        47         | 4001         | "c1ccccc1"
     }
 
 

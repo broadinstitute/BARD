@@ -24,7 +24,7 @@ class QueryCartControllerUnitSpec extends Specification {
         this.queryCartService = Mock(QueryCartService)
         controller.queryCartService = this.queryCartService
         queryCartService.groupUniqueContentsByType() >> {a: 1}
-        cartAssay = new CartAssay(assayTitle: "foo")
+        cartAssay = new CartAssay("foo",1)
     }
 
     void tearDown() {
@@ -102,7 +102,8 @@ class QueryCartControllerUnitSpec extends Specification {
         given:
         params.stt = "1"
         params.class = 'class querycart.CartCompound'
-        params.assayTitle = 'my assay'
+        params.name = 'my compound'
+        params.smiles = 'CC'
         params.id = "2"
         params.stt = paramsStt
 
@@ -228,10 +229,10 @@ class QueryCartControllerUnitSpec extends Specification {
         assert retVal == expectedReturnedValue
 
         where:
-        label                                  | shoppable                                                    | returnedValue | expectedReturnedValue
-        'returnedValue=1'                      | new CartCompound(smiles: 'C-C', name: 'name', compoundId: 1) | 1             | 1
-        'shoppable is null'                    | null as Shoppable                                            | 0             | null
-        'queryCartService throws an exception' | new CartCompound(smiles: 'C-C', name: 'name', compoundId: 1) | -1            | null
+        label                                  | shoppable                           | returnedValue | expectedReturnedValue
+        'returnedValue=1'                      | new CartCompound('C-C', 'name', 1)  | 1             | 1
+        'shoppable is null'                    | null as Shoppable                   | 0             | null
+        'queryCartService throws an exception' | new CartCompound('C-C', 'name',  1) | -1            | null
     }
 
     void "test updateOnscreenCart() #label"() {

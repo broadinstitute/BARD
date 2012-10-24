@@ -4,14 +4,12 @@ import grails.test.mixin.TestFor
 import org.apache.commons.lang.RandomStringUtils
 import spock.lang.Specification
 import spock.lang.Unroll
-import querycart.CartAssay
-import bardqueryapi.BardWebInterfaceController
 
 /**
  * See the API for {@link grails.test.mixin.support.GrailsUnitTestMixin} for usage instructions
  */
 //@TestMixin(GrailsUnitTestMixin)
-@TestFor(BardWebInterfaceController)
+@TestFor(CartAssay)
 @Unroll
 class CartAssayUnitSpec extends Specification {
 
@@ -30,11 +28,11 @@ class CartAssayUnitSpec extends Specification {
         CartAssay cartAssay = new CartAssay("Assay title", assayId)
 
         then:
-        assert cartAssay.assayTitle == 'Assay title'
-        assert cartAssay.assayId
+        assert cartAssay.name == 'Assay title'
+        assert cartAssay.externalId == assayId
     }
 
-    void "test toString"() {
+    void "test toString #label"() {
 
         when:
         final String assayAsString = cartAssay.toString()
@@ -43,8 +41,8 @@ class CartAssayUnitSpec extends Specification {
         where:
         label                  | cartAssay                               | expectedTitle
         "Empty Title"          | new CartAssay()                         | ""
-        "Null String as title" | new CartAssay(assayTitle: "null")       | ""
-        "With title"           | new CartAssay(assayTitle: "Some Title") | "Some Title"
+        "Null String as title" | new CartAssay("null", 100)              | ""
+        "With title"           | new CartAssay("Some Title", 110)        | "Some Title"
     }
 
     void "Test equals #label"() {
@@ -57,7 +55,7 @@ class CartAssayUnitSpec extends Specification {
         label               | cartAssay                               | otherCartAssay                          | equality
         "Other is null"     | new CartAssay()                         | null                                    | false
         "Different classes" | new CartAssay()                         | 20                                      | false
-        "Equality"          | new CartAssay(assayTitle: "Some Title") | new CartAssay(assayTitle: "Some Title") | true
+        "Equality"          | new CartAssay("Some Title", 120)        | new CartAssay("Some Title", 120)               | true
 
 
     }
@@ -72,25 +70,25 @@ class CartAssayUnitSpec extends Specification {
         label               | cartAssay
         "Other is null"     | new CartAssay()
         "Different classes" | new CartAssay()
-        "Equality"          | new CartAssay(assayTitle: "Some Title")
+        "Equality"          | new CartAssay("Some Title", 50)
 
 
     }
 
     void "test shopping cart assay element"() {
         when:
-        CartAssay cartAssay = new CartAssay(assayTitle: "Assay title")
+        CartAssay cartAssay = new CartAssay("Assay title", 50)
         assertNotNull(cartAssay)
 
         then:
-        assert cartAssay.assayTitle == 'Assay title'
+        assert cartAssay.name == 'Assay title'
         assertNull cartAssay.shoppingItem
     }
 
     /**
-     * constraint test.  Note that the choice of ctor makes a difference in whether the setter is used
+     * constraint test.
      */
-    void "test constraints on CartAssay object"() {
+    void "test constraints on CartAssay object with title length = #stringLength"() {
         given:
         mockForConstraintsTests(CartAssay)
 
@@ -108,26 +106,25 @@ class CartAssayUnitSpec extends Specification {
         0            | false
         20           | true
         4000         | true
-        40001        | false
+        40001        | true
     }
 
-    // Note: In this case we are using a setter, and therefore we must NOT mockForConstraintsTests (otherwise
-    // the setter will never be hit.
     void "test adding ellipses when the assay title is too long"() {
         given:
+        mockForConstraintsTests(CartAssay)
         final String assayTitle = RandomStringUtils.randomAlphabetic(stringLength)
-        CartAssay cartAssay = new CartAssay(assayTitle, assayId)
 
         when:
-        cartAssay.setAssayTitle(assayTitle)
+        CartAssay cartAssay = new CartAssay(assayTitle, assayId)
+        cartAssay.validate()
 
         then:
         cartAssay.toString().length() == properStringLength
 
         where:
         assayId | stringLength | properStringLength
-        47      | 4001         | 4003
-        47      | 80000        | 4003
+        47      | 4001         | 4000
+        47      | 80000        | 4000
         47      | 25           | 25
         2       | 0            | 0
     }

@@ -12,7 +12,11 @@ class CartCompound extends QueryItem {
         this.queryItemType = QueryItemType.Compound
     }
 
-    CartCompound(String smiles, String name, int compoundId) {
+    CartCompound(String smiles, String name, String compoundId) {
+        this(smiles, name, Long.parseLong(compoundId))
+    }
+
+    CartCompound(String smiles, String name, Long compoundId) {
         this.smiles = smiles
         this.name = name
         this.externalId = compoundId
@@ -33,7 +37,7 @@ class CartCompound extends QueryItem {
 
     @Override
     String toString() {
-        if (StringUtils.isBlank(name)) {
+        if (StringUtils.isBlank(name) || name == 'null') {
             return "PubChem CID=${externalId}"
         }
         return name

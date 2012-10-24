@@ -28,6 +28,9 @@ class QueryItem extends Shoppable {
 
     @Override
     String toString() {
+        if (this.name == null || this.name == 'null') {
+            return ""
+        }
         return name
     }
 

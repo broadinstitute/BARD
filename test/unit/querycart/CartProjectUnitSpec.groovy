@@ -1,15 +1,15 @@
 package querycart
 
-import bardqueryapi.BardWebInterfaceController
 import grails.test.mixin.TestFor
 import org.apache.commons.lang.RandomStringUtils
 import spock.lang.Specification
 import spock.lang.Unroll
+import org.apache.commons.lang.StringUtils
 
 /**
  * See the API for {@link grails.test.mixin.support.GrailsUnitTestMixin} for usage instructions
  */
-@TestFor(BardWebInterfaceController)
+@TestFor(CartProject)
 @Unroll
 class CartProjectUnitSpec extends Specification {
 
@@ -29,18 +29,20 @@ class CartProjectUnitSpec extends Specification {
         CartProject cartProject = new CartProject(projectName, projectId)
 
         then:
-        assert cartProject.projectName == 'Project title'
-        assert cartProject.projectId
+        assert cartProject.name == 'Project title'
+        assert cartProject.externalId == projectId
     }
 
     void "test toString #label"() {
         given:
-        CartProject cartProject = new CartProject()
-        cartProject.setProjectName(projectName)
+        CartProject cartProject = new CartProject(projectName, 5)
+
         when:
-        final String projectAsString = cartProject.toString()
+        String projectAsString = cartProject.toString()
+
         then:
         assert projectAsString == expectedTitle
+
         where:
         label                         | projectName  | expectedTitle
         "Empty Project Name"          | ""           | ""
@@ -67,38 +69,42 @@ class CartProjectUnitSpec extends Specification {
 
     void "Test hashCode #label"() {
         when:
-        final int code = cartProject.hashCode()
+        int code1 = cartProject1.hashCode()
+        int code2 = cartProject2.hashCode()
 
         then:
-        assert code
-        where:
-        label               | cartProject
-        "Other is null"     | new CartProject()
-        "Different classes" | new CartProject()
-        "Equality"          | new CartProject("Some Title", 22)
+        assert (code1 == code2) == expectation
 
+        where:
+        label                   | cartProject1                      | cartProject2                      | expectation
+        "Empty classes"         | new CartProject()                 | new CartProject()                 | true
+        "Diff ids, diff names"  | new CartProject("Test 1", 5)      | new CartProject("Test 2", 3)      | false
+        "Same ids, diff names"  | new CartProject("Test 1", 3)      | new CartProject("Test 2", 3)      | true
+        "Diff ids, same names"  | new CartProject("Some Title", 22) | new CartProject("Some Title", 25) | false
+        "Same ids, same names"  | new CartProject("Some Title", 22) | new CartProject("Some Title", 22) | true
 
     }
 
-    // Note: In this case we are using a setter, and therefore we must NOT mockForConstraintsTests (otherwise
-    // the setter will never be hit.
     void "test adding ellipses when the project name is too long"() {
         given:
-        final String projectName = RandomStringUtils.randomAlphabetic(stringLength)
-        CartProject cartProject = new CartProject(projectName, projectId)
+        mockForConstraintsTests(CartProject)
+        final String name = RandomStringUtils.randomAlphabetic(stringLength)
+        String truncatedName = StringUtils.abbreviate(name, CartCompound.MAXIMUM_NAME_FIELD_LENGTH)
+
+        CartProject cartProject = new CartProject(name, projectId)
 
         when:
-        cartProject.setProjectName(projectName)
+        cartProject.validate()
 
         then:
-        cartProject.toString().length() == properStringLength
+        assert cartProject.name == truncatedName
 
         where:
-        projectId | stringLength | properStringLength
-        47        | 4001         | 4003
-        47        | 80000        | 4003
-        47        | 25           | 25
-        2         | 0            | 0
+        projectId | stringLength
+        47        | 4001
+        47        | 80000
+        47        | 25
+        2         | 0
     }
 
     void "test shopping cart project element"() {
@@ -107,7 +113,7 @@ class CartProjectUnitSpec extends Specification {
         assertNotNull(cartProject)
 
         then:
-        assert cartProject.projectName == 'my project name'
+        assert cartProject.name == 'my project name'
         assertNull cartProject.shoppingItem
     }
 

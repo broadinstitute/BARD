@@ -265,7 +265,7 @@ class MolecularSpreadSheetService {
             updateMolSpreadSheetDataToReferenceCompound(
                     molSpreadSheetData,
                     rowCount++,
-                    cartCompound.compoundId as Long,
+                    cartCompound.externalId as Long,
                     cartCompound.name,
                     cartCompound.smiles
             )
