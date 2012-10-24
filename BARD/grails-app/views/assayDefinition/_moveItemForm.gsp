@@ -7,7 +7,7 @@
 	<div class="control-group">
     	<label class="control-label" for="edit_card_name">Card Name:</label>
 		<div class="controls">
-			<g:select name="cardId" from="${cardDtoMap.collect{k, v -> v}.flatten()}" optionKey="id" optionValue="title" noSelection="['': '']"/>
+			<g:select name="cardId" from="${cardDtoMap.collect{k, v -> v}.flatten()}" optionKey="id" optionValue="label" noSelection="['': '']"/>
 		</div>
    </div>
    <input type="hidden" id="assayContextItemId" name="assayContextItemId" value="${itemId}"/>

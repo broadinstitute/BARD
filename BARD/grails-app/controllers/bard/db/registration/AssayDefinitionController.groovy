@@ -116,13 +116,13 @@ class AssayDefinitionController {
             assayContext.delete()
         }
         Map<String , CardDto> cardDtoMap = cardFactoryService.createCardDtoMapForAssay(assay)
-        render(template: "cards", model: [cardDtoMap: cardDtoMap])
+        render(template: "cards", model: [cardDtoMap: cardDtoMap, assayId: assayId])
     }
 
     def createOrEditCardName(String edit_card_name, Long assayId, Long assayContextId){
         AssayContext assayContext = assayContextService.createOrEditCardName(assayId, assayContextId, edit_card_name)
         Map<String , CardDto> cardDtoMap = cardFactoryService.createCardDtoMapForAssay(assayContext.assay)
-        render(template: "cards", model: [cardDtoMap: cardDtoMap])
+        render(template: "cards", model: [cardDtoMap: cardDtoMap, assayId: assayId])
     }
 	
 	def showMoveItemForm(Long assayId, Long itemId){
