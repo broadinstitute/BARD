@@ -28,6 +28,9 @@ modules = {
 	assaycards {
 		resource url: '/js/cap/assay.cards.js'
 	}
+	assayshow {
+		resource url: '/js/cap/assay.show.js'
+	}
 	images {
 	}
 }

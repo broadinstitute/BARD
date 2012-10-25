@@ -44,6 +44,21 @@ class AssayDefinitionController {
 
         [assayInstance: assayInstance, cardDtoMap: cardDtoMap]
     }
+	
+	def edit() {
+		def assayInstance = Assay.get(params.id)
+
+		if (!assayInstance) {
+			flash.message = message(code: 'default.not.found.message', args: [message(code: 'assay.label', default: 'Assay'), params.id])
+			return
+		}
+		else
+			flash.message = null
+
+		Map<String , CardDto> cardDtoMap = cardFactoryService.createCardDtoMapForAssay(assayInstance)
+
+		[assayInstance: assayInstance, cardDtoMap: cardDtoMap]
+	}
 
     def findById() {
         if (params.assayId && params.assayId.isLong()) {
@@ -136,7 +151,6 @@ class AssayDefinitionController {
 	}
 	
 	def moveCardItem(Long cardId, Long assayContextItemId, Long assayId){
-//		println "moveCardItem form params -> CardId: " + cardId + "	AssayContextItemId: " + assayContextItemId + "	assayId: " + assayId
 		AssayContext targetAssayContext = AssayContext.findById(cardId)
 		AssayContextItem source = AssayContextItem.findById(assayContextItemId)
 		assayContextService.addItem(source, targetAssayContext)

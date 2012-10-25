@@ -47,7 +47,17 @@ $(document).ready(function () {
        draggable: false,
        zIndex: 3999,
        title:"Move card item"
-  });
+   });
+   
+   $("#dialog_add_item_wizard").dialog({
+	   	height:500,
+	   	width:600,
+	    autoOpen:false,
+	    modal:true,
+	    draggable: false,
+	    zIndex: 3999,
+	    title:"Add Item wizard - Step 1 - Attribute"
+   });
 
    $("#edit_card_form").ajaxForm({
 	   url:'../createOrEditCardName',
@@ -375,4 +385,25 @@ function editCardName(cardId, cardName) {
 
 function editCardItem(){
 	
+}
+
+function launchAddItemWizard(assayContextId){
+	$("#dialog_add_item_wizard").dialog("option", "buttons",[
+	{
+		text: "Cancel",
+	    class: "btn",
+	    click: function(){    
+	    	$( this ).dialog( "close" );
+	    }
+	},
+	{
+		text: "Next",
+	    class: "btn btn-info",
+	    click: function(){
+	    	$( this ).dialog( "close" );
+	    }
+	}
+	]);
+
+	$("#dialog_add_item_wizard").dialog("open");
 }
