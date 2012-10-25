@@ -62,7 +62,7 @@ class MolecularSpreadSheetServiceIntegrationSpec extends IntegrationSpec {
         assert molSpreadSheetData.mssData.size() == 0
         assert molSpreadSheetData.rowPointer.size() == 0
         assert molSpreadSheetData.columnPointer.size() == 0
-        assert molSpreadSheetData.mssHeaders.size() == 3
+        assert molSpreadSheetData.mssHeaders.flatten().size() == 3
     }
 
 
@@ -595,7 +595,7 @@ class MolecularSpreadSheetServiceIntegrationSpec extends IntegrationSpec {
     void assertDataForSpreadSheetExist(MolSpreadSheetData molSpreadSheetData) {
         assert molSpreadSheetData != null
         for (int rowCnt in 0..(molSpreadSheetData.rowCount - 1)) {
-            for (int colCnt in 0..(molSpreadSheetData.mssHeaders.size() - 1)) {
+            for (int colCnt in 0..(molSpreadSheetData.mssHeaders.flatten().size() - 1)) {
                 assertNotNull(molSpreadSheetData.mssData["${rowCnt}_${colCnt}"])
             }
 
@@ -605,11 +605,11 @@ class MolecularSpreadSheetServiceIntegrationSpec extends IntegrationSpec {
 
     MolSpreadSheetData generateFakeData() {
         molSpreadSheetData = new MolSpreadSheetData()
-        molSpreadSheetData.mssHeaders = ["Chemical Structure",
-                "CID",
-                "DNA polymerase (Q9Y253) ADID : 1 IC50",
-                "Serine-protein kinase (Q13315) ADID : 1 IC50",
-                "Tyrosine-DNA phosphodiesterase 1 (Q9NUW8) ADID: 514789"]
+        molSpreadSheetData.mssHeaders = [["Chemical Structure"],
+                ["CID"],
+                ["DNA polymerase (Q9Y253) ADID : 1 IC50"],
+                ["Serine-protein kinase (Q13315) ADID : 1 IC50"],
+                ["Tyrosine-DNA phosphodiesterase 1 (Q9NUW8) ADID: 514789"]]
         molSpreadSheetData.mssData.put("0_0", new MolSpreadSheetCell("1", MolSpreadSheetCellType.string))
         molSpreadSheetData.mssData.put("0_1", new MolSpreadSheetCell("3888711", MolSpreadSheetCellType.identifier))
         molSpreadSheetData.mssData.put("0_2", new MolSpreadSheetCell("3888711", MolSpreadSheetCellType.greaterThanNumeric))

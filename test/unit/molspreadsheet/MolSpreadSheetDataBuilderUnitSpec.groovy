@@ -76,23 +76,23 @@ class MolSpreadSheetDataBuilderUnitSpec extends Specification {
         assert experimentList.size() == 0
     }
 
-    void "test populateMolSpreadSheet #label"() {
-        when:
-        MolSpreadSheetDataBuilder molSpreadSheetDataBuilder = new MolSpreadSheetDataBuilder()
-        molSpreadSheetDataBuilder.molecularSpreadSheetService = this.molecularSpreadSheetService
-        molSpreadSheetDataBuilder.cartCompoundList = cartCompoundList
-        molSpreadSheetDataBuilder.populateMolSpreadSheet([])
-
-        then:
-        1 * molecularSpreadSheetService.extractMolSpreadSheetData(_, _, _) >> {[]}
-        numOfInvocations * molecularSpreadSheetService.convertSpreadSheetActivityToCompoundInformation(_) >> {[:] as Map}
-        //molecularSpreadSheetService.populateMolSpreadSheetColumnMetadata(_, _) >> {null}
-        1 * molecularSpreadSheetService.populateMolSpreadSheetRowMetadata(_, _) >> {null}
-
-        where:
-        label                       | cartCompoundList                         | numOfInvocations
-        'compound-list is empty'    | []                                       | 1
-        'one compound in the list'  | [new CartCompound()]                     | 0
-        'two compounds in the list' | [new CartCompound(), new CartCompound()] | 0
-    }
+//    void "test populateMolSpreadSheet #label"() {
+//        when:
+//        MolSpreadSheetDataBuilder molSpreadSheetDataBuilder = new MolSpreadSheetDataBuilder()
+//        molSpreadSheetDataBuilder.molecularSpreadSheetService = this.molecularSpreadSheetService
+//        molSpreadSheetDataBuilder.cartCompoundList = cartCompoundList
+//        molSpreadSheetDataBuilder.populateMolSpreadSheet([])
+//
+//        then:
+//        1 * molecularSpreadSheetService.extractMolSpreadSheetData(_, _, _) >> {[]}
+//        numOfInvocations * molecularSpreadSheetService.convertSpreadSheetActivityToCompoundInformation(_) >> {[:] as Map}
+//        //molecularSpreadSheetService.populateMolSpreadSheetColumnMetadata(_, _) >> {null}
+//        1 * molecularSpreadSheetService.populateMolSpreadSheetRowMetadata(_, _) >> {null}
+//
+//        where:
+//        label                       | cartCompoundList                         | numOfInvocations
+//        'compound-list is empty'    | []                                       | 1
+//        'one compound in the list'  | [new CartCompound()]                     | 0
+//        'two compounds in the list' | [new CartCompound(), new CartCompound()] | 0
+//    }
 }

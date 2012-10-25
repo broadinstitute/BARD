@@ -153,19 +153,19 @@ class MolecularSpreadSheetServiceUnitSpec extends Specification {
 
     }
 
-    void "test extractActivitiesFromExperiment when experimentValue has no children"() {
-        given: "we have an experiment"
-        final Value experimentalValue = new Value()
-        final experimentId = 47 as Long
-
-        when: "we want to pull out the active values"
-        SpreadSheetActivity spreadSheetActivity = service.extractActivitiesFromExperiment(experimentalValue, experimentId)
-
-        then: "prove that the active values are available"
-        assertNotNull spreadSheetActivity
-        assert spreadSheetActivity.experimentId == experimentId
-
-    }
+//    void "test extractActivitiesFromExperiment when experimentValue has no children"() {
+//        given: "we have an experiment"
+//        final Value experimentalValue = new Value()
+//        final experimentId = 47 as Long
+//
+//        when: "we want to pull out the active values"
+//        SpreadSheetActivity spreadSheetActivity = service.extractActivitiesFromExperiment(experimentalValue, experimentId)
+//
+//        then: "prove that the active values are available"
+//        assertNotNull spreadSheetActivity
+//        assert spreadSheetActivity.experimentId == experimentId
+//
+//    }
 
 
     void "test addCurrentActivityToSpreadSheet when experimentValue has no children"() {
@@ -242,10 +242,10 @@ class MolecularSpreadSheetServiceUnitSpec extends Specification {
         then: "prove that the active values are available"
         assertNotNull molSpreadSheetData
         assertNotNull molSpreadSheetData.mssHeaders
-        assert molSpreadSheetData.mssHeaders.size() == 3
-        assert molSpreadSheetData.mssHeaders.contains("Struct")
-        assert molSpreadSheetData.mssHeaders.contains("CID")
-        assert molSpreadSheetData.mssHeaders.contains("UNM Promiscuity Analysis")
+        assert molSpreadSheetData.mssHeaders.flatten().size() == 3
+        assert molSpreadSheetData.mssHeaders.flatten().contains("Struct")
+        assert molSpreadSheetData.mssHeaders.flatten().contains("CID")
+        assert molSpreadSheetData.mssHeaders.flatten().contains("UNM Promiscuity Analysis")
     }
 
 
@@ -260,10 +260,10 @@ class MolecularSpreadSheetServiceUnitSpec extends Specification {
         then: "prove that the active values are available"
         assertNotNull molSpreadSheetData
         assertNotNull molSpreadSheetData.mssHeaders
-        assert molSpreadSheetData.mssHeaders.size() == 3
-        assert molSpreadSheetData.mssHeaders.contains("Struct")
-        assert molSpreadSheetData.mssHeaders.contains("CID")
-        assert molSpreadSheetData.mssHeaders.contains("UNM Promiscuity Analysis")
+        assert molSpreadSheetData.mssHeaders.flatten().size() == 3
+        assert molSpreadSheetData.mssHeaders.flatten().contains("Struct")
+        assert molSpreadSheetData.mssHeaders.flatten().contains("CID")
+        assert molSpreadSheetData.mssHeaders.flatten().contains("UNM Promiscuity Analysis")
     }
 
 
@@ -283,12 +283,12 @@ class MolecularSpreadSheetServiceUnitSpec extends Specification {
         assertNotNull molSpreadSheetData
         assertNotNull molSpreadSheetData.mssHeaders
         assert molSpreadSheetData.mssHeaders.size() == 6
-        assert molSpreadSheetData.mssHeaders.contains("Struct")
-        assert molSpreadSheetData.mssHeaders.contains("CID")
-        assert molSpreadSheetData.mssHeaders.contains("UNM Promiscuity Analysis")
-        assert molSpreadSheetData.mssHeaders.contains("a")
-        assert molSpreadSheetData.mssHeaders.contains("b")
-        assert molSpreadSheetData.mssHeaders.contains("c")
+        assert molSpreadSheetData.mssHeaders.flatten().contains("Struct")
+        assert molSpreadSheetData.mssHeaders.flatten().contains("CID")
+        assert molSpreadSheetData.mssHeaders.flatten().contains("UNM Promiscuity Analysis")
+        assert molSpreadSheetData.experimentNameList.contains("a")
+        assert molSpreadSheetData.experimentNameList.contains("b")
+        assert molSpreadSheetData.experimentNameList.contains("c")
     }
 
 
@@ -308,7 +308,7 @@ class MolecularSpreadSheetServiceUnitSpec extends Specification {
         then: "prove that the active values are available"
         assertNotNull molSpreadSheetData
         assertNotNull molSpreadSheetData.mssHeaders
-        assert molSpreadSheetData.mssHeaders.size() == 0
+        assert molSpreadSheetData.mssHeaders.flatten().size() == 0
     }
 
 
@@ -324,7 +324,7 @@ class MolecularSpreadSheetServiceUnitSpec extends Specification {
         then: "prove that the active values are available"
         assertNotNull molSpreadSheetData
         assertNotNull molSpreadSheetData.mssHeaders
-        assert molSpreadSheetData.mssHeaders.size() == 0
+        assert molSpreadSheetData.mssHeaders.flatten().size() == 0
     }
 
 

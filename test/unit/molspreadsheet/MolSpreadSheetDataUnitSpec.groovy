@@ -113,9 +113,9 @@ class MolSpreadSheetDataUnitSpec  extends Specification {
         MolSpreadSheetData molSpreadSheetData = new MolSpreadSheetData()
         assertNotNull(molSpreadSheetData)
 
-        molSpreadSheetData.mssHeaders << "col 1"
-        molSpreadSheetData.mssHeaders << "col 2"
-        molSpreadSheetData.mssHeaders << "col 3"
+        molSpreadSheetData.mssHeaders << ["col 1"]
+        molSpreadSheetData.mssHeaders << ["col 2"]
+        molSpreadSheetData.mssHeaders << ["col 3"]
         molSpreadSheetData.rowPointer[1 as Long] = 47
         molSpreadSheetData.rowPointer[2 as Long] = 48
 

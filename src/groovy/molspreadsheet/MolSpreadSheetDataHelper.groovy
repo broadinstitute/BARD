@@ -87,8 +87,8 @@ class MolSpreadSheetDataBuilder {
         // next deal with the compounds
         if (cartCompoundList.isEmpty()) {
             // Explicitly specified assay, for which we will retrieve all compounds
-            etag = molecularSpreadSheetService.retrieveImpliedCompoundsEtagFromAssaySpecification(experimentList)
-            spreadSheetActivityList = molecularSpreadSheetService.extractMolSpreadSheetData(molSpreadSheetData, experimentList, etag)
+            //etag = molecularSpreadSheetService.retrieveImpliedCompoundsEtagFromAssaySpecification(experimentList)
+            spreadSheetActivityList = molecularSpreadSheetService.extractMolSpreadSheetData(molSpreadSheetData, experimentList)
            // spreadSheetActivityList = molecularSpreadSheetService.extractMolSpreadSheetData(molSpreadSheetData, experimentList, [])
             Map map = molecularSpreadSheetService.convertSpreadSheetActivityToCompoundInformation(spreadSheetActivityList)
             molecularSpreadSheetService.populateMolSpreadSheetRowMetadata(molSpreadSheetData, map)
@@ -98,12 +98,8 @@ class MolSpreadSheetDataBuilder {
             // Explicitly specified assays and explicitly specified compounds
             molecularSpreadSheetService.populateMolSpreadSheetRowMetadata(molSpreadSheetData, cartCompoundList)
             etag = molecularSpreadSheetService.generateETagFromCartCompounds(cartCompoundList)
-//            List<Long> compoundsSelected = cartCompoundList.collect {CartCompound cartCompound ->
-//                cartCompound.compoundId.toLong()
-//            }
             spreadSheetActivityList = molecularSpreadSheetService.extractMolSpreadSheetData(molSpreadSheetData, experimentList, etag)
-            //spreadSheetActivityList = molecularSpreadSheetService.extractMolSpreadSheetData(molSpreadSheetData, experimentList, compoundsSelected)
-        }
+         }
         // finally deal with the data
         molecularSpreadSheetService.populateMolSpreadSheetData(molSpreadSheetData, experimentList, spreadSheetActivityList)
     }

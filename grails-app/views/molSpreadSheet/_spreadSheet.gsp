@@ -1,4 +1,4 @@
-<%@ page import="molspreadsheet.SpreadSheetActivityStorage; molspreadsheet.MolSpreadSheetData; molspreadsheet.SpreadSheetActivity; molspreadsheet.MolecularSpreadSheetService; bardqueryapi.FacetFormType" %>
+<%@ page import="molspreadsheet.HillCurveValueHolder; molspreadsheet.SpreadSheetActivityStorage; molspreadsheet.MolSpreadSheetData; molspreadsheet.SpreadSheetActivity; molspreadsheet.MolecularSpreadSheetService; bardqueryapi.FacetFormType" %>
 <%@ page import="molspreadsheet.MolSpreadSheetCellType; molspreadsheet.MolSpreadSheetCell;" %>
 <%@ page import="com.metasieve.shoppingcart.ShoppingCartService;" %>
 
@@ -29,7 +29,7 @@
 
                     <th class="molSpreadSheetHeadData sortable">CID</th>
                     <% int looper = 2 %>
-                    <g:each var="colHeader" in="${molSpreadSheetData?.mssHeaders}">
+                    <g:each var="colHeader" in="${molSpreadSheetData?.mssHeaders.flatten()}">
                         <g:if test="${looper > 3}">
                             <th class="molSpreadSheetHeadData sortable">${colHeader}</th>
                         </g:if>
@@ -77,18 +77,26 @@
                     </td>
                     <g:if test="${molSpreadSheetData.getColumnCount() > 3}">
                         <g:each var="colCnt" in="${3..(molSpreadSheetData.getColumnCount() - 1)}">
-                            <td class="molSpreadSheet" property="var${colCnt}">
                             <% SpreadSheetActivityStorage spreadSheetActivityStorage = molSpreadSheetData?.findSpreadSheetActivity(rowCnt, colCnt) %>
+                            <% int currentCol =  colCnt %>
                             <g:if test="${spreadSheetActivityStorage != null}">
-                                <p>
 
-                                <div data-detail-id="drc_${spreadSheetActivityStorage.sid}_${colCnt}"
-                                     class="drc-popover-link btn btn-link"
-                                     data-original-title="${spreadSheetActivityStorage.hillCurveValueId}"
-                                     data-html="true"
-                                     data-trigger="hover">
-                                    ${molSpreadSheetData?.displayValue(rowCnt, colCnt)?."value"}</div>
-                                </p>
+                                <g:each var="subColCnt" in="${0..(molSpreadSheetData.mssHeaders[colCnt].size())}">
+                                    <% HillCurveValueHolder hillCurveValueHolder =  spreadSheetActivityStorage.getHillCurveValueHolderList()[subColCnt] %>
+
+                                    <td class="molSpreadSheet" property="var${currentCol}">
+                                    <p>
+
+
+                                    <div data-detail-id="drc_${spreadSheetActivityStorage.sid}_${colCnt}"
+                                         class="drc-popover-link btn btn-link"
+                                         data-original-title="chg->spreadSheetActivityStorage.hillCurveValueId"
+                                         data-html="true"
+                                         data-trigger="hover">
+                                        ${molSpreadSheetData?.displayValue(rowCnt, colCnt)?."value"}</div>
+                                    </p>
+
+
 
                                 <div class='popover-content-wrapper' id="drc_${spreadSheetActivityStorage.sid}_${colCnt}"
                                      style="display: none;">
@@ -110,12 +118,18 @@
                                              )}"/>
                                     </div>
                                 </div>
+
+
+
+                                </td>
                             </g:if>
                             <g:else>
-                                Not tested in this experiment
+                                <td class="molSpreadSheet" property="var${colCnt}">
+                                    Not tested in this experiment
+                                </td>
                             </g:else>
 
-                            </td>
+
                         </g:each>
                     </g:if>
                     </tr>

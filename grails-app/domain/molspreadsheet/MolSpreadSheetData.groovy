@@ -8,7 +8,8 @@ class MolSpreadSheetData {
     Map<String,MolSpreadSheetCell> mssData   = [:]
     Map<Long,Integer> rowPointer  = [:]
     Map<Long,Integer> columnPointer   = [:]
-    List<String> mssHeaders   = []
+    List<List<String>> mssHeaders   = []
+    List<String> experimentNameList   = []
 
     /**
      * Display a cell, as specified by a row and column
@@ -60,7 +61,7 @@ class MolSpreadSheetData {
      */
     int getColumnCount(){
         if (mssHeaders) {
-            return mssHeaders.size()
+            return mssHeaders.flatten().size()
         }
         return 0
 

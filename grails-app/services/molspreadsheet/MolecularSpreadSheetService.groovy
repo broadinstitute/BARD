@@ -4,17 +4,17 @@ import bard.core.adapter.CompoundAdapter
 import bard.core.rest.RESTAssayService
 import bard.core.rest.RESTExperimentService
 import bard.core.rest.RESTProjectService
-import bardqueryapi.ActivityOutcome
 import bardqueryapi.IQueryService
 import bardqueryapi.QueryServiceWrapper
 import bardqueryapi.SearchFilter
 import com.metasieve.shoppingcart.ShoppingCartService
-import org.apache.commons.lang.NotImplementedException
 import querycart.CartAssay
 import querycart.CartCompound
 import querycart.CartProject
 import querycart.QueryCartService
 import bard.core.*
+import bardqueryapi.ActivityOutcome
+import org.apache.commons.lang.NotImplementedException
 
 class MolecularSpreadSheetService {
     int MAXIMUM_NUMBER_OF_COMPOUNDS =500
@@ -102,13 +102,41 @@ class MolecularSpreadSheetService {
 
 
 
+//
+//    protected List<SpreadSheetActivity> extractMolSpreadSheetData(MolSpreadSheetData molSpreadSheetData, List<Experiment> experimentList) {
+//        // now step through the data and place into molSpreadSheetData
+//        List<SpreadSheetActivity> spreadSheetActivityList = new ArrayList<SpreadSheetActivity>()
+//
+//        // we need to handle each experiment separately ( until NCGC can do this in the background )
+//        // Note that each experiment corresponds to a column in our spreadsheet
+//        int columnCount = 0
+//        for (Experiment experiment in experimentList) {
+//
+//            ServiceIterator<Value> experimentIterator = queryServiceWrapper.restExperimentService.activities(experiment)
+//
+//            // Now step through the result set and pull back  one value for each compound
+//            Value experimentValue
+//            while (experimentIterator.hasNext()) {
+//                experimentValue = experimentIterator.next()
+//                Long translation = new Long(experimentValue.id.split("\\.")[0])
+//                if (!molSpreadSheetData.columnPointer.containsKey(translation)) {
+//                    molSpreadSheetData.columnPointer.put(translation, columnCount)
+//                }
+//                spreadSheetActivityList.add(extractActivitiesFromExperiment(experimentValue))
+//            }
+//            columnCount++
+//        }
+//        spreadSheetActivityList
+//    }
+//
+//
     /**
      * For a set of experiments
      * @param experimentList
      * @param etag
      * @return
      */
-    protected List<SpreadSheetActivity> extractMolSpreadSheetData(MolSpreadSheetData molSpreadSheetData, List<Experiment> experimentList, Object etag) {
+    protected List<SpreadSheetActivity> extractMolSpreadSheetData(MolSpreadSheetData molSpreadSheetData, List<Experiment> experimentList, Object etag = null) {
         // now step through the data and place into molSpreadSheetData
         List<SpreadSheetActivity> spreadSheetActivityList = new ArrayList<SpreadSheetActivity>()
 
@@ -117,17 +145,23 @@ class MolecularSpreadSheetService {
         int columnCount = 0
         for (Experiment experiment in experimentList) {
 
-            ServiceIterator<Value> experimentIterator = queryServiceWrapper.restExperimentService.activities(experiment, etag)
+            ServiceIterator<Value> experimentIterator
+            if (etag == null) {
+                experimentIterator = queryServiceWrapper.restExperimentService.activities(experiment)
+            }  else {
+                experimentIterator = queryServiceWrapper.restExperimentService.activities(experiment, etag)
+            }
 
             // Now step through the result set and pull back  one value for each compound
             Value experimentValue
+            Integer experimentCount = 0
             while (experimentIterator.hasNext()) {
                 experimentValue = experimentIterator.next()
                 Long translation = new Long(experimentValue.id.split("\\.")[0])
                 if (!molSpreadSheetData.columnPointer.containsKey(translation)) {
                     molSpreadSheetData.columnPointer.put(translation, columnCount)
                 }
-                spreadSheetActivityList.add(extractActivitiesFromExperiment(experimentValue))
+                spreadSheetActivityList.add(extractActivitiesFromExperiment(molSpreadSheetData,experimentCount++,experimentValue))
             }
             columnCount++
         }
@@ -196,7 +230,6 @@ class MolecularSpreadSheetService {
     protected void populateMolSpreadSheetData(MolSpreadSheetData molSpreadSheetData, List<Experiment> experimentList, List<SpreadSheetActivity> spreadSheetActivityList) {
         // now step through the data and place into molSpreadSheetData
         int columnPointer = 0
-//        Map<String, MolSpreadSheetCell> map = [:]
         // we need to handle each experiment separately ( until NCGC can do this in the background )
         // Note that each experiment corresponds to a column in our spreadsheet
         for (Experiment experiment in experimentList) {
@@ -205,16 +238,11 @@ class MolecularSpreadSheetService {
                 if (molSpreadSheetData.rowPointer.containsKey(spreadSheetActivity.cid)) {
                     int innerRowPointer = molSpreadSheetData.rowPointer[spreadSheetActivity.cid]
                     int innerColumnCount = molSpreadSheetData.columnPointer[spreadSheetActivity.eid]
-                    // String arrayKey = innerRowPointer.toString() + "_" + (innerColumnCount + 3).toString()
                     String arrayKey = "${innerRowPointer}_${innerColumnCount + 3}"
                     SpreadSheetActivityStorage spreadSheetActivityStorage = new SpreadSheetActivityStorage(spreadSheetActivity)
 
-                    MolSpreadSheetCell molSpreadSheetCell = new MolSpreadSheetCell(spreadSheetActivity.interpretHillCurveValue().toString(),
-                            MolSpreadSheetCellType.numeric,
-                            MolSpreadSheetCellUnit.Molar,
-                            spreadSheetActivityStorage)
+                    MolSpreadSheetCell molSpreadSheetCell = new MolSpreadSheetCell(spreadSheetActivity)
                     molSpreadSheetData.mssData.put(arrayKey, molSpreadSheetCell)
-                    //    map.put(arrayKey, molSpreadSheetCell)
                 }
                 else {
                     println "did not expect cid = ${spreadSheetActivity.cid}"
@@ -223,7 +251,6 @@ class MolecularSpreadSheetService {
             }
             columnPointer++
         }
-//         molSpreadSheetData.mssData.putAll(map)
         molSpreadSheetData
     }
 
@@ -328,11 +355,12 @@ class MolecularSpreadSheetService {
     protected void populateMolSpreadSheetColumnMetadata(MolSpreadSheetData molSpreadSheetData, List<Experiment> experimentList) {
 
         // now retrieve the header names from the assays
-        molSpreadSheetData.mssHeaders.add("Struct")
-        molSpreadSheetData.mssHeaders.add("CID")
-        molSpreadSheetData.mssHeaders.add("UNM Promiscuity Analysis")
+        molSpreadSheetData.mssHeaders << ["Struct"]
+        molSpreadSheetData.mssHeaders << ["CID"]
+        molSpreadSheetData.mssHeaders << ["UNM Promiscuity Analysis"]
         for (Experiment experiment in experimentList) {
-            molSpreadSheetData.mssHeaders.add(experiment.name)
+            molSpreadSheetData.experimentNameList << experiment.name
+            molSpreadSheetData.mssHeaders << []
         }
     }
 
@@ -532,62 +560,65 @@ class MolecularSpreadSheetService {
      * @param experimentValue
      * @return SpreadSheetActivity
      */
-    SpreadSheetActivity extractActivitiesFromExperiment(final Value experimentValue) {
+    SpreadSheetActivity extractActivitiesFromExperiment(MolSpreadSheetData molSpreadSheetData, final Integer experimentCount, final Value experimentValue) {
         final Iterator<Value> experimentValueIterator = experimentValue.children()
         SpreadSheetActivity spreadSheetActivity = new SpreadSheetActivity()
         while (experimentValueIterator?.hasNext()) {
             Value childValue = experimentValueIterator.next()
-            addCurrentActivityToSpreadSheet(spreadSheetActivity, childValue)
+            addCurrentActivityToSpreadSheet( molSpreadSheetData.mssHeaders[experimentCount],spreadSheetActivity, childValue)
         }
         return spreadSheetActivity
     }
 
-
-    SpreadSheetActivity extractActivitiesFromExperiment(final Value experimentValue, final Long experimentId) {
-        final Iterator<Value> experimentValueIterator = experimentValue.children()
-        SpreadSheetActivity spreadSheetActivity = new SpreadSheetActivity()
-        spreadSheetActivity.experimentId = experimentId
-        while (experimentValueIterator?.hasNext()) {
-            Value childValue = experimentValueIterator.next()
-            addCurrentActivityToSpreadSheet(spreadSheetActivity, childValue)
-        }
-        return spreadSheetActivity
-    }
-
+//
+//    SpreadSheetActivity extractActivitiesFromExperiment(final Value experimentValue, final Long experimentId) {
+//        final Iterator<Value> experimentValueIterator = experimentValue.children()
+//        SpreadSheetActivity spreadSheetActivity = new SpreadSheetActivity()
+//        spreadSheetActivity.experimentId = experimentId
+//        while (experimentValueIterator?.hasNext()) {
+//            Value childValue = experimentValueIterator.next()
+//            addCurrentActivityToSpreadSheet(spreadSheetActivity, childValue)
+//        }
+//        return spreadSheetActivity
+//    }
+//
     /**
-     * The ideais to fill up a spreadsheet activity based on
+     * The idea is to fill up a spreadsheet activity based on
      *  Note hack -- this method has been short-circuited so that a HillCurveValue will cause the method to
      *  push a value back onto readouts and then return
      * @param spreadSheetActivity
      * @param childValue
      */
-    void addCurrentActivityToSpreadSheet(final SpreadSheetActivity spreadSheetActivity, final Value childValue) {
-        String identifier = childValue.id
+    void addCurrentActivityToSpreadSheet(final List <String> resultTypeNames, final SpreadSheetActivity spreadSheetActivity, final Value childValue) {
 
-         if (childValue instanceof HillCurveValue) {
-            spreadSheetActivity.hillCurveValue = childValue
-            spreadSheetActivity.readouts.push(childValue)
-            return
+        if (childValue instanceof HillCurveValue) {
+            spreadSheetActivity.hillCurveValueList << childValue
+            if (!resultTypeNames.contains(childValue.id)) {
+                resultTypeNames << childValue.id
+            }
         }
+        else {
+            String identifier = childValue.id
+            switch (identifier) {
+                case "potency":
+                    spreadSheetActivity.potency = (Double) childValue.value
+                    break
+                case "outcome":
+                    spreadSheetActivity.activityOutcome = ActivityOutcome.findActivityOutcome((Integer) childValue.value)
+                    break
+                case "eid":
+                    spreadSheetActivity.eid = (Long) childValue.value
+                    break
+                case "cid":
+                    spreadSheetActivity.cid = (Long) childValue.value
+                    break
+                case "sid":
+                    spreadSheetActivity.sid = (Long) childValue.value
+                    break
+                default:
+                    throw new NotImplementedException("Experiment Identifier: ${identifier} is unknown")
+            }
 
-        switch (identifier) {
-            case "potency":
-                spreadSheetActivity.potency = (Double) childValue.value
-                break
-            case "outcome":
-                spreadSheetActivity.activityOutcome = ActivityOutcome.findActivityOutcome((Integer) childValue.value)
-                break
-            case "eid":
-                spreadSheetActivity.eid = (Long) childValue.value
-                break
-            case "cid":
-                spreadSheetActivity.cid = (Long) childValue.value
-                break
-            case "sid":
-                spreadSheetActivity.sid = (Long) childValue.value
-                break
-            default:
-                throw new NotImplementedException("Experiment Identifier: ${identifier} is unknown")
         }
     }
 

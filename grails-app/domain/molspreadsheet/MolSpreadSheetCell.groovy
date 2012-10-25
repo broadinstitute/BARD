@@ -1,5 +1,6 @@
 package molspreadsheet
 
+import bard.core.HillCurveValue
 import results.ExperimentalValue
 import results.ExperimentalValueType
 import results.ExperimentalValueUnit
@@ -89,6 +90,39 @@ class MolSpreadSheetCell {
             log.error "We should never see mole spreadsheet type ${this.molSpreadSheetCellType} in this four parameter constructor"
         }
     }
+
+
+
+    MolSpreadSheetCell( SpreadSheetActivity spreadSheetActivity ) {
+        if ((spreadSheetActivity.cid == null)  ||
+                (spreadSheetActivity.sid == null)  ||
+                (spreadSheetActivity.eid == null)  )   {
+            assert false," missing critical values. ${spreadSheetActivity.dump()}"
+        }
+        this.molSpreadSheetCellType = MolSpreadSheetCellType.numeric
+        this.molSpreadSheetCellUnit =  MolSpreadSheetCellUnit.Molar
+
+        this.spreadSheetActivityStorage = new SpreadSheetActivityStorage( eid: spreadSheetActivity.eid,
+                                                                          cid:  spreadSheetActivity.cid,
+                                                                          sid:spreadSheetActivity.sid,
+                                                                          activityOutcome: spreadSheetActivity.activityOutcome )
+        for (HillCurveValue hillCurveValue in spreadSheetActivity.hillCurveValueList) {
+             HillCurveValueHolder hillCurveValueHolder =  new HillCurveValueHolder(  s0: hillCurveValue.s0,
+                    sInf: hillCurveValue.sInf,
+                    slope: hillCurveValue.slope,
+                    coef: hillCurveValue.coef,
+                    conc: hillCurveValue.conc,
+                    response: hillCurveValue.response)
+            if (!this.spreadSheetActivityStorage.columnNames.contains(hillCurveValue.id))
+                this.spreadSheetActivityStorage.columnNames << hillCurveValue.id
+            hillCurveValueHolder.subColumnIndex  =  this.spreadSheetActivityStorage.columnNames.indexOf(hillCurveValue.id)
+            this.spreadSheetActivityStorage.hillCurveValueHolderList  << this.spreadSheetActivityStorage.columnNames.indexOf(hillCurveValue.id)
+        }
+
+    }
+
+
+
 
     /**
      * ctor for images
