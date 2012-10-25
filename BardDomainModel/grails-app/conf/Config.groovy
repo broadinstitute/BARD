@@ -62,7 +62,7 @@ log4j = {
 
     // logs hibernate sql and params, slow but can be very helpful
 //    debug  'org.hibernate.SQL'
-//    trace  'org.hibernate.type'
+//    trace 'org.hibernate.type.descriptor.sql.BasicBinder'
 
 }
 grails.views.default.codec="none" // none, html, base64
