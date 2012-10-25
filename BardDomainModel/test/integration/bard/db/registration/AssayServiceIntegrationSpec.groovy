@@ -4,7 +4,6 @@ import bard.db.experiment.Experiment
 import grails.plugin.fixtures.FixtureLoader
 import grails.plugin.spock.IntegrationSpec
 import registration.AssayService
-import spock.lang.Shared
 import spock.lang.Unroll
 
 /**
@@ -18,12 +17,10 @@ import spock.lang.Unroll
 class AssayServiceIntegrationSpec extends IntegrationSpec {
 
     AssayService assayService
-    @Shared Assay assay1
-    @Shared Assay assay2
     FixtureLoader fixtureLoader
 
     void manualSetup() {
-        assay1 = Assay.build(assayName: 'assay1')
+        Assay assay1 = Assay.build(assayName: 'assay1')
         Experiment experiment1 = Experiment.build(assay: assay1)
         assay1.addToExperiments(experiment1)
         ExternalReference extRef1 = ExternalReference.build(extAssayRef: 'aid=-1', experiment: experiment1)
@@ -37,7 +34,7 @@ class AssayServiceIntegrationSpec extends IntegrationSpec {
         assay1.validate()
         assert assay1.save(flush: true)
 
-        assay2 = Assay.build(assayName: 'assay2')
+        Assay assay2 = Assay.build(assayName: 'assay2')
         Experiment experiment3 = Experiment.build(assay: assay2)
         assay2.addToExperiments(experiment3)
         ExternalReference extRef3 = ExternalReference.build(extAssayRef: 'aid=-1', experiment: experiment3)
@@ -66,17 +63,17 @@ class AssayServiceIntegrationSpec extends IntegrationSpec {
     void "test findByPubChemAid with fixtures #label"() {
 
         given:
-        grails.buildtestdata.TestDataConfigurationHolder.reset()
         def fixture = fixtureLoader.build {
-            experiment1(Experiment, experimentName: 'experiment1')
-            experiment2(Experiment, experimentName: 'experiment2')
-            extRef2(ExternalReference, extAssayRef: 'aid=-2', experiment: experiment1)
-            extRef1(ExternalReference, extAssayRef: 'aid=-1', experiment: experiment2)
-            assay1(Assay, assayName: 'assay1', experiments: [experiment1, experiment2])
+            assay1(Assay, assayName: 'assay1')
+            for (int i in 1..2) {
+                String experimentsAlias = "experiment${i}"
+                "${experimentsAlias}"(Experiment, experimentName: "${experimentsAlias}", assay: assay1)
+                "extRef${i}"(ExternalReference, extAssayRef: "aid=-${i}", experiment: ref("${experimentsAlias}"))
+            }
 
-            experiment3(Experiment, experimentName: 'experiment3')
+            assay2(Assay, assayName: 'assay2')
+            experiment3(Experiment, experimentName: 'experiment3', assay: assay2)
             extRef3(ExternalReference, extAssayRef: 'aid=-1', experiment: experiment3)
-            assay2(Assay, assayName: 'assay2', experiments: [experiment3])
         }
 
         when:
