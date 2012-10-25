@@ -9,6 +9,7 @@ import spock.lang.Shared
 import bard.db.experiment.Experiment
 import spock.lang.Unroll
 import org.springframework.transaction.TransactionStatus
+import grails.plugin.fixtures.FixtureLoader
 
 /**
  * Created with IntelliJ IDEA.
@@ -23,9 +24,9 @@ class AssayServiceIntegrationSpec extends IntegrationSpec {
     AssayService assayService
     @Shared Assay assay1
     @Shared Assay assay2
+    FixtureLoader fixtureLoader
 
-    @Before
-    void doSetup() {
+    void manualSetup() {
 //        Assay.withTransaction {TransactionStatus transactionStatus ->
         grails.buildtestdata.TestDataConfigurationHolder.reset()
         assay1 = Assay.build() //An assay with two experiments, each link to a different external reference (e.g., PubChem AID)
@@ -52,7 +53,7 @@ class AssayServiceIntegrationSpec extends IntegrationSpec {
     void "test findByPubChemAid #label"() {
 
         given:
-
+        manualSetup()
 
         when:
         List<Assay> foundAssays = assayService.findByPubChemAid(aid)
@@ -62,9 +63,33 @@ class AssayServiceIntegrationSpec extends IntegrationSpec {
         assert foundAssays*.id == expectedAssayIDs
 
         where:
-        label                                           | aid       | expectedAssayIDs
+        label | aid | expectedAssayIDs
 //        'find an exiting aid associated with two ADIDs' | 1         | [1, 2]
-        'find an ADID with two AIDs associated with it' | 2         | [1]
+        'find an ADID with two AIDs associated with it' | 2 | [1]
+        'find a non-exiting aid' | 123456789 | []
+    }
+
+    void "test findByPubChemAid with fixtures #label"() {
+
+        given:
+        grails.buildtestdata.TestDataConfigurationHolder.reset()
+        def fixture = fixtureLoader.build {
+            extRef1(ExternalReference, extAssayRef: 'aid=1', experiment: ref("experiment1"))
+            extRef2(ExternalReference, extAssayRef: 'aid=2', experiment: ref("experiment2"))
+            experiment1(Experiment, experimentName: 'experiment1')
+            experiment2(Experiment, experimentName: 'experiment2')
+            assay1(Assay, assayName: 'assay1', experiments: [experiment1, experiment2])
+        }
+
+        when:
+        List<Assay> foundAssays = assayService.findByPubChemAid(aid)
+
+        then:
+        assert foundAssays*.assayName == expectedAssayNames
+
+        where:
+        label                                           | aid       | expectedAssayNames
+        'find an ADID with two AIDs associated with it' | 1         | ['assay1']
         'find a non-exiting aid'                        | 123456789 | []
     }
 }

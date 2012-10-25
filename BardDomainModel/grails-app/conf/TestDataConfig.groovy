@@ -14,6 +14,10 @@ testDataConfig {
     sampleData {
         'bard.db.registration.Assay' {
         }
+        'bard.db.experiment.Experiment' {
+        }
+        'bard.db.registration.ExternalReference' {
+        }
         'bard.db.dictionary.Element' {
             def i = 1
             label = {-> "label${i++}"}

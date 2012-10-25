@@ -81,6 +81,7 @@ class ContextGroupService {
         return contextChangeDTOList
     }
 
+
     /**
      * Converts the list of ContextChangeDTOs (representing the spreadsheet's input groups) into a ContextChange with types properties that can then could be call on its doChange() method
      *
@@ -102,7 +103,10 @@ class ContextGroupService {
         return contextChangeList
     }
 
+
     /**
+     * Run recursively to return a list of ContextChange items
+     *
      * 1. If ADID is null, we need to search across all matching assays in the database
      * 2. If AssayContext was left null, the for a given assay, we need to search across all its matching AssayContexts
      * 3. If ValueLabel is null it mean the item (AssayContextItem) has a value_num instead of a dictionary element; in that case we need to use that numeric value
