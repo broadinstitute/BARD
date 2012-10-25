@@ -79,17 +79,22 @@ class AssayServiceIntegrationSpec extends IntegrationSpec {
             experiment1(Experiment, experimentName: 'experiment1')
             experiment2(Experiment, experimentName: 'experiment2')
             assay1(Assay, assayName: 'assay1', experiments: [experiment1, experiment2])
+
+            extRef3(ExternalReference, extAssayRef: 'aid=1', experiment: ref("experiment3"))
+            experiment3(Experiment, experimentName: 'experiment3')
+            assay2(Assay, assayName: 'assay2', experiments: [experiment3])
         }
 
         when:
         List<Assay> foundAssays = assayService.findByPubChemAid(aid)
 
         then:
-        assert foundAssays*.assayName == expectedAssayNames
+        assert foundAssays*.assayName.sort() == expectedAssayNames
 
         where:
         label                                           | aid       | expectedAssayNames
-        'find an ADID with two AIDs associated with it' | 1         | ['assay1']
+        'find an ADID with two AIDs associated with it' | 2         | ['assay1']
         'find a non-exiting aid'                        | 123456789 | []
+        'find an exiting aid associated with two ADIDs' | 1         | ['assay1' ,'assay2']
     }
 }
