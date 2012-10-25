@@ -14,5 +14,10 @@ class ResultsPage extends HomePage {
         assaysTab(required: true) { $("#assaysTab") }
         compoundsTab(required: true) { $("#compoundsTab") }
         projectsTab(required: true) { $("#projectsTab") }
+
+        addAssayToCart(wait: true) { assayId ->
+            $("a.addAssayToCart.btn.btn-mini[data-cart-id=\"$assayId\"]").click()
+            waitFor(5, 0.5) { queryCart.contentSummary.text() != "Empty" }
+        }
     }
 }
