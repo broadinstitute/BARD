@@ -34,7 +34,7 @@ grails.project.dependency.resolution = {
         build(":rest-client-builder:1.0.2") { export = false }
         build(":release:2.0.2") { export = false }
 
-        test(":spock:0.6") {export = false}
+        compile(":spock:0.6") {export = false}
 
         compile(":database-migration:1.1") { export = true }
         compile(":build-test-data:2.0.3") { export = false }
