@@ -29,7 +29,7 @@ class ShoppingCartServiceIntegrationSpec extends IntegrationSpec {
     void "Test core shopping cart functionality -- if this doesn't work then nothing will"() {
         given: "A shopping cart"
         assertNotNull shoppingCartService
-        CartAssay cartAssay = new CartAssay(assayTitle: "This is an assay")
+        CartAssay cartAssay = new CartAssay("This is an assay", 1)
 
         when: "We make a Query to NCGC's rest API to get a list of assays with that target"
         shoppingCartService.addToShoppingCart(cartAssay)
@@ -49,8 +49,8 @@ class ShoppingCartServiceIntegrationSpec extends IntegrationSpec {
     void "Test isInShoppingCart"() {
         given: "A shopping cart"
         assertNotNull shoppingCartService
-        CartAssay cartAssay = new CartAssay(assayTitle:"This is an assay")
-        CartAssay cartAssay2 = new CartAssay(assayTitle:"This is another assay")
+        CartAssay cartAssay = new CartAssay("This is an assay", 1)
+        CartAssay cartAssay2 = new CartAssay("This is another assay", 2)
 
         when: "The first assay is added to cart"
         shoppingCartService.addToShoppingCart(cartAssay)
@@ -65,7 +65,7 @@ class ShoppingCartServiceIntegrationSpec extends IntegrationSpec {
         assertNotNull shoppingCartService
         assertNotNull  molecularSpreadSheetService
 
-        CartAssay cartAssay = new CartAssay(assayTitle: "This is an assay")
+        CartAssay cartAssay = new CartAssay("This is an assay", 1)
 
         when: "We make a Query to NCGC's rest API to get a list of assays with that target"
         shoppingCartService.addToShoppingCart(cartAssay)
@@ -84,7 +84,7 @@ class ShoppingCartServiceIntegrationSpec extends IntegrationSpec {
         assertNotNull shoppingCartService
         assertNotNull  molecularSpreadSheetService
 
-        CartCompound cartCompound = new CartCompound(smiles: "c1ccccc1", name: "cmpd name", compoundId: 47)
+        CartCompound cartCompound = new CartCompound("c1ccccc1", "cmpd name", 47)
 
         when: "We make a Query to NCGC's rest API to get a list of assays with that target"
         shoppingCartService.addToShoppingCart(cartCompound)
@@ -104,7 +104,7 @@ class ShoppingCartServiceIntegrationSpec extends IntegrationSpec {
         assertNotNull shoppingCartService
         assertNotNull  molecularSpreadSheetService
 
-        CartProject cartProject = new CartProject(projectName: "my project")
+        CartProject cartProject = new CartProject("my project", 1)
 
         when: "We make a Query to NCGC's rest API to get a list of assays with that target"
         shoppingCartService.addToShoppingCart(cartProject)
@@ -120,9 +120,9 @@ class ShoppingCartServiceIntegrationSpec extends IntegrationSpec {
     void "Make sure shopping cart handles all data types"() {
         given: "A shopping cart"
         assertNotNull shoppingCartService
-        CartAssay cartAssay = new CartAssay(assayTitle: "Assay 1")
-        CartAssay cartAssay1 = new CartAssay(assayTitle: "Assay 2")
-        CartCompound cartCompound = new CartCompound(smiles: "c1ccccc1")
+        CartAssay cartAssay = new CartAssay("Assay 1", 1)
+        CartAssay cartAssay1 = new CartAssay("Assay 2", 2)
+        CartCompound cartCompound = new CartCompound("c1ccccc1", "Test", 1)
 
         when: "We make a Query to NCGC's rest API to get a list of assays with that target"
         shoppingCartService.addToShoppingCart(cartAssay)
@@ -140,7 +140,7 @@ class ShoppingCartServiceIntegrationSpec extends IntegrationSpec {
             def convertedShoppingItem = Shoppable.findByShoppingItem(shoppingItem)
             if (convertedShoppingItem instanceof CartAssay) {
                 CartAssay cartAssay2 = convertedShoppingItem as CartAssay
-                assertNotNull cartAssay2.assayTitle
+                assertNotNull cartAssay2.name
                 assert convertedShoppingItem instanceof Shoppable
                 Shoppable shoppable = convertedShoppingItem as Shoppable
                 assert shoppable.id > 0
@@ -152,9 +152,9 @@ class ShoppingCartServiceIntegrationSpec extends IntegrationSpec {
     void "Does each cart type work"() {
         given: "A shopping cart"
         assertNotNull shoppingCartService
-        CartAssay cartAssay = new CartAssay(assayTitle: "Assay 1")
-        CartCompound cartCompound = new CartCompound(smiles: "c1ccccc1", name: "cmpd name", compoundId: 47)
-        CartProject cartProject = new CartProject(projectName: "my project")
+        CartAssay cartAssay = new CartAssay("Assay 1", 1)
+        CartCompound cartCompound = new CartCompound("c1ccccc1", "cmpd name", 47)
+        CartProject cartProject = new CartProject("my project", 1)
 
         when: "We make a Query to NCGC's rest API to get a list of assays with that target"
         shoppingCartService.addToShoppingCart(cartAssay)
@@ -170,6 +170,7 @@ class ShoppingCartServiceIntegrationSpec extends IntegrationSpec {
         assert groupedContents[(QueryCartService.cartCompound)].size() == 1
         assert groupedContents[(QueryCartService.cartProject)].size() == 1
         queryCartService.groupUniqueContentsByType()[(QueryCartService.cartAssay)].each {  cartElement ->
+            assert cartElement instanceof CartAssay
             assert cartElement.id > 0
         }
     }
@@ -178,9 +179,9 @@ class ShoppingCartServiceIntegrationSpec extends IntegrationSpec {
     void "Make sure queryCartService detects unique elements as expected"() {
         given: "A shopping cart"
         assertNotNull shoppingCartService
-        CartAssay cartAssay = new CartAssay(assayTitle: "Assay 1")
-        CartAssay cartAssay1 = new CartAssay(assayTitle: "Assay 2")
-        CartCompound cartCompound = new CartCompound(smiles: "c1ccccc1", name: "cmpd name", compoundId: 47)
+        CartAssay cartAssay = new CartAssay("Assay 1", 1)
+        CartAssay cartAssay1 = new CartAssay("Assay 2", 2)
+        CartCompound cartCompound = new CartCompound("c1ccccc1", "cmpd name", 47)
 
         when: "We make a Query to NCGC's rest API to get a list of assays with that target"
         shoppingCartService.addToShoppingCart(cartAssay)
@@ -199,6 +200,7 @@ class ShoppingCartServiceIntegrationSpec extends IntegrationSpec {
         assert groupedContents[(QueryCartService.cartCompound)].size() == 1
         assert groupedContents[(QueryCartService.cartProject)].size() == 0
         queryCartService.groupUniqueContentsByType()[(QueryCartService.cartAssay)].each {  cartElement ->
+            assert cartElement instanceof CartAssay
             assert cartElement.id > 0
         }
     }
@@ -215,12 +217,12 @@ class ShoppingCartServiceIntegrationSpec extends IntegrationSpec {
     void "Exploring the nature of CartAssay uniqueness"() {
         given: "A shopping cart and some testing objects"
         assertNotNull shoppingCartService
-        CartAssay cartAssay_identical1 = new CartAssay(assayTitle: "Assay 1")
+        CartAssay cartAssay_identical1 = new CartAssay("Assay 1", 1)
         CartAssay cartAssay_identical2 = cartAssay_identical1
-        CartAssay cartAssay_sameName1 = new CartAssay(assayTitle: "Assay 2")
-        CartAssay cartAssay_sameName2 = new CartAssay(assayTitle: "Assay 2")
-        CartAssay cartAssay_differentName1 = new CartAssay(assayTitle: "Assay 3")
-        CartAssay cartAssay_differentName2 = new CartAssay(assayTitle: "Assay 4")
+        CartAssay cartAssay_sameName1 = new CartAssay("Assay 2", 2)
+        CartAssay cartAssay_sameName2 = new CartAssay("Assay 2", 2)
+        CartAssay cartAssay_differentName1 = new CartAssay("Assay 3", 3)
+        CartAssay cartAssay_differentName2 = new CartAssay("Assay 4", 4)
 
         when: "the shopping cart is functional and ready for testing"
         queryCartService.emptyShoppingCart()
@@ -256,12 +258,12 @@ class ShoppingCartServiceIntegrationSpec extends IntegrationSpec {
     void "Exploring the nature of CartCompound uniqueness"() {
         given: "A shopping cart and some testing objects"
         assertNotNull shoppingCartService
-        CartCompound cartCompound_identical1 = new CartCompound(smiles: "c1ccccc1", name: "cmpdname", compoundId: 47)
+        CartCompound cartCompound_identical1 = new CartCompound("c1ccccc1", "cmpdname", 47)
         CartCompound cartCompound_identical2 = cartCompound_identical1
-        CartCompound cartCompound_sameName1 = new CartCompound(smiles: "c2ccccc2", name: "cmpdname", compoundId: 47)
-        CartCompound cartCompound_sameName2 = new CartCompound(smiles: "c2ccccc2", name: "cmpdname", compoundId: 47)
-        CartCompound cartCompound_differentName1 = new CartCompound(smiles: "c3ccccc3", name: "cmpdname", compoundId: 47)
-        CartCompound cartCompound_differentName2 = new CartCompound(smiles: "c4ccccc4", name: "cmpdname", compoundId: 47)
+        CartCompound cartCompound_sameName1 = new CartCompound("c2ccccc2", "cmpdname", 47)
+        CartCompound cartCompound_sameName2 = new CartCompound("c2ccccc2", "cmpdname", 47)
+        CartCompound cartCompound_differentName1 = new CartCompound("c3ccccc3", "cmpdname", 47)
+        CartCompound cartCompound_differentName2 = new CartCompound("c4ccccc4", "cmpdname", 47)
 
         when: "the shopping cart is functional and ready for testing"
         queryCartService.emptyShoppingCart()
@@ -297,12 +299,12 @@ class ShoppingCartServiceIntegrationSpec extends IntegrationSpec {
     void "Exploring the nature of CartProject uniqueness"() {
         given: "A shopping cart and some testing objects"
         assertNotNull shoppingCartService
-        CartProject cartProject_identical1 = new CartProject(projectName: "projectname1")
+        CartProject cartProject_identical1 = new CartProject("projectname1", 1)
         CartProject cartProject_identical2 = cartProject_identical1
-        CartProject cartProject_sameName1 = new CartProject(projectName: "projectname2")
-        CartProject cartProject_sameName2 = new CartProject(projectName: "projectname2")
-        CartProject cartProject_differentName1 = new CartProject(projectName: "projectname3")
-        CartProject cartProject_differentName2 = new CartProject(projectName: "projectname4")
+        CartProject cartProject_sameName1 = new CartProject("projectname2", 2)
+        CartProject cartProject_sameName2 = new CartProject("projectname2", 2)
+        CartProject cartProject_differentName1 = new CartProject("projectname3", 3)
+        CartProject cartProject_differentName2 = new CartProject("projectname4", 4)
 
         when: "the shopping cart is functional and ready for testing"
         Map<String, List> objectMap = queryCartService.groupUniqueContentsByType()

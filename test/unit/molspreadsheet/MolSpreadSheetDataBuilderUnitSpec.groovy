@@ -35,7 +35,7 @@ class MolSpreadSheetDataBuilderUnitSpec extends Specification {
         given:
         MolSpreadSheetDataBuilder molSpreadSheetDataBuilder = new MolSpreadSheetDataBuilder()
         molSpreadSheetDataBuilder.molecularSpreadSheetService = this.molecularSpreadSheetService
-        molSpreadSheetDataBuilder.cartCompoundList = [new CartCompound(compoundId: 200)]
+        molSpreadSheetDataBuilder.cartCompoundList = [new CartCompound("C","C",200)]
         when:
         molSpreadSheetDataBuilder.populateMolSpreadSheet([])
         then:

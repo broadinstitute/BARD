@@ -70,6 +70,11 @@ class MolecularSpreadSheetServiceIntegrationSpec extends IntegrationSpec {
 
 
     void "test weHaveEnoughDataToMakeASpreadsheet()"() {
+        given:
+        CartAssay assay = new CartAssay("A", 1)
+        CartProject project = new CartProject("P", 8)
+        CartCompound compound = new CartCompound("C", "c", 1)
+
         when: "we have a molecularSpreadSheetService"
         assertNotNull molecularSpreadSheetService
         assertNotNull queryCartService
@@ -89,16 +94,16 @@ class MolecularSpreadSheetServiceIntegrationSpec extends IntegrationSpec {
 
 
         where:
-        dataIsSufficient | cartAssay                      | cartProject                       | cartCompound
-        false            | null                           | null                              | null
-        true             | new CartAssay(assayTitle: "A") | null                              | null
-        true             | null                           | new CartProject(projectName: "P") | null
-        true             | null                           | null                              | new CartCompound(smiles: "C", name: "c", compoundId: 1)
-        true             | null                           | new CartProject(projectName: "P") | new CartCompound(smiles: "C", name: "c", compoundId: 1)
-        true             | new CartAssay(assayTitle: "A") | null                              | new CartCompound(smiles: "C", name: "c", compoundId: 1)
-        true             | new CartAssay(assayTitle: "A") | new CartProject(projectName: "P") | null
-        true             | new CartAssay(assayTitle: "A") | new CartProject(projectName: "P") | new CartCompound(smiles: "C", name: "c", compoundId: 1)
-        false            | null                           | null                              | null
+        dataIsSufficient | cartAssay | cartProject | cartCompound
+        false            | null      | null        | null
+        true             | assay     | null        | null
+        true             | null      | project     | null
+        true             | null      | null        | compound
+        true             | null      | project     | compound
+        true             | assay     | null        | compound
+        true             | assay     | project     | null
+        true             | assay     | project     | compound
+        false            | null      | null        | null
     }
 
 
@@ -195,7 +200,7 @@ class MolecularSpreadSheetServiceIntegrationSpec extends IntegrationSpec {
 
         assertNotNull molecularSpreadSheetService
         List<CartProject> cartProjectList = []
-        cartProjectList << new CartProject("Summary of Flow Cytometry HTS of Small Molecules that Regulate V-ATPase Proton Transport in Yeast", 364 as Long)
+        cartProjectList << new CartProject("Summary of Flow Cytometry HTS of Small Molecules that Regulate V-ATPase Proton Transport in Yeast", 364)
         List<Experiment> finalExperimentList = molecularSpreadSheetService.cartProjectsToExperiments(cartProjectList)
         Object eTag = molecularSpreadSheetService.retrieveImpliedCompoundsEtagFromAssaySpecification (finalExperimentList)
 
@@ -263,7 +268,7 @@ class MolecularSpreadSheetServiceIntegrationSpec extends IntegrationSpec {
         when: "we have a molecularSpreadSheetService"
         assertNotNull molecularSpreadSheetService
         List<CartProject> cartProjectList = []
-        cartProjectList.add(new CartProject("Summary of Flow Cytometry HTS of Small Molecules that Regulate V-ATPase Proton Transport in Yeast", 364 as Long))
+        cartProjectList.add(new CartProject("Summary of Flow Cytometry HTS of Small Molecules that Regulate V-ATPase Proton Transport in Yeast", 364))
         List<Experiment> finalExperimentList = molecularSpreadSheetService.cartProjectsToExperiments(cartProjectList)
 
         then: "we should be able to generate a list of spreadsheet activity elements"

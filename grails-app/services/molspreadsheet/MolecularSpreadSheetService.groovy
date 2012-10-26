@@ -434,11 +434,7 @@ class MolecularSpreadSheetService {
  * @return list of Experiment's from a list of CartProject's
  */
     protected List<Experiment> cartProjectsToExperiments(final List<CartProject> cartProjects) {
-        List<Long> projectIds = []
-        for (CartProject cartProject : cartProjects) {
-            long projectId = cartProject.projectId
-            projectIds.add(projectId)
-        }
+        List<Long> projectIds = cartProjects*.externalId
         List<Experiment> allExperiments = []
         final RESTProjectService restProjectService = queryServiceWrapper.restProjectService
         final RESTAssayService restAssayService = queryServiceWrapper.restAssayService

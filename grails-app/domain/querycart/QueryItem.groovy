@@ -13,6 +13,16 @@ class QueryItem extends Shoppable {
     Long externalId
     String name
 
+    QueryItem() {
+
+    }
+
+    QueryItem(String name, Long externalId, QueryItemType queryItemType) {
+        this.name = name
+        this.externalId = externalId
+        this.queryItemType = queryItemType
+    }
+
     /**
      * Catch the beforeValidate event and apply pre-processing to the fields
      */
