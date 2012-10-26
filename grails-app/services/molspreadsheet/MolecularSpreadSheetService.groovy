@@ -161,7 +161,7 @@ class MolecularSpreadSheetService {
                 if (!molSpreadSheetData.columnPointer.containsKey(translation)) {
                     molSpreadSheetData.columnPointer.put(translation, columnCount)
                 }
-                spreadSheetActivityList.add(extractActivitiesFromExperiment(molSpreadSheetData,experimentCount++,experimentValue))
+                spreadSheetActivityList.add(extractActivitiesFromExperiment(molSpreadSheetData,columnCount,experimentValue))
             }
             columnCount++
         }
@@ -565,7 +565,7 @@ class MolecularSpreadSheetService {
         SpreadSheetActivity spreadSheetActivity = new SpreadSheetActivity()
         while (experimentValueIterator?.hasNext()) {
             Value childValue = experimentValueIterator.next()
-            addCurrentActivityToSpreadSheet( molSpreadSheetData.mssHeaders[experimentCount],spreadSheetActivity, childValue)
+            addCurrentActivityToSpreadSheet( molSpreadSheetData.mssHeaders[3+experimentCount],spreadSheetActivity, childValue)
         }
         return spreadSheetActivity
     }

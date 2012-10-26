@@ -17,7 +17,7 @@
     </div>
 
     <div class="span10">
-        <g:if test="${molSpreadSheetData?.mssHeaders?.size() > 0}">
+        <g:if test="${molSpreadSheetData?.getColumnCount() > 0}">
             <label class="checkbox">
                 <input type="checkbox" defaultChecked="unchecked" name="showPromiscuityScores" id="showPromiscuityScores">
                 Hide Promiscuity Scores
@@ -29,7 +29,7 @@
 
                     <th class="molSpreadSheetHeadData sortable">CID</th>
                     <% int looper = 2 %>
-                    <g:each var="colHeader" in="${molSpreadSheetData?.mssHeaders.flatten()}">
+                    <g:each var="colHeader" in="${molSpreadSheetData?.getColumns()}">
                         <g:if test="${looper > 3}">
                             <th class="molSpreadSheetHeadData sortable">${colHeader}</th>
                         </g:if>
@@ -76,12 +76,12 @@
                              id="${cid}_prom"></div>
                     </td>
                     <g:if test="${molSpreadSheetData.getColumnCount() > 3}">
-                        <g:each var="colCnt" in="${3..(molSpreadSheetData.getColumnCount() - 1)}">
+                        <g:each var="colCnt" in="${3..(molSpreadSheetData.getSuperColumnCount() - 1)}">
                             <% SpreadSheetActivityStorage spreadSheetActivityStorage = molSpreadSheetData?.findSpreadSheetActivity(rowCnt, colCnt) %>
                             <% int currentCol =  colCnt %>
                             <g:if test="${spreadSheetActivityStorage != null}">
 
-                                <g:each var="subColCnt" in="${0..(molSpreadSheetData.mssHeaders[colCnt].size())}">
+                                <g:each var="subColCnt" in="${0..(spreadSheetActivityStorage.getHillCurveValueHolderList().size()-1)}">
                                     <% HillCurveValueHolder hillCurveValueHolder =  spreadSheetActivityStorage.getHillCurveValueHolderList()[subColCnt] %>
 
                                     <td class="molSpreadSheet" property="var${currentCol}">
@@ -93,35 +93,35 @@
                                          data-original-title="chg->spreadSheetActivityStorage.hillCurveValueId"
                                          data-html="true"
                                          data-trigger="hover">
-                                        ${molSpreadSheetData?.displayValue(rowCnt, colCnt)?."value"}</div>
+                                        ${hillCurveValueHolder.toString()}</div>
+                                    %{--${molSpreadSheetData?.displayValue(rowCnt, colCnt, subColCnt)?."value"}</div>--}%
                                     </p>
 
 
 
-                                <div class='popover-content-wrapper' id="drc_${spreadSheetActivityStorage.sid}_${colCnt}"
-                                     style="display: none;">
-                                    <div class="center-aligned">
-                                        <img alt="${spreadSheetActivityStorage.sid}"
-                                             title="Substance Id : ${spreadSheetActivityStorage.sid}"
-                                             src="${createLink(
-                                                     controller: 'doseResponseCurve',
-                                                     action: 'doseResponseCurve',
-                                                     params: [
-                                                             sinf: spreadSheetActivityStorage?.hillCurveValueSInf,
-                                                             s0: spreadSheetActivityStorage?.hillCurveValueS0,
-                                                             ac50: spreadSheetActivityStorage?.hillCurveValueSlope,
-                                                             hillSlope: spreadSheetActivityStorage?.hillCurveValueCoef,
-                                                             concentrations: spreadSheetActivityStorage?.hillCurveValueConc,
-                                                             activities: spreadSheetActivityStorage?.hillCurveValueResponse,
-                                                             yAxisLabel: spreadSheetActivityStorage?.hillCurveValueId
-                                                     ]
-                                             )}"/>
+                                    <div class='popover-content-wrapper' id="drc_${spreadSheetActivityStorage.sid}_${colCnt}"
+                                         style="display: none;">
+                                        <div class="center-aligned">
+                                            <img alt="${spreadSheetActivityStorage.sid}"
+                                                 title="Substance Id : ${spreadSheetActivityStorage.sid}"
+                                                 src="${createLink(
+                                                         controller: 'doseResponseCurve',
+                                                         action: 'doseResponseCurve',
+                                                         params: [
+                                                                 sinf: hillCurveValueHolder?.sInf,
+                                                                 s0: hillCurveValueHolder?.s0,
+                                                                 ac50: hillCurveValueHolder?.slope,
+                                                                 hillSlope: hillCurveValueHolder?.coef,
+                                                                 concentrations: hillCurveValueHolder?.conc,
+                                                                 activities: hillCurveValueHolder?.response,
+                                                                 yAxisLabel: hillCurveValueHolder?.identifier
+                                                         ]
+                                                 )}"/>
+                                        </div>
                                     </div>
-                                </div>
-
-
 
                                 </td>
+                                </g:each>
                             </g:if>
                             <g:else>
                                 <td class="molSpreadSheet" property="var${colCnt}">

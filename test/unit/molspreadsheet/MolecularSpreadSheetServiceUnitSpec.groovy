@@ -171,12 +171,13 @@ class MolecularSpreadSheetServiceUnitSpec extends Specification {
     void "test addCurrentActivityToSpreadSheet when experimentValue has no children"() {
         given: "we have an experiment"
         SpreadSheetActivity spreadSheetActivity = new SpreadSheetActivity()
+        List<String> columnNames = []
         final Value experimentalValue = new Value()
         experimentalValue.id = identifier
         experimentalValue.metaClass.value = incomingValue
 
         when: "we want to pull out the active values"
-        service.addCurrentActivityToSpreadSheet(spreadSheetActivity, experimentalValue)
+        service.addCurrentActivityToSpreadSheet(columnNames, spreadSheetActivity, experimentalValue)
 
         then: "prove that the active values are available"
         assert returnRelevantNumber(identifier, spreadSheetActivity) == returnValue
@@ -194,13 +195,14 @@ class MolecularSpreadSheetServiceUnitSpec extends Specification {
     void "test error value of addCurrentActivityToSpreadSheet "() {
         given: "we have an experiment"
         SpreadSheetActivity spreadSheetActivity = new SpreadSheetActivity()
+        List<String> columnNames = []
         final Value experimentalValue = new Value()
 
         when: "we want to pull out the active values"
         experimentalValue.id = "foo"
 
         then: "prove that the active values are available"
-        shouldFail {service.addCurrentActivityToSpreadSheet(spreadSheetActivity, experimentalValue)}
+        shouldFail {service.addCurrentActivityToSpreadSheet(columnNames,spreadSheetActivity, experimentalValue)}
     }
 
 

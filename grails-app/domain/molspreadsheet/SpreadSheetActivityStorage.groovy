@@ -29,7 +29,12 @@ class SpreadSheetActivityStorage {
 
     }
 
-    /**
+    public String toString(int subColumn) {
+        String retutnValue = "unknown"
+        if ((hillCurveValueHolderList!=null) && (subColumn<=hillCurveValueHolderList.size()))
+           hillCurveValueHolderList[subColumn].toString()
+    }
+/**
      *
      * @param o
      * @return

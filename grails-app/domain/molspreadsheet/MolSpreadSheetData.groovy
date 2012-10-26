@@ -32,6 +32,23 @@ class MolSpreadSheetData {
         returnValue
     }
 
+    Map displayValue(int rowCnt, int colCnt, int subColumn ) {
+        Map<String, String> returnValue = [:]
+        String key = "${rowCnt}_${colCnt}"
+        MolSpreadSheetCell molSpreadSheetCell
+        if (mssData.containsKey(key)) {
+            molSpreadSheetCell = mssData[key]
+            returnValue = molSpreadSheetCell.mapForMolecularSpreadsheet ( subColumn )
+        }   else {  // This is a critical error.  Try to cover all the bases so we don't crash at least.
+            returnValue.put("value","-")
+            returnValue.put("name", "Unknown name")
+            returnValue.put("smiles","Unknown smiles")
+        }
+        returnValue
+    }
+
+
+
     SpreadSheetActivityStorage findSpreadSheetActivity(int rowCnt, int colCnt){
         SpreadSheetActivityStorage spreadSheetActivityStorage = null
         String key = "${rowCnt}_${colCnt}"
@@ -64,6 +81,33 @@ class MolSpreadSheetData {
             return mssHeaders.flatten().size()
         }
         return 0
+
+    }
+
+
+    int getSuperColumnCount(){
+        if (mssHeaders) {
+            return mssHeaders.size()
+        }
+        return 0
+
+    }
+
+    List<String> getSubColumns( int experimentCount) {
+        List<String> subColumns = []
+        if (experimentCount < this.mssHeaders.size())
+            subColumns = this.mssHeaders[experimentCount]
+        subColumns
+    }
+
+
+
+
+    List<String> getColumns(){
+        if (mssHeaders) {
+            return mssHeaders.flatten()
+        }
+        return []
 
     }
 

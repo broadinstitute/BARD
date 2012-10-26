@@ -107,7 +107,8 @@ class MolSpreadSheetCell {
                                                                           sid:spreadSheetActivity.sid,
                                                                           activityOutcome: spreadSheetActivity.activityOutcome )
         for (HillCurveValue hillCurveValue in spreadSheetActivity.hillCurveValueList) {
-             HillCurveValueHolder hillCurveValueHolder =  new HillCurveValueHolder(  s0: hillCurveValue.s0,
+             HillCurveValueHolder hillCurveValueHolder =  new HillCurveValueHolder(  identifier: hillCurveValue.id,
+                     s0: hillCurveValue.s0,
                     sInf: hillCurveValue.sInf,
                     slope: hillCurveValue.slope,
                     coef: hillCurveValue.coef,
@@ -116,7 +117,7 @@ class MolSpreadSheetCell {
             if (!this.spreadSheetActivityStorage.columnNames.contains(hillCurveValue.id))
                 this.spreadSheetActivityStorage.columnNames << hillCurveValue.id
             hillCurveValueHolder.subColumnIndex  =  this.spreadSheetActivityStorage.columnNames.indexOf(hillCurveValue.id)
-            this.spreadSheetActivityStorage.hillCurveValueHolderList  << this.spreadSheetActivityStorage.columnNames.indexOf(hillCurveValue.id)
+            this.spreadSheetActivityStorage.hillCurveValueHolderList  << hillCurveValueHolder
         }
 
     }
@@ -154,6 +155,23 @@ class MolSpreadSheetCell {
         }
         returnValue
     }
+
+
+    /**
+     *
+     * @return
+     */
+    Map<String, String> mapForMolecularSpreadsheet(int subColumn) {
+        Map<String, String> returnValue = [:]
+
+        returnValue["value"] = spreadSheetActivityStorage?.toString(subColumn)
+
+        returnValue
+    }
+
+
+
+
 
     /**
      *
