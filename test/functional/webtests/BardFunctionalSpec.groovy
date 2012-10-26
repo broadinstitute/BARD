@@ -41,6 +41,11 @@ abstract class BardFunctionalSpec extends GebReportingSpec {
         return logIn(username, usernameUserPropsMap.get(username).password)
     }
 
+    HomePage logInSomeUser() {
+        String username = getCredentialsForTest().username
+        return logInAsUser(username)
+    }
+
     Map<String, String> getCredentialsForTest() {
         return usernameUserPropsMap.find{it}.value    // returns the first entry
     }

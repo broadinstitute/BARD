@@ -1,9 +1,9 @@
-<div class="span3 offset9">
+<div>
     <sec:ifLoggedIn>
         <g:form name="logoutForm" controller="logout">
-            Welcome Back! Logged in as: <span
+            Logged in as: <span
                 style="font-weight: bold;"><sec:username/></span>&nbsp;&nbsp;
-            <button type="submit" class="btn btn-primary" id="logoutButton">Logout</button>
+            <button type="submit" class="btn btn-small" id="logoutButton">Logout</button>
         </g:form>
     </sec:ifLoggedIn>
     <sec:ifNotLoggedIn>

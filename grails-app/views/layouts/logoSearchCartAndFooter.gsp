@@ -18,9 +18,6 @@
 
 <body>
 <div class="container-fluid">
-    <div class="row-fluid header">
-        <g:render template="/layouts/templates/loginStrip"/>
-    </div>
 
     <div class="row-fluid header">
         <div class="span3">
@@ -35,7 +32,11 @@
 
         <div class="span3">
             <g:render template="/layouts/templates/queryCart"/>
+            <div class="center-aligned">
+                <g:render template="/layouts/templates/loginStrip"/>
+            </div>
         </div>
+
     </div>
 
     <g:if test="${flash.message}">
