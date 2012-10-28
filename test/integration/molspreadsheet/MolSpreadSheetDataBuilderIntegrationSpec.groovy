@@ -51,10 +51,6 @@ class MolSpreadSheetDataBuilderIntegrationSpec  extends IntegrationSpec {
     }
 
   void "test different combinations through deriveListOfExperiments"() {
-      given:
-      CartAssay assay = new CartAssay("A", 1)
-      CartProject project = new CartProject("P", 8)
-      CartCompound compound = new CartCompound("C", "c", 1)
 
       when: "we have a molecularSpreadSheetService"
         assertNotNull molecularSpreadSheetService
@@ -82,16 +78,16 @@ class MolSpreadSheetDataBuilderIntegrationSpec  extends IntegrationSpec {
 
 
       where:
-      dataIsSufficient | cartAssay | cartProject | cartCompound
-      false            | null      | null        | null
-      true             | assay     | null        | null
-      true             | null      | project     | null
-      true             | null      | null        | compound
-      true             | null      | project     | compound
-      true             | assay     | null        | compound
-      true             | assay     | project     | null
-      true             | assay     | project     | compound
-      false            | null      | null        | null
+      dataIsSufficient | cartAssay             | cartProject             | cartCompound
+      false            | null                  | null                    | null
+      true             | new CartAssay("A", 1) | null                    | null
+      true             | null                  | new CartProject("P", 8) | null
+      true             | null                  | null                    | new CartCompound("C", "c", 1)
+      true             | null                  | new CartProject("P", 8) | new CartCompound("C", "c", 1)
+      true             | new CartAssay("A", 1) | null                    | new CartCompound("C", "c", 1)
+      true             | new CartAssay("A", 1) | new CartProject("P", 8) | null
+      true             | new CartAssay("A", 1) | new CartProject("P", 8) | new CartCompound("C", "c", 1)
+      false            | null                  | null                    | null
     }
 
 

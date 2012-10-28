@@ -110,13 +110,17 @@ class QueryCartController {
     }
 
     def isInCart() {
-        Long idToRemove = Long.parseLong(params.externalId)
+        Long idToRemove = params.externalId as Long
+        QueryItemType itemType = params.type as QueryItemType
+
         Boolean result = false
-        QueryItem shoppingItem = QueryItem.findByExternalIdAndQueryItemType(idToRemove)
+        QueryItem shoppingItem = QueryItem.findByExternalIdAndQueryItemType(idToRemove, itemType)
         if (shoppingItem) {
             result = queryCartService.isInShoppingCart(shoppingItem)
         }
-        render result
+        render(contentType: "text/json") {
+            element result
+        }
     }
 
 }

@@ -140,7 +140,7 @@ class MolecularSpreadSheetService {
     protected Object generateETagFromCartCompounds(List<CartCompound> cartCompoundList) {
         List<Long> cartCompoundIdList = new ArrayList<Long>()
         for (CartCompound cartCompound in cartCompoundList)
-            cartCompoundIdList.add(new Long(cartCompound.compoundId))
+            cartCompoundIdList.add(cartCompound.externalId)
         Date date = new Date()
 
         queryServiceWrapper.restCompoundService.newETag(date.toTimestamp().toString(), cartCompoundIdList);
@@ -393,11 +393,7 @@ class MolecularSpreadSheetService {
      * @return
      */
     protected List<Experiment> cartAssaysToExperiments(List<Experiment> incomingExperimentList, final List<CartAssay> cartAssays) {
-        List<Long> assayIds = []
-        for (CartAssay cartAssay : cartAssays) {
-            long assayId = cartAssay.assayId
-            assayIds.add(assayId)
-        }
+        List<Long> assayIds = cartAssays*.externalId
 
         assaysToExperiments(incomingExperimentList, assayIds)
     }
@@ -409,12 +405,7 @@ class MolecularSpreadSheetService {
      * @return
      */
     protected List<Experiment> cartCompoundsToExperiments(final List<CartCompound> cartCompounds) {
-        List<Long> compoundIds = []
-        for (CartCompound cartCompound in cartCompounds) {
-            int compoundId = cartCompound.compoundId
-            compoundIds.add(compoundId as Long)
-        }
-
+        List<Long> compoundIds = cartCompounds*.externalId
 
         List<Assay> allAssays = []
         for (Long individualCompoundId in compoundIds) {

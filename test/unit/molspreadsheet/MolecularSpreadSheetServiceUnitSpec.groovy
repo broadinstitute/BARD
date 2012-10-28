@@ -14,6 +14,7 @@ import spock.lang.Specification
 import spock.lang.Unroll
 import bard.core.*
 import bard.core.rest.RESTCompoundService
+import bard.core.rest.RESTProjectService
 
 /**
  * Created with IntelliJ IDEA.
@@ -34,6 +35,7 @@ class MolecularSpreadSheetServiceUnitSpec extends Specification {
     IQueryService queryService
     RESTExperimentService restExperimentService
     RESTCompoundService restCompoundService
+    RESTProjectService restProjectService
     CompoundAdapter compoundAdapter = buildCompoundAdapter(6 as Long, [842121 as Long])
     @Shared Map compoundAdapterMap = [compoundAdapters: [buildCompoundAdapter(6 as Long, [842121 as Long])], facets: null, nHits: 0]
 
@@ -44,6 +46,7 @@ class MolecularSpreadSheetServiceUnitSpec extends Specification {
         compoundAdapter.metaClass.name = 'name'
         this.restExperimentService = Mock(RESTExperimentService)
         this.restCompoundService = Mock(RESTCompoundService)
+        this.restProjectService = Mock(RESTProjectService)
         this.queryCartService = Mock(QueryCartService)
         this.queryServiceWrapper = Mock(QueryServiceWrapper)
         this.shoppingCartService = Mock(ShoppingCartService)
@@ -327,8 +330,37 @@ class MolecularSpreadSheetServiceUnitSpec extends Specification {
         assert molSpreadSheetData.mssHeaders.size() == 0
     }
 
+    void "test cartAssaysToExperiments with null inputs"() {
 
+        when:
+        List<Experiment> experimentResult = service.cartAssaysToExperiments(null, null)
 
+        then:
+        assert experimentResult == []
+
+    }
+
+    void "test cartCompoundsToExperiments with null input"() {
+
+        when:
+        List<Experiment> experimentResult = service.cartCompoundsToExperiments(null)
+
+        then:
+        assert experimentResult == []
+
+    }
+
+    void "test cartProjectsToExperiments with null input"() {
+        given:
+        queryServiceWrapper.restProjectService >> { restProjectService }
+
+        when:
+        List<Experiment> experimentResult = service.cartProjectsToExperiments(null)
+
+        then:
+        assert experimentResult == []
+
+    }
 
     CompoundAdapter buildCompoundAdapter(final Long cid, final List<Long> sids) {
         final Compound compound = new Compound()

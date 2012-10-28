@@ -58,6 +58,8 @@ class ShoppingCartServiceIntegrationSpec extends IntegrationSpec {
         then: "One item is in shopping cart and the other isn't"
         assert queryCartService.isInShoppingCart(cartAssay)
         assert !queryCartService.isInShoppingCart(cartAssay2)
+
+        assert !queryCartService.isInShoppingCart(null, cartAssay) // also check null shopping cart case
     }
 
     void "Test retrieveCartAssayFromShoppingCart"() {
@@ -258,12 +260,12 @@ class ShoppingCartServiceIntegrationSpec extends IntegrationSpec {
     void "Exploring the nature of CartCompound uniqueness"() {
         given: "A shopping cart and some testing objects"
         assertNotNull shoppingCartService
-        CartCompound cartCompound_identical1 = new CartCompound("c1ccccc1", "cmpdname", 47)
+        CartCompound cartCompound_identical1 = new CartCompound("c1ccccc1", "A", 47)
         CartCompound cartCompound_identical2 = cartCompound_identical1
-        CartCompound cartCompound_sameName1 = new CartCompound("c2ccccc2", "cmpdname", 47)
-        CartCompound cartCompound_sameName2 = new CartCompound("c2ccccc2", "cmpdname", 47)
-        CartCompound cartCompound_differentName1 = new CartCompound("c3ccccc3", "cmpdname", 47)
-        CartCompound cartCompound_differentName2 = new CartCompound("c4ccccc4", "cmpdname", 47)
+        CartCompound cartCompound_sameName1 = new CartCompound("c2ccccc2", "B", 48)
+        CartCompound cartCompound_sameName2 = new CartCompound("c2ccccc2", "B", 48)
+        CartCompound cartCompound_differentName1 = new CartCompound("c3ccccc3", "C", 50)
+        CartCompound cartCompound_differentName2 = new CartCompound("c4ccccc4", "D", 51)
 
         when: "the shopping cart is functional and ready for testing"
         queryCartService.emptyShoppingCart()

@@ -65,15 +65,9 @@ class MolecularSpreadSheetServiceIntegrationSpec extends IntegrationSpec {
         assert molSpreadSheetData.mssHeaders.size() == 3
     }
 
-
-
-
-
     void "test weHaveEnoughDataToMakeASpreadsheet()"() {
         given:
-        CartAssay assay = new CartAssay("A", 1)
-        CartProject project = new CartProject("P", 8)
-        CartCompound compound = new CartCompound("C", "c", 1)
+            shoppingCartService.emptyShoppingCart()
 
         when: "we have a molecularSpreadSheetService"
         assertNotNull molecularSpreadSheetService
@@ -94,16 +88,16 @@ class MolecularSpreadSheetServiceIntegrationSpec extends IntegrationSpec {
 
 
         where:
-        dataIsSufficient | cartAssay | cartProject | cartCompound
-        false            | null      | null        | null
-        true             | assay     | null        | null
-        true             | null      | project     | null
-        true             | null      | null        | compound
-        true             | null      | project     | compound
-        true             | assay     | null        | compound
-        true             | assay     | project     | null
-        true             | assay     | project     | compound
-        false            | null      | null        | null
+        dataIsSufficient | cartAssay             | cartProject             | cartCompound
+        false            | null                  | null                    | null
+        true             | new CartAssay("A", 1) | null                    | null
+        true             | null                  | new CartProject("P", 8) | null
+        true             | null                  | null                    | new CartCompound("C", "c", 1)
+        true             | null                  | new CartProject("P", 8) | new CartCompound("C", "c", 1)
+        true             | new CartAssay("A", 1) | null                    | new CartCompound("C", "c", 1)
+        true             | new CartAssay("A", 1) | new CartProject("P", 8) | null
+        true             | new CartAssay("A", 1) | new CartProject("P", 8) | new CartCompound("C", "c", 1)
+        false            | null                  | null                    | null
     }
 
 
@@ -227,7 +221,7 @@ class MolecularSpreadSheetServiceIntegrationSpec extends IntegrationSpec {
         when: "we have list of cart compounds"
         assertNotNull molecularSpreadSheetService
         List<CartCompound> cartCompoundList = []
-        cartCompoundList.add(new CartCompound(smiles: "CC(=O)C1=C(O)C(C)=C(O)C(CC2=C(O)C3=C(OC(C)(C)C=C3)C(C(=O)\\C=C\\C3=CC=CC=C3)=C2O)=C1O", name: "Rottlerin", compoundId: 5281847))
+        cartCompoundList.add(new CartCompound("CC(=O)C1=C(O)C(C)=C(O)C(CC2=C(O)C3=C(OC(C)(C)C=C3)C(C(=O)\\C=C\\C3=CC=CC=C3)=C2O)=C1O", "Rottlerin", 5281847))
         Object eTag = molecularSpreadSheetService.generateETagFromCartCompounds(cartCompoundList)
 
         then: "we should be able to build and Etag from them"
@@ -242,7 +236,7 @@ class MolecularSpreadSheetServiceIntegrationSpec extends IntegrationSpec {
         when: "we have a molecularSpreadSheetService"
         assertNotNull molecularSpreadSheetService
         List<CartCompound> cartCompoundList = []
-        cartCompoundList.add(new CartCompound(smiles: "CC(=O)C1=C(O)C(C)=C(O)C(CC2=C(O)C3=C(OC(C)(C)C=C3)C(C(=O)\\C=C\\C3=CC=CC=C3)=C2O)=C1O", name: "Rottlerin", compoundId: 5281847))
+        cartCompoundList.add(new CartCompound("CC(=O)C1=C(O)C(C)=C(O)C(CC2=C(O)C3=C(OC(C)(C)C=C3)C(C(=O)\\C=C\\C3=CC=CC=C3)=C2O)=C1O", "Rottlerin", 5281847))
         //List<Experiment> originalExperimentList =  []
         List<Experiment> finalExperimentList = molecularSpreadSheetService.cartCompoundsToExperiments(cartCompoundList)
 
@@ -342,7 +336,7 @@ class MolecularSpreadSheetServiceIntegrationSpec extends IntegrationSpec {
         assert experiments
         where:
         label                                | cartAssays
-        "An existing assay with experiments" | [new CartAssay(assayId: new Long(519))]
+        "An existing assay with experiments" | [new CartAssay("Test", 519)]
     }
 
     void "tests empty cartAssaysToExperiments"() {

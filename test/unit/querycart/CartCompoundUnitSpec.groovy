@@ -41,7 +41,10 @@ class CartCompoundUnitSpec extends Specification {
     void "test truncate smiles #label"() {
         given:
         mockForConstraintsTests(CartCompound)
-        final String smiles = RandomStringUtils.randomAlphabetic(smilesLength)
+        String smiles = null
+        if (smilesLength) {
+            smiles = RandomStringUtils.randomAlphabetic(smilesLength)
+        }
         final String truncatedSmiles = StringUtils.abbreviate(smiles, CartCompound.MAXIMUM_SMILES_FIELD_LENGTH)
 
         when:
@@ -53,6 +56,7 @@ class CartCompoundUnitSpec extends Specification {
 
         where:
         label                  | smilesLength
+        "Null Smiles"          | null
         "Empty Smiles"         | 0
         "More than Max Length" | CartCompound.MAXIMUM_SMILES_FIELD_LENGTH + 1
         "Equals Max Length"    | CartCompound.MAXIMUM_SMILES_FIELD_LENGTH

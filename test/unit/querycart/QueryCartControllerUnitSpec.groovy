@@ -11,20 +11,23 @@ import grails.test.mixin.Mock
 
 @TestMixin(GrailsUnitTestMixin)
 @TestFor(QueryCartController)
-@Mock(Shoppable)
+@Mock([Shoppable, QueryItem, CartAssay])
 @Unroll
 class QueryCartControllerUnitSpec extends Specification {
     ShoppingCartService shoppingCartService
     QueryCartService queryCartService
     CartAssay cartAssay
 
+    static final Long ID_IN_CART = 1
+
     void setup() {
         this.shoppingCartService = Mock(ShoppingCartService)
         controller.shoppingCartService = this.shoppingCartService
         this.queryCartService = Mock(QueryCartService)
         controller.queryCartService = this.queryCartService
-        queryCartService.groupUniqueContentsByType() >> {a: 1}
-        cartAssay = new CartAssay("foo",1)
+        queryCartService.groupUniqueContentsByType() >> {a: ID_IN_CART}
+        cartAssay = new CartAssay("foo",ID_IN_CART)
+        cartAssay.save()
     }
 
     void tearDown() {
@@ -238,20 +241,52 @@ class QueryCartControllerUnitSpec extends Specification {
     void "test updateOnscreenCart() #label"() {
         given:
         params.stt = paramsStt
+        String mockContent = 'mock content'
+        views['/bardWebInterface/_queryCartIndicator.gsp'] = mockContent
+        views['/bardWebInterface/_sarCartContent.gsp'] = mockContent
 
         when:
-        def retVal = controller.updateOnscreenCart()
+        1 * queryCartService.groupUniqueContentsByType(_) >> {[:]}
+        1 * queryCartService.totalNumberOfUniqueItemsInCart(_ as Map) >> {0}
+        queryCartService.totalNumberOfUniqueItemsInCart(_,_) >> {0}
+
+        controller.updateOnscreenCart()
 
         then:
-        queryCartService.addToShoppingCart(_) >> {1}
-        queryCartService.groupUniqueContentsByType(_) >> {[:]}
-        queryCartService.totalNumberOfUniqueItemsInCart(_) >> {0}
-        assert retVal == expectedResult
+        assert response.text == mockContent
 
         where:
-        label                   | paramsStt | expectedResult
-        'somthingReallyChanged' | "1"       | null
-        'nothing has changed'   | "0"       | null
+        label                   | paramsStt
+        'somthingReallyChanged' | "1"
+        'nothing has changed'   | "0"
+    }
+
+    static final QueryItemType TYPE_IN_CART = QueryItemType.AssayDefinition
+
+    void "test isInCart for #label"() {
+        given:
+        params.externalId = idToCheck as String
+        params.type = typeToCheck as String
+
+        when:
+        if(shouldFind) {
+            1 * queryCartService.isInShoppingCart(_) >> true
+        }
+        else {
+            0 * queryCartService.isInShoppingCart(_)
+        }
+        controller.isInCart()
+
+        then:
+        assert response.text == "["+shouldFind+"]"
+
+        where:
+        label          | idToCheck  | typeToCheck             | shouldFind
+        "Item in cart" | ID_IN_CART | TYPE_IN_CART            | true
+        "diff ID"      | 6          | TYPE_IN_CART            | false
+        "diff type"    | ID_IN_CART | QueryItemType.Compound  | false
+        "null ID"      | null       | QueryItemType.Project   | false
+        "null type"    | ID_IN_CART | null                    | false
     }
 
 }
