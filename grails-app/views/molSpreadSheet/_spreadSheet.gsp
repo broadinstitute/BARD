@@ -76,14 +76,14 @@
                              id="${cid}_prom"></div>
                     </td>
                     <g:if test="${molSpreadSheetData.getColumnCount() > 3}">
-                        <g:each var="colCnt" in="${3..(molSpreadSheetData.getSuperColumnCount() - 1)}">
+                        <g:each var="colCnt" in="${3..(molSpreadSheetData.getColumnCount() - 1)}">
                             <% SpreadSheetActivityStorage spreadSheetActivityStorage = molSpreadSheetData?.findSpreadSheetActivity(rowCnt, colCnt) %>
                             <% int currentCol =  colCnt %>
                             <g:if test="${spreadSheetActivityStorage != null}">
 
-                                <g:each var="subColCnt" in="${0..(spreadSheetActivityStorage.getHillCurveValueHolderList().size()-1)}">
+                                %{--<g:each var="subColCnt" in="${0..(spreadSheetActivityStorage.getHillCurveValueHolderList().size()-1)}">--}%
 
-                                    <% HillCurveValueHolder hillCurveValueHolder =  spreadSheetActivityStorage.getHillCurveValueHolderList()[subColCnt] %>
+                                    <% HillCurveValueHolder hillCurveValueHolder =  spreadSheetActivityStorage.getHillCurveValueHolderList()[0] %>
 
                                     <td class="molSpreadSheet" property="var${currentCol}">
                                     <p>
@@ -122,7 +122,7 @@
                                     </div>
 
                                 </td>
-                                </g:each>
+                                %{--</g:each>--}%
                             </g:if>
                             <g:else>
                                 <td class="molSpreadSheet" property="var${colCnt}">

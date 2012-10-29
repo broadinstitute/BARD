@@ -182,7 +182,7 @@ class MolecularSpreadSheetService {
                     molSpreadSheetCell = molSpreadSheetData.mssData[key]
                     spreadSheetActivityStorage = molSpreadSheetCell.spreadSheetActivityStorage
                 }
-                for (int experimentNum in 1..molSpreadSheetData.mssHeaders[col].size()) {
+                for (int experimentNum in 0..molSpreadSheetData.mssHeaders[col].size()-1) {
                     String finalKey = "${row}_${(exptNumberColTracker++)}"
                     if (spreadSheetActivityStorage == null)  {
                         if (molSpreadSheetCell != null) {

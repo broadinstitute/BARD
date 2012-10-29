@@ -54,8 +54,8 @@ class MolSpreadSheetData {
         SpreadSheetActivityStorage spreadSheetActivityStorage = null
         String key = "${rowCnt}_${colCnt}"
         MolSpreadSheetCell molSpreadSheetCell
-        if (mssData.containsKey(key)) {
-            molSpreadSheetCell = mssData[key]
+        if (mssFinalData.containsKey(key)) {
+            molSpreadSheetCell = mssFinalData[key]
             spreadSheetActivityStorage = molSpreadSheetCell.spreadSheetActivityStorage
         }
         return spreadSheetActivityStorage
