@@ -170,6 +170,41 @@ class MolecularSpreadSheetService {
 
 
 
+    protected void fillInTheMissingCellsAndConvertToExpandedMatrix(MolSpreadSheetData molSpreadSheetData) {
+//        int totalColumns =  molSpreadSheetData.columnCount
+        for (int row in 0..(molSpreadSheetData.rowCount - 1)){
+            int exptNumberColTracker = 0
+            for (int col in 0..(molSpreadSheetData.superColumnCount - 1)){
+                String key = "${row}_${col}"
+                MolSpreadSheetCell molSpreadSheetCell
+                SpreadSheetActivityStorage spreadSheetActivityStorage
+                if (molSpreadSheetData.mssData.containsKey(key)) {
+                    molSpreadSheetCell = molSpreadSheetData.mssData[key]
+                    spreadSheetActivityStorage = molSpreadSheetCell.spreadSheetActivityStorage
+                }
+                for (int experimentNum in 1..molSpreadSheetData.mssHeaders[col].size()) {
+                    String finalKey = "${row}_${(exptNumberColTracker++)}"
+                    if (spreadSheetActivityStorage == null)  {
+                        if (molSpreadSheetCell != null) {
+                            molSpreadSheetData.mssFinalData[finalKey] = new MolSpreadSheetCell(molSpreadSheetCell)
+                        }  else {
+                            molSpreadSheetData.mssFinalData[finalKey] = new MolSpreadSheetCell()
+                        }
+                    }  else {
+                        molSpreadSheetData.mssFinalData[finalKey] = new MolSpreadSheetCell(molSpreadSheetCell,experimentNum)
+                    }
+                }
+            }
+
+        }
+      println "woo"
+    }
+
+
+
+
+
+
 
     protected Object generateETagFromCartCompounds(List<CartCompound> cartCompoundList) {
         List<Long> cartCompoundIdList = new ArrayList<Long>()

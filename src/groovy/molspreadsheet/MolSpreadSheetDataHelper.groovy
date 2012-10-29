@@ -102,6 +102,7 @@ class MolSpreadSheetDataBuilder {
          }
         // finally deal with the data
         molecularSpreadSheetService.populateMolSpreadSheetData(molSpreadSheetData, experimentList, spreadSheetActivityList)
+        molecularSpreadSheetService.fillInTheMissingCellsAndConvertToExpandedMatrix( molSpreadSheetData)
     }
 
 

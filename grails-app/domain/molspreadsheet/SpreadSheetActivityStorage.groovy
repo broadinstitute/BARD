@@ -29,6 +29,21 @@ class SpreadSheetActivityStorage {
 
     }
 
+
+    SpreadSheetActivityStorage(SpreadSheetActivityStorage spreadSheetActivityStorage, int experimentIndex ) {
+        this.eid =  spreadSheetActivityStorage.eid
+        this.cid =  spreadSheetActivityStorage.cid
+        this.sid =  spreadSheetActivityStorage.sid
+        this.activityOutcome =  spreadSheetActivityStorage.activityOutcome
+        this.potency =  spreadSheetActivityStorage.potency
+        if (experimentIndex < spreadSheetActivityStorage.hillCurveValueHolderList?.size())
+           this.hillCurveValueHolderList =  [ spreadSheetActivityStorage.hillCurveValueHolderList[experimentIndex]  ]
+        if (experimentIndex < spreadSheetActivityStorage.hillCurveValueHolderList?.size())
+            this.columnNames =  [ spreadSheetActivityStorage.columnNames[experimentIndex]  ]
+    }
+
+
+
     public String toString(int subColumn) {
         String retutnValue = "unknown"
         if ((hillCurveValueHolderList!=null) && (subColumn<=hillCurveValueHolderList.size()))

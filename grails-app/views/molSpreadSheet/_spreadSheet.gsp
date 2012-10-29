@@ -82,6 +82,7 @@
                             <g:if test="${spreadSheetActivityStorage != null}">
 
                                 <g:each var="subColCnt" in="${0..(spreadSheetActivityStorage.getHillCurveValueHolderList().size()-1)}">
+
                                     <% HillCurveValueHolder hillCurveValueHolder =  spreadSheetActivityStorage.getHillCurveValueHolderList()[subColCnt] %>
 
                                     <td class="molSpreadSheet" property="var${currentCol}">

@@ -6,6 +6,7 @@ class MolSpreadSheetData {
     static transients = ['rowCount','columnCount']
 
     Map<String,MolSpreadSheetCell> mssData   = [:]
+    Map<String,MolSpreadSheetCell> mssFinalData   = [:]
     Map<Long,Integer> rowPointer  = [:]
     Map<Long,Integer> columnPointer   = [:]
     List<List<String>> mssHeaders   = []

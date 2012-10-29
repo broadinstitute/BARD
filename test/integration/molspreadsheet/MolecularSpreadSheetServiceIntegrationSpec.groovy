@@ -48,27 +48,6 @@ class MolecularSpreadSheetServiceIntegrationSpec extends IntegrationSpec {
     }
 
 
-    void "test retrieveExperimentalData degenerate case"() {
-        when: "we have a molecularSpreadSheetService"
-        assertNotNull molecularSpreadSheetService
-        MolSpreadSheetData molSpreadSheetData = molecularSpreadSheetService.retrieveExperimentalData()
-
-        then: "we should be able to generate the core molSpreadSheetData, with valid empty data holders"
-        assertNotNull molSpreadSheetData
-        assertNotNull molSpreadSheetData.mssData
-        assertNotNull molSpreadSheetData.rowPointer
-        assertNotNull molSpreadSheetData.columnPointer
-        assertNotNull molSpreadSheetData.mssHeaders
-        assert molSpreadSheetData.mssData.size() == 0
-        assert molSpreadSheetData.rowPointer.size() == 0
-        assert molSpreadSheetData.columnPointer.size() == 0
-        assert molSpreadSheetData.mssHeaders.flatten().size() == 3
-    }
-
-
-
-
-
     void "test weHaveEnoughDataToMakeASpreadsheet()"() {
         when: "we have a molecularSpreadSheetService"
         assertNotNull molecularSpreadSheetService
@@ -100,6 +79,54 @@ class MolecularSpreadSheetServiceIntegrationSpec extends IntegrationSpec {
         true             | new CartAssay(assayTitle: "A") | new CartProject(projectName: "P") | new CartCompound(smiles: "C", name: "c", compoundId: 1)
         false            | null                           | null                              | null
     }
+
+
+
+
+    void "test try different cart combos"() {
+        when: "we have a molecularSpreadSheetService"
+        assertNotNull molecularSpreadSheetService
+        assertNotNull queryCartService
+
+
+        then: "we should be able to generate the core molSpreadSheetData, with valid empty data holders"
+            shoppingCartService.addToShoppingCart(new CartAssay(assayTitle:"Assay Definition: Identification of inhibitors of RAD54 Measured in Biochemical System Using Plate Reader - 2159-01_Inhibitor_SinglePoint_HTS_Activity",assayId:4332L ))
+            shoppingCartService.addToShoppingCart(new CartCompound(smiles: "COC1=CC=C(C=C1)C#CC1=CC=C(C=C1)[C@H]1[C@@H](CO)N2CCCCN(C[C@H]12)C(=O)NC1=CC(F)=CC=C1", name: "BRD-K70362473-001-01-0", compoundId: 54667549))
+
+        shoppingCartService.addToShoppingCart(new CartAssay(assayTitle:"Assay Definition: Confirmation Concentration-Response Assay for Inhibitors of Human Muscle isoform 2 Pyruvate Kinase",assayId:364L ))
+        shoppingCartService.addToShoppingCart(new CartCompound(smiles: "CC1=CC=C(O1)C1=C(NC2=CC=C(C)C=C2)N2C(C=CC=C2C)=N1", name: "HMS1817I15", compoundId: 4085914L))
+
+        MolSpreadSheetData molSpreadSheetData
+        if (molecularSpreadSheetService.weHaveEnoughDataToMakeASpreadsheet()) {
+            molSpreadSheetData = molecularSpreadSheetService.retrieveExperimentalData()
+        }
+        assertNotNull molSpreadSheetData
+
+    }
+
+
+
+    void "test retrieveExperimentalData degenerate case"() {
+        when: "we have a molecularSpreadSheetService"
+        assertNotNull molecularSpreadSheetService
+        MolSpreadSheetData molSpreadSheetData = molecularSpreadSheetService.retrieveExperimentalData()
+
+        then: "we should be able to generate the core molSpreadSheetData, with valid empty data holders"
+        assertNotNull molSpreadSheetData
+        assertNotNull molSpreadSheetData.mssData
+        assertNotNull molSpreadSheetData.rowPointer
+        assertNotNull molSpreadSheetData.columnPointer
+        assertNotNull molSpreadSheetData.mssHeaders
+        assert molSpreadSheetData.mssData.size() == 0
+        assert molSpreadSheetData.rowPointer.size() == 0
+        assert molSpreadSheetData.columnPointer.size() == 0
+        assert molSpreadSheetData.mssHeaders.flatten().size() == 3
+    }
+
+
+
+
+
 
 
     void "test populateMolSpreadSheetData"() {

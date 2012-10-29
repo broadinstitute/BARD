@@ -33,6 +33,33 @@ class MolSpreadSheetCell {
         spreadSheetActivityStorage()
     }
 
+
+    public MolSpreadSheetCell (MolSpreadSheetCell molSpreadSheetCellToCopy) {
+        this.activity =  molSpreadSheetCellToCopy.activity
+        this.molSpreadSheetCellType =  molSpreadSheetCellToCopy.molSpreadSheetCellType
+        this.strInternalValue =  molSpreadSheetCellToCopy.strInternalValue
+        this.numInternalValue =  molSpreadSheetCellToCopy.numInternalValue
+        this.intInternalValue =  molSpreadSheetCellToCopy.intInternalValue
+        this.molSpreadSheetCellUnit =  molSpreadSheetCellToCopy.molSpreadSheetCellUnit
+        this.supplementalInternalValue =  molSpreadSheetCellToCopy.supplementalInternalValue
+        this.spreadSheetActivityStorage =  null
+    }
+
+
+    public MolSpreadSheetCell (MolSpreadSheetCell molSpreadSheetCellToCopy, int exptIndex) {
+        this.activity =  molSpreadSheetCellToCopy.activity
+        this.molSpreadSheetCellType =  molSpreadSheetCellToCopy.molSpreadSheetCellType
+        this.strInternalValue =  molSpreadSheetCellToCopy.strInternalValue
+        this.numInternalValue =  molSpreadSheetCellToCopy.numInternalValue
+        this.intInternalValue =  molSpreadSheetCellToCopy.intInternalValue
+        this.molSpreadSheetCellUnit =  molSpreadSheetCellToCopy.molSpreadSheetCellUnit
+        this.supplementalInternalValue =  molSpreadSheetCellToCopy.supplementalInternalValue
+        this.spreadSheetActivityStorage =  new SpreadSheetActivityStorage(molSpreadSheetCellToCopy.spreadSheetActivityStorage,exptIndex)
+    }
+
+
+
+
     /**
      *  non image, no units  specified
      * @param value
