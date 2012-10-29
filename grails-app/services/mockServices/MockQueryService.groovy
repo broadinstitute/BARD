@@ -22,6 +22,18 @@ class MockQueryService implements IQueryService {
         constructMockAssayAdapter()
         constructMockProjectAdapter()
     }
+
+    /**
+     *
+     * @param compound
+     * @param activeOnly - true if we want only the active compounds
+     * @return int the number of tested assays
+     */
+    public int getNumberTestedAssays(Long cid,
+                                     boolean activeOnly){
+        return 2;
+
+    }
     Map findPromiscuityScoreForCID(final Long cid){
         return [scores: [20,30], status: 200, message: "Success"]
 

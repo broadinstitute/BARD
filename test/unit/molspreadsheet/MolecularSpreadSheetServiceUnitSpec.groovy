@@ -49,6 +49,7 @@ class MolecularSpreadSheetServiceUnitSpec extends Specification {
         this.shoppingCartService = Mock(ShoppingCartService)
         this.queryService = Mock(IQueryService)
         service.queryServiceWrapper = queryServiceWrapper
+        service.queryService = this.queryService
 
     }
 
@@ -242,10 +243,11 @@ class MolecularSpreadSheetServiceUnitSpec extends Specification {
         then: "prove that the active values are available"
         assertNotNull molSpreadSheetData
         assertNotNull molSpreadSheetData.mssHeaders
-        assert molSpreadSheetData.mssHeaders.size() == 3
+        assert molSpreadSheetData.mssHeaders.size() == 4
         assert molSpreadSheetData.mssHeaders.contains("Struct")
         assert molSpreadSheetData.mssHeaders.contains("CID")
         assert molSpreadSheetData.mssHeaders.contains("UNM Promiscuity Analysis")
+        assert molSpreadSheetData.mssHeaders.contains("Active vs Tested across all Assay Definitions")
     }
 
 
@@ -260,10 +262,12 @@ class MolecularSpreadSheetServiceUnitSpec extends Specification {
         then: "prove that the active values are available"
         assertNotNull molSpreadSheetData
         assertNotNull molSpreadSheetData.mssHeaders
-        assert molSpreadSheetData.mssHeaders.size() == 3
+        assert molSpreadSheetData.mssHeaders.size() == 4
         assert molSpreadSheetData.mssHeaders.contains("Struct")
         assert molSpreadSheetData.mssHeaders.contains("CID")
         assert molSpreadSheetData.mssHeaders.contains("UNM Promiscuity Analysis")
+        assert molSpreadSheetData.mssHeaders.contains("Active vs Tested across all Assay Definitions")
+
     }
 
 
@@ -282,10 +286,11 @@ class MolecularSpreadSheetServiceUnitSpec extends Specification {
         then: "prove that the active values are available"
         assertNotNull molSpreadSheetData
         assertNotNull molSpreadSheetData.mssHeaders
-        assert molSpreadSheetData.mssHeaders.size() == 6
+        assert molSpreadSheetData.mssHeaders.size() == 7
         assert molSpreadSheetData.mssHeaders.contains("Struct")
         assert molSpreadSheetData.mssHeaders.contains("CID")
         assert molSpreadSheetData.mssHeaders.contains("UNM Promiscuity Analysis")
+        assert molSpreadSheetData.mssHeaders.contains("Active vs Tested across all Assay Definitions")
         assert molSpreadSheetData.mssHeaders.contains("a")
         assert molSpreadSheetData.mssHeaders.contains("b")
         assert molSpreadSheetData.mssHeaders.contains("c")
