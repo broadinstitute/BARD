@@ -15,9 +15,9 @@ class MolSpreadSheetCell {
     Boolean activity = true
     MolSpreadSheetCellType molSpreadSheetCellType = MolSpreadSheetCellType.unknown
     String strInternalValue = "null"
-    BigDecimal numInternalValue = 0.0
+//    BigDecimal numInternalValue = 0.0
     Integer intInternalValue = 0
-    MolSpreadSheetCellUnit molSpreadSheetCellUnit = MolSpreadSheetCellUnit.unknown
+//    MolSpreadSheetCellUnit molSpreadSheetCellUnit = MolSpreadSheetCellUnit.unknown
     String supplementalInternalValue = null
     SpreadSheetActivityStorage spreadSheetActivityStorage
 
@@ -26,9 +26,9 @@ class MolSpreadSheetCell {
         activity()
         molSpreadSheetCellType(blank: false)
         strInternalValue(nullable: false)
-        numInternalValue(nullable: false)
+//        numInternalValue(nullable: false)
         intInternalValue(nullable: false)
-        molSpreadSheetCellUnit(blank: false)
+//        molSpreadSheetCellUnit(blank: false)
         supplementalInternalValue()
         spreadSheetActivityStorage()
     }
@@ -38,9 +38,9 @@ class MolSpreadSheetCell {
         this.activity =  molSpreadSheetCellToCopy.activity
         this.molSpreadSheetCellType =  molSpreadSheetCellToCopy.molSpreadSheetCellType
         this.strInternalValue =  molSpreadSheetCellToCopy.strInternalValue
-        this.numInternalValue =  molSpreadSheetCellToCopy.numInternalValue
+//        this.numInternalValue =  molSpreadSheetCellToCopy.numInternalValue
         this.intInternalValue =  molSpreadSheetCellToCopy.intInternalValue
-        this.molSpreadSheetCellUnit =  molSpreadSheetCellToCopy.molSpreadSheetCellUnit
+//        this.molSpreadSheetCellUnit =  molSpreadSheetCellToCopy.molSpreadSheetCellUnit
         this.supplementalInternalValue =  molSpreadSheetCellToCopy.supplementalInternalValue
         this.spreadSheetActivityStorage =  null
     }
@@ -50,9 +50,9 @@ class MolSpreadSheetCell {
         this.activity =  molSpreadSheetCellToCopy.activity
         this.molSpreadSheetCellType =  molSpreadSheetCellToCopy.molSpreadSheetCellType
         this.strInternalValue =  molSpreadSheetCellToCopy.strInternalValue
-        this.numInternalValue =  molSpreadSheetCellToCopy.numInternalValue
+//        this.numInternalValue =  molSpreadSheetCellToCopy.numInternalValue
         this.intInternalValue =  molSpreadSheetCellToCopy.intInternalValue
-        this.molSpreadSheetCellUnit =  molSpreadSheetCellToCopy.molSpreadSheetCellUnit
+//        this.molSpreadSheetCellUnit =  molSpreadSheetCellToCopy.molSpreadSheetCellUnit
         this.supplementalInternalValue =  molSpreadSheetCellToCopy.supplementalInternalValue
         this.spreadSheetActivityStorage =  new SpreadSheetActivityStorage(molSpreadSheetCellToCopy.spreadSheetActivityStorage,exptIndex)
     }
@@ -68,28 +68,30 @@ class MolSpreadSheetCell {
     MolSpreadSheetCell(String value, MolSpreadSheetCellType molSpreadSheetCellType, SpreadSheetActivityStorage spreadSheetActivityStorage = null) {
         this.spreadSheetActivityStorage = spreadSheetActivityStorage
         this.molSpreadSheetCellType = molSpreadSheetCellType
-        if ((this.molSpreadSheetCellType == MolSpreadSheetCellType.numeric) ||
-                (this.molSpreadSheetCellType == MolSpreadSheetCellType.percentageNumeric) ||
-                (this.molSpreadSheetCellType == MolSpreadSheetCellType.greaterThanNumeric) ||
-                (this.molSpreadSheetCellType == MolSpreadSheetCellType.lessThanNumeric)) {
-            if ("NaN".equals(value)) {
-                activity = false;
-                numInternalValue = new BigDecimal(0)
-            } else {
-                numInternalValue = new BigDecimal(value)
-            }
-        } else if (this.molSpreadSheetCellType == MolSpreadSheetCellType.string) {
-            strInternalValue = new String(value)
-        } else if (this.molSpreadSheetCellType == MolSpreadSheetCellType.identifier) {
+//        if ((this.molSpreadSheetCellType == MolSpreadSheetCellType.numeric) ||
+//                (this.molSpreadSheetCellType == MolSpreadSheetCellType.percentageNumeric) ||
+//                (this.molSpreadSheetCellType == MolSpreadSheetCellType.greaterThanNumeric) ||
+//                (this.molSpreadSheetCellType == MolSpreadSheetCellType.lessThanNumeric)) {
+//            if ("NaN".equals(value)) {
+//                activity = false;
+//                numInternalValue = new BigDecimal(0)
+//            } else {
+//                numInternalValue = new BigDecimal(value)
+//            }
+//        } else if (this.molSpreadSheetCellType == MolSpreadSheetCellType.string) {
+//            strInternalValue = new String(value)
+//        } else
+if (this.molSpreadSheetCellType == MolSpreadSheetCellType.identifier) {
             if ("NaN".equals(value)) {
                 activity = false;
                 intInternalValue = 0
             } else {
                 intInternalValue = new Integer(value)
             }
-        } else {
-            log.error "We should never see mole spreadsheet type ${this.molSpreadSheetCellType} in this three parameter constructor"
         }
+// else {
+//            log.error "We should never see mole spreadsheet type ${this.molSpreadSheetCellType} in this three parameter constructor"
+//        }
     }
 
     /**
@@ -101,21 +103,21 @@ class MolSpreadSheetCell {
     MolSpreadSheetCell(String value, MolSpreadSheetCellType molSpreadSheetCellType, MolSpreadSheetCellUnit molSpreadSheetCellUnit, SpreadSheetActivityStorage spreadSheetActivityStorage = null) {
         this.spreadSheetActivityStorage = spreadSheetActivityStorage
         this.molSpreadSheetCellType = molSpreadSheetCellType
-        if ((this.molSpreadSheetCellType == MolSpreadSheetCellType.numeric) ||
-                (this.molSpreadSheetCellType == MolSpreadSheetCellType.percentageNumeric) ||
-                (this.molSpreadSheetCellType == MolSpreadSheetCellType.greaterThanNumeric) ||
-                (this.molSpreadSheetCellType == MolSpreadSheetCellType.lessThanNumeric) ||
-                (this.molSpreadSheetCellType == MolSpreadSheetCellType.numeric)) {
-            if ("NaN".equals(value)) {
-                activity = false;
-                numInternalValue = new BigDecimal(0)
-            } else {
-                numInternalValue = new BigDecimal(value)
-            }
-            this.molSpreadSheetCellUnit = molSpreadSheetCellUnit
-        } else {
-            log.error "We should never see mole spreadsheet type ${this.molSpreadSheetCellType} in this four parameter constructor"
-        }
+//        if ((this.molSpreadSheetCellType == MolSpreadSheetCellType.numeric) ||
+//                (this.molSpreadSheetCellType == MolSpreadSheetCellType.percentageNumeric) ||
+//                (this.molSpreadSheetCellType == MolSpreadSheetCellType.greaterThanNumeric) ||
+//                (this.molSpreadSheetCellType == MolSpreadSheetCellType.lessThanNumeric) ||
+//                (this.molSpreadSheetCellType == MolSpreadSheetCellType.numeric)) {
+//            if ("NaN".equals(value)) {
+//                activity = false;
+//                numInternalValue = new BigDecimal(0)
+//            } else {
+//                numInternalValue = new BigDecimal(value)
+//            }
+//            this.molSpreadSheetCellUnit = molSpreadSheetCellUnit
+//        } else {
+//            log.error "We should never see mole spreadsheet type ${this.molSpreadSheetCellType} in this four parameter constructor"
+//        }
     }
 
 
@@ -127,7 +129,7 @@ class MolSpreadSheetCell {
             assert false," missing critical values. ${spreadSheetActivity.dump()}"
         }
         this.molSpreadSheetCellType = MolSpreadSheetCellType.numeric
-        this.molSpreadSheetCellUnit =  MolSpreadSheetCellUnit.Molar
+//        this.molSpreadSheetCellUnit =  MolSpreadSheetCellUnit.Molar
 
         this.spreadSheetActivityStorage = new SpreadSheetActivityStorage( eid: spreadSheetActivity.eid,
                                                                           cid:  spreadSheetActivity.cid,
@@ -164,9 +166,9 @@ class MolSpreadSheetCell {
         if (this.molSpreadSheetCellType == MolSpreadSheetCellType.image) {
             strInternalValue = new String(value1?:"")
             supplementalInternalValue = new String(value2?:"")
-        } else {
-            log.error "We should never see mole spreadsheet type ${this.molSpreadSheetCellType} in this four parameter constructor specialized for images"
-        }
+        } //else {
+//            log.error "We should never see mole spreadsheet type ${this.molSpreadSheetCellType} in this four parameter constructor specialized for images"
+//        }
     }
 
     /**

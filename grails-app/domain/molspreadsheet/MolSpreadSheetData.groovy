@@ -10,6 +10,7 @@ class MolSpreadSheetData {
     Map<Long,Integer> columnPointer   = [:]
     List<List<String>> mssHeaders   = []
     List<String> experimentNameList   = []
+    Map<Integer,String> mapColumnsToAssay   = [:]
 
     /**
      * Display a cell, as specified by a row and column

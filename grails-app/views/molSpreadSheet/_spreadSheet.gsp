@@ -28,14 +28,15 @@
                     <th class="molSpreadSheetImg sortable">Molecular structure</th>
 
                     <th class="molSpreadSheetHeadData sortable">CID</th>
-                    <% int looper = 2 %>
+                    <% int looper = 0 %>
                     <g:each var="colHeader" in="${molSpreadSheetData?.getColumns()}">
-                        <g:if test="${looper > 3}">
+                        <g:if test="${looper == 2}">
                             <th class="molSpreadSheetHeadData sortable">${colHeader}</th>
                         </g:if>
-                        <g:else>
-                            <% looper++ %>
-                        </g:else>
+                        <g:if test="${looper > 2}">
+                            <th class="molSpreadSheetHeadData sortable">AID=<%=molSpreadSheetData.mapColumnsToAssay[looper]%><br/>${colHeader}</th>
+                        </g:if>
+                        <% looper++ %>
                     </g:each>
                 </tr>
                 </thead>
@@ -89,7 +90,7 @@
 
                                     <div data-detail-id="drc_${spreadSheetActivityStorage.sid}_${colCnt}"
                                          class="drc-popover-link btn btn-link"
-                                         data-original-title="chg->spreadSheetActivityStorage.hillCurveValueId"
+                                         data-original-title="${hillCurveValueHolder.identifier}"
                                          data-html="true"
                                          data-trigger="hover">
                                         ${hillCurveValueHolder.toString()}</div>

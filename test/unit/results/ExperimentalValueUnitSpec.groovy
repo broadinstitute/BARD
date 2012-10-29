@@ -101,6 +101,27 @@ class ExperimentalValueUnitSpec extends Specification {
         "converting unit values negative value" | false      | -1.234       | "-1.23"
     }
 
+
+    void "test another default ctor"() {
+        when: "#label"
+        ExperimentalValue experimentalValue = new ExperimentalValue(initialValue)
+        assertNotNull(experimentalValue)
+
+        then: "The resulting search filters size must equal the expected value"
+        assert experimentalValue.toString() == stringValue
+
+        where:
+        label                                   | initialValue  | stringValue
+        "converting unit values"                | 1D            | "1"
+        "converting unit values"                | 1.2D          | "1.2"
+        "converting unit values"                | 1.23D         | "1.23"
+        "converting unit values"                | 1.235D        | "1.24"
+        "converting unit values negative value" | -1.234D       | "-1.23"
+    }
+
+
+
+
     void "test what we do when there is nothing to print"() {
         when: "#label"
         ExperimentalValue experimentalValue = new ExperimentalValue(47, true)

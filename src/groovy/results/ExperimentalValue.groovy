@@ -62,6 +62,26 @@ class ExperimentalValue {
         }
     }
 
+
+    /**
+     *  ExperimentalValue ctor
+     * @param value
+     * @param printUnits
+     */
+    public ExperimentalValue(Double value) {
+        this.value = value
+        this.experimentalValueUnit = ExperimentalValueUnit.Micromolar
+        this.experimentalValueType = ExperimentalValueType.numeric
+        this.printUnits = false
+        if (this.value < 0) {
+            this.value = 0 - this.value
+            valueNegative = true
+        }
+    }
+
+
+
+
     /**
      * The rest of the methods are here to support toString, since this is the one that converts
      * a numerical value into a string with the right degree of precision

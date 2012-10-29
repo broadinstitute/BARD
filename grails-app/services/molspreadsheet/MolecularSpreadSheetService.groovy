@@ -406,7 +406,7 @@ class MolecularSpreadSheetService {
         molSpreadSheetData.mssHeaders << ["CID"]
         molSpreadSheetData.mssHeaders << ["UNM Promiscuity Analysis"]
         for (Experiment experiment in experimentList) {
-            molSpreadSheetData.experimentNameList << experiment.name
+            molSpreadSheetData.experimentNameList << "${experiment.id.toString()}"
             molSpreadSheetData.mssHeaders << []
         }
     }
@@ -602,6 +602,28 @@ class MolecularSpreadSheetService {
         }
         return [totalNumberOfRecords: totalNumberOfRecords, activityValues: activityValues]
     }
+
+
+
+
+    protected void prepareMapOfColumnsToAssay  ( final MolSpreadSheetData molSpreadSheetData) {
+        molSpreadSheetData.mapColumnsToAssay = [:]
+        int columnIndex = 0
+        int assayIndex = 0
+        for (List<String> listOfColumnSubheadings in molSpreadSheetData.mssHeaders) {
+            if (columnIndex < 3 ) {
+                molSpreadSheetData.mapColumnsToAssay [columnIndex++]  =   ""
+            } else {
+                for (String columnSubheadings in listOfColumnSubheadings) {
+                    molSpreadSheetData.mapColumnsToAssay [columnIndex++]  =   molSpreadSheetData.experimentNameList[assayIndex].toString()
+                }
+                assayIndex++
+            }
+        }
+    }
+
+
+
     /**
      *
      * @param experimentValue
