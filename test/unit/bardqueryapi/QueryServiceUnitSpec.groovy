@@ -1,5 +1,9 @@
 package bardqueryapi
 
+import spock.lang.Shared
+import spock.lang.Specification
+import spock.lang.Unroll
+
 import bard.core.adapter.AssayAdapter
 import bard.core.adapter.CompoundAdapter
 import bard.core.adapter.ProjectAdapter
@@ -9,9 +13,6 @@ import bard.core.rest.RESTExperimentService
 import bard.core.rest.RESTProjectService
 import grails.test.mixin.TestFor
 import org.apache.commons.lang.time.StopWatch
-import spock.lang.Shared
-import spock.lang.Specification
-import spock.lang.Unroll
 import bard.core.*
 
 /**
@@ -55,7 +56,26 @@ class QueryServiceUnitSpec extends Specification {
     void tearDown() {
         // Tear down logic here
     }
+    /**
+     * {@link QueryService#getNumberTestedAssays(Long, boolean)}
+     *
+     */
+    void "test get Number Tested Assays #labels"() {
 
+        when:
+        int foundNumber = service.getNumberTestedAssays(compoundId, active)
+        then:
+        queryServiceWrapper.restCompoundService >> { restCompoundService }
+        this.queryServiceWrapper.restCompoundService.get(_) >> {compound}
+        this.queryServiceWrapper.restCompoundService.getTestedAssays(_, _) >> {assays}
+
+        assert assays.size() == foundNumber
+
+        where:
+        label                | compoundId | active | compound  | assays
+        "Active Assays Only" | 872        | true   | compound1 | [assay1, assay2]
+        "Tested Assays Only" | 872        | false  | compound2 | [assay1, assay2]
+    }
     /**
      * {@link QueryService#showCompound(Long)}
      *
