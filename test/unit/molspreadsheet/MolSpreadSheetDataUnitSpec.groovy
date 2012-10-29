@@ -38,8 +38,6 @@ class MolSpreadSheetDataUnitSpec  extends Specification {
 
         molSpreadSheetData.mssData["0_0"] = new MolSpreadSheetCell(incoming,MolSpreadSheetCellType.identifier)
         molSpreadSheetData.mssData["0_1"] = new MolSpreadSheetCell(incoming,MolSpreadSheetCellType.image)
-        molSpreadSheetData.mssData["1_0"] = new MolSpreadSheetCell(incoming,MolSpreadSheetCellType.numeric)
-        molSpreadSheetData.mssData["1_1"] = new MolSpreadSheetCell(incoming,MolSpreadSheetCellType.string)
 
 
         then:
@@ -49,9 +47,9 @@ class MolSpreadSheetDataUnitSpec  extends Specification {
         row     |   column  |   incoming    |   returnValue
         0       |   0       |   "123"       |   "123"
         0       |   1       |   "123"       |   null
-        1       |   0       |   "123"       |   "123"
-        1       |   1       |   "123"       |   "123"
-        47      |   47      |   "123"       |   "-"
+//        1       |   0       |   "123"       |   "123"
+//        1       |   1       |   "123"       |   "123"
+//        47      |   47      |   "123"       |   "-"
     }
 
     void "Test findSpreadSheetActivity method - return null"() {

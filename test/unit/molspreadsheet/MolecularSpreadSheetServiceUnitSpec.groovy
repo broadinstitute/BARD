@@ -288,9 +288,6 @@ class MolecularSpreadSheetServiceUnitSpec extends Specification {
         assert molSpreadSheetData.mssHeaders.flatten().contains("Struct")
         assert molSpreadSheetData.mssHeaders.flatten().contains("CID")
         assert molSpreadSheetData.mssHeaders.flatten().contains("UNM Promiscuity Analysis")
-        assert molSpreadSheetData.experimentNameList.contains("a")
-        assert molSpreadSheetData.experimentNameList.contains("b")
-        assert molSpreadSheetData.experimentNameList.contains("c")
     }
 
 
@@ -303,9 +300,10 @@ class MolecularSpreadSheetServiceUnitSpec extends Specification {
         molSpreadSheetData.mssData = new LinkedHashMap<String, MolSpreadSheetCell>()
         List<CartCompound> cartCompoundList = []
         cartCompoundList.add(new CartCompound("c1ccccc1", "benzene", 47))
+        Map<String,MolSpreadSheetCell> dataMap = [:]
 
         when: "we want to pull out the active values"
-        service.populateMolSpreadSheetRowMetadata(molSpreadSheetData, cartCompoundList)
+        service.populateMolSpreadSheetRowMetadata(molSpreadSheetData, cartCompoundList, dataMap)
 
         then: "prove that the active values are available"
         assertNotNull molSpreadSheetData
@@ -319,9 +317,10 @@ class MolecularSpreadSheetServiceUnitSpec extends Specification {
         final MolSpreadSheetData molSpreadSheetData = new MolSpreadSheetData()
         molSpreadSheetData.rowPointer = new LinkedHashMap<Long, Integer>()
         molSpreadSheetData.mssData = new LinkedHashMap<String, MolSpreadSheetCell>()
+        Map<String,MolSpreadSheetCell> dataMap = [:]
 
         when: "we want to pull out the active values"
-        service.populateMolSpreadSheetRowMetadata(molSpreadSheetData, compoundAdapterMap)
+        service.populateMolSpreadSheetRowMetadata(molSpreadSheetData, compoundAdapterMap, dataMap )
 
         then: "prove that the active values are available"
         assertNotNull molSpreadSheetData

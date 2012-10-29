@@ -59,15 +59,6 @@ class MolSpreadSheetCellUnitUnitSpec extends Specification {
 
         where:
         molSpreadSheetCellType                    | inputString | resultingString | activity
-        MolSpreadSheetCellType.numeric            | "0.123"     | "0.123"         | true
-        MolSpreadSheetCellType.numeric            | "NaN"       | "(no activity)" | false
-        MolSpreadSheetCellType.percentageNumeric  | "0.123"     | "0.123 %"       | true
-        MolSpreadSheetCellType.percentageNumeric  | "NaN"       | "(no activity)" | false
-        MolSpreadSheetCellType.greaterThanNumeric | "0.123"     | "> 0.123"       | true
-        MolSpreadSheetCellType.greaterThanNumeric | "NaN"       | "(no activity)" | false
-        MolSpreadSheetCellType.lessThanNumeric    | "0.123"     | "< 0.123"       | true
-        MolSpreadSheetCellType.lessThanNumeric    | "NaN"       | "(no activity)" | false
-        MolSpreadSheetCellType.string             | "0.123"     | "0.123"         | true
         MolSpreadSheetCellType.identifier         | "3"         | "3"             | true
     }
 
@@ -79,30 +70,6 @@ class MolSpreadSheetCellUnitUnitSpec extends Specification {
 
         then:
         assert molSpreadSheetCell.toString() == "0"
-    }
-
-
-
-
-    void "test MolSpreadSheetCell constructor, three parameters, no units"() {
-        when:
-        MolSpreadSheetCell molSpreadSheetCell = new MolSpreadSheetCell(inputString, molSpreadSheetCellType, molSpreadSheetCellUnit)
-        assertNotNull(molSpreadSheetCell)
-
-        then:
-        assert molSpreadSheetCell.toString() == resultingString
-        assert molSpreadSheetCell.activity == activity
-
-        where:
-        molSpreadSheetCellType                    | inputString | resultingString | molSpreadSheetCellUnit            | activity
-        MolSpreadSheetCellType.numeric            | "0.123"     | "0.123 uM"       | MolSpreadSheetCellUnit.Micromolar | true
-        MolSpreadSheetCellType.numeric            | "NaN"       | "(no activity)" | MolSpreadSheetCellUnit.Micromolar | false
-        MolSpreadSheetCellType.percentageNumeric  | "0.123"     | "0.123 %"       | MolSpreadSheetCellUnit.unknown    | true
-        MolSpreadSheetCellType.percentageNumeric  | "NaN"       | "(no activity)" | MolSpreadSheetCellUnit.unknown    | false
-        MolSpreadSheetCellType.greaterThanNumeric | "0.123"     | "> 0.123 uM"     | MolSpreadSheetCellUnit.Micromolar | true
-        MolSpreadSheetCellType.greaterThanNumeric | "NaN"       | "(no activity)" | MolSpreadSheetCellUnit.Micromolar | false
-        MolSpreadSheetCellType.lessThanNumeric    | "0.123"     | "< 0.123 uM"     | MolSpreadSheetCellUnit.Micromolar | true
-        MolSpreadSheetCellType.lessThanNumeric    | "NaN"       | "(no activity)" | MolSpreadSheetCellUnit.Micromolar | false
     }
 
 
@@ -146,7 +113,6 @@ class MolSpreadSheetCellUnitUnitSpec extends Specification {
         molSpreadSheetCell.activity = true
         molSpreadSheetCell.molSpreadSheetCellType = molSpreadSheetCellType
         molSpreadSheetCell.strInternalValue = 'something'
-        molSpreadSheetCell.numInternalValue = 1
         molSpreadSheetCell.intInternalValue = 2
 
         then:
@@ -156,12 +122,7 @@ class MolSpreadSheetCellUnitUnitSpec extends Specification {
 
         where:
         label                                       | molSpreadSheetCellType                    | expectedToString
-        'MolSpreadSheetCellType.lessThanNumeric'    | MolSpreadSheetCellType.lessThanNumeric    | "< 1"
-        'MolSpreadSheetCellType.greaterThanNumeric' | MolSpreadSheetCellType.greaterThanNumeric | "> 1"
-        'MolSpreadSheetCellType.percentageNumeric'  | MolSpreadSheetCellType.percentageNumeric  | "1 %"
-        'MolSpreadSheetCellType.numeric'            | MolSpreadSheetCellType.numeric            | "1"
         'MolSpreadSheetCellType.identifier'         | MolSpreadSheetCellType.identifier         | "2"
-        'MolSpreadSheetCellType.string'             | MolSpreadSheetCellType.string             | "something"
         'MolSpreadSheetCellType.image'              | MolSpreadSheetCellType.image              | null
     }
 }
