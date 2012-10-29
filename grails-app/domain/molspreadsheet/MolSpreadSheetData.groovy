@@ -6,7 +6,6 @@ class MolSpreadSheetData {
     static transients = ['rowCount','columnCount']
 
     Map<String,MolSpreadSheetCell> mssData   = [:]
-    Map<String,MolSpreadSheetCell> mssFinalData   = [:]
     Map<Long,Integer> rowPointer  = [:]
     Map<Long,Integer> columnPointer   = [:]
     List<List<String>> mssHeaders   = []
@@ -54,8 +53,8 @@ class MolSpreadSheetData {
         SpreadSheetActivityStorage spreadSheetActivityStorage = null
         String key = "${rowCnt}_${colCnt}"
         MolSpreadSheetCell molSpreadSheetCell
-        if (mssFinalData.containsKey(key)) {
-            molSpreadSheetCell = mssFinalData[key]
+        if (mssData.containsKey(key)) {
+            molSpreadSheetCell = mssData[key]
             spreadSheetActivityStorage = molSpreadSheetCell.spreadSheetActivityStorage
         }
         return spreadSheetActivityStorage

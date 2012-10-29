@@ -168,36 +168,40 @@ class MolecularSpreadSheetService {
         spreadSheetActivityList
     }
 
-
-
-    protected void fillInTheMissingCellsAndConvertToExpandedMatrix(MolSpreadSheetData molSpreadSheetData) {
-//        int totalColumns =  molSpreadSheetData.columnCount
+    /**
+     * Now we have all of the available data in the dataMap, but that map may have holes ( where the compound wasn't tested with a particular assay)
+     * and it may also have cells with multiple values. This method is intended to smooth out the rough spots -- make a new map with exactly one value
+     * for each cell  in the molecular spreadsheet.  Some of those cells may be null, but that's fine, since we can print out "Not tested in this experiment"
+     * on the GSP when we bump into one of them.
+     * @param molSpreadSheetData
+     * @param dataMap
+     */
+    protected void fillInTheMissingCellsAndConvertToExpandedMatrix(MolSpreadSheetData molSpreadSheetData, Map<String,MolSpreadSheetCell> dataMap) {
         for (int row in 0..(molSpreadSheetData.rowCount - 1)){
             int exptNumberColTracker = 0
             for (int col in 0..(molSpreadSheetData.superColumnCount - 1)){
                 String key = "${row}_${col}"
                 MolSpreadSheetCell molSpreadSheetCell
                 SpreadSheetActivityStorage spreadSheetActivityStorage
-                if (molSpreadSheetData.mssData.containsKey(key)) {
-                    molSpreadSheetCell = molSpreadSheetData.mssData[key]
+                if (dataMap.containsKey(key)) {
+                    molSpreadSheetCell = dataMap[key]
                     spreadSheetActivityStorage = molSpreadSheetCell.spreadSheetActivityStorage
                 }
                 for (int experimentNum in 0..molSpreadSheetData.mssHeaders[col].size()-1) {
                     String finalKey = "${row}_${(exptNumberColTracker++)}"
                     if (spreadSheetActivityStorage == null)  {
                         if (molSpreadSheetCell != null) {
-                            molSpreadSheetData.mssFinalData[finalKey] = new MolSpreadSheetCell(molSpreadSheetCell)
+                            molSpreadSheetData.mssData[finalKey] = new MolSpreadSheetCell(molSpreadSheetCell)
                         }  else {
-                            molSpreadSheetData.mssFinalData[finalKey] = new MolSpreadSheetCell()
+                            molSpreadSheetData.mssData[finalKey] = new MolSpreadSheetCell()
                         }
                     }  else {
-                        molSpreadSheetData.mssFinalData[finalKey] = new MolSpreadSheetCell(molSpreadSheetCell,experimentNum)
+                        molSpreadSheetData.mssData[finalKey] = new MolSpreadSheetCell(molSpreadSheetCell,experimentNum)
                     }
                 }
             }
 
         }
-      println "woo"
     }
 
 
@@ -257,12 +261,21 @@ class MolecularSpreadSheetService {
 //        spreadSheetActivityList
 //    }
     /**
+     * The goal of this method is to take all the information we have  and store it in a map. Note that we are
+     * crossing every compound  with every assay, so there may be instances where we have no data
+     * for a particular compound/activity combination.  That's fine-- don't fill in the entries
+     * for which we don't have data.  Alternatively, sometimes we will have multiple replicates
+     * for a single  compound/assay.  In this case those multiple values  can hang off of  the
+     * SpreadSheetActivity.
      *
      * @param molSpreadSheetData
      * @param experimentList
      * @param spreadSheetActivityList
      */
-    protected void populateMolSpreadSheetData(MolSpreadSheetData molSpreadSheetData, List<Experiment> experimentList, List<SpreadSheetActivity> spreadSheetActivityList) {
+    protected void populateMolSpreadSheetData(final MolSpreadSheetData molSpreadSheetData,
+                                                                        final List<Experiment> experimentList,
+                                                                        final List<SpreadSheetActivity> spreadSheetActivityList,
+                                                                        final Map<String,MolSpreadSheetCell> dataMap ) {
         // now step through the data and place into molSpreadSheetData
         int columnPointer = 0
         // we need to handle each experiment separately ( until NCGC can do this in the background )
@@ -274,10 +287,8 @@ class MolecularSpreadSheetService {
                     int innerRowPointer = molSpreadSheetData.rowPointer[spreadSheetActivity.cid]
                     int innerColumnCount = molSpreadSheetData.columnPointer[spreadSheetActivity.eid]
                     String arrayKey = "${innerRowPointer}_${innerColumnCount + 3}"
-                    SpreadSheetActivityStorage spreadSheetActivityStorage = new SpreadSheetActivityStorage(spreadSheetActivity)
-
                     MolSpreadSheetCell molSpreadSheetCell = new MolSpreadSheetCell(spreadSheetActivity)
-                    molSpreadSheetData.mssData.put(arrayKey, molSpreadSheetCell)
+                    dataMap[arrayKey] = molSpreadSheetCell
                 }
                 else {
                     println "did not expect cid = ${spreadSheetActivity.cid}"
@@ -286,7 +297,6 @@ class MolecularSpreadSheetService {
             }
             columnPointer++
         }
-        molSpreadSheetData
     }
 
 
@@ -319,7 +329,7 @@ class MolecularSpreadSheetService {
      * @param molSpreadSheetData
      * @param cartCompoundList
      */
-    protected void populateMolSpreadSheetRowMetadata(final MolSpreadSheetData molSpreadSheetData, final List<CartCompound> cartCompoundList) {
+    protected void populateMolSpreadSheetRowMetadata(final MolSpreadSheetData molSpreadSheetData, final List<CartCompound> cartCompoundList, Map<String,MolSpreadSheetCell> dataMap) {
 
         // add specific values for the cid column
         int rowCount = 0
@@ -329,7 +339,8 @@ class MolecularSpreadSheetService {
                     rowCount++,
                     cartCompound.compoundId as Long,
                     cartCompound.name,
-                    cartCompound.smiles
+                    cartCompound.smiles,
+                    dataMap
             )
         }
 
@@ -341,7 +352,7 @@ class MolecularSpreadSheetService {
      * @param compoundAdapterMap
      * @return
      */
-    protected void populateMolSpreadSheetRowMetadata(final MolSpreadSheetData molSpreadSheetData, final Map compoundAdapterMap) {
+    protected void populateMolSpreadSheetRowMetadata(final MolSpreadSheetData molSpreadSheetData, final Map compoundAdapterMap, Map<String,MolSpreadSheetCell> dataMap) {
 
         // Add every compound we can find in the compound adapters map
         List<CompoundAdapter> compoundAdaptersList = compoundAdapterMap.compoundAdapters
@@ -350,7 +361,7 @@ class MolecularSpreadSheetService {
             String smiles = compoundAdapter.structureSMILES
             Long cid = compoundAdapter.pubChemCID
             String name = compoundAdapter.name
-            updateMolSpreadSheetDataToReferenceCompound(molSpreadSheetData, rowCount++, cid, name, smiles)
+            updateMolSpreadSheetDataToReferenceCompound(molSpreadSheetData, rowCount++, cid, name, smiles, dataMap)
         }
 
     }
@@ -368,15 +379,16 @@ class MolecularSpreadSheetService {
                                                                              final int rowCount,
                                                                              final Long compoundId,
                                                                              final String compoundName,
-                                                                             final String compoundSmiles) {
+                                                                             final String compoundSmiles,
+                                                                             Map<String,MolSpreadSheetCell> dataMap) {
         // need to be able to map from CID to row location
         molSpreadSheetData.rowPointer.put(compoundId, rowCount)
 
         // add values for the cid column
-        molSpreadSheetData.mssData.put("${rowCount}_0".toString(), new MolSpreadSheetCell(compoundName, compoundSmiles, MolSpreadSheetCellType.image))
-        molSpreadSheetData.mssData.put("${rowCount}_1".toString(), new MolSpreadSheetCell(compoundId.toString(), MolSpreadSheetCellType.identifier))
+        dataMap.put("${rowCount}_0".toString(), new MolSpreadSheetCell(compoundName, compoundSmiles, MolSpreadSheetCellType.image))
+        dataMap.put("${rowCount}_1".toString(), new MolSpreadSheetCell(compoundId.toString(), MolSpreadSheetCellType.identifier))
         //we will use this to get the promiscuity score
-        molSpreadSheetData.mssData.put("${rowCount}_2".toString(), new MolSpreadSheetCell(compoundId.toString(), MolSpreadSheetCellType.identifier))
+        dataMap.put("${rowCount}_2".toString(), new MolSpreadSheetCell(compoundId.toString(), MolSpreadSheetCellType.identifier))
 
         molSpreadSheetData
 

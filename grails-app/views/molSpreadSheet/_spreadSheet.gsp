@@ -81,8 +81,6 @@
                             <% int currentCol =  colCnt %>
                             <g:if test="${spreadSheetActivityStorage != null}">
 
-                                %{--<g:each var="subColCnt" in="${0..(spreadSheetActivityStorage.getHillCurveValueHolderList().size()-1)}">--}%
-
                                     <% HillCurveValueHolder hillCurveValueHolder =  spreadSheetActivityStorage.getHillCurveValueHolderList()[0] %>
 
                                     <td class="molSpreadSheet" property="var${currentCol}">
@@ -95,7 +93,6 @@
                                          data-html="true"
                                          data-trigger="hover">
                                         ${hillCurveValueHolder.toString()}</div>
-                                    %{--${molSpreadSheetData?.displayValue(rowCnt, colCnt, subColCnt)?."value"}</div>--}%
                                     </p>
 
 
@@ -122,7 +119,6 @@
                                     </div>
 
                                 </td>
-                                %{--</g:each>--}%
                             </g:if>
                             <g:else>
                                 <td class="molSpreadSheet" property="var${colCnt}">
