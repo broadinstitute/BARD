@@ -13,7 +13,7 @@ class HomePage extends ScaffoldPage {
     static content = {
         searchBox() {$("#searchString")}
         searchButton(to: ResultsPage) {$("#searchButton")}
-        structureSearchLink(to: StructureSearchPage) {$("a", text: "Draw or paste a structure for a search")}
+        structureSearchLink(to: StructureSearchPage) {$("a", text: "Draw or paste a structure")}
 
         queryCart { module QueryCartModule }
     }

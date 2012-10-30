@@ -241,7 +241,10 @@ function findTheAppropriateControllerActionFromFacetType(searchType, facetFormTy
     return "EMPTY"
 
 }
-
+function showTab(tabId){
+    var tab = "#" + tabId;
+    $(tab).tab('show');
+}
 /**
  * Handles form submission from the main form
  * @param searchString  - The string entered into the main form's search box
@@ -256,17 +259,18 @@ function handleMainFormSubmit(searchString) {
             break;
         case 'ADID':
             activateCurrentTab('assaysTab');
-            $("#assays").tab('show');
+           showTab("#assays");
             handleSearch('/bardwebquery/bardWebInterface/searchAssaysByIDs', 'searchForm', 'assaysTab', 'totalAssays', 'Assay Definitions ', 'assays');
              break;
         case 'CID':
             activateCurrentTab('compoundsTab') ;
-            $("#compounds").tab('show');
+             showTab("#compounds");
             handleSearch('/bardwebquery/bardWebInterface/searchCompoundsByIDs', 'searchForm', 'compoundsTab', 'totalCompounds', 'Compounds ', 'compounds');
             break;
         case 'PID':
             activateCurrentTab('projectsTab');
-            $("#projects").tab('show');
+           // $("#projects").tab('show');
+            showTab("#projects");
             handleSearch('/bardwebquery/bardWebInterface/searchProjectsByIDs', 'searchForm', 'projectsTab', 'totalProjects', 'Projects ', 'projects');
             break;
         case 'ID':

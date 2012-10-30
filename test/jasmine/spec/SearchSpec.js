@@ -308,12 +308,72 @@ describe("Testing search.js", function () {
             expect(handleStructureSearch).not.toHaveBeenCalled();
             expect(handleStructureSearch.calls.length).toEqual(0);
         });
-        it("should verify that only handleSearch() is called with ADID", function () {
-            spyOn(window, "findSearchType").andReturn("ADID");
+
+        it("should verify that only handleSearch() is called with PID", function () {
+            spyOn(window, "findSearchType").andReturn("PID");
+            spyOn(window, "showTab");
+
             //call the method under test
             handleMainFormSubmit(searchString);
 
             expect(findSearchType).toHaveBeenCalled();
+            expect(showTab).toHaveBeenCalledWith('#projects')
+            expect(findSearchType.calls.length).toEqual(1);
+            expect(findSearchType).toHaveBeenCalledWith(searchString);
+
+
+            expect(handleAllFreeTextSearches).not.toHaveBeenCalled();
+            expect(handleAllFreeTextSearches.calls.length).toEqual(0);
+
+            expect(handleAllIdSearches).not.toHaveBeenCalled();
+            expect(handleAllIdSearches.calls.length).toEqual(0);
+
+            expect(handleStructureSearch).not.toHaveBeenCalled();
+            expect(handleStructureSearch.calls.length).toEqual(0);
+
+            expect(handleSearch).toHaveBeenCalled();
+            expect(handleSearch.calls.length).toEqual(1);
+            expect(handleSearch).toHaveBeenCalledWith('/bardwebquery/bardWebInterface/searchProjectsByIDs', 'searchForm', 'projectsTab', 'totalProjects', 'Projects ', 'projects');
+
+        });
+
+
+        it("should verify that only handleSearch() is called with CID", function () {
+            spyOn(window, "findSearchType").andReturn("CID");
+            spyOn(window, "showTab");
+
+            //call the method under test
+            handleMainFormSubmit(searchString);
+
+            expect(findSearchType).toHaveBeenCalled();
+            expect(showTab).toHaveBeenCalledWith('#compounds')
+            expect(findSearchType.calls.length).toEqual(1);
+            expect(findSearchType).toHaveBeenCalledWith(searchString);
+
+
+            expect(handleAllFreeTextSearches).not.toHaveBeenCalled();
+            expect(handleAllFreeTextSearches.calls.length).toEqual(0);
+
+            expect(handleAllIdSearches).not.toHaveBeenCalled();
+            expect(handleAllIdSearches.calls.length).toEqual(0);
+
+            expect(handleStructureSearch).not.toHaveBeenCalled();
+            expect(handleStructureSearch.calls.length).toEqual(0);
+
+            expect(handleSearch).toHaveBeenCalled();
+            expect(handleSearch.calls.length).toEqual(1);
+            expect(handleSearch).toHaveBeenCalledWith('/bardwebquery/bardWebInterface/searchCompoundsByIDs', 'searchForm', 'compoundsTab', 'totalCompounds', 'Compounds ', 'compounds');
+
+        });
+        it("should verify that only handleSearch() is called with ADID", function () {
+            spyOn(window, "findSearchType").andReturn("ADID");
+            spyOn(window, "showTab");
+
+            //call the method under test
+            handleMainFormSubmit(searchString);
+
+            expect(findSearchType).toHaveBeenCalled();
+            expect(showTab).toHaveBeenCalledWith('#assays')
             expect(findSearchType.calls.length).toEqual(1);
             expect(findSearchType).toHaveBeenCalledWith(searchString);
 
