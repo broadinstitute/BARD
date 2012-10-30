@@ -106,6 +106,20 @@ class BardWebInterfaceController {
      */
     def searchCompoundsByIDs(SearchCommand searchCommand) {
         if (StringUtils.isNotBlank(searchCommand.searchString)) {
+            String originalSearchString = searchCommand.searchString
+            final String[] searchStringSplit = searchCommand.searchString.split(":")
+            if (searchStringSplit.length == 2) {  //if the search string is of the form ADID:1234,3456...
+                final String searchTypeString = searchStringSplit[0]
+                //TODO: assert that the string is CID
+
+                String ids = searchStringSplit[1]
+                //TODO: assert that this string is not empty or null
+                //assign the list of ids only to the command object
+                searchCommand.searchString = ids
+            }
+
+
+            //we want to remove the duplicates from the search string
             removeDuplicatesFromSearchString(searchCommand)
             final List<SearchFilter> searchFilters = searchCommand.appliedFilters ?: []
             this.queryService.findFiltersInSearchBox(searchFilters, searchCommand.searchString)
@@ -120,7 +134,7 @@ class BardWebInterfaceController {
                         compoundAdapters: compoundAdapters,
                         facets: compoundAdapterMap.facets,
                         nhits: compoundAdapterMap.nHits,
-                        searchString: "${searchCommand.searchString}",
+                        searchString: "${originalSearchString}",
                         appliedFilters: getAppliedFilters(searchFilters, compoundAdapterMap.facets)
                 ]
                 )
@@ -143,7 +157,22 @@ class BardWebInterfaceController {
     def searchAssaysByIDs(SearchCommand searchCommand) {
 
         if (StringUtils.isNotBlank(searchCommand.searchString)) {
+            String originalSearchString = searchCommand.searchString
+            final String[] searchStringSplit = searchCommand.searchString.split(":")
+            if (searchStringSplit.length == 2) {  //if the search string is of the form ADID:1234,3456...
+                final String searchTypeString = searchStringSplit[0]
+                //TODO: assert that the string is ADID
+
+                String ids = searchStringSplit[1]
+                //TODO: assert that this string is not empty or null
+                //assign the list of ids only to the command object
+                searchCommand.searchString = ids
+            }
+
+
+            //we want to remove the duplicates from the search string
             removeDuplicatesFromSearchString(searchCommand)
+             //after removing duplicates, reassign
             final List<SearchFilter> searchFilters = searchCommand.appliedFilters ?: []
             try {
                 final List<Long> adids = searchStringToIdList(searchCommand.searchString)
@@ -153,7 +182,7 @@ class BardWebInterfaceController {
                         assayAdapters: assayAdapterMap.assayAdapters,
                         facets: assayAdapterMap.facets,
                         nhits: assayAdapterMap.nHits,
-                        searchString: "${searchCommand.searchString}",
+                        searchString: "${originalSearchString}",
                         appliedFilters: getAppliedFilters(searchFilters, assayAdapterMap.facets)])
             }
             catch (Exception exp) {
@@ -173,11 +202,22 @@ class BardWebInterfaceController {
     def searchProjectsByIDs(SearchCommand searchCommand) {
 
         if (StringUtils.isNotBlank(searchCommand.searchString)) {
+            String originalSearchString = searchCommand.searchString
+             final String[] searchStringSplit = searchCommand.searchString.split(":")
+            if (searchStringSplit.length == 2) {  //if the search string is of the form PID:1234,3456...
+                final String searchTypeString = searchStringSplit[0]
+                //TODO: assert that the string is PID
+
+                String ids = searchStringSplit[1]
+                //TODO: assert that this string is not empty or null
+                //assign the list of ids only to the command object
+                searchCommand.searchString = ids
+            }
+
+
+            //we want to remove the duplicates from the search string
             removeDuplicatesFromSearchString(searchCommand)
             final List<SearchFilter> searchFilters = searchCommand.appliedFilters ?: []
-//            if (!searchFilters) {//user SearchCommand
-//                searchFilters = []
-//            }
             try {
                 final List<Long> projectIds = searchStringToIdList(searchCommand.searchString)
                 Map projectAdapterMap = this.queryService.findProjectsByPIDs(projectIds, searchFilters)
@@ -185,7 +225,7 @@ class BardWebInterfaceController {
                         projectAdapters: projectAdapterMap.projectAdapters,
                         facets: projectAdapterMap.facets,
                         nhits: projectAdapterMap.nHits,
-                        searchString: "${searchCommand.searchString}",
+                        searchString: "${originalSearchString}",
                         appliedFilters: getAppliedFilters(searchFilters, projectAdapterMap.facets)])
             }
             catch (Exception exp) {

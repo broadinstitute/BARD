@@ -16,11 +16,23 @@ describe("Testing search.js", function () {
             searchString = "123 ";
             expect(findSearchType(searchString)).toEqual("ID");
         });
+        it("should return the string 'ADID' when we pass in ADID: followed by a single number followed by a space", function () {
+            searchString = "ADID:123 ";
+            expect(findSearchType(searchString)).toEqual("ADID");
+        });
+        it("should return the string 'PID' when we pass in PID: followed by a single number followed by a space", function () {
+            searchString = "PID:123 ";
+            expect(findSearchType(searchString)).toEqual("PID");
+        });
+        it("should return the string 'CID' when we pass in CID: followed by a single number followed by a space", function () {
+            searchString = "CID:123 ";
+            expect(findSearchType(searchString)).toEqual("CID");
+        });
         it("should return the string 'ID' when we pass in a list of comma separated integers", function () {
             searchString = "123,456,789";
             expect(findSearchType(searchString)).toEqual("ID");
         });
-        it("should return the string 'ID' when we pass in a single integers", function () {
+        it("should return the string 'ID' when we pass in a csv of integers", function () {
             searchString = "123";
             expect(findSearchType(searchString)).toEqual("ID");
 
@@ -30,13 +42,68 @@ describe("Testing search.js", function () {
             searchString = "AB,123,560";
             expect(findSearchType(searchString)).not.toEqual("ID");
         });
+        it("should return the string 'ADID' when we pass in ADID: followed by a csv of integers", function () {
+            searchString = "ADID:123";
+            expect(findSearchType(searchString)).toEqual("ADID");
+
+            searchString = "ADID:  234 , 123 ";
+            expect(findSearchType(searchString)).toEqual("ADID");
+
+            searchString = "ADID:AB,123,560";
+            expect(findSearchType(searchString)).not.toEqual("ADID");
+        });
+        it("should return the string 'PID' when we pass in PID: followed by a csv of integers", function () {
+            searchString = "PID:123";
+            expect(findSearchType(searchString)).toEqual("PID");
+
+            searchString = "PID:  234 , 123 ";
+            expect(findSearchType(searchString)).toEqual("PID");
+
+            searchString = "PID:AB,123,560";
+            expect(findSearchType(searchString)).not.toEqual("PID");
+        });
+
+        it("should return the string 'CID' when we pass in CID: followed by a csv of integers", function () {
+            searchString = "CID:123";
+            expect(findSearchType(searchString)).toEqual("CID");
+
+            searchString = "CID:  234 , 123 ";
+            expect(findSearchType(searchString)).toEqual("CID");
+
+            searchString = "CID:AB,123,560";
+            expect(findSearchType(searchString)).not.toEqual("CID");
+        });
         it("should not return the string 'ID' when we pass in a list of comma separated values containing alphanumeric characters", function () {
             searchString = "1,2A,A123,560";
             expect(findSearchType(searchString)).not.toEqual("ID");
         });
+        it("should not return the string 'ADID' when we pass in 'ADID:' followed by a list of comma separated values containing alphanumeric characters", function () {
+            searchString = "ADID:1,2A,A123,560";
+            expect(findSearchType(searchString)).not.toEqual("ADID");
+        });
+        it("should not return the string 'CID' when we pass in 'CID:' followed by a list of comma separated values containing alphanumeric characters", function () {
+            searchString = "CID:1,2A,A123,560";
+            expect(findSearchType(searchString)).not.toEqual("CID");
+        });
+        it("should not return the string 'PID' when we pass in 'PID:' followed by a list of comma separated values containing alphanumeric characters", function () {
+            searchString = "PID:1,2A,A123,560";
+            expect(findSearchType(searchString)).not.toEqual("PID");
+        });
         it("should return the string 'STRUCTURE' when we pass in Exact:CC", function () {
             searchString = "Exact:CC";
             expect(findSearchType(searchString)).toEqual("STRUCTURE");
+        });
+        it("should return the string 'ADID' when we pass in ADID:234", function () {
+            searchString = "ADID:1234";
+            expect(findSearchType(searchString)).toEqual("ADID");
+        });
+        it("should return the string 'PID' when we pass in PID:234", function () {
+            searchString = "PID:234";
+            expect(findSearchType(searchString)).toEqual("PID");
+        });
+        it("should return the string 'CID' when we pass in CID:234", function () {
+            searchString = "CID:1234";
+            expect(findSearchType(searchString)).toEqual("CID");
         });
         it("should return the string 'STRUCTURE' when we pass in SubStructure:CC", function () {
             searchString = "Substructure:CC";
@@ -63,6 +130,17 @@ describe("Testing search.js", function () {
 
             searchString = "similarity:CC";
             expect(findSearchType(searchString)).toEqual("STRUCTURE");
+        });
+
+        it("should return the string 'ADID'/'PID'/'CID' when we pass in one of 'aDid:12354','ciD:22','Pid:33',case insensitive", function () {
+            searchString = "aDid:12354";
+            expect(findSearchType(searchString)).toEqual("ADID");
+
+            searchString = "ciD:22";
+            expect(findSearchType(searchString)).toEqual("CID");
+
+            searchString = "Pid:33";
+            expect(findSearchType(searchString)).toEqual("PID");
         });
         it("should return the string 'STRUCTURE' when we pass in one of 'eXact:CC',case insensitive", function () {
             searchString = "eXact:CC";
@@ -106,17 +184,17 @@ describe("Testing search.js", function () {
             searchString = "GO:BIOLOGICAL_PROCESS";
             expect(findSearchType(searchString)).toEqual("FREE_TEXT");
         });
-        it("should return the string 'FREE_TEXT' for everything else. 'ADID:1,234,567'", function () {
+        it("should return the string 'ADID' for everything else. 'ADID:1,234,567'", function () {
             searchString = "ADID:1,234,567";
-            expect(findSearchType(searchString)).toEqual("FREE_TEXT");
+            expect(findSearchType(searchString)).toEqual("ADID");
         });
-        it("should return the string 'FREE_TEXT' for everything else. 'PID:1,234,567'", function () {
+        it("should return the string 'PID' for everything else. 'PID:1,234,567'", function () {
             searchString = "PID:1,234,567";
-            expect(findSearchType(searchString)).toEqual("FREE_TEXT");
+            expect(findSearchType(searchString)).toEqual("PID");
         });
-        it("should return the string 'FREE_TEXT' for everything else. 'CID:1,234,567'", function () {
+        it("should return the string 'CID' for everything else. 'CID:1,234,567'", function () {
             searchString = "CID:1,234,567";
-            expect(findSearchType(searchString)).toEqual("FREE_TEXT");
+            expect(findSearchType(searchString)).toEqual("CID");
         });
     });
 
@@ -179,6 +257,7 @@ describe("Testing search.js", function () {
             searchString = "Some Text";
             spyOn(window, "handleAllFreeTextSearches");
             spyOn(window, "handleAllIdSearches");
+            spyOn(window, "handleSearch");
             spyOn(window, "handleStructureSearch");
 
         });
@@ -200,6 +279,9 @@ describe("Testing search.js", function () {
             expect(handleAllIdSearches).not.toHaveBeenCalled();
             expect(handleAllIdSearches.calls.length).toEqual(0);
 
+            expect(handleSearch).not.toHaveBeenCalled();
+            expect(handleSearch.calls.length).toEqual(0);
+
             expect(handleStructureSearch).not.toHaveBeenCalled();
             expect(handleStructureSearch.calls.length).toEqual(0);
         });
@@ -220,12 +302,14 @@ describe("Testing search.js", function () {
             expect(handleAllIdSearches.calls.length).toEqual(1);
             expect(handleAllIdSearches).toHaveBeenCalledWith();
 
+            expect(handleSearch).not.toHaveBeenCalled();
+            expect(handleSearch.calls.length).toEqual(0);
 
             expect(handleStructureSearch).not.toHaveBeenCalled();
             expect(handleStructureSearch.calls.length).toEqual(0);
         });
-        it("should verify that only handleAllIdSearches() is called", function () {
-            spyOn(window, "findSearchType").andReturn("STRUCTURE");
+        it("should verify that only handleSearch() is called with ADID", function () {
+            spyOn(window, "findSearchType").andReturn("ADID");
             //call the method under test
             handleMainFormSubmit(searchString);
 
@@ -240,9 +324,12 @@ describe("Testing search.js", function () {
             expect(handleAllIdSearches).not.toHaveBeenCalled();
             expect(handleAllIdSearches.calls.length).toEqual(0);
 
-            expect(handleStructureSearch).toHaveBeenCalled();
-            expect(handleStructureSearch.calls.length).toEqual(1);
-            expect(handleStructureSearch).toHaveBeenCalledWith('/bardwebquery/bardWebInterface/searchStructures', 'searchForm');
+            expect(handleStructureSearch).not.toHaveBeenCalled();
+            expect(handleStructureSearch.calls.length).toEqual(0);
+
+            expect(handleSearch).toHaveBeenCalled();
+            expect(handleSearch.calls.length).toEqual(1);
+            expect(handleSearch).toHaveBeenCalledWith('/bardwebquery/bardWebInterface/searchAssaysByIDs', 'searchForm', 'assaysTab', 'totalAssays', 'Assay Definitions ', 'assays');
 
         });
     });
@@ -450,6 +537,39 @@ describe("Testing search.js", function () {
             expect(findSearchType).toHaveBeenCalledWith(searchString);
             expect(findTheAppropriateControllerActionFromFacetType).toHaveBeenCalledWith(searchType, facetFormType);
         });
+        it("Should handle ADID Search", function () {
+            searchString = "123";
+            facetFormType = "Text";
+            searchType = "ADID";
+
+            spyOn(window, "findSearchType").andReturn(searchType);
+            findTheAppropriateControllerActionForRequest(searchString, facetFormType);
+
+            expect(findSearchType).toHaveBeenCalledWith(searchString);
+            expect(findTheAppropriateControllerActionFromFacetType).toHaveBeenCalledWith(searchType, facetFormType);
+        });
+        it("Should handle CID Search", function () {
+            searchString = "123";
+            facetFormType = "Text";
+            searchType = "CID";
+
+            spyOn(window, "findSearchType").andReturn(searchType);
+            findTheAppropriateControllerActionForRequest(searchString, facetFormType);
+
+            expect(findSearchType).toHaveBeenCalledWith(searchString);
+            expect(findTheAppropriateControllerActionFromFacetType).toHaveBeenCalledWith(searchType, facetFormType);
+        });
+        it("Should handle PID Search", function () {
+            searchString = "123";
+            facetFormType = "Text";
+            searchType = "PID";
+
+            spyOn(window, "findSearchType").andReturn(searchType);
+            findTheAppropriateControllerActionForRequest(searchString, facetFormType);
+
+            expect(findSearchType).toHaveBeenCalledWith(searchString);
+            expect(findTheAppropriateControllerActionFromFacetType).toHaveBeenCalledWith(searchType, facetFormType);
+        });
         it("Should handle Structure Search", function () {
             searchString = "Exact:CC";
             facetFormType = "Text";
@@ -515,15 +635,33 @@ describe("Testing search.js", function () {
             var controllerAction = findTheAppropriateControllerActionFromFacetType(searchType, facetFormType);
             expect(controllerAction).toEqual("searchAssaysByIDs");
         });
+        it("Should handle ADID and AssayFacetForm type", function () {
+            facetFormType = "AssayFacetForm";
+            searchType = "ADID";
+            var controllerAction = findTheAppropriateControllerActionFromFacetType(searchType, facetFormType);
+            expect(controllerAction).toEqual("searchAssaysByIDs");
+        });
         it("Should handle ID and ProjectFacetForm type", function () {
             facetFormType = "ProjectFacetForm";
             searchType = "ID";
             var controllerAction = findTheAppropriateControllerActionFromFacetType(searchType, facetFormType);
             expect(controllerAction).toEqual("searchProjectsByIDs");
         });
+        it("Should handle PID and ProjectFacetForm type", function () {
+            facetFormType = "ProjectFacetForm";
+            searchType = "PID";
+            var controllerAction = findTheAppropriateControllerActionFromFacetType(searchType, facetFormType);
+            expect(controllerAction).toEqual("searchProjectsByIDs");
+        });
         it("Should handle ID and CompoundFacetForm type", function () {
             facetFormType = "CompoundFacetForm";
             searchType = "ID";
+            var controllerAction = findTheAppropriateControllerActionFromFacetType(searchType, facetFormType);
+            expect(controllerAction).toEqual("searchCompoundsByIDs");
+        });
+        it("Should handle CID and CompoundFacetForm type", function () {
+            facetFormType = "CompoundFacetForm";
+            searchType = "CID";
             var controllerAction = findTheAppropriateControllerActionFromFacetType(searchType, facetFormType);
             expect(controllerAction).toEqual("searchCompoundsByIDs");
         });

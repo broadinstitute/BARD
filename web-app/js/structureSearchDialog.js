@@ -1,13 +1,11 @@
 var adjustMarvinSketchWindow = function () {
     var width = window.innerWidth / 2;
     var height = window.innerHeight / 2;
-//    $('#MarvinSketch').css('width', width)
-//    $('#MarvinSketch').css('height', height)
     document.MarvinSketch.width = width
     document.MarvinSketch.height = height
 }
 
-//$(window).resize(alert("Adjusting"));
+
 $(window.parent).resize(adjustMarvinSketchWindow);
 
 $(document).ready(function () {
@@ -15,7 +13,6 @@ $(document).ready(function () {
         show:false
     });
     $('#modalDiv').css('width', 'auto') //Disable the default width=560px from bootstrap.css
-//    $('#modalDiv').on('show', adjustMarvinSketchWindow);
     $('#structureSearchButton').click(function () {
         var structureSearchTypeSelected = $('input:radio[name=structureSearchType]:checked').val();
         var marvinSketch = $('#MarvinSketch')[0];
