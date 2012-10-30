@@ -49,18 +49,6 @@ class SpreadSheetActivityStorage {
             this.columnNames =  [ spreadSheetActivityStorage.columnNames[experimentIndex]  ]
     }
 
-    /**
-     *
-     * @param subColumn
-     * @return
-     */
-    public String toString(int subColumn) {
-        String returnValue = "unknown"
-        if ((hillCurveValueHolderList!=null) && (subColumn<=hillCurveValueHolderList.size()))
-            returnValue = hillCurveValueHolderList[subColumn].toString()
-        returnValue
-    }
-
 
 /**
      *

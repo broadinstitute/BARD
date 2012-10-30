@@ -207,7 +207,11 @@ class ExperimentalValueUnitSpec extends Specification {
         where:
         label                                                         | activity | experimentValueType                      | expectedStringValue
         "No Activity"                                                 | false    | ExperimentalValueType.greaterThanNumeric | "(no activity)"
+        "Experiment Value Type==greaterThanNumeric and activity==true"| true     | ExperimentalValueType.greaterThanNumeric | "> 2"
+        "No Activity"                                                 | false    | ExperimentalValueType.lessThanNumeric    | "(no activity)"
         "Experiment Value Type == lessThanNumeric and activity==true" | true     | ExperimentalValueType.lessThanNumeric    | "< 2"
+        "No Activity"                                                 | false    | ExperimentalValueType.percentageNumeric  | "(no activity)"
+        "Experiment Value Type == percentage and activity==true"      | true     | ExperimentalValueType.percentageNumeric  | "2 %"
         "No ExperimentalValueType and No activity"                    | true     | null                                     | "2.0"
     }
 
