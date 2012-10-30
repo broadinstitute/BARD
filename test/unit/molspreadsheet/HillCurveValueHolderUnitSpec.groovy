@@ -74,4 +74,27 @@ class HillCurveValueHolderUnitSpec extends Specification{
 
     }
 
+
+
+    void "Test toString method"() {
+        when:
+        HillCurveValueHolder hillCurveValueHolder = new HillCurveValueHolder()
+        hillCurveValueHolder.slope = slope
+        hillCurveValueHolder.response = [response]
+
+        then:
+        assertNotNull hillCurveValueHolder
+        assert hillCurveValueHolder.toString() ==  returnValue
+
+        where:
+        slope       |   response    |   returnValue
+        47.89       |   null        |   "47.9"
+        null        |   47.89       |   "47.9"
+        47.89       |   47.89       |   "47.9"
+        null        |   null        |    "Missing data qualifier"
+
+    }
+
+
+
 }

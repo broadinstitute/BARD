@@ -1,10 +1,12 @@
 package molspreadsheet
 
+import org.slf4j.LoggerFactory
 import results.ExperimentalValue
 
 class HillCurveValueHolder {
 
     static belongsTo = [spreadSheetActivityStorage: SpreadSheetActivityStorage]
+    private final log = LoggerFactory.getLogger(this.class.name)
 
         String identifier = ""
         Integer subColumnIndex = 0
@@ -22,25 +24,24 @@ class HillCurveValueHolder {
         sInf nullable: true
         slope nullable: true
         coef  nullable: true
-        //     conc nullable: false
-        //     response nullable: false
     }
 
 
     @Override
     public String toString() {
-        String returnValue = "Missing data qualifier."
+        String returnValue = "Missing data qualifier"
 
         Double numericalReturnValue = Double.NaN
         if (slope  != null)   {
             numericalReturnValue = slope
         }
         else if ((response  != null) &&
-                (response.size()  == 1)) {
+                (response.size()  == 1)  &&
+                (response[0]  != null)) {
             numericalReturnValue = response[0]
         } else  {
             //TODO: find the business rule describing desired actions under these circumstances
-           println "Problem identified by HillCurveValueHolder: no slope and as well no single valued response"
+           log.info "Problem identified by HillCurveValueHolder: no slope and as well no single valued response"
         }
 
         if (numericalReturnValue != Double.NaN)  {

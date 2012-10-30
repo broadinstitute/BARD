@@ -60,6 +60,8 @@ class SpreadSheetActivityStorage {
             returnValue = hillCurveValueHolderList[subColumn].toString()
         returnValue
     }
+
+
 /**
      *
      * @param o
