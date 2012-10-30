@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <r:require modules="core,bootstrap, assayshow"/>
+    <r:require modules="core,bootstrap, assaycards"/>
     <meta name="layout" content="basic"/>
     <link rel="stylesheet" href="${resource(dir: 'css', file: 'card.css')}" type="text/css">
     <link rel="stylesheet" href="${resource(dir: 'css', file: 'bootstrap-plus.css')}" type="text/css">
@@ -13,13 +13,13 @@
 	<div class="row-fluid">
 	    <div class="span12">
 	    	<div class="well well-small">
-	    		<div class="pull-left">
-	        		<h4>View Assay Definition (ADID: ${assayInstance?.id})</h4>
+	        	<div class="pull-left">
+	        		<h4>Edit Assay Definition (ADID: ${assayInstance?.id})</h4>
 	        	</div>
 	        	<g:if test="${assayInstance?.id}">
 	        	<div class="pull-right">
-	        		<g:link action="edit" id="${assayInstance?.id}" class="btn btn-small btn-info">Edit</g:link>
-	        		<g:link action="edit" id="${assayInstance?.id}" class="btn btn-small btn-info">Clone</g:link>
+	        		<g:link action="show" id="${assayInstance?.id}" class="btn btn-small btn-primary">Save</g:link>
+	        		<g:link action="show" id="${assayInstance?.id}" class="btn btn-small">Cancel</g:link>
 	        	</div>
 	        	</g:if>
 	        </div>
@@ -46,7 +46,7 @@
 	            <g:render template="assaySummaryView" model="['assayInstance': assayInstance]"/>
 
 	            <h3><a href="#">Assay and Biology Details</a></h3>
-	            <g:render template="cardDtoView" model="['cardDtoMap': cardDtoMap, 'assayId': assayInstance.id]"/>
+	            <g:render template="cardDtoEditView" model="['cardDtoMap': cardDtoMap, 'assayId': assayInstance.id]"/>
 
 	            <h3><a href="#">Documents</a></h3>
 	            <g:render template="assayDocumentsView" model="['assayInstance': assayInstance]"/>
