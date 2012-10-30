@@ -29,7 +29,7 @@ class QueryCartControllerSpec extends Specification  {
 
     void "test add"() {
         given:
-        params.stt="1"
+        params.showCartDetails="true"
         params.class = 'class bardqueryapi.Fake'
         params.assayTitle = 'my assay'
         params.id = "2"

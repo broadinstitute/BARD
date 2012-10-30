@@ -16,11 +16,9 @@
 <div class="row-fluid">
     <div class="span12 page-header">
         <h1>Project: ${projectAdapter?.name} <small>(Project ID: ${projectAdapter?.project?.id})</small></h1>
-        <a href="#" class="addProjectToCart btn btn-mini"
-           data-cart-name="${JavaScriptUtility.cleanup(projectAdapter?.name)}"
-           data-cart-id="${projectAdapter?.project?.id}">
-            Save for later analysis
-        </a>
+        <g:saveToCartButton id="${projectAdapter.project.id}"
+                            name="${JavaScriptUtility.cleanup(projectAdapter.project.name)}"
+                            type="${querycart.QueryItemType.Project}"/>
     </div>
 </div>
 
@@ -105,7 +103,7 @@
         <div class="accordion-group">
             <div class="accordion-heading">
                 <a href="#document-header" id="assays-header" class="accordion-toggle" data-toggle="collapse"
-                   data-target="#assays-info"><i class="icon-chevron-right"></i> Assays (${assays.size()})</a>
+                   data-target="#assays-info"><i class="icon-chevron-right"></i> Assays (${assays?.size()})</a>
 
                 <div id="assays-info" class="accordion-body collapse">
                     <div class="accordion-inner">

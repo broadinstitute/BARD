@@ -32,7 +32,7 @@ class QueryItem extends Shoppable {
 
     static constraints = {
         queryItemType nullable: false
-        externalId nullable: false, min: 1L
+        externalId nullable: false, min: 1L, unique: 'queryItemType'
         name nullable: false, blank: false, maxSize: MAXIMUM_NAME_FIELD_LENGTH
     }
 

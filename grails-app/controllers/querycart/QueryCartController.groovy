@@ -1,6 +1,5 @@
 package querycart
 
-import com.metasieve.shoppingcart.Shoppable
 import com.metasieve.shoppingcart.ShoppingCartService
 import grails.plugins.springsecurity.Secured
 
@@ -9,60 +8,68 @@ class QueryCartController {
     ShoppingCartService shoppingCartService
     QueryCartService queryCartService
 
-    // add a single element the shopping cart
-    def add() {
+    def addItem() {
+        QueryItemType itemType = params.type as QueryItemType
+        Long id = params.id as Long
+        String name = params.name
 
-        def somethingWasAdded = null
-        int somethingReallyChanged = Integer.parseInt(params.stt)
-        if (params.class == 'class querycart.CartAssay') {
-
-            // somethingWasAdded = queryCartService.addToShoppingCart(new CartAssay(params.assayTitle, params.id))
-            somethingWasAdded = handleAddingToShoppingCart(new CartAssay(params.assayTitle, params.id))
-
-        } else if (params.class == 'class querycart.CartCompound') {
-
-            CartCompound cartCompound = new CartCompound(params.smiles, params.name, params.id)
-//            somethingWasAdded = queryCartService.addToShoppingCart(cartCompound)
-            somethingWasAdded = handleAddingToShoppingCart(cartCompound)
-
-        } else if (params.class == 'class querycart.CartProject') {
-
-//            somethingWasAdded = queryCartService.addToShoppingCart(new CartProject(params.projectName, params.id))
-            somethingWasAdded = handleAddingToShoppingCart(new CartProject(params.projectName, params.id))
-
-        }
-
-        if (somethingWasAdded != null) {  // something was added, so the display must change
-            if (somethingReallyChanged == 0) {
-                render(template: '/bardWebInterface/queryCartIndicator', model: modelForSummary)
-            } else {
-                render(template: '/bardWebInterface/sarCartContent', model: modelForDetails)  // refresh the cart display via Ajax
+        QueryItem item = QueryItem.findByExternalIdAndQueryItemType(id, itemType)
+        if (!item) {
+            switch(itemType) {
+                case QueryItemType.Compound:
+                    String smiles = params.smiles
+                    item = new CartCompound(smiles, name, id)
+                    break
+                case QueryItemType.Project:
+                    item = new CartProject(name, id)
+                    break
+                case QueryItemType.AssayDefinition:
+                    item = new CartAssay(name, id)
+                    break
+                default:
+                    throw new UnsupportedOperationException("Unsupported QueryItemType " + itemType)
             }
         }
+        queryCartService.addToShoppingCart(item)
+
+        return updateOnscreenCart()
     }
 
-    def handleAddingToShoppingCart(Shoppable shoppable) {
-        def returnValue
-        if (shoppable) {
-            try {
-                returnValue = queryCartService.addToShoppingCart(shoppable)
-            } catch (Exception exception) {
-                log.error("Error performing assay search", exception)
-            }
-        } else {
-            log.error("Received unexpected null shoppable")
+    def removeItem() {
+        QueryItemType itemType = params.type as QueryItemType
+        Long id = params.id as Long
+        QueryItem item = QueryItem.findByExternalIdAndQueryItemType(id, itemType)
+        if (item) {
+            queryCartService.removeFromShoppingCart(item)
         }
-        return returnValue
+
+        return updateOnscreenCart()
+    }
+
+    // empty out everything from the shopping cart
+    def removeAll() {
+        queryCartService.emptyShoppingCart()
+        render(template: '/bardWebInterface/sarCartContent', model: modelForDetails) // refresh the cart display
+    }
+
+    def isInCart() {
+        Long idToCheck = params.id as Long
+        QueryItemType itemType = params.type as QueryItemType
+
+        Boolean result = false
+        QueryItem shoppingItem = QueryItem.findByExternalIdAndQueryItemType(idToCheck, itemType)
+        if (shoppingItem) {
+            result = queryCartService.isInShoppingCart(shoppingItem)
+        }
+        render result
     }
 
     def updateOnscreenCart() {
-        int somethingReallyChanged = Integer.parseInt(params.stt)
-        if (somethingReallyChanged == 0) {
-            return updateSummary()
+        boolean showCartDetails = Boolean.parseBoolean(params.showCartDetails)
+        if (showCartDetails) {
+            return updateDetails()  // refresh the cart display via Ajax
         }
-        return updateDetails()  // refresh the cart display via Ajax
-
-
+        return updateSummary()
     }
 
     def updateSummary() {
@@ -89,38 +96,6 @@ class QueryCartController {
         List assayDefinitions = mapOfUniqueItems.get(QueryCartService.cartAssay)
         List projects = mapOfUniqueItems.get(QueryCartService.cartProject)
         return ['totalItemCount': totalItemCount, 'compounds': compounds, 'assayDefinitions': assayDefinitions, 'projects': projects]
-    }
-
-    // remove a single element
-    def remove() {
-        int idToRemove = Integer.parseInt(params.id)
-        try {
-            def shoppingItem = Shoppable.get(idToRemove)
-            queryCartService.removeFromShoppingCart(shoppingItem)
-        } catch (Exception exception) {
-            log.error("Problem removing item $idToRemove. Message = ${exception.message}")
-        }
-        render(template: '/bardWebInterface/sarCartContent', model: modelForDetails)  // refresh the cart display
-    }
-
-    // empty out everything from the shopping cart
-    def removeAll() {
-        queryCartService.emptyShoppingCart()
-        render(template: '/bardWebInterface/sarCartContent', model: modelForDetails) // refresh the cart display
-    }
-
-    def isInCart() {
-        Long idToRemove = params.externalId as Long
-        QueryItemType itemType = params.type as QueryItemType
-
-        Boolean result = false
-        QueryItem shoppingItem = QueryItem.findByExternalIdAndQueryItemType(idToRemove, itemType)
-        if (shoppingItem) {
-            result = queryCartService.isInShoppingCart(shoppingItem)
-        }
-        render(contentType: "text/json") {
-            element result
-        }
     }
 
 }

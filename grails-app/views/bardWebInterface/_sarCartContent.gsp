@@ -16,7 +16,10 @@
                         <a href="${createLink(controller:'bardWebInterface' , action: 'showCompound', id:elem.externalId)}">${elem.toString()}</a>
                     </td>
                     <td>
-                        <a href="/bardwebquery/queryCart/remove/${elem.id}" class="removeXMark removeItemFromCart">X</a>
+                        <button title="Remove ${elem.toString()}" class="removeItemFromCart btn btn-link"
+                                data-cart-id="${elem.externalId}" data-cart-type="${elem.queryItemType}">
+                            <i class="icon-remove-sign"></i>
+                        </button>
                     </td>
                 </tr>
             </g:each>
@@ -36,7 +39,10 @@
                         <a href="${createLink(controller:'bardWebInterface' , action: 'showAssay', id:elem.externalId)}">${elem.toString()}</a>
                     </td>
                     <td>
-                        <a href="/bardwebquery/queryCart/remove/${elem.id}" class="removeXMark removeItemFromCart">X</a>
+                        <button title="Remove ${elem.toString()}" class="removeItemFromCart btn btn-link"
+                                data-cart-id="${elem.externalId}" data-cart-type="${elem.queryItemType}">
+                            <i class="icon-remove-sign"></i>
+                        </button>
                     </td>
                 </tr>
              </g:each>
@@ -56,7 +62,10 @@
                             <a href="${createLink(controller:'bardWebInterface' , action: 'showProject', id:elem.externalId)}">${elem.toString()}</a>
                         </td>
                         <td>
-                            <a href="/bardwebquery/queryCart/remove/${elem.id}" class="removeXMark removeItemFromCart">X</a>
+                            <button title="Remove ${elem.toString()}" class="removeItemFromCart btn btn-link"
+                                    data-cart-id="${elem.externalId}" data-cart-type="${elem.queryItemType}">
+                                <i class="icon-remove-sign"></i>
+                            </button>
                         </td>
                     </tr>
                 </g:each>

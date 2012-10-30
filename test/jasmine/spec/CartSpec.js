@@ -28,7 +28,7 @@ describe("Testing cart.js", function () {
             queryCart.toggleDetailsHandler();
             expect($(".panel")).toBeVisible();
             expect(ajaxLocation).toEqual('#detailView');
-            expect(showingCartDetails).toEqual(1);
+            expect(showingCartDetails).toEqual(true);
             expect($('#detailView')).toHaveText(fakeData);
         });
 
@@ -43,7 +43,7 @@ describe("Testing cart.js", function () {
             queryCart.toggleDetailsHandler();
             expect($(".panel")).toBeHidden();
             expect(ajaxLocation).toEqual('#summaryView');
-            expect(showingCartDetails).toEqual(0);
+            expect(showingCartDetails).toEqual(false);
             expect($('#summaryView')).toHaveText(fakeData);
         });
     });

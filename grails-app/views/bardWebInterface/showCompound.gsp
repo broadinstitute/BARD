@@ -10,10 +10,10 @@
 <div class="row-fluid">
     <div class="span12 page-header">
         <h1>${compound?.name} <small>(PubChem CID: ${compound?.pubChemCID})</small></h1>
-        <a href="#" class="addCompoundToCart btn btn-mini" data-cart-name="${JavaScriptUtility.cleanup(compound?.name)}"
-           data-cart-id="${compound?.pubChemCID}" data-cart-smiles="${compound?.getStructureSMILES()}">
-            Save for later analysis
-        </a>
+        <g:saveToCartButton id="${compound.pubChemCID}"
+                            name="${JavaScriptUtility.cleanup(compound.name)}"
+                            type="${querycart.QueryItemType.Compound}"
+                            smiles="${compound.getStructureSMILES()}"/>
     </div>
 </div>
 <div class="row-fluid">

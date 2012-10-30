@@ -29,10 +29,10 @@
                             </g:link>
                         </h3>
                         ${compoundAdapter.compound.getValue(CompoundValues.MolecularTypeValue)}
-                        <a href="#" class="addCompoundToCart btn btn-mini" data-cart-name="${JavaScriptUtility.cleanup(compoundAdapter.name)}"
-                                 data-cart-id="${compoundAdapter.pubChemCID}" data-cart-smiles="${compoundAdapter.getStructureSMILES()}">
-                            Save for later analysis
-                        </a>
+                        <g:saveToCartButton id="${compoundAdapter.pubChemCID}"
+                                            name="${JavaScriptUtility.cleanup(compoundAdapter.name)}"
+                                            type="${querycart.QueryItemType.Compound}"
+                                            smiles="${compoundAdapter.getStructureSMILES()}"/>
                         <dl>
                             <g:if test="${compoundAdapter.searchHighlight}">
                                 <dt>Search Match (highlighted in bold):</dt>

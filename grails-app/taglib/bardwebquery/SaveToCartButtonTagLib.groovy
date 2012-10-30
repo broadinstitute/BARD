@@ -1,6 +1,8 @@
 package bardwebquery
 
 import querycart.QueryCartService
+import querycart.QueryItem
+import querycart.QueryItemType
 
 
 class SaveToCartButtonTagLib {
@@ -9,7 +11,12 @@ class SaveToCartButtonTagLib {
 
     def saveToCartButton = { attrs, body ->
         
-        Boolean isInCart = queryCartService.isInShoppingCart()
-        out << render(template: "saveToCartButton", model: [name: attrs.name, id: attrs.id, isInCart: isInCart])
+        Boolean isInCart = false
+        QueryItem item = QueryItem.findByExternalIdAndQueryItemType(attrs.id as Long, attrs.type as QueryItemType)
+        if (item) {
+            isInCart = queryCartService.isInShoppingCart(item)
+        }
+        out << render(template: "saveToCartButton", model: [name: attrs.name, id: attrs.id, type: attrs.type,
+                smiles: attrs.smiles, isInCart: isInCart])
     }
 }

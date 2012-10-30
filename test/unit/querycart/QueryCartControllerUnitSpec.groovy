@@ -40,7 +40,7 @@ class QueryCartControllerUnitSpec extends Specification {
 
     void "test add empty"() {
         given:
-        params.stt = "1"
+        params.showCartDetails = "true"
         params.class = 'class bardqueryapi.Fake'
         params.assayTitle = 'my assay'
         params.id = "2"
@@ -64,7 +64,7 @@ class QueryCartControllerUnitSpec extends Specification {
 
     void "test add CartAssay"() {
         given:
-        params.stt = "1"
+        params.showCartDetails = "true"
         params.class = 'class querycart.CartAssay'
         params.assayTitle = 'my assay'
         params.id = "2"
@@ -85,7 +85,7 @@ class QueryCartControllerUnitSpec extends Specification {
 
     void "test add CartProject"() {
         given:
-        params.stt = "1"
+        params.showCartDetails = "true"
         params.class = 'class querycart.CartProject'
         params.assayTitle = 'my assay'
         params.id = "2"
@@ -101,14 +101,14 @@ class QueryCartControllerUnitSpec extends Specification {
 
 
 
-    void "test add CartCompound params.stt=#label"() {
+    void "test add CartCompound params.showCartDetails=#label"() {
         given:
-        params.stt = "1"
+        params.showCartDetails = "true"
         params.class = 'class querycart.CartCompound'
         params.name = 'my compound'
         params.smiles = 'CC'
         params.id = "2"
-        params.stt = paramsStt
+        params.showCartDetails = paramsShowDetails
 
         when:
         queryCartService.addToShoppingCart(_) >> {1}
@@ -120,9 +120,9 @@ class QueryCartControllerUnitSpec extends Specification {
         assert response.status == 200
 
         where:
-        label            | paramsStt
-        'params.stt = 0' | '0'
-        'params.stt = 1' | '1'
+        label                            | paramsShowDetails
+        'params.showCartDetails = false' | 'false'
+        'params.showCartDetails = true'  | 'true'
     }
 
 
@@ -130,7 +130,7 @@ class QueryCartControllerUnitSpec extends Specification {
 
     void "test updateOnscreenCart"() {
         given:
-        params.stt = "1"
+        params.showCartDetails = "true"
         LinkedHashMap<String, List> mapOfUniqueItems = []
         mapOfUniqueItems[QueryCartService.cartAssay] = [cartAssay]
 
@@ -240,7 +240,7 @@ class QueryCartControllerUnitSpec extends Specification {
 
     void "test updateOnscreenCart() #label"() {
         given:
-        params.stt = paramsStt
+        params.showCartDetails = paramsShowCartDetails
         String mockContent = 'mock content'
         views['/bardWebInterface/_queryCartIndicator.gsp'] = mockContent
         views['/bardWebInterface/_sarCartContent.gsp'] = mockContent
@@ -256,9 +256,9 @@ class QueryCartControllerUnitSpec extends Specification {
         assert response.text == mockContent
 
         where:
-        label                   | paramsStt
-        'somthingReallyChanged' | "1"
-        'nothing has changed'   | "0"
+        label                   | paramsShowCartDetails
+        'show details'          | "true"
+        'show summary'          | "false"
     }
 
     static final QueryItemType TYPE_IN_CART = QueryItemType.AssayDefinition
