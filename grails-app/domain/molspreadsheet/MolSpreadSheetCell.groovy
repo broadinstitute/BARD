@@ -1,9 +1,6 @@
 package molspreadsheet
 
 import bard.core.HillCurveValue
-import results.ExperimentalValue
-import results.ExperimentalValueType
-import results.ExperimentalValueUnit
 
 class MolSpreadSheetCell {
     // static final int SPREAD_SHEET_PRECISION = 3
@@ -16,17 +13,17 @@ class MolSpreadSheetCell {
     MolSpreadSheetCellType molSpreadSheetCellType = MolSpreadSheetCellType.unknown
     String strInternalValue = "null"
     Integer intInternalValue = 0
-    String supplementalInternalValue = null
+    String supplementalInternalValue
     SpreadSheetActivityStorage spreadSheetActivityStorage
 
 
     static constraints = {
-        activity()
+        activity(nullable: false)
         molSpreadSheetCellType(blank: false)
-        strInternalValue(nullable: false)
+        strInternalValue(nullable: true)
         intInternalValue(nullable: false)
-        supplementalInternalValue()
-        spreadSheetActivityStorage()
+        supplementalInternalValue(nullable: true)
+        spreadSheetActivityStorage(nullable: true)
     }
 
 

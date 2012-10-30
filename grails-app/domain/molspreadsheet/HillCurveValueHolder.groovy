@@ -3,15 +3,29 @@ package molspreadsheet
 import results.ExperimentalValue
 
 class HillCurveValueHolder {
+
     static belongsTo = [spreadSheetActivityStorage: SpreadSheetActivityStorage]
-        String identifier
-        Integer subColumnIndex
+
+        String identifier = ""
+        Integer subColumnIndex = 0
         Double s0
         Double sInf
         Double slope
         Double coef
         java.util.List<java.lang.Double> conc = []
         java.util.List<java.lang.Double> response = []
+
+    static constraints = {
+        identifier nullable: false
+        identifier subColumnIndex: false
+        s0 nullable: true
+        sInf nullable: true
+        slope nullable: true
+        coef  nullable: true
+        //     conc nullable: false
+        //     response nullable: false
+    }
+
 
     @Override
     public String toString() {
@@ -36,12 +50,4 @@ class HillCurveValueHolder {
         returnValue
     }
 
-    static constraints = {
-         s0 ()
-         sInf()
-         slope()
-         coef ()
-//         conc ()
-//         response()
-    }
 }
