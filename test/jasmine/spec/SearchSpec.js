@@ -317,7 +317,7 @@ describe("Testing search.js", function () {
             handleMainFormSubmit(searchString);
 
             expect(findSearchType).toHaveBeenCalled();
-            expect(showTab).toHaveBeenCalledWith('#projects')
+            expect(showTab).toHaveBeenCalledWith('projects')
             expect(findSearchType.calls.length).toEqual(1);
             expect(findSearchType).toHaveBeenCalledWith(searchString);
 
@@ -346,7 +346,7 @@ describe("Testing search.js", function () {
             handleMainFormSubmit(searchString);
 
             expect(findSearchType).toHaveBeenCalled();
-            expect(showTab).toHaveBeenCalledWith('#compounds')
+            expect(showTab).toHaveBeenCalledWith('compounds')
             expect(findSearchType.calls.length).toEqual(1);
             expect(findSearchType).toHaveBeenCalledWith(searchString);
 
@@ -373,7 +373,7 @@ describe("Testing search.js", function () {
             handleMainFormSubmit(searchString);
 
             expect(findSearchType).toHaveBeenCalled();
-            expect(showTab).toHaveBeenCalledWith('#assays')
+            expect(showTab).toHaveBeenCalledWith('assays')
             expect(findSearchType.calls.length).toEqual(1);
             expect(findSearchType).toHaveBeenCalledWith(searchString);
 

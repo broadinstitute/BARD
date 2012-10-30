@@ -259,18 +259,18 @@ function handleMainFormSubmit(searchString) {
             break;
         case 'ADID':
             activateCurrentTab('assaysTab');
-           showTab("#assays");
+           showTab("assays");
             handleSearch('/bardwebquery/bardWebInterface/searchAssaysByIDs', 'searchForm', 'assaysTab', 'totalAssays', 'Assay Definitions ', 'assays');
              break;
         case 'CID':
             activateCurrentTab('compoundsTab') ;
-             showTab("#compounds");
+             showTab("compounds");
             handleSearch('/bardwebquery/bardWebInterface/searchCompoundsByIDs', 'searchForm', 'compoundsTab', 'totalCompounds', 'Compounds ', 'compounds');
             break;
         case 'PID':
             activateCurrentTab('projectsTab');
            // $("#projects").tab('show');
-            showTab("#projects");
+            showTab("projects");
             handleSearch('/bardwebquery/bardWebInterface/searchProjectsByIDs', 'searchForm', 'projectsTab', 'totalProjects', 'Projects ', 'projects');
             break;
         case 'ID':
