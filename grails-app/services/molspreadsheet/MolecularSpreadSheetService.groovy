@@ -639,18 +639,32 @@ class MolecularSpreadSheetService {
         return spreadSheetActivity
     }
 
-//
-//    SpreadSheetActivity extractActivitiesFromExperiment(final Value experimentValue, final Long experimentId) {
-//        final Iterator<Value> experimentValueIterator = experimentValue.children()
-//        SpreadSheetActivity spreadSheetActivity = new SpreadSheetActivity()
-//        spreadSheetActivity.experimentId = experimentId
-//        while (experimentValueIterator?.hasNext()) {
-//            Value childValue = experimentValueIterator.next()
-//            addCurrentActivityToSpreadSheet(spreadSheetActivity, childValue)
-//        }
-//        return spreadSheetActivity
-//    }
-//
+
+    SpreadSheetActivity extractActivitiesFromExperiment(final Value experimentValue) {
+        final Iterator<Value> experimentValueIterator = experimentValue.children()
+        SpreadSheetActivity spreadSheetActivity = new SpreadSheetActivity()
+        List <String> dummyHeadersList = []
+        while (experimentValueIterator?.hasNext()) {
+            Value childValue = experimentValueIterator.next()
+            addCurrentActivityToSpreadSheet( dummyHeadersList,spreadSheetActivity, childValue)
+        }
+        return spreadSheetActivity
+    }
+
+
+
+    SpreadSheetActivity extractActivitiesFromExperiment(final Value experimentValue, final Long experimentId) {
+        final Iterator<Value> experimentValueIterator = experimentValue.children()
+        SpreadSheetActivity spreadSheetActivity = new SpreadSheetActivity()
+        spreadSheetActivity.experimentId = experimentId
+        List <String> dummyHeadersList = []
+        while (experimentValueIterator?.hasNext()) {
+            Value childValue = experimentValueIterator.next()
+            addCurrentActivityToSpreadSheet(dummyHeadersList, spreadSheetActivity, childValue)
+        }
+        return spreadSheetActivity
+    }
+
     /**
      * The idea is to fill up a spreadsheet activity based on
      *  Note hack -- this method has been short-circuited so that a HillCurveValue will cause the method to

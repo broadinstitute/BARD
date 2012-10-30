@@ -117,7 +117,7 @@ class MolecularSpreadSheetServiceIntegrationSpec extends IntegrationSpec {
         assertNotNull molSpreadSheetData.rowPointer
         assertNotNull molSpreadSheetData.columnPointer
         assertNotNull molSpreadSheetData.mssHeaders
-        assert molSpreadSheetData.mssData.size() == 0
+        assert molSpreadSheetData.mssData.size() == 6
         assert molSpreadSheetData.rowPointer.size() == 0
         assert molSpreadSheetData.columnPointer.size() == 0
         assert molSpreadSheetData.mssHeaders.flatten().size() == 3
@@ -143,6 +143,9 @@ class MolecularSpreadSheetServiceIntegrationSpec extends IntegrationSpec {
         serviceIterator = restAssayService.iterator(assay, Experiment)
         finalExperimentList.addAll(serviceIterator.collect())
         MolSpreadSheetData molSpreadSheetData = new MolSpreadSheetData()
+        100.times{
+            molSpreadSheetData.mssHeaders << []
+        }
 
         Object etag = this.restCompoundService.newETag((new Date()).toTimestamp().toString(), [4540 as Long,4544 as Long,4549 as Long,4552 as Long])
 
@@ -152,11 +155,12 @@ class MolecularSpreadSheetServiceIntegrationSpec extends IntegrationSpec {
         molSpreadSheetData.rowPointer[4540 as Long]  =0
         molSpreadSheetData.rowPointer[4544 as Long]  =1
         molSpreadSheetData.rowPointer[4549 as Long]  =2
-
+        Map<String,MolSpreadSheetCell> dataMap = [:]
 
         molecularSpreadSheetService.populateMolSpreadSheetData(molSpreadSheetData,
                 finalExperimentList,
-                spreadSheetActivityList)
+                spreadSheetActivityList,
+                dataMap)
 
 
 
@@ -176,6 +180,9 @@ class MolecularSpreadSheetServiceIntegrationSpec extends IntegrationSpec {
         final ServiceIterator<Experiment> serviceIterator = restAssayService.iterator(assay, Experiment)
         Collection<Experiment> experimentList = serviceIterator.collect()
         MolSpreadSheetData molSpreadSheetData = new MolSpreadSheetData()
+        4.times{
+            molSpreadSheetData.mssHeaders << []
+        }
         List<Long> compounds = []
         //compounds << 364 as Long
         Object etag = this.restCompoundService.newETag((new Date()).toTimestamp().toString(), [1074927 as Long,1074929 as Long,1077518 as Long])
@@ -203,6 +210,9 @@ class MolecularSpreadSheetServiceIntegrationSpec extends IntegrationSpec {
         final ServiceIterator<Experiment> serviceIterator = restAssayService.iterator(assay, Experiment)
         Collection<Experiment> experimentList = serviceIterator.collect()
         MolSpreadSheetData molSpreadSheetData = new MolSpreadSheetData()
+        4.times{
+            molSpreadSheetData.mssHeaders << []
+        }
         Object etag = this.restCompoundService.newETag((new Date()).toTimestamp().toString(), [364 as Long])
         List<SpreadSheetActivity> spreadSheetActivityList = molecularSpreadSheetService.extractMolSpreadSheetData(molSpreadSheetData,
                 experimentList,
@@ -318,7 +328,7 @@ class MolecularSpreadSheetServiceIntegrationSpec extends IntegrationSpec {
             assert spreadSheetActivity.cid
             assert spreadSheetActivity.eid
             assert spreadSheetActivity.sid
-            assert spreadSheetActivity.hillCurveValue
+            assert spreadSheetActivity.hillCurveValueList
         }
         where:
         label                                              | experimentId   | top | skip
@@ -410,7 +420,7 @@ class MolecularSpreadSheetServiceIntegrationSpec extends IntegrationSpec {
         assert spreadSheetActivity.cid
         assert spreadSheetActivity.eid
         assert spreadSheetActivity.sid
-        assert spreadSheetActivity.hillCurveValue
+        assert spreadSheetActivity.hillCurveValueList[0]
         where:
         label                                    | cids                                                   | experimentId
         "An existing experiment with activities" | [new Long(164981), new Long(411519), new Long(483860)] | new Long(1326)
@@ -470,7 +480,7 @@ class MolecularSpreadSheetServiceIntegrationSpec extends IntegrationSpec {
         while (experimentIterator.hasNext()) {
             Value experimentValue = experimentIterator.next()
             SpreadSheetActivity spreadSheetActivity = molecularSpreadSheetService.extractActivitiesFromExperiment(experimentValue, experimentId)
-            HillCurveValue hillCurveValue = spreadSheetActivity.hillCurveValue
+            HillCurveValue hillCurveValue = spreadSheetActivity.hillCurveValueList[0]
             if ((hillCurveValue.s0 != null) &&
                     (hillCurveValue.sinf != null) &&
                     (hillCurveValue.coef != null)) {
@@ -495,7 +505,7 @@ class MolecularSpreadSheetServiceIntegrationSpec extends IntegrationSpec {
         while (experimentIterator.hasNext()) {
             Value experimentValue = experimentIterator.next()
             SpreadSheetActivity spreadSheetActivity = molecularSpreadSheetService.extractActivitiesFromExperiment(experimentValue, experimentId)
-            HillCurveValue hillCurveValue = spreadSheetActivity.hillCurveValue
+            HillCurveValue hillCurveValue = spreadSheetActivity.hillCurveValueList[0]
             if ((hillCurveValue.s0 != null) &&
                     (hillCurveValue.sinf != null) &&
                     (hillCurveValue.coef != null)) {
