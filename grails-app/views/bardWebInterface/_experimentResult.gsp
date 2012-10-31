@@ -6,7 +6,7 @@
   To change this template use File | Settings | File Templates.
 --%>
 
-<%@ page import="results.ExperimentalValueType; results.ExperimentalValueUnit; results.ExperimentalValue; molspreadsheet.MolSpreadSheetCell; bard.core.ExperimentValues; bard.core.AssayValues" contentType="text/html;charset=UTF-8" %>
+<%@ page import="molspreadsheet.HillCurveValueHolder; results.ExperimentalValueType; results.ExperimentalValueUnit; results.ExperimentalValue; molspreadsheet.MolSpreadSheetCell; bard.core.ExperimentValues; bard.core.AssayValues" contentType="text/html;charset=UTF-8" %>
 
 <p><b>Title: ${experimentDataMap?.experiment?.name}</b></p>
 
@@ -24,8 +24,7 @@
             <th>Outcome</th>
             <th>Potency</th>
             <g:if test="${!experimentDataMap?.spreadSheetActivities?.isEmpty()}">
-
-                <g:each in="${experimentDataMap?.spreadSheetActivities?.get(0)?.hillCurveValueList[0]}" var="readout">
+               <g:each in="${experimentDataMap?.spreadSheetActivities?.get(0)?.hillCurveValueList[0]}" var="readout">
                     <th>${readout.id}</th>
                     <g:if test="${readout.response.length > 1}">
                         <th>${readout.id} Plot</th>
@@ -78,7 +77,7 @@
                                                  hillSlope: readout.coef,
                                                  concentrations: readout.conc,
                                                  activities: readout.response,
-                                                 yAxisLabel: experimentData.hillCurveValue.id
+                                                 yAxisLabel: readout.id
                                          ])}"/>
                             <br/>
                             <g:if test="${readout.slope}">

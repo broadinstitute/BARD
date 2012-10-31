@@ -2,6 +2,7 @@ package molspreadsheet
 
 import org.slf4j.LoggerFactory
 import results.ExperimentalValue
+import bard.core.HillCurveValue
 
 class HillCurveValueHolder {
 
@@ -50,5 +51,18 @@ class HillCurveValueHolder {
 
         returnValue
     }
+
+
+
+    public static String hillCurveValueTitle( HillCurveValue hillCurveValue ){
+        String returnValue
+        if (hillCurveValue?.id)
+            returnValue =  hillCurveValue.id
+        String x = new String("-")
+        returnValue
+
+    }
+
+
 
 }
