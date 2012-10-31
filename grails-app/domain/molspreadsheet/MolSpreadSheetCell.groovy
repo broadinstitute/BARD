@@ -135,21 +135,6 @@ class MolSpreadSheetCell {
     }
 
 
-    /**
-     *
-     * @return
-     */
-    Map<String, String> mapForMolecularSpreadsheet(int subColumn) {
-        Map<String, String> returnValue = [:]
-
-        returnValue["value"] = spreadSheetActivityStorage?.toString(subColumn)
-
-        returnValue
-    }
-
-
-
-
 
     /**
      *

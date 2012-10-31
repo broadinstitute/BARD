@@ -84,6 +84,22 @@ class MolSpreadSheetDataUnitSpec  extends Specification {
         ['one']                 | 1               | ['two','two','three']
         ['one','two']           | 2               | ['three']
         ['one','two', 'three']  | 3               | []
+        []                      | 50              | ['one','one','two','one','two','three']
+
+    }
+
+
+    void "Test getColumns in degenerate case"() {
+        given:
+        MolSpreadSheetData molSpreadSheetData = new MolSpreadSheetData()
+        molSpreadSheetData.mssHeaders=null
+
+        when:
+        List<String> accumulatedColumns = molSpreadSheetData.getColumns()
+
+        then:
+        assert accumulatedColumns == []
+
     }
 
 
