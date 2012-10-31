@@ -91,7 +91,7 @@ class AssayContextsValidatorCreatorAndPersistor extends ValidatorCreatorAndPersi
                         assayContextItem.modifiedBy = super.modifiedBy
                         //populate the attribute key's element
                         Element element = Element.findByLabelIlike(attribute.key)
-                        assert element, "We must have an element for the assay-context-item attribute"
+                        assert element, "We must have an element for the assay-context-item attribute (${attribute.key})"
                         assayContextItem.attributeElement = element
 
                         //populate attribute-value type and value
@@ -111,7 +111,7 @@ class AssayContextsValidatorCreatorAndPersistor extends ValidatorCreatorAndPersi
                         } else {
                             //throw an error
                             Log.logger.info("Illage attribute value: '${attribute.key}'/'${attribute.value}'")
-                            assert false, "Illage attribute value"
+                            assert false, "Illage attribute value '${attribute.key}'/'${attribute.value}'"
                         }
 
                         //populate the qualifier field, if exists, and prefix the valueDisplay with it
