@@ -11,7 +11,7 @@ import bardqueryapi.SearchFilter
 class MockQueryService implements IQueryService {
     QueryHelperService queryHelperService
 
-    static final Map<Long, MockCompoundAdapter> mockCompoundAdapterMap =[:]
+    static final Map<Long, MockCompoundAdapter> mockCompoundAdapterMap = [:]
 
     static final Map<Long, MockAssayAdapter> mockAssayAdapterMap = [:]
 
@@ -22,8 +22,9 @@ class MockQueryService implements IQueryService {
         constructMockAssayAdapter()
         constructMockProjectAdapter()
     }
-    Map findPromiscuityScoreForCID(final Long cid){
-        return [scores: [20,30], status: 200, message: "Success"]
+
+    Map findPromiscuityScoreForCID(final Long cid) {
+        return [scores: [20, 30], status: 200, message: "Success"]
 
     }
 
@@ -155,7 +156,9 @@ class MockQueryService implements IQueryService {
      * @return ProjectAdapter
      */
     Map showProject(final Long projectId) {
-        return [projectAdapter: MockQueryService.mockProjectAdapterMap.get(projectId), experiments:[]]
+        return [projectAdapter: MockQueryService.mockProjectAdapterMap.get(projectId), experiments: [], assays: [MockQueryService.mockAssayAdapterMap.get(588636 as Long).assay,
+                MockQueryService.mockAssayAdapterMap.get(449731 as Long).assay,
+                MockQueryService.mockAssayAdapterMap.get(588623 as Long).assay]]
     }
 
     //==============================================Auto Complete ======
@@ -290,6 +293,9 @@ protection of diseased and normal cells, respectively. This assay will summarize
         of APE1 in many cancers and resistance of these tumor cells to radio- and chemotherapy.
         Thus, targeting APE1 could improve the efficacy of current treatment paradigms by promoting
         '''
+        mockProjectAdapter.annotations << ['First annotation': '''This is the 1st annotation for this project''']
+        mockProjectAdapter.annotations << ['Second annotation': '''This is the 2nd annotation for this project''']
+        mockProjectAdapter.annotations << ['Third annotation': '''This is the 3rd annotation for this project''']
         mockProjectAdapterMap.put(projectId, mockProjectAdapter)
 
 
@@ -315,6 +321,9 @@ protection of diseased and normal cells, respectively. This assay will summarize
 and efficient stomach colonization (3), and inhibitors of this enzyme may be useful antibacterial drugs for treating these infections.
 The AddAB class of enzymes is closely related to the RecBCD class of helicase
 '''
+        mockProjectAdapter.annotations << ['First annotation': '''This is the 1st annotation for this project''']
+        mockProjectAdapter.annotations << ['Second annotation': '''This is the 2nd annotation for this project''']
+        mockProjectAdapter.annotations << ['Third annotation': '''This is the 3rd annotation for this project''']
         mockProjectAdapterMap.put(projectId, mockProjectAdapter)
 
         mockProjectAdapter = new MockProjectAdapter()
@@ -337,6 +346,9 @@ protection of diseased and normal cells, respectively. This assay will summarize
        to an increased interest in developing drugs that interfere with DNA repair, which could sensitise cancer cells to conventional
        therapy. This summary assay pertains to human RECQ1, which is important
        '''
+        mockProjectAdapter.annotations << ['First annotation': '''This is the 1st annotation for this project''']
+        mockProjectAdapter.annotations << ['Second annotation': '''This is the 2nd annotation for this project''']
+        mockProjectAdapter.annotations << ['Third annotation': '''This is the 3rd annotation for this project''']
         mockProjectAdapterMap.put(projectId, mockProjectAdapter)
 
 
@@ -397,6 +409,11 @@ class MockProjectAdapter extends ProjectAdapter {
     Integer numberOfExperiments = 3
 
 
+    public Collection<Value> getAnnotations() {
+        return [];
+    }
+}
+class MockExperiment extends Experiment{
     public Collection<Value> getAnnotations() {
         return [];
     }
