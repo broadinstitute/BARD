@@ -44,6 +44,7 @@
                     <td>ML#: ${probe.probeId}</td>
                     <td><a href="${probe.url}">Download probe report from Molecular Library BookShelf</a></td>
                     <td>CID: <g:link controller="bardWebInterface" action="showCompound" params="[cid: probe.cid]">${probe.cid}</g:link></td>
+                    <td><g:link controller="molSpreadSheet" action="showExperimentDetails" params="[cid: probe.cid, pid:projectAdapter.project.id]">Show Experimental Details</g:link></td>
                      <td>
                          <g:link controller="bardWebInterface" action="showCompound" params="[cid: probe.cid]">
                              <img alt="${probe?.smiles}" title="${probe.probeId}"
