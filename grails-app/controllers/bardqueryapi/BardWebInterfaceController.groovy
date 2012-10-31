@@ -6,11 +6,11 @@ import bard.core.adapter.AssayAdapter
 import bard.core.adapter.CompoundAdapter
 import bard.core.adapter.ProjectAdapter
 import grails.plugins.springsecurity.Secured
+import molspreadsheet.MolecularSpreadSheetService
 import org.apache.commons.lang.StringUtils
 import promiscuity.PromiscuityScore
 
 import javax.servlet.http.HttpServletResponse
-import molspreadsheet.MolecularSpreadSheetService
 
 /**
  *
@@ -52,7 +52,7 @@ class BardWebInterfaceController {
                 final int skip = searchParams.skip
                 final Map experimentDataMap = molecularSpreadSheetService.findExperimentDataById(id, top, skip)
                 if (experimentDataMap) {
-                    render(template: 'experimentResult', model: [experimentDataMap: experimentDataMap,searchString: params.searchString])
+                    render(template: 'experimentResult', model: [experimentDataMap: experimentDataMap, searchString: params.searchString])
                 } else {
                     flash.message = "Experiment ID ${id} not found"
                     return response.sendError(HttpServletResponse.SC_NOT_FOUND,
@@ -70,6 +70,18 @@ class BardWebInterfaceController {
                     "${flash.message}")
         }
 
+    }
+
+    def activeVrsTested(Long cid) {
+        if (cid) {
+            //Get the Promiscuity score for this CID
+            int activeAssays = this.queryService.getNumberTestedAssays(cid, true)
+            int testedAssays = this.queryService.getNumberTestedAssays(cid, false)
+            render(template: 'assaysActiveVrsTested', model: [activeAssays: activeAssays, testedAssays: testedAssays])
+            return
+        }
+        flash.message = "Error Getting Active vrs Tested Assays for Compound ${cid}"
+        return response.sendError(HttpServletResponse.SC_BAD_REQUEST,"${flash.message}")
     }
 
     def promiscuity(Long cid) {
@@ -117,7 +129,6 @@ class BardWebInterfaceController {
                 //assign the list of ids only to the command object
                 searchCommand.searchString = ids
             }
-
 
             //we want to remove the duplicates from the search string
             removeDuplicatesFromSearchString(searchCommand)
@@ -169,10 +180,9 @@ class BardWebInterfaceController {
                 searchCommand.searchString = ids
             }
 
-
             //we want to remove the duplicates from the search string
             removeDuplicatesFromSearchString(searchCommand)
-             //after removing duplicates, reassign
+            //after removing duplicates, reassign
             final List<SearchFilter> searchFilters = searchCommand.appliedFilters ?: []
             try {
                 final List<Long> adids = searchStringToIdList(searchCommand.searchString)
@@ -203,7 +213,7 @@ class BardWebInterfaceController {
 
         if (StringUtils.isNotBlank(searchCommand.searchString)) {
             String originalSearchString = searchCommand.searchString
-             final String[] searchStringSplit = searchCommand.searchString.split(":")
+            final String[] searchStringSplit = searchCommand.searchString.split(":")
             if (searchStringSplit.length == 2) {  //if the search string is of the form PID:1234,3456...
                 final String searchTypeString = searchStringSplit[0]
                 //TODO: assert that the string is PID
@@ -213,7 +223,6 @@ class BardWebInterfaceController {
                 //assign the list of ids only to the command object
                 searchCommand.searchString = ids
             }
-
 
             //we want to remove the duplicates from the search string
             removeDuplicatesFromSearchString(searchCommand)
@@ -308,7 +317,7 @@ class BardWebInterfaceController {
                 render(view: "showAssay", model: [
                         assayAdapter: assayAdapter,
                         experiments: assayMap.experiments,
-                        projects: assayMap.projects,searchString: params.searchString
+                        projects: assayMap.projects, searchString: params.searchString
                 ]
                 )
             }

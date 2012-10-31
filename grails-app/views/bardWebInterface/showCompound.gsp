@@ -4,7 +4,7 @@
 <head>
     <meta name="layout" content="logoSearchCartAndFooter"/>
     <title>BARD : Compound : ${compound?.name} : PubChem CID ${compound.pubChemCID}</title>
-    <r:require module="promiscuity"/>
+    <r:require modules="promiscuity,activeVrsTested"/>
 </head>
 <body>
 <div class="row-fluid">
@@ -189,6 +189,6 @@
         </div>
     </div>
 </g:if>
-<r:require module="promiscuity"/>
+<r:require modules="promiscuity,activeVrsTested"/>
 </body>
 </html>
