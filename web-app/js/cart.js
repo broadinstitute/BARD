@@ -9,7 +9,7 @@ QueryCart.prototype.toggleDetailsHandler = function() {
     $(".panel").toggle("fast");
     $(this).toggleClass("active");
     return false;
-}
+};
 
 QueryCart.prototype.refreshSummaryView = function() {
     var ajaxLocation='#summaryView';
@@ -19,7 +19,7 @@ QueryCart.prototype.refreshSummaryView = function() {
             jQuery(ajaxLocation).html(data);
         }
     });
-}
+};
 
 QueryCart.prototype.refreshDetailsView = function() {
     var ajaxLocation='#detailView';
@@ -29,7 +29,7 @@ QueryCart.prototype.refreshDetailsView = function() {
             jQuery(ajaxLocation).html(data);
         }
     });
-}
+};
 
 QueryCart.prototype.addItemToCartHandler = function() {
     var id = $(this).attr('data-cart-id');
@@ -47,7 +47,7 @@ QueryCart.prototype.addItemToCartHandler = function() {
         }
     });
     return true;
-}
+};
 
 QueryCart.prototype.removeItemFromCartHandler = function() {
     var id = $(this).attr('data-cart-id');
@@ -61,7 +61,7 @@ QueryCart.prototype.removeItemFromCartHandler = function() {
         }
     });
     return true;
-}
+};
 
 QueryCart.prototype.removeAll = function() {
     jQuery.ajax({  type:'POST',
@@ -75,7 +75,7 @@ QueryCart.prototype.removeAll = function() {
         }
     });
     return false;
-}
+};
 
 QueryCart.prototype.refreshInCartCheckboxes = function(event, idToTarget) {
     var id = $(this).attr('data-cart-id');
@@ -101,7 +101,7 @@ QueryCart.prototype.refreshInCartCheckboxes = function(event, idToTarget) {
             console.log(errorThrown);
         }
     });
-}
+};
 
 QueryCart.prototype.requestDoseResponseImageHandler = function() {
     var id = $(this).attr('concs');
@@ -116,7 +116,7 @@ QueryCart.prototype.requestDoseResponseImageHandler = function() {
         }
     });
     return false;
-}
+};
 
 
 QueryCart.prototype.init = function() {
@@ -135,11 +135,11 @@ QueryCart.prototype.init = function() {
     $(document).on('cart.refreshCheckboxes', '.addToCartCheckbox', this.refreshInCartCheckboxes);
 
     // Refresh the screen periodically in case changes have been made in another tab/window
-    var interval = 2000
-    setInterval(this.refreshSummaryView, interval)
-    setInterval(this.refreshDetailsView, interval)
-    setInterval($('.addToCartCheckbox').trigger('cart.refreshCheckboxes'), interval)
-}
+    var interval = 2000;
+    setInterval(this.refreshSummaryView, interval);
+    setInterval(this.refreshDetailsView, interval);
+    setInterval($('.addToCartCheckbox').trigger('cart.refreshCheckboxes'), interval);
+};
 
 var queryCart = new QueryCart();
 queryCart.init();
