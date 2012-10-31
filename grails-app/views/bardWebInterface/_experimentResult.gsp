@@ -82,10 +82,8 @@
                             <br/>
                             <g:if test="${readout.slope}">
                                 <p>
-                                    AC50 : ${(new ExperimentalValue(readout.slope, false)).toString()} <br/>
-                                    sInf : ${(new ExperimentalValue(readout.sInf, false)).toString()}<br/>
-                                    s0 : ${(new ExperimentalValue(readout.s0, false)).toString()}<br/>
-                                    HillSlope : ${(new ExperimentalValue(readout.slope, false)).toString()}<br/>
+                                    <g:curveDescr ac50="${readout.slope}" s0="${readout.s0}" sInf="${readout.sInf}" slope="${readout.slope}">
+                                    </g:curveDescr>
                                 </p>
                                 <br/>
                                 <br/>

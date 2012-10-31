@@ -47,10 +47,47 @@ class MolSpreadSheetDataUnitSpec  extends Specification {
         row     |   column  |   incoming    |   returnValue
         0       |   0       |   "123"       |   "123"
         0       |   1       |   "123"       |   null
-//        1       |   0       |   "123"       |   "123"
-//        1       |   1       |   "123"       |   "123"
-//        47      |   47      |   "123"       |   "-"
+        47      |   47      |   "123"       |   "-"
     }
+
+    void "Test getSuperColumnCount in degenerate case"() {
+        given:
+        MolSpreadSheetData molSpreadSheetData = new MolSpreadSheetData()
+
+        when:
+        int numberOfColumns = molSpreadSheetData.getSuperColumnCount()
+
+        then:
+        assert numberOfColumns == 0
+    }
+
+
+    void "Test getSubColumns in typical case"() {
+        given:
+        MolSpreadSheetData molSpreadSheetData = new MolSpreadSheetData()
+        molSpreadSheetData.mssHeaders<<[]
+        molSpreadSheetData.mssHeaders<<['one']
+        molSpreadSheetData.mssHeaders<<['one','two']
+        molSpreadSheetData.mssHeaders<<['one','two','three']
+
+        when:
+        List<String> numberOfSubColumns = molSpreadSheetData.getSubColumns( experimentCount)
+        List<String> accumulatedColumns = molSpreadSheetData.getColumns() - numberOfSubColumns
+
+        then:
+        assert numberOfSubColumns == predictedSubs
+        assert accumulatedColumns == predictedAccumulatedColumns
+
+        where:
+        predictedSubs           | experimentCount | predictedAccumulatedColumns
+        []                      | 0               | ['one','one','two','one','two','three']
+        ['one']                 | 1               | ['two','two','three']
+        ['one','two']           | 2               | ['three']
+        ['one','two', 'three']  | 3               | []
+    }
+
+
+
 
     void "Test findSpreadSheetActivity method - return null"() {
         given:
@@ -65,6 +102,45 @@ class MolSpreadSheetDataUnitSpec  extends Specification {
 
 
     void "Test findSpreadSheetActivity method"() {
+        given:
+        SpreadSheetActivityStorage spreadSheetActivityStorage = new SpreadSheetActivityStorage(eid: 1 as Long, cid:  2 as Long, sid: 3 as Long)
+
+        when:
+        MolSpreadSheetData molSpreadSheetData = new MolSpreadSheetData()
+        assertNotNull(molSpreadSheetData)
+
+        MolSpreadSheetCell molSpreadSheetCell_0_0 = new MolSpreadSheetCell("1",MolSpreadSheetCellType.identifier)
+        molSpreadSheetCell_0_0.setSpreadSheetActivityStorage(spreadSheetActivityStorage)
+
+        MolSpreadSheetCell molSpreadSheetCell_0_1 = new MolSpreadSheetCell("1",MolSpreadSheetCellType.image)
+        molSpreadSheetCell_0_1.setSpreadSheetActivityStorage(spreadSheetActivityStorage)
+
+        MolSpreadSheetCell molSpreadSheetCell_1_0 = new MolSpreadSheetCell("1",MolSpreadSheetCellType.numeric)
+        molSpreadSheetCell_1_0.setSpreadSheetActivityStorage(spreadSheetActivityStorage)
+
+        MolSpreadSheetCell molSpreadSheetCell_1_1 = new MolSpreadSheetCell("1",MolSpreadSheetCellType.string)
+        molSpreadSheetCell_1_1.setSpreadSheetActivityStorage(spreadSheetActivityStorage)
+
+        molSpreadSheetData.mssData["0_0"] = molSpreadSheetCell_0_0
+        molSpreadSheetData.mssData["0_1"] = molSpreadSheetCell_0_1
+        molSpreadSheetData.mssData["1_0"] = molSpreadSheetCell_1_0
+        molSpreadSheetData.mssData["1_1"] = molSpreadSheetCell_1_1
+
+
+        then:
+        assert molSpreadSheetData.findSpreadSheetActivity (row, column).eid== 1 as Long
+        assert molSpreadSheetData.findSpreadSheetActivity (row, column).cid== 2 as Long
+        assert molSpreadSheetData.findSpreadSheetActivity (row, column).sid== 3 as Long
+
+        where:
+        row     |   column
+        0       |   0
+        0       |   1
+        1       |   0
+        1       |   1
+    }
+
+    void "Test degenerate method"() {
         given:
         SpreadSheetActivityStorage spreadSheetActivityStorage = new SpreadSheetActivityStorage(eid: 1 as Long, cid:  2 as Long, sid: 3 as Long)
 

@@ -54,15 +54,4 @@ class HillCurveValueHolder {
 
 
 
-    public static String hillCurveValueTitle( HillCurveValue hillCurveValue ){
-        String returnValue
-        if (hillCurveValue?.id)
-            returnValue =  hillCurveValue.id
-        String x = new String("-")
-        returnValue
-
-    }
-
-
-
 }

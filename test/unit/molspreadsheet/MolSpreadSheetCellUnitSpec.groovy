@@ -37,6 +37,7 @@ class MolSpreadSheetCellUnitSpec extends Specification{
 
 
 
+
     void "Test constraints for molecular spreadsheet data"() {
         given:
         mockForConstraintsTests(MolSpreadSheetCell)

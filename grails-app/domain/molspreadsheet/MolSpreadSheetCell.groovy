@@ -81,11 +81,6 @@ class MolSpreadSheetCell {
 
 
     MolSpreadSheetCell( SpreadSheetActivity spreadSheetActivity ) {
-        if ((spreadSheetActivity.cid == null)  ||
-                (spreadSheetActivity.sid == null)  ||
-                (spreadSheetActivity.eid == null)  )   {
-            assert false," missing critical values. ${spreadSheetActivity.dump()}"
-        }
         this.molSpreadSheetCellType = MolSpreadSheetCellType.numeric
         this.spreadSheetActivityStorage = new SpreadSheetActivityStorage( eid: spreadSheetActivity.eid,
                                                                           cid:  spreadSheetActivity.cid,

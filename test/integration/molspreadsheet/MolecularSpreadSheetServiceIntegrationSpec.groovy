@@ -166,9 +166,7 @@ class MolecularSpreadSheetServiceIntegrationSpec extends IntegrationSpec {
 
         then: "we should be able to generate a list of spreadsheet activity elements"
         assertNotNull molSpreadSheetData.mssData
-//        assert molSpreadSheetData.mssData.size()==3 // demonstrate that there are 3 identified compounds compounds
-//        assert molSpreadSheetData.rowPointer.size()==3 // demonstrate that there are 3 identified compounds compounds
-//        assert molSpreadSheetData.columnPointer.size()==9 // demonstrate that there ARE nine assays in this project
+        assert molSpreadSheetData.mssData.size()==0
     }
 
 
@@ -189,6 +187,33 @@ class MolecularSpreadSheetServiceIntegrationSpec extends IntegrationSpec {
         List<SpreadSheetActivity> spreadSheetActivityList = molecularSpreadSheetService.extractMolSpreadSheetData(molSpreadSheetData,
                 experimentList,
                 etag)
+
+        then: "we should be able to generate a list of spreadsheet activity elements"
+        assertNotNull spreadSheetActivityList
+        spreadSheetActivityList.size() > 0
+        spreadSheetActivityList.each {  SpreadSheetActivity spreadSheetActivity ->
+            assertNotNull spreadSheetActivity.eid
+            assertNotNull spreadSheetActivity.cid
+            assertNotNull spreadSheetActivity.sid
+        }
+    }
+
+
+
+    void "test extractMolSpreadSheetData with no compounds selected"() {
+        when: "we have a molecularSpreadSheetService"
+        assertNotNull molecularSpreadSheetService
+        Assay assay = restAssayService.get(346 as Long)
+        final ServiceIterator<Experiment> serviceIterator = restAssayService.iterator(assay, Experiment)
+        Collection<Experiment> experimentList = serviceIterator.collect()
+        MolSpreadSheetData molSpreadSheetData = new MolSpreadSheetData()
+        4.times{
+            molSpreadSheetData.mssHeaders << []
+        }
+        List<Long> compounds = []
+        //compounds << 364 as Long
+        List<SpreadSheetActivity> spreadSheetActivityList = molecularSpreadSheetService.extractMolSpreadSheetData(molSpreadSheetData,
+                experimentList)
 
         then: "we should be able to generate a list of spreadsheet activity elements"
         assertNotNull spreadSheetActivityList
