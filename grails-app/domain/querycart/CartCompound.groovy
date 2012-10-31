@@ -12,10 +12,6 @@ class CartCompound extends QueryItem {
         this.queryItemType = QueryItemType.Compound
     }
 
-    CartCompound(String smiles, String name, String compoundId) {
-        this(smiles, name, Long.parseLong(compoundId))
-    }
-
     CartCompound(String smiles, String name, Long compoundId) {
         this.smiles = smiles
         this.name = name

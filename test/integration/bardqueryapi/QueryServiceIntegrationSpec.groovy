@@ -230,7 +230,7 @@ class QueryServiceIntegrationSpec extends IntegrationSpec {
         "dna repair"              | "\"dna repair\""         | 0    | 10  | 10             | []
         "dna repair with filters" | "\"dna repair\""         | 0    | 10  | 10             | [new SearchFilter("gobp_term", "DNA repair"), new SearchFilter("gobp_term", "response to UV-C")]
         "dna repair skip and top" | "\"dna repair\""         | 10   | 10  | 10             | []
-        "biological process"      | "biological process" | 0    | 10  | 10             | []
+        "biological process"      | "\"biological process\"" | 0    | 10  | 10             | []
 
     }
 

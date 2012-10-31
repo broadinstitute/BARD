@@ -7,10 +7,13 @@ import com.metasieve.shoppingcart.ShoppingCartService
 import grails.test.mixin.TestFor
 import grails.test.mixin.TestMixin
 import grails.test.mixin.support.GrailsUnitTestMixin
+import molspreadsheet.MolecularSpreadSheetService
+import molspreadsheet.SpreadSheetActivity
 import org.apache.http.HttpException
 import org.json.JSONArray
 import promiscuity.PromiscuityScore
 import promiscuity.Scaffold
+import querycart.CartAssay
 import spock.lang.Shared
 import spock.lang.Specification
 import spock.lang.Unroll
@@ -18,10 +21,6 @@ import spock.lang.Unroll
 import javax.servlet.http.HttpServletResponse
 
 import bard.core.*
-import querycart.CartAssay
-import molspreadsheet.MolecularSpreadSheetService
-import molspreadsheet.SpreadSheetActivity
-import spock.lang.Ignore
 
 /**
  * See the API for {@link grails.test.mixin.support.GrailsUnitTestMixin} for usage instructions
@@ -48,6 +47,9 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
         controller.molecularSpreadSheetService = this.molecularSpreadSheetService
         shoppingCartService = Mock(ShoppingCartService)
         controller.shoppingCartService = this.shoppingCartService
+        views['/bardWebInterface/_assays.gsp'] = 'mock content'
+        views['/bardWebInterface/_projects.gsp'] = 'mock content'
+        views['/bardWebInterface/_compounds.gsp'] = 'mock content'
     }
 
     void "test index"() {

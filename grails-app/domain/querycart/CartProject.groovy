@@ -6,10 +6,6 @@ class CartProject extends QueryItem {
         this.queryItemType = QueryItemType.Project
     }
 
-    CartProject(String projectName, String projectIdStr) {
-        this(projectName, Long.parseLong(projectIdStr))
-    }
-
     CartProject(String projectName, Long projectIdStr) {
         this.name = projectName
         this.externalId = projectIdStr

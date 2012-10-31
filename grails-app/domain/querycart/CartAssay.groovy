@@ -6,10 +6,6 @@ class CartAssay extends QueryItem {
         this.queryItemType = QueryItemType.AssayDefinition
     }
 
-    CartAssay(String assayTitle, String assayIdStr) {
-        this(assayTitle, Long.parseLong(assayIdStr))
-    }
-
     CartAssay(String assayTitle, int assayId) {
         this(assayTitle, assayId as Long)
     }

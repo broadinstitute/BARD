@@ -8,10 +8,11 @@ import spock.lang.Specification
 import com.metasieve.shoppingcart.ShoppingCartService
 import com.metasieve.shoppingcart.Shoppable
 import grails.test.mixin.Mock
+import javax.servlet.http.HttpServletResponse
 
 @TestMixin(GrailsUnitTestMixin)
 @TestFor(QueryCartController)
-@Mock([Shoppable, QueryItem, CartAssay])
+@Mock([Shoppable, QueryItem, CartAssay, CartProject])
 @Unroll
 class QueryCartControllerUnitSpec extends Specification {
     ShoppingCartService shoppingCartService
@@ -19,253 +20,179 @@ class QueryCartControllerUnitSpec extends Specification {
     CartAssay cartAssay
 
     static final Long ID_IN_CART = 1
+    static final QueryItemType TYPE_IN_CART = QueryItemType.AssayDefinition
+    static final String MOCK_SUMMARY_CONTENT = 'mock summary content'
+    static final String MOCK_DETAILS_CONTENT = 'mock summary content'
 
     void setup() {
         this.shoppingCartService = Mock(ShoppingCartService)
         controller.shoppingCartService = this.shoppingCartService
         this.queryCartService = Mock(QueryCartService)
         controller.queryCartService = this.queryCartService
-        queryCartService.groupUniqueContentsByType() >> {a: ID_IN_CART}
         cartAssay = new CartAssay("foo",ID_IN_CART)
-        cartAssay.save()
+        assert cartAssay.save()
+
+        views['/bardWebInterface/_queryCartIndicator.gsp'] = MOCK_SUMMARY_CONTENT
+        views['/bardWebInterface/_sarCartContent.gsp'] = MOCK_DETAILS_CONTENT
     }
 
     void tearDown() {
         // Tear down logic here
     }
 
-
-
-
-
-    void "test add empty"() {
+    void "test successful addItem for #label"() {
         given:
-        params.showCartDetails = "true"
-        params.class = 'class bardqueryapi.Fake'
-        params.assayTitle = 'my assay'
-        params.id = "2"
+        params.type = type as String
+        params.id = id as String
+        params.name = name
+        params.smiles = smiles
 
         when:
-        controller.add()
-        //handleAddTest(controller)
+        1 * queryCartService.addToShoppingCart(_ as QueryItem)
+
+        controller.addItem()
 
         then:
-
-        assert response.status == 200
-    }
-
-
-
-
-
-
-
-
-
-    void "test add CartAssay"() {
-        given:
-        params.showCartDetails = "true"
-        params.class = 'class querycart.CartAssay'
-        params.assayTitle = 'my assay'
-        params.id = "2"
-
-
-        when:
-        queryCartService.addToShoppingCart(null) >> {cartAssay}
-        controller.add()
-
-        then:
-        assert response.status == 200
-    }
-
-
-
-
-
-
-    void "test add CartProject"() {
-        given:
-        params.showCartDetails = "true"
-        params.class = 'class querycart.CartProject'
-        params.assayTitle = 'my assay'
-        params.id = "2"
-
-
-        when:
-        queryCartService.addToShoppingCart(null) >> {1}
-        controller.add()
-
-        then:
-        assert response.status == 200
-    }
-
-
-
-    void "test add CartCompound params.showCartDetails=#label"() {
-        given:
-        params.showCartDetails = "true"
-        params.class = 'class querycart.CartCompound'
-        params.name = 'my compound'
-        params.smiles = 'CC'
-        params.id = "2"
-        params.showCartDetails = paramsShowDetails
-
-        when:
-        queryCartService.addToShoppingCart(_) >> {1}
-        queryCartService.groupUniqueContentsByType(_) >> {[:]}
-        queryCartService.totalNumberOfUniqueItemsInCart(_) >> {0}
-        controller.add()
-
-        then:
-        assert response.status == 200
+        assert response.status == HttpServletResponse.SC_OK
 
         where:
-        label                            | paramsShowDetails
-        'params.showCartDetails = false' | 'false'
-        'params.showCartDetails = true'  | 'true'
+        label | type | id | name | smiles
+        "add new assay w/summary" | QueryItemType.AssayDefinition | 2 | 'Test' | null
+        "add new compound w/summary" | QueryItemType.Compound | 3 | 'Test' | 'C'
+        "add new project w/summary" | QueryItemType.Project | 4 | 'Test' | null
+        "add new assay w/details" | QueryItemType.AssayDefinition | 5 | 'Test' | null
+        "add new compound w/details" | QueryItemType.Compound | 6 | 'Test' | 'C'
+        "add new project w/details" | QueryItemType.Project | 7 | 'Test' | null
+        "add assay already in cart" | TYPE_IN_CART | ID_IN_CART | 'foo' | null
     }
 
-
-
-
-    void "test updateOnscreenCart"() {
+    void "test add existing assay not in cart"() {
         given:
-        params.showCartDetails = "true"
-        LinkedHashMap<String, List> mapOfUniqueItems = []
-        mapOfUniqueItems[QueryCartService.cartAssay] = [cartAssay]
-
+        CartProject project = new CartProject('Test', 3)
+        params.type = project.queryItemType as String
+        params.id = project.externalId as String
+        params.name = project.name
 
         when:
-        queryCartService.groupUniqueContentsByType(_) >> {mapOfUniqueItems}
-        controller.updateOnscreenCart()
+        project.save()
+
+        1 * queryCartService.addToShoppingCart(project)
+
+        controller.addItem()
 
         then:
-        assert response.status == 200
+        assert response.status == HttpServletResponse.SC_OK
     }
 
-
-    void "test updateSummary"() {
+    void "test failed addItem for #label"() {
         given:
-        LinkedHashMap<String, List> mapOfUniqueItems = []
-        mapOfUniqueItems[QueryCartService.cartAssay] = [cartAssay]
-
+        params.type = type as String
+        params.id = id as String
+        params.name = 'Test'
 
         when:
-        queryCartService.groupUniqueContentsByType(_, _) >> {mapOfUniqueItems}
-        controller.updateSummary()
+        0 * queryCartService.addToShoppingCart(_ as QueryItem)
+        controller.addItem()
 
         then:
-        assert response.status == 200
-    }
-
-
-
-
-    void "test updateDetails"() {
-        given:
-        LinkedHashMap<String, List> mapOfUniqueItems = []
-        mapOfUniqueItems[QueryCartService.cartAssay] = [cartAssay]
-
-
-        when:
-        queryCartService.groupUniqueContentsByType(_) >> {mapOfUniqueItems}
-        controller.updateDetails()
-
-        then:
-        assert response.status == 200
-    }
-
-
-    void "test remove"() {
-        given:
-        params.id = "1"
-        LinkedHashMap<String, List> mapOfUniqueItems = []
-        mapOfUniqueItems[QueryCartService.cartAssay] = [cartAssay]
-
-        when:
-        queryCartService.groupUniqueContentsByType(_) >> {mapOfUniqueItems}
-        queryCartService.removeFromShoppingCart(_) >> {
-            if (returnedRemoveFromShoppingCart == -1) {
-                throw new RuntimeException('exception')
-            }
-            return null
-        }
-        controller.remove()
-
-        then:
-        assert response.status == 200
+        assert response.status == expectedStatus
 
         where:
-        label                | returnedRemoveFromShoppingCart
-        'Good case'          | null
-        'throw an exception' | -1
+        label | type | id | expectedStatus
+        "unknown type" | 'temp' | 6 | HttpServletResponse.SC_BAD_REQUEST
+        "invalid id" | QueryItemType.Project | -1 | HttpServletResponse.SC_INTERNAL_SERVER_ERROR
+        "bad id" | QueryItemType.Project | 'bad' | HttpServletResponse.SC_BAD_REQUEST
+        "null type" | null | 7 | HttpServletResponse.SC_BAD_REQUEST
+        "null id" | QueryItemType.Project | null | HttpServletResponse.SC_BAD_REQUEST
     }
 
-
-    void "test removeAll"() {
-        given:
-        LinkedHashMap<String, List> mapOfUniqueItems = []
-        mapOfUniqueItems[QueryCartService.cartAssay] = [cartAssay]
-
-        when:
-        queryCartService.groupUniqueContentsByType(_) >> {mapOfUniqueItems}
-        queryCartService.emptyShoppingCart() >> {null}
-        controller.removeAll()
-
-        then:
-        assert response.status == 200
-    }
-
-    void "test handleAddingToShoppingCart() #label"() {
-        given:
-
-        when:
-        queryCartService.addToShoppingCart(_) >> {
-            if (returnedValue == -1) {
-                throw new RuntimeException('exception')
-            }
-            return returnedValue
-        }
-        def retVal = controller.handleAddingToShoppingCart(shoppable)
-
-        then:
-        assert retVal == expectedReturnedValue
-
-        where:
-        label                                  | shoppable                           | returnedValue | expectedReturnedValue
-        'returnedValue=1'                      | new CartCompound('C-C', 'name', 1)  | 1             | 1
-        'shoppable is null'                    | null as Shoppable                   | 0             | null
-        'queryCartService throws an exception' | new CartCompound('C-C', 'name',  1) | -1            | null
-    }
-
-    void "test updateOnscreenCart() #label"() {
-        given:
-        params.showCartDetails = paramsShowCartDetails
-        String mockContent = 'mock content'
-        views['/bardWebInterface/_queryCartIndicator.gsp'] = mockContent
-        views['/bardWebInterface/_sarCartContent.gsp'] = mockContent
-
+    void "test refreshSummaryView"() {
         when:
         1 * queryCartService.groupUniqueContentsByType(_) >> {[:]}
         1 * queryCartService.totalNumberOfUniqueItemsInCart(_ as Map) >> {0}
-        queryCartService.totalNumberOfUniqueItemsInCart(_,_) >> {0}
+        3 * queryCartService.totalNumberOfUniqueItemsInCart(_,_) >> {0}
 
-        controller.updateOnscreenCart()
+        controller.refreshSummaryView()
 
         then:
-        assert response.text == mockContent
-
-        where:
-        label                   | paramsShowCartDetails
-        'show details'          | "true"
-        'show summary'          | "false"
+        assert response.status == HttpServletResponse.SC_OK
+        assert response.text == MOCK_SUMMARY_CONTENT
     }
 
-    static final QueryItemType TYPE_IN_CART = QueryItemType.AssayDefinition
+    void "test updateDetails"() {
+        when:
+        1 * queryCartService.groupUniqueContentsByType(_) >> {[:]}
+        1 * queryCartService.totalNumberOfUniqueItemsInCart(_ as Map) >> {0}
+
+        controller.refreshDetailsView()
+
+        then:
+        assert response.status == HttpServletResponse.SC_OK
+        assert response.text == MOCK_DETAILS_CONTENT
+    }
+
+    void "test successful removeItem for existing QueryItem"() {
+        given:
+        params.type = TYPE_IN_CART as String
+        params.id = ID_IN_CART as String
+
+        when:
+        1 * queryCartService.removeFromShoppingCart(cartAssay)
+
+        controller.removeItem()
+
+        then:
+        assert response.status == HttpServletResponse.SC_OK
+    }
+
+    void "test removeItem for non-existant QueryItem"() {
+        given:
+        params.type = TYPE_IN_CART as String
+        params.id = 9999 as String
+
+        when:
+        0 * queryCartService.removeFromShoppingCart(_)
+
+        controller.removeItem()
+
+        then:
+        assert response.status == HttpServletResponse.SC_OK
+    }
+
+    void "test invalid removeItem for #label"() {
+        given:
+        params.type = type as String
+        params.id = id as String
+
+        when:
+        0 * queryCartService.removeFromShoppingCart(_)
+
+        controller.removeItem()
+
+        then:
+        assert response.status == HttpServletResponse.SC_BAD_REQUEST
+
+        where:
+        label | type | id
+        "null id" | TYPE_IN_CART | null
+        "null id and type" | null | null
+        "null type" | null | ID_IN_CART
+        "bad id" | TYPE_IN_CART | 'bad'
+        "bad type" | 'bad' | ID_IN_CART
+    }
+
+    void "test removeAll"() {
+        when:
+        1 * queryCartService.emptyShoppingCart() >> {null}
+        controller.removeAll()
+
+        then:
+        assert response.status == HttpServletResponse.SC_OK
+    }
 
     void "test isInCart for #label"() {
         given:
-        params.externalId = idToCheck as String
+        params.id = idToCheck as String
         params.type = typeToCheck as String
 
         when:
@@ -278,15 +205,34 @@ class QueryCartControllerUnitSpec extends Specification {
         controller.isInCart()
 
         then:
-        assert response.text == "["+shouldFind+"]"
+        assert response.status == HttpServletResponse.SC_OK
+        assert response.text == shouldFind.toString()
 
         where:
         label          | idToCheck  | typeToCheck             | shouldFind
         "Item in cart" | ID_IN_CART | TYPE_IN_CART            | true
         "diff ID"      | 6          | TYPE_IN_CART            | false
         "diff type"    | ID_IN_CART | QueryItemType.Compound  | false
-        "null ID"      | null       | QueryItemType.Project   | false
-        "null type"    | ID_IN_CART | null                    | false
     }
 
+    void "test invalid isInCart for #label"() {
+        given:
+        params.id = id as String
+        params.type = type as String
+
+        when:
+        0 * queryCartService.isInShoppingCart(_)
+
+        controller.isInCart()
+
+        then:
+        assert response.status == HttpServletResponse.SC_BAD_REQUEST
+
+        where:
+        label | id | type
+        "null ID" | null | TYPE_IN_CART
+        "null type" | ID_IN_CART | null
+        "bad type" | ID_IN_CART | 'bad'
+        "bad ID" | 'bad' | TYPE_IN_CART
+    }
 }

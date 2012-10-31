@@ -1,6 +1,7 @@
 package querycart
 
 import com.metasieve.shoppingcart.ShoppingCartService
+import grails.converters.JSON
 import grails.plugins.springsecurity.Secured
 
 @Secured(['isFullyAuthenticated()'])
@@ -8,9 +9,28 @@ class QueryCartController {
     ShoppingCartService shoppingCartService
     QueryCartService queryCartService
 
+    def refreshSummaryView() {
+        render(template: '/bardWebInterface/queryCartIndicator', model: modelForSummary)
+    }
+
+    def refreshDetailsView() {
+        render(template: '/bardWebInterface/sarCartContent', model: modelForDetails)
+    }
+
     def addItem() {
-        QueryItemType itemType = params.type as QueryItemType
-        Long id = params.id as Long
+
+        Map errorResponse = [:]
+
+        QueryItemType itemType = this.parseQueryItemTypeFromParams(errorResponse)
+        if (errorResponse.size() > 0) {
+            return render(errorResponse)
+        }
+
+        Long id = this.parseIdFromParams(errorResponse)
+        if (errorResponse.size() > 0) {
+            return render(errorResponse)
+        }
+
         String name = params.name
 
         QueryItem item = QueryItem.findByExternalIdAndQueryItemType(id, itemType)
@@ -27,60 +47,106 @@ class QueryCartController {
                     item = new CartAssay(name, id)
                     break
                 default:
-                    throw new UnsupportedOperationException("Unsupported QueryItemType " + itemType)
+                    return render(status: 400, text: "Unsupported QueryItemType [${itemType}]")
             }
         }
+
+        if (!item.validate()) {
+            response.status = 500
+            return render(item.errors.allErrors.collect {
+                message(error:it,encodeAs:'HTML')
+            } as JSON)
+        }
+
         queryCartService.addToShoppingCart(item)
 
-        return updateOnscreenCart()
+        return render(status: 200, text: "Added item [${item}] to cart")
     }
 
     def removeItem() {
-        QueryItemType itemType = params.type as QueryItemType
-        Long id = params.id as Long
+
+        Map errorResponse = [:]
+
+        QueryItemType itemType = this.parseQueryItemTypeFromParams(errorResponse)
+        if (errorResponse.size() > 0) {
+            return render(errorResponse)
+        }
+
+        Long id = this.parseIdFromParams(errorResponse)
+        if (errorResponse.size() > 0) {
+            return render(errorResponse)
+        }
+
         QueryItem item = QueryItem.findByExternalIdAndQueryItemType(id, itemType)
         if (item) {
             queryCartService.removeFromShoppingCart(item)
         }
 
-        return updateOnscreenCart()
+        return render(status: 200, text: "Removed item [${item}] from cart")
     }
 
-    // empty out everything from the shopping cart
     def removeAll() {
         queryCartService.emptyShoppingCart()
-        render(template: '/bardWebInterface/sarCartContent', model: modelForDetails) // refresh the cart display
+        return render(status: 200, text: "Removed all items from cart")
     }
 
     def isInCart() {
-        Long idToCheck = params.id as Long
-        QueryItemType itemType = params.type as QueryItemType
+
+        Map errorResponse = [:]
+
+        QueryItemType itemType = this.parseQueryItemTypeFromParams(errorResponse)
+        if (errorResponse.size() > 0) {
+            return render(errorResponse)
+        }
+
+        Long id = this.parseIdFromParams(errorResponse)
+        if (errorResponse.size() > 0) {
+            return render(errorResponse)
+        }
 
         Boolean result = false
-        QueryItem shoppingItem = QueryItem.findByExternalIdAndQueryItemType(idToCheck, itemType)
+        QueryItem shoppingItem = QueryItem.findByExternalIdAndQueryItemType(id, itemType)
         if (shoppingItem) {
             result = queryCartService.isInShoppingCart(shoppingItem)
         }
         render result
     }
 
-    def updateOnscreenCart() {
-        boolean showCartDetails = Boolean.parseBoolean(params.showCartDetails)
-        if (showCartDetails) {
-            return updateDetails()  // refresh the cart display via Ajax
+    private QueryItemType parseQueryItemTypeFromParams(Map errorResponse) {
+        QueryItemType itemType = null
+        try {
+            itemType = params.type as QueryItemType
+            if (itemType == null) {
+                errorResponse.status = 400
+                errorResponse.text = 'Null QueryItemType passed as params.type'
+            }
         }
-        return updateSummary()
+        catch(IllegalArgumentException e) {
+            log.error("Invalid QueryItemType ${params.type}", e)
+            errorResponse.status = 400
+            errorResponse.text = "Invalid QueryItemType [${params.type}] passed as params.type"
+        }
+        return itemType
     }
 
-    def updateSummary() {
-        render(template: '/bardWebInterface/queryCartIndicator', model: modelForSummary)
+    private Long parseIdFromParams(Map errorResponse) {
+        Long id = null
+        try {
+            id = params.id as Long
+            if (id == null) {
+                errorResponse.status = 400
+                errorResponse.text = 'Null ID passed as params.id'
+            }
+        }
+        catch(NumberFormatException e) {
+            log.error("Invalid ID ${params.id}", e)
+            errorResponse.status = 400
+            errorResponse.text = "Invalid ID [${params.id}] passed as params.id"
+        }
+        return id
     }
 
-    def updateDetails() {
-        render(template: '/bardWebInterface/sarCartContent', model: modelForDetails)
-    }
-
-    Map getModelForSummary() {
+    private Map getModelForSummary() {
         Map<String, List> mapOfUniqueItems = queryCartService.groupUniqueContentsByType(shoppingCartService)
         Integer totalItemCount = queryCartService.totalNumberOfUniqueItemsInCart(mapOfUniqueItems)
         Integer numberOfAssays = queryCartService.totalNumberOfUniqueItemsInCart(mapOfUniqueItems, QueryCartService.cartAssay)
@@ -89,7 +155,7 @@ class QueryCartController {
         return ['totalItemCount': totalItemCount, 'numberOfAssays': numberOfAssays, 'numberOfCompounds': numberOfCompounds, 'numberOfProjects': numberOfProjects];
     }
 
-    Map getModelForDetails() {
+    private Map getModelForDetails() {
         Map<String, List> mapOfUniqueItems = queryCartService.groupUniqueContentsByType(shoppingCartService)
         Integer totalItemCount = queryCartService.totalNumberOfUniqueItemsInCart(mapOfUniqueItems)
         List compounds = mapOfUniqueItems.get(QueryCartService.cartCompound)
