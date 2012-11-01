@@ -38,6 +38,10 @@
                                 <dt>Search Match (highlighted in bold):</dt>
                                 <dd>&hellip;${compoundAdapter.searchHighlight}&hellip;</dd>
                             </g:if>
+                            <dt>Assays - Active vrs Tested:</dt>
+                            <dd>
+                                <div class="activeVrsTested" href="${createLink(controller: 'bardWebInterface', action: 'activeVrsTested', params: [cid: compoundAdapter.pubChemCID])}" id="${compoundAdapter.pubChemCID}_tested"></div>
+                            </dd>
                             <dt>Scaffold Promiscuity Analysis:</dt>
                             <dd>
                                 <div class="promiscuity" href="${createLink(controller: 'bardWebInterface', action: 'promiscuity', params: [cid: compoundAdapter.pubChemCID])}" id="${compoundAdapter.pubChemCID}_prom"></div>

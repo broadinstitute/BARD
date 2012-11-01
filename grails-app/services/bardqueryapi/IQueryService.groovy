@@ -7,6 +7,15 @@ public interface IQueryService {
 
     /**
      *
+     * @param compound
+     * @param activeOnly - true if we want only the active compounds
+     * @return int the number of tested assays
+     */
+    public int getNumberTestedAssays(Long cid,
+                                     boolean activeOnly);
+
+    /**
+     *
      * @param cid
      * return Map
      * Success would return [status: resp.status, message: 'Success', promiscuityScore: promiscuityScore]
@@ -38,7 +47,7 @@ public interface IQueryService {
      * @param searchString
      * @param top
      * @param skip
-     * @param searchFilters  {@link SearchFilter}'s
+     * @param searchFilters {@link SearchFilter}'s
      * @return Map
      */
     Map findProjectsByTextSearch(final String searchString, final Integer top, final Integer skip, final List<SearchFilter> searchFilters);

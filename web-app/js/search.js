@@ -29,7 +29,7 @@ $(document).ready(function () {
         return false; //do not submit form the normal way, use Ajax instead
 
     });
-    $('#AssayFacetForm_ResetButton').live('click', function() {
+    $('#AssayFacetForm_ResetButton').live('click', function () {
         resetAllFilters('AssayFacetForm');
     });
     $('#ProjectFacetForm').live('submit', function (event) {
@@ -37,7 +37,7 @@ $(document).ready(function () {
         handleFilteredQuery(searchString, 'ProjectFacetForm', 'ProjectFacetForm', 'projectsTab', 'totalProjects', 'projects', 'Projects ');
         return false; //do not submit form the normal way, use Ajax instead
     });
-    $('#ProjectFacetForm_ResetButton').live('click', function() {
+    $('#ProjectFacetForm_ResetButton').live('click', function () {
         resetAllFilters('ProjectFacetForm');
     });
     $('#CompoundFacetForm').live('submit', function (event) {
@@ -45,7 +45,7 @@ $(document).ready(function () {
         handleFilteredQuery(searchString, 'CompoundFacetForm', 'CompoundFacetForm', 'compoundsTab', "totalCompounds", 'compounds', 'Compounds ');
         return false; //do not submit form the normal way, use Ajax instead
     });
-    $('#CompoundFacetForm_ResetButton').live('click', function() {
+    $('#CompoundFacetForm_ResetButton').live('click', function () {
         resetAllFilters('CompoundFacetForm');
     });
 
@@ -219,6 +219,9 @@ function findTheAppropriateControllerActionFromFacetType(searchType, facetFormTy
             }
             break;
         case 'ID':
+        case 'CID':
+        case 'ADID':
+        case 'PID':
             if (facetFormType == 'AssayFacetForm') {
                 return 'searchAssaysByIDs'
             }
@@ -238,7 +241,10 @@ function findTheAppropriateControllerActionFromFacetType(searchType, facetFormTy
     return "EMPTY"
 
 }
-
+function showTab(tabId){
+    var tab = "#" + tabId;
+    $(tab).tab('show');
+}
 /**
  * Handles form submission from the main form
  * @param searchString  - The string entered into the main form's search box
@@ -250,6 +256,22 @@ function handleMainFormSubmit(searchString) {
     switch (searchType.toUpperCase()) {
         case 'FREE_TEXT':
             handleAllFreeTextSearches();
+            break;
+        case 'ADID':
+            activateCurrentTab('assaysTab');
+           showTab("assays");
+            handleSearch('/bardwebquery/bardWebInterface/searchAssaysByIDs', 'searchForm', 'assaysTab', 'totalAssays', 'Assay Definitions ', 'assays');
+             break;
+        case 'CID':
+            activateCurrentTab('compoundsTab') ;
+             showTab("compounds");
+            handleSearch('/bardwebquery/bardWebInterface/searchCompoundsByIDs', 'searchForm', 'compoundsTab', 'totalCompounds', 'Compounds ', 'compounds');
+            break;
+        case 'PID':
+            activateCurrentTab('projectsTab');
+           // $("#projects").tab('show');
+            showTab("projects");
+            handleSearch('/bardwebquery/bardWebInterface/searchProjectsByIDs', 'searchForm', 'projectsTab', 'totalProjects', 'Projects ', 'projects');
             break;
         case 'ID':
             //TODO: Right now we are treating Id searches like regular searches
@@ -318,9 +340,34 @@ function activateTabs(tabId, tabListId, resourceId, tabDisplayPrefix) {
  * Make the counts zero for each tab, before you start the search
  */
 function resetTabsForStructureSearches() {
-    activateTabs('compoundsTab', 'compoundsTabLi', 'compounds', "Compounds ");
-    deActivateTabs('assaysTab', 'assaysTabLi', 'assays', 'Assay Definitions (0)');
-    deActivateTabs('projectsTab', 'projectsTabLi', 'projects', 'Projects (0)');
+    activateCurrentTab('compoundsTab');
+}
+
+/**
+ * Reset the tabs for structure searches
+ * Make the counts zero for each tab, before you start the search
+ */
+function activateCurrentTab(currentTab) {
+    switch (currentTab) {
+        case 'compoundsTab':
+            activateTabs('compoundsTab', 'compoundsTabLi', 'compounds', "Compounds ");
+            deActivateTabs('assaysTab', 'assaysTabLi', 'assays', 'Assay Definitions (0)');
+            deActivateTabs('projectsTab', 'projectsTabLi', 'projects', 'Projects (0)');
+            break;
+        case 'assaysTab':
+            deActivateTabs('compoundsTab', 'compoundsTabLi', 'compounds', "Compounds (0)");
+            activateTabs('assaysTab', 'assaysTabLi', 'assays', 'Assay Definitions ');
+            deActivateTabs('projectsTab', 'projectsTabLi', 'projects', 'Projects (0)');
+            break;
+        case 'projectsTab':
+            deActivateTabs('compoundsTab', 'compoundsTabLi', 'compounds', "Compounds (0)");
+            deActivateTabs('assaysTab', 'assaysTabLi', 'assays', 'Assay Definitions (0)');
+            activateTabs('projectsTab', 'projectsTabLi', 'projects', 'Projects ');
+            break;
+        default:
+            activateCurrentTab('compoundsTab');
+            break;
+    }
 }
 /**
  * Find the search type based on the search string supplied by the user
@@ -339,16 +386,28 @@ function findSearchType(searchString) {
     var searchType = searchStringSplit[0];
     if (searchStringSplit.length == 2 && $.trim(searchStringSplit[1]).length) { //has to be of the form Exact:CCC so there must be 2 things in the array
         searchType = searchType.toLowerCase();
-
+        var stringAfterColon = $.trim(searchStringSplit[1])
         switch (searchType) { //must be one of these to qualify as a structure search
             case 'exact':
             case 'substructure':
             case 'superstructure':
             case 'similarity':
                 return 'STRUCTURE';
+            case 'adid': //this is an assay search with ids
+                if (stringAfterColon.match(NUMBER_MATCHING_REGEX)) {//this is an id match
+                    return 'ADID';
+                }
 
+            case 'cid':  //this is an compound search with ids
+                if (stringAfterColon.match(NUMBER_MATCHING_REGEX)) {//this is an id match
+                    return 'CID'
+                }
+            case 'pid':  //this is an project search with ids
+                if (stringAfterColon.match(NUMBER_MATCHING_REGEX)) {//this is an id match
+                    return 'PID'
+                }
         }
-    }else if(searchStringSplit.length == 2 && !$.trim(searchStringSplit[1]).length) { //e.g Exact: with no smile string
+    } else if (searchStringSplit.length == 2 && !$.trim(searchStringSplit[1]).length) { //e.g Exact: with no smile string
         return "EMPTY";
     }
     return "FREE_TEXT"; //this a Free Text Search

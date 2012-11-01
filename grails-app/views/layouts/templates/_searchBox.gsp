@@ -10,9 +10,10 @@
     </div>
     <div class="row-fluid">
         <div class="span10">
-            <div class="pull-right"><i class="icon-search"></i> <a data-toggle="modal" href="#modalDiv">Draw or paste a structure for a search</a></div>
+            <div class="pull-right"><i class="icon-search"></i> <a data-toggle="modal" href="#modalDiv">Draw or paste a structure </a>or<a data-toggle="modal" href="#idModalDiv"> list of Ids for search</a></div>
         </div>
     </div>
 </g:form>
 
 <g:render template="/layouts/templates/structureSearchBox"/>
+<g:render template="/layouts/templates/IdSearchBox"/>

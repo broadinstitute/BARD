@@ -48,6 +48,26 @@ class MolecularSpreadSheetServiceIntegrationSpec extends IntegrationSpec {
     }
 
 
+
+    void "test retrieveExperimentalData degenerate case"() {
+        when: "we have a molecularSpreadSheetService"
+        assertNotNull molecularSpreadSheetService
+        MolSpreadSheetData molSpreadSheetData = molecularSpreadSheetService.retrieveExperimentalData()
+
+        then: "we should be able to generate the core molSpreadSheetData, with valid empty data holders"
+        assertNotNull molSpreadSheetData
+        assertNotNull molSpreadSheetData.mssData
+        assertNotNull molSpreadSheetData.rowPointer
+        assertNotNull molSpreadSheetData.columnPointer
+        assertNotNull molSpreadSheetData.mssHeaders
+        assert molSpreadSheetData.mssData.size() == 8
+        assert molSpreadSheetData.rowPointer.size() == 0
+        assert molSpreadSheetData.columnPointer.size() == 0
+        assert molSpreadSheetData.mssHeaders.size() == 4
+    }
+
+
+
     void "test weHaveEnoughDataToMakeASpreadsheet()"() {
         when: "we have a molecularSpreadSheetService"
         assertNotNull molecularSpreadSheetService
@@ -117,10 +137,10 @@ class MolecularSpreadSheetServiceIntegrationSpec extends IntegrationSpec {
         assertNotNull molSpreadSheetData.rowPointer
         assertNotNull molSpreadSheetData.columnPointer
         assertNotNull molSpreadSheetData.mssHeaders
-        assert molSpreadSheetData.mssData.size() == 6
+        assert molSpreadSheetData.mssData.size() == 8
         assert molSpreadSheetData.rowPointer.size() == 0
         assert molSpreadSheetData.columnPointer.size() == 0
-        assert molSpreadSheetData.mssHeaders.flatten().size() == 3
+        assert molSpreadSheetData.mssHeaders.flatten().size() == 4
     }
 
 

@@ -134,6 +134,31 @@ class ExperimentalValueUnitSpec extends Specification {
 
 
 
+    void "test ExperimentalValueUnit.getByValue"() {
+        when: "#label"
+        ExperimentalValueUnit experimentalValueUnit =  ExperimentalValueUnit.getByValue(val)
+
+        then: "The resulting search filters size must equal the expected value"
+        assert experimentalValueUnit==result
+
+        where:
+        val             | result
+        "M"             |  ExperimentalValueUnit.Molar
+        "uM"         |  ExperimentalValueUnit.Micromolar
+        "mM"         |  ExperimentalValueUnit.Millimolar
+        "junk"       |  null
+    }
+//    Molar(" M", 0),
+//    Millimolar(" mM", -3),
+//    Micromolar(" uM", -6),
+//    Nanomolar(" nM", -9),
+//    Picomolar(" pM", -12),
+//    Femtomolar(" fM", -15),
+//    Attamolar(" aM", -18),
+//    Zeptomolar(" zM", -21),
+//    Yoctomolar(" yM", -24),
+//    unknown(
+
 
     void "test handling of precision conversions"() {
         when: "#label"

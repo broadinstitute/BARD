@@ -18,6 +18,7 @@ import org.apache.commons.lang.NotImplementedException
 
 class MolecularSpreadSheetService {
     int MAXIMUM_NUMBER_OF_COMPOUNDS =500
+    final static int START_DYNAMIC_COLUMNS=4 //Where to start the dynamic columns
     QueryCartService queryCartService
     QueryServiceWrapper queryServiceWrapper
     ShoppingCartService shoppingCartService
@@ -218,48 +219,6 @@ class MolecularSpreadSheetService {
 
         queryServiceWrapper.restCompoundService.newETag(date.toTimestamp().toString(), cartCompoundIdList);
     }
-
-
-
-
-
-
-//
-//    protected List<SpreadSheetActivity> extractMolSpreadSheetData(MolSpreadSheetData molSpreadSheetData, List<Experiment> experimentList, List<Long> compounds) {
-//        // now step through the data and place into molSpreadSheetData
-//        List<SpreadSheetActivity> spreadSheetActivityList = []
-//
-//        // we need to handle each experiment separately ( until NCGC can do this in the background )
-//        // Note that each experiment corresponds to a column in our spreadsheet
-//        int columnCount = 0
-//        for (Experiment experiment in experimentList) {
-//             List<Long> collectCompounds2 = []
-//            final ServiceIterator<Compound> compoundsTestedInExperimentIter = queryServiceWrapper.restExperimentService.compounds(experiment)
-//            List<Long> collectCompounds = compoundsTestedInExperimentIter.collect {Compound compound -> new CompoundAdapter(compound).pubChemCID }
-//            //only do this if compounds is not empty
-//            if (!compounds.isEmpty()) {
-//                //find the intersection of the two Compound lists
-//                collectCompounds = compounds.intersect(collectCompounds)
-//            }
-//            if (!collectCompounds.isEmpty()) {
-//                ServiceIterator<Value> experimentIterator = queryServiceWrapper.restExperimentService.activities(experiment)
-//                // Now step through the result set and pull back  one value for each compound
-//                Value experimentValue
-//                while (experimentIterator.hasNext()) {
-//                    experimentValue = experimentIterator.next()
-//                    Long translation = new Long(experimentValue.id.split("\\.")[0])
-//                    if (!molSpreadSheetData.columnPointer.containsKey(translation)) {
-//                        molSpreadSheetData.columnPointer.put(translation, columnCount)
-//                    }
-//                    spreadSheetActivityList.add(extractActivitiesFromExperiment(experimentValue, new Long(experiment.id.toString())))
-//                }
-//            } else {
-//                molSpreadSheetData.columnPointer.put(experiment.id as Long, columnCount)
-//            }
-//            columnCount++
-//        }
-//        spreadSheetActivityList
-//    }
     /**
      * The goal of this method is to take all the information we have  and store it in a map. Note that we are
      * crossing every compound  with every assay, so there may be instances where we have no data
@@ -286,7 +245,7 @@ class MolecularSpreadSheetService {
                 if (molSpreadSheetData.rowPointer.containsKey(spreadSheetActivity.cid)) {
                     int innerRowPointer = molSpreadSheetData.rowPointer[spreadSheetActivity.cid]
                     int innerColumnCount = molSpreadSheetData.columnPointer[spreadSheetActivity.eid]
-                    String arrayKey = "${innerRowPointer}_${innerColumnCount + 3}"
+                    String arrayKey = "${innerRowPointer}_${innerColumnCount + START_DYNAMIC_COLUMNS}"
                     MolSpreadSheetCell molSpreadSheetCell = new MolSpreadSheetCell(spreadSheetActivity)
                     dataMap[arrayKey] = molSpreadSheetCell
                 }
@@ -384,13 +343,18 @@ class MolecularSpreadSheetService {
         // need to be able to map from CID to row location
         molSpreadSheetData.rowPointer.put(compoundId, rowCount)
 
+        //TODO find a generic way to do this. It seems there are too many places to add new constant columns
         // add values for the cid column
         dataMap.put("${rowCount}_0".toString(), new MolSpreadSheetCell(compoundName, compoundSmiles, MolSpreadSheetCellType.image))
         dataMap.put("${rowCount}_1".toString(), new MolSpreadSheetCell(compoundId.toString(), MolSpreadSheetCellType.identifier))
         //we will use this to get the promiscuity score
         dataMap.put("${rowCount}_2".toString(), new MolSpreadSheetCell(compoundId.toString(), MolSpreadSheetCellType.identifier))
+        //we will use this to get the 'active vrs tested' column
+        int activeAssays = this.queryService.getNumberTestedAssays(compoundId,true)
+        int testedAssays  = this.queryService.getNumberTestedAssays(compoundId,false)
+        molSpreadSheetData.mssData.put("${rowCount}_3".toString(), new MolSpreadSheetCell("${activeAssays} vrs ${testedAssays}", MolSpreadSheetCellType.string))
 
-        molSpreadSheetData
+        return molSpreadSheetData
 
     }
 
@@ -405,6 +369,7 @@ class MolecularSpreadSheetService {
         molSpreadSheetData.mssHeaders << ["Struct"]
         molSpreadSheetData.mssHeaders << ["CID"]
         molSpreadSheetData.mssHeaders << ["UNM Promiscuity Analysis"]
+        molSpreadSheetData.mssHeaders << ["Active vs Tested across all Assay Definitions"]
         for (Experiment experiment in experimentList) {
             molSpreadSheetData.experimentNameList << "${experiment.id.toString()}"
             molSpreadSheetData.mssHeaders << []

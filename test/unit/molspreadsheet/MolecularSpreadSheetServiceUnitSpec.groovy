@@ -14,6 +14,7 @@ import spock.lang.Specification
 import spock.lang.Unroll
 import bard.core.*
 import bard.core.rest.RESTCompoundService
+import bard.core.rest.RESTAssayService
 
 /**
  * Created with IntelliJ IDEA.
@@ -33,6 +34,7 @@ class MolecularSpreadSheetServiceUnitSpec extends Specification {
     ShoppingCartService shoppingCartService
     IQueryService queryService
     RESTExperimentService restExperimentService
+    RESTAssayService restAssayService
     RESTCompoundService restCompoundService
     CompoundAdapter compoundAdapter = buildCompoundAdapter(6 as Long, [842121 as Long])
     @Shared Map compoundAdapterMap = [compoundAdapters: [buildCompoundAdapter(6 as Long, [842121 as Long])], facets: null, nHits: 0]
@@ -44,16 +46,32 @@ class MolecularSpreadSheetServiceUnitSpec extends Specification {
         compoundAdapter.metaClass.name = 'name'
         this.restExperimentService = Mock(RESTExperimentService)
         this.restCompoundService = Mock(RESTCompoundService)
+        this.restAssayService = Mock(RESTAssayService)
         this.queryCartService = Mock(QueryCartService)
         this.queryServiceWrapper = Mock(QueryServiceWrapper)
         this.shoppingCartService = Mock(ShoppingCartService)
         this.queryService = Mock(IQueryService)
+        queryServiceWrapper.restAssayService=restAssayService
         service.queryServiceWrapper = queryServiceWrapper
+        service.queryService = this.queryService
+
+
 
     }
 
     void tearDown() {
         // Tear down logic here
+    }
+    void "test assays To Experiments"(){
+        given:
+        ServiceIterator<Experiment> serviceIterator = Mock(ServiceIterator)
+        Collection<Assay> assays = [new Assay(name: "A1")]
+        when:
+        List<Experiment> experiments = service.assaysToExperiments(assays)
+        then:
+        queryServiceWrapper.restAssayService >> { restAssayService }
+        restAssayService.iterator(_, _) >> {serviceIterator}
+        assert experiments.isEmpty()
     }
     /**
      * We tests the non-null case with an integration test
@@ -244,10 +262,12 @@ class MolecularSpreadSheetServiceUnitSpec extends Specification {
         then: "prove that the active values are available"
         assertNotNull molSpreadSheetData
         assertNotNull molSpreadSheetData.mssHeaders
-        assert molSpreadSheetData.mssHeaders.flatten().size() == 3
+
+        assert molSpreadSheetData.mssHeaders.flatten().size() == 4
         assert molSpreadSheetData.mssHeaders.flatten().contains("Struct")
         assert molSpreadSheetData.mssHeaders.flatten().contains("CID")
         assert molSpreadSheetData.mssHeaders.flatten().contains("UNM Promiscuity Analysis")
+        assert molSpreadSheetData.mssHeaders.flatten().contains("Active vs Tested across all Assay Definitions")
     }
 
 
@@ -262,10 +282,11 @@ class MolecularSpreadSheetServiceUnitSpec extends Specification {
         then: "prove that the active values are available"
         assertNotNull molSpreadSheetData
         assertNotNull molSpreadSheetData.mssHeaders
-        assert molSpreadSheetData.mssHeaders.flatten().size() == 3
+        assert molSpreadSheetData.mssHeaders.flatten().size() == 4
         assert molSpreadSheetData.mssHeaders.flatten().contains("Struct")
         assert molSpreadSheetData.mssHeaders.flatten().contains("CID")
         assert molSpreadSheetData.mssHeaders.flatten().contains("UNM Promiscuity Analysis")
+        assert molSpreadSheetData.mssHeaders.flatten().contains("Active vs Tested across all Assay Definitions")
     }
 
 
@@ -284,7 +305,8 @@ class MolecularSpreadSheetServiceUnitSpec extends Specification {
         then: "prove that the active values are available"
         assertNotNull molSpreadSheetData
         assertNotNull molSpreadSheetData.mssHeaders
-        assert molSpreadSheetData.mssHeaders.size() == 6
+
+        assert molSpreadSheetData.mssHeaders.size() == 7
         assert molSpreadSheetData.mssHeaders.flatten().contains("Struct")
         assert molSpreadSheetData.mssHeaders.flatten().contains("CID")
         assert molSpreadSheetData.mssHeaders.flatten().contains("UNM Promiscuity Analysis")

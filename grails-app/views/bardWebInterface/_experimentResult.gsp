@@ -58,7 +58,7 @@
                         <g:each in="${0..(readout.size() - 1)}" var="i">
                             <%
                                 ExperimentalValue resp = new ExperimentalValue(readout.response[i], false)
-                                ExperimentalValue conc = new ExperimentalValue(readout.conc[i], ExperimentalValueUnit.Molar, ExperimentalValueType.numeric)
+                                ExperimentalValue conc = new ExperimentalValue(readout.conc[i], ExperimentalValueUnit.getByValue(readout?.concentrationUnits), ExperimentalValueType.numeric)
                             %>
                             ${resp.toString()}
                             <g:if test="${readout.conc[i]}">

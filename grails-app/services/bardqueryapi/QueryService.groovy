@@ -37,6 +37,7 @@ class QueryService implements IQueryService {
         final List<CompoundAdapter> foundCompoundAdapters = []
         Collection<Value> facets = []
         int nhits = 0
+       // String eTag = null
         if (searchString) {
             //re-normalize the search string to strip out custom syntax (e.g gobp:SearchString now become SearchString)
             String updatedSearchString = this.queryHelperService.stripCustomStringFromSearchString(searchString)
@@ -53,6 +54,7 @@ class QueryService implements IQueryService {
             foundCompoundAdapters.addAll(this.queryHelperService.compoundsToAdapters(compounds))
             facets = searchIterator.facets
             nhits = searchIterator.count
+         //   eTag = searchIterator.ETag.toString()
         }
         return [compoundAdapters: foundCompoundAdapters, facets: facets, nHits: nhits]
     }
@@ -68,6 +70,7 @@ class QueryService implements IQueryService {
         final List<AssayAdapter> foundAssayAdapters = []
         Collection<Value> facets = []
         int nhits = 0
+        //String eTag = null
         if (searchString) {
             //re-normalize the search string to strip out custom syntax (e.g gobp:SearchString now become SearchString)
             String updatedSearchString = this.queryHelperService.stripCustomStringFromSearchString(searchString)
@@ -82,6 +85,7 @@ class QueryService implements IQueryService {
             foundAssayAdapters.addAll(this.queryHelperService.assaysToAdapters(assays))
             facets = searchIterator.facets
             nhits = searchIterator.count
+          //  eTag = searchIterator.ETag.toString()
         }
         return [assayAdapters: foundAssayAdapters, facets: facets, nHits: nhits]
     }
@@ -96,6 +100,7 @@ class QueryService implements IQueryService {
     Map findProjectsByTextSearch(final String searchString, final Integer top = 10, final Integer skip = 0, final List<SearchFilter> searchFilters = []) {
         List<ProjectAdapter> foundProjectAdapters = []
         Collection<Value> facets = []
+        //String eTag = null
         int nhits = 0
         if (searchString) {
             //query for count
@@ -109,6 +114,7 @@ class QueryService implements IQueryService {
             foundProjectAdapters.addAll(this.queryHelperService.projectsToAdapters(projects))
             facets = searchIterator.facets
             nhits = searchIterator.count
+           // eTag = searchIterator.ETag.toString()
         }
         return [projectAdapters: foundProjectAdapters, facets: facets, nHits: nhits]
     }
@@ -124,7 +130,7 @@ class QueryService implements IQueryService {
     Map structureSearch(final String smiles, final StructureSearchParams.Type structureSearchParamsType, final List<SearchFilter> searchFilters = [], final Integer top = 50, final Integer skip = 0) {
         final List<CompoundAdapter> compoundAdapters = []
         Collection<Value> facets = []
-
+        //String eTag = null
         if (smiles) {
             //construct search parameters
             final StructureSearchParams structureSearchParams =
@@ -148,6 +154,7 @@ class QueryService implements IQueryService {
 
             //collect the facets
             //facets = searchIterator.facets
+            //eTag = searchIterator.ETag.toString()
         }
         int nhits = compoundAdapters.size()
         return [compoundAdapters: compoundAdapters, facets: facets, nHits: nhits]
@@ -163,11 +170,11 @@ class QueryService implements IQueryService {
     Map findCompoundsByCIDs(final List<Long> compoundIds, List<SearchFilter> filters = []) {
         final List<CompoundAdapter> compoundAdapters = []
         Collection<Value> facets = []
-
+        //String eTag = null
         if (compoundIds) {
             //create ETAG using a random name
             StopWatch sw = this.queryHelperService.startStopWatch()
-            //final Object etag = restCompoundService.newETag("Compound ETags", compoundIds);
+          //  eTag = this.queryServiceWrapper.restCompoundService.newETag("Compound ETags", compoundIds).toString();
             //commenting out facets until we figure out how to apply filters to ID searches
             //facets = restCompoundService.getFacets(etag)
             final Collection<Compound> compounds = this.queryServiceWrapper.restCompoundService.get(compoundIds)
@@ -225,6 +232,21 @@ class QueryService implements IQueryService {
         return [projectAdapters: foundProjectAdapters, facets: facets, nHits: nhits]
 
     }
+    /**
+     *
+     * @param compound
+     * @param activeOnly - true if we want only the active compounds
+     * @return int the number of tested assays
+     */
+    public int getNumberTestedAssays(Long cid,
+                               boolean activeOnly){
+        Compound compound = this.queryServiceWrapper.restCompoundService.get(cid)
+
+        final Collection<Assay> assays = this.queryServiceWrapper.restCompoundService.getTestedAssays(compound, activeOnly)
+        return assays.size()
+
+    }
+
     //=============== Show Resources Given a Single ID ================
 
     /**

@@ -11,20 +11,35 @@ import bardqueryapi.SearchFilter
 class MockQueryService implements IQueryService {
     QueryHelperService queryHelperService
 
-    static final Map<Long, MockCompoundAdapter> mockCompoundAdapterMap =[:]
+    static final Map<Long, MockCompoundAdapter> mockCompoundAdapterMap = [:]
 
     static final Map<Long, MockAssayAdapter> mockAssayAdapterMap = [:]
 
     static final Map<Long, MockProjectAdapter> mockProjectAdapterMap = [:]
 
+    static final Map<Long, MockExperiment> mockExperimentMap = [:]
+
     static {
         constructMockCompoundAdapter()
         constructMockAssayAdapter()
         constructMockProjectAdapter()
+        constructMockExperiment()
     }
-    Map findPromiscuityScoreForCID(final Long cid){
-        return [scores: [20,30], status: 200, message: "Success"]
 
+    /**
+     *
+     * @param compound
+     * @param activeOnly - true if we want only the active compounds
+     * @return int the number of tested assays
+     */
+    public int getNumberTestedAssays(Long cid,
+                                     boolean activeOnly) {
+        return 2;
+
+    }
+
+    Map findPromiscuityScoreForCID(final Long cid) {
+        return [scores: [20, 30], status: 200, message: "Success"]
     }
 
     //========================================================== Free Text Searches ================================
@@ -155,7 +170,9 @@ class MockQueryService implements IQueryService {
      * @return ProjectAdapter
      */
     Map showProject(final Long projectId) {
-        return [projectAdapter: MockQueryService.mockProjectAdapterMap.get(projectId), experiments:[]]
+        return [projectAdapter: MockQueryService.mockProjectAdapterMap.get(projectId), experiments: mockExperimentMap.values(), assays: [MockQueryService.mockAssayAdapterMap.get(588636 as Long).assay,
+                MockQueryService.mockAssayAdapterMap.get(449731 as Long).assay,
+                MockQueryService.mockAssayAdapterMap.get(588623 as Long).assay]]
     }
 
     //==============================================Auto Complete ======
@@ -290,6 +307,9 @@ protection of diseased and normal cells, respectively. This assay will summarize
         of APE1 in many cancers and resistance of these tumor cells to radio- and chemotherapy.
         Thus, targeting APE1 could improve the efficacy of current treatment paradigms by promoting
         '''
+        mockProjectAdapter.annotations << ['First annotation': '''This is the 1st annotation for this project''']
+        mockProjectAdapter.annotations << ['Second annotation': '''This is the 2nd annotation for this project''']
+        mockProjectAdapter.annotations << ['Third annotation': '''This is the 3rd annotation for this project''']
         mockProjectAdapterMap.put(projectId, mockProjectAdapter)
 
 
@@ -315,6 +335,9 @@ protection of diseased and normal cells, respectively. This assay will summarize
 and efficient stomach colonization (3), and inhibitors of this enzyme may be useful antibacterial drugs for treating these infections.
 The AddAB class of enzymes is closely related to the RecBCD class of helicase
 '''
+        mockProjectAdapter.annotations << ['First annotation': '''This is the 1st annotation for this project''']
+        mockProjectAdapter.annotations << ['Second annotation': '''This is the 2nd annotation for this project''']
+        mockProjectAdapter.annotations << ['Third annotation': '''This is the 3rd annotation for this project''']
         mockProjectAdapterMap.put(projectId, mockProjectAdapter)
 
         mockProjectAdapter = new MockProjectAdapter()
@@ -337,6 +360,9 @@ protection of diseased and normal cells, respectively. This assay will summarize
        to an increased interest in developing drugs that interfere with DNA repair, which could sensitise cancer cells to conventional
        therapy. This summary assay pertains to human RECQ1, which is important
        '''
+        mockProjectAdapter.annotations << ['First annotation': '''This is the 1st annotation for this project''']
+        mockProjectAdapter.annotations << ['Second annotation': '''This is the 2nd annotation for this project''']
+        mockProjectAdapter.annotations << ['Third annotation': '''This is the 3rd annotation for this project''']
         mockProjectAdapterMap.put(projectId, mockProjectAdapter)
 
 
@@ -382,6 +408,70 @@ Chloroxine induces SOS-<b>DNA repair</b> in E. coli, so chloroxine may be genoto
 
         mockCompoundAdapterMap.put(compoundAdapter.pubChemCID, compoundAdapter)
     }
+
+    private static void constructMockExperiment() {
+        MockExperiment mockedExperiment = new MockExperiment()
+        mockedExperiment.id = 1904
+        mockedExperiment.assay = new Assay()
+        mockedExperiment.type = ExperimentValues.ExperimentType.Confirmatory
+        mockedExperiment.role = ExperimentValues.ExperimentRole.Primary
+        mockedExperiment.category = ExperimentValues.ExperimentCategory.MLPCN
+        mockedExperiment.name = 'qHTS Assay for Inhibitors of Bloom\'s syndrome helicase (BLM)'
+        mockedExperiment.description = '''Survival of cells and the faithful propagation of the genome depend on elaborate mechanisms of detecting and repairing DNA damage. Treatment of advanced cancer relies on radiation therapy or chemotherapy, which kill cancer cells by causing extensive DNA damage. It is often found, that cancer cells develop resistance to therapy through enhanced activity of DNA repair functions; this has led to an increased interest in developing drugs that interfere with DNA repair, which could sensitize cancer cells to conventional therapy.
+This validation qHTS assay pertains to human BLM, which is important in resolving abnormal DNA structures formed during replication or homologous recombination. Shutting down the expression of BLM leads to chromosomal instability and higher radiation sensitivity in cultured cells.
+The validation assay was a fluorescence quenching based kinetic qHTS for BLM Helicase DNA unwinding. The activity was measured as ATP-dependent separation of a 20-bp DNA duplex extended by 30-nt single-stranded tails (forked duplex). The forked DNA substrate was tagged with rhodamine fluorophore (carboxytetramethyl rhodamine, TAMRA) and BHQ-2 (Black Hole Quencher 2) dark quencher. Strand separation results in an increase in the fluorescence of TAMRA (excitation 525 nm, emission 598 nm). This substrate construct operates in a red-shifted region where very few compound library members have been noted to fluoresce (PubChem AIDs 593 and 594). An additional feature of the assay is the inclusion of 2.5 ug/ml poly (dIdC), to reduce interference by compounds such as DNA intercalators, a major source of false inhibitors.
+Assay Providers:
+  Ian Hickson, University of Oxford
+  Opher Gileadi, Structural Genomics Consortium, University of Oxford
+Screening Center PI: Austin, C.P.
+Screening Center: NIH Chemical Genomics Center [NCGC]'''
+        mockedExperiment.addExperimentCompoundCountValue(347941)
+        mockedExperiment.addExperimentSubstanceCountValue(354860)
+        mockedExperiment.pubchemAid = 2528
+        mockExperimentMap.put(mockedExperiment.id, mockedExperiment)
+
+
+        mockedExperiment = new MockExperiment()
+        mockedExperiment.id = 2757
+        mockedExperiment.assay = new Assay()
+        mockedExperiment.type = ExperimentValues.ExperimentType.Summary
+        mockedExperiment.role = ExperimentValues.ExperimentRole.Primary
+        mockedExperiment.category = ExperimentValues.ExperimentCategory.MLPCN
+        mockedExperiment.name = 'Probe Development Summary for Inhibitors of Bloom\'s syndrome helicase (BLM)'
+        mockedExperiment.description = '''Survival of cells and the faithful propagation of the genome depend on elaborate mechanisms of detecting and repairing DNA damage. Treatment of advanced cancer relies on radiation therapy or chemotherapy, which kill cancer cells by causing extensive DNA damage. It is often found, that cancer cells develop resistance to therapy through enhanced activity of DNA repair functions; this has led to an increased interest in developing drugs that interfere with DNA repair, which could sensitize cancer cells to conventional therapy.
+This summary assay pertains to the Bloom syndrome helicase (BLM), which is important in resolving abnormal DNA structures formed during replication or homologous recombination. Shutting down the expression of BLM leads to chromosomal instability and higher radiation sensitivity in cultured cells.
+The goal of this project is to develop inhibitors of BLM activity, which can be used in cell and animal models to examine the consequences of inhibition on the survival of cancer cells. Initial candidates will be identified by a quantitative high-throughput screen (qHTS) of the MLSMR compound library, using a fluorescence-based in vitro biochemical assay that reveals inhibitors of BLM DNA unwinding activity. The resulting compounds will then be subject to orthogonal, secondary biochemical assays, to triage the initial hits, to classify compounds based on mode of action, and to derive structure#activity relationships (SARs) of candidate effectors. SAR and protein structural information will be used in further chemical development to improve the potency and selectivity of the compounds. Cell-based assays will then be applied as the first step in utilizations of the verified inhibitors, examining their effects on cancer cell survival and sensitivity to radiation and chemotherapeutics.
+This assay will summarize the probe development efforts that are currently ongoing.
+Assay Providers:
+  Ian Hickson, University of Oxford
+  Opher Gileadi, Structural Genomics Consortium, University of Oxford
+  Alessandro Vindigni, International Center for Biotechnology and Genetic Engineering
+Screening Center PI: Austin, C.P.
+Screening Center: NIH Chemical Genomics Center [NCGC]'''
+        mockedExperiment.addExperimentCompoundCountValue(0)
+        mockedExperiment.addExperimentSubstanceCountValue(0)
+        mockedExperiment.pubchemAid = 2386
+        mockExperimentMap.put(mockedExperiment.id, mockedExperiment)
+
+
+        mockedExperiment = new MockExperiment()
+        mockedExperiment.id = 3470
+        mockedExperiment.assay = new Assay()
+        mockedExperiment.type = ExperimentValues.ExperimentType.Confirmatory
+        mockedExperiment.role = ExperimentValues.ExperimentRole.Counterscreen
+        mockedExperiment.category = ExperimentValues.ExperimentCategory.MLPCN
+        mockedExperiment.name = 'Counterscreen for BLMA Inhibitors: ADP Fluorescence Polarization Displacement Assay'
+        mockedExperiment.description = '''In order to gain further insight into the mode of action of the BLMAscreening hits, we have profiled them in a set of miniaturized fluorescence polarization assays designed to report on compounds which competitively displace either co-substrate (ATP or DNA). The appropriate fluorescently-labeled probe was used: BODIPY Texas Red-labeled ADP was expected to be competed off by ATP-competitive inhibitors, while single-TAMRA labeled forked-duplex or short single-stranded DNA molecules served as probes for DNA-competitive compounds.
+Assay Providers:
+  Ian Hickson, University of Oxford
+  Opher Gileadi, Structural Genomics Consortium, University of Oxford
+Screening Center PI: Austin, C.P.
+Screening Center: NIH Chemical Genomics Center [NCGC]'''
+        mockedExperiment.addExperimentCompoundCountValue(529)
+        mockedExperiment.addExperimentSubstanceCountValue(534)
+        mockedExperiment.pubchemAid = 2712
+        mockExperimentMap.put(mockedExperiment.id, mockedExperiment)
+    }
 }
 class MockAssayAdapter extends AssayAdapter {
     String searchHighlight
@@ -401,6 +491,25 @@ class MockProjectAdapter extends ProjectAdapter {
         return [];
     }
 }
+class MockExperiment extends Experiment {
+//Implemented in super
+//    String name
+//    Long id
+//    ExperimentRole role
+//    String description
+//    Assay assay
+
+    void addExperimentCompoundCountValue(Integer compoundNum) {
+        final DataSource dataSource = new DataSource("stuff", "v1")
+        this.add(new IntValue(dataSource, ExperimentValues.ExperimentCompoundCountValue, compoundNum))
+    }
+
+    void addExperimentSubstanceCountValue(Integer substanceNum) {
+        final DataSource dataSource = new DataSource("stuff", "v1")
+        this.add(new IntValue(dataSource, ExperimentValues.ExperimentSubstanceCountValue, substanceNum))
+    }
+}
+
 class MockCompoundAdapter extends CompoundAdapter {
     Long[] sids = [70319, 609991, 866273, 3132781]
     Long pubChemCID

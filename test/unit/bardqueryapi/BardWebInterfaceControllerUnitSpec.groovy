@@ -1,5 +1,13 @@
 package bardqueryapi
 
+import org.apache.http.HttpException
+import org.json.JSONArray
+
+import spock.lang.Shared
+import spock.lang.Specification
+import spock.lang.Unroll
+
+import spock.lang.Ignore
 import bard.core.adapter.AssayAdapter
 import bard.core.adapter.CompoundAdapter
 import bard.core.adapter.ProjectAdapter
@@ -7,21 +15,15 @@ import com.metasieve.shoppingcart.ShoppingCartService
 import grails.test.mixin.TestFor
 import grails.test.mixin.TestMixin
 import grails.test.mixin.support.GrailsUnitTestMixin
-import org.apache.http.HttpException
-import org.json.JSONArray
+import molspreadsheet.MolecularSpreadSheetService
+import molspreadsheet.SpreadSheetActivity
 import promiscuity.PromiscuityScore
 import promiscuity.Scaffold
-import spock.lang.Shared
-import spock.lang.Specification
-import spock.lang.Unroll
+import querycart.CartAssay
 
 import javax.servlet.http.HttpServletResponse
 
 import bard.core.*
-import querycart.CartAssay
-import molspreadsheet.MolecularSpreadSheetService
-import molspreadsheet.SpreadSheetActivity
-import spock.lang.Ignore
 
 /**
  * See the API for {@link grails.test.mixin.support.GrailsUnitTestMixin} for usage instructions
@@ -131,6 +133,31 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
         "Empty Null CID - Bad Request" | null | HttpServletResponse.SC_BAD_REQUEST           | null                       | null
         "CID- Internal Server Error"   | 234  | HttpServletResponse.SC_INTERNAL_SERVER_ERROR | null                       | null
         "Success"                      | 567  | HttpServletResponse.SC_OK                    | [new Scaffold(pScore: 22)] | new PromiscuityScore(cid: 567, scaffolds: [new Scaffold(pScore: 222)])
+    }
+
+    void "test activeVrsTested Bad Request"() {
+
+        when:
+        controller.activeVrsTested(cid)
+        then:
+        0 * this.queryService.getNumberTestedAssays(_, _) >> {1}
+        assert response.status == statusCode
+        where:
+        label                          | cid  | statusCode                         | expectedNumberOfAssays
+        "Empty Null CID - Bad Request" | null | HttpServletResponse.SC_BAD_REQUEST | null
+    }
+
+    void "test activeVrsTested #label"() {
+
+        when:
+        controller.activeVrsTested(cid)
+        then:
+        2 * this.queryService.getNumberTestedAssays(_, _) >> {expectedNumberOfAssays}
+        assert response.status == statusCode
+        assert response.text.contains("${expectedNumberOfAssays} vrs ${expectedNumberOfAssays}")
+        where:
+        label     | cid | statusCode                | expectedNumberOfAssays
+        "Success" | 567 | HttpServletResponse.SC_OK | 1
     }
 
     void "test promiscuity action with exception"() {
@@ -489,10 +516,11 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
         and:
         response.status == statusCode
         where:
-        label                                 | searchString | projectAdapterMap                                          | statusCode                                   | filters
-        "Search Projects By Ids"              | "1234, 4567" | [projectAdapters: [buildProjectAdapter(1234, "project1")]] | HttpServletResponse.SC_OK                    | searchFilters1
-        "Search Projects By Non existing Ids" | "12, 47"     | null                                                       | HttpServletResponse.SC_INTERNAL_SERVER_ERROR | searchFilters1
-        "Search Projects By Id No Filters"    | "1234, 4567" | [projectAdapters: [buildProjectAdapter(1234, "project1")]] | HttpServletResponse.SC_OK                    | []
+        label                                  | searchString     | projectAdapterMap                                          | statusCode                                   | filters
+        "Search Projects By Ids"               | "1234, 4567"     | [projectAdapters: [buildProjectAdapter(1234, "project1")]] | HttpServletResponse.SC_OK                    | searchFilters1
+        "Search Projects By Non existing Ids"  | "12, 47"         | null                                                       | HttpServletResponse.SC_INTERNAL_SERVER_ERROR | searchFilters1
+        "Search Projects By Id No Filters"     | "1234, 4567"     | [projectAdapters: [buildProjectAdapter(1234, "project1")]] | HttpServletResponse.SC_OK                    | []
+        "Search Projects By Id with Id syntax" | "PID:1234, 4567" | [projectAdapters: [buildProjectAdapter(1234, "project1")]] | HttpServletResponse.SC_OK                    | []
 
     }
 
@@ -512,10 +540,11 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
         and:
         assert response.status == statusCode
         where:
-        label                               | searchString | assayAdapterMap                                                            | statusCode                                   | filters
-        "Search Assays By Ids"              | "1234, 4567" | [assayAdapters: [buildAssayAdapter(1234, "assay2")], facets: [], nHits: 2] | HttpServletResponse.SC_OK                    | searchFilters1
-        "Search Assays By Non existing Ids" | "12, 47"     | null                                                                       | HttpServletResponse.SC_INTERNAL_SERVER_ERROR | searchFilters1
-        "Search Assays By Id No Filters"    | "1234, 4567" | [assayAdapters: [buildAssayAdapter(1234, "assay2")], facets: [], nHits: 2] | HttpServletResponse.SC_OK                    | []
+        label                                 | searchString      | assayAdapterMap                                                            | statusCode                                   | filters
+        "Search Assays By Ids"                | "1234, 4567"      | [assayAdapters: [buildAssayAdapter(1234, "assay2")], facets: [], nHits: 2] | HttpServletResponse.SC_OK                    | searchFilters1
+        "Search Assays By Ids with id syntax" | "ADID:1234, 4567" | [assayAdapters: [buildAssayAdapter(1234, "assay2")], facets: [], nHits: 2] | HttpServletResponse.SC_OK                    | []
+        "Search Assays By Non existing Ids"   | "12, 47"          | null                                                                       | HttpServletResponse.SC_INTERNAL_SERVER_ERROR | searchFilters1
+        "Search Assays By Id No Filters"      | "1234, 4567"      | [assayAdapters: [buildAssayAdapter(1234, "assay2")], facets: [], nHits: 2] | HttpServletResponse.SC_OK                    | []
 
 
     }
@@ -535,10 +564,11 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
         and:
         assert response.status == statusCode
         where:
-        label                               | searchString | compoundAdapterMap                                                         | statusCode                                   | filters
-        "Search Compounds By Id"            | "1234, 4567" | [compoundAdapters: [buildCompoundAdapter(4567, [])], facets: [], nHits: 2] | HttpServletResponse.SC_OK                    | searchFilters1
-        "Search Compounds Non existing Ids" | "12, 45"     | null                                                                       | HttpServletResponse.SC_INTERNAL_SERVER_ERROR | searchFilters1
-        "Search Compounds By Id No Filters" | "1234, 4567" | [compoundAdapters: [buildCompoundAdapter(4567, [])], facets: [], nHits: 2] | HttpServletResponse.SC_OK                    | []
+        label                                    | searchString     | compoundAdapterMap                                                         | statusCode                                   | filters
+        "Search Compounds By Id"                 | "1234, 4567"     | [compoundAdapters: [buildCompoundAdapter(4567, [])], facets: [], nHits: 2] | HttpServletResponse.SC_OK                    | searchFilters1
+        "Search Compounds Non existing Ids"      | "12, 45"         | null                                                                       | HttpServletResponse.SC_INTERNAL_SERVER_ERROR | searchFilters1
+        "Search Compounds By Id No Filters"      | "1234, 4567"     | [compoundAdapters: [buildCompoundAdapter(4567, [])], facets: [], nHits: 2] | HttpServletResponse.SC_OK                    | []
+        "Search Compounds By Id using ID Syntax" | "CID:1234, 4567" | [compoundAdapters: [buildCompoundAdapter(4567, [])], facets: [], nHits: 2] | HttpServletResponse.SC_OK                    | []
 
 
     }
