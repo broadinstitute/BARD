@@ -12,6 +12,7 @@ class ElementConstraintUnitSpec extends AbstractElementConstraintUnitSpec {
     @Before
     void doSetup() {
         domainInstance = Element.buildWithoutSave()
+        unitElement = Element.build()
     }
 
 
