@@ -106,27 +106,29 @@
                                     </p>
 
 
-
-                                    <div class='popover-content-wrapper' id="drc_${spreadSheetActivityStorage.sid}_${colCnt}"
-                                         style="display: none;">
-                                        <div class="center-aligned">
-                                            <img alt="${spreadSheetActivityStorage.sid}"
-                                                 title="Substance Id : ${spreadSheetActivityStorage.sid}"
-                                                 src="${createLink(
-                                                         controller: 'doseResponseCurve',
-                                                         action: 'doseResponseCurve',
-                                                         params: [
-                                                                 sinf: hillCurveValueHolder?.sInf,
-                                                                 s0: hillCurveValueHolder?.s0,
-                                                                 ac50: hillCurveValueHolder?.slope,
-                                                                 hillSlope: hillCurveValueHolder?.coef,
-                                                                 concentrations: hillCurveValueHolder?.conc,
-                                                                 activities: hillCurveValueHolder?.response,
-                                                                 yAxisLabel: hillCurveValueHolder?.identifier
-                                                         ]
-                                                 )}"/>
+                                    <g:if test="${hillCurveValueHolder?.conc?.size()>1}">
+                                        <div class='popover-content-wrapper' id="drc_${spreadSheetActivityStorage.sid}_${colCnt}"
+                                             style="display: none;">
+                                            <div class="center-aligned">
+                                                <img alt="${spreadSheetActivityStorage.sid}"
+                                                     title="Substance Id : ${spreadSheetActivityStorage.sid}"
+                                                     src="${createLink(
+                                                             controller: 'doseResponseCurve',
+                                                             action: 'doseResponseCurve',
+                                                             params: [
+                                                                     sinf: hillCurveValueHolder?.sInf,
+                                                                     s0: hillCurveValueHolder?.s0,
+                                                                     ac50: hillCurveValueHolder?.slope,
+                                                                     hillSlope: hillCurveValueHolder?.coef,
+                                                                     concentrations: hillCurveValueHolder?.conc,
+                                                                     activities: hillCurveValueHolder?.response,
+                                                                     yAxisLabel: hillCurveValueHolder?.identifier
+                                                             ]
+                                                     )}"/>
+                                            </div>
                                         </div>
-                                    </div>
+
+                                    </g:if>
 
                                 </td>
                             </g:if>
