@@ -280,6 +280,9 @@ table.QcartAppearance  {
     color: black;
     text-decoration: none;
 }
+td.QcartAppearance  {
+    padding-bottom: 10px;
+}
 
 div.QcartAppearance  {
     font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;

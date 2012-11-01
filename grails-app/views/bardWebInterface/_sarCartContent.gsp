@@ -12,7 +12,7 @@
         %{-- hold everything related to assays --}%
             <g:each in="${compounds}" var="elem" status="item">
                 <tr>
-                    <td>
+                    <td class="QcartAppearance">
                         <a href="${createLink(controller:'bardWebInterface' , action: 'showCompound', id:elem.externalId)}">${elem.toString()}</a>
                     </td>
                     <td>
@@ -35,7 +35,7 @@
             <table>
             <g:each in="${assayDefinitions}" var="elem" status="item">
                 <tr>
-                    <td>
+                    <td class="QcartAppearance">
                         <a href="${createLink(controller:'bardWebInterface' , action: 'showAssay', id:elem.externalId)}">${elem.toString()}</a>
                     </td>
                     <td>
@@ -58,7 +58,7 @@
             <table>
                 <g:each in="${projects}" var="elem" status="item">
                     <tr>
-                        <td>
+                        <td class="QcartAppearance">
                             <a href="${createLink(controller:'bardWebInterface' , action: 'showProject', id:elem.externalId)}">${elem.toString()}</a>
                         </td>
                         <td>
