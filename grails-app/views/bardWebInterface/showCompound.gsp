@@ -9,7 +9,14 @@
 <body>
 <div class="row-fluid">
     <div class="span12 page-header">
-        <h1>${compound?.name} <small>(PubChem CID: ${compound?.pubChemCID})</small></h1>
+        <h1>${compound?.name}
+            <g:if test="${compound.isDrug()}">
+                <span class="badge badge-success">Drug</span>
+            </g:if>
+            <g:elseif test="${compound.isProbe()}">
+                <span class="badge badge-info">Probe</span>
+            </g:elseif>
+            <small>(PubChem CID: ${compound?.pubChemCID})</small></h1>
         <a href="#" class="addCompoundToCart btn btn-mini" data-cart-name="${JavaScriptUtility.cleanup(compound?.name)}"
            data-cart-id="${compound?.pubChemCID}" data-cart-smiles="${compound?.getStructureSMILES()}">
             Save for later analysis

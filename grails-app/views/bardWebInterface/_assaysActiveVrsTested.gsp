@@ -1,3 +1,3 @@
 <div>
-    ${activeAssays} vrs ${testedAssays}
+    <span class="badge badge-info">${activeAssays}/${testedAssays}</span>
 </div>

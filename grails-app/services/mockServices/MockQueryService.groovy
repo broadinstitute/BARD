@@ -545,7 +545,7 @@ class MockCompoundAdapter extends CompoundAdapter {
         return new Double(0.00);
     }
 
-    public Long[] getPubChemSIDs() {
+    public List<Long> getPubChemSIDs() {
         return sids;
     }
 }

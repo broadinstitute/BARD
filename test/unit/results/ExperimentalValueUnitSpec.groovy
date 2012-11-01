@@ -1,10 +1,10 @@
 package results
 
-import molspreadsheet.MolSpreadSheetCellUnit
-import grails.test.mixin.TestMixin
-import grails.test.mixin.support.GrailsUnitTestMixin
 import spock.lang.Specification
 import spock.lang.Unroll
+import grails.test.mixin.TestMixin
+import grails.test.mixin.support.GrailsUnitTestMixin
+import molspreadsheet.MolSpreadSheetCellUnit
 
 @TestMixin(GrailsUnitTestMixin)
 @Unroll
@@ -17,8 +17,31 @@ class ExperimentalValueUnitSpec extends Specification {
         // Tear down logic here
     }
 
+    void "test Get By Value #label"() {
+
+        when:
+        final ExperimentalValueUnit experimentalValueUnit = ExperimentalValueUnit.getByValue(experimentalValueUnitValue)
+
+        then:
+        assert experimentalValueUnit == expectedExperimentValueUnit
+
+        where:
+        label         | experimentalValueUnitValue | expectedExperimentValueUnit
+        "Molar"       | " M"                       | ExperimentalValueUnit.Molar
+        "Millimolar"  | " mM"                      | ExperimentalValueUnit.Millimolar
+        "Micromolar"  | " uM"                      | ExperimentalValueUnit.Micromolar
+        "Nanomolar"   | " nM"                      | ExperimentalValueUnit.Nanomolar
+        "Picomolar"   | " pM"                      | ExperimentalValueUnit.Picomolar
+        "Femtomolar"  | " fM"                      | ExperimentalValueUnit.Femtomolar
+        "Attamolar"   | " aM"                      | ExperimentalValueUnit.Attamolar
+        "Zeptomolar"  | " zM"                      | ExperimentalValueUnit.Zeptomolar
+        "Yoctomolar"  | " yM"                      | ExperimentalValueUnit.Yoctomolar
+        "unknown"     | ""                         | ExperimentalValueUnit.unknown
+        "Bogus Value" | "bogus value"              | null
+    }
+
     void "test performUnitNormalization"() {
-        given:  "values the calling routine would request"
+        given: "values the calling routine would request"
         ExperimentalValue experimentalValue = new ExperimentalValue(0.02, ExperimentalValueUnit.Micromolar, ExperimentalValueType.unknown, true)
         final ExperimentalValueUnit originalUnit = experimentalValue.experimentalValueUnit
         experimentalValue.insistOnOutputUnits = ExperimentalValueUnit.unknown
@@ -26,7 +49,7 @@ class ExperimentalValueUnitSpec extends Specification {
         when: "requesting normalization"
         experimentalValue.performUnitNormalization(ExperimentalValueUnit.unknown, ExperimentalValueUnit.unknown)
 
-        then:  "nothing changes"
+        then: "nothing changes"
         assert originalUnit == experimentalValue.experimentalValueUnit
 
     }

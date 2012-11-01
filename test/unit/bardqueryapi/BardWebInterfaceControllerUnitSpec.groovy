@@ -154,7 +154,7 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
         then:
         2 * this.queryService.getNumberTestedAssays(_, _) >> {expectedNumberOfAssays}
         assert response.status == statusCode
-        assert response.text.contains("${expectedNumberOfAssays} vrs ${expectedNumberOfAssays}")
+        assert response.text.contains("${expectedNumberOfAssays}/${expectedNumberOfAssays}")
         where:
         label     | cid | statusCode                | expectedNumberOfAssays
         "Success" | 567 | HttpServletResponse.SC_OK | 1
