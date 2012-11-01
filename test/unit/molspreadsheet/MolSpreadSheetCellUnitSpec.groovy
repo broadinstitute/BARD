@@ -49,6 +49,39 @@ class MolSpreadSheetCellUnitSpec extends Specification{
 
 
 
+    void "Test copy constructors"() {
+        when:
+        MolSpreadSheetCell originalMolSpreadSheetCell = new MolSpreadSheetCell("2", MolSpreadSheetCellType.string)
+        MolSpreadSheetCell newMolSpreadSheetCell = new MolSpreadSheetCell(originalMolSpreadSheetCell)
+
+        then:
+        assert originalMolSpreadSheetCell.activity==newMolSpreadSheetCell.activity
+        assert originalMolSpreadSheetCell.molSpreadSheetCellType ==newMolSpreadSheetCell.molSpreadSheetCellType
+        assert originalMolSpreadSheetCell.strInternalValue ==newMolSpreadSheetCell.strInternalValue
+        assert originalMolSpreadSheetCell.intInternalValue ==newMolSpreadSheetCell.intInternalValue
+        assert originalMolSpreadSheetCell.supplementalInternalValue ==newMolSpreadSheetCell.supplementalInternalValue
+        assert originalMolSpreadSheetCell.spreadSheetActivityStorage==null
+    }
+
+
+    void "Test copy constructors 2"() {
+        when:
+        MolSpreadSheetCell originalMolSpreadSheetCell = new MolSpreadSheetCell("2", MolSpreadSheetCellType.string)
+        originalMolSpreadSheetCell.spreadSheetActivityStorage = new SpreadSheetActivityStorage()
+        MolSpreadSheetCell newMolSpreadSheetCell = new MolSpreadSheetCell(originalMolSpreadSheetCell,0)
+
+        then:
+        assert originalMolSpreadSheetCell.activity==newMolSpreadSheetCell.activity
+        assert originalMolSpreadSheetCell.molSpreadSheetCellType ==newMolSpreadSheetCell.molSpreadSheetCellType
+        assert originalMolSpreadSheetCell.strInternalValue ==newMolSpreadSheetCell.strInternalValue
+        assert originalMolSpreadSheetCell.intInternalValue ==newMolSpreadSheetCell.intInternalValue
+        assert originalMolSpreadSheetCell.supplementalInternalValue ==newMolSpreadSheetCell.supplementalInternalValue
+        assertNotNull originalMolSpreadSheetCell.spreadSheetActivityStorage
+    }
+
+
+
+
     void "Test constraints for molecular spreadsheet data"() {
         given:
         mockForConstraintsTests(MolSpreadSheetCell)

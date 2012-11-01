@@ -66,6 +66,28 @@ class QueryCartControllerUnitSpec extends Specification {
         "add assay already in cart" | TYPE_IN_CART | ID_IN_CART | 'foo' | null
     }
 
+
+
+    void "test unsuccessful addItem for #label"() {
+        given:
+        params.type = 'foo'
+        params.id = 'bar' as String
+        params.name = 'foo'
+        params.smiles = 'ccc'
+
+        when:
+        queryCartService.addToShoppingCart(99)
+
+        controller.addItem()
+
+        then:
+        assert response.status == HttpServletResponse.SC_BAD_REQUEST
+
+    }
+
+
+
+
     void "test add existing assay not in cart"() {
         given:
         CartProject project = new CartProject('Test', 3)

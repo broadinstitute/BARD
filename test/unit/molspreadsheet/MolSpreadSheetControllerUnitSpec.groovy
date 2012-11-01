@@ -35,6 +35,14 @@ class MolSpreadSheetControllerUnitSpec extends Specification  {
     }
 
 
+    void "test showExperimentDetails("() {
+
+        when:
+        controller.showExperimentDetails(1L,1L)
+
+        then:
+        assert response.status == 200
+    }
 
 
 

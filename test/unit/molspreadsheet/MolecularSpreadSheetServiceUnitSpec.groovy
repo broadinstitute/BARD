@@ -76,6 +76,32 @@ class MolecularSpreadSheetServiceUnitSpec extends Specification {
         restAssayService.iterator(_, _) >> {serviceIterator}
         assert experiments.isEmpty()
     }
+
+
+
+
+    void "test prepareMapOfColumnsToAssay "() {
+        when:
+        final MolSpreadSheetData molSpreadSheetData = new MolSpreadSheetData()
+        molSpreadSheetData.mssHeaders << ['a']
+        molSpreadSheetData.mssHeaders << ['b']
+        molSpreadSheetData.mssHeaders << ['c']
+        molSpreadSheetData.mssHeaders << ['d']
+        molSpreadSheetData.mssHeaders << ['e','f','g']
+        service.prepareMapOfColumnsToAssay(molSpreadSheetData)
+        molSpreadSheetData.experimentNameList << 'a'
+
+        then: "we want to pull out the active values"
+        assertNotNull molSpreadSheetData
+        assert molSpreadSheetData.mapColumnsToAssay.size()==7
+    }
+
+
+
+
+
+
+
     /**
      * We tests the non-null case with an integration test
      */
@@ -174,20 +200,6 @@ class MolecularSpreadSheetServiceUnitSpec extends Specification {
 
     }
 
-//    void "test extractActivitiesFromExperiment when experimentValue has no children"() {
-//        given: "we have an experiment"
-//        final Value experimentalValue = new Value()
-//        final experimentId = 47 as Long
-//
-//        when: "we want to pull out the active values"
-//        SpreadSheetActivity spreadSheetActivity = service.extractActivitiesFromExperiment(experimentalValue, experimentId)
-//
-//        then: "prove that the active values are available"
-//        assertNotNull spreadSheetActivity
-//        assert spreadSheetActivity.experimentId == experimentId
-//
-//    }
-
 
     void "test addCurrentActivityToSpreadSheet when experimentValue has no children"() {
         given: "we have an experiment"
@@ -213,6 +225,8 @@ class MolecularSpreadSheetServiceUnitSpec extends Specification {
     }
 
 
+
+
     void "test error value of addCurrentActivityToSpreadSheet "() {
         given: "we have an experiment"
         SpreadSheetActivity spreadSheetActivity = new SpreadSheetActivity()
@@ -225,7 +239,6 @@ class MolecularSpreadSheetServiceUnitSpec extends Specification {
         then: "prove that the active values are available"
         shouldFail {service.addCurrentActivityToSpreadSheet(columnNames,spreadSheetActivity, experimentalValue)}
     }
-
 
     def returnRelevantNumber(String identifier, SpreadSheetActivity spreadSheetActivity) {
         def returnValue
@@ -291,7 +304,6 @@ class MolecularSpreadSheetServiceUnitSpec extends Specification {
         assert molSpreadSheetData.mssHeaders.flatten().contains("UNM Promiscuity Analysis")
         assert molSpreadSheetData.mssHeaders.flatten().contains("Active vs Tested across all Assay Definitions")
     }
-
 
 
     void "test populateMolSpreadSheetColumnMetadata when experiment list is not empty"() {

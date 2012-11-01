@@ -66,6 +66,33 @@ class MolecularSpreadSheetServiceIntegrationSpec extends IntegrationSpec {
         assert molSpreadSheetData.mssHeaders.size() == 4
     }
 
+
+
+
+    void "test fillInTheMissingCellsAndConvertToExpandedMatrix"() {
+        when: "we have a molecularSpreadSheetService"
+        Map<String,MolSpreadSheetCell> dataMap = [:]
+        dataMap["0_3"]  =new MolSpreadSheetCell()
+        MolSpreadSheetCell flawedMolSpreadSheetCell =new MolSpreadSheetCell()
+        flawedMolSpreadSheetCell.spreadSheetActivityStorage=new SpreadSheetActivityStorage()
+        dataMap["0_4"]  =flawedMolSpreadSheetCell
+        molecularSpreadSheetService.fillInTheMissingCellsAndConvertToExpandedMatrix(molSpreadSheetData,dataMap)
+
+        then: "we should be able to generate the core molSpreadSheetData, with valid empty data holders"
+        assertNotNull molSpreadSheetData
+        assertNotNull molSpreadSheetData.mssData
+        assertNotNull molSpreadSheetData.rowPointer
+        assertNotNull molSpreadSheetData.columnPointer
+        assertNotNull molSpreadSheetData.mssHeaders
+        assert molSpreadSheetData.mssData.size() == 10
+        assert molSpreadSheetData.rowPointer.size() == 2
+        assert molSpreadSheetData.columnPointer.size() == 0
+        assert molSpreadSheetData.mssHeaders.size() == 5
+    }
+
+
+
+
     void "test weHaveEnoughDataToMakeASpreadsheet()"() {
         given:
             shoppingCartService.emptyShoppingCart()
@@ -585,6 +612,9 @@ class MolecularSpreadSheetServiceIntegrationSpec extends IntegrationSpec {
         // we expect to see some data
         assert dataCount > 0
     }
+
+
+
     // an example of a problem
 //    void "test indirect accumulation of expts"() {
 //
