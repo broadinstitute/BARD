@@ -7,7 +7,7 @@ function QueryCart() {
 
 QueryCart.prototype.toggleDetailsHandler = function() {
     $(".panel").toggle("fast");
-    $(this).toggleClass("active");
+    $(".trigger").toggleClass("active");
     return false;
 };
 
@@ -43,7 +43,7 @@ QueryCart.prototype.addItemToCartHandler = function() {
             'smiles': smiles},
         url:'/bardwebquery/queryCart/addItem',
         success:function (data) {
-            $('.addToCartCheckbox,#summaryView,#detailView').trigger('cart.itemAdded', id);
+            queryCart.publishCartChangeEvent('cart.itemAdded', id);
         }
     });
     return true;
@@ -57,7 +57,7 @@ QueryCart.prototype.removeItemFromCartHandler = function() {
             'type': type},
         url:'/bardwebquery/queryCart/removeItem',
         success:function (data) {
-            $('.addToCartCheckbox,#summaryView,#detailView').trigger('cart.itemRemoved', id);
+            queryCart.publishCartChangeEvent('cart.itemRemoved', id);
         }
     });
     return true;
@@ -67,7 +67,7 @@ QueryCart.prototype.removeAll = function() {
     jQuery.ajax({  type:'POST',
         url:'/bardwebquery/queryCart/removeAll',
         success:function(data){
-            $('.addToCartCheckbox,#summaryView,#detailView').trigger('cart.itemRemoved');
+            queryCart.publishCartChangeEvent('cart.itemRemoved');
         },
         error:function(XMLHttpRequest,textStatus,errorThrown){
             alert('problem clearing cart');
@@ -75,6 +75,10 @@ QueryCart.prototype.removeAll = function() {
         }
     });
     return false;
+};
+
+QueryCart.prototype.publishCartChangeEvent = function(eventName, itemChangedId) {
+    $('.addToCartCheckbox,#summaryView,#detailView').trigger(eventName, itemChangedId);
 };
 
 QueryCart.prototype.refreshInCartCheckboxes = function(event, idToTarget) {
@@ -103,29 +107,12 @@ QueryCart.prototype.refreshInCartCheckboxes = function(event, idToTarget) {
     });
 };
 
-QueryCart.prototype.requestDoseResponseImageHandler = function() {
-    var id = $(this).attr('concs');
-    var name = $(this).attr('resps');
-    jQuery.ajax({  type:'POST',
-        data:{'id': id,
-            'class': 'class DrcCurveCommand'},
-        contentType: "image/png",
-        url:'/bardwebquery/doseResponseCurve/doseResponseCurve',
-        success:function(data,textStatus){
-            jQuery('#plot').html('<img src="' + data + '" />');
-        }
-    });
-    return false;
-};
-
-
 QueryCart.prototype.init = function() {
     $(document).on('click', '.trigger', this.toggleDetailsHandler);
     $(document).on('click', '.removeItemFromCart', this.removeItemFromCartHandler);
     $(document).on('click', '.removeAllFromCart', this.removeAll);
     $(document).on('click', '.addToCartCheckbox:checked', this.addItemToCartHandler);
     $(document).on('click', '.addToCartCheckbox:not(:checked)', this.removeItemFromCartHandler);
-    $(document).on('click', '.requestDoseResponseImage', this.requestDoseResponseImageHandler);
     $(document).on('cart.itemAdded', '.addToCartCheckbox', this.refreshInCartCheckboxes);
     $(document).on('cart.itemAdded', '#summaryView', this.refreshSummaryView);
     $(document).on('cart.itemAdded', '#detailView', this.refreshDetailsView);

@@ -1,180 +1,134 @@
 describe("Testing cart.js", function () {
 
-    beforeEach(function () {
-        jQuery.fx.off = true;
-        appendSetFixtures('<a class="trigger" href="#">Cart Trigger</a>');
-        appendSetFixtures('<div class="panel"><div id="detailView">Test</div></div>');
-        appendSetFixtures('<div id="summaryView"></div>');
-    });
-
-    afterEach(function() {
-        jQuery.fx.off = false;
-    });
-
-    describe("Test QueryCart.toggleDetailsHandler", function(){
+    describe("Test QueryCart.addItemToCartHandler", function() {
         var fakeData;
         beforeEach(function() {
             fakeData = "Fake Data From Server";
         });
 
-        it("should switch to the expanded view after toggle if summary was being displayed", function(){
-            showingCartDetails = false;
-            ajaxLocation = '#summaryView';
-            $(".panel").hide();
-            //mocking ajax call with Jasmine Spies
+        it("should call ajax and publish a change event upon success", function() {
             spyOn($, "ajax").andCallFake(function (params) {
                 params.success(fakeData);
             });
-            queryCart.toggleDetailsHandler();
-            expect($(".panel")).toBeVisible();
-            expect(ajaxLocation).toEqual('#detailView');
-            expect(showingCartDetails).toEqual(true);
-            expect($('#detailView')).toHaveText(fakeData);
-        });
+            spyOn(queryCart, "publishCartChangeEvent");
 
-        it("should switch to the summary view after toggle if details view was being displayed", function(){
-            showingCartDetails = true;
-            ajaxLocation = '#detailView';
-            $(".trigger").addClass("active");
-            //mocking ajax call with Jasmine Spies
-            spyOn($, "ajax").andCallFake(function (params) {
-                params.success(fakeData);
-            });
-            queryCart.toggleDetailsHandler();
-            expect($(".panel")).toBeHidden();
-            expect(ajaxLocation).toEqual('#summaryView');
-            expect(showingCartDetails).toEqual(false);
-            expect($('#summaryView')).toHaveText(fakeData);
+            queryCart.addItemToCartHandler();
+
+            expect($.ajax).toHaveBeenCalled();
+            expect(queryCart.publishCartChangeEvent).toHaveBeenCalled();
         });
     });
 
-    describe("Test QueryCart.addAssayToCartHandler", function(){
+    describe("Test QueryCart.removeItemFromCartHandler", function() {
         var fakeData;
         beforeEach(function() {
             fakeData = "Fake Data From Server";
         });
 
-        it("should update the summary view if it is showing", function(){
+        it("should call ajax and publish a change event upon success", function() {
             spyOn($, "ajax").andCallFake(function (params) {
                 params.success(fakeData);
             });
-            showingCartDetails = false;
-            ajaxLocation = '#summaryView';
+            spyOn(queryCart, "publishCartChangeEvent");
 
-            queryCart.addAssayToCartHandler();
+            queryCart.removeItemFromCartHandler();
 
-            expect($('#summaryView')).toHaveText(fakeData);
-        });
-
-        it("should update the detail view if it is showing", function(){
-            spyOn($, "ajax").andCallFake(function (params) {
-                params.success(fakeData);
-            });
-            showingCartDetails = true;
-            ajaxLocation = '#detailView';
-
-            queryCart.addAssayToCartHandler();
-
-            expect($('#detailView')).toHaveText(fakeData);
+            expect($.ajax).toHaveBeenCalled();
+            expect(queryCart.publishCartChangeEvent).toHaveBeenCalled();
         });
     });
 
-    describe("Test QueryCart.addCompoundToCartHandler", function(){
+    describe("Test QueryCart.removeAll", function() {
         var fakeData;
         beforeEach(function() {
             fakeData = "Fake Data From Server";
         });
 
-        it("should update the summary view if it is showing", function(){
+        it("should call ajax and publish a change event upon success", function() {
             spyOn($, "ajax").andCallFake(function (params) {
                 params.success(fakeData);
             });
-            showingCartDetails = false;
-            ajaxLocation = '#summaryView';
-
-            queryCart.addCompoundToCartHandler();
-
-            expect($('#summaryView')).toHaveText(fakeData);
-        });
-
-        it("should update the detail view if it is showing", function(){
-            spyOn($, "ajax").andCallFake(function (params) {
-                params.success(fakeData);
-            });
-            showingCartDetails = true;
-            ajaxLocation = '#detailView';
-
-            queryCart.addCompoundToCartHandler();
-
-            expect($('#detailView')).toHaveText(fakeData);
-        });
-    });
-
-    describe("Test QueryCart.addProjectToCartHandler", function(){
-        var fakeData;
-        beforeEach(function() {
-            fakeData = "Fake Data From Server";
-        });
-
-        it("should update the summary view if it is showing", function(){
-            spyOn($, "ajax").andCallFake(function (params) {
-                params.success(fakeData);
-            });
-            showingCartDetails = false;
-            ajaxLocation = '#summaryView';
-
-            queryCart.addProjectToCartHandler();
-
-            expect($('#summaryView')).toHaveText(fakeData);
-        });
-
-        it("should update the detail view if it is showing", function(){
-            spyOn($, "ajax").andCallFake(function (params) {
-                params.success(fakeData);
-            });
-            showingCartDetails = true;
-            ajaxLocation = '#detailView';
-
-            queryCart.addProjectToCartHandler();
-
-            expect($('#detailView')).toHaveText(fakeData);
-        });
-    });
-
-    describe("Test QueryCart.removeItem", function(){
-        var fakeData;
-        beforeEach(function() {
-            fakeData = "Fake Data From Server";
-        });
-
-        it("should update the detail view if it is showing", function(){
-            spyOn($, "ajax").andCallFake(function (params) {
-                params.success(fakeData);
-            });
-
-            queryCart.removeItem();
-
-            expect($('#detailView')).toHaveText(fakeData);
-        });
-
-    });
-
-    describe("Test QueryCart.removeAll", function(){
-        var fakeData;
-        beforeEach(function() {
-            fakeData = "Fake Data From Server";
-        });
-
-        it("should update the detail view if it is showing", function(){
-            spyOn($, "ajax").andCallFake(function (params) {
-                params.success(fakeData);
-            });
+            spyOn(queryCart, "publishCartChangeEvent");
 
             queryCart.removeAll();
 
-            expect($('#detailView')).toHaveText(fakeData);
+            expect($.ajax).toHaveBeenCalled();
+            expect(queryCart.publishCartChangeEvent).toHaveBeenCalled();
+        });
+    });
+
+    describe("Test QueryCart.toggleDetailsHandler", function(){
+
+        beforeEach(function () {
+            jQuery.fx.off = true;
+            appendSetFixtures('<a class="trigger" href="#">Cart Trigger</a>');
+            appendSetFixtures('<div class="panel"><div id="detailView">Test</div></div>');
+            appendSetFixtures('<div id="summaryView"></div>');
         });
 
+        afterEach(function() {
+            jQuery.fx.off = false;
+        });
+
+        it("should switch from summary to details", function(){
+
+            $(".panel").hide();
+
+            queryCart.toggleDetailsHandler();
+
+            expect($(".panel")).toBeVisible();
+            expect($('.trigger')).toHaveClass('active');
+        });
+
+        it("should switch from details to summary", function(){
+
+            $(".trigger").addClass("active");
+
+            queryCart.toggleDetailsHandler();
+
+            expect($(".panel")).toBeHidden();
+            expect($('.trigger')).not.toHaveClass('active');
+        });
+    });
+
+    describe("Test QueryCart.refreshSummaryView", function(){
+        var fakeData;
+        beforeEach(function() {
+            fakeData = "Fake Data From Server";
+        });
+
+        it("should update the summary view", function(){
+
+            appendSetFixtures('<div id="summaryView"></div>');
+
+            spyOn($, "ajax").andCallFake(function (params) {
+                params.success(fakeData);
+            });
+
+            queryCart.refreshSummaryView();
+
+            expect($('#summaryView')).toHaveText(fakeData);
+        });
+    });
+
+    describe("Test QueryCart.refreshDetailsView", function(){
+        var fakeData;
+        beforeEach(function() {
+            fakeData = "Fake Data From Server";
+        });
+
+        it("should update the detail view", function(){
+
+            appendSetFixtures('<div id="detailView"></div>');
+
+            spyOn($, "ajax").andCallFake(function (params) {
+                params.success(fakeData);
+            });
+
+            queryCart.refreshDetailsView();
+
+            expect($('#detailView')).toHaveText(fakeData);
+        });
     });
 
 });
