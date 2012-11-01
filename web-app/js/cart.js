@@ -120,12 +120,6 @@ QueryCart.prototype.init = function() {
     $(document).on('cart.itemRemoved', '#summaryView', this.refreshSummaryView);
     $(document).on('cart.itemRemoved', '#detailView', this.refreshDetailsView);
     $(document).on('cart.refreshCheckboxes', '.addToCartCheckbox', this.refreshInCartCheckboxes);
-
-    // Refresh the screen periodically in case changes have been made in another tab/window
-    var interval = 2000;
-    setInterval(this.refreshSummaryView, interval);
-    setInterval(this.refreshDetailsView, interval);
-    setInterval($('.addToCartCheckbox').trigger('cart.refreshCheckboxes'), interval);
 };
 
 var queryCart = new QueryCart();
