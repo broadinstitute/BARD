@@ -13,10 +13,11 @@ class Project {
     String projectName
     String groupType
     String description
+    ReadyForExtraction readyForExtraction = ReadyForExtraction.Pending
+
     Date dateCreated
     Date lastUpdated
     String modifiedBy
-    ReadyForExtraction readyForExtraction = ReadyForExtraction.Pending
 
     Set<ProjectStep> projectSteps = [] as Set<ProjectStep>
     Set<ExternalReference> externalReferences = [] as Set<ExternalReference>
@@ -31,13 +32,14 @@ class Project {
     }
 
     static constraints = {
-        projectName( maxSize: PROJECT_NAME_MAX_SIZE)
+        projectName( maxSize: PROJECT_NAME_MAX_SIZE, blank: false)
         // TODO make enum
-        groupType( maxSize: GROUP_TYPE_MAX_SIZE, blank:false, inList: ['Project', 'Probe Report', 'Campaign', 'Panel', 'Study'])
-        description(nullable: true, maxSize: DESCRIPTION_MAX_SIZE)
+        groupType( maxSize: GROUP_TYPE_MAX_SIZE, nullable:false, blank: false, inList: ['Project', 'Probe Report', 'Campaign', 'Panel', 'Study', 'Template'])
+        description(nullable: true, blank: false , maxSize: DESCRIPTION_MAX_SIZE)
+        readyForExtraction(maxSize: READY_FOR_EXTRACTION_MAX_SIZE, nullable: false)
+
         dateCreated(nullable: false)
         lastUpdated(nullable: true)
         modifiedBy(nullable: true, blank: false, maxSize: MODIFIED_BY_MAX_SIZE)
-        readyForExtraction(maxSize: READY_FOR_EXTRACTION_MAX_SIZE, nullable: false)
     }
 }

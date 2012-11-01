@@ -1,10 +1,11 @@
 package bard.db.experiment
 
+import bard.db.enums.ReadyForExtraction
 import grails.plugin.spock.IntegrationSpec
 import org.junit.Before
 import spock.lang.Unroll
 
-import static bard.db.experiment.Project.MODIFIED_BY_MAX_SIZE
+import static bard.db.experiment.Project.*
 import static test.TestUtils.assertFieldValidationExpectations
 import static test.TestUtils.createString
 
@@ -25,6 +26,110 @@ class ProjectConstraintIntegrationSpec extends IntegrationSpec {
         domainInstance = Project.buildWithoutSave()
     }
 
+    void "test projectName constraints #desc projectName: '#valueUnderTest'"() {
+        final String field = 'projectName'
+
+        when: 'a value is set for the field under test'
+        domainInstance[(field)] = valueUnderTest
+        domainInstance.validate()
+
+        then: 'verify valid or invalid for expected reason'
+        assertFieldValidationExpectations(domainInstance, field, valid, errorCode)
+
+        and: 'verify the domainspreadsheetmapping can be persisted to the db'
+        if (valid) {
+            domainInstance == domainInstance.save(flush: true)
+        }
+
+        where:
+        desc               | valueUnderTest                          | valid | errorCode
+        'null '            | null                                    | false | 'nullable'
+        'blank value'      | ''                                      | false | 'blank'
+        'blank value'      | '  '                                    | false | 'blank'
+        'too long'         | createString(PROJECT_NAME_MAX_SIZE + 1) | false | 'maxSize.exceeded'
+        'exactly at limit' | createString(PROJECT_NAME_MAX_SIZE)     | true  | null
+    }
+
+    void "test groupType constraints #desc groupType: '#valueUnderTest'"() {
+        final String field = 'groupType'
+
+        when: 'a value is set for the field under test'
+        domainInstance[(field)] = valueUnderTest
+        domainInstance.validate()
+
+        then: 'verify valid or invalid for expected reason'
+        assertFieldValidationExpectations(domainInstance, field, valid, errorCode)
+
+        and: 'verify the domainspreadsheetmapping can be persisted to the db'
+        if (valid) {
+            domainInstance == domainInstance.save(flush: true)
+        }
+
+        where:
+        desc          | valueUnderTest | valid | errorCode
+        'null '       | null           | false | 'nullable'
+        'blank value' | ''             | false | 'blank'
+        'blank value' | '  '           | false | 'blank'
+        'not in list' | 'Foo'          | false | 'not.inList'
+
+        'valid value' | 'Project'      | true  | null
+        'valid value' | 'Probe Report' | true  | null
+        'valid value' | 'Campaign'     | true  | null
+        'valid value' | 'Panel'        | true  | null
+        'valid value' | 'Study'        | true  | null
+        'valid value' | 'Template'     | true  | null
+    }
+
+    void "test description constraints #desc description: '#valueUnderTest'"() {
+        final String field = 'description'
+
+        when: 'a value is set for the field under test'
+        domainInstance[(field)] = valueUnderTest
+        domainInstance.validate()
+
+        then: 'verify valid or invalid for expected reason'
+        assertFieldValidationExpectations(domainInstance, field, valid, errorCode)
+
+        and: 'verify the domainspreadsheetmapping can be persisted to the db'
+        if (valid) {
+            domainInstance == domainInstance.save(flush: true)
+        }
+
+        where:
+        desc               | valueUnderTest                         | valid | errorCode
+        'blank value'      | ''                                     | false | 'blank'
+        'blank value'      | '  '                                   | false | 'blank'
+        'too long'         | createString(DESCRIPTION_MAX_SIZE + 1) | false | 'maxSize.exceeded'
+
+        'exactly at limit' | createString(DESCRIPTION_MAX_SIZE)     | true  | null
+        'null valid'       | null                                   | true  | null
+    }
+
+    void "test readyForExtraction constraints #desc readyForExtraction: '#valueUnderTest'"() {
+        final String field = 'readyForExtraction'
+
+        when: 'a value is set for the field under test'
+        domainInstance[(field)] = valueUnderTest
+        domainInstance.validate()
+
+        then: 'verify valid or invalid for expected reason'
+        assertFieldValidationExpectations(domainInstance, field, valid, errorCode)
+
+        and: 'verify the domainspreadsheetmapping can be persisted to the db'
+        if (valid) {
+            domainInstance == domainInstance.save(flush: true)
+        }
+
+        where:
+        desc             | valueUnderTest              | valid | errorCode
+        'null not valid' | null                        | false | 'nullable'
+
+        'valid valud'    | ReadyForExtraction.Pending  | true  | null
+        'valid value'    | ReadyForExtraction.Ready    | true  | null
+        'valid value'    | ReadyForExtraction.Started  | true  | null
+        'valid value'    | ReadyForExtraction.Complete | true  | null
+    }
+
     void "test modifiedBy constraints #desc modifiedBy: '#valueUnderTest'"() {
 
         final String field = 'modifiedBy'
@@ -36,7 +141,7 @@ class ProjectConstraintIntegrationSpec extends IntegrationSpec {
         then: 'verify valid or invalid for expected reason'
         assertFieldValidationExpectations(domainInstance, field, valid, errorCode)
 
-        and: 'verify the domain can be persisted to the db'
+        and: 'verify the domainspreadsheetmapping can be persisted to the db'
         if (valid) {
             domainInstance == domainInstance.save(flush: true)
         }
@@ -61,7 +166,7 @@ class ProjectConstraintIntegrationSpec extends IntegrationSpec {
         then: 'verify valid or invalid for expected reason'
         assertFieldValidationExpectations(domainInstance, field, valid, errorCode)
 
-        and: 'verify the domain can be persisted to the db'
+        and: 'verify the domainspreadsheetmapping can be persisted to the db'
         if (valid) {
             domainInstance == domainInstance.save(flush: true)
         }
@@ -82,7 +187,7 @@ class ProjectConstraintIntegrationSpec extends IntegrationSpec {
         then: 'verify valid or invalid for expected reason'
         assertFieldValidationExpectations(domainInstance, field, valid, errorCode)
 
-        and: 'verify the domain can be persisted to the db'
+        and: 'verify the domainspreadsheetmapping can be persisted to the db'
         if (valid) {
             domainInstance == domainInstance.save(flush: true)
         }
@@ -92,5 +197,4 @@ class ProjectConstraintIntegrationSpec extends IntegrationSpec {
         'null valid' | null           | true  | null
         'date valid' | new Date()     | true  | null
     }
-
 }
