@@ -124,6 +124,27 @@ class ExperimentalValueUnitSpec extends Specification {
         "converting unit values negative value" | false      | -1.234       | "-1.23"
     }
 
+
+    void "test another default ctor"() {
+        when: "#label"
+        ExperimentalValue experimentalValue = new ExperimentalValue(initialValue)
+        assertNotNull(experimentalValue)
+
+        then: "The resulting search filters size must equal the expected value"
+        assert experimentalValue.toString() == stringValue
+
+        where:
+        label                                   | initialValue  | stringValue
+        "converting unit values"                | 1D            | "1"
+        "converting unit values"                | 1.2D          | "1.2"
+        "converting unit values"                | 1.23D         | "1.23"
+        "converting unit values"                | 1.235D        | "1.24"
+        "converting unit values negative value" | -1.234D       | "-1.23"
+    }
+
+
+
+
     void "test what we do when there is nothing to print"() {
         when: "#label"
         ExperimentalValue experimentalValue = new ExperimentalValue(47, true)
@@ -135,6 +156,31 @@ class ExperimentalValueUnitSpec extends Specification {
     }
 
 
+
+    void "test ExperimentalValueUnit.getByValue"() {
+        when: "#label"
+        ExperimentalValueUnit experimentalValueUnit =  ExperimentalValueUnit.getByValue(val)
+
+        then: "The resulting search filters size must equal the expected value"
+        assert experimentalValueUnit==result
+
+        where:
+        val             | result
+        "M"             |  ExperimentalValueUnit.Molar
+        "uM"         |  ExperimentalValueUnit.Micromolar
+        "mM"         |  ExperimentalValueUnit.Millimolar
+        "junk"       |  null
+    }
+//    Molar(" M", 0),
+//    Millimolar(" mM", -3),
+//    Micromolar(" uM", -6),
+//    Nanomolar(" nM", -9),
+//    Picomolar(" pM", -12),
+//    Femtomolar(" fM", -15),
+//    Attamolar(" aM", -18),
+//    Zeptomolar(" zM", -21),
+//    Yoctomolar(" yM", -24),
+//    unknown(
 
 
     void "test handling of precision conversions"() {
@@ -209,7 +255,11 @@ class ExperimentalValueUnitSpec extends Specification {
         where:
         label                                                         | activity | experimentValueType                      | expectedStringValue
         "No Activity"                                                 | false    | ExperimentalValueType.greaterThanNumeric | "(no activity)"
+        "Experiment Value Type==greaterThanNumeric and activity==true"| true     | ExperimentalValueType.greaterThanNumeric | "> 2"
+        "No Activity"                                                 | false    | ExperimentalValueType.lessThanNumeric    | "(no activity)"
         "Experiment Value Type == lessThanNumeric and activity==true" | true     | ExperimentalValueType.lessThanNumeric    | "< 2"
+        "No Activity"                                                 | false    | ExperimentalValueType.percentageNumeric  | "(no activity)"
+        "Experiment Value Type == percentage and activity==true"      | true     | ExperimentalValueType.percentageNumeric  | "2 %"
         "No ExperimentalValueType and No activity"                    | true     | null                                     | "2.0"
     }
 

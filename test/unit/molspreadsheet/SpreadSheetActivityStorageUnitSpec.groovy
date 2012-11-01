@@ -15,9 +15,11 @@ import spock.lang.Unroll
 class SpreadSheetActivityStorageUnitSpec extends Specification {
 
     MolSpreadSheetCell molSpreadSheetCell
+    HillCurveValueHolder hillCurveValueHolder
 
     void setup() {
         molSpreadSheetCell = new MolSpreadSheetCell("0.123", MolSpreadSheetCellType.numeric)
+        hillCurveValueHolder = new HillCurveValueHolder()
     }
 
     void tearDown() {
@@ -27,6 +29,7 @@ class SpreadSheetActivityStorageUnitSpec extends Specification {
     void "Smoke test can we build a spreadsheet activity storage data"() {
         when:
         SpreadSheetActivityStorage spreadSheetActivityStorage = new SpreadSheetActivityStorage()
+//        spreadSheetActivityStorage.hillCurveValueHolderList <<  hillCurveValueHolder
 
         then:
         assertNotNull(spreadSheetActivityStorage)
@@ -103,13 +106,13 @@ class SpreadSheetActivityStorageUnitSpec extends Specification {
         assertNotNull(spreadSheetActivityStorage)
         assert spreadSheetActivityStorage.sid == 1
         assert spreadSheetActivityStorage.activityOutcome == ActivityOutcome.ACTIVE
-        assertNull(spreadSheetActivityStorage.hillCurveValueS0)
-        assertNull(spreadSheetActivityStorage.hillCurveValueResponse)
-        assertNull(spreadSheetActivityStorage.hillCurveValueSlope)
+//        assertNull(spreadSheetActivityStorage.hillCurveValueS0)
+//        assertNull(spreadSheetActivityStorage.hillCurveValueResponse)
+//        assertNull(spreadSheetActivityStorage.hillCurveValueSlope)
     }
 
 
-    void "Test constructor"() {
+    void "Test SpreadSheetActivityStorage constructor"() {
         given:
         final SpreadSheetActivity spreadSheetActivity = new SpreadSheetActivity()
         spreadSheetActivity.sid = 1 as Long
@@ -123,7 +126,6 @@ class SpreadSheetActivityStorageUnitSpec extends Specification {
         hillCurveValue.coef = 1d
         hillCurveValue.conc = [1d]
         hillCurveValue.response = [1d]
-        spreadSheetActivity.hillCurveValue = hillCurveValue
 
         when:
         SpreadSheetActivityStorage spreadSheetActivityStorage = new SpreadSheetActivityStorage(spreadSheetActivity)
@@ -132,9 +134,32 @@ class SpreadSheetActivityStorageUnitSpec extends Specification {
         assertNotNull(spreadSheetActivityStorage)
         assert spreadSheetActivityStorage.sid == 1
         assert spreadSheetActivityStorage.activityOutcome == ActivityOutcome.ACTIVE
-        assertNotNull(spreadSheetActivityStorage.hillCurveValueS0)
-        assertNotNull(spreadSheetActivityStorage.hillCurveValueResponse)
-        assertNotNull(spreadSheetActivityStorage.hillCurveValueSlope)
+    }
+
+
+    void "Test  MolSpreadSheetCell constructor in case of multiple identical column names"() {
+        given:
+        final SpreadSheetActivity spreadSheetActivity = new SpreadSheetActivity()
+        spreadSheetActivity.sid = 1 as Long
+        spreadSheetActivity.activityOutcome = ActivityOutcome.ACTIVE
+        spreadSheetActivity.potency = 3 as Double
+        final HillCurveValue hillCurveValue = new HillCurveValue()
+        hillCurveValue.id = 1
+        hillCurveValue.sinf = 1d
+        hillCurveValue.s0 = 1d
+        hillCurveValue.slope = 1d
+        hillCurveValue.coef = 1d
+        hillCurveValue.conc = [1d]
+        hillCurveValue.response = [1d]
+        spreadSheetActivity.hillCurveValueList = [hillCurveValue,hillCurveValue]
+
+
+        when:
+        MolSpreadSheetCell molSpreadSheetCell =  new  MolSpreadSheetCell(spreadSheetActivity)
+
+        then:
+        assertNotNull(molSpreadSheetCell)
+        assert  molSpreadSheetCell.spreadSheetActivityStorage.columnNames.size()==1
     }
 
 

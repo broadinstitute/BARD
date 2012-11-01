@@ -8,7 +8,9 @@ class MolSpreadSheetData {
     Map<String,MolSpreadSheetCell> mssData   = [:]
     Map<Long,Integer> rowPointer  = [:]
     Map<Long,Integer> columnPointer   = [:]
-    List<String> mssHeaders   = []
+    List<List<String>> mssHeaders   = []
+    List<String> experimentNameList   = []
+    Map<Integer,String> mapColumnsToAssay   = [:]
 
     /**
      * Display a cell, as specified by a row and column
@@ -30,6 +32,7 @@ class MolSpreadSheetData {
         }
         returnValue
     }
+
 
     SpreadSheetActivityStorage findSpreadSheetActivity(int rowCnt, int colCnt){
         SpreadSheetActivityStorage spreadSheetActivityStorage = null
@@ -60,9 +63,36 @@ class MolSpreadSheetData {
      */
     int getColumnCount(){
         if (mssHeaders) {
+            return mssHeaders.flatten().size()
+        }
+        return 0
+
+    }
+
+
+    int getSuperColumnCount(){
+        if (mssHeaders) {
             return mssHeaders.size()
         }
         return 0
+
+    }
+
+    List<String> getSubColumns( int experimentCount) {
+        List<String> subColumns = []
+        if (experimentCount < this.mssHeaders.size())
+            subColumns = this.mssHeaders[experimentCount]
+        subColumns
+    }
+
+
+
+
+    List<String> getColumns(){
+        if (mssHeaders) {
+            return mssHeaders.flatten()
+        }
+        return []
 
     }
 

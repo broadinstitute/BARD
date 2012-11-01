@@ -61,6 +61,37 @@ class ExperimentalValueUnitUnitSpec extends Specification {
 
     }
 
+
+
+    void "test getByValue"() {
+
+
+        when: "We call the convert method"
+        final ExperimentalValueUnit experimentalValueUnit = ExperimentalValueUnit.convert(molSpreadSheetCellUnit)
+
+        then: "The resulting experimental value type should much the expected one"
+        assert experimentalValueUnit == expectedExperimentalValueUnit
+
+        where:
+        label                  | molSpreadSheetCellUnit            | expectedExperimentalValueUnit
+        "Less Than Numeric"    | MolSpreadSheetCellUnit.Molar      | ExperimentalValueUnit.Molar
+        "Greater Than Numeric" | MolSpreadSheetCellUnit.Millimolar | ExperimentalValueUnit.Millimolar
+        "Percentage Numeric"   | MolSpreadSheetCellUnit.Micromolar | ExperimentalValueUnit.Micromolar
+        "Numeric"              | MolSpreadSheetCellUnit.Nanomolar  | ExperimentalValueUnit.Nanomolar
+        "Image"                | MolSpreadSheetCellUnit.Picomolar  | ExperimentalValueUnit.Picomolar
+        "String"               | MolSpreadSheetCellUnit.Femtomolar | ExperimentalValueUnit.Femtomolar
+        "Unknown"              | MolSpreadSheetCellUnit.Attamolar  | ExperimentalValueUnit.Attamolar
+        "Unknown"              | MolSpreadSheetCellUnit.Zeptomolar | ExperimentalValueUnit.Zeptomolar
+        "Unknown"              | MolSpreadSheetCellUnit.Yoctomolar | ExperimentalValueUnit.Yoctomolar
+        "Unknown"              | MolSpreadSheetCellUnit.unknown    | ExperimentalValueUnit.unknown
+
+
+    }
+
+
+
+
+
     void "test convert with Exception"() {
 
 

@@ -20,6 +20,7 @@ class MolSpreadSheetDataBuilder {
     List<CartAssay> cartAssayList = []
     List<CartProject> cartProjectList = []
     Object etag
+    Map<String,MolSpreadSheetCell> dataMap = [:]
     List<SpreadSheetActivity> spreadSheetActivityList = []
 
     MolSpreadSheetDataBuilder() {
@@ -81,6 +82,9 @@ class MolSpreadSheetDataBuilder {
         // this is the variable we plan to fill
         molSpreadSheetData = new MolSpreadSheetData()
 
+        // temp data sheet
+        dataMap = [:]
+
         // use experiment names to provide names for the columns
         molecularSpreadSheetService.populateMolSpreadSheetColumnMetadata(molSpreadSheetData, experimentList)
 
@@ -88,24 +92,23 @@ class MolSpreadSheetDataBuilder {
         if (cartCompoundList.isEmpty()) {
             // Explicitly specified assay, for which we will retrieve all compounds
             etag = molecularSpreadSheetService.retrieveImpliedCompoundsEtagFromAssaySpecification(experimentList)
-            spreadSheetActivityList = molecularSpreadSheetService.extractMolSpreadSheetData(molSpreadSheetData, experimentList, etag)
+            spreadSheetActivityList = molecularSpreadSheetService.extractMolSpreadSheetData(molSpreadSheetData, experimentList,etag)
            // spreadSheetActivityList = molecularSpreadSheetService.extractMolSpreadSheetData(molSpreadSheetData, experimentList, [])
             Map map = molecularSpreadSheetService.convertSpreadSheetActivityToCompoundInformation(spreadSheetActivityList)
-            molecularSpreadSheetService.populateMolSpreadSheetRowMetadata(molSpreadSheetData, map)
+            molecularSpreadSheetService.populateMolSpreadSheetRowMetadata(molSpreadSheetData, map, this.dataMap)
 
         } else {
 
             // Explicitly specified assays and explicitly specified compounds
-            molecularSpreadSheetService.populateMolSpreadSheetRowMetadata(molSpreadSheetData, cartCompoundList)
+            molecularSpreadSheetService.populateMolSpreadSheetRowMetadata(molSpreadSheetData, cartCompoundList, this.dataMap)
             etag = molecularSpreadSheetService.generateETagFromCartCompounds(cartCompoundList)
-//            List<Long> compoundsSelected = cartCompoundList.collect {CartCompound cartCompound ->
-//                cartCompound.compoundId.toLong()
-//            }
             spreadSheetActivityList = molecularSpreadSheetService.extractMolSpreadSheetData(molSpreadSheetData, experimentList, etag)
-            //spreadSheetActivityList = molecularSpreadSheetService.extractMolSpreadSheetData(molSpreadSheetData, experimentList, compoundsSelected)
-        }
+         }
+
         // finally deal with the data
-        molecularSpreadSheetService.populateMolSpreadSheetData(molSpreadSheetData, experimentList, spreadSheetActivityList)
+        molecularSpreadSheetService.populateMolSpreadSheetData(molSpreadSheetData, experimentList, spreadSheetActivityList, this.dataMap)
+        molecularSpreadSheetService.fillInTheMissingCellsAndConvertToExpandedMatrix( molSpreadSheetData, this.dataMap)
+        molecularSpreadSheetService.prepareMapOfColumnsToAssay(molSpreadSheetData)
     }
 
 
@@ -131,7 +134,6 @@ class MolSpreadSheetDataBuilderDirector {
         List<Experiment> experimentList = molSpreadSheetDataBuilder.deriveListOfExperiments()
 
         molSpreadSheetDataBuilder.populateMolSpreadSheet(experimentList)
-
     }
 
 }
