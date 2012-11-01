@@ -44,6 +44,7 @@
                 <g:each var="rowCnt" in="${0..(molSpreadSheetData.getRowCount() - 1)}">
                     <% String retrievedSmiles = """${molSpreadSheetData?.displayValue(rowCnt, 0)["smiles"]}""".toString() %>
                     <% String cid = """${molSpreadSheetData?.displayValue(rowCnt, 1)?."value"}""".toString() %>
+                    <% String activeVrsTested = """${molSpreadSheetData?.displayValue(rowCnt, 3)?."value"}""".toString() %>
                     <g:if test="${((rowCount++) % 2) == 0}">
                         <tr class="molSpreadSheet">
                     </g:if>
@@ -70,13 +71,17 @@
                                >${cid}</g:link>
 
                     </td>
+
                     <td class="molSpreadSheet">
                         <div class="promiscuity"
                              href="${createLink(controller: 'bardWebInterface', action: 'promiscuity', params: [cid: cid])}"
                              id="${cid}_prom"></div>
                     </td>
-                    <g:if test="${molSpreadSheetData.getColumnCount() > 3}">
-                        <g:each var="colCnt" in="${3..(molSpreadSheetData.getColumnCount() - 1)}">
+                    <td class="molSpreadSheet" property="cid">
+                        ${activeVrsTested}
+                    </td>
+                    <g:if test="${molSpreadSheetData.getColumnCount() > 4}">
+                        <g:each var="colCnt" in="${4..(molSpreadSheetData.getColumnCount() - 1)}">
                             <td class="molSpreadSheet" property="var${colCnt}">
                             <% SpreadSheetActivityStorage spreadSheetActivityStorage = molSpreadSheetData?.findSpreadSheetActivity(rowCnt, colCnt) %>
                             <g:if test="${spreadSheetActivityStorage != null}">

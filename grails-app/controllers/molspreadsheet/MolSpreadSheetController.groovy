@@ -8,7 +8,10 @@ class MolSpreadSheetController {
     def index() {
          render (view:'molecularSpreadSheet')
     }
-
+    def showExperimentDetails(Long pid,Long cid){
+        //TODO: do implementation here. This is just a stub
+        render (view:'molecularSpreadSheet')
+    }
     def molecularSpreadSheet(){
         if (molecularSpreadSheetService.weHaveEnoughDataToMakeASpreadsheet()) {
             MolSpreadSheetData molSpreadSheetData = molecularSpreadSheetService.retrieveExperimentalData()

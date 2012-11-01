@@ -62,7 +62,7 @@ class MolecularSpreadSheetServiceIntegrationSpec extends IntegrationSpec {
         assert molSpreadSheetData.mssData.size() == 0
         assert molSpreadSheetData.rowPointer.size() == 0
         assert molSpreadSheetData.columnPointer.size() == 0
-        assert molSpreadSheetData.mssHeaders.size() == 3
+        assert molSpreadSheetData.mssHeaders.size() == 4
     }
 
     void "test weHaveEnoughDataToMakeASpreadsheet()"() {

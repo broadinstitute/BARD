@@ -323,6 +323,15 @@ enum ExperimentalValueUnit {
         return null;
     }
 
+    public static ExperimentalValueUnit getByValue(String value) {
+        for (final ExperimentalValueUnit element : EnumSet.allOf(ExperimentalValueUnit)) {
+            if (element.value.trim() == value.trim()) {
+                return element;
+            }
+        }
+        return null;
+    }
+
 
 }
 

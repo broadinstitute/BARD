@@ -4,21 +4,32 @@
 <head>
     <meta name="layout" content="logoSearchCartAndFooter"/>
     <title>BARD : Compound : ${compound?.name} : PubChem CID ${compound.pubChemCID}</title>
-    <r:require module="promiscuity"/>
+    <r:require modules="promiscuity,activeVrsTested"/>
 </head>
 <body>
 <div class="row-fluid">
     <div class="span12 page-header">
-        <h1>${compound?.name} <small>(PubChem CID: ${compound?.pubChemCID})</small></h1>
-        <g:saveToCartButton id="${compound.pubChemCID}"
-                            name="${JavaScriptUtility.cleanup(compound.name)}"
-                            type="${querycart.QueryItemType.Compound}"
-                            smiles="${compound.getStructureSMILES()}"/>
+        <h1>${compound?.name}
+            <g:if test="${compound.isDrug()}">
+                <span class="badge badge-success">Drug</span>
+            </g:if>
+            <g:elseif test="${compound.isProbe()}">
+                <span class="badge badge-info">Probe</span>
+            </g:elseif>
+            <small>(PubChem CID: ${compound?.pubChemCID})</small></h1>
+            <g:saveToCartButton id="${compound.pubChemCID}"
+                                name="${JavaScriptUtility.cleanup(compound.name)}"
+                                type="${querycart.QueryItemType.Compound}"
+                                smiles="${compound.getStructureSMILES()}"/>
     </div>
 </div>
 <div class="row-fluid">
     <div class="span12">
         <dl class="dl-horizontal dl-horizontal-wide">
+            <dt>Assays - Active vrs Tested:</dt>
+            <dd>
+                <div class="activeVrsTested" href="${createLink(controller: 'bardWebInterface', action: 'activeVrsTested', params: [cid: compound.pubChemCID])}" id="${compound.pubChemCID}_tested"></div>
+            </dd>
             <g:if test="${compound?.compound?.getValue(bard.core.Compound.IUPACNameValue)}">
                 <dt>IUPAC Name:</dt>
                 <dd>${compound?.compound?.getValue(bard.core.Compound.IUPACNameValue)?.value}</dd>
@@ -189,6 +200,6 @@
         </div>
     </div>
 </g:if>
-<r:require module="promiscuity"/>
+<r:require modules="promiscuity,activeVrsTested"/>
 </body>
 </html>

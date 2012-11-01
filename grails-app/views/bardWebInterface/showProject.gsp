@@ -23,7 +23,7 @@
 </div>
 
 <div class="row-fluid">
-    <div class="span12">
+    <div class="span6">
         <dl class="dl-horizontal dl-horizontal-wide">
             <g:if test="${projectAdapter.project.getValue('grant number')}">
                 <dt>Grant Number:</dt>
@@ -34,6 +34,24 @@
                 <dd>${projectAdapter.project.getValue('laboratory name').value}</dd>
             </g:if>
         </dl>
+    </div>
+    <div class="span6">
+             <table>
+             <g:each var="probe" in="${projectAdapter.probes}" status="i">
+                <tr>
+                    <td>ML#: ${probe.probeId}</td>
+                    <td><a href="${probe.url}">Download probe report from Molecular Library BookShelf</a></td>
+                    <td>CID: <g:link controller="bardWebInterface" action="showCompound" params="[cid: probe.cid]">${probe.cid}</g:link></td>
+                    <td><g:link controller="molSpreadSheet" action="showExperimentDetails" params="[cid: probe.cid, pid:projectAdapter.project.id]">Show Experimental Details</g:link></td>
+                     <td>
+                         <g:link controller="bardWebInterface" action="showCompound" params="[cid: probe.cid]">
+                             <img alt="${probe?.smiles}" title="${probe.probeId}"
+                                  src="${createLink(controller: 'chemAxon', action: 'generateStructureImageFromSmiles', params: [smiles:probe.smiles, width: 400, height: 300])}"/>
+                         </g:link>
+                     </td>
+                </tr>
+            </g:each>
+             </table>
     </div>
 </div>
 
