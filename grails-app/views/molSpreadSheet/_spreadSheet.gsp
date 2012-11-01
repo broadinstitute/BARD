@@ -1,4 +1,4 @@
-<%@ page import="molspreadsheet.SpreadSheetActivityStorage; molspreadsheet.MolSpreadSheetData; molspreadsheet.SpreadSheetActivity; molspreadsheet.MolecularSpreadSheetService; bardqueryapi.FacetFormType" %>
+<%@ page import="molspreadsheet.HillCurveValueHolder; molspreadsheet.SpreadSheetActivityStorage; molspreadsheet.MolSpreadSheetData; molspreadsheet.SpreadSheetActivity; molspreadsheet.MolecularSpreadSheetService; bardqueryapi.FacetFormType" %>
 <%@ page import="molspreadsheet.MolSpreadSheetCellType; molspreadsheet.MolSpreadSheetCell;" %>
 <%@ page import="com.metasieve.shoppingcart.ShoppingCartService;" %>
 
@@ -17,7 +17,7 @@
     </div>
 
     <div class="span10">
-        <g:if test="${molSpreadSheetData?.mssHeaders?.size() > 0}">
+        <g:if test="${molSpreadSheetData?.getColumnCount() > 0}">
             <label class="checkbox">
                 <input type="checkbox" defaultChecked="unchecked" name="showPromiscuityScores" id="showPromiscuityScores">
                 Hide Promiscuity Scores
@@ -28,14 +28,18 @@
                     <th class="molSpreadSheetImg sortable">Molecular structure</th>
 
                     <th class="molSpreadSheetHeadData sortable">CID</th>
-                    <% int looper = 2 %>
-                    <g:each var="colHeader" in="${molSpreadSheetData?.mssHeaders}">
-                        <g:if test="${looper > 3}">
+                    <% int looper = 0 %>
+                    <g:each var="colHeader" in="${molSpreadSheetData?.getColumns()}">
+                        <g:if test="${looper == 2}">
                             <th class="molSpreadSheetHeadData sortable">${colHeader}</th>
                         </g:if>
-                        <g:else>
-                            <% looper++ %>
-                        </g:else>
+                        <g:if test="${looper ==3 }">
+                            <th class="molSpreadSheetHeadData sortable"><%=molSpreadSheetData.mapColumnsToAssay[looper]%><br/>${colHeader}</th>
+                        </g:if>
+                        <g:if test="${looper > 3}">
+                            <th class="molSpreadSheetHeadData sortable">AID=<%=molSpreadSheetData.mapColumnsToAssay[looper]%><br/>${colHeader}</th>
+                        </g:if>
+                        <% looper++ %>
                     </g:each>
                 </tr>
                 </thead>
@@ -82,45 +86,57 @@
                     </td>
                     <g:if test="${molSpreadSheetData.getColumnCount() > 4}">
                         <g:each var="colCnt" in="${4..(molSpreadSheetData.getColumnCount() - 1)}">
-                            <td class="molSpreadSheet" property="var${colCnt}">
+
                             <% SpreadSheetActivityStorage spreadSheetActivityStorage = molSpreadSheetData?.findSpreadSheetActivity(rowCnt, colCnt) %>
+                            <% int currentCol =  colCnt %>
                             <g:if test="${spreadSheetActivityStorage != null}">
-                                <p>
 
-                                <div data-detail-id="drc_${spreadSheetActivityStorage.sid}_${colCnt}"
-                                     class="drc-popover-link btn btn-link"
-                                     data-original-title="${spreadSheetActivityStorage.hillCurveValueId}"
-                                     data-html="true"
-                                     data-trigger="hover">
-                                    ${molSpreadSheetData?.displayValue(rowCnt, colCnt)?."value"}</div>
-                                </p>
+                                    <% HillCurveValueHolder hillCurveValueHolder =  spreadSheetActivityStorage.getHillCurveValueHolderList()[0] %>
 
-                                <div class='popover-content-wrapper' id="drc_${spreadSheetActivityStorage.sid}_${colCnt}"
-                                     style="display: none;">
-                                    <div class="center-aligned">
-                                        <img alt="${spreadSheetActivityStorage.sid}"
-                                             title="Substance Id : ${spreadSheetActivityStorage.sid}"
-                                             src="${createLink(
-                                                     controller: 'doseResponseCurve',
-                                                     action: 'doseResponseCurve',
-                                                     params: [
-                                                             sinf: spreadSheetActivityStorage?.hillCurveValueSInf,
-                                                             s0: spreadSheetActivityStorage?.hillCurveValueS0,
-                                                             ac50: spreadSheetActivityStorage?.hillCurveValueSlope,
-                                                             hillSlope: spreadSheetActivityStorage?.hillCurveValueCoef,
-                                                             concentrations: spreadSheetActivityStorage?.hillCurveValueConc,
-                                                             activities: spreadSheetActivityStorage?.hillCurveValueResponse,
-                                                             yAxisLabel: spreadSheetActivityStorage?.hillCurveValueId
-                                                     ]
-                                             )}"/>
+                                    <td class="molSpreadSheet" property="var${currentCol}">
+                                    <p>
+
+
+                                    <div data-detail-id="drc_${spreadSheetActivityStorage.sid}_${colCnt}"
+                                         class="drc-popover-link btn btn-link"
+                                         data-original-title="${hillCurveValueHolder.identifier}"
+                                         data-html="true"
+                                         data-trigger="hover">
+                                        ${hillCurveValueHolder.toString()}</div>
+                                    </p>
+
+
+
+                                    <div class='popover-content-wrapper' id="drc_${spreadSheetActivityStorage.sid}_${colCnt}"
+                                         style="display: none;">
+                                        <div class="center-aligned">
+                                            <img alt="${spreadSheetActivityStorage.sid}"
+                                                 title="Substance Id : ${spreadSheetActivityStorage.sid}"
+                                                 src="${createLink(
+                                                         controller: 'doseResponseCurve',
+                                                         action: 'doseResponseCurve',
+                                                         params: [
+                                                                 sinf: hillCurveValueHolder?.sInf,
+                                                                 s0: hillCurveValueHolder?.s0,
+                                                                 ac50: hillCurveValueHolder?.slope,
+                                                                 hillSlope: hillCurveValueHolder?.coef,
+                                                                 concentrations: hillCurveValueHolder?.conc,
+                                                                 activities: hillCurveValueHolder?.response,
+                                                                 yAxisLabel: hillCurveValueHolder?.identifier
+                                                         ]
+                                                 )}"/>
+                                        </div>
                                     </div>
-                                </div>
+
+                                </td>
                             </g:if>
                             <g:else>
-                                Not tested in this experiment
+                                <td class="molSpreadSheet" property="var${colCnt}">
+                                    Not tested in this experiment
+                                </td>
                             </g:else>
 
-                            </td>
+
                         </g:each>
                     </g:if>
                     </tr>

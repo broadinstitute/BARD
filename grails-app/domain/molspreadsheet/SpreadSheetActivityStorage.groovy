@@ -8,25 +8,49 @@ import org.apache.commons.lang.builder.HashCodeBuilder
 class SpreadSheetActivityStorage {
 
     static belongsTo = [molSpreadSheetCell: MolSpreadSheetCell]
+    static hasMany = [ hillCurveValueHolderList : HillCurveValueHolder  ]
 
     Long eid
     Long cid
     Long sid
     ActivityOutcome activityOutcome
+    List<HillCurveValueHolder> hillCurveValueHolderList  =  []
+    List<Double> columnNames  = []
     Double potency
-    String hillCurveValueId
-    Double hillCurveValueSInf
-    Double hillCurveValueS0
-    Double hillCurveValueSlope
-    Double hillCurveValueCoef
-    List<Double> hillCurveValueConc
-    List<Double> hillCurveValueResponse
+
+    static constraints = {
+        eid(nullable: true)
+        cid(nullable: true)
+        sid(nullable: true)
+        activityOutcome(nullable: true)
+        potency(nullable: true)
+    }
+
+
 
     SpreadSheetActivityStorage() {
 
     }
 
     /**
+     *
+     * @param spreadSheetActivityStorage
+     * @param experimentIndex
+     */
+    SpreadSheetActivityStorage(SpreadSheetActivityStorage spreadSheetActivityStorage, int experimentIndex ) {
+        this.eid =  spreadSheetActivityStorage.eid
+        this.cid =  spreadSheetActivityStorage.cid
+        this.sid =  spreadSheetActivityStorage.sid
+        this.activityOutcome =  spreadSheetActivityStorage.activityOutcome
+        this.potency =  spreadSheetActivityStorage.potency
+        if (experimentIndex < spreadSheetActivityStorage.hillCurveValueHolderList?.size())
+           this.hillCurveValueHolderList =  [ spreadSheetActivityStorage.hillCurveValueHolderList[experimentIndex]  ]
+        if (experimentIndex < spreadSheetActivityStorage.hillCurveValueHolderList?.size())
+            this.columnNames =  [ spreadSheetActivityStorage.columnNames[experimentIndex]  ]
+    }
+
+
+/**
      *
      * @param o
      * @return
@@ -63,32 +87,10 @@ class SpreadSheetActivityStorage {
      */
     SpreadSheetActivityStorage(SpreadSheetActivity spreadSheetActivity) {
         this.sid = spreadSheetActivity.sid
-        this.eid = eid
-        this.cid = cid
+        this.eid = spreadSheetActivity.eid
+        this.cid = spreadSheetActivity.cid
         this.activityOutcome = spreadSheetActivity.activityOutcome
         this.potency = spreadSheetActivity.potency
-
-        if (spreadSheetActivity.hillCurveValue) {
-            this.hillCurveValueId = spreadSheetActivity.hillCurveValue.id
-            this.hillCurveValueSInf = spreadSheetActivity.hillCurveValue.sinf
-            this.hillCurveValueS0 = spreadSheetActivity.hillCurveValue.s0
-            this.hillCurveValueSlope = spreadSheetActivity.hillCurveValue.slope
-            this.hillCurveValueCoef = spreadSheetActivity.hillCurveValue.coef
-            this.hillCurveValueConc = spreadSheetActivity.hillCurveValue.conc
-            this.hillCurveValueResponse = spreadSheetActivity.hillCurveValue.response
-        }
     }
 
-    static constraints = {
-        eid(nullable: true)
-        cid(nullable: true)
-        sid(nullable: true)
-        activityOutcome(nullable: true)
-        potency(nullable: true)
-        hillCurveValueId(nullable: true)
-        hillCurveValueSInf(nullable: true)
-        hillCurveValueS0(nullable: true)
-        hillCurveValueSlope(nullable: true)
-        hillCurveValueCoef(nullable: true)
-    }
 }

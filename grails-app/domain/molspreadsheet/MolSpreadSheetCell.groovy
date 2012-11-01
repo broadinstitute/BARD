@@ -1,8 +1,6 @@
 package molspreadsheet
 
-import results.ExperimentalValue
-import results.ExperimentalValueType
-import results.ExperimentalValueUnit
+import bard.core.HillCurveValue
 
 class MolSpreadSheetCell {
     // static final int SPREAD_SHEET_PRECISION = 3
@@ -14,23 +12,42 @@ class MolSpreadSheetCell {
     Boolean activity = true
     MolSpreadSheetCellType molSpreadSheetCellType = MolSpreadSheetCellType.unknown
     String strInternalValue = "null"
-    BigDecimal numInternalValue = 0.0
     Integer intInternalValue = 0
-    MolSpreadSheetCellUnit molSpreadSheetCellUnit = MolSpreadSheetCellUnit.unknown
-    String supplementalInternalValue = null
+    String supplementalInternalValue
     SpreadSheetActivityStorage spreadSheetActivityStorage
 
 
     static constraints = {
-        activity()
+        activity(nullable: false)
         molSpreadSheetCellType(blank: false)
-        strInternalValue(nullable: false)
-        numInternalValue(nullable: false)
+        strInternalValue(nullable: true)
         intInternalValue(nullable: false)
-        molSpreadSheetCellUnit(blank: false)
-        supplementalInternalValue()
-        spreadSheetActivityStorage()
+        supplementalInternalValue(nullable: true)
+        spreadSheetActivityStorage(nullable: true)
     }
+
+
+    public MolSpreadSheetCell (MolSpreadSheetCell molSpreadSheetCellToCopy) {
+        this.activity =  molSpreadSheetCellToCopy.activity
+        this.molSpreadSheetCellType =  molSpreadSheetCellToCopy.molSpreadSheetCellType
+        this.strInternalValue =  molSpreadSheetCellToCopy.strInternalValue
+        this.intInternalValue =  molSpreadSheetCellToCopy.intInternalValue
+        this.supplementalInternalValue =  molSpreadSheetCellToCopy.supplementalInternalValue
+        this.spreadSheetActivityStorage =  null
+    }
+
+
+    public MolSpreadSheetCell (MolSpreadSheetCell molSpreadSheetCellToCopy, int exptIndex) {
+        this.activity =  molSpreadSheetCellToCopy.activity
+        this.molSpreadSheetCellType =  molSpreadSheetCellToCopy.molSpreadSheetCellType
+        this.strInternalValue =  molSpreadSheetCellToCopy.strInternalValue
+        this.intInternalValue =  molSpreadSheetCellToCopy.intInternalValue
+        this.supplementalInternalValue =  molSpreadSheetCellToCopy.supplementalInternalValue
+        this.spreadSheetActivityStorage =  new SpreadSheetActivityStorage(molSpreadSheetCellToCopy.spreadSheetActivityStorage,exptIndex)
+    }
+
+
+
 
     /**
      *  non image, no units  specified
@@ -40,27 +57,16 @@ class MolSpreadSheetCell {
     MolSpreadSheetCell(String value, MolSpreadSheetCellType molSpreadSheetCellType, SpreadSheetActivityStorage spreadSheetActivityStorage = null) {
         this.spreadSheetActivityStorage = spreadSheetActivityStorage
         this.molSpreadSheetCellType = molSpreadSheetCellType
-        if ((this.molSpreadSheetCellType == MolSpreadSheetCellType.numeric) ||
-                (this.molSpreadSheetCellType == MolSpreadSheetCellType.percentageNumeric) ||
-                (this.molSpreadSheetCellType == MolSpreadSheetCellType.greaterThanNumeric) ||
-                (this.molSpreadSheetCellType == MolSpreadSheetCellType.lessThanNumeric)) {
-            if ("NaN".equals(value)) {
-                activity = false;
-                numInternalValue = new BigDecimal(0)
-            } else {
-                numInternalValue = new BigDecimal(value)
-            }
-        } else if (this.molSpreadSheetCellType == MolSpreadSheetCellType.string) {
-            strInternalValue = new String(value)
-        } else if (this.molSpreadSheetCellType == MolSpreadSheetCellType.identifier) {
+        if (this.molSpreadSheetCellType == MolSpreadSheetCellType.identifier) {
             if ("NaN".equals(value)) {
                 activity = false;
                 intInternalValue = 0
             } else {
                 intInternalValue = new Integer(value)
             }
-        } else {
-            log.error "We should never see mole spreadsheet type ${this.molSpreadSheetCellType} in this three parameter constructor"
+        }
+        if (this.molSpreadSheetCellType == MolSpreadSheetCellType.string){
+            strInternalValue = value
         }
     }
 
@@ -73,22 +79,34 @@ class MolSpreadSheetCell {
     MolSpreadSheetCell(String value, MolSpreadSheetCellType molSpreadSheetCellType, MolSpreadSheetCellUnit molSpreadSheetCellUnit, SpreadSheetActivityStorage spreadSheetActivityStorage = null) {
         this.spreadSheetActivityStorage = spreadSheetActivityStorage
         this.molSpreadSheetCellType = molSpreadSheetCellType
-        if ((this.molSpreadSheetCellType == MolSpreadSheetCellType.numeric) ||
-                (this.molSpreadSheetCellType == MolSpreadSheetCellType.percentageNumeric) ||
-                (this.molSpreadSheetCellType == MolSpreadSheetCellType.greaterThanNumeric) ||
-                (this.molSpreadSheetCellType == MolSpreadSheetCellType.lessThanNumeric) ||
-                (this.molSpreadSheetCellType == MolSpreadSheetCellType.numeric)) {
-            if ("NaN".equals(value)) {
-                activity = false;
-                numInternalValue = new BigDecimal(0)
-            } else {
-                numInternalValue = new BigDecimal(value)
-            }
-            this.molSpreadSheetCellUnit = molSpreadSheetCellUnit
-        } else {
-            log.error "We should never see mole spreadsheet type ${this.molSpreadSheetCellType} in this four parameter constructor"
-        }
     }
+
+
+
+    MolSpreadSheetCell( SpreadSheetActivity spreadSheetActivity ) {
+        this.molSpreadSheetCellType = MolSpreadSheetCellType.numeric
+        this.spreadSheetActivityStorage = new SpreadSheetActivityStorage( eid: spreadSheetActivity.eid,
+                                                                          cid:  spreadSheetActivity.cid,
+                                                                          sid:spreadSheetActivity.sid,
+                                                                          activityOutcome: spreadSheetActivity.activityOutcome )
+        for (HillCurveValue hillCurveValue in spreadSheetActivity.hillCurveValueList) {
+             HillCurveValueHolder hillCurveValueHolder =  new HillCurveValueHolder(  identifier: hillCurveValue.id,
+                     s0: hillCurveValue.s0,
+                    sInf: hillCurveValue.sInf,
+                    slope: hillCurveValue.slope,
+                    coef: hillCurveValue.coef,
+                    conc: hillCurveValue.conc,
+                    response: hillCurveValue.response)
+            if (!this.spreadSheetActivityStorage.columnNames.contains(hillCurveValue.id))
+                this.spreadSheetActivityStorage.columnNames << hillCurveValue.id
+            hillCurveValueHolder.subColumnIndex  =  this.spreadSheetActivityStorage.columnNames.indexOf(hillCurveValue.id)
+            this.spreadSheetActivityStorage.hillCurveValueHolderList  << hillCurveValueHolder
+        }
+
+    }
+
+
+
 
     /**
      * ctor for images
@@ -102,8 +120,6 @@ class MolSpreadSheetCell {
         if (this.molSpreadSheetCellType == MolSpreadSheetCellType.image) {
             strInternalValue = new String(value1?:"")
             supplementalInternalValue = new String(value2?:"")
-        } else {
-            log.error "We should never see mole spreadsheet type ${this.molSpreadSheetCellType} in this four parameter constructor specialized for images"
         }
     }
 
@@ -121,6 +137,8 @@ class MolSpreadSheetCell {
         returnValue
     }
 
+
+
     /**
      *
      * @return
@@ -134,15 +152,7 @@ class MolSpreadSheetCell {
     @Override
     String toString() {
         String returnValue = null
-        if ((molSpreadSheetCellType == MolSpreadSheetCellType.lessThanNumeric) ||
-                (molSpreadSheetCellType == MolSpreadSheetCellType.greaterThanNumeric) ||
-                (molSpreadSheetCellType == MolSpreadSheetCellType.percentageNumeric) ||
-                (molSpreadSheetCellType == MolSpreadSheetCellType.numeric)) {
-            ExperimentalValue experimentalValue = new ExperimentalValue(numInternalValue,
-                    ExperimentalValueUnit.convert(molSpreadSheetCellUnit),
-                    ExperimentalValueType.convert(molSpreadSheetCellType), activity)
-            returnValue = experimentalValue.toString()
-        } else if (molSpreadSheetCellType == MolSpreadSheetCellType.identifier) {
+         if (molSpreadSheetCellType == MolSpreadSheetCellType.identifier) {
             returnValue = intInternalValue
         } else if (molSpreadSheetCellType == MolSpreadSheetCellType.string) {
             returnValue = strInternalValue

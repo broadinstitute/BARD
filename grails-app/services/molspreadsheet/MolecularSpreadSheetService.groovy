@@ -4,17 +4,17 @@ import bard.core.adapter.CompoundAdapter
 import bard.core.rest.RESTAssayService
 import bard.core.rest.RESTExperimentService
 import bard.core.rest.RESTProjectService
-import bardqueryapi.ActivityOutcome
 import bardqueryapi.IQueryService
 import bardqueryapi.QueryServiceWrapper
 import bardqueryapi.SearchFilter
 import com.metasieve.shoppingcart.ShoppingCartService
-import org.apache.commons.lang.NotImplementedException
 import querycart.CartAssay
 import querycart.CartCompound
 import querycart.CartProject
 import querycart.QueryCartService
 import bard.core.*
+import bardqueryapi.ActivityOutcome
+import org.apache.commons.lang.NotImplementedException
 
 class MolecularSpreadSheetService {
     int MAXIMUM_NUMBER_OF_COMPOUNDS =500
@@ -103,13 +103,41 @@ class MolecularSpreadSheetService {
 
 
 
+//
+//    protected List<SpreadSheetActivity> extractMolSpreadSheetData(MolSpreadSheetData molSpreadSheetData, List<Experiment> experimentList) {
+//        // now step through the data and place into molSpreadSheetData
+//        List<SpreadSheetActivity> spreadSheetActivityList = new ArrayList<SpreadSheetActivity>()
+//
+//        // we need to handle each experiment separately ( until NCGC can do this in the background )
+//        // Note that each experiment corresponds to a column in our spreadsheet
+//        int columnCount = 0
+//        for (Experiment experiment in experimentList) {
+//
+//            ServiceIterator<Value> experimentIterator = queryServiceWrapper.restExperimentService.activities(experiment)
+//
+//            // Now step through the result set and pull back  one value for each compound
+//            Value experimentValue
+//            while (experimentIterator.hasNext()) {
+//                experimentValue = experimentIterator.next()
+//                Long translation = new Long(experimentValue.id.split("\\.")[0])
+//                if (!molSpreadSheetData.columnPointer.containsKey(translation)) {
+//                    molSpreadSheetData.columnPointer.put(translation, columnCount)
+//                }
+//                spreadSheetActivityList.add(extractActivitiesFromExperiment(experimentValue))
+//            }
+//            columnCount++
+//        }
+//        spreadSheetActivityList
+//    }
+//
+//
     /**
      * For a set of experiments
      * @param experimentList
      * @param etag
      * @return
      */
-    protected List<SpreadSheetActivity> extractMolSpreadSheetData(MolSpreadSheetData molSpreadSheetData, List<Experiment> experimentList, Object etag) {
+    protected List<SpreadSheetActivity> extractMolSpreadSheetData(MolSpreadSheetData molSpreadSheetData, List<Experiment> experimentList, Object etag = null) {
         // now step through the data and place into molSpreadSheetData
         List<SpreadSheetActivity> spreadSheetActivityList = new ArrayList<SpreadSheetActivity>()
 
@@ -118,22 +146,67 @@ class MolecularSpreadSheetService {
         int columnCount = 0
         for (Experiment experiment in experimentList) {
 
-            ServiceIterator<Value> experimentIterator = queryServiceWrapper.restExperimentService.activities(experiment, etag)
+            ServiceIterator<Value> experimentIterator
+            if (etag == null) {
+                experimentIterator = queryServiceWrapper.restExperimentService.activities(experiment)
+            }  else {
+                experimentIterator = queryServiceWrapper.restExperimentService.activities(experiment, etag)
+            }
 
             // Now step through the result set and pull back  one value for each compound
             Value experimentValue
+            Integer experimentCount = 0
             while (experimentIterator.hasNext()) {
                 experimentValue = experimentIterator.next()
                 Long translation = new Long(experimentValue.id.split("\\.")[0])
                 if (!molSpreadSheetData.columnPointer.containsKey(translation)) {
                     molSpreadSheetData.columnPointer.put(translation, columnCount)
                 }
-                spreadSheetActivityList.add(extractActivitiesFromExperiment(experimentValue))
+                spreadSheetActivityList.add(extractActivitiesFromExperiment(molSpreadSheetData,columnCount,experimentValue))
             }
             columnCount++
         }
         spreadSheetActivityList
     }
+
+    /**
+     * Now we have all of the available data in the dataMap, but that map may have holes ( where the compound wasn't tested with a particular assay)
+     * and it may also have cells with multiple values. This method is intended to smooth out the rough spots -- make a new map with exactly one value
+     * for each cell  in the molecular spreadsheet.  Some of those cells may be null, but that's fine, since we can print out "Not tested in this experiment"
+     * on the GSP when we bump into one of them.
+     * @param molSpreadSheetData
+     * @param dataMap
+     */
+    protected void fillInTheMissingCellsAndConvertToExpandedMatrix(MolSpreadSheetData molSpreadSheetData, Map<String,MolSpreadSheetCell> dataMap) {
+        for (int row in 0..(molSpreadSheetData.rowCount - 1)){
+            int exptNumberColTracker = 0
+            for (int col in 0..(molSpreadSheetData.superColumnCount - 1)){
+                String key = "${row}_${col}"
+                MolSpreadSheetCell molSpreadSheetCell
+                SpreadSheetActivityStorage spreadSheetActivityStorage
+                if (dataMap.containsKey(key)) {
+                    molSpreadSheetCell = dataMap[key]
+                    spreadSheetActivityStorage = molSpreadSheetCell.spreadSheetActivityStorage
+                }
+                for (int experimentNum in 0..molSpreadSheetData.mssHeaders[col].size()-1) {
+                    String finalKey = "${row}_${(exptNumberColTracker++)}"
+                    if (spreadSheetActivityStorage == null)  {
+                        if (molSpreadSheetCell != null) {
+                            molSpreadSheetData.mssData[finalKey] = new MolSpreadSheetCell(molSpreadSheetCell)
+                        }  else {
+                            molSpreadSheetData.mssData[finalKey] = new MolSpreadSheetCell()
+                        }
+                    }  else {
+                        molSpreadSheetData.mssData[finalKey] = new MolSpreadSheetCell(molSpreadSheetCell,experimentNum)
+                    }
+                }
+            }
+
+        }
+    }
+
+
+
 
 
 
@@ -147,12 +220,21 @@ class MolecularSpreadSheetService {
         queryServiceWrapper.restCompoundService.newETag(date.toTimestamp().toString(), cartCompoundIdList);
     }
     /**
+     * The goal of this method is to take all the information we have  and store it in a map. Note that we are
+     * crossing every compound  with every assay, so there may be instances where we have no data
+     * for a particular compound/activity combination.  That's fine-- don't fill in the entries
+     * for which we don't have data.  Alternatively, sometimes we will have multiple replicates
+     * for a single  compound/assay.  In this case those multiple values  can hang off of  the
+     * SpreadSheetActivity.
      *
      * @param molSpreadSheetData
      * @param experimentList
      * @param spreadSheetActivityList
      */
-    protected void populateMolSpreadSheetData(MolSpreadSheetData molSpreadSheetData, List<Experiment> experimentList, List<SpreadSheetActivity> spreadSheetActivityList) {
+    protected void populateMolSpreadSheetData(final MolSpreadSheetData molSpreadSheetData,
+                                                                        final List<Experiment> experimentList,
+                                                                        final List<SpreadSheetActivity> spreadSheetActivityList,
+                                                                        final Map<String,MolSpreadSheetCell> dataMap ) {
         // now step through the data and place into molSpreadSheetData
         int columnPointer = 0
         // we need to handle each experiment separately ( until NCGC can do this in the background )
@@ -164,13 +246,8 @@ class MolecularSpreadSheetService {
                     int innerRowPointer = molSpreadSheetData.rowPointer[spreadSheetActivity.cid]
                     int innerColumnCount = molSpreadSheetData.columnPointer[spreadSheetActivity.eid]
                     String arrayKey = "${innerRowPointer}_${innerColumnCount + START_DYNAMIC_COLUMNS}"
-                    SpreadSheetActivityStorage spreadSheetActivityStorage = new SpreadSheetActivityStorage(spreadSheetActivity)
-
-                    MolSpreadSheetCell molSpreadSheetCell = new MolSpreadSheetCell(spreadSheetActivity.interpretHillCurveValue().toString(),
-                            MolSpreadSheetCellType.numeric,
-                            MolSpreadSheetCellUnit.Molar,
-                            spreadSheetActivityStorage)
-                    molSpreadSheetData.mssData.put(arrayKey, molSpreadSheetCell)
+                    MolSpreadSheetCell molSpreadSheetCell = new MolSpreadSheetCell(spreadSheetActivity)
+                    dataMap[arrayKey] = molSpreadSheetCell
                 }
                 else {
                     println "did not expect cid = ${spreadSheetActivity.cid}"
@@ -179,7 +256,6 @@ class MolecularSpreadSheetService {
             }
             columnPointer++
         }
-        molSpreadSheetData
     }
 
 
@@ -212,7 +288,7 @@ class MolecularSpreadSheetService {
      * @param molSpreadSheetData
      * @param cartCompoundList
      */
-    protected void populateMolSpreadSheetRowMetadata(final MolSpreadSheetData molSpreadSheetData, final List<CartCompound> cartCompoundList) {
+    protected void populateMolSpreadSheetRowMetadata(final MolSpreadSheetData molSpreadSheetData, final List<CartCompound> cartCompoundList, Map<String,MolSpreadSheetCell> dataMap) {
 
         // add specific values for the cid column
         int rowCount = 0
@@ -222,7 +298,8 @@ class MolecularSpreadSheetService {
                     rowCount++,
                     cartCompound.externalId as Long,
                     cartCompound.name,
-                    cartCompound.smiles
+                    cartCompound.smiles,
+                    dataMap
             )
         }
 
@@ -234,7 +311,7 @@ class MolecularSpreadSheetService {
      * @param compoundAdapterMap
      * @return
      */
-    protected void populateMolSpreadSheetRowMetadata(final MolSpreadSheetData molSpreadSheetData, final Map compoundAdapterMap) {
+    protected void populateMolSpreadSheetRowMetadata(final MolSpreadSheetData molSpreadSheetData, final Map compoundAdapterMap, Map<String,MolSpreadSheetCell> dataMap) {
 
         // Add every compound we can find in the compound adapters map
         List<CompoundAdapter> compoundAdaptersList = compoundAdapterMap.compoundAdapters
@@ -243,7 +320,7 @@ class MolecularSpreadSheetService {
             String smiles = compoundAdapter.structureSMILES
             Long cid = compoundAdapter.pubChemCID
             String name = compoundAdapter.name
-            updateMolSpreadSheetDataToReferenceCompound(molSpreadSheetData, rowCount++, cid, name, smiles)
+            updateMolSpreadSheetDataToReferenceCompound(molSpreadSheetData, rowCount++, cid, name, smiles, dataMap)
         }
 
     }
@@ -261,20 +338,21 @@ class MolecularSpreadSheetService {
                                                                              final int rowCount,
                                                                              final Long compoundId,
                                                                              final String compoundName,
-                                                                             final String compoundSmiles) {
+                                                                             final String compoundSmiles,
+                                                                             Map<String,MolSpreadSheetCell> dataMap) {
         // need to be able to map from CID to row location
         molSpreadSheetData.rowPointer.put(compoundId, rowCount)
 
         //TODO find a generic way to do this. It seems there are too many places to add new constant columns
         // add values for the cid column
-        molSpreadSheetData.mssData.put("${rowCount}_0".toString(), new MolSpreadSheetCell(compoundName, compoundSmiles, MolSpreadSheetCellType.image))
-        molSpreadSheetData.mssData.put("${rowCount}_1".toString(), new MolSpreadSheetCell(compoundId.toString(), MolSpreadSheetCellType.identifier))
+        dataMap.put("${rowCount}_0".toString(), new MolSpreadSheetCell(compoundName, compoundSmiles, MolSpreadSheetCellType.image))
+        dataMap.put("${rowCount}_1".toString(), new MolSpreadSheetCell(compoundId.toString(), MolSpreadSheetCellType.identifier))
         //we will use this to get the promiscuity score
-        molSpreadSheetData.mssData.put("${rowCount}_2".toString(), new MolSpreadSheetCell(compoundId.toString(), MolSpreadSheetCellType.identifier))
+        dataMap.put("${rowCount}_2".toString(), new MolSpreadSheetCell(compoundId.toString(), MolSpreadSheetCellType.identifier))
         //we will use this to get the 'active vrs tested' column
         int activeAssays = this.queryService.getNumberTestedAssays(compoundId,true)
         int testedAssays  = this.queryService.getNumberTestedAssays(compoundId,false)
-        molSpreadSheetData.mssData.put("${rowCount}_3".toString(), new MolSpreadSheetCell("${activeAssays} vrs ${testedAssays}", MolSpreadSheetCellType.string))
+        dataMap.put("${rowCount}_3".toString(),  new MolSpreadSheetCell("${activeAssays} vrs ${testedAssays}", MolSpreadSheetCellType.string))
 
         return molSpreadSheetData
 
@@ -288,13 +366,13 @@ class MolecularSpreadSheetService {
     protected void populateMolSpreadSheetColumnMetadata(MolSpreadSheetData molSpreadSheetData, List<Experiment> experimentList) {
 
         // now retrieve the header names from the assays
-        molSpreadSheetData.mssHeaders.add("Struct")
-        molSpreadSheetData.mssHeaders.add("CID")
-        molSpreadSheetData.mssHeaders.add("UNM Promiscuity Analysis")
-        molSpreadSheetData.mssHeaders.add("Active vs Tested across all Assay Definitions")
-
+        molSpreadSheetData.mssHeaders << ["Struct"]
+        molSpreadSheetData.mssHeaders << ["CID"]
+        molSpreadSheetData.mssHeaders << ["UNM Promiscuity Analysis"]
+        molSpreadSheetData.mssHeaders << ["Active vs Tested across all Assay Definitions"]
         for (Experiment experiment in experimentList) {
-            molSpreadSheetData.mssHeaders.add(experiment.name)
+            molSpreadSheetData.experimentNameList << "${experiment.id.toString()}"
+            molSpreadSheetData.mssHeaders << []
         }
     }
 
@@ -476,67 +554,106 @@ class MolecularSpreadSheetService {
         }
         return [totalNumberOfRecords: totalNumberOfRecords, activityValues: activityValues]
     }
+
+
+
+
+    protected void prepareMapOfColumnsToAssay  ( final MolSpreadSheetData molSpreadSheetData) {
+        molSpreadSheetData.mapColumnsToAssay = [:]
+        int columnIndex = 0
+        int assayIndex = 0
+        for (List<String> listOfColumnSubheadings in molSpreadSheetData.mssHeaders) {
+            if (columnIndex < START_DYNAMIC_COLUMNS ) {
+                molSpreadSheetData.mapColumnsToAssay [columnIndex++]  =   ""
+            } else {
+                for (String columnSubheadings in listOfColumnSubheadings) {
+                    molSpreadSheetData.mapColumnsToAssay [columnIndex++]  =   molSpreadSheetData.experimentNameList[assayIndex].toString()
+                }
+                assayIndex++
+            }
+        }
+    }
+
+
+
     /**
      *
      * @param experimentValue
      * @return SpreadSheetActivity
      */
-    SpreadSheetActivity extractActivitiesFromExperiment(final Value experimentValue) {
+    SpreadSheetActivity extractActivitiesFromExperiment(MolSpreadSheetData molSpreadSheetData, final Integer experimentCount, final Value experimentValue) {
         final Iterator<Value> experimentValueIterator = experimentValue.children()
         SpreadSheetActivity spreadSheetActivity = new SpreadSheetActivity()
         while (experimentValueIterator?.hasNext()) {
             Value childValue = experimentValueIterator.next()
-            addCurrentActivityToSpreadSheet(spreadSheetActivity, childValue)
+            addCurrentActivityToSpreadSheet( molSpreadSheetData.mssHeaders[START_DYNAMIC_COLUMNS+experimentCount],spreadSheetActivity, childValue)
         }
         return spreadSheetActivity
     }
+
+
+    SpreadSheetActivity extractActivitiesFromExperiment(final Value experimentValue) {
+        final Iterator<Value> experimentValueIterator = experimentValue.children()
+        SpreadSheetActivity spreadSheetActivity = new SpreadSheetActivity()
+        List <String> dummyHeadersList = []
+        while (experimentValueIterator?.hasNext()) {
+            Value childValue = experimentValueIterator.next()
+            addCurrentActivityToSpreadSheet( dummyHeadersList,spreadSheetActivity, childValue)
+        }
+        return spreadSheetActivity
+    }
+
 
 
     SpreadSheetActivity extractActivitiesFromExperiment(final Value experimentValue, final Long experimentId) {
         final Iterator<Value> experimentValueIterator = experimentValue.children()
         SpreadSheetActivity spreadSheetActivity = new SpreadSheetActivity()
         spreadSheetActivity.experimentId = experimentId
+        List <String> dummyHeadersList = []
         while (experimentValueIterator?.hasNext()) {
             Value childValue = experimentValueIterator.next()
-            addCurrentActivityToSpreadSheet(spreadSheetActivity, childValue)
+            addCurrentActivityToSpreadSheet(dummyHeadersList, spreadSheetActivity, childValue)
         }
         return spreadSheetActivity
     }
 
     /**
-     * The ideais to fill up a spreadsheet activity based on
+     * The idea is to fill up a spreadsheet activity based on
      *  Note hack -- this method has been short-circuited so that a HillCurveValue will cause the method to
      *  push a value back onto readouts and then return
      * @param spreadSheetActivity
      * @param childValue
      */
-    void addCurrentActivityToSpreadSheet(final SpreadSheetActivity spreadSheetActivity, final Value childValue) {
-        String identifier = childValue.id
+    void addCurrentActivityToSpreadSheet(final List <String> resultTypeNames, final SpreadSheetActivity spreadSheetActivity, final Value childValue) {
 
-         if (childValue instanceof HillCurveValue) {
-            spreadSheetActivity.hillCurveValue = childValue
-            spreadSheetActivity.readouts.push(childValue)
-            return
+        if (childValue instanceof HillCurveValue) {
+            spreadSheetActivity.hillCurveValueList << childValue
+            if (!resultTypeNames.contains(childValue.id)) {
+                resultTypeNames << childValue.id
+            }
         }
+        else {
+            String identifier = childValue.id
+            switch (identifier) {
+                case "potency":
+                    spreadSheetActivity.potency = (Double) childValue.value
+                    break
+                case "outcome":
+                    spreadSheetActivity.activityOutcome = ActivityOutcome.findActivityOutcome((Integer) childValue.value)
+                    break
+                case "eid":
+                    spreadSheetActivity.eid = (Long) childValue.value
+                    break
+                case "cid":
+                    spreadSheetActivity.cid = (Long) childValue.value
+                    break
+                case "sid":
+                    spreadSheetActivity.sid = (Long) childValue.value
+                    break
+                default:
+                    throw new NotImplementedException("Experiment Identifier: ${identifier} is unknown")
+            }
 
-        switch (identifier) {
-            case "potency":
-                spreadSheetActivity.potency = (Double) childValue.value
-                break
-            case "outcome":
-                spreadSheetActivity.activityOutcome = ActivityOutcome.findActivityOutcome((Integer) childValue.value)
-                break
-            case "eid":
-                spreadSheetActivity.eid = (Long) childValue.value
-                break
-            case "cid":
-                spreadSheetActivity.cid = (Long) childValue.value
-                break
-            case "sid":
-                spreadSheetActivity.sid = (Long) childValue.value
-                break
-            default:
-                throw new NotImplementedException("Experiment Identifier: ${identifier} is unknown")
         }
     }
 
