@@ -1,9 +1,12 @@
 package bard.db.dictionary
 
-import bard.db.enums.ReadyForExtraction
 import grails.plugin.spock.IntegrationSpec
-import org.junit.Before
+
 import spock.lang.Unroll
+import spock.lang.Shared
+
+import bard.db.enums.ReadyForExtraction
+import org.junit.Before
 
 import static bard.db.dictionary.AbstractElement.*
 import static test.TestUtils.assertFieldValidationExpectations
@@ -20,7 +23,7 @@ import static test.TestUtils.createString
 abstract class AbstractElementConstraintIntegrationSpec extends IntegrationSpec {
 
     def domainInstance
-    def unitElement
+    @Shared def unitElement
 
     @Before
     abstract void doSetup()
@@ -161,11 +164,9 @@ abstract class AbstractElementConstraintIntegrationSpec extends IntegrationSpec 
         }
 
         where:
-        desc       | valueUnderTest                    | valid | errorCode
-        'too long' | createString(UNIT_MAX_SIZE) + "a" | false | 'maxSize.exceeded'
-
-//        'valid value' | createString(UNIT_MAX_SIZE, 'u')  | true  | null  // TODO needs existing row were label = unit for db constraint
-        'null value' | null | true | null
+        desc          | valueUnderTest | valid | errorCode
+        'null value'  | null           | true  | null
+        'valid value' | unitElement    | true  | null
     }
 
     void "test bardURI constraints #desc bardURI: '#valueUnderTest'"() {

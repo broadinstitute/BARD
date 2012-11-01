@@ -1,11 +1,10 @@
 package bard.db.dictionary
 
-import org.junit.Before
 import spock.lang.Unroll
 
-import static bard.db.dictionary.AbstractElement.UNIT_MAX_SIZE
-import static test.TestUtils.createString
+import org.junit.Before
 
+import static bard.db.dictionary.AbstractElement.LABEL_MAX_SIZE
 /**
  * Created with IntelliJ IDEA.
  * User: balexand
@@ -19,8 +18,7 @@ class ElementConstraintIntegrationSpec extends AbstractElementConstraintIntegrat
     @Before
     void doSetup() {
         domainInstance = Element.buildWithoutSave()
-        //TODO: Dan please take a look had to comment this out to get it to work with grails 2.1.1
-       // unitElement = Element.build(label: createString(UNIT_MAX_SIZE, 'u'))
+        unitElement = Element.build()
     }
 
 }
