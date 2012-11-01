@@ -66,6 +66,22 @@ class ExperimentalValueUnitSpec extends Specification {
 
     }
 
+
+
+    void "test response to a null ExperimentalValue on the constructor"() {
+        given:
+        ExperimentalValue experimentalValue = new ExperimentalValue(0.02, null, ExperimentalValueType.unknown, true)
+        experimentalValue.insistOnOutputUnits = ExperimentalValueUnit.unknown
+        when: "#label"
+        Boolean bool = experimentalValue.insistOnOutputUnit()
+
+        then: "The resulting search filters size must equal the expected value"
+        assert !bool
+
+    }
+
+
+
     void "test roundOff to Desired Precision"() {
         given:
         ExperimentalValue experimentalValue = new ExperimentalValue(initialValue, initialUnit, ExperimentalValueType.numeric, true)

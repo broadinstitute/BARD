@@ -37,6 +37,9 @@ class ExperimentalValue {
                              Boolean activity = true) {
         this.value = value
         this.experimentalValueUnit = experimentalValueUnit
+        if (this.experimentalValueUnit==null)  {
+            this.experimentalValueUnit =  ExperimentalValueUnit.unknown
+        }
         this.experimentalValueType = experimentalValueType
         this.activity = activity
         if (this.value < 0) {
@@ -345,7 +348,7 @@ enum ExperimentalValueUnit {
 
     public static ExperimentalValueUnit getByValue(String value) {
         for (final ExperimentalValueUnit element : EnumSet.allOf(ExperimentalValueUnit)) {
-            if (element.value.trim() == value.trim()) {
+            if (element.value.trim().toUpperCase() == value.trim().toUpperCase()) {
                 return element;
             }
         }
