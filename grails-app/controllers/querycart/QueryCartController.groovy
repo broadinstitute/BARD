@@ -46,8 +46,10 @@ class QueryCartController {
                 case QueryItemType.AssayDefinition:
                     item = new CartAssay(name, id)
                     break
+///CLOVER:OFF
                 default:
                     return render(status: 400, text: "Unsupported QueryItemType [${itemType}]")
+///CLOVER:ON
             }
         }
 
