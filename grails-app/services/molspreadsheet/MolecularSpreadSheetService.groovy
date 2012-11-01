@@ -352,7 +352,7 @@ class MolecularSpreadSheetService {
         //we will use this to get the 'active vrs tested' column
         int activeAssays = this.queryService.getNumberTestedAssays(compoundId,true)
         int testedAssays  = this.queryService.getNumberTestedAssays(compoundId,false)
-        molSpreadSheetData.mssData.put("${rowCount}_3".toString(), new MolSpreadSheetCell("${activeAssays} vrs ${testedAssays}", MolSpreadSheetCellType.string))
+        dataMap.put("${rowCount}_3".toString(),  new MolSpreadSheetCell("${activeAssays} vrs ${testedAssays}", MolSpreadSheetCellType.string))
 
         return molSpreadSheetData
 
@@ -576,7 +576,7 @@ class MolecularSpreadSheetService {
         int columnIndex = 0
         int assayIndex = 0
         for (List<String> listOfColumnSubheadings in molSpreadSheetData.mssHeaders) {
-            if (columnIndex < 3 ) {
+            if (columnIndex < START_DYNAMIC_COLUMNS ) {
                 molSpreadSheetData.mapColumnsToAssay [columnIndex++]  =   ""
             } else {
                 for (String columnSubheadings in listOfColumnSubheadings) {
@@ -599,7 +599,7 @@ class MolecularSpreadSheetService {
         SpreadSheetActivity spreadSheetActivity = new SpreadSheetActivity()
         while (experimentValueIterator?.hasNext()) {
             Value childValue = experimentValueIterator.next()
-            addCurrentActivityToSpreadSheet( molSpreadSheetData.mssHeaders[3+experimentCount],spreadSheetActivity, childValue)
+            addCurrentActivityToSpreadSheet( molSpreadSheetData.mssHeaders[START_DYNAMIC_COLUMNS+experimentCount],spreadSheetActivity, childValue)
         }
         return spreadSheetActivity
     }

@@ -37,6 +37,17 @@ class MolSpreadSheetCellUnitSpec extends Specification{
 
 
 
+    void "Test that we can build a few  molecular spreadsheet cells"() {
+        when:
+        MolSpreadSheetCell molSpreadSheetCell = new MolSpreadSheetCell("2", MolSpreadSheetCellType.string)
+        assertNotNull(molSpreadSheetCell)
+
+        then:
+        assert molSpreadSheetCell.toString()=="2"
+    }
+
+
+
 
     void "Test constraints for molecular spreadsheet data"() {
         given:

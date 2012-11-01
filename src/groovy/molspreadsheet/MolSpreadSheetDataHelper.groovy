@@ -134,7 +134,6 @@ class MolSpreadSheetDataBuilderDirector {
         List<Experiment> experimentList = molSpreadSheetDataBuilder.deriveListOfExperiments()
 
         molSpreadSheetDataBuilder.populateMolSpreadSheet(experimentList)
-
     }
 
 }

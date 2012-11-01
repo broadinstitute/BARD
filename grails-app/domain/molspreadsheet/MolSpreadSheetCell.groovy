@@ -65,6 +65,9 @@ class MolSpreadSheetCell {
                 intInternalValue = new Integer(value)
             }
         }
+        if (this.molSpreadSheetCellType == MolSpreadSheetCellType.string){
+            strInternalValue = value
+        }
     }
 
     /**

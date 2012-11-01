@@ -33,7 +33,10 @@
                         <g:if test="${looper == 2}">
                             <th class="molSpreadSheetHeadData sortable">${colHeader}</th>
                         </g:if>
-                        <g:if test="${looper > 2}">
+                        <g:if test="${looper ==3 }">
+                            <th class="molSpreadSheetHeadData sortable"><%=molSpreadSheetData.mapColumnsToAssay[looper]%><br/>${colHeader}</th>
+                        </g:if>
+                        <g:if test="${looper > 3}">
                             <th class="molSpreadSheetHeadData sortable">AID=<%=molSpreadSheetData.mapColumnsToAssay[looper]%><br/>${colHeader}</th>
                         </g:if>
                         <% looper++ %>
@@ -83,7 +86,7 @@
                     </td>
                     <g:if test="${molSpreadSheetData.getColumnCount() > 4}">
                         <g:each var="colCnt" in="${4..(molSpreadSheetData.getColumnCount() - 1)}">
-                            <td class="molSpreadSheet" property="var${colCnt}">
+
                             <% SpreadSheetActivityStorage spreadSheetActivityStorage = molSpreadSheetData?.findSpreadSheetActivity(rowCnt, colCnt) %>
                             <% int currentCol =  colCnt %>
                             <g:if test="${spreadSheetActivityStorage != null}">
