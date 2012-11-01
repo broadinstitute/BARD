@@ -14,6 +14,10 @@ databaseChangeLog = {
             include file: "${dir.name}/${file.name}"
         }
     }
+// views
+    changeSet(author: 'ddurkin', id: 'create-or-replace-dictionary-views.sql', dbms: 'oracle', context:'standard', runAlways: 'true') {
+            sqlFile(path: "${migrationsDir}/sql/create-or-replace-dictionary-views.sql", stripComments: true)
+    }
 
     // do last
     include file: 'manage-stored-procedures.groovy'
