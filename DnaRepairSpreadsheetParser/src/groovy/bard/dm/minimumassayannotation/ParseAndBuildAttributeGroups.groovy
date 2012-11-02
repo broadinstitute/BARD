@@ -55,7 +55,7 @@ class ParseAndBuildAttributeGroups {
                 }
                 aid = newAid
             }
-            assert aid, "Couldn't find AID"
+            assert aid, "Couldn't find AID: ${aidFromCell}"
 
 
             //Iterate over all assay-groups' contexts

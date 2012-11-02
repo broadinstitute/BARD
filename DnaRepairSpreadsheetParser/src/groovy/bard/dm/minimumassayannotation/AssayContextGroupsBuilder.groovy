@@ -50,8 +50,8 @@ class AssayContextGroupsBuilder {
         List<Attribute> assayFootprint = [new Attribute('2/U', '$/U', AttributeType.Fixed)]
 
         List<Attribute> assayExcitation = [
-                new Attribute('2/V', '$/V', AttributeType.Fixed, false, null,'2/BI'),//The wavelength units are fixed in cell 2/BI
-                new Attribute('2/W', '$/W', AttributeType.Fixed, false, null,'2/BI')]//The wavelength units are fixed in cell 2/BI
+                new Attribute('2/V', '$/V', AttributeType.Fixed, true, null,'2/BI'),//The wavelength units are fixed in cell 2/BI
+                new Attribute('2/W', '$/W', AttributeType.Fixed, true, null,'2/BI')]//The wavelength units are fixed in cell 2/BI
 
         List<Attribute> assayAbsorbance = [new Attribute('2/X', '$/X', AttributeType.Fixed)]
 

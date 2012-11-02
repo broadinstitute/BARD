@@ -26,13 +26,13 @@ class ContextDtoFromContextGroupCreator {
             String attKeyCellId = attribute.key
             def attrKey = getCellContent(attKeyCellId, row, sheet)
             if (attrKey)
-                assert attrKey instanceof String, "Key must be a string"
+                assert attrKey instanceof String, "Key must be a string (Row=${row.rowNum + 1}/CellID=${attKeyCellId})"
 
             //Get the attribute's qualifier-content from cell
             String attQualifierCellId = attribute.qualifier
             def attrQualifier = attQualifierCellId ? getCellContent(attQualifierCellId, row, sheet) : attQualifierCellId
             if (attrQualifier)
-                assert attrQualifier instanceof String, "Qualifier must be a string"
+                assert attrQualifier instanceof String, "Qualifier must be a string: '${attrQualifier}' (Row=${row.rowNum + 1}/CellID=${attQualifierCellId})"
 
             //Get the attribute's value-content from cell
             String attValueCell = attribute.value
@@ -47,7 +47,7 @@ class ContextDtoFromContextGroupCreator {
             String attConcentrationUnitsCellId = attribute.concentrationUnits
             def attrConcentrationUnits = attConcentrationUnitsCellId ? getCellContent(attConcentrationUnitsCellId, row, sheet) : attConcentrationUnitsCellId
             if (attrConcentrationUnits)
-                assert attrConcentrationUnits instanceof String, "ConcentrationUnits must be a string"
+                assert attrConcentrationUnits instanceof String, "ConcentrationUnits must be a string (Row=${row.rowNum + 1}/CellID=${attConcentrationUnitsCellId})"
 
             //Create a new attribute and add it to the context's attributes collection.
             Attribute attr = new Attribute(attrKey, attrValue, attribute.attributeType, attribute.typeIn, attrQualifier, attrConcentrationUnits)
