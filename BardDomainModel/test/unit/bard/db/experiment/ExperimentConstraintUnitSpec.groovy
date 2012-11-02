@@ -9,6 +9,8 @@ import spock.lang.Unroll
 import static bard.db.experiment.Experiment.*
 import static test.TestUtils.assertFieldValidationExpectations
 import static test.TestUtils.createString
+import spock.lang.Shared
+import bard.db.registration.Assay
 
 /**
  * Created with IntelliJ IDEA.
@@ -17,16 +19,19 @@ import static test.TestUtils.createString
  * Time: 12:35 PM
  * To change this template use File | Settings | File Templates.
  */
-@Build(Experiment)
+@Build([Assay, Experiment])
 @Unroll
 class ExperimentConstraintUnitSpec extends Specification {
 
 
     Experiment domainInstance
 
+    @Shared Assay validAssay
+
     @Before
     void doSetup() {
         domainInstance = Experiment.buildWithoutSave()
+        validAssay = Assay.build()
     }
 
     void "test experimentName constraints #desc experimentName: '#valueUnderTest'"() {
@@ -101,6 +106,27 @@ class ExperimentConstraintUnitSpec extends Specification {
         'valid value'    | ReadyForExtraction.Ready    | true  | null
         'valid value'    | ReadyForExtraction.Started  | true  | null
         'valid value'    | ReadyForExtraction.Complete | true  | null
+    }
+
+    void "test assay constraints #desc assay: '#valueUnderTest'"() {
+        final String field = 'assay'
+
+        when: 'a value is set for the field under test'
+        domainInstance[(field)] = valueUnderTest
+        domainInstance.validate()
+
+        then: 'verify valid or invalid for expected reason'
+        assertFieldValidationExpectations(domainInstance, field, valid, errorCode)
+
+        and: 'verify the domainspreadsheetmapping can be persisted to the db'
+        if (valid) {
+            domainInstance == domainInstance.save(flush: true)
+        }
+
+        where:
+        desc             | valueUnderTest | valid | errorCode
+        'null not valid' | null           | false | 'nullable'
+        'valid assay'    | validAssay     | true  | null
     }
 
     void "test runDateFrom constraints #desc runDateFrom: '#valueUnderTest'"() {

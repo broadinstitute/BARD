@@ -29,11 +29,11 @@ class Experiment {
 
     // TODO results can appearently be very large 10 million rows
     Set<Result> results = [] as Set<Result>
-    Set<ExperimentContextItem> experimentContextItems = [] as Set<ExperimentContextItem>
+    List<ExperimentContext> experimentContexts = [] as List<ExperimentContext>
     Set<ProjectStep> projectSteps = [] as Set<ProjectStep>
     Set<ExternalReference> externalReferences = [] as Set<ExternalReference>
 
-    static hasMany = [experimentContextItems: ExperimentContextItem,
+    static hasMany = [experimentContexts: ExperimentContext,
             results: Result,
             projectSteps: ProjectStep,
             externalReferences: ExternalReference]
@@ -42,6 +42,7 @@ class Experiment {
 
     static mapping = {
         id(column: "EXPERIMENT_ID", generator: "sequence", params: [sequence: 'EXPERIMENT_ID_SEQ'])
+        experimentContexts(indexColumn: [name: 'DISPLAY_ORDER'], lazy: 'false')
     }
 
     static constraints = {
@@ -54,16 +55,10 @@ class Experiment {
         runDateTo(nullable: true)
         holdUntilDate(nullable: true)
 
-        description(nullable: true,blank: false, maxSize: DESCRIPTION_MAX_SIZE)
+        description(nullable: true, blank: false, maxSize: DESCRIPTION_MAX_SIZE)
 
         dateCreated(nullable: false)
         lastUpdated(nullable: true)
         modifiedBy(nullable: true, blank: false, maxSize: MODIFIED_BY_MAX_SIZE)
     }
-}
-enum ExperimentStatus {
-    Pending,
-    Approved,
-    Rejected,
-    Revised
 }
