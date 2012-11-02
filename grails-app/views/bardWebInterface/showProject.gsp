@@ -7,6 +7,7 @@
     <r:script>
         $(document).ready(function () {
             $("#accordion").accordion({ autoHeight:false });
+            $('.projectTooltip').tooltip();
         })
     </r:script>
 
@@ -35,23 +36,29 @@
             </g:if>
         </dl>
     </div>
+
     <div class="span6">
-             <table>
-             <g:each var="probe" in="${projectAdapter.probes}" status="i">
+        <table>
+            <g:each var="probe" in="${projectAdapter.probes}" status="i">
                 <tr>
                     <td>ML#: ${probe.probeId}</td>
                     <td><a href="${probe.url}">Download probe report from Molecular Library BookShelf</a></td>
-                    <td>CID: <g:link controller="bardWebInterface" action="showCompound" params="[cid: probe.cid]">${probe.cid}</g:link></td>
-                    <td><g:link controller="molSpreadSheet" action="showExperimentDetails" params="[cid: probe.cid, pid:projectAdapter.project.id]">Show Experimental Details</g:link></td>
-                     <td>
-                         <g:link controller="bardWebInterface" action="showCompound" params="[cid: probe.cid]">
-                             <img alt="${probe?.smiles}" title="${probe.probeId}"
-                                  src="${createLink(controller: 'chemAxon', action: 'generateStructureImageFromSmiles', params: [smiles:probe.smiles, width: 400, height: 300])}"/>
-                         </g:link>
-                     </td>
+                    <td>CID: <g:link controller="bardWebInterface" action="showCompound"
+                                     params="[cid: probe.cid]">${probe.cid}</g:link></td>
+                    <td><g:link controller="molSpreadSheet" action="showExperimentDetails"
+                                params="[cid: probe.cid, pid: projectAdapter.project.id]" data-placement="top"
+                                class="projectTooltip"
+                                rel="tooltip"
+                                data-original-title="Please note: Query Cart would be reset!">Show Experimental Details</g:link></td>
+                    <td>
+                        <g:link controller="bardWebInterface" action="showCompound" params="[cid: probe.cid]">
+                            <img alt="${probe?.smiles}" title="${probe.probeId}"
+                                 src="${createLink(controller: 'chemAxon', action: 'generateStructureImageFromSmiles', params: [smiles: probe.smiles, width: 400, height: 300])}"/>
+                        </g:link>
+                    </td>
                 </tr>
             </g:each>
-             </table>
+        </table>
     </div>
 </div>
 
@@ -128,7 +135,8 @@
                         <g:each var="assay" in="${assays}" status="i">
                             <div>
                                 <p>
-                                    <g:link controller="bardWebInterface" action="showAssay" id="${assay.id}" params='[searchString:"${searchString}"]'>${assay.name}</g:link>
+                                    <g:link controller="bardWebInterface" action="showAssay" id="${assay.id}"
+                                            params='[searchString: "${searchString}"]'>${assay.name}</g:link>
                                 </p>
                             </div>
                         </g:each>
