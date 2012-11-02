@@ -49,15 +49,53 @@ $(document).ready(function () {
        title:"Move card item"
    });
    
+   $("#dialog_add_item_wizard_confirm_cancel").dialog({
+	   	height:200,
+	   	width:500,
+	    autoOpen:false,
+	    modal:true,
+	    draggable: false,
+	    zIndex: 4000,
+	    title:"Confirm"
+  });
+   
+   $("#dialog_add_item_wizard_confirm_cancel").dialog("option", "buttons",[
+   {
+	   text: "OK",
+       class: "btn btn-primary",
+       click: function(){
+    	   $("#dialog_add_item_wizard").dialog( "close" );
+    	   $( this ).dialog( "close" );
+       }
+   },
+   {
+	   text: "Cancel",
+       class: "btn",
+       click: function(){
+    	   $( this ).dialog( "close" );
+       }
+   }
+   ]);
+   
    $("#dialog_add_item_wizard").dialog({
-	   	height:500,
-	   	width:600,
+	   	height:600,
+	   	width:750,
 	    autoOpen:false,
 	    modal:true,
 	    draggable: false,
 	    zIndex: 3999,
-	    title:"Add Item wizard - Step 1 - Attribute"
+	    title:"Add Item Wizard"
    });
+   $("#dialog_add_item_wizard").dialog("option", "buttons",[
+	 {
+		text: "Cancel",
+	    class: "btn",
+	    click: function(){
+	    	//$("#dialog_add_item_wizard_confirm_cancel").dialog( "open" );
+	    	$( this ).dialog( "close" );
+	    }
+	}
+	]);
 
    $("#edit_card_form").ajaxForm({
 	   url:'../createOrEditCardName',
@@ -388,22 +426,20 @@ function editCardItem(){
 }
 
 function launchAddItemWizard(assayContextId){
-	$("#dialog_add_item_wizard").dialog("option", "buttons",[
-	{
-		text: "Cancel",
-	    class: "btn",
-	    click: function(){    
-	    	$( this ).dialog( "close" );
-	    }
-	},
-	{
-		text: "Next",
-	    class: "btn btn-info",
-	    click: function(){
-	    	$( this ).dialog( "close" );
-	    }
-	}
-	]);
+	
+	var data = {'assayContextId':assayContextId};
+	$.ajax({
+    	type:'POST',
+        url:'../../addItemWizard/addItemWizard',
+        data:data,
+        success:function (data) {
+//        	alert(data);
+        	$("#dialog_add_item_wizard").html(data);
+        	$("#dialog_add_item_wizard").dialog("open");
+        },
+        error:function (jqXHR, textStatus, errorThrown){
+        	alert("Error: " + textStatus + " -> " + errorThrown);
+        }
+    });	
 
-	$("#dialog_add_item_wizard").dialog("open");
 }

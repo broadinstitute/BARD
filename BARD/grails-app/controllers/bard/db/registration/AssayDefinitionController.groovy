@@ -158,4 +158,5 @@ class AssayDefinitionController {
 		render(template: "cards", model: [cardDtoMap: cardDtoMap, assayId: assayId])
 	}
 
+
 }

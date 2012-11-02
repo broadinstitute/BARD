@@ -6,7 +6,8 @@
     <meta name="layout" content="basic"/>
     <link rel="stylesheet" href="${resource(dir: 'css', file: 'card.css')}" type="text/css">
     <link rel="stylesheet" href="${resource(dir: 'css', file: 'bootstrap-plus.css')}" type="text/css">
-    <title>Assay Definition</title>
+    <link rel="stylesheet" href="${resource(dir: 'css', file: 'AddItemWizard.css')}"/>
+    <title>Edit Assay Definition</title>
 </head>
 
 <body>
