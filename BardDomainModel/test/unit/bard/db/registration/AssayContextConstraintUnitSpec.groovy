@@ -2,7 +2,6 @@ package bard.db.registration
 
 import grails.buildtestdata.mixin.Build
 import org.junit.Before
-import spock.lang.Shared
 import spock.lang.Specification
 import spock.lang.Unroll
 
@@ -10,6 +9,7 @@ import static AssayContext.CONTEXT_NAME_MAX_SIZE
 import static AssayContext.MODIFIED_BY_MAX_SIZE
 import static test.TestUtils.assertFieldValidationExpectations
 import static test.TestUtils.createString
+import spock.lang.Shared
 
 /**
  * Created with IntelliJ IDEA.
@@ -23,8 +23,6 @@ import static test.TestUtils.createString
 class AssayContextConstraintUnitSpec extends Specification {
 
     AssayContext domainInstance
-
-    // the build() method wasn't visible in the where block
     @Shared Assay validAssay
 
     @Before
@@ -63,6 +61,9 @@ class AssayContextConstraintUnitSpec extends Specification {
         final String field = 'assay'
 
         when: 'a value is set for the field under test'
+        println("field : $field")
+        println("valueUnderTest : $valueUnderTest")
+        println("validExperiment : $validAssay")
         domainInstance[(field)] = valueUnderTest
         domainInstance.validate()
 

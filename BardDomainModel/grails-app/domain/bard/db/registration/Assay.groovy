@@ -67,9 +67,3 @@ class Assay {
         modifiedBy(nullable: true, blank: false, maxSize: MODIFIED_BY_MAX_SIZE)
     }
 }
-enum AssayStatus {
-    Pending,
-    Active,
-    Superseded,
-    Retired
-}
