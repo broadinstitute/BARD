@@ -36,12 +36,12 @@ class AssayContextsValidatorCreatorAndPersistor extends ValidatorCreatorAndPersi
     AssayContextsValidatorCreatorAndPersistor(String modifiedBy) {
         super(modifiedBy)
 
-        goLookupMap = ["dna damage response, signal transduction by p53 class mediator":"0030330",
-                    "histone serine kinase activity":"0035174",
-                    "cell proliferation":"0008283",
-                    "drug metabolic process":"0017144",
-                    "drug transport":"0015893",
-                    "cell death":"0008219"]
+        goLookupMap = ["dna damage response, signal transduction by p53 class mediator": "0030330",
+                "histone serine kinase activity": "0035174",
+                "cell proliferation": "0008283",
+                "drug metabolic process": "0017144",
+                "drug transport": "0015893",
+                "cell death": "0008219"]
 
         assayContextCompare = new AssayContextCompare()
     }
@@ -93,23 +93,35 @@ class AssayContextsValidatorCreatorAndPersistor extends ValidatorCreatorAndPersi
                         Element element = Element.findByLabelIlike(attribute.key)
                         assert element, "We must have an element for the assay-context-item attribute (${attribute.key})"
                         assayContextItem.attributeElement = element
-
+                        Element concentrationUnitsElement = attribute.concentrationUnits ? Element.findByLabelIlike(attribute.concentrationUnits) : null
+                        String concentrationUnitsAbbreviation = concentrationUnitsElement ? " ${concentrationUnitsElement.abbreviation}" : ""
                         //populate attribute-value type and value
                         element = attribute.value ? Element.findByLabelIlike(attribute.value) : null
-                        if (element) {//if the value string could be matched against an element then add it to the valueElement
+                        //if the value string could be matched against an element then add it to the valueElement
+                        if (element) {
                             assayContextItem.valueElement = element
                             assayContextItem.valueDisplay = element.label
-                        } else if (attribute.value && (!(attribute.value instanceof String) || attribute.value.isNumber())) {//if the attribute's value is a number value, store it in the valueNum field
+                        }
+                        //else, if the attribute's value is a number value, store it in the valueNum field
+                        else if (attribute.value && (!(attribute.value instanceof String) || attribute.value.isNumber())) {
                             Float val = new Float(attribute.value)
                             assayContextItem.valueNum = val
                             //If the value is a number and also has concentration-units, we need to find the units element ID and update the valueDisplay accrdingly
-                            Element concentrationUnitsElement = attribute.concentrationUnits ? Element.findByLabelIlike(attribute.concentrationUnits) : null
-                            String concentrationUnitsAbbreviation = concentrationUnitsElement ? " ${concentrationUnitsElement.abbreviation}" : ""
                             assayContextItem.valueDisplay = val.toString() + concentrationUnitsAbbreviation
-                        } else if (attribute.typeIn || (attribute.attributeType == AttributeType.Free)) {//if the attribute's value is a type-in or attribute-type is Free, then simply store it the valueDisplay field
+                        }
+                        //else, if the attribute is a numeric range (e.g., 440-460nm -> 440-460), then store it in valueMin, valueMax and make AttributeType=range.
+                        else if (attribute.value && (attribute.value instanceof String) && attribute.value.matches(/^\d+\-\d+$/)) {
+                            assayContextItem.valueMin = new Float(attribute.value.split('-')[0])
+                            assayContextItem.valueMax = new Float(attribute.value.split('-')[1])
+                            assayContextItem.valueDisplay = attribute.value + concentrationUnitsAbbreviation //range-units are reported separately.
+                            assayContextItem.attributeType = AttributeType.Range
+                        }
+                        //else, if the attribute's is a type-in or attribute-type is Free, then simply store it the valueDisplay field
+                        else if (attribute.typeIn || (attribute.attributeType == AttributeType.Free)) {
                             assayContextItem.valueDisplay = attribute.value
-                        } else {
-                            //throw an error
+                        }
+                        //else, throw an error
+                        else {
                             Log.logger.info("Illage attribute value: '${attribute.key}'/'${attribute.value}'")
                             assert false, "Illage attribute value '${attribute.key}'/'${attribute.value}'"
                         }
@@ -153,8 +165,6 @@ class AssayContextsValidatorCreatorAndPersistor extends ValidatorCreatorAndPersi
             }
         }
     }
-
-
 
     /**
      *  if the value field is of the format 'cid:12345678' then:
@@ -202,7 +212,7 @@ class AssayContextsValidatorCreatorAndPersistor extends ValidatorCreatorAndPersi
         Set<AssayContext> assayContextOrigSet = new HashSet<AssayContext>(assayContext.assay.assayContexts)
 
         for (AssayContext assayContextOrig : assayContextOrigSet) {
-            if (! assayContextOrig.equals(assayContext)) {
+            if (!assayContextOrig.equals(assayContext)) {
                 ComparisonResult<ContextItemComparisonResultEnum> compResult = assayContextCompare.compareContext(assayContextOrig, assayContext)
 
                 if (compResult) {
