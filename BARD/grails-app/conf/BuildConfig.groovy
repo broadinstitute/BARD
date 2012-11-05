@@ -25,7 +25,8 @@ grails.project.dependency.resolution = {
         grailsPlugins()
         grailsHome()
         mavenRepo "http://bard-repo.broadinstitute.org:8081/artifactory/bard-virtual-repo"
-        grailsRepo("http://bard-repo.broadinstitute.org:8081/artifactory/bard-virtual-repo", "grailsCentral")
+        grailsRepo("http://bard-repo.broadinstitute.org:8081/artifactory/bard-virtual-repo", "bardGrailsCentral")
+        grailsCentral()
     }
     dependencies {
         // build scope
