@@ -2,6 +2,7 @@ package bard.db.experiment
 
 import bard.db.registration.ExternalReference
 import bard.db.enums.ReadyForExtraction
+import com.sun.xml.internal.bind.v2.TODO
 
 class Project {
     private static final int PROJECT_NAME_MAX_SIZE = 256
@@ -19,16 +20,19 @@ class Project {
     Date lastUpdated
     String modifiedBy
 
-    Set<ProjectStep> projectSteps = [] as Set<ProjectStep>
-    Set<ExternalReference> externalReferences = [] as Set<ExternalReference>
-    Set<ProjectContextItem> projectContextItems = [] as Set<ProjectContextItem>
+    List<ProjectContext> projectContexts = [] as List
+    Set<ProjectStep> projectSteps = [] as Set
+    Set<ExternalReference> externalReferences = [] as Set
+    Set<ProjectDocument> projectDocuments = [] as Set
 
     static hasMany = [projectSteps: ProjectStep,
             externalReferences: ExternalReference,
-            projectContextItems:ProjectContextItem]
+            projectContexts:ProjectContext,
+            projectDocuments: ProjectDocument]
 
     static mapping = {
         id(column: "PROJECT_ID", generator: "sequence", params: [sequence: 'PROJECT_ID_SEQ'])
+        projectContexts(indexColumn: [name: 'DISPLAY_ORDER'], lazy: 'false')
     }
 
     static constraints = {

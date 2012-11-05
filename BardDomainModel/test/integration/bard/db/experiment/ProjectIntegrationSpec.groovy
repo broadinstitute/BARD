@@ -1,11 +1,12 @@
 package bard.db.experiment
 
+import bard.db.dictionary.Element
 import bard.db.registration.ExternalReference
+import bard.db.registration.ExternalSystem
 import grails.plugin.spock.IntegrationSpec
 import org.hibernate.Session
 import org.hibernate.SessionFactory
 import org.junit.Before
-import spock.lang.Ignore
 
 /**
  * Created with IntelliJ IDEA.
@@ -20,67 +21,71 @@ class ProjectIntegrationSpec extends IntegrationSpec {
     SessionFactory sessionFactory
     Session session
 
+
+    Project project
+    ProjectContext projectContext
+    ProjectContextItem projectContextItem
+    ProjectStep projectStep
+    ExternalReference externalReference
+
     @Before
     void doSetup() {
         domainInstance = Project.buildWithoutSave()
         session = sessionFactory.currentSession
+        project = Project.buildWithoutSave()
+
+        projectContext = ProjectContext.buildWithoutSave()
+        project.addToProjectContexts(projectContext)
+        projectContextItem = ProjectContextItem.buildWithoutSave(attributeElement: Element.build())
+        projectContext.addToProjectContextItems(projectContextItem)
+
+        projectStep = ProjectStep.buildWithoutSave()
+        project.addToProjectSteps(projectStep)
+
+        externalReference = ExternalReference.buildWithoutSave(externalSystem: ExternalSystem.build())
+        project.addToExternalReferences(externalReference)
     }
 
-    void "test projectContextItem cascade save'"() {
-
-
-        when:
-        ProjectContextItem projectContextItem = ProjectContextItem.buildWithoutSave()
-        projectContextItem.attributeElement.save()
-        domainInstance.addToProjectContextItems(projectContextItem)
-
-        then:
-        domainInstance == domainInstance.save(flush: true)
-        def id = domainInstance.id
+    void "test projectContext cascade save"() {
 
         when:
-        session.clear()
-        domainInstance = null
-        domainInstance = Project.get(id)
+        project.save(flush: true)
 
         then:
-        domainInstance.projectContextItems.size() == 1
+        project.id != null
+        projectContext.id != null
+
     }
 
-    @Ignore("temporarily ignore need to look into ORA-02290: check constraint (DDURKIN.CK_PROJECT_EXPERIMENT_NULLS) violated")
-    void "test externalReferences '"() {
+    void "test projectContextItems cascade save"() {
 
         when:
-        domainInstance.addToExternalReferences(ExternalReference.build())
+        project.save(flush: true)
 
         then:
-        domainInstance == domainInstance.save(flush: true)
-        def id = domainInstance.id
+        project.id != null
+        projectContextItem.id != null
 
-        when:
-        session.clear()
-        domainInstance = null
-        domainInstance = Project.get(id)
-
-        then:
-        domainInstance.externalReferences.size() == 1
     }
 
-    void "test projectSteps cascade save'"() {
+    void "test externalReferences cascade save"() {
 
         when:
-        domainInstance.addToProjectSteps(ProjectStep.buildWithoutSave())
+        project.save(flush: true)
 
         then:
-        domainInstance == domainInstance.save(flush: true)
-        def id = domainInstance.id
+        project.id != null
+        externalReference.id != null
+
+    }
+
+    void "test projectSteps cascade save"() {
 
         when:
-        session.clear()
-        domainInstance = null
-        domainInstance = Project.get(id)
+        project.save(flush: true)
 
         then:
-        domainInstance.projectSteps.size() == 1
+        project.id != null
+        projectStep.id != null
     }
 }
