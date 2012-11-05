@@ -24,7 +24,7 @@
             <th>Outcome</th>
             <th>Potency</th>
             <g:if test="${!experimentDataMap?.spreadSheetActivities?.isEmpty()}">
-               <g:each in="${experimentDataMap?.spreadSheetActivities?.get(0)?.hillCurveValueList[0]}" var="readout">
+               <g:each in="${experimentDataMap?.spreadSheetActivities?.get(0)?.hillCurveValueList}" var="readout">
                     <th>${readout.id}</th>
                     <g:if test="${readout.response.length > 1}">
                         <th>${readout.id} Plot</th>
@@ -52,7 +52,7 @@
                         ${potency.toString()}
                     </g:if>
                 </td>
-                <g:each in="${experimentData.hillCurveValueList[0]}" var="readout">
+                <g:each in="${experimentData.hillCurveValueList}" var="readout">
 
                     <td>
                         <g:each in="${0..(readout.size() - 1)}" var="i">
