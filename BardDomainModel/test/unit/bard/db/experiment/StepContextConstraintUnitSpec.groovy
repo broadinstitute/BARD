@@ -15,7 +15,7 @@ import static test.TestUtils.assertFieldValidationExpectations
  * Time: 1:25 PM
  * To change this template use File | Settings | File Templates.
  */
-@Build([ProjectStep,StepContext])
+@Build([ProjectStep, StepContext])
 @Unroll
 class StepContextConstraintUnitSpec extends AbstractContextConstraintUnitSpec {
 
@@ -24,17 +24,17 @@ class StepContextConstraintUnitSpec extends AbstractContextConstraintUnitSpec {
     @Before
     void doSetup() {
         domainInstance = StepContext.buildWithoutSave()
-        validStep = ProjectStep.build()
+        validProjectStep = ProjectStep.build()
     }
 
-    void "test step constraints #desc step: '#valueUnderTest'"() {
-        final String field = 'step'
+    void "test projectStep constraints #desc projectStep: '#valueUnderTest'"() {
+        final String field = 'projectStep'
 
         when: 'a value is set for the field under test'
         domainInstance[(field)] = valueUnderTest
         println("field : $field")
         println("valueUnderTest : $valueUnderTest")
-        println("validStep : $validProjectStep")
+        println("validProjectStep : $validProjectStep")
         domainInstance.validate()
 
         then: 'verify valid or invalid for expected reason'
@@ -46,9 +46,9 @@ class StepContextConstraintUnitSpec extends AbstractContextConstraintUnitSpec {
         }
 
         where:
-        desc               | valueUnderTest  | valid | errorCode
-        'null not valid'   | null            | false | 'nullable'
-        'valid step' | validStep | true  | null
+        desc             | valueUnderTest   | valid | errorCode
+        'null not valid' | null             | false | 'nullable'
+        'valid step'     | validProjectStep | true  | null
     }
 
 }
