@@ -347,12 +347,16 @@ enum ExperimentalValueUnit {
     }
 
     public static ExperimentalValueUnit getByValue(String value) {
-        for (final ExperimentalValueUnit element : EnumSet.allOf(ExperimentalValueUnit)) {
-            if (element.value.trim().toUpperCase() == value.trim().toUpperCase()) {
-                return element;
+        ExperimentalValueUnit returnValue = ExperimentalValueUnit.unknown
+        if (value != null ) {
+            for (final ExperimentalValueUnit element : EnumSet.allOf(ExperimentalValueUnit)) {
+                if (element.value.trim().toUpperCase() == value.trim().toUpperCase()) {
+                    returnValue =  element;
+                    break;
+                }
             }
         }
-        return null;
+        return returnValue;
     }
 
 
