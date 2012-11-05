@@ -20,7 +20,7 @@ class IDSearchTypeUnitSpec extends Specification {
         assert returnedLabel == expectedLabel
         where:
         label                 | searchType        | expectedLabel
-        "Assay Definition ID" | IDSearchType.ADID | "Assay IDs"
+        "Assay Definition ID" | IDSearchType.ADID | "Assay Definition IDs"
         "Compound ID"         | IDSearchType.CID  | "PubChem CIDs"
         "Project ID"          | IDSearchType.PID  | "Project IDs"
     }
