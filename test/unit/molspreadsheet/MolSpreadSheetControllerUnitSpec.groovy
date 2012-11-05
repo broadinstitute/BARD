@@ -34,19 +34,6 @@ class MolSpreadSheetControllerUnitSpec extends Specification  {
         assert response.status == 200
     }
 
-
-    void "test showExperimentDetails("() {
-
-        when:
-        controller.showExperimentDetails(1L,1L)
-
-        then:
-        assert response.status == 200
-    }
-
-
-
-
     void "test molecularSpreadSheet no data"() {
         when:
         controller.molecularSpreadSheet()
