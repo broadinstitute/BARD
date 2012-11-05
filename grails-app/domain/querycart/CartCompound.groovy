@@ -24,7 +24,7 @@ class CartCompound extends QueryItem {
         CompoundAdapter compoundAdapter = compoundAdapters ? compoundAdapters.first() : null
         if (compoundAdapter) {
             this.smiles = compoundAdapter.structureSMILES
-            this.name = name = compoundAdapter.name
+            this.name = compoundAdapter.name
             this.externalId = compoundAdapter.id
             this.queryItemType = QueryItemType.Compound
         }

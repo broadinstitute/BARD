@@ -19,6 +19,7 @@ class MolSpreadSheetController {
         //3. Call molecularSpreadSheet
 
         molecularSpreadSheetService.queryCartService.emptyShoppingCart()
+        CartCompound.executeUpdate("delete QueryItem")
 
         CartCompound cartCompound = new CartCompound(cid)
         CartProject cartProject = new CartProject(pid)

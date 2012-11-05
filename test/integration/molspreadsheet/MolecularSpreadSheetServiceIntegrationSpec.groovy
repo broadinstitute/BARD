@@ -138,11 +138,17 @@ class MolecularSpreadSheetServiceIntegrationSpec extends IntegrationSpec {
 
 
         then: "we should be able to generate the core molSpreadSheetData, with valid empty data holders"
-            shoppingCartService.addToShoppingCart(new CartAssay(assayTitle:"Assay Definition: Identification of inhibitors of RAD54 Measured in Biochemical System Using Plate Reader - 2159-01_Inhibitor_SinglePoint_HTS_Activity",assayId:4332L ))
-            shoppingCartService.addToShoppingCart(new CartCompound(smiles: "COC1=CC=C(C=C1)C#CC1=CC=C(C=C1)[C@H]1[C@@H](CO)N2CCCCN(C[C@H]12)C(=O)NC1=CC(F)=CC=C1", name: "BRD-K70362473-001-01-0", compoundId: 54667549))
+        final CartAssay assay1 = new CartAssay("Assay Definition: Identification of inhibitors of RAD54 Measured in Biochemical System Using Plate Reader - 2159-01_Inhibitor_SinglePoint_HTS_Activity", 4332L)
+        assay1.validate()
+        assert !assay1.hasErrors()
+        queryCartService.addToShoppingCart(assay1)
+        final CartCompound compound1 = new CartCompound("COC1=CC=C(C=C1)C#CC1=CC=C(C=C1)[C@H]1[C@@H](CO)N2CCCCN(C[C@H]12)C(=O)NC1=CC(F)=CC=C1", "BRD-K70362473-001-01-0", 54667549)
+        compound1.validate()
+        assert !compound1.hasErrors()
+        queryCartService.addToShoppingCart(compound1)
 
-        shoppingCartService.addToShoppingCart(new CartAssay(assayTitle:"Assay Definition: Confirmation Concentration-Response Assay for Inhibitors of Human Muscle isoform 2 Pyruvate Kinase",assayId:364L ))
-        shoppingCartService.addToShoppingCart(new CartCompound(smiles: "CC1=CC=C(O1)C1=C(NC2=CC=C(C)C=C2)N2C(C=CC=C2C)=N1", name: "HMS1817I15", compoundId: 4085914L))
+        queryCartService.addToShoppingCart(new CartAssay("Assay Definition: Confirmation Concentration-Response Assay for Inhibitors of Human Muscle isoform 2 Pyruvate Kinase",364L ))
+        queryCartService.addToShoppingCart(new CartCompound("CC1=CC=C(O1)C1=C(NC2=CC=C(C)C=C2)N2C(C=CC=C2C)=N1", "HMS1817I15", 4085914L))
 
         MolSpreadSheetData molSpreadSheetData
         if (molecularSpreadSheetService.weHaveEnoughDataToMakeASpreadsheet()) {
