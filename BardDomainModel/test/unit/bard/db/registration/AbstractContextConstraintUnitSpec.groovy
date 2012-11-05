@@ -1,28 +1,81 @@
-package bard.db.experiment
+package bard.db.registration
 
-import grails.buildtestdata.mixin.Build
 import org.junit.Before
+import spock.lang.Shared
 import spock.lang.Specification
 import spock.lang.Unroll
 
-import static bard.db.experiment.Project.MODIFIED_BY_MAX_SIZE
+import static bard.db.registration.AbstractContext.*
 import static test.TestUtils.assertFieldValidationExpectations
 import static test.TestUtils.createString
 
 /**
  * Created with IntelliJ IDEA.
  * User: ddurkin
- * Date: 8/23/12
- * Time: 12:07 AM
+ * Date: 11/2/12
+ * Time: 11:51 AM
  * To change this template use File | Settings | File Templates.
  */
 @Unroll
-abstract class AbstractProjectContextItemConstraintUnitSpec extends Specification {
+abstract class AbstractContextConstraintUnitSpec extends Specification {
 
     def domainInstance
+    @Shared def validParent
 
     @Before
     abstract void doSetup()
+
+    void "test contextName constraints #desc contextName: '#valueUnderTest'"() {
+        final String field = 'contextName'
+
+        when: 'a value is set for the field under test'
+        domainInstance[(field)] = valueUnderTest
+        domainInstance.validate()
+
+        then: 'verify valid or invalid for expected reason'
+        assertFieldValidationExpectations(domainInstance, field, valid, errorCode)
+
+        and: 'verify the domainspreadsheetmapping can be persisted to the db'
+        if (valid) {
+            domainInstance == domainInstance.save(flush: true)
+        }
+
+        where:
+        desc               | valueUnderTest                          | valid | errorCode
+        'too long'         | createString(CONTEXT_NAME_MAX_SIZE + 1) | false | 'maxSize.exceeded'
+        'blank not valid'  | ''                                      | false | 'blank'
+        'blank not valid'  | '   '                                   | false | 'blank'
+
+        'null valid'       | null                                    | true  | null
+        'exactly at limit' | createString(CONTEXT_NAME_MAX_SIZE)     | true  | null
+
+    }
+
+    void "test contextGroup constraints #desc contextGroup: '#valueUnderTest'"() {
+        final String field = 'contextGroup'
+
+        when: 'a value is set for the field under test'
+        domainInstance[(field)] = valueUnderTest
+        domainInstance.validate()
+
+        then: 'verify valid or invalid for expected reason'
+        assertFieldValidationExpectations(domainInstance, field, valid, errorCode)
+
+        and: 'verify the domainspreadsheetmapping can be persisted to the db'
+        if (valid) {
+            domainInstance == domainInstance.save(flush: true)
+        }
+
+        where:
+        desc               | valueUnderTest                           | valid | errorCode
+        'too long'         | createString(CONTEXT_GROUP_MAX_SIZE + 1) | false | 'maxSize.exceeded'
+        'blank not valid'  | ''                                       | false | 'blank'
+        'blank not valid'  | '   '                                    | false | 'blank'
+
+        'null valid'       | null                                     | true  | null
+        'exactly at limit' | createString(CONTEXT_GROUP_MAX_SIZE)     | true  | null
+
+    }
 
     void "test modifiedBy constraints #desc modifiedBy: '#valueUnderTest'"() {
 
@@ -91,5 +144,6 @@ abstract class AbstractProjectContextItemConstraintUnitSpec extends Specificatio
         'null valid' | null           | true  | null
         'date valid' | new Date()     | true  | null
     }
+
 
 }

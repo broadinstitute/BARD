@@ -1,15 +1,12 @@
 package bard.db.experiment
 
+import bard.db.registration.AbstractContextConstraintUnitSpec
 import grails.buildtestdata.mixin.Build
 import org.junit.Before
-import spock.lang.Specification
+import spock.lang.Shared
 import spock.lang.Unroll
 
-import static bard.db.experiment.ExperimentContext.*
 import static test.TestUtils.assertFieldValidationExpectations
-import static test.TestUtils.createString
-import spock.lang.Shared
-import bard.db.registration.AbstractContextConstraintUnitSpec
 
 /**
  * Created with IntelliJ IDEA.
@@ -18,28 +15,26 @@ import bard.db.registration.AbstractContextConstraintUnitSpec
  * Time: 1:25 PM
  * To change this template use File | Settings | File Templates.
  */
-@Build([Experiment,ExperimentContext])
+@Build([ProjectStep,StepContext])
 @Unroll
-class ExperimentContextConstraintUnitSpec extends AbstractContextConstraintUnitSpec {
+class StepContextConstraintUnitSpec extends AbstractContextConstraintUnitSpec {
 
-
-
-    @Shared Experiment validExperiment
+    @Shared ProjectStep validProjectStep
 
     @Before
     void doSetup() {
-        domainInstance = ExperimentContext.buildWithoutSave()
-        validExperiment = Experiment.build()
+        domainInstance = StepContext.buildWithoutSave()
+        validStep = ProjectStep.build()
     }
 
-    void "test experiment constraints #desc experiment: '#valueUnderTest'"() {
-        final String field = 'experiment'
+    void "test step constraints #desc step: '#valueUnderTest'"() {
+        final String field = 'step'
 
         when: 'a value is set for the field under test'
         domainInstance[(field)] = valueUnderTest
         println("field : $field")
         println("valueUnderTest : $valueUnderTest")
-        println("validExperiment : $validExperiment")
+        println("validStep : $validProjectStep")
         domainInstance.validate()
 
         then: 'verify valid or invalid for expected reason'
@@ -53,8 +48,7 @@ class ExperimentContextConstraintUnitSpec extends AbstractContextConstraintUnitS
         where:
         desc               | valueUnderTest  | valid | errorCode
         'null not valid'   | null            | false | 'nullable'
-        'valid experiment' | validExperiment | true  | null
-        // TODO valueUnderTest is null for the @Shared validExperiment
+        'valid step' | validStep | true  | null
     }
 
 }

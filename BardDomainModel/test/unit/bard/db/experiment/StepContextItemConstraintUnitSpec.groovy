@@ -13,7 +13,7 @@ import spock.lang.Unroll
  */
 @Build(StepContextItem)
 @Unroll
-class StepContextItemConstraintUnitSpec extends AbstractProjectContextItemConstraintUnitSpec{
+class StepContextItemConstraintUnitSpec extends AbstractContextItemConstraintUnitSpec{
     @Before
      void doSetup(){
         domainInstance = StepContextItem.buildWithoutSave()

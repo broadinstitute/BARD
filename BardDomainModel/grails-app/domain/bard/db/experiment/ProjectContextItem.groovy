@@ -1,5 +1,7 @@
 package bard.db.experiment
 
+import bard.db.registration.AbstractContextItem
+
 /**
  * Created with IntelliJ IDEA.
  * User: ddurkin
@@ -7,12 +9,16 @@ package bard.db.experiment
  * Time: 12:02 AM
  * To change this template use File | Settings | File Templates.
  */
-class ProjectContextItem extends AbstractProjectContextItem {
-    Project project
+class ProjectContextItem extends AbstractContextItem {
+    ProjectContext projectContext
 
-    static belongsTo = [project: Project]
+    static belongsTo = [projectContext: ProjectContext]
 
     static mapping = {
-        discriminator(value: "Project")
+        id(column: 'PROJECT_CONTEXT_ITEM_ID', generator: 'sequence', params: [sequence: 'PROJECT_CONTEXT_ITEM_ID_SEQ'])
+        projectContext(column: 'PROJECT_CONTEXT_ID')
+        attributeElement(column: 'ATTRIBUTE_ID')
+        valueElement(column: 'VALUE_ID')
+        qualifier(column: "QUALIFIER", sqlType: "char", length: 2)
     }
 }

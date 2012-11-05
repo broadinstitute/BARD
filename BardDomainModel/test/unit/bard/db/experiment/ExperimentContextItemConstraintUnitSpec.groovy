@@ -18,16 +18,11 @@ import static test.TestUtils.createString
  */
 @Build(ExperimentContextItem)
 @Unroll
-class ExperimentContextItemConstraintUnitSpec extends RunContextItemConstraintUnitSpec {
-
-
+class ExperimentContextItemConstraintUnitSpec extends AbstractContextItemConstraintUnitSpec {
 
     @Before
     @Override
     void doSetup() {
         domainInstance = ExperimentContextItem.buildWithoutSave()
     }
-
-
-
 }
