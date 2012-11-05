@@ -10,7 +10,7 @@ enum IDSearchType {
     /**
      *
      */
-    ADID('Assay IDs'),
+    ADID('Assay Definition IDs'),
     /**
      *
      */
