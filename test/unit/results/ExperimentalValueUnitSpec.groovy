@@ -37,7 +37,7 @@ class ExperimentalValueUnitSpec extends Specification {
         "Zeptomolar"  | " zM"                      | ExperimentalValueUnit.Zeptomolar
         "Yoctomolar"  | " yM"                      | ExperimentalValueUnit.Yoctomolar
         "unknown"     | ""                         | ExperimentalValueUnit.unknown
-        "Bogus Value" | "bogus value"              | null
+        "Bogus Value" | "bogus value"              | ExperimentalValueUnit.unknown
     }
 
     void "test performUnitNormalization"() {
@@ -185,7 +185,7 @@ class ExperimentalValueUnitSpec extends Specification {
         "M"             |  ExperimentalValueUnit.Molar
         "uM"         |  ExperimentalValueUnit.Micromolar
         "mM"         |  ExperimentalValueUnit.Millimolar
-        "junk"       |  null
+        "junk"       |  ExperimentalValueUnit.unknown
     }
 //    Molar(" M", 0),
 //    Millimolar(" mM", -3),
