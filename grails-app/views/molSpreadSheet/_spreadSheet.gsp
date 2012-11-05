@@ -6,7 +6,9 @@
     $(document).ready(function() {
         $('#showPromiscuityScores').click(function() {
             $('td:nth-child(3), th:nth-child(3)').toggle();
+            PromiscuityHandler.setup();
         });
+        $('td:nth-child(3), th:nth-child(3)').toggle();
     });
 </script>
 
@@ -19,7 +21,7 @@
     <div class="span10">
         <g:if test="${molSpreadSheetData?.getColumnCount() > 0}">
             <label class="checkbox">
-                <input type="checkbox" defaultChecked="unchecked" name="showPromiscuityScores" id="showPromiscuityScores">
+                <input type="checkbox" defaultChecked="checked" checked name="showPromiscuityScores" id="showPromiscuityScores">
                 Hide Promiscuity Scores
             </label>
             <table class="molSpreadSheet">
