@@ -372,6 +372,7 @@ class MolecularSpreadSheetService {
         molSpreadSheetData.mssHeaders << ["Active vs Tested across all Assay Definitions"]
         for (Experiment experiment in experimentList) {
             molSpreadSheetData.experimentNameList << "${experiment.id.toString()}"
+            molSpreadSheetData.experimentFullNameList   << "${experiment.name.toString()}"
             molSpreadSheetData.mssHeaders << []
         }
     }
@@ -567,6 +568,7 @@ class MolecularSpreadSheetService {
                 molSpreadSheetData.mapColumnsToAssay [columnIndex++]  =   ""
             } else {
                 for (String columnSubheadings in listOfColumnSubheadings) {
+                    molSpreadSheetData.mapColumnsToAssayName [columnIndex]  =   molSpreadSheetData.experimentFullNameList[assayIndex].toString()
                     molSpreadSheetData.mapColumnsToAssay [columnIndex++]  =   molSpreadSheetData.experimentNameList[assayIndex].toString()
                 }
                 assayIndex++

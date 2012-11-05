@@ -39,7 +39,7 @@
                             <th class="molSpreadSheetHeadData sortable"><%=molSpreadSheetData.mapColumnsToAssay[looper]%><br/>${colHeader}</th>
                         </g:if>
                         <g:if test="${looper > 3}">
-                            <th class="molSpreadSheetHeadData sortable">ADID=<%=molSpreadSheetData.mapColumnsToAssay[looper]%><br/>${colHeader}</th>
+                            <th class="molSpreadSheetHeadData sortable" title="<%=molSpreadSheetData.mapColumnsToAssayName[looper]%>"><a href="../bardWebInterface/showAssay/<%=molSpreadSheetData.mapColumnsToAssay[looper]%>">ADID=<%=molSpreadSheetData.mapColumnsToAssay[looper]%><br/>${colHeader}</a></th>
                         </g:if>
                         <% looper++ %>
                     </g:each>
