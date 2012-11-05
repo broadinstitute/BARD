@@ -37,7 +37,7 @@
                             <th class="molSpreadSheetHeadData sortable"><%=molSpreadSheetData.mapColumnsToAssay[looper]%><br/>${colHeader}</th>
                         </g:if>
                         <g:if test="${looper > 3}">
-                            <th class="molSpreadSheetHeadData sortable">AID=<%=molSpreadSheetData.mapColumnsToAssay[looper]%><br/>${colHeader}</th>
+                            <th class="molSpreadSheetHeadData sortable">ADID=<%=molSpreadSheetData.mapColumnsToAssay[looper]%><br/>${colHeader}</th>
                         </g:if>
                         <% looper++ %>
                     </g:each>
