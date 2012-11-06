@@ -28,7 +28,7 @@
                     </div>
 
                     <div id="accordionDescriptionContent_${i}" class="accordion-body collapse">
-                        <div class="accordion-inner">${experiment.description}</div>
+                        <div class="accordion-inner"><g:textBlock>${experiment.description}</g:textBlock></div>
                     </div>
                 </div>
             </div>

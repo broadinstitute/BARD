@@ -420,10 +420,10 @@ Chloroxine induces SOS-<b>DNA repair</b> in E. coli, so chloroxine may be genoto
         mockedExperiment.description = '''Survival of cells and the faithful propagation of the genome depend on elaborate mechanisms of detecting and repairing DNA damage. Treatment of advanced cancer relies on radiation therapy or chemotherapy, which kill cancer cells by causing extensive DNA damage. It is often found, that cancer cells develop resistance to therapy through enhanced activity of DNA repair functions; this has led to an increased interest in developing drugs that interfere with DNA repair, which could sensitize cancer cells to conventional therapy.
 This validation qHTS assay pertains to human BLM, which is important in resolving abnormal DNA structures formed during replication or homologous recombination. Shutting down the expression of BLM leads to chromosomal instability and higher radiation sensitivity in cultured cells.
 The validation assay was a fluorescence quenching based kinetic qHTS for BLM Helicase DNA unwinding. The activity was measured as ATP-dependent separation of a 20-bp DNA duplex extended by 30-nt single-stranded tails (forked duplex). The forked DNA substrate was tagged with rhodamine fluorophore (carboxytetramethyl rhodamine, TAMRA) and BHQ-2 (Black Hole Quencher 2) dark quencher. Strand separation results in an increase in the fluorescence of TAMRA (excitation 525 nm, emission 598 nm). This substrate construct operates in a red-shifted region where very few compound library members have been noted to fluoresce (PubChem AIDs 593 and 594). An additional feature of the assay is the inclusion of 2.5 ug/ml poly (dIdC), to reduce interference by compounds such as DNA intercalators, a major source of false inhibitors.
-Assay Providers:
-  Ian Hickson, University of Oxford
-  Opher Gileadi, Structural Genomics Consortium, University of Oxford
-Screening Center PI: Austin, C.P.
+Assay Providers:\n
+  Ian Hickson, University of Oxford\n
+  Opher Gileadi, Structural Genomics Consortium, University of Oxford\n
+Screening Center PI: Austin, C.P.\n
 Screening Center: NIH Chemical Genomics Center [NCGC]'''
         mockedExperiment.addExperimentCompoundCountValue(347941)
         mockedExperiment.addExperimentSubstanceCountValue(354860)
@@ -442,11 +442,11 @@ Screening Center: NIH Chemical Genomics Center [NCGC]'''
 This summary assay pertains to the Bloom syndrome helicase (BLM), which is important in resolving abnormal DNA structures formed during replication or homologous recombination. Shutting down the expression of BLM leads to chromosomal instability and higher radiation sensitivity in cultured cells.
 The goal of this project is to develop inhibitors of BLM activity, which can be used in cell and animal models to examine the consequences of inhibition on the survival of cancer cells. Initial candidates will be identified by a quantitative high-throughput screen (qHTS) of the MLSMR compound library, using a fluorescence-based in vitro biochemical assay that reveals inhibitors of BLM DNA unwinding activity. The resulting compounds will then be subject to orthogonal, secondary biochemical assays, to triage the initial hits, to classify compounds based on mode of action, and to derive structure#activity relationships (SARs) of candidate effectors. SAR and protein structural information will be used in further chemical development to improve the potency and selectivity of the compounds. Cell-based assays will then be applied as the first step in utilizations of the verified inhibitors, examining their effects on cancer cell survival and sensitivity to radiation and chemotherapeutics.
 This assay will summarize the probe development efforts that are currently ongoing.
-Assay Providers:
-  Ian Hickson, University of Oxford
-  Opher Gileadi, Structural Genomics Consortium, University of Oxford
-  Alessandro Vindigni, International Center for Biotechnology and Genetic Engineering
-Screening Center PI: Austin, C.P.
+Assay Providers:\n
+  Ian Hickson, University of Oxford\n
+  Opher Gileadi, Structural Genomics Consortium, University of Oxford\n
+  Alessandro Vindigni, International Center for Biotechnology and Genetic Engineering\n
+Screening Center PI: Austin, C.P.\n
 Screening Center: NIH Chemical Genomics Center [NCGC]'''
         mockedExperiment.addExperimentCompoundCountValue(0)
         mockedExperiment.addExperimentSubstanceCountValue(0)
@@ -462,10 +462,10 @@ Screening Center: NIH Chemical Genomics Center [NCGC]'''
         mockedExperiment.category = ExperimentValues.ExperimentCategory.MLPCN
         mockedExperiment.name = 'Counterscreen for BLMA Inhibitors: ADP Fluorescence Polarization Displacement Assay'
         mockedExperiment.description = '''In order to gain further insight into the mode of action of the BLMAscreening hits, we have profiled them in a set of miniaturized fluorescence polarization assays designed to report on compounds which competitively displace either co-substrate (ATP or DNA). The appropriate fluorescently-labeled probe was used: BODIPY Texas Red-labeled ADP was expected to be competed off by ATP-competitive inhibitors, while single-TAMRA labeled forked-duplex or short single-stranded DNA molecules served as probes for DNA-competitive compounds.
-Assay Providers:
-  Ian Hickson, University of Oxford
-  Opher Gileadi, Structural Genomics Consortium, University of Oxford
-Screening Center PI: Austin, C.P.
+Assay Providers:\n
+  Ian Hickson, University of Oxford\n
+  Opher Gileadi, Structural Genomics Consortium, University of Oxford\n
+Screening Center PI: Austin, C.P.\n
 Screening Center: NIH Chemical Genomics Center [NCGC]'''
         mockedExperiment.addExperimentCompoundCountValue(529)
         mockedExperiment.addExperimentSubstanceCountValue(534)
