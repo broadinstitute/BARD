@@ -48,7 +48,7 @@ class MeasureContextsValidatorCreatorAndPersistor extends ValidatorCreatorAndPer
                     assert measureContextDTO.attributes.size() == 1, "There could be only one attribure for a measure-context"
                     //                Log.logger.info("Measure attribute: key='${measureContextDTO.attributes.first().key}'; value='${measureContextDTO.attributes.first().value}'")
                     Element element = Element.findByLabelIlike(measureContextDTO.attributes.first().value) //The value is the result-type
-                    assert element, "We must have an element for the measure-context-item attribute"
+                    assert element, "We must have an element for the measure-context-item attribute: '${measureContextDTO.attributes.first().value}'"
                     measureContext.element = element
                     Log.logger.info("Measure's Assay ID: ${measureContext.assay.id} (${tally++}/${totalMeasureContext})")
 

@@ -169,7 +169,9 @@ class AttributeNameMappingBuilder {
                 'protein-expression assay': 'protein expression assay',
                 'uL/well': 'well volume',
                 'Microscopy slide': 'microscope slide',
-                'DNA sequence': 'DNA construct sequence']
+                'DNA sequence': 'DNA construct sequence',
+                'fold selectivity': 'fold selectivity index',
+                'Storem PhosphorImager': 'Storm PhosphorImager']
 
         return attributeNameMapping
     }
