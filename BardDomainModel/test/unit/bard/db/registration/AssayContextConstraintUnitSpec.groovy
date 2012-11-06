@@ -2,13 +2,9 @@ package bard.db.registration
 
 import grails.buildtestdata.mixin.Build
 import org.junit.Before
-import spock.lang.Specification
 import spock.lang.Unroll
 
-import static AbstractContext.*
 import static test.TestUtils.assertFieldValidationExpectations
-import static test.TestUtils.createString
-import spock.lang.Shared
 
 /**
  * Created with IntelliJ IDEA.
@@ -23,6 +19,7 @@ class AssayContextConstraintUnitSpec extends AbstractContextConstraintUnitSpec {
 
 
     @Before
+    @Override
     void doSetup() {
         domainInstance = AssayContext.buildWithoutSave()
         validParent = Assay.build()
