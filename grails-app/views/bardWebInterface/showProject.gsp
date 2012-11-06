@@ -17,48 +17,53 @@
 <div class="row-fluid">
     <div class="span12 page-header">
         <h1>Project: ${projectAdapter?.name} <small>(Project ID: ${projectAdapter?.project?.id})</small></h1>
-        <g:saveToCartButton id="${projectAdapter.project.id}"
-                            name="${JavaScriptUtility.cleanup(projectAdapter.project.name)}"
+        <g:saveToCartButton id="${projectAdapter?.project?.id}"
+                            name="${JavaScriptUtility.cleanup(projectAdapter?.project?.name)}"
                             type="${querycart.QueryItemType.Project}"/>
     </div>
 </div>
 
 <div class="row-fluid">
-    <div class="span6">
+    <div class="span4">
         <dl class="dl-horizontal dl-horizontal-wide">
-            <g:if test="${projectAdapter.project.getValue('grant number')}">
+            <g:if test="${projectAdapter?.project?.getValue('grant number')}">
                 <dt>Grant Number:</dt>
                 <dd>${projectAdapter.project.getValue('grant number').value}</dd>
             </g:if>
-            <g:if test="${projectAdapter.project.getValue('laboratory name')}">
+            <g:if test="${projectAdapter?.project?.getValue('laboratory name')}">
                 <dt>Laboratory Name:</dt>
                 <dd>${projectAdapter.project.getValue('laboratory name').value}</dd>
             </g:if>
         </dl>
     </div>
 
-    <div class="span6">
-        <table>
-            <g:each var="probe" in="${projectAdapter.probes}" status="i">
-                <tr>
-                    <td>ML#: ${probe.probeId}</td>
-                    <td><a href="${probe.url}">Download probe report from Molecular Library BookShelf</a></td>
-                    <td>CID: <g:link controller="bardWebInterface" action="showCompound"
-                                     params="[cid: probe.cid]">${probe.cid}</g:link></td>
-                    <td><g:link controller="molSpreadSheet" action="showExperimentDetails"
-                                params="[cid: probe.cid, pid: projectAdapter.project.id]" data-placement="top"
-                                class="projectTooltip"
-                                rel="tooltip"
-                                data-original-title="Please note: Query Cart would be reset!">Show Experimental Details</g:link></td>
-                    <td>
+    <div class="span8">
+        <ul class="thumbnails">
+            <g:each var="probe" in="${projectAdapter?.probes}" status="i">
+                <li class="span4">
+                    <div class="thumbnail">
                         <g:link controller="bardWebInterface" action="showCompound" params="[cid: probe.cid]">
                             <img alt="${probe?.smiles}" title="${probe.probeId}"
-                                 src="${createLink(controller: 'chemAxon', action: 'generateStructureImageFromSmiles', params: [smiles: probe.smiles, width: 400, height: 300])}"/>
+                                 src="${createLink(controller: 'chemAxon', action: 'generateStructureImageFromSmiles', params: [smiles: probe.smiles, width: 300, height: 200])}"/>
                         </g:link>
-                    </td>
-                </tr>
+                        <div class="caption">
+                            <h3>Probe ML#: ${probe.probeId}</h3>
+                            <ul>
+                                    <li><a href="${probe.url}">Download probe report from Molecular Library BookShelf</a></li>
+                                    <li><g:link controller="bardWebInterface" action="showCompound"
+                                                params="[cid: probe.cid]">Show Compound Details in BARD</g:link></li>
+                                    <li><a href="http://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?cid=${probe.cid}" target="_blank">View CID ${probe.cid} in PubChem</a></li>
+                                    <li><g:link controller="molSpreadSheet" action="showExperimentDetails"
+                                                params="[cid: probe.cid, pid: projectAdapter.project.id]" data-placement="top"
+                                                class="projectTooltip"
+                                                rel="tooltip"
+                                                data-original-title="Please note: Query Cart would be reset!">Show Experimental Details</g:link></li>
+                            </ul>
+                        </div>
+                    </div>
+                </li>
             </g:each>
-        </table>
+        </ul>
     </div>
 </div>
 
