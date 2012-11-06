@@ -37,7 +37,14 @@ class AttributesContentsCleaner {
                     String matchedValue = attributeNameMapping.keySet().find { String key -> return StringUtils.equalsIgnoreCase(key, valStr)}
                     valStr = matchedValue ? attributeNameMapping.get(matchedValue) : valStr
                     //if val could be number value, replace it ('650 nM' --> 650)
-                    val = (valStr && valStr.split()[0].isNumber()) ? new BigDecimal(valStr.split()[0]) : valStr
+                    def matcher = valStr =~ /^\s*(\d+)\s*[muµn]\w\s*$/
+                    Boolean matches = matcher.matches()
+                    if (matches) {
+                        val = new BigDecimal(matcher[0][1])//matcher[0] is the match; matcher[0][1] is the first matched group (Groovy Matcher spec).
+                    }
+                    else {
+                        val = valStr
+                    }
                 }
 
                 if ((attribute.attributeType != AttributeType.Free) && !val) return //Unless the attribute-type is Free, skip attributes with empty value
