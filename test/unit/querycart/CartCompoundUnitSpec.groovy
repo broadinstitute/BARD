@@ -173,6 +173,4 @@ class CartCompoundUnitSpec extends Specification {
         47         | 4000         | "c1ccccc1"
         47         | 4001         | "c1ccccc1"
     }
-
-
 }

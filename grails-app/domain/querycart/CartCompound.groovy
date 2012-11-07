@@ -7,27 +7,12 @@ import javax.persistence.Transient
 
 class CartCompound extends QueryItem {
 
-    IQueryService queryService
-
     static final int MAXIMUM_SMILES_FIELD_LENGTH = 1024
 
     String smiles
 
     CartCompound() {
         this.queryItemType = QueryItemType.Compound
-    }
-
-    CartCompound(Long cid) {
-        this()
-        List<CompoundAdapter> compoundAdapters = queryService.findCompoundsByCIDs([cid]).compoundAdapters
-        assert compoundAdapters.size() <= 1, "CompoundAdapter must be unique given a CID"
-        CompoundAdapter compoundAdapter = compoundAdapters ? compoundAdapters.first() : null
-        if (compoundAdapter) {
-            this.smiles = compoundAdapter.structureSMILES
-            this.name = compoundAdapter.name
-            this.externalId = compoundAdapter.id
-            this.queryItemType = QueryItemType.Compound
-        }
     }
 
     CartCompound(String smiles, String name, Long compoundId) {

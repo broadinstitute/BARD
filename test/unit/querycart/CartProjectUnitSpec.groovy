@@ -5,6 +5,8 @@ import org.apache.commons.lang.RandomStringUtils
 import spock.lang.Specification
 import spock.lang.Unroll
 import org.apache.commons.lang.StringUtils
+import bardqueryapi.IQueryService
+import bardqueryapi.QueryService
 
 /**
  * See the API for {@link grails.test.mixin.support.GrailsUnitTestMixin} for usage instructions
@@ -14,7 +16,6 @@ import org.apache.commons.lang.StringUtils
 class CartProjectUnitSpec extends Specification {
 
     void setup() {
-        // Setup logic here
     }
 
     void tearDown() {
@@ -76,12 +77,12 @@ class CartProjectUnitSpec extends Specification {
         assert (code1 == code2) == expectation
 
         where:
-        label                   | cartProject1                      | cartProject2                      | expectation
-        "Empty classes"         | new CartProject()                 | new CartProject()                 | true
-        "Diff ids, diff names"  | new CartProject("Test 1", 5)      | new CartProject("Test 2", 3)      | false
-        "Same ids, diff names"  | new CartProject("Test 1", 3)      | new CartProject("Test 2", 3)      | true
-        "Diff ids, same names"  | new CartProject("Some Title", 22) | new CartProject("Some Title", 25) | false
-        "Same ids, same names"  | new CartProject("Some Title", 22) | new CartProject("Some Title", 22) | true
+        label                  | cartProject1                      | cartProject2                      | expectation
+        "Empty classes"        | new CartProject()                 | new CartProject()                 | true
+        "Diff ids, diff names" | new CartProject("Test 1", 5)      | new CartProject("Test 2", 3)      | false
+        "Same ids, diff names" | new CartProject("Test 1", 3)      | new CartProject("Test 2", 3)      | true
+        "Diff ids, same names" | new CartProject("Some Title", 22) | new CartProject("Some Title", 25) | false
+        "Same ids, same names" | new CartProject("Some Title", 22) | new CartProject("Some Title", 22) | true
 
     }
 
@@ -136,6 +137,4 @@ class CartProjectUnitSpec extends Specification {
         "Project Name is null"     | ""             | false
         "Project Name is not null" | "Some Project" | true
     }
-
-
 }
