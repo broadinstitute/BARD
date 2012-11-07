@@ -1,23 +1,23 @@
 package bard.db.registration
 
+import grails.plugin.spock.IntegrationSpec
 import org.junit.Before
 import spock.lang.Shared
-import spock.lang.Specification
-import spock.lang.Unroll
 
 import static bard.db.registration.AbstractContext.*
 import static test.TestUtils.assertFieldValidationExpectations
 import static test.TestUtils.createString
+import spock.lang.Unroll
 
 /**
  * Created with IntelliJ IDEA.
  * User: ddurkin
- * Date: 11/2/12
- * Time: 11:51 AM
+ * Date: 11/6/12
+ * Time: 4:37 PM
  * To change this template use File | Settings | File Templates.
  */
 @Unroll
-abstract class AbstractContextConstraintUnitSpec extends Specification {
+abstract class AbstractContextConstraintIntegrationSpec extends IntegrationSpec {
 
     def domainInstance
 
@@ -143,6 +143,4 @@ abstract class AbstractContextConstraintUnitSpec extends Specification {
         'null valid' | null           | true  | null
         'date valid' | new Date()     | true  | null
     }
-
-
 }

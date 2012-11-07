@@ -22,17 +22,13 @@ class ExperimentContextConstraintUnitSpec extends AbstractContextConstraintUnitS
     @Override
     void doSetup() {
         domainInstance = ExperimentContext.buildWithoutSave()
-        validParent = Experiment.build()
     }
 
     void "test experiment constraints #desc experiment: '#valueUnderTest'"() {
         final String field = 'experiment'
 
         when: 'a value is set for the field under test'
-        domainInstance[(field)] = valueUnderTest
-        println("field : $field")
-        println("valueUnderTest : $valueUnderTest")
-        println("validParent : $validParent")
+        domainInstance[(field)] = valueUnderTest.call()
         domainInstance.validate()
 
         then: 'verify valid or invalid for expected reason'
@@ -44,10 +40,9 @@ class ExperimentContextConstraintUnitSpec extends AbstractContextConstraintUnitS
         }
 
         where:
-        desc               | valueUnderTest | valid | errorCode
-        'null not valid'   | null           | false | 'nullable'
-        'valid experiment' | validParent    | true  | null
+        desc               | valueUnderTest       | valid | errorCode
+        'null not valid'   | {null}               | false | 'nullable'
+        'valid experiment' | {Experiment.build()} | true  | null
 
     }
-
 }
