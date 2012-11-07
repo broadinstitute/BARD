@@ -3,18 +3,18 @@ package bard.db.experiment
 import bard.db.dictionary.Element
 
 /**
- * RunContextItem is a key value pair that either describes the Experiment a paticular
- * Result.  Therefore, there are 2 concrete subclasses of RunContextItem, ExperimentContextItem
+ * AbstractContextItem is a key value pair that either describes the Experiment a paticular
+ * Result.  Therefore, there are 2 concrete subclasses of AbstractContextItem, ExperimentContextItem
  * and ResultContextItem.  Each concreate subclass has a reference to it's owner either an
  * Experiment or Result.
  */
-abstract class RunContextItem {
+abstract class AbstractContextItem {
 
     private static final int EXT_VALUE_ID_MAX_SIZE = 60
     private static final int VALUE_DISPLAY_MAX_SIZE = 500
     private static final int MODIFIED_BY_MAX_SIZE = 40
 
-    RunContextItem groupResultContext
+    AbstractContextItem groupResultContext
 
     Element attributeElement
     Element valueElement

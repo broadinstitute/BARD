@@ -16,9 +16,9 @@ import static test.TestUtils.createString
  * To change this template use File | Settings | File Templates.
  */
 @Unroll
-abstract class RunContextItemIntegrationSpec extends IntegrationSpec {
+abstract class AbstractContextItemIntegrationSpec extends IntegrationSpec {
 
-    RunContextItem domainInstance
+    AbstractContextItem domainInstance
 
     @Before
     abstract void doSetup()

@@ -11,7 +11,7 @@ import spock.lang.Unroll
  * To change this template use File | Settings | File Templates.
  */
 @Unroll
-class ResultContextItemConstraintIntegrationSpec extends RunContextItemIntegrationSpec {
+class ResultContextItemConstraintIntegrationSpec extends AbstractContextItemIntegrationSpec {
     @Before
     @Override
     void doSetup() {

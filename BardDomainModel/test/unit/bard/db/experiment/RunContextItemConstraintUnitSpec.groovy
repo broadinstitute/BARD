@@ -18,7 +18,7 @@ import spock.lang.Unroll
 @Unroll
 abstract class RunContextItemConstraintUnitSpec extends Specification {
 
-    RunContextItem domainInstance
+    AbstractContextItem domainInstance
 
     @Before
     abstract void doSetup()
