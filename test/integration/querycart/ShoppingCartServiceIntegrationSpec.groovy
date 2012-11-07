@@ -162,9 +162,10 @@ class ShoppingCartServiceIntegrationSpec extends IntegrationSpec {
         shoppingCartService.addToShoppingCart(cartAssay)
         shoppingCartService.addToShoppingCart(cartCompound)
         shoppingCartService.addToShoppingCart(cartProject)
+        shoppingCartService.addToShoppingCart(new QueryItem())
 
         then: "We get back a list assay ids"
-        assert queryCartService.totalNumberOfUniqueItemsInCart() == 3
+        assert queryCartService.totalNumberOfUniqueItemsInCart() == 4
 
         Map<String, List> groupedContents = queryCartService.groupUniqueContentsByType()
         assert groupedContents.size() == 3
