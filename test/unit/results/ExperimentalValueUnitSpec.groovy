@@ -36,6 +36,7 @@ class ExperimentalValueUnitSpec extends Specification {
         "Attamolar"   | " aM"                      | ExperimentalValueUnit.Attamolar
         "Zeptomolar"  | " zM"                      | ExperimentalValueUnit.Zeptomolar
         "Yoctomolar"  | " yM"                      | ExperimentalValueUnit.Yoctomolar
+        "unknown"     | null                       | ExperimentalValueUnit.unknown
         "unknown"     | ""                         | ExperimentalValueUnit.unknown
         "Bogus Value" | "bogus value"              | ExperimentalValueUnit.unknown
     }
