@@ -9,6 +9,7 @@
             PromiscuityHandler.setup();
         });
         $('td:nth-child(3), th:nth-child(3)').toggle();
+        $("[rel=tooltip]").tooltip();
     });
 </script>
 
@@ -39,7 +40,7 @@
                             <th class="molSpreadSheetHeadData sortable"><%=molSpreadSheetData.mapColumnsToAssay[looper]%><br/>${colHeader}</th>
                         </g:if>
                         <g:if test="${looper > 3}">
-                            <th class="molSpreadSheetHeadData sortable" title="<%=molSpreadSheetData.mapColumnsToAssayName[looper]%>"><a href="../bardWebInterface/showAssay/<%=molSpreadSheetData.mapColumnsToAssay[looper]%>">ADID=<%=molSpreadSheetData.mapColumnsToAssay[looper]%><br/>${colHeader}</a></th>
+                            <th class="molSpreadSheetHeadData sortable" rel="tooltip" title="<%=molSpreadSheetData.mapColumnsToAssayName[looper]%>"><a href="../bardWebInterface/showAssay/<%=molSpreadSheetData.mapColumnsToAssay[looper]%>">ADID=<%=molSpreadSheetData.mapColumnsToAssay[looper]%><br/>${colHeader}</a></th>
                         </g:if>
                         <% looper++ %>
                     </g:each>
