@@ -100,11 +100,19 @@ class ExperimentalValue {
                 (experimentalValueType == ExperimentalValueType.greaterThanNumeric) ||
                 (experimentalValueType == ExperimentalValueType.percentageNumeric) ||
                 (experimentalValueType == ExperimentalValueType.numeric)) {
-            stringBuilder.append(prepend(experimentalValueType, valueNegative))
-            stringBuilder.append("${roundoffToDesiredPrecision(deliverDesiredValue())}")
-            stringBuilder.append(append(experimentalValueType))
-            if (printUnits) {
-                stringBuilder.append(experimentalValueUnit.toString())
+            if (value != 0)  {
+                stringBuilder <<= prepend(experimentalValueType, valueNegative)
+                stringBuilder <<= "${roundoffToDesiredPrecision(deliverDesiredValue())}"
+                stringBuilder <<= append(experimentalValueType)
+                if (printUnits) {
+                    stringBuilder <<= experimentalValueUnit.toString()
+                }
+            }  else { // 0 is a special case
+                stringBuilder <<= append(experimentalValueType)
+                stringBuilder <<= "0."
+                (DESIRED_PRECISION-1).times {
+                    stringBuilder <<= "0"
+                }
             }
         } else {
             stringBuilder.append(deliverDesiredValue())

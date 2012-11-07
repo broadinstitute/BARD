@@ -183,20 +183,16 @@ class ExperimentalValueUnitSpec extends Specification {
         where:
         val             | result
         "M"             |  ExperimentalValueUnit.Molar
-        "uM"         |  ExperimentalValueUnit.Micromolar
-        "mM"         |  ExperimentalValueUnit.Millimolar
+        "mM"            |  ExperimentalValueUnit.Millimolar
+        "uM"            |  ExperimentalValueUnit.Micromolar
+        "nM"            |  ExperimentalValueUnit.Nanomolar
+        "pM"            |  ExperimentalValueUnit.Picomolar
+        "fM"            |  ExperimentalValueUnit.Femtomolar
+        "aM"            |  ExperimentalValueUnit.Attamolar
+        "zM"            |  ExperimentalValueUnit.Zeptomolar
+        "yM"            |  ExperimentalValueUnit.Yoctomolar
         "junk"       |  ExperimentalValueUnit.unknown
     }
-//    Molar(" M", 0),
-//    Millimolar(" mM", -3),
-//    Micromolar(" uM", -6),
-//    Nanomolar(" nM", -9),
-//    Picomolar(" pM", -12),
-//    Femtomolar(" fM", -15),
-//    Attamolar(" aM", -18),
-//    Zeptomolar(" zM", -21),
-//    Yoctomolar(" yM", -24),
-//    unknown(
 
 
     void "test handling of precision conversions"() {
@@ -209,6 +205,7 @@ class ExperimentalValueUnitSpec extends Specification {
 
         where:
         label                    | initialUnit                      | initialValue | stringValue
+        "converting unit values" | ExperimentalValueUnit.Micromolar | 0            | "0.00"
         "converting unit values" | ExperimentalValueUnit.Micromolar | 1            | "1 uM"
         "converting unit values" | ExperimentalValueUnit.Micromolar | 1.2          | "1.2 uM"
         "converting unit values" | ExperimentalValueUnit.Micromolar | 1.23         | "1.23 uM"
@@ -227,6 +224,24 @@ class ExperimentalValueUnitSpec extends Specification {
         "converting unit values" | ExperimentalValueUnit.Micromolar | 123.45       | "123 uM"
         "converting unit values" | ExperimentalValueUnit.Micromolar | 123.456      | "123 uM"
     }
+
+
+
+    void "test handling of 0"() {
+        when: "we receive a zero through any constructor"
+        List <ExperimentalValue> experimentalValueList = []
+        experimentalValueList << new ExperimentalValue(0.0, ExperimentalValueUnit.Micromolar, ExperimentalValueType.numeric, true)
+//        experimentalValueList <<  new ExperimentalValue(0.0, ExperimentalValueUnit.Micromolar, ExperimentalValueType.numeric, false)
+        experimentalValueList << new ExperimentalValue(0.0, true)
+//        experimentalValueList << new ExperimentalValue(0.0, false)
+        experimentalValueList << new ExperimentalValue(0 as double)
+
+        then: "The resulting conversion should equal a decimal representation of 0 with no units"
+        for (ExperimentalValue experimentalValue in experimentalValueList)
+        assert experimentalValue.toString() == "0.00"
+    }
+
+
 
     /**
      *  While we try to hold things to a nice, clean decimal representation by shifting the units around,
