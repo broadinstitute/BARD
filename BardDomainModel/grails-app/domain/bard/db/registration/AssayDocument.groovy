@@ -1,5 +1,7 @@
 package bard.db.registration
 
+import bard.db.model.AbstractDocument
+
 class AssayDocument extends AbstractDocument {
 
     Assay assay

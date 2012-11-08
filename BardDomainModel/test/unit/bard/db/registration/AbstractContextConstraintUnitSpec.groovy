@@ -1,11 +1,11 @@
 package bard.db.registration
 
 import org.junit.Before
-import spock.lang.Shared
+
 import spock.lang.Specification
 import spock.lang.Unroll
 
-import static bard.db.registration.AbstractContext.*
+import static bard.db.model.AbstractContext.*
 import static test.TestUtils.assertFieldValidationExpectations
 import static test.TestUtils.createString
 

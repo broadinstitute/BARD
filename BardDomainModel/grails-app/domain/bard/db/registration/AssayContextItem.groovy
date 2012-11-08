@@ -1,5 +1,7 @@
 package bard.db.registration
 
+import bard.db.model.AbstractContextItem
+
 class AssayContextItem extends AbstractContextItem {
 
 

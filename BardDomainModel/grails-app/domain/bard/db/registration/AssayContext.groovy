@@ -2,6 +2,7 @@ package bard.db.registration
 
 import bard.db.dictionary.Descriptor
 import org.apache.commons.lang.StringUtils
+import bard.db.model.AbstractContext
 
 class AssayContext extends AbstractContext{
 

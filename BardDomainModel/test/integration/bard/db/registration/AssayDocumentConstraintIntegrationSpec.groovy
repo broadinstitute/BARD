@@ -4,7 +4,7 @@ import grails.plugin.spock.IntegrationSpec
 import org.junit.Before
 import spock.lang.Unroll
 
-import static bard.db.registration.AbstractDocument.*
+import static bard.db.model.AbstractDocument.*
 import static test.TestUtils.assertFieldValidationExpectations
 import static test.TestUtils.createString
 

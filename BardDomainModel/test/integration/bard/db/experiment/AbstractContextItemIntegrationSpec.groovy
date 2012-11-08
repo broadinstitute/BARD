@@ -4,10 +4,10 @@ import grails.plugin.spock.IntegrationSpec
 import org.junit.Before
 import spock.lang.Unroll
 
-import static bard.db.registration.AbstractContextItem.*
+import static bard.db.model.AbstractContextItem.*
 import static test.TestUtils.assertFieldValidationExpectations
 import static test.TestUtils.createString
-import bard.db.registration.AbstractContextItem
+import bard.db.model.AbstractContextItem
 
 /**
  * Created with IntelliJ IDEA.

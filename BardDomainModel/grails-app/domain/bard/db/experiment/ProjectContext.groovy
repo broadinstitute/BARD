@@ -1,6 +1,6 @@
 package bard.db.experiment
 
-import bard.db.registration.AbstractContext
+import bard.db.model.AbstractContext
 
 /**
  * Created with IntelliJ IDEA.

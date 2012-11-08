@@ -2,9 +2,8 @@ package bard.db.registration
 
 import grails.plugin.spock.IntegrationSpec
 import org.junit.Before
-import spock.lang.Shared
 
-import static bard.db.registration.AbstractContext.*
+import static bard.db.model.AbstractContext.*
 import static test.TestUtils.assertFieldValidationExpectations
 import static test.TestUtils.createString
 import spock.lang.Unroll

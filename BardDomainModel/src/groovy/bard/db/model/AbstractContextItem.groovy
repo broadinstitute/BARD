@@ -1,4 +1,4 @@
-package bard.db.registration
+package bard.db.model
 
 import bard.db.dictionary.Element
 
