@@ -1,7 +1,6 @@
 package bard.db.experiment
 
 import org.junit.Before
-
 import spock.lang.Unroll
 
 /**
@@ -13,13 +12,12 @@ import spock.lang.Unroll
  */
 @Unroll
 class ExperimentContextItemConstraintIntegrationSpec extends AbstractContextItemIntegrationSpec {
+
     @Before
     @Override
     void doSetup() {
         domainInstance = ExperimentContextItem.buildWithoutSave()
-        domainInstance.experiment?.save()
-        domainInstance.attributeElement?.save()
-        domainInstance.valueElement?.save()
+        domainInstance.attributeElement.save()
     }
 
 }

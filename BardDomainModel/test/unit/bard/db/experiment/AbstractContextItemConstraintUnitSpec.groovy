@@ -4,7 +4,7 @@ import org.junit.Before
 import spock.lang.Specification
 import spock.lang.Unroll
 
-import static bard.db.registration.AssayContextItem.*
+import static bard.db.registration.AbstractContextItem.*
 import static test.TestUtils.assertFieldValidationExpectations
 import static test.TestUtils.createString
 

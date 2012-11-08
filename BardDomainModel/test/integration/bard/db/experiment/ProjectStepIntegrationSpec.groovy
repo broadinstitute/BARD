@@ -1,11 +1,8 @@
 package bard.db.experiment
 
-import bard.db.registration.ExternalReference
+import bard.db.dictionary.Element
 import grails.plugin.spock.IntegrationSpec
-import org.hibernate.Session
-import org.hibernate.SessionFactory
 import org.junit.Before
-import spock.lang.Ignore
 
 /**
  * Created with IntelliJ IDEA.
@@ -17,34 +14,36 @@ import spock.lang.Ignore
 class ProjectStepIntegrationSpec extends IntegrationSpec {
 
     ProjectStep domainInstance
-    SessionFactory sessionFactory
-    Session session
+    StepContext stepContext
+    StepContextItem stepContextItem
 
     @Before
     void doSetup() {
         domainInstance = ProjectStep.buildWithoutSave()
-        session = sessionFactory.currentSession
+
+        stepContext = StepContext.buildWithoutSave()
+        domainInstance.addToStepContexts(stepContext)
+
+        stepContextItem = StepContextItem.buildWithoutSave(attributeElement: Element.build())
+        stepContext.addToStepContextItems(stepContextItem)
+    }
+
+    void "test stepContext cascade save'"() {
+        when:
+        domainInstance == domainInstance.save(flush: true)
+
+        then:
+        domainInstance.id != null
+        stepContext.id != null
     }
 
     void "test stepContextItem cascade save'"() {
-
-
         when:
-        StepContextItem stepContextItem = StepContextItem.buildWithoutSave()
-        stepContextItem.attributeElement.save()
-        domainInstance.addToStepContextItems(stepContextItem)
-
-        then:
         domainInstance == domainInstance.save(flush: true)
-        def id = domainInstance.id
-
-        when:
-        session.clear()
-        domainInstance = null
-        domainInstance = ProjectStep.get(id)
 
         then:
-        domainInstance.stepContextItems.size() == 1
+        domainInstance.id != null
+        stepContextItem.id != null
     }
 
 }

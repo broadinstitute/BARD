@@ -1,7 +1,7 @@
 package bard.db.experiment
 
-import org.junit.Before
 import grails.buildtestdata.mixin.Build
+import org.junit.Before
 import spock.lang.Unroll
 
 /**
@@ -13,9 +13,11 @@ import spock.lang.Unroll
  */
 @Build(ProjectContextItem)
 @Unroll
-class ProjectContextItemConstraintUnitSpec extends AbstractContextItemConstraintUnitSpec{
+class ProjectContextItemConstraintUnitSpec extends AbstractContextItemConstraintUnitSpec {
+
     @Before
-     void doSetup(){
+    @Override
+    void doSetup() {
         domainInstance = ProjectContextItem.buildWithoutSave()
     }
 }

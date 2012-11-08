@@ -16,6 +16,7 @@ class ExperimentContextItem extends AbstractContextItem {
     static belongsTo = [experimentContext: ExperimentContext]
 
     static mapping = {
+        table('EXPRMT_CONTEXT_ITEM')
         id(column: 'EXPRMT_CONTEXT_ITEM_ID', generator: 'sequence', params: [sequence: 'EXPRMT_CONTEXT_ITEM_ID_SEQ'])
         experimentContext(column: 'EXPRMT_CONTEXT_ID')
         attributeElement(column: 'ATTRIBUTE_ID')

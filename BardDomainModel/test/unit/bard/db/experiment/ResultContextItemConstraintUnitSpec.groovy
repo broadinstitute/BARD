@@ -13,7 +13,7 @@ import grails.buildtestdata.mixin.Build
  */
 @Unroll
 @Build(ResultContextItem)
-class ResultContextItemConstraintUnitSpec extends RunContextItemConstraintUnitSpec {
+class ResultContextItemConstraintUnitSpec extends AbstractContextItemConstraintUnitSpec {
     @Before
     @Override
     void doSetup() {

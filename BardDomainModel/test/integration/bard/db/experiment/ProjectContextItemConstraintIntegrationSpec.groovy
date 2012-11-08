@@ -9,14 +9,13 @@ import org.junit.Before
  * Time: 12:42 AM
  * To change this template use File | Settings | File Templates.
  */
-class ProjectContextItemConstraintIntegrationSpec extends AbstractProjectContextItemConstraintIntegrationSpec{
+class ProjectContextItemConstraintIntegrationSpec extends AbstractContextItemIntegrationSpec {
 
     @Before
-        @Override
-        void doSetup() {
-            domainInstance = ProjectContextItem.buildWithoutSave()
-            domainInstance.project?.save()
-            domainInstance.attributeElement?.save()
-            domainInstance.valueElement?.save()
-        }
+    @Override
+    void doSetup() {
+        domainInstance = ProjectContextItem.buildWithoutSave()
+        domainInstance.attributeElement.save()
+    }
+
 }

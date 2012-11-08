@@ -30,7 +30,7 @@ abstract class AbstractContextItem {
 
     static constraints = {
 
-        attributeElement()
+        attributeElement(nullable: false)
         valueElement(nullable: true)
 
         extValueId(nullable: true, blank: false, maxSize: EXT_VALUE_ID_MAX_SIZE)

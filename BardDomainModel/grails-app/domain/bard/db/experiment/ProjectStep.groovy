@@ -11,9 +11,12 @@ class ProjectStep {
     Date lastUpdated
     String modifiedBy
 
-    Set<StepContextItem> stepContextItems = [] as Set<StepContextItem>
+    Set<StepContext> stepContexts = [] as Set
 
-    static hasMany = [stepContextItems:StepContextItem]
+    static hasMany = [stepContexts:StepContext]
+
+    static belongsTo = [project:Project]
+
     static constraints = {
         project()
         experiment()

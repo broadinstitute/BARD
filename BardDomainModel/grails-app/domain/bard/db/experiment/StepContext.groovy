@@ -12,6 +12,7 @@ import bard.db.registration.AbstractContext
 class StepContext extends AbstractContext {
 
     ProjectStep projectStep
+
     List<StepContextItem> stepContextItems = []
 
     static belongsTo = [projectStep: ProjectStep]

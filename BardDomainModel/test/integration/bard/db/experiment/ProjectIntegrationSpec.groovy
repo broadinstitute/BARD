@@ -1,11 +1,7 @@
 package bard.db.experiment
 
-import bard.db.dictionary.Element
 import bard.db.registration.ExternalReference
-import bard.db.registration.ExternalSystem
 import grails.plugin.spock.IntegrationSpec
-import org.hibernate.Session
-import org.hibernate.SessionFactory
 import org.junit.Before
 
 /**
@@ -18,74 +14,135 @@ import org.junit.Before
 class ProjectIntegrationSpec extends IntegrationSpec {
 
     Project domainInstance
-    SessionFactory sessionFactory
-    Session session
-
-
-    Project project
     ProjectContext projectContext
     ProjectContextItem projectContextItem
+
     ProjectStep projectStep
+    StepContext stepContext
+    StepContextItem stepContextItem
+
     ExternalReference externalReference
 
     @Before
     void doSetup() {
         domainInstance = Project.buildWithoutSave()
-        session = sessionFactory.currentSession
-        project = Project.buildWithoutSave()
+    }
 
-        projectContext = ProjectContext.buildWithoutSave()
-        project.addToProjectContexts(projectContext)
-        projectContextItem = ProjectContextItem.buildWithoutSave(attributeElement: Element.build())
-        projectContext.addToProjectContextItems(projectContextItem)
-
+    public initializeProjectStep() {
         projectStep = ProjectStep.buildWithoutSave()
-        project.addToProjectSteps(projectStep)
+        domainInstance.addToProjectSteps(projectStep)
+    }
 
-        externalReference = ExternalReference.buildWithoutSave(externalSystem: ExternalSystem.build())
-        project.addToExternalReferences(externalReference)
+    void initializeProjectContextItem() {
+        projectContextItem = ProjectContextItem.buildWithoutSave()
+        projectContext.addToProjectContextItems(projectContextItem)
+        projectContextItem.attributeElement.save()
+    }
+
+    void initializeExternalReference() {
+        externalReference = ExternalReference.buildWithoutSave()
+        domainInstance.addToExternalReferences(externalReference)
+    }
+
+    void initializeProjectContext() {
+        projectContext = ProjectContext.buildWithoutSave()
+        domainInstance.addToProjectContexts(projectContext)
+        projectContext
+    }
+
+    void initializeStepContext() {
+        stepContext = StepContext.buildWithoutSave()
+        projectStep.addToStepContexts(stepContext)
+    }
+
+    void initializeStepContextItem() {
+        stepContextItem = StepContextItem.buildWithoutSave()
+        stepContext.addToStepContextItems(stepContextItem)
+        stepContextItem.attributeElement.save()
     }
 
     void "test projectContext cascade save"() {
-
+        given:
+        initializeProjectContext()
+        assert projectContext.id == null
         when:
-        project.save(flush: true)
-
+        domainInstance.save(flush: true)
         then:
-        project.id != null
         projectContext.id != null
-
     }
 
     void "test projectContextItems cascade save"() {
-
+        given:
+        initializeProjectContext()
+        initializeProjectContextItem()
+        assert projectContextItem.id == null
         when:
-        project.save(flush: true)
-
+        domainInstance.save(flush: true)
         then:
-        project.id != null
         projectContextItem.id != null
-
-    }
-
-    void "test externalReferences cascade save"() {
-
-        when:
-        project.save(flush: true)
-
-        then:
-        project.id != null
-        externalReference.id != null
-
     }
 
     void "test projectSteps cascade save"() {
+        given:
+        initializeProjectStep()
+        assert projectStep.id == null
+        when:
+        domainInstance.save(flush: true)
+        then:
+        projectStep.id != null
+    }
+
+    void "test stepContexts cascade save"() {
+        given:
+        initializeProjectStep()
+        initializeStepContext()
+        assert stepContext.id == null
+        when:
+        domainInstance.save(flush: true)
+        then:
+        stepContext.id != null
+    }
+
+    void "test stepContextItems cascade save"() {
+        given:
+        initializeProjectStep()
+        initializeStepContext()
+        initializeStepContextItem()
+        assert stepContextItem.id == null
+        when:
+        domainInstance.save(flush: true)
+        then:
+        stepContextItem.id != null
+    }
+
+    void "test externalReferences cascade save"() {
+        given:
+        initializeExternalReference()
+        assert externalReference.id == null
+        when:
+        domainInstance.save()
+        then:
+        externalReference.id != null
+    }
+
+    void "test externalReferences cascade delete"() {
+        given:
+        initializeExternalReference()
+        domainInstance.save()
+        assert externalReference.id != null
+        flushAndClear()
 
         when:
-        project.save(flush: true)
+        domainInstance.refresh().delete()
 
         then:
-        project.id != null
-        projectStep.id != null
+        ExternalReference.findById(externalReference.id) == null
+    }
+
+    void flushAndClear() {
+        Project.withSession {session ->
+            session.flush()
+            session.clear()
+        }
     }
 }

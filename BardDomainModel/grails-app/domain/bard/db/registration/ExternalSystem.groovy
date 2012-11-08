@@ -9,7 +9,9 @@ class ExternalSystem {
 	Date lastUpdated
 	String modifiedBy
 
-	static hasMany = [externalAssays: ExternalReference]
+    Set<ExternalSystem> externalSystems = [] as Set
+
+	static hasMany = [externalSystems: ExternalReference]
 
 	static mapping = {
 		id( column: 'EXTERNAL_SYSTEM_ID', generator: 'sequence', params: [sequence: 'EXTERNAL_SYSTEM_ID_SEQ'])
