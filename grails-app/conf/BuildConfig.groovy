@@ -85,9 +85,6 @@ grails.project.dependency.resolution = {
     }
 }
 
-// making the domain plugin an in-place plugin
-grails.plugin.location.'bard-client' = "../bard-client"
-
 codenarc.ruleSetFiles = "file:grails-app/conf/BardCodeNarcRuleSet.groovy"
 codenarc.reports = {
     html('html') {
