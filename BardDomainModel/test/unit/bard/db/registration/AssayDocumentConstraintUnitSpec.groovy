@@ -4,6 +4,7 @@ import grails.buildtestdata.mixin.Build
 import org.junit.Before
 
 import spock.lang.Unroll
+import bard.db.model.AbstractDocumentConstraintUnitSpec
 
 /**
  * Created with IntelliJ IDEA.

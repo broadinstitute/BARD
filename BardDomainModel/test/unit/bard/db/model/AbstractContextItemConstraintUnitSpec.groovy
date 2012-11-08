@@ -1,4 +1,4 @@
-package bard.db.experiment
+package bard.db.model
 
 import org.junit.Before
 import spock.lang.Specification

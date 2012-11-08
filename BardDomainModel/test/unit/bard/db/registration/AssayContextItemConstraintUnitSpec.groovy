@@ -1,6 +1,6 @@
 package bard.db.registration
 
-import bard.db.experiment.AbstractContextItemConstraintUnitSpec
+import bard.db.model.AbstractContextItemConstraintUnitSpec
 import grails.buildtestdata.mixin.Build
 import org.junit.Before
 import spock.lang.Unroll

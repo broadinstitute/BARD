@@ -1,78 +1,93 @@
-package bard.db.registration
-
-import org.junit.Before
+package bard.db.model
 
 import spock.lang.Specification
-import spock.lang.Unroll
 
-import static bard.db.model.AbstractContext.*
+import static bard.db.model.AbstractDocument.*
 import static test.TestUtils.assertFieldValidationExpectations
 import static test.TestUtils.createString
 
 /**
  * Created with IntelliJ IDEA.
  * User: ddurkin
- * Date: 11/2/12
- * Time: 11:51 AM
+ * Date: 11/5/12
+ * Time: 4:56 PM
  * To change this template use File | Settings | File Templates.
  */
-@Unroll
-abstract class AbstractContextConstraintUnitSpec extends Specification {
+abstract class AbstractDocumentConstraintUnitSpec extends Specification {
 
     def domainInstance
 
-    @Before
+
     abstract void doSetup()
 
-    void "test contextName constraints #desc contextName: '#valueUnderTest'"() {
-        final String field = 'contextName'
+    void "test documentName constraints #desc documentName: "() {
 
-        when: 'a value is set for the field under test'
+        final String field = 'documentName'
+
+        when:
         domainInstance[(field)] = valueUnderTest
         domainInstance.validate()
 
-        then: 'verify valid or invalid for expected reason'
+        then:
         assertFieldValidationExpectations(domainInstance, field, valid, errorCode)
-
-        and: 'verify the domainspreadsheetmapping can be persisted to the db'
-        if (valid) {
-            domainInstance == domainInstance.save(flush: true)
-        }
-
-        where:
-        desc               | valueUnderTest                          | valid | errorCode
-        'too long'         | createString(CONTEXT_NAME_MAX_SIZE + 1) | false | 'maxSize.exceeded'
-        'blank not valid'  | ''                                      | false | 'blank'
-        'blank not valid'  | '   '                                   | false | 'blank'
-
-        'null valid'       | null                                    | true  | null
-        'exactly at limit' | createString(CONTEXT_NAME_MAX_SIZE)     | true  | null
-
-    }
-
-    void "test contextGroup constraints #desc contextGroup: '#valueUnderTest'"() {
-        final String field = 'contextGroup'
-
-        when: 'a value is set for the field under test'
-        domainInstance[(field)] = valueUnderTest
-        domainInstance.validate()
-
-        then: 'verify valid or invalid for expected reason'
-        assertFieldValidationExpectations(domainInstance, field, valid, errorCode)
-
-        and: 'verify the domainspreadsheetmapping can be persisted to the db'
-        if (valid) {
-            domainInstance == domainInstance.save(flush: true)
-        }
 
         where:
         desc               | valueUnderTest                           | valid | errorCode
-        'too long'         | createString(CONTEXT_GROUP_MAX_SIZE + 1) | false | 'maxSize.exceeded'
+        'null not valid'   | null                                     | false | 'nullable'
         'blank not valid'  | ''                                       | false | 'blank'
         'blank not valid'  | '   '                                    | false | 'blank'
 
-        'null valid'       | null                                     | true  | null
-        'exactly at limit' | createString(CONTEXT_GROUP_MAX_SIZE)     | true  | null
+        'too long'         | createString(DOCUMENT_NAME_MAX_SIZE + 1) | false | 'maxSize.exceeded'
+        'exactly at limit' | createString(DOCUMENT_NAME_MAX_SIZE)     | true  | null
+    }
+
+    void "test documentType constraints #desc documentType: '#valueUnderTest'"() {
+
+        final String field = 'documentType'
+
+        when:
+        domainInstance[(field)] = valueUnderTest
+        domainInstance.validate()
+
+        then:
+        assertFieldValidationExpectations(domainInstance, field, valid, errorCode)
+
+        where:
+        desc               | valueUnderTest                           | valid | errorCode
+        'null not valid'   | null                                     | false | 'nullable'
+        'blank not valid'  | ''                                       | false | 'blank'
+        'blank not valid'  | '   '                                    | false | 'blank'
+
+        'too long'         | createString(DOCUMENT_TYPE_MAX_SIZE + 1) | false | 'maxSize.exceeded'
+
+        'value not inList' | 'Foo'                                    | false | 'not.inList'
+        'valid value'      | 'Description'                            | true  | null
+        'valid value'      | 'Protocol'                               | true  | null
+        'valid value'      | 'Comments'                               | true  | null
+        'valid value'      | 'Paper'                                  | true  | null
+        'valid value'      | 'External URL'                           | true  | null
+        'valid value'      | 'Other'                                  | true  | null
+        //        'exactly at limit' | createString(DOCUMENT_TYPE_MAX_SIZE)     | true  | null
+    }
+
+    void "test documentContent constraints #desc documentContent: "() {
+
+        final String field = 'documentContent'
+
+        when:
+        domainInstance[(field)] = valueUnderTest
+        domainInstance.validate()
+
+        then:
+        assertFieldValidationExpectations(domainInstance, field, valid, errorCode)
+
+        where:
+        desc                         | valueUnderTest         | valid | errorCode
+        'blank not valid'            | ''                     | false | 'blank'
+        'blank not valid'            | '   '                  | false | 'blank'
+
+        'null valid'                 | null                   | true  | null
+        'greater than varchar limit' | createString(4000 + 1) | true  | null
 
     }
 
@@ -80,17 +95,12 @@ abstract class AbstractContextConstraintUnitSpec extends Specification {
 
         final String field = 'modifiedBy'
 
-        when: 'a value is set for the field under test'
+        when:
         domainInstance[(field)] = valueUnderTest
         domainInstance.validate()
 
-        then: 'verify valid or invalid for expected reason'
+        then:
         assertFieldValidationExpectations(domainInstance, field, valid, errorCode)
-
-        and: 'verify the domainspreadsheetmapping can be persisted to the db'
-        if (valid) {
-            domainInstance == domainInstance.save(flush: true)
-        }
 
         where:
         desc               | valueUnderTest                         | valid | errorCode
@@ -105,17 +115,12 @@ abstract class AbstractContextConstraintUnitSpec extends Specification {
     void "test dateCreated constraints #desc dateCreated: '#valueUnderTest'"() {
         final String field = 'dateCreated'
 
-        when: 'a value is set for the field under test'
+        when:
         domainInstance[(field)] = valueUnderTest
         domainInstance.validate()
 
-        then: 'verify valid or invalid for expected reason'
+        then:
         assertFieldValidationExpectations(domainInstance, field, valid, errorCode)
-
-        and: 'verify the domainspreadsheetmapping can be persisted to the db'
-        if (valid) {
-            domainInstance == domainInstance.save(flush: true)
-        }
 
         where:
         desc             | valueUnderTest | valid | errorCode
@@ -126,23 +131,17 @@ abstract class AbstractContextConstraintUnitSpec extends Specification {
     void "test lastUpdated constraints #desc lastUpdated: '#valueUnderTest'"() {
         final String field = 'lastUpdated'
 
-        when: 'a value is set for the field under test'
+        when:
         domainInstance[(field)] = valueUnderTest
         domainInstance.validate()
 
-        then: 'verify valid or invalid for expected reason'
+        then:
         assertFieldValidationExpectations(domainInstance, field, valid, errorCode)
-
-        and: 'verify the domainspreadsheetmapping can be persisted to the db'
-        if (valid) {
-            domainInstance == domainInstance.save(flush: true)
-        }
 
         where:
         desc         | valueUnderTest | valid | errorCode
         'null valid' | null           | true  | null
         'date valid' | new Date()     | true  | null
     }
-
 
 }

@@ -3,6 +3,7 @@ package bard.db.experiment
 import org.junit.Before
 import spock.lang.Unroll
 import grails.buildtestdata.mixin.Build
+import bard.db.model.AbstractContextItemConstraintUnitSpec
 
 /**
  * Created with IntelliJ IDEA.
