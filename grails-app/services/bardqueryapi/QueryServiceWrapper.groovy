@@ -10,6 +10,7 @@ package bardqueryapi;
 
 import bard.core.*
 import bard.core.rest.*
+import bard.core.interfaces.EntityServiceManager
 
 public class QueryServiceWrapper {
     /**

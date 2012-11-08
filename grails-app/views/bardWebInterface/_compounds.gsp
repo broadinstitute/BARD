@@ -1,4 +1,4 @@
-<%@ page import="bard.core.CompoundValues; bardqueryapi.FacetFormType; bardqueryapi.JavaScriptUtility" %>
+<%@ page import="bard.core.interfaces.CompoundValues; bardqueryapi.FacetFormType; bardqueryapi.JavaScriptUtility" %>
 <%@ page import="grails.converters.JSON" %>
 <g:hiddenField name="totalCompounds" id="totalCompounds" value="${nhits}"/>
 <div class="row-fluid">
