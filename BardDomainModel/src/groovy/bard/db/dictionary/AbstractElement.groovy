@@ -59,9 +59,4 @@ abstract class AbstractElement {
         externalURL(column: 'EXTERNAL_URL')
     }
 }
-enum ElementStatus {
-    Pending,
-    Published,
-    Deprecated,
-    Retired
-}
+
