@@ -9,7 +9,7 @@ import bardqueryapi.QueryService
 import bard.core.adapter.CompoundAdapter
 import bard.core.Compound
 import bard.core.DataSource
-import bard.core.MolecularData
+import bard.core.interfaces.MolecularData
 import bard.core.impl.MolecularDataJChemImpl
 import bard.core.MolecularValue
 

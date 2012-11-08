@@ -12,7 +12,7 @@ import bard.core.DataSource
 import bard.core.LongValue
 
 import bard.core.MolecularValue
-import bard.core.MolecularData
+import bard.core.interfaces.MolecularData
 import bard.core.impl.MolecularDataJChemImpl
 
 /**

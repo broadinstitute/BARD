@@ -21,6 +21,7 @@ import spock.lang.Unroll
 import javax.servlet.http.HttpServletResponse
 
 import bard.core.*
+import bard.core.interfaces.ExperimentRole
 
 /**
  * See the API for {@link grails.test.mixin.support.GrailsUnitTestMixin} for usage instructions
@@ -103,7 +104,7 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
         "EID- Not Found"               | 234  | HttpServletResponse.SC_NOT_FOUND   | null
         "Success"                      | 567  | HttpServletResponse.SC_OK          | [total: 2, spreadSheetActivities: [
                 new SpreadSheetActivity(eid: new Long(567), cid: new Long(1), sid: new Long(20))],
-                role: ExperimentValues.ExperimentRole.Counterscreen, experiment: new Experiment(name: 'name')]
+                role: ExperimentRole.Counterscreen, experiment: new Experiment(name: 'name')]
     }
 
     void "test showExperimentResult With Exception"() {
