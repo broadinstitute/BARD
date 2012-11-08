@@ -15,6 +15,7 @@ import querycart.QueryCartService
 import bard.core.*
 import bardqueryapi.ActivityOutcome
 import org.apache.commons.lang.NotImplementedException
+import bard.core.interfaces.ExperimentRole
 
 class MolecularSpreadSheetService {
     int MAXIMUM_NUMBER_OF_COMPOUNDS =500
@@ -508,7 +509,7 @@ class MolecularSpreadSheetService {
         List<SpreadSheetActivity> spreadSheetActivities = []
         final RESTExperimentService restExperimentService = queryServiceWrapper.restExperimentService
         long totalNumberOfRecords = 0
-        ExperimentValues.ExperimentRole role = null
+        ExperimentRole role = null
         Experiment experiment = restExperimentService.get(experimentId)
         if (experiment) {
             role = experiment.role

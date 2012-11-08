@@ -7,6 +7,8 @@ import bard.core.*
 import bardqueryapi.IQueryService
 import bardqueryapi.QueryHelperService
 import bardqueryapi.SearchFilter
+import bard.core.interfaces.AssayValues
+import bard.core.interfaces.ExperimentValues
 
 class MockQueryService implements IQueryService {
     QueryHelperService queryHelperService
