@@ -16,6 +16,7 @@ import bard.core.*
 import bardqueryapi.ActivityOutcome
 import org.apache.commons.lang.NotImplementedException
 import bard.core.interfaces.ExperimentRole
+import bard.core.interfaces.SearchResult
 
 class MolecularSpreadSheetService {
     int MAXIMUM_NUMBER_OF_COMPOUNDS =500
@@ -85,8 +86,8 @@ class MolecularSpreadSheetService {
     protected Object retrieveImpliedCompoundsEtagFromAssaySpecification(List<Experiment> experimentList) {
         Object etag =null
         for (Experiment experiment in experimentList) {
-            final ServiceIterator<Compound> compoundServiceIterator = this.queryServiceWrapper.restExperimentService.compounds(experiment)
-            List<Compound> singleExperimentCompoundList = compoundServiceIterator.next(MAXIMUM_NUMBER_OF_COMPOUNDS)
+            final SearchResult<Compound> compoundIterator = this.queryServiceWrapper.restExperimentService.compounds(experiment)
+            List<Compound> singleExperimentCompoundList = compoundIterator.next(MAXIMUM_NUMBER_OF_COMPOUNDS)
             List <Long> idList = singleExperimentCompoundList*.id as List <Long>
             if (etag == null)  {
                 etag = this.queryServiceWrapper.restCompoundService.newETag("${new Date().toString()}",
@@ -147,7 +148,7 @@ class MolecularSpreadSheetService {
         int columnCount = 0
         for (Experiment experiment in experimentList) {
 
-            ServiceIterator<Value> experimentIterator
+            SearchResult<Value> experimentIterator
             if (etag == null) {
                 experimentIterator = queryServiceWrapper.restExperimentService.activities(experiment)
             }  else {
@@ -390,8 +391,8 @@ class MolecularSpreadSheetService {
             Iterator<Assay> assayIterator = assays.iterator()
             while (assayIterator.hasNext()) {
                 Assay assay = assayIterator.next()
-                final ServiceIterator<Experiment> serviceIterator = restAssayService.iterator(assay, Experiment)
-                Collection<Experiment> experimentList = serviceIterator.collect()
+                final SearchResult<Experiment> iterator = restAssayService.searchResult(assay, Experiment)
+                Collection<Experiment> experimentList = iterator.collect()
                 allExperiments.addAll(experimentList)
             }
         }
@@ -417,9 +418,9 @@ class MolecularSpreadSheetService {
 
         for (Long individualAssayIds in assayIds) {
             Assay assay = restAssayService.get(individualAssayIds)
-            final ServiceIterator<Experiment> serviceIterator = restAssayService.iterator(assay, Experiment)
-            while (serviceIterator.hasNext()) {
-                Experiment experiment = serviceIterator.next()
+            final SearchResult<Experiment> iterator = restAssayService.searchResult(assay, Experiment)
+            while (iterator.hasNext()) {
+                Experiment experiment = iterator.next()
                 allExperiments <<  experiment
             }
             //Collection<Experiment> experimentList = serviceIterator.collect()   <-------- NOTE: this approach does not work. You need to iterate through explicitly
@@ -474,10 +475,10 @@ class MolecularSpreadSheetService {
         final Collection<Project> projects = restProjectService.get(projectIds)
 
         for (Project project : projects) {
-            final ServiceIterator<Assay> serviceIterator = restProjectService.iterator(project, Assay)
-            Collection<Assay> assays = serviceIterator.collect()
+            final SearchResult<Assay> iterator = restProjectService.searchResult(project, Assay)
+            Collection<Assay> assays = iterator.collect()
             for (Assay assay : assays) {
-                final ServiceIterator<Experiment> experimentIterator = restAssayService.iterator(assay, Experiment)
+                final SearchResult<Experiment> experimentIterator = restAssayService.searchResult(assay, Experiment)
                 Collection<Experiment> experimentList = experimentIterator.collect()
                 allExperiments.addAll(experimentList)
             }
@@ -493,7 +494,7 @@ class MolecularSpreadSheetService {
      */
     List<SpreadSheetActivity> findActivitiesForCompounds(final Experiment experiment, final Object compoundETag) {
         final List<SpreadSheetActivity> spreadSheetActivities = []
-        final ServiceIterator<Value> experimentIterator = this.queryServiceWrapper.restExperimentService.activities(experiment, compoundETag);
+        final SearchResult<Value> experimentIterator = this.queryServiceWrapper.restExperimentService.activities(experiment, compoundETag);
         while (experimentIterator.hasNext()) {
             Value experimentValue = experimentIterator.next()
             if (experimentValue) {
@@ -535,11 +536,11 @@ class MolecularSpreadSheetService {
 
     protected Map extractActivityValues(final Experiment experiment, final Integer top = 10, final Integer skip = 0) {
         final RESTExperimentService restExperimentService = queryServiceWrapper.restExperimentService
-        final ServiceIterator<Value> experimentValueIterator = restExperimentService.activities(experiment);
+        final SearchResult<Value> experimentValueIterator = restExperimentService.activities(experiment);
         return extractActivityValuesFromExperimentValueIterator(experimentValueIterator, top, skip)
     }
 
-    protected Map extractActivityValuesFromExperimentValueIterator(final ServiceIterator<Value> experimentValueIterator, final Integer top = 10, final Integer skip = 0) {
+    protected Map extractActivityValuesFromExperimentValueIterator(final SearchResult<Value> experimentValueIterator, final Integer top = 10, final Integer skip = 0) {
         List<Value> activityValues = []
         long totalNumberOfRecords = 0
         if (experimentValueIterator?.hasNext()) {

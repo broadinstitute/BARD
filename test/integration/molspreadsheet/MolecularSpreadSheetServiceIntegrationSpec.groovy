@@ -17,6 +17,7 @@ import spock.lang.Unroll
 import bard.core.*
 
 import static junit.framework.Assert.assertNotNull
+import bard.core.interfaces.SearchResult
 
 @Unroll
 class MolecularSpreadSheetServiceIntegrationSpec extends IntegrationSpec {
@@ -170,11 +171,11 @@ class MolecularSpreadSheetServiceIntegrationSpec extends IntegrationSpec {
 //        List<Experiment> finalExperimentList = molecularSpreadSheetService.cartProjectsToExperiments(cartProjectList)
 
         Assay assay = restAssayService.get(2199 as Long)
-        final ServiceIterator<Experiment> serviceIterator = restAssayService.iterator(assay, Experiment)
-        Collection<Experiment> finalExperimentList = serviceIterator.collect()
+        final SearchResult<Experiment> iterator = restAssayService.searchResult(assay, Experiment)
+        Collection<Experiment> finalExperimentList = iterator.collect()
         assay = restAssayService.get(730 as Long)
-        serviceIterator = restAssayService.iterator(assay, Experiment)
-        finalExperimentList.addAll(serviceIterator.collect())
+        iterator = restAssayService.iterator(assay, Experiment)
+        finalExperimentList.addAll(iterator.collect())
         MolSpreadSheetData molSpreadSheetData = new MolSpreadSheetData()
         100.times{
             molSpreadSheetData.mssHeaders << []
@@ -208,8 +209,8 @@ class MolecularSpreadSheetServiceIntegrationSpec extends IntegrationSpec {
         when: "we have a molecularSpreadSheetService"
         assertNotNull molecularSpreadSheetService
         Assay assay = restAssayService.get(519 as Long)
-        final ServiceIterator<Experiment> serviceIterator = restAssayService.iterator(assay, Experiment)
-        Collection<Experiment> experimentList = serviceIterator.collect()
+        final SearchResult<Experiment> iterator = restAssayService.searchResult(assay, Experiment)
+        Collection<Experiment> experimentList = iterator.collect()
         MolSpreadSheetData molSpreadSheetData = new MolSpreadSheetData()
         5.times{
             molSpreadSheetData.mssHeaders << []
@@ -237,8 +238,8 @@ class MolecularSpreadSheetServiceIntegrationSpec extends IntegrationSpec {
         when: "we have a molecularSpreadSheetService"
         assertNotNull molecularSpreadSheetService
         Assay assay = restAssayService.get(346 as Long)
-        final ServiceIterator<Experiment> serviceIterator = restAssayService.iterator(assay, Experiment)
-        Collection<Experiment> experimentList = serviceIterator.collect()
+        final SearchResult<Experiment> iterator = restAssayService.searchResult(assay, Experiment)
+        Collection<Experiment> experimentList = iterator.collect()
         MolSpreadSheetData molSpreadSheetData = new MolSpreadSheetData()
         5.times{
             molSpreadSheetData.mssHeaders << []
@@ -265,8 +266,8 @@ class MolecularSpreadSheetServiceIntegrationSpec extends IntegrationSpec {
         when: "we have a molecularSpreadSheetService"
         assertNotNull molecularSpreadSheetService
         Assay assay = restAssayService.get(519 as Long)
-        final ServiceIterator<Experiment> serviceIterator = restAssayService.iterator(assay, Experiment)
-        Collection<Experiment> experimentList = serviceIterator.collect()
+        final SearchResult<Experiment> iterator = restAssayService.searchResult(assay, Experiment)
+        Collection<Experiment> experimentList = iterator.collect()
         MolSpreadSheetData molSpreadSheetData = new MolSpreadSheetData()
         4.times{
             molSpreadSheetData.mssHeaders << []
@@ -467,8 +468,8 @@ class MolecularSpreadSheetServiceIntegrationSpec extends IntegrationSpec {
         Experiment experiment = restExperimentService.get(experimentId)
 
         and: "We call the activities method on the restExperimentService"
-        final ServiceIterator<Value> experimentIterator = this.restExperimentService.activities(experiment, compoundETag);
-        Collection collect = experimentIterator.collect()
+        final SearchResult<Value> iterator = this.restExperimentService.activities(experiment, compoundETag);
+        Collection collect = iterator.collect()
         and: "We extract the first element in the collection"
         Value experimentValue = (Value) collect.iterator().next()
         when: "We call the extractActivitiesFromExperiment method with the experimentValue"
@@ -509,12 +510,12 @@ class MolecularSpreadSheetServiceIntegrationSpec extends IntegrationSpec {
     void "test retrieve single value"() {
         given: "That we have created"
         Experiment experiment = restExperimentService.get(new Long(883))
-        final ServiceIterator<Compound> compoundServiceIterator = restExperimentService.compounds(experiment)
+        final SearchResult<Compound> compoundIterator = restExperimentService.compounds(experiment)
         when: "We call the findAct"
         assert experiment
-        List<Compound> compoundList = compoundServiceIterator.next(2)
+        List<Compound> compoundList = compoundIterator.next(2)
         Object etag = restCompoundService.newETag("find an experiment", compoundList*.id);
-        ServiceIterator<Value> eiter = this.restExperimentService.activities(experiment, etag);
+        SearchResult<Value> eiter = this.restExperimentService.activities(experiment, etag);
         assertNotNull eiter
         eiter.hasNext()
         Value value = eiter.next()
@@ -527,12 +528,12 @@ class MolecularSpreadSheetServiceIntegrationSpec extends IntegrationSpec {
         given: "That we have identified experiemnt 346"
         final Long experimentId = new Long(346)
         Experiment experiment = restExperimentService.get(experimentId)
-        final ServiceIterator<Compound> compoundServiceIterator = restExperimentService.compounds(experiment)
+        final SearchResult<Compound> compoundIterator = restExperimentService.compounds(experiment)
         when: "We call for the activities"
         assert experiment
-        List<Compound> compoundList = compoundServiceIterator.next(3)
+        List<Compound> compoundList = compoundIterator.next(3)
         Object etag = restCompoundService.newETag("find experiment 346 data", compoundList*.id); // etag for 3 compounds
-        ServiceIterator<Value> experimentIterator = this.restExperimentService.activities(experiment, etag);
+        SearchResult<Value> experimentIterator = this.restExperimentService.activities(experiment, etag);
         then: "We expect to see non-null activitiy for each compound"
         int countValues = 0
         while (experimentIterator.hasNext()) {
@@ -552,12 +553,12 @@ class MolecularSpreadSheetServiceIntegrationSpec extends IntegrationSpec {
         given: "That we have identified project 274"
         final Long experimentId = new Long(1140)
         Experiment experiment = restExperimentService.get(experimentId)
-        final ServiceIterator<Compound> compoundServiceIterator = restExperimentService.compounds(experiment)
+        final SearchResult<Compound> compoundIterator = restExperimentService.compounds(experiment)
         when: "We call for the activities"
         assert experiment
-        List<Compound> compoundList = compoundServiceIterator.next(1)
+        List<Compound> compoundList = compoundIterator.next(1)
         Object etag = restCompoundService.newETag("find experiment 346 data", compoundList*.id); // etag for 3 compounds
-        ServiceIterator<Value> experimentIterator = this.restExperimentService.activities(experiment, etag);
+        SearchResult<Value> experimentIterator = this.restExperimentService.activities(experiment, etag);
         then: "We expect to see non-null activitiy for each compound"
         int countValues = 0
         while (experimentIterator.hasNext()) {
@@ -584,10 +585,10 @@ class MolecularSpreadSheetServiceIntegrationSpec extends IntegrationSpec {
         final Collection<Project> projects = restProjectService.get(cartProjectIdList)
         List<Experiment> allExperiments = []
         for (Project project : projects) {
-            final ServiceIterator<Assay> serviceIterator = restProjectService.iterator(project, Assay.class)
-            Collection<Assay> assays = serviceIterator.collect()
+            final SearchResult<Assay> iterator = restProjectService.searchResult(project, Assay.class)
+            Collection<Assay> assays = iterator.collect()
             for (Assay assay : assays) {
-                 final ServiceIterator<Experiment> experimentIterator = restAssayService.iterator(assay, Experiment.class)
+                 final SearchResult<Experiment> experimentIterator = restAssayService.searchResult(assay, Experiment.class)
                 Collection<Experiment> experimentList = experimentIterator.collect()
                 allExperiments.addAll(experimentList)
 
@@ -606,7 +607,7 @@ class MolecularSpreadSheetServiceIntegrationSpec extends IntegrationSpec {
         int dataCount = 0
         for (Experiment experiment in allExperiments) {
 
-            ServiceIterator<Value> experimentIterator = restExperimentService.activities(experiment, etag)
+            SearchResult<Value> experimentIterator = restExperimentService.activities(experiment, etag)
             Value experimentValue
             while (experimentIterator.hasNext()) {
                 experimentValue = experimentIterator.next()

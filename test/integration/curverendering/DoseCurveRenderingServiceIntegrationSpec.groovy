@@ -2,7 +2,6 @@ package curverendering
 
 import bard.core.Experiment
 import bard.core.HillCurveValue
-import bard.core.ServiceIterator
 import bard.core.Value
 import bard.core.rest.RESTCompoundService
 import bard.core.rest.RESTExperimentService
@@ -15,6 +14,7 @@ import org.jfree.chart.JFreeChart
 import org.junit.After
 import org.junit.Before
 import spock.lang.Unroll
+import bard.core.interfaces.SearchResult
 
 @Unroll
 class DoseCurveRenderingServiceIntegrationSpec extends IntegrationSpec {
@@ -70,7 +70,7 @@ class DoseCurveRenderingServiceIntegrationSpec extends IntegrationSpec {
         Experiment experiment = restExperimentService.get(experimentId)
 
         and: "We call the activities method on the restExperimentService with the experiment and the ETag"
-        final ServiceIterator<Value> experimentIterator = this.restExperimentService.activities(experiment, compoundETag);
+        final SearchResult<Value> experimentIterator = this.restExperimentService.activities(experiment, compoundETag);
         Collection collect = experimentIterator.collect()
 
         and: "We extract the first experimen tValue in the resulting collection"
@@ -122,7 +122,7 @@ class DoseCurveRenderingServiceIntegrationSpec extends IntegrationSpec {
         Experiment experiment = restExperimentService.get(experimentId)
 
         and: "We call the activities method on the restExperimentService with the experiment and the ETag"
-        final ServiceIterator<Value> experimentIterator = this.restExperimentService.activities(experiment, compoundETag);
+        final SearchResult<Value> experimentIterator = this.restExperimentService.activities(experiment, compoundETag);
         Collection collect = experimentIterator.collect()
 
         and: "We extract the first experimen tValue in the resulting collection"
@@ -158,7 +158,7 @@ class DoseCurveRenderingServiceIntegrationSpec extends IntegrationSpec {
         Experiment experiment = restExperimentService.get(experimentId)
 
         and: "We call the activities method on the restExperimentService with the experiment and the ETag"
-        final ServiceIterator<Value> experimentIterator = this.restExperimentService.activities(experiment, compoundETag);
+        final SearchResult<Value> experimentIterator = this.restExperimentService.activities(experiment, compoundETag);
         Collection collect = experimentIterator.collect()
 
         and: "We extract the first experimen tValue in the resulting collection"
@@ -193,7 +193,7 @@ class DoseCurveRenderingServiceIntegrationSpec extends IntegrationSpec {
         Experiment experiment = restExperimentService.get(experimentId)
 
         and: "We call the activities method on the restExperimentService with the experiment and the ETag"
-        final ServiceIterator<Value> experimentIterator = this.restExperimentService.activities(experiment);
+        final SearchResult<Value> experimentIterator = this.restExperimentService.activities(experiment);
         Collection collect = experimentIterator.collect()
 
         and: "We extract the first experimen tValue in the resulting collection"

@@ -16,6 +16,7 @@ import bard.core.*
 import bard.core.rest.RESTCompoundService
 import bard.core.rest.RESTProjectService
 import bard.core.rest.RESTAssayService
+import bard.core.interfaces.SearchResult
 
 /**
  * Created with IntelliJ IDEA.
@@ -67,13 +68,13 @@ class MolecularSpreadSheetServiceUnitSpec extends Specification {
     }
     void "test assays To Experiments"(){
         given:
-        ServiceIterator<Experiment> serviceIterator = Mock(ServiceIterator)
+        SearchResult<Experiment> searchResult = Mock(SearchResult)
         Collection<Assay> assays = [new Assay(name: "A1")]
         when:
         List<Experiment> experiments = service.assaysToExperiments(assays)
         then:
         queryServiceWrapper.restAssayService >> { restAssayService }
-        restAssayService.iterator(_, _) >> {serviceIterator}
+        restAssayService.iterator(_, _) >> {searchResult}
         assert experiments.isEmpty()
     }
 
@@ -130,7 +131,7 @@ class MolecularSpreadSheetServiceUnitSpec extends Specification {
         given:
         final List <Experiment>  experimentList = []
 
-        ServiceIterator<Compound> compoundServiceIterator  = Mock()
+        SearchResult<Compound> compoundSearchResult  = Mock()
         experimentList << new Experiment()
 
         when:
@@ -143,7 +144,7 @@ class MolecularSpreadSheetServiceUnitSpec extends Specification {
         and:
         restCompoundService.newETag(_) >> { new Object() }
         and:
-        restExperimentService.compounds(_) >> {compoundServiceIterator}
+        restExperimentService.compounds(_) >> {compoundSearchResult}
 
         assertNull eTag
     }
@@ -154,7 +155,7 @@ class MolecularSpreadSheetServiceUnitSpec extends Specification {
         final Experiment experiment = new Experiment()
         final Integer top = 10
         final Integer skip = 0
-        ServiceIterator<Value> experimentValueIterator = Mock(ServiceIterator)
+        SearchResult<Value> experimentValueIterator = Mock(SearchResult)
         when:
         Map map = service.extractActivityValues(experiment, top, skip)
         then:
@@ -180,7 +181,7 @@ class MolecularSpreadSheetServiceUnitSpec extends Specification {
 
     void "test extractActivityValuesFromExperimentIterator #label"() {
         given:
-        ServiceIterator<Value> experimentValueIterator = Mock(ServiceIterator)
+        SearchResult<Value> experimentValueIterator = Mock(SearchResult)
         when:
         final Map map = service.extractActivityValuesFromExperimentValueIterator(experimentValueIterator, top, skip)
         then:

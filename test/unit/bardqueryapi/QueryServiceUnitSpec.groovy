@@ -14,6 +14,7 @@ import bard.core.rest.RESTProjectService
 import grails.test.mixin.TestFor
 import org.apache.commons.lang.time.StopWatch
 import bard.core.*
+import bard.core.interfaces.SearchResult
 
 /**
  * See the API for {@link grails.test.mixin.support.GrailsUnitTestMixin} for usage instructions
@@ -228,7 +229,7 @@ class QueryServiceUnitSpec extends Specification {
      */
     void "test Structure Search No Filters #label"() {
         given:
-        ServiceIterator<Compound> iter = Mock(ServiceIterator)
+        SearchResult<Compound> iter = Mock(SearchResult)
         when:
         service.structureSearch(smiles, structureSearchParamsType)
         then:
@@ -248,7 +249,7 @@ class QueryServiceUnitSpec extends Specification {
      */
     void "test Structure Search Empty Smiles"() {
         given:
-        ServiceIterator<Compound> iter = Mock(ServiceIterator)
+        SearchResult<Compound> iter = Mock(SearchResult)
 
         when:
         final Map searchResults = service.structureSearch("", StructureSearchParams.Type.Substructure)
@@ -265,7 +266,7 @@ class QueryServiceUnitSpec extends Specification {
      */
     void "test Structure Search #label"() {
         given:
-        ServiceIterator<Compound> iter = Mock(ServiceIterator)
+        SearchResult<Compound> iter = Mock(SearchResult)
         List<SearchFilter> searchFilters = [new SearchFilter(filterName: "a", filterValue: "b")]
 
         List<String[]> filters = [["a", "b"] as String[]]
@@ -291,7 +292,7 @@ class QueryServiceUnitSpec extends Specification {
     void "test Find Compounds By Text Search"() {
         given:
         StopWatch sw = Mock(StopWatch)
-        ServiceIterator<Compound> iter = Mock(ServiceIterator)
+        SearchResult<Compound> iter = Mock(SearchResult)
         when:
         Map map = service.findCompoundsByTextSearch(searchString, 10, 0, [])
         then:
@@ -316,7 +317,7 @@ class QueryServiceUnitSpec extends Specification {
     void "test Find Compounds By Text Search with defaults #searchString"() {
         given:
         StopWatch sw = Mock(StopWatch)
-        ServiceIterator<Compound> iter = Mock(ServiceIterator)
+        SearchResult<Compound> iter = Mock(SearchResult)
         when:
         Map map = service.findCompoundsByTextSearch(searchString)
         then:
@@ -341,7 +342,7 @@ class QueryServiceUnitSpec extends Specification {
     void "test Find Assays By Text Search with defaults"() {
         given:
         StopWatch sw = Mock(StopWatch)
-        ServiceIterator<Assay> iter = Mock(ServiceIterator)
+        SearchResult<Assay> iter = Mock(SearchResult)
         when:
         Map map = service.findAssaysByTextSearch(searchString)
         then:
@@ -366,7 +367,7 @@ class QueryServiceUnitSpec extends Specification {
     void "test Find Assays By Text Search"() {
         given:
         StopWatch sw = Mock(StopWatch)
-        ServiceIterator<Assay> iter = Mock(ServiceIterator)
+        SearchResult<Assay> iter = Mock(SearchResult)
         when:
         Map map = service.findAssaysByTextSearch(searchString, 10, 0, [])
         then:
@@ -391,7 +392,7 @@ class QueryServiceUnitSpec extends Specification {
     void "test Find Projects By Text Search"() {
         given:
         StopWatch sw = Mock(StopWatch)
-        ServiceIterator<Project> iter = Mock(ServiceIterator)
+        SearchResult<Project> iter = Mock(SearchResult)
         when:
         Map map = service.findProjectsByTextSearch(searchString, 10, 0, [])
         then:
@@ -416,7 +417,7 @@ class QueryServiceUnitSpec extends Specification {
     void "test Find Projects By Text Search with defaults"() {
         given:
         StopWatch sw = Mock(StopWatch)
-        ServiceIterator<Project> iter = Mock(ServiceIterator)
+        SearchResult<Project> iter = Mock(SearchResult)
         when:
         Map map = service.findProjectsByTextSearch(searchString)
         then:
