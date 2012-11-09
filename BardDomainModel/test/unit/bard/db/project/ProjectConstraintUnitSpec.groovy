@@ -1,4 +1,4 @@
-package bard.db.experiment
+package bard.db.project
 
 import bard.db.enums.ReadyForExtraction
 import grails.buildtestdata.mixin.Build

@@ -1,4 +1,4 @@
-package bard.db.experiment
+package bard.db.project
 
 import org.junit.Before
 import bard.db.model.AbstractContextItemIntegrationSpec

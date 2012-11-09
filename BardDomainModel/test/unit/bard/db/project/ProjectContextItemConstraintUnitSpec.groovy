@@ -1,10 +1,10 @@
-package bard.db.experiment
+package bard.db.project
 
 import grails.buildtestdata.mixin.Build
 import org.junit.Before
 import spock.lang.Unroll
 import bard.db.model.AbstractContextItemConstraintUnitSpec
-import bard.db.project.StepContextItem
+import bard.db.project.ProjectContextItem
 
 /**
  * Created with IntelliJ IDEA.
@@ -13,11 +13,13 @@ import bard.db.project.StepContextItem
  * Time: 12:31 AM
  * To change this template use File | Settings | File Templates.
  */
-@Build(StepContextItem)
+@Build(ProjectContextItem)
 @Unroll
-class StepContextItemConstraintUnitSpec extends AbstractContextItemConstraintUnitSpec{
+class ProjectContextItemConstraintUnitSpec extends AbstractContextItemConstraintUnitSpec {
+
     @Before
-     void doSetup(){
-        domainInstance = StepContextItem.buildWithoutSave()
+    @Override
+    void doSetup() {
+        domainInstance = ProjectContextItem.buildWithoutSave()
     }
 }

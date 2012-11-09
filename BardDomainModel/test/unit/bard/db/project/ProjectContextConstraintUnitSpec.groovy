@@ -1,4 +1,4 @@
-package bard.db.experiment
+package bard.db.project
 
 import bard.db.model.AbstractContextConstraintUnitSpec
 import grails.buildtestdata.mixin.Build
@@ -6,8 +6,8 @@ import org.junit.Before
 import spock.lang.Unroll
 
 import static test.TestUtils.assertFieldValidationExpectations
-import bard.db.project.ProjectStep
-import bard.db.project.StepContext
+import bard.db.project.Project
+import bard.db.project.ProjectContext
 
 /**
  * Created with IntelliJ IDEA.
@@ -16,18 +16,18 @@ import bard.db.project.StepContext
  * Time: 1:25 PM
  * To change this template use File | Settings | File Templates.
  */
-@Build([ProjectStep, StepContext])
+@Build([Project, ProjectContext])
 @Unroll
-class StepContextConstraintUnitSpec extends AbstractContextConstraintUnitSpec {
+class ProjectContextConstraintUnitSpec extends AbstractContextConstraintUnitSpec {
 
     @Before
     @Override
     void doSetup() {
-        domainInstance = StepContext.buildWithoutSave()
+        domainInstance = ProjectContext.buildWithoutSave()
     }
 
-    void "test projectStep constraints #desc projectStep: '#valueUnderTest'"() {
-        final String field = 'projectStep'
+    void "test project constraints #desc project: '#valueUnderTest'"() {
+        final String field = 'project'
 
         when: 'a value is set for the field under test'
         domainInstance[(field)] = valueUnderTest.call()
@@ -42,9 +42,9 @@ class StepContextConstraintUnitSpec extends AbstractContextConstraintUnitSpec {
         }
 
         where:
-        desc             | valueUnderTest        | valid | errorCode
-        'null not valid' | {null}                | false | 'nullable'
-        'valid step'     | {ProjectStep.build()} | true  | null
+        desc             | valueUnderTest    | valid | errorCode
+        'null not valid' | {null}            | false | 'nullable'
+        'valid project'  | {Project.build()} | true  | null
     }
 
 }

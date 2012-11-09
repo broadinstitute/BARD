@@ -1,7 +1,6 @@
-package bard.db.experiment
+package bard.db.project
 
-import bard.db.model.AbstractContextConstraintUnitSpec
-import grails.buildtestdata.mixin.Build
+import bard.db.model.AbstractContextConstraintIntegrationSpec
 import org.junit.Before
 import spock.lang.Unroll
 
@@ -12,14 +11,12 @@ import bard.db.project.ProjectContext
 /**
  * Created with IntelliJ IDEA.
  * User: ddurkin
- * Date: 8/17/12
- * Time: 1:25 PM
+ * Date: 11/6/12
+ * Time: 5:30 PM
  * To change this template use File | Settings | File Templates.
  */
-@Build([Project, ProjectContext])
 @Unroll
-class ProjectContextConstraintUnitSpec extends AbstractContextConstraintUnitSpec {
-
+class ProjectContextConstraintIntegrationSpec extends AbstractContextConstraintIntegrationSpec {
     @Before
     @Override
     void doSetup() {
@@ -46,5 +43,4 @@ class ProjectContextConstraintUnitSpec extends AbstractContextConstraintUnitSpec
         'null not valid' | {null}            | false | 'nullable'
         'valid project'  | {Project.build()} | true  | null
     }
-
 }

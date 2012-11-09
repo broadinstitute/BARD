@@ -1,6 +1,5 @@
-package bard.db.experiment
+package bard.db.project
 
-import grails.buildtestdata.mixin.Build
 import org.junit.Before
 import spock.lang.Specification
 import spock.lang.Unroll
@@ -17,15 +16,16 @@ import bard.db.project.ProjectStep
  * Time: 12:07 AM
  * To change this template use File | Settings | File Templates.
  */
-@Build(ProjectStep)
 @Unroll
-class ProjectStepConstraintUnitSpec extends Specification {
+class ProjectStepConstraintIntegrationSpec extends Specification {
 
     ProjectStep domainInstance
 
     @Before
     void doSetup() {
         domainInstance = ProjectStep.buildWithoutSave()
+        domainInstance.project?.save()
+        domainInstance.experiment?.save()
     }
 
     void "test modifiedBy constraints #desc modifiedBy: '#valueUnderTest'"() {
@@ -39,7 +39,7 @@ class ProjectStepConstraintUnitSpec extends Specification {
         then: 'verify valid or invalid for expected reason'
         assertFieldValidationExpectations(domainInstance, field, valid, errorCode)
 
-        and: 'verify the domainspreadsheetmapping can be persisted to the db'
+        and: 'verify the domain can be persisted to the db'
         if (valid) {
             domainInstance == domainInstance.save(flush: true)
         }
@@ -64,7 +64,7 @@ class ProjectStepConstraintUnitSpec extends Specification {
         then: 'verify valid or invalid for expected reason'
         assertFieldValidationExpectations(domainInstance, field, valid, errorCode)
 
-        and: 'verify the domainspreadsheetmapping can be persisted to the db'
+        and: 'verify the domain can be persisted to the db'
         if (valid) {
             domainInstance == domainInstance.save(flush: true)
         }
@@ -85,7 +85,7 @@ class ProjectStepConstraintUnitSpec extends Specification {
         then: 'verify valid or invalid for expected reason'
         assertFieldValidationExpectations(domainInstance, field, valid, errorCode)
 
-        and: 'verify the domainspreadsheetmapping can be persisted to the db'
+        and: 'verify the domain can be persisted to the db'
         if (valid) {
             domainInstance == domainInstance.save(flush: true)
         }
