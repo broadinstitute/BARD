@@ -1,4 +1,4 @@
-<%@ page import="bard.core.ExperimentValues" %>
+<%@ page import="bard.core.interfaces.ExperimentValues;" %>
 <div>
     <g:each var="experiment" in="${experiments}" status="i">
         <div>

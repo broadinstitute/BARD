@@ -297,7 +297,7 @@ class QueryService implements IQueryService {
      * @param projectId
      * @return Map
      */
-    Map showProject(final Long projectId) {
+    Map  showProject(final Long projectId) {
         if (projectId) {
             StopWatch sw = this.queryHelperService.startStopWatch()
             final RESTProjectService restProjectService = this.queryServiceWrapper.restProjectService
