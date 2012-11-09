@@ -39,7 +39,8 @@ grails.project.dependency.resolution = {
         compile(":database-migration:1.1") { export = true }
         compile(":build-test-data:2.0.3") { export = false }
         compile(":console:1.2") { export = false }
-        compile (":fixtures:1.1") { export = false }
+        compile(":fixtures:1.1") { export = false }
+        compile(":clover:3.1.6") { export = false }
     }
 }
 
@@ -67,4 +68,11 @@ codenarc.reports = {
 }
 codenarc {
     exclusions = ['**/grails-app/migrations/*']
+}
+
+clover {
+    license.path = "${userHome}/.grails/clover.license"
+    directories: ['src/java','src/groovy', 'grails-app']
+    includes = ['**/*.groovy', '**/*.java']
+    excludes = ['**/*Spec*.*', '**/conf/**', '**/migrations/**']
 }
