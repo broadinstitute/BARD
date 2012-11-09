@@ -352,7 +352,7 @@ class MolecularSpreadSheetService {
         //we will use this to get the 'active vrs tested' column
         int activeAssays = this.queryService.getNumberTestedAssays(compoundId,true)
         int testedAssays  = this.queryService.getNumberTestedAssays(compoundId,false)
-        dataMap.put("${rowCount}_3".toString(),  new MolSpreadSheetCell("${activeAssays} vrs ${testedAssays}", MolSpreadSheetCellType.string))
+        dataMap.put("${rowCount}_3".toString(),  new MolSpreadSheetCell("${activeAssays}/${testedAssays}", MolSpreadSheetCellType.string))
 
         return molSpreadSheetData
 
