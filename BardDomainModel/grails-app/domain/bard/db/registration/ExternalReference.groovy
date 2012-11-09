@@ -7,14 +7,16 @@ import org.apache.commons.lang.builder.HashCodeBuilder
 
 class ExternalReference implements Serializable {
     private static final int MODIFIED_BY_MAX_SIZE = 40
+    private static final int EXT_ASSAY_REF_MAX_SIZE = 128
 
-    String extAssayRef
-    Date dateCreated
-    Date lastUpdated
-    String modifiedBy
     ExternalSystem externalSystem
     Experiment experiment
     Project project
+    String extAssayRef
+
+    Date dateCreated
+    Date lastUpdated
+    String modifiedBy
 
     int hashCode() {
         def builder = new HashCodeBuilder()
@@ -31,17 +33,17 @@ class ExternalReference implements Serializable {
         builder.isEquals()
     }
 
-    static belongsTo = Project
+    static belongsTo = [projext:Project, experiment:Experiment]
 
     static mapping = {
         id(column: 'EXTERNAL_REFERENCE_ID', generator: 'sequence', params: [sequence: 'EXTERNAL_REFERENCE_ID_SEQ'])
     }
 
     static constraints = {
+        externalSystem()
         experiment(nullable: true)
         project(nullable: true)
-        extAssayRef(maxSize: 128)
-        externalSystem()
+        extAssayRef(blank:false, maxSize: EXT_ASSAY_REF_MAX_SIZE)
 
         dateCreated(nullable: false)
         lastUpdated(nullable: true)

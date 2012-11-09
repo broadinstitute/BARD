@@ -4,32 +4,38 @@ import bard.db.dictionary.Element
 
 class Measure {
 
+    private static final int MODIFIED_BY_MAX_SIZE = 40
+
+    Assay assay
+    Element resultTypeElement
+    Measure parentMeasure
+    Element entryUnitElement
+
     Date dateCreated = new Date()
     Date lastUpdated
     String modifiedBy
-    AssayContext assayContext
-    String entryUnit
-    Element element
-    Assay assay
-    Measure parentMeasure
 
-    static belongsTo = [Assay]
-    static hasMany = [children: Measure]
+    Set<Measure> childMeasures = [] as Set
+    Set<AssayContextMeasure> assayContextMeasures = [] as Set
+
+    static belongsTo = [assay: Assay]
+    static hasMany = [childMeasures: Measure, assayContextMeasures: AssayContextMeasure]
 
     static mapping = {
         id(column: 'MEASURE_ID', generator: 'sequence', params: [sequence: 'MEASURE_ID_SEQ'])
-        parentMeasure column: "PARENT_MEASURE_ID"
-        entryUnit column: "entry_unit"
-        element column: 'result_type_id'
+        parentMeasure(column: "PARENT_MEASURE_ID")
+        entryUnitElement(column: "entry_unit")
+        resultTypeElement(column: 'result_type_id')
     }
 
     static constraints = {
-        parentMeasure nullable: true
-        dateCreated maxSize: 19
-        lastUpdated nullable: true, maxSize: 19
-        modifiedBy nullable: true, maxSize: 40
-        element nullable: false
-        assayContext nullable: true
-        entryUnit nullable: true
+        assay()
+        resultTypeElement()
+        parentMeasure(nullable: true)
+        entryUnitElement(nullable: true)
+
+        dateCreated(nullable: false)
+        lastUpdated(nullable: true)
+        modifiedBy(nullable: true, blank: false, maxSize: MODIFIED_BY_MAX_SIZE)
     }
 }
