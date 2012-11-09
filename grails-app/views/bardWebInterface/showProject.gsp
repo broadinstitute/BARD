@@ -132,7 +132,7 @@
 
         <div class="accordion-group">
             <div class="accordion-heading">
-                <a href="#document-header" id="assays-header" class="accordion-toggle" data-toggle="collapse"
+                <a href="#assays-header" id="assays-header" class="accordion-toggle" data-toggle="collapse"
                    data-target="#assays-info"><i class="icon-chevron-right"></i> Assays (${assays?.size()})</a>
 
                 <div id="assays-info" class="accordion-body collapse">
