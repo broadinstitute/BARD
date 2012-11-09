@@ -5,9 +5,10 @@ import grails.plugin.spock.IntegrationSpec
 import org.junit.Before
 import spock.lang.Unroll
 
-import static bard.db.experiment.Project.*
+import static bard.db.project.Project.*
 import static test.TestUtils.assertFieldValidationExpectations
 import static test.TestUtils.createString
+import bard.db.project.Project
 
 /**
  * Created with IntelliJ IDEA.

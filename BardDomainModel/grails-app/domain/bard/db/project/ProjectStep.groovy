@@ -1,4 +1,6 @@
-package bard.db.experiment
+package bard.db.project
+
+import bard.db.experiment.Experiment
 
 class ProjectStep {
     private static final int MODIFIED_BY_MAX_SIZE = 40

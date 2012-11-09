@@ -1,8 +1,7 @@
-package bard.db.experiment
+package bard.db.project
 
 import bard.db.registration.ExternalReference
 import bard.db.enums.ReadyForExtraction
-import com.sun.xml.internal.bind.v2.TODO
 
 class Project {
     private static final int PROJECT_NAME_MAX_SIZE = 256

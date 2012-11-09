@@ -3,6 +3,9 @@ package bard.db.experiment
 import bard.db.dictionary.Element
 import grails.plugin.spock.IntegrationSpec
 import org.junit.Before
+import bard.db.project.ProjectStep
+import bard.db.project.StepContext
+import bard.db.project.StepContextItem
 
 /**
  * Created with IntelliJ IDEA.

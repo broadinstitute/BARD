@@ -6,6 +6,8 @@ import org.junit.Before
 import spock.lang.Unroll
 
 import static test.TestUtils.assertFieldValidationExpectations
+import bard.db.project.ProjectStep
+import bard.db.project.StepContext
 
 /**
  * Created with IntelliJ IDEA.

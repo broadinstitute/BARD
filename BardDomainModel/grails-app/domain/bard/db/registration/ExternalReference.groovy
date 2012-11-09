@@ -1,7 +1,7 @@
 package bard.db.registration
 
 import bard.db.experiment.Experiment
-import bard.db.experiment.Project
+import bard.db.project.Project
 import org.apache.commons.lang.builder.EqualsBuilder
 import org.apache.commons.lang.builder.HashCodeBuilder
 

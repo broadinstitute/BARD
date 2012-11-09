@@ -3,6 +3,7 @@ package bard.db.experiment
 import bard.db.enums.ReadyForExtraction
 import bard.db.registration.Assay
 import bard.db.registration.ExternalReference
+import bard.db.project.ProjectStep
 
 class Experiment {
 

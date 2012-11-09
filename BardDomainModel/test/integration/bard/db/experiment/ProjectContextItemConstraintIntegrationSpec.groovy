@@ -2,6 +2,7 @@ package bard.db.experiment
 
 import org.junit.Before
 import bard.db.model.AbstractContextItemIntegrationSpec
+import bard.db.project.ProjectContextItem
 
 /**
  * Created with IntelliJ IDEA.

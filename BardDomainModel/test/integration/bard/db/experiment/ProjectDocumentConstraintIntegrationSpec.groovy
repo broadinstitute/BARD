@@ -3,6 +3,7 @@ package bard.db.experiment
 import bard.db.model.AbstractDocumentConstraintIntegrationSpec
 import org.junit.Before
 import spock.lang.Unroll
+import bard.db.project.ProjectDocument
 
 /**
  * Created with IntelliJ IDEA.
