@@ -1,4 +1,4 @@
-package bard.db.registration
+package bard.db.model
 
 import grails.plugin.spock.IntegrationSpec
 import org.junit.Before

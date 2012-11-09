@@ -1,6 +1,6 @@
 package bard.db.registration
 
-import bard.db.experiment.AbstractContextItemIntegrationSpec
+import bard.db.model.AbstractContextItemIntegrationSpec
 import org.junit.Before
 import spock.lang.Unroll
 

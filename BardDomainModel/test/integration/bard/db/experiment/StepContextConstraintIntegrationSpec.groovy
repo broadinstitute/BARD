@@ -1,6 +1,6 @@
 package bard.db.experiment
 
-import bard.db.registration.AbstractContextConstraintIntegrationSpec
+import bard.db.model.AbstractContextConstraintIntegrationSpec
 import org.junit.Before
 import spock.lang.Unroll
 
