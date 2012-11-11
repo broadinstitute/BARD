@@ -58,8 +58,6 @@ grails.project.dependency.resolution = {
         compile ('org.apache.httpcomponents:httpclient:4.1.2') {
             excludes "commons-codec", "commons-logging"
         }
-        compile 'org.codehaus.jackson:jackson-core-asl:1.9.2'
-        compile 'org.codehaus.jackson:jackson-mapper-asl:1.9.2'
         compile 'ChemAxon:ChemAxonJChemBase:5.10'
         compile 'jfree:jfreechart:1.0.13'
         compile 'com.thoughtworks.xstream:xstream:1.4.2'
@@ -80,7 +78,6 @@ grails.project.dependency.resolution = {
         test ":codenarc:0.15"
         test ":geb:$gebVersion"
         test ":remote-control:1.2"
-        // compile ':remote-pagination:0.3'
         compile ":clover:3.1.6"
     }
 }

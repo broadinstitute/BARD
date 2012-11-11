@@ -25,7 +25,9 @@ class MolSpreadSheetCell {
         supplementalInternalValue(nullable: true)
         spreadSheetActivityStorage(nullable: true)
     }
+    public MolSpreadSheetCell (){
 
+    }
 
     public MolSpreadSheetCell (MolSpreadSheetCell molSpreadSheetCellToCopy) {
         this.activity =  molSpreadSheetCellToCopy.activity

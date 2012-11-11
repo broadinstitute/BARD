@@ -24,7 +24,6 @@ beans = {
             queryService(QueryService) {
                 queryHelperService = ref('queryHelperService')
                 queryServiceWrapper = ref('queryServiceWrapper')
-                promiscuityScoreService = ref('promiscuityScoreService')
             }
     }
     crowdAuthenticationProvider(org.broadinstitute.cbip.crowd.CrowdAuthenticationProviderService) {// beans here

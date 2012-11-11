@@ -1,14 +1,14 @@
 package bardqueryapi
 
+
 import bard.core.adapter.AssayAdapter
 import bard.core.adapter.CompoundAdapter
 import bard.core.adapter.ProjectAdapter
+import bard.core.interfaces.SearchResult
 import bard.core.rest.RESTAssayService
 import bard.core.rest.RESTProjectService
 import org.apache.commons.lang.time.StopWatch
-import promiscuity.PromiscuityScoreService
 import bard.core.*
-import bard.core.interfaces.SearchResult
 
 class QueryService implements IQueryService {
     /**
@@ -19,10 +19,6 @@ class QueryService implements IQueryService {
      * {@link QueryHelperService}
      */
     QueryHelperService queryHelperService
-    /**
-     * {@link PromiscuityScoreService}
-     */
-    PromiscuityScoreService promiscuityScoreService
 
     //========================================================== Free Text Searches ================================
     /**
@@ -38,7 +34,7 @@ class QueryService implements IQueryService {
         final List<CompoundAdapter> foundCompoundAdapters = []
         Collection<Value> facets = []
         int nhits = 0
-       // String eTag = null
+        // String eTag = null
         if (searchString) {
             //re-normalize the search string to strip out custom syntax (e.g gobp:SearchString now become SearchString)
             String updatedSearchString = this.queryHelperService.stripCustomStringFromSearchString(searchString)
@@ -55,7 +51,7 @@ class QueryService implements IQueryService {
             foundCompoundAdapters.addAll(this.queryHelperService.compoundsToAdapters(compounds))
             facets = searchIterator.facets
             nhits = searchIterator.count
-         //   eTag = searchIterator.ETag.toString()
+            //   eTag = searchIterator.ETag.toString()
         }
         return [compoundAdapters: foundCompoundAdapters, facets: facets, nHits: nhits]
     }
@@ -86,7 +82,7 @@ class QueryService implements IQueryService {
             foundAssayAdapters.addAll(this.queryHelperService.assaysToAdapters(assays))
             facets = searchIterator.facets
             nhits = searchIterator.count
-          //  eTag = searchIterator.ETag.toString()
+            //  eTag = searchIterator.ETag.toString()
         }
         return [assayAdapters: foundAssayAdapters, facets: facets, nHits: nhits]
     }
@@ -115,7 +111,7 @@ class QueryService implements IQueryService {
             foundProjectAdapters.addAll(this.queryHelperService.projectsToAdapters(projects))
             facets = searchIterator.facets
             nhits = searchIterator.count
-           // eTag = searchIterator.ETag.toString()
+            // eTag = searchIterator.ETag.toString()
         }
         return [projectAdapters: foundProjectAdapters, facets: facets, nHits: nhits]
     }
@@ -175,7 +171,7 @@ class QueryService implements IQueryService {
         if (compoundIds) {
             //create ETAG using a random name
             StopWatch sw = this.queryHelperService.startStopWatch()
-          //  eTag = this.queryServiceWrapper.restCompoundService.newETag("Compound ETags", compoundIds).toString();
+            //  eTag = this.queryServiceWrapper.restCompoundService.newETag("Compound ETags", compoundIds).toString();
             //commenting out facets until we figure out how to apply filters to ID searches
             //facets = restCompoundService.getFacets(etag)
             final Collection<Compound> compounds = this.queryServiceWrapper.restCompoundService.get(compoundIds)
@@ -240,7 +236,7 @@ class QueryService implements IQueryService {
      * @return int the number of tested assays
      */
     public int getNumberTestedAssays(Long cid,
-                               boolean activeOnly){
+                                     boolean activeOnly) {
         Compound compound = this.queryServiceWrapper.restCompoundService.get(cid)
 
         final Collection<Assay> assays = this.queryServiceWrapper.restCompoundService.getTestedAssays(compound, activeOnly)
@@ -297,7 +293,7 @@ class QueryService implements IQueryService {
      * @param projectId
      * @return Map
      */
-    Map  showProject(final Long projectId) {
+    Map showProject(final Long projectId) {
         if (projectId) {
             StopWatch sw = this.queryHelperService.startStopWatch()
             final RESTProjectService restProjectService = this.queryServiceWrapper.restProjectService
@@ -350,12 +346,15 @@ class QueryService implements IQueryService {
      *
      * @param cid
      * return Map
-     * Success would return [status: resp.status, message: 'Success', promiscuityScore: promiscuityScore]
-     * Failure would return [status: HHTTP Error Code, message: "Error getting Promiscuity Score for ${fullURL}", promiscuityScore: null]
+     * Success would return [status: 200, message: 'Success', promiscuityScore: promiscuityScore]
+     * Failure would return [status: 404, message: "Error getting Promiscuity Score for ${CID}", promiscuityScore: null]
      */
     public Map findPromiscuityScoreForCID(Long cid) {
-        final String promiscuityScoreURL = "${queryServiceWrapper.promiscuityScoreURL}"
-        return this.promiscuityScoreService.findPromiscuityScoreForCID("${promiscuityScoreURL}${cid}")
+        final PromiscuityScore promiscuityScore = queryServiceWrapper.restCompoundService.getPromiscuityScore(cid);
+        if (promiscuityScore != null) {
+            return [status: 200, message: 'Success', promiscuityScore: promiscuityScore]
+        }
+        return [status: 404, message: "Error getting Promiscuity Score for ${cid}", promiscuityScore: null]
     }
 
 }

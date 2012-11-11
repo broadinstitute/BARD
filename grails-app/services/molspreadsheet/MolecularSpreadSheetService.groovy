@@ -181,8 +181,8 @@ class MolecularSpreadSheetService {
             int exptNumberColTracker = 0
             for (int col in 0..(molSpreadSheetData.superColumnCount - 1)) {
                 String key = "${row}_${col}"
-                MolSpreadSheetCell molSpreadSheetCell
-                SpreadSheetActivityStorage spreadSheetActivityStorage
+                MolSpreadSheetCell molSpreadSheetCell=null
+                SpreadSheetActivityStorage spreadSheetActivityStorage=null
                 if (dataMap.containsKey(key)) {
                     molSpreadSheetCell = dataMap[key]
                     spreadSheetActivityStorage = molSpreadSheetCell.spreadSheetActivityStorage
