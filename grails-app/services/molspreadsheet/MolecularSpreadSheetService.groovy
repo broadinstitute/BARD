@@ -1,26 +1,26 @@
 package molspreadsheet
 
 import bard.core.adapter.CompoundAdapter
+import bard.core.interfaces.ExperimentRole
+import bard.core.interfaces.SearchResult
 import bard.core.rest.RESTAssayService
 import bard.core.rest.RESTExperimentService
 import bard.core.rest.RESTProjectService
+import bardqueryapi.ActivityOutcome
 import bardqueryapi.IQueryService
 import bardqueryapi.QueryServiceWrapper
 import bardqueryapi.SearchFilter
 import com.metasieve.shoppingcart.ShoppingCartService
+import org.apache.commons.lang.NotImplementedException
 import querycart.CartAssay
 import querycart.CartCompound
 import querycart.CartProject
 import querycart.QueryCartService
 import bard.core.*
-import bardqueryapi.ActivityOutcome
-import org.apache.commons.lang.NotImplementedException
-import bard.core.interfaces.ExperimentRole
-import bard.core.interfaces.SearchResult
 
 class MolecularSpreadSheetService {
-    int MAXIMUM_NUMBER_OF_COMPOUNDS =500
-    final static int START_DYNAMIC_COLUMNS=4 //Where to start the dynamic columns
+    int MAXIMUM_NUMBER_OF_COMPOUNDS = 500
+    final static int START_DYNAMIC_COLUMNS = 4 //Where to start the dynamic columns
     QueryCartService queryCartService
     QueryServiceWrapper queryServiceWrapper
     ShoppingCartService shoppingCartService
@@ -84,12 +84,12 @@ class MolecularSpreadSheetService {
 
 
     protected Object retrieveImpliedCompoundsEtagFromAssaySpecification(List<Experiment> experimentList) {
-        Object etag =null
+        Object etag = null
         for (Experiment experiment in experimentList) {
-            final SearchResult<Compound> compoundIterator = this.queryServiceWrapper.restExperimentService.compounds(experiment)
-            List<Compound> singleExperimentCompoundList = compoundIterator.next(MAXIMUM_NUMBER_OF_COMPOUNDS)
-            List <Long> idList = singleExperimentCompoundList*.id as List <Long>
-            if (etag == null)  {
+            final SearchResult<Compound> compoundSearchResult = this.queryServiceWrapper.restExperimentService.compounds(experiment)
+            List<Compound> singleExperimentCompoundList = compoundSearchResult.next(MAXIMUM_NUMBER_OF_COMPOUNDS)
+            List<Long> idList = singleExperimentCompoundList*.id as List<Long>
+            if (etag == null) {
                 etag = this.queryServiceWrapper.restCompoundService.newETag("${new Date().toString()}",
                         idList);
             }
@@ -102,8 +102,6 @@ class MolecularSpreadSheetService {
         }
         return etag
     }
-
-
 
 //
 //    protected List<SpreadSheetActivity> extractMolSpreadSheetData(MolSpreadSheetData molSpreadSheetData, List<Experiment> experimentList) {
@@ -148,23 +146,22 @@ class MolecularSpreadSheetService {
         int columnCount = 0
         for (Experiment experiment in experimentList) {
 
-            SearchResult<Value> experimentIterator
+            SearchResult<Value> experimentSearchResults
             if (etag == null) {
-                experimentIterator = queryServiceWrapper.restExperimentService.activities(experiment)
-            }  else {
-                experimentIterator = queryServiceWrapper.restExperimentService.activities(experiment, etag)
+                experimentSearchResults = queryServiceWrapper.restExperimentService.activities(experiment)
+            } else {
+                experimentSearchResults = queryServiceWrapper.restExperimentService.activities(experiment, etag)
             }
 
             // Now step through the result set and pull back  one value for each compound
-            Value experimentValue
-            Integer experimentCount = 0
-            while (experimentIterator.hasNext()) {
-                experimentValue = experimentIterator.next()
+            //Value experimentValue
+            // Integer experimentCount = 0
+            for (Value experimentValue : experimentSearchResults.searchResults) {
                 Long translation = new Long(experimentValue.id.split("\\.")[0])
                 if (!molSpreadSheetData.columnPointer.containsKey(translation)) {
                     molSpreadSheetData.columnPointer.put(translation, columnCount)
                 }
-                spreadSheetActivityList.add(extractActivitiesFromExperiment(molSpreadSheetData,columnCount,experimentValue))
+                spreadSheetActivityList.add(extractActivitiesFromExperiment(molSpreadSheetData, columnCount, experimentValue))
             }
             columnCount++
         }
@@ -179,10 +176,10 @@ class MolecularSpreadSheetService {
      * @param molSpreadSheetData
      * @param dataMap
      */
-    protected void fillInTheMissingCellsAndConvertToExpandedMatrix(MolSpreadSheetData molSpreadSheetData, Map<String,MolSpreadSheetCell> dataMap) {
-        for (int row in 0..(molSpreadSheetData.rowCount - 1)){
+    protected void fillInTheMissingCellsAndConvertToExpandedMatrix(MolSpreadSheetData molSpreadSheetData, Map<String, MolSpreadSheetCell> dataMap) {
+        for (int row in 0..(molSpreadSheetData.rowCount - 1)) {
             int exptNumberColTracker = 0
-            for (int col in 0..(molSpreadSheetData.superColumnCount - 1)){
+            for (int col in 0..(molSpreadSheetData.superColumnCount - 1)) {
                 String key = "${row}_${col}"
                 MolSpreadSheetCell molSpreadSheetCell
                 SpreadSheetActivityStorage spreadSheetActivityStorage
@@ -190,16 +187,16 @@ class MolecularSpreadSheetService {
                     molSpreadSheetCell = dataMap[key]
                     spreadSheetActivityStorage = molSpreadSheetCell.spreadSheetActivityStorage
                 }
-                for (int experimentNum in 0..molSpreadSheetData.mssHeaders[col].size()-1) {
+                for (int experimentNum in 0..molSpreadSheetData.mssHeaders[col].size() - 1) {
                     String finalKey = "${row}_${(exptNumberColTracker++)}"
-                    if (spreadSheetActivityStorage == null)  {
+                    if (spreadSheetActivityStorage == null) {
                         if (molSpreadSheetCell != null) {
                             molSpreadSheetData.mssData[finalKey] = new MolSpreadSheetCell(molSpreadSheetCell)
-                        }  else {
+                        } else {
                             molSpreadSheetData.mssData[finalKey] = new MolSpreadSheetCell()
                         }
-                    }  else {
-                        molSpreadSheetData.mssData[finalKey] = new MolSpreadSheetCell(molSpreadSheetCell,experimentNum)
+                    } else {
+                        molSpreadSheetData.mssData[finalKey] = new MolSpreadSheetCell(molSpreadSheetCell, experimentNum)
                     }
                 }
             }
@@ -234,9 +231,9 @@ class MolecularSpreadSheetService {
      * @param spreadSheetActivityList
      */
     protected void populateMolSpreadSheetData(final MolSpreadSheetData molSpreadSheetData,
-                                                                        final List<Experiment> experimentList,
-                                                                        final List<SpreadSheetActivity> spreadSheetActivityList,
-                                                                        final Map<String,MolSpreadSheetCell> dataMap ) {
+                                              final List<Experiment> experimentList,
+                                              final List<SpreadSheetActivity> spreadSheetActivityList,
+                                              final Map<String, MolSpreadSheetCell> dataMap) {
         // now step through the data and place into molSpreadSheetData
         int columnPointer = 0
         // we need to handle each experiment separately ( until NCGC can do this in the background )
@@ -290,7 +287,7 @@ class MolecularSpreadSheetService {
      * @param molSpreadSheetData
      * @param cartCompoundList
      */
-    protected void populateMolSpreadSheetRowMetadata(final MolSpreadSheetData molSpreadSheetData, final List<CartCompound> cartCompoundList, Map<String,MolSpreadSheetCell> dataMap) {
+    protected void populateMolSpreadSheetRowMetadata(final MolSpreadSheetData molSpreadSheetData, final List<CartCompound> cartCompoundList, Map<String, MolSpreadSheetCell> dataMap) {
 
         // add specific values for the cid column
         int rowCount = 0
@@ -313,7 +310,7 @@ class MolecularSpreadSheetService {
      * @param compoundAdapterMap
      * @return
      */
-    protected void populateMolSpreadSheetRowMetadata(final MolSpreadSheetData molSpreadSheetData, final Map compoundAdapterMap, Map<String,MolSpreadSheetCell> dataMap) {
+    protected void populateMolSpreadSheetRowMetadata(final MolSpreadSheetData molSpreadSheetData, final Map compoundAdapterMap, Map<String, MolSpreadSheetCell> dataMap) {
 
         // Add every compound we can find in the compound adapters map
         List<CompoundAdapter> compoundAdaptersList = compoundAdapterMap.compoundAdapters
@@ -341,7 +338,7 @@ class MolecularSpreadSheetService {
                                                                              final Long compoundId,
                                                                              final String compoundName,
                                                                              final String compoundSmiles,
-                                                                             Map<String,MolSpreadSheetCell> dataMap) {
+                                                                             Map<String, MolSpreadSheetCell> dataMap) {
         // need to be able to map from CID to row location
         molSpreadSheetData.rowPointer.put(compoundId, rowCount)
 
@@ -352,9 +349,9 @@ class MolecularSpreadSheetService {
         //we will use this to get the promiscuity score
         dataMap.put("${rowCount}_2".toString(), new MolSpreadSheetCell(compoundId.toString(), MolSpreadSheetCellType.identifier))
         //we will use this to get the 'active vrs tested' column
-        int activeAssays = this.queryService.getNumberTestedAssays(compoundId,true)
-        int testedAssays  = this.queryService.getNumberTestedAssays(compoundId,false)
-        dataMap.put("${rowCount}_3".toString(),  new MolSpreadSheetCell("${activeAssays} vrs ${testedAssays}", MolSpreadSheetCellType.string))
+        int activeAssays = this.queryService.getNumberTestedAssays(compoundId, true)
+        int testedAssays = this.queryService.getNumberTestedAssays(compoundId, false)
+        dataMap.put("${rowCount}_3".toString(), new MolSpreadSheetCell("${activeAssays} vrs ${testedAssays}", MolSpreadSheetCellType.string))
 
         return molSpreadSheetData
 
@@ -374,7 +371,7 @@ class MolecularSpreadSheetService {
         molSpreadSheetData.mssHeaders << ["Active vs Tested across all Assay Definitions"]
         for (Experiment experiment in experimentList) {
             molSpreadSheetData.experimentNameList << "${experiment.id.toString()}"
-            molSpreadSheetData.experimentFullNameList   << "${experiment.name.toString()}"
+            molSpreadSheetData.experimentFullNameList << "${experiment.name.toString()}"
             molSpreadSheetData.mssHeaders << []
         }
     }
@@ -387,14 +384,10 @@ class MolecularSpreadSheetService {
     protected List<Experiment> assaysToExperiments(final Collection<Assay> assays) {
         final RESTAssayService restAssayService = this.queryServiceWrapper.restAssayService
         List<Experiment> allExperiments = []
-        if (!assays.isEmpty()) {
-            Iterator<Assay> assayIterator = assays.iterator()
-            while (assayIterator.hasNext()) {
-                Assay assay = assayIterator.next()
-                final SearchResult<Experiment> iterator = restAssayService.searchResult(assay, Experiment)
-                Collection<Experiment> experimentList = iterator.collect()
-                allExperiments.addAll(experimentList)
-            }
+
+        for (Assay assay : assays) {
+            final SearchResult<Experiment> searchResult = restAssayService.searchResult(assay, Experiment)
+            allExperiments.addAll(searchResult.searchResults)
         }
 
         return allExperiments
@@ -416,15 +409,12 @@ class MolecularSpreadSheetService {
         }
         final RESTAssayService restAssayService = queryServiceWrapper.restAssayService
 
-        for (Long individualAssayIds in assayIds) {
-            Assay assay = restAssayService.get(individualAssayIds)
-            final SearchResult<Experiment> iterator = restAssayService.searchResult(assay, Experiment)
-            while (iterator.hasNext()) {
-                Experiment experiment = iterator.next()
-                allExperiments <<  experiment
+        for (Long individualAssayIds : assayIds) {
+            final Assay assay = restAssayService.get(individualAssayIds)
+            final SearchResult<Experiment> experimentSearchResult = restAssayService.searchResult(assay, Experiment)
+            for (Experiment experiment : experimentSearchResult.searchResults) {
+                allExperiments << experiment
             }
-            //Collection<Experiment> experimentList = serviceIterator.collect()   <-------- NOTE: this approach does not work. You need to iterate through explicitly
-            //allExperiments.addAll(experimentList)
         }
 
         return allExperiments
@@ -475,12 +465,10 @@ class MolecularSpreadSheetService {
         final Collection<Project> projects = restProjectService.get(projectIds)
 
         for (Project project : projects) {
-            final SearchResult<Assay> iterator = restProjectService.searchResult(project, Assay)
-            Collection<Assay> assays = iterator.collect()
-            for (Assay assay : assays) {
-                final SearchResult<Experiment> experimentIterator = restAssayService.searchResult(assay, Experiment)
-                Collection<Experiment> experimentList = experimentIterator.collect()
-                allExperiments.addAll(experimentList)
+            final SearchResult<Assay> assaySearchResult = restProjectService.searchResult(project, Assay)
+            for (Assay assay : assaySearchResult.searchResults) {
+                final SearchResult<Experiment> searchResults = restAssayService.searchResult(assay, Experiment)
+                allExperiments.addAll(searchResults.searchResults)
             }
         }
         return allExperiments
@@ -495,8 +483,8 @@ class MolecularSpreadSheetService {
     List<SpreadSheetActivity> findActivitiesForCompounds(final Experiment experiment, final Object compoundETag) {
         final List<SpreadSheetActivity> spreadSheetActivities = []
         final SearchResult<Value> experimentIterator = this.queryServiceWrapper.restExperimentService.activities(experiment, compoundETag);
-        while (experimentIterator.hasNext()) {
-            Value experimentValue = experimentIterator.next()
+
+        for (Value experimentValue : experimentIterator.searchResults) {
             if (experimentValue) {
                 SpreadSheetActivity spreadSheetActivity = extractActivitiesFromExperiment(experimentValue)
                 spreadSheetActivities.add(spreadSheetActivity)
@@ -525,9 +513,7 @@ class MolecularSpreadSheetService {
 
     protected List<SpreadSheetActivity> createSpreadSheetActivitiesFromActivityValues(final List<Value> activityValues) {
         List<SpreadSheetActivity> spreadSheetActivities = []
-        final Iterator<Value> iterator = activityValues.iterator()
-        while (iterator.hasNext()) {
-            Value experimentValue = iterator.next()
+        for (Value experimentValue : activityValues) {
             SpreadSheetActivity spreadSheetActivity = extractActivitiesFromExperiment(experimentValue)
             spreadSheetActivities.add(spreadSheetActivity)
         }
@@ -536,61 +522,52 @@ class MolecularSpreadSheetService {
 
     protected Map extractActivityValues(final Experiment experiment, final Integer top = 10, final Integer skip = 0) {
         final RESTExperimentService restExperimentService = queryServiceWrapper.restExperimentService
-        final SearchResult<Value> experimentValueIterator = restExperimentService.activities(experiment);
-        return extractActivityValuesFromExperimentValueIterator(experimentValueIterator, top, skip)
+        final SearchResult<Value> experimentSearchResults = restExperimentService.activities(experiment);
+        return extractActivityValuesFromExperimentValueIterator(experimentSearchResults, top, skip)
     }
 
-    protected Map extractActivityValuesFromExperimentValueIterator(final SearchResult<Value> experimentValueIterator, final Integer top = 10, final Integer skip = 0) {
+    protected Map extractActivityValuesFromExperimentValueIterator(final SearchResult<Value> experimentResults, final Integer top = 10, final Integer skip = 0) {
         List<Value> activityValues = []
         long totalNumberOfRecords = 0
-        if (experimentValueIterator?.hasNext()) {
-            if (skip == 0) {
-                activityValues = experimentValueIterator.next(top)
-            }
-            else { //There is no way to pass in skip and top to the iterator so we have to do this hack
-                //which is not perfect
-                activityValues = experimentValueIterator.next(top + skip)
-                activityValues = activityValues.subList(skip, activityValues.size())
-
-            }
-            totalNumberOfRecords = experimentValueIterator.count
+        if (experimentResults) {
+            activityValues = experimentResults.next(top, skip)
+            totalNumberOfRecords = experimentResults.count
         }
+
         return [totalNumberOfRecords: totalNumberOfRecords, activityValues: activityValues]
     }
 
 
 
 
-    protected void prepareMapOfColumnsToAssay  ( final MolSpreadSheetData molSpreadSheetData) {
+    protected void prepareMapOfColumnsToAssay(final MolSpreadSheetData molSpreadSheetData) {
         molSpreadSheetData.mapColumnsToAssay = [:]
         int columnIndex = 0
         int assayIndex = 0
         for (List<String> listOfColumnSubheadings in molSpreadSheetData.mssHeaders) {
-            if (columnIndex < START_DYNAMIC_COLUMNS ) {
-                molSpreadSheetData.mapColumnsToAssay [columnIndex++]  =   ""
+            if (columnIndex < START_DYNAMIC_COLUMNS) {
+                molSpreadSheetData.mapColumnsToAssay[columnIndex++] = ""
             } else {
                 for (String columnSubheadings in listOfColumnSubheadings) {
-                    molSpreadSheetData.mapColumnsToAssayName [columnIndex]  =   molSpreadSheetData.experimentFullNameList[assayIndex].toString()
-                    molSpreadSheetData.mapColumnsToAssay [columnIndex++]  =   molSpreadSheetData.experimentNameList[assayIndex].toString()
+                    molSpreadSheetData.mapColumnsToAssayName[columnIndex] = molSpreadSheetData.experimentFullNameList[assayIndex].toString()
+                    molSpreadSheetData.mapColumnsToAssay[columnIndex++] = molSpreadSheetData.experimentNameList[assayIndex].toString()
                 }
                 assayIndex++
             }
         }
     }
 
-
-
-    /**
-     *
-     * @param experimentValue
-     * @return SpreadSheetActivity
-     */
+/**
+ *
+ * @param experimentValue
+ * @return SpreadSheetActivity
+ */
     SpreadSheetActivity extractActivitiesFromExperiment(MolSpreadSheetData molSpreadSheetData, final Integer experimentCount, final Value experimentValue) {
         final Iterator<Value> experimentValueIterator = experimentValue.children()
         SpreadSheetActivity spreadSheetActivity = new SpreadSheetActivity()
         while (experimentValueIterator?.hasNext()) {
             Value childValue = experimentValueIterator.next()
-            addCurrentActivityToSpreadSheet( molSpreadSheetData.mssHeaders[START_DYNAMIC_COLUMNS+experimentCount],spreadSheetActivity, childValue)
+            addCurrentActivityToSpreadSheet(molSpreadSheetData.mssHeaders[START_DYNAMIC_COLUMNS + experimentCount], spreadSheetActivity, childValue)
         }
         return spreadSheetActivity
     }
@@ -599,10 +576,10 @@ class MolecularSpreadSheetService {
     SpreadSheetActivity extractActivitiesFromExperiment(final Value experimentValue) {
         final Iterator<Value> experimentValueIterator = experimentValue.children()
         SpreadSheetActivity spreadSheetActivity = new SpreadSheetActivity()
-        List <String> dummyHeadersList = []
+        List<String> dummyHeadersList = []
         while (experimentValueIterator?.hasNext()) {
             Value childValue = experimentValueIterator.next()
-            addCurrentActivityToSpreadSheet( dummyHeadersList,spreadSheetActivity, childValue)
+            addCurrentActivityToSpreadSheet(dummyHeadersList, spreadSheetActivity, childValue)
         }
         return spreadSheetActivity
     }
@@ -613,7 +590,7 @@ class MolecularSpreadSheetService {
         final Iterator<Value> experimentValueIterator = experimentValue.children()
         SpreadSheetActivity spreadSheetActivity = new SpreadSheetActivity()
         spreadSheetActivity.experimentId = experimentId
-        List <String> dummyHeadersList = []
+        List<String> dummyHeadersList = []
         while (experimentValueIterator?.hasNext()) {
             Value childValue = experimentValueIterator.next()
             addCurrentActivityToSpreadSheet(dummyHeadersList, spreadSheetActivity, childValue)
@@ -621,14 +598,14 @@ class MolecularSpreadSheetService {
         return spreadSheetActivity
     }
 
-    /**
-     * The idea is to fill up a spreadsheet activity based on
-     *  Note hack -- this method has been short-circuited so that a HillCurveValue will cause the method to
-     *  push a value back onto readouts and then return
-     * @param spreadSheetActivity
-     * @param childValue
-     */
-    void addCurrentActivityToSpreadSheet(final List <String> resultTypeNames, final SpreadSheetActivity spreadSheetActivity, final Value childValue) {
+/**
+ * The idea is to fill up a spreadsheet activity based on
+ *  Note hack -- this method has been short-circuited so that a HillCurveValue will cause the method to
+ *  push a value back onto readouts and then return
+ * @param spreadSheetActivity
+ * @param childValue
+ */
+    void addCurrentActivityToSpreadSheet(final List<String> resultTypeNames, final SpreadSheetActivity spreadSheetActivity, final Value childValue) {
 
         if (childValue instanceof HillCurveValue) {
             spreadSheetActivity.hillCurveValueList << childValue

@@ -1,20 +1,19 @@
 package bardqueryapi
 
-import spock.lang.Shared
-import spock.lang.Specification
-import spock.lang.Unroll
-
 import bard.core.adapter.AssayAdapter
 import bard.core.adapter.CompoundAdapter
 import bard.core.adapter.ProjectAdapter
+import bard.core.interfaces.SearchResult
 import bard.core.rest.RESTAssayService
 import bard.core.rest.RESTCompoundService
 import bard.core.rest.RESTExperimentService
 import bard.core.rest.RESTProjectService
 import grails.test.mixin.TestFor
 import org.apache.commons.lang.time.StopWatch
+import spock.lang.Shared
+import spock.lang.Specification
+import spock.lang.Unroll
 import bard.core.*
-import bard.core.interfaces.SearchResult
 
 /**
  * See the API for {@link grails.test.mixin.support.GrailsUnitTestMixin} for usage instructions
@@ -106,12 +105,20 @@ class QueryServiceUnitSpec extends Specification {
      * {@link QueryService#showProject(Long)}
      *
      */
-    void "test Show Project"() {
+    void "test Show Project #label"() {
+        given:
+        SearchResult<Experiment> experimentSearchResult = Mock(SearchResult)
+        SearchResult<Assay> assaySearchResult = Mock(SearchResult)
+
         when: "Client enters a project ID and the showProject method is called"
         Map foundProjectAdapterMap = service.showProject(projectId)
         then: "The Project document is displayed"
         queryServiceWrapper.restProjectService >> { restProjectService }
         restProjectService.get(_) >> {project}
+        restProjectService.searchResult(_, _) >> {experimentSearchResult}
+        restAssayService.searchResult(_, _) >> {assaySearchResult}
+        experimentSearchResult.searchResults>> {[]}
+
         if (project) {
             assert foundProjectAdapterMap
             ProjectAdapter foundProjectAdapter = foundProjectAdapterMap.projectAdapter
@@ -132,10 +139,15 @@ class QueryServiceUnitSpec extends Specification {
      *
      */
     void "test Show Assay"() {
+        given:
+        SearchResult<Experiment> experimentSearchResult = Mock(SearchResult)
+        SearchResult<Project> projectSearchResult = Mock(SearchResult)
         when: "Client enters a assay ID and the showAssay method is called"
         Map foundAssayMap = service.showAssay(assayId)
         then: "The Assay document is displayed"
         queryServiceWrapper.restAssayService >> { restAssayService }
+        restAssayService.searchResult(_, _) >> {experimentSearchResult}
+        restAssayService.searchResult(_, _) >> {projectSearchResult}
         restAssayService.get(_) >> {assay}
         if (assay) {
             assert foundAssayMap
@@ -317,7 +329,7 @@ class QueryServiceUnitSpec extends Specification {
     void "test Find Compounds By Text Search with defaults #searchString"() {
         given:
         StopWatch sw = Mock(StopWatch)
-        SearchResult<Compound> iter = Mock(SearchResult)
+        SearchResult<Compound> iter = (SearchResult<Compound>) Mock(SearchResult)
         when:
         Map map = service.findCompoundsByTextSearch(searchString)
         then:

@@ -1,7 +1,11 @@
 package molspreadsheet
 
 import bard.core.adapter.CompoundAdapter
+import bard.core.interfaces.SearchResult
+import bard.core.rest.RESTAssayService
+import bard.core.rest.RESTCompoundService
 import bard.core.rest.RESTExperimentService
+import bard.core.rest.RESTProjectService
 import bardqueryapi.BardWebInterfaceControllerUnitSpec
 import bardqueryapi.IQueryService
 import bardqueryapi.QueryServiceWrapper
@@ -13,10 +17,6 @@ import spock.lang.Shared
 import spock.lang.Specification
 import spock.lang.Unroll
 import bard.core.*
-import bard.core.rest.RESTCompoundService
-import bard.core.rest.RESTProjectService
-import bard.core.rest.RESTAssayService
-import bard.core.interfaces.SearchResult
 
 /**
  * Created with IntelliJ IDEA.
@@ -55,10 +55,9 @@ class MolecularSpreadSheetServiceUnitSpec extends Specification {
         this.queryServiceWrapper = Mock(QueryServiceWrapper)
         this.shoppingCartService = Mock(ShoppingCartService)
         this.queryService = Mock(IQueryService)
-        queryServiceWrapper.restAssayService=restAssayService
+        queryServiceWrapper.restAssayService = restAssayService
         service.queryServiceWrapper = queryServiceWrapper
         service.queryService = this.queryService
-
 
 
     }
@@ -66,7 +65,8 @@ class MolecularSpreadSheetServiceUnitSpec extends Specification {
     void tearDown() {
         // Tear down logic here
     }
-    void "test assays To Experiments"(){
+
+    void "test assays To Experiments"() {
         given:
         SearchResult<Experiment> searchResult = Mock(SearchResult)
         Collection<Assay> assays = [new Assay(name: "A1")]
@@ -74,7 +74,6 @@ class MolecularSpreadSheetServiceUnitSpec extends Specification {
         List<Experiment> experiments = service.assaysToExperiments(assays)
         then:
         queryServiceWrapper.restAssayService >> { restAssayService }
-        restAssayService.iterator(_, _) >> {searchResult}
         assert experiments.isEmpty()
     }
 
@@ -88,20 +87,14 @@ class MolecularSpreadSheetServiceUnitSpec extends Specification {
         molSpreadSheetData.mssHeaders << ['b']
         molSpreadSheetData.mssHeaders << ['c']
         molSpreadSheetData.mssHeaders << ['d']
-        molSpreadSheetData.mssHeaders << ['e','f','g']
+        molSpreadSheetData.mssHeaders << ['e', 'f', 'g']
         service.prepareMapOfColumnsToAssay(molSpreadSheetData)
         molSpreadSheetData.experimentNameList << 'a'
 
         then: "we want to pull out the active values"
         assertNotNull molSpreadSheetData
-        assert molSpreadSheetData.mapColumnsToAssay.size()==7
+        assert molSpreadSheetData.mapColumnsToAssay.size() == 7
     }
-
-
-
-
-
-
 
     /**
      * We tests the non-null case with an integration test
@@ -129,9 +122,9 @@ class MolecularSpreadSheetServiceUnitSpec extends Specification {
 
     void "test null cmp iterator in retrieveImpliedCompoundsEtagFromAssaySpecification"() {
         given:
-        final List <Experiment>  experimentList = []
+        final List<Experiment> experimentList = []
 
-        SearchResult<Compound> compoundSearchResult  = Mock()
+        SearchResult<Compound> compoundSearchResult = Mock()
         experimentList << new Experiment()
 
         when:
@@ -185,20 +178,16 @@ class MolecularSpreadSheetServiceUnitSpec extends Specification {
         when:
         final Map map = service.extractActivityValuesFromExperimentValueIterator(experimentValueIterator, top, skip)
         then:
-        numberOfTimesHasNextIsCalled * experimentValueIterator.hasNext() >> {expectedHasNext}
-        numberOfTimesNextIsCalled * experimentValueIterator.next(_) >> {expectedNext}
+        numberOfTimesNextIsCalled * experimentValueIterator.next(_, _) >> {expectedNext}
         numberOfTimesNextIsCalled * experimentValueIterator.count >> {expectedTotalRecords}
         assert map
         assert map.totalNumberOfRecords == expectedTotalRecords
         assert map.activityValues.size() == expectedTotalActivities
 
         where:
-        label                                 | top | skip | expectedTotalActivities | expectedTotalRecords | expectedNext               | expectedHasNext | numberOfTimesNextIsCalled | numberOfTimesHasNextIsCalled
-        "hasNext, returns true, skip is zero" | 0   | 0    | 0                       | 0                    | []                         | true            | 1                         | 1
-        "hasNext, returns false"              | 0   | 0    | 0                       | 0                    | []                         | false           | 0                         | 1
-        "hasNext, returns true, skip is 1"    | 1   | 1    | 1                       | 1                    | [new Value(), new Value()] | true            | 1                         | 1
-       // "hasNext, returns true"               | 0   | 0    | 0                       | 0                    | []                         | true            | 0                         | 2
-
+        label                | top | skip | numberOfTimesNextIsCalled | expectedNext               | expectedTotalRecords | expectedTotalActivities
+        "Top and skip = 0"   | 0   | 0    | 1                         | []                         | 0                    | 0
+        "Top=1 and skip = 1" | 1   | 1    | 1                         | [new Value(), new Value()] | 1                    | 2
     }
 
 
@@ -238,7 +227,7 @@ class MolecularSpreadSheetServiceUnitSpec extends Specification {
         experimentalValue.id = "foo"
 
         then: "prove that the active values are available"
-        shouldFail {service.addCurrentActivityToSpreadSheet(columnNames,spreadSheetActivity, experimentalValue)}
+        shouldFail {service.addCurrentActivityToSpreadSheet(columnNames, spreadSheetActivity, experimentalValue)}
     }
 
     def returnRelevantNumber(String identifier, SpreadSheetActivity spreadSheetActivity) {
@@ -338,7 +327,7 @@ class MolecularSpreadSheetServiceUnitSpec extends Specification {
         molSpreadSheetData.mssData = new LinkedHashMap<String, MolSpreadSheetCell>()
         List<CartCompound> cartCompoundList = []
         cartCompoundList.add(new CartCompound("c1ccccc1", "benzene", 47))
-        Map<String,MolSpreadSheetCell> dataMap = [:]
+        Map<String, MolSpreadSheetCell> dataMap = [:]
 
         when: "we want to pull out the active values"
         service.populateMolSpreadSheetRowMetadata(molSpreadSheetData, cartCompoundList, dataMap)
@@ -355,10 +344,10 @@ class MolecularSpreadSheetServiceUnitSpec extends Specification {
         final MolSpreadSheetData molSpreadSheetData = new MolSpreadSheetData()
         molSpreadSheetData.rowPointer = new LinkedHashMap<Long, Integer>()
         molSpreadSheetData.mssData = new LinkedHashMap<String, MolSpreadSheetCell>()
-        Map<String,MolSpreadSheetCell> dataMap = [:]
+        Map<String, MolSpreadSheetCell> dataMap = [:]
 
         when: "we want to pull out the active values"
-        service.populateMolSpreadSheetRowMetadata(molSpreadSheetData, compoundAdapterMap, dataMap )
+        service.populateMolSpreadSheetRowMetadata(molSpreadSheetData, compoundAdapterMap, dataMap)
 
         then: "prove that the active values are available"
         assertNotNull molSpreadSheetData

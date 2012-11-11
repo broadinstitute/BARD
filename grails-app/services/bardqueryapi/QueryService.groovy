@@ -49,7 +49,7 @@ class QueryService implements IQueryService {
             final SearchResult<Compound> searchIterator = this.queryServiceWrapper.restCompoundService.search(searchParams)
             this.queryHelperService.stopStopWatch(sw, "find compounds by text search ${searchParams.toString()}")
             //collect results
-            final Collection<Compound> compounds = searchIterator.collect()
+            final Collection<Compound> compounds = searchIterator.searchResults
 
             //convert to adapters
             foundCompoundAdapters.addAll(this.queryHelperService.compoundsToAdapters(compounds))
@@ -82,7 +82,7 @@ class QueryService implements IQueryService {
             final SearchResult<Assay> searchIterator = this.queryServiceWrapper.restAssayService.search(searchParams)
             this.queryHelperService.stopStopWatch(sw, "find assays by text search ${searchParams.toString()}")
 
-            final Collection assays = searchIterator.collect()
+            final Collection assays = searchIterator.searchResults
             foundAssayAdapters.addAll(this.queryHelperService.assaysToAdapters(assays))
             facets = searchIterator.facets
             nhits = searchIterator.count
@@ -111,7 +111,7 @@ class QueryService implements IQueryService {
             StopWatch sw = this.queryHelperService.startStopWatch()
             final SearchResult<Project> searchIterator = this.queryServiceWrapper.restProjectService.search(searchParams)
             this.queryHelperService.stopStopWatch(sw, "find projects by text search ${searchParams.toString()}")
-            final Collection projects = searchIterator.collect()
+            final Collection projects = searchIterator.searchResults
             foundProjectAdapters.addAll(this.queryHelperService.projectsToAdapters(projects))
             facets = searchIterator.facets
             nhits = searchIterator.count
@@ -149,7 +149,7 @@ class QueryService implements IQueryService {
             final SearchResult<Compound> searchIterator = this.queryServiceWrapper.restCompoundService.structureSearch(structureSearchParams);
             this.queryHelperService.stopStopWatch(sw, "structure search ${structureSearchParams.toString()}")
             //collect the results
-            final Collection<Compound> compounds = searchIterator.collect()
+            final Collection<Compound> compounds = searchIterator.searchResults
             //convert to adapters
             compoundAdapters.addAll(this.queryHelperService.compoundsToAdapters(compounds))
 
@@ -280,10 +280,10 @@ class QueryService implements IQueryService {
             this.queryHelperService.stopStopWatch(sw, "show assay ${assayId.toString()}")
             if (assay) {
                 final SearchResult<Experiment> experimentIterator = restAssayService.searchResult(assay, Experiment)
-                Collection<Experiment> experiments = experimentIterator.collect()
+                Collection<Experiment> experiments = experimentIterator.searchResults
 
                 final SearchResult<Project> projectIterator = restAssayService.searchResult(assay, Project)
-                Collection<Project> projects = projectIterator.collect()
+                Collection<Project> projects = projectIterator.searchResults
 
 
                 final AssayAdapter assayAdapter = new AssayAdapter(assay)
@@ -305,10 +305,10 @@ class QueryService implements IQueryService {
             this.queryHelperService.stopStopWatch(sw, "show project ${projectId.toString()}")
             if (project) {
                 final SearchResult<Experiment> experimentIterator = restProjectService.searchResult(project, Experiment)
-                List<Experiment> experiments = experimentIterator.collect()
+                List<Experiment> experiments = experimentIterator.searchResults
                 experiments.sort { it.role }
                 final SearchResult<Assay> assayIterator = restProjectService.searchResult(project, Assay)
-                Collection<Assay> assays = assayIterator.collect()
+                Collection<Assay> assays = assayIterator.searchResults
                 ProjectAdapter projectAdapter = new ProjectAdapter(project)
                 return [projectAdapter: projectAdapter, experiments: experiments, assays: assays]
             }

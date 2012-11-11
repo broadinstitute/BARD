@@ -70,11 +70,11 @@ class DoseCurveRenderingServiceIntegrationSpec extends IntegrationSpec {
         Experiment experiment = restExperimentService.get(experimentId)
 
         and: "We call the activities method on the restExperimentService with the experiment and the ETag"
-        final SearchResult<Value> experimentIterator = this.restExperimentService.activities(experiment, compoundETag);
-        Collection collect = experimentIterator.collect()
+        final SearchResult<Value> activityValueSearchResult = this.restExperimentService.activities(experiment, compoundETag);
+        final List<Value> searchResults = activityValueSearchResult.searchResults
 
         and: "We extract the first experimen tValue in the resulting collection"
-        Value experimentValue = (Value) collect.iterator().next()
+        Value experimentValue = (Value) searchResults.get(0)
 
         and: "We call the extractActivitiesFromExperiment method with the experiment Value to get the SpreadSheetActivity"
         SpreadSheetActivity spreadSheetActivity = molecularSpreadSheetService.extractActivitiesFromExperiment(experimentValue, experimentId)
@@ -122,11 +122,11 @@ class DoseCurveRenderingServiceIntegrationSpec extends IntegrationSpec {
         Experiment experiment = restExperimentService.get(experimentId)
 
         and: "We call the activities method on the restExperimentService with the experiment and the ETag"
-        final SearchResult<Value> experimentIterator = this.restExperimentService.activities(experiment, compoundETag);
-        Collection collect = experimentIterator.collect()
+        final SearchResult<Value> activityValueSearchResults = this.restExperimentService.activities(experiment, compoundETag);
+        final List<Value> searchResults = activityValueSearchResults.searchResults
 
         and: "We extract the first experimen tValue in the resulting collection"
-        Value experimentValue = (Value) collect.iterator().next()
+        Value experimentValue = searchResults.get(0)
 
         and: "We call the extractActivitiesFromExperiment method with the experiment Value to get the SpreadSheetActivity"
         SpreadSheetActivity spreadSheetActivity = molecularSpreadSheetService.extractActivitiesFromExperiment(experimentValue, experimentId)
@@ -159,10 +159,10 @@ class DoseCurveRenderingServiceIntegrationSpec extends IntegrationSpec {
 
         and: "We call the activities method on the restExperimentService with the experiment and the ETag"
         final SearchResult<Value> experimentIterator = this.restExperimentService.activities(experiment, compoundETag);
-        Collection collect = experimentIterator.collect()
+
 
         and: "We extract the first experimen tValue in the resulting collection"
-        Value experimentValue = (Value) collect.iterator().next()
+        Value experimentValue = experimentIterator.searchResults.get(0)
 
         and: "We call the extractActivitiesFromExperiment method with the experiment Value to get the SpreadSheetActivity"
         SpreadSheetActivity spreadSheetActivity = molecularSpreadSheetService.extractActivitiesFromExperiment(experimentValue, experimentId)
@@ -194,10 +194,10 @@ class DoseCurveRenderingServiceIntegrationSpec extends IntegrationSpec {
 
         and: "We call the activities method on the restExperimentService with the experiment and the ETag"
         final SearchResult<Value> experimentIterator = this.restExperimentService.activities(experiment);
-        Collection collect = experimentIterator.collect()
 
         and: "We extract the first experimen tValue in the resulting collection"
-        Value experimentValue = (Value) collect.iterator().next()
+        Value experimentValue = experimentIterator.searchResults.get(0)
+
 
         and: "We call the extractActivitiesFromExperiment method with the experiment Value to get the SpreadSheetActivity"
         SpreadSheetActivity spreadSheetActivity = molecularSpreadSheetService.extractActivitiesFromExperiment(experimentValue, experimentId)

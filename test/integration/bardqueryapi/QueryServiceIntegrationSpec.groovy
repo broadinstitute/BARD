@@ -1,6 +1,5 @@
 package bardqueryapi
 
-import bard.core.AssayValues
 import bard.core.StructureSearchParams
 import bard.core.adapter.AssayAdapter
 import bard.core.adapter.CompoundAdapter
