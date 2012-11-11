@@ -8,9 +8,9 @@ import bard.core.adapter.ProjectAdapter
 import grails.plugins.springsecurity.Secured
 import molspreadsheet.MolecularSpreadSheetService
 import org.apache.commons.lang.StringUtils
-import promiscuity.PromiscuityScore
 
 import javax.servlet.http.HttpServletResponse
+import bard.core.PromiscuityScore
 
 /**
  *
@@ -81,7 +81,7 @@ class BardWebInterfaceController {
             return
         }
         flash.message = "Error Getting Active vrs Tested Assays for Compound ${cid}"
-        return response.sendError(HttpServletResponse.SC_BAD_REQUEST,"${flash.message}")
+        return response.sendError(HttpServletResponse.SC_BAD_REQUEST, "${flash.message}")
     }
 
     def promiscuity(Long cid) {

@@ -48,11 +48,11 @@
             <dd>${compound?.formula()}</dd>
             <g:if test="${compound?.compound?.getValue(bard.core.Compound.CASValue)}">
                 <dt>CAS Registry Numbers:</dt>
-                <dd>${compound?.compound?.getValues(bard.core.CompoundValues.CASValue)?.collect {it.value}?.join(', ')}</dd>
+                <dd>${compound?.compound?.getValues(bard.core.interfaces.CompoundValues.CASValue)?.collect {it.value}?.join(', ')}</dd>
             </g:if>
             <g:if test="${compound?.compound?.getValue(bard.core.Compound.UNIIValue)}">
                 <dt>Unique Ingredient Identifier:</dt>
-                <dd>${compound?.compound?.getValue(bard.core.CompoundValues.UNIIValue)?.value}</dd>
+                <dd>${compound?.compound?.getValue(bard.core.interfaces.CompoundValues.UNIIValue)?.value}</dd>
             </g:if>
             <g:if test="${compound?.compound?.getValue('Wikipedia')}">
                 <dt>Wikipedia Entry:</dt>

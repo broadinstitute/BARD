@@ -3,6 +3,7 @@ package bardqueryapi
 import bard.core.adapter.AssayAdapter
 import bard.core.adapter.CompoundAdapter
 import bard.core.adapter.ProjectAdapter
+import bard.core.interfaces.ExperimentRole
 import com.metasieve.shoppingcart.ShoppingCartService
 import grails.test.mixin.TestFor
 import grails.test.mixin.TestMixin
@@ -11,8 +12,6 @@ import molspreadsheet.MolecularSpreadSheetService
 import molspreadsheet.SpreadSheetActivity
 import org.apache.http.HttpException
 import org.json.JSONArray
-import promiscuity.PromiscuityScore
-import promiscuity.Scaffold
 import querycart.CartAssay
 import spock.lang.Shared
 import spock.lang.Specification
@@ -21,7 +20,6 @@ import spock.lang.Unroll
 import javax.servlet.http.HttpServletResponse
 
 import bard.core.*
-import bard.core.interfaces.ExperimentRole
 
 /**
  * See the API for {@link grails.test.mixin.support.GrailsUnitTestMixin} for usage instructions
