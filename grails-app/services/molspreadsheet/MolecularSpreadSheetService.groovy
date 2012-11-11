@@ -19,8 +19,7 @@ import querycart.QueryCartService
 import bard.core.*
 
 class MolecularSpreadSheetService {
-    int MAXIMUM_NUMBER_OF_COMPOUNDS = 500
-    final static int START_DYNAMIC_COLUMNS = 4 //Where to start the dynamic columns
+     final static int START_DYNAMIC_COLUMNS = 4 //Where to start the dynamic columns
     QueryCartService queryCartService
     QueryServiceWrapper queryServiceWrapper
     ShoppingCartService shoppingCartService
@@ -87,7 +86,7 @@ class MolecularSpreadSheetService {
         Object etag = null
         for (Experiment experiment in experimentList) {
             final SearchResult<Compound> compoundSearchResult = this.queryServiceWrapper.restExperimentService.compounds(experiment)
-            List<Compound> singleExperimentCompoundList = compoundSearchResult.next(MAXIMUM_NUMBER_OF_COMPOUNDS)
+            List<Compound> singleExperimentCompoundList = compoundSearchResult.searchResults
             List<Long> idList = singleExperimentCompoundList*.id as List<Long>
             if (etag == null) {
                 etag = this.queryServiceWrapper.restCompoundService.newETag("${new Date().toString()}",
