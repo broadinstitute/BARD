@@ -4,6 +4,9 @@ import bard.core.StructureSearchParams
 import bard.core.adapter.AssayAdapter
 import bard.core.adapter.CompoundAdapter
 import bard.core.adapter.ProjectAdapter
+import bard.core.interfaces.AssayCategory
+import bard.core.interfaces.AssayRole
+import bard.core.interfaces.AssayType
 import grails.plugin.spock.IntegrationSpec
 import org.junit.After
 import org.junit.Before
@@ -102,9 +105,9 @@ class QueryServiceIntegrationSpec extends IntegrationSpec {
         assert assayId == assayAdapter.assay.id
         assert assayAdapter.assay.protocol
         assert assayAdapter.assay.comments
-        assert assayAdapter.assay.type == AssayValues.AssayType.Other
-        assert assayAdapter.assay.role == AssayValues.AssayRole.Primary
-        assert assayAdapter.assay.category == AssayValues.AssayCategory.MLPCN
+        assert assayAdapter.assay.type == AssayType.Other
+        assert assayAdapter.assay.role == AssayRole.Primary
+        assert assayAdapter.assay.category == AssayCategory.MLPCN
         assert assayAdapter.assay.description
     }
 
@@ -225,7 +228,7 @@ class QueryServiceIntegrationSpec extends IntegrationSpec {
         assert assayAdapterMap.nHits >= 0
 
         where:
-        label                     | searchString         | skip | top | numberOfAssays | filters
+        label                     | searchString             | skip | top | numberOfAssays | filters
         "dna repair"              | "\"dna repair\""         | 0    | 10  | 10             | []
         "dna repair with filters" | "\"dna repair\""         | 0    | 10  | 10             | [new SearchFilter("gobp_term", "DNA repair"), new SearchFilter("gobp_term", "response to UV-C")]
         "dna repair skip and top" | "\"dna repair\""         | 10   | 10  | 10             | []
@@ -261,8 +264,8 @@ class QueryServiceIntegrationSpec extends IntegrationSpec {
         assert projectAdapterMap.nHits >= numberOfProjects
         where:
         label                             | searchString         | skip | top | numberOfProjects | filters
-        "dna repair"                      | "\"dna repair\""         | 0    | 10  | 10               | []
-        "dna repair skip and top"         | "\"dna repair\""         | 10   | 10  | 10               | []
+        "dna repair"                      | "\"dna repair\""     | 0    | 10  | 10               | []
+        "dna repair skip and top"         | "\"dna repair\""     | 10   | 10  | 10               | []
         "biological process"              | "biological process" | 0    | 10  | 10               | []
         "biological process with filters" | "biological process" | 0    | 10  | 10               | [new SearchFilter("num_expt", "6")]
 

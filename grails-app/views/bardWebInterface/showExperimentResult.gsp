@@ -6,7 +6,7 @@
   To change this template use File | Settings | File Templates.
 --%>
 
-<%@ page import="org.springframework.context.annotation.Primary; bard.core.ExperimentValues; bard.core.AssayValues" contentType="text/html;charset=UTF-8" %>
+<%@ page import="org.springframework.context.annotation.Primary; bard.core.ExperimentValues" contentType="text/html;charset=UTF-8" %>
 <!DOCTYPE html>
 <html>
 <head>

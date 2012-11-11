@@ -3,12 +3,12 @@ package mockServices
 import bard.core.adapter.AssayAdapter
 import bard.core.adapter.CompoundAdapter
 import bard.core.adapter.ProjectAdapter
-import bard.core.*
+import bard.core.interfaces.AssayCategory
+import bard.core.interfaces.ExperimentValues
 import bardqueryapi.IQueryService
 import bardqueryapi.QueryHelperService
 import bardqueryapi.SearchFilter
-import bard.core.interfaces.AssayValues
-import bard.core.interfaces.ExperimentValues
+import bard.core.*
 
 class MockQueryService implements IQueryService {
     QueryHelperService queryHelperService
@@ -230,7 +230,7 @@ class MockQueryService implements IQueryService {
         Long assayId = new Long(588636)
         assay.setId(assayId)
         mockAssayAdapter.assay = assay
-        mockAssayAdapter.assay.category = AssayValues.AssayCategory.MLPCN
+        mockAssayAdapter.assay.category = AssayCategory.MLPCN
         mockAssayAdapter.assay.protocol = "Please see linked AIDs for a detailed description of each assay."
         mockAssayAdapter.assay.comments = "This project is on-going and will be updated at a later point with our findings."
         mockAssayAdapter.assay.description = '''

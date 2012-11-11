@@ -387,7 +387,9 @@ class MolecularSpreadSheetService {
 
         for (Assay assay : assays) {
             final SearchResult<Experiment> searchResult = restAssayService.searchResult(assay, Experiment)
-            allExperiments.addAll(searchResult.searchResults)
+            if(searchResult){
+                allExperiments.addAll(searchResult.searchResults)
+            }
         }
 
         return allExperiments
