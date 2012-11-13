@@ -3,6 +3,7 @@ package bard.db.project
 import bard.db.registration.ExternalReference
 import grails.plugin.spock.IntegrationSpec
 import org.junit.Before
+import org.springframework.dao.DataIntegrityViolationException
 
 /**
  * Created with IntelliJ IDEA.
@@ -134,8 +135,10 @@ class ProjectIntegrationSpec extends IntegrationSpec {
 
         when:
         domainInstance.refresh().delete()
+        flushAndClear()
 
-        then:
+        then: 'externalReference should be deleted to to belongsTo cascade delete'
+        notThrown(DataIntegrityViolationException)
         ExternalReference.findById(externalReference.id) == null
     }
 
