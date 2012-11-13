@@ -3,12 +3,6 @@ package bard.db.project
 import bard.db.registration.ExternalReference
 import grails.plugin.spock.IntegrationSpec
 import org.junit.Before
-import bard.db.project.Project
-import bard.db.project.ProjectContext
-import bard.db.project.ProjectContextItem
-import bard.db.project.ProjectStep
-import bard.db.project.StepContext
-import bard.db.project.StepContextItem
 
 /**
  * Created with IntelliJ IDEA.

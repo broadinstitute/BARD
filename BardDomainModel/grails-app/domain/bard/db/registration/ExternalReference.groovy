@@ -33,7 +33,7 @@ class ExternalReference implements Serializable {
         builder.isEquals()
     }
 
-    static belongsTo = [projext:Project, experiment:Experiment]
+    static belongsTo = [project:Project, experiment:Experiment]
 
     static mapping = {
         id(column: 'EXTERNAL_REFERENCE_ID', generator: 'sequence', params: [sequence: 'EXTERNAL_REFERENCE_ID_SEQ'])
