@@ -1,6 +1,9 @@
 package bard.db.registration
 
+import bard.db.experiment.Experiment
+import bard.db.project.Project
 import grails.buildtestdata.mixin.Build
+import org.junit.After
 import org.junit.Before
 import spock.lang.Specification
 import spock.lang.Unroll
@@ -17,7 +20,7 @@ import static test.TestUtils.createString
  * Time: 3:03 PM
  * To change this template use File | Settings | File Templates.
  */
-@Build(ExternalReference)
+@Build([ExternalReference, ExternalSystem, Experiment, Project])
 @Unroll
 class ExternalReferenceConstraintUnitSpec extends Specification {
 
@@ -25,10 +28,57 @@ class ExternalReferenceConstraintUnitSpec extends Specification {
 
     @Before
     void doSetup() {
-        domainInstance = ExternalReference.buildWithoutSave()
+        domainInstance = ExternalReference.buildWithoutSave(experiment: Experiment.build())
     }
 
-    void "test extAssayRef constraints #desc extAssayRef: "() {
+    @After
+    void doAfter() {
+        if (domainInstance.validate()) {
+            domainInstance.save(flush: true)
+        }
+    }
+
+    void "test externalSystem constraints #desc externalSystem: #valueUnderTest"() {
+
+        final String field = 'externalSystem'
+
+        when:
+        domainInstance[(field)] = valueUnderTest.call()
+        domainInstance.validate()
+
+        then:
+        assertFieldValidationExpectations(domainInstance, field, valid, errorCode)
+
+        where:
+        desc                   | valueUnderTest           | valid | errorCode
+        'null not valid'       | {null}                   | false | 'nullable'
+        'valid externalSystem' | {ExternalSystem.build()} | true  | null
+    }
+
+    void "test experiment OR project constraint #desc project: #valueUnderTest"() {
+        given:
+        domainInstance.experiment = null
+        domainInstance.project = null
+
+        when:
+        domainInstance.experiment = experiment.call()
+        domainInstance.project = project.call()
+        domainInstance.validate()
+
+        then:
+        assertFieldValidationExpectations(domainInstance, 'experiment', valid, errorCode)
+        assertFieldValidationExpectations(domainInstance, 'project', valid, errorCode)
+
+        where:
+        desc                      | experiment           | project           | valid | errorCode
+        'both null, not valid'    | {null}               | {null}            | false | 'validator.invalid'
+        'both non-null not valid' | {Experiment.build()} | {Project.build()} | false | 'validator.invalid'
+
+        'only experiment, valid'  | {Experiment.build()} | {null}            | true  | null
+        'only project, valid'     | {null}               | {Project.build()} | true  | null
+    }
+
+    void "test extAssayRef constraints #desc extAssayRef: #valueUnderTest"() {
 
         final String field = 'extAssayRef'
 
@@ -59,6 +109,8 @@ class ExternalReferenceConstraintUnitSpec extends Specification {
 
         then:
         assertFieldValidationExpectations(domainInstance, field, valid, errorCode)
+
+
 
         where:
         desc               | valueUnderTest                         | valid | errorCode
@@ -95,6 +147,7 @@ class ExternalReferenceConstraintUnitSpec extends Specification {
 
         then:
         assertFieldValidationExpectations(domainInstance, field, valid, errorCode)
+
 
         where:
         desc         | valueUnderTest | valid | errorCode

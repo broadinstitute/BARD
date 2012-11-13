@@ -41,12 +41,20 @@ class ExternalReference implements Serializable {
 
     static constraints = {
         externalSystem()
-        experiment(nullable: true)
-        project(nullable: true)
+        experiment(nullable: true, validator: validateExperimentOrProject)
+        project(nullable: true, validator: validateExperimentOrProject)
         extAssayRef(blank:false, maxSize: EXT_ASSAY_REF_MAX_SIZE)
 
         dateCreated(nullable: false)
         lastUpdated(nullable: true)
         modifiedBy(nullable: true, blank: false, maxSize: MODIFIED_BY_MAX_SIZE)
     }
+
+    /**
+     * ExternalReferences require an Experiment or a Project but can't have both
+     */
+    static def validateExperimentOrProject = {val, obj ->
+        obj.experiment != null && obj.project == null || obj.experiment == null && obj.project != null
+    }
+
 }
