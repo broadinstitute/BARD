@@ -159,7 +159,7 @@ class AssayContextsValidatorCreatorAndPersistor extends ValidatorCreatorAndPersi
 //                }
 
                 //comment out to commit the transaction
-                status.setRollbackOnly()
+//                status.setRollbackOnly()
             }
         }
 //        }
