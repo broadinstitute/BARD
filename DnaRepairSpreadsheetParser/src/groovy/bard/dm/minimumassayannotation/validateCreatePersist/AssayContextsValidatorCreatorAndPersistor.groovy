@@ -1,7 +1,6 @@
 package bard.dm.minimumassayannotation.validateCreatePersist
 
 import bard.db.registration.AssayContext
-import org.springframework.transaction.TransactionStatus
 import bard.db.registration.AssayContextItem
 import bard.db.dictionary.Element
 import bard.db.registration.AttributeType
@@ -63,107 +62,107 @@ class AssayContextsValidatorCreatorAndPersistor extends ValidatorCreatorAndPersi
     void createAndPersist(List<ContextDTO> assayContextList) {
         super.validate(assayContextList)
 
-        def out = new File('DnaSpreadsheetParserResultAssayContext' + '_' + System.currentTimeMillis() + '.txt')
-        out.withWriterAppend { writer ->
-            Integer totalAssayContextItems = 0
-            assayContextList.each { ContextDTO assayContextDTO -> totalAssayContextItems += assayContextDTO.attributes.size()}
-            Integer tally = 0
+//        def out = new File('DnaSpreadsheetParserResultAssayContext' + '_' + System.currentTimeMillis() + '.txt')
+//        out.withWriterAppend { writer ->
+        Integer totalAssayContextItems = 0
+        assayContextList.each { ContextDTO assayContextDTO -> totalAssayContextItems += assayContextDTO.attributes.size()}
+        Integer tally = 0
 
-            assayContextList.each { ContextDTO assayContextDTO ->
-                AssayContext.withTransaction { TransactionStatus status ->
-                    //create the assay-context
-                    AssayContext assayContext = new AssayContext()
-                    assayContext.assay = super.getAssayFromAid(assayContextDTO.aid)
-                    assayContext.modifiedBy = super.modifiedBy
-                    //TODO DELETE DELETE DELETE the following line should be deleted once all assays have been uploaded to CAP
-                    if (!assayContext.assay) {//skip this assay context
-                        totalAssayContextItems -= assayContextDTO.attributes.size()
-                        return
-                    }
-
-                    assayContext.contextName = assayContextDTO.name
-
-                    //create the assay-context-item and add them to assay-context
-                    assayContextDTO.attributes.each { Attribute attribute ->
-                        AssayContextItem assayContextItem = new AssayContextItem()
-                        assayContextItem.assayContext = assayContext
-                        assayContextItem.attributeType = attribute.attributeType
-                        assayContextItem.modifiedBy = super.modifiedBy
-                        //populate the attribute key's element
-                        Element element = Element.findByLabelIlike(attribute.key)
-                        assert element, "We must have an element for the assay-context-item attribute (${attribute.key})"
-                        assayContextItem.attributeElement = element
-                        Element concentrationUnitsElement = attribute.concentrationUnits ? Element.findByLabelIlike(attribute.concentrationUnits) : null
-                        String concentrationUnitsAbbreviation = concentrationUnitsElement ? " ${concentrationUnitsElement.abbreviation}" : ""
-                        //populate attribute-value type and value
-                        element = attribute.value ? Element.findByLabelIlike(attribute.value) : null
-                        //if the value string could be matched against an element then add it to the valueElement
-                        if (element) {
-                            assayContextItem.valueElement = element
-                            assayContextItem.valueDisplay = element.label
-                        }
-                        //else, if the attribute's value is a number value, store it in the valueNum field
-                        else if (attribute.value && (!(attribute.value instanceof String) || attribute.value.isNumber())) {
-                            Float val = new Float(attribute.value)
-                            assayContextItem.valueNum = val
-                            //If the value is a number and also has concentration-units, we need to find the units element ID and update the valueDisplay accrdingly
-                            assayContextItem.valueDisplay = val.toString() + concentrationUnitsAbbreviation
-                        }
-                        //else, if the attribute is a numeric range (e.g., 440-460nm -> 440-460), then store it in valueMin, valueMax and make AttributeType=range.
-                        else if (attribute.value && (attribute.value instanceof String) && attribute.value.matches(/^\d+\-\d+$/)) {
-                            assayContextItem.valueMin = new Float(attribute.value.split('-')[0])
-                            assayContextItem.valueMax = new Float(attribute.value.split('-')[1])
-                            assayContextItem.valueDisplay = attribute.value + concentrationUnitsAbbreviation //range-units are reported separately.
-                            assayContextItem.attributeType = AttributeType.Range
-                        }
-                        //else, if the attribute's is a type-in or attribute-type is Free, then simply store it the valueDisplay field
-                        else if (attribute.typeIn || (attribute.attributeType == AttributeType.Free)) {
-                            assayContextItem.valueDisplay = attribute.value
-                        }
-                        //else, throw an error
-                        else {
-                            Log.logger.info("Illage attribute value: '${attribute.key}'/'${attribute.value}'")
-                            assert false, "Illage attribute value '${attribute.key}'/'${attribute.value}'"
-                        }
-
-                        //populate the qualifier field, if exists, and prefix the valueDisplay with it
-                        if (attribute.qualifier) {
-                            assayContextItem.qualifier = String.format('%-2s', attribute.qualifier)
-                            assayContextItem.valueDisplay = "${attribute.qualifier}${assayContextItem.valueDisplay}"
-                        }
-
-                        postProcessAssayContextItem(assayContextItem)
-
-                        assayContext.addToAssayContextItems(assayContextItem)
-                        Log.logger.info("AssayContext Assay ID: ${assayContext.assay.id} (${tally++}/${totalAssayContextItems})")
-                    }
-
-                    checkForDuplicateOrSubsetAndSave(assayContext)
-
-                    if (assayContext.hasErrors()) {
-                        Log.logger.info("AssayContext errors")
-                        writer.writeLine("AssayContext Errors: ${assayContext.errors}")
-                        assert false, "Errors during AssayContext saving"
-                    } else {
-                        writer.writeLine("Assay ID: ${assayContext.assay.id}")
-                        writer.writeLine("ContextName: ${assayContext.contextName}")
-                        assayContext.assayContextItems.each { AssayContextItem assayContextItem ->
-                            writer.writeLine("new attribute")
-                            writer.writeLine("\tAttributeElement: '${assayContextItem?.attributeElement?.label}'")
-                            writer.writeLine("\tValueElement: '${assayContextItem?.valueElement?.label}'")
-                            writer.writeLine("\tAttributeType: '${assayContextItem?.attributeType}'")
-                            writer.writeLine("\tExtValueId: '${assayContextItem?.extValueId}'")
-                            writer.writeLine("\tValueDisplay: '${assayContextItem?.valueDisplay}'")
-                            writer.writeLine("\tValueNum: '${assayContextItem?.valueNum}'")
-                            writer.writeLine("\tQualifier: '${assayContextItem?.qualifier}'")
-                        }
-                    }
-
-                    //comment out to commit the transaction
-                    //status.setRollbackOnly()
+        assayContextList.each { ContextDTO assayContextDTO ->
+            AssayContext.withTransaction { status ->
+                //create the assay-context
+                AssayContext assayContext = new AssayContext()
+                assayContext.assay = super.getAssayFromAid(assayContextDTO.aid)
+                assayContext.modifiedBy = super.modifiedBy
+                //TODO DELETE DELETE DELETE the following line should be deleted once all assays have been uploaded to CAP
+                if (!assayContext.assay) {//skip this assay context
+                    totalAssayContextItems -= assayContextDTO.attributes.size()
+                    return
                 }
+
+                assayContext.contextName = assayContextDTO.name
+
+                //create the assay-context-item and add them to assay-context
+                assayContextDTO.attributes.each { Attribute attribute ->
+                    AssayContextItem assayContextItem = new AssayContextItem()
+                    assayContextItem.assayContext = assayContext
+                    assayContextItem.attributeType = attribute.attributeType
+                    assayContextItem.modifiedBy = super.modifiedBy
+                    //populate the attribute key's element
+                    Element element = Element.findByLabelIlike(attribute.key)
+                    assert element, "We must have an element for the assay-context-item attribute (${attribute.key})"
+                    assayContextItem.attributeElement = element
+                    Element concentrationUnitsElement = attribute.concentrationUnits ? Element.findByLabelIlike(attribute.concentrationUnits) : null
+                    String concentrationUnitsAbbreviation = concentrationUnitsElement ? " ${concentrationUnitsElement.abbreviation}" : ""
+                    //populate attribute-value type and value
+                    element = attribute.value ? Element.findByLabelIlike(attribute.value) : null
+                    //if the value string could be matched against an element then add it to the valueElement
+                    if (element) {
+                        assayContextItem.valueElement = element
+                        assayContextItem.valueDisplay = element.label
+                    }
+                    //else, if the attribute's value is a number value, store it in the valueNum field
+                    else if (attribute.value && (!(attribute.value instanceof String) || attribute.value.isNumber())) {
+                        Float val = new Float(attribute.value)
+                        assayContextItem.valueNum = val
+                        //If the value is a number and also has concentration-units, we need to find the units element ID and update the valueDisplay accrdingly
+                        assayContextItem.valueDisplay = val.toString() + concentrationUnitsAbbreviation
+                    }
+                    //else, if the attribute is a numeric range (e.g., 440-460nm -> 440-460), then store it in valueMin, valueMax and make AttributeType=range.
+                    else if (attribute.value && (attribute.value instanceof String) && attribute.value.matches(/^\d+\-\d+$/)) {
+                        assayContextItem.valueMin = new Float(attribute.value.split('-')[0])
+                        assayContextItem.valueMax = new Float(attribute.value.split('-')[1])
+                        assayContextItem.valueDisplay = attribute.value + concentrationUnitsAbbreviation //range-units are reported separately.
+                        assayContextItem.attributeType = AttributeType.Range
+                    }
+                    //else, if the attribute's is a type-in or attribute-type is Free, then simply store it the valueDisplay field
+                    else if (attribute.typeIn || (attribute.attributeType == AttributeType.Free)) {
+                        assayContextItem.valueDisplay = attribute.value
+                    }
+                    //else, throw an error
+                    else {
+                        Log.logger.info("Illage attribute value: '${attribute.key}'/'${attribute.value}'")
+                        assert false, "Illage attribute value '${attribute.key}'/'${attribute.value}'"
+                    }
+
+                    //populate the qualifier field, if exists, and prefix the valueDisplay with it
+                    if (attribute.qualifier) {
+                        assayContextItem.qualifier = String.format('%-2s', attribute.qualifier)
+                        assayContextItem.valueDisplay = "${attribute.qualifier}${assayContextItem.valueDisplay}"
+                    }
+
+                    postProcessAssayContextItem(assayContextItem)
+
+                    assayContext.addToAssayContextItems(assayContextItem)
+                    Log.logger.info("AssayContext Assay ID: ${assayContext.assay.id} (${tally++}/${totalAssayContextItems})")
+                }
+
+                checkForDuplicateOrSubsetAndSave(assayContext)
+
+//                if (assayContext.hasErrors()) {
+//                    Log.logger.info("AssayContext errors")
+//                        writer.writeLine("AssayContext Errors: ${assayContext.errors}")
+//                    assert false, "Errors during AssayContext saving"
+//                } else {
+//                        writer.writeLine("Assay ID: ${assayContext.assay.id}")
+//                        writer.writeLine("ContextName: ${assayContext.contextName}")
+//                        assayContext.assayContextItems.each { AssayContextItem assayContextItem ->
+//                            writer.writeLine("new attribute")
+//                            writer.writeLine("\tAttributeElement: '${assayContextItem?.attributeElement?.label}'")
+//                            writer.writeLine("\tValueElement: '${assayContextItem?.valueElement?.label}'")
+//                            writer.writeLine("\tAttributeType: '${assayContextItem?.attributeType}'")
+//                            writer.writeLine("\tExtValueId: '${assayContextItem?.extValueId}'")
+//                            writer.writeLine("\tValueDisplay: '${assayContextItem?.valueDisplay}'")
+//                            writer.writeLine("\tValueNum: '${assayContextItem?.valueNum}'")
+//                            writer.writeLine("\tQualifier: '${assayContextItem?.qualifier}'")
+//                        }
+//                }
+
+                //comment out to commit the transaction
+                status.setRollbackOnly()
             }
         }
+//        }
     }
 
     /**
@@ -244,7 +243,9 @@ class AssayContextsValidatorCreatorAndPersistor extends ValidatorCreatorAndPersi
 
         if (doSave) {
             assayContext.save()
+            if (assayContext.hasErrors()) {
+                Log.logger.info("AssayContext errors: ${assayContext.errors.dump()}")
+            }
         }
-
     }
 }

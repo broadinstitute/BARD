@@ -1,7 +1,6 @@
 package bard.dm.minimumassayannotation.validateCreatePersist
 
 import bard.db.registration.Measure
-import org.springframework.transaction.TransactionStatus
 import bard.db.dictionary.Element
 import bard.dm.minimumassayannotation.ContextDTO
 import bard.dm.Log
@@ -27,14 +26,14 @@ class MeasureContextsValidatorCreatorAndPersistor extends ValidatorCreatorAndPer
     void createAndPersist(List<ContextDTO> measureContextList) {
         super.validate(measureContextList)
 
-        def out = new File('DnaSpreadsheetParserResultMeasure' + '_' + System.currentTimeMillis() + '.txt')
-        out.withWriterAppend { writer ->
+//        def out = new File('DnaSpreadsheetParserResultMeasure' + '_' + System.currentTimeMillis() + '.txt')
+//        out.withWriterAppend { writer ->
             Integer totalMeasureContext = 0
             measureContextList.each { ContextDTO measureContextDTO -> totalMeasureContext += measureContextDTO.attributes.size()}
             Integer tally = 0
 
             measureContextList.each { ContextDTO measureContextDTO ->
-                Measure.withTransaction { TransactionStatus status ->
+                Measure.withTransaction { status ->
                     //create the assay-context
                     Measure measureContext = new Measure()
                     measureContext.assay = super.getAssayFromAid(measureContextDTO.aid)
@@ -63,18 +62,16 @@ class MeasureContextsValidatorCreatorAndPersistor extends ValidatorCreatorAndPer
                     measureContext.save()
                     if (measureContext.hasErrors()) {
                         Log.logger.info("MeasureContext errors")
-                        writer.writeLine("MeasureContext Errors: ${measureContext.errors}")
+//                        writer.writeLine("MeasureContext Errors: ${measureContext.errors}")
                         assert false, "Measure-context errros"
                     } else {
-                        writer.writeLine("Assay ID: ${measureContext.assay.id}; Element: ${measureContext.element.label}")
+//                        writer.writeLine("Assay ID: ${measureContext.assay.id}; Element: ${measureContext.element.label}")
                     }
 
                     //comment out to commit the transaction
-                    //status.setRollbackOnly()
+                    status.setRollbackOnly()
                 }
             }
-        }
+//        }
     }
-
-
 }

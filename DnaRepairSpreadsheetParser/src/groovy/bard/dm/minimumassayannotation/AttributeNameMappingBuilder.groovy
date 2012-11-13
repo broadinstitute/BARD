@@ -88,7 +88,6 @@ class AttributeNameMappingBuilder {
                 'ImageXpress Micro ': 'ImageXpress Micro',
                 'single-feature extraction': 'single-feature extraction',
                 'tracer': 'tracer',
-//                'Tecan Safire 2': 'Tecan Safire 2 ',
                 'Amoracia rusticana': 'Amoracia rusticana',
                 'Differientated cultured cells': 'differentiated cultured cell',
                 'IPTG': 'IPTG',
@@ -169,9 +168,11 @@ class AttributeNameMappingBuilder {
                 'protein-expression assay': 'protein expression assay',
                 'uL/well': 'well volume',
                 'Microscopy slide': 'microscope slide',
-                'DNA sequence': 'DNA construct sequence',
                 'fold selectivity': 'fold selectivity index',
-                'Storem PhosphorImager': 'Storm PhosphorImager']
+                'Storem PhosphorImager': 'Storm PhosphorImager',
+                'signal increase corresponding to cell survival': 'signal increase',
+                'percent by volume': 'volume percentage',
+                'cell surface expression': 'cell surface expression assay']
 
         return attributeNameMapping
     }
