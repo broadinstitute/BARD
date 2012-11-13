@@ -39,8 +39,6 @@ class Experiment {
             projectSteps: ProjectStep,
             externalReferences: ExternalReference]
 
-    static belongsTo = [Assay]
-
     static mapping = {
         id(column: "EXPERIMENT_ID", generator: "sequence", params: [sequence: 'EXPERIMENT_ID_SEQ'])
         experimentContexts(indexColumn: [name: 'DISPLAY_ORDER'], lazy: 'false')
