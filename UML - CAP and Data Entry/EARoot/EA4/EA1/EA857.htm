@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-<title>Pending</title>
+<title>Ontology_Element</title>
 <link href="../../../css/ea.css" rel="stylesheet" type="text/css" />
 <script>
 function initPage(src) {	
@@ -34,15 +34,15 @@ function nameClassifier(name, separator)
 <div class="pageHeader"></div>
 <div class="PageBody">
 	<div id="name_classifier" style="display: none;"></div>
-	<span class="ObjectTitle"><script type="text/javascript">document.write(nameClassifier("Pending", " : "))</script>  : Public   State</span>
+	<span class="ObjectTitle"><script type="text/javascript">document.write(nameClassifier("Ontology_Element", " : "))</script>  : Public   Association Class</span>
 	<table border="0" cellpadding="0" cellspacing="0" class="ObjectDetails">
 		<tr>
 			<td width="15%" class="ObjectDetailsTopic">Created:</td>
-			<td width="85%" class="ObjectDetailsValue">1/26/2012 3:34:36 PM</td>
+			<td width="85%" class="ObjectDetailsValue">12/13/2011 6:10:56 PM</td>
 		</tr>
 		<tr>
 			<td class="ObjectDetailsTopic">Modified:</td>
-			<td class="ObjectDetailsValue">1/26/2012 3:34:47 PM</td>
+			<td class="ObjectDetailsValue">1/26/2012 4:15:32 PM</td>
 		</tr>
 		<tr style="height: 10px"><td colspan="2"></td></tr>
 		<tr>
@@ -87,110 +87,192 @@ function nameClassifier(name, separator)
 		</tr>
 		<tr id="adv00" style="display: none;">
 			<td class="ObjectDetailsTopic" style="padding-left: 18px;">UUID:</td>
-			<td class="ObjectDetailsValue">{8A24C89C-39EA-4673-8A3A-C7F0CF85FF06}</td>
+			<td class="ObjectDetailsValue">{EED42C22-4F3F-4023-B883-3B3283271574}</td>
 		</tr>
 		<tr id="adv01" style="display: none;">
 			<td class="ObjectDetailsTopic" style="padding-left: 18px;">Appears In:</td>
-			<td class="ObjectDetailsValue"><a href="EA789.htm">Result Life-Cycle</a></td>
+			<td class="ObjectDetailsValue"><a href="../EA777.htm">Dictionary v2</a>, <a href="../../EA2/EA2/EA3/EA418.htm">Refresh CAP Dictionary</a></td>
 		</tr>
 	</table>
 	
 	<div class="TableGroup" id="TableGroup">
 		<ul class="ItemTitle">
-			<li onClick="parent.toggleItem('FlowTo');" id="FlowToTitle">Flow To</li>
-			<li onClick="parent.toggleItem('FlowFrom');" id="FlowFromTitle">Flow From</li>
+			<li onClick="parent.toggleItem('Attributes');" id="AttributesTitle">Attributes</li>
+			<li onClick="parent.toggleItem('Operations');" id="OperationsTitle">Operations</li>
+			<li onClick="parent.toggleItem('MessagesFrom');" id="MessagesFromTitle">Messages From</li>
 		</ul>
-		<div class="ItemBody" id="FlowToTable">
+<div class="ItemBody" id="AttributesTable">
+	<table border="0" cellspacing="0" cellpadding="0" class="Table">
+		<tr>
+			<td width="100%" class="TableHeading">Attribute</td>
+		</tr>
+						<tr>
+				<td width="100%" class="TableRow">
+					<i>Protected string</i><br /><strong>&nbsp;&nbsp;element_URI</strong>
+				</td>
+			</tr>
+			<tr>
+				<td class="TableRowBottomDashed"  colspan="1">										
+					<a href="#" onclick="parent.toggleData('DetailsImageAttributes906')" style="text-decoration: none; color: #000000;"></BR><img src="../../../images/plus03.gif" align="absmiddle" id="DetailsImageAttributes906" border="0" />Details:
+					<table border="0" cellspacing="0" cellpadding="0" class="Table" style="padding: 4px 18px;">
+					
+						<tr id="DetailsImageAttributes906_00" style="display: none;">
+							<td width="75"><i>Alias:</i></td>
+							<td></td>
+						</tr>
+						<tr id="DetailsImageAttributes906_01" style="display: none;">
+							<td width="75"><i>Initial:</i></td>
+							<td></td>
+						</tr>
+						<tr id="DetailsImageAttributes906_02" style="display: none;">
+							<td width="75"><i>Stereotype: </i></td>
+							<td></td>
+						</tr>
+						<tr id="DetailsImageAttributes906_03" style="display: none;">
+							<td width="75"><i>Ordered: </i></td>
+							<td></td>
+						</tr>
+						<tr id="DetailsImageAttributes906_03" style="display: none;">
+							<td width="75"><i>Range: </i></td>
+							<td></td>
+						</tr>
+					</table>
+					
+					
+						&nbsp;
+						
+				</td>
+			</tr>
+	</table>
+</div>
+<div class="ItemBody" id="OperationsTable">
+	<table border="0" cellspacing="0" cellpadding="0" class="Table">
+		<tr>
+			<td width="100%" class="TableHeading">Operation</td>
+		</tr>
+						<tr>
+				<td width="100%" class="TableRow">
+					<i>Public</i><br />
+					<strong>findElementByOntID</strong>(					<a href="#" onclick="parent.toggleData('param{2C4B1817-0B03-4a15-A5DD-225C751911AB}')" style="text-decoration: none; color: #000000;"><img src="../../../images/plus03.gif" align="absmiddle" id="param{2C4B1817-0B03-4a15-A5DD-225C751911AB}" border="0" />ontology: string</a>, 
+					<table border="0" cellspacing="0" cellpadding="0" class="Table" style="padding: 4px 18px;">
+						<tr id="param{2C4B1817-0B03-4a15-A5DD-225C751911AB}00" style="display: none;">
+							<td width="50"><strong>Default:</strong></td>
+							<td></td>
+						</tr>
+						<tr id="param{2C4B1817-0B03-4a15-A5DD-225C751911AB}01" style="display: none;">
+							<td width="50"><strong>Kind:</strong></td>
+							<td>in</td>
+						</tr>
+						<tr id="param{2C4B1817-0B03-4a15-A5DD-225C751911AB}02" style="display: none;">
+							<td width="50"><strong>Stereotype: </strong></td>
+							<td></td>
+						</tr>
+						<tr id="param{2C4B1817-0B03-4a15-A5DD-225C751911AB}03" style="display: none;">
+							<td width="50"></td>
+							<td></td>
+						</tr>
+					</table>
+					<a href="#" onclick="parent.toggleData('param{5E2C4218-3E4B-4305-B06B-6DAEEAB4E614}')" style="text-decoration: none; color: #000000;"><img src="../../../images/plus03.gif" align="absmiddle" id="param{5E2C4218-3E4B-4305-B06B-6DAEEAB4E614}" border="0" />element_URI: string</a>, 
+					<table border="0" cellspacing="0" cellpadding="0" class="Table" style="padding: 4px 18px;">
+						<tr id="param{5E2C4218-3E4B-4305-B06B-6DAEEAB4E614}00" style="display: none;">
+							<td width="50"><strong>Default:</strong></td>
+							<td></td>
+						</tr>
+						<tr id="param{5E2C4218-3E4B-4305-B06B-6DAEEAB4E614}01" style="display: none;">
+							<td width="50"><strong>Kind:</strong></td>
+							<td>in</td>
+						</tr>
+						<tr id="param{5E2C4218-3E4B-4305-B06B-6DAEEAB4E614}02" style="display: none;">
+							<td width="50"><strong>Stereotype: </strong></td>
+							<td></td>
+						</tr>
+						<tr id="param{5E2C4218-3E4B-4305-B06B-6DAEEAB4E614}03" style="display: none;">
+							<td width="50"></td>
+							<td></td>
+						</tr>
+					</table>
+):void
+				</td>
+			</tr>
+			<tr>
+				<td class="TableRowBottomDashed"  colspan="1">
+					<div class="DetailsDivParent"><img src="../../../images/minus03.gif" align="absmiddle" id="DetailsImageOperations907" onclick="parent.toggleDiv('detailsDIVOperations907','DetailsImageOperations907')" />Details:
+						<div id="detailsDIVOperations907" class="DetailsDiv" >
+					<i>Sequential  </i>
+					<table>
+						<tr>
+							<td valign = "top"><i></i><span style="margin-left: .7cm;"> </span></td>
+							<td></td>
+						</tr>
+					</table>
+					
+					
+					
+						</div>
+					</div>
+				</td>
+			</tr>
+			<tr>
+				<td width="100%" class="TableRow">
+					<i>Public</i><br />
+					<strong>saveOntologyReferernce</strong>():void
+				</td>
+			</tr>
+			<tr>
+				<td class="TableRowBottomDashed"  colspan="1">
+					<div class="DetailsDivParent"><img src="../../../images/minus03.gif" align="absmiddle" id="DetailsImageOperations908" onclick="parent.toggleDiv('detailsDIVOperations908','DetailsImageOperations908')" />Details:
+						<div id="detailsDIVOperations908" class="DetailsDiv" >
+					<i>Sequential  </i>
+					<table>
+						<tr>
+							<td valign = "top"><i></i><span style="margin-left: .7cm;"> </span></td>
+							<td></td>
+						</tr>
+					</table>
+					
+					
+					
+						</div>
+					</div>
+				</td>
+			</tr>
+
+		</table>
+</div>		<div class="ItemBody" id="MessagesFromTable">
 			<table border="0" cellspacing="0" cellpadding="0" class="Table">
 				<tr>
 					<td width="50%" class="TableHeading">Element</td>
-					<td width="50%" class="TableHeading">Name</td>
+					<td width="50%" class="TableHeading">Message</td>
 				</tr>
 				<tr>
-					<td width="50%" class="TableRow" valign="top">
-						<a href="EA882.htm">Approved</a><br />
-						State &nbsp;
-					</td>
-					<td width="50%" class="TableRow" valign="top">&nbsp;</td>					
+					<td width="50%" class="TableRow" valign="top"><a href="../../EA2/EA2/EA3/EA457.htm">Dictionary controller</a></td>
+					<td width="50%" class="TableRow" valign="top">findElementByOntID(string,  string)</td>
 				</tr>
-				<tr>
+		   		<tr>
 					<td class="TableRowBottomDashed"  colspan="2">
-						<div class="DetailsDivParent"><img src="../../../images/minus03.gif" align="absmiddle" id="DetailsImageLinkFlow940" onclick="parent.toggleDiv('detailsDIVLinkFlow940', 'DetailsImageLinkFlow940')" />Details:
-							<div id="detailsDIVLinkFlow940" class="DetailsDiv" >
-							&nbsp;
-							</div>
-						</div>
-					</td>
-				</tr>				<tr>
-					<td width="50%" class="TableRow" valign="top">
-						<a href="EA858.htm">Rejected</a><br />
-						State &nbsp;
-					</td>
-					<td width="50%" class="TableRow" valign="top">&nbsp;</td>					
-				</tr>
-				<tr>
-					<td class="TableRowBottomDashed"  colspan="2">
-						<div class="DetailsDivParent"><img src="../../../images/minus03.gif" align="absmiddle" id="DetailsImageLinkFlow941" onclick="parent.toggleDiv('detailsDIVLinkFlow941', 'DetailsImageLinkFlow941')" />Details:
-							<div id="detailsDIVLinkFlow941" class="DetailsDiv" >
+						<div class="DetailsDivParent"><img src="../../../images/minus03.gif" align="absmiddle" id="DetailsImageMessage909" onclick="parent.toggleDiv('detailsDIVMessage909', 'DetailsImageMessage909')" />Details:
+							<div id="detailsDIVMessage909" class="DetailsDiv" >
+							<strong>Type:</strong> Sequence Synchronous Call<br />
 							&nbsp;
 							</div>
 						</div>
 					</td>
 				</tr>
-			</table>
-		</div>
-		<div class="ItemBody" id="FlowFromTable">
-			<table border="0" cellspacing="0" cellpadding="0" class="Table">
 				<tr>
-					<td width="50%" class="TableHeading">Element</td>
-					<td width="50%" class="TableHeading">Name</td>
+					<td width="50%" class="TableRow" valign="top"><a href="../../EA2/EA2/EA3/EA457.htm">Dictionary controller</a></td>
+					<td width="50%" class="TableRow" valign="top">saveOntologyReferernce()</td>
 				</tr>
-				<tr>
-					<td width="50%" class="TableRow" valign="top">
-						<a href="EA855.htm">Entered</a><br />
-						StateNode &nbsp;
-					</td>
-					<td width="50%" class="TableRow" valign="top">&nbsp;</td>					
-				</tr>
-				<tr>
+		   		<tr>
 					<td class="TableRowBottomDashed"  colspan="2">
-						<div class="DetailsDivParent"><img src="../../../images/minus03.gif" align="absmiddle" id="DetailsImageLinkFlow942" onclick="parent.toggleDiv('detailsDIVLinkFlow942', 'DetailsImageLinkFlow942')" />Details:
-							<div id="detailsDIVLinkFlow942" class="DetailsDiv" >
-							&nbsp;
-							</div>
-						</div>
-					</td>
-				</tr>				<tr>
-					<td width="50%" class="TableRow" valign="top">
-						<a href="EA882.htm">Approved</a><br />
-						State &nbsp;
-					</td>
-					<td width="50%" class="TableRow" valign="top">revert</td>					
-				</tr>
-				<tr>
-					<td class="TableRowBottomDashed"  colspan="2">
-						<div class="DetailsDivParent"><img src="../../../images/minus03.gif" align="absmiddle" id="DetailsImageLinkFlow943" onclick="parent.toggleDiv('detailsDIVLinkFlow943', 'DetailsImageLinkFlow943')" />Details:
-							<div id="detailsDIVLinkFlow943" class="DetailsDiv" >
-							&nbsp;
-							</div>
-						</div>
-					</td>
-				</tr>				<tr>
-					<td width="50%" class="TableRow" valign="top">
-						<a href="EA858.htm">Rejected</a><br />
-						State &nbsp;
-					</td>
-					<td width="50%" class="TableRow" valign="top">revert</td>					
-				</tr>
-				<tr>
-					<td class="TableRowBottomDashed"  colspan="2">
-						<div class="DetailsDivParent"><img src="../../../images/minus03.gif" align="absmiddle" id="DetailsImageLinkFlow944" onclick="parent.toggleDiv('detailsDIVLinkFlow944', 'DetailsImageLinkFlow944')" />Details:
-							<div id="detailsDIVLinkFlow944" class="DetailsDiv" >
+						<div class="DetailsDivParent"><img src="../../../images/minus03.gif" align="absmiddle" id="DetailsImageMessage910" onclick="parent.toggleDiv('detailsDIVMessage910', 'DetailsImageMessage910')" />Details:
+							<div id="detailsDIVMessage910" class="DetailsDiv" >
+							<strong>Type:</strong> Sequence Synchronous Call<br />
 							&nbsp;
 							</div>
 						</div>
 					</td>
 				</tr>
+
 			</table>
 		</div>
 	</div>

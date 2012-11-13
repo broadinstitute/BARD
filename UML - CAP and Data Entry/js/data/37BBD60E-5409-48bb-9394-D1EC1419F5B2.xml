@@ -1,3 +1,3 @@
-tocTab[tocTab.length] = new Array("0.5:1", "", "Data Model", "EARoot/EA5/EA888.htm", "175.png", "10", "0", "", "Logical diagram0","{A742AB4E-5575-4d02-9810-2FCF3D941719}");
-tocTab[tocTab.length] = new Array("0.5.1", "1", "Manage_Ontology", "EARoot/EA5/EA895.htm", "4.png", "", "", "{FE9A5C1A-30DB-430e-A63F-2858DB493313}", "Package");
-tocTab[tocTab.length] = new Array("0.5.2", "1", "Warehouse", "EARoot/EA5/EA897.htm", "4.png", "", "", "{D6C3F84C-EDBE-4e62-A75C-BB4AA4DF49AE}", "Package");
+tocTab[tocTab.length] = new Array("0.5:1", "", "Data Model", "EARoot/EA5/EA925.htm", "175.png", "10", "0", "", "Logical diagram0","{A742AB4E-5575-4d02-9810-2FCF3D941719}");
+tocTab[tocTab.length] = new Array("0.5.1", "1", "Manage_Ontology", "EARoot/EA5/EA932.htm", "4.png", "", "", "{FE9A5C1A-30DB-430e-A63F-2858DB493313}", "Package");
+tocTab[tocTab.length] = new Array("0.5.2", "1", "Warehouse", "EARoot/EA5/EA934.htm", "4.png", "", "", "{D6C3F84C-EDBE-4e62-A75C-BB4AA4DF49AE}", "Package");
