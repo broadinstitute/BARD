@@ -31,13 +31,6 @@ class ExternalReferenceConstraintUnitSpec extends Specification {
         domainInstance = ExternalReference.buildWithoutSave(experiment: Experiment.build())
     }
 
-    @After
-    void doAfter() {
-        if (domainInstance.validate()) {
-            domainInstance.save(flush: true)
-        }
-    }
-
     void "test externalSystem constraints #desc externalSystem: #valueUnderTest"() {
 
         final String field = 'externalSystem'
