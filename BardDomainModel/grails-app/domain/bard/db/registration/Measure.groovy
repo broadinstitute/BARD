@@ -18,14 +18,14 @@ class Measure {
     Set<Measure> childMeasures = [] as Set
     Set<AssayContextMeasure> assayContextMeasures = [] as Set
 
-    static belongsTo = [assay: Assay]
+    static belongsTo = [assay: Assay, parentMeasure: Measure]
     static hasMany = [childMeasures: Measure, assayContextMeasures: AssayContextMeasure]
 
     static mapping = {
         id(column: 'MEASURE_ID', generator: 'sequence', params: [sequence: 'MEASURE_ID_SEQ'])
+        resultTypeElement(column: 'RESULT_TYPE_ID')
         parentMeasure(column: "PARENT_MEASURE_ID")
-        entryUnitElement(column: "entry_unit")
-        resultTypeElement(column: 'result_type_id')
+        entryUnitElement(column: "ENTRY_UNIT_ID")
     }
 
     static constraints = {
