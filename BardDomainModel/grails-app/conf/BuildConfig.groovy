@@ -72,7 +72,7 @@ codenarc {
 
 clover {
     license.path = "${userHome}/.grails/clover.license"
-    directories: ['src/java','src/groovy', 'grails-app']
+    directories: ['src/java', 'src/groovy', 'grails-app']
     includes = ['**/*.groovy', '**/*.java']
-    excludes = ['**/*Spec*.*', '**/conf/**', '**/migrations/**']
+    excludes = ['test/**.*', '**/*Spec*.*', '**/conf/**', '**/migrations/**']
 }
