@@ -7,9 +7,10 @@ class Measure {
     private static final int MODIFIED_BY_MAX_SIZE = 40
 
     Assay assay
-    Element resultTypeElement
+    Element resultType
     Measure parentMeasure
-    Element entryUnitElement
+    Element entryUnit
+    Element statsModifier
 
     Date dateCreated = new Date()
     Date lastUpdated
@@ -23,16 +24,18 @@ class Measure {
 
     static mapping = {
         id(column: 'MEASURE_ID', generator: 'sequence', params: [sequence: 'MEASURE_ID_SEQ'])
-        resultTypeElement(column: 'RESULT_TYPE_ID')
+        resultType(column: 'RESULT_TYPE_ID')
         parentMeasure(column: "PARENT_MEASURE_ID")
-        entryUnitElement(column: "ENTRY_UNIT_ID")
+        entryUnit(column: "ENTRY_UNIT_ID")
+        statsModifier(column: 'STATS_MODIFIER_ID')
     }
 
     static constraints = {
         assay()
-        resultTypeElement()
+        resultType()
         parentMeasure(nullable: true)
-        entryUnitElement(nullable: true)
+        entryUnit(nullable: true)
+        statsModifier(nullable: true)
 
         dateCreated(nullable: false)
         lastUpdated(nullable: true)

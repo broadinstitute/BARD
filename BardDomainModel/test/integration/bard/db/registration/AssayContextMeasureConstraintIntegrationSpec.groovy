@@ -31,7 +31,7 @@ class AssayContextMeasureConstraintIntegrationSpec extends IntegrationSpec {
         Fixture fixture = fixtureLoader.build {
             assay(Assay)
             assayContext(AssayContext, assay: assay)
-            measure(Measure, assay: assay, resultTypeElement: Element.build())
+            measure(Measure, assay: assay, resultType: Element.build())
         }
         domainInstance = AssayContextMeasure.buildWithoutSave(assayContext: fixture.assayContext, measure: fixture.measure)
     }

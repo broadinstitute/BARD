@@ -57,6 +57,6 @@ class MeasureIntegrationSpec extends IntegrationSpec {
     }
 
     private Measure buildWithoutSaveMeasure() {
-        Measure.buildWithoutSave(assay: Assay.build(), resultTypeElement: Element.build())
+        Measure.buildWithoutSave(assay: Assay.build(), resultType: Element.build())
     }
 }

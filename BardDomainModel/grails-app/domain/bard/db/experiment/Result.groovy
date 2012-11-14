@@ -10,20 +10,20 @@ class Result {
     private static final int RESULT_STATUS_MAX_SIZE = 20
     private static final int READY_FOR_EXTRACTION_MAX_SIZE = 20
 
-
     String resultStatus
-    ReadyForExtraction readyForExtraction =  ReadyForExtraction.Pending
+    ReadyForExtraction readyForExtraction = ReadyForExtraction.Pending
 
-    String valueDisplay
+    Experiment experiment
+    Element resultType
+    Substance substance
+    Element statsModifier
+    Integer replicateNumber
+
+    String qualifier
     Float valueNum
     Float valueMin
     Float valueMax
-    String qualifier
-
-    Experiment experiment
-    Substance substance
-
-    Element resultType
+    String valueDisplay
 
     Date dateCreated
     Date lastUpdated
@@ -45,23 +45,26 @@ class Result {
 
     static mapping = {
         id(column: "RESULT_ID", generator: "sequence", params: [sequence: 'RESULT_ID_SEQ'])
-        qualifier column: "qualifier", sqlType: "char", length: 2
-        resultType column: "result_type_id"
+        resultType(column: "RESULT_TYPE_ID")
+        qualifier(column: "qualifier", sqlType: "char", length: 2)
+        replicateNumber(column: 'REPLICATE_NO')
     }
 
     static constraints = {
         resultStatus(maxSize: RESULT_STATUS_MAX_SIZE, nullable: false, inList: ["Pending", "Approved", "Rejected", "Mark for Deletion"])
         readyForExtraction(maxSize: READY_FOR_EXTRACTION_MAX_SIZE, nullable: false)
 
-        valueDisplay(nullable: true, blank: false, maxSize: VALUE_DISPLAY_MAX_SIZE)
+        experiment()
+        resultType()
+        substance()
+        statsModifier(nullable: true)
+        replicateNumber(nullable: true)
+
+        qualifier(nullable: true, blank: false, inList: ['= ', '< ', '<=', '> ', '>=', '<<', '>>', '~ '])
         valueNum(nullable: true)
         valueMin(nullable: true)
         valueMax(nullable: true)
-        qualifier(nullable: true, blank: false, inList: ['= ', '< ', '<=', '> ', '>=', '<<', '>>', '~ '])
-
-        experiment()
-        substance()
-        resultType()
+        valueDisplay(nullable: true, blank: false, maxSize: VALUE_DISPLAY_MAX_SIZE)
 
         dateCreated(nullable: false)
         lastUpdated(nullable: true,)

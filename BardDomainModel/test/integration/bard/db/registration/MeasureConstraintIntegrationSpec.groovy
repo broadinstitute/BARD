@@ -4,11 +4,11 @@ import bard.db.dictionary.Element
 import grails.plugin.spock.IntegrationSpec
 import org.junit.After
 import org.junit.Before
+import spock.lang.Unroll
 
 import static bard.db.registration.Measure.MODIFIED_BY_MAX_SIZE
 import static test.TestUtils.assertFieldValidationExpectations
 import static test.TestUtils.createString
-import spock.lang.Unroll
 
 /**
  * Created with IntelliJ IDEA.
@@ -28,7 +28,7 @@ class MeasureConstraintIntegrationSpec extends IntegrationSpec {
     }
 
     private Measure buildWithoutSaveMeasure() {
-        Measure.buildWithoutSave(assay: Assay.build(), resultTypeElement: Element.build())
+        Measure.buildWithoutSave(assay: Assay.build(), resultType: Element.build())
     }
 
     @After
@@ -56,9 +56,9 @@ class MeasureConstraintIntegrationSpec extends IntegrationSpec {
 
     }
 
-    void "test resultTypeElement constraints #desc resultTypeElement: '#valueUnderTest'"() {
+    void "test resultType constraints #desc resultType: '#valueUnderTest'"() {
 
-        final String field = 'resultTypeElement'
+        final String field = 'resultType'
 
         when:
         domainInstance[(field)] = valueUnderTest.call()
@@ -68,9 +68,63 @@ class MeasureConstraintIntegrationSpec extends IntegrationSpec {
         assertFieldValidationExpectations(domainInstance, field, valid, errorCode)
 
         where:
-        desc                      | valueUnderTest    | valid | errorCode
-        'null not valid'          | {null}            | false | 'nullable'
-        'valid resultTypeElement' | {Element.build()} | true  | null
+        desc               | valueUnderTest    | valid | errorCode
+        'null not valid'   | {null}            | false | 'nullable'
+        'valid resultType' | {Element.build()} | true  | null
+
+    }
+
+    void "test parentMeasure constraints #desc parentMeasure: '#valueUnderTest'"() {
+
+        final String field = 'parentMeasure'
+
+        when:
+        domainInstance[(field)] = valueUnderTest.call()
+        domainInstance.validate()
+
+        then:
+        assertFieldValidationExpectations(domainInstance, field, valid, errorCode)
+
+        where:
+        desc                  | valueUnderTest    | valid | errorCode
+        'null valid'          | {null}            | true  | null
+        'valid parentMeasure' | {Measure.build()} | true  | null
+
+    }
+
+    void "test entryUnit constraints #desc entryUnit: '#valueUnderTest'"() {
+
+        final String field = 'entryUnit'
+
+        when:
+        domainInstance[(field)] = valueUnderTest.call()
+        domainInstance.validate()
+
+        then:
+        assertFieldValidationExpectations(domainInstance, field, valid, errorCode)
+
+        where:
+        desc              | valueUnderTest    | valid | errorCode
+        'null valid'      | {null}            | true  | null
+        'valid entryUnit' | {Element.build()} | true  | null
+
+    }
+
+    void "test statsModifier constraints #desc statsModifier: '#valueUnderTest'"() {
+
+        final String field = 'statsModifier'
+
+        when:
+        domainInstance[(field)] = valueUnderTest.call()
+        domainInstance.validate()
+
+        then:
+        assertFieldValidationExpectations(domainInstance, field, valid, errorCode)
+
+        where:
+        desc                         | valueUnderTest    | valid | errorCode
+        'null valid'                 | {null}            | true  | null
+        'valid statsModifier' | {Element.build()} | true  | null
 
     }
 
@@ -125,15 +179,5 @@ class MeasureConstraintIntegrationSpec extends IntegrationSpec {
         desc         | valueUnderTest | valid | errorCode
         'null valid' | null           | true  | null
         'date valid' | new Date()     | true  | null
-    }
-
-    void "test childMeasures cascade delete "() {
-        final String field = 'lastUpdated'
-
-        when:
-        domainInstance.addToChildMeasures(buildWithoutSaveMeasure())
-
-        then:
-        domainInstance.childMeasures.first().parentMeasure == domainInstance
     }
 }
