@@ -18,7 +18,7 @@
                 <div class="controls">
                     <g:radioGroup name="idSearchType"
                                   values="${IDSearchType.values()}"
-                                  value="${IDSearchType.ADID}"
+                                  value="${IDSearchType.ALL}"
                                   labels="${IDSearchType.values().label}">
                         <label class="radio inline">
                             ${it.radio} ${it.label}
