@@ -7,6 +7,7 @@ package bardqueryapi
  */
 enum IDSearchType {
 
+    ALL('All'),
     /**
      *
      */

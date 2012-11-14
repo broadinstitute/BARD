@@ -9,7 +9,10 @@ $(document).ready(function () {
         var idSearchTypeSelected = $('input:radio[name=idSearchType]:checked').val();
         var ids = $('#idSearchString').val()
         //construct the query into a form that we want
-        var constructedSearch = idSearchTypeSelected + ":" +ids;
+        var constructedSearch =ids;
+        if(idSearchTypeSelected != 'ALL'){
+            constructedSearch = idSearchTypeSelected + ":" +ids
+        }
         $('#searchString').attr('value', constructedSearch);
         $('#searchForm').submit();
 
