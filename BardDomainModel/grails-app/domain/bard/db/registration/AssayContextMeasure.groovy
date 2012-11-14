@@ -15,13 +15,20 @@ class AssayContextMeasure {
     AssayContext assayContext
     Measure measure
 
-    String modifiedBy
+    Date dateCreated = new Date()
     // grails auto-timestamp
-    Date dateCreated
     Date lastUpdated
+    String modifiedBy
 
     static belongsTo = [assayContext: AssayContext]
+
+    static mapping = {
+        id(column: 'ASSAY_CONTEXT_MEASURE_ID', generator: 'sequence', params: [sequence: 'ASSAY_CONTEXT_MEASURE_ID_SEQ'])
+    }
     static constraints = {
+        assayContext(nullable: false)
+        measure(nullable: false)
+
         dateCreated(nullable: false)
         lastUpdated(nullable: true)
         modifiedBy(nullable: true, blank: false, maxSize: MODIFIED_BY_MAX_SIZE)
