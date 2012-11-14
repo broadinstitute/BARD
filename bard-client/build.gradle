@@ -1,0 +1,78 @@
+// see docs at http://www.gradle.org/documentation
+apply plugin: 'java'
+apply plugin: 'groovy'
+apply plugin: 'eclipse'
+apply plugin: 'idea'
+apply plugin: 'maven'
+
+description = "Creating JAR File For JDO"
+
+
+configurations {
+    deployerJars
+}
+
+/**
+ * example usage
+ * ./gradlew tasks             : to list the tasks available
+ * ./gradlew tasks --all       : a more verbose list
+ * ./gradlew test              : execute tests, report generated at build/reports/tests/index.html
+ */
+// specify repos, order matters
+repositories {
+    maven {
+        url 'http://bard-repo.broadinstitute.org:8081/artifactory/bard-virtual-repo'
+    }
+}
+compileJava.enabled = false
+sourceSets {
+    main {
+        java {
+            srcDir 'src/java'
+        }
+        groovy {
+            srcDir 'src/groovy'
+        }
+    }
+}
+
+jar {
+    manifest {
+        attributes 'Implementation-Title': 'Bard Java Client', 'Built-By': userName, 'Implementation-Version': 'v7'
+    }
+    version = 'v7'
+}
+
+dependencies {
+    compile group: 'org.apache.httpcomponents', name: 'httpmime', version: '4.1.1'
+    compile('net.sourceforge.nekohtml:nekohtml:1.9.15') {
+        exclude module: 'xml-api'
+    }
+
+    compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.1'
+    compile group: 'org.apache.httpcomponents', name: 'httpcomponents-core', version: '4.1.1'
+    compile group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.1.1'
+    compile group: 'commons-logging', name: 'commons-logging', version: '1.1.1'
+    compile group: 'org.codehaus.jackson', name: 'jackson-core-asl', version: '1.9.2'
+    compile group: 'org.codehaus.jackson', name: 'jackson-mapper-asl', version: '1.9.2'
+    compile "junit:junit:4.9"
+    //lib directory
+    compile fileTree(dir: 'lib', includes: ['*.jar'])
+
+    groovy "org.codehaus.groovy:groovy-all:1.8.6"
+
+}
+
+task createDirs << {
+    sourceSets*.allSource.srcDirs*.each { it.mkdirs() }
+    sourceSets*.resources.srcDirs*.each { it.mkdirs() }
+}
+task(console, dependsOn: 'classes', type: JavaExec) {
+    main = 'groovy.ui.Console'
+    classpath = sourceSets.main.runtimeClasspath
+}
+// wrapper allows running without gradle being installed
+// ./gradlew [task]
+task wrapper(type: Wrapper) {
+    gradleVersion = '1.0'
+}
