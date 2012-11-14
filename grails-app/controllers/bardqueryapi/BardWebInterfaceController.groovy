@@ -131,7 +131,7 @@ class BardWebInterfaceController {
             }
 
             //we want to remove the duplicates from the search string
-            removeDuplicatesFromSearchString(searchCommand)
+           // removeDuplicatesFromSearchString(searchCommand)
             final List<SearchFilter> searchFilters = searchCommand.appliedFilters ?: []
             this.queryService.findFiltersInSearchBox(searchFilters, searchCommand.searchString)
 
@@ -181,7 +181,7 @@ class BardWebInterfaceController {
             }
 
             //we want to remove the duplicates from the search string
-            removeDuplicatesFromSearchString(searchCommand)
+            //removeDuplicatesFromSearchString(searchCommand)
             //after removing duplicates, reassign
             final List<SearchFilter> searchFilters = searchCommand.appliedFilters ?: []
             try {
@@ -225,7 +225,7 @@ class BardWebInterfaceController {
             }
 
             //we want to remove the duplicates from the search string
-            removeDuplicatesFromSearchString(searchCommand)
+            //removeDuplicatesFromSearchString(searchCommand)
             final List<SearchFilter> searchFilters = searchCommand.appliedFilters ?: []
             try {
                 final List<Long> projectIds = searchStringToIdList(searchCommand.searchString)
@@ -548,8 +548,17 @@ class SearchHelper {
      * Strip out all empty spaces, split on ',' and return as a list of longs
      */
     public List<Long> searchStringToIdList(String searchString) {
-        List<Long> ids = searchString.replaceAll("\\s+", "").split(",") as List<Long>
-        return ids
+        //we also want to remove duplicates
+        final Set<Long> ids = new HashSet<Long>()
+        //first split using spaces
+        List<String> splitSpaces = searchString.split("\\s+") as List<String>
+        for(String id:splitSpaces){
+            String trimmedString = id.trim()
+            if(StringUtils.isNotBlank(trimmedString)){
+               ids.addAll(trimmedString.split(",") as Set<Long>)
+            }
+        }
+        return ids as List<Long>
     }
 
     /**

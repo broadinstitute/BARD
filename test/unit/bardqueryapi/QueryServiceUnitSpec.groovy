@@ -13,6 +13,10 @@ import org.apache.commons.lang.time.StopWatch
 import spock.lang.Shared
 import spock.lang.Specification
 import spock.lang.Unroll
+
+import java.util.regex.Matcher
+import java.util.regex.Pattern
+
 import bard.core.*
 
 /**
@@ -117,7 +121,7 @@ class QueryServiceUnitSpec extends Specification {
         restProjectService.get(_) >> {project}
         restProjectService.searchResult(_, _) >> {experimentSearchResult}
         restAssayService.searchResult(_, _) >> {assaySearchResult}
-        experimentSearchResult.searchResults>> {[]}
+        experimentSearchResult.searchResults >> {[]}
 
         if (project) {
             assert foundProjectAdapterMap

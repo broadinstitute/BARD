@@ -341,16 +341,25 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
         List<Long> results = controller.searchStringToIdList(searchString)
         then:
         results.size() == expectedResults.size()
+        //sort both and then compare
+        results.sort()
+        expectedResults.sort()
         for (int index = 0; index < expectedResults.size(); index++) {
-            assert results.get(index) as Long == expectedResults.get(index);
+            assert results.get(index) == expectedResults.get(index);
         }
         where:
-        label                                            | searchString              | expectedResults
-        "Single id"                                      | "1234"                    | [new Long(1234)]
-        "Multiple ids, comma separated with some spaces" | "1234, 5678, 898,    445" | [new Long(1234), new Long(5678), new Long(898), new Long(445)]
-        "Two ids with spaces"                            | "1234,        5678"       | [new Long(1234), new Long(5678)]
+        label                                                              | searchString                   | expectedResults
+        "Single id"                                                        | "1234"                         | ["1234"]
+        "Multiple ids, comma delimited with some spaces"                   | "1234, 5678, 898,    445"      | ["1234", "5678", "898", "445"]
+        "Two ids, comma delimited with spaces"                             | "1234,        5678"            | ["1234", "5678"]
+        "ids delimited by spaces only"                                     | "1234   5678"                  | ["1234", "5678"]
+        "ids delimited by commas only"                                     | "1234,5678"                    | ["1234", "5678"]
+        "ids delimited with a mixture of spaces and commas"                | "788, 200 300, 1234, 5678 600" | ["788", "200", "300", "1234", "5678", "600"]
+        "ids delimited with a mixture of spaces and commas and duplicates" | "788, 200 788"                 | ["788", "200"]
+
 
     }
+
 
     void "test free text search assays #label"() {
         given:
@@ -469,18 +478,7 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
         "With offset params only"          | ""   | "20"   | 10          | 20
         "With max and offset params"       | "20" | "10"   | 20          | 10
     }
-    /**
-     * {@link SearchHelper#searchStringToIdList(String)}
-     */
-    void "test searchStringToIdList"() {
-        given: " As search string with comma separated list of integers"
-        final String searchString = "21,34,44"
-        when: "We call the removeDuplicates method with the given search string"
-        final List<Long> ids = controller.searchStringToIdList(searchString)
-        then: "We expected to get back a new search string with the duplicates removed"
-        assert ids.size() == 3
 
-    }
     /**
      * {@link SearchHelper#removeDuplicatesFromSearchString(SearchCommand)}
      */
