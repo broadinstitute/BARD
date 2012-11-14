@@ -30,15 +30,13 @@ public class QueryServiceWrapper {
      */
     final RESTExperimentService restExperimentService;
     final String baseURL
-    final String promiscuityScoreURL
     /**
      *
      * @param baseURL
      * @param promiscuityScoreURL
      */
-    public QueryServiceWrapper(final String baseURL, final String promiscuityScoreURL) {
+    public QueryServiceWrapper(final String baseURL) {
         this.baseURL = baseURL
-        this.promiscuityScoreURL = promiscuityScoreURL;
         EntityServiceManager esm = new RESTEntityServiceManager(baseURL);
         this.restCompoundService = esm.getService(Compound);
         this.restAssayService = esm.getService(Assay);

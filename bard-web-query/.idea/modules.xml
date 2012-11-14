@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/Bard-web-query.iml" filepath="$PROJECT_DIR$/Bard-web-query.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Bard-web-query-grailsPlugins.iml" filepath="$PROJECT_DIR$/Bard-web-query-grailsPlugins.iml" />
       <module fileurl="file://$PROJECT_DIR$/bardClient-inplacePlugin.iml" filepath="$PROJECT_DIR$/bardClient-inplacePlugin.iml" />
     </modules>
   </component>

@@ -15,9 +15,8 @@ beans = {
             break;
         default:
             final String ncgcBaseURL = grailsApplication.config.ncgc.server.root.url
-            String promiscuityScoreURL = grailsApplication.config.promiscuityscrores.root.url
 
-            queryServiceWrapper(QueryServiceWrapper, ncgcBaseURL, promiscuityScoreURL) {
+            queryServiceWrapper(QueryServiceWrapper, ncgcBaseURL) {
 
             }
 

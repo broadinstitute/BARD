@@ -17,6 +17,7 @@ import spock.lang.Shared
 import spock.lang.Specification
 import spock.lang.Unroll
 import bard.core.*
+import bard.core.rest.ActivitySearchResult
 
 /**
  * Created with IntelliJ IDEA.
@@ -65,10 +66,22 @@ class MolecularSpreadSheetServiceUnitSpec extends Specification {
     void tearDown() {
         // Tear down logic here
     }
-
+    void "test findActivitiesForCompounds #label"(){
+        given:
+        Experiment experiment = new Experiment()
+        Object compoundETag = null
+        SearchResult<Value> experimentalResults = new ActivitySearchResult(restExperimentService,experiment)
+        //add a null value
+        experimentalResults.searchResults.add(null)
+        when:
+        List<SpreadSheetActivity> spreadSheetActivities = service.findActivitiesForCompounds(experiment,compoundETag)
+        then:
+        queryServiceWrapper.restExperimentService >> { restExperimentService}
+        queryServiceWrapper.restExperimentService.activities(_, _) >> {experimentalResults}
+        assert spreadSheetActivities.isEmpty()
+    }
     void "test assays To Experiments"() {
         given:
-        SearchResult<Experiment> searchResult = Mock(SearchResult)
         Collection<Assay> assays = [new Assay(name: "A1")]
         when:
         List<Experiment> experiments = service.assaysToExperiments(assays)
@@ -101,7 +114,7 @@ class MolecularSpreadSheetServiceUnitSpec extends Specification {
      */
     void "test findExperimentDataById Null Experiment"() {
         given:
-        final Long experimentId
+        final Long experimentId = 2L
         final Integer top = 10
         final Integer skip = 0
         when:
@@ -124,7 +137,7 @@ class MolecularSpreadSheetServiceUnitSpec extends Specification {
         given:
         final List<Experiment> experimentList = []
 
-        SearchResult<Compound> compoundSearchResult = Mock()
+        SearchResult<Compound> compoundSearchResult = Mock(SearchResult)
         experimentList << new Experiment()
 
         when:
@@ -185,9 +198,9 @@ class MolecularSpreadSheetServiceUnitSpec extends Specification {
         assert map.activityValues.size() == expectedTotalActivities
 
         where:
-        label                | top | skip | numberOfTimesNextIsCalled | expectedNext               | expectedTotalRecords | expectedTotalActivities
-        "Top and skip = 0"   | 0   | 0    | 1                         | []                         | 0                    | 0
-        "Top=1 and skip = 1" | 1   | 1    | 1                         | [new Value(), new Value()] | 1                    | 2
+        label                | top | skip | numberOfTimesNextIsCalled | expectedNext                                                           | expectedTotalRecords | expectedTotalActivities
+        "Top and skip = 0"   | 0   | 0    | 1                         | []                                                                     | 0                    | 0
+        "Top=1 and skip = 1" | 1   | 1    | 1                         | [new Value(new DataSource("name")), new Value(new DataSource("name"))] | 1                    | 2
     }
 
 
@@ -195,7 +208,7 @@ class MolecularSpreadSheetServiceUnitSpec extends Specification {
         given: "we have an experiment"
         SpreadSheetActivity spreadSheetActivity = new SpreadSheetActivity()
         List<String> columnNames = []
-        final Value experimentalValue = new Value()
+        final Value experimentalValue = new Value(new DataSource("name"))
         experimentalValue.id = identifier
         experimentalValue.metaClass.value = incomingValue
 
@@ -221,7 +234,7 @@ class MolecularSpreadSheetServiceUnitSpec extends Specification {
         given: "we have an experiment"
         SpreadSheetActivity spreadSheetActivity = new SpreadSheetActivity()
         List<String> columnNames = []
-        final Value experimentalValue = new Value()
+        final Value experimentalValue = new Value(new DataSource("name"))
 
         when: "we want to pull out the active values"
         experimentalValue.id = "foo"
@@ -231,7 +244,7 @@ class MolecularSpreadSheetServiceUnitSpec extends Specification {
     }
 
     def returnRelevantNumber(String identifier, SpreadSheetActivity spreadSheetActivity) {
-        def returnValue
+        def returnValue = null
         switch (identifier) {
             case "potency":
                 returnValue = (Double) spreadSheetActivity.potency
@@ -251,7 +264,7 @@ class MolecularSpreadSheetServiceUnitSpec extends Specification {
             default:
                 assert false, "Unexpected Identifier: ${identifier} is unknown"
         }
-        returnValue
+        return returnValue
     }
 
 

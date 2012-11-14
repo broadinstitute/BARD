@@ -351,7 +351,7 @@ class QueryService implements IQueryService {
      */
     public Map findPromiscuityScoreForCID(Long cid) {
         final PromiscuityScore promiscuityScore = queryServiceWrapper.restCompoundService.getPromiscuityScore(cid);
-        if (promiscuityScore != null) {
+        if (promiscuityScore) {
             return [status: 200, message: 'Success', promiscuityScore: promiscuityScore]
         }
         return [status: 404, message: "Error getting Promiscuity Score for ${cid}", promiscuityScore: null]

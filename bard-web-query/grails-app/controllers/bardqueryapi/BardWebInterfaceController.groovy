@@ -1,5 +1,6 @@
 package bardqueryapi
 
+import bard.core.PromiscuityScore
 import bard.core.StructureSearchParams
 import bard.core.Value
 import bard.core.adapter.AssayAdapter
@@ -10,7 +11,6 @@ import molspreadsheet.MolecularSpreadSheetService
 import org.apache.commons.lang.StringUtils
 
 import javax.servlet.http.HttpServletResponse
-import bard.core.PromiscuityScore
 
 /**
  *
@@ -131,7 +131,7 @@ class BardWebInterfaceController {
             }
 
             //we want to remove the duplicates from the search string
-           // removeDuplicatesFromSearchString(searchCommand)
+            // removeDuplicatesFromSearchString(searchCommand)
             final List<SearchFilter> searchFilters = searchCommand.appliedFilters ?: []
             this.queryService.findFiltersInSearchBox(searchFilters, searchCommand.searchString)
 
@@ -552,11 +552,9 @@ class SearchHelper {
         final Set<Long> ids = new HashSet<Long>()
         //first split using spaces
         List<String> splitSpaces = searchString.split("\\s+") as List<String>
-        for(String id:splitSpaces){
+        for (String id : splitSpaces) {
             String trimmedString = id.trim()
-            if(StringUtils.isNotBlank(trimmedString)){
-               ids.addAll(trimmedString.split(",") as Set<Long>)
-            }
+            ids.addAll(trimmedString.split(",") as Set<Long>)
         }
         return ids as List<Long>
     }

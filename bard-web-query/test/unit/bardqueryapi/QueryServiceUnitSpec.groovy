@@ -13,10 +13,6 @@ import org.apache.commons.lang.time.StopWatch
 import spock.lang.Shared
 import spock.lang.Specification
 import spock.lang.Unroll
-
-import java.util.regex.Matcher
-import java.util.regex.Pattern
-
 import bard.core.*
 
 /**
@@ -474,5 +470,23 @@ class QueryServiceUnitSpec extends Specification {
         service.findFiltersInSearchBox(searchFilters, "gobp_term:DNA Repair")
         then:
         queryHelperService.findFiltersInSearchBox(_, _) >> {}
+    }
+
+    void "test findPromiscuityScoreForCID #label"() {
+        when:
+        final Map promiscuityScoreMap = service.findPromiscuityScoreForCID(cid)
+        then:
+        queryServiceWrapper.restCompoundService >> { restCompoundService }
+        restCompoundService.getPromiscuityScore(_) >> {promiscuityScore}
+
+        assert promiscuityScoreMap.status == expectedStatus
+        assert promiscuityScoreMap.message == expectedMessage
+        assert promiscuityScoreMap.promiscuityScore?.cid == promiscuityScore?.cid
+        where:
+        label                              | cid   | promiscuityScore                | expectedStatus | expectedMessage
+        "Returns a Promiscuity Score"      | 1234  | new PromiscuityScore(cid: 1234) | 200            | "Success"
+        "Returns a null Promiscuity Score" | 23435 | null                            | 404            | "Error getting Promiscuity Score for 23435"
+
+
     }
 }
