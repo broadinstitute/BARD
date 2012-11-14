@@ -3,6 +3,7 @@
 *.iws
 *.iml
 *.ipr
+*.log
 *Db.properties
 *Db.script
 .settings
