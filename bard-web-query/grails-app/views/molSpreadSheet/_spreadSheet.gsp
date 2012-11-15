@@ -10,6 +10,11 @@
         });
         $('td:nth-child(3), th:nth-child(3)').toggle();
         $("[rel=tooltip]").tooltip();
+        $('#molspreadsheet').dataTable( {
+                    "aaSorting": [[ 2, "desc" ]] ,
+                    "bStateSave": true
+        }
+        );
     });
 </script>
 
@@ -26,23 +31,23 @@
                        id="showPromiscuityScores">
                 Hide Promiscuity Scores
             </label>
-            <table class="molSpreadSheet">
+            <table cellpadding="0" cellspacing="0" border="0"  class="molSpreadSheet" id="molspreadsheet"  width="100%">
                 <thead>
-                <tr class="molSpreadSheetHead">
-                    <th class="molSpreadSheetImg sortable">Molecular structure</th>
+                <tr class="molSpreadSheetHead display">
+                    <th class="molSpreadSheetImg">Molecular structure</th>
 
-                    <th class="molSpreadSheetHeadData sortable">CID</th>
+                    <th class="molSpreadSheetHeadData">CID</th>
                     <% int looper = 0 %>
                     <g:each var="colHeader" in="${molSpreadSheetData?.getColumns()}">
                         <g:if test="${looper == 2}">
-                            <th class="molSpreadSheetHeadData sortable">${colHeader}</th>
+                            <th class="molSpreadSheetHeadData">${colHeader}</th>
                         </g:if>
                         <g:if test="${looper == 3}">
-                            <th class="molSpreadSheetHeadData sortable"><%=molSpreadSheetData.mapColumnsToAssay[looper]%><br/>${colHeader}
+                            <th class="molSpreadSheetHeadData"><%=molSpreadSheetData.mapColumnsToAssay[looper]%><br/>${colHeader}
                             </th>
                         </g:if>
                         <g:if test="${looper > 3}">
-                            <th class="molSpreadSheetHeadData sortable" rel="tooltip"
+                            <th class="molSpreadSheetHeadData" rel="tooltip"
                                 title="<%=molSpreadSheetData.mapColumnsToAssayName[looper]%>"><a
                                     href="../bardWebInterface/showAssay/<%=molSpreadSheetData.mapColumnsToAssay[looper]%>">ADID=<%=molSpreadSheetData.mapColumnsToAssay[looper]%><br/>${colHeader}
                             </a></th>
