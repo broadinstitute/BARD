@@ -26,8 +26,8 @@ databaseChangeLog = {
             change {
                 sql.call('''
                         begin
-                        load_data.load_reference;
-                        load_data.load_assay_without_result();
+                        load_data_012.load_reference;
+                        load_data_012.load_assay();
                         end;
                     ''')
             }
