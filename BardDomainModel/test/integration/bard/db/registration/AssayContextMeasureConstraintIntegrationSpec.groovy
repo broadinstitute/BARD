@@ -1,8 +1,6 @@
 package bard.db.registration
 
 import bard.db.dictionary.Element
-import grails.plugin.fixtures.Fixture
-import grails.plugin.fixtures.FixtureLoader
 import grails.plugin.spock.IntegrationSpec
 import org.junit.After
 import org.junit.Before
@@ -24,11 +22,11 @@ class AssayContextMeasureConstraintIntegrationSpec extends IntegrationSpec {
 
     def domainInstance
 
-    FixtureLoader fixtureLoader
+    def fixtureLoader
 
     @Before
     void doSetup() {
-        Fixture fixture = fixtureLoader.build {
+        def fixture = fixtureLoader.build {
             assay(Assay)
             assayContext(AssayContext, assay: assay)
             measure(Measure, assay: assay, resultType: Element.build())

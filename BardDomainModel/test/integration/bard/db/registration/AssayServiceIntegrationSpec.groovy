@@ -1,7 +1,6 @@
 package bard.db.registration
 
 import bard.db.experiment.Experiment
-import grails.plugin.fixtures.FixtureLoader
 import grails.plugin.spock.IntegrationSpec
 import registration.AssayService
 import spock.lang.Unroll
@@ -17,7 +16,7 @@ import spock.lang.Unroll
 class AssayServiceIntegrationSpec extends IntegrationSpec {
 
     AssayService assayService
-    FixtureLoader fixtureLoader
+    def fixtureLoader
 
     void "test findByPubChemAid with fixtures #label"() {
 
