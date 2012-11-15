@@ -9,14 +9,8 @@ import java.util.Collection;
 import java.util.List;
 
 
-public class ActivitySearchResult implements SearchResult<Value> {
+public class ActivitySearchResult extends SearchResultImp<Value> {
     volatile Experiment expr;
-
-
-    List<Value> searchResults;
-    long count = 0;
-    List<Value> facets = new ArrayList<Value>();
-    Object etag;
     private RESTExperimentService restExperimentService;
 
     ActivitySearchResult(RESTExperimentService restExperimentService, Experiment expr) {
@@ -58,45 +52,5 @@ public class ActivitySearchResult implements SearchResult<Value> {
             this.count = this.searchResults.size();
         }
         return this;
-    }
-
-    public List<Value> next(int top) {
-        return next(top, 0);
-    }
-
-    public List<Value> getSearchResults() {
-        return searchResults;
-    }
-
-    public List<Value> next(int top, int skip) {
-        if (top < 0) {
-            throw new IllegalArgumentException("Top must be a number greater than or equals zero");
-        }
-        if (skip < 0) {
-            throw new IllegalArgumentException("skip must be a number greater than or equals zero");
-        }
-        if (top > this.count) {
-            return this.searchResults;
-        }
-
-        if (skip > this.count) {
-            return new ArrayList<Value>();
-        }
-        if ((skip + top) > this.count) {
-            return this.searchResults.subList(skip, this.searchResults.size());
-        }
-        return this.searchResults.subList(skip, top+skip);
-    }
-
-    public Object getETag() {
-        return etag;
-    }
-
-    public Collection<Value> getFacets() {
-        return facets;
-    }
-
-    public long getCount() {
-        return this.count;
     }
 }

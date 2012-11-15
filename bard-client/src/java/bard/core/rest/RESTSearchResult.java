@@ -11,31 +11,24 @@ import java.util.Collection;
 import java.util.List;
 
 /**
-* Created with IntelliJ IDEA.
-* User: jasiedu
-* Date: 11/4/12
-* Time: 9:32 PM
-* To change this template use File | Settings | File Templates.
-*/ /*
+ * Created with IntelliJ IDEA.
+ * User: jasiedu
+ * Date: 11/4/12
+ * Time: 9:32 PM
+ * To change this template use File | Settings | File Templates.
+ */ /*
  * A refactor is needed!
  */
-class RESTSearchResult<E extends Entity>
-        implements SearchResult<E> {
+class RESTSearchResult<E extends Entity> extends SearchResultImp<E> {
 
     int bufferSize;
-
-    long count = 0;
-
     ServiceParams params;
     String resource;
-    List<Value> facets;
-    List<E> searchResults;
-    volatile Object etag;
     private RESTAbstractEntityService restAbstractEntityService;
 
     RESTSearchResult(RESTAbstractEntityService restAbstractEntityService,
                      String resource, ServiceParams params) {
-        this(restAbstractEntityService,RESTAbstractEntityService.DEFAULT_BUFSIZ, resource, params);
+        this(restAbstractEntityService, RESTAbstractEntityService.DEFAULT_BUFSIZ, resource, params);
     }
 
     RESTSearchResult(RESTAbstractEntityService restAbstractEntityService, int bufferSize,
@@ -111,9 +104,6 @@ class RESTSearchResult<E extends Entity>
         return this;
     }
 
-    public List<E> getSearchResults() {
-        return this.searchResults;
-    }
 
     void getHitCount() {
         Value hv = null;
@@ -128,40 +118,5 @@ class RESTSearchResult<E extends Entity>
             facets.remove(hv);
             this.count = (Integer) hv.getValue();
         }
-    }
-
-    public List<E> next(int top) {
-        return next(top, 0);
-    }
-
-    public List<E> next(int top, int skip) {
-        if (top < 0) {
-            throw new IllegalArgumentException("Top must be a number greater than or equals zero");
-        }
-        if (skip < 0) {
-            throw new IllegalArgumentException("skip must be a number greater than or equals zero");
-        }
-
-        if (skip > this.count) {
-            return new ArrayList<E>();
-        }
-        if ((skip + top) > this.count) {
-            return this.searchResults.subList(skip, this.searchResults.size());
-        }
-        return this.searchResults.subList(skip, top+skip);
-    }
-
-
-    public Collection<Value> getFacets() {
-        return this.facets;
-    }
-
-
-    public Object getETag() {
-        return this.etag;
-    }
-
-    public long getCount() {
-        return this.count;
     }
 }
