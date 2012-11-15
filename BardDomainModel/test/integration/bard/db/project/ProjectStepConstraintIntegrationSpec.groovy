@@ -1,13 +1,12 @@
 package bard.db.project
 
+import grails.plugin.spock.IntegrationSpec
 import org.junit.Before
-import spock.lang.Specification
 import spock.lang.Unroll
 
 import static bard.db.project.Project.MODIFIED_BY_MAX_SIZE
 import static test.TestUtils.assertFieldValidationExpectations
 import static test.TestUtils.createString
-import bard.db.project.ProjectStep
 
 /**
  * Created with IntelliJ IDEA.
@@ -17,7 +16,7 @@ import bard.db.project.ProjectStep
  * To change this template use File | Settings | File Templates.
  */
 @Unroll
-class ProjectStepConstraintIntegrationSpec extends Specification {
+class ProjectStepConstraintIntegrationSpec extends IntegrationSpec {
 
     ProjectStep domainInstance
 
