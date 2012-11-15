@@ -7,6 +7,8 @@ import spock.lang.Specification
 import static bard.db.registration.ExternalReference.MODIFIED_BY_MAX_SIZE
 import static test.TestUtils.assertFieldValidationExpectations
 import static test.TestUtils.createString
+import spock.lang.Unroll
+import bard.db.dictionary.Element
 
 /**
  * Created with IntelliJ IDEA.
@@ -16,13 +18,17 @@ import static test.TestUtils.createString
  * To change this template use File | Settings | File Templates.
  */
 @Build(AssayContextMeasure)
+@Unroll
 class AssayContextMeasureConstraintUnitSpec extends Specification {
 
     def domainInstance
 
     @Before
     void doSetup() {
-        domainInstance = AssayContextMeasure.buildWithoutSave()
+        Assay assay = Assay.build()
+        AssayContext assayContext = AssayContext.build(assay: assay)
+        Measure measure = Measure.build(assay: assay, resultType: Element.build())
+        domainInstance = AssayContextMeasure.buildWithoutSave(assayContext: assayContext, measure: measure)
     }
 
     void "test assayContext constraints #desc assayContext: '#valueUnderTest'"() {
