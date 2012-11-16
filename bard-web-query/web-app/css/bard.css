@@ -390,7 +390,7 @@ th.molSpreadSheetHead{
 th.molSpreadSheetImg{
     text-align: center;
     height: 60px;
-    min-width: 60px;
+    min-width: 150px;
 }
 th.molSpreadSheetHeadCid{
     text-align: center;
@@ -412,13 +412,13 @@ tr.molSpreadSheetGray{
     background: #eeeeee;
 }
 td.molSpreadSheetImg{
-    width: 150px;
-    height: 120px;
+    min-width: 150px;
+    min-height:120px;
     text-align: center;
 }
 td.molSpreadSheet{
-    width: 45px;
-    height: 120px;
+    /*width: 45px;*/
+    /*height: 120px;*/
     border-left: 1px solid;
     text-align: center;
 }

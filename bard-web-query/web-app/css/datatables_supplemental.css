@@ -26,3 +26,48 @@ table {
     margin: 1em 0;
     clear: both;
 }
+
+#molspreadsheet tbody tr.even:hover, #molspreadsheet tbody tr.even td.highlighted {
+    background-color: #ECFFB3;
+}
+
+#molspreadsheet tbody tr.odd:hover, #molspreadsheet tbody tr.odd td.highlighted {
+    background-color: #E6FF99;
+}
+
+#molspreadsheet tr.even:hover {
+    background-color: #ECFFB3;
+}
+
+#molspreadsheet tr.even:hover td.sorting_1 {   /* highlighted column, odd num row */
+    background-color: #DDFF75;
+}
+
+#molspreadsheet tr.odd:hover td.sorting_1 {   /* highlighted column, odd num row */
+    background-color: #DDFF75;
+}
+#molspreadsheet tr.even:hover td.sorting_2 {   /* what is this? */
+    background-color: #E7FF9E;
+}
+
+#molspreadsheet tr.even:hover td.sorting_3 { /* what is this? */
+    background-color: #E2FF89;
+}
+
+.ex_highlight_row #molspreadsheet tr.odd:hover {
+    /*background-color: #E6FF99;*/
+    background-color: #00ff00;
+
+}
+
+.ex_highlight_row #molspreadsheet tr.odd:hover td.sorting_1 {  /* what is this? */
+    background-color: #D6FF5C;
+}
+
+.ex_highlight_row #molspreadsheet tr.odd:hover td.sorting_2 {  /* what is this? */
+    background-color: #E0FF84;
+}
+
+.ex_highlight_row #molspreadsheet tr.odd:hover td.sorting_3 {   /* what is this? */
+    background-color: #DBFF70;
+}

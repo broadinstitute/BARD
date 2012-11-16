@@ -11,9 +11,14 @@
         $('td:nth-child(3), th:nth-child(3)').toggle();
         $("[rel=tooltip]").tooltip();
         $('#molspreadsheet').dataTable( {
-                    "aaSorting": [[ 2, "desc" ]] ,
-                    "bStateSave": true
-        }
+                    "bStateSave": true ,
+                    "sPaginationType": "full_numbers",
+                <g:if test="${molSpreadSheetData?.getColumnCount() > 8}">
+                    "sScrollX": "100%",
+                </g:if>
+                    "aLengthMenu": [[5, 10, 25, 50, -1], [5, 10, 25, 50, "All"]],
+                    "bAutoWidth": true
+                }
         );
     });
 </script>
@@ -36,7 +41,7 @@
                 <thead>
                 <tr class="molSpreadSheetHead">
                     <th class="molSpreadSheetImg">Molecular structure</th>
-                    <th class="molSpreadSheetHeadData" width="<%=columnWidth%>%">CID(<%=columnWidth%>%)</th>
+                    <th class="molSpreadSheetHeadData" width="<%=columnWidth%>%">CID</th>
                     <% int column = 0 %>
                     <g:each var="colHeader" in="${molSpreadSheetData?.getColumns()}">
                         <g:if test="${column == 2}">
