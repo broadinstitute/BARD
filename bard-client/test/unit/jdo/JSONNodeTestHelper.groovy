@@ -4,7 +4,7 @@ package jdo
  *
  */
 class JSONNodeTestHelper {
-   public static final String SUGGEST_PAIR='''
+    public static final String SUGGEST_PAIR = '''
 {
 "protocol":
    [
@@ -166,7 +166,7 @@ class JSONNodeTestHelper {
    "name": "Fluorescence-based dose response cell-based high-throughput screening assay for potentiators or agonists of NPY-Y1.",
    "description": "Source (MLPCN Center Name): The Scripps Research Institute Molecular",
     "source": null,
-   "grantNo": null,
+   "grantNo": "GR002",
    "deposited": null,
    "updated": null,
    "hasProbe": false,
@@ -212,7 +212,7 @@ class JSONNodeTestHelper {
                             "Neurodegenerative disease",
                             "Neurodegenerative disease"
                     ],
-            "grantNo": null,
+            "grantNo": "BR222",
             "deposited": null,
             "updated": null,
             "probes":
@@ -278,7 +278,16 @@ class JSONNodeTestHelper {
             "experimentCount": 12
     }
 '''
-
+    public static final String TARGET_NODE = '''
+ {
+ "acc": "P10636",
+  "name": null,
+  "description": "Description",
+  "status": "Reviewed",
+  "geneId": null,
+  "taxId": null
+  }
+'''
     public static final String COMPOUND_EXPANDED_SEARCH_RESULTS = '''
     {
        "cid": 600,
@@ -330,7 +339,7 @@ class JSONNodeTestHelper {
         "name": "SAR analysis of Antagonists of IAP-family anti-apoptotic proteins",
         "description": "Data Source: Sanford-Burnham Center for Chemical Genomics (SBCCG) Source Affiliation",
         "source": "Burnham Center for Chemical Genomics",
-        "grantNo": null,
+        "grantNo": "GR334",
         "protocol": "BIR1/2 assay materials: 1) Bir1/2 protein was provided by Prof. John C. Reed",
         "comments": "Compounds with an IC50 < 100 uM are considered 'active.' To simplify the distinction ",
             "deposited": null,

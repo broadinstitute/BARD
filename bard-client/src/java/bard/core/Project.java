@@ -40,12 +40,12 @@ public class Project extends Entity implements ProjectValues {
     public boolean remove (Assay assay) {
         return assays.remove(assay);
     }
-    public Collection<Assay> getAssays () { 
+    public Collection<Assay> getAssays () {
         return Collections.unmodifiableCollection(assays);
     }
     public Iterator<Assay> assays () { return getAssays().iterator(); }
     public int getAssayCount () { return assays.size(); }
-    
+
     public void add (Experiment expr) {
         experiments.add(expr);
     }
@@ -55,7 +55,7 @@ public class Project extends Entity implements ProjectValues {
     public Collection<Experiment> getExperiments () {
         return Collections.unmodifiableCollection(experiments);
     }
-    public Iterator<Experiment> experiments () { 
+    public Iterator<Experiment> experiments () {
         return getExperiments().iterator();
     }
     public int getExperimentCount () { return experiments.size(); }

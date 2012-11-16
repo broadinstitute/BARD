@@ -1,5 +1,7 @@
 package bard.core;
 
+import org.apache.commons.lang.StringUtils;
+
 import java.io.Serializable;
 import java.util.Date;
 import java.util.Calendar;
@@ -28,7 +30,7 @@ public class DataSource implements Serializable {
         this (name, version, null);
     }
     public DataSource (String name,  String version, String url) {
-        if (name == null || version == null) {
+        if (StringUtils.isBlank(name) || StringUtils.isBlank(version)) {
             throw new IllegalArgumentException
                 ("DataSource name and version can't be null");
         }

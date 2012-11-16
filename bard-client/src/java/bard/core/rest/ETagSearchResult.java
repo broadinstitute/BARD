@@ -14,15 +14,9 @@ import java.util.List;
 * Time: 9:22 PM
 * To change this template use File | Settings | File Templates.
 */
-public class ETagSearchResult implements SearchResult<Value> {
-    long count = 0;
+public class ETagSearchResult extends SearchResultImp<Value> {
     Principal principal;
-    List<Value> searchResults;
     private RESTAbstractEntityService restAbstractEntityService;
-
-    public List<Value> getSearchResults() {
-        return this.searchResults;
-    }
 
     ETagSearchResult(RESTAbstractEntityService restAbstractEntityService, Principal principal) {
         this.restAbstractEntityService = restAbstractEntityService;
@@ -61,42 +55,5 @@ public class ETagSearchResult implements SearchResult<Value> {
             this.count = this.searchResults.size();
         }
         return this;
-    }
-
-
-    public List<Value> next(int top) {
-        return next(top, 0);
-    }
-
-    public List<Value> next(int top, int skip) {
-        if (top < 0) {
-            throw new IllegalArgumentException("Top must be a number greater than or equals zero");
-        }
-        if (skip < 0) {
-            throw new IllegalArgumentException("skip must be a number greater than or equals zero");
-        }
-
-        if (skip > this.count) {
-            return new ArrayList<Value>();
-        }
-        if ((skip + top) > this.count) {
-            return this.searchResults.subList(skip, this.searchResults.size());
-        }
-        return this.searchResults.subList(skip, top+skip);
-    }
-
-
-    public Object getETag() {
-        return null;
-    }
-
-    public List<Value> getFacets() {
-        return null;
-    }
-
-
-    public long getCount() {
-        return this.count;
-
     }
 }

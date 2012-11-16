@@ -21,8 +21,7 @@ import java.util.concurrent.ConcurrentHashMap;
 * Time: 9:18 PM
 * To change this template use File | Settings | File Templates.
 */ // this pattern is quite general; it should be refactor somewhere else
-public class StructureSearchResult
-        implements SearchResult<Compound> {
+public class StructureSearchResult extends SearchResultImp<Compound> {
     public static final String STRUCTURE = "[structure]";
     public static final String TYPE_SUB = "&type=sub";
     public static final String TYPE_SUP = "&type=sup";
@@ -32,12 +31,12 @@ public class StructureSearchResult
     public static final String FILTER = "?filter=";
     volatile StructureSearchParams params;
     volatile String url;
-    List<Compound> searchResults;
     Map<String, Long> etags = new ConcurrentHashMap<String, Long>();
-    long count = 0;
     private RESTCompoundService restCompoundService;
+    protected StructureSearchResult(){
 
-    StructureSearchResult(RESTCompoundService restCompoundService, StructureSearchParams params) {
+    }
+    public StructureSearchResult(RESTCompoundService restCompoundService, StructureSearchParams params) {
         this.restCompoundService = restCompoundService;
         this.searchResults = new ArrayList<Compound>();
         StringBuilder url = new StringBuilder();
@@ -102,41 +101,14 @@ public class StructureSearchResult
         return this;
     }
 
+    @Override
     public Collection<Value> getFacets() {
         String etag = RESTCompoundService.getParentETag(etags);
         return restCompoundService.getFacets(etag);
     }
 
+    @Override
     public Object getETag() {
         return RESTCompoundService.getParentETag(etags);
-    }
-
-    public long getCount() {
-        return this.count;
-    }
-
-    public List<Compound> getSearchResults() {
-        return this.searchResults;
-    }
-
-    public List<Compound> next(int top) {
-        return next(top, 0);
-    }
-
-    public List<Compound> next(int top, int skip) {
-        if (top < 0) {
-            throw new IllegalArgumentException("Top must be a number greater than or equals zero");
-        }
-        if (skip < 0) {
-            throw new IllegalArgumentException("skip must be a number greater than or equals zero");
-        }
-
-        if (skip > this.count) {
-            return new ArrayList<Compound>();
-        }
-        if ((skip + top) > this.count) {
-            return this.searchResults.subList(skip, this.searchResults.size());
-        }
-        return this.searchResults.subList(skip, top+skip);
     }
 }

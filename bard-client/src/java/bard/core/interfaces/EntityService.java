@@ -81,6 +81,7 @@ public interface EntityService<E extends Entity> extends Serializable {
     String ACC = "acc";
     String GENE_ID = "geneId";
     String TAXONOMY_ID = "TaxonomyID";
+    String TAX_ID = "taxId";
     String TARGETS = "targets";
     String ASSAY_ID = "assay_id";
     String COMMENT = "comment";
