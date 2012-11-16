@@ -26,7 +26,7 @@
 <div class="row-fluid">
     <div class="span12">
         <dl class="dl-horizontal dl-horizontal-wide">
-            <dt>Assays - Active vrs Tested:</dt>
+            <dt>Assays - Active vs Tested:</dt>
             <dd>
                 <div class="activeVrsTested" href="${createLink(controller: 'bardWebInterface', action: 'activeVrsTested', params: [cid: compound.pubChemCID])}" id="${compound.pubChemCID}_tested"></div>
             </dd>
