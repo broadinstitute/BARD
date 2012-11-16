@@ -10,28 +10,27 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-/**
- * Created with IntelliJ IDEA.
- * User: jasiedu
- * Date: 11/4/12
- * Time: 9:32 PM
- * To change this template use File | Settings | File Templates.
- */ /*
+
+/*
  * A refactor is needed!
  */
-class RESTSearchResult<E extends Entity> extends SearchResultImp<E> {
+public class RESTSearchResult<E extends Entity> extends SearchResultImp<E> {
 
-    int bufferSize;
-    ServiceParams params;
-    String resource;
+    private int bufferSize;
+    private ServiceParams params;
+    private String resource;
     private RESTAbstractEntityService restAbstractEntityService;
 
-    RESTSearchResult(RESTAbstractEntityService restAbstractEntityService,
+    protected RESTSearchResult(){
+        this.searchResults = new ArrayList<E>();
+        this.facets = new ArrayList<Value>();
+    }
+    public RESTSearchResult(RESTAbstractEntityService restAbstractEntityService,
                      String resource, ServiceParams params) {
         this(restAbstractEntityService, RESTAbstractEntityService.DEFAULT_BUFSIZ, resource, params);
     }
 
-    RESTSearchResult(RESTAbstractEntityService restAbstractEntityService, int bufferSize,
+    public RESTSearchResult(RESTAbstractEntityService restAbstractEntityService, int bufferSize,
                      String resource, ServiceParams params) {
         this.restAbstractEntityService = restAbstractEntityService;
         this.bufferSize = bufferSize;
@@ -40,7 +39,12 @@ class RESTSearchResult<E extends Entity> extends SearchResultImp<E> {
         this.searchResults = new ArrayList<E>();
         this.facets = new ArrayList<Value>();
     }
-
+    protected void addETag(List etags) {
+        if (this.etag == null && !etags.isEmpty()) {
+            // for now just grad the first etag
+            this.etag = etags.iterator().next();
+        }
+    }
     public RESTSearchResult build() {
         //clear results
         this.searchResults.clear();
@@ -61,10 +65,7 @@ class RESTSearchResult<E extends Entity> extends SearchResultImp<E> {
             List<E> results = restAbstractEntityService.get
                     (resource, true, top, skip, etags, facets);
             searchResults.addAll(results);
-            if (etag == null && !etags.isEmpty()) {
-                // for now just assume there is only one etag returned
-                this.etag = etags.iterator().next();
-            }
+           addETag(etags);
             getHitCount();
         } else {
             // unbounded fetching with geometric progression
@@ -76,11 +77,7 @@ class RESTSearchResult<E extends Entity> extends SearchResultImp<E> {
                 List<E> results = restAbstractEntityService.get
                         (resource, true, top, skip, etags, facets);
                 searchResults.addAll(results);
-                if (etag == null && !etags.isEmpty()) {
-                    // for now just assume there is only one
-                    //  etag returned
-                    etag = etags.iterator().next();
-                }
+                addETag(etags);
 
                 getHitCount();
                 if (results.size() < top || results.size() > EntityService.MAXIMUM_NUMBER_OF_COMPOUNDS) {

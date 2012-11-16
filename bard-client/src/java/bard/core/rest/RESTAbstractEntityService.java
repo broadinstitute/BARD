@@ -72,6 +72,7 @@ public abstract class RESTAbstractEntityService<E extends Entity>
 
     /**
      * something like 'plugins/badapple/prom/cid/'
+     *
      * @return the relative url to the promiscuity plugin
      */
     protected String getPromiscuityResource() {
@@ -137,7 +138,7 @@ public abstract class RESTAbstractEntityService<E extends Entity>
      */
     protected void handleArrayNodeForGetEntitySearch(final List<E> values, final List<Value> facets, final JsonNode root) {
         ArrayNode node = (ArrayNode) root.get(COLLECTION);
-        if (node != null && !node.isNull()) {
+        if (isNotNull(node)) {
             handleCollectionNode(node, values);
         } else { // now try "docs" for search
             handleDocsNode(values, facets, root);
@@ -212,7 +213,7 @@ public abstract class RESTAbstractEntityService<E extends Entity>
      * @param node
      */
     protected void addEntityToResults(List<E> results, JsonNode node) {
-        if (node != null && !node.isNull()) {
+        if (isNotNull(node)) {
             if (node.isArray()) {
                 ArrayNode array = (ArrayNode) node;
                 for (int i = 0; i < array.size(); ++i) {
@@ -395,7 +396,7 @@ public abstract class RESTAbstractEntityService<E extends Entity>
     public E get(Object id) {
         final String uri = new StringBuilder(getResource(id)).append(QUESTION_MARK).append(EXPAND_TRUE).toString();
         final JsonNode jsonNodes = executeGetRequest(uri);
-        if (jsonNodes != null && !jsonNodes.isNull()) {
+        if (isNotNull(jsonNodes)) {
             return getEntity(null, jsonNodes);
         }
         return null;
@@ -436,7 +437,7 @@ public abstract class RESTAbstractEntityService<E extends Entity>
         final JsonNode root = executeGetRequest(url);
 
         final ArrayNode node = (ArrayNode) root.get(COLLECTION);
-        if (node != null && !node.isNull()) {
+        if (isNotNull(node)) {
             for (int i = 0; i < node.size(); ++i) {
                 final Value v = parseETag(node.get(i));
                 if (v != null) {
@@ -451,7 +452,7 @@ public abstract class RESTAbstractEntityService<E extends Entity>
     protected int parseFacets(List<Value> facets, JsonNode node) {
         int nhits = 0;
         final JsonNode meta = node.get(META_DATA);
-        if (meta != null && !meta.isNull()) {
+        if (isNotNull(meta)) {
             nhits = extractNumberHitsFromJson(meta);
             facets.addAll(extractFacetsFromJson(meta));
         }
@@ -466,7 +467,7 @@ public abstract class RESTAbstractEntityService<E extends Entity>
         final JsonNode hitsNode = metaNode.get(NHIT);
 
         int nhits = 0;
-        if (hitsNode != null && !hitsNode.isNull()) {
+        if (isNotNull(hitsNode)) {
             nhits = hitsNode.asInt();
         }
         return nhits;
@@ -479,7 +480,7 @@ public abstract class RESTAbstractEntityService<E extends Entity>
     protected List<Value> extractFacetsFromJson(final JsonNode metaNode) {
         final List<Value> facets = new ArrayList<Value>();
         final JsonNode facetNode = metaNode.get(FACETS);
-        if (facetNode != null && !facetNode.isNull()) {
+        if (isNotNull(facetNode)) {
             final DataSource ds = getDataSource(EntityNamedSources.FacetSource);
             final ArrayNode array = (ArrayNode) facetNode;
             for (int i = 0; i < array.size(); ++i) {
@@ -523,7 +524,7 @@ public abstract class RESTAbstractEntityService<E extends Entity>
         final Value facet = new Value(ds, id);
 
         final JsonNode countsNode = n.get(COUNTS);
-        if (countsNode != null && !countsNode.isNull()) {
+        if (isNotNull(countsNode)) {
             extractCountKeyValuePairFromNode(facet, countsNode);
         }
         return facet;
@@ -607,7 +608,7 @@ public abstract class RESTAbstractEntityService<E extends Entity>
      * @param node
      */
     protected void addSingleEntity(List<E> results, JsonNode node) {
-        if (node != null && !node.isNull()) {
+        if (isNotNull(node)) {
             E e = getEntity(null, node);
             if (e != null) {
                 results.add(e);
@@ -639,7 +640,7 @@ public abstract class RESTAbstractEntityService<E extends Entity>
      */
     protected void extractNameFromNode(JsonNode node, Value etag) {
         JsonNode nameNode = node.get(NAME);
-        if (nameNode != null && !nameNode.isNull()) {
+        if (isNotNull(nameNode)) {
             new StringValue(etag, NAME, nameNode.asText());
         }
     }
@@ -654,7 +655,7 @@ public abstract class RESTAbstractEntityService<E extends Entity>
      */
     protected void extractCountFromNode(JsonNode node, Value etag) {
         final JsonNode countNode = node.get(COUNT);
-        if (countNode != null && !countNode.isNull()) {
+        if (isNotNull(countNode)) {
             new IntValue(etag, COUNT, countNode.asInt());
         }
     }
@@ -665,7 +666,7 @@ public abstract class RESTAbstractEntityService<E extends Entity>
      */
     protected void extractUrlFromNode(JsonNode node, Value etag) {
         JsonNode urlNode = node.get(URL_STRING);
-        if (urlNode != null && !urlNode.isNull()) {
+        if (isNotNull(urlNode)) {
             new StringValue(etag, URL_STRING, urlNode.asText());
         }
     }
@@ -676,7 +677,7 @@ public abstract class RESTAbstractEntityService<E extends Entity>
      */
     protected void extractDescriptionFromNode(JsonNode node, Value etag) {
         JsonNode descriptionNode = node.get(DESCRIPTION);
-        if (descriptionNode != null && !descriptionNode.isNull()) {
+        if (isNotNull(descriptionNode)) {
             new StringValue(etag, DESCRIPTION, descriptionNode.asText());
         }
     }
@@ -806,7 +807,7 @@ public abstract class RESTAbstractEntityService<E extends Entity>
         JsonNode root = node.get(ETAG_ID);
         Value etag = null;
         DataSource ds = getDataSource();
-        if (root != null && !root.isNull()) {
+        if (isNotNull(root)) {
             etag = new Value(ds, root.asText());
         }
         return etag;

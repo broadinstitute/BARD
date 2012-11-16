@@ -126,6 +126,43 @@ class RESTAssayServiceIntegrationSpec extends AbstractRESTServiceSpec {
         label                           | adid
         "Search with a single assay id" | 644
     }
+
+    /**
+     * if you search for the this assay via the REST api, you get one experiment associated with the assay
+     */
+    void "test Get Assays with experiment #label"() {
+        when: "We call the get method of the the RESTAssayService with an assay ids"
+        final Assay assay = this.restAssayService.get(adid)
+
+        then: "We expect to get back a list of assays"
+        assertAssays([assay], false)
+        final SearchResult<Experiment> searchResult = restAssayService.searchResult(assay, Experiment.class)
+        final List<Experiment> entities = searchResult.searchResults
+        assert entities
+        assert !entities.isEmpty()
+        for (Experiment experiment : entities) {
+            assert experiment
+        }
+
+
+        where:
+        label                           | adid
+        "Search with a single assay id" | 644
+    }
+    /**
+     * if you search for the this assay via the REST api, you get one experiment associated with the assay
+     */
+    void "test Get Assay with a Single Compound Illegal Argument excpetion"() {
+        when: "We call the get method of the the RESTAssayService with an assay id"
+        final Assay assay = this.restAssayService.get(adid)
+        restAssayService.searchResult(assay, Compound.class)
+        then:
+        thrown(IllegalArgumentException)
+
+        where:
+        label                           | adid
+        "Search with a single assay id" | 644
+    }
 /**
  *
  * @param assays

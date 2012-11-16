@@ -59,13 +59,13 @@ public class RESTExperimentService
         final JsonNode node = root.get(COLLECTION);
         ArrayNode array = null;
 
-        if (node != null && node.isArray()) {
+        if (isNotNull(node) && node.isArray()) {
             array = (ArrayNode) node;
         } else if (root.isArray()) {
             array = (ArrayNode) root;
         }
 
-        if (array != null) {
+        if (isNotNull(array)) {
             for (int i = 0; i < array.size(); ++i) {
                 JsonNode n = array.get(i);
                 values.add(getValue(source, n));
@@ -88,13 +88,13 @@ public class RESTExperimentService
             JsonNode node = root.get(COLLECTION);
             ArrayNode array = null;
 
-            if (node != null && node.isArray()) {
+            if (isNotNull(node) && node.isArray()) {
                 array = (ArrayNode) node;
             } else if (root.isArray()) {
                 array = (ArrayNode) root;
             }
 
-            if (array != null) {
+            if (isNotNull(array)) {
                 for (int i = 0; i < array.size(); ++i) {
                     JsonNode n = array.get(i);
                     queue.put(getValue(source, n));
@@ -114,26 +114,26 @@ public class RESTExperimentService
                 (parent, node.get(NAME).asText());
 
         JsonNode n = node.get(S_0);
-        if (!n.isNull()) {
+        if (isNotNull(n)) {
             hcv.setS0(n.asDouble());
         }
 
         n = node.get(S_INF);
-        if (!n.isNull()) {
+        if (isNotNull(n)) {
             hcv.setSinf(n.asDouble());
         }
 
         n = node.get(HILL);
-        if (!n.isNull()) {
+        if (isNotNull(n)) {
             hcv.setCoef(n.asDouble());
         }
 
         n = node.get(AC_50);
-        if (!n.isNull()) {
+        if (isNotNull(n)) {
             hcv.setSlope(n.asDouble());
         }
         n = node.get(CONC_UNIT);
-        if (!n.isNull()) {
+        if (isNotNull(n)) {
             hcv.setConcentrationUnits(n.asText());
         }
         ArrayNode crc = (ArrayNode) node.get(CR);
@@ -159,12 +159,12 @@ public class RESTExperimentService
         }
 
         JsonNode n = node.get(POTENCY);
-        if (n != null && !n.isNull()) {
+        if (isNotNull(n)) {
             new NumericValue(v, POTENCY, n.asDouble());
         }
 
         n = node.get(OUTCOME);
-        if (n != null && !n.isNull()) {
+        if (isNotNull(n)) {
             new IntValue(v, OUTCOME, n.asInt());
         }
 
@@ -190,7 +190,7 @@ public class RESTExperimentService
         // we'll always have an expanded form, but we only reutrn a
         // a partially filled Assay object
         JsonNode n = node.get(ASSAY_ID);
-        if (n != null && n.isArray()) {
+        if (isNotNull(n) && n.isArray()) {
             RESTAssayService service = (RESTAssayService) getServiceManager()
                     .getService(Assay.class);
             ArrayNode assayNode = (ArrayNode) n;
@@ -204,13 +204,13 @@ public class RESTExperimentService
 
         DataSource ds = getDataSource();
         n = node.get(COMPOUNDS);
-        if (n != null && !n.isNull()) {
+        if (isNotNull(n)) {
             e.add(new IntValue
                     (ds, Experiment.ExperimentCompoundCountValue, n.asInt()));
         }
 
         n = node.get(SUBSTANCES);
-        if (n != null && !n.isNull()) {
+        if (isNotNull(n)) {
             e.add(new IntValue
                     (ds, Experiment.ExperimentSubstanceCountValue, n.asInt()));
         }

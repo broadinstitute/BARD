@@ -136,9 +136,9 @@ public class RESTCompoundService extends RESTAbstractEntityService<Compound>
 
         String url = buildQueryForTestedAssays(compound, activeOnly);
         final JsonNode rootNode = executeGetRequest(url);
-        if (rootNode != null && !rootNode.isNull()) {
+        if (isNotNull(rootNode)) {
             JsonNode node = rootNode.get(COLLECTION);
-            if (node != null && node.isArray()) {
+            if (isNotNull(node) && node.isArray()) {
                 ArrayNode array = (ArrayNode) node;
                 for (int i = 0; i < array.size(); ++i) {
                     JsonNode n = array.get(i);
@@ -155,7 +155,7 @@ public class RESTCompoundService extends RESTAbstractEntityService<Compound>
     }
 
     protected final void addSynonyms(final List<Value> synonyms, final JsonNode node, final DataSource ds) {
-        if (node != null && node.isArray()) {
+        if (isNotNull(node) && node.isArray()) {
             final ArrayNode array = (ArrayNode) node;
             for (int i = 0; i < array.size(); ++i) {
                 JsonNode n = array.get(i);
@@ -165,7 +165,7 @@ public class RESTCompoundService extends RESTAbstractEntityService<Compound>
     }
 
     protected final void addSynonym(final List<Value> synonyms, final JsonNode node, final DataSource ds) {
-        if (node != null && !node.isNull()) {
+        if (isNotNull(node) && node.isArray()) {
             synonyms.add(new StringValue
                     (ds, Compound.SynonymValue,
                             node.asText()));
@@ -179,7 +179,7 @@ public class RESTCompoundService extends RESTAbstractEntityService<Compound>
                 (EntityNamedSources.PubChemSynonymSource);
         ds.setURL(url);
         JsonNode node = executeGetRequest(url);
-        if (node != null && !node.isNull()) {
+        if (isNotNull(node) && node.isArray()) {
             addSynonyms(synonyms, node, ds);
         }
         return synonyms;
@@ -266,7 +266,7 @@ public class RESTCompoundService extends RESTAbstractEntityService<Compound>
 
         DataSource ds = getDataSource();
         JsonNode n = node.get(CID);
-        if (n != null) {
+        if (isNotNull(n)) {
             long cid = n.asLong();
             compound.setId(cid);
             // redundant
@@ -274,7 +274,7 @@ public class RESTCompoundService extends RESTAbstractEntityService<Compound>
         }
 
         n = node.get(SIDS);
-        if (n != null && n.isArray()) {
+        if (isNotNull(n) && n.isArray()) {
             ArrayNode nodes = (ArrayNode) n;
             for (int i = 0; i < nodes.size(); ++i) {
                 long sid = nodes.get(i).asLong();
@@ -283,19 +283,19 @@ public class RESTCompoundService extends RESTAbstractEntityService<Compound>
         }
 
         n = node.get(PROBE_ID);
-        if (n != null && !n.isNull()) {
+        if (isNotNull(n)) {
             compound.add(new StringValue(ds, Compound.ProbeIDValue,
                     n.asText()));
 
         }
 
         n = node.get(NAME);
-        if (n != null && !n.isNull()) {
+        if (isNotNull(n)) {
             compound.setName(n.asText());
         }
 
         n = node.get(IUPAC_NAME);
-        if (n != null && !n.isNull()) {
+        if (isNotNull(n)) {
             compound.add(new StringValue(ds, Compound.IUPACNameValue, n.asText()));
         }
 
@@ -312,7 +312,7 @@ public class RESTCompoundService extends RESTAbstractEntityService<Compound>
         DataSource ds = getDataSource(EntityNamedSources.AnnotationSource);
         final ArrayNode keys = (ArrayNode) node.get(ANNO_KEY);
         final ArrayNode vals = (ArrayNode) node.get(ANNO_VAL);
-        if (keys != null && !keys.isNull() && vals != null && !vals.isNull()) {
+        if (isNotNull(keys) && isNotNull(vals)) {
             for (int i = 0; i < keys.size(); ++i) {
                 String key = keys.get(i).asText();
                 String val = vals.get(i).asText();
@@ -338,16 +338,16 @@ public class RESTCompoundService extends RESTAbstractEntityService<Compound>
 
         String iupac = null;
         n = node.get(IUPAC_NAME);
-        if (n != null && !n.isNull()) {
+        if (isNotNull(n)) {
             compound.setName(iupac = n.asText());
         }
         n = node.get(PROBE_ID);
-        if (n != null && !n.isNull()) {
+        if (isNotNull(n)) {
             compound.add(new StringValue(ds, Compound.ProbeIDValue,
                     n.asText()));
         }
         n = node.get(PREFERRED_TERM);
-        if (n != null && !n.isNull()) {
+        if (isNotNull(n)) {
             compound.setName(n.asText());
         }
 
@@ -356,14 +356,14 @@ public class RESTCompoundService extends RESTAbstractEntityService<Compound>
         }
 
         n = node.get(HIGHLIGHT);
-        if (n != null && !n.isNull()) {
+        if (isNotNull(n)) {
             compound.add(new StringValue
                     (ds, Compound.SearchHighlightValue, n.asText()));
         }
 
         MolecularData md = new MolecularDataJChemImpl();
         final JsonNode iso_smiles = node.get(ISO_SMILES);
-        if (iso_smiles != null && !iso_smiles.isNull()) {
+        if (isNotNull(iso_smiles)) {
             md.setMolecule(iso_smiles.asText());
         }
         compound.add(new MolecularValue(ds, Compound.MolecularValue, md));

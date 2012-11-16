@@ -112,8 +112,10 @@ public class RESTAssayService extends RESTAbstractEntityService<Assay>
         }
 
         final JsonNode grantNo = node.get(GRANT_NO);
-        assay.add(new StringValue
-                (ds, AssayGrantValue, grantNo.asText()));
+        if (isNotNull(grantNo)) {
+            assay.add(new StringValue
+                    (ds, AssayGrantValue, grantNo.asText()));
+        }
         final JsonNode aid = node.get(AID);
         if (isNotNull(aid)) {
             assay.add(new IntValue
@@ -155,7 +157,7 @@ public class RESTAssayService extends RESTAbstractEntityService<Assay>
                 target.add(new IntValue
                         (ds, Biology.GeneIDValue, geneIdNode.asInt()));
             }
-            final JsonNode taxonomyNode = targetNode.get(TAXONOMY_ID);
+            final JsonNode taxonomyNode = targetNode.get(TAX_ID);
             if (isNotNull(taxonomyNode)) {
                 target.add(new IntValue
                         (ds, Biology.TaxonomyIDValue, taxonomyNode.asInt()));

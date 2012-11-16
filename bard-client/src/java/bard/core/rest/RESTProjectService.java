@@ -43,7 +43,7 @@ public class RESTProjectService extends RESTAbstractEntityService<Project>
          */
 
         JsonNode n = node.get(EXPERIMENT_COUNT);
-        if (n != null) {
+        if (isNotNull(n)) {
             project.add(new IntValue
                     (ds, Project.NumberOfExperimentsValue, n.asInt()));
         }
@@ -59,28 +59,28 @@ public class RESTProjectService extends RESTAbstractEntityService<Project>
         }
 
         final JsonNode projectId = node.get(PROJ_ID);
-        if (projectId != null && !projectId.isNull()) {
+        if (isNotNull(projectId)) {
             project.setId(projectId.asLong());
         }
 
         final JsonNode name = node.get(NAME);
-        if (name != null && !name.isNull()) {
+        if (isNotNull(name)) {
             project.setName(name.asText());
         }
         final JsonNode description = node.get(DESCRIPTION);
-        if(description != null && !description.isNull()){
+        if(isNotNull(description)){
             project.setDescription(description.asText());
         }
 
         DataSource ds = getDataSource();
         JsonNode n = node.get(HIGHLIGHT);
-        if (n != null && !n.isNull()) {
+        if (isNotNull(n)) {
             project.add(new StringValue
                     (ds, Entity.SearchHighlightValue, n.asText()));
         }
 
         n = node.get(NUM_EXPT);
-        if (n != null) {
+        if (isNotNull(n)) {
             project.add(new IntValue
                     (ds, Project.NumberOfExperimentsValue, n.asInt()));
         }

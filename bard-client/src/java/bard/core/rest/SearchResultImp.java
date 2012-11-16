@@ -15,10 +15,10 @@ import java.util.List;
  * To change this template use File | Settings | File Templates.
  */
 public abstract class SearchResultImp<E> implements SearchResult {
-    List<E> searchResults;
-    long count = 0;
-    Object etag;
-    List<Value> facets = new ArrayList<Value>();
+    protected List<E> searchResults;
+    protected long count = 0;
+    protected Object etag;
+    protected List<Value> facets = new ArrayList<Value>();
 
 
     public List<E> next(int top) {

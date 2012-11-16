@@ -33,8 +33,10 @@ public class StructureSearchResult extends SearchResultImp<Compound> {
     volatile String url;
     Map<String, Long> etags = new ConcurrentHashMap<String, Long>();
     private RESTCompoundService restCompoundService;
+    protected StructureSearchResult(){
 
-    StructureSearchResult(RESTCompoundService restCompoundService, StructureSearchParams params) {
+    }
+    public StructureSearchResult(RESTCompoundService restCompoundService, StructureSearchParams params) {
         this.restCompoundService = restCompoundService;
         this.searchResults = new ArrayList<Compound>();
         StringBuilder url = new StringBuilder();
