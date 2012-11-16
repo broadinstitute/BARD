@@ -53,14 +53,15 @@
                             </th>
                         </g:if>
                         <g:if test="${column > 3}">
-                            <th class="molSpreadSheetHeadData" rel="tooltip"
-                                title="<%=molSpreadSheetData.mapColumnsToAssayName[looper]%>"><a
+                           <th class="molSpreadSheetHeadData" rel="tooltip"
+                                title="<%=molSpreadSheetData.mapColumnsToAssayName[column]%>"><a
                                     href="../bardWebInterface/showAssay/<%=molSpreadSheetData.mapColumnsToAssay[column] %>" width="<%=columnWidth%>%">ADID=<%=molSpreadSheetData.mapColumnsToAssay[column]%><br/>${colHeader}
                             </a></th>
                         </g:if>
                         <% column++ %>
                     </g:each>
                 </tr>
+
                 </thead>
                 <tbody>
                 <% Integer rowCount = 0 %>
