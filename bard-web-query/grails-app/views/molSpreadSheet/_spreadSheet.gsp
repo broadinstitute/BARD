@@ -13,11 +13,11 @@
         $('#molspreadsheet').dataTable( {
                     "bStateSave": true ,
                     "sPaginationType": "full_numbers",
-                <g:if test="${molSpreadSheetData?.getColumnCount() > 8}">
-                    "sScrollX": "100%",
-                </g:if>
-                    "aLengthMenu": [[5, 10, 25, 50, -1], [5, 10, 25, 50, "All"]],
-                    "bAutoWidth": true
+                %{--<g:if test="${molSpreadSheetData?.getColumnCount() > 8}">--}%
+                    %{--"sScrollX": "100%",--}%
+                    %{--"bAutoWidth": false,--}%
+                %{--</g:if>--}%
+                    "aLengthMenu": [[5, 10, 25, 50, -1], [5, 10, 25, 50, "All"]]
                 }
         );
     });
