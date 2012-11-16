@@ -104,20 +104,6 @@ div.header > h3 {
     font-weight: bold;
 }
 
-/*#modalDiv {*/
-    /*height: 640px;*/
-    /*width: 560px;*/
-    /*overflow: hidden;*/
-/*}*/
-
-/*#modalDiv div.modal-body {*/
-    /*width: 550px;*/
-    /*height: 480px;*/
-    /*max-height: 500px;*/
-    /*overflow: hidden;*/
-    /*padding: 5px;*/
-/*}*/
-
 .bard-footer {
     margin-top: 30px;
     background-color: #f2f5f1;
@@ -377,10 +363,11 @@ div.wellmod {
 }
 
 table.molSpreadSheet{
-    border: 1px black solid;
+    border-bottom: 1px black solid;
+    /*border-left: 1px black solid;*/
+    /*border-right: 1px black solid;*/
     border-collapse: collapse;
     border-spacing: 0px;
-    table-layout: fixed;
     padding: 0;
     margin: 0;
     width: 100%;
@@ -397,33 +384,24 @@ tr.molSpreadSheetHead{
 }
 th.molSpreadSheetHead{
     height: 60px;
-    width:  50px;
     font-weight: bold;
     color: black;
 }
 th.molSpreadSheetImg{
     text-align: center;
-    width: 150px;
     height: 60px;
-    background: #d3d3d3;
+    min-width: 150px;
 }
 th.molSpreadSheetHeadCid{
     text-align: center;
     height: 60px;
-    width:  80px;
     border-left: 1px solid;
     font-weight: bold;
-    background: #d3d3d3;
+    /*background: #eeeeee;*/
 }
 th.molSpreadSheetHeadData{
-    text-align: center;
-    white-space: normal;
-    word-wrap: break-word;
-    height: 60px;
-    width:  120px;
-    font-weight: bold;
     border-left: 1px solid;
-    background: #d3d3d3;
+    /*background: #eeeeee;*/
 }
 
 tr.molSpreadSheet{
@@ -434,13 +412,13 @@ tr.molSpreadSheetGray{
     background: #eeeeee;
 }
 td.molSpreadSheetImg{
-    width: 150px;
-    height: 120px;
+    min-width: 150px;
+    min-height:120px;
     text-align: center;
 }
 td.molSpreadSheet{
-    width: 45px;
-    height: 120px;
+    /*width: 45px;*/
+    /*height: 120px;*/
     border-left: 1px solid;
     text-align: center;
 }

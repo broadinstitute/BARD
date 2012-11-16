@@ -46,6 +46,9 @@ modules = {
      }
     molecularSpreadSheet {
         resource url:"js/molecularSpreadSheet.js"
+        resource url:"js/DataTables-1.9.4/jquery.dataTables.js"
+        resource url:"css/jquery-dataTables.css"
+        resource url:"css/datatables_supplemental.css"
         //resource url:'/js/jquery.address-1.4/jquery.address-1.4.js?state=/'
     }
     experimentData {

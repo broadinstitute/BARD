@@ -10,6 +10,16 @@
         });
         $('td:nth-child(3), th:nth-child(3)').toggle();
         $("[rel=tooltip]").tooltip();
+        $('#molspreadsheet').dataTable( {
+                    "bStateSave": true ,
+                    "sPaginationType": "full_numbers",
+                %{--<g:if test="${molSpreadSheetData?.getColumnCount() > 8}">--}%
+                    %{--"sScrollX": "100%",--}%
+                    %{--"bAutoWidth": false,--}%
+                %{--</g:if>--}%
+                    "aLengthMenu": [[5, 10, 25, 50, -1], [5, 10, 25, 50, "All"]]
+                }
+        );
     });
 </script>
 
@@ -21,35 +31,37 @@
 
     <div class="span10">
         <g:if test="${molSpreadSheetData?.getColumnCount() > 0}">
+            <g:set var="columnWidth" value="${100.0/((molSpreadSheetData?.getColumnCount()-1) as float)}" />
             <label class="checkbox">
                 <input type="checkbox" defaultChecked="checked" checked name="showPromiscuityScores"
                        id="showPromiscuityScores">
                 Hide Promiscuity Scores
             </label>
-            <table class="molSpreadSheet">
+            <table cellpadding="0" cellspacing="0" border="0"  class="molSpreadSheet display" id="molspreadsheet"  width="100%">
                 <thead>
                 <tr class="molSpreadSheetHead">
-                    <th class="molSpreadSheetImg sortable">Molecular structure</th>
-
-                    <th class="molSpreadSheetHeadData sortable">CID</th>
-                    <% int looper = 0 %>
+                    <th class="molSpreadSheetImg">Molecular structure</th>
+                    <th class="molSpreadSheetHeadData" width="<%=columnWidth%>%">CID</th>
+                    <% int column = 0 %>
                     <g:each var="colHeader" in="${molSpreadSheetData?.getColumns()}">
-                        <g:if test="${looper == 2}">
-                            <th class="molSpreadSheetHeadData sortable">${colHeader}</th>
+                        <g:if test="${column == 2}">
+                            <th class="display molSpreadSheetHeadData" width="<%=columnWidth%>%">${colHeader}</th>
                         </g:if>
-                        <g:if test="${looper == 3}">
-                            <th class="molSpreadSheetHeadData sortable"><%=molSpreadSheetData.mapColumnsToAssay[looper]%><br/>${colHeader}
+
+                        <g:if test="${column == 3}">
+                            <th class="molSpreadSheetHeadData" width="<%=columnWidth%>%"><%=molSpreadSheetData.mapColumnsToAssay[column]%><br/>${colHeader}
                             </th>
                         </g:if>
-                        <g:if test="${looper > 3}">
-                            <th class="molSpreadSheetHeadData sortable" rel="tooltip"
-                                title="<%=molSpreadSheetData.mapColumnsToAssayName[looper]%>"><a
-                                    href="../bardWebInterface/showAssay/<%=molSpreadSheetData.mapColumnsToAssay[looper]%>">ADID=<%=molSpreadSheetData.mapColumnsToAssay[looper]%><br/>${colHeader}
+                        <g:if test="${column > 3}">
+                           <th class="molSpreadSheetHeadData" rel="tooltip"
+                                title="<%=molSpreadSheetData.mapColumnsToAssayName[column]%>"><a
+                                    href="../bardWebInterface/showAssay/<%=molSpreadSheetData.mapColumnsToAssay[column] %>" width="<%=columnWidth%>%">ADID=<%=molSpreadSheetData.mapColumnsToAssay[column]%><br/>${colHeader}
                             </a></th>
                         </g:if>
-                        <% looper++ %>
+                        <% column++ %>
                     </g:each>
                 </tr>
+
                 </thead>
                 <tbody>
                 <% Integer rowCount = 0 %>
