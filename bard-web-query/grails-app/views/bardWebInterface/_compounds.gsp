@@ -44,7 +44,7 @@
                         <g:elseif test="${compoundAdapter.isProbe()}">
                             <p><span class="badge badge-info">Probe</span></p>
                         </g:elseif>
-                        <dt>Assays - Active vrs Tested:</dt>
+                        <dt>Assays - Active vs Tested:</dt>
                         <dd>
                             <div class="activeVrsTested"
                                  href="${createLink(controller: 'bardWebInterface', action: 'activeVrsTested', params: [cid: compoundAdapter.pubChemCID])}"
