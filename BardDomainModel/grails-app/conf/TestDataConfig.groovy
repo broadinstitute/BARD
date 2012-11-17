@@ -18,14 +18,22 @@ testDataConfig {
         }
         'bard.db.registration.ExternalReference' {
         }
+        'bard.db.dictionary.AssayDescriptor' {
+            def i = -1
+            id = {-> i--}
+        }
+        'bard.db.dictionary.BiologyDescriptor' {
+            def i = -1
+            id = {-> i--}
+        }
+        'bard.db.dictionary.InstanceDescriptor' {
+            def i = -1
+            id = {-> i--}
+        }
         'bard.db.dictionary.Element' {
             def i = 1
             label = {-> "label${i++}"}
         }
-        'bard.db.dictionary.AssayElement' {
-                    def i = 1
-                    label = {-> "label${i++}"}
-                }
         'bard.db.experiment.Substance' {
             def i = 1
             id = {-> i++}
