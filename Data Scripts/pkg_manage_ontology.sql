@@ -1,9 +1,11 @@
---PROMPT CREATE OR REPLACE PACKAGE manage_ontology
+PROMPT CREATE OR REPLACE PACKAGE manage_ontology
 CREATE OR REPLACE package manage_ontology
 as
     pv_tree_assay_descriptor varchar2(31) := 'ASSAY_DESCRIPTOR';
     pv_tree_biology_descriptor varchar2(31) := 'BIOLOGY_DESCRIPTOR';
     pv_tree_instance_descriptor varchar2(31) := 'INSTANCE_DESCRIPTOR';
+    pv_tree_dictionary varchar2(31) := 'DICTIONARY';
+    pv_tree_stats_modifier varchar2(31) := 'STATS_MODIFIER';
     pv_tree_result_type varchar2(31) := 'RESULT_TYPE';
     pv_tree_unit varchar2(31) := 'UNIT';
     pv_tree_stage varchar2(31) := 'STAGE';
@@ -45,7 +47,7 @@ as
 end manage_ontology;
 /
 
---PROMPT CREATE OR REPLACE PACKAGE BODY manage_ontology
+PROMPT CREATE OR REPLACE PACKAGE BODY manage_ontology
 CREATE OR REPLACE package body manage_ontology
 as
 -- forward declaration, needed for the recursion to compile
@@ -54,12 +56,13 @@ as
                                 ani_parent_node_id in number,
                                 avi_relationship_type in varchar2,
                                 avi_tree_name in varchar2,
+                                avi_full_path IN VARCHAR2,
                                 ani_recursion_level number,
                                 ano_error out number,
                                 avo_errmsg out varchar2);
     -- for preventing limitless trees (circular loops)
-    pn_recursion_limit number := 20;  -- change this limit as needed
-
+    pn_recursion_limit CONSTANT  number := 20;  -- change this limit as needed
+    pv_path_separator  CONSTANT  CHAR(2) := '> ';
     -- for testing only
     pb_trace boolean := false;     -- true;
     pn_node_id_max number := null; --5; --1000;  -- for testing purposes only,
@@ -118,6 +121,14 @@ as
         elsif avi_tree_name = pv_tree_laboratory
         then
             delete from laboratory_tree;
+
+        elsif avi_tree_name = pv_tree_dictionary
+        then
+            delete from dictionary_tree;
+
+        elsif avi_tree_name = pv_tree_stats_modifier
+        then
+            delete from stats_modifier_tree;
         end if;
 
         trace('Delete from ' || avi_tree_name || ' '|| to_char(sql%rowcount) || ' rows' );
@@ -126,9 +137,88 @@ as
 
     end delete_old_tree;
 
+    procedure Set_is_leaf_flag (avi_tree_name IN varchar2)
+
+    AS
+
+
+    BEGIN
+       if avi_tree_name = pv_tree_assay_descriptor
+        then
+            update assay_descriptor_tree a
+            SET is_leaf = 'Y'
+            WHERE NOT EXISTS (SELECT 1
+                FROM assay_descriptor_tree a2
+                WHERE a.node_id = a2.parent_node_id);
+
+        elsif avi_tree_name = pv_tree_biology_descriptor
+        then
+            update biology_descriptor_tree a
+            SET is_leaf = 'Y'
+            WHERE NOT EXISTS (SELECT 1
+                FROM biology_descriptor_tree a2
+                WHERE a.node_id = a2.parent_node_id);
+
+        elsif avi_tree_name = pv_tree_instance_descriptor
+        then
+            update instance_descriptor_tree a
+            SET is_leaf = 'Y'
+            WHERE NOT EXISTS (SELECT 1
+                FROM instance_descriptor_tree a2
+                WHERE a.node_id = a2.parent_node_id);
+
+        elsif avi_tree_name = pv_tree_result_type
+        then
+            update result_type_tree a
+            SET is_leaf = 'Y'
+            WHERE NOT EXISTS (SELECT 1
+                FROM result_type_tree a2
+                WHERE a.node_id = a2.parent_node_id);
+
+        elsif avi_tree_name = pv_tree_unit
+        then
+            update unit_tree a
+            SET is_leaf = 'Y'
+            WHERE NOT EXISTS (SELECT 1
+                FROM unit_tree a2
+                WHERE a.node_id = a2.parent_node_id);
+
+        elsif avi_tree_name = pv_tree_stage
+        then
+            update stage_tree a
+            SET is_leaf = 'Y'
+            WHERE NOT EXISTS (SELECT 1
+                FROM stage_tree a2
+                WHERE a.node_id = a2.parent_node_id);
+
+        elsif avi_tree_name = pv_tree_stats_modifier
+        then
+            update stats_modifier_tree a
+            SET is_leaf = 'Y'
+            WHERE NOT EXISTS (SELECT 1
+                FROM stage_tree a2
+                WHERE a.node_id = a2.parent_node_id);
+
+        elsif avi_tree_name = pv_tree_dictionary
+        then
+            update dictionary_tree a
+            SET is_leaf = 'Y'
+            WHERE NOT EXISTS (SELECT 1
+                FROM stage_tree a2
+                WHERE a.node_id = a2.parent_node_id);
+
+        elsif avi_tree_name = pv_tree_laboratory
+        THEN
+            -- do nothing as there is no is_leaf in this table
+            null;
+        end if;
+
+    END Set_is_leaf_flag;
+
    procedure Save_node (ari_element in element%rowtype,
                                 ani_node_id in number,
                                 ani_parent_node_id in number,
+                                avi_full_path IN VARCHAR2,
                                 avi_tree_name in varchar2,
                                 ano_error out number,
                                 avo_errmsg out varchar2)
@@ -146,10 +236,12 @@ as
                 element_id,
                 label,
                 description,
+                full_path,
+                is_leaf,
                 abbreviation,
                 synonyms,
                 external_URL,
-                unit,
+                unit_id,
                 element_status)
                 values
                 (ani_node_id,
@@ -157,10 +249,12 @@ as
                 ari_element.element_id,
                 ari_element.label,
                 ari_element.description,
+                avi_full_path,
+                'N',
                 ari_element.abbreviation,
                 ari_element.synonyms,
                 ari_element.external_URL,
-                ari_element.unit,
+                ari_element.unit_id,
                 ari_element.element_status);
 
         elsif avi_tree_name = pv_tree_biology_descriptor
@@ -171,10 +265,12 @@ as
                 element_id,
                 label,
                 description,
+                full_path,
+                is_leaf,
                 abbreviation,
                 synonyms,
                 external_URL,
-                unit,
+                unit_id,
                 element_status)
                 values
                 (ani_node_id,
@@ -182,10 +278,12 @@ as
                 ari_element.element_id,
                 ari_element.label,
                 ari_element.description,
+                avi_full_path,
+                'N',
                 ari_element.abbreviation,
                 ari_element.synonyms,
                 ari_element.external_URL,
-                ari_element.unit,
+                ari_element.unit_id,
                 ari_element.element_status);
 
         elsif avi_tree_name = pv_tree_instance_descriptor
@@ -196,10 +294,12 @@ as
                 element_id,
                 label,
                 description,
+                full_path,
+                is_leaf,
                 abbreviation,
                 synonyms,
                 external_URL,
-                unit,
+                unit_id,
                 element_status)
                 values
                 (ani_node_id,
@@ -207,10 +307,70 @@ as
                 ari_element.element_id,
                 ari_element.label,
                 ari_element.description,
+                avi_full_path,
+                'N',
                 ari_element.abbreviation,
                 ari_element.synonyms,
                 ari_element.external_URL,
-                ari_element.unit,
+                ari_element.unit_id,
+                ari_element.element_status);
+
+        elsif avi_tree_name = pv_tree_dictionary
+        then
+            insert into dictionary_tree
+                (node_id,
+                parent_node_id,
+                element_id,
+                label,
+                description,
+                full_path,
+                is_leaf,
+                abbreviation,
+                synonyms,
+                external_URL,
+                unit_id,
+                element_status)
+                values
+                (ani_node_id,
+                ani_parent_node_id,
+                ari_element.element_id,
+                ari_element.label,
+                ari_element.description,
+                avi_full_path,
+                'N',
+                ari_element.abbreviation,
+                ari_element.synonyms,
+                ari_element.external_URL,
+                ari_element.unit_id,
+                ari_element.element_status);
+
+        elsif avi_tree_name = pv_tree_stats_modifier
+        then
+            insert into stats_modifier_tree
+                (node_id,
+                parent_node_id,
+                element_id,
+                label,
+                description,
+                full_path,
+                is_leaf,
+                abbreviation,
+                synonyms,
+                external_URL,
+                unit_id,
+                element_status)
+                values
+                (ani_node_id,
+                ani_parent_node_id,
+                ari_element.element_id,
+                ari_element.label,
+                ari_element.description,
+                avi_full_path,
+                'N',
+                ari_element.abbreviation,
+                ari_element.synonyms,
+                ari_element.external_URL,
+                ari_element.unit_id,
                 ari_element.element_status);
 
         elsif avi_tree_name = pv_tree_result_type
@@ -221,9 +381,11 @@ as
                 result_type_id,
                 result_type_name,
                 description,
+                full_path,
+                is_leaf,
                 abbreviation,
                 synonyms,
-                base_unit,
+                base_unit_id,
                 result_type_status)
                 values
                 (ani_node_id,
@@ -231,9 +393,11 @@ as
                 ari_element.element_id,
                 ari_element.label,
                 ari_element.description,
+                avi_full_path,
+                'N',
                 ari_element.abbreviation,
                 ari_element.synonyms,
-                ari_element.unit,
+                ari_element.unit_id,
                 ari_element.element_status);
 
         elsif avi_tree_name = pv_tree_unit
@@ -243,13 +407,17 @@ as
                 parent_node_id,
                 unit_id,
                 unit,
-                description)
+                description,
+                full_path,
+                is_leaf)
                 values
                 (ani_node_id,
                 ani_parent_node_id,
                 ari_element.element_id,
-                ari_element.label,
-                ari_element.description);
+                Nvl(ari_element.abbreviation,ari_element.label),
+                ari_element.description,
+                avi_full_path,
+                'N');
 
         elsif avi_tree_name = pv_tree_stage
         then
@@ -259,14 +427,18 @@ as
                 stage_id,
                 stage,
                 stage_status,
-                description)
+                description,
+                full_path,
+                is_leaf)
                 values
                 (ani_node_id,
                 ani_parent_node_id,
                 ari_element.element_id,
                 ari_element.label,
                 ari_element.element_status,
-                ari_element.description);
+                ari_element.description,
+                avi_full_path,
+                'N');
 
         elsif avi_tree_name = pv_tree_laboratory
         then
@@ -306,6 +478,7 @@ as
                                 ani_parent_node_id in number,
                                 avi_relationship_type in varchar2,
                                 avi_tree_name in varchar2,
+                                avi_full_path IN VARCHAR2,
                                 ani_recursion_level number,
                                 ano_error out number,
                                 avo_errmsg out varchar2)
@@ -322,6 +495,7 @@ as
     ln_node_id number;
     ln_next_parent_node_id number;
     lr_element element%rowtype;
+    lv_full_path  VARCHAR2(3000);
     ln_error number;
     lv_errmsg varchar2(1000);
     lb_trace boolean;
@@ -329,13 +503,23 @@ as
     begin
         --  checkout the node_id counting!!  it's wicked
         ln_node_id := anio_node_id;
+        IF Length(avi_full_path) = 0
+        THEN
+            lv_full_path := '';
+        ELSE
+            lv_full_path := SubStr(avi_full_path || pv_path_separator, 1, 3000);
+        END IF;
+
         if ani_recursion_level <= pn_recursion_limit
         then
             for lr_element in cur_element
-            loop
-                Save_node(lr_element,
+            LOOP
+                 lv_full_path := lv_full_path || lr_element.label;
+
+                 Save_node(lr_element,
                             ln_node_id,
                             ani_parent_node_id,
+                            lv_full_path,
                             avi_tree_name,
                             ln_error,
                             lv_errmsg);
@@ -346,6 +530,7 @@ as
                       || ' node_id=' || to_char(ln_node_id)
                       || ' parent_node_id=' || to_char(ln_next_parent_node_id)
                       || ' tree = ' || avi_tree_name
+                      || ' path = ' || lv_full_path
                       );
 
                 walk_down_the_tree(lr_element.element_id,
@@ -353,6 +538,7 @@ as
                                     ln_next_parent_node_id,
                                     avi_relationship_type,
                                     avi_tree_name,
+                                    lv_full_path,
                                     ani_recursion_level +1,
                                     ln_error,
                                     lv_errmsg);
@@ -404,6 +590,7 @@ as
     lr_element element%rowtype;
     ln_node_id number;
     ln_parent_node_id number;
+    lv_full_path VARCHAR2(3000);
     ln_error number;
     lv_errmsg varchar2(1000);
     ln_recursion_level number := 1; -- start of the recursion checking
@@ -425,10 +612,12 @@ as
             lr_element.version := 0;
             lr_element.date_created := sysdate;
             -- all other values are nulls
+            lv_full_path := lr_tree_root.label;   -- or maybe just the blank?
 
             Save_node ( lr_element,
                         ln_parent_Node_id,
                         null,
+                        lv_full_path,
                         lr_tree_root.tree_name,
                         ln_error,
                         lv_errmsg);
@@ -440,10 +629,14 @@ as
                         ln_parent_node_id,
                         lr_tree_root.relationship_type,
                         lr_tree_root.tree_name,
+                        lv_full_path,
                         ln_recursion_level,
                         ln_error,
                         lv_errmsg);
             -- return with the Node_ID of the last elment inserted (= count +1)
+
+            -- and set the is_leaf flags
+            Set_is_leaf_flag (lr_tree_root.tree_name);
 
             commit;
         end loop;
@@ -512,11 +705,37 @@ as
         from element
         where element_id = ani_new_element_id;
 
-        update run_context_item
+        update tree_root
+           set element_id = ani_new_element_id
+         where element_id = ani_element_id;
+
+        update ontology_item
+           set element_id = ani_new_element_id
+         where element_id = ani_element_id;
+
+        update rslt_context_item
            set attribute_id = ani_new_element_id
          where attribute_id = ani_element_id;
 
-        update run_context_item
+        update rslt_context_item
+           set value_id = ani_new_element_id,
+               value_display = replace(value_display, lv_old_label, lv_new_label)
+         where value_id = ani_element_id;
+
+        update exprmt_context_item
+           set attribute_id = ani_new_element_id
+         where attribute_id = ani_element_id;
+
+        update exprmt_context_item
+           set value_id = ani_new_element_id,
+               value_display = replace(value_display, lv_old_label, lv_new_label)
+         where value_id = ani_element_id;
+
+        update step_context_item
+           set attribute_id = ani_new_element_id
+         where attribute_id = ani_element_id;
+
+        update step_context_item
            set value_id = ani_new_element_id,
                value_display = replace(value_display, lv_old_label, lv_new_label)
          where value_id = ani_element_id;
@@ -555,33 +774,33 @@ as
 --           set laboratory_id = ani_new_element_id
 --         where laboratory_id = ani_element_id;
 
-        update unit_conversion uc
-          set uc.from_unit = lv_new_label
-        where uc.from_unit = lv_old_label
-          and not exists (select 1 from unit_conversion uc2
-            where uc2.from_unit = lv_new_label
-            and uc2.to_unit = uc.to_unit);
+--        update unit_conversion uc
+--          set uc.from_unit_id = ani_new_element_id
+--        where uc.from_unit_id = ani_element_id
+--          and not exists (select 1 from unit_conversion uc2
+--            where uc2.from_unit_id = ani_new_element_id
+--            and uc2.to_unit_id = uc.to_unit_id);
 
-        update unit_conversion uc
-          set uc.to_unit = lv_new_label
-        where uc.to_unit = lv_old_label
-          and not exists (select 1 from unit_conversion uc2
-            where uc2.to_unit = lv_new_label
-            and uc2.from_unit = uc.from_unit);
+--        update unit_conversion uc
+--          set uc.to_unit_id = ani_new_element_id
+--        where uc.to_unit_id = ani_element_id
+--          and not exists (select 1 from unit_conversion uc2
+--            where uc2.to_unit_id = ani_new_element_id
+--            and uc2.from_unit_id = uc.from_unit_id);
 
-        update element_hierarchy eh
-          set eh.parent_element_id = ani_new_element_id
-        where eh.parent_element_id = ani_element_id
-          and not exists (select 1 from element_hierarchy eh2
-            where eh2.parent_element_id = ani_new_element_id
-            and eh2.child_element_id = eh.child_element_id);
+--        update element_hierarchy eh
+--          set eh.parent_element_id = ani_new_element_id
+--        where eh.parent_element_id = ani_element_id
+--          and not exists (select 1 from element_hierarchy eh2
+--            where eh2.parent_element_id = ani_new_element_id
+--            and eh2.child_element_id = eh.child_element_id);
 
-        update element_hierarchy eh
-          set eh.child_element_id = ani_new_element_id
-        where eh.child_element_id = ani_element_id
-          and not exists (select 1 from element_hierarchy eh2
-            where eh2.child_element_id = ani_new_element_id
-            and eh2.parent_element_id = eh.parent_element_id);
+--        update element_hierarchy eh
+--          set eh.child_element_id = ani_new_element_id
+--        where eh.child_element_id = ani_element_id
+--          and not exists (select 1 from element_hierarchy eh2
+--            where eh2.child_element_id = ani_new_element_id
+--            and eh2.parent_element_id = eh.parent_element_id);
 
         if ab_delete_old
         then
