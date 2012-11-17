@@ -348,9 +348,9 @@ class MolecularSpreadSheetService {
         //we will use this to get the promiscuity score
         dataMap.put("${rowCount}_2".toString(), new MolSpreadSheetCell(compoundId.toString(), MolSpreadSheetCellType.identifier))
         //we will use this to get the 'active vrs tested' column
-        int activeAssays = this.queryService.getNumberTestedAssays(compoundId, true)
-        int testedAssays = this.queryService.getNumberTestedAssays(compoundId, false)
-        dataMap.put("${rowCount}_3".toString(), new MolSpreadSheetCell("${activeAssays}/${testedAssays}", MolSpreadSheetCellType.string))
+        int activeAssays = this.queryService.getNumberTestedAssays(compoundId,true)
+        int testedAssays  = this.queryService.getNumberTestedAssays(compoundId,false)
+        dataMap.put("${rowCount}_3".toString(),  new MolSpreadSheetCell("${activeAssays} / ${testedAssays}", MolSpreadSheetCellType.string))
 
         return molSpreadSheetData
 

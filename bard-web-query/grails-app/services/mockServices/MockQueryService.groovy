@@ -9,6 +9,9 @@ import bardqueryapi.IQueryService
 import bardqueryapi.QueryHelperService
 import bardqueryapi.SearchFilter
 import bard.core.*
+import bard.core.interfaces.ExperimentCategory
+import bard.core.interfaces.ExperimentRole
+import bard.core.interfaces.ExperimentType
 
 class MockQueryService implements IQueryService {
     QueryHelperService queryHelperService
@@ -415,9 +418,9 @@ Chloroxine induces SOS-<b>DNA repair</b> in E. coli, so chloroxine may be genoto
         MockExperiment mockedExperiment = new MockExperiment()
         mockedExperiment.id = 1904
         mockedExperiment.assay = new Assay()
-        mockedExperiment.type = ExperimentValues.ExperimentType.Confirmatory
-        mockedExperiment.role = ExperimentValues.ExperimentRole.Primary
-        mockedExperiment.category = ExperimentValues.ExperimentCategory.MLPCN
+        mockedExperiment.type = ExperimentType.Confirmatory
+        mockedExperiment.role = ExperimentRole.Primary
+        mockedExperiment.category = ExperimentCategory.MLPCN
         mockedExperiment.name = 'qHTS Assay for Inhibitors of Bloom\'s syndrome helicase (BLM)'
         mockedExperiment.description = '''Survival of cells and the faithful propagation of the genome depend on elaborate mechanisms of detecting and repairing DNA damage. Treatment of advanced cancer relies on radiation therapy or chemotherapy, which kill cancer cells by causing extensive DNA damage. It is often found, that cancer cells develop resistance to therapy through enhanced activity of DNA repair functions; this has led to an increased interest in developing drugs that interfere with DNA repair, which could sensitize cancer cells to conventional therapy.
 This validation qHTS assay pertains to human BLM, which is important in resolving abnormal DNA structures formed during replication or homologous recombination. Shutting down the expression of BLM leads to chromosomal instability and higher radiation sensitivity in cultured cells.
@@ -436,9 +439,9 @@ Screening Center: NIH Chemical Genomics Center [NCGC]'''
         mockedExperiment = new MockExperiment()
         mockedExperiment.id = 2757
         mockedExperiment.assay = new Assay()
-        mockedExperiment.type = ExperimentValues.ExperimentType.Summary
-        mockedExperiment.role = ExperimentValues.ExperimentRole.Primary
-        mockedExperiment.category = ExperimentValues.ExperimentCategory.MLPCN
+        mockedExperiment.type = ExperimentType.Summary
+        mockedExperiment.role = ExperimentRole.Primary
+        mockedExperiment.category = ExperimentCategory.MLPCN
         mockedExperiment.name = 'Probe Development Summary for Inhibitors of Bloom\'s syndrome helicase (BLM)'
         mockedExperiment.description = '''Survival of cells and the faithful propagation of the genome depend on elaborate mechanisms of detecting and repairing DNA damage. Treatment of advanced cancer relies on radiation therapy or chemotherapy, which kill cancer cells by causing extensive DNA damage. It is often found, that cancer cells develop resistance to therapy through enhanced activity of DNA repair functions; this has led to an increased interest in developing drugs that interfere with DNA repair, which could sensitize cancer cells to conventional therapy.
 This summary assay pertains to the Bloom syndrome helicase (BLM), which is important in resolving abnormal DNA structures formed during replication or homologous recombination. Shutting down the expression of BLM leads to chromosomal instability and higher radiation sensitivity in cultured cells.
@@ -459,9 +462,9 @@ Screening Center: NIH Chemical Genomics Center [NCGC]'''
         mockedExperiment = new MockExperiment()
         mockedExperiment.id = 3470
         mockedExperiment.assay = new Assay()
-        mockedExperiment.type = ExperimentValues.ExperimentType.Confirmatory
-        mockedExperiment.role = ExperimentValues.ExperimentRole.Counterscreen
-        mockedExperiment.category = ExperimentValues.ExperimentCategory.MLPCN
+        mockedExperiment.type = ExperimentType.Confirmatory
+        mockedExperiment.role = ExperimentRole.Counterscreen
+        mockedExperiment.category = ExperimentCategory.MLPCN
         mockedExperiment.name = 'Counterscreen for BLMA Inhibitors: ADP Fluorescence Polarization Displacement Assay'
         mockedExperiment.description = '''In order to gain further insight into the mode of action of the BLMAscreening hits, we have profiled them in a set of miniaturized fluorescence polarization assays designed to report on compounds which competitively displace either co-substrate (ATP or DNA). The appropriate fluorescently-labeled probe was used: BODIPY Texas Red-labeled ADP was expected to be competed off by ATP-competitive inhibitors, while single-TAMRA labeled forked-duplex or short single-stranded DNA molecules served as probes for DNA-competitive compounds.
 Assay Providers:\n

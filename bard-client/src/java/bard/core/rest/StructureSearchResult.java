@@ -76,7 +76,7 @@ public class StructureSearchResult extends SearchResultImpl<Compound> {
 
             count += results.size();
 
-            if ( results.size() < top) {
+            if (params.getTop() != null || results.size() < top) {
                 break;
             }
             skip += results.size();
