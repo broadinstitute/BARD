@@ -1,4 +1,4 @@
-package jdo
+package bard.core.rest
 
 import grails.plugin.spock.IntegrationSpec
 import spock.lang.Shared

@@ -6,6 +6,7 @@ import java.util.Collection;
 import java.util.List;
 
 public interface SearchResult<E> {
+    final int multiplier = 5;
 
     public List<E> next(int top);
 
@@ -18,4 +19,6 @@ public interface SearchResult<E> {
     Collection<Value> getFacets();
 
     List<E> getSearchResults();
+    public E build();
+
 }

@@ -1,10 +1,12 @@
-package jdo
+package bard.core.rest
 
+import bard.core.interfaces.SearchResult
 import junit.framework.Assert
 import spock.lang.Timeout
 import spock.lang.Unroll
 import bard.core.*
-import bard.core.interfaces.SearchResult
+
+import bard.core.rest.helper.RESTTestHelper
 
 /**
  * Created with IntelliJ IDEA.
@@ -13,7 +15,7 @@ import bard.core.interfaces.SearchResult
  * Time: 2:35 PM
  * To change this template use File | Settings | File Templates.
  */
-@Mixin(jdo.helper.RESTTestHelper)
+@Mixin(RESTTestHelper)
 @Unroll
 class RESTExperimentServiceIntegrationSpec extends AbstractRESTServiceSpec {
     void "testExperiment"() {
@@ -35,7 +37,7 @@ class RESTExperimentServiceIntegrationSpec extends AbstractRESTServiceSpec {
         assert actiter.searchResults
         assert !actiter.searchResults.isEmpty()
         List<Value> next = actiter.next(10);
-        assert  next.size()== 10,"There should be at least 10 activities for experiment 197"
+        assert next.size() == 10, "There should be at least 10 activities for experiment 197"
     }
 
     public void "testExperimentActivityWithCompounds"() {
@@ -55,7 +57,7 @@ class RESTExperimentServiceIntegrationSpec extends AbstractRESTServiceSpec {
         for (Value value : entities) {
             assert value
         }
-        assert 3==acts.getCount();
+        assert 3 == acts.getCount();
     }
 
     void "test Projects From Single Experiment"() {
@@ -92,7 +94,7 @@ class RESTExperimentServiceIntegrationSpec extends AbstractRESTServiceSpec {
 
         when: "We call the getFactest matehod"
         final Experiment experiment = this.restExperimentService.get(experimentid)
-     //   Collection<Compound> compounds = this.restCompoundService.get(cids)
+        //   Collection<Compound> compounds = this.restCompoundService.get(cids)
 
         then: "We expect to get back a list of facets"
         SearchResult<Value> eiter = this.restExperimentService.activities(experiment, etag);
@@ -123,13 +125,13 @@ eTags.
     void "testing  non-compound eTags"() {
         given: "some valid etags"
         Object compoundEtag = restCompoundService.newETag("My compound collection", [2123,4781,5342]);   // works?
-        Object assayEtag = restAssayService.newETag("My assay collection", [519]); // works?
-        Object projectEtag = restAssayService.newETag("My project collection", [805]);  // works?
+        Object assayEtag = restCompoundService.newETag("My assay collection", [519]); // works?
+        Object projectEtag = restCompoundService.newETag("My project collection", [805]);  // works?
         when: "We use services to build sets from eTags"
 //////////// ASSAY SERVICE
-//         def assay1 =  this.restAssayService( compoundEtag )    // err
-//         def assay2 =  this.restAssayService( assayEtag )       // err
-//         def assay3 =  this.restAssayService( projectEtag )    // err
+//         def assay1 =  this.restCompoundService( compoundEtag )    // err
+//         def assay2 =  this.restCompoundService( assayEtag )       // err
+//         def assay3 =  this.restCompoundService( projectEtag )    // err
 
 //////////// compound SERVICE
         def compound1 = this.restCompoundService.get( compoundEtag )   // ok
@@ -149,7 +151,7 @@ eTags.
 ///////////////////////////////
 ////////////////   get id sets from services
 //////////////////////////////
-        Collection<Assay> assays = this.restAssayService.get([519])  // works
+        Collection<Assay> assays = this.restCompoundService.get([519])  // works
         Collection<Project> projects = this.restProjectService.get([805])  // works
         Collection<Compound> compounds = this.restCompoundService.get([2123,4781,5342]) // works
         Collection<Experiment> ESexperiments = this.restExperimentService.get([519])  // works
@@ -157,7 +159,7 @@ eTags.
     }
 */
 
-void "test pulling an arbitrary set of compounds out of an experiment and then looking at their experimental values #label"() {
+    void "test pulling an arbitrary set of compounds out of an experiment and then looking at their experimental values #label"() {
 
         when: "The get method is called with the given experiment ID: #experimentid"
         final Experiment experiment = this.restExperimentService.get(experimentid)
@@ -248,14 +250,13 @@ void "test pulling an arbitrary set of compounds out of an experiment and then l
         public appendValue(Value value) {
             //assert value.children.size() <= 4
             assert value.children.size() >= 3
-            Iterator<Value> valueIterator = value.children()
+            Collection<Value> valueIterator = value.getChildren()
             String keyValue
             Long cid = null
             Long sid = null
             HillCurveValue hillCurveValue
             Object payload = null
-            while (valueIterator.hasNext()) {
-                Value internalValue = valueIterator.next()
+            for (Value internalValue : valueIterator) {
                 String identifier = internalValue.id
                 switch (identifier) {
                     case "eid":

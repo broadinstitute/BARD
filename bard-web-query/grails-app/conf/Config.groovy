@@ -15,7 +15,9 @@ bard.cap.assay = "${bard.cap.home}assayDefinition/show/"
 grails.project.groupId = appName // change this to alter the default package name and Maven publishing destination
 grails.mime.file.extensions = true // enables the parsing of file extensions from URLs into the request format
 grails.mime.use.accept.header = false
-grails.mime.types = [html: ['text/html', 'application/xhtml+xml'],
+
+grails.mime.types = [
+        html: ['text/html', 'application/xhtml+xml'],
         xml: ['text/xml', 'application/xml'],
         text: 'text/plain',
         js: 'text/javascript',
@@ -23,6 +25,8 @@ grails.mime.types = [html: ['text/html', 'application/xhtml+xml'],
         atom: 'application/atom+xml',
         css: 'text/css',
         csv: 'text/csv',
+        pdf: 'application/pdf',
+        excel: 'application/vnd.ms-excel',
         all: '*/*',
         json: ['application/json', 'text/json'],
         form: 'application/x-www-form-urlencoded',

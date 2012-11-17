@@ -10,6 +10,15 @@ import java.util.Map;
 
 
 public interface EntityService<E extends Entity> extends Serializable {
+    final String STRUCTURE = "[structure]";
+    final String TYPE_SUB = "&type=sub";
+    final String TYPE_SUP = "&type=sup";
+    final String TYPE_EXACT = "&type=exact";
+    final String TYPE_SIM = "&type=sim";
+    final String CUTOFF = "&cutoff=";
+    final String FILTER_QUESTION = "?filter=";
+    final String FILTER = "&filter=";
+
     final int MAXIMUM_NUMBER_OF_COMPOUNDS = 500;
 
     //relative path to the experiment resource
@@ -45,7 +54,6 @@ public interface EntityService<E extends Entity> extends Serializable {
     final String _COUNT = "_count";
     final String SUGGEST = "suggest";
     final String TOP = "&top=";
-    final String FILTER = "&filter=";
     final String EXPAND_TRUE = "expand=true";
     final String AMPERSAND = "&";
     final String SOLR_QUERY_PARAM_NAME = "q=";

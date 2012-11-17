@@ -1,15 +1,13 @@
 package bard.core.rest;
 
 import bard.core.Experiment;
-import bard.core.interfaces.SearchResult;
 import bard.core.Value;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 
-public class ActivitySearchResult extends SearchResultImp<Value> {
+public class ActivitySearchResult extends SearchResultImpl<Value> {
     volatile Experiment expr;
     private RESTExperimentService restExperimentService;
 
@@ -23,34 +21,27 @@ public class ActivitySearchResult extends SearchResultImp<Value> {
         this.etag = etag;
         this.searchResults = new ArrayList<Value>();
     }
-
+    @Override
     public ActivitySearchResult build() {
         this.facets.clear();
         this.searchResults.clear();
         // unbounded fetching
-        int a = 5;
-        int top = a * a;
-        int ratio = a;
+        int top = multiplier * multiplier;
+        int ratio = multiplier;
         long skip = 0;
 
         while (true) {
             List<Value> values = this.restExperimentService.getValues(expr, etag, top, skip);
             this.searchResults.addAll(values);
+            skip += values.size();
+            ratio *= multiplier;
             if (values.size() < top) {
                 break; // we're done
             }
-            skip += values.size();
-            // cap this
-            if (skip > 1000) {
-                top = 1000;
-            } else {
-                ratio *= a;
-                top = ratio;
-            }
+            top = findNextTopValue(skip, ratio);
+
         }
-        if (this.count == 0) {
-            this.count = this.searchResults.size();
-        }
+        this.count = this.searchResults.size();
         return this;
     }
 }

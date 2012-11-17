@@ -81,9 +81,4 @@ public class HillCurveValue extends Value {
                           / (1. + Math.exp(ln10 * coef * 
                                            (logslope - logconc))));
     }
-
-    public String toString () {
-        return getClass()+"{id="+getId()+",s0="+getS0()+",sInf="+getSinf()
-            +",slope="+getSlope()+",coef="+getCoef()+",concs="+size()+"}";
-    }
 }

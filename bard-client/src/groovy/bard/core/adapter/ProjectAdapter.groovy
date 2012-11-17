@@ -14,7 +14,6 @@ public class ProjectAdapter extends EntityAdapter<Project> {
             EntityNamedSources.KEGGDiseaseNameAnnotationSource
     ]
 
-    public ProjectAdapter() {}
 
     public ProjectAdapter(Project project) {
         super(project);
@@ -42,9 +41,6 @@ public class ProjectAdapter extends EntityAdapter<Project> {
 
     public Project getProject() { return getEntity(); }
 
-    public void setProject(Project proj) {
-        setEntity(proj);
-    }
 
     public Integer getNumberOfExperiments() {
         Value expt = getEntity().getValue(Project.NumberOfExperimentsValue);

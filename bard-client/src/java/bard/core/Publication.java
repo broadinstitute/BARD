@@ -47,9 +47,4 @@ public class Publication extends Entity implements ProjectValues {
     public void setPubmedId(Long pubmedId) {
         this.pubmedId = pubmedId;
     }
-
-    public String toString() {
-        return getClass().getName() + "{title=" + title
-                + ",pubmedid=" + pubmedId + "," + super.toString() + "}";
-    }
 }

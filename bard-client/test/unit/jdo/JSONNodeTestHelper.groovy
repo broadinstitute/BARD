@@ -4,6 +4,53 @@ package jdo
  *
  */
 class JSONNodeTestHelper {
+    public static final COMPOUND_SYNONYMS='''
+    [
+       "NSC228155",
+       "MLS000756562",
+       "NSC-228155",
+       "AC1L7NUE",
+       "CHEMBL505670",
+       "HMS2796J10",
+       "ZINC01757986",
+       "SMR000448993",
+       "7-nitro-4-(1-oxidopyridin-1-ium-2-yl)sulfanyl-2,1,3-benzoxadiazole"
+    ]
+'''
+    public static final TESTED_ASSAY_NODE = '''
+   {
+  "collection": [
+    {
+      "aid": 1714,
+      "bardAssayId": 411,
+      "capAssayId": 4063,
+      "category": 1,
+      "type": 0,
+      "summary": 0,
+      "assays": 0,
+      "classification": 0,
+      "name": "Identification of Novel Modulators of Cl- dependent Transport Process via HTS: Secondary Assay 3 with KCC2 cells",
+      "description": "description"
+      }
+      ]
+      }
+'''
+    public static final TARGETS_NODE = '''
+              { "targets":
+                    [
+                            {
+                                "acc": "P98170",
+                                "name": "E3 ubiquitin-protein ligase XIAP",
+                                "description": null,
+                                "status": "Reviewed",
+                                "geneId": 331,
+                                "taxId": 9606,
+                                "resourcePath": "/targets/accession/P98170"
+                            }
+                    ]
+                    }
+
+'''
     public static final String SUGGEST_PAIR = '''
 {
 "protocol":
@@ -303,7 +350,7 @@ class JSONNodeTestHelper {
            117595058,
            125659758
        ],
-       "probeId": null,
+       "probeId": "ML108",
        "url": null,
        "smiles": "OC1C(O)C(COP(O)(O)=O)OC(=O)C1O",
        "name": "(3,4,5-trihydroxy-6-oxotetrahydro-2h-pyran-2-yl)methyldihydrogen-phosphat",

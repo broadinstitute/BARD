@@ -1,7 +1,14 @@
-package bard.core;
+package bard.core
 
-public class StructureSearchParams extends SearchParams {
-    private static final long serialVersionUID = 0xaeddb6dac8a37ae8l;
+/**
+ * Created with IntelliJ IDEA.
+ * User: jasiedu
+ * Date: 11/16/12
+ * Time: 4:29 PM
+ * To change this template use File | Settings | File Templates.
+ */
+class StructureSearchParams extends SearchParams {
+   // private static final long serialVersionUID = 0xaeddb6dac8a37ae8l;
 
     /*
      * Different search types supported at the moment
@@ -21,7 +28,6 @@ public class StructureSearchParams extends SearchParams {
         Count
     }
 
-    ;
 
     /*
      * Future we support different metrics
@@ -39,6 +45,7 @@ public class StructureSearchParams extends SearchParams {
     protected Double threshold = 0.7; // for similarity
 
     public StructureSearchParams() {
+       super()
     }
 
     public StructureSearchParams(String query) {
@@ -84,10 +91,5 @@ public class StructureSearchParams extends SearchParams {
     public StructureSearchParams setThreshold(Double threshold) {
         this.threshold = threshold;
         return this;
-    }
-
-    public String toString() {
-        return "{type=" + type + ",method=" + method + ",metric="
-                + metric + ",threshold=" + threshold + "}";
     }
 }

@@ -29,7 +29,7 @@ grails.project.dependency.resolution = {
         // specify dependencies here under either 'build', 'compile', 'runtime', 'test' or 'provided' scopes eg.
 
         // runtime 'mysql:mysql-connector-java:5.1.16'
-        test ("org.spockframework:spock-core:0.6-groovy-1.8") {
+        test("org.spockframework:spock-core:0.6-groovy-1.8") {
             exclude "groovy-all"
         }
         test "org.objenesis:objenesis:1.2" // used by spock for Mocking objects that have no args constructor
@@ -55,19 +55,19 @@ grails.project.dependency.resolution = {
         }
         compile 'org.apache.commons:commons-lang3:3.1'
         provided 'org.apache.httpcomponents:httpcomponents-core:4.1.3'
-        compile ('org.apache.httpcomponents:httpclient:4.1.2') {
+        compile('org.apache.httpcomponents:httpclient:4.1.2') {
             excludes "commons-codec", "commons-logging"
         }
         compile 'ChemAxon:ChemAxonJChemBase:5.10'
         compile 'jfree:jfreechart:1.0.13'
         compile 'com.thoughtworks.xstream:xstream:1.4.2'
-
     }
 
     plugins {
         runtime ":hibernate:$grailsVersion"
         runtime ":jquery:1.7.1"
         compile ":jquery-ui:1.8.15"
+        compile ":export:1.5"
         runtime ":resources:1.1.6"
         compile ":functional-spock:0.6"
         compile ":twitter-bootstrap:2.1.0"
@@ -98,7 +98,7 @@ codenarc {
 
 clover {
     //initstring = "bardwebclover.db"
-    directories: ['src/java','src/groovy', 'grails-app']
+    directories: ['src/java', 'src/groovy', 'grails-app']
     includes = ['**/*.groovy', '**/*.java']
     excludes = ['**/bardwebquery/**.*', '**/*Spec*.*', '**/mockServices/**.*', '**/conf/**', '**/GridController.*', '**/mockServices/**.*']
 }

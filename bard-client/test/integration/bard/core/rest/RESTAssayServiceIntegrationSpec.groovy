@@ -1,14 +1,16 @@
-package jdo
+package bard.core.rest
 
 import bard.core.adapter.AssayAdapter
 import spock.lang.Unroll
 import bard.core.*
 import bard.core.interfaces.SearchResult
 
+import bard.core.rest.helper.RESTTestHelper
+
 /**
  * Tests for RESTAssayService in JDO
  */
-@Mixin(jdo.helper.RESTTestHelper)
+@Mixin(RESTTestHelper)
 @Unroll
 class RESTAssayServiceIntegrationSpec extends AbstractRESTServiceSpec {
 

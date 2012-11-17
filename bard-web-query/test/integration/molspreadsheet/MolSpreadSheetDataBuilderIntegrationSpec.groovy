@@ -100,8 +100,8 @@ class MolSpreadSheetDataBuilderIntegrationSpec  extends IntegrationSpec {
 //    void "test extractMolSpreadSheetData"() {
 //        when: "we have a molecularSpreadSheetService"
 //        assertNotNull molecularSpreadSheetService
-//        Assay assay = restAssayService.get(519 as Long)
-//        final ServiceIterator<Experiment> serviceIterator = restAssayService.iterator(assay, Experiment)
+//        Assay assay = restCompoundService.get(519 as Long)
+//        final ServiceIterator<Experiment> serviceIterator = restCompoundService.iterator(assay, Experiment)
 //        Collection<Experiment> experimentList = serviceIterator.collect()
 //        MolSpreadSheetData molSpreadSheetData = new MolSpreadSheetData()
 //        List<Long> compounds = []
@@ -315,7 +315,7 @@ class MolSpreadSheetDataBuilderIntegrationSpec  extends IntegrationSpec {
 //        Collection<Assay> assays = serviceIterator.collect()
 //        for (Assay assay : assays) {
 //            //println "ASSAY: " + assay.id
-//            final ServiceIterator<Experiment> experimentIterator = queryServiceWrapper.restAssayService.iterator(assay, Experiment)
+//            final ServiceIterator<Experiment> experimentIterator = queryServiceWrapper.restCompoundService.iterator(assay, Experiment)
 //            Collection<Experiment> experimentList = experimentIterator.collect()
 //            allExperiments.addAll(experimentList)
 //

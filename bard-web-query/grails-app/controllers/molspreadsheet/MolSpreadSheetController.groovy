@@ -7,12 +7,14 @@ import javax.servlet.http.HttpServletResponse
 import querycart.CartCompoundService
 import querycart.CartProjectService
 import querycart.QueryItem
+import de.andreasschmitt.export.ExportService
 
 @Secured(['isFullyAuthenticated()'])
 class MolSpreadSheetController {
     MolecularSpreadSheetService molecularSpreadSheetService
     CartCompoundService cartCompoundService
     CartProjectService cartProjectService
+    ExportService exportService
 
     def index() {
         render(view: 'molecularSpreadSheet')
@@ -40,8 +42,15 @@ class MolSpreadSheetController {
     }
 
     def molecularSpreadSheet() {
+
         if (molecularSpreadSheetService.weHaveEnoughDataToMakeASpreadsheet()) {
             MolSpreadSheetData molSpreadSheetData = molecularSpreadSheetService.retrieveExperimentalData()
+            if(params?.format && params.format != "html"){
+                response.contentType = grailsApplication.config.grails.mime.types[params.format]
+                response.setHeader("Content-disposition", "attachment; filename=molecularSpreadSheet.${params.extension}")
+
+                exportService.export(params.format, response.outputStream,Book.list(params), [:], [:])
+            }
             render(template: 'spreadSheet', model: [molSpreadSheetData: molSpreadSheetData])
         } else {
             render(template: 'spreadSheet', model: [molSpreadSheetData: new MolSpreadSheetData()])

@@ -1,4 +1,4 @@
-package jdo;
+package bard.core.rest;
 
 
 import bard.core.adapter.AssayAdapter
@@ -9,6 +9,7 @@ import bard.core.*
 import static org.junit.Assert.assertFalse
 import static org.junit.Assert.assertTrue
 import bard.core.interfaces.SearchResult
+import bard.core.rest.AbstractRESTServiceSpec
 
 /**
  * User: jasiedu
@@ -137,7 +138,7 @@ public class RESTServicesFilterIntegrationSpec extends AbstractRESTServiceSpec {
         searchParamsWithFilters.setFilters(filters);
 
         when:
-//        SearchResult<Assay> assayServiceSearchResultsWithNoFilters = this.restAssayService.search(searchParamsWithNoFilters);
+//        SearchResult<Assay> assayServiceSearchResultsWithNoFilters = this.restCompoundService.search(searchParamsWithNoFilters);
 //        and:
         final SearchResult<Assay> assayServiceSearchResultsWithFilters = this.restAssayService.search(searchParamsWithFilters);
 
@@ -277,9 +278,9 @@ public class RESTServicesFilterIntegrationSpec extends AbstractRESTServiceSpec {
 //        searchParamsWithFilters.setFilters(filters);
 //
 //        when:
-//        SearchResult<Assay> assayServiceSearchResultsWithNoFilters = this.restAssayService.search(searchParamsWithNoFilters);
+//        SearchResult<Assay> assayServiceSearchResultsWithNoFilters = this.restCompoundService.search(searchParamsWithNoFilters);
 //        and:
-//        final SearchResult<Assay> assayServiceSearchResultsWithFilters = this.restAssayService.search(searchParamsWithFilters);
+//        final SearchResult<Assay> assayServiceSearchResultsWithFilters = this.restCompoundService.search(searchParamsWithFilters);
 //        then:
 //        while (assayServiceSearchResultsWithNoFilters.hasNext()) {
 //            assayServiceSearchResultsWithNoFilters.next();

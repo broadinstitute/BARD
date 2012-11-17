@@ -1,9 +1,10 @@
-package jdo;
+package bard.core.rest;
 
 import bard.core.SuggestParams;
 
 
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertTrue
+import bard.core.rest.AbstractRESTServiceSpec;
 
 /**
  * @author Rajarshi Guha

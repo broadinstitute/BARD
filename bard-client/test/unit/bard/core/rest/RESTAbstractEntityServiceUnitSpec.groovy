@@ -1,4 +1,4 @@
-package jdo
+package bard.core.rest
 
 import bard.core.rest.RESTAssayService
 import bard.core.rest.RESTCompoundService
@@ -9,6 +9,7 @@ import spock.lang.Shared
 import spock.lang.Specification
 import spock.lang.Unroll
 import bard.core.*
+import jdo.JSONNodeTestHelper
 
 /**
  * Created with IntelliJ IDEA.

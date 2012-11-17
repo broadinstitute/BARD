@@ -632,7 +632,7 @@ class MolecularSpreadSheetServiceIntegrationSpec extends IntegrationSpec {
 //            Collection<Assay> assays = serviceIterator.collect()
 //            for (Assay assay : assays) {
 //                //println "ASSAY: " + assay.id
-//                final ServiceIterator<Experiment> experimentIterator = restAssayService.iterator(assay, Experiment.class)
+//                final ServiceIterator<Experiment> experimentIterator = restCompoundService.iterator(assay, Experiment.class)
 //                Collection<Experiment> experimentList = experimentIterator.collect()
 //                allExperiments.addAll(experimentList)
 //

@@ -21,6 +21,7 @@ import org.apache.http.client.methods.HttpPut;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.protocol.HTTP;
+import org.apache.log4j.Logger;
 
 import java.io.*;
 import java.net.URLEncoder;
@@ -31,7 +32,7 @@ import java.util.*;
 public abstract class RESTAbstractEntityService<E extends Entity>
         implements EntityService<E> {
     private static final long serialVersionUID = 0xe6685070fd7a917el;
-
+    static final Logger log = Logger.getLogger(RESTAbstractEntityService.class);
 
     protected final String baseURL;
     protected EntityServiceManager srvman;
@@ -178,7 +179,7 @@ public abstract class RESTAbstractEntityService<E extends Entity>
             final JsonNode root = executeGetRequest(suggestQuery);
             extractSuggestsPair(root, suggestions);
         } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            log.error(e);
         }
         return suggestions;
     }
@@ -200,7 +201,7 @@ public abstract class RESTAbstractEntityService<E extends Entity>
             }
             //TODO: Handle null case
         } catch (IOException e) {
-            e.printStackTrace();
+           log.error(e);
         } finally {
             closeInputStream(is);
             httpClient.getConnectionManager().shutdown();
@@ -243,9 +244,9 @@ public abstract class RESTAbstractEntityService<E extends Entity>
                 size = Long.parseLong(br.readLine());
             }
         } catch (NumberFormatException ex) {
-            ex.printStackTrace();
+            log.error(ex);
         } catch (IOException ex) {
-            ex.printStackTrace();
+            log.error(ex);
         } finally {
             closeInputStream(is);
             httpclient.getConnectionManager().shutdown();
@@ -270,7 +271,9 @@ public abstract class RESTAbstractEntityService<E extends Entity>
 
     public int putETag(Object etag, Collection ids) {
         if (etag == null || ids == null || ids.isEmpty()) {
-            throw new IllegalArgumentException("etag value and id list is expected");
+            final String message = "etag value and id list is expected";
+            log.error(message);
+            throw new IllegalArgumentException(message);
         }
         InputStream is = null;
         final DefaultHttpClient httpclient = new DefaultHttpClient();
@@ -294,7 +297,7 @@ public abstract class RESTAbstractEntityService<E extends Entity>
 
             }
         } catch (IOException ex) {
-            ex.printStackTrace();
+            log.error(ex);
         } finally {
             closeInputStream(is);
             httpclient.getConnectionManager().shutdown();
@@ -327,7 +330,7 @@ public abstract class RESTAbstractEntityService<E extends Entity>
                 buildEntityFromResponse(values, facets, is);
             }
         } catch (IOException ex) {
-            ex.printStackTrace();
+            log.error(ex);
         } finally {
             closeInputStream(is);
             httpclient.getConnectionManager().shutdown();
@@ -369,7 +372,7 @@ public abstract class RESTAbstractEntityService<E extends Entity>
                 }
             }
         } catch (IOException ex) {
-            ex.printStackTrace();
+            log.error(ex);
         } finally {
             httpclient.getConnectionManager().shutdown();
         }
@@ -422,7 +425,7 @@ public abstract class RESTAbstractEntityService<E extends Entity>
                 addEntityToResults(results, node);
             }
         } catch (IOException ex) {
-            ex.printStackTrace();
+            log.error(ex);
         } finally {
             closeInputStream(is);
             httpclient.getConnectionManager().shutdown();
@@ -550,7 +553,7 @@ public abstract class RESTAbstractEntityService<E extends Entity>
             f.append(COMMA);
             return f.toString();
         } catch (Exception ex) {
-            ex.printStackTrace();
+            log.error(ex);
         }
         return null;
     }
@@ -579,7 +582,7 @@ public abstract class RESTAbstractEntityService<E extends Entity>
             }
 
         } catch (Exception ex) {
-            ex.printStackTrace();
+            log.error(ex);
         }
         return f.toString();
     }
@@ -838,7 +841,7 @@ public abstract class RESTAbstractEntityService<E extends Entity>
                 is.close();
             }
         } catch (IOException ee) {
-            ee.printStackTrace();
+            log.error(ee);
         }
     }
 

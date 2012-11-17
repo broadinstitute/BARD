@@ -1,4 +1,4 @@
-package jdo;
+package bard.core.rest;
 
 
 import bard.core.adapter.AssayAdapter
@@ -7,6 +7,7 @@ import bard.core.*
 
 import static org.junit.Assert.*
 import bard.core.interfaces.SearchResult
+import bard.core.rest.AbstractRESTServiceSpec
 
 /**
  * @author Rajarshi Guha

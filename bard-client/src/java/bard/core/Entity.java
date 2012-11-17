@@ -2,6 +2,7 @@ package bard.core;
 
 import bard.core.interfaces.EntityNamedSources;
 import bard.core.interfaces.EntityValues;
+import org.apache.log4j.Logger;
 
 import java.util.*;
 
@@ -10,17 +11,12 @@ public class Entity implements EntityValues,
         EntityNamedSources,
         java.io.Serializable {
     private static final long serialVersionUID = 0xed49f700e8675bd0l;
-
+    static final Logger log = Logger.getLogger(Entity.class);
 
     protected Object id; // transient entity id
 
     protected String name; // entity name
     protected String description; // short description of the entity
-    // creation timestamp
-    protected long created = new java.util.Date().getTime();
-    protected long modified; // last modified
-
-    protected AccessControl acl; // access control list
 
     /**
      * Values for entity
@@ -63,44 +59,8 @@ public class Entity implements EntityValues,
         this.description = description;
     }
 
-    public long getCreated() {
-        return created;
-    }
-
-    public void setCreated(long created) {
-        this.created = created;
-    }
-
-    public void setCreatedNow() {
-        this.created = new java.util.Date().getTime();
-    }
-
-    public long getModified() {
-        return modified;
-    }
-
-    public void setModified(long modified) {
-        this.modified = modified;
-    }
-
-    public void setModifiedNow() {
-        this.modified = new java.util.Date().getTime();
-    }
-
-    public AccessControl getACL() {
-        return acl;
-    }
-
-    public void setACL(AccessControl acl) {
-        this.acl = acl;
-    }
-
-    public void add(Value a) {
+    public void addValue(Value a) {
         values.add(a);
-    }
-
-    public boolean remove(Value a) {
-        return values.remove(a);
     }
 
     public Collection<Value> getValues() {
@@ -108,9 +68,9 @@ public class Entity implements EntityValues,
     }
 
     public Collection<Value> getValues(String id) {
-        List<Value> lv = new ArrayList<Value>();
-        for (Iterator<Value> iter = this.values.iterator(); iter.hasNext(); ) {
-            Value v = iter.next();
+        final List<Value> lv = new ArrayList<Value>();
+
+        for (Value v : this.values) {
             findValues(lv, v, id);
         }
         return lv;
@@ -118,8 +78,8 @@ public class Entity implements EntityValues,
 
     public Collection<Value> getValues(DataSource ds) {
         List<Value> lv = new ArrayList<Value>();
-        for (Iterator<Value> iter = values.iterator(); iter.hasNext(); ) {
-            findValues(lv, iter.next(), ds);
+        for (Value v : this.values) {
+            findValues(lv, v, ds);
         }
         return lv;
     }
@@ -154,16 +114,8 @@ public class Entity implements EntityValues,
         return values.size();
     }
 
-    public Iterator<Value> values() {
-        return getValues().iterator();
-    }
-
-    public void add(Link l) {
+    public void addLink(Link l) {
         links.add(l);
-    }
-
-    public boolean remove(Link l) {
-        return links.remove(l);
     }
 
     public Collection<Link> getLinks() {
@@ -172,26 +124,5 @@ public class Entity implements EntityValues,
 
     public int getLinkCount() {
         return links.size();
-    }
-
-    public Iterator<Link> links() {
-        return getLinks().iterator();
-    }
-
-    public String toString() {
-        StringBuilder sb = new StringBuilder
-                (getClass().getName() + "{id=" + id + ",name=" + name + ",description="
-                        + description + ",created=" + created
-                        + ",modified=" + modified + ",acl=" + acl + ",values=" + values.size() + "[");
-        for (Iterator<Value> it = values(); it.hasNext(); ) {
-            Value v = it.next();
-            sb.append(v.toString());
-            if (it.hasNext()) {
-                sb.append(" ");
-            }
-        }
-        sb.append("],links=" + links.size());
-        sb.append("}");
-        return sb.toString();
     }
 }

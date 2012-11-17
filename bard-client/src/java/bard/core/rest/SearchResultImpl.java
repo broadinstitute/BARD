@@ -6,15 +6,10 @@ import bard.core.interfaces.SearchResult;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import org.apache.log4j.Logger;
 
-/**
- * Created with IntelliJ IDEA.
- * User: gwalzer
- * Date: 11/15/12
- * Time: 12:24 PM
- * To change this template use File | Settings | File Templates.
- */
-public abstract class SearchResultImp<E> implements SearchResult {
+public abstract class SearchResultImpl<E> implements SearchResult {
+    Logger log = Logger.getLogger(SearchResultImpl.class);
     protected List<E> searchResults;
     protected long count = 0;
     protected Object etag;
@@ -25,7 +20,6 @@ public abstract class SearchResultImp<E> implements SearchResult {
         return next(top, 0);
     }
 
-
     public List<E> getSearchResults() {
         return this.searchResults;
     }
@@ -33,10 +27,14 @@ public abstract class SearchResultImp<E> implements SearchResult {
 
     public List<E> next(int top, int skip) {
         if (top < 0) {
-            throw new IllegalArgumentException("Top must be a number greater than or equals zero");
+            final String message = "Top must be a number greater than or equals zero";
+            log.error(message);
+            throw new IllegalArgumentException(message);
         }
         if (skip < 0) {
-            throw new IllegalArgumentException("skip must be a number greater than or equals zero");
+            final String message = "skip must be a number greater than or equals zero";
+            log.error(message);
+            throw new IllegalArgumentException(message);
         }
         if (top > this.count) {
             return this.searchResults;
@@ -49,7 +47,15 @@ public abstract class SearchResultImp<E> implements SearchResult {
         }
         return this.searchResults.subList(skip, top+skip);
     }
+    protected int findNextTopValue(long skip, int ratio){
 
+        ///cap this at 1000
+        if (skip > 1000) {
+            return 1000;
+        } else {
+            return ratio;
+        }
+    }
 
     public Object getETag() {
         return this.etag;

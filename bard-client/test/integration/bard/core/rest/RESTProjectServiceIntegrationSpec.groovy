@@ -1,14 +1,16 @@
-package jdo
+package bard.core.rest
 
 import bard.core.adapter.ProjectAdapter
 import spock.lang.Unroll
 import bard.core.*
 import bard.core.interfaces.SearchResult
 
+import bard.core.rest.helper.RESTTestHelper
+
 /**
  * Tests for RESTProjectService in JDO
  */
-@Mixin(jdo.helper.RESTTestHelper)
+@Mixin(RESTTestHelper)
 @Unroll
 class RESTProjectServiceIntegrationSpec extends AbstractRESTServiceSpec {
 

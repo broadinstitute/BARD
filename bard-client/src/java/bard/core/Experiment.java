@@ -5,14 +5,10 @@ import bard.core.interfaces.ExperimentRole;
 import bard.core.interfaces.ExperimentType;
 import bard.core.interfaces.ExperimentValues;
 
-import java.util.List;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.Iterator;
-
-
-
+import java.util.List;
 
 
 public class Experiment extends Entity implements ExperimentValues {
@@ -25,9 +21,11 @@ public class Experiment extends Entity implements ExperimentValues {
     protected ExperimentCategory category;
     protected Long pubchemAid;
 
-    public Experiment () {}
-    public Experiment (String name) {
-        super (name);
+    public Experiment() {
+    }
+
+    public Experiment(String name) {
+        super(name);
     }
 
     public Long getPubchemAid() {
@@ -38,29 +36,47 @@ public class Experiment extends Entity implements ExperimentValues {
         this.pubchemAid = pubchemAid;
     }
 
-    public Assay getAssay () { return assay; }
-    public void setAssay (Assay assay) { this.assay = assay; }
-
-    public void setType (ExperimentType type) { this.type = type; }
-    public ExperimentType getType () { return type; }
-
-    public void setCategory (ExperimentCategory category) { 
-        this.category = category; 
+    public Assay getAssay() {
+        return assay;
     }
-    public ExperimentCategory getCategory () { return category; }
 
-    public void setRole (ExperimentRole role) { this.role = role; }
-    public ExperimentRole getRole () { return role; }
+    public void setAssay(Assay assay) {
+        this.assay = assay;
+    }
 
-    public void add (Project project) { 
+    public void setType(ExperimentType type) {
+        this.type = type;
+    }
+
+    public ExperimentType getType() {
+        return type;
+    }
+
+    public void setCategory(ExperimentCategory category) {
+        this.category = category;
+    }
+
+    public ExperimentCategory getCategory() {
+        return category;
+    }
+
+    public void setRole(ExperimentRole role) {
+        this.role = role;
+    }
+
+    public ExperimentRole getRole() {
+        return role;
+    }
+
+    public void addProject(Project project) {
         projects.add(project);
     }
-    public boolean remove (Project project) {
-        return projects.remove(project);
-    }
-    public Collection<Project> getProjects () {
+
+    public Collection<Project> getProjects() {
         return Collections.unmodifiableCollection(projects);
     }
-    public int getProjectCount () { return projects.size(); }
-    public Iterator<Project> projects () { return getProjects().iterator(); }
+
+    public int getProjectCount() {
+        return projects.size();
+    }
 }

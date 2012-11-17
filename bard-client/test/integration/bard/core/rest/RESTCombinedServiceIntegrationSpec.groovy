@@ -1,4 +1,4 @@
-package jdo
+package bard.core.rest
 
 import bard.core.Experiment
 import bard.core.Project
@@ -7,6 +7,8 @@ import bard.core.Value
 import spock.lang.Unroll
 import bard.core.interfaces.SearchResult
 
+import bard.core.rest.helper.RESTTestHelper
+
 /**
  * Created with IntelliJ IDEA.
  * User: balexand
@@ -14,7 +16,7 @@ import bard.core.interfaces.SearchResult
  * Time: 7:18 AM
  * To change this template use File | Settings | File Templates.
  */
-@Mixin(jdo.helper.RESTTestHelper)
+@Mixin(RESTTestHelper)
 @Unroll
 class RESTCombinedServiceIntegrationSpec extends AbstractRESTServiceSpec {
 

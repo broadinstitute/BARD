@@ -15,7 +15,25 @@ class RESTSearchResultUnitSpec extends Specification {
         // Tear down logic here
     }
 
+    void "test findNextTopValue #label"() {
+        given:
+        final RESTSearchResult<Compound> restSearchResult =
+            new RESTSearchResult<Compound>()
+        when:
+        int top = restSearchResult.findNextTopValue(skip, ratio)
+        then:
+        assert top == expectedTop
+        assert !restSearchResult.getETag()
+        where:
+        label          | skip | ratio | expectedTop
+        "Skip == 10"   | 10   | 10    | 10
+        "skip == 1000" | 1000 | 10    | 10
+        "skip == 1001" | 1001 | 10    | 1000
+
+    }
+
     void "next with Illegal Argument Exception #label"() {
+        given:
         final RESTSearchResult<Compound> restSearchResult =
             new RESTSearchResult<Compound>()
         when:
@@ -44,12 +62,12 @@ class RESTSearchResultUnitSpec extends Specification {
         "Skip > Count"              | 0   | 10   | 0          | 0     | []
         "Skip == Count==resultSize" | 0   | 2    | 0          | 2     | [new Compound("1"), new Compound("2")]
         "Skip == Count< resultSize" | 0   | 1    | 0          | 1     | [new Compound("1"), new Compound("2")]
-        "Skip + Top > Count"        | 2   | 0    | 2          | 1     | [new Compound("1"), new Compound("2")]
+        "Skip + Top > Count"        | 2   | 3    | 1          | 4     | [new Compound("1"), new Compound("2"), new Compound("3"), new Compound("4")]
     }
 
     void "build No Params #label"() {
         given:
-        RESTAbstractEntityService restAbstractEntityService = Mock()
+        RESTAbstractEntityService restAbstractEntityService = Mock(RESTAbstractEntityService.class)
         final RESTSearchResult<Compound> restSearchResult =
             new RESTSearchResult<Compound>()
         restSearchResult.restAbstractEntityService = restAbstractEntityService

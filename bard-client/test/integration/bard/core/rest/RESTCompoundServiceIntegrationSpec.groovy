@@ -1,4 +1,4 @@
-package jdo
+package bard.core.rest
 
 //import spock.lang.Timeout
 
@@ -9,10 +9,12 @@ import org.junit.Assert
 import spock.lang.Unroll
 import bard.core.*
 
+import bard.core.rest.helper.RESTTestHelper
+
 /**
  * Tests for RESTCompoundService in JDO
  */
-@Mixin(jdo.helper.RESTTestHelper)
+@Mixin(RESTTestHelper)
 @Unroll
 class RESTCompoundServiceIntegrationSpec extends AbstractRESTServiceSpec {
 

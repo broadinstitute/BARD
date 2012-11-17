@@ -91,13 +91,13 @@ class ChemAxonControllerUnitSpec extends Specification {
         final DataSource source = new DataSource("stuff", "v1")
         compound.setId(cid);
         for (Long sid : [1, 2, 3]) {
-            compound.add(new LongValue(source, Compound.PubChemSIDValue, sid));
+            compound.addValue(new LongValue(source, Compound.PubChemSIDValue, sid));
         }
         // redundant
-        compound.add(new LongValue(source, Compound.PubChemCIDValue, cid));
+        compound.addValue(new LongValue(source, Compound.PubChemCIDValue, cid));
         MolecularData md = new MolecularDataJChemImpl();
         md.setMolecule(smiles);
-        compound.add(new MolecularValue(source, Compound.MolecularValue, md));
+        compound.addValue(new MolecularValue(source, Compound.MolecularValue, md));
         return compoundAdapter = new CompoundAdapter(compound)
     }
 

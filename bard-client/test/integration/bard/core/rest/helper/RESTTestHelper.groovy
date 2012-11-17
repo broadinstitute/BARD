@@ -1,8 +1,8 @@
-package jdo.helper
+package bard.core.rest.helper
 
 import bard.core.Entity
-import bard.core.interfaces.SearchResult
 import bard.core.Value
+import bard.core.interfaces.SearchResult
 
 /**
  * Created with IntelliJ IDEA.
@@ -26,7 +26,7 @@ class RESTTestHelper {
     public void assertFacets(final Collection<Value> facets) {
         assert facets
         for (Value facet : facets) {
-            assert facet.children()
+            assert facet.getChildren()
         }
     }
     /**
@@ -50,8 +50,7 @@ class RESTTestHelper {
                 assert !facetKeys.contains(parentFacetId)
                 facetKeys.add(parentFacetId)
             }
-            for (Iterator<Value> childIterator = parentFacet.children(); childIterator.hasNext();) {
-                final Value childFacet = childIterator.next();
+            for (final Value childFacet : parentFacet.getChildren()) {
                 final String childFacetId = childFacet.getId()
                 if (childFacetId) {
                     String uniqueChildId = parentFacetId + "-" + childFacetId //Uniqueness should only be checked between facets with the same parent

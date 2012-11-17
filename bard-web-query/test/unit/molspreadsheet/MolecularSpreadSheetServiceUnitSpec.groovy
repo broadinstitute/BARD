@@ -405,10 +405,10 @@ class MolecularSpreadSheetServiceUnitSpec extends Specification {
         final DataSource source = new DataSource("stuff", "v1")
         compound.setId(cid);
         for (Long sid : sids) {
-            compound.add(new LongValue(source, Compound.PubChemSIDValue, sid));
+            compound.addValue(new LongValue(source, Compound.PubChemSIDValue, sid));
         }
         // redundant
-        compound.add(new LongValue(source, Compound.PubChemCIDValue, cid));
+        compound.addValue(new LongValue(source, Compound.PubChemCIDValue, cid));
         return new CompoundAdapter(compound)
     }
 

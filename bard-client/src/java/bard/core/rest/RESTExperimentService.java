@@ -7,14 +7,13 @@ import com.fasterxml.jackson.databind.node.ArrayNode;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.BlockingQueue;
 
 public class RESTExperimentService
         extends RESTAbstractEntityService<Experiment>
         implements ExperimentService {
 
 
-    static final Value DONE = new Value(DataSource.getCurrent());
+    //static final Value DONE = new Value(DataSource.getCurrent());
 
     protected RESTExperimentService
             (RESTEntityServiceManager srvman, String baseURL) {
@@ -74,40 +73,40 @@ public class RESTExperimentService
         return values;
     }
 
-    protected long streamValues(BlockingQueue<Value> queue,
-                                Experiment expr, Object etag,
-                                long top, long skip) {
-        long streamed = 0;
-        try {
-            final String resource = buildExperimentQuery(expr, etag, top, skip);
-            DataSource source = new DataSource
-                    (getResourceContext(), expr.getId().toString());
-            source.setURL(resource);
-
-            final JsonNode root = executeGetRequest(resource);
-            JsonNode node = root.get(COLLECTION);
-            ArrayNode array = null;
-
-            if (isNotNull(node) && node.isArray()) {
-                array = (ArrayNode) node;
-            } else if (root.isArray()) {
-                array = (ArrayNode) root;
-            }
-
-            if (isNotNull(array)) {
-                for (int i = 0; i < array.size(); ++i) {
-                    JsonNode n = array.get(i);
-                    queue.put(getValue(source, n));
-                    ++streamed;
-                }
-            }
-
-        } catch (Exception ex) {
-            ex.printStackTrace();
-            queue.offer(DONE);
-        }
-        return streamed;
-    }
+//    protected long streamValues(BlockingQueue<Value> queue,
+//                                Experiment expr, Object etag,
+//                                long top, long skip) {
+//        long streamed = 0;
+//        try {
+//            final String resource = buildExperimentQuery(expr, etag, top, skip);
+//            DataSource source = new DataSource
+//                    (getResourceContext(), expr.getId().toString());
+//            source.setURL(resource);
+//
+//            final JsonNode root = executeGetRequest(resource);
+//            JsonNode node = root.get(COLLECTION);
+//            ArrayNode array = null;
+//
+//            if (isNotNull(node) && node.isArray()) {
+//                array = (ArrayNode) node;
+//            } else if (root.isArray()) {
+//                array = (ArrayNode) root;
+//            }
+//
+//            if (isNotNull(array)) {
+//                for (int i = 0; i < array.size(); ++i) {
+//                    JsonNode n = array.get(i);
+//                    queue.put(getValue(source, n));
+//                    ++streamed;
+//                }
+//            }
+//
+//        } catch (Exception ex) {
+//            log.error(ex);
+//            queue.offer(DONE);
+//        }
+//        return streamed;
+//    }
 
     protected Value parseReadout(Value parent, JsonNode node) {
         HillCurveValue hcv = new HillCurveValue
@@ -205,13 +204,13 @@ public class RESTExperimentService
         DataSource ds = getDataSource();
         n = node.get(COMPOUNDS);
         if (isNotNull(n)) {
-            e.add(new IntValue
+            e.addValue(new IntValue
                     (ds, Experiment.ExperimentCompoundCountValue, n.asInt()));
         }
 
         n = node.get(SUBSTANCES);
         if (isNotNull(n)) {
-            e.add(new IntValue
+            e.addValue(new IntValue
                     (ds, Experiment.ExperimentSubstanceCountValue, n.asInt()));
         }
 
@@ -239,8 +238,10 @@ public class RESTExperimentService
             return service.getSearchResult
                     (getResource(expr.getId() + COMPOUNDS_RESOURCE), null);
         } else {
+            final String message = "No related searchResults available for " + clazz;
+            log.error(message);
             throw new IllegalArgumentException
-                    ("No related searchResults available for " + clazz);
+                    (message);
         }
     }
 

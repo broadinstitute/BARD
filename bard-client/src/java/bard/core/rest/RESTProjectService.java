@@ -44,7 +44,7 @@ public class RESTProjectService extends RESTAbstractEntityService<Project>
 
         JsonNode n = node.get(EXPERIMENT_COUNT);
         if (isNotNull(n)) {
-            project.add(new IntValue
+            project.addValue(new IntValue
                     (ds, Project.NumberOfExperimentsValue, n.asInt()));
         }
 
@@ -68,20 +68,20 @@ public class RESTProjectService extends RESTAbstractEntityService<Project>
             project.setName(name.asText());
         }
         final JsonNode description = node.get(DESCRIPTION);
-        if(isNotNull(description)){
+        if (isNotNull(description)) {
             project.setDescription(description.asText());
         }
 
         DataSource ds = getDataSource();
         JsonNode n = node.get(HIGHLIGHT);
         if (isNotNull(n)) {
-            project.add(new StringValue
+            project.addValue(new StringValue
                     (ds, Entity.SearchHighlightValue, n.asText()));
         }
 
         n = node.get(NUM_EXPT);
         if (isNotNull(n)) {
-            project.add(new IntValue
+            project.addValue(new IntValue
                     (ds, Project.NumberOfExperimentsValue, n.asInt()));
         }
 
@@ -90,7 +90,7 @@ public class RESTProjectService extends RESTAbstractEntityService<Project>
 
     void addProbes(Project project, JsonNode node) {
         final ArrayNode probeNodes = (ArrayNode) node.get(PROBES);
-        if (probeNodes != null && !probeNodes.isNull()) {
+        if (isNotNull(probeNodes)) {
             for (int i = 0; i < probeNodes.size(); ++i) {
                 JsonNode n = probeNodes.get(i);
                 String cid = n.get(CID).asText();
@@ -99,7 +99,7 @@ public class RESTProjectService extends RESTAbstractEntityService<Project>
                 String smiles = n.get(SMILES).asText();
 
                 Probe probe = new Probe(cid, probeId, url, smiles);
-                project.add(probe);
+                project.addProbe(probe);
             }
         }
     }
@@ -113,7 +113,7 @@ public class RESTProjectService extends RESTAbstractEntityService<Project>
             for (int i = 0; i < keys.size(); ++i) {
                 String key = keys.get(i).asText();
                 String val = vals.get(i).asText();
-                project.add(new StringValue(capds, key, val));
+                project.addValue(new StringValue(capds, key, val));
             }
         }
 
@@ -144,7 +144,7 @@ public class RESTProjectService extends RESTAbstractEntityService<Project>
             for (int i = 0; i < keys.size(); ++i) {
                 String key = keys.get(i).asText();
                 String val = vals.get(i).asText();
-                a.add(new StringValue(ds, key, val));
+                a.addValue(new StringValue(ds, key, val));
             }
         }
         return a;
@@ -163,8 +163,10 @@ public class RESTProjectService extends RESTAbstractEntityService<Project>
             return service.getSearchResult
                     (getResource(project.getId() + EXPERIMENTS_RESOURCE), null);
         } else {
+            final String message = "No related searchResults available for " + clazz;
+            log.error(message);
             throw new IllegalArgumentException
-                    ("No related searchResults available for " + clazz);
+                    (message);
         }
     }
 }
