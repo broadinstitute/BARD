@@ -37,7 +37,7 @@ class MolSpreadSheetDataBuilderUnitSpec extends Specification {
         molSpreadSheetDataBuilder.molecularSpreadSheetService = this.molecularSpreadSheetService
         molSpreadSheetDataBuilder.cartCompoundList = [new CartCompound("C","C",200)]
         when:
-        molSpreadSheetDataBuilder.populateMolSpreadSheet([])
+        molSpreadSheetDataBuilder.populateMolSpreadSheet([], MolSpreadsheetDerivedMethod.Compounds_NoAssays_NoProjects)
         then:
         1 * molecularSpreadSheetService.populateMolSpreadSheetColumnMetadata(_, _) >> {}
         molecularSpreadSheetService.extractMolSpreadSheetData(_, _, _) >> {[]}
@@ -71,9 +71,12 @@ class MolSpreadSheetDataBuilderUnitSpec extends Specification {
         molSpreadSheetDataBuilder.holdCartResults(cartCompoundList, cartAssayList, cartProjectList)
 
         then: "The expected hashCode is returned"
-        List<Experiment> experimentList = molSpreadSheetDataBuilder.deriveListOfExperiments()
+        Map deriveListOfExperiments = molSpreadSheetDataBuilder.deriveListOfExperiments()
+        List<Experiment> experimentList = deriveListOfExperiments.experimentList
+        MolSpreadsheetDerivedMethod molSpreadsheetDerivedMethod = deriveListOfExperiments.molSpreadsheetDerivedMethod
         assertNotNull experimentList
         assert experimentList.size() == 0
+        assertNull molSpreadsheetDerivedMethod
     }
 
 //    void "test populateMolSpreadSheet #label"() {

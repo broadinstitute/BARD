@@ -10,16 +10,23 @@
         });
         $('td:nth-child(3), th:nth-child(3)').toggle();
         $("[rel=tooltip]").tooltip();
-        $('#molspreadsheet').dataTable( {
-                    "bStateSave": true ,
-                    "sPaginationType": "full_numbers",
-                    "aLengthMenu": [[5, 10, 25, 50, -1], [5, 10, 25, 50, "All"]]
+        $('#molspreadsheet').dataTable({
+                    "bStateSave":true,
+                    "sPaginationType":"full_numbers",
+                    "aLengthMenu":[
+                        [5, 10, 25, 50, -1],
+                        [5, 10, 25, 50, "All"]
+                    ]
                 }
         );
     });
 </script>
 
 <div class="row-fluid">
+    <g:if test="${flash.message}">
+        <div class="span12" role="status"><p style="color: #3A87AD;">${flash.message}</p></div>
+    </g:if>
+
     <div class="span2">
         <g:render template="../bardWebInterface/facets"
                   model="['facets': facets, 'formName': FacetFormType.AssayFacetForm]"/>
@@ -27,13 +34,14 @@
 
     <div class="span10">
         <g:if test="${molSpreadSheetData?.getColumnCount() > 0}">
-            <g:set var="columnWidth" value="${100.0/((molSpreadSheetData?.getColumnCount()-1) as float)}" />
+            <g:set var="columnWidth" value="${100.0 / ((molSpreadSheetData?.getColumnCount() - 1) as float)}"/>
             <label class="checkbox">
                 <input type="checkbox" defaultChecked="checked" checked name="showPromiscuityScores"
                        id="showPromiscuityScores">
                 Hide Promiscuity Scores
             </label>
-            <table cellpadding="0" cellspacing="0" border="0"  class="molSpreadSheet display" id="molspreadsheet"  width="100%">
+            <table cellpadding="0" cellspacing="0" border="0" class="molSpreadSheet display" id="molspreadsheet"
+                   width="100%">
                 <thead>
                 <tr class="molSpreadSheetHead">
                     <th class="molSpreadSheetImg">Molecular structure</th>
@@ -45,13 +53,15 @@
                         </g:if>
 
                         <g:if test="${column == 3}">
-                            <th class="molSpreadSheetHeadData" width="<%=columnWidth%>%"><%=molSpreadSheetData.mapColumnsToAssay[column]%><br/>${colHeader}
+                            <th class="molSpreadSheetHeadData"
+                                width="<%=columnWidth%>%"><%=molSpreadSheetData.mapColumnsToAssay[column]%><br/>${colHeader}
                             </th>
                         </g:if>
                         <g:if test="${column > 3}">
-                           <th class="molSpreadSheetHeadData" rel="tooltip"
+                            <th class="molSpreadSheetHeadData" rel="tooltip"
                                 title="<%=molSpreadSheetData.mapColumnsToAssayName[column]%>"><a
-                                    href="../bardWebInterface/showAssay/<%=molSpreadSheetData.mapColumnsToAssay[column] %>" width="<%=columnWidth%>%">ADID=<%=molSpreadSheetData.mapColumnsToAssay[column]%><br/>${colHeader}
+                                    href="../bardWebInterface/showAssay/<%=molSpreadSheetData.mapColumnsToAssay[column]%>"
+                                    width="<%=columnWidth%>%">ADID=<%=molSpreadSheetData.mapColumnsToAssay[column]%><br/>${colHeader}
                             </a></th>
                         </g:if>
                         <% column++ %>

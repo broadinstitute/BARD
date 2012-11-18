@@ -20,7 +20,7 @@ class MolSpreadSheetDataBuilder {
     List<CartAssay> cartAssayList = []
     List<CartProject> cartProjectList = []
     Object etag
-    Map<String,MolSpreadSheetCell> dataMap = [:]
+    Map<String, MolSpreadSheetCell> dataMap = [:]
     List<SpreadSheetActivity> spreadSheetActivityList = []
 
     MolSpreadSheetDataBuilder() {
@@ -44,25 +44,28 @@ class MolSpreadSheetDataBuilder {
      *
      * @return
      */
-    List<Experiment> deriveListOfExperiments() {
+    Map deriveListOfExperiments() {
         List<Experiment> experimentList = []
-
+        MolSpreadsheetDerivedMethod molSpreadsheetDerivedMethod
 
         try {
             // Any projects can be converted to assays, then assays to experiments
             if (!this.cartProjectList?.isEmpty()) {
                 experimentList = molecularSpreadSheetService.cartProjectsToExperiments(this.cartProjectList)
+                molSpreadsheetDerivedMethod = MolSpreadsheetDerivedMethod.NoCompounds_NoAssays_Projects
             }
 
             // Any assays explicitly selected on the cart are added to the  experimentList
             if (!this.cartAssayList?.isEmpty()) {
                 experimentList = molecularSpreadSheetService.cartAssaysToExperiments(experimentList, this.cartAssayList)
+                molSpreadsheetDerivedMethod = MolSpreadsheetDerivedMethod.NoCompounds_Assays_NoProjects
             }
 
             // If we get to this point and have no experiments selected but we DO have a compound (s), then the user
             //  may be looking to derive their assays on the basis of compounds. We can do that.
             if ((experimentList.isEmpty()) && (!this.cartCompoundList?.isEmpty())) {
                 experimentList = molecularSpreadSheetService.cartCompoundsToExperiments(this.cartCompoundList)
+                molSpreadsheetDerivedMethod = MolSpreadsheetDerivedMethod.Compounds_NoAssays_NoProjects
             }
 
 
@@ -71,16 +74,18 @@ class MolSpreadSheetDataBuilder {
             //TODO: If we know the specific exception that it throws then we should catch the specific one
             exception.printStackTrace()
         }
-        experimentList
+
+        return [experimentList: experimentList, molSpreadsheetDerivedMethod: molSpreadsheetDerivedMethod]
     }
 
 
 
 
-    void populateMolSpreadSheet(List<Experiment> experimentList) {
+    void populateMolSpreadSheet(List<Experiment> experimentList, MolSpreadsheetDerivedMethod molSpreadsheetDerivedMethod) {
 
         // this is the variable we plan to fill
         molSpreadSheetData = new MolSpreadSheetData()
+        molSpreadSheetData.molSpreadsheetDerivedMethod = molSpreadsheetDerivedMethod
 
         // temp data sheet
         dataMap = [:]
@@ -92,8 +97,8 @@ class MolSpreadSheetDataBuilder {
         if (cartCompoundList.isEmpty()) {
             // Explicitly specified assay, for which we will retrieve all compounds
             etag = molecularSpreadSheetService.retrieveImpliedCompoundsEtagFromAssaySpecification(experimentList)
-            spreadSheetActivityList = molecularSpreadSheetService.extractMolSpreadSheetData(molSpreadSheetData, experimentList,etag)
-           // spreadSheetActivityList = molecularSpreadSheetService.extractMolSpreadSheetData(molSpreadSheetData, experimentList, [])
+            spreadSheetActivityList = molecularSpreadSheetService.extractMolSpreadSheetData(molSpreadSheetData, experimentList, etag)
+            // spreadSheetActivityList = molecularSpreadSheetService.extractMolSpreadSheetData(molSpreadSheetData, experimentList, [])
             Map map = molecularSpreadSheetService.convertSpreadSheetActivityToCompoundInformation(spreadSheetActivityList)
             molecularSpreadSheetService.populateMolSpreadSheetRowMetadata(molSpreadSheetData, map, this.dataMap)
 
@@ -103,11 +108,11 @@ class MolSpreadSheetDataBuilder {
             molecularSpreadSheetService.populateMolSpreadSheetRowMetadata(molSpreadSheetData, cartCompoundList, this.dataMap)
             etag = molecularSpreadSheetService.generateETagFromCartCompounds(cartCompoundList)
             spreadSheetActivityList = molecularSpreadSheetService.extractMolSpreadSheetData(molSpreadSheetData, experimentList, etag)
-         }
+        }
 
         // finally deal with the data
         molecularSpreadSheetService.populateMolSpreadSheetData(molSpreadSheetData, experimentList, spreadSheetActivityList, this.dataMap)
-        molecularSpreadSheetService.fillInTheMissingCellsAndConvertToExpandedMatrix( molSpreadSheetData, this.dataMap)
+        molecularSpreadSheetService.fillInTheMissingCellsAndConvertToExpandedMatrix(molSpreadSheetData, this.dataMap)
         molecularSpreadSheetService.prepareMapOfColumnsToAssay(molSpreadSheetData)
     }
 
@@ -131,9 +136,11 @@ class MolSpreadSheetDataBuilderDirector {
 
         molSpreadSheetDataBuilder.holdCartResults(cartCompoundList, cartAssayList, cartProjectList)
 
-        List<Experiment> experimentList = molSpreadSheetDataBuilder.deriveListOfExperiments()
+        Map deriveListOfExperiments = molSpreadSheetDataBuilder.deriveListOfExperiments()
+        List<Experiment> experimentList =  deriveListOfExperiments.experimentList
+        MolSpreadsheetDerivedMethod molSpreadsheetDerivedMethod = deriveListOfExperiments.molSpreadsheetDerivedMethod
 
-        molSpreadSheetDataBuilder.populateMolSpreadSheet(experimentList)
+        molSpreadSheetDataBuilder.populateMolSpreadSheet(experimentList, molSpreadsheetDerivedMethod)
     }
 
 }
