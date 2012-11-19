@@ -5,7 +5,7 @@ import org.junit.Before
 import spock.lang.Unroll
 
 
-@Build(StageElement)
+@Build([StageElement,Element])
 @Unroll
 class StageElementConstraintUnitSpec extends AbstractElementConstraintUnitSpec {
 

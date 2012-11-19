@@ -5,7 +5,7 @@ import org.junit.Before
 import spock.lang.Unroll
 
 
-@Build(LaboratoryElement)
+@Build([LaboratoryElement,Element])
 @Unroll
 class LaboratoryElementConstraintUnitSpec extends AbstractElementConstraintUnitSpec {
 
