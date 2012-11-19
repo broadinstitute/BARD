@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<stage xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+ xsi:noNamespaceSchemaLocation="BARDexportSchema.xsd"
+ stageElement="assay stage">
+ <stageName>STAGE</stageName>
+ <description>Singular root to ensure tree viewers work</description>
+ <link rel='related' href='http://localhost:8080/dataExport/api/dictionary/element/223' type='application/vnd.bard.cap+xml;type=element' />
+</stage>

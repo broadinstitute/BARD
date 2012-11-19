@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resultType xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+ xsi:noNamespaceSchemaLocation="BARDexportSchema.xsd"
+ resultTypeElement="result endpoint"
+ resultTypeStatus="Published">
+    <resultTypeName>RESULT_TYPE</resultTypeName>
+    <description>Singular root to ensure tree viewers work</description>
+    <link rel='related' href='http://localhost:8080/dataExport/api/dictionary/element/594' type='application/vnd.bard.cap+xml;type=element' />
+</resultType>
