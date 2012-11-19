@@ -8,7 +8,6 @@ import spock.lang.Unroll
 import static bard.db.dictionary.AbstractElement.*
 import static test.TestUtils.assertFieldValidationExpectations
 import static test.TestUtils.createString
-import spock.lang.Shared
 
 /**
  * Created with IntelliJ IDEA.
@@ -21,7 +20,6 @@ import spock.lang.Shared
 abstract class AbstractElementConstraintUnitSpec extends Specification {
 
     def domainInstance
-    @Shared def unitElement
 
 
     @Before
@@ -160,15 +158,18 @@ abstract class AbstractElementConstraintUnitSpec extends Specification {
         then: 'verify valid or invalid for expected reason'
         assertFieldValidationExpectations(domainInstance, field, valid, errorCode)
 
-        and: 'verify the domain can be persisted to the db'
+        and: 'verify the domainspreadsheetmapping can be persisted to the db'
         if (valid) {
             domainInstance == domainInstance.save(flush: true)
         }
 
         where:
-        desc          | valueUnderTest | valid | errorCode
-        'null value'  | null           | true  | null
-        'valid value' | unitElement    | true  | null
+        desc          | valueUnderTest                    | valid | errorCode
+        'too long'    | createString(UNIT_MAX_SIZE) + "a" | false | 'maxSize.exceeded'
+
+        'valid value' | createString(UNIT_MAX_SIZE)       | true  | null
+        'null value'  | null                              | true  | null
+        'valid value' | "foo"                             | true  | null
     }
 
     void "test bardURI constraints #desc bardURI: '#valueUnderTest'"() {
