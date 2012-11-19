@@ -1,6 +1,5 @@
 package molspreadsheet
 
-import de.andreasschmitt.export.ExportService
 import grails.plugins.springsecurity.Secured
 
 import javax.servlet.http.HttpServletResponse
@@ -12,7 +11,7 @@ class MolSpreadSheetController {
     MolecularSpreadSheetService molecularSpreadSheetService
     CartCompoundService cartCompoundService
     CartProjectService cartProjectService
-    ExportService exportService
+    //ExportService exportService
 
     def index() {
         render(view: 'molecularSpreadSheet')
@@ -43,12 +42,12 @@ class MolSpreadSheetController {
 
         if (molecularSpreadSheetService.weHaveEnoughDataToMakeASpreadsheet()) {
             MolSpreadSheetData molSpreadSheetData = molecularSpreadSheetService.retrieveExperimentalData()
-            if (params?.format && params.format != "html") {
-                response.contentType = grailsApplication.config.grails.mime.types[params.format]
-                response.setHeader("Content-disposition", "attachment; filename=molecularSpreadSheet.${params.extension}")
-
-                exportService.export(params.format, response.outputStream, Book.list(params), [:], [:])
-            }
+//            if (params?.format && params.format != "html") {
+//                response.contentType = grailsApplication.config.grails.mime.types[params.format]
+//                response.setHeader("Content-disposition", "attachment; filename=molecularSpreadSheet.${params.extension}")
+//
+//                exportService.export(params.format, response.outputStream, Book.list(params), [:], [:])
+//            }
             if (molSpreadSheetData.molSpreadsheetDerivedMethod == MolSpreadsheetDerivedMethod.Compounds_NoAssays_NoProjects) {
                 flash.message = message(code: 'show.only.active.compounds', default: "Please note: Only active compounds are shown in the Molecular Spreadsheet")
             }

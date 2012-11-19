@@ -5,7 +5,7 @@
 <head>
     <meta name="layout" content="logoSearchCartAndFooter"/>
     <title>Molecular spreadsheet</title>
-    <r:require modules="molecularSpreadSheet,promiscuity,activeVrsTested,export"/>
+    <r:require modules="molecularSpreadSheet,promiscuity,activeVrsTested"/>
 </head>
 
 <body>
@@ -20,7 +20,7 @@
 <div id="molecularSpreadSheet" href="${createLink(controller: 'molSpreadSheet', action: 'molecularSpreadSheet')}">
 
 </div>
-<export:formats formats="['excel','pdf']"/>
+%{--<export:formats formats="['excel','pdf']"/>--}%
 
 </body>
 </html>
