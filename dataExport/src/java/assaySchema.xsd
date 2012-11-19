@@ -11,7 +11,7 @@ application/vnd.bard.cap+xml;type=assay</xs:documentation>
         </xs:annotation>
         <xs:complexType>
             <xs:sequence>
-                <xs:element default="" name="assayTitle">
+                <xs:element default="" name="assayShortName">
                     <xs:simpleType>
                         <xs:restriction base="xs:string">
                             <xs:maxLength value="250"/>
@@ -37,8 +37,22 @@ application/vnd.bard.cap+xml;type=assay</xs:documentation>
                                 <xs:complexType>
                                     <xs:sequence>
                                         <xs:element name="contextName" type="xs:string"/>
+                                        <xs:element minOccurs="0" name="contextGroup"
+                                            type="xs:string"/>
+                                        <xs:element minOccurs="1" name="displayOrder"
+                                            nillable="false" type="xs:int"/>
                                         <xs:element ref="assayContextItems"/>
+                                        <xs:element minOccurs="0" name="measureRefs">
+                                            <xs:complexType>
+                                                <xs:sequence>
+                                                  <xs:element maxOccurs="unbounded"
+                                                  name="measureRef" type="bardID"/>
+                                                </xs:sequence>
+                                            </xs:complexType>
+                                        </xs:element>
                                     </xs:sequence>
+                                    <xs:attribute name="assayContextId" type="bardID" use="required"
+                                    />
                                 </xs:complexType>
                             </xs:element>
                         </xs:sequence>
@@ -63,6 +77,15 @@ application/vnd.bard.cap+xml;type=assay</xs:documentation>
                                                 </xs:attribute>
                                             </xs:complexType>
                                         </xs:element>
+                                        <xs:element minOccurs="0" name="statsModifier">
+                                            <xs:complexType>
+                                                <xs:sequence>
+                                                  <xs:element minOccurs="0" ref="link"/>
+                                                </xs:sequence>
+                                                <xs:attribute name="label" type="xs:string"
+                                                  use="required"/>
+                                            </xs:complexType>
+                                        </xs:element>
                                         <xs:element minOccurs="0" name="entryUnit">
                                             <xs:annotation>
                                                 <xs:documentation>Unit and a link to the Unit element in the dictionary</xs:documentation>
@@ -75,20 +98,22 @@ application/vnd.bard.cap+xml;type=assay</xs:documentation>
                                                   use="required"/>
                                             </xs:complexType>
                                         </xs:element>
+                                        <xs:element minOccurs="0" name="assayContextRefs">
+                                            <xs:complexType>
+                                                <xs:sequence>
+                                                  <xs:element maxOccurs="unbounded"
+                                                  name="assayContextRef" type="bardID"/>
+                                                </xs:sequence>
+                                            </xs:complexType>
+                                        </xs:element>
                                     </xs:sequence>
-                                    <xs:attribute name="assayContextRef" type="xs:string"
-                                        use="optional">
-                                        <xs:annotation>
-                                            <xs:documentation>References the measure context name</xs:documentation>
-                                        </xs:annotation>
-                                    </xs:attribute>
-                                    <xs:attribute name="parentMeasure" type="bardID"/>
+                                    <xs:attribute name="measureId" type="bardID" use="required"/>
+                                    <xs:attribute name="parentMeasureRef" type="bardID"/>
                                 </xs:complexType>
                             </xs:element>
                         </xs:sequence>
                     </xs:complexType>
                 </xs:element>
-                <xs:element minOccurs="0" ref="assayContextItems"/>
                 <xs:element minOccurs="0" name="assayDocuments">
                     <xs:complexType>
                         <xs:sequence>
@@ -128,27 +153,34 @@ application/vnd.bard.cap+xml;type=assay</xs:documentation>
                         <xs:enumeration value="Regular"/>
                         <xs:enumeration value="Panel - Array"/>
                         <xs:enumeration value="Panel - Group"/>
+                        <xs:enumeration value="Template"/>
                     </xs:restriction>
                 </xs:simpleType>
             </xs:attribute>
         </xs:complexType>
-        <xs:key name="MeasureContext_Key">
-            <xs:selector xpath="assay/measureContexts/measureContext"/>
-            <xs:field xpath="contextName"/>
+        <xs:key name="AssayContext_Key">
+            <xs:selector xpath="assayContexts/assayContext"/>
+            <xs:field xpath="@assayContextId"/>
         </xs:key>
-        <xs:keyref name="MeasureContext_KeyRef" refer="MeasureContext_Key">
-            <xs:selector
-                xpath="assay/measures/measure | assay/measureContextItems/measureContextItem"/>
-            <xs:field xpath="@measureContextRef"/>
+        <xs:key name="AssayContextItem_Key">
+            <xs:selector xpath="assayContexts/assayContext/assayContextItems/assayContextItem"/>
+            <xs:field xpath="@assayContextItemId"/>
+        </xs:key>
+        <xs:key name="Measure_Key">
+            <xs:selector xpath="measures/measure"/>
+            <xs:field xpath="@measureId"/>
+        </xs:key>
+        <xs:keyref name="Measure_KeyRef" refer="Measure_Key">
+            <xs:selector xpath="assayContexts/assayContext/measureRefs/measureRef"/>
+            <xs:field xpath="."/>
         </xs:keyref>
-        <xs:key name="MeasureContextItem_Key">
-            <xs:selector xpath="assay/measureContextItems/measureContextItem"/>
-            <xs:field xpath="@measureContextItemId"/>
-        </xs:key>
-        <xs:keyref name="MeasureContextItem_KeyRef" refer="MeasureContextItem_Key">
-            <xs:selector
-                xpath="assay/measureContextItems/measureContextItem | assay/measureContextItemRefs/measureContextItemRef"/>
-            <xs:field xpath="@measureContextItemRef"/>
+        <xs:keyref name="AssayContext_KeyRef" refer="AssayContext_Key">
+            <xs:selector xpath="measures/measure/assayContextRefs/assayContextRef"/>
+            <xs:field xpath="."/>
+        </xs:keyref>
+        <xs:keyref name="ParentMeasure_KeyRef" refer="Measure_Key">
+            <xs:selector xpath="measures/measure"/>
+            <xs:field xpath="@parentMeasureRef"/>
         </xs:keyref>
     </xs:element>
     <xs:element name="assays">
@@ -246,12 +278,12 @@ application/vnd.bard.cap+xml;type=assay</xs:documentation>
                             <xs:element minOccurs="0" name="extValueId" type="xs:string"/>
                         </xs:sequence>
                         <xs:attribute name="assayContextItemId" type="bardID" use="required"/>
-                        <xs:attribute name="assayContextRef" type="xs:string"/>
                         <xs:attribute name="qualifier" type="xs:string"/>
                         <xs:attribute name="valueNum" type="xs:double"/>
                         <xs:attribute name="valueMin" type="xs:double"/>
                         <xs:attribute name="valueMax" type="xs:double"/>
                         <xs:attribute name="valueDisplay" type="xs:string"/>
+                        <xs:attribute name="displayOrder" type="xs:int"/>
                     </xs:complexType>
                 </xs:element>
             </xs:sequence>
