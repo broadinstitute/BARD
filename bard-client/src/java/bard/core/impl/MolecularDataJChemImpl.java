@@ -100,7 +100,7 @@ public class MolecularDataJChemImpl implements MolecularData {
     public Boolean ruleOf5() {
         return this.ruleOf5;
     }
-
+    //TODO: We need to add a ChemAxon library to do this. But do we even need this? I think not.
     public int[] fingerprint() { // bit fingerprint for indexing/searching
         if (fingerprint == null && this.molecule != null) { // lazy evaluation
             MolHandler mh = new MolHandler(this.molecule.cloneMolecule());

@@ -1,15 +1,14 @@
 package bard.core.rest
 
-import bard.core.Assay
-import bard.core.Compound
-import bard.core.DataSource
-import bard.core.Value
 import bard.core.interfaces.EntityServiceManager
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.databind.node.ArrayNode
 import jdo.JSONNodeTestHelper
+import org.apache.http.client.methods.HttpGet
 import spock.lang.Shared
 import spock.lang.Specification
 import spock.lang.Unroll
+import bard.core.*
 
 @Unroll
 class RESTCompoundServiceUnitSpec extends Specification {
@@ -19,7 +18,8 @@ class RESTCompoundServiceUnitSpec extends Specification {
     @Shared ObjectMapper mapper = new ObjectMapper();
     @Shared String TESTED_ASSAY_NODE = JSONNodeTestHelper.TESTED_ASSAY_NODE
     @Shared String COMPOUND_SYNONYMS = JSONNodeTestHelper.COMPOUND_SYNONYMS
-
+    @Shared String COMPOUND_NODE = JSONNodeTestHelper.COMPOUND_SUMMARY_SEARCH_RESULTS
+    @Shared String COMPOUND_EXPANDED_SEARCH_RESULTS = JSONNodeTestHelper.COMPOUND_EXPANDED_SEARCH_RESULTS
     @Shared String ASSAY_NODE = '''
           {
             "assay_id":"2377",
@@ -37,7 +37,14 @@ class RESTCompoundServiceUnitSpec extends Specification {
     void tearDown() {
         // Tear down logic here
     }
-
+   void "getPromiscuityResource"(){
+       given:
+       long cid = 200
+       when:
+       String url = restCompoundService.getPromiscuityResource(cid)
+       then:
+       assert url =="base/plugins/badapple/prom/cid/200?expand=true"
+   }
     void "buildQueryForTestedAssays #label"() {
         given:
         final Compound compound = new Compound("name")
@@ -111,6 +118,156 @@ class RESTCompoundServiceUnitSpec extends Specification {
         "Node with Synonym" | mapper.readTree("\"NSC228155\"") | false
         "Null Node"         | null                             | true
 
+    }
+
+    void "searchResult with Exceptions"() {
+        given:
+        final Compound compound = new Compound()
+        when:
+        this.restCompoundService.searchResult(compound, Substance.class)
+        then:
+        thrown(IllegalArgumentException)
+
+    }
+
+
+    void "getEntitySearch #label"() {
+        when:
+        final Compound resultCompound = this.restCompoundService.getEntitySearch(compound, node)
+
+        then:
+        assert resultCompound
+        assert resultCompound.getId() == 2722
+        where:
+        label                 | node                           | compound
+        "Project is not null" | mapper.readTree(COMPOUND_NODE) | new Compound()
+        "Project is null"     | mapper.readTree(COMPOUND_NODE) | null
+    }
+
+    void "getEntity #label"() {
+        when:
+        final Compound resultCompound = this.restCompoundService.getEntity(compound, node)
+
+        then:
+        assert resultCompound
+        assert resultCompound.getId() == 600
+        where:
+        label                 | node                                              | compound
+        "Project is not null" | mapper.readTree(COMPOUND_EXPANDED_SEARCH_RESULTS) | new Compound()
+        "Project is null"     | mapper.readTree(COMPOUND_EXPANDED_SEARCH_RESULTS) | null
+    }
+
+    void "addHighlight #label"() {
+        given:
+        final Compound compound = new Compound()
+        when:
+        this.restCompoundService.addHighlight(compound, node)
+        then:
+        assert compound.getValues().isEmpty() == expectedResult
+        where:
+        label                             | node                                          | expectedResult
+        "'highlight' key in JSON Node"    | mapper.readTree("{ \"highlight\": \"high\"}") | false
+        "No 'highlight' key in JSON Node" | mapper.readTree("{ \"someName\": \"high\"}")  | true
+    }
+
+    void "addIupacName #label"() {
+        given:
+        final Compound compound = new Compound()
+        when:
+        this.restCompoundService.addIupacName(compound, node)
+        then:
+        assert compound.getValues().isEmpty() == expectedResult
+        assert compound.getName() == expectedName
+        where:
+        label                             | node                                                 | expectedResult | expectedName
+        "'iupacName' key in JSON Node"    | mapper.readTree("{ \"iupacName\": \"propan-2-0l\"}") | false          | "propan-2-0l"
+        "No 'iupacName' key in JSON Node" | mapper.readTree("{ \"someName\": \"high\"}")         | true           | null
+    }
+
+    void "addPreferredTerm #label"() {
+        given:
+        final Compound compound = new Compound()
+        when:
+        this.restCompoundService.addPreferredTerm(compound, node)
+        then:
+        assert compound.getName() == expectedName
+        where:
+        label                                  | node                                               | expectedName
+        "'preferred_term' key in JSON Node"    | mapper.readTree("{ \"preferred_term\": \"high\"}") | "high"
+        "No 'preferred_term' key in JSON Node" | mapper.readTree("{ \"someName\": \"high\"}")       | null
+
+    }
+
+    void "addCompoundCID #label"() {
+        given:
+        final Compound compound = new Compound()
+        when:
+        this.restCompoundService.addCompoundCID(compound, node)
+        then:
+        assert compound.getId() == expectedId
+        assert compound.getValues().isEmpty() == expectedValues
+        where:
+        label                       | node                                         | expectedId | expectedValues
+        "'cid' key in JSON Node"    | mapper.readTree("{ \"cid\": 200}")           | 200        | false
+        "No 'cid' key in JSON Node" | mapper.readTree("{ \"someName\": \"high\"}") | null       | true
+    }
+
+    void "addCompoundName #label"() {
+        given:
+        final Compound compound = new Compound()
+        when:
+        this.restCompoundService.addCompoundName(compound, node)
+        then:
+        assert compound.getName() == expectedName
+        where:
+        label                        | node                                         | expectedName
+        "'name' key in JSON Node"    | mapper.readTree("{ \"name\": \"name\"}")     | "name"
+        "No 'name' key in JSON Node" | mapper.readTree("{ \"someName\": \"high\"}") | null
+    }
+
+    void "addETagsToHTTPHeader"() {
+        given:
+        HttpGet httpGet = new HttpGet()
+        final Map<String, Long> etags = [key1: 200L, key2: 100L]
+        when:
+        this.restCompoundService.addETagsToHTTPHeader(httpGet, etags)
+        then:
+        assert httpGet.getFirstHeader("If-Match").getValue() == "\"key2\""
+    }
+
+    void "getParentETag"() {
+        given:
+        final Map<String, Long> etags = [key1: 100L, key2: 300L]
+
+        when:
+        String key = RESTCompoundService.getParentETag(etags)
+        then:
+        assert key == "key1"
+
+
+    }
+
+    void "jsonArrayNodeToAssays"() {
+        given:
+        ArrayNode aa = mapper.createArrayNode()
+        aa.add(null)
+        when:
+        List<Assay> assays = this.restCompoundService.jsonArrayNodeToAssays(aa, this.restAssayService)
+        then:
+        assert !assays
+    }
+
+    void "addSIDs #label"() {
+        given:
+        final Compound compound = new Compound()
+        when:
+        this.restCompoundService.addSIDs(compound, node)
+        then:
+        assert compound.getValues().isEmpty() == expectedValues
+        where:
+        label                        | node                                              | expectedValues
+        "'sids' key in JSON Node"    | mapper.readTree(COMPOUND_EXPANDED_SEARCH_RESULTS) | false
+        "No 'sids' key in JSON Node" | mapper.readTree("{ \"someName\": \"high\"}")      | true
     }
 
 }

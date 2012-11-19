@@ -1,6 +1,8 @@
 package bard.core.rest;
 
+import bard.core.Entity;
 import bard.core.Substance;
+import bard.core.interfaces.SearchResult;
 import bard.core.interfaces.SubstanceService;
 import bard.core.interfaces.SubstanceValues;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -13,6 +15,11 @@ public class RESTSubstanceService extends RESTAbstractEntityService<Substance>
     protected RESTSubstanceService
             (RESTEntityServiceManager srvman, String baseURL) {
         super(srvman, baseURL);
+    }
+
+    @Override
+    public <T extends Entity> SearchResult<T> searchResult(Substance entity, Class<T> clazz) {
+        return null;
     }
 
     public Class<Substance> getEntityClass() {

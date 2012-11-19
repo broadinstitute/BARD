@@ -76,8 +76,8 @@ public abstract class RESTAbstractEntityService<E extends Entity>
      *
      * @return the relative url to the promiscuity plugin
      */
-    protected String getPromiscuityResource() {
-        return new StringBuilder(baseURL).append("/plugins/badapple/prom/cid/").toString();
+    protected String getPromiscuityResource(Long cid) {
+        return new StringBuilder(baseURL).append("/plugins/badapple/prom/cid/").append(cid).append("?expand=true").toString();
     }
 
     /*
@@ -101,10 +101,7 @@ public abstract class RESTAbstractEntityService<E extends Entity>
      * subclass needs to override this to provide specific related
      * searchResults
      */
-    public <T extends Entity> SearchResult<T> searchResult
-    (E entity, Class<T> clazz) {
-        return null;
-    }
+    public abstract <T extends Entity> SearchResult<T> searchResult(E entity, Class<T> clazz);
 
     public SearchResult<E> searchResult() {
         return new RESTSearchResult
@@ -201,7 +198,7 @@ public abstract class RESTAbstractEntityService<E extends Entity>
             }
             //TODO: Handle null case
         } catch (IOException e) {
-           log.error(e);
+            log.error(e);
         } finally {
             closeInputStream(is);
             httpClient.getConnectionManager().shutdown();
@@ -262,12 +259,6 @@ public abstract class RESTAbstractEntityService<E extends Entity>
         extractFacets(facets, root);
         return facets;
     }
-
-    // return all known etags that this client has
-    public SearchResult etags(Principal principal) {
-        return new ETagSearchResult(this, principal).build();
-    }
-
 
     public int putETag(Object etag, Collection ids) {
         if (etag == null || ids == null || ids.isEmpty()) {
@@ -342,10 +333,6 @@ public abstract class RESTAbstractEntityService<E extends Entity>
         return get(getResource(), true, top, skip);
     }
 
-    public List<E> get(final long top, final long skip, final String ordering) {
-        return get(top, skip); // ordering is not currently supported
-    }
-
     public Object newETag(final String name) {
         return newETag(name, null);
     }
@@ -381,7 +368,7 @@ public abstract class RESTAbstractEntityService<E extends Entity>
 
     protected List<E> get(String resource, boolean expand,
                           long top, long skip) {
-        return get(resource, expand, top, skip, null, null);
+        return get(resource, expand, top, skip, new ArrayList(), new ArrayList<Value>());
     }
 
     /**
@@ -434,12 +421,14 @@ public abstract class RESTAbstractEntityService<E extends Entity>
     }
 
     protected List<Value> getETags(long top, long skip) {
-
-        final List<Value> etags = new ArrayList<Value>();
         final String url = buildQueryForCollectionOfETags(top, skip);
-        final JsonNode root = executeGetRequest(url);
+        final JsonNode rootNode = executeGetRequest(url);
+        return extractETagsFromRoot(rootNode);
+    }
 
-        final ArrayNode node = (ArrayNode) root.get(COLLECTION);
+    protected List<Value> extractETagsFromRoot(final JsonNode rootNode) {
+        final List<Value> etags = new ArrayList<Value>();
+        final ArrayNode node = (ArrayNode) rootNode.get(COLLECTION);
         if (isNotNull(node)) {
             for (int i = 0; i < node.size(); ++i) {
                 final Value v = parseETag(node.get(i));
@@ -613,9 +602,7 @@ public abstract class RESTAbstractEntityService<E extends Entity>
     protected void addSingleEntity(List<E> results, JsonNode node) {
         if (isNotNull(node)) {
             E e = getEntity(null, node);
-            if (e != null) {
-                results.add(e);
-            }
+            results.add(e);
         }
     }
 
@@ -762,14 +749,12 @@ public abstract class RESTAbstractEntityService<E extends Entity>
             JsonNode n = node.get(i);
             values.add(getEntitySearch(n));
         }
-        // parse facets if any
-        if (facets != null) {
-            int count = parseFacets(facets, root);
-            // internal value representing hit count
-            facets.add(new IntValue
-                    (getDataSource(), HIT_COUNT_,
-                            count));
-        }
+        int count = parseFacets(facets, root);
+        // internal value representing hit count
+        facets.add(new IntValue
+                (getDataSource(), HIT_COUNT_,
+                        count));
+
     }
 
     /**

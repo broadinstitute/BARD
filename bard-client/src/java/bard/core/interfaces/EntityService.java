@@ -76,6 +76,7 @@ public interface EntityService<E extends Entity> extends Serializable {
     String DOI = "doi";
     String ABS = "abs";
     String PUBLICATIONS = "publications";
+    String EXPERIMENT_ASSAY_ID="assayId";
     String CAP_ASSAY_ID = "capAssayId";
     String BARD_ASSAY_ID = "bardAssayId";
     String PROTOCOL = "protocol";
@@ -169,8 +170,6 @@ public interface EntityService<E extends Entity> extends Serializable {
 
     List<E> get(long top, long skip);
 
-    // format for ordering is FIELD [DESC|ASC]
-    List<E> get(long top, long skip, String ordering);
 
     /*
      * 
@@ -191,9 +190,9 @@ public interface EntityService<E extends Entity> extends Serializable {
     // return facets based on given etag
     Collection<Value> getFacets(Object etag);
 
-    // return all known etags that are accessible by the
-    //  given principal
-    SearchResult<Value> etags(Principal principal);
+//    // return all known etags that are accessible by the
+//    //  given principal
+//    SearchResult<Value> etags(Principal principal);
 
     /*
      * retrieval of related entities

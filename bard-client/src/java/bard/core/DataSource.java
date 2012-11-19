@@ -90,7 +90,8 @@ public class DataSource implements Serializable {
     public static DataSource getCurrent() {
         return DEFAULT;
     }
-
+    //TODO: Legacy code from NCGC, two datasources could be equals but then return different hashcodes
+    //TODO: This should be fixed
     public int hashCode() {
         return name.hashCode() ^ version.hashCode();
     }

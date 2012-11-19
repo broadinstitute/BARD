@@ -1,15 +1,11 @@
 package bard.core.rest
 
-import bard.core.rest.RESTAssayService
-import bard.core.rest.RESTCompoundService
-import bard.core.rest.RESTExperimentService
-import bard.core.rest.RESTProjectService
 import com.fasterxml.jackson.databind.ObjectMapper
+import jdo.JSONNodeTestHelper
 import spock.lang.Shared
 import spock.lang.Specification
 import spock.lang.Unroll
 import bard.core.*
-import jdo.JSONNodeTestHelper
 
 /**
  * Created with IntelliJ IDEA.
@@ -47,6 +43,8 @@ class RESTAbstractEntityServiceUnitSpec extends Specification {
     @Shared RESTProjectService restProjectService = new RESTProjectService(null, "http://bard.nih.gov/api/v7")
     @Shared RESTAssayService restAssayService = new RESTAssayService(null, "http://bard.nih.gov/api/v7")
     @Shared RESTExperimentService restExperimentService = new RESTExperimentService(null, "http://bard.nih.gov/api/v7")
+    @Shared RESTSubstanceService restSubstanceService = new RESTSubstanceService(null, "base")
+    @Shared String ETAG_FACET = JSONNodeTestHelper.ETAG_FACET
 
     void "test toString #label"() {
         when:
@@ -329,6 +327,45 @@ class RESTAbstractEntityServiceUnitSpec extends Specification {
 
     }
 
+    void "addEntityToResults"() {
+        given:
+        final List<Compound> results = []
+        when:
+        restCompoundService.addEntityToResults(results, null)
+        then:
+        assert results.isEmpty()
+
+    }
+
+    void "searchResult"() {
+        when:
+        Project project = this.restSubstanceService.searchResult(new Substance(), Project.class)
+        then:
+        assert !project
+        assert !this.restSubstanceService.isReadOnly()
+
+    }
+
+
+    void "filter"() {
+        when:
+        this.restSubstanceService.filter(new FilterParams())
+        then:
+        thrown(UnsupportedOperationException)
+    }
+
+    void "putETag #label"() {
+        when:
+        restCompoundService.putETag(etag, ids)
+        then:
+        thrown(IllegalArgumentException)
+        where:
+        label          | etag   | ids
+        "etag is null" | null   | [2, 3]
+        "ids is null"  | "etag" | null
+        "ids is empty" | "etag" | []
+    }
+
     void "test parse ETag Null value #label"() {
 
         when:
@@ -423,6 +460,27 @@ class RESTAbstractEntityServiceUnitSpec extends Specification {
 
     }
 
+    void "test getDataSource(String,String)"() {
+        given:
+        String name = "name"
+        String version = "version"
+        when:
+        DataSource dataSource = restCompoundService.getDataSource("name", "version")
+        then:
+        dataSource.getName() == name
+        dataSource.getVersion() == version
+    }
+
+    void "test extractFacets Not Root Array"() {
+        given:
+        final List<Value> facets = []
+        when:
+        restCompoundService.extractFacets(facets, mapper.readTree("{\"nhit\":216}"))
+        then:
+        assert facets.isEmpty()
+
+    }
+
     void "test extractFacetNameAndCountFromNode #label"() {
 
         given:
@@ -448,7 +506,17 @@ class RESTAbstractEntityServiceUnitSpec extends Specification {
         label            | hitsNode                          | expectedHits
         "With Hits node" | mapper.readTree("{\"nhit\":216}") | 216
         "No Hits Node"   | mapper.readTree("\"bogus\":216")  | 0
+    }
 
+    void "test extractETagsFromRoot #label"() {
+        when:
+        final List<Value> listOfValues = restCompoundService.extractETagsFromRoot(node)
+        then:
+        assert listOfValues.isEmpty() == expected
+        where:
+        label                  | node                             | expected
+        "With Collection node" | mapper.readTree(ETAG_FACET)      | false
+        "No Collection Node"   | mapper.readTree("\"bogus\":216") | true
 
     }
 
