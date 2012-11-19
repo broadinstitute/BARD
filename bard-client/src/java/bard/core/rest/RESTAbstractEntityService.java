@@ -234,7 +234,8 @@ public abstract class RESTAbstractEntityService<E extends Entity>
             HttpResponse response = httpclient.execute(get);
 
             HttpEntity entity = response.getEntity();
-            if (entity != null) {
+            if (entity != null
+                    && response.getStatusLine().getStatusCode() == 200) {
                 is = entity.getContent();
                 BufferedReader br = new BufferedReader
                         (new InputStreamReader(is));
@@ -406,7 +407,8 @@ public abstract class RESTAbstractEntityService<E extends Entity>
 
             final HttpResponse response = httpclient.execute(post);
             final HttpEntity entity = response.getEntity();
-            if (entity != null) {
+            if (entity != null
+                    && response.getStatusLine().getStatusCode() == 200) {
                 is = entity.getContent();
                 JsonNode node = this.mapper.readTree(is);
                 addEntityToResults(results, node);

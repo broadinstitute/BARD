@@ -34,6 +34,10 @@
                 <dt>Laboratory Name:</dt>
                 <dd>${projectAdapter.project.getValue('laboratory name').value}</dd>
             </g:if>
+            <g:if test="${projectAdapter?.getNumberOfExperiments()}">
+                <dt>Number Of Experiments:</dt>
+                <dd><span class="badge badge-info">${projectAdapter.getNumberOfExperiments()}</span></dd>
+            </g:if>
         </dl>
     </div>
 
