@@ -12,7 +12,7 @@ class AssayControllerTests {
         assert params != null
 
         Assay assay = Assay.buildWithoutSave()
-        params['assayTitle'] = assay.assayTitle
+        params['assayShortName'] = assay.assayShortName
         params['assayName'] = assay.assayName
         params['assayVersion'] = '1.1'
         params['dateCreated'] = assay.dateCreated
@@ -107,7 +107,7 @@ class AssayControllerTests {
 
         // test invalid parameters in update
         params.id = assay.id
-        params.'assayTitle' = null
+        params.'assayShortName' = null
         controller.update()
 
         assert view == "/assay/edit"

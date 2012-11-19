@@ -23,7 +23,8 @@ class AssayContextServiceUnitSpec extends Specification {
 
     void "test addItemToEndOfList #desc"() {
         given: 'an a'
-        AssayContext targetAssayContext = AssayContext.build(assayContextItems: existingAssayContextItems)
+
+        AssayContext targetAssayContext = AssayContext.build(assayContextItems: createAssayContextItem(numberOfExistingContextItems))
         AssayContext sourceAssayContext = AssayContext.build(contextName: ORIGINAL_CONTEXT_NAME)
         sourceAssayContext.addToAssayContextItems(AssayContextItem.build(valueDisplay: ORIGINAL_CONTEXT_NAME))
         AssayContextItem draggedAssayContextItem = sourceAssayContext.assayContextItems.first()
@@ -36,12 +37,11 @@ class AssayContextServiceUnitSpec extends Specification {
         then:
         assertItemAdded(targetAssayContext, draggedAssayContextItem, sizeAfterAdd, indexOfAddedItem)
 
-
         where:
-        desc                            | existingAssayContextItems                                                                                                                                                              | indexOfAddedItem | sizeAfterAdd
-        'add item to empty list'        | []                                                                                                                                                                                     | 0                | 1
-        'add item to list with 1 item'  | [new AssayContextItem(attributeType: AttributeType.Fixed, attributeElement: new Element())]                                                                                            | 1                | 2
-        'add item to list with 2 items' | [new AssayContextItem(attributeType: AttributeType.Fixed, attributeElement: new Element()), new AssayContextItem(attributeType: AttributeType.Fixed, attributeElement: new Element())] | 2                | 3
+        desc                            | numberOfExistingContextItems | indexOfAddedItem | sizeAfterAdd
+        'add item to empty list'        | 0                            | 0                | 1
+        'add item to list with 1 item'  | 1                            | 1                | 2
+        'add item to list with 2 items' | 2                            | 2                | 3
 
     }
 
@@ -63,7 +63,7 @@ class AssayContextServiceUnitSpec extends Specification {
 
     void "test addItemAtIndex #desc"() {
         given:
-        AssayContext targetAssayContext = AssayContext.build(assayContextItems: existingAssayContextItems)
+        AssayContext targetAssayContext = AssayContext.build(assayContextItems: createAssayContextItem(numberOfExistingContextItems))
         AssayContext sourceAssayContext = AssayContext.build(contextName: ORIGINAL_CONTEXT_NAME)
         sourceAssayContext.addToAssayContextItems(AssayContextItem.build(valueDisplay: ORIGINAL_CONTEXT_NAME))
         AssayContextItem draggedAssayContextItem = sourceAssayContext.assayContextItems.first()
@@ -78,18 +78,26 @@ class AssayContextServiceUnitSpec extends Specification {
 
 
         where:
-        desc                    | existingAssayContextItems                                                                                                                                                              | indexOfAddedItem | sizeAfterAdd
-        'addItem to empty list' | []                                                                                                                                                                                     | 0                | 1
-        'addItem at index 0'    | [new AssayContextItem(attributeType: AttributeType.Fixed, attributeElement: new Element())]                                                                                            | 0                | 2
-        'addItem at index 1'    | [new AssayContextItem(attributeType: AttributeType.Fixed, attributeElement: new Element()), new AssayContextItem(attributeType: AttributeType.Fixed, attributeElement: new Element())] | 1                | 3
+        desc                    | numberOfExistingContextItems | indexOfAddedItem | sizeAfterAdd
+        'addItem to empty list' | 0                            | 0                | 1
+        'addItem at index 0'    | 1                            | 0                | 2
+        'addItem at index 1'    | 2                            | 1                | 3
 
     }
 
-    public void assertItemAdded(AssayContext targetAssayContext, AssayContextItem draggedAssayContextItem, int sizeAfterAdd, int indexOfAddedItem) {
+    private void assertItemAdded(AssayContext targetAssayContext, AssayContextItem draggedAssayContextItem, int sizeAfterAdd, int indexOfAddedItem) {
         assert draggedAssayContextItem.assayContext == targetAssayContext
         assert draggedAssayContextItem in targetAssayContext.assayContextItems
         assert sizeAfterAdd == targetAssayContext.assayContextItems.size()
         assert indexOfAddedItem == targetAssayContext.assayContextItems.indexOf(draggedAssayContextItem)
+    }
+
+    private List<AssayContextItem> createAssayContextItem(int i) {
+        List<AssayContextItem> items = []
+        i.times {
+            items << new AssayContextItem(attributeType: AttributeType.Fixed, attributeElement: new Element())
+        }
+        items
     }
 
 
