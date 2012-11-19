@@ -1,11 +1,10 @@
 package bard.core.rest
 
 import bard.core.adapter.AssayAdapter
+import bard.core.interfaces.SearchResult
+import bard.core.rest.helper.RESTTestHelper
 import spock.lang.Unroll
 import bard.core.*
-import bard.core.interfaces.SearchResult
-
-import bard.core.rest.helper.RESTTestHelper
 
 /**
  * Tests for RESTAssayService in JDO
@@ -22,6 +21,37 @@ class RESTAssayServiceIntegrationSpec extends AbstractRESTServiceSpec {
         assert assayAdapter.assay
         assertAssay(assayAdapter.assay)
 
+    }
+
+    void "test get(resource,expand,top,long) #label"() {
+        given:
+        final String resource = "http://bard.nih.gov/api/v7/search/assays?q=dna"
+        when:
+        final List<Assay> assays = restAssayService.get(resource, expand, 10, 0)
+
+        then:
+        assert assays.size() == size
+        where:
+        label           | expand | size
+        "Expand =true"  | true   | 10
+        "Expand =false" | false  | 10
+    }
+    void "test get(long top,long skip)  #label"() {
+        when:
+        final List<Assay> assays = restAssayService.get(10, 0)
+
+        then:
+        assert assays.size() == size
+        where:
+        label           | expand | size
+        "Expand =true"  | true   | 10
+        "Expand =false" | false  | 10
+    }
+    void "test  getETags(long top, long skip)"() {
+        when:
+        final List<Value> tags = restAssayService.getETags(0, 10)
+        then:
+        assert tags != null
     }
 
     void "test Project From Single Assay #label=#adid"() {
@@ -316,6 +346,12 @@ class RESTAssayServiceIntegrationSpec extends AbstractRESTServiceSpec {
         }
     }
 
+    void "test Get Assays with facets single arg"() {
+        when: "We call the getFactest matehod"
+        final Object etag = restAssayService.newETag("My assay collection");
+        then: "We expect to get back a list of facets"
+        assert etag
+    }
 
 
     void "test Get Assays with facets, #label"() {

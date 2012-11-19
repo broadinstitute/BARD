@@ -5,11 +5,10 @@ package bard.core.rest
 
 import bard.core.adapter.CompoundAdapter
 import bard.core.interfaces.SearchResult
+import bard.core.rest.helper.RESTTestHelper
 import org.junit.Assert
 import spock.lang.Unroll
 import bard.core.*
-
-import bard.core.rest.helper.RESTTestHelper
 
 /**
  * Tests for RESTCompoundService in JDO
@@ -61,6 +60,20 @@ class RESTCompoundServiceIntegrationSpec extends AbstractRESTServiceSpec {
 
         }
 
+    }
+
+    void "test putETag"(){
+        given:
+        Object etag = this.restCompoundService.newETag("My awesome compound collection",
+        Arrays.asList(3235555, 3235556, 3235557, 3235558, 3235559,
+                3235560, 3235561, 3235562, 3235563, 3235564,
+                3235565, 3235566, 3235567, 3235568, 3235569,
+                3235570, 3235571));
+        when:
+         // adding a few more id's to this etag
+        int cnt = restCompoundService.putETag(etag, Arrays.asList(1, 2, 3));
+        then:
+        assert cnt == 3
     }
     /**
      *
@@ -127,6 +140,61 @@ class RESTCompoundServiceIntegrationSpec extends AbstractRESTServiceSpec {
         label                       | cid               | expectedSmiles
         "Find an existing compound" | new Integer(2722) | "OC1=C(Cl)C=C(Cl)C2=C1N=CC=C2"
     }
+    /**
+     * TODO: Uncomment when V8 is released
+     */
+//    void "test searchResult with Project"() {
+//        given:
+//        final Compound compound = new Compound()
+//        compound.setId(new Integer(2722))
+//        when:
+//        final SearchResult<Project> searchResult = this.restCompoundService.searchResult(compound, Project.class)
+//
+//        then:
+//        final List<Project> projects = searchResult.searchResults
+//        assert !projects.isEmpty()
+//
+//        where:
+//        label                       | cid               | expectedSmiles
+//        "Find an existing compound" | new Integer(2722) | "OC1=C(Cl)C=C(Cl)C2=C1N=CC=C2"
+//    }
+
+    void "test searchResult with Assay"() {
+        given:
+        final Compound compound = new Compound()
+        compound.setId(new Integer(313619))
+        when:
+        final SearchResult<Assay> searchResult = this.restCompoundService.searchResult(compound, Assay.class)
+
+        then:
+        final List<Assay> assays = searchResult.searchResults
+        assert !assays.isEmpty()
+
+    }
+
+    void "test searchResult with Experiment"() {
+        given:
+        final Compound compound = new Compound()
+        compound.setId(new Integer(313619))
+        when:
+        final SearchResult<Experiment> searchResult = this.restCompoundService.searchResult(compound, Experiment.class)
+
+        then:
+        final List<Experiment> experiments = searchResult.searchResults
+        assert !experiments.isEmpty()
+
+    }
+
+    void "test getSynonyms"() {
+        given:
+        final Compound compound = new Compound()
+        compound.setId(new Integer(313619))
+        when:
+        final Collection<Value> synonyms = this.restCompoundService.getSynonyms(compound)
+        then:
+        assert !synonyms.isEmpty()
+
+    }
 
     void "test retrieving assays from a compound #label"() {
 
@@ -144,7 +212,7 @@ class RESTCompoundServiceIntegrationSpec extends AbstractRESTServiceSpec {
         assert allAssaysForThisCompound.size() > activeAssaysForThisCompound.size()   // might not hold for all compounds, but it holds for these
         where:
         label                     | cid
-        "Find a compound 313619"  | new Long(313619)
+      // "Find a compound 313619"  | new Long(313619)
         "Find a compound 9660191" | new Long(9660191)
     }
 
@@ -241,7 +309,7 @@ class RESTCompoundServiceIntegrationSpec extends AbstractRESTServiceSpec {
         "Search for Approved Drug" | "\"Chloroxine\"" | 0    | 2   | true   | false
     }
     /**
-     *  TODO: Uncomment when latest is released
+     *  TODO: Uncomment when v8 is released
      */
 //    void "test REST Compound Service dna repair and look at collections returned, bug: https://www.pivotaltracker.com/story/show/36349429"() {
 //        given: "That we can construct a valid search parameter"

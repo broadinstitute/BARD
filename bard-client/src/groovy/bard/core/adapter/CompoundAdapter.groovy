@@ -124,7 +124,7 @@ extends EntityAdapter<Compound> implements MolecularData {
     public Boolean ruleOf5() {
         return mv ? mv.ruleOf5() : null;
     }
-
+    //TODO: Add chemaxon library for this to work
     public int[] fingerprint() {
         return mv ? mv.fingerprint() : null;
     }

@@ -121,5 +121,15 @@ class MolecularDataJChemImplUnitSpec extends Specification {
         assert molecularDataJChem.stereocenters() == 0
         assert molecularDataJChem.definedStereo() == 0
     }
+
+    void "test set Molecule with Exception #label"() {
+        given:
+        final MolecularDataJChemImpl molecularDataJChem = new MolecularDataJChemImpl()
+        final String smiles = ""
+        when:
+        molecularDataJChem.setMolecule(smiles.getBytes())
+        then:
+        thrown(IllegalArgumentException)
+    }
 }
 

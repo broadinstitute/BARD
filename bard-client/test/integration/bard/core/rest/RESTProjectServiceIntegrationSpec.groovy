@@ -1,11 +1,10 @@
 package bard.core.rest
 
 import bard.core.adapter.ProjectAdapter
+import bard.core.interfaces.SearchResult
+import bard.core.rest.helper.RESTTestHelper
 import spock.lang.Unroll
 import bard.core.*
-import bard.core.interfaces.SearchResult
-
-import bard.core.rest.helper.RESTTestHelper
 
 /**
  * Tests for RESTProjectService in JDO
@@ -13,6 +12,12 @@ import bard.core.rest.helper.RESTTestHelper
 @Mixin(RESTTestHelper)
 @Unroll
 class RESTProjectServiceIntegrationSpec extends AbstractRESTServiceSpec {
+    void "test size"() {
+        when:
+        long size = restProjectService.size()
+        then:
+        assert size > 0
+    }
 
     void "test project with probe #label"() {
         when: "The get method is called with the given PID: #pid"
@@ -30,6 +35,27 @@ class RESTProjectServiceIntegrationSpec extends AbstractRESTServiceSpec {
         where:
         label                                   | pid
         "Find an existing Project with a Probe" | new Integer(17)
+    }
+    /**
+     *
+     */
+    void "test projects with assays #label"() {
+
+        when: "The get method is called with the given PID: #pid"
+        final Project project = restProjectService.get(pid)
+        then: "A Project is returned with the expected information"
+        assert project
+        assert pid == project.id
+        final ProjectAdapter projectAdapter = new ProjectAdapter(project)
+        assert projectAdapter.numberOfExperiments
+
+        final SearchResult<Assay> searchResults = restProjectService.searchResult(project, Assay.class)
+        final List<Assay> assays = searchResults.searchResults
+        assert assays
+        assert !assays.isEmpty()
+        where:
+        label                      | pid
+        "Find an existing Project" | new Integer(179)
     }
     /**
      *

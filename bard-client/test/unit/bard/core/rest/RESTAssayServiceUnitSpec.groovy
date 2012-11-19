@@ -19,15 +19,9 @@ class RESTAssayServiceUnitSpec extends Specification {
     @Shared ObjectMapper mapper = new ObjectMapper();
     @Shared String TARGET_NODE = JSONNodeTestHelper.TARGET_NODE
     @Shared String TARGETS_NODE = JSONNodeTestHelper.TARGETS_NODE
+    @Shared String ASSAY_SUMMARY_SEARCH_RESULTS = JSONNodeTestHelper.ASSAY_SUMMARY_SEARCH_RESULTS
+    @Shared String ASSAY_EXPANDED_SEARCH_RESULTS = JSONNodeTestHelper.ASSAY_EXPANDED_SEARCH_RESULTS
     @Shared String NO_TARGET_NODE = JSONNodeTestHelper.COMPOUND_SEARCH_RESULTS
-
-    @Shared String ASSAY_NODE = '''
-          {
-            "assay_id":"2377",
-            "name":"NCI Yeast Anticancer Drug Screen. Data for the mgt1 strain",
-            "highlight":"gi|6320001|ref|NP_010081.1|DNA repair methyltransferase (6-O-methylguanine-DNA methylase) involved in protection against DNA alkylation damage; Mgt1p [Saccharomyces cerevisiae]"
-        }
-        '''
 
     void setup() {
         this.entityServiceManager = Mock(RESTEntityServiceManager)
@@ -139,7 +133,7 @@ class RESTAssayServiceUnitSpec extends Specification {
     }
 
 
-    void "getEntitySearch With Assay"() {
+    void "getEntitySearch #label"() {
         when:
         final Assay resultAssay = this.restAssayService.getEntitySearch(assay, node)
 
@@ -147,9 +141,22 @@ class RESTAssayServiceUnitSpec extends Specification {
         assert resultAssay
         assert resultAssay.getId() == 2377
         where:
-        label               | node                        | assay
-        "Assay is not null" | mapper.readTree(ASSAY_NODE) | new Assay()
-        "Assay is null"     | mapper.readTree(ASSAY_NODE) | null
+        label               | node                                          | assay
+        "Assay is not null" | mapper.readTree(ASSAY_SUMMARY_SEARCH_RESULTS) | new Assay()
+        "Assay is null"     | mapper.readTree(ASSAY_SUMMARY_SEARCH_RESULTS) | null
+    }
+
+    void "getEntity #label"() {
+        when:
+        final Assay resultAssay = this.restAssayService.getEntity(assay, node)
+
+        then:
+        assert resultAssay
+        assert resultAssay.getId() == 600
+        where:
+        label               | node                                           | assay
+        "Assay is not null" | mapper.readTree(ASSAY_EXPANDED_SEARCH_RESULTS) | new Assay()
+        "Assay is null"     | mapper.readTree(ASSAY_EXPANDED_SEARCH_RESULTS) | null
     }
 
     void "addKeyValuesAsString Empty Keys and Values Node"() {

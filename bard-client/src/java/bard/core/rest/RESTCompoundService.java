@@ -30,7 +30,7 @@ public class RESTCompoundService extends RESTAbstractEntityService<Compound>
     //this is thread safe
     final XStream xstream;
 
-    protected RESTCompoundService
+    public RESTCompoundService
             (RESTEntityServiceManager srvman, String baseURL) {
         super(srvman, baseURL);
         //initialize xstream
@@ -158,12 +158,10 @@ public class RESTCompoundService extends RESTAbstractEntityService<Compound>
     }
 
     protected Assay jsonNodeToAssay(final JsonNode jsonNode, final RESTAssayService restAssayService) {
-        Assay assay = null;
         if (isNotNull(jsonNode)) {
-            assay = new Assay();
-            restAssayService.getEntity(assay, jsonNode);
+            return restAssayService.getEntity(null, jsonNode);
         }
-        return assay;
+        return null;
     }
 
     protected final void addSynonyms(final List<Value> synonyms, final JsonNode node, final DataSource ds) {
@@ -184,17 +182,14 @@ public class RESTCompoundService extends RESTAbstractEntityService<Compound>
         }
     }
 
-    //TODO: Integration test
     public Collection<Value> getSynonyms(Compound compound) {
         final List<Value> synonyms = new ArrayList<Value>();
         final String url = getResource(compound.getId() + SYNONYMS);
         final DataSource ds = getDataSource
                 (EntityNamedSources.PubChemSynonymSource);
         ds.setURL(url);
-        JsonNode node = executeGetRequest(url);
-        if (isNotNull(node) && node.isArray()) {
-            addSynonyms(synonyms, node, ds);
-        }
+        final JsonNode node = executeGetRequest(url);
+        addSynonyms(synonyms, node, ds);
         return synonyms;
     }
 
@@ -316,13 +311,16 @@ public class RESTCompoundService extends RESTAbstractEntityService<Compound>
         }
     }
 
-
     protected void addMolecularData(final Compound compound, final JsonNode node) {
         final DataSource ds = getDataSource();
         final MolecularData md = new MolecularDataJChemImpl();
-        md.setMolecule(node);
+        final JsonNode iso_smiles = node.get(ISO_SMILES);
+        if (isNotNull(iso_smiles)) {
+            md.setMolecule(iso_smiles.asText());
+        } else {
+            md.setMolecule(node);
+        }
         compound.addValue(new MolecularValue(ds, Compound.MolecularValue, md));
-
     }
 
     protected void addAnnotationsToCompound(Compound compound, JsonNode node) {
@@ -378,15 +376,6 @@ public class RESTCompoundService extends RESTAbstractEntityService<Compound>
         }
     }
 
-    protected void addMolecularDataWithIsoSmiles(Compound compound, JsonNode node) {
-        final DataSource ds = getDataSource();
-        final MolecularData md = new MolecularDataJChemImpl();
-        final JsonNode iso_smiles = node.get(ISO_SMILES);
-        if (isNotNull(iso_smiles)) {
-            md.setMolecule(iso_smiles.asText());
-        }
-        compound.addValue(new MolecularValue(ds, Compound.MolecularValue, md));
-    }
 
     protected Compound getEntity(Compound compound, JsonNode node) {
         if (compound == null) {
@@ -414,7 +403,7 @@ public class RESTCompoundService extends RESTAbstractEntityService<Compound>
         addProbe(compound, node);
         addPreferredTerm(compound, node);
         addHighlight(compound, node);
-        addMolecularDataWithIsoSmiles(compound, node);
+        addMolecularData(compound, node);
         addAnnotationsToCompound(compound, node);
         return compound;
     }

@@ -87,6 +87,19 @@ class RESTExperimentServiceIntegrationSpec extends AbstractRESTServiceSpec {
         assert exprs
         assert !exprs.isEmpty()
     }
+    void "test searchResult with Compound"() {
+        given:
+        final Experiment experiment = new Experiment()
+        experiment.setId(new Integer(2273))
+        when:
+        final SearchResult<Assay> searchResult = this.restExperimentService.searchResult(experiment, Compound.class)
+
+        then:
+        final List<Compound> compounds = searchResult.searchResults
+        assert !compounds.isEmpty()
+
+    }
+
 
     void "test retrieving the experimental data for known compounds in an experiment #label"() {
         given:

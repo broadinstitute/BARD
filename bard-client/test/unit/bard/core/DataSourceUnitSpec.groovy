@@ -59,16 +59,15 @@ class DataSourceUnitSpec extends Specification {
         assert dataSource.getURL() == url
         assert dataSource.getVersion() == version
     }
-//    public boolean equals(Object obj) {
-//        if (obj == this) return true;
-//        if (!(obj instanceof DataSource)) return false;
-//        DataSource ds = (DataSource) obj;
-//
-//        return name.equals(ds.name)
-//        && (version.equals("*")
-//                || ds.version.equals("*")
-//                || version.equals(ds.version));
-//    }
+
+    void "test hashCode"() {
+        given:
+        DataSource dataSource = new DataSource(name, version, url)
+        when:
+        int hashCode = dataSource.hashCode()
+        then:
+        assert hashCode == 334838
+     }
 
     void "test equals compare same instance"() {
         when:
@@ -84,7 +83,7 @@ class DataSourceUnitSpec extends Specification {
         when:
         boolean bool = dataSource.equals(other)
         then:
-        assert bool==expectedResults
+        assert bool == expectedResults
         where:
         label                                        | dataSource                         | other                            | expectedResults
         "Compare to a different instance, but equal" | new DataSource(name, version, url) | new DataSource(name, "*", url)   | true

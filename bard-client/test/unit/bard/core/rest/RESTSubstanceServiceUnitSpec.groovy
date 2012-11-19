@@ -1,14 +1,13 @@
 package bard.core.rest
 
 import bard.core.Substance
-import bard.core.interfaces.EntityServiceManager
 import spock.lang.Specification
 import spock.lang.Unroll
 
 @Unroll
 class RESTSubstanceServiceUnitSpec extends Specification {
     RESTSubstanceService restSubstanceService
-    EntityServiceManager entityServiceManager
+    RESTEntityServiceManager entityServiceManager
 
 
     void setup() {
