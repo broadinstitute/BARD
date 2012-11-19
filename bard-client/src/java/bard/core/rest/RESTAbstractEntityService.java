@@ -76,8 +76,8 @@ public abstract class RESTAbstractEntityService<E extends Entity>
      *
      * @return the relative url to the promiscuity plugin
      */
-    protected String getPromiscuityResource() {
-        return new StringBuilder(baseURL).append("/plugins/badapple/prom/cid/").toString();
+    protected String getPromiscuityResource(Long cid) {
+        return new StringBuilder(baseURL).append("/plugins/badapple/prom/cid/").append(cid).append("?expand=true").toString();
     }
 
     /*

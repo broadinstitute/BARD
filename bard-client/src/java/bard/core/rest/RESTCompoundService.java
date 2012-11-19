@@ -59,7 +59,7 @@ public class RESTCompoundService extends RESTAbstractEntityService<Compound>
      * @return {@link PromiscuityScore}
      */
     public PromiscuityScore getPromiscuityScore(Long cid) {
-        final String url = getPromiscuityResource() + cid;
+        final String url = getPromiscuityResource(cid);
         DefaultHttpClient httpClient = new DefaultHttpClient();
         InputStream is = null;
         try {

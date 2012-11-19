@@ -37,7 +37,14 @@ class RESTCompoundServiceUnitSpec extends Specification {
     void tearDown() {
         // Tear down logic here
     }
-
+   void "getPromiscuityResource"(){
+       given:
+       long cid = 200
+       when:
+       String url = restCompoundService.getPromiscuityResource(cid)
+       then:
+       assert url =="base/plugins/badapple/prom/cid/200?expand=true"
+   }
     void "buildQueryForTestedAssays #label"() {
         given:
         final Compound compound = new Compound("name")
