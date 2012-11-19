@@ -56,6 +56,8 @@ modules = {
        // resource url:'/js/jquery.address-1.4/jquery.address-1.4.js?autoUpdate=1&crawling=1&history=1&tracker=trackFunction&state=/&strict=0&wrap=1'
     }
     jqueryMobile {
+        dependsOn 'jquery, jquery-ui, jquery-theme'
+
         resource url:"css/jquery.mobile-1.2.0/jquery.mobile.structure-1.2.0.css"
         resource url:"css/jquery.mobile-1.2.0/jquery.mobile.structure-1.2.0.min.css"
         resource url:"css/jquery.mobile-1.2.0/jquery.mobile.theme-1.2.0.css"

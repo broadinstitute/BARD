@@ -11,6 +11,7 @@
 <html>
 <head>
     <title>My Page</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <r:require modules="jqueryMobile"/>
     <r:layoutResources/>
 </head>
