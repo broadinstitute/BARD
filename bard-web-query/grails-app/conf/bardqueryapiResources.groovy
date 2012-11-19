@@ -56,13 +56,13 @@ modules = {
        // resource url:'/js/jquery.address-1.4/jquery.address-1.4.js?autoUpdate=1&crawling=1&history=1&tracker=trackFunction&state=/&strict=0&wrap=1'
     }
     jqueryMobile {
-        resource uri:"js/jquery.mobile-1.2/jquery.mobile.custom.js"
-        resource uri:"js/jquery.mobile-1.2/jquery.mobile.custom.min.js"
-        resource uri:"css/jquery.mobile-1.2/jquery.mobile.custom.css"
-        resource uri:"css/jquery.mobile-1.2/jquery.mobile.custom.min.css"
-        resource uri:"css/jquery.mobile-1.2/jquery.mobile.custom.structure.css"
-        resource uri:"css/jquery.mobile-1.2/jquery.mobile.custom.structure.min.css"
-        resource uri:"css/jquery.mobile-1.2/jquery.mobile.custom.theme.css"
-        resource uri:"css/jquery.mobile-1.2/jquery.mobile.custom.theme.min.css"
+        resource url:"css/jquery.mobile-1.2.0/jquery.mobile.structure-1.2.0.css"
+        resource url:"css/jquery.mobile-1.2.0/jquery.mobile.structure-1.2.0.min.css"
+        resource url:"css/jquery.mobile-1.2.0/jquery.mobile.theme-1.2.0.css"
+        resource url:"css/jquery.mobile-1.2.0/jquery.mobile.theme-1.2.0.min.css"
+        resource url:"css/jquery.mobile-1.2.0/jquery.mobile-1.2.0.css"
+        resource url:"css/jquery.mobile-1.2.0/jquery.mobile-1.2.0.min.css"
+        resource url:"js/jquery.mobile-1.2.0/jquery.mobile-1.2.0.js"
+        resource url:"js/jquery.mobile-1.2.0/jquery.mobile-1.2.0.min.js"
     }
 }

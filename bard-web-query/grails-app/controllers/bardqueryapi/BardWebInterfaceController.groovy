@@ -402,6 +402,10 @@ class BardWebInterfaceController {
                     "AutoComplete encoutered an error :\n${exp.message}")
         }
     }
+
+    def testMobilePage() {
+
+    }
 }
 /**
  * We would use this helper class as Mixin for
