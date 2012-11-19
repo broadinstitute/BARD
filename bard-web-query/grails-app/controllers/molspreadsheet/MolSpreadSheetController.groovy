@@ -13,6 +13,8 @@ class MolSpreadSheetController {
     MolecularSpreadSheetService molecularSpreadSheetService
     CartCompoundService cartCompoundService
     CartProjectService cartProjectService
+    def exportService
+    def grailsApplication  //inject GrailsApplication
 
     def index() {
         render(view: 'molecularSpreadSheet')

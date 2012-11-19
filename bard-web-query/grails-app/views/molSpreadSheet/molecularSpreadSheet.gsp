@@ -1,6 +1,7 @@
 <%@ page import="molspreadsheet.SpreadSheetActivityStorage; molspreadsheet.MolSpreadSheetData; molspreadsheet.SpreadSheetActivity; molspreadsheet.MolecularSpreadSheetService; bardqueryapi.FacetFormType" %>
 <%@ page import="molspreadsheet.MolSpreadSheetCellType; molspreadsheet.MolSpreadSheetCell;" %>
 <%@ page import="com.metasieve.shoppingcart.ShoppingCartService;" %>
+<r:require module="export"/>
 <html>
 <head>
     <meta name="layout" content="logoSearchCartAndFooter"/>

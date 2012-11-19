@@ -24,7 +24,7 @@
         <g:render template="../bardWebInterface/facets"
                   model="['facets': facets, 'formName': FacetFormType.AssayFacetForm]"/>
     </div>
-
+    <export:formats />
     <div class="span10">
         <g:if test="${molSpreadSheetData?.getColumnCount() > 0}">
             <g:set var="columnWidth" value="${100.0/((molSpreadSheetData?.getColumnCount()-1) as float)}" />
