@@ -2,17 +2,18 @@ package molspreadsheet
 
 class MolSpreadSheetData {
 
-    static hasMany = [ molSpreadSheetCell : MolSpreadSheetCell ]
-    static transients = ['rowCount','columnCount']
+    static hasMany = [molSpreadSheetCell: MolSpreadSheetCell]
+    static transients = ['rowCount', 'columnCount']
 
-    Map<String,MolSpreadSheetCell> mssData   = [:]
-    Map<Long,Integer> rowPointer  = [:]
-    Map<Long,Integer> columnPointer   = [:]
-    List<List<String>> mssHeaders   = []
-    List<String> experimentNameList   = []
-    List<String> experimentFullNameList   = []
-    Map<Integer,String> mapColumnsToAssay   = [:]
-    Map<Integer,String> mapColumnsToAssayName   = [:]
+    Map<String, MolSpreadSheetCell> mssData = [:]
+    Map<Long, Integer> rowPointer = [:]
+    Map<Long, Integer> columnPointer = [:]
+    List<List<String>> mssHeaders = []
+    List<String> experimentNameList = []
+    List<String> experimentFullNameList = []
+    Map<Integer, String> mapColumnsToAssay = [:]
+    Map<Integer, String> mapColumnsToAssayName = [:]
+    MolSpreadsheetDerivedMethod molSpreadsheetDerivedMethod
 
     /**
      * Display a cell, as specified by a row and column
@@ -26,17 +27,17 @@ class MolSpreadSheetData {
         MolSpreadSheetCell molSpreadSheetCell
         if (mssData.containsKey(key)) {
             molSpreadSheetCell = mssData[key]
-            returnValue = molSpreadSheetCell.mapForMolecularSpreadsheet ()
-        }   else {  // This is a critical error.  Try to cover all the bases so we don't crash at least.
-            returnValue.put("value","-")
+            returnValue = molSpreadSheetCell.mapForMolecularSpreadsheet()
+        } else {  // This is a critical error.  Try to cover all the bases so we don't crash at least.
+            returnValue.put("value", "-")
             returnValue.put("name", "Unknown name")
-            returnValue.put("smiles","Unknown smiles")
+            returnValue.put("smiles", "Unknown smiles")
         }
         returnValue
     }
 
 
-    SpreadSheetActivityStorage findSpreadSheetActivity(int rowCnt, int colCnt){
+    SpreadSheetActivityStorage findSpreadSheetActivity(int rowCnt, int colCnt) {
         SpreadSheetActivityStorage spreadSheetActivityStorage = null
         String key = "${rowCnt}_${colCnt}"
         MolSpreadSheetCell molSpreadSheetCell
@@ -47,12 +48,11 @@ class MolSpreadSheetData {
         return spreadSheetActivityStorage
     }
 
-
     /**
      *
      * @return
      */
-    int getRowCount(){
+    int getRowCount() {
         if (rowPointer) {
             return rowPointer.size()
         }
@@ -63,7 +63,7 @@ class MolSpreadSheetData {
      *
      * @return
      */
-    int getColumnCount(){
+    int getColumnCount() {
         if (mssHeaders) {
             return mssHeaders.flatten().size()
         }
@@ -72,7 +72,7 @@ class MolSpreadSheetData {
     }
 
 
-    int getSuperColumnCount(){
+    int getSuperColumnCount() {
         if (mssHeaders) {
             return mssHeaders.size()
         }
@@ -80,7 +80,7 @@ class MolSpreadSheetData {
 
     }
 
-    List<String> getSubColumns( int experimentCount) {
+    List<String> getSubColumns(int experimentCount) {
         List<String> subColumns = []
         if (experimentCount < this.mssHeaders.size())
             subColumns = this.mssHeaders[experimentCount]
@@ -90,7 +90,7 @@ class MolSpreadSheetData {
 
 
 
-    List<String> getColumns(){
+    List<String> getColumns() {
         if (mssHeaders) {
             return mssHeaders.flatten()
         }
@@ -99,11 +99,27 @@ class MolSpreadSheetData {
     }
 
     static constraints = {
-        mssData  (nullable: false)
-        rowPointer  (nullable: false)
-        columnPointer  (nullable: false)
+        mssData(nullable: false)
+        rowPointer(nullable: false)
+        columnPointer(nullable: false)
         //mssHeaders (nullable: false)
+        molSpreadsheetDerivedMethod(nullable: true)
     }
 }
 
 
+enum MolSpreadsheetDerivedMethod {
+    Compounds_NoAssays_NoProjects("Only compound(s); no assays or projects"),
+    NoCompounds_Assays_NoProjects("Only assay(s); no compounds or projects"),
+    NoCompounds_NoAssays_Projects("Only project(s); no assays or compounds");
+
+    private final String description
+
+    MolSpreadsheetDerivedMethod(String desc) {
+        this.description = desc
+    }
+
+    public String description() {
+        return description
+    }
+}

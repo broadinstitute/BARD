@@ -18,15 +18,10 @@ class RESTAssayServiceUnitSpec extends Specification {
     EntityServiceManager entityServiceManager
     @Shared ObjectMapper mapper = new ObjectMapper();
     @Shared String TARGET_NODE = JSONNodeTestHelper.TARGET_NODE
+    @Shared String TARGETS_NODE = JSONNodeTestHelper.TARGETS_NODE
+    @Shared String ASSAY_SUMMARY_SEARCH_RESULTS = JSONNodeTestHelper.ASSAY_SUMMARY_SEARCH_RESULTS
+    @Shared String ASSAY_EXPANDED_SEARCH_RESULTS = JSONNodeTestHelper.ASSAY_EXPANDED_SEARCH_RESULTS
     @Shared String NO_TARGET_NODE = JSONNodeTestHelper.COMPOUND_SEARCH_RESULTS
-
-    @Shared String ASSAY_NODE = '''
-          {
-            "assay_id":"2377",
-            "name":"NCI Yeast Anticancer Drug Screen. Data for the mgt1 strain",
-            "highlight":"gi|6320001|ref|NP_010081.1|DNA repair methyltransferase (6-O-methylguanine-DNA methylase) involved in protection against DNA alkylation damage; Mgt1p [Saccharomyces cerevisiae]"
-        }
-        '''
 
     void setup() {
         this.entityServiceManager = Mock(RESTEntityServiceManager)
@@ -110,6 +105,21 @@ class RESTAssayServiceUnitSpec extends Specification {
         "No ACC Node"     | mapper.readTree(NO_TARGET_NODE) | true
     }
 
+    void "addTargets Full Properties #label"() {
+        given:
+        final Assay assay = new Assay()
+        when:
+        this.restAssayService.addTargets(node, assay)
+
+        then:
+        final Collection<Biology> targets = assay.getTargets()
+        assert targets.isEmpty() == isNodeEmpty
+        where:
+        label             | node                            | isNodeEmpty
+        "Full Properties" | mapper.readTree(TARGETS_NODE)   | false
+        "No ACC Node"     | mapper.readTree(NO_TARGET_NODE) | true
+    }
+
     void "addHighlight No Highlight Property in JSON"() {
         given:
         final Assay assay = new Assay()
@@ -123,7 +133,7 @@ class RESTAssayServiceUnitSpec extends Specification {
     }
 
 
-    void "getEntitySearch With Assay"() {
+    void "getEntitySearch #label"() {
         when:
         final Assay resultAssay = this.restAssayService.getEntitySearch(assay, node)
 
@@ -131,36 +141,34 @@ class RESTAssayServiceUnitSpec extends Specification {
         assert resultAssay
         assert resultAssay.getId() == 2377
         where:
-        label               | node                        | assay
-        "Assay is not null" | mapper.readTree(ASSAY_NODE) | new Assay()
-        "Assay is null"     | mapper.readTree(ASSAY_NODE) | null
+        label               | node                                          | assay
+        "Assay is not null" | mapper.readTree(ASSAY_SUMMARY_SEARCH_RESULTS) | new Assay()
+        "Assay is null"     | mapper.readTree(ASSAY_SUMMARY_SEARCH_RESULTS) | null
+    }
+
+    void "getEntity #label"() {
+        when:
+        final Assay resultAssay = this.restAssayService.getEntity(assay, node)
+
+        then:
+        assert resultAssay
+        assert resultAssay.getId() == 600
+        where:
+        label               | node                                           | assay
+        "Assay is not null" | mapper.readTree(ASSAY_EXPANDED_SEARCH_RESULTS) | new Assay()
+        "Assay is null"     | mapper.readTree(ASSAY_EXPANDED_SEARCH_RESULTS) | null
     }
 
     void "addKeyValuesAsString Empty Keys and Values Node"() {
-        //final Assay assay, final ArrayNode keys, final ArrayNode vals, final DataSource ds) {
         given:
         Assay assay = new Assay()
         ArrayNode keys = null
         ArrayNode vals = null
         DataSource ds = new DataSource("name")
         when:
-        this.restAssayService.addKeyValueAsString(assay, keys, vals, ds)
+        this.restAssayService.addKeyValuesAsString(assay, keys, vals, ds)
         then:
-        assert !assay.getValues(ds).children.isEmpty()
+        assert assay.getValues(ds).children.isEmpty()
     }
-//    void "searchResult #label"(){
-//        given:
-//        Assay assay = new Assay()
-//        SearchResult searchResult = new RESTSearchResult()
-//        when:
-//        final SearchResult<Project> result = this.restAssayService.searchResult(assay, Project)
-//        then:
-//        restAssayService.getSearchResult(_,_) >>{searchResult}
-//        restAssayService.getServiceManager() >> {entityServiceManager}
-//        restAssayService.getServiceManager().getService(_) >> {restAssayService}
-//
-//        assert result
-//
-//    }
 }
 

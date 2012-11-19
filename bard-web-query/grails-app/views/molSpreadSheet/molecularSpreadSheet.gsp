@@ -18,8 +18,10 @@
     </div>
 </div>
 
-<div id="molecularSpreadSheet" href="${createLink(controller:'molSpreadSheet' , action: 'molecularSpreadSheet')}">
+<div id="molecularSpreadSheet" href="${createLink(controller: 'molSpreadSheet', action: 'molecularSpreadSheet')}">
 
 </div>
+%{--<export:formats formats="['excel','pdf']"/>--}%
+
 </body>
 </html>

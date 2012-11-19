@@ -25,6 +25,8 @@ public class ServiceParams implements Serializable {
         this.skip = skip;
     }
 
+
+
     public Long getTop () { return top; }
     public ServiceParams setTop (Long top) { 
         this.top = top;

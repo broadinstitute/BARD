@@ -1,9 +1,314 @@
 package jdo
 
+
 /**
  *
  */
 class JSONNodeTestHelper {
+    public static final ETAG_FACET='''
+    {
+       "collection":
+       [
+           {
+               "accessed": 1348295120000,
+               "etag_id": "de6add5339d1af20",
+               "count": 7109,
+               "status": 1,
+               "created": 1348240757000,
+               "description": "The NCGC Pharmaceutical Collection",
+               "name": "NPC database",
+               "type": "gov.nih.ncgc.bard.entity.Compound",
+               "url": "http://tripod.nih.gov/npc",
+               "modified": 1348240757000
+           }
+       ],
+       "link": null
+    }
+'''
+
+
+    public static final EXPERIMENT_SINGLE_READOUT='''
+    {
+        "name": "Activation",
+        "s0": 2.08,
+        "sInf": 108.52,
+        "hill": 0.7,
+        "ac50": 0.05,
+        "cr":
+        [
+                [
+                        1.7,
+                        3.2
+                ]
+         ]
+       }
+    '''
+    public static final EXPERIMENT_READOUTS='''
+    {"readouts":
+    [
+    {
+        "name": "Activation",
+        "s0": 2.08957,
+        "sInf": 108.524,
+        "hill": 0.746827,
+        "ac50": 0.0000053989999999999995,
+        "cr":
+        [
+                [
+                        1.79999996908009e-9,
+                        3.2
+                ],
+                [
+                        5.4000001400709206e-9,
+                        6
+                ]
+        ]
+     }
+     ]
+     }
+     '''
+
+    public static final EXPERIMENT_SEARCH_RESULTS='''
+{
+   "exptId":346,
+   "assayId":[
+      {
+         "aid":2209,
+         "bardAssayId":346,
+         "capAssayId":4279,
+         "category":2,
+         "type":0,
+         "summary":0,
+         "assays":0,
+         "classification":0,
+         "name":"Fluorescence-based dose response cell-based high-throughput screening assay for potentiators or agonists of NPY-Y1.",
+         "description":"Source (MLPCN Center Name)",
+         "source":"The Scripps Research Institute Molecular Screening Center",
+         "grantNo":null,
+         "protocol":"Assay Overview",
+         "comments":"Due to the increasing",
+         "deposited":null,
+         "updated":null,
+         "publications":[
+            {
+               "title":"Chronic intracerebroventricular administration of anti-neuropeptide Y antibody stimulates starvation-induced feeding via compensatory responses in the hypothalamus.",
+               "doi":"10.1016/j.brainres.2007.01.086",
+               "abs":"To investigate ",
+               "pubmedId":17320051,
+               "resourcePath":"/documents/17320051"
+            },
+            {
+               "title":"Decreased gene expression of neuropeptide Y and its receptors in hippocampal regions during ethanol withdrawal in rats.",
+               "doi":"10.1016/j.neulet.2007.07.050",
+               "abs":"Ethanol withdrawal ",
+               "pubmedId":17723274,
+               "resourcePath":"/documents/17723274"
+            },
+            {
+               "title":"The NPY system in stress, anxiety and depression.",
+               "doi":"10.1016/j.npep.2004.05.002",
+               "abs":"NPY antagonizes behavioral",
+               "pubmedId":15337373,
+               "resourcePath":"/documents/15337373"
+            }
+         ],
+         "targets":[
+            {
+               "acc":"P25929",
+               "name":"Neuropeptide Y receptor type 1",
+               "description":null,
+               "status":"Reviewed",
+               "geneId":4886,
+               "taxId":9606,
+               "resourcePath":"/targets/accession/P25929"
+            }
+         ],
+         "experiments":[
+            346
+         ],
+         "projects":[
+            67
+         ],
+         "gobp_id":[
+            "GO:0009719",
+            "GO:0051239"
+         ],
+         "gobp_term":[
+            "response to endogenous stimulus",
+            "regulation of multicellular organismal process"
+         ],
+         "gomf_term":[
+            "G-protein coupled receptor activity",
+            "neuropeptide Y receptor activity"
+         ],
+         "gomf_id":[
+            "GO:0004930",
+            "GO:0004983"
+         ],
+         "gocc_id":[
+            "GO:0043005",
+            "GO:0044444"
+         ],
+         "gocc_term":[
+            "neuron projection",
+            "cytoplasmic part"
+         ],
+         "av_dict_label":[
+            "neuropeptide Y receptor Y1 [Homo sapiens]",
+            "Homo sapiens"
+         ],
+         "ak_dict_label":[
+            "gene",
+            "species name"
+         ],
+         "resourcePath":"/assays/346"
+      }
+   ],
+   "pubchemAid":2209,
+   "category":2,
+   "type":2,
+   "summary":0,
+   "assays":0,
+   "classification":2,
+   "substances":3,
+   "compounds":3,
+   "name":"Fluorescence-based dose response cell-based high-throughput screening assay for potentiators or agonists of NPY-Y1.",
+   "description":"Source (MLPCN Center Name)",
+   "source":null,
+   "grantNo":null,
+   "deposited":null,
+   "updated":null,
+   "hasProbe":false,
+   "projectIdList":[
+      67
+   ],
+   "resourcePath":"/experiments/346"
+}
+'''
+    public static final CAP_ANNOTATIONS ='''
+    {       "av_dict_label":
+                    [
+                            "X01 MH083262-01",
+                             "microtubule-associated protein tau [Homo sapiens]"
+                    ],
+            "ak_dict_label":
+                    [
+                            "grant number",
+                            "gene"
+                    ]
+    }
+'''
+    public static final PROBES = '''
+    {           "probes":
+                    [
+                            {
+                                "cid": 9795907,
+                                "sids":
+                                [
+                                        14751169,
+                                        142290905
+                                ],
+                                "probeId": "ML103",
+                                "url": "https://mli.nih.gov/mli/?dl_id=976",
+                                "smiles": "NC1=C2C(=CS1)C(=NN(C2=O)C3=CC=CC=C3)C(O)=O",
+                                "name": "ML103",
+                                "iupacName": "5-amino-4-oxo-3-phenylthieno[3,4-d]pyridazine-1-carboxylic acid",
+                                "mwt": 287.294,
+                                "tpsa": 124,
+                                "exactMass": 287.036,
+                                "xlogp": 2.3,
+                                "complexity": 462,
+                                "rotatable": 2,
+                                "hbondAcceptor": 6,
+                                "hbondDonor": 2,
+                                "anno_val":
+                                [
+                                ],
+                                "anno_key":
+                                [
+                                ],
+                                "highlight": null,
+                                "resourcePath": "/compounds/9795907"
+                            },
+                                                        {
+                                "cid": 9795906,
+                                "sids":
+                                [
+                                        14751169,
+                                        142290905
+                                ],
+                                "probeId": "ML104",
+                                "url": "https://mli.nih.gov/mli/?dl_id=976",
+                                "smiles": "NC1=C2C(=CS1)C(=NN(C2=O)C3=CC=CC=C3)C(O)=O",
+                                "name": "ML103",
+                                "iupacName": "5-amino-4-oxo-3-phenylthieno[3,4-d]pyridazine-1-carboxylic acid",
+                                "mwt": 287.294,
+                                "tpsa": 124,
+                                "exactMass": 287.036,
+                                "xlogp": 2.3,
+                                "complexity": 462,
+                                "rotatable": 2,
+                                "hbondAcceptor": 6,
+                                "hbondDonor": 2,
+                                "anno_val":
+                                [
+                                ],
+                                "anno_key":
+                                [
+                                ],
+                                "highlight": null,
+                                "resourcePath": "/compounds/9795907"
+                            }
+                    ]
+                    }
+'''
+    public static final COMPOUND_SYNONYMS = '''
+    [
+       "NSC228155",
+       "MLS000756562",
+       "NSC-228155",
+       "AC1L7NUE",
+       "CHEMBL505670",
+       "HMS2796J10",
+       "ZINC01757986",
+       "SMR000448993",
+       "7-nitro-4-(1-oxidopyridin-1-ium-2-yl)sulfanyl-2,1,3-benzoxadiazole"
+    ]
+'''
+    public static final TESTED_ASSAY_NODE = '''
+   {
+  "collection": [
+    {
+      "aid": 1714,
+      "bardAssayId": 411,
+      "capAssayId": 4063,
+      "category": 1,
+      "type": 0,
+      "summary": 0,
+      "assays": 0,
+      "classification": 0,
+      "name": "Identification of Novel Modulators of Cl- dependent Transport Process via HTS: Secondary Assay 3 with KCC2 cells",
+      "description": "description"
+      }
+      ]
+      }
+'''
+    public static final TARGETS_NODE = '''
+              { "targets":
+                    [
+                            {
+                                "acc": "P98170",
+                                "name": "E3 ubiquitin-protein ligase XIAP",
+                                "description": null,
+                                "status": "Reviewed",
+                                "geneId": 331,
+                                "taxId": 9606,
+                                "resourcePath": "/targets/accession/P98170"
+                            }
+                    ]
+                    }
+
+'''
     public static final String SUGGEST_PAIR = '''
 {
 "protocol":
@@ -303,7 +608,7 @@ class JSONNodeTestHelper {
            117595058,
            125659758
        ],
-       "probeId": null,
+       "probeId": "ML108",
        "url": null,
        "smiles": "OC1C(O)C(COP(O)(O)=O)OC(=O)C1O",
        "name": "(3,4,5-trihydroxy-6-oxotetrahydro-2h-pyran-2-yl)methyldihydrogen-phosphat",

@@ -78,68 +78,33 @@ public class Assay extends Entity implements AssayValues {
         return role;
     }
 
-    public void add(Project proj) {
-        projects.add(proj);
-    }
-
-    public boolean remove(Project proj) {
-        return projects.remove(proj);
+    public void addProject(Project project) {
+        projects.add(project);
     }
 
     public Collection<Project> getProjects() {
         return Collections.unmodifiableCollection(projects);
     }
 
-    public Iterator<Project> projects() {
-        return getProjects().iterator();
-    }
-
-    public void add(Experiment expr) {
+    public void addExperiment(Experiment expr) {
         experiments.add(expr);
-    }
-
-    public boolean remove(Experiment expr) {
-        return experiments.remove(expr);
     }
 
     public Collection<Experiment> getExperiments() {
         return Collections.unmodifiableCollection(experiments);
     }
-
-    public Iterator<Experiment> experiments() {
-        return getExperiments().iterator();
-    }
-
-    public void add(Publication expr) {
+    public void addPublication(Publication expr) {
         publications.add(expr);
     }
-
-    public boolean remove(Publication expr) {
-        return publications.remove(expr);
-    }
-
     public Collection<Publication> getPublications() {
         return Collections.unmodifiableCollection(publications);
     }
-
-    public Iterator<Publication> publications() {
-        return getPublications().iterator();
-    }
-
-    public void add(Biology target) {
+    public void addTarget(Biology target) {
         targets.add(target);
-    }
-
-    public boolean remove(Biology target) {
-        return targets.remove(target);
     }
 
     public Collection<Biology> getTargets() {
         return Collections.unmodifiableCollection(targets);
-    }
-
-    public Iterator<Biology> targets() {
-        return getTargets().iterator();
     }
 
     public int getPublicationCount() {
@@ -156,14 +121,5 @@ public class Assay extends Entity implements AssayValues {
 
     public int getTargetCount() {
         return targets.size();
-    }
-
-
-    public String toString() {
-        return getClass().getName() + "{protocol=" + protocol + ",comments="
-                + comments + ",type=" + type + ",role=" + role + ",category=" + category
-                + ",projects=" + projects.size() + ",experiments=" + experiments.size()
-                + ",publications=" + publications.size() + ",targets=" + targets.size()
-                + "," + super.toString() + "}";
     }
 }

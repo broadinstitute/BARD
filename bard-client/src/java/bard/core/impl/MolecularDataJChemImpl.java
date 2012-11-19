@@ -12,6 +12,7 @@ import chemaxon.util.MolHandler;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.apache.log4j.Logger;
 
 import java.io.IOException;
 
@@ -20,9 +21,10 @@ import java.io.IOException;
  * Default implementation of MolecularData based on JChem
  */
 public class MolecularDataJChemImpl implements MolecularData {
+    final ObjectMapper mapper = new ObjectMapper();
 
     private static final long serialVersionUID = 0x2ce64ddd6b96665al;
-
+    private static final Logger log = Logger.getLogger(MolecularDataJChemImpl.class);
     protected String formula;
     protected Double mwt;
     protected Double exactMass;
@@ -98,7 +100,7 @@ public class MolecularDataJChemImpl implements MolecularData {
     public Boolean ruleOf5() {
         return this.ruleOf5;
     }
-
+    //TODO: We need to add a ChemAxon library to do this. But do we even need this? I think not.
     public int[] fingerprint() { // bit fingerprint for indexing/searching
         if (fingerprint == null && this.molecule != null) { // lazy evaluation
             MolHandler mh = new MolHandler(this.molecule.cloneMolecule());
@@ -123,12 +125,11 @@ public class MolecularDataJChemImpl implements MolecularData {
                 case MOL:
                 case SDF:
                     return MolExporter.exportToFormat(this.molecule, "mol");
-                case NATIVE:
-                    return this.molecule;
                 default:
-                    throw new IllegalArgumentException("Unsupported format " + format);
+                    return this.molecule;
             }
         } catch (IOException ee) {
+            log.error(ee);
             throw new RuntimeException(ee.getMessage());
         }
 
@@ -153,6 +154,7 @@ public class MolecularDataJChemImpl implements MolecularData {
                 parsePropertiesMol(input.toString());
             }
         } catch (MolFormatException ex) {
+            log.error(ex);
             throw new IllegalArgumentException
                     ("Not a molecular format " + ex.getMessage());
         }
@@ -176,14 +178,14 @@ public class MolecularDataJChemImpl implements MolecularData {
             fingerprint = null;
             this.molecule = molecule;
         } catch (IOException ee) {
-            ee.printStackTrace();
-            // log.error(ee);
+            log.error(ee);
         }
     }
-
+    protected String getStructure(){
+        return this.structure;
+    }
     protected void parsePropertiesMol(final String molstr)
             throws MolFormatException {
-        //System.out.println("MolString: " + molstr);
         parsePropertiesMol(MolImporter.importMol(molstr));
     }
 
@@ -210,7 +212,6 @@ public class MolecularDataJChemImpl implements MolecularData {
 
     protected void parsePropertiesJson(final String content)
             throws JsonProcessingException, IOException, MolFormatException {
-        ObjectMapper mapper = new ObjectMapper();
         parsePropertiesJson(mapper.readTree(content));
     }
 

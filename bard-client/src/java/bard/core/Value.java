@@ -8,7 +8,6 @@ public class Value implements Serializable {
     private static final long serialVersionUID = 0x36d23c591aa3c2d4l;
 
     protected DataSource source;
-    protected AccessControl acl;
 
     protected String id;
     protected String url;
@@ -24,13 +23,13 @@ public class Value implements Serializable {
 
     public Value(Value parent) {
         this(parent.getSource(), null);
-        parent.add(this);
+        parent.addValue(this);
         setId(getClass().getName());
     }
 
     public Value(Value parent, String id) {
         this(parent.getSource(), id);
-        parent.add(this);
+        parent.addValue(this);
     }
 
     public Value(DataSource source, String id) {
@@ -62,14 +61,6 @@ public class Value implements Serializable {
         this.url = url;
     }
 
-    public AccessControl getACL() {
-        return acl;
-    }
-
-    public void setACL(AccessControl acl) {
-        this.acl = acl;
-    }
-
     public Object getValue() {
         return null;
     }
@@ -77,7 +68,9 @@ public class Value implements Serializable {
     // get (first) value with a given id
     public Value getChild(String id) {
         Collection<Value> children = getChildren(id);
-        if (children.isEmpty()) return null;
+        if (children.isEmpty()) {
+            return null;
+        }
         return children.iterator().next();
     }
 
@@ -90,6 +83,9 @@ public class Value implements Serializable {
 
     protected static void getChildren
             (List<Value> children, Value value, String id) {
+        if(value == null || value.getId() == null){
+            return;
+        }
         if (value.getId().equals(id)) {
             children.add(value);
         }
@@ -99,12 +95,8 @@ public class Value implements Serializable {
         }
     }
 
-    public void add(Value child) {
+    public void addValue(Value child) {
         children.add(child);
-    }
-
-    public boolean remove(Value child) {
-        return children.remove(child);
     }
 
     public Collection<Value> getChildren() {
@@ -115,23 +107,7 @@ public class Value implements Serializable {
         return children.size();
     }
 
-    public Iterator<Value> children() {
-        return getChildren().iterator();
-    }
-
     public boolean isTerminal() {
         return children.isEmpty();
-    }
-
-    public String toString() {
-        StringBuilder sb = new StringBuilder
-                (getClass().getName() + "{source=" + getSource() + ",id=" + getId()
-                        + ",url=" + getURL() + ",value=" + getValue() + ",children="
-                        + children.size());
-        for (Value v : children) {
-            sb.append("," + v);
-        }
-        sb.append("}");
-        return sb.toString();
     }
 }

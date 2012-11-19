@@ -1,12 +1,10 @@
 package molspreadsheet
 
 import grails.plugins.springsecurity.Secured
-import querycart.CartCompound
-import querycart.CartProject
+
 import javax.servlet.http.HttpServletResponse
-import querycart.CartCompoundService
-import querycart.CartProjectService
-import querycart.QueryItem
+
+import querycart.*
 
 @Secured(['isFullyAuthenticated()'])
 class MolSpreadSheetController {
@@ -42,8 +40,18 @@ class MolSpreadSheetController {
     }
 
     def molecularSpreadSheet() {
+
         if (molecularSpreadSheetService.weHaveEnoughDataToMakeASpreadsheet()) {
             MolSpreadSheetData molSpreadSheetData = molecularSpreadSheetService.retrieveExperimentalData()
+//            if (params?.format && params.format != "html") {
+//                response.contentType = grailsApplication.config.grails.mime.types[params.format]
+//                response.setHeader("Content-disposition", "attachment; filename=molecularSpreadSheet.${params.extension}")
+//
+//                exportService.export(params.format, response.outputStream, Book.list(params), [:], [:])
+//            }
+            if (molSpreadSheetData.molSpreadsheetDerivedMethod == MolSpreadsheetDerivedMethod.Compounds_NoAssays_NoProjects) {
+                flash.message = message(code: 'show.only.active.compounds', default: "Please note: Only active compounds are shown in the Molecular Spreadsheet")
+            }
             render(template: 'spreadSheet', model: [molSpreadSheetData: molSpreadSheetData])
         } else {
             render(template: 'spreadSheet', model: [molSpreadSheetData: new MolSpreadSheetData()])

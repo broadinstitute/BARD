@@ -1,5 +1,6 @@
 package bard.core.adapter
 
+import bard.core.interfaces.EntityNamedSources
 import spock.lang.Specification
 import spock.lang.Unroll
 import bard.core.*
@@ -18,10 +19,10 @@ class EntityAdapterUnitSpec extends Specification {
 
         given:
         final String synonym = "synonym"
-        Value v = new StringValue (new DataSource("name"), Compound.SynonymValue,
+        Value v = new StringValue(new DataSource("name"), Compound.SynonymValue,
                 synonym)
         Compound compound = new Compound("name")
-        compound.add(v)
+        compound.addValue(v)
         CompoundAdapter<Compound> compoundEntityAdapter = new CompoundAdapter(compound)
         when: "We call the toString method"
         final List<String> synonyms = compoundEntityAdapter.getSynonyms()
@@ -37,7 +38,7 @@ class EntityAdapterUnitSpec extends Specification {
         given:
         Value v = highlightValue
         Compound compound = new Compound("name")
-        compound.add(v)
+        compound.addValue(v)
         CompoundAdapter<Compound> compoundEntityAdapter = new CompoundAdapter(compound)
         when:
         final String searchHighlight = compoundEntityAdapter.getSearchHighlight()
@@ -49,6 +50,7 @@ class EntityAdapterUnitSpec extends Specification {
         "With Highlight"      | new StringValue(new DataSource("name"), Entity.SearchHighlightValue, "highlight") | "highlight"
         "With Null Highlight" | new StringValue(new DataSource("name"), Compound.PubChemSIDValue, "compound")     | null
     }
+
 
 }
 

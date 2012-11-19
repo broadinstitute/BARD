@@ -12,6 +12,7 @@ import querycart.CartCompound
 import querycart.CartProject
 import querycart.QueryItem
 import grails.test.mixin.Mock
+import spock.lang.Shared
 
 /**
  * See the API for {@link grails.test.mixin.support.GrailsUnitTestMixin} for usage instructions
@@ -26,6 +27,10 @@ class MolSpreadSheetControllerUnitSpec extends Specification {
     CartCompoundService cartCompoundService
     CartProjectService cartProjectService
 
+    @Shared MolSpreadSheetData molSpreadSheetData = new MolSpreadSheetData()
+
+
+
     void setup() {
         this.molecularSpreadSheetService = Mock(MolecularSpreadSheetService)
         controller.molecularSpreadSheetService = this.molecularSpreadSheetService
@@ -34,6 +39,7 @@ class MolSpreadSheetControllerUnitSpec extends Specification {
         controller.cartCompoundService = this.cartCompoundService
         this.cartProjectService = Mock(CartProjectService)
         controller.cartProjectService = this.cartProjectService
+        molSpreadSheetData.molSpreadsheetDerivedMethod = MolSpreadsheetDerivedMethod.Compounds_NoAssays_NoProjects
     }
 
     void tearDown() {
@@ -71,7 +77,19 @@ class MolSpreadSheetControllerUnitSpec extends Specification {
         molecularSpreadSheetService.retrieveExperimentalData() >> {new MolSpreadSheetData()}
         assert response.contentAsString.contains("molecular spreadsheet")
         assert response.status == 200
-        assert true
+    }
+
+
+    void "test molecularSpreadSheet with data and flash.message"() {
+        when:
+        controller.molecularSpreadSheet()
+
+        then:
+        molecularSpreadSheetService.weHaveEnoughDataToMakeASpreadsheet() >> {true}
+        molecularSpreadSheetService.retrieveExperimentalData() >> {molSpreadSheetData}
+        assert response.contentAsString.contains("molecular spreadsheet")
+        assert response.status == 200
+        assert flash.message == "Please note: Only active compounds are shown in the Molecular Spreadsheet"
     }
 
 

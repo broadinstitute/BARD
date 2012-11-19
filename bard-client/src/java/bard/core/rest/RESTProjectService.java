@@ -8,10 +8,12 @@ import bard.core.interfaces.ProjectService;
 import bard.core.interfaces.SearchResult;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ArrayNode;
+import org.apache.commons.lang.StringUtils;
 
 
 public class RESTProjectService extends RESTAbstractEntityService<Project>
         implements ProjectService, AssayValues {
+    final DataSource CAP_ANNOTATIONS = getDataSource(EntityNamedSources.CAPAnnotationSource);
 
     protected RESTProjectService
             (final RESTEntityServiceManager srvman, final String baseURL) {
@@ -31,123 +33,159 @@ public class RESTProjectService extends RESTAbstractEntityService<Project>
             project = new Project();
         }
         addProbes(project, node);
-        // identical to Assay... sigh
-        project.setId(node.get(PROJECT_ID).asLong());
-        project.setName(node.get(NAME).asText());
-        project.setDescription(node.get(DESCRIPTION).asText());
+        addProjectIdNode(project, node);
+        addProjectNameNode(project, node);
+        addProjectDescriptionNode(project, node);
+        addExperimentCountNode(project, node);
+        addAllAnnotations(project, node);
+        return project;
+    }
 
+    protected void addProjectDescriptionNode(final Project project, final JsonNode node) {
+        final JsonNode descriptionNode = node.get(DESCRIPTION);
+        if (isNotNull(descriptionNode)) {
+            project.setDescription(descriptionNode.asText());
+        }
+    }
+
+
+    protected void addProjectIdNode(final Project project, final JsonNode node) {
+        final JsonNode idNode = node.get(PROJECT_ID);
+        if (isNotNull(idNode)) {
+            project.setId(idNode.asLong());
+        } else {
+            throw new IllegalArgumentException("Project JSON does not contain " + PROJECT_ID + " node");
+        }
+    }
+
+    protected void addExperimentCountNode(final Project project, final JsonNode node) {
         DataSource ds = getDataSource();
-        /*
-         * retrieval of assays and experiments for a project is
-         * no longer peformed here. instead, use the iterator
-         */
-
-        JsonNode n = node.get(EXPERIMENT_COUNT);
-        if (isNotNull(n)) {
-            project.add(new IntValue
-                    (ds, Project.NumberOfExperimentsValue, n.asInt()));
+        final JsonNode experimentCountNode = node.get(EXPERIMENT_COUNT);
+        if (isNotNull(experimentCountNode)) {
+            project.addValue(new IntValue
+                    (ds, Project.NumberOfExperimentsValue, experimentCountNode.asInt()));
         }
 
-        project = addAnnotations(project, node);
+    }
 
-        return project;
+    protected void addProjIdNode(final Project project, final JsonNode node) {
+        final JsonNode idNode = node.get(PROJ_ID);
+        if (isNotNull(idNode)) {
+            project.setId(idNode.asLong());
+        } else {
+            throw new IllegalArgumentException("Project JSON does not contain " + PROJ_ID + " node");
+        }
+    }
+
+    protected void addProjectNameNode(final Project project, final JsonNode node) {
+        final JsonNode nameNode = node.get(NAME);
+        if (isNotNull(nameNode)) {
+            project.setName(nameNode.asText());
+        }
+    }
+
+    protected void addProjectHighlightNode(final Project project, final JsonNode node) {
+        final DataSource ds = getDataSource();
+        final JsonNode highlightNode = node.get(HIGHLIGHT);
+        if (isNotNull(highlightNode)) {
+            project.addValue(new StringValue
+                    (ds, Entity.SearchHighlightValue, highlightNode.asText()));
+        }
+    }
+
+    protected void addProjectNumExperimentsNode(final Project project, final JsonNode node) {
+        final DataSource ds = getDataSource();
+        final JsonNode numExperimentsNode = node.get(NUM_EXPT);
+        if (isNotNull(numExperimentsNode)) {
+            project.addValue(new IntValue
+                    (ds, Project.NumberOfExperimentsValue, numExperimentsNode.asInt()));
+        }
     }
 
     protected Project getEntitySearch(Project project, JsonNode node) {
         if (project == null) {
             project = new Project();
         }
-
-        final JsonNode projectId = node.get(PROJ_ID);
-        if (isNotNull(projectId)) {
-            project.setId(projectId.asLong());
-        }
-
-        final JsonNode name = node.get(NAME);
-        if (isNotNull(name)) {
-            project.setName(name.asText());
-        }
-        final JsonNode description = node.get(DESCRIPTION);
-        if(isNotNull(description)){
-            project.setDescription(description.asText());
-        }
-
-        DataSource ds = getDataSource();
-        JsonNode n = node.get(HIGHLIGHT);
-        if (isNotNull(n)) {
-            project.add(new StringValue
-                    (ds, Entity.SearchHighlightValue, n.asText()));
-        }
-
-        n = node.get(NUM_EXPT);
-        if (isNotNull(n)) {
-            project.add(new IntValue
-                    (ds, Project.NumberOfExperimentsValue, n.asInt()));
-        }
-
+        addProjIdNode(project, node);
+        addProjectNameNode(project, node);
+        addProjectDescriptionNode(project, node);
+        addProjectHighlightNode(project, node);
+        addProjectNumExperimentsNode(project, node);
         return project;
+    }
+
+    Probe createProbe(JsonNode probeNode) {
+        String cid = probeNode.get(CID).asText();
+        String probeId = probeNode.get(PROBE_ID).asText();
+        String url = probeNode.get(URL_STRING).asText();
+        String smiles = probeNode.get(SMILES).asText();
+        return new Probe(cid, probeId, url, smiles);
     }
 
     void addProbes(Project project, JsonNode node) {
         final ArrayNode probeNodes = (ArrayNode) node.get(PROBES);
-        if (probeNodes != null && !probeNodes.isNull()) {
+        if (isNotNull(probeNodes)) {
             for (int i = 0; i < probeNodes.size(); ++i) {
-                JsonNode n = probeNodes.get(i);
-                String cid = n.get(CID).asText();
-                String probeId = n.get(PROBE_ID).asText();
-                String url = n.get(URL_STRING).asText();
-                String smiles = n.get(SMILES).asText();
-
-                Probe probe = new Probe(cid, probeId, url, smiles);
-                project.add(probe);
+                final JsonNode probeNode = probeNodes.get(i);
+                final Probe probe = createProbe(probeNode);
+                project.addProbe(probe);
             }
         }
     }
 
-    Project addAnnotations(Project project, JsonNode node) {
-        // pull in assay annotations - process different source with different DataSource's
-        DataSource capds = getDataSource(EntityNamedSources.CAPAnnotationSource);
-        if (node.has(AK_DICT_LABEL)) {
-            ArrayNode keys = (ArrayNode) node.get(AK_DICT_LABEL);
-            ArrayNode vals = (ArrayNode) node.get(AV_DICT_LABEL);
-            for (int i = 0; i < keys.size(); ++i) {
-                String key = keys.get(i).asText();
-                String val = vals.get(i).asText();
-                project.add(new StringValue(capds, key, val));
-            }
-        }
-
-        project = setAnnotations(project, node,
+    protected void addNonCAPannotations(Project project, JsonNode node) {
+        addAnnotations(project, node,
                 getDataSource(EntityNamedSources.GOBPAnnotationSource),
                 GOBP_ID, GOBP_TERM);
-        project = setAnnotations(project, node,
+        addAnnotations(project, node,
                 getDataSource(EntityNamedSources.GOMFAnnotationSource),
                 GOMF_ID, GOMF_TERM);
-        project = setAnnotations(project, node,
+        addAnnotations(project, node,
                 getDataSource(EntityNamedSources.GOCCAnnotationSource),
                 GOCC_ID, GOCC_TERM);
 
-        project = setAnnotations(project, node,
+        addAnnotations(project, node,
                 getDataSource(EntityNamedSources.KEGGDiseaseCategoryAnnotationSource),
                 null, KEGG_DISEASE_CAT);
-        project = setAnnotations(project, node,
+        addAnnotations(project, node,
                 getDataSource(EntityNamedSources.KEGGDiseaseNameAnnotationSource),
                 null, KEGG_DISEASE_NAMES);
-
-        return project;
     }
 
-    Project setAnnotations(Project a, JsonNode node, DataSource ds, String keyField, String valueField) {
+    protected void addCAPannotations(final Project project, final JsonNode node) {
+        // pull in assay annotations - process different source with different DataSource's
+        if (node.has(AK_DICT_LABEL)) {
+            addAnnotations(project, node, CAP_ANNOTATIONS, AK_DICT_LABEL, AV_DICT_LABEL);
+        }
+    }
+
+    protected void addAllAnnotations(final Project project, final JsonNode node) {
+        addCAPannotations(project, node);
+        addNonCAPannotations(project, node);
+    }
+
+    protected void addAnnotations(final Project project, final JsonNode node, final DataSource ds, final String keyField, final String valueField) {
         if (node.has(keyField) && !node.get(keyField).isNull()) {
             ArrayNode keys = (ArrayNode) node.get(keyField);
             ArrayNode vals = (ArrayNode) node.get(valueField);
+            addSingleArrayNodeAnnotation(project, ds, keys, vals);
+        }
+    }
+
+    protected void addSingleArrayNodeAnnotation(final Project project, final DataSource ds, final ArrayNode keys, final ArrayNode vals) {
+        if (isNotNull(keys) && isNotNull(vals)) {
             for (int i = 0; i < keys.size(); ++i) {
-                String key = keys.get(i).asText();
-                String val = vals.get(i).asText();
-                a.add(new StringValue(ds, key, val));
+                final String key = keys.get(i).asText();
+                final String val = vals.get(i).asText();
+                addSingleAnnotation(project, ds, key, val);
             }
         }
-        return a;
+    }
+
+    protected void addSingleAnnotation(final Project project, final DataSource ds, final String key, final String val) {
+        if (StringUtils.isNotBlank(key) && StringUtils.isNotBlank(val)) {
+            project.addValue(new StringValue(ds, key, val));
+        }
     }
 
     @Override
@@ -163,8 +201,10 @@ public class RESTProjectService extends RESTAbstractEntityService<Project>
             return service.getSearchResult
                     (getResource(project.getId() + EXPERIMENTS_RESOURCE), null);
         } else {
+            final String message = "No related searchResults available for " + clazz;
+            log.error(message);
             throw new IllegalArgumentException
-                    ("No related searchResults available for " + clazz);
+                    (message);
         }
     }
 }

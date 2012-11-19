@@ -4,11 +4,10 @@ package bard.core.adapter;
 import bard.core.Assay
 import bard.core.DataSource
 import bard.core.Value
-
-import bard.core.interfaces.AssayType
-import bard.core.interfaces.EntityNamedSources
 import bard.core.interfaces.AssayCategory
 import bard.core.interfaces.AssayRole
+import bard.core.interfaces.AssayType
+import bard.core.interfaces.EntityNamedSources
 
 public class AssayAdapter extends EntityAdapter<Assay> {
     List<String> srcNames = [EntityNamedSources.CAPAnnotationSource,
@@ -18,7 +17,9 @@ public class AssayAdapter extends EntityAdapter<Assay> {
             EntityNamedSources.KEGGDiseaseCategoryAnnotationSource,
             EntityNamedSources.KEGGDiseaseNameAnnotationSource]
 
-    public AssayAdapter() {}
+    public AssayAdapter() {
+
+    }
 
     public AssayAdapter(Assay assay) {
         super(assay);
@@ -59,7 +60,9 @@ public class AssayAdapter extends EntityAdapter<Assay> {
 
         for (String srcName : this.srcNames) {
             Collection<Value> values = entity.getValues(new DataSource(srcName));
-            if (values != null) annos.addAll(values);
+            if (values) {
+                annos.addAll(values)
+            }
         }
         return annos;
     }

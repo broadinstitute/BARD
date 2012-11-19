@@ -10,6 +10,7 @@ import java.util.List;
 public class RESTEntityServiceManager implements EntityServiceManager {
     EntityService[] services;
 
+    // static final Logger log = Logger.getLogger(RESTEntityServiceManager.class);
     public RESTEntityServiceManager(String baseURL) {
         services = new EntityService[]{
                 new RESTCompoundService(this, baseURL),
@@ -22,10 +23,6 @@ public class RESTEntityServiceManager implements EntityServiceManager {
 
     public <T extends EntityService<? extends Entity>> T getService
             (Class<? extends Entity> clazz) {
-        if (services == null) {
-            throw new IllegalStateException
-                    ("Service manager has already been shutdown!");
-        }
 
         Class c = clazz;
         do {

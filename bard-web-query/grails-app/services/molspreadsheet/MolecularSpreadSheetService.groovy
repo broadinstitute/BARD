@@ -19,11 +19,39 @@ import querycart.QueryCartService
 import bard.core.*
 
 class MolecularSpreadSheetService {
-     final static int START_DYNAMIC_COLUMNS = 4 //Where to start the dynamic columns
+    final static int START_DYNAMIC_COLUMNS = 4 //Where to start the dynamic columns
     QueryCartService queryCartService
     QueryServiceWrapper queryServiceWrapper
     ShoppingCartService shoppingCartService
     IQueryService queryService
+
+
+
+    protected LinkedHashMap<String, Object> prepareForExport ( String format, MolSpreadSheetData molSpreadSheetData ) {
+        LinkedHashMap<String, Object> returnValue = []
+        returnValue ["format"]   = format
+        returnValue ["labels"]   = ["molstruct": "molecular structure"]
+        returnValue ["labels"] << ["cid": "CID"]
+        int column = 0
+        for (String colHeader in molSpreadSheetData?.getColumns()){
+            if (column == 2) {
+                returnValue ["labels"] << ["c${column}": "$colHeader"]
+            }
+            if (column > 2) {
+                returnValue ["labels"] << ["c${column}": "${molSpreadSheetData.mapColumnsToAssay[column]} ${colHeader}"]
+            }
+            column++
+        }
+        returnValue["fields"] = []
+        returnValue["labels"].each {key, value ->
+            returnValue["fields"] << key
+        }
+        returnValue ["data"]   = [:]
+
+    }
+
+
+
 
     /**
      * High-level routine to pull information out of the query cart and store it into a data structure suitable
@@ -180,8 +208,8 @@ class MolecularSpreadSheetService {
             int exptNumberColTracker = 0
             for (int col in 0..(molSpreadSheetData.superColumnCount - 1)) {
                 String key = "${row}_${col}"
-                MolSpreadSheetCell molSpreadSheetCell=null
-                SpreadSheetActivityStorage spreadSheetActivityStorage=null
+                MolSpreadSheetCell molSpreadSheetCell = null
+                SpreadSheetActivityStorage spreadSheetActivityStorage = null
                 if (dataMap.containsKey(key)) {
                     molSpreadSheetCell = dataMap[key]
                     spreadSheetActivityStorage = molSpreadSheetCell.spreadSheetActivityStorage
@@ -386,7 +414,7 @@ class MolecularSpreadSheetService {
 
         for (Assay assay : assays) {
             final SearchResult<Experiment> searchResult = restAssayService.searchResult(assay, Experiment)
-            if(searchResult){
+            if (searchResult) {
                 allExperiments.addAll(searchResult.searchResults)
             }
         }
@@ -564,10 +592,9 @@ class MolecularSpreadSheetService {
  * @return SpreadSheetActivity
  */
     SpreadSheetActivity extractActivitiesFromExperiment(MolSpreadSheetData molSpreadSheetData, final Integer experimentCount, final Value experimentValue) {
-        final Iterator<Value> experimentValueIterator = experimentValue.children()
+        final Collection<Value> experimentValueIterator = experimentValue.getChildren()
         SpreadSheetActivity spreadSheetActivity = new SpreadSheetActivity()
-        while (experimentValueIterator?.hasNext()) {
-            Value childValue = experimentValueIterator.next()
+        for (Value childValue : experimentValueIterator) {
             addCurrentActivityToSpreadSheet(molSpreadSheetData.mssHeaders[START_DYNAMIC_COLUMNS + experimentCount], spreadSheetActivity, childValue)
         }
         return spreadSheetActivity
@@ -575,11 +602,10 @@ class MolecularSpreadSheetService {
 
 
     SpreadSheetActivity extractActivitiesFromExperiment(final Value experimentValue) {
-        final Iterator<Value> experimentValueIterator = experimentValue.children()
+        final Collection<Value> experimentValueIterator = experimentValue.getChildren()
         SpreadSheetActivity spreadSheetActivity = new SpreadSheetActivity()
         List<String> dummyHeadersList = []
-        while (experimentValueIterator?.hasNext()) {
-            Value childValue = experimentValueIterator.next()
+        for (Value childValue : experimentValueIterator) {
             addCurrentActivityToSpreadSheet(dummyHeadersList, spreadSheetActivity, childValue)
         }
         return spreadSheetActivity
@@ -588,12 +614,11 @@ class MolecularSpreadSheetService {
 
 
     SpreadSheetActivity extractActivitiesFromExperiment(final Value experimentValue, final Long experimentId) {
-        final Iterator<Value> experimentValueIterator = experimentValue.children()
+        final Collection<Value> experimentValueIterator = experimentValue.getChildren()
         SpreadSheetActivity spreadSheetActivity = new SpreadSheetActivity()
         spreadSheetActivity.experimentId = experimentId
         List<String> dummyHeadersList = []
-        while (experimentValueIterator?.hasNext()) {
-            Value childValue = experimentValueIterator.next()
+        for (Value childValue : experimentValueIterator) {
             addCurrentActivityToSpreadSheet(dummyHeadersList, spreadSheetActivity, childValue)
         }
         return spreadSheetActivity

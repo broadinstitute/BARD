@@ -1,6 +1,7 @@
 package bard.core;
 
 
+import bard.core.impl.MolecularDataJChemImpl;
 import bard.core.interfaces.MolecularData;
 
 public class MolecularValue extends Value implements MolecularData {
@@ -8,18 +9,23 @@ public class MolecularValue extends Value implements MolecularData {
 
      protected MolecularData moldata;
 
-    protected MolecularValue () {}
+    protected MolecularValue () {
+        this.moldata = new MolecularDataJChemImpl();
+    }
     public MolecularValue (Value parent) {
         super (parent);
+        this.moldata = new MolecularDataJChemImpl();
     }
     public MolecularValue (Value parent, String id) {
         super (parent, id);
+        this.moldata = new MolecularDataJChemImpl();
     }
     public MolecularValue (DataSource source) {
         this (source, null);
     }
     public MolecularValue (DataSource source, String id) {
         super (source, id);
+        this.moldata = new MolecularDataJChemImpl();
     }
     public MolecularValue (DataSource source, String id, 
                            MolecularData moldata) {
@@ -83,11 +89,6 @@ public class MolecularValue extends Value implements MolecularData {
      */
     public void setMolecule (Object input) {
         moldata.setMolecule(input);
-    }
-
-    public String toString () {
-        return getClass()+"{id="+getId()+",smiles="+toFormat(Format.SMI)
-            +",moldata="+moldata+"}";
     }
 }
 

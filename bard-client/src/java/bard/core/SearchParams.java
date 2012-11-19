@@ -12,6 +12,7 @@ public class SearchParams extends ServiceParams {
     protected List<String[]> filters = null;
 
     public SearchParams () {
+        super();
     }
 
     public SearchParams (String query) {

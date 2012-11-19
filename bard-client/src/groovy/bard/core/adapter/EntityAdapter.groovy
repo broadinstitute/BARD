@@ -25,7 +25,7 @@ public class EntityAdapter<E extends Entity> {
     public Entity getEntity() { return entity; }
 
     public String getName() {
-        return entity.getName();
+        return entity?.getName();
     }
 
     public List<String> getSynonyms() {

@@ -1,9 +1,12 @@
 package bard.core.adapter;
 
 
-import bard.core.*
-import org.apache.commons.lang3.StringUtils
+import bard.core.Compound
+import bard.core.Format
+import bard.core.MolecularValue
+import bard.core.Value
 import bard.core.interfaces.MolecularData
+import org.apache.commons.lang3.StringUtils
 
 public class CompoundAdapter
 extends EntityAdapter<Compound> implements MolecularData {
@@ -21,16 +24,16 @@ extends EntityAdapter<Compound> implements MolecularData {
     }
 
     public boolean isDrug() {
-        return this.getCompound().isDrug()
+        return this.getCompound()?.isDrug()
     }
 
     public String getProbeId() {
-        if (this.probeId==null) {
-             synchronized (myLock) {
-                if (this.getCompound().getValue(Compound.ProbeIDValue)) {
-                    this.probeId =this.getCompound().getValue(Compound.ProbeIDValue).toString()
-                }  else{
-                    this.probeId=""
+        if (this.probeId == null) {
+            synchronized (myLock) {
+                if (this.getCompound()?.getValue(Compound.ProbeIDValue)) {
+                    this.probeId = this.getCompound().getValue(Compound.ProbeIDValue).toString()
+                } else {
+                    this.probeId = ""
                 }
             }
         }
@@ -59,7 +62,7 @@ extends EntityAdapter<Compound> implements MolecularData {
     }
 
     public Long getPubChemCID() {
-        Value cid = getEntity().getValue(Compound.PubChemCIDValue);
+        Value cid = getEntity()?.getValue(Compound.PubChemCIDValue);
         if (cid) {
             return (Long) cid.getValue()
         }
@@ -121,7 +124,7 @@ extends EntityAdapter<Compound> implements MolecularData {
     public Boolean ruleOf5() {
         return mv ? mv.ruleOf5() : null;
     }
-
+    //TODO: Add chemaxon library for this to work
     public int[] fingerprint() {
         return mv ? mv.fingerprint() : null;
     }

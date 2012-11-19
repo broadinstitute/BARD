@@ -506,12 +506,12 @@ class MockExperiment extends Experiment {
 
     void addExperimentCompoundCountValue(Integer compoundNum) {
         final DataSource dataSource = new DataSource("stuff", "v1")
-        this.add(new IntValue(dataSource, ExperimentValues.ExperimentCompoundCountValue, compoundNum))
+        this.addValue(new IntValue(dataSource, ExperimentValues.ExperimentCompoundCountValue, compoundNum))
     }
 
     void addExperimentSubstanceCountValue(Integer substanceNum) {
         final DataSource dataSource = new DataSource("stuff", "v1")
-        this.add(new IntValue(dataSource, ExperimentValues.ExperimentSubstanceCountValue, substanceNum))
+        this.addValue(new IntValue(dataSource, ExperimentValues.ExperimentSubstanceCountValue, substanceNum))
     }
 }
 

@@ -50,10 +50,12 @@ public class RESTAssayService extends RESTAbstractEntityService<Assay>
 
     protected void addPublications(final JsonNode node, final Assay assay) {
         final ArrayNode pubNode = (ArrayNode) node.get(PUBLICATIONS);
-        for (int i = 0; i < pubNode.size(); i++) {
-            ObjectNode on = (ObjectNode) pubNode.get(i);
-            Publication pub = createPublication(on);
-            assay.add(pub);
+        if (isNotNull(pubNode)) {
+            for (int i = 0; i < pubNode.size(); i++) {
+                ObjectNode on = (ObjectNode) pubNode.get(i);
+                Publication pub = createPublication(on);
+                assay.addPublication(pub);
+            }
         }
 
     }
@@ -107,18 +109,18 @@ public class RESTAssayService extends RESTAbstractEntityService<Assay>
         DataSource ds = getDataSource();
         final JsonNode source = node.get(SOURCE);
         if (isNotNull(source)) {
-            assay.add(new StringValue
+            assay.addValue(new StringValue
                     (ds, AssaySourceValue, source.asText()));
         }
 
         final JsonNode grantNo = node.get(GRANT_NO);
         if (isNotNull(grantNo)) {
-            assay.add(new StringValue
+            assay.addValue(new StringValue
                     (ds, AssayGrantValue, grantNo.asText()));
         }
         final JsonNode aid = node.get(AID);
         if (isNotNull(aid)) {
-            assay.add(new IntValue
+            assay.addValue(new IntValue
                     (ds, AssayPubChemAIDValue, aid.asInt()));
         }
 
@@ -141,7 +143,7 @@ public class RESTAssayService extends RESTAbstractEntityService<Assay>
         if (isNotNull(accNode)) {
             final Biology target = new Biology();
             target.setId(accNode.asText());
-            target.add(new StringValue
+            target.addValue(new StringValue
                     (ds, Biology.AccessionValue, accNode.asText()));
 
             final JsonNode descriptionNode = targetNode.get(DESCRIPTION);
@@ -154,15 +156,15 @@ public class RESTAssayService extends RESTAbstractEntityService<Assay>
             }
             final JsonNode geneIdNode = targetNode.get(GENE_ID);
             if (isNotNull(geneIdNode)) {
-                target.add(new IntValue
+                target.addValue(new IntValue
                         (ds, Biology.GeneIDValue, geneIdNode.asInt()));
             }
             final JsonNode taxonomyNode = targetNode.get(TAX_ID);
             if (isNotNull(taxonomyNode)) {
-                target.add(new IntValue
+                target.addValue(new IntValue
                         (ds, Biology.TaxonomyIDValue, taxonomyNode.asInt()));
             }
-            assay.add(target);
+            assay.addTarget(target);
         }
 
     }
@@ -207,7 +209,7 @@ public class RESTAssayService extends RESTAbstractEntityService<Assay>
         DataSource ds = getDataSource();
         final JsonNode highlight = node.get(HIGHLIGHT);
         if (isNotNull(highlight)) {
-            assay.add(new StringValue
+            assay.addValue(new StringValue
                     (ds, Entity.SearchHighlightValue, highlight.asText()));
         }
 
@@ -235,7 +237,7 @@ public class RESTAssayService extends RESTAbstractEntityService<Assay>
     }
 
     protected void addKeyValueAsString(final Assay assay, final String key, final String val, final DataSource ds) {
-        assay.add(new StringValue(ds, key, val));
+        assay.addValue(new StringValue(ds, key, val));
     }
 
     protected void addKeyValuesAsString(final Assay assay, final ArrayNode keys, final ArrayNode vals, final DataSource ds) {
@@ -294,8 +296,10 @@ public class RESTAssayService extends RESTAbstractEntityService<Assay>
             return service.getSearchResult
                     (getResource(assay.getId() + EXPERIMENTS_RESOURCE), null);
         } else {
+            final String message = "No related searchResults available for " + clazz;
+            log.error(message);
             throw new IllegalArgumentException
-                    ("No related searchResults available for " + clazz);
+                    (message);
         }
     }
 }

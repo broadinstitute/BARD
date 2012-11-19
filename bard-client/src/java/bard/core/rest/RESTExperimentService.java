@@ -7,17 +7,15 @@ import com.fasterxml.jackson.databind.node.ArrayNode;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.BlockingQueue;
 
 public class RESTExperimentService
         extends RESTAbstractEntityService<Experiment>
         implements ExperimentService {
 
 
-    static final Value DONE = new Value(DataSource.getCurrent());
+    //static final Value DONE = new Value(DataSource.getCurrent());
 
-    protected RESTExperimentService
-            (RESTEntityServiceManager srvman, String baseURL) {
+    protected RESTExperimentService(RESTEntityServiceManager srvman, String baseURL) {
         super(srvman, baseURL);
     }
 
@@ -36,12 +34,7 @@ public class RESTExperimentService
             resource.append(FORWARD_SLASH).append(ETAG).append(FORWARD_SLASH).append(getETagId(etag));
         }
         resource.append(EXPTDATA_RESOURCE);
-
-        if (resource.indexOf(QUESTION_MARK) < 0) {
-            resource.append(QUESTION_MARK);
-        } else {
-            resource.append(AMPERSAND);
-        }
+        resource.append(QUESTION_MARK);
         resource.append(SKIP).append(skip).append(TOP).append(top).append(AMPERSAND).append(EXPAND_TRUE);
         return resource.toString();
     }
@@ -49,181 +42,345 @@ public class RESTExperimentService
     protected List<Value> getValues
             (Experiment expr, Object etag, long top, long skip) {
 
-        final List<Value> values = new ArrayList<Value>();
-
         final String resource = buildExperimentQuery(expr, etag, top, skip);
         final DataSource source = new DataSource
                 (getResourceContext(), expr.getId().toString());
         source.setURL(resource);
         final JsonNode root = executeGetRequest(resource);
-        final JsonNode node = root.get(COLLECTION);
+
+        return processRootNode(root, source);
+
+    }
+
+    protected List<Value> processRootNode(final JsonNode rootNode, final DataSource dataSource) {
+        final JsonNode node = rootNode.get(COLLECTION);
         ArrayNode array = null;
 
         if (isNotNull(node) && node.isArray()) {
             array = (ArrayNode) node;
-        } else if (root.isArray()) {
-            array = (ArrayNode) root;
+        } else if (rootNode.isArray()) {
+            array = (ArrayNode) rootNode;
         }
+        return extractValuesFromNode(array, dataSource);
+    }
 
-        if (isNotNull(array)) {
-            for (int i = 0; i < array.size(); ++i) {
-                JsonNode n = array.get(i);
-                values.add(getValue(source, n));
+    protected List<Value> extractValuesFromNode(final ArrayNode arrayNode, final DataSource source) {
+        final List<Value> values = new ArrayList<Value>();
+
+        if (isNotNull(arrayNode)) {
+            for (int i = 0; i < arrayNode.size(); ++i) {
+                final JsonNode valueNode = arrayNode.get(i);
+                values.add(getValue(source, valueNode));
             }
         }
         return values;
     }
 
-    protected long streamValues(BlockingQueue<Value> queue,
-                                Experiment expr, Object etag,
-                                long top, long skip) {
-        long streamed = 0;
-        try {
-            final String resource = buildExperimentQuery(expr, etag, top, skip);
-            DataSource source = new DataSource
-                    (getResourceContext(), expr.getId().toString());
-            source.setURL(resource);
-
-            final JsonNode root = executeGetRequest(resource);
-            JsonNode node = root.get(COLLECTION);
-            ArrayNode array = null;
-
-            if (isNotNull(node) && node.isArray()) {
-                array = (ArrayNode) node;
-            } else if (root.isArray()) {
-                array = (ArrayNode) root;
-            }
-
-            if (isNotNull(array)) {
-                for (int i = 0; i < array.size(); ++i) {
-                    JsonNode n = array.get(i);
-                    queue.put(getValue(source, n));
-                    ++streamed;
-                }
-            }
-
-        } catch (Exception ex) {
-            ex.printStackTrace();
-            queue.offer(DONE);
-        }
-        return streamed;
-    }
-
+    //    protected long streamValues(BlockingQueue<Value> queue,
+//                                Experiment expr, Object etag,
+//                                long top, long skip) {
+//        long streamed = 0;
+//        try {
+//            final String resource = buildExperimentQuery(expr, etag, top, skip);
+//            DataSource source = new DataSource
+//                    (getResourceContext(), expr.getId().toString());
+//            source.setURL(resource);
+//
+//            final JsonNode root = executeGetRequest(resource);
+//            JsonNode node = root.get(COLLECTION);
+//            ArrayNode array = null;
+//
+//            if (isNotNull(node) && node.isArray()) {
+//                array = (ArrayNode) node;
+//            } else if (root.isArray()) {
+//                array = (ArrayNode) root;
+//            }
+//
+//            if (isNotNull(array)) {
+//                for (int i = 0; i < array.size(); ++i) {
+//                    JsonNode n = array.get(i);
+//                    queue.put(getValue(source, n));
+//                    ++streamed;
+//                }
+//            }
+//
+//        } catch (Exception ex) {
+//            log.error(ex);
+//            queue.offer(DONE);
+//        }
+//        return streamed;
+//    }
     protected Value parseReadout(Value parent, JsonNode node) {
-        HillCurveValue hcv = new HillCurveValue
-                (parent, node.get(NAME).asText());
+        final JsonNode nameNode = node.get(NAME);
+        if (isNotNull(nameNode)) {
+            final HillCurveValue hcv = new HillCurveValue
+                    (parent, nameNode.asText());
 
-        JsonNode n = node.get(S_0);
-        if (isNotNull(n)) {
-            hcv.setS0(n.asDouble());
+            addS0(hcv, node);
+            addSinf(hcv, node);
+            addCoeff(hcv, node);
+            addSlope(hcv, node);
+            addConcUnit(hcv, node);
+            addCrcs(hcv, node);
+            return hcv;
         }
-
-        n = node.get(S_INF);
-        if (isNotNull(n)) {
-            hcv.setSinf(n.asDouble());
-        }
-
-        n = node.get(HILL);
-        if (isNotNull(n)) {
-            hcv.setCoef(n.asDouble());
-        }
-
-        n = node.get(AC_50);
-        if (isNotNull(n)) {
-            hcv.setSlope(n.asDouble());
-        }
-        n = node.get(CONC_UNIT);
-        if (isNotNull(n)) {
-            hcv.setConcentrationUnits(n.asText());
-        }
-        ArrayNode crc = (ArrayNode) node.get(CR);
-        for (int i = 0; i < crc.size(); ++i) {
-            ArrayNode xy = (ArrayNode) crc.get(i);
-            hcv.add(xy.get(0).asDouble(), xy.get(1).asDouble());
-        }
-
-        return hcv;
+        return null;
     }
 
-    protected Value getValue(DataSource source, JsonNode node) {
-        String id = node.get(EXPT_DATA_ID).asText();
-        Value v = new Value(source, id);
-        new IntValue(v, EID, node.get(EID).asInt());
-        new LongValue(v, CID, node.get(CID).asLong());
-        new LongValue(v, SID, node.get(SID).asLong());
-
-        ArrayNode readouts = (ArrayNode) node.get(READOUTS);
+    protected void parseReadouts(final Value value, final ArrayNode readouts) {
         for (int i = 0; i < readouts.size(); ++i) {
-            JsonNode n = readouts.get(i);
-            parseReadout(v, n);
+            final JsonNode readOutNode = readouts.get(i);
+            parseReadout(value, readOutNode);
         }
-
-        JsonNode n = node.get(POTENCY);
-        if (isNotNull(n)) {
-            new NumericValue(v, POTENCY, n.asDouble());
-        }
-
-        n = node.get(OUTCOME);
-        if (isNotNull(n)) {
-            new IntValue(v, OUTCOME, n.asInt());
-        }
-
-        return v;
     }
 
-    protected Experiment getEntity(Experiment e, JsonNode node) {
-        if (e == null) {
-            e = new Experiment();
+
+    protected void addReadOuts(final Value value, final JsonNode node) {
+        final JsonNode readouts = node.get(READOUTS);
+        if (isNotNull(readouts) && readouts.isArray()) {
+            parseReadouts(value, (ArrayNode) readouts);
         }
-        e.setId(node.get(EXPT_ID).asInt());
-        e.setName(node.get(NAME).asText());
-        e.setDescription(node.get(DESCRIPTION).asText());
+    }
 
-        e.setCategory(ExperimentCategory.valueOf
-                (node.get(CATEGORY).asInt()));
-        e.setType(ExperimentType.valueOf
-                (node.get(TYPE).asInt()));
-        e.setRole(ExperimentRole.valueOf
-                (node.get(CLASSIFICATION).asInt()));
-        e.setPubchemAid(node.get(PUBCHEM_AID).asLong());
+    protected void addS0(final HillCurveValue hcv, final JsonNode node) {
+        final JsonNode s0Node = node.get(S_0);
+        if (isNotNull(s0Node)) {
+            hcv.setS0(s0Node.asDouble());
+        }
+    }
 
-        // we'll always have an expanded form, but we only reutrn a
+    protected void addSinf(final HillCurveValue hcv, final JsonNode node) {
+        final JsonNode sInfNode = node.get(S_INF);
+        if (isNotNull(sInfNode)) {
+            hcv.setSinf(sInfNode.asDouble());
+        }
+    }
+
+    protected void addCoeff(final HillCurveValue hcv, final JsonNode node) {
+        final JsonNode hillNode = node.get(HILL);
+        if (isNotNull(hillNode)) {
+            hcv.setCoef(hillNode.asDouble());
+        }
+    }
+
+    protected void addSlope(final HillCurveValue hcv, final JsonNode node) {
+        final JsonNode ac50Node = node.get(AC_50);
+        if (isNotNull(ac50Node)) {
+            hcv.setSlope(ac50Node.asDouble());
+        }
+    }
+
+    protected void addConcUnit(final HillCurveValue hcv, final JsonNode node) {
+        final JsonNode concentrationUnitNode = node.get(CONC_UNIT);
+        if (isNotNull(concentrationUnitNode)) {
+            hcv.setConcentrationUnits(concentrationUnitNode.asText());
+        }
+    }
+
+    protected void addCrcs(final HillCurveValue hcv, final JsonNode node) {
+        final ArrayNode crc = (ArrayNode) node.get(CR);
+        for (int i = 0; i < crc.size(); ++i) {
+            final ArrayNode xyCoordinate = (ArrayNode) crc.get(i);
+            addCrc(hcv, xyCoordinate);
+        }
+    }
+
+    protected void addCrc(final HillCurveValue hcv, final ArrayNode xyCoordinate) {
+        hcv.add(xyCoordinate.get(0).asDouble(), xyCoordinate.get(1).asDouble());
+    }
+
+
+    protected void addSID(final Value value, final JsonNode node) {
+        final JsonNode sidNode = node.get(SID);
+        if (isNotNull(sidNode)) {
+            new LongValue(value, SID, sidNode.asLong());
+        }
+    }
+
+
+    protected void addPotency(final Value value, final JsonNode node) {
+        final JsonNode potencyNode = node.get(POTENCY);
+        if (isNotNull(potencyNode)) {
+            new NumericValue(value, POTENCY, potencyNode.asDouble());
+        }
+    }
+
+    protected void addOutcome(final Value value, final JsonNode node) {
+        final JsonNode outcomeNode = node.get(OUTCOME);
+        if (isNotNull(outcomeNode)) {
+            new IntValue(value, OUTCOME, outcomeNode.asInt());
+        }
+    }
+
+    protected void addCID(final Value value, final JsonNode node) {
+        final JsonNode cidNode = node.get(CID);
+        if (isNotNull(cidNode)) {
+            new LongValue(value, CID, cidNode.asLong());
+        }
+    }
+
+    protected void addEID(final Value value, final JsonNode node) {
+        final JsonNode eidNode = node.get(EID);
+        if (isNotNull(eidNode)) {
+            new IntValue(value, EID, eidNode.asInt());
+        }
+    }
+
+    protected Value createValueFromID(final DataSource source, final JsonNode node) {
+        final JsonNode idNode = node.get(EXPT_DATA_ID);
+        if (isNotNull(idNode)) {
+            final String id = idNode.asText();
+            return new Value(source, id);
+        }
+        return null;
+
+    }
+
+    protected Value createValue(final DataSource source, final JsonNode node) {
+        final Value value = createValueFromID(source, node);
+        if (value == null) {
+            throw new IllegalArgumentException("JSON does not contain " + EXPT_DATA_ID + " node");
+        }
+        addEID(value, node);
+        addCID(value, node);
+        addSID(value, node);
+        return value;
+    }
+
+
+    protected Value getValue(final DataSource source, final JsonNode node) {
+        final Value value = createValue(source, node);
+        addReadOuts(value, node);
+        addPotency(value, node);
+        addOutcome(value, node);
+        return value;
+    }
+
+    protected void addIdNode(final Experiment experiment, final JsonNode node) {
+        final JsonNode idNode = node.get(EXPT_ID);
+        if (isNotNull(idNode)) {
+            experiment.setId(idNode.asInt());
+        } else {
+            throw new IllegalArgumentException("Experiment JSON does not contain " + EXPT_ID + " node");
+        }
+
+    }
+
+    protected void addNameNode(final Experiment experiment, final JsonNode node) {
+        final JsonNode nameNode = node.get(NAME);
+        if (isNotNull(nameNode)) {
+            experiment.setName(nameNode.asText());
+        } else {
+            throw new IllegalArgumentException("Experiment JSON does not contain " + NAME + " node");
+        }
+    }
+
+    protected void addDescriptionNode(final Experiment experiment, final JsonNode node) {
+        final JsonNode descriptionNode = node.get(DESCRIPTION);
+        if (isNotNull(descriptionNode)) {
+            experiment.setDescription(descriptionNode.asText());
+        }
+    }
+
+    protected void addCategoryNode(final Experiment experiment, final JsonNode node) {
+        final JsonNode categoryNode = node.get(CATEGORY);
+        if (isNotNull(categoryNode)) {
+            experiment.setCategory(ExperimentCategory.valueOf
+                    (categoryNode.asInt()));
+        }
+    }
+
+    protected void addTypeNode(final Experiment experiment, final JsonNode node) {
+        final JsonNode typeNode = node.get(TYPE);
+        if (isNotNull(typeNode)) {
+            experiment.setType(ExperimentType.valueOf
+                    (typeNode.asInt()));
+        }
+    }
+
+    protected void addRoleNode(final Experiment experiment, final JsonNode node) {
+        final JsonNode classificationNode = node.get(CLASSIFICATION);
+        if (isNotNull(classificationNode)) {
+            experiment.setRole(ExperimentRole.valueOf
+                    (classificationNode.asInt()));
+        }
+    }
+
+    protected void addPubChemAIDNode(final Experiment experiment, final JsonNode node) {
+        final JsonNode aidNode = node.get(PUBCHEM_AID);
+        if (isNotNull(aidNode)) {
+            experiment.setPubchemAid(aidNode.asLong());
+        }
+    }
+
+    protected Experiment getEntity(Experiment experiment, JsonNode node) {
+        if (experiment == null) {
+            experiment = new Experiment();
+        }
+        addIdNode(experiment, node);
+        addNameNode(experiment, node);
+        addDescriptionNode(experiment, node);
+        addCategoryNode(experiment, node);
+        addTypeNode(experiment, node);
+        addRoleNode(experiment, node);
+        addPubChemAIDNode(experiment, node);
+
+        // we'll always have an expanded form, but we only return a
         // a partially filled Assay object
-        JsonNode n = node.get(ASSAY_ID);
-        if (isNotNull(n) && n.isArray()) {
-            RESTAssayService service = (RESTAssayService) getServiceManager()
-                    .getService(Assay.class);
-            ArrayNode assayNode = (ArrayNode) n;
-            for (int i = 0; i < assayNode.size(); i++) {
-                n = assayNode.get(i);
-                Assay assay = new Assay();
-                service.getEntity(assay, n);
-                e.setAssay(assay);
-            }
-        }
-
+        addAssayNode(experiment, node);
         DataSource ds = getDataSource();
-        n = node.get(COMPOUNDS);
-        if (isNotNull(n)) {
-            e.add(new IntValue
-                    (ds, Experiment.ExperimentCompoundCountValue, n.asInt()));
-        }
+        addCompound(experiment, node, ds);
+        addSubstance(experiment, node, ds);
 
-        n = node.get(SUBSTANCES);
-        if (isNotNull(n)) {
-            e.add(new IntValue
-                    (ds, Experiment.ExperimentSubstanceCountValue, n.asInt()));
-        }
-
-        return e;
+        return experiment;
     }
 
-    protected Experiment getEntitySearch(Experiment e, JsonNode node) {
-        if (e == null) {
-            e = new Experiment();
+    protected void addAssayNode(final Experiment experiment, final JsonNode node) {
+        final JsonNode assayIdNode = node.get(EXPERIMENT_ASSAY_ID);
+        if (isNotNull(assayIdNode) && assayIdNode.isArray()) {
+            addAssay(experiment, (ArrayNode) assayIdNode);
+        }
+    }
+
+    protected void addAssay(final Experiment experiment, final ArrayNode assaysNode) {
+        RESTAssayService service = (RESTAssayService) getServiceManager()
+                .getService(Assay.class);
+        for (int i = 0; i < assaysNode.size(); i++) {
+            final JsonNode assayNode = assaysNode.get(i);
+            addSingleAssayNode(experiment, assayNode, service);
+        }
+    }
+
+    protected void addSingleAssayNode(final Experiment experiment, final JsonNode assayNode, final RESTAssayService service) {
+        if (isNotNull(assayNode)) {
+            final Assay assay = service.getEntity(null, assayNode);
+            experiment.setAssay(assay);
         }
 
-        return e;
+    }
+
+    protected void addSubstance(final Experiment experiment, final JsonNode node, final DataSource ds) {
+        final JsonNode substanceNode = node.get(SUBSTANCES);
+        if (isNotNull(substanceNode)) {
+            experiment.addValue(new IntValue
+                    (ds, Experiment.ExperimentSubstanceCountValue, substanceNode.asInt()));
+        }
+    }
+
+    protected void addCompound(final Experiment experiment, final JsonNode node, final DataSource ds) {
+        final JsonNode compoundNode = node.get(COMPOUNDS);
+        if (isNotNull(compoundNode)) {
+            experiment.addValue(new IntValue
+                    (ds, Experiment.ExperimentCompoundCountValue, compoundNode.asInt()));
+        }
+    }
+
+    protected Experiment getEntitySearch(Experiment experiment, JsonNode node) {
+        if (experiment == null) {
+            experiment = new Experiment();
+        }
+
+        return experiment;
     }
 
     @Override
@@ -239,8 +396,10 @@ public class RESTExperimentService
             return service.getSearchResult
                     (getResource(expr.getId() + COMPOUNDS_RESOURCE), null);
         } else {
+            final String message = "No related searchResults available for " + clazz;
+            log.error(message);
             throw new IllegalArgumentException
-                    ("No related searchResults available for " + clazz);
+                    (message);
         }
     }
 
