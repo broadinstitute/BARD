@@ -25,6 +25,34 @@ class MolecularSpreadSheetService {
     ShoppingCartService shoppingCartService
     IQueryService queryService
 
+
+
+    protected LinkedHashMap<String, Object> prepareForExport ( String format, MolSpreadSheetData molSpreadSheetData ) {
+        LinkedHashMap<String, Object> returnValue = []
+        returnValue ["format"]   = format
+        returnValue ["labels"]   = ["molstruct": "molecular structure"]
+        returnValue ["labels"] << ["cid": "CID"]
+        int column = 0
+        for (String colHeader in molSpreadSheetData?.getColumns()){
+            if (column == 2) {
+                returnValue ["labels"] << ["c${column}": "$colHeader"]
+            }
+            if (column > 2) {
+                returnValue ["labels"] << ["c${column}": "${molSpreadSheetData.mapColumnsToAssay[column]} ${colHeader}"]
+            }
+            column++
+        }
+        returnValue["fields"] = []
+        returnValue["labels"].each {key, value ->
+            returnValue["fields"] << key
+        }
+        returnValue ["data"]   = [:]
+
+    }
+
+
+
+
     /**
      * High-level routine to pull information out of the query cart and store it into a data structure suitable
      * for passing to the molecular spreadsheet.
