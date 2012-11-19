@@ -46,7 +46,12 @@ class MolecularSpreadSheetService {
         returnValue["labels"].each {key, value ->
             returnValue["fields"] << key
         }
-        returnValue ["data"]   = [:]
+        returnValue ["data"]   = []
+        for (int rowCnt in 0..(molSpreadSheetData.getRowCount() - 1)){
+
+            returnValue ["data"] << ["molstruct": """${molSpreadSheetData?.displayValue(rowCnt, 0)["smiles"]}""".toString()]
+            returnValue ["data"] << ["molstruct": """${molSpreadSheetData?.displayValue(rowCnt, 0)["smiles"]}""".toString()]
+        }
 
     }
 
