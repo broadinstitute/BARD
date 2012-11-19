@@ -15,6 +15,8 @@ import javax.xml.datatype.DatatypeFactory
 import javax.xml.datatype.XMLGregorianCalendar
 
 import bard.db.experiment.*
+import bard.db.project.ProjectStep
+import bard.db.project.Project
 
 /**
  * Class that generates Experiments as XML

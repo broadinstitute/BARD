@@ -1,6 +1,6 @@
 package dataexport.cap.experiment
 
-import bard.db.experiment.Project
+import bard.db.project.Project
 import dataexport.experiment.ProjectExportService
 import dataexport.registration.BardHttpResponse
 import exceptions.NotFoundException

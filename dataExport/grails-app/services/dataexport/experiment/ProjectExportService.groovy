@@ -3,9 +3,9 @@ package dataexport.experiment
 import bard.db.dictionary.Element
 import bard.db.enums.ReadyForExtraction
 import bard.db.experiment.Experiment
-import bard.db.experiment.Project
-import bard.db.experiment.ProjectContextItem
-import bard.db.experiment.ProjectStep
+import bard.db.project.Project
+import bard.db.project.ProjectContextItem
+import bard.db.project.ProjectStep
 import dataexport.registration.BardHttpResponse
 import dataexport.registration.MediaTypesDTO
 import dataexport.util.UtilityService
