@@ -35,7 +35,7 @@ class MolSpreadSheetDataBuilderIntegrationSpec extends IntegrationSpec {
 
     @Before
     void setup() {
-        molSpreadSheetDataBuilder = new MolSpreadSheetDataBuilder()
+        molSpreadSheetDataBuilder = new MolSpreadSheetDataBuilder(this.molecularSpreadSheetService)
 
         this.restExperimentService = molecularSpreadSheetService.queryServiceWrapper.restExperimentService
         this.restCompoundService = molecularSpreadSheetService.queryServiceWrapper.restCompoundService

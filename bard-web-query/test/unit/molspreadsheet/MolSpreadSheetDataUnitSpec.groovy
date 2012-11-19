@@ -9,7 +9,7 @@ import spock.lang.Unroll
  */
 @TestFor(MolSpreadSheetData)
 @Unroll
-class MolSpreadSheetDataUnitSpec  extends Specification {
+class MolSpreadSheetDataUnitSpec extends Specification {
 
     void setup() {
         // Setup logic here
@@ -36,18 +36,18 @@ class MolSpreadSheetDataUnitSpec  extends Specification {
         MolSpreadSheetData molSpreadSheetData = new MolSpreadSheetData()
         assertNotNull(molSpreadSheetData)
 
-        molSpreadSheetData.mssData["0_0"] = new MolSpreadSheetCell(incoming,MolSpreadSheetCellType.identifier)
-        molSpreadSheetData.mssData["0_1"] = new MolSpreadSheetCell(incoming,MolSpreadSheetCellType.image)
+        molSpreadSheetData.mssData["0_0"] = new MolSpreadSheetCell(incoming, MolSpreadSheetCellType.identifier)
+        molSpreadSheetData.mssData["0_1"] = new MolSpreadSheetCell(incoming, MolSpreadSheetCellType.image)
 
 
         then:
-        assert molSpreadSheetData.displayValue (row, column)["value"]== returnValue
+        assert molSpreadSheetData.displayValue(row, column)["value"] == returnValue
 
         where:
-        row     |   column  |   incoming    |   returnValue
-        0       |   0       |   "123"       |   "123"
-        0       |   1       |   "123"       |   null
-        47      |   47      |   "123"       |   "-"
+        row | column | incoming | returnValue
+        0   | 0      | "123"    | "123"
+        0   | 1      | "123"    | null
+        47  | 47     | "123"    | "-"
     }
 
     void "Test getSuperColumnCount in degenerate case"() {
@@ -65,13 +65,13 @@ class MolSpreadSheetDataUnitSpec  extends Specification {
     void "Test getSubColumns in typical case"() {
         given:
         MolSpreadSheetData molSpreadSheetData = new MolSpreadSheetData()
-        molSpreadSheetData.mssHeaders<<[]
-        molSpreadSheetData.mssHeaders<<['one']
-        molSpreadSheetData.mssHeaders<<['one','two']
-        molSpreadSheetData.mssHeaders<<['one','two','three']
+        molSpreadSheetData.mssHeaders << []
+        molSpreadSheetData.mssHeaders << ['one']
+        molSpreadSheetData.mssHeaders << ['one', 'two']
+        molSpreadSheetData.mssHeaders << ['one', 'two', 'three']
 
         when:
-        List<String> numberOfSubColumns = molSpreadSheetData.getSubColumns( experimentCount)
+        List<String> numberOfSubColumns = molSpreadSheetData.getSubColumns(experimentCount)
         List<String> accumulatedColumns = molSpreadSheetData.getColumns() - numberOfSubColumns
 
         then:
@@ -80,11 +80,11 @@ class MolSpreadSheetDataUnitSpec  extends Specification {
 
         where:
         predictedSubs           | experimentCount | predictedAccumulatedColumns
-        []                      | 0               | ['one','one','two','one','two','three']
-        ['one']                 | 1               | ['two','two','three']
-        ['one','two']           | 2               | ['three']
-        ['one','two', 'three']  | 3               | []
-        []                      | 50              | ['one','one','two','one','two','three']
+        []                      | 0               | ['one', 'one', 'two', 'one', 'two', 'three']
+        ['one']                 | 1               | ['two', 'two', 'three']
+        ['one', 'two']          | 2               | ['three']
+        ['one', 'two', 'three'] | 3               | []
+        []                      | 50              | ['one', 'one', 'two', 'one', 'two', 'three']
 
     }
 
@@ -92,7 +92,7 @@ class MolSpreadSheetDataUnitSpec  extends Specification {
     void "Test getColumns in degenerate case"() {
         given:
         MolSpreadSheetData molSpreadSheetData = new MolSpreadSheetData()
-        molSpreadSheetData.mssHeaders=null
+        molSpreadSheetData.mssHeaders = null
 
         when:
         List<String> accumulatedColumns = molSpreadSheetData.getColumns()
@@ -119,22 +119,22 @@ class MolSpreadSheetDataUnitSpec  extends Specification {
 
     void "Test findSpreadSheetActivity method"() {
         given:
-        SpreadSheetActivityStorage spreadSheetActivityStorage = new SpreadSheetActivityStorage(eid: 1 as Long, cid:  2 as Long, sid: 3 as Long)
+        SpreadSheetActivityStorage spreadSheetActivityStorage = new SpreadSheetActivityStorage(eid: 1 as Long, cid: 2 as Long, sid: 3 as Long)
 
         when:
         MolSpreadSheetData molSpreadSheetData = new MolSpreadSheetData()
         assertNotNull(molSpreadSheetData)
 
-        MolSpreadSheetCell molSpreadSheetCell_0_0 = new MolSpreadSheetCell("1",MolSpreadSheetCellType.identifier)
+        MolSpreadSheetCell molSpreadSheetCell_0_0 = new MolSpreadSheetCell("1", MolSpreadSheetCellType.identifier)
         molSpreadSheetCell_0_0.setSpreadSheetActivityStorage(spreadSheetActivityStorage)
 
-        MolSpreadSheetCell molSpreadSheetCell_0_1 = new MolSpreadSheetCell("1",MolSpreadSheetCellType.image)
+        MolSpreadSheetCell molSpreadSheetCell_0_1 = new MolSpreadSheetCell("1", MolSpreadSheetCellType.image)
         molSpreadSheetCell_0_1.setSpreadSheetActivityStorage(spreadSheetActivityStorage)
 
-        MolSpreadSheetCell molSpreadSheetCell_1_0 = new MolSpreadSheetCell("1",MolSpreadSheetCellType.numeric)
+        MolSpreadSheetCell molSpreadSheetCell_1_0 = new MolSpreadSheetCell("1", MolSpreadSheetCellType.numeric)
         molSpreadSheetCell_1_0.setSpreadSheetActivityStorage(spreadSheetActivityStorage)
 
-        MolSpreadSheetCell molSpreadSheetCell_1_1 = new MolSpreadSheetCell("1",MolSpreadSheetCellType.string)
+        MolSpreadSheetCell molSpreadSheetCell_1_1 = new MolSpreadSheetCell("1", MolSpreadSheetCellType.string)
         molSpreadSheetCell_1_1.setSpreadSheetActivityStorage(spreadSheetActivityStorage)
 
         molSpreadSheetData.mssData["0_0"] = molSpreadSheetCell_0_0
@@ -144,36 +144,36 @@ class MolSpreadSheetDataUnitSpec  extends Specification {
 
 
         then:
-        assert molSpreadSheetData.findSpreadSheetActivity (row, column).eid== 1 as Long
-        assert molSpreadSheetData.findSpreadSheetActivity (row, column).cid== 2 as Long
-        assert molSpreadSheetData.findSpreadSheetActivity (row, column).sid== 3 as Long
+        assert molSpreadSheetData.findSpreadSheetActivity(row, column).eid == 1 as Long
+        assert molSpreadSheetData.findSpreadSheetActivity(row, column).cid == 2 as Long
+        assert molSpreadSheetData.findSpreadSheetActivity(row, column).sid == 3 as Long
 
         where:
-        row     |   column
-        0       |   0
-        0       |   1
-        1       |   0
-        1       |   1
+        row | column
+        0   | 0
+        0   | 1
+        1   | 0
+        1   | 1
     }
 
     void "Test degenerate method"() {
         given:
-        SpreadSheetActivityStorage spreadSheetActivityStorage = new SpreadSheetActivityStorage(eid: 1 as Long, cid:  2 as Long, sid: 3 as Long)
+        SpreadSheetActivityStorage spreadSheetActivityStorage = new SpreadSheetActivityStorage(eid: 1 as Long, cid: 2 as Long, sid: 3 as Long)
 
         when:
         MolSpreadSheetData molSpreadSheetData = new MolSpreadSheetData()
         assertNotNull(molSpreadSheetData)
 
-        MolSpreadSheetCell molSpreadSheetCell_0_0 = new MolSpreadSheetCell("1",MolSpreadSheetCellType.identifier)
+        MolSpreadSheetCell molSpreadSheetCell_0_0 = new MolSpreadSheetCell("1", MolSpreadSheetCellType.identifier)
         molSpreadSheetCell_0_0.setSpreadSheetActivityStorage(spreadSheetActivityStorage)
 
-        MolSpreadSheetCell molSpreadSheetCell_0_1 = new MolSpreadSheetCell("1",MolSpreadSheetCellType.image)
+        MolSpreadSheetCell molSpreadSheetCell_0_1 = new MolSpreadSheetCell("1", MolSpreadSheetCellType.image)
         molSpreadSheetCell_0_1.setSpreadSheetActivityStorage(spreadSheetActivityStorage)
 
-        MolSpreadSheetCell molSpreadSheetCell_1_0 = new MolSpreadSheetCell("1",MolSpreadSheetCellType.numeric)
+        MolSpreadSheetCell molSpreadSheetCell_1_0 = new MolSpreadSheetCell("1", MolSpreadSheetCellType.numeric)
         molSpreadSheetCell_1_0.setSpreadSheetActivityStorage(spreadSheetActivityStorage)
 
-        MolSpreadSheetCell molSpreadSheetCell_1_1 = new MolSpreadSheetCell("1",MolSpreadSheetCellType.string)
+        MolSpreadSheetCell molSpreadSheetCell_1_1 = new MolSpreadSheetCell("1", MolSpreadSheetCellType.string)
         molSpreadSheetCell_1_1.setSpreadSheetActivityStorage(spreadSheetActivityStorage)
 
         molSpreadSheetData.mssData["0_0"] = molSpreadSheetCell_0_0
@@ -183,16 +183,16 @@ class MolSpreadSheetDataUnitSpec  extends Specification {
 
 
         then:
-        assert molSpreadSheetData.findSpreadSheetActivity (row, column).eid== 1 as Long
-        assert molSpreadSheetData.findSpreadSheetActivity (row, column).cid== 2 as Long
-        assert molSpreadSheetData.findSpreadSheetActivity (row, column).sid== 3 as Long
+        assert molSpreadSheetData.findSpreadSheetActivity(row, column).eid == 1 as Long
+        assert molSpreadSheetData.findSpreadSheetActivity(row, column).cid == 2 as Long
+        assert molSpreadSheetData.findSpreadSheetActivity(row, column).sid == 3 as Long
 
         where:
-        row     |   column
-        0       |   0
-        0       |   1
-        1       |   0
-        1       |   1
+        row | column
+        0   | 0
+        0   | 1
+        1   | 0
+        1   | 1
     }
 
 
@@ -210,9 +210,10 @@ class MolSpreadSheetDataUnitSpec  extends Specification {
         molSpreadSheetData.rowPointer[2 as Long] = 48
 
         then:
-        assert molSpreadSheetData.rowCount==2
-        assert molSpreadSheetData.columnCount==3
+        assert molSpreadSheetData.rowCount == 2
+        assert molSpreadSheetData.columnCount == 3
     }
+
     void "Test rowCount and colCount method with null maps"() {
         given:
         MolSpreadSheetData molSpreadSheetData = new MolSpreadSheetData()
@@ -223,7 +224,7 @@ class MolSpreadSheetDataUnitSpec  extends Specification {
         final int columnCount = molSpreadSheetData.columnCount
 
         and:
-        final int rowCount =molSpreadSheetData.rowCount
+        final int rowCount = molSpreadSheetData.rowCount
         then:
         assert columnCount == 0
         assert rowCount == 0
@@ -239,7 +240,7 @@ class MolSpreadSheetDataUnitSpec  extends Specification {
         molSpreadSheetData.rowPointer = null
 
         then:
-        assert molSpreadSheetData.rowCount==0
+        assert molSpreadSheetData.rowCount == 0
     }
 
 
@@ -256,25 +257,41 @@ class MolSpreadSheetDataUnitSpec  extends Specification {
 
         then:
         def mssData = molSpreadSheetData.mssData
-        molSpreadSheetData.setMssData ( null )
+        molSpreadSheetData.setMssData(null)
         assertFalse molSpreadSheetData.validate()
-        molSpreadSheetData.setMssData ( mssData )
+        molSpreadSheetData.setMssData(mssData)
         assertTrue molSpreadSheetData.validate()
 
         def rowPointer = molSpreadSheetData.rowPointer
-        molSpreadSheetData.setRowPointer ( null )
+        molSpreadSheetData.setRowPointer(null)
         assertFalse molSpreadSheetData.validate()
-        molSpreadSheetData.setRowPointer ( rowPointer )
+        molSpreadSheetData.setRowPointer(rowPointer)
         assertTrue molSpreadSheetData.validate()
 
         def columnPointer = molSpreadSheetData.columnPointer
-        molSpreadSheetData.setColumnPointer ( null )
+        molSpreadSheetData.setColumnPointer(null)
         assertFalse molSpreadSheetData.validate()
-        molSpreadSheetData.setColumnPointer ( columnPointer )
+        molSpreadSheetData.setColumnPointer(columnPointer)
         assertTrue molSpreadSheetData.validate()
 
-        molSpreadSheetData.setMssHeaders ( null )
+        molSpreadSheetData.setMssHeaders(null)
         assertTrue molSpreadSheetData.validate()
 
+    }
+
+    void "test MolSpreadsheetDerivedMethod enum"() {
+        given:
+
+        when:
+        String description = molSpreadsheetDerivedMethod.description()
+
+        then:
+        assert description == expectedDescription
+
+        where:
+        molSpreadsheetDerivedMethod                               | expectedDescription
+        MolSpreadsheetDerivedMethod.Compounds_NoAssays_NoProjects | "Only compound(s); no assays or projects"
+        MolSpreadsheetDerivedMethod.NoCompounds_Assays_NoProjects | "Only assay(s); no compounds or projects"
+        MolSpreadsheetDerivedMethod.NoCompounds_NoAssays_Projects | "Only project(s); no assays or compounds"
     }
 }
