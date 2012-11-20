@@ -43,9 +43,9 @@ class AssayExportHelperServiceUnitSpec extends Specification {
         then: "A valid xml measure is generated with the expected measure attributes, result type and entry unit"
         XmlTestAssertions.assertResults(results, this.writer.toString())
         where:
-        label                                           | measure                                                                                                                      | results
-        "Measure with Parent No Child Elements"         | new Measure(assayContext: new AssayContext(contextName: "label"))                                                            | XmlTestSamples.MEASURE_1_UNIT
-        "Measure with Parent,ResultType and Entry Unit" | new Measure(assayContext: new AssayContext(contextName: "label"), element: new Element(label: "resultType"), entryUnit: "%") | XmlTestSamples.MEASURE_2_UNIT
+        label                                           | measure                                                                                                                         | results
+        "Measure with Parent No Child Elements"         | new Measure(id:'1')                                                                          | XmlTestSamples.MEASURE_1_UNIT
+        "Measure with Parent,ResultType and Entry Unit" | new Measure(assayContext: new AssayContext(contextName: "label"), resultType: new Element(label: "resultType"), entryUnit: "%") | XmlTestSamples.MEASURE_2_UNIT
 
     }
 

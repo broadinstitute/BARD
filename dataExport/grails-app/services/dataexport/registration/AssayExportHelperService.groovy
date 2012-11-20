@@ -33,12 +33,9 @@ class AssayExportHelperService {
      */
     protected Map<String, String> createAttributesForMeasure(final Measure measure) {
         final Map<String, String> attributes = [:]
-
-        if (measure.assayContext) {
-            attributes.put('assayContextRef', measure.assayContext.contextName)
-        }
+        attributes.put('measureId', measure.id.toString())
         if (measure.parentMeasure) {
-            attributes.put('parentMeasure', measure.parentMeasure.id.toString())
+            attributes.put('parentMeasureRef', measure.parentMeasure.id.toString())
         }
         return attributes
     }
@@ -47,7 +44,13 @@ class AssayExportHelperService {
 
         final Map<String, String> attributes = createAttributesForMeasure(measure);
         markupBuilder.measure(attributes) {
-            final Element resultType = measure.element
+            Element statsModifier = measure.statsModifier
+            if (statsModifier) {
+                statsModifier(label: statsModifier.label) {
+                    // TODO generate link
+                }
+            }
+            final Element resultType = measure.resultType
             if (resultType) { //this is the result type
                 resultTypeRef(label: resultType.label) {
                     final String href = grailsLinkGenerator.link(mapping: 'resultType', absolute: true, params: [id: resultType.id]).toString()
@@ -163,7 +166,7 @@ class AssayExportHelperService {
         if (allAssayContextItems) {
             markupBuilder.assayContextItems() {
                 for (AssayContextItem assayContextItem : allAssayContextItems) {
-                    if(assayContextItem != null){
+                    if (assayContextItem != null) {
                         generateAssayContextItem(markupBuilder, assayContextItem)
                     }
                 }
@@ -252,8 +255,8 @@ class AssayExportHelperService {
         }
 
         markupBuilder.assay(attributes) {
-            if(assay.assayTitle){
-                assayTitle(assay.assayTitle)
+            if (assay.assayShortName) {
+                assayShortName(assay.assayShortName)
             }
             if (assay.assayName) {
                 assayName(assay.assayName)

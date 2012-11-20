@@ -161,7 +161,7 @@ class ResultExportServiceUnitSpec extends Specification {
         given: "A Result Context Item"
         when: "We call the service method to generate Attributes"
         final Map<String, String> resultContextItemAttributes =
-            this.resultExportService.generateAttributesForRunContextItem(resultContextItem,"resultContextItemId")
+            this.resultExportService.generateAttributesForContextItem(resultContextItem,"resultContextItemId")
         then: "The generated map is equal to the expected map"
         resultContextItemAttributes == results
         where:
@@ -182,7 +182,7 @@ class ResultExportServiceUnitSpec extends Specification {
     void "test generate Result Context Item #label"() {
         given: "A Result Context Item"
         when: "We call the service method to generate the XML representation"
-        this.resultExportService.generateRunContextItem(this.staxBuilder, resultContextItem)
+        this.resultExportService.generateContextItem(this.staxBuilder, resultContextItem)
         then: "The generated XML is the similar to the expected XML"
         XmlTestAssertions.assertResults(results, this.writer.toString())
         where:

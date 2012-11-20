@@ -159,10 +159,10 @@ class ExperimentExportService {
      */
     protected void generateExperimentContextItem(def markupBuilder, final ExperimentContextItem experimentContextItem) {
 
-        final Map<String, String> attributes = this.resultExportService.generateAttributesForRunContextItem(experimentContextItem, "experimentContextItemId")
+        final Map<String, String> attributes = this.resultExportService.generateAttributesForContextItem(experimentContextItem, "experimentContextItemId")
 
         markupBuilder.experimentContextItem(attributes) {
-            this.resultExportService.generateRunContextItemElements(markupBuilder, experimentContextItem)
+            this.resultExportService.generateContextItemElements(markupBuilder, experimentContextItem)
 
         }
     }

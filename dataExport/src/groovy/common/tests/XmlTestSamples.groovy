@@ -298,7 +298,7 @@ class XmlTestSamples {
   <entryUnit unit='%' />
 </measure>
 '''
-    static final String MEASURE_1_UNIT = '''<measure assayContextRef='label'/>'''
+    static final String MEASURE_1_UNIT = '''<measure measureId='1'                                                                                                                                                                          />'''
     static final String MEASURE_CONTEXT_1_UNIT = '''
 <assayContext>
   <contextName>TestName1</contextName>

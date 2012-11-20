@@ -20,6 +20,7 @@ import bard.db.experiment.*
 import org.apache.commons.lang.time.StopWatch
 import org.hibernate.SessionFactory
 import org.hibernate.Session
+import bard.db.model.AbstractContextItem
 
 class ResultExportService {
     LinkGenerator grailsLinkGenerator
@@ -239,36 +240,32 @@ class ResultExportService {
     protected void generateResultContextItems(def markupBuilder, final Set<ResultContextItem> resultContextItems) {
         markupBuilder.resultContextItems() {
             for (ResultContextItem resultContextItem : resultContextItems) {
-                generateRunContextItem(markupBuilder, resultContextItem)
+                generateContextItem(markupBuilder, resultContextItem)
             }
         }
     }
     /**
      *
-     * @param runContextItem
+     * @param contextItem
      * @return
      */
-    protected Map<String, String> generateAttributesForRunContextItem(final RunContextItem runContextItem, final String runContextItemIdLabel) {
+    protected Map<String, String> generateAttributesForContextItem(final AbstractContextItem contextItem, final String runContextItemIdLabel) {
         Map<String, String> attributes = [:]
-        attributes.put(runContextItemIdLabel, runContextItem.id?.toString())
-        if (runContextItem.groupResultContext && runContextItem.groupResultContext.id.toString().isInteger()) {
-            attributes.put('parentGroup', runContextItem.groupResultContext.id.toString())
+        attributes.put(runContextItemIdLabel, contextItem.id?.toString())
+        if (contextItem.qualifier) {
+            attributes.put('qualifier', contextItem.qualifier)
         }
-
-        if (runContextItem.qualifier) {
-            attributes.put('qualifier', runContextItem.qualifier)
+        if (contextItem.valueDisplay) {
+            attributes.put('valueDisplay', contextItem.valueDisplay)
         }
-        if (runContextItem.valueDisplay) {
-            attributes.put('valueDisplay', runContextItem.valueDisplay)
+        if (contextItem.valueNum || contextItem.valueNum.toString().isInteger()) {
+            attributes.put('valueNum', contextItem.valueNum.toString())
         }
-        if (runContextItem.valueNum || runContextItem.valueNum.toString().isInteger()) {
-            attributes.put('valueNum', runContextItem.valueNum.toString())
+        if (contextItem.valueMin || contextItem.valueMin.toString().isInteger()) {
+            attributes.put('valueMin', contextItem.valueMin.toString())
         }
-        if (runContextItem.valueMin || runContextItem.valueMin.toString().isInteger()) {
-            attributes.put('valueMin', runContextItem.valueMin.toString())
-        }
-        if (runContextItem.valueMax || runContextItem.valueMax.toString().isInteger()) {
-            attributes.put('valueMax', runContextItem.valueMax.toString())
+        if (contextItem.valueMax || contextItem.valueMax.toString().isInteger()) {
+            attributes.put('valueMax', contextItem.valueMax.toString())
         }
         return attributes
     }
@@ -277,12 +274,12 @@ class ResultExportService {
      * @param markupBuilder
      * @param resultContextItem
      */
-    protected void generateRunContextItem(def markupBuilder, final RunContextItem runContextItem) {
+    protected void generateContextItem(def markupBuilder, final AbstractContextItem contextItem) {
 
-        final Map<String, String> attributes = generateAttributesForRunContextItem(runContextItem,"resultContextItemId")
+        final Map<String, String> attributes = generateAttributesForContextItem(contextItem,"resultContextItemId")
 
         markupBuilder.resultContextItem(attributes) {
-            generateRunContextItemElements(markupBuilder,runContextItem)
+            generateContextItemElements(markupBuilder,contextItem)
         }
     }
     /**
@@ -290,22 +287,22 @@ class ResultExportService {
      * @param markupBuilder
      * @param resultContextItem
      */
-    protected void generateRunContextItemElements(def markupBuilder, final RunContextItem runContextItem) {
-            if (runContextItem.attributeElement) {
-                final String attributeHref = grailsLinkGenerator.link(mapping: 'element', absolute: true, params: [id: "${runContextItem.attributeElement.id}"]).toString()
-                markupBuilder.attribute(label: runContextItem.attributeElement.label) {
+    protected void generateContextItemElements(def markupBuilder, final AbstractContextItem contextItem) {
+            if (contextItem.attributeElement) {
+                final String attributeHref = grailsLinkGenerator.link(mapping: 'element', absolute: true, params: [id: "${contextItem.attributeElement.id}"]).toString()
+                markupBuilder.attribute(label: contextItem.attributeElement.label) {
                     link(rel: 'related', href: "${attributeHref}", type: "${this.mediaTypes.elementMediaType}")
                 }
             }
-            if (runContextItem.valueElement) {
-                final String attributeHref = grailsLinkGenerator.link(mapping: 'element', absolute: true, params: [id: "${runContextItem.valueElement.id}"]).toString()
+            if (contextItem.valueElement) {
+                final String attributeHref = grailsLinkGenerator.link(mapping: 'element', absolute: true, params: [id: "${contextItem.valueElement.id}"]).toString()
 
-                markupBuilder.valueControlled(label: runContextItem.valueElement.label) {
+                markupBuilder.valueControlled(label: contextItem.valueElement.label) {
                     link(rel: 'related', href: "${attributeHref}", type: "${this.mediaTypes.elementMediaType}")
                 }
             }
-            if (runContextItem.extValueId) {
-                markupBuilder.extValueId(runContextItem.extValueId)
+            if (contextItem.extValueId) {
+                markupBuilder.extValueId(contextItem.extValueId)
             }
 
     }
