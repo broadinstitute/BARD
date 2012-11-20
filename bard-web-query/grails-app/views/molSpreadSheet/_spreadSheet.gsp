@@ -31,7 +31,6 @@
         <g:render template="../bardWebInterface/facets"
                   model="['facets': facets, 'formName': FacetFormType.AssayFacetForm]"/>
     </div>
-    <export:formats />
     <div class="span10">
         <g:if test="${molSpreadSheetData?.getColumnCount() > 0}">
             <g:set var="columnWidth" value="${100.0 / ((molSpreadSheetData?.getColumnCount() - 1) as float)}"/>
@@ -72,7 +71,7 @@
                 <tbody>
                 <% Integer rowCount = 0 %>
                 <g:each var="rowCnt" in="${0..(molSpreadSheetData.getRowCount() - 1)}">
-                    <% String retrievedSmiles = """${molSpreadSheetData?.displayValue(rowCnt, 0)["smiles"]}""".toString() %>
+                    <% String retrievedSmiles = """${molSpreadSheetData?.displayValue(rowCnt, 0)."smiles"}""".toString() %>
                     <% String cid = """${molSpreadSheetData?.displayValue(rowCnt, 1)?."value"}""".toString() %>
                     <% String activeVrsTested = """${molSpreadSheetData?.displayValue(rowCnt, 3)?."value"}""".toString() %>
                     <g:if test="${((rowCount++) % 2) == 0}">
@@ -172,6 +171,7 @@
                 </g:each>
                 </tbody>
             </table>
+            <export:formats/>
         </g:if>
         <g:else>
             <div class="alert">
