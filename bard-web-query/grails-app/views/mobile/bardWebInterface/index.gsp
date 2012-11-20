@@ -10,7 +10,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>My Page</title>
+    <title>Index Page</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <r:require modules="jqueryMobile"/>
     <r:layoutResources/>
@@ -19,6 +19,9 @@
 <body>
 
 <div data-role="page">
+    <div class="right-aligned">
+        <g:render template="/layouts/templates/loginStrip"/>
+    </div>
 
     <div data-role="header">
         <h1>My Title</h1>

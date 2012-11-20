@@ -26,7 +26,20 @@ class BardWebInterfaceController {
     def shoppingCartService
     IQueryService queryService
     MolecularSpreadSheetService molecularSpreadSheetService
+    MobileService mobileService
     List<SearchFilter> filters = []
+
+    //An AfterInterceptor to handle mobile-view routing.
+    def afterInterceptor = [action: this.&handleMobile]
+
+    private handleMobile(model, modelAndView) {
+        if (modelAndView && mobileService.detect(request)) {
+            String newView = '/mobile' + modelAndView.viewName
+            if (mobileService.gspExists(newView)) {
+                modelAndView.viewName = newView
+            }
+        }
+    }
 
     def index() {
 
@@ -401,10 +414,6 @@ class BardWebInterfaceController {
             return response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR.intValue(),
                     "AutoComplete encoutered an error :\n${exp.message}")
         }
-    }
-
-    def testMobilePage() {
-
     }
 }
 /**

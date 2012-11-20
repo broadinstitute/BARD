@@ -79,6 +79,7 @@ grails.project.dependency.resolution = {
         test ":geb:$gebVersion"
         test ":remote-control:1.2"
         compile ":clover:3.1.6"
+        compile ":spring-mobile:0.4"
     }
 }
 

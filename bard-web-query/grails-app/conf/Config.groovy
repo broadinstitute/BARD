@@ -113,7 +113,7 @@ CbipCrowd {
     application.url = 'https://crowd.somewhere.com/crowd/'
     application.username = 'bard'
     application.password = 'ChangeMe'
-    applicationSpecificRoles = ['ROLE_USER', 'ROLE_NO_ROLE']
+    applicationSpecificRoles = ['ROLE_USER', 'ROLE_NO_ROLE', 'ROLE_MOBILE']
 }
 grails {
     plugins {
