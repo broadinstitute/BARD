@@ -1,9 +1,9 @@
 package dataexport.registration
 
-
 import bard.db.dictionary.Element
 import common.tests.XmlTestAssertions
 import common.tests.XmlTestSamples
+import grails.buildtestdata.mixin.Build
 import grails.test.mixin.Mock
 import groovy.xml.MarkupBuilder
 import org.codehaus.groovy.grails.web.mapping.LinkGenerator
@@ -36,33 +36,42 @@ class AssayExportHelperServiceUnitSpec extends Specification {
         this.markupBuilder = new MarkupBuilder(writer)
     }
 
+    /**
+     * uses passed in map but manually sets the ID property as this can't be set the map constructor
+     * @return a measure
+     */
+    Measure createMeasure(Map map = [:]) {
+        // resulttype is required so included unless specifically passed in
+        if (!map.containsKey('resultType')) {
+            map.resultType = new Element(label: "resultType")
+        }
+        Measure measure = new Measure(map)
+        measure.@id = map.id ?: 1
+        measure
+    }
+
+    AssayContext createAssayContext(Map map = [:]) {
+        AssayContext assayContext = new AssayContext(map)
+        assayContext.@id = map.id ?: 1
+        assayContext
+    }
 
     void "test generate Measure #label"() {
         when: "We attempt to generate a measure in xml"
-        this.assayExportHelperService.generateMeasure(this.markupBuilder, measure)
+        this.assayExportHelperService.generateMeasure(this.markupBuilder, measure.call())
         then: "A valid xml measure is generated with the expected measure attributes, result type and entry unit"
         XmlTestAssertions.assertResults(results, this.writer.toString())
         where:
-        label                                           | measure                                                                                                                         | results
-        "Measure with Parent No Child Elements"         | new Measure(id:'1')                                                                          | XmlTestSamples.MEASURE_1_UNIT
-        "Measure with Parent,ResultType and Entry Unit" | new Measure(assayContext: new AssayContext(contextName: "label"), resultType: new Element(label: "resultType"), entryUnit: "%") | XmlTestSamples.MEASURE_2_UNIT
+        label                                    | measure                                                                                                    | results
+        "minimal Measure"                        | {createMeasure()}                                                                                          | XmlTestSamples.MINIMAL_MEASURE
+        "minimal Measure with parentMeasureRef"  | {createMeasure(id: 2, parentMeasure: createMeasure())}                                                     | XmlTestSamples.MINIMAL_MEASURE_WITH_PARENT_MEASURE_REF
+        "minimal Measure with statsModifierRef"  | {createMeasure(statsModifier: new Element(label: "statsModifier"))}                                        | XmlTestSamples.MINIMAL_MEASURE_WITH_STATS_MODIFIER_REF
+        "minimal Measure with entryUnitRef"      | {createMeasure(entryUnit: new Element(label: "entryUnit"))}                                                | XmlTestSamples.MINIMAL_MEASURE_WITH_ENTRY_UNIT_REF
+        "minimal Measure with assayContextRefs " | {createMeasure(assayContextMeasures: [new AssayContextMeasure(assayContext: createAssayContext(id: 20))])} | XmlTestSamples.MINIMAL_MEASURE_WITH_ASSAY_CONTEXT_REFS
 
     }
 
-
-    void "test create Attributes For Measure #label"() {
-        when: "We pass in a measure to Create a attributes for a Measure"
-        Map<String, String> attributes = this.assayExportHelperService.createAttributesForMeasure(measure)
-        then: "A map with the expected key/value pairs is generated"
-        results == attributes
-        where:
-        label                             | measure                                                                                                                                     | results
-        "Measure With Measure Context "   | new Measure(assayContext: new AssayContext(contextName: "label"), element: new Element(label: "label"), entryUnit: "%", modifiedBy: "Bard") | [assayContextRef: "label"]
-        "Measure with No Measure Context" | new Measure(element: new Element(label: "label"), entryUnit: "%", modifiedBy: "Bard")                                                       | [:]
-
-    }
-
-    void "test Generate Measure Context #label"() {
+    void "test generate Assay Context #label"() {
         given:
         AssayContext assayContext = new AssayContext(contextName: contextName)
         when: "We attempt to generate a measure context in xml"
@@ -71,7 +80,7 @@ class AssayExportHelperServiceUnitSpec extends Specification {
         XmlTestAssertions.assertResults(results, this.writer.toString())
         where:
         label              | contextName | results
-        "Measure context " | "TestName1" | XmlTestSamples.MEASURE_CONTEXT_1_UNIT
+        "assay context " | "TestName1" | XmlTestSamples.ASSAY_CONTEXT_WITH_CONTEXT_NAME_UNIT
 
     }
 

@@ -177,7 +177,7 @@ class XmlTestSamples {
 </experiments>
 '''
 
- static final String PROJECTS = '''
+    static final String PROJECTS = '''
 <projects count='2'>
     <project projectId='1' readyForExtraction='Ready' groupType='Project'>
     <projectName>Scripps special project #1</projectName>
@@ -291,15 +291,49 @@ class XmlTestSamples {
 </assayContextItem>
 '''
 
-    static final String MEASURE_2_UNIT = '''<measure assayContextRef='label'>
-  <resultTypeRef label='resultType'>
-    <link rel='related' href='null' type='xml' />
-  </resultTypeRef>
-  <entryUnit unit='%' />
-</measure>
-'''
-    static final String MEASURE_1_UNIT = '''<measure measureId='1'                                                                                                                                                                          />'''
-    static final String MEASURE_CONTEXT_1_UNIT = '''
+    static final String MINIMAL_MEASURE = '''
+        <measure measureId='1'>
+          <resultTypeRef label='resultType'>
+            <link rel='related' href='null' type='xml' />
+          </resultTypeRef>
+        </measure>'''
+    static final String MINIMAL_MEASURE_WITH_PARENT_MEASURE_REF = '''
+        <measure measureId='2' parentMeasureRef='1'>
+          <resultTypeRef label='resultType'>
+            <link rel='related' href='null' type='xml' />
+          </resultTypeRef>
+        </measure>'''
+
+    static final String MINIMAL_MEASURE_WITH_STATS_MODIFIER_REF = '''
+        <measure measureId='1'>
+          <resultTypeRef label='resultType'>
+            <link rel='related' href='null' type='xml' />
+          </resultTypeRef>
+          <statsModifierRef label='statsModifier'>
+            <link rel='related' href='null' type='xml' />
+          </statsModifierRef>
+        </measure>'''
+
+    static final String MINIMAL_MEASURE_WITH_ENTRY_UNIT_REF = '''
+        <measure measureId='1'>
+          <resultTypeRef label='resultType'>
+            <link rel='related' href='null' type='xml' />
+          </resultTypeRef>
+          <entryUnitRef label='entryUnit'>
+            <link rel='related' href='null' type='xml' />
+          </entryUnitRef>
+        </measure>'''
+    static final String MINIMAL_MEASURE_WITH_ASSAY_CONTEXT_REFS = '''
+        <measure measureId='1' >
+          <resultTypeRef label='resultType'>
+            <link rel='related' href='null' type='xml' />
+          </resultTypeRef>
+          <assayContextRefs>
+            <assayContextRef>20</assayContextRef>
+          </assayContextRefs>
+        </measure>'''
+
+    static final String ASSAY_CONTEXT_WITH_CONTEXT_NAME_UNIT = '''
 <assayContext>
   <contextName>TestName1</contextName>
 </assayContext>

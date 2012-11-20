@@ -44,24 +44,33 @@ class AssayExportHelperService {
 
         final Map<String, String> attributes = createAttributesForMeasure(measure);
         markupBuilder.measure(attributes) {
-            Element statsModifier = measure.statsModifier
-            if (statsModifier) {
-                statsModifier(label: statsModifier.label) {
-                    // TODO generate link
-                }
-            }
             final Element resultType = measure.resultType
             if (resultType) { //this is the result type
-                resultTypeRef(label: resultType.label) {
-                    final String href = grailsLinkGenerator.link(mapping: 'resultType', absolute: true, params: [id: resultType.id]).toString()
-                    link(rel: 'related', href: "${href}", type: "${this.mediaTypesDTO.resultTypeMediaType}")
+                createElementRef(markupBuilder, resultType, 'resultTypeRef', this.mediaTypesDTO.resultTypeMediaType)
+            }
+            final Element statsModifier = measure.statsModifier
+            if (statsModifier) {
+                createElementRef(markupBuilder, statsModifier, 'statsModifierRef', this.mediaTypesDTO.elementMediaType)
+            }
+            final Element entryUnit = measure.entryUnit
+            if (entryUnit) {
+                createElementRef(markupBuilder, entryUnit, 'entryUnitRef', this.mediaTypesDTO.elementMediaType)
+            }
+            if (measure.assayContextMeasures) {
+                assayContextRefs() {
+                    for (assayContextMeasure in measure.assayContextMeasures) {
+                        assayContextRef(assayContextMeasure.assayContext.id)
+                    }
                 }
             }
-            final String unit = measure.entryUnit
-            if (unit) {
-                entryUnit(unit: unit) {
-                }
-            }
+
+        }
+    }
+
+    public createElementRef(MarkupBuilder markupBuilder, Element element, String refName, String mediaType) {
+        markupBuilder."${refName}"(label: element.label) {
+            final String href = grailsLinkGenerator.link(mapping: 'element', absolute: true, params: [id: element.id]).toString()
+            link(rel: 'related', href: href, type: mediaType)
         }
     }
 
