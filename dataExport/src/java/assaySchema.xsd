@@ -77,7 +77,7 @@ application/vnd.bard.cap+xml;type=assay</xs:documentation>
                                                 </xs:attribute>
                                             </xs:complexType>
                                         </xs:element>
-                                        <xs:element minOccurs="0" name="statsModifier">
+                                        <xs:element minOccurs="0" name="statsModifierRef">
                                             <xs:complexType>
                                                 <xs:sequence>
                                                   <xs:element minOccurs="0" ref="link"/>
@@ -86,7 +86,7 @@ application/vnd.bard.cap+xml;type=assay</xs:documentation>
                                                   use="required"/>
                                             </xs:complexType>
                                         </xs:element>
-                                        <xs:element minOccurs="0" name="entryUnit">
+                                        <xs:element minOccurs="0" name="entryUnitRef">
                                             <xs:annotation>
                                                 <xs:documentation>Unit and a link to the Unit element in the dictionary</xs:documentation>
                                             </xs:annotation>
