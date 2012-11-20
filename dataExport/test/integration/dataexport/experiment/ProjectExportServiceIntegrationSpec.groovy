@@ -1,7 +1,7 @@
 package dataexport.experiment
 
 import bard.db.enums.ReadyForExtraction
-import bard.db.experiment.Project
+import bard.db.project.Project
 import common.tests.XmlTestAssertions
 import common.tests.XmlTestSamples
 import dataexport.registration.BardHttpResponse

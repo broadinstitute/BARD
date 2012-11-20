@@ -16,6 +16,8 @@ import org.codehaus.groovy.grails.web.mapping.LinkGenerator
 import spock.lang.Specification
 import bard.db.experiment.*
 import spock.lang.Unroll
+import bard.db.project.ProjectStep
+import bard.db.project.Project
 
 @Unroll
 /**

@@ -1,6 +1,6 @@
 package dataexport.experiment
 
-import bard.db.experiment.Project
+import bard.db.project.Project
 import dataexport.cap.experiment.ProjectRestController
 import grails.test.mixin.Mock
 import grails.test.mixin.TestFor

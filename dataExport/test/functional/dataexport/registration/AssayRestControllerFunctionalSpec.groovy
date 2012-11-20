@@ -15,7 +15,7 @@ import javax.servlet.http.HttpServletResponse
 
 import static groovyx.net.http.Method.GET
 import org.custommonkey.xmlunit.XMLAssert
-import bard.db.experiment.Project
+import bard.db.project.Project
 
 import static groovyx.net.http.Method.PUT
 import static groovyx.net.http.ContentType.TEXT

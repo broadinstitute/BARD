@@ -1,6 +1,6 @@
 package dataexport.experiment
 
-import bard.db.experiment.Project
+import bard.db.project.Project
 import grails.converters.XML
 import grails.plugin.remotecontrol.RemoteControl
 import groovyx.net.http.RESTClient
