@@ -278,12 +278,12 @@ application/vnd.bard.cap+xml;type=assay</xs:documentation>
                             <xs:element minOccurs="0" name="extValueId" type="xs:string"/>
                         </xs:sequence>
                         <xs:attribute name="assayContextItemId" type="bardID" use="required"/>
+                        <xs:attribute name="displayOrder" type="xs:int" use="required"/>
                         <xs:attribute name="qualifier" type="xs:string"/>
                         <xs:attribute name="valueNum" type="xs:double"/>
                         <xs:attribute name="valueMin" type="xs:double"/>
                         <xs:attribute name="valueMax" type="xs:double"/>
                         <xs:attribute name="valueDisplay" type="xs:string"/>
-                        <xs:attribute name="displayOrder" type="xs:int"/>
                     </xs:complexType>
                 </xs:element>
             </xs:sequence>

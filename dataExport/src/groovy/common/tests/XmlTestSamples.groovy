@@ -272,24 +272,22 @@ class XmlTestSamples {
 </assayDocument>
 '''
 
-    static final String MEASURE_CONTEXT_ITEM_WITH_ATTRIBUTE_AND_VALUE_UNIT = '''
-<assayContextItem assayContextRef='assayContext' qualifier='&lt;' valueDisplay='Display' valueNum='5.0' valueMin='6.0' valueMax='7.0'>
-  <valueId label='valueLabel'>
-    <link rel='related' href='null' type='xml' />
-  </valueId>
-  <attributeId attributeType='Fixed' label='attributeLabel'>
-    <link rel='related' href='null' type='xml' />
-  </attributeId>
-</assayContextItem>
-'''
+    static final String ASSAY_CONTEXT_ITEM_WITH_ATTRIBUTE = '''
+        <assayContextItem assayContextItemId='1' displayOrder='0' qualifier='&lt;' valueDisplay='Display' valueNum='5.0' valueMin='6.0' valueMax='7.0'>
+          <attributeId attributeType='Fixed' label='attributeLabel'>
+            <link rel='related' href='null' type='xml' />
+          </attributeId>
+        </assayContextItem>'''
 
-    static final String MEASURE_CONTEXT_ITEM_WITH_ATTRIBUTE_UNIT = '''
-<assayContextItem assayContextRef='assayContext' qualifier='&lt;' valueDisplay='Display' valueNum='5.0' valueMin='6.0' valueMax='7.0'>
-  <attributeId attributeType='Fixed' label='attributeLabel'>
-    <link rel='related' href='null' type='xml' />
-  </attributeId>
-</assayContextItem>
-'''
+    static final String ASSAY_CONTEXT_ITEM_WITH_ATTRIBUTE_AND_VALUE = '''
+        <assayContextItem assayContextItemId='1' displayOrder='0' qualifier='&lt;' valueDisplay='Display' valueNum='5.0' valueMin='6.0' valueMax='7.0'>
+          <valueId label='valueLabel'>
+            <link rel='related' href='null' type='xml' />
+          </valueId>
+          <attributeId attributeType='Fixed' label='attributeLabel'>
+            <link rel='related' href='null' type='xml' />
+          </attributeId>
+        </assayContextItem>'''
 
     static final String MINIMAL_MEASURE = '''
         <measure measureId='1'>
@@ -333,11 +331,28 @@ class XmlTestSamples {
           </assayContextRefs>
         </measure>'''
 
-    static final String ASSAY_CONTEXT_WITH_CONTEXT_NAME_UNIT = '''
-<assayContext>
-  <contextName>TestName1</contextName>
-</assayContext>
-'''
+    static final String MINIMAL_ASSAY_CONTEXT = '''
+        <assayContext assayContextId='1' displayOrder='0'>
+          <contextName>contextName</contextName>
+        </assayContext> '''
+
+    static final String MINIMAL_ASSAY_CONTEXT_WITH_CONTEXT_GROUP = '''
+        <assayContext assayContextId='1' displayOrder='0'>
+          <contextName>contextName</contextName>
+          <contextGroup>contextGroup</contextGroup>
+        </assayContext> '''
+
+    static final String MINIMAL_ASSAY_CONTEXT_WITH_ASSAY_CONTEXT_ITEM = '''
+        <assayContext assayContextId='1' displayOrder='0'>
+          <contextName>contextName</contextName>
+          <assayContextItems>
+            <assayContextItem assayContextItemId='1' displayOrder='0'>
+              <attributeId attributeType='Fixed' label='label'>
+                <link rel='related' href='null' type='xml' />
+              </attributeId>
+            </assayContextItem>
+          </assayContextItems>
+        </assayContext> '''
 
     static String ASSAY_LINKS = '''
 <links>

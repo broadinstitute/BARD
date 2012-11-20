@@ -4,12 +4,12 @@ import bard.db.dictionary.Element
 import common.tests.XmlTestAssertions
 import common.tests.XmlTestSamples
 import grails.buildtestdata.mixin.Build
-import grails.test.mixin.Mock
 import groovy.xml.MarkupBuilder
 import org.codehaus.groovy.grails.web.mapping.LinkGenerator
 import spock.lang.Specification
 import spock.lang.Unroll
 import bard.db.registration.*
+import grails.buildtestdata.TestDataConfigurationHolder
 
 /**
  * Created with IntelliJ IDEA.
@@ -18,7 +18,7 @@ import bard.db.registration.*
  * Time: 12:52 PM
  * To change this template use File | Settings | File Templates.
  */
-@Mock([Measure, AssayContextItem, AssayContext, Assay, AssayDocument])
+@Build([Assay, AssayContext, AssayContextItem, AssayDocument, Element, Measure])
 @Unroll
 class AssayExportHelperServiceUnitSpec extends Specification {
     Writer writer
@@ -27,6 +27,7 @@ class AssayExportHelperServiceUnitSpec extends Specification {
     AssayExportHelperService assayExportHelperService
 
     void setup() {
+        TestDataConfigurationHolder.reset()
         grailsLinkGenerator = Mock(LinkGenerator.class)
         final MediaTypesDTO mediaTypesDTO = new MediaTypesDTO(resultTypeMediaType: "xml", elementMediaType: "xml", assaysMediaType: "xml", assayMediaType: "xml", assayDocMediaType: "xml")
         this.assayExportHelperService =
@@ -50,10 +51,22 @@ class AssayExportHelperServiceUnitSpec extends Specification {
         measure
     }
 
+    /**
+     * create a assayContext with required fields
+     * @param map
+     * @return
+     */
     AssayContext createAssayContext(Map map = [:]) {
-        AssayContext assayContext = new AssayContext(map)
+        if (!map.containsKey('contextName')) {
+            map.contextName = 'contextName'
+        }
+        AssayContext assayContext = AssayContext.build(map)
         assayContext.@id = map.id ?: 1
         assayContext
+    }
+
+    AssayContextItem createAssayContextItem(Map map = [:]) {
+        AssayContextItem.build(map)
     }
 
     void "test generate Measure #label"() {
@@ -72,55 +85,49 @@ class AssayExportHelperServiceUnitSpec extends Specification {
     }
 
     void "test generate Assay Context #label"() {
-        given:
-        AssayContext assayContext = new AssayContext(contextName: contextName)
+        def localAc = valueUnderTest.call()
         when: "We attempt to generate a measure context in xml"
-        this.assayExportHelperService.generateAssayContext(this.markupBuilder, assayContext)
+        this.assayExportHelperService.generateAssayContext(this.markupBuilder, localAc)
         then: "A valid xml measure context is generated with the expected measure context id and name"
+        println(this.writer.toString())
         XmlTestAssertions.assertResults(results, this.writer.toString())
         where:
-        label              | contextName | results
-        "assay context " | "TestName1" | XmlTestSamples.ASSAY_CONTEXT_WITH_CONTEXT_NAME_UNIT
+        label                                         | valueUnderTest                                                                                        | results
+        "minimal AssayContext "                       | {createAssayContext()}                                                                                | XmlTestSamples.MINIMAL_ASSAY_CONTEXT
+        "minimal AssayContext with contextGroup"      | {createAssayContext(contextGroup: 'contextGroup')}                                                    | XmlTestSamples.MINIMAL_ASSAY_CONTEXT_WITH_CONTEXT_GROUP
+        "minimal AssayContext with assayContextItems" | {def aci = AssayContextItem.build(); aci.assayContext.contextName = 'contextName'; aci.assayContext } | XmlTestSamples.MINIMAL_ASSAY_CONTEXT_WITH_ASSAY_CONTEXT_ITEM
+
 
     }
 
-    void "test generate Measure Context Item #label"() {
-        given: "A DTO"
-        AttributeType attributeType = AttributeType.Fixed
-        String valueDisplay = "Display"
-        Float valueNum = new Float("5.0")
-        Float valueMin = new Float("6.0")
-        Float valueMax = new Float("7.0")
-        String modifiedBy = "Bard"
-        Element attributeElement = new Element(label: attributeLabel)
+    void "test generate AssayContextItem #label"() {
+        given:
+        Element attributeElement = Element.build(label: attributeLabel)
         Element valueElement = null
         if (valueLabel) {
             valueElement = new Element(label: valueLabel)
         }
-
-        AssayContext assayContext = new AssayContext(contextName: "assayContext")
-        final String qualifier = "<"
         final AssayContextItem assayContextItem =
-            new AssayContextItem(attributeElement: attributeElement,
-                    attributeType: attributeType,
-                    assayContext: assayContext,
+            createAssayContextItem(attributeType: AttributeType.Fixed,
+                    attributeElement: attributeElement,
                     valueElement: valueElement,
-                    valueDisplay: valueDisplay,
-                    valueMax: valueMax,
-                    valueMin: valueMin,
-                    valueNum: valueNum,
-                    modifiedBy: modifiedBy,
-                    qualifier: qualifier)
+                    valueDisplay: "Display",
+                    valueMax: new Float("7.0"),
+                    valueMin: new Float("6.0"),
+                    valueNum: new Float("5.0"),
+                    modifiedBy: "Bard",
+                    qualifier: "< ")
 
-        when: "We pass in a measurce context item to create Measure Context Item xml document"
+
+        when: "We pass in a assay context item we get a good xml document"
         this.assayExportHelperService.generateAssayContextItem(this.markupBuilder, assayContextItem)
         then: "We expect back an xml document"
+        println(this.writer.toString())
         XmlTestAssertions.assertResults(results, this.writer.toString())
         where:
-        label                                           | attributeLabel   | valueLabel   | results
-        "Measure context Item with attribute and value" | "attributeLabel" | "valueLabel" | XmlTestSamples.MEASURE_CONTEXT_ITEM_WITH_ATTRIBUTE_AND_VALUE_UNIT
-        "Measure context Item with attribute only"      | "attributeLabel" | null         | XmlTestSamples.MEASURE_CONTEXT_ITEM_WITH_ATTRIBUTE_UNIT
-
+        label                      | attributeLabel   | valueLabel   | results
+        "with attribute only"      | "attributeLabel" | null         | XmlTestSamples.ASSAY_CONTEXT_ITEM_WITH_ATTRIBUTE
+        "with attribute and value" | "attributeLabel" | "valueLabel" | XmlTestSamples.ASSAY_CONTEXT_ITEM_WITH_ATTRIBUTE_AND_VALUE
     }
 
     void "test Generate Assay Document #label"() {
@@ -139,29 +146,22 @@ class AssayExportHelperServiceUnitSpec extends Specification {
 
     void "create Attributes For AssayContextItem"() {
         given: "A DTO"
-        final Map<String, String> results = [assayContextRef: "assayContext", qualifier: "<", valueDisplay: "Display", valueNum: "5.0", valueMin: "6.0", valueMax: "7.0"]
-        AttributeType attributeType = AttributeType.Fixed
-        String valueDisplay = "Display"
-        Float valueNum = new Float("5.0")
-        Float valueMin = new Float("6.0")
-        Float valueMax = new Float("7.0")
-        String modifiedBy = "Bard"
+        final Map<String, String> results = [assayContextItemId: "1" , displayOrder:"0", qualifier: "< ", valueDisplay: "Display", valueNum: "5.0", valueMin: "6.0", valueMax: "7.0"]
+
         Element attributeElement = new Element(label: "attributeLabel")
         Element valueElement = new Element(label: "valueLabel")
-        AssayContext assayContext = new AssayContext(contextName: "assayContext")
-        final String qualifier = "<"
         final AssayContextItem assayContextItem =
-            new AssayContextItem(attributeElement: attributeElement,
-                    attributeType: attributeType,
-                    assayContext: assayContext,
-                    valueElement: valueElement,
-                    valueDisplay: valueDisplay,
-                    valueMax: valueMax,
-                    valueMin: valueMin,
-                    valueNum: valueNum,
-                    modifiedBy: modifiedBy,
-                    qualifier: qualifier)
-        when: "We pass in a dto to create Measure Context Item Attributes"
+                    createAssayContextItem(attributeType: AttributeType.Fixed,
+                            attributeElement: attributeElement,
+                            valueElement: valueElement,
+                            valueDisplay: "Display",
+                            valueMax: new Float("7.0"),
+                            valueMin: new Float("6.0"),
+                            valueNum: new Float("5.0"),
+                            modifiedBy: "Bard",
+                            qualifier: "< ")
+
+        when: "We pass in a assayContextItem we get an expected map"
         Map<String, String> attributes = this.assayExportHelperService.createAttributesForAssayContextItem(assayContextItem)
         then: "A map with the expected key/value pairs is generated"
         attributes == results

@@ -20,9 +20,13 @@ class AssayExportHelperService {
     }
 
     protected void generateAssayContext(final MarkupBuilder markupBuilder, final AssayContext assayContext) {
-
-        markupBuilder.assayContext() {
-            contextName(assayContext.contextName)
+        def attributes = ['assayContextId': assayContext.id,
+                'displayOrder': assayContext.assay.assayContexts.indexOf(assayContext)]
+        markupBuilder.assayContext(attributes) {
+            contextName(assayContext.getPreferredName())
+            if (assayContext.contextGroup) {
+                contextGroup(assayContext.contextGroup)
+            }
             generateAssayContextItems(markupBuilder, assayContext.assayContextItems)
         }
     }
@@ -77,16 +81,12 @@ class AssayExportHelperService {
     protected Map<String, String> createAttributesForAssayContextItem(final AssayContextItem assayContextItem) {
         final Map<String, String> attributes = [:]
 
-        if (assayContextItem.id) {
-            attributes.put('assayContextItemId', assayContextItem.id.toString())
-        }
-        if (assayContextItem.assayContext) {
-            attributes.put('assayContextRef', assayContextItem.assayContext?.contextName)
-        }
+        attributes.put('assayContextItemId', assayContextItem.id.toString())
+        attributes.put('displayOrder', assayContextItem.assayContext.assayContextItems.indexOf(assayContextItem).toString())
+
         if (assayContextItem.qualifier) {
             attributes.put('qualifier', assayContextItem.qualifier)
         }
-
         if (assayContextItem.valueDisplay) {
             attributes.put('valueDisplay', assayContextItem.valueDisplay)
         }
@@ -99,6 +99,7 @@ class AssayExportHelperService {
         if (assayContextItem.valueMax || assayContextItem.valueMax.toString().isInteger()) {
             attributes.put('valueMax', assayContextItem.valueMax.toString())
         }
+
         return attributes;
     }
 

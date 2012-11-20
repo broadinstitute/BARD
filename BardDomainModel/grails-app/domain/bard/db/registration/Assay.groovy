@@ -28,7 +28,7 @@ class Assay {
 
     Set<Experiment> experiments = [] as Set<Experiment>
     Set<Measure> measures = [] as Set<Measure>
-    Set<AssayContext> assayContexts = [] as Set<AssayContext>
+    List<AssayContext> assayContexts = [] as List<AssayContext>
     Set<AssayDocument> assayDocuments = [] as Set<AssayDocument>
 
 
@@ -48,7 +48,7 @@ class Assay {
 
     static mapping = {
         id(column: "ASSAY_ID", generator: "sequence", params: [sequence: 'ASSAY_ID_SEQ'])
-        assayContexts(lazy: false)
+        assayContexts(indexColumn: [name: 'DISPLAY_ORDER'], lazy: 'false')
     }
 
     static constraints = {
