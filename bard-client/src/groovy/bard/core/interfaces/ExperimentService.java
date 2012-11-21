@@ -5,10 +5,6 @@ import bard.core.Experiment;
 import bard.core.Value;
 
 public interface ExperimentService extends EntityService<Experiment> {
-    /*
-     * return compounds for an experiment
-     */
-    SearchResult<Compound> compounds(Experiment expr);
 
     /*
      * return experimental values for an experiment

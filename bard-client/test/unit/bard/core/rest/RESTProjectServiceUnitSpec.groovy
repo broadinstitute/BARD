@@ -2,19 +2,17 @@ package bard.core.rest
 
 import bard.core.DataSource
 import bard.core.Project
-import bard.core.interfaces.EntityServiceManager
 import com.fasterxml.jackson.databind.ObjectMapper
 import jdo.JSONNodeTestHelper
 import spock.lang.Shared
 import spock.lang.Specification
 import spock.lang.Unroll
-import bard.core.Substance
 
 @Unroll
 class RESTProjectServiceUnitSpec extends Specification {
     RESTAssayService restAssayService
     RESTProjectService restProjectService
-    EntityServiceManager entityServiceManager
+
     @Shared ObjectMapper mapper = new ObjectMapper();
     @Shared String PROJECT_EXPANDED_SEARCH_RESULTS = JSONNodeTestHelper.PROJECT_EXPANDED_SEARCH_RESULTS
     @Shared String PROBES_NODE = JSONNodeTestHelper.PROBES
@@ -29,9 +27,8 @@ class RESTProjectServiceUnitSpec extends Specification {
         '''
 
     void setup() {
-        this.entityServiceManager = Mock(RESTEntityServiceManager)
-        this.restProjectService = new RESTProjectService(this.entityServiceManager, "base")
-        this.restAssayService = new RESTAssayService(this.entityServiceManager, "base")
+        this.restProjectService = new RESTProjectService("base")
+        this.restAssayService = new RESTAssayService("base")
     }
 
     void tearDown() {
@@ -202,14 +199,6 @@ class RESTProjectServiceUnitSpec extends Specification {
         "'name' key in JSON Node"    | mapper.readTree("{ \"name\": \"name\"}")    | "name"
         "No 'name' key in JSON Node" | mapper.readTree("{ \"someName\":\"name\"}") | null
     }
-    void "searchResult with Exceptions"() {
-        given:
-        final Project project = new Project()
-        when:
-        this.restProjectService.searchResult(project,Substance.class)
-        then:
-        thrown(IllegalArgumentException)
 
-    }
 }
 

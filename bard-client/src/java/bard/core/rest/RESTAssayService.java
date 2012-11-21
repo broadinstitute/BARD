@@ -8,13 +8,11 @@ import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
 
-public class RESTAssayService extends RESTAbstractEntityService<Assay>
-        implements AssayService, AssayValues {
+public class RESTAssayService extends RESTAbstractEntityService<Assay> implements AssayService, AssayValues {
 
 
-    protected RESTAssayService
-            (final RESTEntityServiceManager srvman, final String baseURL) {
-        super(srvman, baseURL);
+    protected RESTAssayService(final String baseURL) {
+        super(baseURL);
     }
 
     public Class<Assay> getEntityClass() {
@@ -280,26 +278,5 @@ public class RESTAssayService extends RESTAbstractEntityService<Assay>
                 getDataSource(EntityNamedSources.KEGGDiseaseNameAnnotationSource),
                 null, KEGG_DISEASE_NAMES);
 
-    }
-
-
-    @Override
-    public <T extends Entity> SearchResult<T> searchResult
-            (Assay assay, Class<T> clazz) {
-        RESTAbstractEntityService<T> service =
-                (RESTAbstractEntityService) getServiceManager().getService(clazz);
-
-        if (clazz.equals(Project.class)) {
-            return service.getSearchResult
-                    (getResource(assay.getId() + PROJECTS_RESOURCE), null);
-        } else if (clazz.equals(Experiment.class)) {
-            return service.getSearchResult
-                    (getResource(assay.getId() + EXPERIMENTS_RESOURCE), null);
-        } else {
-            final String message = "No related searchResults available for " + clazz;
-            log.error(message);
-            throw new IllegalArgumentException
-                    (message);
-        }
     }
 }

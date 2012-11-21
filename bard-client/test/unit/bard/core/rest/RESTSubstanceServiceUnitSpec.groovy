@@ -7,13 +7,10 @@ import spock.lang.Unroll
 @Unroll
 class RESTSubstanceServiceUnitSpec extends Specification {
     RESTSubstanceService restSubstanceService
-    RESTEntityServiceManager entityServiceManager
 
 
     void setup() {
-        this.entityServiceManager = Mock(RESTEntityServiceManager)
-
-        this.restSubstanceService = new RESTSubstanceService(this.entityServiceManager, "base")
+        this.restSubstanceService = new RESTSubstanceService("base")
     }
 
     void tearDown() {

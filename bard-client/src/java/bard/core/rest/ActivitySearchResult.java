@@ -11,11 +11,11 @@ public class ActivitySearchResult extends SearchResultImpl<Value> {
     volatile Experiment expr;
     private RESTExperimentService restExperimentService;
 
-    ActivitySearchResult(RESTExperimentService restExperimentService, Experiment expr) {
+    public ActivitySearchResult(RESTExperimentService restExperimentService, Experiment expr) {
         this(restExperimentService, expr, null);
     }
 
-    ActivitySearchResult(RESTExperimentService restExperimentService, Experiment expr, Object etag) {
+    public ActivitySearchResult(RESTExperimentService restExperimentService, Experiment expr, Object etag) {
         this.restExperimentService = restExperimentService;
         this.expr = expr;
         this.etag = etag;

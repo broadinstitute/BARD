@@ -31,8 +31,8 @@ public class RESTCompoundService extends RESTAbstractEntityService<Compound>
     final XStream xstream;
 
     public RESTCompoundService
-            (RESTEntityServiceManager srvman, String baseURL) {
-        super(srvman, baseURL);
+            (String baseURL) {
+        super(baseURL);
         //initialize xstream
         this.xstream = new XStream();
         //step up deserialization. Read XStream docs if you httpGet confused here
@@ -123,28 +123,6 @@ public class RESTCompoundService extends RESTAbstractEntityService<Compound>
 
     }
 
-
-    public Collection<Assay> getTestedAssays(Compound compound,
-                                             boolean activeOnly) {
-        final String url = buildQueryForTestedAssays(compound, activeOnly);
-        final JsonNode rootNode = executeGetRequest(url);
-        return extractedTestAssays(rootNode);
-    }
-
-    protected List<Assay> extractedTestAssays(final JsonNode rootNode) {
-        final RESTAssayService restAssayService = getServiceManager().getService(Assay.class);
-        final List<Assay> assays = new ArrayList<Assay>();
-        if (isNotNull(rootNode)) {
-            final JsonNode node = rootNode.get(COLLECTION);
-            if (isNotNull(node) && node.isArray()) {
-                ArrayNode array = (ArrayNode) node;
-                assays.addAll(jsonArrayNodeToAssays(array, restAssayService));
-            }
-        }
-
-        return assays;
-    }
-
     protected List<Assay> jsonArrayNodeToAssays(final ArrayNode array, final RESTAssayService restAssayService) {
         final List<Assay> assays = new ArrayList<Assay>();
         for (int i = 0; i < array.size(); ++i) {
@@ -212,7 +190,7 @@ public class RESTCompoundService extends RESTAbstractEntityService<Compound>
     protected String buildResourceURL(final String resource,
                                       final long top,
                                       final long skip) {
-        StringBuilder builder =
+        final StringBuilder stringBuilder =
                 new StringBuilder().
                         append(resource).
                         append(TOP).
@@ -220,7 +198,7 @@ public class RESTCompoundService extends RESTAbstractEntityService<Compound>
                         append(AMPERSAND).
                         append(SKIP).
                         append(skip);
-        return builder.toString();
+        return stringBuilder.toString();
     }
 
     protected void addETagsToHTTPHeader(HttpGet httpGet, final Map<String, Long> etags) {
@@ -413,28 +391,5 @@ public class RESTCompoundService extends RESTAbstractEntityService<Compound>
             return structureSearch((StructureSearchParams) params);
         }
         return super.search(params);
-    }
-
-    @Override
-    public <T extends Entity> SearchResult<T> searchResult
-            (Compound compound, Class<T> clazz) {
-        RESTAbstractEntityService<T> service =
-                (RESTAbstractEntityService) getServiceManager().getService(clazz);
-
-        if (clazz.equals(Project.class)) {
-            return service.getSearchResult
-                    (getResource(compound.getId() + PROJECTS_RESOURCE), null);
-        } else if (clazz.equals(Assay.class)) {
-            return service.getSearchResult
-                    (getResource(compound.getId() + ASSAYS_RESOURCE), null);
-        } else if (clazz.equals(Experiment.class)) {
-            return service.getSearchResult
-                    (getResource(compound.getId() + EXPERIMENTS_RESOURCE), null);
-        } else {
-            final String message = "No related searchResults available for " + clazz;
-            log.error(message);
-            throw new IllegalArgumentException
-                    (message);
-        }
     }
 }

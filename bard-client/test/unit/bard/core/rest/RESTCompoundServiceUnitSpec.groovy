@@ -1,6 +1,9 @@
 package bard.core.rest
 
-import bard.core.interfaces.EntityServiceManager
+import bard.core.Assay
+import bard.core.Compound
+import bard.core.DataSource
+import bard.core.Value
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.node.ArrayNode
 import jdo.JSONNodeTestHelper
@@ -8,15 +11,12 @@ import org.apache.http.client.methods.HttpGet
 import spock.lang.Shared
 import spock.lang.Specification
 import spock.lang.Unroll
-import bard.core.*
 
 @Unroll
 class RESTCompoundServiceUnitSpec extends Specification {
     RESTCompoundService restCompoundService
     RESTAssayService restAssayService
-    EntityServiceManager entityServiceManager
     @Shared ObjectMapper mapper = new ObjectMapper();
-    @Shared String TESTED_ASSAY_NODE = JSONNodeTestHelper.TESTED_ASSAY_NODE
     @Shared String COMPOUND_SYNONYMS = JSONNodeTestHelper.COMPOUND_SYNONYMS
     @Shared String COMPOUND_NODE = JSONNodeTestHelper.COMPOUND_SUMMARY_SEARCH_RESULTS
     @Shared String COMPOUND_EXPANDED_SEARCH_RESULTS = JSONNodeTestHelper.COMPOUND_EXPANDED_SEARCH_RESULTS
@@ -29,22 +29,23 @@ class RESTCompoundServiceUnitSpec extends Specification {
         '''
 
     void setup() {
-        this.entityServiceManager = Mock(RESTEntityServiceManager)
-        this.restAssayService = new RESTAssayService(this.entityServiceManager, "base")
-        this.restCompoundService = new RESTCompoundService(this.entityServiceManager, "base")
+        this.restAssayService = new RESTAssayService("base")
+        this.restCompoundService = new RESTCompoundService("base")
     }
 
     void tearDown() {
         // Tear down logic here
     }
-   void "getPromiscuityResource"(){
-       given:
-       long cid = 200
-       when:
-       String url = restCompoundService.getPromiscuityResource(cid)
-       then:
-       assert url =="base/plugins/badapple/prom/cid/200?expand=true"
-   }
+
+    void "getPromiscuityResource"() {
+        given:
+        long cid = 200
+        when:
+        String url = restCompoundService.getPromiscuityResource(cid)
+        then:
+        assert url == "base/plugins/badapple/prom/cid/200?expand=true"
+    }
+
     void "buildQueryForTestedAssays #label"() {
         given:
         final Compound compound = new Compound("name")
@@ -59,21 +60,6 @@ class RESTCompoundServiceUnitSpec extends Specification {
         "InActive Compounds" | false  | "base/compounds/200/assays?expand=true"
     }
 
-    void "extractedTestAssays #label"() {
-        when:
-        List<Assay> assays = this.restCompoundService.extractedTestAssays(rootNode)
-        then:
-        this.entityServiceManager.getService(Assay.class) >> {restAssayService}
-        restAssayService.getEntity(_, _) >> {}
-        assert assays.isEmpty() == isNodeEmpty
-        where:
-        label                                   | rootNode                           | isNodeEmpty
-        "Root Node has Full Properties"         | mapper.readTree(TESTED_ASSAY_NODE) | false
-        "Root Node Does not Contain Collection" | mapper.readTree(ASSAY_NODE)        | true
-        "Null Root Node"                        | null                               | true
-
-
-    }
 
     void "jsonNodeToAssay #label"() {
         given:
@@ -81,7 +67,6 @@ class RESTCompoundServiceUnitSpec extends Specification {
         when:
         Assay assay = this.restCompoundService.jsonNodeToAssay(jsonNode, restAssayService)
         then:
-        this.entityServiceManager.getService(Assay.class) >> {restAssayService}
         restAssayService.getEntity(_, _) >> {}
         assert (assay == null) == isNodeEmpty
         where:
@@ -120,15 +105,7 @@ class RESTCompoundServiceUnitSpec extends Specification {
 
     }
 
-    void "searchResult with Exceptions"() {
-        given:
-        final Compound compound = new Compound()
-        when:
-        this.restCompoundService.searchResult(compound, Substance.class)
-        then:
-        thrown(IllegalArgumentException)
 
-    }
 
 
     void "getEntitySearch #label"() {
