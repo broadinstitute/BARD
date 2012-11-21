@@ -1,4 +1,4 @@
-var bigSpinnerImage = '<div class="tab-message"><img src="/bardwebquery/static/images/ajax-loader.gif" alt="loading" title="loading"/></div>';
+var bigSpinnerImage = '<div class="tab-message"><img src="/bardwebclient/static/images/ajax-loader.gif" alt="loading" title="loading"/></div>';
 
 $(document).ready(function () {
     var url = $('#experimentalResults').attr('href');
