@@ -347,7 +347,7 @@ class XmlTestSamples {
           <contextName>contextName</contextName>
           <assayContextItems>
             <assayContextItem assayContextItemId='1' displayOrder='0'>
-              <attributeId attributeType='Fixed' label='label'>
+              <attributeId attributeType='Fixed' label='label1'>
                 <link rel='related' href='null' type='xml' />
               </attributeId>
             </assayContextItem>
