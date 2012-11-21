@@ -23,10 +23,6 @@ public class RESTExperimentService
         super(baseURL);
     }
 
-    public Class<Experiment> getEntityClass() {
-        return Experiment.class;
-    }
-
     public String getResourceContext() {
         return EXPERIMENTS_RESOURCE;
     }

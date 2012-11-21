@@ -136,10 +136,6 @@ public interface EntityService<E extends Entity> extends Serializable {
     String PROBES = "probes";
     String SMILES = "smiles";
 
-    /*
-    * Service metadata
-    */
-    Class<E> getEntityClass();
 
 
     // is this service read-only? if so all write operations (e.g., put, ETag)

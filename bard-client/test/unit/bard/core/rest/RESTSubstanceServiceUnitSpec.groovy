@@ -17,13 +17,7 @@ class RESTSubstanceServiceUnitSpec extends Specification {
         // Tear down logic here
     }
 
-    void "getEntityClass()"() {
-        when:
-        final Class clazz = this.restSubstanceService.getEntityClass()
-        then:
-        assert clazz.getName() == "bard.core.Substance"
 
-    }
 
     void "getResourceContext"() {
         when:

@@ -18,10 +18,6 @@ public class RESTProjectService extends RESTAbstractEntityService<Project>
         super(baseURL);
     }
 
-    public Class<Project> getEntityClass() {
-        return Project.class;
-    }
-
     public String getResourceContext() {
         return PROJECTS_RESOURCE;
     }

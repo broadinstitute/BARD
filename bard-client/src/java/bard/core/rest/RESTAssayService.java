@@ -15,9 +15,6 @@ public class RESTAssayService extends RESTAbstractEntityService<Assay> implement
         super(baseURL);
     }
 
-    public Class<Assay> getEntityClass() {
-        return Assay.class;
-    }
 
     public String getResourceContext() {
         return ASSAYS_RESOURCE;

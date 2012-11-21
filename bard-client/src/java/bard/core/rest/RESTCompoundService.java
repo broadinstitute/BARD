@@ -41,10 +41,6 @@ public class RESTCompoundService extends RESTAbstractEntityService<Compound>
         this.xstream.addImplicitCollection(PromiscuityScore.class, "scaffolds");
     }
 
-    public Class<Compound> getEntityClass() {
-        return Compound.class;
-    }
-
     public String getResourceContext() {
         return COMPOUNDS_RESOURCE;
     }

@@ -16,10 +16,6 @@ public class RESTSubstanceService extends RESTAbstractEntityService<Substance>
     }
 
 
-    public Class<Substance> getEntityClass() {
-        return Substance.class;
-    }
-
     public String getResourceContext() {
         return SUBSTANCES_RESOURCE;
     }
