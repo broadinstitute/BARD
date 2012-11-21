@@ -1,3 +1,8 @@
+BEGIN
+    update_context_name;
+END;
+/
+
 UPDATE assay_context_item aci
 SET display_order =
     (SELECT Count(*)
