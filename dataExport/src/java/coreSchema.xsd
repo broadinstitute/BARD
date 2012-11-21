@@ -36,7 +36,7 @@
     </xs:element>
     <xs:element name="link">
         <xs:annotation>
-            <xs:documentation>Link to an Element in the dictionary</xs:documentation>
+            <xs:documentation>Link to a top level Resource</xs:documentation>
         </xs:annotation>
         <xs:complexType>
             <xs:attribute name="type" use="required">
@@ -127,7 +127,7 @@
                 </xs:simpleType>
             </xs:element>
             <xs:element minOccurs="0" name="documentContent" type="xs:string"/>
-            <xs:element minOccurs="0" ref="link"/>
+            <xs:element ref="link" maxOccurs="unbounded"/>
         </xs:sequence>
         <xs:attribute name="documentType">
             <xs:simpleType>
