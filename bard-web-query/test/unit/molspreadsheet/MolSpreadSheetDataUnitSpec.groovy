@@ -31,6 +31,37 @@ class MolSpreadSheetDataUnitSpec extends Specification {
     }
 
 
+
+    void "test determineResponseTypesPerAssay"() {
+        given:
+        MolSpreadSheetData molSpreadSheetData = new MolSpreadSheetData()
+
+        when:
+        assertNotNull(molSpreadSheetData)
+        molSpreadSheetData.mapColumnsToAssay[0]=''
+        molSpreadSheetData.mapColumnsToAssay[1]=''
+        molSpreadSheetData.mapColumnsToAssay[2]=''
+        molSpreadSheetData.mapColumnsToAssay[3]=''
+        molSpreadSheetData.mapColumnsToAssay[4]='346'
+        molSpreadSheetData.mapColumnsToAssay[5]='2199'
+        molSpreadSheetData.mapColumnsToAssay[6]='2199'
+        molSpreadSheetData.experimentFullNameList<<'Fluorescence-based dose response'
+        molSpreadSheetData.experimentFullNameList<<'HTS small molecules'
+        List <LinkedHashMap<String,String>> returnValue  = molSpreadSheetData.determineResponseTypesPerAssay()
+
+        then:
+        assertNotNull returnValue
+        assert returnValue.size()==2
+        assert returnValue[0]."assayName"=='346'
+        assert returnValue[0]."numberOfResultTypes"==1
+        assert returnValue[0]."fullAssayName"=='Fluorescence-based dose response'
+        assert returnValue[1]."assayName"=='2199'
+        assert returnValue[1]."numberOfResultTypes"==2
+        assert returnValue[1]."fullAssayName"=='HTS small molecules'
+    }
+
+
+
     void "Test displayValue method"() {
         when:
         MolSpreadSheetData molSpreadSheetData = new MolSpreadSheetData()

@@ -5,10 +5,12 @@
 <script type="text/javascript">
     $(document).ready(function () {
         $('#showPromiscuityScores').click(function () {
-            $('td:nth-child(3), th:nth-child(3)').toggle();
+            $('td:nth-child(3)').toggle();
+            $('#promiscuitycol').toggle();
             PromiscuityHandler.setup();
         });
-        $('td:nth-child(3), th:nth-child(3)').toggle();
+        $('td:nth-child(3)').toggle();
+        $('#promiscuitycol').toggle();
         $("[rel=tooltip]").tooltip();
         $('#molspreadsheet').dataTable({
                     "bStateSave":true,
@@ -48,25 +50,35 @@
                    width="100%">
                 <thead>
                 <tr class="molSpreadSheetHead">
-                    <th class="molSpreadSheetImg">Molecular structure</th>
-                    <th class="molSpreadSheetHeadData" width="<%=columnWidth%>%">CID</th>
+                    <th  rowspan="2" class="molSpreadSheetImg">Molecular structure</th>
+                    <th  rowspan="2" class="molSpreadSheetHeadData" width="<%=columnWidth%>%">CID</th>
                     <% int column = 0 %>
                     <g:each var="colHeader" in="${molSpreadSheetData?.getColumns()}">
                         <g:if test="${column == 2}">
-                            <th class="display molSpreadSheetHeadData" width="<%=columnWidth%>%">${colHeader}</th>
+                            <th  rowspan="2" class="display molSpreadSheetHeadData" width="<%=columnWidth%>%">${colHeader}</th>
                         </g:if>
 
                         <g:if test="${column == 3}">
-                            <th class="molSpreadSheetHeadData"
+                            <th  rowspan="2" class="molSpreadSheetHeadData"  id="promiscuitycol"
                                 width="<%=columnWidth%>%"><%=molSpreadSheetData.mapColumnsToAssay[column]%><br/>${colHeader}
                             </th>
                         </g:if>
-                        <g:if test="${column > 3}">
-                            <th class="molSpreadSheetHeadData" rel="tooltip"
-                                title="<%=molSpreadSheetData.mapColumnsToAssayName[column]%>"><a
-                                    href="../bardWebInterface/showAssay/<%=molSpreadSheetData.mapColumnsToAssay[column]%>"
-                                    width="<%=columnWidth%>%">ADID=<%=molSpreadSheetData.mapColumnsToAssay[column]%><br/>${colHeader}
-                            </a></th>
+                        <% column++ %>
+                    </g:each>
+                    <g:each var="assayColumn" in="${molSpreadSheetData.determineResponseTypesPerAssay ()}">
+                        <th class="molSpreadSheetHeadData" rel="tooltip"
+                            colspan="<%=assayColumn."numberOfResultTypes"%>"
+                            title="<%=assayColumn."fullAssayName"%>"><a href="../bardWebInterface/showAssay/<%=assayColumn."assayName"%>">
+                            ADID=<%=assayColumn."assayName"%></a>
+                        </th>
+                    </g:each>
+                </tr>
+                <tr class="molSpreadSheetHead">
+                    <%  column = 0 %>
+                    <g:each var="colHeader" in="${molSpreadSheetData?.getColumns()}">
+                         <g:if test="${column > 3}">
+                            <th class="molSpreadSheetHeadData">${colHeader}
+                            </th>
                         </g:if>
                         <% column++ %>
                     </g:each>
