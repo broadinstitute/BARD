@@ -143,6 +143,9 @@ END reset_sequence;
                 LAST_UPDATED,
                 MODIFIED_BY
             from data_mig_old.element e
+--            WHERE NOT EXISTS  (SELECT 1
+--                FROM element e2
+--                WHERE e2.element_id = e.element_id)
             order by nvl(unit, ' ');
 
             insert into element_hierarchy
@@ -200,7 +203,10 @@ END reset_sequence;
                 DATE_CREATED,
                 LAST_UPDATED,
                 MODIFIED_BY
-            from data_mig_old.tree_root;
+            from data_mig_old.tree_root
+            WHERE EXISTS (SELECT 1
+                  FROM tabs t
+                  WHERE t.table_name = tree_name || '_TREE');
 
             insert into external_system
                 (EXTERNAL_SYSTEM_ID,
@@ -285,9 +291,12 @@ END reset_sequence;
     as
         cursor cur_assay
         is
-        select assay_id from data_mig_old.assay
-        where assay_id = an_assay_id
-        or an_assay_id is null;
+        select DISTINCT assay_id from data_mig_old.experiment e
+        where (assay_id = an_assay_id
+              or an_assay_id is NULL)
+         AND EXISTS (SELECT 1
+            FROM data_mig_old.result r
+            WHERE e.experiment_id = r.experiment_id);
 
         cursor cur_experiment (cn_assay_id number)
         is
