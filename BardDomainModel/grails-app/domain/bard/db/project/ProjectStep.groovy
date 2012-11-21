@@ -13,7 +13,7 @@ class ProjectStep {
     Date lastUpdated
     String modifiedBy
 
-    Set<StepContext> stepContexts = [] as Set
+    List<StepContext> stepContexts = [] as List
 
     static hasMany = [stepContexts:StepContext]
 
@@ -31,6 +31,7 @@ class ProjectStep {
     }
     static mapping = {
         id(column: "PROJECT_STEP_ID", generator: "sequence", params: [sequence: 'PROJECT_STEP_ID_SEQ'])
+        stepContexts(indexColumn: [name: 'DISPLAY_ORDER'], lazy: 'false')
         precedingExperiment column: "FOLLOWS_EXPERIMENT_ID"
     }
 }
