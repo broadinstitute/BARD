@@ -51,15 +51,19 @@
                         <xs:enumeration value="application/vnd.bard.cap+xml;type=result"/>
                         <xs:enumeration value="application/vnd.bard.cap+xml;type=cap"/>
                         <xs:enumeration value="application/vnd.bard.cap+xml;type=resultType"/>
-                        <xs:enumeration value="application/vnd.bard.cap+xml;type=project"/>
+                        <xs:enumeration value="application/vnd.bard.cap+xml;type=assays"/>
                         <xs:enumeration value="application/vnd.bard.cap+xml;type=assay"/>
                         <xs:enumeration value="application/vnd.bard.cap+xml;type=dictionary"/>
                         <xs:enumeration value="application/vnd.bard.cap+xml;type=bardexport"/>
                         <xs:enumeration value="application/vnd.bard.cap+xml;type=stage"/>
                         <xs:enumeration value="application/vnd.bard.cap+xml;type=element"/>
                         <xs:enumeration value="application/vnd.bard.cap+xml;type=projects"/>
+                        <xs:enumeration value="application/vnd.bard.cap+xml;type=project"/>
                         <xs:enumeration value="application/vnd.bard.cap+xml;type=assayDoc"/>
-                        <xs:enumeration value="application/vnd.bard.cap+xml;type=assays"/>
+                        <xs:enumeration value="application/vnd.bard.cap+xml;type=externalReferences"/>
+                        <xs:enumeration value="application/vnd.bard.cap+xml;type=externalReference"/>
+                        <xs:enumeration value="application/vnd.bard.cap+xml;type=externalSystems"/>
+                        <xs:enumeration value="application/vnd.bard.cap+xml;type=externalSystem"/>
                     </xs:restriction>
                 </xs:simpleType>
             </xs:attribute>
@@ -189,7 +193,7 @@
         <xs:sequence>
             <xs:element name="contextName" type="xs:string"/>
             <xs:element minOccurs="0" name="contextGroup" type="xs:string"/>
-            <xs:element minOccurs="1" name="displayOrder" nillable="false" type="xs:int"/>
         </xs:sequence>
+        <xs:attribute name="displayOrder" type="xs:int"/>
     </xs:complexType>
 </xs:schema>
