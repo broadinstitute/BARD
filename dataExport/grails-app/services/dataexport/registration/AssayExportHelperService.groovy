@@ -28,6 +28,18 @@ class AssayExportHelperService {
                 contextGroup(assayContext.contextGroup)
             }
             generateAssayContextItems(markupBuilder, assayContext.assayContextItems)
+            generateAssayContextMeasureRefs(markupBuilder, 'measureRef', assayContext.assayContextMeasures)
+        }
+    }
+
+    protected void generateAssayContextMeasureRefs(MarkupBuilder markupBuilder, String refElementName, Set<AssayContextMeasure> assayContextMeasures) {
+        if (assayContextMeasures) {
+            String propName = refElementName - 'Ref'
+            markupBuilder."${refElementName}s"() {
+                for (AssayContextMeasure assayContextMeasure in assayContextMeasures) {
+                    "${refElementName}"(assayContextMeasure."${propName}".id)
+                }
+            }
         }
     }
     /**
@@ -60,14 +72,7 @@ class AssayExportHelperService {
             if (entryUnit) {
                 createElementRef(markupBuilder, entryUnit, 'entryUnitRef', this.mediaTypesDTO.elementMediaType)
             }
-            if (measure.assayContextMeasures) {
-                assayContextRefs() {
-                    for (assayContextMeasure in measure.assayContextMeasures) {
-                        assayContextRef(assayContextMeasure.assayContext.id)
-                    }
-                }
-            }
-
+            generateAssayContextMeasureRefs(markupBuilder, 'assayContextRef', measure.assayContextMeasures)
         }
     }
 

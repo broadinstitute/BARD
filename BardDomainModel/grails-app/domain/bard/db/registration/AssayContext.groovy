@@ -24,7 +24,7 @@ class AssayContext extends AbstractContext{
 
     static belongsTo = [assay: Assay]
 
-    static hasMany = [assayContextItems: AssayContextItem, assayContextMeasure: AssayContextMeasure]
+    static hasMany = [assayContextItems: AssayContextItem, assayContextMeasures: AssayContextMeasure]
 
     static mapping = {
         sort("ASSAY_CONTEXT_ID") // default sort order

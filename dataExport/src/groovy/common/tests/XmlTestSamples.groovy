@@ -354,6 +354,14 @@ class XmlTestSamples {
           </assayContextItems>
         </assayContext> '''
 
+    static final String MINIMAL_ASSAY_CONTEXT_WITH_MEASURE_REFS = '''
+        <assayContext assayContextId='1' displayOrder='0'>
+          <contextName>contextName</contextName>
+          <measureRefs>
+            <measureRef>1</measureRef>
+          </measureRefs>
+        </assayContext> '''
+
     static String ASSAY_LINKS = '''
 <links>
   <link rel='edit' href='http://localhost:8080/dataExport/api/assays/1' type='application/vnd.bard.cap+xml;type=assay' />

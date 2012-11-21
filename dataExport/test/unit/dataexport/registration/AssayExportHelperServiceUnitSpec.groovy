@@ -17,7 +17,7 @@ import bard.db.registration.*
  * Time: 12:52 PM
  * To change this template use File | Settings | File Templates.
  */
-@Build([Assay, AssayContext, AssayContextItem, AssayDocument, Element, Measure])
+@Build([Assay, AssayContext, AssayContextItem, AssayContextMeasure, AssayDocument, Element, Measure])
 @Unroll
 class AssayExportHelperServiceUnitSpec extends Specification {
     Writer writer
@@ -82,7 +82,7 @@ class AssayExportHelperServiceUnitSpec extends Specification {
 
     }
 
-    void "test generate Assay Context #label"() {
+    void "test generate #label"() {
         def localAc = valueUnderTest.call()
         when: "We attempt to generate a measure context in xml"
         this.assayExportHelperService.generateAssayContext(this.markupBuilder, localAc)
@@ -94,7 +94,7 @@ class AssayExportHelperServiceUnitSpec extends Specification {
         "minimal AssayContext "                       | {createAssayContext()}                                                                                | XmlTestSamples.MINIMAL_ASSAY_CONTEXT
         "minimal AssayContext with contextGroup"      | {createAssayContext(contextGroup: 'contextGroup')}                                                    | XmlTestSamples.MINIMAL_ASSAY_CONTEXT_WITH_CONTEXT_GROUP
         "minimal AssayContext with assayContextItems" | {def aci = AssayContextItem.build(); aci.assayContext.contextName = 'contextName'; aci.assayContext } | XmlTestSamples.MINIMAL_ASSAY_CONTEXT_WITH_ASSAY_CONTEXT_ITEM
-
+        "minimal AssayContext with measureRefs"       | {def ac = createAssayContext(); ac.addToAssayContextMeasures(AssayContextMeasure.build()); ac}          | XmlTestSamples.MINIMAL_ASSAY_CONTEXT_WITH_MEASURE_REFS
 
     }
 
@@ -144,20 +144,20 @@ class AssayExportHelperServiceUnitSpec extends Specification {
 
     void "create Attributes For AssayContextItem"() {
         given: "A DTO"
-        final Map<String, String> results = [assayContextItemId: "1" , displayOrder:"0", qualifier: "< ", valueDisplay: "Display", valueNum: "5.0", valueMin: "6.0", valueMax: "7.0"]
+        final Map<String, String> results = [assayContextItemId: "1", displayOrder: "0", qualifier: "< ", valueDisplay: "Display", valueNum: "5.0", valueMin: "6.0", valueMax: "7.0"]
 
         Element attributeElement = new Element(label: "attributeLabel")
         Element valueElement = new Element(label: "valueLabel")
         final AssayContextItem assayContextItem =
-                    createAssayContextItem(attributeType: AttributeType.Fixed,
-                            attributeElement: attributeElement,
-                            valueElement: valueElement,
-                            valueDisplay: "Display",
-                            valueMax: new Float("7.0"),
-                            valueMin: new Float("6.0"),
-                            valueNum: new Float("5.0"),
-                            modifiedBy: "Bard",
-                            qualifier: "< ")
+            createAssayContextItem(attributeType: AttributeType.Fixed,
+                    attributeElement: attributeElement,
+                    valueElement: valueElement,
+                    valueDisplay: "Display",
+                    valueMax: new Float("7.0"),
+                    valueMin: new Float("6.0"),
+                    valueNum: new Float("5.0"),
+                    modifiedBy: "Bard",
+                    qualifier: "< ")
 
         when: "We pass in a assayContextItem we get an expected map"
         Map<String, String> attributes = this.assayExportHelperService.createAttributesForAssayContextItem(assayContextItem)
