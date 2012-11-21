@@ -193,6 +193,16 @@ application/vnd.bard.cap+xml;type=assay</xs:documentation>
         <xs:complexContent>
             <xs:extension base="abstractContextItemType">
                 <xs:attribute name="assayContextItemId" type="bardID" use="required"/>
+                <xs:attribute name="attributeType" use="required">
+                    <xs:simpleType>
+                        <xs:restriction base="xs:string">
+                            <xs:enumeration value="Fixed"/>
+                            <xs:enumeration value="List"/>
+                            <xs:enumeration value="Range"/>
+                            <xs:enumeration value="Free"/>
+                        </xs:restriction>
+                    </xs:simpleType>
+                </xs:attribute>
             </xs:extension>
         </xs:complexContent>
     </xs:complexType>
@@ -200,6 +210,7 @@ application/vnd.bard.cap+xml;type=assay</xs:documentation>
         <xs:complexContent>
             <xs:extension base="abstractContextType">
                 <xs:sequence>
+                    <xs:element ref="assayContextItems"/>
                     <xs:element minOccurs="0" name="measureRefs">
                         <xs:complexType>
                             <xs:sequence>
@@ -207,7 +218,6 @@ application/vnd.bard.cap+xml;type=assay</xs:documentation>
                             </xs:sequence>
                         </xs:complexType>
                     </xs:element>
-                    <xs:element ref="assayContextItems"/>
                 </xs:sequence>
                 <xs:attribute name="assayContextId" type="bardID" use="required"/>
             </xs:extension>
