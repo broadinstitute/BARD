@@ -47,6 +47,14 @@ application/vnd.bard.cap+xml;type=project</xs:documentation>
                                 <xs:complexType>
                                     <xs:sequence>
                                         <xs:element ref="description"/>
+                                        <xs:element minOccurs="0" name="stepContexts">
+                                            <xs:complexType>
+                                                <xs:sequence>
+                                                  <xs:element maxOccurs="unbounded"
+                                                  name="stepContext" type="stepContextType"/>
+                                                </xs:sequence>
+                                            </xs:complexType>
+                                        </xs:element>
                                         <xs:element maxOccurs="unbounded" minOccurs="0" ref="link"/>
                                     </xs:sequence>
                                     <xs:attribute name="projectStepId" type="bardID" use="required"
@@ -57,46 +65,18 @@ application/vnd.bard.cap+xml;type=project</xs:documentation>
                     </xs:complexType>
                 </xs:element>
                 <xs:element maxOccurs="unbounded" minOccurs="0" ref="link"/>
-                <xs:element minOccurs="0" name="projectContextItems">
+                <xs:element minOccurs="0" name="projectContexts">
                     <xs:complexType>
                         <xs:sequence>
-                            <xs:element maxOccurs="unbounded" name="projectContextItem">
-                                <xs:annotation>
-                                    <xs:documentation>We include the group result context Id and the result context item Id so that the client can walk the tree from child to parent</xs:documentation>
-                                </xs:annotation>
-                                <xs:complexType>
-                                    <xs:sequence>
-                                        <xs:element minOccurs="0" name="valueId">
-                                            <xs:complexType>
-                                                <xs:sequence>
-                                                  <xs:element ref="link" minOccurs="0"/>
-                                                </xs:sequence>
-                                                <xs:attribute name="label" type="xs:string"
-                                                  use="required"/>
-                                            </xs:complexType>
-                                        </xs:element>
-                                        <xs:element name="attributeId" minOccurs="0">
-                                            <xs:complexType>
-                                                <xs:sequence>
-                                                  <xs:element ref="link" minOccurs="0"/>
-                                                </xs:sequence>
-                                                <xs:attribute name="label" type="xs:string"
-                                                  use="required"/>
-                                            </xs:complexType>
-                                        </xs:element>
-                                        <xs:element minOccurs="0" name="extValueId" type="xs:string"
-                                        />
-                                    </xs:sequence>
-                                    <xs:attribute name="projectContextItemId" type="bardID"
-                                        use="required"/>
-                                    <xs:attribute name="parentGroup" type="bardID"/>
-                                    <xs:attribute name="qualifier" type="xs:string"/>
-                                    <xs:attribute name="valueDisplay" type="xs:string"/>
-                                    <xs:attribute name="valueNum" type="xs:double"/>
-                                    <xs:attribute name="valueMin" type="xs:double"/>
-                                    <xs:attribute name="valueMax" type="xs:double"/>
-                                </xs:complexType>
-                            </xs:element>
+                            <xs:element maxOccurs="unbounded" name="projectContext"
+                                type="projectContextType"/>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element minOccurs="0" name="projectDocuments">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element maxOccurs="unbounded" ref="projectDocument"/>
                         </xs:sequence>
                     </xs:complexType>
                 </xs:element>
@@ -115,4 +95,70 @@ application/vnd.bard.cap+xml;type=project</xs:documentation>
             <xs:attribute ref="readyForExtraction"/>
         </xs:complexType>
     </xs:element>
+    <xs:element name="projectDocument" type="documentType"> </xs:element>
+    <xs:element name="projectContextItems">
+
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element maxOccurs="unbounded" name="projectContextItem"
+                    type="projectContextItemType"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:complexType name="projectContextItemType">
+        <xs:complexContent>
+            <xs:extension base="abstractContextItemType">
+                <xs:attribute name="projectContextItemId" type="bardID" use="required"/>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    <xs:complexType name="stepContextItemType">
+        <xs:complexContent>
+            <xs:extension base="abstractContextItemType">
+                <xs:attribute name="stepContextItemId" type="bardID" use="required"/>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    <xs:complexType name="projectContextType">
+        <xs:complexContent>
+            <xs:extension base="abstractContextType">
+                <xs:sequence>
+                    <xs:element minOccurs="0" name="projectContextItems">
+                        <xs:complexType>
+                            <xs:sequence>
+                                <xs:element maxOccurs="unbounded" name="projectContextItem"
+                                    type="projectContextItemType">
+                                    <xs:annotation>
+                                        <xs:documentation>We include the group result context Id and the result context item Id so that the client can walk the tree from child to parent</xs:documentation>
+                                    </xs:annotation>
+                                </xs:element>
+                            </xs:sequence>
+                        </xs:complexType>
+                    </xs:element>
+                </xs:sequence>
+                <xs:attribute name="projectContextId" type="bardID" use="required"/>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    <xs:complexType name="stepContextType">
+        <xs:complexContent>
+            <xs:extension base="abstractContextType">
+                <xs:sequence>
+                    <xs:element minOccurs="0" name="stepContextItems">
+                        <xs:complexType>
+                            <xs:sequence>
+                                <xs:element maxOccurs="unbounded" name="stepContextItem"
+                                    type="stepContextItemType">
+                                    <xs:annotation>
+                                        <xs:documentation>We include the group result context Id and the result context item Id so that the client can walk the tree from child to parent</xs:documentation>
+                                    </xs:annotation>
+                                </xs:element>
+                            </xs:sequence>
+                        </xs:complexType>
+                    </xs:element>
+                </xs:sequence>
+                <xs:attribute name="stepContextId" type="bardID" use="required"/>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
 </xs:schema>
