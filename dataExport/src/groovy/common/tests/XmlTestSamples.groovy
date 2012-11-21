@@ -236,41 +236,53 @@ class XmlTestSamples {
 </project>
 '''
     static final String ASSAY_NO_DESIGNER_UNIT = '''
-<assay readyForExtraction='Ready' assayVersion='2.3' assayType='Regular' status='Pending'>
-  <assayName>Assay Name1</assayName>
-  <link rel='edit' href='null' type='xml' />
-  <link rel='self' href='null' type='xml' />
-  <link rel='up' href='null' type='xml' />
-</assay>
-'''
-    static final String ASSAY_UNIT = '''
-<assay readyForExtraction='Ready' assayVersion='3.3' status='Pending' assayType='Regular'>
-  <assayName>Assay Name2</assayName>
-  <designedBy>Broad</designedBy>
-  <link rel='edit' href='null' type='xml' />
-  <link rel='self' href='null' type='xml' />
-  <link rel='up' href='null' type='xml' />
-</assay>
-'''
+        <assay assayId='1' readyForExtraction='Pending' assayVersion='assayVersi' assayType='Regular' status='Pending'>
+          <assayShortName>assayShortName</assayShortName>
+          <assayName>assayName</assayName>
+          <link rel='edit' href='null' type='xml' />
+          <link rel='self' href='null' type='xml' />
+          <link rel='up' href='null' type='xml' />
+        </assay> '''
+    static final String ASSAY_WITH_DESIGNER_NAME = '''
+        <assay assayId='1' readyForExtraction='Pending' assayVersion='assayVersi' assayType='Regular' status='Pending'>
+          <assayShortName>assayShortName</assayShortName>
+          <assayName>assayName</assayName>
+          <designedBy>Broad</designedBy>
+          <link rel='edit' href='null' type='xml' />
+          <link rel='self' href='null' type='xml' />
+          <link rel='up' href='null' type='xml' />
+        </assay> '''
+    static final String ASSAY_WITH_DOCUMENT = '''
+         <assay assayId='1' readyForExtraction='Pending' assayVersion='assayVersi' assayType='Regular' status='Pending'>
+          <assayShortName>assayShortName</assayShortName>
+          <assayName>assayName</assayName>
+          <link rel='edit' href='null' type='xml' />
+          <link rel='self' href='null' type='xml' />
+          <link rel='up' href='null' type='xml' />
+          <link rel='item' href='null' type='xml' />
+        </assay> '''
 
-    static final String ASSAY_DOCUMENT_SERVER = '''<assayDocument documentType='Protocol'>
-    <documentName>Dose-response biochemical assay of inhibitors of Rho kinase 2 (Rock2)</documentName>
-    <documentContent>Some Document1</documentContent>
-    <link rel='item' href='http://localhost:8080/dataExport/api/assayDocument/1' type='application/vnd.bard.cap+xml;type=assayDoc' />
-    </assayDocument>'''
-    static final String ASSAY_DOCUMENT_WITH_DOCUMENT_NAME_UNIT = '''
-<assayDocument documentType='documentType'>
-  <documentName>documentName</documentName>
-  <documentContent>Content</documentContent>
-  <link rel='item' href='null' type='xml' />
-</assayDocument>
-    '''
-    static final String ASSAY_DOCUMENT_NO_DOCUMENT_NAME_UNIT = '''
-<assayDocument documentType='documentType'>
-  <documentContent>Content</documentContent>
-  <link rel='item' href='null' type='xml' />
-</assayDocument>
-'''
+    static final String ASSAY_DOCUMENT_SERVER = '''
+        <assayDocument documentType='Protocol'>
+            <documentName>Dose-response biochemical assay of inhibitors of Rho kinase 2 (Rock2)</documentName>
+            <documentContent>Some Document1</documentContent>
+            <link rel='item' href='http://localhost:8080/dataExport/api/assayDocument/1' type='application/vnd.bard.cap+xml;type=assayDoc' />
+        </assayDocument>'''
+
+    static final String MINIMAL_ASSAY_DOCUMENT = '''
+        <assayDocument documentType='Description'>
+            <documentName>documentName</documentName>
+            <link rel='self' href='null' type='xml' />
+            <link rel='related' href='null' type='xml' />
+        </assayDocument>'''
+
+    static final String ASSAY_DOCUMENT_WITH_CONTENT = '''
+        <assayDocument documentType='Description'>
+            <documentName>documentName</documentName>
+            <documentContent>Content</documentContent>
+            <link rel='self' href='null' type='xml' />
+            <link rel='related' href='null' type='xml' />
+        </assayDocument>'''
 
     static final String ASSAY_CONTEXT_ITEM_WITH_ATTRIBUTE = '''
         <assayContextItem assayContextItemId='1' displayOrder='0' qualifier='&lt;' valueDisplay='Display' valueNum='5.0' valueMin='6.0' valueMax='7.0'>
