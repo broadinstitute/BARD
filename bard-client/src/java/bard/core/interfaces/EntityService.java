@@ -141,7 +141,6 @@ public interface EntityService<E extends Entity> extends Serializable {
     */
     Class<E> getEntityClass();
 
-    EntityServiceManager getServiceManager();
 
     // is this service read-only? if so all write operations (e.g., put, ETag)
     //  will throw UnsupportedOperationException

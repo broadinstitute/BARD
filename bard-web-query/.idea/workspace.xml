@@ -40,6 +40,7 @@
       <change type="MOVED" beforePath="C:\bardwebclient\bard-web-query\bard-client\src\java\bard\core\interfaces\SubstanceCategory.java" afterPath="$PROJECT_DIR$/../bard-client/src/groovy/bard/core/interfaces/SubstanceCategory.groovy" />
       <change type="MOVED" beforePath="C:\bardwebclient\bard-web-query\bard-client\src\java\bard\core\interfaces\SubstanceValues.java" afterPath="$PROJECT_DIR$/../bard-client/src/groovy/bard/core/interfaces/SubstanceValues.groovy" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../bard-client/BardClientGrailsPlugin.groovy" afterPath="$PROJECT_DIR$/../bard-client/BardClientGrailsPlugin.groovy" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../bard-client/src/java/bard/core/interfaces/EntityService.java" afterPath="$PROJECT_DIR$/../bard-client/src/java/bard/core/interfaces/EntityService.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../bard-client/src/java/bard/core/rest/ActivitySearchResult.java" afterPath="$PROJECT_DIR$/../bard-client/src/java/bard/core/rest/ActivitySearchResult.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../bard-client/src/java/bard/core/rest/RESTAbstractEntityService.java" afterPath="$PROJECT_DIR$/../bard-client/src/java/bard/core/rest/RESTAbstractEntityService.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../bard-client/src/java/bard/core/rest/RESTAssayService.java" afterPath="$PROJECT_DIR$/../bard-client/src/java/bard/core/rest/RESTAssayService.java" />
@@ -374,10 +375,19 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="BardClientGrailsPlugin.groovy" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="BardClientGrailsPlugin.groovy" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/../bard-client/BardClientGrailsPlugin.groovy">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="44" column="24" selection-start="1565" selection-end="1565" vertical-scroll-proportion="0.3951613">
+            <state line="44" column="24" selection-start="1565" selection-end="1565" vertical-scroll-proportion="0.0">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="EntityService.java" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/../bard-client/src/java/bard/core/interfaces/EntityService.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="143" column="2" selection-start="4900" selection-end="4900" vertical-scroll-proportion="0.33333334">
               <folding />
             </state>
           </provider>
@@ -423,7 +433,6 @@
   <component name="IdeDocumentHistory">
     <option name="changedFiles">
       <list>
-        <option value="$PROJECT_DIR$/../bard-client/grails-app/conf/spring/resources.groovy" />
         <option value="$PROJECT_DIR$/grails-app/services/bardqueryapi/QueryService.groovy" />
         <option value="$PROJECT_DIR$/test/integration/curverendering/DoseCurveRenderingServiceIntegrationSpec.groovy" />
         <option value="$PROJECT_DIR$/test/integration/molspreadsheet/MolecularSpreadSheetServiceIntegrationSpec.groovy" />
@@ -439,6 +448,7 @@
         <option value="$PROJECT_DIR$/../bard-client/test/unit/bard/core/rest/RESTAssayServiceUnitSpec.groovy" />
         <option value="$PROJECT_DIR$/../bard-client/BardClientGrailsPlugin.groovy" />
         <option value="$PROJECT_DIR$/grails-app/conf/spring/resources.groovy" />
+        <option value="$PROJECT_DIR$/../bard-client/src/java/bard/core/interfaces/EntityService.java" />
       </list>
     </option>
   </component>
@@ -970,12 +980,12 @@
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="8" side_tool="true" content_ui="tabs" />
       <window_info id="IDEtalk Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="IDEtalk" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.39944133" sideWeight="0.5" order="12" side_tool="false" content_ui="tabs" />
+      <window_info id="Console" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.39944133" sideWeight="0.5" order="12" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="Cloverage" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.2719072" sideWeight="0.5544693" order="0" side_tool="false" content_ui="combo" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.4455307" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.2719072" sideWeight="0.60055864" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4455307" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Test Runs" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Data Sources" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3298969" sideWeight="0.61731845" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="JetGradle" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3298969" sideWeight="0.6662011" order="7" side_tool="false" content_ui="tabs" />
@@ -1077,13 +1087,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/../bard-client/src/java/bard/core/interfaces/EntityService.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="11" column="17" selection-start="206" selection-end="206" vertical-scroll-proportion="0.03448276">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/../bard-client/src/java/bard/core/interfaces/CompoundService.java">
       <provider selected="true" editor-type-id="text-editor">
         <state line="9" column="17" selection-start="194" selection-end="194" vertical-scroll-proportion="0.13793103">
@@ -1165,7 +1168,14 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/../bard-client/BardClientGrailsPlugin.groovy">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="44" column="24" selection-start="1565" selection-end="1565" vertical-scroll-proportion="0.3951613">
+        <state line="44" column="24" selection-start="1565" selection-end="1565" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../bard-client/src/java/bard/core/interfaces/EntityService.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="143" column="2" selection-start="4900" selection-end="4900" vertical-scroll-proportion="0.33333334">
           <folding />
         </state>
       </provider>
