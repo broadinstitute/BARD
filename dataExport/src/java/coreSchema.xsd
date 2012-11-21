@@ -138,4 +138,51 @@
             </xs:simpleType>
         </xs:attribute>
     </xs:complexType>
+    <xs:complexType abstract="true" name="abstractContextItemType">
+        <xs:sequence>
+            <xs:element minOccurs="0" name="valueId">
+                <xs:annotation>
+                    <xs:documentation>The label references the label of the element that it references</xs:documentation>
+                </xs:annotation>
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" ref="link"/>
+                    </xs:sequence>
+                    <xs:attribute name="label" type="xs:string" use="required">
+                        <xs:annotation>
+                            <xs:documentation>Label on an element in the dictionary</xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                </xs:complexType>
+            </xs:element>
+            <xs:element minOccurs="0" name="attributeId">
+                <xs:annotation>
+                    <xs:documentation>The label references the label of the element that it references</xs:documentation>
+                </xs:annotation>
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element maxOccurs="1" minOccurs="0" ref="link"/>
+                    </xs:sequence>
+                    <xs:attribute name="attributeType" use="required">
+                        <xs:simpleType>
+                            <xs:restriction base="xs:string">
+                                <xs:enumeration value="List"/>
+                                <xs:enumeration value="Range"/>
+                                <xs:enumeration value="Number"/>
+                                <xs:enumeration value="Fixed"/>
+                            </xs:restriction>
+                        </xs:simpleType>
+                    </xs:attribute>
+                    <xs:attribute name="label" type="xs:string" use="required"/>
+                </xs:complexType>
+            </xs:element>
+            <xs:element minOccurs="0" name="extValueId" type="xs:string"/>
+        </xs:sequence>
+        <xs:attribute name="displayOrder" type="xs:int" use="required"/>
+        <xs:attribute name="qualifier" type="xs:string"/>
+        <xs:attribute name="valueNum" type="xs:double"/>
+        <xs:attribute name="valueMin" type="xs:double"/>
+        <xs:attribute name="valueMax" type="xs:double"/>
+        <xs:attribute name="valueDisplay" type="xs:string"/>
+    </xs:complexType>
 </xs:schema>
