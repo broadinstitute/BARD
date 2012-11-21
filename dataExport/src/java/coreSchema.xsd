@@ -185,4 +185,11 @@
         <xs:attribute name="valueMax" type="xs:double"/>
         <xs:attribute name="valueDisplay" type="xs:string"/>
     </xs:complexType>
+    <xs:complexType abstract="true" name="abstractContextType">
+        <xs:sequence>
+            <xs:element name="contextName" type="xs:string"/>
+            <xs:element minOccurs="0" name="contextGroup" type="xs:string"/>
+            <xs:element minOccurs="1" name="displayOrder" nillable="false" type="xs:int"/>
+        </xs:sequence>
+    </xs:complexType>
 </xs:schema>
