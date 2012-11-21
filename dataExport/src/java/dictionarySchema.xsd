@@ -18,7 +18,7 @@ will give you this element
                 <xs:element minOccurs="0" ref="description"/>
                 <xs:element minOccurs="0" name="synonyms" type="xs:string"/>
                 <xs:element minOccurs="0" name="externalUrl" type="xs:anyURI"/>
-                <xs:element maxOccurs="unbounded" minOccurs="0" ref="link"/>
+                <xs:element maxOccurs="unbounded" ref="link"/>
             </xs:sequence>
             <xs:attribute name="elementId" type="bardID" use="required"/>
             <xs:attribute name="elementStatus">
@@ -32,7 +32,6 @@ will give you this element
                 </xs:simpleType>
             </xs:attribute>
             <xs:attribute name="abbreviation" type="xs:string"/>
-            <xs:attribute name="unit" type="xs:string"/>
             <xs:attribute ref="readyForExtraction" use="required"/>
         </xs:complexType>
     </xs:element>

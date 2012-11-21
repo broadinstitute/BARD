@@ -803,19 +803,21 @@ class XmlTestSamples {
 
 
     static String ELEMENT_FULL = '''
-<element elementId='' readyForExtraction='Ready' elementStatus='Pending' abbreviation='abb' unit='cm'>
+<element elementId='' readyForExtraction='Ready' elementStatus='Pending' abbreviation='abb'>
   <label>label</label>
   <description>desc</description>
   <synonyms>syn</synonyms>
   <externalUrl>http://www.broad.org</externalUrl>
   <link rel='edit' href='null' type='xml' />
+  <link rel='related' href='null' type='xml' />
 </element>
 '''
     static String ELEMENT_NO_DESCRIPTION = '''
-<element elementId='' readyForExtraction='Ready' elementStatus='Pending' unit='cm'>
+<element elementId='' readyForExtraction='Ready' elementStatus='Pending'>
   <label>label</label>
   <externalUrl>http://www.broad.org</externalUrl>
   <link rel='edit' href='null' type='xml' />
+  <link rel='related' href='null' type='xml' />
 </element>
 '''
     static String ELEMENT_HIERARCHY_FULL = '''
