@@ -193,10 +193,6 @@ public interface EntityService<E extends Entity> extends Serializable {
 //    //  given principal
 //    SearchResult<Value> etags(Principal principal);
 
-    /*
-     * retrieval of related entities
-     */
-    <T extends Entity> SearchResult<T> searchResult(E entity, Class<T> clazz);
 
     /*
      * Various entity retrieval methods

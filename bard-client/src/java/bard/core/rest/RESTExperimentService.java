@@ -13,10 +13,12 @@ public class RESTExperimentService
         implements ExperimentService {
 
     RESTAssayService restAssayService;
+
     //static final Value DONE = new Value(DataSource.getCurrent());
     public void setRestAssayService(RESTAssayService restAssayService) {
         this.restAssayService = restAssayService;
     }
+
     protected RESTExperimentService(String baseURL) {
         super(baseURL);
     }
