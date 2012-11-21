@@ -204,9 +204,9 @@ describe("Testing search.js", function () {
             handleAllIdSearches();
             expect(handleSearch).toHaveBeenCalled();
             expect(handleSearch.calls.length).toEqual(3);
-            expect(handleSearch).toHaveBeenCalledWith('/bardwebquery/bardWebInterface/searchAssaysByIDs', 'searchForm', 'assaysTab', 'totalAssays', 'Assay Definitions ', 'assays');
-            expect(handleSearch).toHaveBeenCalledWith('/bardwebquery/bardWebInterface/searchCompoundsByIDs', 'searchForm', 'compoundsTab', 'totalCompounds', 'Compounds ', 'compounds');
-            expect(handleSearch).toHaveBeenCalledWith('/bardwebquery/bardWebInterface/searchProjectsByIDs', 'searchForm', 'projectsTab', 'totalProjects', 'Projects ', 'projects');
+            expect(handleSearch).toHaveBeenCalledWith('/bardwebclient/bardWebInterface/searchAssaysByIDs', 'searchForm', 'assaysTab', 'totalAssays', 'Assay Definitions ', 'assays');
+            expect(handleSearch).toHaveBeenCalledWith('/bardwebclient/bardWebInterface/searchCompoundsByIDs', 'searchForm', 'compoundsTab', 'totalCompounds', 'Compounds ', 'compounds');
+            expect(handleSearch).toHaveBeenCalledWith('/bardwebclient/bardWebInterface/searchProjectsByIDs', 'searchForm', 'projectsTab', 'totalProjects', 'Projects ', 'projects');
 
             //should not have been called with any of the calls for a free text search
             expect(handleSearch).not.toHaveBeenCalledWith('searchProjects', 'projectsTab', 'totalProjects', 'Projects ', 'projects');
@@ -220,9 +220,9 @@ describe("Testing search.js", function () {
             expect(handleSearch).toHaveBeenCalled();
             expect(handleSearch.calls.length).toEqual(3);
 
-            expect(handleSearch).toHaveBeenCalledWith('/bardwebquery/bardWebInterface/searchAssays', 'searchForm', 'assaysTab', 'totalAssays', 'Assay Definitions ', 'assays');
-            expect(handleSearch).toHaveBeenCalledWith('/bardwebquery/bardWebInterface/searchCompounds', 'searchForm', 'compoundsTab', 'totalCompounds', 'Compounds ', 'compounds');
-            expect(handleSearch).toHaveBeenCalledWith('/bardwebquery/bardWebInterface/searchProjects', 'searchForm', 'projectsTab', 'totalProjects', 'Projects ', 'projects');
+            expect(handleSearch).toHaveBeenCalledWith('/bardwebclient/bardWebInterface/searchAssays', 'searchForm', 'assaysTab', 'totalAssays', 'Assay Definitions ', 'assays');
+            expect(handleSearch).toHaveBeenCalledWith('/bardwebclient/bardWebInterface/searchCompounds', 'searchForm', 'compoundsTab', 'totalCompounds', 'Compounds ', 'compounds');
+            expect(handleSearch).toHaveBeenCalledWith('/bardwebclient/bardWebInterface/searchProjects', 'searchForm', 'projectsTab', 'totalProjects', 'Projects ', 'projects');
 
             //should not have been called with any of the calls for an id search
             expect(handleSearch).not.toHaveBeenCalledWith('searchProjectsByIDs', 'searchForm', 'projectsTab', 'totalProjects', 'Projects ', 'projects');
@@ -333,7 +333,7 @@ describe("Testing search.js", function () {
 
             expect(handleSearch).toHaveBeenCalled();
             expect(handleSearch.calls.length).toEqual(1);
-            expect(handleSearch).toHaveBeenCalledWith('/bardwebquery/bardWebInterface/searchProjectsByIDs', 'searchForm', 'projectsTab', 'totalProjects', 'Projects ', 'projects');
+            expect(handleSearch).toHaveBeenCalledWith('/bardwebclient/bardWebInterface/searchProjectsByIDs', 'searchForm', 'projectsTab', 'totalProjects', 'Projects ', 'projects');
 
         });
 
@@ -362,7 +362,7 @@ describe("Testing search.js", function () {
 
             expect(handleSearch).toHaveBeenCalled();
             expect(handleSearch.calls.length).toEqual(1);
-            expect(handleSearch).toHaveBeenCalledWith('/bardwebquery/bardWebInterface/searchCompoundsByIDs', 'searchForm', 'compoundsTab', 'totalCompounds', 'Compounds ', 'compounds');
+            expect(handleSearch).toHaveBeenCalledWith('/bardwebclient/bardWebInterface/searchCompoundsByIDs', 'searchForm', 'compoundsTab', 'totalCompounds', 'Compounds ', 'compounds');
 
         });
         it("should verify that only handleSearch() is called with ADID", function () {
@@ -389,7 +389,7 @@ describe("Testing search.js", function () {
 
             expect(handleSearch).toHaveBeenCalled();
             expect(handleSearch.calls.length).toEqual(1);
-            expect(handleSearch).toHaveBeenCalledWith('/bardwebquery/bardWebInterface/searchAssaysByIDs', 'searchForm', 'assaysTab', 'totalAssays', 'Assay Definitions ', 'assays');
+            expect(handleSearch).toHaveBeenCalledWith('/bardwebclient/bardWebInterface/searchAssaysByIDs', 'searchForm', 'assaysTab', 'totalAssays', 'Assay Definitions ', 'assays');
 
         });
     });
@@ -508,13 +508,13 @@ describe("Testing search.js", function () {
             spyOn(window, "findTheAppropriateControllerActionForRequest").andReturn("structureSearch");
             handleFilteredQuery(searchString, 'facetFormType', 'currentFormId', 'currentTabId', 'numberOfHitsDivId', 'updateId', 'tabDisplayPrefix');
             expect(handleSearch).not.toHaveBeenCalled();
-            expect(handleStructureSearch).toHaveBeenCalledWith('/bardwebquery/bardWebInterface/searchStructures', 'currentFormId');
+            expect(handleStructureSearch).toHaveBeenCalledWith('/bardwebclient/bardWebInterface/searchStructures', 'currentFormId');
         });
         it("Should handle any other search", function () {
             searchString = "Stuff";
             spyOn(window, "findTheAppropriateControllerActionForRequest").andReturn("Default");
             handleFilteredQuery(searchString, 'facetFormType', 'currentFormId', 'currentTabId', 'numberOfHitsDivId', 'updateId', 'tabDisplayPrefix');
-            expect(handleSearch).toHaveBeenCalledWith("/bardwebquery/bardWebInterface/Default", 'currentFormId', 'currentTabId', 'numberOfHitsDivId', 'tabDisplayPrefix', 'updateId');
+            expect(handleSearch).toHaveBeenCalledWith("/bardwebclient/bardWebInterface/Default", 'currentFormId', 'currentTabId', 'numberOfHitsDivId', 'tabDisplayPrefix', 'updateId');
             expect(handleStructureSearch).not.toHaveBeenCalled();
         });
     });
