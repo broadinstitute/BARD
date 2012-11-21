@@ -102,4 +102,40 @@
         </xs:simpleType>
     </xs:attribute>
     <xs:element name="label" type="xs:string"/>
+    <xs:complexType name="documentType">
+        <xs:annotation>
+            <xs:documentation>This type is used by both an assay and project</xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+
+
+
+            <xs:element name="documentName">
+                <xs:annotation>
+                    <xs:documentation>
+                                                                                                  The "VARCHAR2" type from the data base was mapped to "xs:string" XML Schema type.
+                                                                                              </xs:documentation>
+                </xs:annotation>
+                <xs:simpleType>
+                    <xs:restriction base="xs:string">
+                        <xs:maxLength value="500"/>
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:element>
+            <xs:element minOccurs="0" name="documentContent" type="xs:string"/>
+            <xs:element minOccurs="0" ref="link"/>
+        </xs:sequence>
+        <xs:attribute name="documentType">
+            <xs:simpleType>
+                <xs:restriction base="xs:string">
+                    <xs:enumeration value="Description"/>
+                    <xs:enumeration value="Protocol"/>
+                    <xs:enumeration value="Comments"/>
+                    <xs:enumeration value="Paper"/>
+                    <xs:enumeration value="External URL"/>
+                    <xs:enumeration value="Other"/>
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:attribute>
+    </xs:complexType>
 </xs:schema>
