@@ -12,15 +12,15 @@ public class RESTExperimentService
         extends RESTAbstractEntityService<Experiment>
         implements ExperimentService {
 
+    RESTAssayService restAssayService;
 
     //static final Value DONE = new Value(DataSource.getCurrent());
-
-    protected RESTExperimentService(RESTEntityServiceManager srvman, String baseURL) {
-        super(srvman, baseURL);
+    public void setRestAssayService(RESTAssayService restAssayService) {
+        this.restAssayService = restAssayService;
     }
 
-    public Class<Experiment> getEntityClass() {
-        return Experiment.class;
+    protected RESTExperimentService(String baseURL) {
+        super(baseURL);
     }
 
     public String getResourceContext() {
@@ -343,11 +343,10 @@ public class RESTExperimentService
     }
 
     protected void addAssay(final Experiment experiment, final ArrayNode assaysNode) {
-        RESTAssayService service = (RESTAssayService) getServiceManager()
-                .getService(Assay.class);
+
         for (int i = 0; i < assaysNode.size(); i++) {
             final JsonNode assayNode = assaysNode.get(i);
-            addSingleAssayNode(experiment, assayNode, service);
+            addSingleAssayNode(experiment, assayNode, restAssayService);
         }
     }
 
@@ -381,33 +380,6 @@ public class RESTExperimentService
         }
 
         return experiment;
-    }
-
-    @Override
-    public <T extends Entity> SearchResult<T> searchResult
-            (Experiment expr, Class<T> clazz) {
-        RESTAbstractEntityService<T> service =
-                (RESTAbstractEntityService) getServiceManager().getService(clazz);
-
-        if (clazz.equals(Project.class)) {
-            return service.getSearchResult
-                    (getResource(expr.getId() + PROJECTS_RESOURCE), null);
-        } else if (clazz.equals(Compound.class)) {
-            return service.getSearchResult
-                    (getResource(expr.getId() + COMPOUNDS_RESOURCE), null);
-        } else {
-            final String message = "No related searchResults available for " + clazz;
-            log.error(message);
-            throw new IllegalArgumentException
-                    (message);
-        }
-    }
-
-    public SearchResult<Compound> compounds(Experiment expr) {
-        String resource = getResource(expr.getId()) + COMPOUNDS_RESOURCE;
-        RESTCompoundService cs = (RESTCompoundService)
-                getServiceManager().getService(Compound.class);
-        return cs.getSearchResult(resource, null);
     }
 
     public SearchResult<Value> activities(Experiment expr) {

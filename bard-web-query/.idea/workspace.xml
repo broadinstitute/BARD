@@ -5,9 +5,64 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="e8a8ddfb-b245-4a81-84e3-b506741e8113" name="Default" comment="">
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../bard-client/src/groovy/bard/core/interfaces/BiologyType.groovy" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../bard-client/src/groovy/bard/core/interfaces/BiologyValues.groovy" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../bard-client/src/groovy/bard/core/interfaces/CompoundValues.groovy" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../bard-client/src/groovy/bard/core/interfaces/EntityNamedSources.groovy" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../bard-client/src/groovy/bard/core/interfaces/EntityValues.groovy" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../bard-client/src/groovy/bard/core/interfaces/ExperimentValues.groovy" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../bard-client/src/groovy/bard/core/interfaces/MolecularType.groovy" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../bard-client/src/groovy/bard/core/interfaces/ProjectValues.groovy" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../bard-client/src/groovy/bard/core/interfaces/RegulatoryAgency.groovy" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../bard-client/src/groovy/bard/core/interfaces/RegulatoryStatus.groovy" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../bard-client/src/groovy/bard/core/interfaces/SubstanceCategory.groovy" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../bard-client/src/groovy/bard/core/interfaces/SubstanceValues.groovy" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../bard-client/test/integration/bard/core/rest/CombinedRestServiceIntegrationSpec.groovy" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\bard-client\src\java\bard\core\interfaces\AssayCategory.java" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\bard-client\src\java\bard\core\interfaces\AssayRole.java" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\bard-client\src\java\bard\core\interfaces\AssayType.java" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\bard-client\src\java\bard\core\interfaces\AssayValues.java" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\bard-client\src\java\bard\core\interfaces\CompoundValues.java" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\bard-client\src\java\bard\core\interfaces\EntityServiceManager.java" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\bard-client\src\java\bard\core\rest\RESTEntityServiceManager.java" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\bard-client\test\unit\bard\core\rest\RESTEntityServiceManagerUnitSpec.groovy" afterPath="" />
+      <change type="MOVED" beforePath="C:\bardwebclient\bard-web-query\bard-client\src\java\bard\core\interfaces\BiologyType.java" afterPath="$PROJECT_DIR$/../bard-client/src/groovy/bard/core/interfaces/BiologyType.groovy" />
+      <change type="MOVED" beforePath="C:\bardwebclient\bard-web-query\bard-client\src\java\bard\core\interfaces\BiologyValues.java" afterPath="$PROJECT_DIR$/../bard-client/src/groovy/bard/core/interfaces/BiologyValues.groovy" />
+      <change type="MOVED" beforePath="C:\bardwebclient\bard-web-query\bard-client\src\java\bard\core\interfaces\EntityNamedSources.java" afterPath="$PROJECT_DIR$/../bard-client/src/groovy/bard/core/interfaces/EntityNamedSources.groovy" />
+      <change type="MOVED" beforePath="C:\bardwebclient\bard-web-query\bard-client\src\java\bard\core\interfaces\EntityValues.java" afterPath="$PROJECT_DIR$/../bard-client/src/groovy/bard/core/interfaces/EntityValues.groovy" />
+      <change type="MOVED" beforePath="C:\bardwebclient\bard-web-query\bard-client\src\java\bard\core\interfaces\ExperimentCategory.java" afterPath="$PROJECT_DIR$/../bard-client/src/groovy/bard/core/interfaces/ExperimentCategory.groovy" />
+      <change type="MOVED" beforePath="C:\bardwebclient\bard-web-query\bard-client\src\java\bard\core\interfaces\ExperimentRole.java" afterPath="$PROJECT_DIR$/../bard-client/src/groovy/bard/core/interfaces/ExperimentRole.groovy" />
+      <change type="MOVED" beforePath="C:\bardwebclient\bard-web-query\bard-client\src\java\bard\core\interfaces\ExperimentService.java" afterPath="$PROJECT_DIR$/../bard-client/src/groovy/bard/core/interfaces/ExperimentService.java" />
+      <change type="MOVED" beforePath="C:\bardwebclient\bard-web-query\bard-client\src\java\bard\core\interfaces\ExperimentType.java" afterPath="$PROJECT_DIR$/../bard-client/src/groovy/bard/core/interfaces/ExperimentType.groovy" />
+      <change type="MOVED" beforePath="C:\bardwebclient\bard-web-query\bard-client\src\java\bard\core\interfaces\ExperimentValues.java" afterPath="$PROJECT_DIR$/../bard-client/src/groovy/bard/core/interfaces/ExperimentValues.groovy" />
+      <change type="MOVED" beforePath="C:\bardwebclient\bard-web-query\bard-client\src\java\bard\core\interfaces\RegulatoryAgency.java" afterPath="$PROJECT_DIR$/../bard-client/src/groovy/bard/core/interfaces/RegulatoryAgency.groovy" />
+      <change type="MOVED" beforePath="C:\bardwebclient\bard-web-query\bard-client\src\java\bard\core\interfaces\RegulatoryStatus.java" afterPath="$PROJECT_DIR$/../bard-client/src/groovy/bard/core/interfaces/RegulatoryStatus.groovy" />
+      <change type="MOVED" beforePath="C:\bardwebclient\bard-web-query\bard-client\src\java\bard\core\interfaces\SubstanceCategory.java" afterPath="$PROJECT_DIR$/../bard-client/src/groovy/bard/core/interfaces/SubstanceCategory.groovy" />
+      <change type="MOVED" beforePath="C:\bardwebclient\bard-web-query\bard-client\src\java\bard\core\interfaces\SubstanceValues.java" afterPath="$PROJECT_DIR$/../bard-client/src/groovy/bard/core/interfaces/SubstanceValues.groovy" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../bard-client/BardClientGrailsPlugin.groovy" afterPath="$PROJECT_DIR$/../bard-client/BardClientGrailsPlugin.groovy" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../bard-client/src/java/bard/core/interfaces/CompoundService.java" afterPath="$PROJECT_DIR$/../bard-client/src/java/bard/core/interfaces/CompoundService.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../bard-client/src/java/bard/core/interfaces/EntityService.java" afterPath="$PROJECT_DIR$/../bard-client/src/java/bard/core/interfaces/EntityService.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../bard-client/src/java/bard/core/rest/ActivitySearchResult.java" afterPath="$PROJECT_DIR$/../bard-client/src/java/bard/core/rest/ActivitySearchResult.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../bard-client/src/java/bard/core/rest/RESTAbstractEntityService.java" afterPath="$PROJECT_DIR$/../bard-client/src/java/bard/core/rest/RESTAbstractEntityService.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../bard-client/src/java/bard/core/rest/RESTAssayService.java" afterPath="$PROJECT_DIR$/../bard-client/src/java/bard/core/rest/RESTAssayService.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../bard-client/src/java/bard/core/rest/RESTCompoundService.java" afterPath="$PROJECT_DIR$/../bard-client/src/java/bard/core/rest/RESTCompoundService.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../bard-client/src/java/bard/core/rest/RESTExperimentService.java" afterPath="$PROJECT_DIR$/../bard-client/src/java/bard/core/rest/RESTExperimentService.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../bard-client/src/java/bard/core/rest/RESTProjectService.java" afterPath="$PROJECT_DIR$/../bard-client/src/java/bard/core/rest/RESTProjectService.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../bard-client/src/java/bard/core/rest/RESTSubstanceService.java" afterPath="$PROJECT_DIR$/../bard-client/src/java/bard/core/rest/RESTSubstanceService.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../bard-client/test/integration/bard/core/rest/AbstractRESTServiceSpec.groovy" afterPath="$PROJECT_DIR$/../bard-client/test/integration/bard/core/rest/AbstractRESTServiceSpec.groovy" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../bard-client/test/integration/bard/core/rest/RESTAssayServiceIntegrationSpec.groovy" afterPath="$PROJECT_DIR$/../bard-client/test/integration/bard/core/rest/RESTAssayServiceIntegrationSpec.groovy" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../bard-client/test/integration/bard/core/rest/RESTCombinedServiceIntegrationSpec.groovy" afterPath="$PROJECT_DIR$/../bard-client/test/integration/bard/core/rest/RESTCombinedServiceIntegrationSpec.groovy" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../bard-client/test/integration/bard/core/rest/RESTCompoundServiceIntegrationSpec.groovy" afterPath="$PROJECT_DIR$/../bard-client/test/integration/bard/core/rest/RESTCompoundServiceIntegrationSpec.groovy" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../bard-client/test/integration/bard/core/rest/RESTExperimentServiceIntegrationSpec.groovy" afterPath="$PROJECT_DIR$/../bard-client/test/integration/bard/core/rest/RESTExperimentServiceIntegrationSpec.groovy" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../bard-client/test/integration/bard/core/rest/RESTProjectServiceIntegrationSpec.groovy" afterPath="$PROJECT_DIR$/../bard-client/test/integration/bard/core/rest/RESTProjectServiceIntegrationSpec.groovy" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../bard-client/test/integration/bard/core/rest/StructureSearchResultIntegrationSpec.groovy" afterPath="$PROJECT_DIR$/../bard-client/test/integration/bard/core/rest/StructureSearchResultIntegrationSpec.groovy" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../bard-client/test/unit/bard/core/adapter/EntityAdapterUnitSpec.groovy" afterPath="$PROJECT_DIR$/../bard-client/test/unit/bard/core/adapter/EntityAdapterUnitSpec.groovy" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../bard-client/test/unit/bard/core/rest/RESTAbstractEntityServiceUnitSpec.groovy" afterPath="$PROJECT_DIR$/../bard-client/test/unit/bard/core/rest/RESTAbstractEntityServiceUnitSpec.groovy" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../bard-client/test/unit/bard/core/rest/RESTAssayServiceUnitSpec.groovy" afterPath="$PROJECT_DIR$/../bard-client/test/unit/bard/core/rest/RESTAssayServiceUnitSpec.groovy" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../bard-client/test/unit/bard/core/rest/RESTCompoundServiceUnitSpec.groovy" afterPath="$PROJECT_DIR$/../bard-client/test/unit/bard/core/rest/RESTCompoundServiceUnitSpec.groovy" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../bard-client/test/unit/bard/core/rest/RESTExperimentServiceUnitSpec.groovy" afterPath="$PROJECT_DIR$/../bard-client/test/unit/bard/core/rest/RESTExperimentServiceUnitSpec.groovy" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../bard-client/test/unit/bard/core/rest/RESTProjectServiceUnitSpec.groovy" afterPath="$PROJECT_DIR$/../bard-client/test/unit/bard/core/rest/RESTProjectServiceUnitSpec.groovy" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../bard-client/test/unit/bard/core/rest/RESTSubstanceServiceUnitSpec.groovy" afterPath="$PROJECT_DIR$/../bard-client/test/unit/bard/core/rest/RESTSubstanceServiceUnitSpec.groovy" />
     </list>
     <ignored path="bard-web-query.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -154,7 +209,7 @@
         <option name="CONDITION" value="" />
         <option name="LOG_MESSAGE" value="" />
       </breakpoint>
-      <breakpoint url="file://$PROJECT_DIR$/../bard-client/src/groovy/bard/core/adapter/ProjectAdapter.groovy" line="50" class="bard.core.adapter.ProjectAdapter" package="bard.core.adapter">
+      <breakpoint url="file://$PROJECT_DIR$/grails-app/services/bardqueryapi/QueryService.groovy" line="134" class="bardqueryapi.QueryService" package="bardqueryapi">
         <option name="ENABLED" value="true" />
         <option name="LOG_ENABLED" value="false" />
         <option name="LOG_EXPRESSION_ENABLED" value="false" />
@@ -167,7 +222,7 @@
         <option name="CONDITION" value="" />
         <option name="LOG_MESSAGE" value="" />
       </breakpoint>
-      <breakpoint url="file://$PROJECT_DIR$/grails-app/services/bardqueryapi/QueryService.groovy" line="133" class="bardqueryapi.QueryService" package="bardqueryapi">
+      <breakpoint url="file://$PROJECT_DIR$/grails-app/services/bardqueryapi/QueryService.groovy" line="137" class="bardqueryapi.QueryService" package="bardqueryapi">
         <option name="ENABLED" value="true" />
         <option name="LOG_ENABLED" value="false" />
         <option name="LOG_EXPRESSION_ENABLED" value="false" />
@@ -180,7 +235,7 @@
         <option name="CONDITION" value="" />
         <option name="LOG_MESSAGE" value="" />
       </breakpoint>
-      <breakpoint url="file://$PROJECT_DIR$/grails-app/services/bardqueryapi/QueryService.groovy" line="136" class="bardqueryapi.QueryService" package="bardqueryapi">
+      <breakpoint url="file://$PROJECT_DIR$/grails-app/services/bardqueryapi/QueryService.groovy" line="140" class="bardqueryapi.QueryService" package="bardqueryapi">
         <option name="ENABLED" value="true" />
         <option name="LOG_ENABLED" value="false" />
         <option name="LOG_EXPRESSION_ENABLED" value="false" />
@@ -193,33 +248,7 @@
         <option name="CONDITION" value="" />
         <option name="LOG_MESSAGE" value="" />
       </breakpoint>
-      <breakpoint url="file://$PROJECT_DIR$/grails-app/services/bardqueryapi/QueryService.groovy" line="139" class="bardqueryapi.QueryService" package="bardqueryapi">
-        <option name="ENABLED" value="true" />
-        <option name="LOG_ENABLED" value="false" />
-        <option name="LOG_EXPRESSION_ENABLED" value="false" />
-        <option name="SUSPEND_POLICY" value="SuspendAll" />
-        <option name="COUNT_FILTER_ENABLED" value="false" />
-        <option name="COUNT_FILTER" value="0" />
-        <option name="CONDITION_ENABLED" value="false" />
-        <option name="CLASS_FILTERS_ENABLED" value="false" />
-        <option name="INSTANCE_FILTERS_ENABLED" value="false" />
-        <option name="CONDITION" value="" />
-        <option name="LOG_MESSAGE" value="" />
-      </breakpoint>
-      <breakpoint url="file://$PROJECT_DIR$/grails-app/services/bardqueryapi/QueryService.groovy" line="144" class="bardqueryapi.QueryService" package="bardqueryapi">
-        <option name="ENABLED" value="true" />
-        <option name="LOG_ENABLED" value="false" />
-        <option name="LOG_EXPRESSION_ENABLED" value="false" />
-        <option name="SUSPEND_POLICY" value="SuspendAll" />
-        <option name="COUNT_FILTER_ENABLED" value="false" />
-        <option name="COUNT_FILTER" value="0" />
-        <option name="CONDITION_ENABLED" value="false" />
-        <option name="CLASS_FILTERS_ENABLED" value="false" />
-        <option name="INSTANCE_FILTERS_ENABLED" value="false" />
-        <option name="CONDITION" value="" />
-        <option name="LOG_MESSAGE" value="" />
-      </breakpoint>
-      <breakpoint url="file://$PROJECT_DIR$/../bard-client/src/java/bard/core/rest/RESTCompoundService.java" line="53" class="bard.core.rest.RESTCompoundService" package="bard.core.rest">
+      <breakpoint url="file://$PROJECT_DIR$/grails-app/services/bardqueryapi/QueryService.groovy" line="145" class="bardqueryapi.QueryService" package="bardqueryapi">
         <option name="ENABLED" value="true" />
         <option name="LOG_ENABLED" value="false" />
         <option name="LOG_EXPRESSION_ENABLED" value="false" />
@@ -258,7 +287,7 @@
         <option name="CONDITION" value="" />
         <option name="LOG_MESSAGE" value="" />
       </breakpoint>
-      <breakpoint url="file://$PROJECT_DIR$/../bard-client/src/java/bard/core/rest/RESTProjectService.java" line="126" class="bard.core.rest.RESTProjectService" package="bard.core.rest">
+      <breakpoint url="file://$PROJECT_DIR$/../bard-client/test/unit/bard/core/rest/RESTExperimentServiceUnitSpec.groovy" line="121" class="bard.core.rest.RESTExperimentServiceUnitSpec" package="bard.core.rest">
         <option name="ENABLED" value="true" />
         <option name="LOG_ENABLED" value="false" />
         <option name="LOG_EXPRESSION_ENABLED" value="false" />
@@ -271,7 +300,7 @@
         <option name="CONDITION" value="" />
         <option name="LOG_MESSAGE" value="" />
       </breakpoint>
-      <breakpoint url="file://$PROJECT_DIR$/../bard-client/src/java/bard/core/rest/RESTExperimentService.java" line="302" class="bard.core.rest.RESTExperimentService" package="bard.core.rest">
+      <breakpoint url="file://$PROJECT_DIR$/grails-app/conf/spring/resources.groovy" line="24" class="resources.groovy" package="">
         <option name="ENABLED" value="true" />
         <option name="LOG_ENABLED" value="false" />
         <option name="LOG_EXPRESSION_ENABLED" value="false" />
@@ -284,20 +313,7 @@
         <option name="CONDITION" value="" />
         <option name="LOG_MESSAGE" value="" />
       </breakpoint>
-      <breakpoint url="file://$PROJECT_DIR$/../bard-client/src/java/bard/core/rest/RESTAbstractEntityService.java" line="163" class="bard.core.rest.RESTAbstractEntityService" package="bard.core.rest">
-        <option name="ENABLED" value="true" />
-        <option name="LOG_ENABLED" value="false" />
-        <option name="LOG_EXPRESSION_ENABLED" value="false" />
-        <option name="SUSPEND_POLICY" value="SuspendAll" />
-        <option name="COUNT_FILTER_ENABLED" value="false" />
-        <option name="COUNT_FILTER" value="0" />
-        <option name="CONDITION_ENABLED" value="false" />
-        <option name="CLASS_FILTERS_ENABLED" value="false" />
-        <option name="INSTANCE_FILTERS_ENABLED" value="false" />
-        <option name="CONDITION" value="" />
-        <option name="LOG_MESSAGE" value="" />
-      </breakpoint>
-      <breakpoint url="file://$PROJECT_DIR$/../bard-client/src/java/bard/core/rest/RESTAbstractEntityService.java" line="164" class="bard.core.rest.RESTAbstractEntityService" package="bard.core.rest">
+      <breakpoint url="file://$PROJECT_DIR$/grails-app/conf/spring/resources.groovy" line="31" class="resources.groovy" package="">
         <option name="ENABLED" value="true" />
         <option name="LOG_ENABLED" value="false" />
         <option name="LOG_EXPRESSION_ENABLED" value="false" />
@@ -351,21 +367,10 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="ETagSearchResultIntegrationSpec.groovy" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/../bard-client/test/integration/bard/core/rest/ETagSearchResultIntegrationSpec.groovy">
+      <file leaf-file-name="RESTAssayService.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/../bard-client/src/java/bard/core/rest/RESTAssayService.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="11" column="27" selection-start="235" selection-end="235" vertical-scroll-proportion="0.0">
-              <folding>
-                <element signature="e#24#67#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="PromiscuityScore.groovy" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/../bard-client/src/groovy/bard/core/PromiscuityScore.groovy">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="13" column="22" selection-start="362" selection-end="362" vertical-scroll-proportion="0.0">
+            <state line="10" column="86" selection-start="351" selection-end="351" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -374,75 +379,61 @@
       <file leaf-file-name="RESTCompoundService.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/../bard-client/src/java/bard/core/rest/RESTCompoundService.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="60" column="38" selection-start="1947" selection-end="1947" vertical-scroll-proportion="0.0">
+            <state line="42" column="0" selection-start="1458" selection-end="1458" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="RESTCompoundServiceIntegrationSpec.groovy" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/../bard-client/test/integration/bard/core/rest/RESTCompoundServiceIntegrationSpec.groovy">
+      <file leaf-file-name="RESTExperimentService.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/../bard-client/src/java/bard/core/rest/RESTExperimentService.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="97" column="22" selection-start="3537" selection-end="3537" vertical-scroll-proportion="0.0">
+            <state line="25" column="28" selection-start="711" selection-end="711" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="MolSpreadSheetData.groovy" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/grails-app/domain/molspreadsheet/MolSpreadSheetData.groovy">
+      <file leaf-file-name="RESTProjectService.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/../bard-client/src/java/bard/core/rest/RESTProjectService.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="6" column="91" selection-start="166" selection-end="166" vertical-scroll-proportion="-1.9767442">
-              <folding />
-            </state>
-          </provider>
-          <provider editor-type-id="org.jetbrains.plugins.grails.perspectives.DomainClassesRelationsEditorProvider">
-            <state />
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="MolSpreadSheetController.groovy" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/grails-app/controllers/molspreadsheet/MolSpreadSheetController.groovy">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="54" column="103" selection-start="2448" selection-end="2448" vertical-scroll-proportion="-9.826087">
-              <folding>
-                <element signature="e#24#68#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="molecularSpreadSheet.gsp" pinned="false" current="true" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/grails-app/views/molSpreadSheet/molecularSpreadSheet.gsp">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="7" column="72" selection-start="557" selection-end="557" vertical-scroll-proportion="0.25211865">
+            <state line="19" column="0" selection-start="662" selection-end="662" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="RESTAbstractEntityService.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/../bard-client/src/java/bard/core/rest/RESTAbstractEntityService.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="78" column="43" selection-start="2658" selection-end="2680" vertical-scroll-proportion="0.0">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="RESTCompoundServiceUnitSpec.groovy" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/../bard-client/test/unit/bard/core/rest/RESTCompoundServiceUnitSpec.groovy">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="35" column="36" selection-start="1607" selection-end="1607" vertical-scroll-proportion="0.0">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="RESTSubstanceService.java" pinned="false" current="false" current-in-tab="false">
+      <file leaf-file-name="RESTSubstanceService.java" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/../bard-client/src/java/bard/core/rest/RESTSubstanceService.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="20" column="46" selection-start="710" selection-end="710" vertical-scroll-proportion="0.0">
+            <state line="17" column="0" selection-start="542" selection-end="542" vertical-scroll-proportion="0.4608295">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="AssayService.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/../bard-client/src/java/bard/core/interfaces/AssayService.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="5" column="46" selection-start="103" selection-end="103" vertical-scroll-proportion="0.0">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="EntityService.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/../bard-client/src/java/bard/core/interfaces/EntityService.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="138" column="2" selection-start="4831" selection-end="4831" vertical-scroll-proportion="0.0">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="RESTSubstanceServiceUnitSpec.groovy" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/../bard-client/test/unit/bard/core/rest/RESTSubstanceServiceUnitSpec.groovy">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="19" column="0" selection-start="380" selection-end="380" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -458,33 +449,40 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
   </component>
+  <component name="GradleLocalSettings">
+    <option name="expandStates">
+      <map>
+        <entry key="bard-web-query" value="true" />
+      </map>
+    </option>
+  </component>
   <component name="IdeDocumentHistory">
     <option name="changedFiles">
       <list>
-        <option value="$PROJECT_DIR$/../bard-client/test/unit/bard/core/rest/RESTExperimentServiceUnitSpec.groovy" />
-        <option value="$PROJECT_DIR$/../bard-client/test/unit/jdo/JSONNodeTestHelper.groovy" />
-        <option value="$PROJECT_DIR$/../bard-client/test/integration/bard/core/rest/RESTAssayServiceIntegrationSpec.groovy" />
-        <option value="$PROJECT_DIR$/../bard-client/test/integration/bard/core/rest/RESTCompoundServiceIntegrationSpec.groovy" />
-        <option value="$PROJECT_DIR$/../bard-client/test/integration/bard/core/rest/RESTProjectServiceIntegrationSpec.groovy" />
+        <option value="$PROJECT_DIR$/../bard-client/src/groovy/bard/core/interfaces/AssayType.groovy" />
+        <option value="$PROJECT_DIR$/../bard-client/src/java/bard/core/interfaces/AssayValues.java" />
+        <option value="$PROJECT_DIR$/../bard-client/src/groovy/bard/core/interfaces/AssayValues.groovy" />
+        <option value="$PROJECT_DIR$/../bard-client/src/java/bard/core/interfaces/CompoundValues.java" />
+        <option value="$PROJECT_DIR$/../bard-client/src/java/bard/core/Assay.java" />
+        <option value="$PROJECT_DIR$/../bard-client/test/unit/bard/core/rest/RESTAssayServiceUnitSpec.groovy" />
+        <option value="$PROJECT_DIR$/../bard-client/BardClientGrailsPlugin.groovy" />
+        <option value="$PROJECT_DIR$/grails-app/conf/spring/resources.groovy" />
+        <option value="$PROJECT_DIR$/../bard-client/src/java/bard/core/interfaces/CompoundService.java" />
+        <option value="$PROJECT_DIR$/../bard-client/test/unit/bard/core/rest/RESTSubstanceServiceUnitSpec.groovy" />
+        <option value="$PROJECT_DIR$/../bard-client/src/java/bard/core/rest/RESTAssayService.java" />
         <option value="$PROJECT_DIR$/../bard-client/src/java/bard/core/interfaces/EntityService.java" />
-        <option value="$PROJECT_DIR$/../bard-client/src/java/bard/core/rest/RESTSubstanceService.java" />
-        <option value="$PROJECT_DIR$/../bard-client/test/unit/bard/core/rest/RESTAbstractEntityServiceUnitSpec.groovy" />
-        <option value="$PROJECT_DIR$/../bard-client/src/java/bard/core/rest/ETagSearchResult.java" />
-        <option value="$PROJECT_DIR$/../bard-client/test/integration/bard/core/rest/ETagSearchResultIntegrationSpec.groovy" />
         <option value="$PROJECT_DIR$/../bard-client/src/java/bard/core/rest/RESTCompoundService.java" />
-        <option value="$PROJECT_DIR$/../bard-client/src/java/bard/core/rest/RESTAbstractEntityService.java" />
-        <option value="$PROJECT_DIR$/../bard-client/test/unit/bard/core/rest/RESTCompoundServiceUnitSpec.groovy" />
-        <option value="$PROJECT_DIR$/grails-app/domain/molspreadsheet/MolSpreadSheetData.groovy" />
-        <option value="$PROJECT_DIR$/grails-app/controllers/molspreadsheet/MolSpreadSheetController.groovy" />
-        <option value="$PROJECT_DIR$/grails-app/views/molSpreadSheet/molecularSpreadSheet.gsp" />
+        <option value="$PROJECT_DIR$/../bard-client/src/java/bard/core/rest/RESTExperimentService.java" />
+        <option value="$PROJECT_DIR$/../bard-client/src/java/bard/core/rest/RESTProjectService.java" />
+        <option value="$PROJECT_DIR$/../bard-client/src/java/bard/core/rest/RESTSubstanceService.java" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="-8" />
-    <option name="y" value="-8" />
-    <option name="width" value="1616" />
-    <option name="height" value="876" />
+    <option name="x" value="504" />
+    <option name="y" value="7" />
+    <option name="width" value="1022" />
+    <option name="height" value="726" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="false">
     <OptionsSetting value="true" id="Add" />
@@ -514,26 +512,6 @@
       <sortByType />
     </navigator>
     <panes>
-      <pane id="ProjectPane">
-        <subPane>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="bard-web-query" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="bard-web-query" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="bard-web-query" />
-              <option name="myItemType" value="com.cenqua.clover.idea.projectview.PsiDirectoryNodeWrapper" />
-            </PATH_ELEMENT>
-          </PATH>
-        </subPane>
-      </pane>
       <pane id="Scope">
         <subPane subId="Project Files">
           <PATH>
@@ -554,10 +532,92 @@
           </PATH>
         </subPane>
       </pane>
+      <pane id="ProjectPane">
+        <subPane>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="bard-web-query" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="bard-web-query" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="bard-client" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="bard-web-query" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="bard-client" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="java" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="core" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="bard-web-query" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="bard-client" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="java" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="core" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="rest" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="bard-web-query" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="bard-client" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+        </subPane>
+      </pane>
     </panes>
   </component>
   <component name="PropertiesComponent">
-    <property name="last_directory_selection" value="$PROJECT_DIR$/../bard-client/test/unit/bard/core/rest" />
+    <property name="last_directory_selection" value="$PROJECT_DIR$/../bard-client/src/groovy/bard/core/interfaces" />
     <property name="project.structure.last.edited" value="Libraries" />
     <property name="GoToFile.includeJavaFiles" value="false" />
     <property name="OverrideImplement.combined" value="true" />
@@ -582,19 +642,49 @@
       <recent name="bard.core.interfaces" />
     </key>
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\bardwebclient\bard-web-query\bard-client\grails-app\conf\spring" />
       <recent name="C:\bardwebclient\bard-web-query\bard-client" />
     </key>
     <key name="MoveClassesOrPackagesDialog.RECENTS_KEY">
-      <recent name="bard.core.rest.helper" />
+      <recent name="bard.core.interfaces" />
       <recent name="bard.core.rest" />
+      <recent name="bard.core.rest.helper" />
       <recent name="bard.core" />
     </key>
   </component>
-  <component name="RunManager" selected="Grails.getPromiscuityResource()">
-    <configuration default="false" name="test get(String resource, boolean expand,long top, long skip)()" type="GrailsRunConfigurationType" factoryName="Grails" temporary="true">
+  <component name="RunManager" selected="Grails.Grails tests:integration">
+    <configuration default="false" name="QueryServiceUnitSpec" type="GrailsRunConfigurationType" factoryName="Grails" temporary="true">
+      <module name="Bard-web-query" />
+      <setting name="vmparams" value="" />
+      <setting name="cmdLine" value="test-app unit: bardqueryapi.QueryServiceUnitSpec -echoOut" />
+      <setting name="depsClasspath" value="true" />
+      <setting name="passParentEnv" value="true" />
+      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
+      <setting name="launchBrowser" value="true" />
+      <RunnerSettings RunnerId="Run" />
+      <ConfigurationWrapper RunnerId="Run" />
+      <method>
+        <option name="Make" enabled="false" />
+      </method>
+    </configuration>
+    <configuration default="false" name="MolecularSpreadSheetServiceUnitSpec" type="GrailsRunConfigurationType" factoryName="Grails" temporary="true">
+      <module name="Bard-web-query" />
+      <setting name="vmparams" value="" />
+      <setting name="cmdLine" value="test-app unit: molspreadsheet.MolecularSpreadSheetServiceUnitSpec -echoOut" />
+      <setting name="depsClasspath" value="true" />
+      <setting name="passParentEnv" value="true" />
+      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
+      <setting name="launchBrowser" value="true" />
+      <RunnerSettings RunnerId="Run" />
+      <ConfigurationWrapper RunnerId="Run" />
+      <method>
+        <option name="Make" enabled="false" />
+      </method>
+    </configuration>
+    <configuration default="false" name="RESTAssayServiceIntegrationSpec" type="GrailsRunConfigurationType" factoryName="Grails" temporary="true">
       <module name="bardClient-inplacePlugin" />
       <setting name="vmparams" value="" />
-      <setting name="cmdLine" value="test-app integration: bard.core.rest.RESTAssayServiceIntegrationSpec.test get(String resource, boolean expand,long top, long skip) -echoOut" />
+      <setting name="cmdLine" value="test-app integration: bard.core.rest.RESTAssayServiceIntegrationSpec -echoOut" />
       <setting name="depsClasspath" value="true" />
       <setting name="passParentEnv" value="true" />
       <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
@@ -611,52 +701,10 @@
         <option name="Make" enabled="false" />
       </method>
     </configuration>
-    <configuration default="false" name="test Get Assays with facets single arg()" type="GrailsRunConfigurationType" factoryName="Grails" temporary="true">
-      <module name="bardClient-inplacePlugin" />
+    <configuration default="false" name="DoseCurveRenderingServiceIntegrationSpec" type="GrailsRunConfigurationType" factoryName="Grails" temporary="true">
+      <module name="Bard-web-query" />
       <setting name="vmparams" value="" />
-      <setting name="cmdLine" value="test-app integration: bard.core.rest.RESTAssayServiceIntegrationSpec.test Get Assays with facets single arg -echoOut" />
-      <setting name="depsClasspath" value="true" />
-      <setting name="passParentEnv" value="true" />
-      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
-      <setting name="launchBrowser" value="true" />
-      <RunnerSettings RunnerId="Run" />
-      <ConfigurationWrapper RunnerId="Run" />
-      <method>
-        <option name="Make" enabled="false" />
-      </method>
-    </configuration>
-    <configuration default="false" name="putETag #label()" type="GrailsRunConfigurationType" factoryName="Grails" temporary="true">
-      <module name="bardClient-inplacePlugin" />
-      <setting name="vmparams" value="" />
-      <setting name="cmdLine" value="test-app unit: bard.core.rest.RESTAbstractEntityServiceUnitSpec.putETag #label -echoOut" />
-      <setting name="depsClasspath" value="true" />
-      <setting name="passParentEnv" value="true" />
-      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
-      <setting name="launchBrowser" value="true" />
-      <RunnerSettings RunnerId="Run" />
-      <ConfigurationWrapper RunnerId="Run" />
-      <method>
-        <option name="Make" enabled="false" />
-      </method>
-    </configuration>
-    <configuration default="false" name="ETagSearchResultIntegrationSpec" type="GrailsRunConfigurationType" factoryName="Grails" temporary="true">
-      <module name="bardClient-inplacePlugin" />
-      <setting name="vmparams" value="" />
-      <setting name="cmdLine" value="test-app integration: bard.core.rest.ETagSearchResultIntegrationSpec -echoOut" />
-      <setting name="depsClasspath" value="true" />
-      <setting name="passParentEnv" value="true" />
-      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
-      <setting name="launchBrowser" value="true" />
-      <RunnerSettings RunnerId="Run" />
-      <ConfigurationWrapper RunnerId="Run" />
-      <method>
-        <option name="Make" enabled="false" />
-      </method>
-    </configuration>
-    <configuration default="false" name="getPromiscuityResource()" type="GrailsRunConfigurationType" factoryName="Grails" temporary="true">
-      <module name="bardClient-inplacePlugin" />
-      <setting name="vmparams" value="" />
-      <setting name="cmdLine" value="test-app unit: bard.core.rest.RESTCompoundServiceUnitSpec.getPromiscuityResource -echoOut" />
+      <setting name="cmdLine" value="test-app integration: curverendering.DoseCurveRenderingServiceIntegrationSpec -echoOut" />
       <setting name="depsClasspath" value="true" />
       <setting name="passParentEnv" value="true" />
       <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
@@ -845,7 +893,13 @@
       <setting name="passParentEnv" value="true" />
       <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
       <setting name="launchBrowser" value="true" />
+      <RunnerSettings RunnerId="Debug">
+        <option name="DEBUG_PORT" value="" />
+        <option name="TRANSPORT" value="0" />
+        <option name="LOCAL" value="true" />
+      </RunnerSettings>
       <RunnerSettings RunnerId="Run" />
+      <ConfigurationWrapper RunnerId="Debug" />
       <ConfigurationWrapper RunnerId="Run" />
       <method>
         <option name="Make" enabled="false" />
@@ -903,16 +957,30 @@
         <option name="Make" enabled="false" />
       </method>
     </configuration>
+    <configuration default="false" name="Grails tests:integration" type="GrailsRunConfigurationType" factoryName="Grails">
+      <module name="Bard-web-query" />
+      <setting name="vmparams" value="" />
+      <setting name="cmdLine" value="test-app integration: -echoOut" />
+      <setting name="depsClasspath" value="true" />
+      <setting name="passParentEnv" value="true" />
+      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
+      <setting name="launchBrowser" value="true" />
+      <RunnerSettings RunnerId="Run" />
+      <ConfigurationWrapper RunnerId="Run" />
+      <method>
+        <option name="Make" enabled="false" />
+      </method>
+    </configuration>
     <list size="9">
       <item index="0" class="java.lang.String" itemvalue="Grails.Grails:bard-web-query" />
       <item index="1" class="java.lang.String" itemvalue="Grails.DataSourceUnitSpec" />
       <item index="2" class="java.lang.String" itemvalue="Grails.ProjectAdapterUnitSpec" />
       <item index="3" class="java.lang.String" itemvalue="Grails.findValues #label()" />
-      <item index="4" class="java.lang.String" itemvalue="Grails.test get(String resource, boolean expand,long top, long skip)()" />
-      <item index="5" class="java.lang.String" itemvalue="Grails.test Get Assays with facets single arg()" />
-      <item index="6" class="java.lang.String" itemvalue="Grails.putETag #label()" />
-      <item index="7" class="java.lang.String" itemvalue="Grails.ETagSearchResultIntegrationSpec" />
-      <item index="8" class="java.lang.String" itemvalue="Grails.getPromiscuityResource()" />
+      <item index="4" class="java.lang.String" itemvalue="Grails.QueryServiceUnitSpec" />
+      <item index="5" class="java.lang.String" itemvalue="Grails.MolecularSpreadSheetServiceUnitSpec" />
+      <item index="6" class="java.lang.String" itemvalue="Grails.RESTAssayServiceIntegrationSpec" />
+      <item index="7" class="java.lang.String" itemvalue="Grails.Grails tests:integration" />
+      <item index="8" class="java.lang.String" itemvalue="Grails.DoseCurveRenderingServiceIntegrationSpec" />
     </list>
     <configuration name="&lt;template&gt;" type="WebApp" default="true" selected="false">
       <Host>localhost</Host>
@@ -929,39 +997,39 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="-8" width="1616" height="876" extended-state="6" />
+    <frame x="504" y="7" width="1022" height="726" extended-state="0" />
     <editor active="true" />
     <layout>
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Persistence" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="true" content_ui="tabs" />
-      <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="8" side_tool="true" content_ui="tabs" />
       <window_info id="IDEtalk Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
-      <window_info id="IDEtalk" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
-      <window_info id="Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.19134079" sideWeight="0.5" order="12" side_tool="false" content_ui="tabs" />
+      <window_info id="IDEtalk" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25265017" sideWeight="0.5" order="12" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="Cloverage" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.25515464" sideWeight="0.8086592" order="0" side_tool="false" content_ui="combo" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.51536316" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.3006263" sideWeight="0.8816254" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4455307" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Test Runs" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
-      <window_info id="Data Sources" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3298969" sideWeight="0.61731845" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="JetGradle" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.35893854" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3337989" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Data Sources" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3298969" sideWeight="0.61731845" order="4" side_tool="false" content_ui="tabs" />
+      <window_info id="JetGradle" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3298969" sideWeight="0.6662011" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.11837456" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.44134077" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Grails View" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.27234638" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
       <window_info id="Web" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="true" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="true" content_ui="tabs" />
-      <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="JsTestDriver Server" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="13" side_tool="false" content_ui="tabs" />
       <window_info id="Coverage" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.16430412" sideWeight="0.7723464" order="0" side_tool="true" content_ui="tabs" />
-      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
+      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="combo" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3282123" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
     </layout>
   </component>
@@ -1024,107 +1092,118 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/../bard-client/src/java/bard/core/rest/ETagSearchResult.java">
+    <entry file="file://$PROJECT_DIR$/../bard-client/src/java/bard/core/Assay.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="13" column="4" selection-start="294" selection-end="294" vertical-scroll-proportion="0.0" />
+        <state line="7" column="13" selection-start="196" selection-end="196" vertical-scroll-proportion="0.08924949">
+          <folding />
+        </state>
       </provider>
     </entry>
-    <entry file="jar://C:/Program Files/Java/jdk1.6.0_26/jre/lib/rt.jar!/sun/security/acl/PrincipalImpl.class">
+    <entry file="file://$PROJECT_DIR$/../bard-client/test/unit/bard/core/rest/RESTAssayServiceUnitSpec.groovy">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="8" column="11" selection-start="256" selection-end="256" vertical-scroll-proportion="0.0" />
+        <state line="6" column="32" selection-start="249" selection-end="249" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/../bard-client/src/java/bard/core/rest/SearchResultImpl.java">
+    <entry file="file://$PROJECT_DIR$/../bard-client/grails-app/conf/spring/resources.groovy">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="12" column="30" selection-start="362" selection-end="362" vertical-scroll-proportion="0.0" />
+        <state line="5" column="0" selection-start="55" selection-end="132" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/../bard-client/src/java/bard/core/rest/ActivitySearchResult.java">
+    <entry file="file://$PROJECT_DIR$/grails-app/conf/spring/resources.groovy">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="17" column="33" selection-start="466" selection-end="466" vertical-scroll-proportion="0.0" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../bard-client/src/groovy/bard/core/FilterParams.groovy">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="14" column="11" selection-start="342" selection-end="342" vertical-scroll-proportion="0.0" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../bard-client/src/groovy/bard/core/Substance.groovy">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="13" column="11" selection-start="292" selection-end="292" vertical-scroll-proportion="0.0" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../bard-client/src/java/bard/core/rest/RESTSubstanceService.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="20" column="46" selection-start="710" selection-end="710" vertical-scroll-proportion="0.0" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../bard-client/test/integration/bard/core/rest/ETagSearchResultIntegrationSpec.groovy">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="11" column="27" selection-start="235" selection-end="235" vertical-scroll-proportion="0.0">
+        <state line="9" column="0" selection-start="233" selection-end="233" vertical-scroll-proportion="0.0">
           <folding>
-            <element signature="e#24#67#0" expanded="true" />
+            <element signature="e#0#32#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/../bard-client/src/groovy/bard/core/PromiscuityScore.groovy">
+    <entry file="file://$PROJECT_DIR$/../bard-client/BardClientGrailsPlugin.groovy">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="13" column="22" selection-start="362" selection-end="362" vertical-scroll-proportion="0.0">
+        <state line="44" column="24" selection-start="1565" selection-end="1565" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/../bard-client/src/java/bard/core/rest/RESTAbstractEntityService.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="78" column="43" selection-start="2658" selection-end="2680" vertical-scroll-proportion="0.0">
+        <state line="30" column="28" selection-start="1086" selection-end="1086" vertical-scroll-proportion="0.0">
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../bard-client/src/java/bard/core/interfaces/CompoundService.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="19" column="0" selection-start="462" selection-end="462" vertical-scroll-proportion="0.43430656">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/../bard-client/test/unit/bard/core/rest/RESTCompoundServiceUnitSpec.groovy">
+    <entry file="file://$PROJECT_DIR$/../bard-client/coverage-error.log">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="35" column="36" selection-start="1607" selection-end="1607" vertical-scroll-proportion="0.0">
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../bard-client/test/unit/bard/core/rest/RESTSubstanceServiceUnitSpec.groovy">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="19" column="0" selection-start="380" selection-end="380" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../bard-client/src/java/bard/core/interfaces/AssayService.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="5" column="46" selection-start="103" selection-end="103" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../bard-client/src/java/bard/core/interfaces/EntityService.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="138" column="2" selection-start="4831" selection-end="4831" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../bard-client/src/java/bard/core/rest/RESTAssayService.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="10" column="86" selection-start="351" selection-end="351" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/../bard-client/src/java/bard/core/rest/RESTCompoundService.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="60" column="38" selection-start="1947" selection-end="1947" vertical-scroll-proportion="0.0">
+        <state line="42" column="0" selection-start="1458" selection-end="1458" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/../bard-client/test/integration/bard/core/rest/RESTCompoundServiceIntegrationSpec.groovy">
+    <entry file="file://$PROJECT_DIR$/../bard-client/src/java/bard/core/rest/RESTExperimentService.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="97" column="22" selection-start="3537" selection-end="3537" vertical-scroll-proportion="0.0">
+        <state line="25" column="28" selection-start="711" selection-end="711" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/grails-app/domain/molspreadsheet/MolSpreadSheetData.groovy">
+    <entry file="file://$PROJECT_DIR$/../bard-client/src/java/bard/core/rest/RESTProjectService.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="6" column="91" selection-start="166" selection-end="166" vertical-scroll-proportion="-1.9767442">
+        <state line="19" column="0" selection-start="662" selection-end="662" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
-      <provider editor-type-id="org.jetbrains.plugins.grails.perspectives.DomainClassesRelationsEditorProvider">
-        <state />
-      </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/grails-app/controllers/molspreadsheet/MolSpreadSheetController.groovy">
+    <entry file="file://$PROJECT_DIR$/../bard-client/src/java/bard/core/rest/RESTSubstanceService.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="54" column="103" selection-start="2448" selection-end="2448" vertical-scroll-proportion="-9.826087">
-          <folding>
-            <element signature="e#24#68#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/grails-app/views/molSpreadSheet/molecularSpreadSheet.gsp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="7" column="72" selection-start="557" selection-end="557" vertical-scroll-proportion="0.25211865">
+        <state line="17" column="0" selection-start="542" selection-end="542" vertical-scroll-proportion="0.4608295">
           <folding />
         </state>
       </provider>
@@ -1133,11 +1212,18 @@
   <component name="grailsSettings">
     <option name="map">
       <map>
+        <entry key="5-inplacePlugin">
+          <value>
+            <GrailsSettings>
+              <option name="buildConfigCrc" value="0" />
+            </GrailsSettings>
+          </value>
+        </entry>
         <entry key="Bard-web-query">
           <value>
             <GrailsSettings>
-              <option name="buildConfigCrc" value="-1651986649" />
-              <option name="pluginDependenciesCrc" value="-1203119491" />
+              <option name="buildConfigCrc" value="-60686121" />
+              <option name="pluginDependenciesCrc" value="-1768786325" />
               <option name="properties">
                 <map>
                   <entry key="grails.global.plugins.dir" value="C:\Users\jasiedu\.grails\2.1.1\global-plugins" />

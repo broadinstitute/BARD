@@ -1,7 +1,6 @@
 package bard.core.rest
 
 import bard.core.interfaces.EntityService
-import bard.core.interfaces.EntityServiceManager
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.node.ArrayNode
@@ -15,7 +14,6 @@ import bard.core.*
 @Unroll
 class RESTAssayServiceUnitSpec extends Specification {
     RESTAssayService restAssayService
-    EntityServiceManager entityServiceManager
     @Shared ObjectMapper mapper = new ObjectMapper();
     @Shared String TARGET_NODE = JSONNodeTestHelper.TARGET_NODE
     @Shared String TARGETS_NODE = JSONNodeTestHelper.TARGETS_NODE
@@ -24,9 +22,7 @@ class RESTAssayServiceUnitSpec extends Specification {
     @Shared String NO_TARGET_NODE = JSONNodeTestHelper.COMPOUND_SEARCH_RESULTS
 
     void setup() {
-        this.entityServiceManager = Mock(RESTEntityServiceManager)
-
-        this.restAssayService = new RESTAssayService(this.entityServiceManager, "base")
+        this.restAssayService = new RESTAssayService( "base")
     }
 
     void tearDown() {

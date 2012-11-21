@@ -2,13 +2,8 @@ package molspreadsheet
 
 import bard.core.adapter.CompoundAdapter
 import bard.core.interfaces.SearchResult
-import bard.core.rest.RESTAssayService
-import bard.core.rest.RESTCompoundService
-import bard.core.rest.RESTExperimentService
-import bard.core.rest.RESTProjectService
 import bardqueryapi.BardWebInterfaceControllerUnitSpec
 import bardqueryapi.IQueryService
-import bardqueryapi.QueryServiceWrapper
 import com.metasieve.shoppingcart.ShoppingCartService
 import grails.test.mixin.TestFor
 import querycart.CartCompound
@@ -17,7 +12,7 @@ import spock.lang.Shared
 import spock.lang.Specification
 import spock.lang.Unroll
 import bard.core.*
-import bard.core.rest.ActivitySearchResult
+import bard.core.rest.*
 
 /**
  * Created with IntelliJ IDEA.
@@ -33,7 +28,7 @@ import bard.core.rest.ActivitySearchResult
 class MolecularSpreadSheetServiceUnitSpec extends Specification {
 
     QueryCartService queryCartService
-    QueryServiceWrapper queryServiceWrapper
+    CombinedRestService combinedRestService
     ShoppingCartService shoppingCartService
     IQueryService queryService
     RESTExperimentService restExperimentService
@@ -53,12 +48,15 @@ class MolecularSpreadSheetServiceUnitSpec extends Specification {
         this.restProjectService = Mock(RESTProjectService)
         this.restAssayService = Mock(RESTAssayService)
         this.queryCartService = Mock(QueryCartService)
-        this.queryServiceWrapper = Mock(QueryServiceWrapper)
         this.shoppingCartService = Mock(ShoppingCartService)
         this.queryService = Mock(IQueryService)
-        queryServiceWrapper.restAssayService = restAssayService
-        service.queryServiceWrapper = queryServiceWrapper
+        this.combinedRestService=Mock(CombinedRestService)
+        service.restAssayService = restAssayService
+        service.restCompoundService = restCompoundService
+        service.restExperimentService = restExperimentService
+        service.restProjectService = restProjectService
         service.queryService = this.queryService
+        service.combinedRestService = this.combinedRestService
 
 
     }
@@ -66,27 +64,27 @@ class MolecularSpreadSheetServiceUnitSpec extends Specification {
     void tearDown() {
         // Tear down logic here
     }
-    void "test findActivitiesForCompounds #label"(){
+
+    void "test findActivitiesForCompounds #label"() {
         given:
         Experiment experiment = new Experiment()
         Object compoundETag = null
-        SearchResult<Value> experimentalResults = new ActivitySearchResult(restExperimentService,experiment)
+        SearchResult<Value> experimentalResults = new ActivitySearchResult(restExperimentService, experiment)
         //add a null value
         experimentalResults.searchResults.add(null)
         when:
-        List<SpreadSheetActivity> spreadSheetActivities = service.findActivitiesForCompounds(experiment,compoundETag)
+        List<SpreadSheetActivity> spreadSheetActivities = service.findActivitiesForCompounds(experiment, compoundETag)
         then:
-        queryServiceWrapper.restExperimentService >> { restExperimentService}
-        queryServiceWrapper.restExperimentService.activities(_, _) >> {experimentalResults}
+        restExperimentService.activities(_, _) >> {experimentalResults}
         assert spreadSheetActivities.isEmpty()
     }
+
     void "test assays To Experiments"() {
         given:
         Collection<Assay> assays = [new Assay(name: "A1")]
         when:
         List<Experiment> experiments = service.assaysToExperiments(assays)
         then:
-        queryServiceWrapper.restAssayService >> { restAssayService }
         assert experiments.isEmpty()
     }
 
@@ -120,8 +118,6 @@ class MolecularSpreadSheetServiceUnitSpec extends Specification {
         when:
         Map resultsMap = service.findExperimentDataById(experimentId, top, skip)
         then:
-        queryServiceWrapper.restExperimentService >> { restExperimentService }
-        and:
         restExperimentService.get(_) >> {null}
         and:
         assert resultsMap
@@ -144,13 +140,9 @@ class MolecularSpreadSheetServiceUnitSpec extends Specification {
         Object eTag = service.retrieveImpliedCompoundsEtagFromAssaySpecification(experimentList)
 
         then:
-        queryServiceWrapper.restExperimentService >> { restExperimentService }
-        and:
-        queryServiceWrapper.restCompoundService >> { restCompoundService }
-        and:
         restCompoundService.newETag(_) >> { new Object() }
         and:
-        restExperimentService.compounds(_) >> {compoundSearchResult}
+        combinedRestService.compounds(_) >> {compoundSearchResult}
 
         assertNull eTag
     }
@@ -165,8 +157,6 @@ class MolecularSpreadSheetServiceUnitSpec extends Specification {
         when:
         Map map = service.extractActivityValues(experiment, top, skip)
         then:
-        queryServiceWrapper.restExperimentService >> { restExperimentService }
-        and:
         restExperimentService.activities(_) >> {experimentValueIterator}
         and:
         assert map
@@ -389,9 +379,6 @@ class MolecularSpreadSheetServiceUnitSpec extends Specification {
     }
 
     void "test cartProjectsToExperiments with null input"() {
-        given:
-        queryServiceWrapper.restProjectService >> { restProjectService }
-
         when:
         List<Experiment> experimentResult = service.cartProjectsToExperiments(null)
 

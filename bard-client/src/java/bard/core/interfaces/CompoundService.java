@@ -17,6 +17,4 @@ public interface CompoundService extends EntityService<Compound> {
      * return compound synonyms
      */
     Collection<Value> getSynonyms(Compound compound);
-
-    Collection<Assay> getTestedAssays(Compound compound, boolean activeOnly);
 }

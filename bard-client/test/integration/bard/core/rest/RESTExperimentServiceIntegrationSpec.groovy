@@ -60,45 +60,7 @@ class RESTExperimentServiceIntegrationSpec extends AbstractRESTServiceSpec {
         assert 3 == acts.getCount();
     }
 
-    void "test Projects From Single Experiment"() {
-        given:
-        Experiment experiment = this.restExperimentService.get(197);
-        assert experiment
-        when:
-        SearchResult<Project> iter =
-            restExperimentService.searchResult(experiment, Project.class);
-        assert iter.searchResults
-        Collection<Project> projects = iter.next(100);
-        then:
-        assert projects
-        assert !projects.isEmpty()
-    }
 
-    void "testExperimentsFromSingleProject"() {
-        given:
-        Project project = restProjectService.get(1);
-        assert project
-
-        when:
-        SearchResult<Experiment> iter =
-            restProjectService.searchResult(project, Experiment.class);
-        then:
-        Collection<Experiment> exprs = iter.next(100);
-        assert exprs
-        assert !exprs.isEmpty()
-    }
-    void "test searchResult with Compound"() {
-        given:
-        final Experiment experiment = new Experiment()
-        experiment.setId(new Integer(2273))
-        when:
-        final SearchResult<Assay> searchResult = this.restExperimentService.searchResult(experiment, Compound.class)
-
-        then:
-        final List<Compound> compounds = searchResult.searchResults
-        assert !compounds.isEmpty()
-
-    }
 
 
     void "test retrieving the experimental data for known compounds in an experiment #label"() {
@@ -172,27 +134,7 @@ eTags.
     }
 */
 
-    void "test pulling an arbitrary set of compounds out of an experiment and then looking at their experimental values #label"() {
 
-        when: "The get method is called with the given experiment ID: #experimentid"
-        final Experiment experiment = this.restExperimentService.get(experimentid)
-        final SearchResult<Compound> compoundSearchResult = this.restExperimentService.compounds(experiment)
-        then: "An experiment is returned with the expected information"
-        assert experiment
-        assert compoundSearchResult
-        List<Compound> compoundList = compoundSearchResult.next(numVals)
-        Object etag = restCompoundService.newETag(label, compoundList*.id);
-        SearchResult<Value> eiter = this.restExperimentService.activities(experiment, etag);
-        Assert.assertNotNull eiter.searchResults
-
-        Value value = eiter.searchResults.get(0)
-        assert value
-        where:
-        label                | experimentid  | numVals
-        "Find an experiment" | new Long(883) | 2
-//        "Find an experiment"       | new Long(1326) |   5
-//        "Find an experiment"       | new Long(1326) |   500
-    }
 
 
 
