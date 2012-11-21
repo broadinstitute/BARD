@@ -163,7 +163,7 @@ class AssayExportHelperService {
      * @param markupBuilder
      * @param assayContexts
      */
-    protected void generateAssayContexts(final MarkupBuilder markupBuilder, final Set<AssayContext> assayContexts) {
+    protected void generateAssayContexts(final MarkupBuilder markupBuilder, final List<AssayContext> assayContexts) {
         if (assayContexts) {
             markupBuilder.assayContexts() {
                 for (AssayContext assayContext : assayContexts) {
