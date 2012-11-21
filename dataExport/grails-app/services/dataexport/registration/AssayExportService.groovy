@@ -24,7 +24,7 @@ class AssayExportService {
             throw new NotFoundException("Assay Document with Id ${assayDocumentId} does not exists")
         }
 
-        this.assayExportHelperService.generateAssayDocument(markupBuilder, assayDocument, true)
+        this.assayExportHelperService.generateAssayDocument(markupBuilder, assayDocument)
         return assayDocument.version
     }
     /**

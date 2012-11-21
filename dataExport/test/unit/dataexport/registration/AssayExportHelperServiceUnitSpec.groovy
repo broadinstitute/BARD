@@ -94,7 +94,7 @@ class AssayExportHelperServiceUnitSpec extends Specification {
         "minimal AssayContext "                       | {createAssayContext()}                                                                                | XmlTestSamples.MINIMAL_ASSAY_CONTEXT
         "minimal AssayContext with contextGroup"      | {createAssayContext(contextGroup: 'contextGroup')}                                                    | XmlTestSamples.MINIMAL_ASSAY_CONTEXT_WITH_CONTEXT_GROUP
         "minimal AssayContext with assayContextItems" | {def aci = AssayContextItem.build(); aci.assayContext.contextName = 'contextName'; aci.assayContext } | XmlTestSamples.MINIMAL_ASSAY_CONTEXT_WITH_ASSAY_CONTEXT_ITEM
-        "minimal AssayContext with measureRefs"       | {def ac = createAssayContext(); ac.addToAssayContextMeasures(AssayContextMeasure.build()); ac}          | XmlTestSamples.MINIMAL_ASSAY_CONTEXT_WITH_MEASURE_REFS
+        "minimal AssayContext with measureRefs"       | {def ac = createAssayContext(); ac.addToAssayContextMeasures(AssayContextMeasure.build()); ac}        | XmlTestSamples.MINIMAL_ASSAY_CONTEXT_WITH_MEASURE_REFS
 
     }
 
@@ -128,20 +128,6 @@ class AssayExportHelperServiceUnitSpec extends Specification {
         "with attribute and value" | "attributeLabel" | "valueLabel" | XmlTestSamples.ASSAY_CONTEXT_ITEM_WITH_ATTRIBUTE_AND_VALUE
     }
 
-    void "test Generate Assay Document #label"() {
-        given:
-        final AssayDocument assayDocument = new AssayDocument(documentType: documentType, documentContent: documentContent, documentName: documentName)
-        when: "We attempt to generate an Assay document"
-        this.assayExportHelperService.generateAssayDocument(this.markupBuilder, assayDocument, true)
-        then: "A valid xml document is generated and is similar to the expected document"
-        XmlTestAssertions.assertResults(results, this.writer.toString())
-        where:
-        label                                               | documentType   | documentContent | documentName   | results
-        "Document Type, Document Content, no document Name" | "documentType" | "Content"       | ""             | XmlTestSamples.ASSAY_DOCUMENT_NO_DOCUMENT_NAME_UNIT
-        "With Document Name"                                | "documentType" | "Content"       | "documentName" | XmlTestSamples.ASSAY_DOCUMENT_WITH_DOCUMENT_NAME_UNIT
-
-    }
-
     void "create Attributes For AssayContextItem"() {
         given: "A DTO"
         final Map<String, String> results = [assayContextItemId: "1", displayOrder: "0", qualifier: "< ", valueDisplay: "Display", valueNum: "5.0", valueMin: "6.0", valueMax: "7.0"]
@@ -163,5 +149,19 @@ class AssayExportHelperServiceUnitSpec extends Specification {
         Map<String, String> attributes = this.assayExportHelperService.createAttributesForAssayContextItem(assayContextItem)
         then: "A map with the expected key/value pairs is generated"
         attributes == results
+    }
+
+    void "test generate AssayDocument #label"() {
+        given:
+        final AssayDocument assayDocument = AssayDocument.build(documentType: documentType, documentContent: documentContent)
+        when: "We attempt to generate an Assay document"
+        this.assayExportHelperService.generateAssayDocument(this.markupBuilder, assayDocument)
+        then: "A valid xml document is generated and is similar to the expected document"
+        println(this.writer.toString())
+        XmlTestAssertions.assertResults(results, this.writer.toString())
+        where:
+        label                                | documentType  | documentContent | results
+        "minimal AssayDocument"              | "Description" | null            | XmlTestSamples.MINIMAL_ASSAY_DOCUMENT
+        "minimal AssayDocument with content" | "Description" | "Content"       | XmlTestSamples.ASSAY_DOCUMENT_WITH_CONTENT
     }
 }
