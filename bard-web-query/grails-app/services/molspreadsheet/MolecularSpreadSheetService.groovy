@@ -32,18 +32,18 @@ class MolecularSpreadSheetService {
 
 
 
-    protected LinkedHashMap<String, Object> prepareForExport ( String format, MolSpreadSheetData molSpreadSheetData ) {
+
+    protected LinkedHashMap<String, Object> prepareForExport ( MolSpreadSheetData molSpreadSheetData ) {
         LinkedHashMap<String, Object> returnValue = []
-        returnValue ["format"]   = format
         returnValue ["labels"]   = ["molstruct": "molecular structure"]
         returnValue ["labels"] << ["cid": "CID"]
         int column = 0
-        for (String colHeader in molSpreadSheetData?.getColumns()){
+        for (String colHeader in molSpreadSheetData.getColumns()){
             if (column == 2) {
-                returnValue ["labels"] << ["c${column}": "$colHeader"]
+                returnValue ["labels"] << [("c${column}" as String): "$colHeader"]
             }
             if (column > 2) {
-                returnValue ["labels"] << ["c${column}": "${molSpreadSheetData.mapColumnsToAssay[column]} ${colHeader}"]
+                returnValue ["labels"] << [("c${column}" as String): "${molSpreadSheetData.mapColumnsToAssay[column]} ${colHeader}"]
             }
             column++
         }
@@ -51,10 +51,59 @@ class MolecularSpreadSheetService {
         returnValue["labels"].each {key, value ->
             returnValue["fields"] << key
         }
-        returnValue ["data"]   = [:]
+        //leave out promicuity for now
+        returnValue["fields"] -= "c2"
+        returnValue ["data"]   = []
+        for (int rowCnt in 0..(molSpreadSheetData.getRowCount() - 1)){
+            LinkedHashMap<String, String> mapForThisRow  = []
+            mapForThisRow << ["molstruct": """${molSpreadSheetData.displayValue(rowCnt, 0)?."smiles"}""".toString()]
+            mapForThisRow << ["cid": """${molSpreadSheetData.displayValue(rowCnt, 1)?."value"}""".toString()]
+            mapForThisRow << ["c3": """${molSpreadSheetData.displayValue(rowCnt, 3)?."value"}""".toString()]
+            if (molSpreadSheetData.getColumnCount() > 4) {
+                for (int colCnt in (4..molSpreadSheetData.getColumnCount() - 1)) {
+                    SpreadSheetActivityStorage spreadSheetActivityStorage = molSpreadSheetData.findSpreadSheetActivity(rowCnt, colCnt)
+                    if (spreadSheetActivityStorage != null)  {
+                        HillCurveValueHolder hillCurveValueHolder = spreadSheetActivityStorage.getHillCurveValueHolderList()[0]
+                        mapForThisRow << [("c${colCnt}" as String): hillCurveValueHolder.toString() ]
+                    }  else {
+                        mapForThisRow << [("c${colCnt}" as String): "not tested in this experiment"]
+                    }
+
+                }
+            }
+            returnValue["data"] << mapForThisRow
+        }
+        return returnValue
 
     }
 
+
+
+
+//
+//    protected LinkedHashMap<String, Object> prepareForExport (  MolSpreadSheetData molSpreadSheetData ) {
+//        LinkedHashMap<String, Object> returnValue = []
+//        returnValue ["format"]   = format
+//        returnValue ["labels"]   = ["molstruct": "molecular structure"]
+//        returnValue ["labels"] << ["cid": "CID"]
+//        int column = 0
+//        for (String colHeader in molSpreadSheetData?.getColumns()){
+//            if (column == 2) {
+//                returnValue ["labels"] << ["c${column}": "$colHeader"]
+//            }
+//            if (column > 2) {
+//                returnValue ["labels"] << ["c${column}": "${molSpreadSheetData.mapColumnsToAssay[column]} ${colHeader}"]
+//            }
+//            column++
+//        }
+//        returnValue["fields"] = []
+//        returnValue["labels"].each {key, value ->
+//            returnValue["fields"] << key
+//        }
+//        returnValue ["data"]   = [:]
+//
+//    }
+//
 
 
 
