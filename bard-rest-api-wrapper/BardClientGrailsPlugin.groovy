@@ -19,7 +19,7 @@ Brief summary/description of the plugin.
 '''
 
     // URL to the plugin's documentation
-    def documentation = "http://grails.org/plugin/bard-client"
+    def documentation = "http://grails.org/plugin/bard-rest-api-wrapper"
 
     // Extra (optional) plugin metadata
 
