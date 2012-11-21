@@ -4,7 +4,6 @@ import bard.core.*;
 import bard.core.StringValue;
 import bard.core.interfaces.EntityNamedSources;
 import bard.core.interfaces.EntityService;
-import bard.core.interfaces.EntityServiceManager;
 import bard.core.interfaces.SearchResult;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -25,7 +24,6 @@ import org.apache.log4j.Logger;
 
 import java.io.*;
 import java.net.URLEncoder;
-import java.security.Principal;
 import java.util.*;
 
 
@@ -35,7 +33,6 @@ public abstract class RESTAbstractEntityService<E extends Entity>
     static final Logger log = Logger.getLogger(RESTAbstractEntityService.class);
 
     protected final String baseURL;
-    protected EntityServiceManager srvman;
 
     //this is thread safe so we can re-use it
     protected final ObjectMapper mapper = new ObjectMapper();
@@ -50,8 +47,7 @@ public abstract class RESTAbstractEntityService<E extends Entity>
     protected abstract E getEntitySearch(E e, JsonNode node);
 
     // base URL; should have no trailing slash!
-    protected RESTAbstractEntityService(RESTEntityServiceManager srvman, String baseURL) {
-        this.srvman = srvman;
+    protected RESTAbstractEntityService(String baseURL) {
         this.baseURL = baseURL;
     }
 
@@ -79,14 +75,6 @@ public abstract class RESTAbstractEntityService<E extends Entity>
     protected String getPromiscuityResource(Long cid) {
         return new StringBuilder(baseURL).append("/plugins/badapple/prom/cid/").append(cid).append("?expand=true").toString();
     }
-
-    /*
-    * EntityService interface
-    */
-    public EntityServiceManager getServiceManager() {
-        return srvman;
-    }
-
     public boolean isReadOnly() {
         return false;
     }
@@ -101,7 +89,7 @@ public abstract class RESTAbstractEntityService<E extends Entity>
      * subclass needs to override this to provide specific related
      * searchResults
      */
-    public abstract <T extends Entity> SearchResult<T> searchResult(E entity, Class<T> clazz);
+    //public abstract <T extends Entity> SearchResult<T> searchResult(E entity, Class<T> clazz);
 
     public SearchResult<E> searchResult() {
         return new RESTSearchResult
@@ -234,7 +222,8 @@ public abstract class RESTAbstractEntityService<E extends Entity>
             HttpResponse response = httpclient.execute(get);
 
             HttpEntity entity = response.getEntity();
-            if (entity != null) {
+            if (entity != null
+                    && response.getStatusLine().getStatusCode() == 200) {
                 is = entity.getContent();
                 BufferedReader br = new BufferedReader
                         (new InputStreamReader(is));
@@ -406,7 +395,8 @@ public abstract class RESTAbstractEntityService<E extends Entity>
 
             final HttpResponse response = httpclient.execute(post);
             final HttpEntity entity = response.getEntity();
-            if (entity != null) {
+            if (entity != null
+                    && response.getStatusLine().getStatusCode() == 200) {
                 is = entity.getContent();
                 JsonNode node = this.mapper.readTree(is);
                 addEntityToResults(results, node);

@@ -39,12 +39,16 @@ class RESTAbstractEntityServiceUnitSpec extends Specification {
     @Shared String ASSAY_SEARCH_RESULTS = JSONNodeTestHelper.ASSAY_SEARCH_RESULTS
     @Shared String COMPOUND_SEARCH_RESULTS = JSONNodeTestHelper.COMPOUND_SEARCH_RESULTS
     @Shared String SUGGEST_PAIR = JSONNodeTestHelper.SUGGEST_PAIR
-    @Shared RESTCompoundService restCompoundService = new RESTCompoundService(null, "http://bard.nih.gov/api/v7")
-    @Shared RESTProjectService restProjectService = new RESTProjectService(null, "http://bard.nih.gov/api/v7")
-    @Shared RESTAssayService restAssayService = new RESTAssayService(null, "http://bard.nih.gov/api/v7")
-    @Shared RESTExperimentService restExperimentService = new RESTExperimentService(null, "http://bard.nih.gov/api/v7")
-    @Shared RESTSubstanceService restSubstanceService = new RESTSubstanceService(null, "base")
+    @Shared RESTCompoundService restCompoundService = new RESTCompoundService("http://bard.nih.gov/api/v7")
+    @Shared RESTProjectService restProjectService = new RESTProjectService("http://bard.nih.gov/api/v7")
+    @Shared RESTAssayService restAssayService = new RESTAssayService("http://bard.nih.gov/api/v7")
+    @Shared RESTExperimentService restExperimentService = new RESTExperimentService("http://bard.nih.gov/api/v7")
+    @Shared RESTSubstanceService restSubstanceService = new RESTSubstanceService("base")
     @Shared String ETAG_FACET = JSONNodeTestHelper.ETAG_FACET
+
+
+    void setup() {
+    }
 
     void "test toString #label"() {
         when:
@@ -334,17 +338,10 @@ class RESTAbstractEntityServiceUnitSpec extends Specification {
         restCompoundService.addEntityToResults(results, null)
         then:
         assert results.isEmpty()
+        assert !this.restCompoundService.isReadOnly()
 
     }
 
-    void "searchResult"() {
-        when:
-        Project project = this.restSubstanceService.searchResult(new Substance(), Project.class)
-        then:
-        assert !project
-        assert !this.restSubstanceService.isReadOnly()
-
-    }
 
 
     void "filter"() {

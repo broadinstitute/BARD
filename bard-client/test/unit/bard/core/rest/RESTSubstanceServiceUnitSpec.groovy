@@ -7,26 +7,17 @@ import spock.lang.Unroll
 @Unroll
 class RESTSubstanceServiceUnitSpec extends Specification {
     RESTSubstanceService restSubstanceService
-    RESTEntityServiceManager entityServiceManager
 
 
     void setup() {
-        this.entityServiceManager = Mock(RESTEntityServiceManager)
-
-        this.restSubstanceService = new RESTSubstanceService(this.entityServiceManager, "base")
+        this.restSubstanceService = new RESTSubstanceService("base")
     }
 
     void tearDown() {
         // Tear down logic here
     }
 
-    void "getEntityClass()"() {
-        when:
-        final Class clazz = this.restSubstanceService.getEntityClass()
-        then:
-        assert clazz.getName() == "bard.core.Substance"
 
-    }
 
     void "getResourceContext"() {
         when:

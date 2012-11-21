@@ -159,31 +159,7 @@ class RESTCompoundServiceIntegrationSpec extends AbstractRESTServiceSpec {
 //        "Find an existing compound" | new Integer(2722) | "OC1=C(Cl)C=C(Cl)C2=C1N=CC=C2"
 //    }
 
-    void "test searchResult with Assay"() {
-        given:
-        final Compound compound = new Compound()
-        compound.setId(new Integer(313619))
-        when:
-        final SearchResult<Assay> searchResult = this.restCompoundService.searchResult(compound, Assay.class)
 
-        then:
-        final List<Assay> assays = searchResult.searchResults
-        assert !assays.isEmpty()
-
-    }
-
-    void "test searchResult with Experiment"() {
-        given:
-        final Compound compound = new Compound()
-        compound.setId(new Integer(313619))
-        when:
-        final SearchResult<Experiment> searchResult = this.restCompoundService.searchResult(compound, Experiment.class)
-
-        then:
-        final List<Experiment> experiments = searchResult.searchResults
-        assert !experiments.isEmpty()
-
-    }
 
     void "test getSynonyms"() {
         given:
@@ -196,25 +172,7 @@ class RESTCompoundServiceIntegrationSpec extends AbstractRESTServiceSpec {
 
     }
 
-    void "test retrieving assays from a compound #label"() {
 
-        when: "The get method is called with the given CID: #cid"
-        final Compound compound = this.restCompoundService.get(cid)
-        then: "A Compound is returned with the expected information"
-        Collection<Assay> allAssaysForThisCompound = this.restCompoundService.getTestedAssays(compound, false)
-        for (Assay assay : allAssaysForThisCompound) {
-            Assert.assertNotNull assay
-        }
-        Collection<Assay> activeAssaysForThisCompound = this.restCompoundService.getTestedAssays(compound, true)
-        for (Assay assay : activeAssaysForThisCompound) {
-            Assert.assertNotNull assay
-        }
-        assert allAssaysForThisCompound.size() > activeAssaysForThisCompound.size()   // might not hold for all compounds, but it holds for these
-        where:
-        label                     | cid
-      // "Find a compound 313619"  | new Long(313619)
-        "Find a compound 9660191" | new Long(9660191)
-    }
 
     /**
      *

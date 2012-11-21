@@ -4,16 +4,13 @@ import bard.core.adapter.AssayAdapter
 import bard.core.adapter.CompoundAdapter
 import bard.core.adapter.ProjectAdapter
 import bard.core.interfaces.SearchResult
-import bard.core.rest.RESTAssayService
-import bard.core.rest.RESTCompoundService
-import bard.core.rest.RESTExperimentService
-import bard.core.rest.RESTProjectService
 import grails.test.mixin.TestFor
 import org.apache.commons.lang.time.StopWatch
 import spock.lang.Shared
 import spock.lang.Specification
 import spock.lang.Unroll
 import bard.core.*
+import bard.core.rest.*
 
 /**
  * See the API for {@link grails.test.mixin.support.GrailsUnitTestMixin} for usage instructions
@@ -26,7 +23,7 @@ class QueryServiceUnitSpec extends Specification {
     RESTAssayService restAssayService
     RESTExperimentService restExperimentService
     QueryHelperService queryHelperService
-    QueryServiceWrapper queryServiceWrapper
+    CombinedRestService combinedRestService
 
     @Shared Assay assay1 = new Assay(name: "A1")
     @Shared Assay assay2 = new Assay(name: "A2")
@@ -46,10 +43,14 @@ class QueryServiceUnitSpec extends Specification {
         restProjectService = Mock(RESTProjectService)
         restAssayService = Mock(RESTAssayService)
         restExperimentService = Mock(RESTExperimentService)
-        queryServiceWrapper = Mock(QueryServiceWrapper)
+        combinedRestService = Mock(CombinedRestService)
         queryHelperService = Mock(QueryHelperService)
+
         service.queryHelperService = queryHelperService
-        service.queryServiceWrapper = queryServiceWrapper
+        service.restAssayService = restAssayService
+        service.restCompoundService = restCompoundService
+        service.restProjectService = restProjectService
+        service.combinedRestService = combinedRestService
 
     }
 
@@ -65,9 +66,8 @@ class QueryServiceUnitSpec extends Specification {
         when:
         int foundNumber = service.getNumberTestedAssays(compoundId, active)
         then:
-        queryServiceWrapper.restCompoundService >> { restCompoundService }
-        this.queryServiceWrapper.restCompoundService.get(_) >> {compound}
-        this.queryServiceWrapper.restCompoundService.getTestedAssays(_, _) >> {assays}
+        this.restCompoundService.get(_) >> {compound}
+        this.combinedRestService.getTestedAssays(_, _) >> {assays}
 
         assert assays.size() == foundNumber
 
@@ -85,8 +85,8 @@ class QueryServiceUnitSpec extends Specification {
         when: "Client enters a CID and the showCompound method is called"
         CompoundAdapter compoundAdapter = service.showCompound(compoundId)
         then: "The CompoundDocument is called"
-        queryServiceWrapper.restCompoundService >> { restCompoundService }
-        this.queryServiceWrapper.restCompoundService.get(_) >> {compound}
+//        restCompoundService >> { restCompoundService }
+        this.restCompoundService.get(_) >> {compound}
         if (compound) {
             assert compoundAdapter
             assert compoundAdapter.compound
@@ -113,10 +113,10 @@ class QueryServiceUnitSpec extends Specification {
         when: "Client enters a project ID and the showProject method is called"
         Map foundProjectAdapterMap = service.showProject(projectId)
         then: "The Project document is displayed"
-        queryServiceWrapper.restProjectService >> { restProjectService }
+//        restProjectService >> { restProjectService }
         restProjectService.get(_) >> {project}
-        restProjectService.searchResult(_, _) >> {experimentSearchResult}
-        restAssayService.searchResult(_, _) >> {assaySearchResult}
+        combinedRestService.searchResultByProject(_, _) >> {experimentSearchResult}
+        combinedRestService.searchResultByProject(_, _) >> {assaySearchResult}
         experimentSearchResult.searchResults >> {[]}
 
         if (project) {
@@ -145,9 +145,9 @@ class QueryServiceUnitSpec extends Specification {
         when: "Client enters a assay ID and the showAssay method is called"
         Map foundAssayMap = service.showAssay(assayId)
         then: "The Assay document is displayed"
-        queryServiceWrapper.restAssayService >> { restAssayService }
-        restAssayService.searchResult(_, _) >> {experimentSearchResult}
-        restAssayService.searchResult(_, _) >> {projectSearchResult}
+//        restAssayService >> { restAssayService }
+        combinedRestService.searchResultByAssay(_, _) >> {experimentSearchResult}
+        combinedRestService.searchResultByAssay(_, _) >> {projectSearchResult}
         restAssayService.get(_) >> {assay}
         if (assay) {
             assert foundAssayMap
@@ -171,7 +171,7 @@ class QueryServiceUnitSpec extends Specification {
         when:
         Map responseMap = service.findCompoundsByCIDs(cids)
         then:
-        queryServiceWrapper.restCompoundService >> { restCompoundService }
+//        restCompoundService >> { restCompoundService }
         expectedNumberOfCalls * restCompoundService.get(_) >> {compound}
         and:
         assert responseMap
@@ -194,7 +194,7 @@ class QueryServiceUnitSpec extends Specification {
         when:
         Map responseMap = service.findAssaysByADIDs(assayIds)
         then:
-        queryServiceWrapper.restAssayService >> { restAssayService }
+//        restAssayService >> { restAssayService }
         queryHelperService.assaysToAdapters(_) >> {assayAdapters}
         expectedNumberOfCalls * restAssayService.get(_) >> {assay}
         and:
@@ -218,7 +218,7 @@ class QueryServiceUnitSpec extends Specification {
         when:
         Map responseMap = service.findProjectsByPIDs(projectIds)
         then:
-        queryServiceWrapper.restProjectService >> { restProjectService }
+//        restProjectService >> { restProjectService }
         queryHelperService.projectsToAdapters(_) >> {projectAdapters}
         expectedNumberOfCalls * restProjectService.get(_) >> {project}
         and:
@@ -245,7 +245,7 @@ class QueryServiceUnitSpec extends Specification {
         when:
         service.structureSearch(smiles, structureSearchParamsType)
         then:
-        queryServiceWrapper.restCompoundService >> { restCompoundService }
+//        restCompoundService >> { restCompoundService }
         restCompoundService.structureSearch(_) >> {iter}
 
         where:
@@ -266,7 +266,7 @@ class QueryServiceUnitSpec extends Specification {
         when:
         final Map searchResults = service.structureSearch("", StructureSearchParams.Type.Substructure)
         then:
-        _ * queryServiceWrapper.restCompoundService >> { restCompoundService }
+//        _ * restCompoundService >> { restCompoundService }
         _ * restCompoundService.structureSearch(_) >> {iter}
         assert searchResults.nHits == 0
         assert searchResults.compoundAdapters.isEmpty()
@@ -285,7 +285,7 @@ class QueryServiceUnitSpec extends Specification {
         when:
         service.structureSearch(smiles, structureSearchParamsType, searchFilters)
         then:
-        queryServiceWrapper.restCompoundService >> { restCompoundService }
+//        restCompoundService >> { restCompoundService }
         queryHelperService.convertSearchFiltersToFilters(_) >> {filters}
         restCompoundService.structureSearch(_) >> {iter}
 
@@ -310,7 +310,7 @@ class QueryServiceUnitSpec extends Specification {
         then:
         queryHelperService.startStopWatch() >> {sw}
         queryHelperService.stopStopWatch(_, _) >> {}
-        queryServiceWrapper.restCompoundService >> { restCompoundService }
+//        restCompoundService >> { restCompoundService }
         restCompoundService.search(_) >> {iter}
         queryHelperService.stripCustomStringFromSearchString(_) >> {"stuff"}
         queryHelperService.constructSearchParams(_, _, _, _) >> { new SearchParams(searchString)}
@@ -335,7 +335,6 @@ class QueryServiceUnitSpec extends Specification {
         then:
         queryHelperService.startStopWatch() >> {sw}
         queryHelperService.stopStopWatch(_, _) >> {}
-        queryServiceWrapper.restCompoundService >> { restCompoundService }
         restCompoundService.search(_) >> {iter}
         queryHelperService.stripCustomStringFromSearchString(_) >> {"stuff"}
         queryHelperService.constructSearchParams(_, _, _, _) >> { new SearchParams(searchString)}
@@ -360,7 +359,6 @@ class QueryServiceUnitSpec extends Specification {
         then:
         queryHelperService.startStopWatch() >> {sw}
         queryHelperService.stopStopWatch(_, _) >> {}
-        queryServiceWrapper.restAssayService >> { restAssayService }
         restAssayService.search(_) >> {iter}
         queryHelperService.stripCustomStringFromSearchString(_) >> {"stuff"}
         queryHelperService.constructSearchParams(_, _, _, _) >> { new SearchParams(searchString)}
@@ -385,7 +383,6 @@ class QueryServiceUnitSpec extends Specification {
         then:
         queryHelperService.startStopWatch() >> {sw}
         queryHelperService.stopStopWatch(_, _) >> {}
-        queryServiceWrapper.restAssayService >> { restAssayService }
         restAssayService.search(_) >> {iter}
         queryHelperService.stripCustomStringFromSearchString(_) >> {"stuff"}
         queryHelperService.constructSearchParams(_, _, _, _) >> { new SearchParams(searchString)}
@@ -410,7 +407,6 @@ class QueryServiceUnitSpec extends Specification {
         then:
         _ * queryHelperService.startStopWatch() >> {sw}
         _ * queryHelperService.stopStopWatch(_, _) >> {}
-        _ * queryServiceWrapper.restProjectService >> { restProjectService }
         _ * restProjectService.search(_) >> {iter}
         _ * queryHelperService.stripCustomStringFromSearchString(_) >> {"stuff"}
         _ * queryHelperService.constructSearchParams(_, _, _, _) >> { new SearchParams(searchString)}
@@ -435,7 +431,6 @@ class QueryServiceUnitSpec extends Specification {
         then:
         _ * queryHelperService.startStopWatch() >> {sw}
         _ * queryHelperService.stopStopWatch(_, _) >> {}
-        _ * queryServiceWrapper.restProjectService >> { restProjectService }
         _ * restProjectService.search(_) >> {iter}
         _ * queryHelperService.stripCustomStringFromSearchString(_) >> {"stuff"}
         _ * queryHelperService.constructSearchParams(_, _, _, _) >> { new SearchParams(searchString)}
@@ -456,7 +451,6 @@ class QueryServiceUnitSpec extends Specification {
         when:
         List list = service.autoComplete("Some Search String")
         then:
-        queryServiceWrapper.restAssayService >> { restAssayService }
         restAssayService.suggest(_) >> {map}
         queryHelperService.autoComplete(_, _) >> {[map]}
         assert list
@@ -476,7 +470,6 @@ class QueryServiceUnitSpec extends Specification {
         when:
         final Map promiscuityScoreMap = service.findPromiscuityScoreForCID(cid)
         then:
-        queryServiceWrapper.restCompoundService >> { restCompoundService }
         restCompoundService.getPromiscuityScore(_) >> {promiscuityScore}
 
         assert promiscuityScoreMap.status == expectedStatus

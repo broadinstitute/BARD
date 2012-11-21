@@ -54,27 +54,7 @@ class RESTAssayServiceIntegrationSpec extends AbstractRESTServiceSpec {
         assert tags != null
     }
 
-    void "test Project From Single Assay #label=#adid"() {
-        given:
-        Assay a = this.restAssayService.get(adid);
-        when:
-        SearchResult<Project> iter =
-            restAssayService.searchResult(a, Project.class);
-        then:
-        Collection<Project> projects = iter.next(1000);
-        and:
-        assert projects
-        assert !projects.isEmpty()
-        and:
 
-        for (Project project : projects) {
-            assert project.getId()
-        }
-        where:
-        label      | adid
-        "Assay ID" | 2868
-
-    }
 
 
     public void "testServices Free Text Search"() {
@@ -136,65 +116,9 @@ class RESTAssayServiceIntegrationSpec extends AbstractRESTServiceSpec {
         "Search with a list of assay ids" | [3894, 4174, 4202]
         "Search with a single assay id"   | [3894]
     }
-    /**
-     * if you search for the this assay via the REST api, you get one project associated with the assay: http://bard.nih.gov/api/latest/assays/588591/projects
-     */
-    void "test Get Assays with projects #label"() {
-        when: "We call the get method of the the RESTAssayService with an assay ids"
-        final Assay assay = this.restAssayService.get(adid)
-
-        then: "We expect to get back a list of assays"
-        assertAssays([assay], false)
-        final SearchResult<Project> searchResult = restAssayService.searchResult(assay, Project.class)
-        final List<Project> entities = searchResult.searchResults
-        assert entities
-        assert !entities.isEmpty()
-        for (Project project : entities) {
-            assert project
-        }
 
 
-        where:
-        label                           | adid
-        "Search with a single assay id" | 644
-    }
 
-    /**
-     * if you search for the this assay via the REST api, you get one experiment associated with the assay
-     */
-    void "test Get Assays with experiment #label"() {
-        when: "We call the get method of the the RESTAssayService with an assay ids"
-        final Assay assay = this.restAssayService.get(adid)
-
-        then: "We expect to get back a list of assays"
-        assertAssays([assay], false)
-        final SearchResult<Experiment> searchResult = restAssayService.searchResult(assay, Experiment.class)
-        final List<Experiment> entities = searchResult.searchResults
-        assert entities
-        assert !entities.isEmpty()
-        for (Experiment experiment : entities) {
-            assert experiment
-        }
-
-
-        where:
-        label                           | adid
-        "Search with a single assay id" | 644
-    }
-    /**
-     * if you search for the this assay via the REST api, you get one experiment associated with the assay
-     */
-    void "test Get Assay with a Single Compound Illegal Argument excpetion"() {
-        when: "We call the get method of the the RESTAssayService with an assay id"
-        final Assay assay = this.restAssayService.get(adid)
-        restAssayService.searchResult(assay, Compound.class)
-        then:
-        thrown(IllegalArgumentException)
-
-        where:
-        label                           | adid
-        "Search with a single assay id" | 644
-    }
 /**
  *
  * @param assays
