@@ -65,7 +65,7 @@ class MolecularSpreadSheetServiceUnitSpec extends Specification {
         // Tear down logic here
     }
 
-<<<<<<< HEAD
+
 
 
 
