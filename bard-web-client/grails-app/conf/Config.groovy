@@ -6,7 +6,7 @@ ncgc.server.root.url = "http://bard.nih.gov/api/v7"
 promiscuityscrores.root.url = "${ncgc.server.root.url}/plugins/badapple/prom/cid/"
 //override in config file for environment
 server.port = System.properties.getProperty('server.port') ?: 8080
-grails.serverURL = "http://localhost:${server.port}/bardwebquery"
+grails.serverURL = "http://localhost:${server.port}/bardwebclient"
 //URL to the ROOT of the cap server
 bard.cap.home = "http://localhost:8081/BARD/"
 bard.cap.assay = "${bard.cap.home}assayDefinition/show/"
