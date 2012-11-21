@@ -12,7 +12,12 @@
         $("[rel=tooltip]").tooltip();
         $('#molspreadsheet').dataTable({
                     "bStateSave":true,
+                    "aoColumnDefs": [
+                         {"bSortable":false, 'aTargets': [0]}
+                    ],
+                    <g:if test="${molSpreadSheetData.getRowCount()>50}">%{--If we have a lot of data then use full-featured pagination--}%
                     "sPaginationType":"full_numbers",
+                    </g:if>
                     "aLengthMenu":[
                         [5, 10, 25, 50, -1],
                         [5, 10, 25, 50, "All"]
@@ -171,7 +176,6 @@
                 </g:each>
                 </tbody>
             </table>
-            <export:formats/>
         </g:if>
         <g:else>
             <div class="alert">
@@ -181,6 +185,8 @@
         </g:else>
 
     </div>
-
+    <div class="span10 pull-right">
+       <export:formats/>
+    </div>
 </div>
 

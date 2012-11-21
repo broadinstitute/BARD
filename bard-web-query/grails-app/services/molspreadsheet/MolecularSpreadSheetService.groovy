@@ -32,7 +32,7 @@ class MolecularSpreadSheetService {
         returnValue ["labels"]   = ["molstruct": "molecular structure"]
         returnValue ["labels"] << ["cid": "CID"]
         int column = 0
-        for (String colHeader in molSpreadSheetData?.getColumns()){
+        for (String colHeader in molSpreadSheetData.getColumns()){
             if (column == 2) {
                 returnValue ["labels"] << [("c${column}" as String): "$colHeader"]
             }
@@ -50,12 +50,12 @@ class MolecularSpreadSheetService {
         returnValue ["data"]   = []
         for (int rowCnt in 0..(molSpreadSheetData.getRowCount() - 1)){
             LinkedHashMap<String, String> mapForThisRow  = []
-            mapForThisRow << ["molstruct": """${molSpreadSheetData?.displayValue(rowCnt, 0)?."smiles"}""".toString()]
-            mapForThisRow << ["cid": """${molSpreadSheetData?.displayValue(rowCnt, 1)?."value"}""".toString()]
-            mapForThisRow << ["c3": """${molSpreadSheetData?.displayValue(rowCnt, 3)?."value"}""".toString()]
+            mapForThisRow << ["molstruct": """${molSpreadSheetData.displayValue(rowCnt, 0)?."smiles"}""".toString()]
+            mapForThisRow << ["cid": """${molSpreadSheetData.displayValue(rowCnt, 1)?."value"}""".toString()]
+            mapForThisRow << ["c3": """${molSpreadSheetData.displayValue(rowCnt, 3)?."value"}""".toString()]
             if (molSpreadSheetData.getColumnCount() > 4) {
                 for (int colCnt in (4..molSpreadSheetData.getColumnCount() - 1)) {
-                    SpreadSheetActivityStorage spreadSheetActivityStorage = molSpreadSheetData?.findSpreadSheetActivity(rowCnt, colCnt)
+                    SpreadSheetActivityStorage spreadSheetActivityStorage = molSpreadSheetData.findSpreadSheetActivity(rowCnt, colCnt)
                     if (spreadSheetActivityStorage != null)  {
                         HillCurveValueHolder hillCurveValueHolder = spreadSheetActivityStorage.getHillCurveValueHolderList()[0]
                         mapForThisRow << [("c${colCnt}" as String): hillCurveValueHolder.toString() ]

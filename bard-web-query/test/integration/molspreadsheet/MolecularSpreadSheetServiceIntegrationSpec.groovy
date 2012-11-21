@@ -33,6 +33,7 @@ class MolecularSpreadSheetServiceIntegrationSpec extends IntegrationSpec {
     ShoppingCartService shoppingCartService
 
 
+
     @Before
     void setup() {
         this.restExperimentService = molecularSpreadSheetService.queryServiceWrapper.restExperimentService
@@ -66,6 +67,49 @@ class MolecularSpreadSheetServiceIntegrationSpec extends IntegrationSpec {
         assert molSpreadSheetData.columnPointer.size() == 0
         assert molSpreadSheetData.mssHeaders.size() == 4
     }
+
+
+
+
+//  This test should work, but there are some recent changes to the code that I think may need to be reversed
+//  I will leave this stub here for now, with the intention of later modification.
+//
+//    void "test prepareForExport ( molSpreadSheetData )"() {
+//        MolSpreadSheetDataBuilder molSpreadSheetDataBuilder = new MolSpreadSheetDataBuilder()
+//        MolSpreadSheetDataBuilderDirector molSpreadSheetDataBuilderDirector = new MolSpreadSheetDataBuilderDirector()
+//
+//        when: "we have a molecularSpreadSheetService"
+//        assertNotNull molecularSpreadSheetService
+//        assertNotNull molecularSpreadSheetService
+//        assertNotNull queryCartService
+//        assertNotNull molSpreadSheetDataBuilder
+//        List<CartCompound> cartCompoundList = []
+//        List<CartAssay> cartAssayList = []
+//        List<CartProject> cartProjectList = []
+//
+//
+//        then: "we should be able to generate the core molSpreadSheetData, with valid empty data holders"
+//
+//        cartAssayList << new CartAssay("assay",2199)
+//        cartCompoundList << new CartCompound("C(=O)C1=C(NCCCC2=CC=CC=C2)C=CC(=C1)[N+]([O-])=O","mol1",4549L)
+//        cartCompoundList << new CartCompound("COC1=CC(=CC(OC)=C1OC)C(CCCN(C)CCC1=CC(OC)=C(OC)C=C1)(C#N)C(C)C","mol2",1234L)
+//
+//
+//
+//        molSpreadSheetDataBuilderDirector.setMolSpreadSheetDataBuilder(molSpreadSheetDataBuilder)
+//        molSpreadSheetDataBuilderDirector.constructMolSpreadSheetData(cartCompoundList,
+//                cartAssayList,
+//                cartProjectList)
+//
+//          molSpreadSheetDataBuilderDirector.molSpreadSheetData
+//
+//        LinkedHashMap<String, Object> dataReadyForExporting  =  molecularSpreadSheetService.prepareForExport molSpreadSheetData
+//
+//
+//        then: "we should be able to generate a list of spreadsheet activity elements"
+//        assertNotNull dataReadyForExporting
+//    }
+//
 
 
 

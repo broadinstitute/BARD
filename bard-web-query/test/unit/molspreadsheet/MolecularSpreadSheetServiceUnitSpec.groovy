@@ -66,6 +66,71 @@ class MolecularSpreadSheetServiceUnitSpec extends Specification {
     void tearDown() {
         // Tear down logic here
     }
+
+
+
+
+    void "test prepareForExport #label"() {
+        given:
+        MolSpreadSheetData molSpreadSheetData = new MolSpreadSheetData()
+
+        when:
+        molSpreadSheetData.mssHeaders << ['a']
+        molSpreadSheetData.mssHeaders << ['b']
+        molSpreadSheetData.mssHeaders << ['c']
+        molSpreadSheetData.mssHeaders << ['e', 'f', 'g']
+        MolSpreadSheetCell molSpreadSheetCell0 = new MolSpreadSheetCell("2", MolSpreadSheetCellType.image)
+        molSpreadSheetCell0.spreadSheetActivityStorage = new SpreadSheetActivityStorage()
+        MolSpreadSheetCell molSpreadSheetCell1 = new MolSpreadSheetCell("2", MolSpreadSheetCellType.string)
+        molSpreadSheetCell1.spreadSheetActivityStorage = new SpreadSheetActivityStorage()
+        MolSpreadSheetCell molSpreadSheetCell2 = new MolSpreadSheetCell("2.1", MolSpreadSheetCellType.numeric)
+        molSpreadSheetCell2.spreadSheetActivityStorage = new SpreadSheetActivityStorage()
+        molSpreadSheetData.mssData = [:]
+        molSpreadSheetData.mssData.put("1_0", molSpreadSheetCell0 )
+        molSpreadSheetData.mssData.put("1_1", molSpreadSheetCell1 )
+        molSpreadSheetData.mssData.put("1_3", molSpreadSheetCell1 )
+        molSpreadSheetData.mssData.put("1_4", molSpreadSheetCell1 )
+        molSpreadSheetData.mssData.put("1_5",molSpreadSheetCell2 )
+        molSpreadSheetData.rowPointer[0L]=0
+        molSpreadSheetData.rowPointer[1L]=1
+        LinkedHashMap<String, Object> dataForExporting = service.prepareForExport ( molSpreadSheetData )
+
+        then:
+        assertNotNull  dataForExporting
+        assertNotNull  dataForExporting."labels"
+        assert  (dataForExporting["labels"]).size()==6
+        assertNotNull  dataForExporting."fields"
+        assert  (dataForExporting["fields"]).size()==5
+        assertNotNull  dataForExporting."data"
+        assert  (dataForExporting["data"]).size()==2
+
+    }
+    void "test prepareForExport degenerate"() {
+        given:
+        MolSpreadSheetData molSpreadSheetData = new MolSpreadSheetData()
+
+        when:
+        molSpreadSheetData.mssHeaders << ['a']
+        molSpreadSheetData.mssHeaders << ['b']
+        molSpreadSheetData.mssHeaders << ['c']
+        molSpreadSheetData.mssData = [:]
+        molSpreadSheetData.rowPointer[0L]=0
+        LinkedHashMap<String, Object> dataForExporting = service.prepareForExport ( molSpreadSheetData )
+
+        then:
+        assertNotNull  dataForExporting
+        assertNotNull  dataForExporting."labels"
+        assert  (dataForExporting["labels"]).size()==3
+        assertNotNull  dataForExporting."fields"
+        assert  (dataForExporting["fields"]).size()==2
+        assertNotNull  dataForExporting."data"
+        assert  (dataForExporting["data"]).size()==1
+
+    }
+
+
+
+
     void "test findActivitiesForCompounds #label"(){
         given:
         Experiment experiment = new Experiment()
