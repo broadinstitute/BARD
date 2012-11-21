@@ -8,7 +8,6 @@ import bard.core.rest.RESTExperimentService
 import bard.core.rest.RESTProjectService
 import bardqueryapi.ActivityOutcome
 import bardqueryapi.IQueryService
-import bardqueryapi.QueryServiceWrapper
 import bardqueryapi.SearchFilter
 import com.metasieve.shoppingcart.ShoppingCartService
 import org.apache.commons.lang.NotImplementedException
@@ -17,13 +16,68 @@ import querycart.CartCompound
 import querycart.CartProject
 import querycart.QueryCartService
 import bard.core.*
+import bard.core.rest.CombinedRestService
+import bard.core.rest.RESTCompoundService
 
 class MolecularSpreadSheetService {
     final static int START_DYNAMIC_COLUMNS = 4 //Where to start the dynamic columns
     QueryCartService queryCartService
-    QueryServiceWrapper queryServiceWrapper
+    CombinedRestService combinedRestService
+    RESTAssayService restAssayService
+    RESTProjectService restProjectService
+    RESTCompoundService restCompoundService
+    RESTExperimentService restExperimentService
     ShoppingCartService shoppingCartService
     IQueryService queryService
+
+
+
+    protected LinkedHashMap<String, Object> prepareForExport ( MolSpreadSheetData molSpreadSheetData ) {
+        LinkedHashMap<String, Object> returnValue = []
+        returnValue ["labels"]   = ["molstruct": "molecular structure"]
+        returnValue ["labels"] << ["cid": "CID"]
+        int column = 0
+        for (String colHeader in molSpreadSheetData.getColumns()){
+            if (column == 2) {
+                returnValue ["labels"] << [("c${column}" as String): "$colHeader"]
+            }
+            if (column > 2) {
+                returnValue ["labels"] << [("c${column}" as String): "${molSpreadSheetData.mapColumnsToAssay[column]} ${colHeader}"]
+            }
+            column++
+        }
+        returnValue["fields"] = []
+        returnValue["labels"].each {key, value ->
+            returnValue["fields"] << key
+        }
+        //leave out promicuity for now
+        returnValue["fields"] -= "c2"
+        returnValue ["data"]   = []
+        for (int rowCnt in 0..(molSpreadSheetData.getRowCount() - 1)){
+            LinkedHashMap<String, String> mapForThisRow  = []
+            mapForThisRow << ["molstruct": """${molSpreadSheetData.displayValue(rowCnt, 0)?."smiles"}""".toString()]
+            mapForThisRow << ["cid": """${molSpreadSheetData.displayValue(rowCnt, 1)?."value"}""".toString()]
+            mapForThisRow << ["c3": """${molSpreadSheetData.displayValue(rowCnt, 3)?."value"}""".toString()]
+            if (molSpreadSheetData.getColumnCount() > 4) {
+                for (int colCnt in (4..molSpreadSheetData.getColumnCount() - 1)) {
+                    SpreadSheetActivityStorage spreadSheetActivityStorage = molSpreadSheetData.findSpreadSheetActivity(rowCnt, colCnt)
+                    if (spreadSheetActivityStorage != null)  {
+                        HillCurveValueHolder hillCurveValueHolder = spreadSheetActivityStorage.getHillCurveValueHolderList()[0]
+                        mapForThisRow << [("c${colCnt}" as String): hillCurveValueHolder.toString() ]
+                    }  else {
+                        mapForThisRow << [("c${colCnt}" as String): "not tested in this experiment"]
+                    }
+
+                }
+            }
+            returnValue["data"] << mapForThisRow
+        }
+        return returnValue
+
+    }
+
+
+
 
     /**
      * High-level routine to pull information out of the query cart and store it into a data structure suitable
@@ -85,16 +139,16 @@ class MolecularSpreadSheetService {
     protected Object retrieveImpliedCompoundsEtagFromAssaySpecification(List<Experiment> experimentList) {
         Object etag = null
         for (Experiment experiment in experimentList) {
-            final SearchResult<Compound> compoundSearchResult = this.queryServiceWrapper.restExperimentService.compounds(experiment)
+            final SearchResult<Compound> compoundSearchResult = this.combinedRestService.compounds(experiment)
             List<Compound> singleExperimentCompoundList = compoundSearchResult.searchResults
             List<Long> idList = singleExperimentCompoundList*.id as List<Long>
             if (etag == null) {
-                etag = this.queryServiceWrapper.restCompoundService.newETag("${new Date().toString()}",
+                etag = this.restCompoundService.newETag("${new Date().toString()}",
                         idList);
             }
             else if ((singleExperimentCompoundList != null) &&
                     (singleExperimentCompoundList.size() > 0)) {
-                this.queryServiceWrapper.restCompoundService.putETag(etag,
+                this.restCompoundService.putETag(etag,
                         idList);
             }
 
@@ -147,9 +201,9 @@ class MolecularSpreadSheetService {
 
             SearchResult<Value> experimentSearchResults
             if (etag == null) {
-                experimentSearchResults = queryServiceWrapper.restExperimentService.activities(experiment)
+                experimentSearchResults = restExperimentService.activities(experiment)
             } else {
-                experimentSearchResults = queryServiceWrapper.restExperimentService.activities(experiment, etag)
+                experimentSearchResults = restExperimentService.activities(experiment, etag)
             }
 
             // Now step through the result set and pull back  one value for each compound
@@ -215,7 +269,7 @@ class MolecularSpreadSheetService {
             cartCompoundIdList.add(cartCompound.externalId)
         Date date = new Date()
 
-        queryServiceWrapper.restCompoundService.newETag(date.toTimestamp().toString(), cartCompoundIdList);
+        restCompoundService.newETag(date.toTimestamp().toString(), cartCompoundIdList);
     }
     /**
      * The goal of this method is to take all the information we have  and store it in a map. Note that we are
@@ -381,11 +435,10 @@ class MolecularSpreadSheetService {
      * @return
      */
     protected List<Experiment> assaysToExperiments(final Collection<Assay> assays) {
-        final RESTAssayService restAssayService = this.queryServiceWrapper.restAssayService
         List<Experiment> allExperiments = []
 
         for (Assay assay : assays) {
-            final SearchResult<Experiment> searchResult = restAssayService.searchResult(assay, Experiment)
+            final SearchResult<Experiment> searchResult = combinedRestService.searchResultByAssay(assay, Experiment)
             if (searchResult) {
                 allExperiments.addAll(searchResult.searchResults)
             }
@@ -408,11 +461,10 @@ class MolecularSpreadSheetService {
         else {
             allExperiments = incomingExperimentList
         }
-        final RESTAssayService restAssayService = queryServiceWrapper.restAssayService
 
         for (Long individualAssayIds : assayIds) {
             final Assay assay = restAssayService.get(individualAssayIds)
-            final SearchResult<Experiment> experimentSearchResult = restAssayService.searchResult(assay, Experiment)
+            final SearchResult<Experiment> experimentSearchResult = combinedRestService.searchResultByAssay(assay, Experiment)
             for (Experiment experiment : experimentSearchResult.searchResults) {
                 allExperiments << experiment
             }
@@ -443,8 +495,8 @@ class MolecularSpreadSheetService {
 
         List<Assay> allAssays = []
         for (Long individualCompoundId in compoundIds) {
-            Compound compound = queryServiceWrapper.restCompoundService.get(individualCompoundId)
-            Collection<Assay> activeAssaysForThisCompound = queryServiceWrapper.restCompoundService.getTestedAssays(compound, true)  // true = active only
+            Compound compound = restCompoundService.get(individualCompoundId)
+            Collection<Assay> activeAssaysForThisCompound = combinedRestService.getTestedAssays(compound, true)  // true = active only
             for (Assay assay in activeAssaysForThisCompound) {
                 allAssays << assay
             }
@@ -461,14 +513,12 @@ class MolecularSpreadSheetService {
     protected List<Experiment> cartProjectsToExperiments(final List<CartProject> cartProjects) {
         List<Long> projectIds = cartProjects*.externalId
         List<Experiment> allExperiments = []
-        final RESTProjectService restProjectService = queryServiceWrapper.restProjectService
-        final RESTAssayService restAssayService = queryServiceWrapper.restAssayService
         final Collection<Project> projects = restProjectService.get(projectIds)
 
         for (Project project : projects) {
-            final SearchResult<Assay> assaySearchResult = restProjectService.searchResult(project, Assay)
+            final SearchResult<Assay> assaySearchResult = combinedRestService.searchResultByProject(project, Assay)
             for (Assay assay : assaySearchResult.searchResults) {
-                final SearchResult<Experiment> searchResults = restAssayService.searchResult(assay, Experiment)
+                final SearchResult<Experiment> searchResults = combinedRestService.searchResultByAssay(assay, Experiment)
                 allExperiments.addAll(searchResults.searchResults)
             }
         }
@@ -483,7 +533,7 @@ class MolecularSpreadSheetService {
      */
     List<SpreadSheetActivity> findActivitiesForCompounds(final Experiment experiment, final Object compoundETag) {
         final List<SpreadSheetActivity> spreadSheetActivities = []
-        final SearchResult<Value> experimentalResults = this.queryServiceWrapper.restExperimentService.activities(experiment, compoundETag);
+        final SearchResult<Value> experimentalResults = restExperimentService.activities(experiment, compoundETag);
 
         for (Value experimentValue : experimentalResults.searchResults) {
             if (experimentValue) {
@@ -497,8 +547,7 @@ class MolecularSpreadSheetService {
 
     Map findExperimentDataById(final Long experimentId, final Integer top = 10, final Integer skip = 0) {
         List<SpreadSheetActivity> spreadSheetActivities = []
-        final RESTExperimentService restExperimentService = queryServiceWrapper.restExperimentService
-        long totalNumberOfRecords = 0
+         long totalNumberOfRecords = 0
         ExperimentRole role = null
         Experiment experiment = restExperimentService.get(experimentId)
         if (experiment) {
@@ -522,7 +571,6 @@ class MolecularSpreadSheetService {
     }
 
     protected Map extractActivityValues(final Experiment experiment, final Integer top = 10, final Integer skip = 0) {
-        final RESTExperimentService restExperimentService = queryServiceWrapper.restExperimentService
         final SearchResult<Value> experimentSearchResults = restExperimentService.activities(experiment);
         return extractActivityValuesFromExperimentValueIterator(experimentSearchResults, top, skip)
     }

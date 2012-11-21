@@ -36,50 +36,7 @@ class RESTProjectServiceIntegrationSpec extends AbstractRESTServiceSpec {
         label                                   | pid
         "Find an existing Project with a Probe" | new Integer(17)
     }
-    /**
-     *
-     */
-    void "test projects with assays #label"() {
 
-        when: "The get method is called with the given PID: #pid"
-        final Project project = restProjectService.get(pid)
-        then: "A Project is returned with the expected information"
-        assert project
-        assert pid == project.id
-        final ProjectAdapter projectAdapter = new ProjectAdapter(project)
-        assert projectAdapter.numberOfExperiments
-
-        final SearchResult<Assay> searchResults = restProjectService.searchResult(project, Assay.class)
-        final List<Assay> assays = searchResults.searchResults
-        assert assays
-        assert !assays.isEmpty()
-        where:
-        label                      | pid
-        "Find an existing Project" | new Integer(179)
-    }
-    /**
-     *
-     */
-    void "test projects with experiments #label"() {
-
-        when: "The get method is called with the given PID: #pid"
-        final Project project = restProjectService.get(pid)
-        then: "A Project is returned with the expected information"
-        assert project
-        assert pid == project.id
-        final ProjectAdapter projectAdapter = new ProjectAdapter(project)
-        assert projectAdapter.numberOfExperiments
-
-        final SearchResult<Experiment> searchResults = restProjectService.searchResult(project, Experiment.class)
-        final List<Experiment> experiments = searchResults.searchResults
-        assert experiments
-        for (Experiment experiment : experiments) {
-            assert experiment
-        }
-        where:
-        label                      | pid
-        "Find an existing Project" | new Integer(179)
-    }
 
     void "use auto-suggest 'zinc ion binding as GO molecular function term' has problems bug: https://www.pivotaltracker.com/story/show/36709121"() {
         given:

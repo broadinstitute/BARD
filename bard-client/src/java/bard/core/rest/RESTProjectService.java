@@ -5,7 +5,6 @@ import bard.core.StringValue;
 import bard.core.interfaces.AssayValues;
 import bard.core.interfaces.EntityNamedSources;
 import bard.core.interfaces.ProjectService;
-import bard.core.interfaces.SearchResult;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import org.apache.commons.lang.StringUtils;
@@ -15,13 +14,8 @@ public class RESTProjectService extends RESTAbstractEntityService<Project>
         implements ProjectService, AssayValues {
     final DataSource CAP_ANNOTATIONS = getDataSource(EntityNamedSources.CAPAnnotationSource);
 
-    protected RESTProjectService
-            (final RESTEntityServiceManager srvman, final String baseURL) {
-        super(srvman, baseURL);
-    }
-
-    public Class<Project> getEntityClass() {
-        return Project.class;
+    protected RESTProjectService(final String baseURL) {
+        super(baseURL);
     }
 
     public String getResourceContext() {
@@ -185,26 +179,6 @@ public class RESTProjectService extends RESTAbstractEntityService<Project>
     protected void addSingleAnnotation(final Project project, final DataSource ds, final String key, final String val) {
         if (StringUtils.isNotBlank(key) && StringUtils.isNotBlank(val)) {
             project.addValue(new StringValue(ds, key, val));
-        }
-    }
-
-    @Override
-    public <T extends Entity> SearchResult<T> searchResult
-            (Project project, Class<T> clazz) {
-        RESTAbstractEntityService<T> service =
-                (RESTAbstractEntityService) getServiceManager().getService(clazz);
-
-        if (clazz.equals(Assay.class)) {
-            return service.getSearchResult
-                    (getResource(project.getId() + ASSAYS_RESOURCE), null);
-        } else if (clazz.equals(Experiment.class)) {
-            return service.getSearchResult
-                    (getResource(project.getId() + EXPERIMENTS_RESOURCE), null);
-        } else {
-            final String message = "No related searchResults available for " + clazz;
-            log.error(message);
-            throw new IllegalArgumentException
-                    (message);
         }
     }
 }

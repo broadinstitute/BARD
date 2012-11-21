@@ -27,8 +27,6 @@ class DoseCurveRenderingServiceIntegrationSpec extends IntegrationSpec {
 
     @Before
     void setup() {
-        this.restExperimentService = molecularSpreadSheetService.queryServiceWrapper.restExperimentService
-        this.restCompoundService = molecularSpreadSheetService.queryServiceWrapper.restCompoundService
 
     }
 

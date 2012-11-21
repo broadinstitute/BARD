@@ -136,12 +136,7 @@ public interface EntityService<E extends Entity> extends Serializable {
     String PROBES = "probes";
     String SMILES = "smiles";
 
-    /*
-    * Service metadata
-    */
-    Class<E> getEntityClass();
 
-    EntityServiceManager getServiceManager();
 
     // is this service read-only? if so all write operations (e.g., put, ETag)
     //  will throw UnsupportedOperationException
@@ -194,10 +189,6 @@ public interface EntityService<E extends Entity> extends Serializable {
 //    //  given principal
 //    SearchResult<Value> etags(Principal principal);
 
-    /*
-     * retrieval of related entities
-     */
-    <T extends Entity> SearchResult<T> searchResult(E entity, Class<T> clazz);
 
     /*
      * Various entity retrieval methods

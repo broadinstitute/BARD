@@ -12,7 +12,12 @@
         $("[rel=tooltip]").tooltip();
         $('#molspreadsheet').dataTable({
                     "bStateSave":true,
+                    "aoColumnDefs": [
+                         {"bSortable":false, 'aTargets': [0]}
+                    ],
+                    <g:if test="${molSpreadSheetData.getRowCount()>50}">%{--If we have a lot of data then use full-featured pagination--}%
                     "sPaginationType":"full_numbers",
+                    </g:if>
                     "aLengthMenu":[
                         [5, 10, 25, 50, -1],
                         [5, 10, 25, 50, "All"]
@@ -31,7 +36,6 @@
         <g:render template="../bardWebInterface/facets"
                   model="['facets': facets, 'formName': FacetFormType.AssayFacetForm]"/>
     </div>
-
     <div class="span10">
         <g:if test="${molSpreadSheetData?.getColumnCount() > 0}">
             <g:set var="columnWidth" value="${100.0 / ((molSpreadSheetData?.getColumnCount() - 1) as float)}"/>
@@ -72,7 +76,7 @@
                 <tbody>
                 <% Integer rowCount = 0 %>
                 <g:each var="rowCnt" in="${0..(molSpreadSheetData.getRowCount() - 1)}">
-                    <% String retrievedSmiles = """${molSpreadSheetData?.displayValue(rowCnt, 0)["smiles"]}""".toString() %>
+                    <% String retrievedSmiles = """${molSpreadSheetData?.displayValue(rowCnt, 0)."smiles"}""".toString() %>
                     <% String cid = """${molSpreadSheetData?.displayValue(rowCnt, 1)?."value"}""".toString() %>
                     <% String activeVrsTested = """${molSpreadSheetData?.displayValue(rowCnt, 3)?."value"}""".toString() %>
                     <g:if test="${((rowCount++) % 2) == 0}">
@@ -181,6 +185,8 @@
         </g:else>
 
     </div>
-
+    <div class="span10 pull-right">
+       <export:formats/>
+    </div>
 </div>
 

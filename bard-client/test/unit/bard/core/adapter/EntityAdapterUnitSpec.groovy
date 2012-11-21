@@ -1,6 +1,5 @@
 package bard.core.adapter
 
-import bard.core.interfaces.EntityNamedSources
 import spock.lang.Specification
 import spock.lang.Unroll
 import bard.core.*

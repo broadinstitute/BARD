@@ -12,6 +12,7 @@ import spock.lang.Unroll
 @Unroll
 class StructureSearchResultIntegrationSpec extends AbstractRESTServiceSpec {
 
+   // RESTCompoundService restCompoundService
 
     void "test build #label"() {
         given:

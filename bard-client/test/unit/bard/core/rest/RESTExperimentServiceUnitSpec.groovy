@@ -14,7 +14,6 @@ import bard.core.*
 class RESTExperimentServiceUnitSpec extends Specification {
     RESTExperimentService restExperimentService
     RESTAssayService restAssayService
-    RESTEntityServiceManager entityServiceManager
     @Shared DataSource dataSource = new DataSource("name")
     @Shared ObjectMapper mapper = new ObjectMapper();
     @Shared String EXPERIMENT_READOUTS = JSONNodeTestHelper.EXPERIMENT_READOUTS
@@ -41,24 +40,16 @@ class RESTExperimentServiceUnitSpec extends Specification {
    '''
 
     void setup() {
-        this.entityServiceManager = Mock(RESTEntityServiceManager)
-        this.restExperimentService = new RESTExperimentService(this.entityServiceManager, "base")
-        this.restAssayService = new RESTAssayService(this.entityServiceManager, "base")
+        this.restExperimentService = new RESTExperimentService("base")
+        this.restAssayService = new RESTAssayService("base")
+        this.restExperimentService.restAssayService = this.restAssayService
     }
 
     void tearDown() {
         // Tear down logic here
     }
 
-    void "searchResult with Exceptions"() {
-        given:
-        final Experiment experiment = new Experiment()
-        when:
-        this.restExperimentService.searchResult(experiment, Substance.class)
-        then:
-        thrown(IllegalArgumentException)
 
-    }
 
     void "getEntitySearch #label"() {
         when:
@@ -128,7 +119,6 @@ class RESTExperimentServiceUnitSpec extends Specification {
         this.restExperimentService.addAssayNode(experiment, node)
 
         then:
-        this.entityServiceManager.getService(Assay.class) >> {restAssayService}
         assert (experiment.getAssay() == null) == isNull
         assert (experiment.getAssay()?.getId() != 346) == isNull
 
@@ -145,7 +135,6 @@ class RESTExperimentServiceUnitSpec extends Specification {
         final Experiment resultExperiment = this.restExperimentService.getEntity(experiment, node)
 
         then:
-        this.entityServiceManager.getService(Assay.class) >> {restAssayService}
         assert resultExperiment
         assert resultExperiment.getId() == 346
         where:
@@ -433,7 +422,7 @@ class RESTExperimentServiceUnitSpec extends Specification {
         given:
         final Value value = new Value(dataSource)
         when:
-        final HillCurveValue hcv = this.restExperimentService.parseReadout(value, node)
+        final HillCurveValue hcv = (HillCurveValue)this.restExperimentService.parseReadout(value, node)
         then:
         assert hcv
         assert hcv.getS0()
@@ -453,7 +442,7 @@ class RESTExperimentServiceUnitSpec extends Specification {
         given:
         final Value value = new Value(dataSource)
         when:
-        final HillCurveValue hcv = this.restExperimentService.parseReadout(value, mapper.readTree("{ \"nos0\": 17}"))
+        final HillCurveValue hcv = (HillCurveValue)this.restExperimentService.parseReadout(value, mapper.readTree("{ \"nos0\": 17}"))
         then:
         assert !hcv
     }

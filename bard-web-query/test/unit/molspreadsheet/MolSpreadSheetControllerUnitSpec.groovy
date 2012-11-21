@@ -13,6 +13,7 @@ import querycart.CartProject
 import querycart.QueryItem
 import grails.test.mixin.Mock
 import spock.lang.Shared
+import de.andreasschmitt.export.ExportService
 
 /**
  * See the API for {@link grails.test.mixin.support.GrailsUnitTestMixin} for usage instructions
@@ -23,6 +24,7 @@ import spock.lang.Shared
 @Unroll
 class MolSpreadSheetControllerUnitSpec extends Specification {
     MolecularSpreadSheetService molecularSpreadSheetService
+    ExportService exportService
     QueryCartService queryCartService
     CartCompoundService cartCompoundService
     CartProjectService cartProjectService
@@ -34,6 +36,8 @@ class MolSpreadSheetControllerUnitSpec extends Specification {
     void setup() {
         this.molecularSpreadSheetService = Mock(MolecularSpreadSheetService)
         controller.molecularSpreadSheetService = this.molecularSpreadSheetService
+        this.exportService = Mock(ExportService)
+        controller.exportService = this.exportService
         this.queryCartService = Mock(QueryCartService)
         this.cartCompoundService = Mock(CartCompoundService)
         controller.cartCompoundService = this.cartCompoundService
@@ -92,6 +96,25 @@ class MolSpreadSheetControllerUnitSpec extends Specification {
         assert flash.message == "Please note: Only active compounds are shown in the Molecular Spreadsheet"
     }
 
+
+
+    void "test molecularSpreadSheet with export"() {
+        given:
+        params.format = 'csv'
+        LinkedHashMap<String,Object> fakeMap = ['data':null,'fields':null,'labels':null]
+
+        when:
+        controller.molecularSpreadSheet()
+
+        then:
+        molecularSpreadSheetService.weHaveEnoughDataToMakeASpreadsheet() >> {true}
+        molecularSpreadSheetService.retrieveExperimentalData() >> {molSpreadSheetData}
+        molecularSpreadSheetService.prepareForExport (_) >> {fakeMap}
+        exportService.export() >> {}
+        assert response.contentAsString.contains("molecular spreadsheet")
+        assert response.status == 200
+        assert flash.message == "Please note: Only active compounds are shown in the Molecular Spreadsheet"
+    }
 
 
 

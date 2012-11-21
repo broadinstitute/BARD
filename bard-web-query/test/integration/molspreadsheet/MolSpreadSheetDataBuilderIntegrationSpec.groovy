@@ -5,7 +5,6 @@ import bard.core.rest.RESTAssayService
 import bard.core.rest.RESTCompoundService
 import bard.core.rest.RESTExperimentService
 import bard.core.rest.RESTProjectService
-import bardqueryapi.QueryServiceWrapper
 import com.metasieve.shoppingcart.ShoppingCartService
 import grails.plugin.spock.IntegrationSpec
 import org.junit.After
@@ -28,7 +27,6 @@ class MolSpreadSheetDataBuilderIntegrationSpec extends IntegrationSpec {
     RESTExperimentService restExperimentService
     RESTProjectService restProjectService
     RESTAssayService restAssayService
-    QueryServiceWrapper queryServiceWrapper
     QueryCartService queryCartService
     ShoppingCartService shoppingCartService
 
@@ -36,11 +34,6 @@ class MolSpreadSheetDataBuilderIntegrationSpec extends IntegrationSpec {
     @Before
     void setup() {
         molSpreadSheetDataBuilder = new MolSpreadSheetDataBuilder(this.molecularSpreadSheetService)
-
-        this.restExperimentService = molecularSpreadSheetService.queryServiceWrapper.restExperimentService
-        this.restCompoundService = molecularSpreadSheetService.queryServiceWrapper.restCompoundService
-        this.restProjectService = molecularSpreadSheetService.queryServiceWrapper.restProjectService
-        this.restAssayService = molecularSpreadSheetService.queryServiceWrapper.restAssayService
         this.queryCartService = molecularSpreadSheetService.queryCartService
         this.shoppingCartService = molecularSpreadSheetService.shoppingCartService
     }
