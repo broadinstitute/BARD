@@ -25,6 +25,7 @@ Link to Project and Assay</xs:documentation>
                     </xs:complexType>
                 </xs:element>
             </xs:sequence>
+            <xs:attribute name="count" type="xs:int" use="required"/>
         </xs:complexType>
     </xs:element>
     <xs:element name="externalSystems">
@@ -44,6 +45,7 @@ Link to Project and Assay</xs:documentation>
                     </xs:complexType>
                 </xs:element>
             </xs:sequence>
+            <xs:attribute name="count" type="xs:int" use="required"/>
         </xs:complexType>
     </xs:element>
 </xs:schema>

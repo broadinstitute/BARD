@@ -12,6 +12,10 @@ class UrlMappings {
         name dictionary: "/api/dictionary"(controller: "dictionaryRest") {
             action = [GET: "dictionary"]
         }
+
+        name externalReferences:"/api/externalReferences"(controller: "dictionaryRest") {
+            action = [GET: "externalReferences"]
+        }
         name resultType: "/api/dictionary/resultType/$id"(controller: "dictionaryRest") {
             action = [GET: "resultType"]
         }
@@ -20,6 +24,18 @@ class UrlMappings {
         }
         name element: "/api/dictionary/element/$id"(controller: "dictionaryRest") {
             action = [GET: "element", PUT: "updateElement"]
+        }
+        name externalReferences:"/api/externalReferences"(controller: "externalReferenceRest") {
+            action = [GET: "externalReferences"]
+        }
+        name externalReference:"/api/externalReference/$id"(controller: "externalReferenceRest") {
+            action = [GET: "externalReference"]
+        }
+        name externalSystems:"/api/externalSystems"(controller: "externalReferenceRest") {
+            action = [GET: "externalSystems"]
+        }
+        name externalSystem:"/api/externalSystem/$id"(controller: "externalReferenceRest") {
+            action = [GET: "externalSystem"]
         }
         name assays: "/api/assays"(controller: "assayRest") {
             action = [GET: "assays"]

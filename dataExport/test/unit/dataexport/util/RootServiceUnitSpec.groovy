@@ -25,7 +25,9 @@ class RootServiceUnitSpec extends Specification {
                     dictionaryMediaType: "dictionaryMediaType",
                     assaysMediaType: "assaysMediaType",
                     projectsMediaType: "projectsMediaType",
-                    experimentsMediaType: "experimentsMediaType"
+                    experimentsMediaType: "experimentsMediaType",
+                    externalSystemsMediaType: "externalSystems",
+                    externalReferencesMediaType: "externalReferences"
             )
         this.rootService =
             new RootService(mediaTypesDTO)

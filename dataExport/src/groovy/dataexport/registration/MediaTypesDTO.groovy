@@ -17,6 +17,10 @@ class MediaTypesDTO {
     String experimentMediaType
     String resultsMediaType
     String resultMediaType
+    String externalReferencesMediaType
+    String externalReferenceMediaType
+    String externalSystemsMediaType
+    String externalSystemMediaType
     MediaTypesDTO() {
 
     }

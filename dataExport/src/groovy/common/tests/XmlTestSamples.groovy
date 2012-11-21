@@ -487,14 +487,16 @@ class XmlTestSamples {
 </assayContexts>
 '''
 
-    static String BARD_DATA_EXPORT_UNIT = '''
-<bardexport>
-  <link rel='item' title='The BARD Dictionary' href='null' type='dictionaryMediaType' />
-  <link rel='item' title='List of assays, ready for extraction' href='null' type='assaysMediaType' />
-  <link rel='item' title='List of projects, ready for extraction' href='null' type='projectsMediaType' />
-  <link rel='item' title='List of experiments, ready for extraction' type='experimentsMediaType' href='null' />
-</bardexport>
-'''
+ static String BARD_DATA_EXPORT_UNIT = '''
+                                        <bardexport>
+                                          <link rel='item' title='The BARD Dictionary' href='null' type='dictionaryMediaType' />
+                                          <link rel='item' title='List of assays, ready for extraction' href='null' type='assaysMediaType' />
+                                          <link rel='item' title='List of projects, ready for extraction' href='null' type='projectsMediaType' />
+                                          <link rel='item' title='List of experiments, ready for extraction' type='experimentsMediaType' href='null' />
+                                          <link rel='item' title='List of external references' type='externalReferences' href='null' />
+                                          <link rel='item' title='List of external systems' type='externalSystems' href='null' />
+                                        </bardexport>
+                                        '''
     static String BARD_DATA_EXPORT = '''
 <bardexport>
   <link rel='item' title='The BARD Dictionary' href='http://localhost:8080/dataExport/api/dictionary' type='application/vnd.bard.cap+xml;type=dictionary' />

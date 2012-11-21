@@ -40,6 +40,16 @@ bard.data.export.dictionary.xml = 'application/vnd.bard.cap+xml;type=dictionary'
 bard.data.export.dictionary.stage.xml = 'application/vnd.bard.cap+xml;type=stage'
 bard.data.export.dictionary.element.xml = 'application/vnd.bard.cap+xml;type=element'
 
+
+//external reference
+bard.data.export.externalreference.xml='application/vnd.bard.cap+xml;type=externalReference'
+bard.data.export.externalreferences.xml='application/vnd.bard.cap+xml;type=externalReferences'
+
+//external systems
+bard.data.export.externalsystem.xml ='application/vnd.bard.cap+xml;type=externalSystem'
+bard.data.export.externalsystems.xml='application/vnd.bard.cap+xml;type=externalSystems'
+
+
 grails.project.groupId = appName // change this to alter the default package name and Maven publishing destination
 grails.mime.file.extensions = true // enables the parsing of file extensions from URLs into the request format
 grails.mime.use.accept.header = false
