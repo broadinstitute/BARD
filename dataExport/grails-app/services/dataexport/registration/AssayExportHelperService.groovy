@@ -155,7 +155,6 @@ class AssayExportHelperService {
                     documentContent(assayDocument.documentContent)
                 }
             }
-            link(rel: 'item', href: "${assayDocumentHref}", type: "${this.mediaTypesDTO.assayDocMediaType}")
         }
     }
     /**

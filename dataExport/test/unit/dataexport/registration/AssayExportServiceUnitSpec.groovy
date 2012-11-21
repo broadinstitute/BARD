@@ -70,8 +70,8 @@ class AssayExportServiceUnitSpec extends Specification {
         XmlTestAssertions.assertResults(results, this.writer.toString())
         where:
         label                                               | documentType   | documentContent | documentName   | results
-        "Document Type, Document Content, no document Name" | "documentType" | "Content"       | ""             | XmlTestSamples.ASSAY_DOCUMENT_NO_DOCUMENT_NAME_UNIT
-        "With Document Name"                                | "documentType" | "Content"       | "documentName" | XmlTestSamples.ASSAY_DOCUMENT_WITH_DOCUMENT_NAME_UNIT
+        "Document Type, Document Content, no document Name" | "documentType" | "Content"       | ""             | XmlTestSamples.MINIMAL_ASSAY_DOCUMENT
+        "With Document Name"                                | "documentType" | "Content"       | "documentName" | XmlTestSamples.ASSAY_DOCUMENT_WITH_CONTENT
     }
 
     void "test Generate Assay Document Not Found Exception"() {
