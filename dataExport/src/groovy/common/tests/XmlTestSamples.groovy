@@ -243,6 +243,37 @@ class XmlTestSamples {
           <link rel='self' href='null' type='xml' />
           <link rel='up' href='null' type='xml' />
         </assay> '''
+    static final String EXTERNAL_SYSTEM = '''
+                                            <externalSystem name='systemName'>
+                                            <link rel='self' href='null' type='xml' />
+                                            <link rel='up' href='null' type='xml' />
+                                            </externalSystem>
+                                            '''
+    static final String EXTERNAL_SYSTEMS = ''' <externalSystems count='1'>
+                                                <externalSystem name='systemName'>
+                                                <link rel='self' href='null' type='xml' />
+                                                <link rel='up' href='null' type='xml' />
+                                                </externalSystem>
+                                                </externalSystems>
+                                               '''
+    static final String EXTERNAL_REFERENCES = '''
+<externalReferences count='1'>
+    <externalReference>
+        <externalAssayRef>extAssayRef</externalAssayRef>
+        <link rel='related' href='null' type='xml' />
+        <link rel='self' href='null' type='xml' />
+        <link rel='up' href='null' type='xml' />
+    </externalReference>
+    </externalReferences>
+    '''
+    static final String EXTERNAL_REFERENCE = '''
+    <externalReference>
+        <externalAssayRef>extAssayRef</externalAssayRef>
+        <link rel='related' href='null' type='xml' />
+        <link rel='self' href='null' type='xml' />
+        <link rel='up' href='null' type='xml' />
+    </externalReference>
+    '''
     static final String ASSAY_WITH_DESIGNER_NAME = '''
         <assay assayId='1' readyForExtraction='Pending' assayVersion='assayVersi' assayType='Regular' status='Pending'>
           <assayShortName>assayShortName</assayShortName>
@@ -499,7 +530,7 @@ class XmlTestSamples {
 </assayContexts>
 '''
 
- static String BARD_DATA_EXPORT_UNIT = '''
+    static String BARD_DATA_EXPORT_UNIT = '''
                                         <bardexport>
                                           <link rel='item' title='The BARD Dictionary' href='null' type='dictionaryMediaType' />
                                           <link rel='item' title='List of assays, ready for extraction' href='null' type='assaysMediaType' />

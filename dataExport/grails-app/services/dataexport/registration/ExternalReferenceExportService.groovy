@@ -2,7 +2,6 @@ package dataexport.registration
 
 import bard.db.registration.ExternalReference
 import bard.db.registration.ExternalSystem
-import dataexport.registration.MediaTypesDTO
 import exceptions.NotFoundException
 import groovy.xml.MarkupBuilder
 import org.codehaus.groovy.grails.web.mapping.LinkGenerator
@@ -12,7 +11,7 @@ class ExternalReferenceExportService {
     LinkGenerator grailsLinkGenerator
     MediaTypesDTO mediaTypesDTO
 
-    ExternalReferenceExportService(final MediaTypesDTO mediaTypesDTO) {
+    ExternalReferenceExportService() {
     }
 
     /**
@@ -86,6 +85,11 @@ class ExternalReferenceExportService {
         markupBuilder.externalReference() {
             if (externalReference.extAssayRef) {
                 externalAssayRef(externalReference.extAssayRef)
+            }
+            if (externalReference.externalSystem) {
+                final String externalSystemHref = grailsLinkGenerator.link(mapping: 'externalSystem', absolute: true, params: [id: externalReference.externalSystem.id]).toString()
+                markupBuilder.link(rel: 'related', href: "${externalSystemHref}", type: "${this.mediaTypesDTO.externalSystemMediaType}")
+
             }
             final String externalReferenceHref = grailsLinkGenerator.link(mapping: 'externalReference', absolute: true, params: [id: externalReference.id]).toString()
             final String externalReferencesHref = grailsLinkGenerator.link(mapping: 'externalReferences', absolute: true).toString()
