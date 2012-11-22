@@ -14,7 +14,7 @@
                     <xs:complexType>
                         <xs:sequence>
                             <xs:element name="externalAssayRef" type="xs:string"/>
-                            <xs:element maxOccurs="unbounded" minOccurs="0" ref="link">
+                            <xs:element maxOccurs="unbounded" ref="link">
                                 <xs:annotation>
                                     <xs:documentation>Link to self
 Link to results
