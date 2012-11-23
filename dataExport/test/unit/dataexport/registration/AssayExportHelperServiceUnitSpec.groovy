@@ -142,9 +142,8 @@ class AssayExportHelperServiceUnitSpec extends Specification {
                     valueNum: new Float("5.0"),
                     modifiedBy: "Bard",
                     qualifier: "< ")
-
         when: "We pass in a assayContextItem we get an expected map"
-        Map<String, String> attributes = this.assayExportHelperService.createAttributesForAssayContextItem(assayContextItem)
+        Map<String, String> attributes = this.assayExportHelperService.createAttributesForContextItem(assayContextItem,assayContextItem.id,'assayContextItem',0)
         then: "A map with the expected key/value pairs is generated"
         attributes == results
     }

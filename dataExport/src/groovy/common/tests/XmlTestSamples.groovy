@@ -220,39 +220,84 @@ class XmlTestSamples {
     <link rel='up' href='http://localhost:8080/dataExport/api/projects' type='application/vnd.bard.cap+xml;type=projects' />
     </project>
 '''
-static final String PROJECT_WITH_DESCRIPTION = '''
-<project projectId='' readyForExtraction='Ready' groupType='Panel'>
-  <projectName>Project Name2</projectName>
-  <description>Broad</description>
-  <link rel='edit' href='null' type='projectMediaType' />
-  <link rel='up' href='null' type='projectsMediaType' />
-</project>
-'''
+    static final String STEP_CONTEXT_MINIMAL = '''
+                                                <stepContext stepContextId='1' displayOrder='0'>
+                                                  <contextName>contextName</contextName>
+                                                  <contextGroup>contextGroup</contextGroup>
+                                                  <stepContextItems />
+                                                </stepContext>
+                                                '''
+    static final String PROJECT_CONTEXT_MINIMAL = '''
+                                                     <projectContext projectContextId='1' displayOrder='0'>
+                                                        <contextName>contextName</contextName>
+                                                        <contextGroup>contextGroup</contextGroup>
+                                                        <projectContextItems />
+                                                     </projectContext>
+                                                     '''
+    static final String PROJECT_CONTEXT_ITEMS_MINIMAL = '''
+                                            <projectContextItems>
+                                              <projectContextItem projectContextItemId='1' displayOrder='0'>
+                                                <attributeId label='label1'>
+                                                  <link rel='related' href='null' type='elementMediaType' />
+                                                </attributeId>
+                                              </projectContextItem>
+                                            </projectContextItems>
+                                            '''
+    static final String STEP_CONTEXT_ITEM_MINIMAL = '''
+                                                        <stepContextItem stepContextItemId='1' displayOrder='0'>
+                                                        <attributeId label='label2'>
+                                                        <link rel='related' href='null' type='elementMediaType' />
+                                                        </attributeId>
+                                                        </stepContextItem>
+                                                        '''
+    static final String PROJECT_STEP_MINIMAL = '''
+                                                <projectStep projectStepId='1'>
+                                                    <description />
+                                                    <experimentRef label='experimentName'>
+                                                        <link rel='related' href='null' type='experimentMediaType' />
+                                                    </experimentRef>
+                                                </projectStep>
+                                                    '''
+    static final String PROJECT_CONTEXT_ITEM_MINIMAL = '''
+                                                    <projectContextItem projectContextItemId='1' displayOrder='0'>
+                                                      <attributeId label='label3'>
+                                                        <link rel='related' href='null' type='elementMediaType' />
+                                                      </attributeId>
+                                                    </projectContextItem>
+                                                    '''
+    static final String PROJECT_WITH_DESCRIPTION = '''
+                                                    <project projectId='1' readyForExtraction='Ready' groupType='Panel'>
+                                                      <projectName>Project Name2</projectName>
+                                                      <description>Broad</description>
+                                                      <link rel='edit' href='null' type='projectMediaType' />
+                                                      <link rel='up' href='null' type='projectsMediaType' />
+                                                    </project>
+                                                    '''
 //Note that the 'root' node is only included in this test case for validation purposes
 //Without the 'root' node the XML would not be valid
-static final String PROJECT_LINKS_WITH_EXTERNAL_REFERENCE = '''
-<root>
-<link rel='edit' href='null' type='projectMediaType' />
-<link rel='up' href='null' type='projectsMediaType' />
-<link rel='related' title='Fetch the external reference' type='externalReferenceMediaType' href='null' />
-<link rel='related' title='Fetch the external reference' type='externalReferenceMediaType' href='null' />
-</root>
-'''
+    static final String PROJECT_LINKS_WITH_EXTERNAL_REFERENCE = '''
+                                                                <root>
+                                                                    <link rel='edit' href='null' type='projectMediaType' />
+                                                                    <link rel='up' href='null' type='projectsMediaType' />
+                                                                    <link rel='related' type='externalReferenceMediaType' href='null' />
+                                                                    <link rel='related' type='externalReferenceMediaType' href='null' />
+                                                                </root>
+                                                              '''
 //Note that the 'root' node is only included in this test case for validation purposes
 //Without the 'root' node the XML would not be valid
- static final String PROJECT_LINKS_WITH_NO_EXTERNAL_REFERENCE = '''
-<root>
-<link rel='edit' href='null' type='projectMediaType' />
-<link rel='up' href='null' type='projectsMediaType' />
-</root>
-'''
-    static final String PROJECT_NO_DESCRIPTION = '''
-<project projectId='' readyForExtraction='Ready' groupType='Project'>
-  <projectName>Project Name1</projectName>
-  <link rel='edit' href='null' type='projectMediaType' />
-  <link rel='up' href='null' type='projectsMediaType' />
-</project>
-'''
+    static final String PROJECT_LINKS_WITHOUT_EXTERNAL_REFERENCE = '''
+                                                                    <root>
+                                                                        <link rel='edit' href='null' type='projectMediaType' />
+                                                                        <link rel='up' href='null' type='projectsMediaType' />
+                                                                    </root>
+                                                                    '''
+    static final String PROJECT_MINIMAL = '''
+                                            <project projectId='' readyForExtraction='Ready' groupType='Project'>
+                                              <projectName>Project Name1</projectName>
+                                              <link rel='edit' href='null' type='projectMediaType' />
+                                              <link rel='up' href='null' type='projectsMediaType' />
+                                            </project>
+                                          '''
     static final String ASSAY_NO_DESIGNER_UNIT = '''
         <assay assayId='1' readyForExtraction='Pending' assayVersion='assayVersi' assayType='Regular' status='Pending'>
           <assayShortName>assayShortName</assayShortName>

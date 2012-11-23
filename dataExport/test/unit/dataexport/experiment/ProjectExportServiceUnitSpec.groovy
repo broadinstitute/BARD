@@ -1,7 +1,6 @@
 package dataexport.experiment
 
 import bard.db.enums.ReadyForExtraction
-import bard.db.project.Project
 import bard.db.registration.ExternalReference
 import common.tests.XmlTestAssertions
 import common.tests.XmlTestSamples
@@ -12,6 +11,7 @@ import groovy.xml.MarkupBuilder
 import org.codehaus.groovy.grails.web.mapping.LinkGenerator
 import spock.lang.Specification
 import spock.lang.Unroll
+import bard.db.project.*
 
 /**
  * Created with IntelliJ IDEA.
@@ -20,7 +20,7 @@ import spock.lang.Unroll
  * Time: 12:52 PM
  * To change this template use File | Settings | File Templates.
  */
-@Build([Project, ExternalReference])
+@Build([Project, ExternalReference, ProjectContext, ProjectContextItem, StepContext, StepContextItem])
 @Unroll
 class ProjectExportServiceUnitSpec extends Specification {
     Writer writer
@@ -34,12 +34,93 @@ class ProjectExportServiceUnitSpec extends Specification {
         MediaTypesDTO mediaTypesDTO =
             new MediaTypesDTO(projectMediaType: "projectMediaType",
                     projectsMediaType: "projectsMediaType",
-                    externalReferenceMediaType: "externalReferenceMediaType")
+                    externalReferenceMediaType: "externalReferenceMediaType",
+                    elementMediaType: "elementMediaType",
+                    experimentMediaType: "experimentMediaType")
 
-        this.projectExportService = new ProjectExportService(mediaTypesDTO)
+        this.projectExportService = new ProjectExportService()
         projectExportService.grailsLinkGenerator = grailsLinkGenerator
+        projectExportService.mediaTypesDTO = mediaTypesDTO
         this.writer = new StringWriter()
         this.markupBuilder = new MarkupBuilder(writer)
+    }
+
+    void "generateStepContext #label"() {
+        given:
+        StepContext stepContext = StepContext.build(contextName: 'contextName', contextGroup: 'contextGroup')
+        when:
+        this.projectExportService.generateStepContext(this.markupBuilder, stepContext)
+        then:
+        XmlTestAssertions.assertResults(results, this.writer.toString())
+        where:
+        label     | results
+        "Minimal" | XmlTestSamples.STEP_CONTEXT_MINIMAL
+
+    }
+
+    //println(this.writer.toString())
+
+    void "generateProjectContext #label"() {
+        given:
+        ProjectContext projectContext = ProjectContext.build(contextName: 'contextName', contextGroup: 'contextGroup')
+        when:
+        this.projectExportService.generateProjectContext(this.markupBuilder, projectContext)
+        then:
+        XmlTestAssertions.assertResults(results, this.writer.toString())
+        where:
+        label     | results
+        "Minimal" | XmlTestSamples.PROJECT_CONTEXT_MINIMAL
+    }
+
+    void "generateProjectContextItems #label"() {
+        given:
+        List<ProjectContextItem> projectContextItems = [ProjectContextItem.build()]  as List<ProjectContextItem>
+        when:
+        this.projectExportService.generateProjectContextItems(this.markupBuilder, projectContextItems)
+        then:
+        XmlTestAssertions.assertResults(results, this.writer.toString())
+        where:
+        label     | results
+        "Minimal" | XmlTestSamples.PROJECT_CONTEXT_ITEMS_MINIMAL
+    }
+
+    void "generateStepContextItem #label"() {
+        given:
+        StepContextItem stepContextItem = StepContextItem.build()
+        when:
+        this.projectExportService.generateStepContextItem(this.markupBuilder, stepContextItem)
+        then:
+        println(this.writer.toString())
+        XmlTestAssertions.assertResults(results, this.writer.toString())
+        where:
+        label     | results
+        "Minimal" | XmlTestSamples.STEP_CONTEXT_ITEM_MINIMAL
+
+    }
+
+    void "generateProjectContextItem #label"() {
+        given:
+        ProjectContextItem projectContextItem = ProjectContextItem.build()
+        when:
+        this.projectExportService.generateProjectContextItem(this.markupBuilder, projectContextItem)
+        then:
+        XmlTestAssertions.assertResults(results, this.writer.toString())
+        where:
+        label     | results
+        "Minimal" | XmlTestSamples.PROJECT_CONTEXT_ITEM_MINIMAL
+    }
+
+    void "generateProjectStep #label"() {
+        given:
+        final ProjectStep projectStep = ProjectStep.build()
+        when:
+        this.projectExportService.generateProjectStep(this.markupBuilder, projectStep)
+        then:
+        println this.writer.toString()
+        XmlTestAssertions.assertResults(results, this.writer.toString())
+        where:
+        label     | results
+        "Minimal" | XmlTestSamples.PROJECT_STEP_MINIMAL
     }
 
     void "test generate Project #label"() {
@@ -50,10 +131,8 @@ class ProjectExportServiceUnitSpec extends Specification {
         then: "A valid xml document is generated and is similar to the expected document"
         XmlTestAssertions.assertResults(results, this.writer.toString())
         where:
-        label                         | projectName     | groupType | description | results
-        "Project with no description" | "Project Name1" | 'Project' | ""          | XmlTestSamples.PROJECT_NO_DESCRIPTION
-        "Full Project"                | "Project Name2" | 'Panel'   | "Broad"     | XmlTestSamples.PROJECT_WITH_DESCRIPTION
-
+        label          | projectName     | groupType | description | results
+        "Full Project" | "Project Name2" | 'Panel'   | "Broad"     | XmlTestSamples.PROJECT_WITH_DESCRIPTION
     }
 
     void "test Generate Project Not Found Exception"() {
@@ -67,7 +146,7 @@ class ProjectExportServiceUnitSpec extends Specification {
 
     void "test Generate Project Links #label"() {
         given:
-        final Project project = (Project)valueUnderTest.call()
+        final Project project = (Project) valueUnderTest.call()
         when:
         this.markupBuilder.root() {
             this.projectExportService.generateProjectLinks(this.markupBuilder, project)
@@ -77,6 +156,6 @@ class ProjectExportServiceUnitSpec extends Specification {
         where:
         label                                       | valueUnderTest                                                           | results
         "Project Links with External References"    | {def ex = ExternalReference.build(project: Project.build()); ex.project} | XmlTestSamples.PROJECT_LINKS_WITH_EXTERNAL_REFERENCE
-        "Project Links with No External References" | {Project.build()}                                                        | XmlTestSamples.PROJECT_LINKS_WITH_NO_EXTERNAL_REFERENCE
+        "Project Links with No External References" | {Project.build()}                                                        | XmlTestSamples.PROJECT_LINKS_WITHOUT_EXTERNAL_REFERENCE
     }
 }

@@ -62,8 +62,9 @@ beans = {
         grailsLinkGenerator = ref('grailsLinkGenerator')
     }
 
-    projectExportService(dataexport.experiment.ProjectExportService, mediaTypesDTO) {
+    projectExportService(dataexport.experiment.ProjectExportService) {
         grailsLinkGenerator = ref('grailsLinkGenerator')
+        mediaTypeDTO = mediaTypesDTO
         utilityService = ref('utilityService')
     }
 }

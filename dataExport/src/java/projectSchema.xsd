@@ -11,7 +11,7 @@ These can be filtered to a specific project depending on the query</xs:documenta
         </xs:annotation>
         <xs:complexType>
             <xs:sequence>
-                <xs:element ref="project" maxOccurs="unbounded"/>
+                <xs:element ref="link" maxOccurs="unbounded"/>
             </xs:sequence>
             <xs:attribute name="count" type="xs:integer" use="required"/>
         </xs:complexType>
@@ -56,6 +56,7 @@ precedingExperimentRef references an experiment resource</xs:documentation>
                                                 <xs:sequence>
                                                   <xs:element ref="link"/>
                                                 </xs:sequence>
+                                                <xs:attribute name="label" type="xs:string"/>
                                             </xs:complexType>
                                         </xs:element>
                                         <xs:element minOccurs="0" name="precedingExperimentRef">
@@ -63,6 +64,7 @@ precedingExperimentRef references an experiment resource</xs:documentation>
                                                 <xs:sequence>
                                                   <xs:element ref="link"/>
                                                 </xs:sequence>
+                                                <xs:attribute name="label" type="xs:string"/>
                                             </xs:complexType>
                                         </xs:element>
                                         <xs:element minOccurs="0" name="stepContexts">
