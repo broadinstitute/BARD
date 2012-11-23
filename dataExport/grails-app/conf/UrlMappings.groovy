@@ -54,6 +54,9 @@ class UrlMappings {
         name project: "/api/projects/$id"(controller: "projectRest") {
             action = [GET: "project", PUT: "updateProject"]
         }
+        name projectDocument: "/api/projectDocument/$id"(controller: "projectRest") {
+            action = [GET: "projectDocument"]
+        }
         name experiments: "/api/experiments"(controller: "experimentRest") {
             action = [GET: "experiments"]
         }

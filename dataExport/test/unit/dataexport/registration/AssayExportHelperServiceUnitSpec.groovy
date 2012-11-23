@@ -87,7 +87,6 @@ class AssayExportHelperServiceUnitSpec extends Specification {
         when: "We attempt to generate a measure context in xml"
         this.assayExportHelperService.generateAssayContext(this.markupBuilder, localAc)
         then: "A valid xml measure context is generated with the expected measure context id and name"
-        println(this.writer.toString())
         XmlTestAssertions.assertResults(results, this.writer.toString())
         where:
         label                                         | valueUnderTest                                                                                        | results
@@ -120,7 +119,6 @@ class AssayExportHelperServiceUnitSpec extends Specification {
         when: "We pass in a assay context item we get a good xml document"
         this.assayExportHelperService.generateAssayContextItem(this.markupBuilder, assayContextItem)
         then: "We expect back an xml document"
-        println(this.writer.toString())
         XmlTestAssertions.assertResults(results, this.writer.toString())
         where:
         label                      | attributeLabel   | valueLabel   | results
@@ -155,9 +153,13 @@ class AssayExportHelperServiceUnitSpec extends Specification {
         given:
         final AssayDocument assayDocument = AssayDocument.build(documentType: documentType, documentContent: documentContent)
         when: "We attempt to generate an Assay document"
-        this.assayExportHelperService.generateAssayDocument(this.markupBuilder, assayDocument)
+        this.assayExportHelperService.generateDocument(this.grailsLinkGenerator,
+                this.markupBuilder,assayDocument,'assayDocument','assay',
+                assayDocument.id,assayDocument.assay.id,
+                this.assayExportHelperService.mediaTypesDTO.assayDocMediaType,
+                this.assayExportHelperService.mediaTypesDTO.assayMediaType
+        )
         then: "A valid xml document is generated and is similar to the expected document"
-        println(this.writer.toString())
         XmlTestAssertions.assertResults(results, this.writer.toString())
         where:
         label                                | documentType  | documentContent | results

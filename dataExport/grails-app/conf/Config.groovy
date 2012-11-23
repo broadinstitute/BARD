@@ -28,6 +28,7 @@ bard.data.export.results.xml = 'application/vnd.bard.cap+xml;type=results'
 bard.data.export.result.xml = 'application/vnd.bard.cap+xml;type=result'
 bard.data.export.projects.xml = 'application/vnd.bard.cap+xml;type=projects'
 bard.data.export.project.xml = 'application/vnd.bard.cap+xml;type=project'
+bard.data.export.project.doc.xml = 'application/vnd.bard.cap+xml;type=projectDoc'
 
 //assays
 bard.data.export.assays.xml = 'application/vnd.bard.cap+xml;type=assays'
@@ -67,7 +68,13 @@ grails.mime.types = [html: ['text/html', 'application/xhtml+xml'],
                 "${bard.data.export.dictionary.xml}",
                 "${bard.data.export.dictionary.resultType.xml}",
                 "${bard.data.export.dictionary.stage.xml}",
-                "${bard.data.export.dictionary.element.xml}"
+                "${bard.data.export.dictionary.element.xml}",
+                "${bard.data.export.externalreference.xm}",
+                "${bard.data.export.externalreferences.xml}",
+                "${bard.data.export.externalsystems.xml}",
+                "${bard.data.export.externalsystem.xml}",
+                "${bard.data.export.project.doc.xml}"
+
 
         ],
         text: 'text/plain',

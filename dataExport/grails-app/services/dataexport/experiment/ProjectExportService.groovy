@@ -5,21 +5,23 @@ import bard.db.enums.ReadyForExtraction
 import bard.db.experiment.Experiment
 import bard.db.project.Project
 import bard.db.project.ProjectContextItem
+import bard.db.project.ProjectDocument
 import bard.db.project.ProjectStep
 import bard.db.registration.ExternalReference
 import dataexport.registration.BardHttpResponse
 import dataexport.registration.MediaTypesDTO
+import dataexport.util.ExportAbstractService
 import dataexport.util.UtilityService
 import exceptions.NotFoundException
 import groovy.xml.MarkupBuilder
 import org.codehaus.groovy.grails.web.mapping.LinkGenerator
 
-class ProjectExportService {
-    LinkGenerator grailsLinkGenerator
+class ProjectExportService extends ExportAbstractService {
     final String projectMediaType
     final String projectsMediaType
     final MediaTypesDTO mediaTypesDTO
     UtilityService utilityService
+    final LinkGenerator grailsLinkGenerator
 
     //This is instantiated from resources.groovy
     ProjectExportService(final MediaTypesDTO mediaTypesDTO) {
@@ -94,15 +96,17 @@ class ProjectExportService {
             //add value id element
             if (valueElement) {
                 valueId(label: valueElement.label) {
-                    final String valueHref = grailsLinkGenerator.link(mapping: 'element', absolute: true, params: [id: valueElement.id]).toString()
-                    link(rel: 'related', href: "${valueHref}", type: "${this.mediaTypesDTO.elementMediaType}")
+                    final String valueHref = generateHref('element', valueElement.id, this.grailsLinkGenerator)
+                    generateLink(markupBuilder, valueHref, 'related', this.mediaTypesDTO.elementMediaType)
+
                 }
             }
             //add attributeId element
             if (attributeElement) {
-                final String attributeHref = grailsLinkGenerator.link(mapping: 'element', absolute: true, params: [id: attributeElement.id]).toString()
+
                 attributeId(label: attributeElement.label) {
-                    link(rel: 'related', href: "${attributeHref}", type: "${this.mediaTypesDTO.elementMediaType}")
+                    final String attributeHref = generateHref('element', attributeElement.id, this.grailsLinkGenerator)
+                    generateLink(markupBuilder, attributeHref, 'related', this.mediaTypesDTO.elementMediaType)
                 }
             }
             if (projectContextItemInstance.extValueId) {
@@ -125,8 +129,8 @@ class ProjectExportService {
             }
             final Experiment experiment = projectStepInstance.experiment
             if (experiment) {
-                final String experimentHref = grailsLinkGenerator.link(mapping: 'experiment', absolute: true, params: [id: "${experiment.id}"]).toString()
-                link(rel: 'related', href: "${experimentHref}", type: "${this.mediaTypesDTO.experimentMediaType}")
+                final String experimentHref = generateHref('experiment', experiment.id, this.grailsLinkGenerator)
+                generateLink(markupBuilder, experimentHref, 'related', this.mediaTypesDTO.experimentMediaType)
             }
         }
     }
@@ -173,28 +177,17 @@ class ProjectExportService {
     }
 
     protected void generateProjectLinks(final MarkupBuilder markupBuilder, final Project project) {
-        final String projectHref = grailsLinkGenerator.link(mapping: 'project', absolute: true, params: [id: project.id]).toString()
-        markupBuilder.link(rel: 'edit', href: "${projectHref}", type: "${this.projectMediaType}")
 
-        final String projectsHref = grailsLinkGenerator.link(mapping: 'projects', absolute: true).toString()
-        markupBuilder.link(rel: 'up', href: "${projectsHref}", type: "${this.projectsMediaType}")
+        final String projectHref = generateHref('project', project.id, this.grailsLinkGenerator)
+        generateLink(markupBuilder, projectHref, 'edit', this.projectMediaType)
+
+        final String projectsHref = generateHref('projects', null, this.grailsLinkGenerator)
+        generateLink(markupBuilder, projectsHref, 'up', this.projectsMediaType)
 
         final Set<ExternalReference> externalReferences = project.externalReferences
         generateExternalReferencesLink(markupBuilder, externalReferences as List<ExternalReference>, this.grailsLinkGenerator, this.mediaTypesDTO)
     }
 
-    public static void generateExternalReferencesLink(final MarkupBuilder markupBuilder,
-                                                      final List<ExternalReference> externalReferences,
-                                                      final LinkGenerator grailsLinkGenerator,
-                                                      final MediaTypesDTO mediaTypesDTO) {
-        for (ExternalReference externalReference : externalReferences) {
-            //link to fetch external reference
-            final String externalReferenceHref = grailsLinkGenerator.link(mapping: 'externalReference', absolute: true, params: [id: externalReference.id]).toString()
-            markupBuilder.link(rel: 'related', title: 'Fetch the external reference', type: "${mediaTypesDTO.externalReferenceMediaType}", href: externalReferenceHref)
-
-        }
-
-    }
     /**
      *  Generate a project from a given projectId
      * @param markupBuilder
@@ -220,4 +213,46 @@ class ProjectExportService {
             }
         }
     }
+
+    public void generateProjectDocument(final MarkupBuilder markupBuilder, ProjectDocument projectDocument) {
+        generateDocument(this.grailsLinkGenerator, markupBuilder, projectDocument,
+                'projectDocument', 'project',
+                projectDocument.id,
+                projectDocument.project.id,
+                this.mediaTypesDTO.projectDocMediaType,
+                this.mediaTypesDTO.projectMediaType
+        )
+    }
+
+    public void generateProjectDocuments(
+            final MarkupBuilder markupBuilder,
+            final Set<ProjectDocument> projectDocuments) {
+        if (projectDocuments) {
+            markupBuilder.projectDocuments() {
+                this.generateDocument(this.grailsLinkGenerator,)
+                for (ProjectDocument projectDocument : projectDocuments) {
+                    generateProjectDocument(markupBuilder, projectDocument)
+                }
+            }
+        }
+    }
+
+    /**
+     * Stream an project document
+     * @param markupBuilder
+     * @param projectDocument
+     */
+    public Long generateProjectDocument(
+            final MarkupBuilder markupBuilder, final Long projectDocumentId) {
+        final ProjectDocument projectDocument = ProjectDocument.get(projectDocumentId)
+        if (!projectDocument) {
+            final String errorMessage = "Project Document with Id ${projectDocumentId} does not exists"
+            log.error(errorMessage)
+            throw new NotFoundException(errorMessage)
+        }
+
+        generateProjectDocument(markupBuilder, projectDocument)
+        return projectDocument.version
+    }
+
 }

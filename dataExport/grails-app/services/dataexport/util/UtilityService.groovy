@@ -1,11 +1,14 @@
 package dataexport.util
 
+import bard.db.enums.ReadyForExtraction
 import dataexport.registration.BardHttpResponse
 import exceptions.NotFoundException
+import org.codehaus.groovy.grails.web.mapping.LinkGenerator
+
 import javax.servlet.http.HttpServletResponse
-import bard.db.enums.ReadyForExtraction
 
 class UtilityService {
+    LinkGenerator grailsLinkGenerator
 
     /**
      * Set the ReadyForExtraction value on the domainObject to 'Complete'
@@ -21,7 +24,7 @@ class UtilityService {
      * Returns the HTTPStatus Code
      */
     public BardHttpResponse update(def domainObject, final Long id, final Long clientVersion, final ReadyForExtraction latestStatus, final String domainObjectType) {
-         if (!domainObject) { //we could not find the element
+        if (!domainObject) { //we could not find the element
             throw new NotFoundException("Could not find ${domainObjectType} with ID: ${id}")
         }
         if (domainObject.version > clientVersion) { //There is a conflict, supplied version is less than the current version
@@ -35,7 +38,7 @@ class UtilityService {
         final ReadyForExtraction currentStatus = domainObject.readyForExtraction
         if (currentStatus != latestStatus) {
             domainObject.readyForExtraction = latestStatus
-            domainObject.save(flush: true, failOnError:true)
+            domainObject.save(flush: true, failOnError: true)
         }
         return new BardHttpResponse(httpResponseCode: HttpServletResponse.SC_OK, ETag: domainObject.version)
     }

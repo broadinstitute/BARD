@@ -3,6 +3,7 @@ package dataexport.registration
 import bard.db.dictionary.Element
 import bard.db.enums.ReadyForExtraction
 import bard.db.experiment.Experiment
+import dataexport.util.ExportAbstractService
 import groovy.xml.MarkupBuilder
 import org.codehaus.groovy.grails.web.mapping.LinkGenerator
 import bard.db.registration.*
@@ -11,7 +12,7 @@ import bard.db.registration.*
  * Helper Service for handling generation for XML documents for Assay definition extraction
  * This is wired in resources.groovy
  */
-class AssayExportHelperService {
+class AssayExportHelperService extends ExportAbstractService {
     LinkGenerator grailsLinkGenerator
     final MediaTypesDTO mediaTypesDTO
 
@@ -135,29 +136,29 @@ class AssayExportHelperService {
         }
 
     }
-    /**
-     *
-     * @param markupBuilder
-     * @param assayDocument
-     * @param generateContent - True if we should add the contents of this document
-     */
-    public void generateAssayDocument(
-            MarkupBuilder markupBuilder, AssayDocument assayDocument) {
-
-
-        markupBuilder.assayDocument(documentType: assayDocument.documentType) {
-            if (assayDocument.documentName) {
-                documentName(assayDocument.documentName)
-            }
-            if (assayDocument.documentContent) {
-                documentContent(assayDocument.documentContent)
-            }
-            final String assayDocumentHref = grailsLinkGenerator.link(mapping: 'assayDocument', absolute: true, params: [id: assayDocument.id]).toString()
-            link(rel: 'self', href: "${assayDocumentHref}", type: "${this.mediaTypesDTO.assayDocMediaType}")
-            final String assayHref = grailsLinkGenerator.link(mapping: 'assay', absolute: true, params: [id: assayDocument.assay.id]).toString()
-            link(rel: 'related', href: "${assayHref}", type: "${this.mediaTypesDTO.assayMediaType}")
-        }
-    }
+//    /**
+//     *
+//     * @param markupBuilder
+//     * @param assayDocument
+//     * @param generateContent - True if we should add the contents of this document
+//     */
+//    public void generateAssayDocument(
+//            MarkupBuilder markupBuilder, AssayDocument assayDocument) {
+//
+//
+//        markupBuilder.assayDocument(documentType: assayDocument.documentType) {
+//            if (assayDocument.documentName) {
+//                documentName(assayDocument.documentName)
+//            }
+//            if (assayDocument.documentContent) {
+//                documentContent(assayDocument.documentContent)
+//            }
+//            final String assayDocumentHref = grailsLinkGenerator.link(mapping: 'assayDocument', absolute: true, params: [id: assayDocument.id]).toString()
+//            link(rel: 'self', href: "${assayDocumentHref}", type: "${this.mediaTypesDTO.assayDocMediaType}")
+//            final String assayHref = grailsLinkGenerator.link(mapping: 'assay', absolute: true, params: [id: assayDocument.assay.id]).toString()
+//            link(rel: 'related', href: "${assayHref}", type: "${this.mediaTypesDTO.assayMediaType}")
+//        }
+//    }
     /**
      * Generate a measure contexts
      * @param markupBuilder
@@ -236,14 +237,21 @@ class AssayExportHelperService {
             }
         }
     }
+    public void generateDocument(final MarkupBuilder markupBuilder, AssayDocument assayDocument) {
+        generateDocument(this.grailsLinkGenerator,markupBuilder, assayDocument,
+                'assayDocument', 'assay',
+                assayDocument.id,
+                assayDocument.assay.id,
+                this.mediaTypesDTO.assayDocMediaType, this.mediaTypesDTO.assayMediaType)
 
+    }
     public void generateAssayDocuments(
             final MarkupBuilder markupBuilder,
             final Set<AssayDocument> assayDocuments) {
         if (assayDocuments) {
             markupBuilder.assayDocuments() {
                 for (AssayDocument assayDocument : assayDocuments) {
-                    generateAssayDocument(markupBuilder, assayDocument)
+                   generateDocument(markupBuilder,assayDocument)
                 }
             }
         }

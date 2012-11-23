@@ -9,6 +9,7 @@ beans = {
     mediaTypesDTO.resultTypeMediaType = grailsApplication.config.bard.data.export.dictionary.resultType.xml
     mediaTypesDTO.assayMediaType = grailsApplication.config.bard.data.export.assay.xml
     mediaTypesDTO.assayDocMediaType = grailsApplication.config.bard.data.export.assay.doc.xml
+    mediaTypesDTO.projectDocMediaType = grailsApplication.config.bard.data.export.project.doc.xml
     mediaTypesDTO.dictionaryMediaType = grailsApplication.config.bard.data.export.dictionary.xml
     mediaTypesDTO.assaysMediaType = grailsApplication.config.bard.data.export.assays.xml
     mediaTypesDTO.projectMediaType = grailsApplication.config.bard.data.export.project.xml
