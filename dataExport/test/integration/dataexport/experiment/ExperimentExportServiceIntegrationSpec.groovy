@@ -19,7 +19,7 @@ import bard.db.enums.ReadyForExtraction
 
 @Unroll
 class ExperimentExportServiceIntegrationSpec extends IntegrationSpec {
-    static final String BARD_EXPERIMENT_EXPORT_SCHEMA = "test/integration/dataexport/experiment/experimentSchema.xsd"
+    static final String BARD_EXPERIMENT_EXPORT_SCHEMA = "src/java/experimentSchema.xsd"
 
     ExperimentExportService experimentExportService
     Writer writer

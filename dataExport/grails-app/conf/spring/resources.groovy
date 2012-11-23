@@ -26,7 +26,7 @@ beans = {
 
 
     externalReferenceExportService(ExternalReferenceExportService) {
-        mediaTypes = mediaTypesDTO
+        mediaTypesDTO = mediaTypesDTO
         grailsLinkGenerator = ref('grailsLinkGenerator')
     }
     final int maxExperimentsRecordsPerPage = grailsApplication.config.bard.experiments.max.per.page
@@ -64,7 +64,7 @@ beans = {
 
     projectExportService(dataexport.experiment.ProjectExportService) {
         grailsLinkGenerator = ref('grailsLinkGenerator')
-        mediaTypeDTO = mediaTypesDTO
+        mediaTypesDTO = mediaTypesDTO
         utilityService = ref('utilityService')
     }
 }

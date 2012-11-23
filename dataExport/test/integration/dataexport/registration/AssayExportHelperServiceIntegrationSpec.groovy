@@ -16,7 +16,7 @@ import javax.xml.validation.Validator
 
 @Unroll
 class AssayExportHelperServiceIntegrationSpec extends IntegrationSpec {
-    static final String BARD_ASSAY_EXPORT_SCHEMA = "test/integration/dataexport/registration/assaySchema.xsd"
+    static final String BARD_ASSAY_EXPORT_SCHEMA = "src/java/assaySchema.xsd"
 
     AssayExportHelperService assayExportHelperService
     Writer writer

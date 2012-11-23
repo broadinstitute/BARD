@@ -19,7 +19,7 @@ import spock.lang.Unroll
 
 @Unroll
 class DictionaryExportServiceIntegrationSpec extends IntegrationSpec {
-    static final String BARD_DICTIONARY_EXPORT_SCHEMA = "test/integration/dataexport/dictionary/dictionarySchema.xsd"
+    static final String BARD_DICTIONARY_EXPORT_SCHEMA = "src/java/dictionarySchema.xsd"
     DictionaryExportService dictionaryExportService
 
     Writer writer

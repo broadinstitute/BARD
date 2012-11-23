@@ -17,7 +17,7 @@ import spock.lang.Unroll
 
 @Unroll
 class AssayExportServiceIntegrationSpec extends IntegrationSpec {
-    static final String BARD_ASSAY_EXPORT_SCHEMA = "test/integration/dataexport/registration/assaySchema.xsd"
+    static final String BARD_ASSAY_EXPORT_SCHEMA = "src/java/assaySchema.xsd"
 
     AssayExportService assayExportService
     Writer writer
