@@ -16,40 +16,59 @@ class ExportAbstractService {
                                                final LinkGenerator grailsLinkGenerator,
                                                final MediaTypesDTO mediaTypesDTO) {
         for (ExternalReference externalReference : externalReferences) {
-            //link to fetch external reference
-            final String currentHref = generateHref('externalReference', externalReference.id, grailsLinkGenerator)
-            generateLink(markupBuilder, currentHref, 'related', mediaTypesDTO.externalReferenceMediaType)
+
+            generateLink(
+                    [
+                            mapping: 'externalReference',
+                            absolute: true, rel: 'related',
+                            mediaType: mediaTypesDTO.externalReferenceMediaType,
+                            params: [id: externalReference.id]
+                    ],
+                    markupBuilder, grailsLinkGenerator)
         }
-    }
-    /**
-     * Generate a string that could be used as the href value for a Link object
-     * @param resourceName
-     * @param entityId
-     * @return a string that could be used as the href value for a Link object
-     */
-    public String generateHref(String resourceName, Long entityId, final LinkGenerator grailsLinkGenerator) {
-        if (entityId == null) {
-            return grailsLinkGenerator.link(mapping: resourceName, absolute: true).toString()
-        }
-        return grailsLinkGenerator.link(mapping: resourceName, absolute: true, params: [id: entityId]).toString()
-    }
-    /**
-     *
-     * @param markupBuilder
-     * @param currentHref
-     * @param linkRelation
-     * @param mediaType
-     * Generate the link element for an xml document
-     */
-    public void generateLink(final MarkupBuilder markupBuilder, final String currentHref, final String linkRelation, final String mediaType) {
-        markupBuilder.link(rel: linkRelation, href: currentHref, type: mediaType)
     }
 
+    protected String generateHref(final Map map, final LinkGenerator grailsLinkGenerator) {
+        final String mappingVal = map.get("mapping")
+        final Map parameters = (Map) map.get("params")
+        Long idVal = null
+        Map paramMap = [:]
+        if (parameters) {
+            idVal = (Long) parameters.get("Id")
+            if (parameters.get("offset") > -1) {
+                paramMap.put("offset", parameters.get("offset"))
+            }
+        }
+        if (idVal) {
+            paramMap.put(id: idVal)
+        }
+        if (paramMap.isEmpty()) {
+            return grailsLinkGenerator.link(mapping: mappingVal, absolute: true).toString()
+        }
+        return grailsLinkGenerator.link(mapping: mappingVal, absolute: true, params: paramMap).toString()
+
+
+    }
+
+    public String generateLink(final Map map, final MarkupBuilder markupBuilder, final LinkGenerator grailsLinkGenerator) {
+        generateHref(map, grailsLinkGenerator)
+        String relVal = map.get("rel") ?: 'related'
+        String mediaType = map.get("mediaType")
+
+        String currentHref = generateHref(map, grailsLinkGenerator)
+        markupBuilder.link(rel: relVal, href: currentHref, type: mediaType)
+    }
     /**
      *
+     * @param grailsLinkGenerator
      * @param markupBuilder
-     * @param assayDocument
-     * @param generateContent - True if we should add the contents of this document
+     * @param abstractDocument
+     * @param resourceName
+     * @param relatedResourceName
+     * @param entityId
+     * @param relatedEntityId
+     * @param mediaType
+     * @param relatedMediaType
      */
     public void generateDocument(
             final LinkGenerator grailsLinkGenerator,
@@ -68,13 +87,26 @@ class ExportAbstractService {
             if (abstractDocument.documentContent) {
                 documentContent(abstractDocument.documentContent)
             }
-            final String documentHref = generateHref(resourceName, entityId, grailsLinkGenerator)
-            generateLink(markupBuilder, documentHref, 'self', mediaType)
+            generateLink(
+                    [
+                            mapping: resourceName,
+                            absolute: true, rel: 'self',
+                            mediaType: mediaType,
+                            params: [id: entityId]
+                    ],
+                    markupBuilder, grailsLinkGenerator)
 
-            final String parentEntityHref = generateHref(relatedResourceName, relatedEntityId, grailsLinkGenerator)
-            generateLink(markupBuilder, parentEntityHref, 'related', relatedMediaType)
+            generateLink(
+                    [
+                            mapping: relatedResourceName,
+                            absolute: true, rel: 'related',
+                            mediaType: relatedMediaType,
+                            params: [id: relatedEntityId]
+                    ],
+                    markupBuilder, grailsLinkGenerator)
         }
     }
+
     protected Map<String, String> createAttributesForContextItem(final AbstractContextItem contextItem,
                                                                  final Long contextItemId,
                                                                  final String resourceName, final int displayOrder) {
@@ -119,8 +151,17 @@ class ExportAbstractService {
             //add value id element
             if (valueElement) {
                 valueId(label: valueElement.label) {
-                    final String valueHref = generateHref('element', valueElement.id, linkGenerator)
-                    generateLink(markupBuilder, valueHref, 'related', elementMediaType)
+
+                    generateLink(
+                            [
+                                    mapping: 'element',
+                                    absolute: true,
+                                    rel: 'related',
+                                    mediaType: elementMediaType,
+                                    params: [id: valueElement.id]
+                            ],
+                            markupBuilder, linkGenerator
+                    )
                 }
             }
             //add attributeId element
@@ -133,8 +174,16 @@ class ExportAbstractService {
                 attributeIdAttributes.put("label", attributeElement.label)
 
                 attributeId(attributeIdAttributes) {
-                    final String attributeHref = generateHref('element', attributeElement.id, linkGenerator)
-                    generateLink(markupBuilder, attributeHref, 'related', elementMediaType)
+                    generateLink(
+                            [
+                                    mapping: 'element',
+                                    absolute: true,
+                                    rel: 'related',
+                                    mediaType: elementMediaType,
+                                    params: [id: attributeElement.id]
+                            ],
+                            markupBuilder, linkGenerator
+                    )
                 }
             }
             if (contextItem.extValueId) {

@@ -67,11 +67,25 @@ class ExternalReferenceExportService extends ExportAbstractService {
             if (externalSystem.systemUrl) {
                 systemUrl(externalSystem.systemUrl)
             }
-            final String externalSystemHref = generateHref('externalSystem', externalSystem.id, this.grailsLinkGenerator)
-            this.generateLink(markupBuilder, externalSystemHref, 'self', this.mediaTypesDTO.externalSystemMediaType)
 
-            final String externalSystemsHref = generateHref('externalSystem', null, this.grailsLinkGenerator)
-            this.generateLink(markupBuilder, externalSystemsHref, 'up', this.mediaTypesDTO.externalSystemsMediaType)
+            generateLink(
+                    [
+                            mapping: 'externalSystem', absolute: true,
+                            rel: 'self', mediaType: this.mediaTypesDTO.externalSystemMediaType,
+                            params: [id: externalSystem.id]
+                    ],
+                    markupBuilder,
+                    this.grailsLinkGenerator
+            )
+            generateLink(
+                    [
+                            mapping: 'externalSystems', absolute: true,
+                            rel: 'up', mediaType: this.mediaTypesDTO.externalSystemsMediaType,
+                            params: [id: externalSystem.id]
+                    ],
+                    markupBuilder,
+                    this.grailsLinkGenerator
+            )
         }
     }
     /**
@@ -87,15 +101,33 @@ class ExternalReferenceExportService extends ExportAbstractService {
                 externalAssayRef(externalReference.extAssayRef)
             }
             if (externalReference.externalSystem) {
-                final String externalSystemHref = this.generateHref('externalSystem', externalReference.externalSystem.id, this.grailsLinkGenerator)
-                this.generateLink(markupBuilder, externalSystemHref, 'related', this.mediaTypesDTO.externalSystemMediaType)
+                generateLink(
+                        [
+                                mapping: 'externalSystem', absolute: true,
+                                rel: 'related', mediaType: this.mediaTypesDTO.externalSystemMediaType,
+                                params: [id: externalReference.externalSystem.id]
+                        ],
+                        markupBuilder,
+                        this.grailsLinkGenerator
+                )
             }
-            final String externalReferenceHref = generateHref('externalReference', externalReference.id, this.grailsLinkGenerator)
-            this.generateLink(markupBuilder, externalReferenceHref, 'self', this.mediaTypesDTO.externalReferenceMediaType)
-
-            final String externalReferencesHref = generateHref('externalReferences', null, this.grailsLinkGenerator)
-            this.generateLink(markupBuilder, externalReferencesHref, 'up', this.mediaTypesDTO.externalReferencesMediaType)
-
+            generateLink(
+                    [
+                            mapping: 'externalReference', absolute: true,
+                            rel: 'self', mediaType: this.mediaTypesDTO.externalReferenceMediaType,
+                            params: [id: externalReference.id]
+                    ],
+                    markupBuilder,
+                    this.grailsLinkGenerator
+            )
+            generateLink(
+                    [
+                            mapping: 'externalReferences', absolute: true,
+                            rel: 'up', mediaType: this.mediaTypesDTO.externalReferencesMediaType
+                    ],
+                    markupBuilder,
+                    this.grailsLinkGenerator
+            )
         }
     }
     /**

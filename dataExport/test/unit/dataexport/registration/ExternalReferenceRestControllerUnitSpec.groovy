@@ -39,9 +39,9 @@ class ExternalReferenceRestControllerUnitSpec extends Specification {
         then: "We expect a response with the given status code"
         expectedResults == response.status
         where:
-        label               | mimeType                                               | expectedResults
-        "Expects 400 Error" | "application/vnd.bard.cap+xml;type=dictionary"         | HttpServletResponse.SC_BAD_REQUEST
-        "Expects 200 OK"    | "application/vnd.bard.cap+xml;type=externalReferences" | HttpServletResponse.SC_OK
+        label                              | mimeType                                               | expectedResults
+        "Statuc Code 400, wrong mime type" | "application/vnd.bard.cap+xml;type=dictionary"         | HttpServletResponse.SC_BAD_REQUEST
+        "Status Code 200"                  | "application/vnd.bard.cap+xml;type=externalReferences" | HttpServletResponse.SC_OK
     }
 
     /**
@@ -56,25 +56,25 @@ class ExternalReferenceRestControllerUnitSpec extends Specification {
         then: "We expect a response with the given status code"
         expectedResults == response.status
         where:
-        label               | mimeType                                            | expectedResults
-        "Expects 400 Error" | "application/vnd.bard.cap+xml;type=dictionary"      | HttpServletResponse.SC_BAD_REQUEST
-        "Expects 200 OK"    | "application/vnd.bard.cap+xml;type=externalSystems" | HttpServletResponse.SC_OK
+        label                                  | mimeType                                            | expectedResults
+        "Status Code 400, incorrect mime type" | "application/vnd.bard.cap+xml;type=dictionary"      | HttpServletResponse.SC_BAD_REQUEST
+        "Status Code 200"                      | "application/vnd.bard.cap+xml;type=externalSystems" | HttpServletResponse.SC_OK
     }
     /**
      *
      */
-    void "test  external reference fail #label #id"() {
+    void "test  external reference #label #id"() {
         when: "We send an HTTP GET request for a specific externalReference"
         request.method = 'GET'
         controller.request.addHeader(HttpHeaders.ACCEPT, mimeType)
-        controller.params.id = id
-        controller.externalReference()
+        controller.externalReference(id)
         then:
         expectedResults == response.status
         where:
-        label                     | id   | mimeType                                              | expectedResults
-        "Expects 400 Bad request" | "2"  | "bogus.mime.type"                                     | HttpServletResponse.SC_BAD_REQUEST
-        "Expects 400 Bad request" | null | "application/vnd.bard.cap+xml;type=externalReference" | HttpServletResponse.SC_BAD_REQUEST
+        label                                  | id   | mimeType                                              | expectedResults
+        "Status Code 400, incorrect mime type" | 2    | "bogus.mime.type"                                     | HttpServletResponse.SC_BAD_REQUEST
+        "Status Code 400, null entity Id"      | null | "application/vnd.bard.cap+xml;type=externalReference" | HttpServletResponse.SC_BAD_REQUEST
+        "Status Code 200"                      | 5    | "application/vnd.bard.cap+xml;type=externalReference" | HttpServletResponse.SC_OK
     }
 
     /**
@@ -84,46 +84,13 @@ class ExternalReferenceRestControllerUnitSpec extends Specification {
         when: "We send an HTTP GET request for a specific externalSystem"
         request.method = 'GET'
         controller.request.addHeader(HttpHeaders.ACCEPT, mimeType)
-        controller.params.id = id
-        controller.externalSystem()
+        controller.externalSystem(id)
         then:
         expectedResults == response.status
         where:
-        label                     | id   | mimeType                                           | expectedResults
-        "Expects 400 Bad request" | "2"  | "bogus.mime.type"                                  | HttpServletResponse.SC_BAD_REQUEST
-        "Expects 400 Bad request" | null | "application/vnd.bard.cap+xml;type=externalSystem" | HttpServletResponse.SC_BAD_REQUEST
-    }
-    /**
-     *
-     */
-    void "test  external reference #label"() {
-        when: "We send an HTTP GET request for a specific external Reference"
-        request.method = 'GET'
-        controller.request.addHeader(HttpHeaders.ACCEPT, mimeType)
-        controller.params.id = id
-
-        controller.externalReference()
-        then:
-        expectedResults == response.status
-        where:
-        label                        | id  | mimeType                                              | expectedResults
-        "Expects 200 OK status code" | "5" | "application/vnd.bard.cap+xml;type=externalReference" | HttpServletResponse.SC_OK
-    }
-
-    /**
-     *
-     */
-    void "test  external system #label"() {
-        when: "We send an HTTP GET request for a specific external system"
-        request.method = 'GET'
-        controller.request.addHeader(HttpHeaders.ACCEPT, mimeType)
-        controller.params.id = id
-
-        controller.externalSystem()
-        then:
-        expectedResults == response.status
-        where:
-        label                        | id  | mimeType                                           | expectedResults
-        "Expects 200 OK status code" | "5" | "application/vnd.bard.cap+xml;type=externalSystem" | HttpServletResponse.SC_OK
+        label                                  | id   | mimeType                                           | expectedResults
+        "Status Code 400, incorrect mime type" | 2    | "bogus.mime.type"                                  | HttpServletResponse.SC_BAD_REQUEST
+        "Status Code 400, null entity Id"      | null | "application/vnd.bard.cap+xml;type=externalSystem" | HttpServletResponse.SC_BAD_REQUEST
+        "Status Code 200"                      | 5    | "application/vnd.bard.cap+xml;type=externalSystem" | HttpServletResponse.SC_OK
     }
 }

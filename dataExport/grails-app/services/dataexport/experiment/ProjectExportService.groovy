@@ -47,14 +47,20 @@ class ProjectExportService extends ExportAbstractService {
             description(projectStep.description)
             final Experiment experiment = projectStep.experiment
             experimentRef(label: experiment.experimentName) {
-                final String experimentHref = generateHref('experiment', experiment.id, this.grailsLinkGenerator)
-                generateLink(markupBuilder, experimentHref, 'related', this.mediaTypesDTO.experimentMediaType)
+                Map map = [mapping: 'experiment', rel: 'related',
+                        mediaType: this.mediaTypesDTO.experimentMediaType,
+                        params: [id: experiment.id]]
+                generateLink(map, markupBuilder, this.grailsLinkGenerator)
             }
             final Experiment precedingExperiment = projectStep.precedingExperiment
             if (precedingExperiment) {
                 precedingExperimentRef(label: precedingExperiment.experimentName) {
-                    final String experimentHref = generateHref('experiment', precedingExperiment.id, this.grailsLinkGenerator)
-                    generateLink(markupBuilder, experimentHref, 'related', this.mediaTypesDTO.experimentMediaType)
+                    Map map = [
+                            mapping: 'experiment', rel: 'related',
+                            mediaType: this.mediaTypesDTO.experimentsMediaType,
+                            params: [id: precedingExperiment.id]
+                    ]
+                    generateLink(map, markupBuilder, this.grailsLinkGenerator)
                 }
             }
             if (projectStep.stepContexts) {
@@ -106,20 +112,20 @@ class ProjectExportService extends ExportAbstractService {
     }
 
     protected void generateProjectLinks(final MarkupBuilder markupBuilder, final Project project) {
+        Map map = [mapping: 'project', absolute: true, rel: 'edit', mediaType: this.mediaTypesDTO.projectMediaType, params: [id: project.id]]
+        generateLink(map, markupBuilder, this.grailsLinkGenerator)
 
-        final String projectHref = generateHref('project', project.id, this.grailsLinkGenerator)
-        generateLink(markupBuilder, projectHref, 'edit', this.mediaTypesDTO.projectMediaType)
+        map = [mapping: 'projects', absolute: true, rel: 'up', mediaType: this.mediaTypesDTO.projectsMediaType]
+        generateLink(map, markupBuilder, this.grailsLinkGenerator)
 
-        final String projectsHref = generateHref('projects', null, this.grailsLinkGenerator)
-        generateLink(markupBuilder, projectsHref, 'up', mediaTypesDTO.projectsMediaType)
 
         final Set<ExternalReference> externalReferences = project.externalReferences
         generateExternalReferencesLink(markupBuilder, externalReferences as List<ExternalReference>, this.grailsLinkGenerator, this.mediaTypesDTO)
 
         //add links for each document
         for (ProjectDocument projectDocument : project.projectDocuments) {
-            final String projectDocumentHref = this.generateHref('projectDocument', projectDocument.id, this.grailsLinkGenerator)
-            generateLink(markupBuilder, projectDocumentHref, 'item', this.mediaTypesDTO.projectDocMediaType)
+            map = [mapping: 'projectDocument', absolute: true, rel: 'item', mediaType: this.mediaTypesDTO.projectDocMediaType, params: [id: projectDocument.id]]
+            generateLink(map, markupBuilder, this.grailsLinkGenerator)
         }
     }
 
@@ -234,8 +240,13 @@ class ProjectExportService extends ExportAbstractService {
         final int numberOfProjects = projects.size()
         markupBuilder.projects(count: numberOfProjects) {
             for (Project project : projects) {
-                final String assayHref = generateHref('project', project.id, this.grailsLinkGenerator)
-                generateLink(markupBuilder, assayHref, 'item', this.mediaTypesDTO.projectMediaType)
+                Map map = [
+                        mapping: 'project',
+                        absolute: true, rel: 'item',
+                        mediaType: this.mediaTypesDTO.projectMediaType,
+                        params: [id: project.id]
+                ]
+                generateLink(map, markupBuilder, this.grailsLinkGenerator)
             }
         }
     }

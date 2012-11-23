@@ -52,7 +52,7 @@ The link with 'edit' relation should be used to set the status of this experimen
                         </xs:sequence>
                     </xs:complexType>
                 </xs:element>
-                <xs:element maxOccurs="unbounded" minOccurs="0" ref="link">
+                <xs:element maxOccurs="unbounded" minOccurs="1" ref="link">
                     <xs:annotation>
                         <xs:documentation>Link to self
 Link to results

@@ -17,14 +17,16 @@ package common.tests
 
 class XmlTestSamples {
     //We include a root, just so we can validate, otherwise the XML is not well-formed
-    static final String EXPERIMENTS_LINK_UNIT = '''
-<root>
-  <link rel='related' title='Link to Assay' type='assayMediaType' href='null' />
-  <link rel='up' title='List Experiments' type='experimentsMediaType' href='null' />
-  <link rel='related' title='List Related Results' type='resultsMediaType' href='null' />
-  <link rel='edit' title='Use link to edit Experiment' type='experimentMediaType' href='null' />
-</root>
-    '''
+    static final String EXPERIMENTS_LINK_MINIMAL = '''
+                                                <root>
+                                                  <link rel='related' href='null' type='assayMediaType' />
+                                                  <link rel='up' href='null' type='experimentsMediaType' />
+                                                  <link rel='related' href='null' type='resultsMediaType' />
+                                                  <link rel='edit' href='null' type='experimentMediaType' />
+                                                  <link rel='related' href='null' type='externalReferenceMediaType' />
+                                                  <link rel='related' href='null' type='externalReferenceMediaType' />
+                                                </root>
+                                                '''
 
     static final String RESULT_CONTEXT_ITEM_UNIT = '''
   <resultContextItem resultContextItemId='null' qualifier='%' valueDisplay='20 %' valueNum='2.0' valueMin='1.0' valueMax='3.0'>
@@ -113,50 +115,23 @@ class XmlTestSamples {
     '''
 
     static final String EXPERIMENT_UNIT_ONLY_ATTRIBUTES = '''
-<experiment experimentId='' experimentName='Experiment1' status='Published' readyForExtraction='Pending' holdUntilDate='1969-12-31T19:00:00.000-05:00' runDateFrom='1969-12-31T19:00:00.000-05:00' runDateTo='1969-12-31T19:00:00.000-05:00'>
-  <link rel='related' title='Link to Assay' type='assayMediaType' href='null' />
-  <link rel='up' title='List Experiments' type='experimentsMediaType' href='null' />
-  <link rel='related' title='List Related Results' type='resultsMediaType' href='null' />
-  <link rel='edit' title='Use link to edit Experiment' type='experimentMediaType' href='null' />
+<experiment experimentId='' experimentName='Experiment1' status='Pending' readyForExtraction='Pending' holdUntilDate='1969-12-31T19:00:00.000-05:00' runDateFrom='1969-12-31T19:00:00.000-05:00' runDateTo='1969-12-31T19:00:00.000-05:00'>
+  <link rel='related' href='null' type='assayMediaType' />
+  <link rel='up' href='null' type='experimentsMediaType' />
+  <link rel='related' href='null' type='resultsMediaType' />
+  <link rel='edit' href='null' type='experimentMediaType' />
 </experiment>
     '''
-    static final String EXPERIMENT_UNIT_ATTRIBUTES_AND_ELEMENTS = '''
-<experiment experimentId='' experimentName='Experiment1' status='Published' readyForExtraction='Pending' holdUntilDate='1969-12-31T19:00:00.000-05:00' runDateFrom='1969-12-31T19:00:00.000-05:00' runDateTo='1969-12-31T19:00:00.000-05:00'>
-  <description>Broad</description>
-  <experimentContextItems>
-    <experimentContextItem experimentContextItemId='' qualifier='&lt;' valueDisplay='&lt; 20 uM' valueNum='1.0' valueMin='5.0' valueMax='20.0'>
-      <attribute label='attribute'>
-        <link rel='related' href='null' type='elementMediaType' />
-      </attribute>
-      <valueControlled label='valueControlled'>
-        <link rel='related' href='null' type='elementMediaType' />
-      </valueControlled>
-    </experimentContextItem>
-  </experimentContextItems>
-  <projectSteps>
-    <projectStep>
-      <description>Broad</description>
-      <precedingExperiment id='null'>
-        <link rel='related' href='null' type='experimentMediaType' />
-      </precedingExperiment>
-      <link rel='related' href='null' type='projectMediaType' />
-    </projectStep>
-  </projectSteps>
-  <externalReferences>
-    <externalReference>
-      <externalAssayRef>External Assay Ref</externalAssayRef>
-      <externalSystem name='systemName' owner='owner'>
-        <systemUrl>http://broad.org</systemUrl>
-      </externalSystem>
-      <link rel='related' href='null' type='projectMediaType' />
-    </externalReference>
-  </externalReferences>
-  <link rel='related' title='Link to Assay' type='assayMediaType' href='null' />
-  <link rel='up' title='List Experiments' type='experimentsMediaType' href='null' />
-  <link rel='related' title='List Related Results' type='resultsMediaType' href='null' />
-  <link rel='edit' title='Use link to edit Experiment' type='experimentMediaType' href='null' />
-</experiment>
-'''
+    static final String EXPERIMENT_FULL = '''
+                                            <experiment experimentId='' experimentName='Experiment1' status='Pending' readyForExtraction='Pending' holdUntilDate='1969-12-31T19:00:00.000-05:00' runDateFrom='1969-12-31T19:00:00.000-05:00' runDateTo='1969-12-31T19:00:00.000-05:00'>
+                                              <description>Broad</description>
+                                              <link rel='related' href='null' type='assayMediaType' />
+                                              <link rel='up' href='null' type='experimentsMediaType' />
+                                              <link rel='related' href='null' type='resultsMediaType' />
+                                              <link rel='edit' href='null' type='experimentMediaType' />
+                                              <link rel='related' href='null' type='externalReferenceMediaType' />
+                                            </experiment>
+                                    '''
     static final String EXPERIMENTS_2_RECORDS_UNIT = '''
    <experiments count='2'>
   <link rel='related' type='experimentMediaType' href='null' />

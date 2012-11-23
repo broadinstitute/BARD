@@ -58,8 +58,6 @@ class ProjectExportServiceUnitSpec extends Specification {
 
     }
 
-    //println(this.writer.toString())
-
     void "generateProjectContext #label"() {
         given:
         ProjectContext projectContext = ProjectContext.build(contextName: 'contextName', contextGroup: 'contextGroup')
@@ -90,7 +88,6 @@ class ProjectExportServiceUnitSpec extends Specification {
         when:
         this.projectExportService.generateStepContextItem(this.markupBuilder, stepContextItem)
         then:
-        println(this.writer.toString())
         XmlTestAssertions.assertResults(results, this.writer.toString())
         where:
         label     | results
@@ -116,7 +113,6 @@ class ProjectExportServiceUnitSpec extends Specification {
         when:
         this.projectExportService.generateProjectStep(this.markupBuilder, projectStep)
         then:
-        println this.writer.toString()
         XmlTestAssertions.assertResults(results, this.writer.toString())
         where:
         label     | results

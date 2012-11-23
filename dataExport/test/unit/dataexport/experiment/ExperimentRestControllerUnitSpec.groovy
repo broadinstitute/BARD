@@ -38,9 +38,9 @@ class ExperimentRestControllerUnitSpec extends Specification {
         then: "We expect a response with the given status code"
         expectedResults == response.status
         where:
-        label               | mimeType                                        | expectedResults
-        "Expects 400 Error" | "application/vnd.bard.cap+xml;type=dictionary"  | HttpServletResponse.SC_BAD_REQUEST
-        "Expects 200 OK"    | "application/vnd.bard.cap+xml;type=experiments" | HttpServletResponse.SC_OK
+        label                                  | mimeType                                        | expectedResults
+        "Status Code 400, incorrect mime type" | "application/vnd.bard.cap+xml;type=dictionary"  | HttpServletResponse.SC_BAD_REQUEST
+        "Status Code 200"                      | "application/vnd.bard.cap+xml;type=experiments" | HttpServletResponse.SC_OK
     }
     /**
      *
@@ -49,29 +49,13 @@ class ExperimentRestControllerUnitSpec extends Specification {
         when: "We send an HTTP GET request for a specific experiment"
         request.method = 'GET'
         controller.request.addHeader(HttpHeaders.ACCEPT, mimeType)
-        controller.params.id = id
-
-        controller.experiment(new Integer(id))
+        controller.experiment(id)
         then:
         expectedResults == response.status
         where:
-        label                     | id  | mimeType                                       | expectedResults
-        "Expects 400 Bad request" | "2" | "bogus.mime.type"                              | HttpServletResponse.SC_BAD_REQUEST
-        "Expects 400 Bad request" | "0" | "application/vnd.bard.cap+xml;type=experiment" | HttpServletResponse.SC_BAD_REQUEST
-    }
-    /**
-     *
-     */
-    void "test  experiment #label"() {
-        when: "We send an HTTP GET request for a specific experiment"
-        request.method = 'GET'
-        controller.request.addHeader(HttpHeaders.ACCEPT, mimeType)
-
-        controller.experiment(new Integer(id))
-        then:
-        expectedResults == response.status
-        where:
-        label                           | id  | mimeType                                       | expectedResults
-        "Expects 200 OK For Experiment" | "5" | "application/vnd.bard.cap+xml;type=experiment" | HttpServletResponse.SC_OK
+        label                                  | id   | mimeType                                       | expectedResults
+        "Status Code 400, incorrect mime type" | 2    | "bogus.mime.type"                              | HttpServletResponse.SC_BAD_REQUEST
+        "Status Code 400, null id "            | null | "application/vnd.bard.cap+xml;type=experiment" | HttpServletResponse.SC_BAD_REQUEST
+        "Status Code 200"                      | 5    | "application/vnd.bard.cap+xml;type=experiment" | HttpServletResponse.SC_OK
     }
 }

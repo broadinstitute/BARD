@@ -1,7 +1,10 @@
 package dataexport.experiment
 
 import bard.db.dictionary.Element
-import bard.db.enums.ReadyForExtraction
+import bard.db.experiment.Experiment
+import bard.db.experiment.ExperimentContextItem
+import bard.db.project.Project
+import bard.db.project.ProjectStep
 import bard.db.registration.Assay
 import bard.db.registration.ExternalReference
 import bard.db.registration.ExternalSystem
@@ -9,15 +12,12 @@ import common.tests.XmlTestAssertions
 import common.tests.XmlTestSamples
 import dataexport.registration.MediaTypesDTO
 import exceptions.NotFoundException
-import grails.test.mixin.Mock
+import grails.buildtestdata.mixin.Build
 import grails.test.mixin.TestFor
 import groovy.xml.MarkupBuilder
 import org.codehaus.groovy.grails.web.mapping.LinkGenerator
 import spock.lang.Specification
-import bard.db.experiment.*
 import spock.lang.Unroll
-import bard.db.project.ProjectStep
-import bard.db.project.Project
 
 @Unroll
 /**
@@ -28,7 +28,7 @@ import bard.db.project.Project
  * To change this template use File | Settings | File Templates.
  */
 @TestFor(ExperimentExportService)
-@Mock([Experiment, ResultExportService])
+@Build([Experiment, Assay, ExternalReference, ExternalSystem])
 class ExperimentExportServiceUnitSpec extends Specification {
     Writer writer
     MarkupBuilder markupBuilder
@@ -41,13 +41,19 @@ class ExperimentExportServiceUnitSpec extends Specification {
         LinkGenerator grailsLinkGenerator = Mock(LinkGenerator.class)
 
         final MediaTypesDTO mediaTypesDTO =
-            new MediaTypesDTO(experimentsMediaType: "experimentsMediaType",
+            new MediaTypesDTO(
+                    experimentsMediaType: "experimentsMediaType",
                     experimentMediaType: "experimentMediaType",
                     resultsMediaType: "resultsMediaType",
                     elementMediaType: "elementMediaType",
-                    projectMediaType: "projectMediaType", stageMediaType: "stageMediaType", assayMediaType: "assayMediaType")
+                    projectMediaType: "projectMediaType",
+                    stageMediaType: "stageMediaType",
+                    externalReferenceMediaType: "externalReferenceMediaType",
+                    assayMediaType: "assayMediaType"
+            )
         this.experimentExportService.mediaTypeDTO = mediaTypesDTO
         this.experimentExportService.numberRecordsPerPage = maxNumberOfExperimentsPerPage
+        this.experimentExportService.resultExportService = Mock(ResultExportService.class)
         this.experimentExportService.grailsLinkGenerator = grailsLinkGenerator
         this.experimentExportService.resultExportService.grailsLinkGenerator = grailsLinkGenerator
         this.experimentExportService.resultExportService.mediaTypes = mediaTypesDTO
@@ -58,70 +64,16 @@ class ExperimentExportServiceUnitSpec extends Specification {
 
     void "test Generate Experiment Links #label"() {
         given: "An Experiment"
-        final Experiment experiment =
-            new Experiment(id: 1, assay: new Assay(id: 1))
+        final Experiment experiment = Experiment.build()
+        ExternalReference externalReference = ExternalReference.build(experiment: experiment)
+
+        //new Experiment(id: 1, assay: new Assay(id: 1))
         when: "We call the service method to generate links for the experiment"
         this.markupBuilder.root() {
             this.experimentExportService.generateExperimentLinks(this.markupBuilder, experiment)
         }
         then: "The generated XML is the similar to the expected XML"
-        XmlTestAssertions.assertResults(XmlTestSamples.EXPERIMENTS_LINK_UNIT, this.writer.toString())
-    }
-
-    void "test generate Project Steps #label"() {
-        given: " A Project Step"
-        when: "We call the service method to generate the XML representation"
-        this.experimentExportService.generateProjectSteps(this.markupBuilder, projectSteps)
-        then: "We get back a valid Project Steps"
-        XmlTestAssertions.assertResults(results, this.writer.toString())
-        where:
-        label                             | projectSteps                                                                                                                               | results
-        "Full Document"                   | [new ProjectStep(project: new Project(id: 1), precedingExperiment: new Experiment(id: 5), description: "description")] as Set<ProjectStep> | XmlTestSamples.PROJECT_STEPS_UNIT
-        "No Project/Stage/Preceding Exp " | [new ProjectStep(project: new Project(id: 1), description: "description")] as Set<ProjectStep>                                             | XmlTestSamples.PROJECT_STEPS_UNIT_NO_CHILD_ELEMENTS
-
-    }
-
-    void "test generate Project Step #label"() {
-        given: " A Project Step"
-        when: "We call the service method to generate the XML representation"
-        this.experimentExportService.generateProjectStep(this.markupBuilder, projectStep)
-        then: "We get back a valid Project Step"
-        XmlTestAssertions.assertResults(results, this.writer.toString())
-        where:
-        label                             | projectStep                                                                                                          | results
-        "Full Document"                   | new ProjectStep(project: new Project(id: 1), precedingExperiment: new Experiment(id: 5), description: "description") | XmlTestSamples.PROJECT_STEP_UNIT
-        "No Project/Stage/Preceding Exp " | new ProjectStep(project: new Project(id: 1), description: "description")                                             | XmlTestSamples.PROJECT_STEP_UNIT_NO_CHILD_ELEMENTS
-
-    }
-
-
-
-    void "test generate External Reference"() {
-        given: "An External Reference object"
-        final ExternalReference externalReference =
-            new ExternalReference(extAssayRef: "External Assay Ref", project: new Project(projectName: "projectName"),
-                    externalSystem: new ExternalSystem(systemUrl: "http://broad.org", systemName: "systemName", owner: "owner"))
-        when: "We convert it to XML"
-        this.experimentExportService.generateExternalReference(this.markupBuilder, externalReference)
-
-        then: "We get the expected XML document"
-        XmlTestAssertions.assertResults(XmlTestSamples.EXTERNAL_REFERENCE_UNT, this.writer.toString())
-
-    }
-
-    void "test generate External References"() {
-        given: "An External References object"
-        final ExternalReference externalReference =
-            new ExternalReference(extAssayRef: "External Assay Ref", project: new Project(projectName: "projectName"),
-                    externalSystem: new ExternalSystem(systemUrl: "http://broad.org", systemName: "systemName", owner: "owner"))
-        final Set<ExternalReference> externalReferences = [] as Set<ExternalReference>
-        externalReferences.add(externalReference)
-
-        when: "We convert it to XML"
-        this.experimentExportService.generateExternalReferences(this.markupBuilder, externalReferences)
-
-        then: "We get the expected XML document"
-        XmlTestAssertions.assertResults(XmlTestSamples.EXTERNAL_REFERENCES_UNT, this.writer.toString())
+        XmlTestAssertions.assertResults(XmlTestSamples.EXPERIMENTS_LINK_MINIMAL, this.writer.toString())
     }
 
     void "test generate Experiment #label"() {
@@ -166,23 +118,27 @@ class ExperimentExportServiceUnitSpec extends Specification {
         then: "A valid xml document is generated and is similar to the expected document"
         XmlTestAssertions.assertResults(results, this.writer.toString())
         where:
-        label                                                                 | experimentName | description | results
-        "No description, resultContextItems, externalReferences,projectSteps" | "Experiment1"  | ""          | XmlTestSamples.EXPERIMENT_UNIT_ONLY_ATTRIBUTES
-        "Full Experiment"                                                     | "Experiment2"  | "Broad"     | XmlTestSamples.EXPERIMENT_UNIT_ATTRIBUTES_AND_ELEMENTS
+        label                | experimentName | description | results
+        "Minimal Experiment" | "Experiment1"  | ""          | XmlTestSamples.EXPERIMENT_UNIT_ONLY_ATTRIBUTES
+        "Full Experiment"    | "Experiment2"  | "Broad"     | XmlTestSamples.EXPERIMENT_FULL
 
     }
 
     void "test generate Attributes For Experiment #label"() {
-        given: "A experiment, "
+        given:
+        Experiment experiment = valueUnderTest.call()
         when: "We extract key-value pairs, needed to generate the XML attributes for an Experiment document"
-        final Map<String, String> attributesForExperiment = this.experimentExportService.generateAttributesForExperiment(experiment)
+        def attributesForExperiment =
+            this.experimentExportService.generateAttributesForExperiment(experiment)
         then: "We expect the resulting Map to be equal to the expected map"
+        attributesForExperiment.experimentId.toString() == results.experimentId.toString()
+        attributesForExperiment.experimentName == results.experimentName
+        attributesForExperiment.status == results.status
+        attributesForExperiment.readyForExtraction == results.readyForExtraction
 
-        attributesForExperiment == results
         where:
-        label                      | experiment                                                                                                                                                        | results
-        "Experiment with dates"    | new Experiment(id: 1, experimentName: "Experiment1", holdUntilDate: new Date(0), runDateFrom: new Date(0), runDateTo: new Date(0), experimentStatus: 'Published') | [experimentId: null, experimentName: 'Experiment1', status: 'Published',readyForExtraction:'Pending', holdUntilDate: '1969-12-31T19:00:00.000-05:00', runDateFrom: '1969-12-31T19:00:00.000-05:00', runDateTo: '1969-12-31T19:00:00.000-05:00'] as Map<String, String>
-        "Experiment with no dates" | new Experiment(id: 2, experimentName: "Experiment2", experimentStatus: 'Published')                                                                               | [experimentId: null, experimentName: 'Experiment2', status: 'Published',readyForExtraction:'Pending'] as Map<String, String>
+        label                  | valueUnderTest                                    | results
+        "Experiment - Minimal" | {Experiment.build(experimentName: "Experiment2")} | [experimentId: 1, experimentName: 'Experiment2', status: 'Pending', readyForExtraction: 'Pending']
     }
 
     void "test Generate Experiment Not Found Exception"() {

@@ -150,7 +150,6 @@ class ExperimentRestControllerFunctionalSpec extends Specification {
         assert serverResponse.getFirstHeader('ETag').name == 'ETag'
         assert serverResponse.getFirstHeader('ETag').value == '0'
         final String responseData = serverResponse.data.readLines().join()
-        println responseData
         XMLAssert.assertXpathEvaluatesTo("1", "count(//experiment)", responseData)
         XMLAssert.assertXpathEvaluatesTo("0", "count(//experiments)", responseData)
         XMLAssert.assertXpathEvaluatesTo("1", "count(//experimentContextItems)", responseData)

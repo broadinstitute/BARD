@@ -2,14 +2,11 @@ package dataexport.experiment
 
 import bard.db.enums.ReadyForExtraction
 import bard.db.experiment.Experiment
-import bard.db.experiment.ExperimentContextItem
 import bard.db.experiment.Result
-import bard.db.project.Project
-import bard.db.project.ProjectStep
 import bard.db.registration.ExternalReference
-import bard.db.registration.ExternalSystem
 import dataexport.registration.BardHttpResponse
 import dataexport.registration.MediaTypesDTO
+import dataexport.util.ExportAbstractService
 import dataexport.util.UtilityService
 import exceptions.NotFoundException
 import groovy.xml.MarkupBuilder
@@ -27,7 +24,7 @@ import javax.xml.datatype.XMLGregorianCalendar
  * Right now, i have not seen any memory issues yet, but then again, we do not have many real experiment documents
  * I have tested with what i think should be a full experiment, using 100K records and I did not encounter any issues
  */
-class ExperimentExportService {
+class ExperimentExportService extends ExportAbstractService {
 
     ResultExportService resultExportService
     UtilityService utilityService
@@ -70,7 +67,7 @@ class ExperimentExportService {
         int end = this.numberRecordsPerPage + 1  //A trick to know if there are more records
         boolean hasMoreExperiments = false //This is used for paging, if there are more experiments than the threshold, add next link and return true
 
-        List<Long> experimentIds = (List<Long>)Result.executeQuery("select distinct experiment.id from Experiment experiment where experiment.readyForExtraction=:ready order by experiment.id asc", [ready: ReadyForExtraction.Ready, offset: offset, max: end])
+        List<Long> experimentIds = (List<Long>) Result.executeQuery("select distinct experiment.id from Experiment experiment where experiment.readyForExtraction=:ready order by experiment.id asc", [ready: ReadyForExtraction.Ready, offset: offset, max: end])
 
         final int numberOfExperiments = experimentIds.size()
         if (numberOfExperiments > this.numberRecordsPerPage) {
@@ -83,14 +80,28 @@ class ExperimentExportService {
 
         markupBuilder.experiments(count: experimentIds.size()) {
             for (Long experimentId : experimentIds) {
-                final String experimentHref = grailsLinkGenerator.link(mapping: 'experiment', absolute: true, params: [id: experimentId]).toString()
-                link(rel: 'related', type: "${this.mediaTypeDTO.experimentMediaType}", href: "${experimentHref}")
+                generateLink(
+                        [mapping: 'experiment', absolute: true,
+                                rel: 'related', mediaType:this.mediaTypeDTO.experimentMediaType,
+                                params: [id: experimentId]
+                        ]
+                        ,
+                        markupBuilder,
+                        this.grailsLinkGenerator
+                )
             }
             //if there are more records that can fit on a page then add the next link, with the offset parameter
             //being the end variable in this method
             if (hasMoreExperiments) {
-                final String experimentsHref = grailsLinkGenerator.link(mapping: 'experiments', absolute: true, params: [offset: currentoffSet]).toString()
-                link(rel: 'next', title: 'List Experiments', type: "${this.mediaTypeDTO.experimentsMediaType}", href: "${experimentsHref}")
+                generateLink(
+                        [mapping: 'experiments', absolute: true,
+                                rel: 'next', mediaType:this.mediaTypeDTO.experimentsMediaType,
+                                params: [offset: currentoffSet]
+                        ]
+                        ,
+                        markupBuilder,
+                        this.grailsLinkGenerator
+                )
             }
         }
         return hasMoreExperiments
@@ -140,33 +151,6 @@ class ExperimentExportService {
         }
         return attributes
     }
-
-    /**
-     *
-     * @param markupBuilder
-     * @param resultContextItems
-     */
-    protected void generateExperimentContextItems(def markupBuilder, final Set<ExperimentContextItem> experimentContextItems) {
-        markupBuilder.experimentContextItems() {
-            for (ExperimentContextItem experimentContextItem : experimentContextItems) {
-                generateExperimentContextItem(markupBuilder, experimentContextItem)
-            }
-        }
-    }
-    /**
-     *
-     * @param markupBuilder
-     * @param resultContextItem
-     */
-    protected void generateExperimentContextItem(def markupBuilder, final ExperimentContextItem experimentContextItem) {
-
-        final Map<String, String> attributes = this.resultExportService.generateAttributesForContextItem(experimentContextItem, "experimentContextItemId")
-
-        markupBuilder.experimentContextItem(attributes) {
-            this.resultExportService.generateContextItemElements(markupBuilder, experimentContextItem)
-
-        }
-    }
     /**
      * @param markupBuilder
      * @param experiment
@@ -181,92 +165,10 @@ class ExperimentExportService {
             if (experiment.description) {
                 description(experiment.description)
             }
-            final Set<ExperimentContextItem> experimentContextItems = experiment.experimentContextItems
-            if (experimentContextItems) {
-                generateExperimentContextItems(markupBuilder, experimentContextItems)
-            }
-            final Set<ProjectStep> projectSteps = experiment.projectSteps
-            if (projectSteps) {
-                generateProjectSteps(markupBuilder, projectSteps)
-            }
-            final Set<ExternalReference> externalReferences = experiment.externalReferences
-            if (externalReferences) {
-                generateExternalReferences(markupBuilder, externalReferences)
-            }
             generateExperimentLinks(markupBuilder, experiment)
         }
     }
-    /**
-     * External References to an Experiment
-     */
-    protected void generateExternalReferences(final MarkupBuilder markupBuilder, final Set<ExternalReference> externalReferences) {
-        markupBuilder.externalReferences() {
-            for (ExternalReference externalReference : externalReferences) {
-                generateExternalReference(markupBuilder, externalReference)
-            }
-        }
-    }
-    /**
-     * External Reference to an Experiment
-     * @param markupBuilder
-     * @param externalReference
-     */
-    protected void generateExternalReference(final MarkupBuilder markupBuilder, final ExternalReference externalReference) {
 
-        markupBuilder.externalReference() {
-            externalAssayRef(externalReference.extAssayRef) {
-            }
-            final ExternalSystem externalSystemReference = externalReference.externalSystem
-            if (externalSystemReference) {
-                externalSystem(name: externalSystemReference.systemName, owner: externalSystemReference.owner) {
-                    systemUrl(externalSystemReference.systemUrl)
-                }
-            }
-            final Project project = externalReference.project
-            if (project) {
-                final String projectHref = grailsLinkGenerator.link(mapping: 'project', absolute: true, params: [id: "${project.id}"]).toString()
-                link(rel: 'related', href: "${projectHref}", type: "${this.mediaTypeDTO.projectMediaType}")
-            }
-        }
-    }
-    /**
-     * List of @ProjectExperiment associated to a given Experiment
-     * @param markupBuilder
-     * @param projectSteps
-     */
-    protected void generateProjectSteps(final MarkupBuilder markupBuilder, final Set<ProjectStep> projectSteps) {
-        markupBuilder.projectSteps() {
-            for (ProjectStep projectStep : projectSteps) {
-                generateProjectStep(markupBuilder, projectStep)
-            }
-        }
-    }
-    /**
-     * Generate projectStep
-     *
-     * @param markupBuilder
-     * @param projectStep
-     */
-    protected void generateProjectStep(final MarkupBuilder markupBuilder, final ProjectStep projectStep) {
-        markupBuilder.projectStep() {
-            if (projectStep.description) {
-                description(projectStep.description)
-            }
-            final Experiment precedingExperimentR = projectStep.precedingExperiment
-            if (precedingExperimentR) {
-                precedingExperiment(id: precedingExperimentR.id.toString()) {
-                    final String precedingExperimentHref = grailsLinkGenerator.link(mapping: 'experiment', absolute: true, params: [id: "${precedingExperimentR.id}"]).toString()
-                    link(rel: 'related', href: "${precedingExperimentHref}", type: "${this.mediaTypeDTO.experimentMediaType}")
-                }
-            }
-            final Project project = projectStep.project
-            if (project) {
-                final String projectHref = grailsLinkGenerator.link(mapping: 'project', absolute: true, params: [id: "${project.id}"]).toString()
-                link(rel: 'related', href: "${projectHref}", type: "${this.mediaTypeDTO.projectMediaType}")
-
-            }
-        }
-    }
     /**
      *  Generate links from an experiment object
      *  - results, parent experiments,assay, and self
@@ -276,23 +178,49 @@ class ExperimentExportService {
     protected void generateExperimentLinks(final MarkupBuilder markupBuilder, final Experiment experiment) {
 
         //link to the assay
-        final String assayHref = grailsLinkGenerator.link(mapping: 'assay', absolute: true, params: [id: experiment.assay?.id]).toString()
-        markupBuilder.link(rel: 'related', title: 'Link to Assay', type: "${this.mediaTypeDTO.assayMediaType}", href: assayHref)
+        generateLink(
+                [mapping: 'assay', absolute: true,
+                        rel: 'related',mediaType: this.mediaTypeDTO.assayMediaType,
+                        params: [id: experiment.assay?.id]
+                ]
+                ,
+                markupBuilder,
+                this.grailsLinkGenerator
+        )
 
         //link to list of experiments
-        final String experimentsHref = grailsLinkGenerator.link(mapping: 'experiments', absolute: true).toString()
-        markupBuilder.link(rel: 'up', title: 'List Experiments', type: "${this.mediaTypeDTO.experimentsMediaType}", href: "${experimentsHref}")
+        generateLink(
+                [mapping: 'experiments', absolute: true,
+                        rel: 'up', mediaType:this.mediaTypeDTO.experimentsMediaType
+                ]
+                ,
+                markupBuilder,
+                this.grailsLinkGenerator
+        )
 
         //link to results associated with this experiment
-        final String resultsHref = grailsLinkGenerator.link(mapping: 'results', absolute: true, params: [id: experiment.id, offset: 0]).toString()
-        markupBuilder.link(rel: 'related', title: 'List Related Results', type: "${this.mediaTypeDTO.resultsMediaType}", href: "${resultsHref}")
+        generateLink(
+                [mapping: 'results', absolute: true,
+                        rel: 'related',mediaType: this.mediaTypeDTO.resultsMediaType,
+                        params: [id: experiment.id, offset: 0]
+                ]
+                ,
+                markupBuilder,
+                this.grailsLinkGenerator
+        )
 
         //link to edit this experiment. You can only change the ready_for_extraction status
-        final String experimentHref = grailsLinkGenerator.link(mapping: 'experiment', absolute: true, params: [id: experiment.id]).toString()
-        markupBuilder.link(rel: 'edit', title: 'Use link to edit Experiment', type: "${this.mediaTypeDTO.experimentMediaType}", href: experimentHref)
-
+        generateLink(
+                [mapping: 'experiment', absolute: true,
+                        rel: 'edit',mediaType: this.mediaTypeDTO.experimentMediaType,
+                        params: [id: experiment.id]
+                ]
+                ,
+                markupBuilder,
+                this.grailsLinkGenerator
+        )
         final Set<ExternalReference> externalReferences = experiment.externalReferences
-        ProjectExportService.generateExternalReferencesLink(markupBuilder, externalReferences as List<ExternalReference>, this.grailsLinkGenerator, this.mediaTypeDTO)
+        generateExternalReferencesLink(markupBuilder, externalReferences as List<ExternalReference>, this.grailsLinkGenerator, this.mediaTypeDTO)
     }
 
 }
