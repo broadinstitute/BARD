@@ -2,11 +2,12 @@ package dataexport.experiment
 
 import bard.db.enums.ReadyForExtraction
 import bard.db.project.Project
+import bard.db.registration.ExternalReference
 import common.tests.XmlTestAssertions
 import common.tests.XmlTestSamples
 import dataexport.registration.MediaTypesDTO
 import exceptions.NotFoundException
-import grails.test.mixin.Mock
+import grails.buildtestdata.mixin.Build
 import groovy.xml.MarkupBuilder
 import org.codehaus.groovy.grails.web.mapping.LinkGenerator
 import spock.lang.Specification
@@ -19,7 +20,7 @@ import spock.lang.Unroll
  * Time: 12:52 PM
  * To change this template use File | Settings | File Templates.
  */
-@Mock([Project])
+@Build([Project, ExternalReference])
 @Unroll
 class ProjectExportServiceUnitSpec extends Specification {
     Writer writer
@@ -30,7 +31,10 @@ class ProjectExportServiceUnitSpec extends Specification {
 
     void setup() {
         LinkGenerator grailsLinkGenerator = Mock(LinkGenerator.class)
-        MediaTypesDTO mediaTypesDTO = new MediaTypesDTO(projectMediaType: "projectMediaType", projectsMediaType: "projectsMediaType")
+        MediaTypesDTO mediaTypesDTO =
+            new MediaTypesDTO(projectMediaType: "projectMediaType",
+                    projectsMediaType: "projectsMediaType",
+                    externalReferenceMediaType: "externalReferenceMediaType")
 
         this.projectExportService = new ProjectExportService(mediaTypesDTO)
         projectExportService.grailsLinkGenerator = grailsLinkGenerator
@@ -40,7 +44,7 @@ class ProjectExportServiceUnitSpec extends Specification {
 
     void "test generate Project #label"() {
         given: "A Project"
-        final Project project = new Project(projectName: projectName, groupType: groupType, description: description, readyForExtraction: ReadyForExtraction.Ready)
+        final Project project = Project.build(projectName: projectName, groupType: groupType, description: description, readyForExtraction: ReadyForExtraction.Ready)
         when: "We attempt to generate a Project XML document"
         this.projectExportService.generateProject(this.markupBuilder, project)
         then: "A valid xml document is generated and is similar to the expected document"
@@ -59,5 +63,20 @@ class ProjectExportServiceUnitSpec extends Specification {
         this.projectExportService.generateProject(this.markupBuilder, new Long("2"))
         then: "An exception should be thrown"
         thrown(NotFoundException)
+    }
+
+    void "test Generate Project Links #label"() {
+        given:
+        final Project project = (Project)valueUnderTest.call()
+        when:
+        this.markupBuilder.root() {
+            this.projectExportService.generateProjectLinks(this.markupBuilder, project)
+        }
+        then:
+        XmlTestAssertions.assertResults(results, this.writer.toString())
+        where:
+        label                                       | valueUnderTest                                                           | results
+        "Project Links with External References"    | {def ex = ExternalReference.build(project: Project.build()); ex.project} | XmlTestSamples.PROJECT_LINKS_WITH_EXTERNAL_REFERENCE
+        "Project Links with No External References" | {Project.build()}                                                        | XmlTestSamples.PROJECT_LINKS_WITH_NO_EXTERNAL_REFERENCE
     }
 }

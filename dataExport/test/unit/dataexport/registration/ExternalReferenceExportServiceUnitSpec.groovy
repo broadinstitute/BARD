@@ -126,24 +126,4 @@ class ExternalReferenceExportServiceUnitSpec extends Specification {
         "External Reference with Project" | XmlTestSamples.EXTERNAL_SYSTEMS
 
     }
-//
-//
-//
-//    void "test Generate Assay Document Not Found Exception"() {
-//        given:
-//        AssayDocument.metaClass.static.get = {id -> null }
-//        when: "We attempt to generate an Assay document"
-//        this.assayExportService.generateAssayDocument(this.markupBuilder, new Long("2"))
-//        then: "An exception should be thrown"
-//        thrown(NotFoundException)
-//    }
-//
-//    void "test Generate Assay Not Found Exception"() {
-//        given:
-//        Assay.metaClass.static.get = {id -> null }
-//        when: "We attempt to generate an Assay"
-//        this.assayExportService.generateAssay(this.markupBuilder, new Long("2"))
-//        then: "An exception should be thrown"
-//        thrown(NotFoundException)
-//    }
 }

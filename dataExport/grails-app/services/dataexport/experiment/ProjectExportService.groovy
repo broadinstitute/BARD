@@ -6,6 +6,7 @@ import bard.db.experiment.Experiment
 import bard.db.project.Project
 import bard.db.project.ProjectContextItem
 import bard.db.project.ProjectStep
+import bard.db.registration.ExternalReference
 import dataexport.registration.BardHttpResponse
 import dataexport.registration.MediaTypesDTO
 import dataexport.util.UtilityService
@@ -167,11 +168,32 @@ class ProjectExportService {
             if (project.projectContextItems) {
                 generateProjectContextItems(markupBuilder, project.projectContextItems)
             }
-            final String projectHref = grailsLinkGenerator.link(mapping: 'project', absolute: true, params: [id: project.id]).toString()
-            link(rel: 'edit', href: "${projectHref}", type: "${this.projectMediaType}")
-            final String projectsHref = grailsLinkGenerator.link(mapping: 'projects', absolute: true).toString()
-            link(rel: 'up', href: "${projectsHref}", type: "${this.projectsMediaType}")
+            generateProjectLinks(markupBuilder, project)
         }
+    }
+
+    protected void generateProjectLinks(final MarkupBuilder markupBuilder, final Project project) {
+        final String projectHref = grailsLinkGenerator.link(mapping: 'project', absolute: true, params: [id: project.id]).toString()
+        markupBuilder.link(rel: 'edit', href: "${projectHref}", type: "${this.projectMediaType}")
+
+        final String projectsHref = grailsLinkGenerator.link(mapping: 'projects', absolute: true).toString()
+        markupBuilder.link(rel: 'up', href: "${projectsHref}", type: "${this.projectsMediaType}")
+
+        final Set<ExternalReference> externalReferences = project.externalReferences
+        generateExternalReferencesLink(markupBuilder, externalReferences as List<ExternalReference>, this.grailsLinkGenerator, this.mediaTypesDTO)
+    }
+
+    public static void generateExternalReferencesLink(final MarkupBuilder markupBuilder,
+                                                      final List<ExternalReference> externalReferences,
+                                                      final LinkGenerator grailsLinkGenerator,
+                                                      final MediaTypesDTO mediaTypesDTO) {
+        for (ExternalReference externalReference : externalReferences) {
+            //link to fetch external reference
+            final String externalReferenceHref = grailsLinkGenerator.link(mapping: 'externalReference', absolute: true, params: [id: externalReference.id]).toString()
+            markupBuilder.link(rel: 'related', title: 'Fetch the external reference', type: "${mediaTypesDTO.externalReferenceMediaType}", href: externalReferenceHref)
+
+        }
+
     }
     /**
      *  Generate a project from a given projectId

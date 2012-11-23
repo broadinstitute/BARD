@@ -61,7 +61,7 @@ class ExperimentExportServiceUnitSpec extends Specification {
         final Experiment experiment =
             new Experiment(id: 1, assay: new Assay(id: 1))
         when: "We call the service method to generate links for the experiment"
-        this.markupBuilder.dummyHeader() {
+        this.markupBuilder.root() {
             this.experimentExportService.generateExperimentLinks(this.markupBuilder, experiment)
         }
         then: "The generated XML is the similar to the expected XML"

@@ -16,14 +16,14 @@ package common.tests
 
 
 class XmlTestSamples {
-    //We include a dummy header, just so we can validate, otherwise the XML is not well-formed
+    //We include a root, just so we can validate, otherwise the XML is not well-formed
     static final String EXPERIMENTS_LINK_UNIT = '''
-<dummyHeader>
+<root>
   <link rel='related' title='Link to Assay' type='assayMediaType' href='null' />
   <link rel='up' title='List Experiments' type='experimentsMediaType' href='null' />
   <link rel='related' title='List Related Results' type='resultsMediaType' href='null' />
   <link rel='edit' title='Use link to edit Experiment' type='experimentMediaType' href='null' />
-</dummyHeader>
+</root>
     '''
 
     static final String RESULT_CONTEXT_ITEM_UNIT = '''
@@ -220,13 +220,31 @@ class XmlTestSamples {
     <link rel='up' href='http://localhost:8080/dataExport/api/projects' type='application/vnd.bard.cap+xml;type=projects' />
     </project>
 '''
-    static final String PROJECT_WITH_DESCRIPTION = '''
+static final String PROJECT_WITH_DESCRIPTION = '''
 <project projectId='' readyForExtraction='Ready' groupType='Panel'>
   <projectName>Project Name2</projectName>
   <description>Broad</description>
   <link rel='edit' href='null' type='projectMediaType' />
   <link rel='up' href='null' type='projectsMediaType' />
 </project>
+'''
+//Note that the 'root' node is only included in this test case for validation purposes
+//Without the 'root' node the XML would not be valid
+static final String PROJECT_LINKS_WITH_EXTERNAL_REFERENCE = '''
+<root>
+<link rel='edit' href='null' type='projectMediaType' />
+<link rel='up' href='null' type='projectsMediaType' />
+<link rel='related' title='Fetch the external reference' type='externalReferenceMediaType' href='null' />
+<link rel='related' title='Fetch the external reference' type='externalReferenceMediaType' href='null' />
+</root>
+'''
+//Note that the 'root' node is only included in this test case for validation purposes
+//Without the 'root' node the XML would not be valid
+ static final String PROJECT_LINKS_WITH_NO_EXTERNAL_REFERENCE = '''
+<root>
+<link rel='edit' href='null' type='projectMediaType' />
+<link rel='up' href='null' type='projectsMediaType' />
+</root>
 '''
     static final String PROJECT_NO_DESCRIPTION = '''
 <project projectId='' readyForExtraction='Ready' groupType='Project'>

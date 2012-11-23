@@ -1,6 +1,11 @@
 package dataexport.experiment
 
 import bard.db.enums.ReadyForExtraction
+import bard.db.experiment.Experiment
+import bard.db.experiment.ExperimentContextItem
+import bard.db.experiment.Result
+import bard.db.project.Project
+import bard.db.project.ProjectStep
 import bard.db.registration.ExternalReference
 import bard.db.registration.ExternalSystem
 import dataexport.registration.BardHttpResponse
@@ -13,10 +18,6 @@ import org.codehaus.groovy.grails.web.mapping.LinkGenerator
 import javax.servlet.http.HttpServletResponse
 import javax.xml.datatype.DatatypeFactory
 import javax.xml.datatype.XMLGregorianCalendar
-
-import bard.db.experiment.*
-import bard.db.project.ProjectStep
-import bard.db.project.Project
 
 /**
  * Class that generates Experiments as XML
@@ -69,9 +70,9 @@ class ExperimentExportService {
         int end = this.numberRecordsPerPage + 1  //A trick to know if there are more records
         boolean hasMoreExperiments = false //This is used for paging, if there are more experiments than the threshold, add next link and return true
 
-        List<Long> experimentIds = Result.executeQuery("select distinct experiment.id from Experiment experiment where experiment.readyForExtraction=:ready order by experiment.id asc", [ready: ReadyForExtraction.Ready, offset: offset, max: end])
+        List<Long> experimentIds = (List<Long>)Result.executeQuery("select distinct experiment.id from Experiment experiment where experiment.readyForExtraction=:ready order by experiment.id asc", [ready: ReadyForExtraction.Ready, offset: offset, max: end])
 
-        final int numberOfExperiments  = experimentIds.size()
+        final int numberOfExperiments = experimentIds.size()
         if (numberOfExperiments > this.numberRecordsPerPage) {
             hasMoreExperiments = true
             experimentIds = experimentIds.subList(0, this.numberRecordsPerPage)
@@ -116,7 +117,7 @@ class ExperimentExportService {
 
         attributes.put("experimentId", experiment.id?.toString())
         attributes.put('experimentName', experiment.experimentName)
-        attributes.put('status', experiment.experimentStatus)
+        attributes.put('status', experiment.experimentStatus.toString())
         attributes.put('readyForExtraction', experiment.readyForExtraction.toString())
 
         if (experiment.holdUntilDate) {   //convert date to XML date
@@ -289,7 +290,11 @@ class ExperimentExportService {
         //link to edit this experiment. You can only change the ready_for_extraction status
         final String experimentHref = grailsLinkGenerator.link(mapping: 'experiment', absolute: true, params: [id: experiment.id]).toString()
         markupBuilder.link(rel: 'edit', title: 'Use link to edit Experiment', type: "${this.mediaTypeDTO.experimentMediaType}", href: experimentHref)
+
+        final Set<ExternalReference> externalReferences = experiment.externalReferences
+        ProjectExportService.generateExternalReferencesLink(markupBuilder, externalReferences as List<ExternalReference>, this.grailsLinkGenerator, this.mediaTypeDTO)
     }
+
 }
 
 
