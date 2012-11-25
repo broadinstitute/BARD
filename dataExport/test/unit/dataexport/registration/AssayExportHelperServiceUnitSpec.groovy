@@ -9,6 +9,7 @@ import org.codehaus.groovy.grails.web.mapping.LinkGenerator
 import spock.lang.Specification
 import spock.lang.Unroll
 import bard.db.registration.*
+import grails.buildtestdata.TestDataConfigurationHolder
 
 /**
  * Created with IntelliJ IDEA.
@@ -26,6 +27,7 @@ class AssayExportHelperServiceUnitSpec extends Specification {
     AssayExportHelperService assayExportHelperService
 
     void setup() {
+        TestDataConfigurationHolder.reset()
         grailsLinkGenerator = Mock(LinkGenerator.class)
         final MediaTypesDTO mediaTypesDTO = new MediaTypesDTO(resultTypeMediaType: "xml", elementMediaType: "xml", assaysMediaType: "xml", assayMediaType: "xml", assayDocMediaType: "xml")
         this.assayExportHelperService =

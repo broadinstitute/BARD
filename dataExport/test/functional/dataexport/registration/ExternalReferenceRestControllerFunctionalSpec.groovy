@@ -15,6 +15,7 @@ import spock.lang.Unroll
 import javax.servlet.http.HttpServletResponse
 
 import static groovyx.net.http.Method.GET
+import spock.lang.Shared
 
 /**
  * Created with IntelliJ IDEA.
@@ -26,15 +27,15 @@ import static groovyx.net.http.Method.GET
 @Unroll
 class ExternalReferenceRestControllerFunctionalSpec extends Specification {
     RemoteControl remote = new RemoteControl()
-    final String externalReferencesUrl = remote { ctx.grailsApplication.config.grails.serverURL } + "/api/externalReferences"
-    final String externalSystemsUrl = remote { ctx.grailsApplication.config.grails.serverURL } + "/api/externalSystems"
-    final String externalReferenceUrl = remote { ctx.grailsApplication.config.grails.serverURL } + "/api/externalReference"
-    final String externalSystemUrl = remote { ctx.grailsApplication.config.grails.serverURL } + "/api/externalSystem"
+    @Shared final String externalReferencesUrl = remote { ctx.grailsApplication.config.grails.serverURL } + "/api/externalReferences"
+    @Shared final String externalSystemsUrl = remote { ctx.grailsApplication.config.grails.serverURL } + "/api/externalSystems"
+    @Shared final String externalReferenceUrl = remote { ctx.grailsApplication.config.grails.serverURL } + "/api/externalReference"
+    @Shared final String externalSystemUrl = remote { ctx.grailsApplication.config.grails.serverURL } + "/api/externalSystem"
 
-    String externalReferencesAcceptContentType = remote { ctx.grailsApplication.config.bard.data.export.externalreferences.xml }
-    String externalSystemsAcceptContentType = remote { ctx.grailsApplication.config.bard.data.export.externalsystems.xml }
-    String externalReferenceAcceptContentType = remote { ctx.grailsApplication.config.bard.data.export.externalreference.xml }
-    String externalSystemAcceptContentType = remote { ctx.grailsApplication.config.bard.data.export.externalsystem.xml }
+    @Shared String externalReferencesAcceptContentType = remote { ctx.grailsApplication.config.bard.data.export.externalreferences.xml }
+    @Shared String externalSystemsAcceptContentType = remote { ctx.grailsApplication.config.bard.data.export.externalsystems.xml }
+    @Shared String externalReferenceAcceptContentType = remote { ctx.grailsApplication.config.bard.data.export.externalreference.xml }
+    @Shared String externalSystemAcceptContentType = remote { ctx.grailsApplication.config.bard.data.export.externalsystem.xml }
 
     final String apiKeyHeader = remote { ctx.grailsApplication.config.dataexport.externalapplication.apiKey.header }
     final String apiKeyHashed = remote { ctx.grailsApplication.config.dataexport.externalapplication.apiKey.hashed }
