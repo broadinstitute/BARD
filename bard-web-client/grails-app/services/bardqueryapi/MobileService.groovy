@@ -11,6 +11,7 @@ class MobileService {
 
     Boolean detect(request) {
 
+
         if (SpringSecurityUtils.ifAnyGranted('ROLE_MOBILE')) {
             return true
         }
