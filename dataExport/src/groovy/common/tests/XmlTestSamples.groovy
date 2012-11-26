@@ -579,13 +579,15 @@ class XmlTestSamples {
                                         </bardexport>
                                         '''
     static String BARD_DATA_EXPORT = '''
-<bardexport>
-  <link rel='item' title='The BARD Dictionary' href='http://localhost:8080/dataExport/api/dictionary' type='application/vnd.bard.cap+xml;type=dictionary' />
-  <link rel='item' title='List of assays, ready for extraction' href='http://localhost:8080/dataExport/api/assays' type='application/vnd.bard.cap+xml;type=assays' />
-  <link rel='item' title='List of projects, ready for extraction' href='http://localhost:8080/dataExport/api/projects' type='application/vnd.bard.cap+xml;type=projects' />
-  <link rel='item' title='List of experiments, ready for extraction' type='application/vnd.bard.cap+xml;type=experiments' href='http://localhost:8080/dataExport/api/experiments' />
-</bardexport>
-    '''
+        <bardexport>
+          <link rel='item' title='The BARD Dictionary' href='http://localhost:8080/dataExport/api/dictionary' type='application/vnd.bard.cap+xml;type=dictionary' />
+          <link rel='item' title='List of assays, ready for extraction' href='http://localhost:8080/dataExport/api/assays' type='application/vnd.bard.cap+xml;type=assays' />
+          <link rel='item' title='List of projects, ready for extraction' href='http://localhost:8080/dataExport/api/projects' type='application/vnd.bard.cap+xml;type=projects' />
+          <link rel='item' title='List of experiments, ready for extraction' type='application/vnd.bard.cap+xml;type=experiments' href='http://localhost:8080/dataExport/api/experiments' />
+          <link rel='item' title='List of external references' type='application/vnd.bard.cap+xml;type=externalReferences' href='http://localhost:8080/dataExport/api/externalReferences' />
+          <link rel='item' title='List of external systems' type='application/vnd.bard.cap+xml;type=externalSystems' href='http://localhost:8080/dataExport/api/externalSystems' />
+        </bardexport> '''
+
     static String UNIT_CONVERSION_FULL = '''
 <unitConversion fromUnit='fromUnit' toUnit='toUnit' multiplier='1.0' offset='1.0'>
   <formula>formula</formula>
