@@ -10,9 +10,9 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Index Page</title>
+    <title>Welcome to BARD</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <r:require modules="jqueryMobile"/>
+    <r:require modules="jqueryMobile, jqueryMobileInit"/>
     <r:layoutResources/>
 </head>
 
@@ -20,7 +20,7 @@
 
 <div data-role="page">
     <div class="right-aligned">
-        <g:render template="/layouts/templates/loginStrip"/>
+        <g:render template="/layouts/templates/mobileLoginStrip"/>
     </div>
 
     <div data-role="header">

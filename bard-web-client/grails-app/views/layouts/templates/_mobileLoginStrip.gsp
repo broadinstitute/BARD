@@ -1,10 +1,6 @@
 <div>
     <sec:ifLoggedIn>
-        <g:form name="logoutForm" controller="bardLogout">
-            Logged in as: <span
-                style="font-weight: bold;"><sec:username/></span>&nbsp;&nbsp;
-            <button type="submit" class="btn btn-small" id="logoutButton">Logout</button>
-        </g:form>
+        <g:link controller="bardLogout" action="index" data-ajax="false">Logout</g:link>
     </sec:ifLoggedIn>
     <sec:ifNotLoggedIn>
         <g:form name="loginForm" controller="bardLogin">

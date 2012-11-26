@@ -1,5 +1,6 @@
 import grails.util.Environment
 import org.apache.log4j.DailyRollingFileAppender
+import org.springframework.security.web.authentication.AbstractAuthenticationTargetUrlRequestHandler
 
 //TODO: Override in dev, qa and prod to point to the current stable realse
 ncgc.server.root.url = "http://bard.nih.gov/api/v7"
@@ -128,6 +129,30 @@ grails {
                     '/bardWebInterface/**': 'JOINED_FILTERS,-exceptionTranslationFilter',
                     '/**': 'JOINED_FILTERS,-basicAuthenticationFilter,-basicExceptionTranslationFilter'
             ]
+
+            /** authenticationEntryPoint */
+            auth.loginFormUrl = '/bardLogin/auth'
+            auth.forceHttps = 'false'
+            auth.ajaxLoginFormUrl = '/bardLogin/authAjax'
+            auth.useForward = false
+
+            /** logoutFilter */
+            logout.afterLogoutUrl = '/bardLogout/afterLogout' // '/'
+            logout.filterProcessesUrl = '/j_spring_security_logout'
+            logout.handlerNames = [] // 'rememberMeServices', 'securityContextLogoutHandler'
+
+            // failureHandler
+            failureHandler.defaultFailureUrl = '/bardLogin/authfail?login_error=1'
+            failureHandler.ajaxAuthFailUrl = '/bardLogin/authfail?ajax=true'
+            failureHandler.exceptionMappings = [:]
+            failureHandler.useForward = false
+
+            // successHandler
+            successHandler.defaultTargetUrl = '/'
+            successHandler.alwaysUseDefault = false
+            successHandler.targetUrlParameter = AbstractAuthenticationTargetUrlRequestHandler.DEFAULT_TARGET_PARAMETER // 'spring-security-redirect'
+            successHandler.useReferer = false
+            successHandler.ajaxSuccessUrl = '/bardLogin/ajaxSuccess'
 
         }
     }
