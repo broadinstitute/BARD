@@ -6,7 +6,8 @@
     <meta name="layout" content="basic"/>
     <link rel="stylesheet" href="${resource(dir: 'css', file: 'card.css')}" type="text/css">
     <link rel="stylesheet" href="${resource(dir: 'css', file: 'bootstrap-plus.css')}" type="text/css">
-    <title>Assay Definition</title>
+    <link rel="stylesheet" href="${resource(dir: 'css', file: 'AddItemWizard.css')}"/>
+    <title>Edit Assay Definition</title>
 </head>
 
 <body>
@@ -18,12 +19,17 @@
 	        	</div>
 	        	<g:if test="${assayInstance?.id}">
 	        	<div class="pull-right">
-	        		<g:link action="show" id="${assayInstance?.id}" class="btn btn-small btn-primary">Save</g:link>
-	        		<g:link action="show" id="${assayInstance?.id}" class="btn btn-small">Cancel</g:link>
+	        		<g:link action="show" id="${assayInstance?.id}" class="btn btn-small btn-primary">Finish Editing</g:link>
+	        		%{--<g:link action="show" id="${assayInstance?.id}" class="btn btn-small">Cancel</g:link>--}%
 	        	</div>
 	        	</g:if>
 	        </div>
 	    </div>
+	</div>
+	
+	<div class="alert">
+ 		<button type="button" class="close" data-dismiss="alert">×</button>
+  		<strong>Tips:</strong> Edits will be saved immediately. You can drag items within cards to other cards, or use menus on individual cards to move items.
 	</div>
 
     <g:if test="${flash.message}">

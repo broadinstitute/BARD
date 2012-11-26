@@ -88,7 +88,6 @@ class AttributeNameMappingBuilder {
                 'ImageXpress Micro ': 'ImageXpress Micro',
                 'single-feature extraction': 'single-feature extraction',
                 'tracer': 'tracer',
-//                'Tecan Safire 2': 'Tecan Safire 2 ',
                 'Amoracia rusticana': 'Amoracia rusticana',
                 'Differientated cultured cells': 'differentiated cultured cell',
                 'IPTG': 'IPTG',
@@ -154,7 +153,26 @@ class AttributeNameMappingBuilder {
                 'ACTIVITY_RGS7': 'Activity type',
                 'ACTIVITY_RGS8': 'Activity type',
                 'ng': 'nanogram',
-                'ng/uL': 'microgram per milliliter']
+                'ng/uL': 'microgram per milliliter',
+                'CID 25203724': 'CID: 25203724',
+                'Optical density (600nm)': 'Optical density',
+                'P. aeruginosa PvdQ': 'Pseudomonas aeruginosa PvdQ',
+                'qPCR': 'quantitative reverse transcription polymerase chain reaction',
+                'DNA sequence': 'DNA construct sequence',
+                'Alphascreen (Perkin Elmer)': 'PerkinElmer Alphascreen',
+                'ImagExpress': 'ImageXpress Micro',
+                'Kinase profile': 'kinase profile',
+                'qFRET': 'fluorescence resonance energy transfer',
+                'cells/uL': 'cells per microliter',
+                'fold of standard (X)': 'FOC',
+                'protein-expression assay': 'protein expression assay',
+                'uL/well': 'well volume',
+                'Microscopy slide': 'microscope slide',
+                'fold selectivity': 'fold selectivity index',
+                'Storem PhosphorImager': 'Storm PhosphorImager',
+                'signal increase corresponding to cell survival': 'signal increase',
+                'percent by volume': 'volume percentage',
+                'cell surface expression': 'cell surface expression assay']
 
         return attributeNameMapping
     }

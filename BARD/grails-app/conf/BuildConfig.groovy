@@ -25,7 +25,8 @@ grails.project.dependency.resolution = {
         grailsPlugins()
         grailsHome()
         mavenRepo "http://bard-repo.broadinstitute.org:8081/artifactory/bard-virtual-repo"
-        grailsRepo("http://bard-repo.broadinstitute.org:8081/artifactory/bard-virtual-repo", "grailsCentral")
+        grailsRepo("http://bard-repo.broadinstitute.org:8081/artifactory/bard-virtual-repo", "bardGrailsCentral")
+        grailsCentral()
     }
     dependencies {
         // build scope
@@ -72,6 +73,8 @@ grails.project.dependency.resolution = {
         compile ":cbipcrowdauthentication:0.3.0"
         compile(":build-test-data:2.0.3")
 		compile(":jquery-validation-ui:1.4")
+		compile ":webflow:2.0.0"
+		compile ":ajaxflow:0.2.4"
         //compile ":console:1.2"
         compile ":clover:3.1.6"
 

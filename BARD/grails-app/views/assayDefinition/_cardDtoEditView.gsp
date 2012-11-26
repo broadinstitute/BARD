@@ -43,6 +43,13 @@
 		</div>
 
 		<div id="dialog_add_item_wizard"></div>
+		
+		<div id="dialog_add_item_wizard_confirm_cancel">
+			<p>
+				<span class="ui-icon ui-icon-alert" style="float:left; margin:0 7px 20px 0;"></span>
+				Are you sure you want to cancel the Add Item Wizard?
+			</p>
+		</div>
 
     </div>
 </div>
