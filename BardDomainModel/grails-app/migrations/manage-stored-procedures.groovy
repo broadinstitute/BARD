@@ -58,29 +58,6 @@ databaseChangeLog = {
 
     }
 
-    changeSet(author: 'ddurkin', id: 'create-load-data-012-package.sql', dbms: 'oracle', context:'standard, load-data',runOnChange: 'true') {
-
-            grailsChange {
-                final List<String> sqlBlocks = []
-                String text = resourceAccessor.getResourceAsStream('sql/create-load-data-012-package.sql').text
-                for (String sqlBlock in text.split(BACKSLASH_ONLY_OPTIONAL_WHITESPACE)) {
-                    sqlBlocks.add(sqlBlock)
-                }
-
-                change {
-                    for (String sqlBlock in sqlBlocks) {
-    //                      println( '**************' )
-    //                      println( sqlBlock )
-    //                      println( '**************' )
-                        sql.call(sqlBlock)
-                    }
-                }
-
-                checkSum(text)
-            }
-
-        }
-
     // NOTE this changeset will always be run
     changeSet(author: "ddurkin", id: "execute manage_ontology.make_trees() stored procedure", context:'standard',dbms: 'oracle', runAlways: 'true') {
         grailsChange {
