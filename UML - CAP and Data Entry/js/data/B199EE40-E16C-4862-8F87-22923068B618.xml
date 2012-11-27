@@ -1,3 +1,3 @@
-tocTab[tocTab.length] = new Array("0.2.2.1", "1", "CAP", "EARoot/EA2/EA2/EA311.htm", "4.png", "", "", "{2FCDA9FD-8C34-4ede-9688-DC6F9D301F77}", "Package");
-tocTab[tocTab.length] = new Array("0.2.2.2", "1", "Data Upload", "EARoot/EA2/EA2/EA312.htm", "4.png", "", "", "{0A642393-FA21-4aaf-9A93-C4D0698F2BB4}", "Package");
-tocTab[tocTab.length] = new Array("0.2.2.3", "1", "Dictionary", "EARoot/EA2/EA2/EA313.htm", "4.png", "", "", "{209DD870-9256-481c-A5D6-24B1CEAAAA7C}", "Package");
+tocTab[tocTab.length] = new Array("0.2.2.1", "1", "CAP", "EARoot/EA2/EA2/EA340.htm", "4.png", "", "", "{2FCDA9FD-8C34-4ede-9688-DC6F9D301F77}", "Package");
+tocTab[tocTab.length] = new Array("0.2.2.2", "1", "Data Upload", "EARoot/EA2/EA2/EA341.htm", "4.png", "", "", "{0A642393-FA21-4aaf-9A93-C4D0698F2BB4}", "Package");
+tocTab[tocTab.length] = new Array("0.2.2.3", "1", "Dictionary", "EARoot/EA2/EA2/EA342.htm", "4.png", "", "", "{209DD870-9256-481c-A5D6-24B1CEAAAA7C}", "Package");
