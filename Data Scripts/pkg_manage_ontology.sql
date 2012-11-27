@@ -514,12 +514,10 @@ as
         then
             for lr_element in cur_element
             LOOP
-                 lv_full_path := lv_full_path || lr_element.label;
-
                  Save_node(lr_element,
                             ln_node_id,
                             ani_parent_node_id,
-                            lv_full_path,
+                            lv_full_path || lr_element.label,
                             avi_tree_name,
                             ln_error,
                             lv_errmsg);
@@ -538,7 +536,7 @@ as
                                     ln_next_parent_node_id,
                                     avi_relationship_type,
                                     avi_tree_name,
-                                    lv_full_path,
+                                    lv_full_path || lr_element.label,
                                     ani_recursion_level +1,
                                     ln_error,
                                     lv_errmsg);

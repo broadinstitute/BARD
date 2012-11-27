@@ -1,10 +1,7 @@
---
--- PACKAGE: LOAD_DATA
---
-
-create or replace package load_data
+PROMPT CREATE OR REPLACE PACKAGE load_data
+CREATE OR REPLACE package load_data
 as
-    type r_cursor is ref cursor;
+    procedure reset_sequence;
 
     procedure Load_reference;
 
@@ -15,16 +12,11 @@ as
     procedure load_assay (av_assay_set in VARCHAR2,
                           ab_w_results  IN BOOLEAN DEFAULT false);
 
-    procedure open_src_cursor
-        (av_modified_by   in  varchar2,
-         av_table_name  in  varchar2,
-         an_identifier  in number,
-         aco_cursor in out r_cursor);
-
 end load_data;
 /
 
-create or replace package body load_data
+PROMPT CREATE OR REPLACE PACKAGE BODY load_data
+CREATE OR REPLACE package body load_data
 as
     --------------------------------------------------------------------
     --  This depends on the source and targe schemas being identical (columns in same order in every table)
@@ -35,514 +27,70 @@ as
     --
     --
     ----------------------------------------------------------------------
-
-
-    procedure open_src_cursor
-        (av_modified_by   in  varchar2,
-         av_table_name  in  varchar2,
-         an_identifier  in number,
-         aco_cursor in out r_cursor)
+    procedure reset_sequence
     as
-        le_no_table_defined exception;
+    cursor cur_sequence
+    is
+    select sequence_name
+    from user_sequences
+    WHERE sequence_name LIKE '%_ID_SEQ';
 
-    BEGIN
-        if av_table_name = 'ASSAY'
-        then
-            open aco_cursor for
-            select ASSAY_ID,
-                ASSAY_STATUS,
-                ASSAY_TITLE,
-                ASSAY_NAME,
-                ASSAY_VERSION,
-                ASSAY_TYPE,
-                DESIGNED_BY,
-                READY_FOR_EXTRACTION,
-                VERSION,
-                DATE_CREATED,
-                LAST_UPDATED,
-                MODIFIED_BY
-            from assay
-            where assay_id = an_identifier
-               or an_identifier is null;
+    lv_max_sql  varchar2(1000);
+    lv_drop_sql varchar2(1000);
+    lv_create_sql   varchar2(1000);
+    lv_grant_sql    varchar2(1000);
+    lv_table_name   varchar2(50);
+    lv_primary_key  varchar2(50);
+    ln_max_id   number;
 
-        elsif av_table_name = 'ASSAY_COUNT'
-        then
-            -- used when an unlimited range is asked for
-            open aco_cursor for
-            select MAX(ASSAY_ID)
-            from assay;
+begin
+    for rec_sequence in cur_sequence
+    loop
+        lv_table_name := replace(rec_sequence.sequence_name, '_ID_SEQ', null);
+        lv_primary_key := replace(rec_sequence.sequence_name, '_SEQ', null);
 
-        elsif av_table_name = 'ASSAY_CONTEXT'
-        then
-            open aco_cursor for
-            select ASSAY_CONTEXT_ID,
-                ASSAY_ID,
-                CONTEXT_NAME,
-                VERSION,
-                DATE_CREATED,
-                LAST_UPDATED,
-                MODIFIED_BY
-            from assay_context
-            where assay_id = an_identifier;
+        lv_max_sql := 'select nvl(max(' || lv_primary_key || '), 0) from ' || lv_table_name;
+        begin
+            --dbms_output.put_line(lv_max_sql);
+            EXECUTE IMMEDIATE lv_max_sql INTO ln_max_ID;
 
-        elsif av_table_name = 'ASSAY_CONTEXT_ITEM'
-        then
-            -- just ensure the group...ID is not nulled!
-            open aco_cursor for
-            select ASSAY_CONTEXT_ITEM_ID, --was MEASURE_CONTEXT_ITEM_ID,-- SJC 8/17/12
-                ASSAY_CONTEXT_ID,
-                DISPLAY_ORDER,   -- was nvl(GROUP_MEASURE_CONTEXT_ITEM_ID, ASSAY_CONTEXT_ITEM_ID) -- sjc 8/17/12
-                ATTRIBUTE_TYPE,
-                ATTRIBUTE_ID,
-                QUALIFIER,
-                VALUE_ID,
-                EXT_VALUE_ID,
-                VALUE_DISPLAY,
-                VALUE_NUM,
-                VALUE_MIN,
-                VALUE_MAX,
-                VERSION,
-                DATE_CREATED,
-                LAST_UPDATED,
-                MODIFIED_BY
-            from assay_context_item
-            where assay_context_id = an_identifier;
-            -- don't need an order any more as there's no circular reference
+            lv_drop_sql := 'drop sequence ' || rec_sequence.sequence_name;
+            --dbms_output.put_line(lv_drop_sql);
+            EXECUTE IMMEDIATE lv_drop_sql;
 
-       elsif av_table_name = 'ASSAY_DOCUMENT'
-        then
-            -- only get the ones that are relevant to the source schema
-            -- expecially the blank CLOBs
-            open aco_cursor for
-            select ASSAY_DOCUMENT_ID,
-                ASSAY_ID,
-                DOCUMENT_NAME,
-                DOCUMENT_TYPE,
-                DOCUMENT_CONTENT,   -- careful!! this is a CLOB
-                VERSION,
-                DATE_CREATED,
-                LAST_UPDATED,
-                MODIFIED_BY
-            from assay_document
-            where assay_id = an_identifier
-              and length(document_content) > 0;
-              --and nvl(modified_by, av_modified_by) = av_modified_by;
+            lv_create_sql := 'create sequence ' || rec_sequence.sequence_name
+                    || ' start with ' || to_char(ln_max_id + 1)
+                    || ' increment by 1 nominvalue maxvalue 2147483648 nocycle ';
+            IF rec_sequence.sequence_name = 'RESULT_ID_SEQ'
+            THEN
+                lv_create_sql := lv_create_sql || 'cache 10000 noorder';
+            ELSE
+                lv_create_sql := lv_create_sql || 'cache 20 noorder';
+            END IF;
+            --dbms_output.put_line(lv_create_sql);
 
-        elsif av_table_name = 'ELEMENT'
-        then
-            -- this has a parantage circular relationship
-            -- so we need to be careful of the order of insertion
-            open aco_cursor for
-            select ELEMENT_ID,
-                ELEMENT_STATUS,
-                LABEL,
-                DESCRIPTION,
-                ABBREVIATION,
-                SYNONYMS,
-                UNIT,
-                BARD_URI,
-                EXTERNAL_URL,
-                READY_FOR_EXTRACTION,
-                VERSION,
-                DATE_CREATED,
-                LAST_UPDATED,
-                MODIFIED_BY
-            from element
-            where (element_id = an_identifier
-               or an_identifier is null)
-            order by nvl(unit, ' '), element_id;
+            lv_grant_sql := 'grant select on ' || rec_sequence.sequence_name
+                    || ' to schatwin';
+            --dbms_output.put_line(lv_grant_sql);
+            EXECUTE IMMEDIATE lv_create_sql;
+            EXECUTE IMMEDIATE lv_grant_sql;
 
-        elsif av_table_name = 'ELEMENT_HIERARCHY'
-        then
-            open aco_cursor for
-            select ELEMENT_HIERARCHY_ID,
-                PARENT_ELEMENT_ID,
-                CHILD_ELEMENT_ID,
-                RELATIONSHIP_TYPE,
-                VERSION,
-                DATE_CREATED,
-                LAST_UPDATED,
-                MODIFIED_BY
-            from element_hierarchy
-            where (parent_element_id = an_identifier
-               or child_element_id = an_identifier);
+        exception
+            when others
+            then
+                null;   --dbms_output.put_line (to_char(sqlcode) || ', ' || sqlerrm);
 
-        elsif av_table_name = 'EXPERIMENT'
-        then
-            open aco_cursor for
-            select EXPERIMENT_ID,
-                EXPERIMENT_NAME,
-                EXPERIMENT_STATUS,
-                READY_FOR_EXTRACTION,
-                ASSAY_ID,
-                --LABORATORY_ID,
-                RUN_DATE_FROM,
-                RUN_DATE_TO,
-                HOLD_UNTIL_DATE,
-                DESCRIPTION,
-                VERSION,
-                DATE_CREATED,
-                LAST_UPDATED,
-                MODIFIED_BY
-            from experiment
-            where assay_id = an_identifier;
-            -- dbms_output.put_line('open curosr for experiment by assay');
+        end;
 
-        elsif av_table_name = 'EXTERNAL_REFERENCE_AID'
-        then
-            open aco_cursor for
-            select ext_assay_ref
-            from external_reference er,
-                 experiment e
-            where er.experiment_id = e.experiment_id
-            and e.assay_id = an_identifier;
+    end loop;
 
-        elsif av_table_name = 'EXTERNAL_REFERENCE'
-        then
-            open aco_cursor for
-            select EXTERNAL_REFERENCE_ID,
-                EXTERNAL_SYSTEM_ID,
-                EXPERIMENT_ID,
-                PROJECT_ID,
-                EXT_ASSAY_REF,
-                VERSION,
-                DATE_CREATED,
-                LAST_UPDATED,
-                MODIFIED_BY
-            from external_reference
-            where experiment_id = an_identifier;
+    if cur_sequence%isopen
+    then
+        close cur_sequence;
+    end if;
 
-        elsif av_table_name = 'EXTERNAL_REFERENCE_project'
-        then
-            open aco_cursor for
-            select EXTERNAL_REFERENCE_ID,
-                EXTERNAL_SYSTEM_ID,
-                EXPERIMENT_ID,
-                PROJECT_ID,
-                EXT_ASSAY_REF,
-                VERSION,
-                DATE_CREATED,
-                LAST_UPDATED,
-                MODIFIED_BY
-            from external_reference
-            where project_id = an_identifier;
+END reset_sequence;
 
-        elsif av_table_name = 'EXTERNAL_SYSTEM'
-        then
-            open aco_cursor for
-            select EXTERNAL_SYSTEM_ID,
-                SYSTEM_NAME,
-                OWNER,
-                SYSTEM_URL,
-                VERSION,
-                DATE_CREATED,
-                LAST_UPDATED,
-                MODIFIED_BY
-            from external_system
-            where external_system_id = an_identifier
-               or an_identifier is null;
-
-        elsif av_table_name = 'MEASURE'
-        then
-            -- this has a parantage circular relationship
-            -- so we need to be careful of the order of insertion
-            -- DBMS_output.put_line('arrived in open src cursor, assay_id='  || to_char(an_identifier));
-            open aco_cursor for
-            select MEASURE_ID,
-                ASSAY_ID,
-                ASSAY_CONTEXT_ID,
-                PARENT_MEASURE_ID,
-                RESULT_TYPE_ID,
-                ENTRY_UNIT,
-                VERSION,
-                DATE_CREATED,
-                LAST_UPDATED,
-                MODIFIED_BY
-            from measure
-            where assay_id = an_identifier
-            connect by prior measure_id = parent_measure_id
-            start with (parent_measure_id is NULL
-                    OR parent_measure_id = measure_id);
-
-        elsif av_table_name = 'ONTOLOGY'
-        then
-            open aco_cursor for
-            select ONTOLOGY_ID,
-                ONTOLOGY_NAME,
-                ABBREVIATION,
-                SYSTEM_URL,
-                VERSION,
-                DATE_CREATED,
-                LAST_UPDATED,
-                MODIFIED_BY
-            from ontology
-            where ontology_id = an_identifier
-               or an_identifier is null;
-
-        elsif av_table_name = 'ONTOLOGY_ITEM'
-        then
-            -- only get the ones that are relevant to the source schema
-            open aco_cursor for
-            select ONTOLOGY_ITEM_ID,
-                ONTOLOGY_ID,
-                ELEMENT_ID,
-                ITEM_REFERENCE,
-                VERSION,
-                DATE_CREATED,
-                LAST_UPDATED,
-                MODIFIED_BY
-            from ontology_item
-            where element_id = an_identifier;
-
-        elsif av_table_name = 'PROJECT'
-        then
-            open aco_cursor for
-            select PROJECT_ID,
-                PROJECT_NAME,
-                GROUP_TYPE,
-                DESCRIPTION,
-                READY_FOR_EXTRACTION,
-                VERSION,
-                DATE_CREATED,
-                LAST_UPDATED,
-                MODIFIED_BY
-            from project
-            where project_id = an_identifier
-               or an_identifier is null;
-
-        elsif av_table_name = 'PROJECT_CONTEXT_ITEM'
-        then
-            -- must sort these to ensure the parents go into the target first
-            -- just ensure the group...ID is not nulled!
-            --dbms_output.put_line ('open_src_cursor, result=' ||to_char(an_identifier));
-            open aco_cursor for
-            select PROJECT_CONTEXT_ITEM_ID,
-                nvl(GROUP_PROJECT_CONTEXT_ID,PROJECT_CONTEXT_ITEM_ID),
-                PROJECT_ID,
-                PROJECT_STEP_ID,
-                DISCRIMINATOR,
-                ATTRIBUTE_ID,
-                VALUE_ID,
-                EXT_VALUE_ID,
-                QUALIFIER,
-                VALUE_DISPLAY,
-                VALUE_NUM,
-                VALUE_MIN,
-                VALUE_MAX,
-                VERSION,
-                DATE_CREATED,
-                LAST_UPDATED,
-                MODIFIED_BY
-            from project_context_item
-            where project_id = an_identifier
-            CONNECT BY PRIOR group_project_context_id = project_context_item_id
-               START WITH (group_project_context_id = project_context_item_id
-                          OR group_project_context_id IS NULL);
-
-        elsif av_table_name = 'PROJECT_CONTEXT_ITEM_step'
-        then
-             open aco_cursor for
-            select PROJECT_CONTEXT_ITEM_ID,
-                nvl(GROUP_PROJECT_CONTEXT_ID,PROJECT_CONTEXT_ITEM_ID),
-                PROJECT_ID,
-                PROJECT_STEP_ID,
-                DISCRIMINATOR,
-                ATTRIBUTE_ID,
-                VALUE_ID,
-                EXT_VALUE_ID,
-                QUALIFIER,
-                VALUE_DISPLAY,
-                VALUE_NUM,
-                VALUE_MIN,
-                VALUE_MAX,
-                VERSION,
-                DATE_CREATED,
-                LAST_UPDATED,
-                MODIFIED_BY
-            from project_context_item
-            where project_step_id = an_identifier
-               START WITH (group_project_context_id = project_context_item_id
-                          OR group_project_context_id IS NULL);
-
-
-        elsif av_table_name = 'PROJECT_DOCUMENT'
-        then
-            -- only get the ones that are relevant to the source schema
-            -- expecially the blank CLOBs
-            open aco_cursor for
-            select PROJECT_DOCUMENT_ID,
-                PROJECT_ID,
-                DOCUMENT_NAME,
-                DOCUMENT_TYPE,
-                DOCUMENT_CONTENT,   -- careful!! this is a CLOB
-                VERSION,
-                DATE_CREATED,
-                LAST_UPDATED,
-                MODIFIED_BY
-            from project_document
-            where project_id = an_identifier
-              and length(document_content) > 0;
-              --and nvl(modified_by, av_modified_by) = av_modified_by;
-
-        elsif av_table_name = 'PROJECT_STEP'
-        then
-            -- beware this one, it may retrieve follows_experiments that you
-            -- have not yet migrated
-            open aco_cursor for
-            select PROJECT_STEP_ID,
-                PROJECT_ID,
-                --STAGE_ID,
-                EXPERIMENT_ID,
-                FOLLOWS_EXPERIMENT_ID,
-                DESCRIPTION,
-                VERSION,
-                DATE_CREATED,
-                LAST_UPDATED,
-                MODIFIED_BY
-            from project_step
-            where experiment_id = an_identifier
-               or nvl(follows_experiment_id, an_identifier) = an_identifier;
-
-        elsif av_table_name = 'RESULT'
-        then
-            open aco_cursor for
-            select RESULT_ID,
-                RESULT_STATUS,
-                READY_FOR_EXTRACTION,
-                VALUE_DISPLAY,
-                VALUE_NUM,
-                VALUE_MIN,
-                VALUE_MAX,
-                QUALIFIER,
-                EXPERIMENT_ID,
-                SUBSTANCE_ID,
-                RESULT_TYPE_ID,
-                VERSION,
-                DATE_CREATED,
-                LAST_UPDATED,
-                MODIFIED_BY
-            from result
-            where experiment_id = an_identifier;
-
-        elsif av_table_name = 'RESULT_HIERARCHY'
-        then
-            -- this gets all hierarchy records for the experiment
-            -- assumes there is a match in result_ids
-            open aco_cursor for
-            select rh.RESULT_ID,
-                rh.PARENT_RESULT_ID,
-                rh.HIERARCHY_TYPE,
-                rh.VERSION,
-                rh.DATE_CREATED,
-                rh.LAST_UPDATED,
-                rh.MODIFIED_BY
-            from result_hierarchy rh
-            where EXISTS (SELECT 1
-                    FROM result r
-                    WHERE r.result_id = rh.result_id
-                    AND r.experiment_id = an_identifier);
-
-        elsif av_table_name = 'RUN_CONTEXT_ITEM'
-        then
-            -- must sort these to ensure the parents go into the target first
-            -- just ensure the group...ID is not nulled!
-            --dbms_output.put_line ('open_src_cursor, result=' ||to_char(an_identifier));
-            open aco_cursor for
-            select RUN_CONTEXT_ITEM_ID,
-                nvl(GROUP_RUN_CONTEXT_ID,RUN_CONTEXT_ITEM_ID),
-                EXPERIMENT_ID,
-                RESULT_ID,
-                DISCRIMINATOR,
-                ATTRIBUTE_ID,
-                VALUE_ID,
-                EXT_VALUE_ID,
-                QUALIFIER,
-                VALUE_NUM,
-                VALUE_MIN,
-                VALUE_MAX,
-                VALUE_DISPLAY,
-                VERSION,
-                DATE_CREATED,
-                LAST_UPDATED,
-                MODIFIED_BY
-            from run_context_item
-            where result_id = an_identifier
-            CONNECT BY PRIOR group_run_context_id = run_context_item_id
-            START WITH (group_run_context_id = run_context_item_id
-                        OR
-                        group_run_context_id IS NULL);
-
-        elsif av_table_name = 'RUN_CONTEXT_ITEM_experiment'
-        then
-             open aco_cursor for
-            select RUN_CONTEXT_ITEM_ID,
-                nvl(GROUP_RUN_CONTEXT_ID,RUN_CONTEXT_ITEM_ID),
-                EXPERIMENT_ID,
-                RESULT_ID,
-                DISCRIMINATOR,
-                ATTRIBUTE_ID,
-                VALUE_ID,
-                EXT_VALUE_ID,
-                QUALIFIER,
-                VALUE_NUM,
-                VALUE_MIN,
-                VALUE_MAX,
-                VALUE_DISPLAY,
-                VERSION,
-                DATE_CREATED,
-                LAST_UPDATED,
-                MODIFIED_BY
-            from run_context_item
-            where experiment_id = an_identifier
-              and result_id is null
-            CONNECT BY PRIOR group_run_context_id = run_context_item_id
-            START WITH (group_run_context_id = run_context_item_id
-                        OR
-                        group_run_context_id IS NULL);
-
-
-        elsif av_table_name = 'TREE_ROOT'
-        then
-            open aco_cursor for
-            select TREE_ROOT_ID,
-                TREE_NAME,
-                ELEMENT_ID,
-                RELATIONSHIP_TYPE,
-                VERSION,
-                DATE_CREATED,
-                LAST_UPDATED,
-                MODIFIED_BY
-            from tree_root
-            where (element_id = an_identifier
-               or an_identifier is null);
-
-        elsif av_table_name = 'UNIT_CONVERSION'
-        then
-            --get all of them - the PK is not helpful here (not an ID)
-            open aco_cursor for
-            select FROM_UNIT,
-                TO_UNIT,
-                MULTIPLIER,
-                OFFSET,
-                FORMULA,
-                VERSION,
-                DATE_CREATED,
-                LAST_UPDATED,
-                MODIFIED_BY
-            from unit_conversion;
-
-        else
-            raise le_no_table_defined;
-        end if;
-
-    exception
-        when le_no_table_defined
-        then
-            raise_application_error(-20002, 'No cursor defined for the table in this source - open_src_cursor');
-        when others
-        then
-            raise_application_error (sqlcode, sqlerrm);
-    end open_src_cursor;
 
     procedure Load_reference
     as
@@ -570,7 +118,7 @@ as
                 DESCRIPTION,
                 ABBREVIATION,
                 SYNONYMS,
-                UNIT,
+                UNIT_ID,
                 BARD_URI,
                 EXTERNAL_URL,
                 READY_FOR_EXTRACTION,
@@ -584,7 +132,7 @@ as
                 DESCRIPTION,
                 ABBREVIATION,
                 SYNONYMS,
-                UNIT,
+                UNIT_ID,      ----------------- WAIT FOR dATA mIG
                 BARD_URI,
                 EXTERNAL_URL,
                 READY_FOR_EXTRACTION,
@@ -592,8 +140,8 @@ as
                 DATE_CREATED,
                 LAST_UPDATED,
                 MODIFIED_BY
-            from data_mig.element
-            order by nvl(unit, ' ');
+            from schatwin.element
+            order by nvl(unit_ID, -1);
 
             insert into element_hierarchy
                 (ELEMENT_HIERARCHY_ID,
@@ -612,7 +160,7 @@ as
                 DATE_CREATED,
                 LAST_UPDATED,
                 MODIFIED_BY
-         from data_mig.element_hierarchy;
+         from schatwin.element_hierarchy;
 
             insert into ontology
                 (ONTOLOGY_ID,
@@ -631,7 +179,7 @@ as
                 DATE_CREATED,
                 LAST_UPDATED,
                 MODIFIED_BY
-            from data_mig.ontology;
+            from schatwin.ontology;
 
             insert into tree_root
                 (TREE_ROOT_ID,
@@ -650,7 +198,7 @@ as
                 DATE_CREATED,
                 LAST_UPDATED,
                 MODIFIED_BY
-            from data_mig.tree_root;
+            from schatwin.tree_root;
 
             insert into external_system
                 (EXTERNAL_SYSTEM_ID,
@@ -669,7 +217,7 @@ as
                 DATE_CREATED,
                 LAST_UPDATED,
                 MODIFIED_BY
-            from data_mig.external_system;
+            from schatwin.external_system;
             commit;
 
             insert into ontology_item
@@ -689,11 +237,12 @@ as
                 DATE_CREATED,
                 LAST_UPDATED,
                 MODIFIED_BY
-            from data_mig.ontology_item;
+            from schatwin.ontology_item;
 
             insert into unit_conversion
-                (FROM_UNIT,
-                TO_UNIT,
+                (UNIT_CONVERSION_ID,
+                FROM_UNIT_ID,
+                TO_UNIT_ID,
                 MULTIPLIER,
                 OFFSET,
                 FORMULA,
@@ -701,8 +250,9 @@ as
                 DATE_CREATED,
                 LAST_UPDATED,
                 MODIFIED_BY)
-            select FROM_UNIT,
-                TO_UNIT,
+            select UNIT_CONVERSION_ID,
+                FROM_UNIT_ID,
+                TO_UNIT_ID,
                 MULTIPLIER,
                 OFFSET,
                 FORMULA,
@@ -710,7 +260,7 @@ as
                 DATE_CREATED,
                 LAST_UPDATED,
                 MODIFIED_BY
-            from data_mig.unit_conversion;
+            from schatwin.unit_conversion;
 
             manage_ontology.make_trees;
             commit;
@@ -726,31 +276,22 @@ as
     as
         cursor cur_assay
         is
-        select assay_id from data_mig.assay
+        select assay_id from schatwin.assay
         where assay_id = an_assay_id
         or an_assay_id is null;
 
         cursor cur_experiment (cn_assay_id number)
         is
         select experiment_id
-        from data_mig.experiment
+        from schatwin.experiment
         where assay_id = cn_assay_id;
 
     begin
-        if an_assay_id is null
-        then
-            begin
-               load_reference;    -- this could be handled on the fly, but we want them all
-            exception
-            when others
-            then
-                null;   --trap the error if reference is already loaded
-            end;
-        end if;
+
+        load_assay (an_assay_id);
 
         for rec_assay in cur_assay
         LOOP
-            load_assay (rec_assay.assay_id);
              -- insert into assay
              -- insert into assay_document
              -- insert into assay_context
@@ -769,6 +310,7 @@ as
                     (RESULT_ID,
                     RESULT_STATUS,
                     READY_FOR_EXTRACTION,
+                    REPLICATE_NO,
                     VALUE_DISPLAY,
                     VALUE_NUM,
                     VALUE_MIN,
@@ -777,6 +319,7 @@ as
                     EXPERIMENT_ID,
                     SUBSTANCE_ID,
                     RESULT_TYPE_ID,
+                    STATS_MODIFIER_ID,
                     VERSION,
                     DATE_CREATED,
                     LAST_UPDATED,
@@ -784,6 +327,7 @@ as
                 select RESULT_ID,
                     RESULT_STATUS,
                     READY_FOR_EXTRACTION,
+                    REPLICATE_NO,
                     VALUE_DISPLAY,
                     VALUE_NUM,
                     VALUE_MIN,
@@ -792,20 +336,19 @@ as
                     EXPERIMENT_ID,
                     SUBSTANCE_ID,
                     RESULT_TYPE_ID,
+                    STATS_MODIFIER_ID,
                     VERSION,
                     DATE_CREATED,
                     LAST_UPDATED,
                     MODIFIED_BY
-                from data_mig.result
+                from schatwin.result
                 where experiment_id = rec_experiment.experiment_id;
 
-                insert into run_context_item
-                    (RUN_CONTEXT_ITEM_ID,
-                    GROUP_RUN_CONTEXT_ID,
-                    EXPERIMENT_ID,
+                insert into rslt_context_item
+                    (RSLT_CONTEXT_ITEM_ID,
+                    DISPLAY_ORDER,
                     RESULT_ID,
                     ATTRIBUTE_ID,
-                    DISCRIMINATOR,
                     VALUE_ID,
                     EXT_VALUE_ID,
                     QUALIFIER,
@@ -817,11 +360,9 @@ as
                     DATE_CREATED,
                     LAST_UPDATED,
                     MODIFIED_BY)
-                select RUN_CONTEXT_ITEM_ID,
-                    GROUP_RUN_CONTEXT_ID,
-                    EXPERIMENT_ID,
+                select RSLT_CONTEXT_ITEM_ID,
+                    DISPLAY_ORDER,
                     RESULT_ID,
-                    DISCRIMINATOR,
                     ATTRIBUTE_ID,
                     VALUE_ID,
                     EXT_VALUE_ID,
@@ -834,31 +375,33 @@ as
                     DATE_CREATED,
                     LAST_UPDATED,
                     MODIFIED_BY
-                from data_mig.run_context_item  rci
-                where experiment_id = rec_experiment.experiment_id
-                   OR EXISTS (SELECT 1
-                      FROM data_mig.result r
+                from schatwin.rslt_context_item  rci
+                where EXISTS (SELECT 1
+                      FROM schatwin.result r
                       WHERE r.result_id = rci.result_id
                         AND r.experiment_id = rec_experiment.experiment_id);
 
+                -- ASSUMES ALL HIERARCHIES EXIST ONLY WITHIN THE CONTEXT OF AN EXPERIMENT
                 insert into result_hierarchy
-                    (RESULT_ID,
+                    (RESULT_HIERARCHY_ID,
+                    RESULT_ID,
                     PARENT_RESULT_ID,
                     HIERARCHY_TYPE,
                     VERSION,
                     DATE_CREATED,
                     LAST_UPDATED,
                     MODIFIED_BY)
-                select RESULT_ID,
+                select RESULT_HIERARCHY_ID,
+                    RESULT_ID,
                     PARENT_RESULT_ID,
                     HIERARCHY_TYPE,
                     VERSION,
                     DATE_CREATED,
                     LAST_UPDATED,
                     MODIFIED_BY
-                from data_mig.result_hierarchy rh
+                from schatwin.result_hierarchy rh
                 where EXISTS (SELECT 1
-                        FROM data_mig.result r
+                        FROM schatwin.result r
                         WHERE r.result_id = rh.result_id
                         AND r.experiment_id = rec_experiment.experiment_id);
 
@@ -876,11 +419,7 @@ as
         -- loop again to get the project experiments
         -- with predecessors
 
---        if an_assay_id is null
---        then
---            reset_sequence;
-----            null;
---        end if;
+        -- reset_sequence;
 
     end load_assay_with_result;
 
@@ -888,14 +427,14 @@ as
     as
         cursor cur_assay
         is
-        select assay_id from data_mig.assay
+        select assay_id from schatwin.assay
         where assay_id = an_assay_id
         or an_assay_id is null;
 
         cursor cur_experiment (cn_assay_id number)
         is
         select experiment_id
-        from data_mig.experiment
+        from schatwin.experiment
         where assay_id = cn_assay_id;
 
     begin
@@ -915,7 +454,7 @@ as
             insert into assay
                 (ASSAY_ID,
                 ASSAY_STATUS,
-                ASSAY_TITLE,
+                ASSAY_SHORT_NAME,
                 ASSAY_NAME,
                 ASSAY_VERSION,
                 ASSAY_TYPE,
@@ -927,7 +466,7 @@ as
                 MODIFIED_BY)
             select ASSAY_ID,
                 ASSAY_STATUS,
-                ASSAY_TITLE,
+                ASSAY_SHORT_NAME,
                 ASSAY_NAME,
                 ASSAY_VERSION,
                 ASSAY_TYPE,
@@ -937,7 +476,7 @@ as
                 DATE_CREATED,
                 LAST_UPDATED,
                 MODIFIED_BY
-            from data_mig.assay
+            from schatwin.assay
             where assay_id = rec_assay.assay_id;
 
             insert into assay_document
@@ -959,13 +498,15 @@ as
                 DATE_CREATED,
                 LAST_UPDATED,
                 MODIFIED_BY
-            from data_mig.assay_document
+            from schatwin.assay_document
             where assay_id = rec_assay.assay_id;
 
             insert into assay_context
                 (ASSAY_CONTEXT_ID,
                 ASSAY_ID,
                 CONTEXT_NAME,
+                CONTEXT_GROUP,
+                DISPLAY_ORDER,
                 VERSION,
                 DATE_CREATED,
                 LAST_UPDATED,
@@ -973,80 +514,43 @@ as
             select ASSAY_CONTEXT_ID,
                 ASSAY_ID,
                 CONTEXT_NAME,
+                CONTEXT_GROUP,
+                DISPLAY_ORDER,
                 VERSION,
                 DATE_CREATED,
                 LAST_UPDATED,
                 MODIFIED_BY
-            from data_mig.assay_context
+            from schatwin.assay_context
             where assay_id = rec_assay.assay_id;
 
             insert into measure
                 (MEASURE_ID,
                 ASSAY_ID,
-                ASSAY_CONTEXT_ID,
                 PARENT_MEASURE_ID,
                 RESULT_TYPE_ID,
-                ENTRY_UNIT,
+                STATS_MODIFIER_ID,
+                ENTRY_UNIT_ID,
                 VERSION,
                 DATE_CREATED,
                 LAST_UPDATED,
                 MODIFIED_BY)
             select MEASURE_ID,
                 ASSAY_ID,
-                ASSAY_CONTEXT_ID,
                 PARENT_MEASURE_ID,
                 RESULT_TYPE_ID,
-                ENTRY_UNIT,
+                STATS_MODIFIER_ID,
+                ENTRY_UNIT_ID,
                 VERSION,
                 DATE_CREATED,
                 LAST_UPDATED,
                 MODIFIED_BY
-            from data_mig.measure
+            from schatwin.measure
             where assay_id = rec_assay.assay_id
             connect by prior measure_id = parent_measure_id
             start with (parent_measure_id is NULL
                     OR parent_measure_id = measure_id);
 
-            insert into assay_context_item
-                (ASSAY_CONTEXT_ITEM_ID,
-                DISPLAY_ORDER,
-                ASSAY_CONTEXT_ID,
-                ATTRIBUTE_TYPE,
-                ATTRIBUTE_ID,
-                QUALIFIER,
-                VALUE_ID,
-                EXT_VALUE_ID,
-                VALUE_DISPLAY,
-                VALUE_NUM,
-                VALUE_MIN,
-                VALUE_MAX,
-                VERSION,
-                DATE_CREATED,
-                LAST_UPDATED,
-                MODIFIED_BY)
-            select ASSAY_CONTEXT_ITEM_ID,
-                DISPLAY_ORDER,
-                ASSAY_CONTEXT_ID,
-                ATTRIBUTE_TYPE,
-                ATTRIBUTE_ID,
-                QUALIFIER,
-                VALUE_ID,
-                EXT_VALUE_ID,
-                VALUE_DISPLAY,
-                VALUE_NUM,
-                VALUE_MIN,
-                VALUE_MAX,
-                VERSION,
-                DATE_CREATED,
-                LAST_UPDATED,
-                MODIFIED_BY
-            from data_mig.assay_context_item
-            where assay_context_id in
-                (select assay_context_id
-                 from assay_context
-                 where assay_id = rec_assay.assay_id);
-
-             for rec_experiment in cur_experiment(rec_assay.assay_id)
+            for rec_experiment in cur_experiment(rec_assay.assay_id)
             loop
                 insert into experiment
                     (EXPERIMENT_ID,
@@ -1054,7 +558,6 @@ as
                     EXPERIMENT_STATUS,
                     READY_FOR_EXTRACTION,
                     ASSAY_ID,
-                    --LABORATORY_ID,
                     RUN_DATE_FROM,
                     RUN_DATE_TO,
                     HOLD_UNTIL_DATE,
@@ -1068,7 +571,6 @@ as
                     EXPERIMENT_STATUS,
                     READY_FOR_EXTRACTION,
                     ASSAY_ID,
-                    --LABORATORY_ID,
                     RUN_DATE_FROM,
                     RUN_DATE_TO,
                     HOLD_UNTIL_DATE,
@@ -1077,8 +579,30 @@ as
                     DATE_CREATED,
                     LAST_UPDATED,
                     MODIFIED_BY
-                from data_mig.experiment
+                from schatwin.experiment
                 where experiment_id = rec_experiment.experiment_id;
+
+                INSERT INTO exprmt_context
+                    (exprmt_context_id,
+                    experiment_id,
+                    context_name,
+                    context_group,
+                    version,
+                    date_created,
+                    last_updated,
+                    modified_by
+                    )
+                SELECT exprmt_context_id,
+                    experiment_id,
+                    context_name,
+                    context_group,
+                    version,
+                    date_created,
+                    last_updated,
+                    modified_by
+                FROM schatwin.exprmt_context
+                WHERE experiment_id = rec_experiment.experiment_id;
+
 
                 insert into project
                 select PROJECT_ID,
@@ -1090,9 +614,9 @@ as
                     DATE_CREATED,
                     LAST_UPDATED,
                     MODIFIED_BY
-                from data_mig.project dp
+                from schatwin.project dp
                 where project_id in
-                    (select project_id from data_mig.project_step
+                    (select project_id from schatwin.project_step
                      where experiment_id = rec_experiment.experiment_id
                      or follows_experiment_id = rec_experiment.experiment_id)
                  and not exists (select 1 from project p
@@ -1101,7 +625,6 @@ as
                 insert into project_step
                     (PROJECT_STEP_ID,
                     PROJECT_ID,
-                    --STAGE_ID,
                     EXPERIMENT_ID,
                     FOLLOWS_EXPERIMENT_ID,
                     DESCRIPTION,
@@ -1119,59 +642,16 @@ as
                     DATE_CREATED,
                     LAST_UPDATED,
                     MODIFIED_BY
-                from data_mig.project_step pe
+                from schatwin.project_step pe
                 where experiment_id = rec_experiment.experiment_id
-                 and follows_experiment_id is null;
+                 and EXISTS (SELECT 1
+                          FROM experiment e
+                          WHERE e.experiment_id (+) = pe.follows_experiment_id)
+                 AND NOT EXISTS (SELECT 1
+                          FROM project_step ps
+                          WHERE ps.project_step_id = pe.project_step_id);
 
-                -- insert project context
-                insert into project_context_item
-                    (PROJECT_CONTEXT_ITEM_ID,
-                    GROUP_PROJECT_CONTEXT_ID,
-                    PROJECT_ID,
-                    PROJECT_STEP_ID,
-                    DISCRIMINATOR,
-                    ATTRIBUTE_ID,
-                    VALUE_ID,
-                    EXT_VALUE_ID,
-                    QUALIFIER,
-                    VALUE_DISPLAY,
-                    VALUE_NUM,
-                    VALUE_MIN,
-                    VALUE_MAX,
-                    VERSION,
-                    DATE_CREATED,
-                    LAST_UPDATED,
-                    MODIFIED_BY
-                    )
-                select PROJECT_CONTEXT_ITEM_ID,
-                    GROUP_PROJECT_CONTEXT_ID,
-                    PROJECT_ID,
-                    PROJECT_STEP_ID,
-                    DISCRIMINATOR,
-                    ATTRIBUTE_ID,
-                    VALUE_ID,
-                    EXT_VALUE_ID,
-                    QUALIFIER,
-                    VALUE_DISPLAY,
-                    VALUE_NUM,
-                    VALUE_MIN,
-                    VALUE_MAX,
-                    VERSION,
-                    DATE_CREATED,
-                    LAST_UPDATED,
-                    MODIFIED_BY
-                from data_mig.project_context_item pci
-                where project_step_id in
-                        (select project_step_id
-                         from project_step e
-                         where e.experiment_id = rec_experiment.experiment_id)
-                  and not exists (select 1
-                        from project_context_item pci2
-                        where pci2.project_context_item_id = pci.project_context_item_id)
-                ORDER by decode (project_context_item_id,
-                                group_project_context_id, 0,
-                                project_context_item_id);
-
+                -- assumes all the external systems have been loaded (see load_reference)
                 insert into external_reference
                     (EXTERNAL_REFERENCE_ID,
                     EXTERNAL_SYSTEM_ID,
@@ -1191,40 +671,97 @@ as
                     DATE_CREATED,
                     LAST_UPDATED,
                     MODIFIED_BY
-                from data_mig.external_reference
+                from schatwin.external_reference
                 where experiment_id = rec_experiment.experiment_id;
 
 
-            end loop;
+            end loop;   -- for each experiment
+
 
             commit; -- for each assay
 
         end loop;
 
-         --- insert into project (for all ones not loaded yet)
-         insert into project
-            (PROJECT_ID,
-            PROJECT_NAME,
-            GROUP_TYPE,
-            DESCRIPTION,
-            READY_FOR_EXTRACTION,
-            VERSION,
-            DATE_CREATED,
-            LAST_UPDATED,
-            MODIFIED_BY)
-        select PROJECT_ID,
-            PROJECT_NAME,
-            GROUP_TYPE,
-            DESCRIPTION,
-            READY_FOR_EXTRACTION,
-            VERSION,
-            DATE_CREATED,
-            LAST_UPDATED,
-            MODIFIED_BY
-        from data_mig.project p
-        where not exists (select 1
-                from project pp
-                where pp.project_id = p.project_id);
+         IF an_assay_id IS NULL
+         then--- insert into project (for all ones not loaded yet)
+              insert into project
+                  (PROJECT_ID,
+                  PROJECT_NAME,
+                  GROUP_TYPE,
+                  DESCRIPTION,
+                  READY_FOR_EXTRACTION,
+                  VERSION,
+                  DATE_CREATED,
+                  LAST_UPDATED,
+                  MODIFIED_BY)
+              select PROJECT_ID,
+                  PROJECT_NAME,
+                  GROUP_TYPE,
+                  DESCRIPTION,
+                  READY_FOR_EXTRACTION,
+                  VERSION,
+                  DATE_CREATED,
+                  LAST_UPDATED,
+                  MODIFIED_BY
+              from schatwin.project p
+              where not exists (select 1
+                      from project pp
+                      where pp.project_id = p.project_id);
+
+              insert into external_reference
+                    (EXTERNAL_REFERENCE_ID,
+                    EXTERNAL_SYSTEM_ID,
+                    EXPERIMENT_ID,
+                    PROJECT_ID,
+                    EXT_ASSAY_REF,
+                    VERSION,
+                    DATE_CREATED,
+                    LAST_UPDATED,
+                    MODIFIED_BY)
+                select EXTERNAL_REFERENCE_ID,
+                    EXTERNAL_SYSTEM_ID,
+                    EXPERIMENT_ID,
+                    PROJECT_ID,
+                    EXT_ASSAY_REF,
+                    VERSION,
+                    DATE_CREATED,
+                    LAST_UPDATED,
+                    MODIFIED_BY
+                from schatwin.external_reference der
+                where project_id in
+                        (select project_id from project)
+                  and not exists (select 1 from external_reference er
+                        where er.external_reference_id = der.external_reference_id);
+
+        END IF;
+
+        INSERT INTO assay_context_measure
+              (assay_context_measure_id,
+              assay_context_id,
+              measure_id,
+              version,
+              date_created,
+              last_updated,
+              modified_by)
+        SELECT
+              assay_context_measure_id,
+              assay_context_id,
+              measure_id,
+              version,
+              date_created,
+              last_updated,
+              modified_by
+        from schatwin.assay_context_measure acm
+        where NOT EXISTS (SELECT 1
+                FROM assay_context_measure acm2
+                WHERE acm2.assay_context_measure_id = acm.assay_context_measure_id)
+          AND EXISTS (SELECT 1
+                FROM assay_context ac
+                WHERE ac.assay_context_id = acm.assay_context_id)
+          AND eXISTS (SELECT 1
+                FROM measure ac
+                WHERE ac.measure_id = acm.measure_id);
+
 
         insert into project_document
             (PROJECT_DOCUMENT_ID,
@@ -1245,7 +782,7 @@ as
             DATE_CREATED,
             LAST_UPDATED,
             MODIFIED_BY
-        from data_mig.project_document dpd
+        from schatwin.project_document dpd
         where EXISTS (SELECT 1
                   FROM project p
                   WHERE p.project_id = dpd.project_id)
@@ -1253,13 +790,38 @@ as
                   FROM project_document pd
                   WHERE pd.project_document_id = dpd.project_document_id);
 
-                -- insert project context
+        -- insert project context
+        insert into project_context
+            (PROJECT_CONTEXT_ID,
+            PROJECT_ID,
+            CONTEXT_NAME,
+            CONTEXT_GROUP,
+            DISPLAY_ORDER,
+            VERSION,
+            DATE_CREATED,
+            LAST_UPDATED,
+            MODIFIED_BY)
+        select PROJECT_CONTEXT_ID,
+            PROJECT_ID,
+            CONTEXT_NAME,
+            CONTEXT_GROUP,
+            DISPLAY_ORDER,
+            VERSION,
+            DATE_CREATED,
+            LAST_UPDATED,
+            MODIFIED_BY
+        from schatwin.project_context dpc
+        where EXISTS (SELECT 1
+                      FROM project p
+                      WHERE p.project_id = dpc.project_id)
+          AND NOT EXISTS (SELECT 1
+                      FROM project_context pc
+                      WHERE pc.project_context_id = dpc.project_context_id);
+
         insert into project_context_item
             (PROJECT_CONTEXT_ITEM_ID,
-            GROUP_PROJECT_CONTEXT_ID,
-            PROJECT_ID,
-            PROJECT_STEP_ID,
-            DISCRIMINATOR,
+            PROJECT_CONTEXT_ID,
+            DISPLAY_ORDER,
             ATTRIBUTE_ID,
             VALUE_ID,
             EXT_VALUE_ID,
@@ -1274,10 +836,8 @@ as
             MODIFIED_BY
             )
         select PROJECT_CONTEXT_ITEM_ID,
-            GROUP_PROJECT_CONTEXT_ID,
-            PROJECT_ID,
-            PROJECT_STEP_ID,
-            DISCRIMINATOR,
+            PROJECT_CONTEXT_ID,
+            DISPLAY_ORDER,
             ATTRIBUTE_ID,
             VALUE_ID,
             EXT_VALUE_ID,
@@ -1290,84 +850,164 @@ as
             DATE_CREATED,
             LAST_UPDATED,
             MODIFIED_BY
-        from data_mig.project_context_item pci
-        where project_id in
-                (select project_id
-                 from project)
-          and not exists (select 1
-                from project_context_item pci2
-                where pci2.project_context_item_id = pci.project_context_item_id)
-        ORDER by decode (project_context_item_id,
-                        group_project_context_id, 0,
-                        project_context_item_id);
+        from schatwin.project_context_item dpci
+        where NOT EXISTS (SELECT 1
+                      FROM project_context_item pci
+                      WHERE pci.project_context_item_id = dpci.project_context_item_id)
+          AND EXISTS (SELECT 1
+                      FROM project_context pc
+                      WHERE pc.project_context_id = dpci.project_context_id);
 
-        insert into external_reference
-            (EXTERNAL_REFERENCE_ID,
-            EXTERNAL_SYSTEM_ID,
-            EXPERIMENT_ID,
-            PROJECT_ID,
-            EXT_ASSAY_REF,
+        insert into assay_context_item
+            (ASSAY_CONTEXT_ITEM_ID,
+            DISPLAY_ORDER,
+            ASSAY_CONTEXT_ID,
+            ATTRIBUTE_TYPE,
+            ATTRIBUTE_ID,
+            QUALIFIER,
+            VALUE_ID,
+            EXT_VALUE_ID,
+            VALUE_DISPLAY,
+            VALUE_NUM,
+            VALUE_MIN,
+            VALUE_MAX,
             VERSION,
             DATE_CREATED,
             LAST_UPDATED,
             MODIFIED_BY)
-        select EXTERNAL_REFERENCE_ID,
-            EXTERNAL_SYSTEM_ID,
-            EXPERIMENT_ID,
-            PROJECT_ID,
-            EXT_ASSAY_REF,
+        select ASSAY_CONTEXT_ITEM_ID,
+            DISPLAY_ORDER,
+            ASSAY_CONTEXT_ID,
+            ATTRIBUTE_TYPE,
+            ATTRIBUTE_ID,
+            QUALIFIER,
+            VALUE_ID,
+            EXT_VALUE_ID,
+            VALUE_DISPLAY,
+            VALUE_NUM,
+            VALUE_MIN,
+            VALUE_MAX,
             VERSION,
             DATE_CREATED,
             LAST_UPDATED,
             MODIFIED_BY
-        from data_mig.external_reference der
-        where project_id in
-                (select project_id from project)
-          and not exists (select 1 from external_reference er
-                where er.external_reference_id = der.external_reference_id);
+        from schatwin.assay_context_item  aci
+        where EXISTS (SELECT 1
+                    from assay_context ac
+                    where ac.assay_context_id = aci.assay_context_id)
+          AND NOT EXISTS (SELECT 1
+                    from assay_context_item aci2
+                    where aci2.assay_context_Item_id = aci.assay_context_item_id);
 
-        -- loop again to get the project experiments
-        -- with predecessors
-        for rec_assay in cur_assay
-        loop
-            for rec_experiment in cur_experiment(rec_assay.assay_id)
-            loop
-                insert into project_step
-                    (PROJECT_STEP_ID,
-                    PROJECT_ID,
-                    --STAGE_ID,
-                    EXPERIMENT_ID,
-                    FOLLOWS_EXPERIMENT_ID,
-                    DESCRIPTION,
-                    VERSION,
-                    DATE_CREATED,
-                    LAST_UPDATED,
-                    MODIFIED_BY)
-                select PROJECT_STEP_ID,
-                    PROJECT_ID,
-                    --STAGE_ID,
-                    EXPERIMENT_ID,
-                    FOLLOWS_EXPERIMENT_ID,
-                    DESCRIPTION,
-                    VERSION,
-                    DATE_CREATED,
-                    LAST_UPDATED,
-                    MODIFIED_BY
-                from data_mig.project_step pe
-                where experiment_id = rec_experiment.experiment_id
-                 and exists (select 1 from experiment e2
-                        where e2.experiment_id = pe.follows_experiment_id);
-            end loop;
 
-        end loop;
+        INSERT INTO exprmt_context_Item
+              (EXPRMT_CONTEXT_ITEM_ID,
+                EXPRMT_CONTEXT_ID,
+                DISPLAY_ORDER,
+                ATTRIBUTE_ID,
+                VALUE_ID,
+                EXT_VALUE_ID,
+                QUALIFIER,
+                VALUE_NUM,
+                VALUE_MIN,
+                VALUE_MAX,
+                VALUE_DISPLAY,
+                VERSION,
+                DATE_CREATED,
+                LAST_UPDATED,
+                MODIFIED_BY)
+          SELECT EXPRMT_CONTEXT_ITEM_ID,
+                EXPRMT_CONTEXT_ID,
+                DISPLAY_ORDER,
+                ATTRIBUTE_ID,
+                VALUE_ID,
+                EXT_VALUE_ID,
+                QUALIFIER,
+                VALUE_NUM,
+                VALUE_MIN,
+                VALUE_MAX,
+                VALUE_DISPLAY,
+                VERSION,
+                DATE_CREATED,
+                LAST_UPDATED,
+                MODIFIED_BY
+          FROM schatwin.exprmt_CONTEXT_ITEM  eci
+          WHERE EXISTS (SELECT 1
+                    from exprmt_context ec
+                    where eci.exprmt_context_id = eci.exprmt_context_id)
+            AND NOT EXISTS (SELECT 1
+                    from exprmt_context_item eci2
+                    where eci2.exprmt_context_Item_id = eci.exprmt_context_item_id);
+
+           -- insert step context
+            insert into step_context
+                (STEP_CONTEXT_ID,
+                PROJECT_STEP_ID,
+                CONTEXT_NAME,
+                CONTEXT_GROUP,
+                DISPLAY_ORDER,
+                VERSION,
+                DATE_CREATED,
+                LAST_UPDATED,
+                MODIFIED_BY)
+            select STEP_CONTEXT_ID,
+                PROJECT_STEP_ID,
+                CONTEXT_NAME,
+                CONTEXT_GROUP,
+                DISPLAY_ORDER,
+                VERSION,
+                DATE_CREATED,
+                LAST_UPDATED,
+                MODIFIED_BY
+            from schatwin.step_context dpc
+            where EXISTS (SELECT 1
+                          FROM project_step p
+                          WHERE p.project_step_id = dpc.project_step_id)
+              AND NOT EXISTS (SELECT 1
+                          FROM step_context pc
+                          WHERE pc.step_context_id = dpc.step_context_id);
+
+            insert into step_context_item
+                (STEP_CONTEXT_ITEM_ID,
+                STEP_CONTEXT_ID,
+                DISPLAY_ORDER,
+                ATTRIBUTE_ID,
+                VALUE_ID,
+                EXT_VALUE_ID,
+                QUALIFIER,
+                VALUE_DISPLAY,
+                VALUE_NUM,
+                VALUE_MIN,
+                VALUE_MAX,
+                VERSION,
+                DATE_CREATED,
+                LAST_UPDATED,
+                MODIFIED_BY)
+            select STEP_CONTEXT_ITEM_ID,
+                STEP_CONTEXT_ID,
+                DISPLAY_ORDER,
+                ATTRIBUTE_ID,
+                VALUE_ID,
+                EXT_VALUE_ID,
+                QUALIFIER,
+                VALUE_DISPLAY,
+                VALUE_NUM,
+                VALUE_MIN,
+                VALUE_MAX,
+                VERSION,
+                DATE_CREATED,
+                LAST_UPDATED,
+                MODIFIED_BY
+            from schatwin.step_context_item dpci
+            where NOT EXISTS (SELECT 1
+                          FROM step_context_item pci
+                          WHERE pci.step_context_item_id = dpci.step_context_item_id)
+              AND EXISTS (SELECT 1
+                          FROM step_context pc
+                          WHERE pc.step_context_id = dpci.step_context_id);
+
 
         commit;
-
-        if an_assay_id is null
-        then
-            --reset_sequence;
-            null;
-        end if;
 
     end load_assay;
 
@@ -1442,38 +1082,9 @@ as
 
         end loop;
 
---        reset_sequence;
+        reset_sequence;
 
      end load_assay;
 end load_data;
 /
 
-GRANT EXECUTE ON LOAD_DATA TO SCHATWIN
-;
-GRANT EXECUTE ON LOAD_DATA TO BARD_DEV
-;
-GRANT EXECUTE ON LOAD_DATA TO SBRUDZ
-;
-GRANT EXECUTE ON LOAD_DATA TO DATA_MIG
-;
-GRANT EXECUTE ON LOAD_DATA TO YCRUZ
-;
-GRANT EXECUTE ON LOAD_DATA TO SOUTHERN
-;
-GRANT EXECUTE ON LOAD_DATA TO BARD_QA
-;
-GRANT EXECUTE ON LOAD_DATA TO BARD_CI
-;
-GRANT EXECUTE ON LOAD_DATA TO DSTONICH
-;
-GRANT EXECUTE ON LOAD_DATA TO BALEXAND
-;
-GRANT EXECUTE ON LOAD_DATA TO DDURKIN
-;
-GRANT EXECUTE ON LOAD_DATA TO JASIEDU
-;
-
-BEGIN
-load_data.load_assay;
-END;
-/
