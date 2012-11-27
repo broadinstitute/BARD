@@ -482,6 +482,10 @@ class MockAssayAdapter extends AssayAdapter {
     String searchHighlight
     String name
 
+    MockAssayAdapter() {
+        super()
+    }
+
     public Collection<Value> getAnnotations() {
         return [];
     }
@@ -491,6 +495,8 @@ class MockProjectAdapter extends ProjectAdapter {
     String name
     Integer numberOfExperiments = 3
 
+    MockProjectAdapter() {
+    }
 
     public Collection<Value> getAnnotations() {
         return [];
@@ -522,7 +528,9 @@ class MockCompoundAdapter extends CompoundAdapter {
     String searchHighlight
     String name
 
-
+    MockCompoundAdapter() {
+        super()
+    }
 
     public Compound getCompound() {
         return new Compound() {
