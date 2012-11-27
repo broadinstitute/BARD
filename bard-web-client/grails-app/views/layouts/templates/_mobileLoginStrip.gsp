@@ -1,6 +1,9 @@
 <div>
     <sec:ifLoggedIn>
-        <g:link controller="bardLogout" action="index" data-ajax="false">Logout</g:link>
+        <div style="text-align: right;">
+            <g:link controller="bardLogout" action="index" data-ajax="false" data-role="button" class="ui-btn-right"
+                    data-inline="true" data-theme="b" data-mini="true">Logout</g:link>
+        </div>
     </sec:ifLoggedIn>
     <sec:ifNotLoggedIn>
         <g:form name="loginForm" controller="bardLogin">
