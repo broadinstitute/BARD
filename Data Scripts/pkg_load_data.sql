@@ -140,7 +140,7 @@ END reset_sequence;
                 DATE_CREATED,
                 LAST_UPDATED,
                 MODIFIED_BY
-            from schatwin.element
+            from data_mig.element
             order by nvl(unit_ID, -1);
 
             insert into element_hierarchy
@@ -160,7 +160,7 @@ END reset_sequence;
                 DATE_CREATED,
                 LAST_UPDATED,
                 MODIFIED_BY
-         from schatwin.element_hierarchy;
+         from data_mig.element_hierarchy;
 
             insert into ontology
                 (ONTOLOGY_ID,
@@ -179,7 +179,7 @@ END reset_sequence;
                 DATE_CREATED,
                 LAST_UPDATED,
                 MODIFIED_BY
-            from schatwin.ontology;
+            from data_mig.ontology;
 
             insert into tree_root
                 (TREE_ROOT_ID,
@@ -198,7 +198,7 @@ END reset_sequence;
                 DATE_CREATED,
                 LAST_UPDATED,
                 MODIFIED_BY
-            from schatwin.tree_root;
+            from data_mig.tree_root;
 
             insert into external_system
                 (EXTERNAL_SYSTEM_ID,
@@ -217,7 +217,7 @@ END reset_sequence;
                 DATE_CREATED,
                 LAST_UPDATED,
                 MODIFIED_BY
-            from schatwin.external_system;
+            from data_mig.external_system;
             commit;
 
             insert into ontology_item
@@ -237,7 +237,7 @@ END reset_sequence;
                 DATE_CREATED,
                 LAST_UPDATED,
                 MODIFIED_BY
-            from schatwin.ontology_item;
+            from data_mig.ontology_item;
 
             insert into unit_conversion
                 (UNIT_CONVERSION_ID,
@@ -260,7 +260,7 @@ END reset_sequence;
                 DATE_CREATED,
                 LAST_UPDATED,
                 MODIFIED_BY
-            from schatwin.unit_conversion;
+            from data_mig.unit_conversion;
 
             manage_ontology.make_trees;
             commit;
@@ -276,14 +276,14 @@ END reset_sequence;
     as
         cursor cur_assay
         is
-        select assay_id from schatwin.assay
+        select assay_id from data_mig.assay
         where assay_id = an_assay_id
         or an_assay_id is null;
 
         cursor cur_experiment (cn_assay_id number)
         is
         select experiment_id
-        from schatwin.experiment
+        from data_mig.experiment
         where assay_id = cn_assay_id;
 
     begin
@@ -341,7 +341,7 @@ END reset_sequence;
                     DATE_CREATED,
                     LAST_UPDATED,
                     MODIFIED_BY
-                from schatwin.result
+                from data_mig.result
                 where experiment_id = rec_experiment.experiment_id;
 
                 insert into rslt_context_item
@@ -375,9 +375,9 @@ END reset_sequence;
                     DATE_CREATED,
                     LAST_UPDATED,
                     MODIFIED_BY
-                from schatwin.rslt_context_item  rci
+                from data_mig.rslt_context_item  rci
                 where EXISTS (SELECT 1
-                      FROM schatwin.result r
+                      FROM data_mig.result r
                       WHERE r.result_id = rci.result_id
                         AND r.experiment_id = rec_experiment.experiment_id);
 
@@ -399,9 +399,9 @@ END reset_sequence;
                     DATE_CREATED,
                     LAST_UPDATED,
                     MODIFIED_BY
-                from schatwin.result_hierarchy rh
+                from data_mig.result_hierarchy rh
                 where EXISTS (SELECT 1
-                        FROM schatwin.result r
+                        FROM data_mig.result r
                         WHERE r.result_id = rh.result_id
                         AND r.experiment_id = rec_experiment.experiment_id);
 
@@ -427,14 +427,14 @@ END reset_sequence;
     as
         cursor cur_assay
         is
-        select assay_id from schatwin.assay
+        select assay_id from data_mig.assay
         where assay_id = an_assay_id
         or an_assay_id is null;
 
         cursor cur_experiment (cn_assay_id number)
         is
         select experiment_id
-        from schatwin.experiment
+        from data_mig.experiment
         where assay_id = cn_assay_id;
 
     begin
@@ -476,7 +476,7 @@ END reset_sequence;
                 DATE_CREATED,
                 LAST_UPDATED,
                 MODIFIED_BY
-            from schatwin.assay
+            from data_mig.assay
             where assay_id = rec_assay.assay_id;
 
             insert into assay_document
@@ -498,7 +498,7 @@ END reset_sequence;
                 DATE_CREATED,
                 LAST_UPDATED,
                 MODIFIED_BY
-            from schatwin.assay_document
+            from data_mig.assay_document
             where assay_id = rec_assay.assay_id;
 
             insert into assay_context
@@ -520,7 +520,7 @@ END reset_sequence;
                 DATE_CREATED,
                 LAST_UPDATED,
                 MODIFIED_BY
-            from schatwin.assay_context
+            from data_mig.assay_context
             where assay_id = rec_assay.assay_id;
 
             insert into measure
@@ -544,7 +544,7 @@ END reset_sequence;
                 DATE_CREATED,
                 LAST_UPDATED,
                 MODIFIED_BY
-            from schatwin.measure
+            from data_mig.measure
             where assay_id = rec_assay.assay_id
             connect by prior measure_id = parent_measure_id
             start with (parent_measure_id is NULL
@@ -579,7 +579,7 @@ END reset_sequence;
                     DATE_CREATED,
                     LAST_UPDATED,
                     MODIFIED_BY
-                from schatwin.experiment
+                from data_mig.experiment
                 where experiment_id = rec_experiment.experiment_id;
 
                 INSERT INTO exprmt_context
@@ -600,7 +600,7 @@ END reset_sequence;
                     date_created,
                     last_updated,
                     modified_by
-                FROM schatwin.exprmt_context
+                FROM data_mig.exprmt_context
                 WHERE experiment_id = rec_experiment.experiment_id;
 
 
@@ -614,9 +614,9 @@ END reset_sequence;
                     DATE_CREATED,
                     LAST_UPDATED,
                     MODIFIED_BY
-                from schatwin.project dp
+                from data_mig.project dp
                 where project_id in
-                    (select project_id from schatwin.project_step
+                    (select project_id from data_mig.project_step
                      where experiment_id = rec_experiment.experiment_id
                      or follows_experiment_id = rec_experiment.experiment_id)
                  and not exists (select 1 from project p
@@ -642,7 +642,7 @@ END reset_sequence;
                     DATE_CREATED,
                     LAST_UPDATED,
                     MODIFIED_BY
-                from schatwin.project_step pe
+                from data_mig.project_step pe
                 where experiment_id = rec_experiment.experiment_id
                  and EXISTS (SELECT 1
                           FROM experiment e
@@ -671,7 +671,7 @@ END reset_sequence;
                     DATE_CREATED,
                     LAST_UPDATED,
                     MODIFIED_BY
-                from schatwin.external_reference
+                from data_mig.external_reference
                 where experiment_id = rec_experiment.experiment_id;
 
 
@@ -703,7 +703,7 @@ END reset_sequence;
                   DATE_CREATED,
                   LAST_UPDATED,
                   MODIFIED_BY
-              from schatwin.project p
+              from data_mig.project p
               where not exists (select 1
                       from project pp
                       where pp.project_id = p.project_id);
@@ -727,7 +727,7 @@ END reset_sequence;
                     DATE_CREATED,
                     LAST_UPDATED,
                     MODIFIED_BY
-                from schatwin.external_reference der
+                from data_mig.external_reference der
                 where project_id in
                         (select project_id from project)
                   and not exists (select 1 from external_reference er
@@ -751,7 +751,7 @@ END reset_sequence;
               date_created,
               last_updated,
               modified_by
-        from schatwin.assay_context_measure acm
+        from data_mig.assay_context_measure acm
         where NOT EXISTS (SELECT 1
                 FROM assay_context_measure acm2
                 WHERE acm2.assay_context_measure_id = acm.assay_context_measure_id)
@@ -782,7 +782,7 @@ END reset_sequence;
             DATE_CREATED,
             LAST_UPDATED,
             MODIFIED_BY
-        from schatwin.project_document dpd
+        from data_mig.project_document dpd
         where EXISTS (SELECT 1
                   FROM project p
                   WHERE p.project_id = dpd.project_id)
@@ -810,7 +810,7 @@ END reset_sequence;
             DATE_CREATED,
             LAST_UPDATED,
             MODIFIED_BY
-        from schatwin.project_context dpc
+        from data_mig.project_context dpc
         where EXISTS (SELECT 1
                       FROM project p
                       WHERE p.project_id = dpc.project_id)
@@ -850,7 +850,7 @@ END reset_sequence;
             DATE_CREATED,
             LAST_UPDATED,
             MODIFIED_BY
-        from schatwin.project_context_item dpci
+        from data_mig.project_context_item dpci
         where NOT EXISTS (SELECT 1
                       FROM project_context_item pci
                       WHERE pci.project_context_item_id = dpci.project_context_item_id)
@@ -891,7 +891,7 @@ END reset_sequence;
             DATE_CREATED,
             LAST_UPDATED,
             MODIFIED_BY
-        from schatwin.assay_context_item  aci
+        from data_mig.assay_context_item  aci
         where EXISTS (SELECT 1
                     from assay_context ac
                     where ac.assay_context_id = aci.assay_context_id)
@@ -931,7 +931,7 @@ END reset_sequence;
                 DATE_CREATED,
                 LAST_UPDATED,
                 MODIFIED_BY
-          FROM schatwin.exprmt_CONTEXT_ITEM  eci
+          FROM data_mig.exprmt_CONTEXT_ITEM  eci
           WHERE EXISTS (SELECT 1
                     from exprmt_context ec
                     where eci.exprmt_context_id = eci.exprmt_context_id)
@@ -959,7 +959,7 @@ END reset_sequence;
                 DATE_CREATED,
                 LAST_UPDATED,
                 MODIFIED_BY
-            from schatwin.step_context dpc
+            from data_mig.step_context dpc
             where EXISTS (SELECT 1
                           FROM project_step p
                           WHERE p.project_step_id = dpc.project_step_id)
@@ -998,7 +998,7 @@ END reset_sequence;
                 DATE_CREATED,
                 LAST_UPDATED,
                 MODIFIED_BY
-            from schatwin.step_context_item dpci
+            from data_mig.step_context_item dpci
             where NOT EXISTS (SELECT 1
                           FROM step_context_item pci
                           WHERE pci.step_context_item_id = dpci.step_context_item_id)
