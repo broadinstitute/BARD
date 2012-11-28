@@ -1,7 +1,7 @@
 package webtests.pages
 
 import grails.plugin.remotecontrol.RemoteControl
-import bard.core.StructureSearchParams
+import bard.core.rest.spring.util.StructureSearchParams
 
 class StructureSearchPage extends ScaffoldPage {
 

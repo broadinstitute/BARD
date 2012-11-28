@@ -1,4 +1,4 @@
-<%@ page import="bard.core.StructureSearchParams" %>
+<%@ page import="bard.core.rest.spring.util.StructureSearchParams" %>
 
 <r:require module="structureSearch"/>
 

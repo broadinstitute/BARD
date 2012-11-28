@@ -217,7 +217,7 @@ class QueryServiceHelperUnitSpec extends Specification {
 
         where:
         label               | projects                               | expectedProjectsAdapters
-        "Single Project"    | [new Project("c1")]                    | [new ProjectAdapter(new Project("c1"))]
+        "Single ProjectSearchResult"    | [new Project("c1")]                    | [new ProjectAdapter(new Project("c1"))]
         "Multiple Projects" | [new Project("c1"), new Project("c2")] | [new ProjectAdapter(new Project("c1")), new ProjectAdapter(new Project("c2"))]
         "No Projects"       | []                                     | []
 

@@ -16,10 +16,12 @@ public class SearchParams extends ServiceParams {
     }
 
     public SearchParams (String query) {
+        this();
         this.query = query;
     }
     
     public SearchParams(String query, List<String[]> filters) {
+        this(query);
         this.query = query;
         this.filters = filters;
     }

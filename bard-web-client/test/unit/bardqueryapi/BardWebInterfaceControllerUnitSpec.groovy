@@ -20,6 +20,8 @@ import spock.lang.Unroll
 import javax.servlet.http.HttpServletResponse
 
 import bard.core.*
+import bard.core.rest.spring.compounds.PromiscuityScore
+import bard.core.rest.spring.compounds.Scaffold
 
 /**
  * See the API for {@link grails.test.mixin.support.GrailsUnitTestMixin} for usage instructions
@@ -714,9 +716,9 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
         assert response.status == statusCode
         where:
         label                     | pid    | name   | projectAdapter                                                         | expectedProjectView             | statusCode
-        "Return a Project"        | 485349 | "Test" | [projectAdapter: buildProjectAdapter(485349, "Test"), experiments: []] | "/bardWebInterface/showProject" | 200
-        "Project PID is null"     | null   | "Test" | [projectAdapter: buildProjectAdapter(485349, "Test"), experiments: []] | null                            | 404
-        "Project Adapter is null" | null   | "Test" | null                                                                   | null                            | 404
+        "Return a ProjectSearchResult"        | 485349 | "Test" | [projectAdapter: buildProjectAdapter(485349, "Test"), experiments: []] | "/bardWebInterface/showProject" | 200
+        "ProjectSearchResult PID is null"     | null   | "Test" | [projectAdapter: buildProjectAdapter(485349, "Test"), experiments: []] | null                            | 404
+        "ProjectSearchResult Adapter is null" | null   | "Test" | null                                                                   | null                            | 404
     }
 
 

@@ -662,9 +662,9 @@ class MolecularSpreadSheetServiceIntegrationSpec extends IntegrationSpec {
 //
 //        List<Long> cartProjectIdList = new ArrayList<Long>()
 //        cartProjectIdList.add(new Long(274))
-//        final Collection<Project> projects = restProjectService.get(cartProjectIdList)
+//        final Collection<ProjectSearchResult> projects = restProjectService.get(cartProjectIdList)
 //        List<Experiment> allExperiments = []
-//        for (Project project : projects) {
+//        for (ProjectSearchResult project : projects) {
 //            final ServiceIterator<Assay> serviceIterator = restProjectService.iterator(project, Assay.class)
 //            Collection<Assay> assays = serviceIterator.collect()
 //            for (Assay assay : assays) {

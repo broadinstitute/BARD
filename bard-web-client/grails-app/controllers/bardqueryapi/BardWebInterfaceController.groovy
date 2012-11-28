@@ -1,7 +1,7 @@
 package bardqueryapi
 
-import bard.core.PromiscuityScore
-import bard.core.StructureSearchParams
+import bard.core.rest.spring.compounds.PromiscuityScore
+import bard.core.rest.spring.util.StructureSearchParams
 import bard.core.Value
 import bard.core.adapter.AssayAdapter
 import bard.core.adapter.CompoundAdapter
@@ -207,7 +207,7 @@ class BardWebInterfaceController {
         }
     }
     /**
-     * Given a list of Project ids, invoke this action
+     * Given a list of ProjectSearchResult ids, invoke this action
      */
     def searchProjectsByIDs(SearchCommand searchCommand) {
 
@@ -240,7 +240,7 @@ class BardWebInterfaceController {
             catch (Exception exp) {
                 log.error(exp)
                 return response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR.intValue(),
-                        "Project search has encountered an error:\n${exp.message}")
+                        "ProjectSearchResult search has encountered an error:\n${exp.message}")
             }
         } else {
             flash.message = 'Search String is required'
@@ -345,7 +345,7 @@ class BardWebInterfaceController {
                         searchString: params.searchString])
             }
             else {
-                final String message = "Could not find Project Id ${projectId}"
+                final String message = "Could not find ProjectSearchResult Id ${projectId}"
                 flash.message = message
                 return response.sendError(HttpServletResponse.SC_NOT_FOUND,
                         message)
@@ -355,7 +355,7 @@ class BardWebInterfaceController {
         catch (Exception exp) {
             log.error(exp)
             return response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR.intValue(),
-                    "Search For Project Id ${projectId}:\n${exp.message}")
+                    "Search For ProjectSearchResult Id ${projectId}:\n${exp.message}")
         }
     }
 
@@ -525,10 +525,10 @@ class SearchHelper {
             catch (Exception exp) {
                 log.error("Error performing project search", exp)
                 return response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR,
-                        "Project search has encountered an error:\n${exp.message}")
+                        "ProjectSearchResult search has encountered an error:\n${exp.message}")
             }
         } else {
-            log.error("Search String required for Project searches");
+            log.error("Search String required for ProjectSearchResult searches");
             return response.sendError(HttpServletResponse.SC_BAD_REQUEST,
                     "Search String required")
         }

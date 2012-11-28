@@ -5,6 +5,7 @@ import bard.core.StringValue;
 import bard.core.interfaces.EntityNamedSources;
 import bard.core.interfaces.EntityService;
 import bard.core.interfaces.SearchResult;
+import bard.core.rest.spring.util.FilterParams;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
@@ -33,7 +34,6 @@ public abstract class RESTAbstractEntityService<E extends Entity>
     static final Logger log = Logger.getLogger(RESTAbstractEntityService.class);
 
     protected final String baseURL;
-
     //this is thread safe so we can re-use it
     protected final ObjectMapper mapper = new ObjectMapper();
 

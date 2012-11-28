@@ -6,6 +6,7 @@ import spock.lang.Shared
 import spock.lang.Specification
 import spock.lang.Unroll
 import bard.core.*
+import bard.core.rest.spring.util.FilterParams
 
 /**
  * Created with IntelliJ IDEA.
@@ -39,10 +40,10 @@ class RESTAbstractEntityServiceUnitSpec extends Specification {
     @Shared String ASSAY_SEARCH_RESULTS = JSONNodeTestHelper.ASSAY_SEARCH_RESULTS
     @Shared String COMPOUND_SEARCH_RESULTS = JSONNodeTestHelper.COMPOUND_SEARCH_RESULTS
     @Shared String SUGGEST_PAIR = JSONNodeTestHelper.SUGGEST_PAIR
-    @Shared RESTCompoundService restCompoundService = new RESTCompoundService("http://bard.nih.gov/api/v7")
-    @Shared RESTProjectService restProjectService = new RESTProjectService("http://bard.nih.gov/api/v7")
-    @Shared RESTAssayService restAssayService = new RESTAssayService("http://bard.nih.gov/api/v7")
-    @Shared RESTExperimentService restExperimentService = new RESTExperimentService("http://bard.nih.gov/api/v7")
+    @Shared RESTCompoundService restCompoundService = new RESTCompoundService("base")
+    @Shared RESTProjectService restProjectService = new RESTProjectService("base")
+    @Shared RESTAssayService restAssayService = new RESTAssayService("base")
+    @Shared RESTExperimentService restExperimentService = new RESTExperimentService("base")
     @Shared RESTSubstanceService restSubstanceService = new RESTSubstanceService("base")
     @Shared String ETAG_FACET = JSONNodeTestHelper.ETAG_FACET
 
@@ -120,7 +121,7 @@ class RESTAbstractEntityServiceUnitSpec extends Specification {
         assert project
         where:
         label              | jsonNode
-        "Project Resource" | mapper.readTree(PROJECT_SEARCH_RESULTS)
+        "ProjectSearchResult Resource" | mapper.readTree(PROJECT_SEARCH_RESULTS)
     }
 
     void "test handleDocsNode Compounds #label"() {
@@ -187,7 +188,7 @@ class RESTAbstractEntityServiceUnitSpec extends Specification {
         when:
         String query = restProjectService.buildSuggestQuery(constructSuggestParams())
         then:
-        assert query == "http://bard.nih.gov/api/v7/search/projects/suggest?q=dna&top=10"
+        assert query == "base/search/projects/suggest?q=dna&top=10"
 
 
     }
@@ -254,7 +255,7 @@ class RESTAbstractEntityServiceUnitSpec extends Specification {
         when:
         final String tags = restProjectService.buildQueryForCollectionOfETags(2, 2)
         then:
-        assert tags == "http://bard.nih.gov/api/v7/projects/etag?skip=2&top=2&expand=true"
+        assert tags == "base/projects/etag?skip=2&top=2&expand=true"
     }
 
     void "test addSingleEntity Projects #label"() {
@@ -266,8 +267,8 @@ class RESTAbstractEntityServiceUnitSpec extends Specification {
         assert projects.size() == numberOfEntities
         where:
         label                           | jsonNode                                         | numberOfEntities
-        "Project Resource"              | mapper.readTree(PROJECT_EXPANDED_SEARCH_RESULTS) | 1
-        "Project Resource, null entity" | mapper.readTree(PROJECT_EXPANDED_SEARCH_RESULTS) | 1
+        "ProjectSearchResult Resource"              | mapper.readTree(PROJECT_EXPANDED_SEARCH_RESULTS) | 1
+        "ProjectSearchResult Resource, null entity" | mapper.readTree(PROJECT_EXPANDED_SEARCH_RESULTS) | 1
         "Null Json Node"                | null                                             | 0
 
     }
@@ -439,8 +440,8 @@ class RESTAbstractEntityServiceUnitSpec extends Specification {
         assert query == expectedQuery
         where:
         label                               | params                       | expectedQuery
-        "With Search Params and Filters"    | constructParamsWithFilters() | "http://bard.nih.gov/api/v7/search/compounds/?q=dna+repair&filter=fq(num_expt:6),"
-        "With Search Params and No Filters" | constructParams()            | "http://bard.nih.gov/api/v7/search/compounds/?q=dna+repair,"
+        "With Search Params and Filters"    | constructParamsWithFilters() | "base/search/compounds/?q=dna+repair&filter=fq(num_expt:6),"
+        "With Search Params and No Filters" | constructParams()            | "base/search/compounds/?q=dna+repair,"
         "With  null"                        | null                         | null
     }
 

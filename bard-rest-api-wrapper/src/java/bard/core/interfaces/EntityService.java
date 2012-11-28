@@ -1,9 +1,9 @@
 package bard.core.interfaces;
 
 import bard.core.*;
+import bard.core.rest.spring.util.FilterParams;
 
 import java.io.Serializable;
-import java.security.Principal;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -20,6 +20,8 @@ public interface EntityService<E extends Entity> extends Serializable {
     final String FILTER = "&filter=";
 
     final int MAXIMUM_NUMBER_OF_COMPOUNDS = 500;
+    final int MAXIMUM_NUMBER_OF_EXPERIMENTS = 1000;
+    final String ANNOTATIONS= "/annotations";
 
     //relative path to the experiment resource
     final String EXPERIMENTS_RESOURCE = "/experiments";

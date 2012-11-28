@@ -32,7 +32,7 @@ grails.project.dependency.resolution = {
         compile 'com.fasterxml.jackson.core:jackson-annotations:2.0.0'
         compile 'com.fasterxml.jackson.core:jackson-core:2.0.0'
         compile 'com.fasterxml.jackson.core:jackson-databind:2.0.0'
-        compile 'com.thoughtworks.xstream:xstream:1.4.2'
+        //compile 'com.thoughtworks.xstream:xstream:1.4.2'
 
 
         // specify dependencies here under either 'build', 'compile', 'runtime', 'test' or 'provided' scopes eg.

@@ -44,8 +44,8 @@ class RESTProjectServiceUnitSpec extends Specification {
         assert resultProject.getId() == 179
         where:
         label                 | node                          | project
-        "Project is not null" | mapper.readTree(PROJECT_NODE) | new Project()
-        "Project is null"     | mapper.readTree(PROJECT_NODE) | null
+        "ProjectSearchResult is not null" | mapper.readTree(PROJECT_NODE) | new Project()
+        "ProjectSearchResult is null"     | mapper.readTree(PROJECT_NODE) | null
     }
 
     void "getEntity #label"() {
@@ -57,8 +57,8 @@ class RESTProjectServiceUnitSpec extends Specification {
         assert resultProject.getId() == 17
         where:
         label                 | node                                             | project
-        "Project is not null" | mapper.readTree(PROJECT_EXPANDED_SEARCH_RESULTS) | new Project()
-        "Project is null"     | mapper.readTree(PROJECT_EXPANDED_SEARCH_RESULTS) | null
+        "ProjectSearchResult is not null" | mapper.readTree(PROJECT_EXPANDED_SEARCH_RESULTS) | new Project()
+        "ProjectSearchResult is null"     | mapper.readTree(PROJECT_EXPANDED_SEARCH_RESULTS) | null
     }
 
     void "addProjectIdNode #label"() {

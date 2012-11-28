@@ -20,15 +20,6 @@ class SpreadSheetActivityUnitSpec extends Specification {
     void tearDown() {
         // Tear down logic here
     }
-    /**
-     * {@link SpreadSheetActivity#interpretHillCurveValue}
-     */
 
-    void "test interpret Hill Curve Value with null HillCurveValue"() {
-        when:
-        final SpreadSheetActivity spreadSheetActivity = new SpreadSheetActivity()
-        then:
-        assertNotNull spreadSheetActivity
-    }
 
 }

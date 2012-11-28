@@ -24,10 +24,10 @@ class CombinedRestServiceUnitSpec extends Specification {
 
     void setup() {
         RESTSubstanceService restSubstanceService = new RESTSubstanceService("base")
-        RESTCompoundService restCompoundService = new RESTCompoundService("http://bard.nih.gov/api/v7")
-        RESTProjectService restProjectService = new RESTProjectService("http://bard.nih.gov/api/v7")
-        RESTAssayService restAssayService = new RESTAssayService("http://bard.nih.gov/api/v7")
-        RESTExperimentService restExperimentService = new RESTExperimentService("http://bard.nih.gov/api/v7")
+        RESTCompoundService restCompoundService = new RESTCompoundService("base")
+        RESTProjectService restProjectService = new RESTProjectService("base")
+        RESTAssayService restAssayService = new RESTAssayService("base")
+        RESTExperimentService restExperimentService = new RESTExperimentService("base")
 
         this.service.restCompoundService = restCompoundService
         this.service.restAssayService = restAssayService

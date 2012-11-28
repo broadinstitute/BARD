@@ -302,9 +302,9 @@ class MolSpreadSheetDataBuilderIntegrationSpec extends IntegrationSpec {
 //    void "test indirect accumulation of expts2"() {
 //
 //        given: "That we casn retrieve the expts for project 274"
-//        final Project project = queryServiceWrapper.restProjectService.get(new Long(274))
+//        final ProjectSearchResult project = queryServiceWrapper.restProjectService.get(new Long(274))
 //        List<Experiment> allExperiments = []
-//        //for (Project project : projects) {
+//        //for (ProjectSearchResult project : projects) {
 //        final ServiceIterator<Assay> serviceIterator = queryServiceWrapper.restProjectService.iterator(project, Assay)
 //        Collection<Assay> assays = serviceIterator.collect()
 //        for (Assay assay : assays) {

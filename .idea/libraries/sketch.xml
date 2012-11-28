@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="sketch">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/bard-web-client/web-app/marvin/sjars/sketch/bracketsm.jar!/" />
+      <root url="jar://$PROJECT_DIR$/bard-web-client/web-app/marvin/sjars/sketch/linesm.jar!/" />
+      <root url="jar://$PROJECT_DIR$/bard-web-client/web-app/marvin/sjars/sketch/boxsm.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

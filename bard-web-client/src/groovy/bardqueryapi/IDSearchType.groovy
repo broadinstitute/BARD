@@ -20,7 +20,7 @@ enum IDSearchType {
     /**
      *
      */
-    PID('Project IDs');
+    PID('ProjectSearchResult IDs');
 
     private final String label;
     private IDSearchType(String label){

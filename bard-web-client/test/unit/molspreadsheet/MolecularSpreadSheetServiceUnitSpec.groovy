@@ -2,6 +2,7 @@ package molspreadsheet
 
 import bard.core.adapter.CompoundAdapter
 import bard.core.interfaces.SearchResult
+import bard.core.rest.spring.RestCombinedService
 import bardqueryapi.BardWebInterfaceControllerUnitSpec
 import bardqueryapi.IQueryService
 import com.metasieve.shoppingcart.ShoppingCartService
@@ -28,7 +29,7 @@ import bard.core.rest.*
 class MolecularSpreadSheetServiceUnitSpec extends Specification {
 
     QueryCartService queryCartService
-    CombinedRestService combinedRestService
+    RestCombinedService restCombinedService
     ShoppingCartService shoppingCartService
     IQueryService queryService
     RESTExperimentService restExperimentService
@@ -50,7 +51,7 @@ class MolecularSpreadSheetServiceUnitSpec extends Specification {
         this.queryCartService = Mock(QueryCartService)
         this.shoppingCartService = Mock(ShoppingCartService)
         this.queryService = Mock(IQueryService)
-        this.combinedRestService=Mock(CombinedRestService)
+        this.combinedRestService = Mock(CombinedRestService)
         service.restAssayService = restAssayService
         service.restCompoundService = restCompoundService
         service.restExperimentService = restExperimentService
@@ -85,25 +86,26 @@ class MolecularSpreadSheetServiceUnitSpec extends Specification {
         MolSpreadSheetCell molSpreadSheetCell2 = new MolSpreadSheetCell("2.1", MolSpreadSheetCellType.numeric)
         molSpreadSheetCell2.spreadSheetActivityStorage = new SpreadSheetActivityStorage()
         molSpreadSheetData.mssData = [:]
-        molSpreadSheetData.mssData.put("1_0", molSpreadSheetCell0 )
-        molSpreadSheetData.mssData.put("1_1", molSpreadSheetCell1 )
-        molSpreadSheetData.mssData.put("1_3", molSpreadSheetCell1 )
-        molSpreadSheetData.mssData.put("1_4", molSpreadSheetCell1 )
-        molSpreadSheetData.mssData.put("1_5",molSpreadSheetCell2 )
-        molSpreadSheetData.rowPointer[0L]=0
-        molSpreadSheetData.rowPointer[1L]=1
-        LinkedHashMap<String, Object> dataForExporting = service.prepareForExport ( molSpreadSheetData )
+        molSpreadSheetData.mssData.put("1_0", molSpreadSheetCell0)
+        molSpreadSheetData.mssData.put("1_1", molSpreadSheetCell1)
+        molSpreadSheetData.mssData.put("1_3", molSpreadSheetCell1)
+        molSpreadSheetData.mssData.put("1_4", molSpreadSheetCell1)
+        molSpreadSheetData.mssData.put("1_5", molSpreadSheetCell2)
+        molSpreadSheetData.rowPointer[0L] = 0
+        molSpreadSheetData.rowPointer[1L] = 1
+        LinkedHashMap<String, Object> dataForExporting = service.prepareForExport(molSpreadSheetData)
 
         then:
-        assertNotNull  dataForExporting
-        assertNotNull  dataForExporting."labels"
-        assert  (dataForExporting["labels"]).size()==6
-        assertNotNull  dataForExporting."fields"
-        assert  (dataForExporting["fields"]).size()==5
-        assertNotNull  dataForExporting."data"
-        assert  (dataForExporting["data"]).size()==2
+        assertNotNull dataForExporting
+        assertNotNull dataForExporting."labels"
+        assert (dataForExporting["labels"]).size() == 6
+        assertNotNull dataForExporting."fields"
+        assert (dataForExporting["fields"]).size() == 5
+        assertNotNull dataForExporting."data"
+        assert (dataForExporting["data"]).size() == 2
 
     }
+
     void "test prepareForExport degenerate"() {
         given:
         MolSpreadSheetData molSpreadSheetData = new MolSpreadSheetData()
@@ -113,24 +115,24 @@ class MolecularSpreadSheetServiceUnitSpec extends Specification {
         molSpreadSheetData.mssHeaders << ['b']
         molSpreadSheetData.mssHeaders << ['c']
         molSpreadSheetData.mssData = [:]
-        molSpreadSheetData.rowPointer[0L]=0
-        LinkedHashMap<String, Object> dataForExporting = service.prepareForExport ( molSpreadSheetData )
+        molSpreadSheetData.rowPointer[0L] = 0
+        LinkedHashMap<String, Object> dataForExporting = service.prepareForExport(molSpreadSheetData)
 
         then:
-        assertNotNull  dataForExporting
-        assertNotNull  dataForExporting."labels"
-        assert  (dataForExporting["labels"]).size()==3
-        assertNotNull  dataForExporting."fields"
-        assert  (dataForExporting["fields"]).size()==2
-        assertNotNull  dataForExporting."data"
-        assert  (dataForExporting["data"]).size()==1
+        assertNotNull dataForExporting
+        assertNotNull dataForExporting."labels"
+        assert (dataForExporting["labels"]).size() == 3
+        assertNotNull dataForExporting."fields"
+        assert (dataForExporting["fields"]).size() == 2
+        assertNotNull dataForExporting."data"
+        assert (dataForExporting["data"]).size() == 1
 
     }
 
 
 
 
-    void "test findActivitiesForCompounds #label"(){
+    void "test findActivitiesForCompounds #label"() {
         given:
         Experiment experiment = new Experiment()
         Object compoundETag = null

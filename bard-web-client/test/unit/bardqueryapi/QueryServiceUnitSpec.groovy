@@ -11,6 +11,8 @@ import spock.lang.Specification
 import spock.lang.Unroll
 import bard.core.*
 import bard.core.rest.*
+import bard.core.rest.spring.compounds.PromiscuityScore
+import bard.core.rest.spring.util.StructureSearchParams
 
 /**
  * See the API for {@link grails.test.mixin.support.GrailsUnitTestMixin} for usage instructions
@@ -112,7 +114,7 @@ class QueryServiceUnitSpec extends Specification {
 
         when: "Client enters a project ID and the showProject method is called"
         Map foundProjectAdapterMap = service.showProject(projectId)
-        then: "The Project document is displayed"
+        then: "The ProjectSearchResult document is displayed"
 //        restProjectService >> { restProjectService }
         restProjectService.get(_) >> {project}
         combinedRestService.searchResultByProject(_, _) >> {experimentSearchResult}
@@ -130,8 +132,8 @@ class QueryServiceUnitSpec extends Specification {
 
         where:
         label                      | projectId | project
-        "Return a Project Adapter" | 872       | project1
-        "Unknown Project"          | 872       | null
+        "Return a ProjectSearchResult Adapter" | 872       | project1
+        "Unknown ProjectSearchResult"          | 872       | null
         "Null projectId"           | null      | null
     }
     /**
@@ -228,15 +230,15 @@ class QueryServiceUnitSpec extends Specification {
         assert responseMap.projectAdapters.size() == expectedNumberOfHits
         where:
         label                   | projectIds                     | project              | expectedNumberOfCalls | expectedNumberOfHits | projectAdapters
-        "Multiple Project Ids"  | [new Long(872), new Long(111)] | [project1, project2] | 1                     | 2                    | [new ProjectAdapter(project1), new ProjectAdapter(project2)]
-        "Unknown Project Id"    | [new Long(802)]                | null                 | 1                     | 0                    | null
-        "Single Project Id"     | [new Long(872)]                | [project1]           | 1                     | 1                    | [new ProjectAdapter(project2)]
-        "Empty Project Id list" | []                             | null                 | 0                     | 0                    | null
+        "Multiple ProjectSearchResult Ids"  | [new Long(872), new Long(111)] | [project1, project2] | 1                     | 2                    | [new ProjectAdapter(project1), new ProjectAdapter(project2)]
+        "Unknown ProjectSearchResult Id"    | [new Long(802)]                | null                 | 1                     | 0                    | null
+        "Single ProjectSearchResult Id"     | [new Long(872)]                | [project1]           | 1                     | 1                    | [new ProjectAdapter(project2)]
+        "Empty ProjectSearchResult Id list" | []                             | null                 | 0                     | 0                    | null
 
     }
 
     /**
-     * {@link QueryService#structureSearch(String, StructureSearchParams.Type)}
+     * {@link QueryService#structureSearch(String, bard.core.rest.spring.util.StructureSearchParams.Type)}
      *
      */
     void "test Structure Search No Filters #label"() {

@@ -1,6 +1,6 @@
 package bardqueryapi
 
-import bard.core.StructureSearchParams
+import bard.core.rest.spring.util.StructureSearchParams
 import bard.core.adapter.AssayAdapter
 import bard.core.adapter.CompoundAdapter
 import bard.core.adapter.ProjectAdapter
@@ -80,7 +80,7 @@ class QueryServiceIntegrationSpec extends IntegrationSpec {
         final Integer projectId = 129
         when: "Client enters a project ID and the showProject method is called"
         Map projectAdapterMap = queryService.showProject(projectId)
-        then: "The Project is found"
+        then: "The ProjectSearchResult is found"
         assert projectAdapterMap
         ProjectAdapter projectAdapter = projectAdapterMap.projectAdapter
         assert projectAdapter

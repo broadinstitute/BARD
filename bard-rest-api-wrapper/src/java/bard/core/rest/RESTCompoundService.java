@@ -7,9 +7,10 @@ import bard.core.interfaces.CompoundService;
 import bard.core.interfaces.EntityNamedSources;
 import bard.core.interfaces.MolecularData;
 import bard.core.interfaces.SearchResult;
+import bard.core.rest.spring.compounds.PromiscuityScore;
+import bard.core.rest.spring.util.StructureSearchParams;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ArrayNode;
-import com.thoughtworks.xstream.XStream;
 import org.apache.commons.lang.StringUtils;
 import org.apache.http.Header;
 import org.apache.http.HttpEntity;
@@ -28,57 +29,24 @@ import java.util.Map;
 public class RESTCompoundService extends RESTAbstractEntityService<Compound>
         implements CompoundService {
     //this is thread safe
-    final XStream xstream;
+    //  final XStream xstream;
 
     public RESTCompoundService
             (String baseURL) {
         super(baseURL);
         //initialize xstream
-        this.xstream = new XStream();
-        //step up deserialization. Read XStream docs if you httpGet confused here
-        this.xstream.alias("compound", PromiscuityScore.class);
-        this.xstream.alias("hscaf", Scaffold.class);
-        this.xstream.addImplicitCollection(PromiscuityScore.class, "scaffolds");
+//        this.xstream = new XStream();
+//        //step up deserialization. Read XStream docs if you httpGet confused here
+//        this.xstream.alias("compound", PromiscuityScore.class);
+//        this.xstream.alias("hscaf", Scaffold.class);
+//        this.xstream.addImplicitCollection(PromiscuityScore.class, "scaffolds");
     }
 
     public String getResourceContext() {
         return COMPOUNDS_RESOURCE;
     }
 
-    public SearchResult<Compound> structureSearch
-            (StructureSearchParams params) {
-        return new StructureSearchResult(this, params).build();
-    }
 
-    /**
-     * @param cid -
-     * @return {@link PromiscuityScore}
-     */
-    public PromiscuityScore getPromiscuityScore(Long cid) {
-        final String url = getPromiscuityResource(cid);
-        DefaultHttpClient httpClient = new DefaultHttpClient();
-        InputStream is = null;
-        try {
-            HttpGet get = new HttpGet(url);
-            get.addHeader("Accept", "application/xml");
-
-            HttpResponse response = httpClient.execute(get);
-
-            HttpEntity entity = response.getEntity();
-            if (entity != null
-                    && response.getStatusLine().getStatusCode() == 200) {
-                is = entity.getContent();
-                return (PromiscuityScore) xstream.fromXML(is);
-            }
-        } catch (IOException e) {
-            log.error(e);
-        } finally {
-            closeInputStream(is);
-            httpClient.getConnectionManager().shutdown();
-        }
-        return null;
-
-    }
 
 //    public List<PromiscuityScore> getPromiscuityScores(List<Long> cids) {
 //        DefaultHttpClient httpclient = new DefaultHttpClient();
@@ -107,7 +75,7 @@ public class RESTCompoundService extends RESTAbstractEntityService<Compound>
 //        return results;
 //
 //    }
-
+    //TODO: Redundant since v9
     protected String buildQueryForTestedAssays(final Compound compound,
                                                final boolean activeOnly) {
         StringBuilder url = new StringBuilder();
@@ -156,46 +124,7 @@ public class RESTCompoundService extends RESTAbstractEntityService<Compound>
         }
     }
 
-    public Collection<Value> getSynonyms(Compound compound) {
-        final List<Value> synonyms = new ArrayList<Value>();
-        final String url = getResource(compound.getId() + SYNONYMS);
-        final DataSource ds = getDataSource
-                (EntityNamedSources.PubChemSynonymSource);
-        ds.setURL(url);
-        final JsonNode node = executeGetRequest(url);
-        addSynonyms(synonyms, node, ds);
-        return synonyms;
-    }
 
-    protected List<Compound> search(String resource, long top, long skip) {
-        return search(resource, top, skip, null);
-    }
-
-    static String getParentETag(Map<String, Long> etags) {
-        String mintag = "";
-        Long minval = null;
-        for (Map.Entry<String, Long> me : etags.entrySet()) {
-            if (minval == null || minval > me.getValue()) {
-                mintag = me.getKey();
-                minval = me.getValue();
-            }
-        }
-        return mintag;
-    }
-
-    protected String buildResourceURL(final String resource,
-                                      final long top,
-                                      final long skip) {
-        final StringBuilder stringBuilder =
-                new StringBuilder().
-                        append(resource).
-                        append(TOP).
-                        append(top).
-                        append(AMPERSAND).
-                        append(SKIP).
-                        append(skip);
-        return stringBuilder.toString();
-    }
 
     protected void addETagsToHTTPHeader(HttpGet httpGet, final Map<String, Long> etags) {
         if (etags != null && !etags.isEmpty()) {
@@ -216,43 +145,7 @@ public class RESTCompoundService extends RESTAbstractEntityService<Compound>
         }
     }
 
-    protected List<Compound> search(String resource, long top,
-                                    long skip, Map<String, Long> etags) {
 
-        final List<Compound> results = new ArrayList<Compound>();
-        final DefaultHttpClient httpclient = new DefaultHttpClient();
-
-        try {
-            final String url = buildResourceURL(resource, top, skip);
-            HttpGet httpGet = new HttpGet(url);
-            addETagsToHTTPHeader(httpGet, etags);
-
-
-            HttpResponse response = httpclient.execute(httpGet);
-            extractETagFromResponseHeader(response, skip, etags);
-
-            HttpEntity entity = response.getEntity();
-            if (entity != null) {
-                InputStream is = entity.getContent();
-                try {
-                    ArrayNode node = (ArrayNode) this.mapper.readTree(is);
-                    for (int i = 0; i < node.size(); ++i) {
-                        JsonNode n = node.get(i);
-                        results.add(getEntity(null, n));
-                    }
-                } catch (Exception ex) {
-                    log.error(ex);
-                } finally {
-                    is.close();
-                }
-            }
-        } catch (IOException ex) {
-            log.error(ex);
-        } finally {
-            httpclient.getConnectionManager().shutdown();
-        }
-        return results;
-    }
 
     protected void addCompoundName(final Compound compound, final JsonNode node) {
         final JsonNode n = node.get(NAME);
@@ -263,27 +156,7 @@ public class RESTCompoundService extends RESTAbstractEntityService<Compound>
     }
 
 
-    protected void addSIDs(final Compound compound, final JsonNode node) {
-        final JsonNode n = node.get(SIDS);
-        if (isNotNull(n) && n.isArray()) {
-            final DataSource ds = getDataSource();
-            final ArrayNode nodes = (ArrayNode) n;
-            for (int i = 0; i < nodes.size(); ++i) {
-                long sid = nodes.get(i).asLong();
-                compound.addValue(new LongValue(ds, Compound.PubChemSIDValue, sid));
-            }
-        }
-    }
 
-    protected void addProbe(Compound compound, JsonNode node) {
-        final JsonNode n = node.get(PROBE_ID);
-        if (isNotNull(n)) {
-            DataSource ds = getDataSource();
-            compound.addValue(new StringValue(ds, Compound.ProbeIDValue,
-                    n.asText()));
-
-        }
-    }
 
     protected void addMolecularData(final Compound compound, final JsonNode node) {
         final DataSource ds = getDataSource();
@@ -295,22 +168,6 @@ public class RESTCompoundService extends RESTAbstractEntityService<Compound>
             md.setMolecule(node);
         }
         compound.addValue(new MolecularValue(ds, Compound.MolecularValue, md));
-    }
-
-    protected void addAnnotationsToCompound(Compound compound, JsonNode node) {
-        final DataSource ds = getDataSource(EntityNamedSources.AnnotationSource);
-        final ArrayNode keys = (ArrayNode) node.get(ANNO_KEY);
-        final ArrayNode vals = (ArrayNode) node.get(ANNO_VAL);
-        if (isNotNull(keys) && isNotNull(vals)) {
-            for (int i = 0; i < keys.size(); ++i) {
-                String key = keys.get(i).asText();
-                String val = vals.get(i).asText();
-                if (key.equalsIgnoreCase(COLLECTION) && (val.equalsIgnoreCase(APPROVED_DRUGS) || val.equalsIgnoreCase(FDA_APPROVED))) {
-                    compound.setDrug(true);
-                }
-                compound.addValue(new StringValue(ds, key, val));
-            }
-        }
     }
 
     protected void addCompoundCID(final Compound compound, final JsonNode node) {
@@ -349,6 +206,159 @@ public class RESTCompoundService extends RESTAbstractEntityService<Compound>
                     (ds, Compound.SearchHighlightValue, n.asText()));
         }
     }
+
+  //============ TODO: Methods to change
+  protected List<Compound> search(String resource, long top, long skip) {
+      return search(resource, top, skip, null);
+  }
+    //TODO: Moved
+    public SearchResult<Compound> structureSearch
+    (StructureSearchParams params) {
+        return new StructureSearchResult(this, params).build();
+    }
+
+    static String getParentETag(Map<String, Long> etags) {
+        String mintag = "";
+        Long minval = null;
+        for (Map.Entry<String, Long> me : etags.entrySet()) {
+            if (minval == null || minval > me.getValue()) {
+                mintag = me.getKey();
+                minval = me.getValue();
+            }
+        }
+        return mintag;
+    }
+
+    /**
+     * @param cid -
+     * @return {@link bard.core.rest.spring.compounds.PromiscuityScore}
+     */
+    //TODO: Moved
+    public PromiscuityScore getPromiscuityScore(Long cid) {
+        final String url = getPromiscuityResource(cid);
+        DefaultHttpClient httpClient = new DefaultHttpClient();
+        InputStream is = null;
+        try {
+            HttpGet get = new HttpGet(url);
+            get.addHeader("Accept", "application/xml");
+
+            HttpResponse response = httpClient.execute(get);
+
+            HttpEntity entity = response.getEntity();
+            if (entity != null
+                    && response.getStatusLine().getStatusCode() == 200) {
+                is = entity.getContent();
+                //  return (PromiscuityScore) xstream.fromXML(is);
+            }
+        } catch (IOException e) {
+            log.error(e);
+        } finally {
+            closeInputStream(is);
+            httpClient.getConnectionManager().shutdown();
+        }
+        return null;
+
+    }
+  //TODO: Moved
+  public Collection<Value> getSynonyms(Compound compound) {
+      final List<Value> synonyms = new ArrayList<Value>();
+      final String url = getResource(compound.getId() + SYNONYMS);
+      final DataSource ds = getDataSource
+              (EntityNamedSources.PubChemSynonymSource);
+      ds.setURL(url);
+      final JsonNode node = executeGetRequest(url);
+      addSynonyms(synonyms, node, ds);
+      return synonyms;
+  }
+  //TODO: Moved
+  protected String buildResourceURL(final String resource,
+                                    final long top,
+                                    final long skip) {
+      final StringBuilder stringBuilder =
+              new StringBuilder().
+                      append(resource).
+                      append(TOP).
+                      append(top).
+                      append(AMPERSAND).
+                      append(SKIP).
+                      append(skip);
+      return stringBuilder.toString();
+  }
+
+    protected void addSIDs(final Compound compound, final JsonNode node) {
+        final JsonNode n = node.get(SIDS);
+        if (isNotNull(n) && n.isArray()) {
+            final DataSource ds = getDataSource();
+            final ArrayNode nodes = (ArrayNode) n;
+            for (int i = 0; i < nodes.size(); ++i) {
+                long sid = nodes.get(i).asLong();
+                compound.addValue(new LongValue(ds, Compound.PubChemSIDValue, sid));
+            }
+        }
+    }
+
+    protected void addProbe(Compound compound, JsonNode node) {
+        final JsonNode n = node.get(PROBE_ID);
+        if (isNotNull(n)) {
+            DataSource ds = getDataSource();
+            compound.addValue(new StringValue(ds, Compound.ProbeIDValue,
+                    n.asText()));
+
+        }
+    }
+    protected List<Compound> search(String resource, long top,
+                                    long skip, Map<String, Long> etags) {
+
+        final List<Compound> results = new ArrayList<Compound>();
+        final DefaultHttpClient httpclient = new DefaultHttpClient();
+
+        try {
+            final String url = buildResourceURL(resource, top, skip);
+            HttpGet httpGet = new HttpGet(url);
+            addETagsToHTTPHeader(httpGet, etags);
+
+
+            HttpResponse response = httpclient.execute(httpGet);
+            extractETagFromResponseHeader(response, skip, etags);
+
+            HttpEntity entity = response.getEntity();
+            if (entity != null) {
+                InputStream is = entity.getContent();
+                try {
+                    ArrayNode node = (ArrayNode) this.mapper.readTree(is);
+                    for (int i = 0; i < node.size(); ++i) {
+                        JsonNode n = node.get(i);
+                        results.add(getEntity(null, n));
+                    }
+                } catch (Exception ex) {
+                    log.error(ex);
+                } finally {
+                    is.close();
+                }
+            }
+        } catch (IOException ex) {
+            log.error(ex);
+        } finally {
+            httpclient.getConnectionManager().shutdown();
+        }
+        return results;
+    }
+    protected void addAnnotationsToCompound(Compound compound, JsonNode node) {
+        final DataSource ds = getDataSource(EntityNamedSources.AnnotationSource);
+        final ArrayNode keys = (ArrayNode) node.get(ANNO_KEY);
+        final ArrayNode vals = (ArrayNode) node.get(ANNO_VAL);
+        if (isNotNull(keys) && isNotNull(vals)) {
+            for (int i = 0; i < keys.size(); ++i) {
+                String key = keys.get(i).asText();
+                String val = vals.get(i).asText();
+                if (key.equalsIgnoreCase(COLLECTION) && (val.equalsIgnoreCase(APPROVED_DRUGS) || val.equalsIgnoreCase(FDA_APPROVED))) {
+                    compound.setDrug(true);
+                }
+                compound.addValue(new StringValue(ds, key, val));
+            }
+        }
+    }
+
 
 
     protected Compound getEntity(Compound compound, JsonNode node) {

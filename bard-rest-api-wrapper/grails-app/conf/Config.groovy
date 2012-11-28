@@ -1,5 +1,6 @@
 // configuration for plugin testing - will not be included in the plugin zip
-ncgc.server.root.url = "http://bard.nih.gov/api/v7"
+ncgc.server.root.url = "http://bard.nih.gov/api/v9"
+promiscuity.badapple.url="${ncgc.server.root.url}/plugins/badapple/prom/cid/"
 
 log4j = {
     // Example of changing the log pattern for the default console

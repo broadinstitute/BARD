@@ -1,26 +1,42 @@
 import bardqueryapi.QueryService
 import grails.util.GrailsUtil
 import mockServices.MockQueryService
+import org.springframework.web.client.RestTemplate
+import bard.core.rest.spring.*
 
 /**
  * Spring Configuration of resources
  */
 beans = {
     final String ncgcBaseURL = grailsApplication.config.ncgc.server.root.url
-    restAssayService(bard.core.rest.RESTAssayService, ncgcBaseURL) {}
-    restProjectService(bard.core.rest.RESTProjectService, ncgcBaseURL) {}
-    restExperimentService(bard.core.rest.RESTExperimentService, ncgcBaseURL) {
-        restAssayService = ref('restAssayService')
+    final String badApplePromiscuityUrl = grailsApplication.config.promiscuity.badapple.url
+    restTemplate(RestTemplate) {
     }
-    restCompoundService(bard.core.rest.RESTCompoundService, ncgcBaseURL) {}
-    restSubstanceService(bard.core.rest.RESTSubstanceService, ncgcBaseURL) {}
+    compoundRestService(CompoundRestService) {
+        baseUrl = ncgcBaseURL
+        promiscuityUrl = badApplePromiscuityUrl
+        restTemplate = ref('restTemplate')
+    }
 
-    combinedRestService(bard.core.rest.CombinedRestService) {
-        restSubstanceService = ref('restSubstanceService')
-        restCompoundService = ref('restCompoundService')
-        restExperimentService = ref('restExperimentService')
-        restProjectService = ref('restProjectService')
-        restAssayService = ref('restAssayService')
+    experimentRestService(ExperimentRestService) {
+        baseUrl = ncgcBaseURL
+        restTemplate = ref('restTemplate')
+    }
+    projectRestService(ProjectRestService) {
+        baseUrl = ncgcBaseURL
+        restTemplate = ref('restTemplate')
+    }
+    assayRestService(AssayRestService) {
+        baseUrl = ncgcBaseURL
+        restTemplate = ref('restTemplate')
+    }
+    restCombinedService(RestCombinedService) {
+        baseUrl = ncgcBaseURL
+        restTemplate = ref('restTemplate')
+        experimentRestService = ref('experimentRestService')
+        compoundRestService = ref('compoundRestService')
+        assayRestService = ref('assayRestService')
+        projectRestService = ref('projectRestService')
     }
     switch (GrailsUtil.environment) {
         case "offline":
@@ -31,10 +47,9 @@ beans = {
         default:
             queryService(QueryService) {
                 queryHelperService = ref('queryHelperService')
-                restCompoundService = ref('restCompoundService')
-                restProjectService = ref('restProjectService')
-                combinedRestService = ref('combinedRestService')
-                restAssayService = ref('restAssayService')
+                compoundRestService = ref('compoundRestService')
+                projectRestService = ref('projectRestService')
+                assayRestService = ref('assayRestService')
             }
     }
     crowdAuthenticationProvider(org.broadinstitute.cbip.crowd.CrowdAuthenticationProviderService) {// beans here
