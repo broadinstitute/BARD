@@ -17,7 +17,6 @@ class AssayConstraintIntegrationSpec extends IntegrationSpec {
 
     Assay domainInstance
 
-
     @Before
     void doSetup() {
         domainInstance = Assay.buildWithoutSave()
@@ -49,9 +48,9 @@ class AssayConstraintIntegrationSpec extends IntegrationSpec {
 
     }
 
-    void "test assayTitle constraints #desc assayTitle: "() {
+    void "test assayShortName constraints #desc assayShortName: "() {
 
-        final String field = 'assayTitle'
+        final String field = 'assayShortName'
 
         when: 'a value is set for the field under test'
         domainInstance[(field)] = valueUnderTest
@@ -66,13 +65,13 @@ class AssayConstraintIntegrationSpec extends IntegrationSpec {
         }
 
         where:
-        desc               | valueUnderTest                         | valid | errorCode
-        'null not valid'   | null                                   | false | 'nullable'
-        'blank not valid'  | ''                                     | false | 'blank'
-        'blank not valid'  | '   '                                  | false | 'blank'
+        desc               | valueUnderTest                              | valid | errorCode
+        'null not valid'   | null                                        | false | 'nullable'
+        'blank not valid'  | ''                                          | false | 'blank'
+        'blank not valid'  | '   '                                       | false | 'blank'
 
-        'too long'         | createString(ASSAY_TITLE_MAX_SIZE + 1) | false | 'maxSize.exceeded'
-        'exactly at limit' | createString(ASSAY_TITLE_MAX_SIZE)     | true  | null
+        'too long'         | createString(ASSAY_SHORT_NAME_MAX_SIZE + 1) | false | 'maxSize.exceeded'
+        'exactly at limit' | createString(ASSAY_SHORT_NAME_MAX_SIZE)     | true  | null
     }
 
     void "test assayName constraints #desc assayName: "() {
@@ -207,11 +206,12 @@ class AssayConstraintIntegrationSpec extends IntegrationSpec {
         where:
         desc               | valueUnderTest  | valid | errorCode
         'null valid'       | null            | false | null
-
         'value not inList' | 'Foo'           | false | 'not.inList'
+
         'valid value'      | 'Regular'       | true  | null
         'valid value'      | 'Panel - Array' | true  | null
         'valid value'      | 'Panel - Group' | true  | null
+        'valid value'      | 'Template'      | true  | null
     }
 
     void "test modifiedBy constraints #desc modifiedBy: '#valueUnderTest'"() {

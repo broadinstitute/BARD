@@ -6,17 +6,17 @@ import common.tests.XmlTestSamples
 import grails.plugin.spock.IntegrationSpec
 import groovy.xml.MarkupBuilder
 import org.custommonkey.xmlunit.XMLAssert
+import spock.lang.Unroll
 
 import javax.xml.XMLConstants
 import javax.xml.transform.stream.StreamSource
 import javax.xml.validation.Schema
 import javax.xml.validation.SchemaFactory
 import javax.xml.validation.Validator
-import spock.lang.Unroll
 
 @Unroll
 class AssayExportHelperServiceIntegrationSpec extends IntegrationSpec {
-    static final String BARD_ASSAY_EXPORT_SCHEMA = "test/integration/dataexport/registration/assaySchema.xsd"
+    static final String BARD_ASSAY_EXPORT_SCHEMA = "src/java/assaySchema.xsd"
 
     AssayExportHelperService assayExportHelperService
     Writer writer
@@ -38,7 +38,6 @@ class AssayExportHelperServiceIntegrationSpec extends IntegrationSpec {
         when: "A service call is made to generate measure contexts for that Assay"
         this.assayExportHelperService.generateAssayContexts(this.markupBuilder, assay.assayContexts)
         then: "An XML is generated that conforms to the expected XML"
-        println  this.writer.toString()
         XmlTestAssertions.assertResults(results, this.writer.toString())
         where:
         label                                | assayId             | results
@@ -71,7 +70,6 @@ class AssayExportHelperServiceIntegrationSpec extends IntegrationSpec {
         when: "A service call is made to generate the measures for that Assay"
         this.assayExportHelperService.generateMeasures(this.markupBuilder, assay.measures)
         then: "An XML is generated that conforms to the expected XML"
-        println this.writer.toString()
         XmlTestAssertions.assertResults(results, this.writer.toString())
         where:
         label                         | assayId             | results
@@ -101,7 +99,6 @@ class AssayExportHelperServiceIntegrationSpec extends IntegrationSpec {
         when: "A service call is made to generate the measures for that Assay"
         this.assayExportHelperService.generateAssay(this.markupBuilder, assay)
         then: "An XML is generated that conforms to the expected XML"
-        println(this.writer.toString())
         XMLAssert.assertXpathEvaluatesTo("1", "count(//assayContexts)", this.writer.toString());
         XMLAssert.assertXpathEvaluatesTo("1", "count(//assayContext)", this.writer.toString());
         XMLAssert.assertXpathEvaluatesTo("1", "count(//measures)", this.writer.toString());
@@ -125,7 +122,6 @@ class AssayExportHelperServiceIntegrationSpec extends IntegrationSpec {
         when: "A service call is made to generate a list of assays ready to be extracted"
         this.assayExportHelperService.generateAssays(this.markupBuilder)
         then: "An XML is generated that conforms to the expected XML"
-        println this.writer.toString()
         XmlTestAssertions.assertResultsWithOverrideAttributes(results, this.writer.toString())
         XMLAssert.assertXpathEvaluatesTo("1", "//assays/@count", this.writer.toString());
         XMLAssert.assertXpathEvaluatesTo("related", "//link/@rel", this.writer.toString());

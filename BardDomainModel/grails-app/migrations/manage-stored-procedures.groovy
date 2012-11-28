@@ -56,7 +56,6 @@ databaseChangeLog = {
             checkSum(text)
         }
 
-
     }
 
     // NOTE this changeset will always be run

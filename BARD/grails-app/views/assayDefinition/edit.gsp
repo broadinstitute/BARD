@@ -29,7 +29,7 @@
 	
 	<div class="alert">
  		<button type="button" class="close" data-dismiss="alert">×</button>
-  		<strong>Tips:</strong> Edits are save immediately.You can drag items within cards to other cards. Or use menus on individual cards to move items.
+  		<strong>Tips:</strong> Edits will be saved immediately. You can drag items within cards to other cards, or use menus on individual cards to move items.
 	</div>
 
     <g:if test="${flash.message}">

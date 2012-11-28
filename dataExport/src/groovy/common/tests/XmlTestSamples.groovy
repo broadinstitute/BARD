@@ -16,15 +16,17 @@ package common.tests
 
 
 class XmlTestSamples {
-    //We include a dummy header, just so we can validate, otherwise the XML is not well-formed
-    static final String EXPERIMENTS_LINK_UNIT = '''
-<dummyHeader>
-  <link rel='related' title='Link to Assay' type='assayMediaType' href='null' />
-  <link rel='up' title='List Experiments' type='experimentsMediaType' href='null' />
-  <link rel='related' title='List Related Results' type='resultsMediaType' href='null' />
-  <link rel='edit' title='Use link to edit Experiment' type='experimentMediaType' href='null' />
-</dummyHeader>
-    '''
+    //We include a root, just so we can validate, otherwise the XML is not well-formed
+    static final String EXPERIMENTS_LINK_MINIMAL = '''
+                                                <root>
+                                                  <link rel='related' href='null' type='assayMediaType' />
+                                                  <link rel='up' href='null' type='experimentsMediaType' />
+                                                  <link rel='related' href='null' type='resultsMediaType' />
+                                                  <link rel='edit' href='null' type='experimentMediaType' />
+                                                  <link rel='related' href='null' type='externalReferenceMediaType' />
+                                                  <link rel='related' href='null' type='externalReferenceMediaType' />
+                                                </root>
+                                                '''
 
     static final String RESULT_CONTEXT_ITEM_UNIT = '''
   <resultContextItem resultContextItemId='null' qualifier='%' valueDisplay='20 %' valueNum='2.0' valueMin='1.0' valueMax='3.0'>
@@ -113,50 +115,23 @@ class XmlTestSamples {
     '''
 
     static final String EXPERIMENT_UNIT_ONLY_ATTRIBUTES = '''
-<experiment experimentId='' experimentName='Experiment1' status='Published' readyForExtraction='Pending' holdUntilDate='1969-12-31T19:00:00.000-05:00' runDateFrom='1969-12-31T19:00:00.000-05:00' runDateTo='1969-12-31T19:00:00.000-05:00'>
-  <link rel='related' title='Link to Assay' type='assayMediaType' href='null' />
-  <link rel='up' title='List Experiments' type='experimentsMediaType' href='null' />
-  <link rel='related' title='List Related Results' type='resultsMediaType' href='null' />
-  <link rel='edit' title='Use link to edit Experiment' type='experimentMediaType' href='null' />
+<experiment experimentId='' experimentName='Experiment1' status='Pending' readyForExtraction='Pending' holdUntilDate='1969-12-31T19:00:00.000-05:00' runDateFrom='1969-12-31T19:00:00.000-05:00' runDateTo='1969-12-31T19:00:00.000-05:00'>
+  <link rel='related' href='null' type='assayMediaType' />
+  <link rel='up' href='null' type='experimentsMediaType' />
+  <link rel='related' href='null' type='resultsMediaType' />
+  <link rel='edit' href='null' type='experimentMediaType' />
 </experiment>
     '''
-    static final String EXPERIMENT_UNIT_ATTRIBUTES_AND_ELEMENTS = '''
-<experiment experimentId='' experimentName='Experiment1' status='Published' readyForExtraction='Pending' holdUntilDate='1969-12-31T19:00:00.000-05:00' runDateFrom='1969-12-31T19:00:00.000-05:00' runDateTo='1969-12-31T19:00:00.000-05:00'>
-  <description>Broad</description>
-  <experimentContextItems>
-    <experimentContextItem experimentContextItemId='' qualifier='&lt;' valueDisplay='&lt; 20 uM' valueNum='1.0' valueMin='5.0' valueMax='20.0'>
-      <attribute label='attribute'>
-        <link rel='related' href='null' type='elementMediaType' />
-      </attribute>
-      <valueControlled label='valueControlled'>
-        <link rel='related' href='null' type='elementMediaType' />
-      </valueControlled>
-    </experimentContextItem>
-  </experimentContextItems>
-  <projectSteps>
-    <projectStep>
-      <description>Broad</description>
-      <precedingExperiment id='null'>
-        <link rel='related' href='null' type='experimentMediaType' />
-      </precedingExperiment>
-      <link rel='related' href='null' type='projectMediaType' />
-    </projectStep>
-  </projectSteps>
-  <externalReferences>
-    <externalReference>
-      <externalAssayRef>External Assay Ref</externalAssayRef>
-      <externalSystem name='systemName' owner='owner'>
-        <systemUrl>http://broad.org</systemUrl>
-      </externalSystem>
-      <link rel='related' href='null' type='projectMediaType' />
-    </externalReference>
-  </externalReferences>
-  <link rel='related' title='Link to Assay' type='assayMediaType' href='null' />
-  <link rel='up' title='List Experiments' type='experimentsMediaType' href='null' />
-  <link rel='related' title='List Related Results' type='resultsMediaType' href='null' />
-  <link rel='edit' title='Use link to edit Experiment' type='experimentMediaType' href='null' />
-</experiment>
-'''
+    static final String EXPERIMENT_FULL = '''
+                                            <experiment experimentId='' experimentName='Experiment1' status='Pending' readyForExtraction='Pending' holdUntilDate='1969-12-31T19:00:00.000-05:00' runDateFrom='1969-12-31T19:00:00.000-05:00' runDateTo='1969-12-31T19:00:00.000-05:00'>
+                                              <description>Broad</description>
+                                              <link rel='related' href='null' type='assayMediaType' />
+                                              <link rel='up' href='null' type='experimentsMediaType' />
+                                              <link rel='related' href='null' type='resultsMediaType' />
+                                              <link rel='edit' href='null' type='experimentMediaType' />
+                                              <link rel='related' href='null' type='externalReferenceMediaType' />
+                                            </experiment>
+                                    '''
     static final String EXPERIMENTS_2_RECORDS_UNIT = '''
    <experiments count='2'>
   <link rel='related' type='experimentMediaType' href='null' />
@@ -177,7 +152,7 @@ class XmlTestSamples {
 </experiments>
 '''
 
- static final String PROJECTS = '''
+    static final String PROJECTS = '''
 <projects count='2'>
     <project projectId='1' readyForExtraction='Ready' groupType='Project'>
     <projectName>Scripps special project #1</projectName>
@@ -220,90 +195,253 @@ class XmlTestSamples {
     <link rel='up' href='http://localhost:8080/dataExport/api/projects' type='application/vnd.bard.cap+xml;type=projects' />
     </project>
 '''
+    static final String STEP_CONTEXT_MINIMAL = '''
+                                                <stepContext stepContextId='1' displayOrder='0'>
+                                                  <contextName>contextName</contextName>
+                                                  <contextGroup>contextGroup</contextGroup>
+                                                  <stepContextItems />
+                                                </stepContext>
+                                                '''
+    static final String PROJECT_CONTEXT_MINIMAL = '''
+                                                     <projectContext projectContextId='1' displayOrder='0'>
+                                                        <contextName>contextName</contextName>
+                                                        <contextGroup>contextGroup</contextGroup>
+                                                        <projectContextItems />
+                                                     </projectContext>
+                                                     '''
+    static final String PROJECT_CONTEXT_ITEMS_MINIMAL = '''
+                                            <projectContextItems>
+                                              <projectContextItem projectContextItemId='1' displayOrder='0'>
+                                                <attributeId label='label1'>
+                                                  <link rel='related' href='null' type='elementMediaType' />
+                                                </attributeId>
+                                              </projectContextItem>
+                                            </projectContextItems>
+                                            '''
+    static final String STEP_CONTEXT_ITEM_MINIMAL = '''
+                                                        <stepContextItem stepContextItemId='1' displayOrder='0'>
+                                                        <attributeId label='label2'>
+                                                        <link rel='related' href='null' type='elementMediaType' />
+                                                        </attributeId>
+                                                        </stepContextItem>
+                                                        '''
+    static final String PROJECT_STEP_MINIMAL = '''
+                                                <projectStep projectStepId='1'>
+                                                    <description />
+                                                    <experimentRef label='experimentName'>
+                                                        <link rel='related' href='null' type='experimentMediaType' />
+                                                    </experimentRef>
+                                                </projectStep>
+                                                    '''
+    static final String PROJECT_CONTEXT_ITEM_MINIMAL = '''
+                                                    <projectContextItem projectContextItemId='1' displayOrder='0'>
+                                                      <attributeId label='label3'>
+                                                        <link rel='related' href='null' type='elementMediaType' />
+                                                      </attributeId>
+                                                    </projectContextItem>
+                                                    '''
     static final String PROJECT_WITH_DESCRIPTION = '''
-<project projectId='' readyForExtraction='Ready' groupType='Panel'>
-  <projectName>Project Name2</projectName>
-  <description>Broad</description>
-  <link rel='edit' href='null' type='projectMediaType' />
-  <link rel='up' href='null' type='projectsMediaType' />
-</project>
-'''
-    static final String PROJECT_NO_DESCRIPTION = '''
-<project projectId='' readyForExtraction='Ready' groupType='Project'>
-  <projectName>Project Name1</projectName>
-  <link rel='edit' href='null' type='projectMediaType' />
-  <link rel='up' href='null' type='projectsMediaType' />
-</project>
-'''
+                                                    <project projectId='1' readyForExtraction='Ready' groupType='Panel'>
+                                                      <projectName>Project Name2</projectName>
+                                                      <description>Broad</description>
+                                                      <link rel='edit' href='null' type='projectMediaType' />
+                                                      <link rel='up' href='null' type='projectsMediaType' />
+                                                    </project>
+                                                    '''
+//Note that the 'root' node is only included in this test case for validation purposes
+//Without the 'root' node the XML would not be valid
+    static final String PROJECT_LINKS_WITH_EXTERNAL_REFERENCE = '''
+                                                                <root>
+                                                                    <link rel='edit' href='null' type='projectMediaType' />
+                                                                    <link rel='up' href='null' type='projectsMediaType' />
+                                                                    <link rel='related' type='externalReferenceMediaType' href='null' />
+                                                                    <link rel='related' type='externalReferenceMediaType' href='null' />
+                                                                </root>
+                                                              '''
+//Note that the 'root' node is only included in this test case for validation purposes
+//Without the 'root' node the XML would not be valid
+    static final String PROJECT_LINKS_WITHOUT_EXTERNAL_REFERENCE = '''
+                                                                    <root>
+                                                                        <link rel='edit' href='null' type='projectMediaType' />
+                                                                        <link rel='up' href='null' type='projectsMediaType' />
+                                                                    </root>
+                                                                    '''
+    static final String PROJECT_MINIMAL = '''
+                                            <project projectId='' readyForExtraction='Ready' groupType='Project'>
+                                              <projectName>Project Name1</projectName>
+                                              <link rel='edit' href='null' type='projectMediaType' />
+                                              <link rel='up' href='null' type='projectsMediaType' />
+                                            </project>
+                                          '''
     static final String ASSAY_NO_DESIGNER_UNIT = '''
-<assay readyForExtraction='Ready' assayVersion='2.3' assayType='Regular' status='Pending'>
-  <assayName>Assay Name1</assayName>
-  <link rel='edit' href='null' type='xml' />
-  <link rel='self' href='null' type='xml' />
-  <link rel='up' href='null' type='xml' />
-</assay>
-'''
-    static final String ASSAY_UNIT = '''
-<assay readyForExtraction='Ready' assayVersion='3.3' status='Pending' assayType='Regular'>
-  <assayName>Assay Name2</assayName>
-  <designedBy>Broad</designedBy>
-  <link rel='edit' href='null' type='xml' />
-  <link rel='self' href='null' type='xml' />
-  <link rel='up' href='null' type='xml' />
-</assay>
-'''
-
-    static final String ASSAY_DOCUMENT_SERVER = '''<assayDocument documentType='Protocol'>
-    <documentName>Dose-response biochemical assay of inhibitors of Rho kinase 2 (Rock2)</documentName>
-    <documentContent>Some Document1</documentContent>
-    <link rel='item' href='http://localhost:8080/dataExport/api/assayDocument/1' type='application/vnd.bard.cap+xml;type=assayDoc' />
-    </assayDocument>'''
-    static final String ASSAY_DOCUMENT_WITH_DOCUMENT_NAME_UNIT = '''
-<assayDocument documentType='documentType'>
-  <documentName>documentName</documentName>
-  <documentContent>Content</documentContent>
-  <link rel='item' href='null' type='xml' />
-</assayDocument>
+        <assay assayId='1' readyForExtraction='Pending' assayVersion='assayVersi' assayType='Regular' status='Pending'>
+          <assayShortName>assayShortName</assayShortName>
+          <assayName>assayName</assayName>
+          <link rel='edit' href='null' type='xml' />
+          <link rel='self' href='null' type='xml' />
+          <link rel='up' href='null' type='xml' />
+        </assay> '''
+    static final String EXTERNAL_SYSTEM = '''
+                                            <externalSystem name='systemName'>
+                                            <link rel='self' href='null' type='xml' />
+                                            <link rel='up' href='null' type='xml' />
+                                            </externalSystem>
+                                            '''
+    static final String EXTERNAL_SYSTEMS = ''' <externalSystems count='1'>
+                                                <externalSystem name='systemName'>
+                                                <link rel='self' href='null' type='xml' />
+                                                <link rel='up' href='null' type='xml' />
+                                                </externalSystem>
+                                                </externalSystems>
+                                               '''
+    static final String EXTERNAL_REFERENCES = '''
+<externalReferences count='1'>
+    <externalReference>
+        <externalAssayRef>extAssayRef</externalAssayRef>
+        <link rel='related' href='null' type='xml' />
+        <link rel='self' href='null' type='xml' />
+        <link rel='up' href='null' type='xml' />
+    </externalReference>
+    </externalReferences>
     '''
-    static final String ASSAY_DOCUMENT_NO_DOCUMENT_NAME_UNIT = '''
-<assayDocument documentType='documentType'>
-  <documentContent>Content</documentContent>
-  <link rel='item' href='null' type='xml' />
-</assayDocument>
-'''
+    static final String EXTERNAL_REFERENCE = '''
+    <externalReference>
+        <externalAssayRef>extAssayRef</externalAssayRef>
+        <link rel='related' href='null' type='xml' />
+        <link rel='self' href='null' type='xml' />
+        <link rel='up' href='null' type='xml' />
+    </externalReference>
+    '''
+    static final String ASSAY_WITH_DESIGNER_NAME = '''
+        <assay assayId='1' readyForExtraction='Pending' assayVersion='assayVersi' assayType='Regular' status='Pending'>
+          <assayShortName>assayShortName</assayShortName>
+          <assayName>assayName</assayName>
+          <designedBy>Broad</designedBy>
+          <link rel='edit' href='null' type='xml' />
+          <link rel='self' href='null' type='xml' />
+          <link rel='up' href='null' type='xml' />
+        </assay> '''
+    static final String ASSAY_WITH_DOCUMENT = '''
+         <assay assayId='1' readyForExtraction='Pending' assayVersion='assayVersi' assayType='Regular' status='Pending'>
+          <assayShortName>assayShortName</assayShortName>
+          <assayName>assayName</assayName>
+          <link rel='edit' href='null' type='xml' />
+          <link rel='self' href='null' type='xml' />
+          <link rel='up' href='null' type='xml' />
+          <link rel='item' href='null' type='xml' />
+        </assay> '''
 
-    static final String MEASURE_CONTEXT_ITEM_WITH_ATTRIBUTE_AND_VALUE_UNIT = '''
-<assayContextItem assayContextRef='assayContext' qualifier='&lt;' valueDisplay='Display' valueNum='5.0' valueMin='6.0' valueMax='7.0'>
-  <valueId label='valueLabel'>
-    <link rel='related' href='null' type='xml' />
-  </valueId>
-  <attributeId attributeType='Fixed' label='attributeLabel'>
-    <link rel='related' href='null' type='xml' />
-  </attributeId>
-</assayContextItem>
-'''
+    static final String ASSAY_DOCUMENT_SERVER = '''
+        <assayDocument documentType='Protocol'>
+            <documentName>Dose-response biochemical assay of inhibitors of Rho kinase 2 (Rock2)</documentName>
+            <documentContent>Some Document1</documentContent>
+            <link rel='item' href='http://localhost:8080/dataExport/api/assayDocument/1' type='application/vnd.bard.cap+xml;type=assayDoc' />
+        </assayDocument>'''
 
-    static final String MEASURE_CONTEXT_ITEM_WITH_ATTRIBUTE_UNIT = '''
-<assayContextItem assayContextRef='assayContext' qualifier='&lt;' valueDisplay='Display' valueNum='5.0' valueMin='6.0' valueMax='7.0'>
-  <attributeId attributeType='Fixed' label='attributeLabel'>
-    <link rel='related' href='null' type='xml' />
-  </attributeId>
-</assayContextItem>
-'''
+    static final String MINIMAL_ASSAY_DOCUMENT = '''
+        <assayDocument documentType='Description'>
+            <documentName>documentName</documentName>
+            <link rel='self' href='null' type='xml' />
+            <link rel='related' href='null' type='xml' />
+        </assayDocument>'''
 
-    static final String MEASURE_2_UNIT = '''<measure assayContextRef='label'>
-  <resultTypeRef label='resultType'>
-    <link rel='related' href='null' type='xml' />
-  </resultTypeRef>
-  <entryUnit unit='%' />
-</measure>
-'''
-    static final String MEASURE_1_UNIT = '''<measure assayContextRef='label'/>'''
-    static final String MEASURE_CONTEXT_1_UNIT = '''
-<assayContext>
-  <contextName>TestName1</contextName>
-</assayContext>
-'''
+    static final String ASSAY_DOCUMENT_WITH_CONTENT = '''
+        <assayDocument documentType='Description'>
+            <documentName>documentName</documentName>
+            <documentContent>Content</documentContent>
+            <link rel='self' href='null' type='xml' />
+            <link rel='related' href='null' type='xml' />
+        </assayDocument>'''
+
+    static final String ASSAY_CONTEXT_ITEM_WITH_ATTRIBUTE = '''
+        <assayContextItem assayContextItemId='1' displayOrder='0' qualifier='&lt;' valueDisplay='Display' valueNum='5.0' valueMin='6.0' valueMax='7.0'>
+          <attributeId attributeType='Fixed' label='attributeLabel'>
+            <link rel='related' href='null' type='xml' />
+          </attributeId>
+        </assayContextItem>'''
+
+    static final String ASSAY_CONTEXT_ITEM_WITH_ATTRIBUTE_AND_VALUE = '''
+        <assayContextItem assayContextItemId='1' displayOrder='0' qualifier='&lt;' valueDisplay='Display' valueNum='5.0' valueMin='6.0' valueMax='7.0'>
+          <valueId label='valueLabel'>
+            <link rel='related' href='null' type='xml' />
+          </valueId>
+          <attributeId attributeType='Fixed' label='attributeLabel'>
+            <link rel='related' href='null' type='xml' />
+          </attributeId>
+        </assayContextItem>'''
+
+    static final String MINIMAL_MEASURE = '''
+        <measure measureId='1'>
+          <resultTypeRef label='resultType'>
+            <link rel='related' href='null' type='xml' />
+          </resultTypeRef>
+        </measure>'''
+    static final String MINIMAL_MEASURE_WITH_PARENT_MEASURE_REF = '''
+        <measure measureId='2' parentMeasureRef='1'>
+          <resultTypeRef label='resultType'>
+            <link rel='related' href='null' type='xml' />
+          </resultTypeRef>
+        </measure>'''
+
+    static final String MINIMAL_MEASURE_WITH_STATS_MODIFIER_REF = '''
+        <measure measureId='1'>
+          <resultTypeRef label='resultType'>
+            <link rel='related' href='null' type='xml' />
+          </resultTypeRef>
+          <statsModifierRef label='statsModifier'>
+            <link rel='related' href='null' type='xml' />
+          </statsModifierRef>
+        </measure>'''
+
+    static final String MINIMAL_MEASURE_WITH_ENTRY_UNIT_REF = '''
+        <measure measureId='1'>
+          <resultTypeRef label='resultType'>
+            <link rel='related' href='null' type='xml' />
+          </resultTypeRef>
+          <entryUnitRef label='entryUnit'>
+            <link rel='related' href='null' type='xml' />
+          </entryUnitRef>
+        </measure>'''
+    static final String MINIMAL_MEASURE_WITH_ASSAY_CONTEXT_REFS = '''
+        <measure measureId='1' >
+          <resultTypeRef label='resultType'>
+            <link rel='related' href='null' type='xml' />
+          </resultTypeRef>
+          <assayContextRefs>
+            <assayContextRef>20</assayContextRef>
+          </assayContextRefs>
+        </measure>'''
+
+    static final String MINIMAL_ASSAY_CONTEXT = '''
+        <assayContext assayContextId='1' displayOrder='0'>
+          <contextName>contextName</contextName>
+        </assayContext> '''
+
+    static final String MINIMAL_ASSAY_CONTEXT_WITH_CONTEXT_GROUP = '''
+        <assayContext assayContextId='1' displayOrder='0'>
+          <contextName>contextName</contextName>
+          <contextGroup>contextGroup</contextGroup>
+        </assayContext> '''
+
+    static final String MINIMAL_ASSAY_CONTEXT_WITH_ASSAY_CONTEXT_ITEM = '''
+        <assayContext assayContextId='1' displayOrder='0'>
+          <contextName>contextName</contextName>
+          <assayContextItems>
+            <assayContextItem assayContextItemId='1' displayOrder='0'>
+              <attributeId attributeType='Fixed' label='label1'>
+                <link rel='related' href='null' type='xml' />
+              </attributeId>
+            </assayContextItem>
+          </assayContextItems>
+        </assayContext> '''
+
+    static final String MINIMAL_ASSAY_CONTEXT_WITH_MEASURE_REFS = '''
+        <assayContext assayContextId='1' displayOrder='0'>
+          <contextName>contextName</contextName>
+          <measureRefs>
+            <measureRef>1</measureRef>
+          </measureRefs>
+        </assayContext> '''
 
     static String ASSAY_LINKS = '''
 <links>
@@ -431,21 +569,25 @@ class XmlTestSamples {
 '''
 
     static String BARD_DATA_EXPORT_UNIT = '''
-<bardexport>
-  <link rel='item' title='The BARD Dictionary' href='null' type='dictionaryMediaType' />
-  <link rel='item' title='List of assays, ready for extraction' href='null' type='assaysMediaType' />
-  <link rel='item' title='List of projects, ready for extraction' href='null' type='projectsMediaType' />
-  <link rel='item' title='List of experiments, ready for extraction' type='experimentsMediaType' href='null' />
-</bardexport>
-'''
+                                        <bardexport>
+                                          <link rel='item' title='The BARD Dictionary' href='null' type='dictionaryMediaType' />
+                                          <link rel='item' title='List of assays, ready for extraction' href='null' type='assaysMediaType' />
+                                          <link rel='item' title='List of projects, ready for extraction' href='null' type='projectsMediaType' />
+                                          <link rel='item' title='List of experiments, ready for extraction' type='experimentsMediaType' href='null' />
+                                          <link rel='item' title='List of external references' type='externalReferences' href='null' />
+                                          <link rel='item' title='List of external systems' type='externalSystems' href='null' />
+                                        </bardexport>
+                                        '''
     static String BARD_DATA_EXPORT = '''
-<bardexport>
-  <link rel='item' title='The BARD Dictionary' href='http://localhost:8080/dataExport/api/dictionary' type='application/vnd.bard.cap+xml;type=dictionary' />
-  <link rel='item' title='List of assays, ready for extraction' href='http://localhost:8080/dataExport/api/assays' type='application/vnd.bard.cap+xml;type=assays' />
-  <link rel='item' title='List of projects, ready for extraction' href='http://localhost:8080/dataExport/api/projects' type='application/vnd.bard.cap+xml;type=projects' />
-  <link rel='item' title='List of experiments, ready for extraction' type='application/vnd.bard.cap+xml;type=experiments' href='http://localhost:8080/dataExport/api/experiments' />
-</bardexport>
-    '''
+        <bardexport>
+          <link rel='item' title='The BARD Dictionary' href='http://localhost:8080/dataExport/api/dictionary' type='application/vnd.bard.cap+xml;type=dictionary' />
+          <link rel='item' title='List of assays, ready for extraction' href='http://localhost:8080/dataExport/api/assays' type='application/vnd.bard.cap+xml;type=assays' />
+          <link rel='item' title='List of projects, ready for extraction' href='http://localhost:8080/dataExport/api/projects' type='application/vnd.bard.cap+xml;type=projects' />
+          <link rel='item' title='List of experiments, ready for extraction' type='application/vnd.bard.cap+xml;type=experiments' href='http://localhost:8080/dataExport/api/experiments' />
+          <link rel='item' title='List of external references' type='application/vnd.bard.cap+xml;type=externalReferences' href='http://localhost:8080/dataExport/api/externalReferences' />
+          <link rel='item' title='List of external systems' type='application/vnd.bard.cap+xml;type=externalSystems' href='http://localhost:8080/dataExport/api/externalSystems' />
+        </bardexport> '''
+
     static String UNIT_CONVERSION_FULL = '''
 <unitConversion fromUnit='fromUnit' toUnit='toUnit' multiplier='1.0' offset='1.0'>
   <formula>formula</formula>
@@ -746,19 +888,21 @@ class XmlTestSamples {
 
 
     static String ELEMENT_FULL = '''
-<element elementId='' readyForExtraction='Ready' elementStatus='Pending' abbreviation='abb' unit='cm'>
+<element elementId='' readyForExtraction='Ready' elementStatus='Pending' abbreviation='abb'>
   <label>label</label>
   <description>desc</description>
   <synonyms>syn</synonyms>
   <externalUrl>http://www.broad.org</externalUrl>
   <link rel='edit' href='null' type='xml' />
+  <link rel='related' href='null' type='xml' />
 </element>
 '''
     static String ELEMENT_NO_DESCRIPTION = '''
-<element elementId='' readyForExtraction='Ready' elementStatus='Pending' unit='cm'>
+<element elementId='' readyForExtraction='Ready' elementStatus='Pending'>
   <label>label</label>
   <externalUrl>http://www.broad.org</externalUrl>
   <link rel='edit' href='null' type='xml' />
+  <link rel='related' href='null' type='xml' />
 </element>
 '''
     static String ELEMENT_HIERARCHY_FULL = '''

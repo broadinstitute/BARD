@@ -1,13 +1,8 @@
 package bard.db.experiment
 
-import bard.db.registration.AttributeType
 import org.junit.Before
-
-import static bard.db.registration.AssayContextItem.*
-import static test.TestUtils.assertFieldValidationExpectations
-import static test.TestUtils.createString
-import grails.plugin.spock.IntegrationSpec
 import spock.lang.Unroll
+import bard.db.model.AbstractContextItemIntegrationSpec
 
 /**
  * Created with IntelliJ IDEA.
@@ -17,14 +12,13 @@ import spock.lang.Unroll
  * To change this template use File | Settings | File Templates.
  */
 @Unroll
-class ExperimentContextItemConstraintIntegrationSpec extends RunContextItemIntegrationSpec {
+class ExperimentContextItemConstraintIntegrationSpec extends AbstractContextItemIntegrationSpec {
+
     @Before
     @Override
     void doSetup() {
         domainInstance = ExperimentContextItem.buildWithoutSave()
-        domainInstance.experiment?.save()
-        domainInstance.attributeElement?.save()
-        domainInstance.valueElement?.save()
+        domainInstance.attributeElement.save()
     }
 
 }

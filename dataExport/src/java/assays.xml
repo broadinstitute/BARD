@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<assays count='9'>
+  <link rel='related' title='111' type='application/vnd.bard.cap+xml;type=assay' href='https://bard.broadinstitute.org/dataExport/api/assays/111' />
+  <link rel='related' title='112' type='application/vnd.bard.cap+xml;type=assay' href='https://bard.broadinstitute.org/dataExport/api/assays/112' />
+  <link rel='related' title='113' type='application/vnd.bard.cap+xml;type=assay' href='https://bard.broadinstitute.org/dataExport/api/assays/113' />
+  <link rel='related' title='114' type='application/vnd.bard.cap+xml;type=assay' href='https://bard.broadinstitute.org/dataExport/api/assays/114' />
+  <link rel='related' title='115' type='application/vnd.bard.cap+xml;type=assay' href='https://bard.broadinstitute.org/dataExport/api/assays/115' />
+  <link rel='related' title='116' type='application/vnd.bard.cap+xml;type=assay' href='https://bard.broadinstitute.org/dataExport/api/assays/116' />
+  <link rel='related' title='117' type='application/vnd.bard.cap+xml;type=assay' href='https://bard.broadinstitute.org/dataExport/api/assays/117' />
+  <link rel='related' title='118' type='application/vnd.bard.cap+xml;type=assay' href='https://bard.broadinstitute.org/dataExport/api/assays/118' />
+  <link rel='related' title='119' type='application/vnd.bard.cap+xml;type=assay' href='https://bard.broadinstitute.org/dataExport/api/assays/119' />
+</assays>

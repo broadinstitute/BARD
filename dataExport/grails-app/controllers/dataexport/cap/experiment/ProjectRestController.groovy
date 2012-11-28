@@ -1,16 +1,13 @@
 package dataexport.cap.experiment
 
-import bard.db.experiment.Project
+import dataexport.cap.registration.UpdateStatusHelper
 import dataexport.experiment.ProjectExportService
-import dataexport.registration.BardHttpResponse
 import exceptions.NotFoundException
 import groovy.xml.MarkupBuilder
 import org.codehaus.groovy.grails.commons.GrailsApplication
 import org.codehaus.groovy.grails.web.servlet.HttpHeaders
 
 import javax.servlet.http.HttpServletResponse
-import dataexport.cap.registration.UpdateStatusHelper
-import dataexport.registration.UpdateType
 
 /**
  * Please note that the DataExportFilters is applied to all incoming request.
@@ -24,13 +21,44 @@ class ProjectRestController {
     static allowedMethods = [
             project: "GET",
             updateProject: "PUT",
-            projects: "GET"
+            projects: "GET",
+            projectDocument: 'GET'
     ]
 
     static final String responseContentTypeEncoding = "UTF-8"
 
     def index() {
         return response.sendError(HttpServletResponse.SC_METHOD_NOT_ALLOWED)
+    }
+    /**
+     * Get an assay with the given id
+     * @return
+     */
+    def projectDocument(Integer id) {
+        try {
+            final String mimeType = grailsApplication.config.bard.data.export.project.doc.xml
+            //do validations
+            if (mimeType == request.getHeader(HttpHeaders.ACCEPT) && id) {
+                final StringWriter markupWriter = new StringWriter()
+                final MarkupBuilder markupBuilder = new MarkupBuilder(markupWriter)
+                final Long eTag = this.projectExportService.generateProjectDocument(markupBuilder, new Long(id))
+                response.addHeader(HttpHeaders.ETAG, eTag.toString())
+                render(text: markupWriter.toString(), contentType: mimeType, encoding: responseContentTypeEncoding)
+                return
+            }
+            response.status = HttpServletResponse.SC_BAD_REQUEST
+            render ""
+        }
+        catch (NotFoundException notFoundException) {
+            log.error(notFoundException.message)
+            response.status = HttpServletResponse.SC_NOT_FOUND
+            render ""
+        }
+        catch (Exception ee) {
+            response.status = HttpServletResponse.SC_INTERNAL_SERVER_ERROR
+            log.error(ee.message)
+            ee.printStackTrace()
+        }
     }
 
     def projects() {
@@ -80,7 +108,8 @@ class ProjectRestController {
             ee.printStackTrace()
         }
     }
+
     def updateProject(Long id) {
-       updateDomainObject(this.projectExportService,id)
+        updateDomainObject(this.projectExportService, id)
     }
 }

@@ -19,7 +19,7 @@ import bard.db.enums.ReadyForExtraction
 
 @Unroll
 class ExperimentExportServiceIntegrationSpec extends IntegrationSpec {
-    static final String BARD_EXPERIMENT_EXPORT_SCHEMA = "test/integration/dataexport/experiment/experimentSchema.xsd"
+    static final String BARD_EXPERIMENT_EXPORT_SCHEMA = "src/java/experimentSchema.xsd"
 
     ExperimentExportService experimentExportService
     Writer writer
@@ -106,39 +106,39 @@ class ExperimentExportServiceIntegrationSpec extends IntegrationSpec {
         validator.validate(new StreamSource(new StringReader(this.writer.toString())))
     }
 
-    void "test generate external references"() {
-        given: "Given that there is an experiment"
-        final Experiment experiment = Experiment.get(1)
-
-
-        when: "A service call is made to generate the external references"
-        this.markupBuilder.experiment(experimentName: 'experimentName') {
-            this.experimentExportService.generateExternalReferences(this.markupBuilder, experiment.externalReferences)
-        }
-        then: "An XML is generated that conforms to the expected XML"
-        final SchemaFactory factory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI)
-        final Schema schema = factory.newSchema(new StreamSource(new FileReader(BARD_EXPERIMENT_EXPORT_SCHEMA)))
-        final Validator validator = schema.newValidator()
-        validator.validate(new StreamSource(new StringReader(this.writer.toString())))
-    }
-
-    void "test generate external reference"() {
-        given: "Given that there is an experiment"
-        final Experiment experiment = Experiment.get(1)
-        final List<ExternalReference> refs = experiment.externalReferences as List<ExternalReference>
-        final ExternalReference externalReference = refs.get(0)
-        when: "A service call is made to generate the external reference"
-        this.experimentExportService.generateExternalReference(this.markupBuilder, externalReference)
-
-        then: "An XML is generated that conforms to the expected XML"
-        XMLAssert.assertXpathEvaluatesTo("1", "count(//externalReference)", this.writer.toString());
-        XMLAssert.assertXpathEvaluatesTo("aid=1007", "//externalAssayRef", this.writer.toString());
-        XMLAssert.assertXpathEvaluatesTo("PubChem", "//externalSystem/@name", this.writer.toString());
-        XMLAssert.assertXpathEvaluatesTo("NIH", "//externalSystem/@owner", this.writer.toString());
-        XMLAssert.assertXpathEvaluatesTo("http://pubchem.ncbi.nlm.nih.gov/assay/assay.cgi?", "//systemUrl", this.writer.toString());
-        XMLAssert.assertXpathEvaluatesTo("http://localhost:8080/dataExport/api/projects/1", "//link/@href", this.writer.toString());
-        XMLAssert.assertXpathEvaluatesTo("application/vnd.bard.cap+xml;type=project", "//link/@type", this.writer.toString());
-
-    }
+//    void "test generate external references"() {
+//        given: "Given that there is an experiment"
+//        final Experiment experiment = Experiment.get(1)
+//
+//
+//        when: "A service call is made to generate the external references"
+//        this.markupBuilder.experiment(experimentName: 'experimentName') {
+//            this.experimentExportService.generateExternalReferences(this.markupBuilder, experiment.externalReferences)
+//        }
+//        then: "An XML is generated that conforms to the expected XML"
+//        final SchemaFactory factory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI)
+//        final Schema schema = factory.newSchema(new StreamSource(new FileReader(BARD_EXPERIMENT_EXPORT_SCHEMA)))
+//        final Validator validator = schema.newValidator()
+//        validator.validate(new StreamSource(new StringReader(this.writer.toString())))
+//    }
+//
+//    void "test generate external reference"() {
+//        given: "Given that there is an experiment"
+//        final Experiment experiment = Experiment.get(1)
+//        final List<ExternalReference> refs = experiment.externalReferences as List<ExternalReference>
+//        final ExternalReference externalReference = refs.get(0)
+//        when: "A service call is made to generate the external reference"
+//        this.experimentExportService.generateExternalReference(this.markupBuilder, externalReference)
+//
+//        then: "An XML is generated that conforms to the expected XML"
+//        XMLAssert.assertXpathEvaluatesTo("1", "count(//externalReference)", this.writer.toString());
+//        XMLAssert.assertXpathEvaluatesTo("aid=1007", "//externalAssayRef", this.writer.toString());
+//        XMLAssert.assertXpathEvaluatesTo("PubChem", "//externalSystem/@name", this.writer.toString());
+//        XMLAssert.assertXpathEvaluatesTo("NIH", "//externalSystem/@owner", this.writer.toString());
+//        XMLAssert.assertXpathEvaluatesTo("http://pubchem.ncbi.nlm.nih.gov/assay/assay.cgi?", "//systemUrl", this.writer.toString());
+//        XMLAssert.assertXpathEvaluatesTo("http://localhost:8080/dataExport/api/projects/1", "//link/@href", this.writer.toString());
+//        XMLAssert.assertXpathEvaluatesTo("application/vnd.bard.cap+xml;type=project", "//link/@type", this.writer.toString());
+//
+//    }
 
 }

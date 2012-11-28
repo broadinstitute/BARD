@@ -2,11 +2,9 @@ package bard.db.registration
 
 import bard.db.dictionary.Descriptor
 import org.apache.commons.lang.StringUtils
+import bard.db.model.AbstractContext
 
-class AssayContext {
-
-    private static final int CONTEXT_NAME_MAX_SIZE = 128
-    private static final int MODIFIED_BY_MAX_SIZE = 40
+class AssayContext extends AbstractContext{
 
     /**
      * these labels or portions of labels are pulled out of the ontology and are an order of preference for sorting and naming of cards
@@ -18,33 +16,20 @@ class AssayContext {
             'assay readout': 'assay readout', 'wavelength': 'fluorescence/luminescence',
             'number': 'result detail']
 
-    String contextName
     Assay assay
 
-    Set<Measure> measures = [] as Set<Measure>
-    List<AssayContextItem> assayContextItems = []
 
-    Date dateCreated = new Date()
-    Date lastUpdated
-    String modifiedBy
+    List<AssayContextItem> assayContextItems = []
+    Set<AssayContextMeasure> assayContextMeasures = [] as Set
 
     static belongsTo = [assay: Assay]
 
-    static hasMany = [assayContextItems: AssayContextItem,
-            measures: Measure]
+    static hasMany = [assayContextItems: AssayContextItem, assayContextMeasures: AssayContextMeasure]
 
     static mapping = {
         sort("ASSAY_CONTEXT_ID") // default sort order
         id(column: "ASSAY_CONTEXT_ID", generator: "sequence", params: [sequence: 'ASSAY_CONTEXT_ID_SEQ'])
         assayContextItems(indexColumn: [name: 'DISPLAY_ORDER'], lazy: 'false')
-    }
-
-    static constraints = {
-        contextName(maxSize: CONTEXT_NAME_MAX_SIZE)
-        assay()
-        dateCreated(nullable: false)
-        lastUpdated(nullable: true)
-        modifiedBy(nullable: true, blank: false, maxSize: MODIFIED_BY_MAX_SIZE)
     }
 
     /**

@@ -16,6 +16,7 @@ abstract class Descriptor<T> {
     private static final int UNIT_MAX_SIZE = 128
     private static final int EXTERNAL_URL_MAX_SIZE = 1000
     private static final int ELEMENT_STATUS_MAX_SIZE = 20
+    private static final int FULL_PATH_MAX_SIZE = 3000
 
 
     T parent
@@ -23,19 +24,25 @@ abstract class Descriptor<T> {
     ElementStatus elementStatus = ElementStatus.Pending
 
     String label
+    Boolean leaf
     String description
+    String fullPath
     String abbreviation
 
     String synonyms
     String externalURL
-    String unit
+    Element unit
 
     static constraints = {
 
+        parent(nullable:true)
+        element()
         elementStatus(nullable: false, maxSize: ELEMENT_STATUS_MAX_SIZE)
 
         label(nullable: false, unique: true, maxSize: LABEL_MAX_SIZE)
+        leaf()
         description(nullable: true, maxSize: DESCRIPTION_MAX_SIZE)
+        fullPath(nullable:true, blank:false,maxSize: FULL_PATH_MAX_SIZE)
         abbreviation(nullable: true, maxSize: ABBREVIATION_MAX_SIZE)
 
         synonyms(nullable: true, maxSize: SYNONYMS_MAX_SIZE)

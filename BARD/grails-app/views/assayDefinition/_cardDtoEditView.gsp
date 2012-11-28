@@ -18,14 +18,14 @@
                     <label class="control-label" for="edit_card_name">Name:</label>
 
                     <div class="controls">
-                        <input type="text" id="edit_card_name" name="edit_card_name" size="${bard.db.registration.AssayContext.CONTEXT_NAME_MAX_SIZE}" placeholder="Enter Card Name" >
+                        <input type="text" id="edit_card_name" name="edit_card_name" placeholder="Enter Card Name" >
                     </div>
                 </div>
                 <input type="hidden" id="assayContextId" name="assayContextId" value=""/>
                 <input type="hidden" id="assayId" name="assayId" value="${assayId}"/>
             </form>
         </div>
-		
+
 		<div id="dialog_move_item"></div>
 
         <div id="dialog_confirm_delete_item">
@@ -41,7 +41,7 @@
 				This card will be permanently deleted and cannot be recovered. Are you sure?
 			</p>
 		</div>
-		
+
 		<div id="dialog_add_item_wizard"></div>
 		
 		<div id="dialog_add_item_wizard_confirm_cancel">

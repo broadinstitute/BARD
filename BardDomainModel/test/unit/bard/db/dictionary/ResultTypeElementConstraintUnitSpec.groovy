@@ -5,7 +5,7 @@ import org.junit.Before
 import spock.lang.Unroll
 
 
-@Build(ResultTypeElement)
+@Build([ResultTypeElement,Element])
 @Unroll
 class ResultTypeElementConstraintUnitSpec extends AbstractElementConstraintUnitSpec {
 

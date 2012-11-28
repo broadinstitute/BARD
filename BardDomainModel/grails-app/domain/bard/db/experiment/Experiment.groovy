@@ -1,53 +1,63 @@
 package bard.db.experiment
 
+import bard.db.enums.ReadyForExtraction
 import bard.db.registration.Assay
 import bard.db.registration.ExternalReference
-import bard.db.enums.ReadyForExtraction
+import bard.db.project.ProjectStep
 
 class Experiment {
 
-	String experimentName
-	Date runDateFrom
-	Date runDateTo
-	Date holdUntilDate
-	String description
-	Date dateCreated
-	Date lastUpdated
-	String modifiedBy
-	String experimentStatus
-	Assay assay
-    ReadyForExtraction readyForExtraction = ReadyForExtraction.Pending
     private static final int READY_FOR_EXTRACTION_MAX_SIZE = 20
+    private static final int EXPERIMENT_NAME_MAX_SIZE = 1000
+    private static final int EXPERIMENT_STATUS_MAX_SIZE = 20
+    private static final int MODIFIED_BY_MAX_SIZE = 40
+    private static final int DESCRIPTION_MAX_SIZE = 1000
 
+    String experimentName
+    ExperimentStatus experimentStatus = ExperimentStatus.Pending
+    ReadyForExtraction readyForExtraction = ReadyForExtraction.Pending
+    Assay assay
+
+    Date runDateFrom
+    Date runDateTo
+    Date holdUntilDate
+
+    String description
+
+    Date dateCreated
+    Date lastUpdated
+    String modifiedBy
 
     // TODO results can appearently be very large 10 million rows
     Set<Result> results = [] as Set<Result>
-    Set<ExperimentContextItem> experimentContextItems = [] as Set<ExperimentContextItem>
+    List<ExperimentContext> experimentContexts = [] as List<ExperimentContext>
     Set<ProjectStep> projectSteps = [] as Set<ProjectStep>
     Set<ExternalReference> externalReferences = [] as Set<ExternalReference>
 
-	static hasMany = [experimentContextItems: ExperimentContextItem,
-			results: Result,
-            projectSteps:ProjectStep,
-            externalReferences:ExternalReference]
+    static hasMany = [experimentContexts: ExperimentContext,
+            results: Result,
+            projectSteps: ProjectStep,
+            externalReferences: ExternalReference]
 
-	static belongsTo = [Assay]
-
-	static mapping = {
+    static mapping = {
         id(column: "EXPERIMENT_ID", generator: "sequence", params: [sequence: 'EXPERIMENT_ID_SEQ'])
-	}
+        experimentContexts(indexColumn: [name: 'DISPLAY_ORDER'], lazy: 'false')
+    }
 
-	static constraints = {
-		experimentName maxSize: 256
-		experimentStatus nullable: false
-		runDateFrom nullable: true, maxSize: 10
-		runDateTo nullable: true, maxSize: 10
-		holdUntilDate nullable: true, maxSize: 10
-		description nullable: true, maxSize: 1000
-		dateCreated maxSize: 19
-		lastUpdated nullable: true, maxSize: 19
-		modifiedBy nullable: true, maxSize: 40
-		experimentStatus maxSize: 20, nullable: false, inList: ["Pending", "Approved", "Rejected", "Revised"]
+    static constraints = {
+        experimentName(blank: false, maxSize: EXPERIMENT_NAME_MAX_SIZE)
+        experimentStatus(nullable: false, maxSize: EXPERIMENT_STATUS_MAX_SIZE)
         readyForExtraction(maxSize: READY_FOR_EXTRACTION_MAX_SIZE, nullable: false)
+        assay()
+
+        runDateFrom(nullable: true)
+        runDateTo(nullable: true)
+        holdUntilDate(nullable: true)
+
+        description(nullable: true, blank: false, maxSize: DESCRIPTION_MAX_SIZE)
+
+        dateCreated(nullable: false)
+        lastUpdated(nullable: true)
+        modifiedBy(nullable: true, blank: false, maxSize: MODIFIED_BY_MAX_SIZE)
     }
 }

@@ -47,13 +47,15 @@ grails.project.dependency.resolution = {
     }
 
     plugins {
-        runtime ":hibernate:$grailsVersion"
-        runtime ":resources:1.1.6"
-        compile ":functional-spock:0.6"
         build ":tomcat:$grailsVersion"
         build ":codenarc:0.15"
+
+        compile ":functional-spock:0.6"
         compile ":spock:0.6"
         compile ":remote-control:1.2"
+
+        runtime ":hibernate:$grailsVersion"
+        runtime ":resources:1.1.6"
     }
 }
 

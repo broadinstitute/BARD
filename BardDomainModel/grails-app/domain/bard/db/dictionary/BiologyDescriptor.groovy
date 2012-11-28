@@ -13,6 +13,7 @@ class BiologyDescriptor extends Descriptor<BiologyDescriptor> {
         table('BIOLOGY_DESCRIPTOR_TREE')
         id(column: 'NODE_ID', generator: 'assigned')
         version(false)
+        leaf(column: 'IS_LEAF', type: 'yes_no')
         bardURI(column: 'BARD_URI')
         externalURL(column: 'EXTERNAL_URL')
         parent(column: 'PARENT_NODE_ID')

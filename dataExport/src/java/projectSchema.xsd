@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
+    <xs:annotation>
+        <xs:documentation>All of the individual schema needed to do a data export</xs:documentation>
+    </xs:annotation>
+    <xs:include schemaLocation="coreSchema.xsd"/>
+    <xs:element name="projects">
+        <xs:annotation>
+            <xs:documentation>The list of projects in the CAP.
+These can be filtered to a specific project depending on the query</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="link" maxOccurs="unbounded"/>
+            </xs:sequence>
+            <xs:attribute name="count" type="xs:integer" use="required"/>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="project">
+        <xs:annotation>
+            <xs:documentation>Models a project in the cap. Maps to
+application/vnd.bard.cap+xml;type=project</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="projectName">
+                    <xs:annotation>
+                        <xs:documentation>Name of current Project
+                        </xs:documentation>
+                    </xs:annotation>
+                    <xs:simpleType>
+                        <xs:restriction base="xs:string">
+                            <xs:maxLength value="256"/>
+                        </xs:restriction>
+                    </xs:simpleType>
+                </xs:element>
+                <xs:element minOccurs="0" ref="description">
+                    <xs:annotation>
+                        <xs:documentation>Description for current element
+                        </xs:documentation>
+                    </xs:annotation>
+                </xs:element>
+                <xs:element minOccurs="0" name="projectSteps">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element maxOccurs="unbounded" name="projectStep">
+                                <xs:annotation>
+                                    <xs:documentation>experimentRef references an experiment resources
+precedingExperimentRef references an experiment resource</xs:documentation>
+                                </xs:annotation>
+                                <xs:complexType>
+                                    <xs:sequence>
+                                        <xs:element ref="description"/>
+                                        <xs:element name="experimentRef">
+                                            <xs:complexType>
+                                                <xs:sequence>
+                                                  <xs:element ref="link"/>
+                                                </xs:sequence>
+                                                <xs:attribute name="label" type="xs:string"/>
+                                            </xs:complexType>
+                                        </xs:element>
+                                        <xs:element minOccurs="0" name="precedingExperimentRef">
+                                            <xs:complexType>
+                                                <xs:sequence>
+                                                  <xs:element ref="link"/>
+                                                </xs:sequence>
+                                                <xs:attribute name="label" type="xs:string"/>
+                                            </xs:complexType>
+                                        </xs:element>
+                                        <xs:element minOccurs="0" name="stepContexts">
+                                            <xs:complexType>
+                                                <xs:sequence>
+                                                  <xs:element maxOccurs="unbounded"
+                                                  name="stepContext" type="stepContextType"/>
+                                                </xs:sequence>
+                                            </xs:complexType>
+                                        </xs:element>
+                                    </xs:sequence>
+                                    <xs:attribute name="projectStepId" type="bardID" use="required"
+                                    />
+                                </xs:complexType>
+                            </xs:element>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element minOccurs="0" name="projectContexts">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element maxOccurs="unbounded" name="projectContext"
+                                type="projectContextType"/>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element minOccurs="0" name="projectDocuments">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element maxOccurs="unbounded" ref="projectDocument"/>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element maxOccurs="unbounded" minOccurs="0" ref="link"/>
+            </xs:sequence>
+            <xs:attribute name="projectId" type="bardID" use="required"/>
+            <xs:attribute name="groupType" use="required">
+                <xs:simpleType>
+                    <xs:restriction base="xs:string">
+                        <xs:enumeration value="Project"/>
+                        <xs:enumeration value="Campaign"/>
+                        <xs:enumeration value="Panel"/>
+                        <xs:enumeration value="Study"/>
+                        <xs:enumeration value="Template"/>
+                        <xs:enumeration value="Probe Report"/>
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:attribute>
+            <xs:attribute ref="readyForExtraction"/>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="projectDocument" type="documentType"> </xs:element>
+    <xs:element name="projectContextItems">
+
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element maxOccurs="unbounded" name="projectContextItem"
+                    type="projectContextItemType"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:complexType name="projectContextItemType">
+        <xs:complexContent>
+            <xs:extension base="abstractContextItemType">
+                <xs:attribute name="projectContextItemId" type="bardID" use="required"/>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    <xs:complexType name="stepContextItemType">
+        <xs:complexContent>
+            <xs:extension base="abstractContextItemType">
+                <xs:attribute name="stepContextItemId" type="bardID" use="required"/>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    <xs:complexType name="projectContextType">
+        <xs:complexContent>
+            <xs:extension base="abstractContextType">
+                <xs:sequence>
+                    <xs:element minOccurs="0" name="projectContextItems">
+                        <xs:complexType>
+                            <xs:sequence>
+                                <xs:element maxOccurs="unbounded" name="projectContextItem"
+                                    type="projectContextItemType">
+                                    <xs:annotation>
+                                        <xs:documentation>We include the group result context Id and the result context item Id so that the client can walk the tree from child to parent</xs:documentation>
+                                    </xs:annotation>
+                                </xs:element>
+                            </xs:sequence>
+                        </xs:complexType>
+                    </xs:element>
+                </xs:sequence>
+                <xs:attribute name="projectContextId" type="bardID" use="required"/>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    <xs:complexType name="stepContextType">
+        <xs:complexContent>
+            <xs:extension base="abstractContextType">
+                <xs:sequence>
+                    <xs:element minOccurs="0" name="stepContextItems">
+                        <xs:complexType>
+                            <xs:sequence>
+                                <xs:element maxOccurs="unbounded" name="stepContextItem"
+                                    type="stepContextItemType">
+                                    <xs:annotation>
+                                        <xs:documentation>We include the group result context Id and the result context item Id so that the client can walk the tree from child to parent</xs:documentation>
+                                    </xs:annotation>
+                                </xs:element>
+                            </xs:sequence>
+                        </xs:complexType>
+                    </xs:element>
+                </xs:sequence>
+                <xs:attribute name="stepContextId" type="bardID" use="required"/>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+</xs:schema>

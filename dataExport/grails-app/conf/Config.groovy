@@ -28,6 +28,7 @@ bard.data.export.results.xml = 'application/vnd.bard.cap+xml;type=results'
 bard.data.export.result.xml = 'application/vnd.bard.cap+xml;type=result'
 bard.data.export.projects.xml = 'application/vnd.bard.cap+xml;type=projects'
 bard.data.export.project.xml = 'application/vnd.bard.cap+xml;type=project'
+bard.data.export.project.doc.xml = 'application/vnd.bard.cap+xml;type=projectDoc'
 
 //assays
 bard.data.export.assays.xml = 'application/vnd.bard.cap+xml;type=assays'
@@ -39,6 +40,16 @@ bard.data.export.dictionary.resultType.xml = 'application/vnd.bard.cap+xml;type=
 bard.data.export.dictionary.xml = 'application/vnd.bard.cap+xml;type=dictionary'
 bard.data.export.dictionary.stage.xml = 'application/vnd.bard.cap+xml;type=stage'
 bard.data.export.dictionary.element.xml = 'application/vnd.bard.cap+xml;type=element'
+
+
+//external reference
+bard.data.export.externalreference.xml='application/vnd.bard.cap+xml;type=externalReference'
+bard.data.export.externalreferences.xml='application/vnd.bard.cap+xml;type=externalReferences'
+
+//external systems
+bard.data.export.externalsystem.xml ='application/vnd.bard.cap+xml;type=externalSystem'
+bard.data.export.externalsystems.xml='application/vnd.bard.cap+xml;type=externalSystems'
+
 
 grails.project.groupId = appName // change this to alter the default package name and Maven publishing destination
 grails.mime.file.extensions = true // enables the parsing of file extensions from URLs into the request format
@@ -57,7 +68,13 @@ grails.mime.types = [html: ['text/html', 'application/xhtml+xml'],
                 "${bard.data.export.dictionary.xml}",
                 "${bard.data.export.dictionary.resultType.xml}",
                 "${bard.data.export.dictionary.stage.xml}",
-                "${bard.data.export.dictionary.element.xml}"
+                "${bard.data.export.dictionary.element.xml}",
+                "${bard.data.export.externalreference.xm}",
+                "${bard.data.export.externalreferences.xml}",
+                "${bard.data.export.externalsystems.xml}",
+                "${bard.data.export.externalsystem.xml}",
+                "${bard.data.export.project.doc.xml}"
+
 
         ],
         text: 'text/plain',

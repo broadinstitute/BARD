@@ -1,6 +1,6 @@
 databaseChangeLog = {
 
-    changeSet(author: "ddurkin", id: "grant select", dbms: 'oracle', context:'standard,load-data',runAlways: 'true') {
+    changeSet(author: "ddurkin", id: "grant select", dbms: 'oracle', context:'grant-selects',runAlways: 'true') {
         grailsChange {
             change {
                 List<String> usernames = ['SCHATWIN', 'BARD_DEV', 'SBRUDZ', 'DATA_MIG', 'YCRUZ', 'SOUTHERN', 'BARD_QA', 'BARD_CI', 'DSTONICH', 'BALEXAND', 'DDURKIN', 'JASIEDU']

@@ -8,6 +8,7 @@ import spock.lang.Unroll
 import static bard.db.dictionary.AbstractElement.*
 import static test.TestUtils.assertFieldValidationExpectations
 import static test.TestUtils.createString
+import spock.lang.Shared
 
 /**
  * Created with IntelliJ IDEA.
@@ -20,7 +21,6 @@ import static test.TestUtils.createString
 abstract class AbstractElementConstraintUnitSpec extends Specification {
 
     def domainInstance
-
 
     @Before
     abstract void doSetup()
@@ -123,7 +123,6 @@ abstract class AbstractElementConstraintUnitSpec extends Specification {
         'valid value' | "foo"                                     | true  | null
     }
 
-
     void "test synonyms constraints #desc synonyms: '#valueUnderTest'"() {
         final String field = 'synonyms'
 
@@ -152,24 +151,21 @@ abstract class AbstractElementConstraintUnitSpec extends Specification {
         final String field = 'unit'
 
         when: 'a value is set for the field under test'
-        domainInstance[(field)] = valueUnderTest
+        domainInstance[(field)] = valueUnderTest.call()
         domainInstance.save()
 
         then: 'verify valid or invalid for expected reason'
         assertFieldValidationExpectations(domainInstance, field, valid, errorCode)
 
-        and: 'verify the domainspreadsheetmapping can be persisted to the db'
+        and: 'verify the domain can be persisted to the db'
         if (valid) {
             domainInstance == domainInstance.save(flush: true)
         }
 
         where:
         desc          | valueUnderTest                    | valid | errorCode
-        'too long'    | createString(UNIT_MAX_SIZE) + "a" | false | 'maxSize.exceeded'
-
-        'valid value' | createString(UNIT_MAX_SIZE)       | true  | null
-        'null value'  | null                              | true  | null
-        'valid value' | "foo"                             | true  | null
+        'null value'  | {null}                              | true  | null
+        'valid value' | {Element.build()}    | true  | null
     }
 
     void "test bardURI constraints #desc bardURI: '#valueUnderTest'"() {

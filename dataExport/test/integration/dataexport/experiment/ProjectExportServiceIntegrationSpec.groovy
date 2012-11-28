@@ -1,7 +1,7 @@
 package dataexport.experiment
 
 import bard.db.enums.ReadyForExtraction
-import bard.db.experiment.Project
+import bard.db.project.Project
 import common.tests.XmlTestAssertions
 import common.tests.XmlTestSamples
 import dataexport.registration.BardHttpResponse
@@ -20,7 +20,7 @@ import spock.lang.Unroll
 
 @Unroll
 class ProjectExportServiceIntegrationSpec extends IntegrationSpec {
-    static final String BARD_PROJECT_EXPORT_SCHEMA = "test/integration/dataexport/experiment/projectSchema.xsd"
+    static final String BARD_PROJECT_EXPORT_SCHEMA = "src/java/projectSchema.xsd"
 
     ProjectExportService projectExportService
     Writer writer

@@ -313,9 +313,6 @@ class DictionaryExportHelperService {
             attributes.put('abbreviation', element.abbreviation)
         }
 
-        if (element?.unit) {
-            attributes.put('unit', element.unit)
-        }
         xml.element(attributes) {
             if (element.label) {
                 label(element.label)
@@ -332,8 +329,12 @@ class DictionaryExportHelperService {
             //now generate links for editing the element
             //clients can use this link to indicate that they have consumed the element
             final String ELEMENT_MEDIA_TYPE = this.elementMediaType
-            final String elementHref = grailsLinkGenerator.link(mapping: 'element', absolute: true, params: [id: element.id]).toString()
+            final String elementHref = grailsLinkGenerator.link(mapping: 'element', absolute: true, params: [id: element.id])
             link(rel: 'edit', href: "${elementHref}", type: "${ELEMENT_MEDIA_TYPE}")
+            if (element?.unit) {
+                final String unitHref = grailsLinkGenerator.link(mapping: 'element', absolute: true, params: [id: element.unit.id])
+                link(rel: 'related', href: "${unitHref}", type: "${ELEMENT_MEDIA_TYPE}")
+            }
 
         }
     }

@@ -10,6 +10,7 @@ import spock.lang.Unroll
 class ElementConstraintUnitSpec extends AbstractElementConstraintUnitSpec {
 
     @Before
+    @Override
     void doSetup() {
         domainInstance = Element.buildWithoutSave()
     }

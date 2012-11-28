@@ -1,5 +1,7 @@
 package bard.db.experiment
 
+import bard.db.model.AbstractContextItem
+
 /**
  * Created with IntelliJ IDEA.
  * User: ddurkin
@@ -7,13 +9,18 @@ package bard.db.experiment
  * Time: 3:59 PM
  * To change this template use File | Settings | File Templates.
  */
-class ExperimentContextItem extends RunContextItem{
+class ExperimentContextItem extends AbstractContextItem {
 
-    Experiment experiment
+    ExperimentContext experimentContext
 
-    static belongsTo = [experiment:Experiment]
+    static belongsTo = [experimentContext: ExperimentContext]
 
     static mapping = {
-        discriminator( value:"Experiment")
+        table('EXPRMT_CONTEXT_ITEM')
+        id(column: 'EXPRMT_CONTEXT_ITEM_ID', generator: 'sequence', params: [sequence: 'EXPRMT_CONTEXT_ITEM_ID_SEQ'])
+        experimentContext(column: 'EXPRMT_CONTEXT_ID')
+        attributeElement(column: 'ATTRIBUTE_ID')
+        valueElement(column: 'VALUE_ID')
+        qualifier(column: "QUALIFIER", sqlType: "char", length: 2)
     }
 }

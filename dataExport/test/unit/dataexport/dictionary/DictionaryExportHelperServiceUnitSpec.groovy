@@ -221,7 +221,6 @@ class DictionaryExportHelperServiceUnitSpec extends Specification {
         when:
         this.dictionaryExportHelperService.generateDescriptor(this.markupBuilder, descriptor)
         then:
-        println(this.writer.toString())
 
         XmlTestAssertions.assertResults(results, this.writer.toString())
         where:

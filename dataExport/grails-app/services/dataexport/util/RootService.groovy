@@ -10,6 +10,8 @@ class RootService {
     final String assaysMediaType
     final String projectsMediaType
     final String experimentsMediaType
+    final String externalReferencesMediaType
+    final String externalSystemsMediaType
     /**
      * This is wired in resources.groovy
      *
@@ -20,6 +22,8 @@ class RootService {
         this.assaysMediaType = mediaTypesDTO.assaysMediaType
         this.projectsMediaType = mediaTypesDTO.projectsMediaType
         this.experimentsMediaType = mediaTypesDTO.experimentsMediaType
+        this.externalReferencesMediaType = mediaTypesDTO.externalReferencesMediaType
+        this.externalSystemsMediaType = mediaTypesDTO.externalSystemsMediaType
     }
 
     public void generateRootElement(final MarkupBuilder xml) {
@@ -39,6 +43,14 @@ class RootService {
 
             final String experimentsHref = grailsLinkGenerator.link(mapping: 'experiments', absolute: true).toString()
             link(rel: 'item', title: 'List of experiments, ready for extraction', type: "${this.experimentsMediaType}", href: "${experimentsHref}") {
+            }
+
+            final String externalReferencesHref = grailsLinkGenerator.link(mapping: 'externalReferences', absolute: true).toString()
+            link(rel: 'item', title: 'List of external references', type: "${this.externalReferencesMediaType}", href: "${externalReferencesHref}") {
+            }
+
+            final String externalSystemsHref = grailsLinkGenerator.link(mapping: 'externalSystems', absolute: true).toString()
+            link(rel: 'item', title: 'List of external systems', type: "${this.externalSystemsMediaType}", href: "${externalSystemsHref}") {
             }
         }
     }

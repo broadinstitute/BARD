@@ -3,7 +3,7 @@ grails.project.class.dir = "target/classes"
 grails.project.test.class.dir = "target/test-classes"
 grails.project.test.reports.dir = "target/test-reports"
 grails.project.target.level = 1.6
-//grails.project.war.file = "target/${appName}-${appVersion}.war"
+
 
 
 grails.project.dependency.resolution = {
@@ -14,15 +14,13 @@ grails.project.dependency.resolution = {
     }
     log "warn" // log level of Ivy resolver, either 'error', 'warn', 'info', 'debug' or 'verbose'
     repositories {
+        inherit(false) // don't repositories from plugins
         grailsPlugins()
         grailsHome()
         mavenRepo 'http://bard-repo:8081/artifactory/bard-virtual-repo'
         grailsRepo('http://bard-repo:8081/artifactory/bard-virtual-repo', 'grailsCentral')
     }
     dependencies {
-        // specify dependencies here under either 'build', 'compile', 'runtime', 'test' or 'provided' scopes eg.
-
-        // runtime 'mysql:mysql-connector-java:5.1.5'
         build 'com.oracle:ojdbc6:11.2.0.2.0'
     }
 
@@ -37,9 +35,10 @@ grails.project.dependency.resolution = {
         compile(":spock:0.6") {export = false}
 
         compile(":database-migration:1.1") { export = true }
-        compile(":build-test-data:2.0.3") { export = false }
+        compile(":build-test-data:2.0.3") { export =  true }
         compile(":console:1.2") { export = false }
-        compile (":fixtures:1.1") { export = false }
+        compile(":fixtures:1.1") { export = false }
+        compile(":clover:3.1.6") { export = false }
     }
 }
 
@@ -67,4 +66,11 @@ codenarc.reports = {
 }
 codenarc {
     exclusions = ['**/grails-app/migrations/*']
+}
+
+clover {
+    license.path = "${userHome}/.grails/clover.license"
+    directories: ['src/java', 'src/groovy', 'grails-app']
+    includes = ['**/*.groovy', '**/*.java']
+    excludes = ['test/**.*', '**/*Spec*.*', '**/conf/**', '**/migrations/**']
 }

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<experiment xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+ xsi:noNamespaceSchemaLocation="experimentSchema.xsd"
+ experimentId="1"
+ experimentName="A cell-based HTS for delayed death inhibitors of the malarial parasite plastid Measured in Microorganism System Using Plate Reader - 2126-01_Inhibitor_Dose_DryPowder_Activity:1"
+ status="Approved"
+ readyForExtraction="Ready"
+ holdUntilDate="2012-08-24T18:51:46.052-04:00"
+ runDateFrom="2012-08-24T18:51:46.052-04:00"
+ runDateTo="2012-08-24T18:51:46.052-04:00">
+    <experimentContextItems>
+        <experimentContextItem experimentContextItemId='1' qualifier='%' valueDisplay='66' valueNum='66.0'>
+            <attribute label='Number of points'>
+                <link rel='related' href='http://localhost:8080/dataExport/api/dictionary/element/370' type='application/vnd.bard.cap+xml;type=element' />
+            </attribute>
+        </experimentContextItem>
+        <experimentContextItem experimentContextItemId='2' qualifier='%' valueDisplay='66' valueNum='66.0'>
+            <attribute label='Number of points'>
+                <link rel='related' href='http://localhost:8080/dataExport/api/dictionary/element/370' type='application/vnd.bard.cap+xml;type=element' />
+            </attribute>
+        </experimentContextItem>
+    </experimentContextItems>
+    <projectSteps>
+        <projectStep>
+            <description>2126 - MLPCN Malaria - Inhibitor</description>
+            <link rel='related' href='http://localhost:8080/dataExport/api/projects/1' type='application/vnd.bard.cap+xml;type=project' />
+        </projectStep>
+    </projectSteps>
+    <externalReferences>
+        <externalReference>
+            <externalAssayRef>aid=1007</externalAssayRef>
+            <externalSystem name='PubChem' owner='NIH'>
+                <systemUrl>http://pubchem.ncbi.nlm.nih.gov/assay/assay.cgi?</systemUrl>
+            </externalSystem>
+            <link rel='related' href='http://localhost:8080/dataExport/api/projects/1' type='application/vnd.bard.cap+xml;type=project' />
+        </externalReference>
+    </externalReferences>
+    <link rel='related' title='Link to Assay' type='application/vnd.bard.cap+xml;type=assay' href='http://localhost:8080/dataExport/api/assays/1' />
+    <link rel='up' title='List Experiments' type='application/vnd.bard.cap+xml;type=experiments' href='http://localhost:8080/dataExport/api/experiments' />
+    <link rel='related' title='List Related Results' type='application/vnd.bard.cap+xml;type=results' href='http://localhost:8080/dataExport/api/experiments/1/results?offset=0' />
+    <link rel='edit' title='Use link to edit Experiment' type='application/vnd.bard.cap+xml;type=experiment' href='http://localhost:8080/dataExport/api/experiments/1' />
+</experiment>

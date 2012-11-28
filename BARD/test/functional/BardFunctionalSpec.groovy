@@ -24,6 +24,8 @@ abstract class BardFunctionalSpec extends GebReportingSpec {
             Map userProps = user.value
             usernameUserPropsMap.put(userProps.username, userProps)
         }
+
+        driver.manage().window().maximize()
     }
 
     HomePage logInWithRole(String role) {

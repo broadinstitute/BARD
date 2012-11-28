@@ -33,7 +33,7 @@ class AssayConstraintUnitSpec extends Specification {
         then: 'verify valid or invalid for expected reason'
         assertFieldValidationExpectations(domainInstance, field, valid, errorCode)
 
-        and: 'verify the domainspreadsheetmapping can be persisted to the db'
+        and: 'verify the domain can be persisted to the db'
         if (valid) {
             domainInstance == domainInstance.save(flush: true)
         }
@@ -49,9 +49,9 @@ class AssayConstraintUnitSpec extends Specification {
 
     }
 
-    void "test assayTitle constraints #desc assayTitle: "() {
+    void "test assayShortName constraints #desc assayShortName: "() {
 
-        final String field = 'assayTitle'
+        final String field = 'assayShortName'
 
         when: 'a value is set for the field under test'
         domainInstance[(field)] = valueUnderTest
@@ -60,19 +60,19 @@ class AssayConstraintUnitSpec extends Specification {
         then: 'verify valid or invalid for expected reason'
         assertFieldValidationExpectations(domainInstance, field, valid, errorCode)
 
-        and: 'verify the domainspreadsheetmapping can be persisted to the db'
+        and: 'verify the domain can be persisted to the db'
         if (valid) {
             domainInstance == domainInstance.save(flush: true)
         }
 
         where:
-        desc               | valueUnderTest                         | valid | errorCode
-        'null not valid'   | null                                   | false | 'nullable'
-        'blank not valid'  | ''                                     | false | 'blank'
-        'blank not valid'  | '   '                                  | false | 'blank'
+        desc               | valueUnderTest                              | valid | errorCode
+        'null not valid'   | null                                        | false | 'nullable'
+        'blank not valid'  | ''                                          | false | 'blank'
+        'blank not valid'  | '   '                                       | false | 'blank'
 
-        'too long'         | createString(ASSAY_TITLE_MAX_SIZE + 1) | false | 'maxSize.exceeded'
-        'exactly at limit' | createString(ASSAY_TITLE_MAX_SIZE)     | true  | null
+        'too long'         | createString(ASSAY_SHORT_NAME_MAX_SIZE + 1) | false | 'maxSize.exceeded'
+        'exactly at limit' | createString(ASSAY_SHORT_NAME_MAX_SIZE)     | true  | null
     }
 
     void "test assayName constraints #desc assayName: "() {
@@ -86,16 +86,16 @@ class AssayConstraintUnitSpec extends Specification {
         then: 'verify valid or invalid for expected reason'
         assertFieldValidationExpectations(domainInstance, field, valid, errorCode)
 
-        and: 'verify the domainspreadsheetmapping can be persisted to the db'
+        and: 'verify the domain can be persisted to the db'
         if (valid) {
             domainInstance == domainInstance.save(flush: true)
         }
 
         where:
-        desc               | valueUnderTest                         | valid | errorCode
-        'null not valid'   | null                                   | false | 'nullable'
-        'blank not valid'  | ''                                     | false | 'blank'
-        'blank not valid'  | '   '                                  | false | 'blank'
+        desc               | valueUnderTest                        | valid | errorCode
+        'null not valid'   | null                                  | false | 'nullable'
+        'blank not valid'  | ''                                    | false | 'blank'
+        'blank not valid'  | '   '                                 | false | 'blank'
 
         'too long'         | createString(ASSAY_NAME_MAX_SIZE + 1) | false | 'maxSize.exceeded'
         'exactly at limit' | createString(ASSAY_NAME_MAX_SIZE)     | true  | null
@@ -114,7 +114,7 @@ class AssayConstraintUnitSpec extends Specification {
         then: 'verify valid or invalid for expected reason'
         assertFieldValidationExpectations(domainInstance, field, valid, errorCode)
 
-        and: 'verify the domainspreadsheetmapping can be persisted to the db'
+        and: 'verify the domain can be persisted to the db'
         if (valid) {
             domainInstance == domainInstance.save(flush: true)
         }
@@ -143,7 +143,7 @@ class AssayConstraintUnitSpec extends Specification {
         then: 'verify valid or invalid for expected reason'
         assertFieldValidationExpectations(domainInstance, field, valid, errorCode)
 
-        and: 'verify the domainspreadsheetmapping can be persisted to the db'
+        and: 'verify the domain can be persisted to the db'
         if (valid) {
             domainInstance == domainInstance.save(flush: true)
         }
@@ -169,7 +169,7 @@ class AssayConstraintUnitSpec extends Specification {
         then: 'verify valid or invalid for expected reason'
         assertFieldValidationExpectations(domainInstance, field, valid, errorCode)
 
-        and: 'verify the domainspreadsheetmapping can be persisted to the db'
+        and: 'verify the domain can be persisted to the db'
         if (valid) {
             domainInstance == domainInstance.save(flush: true)
         }
@@ -199,7 +199,7 @@ class AssayConstraintUnitSpec extends Specification {
         then: 'verify valid or invalid for expected reason'
         assertFieldValidationExpectations(domainInstance, field, valid, errorCode)
 
-        and: 'verify the domainspreadsheetmapping can be persisted to the db'
+        and: 'verify the domain can be persisted to the db'
         if (valid) {
             domainInstance == domainInstance.save(flush: true)
         }
@@ -207,11 +207,12 @@ class AssayConstraintUnitSpec extends Specification {
         where:
         desc               | valueUnderTest  | valid | errorCode
         'null valid'       | null            | false | null
-
         'value not inList' | 'Foo'           | false | 'not.inList'
+
         'valid value'      | 'Regular'       | true  | null
         'valid value'      | 'Panel - Array' | true  | null
         'valid value'      | 'Panel - Group' | true  | null
+        'valid value'      | 'Template'      | true  | null
     }
 
     void "test modifiedBy constraints #desc modifiedBy: '#valueUnderTest'"() {
@@ -225,7 +226,7 @@ class AssayConstraintUnitSpec extends Specification {
         then: 'verify valid or invalid for expected reason'
         assertFieldValidationExpectations(domainInstance, field, valid, errorCode)
 
-        and: 'verify the domainspreadsheetmapping can be persisted to the db'
+        and: 'verify the domain can be persisted to the db'
         if (valid) {
             domainInstance == domainInstance.save(flush: true)
         }
@@ -250,7 +251,7 @@ class AssayConstraintUnitSpec extends Specification {
         then: 'verify valid or invalid for expected reason'
         assertFieldValidationExpectations(domainInstance, field, valid, errorCode)
 
-        and: 'verify the domainspreadsheetmapping can be persisted to the db'
+        and: 'verify the domain can be persisted to the db'
         if (valid) {
             domainInstance == domainInstance.save(flush: true)
         }
@@ -271,7 +272,7 @@ class AssayConstraintUnitSpec extends Specification {
         then: 'verify valid or invalid for expected reason'
         assertFieldValidationExpectations(domainInstance, field, valid, errorCode)
 
-        and: 'verify the domainspreadsheetmapping can be persisted to the db'
+        and: 'verify the domain can be persisted to the db'
         if (valid) {
             domainInstance == domainInstance.save(flush: true)
         }

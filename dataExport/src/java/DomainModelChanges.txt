@@ -1,0 +1,106 @@
+Assay
+    assayTitle --> assayShortName
+    xsd -- assay no longer has direct association to assayContextItems, all assayContextItems under a given assayContext
+    xsd - removed assayDocuments element, assay documents will be in links element
+AssayContext
+    xsd - added attribute assayContextId
+    xsd - added new context_group
+    xsd - added display_order
+    xsd - optional measureRefs with 1 to many measureRef elements
+AssayContextItem
+    xsd - added displayOrder as attribute 
+    xsd - removed attribute assayContextRef
+    xsd - added assayContextItemId
+Measure
+    xsd - attribute assayContextRef eliminated
+    xsd - attribute added measureId 
+    xsd - renamed entityUnit to entityUnitRef
+    xsd - add statsModifierRef to Element
+    xsd - attribute parentMeasure renamed to parentMeasureRef, this is optional
+
+
+Experiment
+    xsd - changed experimentName from attribute to element
+    xsd - removed experimentContextItems
+    xsd - removed project steps 
+    xsd - removed externalReferences, will be converted to links with External Reference becoming top level resource
+    TODO implement or discuss Experiment measures
+
+
+Projects
+    xsd - Now lists a list of linked Project's just like Assays
+        - This is because projects have too many elements now
+          and the potential exists that we may have to add
+	    paging.
+Project
+    xsd - removed ProjectContextItem
+    xsd - added Project Context
+    xsd - added Project Documents
+    xsd - added links for external references
+    
+Project Step
+    xsd - addeed experimentRef
+    xsd - added proceedingExperimentRef
+    xsd - removed links
+    xsd - added step Contexts
+
+StepContext
+    xsd - ( just like assay context and projext context )
+    xsd  - step contexts have stepcontextitem
+
+Dictionary:
+Element
+    xsd - removed attribute unit, this will know be expressed as a link
+
+
+TODO//
+should add project Document mime type
+model External System and External Reference as a resource
+
+
+Dictionary:
+Element change unit from string to fk
+
+Project Info:
+add project document ( refactor code for assayDocument )
+add / refactor for Step_context and project_context
+add / refactor for Step_context_item and project_context_item ( same as assay context except for owning fk and attribute_type )
+
+Results Info
+add Experiment Context and ExperimentContextItem
+add Project Context and ProjectContextItem
+refactor around Rslt_context_item
+
+Potentially deffer or lower priority
+
+add Experiment Context and ExperimentContextItem
+refactor around Rslt_context_item
+
+Reasoning NCGC is not pulling, Results yet.
+
+ 
+AbstractContext
+  AssayContext
+  ExperimentContext
+  ProjectContext
+  StepContext
+
+AbstractContextItem
+  AssayContextItem
+  ExperimentContextItem
+  ResultContextItem
+  ProjectContextItem
+  StepContextItem
+
+Questions
+
+Project_Step
+Experiment_ID is not nullable but cardinality notation indicates Experiment is optional, this is inconsistant.  Should Experiment be optional?
+Should Project.projectSteps be a list? or should the projectSteps have some ordering?  Currently what should we order on?
+
+
+Should replicateNumber be null or >= 0
+
+are there any constraints on valueNum, valueMin, and valueMax and valudeDisplay
+
+Should AssayContextMeasure constraint that Measure.assay and AssayContext.assay be the same Assay

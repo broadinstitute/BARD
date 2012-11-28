@@ -3,6 +3,7 @@ package dataexport.registration
 import bard.db.dictionary.Element
 import bard.db.enums.ReadyForExtraction
 import bard.db.experiment.Experiment
+import dataexport.util.ExportAbstractService
 import groovy.xml.MarkupBuilder
 import org.codehaus.groovy.grails.web.mapping.LinkGenerator
 import bard.db.registration.*
@@ -11,7 +12,7 @@ import bard.db.registration.*
  * Helper Service for handling generation for XML documents for Assay definition extraction
  * This is wired in resources.groovy
  */
-class AssayExportHelperService {
+class AssayExportHelperService extends ExportAbstractService {
     LinkGenerator grailsLinkGenerator
     final MediaTypesDTO mediaTypesDTO
 
@@ -20,10 +21,26 @@ class AssayExportHelperService {
     }
 
     protected void generateAssayContext(final MarkupBuilder markupBuilder, final AssayContext assayContext) {
-
-        markupBuilder.assayContext() {
-            contextName(assayContext.contextName)
+        def attributes = ['assayContextId': assayContext.id,
+                'displayOrder': assayContext.assay.assayContexts.indexOf(assayContext)]
+        markupBuilder.assayContext(attributes) {
+            contextName(assayContext.getPreferredName())
+            if (assayContext.contextGroup) {
+                contextGroup(assayContext.contextGroup)
+            }
             generateAssayContextItems(markupBuilder, assayContext.assayContextItems)
+            generateAssayContextMeasureRefs(markupBuilder, 'measureRef', assayContext.assayContextMeasures)
+        }
+    }
+
+    protected void generateAssayContextMeasureRefs(MarkupBuilder markupBuilder, String refElementName, Set<AssayContextMeasure> assayContextMeasures) {
+        if (assayContextMeasures) {
+            String propName = refElementName - 'Ref'
+            markupBuilder."${refElementName}s"() {
+                for (AssayContextMeasure assayContextMeasure in assayContextMeasures) {
+                    "${refElementName}"(assayContextMeasure."${propName}".id)
+                }
+            }
         }
     }
     /**
@@ -33,12 +50,9 @@ class AssayExportHelperService {
      */
     protected Map<String, String> createAttributesForMeasure(final Measure measure) {
         final Map<String, String> attributes = [:]
-
-        if (measure.assayContext) {
-            attributes.put('assayContextRef', measure.assayContext.contextName)
-        }
+        attributes.put('measureId', measure.id.toString())
         if (measure.parentMeasure) {
-            attributes.put('parentMeasure', measure.parentMeasure.id.toString())
+            attributes.put('parentMeasureRef', measure.parentMeasure.id.toString())
         }
         return attributes
     }
@@ -47,105 +61,47 @@ class AssayExportHelperService {
 
         final Map<String, String> attributes = createAttributesForMeasure(measure);
         markupBuilder.measure(attributes) {
-            final Element resultType = measure.element
+            final Element resultType = measure.resultType
             if (resultType) { //this is the result type
-                resultTypeRef(label: resultType.label) {
-                    final String href = grailsLinkGenerator.link(mapping: 'resultType', absolute: true, params: [id: resultType.id]).toString()
-                    link(rel: 'related', href: "${href}", type: "${this.mediaTypesDTO.resultTypeMediaType}")
-                }
+                createElementRef(markupBuilder, resultType, 'resultTypeRef', this.mediaTypesDTO.resultTypeMediaType)
             }
-            final String unit = measure.entryUnit
-            if (unit) {
-                entryUnit(unit: unit) {
-                }
+            final Element statsModifier = measure.statsModifier
+            if (statsModifier) {
+                createElementRef(markupBuilder, statsModifier, 'statsModifierRef', this.mediaTypesDTO.elementMediaType)
             }
+            final Element entryUnit = measure.entryUnit
+            if (entryUnit) {
+                createElementRef(markupBuilder, entryUnit, 'entryUnitRef', this.mediaTypesDTO.elementMediaType)
+            }
+            generateAssayContextMeasureRefs(markupBuilder, 'assayContextRef', measure.assayContextMeasures)
         }
     }
 
-    protected Map<String, String> createAttributesForAssayContextItem(final AssayContextItem assayContextItem) {
-        final Map<String, String> attributes = [:]
-
-        if (assayContextItem.id) {
-            attributes.put('assayContextItemId', assayContextItem.id.toString())
+    public createElementRef(MarkupBuilder markupBuilder, Element element, String refName, String mediaType) {
+        markupBuilder."${refName}"(label: element.label) {
+            final String href = grailsLinkGenerator.link(mapping: 'element', absolute: true, params: [id: element.id]).toString()
+            link(rel: 'related', href: href, type: mediaType)
         }
-        if (assayContextItem.assayContext) {
-            attributes.put('assayContextRef', assayContextItem.assayContext?.contextName)
-        }
-        if (assayContextItem.qualifier) {
-            attributes.put('qualifier', assayContextItem.qualifier)
-        }
-
-        if (assayContextItem.valueDisplay) {
-            attributes.put('valueDisplay', assayContextItem.valueDisplay)
-        }
-        if (assayContextItem.valueNum || assayContextItem.valueNum.toString().isInteger()) {
-            attributes.put('valueNum', assayContextItem.valueNum.toString())
-        }
-        if (assayContextItem.valueMin || assayContextItem.valueMin.toString().isInteger()) {
-            attributes.put('valueMin', assayContextItem.valueMin.toString())
-        }
-        if (assayContextItem.valueMax || assayContextItem.valueMax.toString().isInteger()) {
-            attributes.put('valueMax', assayContextItem.valueMax.toString())
-        }
-        return attributes;
     }
+
 
     protected void generateAssayContextItem(final MarkupBuilder markupBuilder, final AssayContextItem assayContextItem) {
-        final Map<String, String> attributes = createAttributesForAssayContextItem(assayContextItem)
-
-        markupBuilder.assayContextItem(attributes) {
-            final Element valueElement = assayContextItem.valueElement
-            final Element attributeElement = assayContextItem.attributeElement
-
-            //add value id element
-            if (valueElement) {
-                valueId(label: valueElement.label) {
-                    final String valueHref = grailsLinkGenerator.link(mapping: 'element', absolute: true, params: [id: valueElement.id]).toString()
-                    link(rel: 'related', href: "${valueHref}", type: "${this.mediaTypesDTO.elementMediaType}")
-                }
-            }
-            //add attributeId element
-            if (attributeElement) {
-                final String attributeHref = grailsLinkGenerator.link(mapping: 'element', absolute: true, params: [id: attributeElement.id]).toString()
-                attributeId(attributeType: assayContextItem.attributeType.toString(), label: attributeElement.label) {
-                    link(rel: 'related', href: "${attributeHref}", type: "${this.mediaTypesDTO.elementMediaType}")
-                }
-            }
-            if (assayContextItem.extValueId) {
-                extValueId(assayContextItem.extValueId)
-            }
-        }
-
+        generateContextItem(markupBuilder,
+                assayContextItem,
+                assayContextItem.attributeType.toString(),
+                'assayContextItem',
+                this.mediaTypesDTO.elementMediaType,
+                this.grailsLinkGenerator,
+                assayContextItem.id,
+                assayContextItem.assayContext.assayContextItems.indexOf(assayContextItem))
     }
-    /**
-     *
-     * @param markupBuilder
-     * @param assayDocument
-     * @param generateContent - True if we should add the contents of this document
-     */
-    public void generateAssayDocument(
-            final MarkupBuilder markupBuilder, final AssayDocument assayDocument, final boolean generateContent) {
 
-        final String assayDocumentHref = grailsLinkGenerator.link(mapping: 'assayDocument', absolute: true, params: [id: assayDocument.id]).toString()
-
-        markupBuilder.assayDocument(documentType: assayDocument.documentType) {
-            if (assayDocument.documentName) {
-                documentName(assayDocument.documentName)
-            }
-            if (generateContent) {
-                if (assayDocument.documentContent) {
-                    documentContent(assayDocument.documentContent)
-                }
-            }
-            link(rel: 'item', href: "${assayDocumentHref}", type: "${this.mediaTypesDTO.assayDocMediaType}")
-        }
-    }
     /**
      * Generate a measure contexts
      * @param markupBuilder
      * @param assayContexts
      */
-    protected void generateAssayContexts(final MarkupBuilder markupBuilder, final Set<AssayContext> assayContexts) {
+    protected void generateAssayContexts(final MarkupBuilder markupBuilder, final List<AssayContext> assayContexts) {
         if (assayContexts) {
             markupBuilder.assayContexts() {
                 for (AssayContext assayContext : assayContexts) {
@@ -163,7 +119,7 @@ class AssayExportHelperService {
         if (allAssayContextItems) {
             markupBuilder.assayContextItems() {
                 for (AssayContextItem assayContextItem : allAssayContextItems) {
-                    if(assayContextItem != null){
+                    if (assayContextItem != null) {
                         generateAssayContextItem(markupBuilder, assayContextItem)
                     }
                 }
@@ -198,6 +154,11 @@ class AssayExportHelperService {
         markupBuilder.link(rel: 'self', href: "${assayHref}", type: "${this.mediaTypesDTO.assayMediaType}")
         markupBuilder.link(rel: 'up', href: "${assaysHref}", type: "${this.mediaTypesDTO.assaysMediaType}")
 
+        for (AssayDocument assayDocument in assay.assayDocuments) {
+            final String assayDocumentHref = grailsLinkGenerator.link(mapping: 'assayDocument', absolute: true, params: [id: assayDocument.id]).toString()
+            markupBuilder.link(rel: 'item', href: "${assayDocumentHref}", type: "${this.mediaTypesDTO.assayDocMediaType}")
+        }
+
         for (Experiment experiment : assay.experiments) {
             final String experimentHref = grailsLinkGenerator.link(mapping: 'experiment', absolute: true, params: [id: experiment.id]).toString()
             markupBuilder.link(rel: 'related', type: "${this.mediaTypesDTO.experimentMediaType}", href: "${experimentHref}")
@@ -214,13 +175,22 @@ class AssayExportHelperService {
         }
     }
 
+    public void generateDocument(final MarkupBuilder markupBuilder, AssayDocument assayDocument) {
+        generateDocument(this.grailsLinkGenerator, markupBuilder, assayDocument,
+                'assayDocument', 'assay',
+                assayDocument.id,
+                assayDocument.assay.id,
+                this.mediaTypesDTO.assayDocMediaType, this.mediaTypesDTO.assayMediaType)
+
+    }
+
     public void generateAssayDocuments(
             final MarkupBuilder markupBuilder,
             final Set<AssayDocument> assayDocuments) {
         if (assayDocuments) {
             markupBuilder.assayDocuments() {
                 for (AssayDocument assayDocument : assayDocuments) {
-                    generateAssayDocument(markupBuilder, assayDocument, false)
+                    generateDocument(markupBuilder, assayDocument)
                 }
             }
         }
@@ -236,10 +206,7 @@ class AssayExportHelperService {
             final Assay assay) {
 
         final Map<String, String> attributes = [:]
-
-        if (assay.id) {
-            attributes.put("assayId", assay.id.toString())
-        }
+        attributes.put("assayId", assay.id.toString())
         attributes.put('readyForExtraction', assay.readyForExtraction.toString())
         if (assay.assayVersion) {
             attributes.put('assayVersion', assay.assayVersion)
@@ -252,20 +219,17 @@ class AssayExportHelperService {
         }
 
         markupBuilder.assay(attributes) {
-            if(assay.assayTitle){
-                assayTitle(assay.assayTitle)
-            }
-            if (assay.assayName) {
-                assayName(assay.assayName)
-            }
-
+            assayShortName(assay.assayShortName)
+            assayName(assay.assayName)
             if (assay.designedBy) {
                 designedBy(assay.designedBy)
             }
-            generateAssayContexts(markupBuilder, assay.assayContexts)
-            generateMeasures(markupBuilder, assay.measures)
-            generateAssayContextItems(markupBuilder, assay.assayContextItems)
-            generateAssayDocuments(markupBuilder, assay.assayDocuments)
+            if (assay.assayContexts) {
+                generateAssayContexts(markupBuilder, assay.assayContexts)
+            }
+            if (assay.measures) {
+                generateMeasures(markupBuilder, assay.measures)
+            }
             generateLinksForAssay(markupBuilder, assay)
         }
     }

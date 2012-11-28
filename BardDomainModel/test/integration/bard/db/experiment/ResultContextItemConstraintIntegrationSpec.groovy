@@ -2,6 +2,7 @@ package bard.db.experiment
 
 import org.junit.Before
 import spock.lang.Unroll
+import bard.db.model.AbstractContextItemIntegrationSpec
 
 /**
  * Created with IntelliJ IDEA.
@@ -11,7 +12,7 @@ import spock.lang.Unroll
  * To change this template use File | Settings | File Templates.
  */
 @Unroll
-class ResultContextItemConstraintIntegrationSpec extends RunContextItemIntegrationSpec {
+class ResultContextItemConstraintIntegrationSpec extends AbstractContextItemIntegrationSpec {
     @Before
     @Override
     void doSetup() {

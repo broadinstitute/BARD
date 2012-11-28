@@ -2,12 +2,10 @@ package bard.db.experiment
 
 import grails.buildtestdata.mixin.Build
 import org.junit.Before
-import spock.lang.Specification
+
 import spock.lang.Unroll
 
-import static bard.db.registration.AssayContextItem.*
-import static test.TestUtils.assertFieldValidationExpectations
-import static test.TestUtils.createString
+import bard.db.model.AbstractContextItemConstraintUnitSpec
 
 /**
  * Created with IntelliJ IDEA.
@@ -18,16 +16,11 @@ import static test.TestUtils.createString
  */
 @Build(ExperimentContextItem)
 @Unroll
-class ExperimentContextItemConstraintUnitSpec extends RunContextItemConstraintUnitSpec {
-
-
+class ExperimentContextItemConstraintUnitSpec extends AbstractContextItemConstraintUnitSpec {
 
     @Before
     @Override
     void doSetup() {
         domainInstance = ExperimentContextItem.buildWithoutSave()
     }
-
-
-
 }

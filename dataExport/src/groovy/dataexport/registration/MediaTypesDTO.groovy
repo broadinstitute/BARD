@@ -10,6 +10,7 @@ class MediaTypesDTO {
     String resultTypeMediaType
     String stageMediaType
     String assayDocMediaType
+    String projectDocMediaType
     String dictionaryMediaType
     String projectMediaType
     String projectsMediaType
@@ -17,6 +18,10 @@ class MediaTypesDTO {
     String experimentMediaType
     String resultsMediaType
     String resultMediaType
+    String externalReferencesMediaType
+    String externalReferenceMediaType
+    String externalSystemsMediaType
+    String externalSystemMediaType
     MediaTypesDTO() {
 
     }
