@@ -30,10 +30,10 @@
             <dt>Associated Projects:</dt>
             <dd>
                 <ul>
-                    %{-- TODO: <g:each in="${projects}" var="project">--}%
-                        %{--<li><g:link controller="bardWebInterface" action="showProject" id="${project.id}" params='[searchString:"${searchString}"]'>${project.name} <small>(Project ID: ${project.id})</small></g:link>--}%
-                        %{--</li>--}%
-                    %{--</g:each>--}%
+                     <g:each in="${projects}" var="project">
+                        <li><g:link controller="bardWebInterface" action="showProject" id="${project.id}" params='[searchString:"${searchString}"]'>${project.name} <small>(Project ID: ${project.id})</small></g:link>
+                        </li>
+                    </g:each>
                 </ul>
             </dd>
         </dl>
