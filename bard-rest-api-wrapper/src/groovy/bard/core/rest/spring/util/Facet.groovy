@@ -1,14 +1,15 @@
 package bard.core.rest.spring.util
 
-import com.fasterxml.jackson.annotation.JsonInclude
-
-import com.fasterxml.jackson.annotation.JsonProperty
-import org.apache.commons.lang.builder.ToStringBuilder
-import org.apache.commons.lang.builder.HashCodeBuilder
-import org.apache.commons.lang.builder.EqualsBuilder
+import bard.core.DataSource
+import bard.core.IntValue
+import bard.core.Value
 import com.fasterxml.jackson.annotation.JsonAnyGetter
 import com.fasterxml.jackson.annotation.JsonAnySetter
-import bard.core.rest.spring.util.Counts
+import com.fasterxml.jackson.annotation.JsonInclude
+import com.fasterxml.jackson.annotation.JsonProperty
+import org.apache.commons.lang.builder.EqualsBuilder
+import org.apache.commons.lang.builder.HashCodeBuilder
+import org.apache.commons.lang.builder.ToStringBuilder
 
 /**
  * Created with IntelliJ IDEA.
@@ -71,4 +72,21 @@ public class Facet {
         this.additionalProperties.put(name, value);
     }
 
+    public Value toValue() {
+        final Value facet = new Value(DataSource.DEFAULT, this.facetName);
+        final Counts counts = this.getCounts()
+        final Map<String, Object> additionalProperties = counts.getAdditionalProperties()
+        boolean hasAtleastOneValue = 0//We will ignore empty facets
+        for (String key : additionalProperties.keySet()) {
+            final Object object = additionalProperties.get(key)
+            if (object != null) {
+                new IntValue(facet, key, (Integer) object);
+                hasAtleastOneValue = true
+            }
+        }
+        if (hasAtleastOneValue) {
+            return facet
+        }
+        return null
+    }
 }

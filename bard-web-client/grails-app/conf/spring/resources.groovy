@@ -30,6 +30,33 @@ beans = {
         baseUrl = ncgcBaseURL
         restTemplate = ref('restTemplate')
     }
+    restCombinedService(RestCombinedService){
+        baseUrl = ncgcBaseURL
+        restTemplate = ref('restTemplate')
+        experimentRestService=ref('experimentRestService')
+        compoundRestService=ref('compoundRestService')
+        assayRestService=ref('assayRestService')
+        projectRestService=ref('projectRestService')
+    }
+
+    compoundRestService(CompoundRestService) {
+        baseUrl = ncgcBaseURL
+        promiscuityUrl = badApplePromiscuityUrl
+        restTemplate = ref('restTemplate')
+    }
+
+    experimentRestService(ExperimentRestService) {
+        baseUrl = ncgcBaseURL
+        restTemplate = ref('restTemplate')
+    }
+    projectRestService(ProjectRestService) {
+        baseUrl = ncgcBaseURL
+        restTemplate = ref('restTemplate')
+    }
+    assayRestService(AssayRestService) {
+        baseUrl = ncgcBaseURL
+        restTemplate = ref('restTemplate')
+    }
     restCombinedService(RestCombinedService) {
         baseUrl = ncgcBaseURL
         restTemplate = ref('restTemplate')

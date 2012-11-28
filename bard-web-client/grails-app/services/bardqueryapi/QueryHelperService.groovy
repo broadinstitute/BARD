@@ -11,6 +11,9 @@ import org.apache.commons.lang.time.StopWatch
 
 import java.util.regex.Matcher
 import java.util.regex.Pattern
+import bard.core.rest.spring.compounds.ExpandedCompoundResult
+import bard.core.rest.spring.assays.FreeTextAssayResult
+import bard.core.rest.spring.project.ExpandedProjectResult
 
 class QueryHelperService {
 
@@ -122,6 +125,14 @@ class QueryHelperService {
         }
         return compoundAdapters
     }
+    final List<CompoundAdapter> compoundsToAdapters(final ExpandedCompoundResult expandedCompoundResult){
+        final List<CompoundAdapter> compoundAdapters = []
+        for (compound in expandedCompoundResult.compounds) {
+            final CompoundAdapter compoundAdapter = new CompoundAdapter(compound)
+            compoundAdapters.add(compoundAdapter)
+        }
+        return compoundAdapters
+    }
     /**
      * convert a list Assay's to a list of AssayAdapter's
      * @param assays {@link Assay}
@@ -135,6 +146,19 @@ class QueryHelperService {
         return assayAdapters
     }
     /**
+     * convert a list Assay's to a list of AssayAdapter's
+     * @param assays {@link Assay}
+     * @return list of {@link AssayAdapter}'s
+     */
+    public List<AssayAdapter> assaysToAdapters(FreeTextAssayResult freeTextAssayResult) {
+        final List<AssayAdapter> assayAdapters = []
+        for (bard.core.rest.spring.assays.Assay assay : freeTextAssayResult.assays) {
+            assayAdapters.add(new AssayAdapter(assay))
+        }
+        return assayAdapters
+    }
+
+    /**
      * convert Project's to ProjectAdapter's
      * @param projects {@link Project}'s
      * @return list of {@link ProjectAdapter}'s
@@ -146,7 +170,13 @@ class QueryHelperService {
         }
         return projectAdapters
     }
-
+    public List<ProjectAdapter> projectsToAdapters(final ExpandedProjectResult expandedProjectResult){
+        final List<ProjectAdapter> projectAdapters = []
+        for (bard.core.rest.spring.project.Project project : expandedProjectResult.projects) {
+            projectAdapters.add(new ProjectAdapter(project))
+        }
+        return projectAdapters
+    }
     /**
      * Extract filters from the search string if any
      * @param searchFilters {@link SearchFilter}'s

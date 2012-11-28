@@ -1,7 +1,7 @@
 package bardqueryapi
 
-import bard.core.StructureSearchParams
 import bard.core.adapter.CompoundAdapter
+import bard.core.rest.spring.util.StructureSearchParams
 
 public interface IQueryService {
 

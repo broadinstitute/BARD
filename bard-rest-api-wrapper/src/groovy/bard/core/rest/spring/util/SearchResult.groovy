@@ -6,6 +6,7 @@ import org.apache.commons.lang.builder.ToStringBuilder
 import com.fasterxml.jackson.annotation.*
 import bard.core.rest.spring.util.MetaData
 import bard.core.rest.spring.util.Facet
+import bard.core.Value
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class SearchResult {
@@ -85,6 +86,9 @@ public class SearchResult {
     @JsonIgnore
     public List<Facet> getFacets() {
         return this.metaData?.facets?:[]
+    }
+    public Collection<Value> getFacetsToValues(){
+        return getMetaData()?.facetsToValues()
     }
     Map<String, Long> getEtags() {
         return etags

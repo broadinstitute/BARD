@@ -11,7 +11,7 @@ import org.apache.commons.lang3.StringUtils
 public class CompoundAdapter
 extends EntityAdapter<Compound> implements MolecularData {
     private final Object myLock = new Object()
-
+    bard.core.rest.spring.compounds.Compound restCompound
 
     protected MolecularValue mv;
     private String probeId;
@@ -19,21 +19,33 @@ extends EntityAdapter<Compound> implements MolecularData {
     public CompoundAdapter() {
     }
 
+    public CompoundAdapter(bard.core.rest.spring.compounds.Compound restCompound) {
+        this.restCompound = restCompound
+    }
+
     public CompoundAdapter(Compound compound) {
         setCompound(compound);
     }
 
     public boolean isDrug() {
+        if (restCompound) {
+            return restCompound.compoundClass == 'Drug'
+        }
         return this.getCompound()?.isDrug()
     }
 
     public String getProbeId() {
+
         if (this.probeId == null) {
             synchronized (myLock) {
-                if (this.getCompound()?.getValue(Compound.ProbeIDValue)) {
-                    this.probeId = this.getCompound().getValue(Compound.ProbeIDValue).toString()
+                if (restCompound) {
+                    this.probeId = restCompound.probeId ?: ""
                 } else {
-                    this.probeId = ""
+                    if (this.getCompound()?.getValue(Compound.ProbeIDValue)) {
+                        this.probeId = this.getCompound().getValue(Compound.ProbeIDValue).toString()
+                    } else {
+                        this.probeId = ""
+                    }
                 }
             }
         }
@@ -50,8 +62,9 @@ extends EntityAdapter<Compound> implements MolecularData {
         setEntity(compound);
         mv = (MolecularValue) compound.getValue(Compound.MolecularValue);
     }
-
+    //Deprecated
     public List<Long> getPubChemSIDs() {
+
         Collection<Value> values =
             getEntity().getValues(Compound.PubChemSIDValue);
         List<Long> sids = [];
@@ -62,6 +75,9 @@ extends EntityAdapter<Compound> implements MolecularData {
     }
 
     public Long getPubChemCID() {
+        if (restCompound) {
+            return restCompound.cid
+        }
         Value cid = getEntity()?.getValue(Compound.PubChemCIDValue);
         if (cid) {
             return (Long) cid.getValue()
@@ -70,6 +86,9 @@ extends EntityAdapter<Compound> implements MolecularData {
     }
 
     public String getStructureSMILES() {
+        if (restCompound) {
+            return this.restCompound.smiles
+        }
         return (String) toFormat(Format.SMILES);
     }
 
@@ -89,19 +108,38 @@ extends EntityAdapter<Compound> implements MolecularData {
         return mv ? mv.formula() : "";
     }
 
-    public Double mwt() { return mv ? mv.mwt() : null; }
+    public Double mwt() {
+        if (restCompound) {
+            return restCompound.mwt
+        }
+        return mv ? mv.mwt() : null;
+    }
 
-    public Double exactMass() { return mv ? mv.exactMass() : null; }
+    public Double exactMass() {
+        if (restCompound) {
+            return restCompound.exactMass
+        }
+        return mv ? mv.exactMass() : null;
+    }
 
     public Integer hbondDonor() {
+        if (restCompound) {
+            return restCompound.hbondDonor
+        }
         return mv ? mv.hbondDonor() : null;
     }
 
     public Integer hbondAcceptor() {
+        if (restCompound) {
+            return restCompound.hbondAcceptor
+        }
         return mv ? mv.hbondAcceptor() : null;
     }
 
     public Integer rotatable() {
+        if (restCompound) {
+            return restCompound.rotatable
+        }
         return mv ? mv.rotatable() : null;
     }
 
@@ -114,10 +152,16 @@ extends EntityAdapter<Compound> implements MolecularData {
     }
 
     public Double TPSA() {
+        if (restCompound) {
+            return restCompound.tpsa
+        }
         return mv ? mv.TPSA() : null;
     }
 
     public Double logP() {
+        if (restCompound) {
+            return restCompound.xlogp
+        }
         return mv ? mv.logP() : null;
     }
 
@@ -134,12 +178,49 @@ extends EntityAdapter<Compound> implements MolecularData {
     }
 
     public byte[] toImage(int size, int background) {
-        return mv ? mv.toImage(size, background) : null;
+        return mv ? mv.toImage(size, background) : null
     }
 
     public void setMolecule(Object input) {
         if (mv) {
             mv.setMolecule(input);
         }
+    }
+
+    public String getName() {
+        return restCompound.name;
+    }
+
+    public String getIupacName() {
+
+        return restCompound?.iupacName;
+    }
+
+    public String getUrl() {
+        return restCompound?.url
+    }
+
+    public Integer getComplexity() {
+        return restCompound?.complexity
+    }
+
+    public String getCompoundClass() {
+        return restCompound?.compoundClass
+    }
+
+    public int getNumberOfAssays() {
+        if (restCompound) {
+            return restCompound?.numAssay?.intValue()
+        }
+    }
+
+    public int getNumberOfActiveAssays() {
+        if (restCompound) {
+            return restCompound?.numActiveAssay?.intValue()
+        }
+    }
+
+    public String resourcePath() {
+        return restCompound?.resourcePath
     }
 }

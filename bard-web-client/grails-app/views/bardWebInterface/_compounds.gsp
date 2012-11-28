@@ -46,9 +46,12 @@
                         </g:elseif>
                         <dt>Assays - Active vs Tested:</dt>
                         <dd>
-                            <div class="activeVrsTested"
-                                 href="${createLink(controller: 'bardWebInterface', action: 'activeVrsTested', params: [cid: compoundAdapter.pubChemCID])}"
-                                 id="${compoundAdapter.pubChemCID}_tested"></div>
+                            <div class="activeVrsTested">
+                                <div>
+                                    <span class="badge badge-info">${compoundAdapter?.numberOfActiveAssays} / ${compoundAdapter?.numberOfAssays}</span>
+                                </div>
+
+                                 </div>
                         </dd>
 
                         <dt>Scaffold Promiscuity Analysis:</dt>

@@ -12,8 +12,9 @@ import bard.core.*
 import bard.core.interfaces.ExperimentCategory
 import bard.core.interfaces.ExperimentRole
 import bard.core.interfaces.ExperimentType
+import bard.core.rest.spring.util.StructureSearchParams
 
-class MockQueryService implements IQueryService {
+class MockQueryService {
     QueryHelperService queryHelperService
 
     static final Map<Long, MockCompoundAdapter> mockCompoundAdapterMap = [:]

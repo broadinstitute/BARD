@@ -1,14 +1,15 @@
 package bard.core.rest.spring.util
 
-import com.fasterxml.jackson.annotation.JsonInclude
-import javax.annotation.Generated
-
-import com.fasterxml.jackson.annotation.JsonProperty
-import org.apache.commons.lang.builder.ToStringBuilder
-import org.apache.commons.lang.builder.HashCodeBuilder
-import org.apache.commons.lang.builder.EqualsBuilder
+import bard.core.Value
 import com.fasterxml.jackson.annotation.JsonAnyGetter
 import com.fasterxml.jackson.annotation.JsonAnySetter
+import com.fasterxml.jackson.annotation.JsonInclude
+import com.fasterxml.jackson.annotation.JsonProperty
+import org.apache.commons.lang.builder.EqualsBuilder
+import org.apache.commons.lang.builder.HashCodeBuilder
+import org.apache.commons.lang.builder.ToStringBuilder
+
+import javax.annotation.Generated
 
 /**
  * Created with IntelliJ IDEA.
@@ -118,6 +119,17 @@ public class MetaData {
     @JsonAnySetter
     public void setAdditionalProperties(String name, Object value) {
         this.additionalProperties.put(name, value);
+    }
+
+    Collection<Value> facetsToValues() {
+        Collection<Value> values = []
+        for (Facet facet : this.facets) {
+            Value value = facet.toValue()
+            if (value) {
+                values.add(value)
+            }
+        }
+        return values;
     }
 
 }

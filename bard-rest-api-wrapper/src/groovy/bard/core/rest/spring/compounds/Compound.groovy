@@ -24,7 +24,7 @@ public class Compound {
     @JsonProperty("cid")
     private Integer cid;
     @JsonProperty("probeId")
-    private Object probeId;
+    private String probeId;
     @JsonProperty("url")
     private Object url;
     @JsonProperty("smiles")
@@ -101,12 +101,12 @@ public class Compound {
     }
 
     @JsonProperty("probeId")
-    public Object getProbeId() {
+    public String getProbeId() {
         return probeId;
     }
 
     @JsonProperty("probeId")
-    public void setProbeId(Object probeId) {
+    public void setProbeId(String probeId) {
         this.probeId = probeId;
     }
 

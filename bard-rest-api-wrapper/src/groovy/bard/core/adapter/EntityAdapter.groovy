@@ -38,10 +38,10 @@ public class EntityAdapter<E extends Entity> {
     }
 
     public String getSearchHighlight() {
-        Value hl = entity.getValue(Entity.SearchHighlightValue);
-        if (hl != null) {
-            return (String) hl.getValue();
-        }
+//        Value hl = entity.getValue(Entity.SearchHighlightValue);
+//        if (hl != null) {
+//            return (String) hl.getValue();
+//        }
         return null;
     }
 

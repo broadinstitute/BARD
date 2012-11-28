@@ -12,11 +12,11 @@
     <ul class="unstyled results">
         <g:each var="projectAdapter" in="${projectAdapters}">
             <li>
-                <h3><g:link action="showProject" id="${projectAdapter.project.id}"
-                            params='[searchString: "${searchString}"]'>${projectAdapter.project.name} <small>(Project ID: ${projectAdapter.project.id})</small></g:link>
+                <h3><g:link action="showProject" id="${projectAdapter.id}"
+                            params='[searchString: "${searchString}"]'>${projectAdapter.name} <small>(Project ID: ${projectAdapter.id})</small></g:link>
                 </h3>
-                <g:saveToCartButton id="${projectAdapter.project.id}"
-                                    name="${JavaScriptUtility.cleanup(projectAdapter.project.name)}"
+                <g:saveToCartButton id="${projectAdapter.id}"
+                                    name="${JavaScriptUtility.cleanup(projectAdapter.name)}"
                                     type="${querycart.QueryItemType.Project}"/>
                 <g:if test="${projectAdapter.searchHighlight}">
                     <dl>

@@ -19,7 +19,7 @@
                                     params='[searchString: "${searchString}"]'>View Results</g:link>
                             <g:if test="${showAssaySummary}">
                                 <div><g:render template="assaySummary"
-                                               model="[assayAdapter: experiment.getAssay()]"/></div>
+                                               model="[assayAdapter: experiment?.getAssay()]"/></div>
                             </g:if>
                             |
                             <a data-toggle="collapse" data-parent="#accordionDescription"
