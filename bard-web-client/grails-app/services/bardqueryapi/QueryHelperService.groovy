@@ -127,7 +127,7 @@ class QueryHelperService {
     }
     final List<CompoundAdapter> compoundsToAdapters(final ExpandedCompoundResult expandedCompoundResult){
         final List<CompoundAdapter> compoundAdapters = []
-        for (compound in expandedCompoundResult.compounds) {
+        for (bard.core.rest.spring.compounds.Compound compound : expandedCompoundResult.compounds) {
             final CompoundAdapter compoundAdapter = new CompoundAdapter(compound)
             compoundAdapters.add(compoundAdapter)
         }

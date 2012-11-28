@@ -363,7 +363,9 @@ public class Compound {
     public void setEtag(String etag) {
         this.etag = etag
     }
-
+    public Integer getId(){
+        return this.cid;
+    }
 
 }
 

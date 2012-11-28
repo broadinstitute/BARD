@@ -1,11 +1,11 @@
 package bardqueryapi
 
-import bard.core.rest.spring.compounds.PromiscuityScore
-import bard.core.rest.spring.util.StructureSearchParams
 import bard.core.Value
 import bard.core.adapter.AssayAdapter
 import bard.core.adapter.CompoundAdapter
 import bard.core.adapter.ProjectAdapter
+import bard.core.rest.spring.compounds.PromiscuityScore
+import bard.core.rest.spring.util.StructureSearchParams
 import grails.plugins.springsecurity.Secured
 import molspreadsheet.MolecularSpreadSheetService
 import org.apache.commons.lang.StringUtils
