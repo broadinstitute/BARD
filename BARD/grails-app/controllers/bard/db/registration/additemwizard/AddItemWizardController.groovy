@@ -69,18 +69,18 @@ class AddItemWizardController {
 		// triggers the 'next' action (hence, the main
 		// page dynamically renders the study template
 		// and makes the flow jump to the study logic)
-		mainPage {
-			render(view: "/AddItemWizard/index")
-			onRender {
-				// Grom a development message
-				if (pluginManager.getGrailsPlugin('grom')) "rendering the main Ajaxflow page (index.gsp)".grom()
-
-				// let the view know we're in page 1
-				flow.page = 1
-				success()
-			}
-			on("next").to "pageOne"
-		}
+//		mainPage {
+//			render(view: "/AddItemWizard/index")
+//			onRender {
+//				// Grom a development message
+//				if (pluginManager.getGrailsPlugin('grom')) "rendering the main Ajaxflow page (index.gsp)".grom()
+//
+//				// let the view know we're in page 1
+//				flow.page = 1
+//				success()
+//			}
+//			on("next").to "pageOne"
+//		}
 
 		// first wizard page
 		pageOne {
@@ -160,7 +160,7 @@ class AddItemWizardController {
 				flow.page = 4
 				success()
 			}
-			on("next") {
+			on("save") {
 				// put some logic in here
 				flow.page = 5
 			}.to "save"
