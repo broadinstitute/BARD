@@ -44,18 +44,6 @@ public class ExpandedAssay extends AbstractAssay {
     private List<Experiment> experiments = new ArrayList<Experiment>();
     @JsonProperty("projects")
     private List<Project> projects = new ArrayList<Project>();
-    @JsonProperty("comments")
-    private String comments;
-
-    @JsonProperty("comments")
-    public String getComments() {
-        return this.comments;
-    }
-
-    @JsonProperty("comments")
-    public void setComments(String comments) {
-        this.comments = comments;
-    }
 
     @JsonProperty("documents")
     public List<Document> getDocuments() {

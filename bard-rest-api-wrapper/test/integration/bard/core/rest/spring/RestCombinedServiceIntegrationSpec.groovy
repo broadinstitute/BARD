@@ -143,7 +143,7 @@ class RestCombinedServiceIntegrationSpec extends IntegrationSpec {
         int dataCount = 0
         for (Experiment experiment in allExperiments) {
 
-            ExperimentData experimentData = this.restCombinedService.experimentRestService.activities(experiment.exptId, etag)
+            ExperimentData experimentData = this.restCombinedService.experimentRestService.activities(experiment.id, etag)
             dataCount = dataCount + experimentData.activities.size()
         }
 

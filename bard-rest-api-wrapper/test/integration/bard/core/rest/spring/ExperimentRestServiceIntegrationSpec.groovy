@@ -25,7 +25,7 @@ class ExperimentRestServiceIntegrationSpec extends IntegrationSpec {
         when: "The get method is called with the given experiment ID: #experimentid"
         final ExperimentSearch experiment = this.experimentRestService.getExperimentById(experimentid)
         then: "An experiment is returned with the expected information"
-        assert experiment.getExptId() == experimentid
+        assert experiment.getId() == experimentid
         List<Assay> assays = experiment.getAssays()
         assert assays
         List<Long> projectCollection = experiment.getProjectIdList()
@@ -54,7 +54,7 @@ class ExperimentRestServiceIntegrationSpec extends IntegrationSpec {
         final ExperimentSearch experimentSearch = this.experimentRestService.getExperimentById(experimentId)
         then: "An experiment is returned with the expected information"
         assert experimentSearch
-        assert experimentSearch.getExptId() == experimentId
+        assert experimentSearch.getId() == experimentId
         assertExperimentSearchResult(experimentSearch)
         where:
         label                | experimentId
@@ -129,7 +129,7 @@ class ExperimentRestServiceIntegrationSpec extends IntegrationSpec {
      * @param experiment
      */
     void assertExperimentSearchResult(final ExperimentSearch experimentSearch) {
-        final ExperimentData experimentData = this.experimentRestService.activities(experimentSearch.exptId)
+        final ExperimentData experimentData = this.experimentRestService.activities(experimentSearch.id)
         final List<Activity> activities = experimentData.activities
         assert activities
         for (Activity activity : activities) {

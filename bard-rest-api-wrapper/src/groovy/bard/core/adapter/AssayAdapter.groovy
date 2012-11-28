@@ -8,9 +8,10 @@ import bard.core.interfaces.AssayCategory
 import bard.core.interfaces.AssayRole
 import bard.core.interfaces.AssayType
 import bard.core.interfaces.EntityNamedSources
+import bard.core.rest.spring.assays.ExpandedAssay
 
 public class AssayAdapter extends EntityAdapter<Assay> {
-    private bard.core.rest.spring.assays.Assay restAssay
+    private bard.core.rest.spring.assays.AbstractAssay restAssay
     List<String> srcNames = [EntityNamedSources.CAPAnnotationSource,
             EntityNamedSources.GOBPAnnotationSource,
             EntityNamedSources.GOMFAnnotationSource,
@@ -26,7 +27,7 @@ public class AssayAdapter extends EntityAdapter<Assay> {
             return restAssay.name
         }
     }
-    public AssayAdapter(bard.core.rest.spring.assays.Assay assay) {
+    public AssayAdapter(bard.core.rest.spring.assays.AbstractAssay assay) {
         this.restAssay = assay
     }
     public Long getCapAssayId(){
@@ -81,20 +82,30 @@ public class AssayAdapter extends EntityAdapter<Assay> {
 
     public String getComments() {
         if (restAssay) {
-            return ""
+            return restAssay.getComments()
         }
         return getAssay().getComments()
     }
-
+    public Long getAid(){
+        if(restAssay){
+            return restAssay.aid
+        }
+        return getAssay().getValue('AssayPubChemAID').value
+    }
     public Assay getAssay() { return (Assay) getEntity(); }
 
     public void setAssay(Assay assay) {
         setEntity(assay);
     }
-
+    public String getSource(){
+        if(restAssay){
+            return restAssay.source
+        }
+        else{
+            return getAssay().getValue('AssaySource').value
+        }
+    }
     public Collection<Value> getAnnotations() {
-
-
         Collection<Value> annos = new ArrayList<Value>();
 //
 //        for (String srcName : this.srcNames) {
@@ -137,7 +148,15 @@ public class AssayAdapter extends EntityAdapter<Assay> {
             }
             return annos
         }
+    }
 
-
+    //TODO: Change to values?
+    public List<String> getKeggAnnotations() {
+        Map<String, List<String>> annos = new HashMap<String, List<String>>()
+        if (restAssay) {
+            annos.put(EntityNamedSources.KEGGDiseaseCategoryAnnotationSource, restAssay.getKegg_disease_cat())
+            annos.put(EntityNamedSources.KEGGDiseaseNameAnnotationSource, restAssay.getKegg_disease_names())
+        }
+        return annos;
     }
 }

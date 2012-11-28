@@ -10,6 +10,18 @@ import org.apache.commons.lang3.builder.ToStringBuilder
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class AbstractAssay {
+    @JsonProperty("comments")
+    private String comments;
+
+    @JsonProperty("comments")
+    public String getComments() {
+        return this.comments;
+    }
+
+    @JsonProperty("comments")
+    public void setComments(String comments) {
+        this.comments = comments;
+    }
 
     @JsonProperty("aid")
     private long aid;

@@ -152,12 +152,20 @@ class QueryHelperService {
      */
     public List<AssayAdapter> assaysToAdapters(FreeTextAssayResult freeTextAssayResult) {
         final List<AssayAdapter> assayAdapters = []
-        for (bard.core.rest.spring.assays.Assay assay : freeTextAssayResult.assays) {
+        return assaysToAdapters(freeTextAssayResult.assays)
+    }
+    /**
+     * convert a list Assay's to a list of AssayAdapter's
+     * @param assays {@link Assay}
+     * @return list of {@link AssayAdapter}'s
+     */
+    public List<AssayAdapter> assaysToAdapters(List<bard.core.rest.spring.assays.Assay> assays) {
+        final List<AssayAdapter> assayAdapters = []
+        for (bard.core.rest.spring.assays.Assay assay :assays) {
             assayAdapters.add(new AssayAdapter(assay))
         }
         return assayAdapters
     }
-
     /**
      * convert Project's to ProjectAdapter's
      * @param projects {@link Project}'s

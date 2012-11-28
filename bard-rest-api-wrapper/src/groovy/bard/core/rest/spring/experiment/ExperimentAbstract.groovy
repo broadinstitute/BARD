@@ -7,6 +7,7 @@ import com.fasterxml.jackson.annotation.JsonProperty
 import org.apache.commons.lang.builder.EqualsBuilder
 import org.apache.commons.lang.builder.HashCodeBuilder
 import org.apache.commons.lang.builder.ToStringBuilder
+import bard.core.interfaces.ExperimentRole
 
 /**
  * Created with IntelliJ IDEA.
@@ -19,7 +20,7 @@ import org.apache.commons.lang.builder.ToStringBuilder
 public abstract class ExperimentAbstract {
 
     @JsonProperty("exptId")
-    private long exptId;
+    private long id;
     @JsonProperty("pubchemAid")
     private long pubchemAid;
     @JsonProperty("category")
@@ -57,13 +58,13 @@ public abstract class ExperimentAbstract {
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
     @JsonProperty("exptId")
-    public long getExptId() {
-        return exptId;
+    public long getId() {
+        return id;
     }
 
     @JsonProperty("exptId")
-    public void setExptId(long exptId) {
-        this.exptId = exptId;
+    public void setId(long id) {
+        this.id = id;
     }
 
     @JsonProperty("assayId")
@@ -160,7 +161,9 @@ public abstract class ExperimentAbstract {
     public String getDescription() {
         return description;
     }
-
+     public ExperimentRole getRole(){
+         return ExperimentRole.valueOf(this.getClassification().intValue())
+     }
     @JsonProperty("description")
     public void setDescription(String description) {
         this.description = description;

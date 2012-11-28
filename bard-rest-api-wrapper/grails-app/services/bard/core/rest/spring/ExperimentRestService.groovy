@@ -62,7 +62,7 @@ class ExperimentRestService extends AbstractRestService {
     }
 
     public ExperimentData activities(Experiment experiment) {
-        return activities(experiment.getExptId())
+        return activities(experiment.getId())
     }
 
     public ExperimentData activities(Long experimentId) {

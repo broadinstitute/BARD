@@ -3,7 +3,7 @@
 <html xmlns="http://www.w3.org/1999/html">
 <head>
     <meta name="layout" content="logoSearchCartAndFooter"/>
-    <title>BARD : Assay Definition : ADID ${assayAdapter?.assay?.id}</title>
+    <title>BARD : Assay Definition : ADID ${assayAdapter?.id}</title>
 </head>
 
 <body>
@@ -23,17 +23,17 @@
 
 <div class="row-fluid">
     <div class="span6">
-        <g:render template="assaySummary" model="[assay:assayAdapter.assay]"/>
+        <g:render template="assaySummary" model="[assayAdapter:assayAdapter]"/>
     </div>
     <div class="span6">
         <dl>
             <dt>Associated Projects:</dt>
             <dd>
                 <ul>
-                    <g:each in="${projects}" var="project">
-                        <li><g:link controller="bardWebInterface" action="showProject" id="${project.id}" params='[searchString:"${searchString}"]'>${project.name} <small>(Project ID: ${project.id})</small></g:link>
-                        </li>
-                    </g:each>
+                    %{-- TODO: <g:each in="${projects}" var="project">--}%
+                        %{--<li><g:link controller="bardWebInterface" action="showProject" id="${project.id}" params='[searchString:"${searchString}"]'>${project.name} <small>(Project ID: ${project.id})</small></g:link>--}%
+                        %{--</li>--}%
+                    %{--</g:each>--}%
                 </ul>
             </dd>
         </dl>
@@ -64,10 +64,10 @@
                 <div id="assay-bio-info" class="accordion-body collapse">
                     <div class="accordion-inner">
                         <dl>
-                        <g:each in="${assayAdapter?.annotations}" var="annotation">
-                            <dt>${annotation.id}</dt>
-                            <dd>${annotation.value}</dd>
-                        </g:each>
+                        %{-- TODO: Make annother call to get annotations . KEGG Terms are available<g:each in="${assayAdapter?.annotations}" var="annotation">--}%
+                            %{--<dt>${annotation.id}</dt>--}%
+                            %{--<dd>${annotation.value}</dd>--}%
+                        %{--</g:each>--}%
                         </dl>
                     </div>
                 </div>
