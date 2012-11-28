@@ -34,6 +34,10 @@ testDataConfig {
             def i = 1
             label = {-> "label${i++}"}
         }
+        'bard.db.dictionary.UnitTree' {
+            def i = 1
+            id = {-> i++}
+        }
         'bard.db.experiment.Substance' {
             def i = 1
             id = {-> i++}
