@@ -1,19 +1,21 @@
 package bardqueryapi
 
+import bard.core.SearchParams
+import bard.core.SuggestParams
+import bard.core.Value
 import bard.core.adapter.AssayAdapter
 import bard.core.adapter.CompoundAdapter
 import bard.core.adapter.ProjectAdapter
-import bard.core.interfaces.SearchResult
 import bard.core.rest.spring.AssayRestService
 import bard.core.rest.spring.CompoundRestService
 import bard.core.rest.spring.ProjectRestService
 import bard.core.rest.spring.assays.FreeTextAssayResult
 import bard.core.rest.spring.compounds.ExpandedCompoundResult
 import bard.core.rest.spring.compounds.PromiscuityScore
+import bard.core.rest.spring.project.ExpandedProjectResult
 import bard.core.rest.spring.util.StructureSearchParams
 import org.apache.commons.lang.time.StopWatch
-import bard.core.*
-import bard.core.rest.spring.project.ExpandedProjectResult
+import bard.core.rest.spring.compounds.Compound
 
 class QueryService implements IQueryService {
     /**
@@ -66,7 +68,6 @@ class QueryService implements IQueryService {
      */
     Map findAssaysByTextSearch(final String searchString, final Integer top = 10, final Integer skip = 0, final List<SearchFilter> searchFilters = []) {
         final List<AssayAdapter> foundAssayAdapters = []
-        //TODO: Deal with facets
         Collection<Value> facets = []
         int nhits = 0
         //String eTag = null
@@ -243,7 +244,7 @@ class QueryService implements IQueryService {
 //
 //        final Collection<Assay> assays = combinedRestService.getTestedAssays(compound, activeOnly)
 //        return assays.size()
-         return 0
+        return 0
     }
 
     //=============== Show Resources Given a Single ID ================
@@ -254,14 +255,14 @@ class QueryService implements IQueryService {
      * @return CompoundAdapter
      */
     CompoundAdapter showCompound(final Long compoundId) {
-//        if (compoundId) {
-//            StopWatch sw = this.queryHelperService.startStopWatch()
-//            final Compound compound = restCompoundService.get(compoundId)
-//            this.queryHelperService.stopStopWatch(sw, "show compound ${compoundId.toString()}")
-//            if (compound) {
-//                return new CompoundAdapter(compound)
-//            }
-//        }
+        if (compoundId) {
+            StopWatch sw = this.queryHelperService.startStopWatch()
+            final Compound compound = compoundRestService.getCompoundById(compoundId)
+            this.queryHelperService.stopStopWatch(sw, "show compound ${compoundId.toString()}")
+            if (compound) {
+                return new CompoundAdapter(compound)
+            }
+        }
         return null
     }
 
