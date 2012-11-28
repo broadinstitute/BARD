@@ -9,18 +9,18 @@ import bard.core.adapter.ProjectAdapter
 import bard.core.rest.spring.AssayRestService
 import bard.core.rest.spring.CompoundRestService
 import bard.core.rest.spring.ProjectRestService
+import bard.core.rest.spring.RestCombinedService
+import bard.core.rest.spring.assays.Assay
+import bard.core.rest.spring.assays.ExpandedAssay
 import bard.core.rest.spring.assays.FreeTextAssayResult
 import bard.core.rest.spring.compounds.Compound
 import bard.core.rest.spring.compounds.ExpandedCompoundResult
 import bard.core.rest.spring.compounds.PromiscuityScore
+import bard.core.rest.spring.experiment.Experiment
 import bard.core.rest.spring.project.ExpandedProjectResult
+import bard.core.rest.spring.project.Project
 import bard.core.rest.spring.util.StructureSearchParams
 import org.apache.commons.lang.time.StopWatch
-import bard.core.rest.spring.RestCombinedService
-import bard.core.rest.spring.experiment.Experiment
-import bard.core.rest.spring.project.ProjectResult
-import bard.core.rest.spring.project.Project
-import bard.core.rest.spring.assays.ExpandedAssay
 
 class QueryService implements IQueryService {
     /**
@@ -296,21 +296,18 @@ class QueryService implements IQueryService {
      * @return Map
      */
     Map showProject(final Long projectId) {
-//        if (projectId) {
-//            StopWatch sw = this.queryHelperService.startStopWatch()
-//            final RESTProjectService restProjectService = restProjectService
-//            final Project project = restProjectService.get(projectId)
-//            this.queryHelperService.stopStopWatch(sw, "show project ${projectId.toString()}")
-//            if (project) {
-//                final SearchResult<Experiment> experimentIterator = combinedRestService.searchResultByProject(project, Experiment)
-//                List<Experiment> experiments = experimentIterator.searchResults
-//                experiments.sort { it.role }
-//                final SearchResult<Assay> assayIterator = combinedRestService.searchResultByProject(project, Assay)
-//                Collection<Assay> assays = assayIterator.searchResults
-//                ProjectAdapter projectAdapter = new ProjectAdapter(project)
-//                return [projectAdapter: projectAdapter, experiments: experiments, assays: assays]
-//            }
-//        }
+        if (projectId) {
+            StopWatch sw = this.queryHelperService.startStopWatch()
+            Project project = projectRestService.getProjectById(projectId)
+            this.queryHelperService.stopStopWatch(sw, "show project ${projectId.toString()}")
+            if (project) {
+                List<Experiment> experiments = restCombinedService.findExperimentsByProjectId(projectId)
+                experiments.sort { it.role }
+                final List<Assay> assays = restCombinedService.findAssaysByProjectId(projectId)
+                ProjectAdapter projectAdapter = new ProjectAdapter(project)
+                return [projectAdapter: projectAdapter, experiments: experiments, assays: assays]
+            }
+        }
         return [:]
     }
 

@@ -56,7 +56,7 @@ public class ProjectAdapter extends EntityAdapter<Project> {
 
     public String getLaboratoryName() {
         if (restProject) {
-            return null
+            return getDictionaryTerms().get("laboratory name")
         }
         Value labs = getEntity().getValue("laboratory name");
         return labs ? (String) labs.getValue() : null;
@@ -80,7 +80,7 @@ public class ProjectAdapter extends EntityAdapter<Project> {
 
     public Integer getNumberOfExperiments() {
         if (restProject) {
-            return restProject.experimentCount
+            return restProject.experimentCount?.intValue()?:0
         }
         Value expt = getEntity().getValue(Project.NumberOfExperimentsValue);
         return expt ? (Integer) expt.getValue() : null;
