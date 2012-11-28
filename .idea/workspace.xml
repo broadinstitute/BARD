@@ -3,8 +3,6 @@
   <component name="ChangeListManager">
     <list default="true" id="1922f8e1-9b1f-4a78-b840-b1857f23d256" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/bard-rest-api-wrapper/src/groovy/bard/core/adapter/ProjectAdapter.groovy" afterPath="$PROJECT_DIR$/bard-rest-api-wrapper/src/groovy/bard/core/adapter/ProjectAdapter.groovy" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/bard-web-client/grails-app/conf/spring/resources.groovy" afterPath="$PROJECT_DIR$/bard-web-client/grails-app/conf/spring/resources.groovy" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/bard-web-client/grails-app/services/bardqueryapi/QueryService.groovy" afterPath="$PROJECT_DIR$/bard-web-client/grails-app/services/bardqueryapi/QueryService.groovy" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/bard-web-client/grails-app/views/bardWebInterface/showProject.gsp" afterPath="$PROJECT_DIR$/bard-web-client/grails-app/views/bardWebInterface/showProject.gsp" />
     </list>
     <ignored path="bard-web-query.iws" />
@@ -1019,32 +1017,6 @@
         <option name="CONDITION" value="" />
         <option name="LOG_MESSAGE" value="" />
       </breakpoint>
-      <breakpoint url="file://$PROJECT_DIR$/bard-web-client/grails-app/services/bardqueryapi/QueryService.groovy" line="303" class="bardqueryapi.QueryService" package="bardqueryapi">
-        <option name="ENABLED" value="true" />
-        <option name="LOG_ENABLED" value="false" />
-        <option name="LOG_EXPRESSION_ENABLED" value="false" />
-        <option name="SUSPEND_POLICY" value="SuspendAll" />
-        <option name="COUNT_FILTER_ENABLED" value="false" />
-        <option name="COUNT_FILTER" value="0" />
-        <option name="CONDITION_ENABLED" value="false" />
-        <option name="CLASS_FILTERS_ENABLED" value="false" />
-        <option name="INSTANCE_FILTERS_ENABLED" value="false" />
-        <option name="CONDITION" value="" />
-        <option name="LOG_MESSAGE" value="" />
-      </breakpoint>
-      <breakpoint url="file://$PROJECT_DIR$/bard-rest-api-wrapper/grails-app/services/bard/core/rest/spring/RestCombinedService.groovy" line="144" class="bard.core.rest.spring.RestCombinedService" package="bard.core.rest.spring">
-        <option name="ENABLED" value="true" />
-        <option name="LOG_ENABLED" value="false" />
-        <option name="LOG_EXPRESSION_ENABLED" value="false" />
-        <option name="SUSPEND_POLICY" value="SuspendAll" />
-        <option name="COUNT_FILTER_ENABLED" value="false" />
-        <option name="COUNT_FILTER" value="0" />
-        <option name="CONDITION_ENABLED" value="false" />
-        <option name="CLASS_FILTERS_ENABLED" value="false" />
-        <option name="INSTANCE_FILTERS_ENABLED" value="false" />
-        <option name="CONDITION" value="" />
-        <option name="LOG_MESSAGE" value="" />
-      </breakpoint>
     </line_breakpoints>
     <breakpoint_any>
       <breakpoint>
@@ -1106,46 +1078,80 @@
       <file leaf-file-name="showProject.gsp" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/bard-web-client/grails-app/views/bardWebInterface/showProject.gsp">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="126" column="86" selection-start="6024" selection-end="6024" vertical-scroll-proportion="-40.857143">
+            <state line="92" column="8" selection-start="4107" selection-end="4107" vertical-scroll-proportion="-3.8163266">
               <folding>
-                <marker date="1354124303382" expanded="true" signature="280:396" placeholder="{...}" />
-                <marker date="1354124303382" expanded="true" signature="3554:3988" placeholder="{...}" />
-                <marker date="1354124303382" expanded="true" signature="3602:3767" placeholder="{...}" />
-                <marker date="1354124303382" expanded="true" signature="3816:3980" placeholder="{...}" />
+                <marker date="1354126769228" expanded="true" signature="280:396" placeholder="{...}" />
+                <marker date="1354126769228" expanded="true" signature="3590:4024" placeholder="{...}" />
+                <marker date="1354126769228" expanded="true" signature="3638:3803" placeholder="{...}" />
+                <marker date="1354126769228" expanded="true" signature="3852:4016" placeholder="{...}" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="BardWebInterfaceController.groovy" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/bard-web-client/grails-app/controllers/bardqueryapi/BardWebInterfaceController.groovy">
+      <file leaf-file-name="ProjectAdapter.groovy" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/bard-rest-api-wrapper/src/groovy/bard/core/adapter/ProjectAdapter.groovy">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="341" column="57" selection-start="14821" selection-end="14821" vertical-scroll-proportion="-4.4791665">
+            <state line="92" column="43" selection-start="2937" selection-end="2937" vertical-scroll-proportion="0.0">
               <folding>
-                <element signature="e#22#77#0" expanded="true" />
+                <element signature="e#29#75#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="IQueryService.groovy" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/bard-web-client/grails-app/services/bardqueryapi/IQueryService.groovy">
+      <file leaf-file-name="StringValue.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="jar://C:/Program Files/Java/jdk1.6.0_26/src.zip!/java/lang/StringValue.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="109" column="0" selection-start="3762" selection-end="3762" vertical-scroll-proportion="0.0">
-              <folding>
-                <element signature="e#22#62#0" expanded="true" />
-              </folding>
+            <state line="17" column="12" selection-start="380" selection-end="380" vertical-scroll-proportion="0.0">
+              <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="QueryService.groovy" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="Value.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/bard-rest-api-wrapper/src/java/bard/core/Value.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="15" column="14" selection-start="348" selection-end="348" vertical-scroll-proportion="-7.84">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="StringValue.java" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/bard-rest-api-wrapper/src/java/bard/core/StringValue.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="24" column="11" selection-start="586" selection-end="586" vertical-scroll-proportion="0.33333334">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="QueryService.groovy" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/bard-web-client/grails-app/services/bardqueryapi/QueryService.groovy">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="304" column="0" selection-start="14463" selection-end="14463" vertical-scroll-proportion="0.33333334">
+            <state line="303" column="0" selection-start="14358" selection-end="14358" vertical-scroll-proportion="-8.92">
               <folding>
                 <element signature="e#22#51#0" expanded="true" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="SearchResult.groovy" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/bard-rest-api-wrapper/src/groovy/bard/core/rest/spring/util/SearchResult.groovy">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="90" column="38" selection-start="2271" selection-end="2271" vertical-scroll-proportion="0.0">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="MetaData.groovy" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/bard-rest-api-wrapper/src/groovy/bard/core/rest/spring/util/MetaData.groovy">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="123" column="22" selection-start="3169" selection-end="3169" vertical-scroll-proportion="0.0">
+              <folding />
             </state>
           </provider>
         </entry>
@@ -1165,42 +1171,6 @@
         <entry file="file://$PROJECT_DIR$/bard-rest-api-wrapper/src/groovy/bard/core/rest/spring/experiment/Experiment.groovy">
           <provider selected="true" editor-type-id="text-editor">
             <state line="17" column="36" selection-start="432" selection-end="432" vertical-scroll-proportion="0.0">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="ExperimentAbstract.groovy" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/bard-rest-api-wrapper/src/groovy/bard/core/rest/spring/experiment/ExperimentAbstract.groovy">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="20" column="76" selection-start="704" selection-end="704" vertical-scroll-proportion="-6.08">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="RestCombinedService.groovy" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/bard-rest-api-wrapper/grails-app/services/bard/core/rest/spring/RestCombinedService.groovy">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="144" column="0" selection-start="6345" selection-end="6345" vertical-scroll-proportion="0.0">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="Project.groovy" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/bard-rest-api-wrapper/src/groovy/bard/core/rest/spring/project/Project.groovy">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="13" column="13" selection-start="564" selection-end="564" vertical-scroll-proportion="-3.24">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="ProjectRestService.groovy" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/bard-rest-api-wrapper/grails-app/services/bard/core/rest/spring/ProjectRestService.groovy">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="23" column="18" selection-start="742" selection-end="749" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -1231,16 +1201,15 @@
         <option value="$PROJECT_DIR$/bard-web-client/grails-app/views/bardWebInterface/_experiments.gsp" />
         <option value="$PROJECT_DIR$/bard-rest-api-wrapper/src/groovy/bard/core/rest/spring/experiment/ExperimentAbstract.groovy" />
         <option value="$PROJECT_DIR$/bard-web-client/grails-app/views/bardWebInterface/showAssay.gsp" />
-        <option value="$PROJECT_DIR$/bard-rest-api-wrapper/src/groovy/bard/core/adapter/ProjectAdapter.groovy" />
-        <option value="$PROJECT_DIR$/bard-web-client/grails-app/views/bardWebInterface/showProject.gsp" />
         <option value="$PROJECT_DIR$/bard-web-client/grails-app/services/bardqueryapi/QueryService.groovy" />
         <option value="$PROJECT_DIR$/bard-web-client/grails-app/conf/spring/resources.groovy" />
+        <option value="$PROJECT_DIR$/bard-web-client/grails-app/views/bardWebInterface/showProject.gsp" />
+        <option value="$PROJECT_DIR$/bard-rest-api-wrapper/src/groovy/bard/core/adapter/ProjectAdapter.groovy" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="-8" />
-    <option name="y" value="-8" />
+    <option name="x" value="-9" />
     <option name="width" value="1616" />
     <option name="height" value="876" />
   </component>
@@ -1867,7 +1836,7 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="-8" width="1616" height="876" extended-state="6" />
+    <frame x="-9" y="0" width="1616" height="876" extended-state="0" />
     <editor active="true" />
     <layout>
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
@@ -1880,14 +1849,14 @@
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="Cloverage" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.28120977" sideWeight="0.67318434" order="0" side_tool="false" content_ui="combo" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4162011" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.28120977" sideWeight="0.67318434" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.4162011" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Test Runs" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Data Sources" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3298969" sideWeight="0.59217876" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="JetGradle" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4650838" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.32681563" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4567039" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Grails View" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Web" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="true" content_ui="tabs" />
@@ -1961,66 +1930,6 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/bard-web-client/grails-app/views/bardWebInterface/_assaySummary.gsp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/bard-web-client/grails-app/views/bardWebInterface/_experiments.gsp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="20" column="42" selection-start="1073" selection-end="1073" vertical-scroll-proportion="1.7346939">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/bard-web-client/grails-app/views/bardWebInterface/showAssay.gsp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="32" column="21" selection-start="1178" selection-end="1178" vertical-scroll-proportion="1.23918">
-          <folding>
-            <marker date="1354123317182" expanded="true" signature="-1:-1" placeholder="{...}" />
-            <marker date="1354123317182" expanded="true" signature="-1:-1" placeholder="{...}" />
-            <marker date="1354123317182" expanded="true" signature="-1:-1" placeholder="{...}" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/bard-rest-api-wrapper/src/groovy/bard/core/adapter/AssayAdapter.groovy">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="84" column="0" selection-start="2324" selection-end="2324" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/bard-rest-api-wrapper/src/groovy/bard/core/adapter/CompoundAdapter.groovy">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="19" column="76" selection-start="513" selection-end="513" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/bard-rest-api-wrapper/src/groovy/bard/core/adapter/ProjectAdapter.groovy">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="95" column="52" selection-start="2975" selection-end="2975" vertical-scroll-proportion="0.0">
-          <folding>
-            <element signature="e#29#56#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/bard-web-client/grails-app/views/bardWebInterface/showProject.gsp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="126" column="86" selection-start="6024" selection-end="6024" vertical-scroll-proportion="-40.857143">
-          <folding>
-            <marker date="1354124303382" expanded="true" signature="280:396" placeholder="{...}" />
-            <marker date="1354124303382" expanded="true" signature="3554:3988" placeholder="{...}" />
-            <marker date="1354124303382" expanded="true" signature="3602:3767" placeholder="{...}" />
-            <marker date="1354124303382" expanded="true" signature="3816:3980" placeholder="{...}" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/bard-web-client/grails-app/controllers/bardqueryapi/BardWebInterfaceController.groovy">
       <provider selected="true" editor-type-id="text-editor">
         <state line="341" column="57" selection-start="14821" selection-end="14821" vertical-scroll-proportion="-4.4791665">
@@ -2060,13 +1969,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/bard-rest-api-wrapper/src/groovy/bard/core/rest/spring/experiment/Experiment.groovy">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="17" column="36" selection-start="432" selection-end="432" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/bard-web-client/grails-app/conf/spring/resources.groovy">
       <provider selected="true" editor-type-id="text-editor">
         <state line="79" column="61" selection-start="2808" selection-end="2808" vertical-scroll-proportion="0.0">
@@ -2076,19 +1978,82 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/bard-rest-api-wrapper/grails-app/services/bard/core/rest/spring/RestCombinedService.groovy">
+    <entry file="file://$PROJECT_DIR$/bard-rest-api-wrapper/src/groovy/bard/core/rest/spring/util/MetaData.groovy">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="144" column="0" selection-start="6345" selection-end="6345" vertical-scroll-proportion="0.0">
+        <state line="123" column="22" selection-start="3169" selection-end="3169" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/bard-rest-api-wrapper/src/groovy/bard/core/rest/spring/util/SearchResult.groovy">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="90" column="38" selection-start="2271" selection-end="2271" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/bard-web-client/grails-app/services/bardqueryapi/QueryService.groovy">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="304" column="0" selection-start="14463" selection-end="14463" vertical-scroll-proportion="0.33333334">
+        <state line="303" column="0" selection-start="14358" selection-end="14358" vertical-scroll-proportion="-8.92">
           <folding>
             <element signature="e#22#51#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/bard-rest-api-wrapper/src/java/bard/core/Value.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="15" column="14" selection-start="348" selection-end="348" vertical-scroll-proportion="-7.84">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/bard-web-client/grails-app/views/bardWebInterface/showProject.gsp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="92" column="8" selection-start="4107" selection-end="4107" vertical-scroll-proportion="-3.8163266">
+          <folding>
+            <marker date="1354126769228" expanded="true" signature="280:396" placeholder="{...}" />
+            <marker date="1354126769228" expanded="true" signature="3590:4024" placeholder="{...}" />
+            <marker date="1354126769228" expanded="true" signature="3638:3803" placeholder="{...}" />
+            <marker date="1354126769228" expanded="true" signature="3852:4016" placeholder="{...}" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/bard-rest-api-wrapper/grails-app/services/bard/core/rest/spring/RestCombinedService.groovy">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="144" column="0" selection-start="6345" selection-end="6345" vertical-scroll-proportion="0.6361323">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/bard-rest-api-wrapper/src/groovy/bard/core/rest/spring/experiment/Experiment.groovy">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="17" column="36" selection-start="432" selection-end="432" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://C:/Program Files/Java/jdk1.6.0_26/src.zip!/java/lang/StringValue.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="17" column="12" selection-start="380" selection-end="380" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/bard-rest-api-wrapper/src/groovy/bard/core/adapter/ProjectAdapter.groovy">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="92" column="43" selection-start="2937" selection-end="2937" vertical-scroll-proportion="0.0">
+          <folding>
+            <element signature="e#29#75#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/bard-rest-api-wrapper/src/java/bard/core/StringValue.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="24" column="11" selection-start="586" selection-end="586" vertical-scroll-proportion="0.33333334">
+          <folding />
         </state>
       </provider>
     </entry>

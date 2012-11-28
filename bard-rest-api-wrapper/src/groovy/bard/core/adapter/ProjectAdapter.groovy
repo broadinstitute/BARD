@@ -1,12 +1,9 @@
 package bard.core.adapter;
 
 
-import bard.core.DataSource
-import bard.core.Probe
-import bard.core.Project
-import bard.core.Value
 import bard.core.interfaces.EntityNamedSources
 import bard.core.rest.spring.compounds.Compound
+import bard.core.*
 
 public class ProjectAdapter extends EntityAdapter<Project> {
     bard.core.rest.spring.project.Project restProject
@@ -27,18 +24,20 @@ public class ProjectAdapter extends EntityAdapter<Project> {
         super(project);
     }
 
-   public Long getId(){
-       if(restProject){
-           return restProject.projectId
-       }
-       return project.id
-   }
-   public String getName(){
-       if(restProject){
-           return restProject.name
-       }
-       return project.name
-   }
+    public Long getId() {
+        if (restProject) {
+            return restProject.projectId
+        }
+        return project.id
+    }
+
+    public String getName() {
+        if (restProject) {
+            return restProject.name
+        }
+        return project.name
+    }
+
     public String getDescription() {
         if (restProject) {
             return restProject.description
@@ -48,7 +47,7 @@ public class ProjectAdapter extends EntityAdapter<Project> {
 
     public String getGrantNumber() {
         if (restProject) {
-            return restProject.grantNo
+            return restProject.grantNo ?: getDictionaryTerms().get("grant number")
         }
         Value grant = getEntity().getValue("grant number");
         return grant ? (String) grant.getValue() : null;
@@ -80,7 +79,7 @@ public class ProjectAdapter extends EntityAdapter<Project> {
 
     public Integer getNumberOfExperiments() {
         if (restProject) {
-            return restProject.experimentCount?.intValue()?:0
+            return restProject.experimentCount?.intValue() ?: 0
         }
         Value expt = getEntity().getValue(Project.NumberOfExperimentsValue);
         return expt ? (Integer) expt.getValue() : null;
@@ -88,10 +87,19 @@ public class ProjectAdapter extends EntityAdapter<Project> {
 
     public Collection<Value> getAnnotations() {
         Collection<Value> annos = new ArrayList<Value>();
+        if (restProject) {
+            final Map<String, String> terms = getDictionaryTerms()
+            for (String key : terms.keySet()) {
+                StringValue value = new StringValue(DataSource.DEFAULT, key, terms.get(key))
+                annos.add(value)
+            }
+        }
+        else {
 
-        for (String srcName : this.srcNames) {
-            Collection<Value> values = entity.getValues(new DataSource(srcName));
-            if (values) { annos.addAll(values)}
+            for (String srcName : this.srcNames) {
+                Collection<Value> values = entity.getValues(new DataSource(srcName));
+                if (values) { annos.addAll(values)}
+            }
         }
         return annos;
     }

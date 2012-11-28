@@ -53,15 +53,17 @@
                         <div class="caption">
                             <h3>Probe ML#: ${probe.probeId}</h3>
                             <ul>
-                                    <li><a href="${probe.url}">Download probe report from Molecular Library BookShelf</a></li>
-                                    <li><g:link controller="bardWebInterface" action="showCompound"
-                                                params="[cid: probe.cid]">Show Compound Details in BARD</g:link></li>
-                                    <li><a href="http://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?cid=${probe.cid}" target="_blank">View CID ${probe.cid} in PubChem</a></li>
-                                    <li><g:link controller="molSpreadSheet" action="showExperimentDetails"
-                                                params="[cid: probe.cid, pid: projectAdapter.id]" data-placement="top"
-                                                class="projectTooltip"
-                                                rel="tooltip"
-                                                data-original-title="Please note: Query Cart would be reset!">Show Experimental Details</g:link></li>
+                                <li><a href="${probe.url}">Download probe report from Molecular Library BookShelf</a>
+                                </li>
+                                <li><g:link controller="bardWebInterface" action="showCompound"
+                                            params="[cid: probe.cid]">Show Compound Details in BARD</g:link></li>
+                                <li><a href="http://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?cid=${probe.cid}"
+                                       target="_blank">View CID ${probe.cid} in PubChem</a></li>
+                                <li><g:link controller="molSpreadSheet" action="showExperimentDetails"
+                                            params="[cid: probe.cid, pid: projectAdapter.id]" data-placement="top"
+                                            class="projectTooltip"
+                                            rel="tooltip"
+                                            data-original-title="Please note: Query Cart would be reset!">Show Experimental Details</g:link></li>
                             </ul>
                         </div>
                     </div>
@@ -88,23 +90,23 @@
 
     <div class="span12 accordion">
 
-        %{--TODO: Add annotations <div class="accordion-group">--}%
-            %{--<div class="accordion-heading">--}%
-                %{--<a href="#annotations-header" id="annotations-header" class="accordion-toggle" data-toggle="collapse"--}%
-                   %{--data-target="#annotations-info"><i--}%
-                        %{--class="icon-chevron-right"></i> Annotations (${projectAdapter?.annotations?.size()})</a>--}%
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                <a href="#annotations-header" id="annotations-header" class="accordion-toggle" data-toggle="collapse"
+                   data-target="#annotations-info"><i
+                        class="icon-chevron-right"></i> Annotations (${projectAdapter?.annotations?.size()})</a>
 
-                %{--<div id="annotations-info" class="accordion-body collapse">--}%
-                    %{--<div class="accordion-inner">--}%
-                        %{--<dl>--}%
-                            %{--<g:each in="${projectAdapter?.annotations}" var="annotation">--}%
-                                %{--<dt>${annotation.id}</dt>--}%
-                                %{--<dd>${annotation.value}</dd>--}%
-                            %{--</g:each>--}%
-                        %{--</dl>--}%
-                    %{--</div>--}%
-                %{--</div>--}%
-            %{--</div>--}%
+                <div id="annotations-info" class="accordion-body collapse">
+                    <div class="accordion-inner">
+                        <dl>
+                            <g:each in="${projectAdapter?.annotations}" var="annotation">
+                                <dt>${annotation.id}</dt>
+                                <dd>${annotation.value}</dd>
+                            </g:each>
+                        </dl>
+                    </div>
+                </div>
+            </div>
         </div>
 
         <div class="accordion-group">
