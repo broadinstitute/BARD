@@ -567,7 +567,7 @@ class SearchHelper {
      * not need to add the search string to the paging object
      */
     protected void removeDuplicatesFromSearchString(SearchCommand searchCommand) {
-        Set<String> searchCommandSplit = searchCommand.searchString.trim().split(",") as Set<String>
+        Set<String> searchCommandSplit = searchCommand.searchString.trim().split(/w,w/) as Set<String>
         searchCommand.searchString = searchCommandSplit.join(",")
         params.searchString = searchCommand.searchString
 
