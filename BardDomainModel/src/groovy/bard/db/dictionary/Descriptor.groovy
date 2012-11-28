@@ -16,7 +16,7 @@ abstract class Descriptor<T> {
     private static final int UNIT_MAX_SIZE = 128
     private static final int EXTERNAL_URL_MAX_SIZE = 1000
     private static final int ELEMENT_STATUS_MAX_SIZE = 20
-    private static final int FULL_PATH_MAX_SIZE = 2500
+    private static final int FULL_PATH_MAX_SIZE = 3000
 
 
     T parent

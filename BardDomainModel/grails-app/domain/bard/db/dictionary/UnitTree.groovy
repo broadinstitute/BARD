@@ -9,7 +9,7 @@ package bard.db.dictionary
  */
 class UnitTree {
 
-    private static final int FULL_PATH_MAX_SIZE = 2000
+    private static final int FULL_PATH_MAX_SIZE = 3000
 
     UnitTree parent
     Element element

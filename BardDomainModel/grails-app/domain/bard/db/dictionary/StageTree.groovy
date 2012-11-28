@@ -9,7 +9,7 @@ package bard.db.dictionary
  */
 class StageTree {
 
-    private static final int FULL_PATH_MAX_SIZE = 2000
+    private static final int FULL_PATH_MAX_SIZE = 3000
 
     StageTree parent
     Element element
