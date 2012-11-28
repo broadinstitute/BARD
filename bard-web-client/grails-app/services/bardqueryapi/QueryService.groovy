@@ -12,6 +12,7 @@ import bard.core.rest.spring.ProjectRestService
 import bard.core.rest.spring.RestCombinedService
 import bard.core.rest.spring.assays.Assay
 import bard.core.rest.spring.assays.ExpandedAssay
+import bard.core.rest.spring.assays.ExpandedAssayResult
 import bard.core.rest.spring.assays.FreeTextAssayResult
 import bard.core.rest.spring.compounds.Compound
 import bard.core.rest.spring.compounds.ExpandedCompoundResult
@@ -170,23 +171,23 @@ class QueryService implements IQueryService {
      * @return Map
      */
     Map findCompoundsByCIDs(final List<Long> compoundIds, List<SearchFilter> filters = []) {
-        return [:]
-//        final List<CompoundAdapter> compoundAdapters = []
-//        Collection<Value> facets = []
-//        //String eTag = null
-//        if (compoundIds) {
-//            //create ETAG using a random name
-//            StopWatch sw = this.queryHelperService.startStopWatch()
-//            //  eTag = restCompoundService.newETag("Compound ETags", compoundIds).toString();
-//            //commenting out facets until we figure out how to apply filters to ID searches
-//            //facets = restCompoundService.getFacets(etag)
-//            final Collection<Compound> compounds = restCompoundService.get(compoundIds)
-//            this.queryHelperService.stopStopWatch(sw, "find compounds by CIDs ${compoundIds.toString()}")
-//            compoundAdapters.addAll(this.queryHelperService.compoundsToAdapters(compounds))
-//            //TODO: Even though facets are available they cannot be used for filtering
-//        }
-//        int nhits = compoundAdapters.size()
-//        return [compoundAdapters: compoundAdapters, facets: facets, nHits: nhits]
+
+        final List<CompoundAdapter> compoundAdapters = []
+        Collection<Value> facets = []
+        //String eTag = null
+        if (compoundIds) {
+            //create ETAG using a random name
+            StopWatch sw = this.queryHelperService.startStopWatch()
+            //  eTag = restCompoundService.newETag("Compound ETags", compoundIds).toString();
+            //commenting out facets until we figure out how to apply filters to ID searches
+            //facets = restCompoundService.getFacets(etag)
+            ExpandedCompoundResult expandedCompoundResult = compoundRestService.searchCompoundsByIds(compoundIds)
+            this.queryHelperService.stopStopWatch(sw, "find compounds by CIDs ${compoundIds.toString()}")
+            compoundAdapters.addAll(this.queryHelperService.compoundsToAdapters(expandedCompoundResult))
+            //TODO: Even though facets are available they cannot be used for filtering
+        }
+        int nhits = compoundAdapters.size()
+        return [compoundAdapters: compoundAdapters, facets: facets, nHits: nhits]
     }
 
     /**
@@ -196,21 +197,20 @@ class QueryService implements IQueryService {
      * @return map
      */
     Map findAssaysByADIDs(final List<Long> assayIds, List<SearchFilter> filters = []) {
-        return [:]
-//        final List<AssayAdapter> foundAssayAdapters = []
-//        Collection<Value> facets = []
-//
-//        if (assayIds) {
-//            StopWatch sw = this.queryHelperService.startStopWatch()
-//            final Collection<Assay> assays = this.restAssayService.get(assayIds)
-//            this.queryHelperService.stopStopWatch(sw, "find assays by ADIDs ${assayIds.toString()}")
-//            if (assays) {
-//                foundAssayAdapters.addAll(this.queryHelperService.assaysToAdapters(assays))
-//                //TODO: Facet needed. Not yet ready in JDO
-//            }
-//        }
-//        final int nhits = foundAssayAdapters.size()
-//        return [assayAdapters: foundAssayAdapters, facets: facets, nHits: nhits]
+        final List<AssayAdapter> foundAssayAdapters = []
+        Collection<Value> facets = []
+
+        if (assayIds) {
+            StopWatch sw = this.queryHelperService.startStopWatch()
+            ExpandedAssayResult expandedAssayResult = this.assayRestService.searchAssaysByIds(assayIds)
+            this.queryHelperService.stopStopWatch(sw, "find assays by ADIDs ${assayIds.toString()}")
+            if (expandedAssayResult) {
+                foundAssayAdapters.addAll(this.queryHelperService.assaysToAdapters(expandedAssayResult.assays))
+                //TODO: Facet needed. Not yet ready in JDO
+            }
+        }
+        final int nhits = foundAssayAdapters.size()
+        return [assayAdapters: foundAssayAdapters, facets: facets, nHits: nhits]
     }
 
     /**
@@ -221,21 +221,18 @@ class QueryService implements IQueryService {
      * @return Map
      */
     Map findProjectsByPIDs(final List<Long> projectIds, List<SearchFilter> filters = []) {
-//        Collection<Value> facets = []
-//        final List<ProjectAdapter> foundProjectAdapters = []
-//        if (projectIds) {
-//            StopWatch sw = this.queryHelperService.startStopWatch()
-//            final Collection<Project> projects = restProjectService.get(projectIds)
-//            this.queryHelperService.stopStopWatch(sw, "find projects by PIDs ${projectIds.toString()}")
-//            if (projects) {
-//                foundProjectAdapters.addAll(this.queryHelperService.projectsToAdapters(projects))
-//                //TODO: Facet needed. Not yet ready in JDO
-//            }
-//        }
-//        final int nhits = foundProjectAdapters.size()
-//        return [projectAdapters: foundProjectAdapters, facets: facets, nHits: nhits]
-        return [:]
-
+        Collection<Value> facets = []
+        final List<ProjectAdapter> foundProjectAdapters = []
+        if (projectIds) {
+            StopWatch sw = this.queryHelperService.startStopWatch()
+            ExpandedProjectResult expandedProjectResult = projectRestService.searchProjectsByIds(projectIds)
+            this.queryHelperService.stopStopWatch(sw, "find projects by PIDs ${projectIds.toString()}")
+            if (expandedProjectResult) {
+                foundProjectAdapters.addAll(this.queryHelperService.projectsToAdapters(expandedProjectResult))
+            }
+        }
+        final int nhits = foundProjectAdapters.size()
+        return [projectAdapters: foundProjectAdapters, facets: facets, nHits: nhits]
     }
     /**
      *

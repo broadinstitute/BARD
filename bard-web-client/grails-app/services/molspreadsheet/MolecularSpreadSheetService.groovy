@@ -21,7 +21,6 @@ import bard.core.rest.RESTCompoundService
 class MolecularSpreadSheetService {
     final static int START_DYNAMIC_COLUMNS = 4 //Where to start the dynamic columns
     QueryCartService queryCartService
-   // CombinedRestService combinedRestService
     RESTAssayService restAssayService
     RESTProjectService restProjectService
     RESTCompoundService restCompoundService
