@@ -5,7 +5,7 @@ import org.junit.Before
 import spock.lang.Specification
 import spock.lang.Unroll
 
-import static bard.db.dictionary.UnitTree.*
+import static bard.db.dictionary.ResultTypeTree.FULL_PATH_MAX_SIZE
 import static test.TestUtils.assertFieldValidationExpectations
 import static test.TestUtils.createString
 
@@ -17,13 +17,13 @@ import static test.TestUtils.createString
  * To change this template use File | Settings | File Templates.
  */
 @Unroll
-@Build([UnitTree,Element])
-class UnitTreeConstraintUnitSpec extends Specification {
-    UnitTree domainInstance
+@Build([ResultTypeTree, Element])
+class ResultTypeTreeConstraintUnitSpec extends Specification {
+    ResultTypeTree domainInstance
 
     @Before
     void doSetup() {
-        domainInstance = UnitTree.buildWithoutSave()
+        domainInstance = ResultTypeTree.buildWithoutSave()
     }
 
     void "test parent constraints #desc parent: '#valueUnderTest'"() {
@@ -42,9 +42,9 @@ class UnitTreeConstraintUnitSpec extends Specification {
         }
 
         where:
-        desc          | valueUnderTest     | valid | errorCode
-        'null valid'  | {null}             | true  | null
-        'valid value' | {UnitTree.build()} | true  | null
+        desc          | valueUnderTest      | valid | errorCode
+        'null valid'  | {null}              | true  | null
+        'valid value' | {ResultTypeTree.build()} | true  | null
     }
 
     void "test element constraints #desc element: '#valueUnderTest'"() {
@@ -69,21 +69,21 @@ class UnitTreeConstraintUnitSpec extends Specification {
     }
 
     void "test leaf constraints #desc leaf: '#valueUnderTest'"() {
-            final String field = 'leaf'
+        final String field = 'leaf'
 
-            when: 'a value is set for the field under test'
-            domainInstance[(field)] = valueUnderTest
-            domainInstance.save()
+        when: 'a value is set for the field under test'
+        domainInstance[(field)] = valueUnderTest
+        domainInstance.save()
 
-            then: 'verify valid or invalid for expected reason'
-            assertFieldValidationExpectations(domainInstance, field, valid, errorCode)
+        then: 'verify valid or invalid for expected reason'
+        assertFieldValidationExpectations(domainInstance, field, valid, errorCode)
 
-            where:
-            desc             | valueUnderTest | valid | errorCode
-            'null not valid' | null           | false | 'nullable'
-            'true valid'     | true           | true  | null
-            'false valid'    | false          | true  | null
-        }
+        where:
+        desc             | valueUnderTest | valid | errorCode
+        'null not valid' | null           | false | 'nullable'
+        'true valid'     | true           | true  | null
+        'false valid'    | false          | true  | null
+    }
 
     void "test fullPath constraints #desc fullPath : '#valueUnderTest'"() {
         final String field = 'fullPath'
@@ -102,6 +102,27 @@ class UnitTreeConstraintUnitSpec extends Specification {
         'valid value' | createString(FULL_PATH_MAX_SIZE)       | true  | null
         'null valid'  | null                                   | true  | null
         'valid value' | "foo"                                  | true  | null
+    }
+
+    void "test baseUnit constraints #desc baseUnit: '#valueUnderTest'"() {
+        final String field = 'baseUnit'
+
+        when: 'a value is set for the field under test'
+        domainInstance[(field)] = valueUnderTest.call()
+        domainInstance.save()
+
+        then: 'verify valid or invalid for expected reason'
+        assertFieldValidationExpectations(domainInstance, field, valid, errorCode)
+
+        and: 'verify the domain can be persisted to the db'
+        if (valid) {
+            domainInstance == domainInstance.save(flush: true)
+        }
+
+        where:
+        desc          | valueUnderTest    | valid | errorCode
+        'null valid'  | {null}            | true | null
+        'valid value' | {Element.build()} | true  | null
     }
 
 }

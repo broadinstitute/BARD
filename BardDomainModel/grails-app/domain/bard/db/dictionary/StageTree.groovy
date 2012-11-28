@@ -7,11 +7,11 @@ package bard.db.dictionary
  * Time: 9:38 AM
  * To change this template use File | Settings | File Templates.
  */
-class UnitTree {
+class StageTree {
 
     private static final int FULL_PATH_MAX_SIZE = 2000
 
-    UnitTree parent
+    StageTree parent
     Element element
     Boolean leaf
     String fullPath
@@ -27,9 +27,8 @@ class UnitTree {
         id(column: 'NODE_ID', generator: 'assigned')
         version(false)
         parent(column: 'PARENT_NODE_ID')
-        element(column: 'UNIT_ID')
+        element(column: 'STAGE_ID')
         leaf(column: 'IS_LEAF', type: 'yes_no')
     }
-
 
 }

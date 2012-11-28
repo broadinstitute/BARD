@@ -4,7 +4,7 @@ import grails.plugin.spock.IntegrationSpec
 import org.junit.Before
 import spock.lang.Unroll
 
-import static bard.db.dictionary.UnitTree.*
+import static bard.db.dictionary.UnitTree.FULL_PATH_MAX_SIZE
 import static test.TestUtils.assertFieldValidationExpectations
 import static test.TestUtils.createString
 
@@ -16,12 +16,12 @@ import static test.TestUtils.createString
  * To change this template use File | Settings | File Templates.
  */
 @Unroll
-class UnitTreeConstraintIntegrationSpec extends IntegrationSpec {
-    def domainInstance
+class LaboratoryTreeConstraintIntegrationSpec extends IntegrationSpec {
+    LaboratoryTree domainInstance
 
     @Before
     void doSetup() {
-        domainInstance = UnitTree.buildWithoutSave()
+        domainInstance = LaboratoryTree.buildWithoutSave()
         domainInstance.element.save()
     }
 
@@ -43,7 +43,7 @@ class UnitTreeConstraintIntegrationSpec extends IntegrationSpec {
         where:
         desc          | valueUnderTest     | valid | errorCode
         'null valid'  | {null}             | true  | null
-        'valid value' | {UnitTree.build()} | true  | null
+        'valid value' | {LaboratoryTree.build()} | true  | null
     }
 
     void "test element constraints #desc element: '#valueUnderTest'"() {
@@ -65,42 +65,6 @@ class UnitTreeConstraintIntegrationSpec extends IntegrationSpec {
         desc          | valueUnderTest    | valid | errorCode
         'null value'  | {null}            | false | 'nullable'
         'valid value' | {Element.build()} | true  | null
-    }
-
-    void "test leaf constraints #desc leaf: '#valueUnderTest'"() {
-        final String field = 'leaf'
-
-        when: 'a value is set for the field under test'
-        domainInstance[(field)] = valueUnderTest
-        domainInstance.save()
-
-        then: 'verify valid or invalid for expected reason'
-        assertFieldValidationExpectations(domainInstance, field, valid, errorCode)
-
-        where:
-        desc             | valueUnderTest | valid | errorCode
-        'null not valid' | null           | false | 'nullable'
-        'true valid'     | true           | true  | null
-        'false valid'    | false          | true  | null
-    }
-
-    void "test fullPath constraints #desc fullPath : '#valueUnderTest'"() {
-        final String field = 'fullPath'
-
-        when: 'a value is set for the field under test'
-        domainInstance[(field)] = valueUnderTest
-        domainInstance.validate()
-
-        then: 'verify valid or invalid for expected reason'
-        assertFieldValidationExpectations(domainInstance, field, valid, errorCode)
-
-        where:
-        desc          | valueUnderTest                         | valid | errorCode
-        'too long'    | createString(FULL_PATH_MAX_SIZE) + "a" | false | 'maxSize.exceeded'
-
-        'valid value' | createString(FULL_PATH_MAX_SIZE)       | true  | null
-        'null valid'  | null                                   | true  | null
-        'valid value' | "foo"                                  | true  | null
     }
 
 }

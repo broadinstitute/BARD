@@ -1,11 +1,10 @@
 package bard.db.dictionary
 
-import grails.buildtestdata.mixin.Build
+import grails.plugin.spock.IntegrationSpec
 import org.junit.Before
-import spock.lang.Specification
 import spock.lang.Unroll
 
-import static bard.db.dictionary.UnitTree.*
+import static bard.db.dictionary.StageTree.FULL_PATH_MAX_SIZE
 import static test.TestUtils.assertFieldValidationExpectations
 import static test.TestUtils.createString
 
@@ -17,13 +16,13 @@ import static test.TestUtils.createString
  * To change this template use File | Settings | File Templates.
  */
 @Unroll
-@Build([UnitTree,Element])
-class UnitTreeConstraintUnitSpec extends Specification {
-    UnitTree domainInstance
+class StageTreeConstraintIntegrationSpec extends IntegrationSpec {
+    StageTree domainInstance
 
     @Before
     void doSetup() {
-        domainInstance = UnitTree.buildWithoutSave()
+        domainInstance = StageTree.buildWithoutSave()
+        domainInstance.element.save()
     }
 
     void "test parent constraints #desc parent: '#valueUnderTest'"() {
@@ -44,7 +43,7 @@ class UnitTreeConstraintUnitSpec extends Specification {
         where:
         desc          | valueUnderTest     | valid | errorCode
         'null valid'  | {null}             | true  | null
-        'valid value' | {UnitTree.build()} | true  | null
+        'valid value' | {StageTree.build()} | true  | null
     }
 
     void "test element constraints #desc element: '#valueUnderTest'"() {
@@ -69,21 +68,21 @@ class UnitTreeConstraintUnitSpec extends Specification {
     }
 
     void "test leaf constraints #desc leaf: '#valueUnderTest'"() {
-            final String field = 'leaf'
+        final String field = 'leaf'
 
-            when: 'a value is set for the field under test'
-            domainInstance[(field)] = valueUnderTest
-            domainInstance.save()
+        when: 'a value is set for the field under test'
+        domainInstance[(field)] = valueUnderTest
+        domainInstance.save()
 
-            then: 'verify valid or invalid for expected reason'
-            assertFieldValidationExpectations(domainInstance, field, valid, errorCode)
+        then: 'verify valid or invalid for expected reason'
+        assertFieldValidationExpectations(domainInstance, field, valid, errorCode)
 
-            where:
-            desc             | valueUnderTest | valid | errorCode
-            'null not valid' | null           | false | 'nullable'
-            'true valid'     | true           | true  | null
-            'false valid'    | false          | true  | null
-        }
+        where:
+        desc             | valueUnderTest | valid | errorCode
+        'null not valid' | null           | false | 'nullable'
+        'true valid'     | true           | true  | null
+        'false valid'    | false          | true  | null
+    }
 
     void "test fullPath constraints #desc fullPath : '#valueUnderTest'"() {
         final String field = 'fullPath'

@@ -38,6 +38,18 @@ testDataConfig {
             def i = 1
             id = {-> i++}
         }
+        'bard.db.dictionary.LaboratoryTree' {
+            def i = 1
+            id = {-> i++}
+        }
+        'bard.db.dictionary.ResultTypeTree' {
+            def i = 1
+            id = {-> i++}
+        }
+        'bard.db.dictionary.StageTree' {
+            def i = 1
+            id = {-> i++}
+        }
         'bard.db.experiment.Substance' {
             def i = 1
             id = {-> i++}

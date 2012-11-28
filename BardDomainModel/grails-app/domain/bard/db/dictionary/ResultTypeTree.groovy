@@ -7,29 +7,31 @@ package bard.db.dictionary
  * Time: 9:38 AM
  * To change this template use File | Settings | File Templates.
  */
-class UnitTree {
+class ResultTypeTree {
 
-    private static final int FULL_PATH_MAX_SIZE = 2000
+    private static final int FULL_PATH_MAX_SIZE = 3000
 
-    UnitTree parent
+    ResultTypeTree parent
     Element element
     Boolean leaf
     String fullPath
+    Element baseUnit
 
     static constraints = {
         parent(nullable: true)
         element()
         leaf()
         fullPath(nullable: true, blank: false, maxSize: FULL_PATH_MAX_SIZE)
+        baseUnit(nullable:true)
     }
 
     static mapping = {
         id(column: 'NODE_ID', generator: 'assigned')
         version(false)
         parent(column: 'PARENT_NODE_ID')
-        element(column: 'UNIT_ID')
+        element(column: 'RESULT_TYPE_ID')
         leaf(column: 'IS_LEAF', type: 'yes_no')
-    }
 
+    }
 
 }
