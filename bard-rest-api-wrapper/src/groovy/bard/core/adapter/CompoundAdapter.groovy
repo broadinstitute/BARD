@@ -48,7 +48,9 @@ public class CompoundAdapter {
 //        return sids;
         return []
     }
-
+    public Long getId(){
+        return getPubChemCID()
+    }
     public Long getPubChemCID() {
         return compound?.cid
     }

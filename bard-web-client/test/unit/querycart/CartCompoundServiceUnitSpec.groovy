@@ -7,11 +7,7 @@ import bardqueryapi.IQueryService
 import spock.lang.Shared
 import bardqueryapi.QueryService
 import bard.core.adapter.CompoundAdapter
-import bard.core.Compound
-import bard.core.DataSource
-import bard.core.interfaces.MolecularData
-import bard.core.impl.MolecularDataJChemImpl
-import bard.core.MolecularValue
+import bard.core.rest.spring.compounds.Compound
 
 /**
  * See the API for {@link grails.test.mixin.support.GrailsUnitTestMixin} for usage instructions
@@ -22,12 +18,11 @@ import bard.core.MolecularValue
 class CartCompoundServiceUnitSpec extends Specification {
 
     IQueryService queryService
-    @Shared CompoundAdapter compoundAdapter = new CompoundAdapter(new Compound("name1"))
+    @Shared CompoundAdapter compoundAdapter = new CompoundAdapter(new Compound(name:"name1", cid: 1L))
 
     void setup() {
         queryService = Mock(QueryService)
         service.queryService = this.queryService
-        this.compoundAdapter.compound.setId(1L)
     }
 
     void tearDown() {

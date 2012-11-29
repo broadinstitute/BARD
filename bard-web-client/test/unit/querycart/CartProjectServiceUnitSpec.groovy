@@ -6,8 +6,9 @@ import spock.lang.Unroll
 import bardqueryapi.IQueryService
 import bardqueryapi.QueryService
 import bard.core.adapter.ProjectAdapter
-import bard.core.Project
+
 import spock.lang.Shared
+import bard.core.rest.spring.project.Project
 /**
  * See the API for {@link grails.test.mixin.support.GrailsUnitTestMixin} for usage instructions
  */
@@ -17,12 +18,11 @@ import spock.lang.Shared
 class CartProjectServiceUnitSpec extends Specification {
 
     IQueryService queryService
-    @Shared ProjectAdapter projectAdapter = new ProjectAdapter(new Project("name1"))
+    @Shared ProjectAdapter projectAdapter = new ProjectAdapter(new Project(name:"name1", projectId: 1L))
 
     void setup() {
         queryService = Mock(QueryService)
         service.queryService = this.queryService
-        this.projectAdapter.project.setId(1L)
     }
 
     void tearDown() {
