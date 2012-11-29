@@ -1,5 +1,8 @@
 package bard.core.rest.spring.experiment
 
+import bard.core.DataSource
+import bard.core.HillCurveValue
+import bard.core.Value
 import com.fasterxml.jackson.annotation.JsonAnyGetter
 import com.fasterxml.jackson.annotation.JsonAnySetter
 import com.fasterxml.jackson.annotation.JsonInclude
@@ -44,12 +47,15 @@ public class Readout {
     public Double[] getConc() {
         return conc.toArray(new Double[0]);
     }
-    public List<Double> getConcAsList(){
+
+    public List<Double> getConcAsList() {
         return conc
     }
+
     public List<Double> getResponseAsList() {
         return response;
     }
+
     public Double[] getResponse() {
         return response.toArray(new Double[0]);
     }
@@ -184,6 +190,19 @@ public class Readout {
     @JsonAnySetter
     public void setAdditionalProperties(String name, Object value) {
         this.additionalProperties.put(name, value);
+    }
+
+    HillCurveValue toHillCurveValue() {
+        final Value parent = new Value(DataSource.DEFAULT)
+        HillCurveValue hillCurveValue = new HillCurveValue(parent, this.name)
+        hillCurveValue.coef = this.coef
+        hillCurveValue.slope = this.slope
+        hillCurveValue.conc = this.conc
+        hillCurveValue.response = this.response
+        hillCurveValue.s0 = this.s0
+        hillCurveValue.sinf = this.sInf
+        hillCurveValue.concentrationUnits = this.concentrationUnits
+        return hillCurveValue
     }
 }
 

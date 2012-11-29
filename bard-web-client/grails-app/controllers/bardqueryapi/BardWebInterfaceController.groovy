@@ -11,6 +11,7 @@ import molspreadsheet.MolecularSpreadSheetService
 import org.apache.commons.lang.StringUtils
 
 import javax.servlet.http.HttpServletResponse
+import molspreadsheet.NewMolecularSpreadSheetService
 
 /**
  *
@@ -26,6 +27,7 @@ class BardWebInterfaceController {
     def shoppingCartService
     IQueryService queryService
     MolecularSpreadSheetService molecularSpreadSheetService
+    NewMolecularSpreadSheetService newMolecularSpreadSheetService
     List<SearchFilter> filters = []
 
     def index() {
@@ -50,7 +52,7 @@ class BardWebInterfaceController {
                 Map<String, Integer> searchParams = handleSearchParams()
                 final int top = searchParams.top
                 final int skip = searchParams.skip
-                final Map experimentDataMap = molecularSpreadSheetService.findExperimentDataById(id, top, skip)
+                final Map experimentDataMap = newMolecularSpreadSheetService.findExperimentDataById(id, top, skip)
                 if (experimentDataMap) {
                     render(template: 'experimentResult', model: [experimentDataMap: experimentDataMap, searchString: params.searchString])
                 } else {
