@@ -10,12 +10,12 @@
 	<g:select name="assayStatus" from="${bard.db.registration.AssayStatus?.values()}" keys="${bard.db.registration.AssayStatus.values()*.name()}" required="" value="${assayInstance?.assayStatus?.name()}"/>
 </div>
 
-<div class="fieldcontain ${hasErrors(bean: assayInstance, field: 'assayTitle', 'error')} required">
-	<label for="assayTitle">
-		<g:message code="assay.assayTitle.label" default="Assay Title" />
+<div class="fieldcontain ${hasErrors(bean: assayInstance, field: 'assayShortName', 'error')} required">
+	<label for="assayShortName">
+		<g:message code="assay.assayShortName.label" default="Assay Short Name" />
 		<span class="required-indicator">*</span>
 	</label>
-	<g:textField name="assayTitle" maxlength="250" required="" value="${assayInstance?.assayTitle}"/>
+	<g:textField name="assayShortName" maxlength="250" required="" value="${assayInstance?.assayShortName}"/>
 </div>
 
 <div class="fieldcontain ${hasErrors(bean: assayInstance, field: 'assayName', 'error')} required">
@@ -37,7 +37,7 @@
 <div class="fieldcontain ${hasErrors(bean: assayInstance, field: 'designedBy', 'error')} ">
 	<label for="designedBy">
 		<g:message code="assay.designedBy.label" default="Designed By" />
-		
+
 	</label>
 	<g:textField name="designedBy" maxlength="100" value="${assayInstance?.designedBy}"/>
 </div>
@@ -53,7 +53,7 @@
 <div class="fieldcontain ${hasErrors(bean: assayInstance, field: 'assayType', 'error')} ">
 	<label for="assayType">
 		<g:message code="assay.assayType.label" default="Assay Type" />
-		
+
 	</label>
 	<g:select name="assayType" from="${assayInstance.constraints.assayType.inList}" value="${assayInstance?.assayType}" valueMessagePrefix="assay.assayType" noSelection="['': '']"/>
 </div>
@@ -61,7 +61,7 @@
 <div class="fieldcontain ${hasErrors(bean: assayInstance, field: 'modifiedBy', 'error')} ">
 	<label for="modifiedBy">
 		<g:message code="assay.modifiedBy.label" default="Modified By" />
-		
+
 	</label>
 	<g:textField name="modifiedBy" maxlength="40" value="${assayInstance?.modifiedBy}"/>
 </div>
@@ -69,9 +69,9 @@
 <div class="fieldcontain ${hasErrors(bean: assayInstance, field: 'assayContexts', 'error')} ">
 	<label for="assayContexts">
 		<g:message code="assay.assayContexts.label" default="Assay Contexts" />
-		
+
 	</label>
-	
+
 <ul class="one-to-many">
 <g:each in="${assayInstance?.assayContexts?}" var="a">
     <li><g:link controller="assayContext" action="show" id="${a.id}">${a?.encodeAsHTML()}</g:link></li>
@@ -86,9 +86,9 @@
 <div class="fieldcontain ${hasErrors(bean: assayInstance, field: 'assayDocuments', 'error')} ">
 	<label for="assayDocuments">
 		<g:message code="assay.assayDocuments.label" default="Assay Documents" />
-		
+
 	</label>
-	
+
 <ul class="one-to-many">
 <g:each in="${assayInstance?.assayDocuments?}" var="a">
     <li><g:link controller="assayDocument" action="show" id="${a.id}">${a?.encodeAsHTML()}</g:link></li>
@@ -103,9 +103,9 @@
 <div class="fieldcontain ${hasErrors(bean: assayInstance, field: 'experiments', 'error')} ">
 	<label for="experiments">
 		<g:message code="assay.experiments.label" default="Experiments" />
-		
+
 	</label>
-	
+
 <ul class="one-to-many">
 <g:each in="${assayInstance?.experiments?}" var="e">
     <li><g:link controller="experiment" action="show" id="${e.id}">${e?.encodeAsHTML()}</g:link></li>
@@ -120,9 +120,9 @@
 <div class="fieldcontain ${hasErrors(bean: assayInstance, field: 'measures', 'error')} ">
 	<label for="measures">
 		<g:message code="assay.measures.label" default="Measures" />
-		
+
 	</label>
-	
+
 <ul class="one-to-many">
 <g:each in="${assayInstance?.measures?}" var="m">
     <li><g:link controller="measure" action="show" id="${m.id}">${m?.encodeAsHTML()}</g:link></li>
