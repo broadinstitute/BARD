@@ -7,13 +7,17 @@ as
     pv_tree_assay_descriptor varchar2(31) := 'ASSAY_DESCRIPTOR';
     pv_tree_biology_descriptor varchar2(31) := 'BIOLOGY_DESCRIPTOR';
     pv_tree_instance_descriptor varchar2(31) := 'INSTANCE_DESCRIPTOR';
+    pv_tree_dictionary varchar2(31) := 'DICTIONARY';
+    pv_tree_stats_modifier varchar2(31) := 'STATS_MODIFIER';
     pv_tree_result_type varchar2(31) := 'RESULT_TYPE';
     pv_tree_unit varchar2(31) := 'UNIT';
     pv_tree_stage varchar2(31) := 'STAGE';
     pv_tree_laboratory varchar2(31) := 'LABORATORY';
+
 --    procedure delete_old_tree(avi_tree_name in varchar2,
 --                            ano_error out number,
 --                            avo_errmsg out varchar2);
+
 --    procedure walk_down_the_tree(ani_element_id in number,
 --                                anio_node_id in out number,
 --                                ani_parent_node_id in number,
@@ -22,22 +26,27 @@ as
 --                                ani_recursion_level number,
 --                                ano_error out number,
 --                                avo_errmsg out varchar2);
+
 --    procedure Save_node (ari_element in element%rowtype,
 --                                ani_node_id in number,
 --                                ani_parent_node_id in number,
 --                                avi_tree_name in varchar2,
 --                                ano_error out number,
 --                                avo_errmsg out varchar2);
+
     procedure make_trees (avi_tree_name in varchar2 default null);
+
     procedure add_element(avi_tree_name in varchar2,
                         ani_parent_element_id in number,
                         avi_element_label in varchar2,
                         avi_element_description in varchar2,
                         avi_element_abbreviation in varchar2,
                         avi_element_synonyms in varchar2);
+
     procedure swap_element_id (ani_element_id   in  number,
                                ani_new_element_id   in   number,
                                ab_delete_old    in boolean default false);
+
 end manage_ontology;
 /
 CREATE OR REPLACE package body manage_ontology
@@ -113,6 +122,14 @@ as
         elsif avi_tree_name = pv_tree_laboratory
         then
             delete from laboratory_tree;
+
+        elsif avi_tree_name = pv_tree_dictionary
+        then
+            delete from dictionary_tree;
+
+        elsif avi_tree_name = pv_tree_stats_modifier
+        then
+            delete from stats_modifier_tree;
         end if;
 
         trace('Delete from ' || avi_tree_name || ' '|| to_char(sql%rowcount) || ' rows' );
@@ -170,6 +187,22 @@ as
         elsif avi_tree_name = pv_tree_stage
         then
             update stage_tree a
+            SET is_leaf = 'Y'
+            WHERE NOT EXISTS (SELECT 1
+                FROM stage_tree a2
+                WHERE a.node_id = a2.parent_node_id);
+
+        elsif avi_tree_name = pv_tree_stats_modifier
+        then
+            update stats_modifier_tree a
+            SET is_leaf = 'Y'
+            WHERE NOT EXISTS (SELECT 1
+                FROM stage_tree a2
+                WHERE a.node_id = a2.parent_node_id);
+
+        elsif avi_tree_name = pv_tree_dictionary
+        then
+            update dictionary_tree a
             SET is_leaf = 'Y'
             WHERE NOT EXISTS (SELECT 1
                 FROM stage_tree a2
@@ -257,6 +290,64 @@ as
         elsif avi_tree_name = pv_tree_instance_descriptor
         then
             insert into instance_descriptor_tree
+                (node_id,
+                parent_node_id,
+                element_id,
+                label,
+                description,
+                full_path,
+                is_leaf,
+                abbreviation,
+                synonyms,
+                external_URL,
+                unit_id,
+                element_status)
+                values
+                (ani_node_id,
+                ani_parent_node_id,
+                ari_element.element_id,
+                ari_element.label,
+                ari_element.description,
+                avi_full_path,
+                'N',
+                ari_element.abbreviation,
+                ari_element.synonyms,
+                ari_element.external_URL,
+                ari_element.unit_id,
+                ari_element.element_status);
+
+        elsif avi_tree_name = pv_tree_dictionary
+        then
+            insert into dictionary_tree
+                (node_id,
+                parent_node_id,
+                element_id,
+                label,
+                description,
+                full_path,
+                is_leaf,
+                abbreviation,
+                synonyms,
+                external_URL,
+                unit_id,
+                element_status)
+                values
+                (ani_node_id,
+                ani_parent_node_id,
+                ari_element.element_id,
+                ari_element.label,
+                ari_element.description,
+                avi_full_path,
+                'N',
+                ari_element.abbreviation,
+                ari_element.synonyms,
+                ari_element.external_URL,
+                ari_element.unit_id,
+                ari_element.element_status);
+
+        elsif avi_tree_name = pv_tree_stats_modifier
+        then
+            insert into stats_modifier_tree
                 (node_id,
                 parent_node_id,
                 element_id,
@@ -405,7 +496,7 @@ as
     ln_node_id number;
     ln_next_parent_node_id number;
     lr_element element%rowtype;
-    lv_full_path  VARCHAR2(4000);
+    lv_full_path  VARCHAR2(3000);
     ln_error number;
     lv_errmsg varchar2(1000);
     lb_trace boolean;
@@ -417,19 +508,17 @@ as
         THEN
             lv_full_path := '';
         ELSE
-            lv_full_path := avi_full_path || pv_path_separator;
+            lv_full_path := SubStr(avi_full_path || pv_path_separator, 1, 3000);
         END IF;
 
         if ani_recursion_level <= pn_recursion_limit
         then
             for lr_element in cur_element
             LOOP
-                 lv_full_path := lv_full_path || lr_element.label;
-
                  Save_node(lr_element,
                             ln_node_id,
                             ani_parent_node_id,
-                            lv_full_path,
+                            lv_full_path || lr_element.label,
                             avi_tree_name,
                             ln_error,
                             lv_errmsg);
@@ -448,7 +537,7 @@ as
                                     ln_next_parent_node_id,
                                     avi_relationship_type,
                                     avi_tree_name,
-                                    lv_full_path,
+                                    lv_full_path || lr_element.label,
                                     ani_recursion_level +1,
                                     ln_error,
                                     lv_errmsg);
@@ -500,7 +589,7 @@ as
     lr_element element%rowtype;
     ln_node_id number;
     ln_parent_node_id number;
-    lv_full_path VARCHAR2(4000);
+    lv_full_path VARCHAR2(3000);
     ln_error number;
     lv_errmsg varchar2(1000);
     ln_recursion_level number := 1; -- start of the recursion checking
