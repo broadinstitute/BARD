@@ -34,10 +34,10 @@
                                         type="${querycart.QueryItemType.Compound}"
                                         smiles="${compoundAdapter.getStructureSMILES()}"/>
                     <dl>
-                        <g:if test="${compoundAdapter.searchHighlight}">
-                            <dt>Search Match (highlighted in bold):</dt>
-                            <dd>&hellip;${compoundAdapter.searchHighlight}&hellip;</dd>
-                        </g:if>
+                        %{--<g:if test="${compoundAdapter.searchHighlight}">--}%
+                            %{--<dt>Search Match (highlighted in bold):</dt>--}%
+                            %{--<dd>&hellip;${compoundAdapter.searchHighlight}&hellip;</dd>--}%
+                        %{--</g:if>--}%
                         <g:if test="${compoundAdapter.isDrug()}">
                             <p><span class="badge badge-success">Drug</span></p>
                         </g:if>
