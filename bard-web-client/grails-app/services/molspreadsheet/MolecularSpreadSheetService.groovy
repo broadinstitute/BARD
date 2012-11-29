@@ -397,7 +397,7 @@ class MolecularSpreadSheetService {
      * @return
      */
     protected List<ExperimentSearch> assaysToExperiments(final Collection<AbstractAssay> assays) {
-        List<Long> assayIds = assays*.assayId
+        List<Long> assayIds = assays*.id
         return assayIdsToExperiments(assayIds)
     }
     /**

@@ -19,6 +19,7 @@ import querycart.QueryCartService
 import spock.lang.Unroll
 
 import static junit.framework.Assert.assertNotNull
+import spock.lang.IgnoreRest
 
 @Unroll
 class MolecularSpreadSheetServiceIntegrationSpec extends IntegrationSpec {
