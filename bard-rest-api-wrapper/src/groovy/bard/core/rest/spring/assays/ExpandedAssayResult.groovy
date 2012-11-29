@@ -19,4 +19,5 @@ public class ExpandedAssayResult extends SearchResult {
     public void setAssays(List<ExpandedAssay> assays) {
         this.assays = assays;
     }
+
 }

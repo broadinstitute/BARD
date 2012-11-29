@@ -55,7 +55,6 @@ class AssayRestServiceIntegrationSpec extends IntegrationSpec {
         }
 
     }
-    @IgnoreRest
     void "getAssayAnnotationFromIds"() {
         given:
         List<Long> adids = [600L, 2868L]

@@ -1,9 +1,18 @@
 package bardqueryapi
 
+import bard.core.DataSource
+import bard.core.IntValue
+import bard.core.Value
 import bard.core.adapter.AssayAdapter
 import bard.core.adapter.CompoundAdapter
 import bard.core.adapter.ProjectAdapter
 import bard.core.interfaces.ExperimentRole
+import bard.core.rest.spring.assays.Assay
+import bard.core.rest.spring.compounds.Compound
+import bard.core.rest.spring.compounds.PromiscuityScore
+import bard.core.rest.spring.compounds.Scaffold
+import bard.core.rest.spring.experiment.ExperimentSearch
+import bard.core.rest.spring.project.Project
 import com.metasieve.shoppingcart.ShoppingCartService
 import grails.test.mixin.TestFor
 import grails.test.mixin.TestMixin
@@ -18,10 +27,7 @@ import spock.lang.Specification
 import spock.lang.Unroll
 
 import javax.servlet.http.HttpServletResponse
-
-import bard.core.*
-import bard.core.rest.spring.compounds.PromiscuityScore
-import bard.core.rest.spring.compounds.Scaffold
+import spock.lang.IgnoreRest
 
 /**
  * See the API for {@link grails.test.mixin.support.GrailsUnitTestMixin} for usage instructions
@@ -58,7 +64,6 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
         when:
         controller.index()
         then:
-        //request.makeAjaxRequest()
         assert response.status == 200
     }
 
@@ -91,6 +96,7 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
         assert model.experimentId == "222"
     }
 
+
     void "test showExperimentResult #label"() {
         when:
         controller.showExperimentResult(eid)
@@ -104,7 +110,7 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
         "EID- Not Found"               | 234  | HttpServletResponse.SC_NOT_FOUND   | null
         "Success"                      | 567  | HttpServletResponse.SC_OK          | [total: 2, spreadSheetActivities: [
                 new SpreadSheetActivity(eid: new Long(567), cid: new Long(1), sid: new Long(20))],
-                role: ExperimentRole.Counterscreen, experiment: new Experiment(name: 'name')]
+                role: ExperimentRole.Counterscreen, experiment: new ExperimentSearch(name: 'name', assays: [new Assay(name: "name", assayId: 1)])]
     }
 
     void "test showExperimentResult With Exception"() {
@@ -134,31 +140,6 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
         "Empty Null CID - Bad Request" | null | HttpServletResponse.SC_BAD_REQUEST           | null                       | null
         "CID- Internal Server Error"   | 234  | HttpServletResponse.SC_INTERNAL_SERVER_ERROR | null                       | null
         "Success"                      | 567  | HttpServletResponse.SC_OK                    | [new Scaffold(pScore: 22)] | new PromiscuityScore(cid: 567, scaffolds: [new Scaffold(pScore: 222)])
-    }
-
-    void "test activeVrsTested Bad Request"() {
-
-        when:
-        controller.activeVrsTested(cid)
-        then:
-        0 * this.queryService.getNumberTestedAssays(_, _) >> {1}
-        assert response.status == statusCode
-        where:
-        label                          | cid  | statusCode                         | expectedNumberOfAssays
-        "Empty Null CID - Bad Request" | null | HttpServletResponse.SC_BAD_REQUEST | null
-    }
-
-    void "test activeVrsTested #label"() {
-
-        when:
-        controller.activeVrsTested(cid)
-        then:
-        2 * this.queryService.getNumberTestedAssays(_, _) >> {expectedNumberOfAssays}
-        assert response.status == statusCode
-        assert response.text.contains("${expectedNumberOfAssays} / ${expectedNumberOfAssays}")
-        where:
-        label     | cid | statusCode                | expectedNumberOfAssays
-        "Success" | 567 | HttpServletResponse.SC_OK | 1
     }
 
     void "test promiscuity action with exception"() {
@@ -255,7 +236,7 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
         label                                  | searchString  | statusCode                                   | compoundAdapterMap
         "Empty Search String"                  | ""            | HttpServletResponse.SC_BAD_REQUEST           | null
         "Search String- Internal Server Error" | "Some String" | HttpServletResponse.SC_INTERNAL_SERVER_ERROR | null
-        "Success"                              | "1234,5678"   | HttpServletResponse.SC_OK                    | [compoundAdapters: [buildCompoundAdapter(1234, []), buildCompoundAdapter(4567, [])], facets: [], nHits: 2]
+        "Success"                              | "1234,5678"   | HttpServletResponse.SC_OK                    | [compoundAdapters: [buildCompoundAdapter(1234), buildCompoundAdapter(4567)], facets: [], nHits: 2]
     }
 
     void "test apply Filters to projects #label"() {
@@ -293,7 +274,7 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
         where:
         label                 | searchString | statusCode                         | compoundAdapterMap
         "Empty Search String" | ""           | HttpServletResponse.SC_BAD_REQUEST | null
-        "Success"             | "1234,5678"  | HttpServletResponse.SC_OK          | [compoundAdapters: [buildCompoundAdapter(1234, []), buildCompoundAdapter(4567, [])], facets: [], nHits: 2]
+        "Success"             | "1234,5678"  | HttpServletResponse.SC_OK          | [compoundAdapters: [buildCompoundAdapter(1234), buildCompoundAdapter(4567)], facets: [], nHits: 2]
     }
 
     void "test apply Filters to assays #label"() {
@@ -410,7 +391,7 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
         where:
         label                 | searchString | statusCode                         | compoundAdapterMap
         "Empty Search String" | ""           | HttpServletResponse.SC_BAD_REQUEST | null
-        "Success"             | "1234,5678"  | HttpServletResponse.SC_OK          | [compoundAdapters: [buildCompoundAdapter(1234, []), buildCompoundAdapter(4567, [])], facets: [], nHits: 2]
+        "Success"             | "1234,5678"  | HttpServletResponse.SC_OK          | [compoundAdapters: [buildCompoundAdapter(1234), buildCompoundAdapter(4567)], facets: [], nHits: 2]
 
     }
 
@@ -442,8 +423,8 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
         label                 | searchString | flashMessage                                                                | filters        | statusCode                         | compoundAdapterMap
         "Empty Search String" | ""           | 'Search String is required, must be of the form StructureSearchType:Smiles' | searchFilters1 | HttpServletResponse.SC_BAD_REQUEST | null
         "Throws Exception"    | "1234,5678"  | 'Search String is required, must be of the form StructureSearchType:Smiles' | searchFilters1 | HttpServletResponse.SC_BAD_REQUEST | null
-        "Success"             | "Exact:CCC"  | null                                                                        | searchFilters1 | HttpServletResponse.SC_OK          | [compoundAdapters: [buildCompoundAdapter(4567, [])], facets: [], nHits: 2]
-        "Success No Filters"  | "Exact:CCC"  | null                                                                        | []             | HttpServletResponse.SC_OK          | [compoundAdapters: [buildCompoundAdapter(4567, [])], facets: [], nHits: 2]
+        "Success"             | "Exact:CCC"  | null                                                                        | searchFilters1 | HttpServletResponse.SC_OK          | [compoundAdapters: [buildCompoundAdapter(4567)], facets: [], nHits: 2]
+        "Success No Filters"  | "Exact:CCC"  | null                                                                        | []             | HttpServletResponse.SC_OK          | [compoundAdapters: [buildCompoundAdapter(4567)], facets: [], nHits: 2]
 
     }
 
@@ -567,11 +548,11 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
         and:
         assert response.status == statusCode
         where:
-        label                                    | searchString     | compoundAdapterMap                                                         | statusCode                                   | filters
-        "Search Compounds By Id"                 | "1234, 4567"     | [compoundAdapters: [buildCompoundAdapter(4567, [])], facets: [], nHits: 2] | HttpServletResponse.SC_OK                    | searchFilters1
-        "Search Compounds Non existing Ids"      | "12, 45"         | null                                                                       | HttpServletResponse.SC_INTERNAL_SERVER_ERROR | searchFilters1
-        "Search Compounds By Id No Filters"      | "1234, 4567"     | [compoundAdapters: [buildCompoundAdapter(4567, [])], facets: [], nHits: 2] | HttpServletResponse.SC_OK                    | []
-        "Search Compounds By Id using ID Syntax" | "CID:1234, 4567" | [compoundAdapters: [buildCompoundAdapter(4567, [])], facets: [], nHits: 2] | HttpServletResponse.SC_OK                    | []
+        label                                    | searchString     | compoundAdapterMap                                                     | statusCode                                   | filters
+        "Search Compounds By Id"                 | "1234, 4567"     | [compoundAdapters: [buildCompoundAdapter(4567)], facets: [], nHits: 2] | HttpServletResponse.SC_OK                    | searchFilters1
+        "Search Compounds Non existing Ids"      | "12, 45"         | null                                                                   | HttpServletResponse.SC_INTERNAL_SERVER_ERROR | searchFilters1
+        "Search Compounds By Id No Filters"      | "1234, 4567"     | [compoundAdapters: [buildCompoundAdapter(4567)], facets: [], nHits: 2] | HttpServletResponse.SC_OK                    | []
+        "Search Compounds By Id using ID Syntax" | "CID:1234, 4567" | [compoundAdapters: [buildCompoundAdapter(4567)], facets: [], nHits: 2] | HttpServletResponse.SC_OK                    | []
 
 
     }
@@ -641,17 +622,16 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
 
         if (cid && compoundAdapter) {
             assert model.compound
-            expectedCID == model.compound.pubChemCID
-            expectedSIDs == model.compound.pubChemSIDs
+            expectedCID == model.compound.getPubChemCID()
         }
         response.status == statusCode
 
         where:
-        label                                             | cid  | compoundAdapter                      | expectedCID | expectedSIDs | expectedView                     | statusCode
-        "Render show compound page"                       | 872  | buildCompoundAdapter(872, [1, 3, 2]) | 872         | [1, 2, 3]    | "/bardWebInterface/showCompound" | 200
-        "Render not found Compound string, null Adapter"  | null | null                                 | null        | null         | null                             | 404
-        "Render not found Compound with Compound Adpater" | null | buildCompoundAdapter(872, [3, 2, 1]) | null        | null         | "/bardWebInterface/showCompound" | 200
-        "Compound does not exist"                         | -1   | null                                 | null        | null         | null                             | 404
+        label                                             | cid  | compoundAdapter           | expectedCID | expectedView                     | statusCode
+        "Render show compound page"                       | 872  | buildCompoundAdapter(872) | 872         | "/bardWebInterface/showCompound" | 200
+        "Render not found Compound string, null Adapter"  | null | null                      | null        | null                             | 404
+        "Render not found Compound with Compound Adpater" | null | buildCompoundAdapter(872) | null        | "/bardWebInterface/showCompound" | 200
+        "Compound does not exist"                         | -1   | null                      | null        | null                             | 404
 
     }
 
@@ -719,7 +699,7 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
         }
         assert response.status == statusCode
         where:
-        label                     | pid    | name   | projectAdapter                                                         | expectedProjectView             | statusCode
+        label                                 | pid    | name   | projectAdapter                                                         | expectedProjectView             | statusCode
         "Return a ProjectSearchResult"        | 485349 | "Test" | [projectAdapter: buildProjectAdapter(485349, "Test"), experiments: []] | "/bardWebInterface/showProject" | 200
         "ProjectSearchResult PID is null"     | null   | "Test" | [projectAdapter: buildProjectAdapter(485349, "Test"), experiments: []] | null                            | 404
         "ProjectSearchResult Adapter is null" | null   | "Test" | null                                                                   | null                            | 404
@@ -834,27 +814,23 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
     }
 
 
-    CompoundAdapter buildCompoundAdapter(final Long cid, final List<Long> sids) {
+    CompoundAdapter buildCompoundAdapter(final Long cid) {
         final Compound compound = new Compound()
-        final DataSource source = new DataSource("stuff", "v1")
-        compound.setId(cid);
-        for (Long sid : sids) {
-            compound.addValue(new LongValue(source, Compound.PubChemSIDValue, sid));
-        }
-        // redundant
-        compound.addValue(new LongValue(source, Compound.PubChemCIDValue, cid));
+        compound.setCid(cid.intValue())
         return new CompoundAdapter(compound)
     }
 
     AssayAdapter buildAssayAdapter(final Long adid, final String name) {
-        final Assay assay = new Assay(name)
-        assay.setId(adid)
+        final Assay assay = new Assay()
+        assay.setName(name)
+        assay.setAssayId(adid)
         return new AssayAdapter(assay)
     }
 
     ProjectAdapter buildProjectAdapter(final Long pid, final String name) {
-        final Project project = new Project(name)
-        project.setId(pid)
+        final Project project = new Project()
+        project.setName(name)
+        project.setProjectId(pid)
         return new ProjectAdapter(project)
     }
 }

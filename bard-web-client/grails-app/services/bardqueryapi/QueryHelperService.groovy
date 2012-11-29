@@ -1,19 +1,19 @@
 package bardqueryapi
 
-import bard.core.Assay
-import bard.core.Compound
-import bard.core.Project
 import bard.core.SearchParams
 import bard.core.adapter.AssayAdapter
 import bard.core.adapter.CompoundAdapter
 import bard.core.adapter.ProjectAdapter
+import bard.core.rest.spring.assays.Assay
+import bard.core.rest.spring.assays.FreeTextAssayResult
+import bard.core.rest.spring.compounds.ExpandedCompoundResult
+import bard.core.rest.spring.project.ExpandedProjectResult
+import bard.core.rest.spring.project.Project
 import org.apache.commons.lang.time.StopWatch
 
 import java.util.regex.Matcher
 import java.util.regex.Pattern
-import bard.core.rest.spring.compounds.ExpandedCompoundResult
-import bard.core.rest.spring.assays.FreeTextAssayResult
-import bard.core.rest.spring.project.ExpandedProjectResult
+import bard.core.rest.spring.compounds.Compound
 
 class QueryHelperService {
 
@@ -114,20 +114,13 @@ class QueryHelperService {
     //=========== Construct adapters ===================
     /**
      * Convert the list of compounds to the list of adapters
-     * @param compounds {@link Compound}'s
+     * @param compounds {@link ExpandedCompoundResult}'s
      * @return List of {@link CompoundAdapter}'s
      */
-    final List<CompoundAdapter> compoundsToAdapters(final Collection<Compound> compounds) {
+    final List<CompoundAdapter> compoundsToAdapters(final ExpandedCompoundResult expandedCompoundResult) {
         final List<CompoundAdapter> compoundAdapters = []
-        for (Compound compound : compounds) {
-            final CompoundAdapter compoundAdapter = new CompoundAdapter(compound)
-            compoundAdapters.add(compoundAdapter)
-        }
-        return compoundAdapters
-    }
-    final List<CompoundAdapter> compoundsToAdapters(final ExpandedCompoundResult expandedCompoundResult){
-        final List<CompoundAdapter> compoundAdapters = []
-        for (bard.core.rest.spring.compounds.Compound compound : expandedCompoundResult.compounds) {
+
+        for (Compound compound : expandedCompoundResult.compounds) {
             final CompoundAdapter compoundAdapter = new CompoundAdapter(compound)
             compoundAdapters.add(compoundAdapter)
         }
@@ -135,52 +128,32 @@ class QueryHelperService {
     }
     /**
      * convert a list Assay's to a list of AssayAdapter's
-     * @param assays {@link Assay}
-     * @return list of {@link AssayAdapter}'s
-     */
-    public List<AssayAdapter> assaysToAdapters(final Collection<Assay> assays) {
-        final List<AssayAdapter> assayAdapters = []
-        for (Assay assay : assays) {
-            assayAdapters.add(new AssayAdapter(assay))
-        }
-        return assayAdapters
-    }
-    /**
-     * convert a list Assay's to a list of AssayAdapter's
-     * @param assays {@link Assay}
+     * @param assays {@link FreeTextAssayResult}
      * @return list of {@link AssayAdapter}'s
      */
     public List<AssayAdapter> assaysToAdapters(FreeTextAssayResult freeTextAssayResult) {
-        final List<AssayAdapter> assayAdapters = []
-        return assaysToAdapters(freeTextAssayResult.assays)
+        final List<Assay> assays = freeTextAssayResult.assays
+        if (assays) {
+            return assaysToAdapters(assays)
+        }
+        return []
     }
     /**
      * convert a list Assay's to a list of AssayAdapter's
      * @param assays {@link Assay}
      * @return list of {@link AssayAdapter}'s
      */
-    public List<AssayAdapter> assaysToAdapters(List<bard.core.rest.spring.assays.Assay> assays) {
+    public List<AssayAdapter> assaysToAdapters(List<Assay> assays) {
         final List<AssayAdapter> assayAdapters = []
-        for (bard.core.rest.spring.assays.Assay assay :assays) {
+        for (bard.core.rest.spring.assays.Assay assay : assays) {
             assayAdapters.add(new AssayAdapter(assay))
         }
         return assayAdapters
     }
-    /**
-     * convert Project's to ProjectAdapter's
-     * @param projects {@link Project}'s
-     * @return list of {@link ProjectAdapter}'s
-     */
-    public List<ProjectAdapter> projectsToAdapters(final Collection<Project> projects) {
+
+    public List<ProjectAdapter> projectsToAdapters(final ExpandedProjectResult expandedProjectResult) {
         final List<ProjectAdapter> projectAdapters = []
-        for (Project project : projects) {
-            projectAdapters.add(new ProjectAdapter(project))
-        }
-        return projectAdapters
-    }
-    public List<ProjectAdapter> projectsToAdapters(final ExpandedProjectResult expandedProjectResult){
-        final List<ProjectAdapter> projectAdapters = []
-        for (bard.core.rest.spring.project.Project project : expandedProjectResult.projects) {
+        for (Project project : expandedProjectResult.projects) {
             projectAdapters.add(new ProjectAdapter(project))
         }
         return projectAdapters
