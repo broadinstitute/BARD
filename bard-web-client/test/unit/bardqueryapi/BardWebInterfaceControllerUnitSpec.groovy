@@ -110,7 +110,7 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
         "EID- Not Found"               | 234  | HttpServletResponse.SC_NOT_FOUND   | null
         "Success"                      | 567  | HttpServletResponse.SC_OK          | [total: 2, spreadSheetActivities: [
                 new SpreadSheetActivity(eid: new Long(567), cid: new Long(1), sid: new Long(20))],
-                role: ExperimentRole.Counterscreen, experiment: new ExperimentSearch(name: 'name', assays: [new Assay(name: "name", assayId: 1)])]
+                role: ExperimentRole.Counterscreen, experiment: new ExperimentSearch(name: 'name', assayId:1)]
     }
 
     void "test showExperimentResult With Exception"() {
