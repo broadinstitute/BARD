@@ -16,12 +16,12 @@
                 <g:saveToCartButton id="${assayAdapter.id}"
                                     name="${JavaScriptUtility.cleanup(assayAdapter.name)}"
                                     type="${querycart.QueryItemType.AssayDefinition}"/>
-                <g:if test="${assayAdapter.searchHighlight}">
-                    <dl>
-                        <dt>Search Match (highlighted in bold):</dt>
-                        <dd>&hellip;${assayAdapter.searchHighlight}&hellip;</dd>
-                    </dl>
-                </g:if>
+                %{--<g:if test="${assayAdapter.searchHighlight}">--}%
+                    %{--<dl>--}%
+                        %{--<dt>Search Match (highlighted in bold):</dt>--}%
+                        %{--<dd>&hellip;${assayAdapter.searchHighlight}&hellip;</dd>--}%
+                    %{--</dl>--}%
+                %{--</g:if>--}%
             </li>
         </g:each>
         </ul>

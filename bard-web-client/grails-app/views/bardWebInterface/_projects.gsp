@@ -18,12 +18,12 @@
                 <g:saveToCartButton id="${projectAdapter.id}"
                                     name="${JavaScriptUtility.cleanup(projectAdapter.name)}"
                                     type="${querycart.QueryItemType.Project}"/>
-                <g:if test="${projectAdapter.searchHighlight}">
-                    <dl>
-                        <dt>Search Match (highlighted in bold):</dt>
-                        <dd>&hellip;${projectAdapter.searchHighlight}&hellip;</dd>
-                    </dl>
-                </g:if>
+                %{--<g:if test="${projectAdapter.searchHighlight}">--}%
+                    %{--<dl>--}%
+                        %{--<dt>Search Match (highlighted in bold):</dt>--}%
+                        %{--<dd>&hellip;${projectAdapter.searchHighlight}&hellip;</dd>--}%
+                    %{--</dl>--}%
+                %{--</g:if>--}%
                 <g:if test="${projectAdapter?.getNumberOfExperiments()}">
                     <dl>
                         <dt>Number Of Experiments:</dt>
