@@ -10,4 +10,8 @@ class Cluster {
 
     static constraints = {
     }
+
+    static mapping = {
+        table 'cluster_tbl'
+    }
 }

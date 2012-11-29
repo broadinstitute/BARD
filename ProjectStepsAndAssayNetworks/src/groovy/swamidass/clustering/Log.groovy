@@ -1,3 +1,4 @@
+package swamidass.clustering
 
 
 import org.apache.log4j.FileAppender
@@ -17,11 +18,11 @@ class Log {
 
     static FileAppender fileAppender
 
-    private static String filePath = "test/exampleData/dnaRepairLoad.log"
+    private static String filePath = "ParseSwamidassProjects.log"
     //"test/exampleData/assayDeDuplication.log"//"test/exampleData/parseCarsSpreadsheet.log"
 
     private static Logger initializeLogger() {
-        Logger logger = Logger.getLogger("parseCarsSpreadsheetScriptLogger")
+        Logger logger = Logger.getLogger("parseSwamidassProjectsScriptLogger")
         logger.setLevel(Level.ALL)
 
         fileAppender = new FileAppender(new SimpleLayout(),  filePath, false)

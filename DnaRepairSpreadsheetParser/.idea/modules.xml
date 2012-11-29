@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/DnaRepairSpreadsheetParser.iml" filepath="$PROJECT_DIR$/DnaRepairSpreadsheetParser.iml" />
+      <module fileurl="file://$PROJECT_DIR$/DnaRepairSpreadsheetParser-grailsPlugins.iml" filepath="$PROJECT_DIR$/DnaRepairSpreadsheetParser-grailsPlugins.iml" />
       <module fileurl="file://$PROJECT_DIR$/bardDomainspreadsheetmappingModel-inplacePlugin.iml" filepath="$PROJECT_DIR$/bardDomainspreadsheetmappingModel-inplacePlugin.iml" />
     </modules>
   </component>

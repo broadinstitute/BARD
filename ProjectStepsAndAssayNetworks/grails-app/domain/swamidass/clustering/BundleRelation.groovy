@@ -12,4 +12,8 @@ class BundleRelation {
 
     static constraints = {
     }
+
+    static mapping = {
+        parentChildOverlappingCompounds column: 'Prnt_Chld_Ovrlp_Cmpds'
+    }
 }
