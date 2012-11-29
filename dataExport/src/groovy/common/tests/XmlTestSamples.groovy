@@ -601,29 +601,30 @@ class XmlTestSamples {
 
 
     static String STAGES = '''
-<stages>
-  <stage stageElement='IC50'>
-    <stageName>construct variant assay</stageName>
-    <description>Description</description>
-    <link rel='related' href='http://localhost:8080/dataExport/api/dictionary/element/341' type='application/vnd.bard.cap+xml;type=element' />
-  </stage>
-</stages>
-'''
+        <stages>
+          <stage stageElement='label1'>
+            <stageName>label</stageName>
+            <link rel='related' href='http://localhost:8080/dataExport/api/dictionary/element/1' type='application/vnd.bard.cap+xml;type=element' />
+          </stage>
+          <stage stageElement='label2'>
+            <stageName>label</stageName>
+            <link rel='related' href='http://localhost:8080/dataExport/api/dictionary/element/2' type='application/vnd.bard.cap+xml;type=element' />
+          </stage>
+        </stages>'''
 
     static String STAGE = '''
-<stage stageElement='IC50'>
-  <stageName>construct variant assay</stageName>
-  <description>Description</description>
-  <link rel='related' href='http://localhost:8080/dataExport/api/dictionary/element/341' type='application/vnd.bard.cap+xml;type=element' />
-</stage>
-'''
+        <stage stageElement='IC50'>
+          <stageName>construct variant assay</stageName>
+          <description>Description</description>
+          <link rel='related' href='http://localhost:8080/dataExport/api/dictionary/element/341' type='application/vnd.bard.cap+xml;type=element' />
+        </stage> '''
+
     static String STAGE1 = '''
-<stage stageElement='IC50'>
-  <stageName>construct variant assay</stageName>
-  <description>Description</description>
-  <link rel='related' href='http://localhost:8080/dataExport/api/dictionary/element/341' type='application/vnd.bard.cap+xml;type=element' />
-</stage>
-'''
+        <stage stageElement='IC50'>
+          <stageName>construct variant assay</stageName>
+          <description>Description</description>
+          <link rel='related' href='http://localhost:8080/dataExport/api/dictionary/element/341' type='application/vnd.bard.cap+xml;type=element' />
+        </stage> '''
 
 
     static String RESULT_TYPE = '''
@@ -640,7 +641,7 @@ class XmlTestSamples {
 </resultType>
 '''
     static String ELEMENT = '''
-    <element elementId='386' readyForExtraction='Ready' elementStatus='Published'>
+    <element elementId='1' readyForExtraction='Ready' elementStatus='Published'>
       <label>uM</label>
       <link rel='edit' href='http://localhost:8080/dataExport/api/dictionary/element/386' type='application/vnd.bard.cap+xml;type=element' />
     </element>
@@ -788,42 +789,16 @@ class XmlTestSamples {
 
 
     static String ELEMENTS = '''
-<elements>
-  <element elementId='386' readyForExtraction='Ready' elementStatus='Published'>
-    <label>uM</label>
-    <link rel='edit' href='http://localhost:8080/dataExport/api/dictionary/element/386' type='application/vnd.bard.cap+xml;type=element' />
-  </element>
-  <element elementId='366' readyForExtraction='Ready' elementStatus='Published'>
-    <label>concentration</label>
-    <link rel='edit' href='http://localhost:8080/dataExport/api/dictionary/element/366' type='application/vnd.bard.cap+xml;type=element' />
-  </element>
-  <element elementId='123' readyForExtraction='Ready' elementStatus='Published'>
-    <label>unit of measurement</label>
-    <description>It is the inite magnitude of a physical quantity or of time. It has a quantity and a unit associated with it.</description>
-    <link rel='edit' href='http://localhost:8080/dataExport/api/dictionary/element/123' type='application/vnd.bard.cap+xml;type=element' />
-  </element>
-  <element elementId='372' readyForExtraction='Ready' elementStatus='Published'>
-    <label>Assay Explorer</label>
-    <link rel='edit' href='http://localhost:8080/dataExport/api/dictionary/element/372' type='application/vnd.bard.cap+xml;type=element' />
-  </element>
-  <element elementId='370' readyForExtraction='Ready' elementStatus='Published'>
-    <label>Number of points</label>
-    <link rel='edit' href='http://localhost:8080/dataExport/api/dictionary/element/370' type='application/vnd.bard.cap+xml;type=element' />
-  </element>
-  <element elementId='369' readyForExtraction='Ready' elementStatus='Published'>
-    <label>Number of exclusions</label>
-    <link rel='edit' href='http://localhost:8080/dataExport/api/dictionary/element/369' type='application/vnd.bard.cap+xml;type=element' />
-  </element>
-  <element elementId='368' readyForExtraction='Complete' elementStatus='Published'>
-    <label>software</label>
-    <link rel='edit' href='http://localhost:8080/dataExport/api/dictionary/element/368' type='application/vnd.bard.cap+xml;type=element' />
-  </element>
-  <element elementId='341' readyForExtraction='Ready' elementStatus='Published' unit='uM'>
-    <label>IC50</label>
-    <link rel='edit' href='http://localhost:8080/dataExport/api/dictionary/element/341' type='application/vnd.bard.cap+xml;type=element' />
-  </element>
-</elements>
-'''
+        <elements>
+          <element elementId='1' readyForExtraction='Pending' elementStatus='Pending'>
+            <label>label1</label>
+            <link rel='edit' href='http://localhost:8080/dataExport/api/dictionary/element/1' type='application/vnd.bard.cap+xml;type=element' />
+          </element>
+          <element elementId='2' readyForExtraction='Pending' elementStatus='Pending'>
+            <label>label2</label>
+            <link rel='edit' href='http://localhost:8080/dataExport/api/dictionary/element/2' type='application/vnd.bard.cap+xml;type=element' />
+          </element>
+        </elements>'''
 
 
     static String ELEMENT_HIERARCHIES = '''
