@@ -16,7 +16,7 @@ public class ExperimentSearch extends ExperimentAbstract {
     }
 
     @JsonProperty("assayId")
-    public void setAssayId(List<Assay> assays) {
+    public void setAssays(List<Assay> assays) {
         this.assays = assays;
     }
 

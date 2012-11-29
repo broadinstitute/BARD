@@ -153,7 +153,10 @@ class QueryService implements IQueryService {
             this.queryHelperService.stopStopWatch(sw, "structure search ${structureSearchParams.toString()}")
             //collect the results
             //convert to adapters
-            compoundAdapters.addAll(this.queryHelperService.compoundsToAdapters(expandedCompoundResult))
+            final List<CompoundAdapter> compoundsToAdapters = this.queryHelperService.compoundsToAdapters(expandedCompoundResult)
+            if (compoundsToAdapters) {
+                compoundAdapters.addAll(compoundsToAdapters)
+            }
 
             //collect the facets
             //facets = searchIterator.facets
@@ -205,7 +208,9 @@ class QueryService implements IQueryService {
             ExpandedAssayResult expandedAssayResult = this.assayRestService.searchAssaysByIds(assayIds)
             this.queryHelperService.stopStopWatch(sw, "find assays by ADIDs ${assayIds.toString()}")
             if (expandedAssayResult) {
-                foundAssayAdapters.addAll(this.queryHelperService.assaysToAdapters(expandedAssayResult.assays))
+                if (expandedAssayResult.assays) {
+                    foundAssayAdapters.addAll(this.queryHelperService.assaysToAdapters(expandedAssayResult.assays))
+                }
                 //TODO: Facet needed. Not yet ready in JDO
             }
         }
@@ -228,7 +233,10 @@ class QueryService implements IQueryService {
             ExpandedProjectResult expandedProjectResult = projectRestService.searchProjectsByIds(projectIds)
             this.queryHelperService.stopStopWatch(sw, "find projects by PIDs ${projectIds.toString()}")
             if (expandedProjectResult) {
-                foundProjectAdapters.addAll(this.queryHelperService.projectsToAdapters(expandedProjectResult))
+                final List<ProjectAdapter> projectsToAdapters = this.queryHelperService.projectsToAdapters(expandedProjectResult)
+                if (projectsToAdapters) {
+                    foundProjectAdapters.addAll(projectsToAdapters)
+                }
             }
         }
         final int nhits = foundProjectAdapters.size()
@@ -281,7 +289,6 @@ class QueryService implements IQueryService {
             ExpandedAssay assay = assayRestService.getAssayById(assayId)
             List<Experiment> experiments = assay.experiments
             final List<Project> projects = assay.projects
-            //queryHelperService.projectsToAdapters(projects)
             final AssayAdapter assayAdapter = new AssayAdapter(assay)
             return [assayAdapter: assayAdapter, experiments: experiments, projects: projects]
         }
@@ -295,13 +302,17 @@ class QueryService implements IQueryService {
     Map showProject(final Long projectId) {
         if (projectId) {
             StopWatch sw = this.queryHelperService.startStopWatch()
-            Project project = projectRestService.getProjectById(projectId)
+            final Project project = projectRestService.getProjectById(projectId)
             this.queryHelperService.stopStopWatch(sw, "show project ${projectId.toString()}")
             if (project) {
-                List<Experiment> experiments = restCombinedService.findExperimentsByProjectId(projectId)
-                experiments.sort { it.role }
+                final List<Experiment> experiments = restCombinedService.findExperimentsByProjectId(projectId)
+                if (experiments && !experiments.isEmpty()) {
+                    experiments?.sort {
+                        it?.role
+                    }
+                }
                 final List<Assay> assays = restCombinedService.findAssaysByProjectId(projectId)
-                ProjectAdapter projectAdapter = new ProjectAdapter(project)
+                final ProjectAdapter projectAdapter = new ProjectAdapter(project)
                 return [projectAdapter: projectAdapter, experiments: experiments, assays: assays]
             }
         }

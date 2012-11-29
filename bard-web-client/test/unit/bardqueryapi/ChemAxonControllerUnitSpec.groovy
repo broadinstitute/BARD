@@ -1,19 +1,13 @@
 package bardqueryapi
 
-import spock.lang.Specification
-import spock.lang.Unroll
+import bard.core.adapter.CompoundAdapter
+import bard.core.rest.spring.compounds.Compound
 import grails.test.mixin.TestFor
 import grails.test.mixin.TestMixin
 import grails.test.mixin.support.GrailsUnitTestMixin
-import bard.core.adapter.CompoundAdapter
 import spock.lang.Shared
-import bard.core.Compound
-import bard.core.DataSource
-import bard.core.LongValue
-
-import bard.core.MolecularValue
-import bard.core.interfaces.MolecularData
-import bard.core.impl.MolecularDataJChemImpl
+import spock.lang.Specification
+import spock.lang.Unroll
 
 /**
  * Created with IntelliJ IDEA.
@@ -43,9 +37,6 @@ class ChemAxonControllerUnitSpec extends Specification {
      */
     void "test generateStructureImageFromSmiles #label"() {
         when:
-//        controller.params.smiles = smiles
-//        controller.params.width = width
-//        controller.params.height = height
         controller.generateStructureImageFromSmiles(smiles, width, height)
         final byte[] returnedImage = response.contentAsByteArray
 
@@ -86,18 +77,10 @@ class ChemAxonControllerUnitSpec extends Specification {
         "cid is null"                  | 'C1=CC2=C(C=C1)C=CC=C2' | 300 as Integer | 300 as Integer | [1, 2, 3] as byte[] | null         | 0                     | compoundAdapter
     }
 
-    CompoundAdapter buildCompoundAdapter(final Long cid, final String smiles) {
+    CompoundAdapter buildCompoundAdapter(final int cid, final String smiles) {
         final Compound compound = new Compound()
-        final DataSource source = new DataSource("stuff", "v1")
-        compound.setId(cid);
-        for (Long sid : [1, 2, 3]) {
-            compound.addValue(new LongValue(source, Compound.PubChemSIDValue, sid));
-        }
-        // redundant
-        compound.addValue(new LongValue(source, Compound.PubChemCIDValue, cid));
-        MolecularData md = new MolecularDataJChemImpl();
-        md.setMolecule(smiles);
-        compound.addValue(new MolecularValue(source, Compound.MolecularValue, md));
+        compound.setSmiles(smiles)
+        compound.setCid(cid);
         return compoundAdapter = new CompoundAdapter(compound)
     }
 
