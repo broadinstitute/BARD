@@ -54,3 +54,6 @@ grails.project.dependency.resolution = {
         compile ':cache:1.0.0'
     }
 }
+
+// making the domainspreadsheetmapping plugin an in-place plugin
+grails.plugin.location.'bard-domainspreadsheetmapping-model' = "../BardDomainModel"

@@ -42,6 +42,8 @@ environments {
     }
     gwalzer_barddev {
         dataSource {
+            pooled = true
+            dbCreate = "update"
             url = "jdbc:oracle:thin:@vmbarddev:1521:barddev"
             driverClassName = "oracle.jdbc.driver.OracleDriver"
             dialect = org.hibernate.dialect.Oracle10gDialect
