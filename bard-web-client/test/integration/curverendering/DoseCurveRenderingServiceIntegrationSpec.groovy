@@ -3,8 +3,9 @@ package curverendering
 import bard.core.Experiment
 import bard.core.HillCurveValue
 import bard.core.Value
-import bard.core.rest.RESTCompoundService
-import bard.core.rest.RESTExperimentService
+import bard.core.interfaces.SearchResult
+import bard.core.rest.spring.CompoundRestService
+import bard.core.rest.spring.ExperimentRestService
 import bardqueryapi.DrcCurveCommand
 import grails.plugin.spock.IntegrationSpec
 import molspreadsheet.MolecularSpreadSheetService
@@ -14,14 +15,15 @@ import org.jfree.chart.JFreeChart
 import org.junit.After
 import org.junit.Before
 import spock.lang.Unroll
-import bard.core.interfaces.SearchResult
+import bard.core.rest.spring.experiment.ExperimentData
+import bard.core.rest.spring.experiment.Activity
 
 @Unroll
 class DoseCurveRenderingServiceIntegrationSpec extends IntegrationSpec {
 
     MolecularSpreadSheetService molecularSpreadSheetService
-    RESTCompoundService restCompoundService
-    RESTExperimentService restExperimentService
+    CompoundRestService compoundRestService
+    ExperimentRestService experimentRestService
     DoseCurveRenderingService doseCurveRenderingService
 
 
@@ -60,34 +62,19 @@ class DoseCurveRenderingServiceIntegrationSpec extends IntegrationSpec {
     }
 
 
-    void "tests createDoseCurve"() {
+    void "tests createDoseCurve #label"() {
         given: "That we have created an ETag from a list of CIDs"
-        final Object compoundETag = restCompoundService.newETag("Compound ETags For Activities", cids);
-
-        and: "That we have an Experiment in which the Compounds were tested in."
-        Experiment experiment = restExperimentService.get(experimentId)
+        final String compoundETag = compoundRestService.newETag("Compound ETags For Activities", cids);
 
         and: "We call the activities method on the restExperimentService with the experiment and the ETag"
-        final SearchResult<Value> activityValueSearchResult = this.restExperimentService.activities(experiment, compoundETag);
-        final List<Value> searchResults = activityValueSearchResult.searchResults
+        final ExperimentData activityValueSearchResult = this.experimentRestService.activities(experimentId, compoundETag);
+        final List<Activity> searchResults = activityValueSearchResult.activities
 
         and: "We extract the first experimen tValue in the resulting collection"
-        Value experimentValue = (Value) searchResults.get(0)
+        final Activity experimentValue = (Activity) searchResults.get(0)
 
         and: "We call the extractActivitiesFromExperiment method with the experiment Value to get the SpreadSheetActivity"
-        SpreadSheetActivity spreadSheetActivity = molecularSpreadSheetService.extractActivitiesFromExperiment(experimentValue, experimentId)
-//        final List<Double> concentrations,
-//        final List<Double> activities,
-//        final Double slope,
-//        final Double coef,
-//        final Double s0,
-//        final Double sinf,
-//        final String xAxisLabel,
-//        final String yAxisLabel,
-//        final Double xNormMin,
-//        final Double xNormMax,
-//        final Double yNormMin,
-//        final Double yNormMax
+        SpreadSheetActivity spreadSheetActivity = molecularSpreadSheetService.extractActivitiesFromExperiment(experimentValue)
         when: "We call the createDoseCurve method with the spreadSheetActivity.hillCurveValue value and the other parameters"
         JFreeChart jFreeChart =
             this.doseCurveRenderingService.
@@ -112,22 +99,20 @@ class DoseCurveRenderingServiceIntegrationSpec extends IntegrationSpec {
 
     }
 
-    void "tests createDoseCurve with points"() {
+    void "tests createDoseCurve with points #label"() {
         given: "That we have created an ETag from a list of CIDs"
-        final Object compoundETag = restCompoundService.newETag("Compound ETags For Activities", cids);
+        final String compoundETag = compoundRestService.newETag("Compound ETags For Activities", cids);
 
-        and: "That we have an Experiment in which the Compounds were tested in."
-        Experiment experiment = restExperimentService.get(experimentId)
 
         and: "We call the activities method on the restExperimentService with the experiment and the ETag"
-        final SearchResult<Value> activityValueSearchResults = this.restExperimentService.activities(experiment, compoundETag);
-        final List<Value> searchResults = activityValueSearchResults.searchResults
+        final ExperimentData experimentData = this.experimentRestService.activities(experimentId, compoundETag);
+        final List<Activity> searchResults = experimentData.activities
 
         and: "We extract the first experimen tValue in the resulting collection"
-        Value experimentValue = searchResults.get(0)
+        Activity experimentValue = searchResults.get(0)
 
         and: "We call the extractActivitiesFromExperiment method with the experiment Value to get the SpreadSheetActivity"
-        SpreadSheetActivity spreadSheetActivity = molecularSpreadSheetService.extractActivitiesFromExperiment(experimentValue, experimentId)
+        SpreadSheetActivity spreadSheetActivity = molecularSpreadSheetService.extractActivitiesFromExperiment(experimentValue)
 
         when: "We call the createDoseCurve method with the spreadSheetActivity.hillCurveValue value and the other parameters"
         final HillCurveValue hillCurveValue = spreadSheetActivity.hillCurveValueList[0]
@@ -150,20 +135,17 @@ class DoseCurveRenderingServiceIntegrationSpec extends IntegrationSpec {
 
     void "tests findDrcData"() {
         given: "That we have created an ETag from a list of CIDs"
-        final Object compoundETag = restCompoundService.newETag("Compound ETags For Activities", cids);
-
-        and: "That we have an Experiment in which the Compounds were tested in."
-        Experiment experiment = restExperimentService.get(experimentId)
+        final Object compoundETag = compoundRestService.newETag("Compound ETags For Activities", cids);
 
         and: "We call the activities method on the restExperimentService with the experiment and the ETag"
-        final SearchResult<Value> experimentIterator = this.restExperimentService.activities(experiment, compoundETag);
+        final ExperimentData experimentIterator = this.experimentRestService.activities(experimentId, compoundETag);
 
 
         and: "We extract the first experimen tValue in the resulting collection"
-        Value experimentValue = experimentIterator.searchResults.get(0)
+        Activity experimentValue = experimentIterator.activities.get(0)
 
         and: "We call the extractActivitiesFromExperiment method with the experiment Value to get the SpreadSheetActivity"
-        SpreadSheetActivity spreadSheetActivity = molecularSpreadSheetService.extractActivitiesFromExperiment(experimentValue, experimentId)
+        SpreadSheetActivity spreadSheetActivity = molecularSpreadSheetService.extractActivitiesFromExperiment(experimentValue)
 
         when: "We call the findDrcData method with the spreadSheetActivity.hillCurveValue value"
         final HillCurveValue hillCurveValue = spreadSheetActivity.getHillCurveValueList()[0]
@@ -188,17 +170,16 @@ class DoseCurveRenderingServiceIntegrationSpec extends IntegrationSpec {
     void "tests findDrcData No AC50"() {
         given: "That we have an Experiment"
         final Long experimentId = new Long(1326)
-        Experiment experiment = restExperimentService.get(experimentId)
 
         and: "We call the activities method on the restExperimentService with the experiment and the ETag"
-        final SearchResult<Value> experimentIterator = this.restExperimentService.activities(experiment);
+        final ExperimentData experimentIterator = this.experimentRestService.activities(experimentId);
 
         and: "We extract the first experimen tValue in the resulting collection"
-        Value experimentValue = experimentIterator.searchResults.get(0)
+        Activity experimentValue = experimentIterator.activities.get(0)
 
 
         and: "We call the extractActivitiesFromExperiment method with the experiment Value to get the SpreadSheetActivity"
-        SpreadSheetActivity spreadSheetActivity = molecularSpreadSheetService.extractActivitiesFromExperiment(experimentValue, experimentId)
+        SpreadSheetActivity spreadSheetActivity = molecularSpreadSheetService.extractActivitiesFromExperiment(experimentValue)
 
         when: "We call the findDrcData method with the spreadSheetActivity.hillCurveValue value"
         final HillCurveValue hillCurveValue = spreadSheetActivity.hillCurveValueList[0]

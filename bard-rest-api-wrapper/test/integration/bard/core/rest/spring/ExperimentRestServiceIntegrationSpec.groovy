@@ -3,12 +3,13 @@ package bard.core.rest.spring
 import bard.core.rest.helper.RESTTestHelper
 import bard.core.rest.spring.experiment.Activity
 import bard.core.rest.spring.experiment.ExperimentData
-import bard.core.rest.spring.experiment.ExperimentResult
-import bard.core.rest.spring.experiment.ExperimentSearch
+
 import grails.plugin.spock.IntegrationSpec
 import spock.lang.Timeout
 import spock.lang.Unroll
 import bard.core.rest.spring.assays.Assay
+import bard.core.rest.spring.experiment.ExperimentShowResult
+import bard.core.rest.spring.experiment.ExperimentShow
 
 /**
  * Tests for ProjectRestService
@@ -23,7 +24,7 @@ class ExperimentRestServiceIntegrationSpec extends IntegrationSpec {
     void "test pull other values out of an experiment"() {
 
         when: "The get method is called with the given experiment ID: #experimentid"
-        final ExperimentSearch experiment = this.experimentRestService.getExperimentById(experimentid)
+        final ExperimentShow experiment = this.experimentRestService.getExperimentById(experimentid)
         then: "An experiment is returned with the expected information"
         assert experiment.getId() == experimentid
         List<Assay> assays = experiment.getAssays()
@@ -41,7 +42,7 @@ class ExperimentRestServiceIntegrationSpec extends IntegrationSpec {
         given:
         final List<Long> experimentIds = [460, 461, 197, 198, 4171, 3278, 3274, 3277, 2362, 2637]
         when:
-        final ExperimentResult experimentResult = experimentRestService.searchExperimentsByIds(experimentIds)
+        final ExperimentShowResult experimentResult = experimentRestService.searchExperimentsByIds(experimentIds)
         then:
         assert experimentResult
         assert experimentResult.experiments
@@ -51,11 +52,11 @@ class ExperimentRestServiceIntegrationSpec extends IntegrationSpec {
     void "test step through entire Experiment iterator #experimentId"() {
 
         when: "The get method is called with the given experiment ID: #experimentId"
-        final ExperimentSearch experimentSearch = this.experimentRestService.getExperimentById(experimentId)
+        final ExperimentShow experimentShow = this.experimentRestService.getExperimentById(experimentId)
         then: "An experiment is returned with the expected information"
-        assert experimentSearch
-        assert experimentSearch.getId() == experimentId
-        assertExperimentSearchResult(experimentSearch)
+        assert experimentShow
+        assert experimentShow.getId() == experimentId
+        assertExperimentSearchResult(experimentShow)
         where:
         label                | experimentId
         "Find an experiment" | new Long(346)  // short expt (3000 values)
@@ -128,8 +129,8 @@ class ExperimentRestServiceIntegrationSpec extends IntegrationSpec {
      * Step through the experiment with the iterator
      * @param experiment
      */
-    void assertExperimentSearchResult(final ExperimentSearch experimentSearch) {
-        final ExperimentData experimentData = this.experimentRestService.activities(experimentSearch.id)
+    void assertExperimentSearchResult(final ExperimentShow experimentShow) {
+        final ExperimentData experimentData = this.experimentRestService.activities(experimentShow.id)
         final List<Activity> activities = experimentData.activities
         assert activities
         for (Activity activity : activities) {

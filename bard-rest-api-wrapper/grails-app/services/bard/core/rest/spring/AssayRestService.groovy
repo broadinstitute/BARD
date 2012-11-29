@@ -46,7 +46,7 @@ class AssayRestService extends AbstractRestService {
         this.addETagsToHTTPHeader(headers, etags)
         HttpEntity<List> entity = new HttpEntity<List>(map, headers);
         final String url = this.buildURLToPostIds()
-        final HttpEntity<List> exchange = restTemplate.exchange(url, HttpMethod.POST, entity, List.class);
+        final HttpEntity<List> exchange = restTemplate.exchange(url, HttpMethod.POST, entity, ExpandedAssay[].class);
         final List<ExpandedAssay> assays = exchange.getBody()
         headers = exchange.getHeaders()
         this.extractETagFromResponseHeader(headers, 0, etags)

@@ -129,10 +129,13 @@ class MolecularSpreadSheetService {
 
 
 
-    protected String retrieveImpliedCompoundsEtagFromAssaySpecification(List<Experiment> experimentList) {
+    protected String retrieveImpliedCompoundsEtagFromAssaySpecification(List<ExperimentSearch> experimentList) {
         String etag = null
-        for (Experiment experiment : experimentList) {
-            final List<Long> idList = this.restCombinedService.compounds(experiment.id)
+        for (ExperimentSearch experiment : experimentList) {
+            List<Long> idList = []
+            if (experiment.id) {
+                idList = this.restCombinedService.compounds(experiment.id)
+            }
             if (etag == null) {
                 etag = this.compoundRestService.newETag("${new Date().toString()}", idList);
             }
@@ -148,14 +151,14 @@ class MolecularSpreadSheetService {
      * @param etag
      * @return
      */
-    protected List<SpreadSheetActivity> extractMolSpreadSheetData(final MolSpreadSheetData molSpreadSheetData, final List<Experiment> experimentList, String etag = null) {
+    protected List<SpreadSheetActivity> extractMolSpreadSheetData(final MolSpreadSheetData molSpreadSheetData, final List<ExperimentSearch> experimentList, String etag = null) {
         // now step through the data and place into molSpreadSheetData
         final List<SpreadSheetActivity> spreadSheetActivityList = new ArrayList<SpreadSheetActivity>()
 
         // we need to handle each experiment separately ( until NCGC can do this in the background )
         // Note that each experiment corresponds to a column in our spreadsheet
         int columnCount = 0
-        for (Experiment experiment in experimentList) {
+        for (ExperimentSearch experiment in experimentList) {
             ExperimentData experimentSearchResults
             if (etag) {
                 experimentSearchResults = experimentRestService.activities(experiment.id, etag)
@@ -241,14 +244,14 @@ class MolecularSpreadSheetService {
      * @param spreadSheetActivityList
      */
     protected void populateMolSpreadSheetData(final MolSpreadSheetData molSpreadSheetData,
-                                              final List<Experiment> experimentList,
+                                              final List<ExperimentSearch> experimentList,
                                               final List<SpreadSheetActivity> spreadSheetActivityList,
                                               final Map<String, MolSpreadSheetCell> dataMap) {
         // now step through the data and place into molSpreadSheetData
         int columnPointer = 0
         // we need to handle each experiment separately ( until NCGC can do this in the background )
         // Note that each experiment corresponds to a column in our spreadsheet
-        for (Experiment experiment in experimentList) {
+        for (ExperimentSearch experiment in experimentList) {
 
             for (SpreadSheetActivity spreadSheetActivity in spreadSheetActivityList) {
                 if (molSpreadSheetData.rowPointer.containsKey(spreadSheetActivity.cid)) {
@@ -373,14 +376,14 @@ class MolecularSpreadSheetService {
      * @param molSpreadSheetData
      * @param experimentList
      */
-    protected void populateMolSpreadSheetColumnMetadata(MolSpreadSheetData molSpreadSheetData, List<Experiment> experimentList) {
+    protected void populateMolSpreadSheetColumnMetadata(MolSpreadSheetData molSpreadSheetData, List<ExperimentSearch> experimentList) {
 
         // now retrieve the header names from the assays
         molSpreadSheetData.mssHeaders << ["Struct"]
         molSpreadSheetData.mssHeaders << ["CID"]
         molSpreadSheetData.mssHeaders << ["UNM Promiscuity Analysis"]
         molSpreadSheetData.mssHeaders << ["Active vs Tested across all Assay Definitions"]
-        for (Experiment experiment in experimentList) {
+        for (ExperimentSearch experiment : experimentList) {
             molSpreadSheetData.experimentNameList << "${experiment.id.toString()}"
             molSpreadSheetData.experimentFullNameList << "${experiment.name.toString()}"
             molSpreadSheetData.mssHeaders << []
@@ -392,11 +395,11 @@ class MolecularSpreadSheetService {
      * @param cartAssays
      * @return
      */
-    protected List<Experiment> assaysToExperiments(final Collection<Assay> assays) {
-        final List<Experiment> allExperiments = []
+    protected List<ExperimentSearch> assaysToExperiments(final Collection<Assay> assays) {
+        final List<ExperimentSearch> allExperiments = []
 
         for (Assay assay : assays) {
-            final List<Experiment> experiments = restCombinedService.findExperimentsByAssayId(assay.id)
+            final List<ExperimentSearch> experiments = restCombinedService.findExperimentsByAssayId(assay.id)
             if (experiments) {
                 allExperiments.addAll(experiments)
             }
@@ -410,19 +413,25 @@ class MolecularSpreadSheetService {
      * @param cartAssays
      * @return
      */
-    protected List<Experiment> assaysToExperiments(List<Experiment> incomingExperimentList, final List<Long> assayIds) {
+    protected List<ExperimentSearch> assaysToExperiments(List<ExperimentSearch> incomingExperimentList, final List<Long> assayIds) {
 
-        List<Experiment> allExperiments
+        List<ExperimentSearch> allExperiments
         if (incomingExperimentList) {
             allExperiments = incomingExperimentList
         }
         else {
             allExperiments = []
         }
+        if(!assayIds){
+         return allExperiments
+        }
         final ExpandedAssayResult expandedAssayResult = assayRestService.searchAssaysByIds(assayIds)
         final List<ExpandedAssay> assays = expandedAssayResult.assays
         for (ExpandedAssay assay : assays) {
-            allExperiments.addAll(assay.experiments)
+            final List<ExperimentSearch> experiments = assay.experiments
+            if (experiments) {
+                allExperiments.addAll(experiments)
+            }
         }
         return allExperiments
     }
@@ -432,10 +441,9 @@ class MolecularSpreadSheetService {
      * @param cartAssays
      * @return
      */
-    protected List<Experiment> cartAssaysToExperiments(List<Experiment> incomingExperimentList, final List<CartAssay> cartAssays) {
+    protected List<ExperimentSearch> cartAssaysToExperiments(List<ExperimentSearch> incomingExperimentList, final List<CartAssay> cartAssays) {
         List<Long> assayIds = cartAssays*.externalId
-
-        assaysToExperiments(incomingExperimentList, assayIds)
+        return assaysToExperiments(incomingExperimentList, assayIds)
     }
 
     /**
@@ -444,7 +452,7 @@ class MolecularSpreadSheetService {
      * @param cartCompounds
      * @return
      */
-    protected List<Experiment> cartCompoundsToExperiments(final List<CartCompound> cartCompounds) {
+    protected List<ExperimentSearch> cartCompoundsToExperiments(final List<CartCompound> cartCompounds) {
         final List<Long> compoundIds = cartCompounds*.externalId
 
         List<Assay> allAssays = []
@@ -452,7 +460,7 @@ class MolecularSpreadSheetService {
             List<Assay> assays = compoundRestService.getTestedAssays(individualCompoundId, true)  // true = active only
             allAssays.addAll(assays)
         }
-        assaysToExperiments(allAssays)
+        return assaysToExperiments(allAssays)
     }
 
 /**
@@ -460,16 +468,19 @@ class MolecularSpreadSheetService {
  * @param cartProjects
  * @return list of Experiment's from a list of CartProject's
  */
-    protected List<Experiment> cartProjectsToExperiments(final List<CartProject> cartProjects) {
+    protected List<ExperimentSearch> cartProjectsToExperiments(final List<CartProject> cartProjects) {
         List<Long> projectIds = cartProjects*.externalId
-        List<Experiment> allExperiments = []
+        List<ExperimentSearch> allExperiments = []
         final ExpandedProjectResult expandedProjectResult = projectRestService.searchProjectsByIds(projectIds)
 
 
         for (Project project : expandedProjectResult.projects) {
             final List<Long> eids = project.eids
-            final ExperimentResult experimentResult = experimentRestService.searchExperimentsByIds(eids)
-            allExperiments.addAll(experimentResult.experiments)
+            final ExperimentSearchResult experimentResult = experimentRestService.searchExperimentsByIds(eids)
+            final List<ExperimentSearch> experiments = experimentResult.experiments
+            if (experiments) {
+                allExperiments.addAll(experiments)
+            }
         }
         return allExperiments
     }
@@ -480,14 +491,14 @@ class MolecularSpreadSheetService {
      * @param compoundETag
      * @return
      */
-    List<SpreadSheetActivity> findActivitiesForCompounds(final Experiment experiment, final String compoundETag) {
+    List<SpreadSheetActivity> findActivitiesForCompounds(final Long experimentId, final String compoundETag) {
         final List<SpreadSheetActivity> spreadSheetActivities = []
-        final ExperimentData experimentData = experimentRestService.activities(experiment.id, compoundETag);
+        final ExperimentData experimentData = experimentRestService.activities(experimentId, compoundETag);
 
         for (Activity experimentValue : experimentData.activities) {
             if (experimentValue) {
                 SpreadSheetActivity spreadSheetActivity = extractActivitiesFromExperiment(experimentValue)
-                spreadSheetActivity.experimentId = experiment.id
+                spreadSheetActivity.experimentId = experimentId
                 spreadSheetActivities.add(spreadSheetActivity)
             }
         }
@@ -499,16 +510,16 @@ class MolecularSpreadSheetService {
         List<SpreadSheetActivity> spreadSheetActivities = []
         long totalNumberOfRecords = 0
         ExperimentRole role = null
-        ExperimentSearch experiment = experimentRestService.getExperimentById(experimentId)
-        if (experiment) {
-            role = experiment.role
+        ExperimentShow experimentShow = experimentRestService.getExperimentById(experimentId)
+        if (experimentShow) {
+            role = experimentShow.role
             final Map activityValuesMap = extractActivityValuesWithExperiment(experimentId, top, skip)
             final List<Activity> activityValues = activityValuesMap.activityValues
             totalNumberOfRecords = activityValuesMap.totalNumberOfRecords
             spreadSheetActivities = createSpreadSheetActivitiesFromActivityValues(activityValues)
 
         }
-        return [total: totalNumberOfRecords, spreadSheetActivities: spreadSheetActivities, role: role, experiment: experiment]
+        return [total: totalNumberOfRecords, spreadSheetActivities: spreadSheetActivities, role: role, experiment: experimentShow]
     }
 
     protected Map extractActivityValuesWithExperiment(final Long experimentId, final Integer top = 10, final Integer skip = 0) {
@@ -525,7 +536,7 @@ class MolecularSpreadSheetService {
         return spreadSheetActivities
     }
 
-    protected Map extractActivityValues(final Experiment experiment, final Integer top = 10, final Integer skip = 0) {
+    protected Map extractActivityValues(final ExperimentSearch experiment, final Integer top = 10, final Integer skip = 0) {
         final ExperimentData experimentData = experimentRestService.activities(experiment)
         return extractActivityValuesFromExperimentValueIterator(experimentData, top, skip)
     }

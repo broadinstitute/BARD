@@ -1,12 +1,12 @@
 package bardqueryapi
 
-import bard.core.rest.spring.util.StructureSearchParams
 import bard.core.adapter.AssayAdapter
 import bard.core.adapter.CompoundAdapter
 import bard.core.adapter.ProjectAdapter
 import bard.core.interfaces.AssayCategory
 import bard.core.interfaces.AssayRole
 import bard.core.interfaces.AssayType
+import bard.core.rest.spring.util.StructureSearchParams
 import grails.plugin.spock.IntegrationSpec
 import org.junit.After
 import org.junit.Before
@@ -65,12 +65,9 @@ class QueryServiceIntegrationSpec extends IntegrationSpec {
         assert compoundAdapter.compound
         assert cid == compoundAdapter.pubChemCID
         assert expectedSmiles == compoundAdapter.structureSMILES
-        Long[] sids = compoundAdapter.pubChemSIDs
-        assert expectedSIDs.size() == sids.length
-        assert expectedSIDs == sids
         where:
-        label                       | cid    | expectedSIDs                                                                                        | expectedSmiles
-        "Return a Compound Adapter" | 658342 | [5274057, 47984903, 51638425, 113532087, 124777946, 970329, 6320599, 35591597, 76362856, 112834159] | "C(CN1CCCCC1)N1C(N=CC2=CC=CS2)=NC2=CC=CC=C12"
+        label                       | cid    | expectedSmiles
+        "Return a Compound Adapter" | 658342 | "C(CN1CCCCC1)N2C(N=CC3=CC=CS3)=NC4=CC=CC=C24"
     }
 
 
@@ -85,9 +82,9 @@ class QueryServiceIntegrationSpec extends IntegrationSpec {
         ProjectAdapter projectAdapter = projectAdapterMap.projectAdapter
         assert projectAdapter
         assert projectAdapter.project
-        assert projectId == projectAdapter.project.id
+        assert projectId == projectAdapter.id
         assert projectAdapter.name
-        assert projectAdapter.project.description
+        assert projectAdapter.description
     }
 
 
@@ -102,13 +99,13 @@ class QueryServiceIntegrationSpec extends IntegrationSpec {
         assert assayMap
         AssayAdapter assayAdapter = assayMap.assayAdapter
         assert assayAdapter
-        assert assayId == assayAdapter.assay.id
-        assert assayAdapter.assay.protocol
-        assert assayAdapter.assay.comments
-        assert assayAdapter.assay.type == AssayType.Other
-        assert assayAdapter.assay.role == AssayRole.Primary
-        assert assayAdapter.assay.category == AssayCategory.MLPCN
-        assert assayAdapter.assay.description
+        assert assayId == assayAdapter.id
+        assert assayAdapter.protocol
+        assert assayAdapter.comments
+        assert assayAdapter.type == AssayType.Other
+        assert assayAdapter.role == AssayRole.Primary
+        assert assayAdapter.category == AssayCategory.MLPCN
+        assert assayAdapter.description
     }
 
     /**
@@ -205,12 +202,10 @@ class QueryServiceIntegrationSpec extends IntegrationSpec {
         then:
         assert compoundAdapterMap
         final List<CompoundAdapter> compoundAdapters = compoundAdapterMap.compoundAdapters
-        //Collection<Value> facets = compoundAdapterMap.facets
         assert compoundAdapters != null
         assert compoundAdapterMap
         assert cids.size() == compoundAdapters.size()
-        //      assert facets != null
-//        assert !facets.isEmpty()
+
         where:
         label                        | cids
         "Single CID"                 | [3235555]

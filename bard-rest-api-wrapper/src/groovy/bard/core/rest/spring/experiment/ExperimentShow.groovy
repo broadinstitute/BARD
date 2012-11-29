@@ -3,6 +3,7 @@ package bard.core.rest.spring.experiment
 import com.fasterxml.jackson.annotation.JsonInclude
 
 import com.fasterxml.jackson.annotation.JsonProperty
+import bard.core.rest.spring.assays.Assay
 
 /**
  * For Show Experiment Pages/ getId pages
@@ -15,18 +16,18 @@ import com.fasterxml.jackson.annotation.JsonProperty
  * To change this template use File | Settings | File Templates.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class Experiment extends ExperimentAbstract {
-
-     @JsonProperty("assayId")
-    private long assayId;
+public class ExperimentShow extends ExperimentAbstract {
 
     @JsonProperty("assayId")
-    public long getAssayId() {
-        return assayId;
+    private List<Assay> assays = new ArrayList<Assay>();
+
+    @JsonProperty("assayId")
+    public List<Assay> getAssays() {
+        return assays;
     }
 
     @JsonProperty("assayId")
-    public void setAssayId(long assayId) {
-        this.assayId = assayId;
+    public void setAssays(List<Assay> assays) {
+        this.assays = assays;
     }
 }

@@ -234,16 +234,16 @@ class CompoundRestService extends AbstractRestService {
         final HttpEntity entity = new HttpEntity(map, headers);
         final String url = buildURLToPostIds()
         final HttpEntity<List> exchange = restTemplate.exchange(url, HttpMethod.POST, entity, List.class);
-        final List<Compound> compoundTemplates = exchange.getBody()
+        final List<Compound> compounds = exchange.getBody()
         headers = exchange.getHeaders()
         extractETagFromResponseHeader(headers, 0, etags)
-        int nhits = compoundTemplates?.size();
+        int nhits = compounds?.size();
 
         if (nhits == 0) {
-            nhits = compoundTemplates.size();
+            nhits = compounds.size();
         }
         final ExpandedCompoundResult compoundSearchResult = new ExpandedCompoundResult()
-        compoundSearchResult.setCompounds(compoundTemplates)
+        compoundSearchResult.setCompounds(compounds)
         compoundSearchResult.setEtags(etags)
         final MetaData metaData = new MetaData()
         metaData.nhit = nhits

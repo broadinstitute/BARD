@@ -17,7 +17,7 @@ import bard.core.rest.spring.assays.FreeTextAssayResult
 import bard.core.rest.spring.compounds.Compound
 import bard.core.rest.spring.compounds.ExpandedCompoundResult
 import bard.core.rest.spring.compounds.PromiscuityScore
-import bard.core.rest.spring.experiment.Experiment
+import bard.core.rest.spring.experiment.ExperimentSearch
 import bard.core.rest.spring.project.ExpandedProjectResult
 import bard.core.rest.spring.project.Project
 import bard.core.rest.spring.util.StructureSearchParams
@@ -287,7 +287,7 @@ class QueryService implements IQueryService {
             StopWatch sw = this.queryHelperService.startStopWatch()
             this.queryHelperService.stopStopWatch(sw, "show assay ${assayId.toString()}")
             ExpandedAssay assay = assayRestService.getAssayById(assayId)
-            List<Experiment> experiments = assay.experiments
+            List<ExperimentSearch> experiments = assay.experiments
             final List<Project> projects = assay.projects
             final AssayAdapter assayAdapter = new AssayAdapter(assay)
             return [assayAdapter: assayAdapter, experiments: experiments, projects: projects]
@@ -305,7 +305,7 @@ class QueryService implements IQueryService {
             final Project project = projectRestService.getProjectById(projectId)
             this.queryHelperService.stopStopWatch(sw, "show project ${projectId.toString()}")
             if (project) {
-                final List<Experiment> experiments = restCombinedService.findExperimentsByProjectId(projectId)
+                final List<ExperimentSearch> experiments = restCombinedService.findExperimentsByProjectId(projectId)
                 if (experiments && !experiments.isEmpty()) {
                     experiments?.sort {
                         it?.role

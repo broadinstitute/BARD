@@ -4,8 +4,8 @@ import bard.core.interfaces.EntityService
 import bard.core.rest.spring.assays.Assay
 import bard.core.rest.spring.assays.AssayResult
 import bard.core.rest.spring.compounds.CompoundResult
-import bard.core.rest.spring.experiment.Experiment
-import bard.core.rest.spring.experiment.ExperimentResult
+import bard.core.rest.spring.experiment.ExperimentSearch
+import bard.core.rest.spring.experiment.ExperimentShowResult
 import bard.core.rest.spring.project.ProjectResult
 import com.fasterxml.jackson.databind.ObjectMapper
 import org.springframework.web.client.RestTemplate
@@ -46,7 +46,7 @@ class RestCombinedService {
 
     }
 
-    public List<Experiment> findExperimentsByAssayId(final Long adid) {
+    public List<ExperimentSearch> findExperimentsByAssayId(final Long adid) {
         final StringBuilder resource =
             new StringBuilder(
                     assayRestService.getResource(adid.toString())).
@@ -55,7 +55,7 @@ class RestCombinedService {
                     append(EntityService.EXPAND_TRUE)
         final URL url = new URL(resource.toString())
 
-        List<Experiment> experiments = this.restTemplate.getForObject(url.toURI(), Experiment[].class)
+        List<ExperimentSearch> experiments = this.restTemplate.getForObject(url.toURI(), ExperimentSearch[].class)
         experiments
 
     }
@@ -86,7 +86,7 @@ class RestCombinedService {
 
     }
 
-    public ExperimentResult findExperimentsByCID(final Long cid) {
+    public ExperimentShowResult findExperimentsByCID(final Long cid) {
         final StringBuilder resource =
             new StringBuilder(
                     compoundRestService.getResource(cid.toString())).
@@ -94,7 +94,7 @@ class RestCombinedService {
                     append(EntityService.QUESTION_MARK).
                     append(EntityService.EXPAND_TRUE)
         final URL url = new URL(resource.toString())
-        ExperimentResult experimentResult = this.restTemplate.getForObject(url.toURI(), ExperimentResult.class)
+        ExperimentShowResult experimentResult = this.restTemplate.getForObject(url.toURI(), ExperimentShowResult.class)
         return experimentResult
 
     }
@@ -135,7 +135,7 @@ class RestCombinedService {
         return assays;
     }
 
-    public List<Experiment> findExperimentsByProjectId(Long pid) {
+    public List<ExperimentSearch> findExperimentsByProjectId(Long pid) {
         final StringBuilder resource =
             new StringBuilder(
                     projectRestService.getResource(pid.toString())).
@@ -143,7 +143,7 @@ class RestCombinedService {
                     append(EntityService.QUESTION_MARK).
                     append(EntityService.EXPAND_TRUE)
         final URL url = new URL(resource.toString())
-        List<Experiment> experiments = this.restTemplate.getForObject(url.toURI(), Experiment[].class)
+        List<ExperimentSearch> experiments = this.restTemplate.getForObject(url.toURI(), ExperimentSearch[].class)
         return experiments
 
     }

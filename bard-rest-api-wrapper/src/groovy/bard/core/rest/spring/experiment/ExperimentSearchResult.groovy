@@ -10,16 +10,16 @@ public class ExperimentSearchResult extends SearchResult {
 
 
     @JsonProperty("docs")
-    private List<Experiment> experiments = new ArrayList<Experiment>()
+    private List<ExperimentSearch> experiments = new ArrayList<ExperimentSearch>()
 
 
     @JsonProperty("docs")
-    public List<Experiment> getExperiments() {
+    public List<ExperimentSearch> getExperiments() {
         return this.experiments
     }
 
     @JsonProperty("docs")
-    public void setExperiments(List<Experiment> experiments) {
+    public void setExperiments(List<ExperimentSearch> experiments) {
         this.experiments = experiments
     }
 }

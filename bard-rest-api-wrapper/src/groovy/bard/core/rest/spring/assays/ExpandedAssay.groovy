@@ -1,13 +1,12 @@
 package bard.core.rest.spring.assays
 
+import bard.core.rest.spring.experiment.ExperimentSearch
+import bard.core.rest.spring.project.Project
+import bard.core.rest.spring.util.Document
+import bard.core.rest.spring.util.Target
 import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.annotation.JsonProperty
 import com.fasterxml.jackson.annotation.JsonPropertyOrder
-
-import bard.core.rest.spring.util.Document
-import bard.core.rest.spring.util.Target
-import bard.core.rest.spring.experiment.Experiment
-import bard.core.rest.spring.project.Project
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder([
@@ -41,7 +40,7 @@ public class ExpandedAssay extends AbstractAssay {
     @JsonProperty("targets")
     private List<Target> targets = new ArrayList<Target>();
     @JsonProperty("experiments")
-    private List<Experiment> experiments = new ArrayList<Experiment>();
+    private List<ExperimentSearch> experiments = new ArrayList<ExperimentSearch>();
     @JsonProperty("projects")
     private List<Project> projects = new ArrayList<Project>();
 
@@ -66,12 +65,12 @@ public class ExpandedAssay extends AbstractAssay {
     }
 
     @JsonProperty("experiments")
-    public List<Experiment> getExperiments() {
+    public List<ExperimentSearch> getExperiments() {
         return experiments;
     }
 
     @JsonProperty("experiments")
-    public void setExperiments(List<Experiment> experiments) {
+    public void setExperiments(List<ExperimentSearch> experiments) {
         this.experiments = experiments;
     }
 

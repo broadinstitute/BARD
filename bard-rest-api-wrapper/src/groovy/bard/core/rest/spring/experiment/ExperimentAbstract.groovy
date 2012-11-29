@@ -19,8 +19,10 @@ import bard.core.interfaces.ExperimentRole
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public abstract class ExperimentAbstract {
 
-    @JsonProperty("exptId")
+
     private long id;
+    @JsonProperty("exptId")
+    private long exptId;
     @JsonProperty("pubchemAid")
     private long pubchemAid;
     @JsonProperty("category")
@@ -29,8 +31,6 @@ public abstract class ExperimentAbstract {
     private long type;
     @JsonProperty("summary")
     private long summary;
-    @JsonProperty("assays")
-    private long assays;
     @JsonProperty("classification")
     private long classification;
     @JsonProperty("substances")
@@ -58,25 +58,21 @@ public abstract class ExperimentAbstract {
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
     @JsonProperty("exptId")
-    public long getId() {
-        return id;
+    public long getExptId() {
+        return exptId;
     }
 
     @JsonProperty("exptId")
-    public void setId(long id) {
-        this.id = id;
+    public void setExptId(long exptId) {
+        this.exptId = exptId;
     }
 
-    @JsonProperty("assayId")
-    public long getAssayId() {
-        return assayId;
+    public long getId() {
+        if(exptId){
+            this.id = exptId
+        }
+        return id;
     }
-
-    @JsonProperty("assayId")
-    public void setAssayId(long assayId) {
-        this.assayId = assayId;
-    }
-
     @JsonProperty("pubchemAid")
     public long getPubchemAid() {
         return pubchemAid;

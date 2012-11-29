@@ -12,8 +12,14 @@ import querycart.QueryCartService
 import spock.lang.Shared
 import spock.lang.Specification
 import spock.lang.Unroll
-import bard.core.*
 import bard.core.rest.*
+import bard.core.Experiment
+import bard.core.rest.spring.experiment.ExperimentSearch
+import bard.core.Value
+import bard.core.DataSource
+import bard.core.Assay
+import bard.core.rest.spring.compounds.Compound
+import bard.core.LongValue
 
 /**
  * Created with IntelliJ IDEA.
@@ -135,7 +141,7 @@ class MolecularSpreadSheetServiceUnitSpec extends Specification {
     void "test findActivitiesForCompounds #label"() {
         given:
         Experiment experiment = new Experiment()
-        Object compoundETag = null
+        String compoundETag = null
         SearchResult<Value> experimentalResults = new ActivitySearchResult(restExperimentService, experiment)
         //add a null value
         experimentalResults.searchResults.add(null)
@@ -198,18 +204,16 @@ class MolecularSpreadSheetServiceUnitSpec extends Specification {
 
     void "test null cmp iterator in retrieveImpliedCompoundsEtagFromAssaySpecification"() {
         given:
-        final List<Experiment> experimentList = []
-
-        SearchResult<Compound> compoundSearchResult = Mock(SearchResult)
-        experimentList << new Experiment()
+        final List<ExperimentSearch> experimentList = []
+        experimentList << new ExperimentSearch()
 
         when:
-        Object eTag = service.retrieveImpliedCompoundsEtagFromAssaySpecification(experimentList)
+        String eTag = service.retrieveImpliedCompoundsEtagFromAssaySpecification(experimentList)
 
         then:
-        restCompoundService.newETag(_) >> { new Object() }
+        restCompoundService.newETag(_) >> { new String() }
         and:
-        combinedRestService.compounds(_) >> {compoundSearchResult}
+        restCombinedService.compounds(_) >> {[123,456]}
 
         assertNull eTag
     }

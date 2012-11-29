@@ -1,17 +1,17 @@
 package bard.core.rest.spring
 
 import bard.core.interfaces.EntityService
+import bard.core.rest.spring.experiment.Activity
+import bard.core.rest.spring.experiment.ExperimentData
+import bard.core.rest.spring.experiment.ExperimentSearch
+import bard.core.rest.spring.experiment.ExperimentSearchResult
+import bard.core.rest.spring.util.MetaData
 import org.springframework.http.HttpEntity
 import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpMethod
 import org.springframework.util.LinkedMultiValueMap
 import org.springframework.util.MultiValueMap
-import bard.core.rest.spring.experiment.Experiment
-import bard.core.rest.spring.experiment.ExperimentData
-import bard.core.rest.spring.experiment.ExperimentResult
-import bard.core.rest.spring.experiment.ExperimentSearch
-import bard.core.rest.spring.experiment.Activity
-import bard.core.rest.spring.util.MetaData
+import bard.core.rest.spring.experiment.ExperimentShow
 
 class ExperimentRestService extends AbstractRestService {
 
@@ -21,20 +21,20 @@ class ExperimentRestService extends AbstractRestService {
     /**
      *
      * @param eid
-     * @return {@link bard.core.rest.spring.experiment.Experiment}
+     * @return {@link bard.core.rest.spring.experiment.ExperimentSearch}
      */
-    public ExperimentSearch getExperimentById(Long eid) {
+    public ExperimentShow getExperimentById(Long eid) {
         final String url = buildEntityURL() + "?expand={expand}"
         final Map map = [id: eid, expand: "true"]
-        final ExperimentSearch experimentSearch = this.restTemplate.getForObject(url, ExperimentSearch.class, map)
-        return experimentSearch;
+        final ExperimentShow experimentShow = this.restTemplate.getForObject(url, ExperimentShow.class, map)
+        return experimentShow;
     }
     /**
      *
      * @param list of pids
      * @return {@link bard.core.rest.spring.project.ExpandedProjectResult}
      */
-    public ExperimentResult searchExperimentsByIds(final List<Long> eids) {
+    public ExperimentSearchResult searchExperimentsByIds(final List<Long> eids) {
         final Map<String, Long> etags = [:]
         MultiValueMap<String, String> map = new LinkedMultiValueMap<String, String>();
         map.add("ids", eids.join(","));
@@ -44,14 +44,14 @@ class ExperimentRestService extends AbstractRestService {
         HttpEntity<List> entity = new HttpEntity<List>(map, headers);
         final String url = this.buildURLToPostIds()
 
-        final HttpEntity<List> exchange = restTemplate.exchange(url, HttpMethod.POST, entity, List.class);
+        final HttpEntity<List> exchange = restTemplate.exchange(url, HttpMethod.POST, entity, ExperimentSearch[].class);
 
-        final List<Experiment> experiments = exchange.getBody()
+        final List<ExperimentSearch> experiments = exchange.getBody()
         headers = exchange.getHeaders()
         this.extractETagFromResponseHeader(headers, 0, etags)
         int nhits = experiments?.size();
 
-        final ExperimentResult experimentResult = new ExperimentResult()
+        final ExperimentSearchResult experimentResult = new ExperimentSearchResult()
         experimentResult.setExperiments(experiments)
         experimentResult.setEtags(etags)
         final MetaData metaData = new MetaData()
@@ -61,7 +61,7 @@ class ExperimentRestService extends AbstractRestService {
 
     }
 
-    public ExperimentData activities(Experiment experiment) {
+    public ExperimentData activities(ExperimentSearch experiment) {
         return activities(experiment.getId())
     }
 

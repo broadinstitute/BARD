@@ -11,17 +11,17 @@ import bard.core.rest.spring.assays.FreeTextAssayResult
 import bard.core.rest.spring.compounds.Compound
 import bard.core.rest.spring.compounds.ExpandedCompoundResult
 import bard.core.rest.spring.compounds.PromiscuityScore
-import bard.core.rest.spring.experiment.Experiment
+import bard.core.rest.spring.experiment.ExperimentSearch
 import bard.core.rest.spring.project.ExpandedProjectResult
 import bard.core.rest.spring.project.Project
 import bard.core.rest.spring.util.StructureSearchParams
 import grails.test.mixin.TestFor
 import org.apache.commons.lang.time.StopWatch
+import spock.lang.IgnoreRest
 import spock.lang.Shared
 import spock.lang.Specification
 import spock.lang.Unroll
 import bard.core.rest.spring.*
-import spock.lang.IgnoreRest
 
 /**
  * See the API for {@link grails.test.mixin.support.GrailsUnitTestMixin} for usage instructions
@@ -103,9 +103,9 @@ class QueryServiceUnitSpec extends Specification {
     void "test Show Project #label"() {
 
         given:
-        final Experiment experiment = new Experiment()
+        final ExperimentSearch experiment = new ExperimentSearch()
         experiment.classification = 0
-        List<Experiment> experiments = [experiment]
+        List<ExperimentSearch> experiments = [experiment]
         List<Assay> assays = Mock(List)
 
         when: "Client enters a project ID and the showProject method is called"
