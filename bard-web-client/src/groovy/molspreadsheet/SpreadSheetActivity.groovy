@@ -17,7 +17,7 @@ class SpreadSheetActivity {
     ActivityOutcome activityOutcome = ActivityOutcome.UNSPECIFIED
     List<HillCurveValue> hillCurveValueList = []
 
-    public void activityToSpreadSheetActivity(Activity activity) {
+    public void activityToSpreadSheetActivity(Activity activity, final List<String> resultTypeNames) {
         this.cid = activity.cid
         this.eid = activity.eid
         this.sid = activity.sid
@@ -32,6 +32,7 @@ class SpreadSheetActivity {
             for (Readout readout : readouts) {
 
                 final HillCurveValue hillCurveValue = readout.toHillCurveValue()
+                resultTypeNames.add(hillCurveValue.id)
                 this.hillCurveValueList << hillCurveValue
             }
         }

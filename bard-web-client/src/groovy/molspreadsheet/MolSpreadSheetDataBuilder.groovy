@@ -1,6 +1,6 @@
 package molspreadsheet
 
-import bard.core.Experiment
+import bard.core.rest.spring.experiment.Experiment
 import querycart.CartAssay
 import querycart.CartCompound
 import querycart.CartProject
@@ -137,7 +137,7 @@ class MolSpreadSheetDataBuilderDirector {
         molSpreadSheetDataBuilder.holdCartResults(cartCompoundList, cartAssayList, cartProjectList)
 
         Map deriveListOfExperiments = molSpreadSheetDataBuilder.deriveListOfExperiments()
-        List<Experiment> experimentList =  deriveListOfExperiments.experimentList
+        List<Experiment> experimentList = deriveListOfExperiments.experimentList
         MolSpreadsheetDerivedMethod molSpreadsheetDerivedMethod = deriveListOfExperiments.molSpreadsheetDerivedMethod
 
         molSpreadSheetDataBuilder.populateMolSpreadSheet(experimentList, molSpreadsheetDerivedMethod)

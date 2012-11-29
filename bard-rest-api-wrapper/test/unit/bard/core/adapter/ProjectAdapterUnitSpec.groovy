@@ -1,11 +1,8 @@
 package bard.core.adapter
 
-import bard.core.DataSource
-import bard.core.Project
-import bard.core.StringValue
+import bard.core.rest.spring.project.Project
 import spock.lang.Specification
 import spock.lang.Unroll
-import bard.core.interfaces.EntityNamedSources
 
 @Unroll
 class ProjectAdapterUnitSpec extends Specification {
@@ -20,7 +17,8 @@ class ProjectAdapterUnitSpec extends Specification {
     void "test Constructor()"() {
 
         given:
-        Project project = new Project("name")
+        Project project = new Project()
+        project.name = "name"
         when:
         ProjectAdapter projectAdapter = new ProjectAdapter(project)
         then:
@@ -32,26 +30,18 @@ class ProjectAdapterUnitSpec extends Specification {
     void "test getters()"() {
 
         given:
-        DataSource dataSource = new DataSource("name", "version", "url")
-        DataSource dataSourceAnnotations = new DataSource( EntityNamedSources.CAPAnnotationSource, "version", "url")
 
         String grantNo = "GR001"
         String lab = "lab"
-        Project project = new Project("name")
-        project.addValue(new StringValue
-        (dataSource, "grant number", grantNo));
-        project.addValue(new StringValue
-        (dataSource, "laboratory name", lab));
-        project.addValue(new StringValue
-        (dataSourceAnnotations, "Annotation", lab));
+        Project project = new Project()
+        project.name = "name"
+
         when:
         ProjectAdapter projectAdapter = new ProjectAdapter(project)
         then:
         assert projectAdapter.name == "name"
-        assert projectAdapter.getGrantNumber() == grantNo
-        assert projectAdapter.getLaboratoryName() == lab
-        assert projectAdapter.getNumberOfExperiments() == null
-        assert !projectAdapter.getAnnotations().isEmpty()
+        assert projectAdapter.getNumberOfExperiments() == 0
+        assert projectAdapter.getAnnotations().isEmpty()
     }
 
 }

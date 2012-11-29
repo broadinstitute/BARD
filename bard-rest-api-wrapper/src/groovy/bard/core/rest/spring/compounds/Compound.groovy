@@ -26,7 +26,7 @@ public class Compound {
     @JsonProperty("probeId")
     private String probeId;
     @JsonProperty("url")
-    private Object url;
+    private String url;
     @JsonProperty("smiles")
     private String smiles;
     @JsonProperty("name")
@@ -111,12 +111,12 @@ public class Compound {
     }
 
     @JsonProperty("url")
-    public Object getUrl() {
+    public String getUrl() {
         return url;
     }
 
     @JsonProperty("url")
-    public void setUrl(Object url) {
+    public void setUrl(String url) {
         this.url = url;
     }
 
