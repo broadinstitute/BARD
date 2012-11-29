@@ -16,6 +16,7 @@ import querycart.CartProject
 import querycart.QueryCartService
 import bard.core.rest.spring.*
 import bard.core.rest.spring.experiment.*
+import bard.core.rest.spring.assays.AbstractAssay
 
 class MolecularSpreadSheetService {
     final static int START_DYNAMIC_COLUMNS = 4 //Where to start the dynamic columns
@@ -395,11 +396,20 @@ class MolecularSpreadSheetService {
      * @param cartAssays
      * @return
      */
-    protected List<ExperimentSearch> assaysToExperiments(final Collection<Assay> assays) {
+    protected List<ExperimentSearch> assaysToExperiments(final Collection<AbstractAssay> assays) {
+        List<Long> assayIds = assays*.assayId
+        return assayIdsToExperiments(assayIds)
+    }
+    /**
+     * Convert Assay ODs to expt ids
+     * @param cartAssays
+     * @return
+     */
+    protected List<ExperimentSearch> assayIdsToExperiments(final List<Long> assayIds) {
         final List<ExperimentSearch> allExperiments = []
 
-        for (Assay assay : assays) {
-            final List<ExperimentSearch> experiments = restCombinedService.findExperimentsByAssayId(assay.id)
+        for (Long assayId : assayIds) {
+            final List<ExperimentSearch> experiments = restCombinedService.findExperimentsByAssayId(assayId)
             if (experiments) {
                 allExperiments.addAll(experiments)
             }
@@ -407,7 +417,6 @@ class MolecularSpreadSheetService {
 
         return allExperiments
     }
-
     /**
      * Convert Cart assays to Experiments starting with a list of Assay IDs
      * @param cartAssays
@@ -422,8 +431,8 @@ class MolecularSpreadSheetService {
         else {
             allExperiments = []
         }
-        if(!assayIds){
-         return allExperiments
+        if (!assayIds) {
+            return allExperiments
         }
         final ExpandedAssayResult expandedAssayResult = assayRestService.searchAssaysByIds(assayIds)
         final List<ExpandedAssay> assays = expandedAssayResult.assays
@@ -453,6 +462,9 @@ class MolecularSpreadSheetService {
      * @return
      */
     protected List<ExperimentSearch> cartCompoundsToExperiments(final List<CartCompound> cartCompounds) {
+        if (!cartCompounds) {
+            return []
+        }
         final List<Long> compoundIds = cartCompounds*.externalId
 
         List<Assay> allAssays = []
@@ -469,6 +481,9 @@ class MolecularSpreadSheetService {
  * @return list of Experiment's from a list of CartProject's
  */
     protected List<ExperimentSearch> cartProjectsToExperiments(final List<CartProject> cartProjects) {
+        if (!cartProjects) {
+            return []
+        }
         List<Long> projectIds = cartProjects*.externalId
         List<ExperimentSearch> allExperiments = []
         final ExpandedProjectResult expandedProjectResult = projectRestService.searchProjectsByIds(projectIds)
@@ -524,7 +539,7 @@ class MolecularSpreadSheetService {
 
     protected Map extractActivityValuesWithExperiment(final Long experimentId, final Integer top = 10, final Integer skip = 0) {
         ExperimentData experimentData = experimentRestService.activities(experimentId);
-        return extractActivityValuesFromExperimentValueIterator(experimentData, top, skip)
+        return extractActivityValuesFromExperimentData(experimentData, top, skip)
     }
 
     protected List<SpreadSheetActivity> createSpreadSheetActivitiesFromActivityValues(final List<Activity> activityValues) {
@@ -538,10 +553,10 @@ class MolecularSpreadSheetService {
 
     protected Map extractActivityValues(final ExperimentSearch experiment, final Integer top = 10, final Integer skip = 0) {
         final ExperimentData experimentData = experimentRestService.activities(experiment)
-        return extractActivityValuesFromExperimentValueIterator(experimentData, top, skip)
+        return extractActivityValuesFromExperimentData(experimentData, top, skip)
     }
 
-    protected Map extractActivityValuesFromExperimentValueIterator(final ExperimentData experimentData, final Integer top = 10, final Integer skip = 0) {
+    protected Map extractActivityValuesFromExperimentData(final ExperimentData experimentData, final Integer top = 10, final Integer skip = 0) {
         List<Activity> activityValues = []
         long totalNumberOfRecords = 0
         if (experimentData) {
@@ -596,11 +611,14 @@ class MolecularSpreadSheetService {
         return spreadSheetActivity
     }
 
+    void addCurrentActivityToSpreadSheet(List<String> columnNames, SpreadSheetActivity spreadSheetActivity, final Activity activity) {
+        spreadSheetActivity.activityToSpreadSheetActivity(activity, columnNames)
+    }
 
-    SpreadSheetActivity extractActivitiesFromExperiment(final Activity experimentValue) {
-        List<String> dummyHeadersList = []
-        SpreadSheetActivity spreadSheetActivity = new SpreadSheetActivity()
-        spreadSheetActivity.activityToSpreadSheetActivity(experimentValue, dummyHeadersList)
+    SpreadSheetActivity extractActivitiesFromExperiment(final Activity activity) {
+        final List<String> dummyHeadersList = []
+        final SpreadSheetActivity spreadSheetActivity = new SpreadSheetActivity()
+        addCurrentActivityToSpreadSheet(dummyHeadersList, spreadSheetActivity, activity)
         return spreadSheetActivity
     }
 }

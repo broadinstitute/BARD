@@ -2,9 +2,13 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="1922f8e1-9b1f-4a78-b840-b1857f23d256" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/bard-rest-api-wrapper/src/groovy/bard/core/adapter/CompoundAdapter.groovy" afterPath="$PROJECT_DIR$/bard-rest-api-wrapper/src/groovy/bard/core/adapter/CompoundAdapter.groovy" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/bard-web-client/test/unit/querycart/CartCompoundServiceUnitSpec.groovy" afterPath="$PROJECT_DIR$/bard-web-client/test/unit/querycart/CartCompoundServiceUnitSpec.groovy" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/bard-web-client/test/unit/querycart/CartProjectServiceUnitSpec.groovy" afterPath="$PROJECT_DIR$/bard-web-client/test/unit/querycart/CartProjectServiceUnitSpec.groovy" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/bard-web-client/grails-app/services/bardqueryapi/QueryHelperService.groovy" afterPath="$PROJECT_DIR$/bard-web-client/grails-app/services/bardqueryapi/QueryHelperService.groovy" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/bard-web-client/grails-app/services/bardqueryapi/QueryService.groovy" afterPath="$PROJECT_DIR$/bard-web-client/grails-app/services/bardqueryapi/QueryService.groovy" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/bard-web-client/grails-app/services/molspreadsheet/MolecularSpreadSheetService.groovy" afterPath="$PROJECT_DIR$/bard-web-client/grails-app/services/molspreadsheet/MolecularSpreadSheetService.groovy" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/bard-web-client/test/integration/molspreadsheet/MolecularSpreadSheetServiceIntegrationSpec.groovy" afterPath="$PROJECT_DIR$/bard-web-client/test/integration/molspreadsheet/MolecularSpreadSheetServiceIntegrationSpec.groovy" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/bard-web-client/test/unit/bardqueryapi/BardWebInterfaceControllerUnitSpec.groovy" afterPath="$PROJECT_DIR$/bard-web-client/test/unit/bardqueryapi/BardWebInterfaceControllerUnitSpec.groovy" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/bard-web-client/test/unit/bardqueryapi/QueryServiceUnitSpec.groovy" afterPath="$PROJECT_DIR$/bard-web-client/test/unit/bardqueryapi/QueryServiceUnitSpec.groovy" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/bard-web-client/test/unit/molspreadsheet/MolecularSpreadSheetServiceUnitSpec.groovy" afterPath="$PROJECT_DIR$/bard-web-client/test/unit/molspreadsheet/MolecularSpreadSheetServiceUnitSpec.groovy" />
     </list>
     <ignored path="bard-web-query.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -576,7 +580,7 @@
         <option name="CONDITION" value="" />
         <option name="LOG_MESSAGE" value="" />
       </breakpoint>
-      <breakpoint url="file://$PROJECT_DIR$/bard-web-client/grails-app/services/molspreadsheet/MolecularSpreadSheetService.groovy" line="385" class="molspreadsheet.MolecularSpreadSheetService" package="molspreadsheet">
+      <breakpoint url="file://$PROJECT_DIR$/bard-web-client/grails-app/services/molspreadsheet/MolecularSpreadSheetService.groovy" line="386" class="molspreadsheet.MolecularSpreadSheetService" package="molspreadsheet">
         <option name="ENABLED" value="true" />
         <option name="LOG_ENABLED" value="false" />
         <option name="LOG_EXPRESSION_ENABLED" value="false" />
@@ -719,7 +723,7 @@
         <option name="CONDITION" value="" />
         <option name="LOG_MESSAGE" value="" />
       </breakpoint>
-      <breakpoint url="file://$PROJECT_DIR$/bard-web-client/grails-app/services/molspreadsheet/MolecularSpreadSheetService.groovy" line="386" class="molspreadsheet.MolecularSpreadSheetService" package="molspreadsheet">
+      <breakpoint url="file://$PROJECT_DIR$/bard-web-client/grails-app/services/molspreadsheet/MolecularSpreadSheetService.groovy" line="387" class="molspreadsheet.MolecularSpreadSheetService" package="molspreadsheet">
         <option name="ENABLED" value="true" />
         <option name="LOG_ENABLED" value="false" />
         <option name="LOG_EXPRESSION_ENABLED" value="false" />
@@ -745,20 +749,7 @@
         <option name="CONDITION" value="" />
         <option name="LOG_MESSAGE" value="" />
       </breakpoint>
-      <breakpoint url="file://$PROJECT_DIR$/bard-web-client/grails-app/services/bardqueryapi/QueryHelperService.groovy" line="154" class="bardqueryapi.QueryHelperService" package="bardqueryapi">
-        <option name="ENABLED" value="true" />
-        <option name="LOG_ENABLED" value="false" />
-        <option name="LOG_EXPRESSION_ENABLED" value="false" />
-        <option name="SUSPEND_POLICY" value="SuspendAll" />
-        <option name="COUNT_FILTER_ENABLED" value="false" />
-        <option name="COUNT_FILTER" value="0" />
-        <option name="CONDITION_ENABLED" value="false" />
-        <option name="CLASS_FILTERS_ENABLED" value="false" />
-        <option name="INSTANCE_FILTERS_ENABLED" value="false" />
-        <option name="CONDITION" value="" />
-        <option name="LOG_MESSAGE" value="" />
-      </breakpoint>
-      <breakpoint url="file://$PROJECT_DIR$/bard-web-client/grails-app/services/bardqueryapi/QueryService.groovy" line="309" class="bardqueryapi.QueryService" package="bardqueryapi">
+      <breakpoint url="file://$PROJECT_DIR$/bard-web-client/grails-app/services/bardqueryapi/QueryHelperService.groovy" line="155" class="bardqueryapi.QueryHelperService" package="bardqueryapi">
         <option name="ENABLED" value="true" />
         <option name="LOG_ENABLED" value="false" />
         <option name="LOG_EXPRESSION_ENABLED" value="false" />
@@ -784,6 +775,19 @@
         <option name="CONDITION" value="" />
         <option name="LOG_MESSAGE" value="" />
       </breakpoint>
+      <breakpoint url="file://$PROJECT_DIR$/bard-web-client/grails-app/services/bardqueryapi/QueryService.groovy" line="311" class="bardqueryapi.QueryService" package="bardqueryapi">
+        <option name="ENABLED" value="true" />
+        <option name="LOG_ENABLED" value="false" />
+        <option name="LOG_EXPRESSION_ENABLED" value="false" />
+        <option name="SUSPEND_POLICY" value="SuspendAll" />
+        <option name="COUNT_FILTER_ENABLED" value="false" />
+        <option name="COUNT_FILTER" value="0" />
+        <option name="CONDITION_ENABLED" value="false" />
+        <option name="CLASS_FILTERS_ENABLED" value="false" />
+        <option name="INSTANCE_FILTERS_ENABLED" value="false" />
+        <option name="CONDITION" value="" />
+        <option name="LOG_MESSAGE" value="" />
+      </breakpoint>
       <breakpoint url="file://$PROJECT_DIR$/bard-web-client/grails-app/controllers/bardqueryapi/BardWebInterfaceController.groovy" line="67" class="bardqueryapi.BardWebInterfaceController" package="bardqueryapi">
         <option name="ENABLED" value="true" />
         <option name="LOG_ENABLED" value="false" />
@@ -797,7 +801,7 @@
         <option name="CONDITION" value="" />
         <option name="LOG_MESSAGE" value="" />
       </breakpoint>
-      <breakpoint url="file://$PROJECT_DIR$/bard-web-client/test/integration/molspreadsheet/MolecularSpreadSheetServiceIntegrationSpec.groovy" line="270" class="molspreadsheet.MolecularSpreadSheetServiceIntegrationSpec" package="molspreadsheet">
+      <breakpoint url="file://$PROJECT_DIR$/bard-web-client/test/integration/molspreadsheet/MolecularSpreadSheetServiceIntegrationSpec.groovy" line="269" class="molspreadsheet.MolecularSpreadSheetServiceIntegrationSpec" package="molspreadsheet">
         <option name="ENABLED" value="true" />
         <option name="LOG_ENABLED" value="false" />
         <option name="LOG_EXPRESSION_ENABLED" value="false" />
@@ -810,7 +814,7 @@
         <option name="CONDITION" value="" />
         <option name="LOG_MESSAGE" value="" />
       </breakpoint>
-      <breakpoint url="file://$PROJECT_DIR$/bard-web-client/test/integration/molspreadsheet/MolecularSpreadSheetServiceIntegrationSpec.groovy" line="567" class="molspreadsheet.MolecularSpreadSheetServiceIntegrationSpec" package="molspreadsheet">
+      <breakpoint url="file://$PROJECT_DIR$/bard-web-client/test/integration/molspreadsheet/MolecularSpreadSheetServiceIntegrationSpec.groovy" line="566" class="molspreadsheet.MolecularSpreadSheetServiceIntegrationSpec" package="molspreadsheet">
         <option name="ENABLED" value="true" />
         <option name="LOG_ENABLED" value="false" />
         <option name="LOG_EXPRESSION_ENABLED" value="false" />
@@ -823,7 +827,7 @@
         <option name="CONDITION" value="" />
         <option name="LOG_MESSAGE" value="" />
       </breakpoint>
-      <breakpoint url="file://$PROJECT_DIR$/bard-web-client/test/integration/molspreadsheet/MolecularSpreadSheetServiceIntegrationSpec.groovy" line="571" class="molspreadsheet.MolecularSpreadSheetServiceIntegrationSpec" package="molspreadsheet">
+      <breakpoint url="file://$PROJECT_DIR$/bard-web-client/test/integration/molspreadsheet/MolecularSpreadSheetServiceIntegrationSpec.groovy" line="570" class="molspreadsheet.MolecularSpreadSheetServiceIntegrationSpec" package="molspreadsheet">
         <option name="ENABLED" value="true" />
         <option name="LOG_ENABLED" value="false" />
         <option name="LOG_EXPRESSION_ENABLED" value="false" />
@@ -836,7 +840,7 @@
         <option name="CONDITION" value="" />
         <option name="LOG_MESSAGE" value="" />
       </breakpoint>
-      <breakpoint url="file://$PROJECT_DIR$/bard-web-client/test/integration/molspreadsheet/MolecularSpreadSheetServiceIntegrationSpec.groovy" line="319" class="molspreadsheet.MolecularSpreadSheetServiceIntegrationSpec" package="molspreadsheet">
+      <breakpoint url="file://$PROJECT_DIR$/bard-web-client/test/integration/molspreadsheet/MolecularSpreadSheetServiceIntegrationSpec.groovy" line="318" class="molspreadsheet.MolecularSpreadSheetServiceIntegrationSpec" package="molspreadsheet">
         <option name="ENABLED" value="true" />
         <option name="LOG_ENABLED" value="false" />
         <option name="LOG_EXPRESSION_ENABLED" value="false" />
@@ -849,7 +853,7 @@
         <option name="CONDITION" value="" />
         <option name="LOG_MESSAGE" value="" />
       </breakpoint>
-      <breakpoint url="file://$PROJECT_DIR$/bard-web-client/grails-app/services/molspreadsheet/MolecularSpreadSheetService.groovy" line="133" class="molspreadsheet.MolecularSpreadSheetService" package="molspreadsheet">
+      <breakpoint url="file://$PROJECT_DIR$/bard-web-client/grails-app/services/molspreadsheet/MolecularSpreadSheetService.groovy" line="134" class="molspreadsheet.MolecularSpreadSheetService" package="molspreadsheet">
         <option name="ENABLED" value="true" />
         <option name="LOG_ENABLED" value="false" />
         <option name="LOG_EXPRESSION_ENABLED" value="false" />
@@ -862,7 +866,7 @@
         <option name="CONDITION" value="" />
         <option name="LOG_MESSAGE" value="" />
       </breakpoint>
-      <breakpoint url="file://$PROJECT_DIR$/bard-web-client/grails-app/services/molspreadsheet/MolecularSpreadSheetService.groovy" line="145" class="molspreadsheet.MolecularSpreadSheetService" package="molspreadsheet">
+      <breakpoint url="file://$PROJECT_DIR$/bard-web-client/grails-app/services/molspreadsheet/MolecularSpreadSheetService.groovy" line="146" class="molspreadsheet.MolecularSpreadSheetService" package="molspreadsheet">
         <option name="ENABLED" value="true" />
         <option name="LOG_ENABLED" value="false" />
         <option name="LOG_EXPRESSION_ENABLED" value="false" />
@@ -875,7 +879,7 @@
         <option name="CONDITION" value="" />
         <option name="LOG_MESSAGE" value="" />
       </breakpoint>
-      <breakpoint url="file://$PROJECT_DIR$/bard-web-client/grails-app/services/molspreadsheet/MolecularSpreadSheetService.groovy" line="135" class="molspreadsheet.MolecularSpreadSheetService" package="molspreadsheet">
+      <breakpoint url="file://$PROJECT_DIR$/bard-web-client/grails-app/services/molspreadsheet/MolecularSpreadSheetService.groovy" line="136" class="molspreadsheet.MolecularSpreadSheetService" package="molspreadsheet">
         <option name="ENABLED" value="true" />
         <option name="LOG_ENABLED" value="false" />
         <option name="LOG_EXPRESSION_ENABLED" value="false" />
@@ -914,7 +918,7 @@
         <option name="CONDITION" value="" />
         <option name="LOG_MESSAGE" value="" />
       </breakpoint>
-      <breakpoint url="file://$PROJECT_DIR$/bard-web-client/test/integration/molspreadsheet/MolecularSpreadSheetServiceIntegrationSpec.groovy" line="321" class="molspreadsheet.MolecularSpreadSheetServiceIntegrationSpec" package="molspreadsheet">
+      <breakpoint url="file://$PROJECT_DIR$/bard-web-client/test/integration/molspreadsheet/MolecularSpreadSheetServiceIntegrationSpec.groovy" line="320" class="molspreadsheet.MolecularSpreadSheetServiceIntegrationSpec" package="molspreadsheet">
         <option name="ENABLED" value="true" />
         <option name="LOG_ENABLED" value="false" />
         <option name="LOG_EXPRESSION_ENABLED" value="false" />
@@ -940,7 +944,7 @@
         <option name="CONDITION" value="" />
         <option name="LOG_MESSAGE" value="" />
       </breakpoint>
-      <breakpoint url="file://$PROJECT_DIR$/bard-web-client/grails-app/services/molspreadsheet/MolecularSpreadSheetService.groovy" line="428" class="molspreadsheet.MolecularSpreadSheetService" package="molspreadsheet">
+      <breakpoint url="file://$PROJECT_DIR$/bard-web-client/grails-app/services/molspreadsheet/MolecularSpreadSheetService.groovy" line="437" class="molspreadsheet.MolecularSpreadSheetService" package="molspreadsheet">
         <option name="ENABLED" value="true" />
         <option name="LOG_ENABLED" value="false" />
         <option name="LOG_EXPRESSION_ENABLED" value="false" />
@@ -953,7 +957,7 @@
         <option name="CONDITION" value="" />
         <option name="LOG_MESSAGE" value="" />
       </breakpoint>
-      <breakpoint url="file://$PROJECT_DIR$/bard-web-client/test/integration/molspreadsheet/MolecularSpreadSheetServiceIntegrationSpec.groovy" line="477" class="molspreadsheet.MolecularSpreadSheetServiceIntegrationSpec" package="molspreadsheet">
+      <breakpoint url="file://$PROJECT_DIR$/bard-web-client/test/integration/molspreadsheet/MolecularSpreadSheetServiceIntegrationSpec.groovy" line="476" class="molspreadsheet.MolecularSpreadSheetServiceIntegrationSpec" package="molspreadsheet">
         <option name="ENABLED" value="true" />
         <option name="LOG_ENABLED" value="false" />
         <option name="LOG_EXPRESSION_ENABLED" value="false" />
@@ -966,7 +970,7 @@
         <option name="CONDITION" value="" />
         <option name="LOG_MESSAGE" value="" />
       </breakpoint>
-      <breakpoint url="file://$PROJECT_DIR$/bard-web-client/grails-app/services/molspreadsheet/MolecularSpreadSheetService.groovy" line="445" class="molspreadsheet.MolecularSpreadSheetService" package="molspreadsheet">
+      <breakpoint url="file://$PROJECT_DIR$/bard-web-client/grails-app/services/molspreadsheet/MolecularSpreadSheetService.groovy" line="454" class="molspreadsheet.MolecularSpreadSheetService" package="molspreadsheet">
         <option name="ENABLED" value="true" />
         <option name="LOG_ENABLED" value="false" />
         <option name="LOG_EXPRESSION_ENABLED" value="false" />
@@ -979,7 +983,7 @@
         <option name="CONDITION" value="" />
         <option name="LOG_MESSAGE" value="" />
       </breakpoint>
-      <breakpoint url="file://$PROJECT_DIR$/bard-web-client/test/integration/molspreadsheet/MolecularSpreadSheetServiceIntegrationSpec.groovy" line="479" class="molspreadsheet.MolecularSpreadSheetServiceIntegrationSpec" package="molspreadsheet">
+      <breakpoint url="file://$PROJECT_DIR$/bard-web-client/test/integration/molspreadsheet/MolecularSpreadSheetServiceIntegrationSpec.groovy" line="478" class="molspreadsheet.MolecularSpreadSheetServiceIntegrationSpec" package="molspreadsheet">
         <option name="ENABLED" value="true" />
         <option name="LOG_ENABLED" value="false" />
         <option name="LOG_EXPRESSION_ENABLED" value="false" />
@@ -992,7 +996,7 @@
         <option name="CONDITION" value="" />
         <option name="LOG_MESSAGE" value="" />
       </breakpoint>
-      <breakpoint url="file://$PROJECT_DIR$/bard-web-client/grails-app/services/molspreadsheet/MolecularSpreadSheetService.groovy" line="427" class="molspreadsheet.MolecularSpreadSheetService" package="molspreadsheet">
+      <breakpoint url="file://$PROJECT_DIR$/bard-web-client/grails-app/services/molspreadsheet/MolecularSpreadSheetService.groovy" line="436" class="molspreadsheet.MolecularSpreadSheetService" package="molspreadsheet">
         <option name="ENABLED" value="true" />
         <option name="LOG_ENABLED" value="false" />
         <option name="LOG_EXPRESSION_ENABLED" value="false" />
@@ -1031,7 +1035,7 @@
         <option name="CONDITION" value="" />
         <option name="LOG_MESSAGE" value="" />
       </breakpoint>
-      <breakpoint url="file://$PROJECT_DIR$/bard-web-client/grails-app/services/molspreadsheet/MolecularSpreadSheetService.groovy" line="425" class="molspreadsheet.MolecularSpreadSheetService" package="molspreadsheet">
+      <breakpoint url="file://$PROJECT_DIR$/bard-web-client/grails-app/services/molspreadsheet/MolecularSpreadSheetService.groovy" line="434" class="molspreadsheet.MolecularSpreadSheetService" package="molspreadsheet">
         <option name="ENABLED" value="true" />
         <option name="LOG_ENABLED" value="false" />
         <option name="LOG_EXPRESSION_ENABLED" value="false" />
@@ -1109,6 +1113,32 @@
         <option name="CONDITION" value="" />
         <option name="LOG_MESSAGE" value="" />
       </breakpoint>
+      <breakpoint url="file://$PROJECT_DIR$/bard-web-client/grails-app/services/molspreadsheet/MolecularSpreadSheetService.groovy" line="569" class="molspreadsheet.MolecularSpreadSheetService" package="molspreadsheet">
+        <option name="ENABLED" value="true" />
+        <option name="LOG_ENABLED" value="false" />
+        <option name="LOG_EXPRESSION_ENABLED" value="false" />
+        <option name="SUSPEND_POLICY" value="SuspendAll" />
+        <option name="COUNT_FILTER_ENABLED" value="false" />
+        <option name="COUNT_FILTER" value="0" />
+        <option name="CONDITION_ENABLED" value="false" />
+        <option name="CLASS_FILTERS_ENABLED" value="false" />
+        <option name="INSTANCE_FILTERS_ENABLED" value="false" />
+        <option name="CONDITION" value="" />
+        <option name="LOG_MESSAGE" value="" />
+      </breakpoint>
+      <breakpoint url="file://$PROJECT_DIR$/bard-web-client/grails-app/services/molspreadsheet/MolecularSpreadSheetService.groovy" line="566" class="molspreadsheet.MolecularSpreadSheetService" package="molspreadsheet">
+        <option name="ENABLED" value="true" />
+        <option name="LOG_ENABLED" value="false" />
+        <option name="LOG_EXPRESSION_ENABLED" value="false" />
+        <option name="SUSPEND_POLICY" value="SuspendAll" />
+        <option name="COUNT_FILTER_ENABLED" value="false" />
+        <option name="COUNT_FILTER" value="0" />
+        <option name="CONDITION_ENABLED" value="false" />
+        <option name="CLASS_FILTERS_ENABLED" value="false" />
+        <option name="INSTANCE_FILTERS_ENABLED" value="false" />
+        <option name="CONDITION" value="" />
+        <option name="LOG_MESSAGE" value="" />
+      </breakpoint>
     </line_breakpoints>
     <breakpoint_any>
       <breakpoint>
@@ -1167,100 +1197,13 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="MolecularSpreadSheetServiceIntegrationSpec.groovy" pinned="false" current="false" current-in-tab="false">
+      <file leaf-file-name="MolecularSpreadSheetServiceIntegrationSpec.groovy" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/bard-web-client/test/integration/molspreadsheet/MolecularSpreadSheetServiceIntegrationSpec.groovy">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="463" column="61" selection-start="19883" selection-end="19883" vertical-scroll-proportion="0.0">
+            <state line="23" column="23" selection-start="781" selection-end="781" vertical-scroll-proportion="0.75482625">
               <folding>
                 <element signature="e#24#55#0" expanded="true" />
               </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="BardWebInterfaceControllerUnitSpec.groovy" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/bard-web-client/test/unit/bardqueryapi/BardWebInterfaceControllerUnitSpec.groovy">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="106" column="122" selection-start="3908" selection-end="3908" vertical-scroll-proportion="-8.26087">
-              <folding>
-                <element signature="e#22#49#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="CartProjectServiceUnitSpec.groovy" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/bard-web-client/test/unit/querycart/CartProjectServiceUnitSpec.groovy">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="17" column="20" selection-start="482" selection-end="482" vertical-scroll-proportion="0.0">
-              <folding>
-                <element signature="e#19#51#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="CartCompoundServiceUnitSpec.groovy" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/bard-web-client/test/unit/querycart/CartCompoundServiceUnitSpec.groovy">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="25" column="0" selection-start="771" selection-end="771" vertical-scroll-proportion="0.0">
-              <folding>
-                <element signature="e#19#51#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="CartCompoundService.groovy" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/bard-web-client/grails-app/services/querycart/CartCompoundService.groovy">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="14" column="16" selection-start="459" selection-end="459" vertical-scroll-proportion="0.0">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="CompoundAdapter.groovy" pinned="false" current="true" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/bard-rest-api-wrapper/src/groovy/bard/core/adapter/CompoundAdapter.groovy">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="51" column="30" selection-start="1198" selection-end="1198" vertical-scroll-proportion="-2.8972332">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="ProjectAdapter.groovy" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/bard-rest-api-wrapper/src/groovy/bard/core/adapter/ProjectAdapter.groovy">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="21" column="11" selection-start="700" selection-end="700" vertical-scroll-proportion="0.0">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="BardWebInterfaceController.groovy" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/bard-web-client/grails-app/controllers/bardqueryapi/BardWebInterfaceController.groovy">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="55" column="0" selection-start="1595" selection-end="1595" vertical-scroll-proportion="-7.0434785">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="_experimentResult.gsp" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/bard-web-client/grails-app/views/bardWebInterface/_experimentResult.gsp">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="13" column="67" selection-start="608" selection-end="613" vertical-scroll-proportion="-1.1891892">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="ExperimentSearch.groovy" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/bard-rest-api-wrapper/src/groovy/bard/core/rest/spring/experiment/ExperimentSearch.groovy">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="8" column="13" selection-start="277" selection-end="277" vertical-scroll-proportion="0.0">
-              <folding />
             </state>
           </provider>
         </entry>
@@ -1278,22 +1221,22 @@
   <component name="IdeDocumentHistory">
     <option name="changedFiles">
       <list>
-        <option value="$PROJECT_DIR$/bard-rest-api-wrapper/grails-app/services/bard/core/rest/spring/RestCombinedService.groovy" />
-        <option value="$PROJECT_DIR$/bard-rest-api-wrapper/src/groovy/bard/core/rest/spring/experiment/ExperimentSearchResult.groovy" />
-        <option value="$PROJECT_DIR$/bard-web-client/grails-app/services/bardqueryapi/QueryService.groovy" />
-        <option value="$PROJECT_DIR$/bard-web-client/src/groovy/molspreadsheet/MolSpreadSheetDataBuilder.groovy" />
         <option value="$PROJECT_DIR$/bard-rest-api-wrapper/src/groovy/bard/core/rest/spring/experiment/ExperimentSearch.groovy" />
         <option value="$PROJECT_DIR$/bard-rest-api-wrapper/grails-app/services/bard/core/rest/spring/ExperimentRestService.groovy" />
         <option value="$PROJECT_DIR$/bard-rest-api-wrapper/test/integration/bard/core/rest/spring/ExperimentRestServiceIntegrationSpec.groovy" />
         <option value="$PROJECT_DIR$/bard-rest-api-wrapper/test/integration/bard/core/rest/spring/RestCombinedServiceIntegrationSpec.groovy" />
         <option value="$PROJECT_DIR$/bard-rest-api-wrapper/grails-app/services/bard/core/rest/spring/AssayRestService.groovy" />
-        <option value="$PROJECT_DIR$/bard-web-client/grails-app/services/molspreadsheet/MolecularSpreadSheetService.groovy" />
-        <option value="$PROJECT_DIR$/bard-web-client/test/integration/molspreadsheet/MolecularSpreadSheetServiceIntegrationSpec.groovy" />
         <option value="$PROJECT_DIR$/bard-web-client/grails-app/views/bardWebInterface/_experimentResult.gsp" />
-        <option value="$PROJECT_DIR$/bard-web-client/test/unit/bardqueryapi/BardWebInterfaceControllerUnitSpec.groovy" />
         <option value="$PROJECT_DIR$/bard-web-client/test/unit/querycart/CartProjectServiceUnitSpec.groovy" />
         <option value="$PROJECT_DIR$/bard-web-client/test/unit/querycart/CartCompoundServiceUnitSpec.groovy" />
         <option value="$PROJECT_DIR$/bard-rest-api-wrapper/src/groovy/bard/core/adapter/CompoundAdapter.groovy" />
+        <option value="$PROJECT_DIR$/bard-web-client/grails-app/services/bardqueryapi/QueryService.groovy" />
+        <option value="$PROJECT_DIR$/bard-web-client/grails-app/services/bardqueryapi/QueryHelperService.groovy" />
+        <option value="$PROJECT_DIR$/bard-web-client/test/unit/bardqueryapi/BardWebInterfaceControllerUnitSpec.groovy" />
+        <option value="$PROJECT_DIR$/bard-web-client/test/unit/bardqueryapi/QueryServiceUnitSpec.groovy" />
+        <option value="$PROJECT_DIR$/bard-web-client/test/integration/molspreadsheet/MolecularSpreadSheetServiceIntegrationSpec.groovy" />
+        <option value="$PROJECT_DIR$/bard-web-client/grails-app/services/molspreadsheet/MolecularSpreadSheetService.groovy" />
+        <option value="$PROJECT_DIR$/bard-web-client/test/unit/molspreadsheet/MolecularSpreadSheetServiceUnitSpec.groovy" />
       </list>
     </option>
   </component>
@@ -1386,46 +1329,6 @@
               <option name="myItemType" value="com.cenqua.clover.idea.projectview.PsiDirectoryNodeWrapper" />
             </PATH_ELEMENT>
           </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="bard-web-query" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="bard-web-query" />
-              <option name="myItemType" value="com.cenqua.clover.idea.projectview.PsiDirectoryNodeWrapper" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="bard-web-client" />
-              <option name="myItemType" value="com.cenqua.clover.idea.projectview.PsiDirectoryNodeWrapper" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="test" />
-              <option name="myItemType" value="com.cenqua.clover.idea.projectview.PsiDirectoryNodeWrapper" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="unit" />
-              <option name="myItemType" value="com.cenqua.clover.idea.projectview.PsiDirectoryNodeWrapper" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="bard-web-query" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="bard-web-query" />
-              <option name="myItemType" value="com.cenqua.clover.idea.projectview.PsiDirectoryNodeWrapper" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="bard-web-client" />
-              <option name="myItemType" value="com.cenqua.clover.idea.projectview.PsiDirectoryNodeWrapper" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="test" />
-              <option name="myItemType" value="com.cenqua.clover.idea.projectview.PsiDirectoryNodeWrapper" />
-            </PATH_ELEMENT>
-          </PATH>
         </subPane>
       </pane>
     </panes>
@@ -1462,83 +1365,73 @@
       <recent name="bard.core.rest.spring" />
     </key>
   </component>
-  <component name="RunManager" selected="Grails.Grails tests:querycart">
-    <configuration default="false" name="test that we can create an ETag from a list of experiments()" type="GrailsRunConfigurationType" factoryName="Grails" temporary="true">
-      <module name="Bard-web-client" />
-      <setting name="vmparams" value="" />
-      <setting name="cmdLine" value="test-app integration: molspreadsheet.MolecularSpreadSheetServiceIntegrationSpec.test that we can create an ETag from a list of experiments -echoOut" />
-      <setting name="depsClasspath" value="true" />
-      <setting name="passParentEnv" value="true" />
-      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
-      <setting name="launchBrowser" value="true" />
-      <RunnerSettings RunnerId="Debug">
-        <option name="DEBUG_PORT" value="" />
-        <option name="TRANSPORT" value="0" />
-        <option name="LOCAL" value="true" />
-      </RunnerSettings>
-      <ConfigurationWrapper RunnerId="Debug" />
-      <method>
-        <option name="Make" enabled="false" />
-      </method>
-    </configuration>
-    <configuration default="false" name="ExperimentUnitSpec" type="GrailsRunConfigurationType" factoryName="Grails" temporary="true">
-      <module name="bardRestApiWrapper-inplacePlugin" />
-      <setting name="vmparams" value="" />
-      <setting name="cmdLine" value="test-app unit: bard.core.rest.spring.ExperimentUnitSpec -echoOut" />
-      <setting name="depsClasspath" value="true" />
-      <setting name="passParentEnv" value="true" />
-      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
-      <setting name="launchBrowser" value="true" />
-      <RunnerSettings RunnerId="Run" />
-      <ConfigurationWrapper RunnerId="Run" />
-      <method>
-        <option name="Make" enabled="false" />
-      </method>
-    </configuration>
-    <configuration default="false" name="test findExperimentDataById #label()" type="GrailsRunConfigurationType" factoryName="Grails" temporary="true">
-      <module name="Bard-web-client" />
-      <setting name="vmparams" value="" />
-      <setting name="cmdLine" value="test-app integration: molspreadsheet.MolecularSpreadSheetServiceIntegrationSpec.test findExperimentDataById #label -echoOut" />
-      <setting name="depsClasspath" value="true" />
-      <setting name="passParentEnv" value="true" />
-      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
-      <setting name="launchBrowser" value="true" />
-      <RunnerSettings RunnerId="Debug">
-        <option name="DEBUG_PORT" value="" />
-        <option name="TRANSPORT" value="0" />
-        <option name="LOCAL" value="true" />
-      </RunnerSettings>
-      <RunnerSettings RunnerId="Run" />
-      <ConfigurationWrapper RunnerId="Debug" />
-      <ConfigurationWrapper RunnerId="Run" />
-      <method>
-        <option name="Make" enabled="false" />
-      </method>
-    </configuration>
-    <configuration default="false" name="BardWebInterfaceControllerUnitSpec" type="GrailsRunConfigurationType" factoryName="Grails" temporary="true">
-      <module name="Bard-web-client" />
-      <setting name="vmparams" value="" />
-      <setting name="cmdLine" value="test-app unit: bardqueryapi.BardWebInterfaceControllerUnitSpec -echoOut" />
-      <setting name="depsClasspath" value="true" />
-      <setting name="passParentEnv" value="true" />
-      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
-      <setting name="launchBrowser" value="true" />
-      <RunnerSettings RunnerId="Debug">
-        <option name="DEBUG_PORT" value="" />
-        <option name="TRANSPORT" value="0" />
-        <option name="LOCAL" value="true" />
-      </RunnerSettings>
-      <RunnerSettings RunnerId="Run" />
-      <ConfigurationWrapper RunnerId="Debug" />
-      <ConfigurationWrapper RunnerId="Run" />
-      <method>
-        <option name="Make" enabled="false" />
-      </method>
-    </configuration>
+  <component name="RunManager" selected="Grails.MolecularSpreadSheetServiceIntegrationSpec">
     <configuration default="false" name="Grails tests:querycart" type="GrailsRunConfigurationType" factoryName="Grails" temporary="true">
       <module name="Bard-web-client" />
       <setting name="vmparams" value="" />
       <setting name="cmdLine" value="test-app unit: querycart.** -echoOut" />
+      <setting name="depsClasspath" value="true" />
+      <setting name="passParentEnv" value="true" />
+      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
+      <setting name="launchBrowser" value="true" />
+      <RunnerSettings RunnerId="Run" />
+      <ConfigurationWrapper RunnerId="Run" />
+      <method>
+        <option name="Make" enabled="false" />
+      </method>
+    </configuration>
+    <configuration default="false" name="QueryServiceIntegrationSpec" type="GrailsRunConfigurationType" factoryName="Grails" temporary="true">
+      <module name="Bard-web-client" />
+      <setting name="vmparams" value="" />
+      <setting name="cmdLine" value="test-app integration: bardqueryapi.QueryServiceIntegrationSpec -echoOut" />
+      <setting name="depsClasspath" value="true" />
+      <setting name="passParentEnv" value="true" />
+      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
+      <setting name="launchBrowser" value="true" />
+      <RunnerSettings RunnerId="Run" />
+      <ConfigurationWrapper RunnerId="Run" />
+      <method>
+        <option name="Make" enabled="false" />
+      </method>
+    </configuration>
+    <configuration default="false" name="test extractActivityValuesFromExperimentData skip &gt;= totalNumberOfRecords()" type="GrailsRunConfigurationType" factoryName="Grails" temporary="true">
+      <module name="Bard-web-client" />
+      <setting name="vmparams" value="" />
+      <setting name="cmdLine" value="test-app unit: molspreadsheet.MolecularSpreadSheetServiceUnitSpec.test extractActivityValuesFromExperimentData skip &gt;= totalNumberOfRecords -echoOut" />
+      <setting name="depsClasspath" value="true" />
+      <setting name="passParentEnv" value="true" />
+      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
+      <setting name="launchBrowser" value="true" />
+      <RunnerSettings RunnerId="Debug">
+        <option name="DEBUG_PORT" value="" />
+        <option name="TRANSPORT" value="0" />
+        <option name="LOCAL" value="true" />
+      </RunnerSettings>
+      <RunnerSettings RunnerId="Run" />
+      <ConfigurationWrapper RunnerId="Debug" />
+      <ConfigurationWrapper RunnerId="Run" />
+      <method>
+        <option name="Make" enabled="false" />
+      </method>
+    </configuration>
+    <configuration default="false" name="MolecularSpreadSheetServiceUnitSpec" type="GrailsRunConfigurationType" factoryName="Grails" temporary="true">
+      <module name="Bard-web-client" />
+      <setting name="vmparams" value="" />
+      <setting name="cmdLine" value="test-app unit: molspreadsheet.MolecularSpreadSheetServiceUnitSpec -echoOut" />
+      <setting name="depsClasspath" value="true" />
+      <setting name="passParentEnv" value="true" />
+      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
+      <setting name="launchBrowser" value="true" />
+      <RunnerSettings RunnerId="Run" />
+      <ConfigurationWrapper RunnerId="Run" />
+      <method>
+        <option name="Make" enabled="false" />
+      </method>
+    </configuration>
+    <configuration default="false" name="MolecularSpreadSheetServiceIntegrationSpec" type="GrailsRunConfigurationType" factoryName="Grails" temporary="true">
+      <module name="Bard-web-client" />
+      <setting name="vmparams" value="" />
+      <setting name="cmdLine" value="test-app integration: molspreadsheet.MolecularSpreadSheetServiceIntegrationSpec -echoOut" />
       <setting name="depsClasspath" value="true" />
       <setting name="passParentEnv" value="true" />
       <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
@@ -1882,11 +1775,11 @@
       <item index="5" class="java.lang.String" itemvalue="Grails.testExperimentActivityWithCompounds()" />
       <item index="6" class="java.lang.String" itemvalue="Grails.testApplyFiltersWithAssayService()" />
       <item index="7" class="java.lang.String" itemvalue="Grails.Grails tests:unit" />
-      <item index="8" class="java.lang.String" itemvalue="Grails.test that we can create an ETag from a list of experiments()" />
-      <item index="9" class="java.lang.String" itemvalue="Grails.ExperimentUnitSpec" />
-      <item index="10" class="java.lang.String" itemvalue="Grails.test findExperimentDataById #label()" />
-      <item index="11" class="java.lang.String" itemvalue="Grails.BardWebInterfaceControllerUnitSpec" />
-      <item index="12" class="java.lang.String" itemvalue="Grails.Grails tests:querycart" />
+      <item index="8" class="java.lang.String" itemvalue="Grails.Grails tests:querycart" />
+      <item index="9" class="java.lang.String" itemvalue="Grails.QueryServiceIntegrationSpec" />
+      <item index="10" class="java.lang.String" itemvalue="Grails.test extractActivityValuesFromExperimentData skip &gt;= totalNumberOfRecords()" />
+      <item index="11" class="java.lang.String" itemvalue="Grails.MolecularSpreadSheetServiceUnitSpec" />
+      <item index="12" class="java.lang.String" itemvalue="Grails.MolecularSpreadSheetServiceIntegrationSpec" />
     </list>
     <configuration name="&lt;template&gt;" type="WebApp" default="true" selected="false">
       <Host>localhost</Host>
@@ -1930,12 +1823,12 @@
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="8" side_tool="true" content_ui="tabs" />
       <window_info id="IDEtalk Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="IDEtalk" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
-      <window_info id="Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.19419643" sideWeight="0.5" order="12" side_tool="false" content_ui="tabs" />
+      <window_info id="Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.29799107" sideWeight="0.5" order="12" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="Cloverage" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.23479189" sideWeight="0.61495537" order="0" side_tool="true" content_ui="combo" />
-      <window_info id="Run" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.38504463" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.23479189" sideWeight="0.62053573" order="0" side_tool="true" content_ui="combo" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.3794643" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Test Runs" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Data Sources" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3298969" sideWeight="0.59217876" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="JetGradle" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
@@ -2015,125 +1908,125 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/bard-rest-api-wrapper/src/groovy/bard/core/rest/spring/experiment/ExperimentAbstract.groovy">
+    <entry file="file://$PROJECT_DIR$/bard-web-client/test/unit/bardqueryapi/QueryServiceUnitSpec.groovy">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="19" column="0" selection-start="661" selection-end="661" vertical-scroll-proportion="-6.4">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/bard-rest-api-wrapper/grails-app/services/bard/core/rest/spring/ExperimentRestService.groovy">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="25" column="34" selection-start="929" selection-end="929" vertical-scroll-proportion="0.0">
+        <state line="236" column="37" selection-start="10941" selection-end="10941" vertical-scroll-proportion="0.0">
           <folding>
-            <element signature="e#31#72#0" expanded="true" />
+            <element signature="e#22#51#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/bard-rest-api-wrapper/test/integration/bard/core/rest/spring/ExperimentRestServiceIntegrationSpec.groovy">
+    <entry file="file://$PROJECT_DIR$/bard-rest-api-wrapper/src/groovy/bard/core/rest/spring/compounds/Compound.groovy">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="54" column="73" selection-start="2110" selection-end="2110" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/bard-rest-api-wrapper/test/integration/bard/core/rest/spring/RestCombinedServiceIntegrationSpec.groovy">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="7" column="64" selection-start="336" selection-end="336" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/bard-rest-api-wrapper/grails-app/services/bard/core/rest/spring/AssayRestService.groovy">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="48" column="0" selection-start="2017" selection-end="2017" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/bard-web-client/grails-app/services/molspreadsheet/MolecularSpreadSheetService.groovy">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="425" column="0" selection-start="19338" selection-end="19338" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/bard-web-client/grails-app/controllers/bardqueryapi/BardWebInterfaceController.groovy">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="55" column="0" selection-start="1595" selection-end="1595" vertical-scroll-proportion="-7.0434785">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/bard-web-client/test/integration/molspreadsheet/MolecularSpreadSheetServiceIntegrationSpec.groovy">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="463" column="61" selection-start="19883" selection-end="19883" vertical-scroll-proportion="0.0">
-          <folding>
-            <element signature="e#24#55#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/bard-rest-api-wrapper/src/groovy/bard/core/rest/spring/experiment/ExperimentSearch.groovy">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="8" column="13" selection-start="277" selection-end="277" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/bard-web-client/grails-app/views/bardWebInterface/_experimentResult.gsp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="13" column="67" selection-start="608" selection-end="613" vertical-scroll-proportion="-1.1891892">
+        <state line="98" column="16" selection-start="2654" selection-end="2654" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/bard-web-client/test/unit/bardqueryapi/BardWebInterfaceControllerUnitSpec.groovy">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="106" column="122" selection-start="3908" selection-end="3908" vertical-scroll-proportion="-8.26087">
+        <state line="36" column="6" selection-start="1231" selection-end="1231" vertical-scroll-proportion="-7.9130435">
           <folding>
             <element signature="e#22#49#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/bard-rest-api-wrapper/src/groovy/bard/core/adapter/ProjectAdapter.groovy">
+    <entry file="file://$PROJECT_DIR$/bard-rest-api-wrapper/src/groovy/bard/core/rest/spring/experiment/Activity.groovy">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="21" column="11" selection-start="700" selection-end="700" vertical-scroll-proportion="0.0">
+        <state line="11" column="13" selection-start="475" selection-end="475" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/bard-web-client/test/unit/querycart/CartProjectServiceUnitSpec.groovy">
+    <entry file="file://$PROJECT_DIR$/bard-web-client/src/groovy/molspreadsheet/SpreadSheetActivity.groovy">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="17" column="20" selection-start="482" selection-end="482" vertical-scroll-proportion="0.0">
+        <state line="19" column="16" selection-start="456" selection-end="456" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/bard-rest-api-wrapper/src/groovy/bard/core/rest/spring/experiment/ExperimentData.groovy">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="11" column="13" selection-start="475" selection-end="475" vertical-scroll-proportion="0.14072847">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/bard-rest-api-wrapper/grails-app/services/bard/core/rest/spring/RestCombinedService.groovy">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="48" column="34" selection-start="2057" selection-end="2057" vertical-scroll-proportion="0.32119206">
           <folding>
-            <element signature="e#19#51#0" expanded="true" />
+            <element signature="e#31#72#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/bard-web-client/test/unit/querycart/CartCompoundServiceUnitSpec.groovy">
+    <entry file="file://$PROJECT_DIR$/bard-rest-api-wrapper/src/groovy/bard/core/rest/spring/assays/AbstractAssay.groovy">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="25" column="0" selection-start="771" selection-end="771" vertical-scroll-proportion="0.0">
+        <state line="11" column="13" selection-start="474" selection-end="474" vertical-scroll-proportion="0.14072847">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/bard-rest-api-wrapper/grails-app/services/bard/core/rest/spring/ExperimentRestService.groovy">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="71" column="26" selection-start="2752" selection-end="2752" vertical-scroll-proportion="0.28145695">
           <folding>
-            <element signature="e#19#51#0" expanded="true" />
+            <element signature="e#31#72#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/bard-web-client/grails-app/services/querycart/CartCompoundService.groovy">
+    <entry file="file://$PROJECT_DIR$/bard-rest-api-wrapper/src/groovy/bard/core/rest/spring/assays/Assay.groovy">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="14" column="16" selection-start="459" selection-end="459" vertical-scroll-proportion="0.0">
+        <state line="10" column="13" selection-start="351" selection-end="351" vertical-scroll-proportion="0.22516556">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/bard-rest-api-wrapper/src/groovy/bard/core/adapter/CompoundAdapter.groovy">
+    <entry file="file://$PROJECT_DIR$/bard-rest-api-wrapper/src/java/bard/core/Experiment.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="51" column="30" selection-start="1198" selection-end="1198" vertical-scroll-proportion="-2.8972332">
+        <state line="26" column="11" selection-start="736" selection-end="736" vertical-scroll-proportion="0.5066225">
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/bard-rest-api-wrapper/src/groovy/bard/core/rest/spring/experiment/ExperimentSearch.groovy">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="8" column="13" selection-start="277" selection-end="277" vertical-scroll-proportion="0.16887417">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/bard-web-client/grails-app/services/molspreadsheet/MolecularSpreadSheetService.groovy">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="379" column="104" selection-start="17713" selection-end="17713" vertical-scroll-proportion="0.27979276">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/bard-rest-api-wrapper/grails-app/services/bard/core/rest/spring/AbstractRestService.groovy">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="152" column="48" selection-start="5703" selection-end="5715" vertical-scroll-proportion="0.52397263">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/bard-web-client/test/unit/molspreadsheet/MolecularSpreadSheetServiceUnitSpec.groovy">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="5" column="44" selection-start="199" selection-end="199" vertical-scroll-proportion="0.14554794">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/bard-web-client/test/integration/molspreadsheet/MolecularSpreadSheetServiceIntegrationSpec.groovy">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="23" column="23" selection-start="781" selection-end="781" vertical-scroll-proportion="0.75482625">
+          <folding>
+            <element signature="e#24#55#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>

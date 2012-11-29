@@ -14,6 +14,7 @@ import org.apache.commons.lang.time.StopWatch
 import java.util.regex.Matcher
 import java.util.regex.Pattern
 import bard.core.rest.spring.compounds.Compound
+import bard.core.rest.spring.assays.AbstractAssay
 
 class QueryHelperService {
 
@@ -143,9 +144,9 @@ class QueryHelperService {
      * @param assays {@link Assay}
      * @return list of {@link AssayAdapter}'s
      */
-    public List<AssayAdapter> assaysToAdapters(List<Assay> assays) {
+    public List<AssayAdapter> assaysToAdapters(List<AbstractAssay> assays) {
         final List<AssayAdapter> assayAdapters = []
-        for (bard.core.rest.spring.assays.Assay assay : assays) {
+        for (AbstractAssay assay : assays) {
             assayAdapters.add(new AssayAdapter(assay))
         }
         return assayAdapters

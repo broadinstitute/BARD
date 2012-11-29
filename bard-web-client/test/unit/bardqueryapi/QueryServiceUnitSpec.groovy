@@ -17,7 +17,6 @@ import bard.core.rest.spring.project.Project
 import bard.core.rest.spring.util.StructureSearchParams
 import grails.test.mixin.TestFor
 import org.apache.commons.lang.time.StopWatch
-import spock.lang.IgnoreRest
 import spock.lang.Shared
 import spock.lang.Specification
 import spock.lang.Unroll
@@ -229,7 +228,6 @@ class QueryServiceUnitSpec extends Specification {
      * {@link QueryService#structureSearch(String, bard.core.rest.spring.util.StructureSearchParams.Type)}
      *
      */
-    @IgnoreRest
     void "test Structure Search No Filters #label"() {
         given:
         ExpandedCompoundResult expandedCompoundResult = new ExpandedCompoundResult(compounds: [new Compound(smiles: smiles)])

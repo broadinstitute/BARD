@@ -208,7 +208,8 @@ class QueryService implements IQueryService {
             ExpandedAssayResult expandedAssayResult = this.assayRestService.searchAssaysByIds(assayIds)
             this.queryHelperService.stopStopWatch(sw, "find assays by ADIDs ${assayIds.toString()}")
             if (expandedAssayResult) {
-                if (expandedAssayResult.assays) {
+                final List<ExpandedAssay> assays = expandedAssayResult.assays
+                if (assays) {
                     foundAssayAdapters.addAll(this.queryHelperService.assaysToAdapters(expandedAssayResult.assays))
                 }
                 //TODO: Facet needed. Not yet ready in JDO
