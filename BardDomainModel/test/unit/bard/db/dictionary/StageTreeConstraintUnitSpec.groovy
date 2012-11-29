@@ -5,7 +5,7 @@ import org.junit.Before
 import spock.lang.Specification
 import spock.lang.Unroll
 
-import static bard.db.dictionary.StageTree.FULL_PATH_MAX_SIZE
+import static bard.db.dictionary.StageTree.*
 import static test.TestUtils.assertFieldValidationExpectations
 import static test.TestUtils.createString
 
@@ -85,7 +85,7 @@ class StageTreeConstraintUnitSpec extends Specification {
         'false valid'    | false          | true  | null
     }
 
-    void "test fullPath constraints #desc fullPath : '#valueUnderTest'"() {
+    void "test fullPath constraints #desc fullPath : size #valueUnderTest.size()"() {
         final String field = 'fullPath'
 
         when: 'a value is set for the field under test'
@@ -102,6 +102,63 @@ class StageTreeConstraintUnitSpec extends Specification {
         'valid value' | createString(FULL_PATH_MAX_SIZE)       | true  | null
         'null valid'  | null                                   | true  | null
         'valid value' | "foo"                                  | true  | null
+    }
+
+    void "test label constraints #desc label size #valueUnderTest.size()"() {
+        final String field = 'label'
+
+        when: 'a value is set for the field under test'
+        domainInstance[(field)] = valueUnderTest
+        domainInstance.validate()
+
+        then: 'verify valid or invalid for expected reason'
+        assertFieldValidationExpectations(domainInstance, field, valid, errorCode)
+
+        where:
+        desc             | valueUnderTest                     | valid | errorCode
+        'null not valid' | null                               | false | 'nullable'
+        'too long'       | createString(LABEL_MAX_SIZE) + "a" | false | 'maxSize.exceeded'
+
+        'valid value'    | createString(LABEL_MAX_SIZE)       | true  | null
+        'valid value'    | "foo"                              | true  | null
+    }
+
+    void "test elementStatus constraints #desc elementStatus : '#valueUnderTest'"() {
+        final String field = 'elementStatus'
+
+        when: 'a value is set for the field under test'
+        domainInstance[(field)] = valueUnderTest
+        domainInstance.validate()
+
+        then: 'verify valid or invalid for expected reason'
+        assertFieldValidationExpectations(domainInstance, field, valid, errorCode)
+
+        where:
+        desc             | valueUnderTest                              | valid | errorCode
+        'null not valid' | null                                        | false | 'nullable'
+        'too long'       | createString(ELEMENT_STATUS_MAX_SIZE) + "a" | false | 'maxSize.exceeded'
+
+        'valid value'    | createString(ELEMENT_STATUS_MAX_SIZE)       | true  | null
+        'valid value'    | "foo"                                       | true  | null
+    }
+
+    void "test description constraints #desc size #valueUnderTest.size()"() {
+        final String field = 'description'
+
+        when: 'a value is set for the field under test'
+        domainInstance[(field)] = valueUnderTest
+        domainInstance.validate()
+
+        then: 'verify valid or invalid for expected reason'
+        assertFieldValidationExpectations(domainInstance, field, valid, errorCode)
+
+        where:
+        desc          | valueUnderTest                           | valid | errorCode
+        'too long'    | createString(DESCRIPTION_MAX_SIZE) + "a" | false | 'maxSize.exceeded'
+
+        'null valid'  | null                                     | true  | null
+        'valid value' | createString(DESCRIPTION_MAX_SIZE)       | true  | null
+        'valid value' | "foo"                                    | true  | null
     }
 
 }

@@ -103,4 +103,41 @@ class UnitTreeConstraintIntegrationSpec extends IntegrationSpec {
         'valid value' | "foo"                                  | true  | null
     }
 
+    void "test label constraints #desc label size #valueUnderTest.size()"() {
+        final String field = 'label'
+
+        when: 'a value is set for the field under test'
+        domainInstance[(field)] = valueUnderTest
+        domainInstance.validate()
+
+        then: 'verify valid or invalid for expected reason'
+        assertFieldValidationExpectations(domainInstance, field, valid, errorCode)
+
+        where:
+        desc             | valueUnderTest                     | valid | errorCode
+        'null not valid' | null                               | false | 'nullable'
+        'too long'       | createString(LABEL_MAX_SIZE) + "a" | false | 'maxSize.exceeded'
+
+        'valid value'    | createString(LABEL_MAX_SIZE)       | true  | null
+        'valid value'    | "foo"                              | true  | null
+    }
+
+    void "test description constraints #desc size #valueUnderTest.size()"() {
+        final String field = 'description'
+
+        when: 'a value is set for the field under test'
+        domainInstance[(field)] = valueUnderTest
+        domainInstance.validate()
+
+        then: 'verify valid or invalid for expected reason'
+        assertFieldValidationExpectations(domainInstance, field, valid, errorCode)
+
+        where:
+        desc          | valueUnderTest                           | valid | errorCode
+        'too long'    | createString(DESCRIPTION_MAX_SIZE) + "a" | false | 'maxSize.exceeded'
+
+        'null valid'  | null                                     | true  | null
+        'valid value' | createString(DESCRIPTION_MAX_SIZE)       | true  | null
+        'valid value' | "foo"                                    | true  | null
+    }
 }
