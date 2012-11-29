@@ -1,5 +1,5 @@
 databaseChangeLog = {
-    changeSet(author: "ddurkin", id: 'delete-data prior to loading data', dbms: 'oracle', context: 'load-data', runAlways: 'true') {
+    changeSet(author: "ddurkin", id: 'delete-data prior to loading data', dbms: 'oracle', context: 'load-data, delete-data', runAlways: 'true') {
         String bardDomainModelMigrationsDir = ctx.migrationResourceAccessor.baseDirectory
         File migrationsDir = new File(bardDomainModelMigrationsDir)
         File sqlDir = new File(migrationsDir, 'sql')
