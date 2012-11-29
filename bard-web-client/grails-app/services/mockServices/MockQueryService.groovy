@@ -12,6 +12,7 @@ import bard.core.*
 import bard.core.interfaces.ExperimentCategory
 import bard.core.interfaces.ExperimentRole
 import bard.core.interfaces.ExperimentType
+import bard.core.rest.spring.compounds.Compound
 import bard.core.rest.spring.util.StructureSearchParams
 
 class MockQueryService {
@@ -480,7 +481,7 @@ Screening Center: NIH Chemical Genomics Center [NCGC]'''
     }
 }
 class MockAssayAdapter extends AssayAdapter {
-    String searchHighlight
+//    String searchHighlight
     String name
 
     public Collection<Value> getAnnotations() {
@@ -488,7 +489,7 @@ class MockAssayAdapter extends AssayAdapter {
     }
 }
 class MockProjectAdapter extends ProjectAdapter {
-    String searchHighlight
+//    String searchHighlight
     String name
     Integer numberOfExperiments = 3
 
@@ -520,7 +521,7 @@ class MockCompoundAdapter extends CompoundAdapter {
     Long[] sids = [70319, 609991, 866273, 3132781]
     Long pubChemCID
     String structureSMILES
-    String searchHighlight
+//    String searchHighlight
     String name
 
 

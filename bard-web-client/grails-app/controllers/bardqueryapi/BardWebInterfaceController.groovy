@@ -568,8 +568,16 @@ class SearchHelper {
      * not need to add the search string to the paging object
      */
     protected void removeDuplicatesFromSearchString(SearchCommand searchCommand) {
-        Set<String> searchCommandSplit = searchCommand.searchString.trim().split(/w,w/) as Set<String>
-        searchCommand.searchString = searchCommandSplit.join(",")
+        List<String> searchCommandSplit = []
+        if(!searchCommand.searchString.matches(/[^"]*"[^"]+"/))  {
+            // This is a little complicated.
+            // If the search string contains a quote-delimited string anywhere in it, take the search string as it is.
+            // Otherwise, split it on commas, then remove the duplicates.
+            // We could do this with a Set instead of performing unique() on the list, but then the order gets a little scrambled.
+            // Regex: Zero or more things that aren't ", then ", then one or more things that aren't " (so empty strings are not allowed), then "
+            searchCommandSplit.addAll(searchCommand.searchString.trim().split(",") as List<String>)
+            searchCommand.searchString = searchCommandSplit.unique().join(",")
+        }
         params.searchString = searchCommand.searchString
 
     }

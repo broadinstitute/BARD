@@ -484,20 +484,24 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
     /**
      * {@link SearchHelper#removeDuplicatesFromSearchString(SearchCommand)}
      */
-    void "test removeDuplicatesFromSearchString"() {
-        given: " As search string with duplicate values"
-        String searchStringWithDuplicates = "abc,efg,abc"
-
+    void "test removeDuplicatesFromSearchString: #label"() {
         mockCommandObject(SearchCommand)
         params.formName = FacetFormType.ProjectFacetForm.CompoundFacetForm.toString()
-        Map paramMap = [formName: FacetFormType.ProjectFacetForm.toString(), searchString: searchStringWithDuplicates, filters: []]
+        Map paramMap = [formName: FacetFormType.ProjectFacetForm.toString(), searchString: searchString, filters: []]
         controller.metaClass.getParams {-> paramMap}
         SearchCommand searchCommand = new SearchCommand(paramMap)
 
         when: "We call the removeDuplicates method with the given search string"
         controller.removeDuplicatesFromSearchString(searchCommand)
         then: "We expected to get back a new search string with the duplicates removed"
-        assert searchCommand.searchString == "abc,efg"
+        assert searchCommand.searchString == expectedResult
+
+        where:
+        label                              | searchString                                         | expectedResult
+        "String without duplicates"        | "abc,efg"                                            | "abc,efg"
+        "String with duplicates"           | "abc,efg,abc"                                        | "abc,efg"
+        "String with duplicates in quotes" | "\"abc,efg,abc\""                                    | "\"abc,efg,abc\""
+        "GO term with comma in quotes"     | "gobp_term:\"synaptic transmission, glutamatergic\"" | "gobp_term:\"synaptic transmission, glutamatergic\""
     }
 
     void "test searchProjectsByIDs action"() {
