@@ -90,7 +90,7 @@ class MolecularSpreadSheetService {
                 retrieveCartAssayFromShoppingCart(),
                 retrieveCartProjectFromShoppingCart())
 
-        molSpreadSheetDataBuilderDirector.molSpreadSheetData
+       return molSpreadSheetDataBuilderDirector.molSpreadSheetData
     }
 
     /**
@@ -104,7 +104,7 @@ class MolecularSpreadSheetService {
             compoundIds.add(spreadSheetActivity.cid)
         }
         List<SearchFilter> filters = []
-        queryService.findCompoundsByCIDs(compoundIds, filters)
+        return queryService.findCompoundsByCIDs(compoundIds, filters)
     }
     /**
      * When do we have sufficient data to charge often try to build a spreadsheet?
@@ -125,7 +125,7 @@ class MolecularSpreadSheetService {
                 QueryCartService.cartCompound) > 0) {
             returnValue = true
         }
-        returnValue
+        return returnValue
     }
 
 
@@ -179,7 +179,7 @@ class MolecularSpreadSheetService {
             }
             columnCount++
         }
-        spreadSheetActivityList
+        return spreadSheetActivityList
     }
 
     /**
@@ -277,7 +277,7 @@ class MolecularSpreadSheetService {
         for (CartCompound cartCompound in (queryCartService.groupUniqueContentsByType(shoppingCartService)[(QueryCartService.cartCompound)])) {
             cartCompoundList.add(cartCompound)
         }
-        cartCompoundList
+        return cartCompoundList
     }
 
     List<CartAssay> retrieveCartAssayFromShoppingCart() {
@@ -285,7 +285,7 @@ class MolecularSpreadSheetService {
         for (CartAssay cartAssay in (queryCartService.groupUniqueContentsByType(shoppingCartService)[(QueryCartService.cartAssay)])) {
             cartAssayList.add(cartAssay)
         }
-        cartAssayList
+        return cartAssayList
     }
 
     List<CartProject> retrieveCartProjectFromShoppingCart() {
@@ -293,7 +293,7 @@ class MolecularSpreadSheetService {
         for (CartProject cartProject in (queryCartService.groupUniqueContentsByType(shoppingCartService)[(QueryCartService.cartProject)])) {
             cartProjectList.add(cartProject)
         }
-        cartProjectList
+        return cartProjectList
     }
 
     /**

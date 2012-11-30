@@ -31,7 +31,17 @@ class SpreadSheetActivityStorage {
     SpreadSheetActivityStorage() {
 
     }
-
+    /**
+     *  This seems to be used only in unit tests
+     * @param spreadSheetActivity
+     */
+    SpreadSheetActivityStorage(SpreadSheetActivity spreadSheetActivity) {
+        this.sid = spreadSheetActivity.sid
+        this.eid = spreadSheetActivity.eid
+        this.cid = spreadSheetActivity.cid
+        this.activityOutcome = spreadSheetActivity.activityOutcome
+        this.potency = spreadSheetActivity.potency
+    }
     /**
      *
      * @param spreadSheetActivityStorage
@@ -81,16 +91,6 @@ class SpreadSheetActivityStorage {
                 append(this.molSpreadSheetCell?.hashCode()).
                 toHashCode();
     }
-    /**
-     *
-     * @param spreadSheetActivity
-     */
-    SpreadSheetActivityStorage(SpreadSheetActivity spreadSheetActivity) {
-        this.sid = spreadSheetActivity.sid
-        this.eid = spreadSheetActivity.eid
-        this.cid = spreadSheetActivity.cid
-        this.activityOutcome = spreadSheetActivity.activityOutcome
-        this.potency = spreadSheetActivity.potency
-    }
+
 
 }
