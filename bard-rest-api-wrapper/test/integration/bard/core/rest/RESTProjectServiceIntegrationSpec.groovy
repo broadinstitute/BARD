@@ -218,7 +218,8 @@ class RESTProjectServiceIntegrationSpec extends AbstractRESTServiceSpec {
         if (isStringSearch) {
             final Collection<Value> annotations = projectAdapter.getAnnotations()
             assert annotations != null
-            assert projectAdapter.searchHighlight
+            // search highlights were removed -- they return null now
+//            assert projectAdapter.searchHighlight
         }
     }
 }
