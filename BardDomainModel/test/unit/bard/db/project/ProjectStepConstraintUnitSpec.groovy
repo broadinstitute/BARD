@@ -5,10 +5,10 @@ import org.junit.Before
 import spock.lang.Specification
 import spock.lang.Unroll
 
-import static bard.db.project.Project.MODIFIED_BY_MAX_SIZE
+import static bard.db.project.ProjectStep.EDGE_NAME_MAX_SIZE
+import static bard.db.project.ProjectStep.MODIFIED_BY_MAX_SIZE
 import static test.TestUtils.assertFieldValidationExpectations
 import static test.TestUtils.createString
-import bard.db.project.ProjectStep
 
 /**
  * Created with IntelliJ IDEA.
@@ -28,6 +28,63 @@ class ProjectStepConstraintUnitSpec extends Specification {
         domainInstance = ProjectStep.buildWithoutSave()
     }
 
+    void "test nextProjectExperiment constraints #desc"() {
+
+        final String field = 'nextProjectExperiment'
+
+        when:
+        domainInstance[(field)] = valueUnderTest.call()
+        domainInstance.validate()
+
+        then:
+        assertFieldValidationExpectations(domainInstance, field, valid, errorCode)
+
+        where:
+        desc                          | valueUnderTest              | valid | errorCode
+        'null not valid'              | {null}                      | false | 'nullable'
+        'valid nextProjectExperiment' | {ProjectExperiment.build()} | true  | null
+
+    }
+
+    void "test previousProjectExperiment constraints #desc"() {
+
+        final String field = 'previousProjectExperiment'
+
+        when:
+        domainInstance[(field)] = valueUnderTest.call()
+        domainInstance.validate()
+
+        then:
+        assertFieldValidationExpectations(domainInstance, field, valid, errorCode)
+
+        where:
+        desc                              | valueUnderTest              | valid | errorCode
+        'null not valid'                  | {null}                      | false | 'nullable'
+        'valid previousProjectExperiment' | {ProjectExperiment.build()} | true  | null
+
+    }
+
+    void "test edgeName constraints #desc edgeName: '#valueUnderTest'"() {
+
+        final String field = 'edgeName'
+
+        when: 'a value is set for the field under test'
+        domainInstance[(field)] = valueUnderTest
+        domainInstance.validate()
+
+        then: 'verify valid or invalid for expected reason'
+        assertFieldValidationExpectations(domainInstance, field, valid, errorCode)
+
+        where:
+        desc               | valueUnderTest                       | valid | errorCode
+        'too long'         | createString(EDGE_NAME_MAX_SIZE + 1) | false | 'maxSize.exceeded'
+        'blank valid'      | ''                                   | false | 'blank'
+        'blank valid'      | '  '                                 | false | 'blank'
+
+        'exactly at limit' | createString(EDGE_NAME_MAX_SIZE)     | true  | null
+        'null valid'       | null                                 | true  | null
+    }
+
     void "test modifiedBy constraints #desc modifiedBy: '#valueUnderTest'"() {
 
         final String field = 'modifiedBy'
@@ -38,11 +95,6 @@ class ProjectStepConstraintUnitSpec extends Specification {
 
         then: 'verify valid or invalid for expected reason'
         assertFieldValidationExpectations(domainInstance, field, valid, errorCode)
-
-        and: 'verify the domainspreadsheetmapping can be persisted to the db'
-        if (valid) {
-            domainInstance == domainInstance.save(flush: true)
-        }
 
         where:
         desc               | valueUnderTest                         | valid | errorCode
@@ -64,11 +116,6 @@ class ProjectStepConstraintUnitSpec extends Specification {
         then: 'verify valid or invalid for expected reason'
         assertFieldValidationExpectations(domainInstance, field, valid, errorCode)
 
-        and: 'verify the domainspreadsheetmapping can be persisted to the db'
-        if (valid) {
-            domainInstance == domainInstance.save(flush: true)
-        }
-
         where:
         desc             | valueUnderTest | valid | errorCode
         'null not valid' | null           | false | 'nullable'
@@ -84,11 +131,6 @@ class ProjectStepConstraintUnitSpec extends Specification {
 
         then: 'verify valid or invalid for expected reason'
         assertFieldValidationExpectations(domainInstance, field, valid, errorCode)
-
-        and: 'verify the domainspreadsheetmapping can be persisted to the db'
-        if (valid) {
-            domainInstance == domainInstance.save(flush: true)
-        }
 
         where:
         desc         | valueUnderTest | valid | errorCode
