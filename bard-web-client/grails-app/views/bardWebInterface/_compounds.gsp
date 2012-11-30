@@ -32,7 +32,10 @@
                     <g:saveToCartButton id="${compoundAdapter.pubChemCID}"
                                         name="${JavaScriptUtility.cleanup(compoundAdapter.name)}"
                                         type="${querycart.QueryItemType.Compound}"
-                                        smiles="${compoundAdapter.getStructureSMILES()}"/>
+                                        smiles="${compoundAdapter.getStructureSMILES()}"
+                                        numAssayActive="${compoundAdapter.numberOfActiveAssays}"
+                                        numAssayTested="${compoundAdapter.numberOfAssays}"
+                    />
                     <dl>
                         %{--<g:if test="${compoundAdapter.searchHighlight}">--}%
                             %{--<dt>Search Match (highlighted in bold):</dt>--}%

@@ -77,11 +77,11 @@ class MolSpreadSheetDataBuilderIntegrationSpec extends IntegrationSpec {
         false            | null                  | null                    | null                          | null
         true             | new CartAssay("A", 1) | null                    | null                          | MolSpreadsheetDerivedMethod.NoCompounds_Assays_NoProjects
         true             | null                  | new CartProject("P", 8) | null                          | MolSpreadsheetDerivedMethod.NoCompounds_NoAssays_Projects
-        true             | null                  | null                    | new CartCompound("C", "c", 1) | null
-        true             | null                  | new CartProject("P", 8) | new CartCompound("C", "c", 1) | MolSpreadsheetDerivedMethod.NoCompounds_NoAssays_Projects
-        true             | new CartAssay("A", 1) | null                    | new CartCompound("C", "c", 1) | MolSpreadsheetDerivedMethod.NoCompounds_Assays_NoProjects
+        true             | null                  | null                    | new CartCompound("C", "c", 1, 0, 0) | null
+        true             | null                  | new CartProject("P", 8) | new CartCompound("C", "c", 1, 0, 0) | MolSpreadsheetDerivedMethod.NoCompounds_NoAssays_Projects
+        true             | new CartAssay("A", 1) | null                    | new CartCompound("C", "c", 1, 0, 0) | MolSpreadsheetDerivedMethod.NoCompounds_Assays_NoProjects
         true             | new CartAssay("A", 1) | new CartProject("P", 8) | null                          | MolSpreadsheetDerivedMethod.NoCompounds_NoAssays_Projects
-        true             | new CartAssay("A", 1) | new CartProject("P", 8) | new CartCompound("C", "c", 1) | MolSpreadsheetDerivedMethod.NoCompounds_NoAssays_Projects
+        true             | new CartAssay("A", 1) | new CartProject("P", 8) | new CartCompound("C", "c", 1, 0, 0) | MolSpreadsheetDerivedMethod.NoCompounds_NoAssays_Projects
         false            | null                  | null                    | null                          | null
     }
 

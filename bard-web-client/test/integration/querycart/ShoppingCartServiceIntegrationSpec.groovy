@@ -86,7 +86,7 @@ class ShoppingCartServiceIntegrationSpec extends IntegrationSpec {
         assertNotNull shoppingCartService
         assertNotNull  molecularSpreadSheetService
 
-        CartCompound cartCompound = new CartCompound("c1ccccc1", "cmpd name", 47)
+        CartCompound cartCompound = new CartCompound("c1ccccc1", "cmpd name", 47, 0, 0)
 
         when: "We make a Query to NCGC's rest API to get a list of assays with that target"
         shoppingCartService.addToShoppingCart(cartCompound)
@@ -124,7 +124,7 @@ class ShoppingCartServiceIntegrationSpec extends IntegrationSpec {
         assertNotNull shoppingCartService
         CartAssay cartAssay = new CartAssay("Assay 1", 1)
         CartAssay cartAssay1 = new CartAssay("Assay 2", 2)
-        CartCompound cartCompound = new CartCompound("c1ccccc1", "Test", 1)
+        CartCompound cartCompound = new CartCompound("c1ccccc1", "Test", 1, 0, 0)
 
         when: "We make a Query to NCGC's rest API to get a list of assays with that target"
         shoppingCartService.addToShoppingCart(cartAssay)
@@ -155,7 +155,7 @@ class ShoppingCartServiceIntegrationSpec extends IntegrationSpec {
         given: "A shopping cart"
         assertNotNull shoppingCartService
         CartAssay cartAssay = new CartAssay("Assay 1", 1)
-        CartCompound cartCompound = new CartCompound("c1ccccc1", "cmpd name", 47)
+        CartCompound cartCompound = new CartCompound("c1ccccc1", "cmpd name", 47, 0, 0)
         CartProject cartProject = new CartProject("my project", 1)
 
         when: "We make a Query to NCGC's rest API to get a list of assays with that target"
@@ -184,7 +184,7 @@ class ShoppingCartServiceIntegrationSpec extends IntegrationSpec {
         assertNotNull shoppingCartService
         CartAssay cartAssay = new CartAssay("Assay 1", 1)
         CartAssay cartAssay1 = new CartAssay("Assay 2", 2)
-        CartCompound cartCompound = new CartCompound("c1ccccc1", "cmpd name", 47)
+        CartCompound cartCompound = new CartCompound("c1ccccc1", "cmpd name", 47, 0, 0)
 
         when: "We make a Query to NCGC's rest API to get a list of assays with that target"
         shoppingCartService.addToShoppingCart(cartAssay)
@@ -261,12 +261,12 @@ class ShoppingCartServiceIntegrationSpec extends IntegrationSpec {
     void "Exploring the nature of CartCompound uniqueness"() {
         given: "A shopping cart and some testing objects"
         assertNotNull shoppingCartService
-        CartCompound cartCompound_identical1 = new CartCompound("c1ccccc1", "A", 47)
+        CartCompound cartCompound_identical1 = new CartCompound("c1ccccc1", "A", 47, 0, 0)
         CartCompound cartCompound_identical2 = cartCompound_identical1
-        CartCompound cartCompound_sameName1 = new CartCompound("c2ccccc2", "B", 48)
-        CartCompound cartCompound_sameName2 = new CartCompound("c2ccccc2", "B", 48)
-        CartCompound cartCompound_differentName1 = new CartCompound("c3ccccc3", "C", 50)
-        CartCompound cartCompound_differentName2 = new CartCompound("c4ccccc4", "D", 51)
+        CartCompound cartCompound_sameName1 = new CartCompound("c2ccccc2", "B", 48, 0, 0)
+        CartCompound cartCompound_sameName2 = new CartCompound("c2ccccc2", "B", 48, 0, 0)
+        CartCompound cartCompound_differentName1 = new CartCompound("c3ccccc3", "C", 50, 0, 0)
+        CartCompound cartCompound_differentName2 = new CartCompound("c4ccccc4", "D", 51, 0, 0)
 
         when: "the shopping cart is functional and ready for testing"
         queryCartService.emptyShoppingCart()

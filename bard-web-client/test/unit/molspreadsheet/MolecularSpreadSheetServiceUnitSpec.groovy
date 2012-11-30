@@ -363,7 +363,7 @@ class MolecularSpreadSheetServiceUnitSpec extends Specification {
         molSpreadSheetData.rowPointer = new LinkedHashMap<Long, Integer>()
         molSpreadSheetData.mssData = new LinkedHashMap<String, MolSpreadSheetCell>()
         List<CartCompound> cartCompoundList = []
-        cartCompoundList.add(new CartCompound("c1ccccc1", "benzene", 47))
+        cartCompoundList.add(new CartCompound("c1ccccc1", "benzene", 47, 0, 0))
         Map<String, MolSpreadSheetCell> dataMap = [:]
 
         when: "we want to pull out the active values"
@@ -424,6 +424,8 @@ class MolecularSpreadSheetServiceUnitSpec extends Specification {
     CompoundAdapter buildCompoundAdapter(final Long cid) {
         final Compound compound = new Compound()
         compound.setCid(cid.intValue());
+        compound.setNumActiveAssay(1)
+        compound.setNumAssay(5)
         return new CompoundAdapter(compound)
     }
 

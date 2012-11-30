@@ -313,7 +313,7 @@ class MolecularSpreadSheetService {
                     cartCompound.externalId as Long,
                     cartCompound.name,
                     cartCompound.smiles,
-                    dataMap
+                    dataMap, cartCompound.numAssayActive, cartCompound.numAssayTested
             )
         }
 
@@ -334,7 +334,9 @@ class MolecularSpreadSheetService {
             String smiles = compoundAdapter.structureSMILES
             Long cid = compoundAdapter.pubChemCID
             String name = compoundAdapter.name
-            updateMolSpreadSheetDataToReferenceCompound(molSpreadSheetData, rowCount++, cid, name, smiles, dataMap)
+            final int numberOfActiveAssays = compoundAdapter.numberOfActiveAssays
+            final int numberOfAssays = compoundAdapter.numberOfAssays
+            updateMolSpreadSheetDataToReferenceCompound(molSpreadSheetData, rowCount++, cid, name, smiles, dataMap, numberOfActiveAssays, numberOfAssays)
         }
 
     }
@@ -348,12 +350,12 @@ class MolecularSpreadSheetService {
      * @param compoundSmiles
      * @return
      */
-    protected MolSpreadSheetData updateMolSpreadSheetDataToReferenceCompound(final MolSpreadSheetData molSpreadSheetData,
-                                                                             final int rowCount,
-                                                                             final Long compoundId,
-                                                                             final String compoundName,
-                                                                             final String compoundSmiles,
-                                                                             Map<String, MolSpreadSheetCell> dataMap) {
+    protected MolSpreadSheetData updateMolSpreadSheetDataToReferenceCompound(MolSpreadSheetData molSpreadSheetData,
+                                                                             int rowCount, Long compoundId,
+                                                                             String compoundName,
+                                                                             String compoundSmiles, Map<String, MolSpreadSheetCell> dataMap,
+                                                                             int numAssayActive,
+                                                                             int numAssayTested) {
         // need to be able to map from CID to row location
         molSpreadSheetData.rowPointer.put(compoundId, rowCount)
 
@@ -365,9 +367,7 @@ class MolecularSpreadSheetService {
         dataMap.put("${rowCount}_2".toString(), new MolSpreadSheetCell(compoundId.toString(), MolSpreadSheetCellType.identifier))
         //we will use this to get the 'active vrs tested' column
         final Compound compound = compoundRestService.getCompoundById(compoundId)
-        int activeAssays = compound.numActiveAssay
-        int testedAssays = compound.numAssay
-        dataMap.put("${rowCount}_3".toString(), new MolSpreadSheetCell("${activeAssays} / ${testedAssays}", MolSpreadSheetCellType.string))
+        dataMap.put("${rowCount}_3".toString(), new MolSpreadSheetCell("${numAssayActive} / ${numAssayTested}", MolSpreadSheetCellType.string))
 
         return molSpreadSheetData
 

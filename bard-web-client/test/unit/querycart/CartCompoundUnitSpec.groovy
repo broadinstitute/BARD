@@ -29,7 +29,7 @@ class CartCompoundUnitSpec extends Specification {
         Integer compdId = 47
 
         when:
-        CartCompound cartCompound = new CartCompound(moleculeDefinition, name, compdId)
+        CartCompound cartCompound = new CartCompound(moleculeDefinition, name, compdId, 0, 0)
         assertNotNull(cartCompound)
 
         then:
@@ -48,7 +48,7 @@ class CartCompoundUnitSpec extends Specification {
         final String truncatedSmiles = StringUtils.abbreviate(smiles, CartCompound.MAXIMUM_SMILES_FIELD_LENGTH)
 
         when:
-        CartCompound cartCompound = new CartCompound(smiles, "test", 3)
+        CartCompound cartCompound = new CartCompound(smiles, "test", 3, 0, 0)
         cartCompound.validate()
 
         then:
@@ -71,7 +71,7 @@ class CartCompoundUnitSpec extends Specification {
         Long compoundId = 3
 
         when:
-        CartCompound cartCompound = new CartCompound("CC", name, compoundId)
+        CartCompound cartCompound = new CartCompound("CC", name, compoundId, 0, 0)
         cartCompound.validate()
 
         then:
@@ -95,7 +95,7 @@ class CartCompoundUnitSpec extends Specification {
         label               | cartCompound                                 | otherCartCompound                            | equality
         "Other is null"     | new CartCompound()                           | null                                         | false
         "Different classes" | new CartCompound()                           | 20                                           | false
-        "Equality"          | new CartCompound("CC", "Name", 3)            | new CartCompound("CC", "Name", 3)            | true
+        "Equality"          | new CartCompound("CC", "Name", 3, 0, 0)            | new CartCompound("CC", "Name", 3, 0, 0)            | true
 
 
     }
@@ -114,7 +114,7 @@ class CartCompoundUnitSpec extends Specification {
         mockForConstraintsTests(CartCompound)
         final String name = RandomStringUtils.randomAlphabetic(nameLength)
         when:
-        CartCompound cartCompound = new CartCompound(smiles, name, compoundId)
+        CartCompound cartCompound = new CartCompound(smiles, name, compoundId, 0, 0)
         cartCompound.validate()
 
         then:
@@ -139,7 +139,7 @@ class CartCompoundUnitSpec extends Specification {
         Long compoundId = 47
 
         when:
-        CartCompound cartCompound = new CartCompound(smiles, name, compoundId)
+        CartCompound cartCompound = new CartCompound(smiles, name, compoundId, 0, 0)
         cartCompound.validate()
 
         then:
@@ -161,7 +161,7 @@ class CartCompoundUnitSpec extends Specification {
         String truncatedName = StringUtils.abbreviate(name, CartCompound.MAXIMUM_NAME_FIELD_LENGTH)
 
         when:
-        CartCompound cartCompound = new CartCompound(smiles, name, compoundId)
+        CartCompound cartCompound = new CartCompound(smiles, name, compoundId, 0, 0)
         cartCompound.validate()
 
         then:

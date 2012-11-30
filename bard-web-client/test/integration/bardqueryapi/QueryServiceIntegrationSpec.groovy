@@ -119,8 +119,6 @@ class QueryServiceIntegrationSpec extends IntegrationSpec {
         final List<CompoundAdapter> compoundAdapters = compoundAdapterMap.compoundAdapters
         assert compoundAdapters
         assert numberOfCompounds == compoundAdapters.size()
-//        and:
-//        assert compoundAdapterMap.facets
         and:
         assert compoundAdapterMap.nHits > 0
 
@@ -171,9 +169,6 @@ class QueryServiceIntegrationSpec extends IntegrationSpec {
         "ions 2"                         | StructureSearchParams.Type.Substructure | "[Cl-][Ca++][Cl-]"        | 0    | 2   | 0
         "with H"                         | StructureSearchParams.Type.Substructure | "C[C@H](N)C=C"            | 0    | 2   | 2
         "without H"                      | StructureSearchParams.Type.Substructure | "CC[C@@](C)(N)C=C"        | 0    | 2   | 2
-
-        //  "ions 1"                         | StructureSearchParams.Type.Substructure | "[O-]c1ccccc1"            | 0    | 2   | 2
-        //"isotopes"                       | StructureSearchParams.Type.Substructure | "C[14C]C"                 | 0    | 2   | 0
 
 
     }
