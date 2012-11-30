@@ -1,11 +1,9 @@
 package bard.db.experiment
 
+import bard.db.model.AbstractContextItemConstraintUnitSpec
 import grails.buildtestdata.mixin.Build
 import org.junit.Before
-
 import spock.lang.Unroll
-
-import bard.db.model.AbstractContextItemConstraintUnitSpec
 
 /**
  * Created with IntelliJ IDEA.

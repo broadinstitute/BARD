@@ -1,5 +1,6 @@
 package bard.db.model
 
+import bard.db.dictionary.Element
 import org.junit.Before
 import spock.lang.Specification
 import spock.lang.Unroll
@@ -22,6 +23,67 @@ abstract class AbstractContextItemConstraintUnitSpec extends Specification {
 
     @Before
     abstract void doSetup()
+
+    void "test attributeElement constraints #desc"() {
+        final String field = 'attributeElement'
+
+        when:
+        domainInstance[(field)] = valueUnderTest.call()
+        domainInstance.validate()
+
+        then:
+        assertFieldValidationExpectations(domainInstance, field, valid, errorCode)
+
+        where:
+        desc                     | valueUnderTest    | valid | errorCode
+        'null is not valid'      | {null}            | false | 'nullable'
+        'valid attributeElement' | {Element.build()} | true  | null
+
+    }
+
+    void "test valueElement constraints #desc"() {
+
+        final String field = 'valueElement'
+
+        when:
+        domainInstance[(field)] = valueUnderTest.call()
+        domainInstance.validate()
+
+        then:
+        assertFieldValidationExpectations(domainInstance, field, valid, errorCode)
+
+        where:
+        desc                 | valueUnderTest    | valid | errorCode
+        'null is valid'      | {null}            | true  | null
+        'valid valueElement' | {Element.build()} | true  | null
+
+    }
+
+    void "test extValueId constraints #desc extValueId: '#valueUnderTest'"() {
+
+        final String field = 'extValueId'
+
+        when: 'a value is set for the field under test'
+        domainInstance[(field)] = valueUnderTest
+        domainInstance.validate()
+
+        then: 'verify valid or invalid for expected reason'
+        assertFieldValidationExpectations(domainInstance, field, valid, errorCode)
+
+        and: 'verify the domainspreadsheetmapping can be persisted to the db'
+        if (valid) {
+            domainInstance == domainInstance.save(flush: true)
+        }
+
+        where:
+        desc               | valueUnderTest                          | valid | errorCode
+        'too long'         | createString(EXT_VALUE_ID_MAX_SIZE + 1) | false | 'maxSize.exceeded'
+        'blank valid'      | ''                                      | false | 'blank'
+        'blank valid'      | '  '                                    | false | 'blank'
+
+        'exactly at limit' | createString(EXT_VALUE_ID_MAX_SIZE)     | true  | null
+        'null valid'       | null                                    | true  | null
+    }
 
     void "test qualifier constraints #desc qualifier: '#valueUnderTest'"() {
 
@@ -58,32 +120,7 @@ abstract class AbstractContextItemConstraintUnitSpec extends Specification {
 
     }
 
-    void "test extValueId constraints #desc extValueId: '#valueUnderTest'"() {
-
-        final String field = 'extValueId'
-
-        when: 'a value is set for the field under test'
-        domainInstance[(field)] = valueUnderTest
-        domainInstance.validate()
-
-        then: 'verify valid or invalid for expected reason'
-        assertFieldValidationExpectations(domainInstance, field, valid, errorCode)
-
-        and: 'verify the domainspreadsheetmapping can be persisted to the db'
-        if (valid) {
-            domainInstance == domainInstance.save(flush: true)
-        }
-
-        where:
-        desc               | valueUnderTest                          | valid | errorCode
-        'too long'         | createString(EXT_VALUE_ID_MAX_SIZE + 1) | false | 'maxSize.exceeded'
-        'blank valid'      | ''                                      | false | 'blank'
-        'blank valid'      | '  '                                    | false | 'blank'
-
-        'exactly at limit' | createString(EXT_VALUE_ID_MAX_SIZE)     | true  | null
-        'null valid'       | null                                    | true  | null
-    }
-
+    //TODO value num, value min, value max
     void "test valueDisplay constraints #desc valueDisplay: '#valueUnderTest'"() {
 
         final String field = 'valueDisplay'
