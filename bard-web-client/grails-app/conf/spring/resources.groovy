@@ -30,13 +30,13 @@ beans = {
         baseUrl = ncgcBaseURL
         restTemplate = ref('restTemplate')
     }
-    restCombinedService(RestCombinedService){
+    restCombinedService(RestCombinedService) {
         baseUrl = ncgcBaseURL
         restTemplate = ref('restTemplate')
-        experimentRestService=ref('experimentRestService')
-        compoundRestService=ref('compoundRestService')
-        assayRestService=ref('assayRestService')
-        projectRestService=ref('projectRestService')
+        experimentRestService = ref('experimentRestService')
+        compoundRestService = ref('compoundRestService')
+        assayRestService = ref('assayRestService')
+        projectRestService = ref('projectRestService')
     }
 
     compoundRestService(CompoundRestService) {
@@ -77,7 +77,7 @@ beans = {
                 compoundRestService = ref('compoundRestService')
                 projectRestService = ref('projectRestService')
                 assayRestService = ref('assayRestService')
-                restCombinedService=ref('restCombinedService')
+                restCombinedService = ref('restCombinedService')
             }
     }
     crowdAuthenticationProvider(org.broadinstitute.cbip.crowd.CrowdAuthenticationProviderService) {// beans here

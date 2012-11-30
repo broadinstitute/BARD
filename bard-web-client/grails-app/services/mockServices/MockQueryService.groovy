@@ -16,21 +16,20 @@ import bard.core.interfaces.*
 class MockQueryService implements IQueryService {
     QueryHelperService queryHelperService
 
-    static final Map<Long, MockCompoundAdapter> mockCompoundAdapterMap = [:]
+    final Map<Long, MockCompoundAdapter> mockCompoundAdapterMap = [:]
 
-    static final Map<Long, MockAssayAdapter> mockAssayAdapterMap = [:]
+    final Map<Long, MockAssayAdapter> mockAssayAdapterMap = [:]
 
-    static final Map<Long, MockProjectAdapter> mockProjectAdapterMap = [:]
+    final Map<Long, MockProjectAdapter> mockProjectAdapterMap = [:]
 
-    static final Map<Long, MockExperiment> mockExperimentMap = [:]
+    final Map<Long, MockExperiment> mockExperimentMap = [:]
 
-    static {
+    public MockQueryService() {
         constructMockCompoundAdapter()
         constructMockAssayAdapter()
         constructMockProjectAdapter()
         constructMockExperiment()
     }
-
     /**
      *
      * @param compound
@@ -59,9 +58,9 @@ class MockQueryService implements IQueryService {
     Map findCompoundsByTextSearch(final String searchString, final Integer top = 10, final Integer skip = 0, final List<SearchFilter> searchFilters = []) {
         final List<CompoundAdapter> foundCompoundAdapters = []
 
-        Set<Long> keySet = MockQueryService.mockCompoundAdapterMap.keySet()
+        Set<Long> keySet = mockCompoundAdapterMap.keySet()
         for (Long key : keySet) {
-            foundCompoundAdapters.add((MockCompoundAdapter) MockQueryService.mockCompoundAdapterMap.get(key))
+            foundCompoundAdapters.add((MockCompoundAdapter)mockCompoundAdapterMap.get(key))
         }
         Collection<Value> facets = []
         return [compoundAdapters: foundCompoundAdapters, facets: facets, nHits: 3]
@@ -80,9 +79,9 @@ class MockQueryService implements IQueryService {
         final List<AssayAdapter> foundAssayAdapters = []
         Collection<Value> facets = []
 
-        Set<Long> keySet = MockQueryService.mockAssayAdapterMap.keySet()
+        Set<Long> keySet = mockAssayAdapterMap.keySet()
         for (Long key : keySet) {
-            foundAssayAdapters.add(MockQueryService.mockAssayAdapterMap.get(key))
+            foundAssayAdapters.add(mockAssayAdapterMap.get(key))
         }
         int nhits = foundAssayAdapters.size()
         return [assayAdapters: foundAssayAdapters, facets: facets, nHits: nhits]
@@ -100,9 +99,9 @@ class MockQueryService implements IQueryService {
         List<ProjectAdapter> foundProjectAdapters = []
         Collection<Value> facets = []
 
-        Set<Long> keySet = MockQueryService.mockProjectAdapterMap.keySet()
+        Set<Long> keySet = mockProjectAdapterMap.keySet()
         for (Long key : keySet) {
-            foundProjectAdapters.add(MockQueryService.mockProjectAdapterMap.get(key))
+            foundProjectAdapters.add(mockProjectAdapterMap.get(key))
         }
         int nhits = foundProjectAdapters.size()
         return [projectAdapters: foundProjectAdapters, facets: facets, nHits: nhits]
@@ -157,7 +156,7 @@ class MockQueryService implements IQueryService {
      */
     CompoundAdapter showCompound(final Long compoundId) {
 
-        return MockQueryService.mockCompoundAdapterMap.get(compoundId)
+        return mockCompoundAdapterMap.get(compoundId)
     }
 
     /**
@@ -167,7 +166,7 @@ class MockQueryService implements IQueryService {
      */
     Map showAssay(final Long assayId) {
 
-        return MockQueryService.mockAssayAdapterMap.get(assayId)
+        return mockAssayAdapterMap.get(assayId)
     }
     /**
      * Given a projectId, get detailed Project information from the JDO
@@ -175,12 +174,12 @@ class MockQueryService implements IQueryService {
      * @return ProjectAdapter
      */
     Map showProject(final Long projectId) {
-        return [projectAdapter: MockQueryService.mockProjectAdapterMap.get(projectId),
+        return [projectAdapter: mockProjectAdapterMap.get(projectId),
                 experiments: mockExperimentMap.values(),
                 assays: [
-                        MockQueryService.mockAssayAdapterMap.get(588636 as Long),
-                        MockQueryService.mockAssayAdapterMap.get(449731 as Long),
-                        MockQueryService.mockAssayAdapterMap.get(588623 as Long)]
+                        mockAssayAdapterMap.get(588636 as Long),
+                        mockAssayAdapterMap.get(449731 as Long),
+                        mockAssayAdapterMap.get(588623 as Long)]
         ]
     }
 
@@ -193,12 +192,13 @@ class MockQueryService implements IQueryService {
     public List<Map<String, String>> autoComplete(final String term) {
 
         //the number of items to retrieve per category
-        final Map<String, List<String>> autoSuggestResponseFromJDO = ["gobp_term":
-                [
-                        "DNA repair",
-                        "DNA fragmentation involved in apoptotic nuclear change",
-                        "DNA damage response, signal transduction by p53 class mediator resulting in cell cycle arrest"
-                ],
+        final Map<String, List<String>> autoSuggestResponseFromJDO = [
+                "gobp_term":
+                        [
+                                "DNA repair",
+                                "DNA fragmentation involved in apoptotic nuclear change",
+                                "DNA damage response, signal transduction by p53 class mediator resulting in cell cycle arrest"
+                        ],
                 "target_name":
                         [
                                 "DNA dC->dU-editing enzyme APOBEC-3G",
@@ -215,6 +215,7 @@ class MockQueryService implements IQueryService {
         final List<Map<String, String>> autoSuggestTerms = this.queryHelperService.autoComplete(term, autoSuggestResponseFromJDO)
         return autoSuggestTerms
     }
+
     /**
      * Extract filters from the search string if any
      * @return list of filters from search String
@@ -223,7 +224,7 @@ class MockQueryService implements IQueryService {
         queryHelperService.findFiltersInSearchBox(searchFilters, searchString)
     }
 
-    private static void constructMockAssayAdapter() {
+    private void constructMockAssayAdapter() {
 
         MockAssayAdapter mockAssayAdapter = new MockAssayAdapter()
 
@@ -253,7 +254,7 @@ class MockQueryService implements IQueryService {
 
     }
 
-    private static void constructMockProjectAdapter() {
+    private void constructMockProjectAdapter() {
         MockProjectAdapter mockProjectAdapter = new MockProjectAdapter()
         Long projectId = new Long(2324)
         mockProjectAdapter.id = projectId
@@ -304,7 +305,7 @@ protection of diseased and normal cells, respectively. This assay will summarize
 
     }
 
-    private static void constructMockCompoundAdapter() {
+    private void constructMockCompoundAdapter() {
         MockCompoundAdapter compoundAdapter = new MockCompoundAdapter()
         compoundAdapter.pubChemCID = 2722
         compoundAdapter.structureSMILES = "OC1=C(Cl)C=C(Cl)C2=C1N=CC=C2"
@@ -327,7 +328,7 @@ protection of diseased and normal cells, respectively. This assay will summarize
         mockCompoundAdapterMap.put(compoundAdapter.pubChemCID, compoundAdapter)
     }
 
-    private static void constructMockExperiment() {
+    private void constructMockExperiment() {
         MockExperiment mockedExperiment = new MockExperiment()
         mockedExperiment.exptId = 1904
         mockedExperiment.type = 2

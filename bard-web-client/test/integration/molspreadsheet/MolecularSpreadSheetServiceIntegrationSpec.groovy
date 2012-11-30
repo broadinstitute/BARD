@@ -19,7 +19,6 @@ import querycart.QueryCartService
 import spock.lang.Unroll
 
 import static junit.framework.Assert.assertNotNull
-import spock.lang.IgnoreRest
 
 @Unroll
 class MolecularSpreadSheetServiceIntegrationSpec extends IntegrationSpec {
@@ -505,27 +504,6 @@ class MolecularSpreadSheetServiceIntegrationSpec extends IntegrationSpec {
 
     }
 
-//    void "test assay to experiment mapping"(){
-//        given:
-//        Long assayId = 1326L
-//        Assay assayOriginatingFromScalarId =  queryServiceWrapper.getRestAssayService().get( assayId )
-//        and:
-//        List<Long> assayListWithOneId = [1326L]
-//        Collection<Assay> assaysFromListWithOneId = queryServiceWrapper.getRestAssayService().get( assayListWithOneId)
-//        assert assaysFromListWithOneId.size()==1
-//        Assay assayOriginatingFromIdsInAList = assaysFromListWithOneId[0]
-//        when:
-//        Collection<Experiment> experiments1 = assayOriginatingFromIdsInAList.getExperiments()
-//        Collection<Experiment> experiments2 = assayOriginatingFromScalarId.getExperiments()
-//        println experiments2.getClass().name
-//            then:
-//        if ((experiments1.size()==1)   && (experiments2.size()==1)) {
-//            assert experiments1.iterator().next() ==  experiments2.iterator().next()
-//        }
-//        else
-//            assert true
-//    }
-
     void "test retrieve single value"() {
         given: "That we have created"
         Long experimentId = new Long(883)
@@ -538,7 +516,6 @@ class MolecularSpreadSheetServiceIntegrationSpec extends IntegrationSpec {
         assertNotNull eiter
         assert eiter.activities
         Activity value = eiter.activities.get(0)
-        //final List<SpreadSheetActivity> activities = experiment.
         then: "We expect experiments for each of the assays to be found"
         assert value
     }
