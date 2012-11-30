@@ -1,12 +1,13 @@
 package bard.db.model
 
 import grails.plugin.spock.IntegrationSpec
+import org.junit.After
 import org.junit.Before
+import spock.lang.Unroll
 
 import static bard.db.model.AbstractContext.*
 import static test.TestUtils.assertFieldValidationExpectations
 import static test.TestUtils.createString
-import spock.lang.Unroll
 
 /**
  * Created with IntelliJ IDEA.
@@ -23,6 +24,13 @@ abstract class AbstractContextConstraintIntegrationSpec extends IntegrationSpec 
     @Before
     abstract void doSetup()
 
+    @After
+    void doAfter() {
+        if (domainInstance.validate()) {
+            domainInstance.save(flush: true)
+        }
+    }
+
     void "test contextName constraints #desc contextName: '#valueUnderTest'"() {
         final String field = 'contextName'
 
@@ -32,11 +40,6 @@ abstract class AbstractContextConstraintIntegrationSpec extends IntegrationSpec 
 
         then: 'verify valid or invalid for expected reason'
         assertFieldValidationExpectations(domainInstance, field, valid, errorCode)
-
-        and: 'verify the domainspreadsheetmapping can be persisted to the db'
-        if (valid) {
-            domainInstance == domainInstance.save(flush: true)
-        }
 
         where:
         desc               | valueUnderTest                          | valid | errorCode
@@ -58,11 +61,6 @@ abstract class AbstractContextConstraintIntegrationSpec extends IntegrationSpec 
 
         then: 'verify valid or invalid for expected reason'
         assertFieldValidationExpectations(domainInstance, field, valid, errorCode)
-
-        and: 'verify the domainspreadsheetmapping can be persisted to the db'
-        if (valid) {
-            domainInstance == domainInstance.save(flush: true)
-        }
 
         where:
         desc               | valueUnderTest                           | valid | errorCode
@@ -86,11 +84,6 @@ abstract class AbstractContextConstraintIntegrationSpec extends IntegrationSpec 
         then: 'verify valid or invalid for expected reason'
         assertFieldValidationExpectations(domainInstance, field, valid, errorCode)
 
-        and: 'verify the domainspreadsheetmapping can be persisted to the db'
-        if (valid) {
-            domainInstance == domainInstance.save(flush: true)
-        }
-
         where:
         desc               | valueUnderTest                         | valid | errorCode
         'too long'         | createString(MODIFIED_BY_MAX_SIZE + 1) | false | 'maxSize.exceeded'
@@ -111,11 +104,6 @@ abstract class AbstractContextConstraintIntegrationSpec extends IntegrationSpec 
         then: 'verify valid or invalid for expected reason'
         assertFieldValidationExpectations(domainInstance, field, valid, errorCode)
 
-        and: 'verify the domainspreadsheetmapping can be persisted to the db'
-        if (valid) {
-            domainInstance == domainInstance.save(flush: true)
-        }
-
         where:
         desc             | valueUnderTest | valid | errorCode
         'null not valid' | null           | false | 'nullable'
@@ -131,11 +119,6 @@ abstract class AbstractContextConstraintIntegrationSpec extends IntegrationSpec 
 
         then: 'verify valid or invalid for expected reason'
         assertFieldValidationExpectations(domainInstance, field, valid, errorCode)
-
-        and: 'verify the domainspreadsheetmapping can be persisted to the db'
-        if (valid) {
-            domainInstance == domainInstance.save(flush: true)
-        }
 
         where:
         desc         | valueUnderTest | valid | errorCode

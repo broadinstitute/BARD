@@ -22,11 +22,14 @@ class ProjectExperiment {
     Date lastUpdated
     String modifiedBy
 
+    List<ProjectExperimentContext> projectExperimentContexts = []
+
+    static hasMany = [projectExperimentContexts: ProjectExperimentContext]
+
     static constraints = {
         experiment()
         project()
         stage(nullable: true)
-
 
         dateCreated(nullable: false)
         lastUpdated(nullable: true)
@@ -34,5 +37,6 @@ class ProjectExperiment {
     }
     static mapping = {
         id(column: "PROJECT_EXPERIMENT_ID", generator: "sequence", params: [sequence: 'PROJECT_EXPERIMENT_ID_SEQ'])
+        projectExperimentContexts(indexColumn: [name: 'DISPLAY_ORDER'], lazy: 'false')
     }
 }
