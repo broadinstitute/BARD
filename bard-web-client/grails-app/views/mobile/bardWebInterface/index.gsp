@@ -40,9 +40,15 @@
                        value="${flash.searchString ?: params?.searchString}"/>
             </div>
 
-            <button value="Search" name="search" data-theme="b" type="submit" class="ui-btn-hidden" aria-disabled="false" data-inline="true" data-theme="b">Submit</button>
+            <button value="Search" name="search" data-theme="b" type="submit" class="ui-btn-hidden"
+                    aria-disabled="false" data-inline="true" data-theme="b">Submit</button>
 
         </g:form>
+        <div>
+            <g:link controller="bardWebInterface" action="turnoffMobileExperience">
+                <g:message code="mobile.disable.experience" default="Switch to the regular website"/>
+            </g:link>
+        </div>
     </div><!-- /content -->
 </div><!-- /page -->
 <r:layoutResources/>

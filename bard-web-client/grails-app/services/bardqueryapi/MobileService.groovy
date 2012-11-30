@@ -11,6 +11,9 @@ class MobileService {
 
     Boolean detect(request) {
 
+        if (request.session.'mobileExperienceDisabled') {
+            return false
+        }
 
         if (SpringSecurityUtils.ifAnyGranted('ROLE_MOBILE')) {
             return true

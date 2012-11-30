@@ -42,7 +42,7 @@ class BardWebInterfaceController {
     }
 
     def index() {
-
+        println('in index')
     }
 
     def search() {
@@ -414,6 +414,11 @@ class BardWebInterfaceController {
             return response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR.intValue(),
                     "AutoComplete encoutered an error :\n${exp.message}")
         }
+    }
+
+    def turnoffMobileExperience() {
+        session.putValue('mobileExperienceDisabled', true)
+        redirect(action: 'index')
     }
 }
 /**
