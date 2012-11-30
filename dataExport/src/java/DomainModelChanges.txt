@@ -1,106 +1,116 @@
+****************************************************************************************************************
+* dictionarySchema.xsd Related changes
+****************************************************************************************************************
+Element
+    xsd - removed attribute /element@unit, this will now be expressed as a link
+
+****************************************************************************************************************
+* assaySchema.xsd Related changes
+****************************************************************************************************************
+
 Assay
-    assayTitle --> assayShortName
-    xsd -- assay no longer has direct association to assayContextItems, all assayContextItems under a given assayContext
-    xsd - removed assayDocuments element, assay documents will be in links element
-AssayContext
+    xsd - renamed /assay/assayTitle --> /assay/assayShortName
+    xsd - moved /assay/assayContextItems
+          to    /assay/assayContexts/assayContext/assayContextItems
+          assay no longer has direct association to assayContextItems,
+          all assayContextItems under a given assayContext
+    xsd - removed element /assay/assayDocuments
+          assay documents will be in links element
+         NOTE: this removes the document title so you will need to follow the link to
+               get the title
+               Is this ok?
+
+AssayContext ( extends AbstractContextType )
+    /assay/assayContexts/assayContext
     xsd - added attribute assayContextId
-    xsd - added new context_group
-    xsd - added display_order
-    xsd - optional measureRefs with 1 to many measureRef elements
-AssayContextItem
-    xsd - added displayOrder as attribute 
+    xsd - added new optional contextGroup
+    xsd - added required displayOrder
+    xsd - added optional measureRefs with 1 to many measureRef elements
+AssayContextItem (extends abstractContextItemType )
+    /assay/assayContexts/assayContext/assayContextItems/assayContextItem
+    xsd - added displayOrder as attribute
     xsd - removed attribute assayContextRef
     xsd - added assayContextItemId
 Measure
-    xsd - attribute assayContextRef eliminated
-    xsd - attribute added measureId 
+    xsd - removed attribute assayContextRef
+    xsd - added attribute measureId
     xsd - renamed entityUnit to entityUnitRef
     xsd - add statsModifierRef to Element
-    xsd - attribute parentMeasure renamed to parentMeasureRef, this is optional
+    xsd - renamed attribute parentMeasure to parentMeasureRef, this is optional
 
+****************************************************************************************************************
+* experimentSchema.xsd Related changes
+****************************************************************************************************************
 
 Experiment
-    xsd - changed experimentName from attribute to element
-    xsd - removed experimentContextItems
-    xsd - removed project steps 
-    xsd - removed externalReferences, will be converted to links with External Reference becoming top level resource
-    TODO implement or discuss Experiment measures
+    xsd - moved /experiment/experimentName from attribute to element
+ExperimentContext ( extends AbstractContextType )
+    xsd - added /experiment/experimentContexts
+    xsd - added /experiment/experimentContexts/experimentContext ( extends an abstractContextType )
 
+ExperimentContextItem ( extends AbstractContextItemType )
+    xsd - moved /experiment/experimentContextItems to
+                /experiment/experimentContexts/experimentContext/experimentContextItems (extends abstractContextItemType )
+                ( just like assayContext and assayContextItem )
+    xsd - removed project steps
+    xsd - removed externalReferences, will be converted to links with External Reference becoming top level resource
+    // Experiment measures will be introduced soon, not there currently
+    // linking to Projexts will be updated with new changes around ProjectExperiment and ProjectStep
+
+    Is the Experiment Resource actively being used?
+
+
+****************************************************************************************************************
+* externalReferenceSchema.xsd Related changes
+****************************************************************************************************************
+
+ExternalSystems
+    xsd - added /externalSystems/externalSystem
+
+ExternalResources
+    xsd - added /externalResources/externalResource
+
+
+    Note: Both are now top level resources that will be linked to,
+          externalReferences are linked to by Projects and Experiments
+
+
+****************************************************************************************************************
+* projectSchema.xsd Related changes
+****************************************************************************************************************
 
 Projects
     xsd - Now lists a list of linked Project's just like Assays
         - This is because projects have too many elements now
-          and the potential exists that we may have to add
+          and the potential exists that we may have to addd
 	    paging.
+	// TODO confirm
+	xsd - removed /project/projectDocuments elements, assay documents will be in links element
 Project
-    xsd - removed ProjectContextItem
-    xsd - added Project Context
+    xsd - moved /project/projectContextItems
+              to /project/projectContexts/projectContext/projectContextItems
+    xsd - added /project/projectContexts/projextContext ( extends an abstractContextType )
     xsd - added Project Documents
     xsd - added links for external references
-    
+
+// Some addition Changes coming, namely ProjectSteps no longer directly associated with projects
+// a new concept of ProjectExperiment links projects and experiments, projectExperiments are linked together with
+// ProjectSteps to provide some ordering/sequencing to experiments within a project, not available yet
+//
 Project Step
     xsd - addeed experimentRef
     xsd - added proceedingExperimentRef
     xsd - removed links
     xsd - added step Contexts
-
 StepContext
     xsd - ( just like assay context and projext context )
     xsd  - step contexts have stepcontextitem
 
-Dictionary:
-Element
-    xsd - removed attribute unit, this will know be expressed as a link
 
 
-TODO//
-should add project Document mime type
-model External System and External Reference as a resource
 
-
-Dictionary:
-Element change unit from string to fk
-
-Project Info:
-add project document ( refactor code for assayDocument )
-add / refactor for Step_context and project_context
-add / refactor for Step_context_item and project_context_item ( same as assay context except for owning fk and attribute_type )
-
+// TODO  finish impl for Results
 Results Info
 add Experiment Context and ExperimentContextItem
-add Project Context and ProjectContextItem
 refactor around Rslt_context_item
-
-Potentially deffer or lower priority
-
-add Experiment Context and ExperimentContextItem
-refactor around Rslt_context_item
-
-Reasoning NCGC is not pulling, Results yet.
-
- 
-AbstractContext
-  AssayContext
-  ExperimentContext
-  ProjectContext
-  StepContext
-
-AbstractContextItem
-  AssayContextItem
-  ExperimentContextItem
-  ResultContextItem
-  ProjectContextItem
-  StepContextItem
-
-Questions
-
-Project_Step
-Experiment_ID is not nullable but cardinality notation indicates Experiment is optional, this is inconsistant.  Should Experiment be optional?
-Should Project.projectSteps be a list? or should the projectSteps have some ordering?  Currently what should we order on?
-
-
-Should replicateNumber be null or >= 0
-
-are there any constraints on valueNum, valueMin, and valueMax and valudeDisplay
-
-Should AssayContextMeasure constraint that Measure.assay and AssayContext.assay be the same Assay
+deferred with the thought that NCGC is not pulling, Results yet.
