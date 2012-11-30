@@ -5,20 +5,25 @@ CREATE OR REPLACE PROCEDURE update_context_name
 AS
      CURSOR cur_assay_context (cn_assay_id IN NUMBER)
      IS
-     SELECT ac.assay_id,
+     SELECT grp_attr.assay_id,
+      grp_attr.assay_context_id,
+      Sum(grp_attr.aci_count) aci_count,
+      LISTAGG(grp_attr.ATTRIBUTE, ';') WITHIN GROUP (ORDER BY grp_attr.ATTRIBUTE) attributes
+FROM (SELECT ac.assay_id,
             ac.assay_context_id,
-            Count(*) aci_count,
-            LISTAGG(e.label, ';') WITHIN GROUP (ORDER BY aci.display_order) attributes
-     FROM assay_context ac,
+            e.label attribute,
+            Count(*) aci_count
+      FROM assay_context ac,
           assay_context_item aci,
           element e
-     WHERE aci.assay_context_id = ac.assay_context_id
-       AND e.element_id = aci.attribute_id
-       AND (ac.assay_id = cn_assay_id
-          OR
-           cn_assay_id IS NULL)
-     GROUP BY ac.assay_id,
-            ac.assay_context_id;
+      WHERE aci.assay_context_id = ac.assay_context_id
+        AND e.element_id = aci.attribute_id
+        AND ac.assay_id = Nvl(cn_assay_id, ac.assay_id)
+      GROUP BY ac.assay_id,
+            ac.assay_context_id,
+            e.label) grp_attr
+GROUP BY grp_attr.assay_id,
+      grp_attr.assay_context_id;
 
     lv_context_name  element.label%TYPE;
 

@@ -603,69 +603,69 @@ END reset_sequence;
                 FROM data_mig.exprmt_context
                 WHERE experiment_id = rec_experiment.experiment_id;
 
-                INSERT INTO exprmt_measure
-                    (exprmt_measure_id,
-                    experiment_id,
-                    measure_id,
-                    parent_exprmt_measure_id,
-                    parent_child_relationship,
-                    version,
-                    date_created,
-                    last_updated,
-                    modified_by
-                    )
-                SELECT exprmt_measure_id,
-                    experiment_id,
-                    measure_id,
-                    parent_exprmt_measure_id,
-                    parent_child_relationship,
-                    version,
-                    date_created,
-                    last_updated,
-                    modified_by
-                FROM data_mig.exprmt_measure
-                WHERE experiment_id = rec_experiment.experiment_id
-                ORDER BY Nvl(parent_exprmt_measure_id, 0);
+--                INSERT INTO exprmt_measure
+--                    (exprmt_measure_id,
+--                    experiment_id,
+--                    measure_id,
+--                    parent_exprmt_measure_id,
+--                    parent_child_relationship,
+--                    version,
+--                    date_created,
+--                    last_updated,
+--                    modified_by
+--                    )
+--                SELECT exprmt_measure_id,
+--                    experiment_id,
+--                    measure_id,
+--                    parent_exprmt_measure_id,
+--                    parent_child_relationship,
+--                    version,
+--                    date_created,
+--                    last_updated,
+--                    modified_by
+--                FROM data_mig.exprmt_measure
+--                WHERE experiment_id = rec_experiment.experiment_id
+--                ORDER BY Nvl(parent_exprmt_measure_id, 0);
 
-                insert into project
-                select PROJECT_ID,
-                    PROJECT_NAME,
-                    GROUP_TYPE,
-                    DESCRIPTION,
-                    READY_FOR_EXTRACTION,
-                    VERSION,
-                    DATE_CREATED,
-                    LAST_UPDATED,
-                    MODIFIED_BY
-                from data_mig.project dp
-                where project_id in
-                    (select project_id from data_mig.project_experiment
-                     where experiment_id = rec_experiment.experiment_id)
-                 and not exists (select 1 from project p
-                            where p.project_id = dp.project_id);
+--                insert into project
+--                select PROJECT_ID,
+--                    PROJECT_NAME,
+--                    GROUP_TYPE,
+--                    DESCRIPTION,
+--                    READY_FOR_EXTRACTION,
+--                    VERSION,
+--                    DATE_CREATED,
+--                    LAST_UPDATED,
+--                    MODIFIED_BY
+--                from data_mig.project dp
+--                where project_id in
+--                    (select project_id from data_mig.project_experiment
+--                     where experiment_id = rec_experiment.experiment_id)
+--                 and not exists (select 1 from project p
+--                            where p.project_id = dp.project_id);
 
-                insert into project_experiment
-                    (PROJECT_EXPERIMENT_ID,
-                    PROJECT_ID,
-                    EXPERIMENT_ID,
-                    STAGE_ID,
-                    VERSION,
-                    DATE_CREATED,
-                    LAST_UPDATED,
-                    MODIFIED_BY)
-                select PROJECT_EXPERIMENT_ID,
-                    PROJECT_ID,
-                    EXPERIMENT_ID,
-                    STAGE_ID,
-                    VERSION,
-                    DATE_CREATED,
-                    LAST_UPDATED,
-                    MODIFIED_BY
-                from data_mig.project_EXPERIMENT pe
-                where experiment_id = rec_experiment.experiment_id
-                  AND NOT EXISTS (SELECT 1
-                          FROM project_EXPERIMENT ps
-                          WHERE ps.project_experiment_id = pe.project_experiment_id);
+--                insert into project_experiment
+--                    (PROJECT_EXPERIMENT_ID,
+--                    PROJECT_ID,
+--                    EXPERIMENT_ID,
+--                    STAGE_ID,
+--                    VERSION,
+--                    DATE_CREATED,
+--                    LAST_UPDATED,
+--                    MODIFIED_BY)
+--                select PROJECT_EXPERIMENT_ID,
+--                    PROJECT_ID,
+--                    EXPERIMENT_ID,
+--                    STAGE_ID,
+--                    VERSION,
+--                    DATE_CREATED,
+--                    LAST_UPDATED,
+--                    MODIFIED_BY
+--                from data_mig.project_EXPERIMENT pe
+--                where experiment_id = rec_experiment.experiment_id
+--                  AND NOT EXISTS (SELECT 1
+--                          FROM project_EXPERIMENT ps
+--                          WHERE ps.project_experiment_id = pe.project_experiment_id);
 
                 -- assumes all the external systems have been loaded (see load_reference)
                 insert into external_reference
@@ -751,34 +751,43 @@ END reset_sequence;
 
         END IF;
 
-        INSERT INTO project_step
-               (project_step_id,
-                next_project_experiment_id,
-                prev_project_experiment_id,
-                edge_name,
-                version,
-                date_created,
-                last_updated,
-                modified_by)
-        SELECT  project_step_id,
-                next_project_experiment_id,
-                prev_project_experiment_id,
-                edge_name,
-                version,
-                date_created,
-                last_updated,
-                modified_by
-        FROM data_mig.project_step ps
-        WHERE EXISTS (SELECT 1
-            FROM project_experiment pe
-            WHERE ps.next_project_experiment_id = pe.project_experiment_id)
-         AND exists (SELECT 1
-            FROM project_experiment pe
-            WHERE ps.prev_project_experiment_id = pe.project_experiment_id)
-         AND NOT EXISTS (SELECT 1
-            from project_step ps2
-            WHERE ps2.project_step_id = ps.project_step_id);
 
+INSERT INTO project_experiment
+                   (PROJECT_EXPERIMENT_ID ,
+                    EXPERIMENT_ID,
+                    PROJECT_ID,
+                    STAGE_ID,
+                    VERSION,
+                    DATE_CREATED,
+                    LAST_UPDATED,
+                    MODIFIED_BY)
+            SELECT PROJECT_EXPERIMENT_ID_SEQ.NEXTVAL,
+                   PS.EXPERIMENT_ID,
+                   PS.PROJECT_ID,
+                   (SELECT VALUE_ID
+                      FROM data_mig.STEP_CONTEXT_ITEM SCI,
+                           data_mig.STEP_CONTEXT SC,
+                           data_mig.PROJECT_STep PS2
+                     WHERE SC.STEP_CONTEXT_ID = SCI.STEP_CONTEXT_ITEM_ID
+                       AND PS2.PROJECT_STEP_ID = SC.PROJECT_STEP_ID
+                       AND PS2.PROJECT_ID = PS.PROJECT_ID
+                       AND PS2.EXPERIMENT_ID = PS.EXPERIMENT_ID
+                       AND ATTRIBUTE_ID = 556  -- Only assay stage items transferred
+                       AND ROWNUM = 1) STAGE_ID,
+                   PS.VERSION,
+                   PS.DATE_CREATED,
+                   PS.LAST_UPDATED,
+                   SubStr(PS.MODIFIED_BY, 1, 40)
+            FROM (SELECT EXPERIMENT_ID,
+                        PROJECT_ID,
+                        Max(VERSION) VERSION,
+                        Min(DATE_CREATED) DATE_CREATED,
+                        Max(LAST_UPDATED) LAST_UPDATED,
+                        LISTAGG(MODIFIED_BY, ',') WITHIN GROUP (ORDER BY PROJECT_STEP_ID) MODIFIED_BY
+                  FROM data_mig.PROJECT_STep
+                  GROUP BY EXPERIMENT_ID,
+                        PROJECT_ID) PS
+;
 
 
         INSERT INTO assay_context_measure
@@ -905,72 +914,72 @@ END reset_sequence;
                       WHERE pc.project_context_id = dpci.project_context_id);
 
         -- insert prjct_exprmt context
-        insert into prjct_exprmt_context
-            (prjct_exprmt_CONTEXT_ID,
-            PROJECT_EXPERIMENT_ID,
-            CONTEXT_NAME,
-            CONTEXT_GROUP,
-            DISPLAY_ORDER,
-            VERSION,
-            DATE_CREATED,
-            LAST_UPDATED,
-            MODIFIED_BY)
-        select prjct_exprmt_CONTEXT_ID,
-            PROJECT_EXPERIMENT_ID,
-            CONTEXT_NAME,
-            CONTEXT_GROUP,
-            DISPLAY_ORDER,
-            VERSION,
-            DATE_CREATED,
-            LAST_UPDATED,
-            MODIFIED_BY
-        from data_mig.prjct_exprmt_context dpc
-        where EXISTS (SELECT 1
-                      FROM project_experiment p
-                      WHERE p.project_experiment_id = dpc.project_experiment_id)
-          AND NOT EXISTS (SELECT 1
-                      FROM prjct_exprmt_context pc
-                      WHERE pc.prjct_exprmt_CONTEXT_ID = dpc.prjct_exprmt_CONTEXT_ID);
+--        insert into prjct_exprmt_context
+--            (prjct_exprmt_CONTEXT_ID,
+--            PROJECT_EXPERIMENT_ID,
+--            CONTEXT_NAME,
+--            CONTEXT_GROUP,
+--            DISPLAY_ORDER,
+--            VERSION,
+--            DATE_CREATED,
+--            LAST_UPDATED,
+--            MODIFIED_BY)
+--        select prjct_exprmt_CONTEXT_ID,
+--            PROJECT_EXPERIMENT_ID,
+--            CONTEXT_NAME,
+--            CONTEXT_GROUP,
+--            DISPLAY_ORDER,
+--            VERSION,
+--            DATE_CREATED,
+--            LAST_UPDATED,
+--            MODIFIED_BY
+--        from data_mig.prjct_exprmt_context dpc
+--        where EXISTS (SELECT 1
+--                      FROM project_experiment p
+--                      WHERE p.project_experiment_id = dpc.project_experiment_id)
+--          AND NOT EXISTS (SELECT 1
+--                      FROM prjct_exprmt_context pc
+--                      WHERE pc.prjct_exprmt_CONTEXT_ID = dpc.prjct_exprmt_CONTEXT_ID);
 
-        insert into prjct_exprmt_context_item
-            (PRJCT_EXPRMT_CONTEXT_ITEM_ID,
-            PRJCT_EXPRMT_CONTEXT_ID,
-            DISPLAY_ORDER,
-            ATTRIBUTE_ID,
-            VALUE_ID,
-            EXT_VALUE_ID,
-            QUALIFIER,
-            VALUE_DISPLAY,
-            VALUE_NUM,
-            VALUE_MIN,
-            VALUE_MAX,
-            VERSION,
-            DATE_CREATED,
-            LAST_UPDATED,
-            MODIFIED_BY
-            )
-        select PRJCT_EXPRMT_CONTEXT_ITEM_ID,
-            PRJCT_EXPRMT_CONTEXT_ID,
-            DISPLAY_ORDER,
-            ATTRIBUTE_ID,
-            VALUE_ID,
-            EXT_VALUE_ID,
-            QUALIFIER,
-            VALUE_DISPLAY,
-            VALUE_NUM,
-            VALUE_MIN,
-            VALUE_MAX,
-            VERSION,
-            DATE_CREATED,
-            LAST_UPDATED,
-            MODIFIED_BY
-        from data_mig.prjct_exprmt_context_item dpci
-        where NOT EXISTS (SELECT 1
-                      FROM prjct_exprmt_context_item pci
-                      WHERE pci.PRJCT_EXPRMT_CONTEXT_ITEM_ID = dpci.PRJCT_EXPRMT_CONTEXT_ITEM_ID)
-          AND EXISTS (SELECT 1
-                      FROM prjct_exprmt_context pc
-                      WHERE pc.PRJCT_EXPRMT_CONTEXT_ID = dpci.PRJCT_EXPRMT_CONTEXT_ID);
+--        insert into prjct_exprmt_context_item
+--            (PRJCT_EXPRMT_CONTEXT_ITEM_ID,
+--            PRJCT_EXPRMT_CONTEXT_ID,
+--            DISPLAY_ORDER,
+--            ATTRIBUTE_ID,
+--            VALUE_ID,
+--            EXT_VALUE_ID,
+--            QUALIFIER,
+--            VALUE_DISPLAY,
+--            VALUE_NUM,
+--            VALUE_MIN,
+--            VALUE_MAX,
+--            VERSION,
+--            DATE_CREATED,
+--            LAST_UPDATED,
+--            MODIFIED_BY
+--            )
+--        select PRJCT_EXPRMT_CONTEXT_ITEM_ID,
+--            PRJCT_EXPRMT_CONTEXT_ID,
+--            DISPLAY_ORDER,
+--            ATTRIBUTE_ID,
+--            VALUE_ID,
+--            EXT_VALUE_ID,
+--            QUALIFIER,
+--            VALUE_DISPLAY,
+--            VALUE_NUM,
+--            VALUE_MIN,
+--            VALUE_MAX,
+--            VERSION,
+--            DATE_CREATED,
+--            LAST_UPDATED,
+--            MODIFIED_BY
+--        from data_mig.prjct_exprmt_context_item dpci
+--        where NOT EXISTS (SELECT 1
+--                      FROM prjct_exprmt_context_item pci
+--                      WHERE pci.PRJCT_EXPRMT_CONTEXT_ITEM_ID = dpci.PRJCT_EXPRMT_CONTEXT_ITEM_ID)
+--          AND EXISTS (SELECT 1
+--                      FROM prjct_exprmt_context pc
+--                      WHERE pc.PRJCT_EXPRMT_CONTEXT_ID = dpci.PRJCT_EXPRMT_CONTEXT_ID);
 
         insert into assay_context_item
             (ASSAY_CONTEXT_ITEM_ID,
