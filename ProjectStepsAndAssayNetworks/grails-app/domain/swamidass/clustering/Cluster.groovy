@@ -13,5 +13,7 @@ class Cluster {
 
     static mapping = {
         table 'cluster_tbl'
+        bundles cascade: "all-delete-orphan"
+        bundleRelations cascade: "all-delete-orphan"
     }
 }

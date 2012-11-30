@@ -1,8 +1,11 @@
 package swamidass.clustering
 
 import bard.db.registration.Assay
+import registration.AssayService
 
 class ParseSwamidassProjectsService {
+
+    AssayService assayService
 
     public void buildBundles(File projectDirectory, Cluster cluster) {
         File bundlesFile = new File(projectDirectory, 'bundles')
@@ -24,11 +27,13 @@ class ParseSwamidassProjectsService {
                     assert foundAssays.size() <= 1, "We expect one assay the most when searching by aid: ${foundAssays.dump()}"
                     if (!foundAssays) {
                         Log.logger.error("We couldn't find a matching assay for AID=${aid}")
+                        return null
                     }
                     return foundAssays.first() //and only one
                 }
-                assert assays, "We expect to have at least one valid assay in each bundle"
-                Bundle bundle = new Bundle(bid: BID, assays: assays, cluster: cluster)
+                assays.removeAll([null])//remove all the null items - the ones we couldn't find a matching Assay to an AID
+//                assert assays, "We expect to have at least one valid assay in each bundle"
+                Bundle bundle = new Bundle(bid: BID, assays: assays)
                 cluster.addToBundles(bundle)
             }
         }
@@ -45,10 +50,16 @@ class ParseSwamidassProjectsService {
                 String[] values = line.trim().split('\t')
                 assert values.size() == 4, "we must have a value in each one of the NODE/CHILD/NODE_SIZE/OVERLAP columns of the workflow.csv file"
                 Integer parentBID = new Integer(values[0].trim())
-                Integer childBID = new Integer(values[1].trim())
+                Integer childBID = null
+                if (values[1].trim().isNumber()) {
+                    childBID = new Integer(values[1].trim())
+                }
+                else {
+                    assert values[1].trim() == '?', "childBID must either be a number of '?' (a leaf node): ${values[1]}"
+                }
                 Integer parentTestedCompounds = new Integer(values[2].trim())
                 Integer parentChildOverlappingCompounds = null
-                if (values[2].trim().isNumber()) {
+                if (values[3].trim().isNumber()) {
                     parentChildOverlappingCompounds = new Integer(values[3].trim())
                 }
                 else {
@@ -57,16 +68,18 @@ class ParseSwamidassProjectsService {
 
                 //Find bundleParent and bundleChild
                 Bundle parentBundle = cluster.bundles.find {Bundle bundle ->
-                    bundle.bid = parentBID
+                    return (bundle.bid == parentBID)
                 }
                 assert parentBundle, "bundleParent must exist"
-                Bundle childBundle = cluster.bundles.find {Bundle bundle ->
-                    bundle.bid = childBID
+                Bundle childBundle
+                if (childBID) { //if childBID is '?' leave childBundle null
+                    childBundle = cluster.bundles.find {Bundle bundle ->
+                        return (bundle.bid == childBID)
+                    }
+                    assert childBundle, "bundleChild must exist"
                 }
-                assert childBundle, "bundleChild must exist"
                 //Build the BundleRelation
-                BundleRelation bundleRelation = new BundleRelation(cluster: cluster,
-                        parentBundle: parentBundle,
+                BundleRelation bundleRelation = new BundleRelation(parentBundle: parentBundle,
                         childBundle: childBundle,
                         parentTestedCompounds: parentTestedCompounds,
                         parentChildOverlappingCompounds: parentChildOverlappingCompounds)

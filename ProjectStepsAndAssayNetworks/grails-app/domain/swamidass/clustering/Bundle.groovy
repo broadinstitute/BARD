@@ -8,6 +8,8 @@ class Bundle {
     Set<Assay> assays
     Cluster cluster
 
+    static hasMany = [assays: Assay]
+
     static belongsTo = [cluster: Cluster]
 
     static constraints = {

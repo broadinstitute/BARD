@@ -13,8 +13,10 @@ assert parseSwamidassProjectsService
 
 String path = 'C:/BARD_DATA_MIGRATION/projects'
 def rootFolder = new File(path)
+Integer count=1
 
 rootFolder.eachFileRecurse(FileType.DIRECTORIES) {File projectDirectory ->
+    Log.logger.info("processing project-folder: ${projectDirectory} (${count++})")
     String clusterName = projectDirectory.name
     Cluster cluster = new Cluster(name: clusterName)
 
@@ -24,5 +26,6 @@ rootFolder.eachFileRecurse(FileType.DIRECTORIES) {File projectDirectory ->
     //Parse and build all the bundleRelarions
     parseSwamidassProjectsService.buildBundleRelations(projectDirectory, cluster)
 
-    cluster.save(failOnError: true)
+//    cluster.validate()
+    cluster.save(failOnError: true, flush: true)
 }
