@@ -45,7 +45,7 @@
 
         </g:form>
         <div>
-            <g:link controller="bardWebInterface" action="turnoffMobileExperience">
+            <g:link controller="bardWebInterface" action="turnoffMobileExperience" data-ajax="false">
                 <g:message code="mobile.disable.experience" default="Switch to the regular website"/>
             </g:link>
         </div>

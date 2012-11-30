@@ -11,6 +11,7 @@ import molspreadsheet.MolecularSpreadSheetService
 import org.apache.commons.lang.StringUtils
 
 import javax.servlet.http.HttpServletResponse
+import grails.converters.JSON
 
 /**
  *
@@ -38,11 +39,13 @@ class BardWebInterfaceController {
             if (mobileService.gspExists(newView)) {
                 modelAndView.viewName = newView
             }
+            else {
+                modelAndView.viewName = "/mobile/bardWebInterface/missingPageError"
+            }
         }
     }
 
     def index() {
-        println('in index')
     }
 
     def search() {
