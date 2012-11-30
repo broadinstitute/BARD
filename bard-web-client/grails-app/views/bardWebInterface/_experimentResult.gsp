@@ -11,7 +11,7 @@
 <p><b>Title: ${experimentDataMap?.experiment?.name}</b></p>
 
 <p><b>Assay ID : <g:link controller="bardWebInterface" action="showAssay"
-                         id="${experimentDataMap?.experiment?.assayId}" params='[searchString:"${searchString}"]'>${experimentDataMap?.experiment?.assayId}</g:link></b>
+                         id="${experimentDataMap?.experiment?.adid}" params='[searchString:"${searchString}"]'>${experimentDataMap?.experiment?.adid}</g:link></b>
 </p>
 
 <div class="row-fluid">

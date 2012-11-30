@@ -1,9 +1,8 @@
 package bard.core.rest.spring.experiment
 
-import com.fasterxml.jackson.annotation.JsonInclude
-
-import com.fasterxml.jackson.annotation.JsonProperty
 import bard.core.rest.spring.assays.Assay
+import com.fasterxml.jackson.annotation.JsonInclude
+import com.fasterxml.jackson.annotation.JsonProperty
 
 /**
  * For Show Experiment Pages/ getId pages
@@ -17,6 +16,13 @@ import bard.core.rest.spring.assays.Assay
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class ExperimentShow extends ExperimentAbstract {
+    @Override
+    public Long getAdid() {
+        if (assays) {
+            return assays.get(0).getId()
+        }
+        return null
+    }
 
     @JsonProperty("assayId")
     private List<Assay> assays = new ArrayList<Assay>();

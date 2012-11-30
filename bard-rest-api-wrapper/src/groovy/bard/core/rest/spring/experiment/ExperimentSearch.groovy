@@ -1,12 +1,17 @@
 package bard.core.rest.spring.experiment
 
-import bard.core.rest.spring.assays.Assay
 import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.annotation.JsonProperty
 
 //Results of Text Box searches
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class ExperimentSearch extends ExperimentAbstract {
+
+    @Override
+    public Long getAdid() {
+        return assayId
+    }
+
     @JsonProperty("assayId")
     private long assayId;
 
@@ -19,8 +24,10 @@ public class ExperimentSearch extends ExperimentAbstract {
     public void setAssayId(long assayId) {
         this.assayId = assayId;
     }
+
     @JsonProperty("assays")
     private long assays;
+
     @JsonProperty("assays")
     public long getAssays() {
         return assays;

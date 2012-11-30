@@ -262,5 +262,6 @@ public abstract class ExperimentAbstract {
     public int getProjectCount(){
         return projectIdList.size()
     }
+    public abstract Long getAdid();
 
 }
