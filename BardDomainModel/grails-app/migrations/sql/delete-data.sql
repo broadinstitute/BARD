@@ -23,6 +23,9 @@ delete from EXTERNAL_SYSTEM;
 delete from STEP_CONTEXT_ITEM;
 delete from STEP_CONTEXT;
 delete from PROJECT_STEP;
+delete from PRJCT_EXPRMT_CONTEXT;
+delete from PRJCT_EXPRMT_CONTEXT_ITEM;
+delete from PROJECT_EXPERIMENT;
 delete from PROJECT_DOCUMENT;
 delete from PROJECT_CONTEXT_ITEM;
 delete from PROJECT_CONTEXT;
@@ -30,6 +33,7 @@ delete from PROJECT;
 -- experiments
 delete from EXPRMT_CONTEXT_ITEM;
 delete from EXPRMT_CONTEXT;
+delete from EXPRMT_MEASURE;
 delete from EXPERIMENT;
 -- assays
 delete from ASSAY_CONTEXT_MEASURE;
