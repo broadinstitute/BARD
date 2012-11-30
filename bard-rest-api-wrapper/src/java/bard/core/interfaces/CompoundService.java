@@ -1,8 +1,7 @@
 package bard.core.interfaces;
 
-import bard.core.Assay;
 import bard.core.Compound;
-import bard.core.StructureSearchParams;
+import bard.core.rest.spring.util.StructureSearchParams;
 import bard.core.Value;
 
 import java.util.Collection;

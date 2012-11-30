@@ -1,6 +1,6 @@
 package bardqueryapi
 
-import bard.core.StructureSearchParams
+import bard.core.rest.spring.util.StructureSearchParams
 import grails.converters.JSON
 import grails.plugin.remotecontrol.RemoteControl
 import groovyx.net.http.HttpResponseDecorator

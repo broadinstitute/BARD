@@ -114,6 +114,7 @@ class MolSpreadSheetData {
                 }
             }
         }
+        //TODO: Assay Names seems to be zero in some cases. Is it possible?
         for (int i in 0..(assayNames.size()-1))  {
             returnValue << ["assayName":assayNames[i],"numberOfResultTypes":(accumulator[assayNames[i]]+1),"fullAssayName":experimentFullNameList[i]]
 

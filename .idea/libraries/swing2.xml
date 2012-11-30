@@ -1,0 +1,19 @@
+<component name="libraryTable">
+  <library name="swing2">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/bard-web-client/web-app/marvin/sjars/view/swing/viewdnd.jar!/" />
+      <root url="jar://$PROJECT_DIR$/bard-web-client/web-app/marvin/sjars/view/swing/gridbagview.jar!/" />
+      <root url="jar://$PROJECT_DIR$/bard-web-client/web-app/marvin/sjars/view/swing/mviewsketch.jar!/" />
+      <root url="jar://$PROJECT_DIR$/bard-web-client/web-app/marvin/sjars/view/swing/imageviewframe.jar!/" />
+      <root url="jar://$PROJECT_DIR$/bard-web-client/web-app/marvin/sjars/view/swing/mviewanimator.jar!/" />
+      <root url="jar://$PROJECT_DIR$/bard-web-client/web-app/marvin/sjars/view/swing/printview.jar!/" />
+      <root url="jar://$PROJECT_DIR$/bard-web-client/web-app/marvin/sjars/view/swing/showconformers.jar!/" />
+      <root url="jar://$PROJECT_DIR$/bard-web-client/web-app/marvin/sjars/view/swing/mviewframe.jar!/" />
+      <root url="jar://$PROJECT_DIR$/bard-web-client/web-app/marvin/sjars/view/swing/tableview.jar!/" />
+      <root url="jar://$PROJECT_DIR$/bard-web-client/web-app/marvin/sjars/view/swing/find.jar!/" />
+      <root url="jar://$PROJECT_DIR$/bard-web-client/web-app/marvin/sjars/view/swing/molsframe.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

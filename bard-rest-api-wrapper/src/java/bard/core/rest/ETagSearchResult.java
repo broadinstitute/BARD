@@ -17,6 +17,7 @@ public class ETagSearchResult extends SearchResultImpl<Value> {
         this.searchResults = new ArrayList<Value>();
 
     }
+    //TODO: Done
     @Override
     public ETagSearchResult build() {
         this.searchResults.clear();

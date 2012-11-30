@@ -35,7 +35,7 @@ class ExperimentalValue {
                              ExperimentalValueUnit experimentalValueUnit,
                              ExperimentalValueType experimentalValueType,
                              Boolean activity = true) {
-        this.value = value
+        this.value = value?:0.0
         this.experimentalValueUnit = experimentalValueUnit
         if (this.experimentalValueUnit==null)  {
             this.experimentalValueUnit =  ExperimentalValueUnit.unknown

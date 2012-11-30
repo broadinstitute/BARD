@@ -1,7 +1,7 @@
 package bard.core.rest;
 
 import bard.core.Compound;
-import bard.core.StructureSearchParams;
+import bard.core.rest.spring.util.StructureSearchParams;
 import bard.core.Value;
 import bard.core.interfaces.EntityService;
 

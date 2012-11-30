@@ -2,6 +2,8 @@ package bard.core
 
 import spock.lang.Specification
 import spock.lang.Unroll
+import bard.core.rest.spring.compounds.Scaffold
+import bard.core.rest.spring.compounds.WarningLevel
 
 @Unroll
 class ScaffoldUnitSpec extends Specification {

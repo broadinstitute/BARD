@@ -2,6 +2,8 @@ package bard.core
 
 import spock.lang.Specification
 import spock.lang.Unroll
+import bard.core.rest.spring.compounds.PromiscuityScore
+import bard.core.rest.spring.compounds.Scaffold
 
 @Unroll
 class PromiscuityScoreUnitSpec extends Specification {

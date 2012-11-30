@@ -3,34 +3,34 @@
 <html xmlns="http://www.w3.org/1999/html">
 <head>
     <meta name="layout" content="logoSearchCartAndFooter"/>
-    <title>BARD : Assay Definition : ADID ${assayAdapter?.assay?.id}</title>
+    <title>BARD : Assay Definition : ADID ${assayAdapter?.id}</title>
 </head>
 
 <body>
 <div class="row-fluid">
     <div class="span12 page-header">
-        <h1>Assay Definition: ${assayAdapter?.assay?.name}
-            <small>(ADID: ${assayAdapter?.assay?.id})</small>
+        <h1>Assay Definition: ${assayAdapter?.name}
+            <small>(ADID: ${assayAdapter?.id})</small>
         </h1>
 
-        <g:saveToCartButton id="${assayAdapter.assay.id}"
+        <g:saveToCartButton id="${assayAdapter.id}"
                             name="${JavaScriptUtility.cleanup(assayAdapter.name)}"
                             type="${querycart.QueryItemType.AssayDefinition}"/>
-        <a class="btn btn-mini" href="${grailsApplication.config.bard.cap.assay}${assayAdapter?.assay?.capAssayId}"
+        <a class="btn btn-mini" href="${grailsApplication.config.bard.cap.assay}${assayAdapter?.capAssayId}"
            title="Click To Edit Assay Definition In Cap" rel="tooltip">Edit in CAP</a>
     </div>
 </div>
 
 <div class="row-fluid">
     <div class="span6">
-        <g:render template="assaySummary" model="[assay:assayAdapter.assay]"/>
+        <g:render template="assaySummary" model="[assayAdapter:assayAdapter]"/>
     </div>
     <div class="span6">
         <dl>
             <dt>Associated Projects:</dt>
             <dd>
                 <ul>
-                    <g:each in="${projects}" var="project">
+                     <g:each in="${projects}" var="project">
                         <li><g:link controller="bardWebInterface" action="showProject" id="${project.id}" params='[searchString:"${searchString}"]'>${project.name} <small>(Project ID: ${project.id})</small></g:link>
                         </li>
                     </g:each>
@@ -64,10 +64,10 @@
                 <div id="assay-bio-info" class="accordion-body collapse">
                     <div class="accordion-inner">
                         <dl>
-                        <g:each in="${assayAdapter?.annotations}" var="annotation">
-                            <dt>${annotation.id}</dt>
-                            <dd>${annotation.value}</dd>
-                        </g:each>
+                        %{-- TODO: Make annother call to get annotations . KEGG Terms are available<g:each in="${assayAdapter?.annotations}" var="annotation">--}%
+                            %{--<dt>${annotation.id}</dt>--}%
+                            %{--<dd>${annotation.value}</dd>--}%
+                        %{--</g:each>--}%
                         </dl>
                     </div>
                 </div>
@@ -78,9 +78,9 @@
             <div class="accordion-heading">
                 <a href="#document-header" id="document-header" class="accordion-toggle" data-toggle="collapse"
                    data-target="#document-info"><i class="icon-chevron-right"></i> Documents
-                    <small>(${[(assayAdapter.assay.protocol ? 'protocol' : 'no protocol'),
-                            (assayAdapter.assay.description ? 'description' : 'no description'),
-                            (assayAdapter.assay.comments ? 'comments' : 'no comments')].join(', ')})</small>
+                    <small>(${[(assayAdapter.protocol ? 'protocol' : 'no protocol'),
+                            (assayAdapter.description ? 'description' : 'no description'),
+                            (assayAdapter.comments ? 'comments' : 'no comments')].join(', ')})</small>
                 </a>
 
                 <div id="document-info" class="accordion-body collapse">

@@ -14,8 +14,8 @@
         $("[rel=tooltip]").tooltip();
         $('#molspreadsheet').dataTable({
                     "bStateSave":true,
-                    "aoColumnDefs": [
-                         {"bSortable":false, 'aTargets': [0]}
+                    "aoColumnDefs":[
+                        {"bSortable":false, 'aTargets':[0]}
                     ],
                     <g:if test="${molSpreadSheetData.getRowCount()>50}">%{--If we have a lot of data then use full-featured pagination--}%
                     "sPaginationType":"full_numbers",
@@ -38,6 +38,7 @@
         <g:render template="../bardWebInterface/facets"
                   model="['facets': facets, 'formName': FacetFormType.AssayFacetForm]"/>
     </div>
+
     <div class="span10">
         <g:if test="${molSpreadSheetData?.getColumnCount() > 0}">
             <g:set var="columnWidth" value="${100.0 / ((molSpreadSheetData?.getColumnCount() - 1) as float)}"/>
@@ -50,33 +51,36 @@
                    width="100%">
                 <thead>
                 <tr class="molSpreadSheetHead">
-                    <th  rowspan="2" class="molSpreadSheetImg">Molecular structure</th>
-                    <th  rowspan="2" class="molSpreadSheetHeadData" width="<%=columnWidth%>%">CID</th>
+                    <th rowspan="2" class="molSpreadSheetImg">Molecular structure</th>
+                    <th rowspan="2" class="molSpreadSheetHeadData" width="<%=columnWidth%>%">CID</th>
                     <% int column = 0 %>
                     <g:each var="colHeader" in="${molSpreadSheetData?.getColumns()}">
                         <g:if test="${column == 2}">
-                            <th  rowspan="2" class="display molSpreadSheetHeadData" width="<%=columnWidth%>%">${colHeader}</th>
+                            <th rowspan="2" class="molSpreadSheetHeadData" id="promiscuitycol"
+                                width="<%=columnWidth%>%"><%=molSpreadSheetData.mapColumnsToAssay[column]%><br/>${colHeader}
+                            </th>
+
                         </g:if>
 
                         <g:if test="${column == 3}">
-                            <th  rowspan="2" class="molSpreadSheetHeadData"  id="promiscuitycol"
-                                width="<%=columnWidth%>%"><%=molSpreadSheetData.mapColumnsToAssay[column]%><br/>${colHeader}
-                            </th>
+                            <th rowspan="2" class="display molSpreadSheetHeadData"
+                                width="<%=columnWidth%>%">${colHeader}</th>
                         </g:if>
                         <% column++ %>
                     </g:each>
-                    <g:each var="assayColumn" in="${molSpreadSheetData.determineResponseTypesPerAssay ()}">
+                    <g:each var="assayColumn" in="${molSpreadSheetData.determineResponseTypesPerAssay()}">
                         <th class="molSpreadSheetHeadData" rel="tooltip"
                             colspan="<%=assayColumn."numberOfResultTypes"%>"
-                            title="<%=assayColumn."fullAssayName"%>"><a href="../bardWebInterface/showAssay/<%=assayColumn."assayName"%>">
+                            title="<%=assayColumn."fullAssayName"%>"><a
+                                href="../bardWebInterface/showAssay/<%=assayColumn."assayName"%>">
                             ADID=<%=assayColumn."assayName"%></a>
                         </th>
                     </g:each>
                 </tr>
                 <tr class="molSpreadSheetHead">
-                    <%  column = 0 %>
+                    <% column = 0 %>
                     <g:each var="colHeader" in="${molSpreadSheetData?.getColumns()}">
-                         <g:if test="${column > 3}">
+                        <g:if test="${column > 3}">
                             <th class="molSpreadSheetHeadData">${colHeader}
                             </th>
                         </g:if>
@@ -197,8 +201,9 @@
         </g:else>
 
     </div>
+
     <div class="span10 pull-right">
-       <export:formats/>
+        <export:formats/>
     </div>
 </div>
 

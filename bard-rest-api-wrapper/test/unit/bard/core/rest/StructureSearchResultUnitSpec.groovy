@@ -1,6 +1,6 @@
 package bard.core.rest
 
-import bard.core.StructureSearchParams
+import bard.core.rest.spring.util.StructureSearchParams
 import spock.lang.Specification
 import spock.lang.Unroll
 

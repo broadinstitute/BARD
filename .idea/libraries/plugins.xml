@@ -1,0 +1,17 @@
+<component name="libraryTable">
+  <library name="plugins">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/bard-web-client/web-app/marvin/sjars/plugins/MolecularModelling.jar!/" />
+      <root url="jar://$PROJECT_DIR$/bard-web-client/web-app/marvin/sjars/plugins/MarkushEnumeration.jar!/" />
+      <root url="jar://$PROJECT_DIR$/bard-web-client/web-app/marvin/sjars/plugins/Tautomers.jar!/" />
+      <root url="jar://$PROJECT_DIR$/bard-web-client/web-app/marvin/sjars/plugins/Partitioning.jar!/" />
+      <root url="jar://$PROJECT_DIR$/bard-web-client/web-app/marvin/sjars/plugins/Protonation.jar!/" />
+      <root url="jar://$PROJECT_DIR$/bard-web-client/web-app/marvin/sjars/plugins/Alignment.jar!/" />
+      <root url="jar://$PROJECT_DIR$/bard-web-client/web-app/marvin/sjars/plugins/Other.jar!/" />
+      <root url="jar://$PROJECT_DIR$/bard-web-client/web-app/marvin/sjars/plugins/CalculationsCore.jar!/" />
+      <root url="jar://$PROJECT_DIR$/bard-web-client/web-app/marvin/sjars/plugins/Analysers.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

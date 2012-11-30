@@ -1,47 +1,36 @@
 package mockServices
 
+import bard.core.DataSource
+import bard.core.Probe
+import bard.core.Value
 import bard.core.adapter.AssayAdapter
 import bard.core.adapter.CompoundAdapter
 import bard.core.adapter.ProjectAdapter
-import bard.core.interfaces.AssayCategory
-import bard.core.interfaces.ExperimentValues
+import bard.core.rest.spring.experiment.ExperimentSearch
+import bard.core.rest.spring.util.StructureSearchParams
 import bardqueryapi.IQueryService
 import bardqueryapi.QueryHelperService
 import bardqueryapi.SearchFilter
-import bard.core.*
-import bard.core.interfaces.ExperimentCategory
-import bard.core.interfaces.ExperimentRole
-import bard.core.interfaces.ExperimentType
+import bard.core.interfaces.*
 
 class MockQueryService implements IQueryService {
     QueryHelperService queryHelperService
 
-    static final Map<Long, MockCompoundAdapter> mockCompoundAdapterMap = [:]
+    final Map<Long, MockCompoundAdapter> mockCompoundAdapterMap = [:]
 
-    static final Map<Long, MockAssayAdapter> mockAssayAdapterMap = [:]
+    final Map<Long, MockAssayAdapter> mockAssayAdapterMap = [:]
 
-    static final Map<Long, MockProjectAdapter> mockProjectAdapterMap = [:]
+    final Map<Long, MockProjectAdapter> mockProjectAdapterMap = [:]
 
-    static final Map<Long, MockExperiment> mockExperimentMap = [:]
+    final Map<Long, MockExperiment> mockExperimentMap = [:]
 
-    static {
+    public MockQueryService() {
         constructMockCompoundAdapter()
         constructMockAssayAdapter()
         constructMockProjectAdapter()
         constructMockExperiment()
     }
 
-    /**
-     *
-     * @param compound
-     * @param activeOnly - true if we want only the active compounds
-     * @return int the number of tested assays
-     */
-    public int getNumberTestedAssays(Long cid,
-                                     boolean activeOnly) {
-        return 2;
-
-    }
 
     Map findPromiscuityScoreForCID(final Long cid) {
         return [scores: [20, 30], status: 200, message: "Success"]
@@ -59,9 +48,9 @@ class MockQueryService implements IQueryService {
     Map findCompoundsByTextSearch(final String searchString, final Integer top = 10, final Integer skip = 0, final List<SearchFilter> searchFilters = []) {
         final List<CompoundAdapter> foundCompoundAdapters = []
 
-        Set<Long> keySet = MockQueryService.mockCompoundAdapterMap.keySet()
+        Set<Long> keySet = mockCompoundAdapterMap.keySet()
         for (Long key : keySet) {
-            foundCompoundAdapters.add(MockQueryService.mockCompoundAdapterMap.get(key))
+            foundCompoundAdapters.add((MockCompoundAdapter) mockCompoundAdapterMap.get(key))
         }
         Collection<Value> facets = []
         return [compoundAdapters: foundCompoundAdapters, facets: facets, nHits: 3]
@@ -80,9 +69,9 @@ class MockQueryService implements IQueryService {
         final List<AssayAdapter> foundAssayAdapters = []
         Collection<Value> facets = []
 
-        Set<Long> keySet = MockQueryService.mockAssayAdapterMap.keySet()
+        Set<Long> keySet = mockAssayAdapterMap.keySet()
         for (Long key : keySet) {
-            foundAssayAdapters.add(MockQueryService.mockAssayAdapterMap.get(key))
+            foundAssayAdapters.add(mockAssayAdapterMap.get(key))
         }
         int nhits = foundAssayAdapters.size()
         return [assayAdapters: foundAssayAdapters, facets: facets, nHits: nhits]
@@ -100,9 +89,9 @@ class MockQueryService implements IQueryService {
         List<ProjectAdapter> foundProjectAdapters = []
         Collection<Value> facets = []
 
-        Set<Long> keySet = MockQueryService.mockProjectAdapterMap.keySet()
+        Set<Long> keySet = mockProjectAdapterMap.keySet()
         for (Long key : keySet) {
-            foundProjectAdapters.add(MockQueryService.mockProjectAdapterMap.get(key))
+            foundProjectAdapters.add(mockProjectAdapterMap.get(key))
         }
         int nhits = foundProjectAdapters.size()
         return [projectAdapters: foundProjectAdapters, facets: facets, nHits: nhits]
@@ -157,7 +146,7 @@ class MockQueryService implements IQueryService {
      */
     CompoundAdapter showCompound(final Long compoundId) {
 
-        return MockQueryService.mockCompoundAdapterMap.get(compoundId)
+        return mockCompoundAdapterMap.get(compoundId)
     }
 
     /**
@@ -167,7 +156,7 @@ class MockQueryService implements IQueryService {
      */
     Map showAssay(final Long assayId) {
 
-        return MockQueryService.mockAssayAdapterMap.get(assayId)
+        return mockAssayAdapterMap.get(assayId)
     }
     /**
      * Given a projectId, get detailed Project information from the JDO
@@ -175,9 +164,13 @@ class MockQueryService implements IQueryService {
      * @return ProjectAdapter
      */
     Map showProject(final Long projectId) {
-        return [projectAdapter: MockQueryService.mockProjectAdapterMap.get(projectId), experiments: mockExperimentMap.values(), assays: [MockQueryService.mockAssayAdapterMap.get(588636 as Long).assay,
-                MockQueryService.mockAssayAdapterMap.get(449731 as Long).assay,
-                MockQueryService.mockAssayAdapterMap.get(588623 as Long).assay]]
+        return [projectAdapter: mockProjectAdapterMap.get(projectId),
+                experiments: mockExperimentMap.values(),
+                assays: [
+                        mockAssayAdapterMap.get(588636 as Long),
+                        mockAssayAdapterMap.get(449731 as Long),
+                        mockAssayAdapterMap.get(588623 as Long)]
+        ]
     }
 
     //==============================================Auto Complete ======
@@ -189,12 +182,13 @@ class MockQueryService implements IQueryService {
     public List<Map<String, String>> autoComplete(final String term) {
 
         //the number of items to retrieve per category
-        final Map<String, List<String>> autoSuggestResponseFromJDO = ["gobp_term":
-                [
-                        "DNA repair",
-                        "DNA fragmentation involved in apoptotic nuclear change",
-                        "DNA damage response, signal transduction by p53 class mediator resulting in cell cycle arrest"
-                ],
+        final Map<String, List<String>> autoSuggestResponseFromJDO = [
+                "gobp_term":
+                        [
+                                "DNA repair",
+                                "DNA fragmentation involved in apoptotic nuclear change",
+                                "DNA damage response, signal transduction by p53 class mediator resulting in cell cycle arrest"
+                        ],
                 "target_name":
                         [
                                 "DNA dC->dU-editing enzyme APOBEC-3G",
@@ -211,6 +205,7 @@ class MockQueryService implements IQueryService {
         final List<Map<String, String>> autoSuggestTerms = this.queryHelperService.autoComplete(term, autoSuggestResponseFromJDO)
         return autoSuggestTerms
     }
+
     /**
      * Extract filters from the search string if any
      * @return list of filters from search String
@@ -219,152 +214,79 @@ class MockQueryService implements IQueryService {
         queryHelperService.findFiltersInSearchBox(searchFilters, searchString)
     }
 
-    private static void constructMockAssayAdapter() {
+    private void constructMockAssayAdapter() {
 
         MockAssayAdapter mockAssayAdapter = new MockAssayAdapter()
-        mockAssayAdapter.searchHighlight = '''
-        The Y-family of DNA polymerases, such as Pol eta, are specifically involved in <b>DNA repair</b>.
-        Pol eta copies undamaged DNA with a lower fidelity than other DNA-directed polymerases.
-        However, it accurately replicates UV-damaged DNA; when thymine dimers are present,
-        this polymerase inserts
-        '''
+
         mockAssayAdapter.name = "qHTS for Inhibitors of Polymerase Eta: Summary"
-        Assay assay = new Assay()
         Long assayId = new Long(588636)
-        assay.setId(assayId)
-        mockAssayAdapter.assay = assay
-        mockAssayAdapter.assay.category = AssayCategory.MLPCN
-        mockAssayAdapter.assay.protocol = "Please see linked AIDs for a detailed description of each assay."
-        mockAssayAdapter.assay.comments = "This project is on-going and will be updated at a later point with our findings."
-        mockAssayAdapter.assay.description = '''
-The Y-family of DNA polymerases, such as Pol eta, are specifically involved in DNA repair.
-Pol eta copies undamaged DNA with a lower fidelity than other DNA-directed polymerases.
-However, it accurately replicates UV-damaged DNA; when thymine dimers are present, this polymerase inserts the
-complementary nucleotides in the newly synthesized DNA, thereby bypassing the lesion and suppressing the mutagenic
-effect of UV-induced DNA damage. Pol eta has the ability to bypass cisplatinated DNA adducts in vitro, and it
-has been suggested that pol eta-dependent bypass of the cisplatin lesion in vivo leads to increased tumor resistance.
-Thus, while pol eta's (and most likely iota's) normal function is to protect humans against the deleterious consequences
-of DNA damage, under certain conditions they can have deleterious effects on human health.
-As a consequence, we propose to utilize a high throughput replication assay to
-identify small molecule inhibitors of pol eta.
+        mockAssayAdapter.assayId = assayId
+        mockAssayAdapter.category = AssayCategory.MLPCN
+        mockAssayAdapter.protocol = "Please see linked AIDs for a detailed description of each assay."
+        mockAssayAdapter.comments = "This project is on-going and will be updated at a later point with our findings."
+        mockAssayAdapter.description =
+            mockAssayAdapterMap.put(assayId, mockAssayAdapter)
 
-In a collaboration between the National Institute of Child Health & Human Development (NICHD) and NIH Chemical
-Genomics Center, a high-throughput, fluorescent screen was developed to screen the NIH Molecular Libraries Small
-Molecule Repository (MLSMR). This screen is used to identify inhibitors of pol eta.
 
-NIH Chemical Genomics Center [NCGC]
-NIH Molecular Libraries Probe Centers Network [MLPCN]
 
-MLPCN Grant: MH090825
-Assay Submitter (PI): Roger Woodgate, NICHD)
-'''
-        mockAssayAdapterMap.put(assayId, mockAssayAdapter)
 
         mockAssayAdapter = new MockAssayAdapter()
-        mockAssayAdapter.searchHighlight = '''
-for the bacteria to persist. The H. pylori AddAB helicase-exonuclease is required for <b>DNA repair</b>
-and efficient stomach colonization (3), and inhibitors of this enzyme may be useful antibacterial
-drugs for treating these infections. The AddAB class of enzymes is closely related to the RecBCD
-class of helicase
-'''
         mockAssayAdapter.name = "Summary of the probe development effort to identify inhibitors of AddAB recombination protein complex"
-        assay = new Assay()
         assayId = new Long(449731)
-        assay.setId(assayId)
-        mockAssayAdapter.assay = assay
+        mockAssayAdapter.assayId = assayId
         mockAssayAdapterMap.put(assayId, mockAssayAdapter)
 
 
         mockAssayAdapter = new MockAssayAdapter()
-        mockAssayAdapter.searchHighlight = '''
-DNA polymerases, such as Pol iota, are specifically involved in <b>DNA repair</b>.
-Pol iota specifically plays an important role in translesion synthesis, where
-the normal high-fidelity DNA polymerases cannot proceed and DNA synthesis stalls.
-It has been reported that human pol iota may be upregulated'''
-        mockAssayAdapter.name = "qHTS for Inhibitors of Polymerase Iota: Summary"
-
-        assay = new Assay()
         assayId = new Long(588623)
-
-        assay.setId(assayId)
-        mockAssayAdapter.assay = assay
+        mockAssayAdapter.assayId = assayId
         mockAssayAdapterMap.put(assayId, mockAssayAdapter)
 
     }
 
-    private static void constructMockProjectAdapter() {
+    private void constructMockProjectAdapter() {
         MockProjectAdapter mockProjectAdapter = new MockProjectAdapter()
         Long projectId = new Long(2324)
-        Project project = new Project()
-        project.setId(projectId)
-        project.description = '''
-Assay Provider: David M. Wilson, III, National Institute on Aging, NIH Screening Center PI: Austin, C.P. Screening Center: NIH Chemical Genomics Center [NCGC]
-The apurinic/apyrimidinic endonuclease APE1 is the primary mammalian enzyme responsible for the removal of abasic (or AP) sites in DNA and functions centrally
-in the base excision DNA repair (BER) pathway. Recent studies suggested a link between an overexpression of APE1 in many cancers and resistance of these tumor
-cells to radio- and chemotherapy. Thus, targeting APE1 could improve the efficacy of current treatment paradigms by promoting selective sensitization or
-protection of diseased and normal cells, respectively. This assay will summarize the probe development efforts that are currently ongoing.
-   '''
-        mockProjectAdapter.project = project
-        project.name = "Probe Development Summary of Inhibitors of the Human Apurinic/apyrimidinic Endonuclease 1 (APE1)"
-        mockProjectAdapter.name = "Probe Development Summary of Inhibitors of the Human Apurinic/apyrimidinic Endonuclease 1 (APE1)"
-        mockProjectAdapter.searchHighlight = '''and functions centrally in the base excision DNA repair (BER) pathway.
-        Recent studies suggested a link between an overexpression
-        of APE1 in many cancers and resistance of these tumor cells to radio- and chemotherapy.
-        Thus, targeting APE1 could improve the efficacy of current treatment paradigms by promoting
-        '''
-        mockProjectAdapter.annotations << ['First annotation': '''This is the 1st annotation for this project''']
+        mockProjectAdapter.id = projectId
+        mockProjectAdapter.description = mockProjectAdapter.annotations << ['First annotation': '''This is the 1st annotation for this project''']
         mockProjectAdapter.annotations << ['Second annotation': '''This is the 2nd annotation for this project''']
         mockProjectAdapter.annotations << ['Third annotation': '''This is the 3rd annotation for this project''']
+
+        mockProjectAdapter.name = "Name 2"
         mockProjectAdapterMap.put(projectId, mockProjectAdapter)
 
 
 
         mockProjectAdapter = new MockProjectAdapter()
-        project = new Project()
         projectId = new Long(449731)
-        project.name = "Summary of the probe development effort to identify inhibitors of AddAB recombination protein complex"
-        project.setId(projectId)
+        mockProjectAdapter.id = projectId
 
-        project.description = '''
+        mockProjectAdapter.description = '''
 Assay Provider: David M. Wilson, III, National Institute on Aging, NIH Screening Center PI: Austin, C.P. Screening Center: NIH Chemical Genomics Center [NCGC]
 The apurinic/apyrimidinic endonuclease APE1 is the primary mammalian enzyme responsible for the removal of abasic (or AP) sites in DNA and functions centrally
 in the base excision DNA repair (BER) pathway. Recent studies suggested a link between an overexpression of APE1 in many cancers and resistance of these tumor
 cells to radio- and chemotherapy. Thus, targeting APE1 could improve the efficacy of current treatment paradigms by promoting selective sensitization or
 protection of diseased and normal cells, respectively. This assay will summarize the probe development efforts that are currently ongoing.
    '''
-        mockProjectAdapter.project = project
         mockProjectAdapter.name = "Summary of the probe development effort to identify inhibitors of AddAB recombination protein complex"
 
 
-        mockProjectAdapter.searchHighlight = '''for the bacteria to persist. The H. pylori AddAB helicase-exonuclease is required for DNA repair
-and efficient stomach colonization (3), and inhibitors of this enzyme may be useful antibacterial drugs for treating these infections.
-The AddAB class of enzymes is closely related to the RecBCD class of helicase
-'''
         mockProjectAdapter.annotations << ['First annotation': '''This is the 1st annotation for this project''']
         mockProjectAdapter.annotations << ['Second annotation': '''This is the 2nd annotation for this project''']
         mockProjectAdapter.annotations << ['Third annotation': '''This is the 3rd annotation for this project''']
         mockProjectAdapterMap.put(projectId, mockProjectAdapter)
 
         mockProjectAdapter = new MockProjectAdapter()
-        project = new Project()
         projectId = new Long(2367)
-        project.setId(projectId)
-        project.name = "Probe Development Summary for Inhibitors of RecQ-Like Dna Helicase 1 (RECQ1)"
-        project.description = '''
-Assay Provider: David M. Wilson, III, National Institute on Aging, NIH Screening Center PI: Austin, C.P. Screening Center: NIH Chemical Genomics Center [NCGC]
-The apurinic/apyrimidinic endonuclease APE1 is the primary mammalian enzyme responsible for the removal of abasic (or AP) sites in DNA and functions centrally
-in the base excision DNA repair (BER) pathway. Recent studies suggested a link between an overexpression of APE1 in many cancers and resistance of these tumor
-cells to radio- and chemotherapy. Thus, targeting APE1 could improve the efficacy of current treatment paradigms by promoting selective sensitization or
-protection of diseased and normal cells, respectively. This assay will summarize the probe development efforts that are currently ongoing.
-   '''
-        mockProjectAdapter.project = project
+        mockProjectAdapter.id = projectId
         mockProjectAdapter.name = "Probe Development Summary for Inhibitors of RecQ-Like Dna Helicase 1 (RECQ1)"
-
-        mockProjectAdapter.searchHighlight = '''
-       develop resistance to therapy through enhanced activity of DNA repair functions; this has led
-       to an increased interest in developing drugs that interfere with DNA repair, which could sensitise cancer cells to conventional
-       therapy. This summary assay pertains to human RECQ1, which is important
-       '''
+        mockProjectAdapter.description = '''
+                                            Assay Provider: David M. Wilson, III, National Institute on Aging, NIH Screening Center PI: Austin, C.P. Screening Center: NIH Chemical Genomics Center [NCGC]
+                                            The apurinic/apyrimidinic endonuclease APE1 is the primary mammalian enzyme responsible for the removal of abasic (or AP) sites in DNA and functions centrally
+                                            in the base excision DNA repair (BER) pathway. Recent studies suggested a link between an overexpression of APE1 in many cancers and resistance of these tumor
+                                            cells to radio- and chemotherapy. Thus, targeting APE1 could improve the efficacy of current treatment paradigms by promoting selective sensitization or
+                                            protection of diseased and normal cells, respectively. This assay will summarize the probe development efforts that are currently ongoing.
+                                            '''
         mockProjectAdapter.annotations << ['First annotation': '''This is the 1st annotation for this project''']
         mockProjectAdapter.annotations << ['Second annotation': '''This is the 2nd annotation for this project''']
         mockProjectAdapter.annotations << ['Third annotation': '''This is the 3rd annotation for this project''']
@@ -373,54 +295,35 @@ protection of diseased and normal cells, respectively. This assay will summarize
 
     }
 
-    private static void constructMockCompoundAdapter() {
+    private void constructMockCompoundAdapter() {
         MockCompoundAdapter compoundAdapter = new MockCompoundAdapter()
-        compoundAdapter.searchHighlight = '''
-Although the mechanism of action is not understood, chloroxine may slow down mitotic activity in the epidermis,
-thereby reducing excessive scaling associated with dandruff or seborrheic dermatitis of the scalp.
-Chloroxine induces SOS-<b>DNA repair</b> in E. coli, so chloroxine may be genotoxic to bacteria
-'''
         compoundAdapter.pubChemCID = 2722
         compoundAdapter.structureSMILES = "OC1=C(Cl)C=C(Cl)C2=C1N=CC=C2"
         compoundAdapter.name = "5,7-dichloroquinolin-8-ol"
-
         mockCompoundAdapterMap.put(compoundAdapter.pubChemCID, compoundAdapter)
 
 
         compoundAdapter = new MockCompoundAdapter()
-        compoundAdapter.searchHighlight = '''
-      inhibition. The affinity of clofarabine triphosphate for these enzymes is similar to or greater than that of
-      deoxyadenosine triphosphate. In preclinical models, clofarabine has demonstrated the ability to inhibit <b>DNA repair</b>
-      by incorporation into the DNA chain during the repair process. Clofarabine 5
-'''
         compoundAdapter.pubChemCID = 16760208
         compoundAdapter.name = "(2R,3S,5R)-5-(6-amino-2-chloropurin-9-yl)-4-fluoro-2-(hydroxymethyl)oxolan-3-ol"
         compoundAdapter.structureSMILES = "NC1=NC(Cl)=NC2=C1N=CN2[C@@H]1O[C@H](CO)[C@H](O)C1F"
-
         mockCompoundAdapterMap.put(compoundAdapter.pubChemCID, compoundAdapter)
 
 
 
         compoundAdapter = new MockCompoundAdapter()
-        compoundAdapter.searchHighlight = '''
-    alkyltransferase, which is the <b>DNA repair</b> protein that specifically removes alkyl groups at the O6 position of guanine.
-    Cells lines that have lower levels of AGT are more sensitive to the cytotoxicity of temozolomide.
-    It is also suggested that cytotoxic mechanism of temozolomide is related to the failure
-'''
         compoundAdapter.pubChemCID = 354624
         compoundAdapter.structureSMILES = "NC1=NC(Cl)=NC2=C1N=CN2C1OC(CO)C(O)C1F"
         compoundAdapter.name = "5-(6-amino-2-chloropurin-9-yl)-4-fluoro-2-(hydroxymethyl)oxolan-3-ol"
-
         mockCompoundAdapterMap.put(compoundAdapter.pubChemCID, compoundAdapter)
     }
 
-    private static void constructMockExperiment() {
+    private void constructMockExperiment() {
         MockExperiment mockedExperiment = new MockExperiment()
-        mockedExperiment.id = 1904
-        mockedExperiment.assay = new Assay()
-        mockedExperiment.type = ExperimentType.Confirmatory
-        mockedExperiment.role = ExperimentRole.Primary
-        mockedExperiment.category = ExperimentCategory.MLPCN
+        mockedExperiment.exptId = 1904
+        mockedExperiment.type = 2
+        mockedExperiment.classification = 1
+        mockedExperiment.category = 0
         mockedExperiment.name = 'qHTS Assay for Inhibitors of Bloom\'s syndrome helicase (BLM)'
         mockedExperiment.description = '''Survival of cells and the faithful propagation of the genome depend on elaborate mechanisms of detecting and repairing DNA damage. Treatment of advanced cancer relies on radiation therapy or chemotherapy, which kill cancer cells by causing extensive DNA damage. It is often found, that cancer cells develop resistance to therapy through enhanced activity of DNA repair functions; this has led to an increased interest in developing drugs that interfere with DNA repair, which could sensitize cancer cells to conventional therapy.
 This validation qHTS assay pertains to human BLM, which is important in resolving abnormal DNA structures formed during replication or homologous recombination. Shutting down the expression of BLM leads to chromosomal instability and higher radiation sensitivity in cultured cells.
@@ -430,18 +333,15 @@ Assay Providers:\n
   Opher Gileadi, Structural Genomics Consortium, University of Oxford\n
 Screening Center PI: Austin, C.P.\n
 Screening Center: NIH Chemical Genomics Center [NCGC]'''
-        mockedExperiment.addExperimentCompoundCountValue(347941)
-        mockedExperiment.addExperimentSubstanceCountValue(354860)
         mockedExperiment.pubchemAid = 2528
         mockExperimentMap.put(mockedExperiment.id, mockedExperiment)
 
 
         mockedExperiment = new MockExperiment()
-        mockedExperiment.id = 2757
-        mockedExperiment.assay = new Assay()
-        mockedExperiment.type = ExperimentType.Summary
-        mockedExperiment.role = ExperimentRole.Primary
-        mockedExperiment.category = ExperimentCategory.MLPCN
+        mockedExperiment.exptId = 2757
+        mockedExperiment.type = ExperimentType.Summary.ordinal()
+        mockedExperiment.classification = ExperimentRole.Primary.ordinal()
+        mockedExperiment.category = ExperimentCategory.MLPCN.ordinal()
         mockedExperiment.name = 'Probe Development Summary for Inhibitors of Bloom\'s syndrome helicase (BLM)'
         mockedExperiment.description = '''Survival of cells and the faithful propagation of the genome depend on elaborate mechanisms of detecting and repairing DNA damage. Treatment of advanced cancer relies on radiation therapy or chemotherapy, which kill cancer cells by causing extensive DNA damage. It is often found, that cancer cells develop resistance to therapy through enhanced activity of DNA repair functions; this has led to an increased interest in developing drugs that interfere with DNA repair, which could sensitize cancer cells to conventional therapy.
 This summary assay pertains to the Bloom syndrome helicase (BLM), which is important in resolving abnormal DNA structures formed during replication or homologous recombination. Shutting down the expression of BLM leads to chromosomal instability and higher radiation sensitivity in cultured cells.
@@ -453,18 +353,16 @@ Assay Providers:\n
   Alessandro Vindigni, International Center for Biotechnology and Genetic Engineering\n
 Screening Center PI: Austin, C.P.\n
 Screening Center: NIH Chemical Genomics Center [NCGC]'''
-        mockedExperiment.addExperimentCompoundCountValue(0)
-        mockedExperiment.addExperimentSubstanceCountValue(0)
         mockedExperiment.pubchemAid = 2386
         mockExperimentMap.put(mockedExperiment.id, mockedExperiment)
 
 
         mockedExperiment = new MockExperiment()
-        mockedExperiment.id = 3470
-        mockedExperiment.assay = new Assay()
-        mockedExperiment.type = ExperimentType.Confirmatory
-        mockedExperiment.role = ExperimentRole.Counterscreen
-        mockedExperiment.category = ExperimentCategory.MLPCN
+        mockedExperiment.exptId = 3470
+        mockedExperiment.assayId = 37
+        mockedExperiment.type = ExperimentType.Confirmatory.ordinal()
+        mockedExperiment.classification = 0
+        mockedExperiment.category = 1
         mockedExperiment.name = 'Counterscreen for BLMA Inhibitors: ADP Fluorescence Polarization Displacement Assay'
         mockedExperiment.description = '''In order to gain further insight into the mode of action of the BLMAscreening hits, we have profiled them in a set of miniaturized fluorescence polarization assays designed to report on compounds which competitively displace either co-substrate (ATP or DNA). The appropriate fluorescently-labeled probe was used: BODIPY Texas Red-labeled ADP was expected to be competed off by ATP-competitive inhibitors, while single-TAMRA labeled forked-duplex or short single-stranded DNA molecules served as probes for DNA-competitive compounds.
 Assay Providers:\n
@@ -472,93 +370,309 @@ Assay Providers:\n
   Opher Gileadi, Structural Genomics Consortium, University of Oxford\n
 Screening Center PI: Austin, C.P.\n
 Screening Center: NIH Chemical Genomics Center [NCGC]'''
-        mockedExperiment.addExperimentCompoundCountValue(529)
-        mockedExperiment.addExperimentSubstanceCountValue(534)
         mockedExperiment.pubchemAid = 2712
         mockExperimentMap.put(mockedExperiment.id, mockedExperiment)
     }
 }
-class MockAssayAdapter extends AssayAdapter {
-    String searchHighlight
+class MockAssayAdapter implements AssayAdapterInterface {
     String name
+    Long assayId
+    AssayCategory category
+    String protocol
+    String comments
+    String description
+    AssayType assayType
+    AssayRole assayRole
+    String source
+    Long aid
 
     MockAssayAdapter() {
         super()
     }
 
     public Collection<Value> getAnnotations() {
-        return [];
+        final Collection<Value> annos = new ArrayList<Value>();
+        final Map<String, String> terms = [name: "value"]
+        for (String key : terms.keySet()) {
+            Value value = new bard.core.StringValue(DataSource.DEFAULT, key, terms.get(key))
+            annos.add(value)
+        }
+        return annos//To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
+    List<String> getKeggDiseaseNames() {
+        return ["Neurodegenerative disease", "Neurodegenerative disease", "Neurodegenerative disease"]
+    }
+
+    @Override
+    List<String> getKeggDiseaseCategories() {
+        return ["Amyotrophic lateral sclerosis (ALS)", "Lou Gehrig's disease", "Progressive supranuclear palsy (PSP)"]
+    }
+
+    @Override
+    Map<String, List<String>> getKeggAnnotations() {
+        Map<String, List<String>> annos = new HashMap<String, List<String>>()
+        annos.put(EntityNamedSources.KEGGDiseaseCategoryAnnotationSource, ["Amyotrophic lateral sclerosis (ALS)", "Lou Gehrig's disease", "Progressive supranuclear palsy (PSP)"])
+        annos.put(EntityNamedSources.KEGGDiseaseNameAnnotationSource, ["Neurodegenerative disease", "Neurodegenerative disease", "Neurodegenerative disease"])
+        return annos;
+    }
+
+    @Override
+    Long getCapAssayId() {
+        return this.assayId ?: 233  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
+    AssayType getType() {
+        return this.assayType ?: AssayType.Confirmatory  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
+    AssayRole getRole() {
+        return assayRole ?: AssayRole.SecondaryConfirmation  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
+    AssayCategory getCategory() {
+        return category ?: AssayCategory.MLPCN
+    }
+
+    @Override
+    String getDescription() {
+        return this.description ?: '''
+                    The Y-family of DNA polymerases, such as Pol eta, are specifically involved in DNA repair.
+                    Pol eta copies undamaged DNA with a lower fidelity than other DNA-directed polymerases.
+                    However, it accurately replicates UV-damaged DNA; when thymine dimers are present, this polymerase inserts the
+                    complementary nucleotides in the newly synthesized DNA, thereby bypassing the lesion and suppressing the mutagenic
+                    effect of UV-induced DNA damage. Pol eta has the ability to bypass cisplatinated DNA adducts in vitro, and it
+                    has been suggested that pol eta-dependent bypass of the cisplatin lesion in vivo leads to increased tumor resistance.
+                    Thus, while pol eta's (and most likely iota's) normal function is to protect humans against the deleterious consequences
+                    of DNA damage, under certain conditions they can have deleterious effects on human health.
+                    As a consequence, we propose to utilize a high throughput replication assay to
+                    identify small molecule inhibitors of pol eta.
+
+                    In a collaboration between the National Institute of Child Health & Human Development (NICHD) and NIH Chemical
+                    Genomics Center, a high-throughput, fluorescent screen was developed to screen the NIH Molecular Libraries Small
+                    Molecule Repository (MLSMR). This screen is used to identify inhibitors of pol eta.
+
+                    NIH Chemical Genomics Center [NCGC]
+                    NIH Molecular Libraries Probe Centers Network [MLPCN]
+
+                    MLPCN Grant: MH090825
+                    Assay Submitter (PI): Roger Woodgate, NICHD)
+                '''
+    }
+
+    @Override
+    Long getId() {
+        return assayId ?: 22
+    }
+
+    @Override
+    String getProtocol() {
+        return this.protocol ?: "Protocol"
+    }
+
+    @Override
+    String getComments() {
+        return this.comments ?: "Comments"
+    }
+
+    @Override
+    Long getAid() {
+        return this.aid ?: 244
+    }
+
+    @Override
+    String getSource() {
+        return this.source ?: "Source"  //To change body of implemented methods use File | Settings | File Templates.
     }
 }
-class MockProjectAdapter extends ProjectAdapter {
-    String searchHighlight
+class MockProjectAdapter implements ProjectAdapterInterface {
+    Long id
     String name
-    Integer numberOfExperiments = 3
+    String description
+    String grantNumber
+    String labName
+    Integer numExperiments
+    Collection<Value> annotations = []
 
-    MockProjectAdapter() {
+    @Override
+    Long getId() {
+        return id ?: 2  //To change body of implemented methods use File | Settings | File Templates.
     }
 
-    public Collection<Value> getAnnotations() {
-        return [];
-    }
-}
-class MockExperiment extends Experiment {
-//Implemented in super
-//    String name
-//    Long id
-//    ExperimentRole role
-//    String description
-//    Assay assay
-
-    void addExperimentCompoundCountValue(Integer compoundNum) {
-        final DataSource dataSource = new DataSource("stuff", "v1")
-        this.addValue(new IntValue(dataSource, ExperimentValues.ExperimentCompoundCountValue, compoundNum))
+    @Override
+    String getName() {
+        return name ?: "Project Name" //To change body of implemented methods use File | Settings | File Templates.
     }
 
-    void addExperimentSubstanceCountValue(Integer substanceNum) {
-        final DataSource dataSource = new DataSource("stuff", "v1")
-        this.addValue(new IntValue(dataSource, ExperimentValues.ExperimentSubstanceCountValue, substanceNum))
-    }
-}
-
-class MockCompoundAdapter extends CompoundAdapter {
-    Long[] sids = [70319, 609991, 866273, 3132781]
-    Long pubChemCID
-    String structureSMILES
-    String searchHighlight
-    String name
-
-    MockCompoundAdapter() {
-        super()
+    @Override
+    String getDescription() {
+        return description ?: '''
+                    Assay Provider: David M. Wilson, III, National Institute on Aging, NIH Screening Center PI: Austin, C.P. Screening Center: NIH Chemical Genomics Center [NCGC]
+                    The apurinic/apyrimidinic endonuclease APE1 is the primary mammalian enzyme responsible for the removal of abasic (or AP) sites in DNA and functions centrally
+                    in the base excision DNA repair (BER) pathway. Recent studies suggested a link between an overexpression of APE1 in many cancers and resistance of these tumor
+                    cells to radio- and chemotherapy. Thus, targeting APE1 could improve the efficacy of current treatment paradigms by promoting selective sensitization or
+                    protection of diseased and normal cells, respectively. This assay will summarize the probe development efforts that are currently ongoing.
+                 '''
     }
 
-    public Compound getCompound() {
-        return new Compound() {
-            String getPreferredName() {
-                return name
+    @Override
+    String getGrantNumber() {
+        return grantNumber ?: "GI2"  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
+    String getLaboratoryName() {
+        return labName ?: "Broad" //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
+    List<Probe> getProbes() {
+        return [new Probe("2", "ML18", "http://bard.org", "CCC"), new Probe("28", "ML20", "http://bard.org", "CCCC")]  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
+    Integer getNumberOfExperiments() {
+        return numExperiments ?: 2  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
+    Collection<Value> getAnnotations() {
+        if (!annotations) {
+            this.annotations = new ArrayList<Value>();
+            final Map<String, String> terms = getDictionaryTerms()
+            for (String key : terms.keySet()) {
+                Value value = new bard.core.StringValue(DataSource.DEFAULT, key, terms.get(key))
+                this.annotations.add(value)
             }
         }
+        return annotations//To change body of implemented methods use File | Settings | File Templates.
     }
 
+    @Override
+    Map<String, String> getDictionaryTerms() {
+        return ["grant number": "X01 MH083262-01", "laboratory name": "NCGC", "protein": "gi|92096784|gb|AAI14949.1|Microtubule-associated protein tau [Homo sapiens]"]
+    }
+
+    @Override
+    Map<String, List<String>> getKeggAnnotations() {
+        Map<String, List<String>> annos = new HashMap<String, List<String>>()
+        annos.put(EntityNamedSources.KEGGDiseaseCategoryAnnotationSource, ["Amyotrophic lateral sclerosis (ALS)", "Lou Gehrig's disease", "Progressive supranuclear palsy (PSP)"])
+        annos.put(EntityNamedSources.KEGGDiseaseNameAnnotationSource, ["Neurodegenerative disease", "Neurodegenerative disease", "Neurodegenerative disease"])
+        return annos;
+
+    }
+}
+class MockExperiment extends ExperimentSearch {
+
+}
+
+class MockCompoundAdapter implements CompoundAdapterInterface {
+
+    Long pubChemCID = 354624
+    String structureSMILES = "NC1=NC(Cl)=NC2=C1N=CN2C1OC(CO)C(O)C1F"
+    String name = "5-(6-amino-2-chloropurin-9-yl)-4-fluoro-2-(hydroxymethyl)oxolan-3-ol"
+    Double mwt
+    String formula
+    Double exactMass
+    Integer hbondDonor
+    Integer hbondAcceptor
+    Integer rotatable
+    Double tpsa
+    String iupacName
+    String compoundClass
+    Integer numAssays
+    Integer numActiveAssays
+    Long id
     /*
     * MolecularData interface
     */
 
-    public String formula() { return "C9H5Cl2NO" }
+    public String formula() { return formula ?: "C9H5Cl2NO" }
 
-    public Double mwt() { return new Double(214.048) }
+    public Double mwt() { return this.mwt ?: new Double(214.048) }
 
-    public Double exactMass() { return new Double(212.975) }
+    public Double exactMass() { return this.exactMass ?: new Double(212.975) }
+
+    @Override
+    Integer hbondDonor() {
+        return this.hbondDonor ?: 2  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
+    Integer hbondAcceptor() {
+        return this.hbondAcceptor ?: 2  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
+    Integer rotatable() {
+        return this.rotatable ?: 1  //To change body of implemented methods use File | Settings | File Templates.
+    }
 
     public Double TPSA() {
-        return new Double(33.1);
+        return this.tpsa ?: new Double(33.1);
     }
 
     public Double logP() {
         return new Double(0.00);
     }
 
-    public List<Long> getPubChemSIDs() {
-        return sids;
+    @Override
+    String getIupacName() {
+        return this.iupacName ?: "propan-2-ol"  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
+    String getUrl() {
+        return "http://www.compound.com"  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
+    Integer getComplexity() {
+        return 1  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
+    String getCompoundClass() {
+        return this.compoundClass ?: "Drug"  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
+    int getNumberOfAssays() {
+        return numAssays ?: 10  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
+    int getNumberOfActiveAssays() {
+        return numActiveAssays ?: 5  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
+    String resourcePath() {
+        return "/compound/223"  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+
+    @Override
+    boolean isDrug() {
+        return getCompoundClass() == "Drug"  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
+    String getProbeId() {
+        return 2  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
+    boolean isProbe() {
+        return true  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
+    Long getId() {
+        return this.id ?: pubChemCID ?: 2  //To change body of implemented methods use File | Settings | File Templates.
     }
 }

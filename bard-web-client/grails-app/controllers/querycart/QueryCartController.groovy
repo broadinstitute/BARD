@@ -38,7 +38,9 @@ class QueryCartController {
             switch(itemType) {
                 case QueryItemType.Compound:
                     String smiles = params.smiles
-                    item = new CartCompound(smiles, name, id)
+                    int numAssayActive = params.numAssayActive ? new Integer(params.numAssayActive) : 0
+                    int numAssayTested = params.numAssayTested ? new Integer(params.numAssayTested) : 0
+                    item = new CartCompound(smiles, name, id, numAssayActive, numAssayTested)
                     break
                 case QueryItemType.Project:
                     item = new CartProject(name, id)

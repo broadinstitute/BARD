@@ -10,16 +10,16 @@
                         </h4>
 
                         <p><span class="label label-info">${experiment.getRole()}</span>
-                            ${experiment.getValue(ExperimentValues.ExperimentCompoundCountValue).value} compound(s) /
-                            ${experiment.getValue(ExperimentValues.ExperimentSubstanceCountValue).value} substance(s) tested
+                            ${experiment.compounds} compound(s) /
+                            ${experiment.substances} substance(s) tested
                         </p>
 
                         <p><span>
                             <g:link controller="bardWebInterface" action="showExperiment" id="${experiment.id}"
                                     params='[searchString: "${searchString}"]'>View Results</g:link>
                             <g:if test="${showAssaySummary}">
-                                <div><g:render template="assaySummary"
-                                               model="[assayAdapter: experiment.getAssay()]"/></div>
+                                %{-- TODO <div><g:render template="assaySummary"--}%
+                                               %{--model="[assayAdapter: experiment?.getAssay()]"/></div>--}%
                             </g:if>
                             |
                             <a data-toggle="collapse" data-parent="#accordionDescription"

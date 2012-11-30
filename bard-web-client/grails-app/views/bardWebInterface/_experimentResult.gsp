@@ -11,7 +11,7 @@
 <p><b>Title: ${experimentDataMap?.experiment?.name}</b></p>
 
 <p><b>Assay ID : <g:link controller="bardWebInterface" action="showAssay"
-                         id="${experimentDataMap?.experiment?.assay?.id}" params='[searchString:"${searchString}"]'>${experimentDataMap?.experiment?.assay?.id}</g:link></b>
+                         id="${experimentDataMap?.experiment?.adid}" params='[searchString:"${searchString}"]'>${experimentDataMap?.experiment?.adid}</g:link></b>
 </p>
 
 <div class="row-fluid">
@@ -52,7 +52,7 @@
                         ${potency.toString()}
                     </g:if>
                 </td>
-                <g:each in="${experimentData.hillCurveValueList}" var="readout">
+                <g:each in="${experimentData?.hillCurveValueList}" var="readout">
 
                     <td>
                         <g:each in="${0..(readout.size() - 1)}" var="i">

@@ -17,8 +17,8 @@ public class HillCurveValue extends Value {
     protected String concentrationUnits;
 
     // data
-    protected List<Double> conc = new ArrayList<Double>();
-    protected List<Double> response = new ArrayList<Double>();
+    List<Double> conc = new ArrayList<Double>();
+    List<Double> response = new ArrayList<Double>();
 
     protected HillCurveValue () {}
     public HillCurveValue (Value parent) {

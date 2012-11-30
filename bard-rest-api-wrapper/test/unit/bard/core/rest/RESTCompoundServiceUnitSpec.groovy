@@ -117,8 +117,8 @@ class RESTCompoundServiceUnitSpec extends Specification {
         assert resultCompound.getId() == 2722
         where:
         label                 | node                           | compound
-        "Project is not null" | mapper.readTree(COMPOUND_NODE) | new Compound()
-        "Project is null"     | mapper.readTree(COMPOUND_NODE) | null
+        "ProjectSearchResult is not null" | mapper.readTree(COMPOUND_NODE) | new Compound()
+        "ProjectSearchResult is null"     | mapper.readTree(COMPOUND_NODE) | null
     }
 
     void "getEntity #label"() {
@@ -130,8 +130,8 @@ class RESTCompoundServiceUnitSpec extends Specification {
         assert resultCompound.getId() == 600
         where:
         label                 | node                                              | compound
-        "Project is not null" | mapper.readTree(COMPOUND_EXPANDED_SEARCH_RESULTS) | new Compound()
-        "Project is null"     | mapper.readTree(COMPOUND_EXPANDED_SEARCH_RESULTS) | null
+        "ProjectSearchResult is not null" | mapper.readTree(COMPOUND_EXPANDED_SEARCH_RESULTS) | new Compound()
+        "ProjectSearchResult is null"     | mapper.readTree(COMPOUND_EXPANDED_SEARCH_RESULTS) | null
     }
 
     void "addHighlight #label"() {

@@ -1,0 +1,14 @@
+<component name="libraryTable">
+  <library name="marvin">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/bard-web-client/web-app/marvin/sjars/marvin/services.jar!/" />
+      <root url="jar://$PROJECT_DIR$/bard-web-client/web-app/marvin/sjars/marvin/services-xmlrpc.jar!/" />
+      <root url="jar://$PROJECT_DIR$/bard-web-client/web-app/marvin/sjars/marvin/services-soap.jar!/" />
+      <root url="jar://$PROJECT_DIR$/bard-web-client/web-app/marvin/sjars/marvin/services-local.jar!/" />
+      <root url="jar://$PROJECT_DIR$/bard-web-client/web-app/marvin/sjars/marvin/services-jsonrpc.jar!/" />
+      <root url="jar://$PROJECT_DIR$/bard-web-client/web-app/marvin/sjars/marvin/services-http.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

@@ -2,6 +2,7 @@ package bard.core
 
 import spock.lang.Specification
 import spock.lang.Unroll
+import bard.core.rest.spring.util.FilterParams
 
 @Unroll
 class FilterParamsUnitSpec extends Specification {

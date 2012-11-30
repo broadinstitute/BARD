@@ -176,7 +176,7 @@ public class RESTAssayService extends RESTAbstractEntityService<Assay> implement
     }
 
     protected void addEntitySearchSummary(final Assay assay, final JsonNode node) {
-        final JsonNode assay_id = node.get(ASSAY_ID);
+        final JsonNode assay_id = node.get(AID);
         if (isNotNull(assay_id)) {
             assay.setId(assay_id.asLong());
         }

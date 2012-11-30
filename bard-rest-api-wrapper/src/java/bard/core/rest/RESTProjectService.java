@@ -48,7 +48,7 @@ public class RESTProjectService extends RESTAbstractEntityService<Project>
         if (isNotNull(idNode)) {
             project.setId(idNode.asLong());
         } else {
-            throw new IllegalArgumentException("Project JSON does not contain " + PROJECT_ID + " node");
+            throw new IllegalArgumentException("ProjectSearchResult JSON does not contain " + PROJECT_ID + " node");
         }
     }
 
@@ -67,7 +67,7 @@ public class RESTProjectService extends RESTAbstractEntityService<Project>
         if (isNotNull(idNode)) {
             project.setId(idNode.asLong());
         } else {
-            throw new IllegalArgumentException("Project JSON does not contain " + PROJ_ID + " node");
+            throw new IllegalArgumentException("ProjectSearchResult JSON does not contain " + PROJ_ID + " node");
         }
     }
 
