@@ -243,21 +243,7 @@ class QueryService implements IQueryService {
         final int nhits = foundProjectAdapters.size()
         return [projectAdapters: foundProjectAdapters, facets: facets, nHits: nhits]
     }
-    /**
-     *
-     * @param compound
-     * @param activeOnly - true if we want only the active compounds
-     * @return int the number of tested assays
-     */
-    @Deprecated
-    public int getNumberTestedAssays(Long cid,
-                                     boolean activeOnly) {
-//        final Compound compound = restCompoundService.get(cid)
-//
-//        final Collection<Assay> assays = combinedRestService.getTestedAssays(compound, activeOnly)
-//        return assays.size()
-        return 0
-    }
+
 
     //=============== Show Resources Given a Single ID ================
 

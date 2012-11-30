@@ -2,8 +2,11 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="1922f8e1-9b1f-4a78-b840-b1857f23d256" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/bard-web-client/grails-app/views/molSpreadSheet/_spreadSheet.gsp" afterPath="$PROJECT_DIR$/bard-web-client/grails-app/views/molSpreadSheet/_spreadSheet.gsp" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/bard-web-client/grails-app/controllers/bardqueryapi/BardWebInterfaceController.groovy" afterPath="$PROJECT_DIR$/bard-web-client/grails-app/controllers/bardqueryapi/BardWebInterfaceController.groovy" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/bard-web-client/grails-app/services/bardqueryapi/IQueryService.groovy" afterPath="$PROJECT_DIR$/bard-web-client/grails-app/services/bardqueryapi/IQueryService.groovy" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/bard-web-client/grails-app/services/bardqueryapi/QueryService.groovy" afterPath="$PROJECT_DIR$/bard-web-client/grails-app/services/bardqueryapi/QueryService.groovy" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/bard-web-client/grails-app/services/mockServices/MockQueryService.groovy" afterPath="$PROJECT_DIR$/bard-web-client/grails-app/services/mockServices/MockQueryService.groovy" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/bard-web-client/grails-app/services/molspreadsheet/MolecularSpreadSheetService.groovy" afterPath="$PROJECT_DIR$/bard-web-client/grails-app/services/molspreadsheet/MolecularSpreadSheetService.groovy" />
     </list>
     <ignored path="bard-web-query.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -217,10 +220,10 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="_spreadSheet.gsp" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="_spreadSheet.gsp" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/bard-web-client/grails-app/views/molSpreadSheet/_spreadSheet.gsp">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="66" column="75" selection-start="3293" selection-end="3293" vertical-scroll-proportion="1.9378239">
+            <state line="66" column="75" selection-start="3293" selection-end="3293" vertical-scroll-proportion="-7.1216216">
               <folding />
             </state>
           </provider>
@@ -230,15 +233,6 @@
         <entry file="file://$PROJECT_DIR$/bard-web-client/grails-app/views/molSpreadSheet/molecularSpreadSheet.gsp">
           <provider selected="true" editor-type-id="text-editor">
             <state line="13" column="91" selection-start="666" selection-end="666" vertical-scroll-proportion="-4.5102043">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="Activity.groovy" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/bard-rest-api-wrapper/src/groovy/bard/core/rest/spring/experiment/Activity.groovy">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="11" column="15" selection-start="477" selection-end="477" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -262,22 +256,46 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="SpreadSheetActivityStorage.groovy" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/bard-web-client/grails-app/domain/molspreadsheet/SpreadSheetActivityStorage.groovy">
-          <provider editor-type-id="org.jetbrains.plugins.grails.perspectives.DomainClassesRelationsEditorProvider">
-            <state />
-          </provider>
+      <file leaf-file-name="MolecularSpreadSheetService.groovy" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/bard-web-client/grails-app/services/molspreadsheet/MolecularSpreadSheetService.groovy">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="49" column="4" selection-start="1296" selection-end="1296" vertical-scroll-proportion="-3.139535">
+            <state line="368" column="44" selection-start="17353" selection-end="17353" vertical-scroll-proportion="-14.4">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="MolecularSpreadSheetService.groovy" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/bard-web-client/grails-app/services/molspreadsheet/MolecularSpreadSheetService.groovy">
+      <file leaf-file-name="IQueryService.groovy" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/bard-web-client/grails-app/services/bardqueryapi/IQueryService.groovy">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="418" column="15" selection-start="19298" selection-end="19298" vertical-scroll-proportion="0.0">
+            <state line="5" column="0" selection-start="120" selection-end="120" vertical-scroll-proportion="0.0">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="MockQueryService.groovy" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/bard-web-client/grails-app/services/mockServices/MockQueryService.groovy">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="32" column="3" selection-start="1009" selection-end="1009" vertical-scroll-proportion="0.0">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="QueryService.groovy" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/bard-web-client/grails-app/services/bardqueryapi/QueryService.groovy">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="25" column="37" selection-start="1088" selection-end="1088" vertical-scroll-proportion="0.0">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="BardWebInterfaceController.groovy" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/bard-web-client/grails-app/controllers/bardqueryapi/BardWebInterfaceController.groovy">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="441" column="0" selection-start="18638" selection-end="18638" vertical-scroll-proportion="0.2513089">
               <folding />
             </state>
           </provider>
@@ -290,29 +308,6 @@
           </provider>
           <provider selected="true" editor-type-id="text-editor">
             <state line="48" column="0" selection-start="1888" selection-end="1888" vertical-scroll-proportion="-1.3255814">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="HillCurveValueHolder.groovy" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/bard-web-client/grails-app/domain/molspreadsheet/HillCurveValueHolder.groovy">
-          <provider editor-type-id="org.jetbrains.plugins.grails.perspectives.DomainClassesRelationsEditorProvider">
-            <state />
-          </provider>
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="31" column="32" selection-start="816" selection-end="816" vertical-scroll-proportion="-0.39534885">
-              <folding>
-                <element signature="e#24#54#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="DoseCurveRenderingService.groovy" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/bard-web-client/grails-app/services/curverendering/DoseCurveRenderingService.groovy">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="61" column="0" selection-start="1912" selection-end="1912" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -331,12 +326,8 @@
   <component name="IdeDocumentHistory">
     <option name="changedFiles">
       <list>
-        <option value="$PROJECT_DIR$/bard-rest-api-wrapper/src/groovy/bard/core/adapter/ProjectAdapter.groovy" />
-        <option value="$PROJECT_DIR$/bard-rest-api-wrapper/src/groovy/bard/core/rest/spring/experiment/ExperimentAbstract.groovy" />
-        <option value="$PROJECT_DIR$/bard-rest-api-wrapper/src/groovy/bard/core/rest/spring/experiment/ExperimentShow.groovy" />
         <option value="$PROJECT_DIR$/bard-rest-api-wrapper/src/groovy/bard/core/rest/spring/experiment/ExperimentSearch.groovy" />
         <option value="$PROJECT_DIR$/bard-web-client/grails-app/views/bardWebInterface/_experimentResult.gsp" />
-        <option value="$PROJECT_DIR$/bard-web-client/grails-app/services/mockServices/MockQueryService.groovy" />
         <option value="$PROJECT_DIR$/bard-web-client/grails-app/conf/spring/resources.groovy" />
         <option value="$PROJECT_DIR$/bard-rest-api-wrapper/grails-app/services/bard/core/rest/spring/CompoundRestService.groovy" />
         <option value="$PROJECT_DIR$/bard-web-client/test/integration/molspreadsheet/MolecularSpreadSheetServiceIntegrationSpec.groovy" />
@@ -344,9 +335,13 @@
         <option value="$PROJECT_DIR$/bard-web-client/grails-app/domain/molspreadsheet/HillCurveValueHolder.groovy" />
         <option value="$PROJECT_DIR$/bard-web-client/grails-app/domain/molspreadsheet/MolSpreadSheetCell.groovy" />
         <option value="$PROJECT_DIR$/bard-web-client/grails-app/domain/molspreadsheet/SpreadSheetActivityStorage.groovy" />
-        <option value="$PROJECT_DIR$/bard-web-client/grails-app/services/molspreadsheet/MolecularSpreadSheetService.groovy" />
         <option value="$PROJECT_DIR$/bard-web-client/src/groovy/molspreadsheet/SpreadSheetActivity.groovy" />
         <option value="$PROJECT_DIR$/bard-web-client/grails-app/views/molSpreadSheet/_spreadSheet.gsp" />
+        <option value="$PROJECT_DIR$/bard-web-client/grails-app/services/molspreadsheet/MolecularSpreadSheetService.groovy" />
+        <option value="$PROJECT_DIR$/bard-web-client/grails-app/services/bardqueryapi/QueryService.groovy" />
+        <option value="$PROJECT_DIR$/bard-web-client/grails-app/controllers/bardqueryapi/BardWebInterfaceController.groovy" />
+        <option value="$PROJECT_DIR$/bard-web-client/grails-app/services/bardqueryapi/IQueryService.groovy" />
+        <option value="$PROJECT_DIR$/bard-web-client/grails-app/services/mockServices/MockQueryService.groovy" />
       </list>
     </option>
   </component>
@@ -922,16 +917,16 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="0" width="1600" height="860" extended-state="0" />
-    <editor active="true" />
+    <editor active="false" />
     <layout>
       <window_info id="Data Sources" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3298969" sideWeight="0.59217876" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="JetGradle" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Persistence" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="true" content_ui="tabs" />
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.44972068" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4485714" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.53571427" sideWeight="0.7290862" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.5757143" sideWeight="0.7290862" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="IDEtalk Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.34497207" sideWeight="0.26640928" order="8" side_tool="true" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
@@ -944,8 +939,8 @@
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="true" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32947233" sideWeight="0.8547486" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.27113134" sideWeight="0.4642857" order="0" side_tool="true" content_ui="combo" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.61731845" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.27113134" sideWeight="0.6614286" order="0" side_tool="true" content_ui="combo" />
+      <window_info id="Run" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.33857143" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Test Runs" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="JsTestDriver Server" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="13" side_tool="false" content_ui="tabs" />
       <window_info id="Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.49301675" sideWeight="0.5" order="12" side_tool="false" content_ui="tabs" />
@@ -1015,26 +1010,6 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/bard-web-client/grails-app/controllers/molspreadsheet/MolSpreadSheetController.groovy">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="54" column="0" selection-start="2511" selection-end="2511" vertical-scroll-proportion="-13.913043" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/bard-web-client/src/groovy/molspreadsheet/MolSpreadSheetDataBuilder.groovy">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="59" column="0" selection-start="1990" selection-end="1990" vertical-scroll-proportion="0.0" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/bard-web-client/test/unit/molspreadsheet/MolecularSpreadSheetServiceUnitSpec.groovy">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/bard-rest-api-wrapper/grails-app/services/bard/core/rest/spring/CompoundRestService.groovy">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="29" column="0" selection-start="1286" selection-end="1286" vertical-scroll-proportion="0.632948" />
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/bard-web-client/grails-app/domain/molspreadsheet/MolSpreadSheetData.groovy">
       <provider editor-type-id="org.jetbrains.plugins.grails.perspectives.DomainClassesRelationsEditorProvider">
         <state />
@@ -1081,13 +1056,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/bard-web-client/grails-app/services/molspreadsheet/MolecularSpreadSheetService.groovy">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="418" column="15" selection-start="19298" selection-end="19298" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/bard-rest-api-wrapper/src/groovy/bard/core/rest/spring/experiment/Activity.groovy">
       <provider selected="true" editor-type-id="text-editor">
         <state line="11" column="15" selection-start="477" selection-end="477" vertical-scroll-proportion="0.0">
@@ -1128,7 +1096,42 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/bard-web-client/grails-app/views/molSpreadSheet/_spreadSheet.gsp">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="66" column="75" selection-start="3293" selection-end="3293" vertical-scroll-proportion="1.9378239">
+        <state line="66" column="75" selection-start="3293" selection-end="3293" vertical-scroll-proportion="-7.1216216">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/bard-web-client/grails-app/services/molspreadsheet/MolecularSpreadSheetService.groovy">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="368" column="44" selection-start="17353" selection-end="17353" vertical-scroll-proportion="-14.4">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/bard-web-client/grails-app/services/bardqueryapi/QueryService.groovy">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="25" column="37" selection-start="1088" selection-end="1088" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/bard-web-client/grails-app/services/mockServices/MockQueryService.groovy">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="32" column="3" selection-start="1009" selection-end="1009" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/bard-web-client/grails-app/services/bardqueryapi/IQueryService.groovy">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="5" column="0" selection-start="120" selection-end="120" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/bard-web-client/grails-app/controllers/bardqueryapi/BardWebInterfaceController.groovy">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="441" column="0" selection-start="18638" selection-end="18638" vertical-scroll-proportion="0.2513089">
           <folding />
         </state>
       </provider>

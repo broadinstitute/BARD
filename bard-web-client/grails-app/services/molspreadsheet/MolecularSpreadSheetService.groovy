@@ -17,6 +17,7 @@ import querycart.QueryCartService
 import bard.core.rest.spring.*
 import bard.core.rest.spring.experiment.*
 import bard.core.rest.spring.assays.AbstractAssay
+import bard.core.rest.spring.compounds.Compound
 
 class MolecularSpreadSheetService {
     final static int START_DYNAMIC_COLUMNS = 4 //Where to start the dynamic columns
@@ -363,9 +364,9 @@ class MolecularSpreadSheetService {
         //we will use this to get the promiscuity score
         dataMap.put("${rowCount}_2".toString(), new MolSpreadSheetCell(compoundId.toString(), MolSpreadSheetCellType.identifier))
         //we will use this to get the 'active vrs tested' column
-        //TODO: This should change, because we should have these values for each compound
-        int activeAssays = this.queryService.getNumberTestedAssays(compoundId, true)
-        int testedAssays = this.queryService.getNumberTestedAssays(compoundId, false)
+        final Compound compound = compoundRestService.getCompoundById(compoundId)
+        int activeAssays = compound.numActiveAssay
+        int testedAssays = compound.numAssay
         dataMap.put("${rowCount}_3".toString(), new MolSpreadSheetCell("${activeAssays} / ${testedAssays}", MolSpreadSheetCellType.string))
 
         return molSpreadSheetData

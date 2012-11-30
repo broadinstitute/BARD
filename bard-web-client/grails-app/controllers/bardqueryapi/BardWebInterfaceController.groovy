@@ -73,17 +73,7 @@ class BardWebInterfaceController {
 
     }
 
-    def activeVrsTested(Long cid) {
-        if (cid) {
-            //Get the Promiscuity score for this CID
-            int activeAssays = this.queryService.getNumberTestedAssays(cid, true)
-            int testedAssays = this.queryService.getNumberTestedAssays(cid, false)
-            render(template: 'assaysActiveVrsTested', model: [activeAssays: activeAssays, testedAssays: testedAssays])
-            return
-        }
-        flash.message = "Error Getting Active vrs Tested Assays for Compound ${cid}"
-        return response.sendError(HttpServletResponse.SC_BAD_REQUEST, "${flash.message}")
-    }
+
 
     def promiscuity(Long cid) {
         if (cid) {

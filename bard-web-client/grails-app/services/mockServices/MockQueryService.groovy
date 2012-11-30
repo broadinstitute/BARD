@@ -30,17 +30,7 @@ class MockQueryService implements IQueryService {
         constructMockProjectAdapter()
         constructMockExperiment()
     }
-    /**
-     *
-     * @param compound
-     * @param activeOnly - true if we want only the active compounds
-     * @return int the number of tested assays
-     */
-    public int getNumberTestedAssays(Long cid,
-                                     boolean activeOnly) {
-        return 2;
 
-    }
 
     Map findPromiscuityScoreForCID(final Long cid) {
         return [scores: [20, 30], status: 200, message: "Success"]
@@ -60,7 +50,7 @@ class MockQueryService implements IQueryService {
 
         Set<Long> keySet = mockCompoundAdapterMap.keySet()
         for (Long key : keySet) {
-            foundCompoundAdapters.add((MockCompoundAdapter)mockCompoundAdapterMap.get(key))
+            foundCompoundAdapters.add((MockCompoundAdapter) mockCompoundAdapterMap.get(key))
         }
         Collection<Value> facets = []
         return [compoundAdapters: foundCompoundAdapters, facets: facets, nHits: 3]
