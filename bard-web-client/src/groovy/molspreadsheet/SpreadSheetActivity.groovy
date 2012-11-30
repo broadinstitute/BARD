@@ -32,8 +32,15 @@ class SpreadSheetActivity {
             for (Readout readout : readouts) {
 
                 final HillCurveValue hillCurveValue = readout.toHillCurveValue()
-                resultTypeNames.add(hillCurveValue.id)
-                this.hillCurveValueList << hillCurveValue
+                if (!resultTypeNames.contains(hillCurveValue.id)) {
+                    resultTypeNames.add(hillCurveValue.id)
+                }
+                if (hillCurveValue == null) {
+                    println "Null Hill Curve value"
+                } else {
+                    this.hillCurveValueList << hillCurveValue
+                }
+
             }
         }
     }
