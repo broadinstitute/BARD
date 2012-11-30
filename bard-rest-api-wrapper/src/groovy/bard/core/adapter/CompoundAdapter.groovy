@@ -136,11 +136,11 @@ public class CompoundAdapter implements CompoundAdapterInterface{
     }
 
     public int getNumberOfAssays() {
-        return compound?.numAssay?.intValue()
+        return compound?.numAssay?.intValue()?:0
     }
 
     public int getNumberOfActiveAssays() {
-        return compound?.numActiveAssay?.intValue()
+        return compound?.numActiveAssay?.intValue()?:0
     }
 
     public String resourcePath() {
