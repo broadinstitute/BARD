@@ -56,14 +56,15 @@
                     <% int column = 0 %>
                     <g:each var="colHeader" in="${molSpreadSheetData?.getColumns()}">
                         <g:if test="${column == 2}">
-                            <th rowspan="2" class="display molSpreadSheetHeadData"
-                                width="<%=columnWidth%>%">${colHeader}</th>
-                        </g:if>
-
-                        <g:if test="${column == 3}">
                             <th rowspan="2" class="molSpreadSheetHeadData" id="promiscuitycol"
                                 width="<%=columnWidth%>%"><%=molSpreadSheetData.mapColumnsToAssay[column]%><br/>${colHeader}
                             </th>
+
+                        </g:if>
+
+                        <g:if test="${column == 3}">
+                            <th rowspan="2" class="display molSpreadSheetHeadData"
+                                width="<%=columnWidth%>%">${colHeader}</th>
                         </g:if>
                         <% column++ %>
                     </g:each>
