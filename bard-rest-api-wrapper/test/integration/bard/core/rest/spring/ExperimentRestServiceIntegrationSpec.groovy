@@ -1,15 +1,14 @@
 package bard.core.rest.spring
 
 import bard.core.rest.helper.RESTTestHelper
+import bard.core.rest.spring.assays.Assay
 import bard.core.rest.spring.experiment.Activity
 import bard.core.rest.spring.experiment.ExperimentData
-
+import bard.core.rest.spring.experiment.ExperimentSearchResult
+import bard.core.rest.spring.experiment.ExperimentShow
 import grails.plugin.spock.IntegrationSpec
 import spock.lang.Timeout
 import spock.lang.Unroll
-import bard.core.rest.spring.assays.Assay
-import bard.core.rest.spring.experiment.ExperimentShowResult
-import bard.core.rest.spring.experiment.ExperimentShow
 
 /**
  * Tests for ProjectRestService
@@ -42,7 +41,7 @@ class ExperimentRestServiceIntegrationSpec extends IntegrationSpec {
         given:
         final List<Long> experimentIds = [460, 461, 197, 198, 4171, 3278, 3274, 3277, 2362, 2637]
         when:
-        final ExperimentShowResult experimentResult = experimentRestService.searchExperimentsByIds(experimentIds)
+        final ExperimentSearchResult experimentResult = experimentRestService.searchExperimentsByIds(experimentIds)
         then:
         assert experimentResult
         assert experimentResult.experiments

@@ -6,8 +6,8 @@ import bard.core.rest.spring.assays.ExpandedAssay
 import bard.core.rest.spring.compounds.CompoundResult
 import bard.core.rest.spring.experiment.ExperimentData
 import bard.core.rest.spring.experiment.ExperimentSearch
+import bard.core.rest.spring.experiment.ExperimentSearchResult
 import bard.core.rest.spring.experiment.ExperimentShow
-import bard.core.rest.spring.experiment.ExperimentShowResult
 import bard.core.rest.spring.project.ExpandedProjectResult
 import bard.core.rest.spring.project.Project
 import bard.core.rest.spring.project.ProjectResult
@@ -299,7 +299,7 @@ class RestCombinedServiceIntegrationSpec extends IntegrationSpec {
         given:
         Long cid = 313619
         when:
-        ExperimentShowResult experimentResult = this.restCombinedService.findExperimentsByCID(cid)
+        ExperimentSearchResult experimentResult = this.restCombinedService.findExperimentsByCID(cid)
         then:
         assert experimentResult
         assert experimentResult.experiments

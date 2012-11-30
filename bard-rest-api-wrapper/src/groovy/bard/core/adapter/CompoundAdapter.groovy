@@ -4,8 +4,9 @@ package bard.core.adapter;
 import bard.core.Format
 import bard.core.rest.spring.compounds.Compound
 import org.apache.commons.lang3.StringUtils
+import bard.core.interfaces.CompoundAdapterInterface
 
-public class CompoundAdapter {
+public class CompoundAdapter implements CompoundAdapterInterface{
     private final Object myLock = new Object()
     Compound compound
     private String probeId;
@@ -34,19 +35,6 @@ public class CompoundAdapter {
 
     public boolean isProbe() {
         return StringUtils.isNotBlank(this.getProbeId())
-    }
-
-    //Deprecated
-    public List<Long> getPubChemSIDs() {
-//
-//        Collection<Value> values =
-//            getEntity().getValues(Compound.PubChemSIDValue);
-//        List<Long> sids = [];
-//        for (Value value : values) {
-//            sids.add((Long) value.getValue());
-//        }
-//        return sids;
-        return []
     }
     public Long getId(){
         return getPubChemCID()

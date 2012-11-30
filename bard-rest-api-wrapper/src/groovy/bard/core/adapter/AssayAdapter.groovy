@@ -2,31 +2,22 @@ package bard.core.adapter;
 
 
 import bard.core.Value
-import bard.core.interfaces.AssayCategory
-import bard.core.interfaces.AssayRole
-import bard.core.interfaces.AssayType
-import bard.core.interfaces.EntityNamedSources
 import bard.core.rest.spring.assays.AbstractAssay
+import bard.core.interfaces.*
 
-public class AssayAdapter {
+public class AssayAdapter implements AssayAdapterInterface {
     private AbstractAssay assay
-//    List<String> srcNames = [EntityNamedSources.CAPAnnotationSource,
-//            EntityNamedSources.GOBPAnnotationSource,
-//            EntityNamedSources.GOMFAnnotationSource,
-//            EntityNamedSources.GOCCAnnotationSource,
-//            EntityNamedSources.KEGGDiseaseCategoryAnnotationSource,
-//            EntityNamedSources.KEGGDiseaseNameAnnotationSource]
 
     public AssayAdapter() {
 
     }
 
-    public String getName() {
-        return assay.name
-    }
-
     public AssayAdapter(AbstractAssay assay) {
         this.assay = assay
+    }
+
+    public String getName() {
+        return assay.name
     }
 
     public Long getCapAssayId() {
@@ -96,7 +87,7 @@ public class AssayAdapter {
     }
 
     //TODO: Change to values?
-    public List<String> getKeggAnnotations() {
+    public Map<String, List<String>> getKeggAnnotations() {
         Map<String, List<String>> annos = new HashMap<String, List<String>>()
         if (assay) {
             annos.put(EntityNamedSources.KEGGDiseaseCategoryAnnotationSource, assay.getKegg_disease_cat())

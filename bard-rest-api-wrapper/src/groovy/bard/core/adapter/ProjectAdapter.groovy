@@ -7,17 +7,11 @@ import bard.core.Value
 import bard.core.interfaces.EntityNamedSources
 import bard.core.rest.spring.compounds.Compound
 import bard.core.rest.spring.project.Project
+import bard.core.interfaces.ProjectAdapterInterface
 
-public class ProjectAdapter {
+public class ProjectAdapter implements ProjectAdapterInterface {
     Project project
-//    List<String> srcNames = [
-//            EntityNamedSources.CAPAnnotationSource,
-//            EntityNamedSources.GOBPAnnotationSource,
-//            EntityNamedSources.GOMFAnnotationSource,
-//            EntityNamedSources.GOCCAnnotationSource,
-//            EntityNamedSources.KEGGDiseaseCategoryAnnotationSource,
-//            EntityNamedSources.KEGGDiseaseNameAnnotationSource
-//    ]
+
 
     public ProjectAdapter(Project project) {
         this.project = project
@@ -49,7 +43,7 @@ public class ProjectAdapter {
         final List<Probe> probes = new ArrayList<Probe>()
         final List<Compound> compounds = project.getProbes()
         for (Compound compound : compounds) {
-            Probe probe = new Probe((String)compound.cid.toString(), compound.probeId, compound.url, compound.smiles)
+            Probe probe = new Probe(compound?.cid?.toString(), compound.probeId, compound.url, compound.smiles)
             probes.add(probe)
         }
         return probes
@@ -65,7 +59,7 @@ public class ProjectAdapter {
         final Collection<Value> annos = new ArrayList<Value>();
         final Map<String, String> terms = getDictionaryTerms()
         for (String key : terms.keySet()) {
-            StringValue value = new StringValue(DataSource.DEFAULT, key, terms.get(key))
+            Value value = new bard.core.StringValue(DataSource.DEFAULT, key, terms.get(key))
             annos.add(value)
         }
 
@@ -86,7 +80,7 @@ public class ProjectAdapter {
         return dictionaryTerms
     }
 
-    public List<String> getKeggAnnotations() {
+    public Map<String, List<String>> getKeggAnnotations() {
         Map<String, List<String>> annos = new HashMap<String, List<String>>()
         annos.put(EntityNamedSources.KEGGDiseaseCategoryAnnotationSource, project.getKegg_disease_cat())
         annos.put(EntityNamedSources.KEGGDiseaseNameAnnotationSource, project.getKegg_disease_names())

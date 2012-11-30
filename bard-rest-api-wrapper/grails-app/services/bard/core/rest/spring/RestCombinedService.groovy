@@ -5,7 +5,7 @@ import bard.core.rest.spring.assays.Assay
 import bard.core.rest.spring.assays.AssayResult
 import bard.core.rest.spring.compounds.CompoundResult
 import bard.core.rest.spring.experiment.ExperimentSearch
-import bard.core.rest.spring.experiment.ExperimentShowResult
+import bard.core.rest.spring.experiment.ExperimentSearchResult
 import bard.core.rest.spring.project.ProjectResult
 import com.fasterxml.jackson.databind.ObjectMapper
 import org.springframework.web.client.RestTemplate
@@ -86,7 +86,7 @@ class RestCombinedService {
 
     }
 
-    public ExperimentShowResult findExperimentsByCID(final Long cid) {
+    public ExperimentSearchResult findExperimentsByCID(final Long cid) {
         final StringBuilder resource =
             new StringBuilder(
                     compoundRestService.getResource(cid.toString())).
@@ -94,7 +94,7 @@ class RestCombinedService {
                     append(EntityService.QUESTION_MARK).
                     append(EntityService.EXPAND_TRUE)
         final URL url = new URL(resource.toString())
-        ExperimentShowResult experimentResult = this.restTemplate.getForObject(url.toURI(), ExperimentShowResult.class)
+        ExperimentSearchResult experimentResult = this.restTemplate.getForObject(url.toURI(), ExperimentSearchResult.class)
         return experimentResult
 
     }
