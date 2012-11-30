@@ -409,6 +409,7 @@ class MolecularSpreadSheetService {
         final List<ExperimentSearch> allExperiments = []
 
         for (Long assayId : assayIds) {
+            //TODO: We probably could post all the ids to this url. We need to investigate
             final List<ExperimentSearch> experiments = restCombinedService.findExperimentsByAssayId(assayId)
             if (experiments) {
                 allExperiments.addAll(experiments)
