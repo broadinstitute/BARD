@@ -1,9 +1,16 @@
 databaseChangeLog = {
 
-    changeSet(author: "ddurkin", id: "grant select", dbms: 'oracle', context:'grant-selects',runAlways: 'true') {
+    changeSet(author: "ddurkin", id: "grant select", dbms: 'oracle', context:'grant-selects,standard',runAlways: 'true') {
         grailsChange {
             change {
-                List<String> usernames = ['SCHATWIN', 'BARD_DEV', 'SBRUDZ', 'DATA_MIG', 'YCRUZ', 'SOUTHERN', 'BARD_QA', 'BARD_CI', 'DSTONICH', 'BALEXAND', 'DDURKIN', 'JASIEDU']
+
+                List<String> usernames = ['BALEXAND','BAMBOO','BARD_BAMBOO_CAP','BARD_BAMBOO_DATA_EXPORT',
+                                          'BARD_BAMBOO_DOMAIN_MODEL','BARD_BAMBOO_QUERY_API','BARD_CAP_CHROME',
+                                          'BARD_CAP_FIREFOX','BARD_CI','BARD_DEV','BARD_PROD','BARD_QA',
+                                          'BARD_QA1','BARD_QA_CAP','DDURKIN','DLAHR_BARD','DSTONICH',
+                                          'GWALZER_BARD','JASIEDU','JLEV','SBRUDZ','SCHATWIN','SOUTHERN',
+                                          'XIAORONG','YCRUZ']
+
                 String currentUsername = application?.config?.dataSource?.username?.toUpperCase()
 
                 def tablenames = sql.rows('''select table_name from user_tables order by table_name''').collect{it.TABLE_NAME}
