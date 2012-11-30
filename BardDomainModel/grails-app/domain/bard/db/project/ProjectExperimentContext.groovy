@@ -12,16 +12,16 @@ import bard.db.model.AbstractContext
 class ProjectExperimentContext extends AbstractContext{
 
     ProjectExperiment projectExperiment
-//    List<ProjectContextItem> projectContextItems = []
+    List<ProjectExperimentContextItem> contextItems = []
 
     static belongsTo = [projectExperiment: ProjectExperiment]
 
-//    static hasMany = [projectContextItems: ProjectContextItem]
+    static hasMany = [contextItems: ProjectExperimentContextItem]
 
     static mapping = {
         table('PRJCT_EXPRMT_CONTEXT')
         id(column: "PRJCT_EXPRMT_CONTEXT_ID", generator: "sequence", params: [sequence: 'PRJCT_EXPRMT_CONTEXT_ID_SEQ'])
-//        projectContextItems(indexColumn: [name: 'DISPLAY_ORDER'])
+        contextItems(indexColumn: [name: 'DISPLAY_ORDER'])
     }
 
 }
