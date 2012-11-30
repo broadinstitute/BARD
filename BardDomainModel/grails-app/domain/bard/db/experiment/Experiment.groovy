@@ -30,15 +30,17 @@ class Experiment {
     String modifiedBy
 
     // TODO results can appearently be very large 10 million rows
-    Set<Result> results = [] as Set<Result>
-    List<ExperimentContext> experimentContexts = [] as List<ExperimentContext>
-    Set<ProjectExperiment> projectExperiments = [] as Set<ProjectExperiment>
-    Set<ExternalReference> externalReferences = [] as Set<ExternalReference>
+    List<ExperimentContext> experimentContexts = []
+    Set<ProjectExperiment> projectExperiments = [] as Set
+    Set<ExternalReference> externalReferences = [] as Set
+    Set<ExperimentMeasure> experimentMeasures = [] as Set
+    Set<Result> results = [] as Set
 
     static hasMany = [experimentContexts: ExperimentContext,
-            results: Result,
+            experimentMeasures: ExperimentMeasure,
+            externalReferences: ExternalReference,
             projectExperiments: ProjectExperiment,
-            externalReferences: ExternalReference]
+            results: Result]
 
     static mapping = {
         id(column: "EXPERIMENT_ID", generator: "sequence", params: [sequence: 'EXPERIMENT_ID_SEQ'])
