@@ -4,6 +4,7 @@ import bard.db.enums.ReadyForExtraction
 import bard.db.registration.Assay
 import bard.db.registration.ExternalReference
 import bard.db.project.ProjectStep
+import bard.db.project.ProjectExperiment
 
 class Experiment {
 
@@ -31,12 +32,12 @@ class Experiment {
     // TODO results can appearently be very large 10 million rows
     Set<Result> results = [] as Set<Result>
     List<ExperimentContext> experimentContexts = [] as List<ExperimentContext>
-    Set<ProjectStep> projectSteps = [] as Set<ProjectStep>
+    Set<ProjectExperiment> projectExperiments = [] as Set<ProjectExperiment>
     Set<ExternalReference> externalReferences = [] as Set<ExternalReference>
 
     static hasMany = [experimentContexts: ExperimentContext,
             results: Result,
-            projectSteps: ProjectStep,
+            projectExperiments: ProjectExperiment,
             externalReferences: ExternalReference]
 
     static mapping = {

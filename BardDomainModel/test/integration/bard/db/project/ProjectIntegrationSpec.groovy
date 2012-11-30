@@ -18,9 +18,9 @@ class ProjectIntegrationSpec extends IntegrationSpec {
     ProjectContext projectContext
     ProjectContextItem projectContextItem
 
-    ProjectStep projectStep
-    StepContext stepContext
-    StepContextItem stepContextItem
+    ProjectExperiment projectExperiment
+    ProjectExperimentContext projectExperimentContext
+    ProjectExperimentContextItem projectExperimentContextItem
 
     ExternalReference externalReference
 
@@ -29,9 +29,10 @@ class ProjectIntegrationSpec extends IntegrationSpec {
         domainInstance = Project.buildWithoutSave()
     }
 
-    public initializeProjectStep() {
-        projectStep = ProjectStep.buildWithoutSave()
-        domainInstance.addToProjectSteps(projectStep)
+    public initializeProjectExperiment() {
+        projectExperiment = ProjectExperiment.buildWithoutSave()
+        projectExperiment.experiment.save()
+        domainInstance.addToProjectExperiments(projectExperiment)
     }
 
     void initializeProjectContextItem() {
@@ -51,15 +52,15 @@ class ProjectIntegrationSpec extends IntegrationSpec {
         projectContext
     }
 
-    void initializeStepContext() {
-        stepContext = StepContext.buildWithoutSave()
-        projectStep.addToStepContexts(stepContext)
+    void initializeProjectExperimentContext() {
+        projectExperimentContext = ProjectExperimentContext.buildWithoutSave()
+        projectExperiment.addToProjectExperimentContexts(projectExperimentContext)
     }
 
-    void initializeStepContextItem() {
-        stepContextItem = StepContextItem.buildWithoutSave()
-        stepContext.addToStepContextItems(stepContextItem)
-        stepContextItem.attributeElement.save()
+    void initializeProjectExperimentContextItem() {
+        projectExperimentContextItem = ProjectExperimentContextItem.buildWithoutSave()
+        projectExperimentContext.addToContextItems(projectExperimentContextItem)
+        projectExperimentContextItem.attributeElement.save()
     }
 
     void "test projectContext cascade save"() {
@@ -83,37 +84,37 @@ class ProjectIntegrationSpec extends IntegrationSpec {
         projectContextItem.id != null
     }
 
-    void "test projectSteps cascade save"() {
+    void "test projectExperiments cascade save"() {
         given:
-        initializeProjectStep()
-        assert projectStep.id == null
+        initializeProjectExperiment()
+        assert projectExperiment.id == null
         when:
         domainInstance.save(flush: true)
         then:
-        projectStep.id != null
+        projectExperiment.id != null
     }
 
     void "test stepContexts cascade save"() {
         given:
-        initializeProjectStep()
-        initializeStepContext()
-        assert stepContext.id == null
+        initializeProjectExperiment()
+        initializeProjectExperimentContext()
+        assert projectExperimentContext.id == null
         when:
         domainInstance.save(flush: true)
         then:
-        stepContext.id != null
+        projectExperimentContext.id != null
     }
 
     void "test stepContextItems cascade save"() {
         given:
-        initializeProjectStep()
-        initializeStepContext()
-        initializeStepContextItem()
-        assert stepContextItem.id == null
+        initializeProjectExperiment()
+        initializeProjectExperimentContext()
+        initializeProjectExperimentContextItem()
+        assert projectExperimentContextItem.id == null
         when:
         domainInstance.save(flush: true)
         then:
-        stepContextItem.id != null
+        projectExperimentContextItem.id != null
     }
 
     void "test externalReferences cascade save"() {

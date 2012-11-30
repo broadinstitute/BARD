@@ -23,8 +23,15 @@ class ProjectExperiment {
     String modifiedBy
 
     List<ProjectExperimentContext> projectExperimentContexts = []
+    Set<ProjectStep> precedingProjectSteps = [] as Set
+    Set<ProjectStep> followingProjectSteps = [] as Set
 
-    static hasMany = [projectExperimentContexts: ProjectExperimentContext]
+    static hasMany = [projectExperimentContexts: ProjectExperimentContext,
+            precedingProjectSteps: ProjectStep,
+            followingProjectSteps: ProjectStep]
+
+    static mappedBy = [precedingProjectSteps: 'nextProjectExperiment',
+            followingProjectSteps: 'previousProjectExperiment']
 
     static constraints = {
         experiment()

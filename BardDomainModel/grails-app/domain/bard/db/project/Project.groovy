@@ -20,11 +20,12 @@ class Project {
     String modifiedBy
 
     List<ProjectContext> projectContexts = [] as List
-    Set<ProjectStep> projectSteps = [] as Set
+    Set<ProjectExperiment> projectExperiments = [] as Set
+
     Set<ExternalReference> externalReferences = [] as Set
     Set<ProjectDocument> projectDocuments = [] as Set
 
-    static hasMany = [projectSteps: ProjectStep,
+    static hasMany = [projectExperiments: ProjectExperiment,
             externalReferences: ExternalReference,
             projectContexts:ProjectContext,
             projectDocuments: ProjectDocument]
