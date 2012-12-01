@@ -2,26 +2,31 @@ package bard.db.dictionary
 
 class OntologyItem {
 
-	String itemReference
-	Date dateCreated
-	Date lastUpdated
-	String modifiedBy
-	Element element
-	Ontology ontology
+    private static final int MODIFIED_BY_MAX_SIZE = 40
+    private static final int ITEM_REFERENCE_MAX_SIZE = 20
 
-	static belongsTo = [Ontology]
+    Ontology ontology
+    Element element
+    String itemReference
 
-	static mapping = {
-		id column: "Ontology_Item_ID", generator: "assigned"
-        itemReference sqlType: "char", length: 10
-	}
+    Date dateCreated
+    Date lastUpdated
+    String modifiedBy
 
-	static constraints = {
-		itemReference nullable: true, maxSize: 10
-		dateCreated maxSize: 19
-		lastUpdated nullable: true, maxSize: 19
-		modifiedBy nullable: true, maxSize: 40
-        ontology nullable: false
-        element nullable: true
-	}
+    static belongsTo = [ontology: Ontology]
+
+    static constraints = {
+
+        ontology(nullable: false)
+        element(nullable: true)
+        itemReference( nullable: true, blank: false, maxSize: ITEM_REFERENCE_MAX_SIZE)
+
+        dateCreated(nullable: false)
+        lastUpdated(nullable: true)
+        modifiedBy(nullable: true, blank: false, maxSize: MODIFIED_BY_MAX_SIZE)
+    }
+
+    static mapping = {
+        id(column: 'ONTOLOGY_ITEM_ID', generator: 'sequence', params: [sequence: 'ONTOLOGY_ITEM_ID_SEQ'])
+    }
 }

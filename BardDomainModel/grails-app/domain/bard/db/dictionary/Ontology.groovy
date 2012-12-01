@@ -2,9 +2,9 @@ package bard.db.dictionary
 
 class Ontology {
 
+    private static final int ABBREVIATION_MAX_SIZE = 20
     private static final int MODIFIED_BY_MAX_SIZE = 40
     private static final int ONTOLOGY_NAME_MAX_SIZE = 256
-    private static final int ABBREVIATION_MAX_SIZE = 20
     private static final int SYSTEM_URL_MAX_SIZE = 1000
 
     String ontologyName
