@@ -1,48 +1,33 @@
 package bard.db.dictionary
 
-import org.apache.commons.lang.builder.EqualsBuilder
-import org.apache.commons.lang.builder.HashCodeBuilder
-
 class UnitConversion implements Serializable {
 
-	Float multiplier
-	Float offset
-	String formula
-	Date dateCreated
-	Date lastUpdated
-	String modifiedBy
-	String fromUnit
-	String toUnit
+    private static final int MODIFIED_BY_MAX_SIZE = 40
+    private static final int FORMULA_MAX_SIZE = 256
 
-	int hashCode() {
-		def builder = new HashCodeBuilder()
-		builder.append fromUnit
-		builder.append toUnit
-		builder.toHashCode()
-	}
+    Element fromUnit
+    Element toUnit
 
-	boolean equals(other) {
-		if (other == null) return false
-		def builder = new EqualsBuilder()
-		builder.append fromUnit, other.fromUnit
-		builder.append toUnit, other.toUnit
-		builder.isEquals()
-	}
+    Float multiplier
+    Float offset
+    String formula
 
-	static mapping = {
-		id composite: ["fromUnit", "toUnit"]
-        fromUnit column: "from_unit"
-        toUnit column:  "to_unit"
-	}
+    Date dateCreated
+    Date lastUpdated
+    String modifiedBy
 
-	static constraints = {
-		fromUnit maxSize: 100
-		toUnit maxSize: 100
-		multiplier nullable: true
-		offset nullable: true
-		formula nullable: true, maxSize: 256
-		dateCreated maxSize: 19
-		lastUpdated nullable: true, maxSize: 19
-		modifiedBy nullable: true, maxSize: 40
-	}
+    static constraints = {
+        fromUnit()
+        toUnit()
+        multiplier( nullable: true)
+        offset( nullable: true)
+        formula( nullable: true, blank: false, maxSize: FORMULA_MAX_SIZE)
+        dateCreated(nullable: false)
+        lastUpdated(nullable: true)
+        modifiedBy(nullable: true, blank: false, maxSize: MODIFIED_BY_MAX_SIZE)
+    }
+
+    static mapping = {
+        id(column: 'UNIT_CONVERSION_ID', generator: 'sequence', params: [sequence: 'UNIT_CONVERSION_ID_SEQ'])
+    }
 }
