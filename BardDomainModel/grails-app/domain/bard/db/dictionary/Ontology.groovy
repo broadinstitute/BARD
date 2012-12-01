@@ -2,25 +2,34 @@ package bard.db.dictionary
 
 class Ontology {
 
-	String ontologyName
-	String abbreviation
-	String systemUrl
-	Date dateCreated
-	Date lastUpdated
-	String modifiedBy
+    private static final int MODIFIED_BY_MAX_SIZE = 40
+    private static final int ONTOLOGY_NAME_MAX_SIZE = 256
+    private static final int ABBREVIATION_MAX_SIZE = 20
+    private static final int SYSTEM_URL_MAX_SIZE = 1000
 
-	static hasMany = [ontologyItems: OntologyItem]
+    String ontologyName
+    String abbreviation
+    String systemUrl
 
-	static mapping = {
-		id column: "Ontology_ID", generator: "assigned"
-	}
+    Date dateCreated
+    Date lastUpdated
+    String modifiedBy
 
-	static constraints = {
-		ontologyName maxSize: 256
-		abbreviation nullable: true, maxSize: 20
-		systemUrl nullable: true, maxSize: 1000
-		dateCreated maxSize: 19
-		lastUpdated nullable: true, maxSize: 19
-		modifiedBy nullable: true, maxSize: 40
-	}
+    Set<OntologyItem> ontologyItems = [] as Set
+
+    static hasMany = [ontologyItems: OntologyItem]
+
+    static constraints = {
+        ontologyName(blank: false, maxSize: ONTOLOGY_NAME_MAX_SIZE)
+        abbreviation(nullable: true, blank: false, maxSize: ABBREVIATION_MAX_SIZE)
+        systemUrl(nullable: true, blank: false, maxSize: SYSTEM_URL_MAX_SIZE)
+
+        dateCreated(nullable: false)
+        lastUpdated(nullable: true)
+        modifiedBy(nullable: true, blank: false, maxSize: MODIFIED_BY_MAX_SIZE)
+    }
+
+    static mapping = {
+        id(column: 'ONTOLOGY_ID', generator: 'sequence', params: [sequence: 'ONTOLOGY_ID_SEQ'])
+    }
 }
