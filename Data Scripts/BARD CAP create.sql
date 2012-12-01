@@ -1853,7 +1853,7 @@ CREATE TABLE Unit_tree(
 -- VIEW: ASSAY_ELEMENT
 --
 
-CREATE VIEW ASSAY_ELEMENT AS
+create or replace view ASSAY_ELEMENT AS
 SELECT El.ELEMENT_ID Element_ID, El.ELEMENT_STATUS Element_Status, El.LABEL Label, El.DESCRIPTION Description, El.ABBREVIATION Abbreviation, El.SYNONYMS Synonyms, El.UNIT_ID Unit_ID, El.BARD_URI BARD_URI, El.EXTERNAL_URL External_URL, El.READY_FOR_EXTRACTION ready_for_extraction, El.VERSION Version, El.Date_Created Date_Created, El.Last_Updated Last_Updated, El.MODIFIED_BY Modified_by
 FROM ELEMENT El
 WHERE ELEMENT_ID in (select ELEMENT_ID from Assay_Descriptor_Tree)
@@ -1865,7 +1865,7 @@ COMMENT ON TABLE ASSAY_ELEMENT IS 'This view shows the unique list of elements u
 -- VIEW: BIOLOGY_ELEMENT
 --
 
-CREATE VIEW BIOLOGY_ELEMENT AS
+create or replace view BIOLOGY_ELEMENT AS
 SELECT El.ELEMENT_ID Element_ID, El.ELEMENT_STATUS Element_Status, El.LABEL Label, El.DESCRIPTION Description, El.ABBREVIATION Abbreviation, El.SYNONYMS Synonyms, El.UNIT_ID Unit_ID, El.BARD_URI BARD_URI, El.EXTERNAL_URL External_URL, El.READY_FOR_EXTRACTION ready_for_extraction, El.VERSION Version, El.Date_Created Date_Created, El.Last_Updated Last_Updated, El.MODIFIED_BY Modified_by
 FROM ELEMENT El
 WHERE el.ELEMENT_ID in (select ELEMENT_ID from Biology_Descriptor_tree)
@@ -1875,7 +1875,7 @@ WHERE el.ELEMENT_ID in (select ELEMENT_ID from Biology_Descriptor_tree)
 -- VIEW: INSTANCE_ELEMENT
 --
 
-CREATE VIEW INSTANCE_ELEMENT AS
+create or replace view INSTANCE_ELEMENT AS
 SELECT El.ELEMENT_ID Element_ID, El.ELEMENT_STATUS Element_Status, El.LABEL Label, El.DESCRIPTION Description, El.ABBREVIATION Abbreviation, El.SYNONYMS Synonyms, El.UNIT_ID Unit_ID, El.BARD_URI BARD_URI, El.EXTERNAL_URL External_URL, El.READY_FOR_EXTRACTION ready_for_extraction, El.VERSION Version, El.Date_Created Date_Created, El.Last_Updated Last_Updated, El.MODIFIED_BY Modified_by
 FROM ELEMENT El
 WHERE el.ELEMENT_ID in (select ELEMENT_ID from Instance_Descriptor_tree)
@@ -1885,7 +1885,7 @@ WHERE el.ELEMENT_ID in (select ELEMENT_ID from Instance_Descriptor_tree)
 -- VIEW: LABORATORY_ELEMENT
 --
 
-CREATE VIEW LABORATORY_ELEMENT
+create or replace view LABORATORY_ELEMENT
 (ELEMENT_ID, ELEMENT_STATUS, LABEL, DESCRIPTION, ABBREVIATION, SYNONYMS, UNIT_ID, BARD_URI, EXTERNAL_URL, READY_FOR_EXTRACTION, VERSION, DATE_CREATED, LAST_UPDATED, MODIFIED_BY) AS
 SELECT El.ELEMENT_ID, El.ELEMENT_STATUS, El.LABEL, El.DESCRIPTION, El.ABBREVIATION, El.SYNONYMS, El.UNIT_ID, El.BARD_URI, El.EXTERNAL_URL, El.READY_FOR_EXTRACTION, El.VERSION, El.Date_Created, El.Last_Updated, El.MODIFIED_BY
 FROM ELEMENT El
@@ -1896,7 +1896,7 @@ WHERE ELEMENT_ID in (select ELEMENT_ID from Laboratory_tree)
 -- VIEW: RESULT_TYPE_ELEMENT
 --
 
-CREATE VIEW RESULT_TYPE_ELEMENT AS
+create or replace view RESULT_TYPE_ELEMENT AS
 SELECT El.ELEMENT_ID Element_ID, El.ELEMENT_STATUS Element_Status, El.LABEL Label, El.DESCRIPTION Description, El.ABBREVIATION Abbreviation, El.SYNONYMS Synonyms, El.UNIT_ID Unit_ID, El.BARD_URI BARD_URI, El.EXTERNAL_URL External_URL, El.READY_FOR_EXTRACTION ready_for_extraction, El.VERSION Version, El.Date_Created Date_Created, El.Last_Updated Last_Updated, El.MODIFIED_BY Modified_by
 FROM ELEMENT El
 WHERE el.ELEMENT_ID in (select RESULT_TYPE_ID from Result_type_tree)
@@ -1906,7 +1906,7 @@ WHERE el.ELEMENT_ID in (select RESULT_TYPE_ID from Result_type_tree)
 -- VIEW: STAGE_ELEMENT
 --
 
-CREATE VIEW STAGE_ELEMENT AS
+create or replace view STAGE_ELEMENT AS
 SELECT El.ELEMENT_ID Element_ID, El.ELEMENT_STATUS Element_Status, El.LABEL Label, El.DESCRIPTION Description, El.ABBREVIATION Abbreviation, El.SYNONYMS Synonyms, El.UNIT_ID Unit_ID, El.BARD_URI BARD_URI, El.EXTERNAL_URL External_URL, El.READY_FOR_EXTRACTION ready_for_extraction, El.VERSION Version, El.Date_Created Date_Created, El.Last_Updated Last_Updated, El.MODIFIED_BY Modified_by
 FROM ELEMENT El
 WHERE el.ELEMENT_ID in (select ELEMENT_ID from Stage_tree)
@@ -1916,7 +1916,7 @@ WHERE el.ELEMENT_ID in (select ELEMENT_ID from Stage_tree)
 -- VIEW: UNIT_ELEMENT
 --
 
-CREATE VIEW UNIT_ELEMENT AS
+create or replace view UNIT_ELEMENT AS
 SELECT El.ELEMENT_ID Element_ID, El.ELEMENT_STATUS Element_Status, El.LABEL Label, El.DESCRIPTION Description, El.ABBREVIATION Abbreviation, El.SYNONYMS Synonyms, El.UNIT_ID Unit_ID, El.BARD_URI BARD_URI, El.EXTERNAL_URL External_URL, El.READY_FOR_EXTRACTION ready_for_extraction, El.VERSION Version, El.Date_Created Date_Created, El.Last_Updated Last_Updated, El.MODIFIED_BY Modified_by
 FROM ELEMENT El
 WHERE ELEMENT_ID in (select UNIT_ID from Unit_tree)
