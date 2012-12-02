@@ -5,117 +5,625 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="1922f8e1-9b1f-4a78-b840-b1857f23d256" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/bard-rest-api-wrapper/src/java/bard/core/interfaces/RestApiConstants.java" />
-      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\bard-rest-api-wrapper\grails-app\services\bard\core\rest\spring\RestCombinedService.groovy" afterPath="" />
-      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\bard-rest-api-wrapper\src\groovy\bard\core\Biology.groovy" afterPath="" />
-      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\bard-rest-api-wrapper\src\groovy\bard\core\Link.groovy" afterPath="" />
-      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\bard-rest-api-wrapper\src\groovy\bard\core\Project.groovy" afterPath="" />
-      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\bard-rest-api-wrapper\src\groovy\bard\core\Substance.groovy" afterPath="" />
-      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\bard-rest-api-wrapper\src\groovy\bard\core\interfaces\AssayValues.groovy" afterPath="" />
-      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\bard-rest-api-wrapper\src\groovy\bard\core\interfaces\BiologyType.groovy" afterPath="" />
-      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\bard-rest-api-wrapper\src\groovy\bard\core\interfaces\BiologyValues.groovy" afterPath="" />
-      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\bard-rest-api-wrapper\src\groovy\bard\core\interfaces\CompoundValues.groovy" afterPath="" />
-      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\bard-rest-api-wrapper\src\groovy\bard\core\interfaces\ExperimentService.java" afterPath="" />
-      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\bard-rest-api-wrapper\src\groovy\bard\core\interfaces\MolecularType.groovy" afterPath="" />
-      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\bard-rest-api-wrapper\src\groovy\bard\core\interfaces\ProjectValues.groovy" afterPath="" />
-      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\bard-rest-api-wrapper\src\groovy\bard\core\interfaces\RegulatoryAgency.groovy" afterPath="" />
-      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\bard-rest-api-wrapper\src\groovy\bard\core\interfaces\RegulatoryStatus.groovy" afterPath="" />
-      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\bard-rest-api-wrapper\src\groovy\bard\core\interfaces\SubstanceValues.groovy" afterPath="" />
-      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\bard-rest-api-wrapper\src\groovy\bard\core\rest\spring\util\EntityType.groovy" afterPath="" />
-      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\bard-rest-api-wrapper\src\java\bard\core\Assay.java" afterPath="" />
-      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\bard-rest-api-wrapper\src\java\bard\core\Compound.java" afterPath="" />
-      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\bard-rest-api-wrapper\src\java\bard\core\Entity.java" afterPath="" />
-      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\bard-rest-api-wrapper\src\java\bard\core\Experiment.java" afterPath="" />
-      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\bard-rest-api-wrapper\src\java\bard\core\Format.java" afterPath="" />
-      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\bard-rest-api-wrapper\src\java\bard\core\MolecularValue.java" afterPath="" />
-      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\bard-rest-api-wrapper\src\java\bard\core\Publication.java" afterPath="" />
-      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\bard-rest-api-wrapper\src\java\bard\core\impl\MolecularDataJChemImpl.java" afterPath="" />
-      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\bard-rest-api-wrapper\src\java\bard\core\interfaces\AssayService.java" afterPath="" />
-      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\bard-rest-api-wrapper\src\java\bard\core\interfaces\CompoundService.java" afterPath="" />
-      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\bard-rest-api-wrapper\src\java\bard\core\interfaces\EntityService.java" afterPath="" />
-      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\bard-rest-api-wrapper\src\java\bard\core\interfaces\LinkService.java" afterPath="" />
-      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\bard-rest-api-wrapper\src\java\bard\core\interfaces\MolecularData.java" afterPath="" />
-      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\bard-rest-api-wrapper\src\java\bard\core\interfaces\ProjectService.java" afterPath="" />
-      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\bard-rest-api-wrapper\src\java\bard\core\interfaces\SearchResult.java" afterPath="" />
-      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\bard-rest-api-wrapper\src\java\bard\core\interfaces\Standardizable.java" afterPath="" />
-      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\bard-rest-api-wrapper\src\java\bard\core\interfaces\SubstanceService.java" afterPath="" />
-      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\bard-rest-api-wrapper\src\java\bard\core\rest\ActivitySearchResult.java" afterPath="" />
-      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\bard-rest-api-wrapper\src\java\bard\core\rest\ETagSearchResult.java" afterPath="" />
-      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\bard-rest-api-wrapper\src\java\bard\core\rest\RESTAbstractEntityService.java" afterPath="" />
-      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\bard-rest-api-wrapper\src\java\bard\core\rest\RESTAssayService.java" afterPath="" />
-      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\bard-rest-api-wrapper\src\java\bard\core\rest\RESTCompoundService.java" afterPath="" />
-      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\bard-rest-api-wrapper\src\java\bard\core\rest\RESTExperimentService.java" afterPath="" />
-      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\bard-rest-api-wrapper\src\java\bard\core\rest\RESTProjectService.java" afterPath="" />
-      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\bard-rest-api-wrapper\src\java\bard\core\rest\RESTSearchResult.java" afterPath="" />
-      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\bard-rest-api-wrapper\src\java\bard\core\rest\RESTSubstanceService.java" afterPath="" />
-      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\bard-rest-api-wrapper\src\java\bard\core\rest\SearchResultImpl.java" afterPath="" />
-      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\bard-rest-api-wrapper\src\java\bard\core\rest\StructureSearchResult.java" afterPath="" />
-      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\bard-rest-api-wrapper\test\unit\bard\core\AssayUnitSpec.groovy" afterPath="" />
-      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\bard-rest-api-wrapper\test\unit\bard\core\BiologyUnitSpec.groovy" afterPath="" />
-      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\bard-rest-api-wrapper\test\unit\bard\core\ExperimentUnitSpec.groovy" afterPath="" />
-      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\bard-rest-api-wrapper\test\unit\bard\core\LinkUnitSpec.groovy" afterPath="" />
-      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\bard-rest-api-wrapper\test\unit\bard\core\MolecularValueUnitSpec.groovy" afterPath="" />
-      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\bard-rest-api-wrapper\test\unit\bard\core\PublicationUnitSpec.groovy" afterPath="" />
-      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\bard-rest-api-wrapper\test\unit\bard\core\SubstanceUnitSpec.groovy" afterPath="" />
-      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\bard-rest-api-wrapper\test\unit\bard\core\impl\MolecularDataJChemImplUnitSpec.groovy" afterPath="" />
-      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\bard-rest-api-wrapper\test\unit\bard\core\rest\RESTAbstractEntityServiceUnitSpec.groovy" afterPath="" />
-      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\bard-rest-api-wrapper\test\unit\bard\core\rest\RESTCompoundServiceUnitSpec.groovy" afterPath="" />
-      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\bard-rest-api-wrapper\test\unit\bard\core\rest\RESTExperimentServiceUnitSpec.groovy" afterPath="" />
-      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\bard-rest-api-wrapper\test\unit\bard\core\rest\RESTProjectServiceUnitSpec.groovy" afterPath="" />
-      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\bard-rest-api-wrapper\test\unit\bard\core\rest\RESTSearchResultUnitSpec.groovy" afterPath="" />
-      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\bard-rest-api-wrapper\test\unit\bard\core\rest\RESTSubstanceServiceUnitSpec.groovy" afterPath="" />
-      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\bard-rest-api-wrapper\test\unit\bard\core\rest\StructureSearchResultUnitSpec.groovy" afterPath="" />
-      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\bard-rest-api-wrapper\test\unit\jdo\JSONNodeTestHelper.groovy" afterPath="" />
-      <change type="MOVED" beforePath="C:\bardwebclient\bard-web-query\bard-rest-api-wrapper\test\unit\bard\core\rest\spring\ActivityUnitSpec.groovy" afterPath="$PROJECT_DIR$/bard-rest-api-wrapper/test/unit/bard/core/rest/spring/experiment/ActivityUnitSpec.groovy" />
-      <change type="MOVED" beforePath="C:\bardwebclient\bard-web-query\bard-rest-api-wrapper\test\unit\bard\core\rest\spring\ExperimentDataUnitSpec.groovy" afterPath="$PROJECT_DIR$/bard-rest-api-wrapper/test/unit/bard/core/rest/spring/experiment/ExperimentDataUnitSpec.groovy" />
-      <change type="MOVED" beforePath="C:\bardwebclient\bard-web-query\bard-rest-api-wrapper\test\unit\bard\core\rest\spring\ExperimentUnitSpec.groovy" afterPath="$PROJECT_DIR$/bard-rest-api-wrapper/test/unit/bard/core/rest/spring/experiment/ExperimentUnitSpec.groovy" />
-      <change type="MOVED" beforePath="C:\bardwebclient\bard-web-query\bard-rest-api-wrapper\test\unit\bard\core\rest\spring\ReadoutUnitSpec.groovy" afterPath="$PROJECT_DIR$/bard-rest-api-wrapper/test/unit/bard/core/rest/spring/experiment/ReadoutUnitSpec.groovy" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\JQueryResourceTagLib$_closure1.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\JQueryResourceTagLib$_closure2.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\JQueryResourceTagLib$_closure2_closure4.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\JQueryResourceTagLib$_closure2_closure5.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\JQueryResourceTagLib$_closure2_closure6.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\JQueryResourceTagLib$_closure2_closure7.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\JQueryResourceTagLib$_closure3.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\JQueryResourceTagLib.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\JQueryService$_closure1.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\JQueryService$_closure2.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\JQueryService$_closure3.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\JQueryService$_closure4.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\JQueryService.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\JQueryTagLib$_closure1.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\JQueryTagLib$_closure1_closure6.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\JQueryTagLib$_closure2.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\JQueryTagLib$_closure3.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\JQueryTagLib$_closure4.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\JQueryTagLib$_closure5.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\JQueryTagLib.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\LoginController$_closure1.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\LoginController$_closure2.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\LoginController$_closure3.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\LoginController$_closure4.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\LoginController$_closure5.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\LoginController$_closure6.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\LoginController$_closure7.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\LoginController$_closure8.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\LoginController.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\LogoutController$_closure1.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\LogoutController.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\com\grailsrocks\jqueryui\JqueryUiTagLib$__clinit__closure5.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\com\grailsrocks\jqueryui\JqueryUiTagLib$__clinit__closure6.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\com\grailsrocks\jqueryui\JqueryUiTagLib$__clinit__closure7.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\com\grailsrocks\jqueryui\JqueryUiTagLib$__clinit__closure8.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\com\grailsrocks\jqueryui\JqueryUiTagLib$_closure1.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\com\grailsrocks\jqueryui\JqueryUiTagLib$_closure2.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\com\grailsrocks\jqueryui\JqueryUiTagLib$_closure3.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\com\grailsrocks\jqueryui\JqueryUiTagLib$_writeAttrs_closure4.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\com\grailsrocks\jqueryui\JqueryUiTagLib.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\com\metasieve\shoppingcart\IShoppable.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\com\metasieve\shoppingcart\Quantity.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\com\metasieve\shoppingcart\SessionUtils.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\com\metasieve\shoppingcart\Shoppable$__clinit__closure1.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\com\metasieve\shoppingcart\Shoppable.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\com\metasieve\shoppingcart\ShoppableMixin$_mixin_closure1.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\com\metasieve\shoppingcart\ShoppableMixin$_mixin_closure10.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\com\metasieve\shoppingcart\ShoppableMixin$_mixin_closure2.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\com\metasieve\shoppingcart\ShoppableMixin$_mixin_closure2_closure11.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\com\metasieve\shoppingcart\ShoppableMixin$_mixin_closure3.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\com\metasieve\shoppingcart\ShoppableMixin$_mixin_closure4.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\com\metasieve\shoppingcart\ShoppableMixin$_mixin_closure5.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\com\metasieve\shoppingcart\ShoppableMixin$_mixin_closure6.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\com\metasieve\shoppingcart\ShoppableMixin$_mixin_closure7.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\com\metasieve\shoppingcart\ShoppableMixin$_mixin_closure8.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\com\metasieve\shoppingcart\ShoppableMixin$_mixin_closure9.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\com\metasieve\shoppingcart\ShoppableMixin.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\com\metasieve\shoppingcart\ShoppingCart$__clinit__closure1.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\com\metasieve\shoppingcart\ShoppingCart.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\com\metasieve\shoppingcart\ShoppingCartInterfaceTestProduct.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\com\metasieve\shoppingcart\ShoppingCartService$_checkOut_closure3.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\com\metasieve\shoppingcart\ShoppingCartService$_emptyShoppingCart_closure2.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\com\metasieve\shoppingcart\ShoppingCartService$_removeFromShoppingCart_closure1.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\com\metasieve\shoppingcart\ShoppingCartService.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\com\metasieve\shoppingcart\ShoppingCartTagLib$_closure1.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\com\metasieve\shoppingcart\ShoppingCartTagLib$_closure1_closure2.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\com\metasieve\shoppingcart\ShoppingCartTagLib$_closure1_closure3.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\com\metasieve\shoppingcart\ShoppingCartTagLib.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\com\metasieve\shoppingcart\ShoppingCartTestProduct.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\com\metasieve\shoppingcart\ShoppingItem.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\com\metasieve\shoppingcart\TestShoppingCartController$_closure1.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\com\metasieve\shoppingcart\TestShoppingCartController$_closure2.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\com\metasieve\shoppingcart\TestShoppingCartController$_closure3.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\com\metasieve\shoppingcart\TestShoppingCartController$_closure4.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\com\metasieve\shoppingcart\TestShoppingCartController$_closure5.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\com\metasieve\shoppingcart\TestShoppingCartController$_closure6.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\com\metasieve\shoppingcart\TestShoppingCartController.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\de\andreasschmitt\export\ExportService.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\de\andreasschmitt\export\ExportTagLib$_closure1.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\de\andreasschmitt\export\ExportTagLib$_closure1_closure3.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\de\andreasschmitt\export\ExportTagLib$_closure1_closure3_closure4.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\de\andreasschmitt\export\ExportTagLib$_closure1_closure3_closure4_closure5.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\de\andreasschmitt\export\ExportTagLib$_closure2.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\de\andreasschmitt\export\ExportTagLib.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\de\andreasschmitt\export\builder\ExcelBuilder$_createNode_closure1.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\de\andreasschmitt\export\builder\ExcelBuilder.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\de\andreasschmitt\export\exporter\AbstractExporter.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\de\andreasschmitt\export\exporter\DefaultCSVExporter$_exportData_closure1.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\de\andreasschmitt\export\exporter\DefaultCSVExporter$_exportData_closure2.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\de\andreasschmitt\export\exporter\DefaultCSVExporter$_exportData_closure2_closure3.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\de\andreasschmitt\export\exporter\DefaultCSVExporter.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\de\andreasschmitt\export\exporter\DefaultExcelExporter$_exportData_closure1.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\de\andreasschmitt\export\exporter\DefaultExcelExporter$_exportData_closure1_closure2.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\de\andreasschmitt\export\exporter\DefaultExcelExporter$_exportData_closure1_closure2_closure3.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\de\andreasschmitt\export\exporter\DefaultExcelExporter$_exportData_closure1_closure2_closure3_closure4.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\de\andreasschmitt\export\exporter\DefaultExcelExporter$_exportData_closure1_closure2_closure3_closure5.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\de\andreasschmitt\export\exporter\DefaultExcelExporter$_exportData_closure1_closure2_closure3_closure6.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\de\andreasschmitt\export\exporter\DefaultExcelExporter$_exportData_closure1_closure2_closure3_closure6_closure7.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\de\andreasschmitt\export\exporter\DefaultExcelExporter.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\de\andreasschmitt\export\exporter\DefaultExporterFactory.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\de\andreasschmitt\export\exporter\DefaultODSExporter$_exportData_closure1.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\de\andreasschmitt\export\exporter\DefaultODSExporter$_exportData_closure2.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\de\andreasschmitt\export\exporter\DefaultODSExporter$_exportData_closure2_closure3.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\de\andreasschmitt\export\exporter\DefaultODSExporter.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\de\andreasschmitt\export\exporter\DefaultPDFExporter$_exportData_closure1.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\de\andreasschmitt\export\exporter\DefaultPDFExporter$_exportData_closure2.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\de\andreasschmitt\export\exporter\DefaultPDFExporter$_exportData_closure2_closure5.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\de\andreasschmitt\export\exporter\DefaultPDFExporter$_exportData_closure3.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\de\andreasschmitt\export\exporter\DefaultPDFExporter$_exportData_closure4.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\de\andreasschmitt\export\exporter\DefaultPDFExporter$_exportData_closure4_closure6.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\de\andreasschmitt\export\exporter\DefaultPDFExporter.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\de\andreasschmitt\export\exporter\DefaultRTFExporter$_exportData_closure1.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\de\andreasschmitt\export\exporter\DefaultRTFExporter$_exportData_closure2.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\de\andreasschmitt\export\exporter\DefaultRTFExporter$_exportData_closure3.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\de\andreasschmitt\export\exporter\DefaultRTFExporter$_exportData_closure3_closure4.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\de\andreasschmitt\export\exporter\DefaultRTFExporter.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\de\andreasschmitt\export\exporter\DefaultXMLExporter$_build_closure1.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\de\andreasschmitt\export\exporter\DefaultXMLExporter$_build_closure1_closure2.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\de\andreasschmitt\export\exporter\DefaultXMLExporter$_build_closure1_closure2_closure3.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\de\andreasschmitt\export\exporter\DefaultXMLExporter$_build_closure1_closure2_closure3_closure4.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\de\andreasschmitt\export\exporter\DefaultXMLExporter.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\de\andreasschmitt\export\exporter\Exporter.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\de\andreasschmitt\export\exporter\ExporterFactory.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\de\andreasschmitt\export\exporter\ExporterNotFoundException.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\de\andreasschmitt\export\exporter\ExporterUtil$_getFields_closure1.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\de\andreasschmitt\export\exporter\ExporterUtil$_getFields_closure2.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\de\andreasschmitt\export\exporter\ExporterUtil$_getFields_closure3.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\de\andreasschmitt\export\exporter\ExporterUtil.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\de\andreasschmitt\export\exporter\ExportingException.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\de\andreasschmitt\export\taglib\util\RenderUtils.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\grails\plugin\functional\spock\SpecTestTypeLoader$_isShouldRegisterSpecSupport_closure1.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\grails\plugin\functional\spock\SpecTestTypeLoader.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\grails\plugin\remotecontrol\RemoteControl.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\grails\plugin\remotecontrol\RemoteControlServlet.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\grails\plugin\svn\SvnClient$_fetchFile_closure2.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\grails\plugin\svn\SvnClient$_getUnversionedFiles_closure1.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\grails\plugin\svn\SvnClient.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\grails\plugin\svn\SvnScmProvider$_commit_closure11.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\grails\plugin\svn\SvnScmProvider$_importIntoRepo_closure1.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\grails\plugin\svn\SvnScmProvider$_importIntoRepo_closure2.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\grails\plugin\svn\SvnScmProvider$_importIntoRepo_closure3.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\grails\plugin\svn\SvnScmProvider$_importIntoRepo_closure4.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\grails\plugin\svn\SvnScmProvider$_importIntoRepo_closure5.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\grails\plugin\svn\SvnScmProvider$_importIntoRepo_closure6.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\grails\plugin\svn\SvnScmProvider$_importIntoRepo_closure7.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\grails\plugin\svn\SvnScmProvider$_importIntoRepo_closure8.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\grails\plugin\svn\SvnScmProvider$_importIntoRepo_closure9.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\grails\plugin\svn\SvnScmProvider$_synchronize_closure13.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\grails\plugin\svn\SvnScmProvider$_tag_closure12.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\grails\plugin\svn\SvnScmProvider$_upToDate_closure10.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\grails\plugin\svn\SvnScmProvider.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\grails\plugin\webxml\FilterManager.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\grails\plugins\publish\DistributionManagementInfo.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\grails\plugins\publish\ExcludeResolver.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\grails\plugins\publish\PluginDeployer.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\grails\plugins\publish\PluginPublisher.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\grails\plugins\publish\Repository.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\grails\plugins\publish\maven\MavenDeployer$_deployPlugin_closure1.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\grails\plugins\publish\maven\MavenDeployer.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\grails\plugins\publish\portal\GrailsCentralDeployer$_deployPlugin_closure1.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\grails\plugins\publish\portal\GrailsCentralDeployer.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\grails\plugins\publish\print\DryRunDeployer.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\grails\plugins\publish\svn\MasterPluginList$_update_closure1.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\grails\plugins\publish\svn\MasterPluginList$_update_closure2.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\grails\plugins\publish\svn\MasterPluginList.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\grails\plugins\publish\svn\SvnDeployer$_deployPlugin_closure10.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\grails\plugins\publish\svn\SvnDeployer$_deployPlugin_closure11.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\grails\plugins\publish\svn\SvnDeployer$_deployPlugin_closure2.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\grails\plugins\publish\svn\SvnDeployer$_deployPlugin_closure3.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\grails\plugins\publish\svn\SvnDeployer$_deployPlugin_closure4.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\grails\plugins\publish\svn\SvnDeployer$_deployPlugin_closure5.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\grails\plugins\publish\svn\SvnDeployer$_deployPlugin_closure6.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\grails\plugins\publish\svn\SvnDeployer$_deployPlugin_closure7.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\grails\plugins\publish\svn\SvnDeployer$_deployPlugin_closure8.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\grails\plugins\publish\svn\SvnDeployer$_deployPlugin_closure9.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\grails\plugins\publish\svn\SvnDeployer$_isVersionAlreadyPublished_closure1.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\grails\plugins\publish\svn\SvnDeployer$_updatePluginList_closure12.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\grails\plugins\publish\svn\SvnDeployer.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\grails\plugins\rest\client\ErrorResponse$_getText_closure1.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\grails\plugins\rest\client\ErrorResponse.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\grails\plugins\rest\client\RequestCustomizer$_accept_closure1.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\grails\plugins\rest\client\RequestCustomizer.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\grails\plugins\rest\client\RestBuilder.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\grails\plugins\rest\client\RestResponse$_getJson_closure1.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\grails\plugins\rest\client\RestResponse$_getText_closure3.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\grails\plugins\rest\client\RestResponse$_getXml_closure2.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\grails\plugins\rest\client\RestResponse.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\grails\plugins\springsecurity\BCryptPasswordEncoder.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\grails\plugins\springsecurity\DigestAuthPasswordEncoder.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\grails\plugins\springsecurity\Secured.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\grails\plugins\springsecurity\SecurityConfigType.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\grails\plugins\springsecurity\SecurityTagLib$__clinit__closure13.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\grails\plugins\springsecurity\SecurityTagLib$_closure1.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\grails\plugins\springsecurity\SecurityTagLib$_closure10.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\grails\plugins\springsecurity\SecurityTagLib$_closure11.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\grails\plugins\springsecurity\SecurityTagLib$_closure12.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\grails\plugins\springsecurity\SecurityTagLib$_closure2.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\grails\plugins\springsecurity\SecurityTagLib$_closure3.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\grails\plugins\springsecurity\SecurityTagLib$_closure4.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\grails\plugins\springsecurity\SecurityTagLib$_closure5.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\grails\plugins\springsecurity\SecurityTagLib$_closure6.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\grails\plugins\springsecurity\SecurityTagLib$_closure7.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\grails\plugins\springsecurity\SecurityTagLib$_closure8.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\grails\plugins\springsecurity\SecurityTagLib$_closure9.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\grails\plugins\springsecurity\SecurityTagLib.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\grails\plugins\springsecurity\SpringSecurityService$_deleteRole_closure1.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\grails\plugins\springsecurity\SpringSecurityService.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\messages.properties" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\org\broadinstitute\cbip\crowd\AbstractCrowdAuthenticationProviderService.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\org\broadinstitute\cbip\crowd\CbipTokenBasedRememberMeServices.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\org\broadinstitute\cbip\crowd\CbipUser.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\org\broadinstitute\cbip\crowd\CrowdAuthenticationProviderService.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\org\broadinstitute\cbip\crowd\CrowdUserDetailsService.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\org\broadinstitute\cbip\crowd\Email.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\org\broadinstitute\cbip\crowd\ICrowdAuthenticationProviderService.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\org\broadinstitute\cbip\crowd\MultiProviderUserDetailsService$_loadUserByUsername_closure1.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\org\broadinstitute\cbip\crowd\MultiProviderUserDetailsService.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\org\broadinstitute\cbip\crowd\noServer\MockCrowdAuthenticationProviderService$_findUsersInGroup_closure2.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\org\broadinstitute\cbip\crowd\noServer\MockCrowdAuthenticationProviderService$_findUsersInGroup_closure2_closure5.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\org\broadinstitute\cbip\crowd\noServer\MockCrowdAuthenticationProviderService$_initializeUserMap_closure1.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\org\broadinstitute\cbip\crowd\noServer\MockCrowdAuthenticationProviderService$_initializeUserMap_closure1_closure4.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\org\broadinstitute\cbip\crowd\noServer\MockCrowdAuthenticationProviderService$_isUserDirectGroupMember_closure3.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\org\broadinstitute\cbip\crowd\noServer\MockCrowdAuthenticationProviderService.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\org\codehaus\groovy\grails\plugins\jquery\JQueryConfig$_init_closure1.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\org\codehaus\groovy\grails\plugins\jquery\JQueryConfig$_init_closure2.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\org\codehaus\groovy\grails\plugins\jquery\JQueryConfig.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\org\codehaus\groovy\grails\plugins\jquery\JQueryProvider$_doRemoteFunction_closure1.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\org\codehaus\groovy\grails\plugins\jquery\JQueryProvider$_doRemoteFunction_closure2.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\org\codehaus\groovy\grails\plugins\jquery\JQueryProvider$_doRemoteFunction_closure3.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\org\codehaus\groovy\grails\plugins\jquery\JQueryProvider$_doRemoteFunction_closure4.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\org\codehaus\groovy\grails\plugins\jquery\JQueryProvider.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\org\codehaus\groovy\grails\plugins\springsecurity\AbstractFilterInvocationDefinition.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\org\codehaus\groovy\grails\plugins\springsecurity\AjaxAwareAccessDeniedHandler.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\org\codehaus\groovy\grails\plugins\springsecurity\AjaxAwareAuthenticationEntryPoint.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\org\codehaus\groovy\grails\plugins\springsecurity\AjaxAwareAuthenticationFailureHandler.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\org\codehaus\groovy\grails\plugins\springsecurity\AjaxAwareAuthenticationSuccessHandler.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\org\codehaus\groovy\grails\plugins\springsecurity\AnnotationFilterInvocationDefinition.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\org\codehaus\groovy\grails\plugins\springsecurity\AuthenticatedVetoableDecisionManager.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\org\codehaus\groovy\grails\plugins\springsecurity\ChannelFilterInvocationSecurityMetadataSourceFactoryBean.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\org\codehaus\groovy\grails\plugins\springsecurity\DefaultPostAuthenticationChecks.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\org\codehaus\groovy\grails\plugins\springsecurity\DefaultPreAuthenticationChecks.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\org\codehaus\groovy\grails\plugins\springsecurity\DummyRequestCreator$1.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\org\codehaus\groovy\grails\plugins\springsecurity\DummyRequestCreator.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\org\codehaus\groovy\grails\plugins\springsecurity\DummyResponseCreator$1.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\org\codehaus\groovy\grails\plugins\springsecurity\DummyResponseCreator.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\org\codehaus\groovy\grails\plugins\springsecurity\GormPersistentTokenRepository$_createNewToken_closure1.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\org\codehaus\groovy\grails\plugins\springsecurity\GormPersistentTokenRepository$_removeUserTokens_closure2.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\org\codehaus\groovy\grails\plugins\springsecurity\GormPersistentTokenRepository$_updateToken_closure3.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\org\codehaus\groovy\grails\plugins\springsecurity\GormPersistentTokenRepository.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\org\codehaus\groovy\grails\plugins\springsecurity\GormUserDetailsService$_loadAuthorities_closure2.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\org\codehaus\groovy\grails\plugins\springsecurity\GormUserDetailsService$_loadUserByUsername_closure1.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\org\codehaus\groovy\grails\plugins\springsecurity\GormUserDetailsService.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\org\codehaus\groovy\grails\plugins\springsecurity\GrailsUser.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\org\codehaus\groovy\grails\plugins\springsecurity\GrailsUserDetailsService.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\org\codehaus\groovy\grails\plugins\springsecurity\GrailsWebInvocationPrivilegeEvaluator$1.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\org\codehaus\groovy\grails\plugins\springsecurity\GrailsWebInvocationPrivilegeEvaluator.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\org\codehaus\groovy\grails\plugins\springsecurity\HeaderCheckInsecureChannelProcessor.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\org\codehaus\groovy\grails\plugins\springsecurity\HeaderCheckSecureChannelProcessor.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\org\codehaus\groovy\grails\plugins\springsecurity\InterceptUrlMapFilterInvocationDefinition.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\org\codehaus\groovy\grails\plugins\springsecurity\IpAddressFilter.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\org\codehaus\groovy\grails\plugins\springsecurity\MutableLogoutFilter$1.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\org\codehaus\groovy\grails\plugins\springsecurity\MutableLogoutFilter$DummyLogoutHandler.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\org\codehaus\groovy\grails\plugins\springsecurity\MutableLogoutFilter.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\org\codehaus\groovy\grails\plugins\springsecurity\NullAuthenticationEventPublisher.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\org\codehaus\groovy\grails\plugins\springsecurity\NullLogoutHandlerRememberMeServices.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\org\codehaus\groovy\grails\plugins\springsecurity\NullSaltSource.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\org\codehaus\groovy\grails\plugins\springsecurity\ReflectionUtils$_splitMap_closure1.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\org\codehaus\groovy\grails\plugins\springsecurity\ReflectionUtils.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\org\codehaus\groovy\grails\plugins\springsecurity\RequestHolderAuthenticationFilter.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\org\codehaus\groovy\grails\plugins\springsecurity\RequestmapFilterInvocationDefinition.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\org\codehaus\groovy\grails\plugins\springsecurity\SecurityEventListener.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\org\codehaus\groovy\grails\plugins\springsecurity\SecurityFilterPosition.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\org\codehaus\groovy\grails\plugins\springsecurity\SecurityRequestHolder.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\org\codehaus\groovy\grails\plugins\springsecurity\SpringSecurityUtils$1.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\org\codehaus\groovy\grails\plugins\springsecurity\SpringSecurityUtils.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\org\codehaus\groovy\grails\plugins\springsecurity\WebExpressionConfigAttribute.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\org\codehaus\groovy\grails\plugins\springsecurity\WebExpressionVoter.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\org\grails\plugin\resource\AggregatedResourceMeta$_buildAggregateResource_closure3.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\org\grails\plugin\resource\AggregatedResourceMeta$_buildAggregateResource_closure3_closure4.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\org\grails\plugin\resource\AggregatedResourceMeta$_containsResource_closure1.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\org\grails\plugin\resource\AggregatedResourceMeta$_isDirty_closure2.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\org\grails\plugin\resource\AggregatedResourceMeta.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\org\grails\plugin\resource\CSSBundleResourceMeta.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\org\grails\plugin\resource\CSSLinkProcessor$_process_closure1.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\org\grails\plugin\resource\CSSLinkProcessor.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\org\grails\plugin\resource\DevModeSanityFilter.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\org\grails\plugin\resource\JavaScriptBundleResourceMeta.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\org\grails\plugin\resource\ProcessingFilter.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\org\grails\plugin\resource\ResourceMeta$_reset_closure1.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\org\grails\plugin\resource\ResourceMeta.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\org\grails\plugin\resource\ResourceModule$_closure1.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\org\grails\plugin\resource\ResourceModule$_getRequiredDispositions_closure3.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\org\grails\plugin\resource\ResourceModule$_newResourceFromArgs_closure2.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\org\grails\plugin\resource\ResourceModule.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\org\grails\plugin\resource\ResourceProcessor$_afterPropertiesSet_closure5.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\org\grails\plugin\resource\ResourceProcessor$_afterPropertiesSet_closure6.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\org\grails\plugin\resource\ResourceProcessor$_canProcessLegacyResource_closure7.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\org\grails\plugin\resource\ResourceProcessor$_canProcessLegacyResource_closure8.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\org\grails\plugin\resource\ResourceProcessor$_defineModuleFromBuilder_closure16.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\org\grails\plugin\resource\ResourceProcessor$_dumpResources_closure21.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\org\grails\plugin\resource\ResourceProcessor$_dumpResources_closure21_closure35.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\org\grails\plugin\resource\ResourceProcessor$_dumpResources_closure21_closure36.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\org\grails\plugin\resource\ResourceProcessor$_dumpResources_closure22.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\org\grails\plugin\resource\ResourceProcessor$_dumpStats_closure20.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\org\grails\plugin\resource\ResourceProcessor$_dumpStats_closure20_closure34.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\org\grails\plugin\resource\ResourceProcessor$_findSyntheticResourceById_closure9.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\org\grails\plugin\resource\ResourceProcessor$_getConfigParamOrDefault_closure23.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\org\grails\plugin\resource\ResourceProcessor$_getResourceMetaForURI_closure10.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\org\grails\plugin\resource\ResourceProcessor$_getResourceMetaForURI_closure10_closure27.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\org\grails\plugin\resource\ResourceProcessor$_getServletContext_closure24.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\org\grails\plugin\resource\ResourceProcessor$_loadModules_closure17.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\org\grails\plugin\resource\ResourceProcessor$_loadModules_closure18.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\org\grails\plugin\resource\ResourceProcessor$_loadModules_closure18_closure30.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\org\grails\plugin\resource\ResourceProcessor$_loadModules_closure18_closure31.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\org\grails\plugin\resource\ResourceProcessor$_loadModules_closure18_closure31_closure32.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\org\grails\plugin\resource\ResourceProcessor$_loadModules_closure18_closure31_closure33.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\org\grails\plugin\resource\ResourceProcessor$_loadModules_closure19.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\org\grails\plugin\resource\ResourceProcessor$_makeFileSystemPathFromURI_closure11.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\org\grails\plugin\resource\ResourceProcessor$_prepareResourceBatch_closure13.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\org\grails\plugin\resource\ResourceProcessor$_prepareResourceBatch_closure14.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\org\grails\plugin\resource\ResourceProcessor$_prepareResourceBatch_closure14_closure28.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\org\grails\plugin\resource\ResourceProcessor$_prepareResourceBatch_closure14_closure29.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\org\grails\plugin\resource\ResourceProcessor$_prepareResourceBatch_closure15.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\org\grails\plugin\resource\ResourceProcessor$_prepareSingleDeclaredResource_closure12.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\org\grails\plugin\resource\ResourceProcessor$_updateDependencyOrder_closure1.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\org\grails\plugin\resource\ResourceProcessor$_updateDependencyOrder_closure2.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\org\grails\plugin\resource\ResourceProcessor$_updateDependencyOrder_closure3.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\org\grails\plugin\resource\ResourceProcessor$_updateDependencyOrder_closure3_closure25.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\org\grails\plugin\resource\ResourceProcessor$_updateDependencyOrder_closure4.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\org\grails\plugin\resource\ResourceProcessor$_updateDependencyOrder_closure4_closure26.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\org\grails\plugin\resource\ResourceProcessor.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\org\grails\plugin\resource\ResourceProcessorBatch.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\org\grails\plugin\resource\ResourceTagLib$__clinit__closure13.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\org\grails\plugin\resource\ResourceTagLib$__clinit__closure14.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\org\grails\plugin\resource\ResourceTagLib$_closure1.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\org\grails\plugin\resource\ResourceTagLib$_closure10.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\org\grails\plugin\resource\ResourceTagLib$_closure10_closure17.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\org\grails\plugin\resource\ResourceTagLib$_closure1_closure15.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\org\grails\plugin\resource\ResourceTagLib$_closure2.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\org\grails\plugin\resource\ResourceTagLib$_closure3.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\org\grails\plugin\resource\ResourceTagLib$_closure4.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\org\grails\plugin\resource\ResourceTagLib$_closure5.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\org\grails\plugin\resource\ResourceTagLib$_closure5_closure16.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\org\grails\plugin\resource\ResourceTagLib$_closure6.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\org\grails\plugin\resource\ResourceTagLib$_closure7.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\org\grails\plugin\resource\ResourceTagLib$_closure8.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\org\grails\plugin\resource\ResourceTagLib$_closure9.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\org\grails\plugin\resource\ResourceTagLib$_resolveResourceAndURI_closure12.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\org\grails\plugin\resource\ResourceTagLib$_writeAttrs_closure11.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\org\grails\plugin\resource\ResourceTagLib.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\org\grails\plugin\resource\URLUtils.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\org\grails\plugin\resource\mapper\MapperPhase.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\org\grails\plugin\resource\mapper\ResourceMapper$_closure1.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\org\grails\plugin\resource\mapper\ResourceMapper$_getDefaultExcludes_closure8.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\org\grails\plugin\resource\mapper\ResourceMapper$_getDefaultIncludes_closure9.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\org\grails\plugin\resource\mapper\ResourceMapper$_getExcludes_closure10.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\org\grails\plugin\resource\mapper\ResourceMapper$_getExcludingPattern_closure2.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\org\grails\plugin\resource\mapper\ResourceMapper$_getIncludes_closure11.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\org\grails\plugin\resource\mapper\ResourceMapper$_getIncludingPattern_closure3.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\org\grails\plugin\resource\mapper\ResourceMapper$_getName_closure7.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\org\grails\plugin\resource\mapper\ResourceMapper$_getOperation_closure5.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\org\grails\plugin\resource\mapper\ResourceMapper$_getPhase_closure4.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\org\grails\plugin\resource\mapper\ResourceMapper$_getPriority_closure6.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\org\grails\plugin\resource\mapper\ResourceMapper.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\org\grails\plugin\resource\mapper\ResourceMappersFactory$_createResourceMappers_closure1.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\org\grails\plugin\resource\mapper\ResourceMappersFactory$_createResourceMappers_closure2.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\org\grails\plugin\resource\mapper\ResourceMappersFactory$_createResourceMappers_closure2_closure7.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\org\grails\plugin\resource\mapper\ResourceMappersFactory$_createResourceMappers_closure3.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\org\grails\plugin\resource\mapper\ResourceMappersFactory$_createResourceMappers_closure4.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\org\grails\plugin\resource\mapper\ResourceMappersFactory$_createResourceMappers_closure5.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\org\grails\plugin\resource\mapper\ResourceMappersFactory$_createResourceMappers_closure6.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\org\grails\plugin\resource\mapper\ResourceMappersFactory.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\org\grails\plugin\resource\module\ModuleBuilder.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\org\grails\plugin\resource\module\ModuleDeclarationsFactory$_getModuleDeclarations_closure1.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\org\grails\plugin\resource\module\ModuleDeclarationsFactory$_getModuleDeclarations_closure2.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\org\grails\plugin\resource\module\ModuleDeclarationsFactory$_getModuleDeclarations_closure3.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\org\grails\plugin\resource\module\ModuleDeclarationsFactory.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\org\grails\plugin\resource\module\ModulesBuilder$_invokeMethod_closure1.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\org\grails\plugin\resource\module\ModulesBuilder.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\org\grails\plugin\resource\util\HalfBakedLegacyLinkGenerator.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\org\grails\plugin\resource\util\ResourceMetaStore$_addResource_closure1.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\org\grails\plugin\resource\util\ResourceMetaStore.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\org\grails\plugin\resources\artefacts\AbstractResourcesArtefactHandler.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\org\grails\plugin\resources\artefacts\DefaultResourceMapperClass.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\org\grails\plugin\resources\artefacts\DefaultResourcesClass.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\org\grails\plugin\resources\artefacts\ResourceMapperArtefactHandler.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\org\grails\plugin\resources\artefacts\ResourceMapperClass.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\org\grails\plugin\resources\artefacts\ResourcesArtefactHandler.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\org\grails\plugin\resources\artefacts\ResourcesClass.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\org\groovydev\TwitterBootstrapTagLib$_closure1.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\org\groovydev\TwitterBootstrapTagLib$_closure1_closure2.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\org\groovydev\TwitterBootstrapTagLib$_closure1_closure3.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\org\groovydev\TwitterBootstrapTagLib$_closure1_closure4.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\org\groovydev\TwitterBootstrapTagLib$_closure1_closure4_closure7.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\org\groovydev\TwitterBootstrapTagLib$_closure1_closure5.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\org\groovydev\TwitterBootstrapTagLib$_closure1_closure6.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\org\groovydev\TwitterBootstrapTagLib.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\org\mindrot\jbcrypt\BCrypt.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\spring-security-core.properties" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\spring-security-core_de.properties" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client-grailsPlugins\spring-security-core_fr.properties" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client\messages.properties" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client\messages_cs_CZ.properties" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client\messages_da.properties" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client\messages_de.properties" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client\messages_es.properties" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client\messages_fr.properties" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client\messages_it.properties" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client\messages_ja.properties" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client\messages_nl.properties" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client\messages_pt_BR.properties" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client\messages_pt_PT.properties" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client\messages_ru.properties" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client\messages_sv.properties" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client\messages_th.properties" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\Bard-web-client\messages_zh_CN.properties" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\bardRestApiWrapper-inplacePlugin\bard\core\Assay.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\bardRestApiWrapper-inplacePlugin\bard\core\BinaryValue.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\bardRestApiWrapper-inplacePlugin\bard\core\Biology.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\bardRestApiWrapper-inplacePlugin\bard\core\Compound.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\bardRestApiWrapper-inplacePlugin\bard\core\DataSource.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\bardRestApiWrapper-inplacePlugin\bard\core\Entity.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\bardRestApiWrapper-inplacePlugin\bard\core\Experiment.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\bardRestApiWrapper-inplacePlugin\bard\core\Format.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\bardRestApiWrapper-inplacePlugin\bard\core\HillCurveValue.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\bardRestApiWrapper-inplacePlugin\bard\core\IntValue.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\bardRestApiWrapper-inplacePlugin\bard\core\Link.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\bardRestApiWrapper-inplacePlugin\bard\core\LongValue.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\bardRestApiWrapper-inplacePlugin\bard\core\MolecularValue.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\bardRestApiWrapper-inplacePlugin\bard\core\NumericValue.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\bardRestApiWrapper-inplacePlugin\bard\core\Probe.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\bardRestApiWrapper-inplacePlugin\bard\core\Project.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\bardRestApiWrapper-inplacePlugin\bard\core\Publication.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\bardRestApiWrapper-inplacePlugin\bard\core\SearchParams.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\bardRestApiWrapper-inplacePlugin\bard\core\ServiceParams.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\bardRestApiWrapper-inplacePlugin\bard\core\StringValue.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\bardRestApiWrapper-inplacePlugin\bard\core\Substance.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\bardRestApiWrapper-inplacePlugin\bard\core\SuggestParams.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\bardRestApiWrapper-inplacePlugin\bard\core\Value.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\bardRestApiWrapper-inplacePlugin\bard\core\adapter\AssayAdapter.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\bardRestApiWrapper-inplacePlugin\bard\core\adapter\CompoundAdapter.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\bardRestApiWrapper-inplacePlugin\bard\core\adapter\ProjectAdapter.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\bardRestApiWrapper-inplacePlugin\bard\core\impl\MolecularDataJChemImpl$1.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\bardRestApiWrapper-inplacePlugin\bard\core\impl\MolecularDataJChemImpl.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\bardRestApiWrapper-inplacePlugin\bard\core\interfaces\AssayAdapterInterface.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\bardRestApiWrapper-inplacePlugin\bard\core\interfaces\AssayCategory.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\bardRestApiWrapper-inplacePlugin\bard\core\interfaces\AssayRole.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\bardRestApiWrapper-inplacePlugin\bard\core\interfaces\AssayService.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\bardRestApiWrapper-inplacePlugin\bard\core\interfaces\AssayType.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\bardRestApiWrapper-inplacePlugin\bard\core\interfaces\AssayValues.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\bardRestApiWrapper-inplacePlugin\bard\core\interfaces\BiologyType.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\bardRestApiWrapper-inplacePlugin\bard\core\interfaces\BiologyValues.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\bardRestApiWrapper-inplacePlugin\bard\core\interfaces\CompoundAdapterInterface.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\bardRestApiWrapper-inplacePlugin\bard\core\interfaces\CompoundService.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\bardRestApiWrapper-inplacePlugin\bard\core\interfaces\CompoundValues.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\bardRestApiWrapper-inplacePlugin\bard\core\interfaces\EntityNamedSources.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\bardRestApiWrapper-inplacePlugin\bard\core\interfaces\EntityService.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\bardRestApiWrapper-inplacePlugin\bard\core\interfaces\EntityValues.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\bardRestApiWrapper-inplacePlugin\bard\core\interfaces\ExperimentCategory.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\bardRestApiWrapper-inplacePlugin\bard\core\interfaces\ExperimentRole.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\bardRestApiWrapper-inplacePlugin\bard\core\interfaces\ExperimentService.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\bardRestApiWrapper-inplacePlugin\bard\core\interfaces\ExperimentType.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\bardRestApiWrapper-inplacePlugin\bard\core\interfaces\ExperimentValues.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\bardRestApiWrapper-inplacePlugin\bard\core\interfaces\LinkService.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\bardRestApiWrapper-inplacePlugin\bard\core\interfaces\MolecularData.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\bardRestApiWrapper-inplacePlugin\bard\core\interfaces\MolecularType.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\bardRestApiWrapper-inplacePlugin\bard\core\interfaces\ProjectAdapterInterface.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\bardRestApiWrapper-inplacePlugin\bard\core\interfaces\ProjectService.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\bardRestApiWrapper-inplacePlugin\bard\core\interfaces\ProjectValues.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\bardRestApiWrapper-inplacePlugin\bard\core\interfaces\RegulatoryAgency.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\bardRestApiWrapper-inplacePlugin\bard\core\interfaces\RegulatoryStatus.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\bardRestApiWrapper-inplacePlugin\bard\core\interfaces\SearchResult.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\bardRestApiWrapper-inplacePlugin\bard\core\interfaces\Standardizable.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\bardRestApiWrapper-inplacePlugin\bard\core\interfaces\SubstanceCategory.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\bardRestApiWrapper-inplacePlugin\bard\core\interfaces\SubstanceService.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\bardRestApiWrapper-inplacePlugin\bard\core\interfaces\SubstanceValues.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\bardRestApiWrapper-inplacePlugin\bard\core\rest\ActivitySearchResult.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\bardRestApiWrapper-inplacePlugin\bard\core\rest\ETagSearchResult.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\bardRestApiWrapper-inplacePlugin\bard\core\rest\RESTAbstractEntityService.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\bardRestApiWrapper-inplacePlugin\bard\core\rest\RESTAssayService.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\bardRestApiWrapper-inplacePlugin\bard\core\rest\RESTCompoundService.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\bardRestApiWrapper-inplacePlugin\bard\core\rest\RESTExperimentService.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\bardRestApiWrapper-inplacePlugin\bard\core\rest\RESTProjectService.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\bardRestApiWrapper-inplacePlugin\bard\core\rest\RESTSearchResult.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\bardRestApiWrapper-inplacePlugin\bard\core\rest\RESTSubstanceService.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\bardRestApiWrapper-inplacePlugin\bard\core\rest\SearchResultImpl.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\bardRestApiWrapper-inplacePlugin\bard\core\rest\StructureSearchResult$1.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\bardRestApiWrapper-inplacePlugin\bard\core\rest\StructureSearchResult.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\bardRestApiWrapper-inplacePlugin\bard\core\rest\spring\AbstractRestService.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\bardRestApiWrapper-inplacePlugin\bard\core\rest\spring\AssayRestService.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\bardRestApiWrapper-inplacePlugin\bard\core\rest\spring\CompoundRestService.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\bardRestApiWrapper-inplacePlugin\bard\core\rest\spring\ExperimentRestService$_compoundsForExperiment_closure1.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\bardRestApiWrapper-inplacePlugin\bard\core\rest\spring\ExperimentRestService.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\bardRestApiWrapper-inplacePlugin\bard\core\rest\spring\ProjectRestService.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\bardRestApiWrapper-inplacePlugin\bard\core\rest\spring\assays\AbstractAssay.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\bardRestApiWrapper-inplacePlugin\bard\core\rest\spring\assays\Assay.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\bardRestApiWrapper-inplacePlugin\bard\core\rest\spring\assays\AssayAnnotation.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\bardRestApiWrapper-inplacePlugin\bard\core\rest\spring\assays\AssayResult.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\bardRestApiWrapper-inplacePlugin\bard\core\rest\spring\assays\ExpandedAssay.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\bardRestApiWrapper-inplacePlugin\bard\core\rest\spring\assays\ExpandedAssayResult.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\bardRestApiWrapper-inplacePlugin\bard\core\rest\spring\assays\FreeTextAssayResult.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\bardRestApiWrapper-inplacePlugin\bard\core\rest\spring\compounds\Compound.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\bardRestApiWrapper-inplacePlugin\bard\core\rest\spring\compounds\CompoundAnnotations.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\bardRestApiWrapper-inplacePlugin\bard\core\rest\spring\compounds\CompoundResult.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\bardRestApiWrapper-inplacePlugin\bard\core\rest\spring\compounds\ExpandedCompoundResult.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\bardRestApiWrapper-inplacePlugin\bard\core\rest\spring\compounds\PromiscuityScore.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\bardRestApiWrapper-inplacePlugin\bard\core\rest\spring\compounds\Scaffold.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\bardRestApiWrapper-inplacePlugin\bard\core\rest\spring\compounds\WarningLevel$_getWarningLevel_closure1.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\bardRestApiWrapper-inplacePlugin\bard\core\rest\spring\compounds\WarningLevel.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\bardRestApiWrapper-inplacePlugin\bard\core\rest\spring\experiment\Activity.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\bardRestApiWrapper-inplacePlugin\bard\core\rest\spring\experiment\ExperimentAbstract.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\bardRestApiWrapper-inplacePlugin\bard\core\rest\spring\experiment\ExperimentData.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\bardRestApiWrapper-inplacePlugin\bard\core\rest\spring\experiment\ExperimentSearch.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\bardRestApiWrapper-inplacePlugin\bard\core\rest\spring\experiment\ExperimentSearchResult.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\bardRestApiWrapper-inplacePlugin\bard\core\rest\spring\experiment\ExperimentShow.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\bardRestApiWrapper-inplacePlugin\bard\core\rest\spring\experiment\Readout.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\bardRestApiWrapper-inplacePlugin\bard\core\rest\spring\project\ExpandedProjectResult.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\bardRestApiWrapper-inplacePlugin\bard\core\rest\spring\project\Project.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\bardRestApiWrapper-inplacePlugin\bard\core\rest\spring\project\ProjectResult.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\bardRestApiWrapper-inplacePlugin\bard\core\rest\spring\util\Counts.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\bardRestApiWrapper-inplacePlugin\bard\core\rest\spring\util\Document.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\bardRestApiWrapper-inplacePlugin\bard\core\rest\spring\util\ETag.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\bardRestApiWrapper-inplacePlugin\bard\core\rest\spring\util\ETagCollection.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\bardRestApiWrapper-inplacePlugin\bard\core\rest\spring\util\EntityType.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\bardRestApiWrapper-inplacePlugin\bard\core\rest\spring\util\Facet.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\bardRestApiWrapper-inplacePlugin\bard\core\rest\spring\util\FilterParams.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\bardRestApiWrapper-inplacePlugin\bard\core\rest\spring\util\MetaData.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\bardRestApiWrapper-inplacePlugin\bard\core\rest\spring\util\SearchResult.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\bardRestApiWrapper-inplacePlugin\bard\core\rest\spring\util\StructureSearchParams$Method.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\bardRestApiWrapper-inplacePlugin\bard\core\rest\spring\util\StructureSearchParams$Metric.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\bardRestApiWrapper-inplacePlugin\bard\core\rest\spring\util\StructureSearchParams$Type.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\bardRestApiWrapper-inplacePlugin\bard\core\rest\spring\util\StructureSearchParams.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\production\bardRestApiWrapper-inplacePlugin\bard\core\rest\spring\util\Target.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\test\bardRestApiWrapper-inplacePlugin\bard\core\AssayUnitSpec.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\test\bardRestApiWrapper-inplacePlugin\bard\core\BinaryValueUnitSpec.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\test\bardRestApiWrapper-inplacePlugin\bard\core\BiologyUnitSpec.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\test\bardRestApiWrapper-inplacePlugin\bard\core\DataSourceUnitSpec.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\test\bardRestApiWrapper-inplacePlugin\bard\core\ExperimentUnitSpec.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\test\bardRestApiWrapper-inplacePlugin\bard\core\FilterParamsUnitSpec.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\test\bardRestApiWrapper-inplacePlugin\bard\core\HillCurveValueUnitSpec.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\test\bardRestApiWrapper-inplacePlugin\bard\core\IntValueUnitSpec.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\test\bardRestApiWrapper-inplacePlugin\bard\core\LinkUnitSpec.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\test\bardRestApiWrapper-inplacePlugin\bard\core\LongValueUnitSpec.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\test\bardRestApiWrapper-inplacePlugin\bard\core\MolecularValueUnitSpec.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\test\bardRestApiWrapper-inplacePlugin\bard\core\NumericValueUnitSpec.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\test\bardRestApiWrapper-inplacePlugin\bard\core\ProbeUnitSpec.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\test\bardRestApiWrapper-inplacePlugin\bard\core\PromiscuityScoreUnitSpec.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\test\bardRestApiWrapper-inplacePlugin\bard\core\PublicationUnitSpec.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\test\bardRestApiWrapper-inplacePlugin\bard\core\ScaffoldUnitSpec.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\test\bardRestApiWrapper-inplacePlugin\bard\core\SearchParamsUnitSpec.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\test\bardRestApiWrapper-inplacePlugin\bard\core\ServiceParamsUnitSpec.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\test\bardRestApiWrapper-inplacePlugin\bard\core\StringValueUnitSpec.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\test\bardRestApiWrapper-inplacePlugin\bard\core\StructureSearchParamsUnitSpec.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\test\bardRestApiWrapper-inplacePlugin\bard\core\SubstanceUnitSpec.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\test\bardRestApiWrapper-inplacePlugin\bard\core\SuggestParamsUnitSpec.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\test\bardRestApiWrapper-inplacePlugin\bard\core\ValueUnitSpec.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\test\bardRestApiWrapper-inplacePlugin\bard\core\WarningLevelUnitSpec.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\test\bardRestApiWrapper-inplacePlugin\bard\core\adapter\AssayAdapterUnitSpec.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\test\bardRestApiWrapper-inplacePlugin\bard\core\adapter\CompoundAdapterUnitSpec.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\test\bardRestApiWrapper-inplacePlugin\bard\core\adapter\ProjectAdapterUnitSpec.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\test\bardRestApiWrapper-inplacePlugin\bard\core\impl\MolecularDataJChemImplUnitSpec.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\test\bardRestApiWrapper-inplacePlugin\bard\core\interfaces\AssayCategoryUnitSpec.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\test\bardRestApiWrapper-inplacePlugin\bard\core\interfaces\AssayRoleUnitSpec.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\test\bardRestApiWrapper-inplacePlugin\bard\core\interfaces\AssayTypeUnitSpec.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\test\bardRestApiWrapper-inplacePlugin\bard\core\interfaces\ExperimentCategoryUnitSpec.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\test\bardRestApiWrapper-inplacePlugin\bard\core\interfaces\ExperimentRoleUnitSpec.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\test\bardRestApiWrapper-inplacePlugin\bard\core\interfaces\ExperimentTypeUnitSpec.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\test\bardRestApiWrapper-inplacePlugin\bard\core\rest\RESTAbstractEntityServiceUnitSpec.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\test\bardRestApiWrapper-inplacePlugin\bard\core\rest\RESTCompoundServiceUnitSpec$_$spock_feature_0_2_closure1.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\test\bardRestApiWrapper-inplacePlugin\bard\core\rest\RESTCompoundServiceUnitSpec.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\test\bardRestApiWrapper-inplacePlugin\bard\core\rest\RESTExperimentServiceUnitSpec.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\test\bardRestApiWrapper-inplacePlugin\bard\core\rest\RESTSearchResultUnitSpec$_$spock_feature_0_3_closure1.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\test\bardRestApiWrapper-inplacePlugin\bard\core\rest\RESTSearchResultUnitSpec$_$spock_feature_0_4_closure2.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\test\bardRestApiWrapper-inplacePlugin\bard\core\rest\RESTSearchResultUnitSpec.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\test\bardRestApiWrapper-inplacePlugin\bard\core\rest\RESTSubstanceServiceUnitSpec.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\test\bardRestApiWrapper-inplacePlugin\bard\core\rest\StructureSearchResultUnitSpec.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\test\bardRestApiWrapper-inplacePlugin\bard\core\rest\helper\RESTTestHelper.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\test\bardRestApiWrapper-inplacePlugin\bard\core\rest\spring\ActivityUnitSpec.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\test\bardRestApiWrapper-inplacePlugin\bard\core\rest\spring\AssayRestServiceIntegrationSpec$_$spock_feature_1_18_closure1.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\test\bardRestApiWrapper-inplacePlugin\bard\core\rest\spring\AssayRestServiceIntegrationSpec$_$spock_feature_1_18_closure2.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\test\bardRestApiWrapper-inplacePlugin\bard\core\rest\spring\AssayRestServiceIntegrationSpec.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\test\bardRestApiWrapper-inplacePlugin\bard\core\rest\spring\AssayRestServiceUnitSpec$_$spock_feature_0_0_closure1.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\test\bardRestApiWrapper-inplacePlugin\bard\core\rest\spring\AssayRestServiceUnitSpec$_$spock_feature_0_1_closure2.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\test\bardRestApiWrapper-inplacePlugin\bard\core\rest\spring\AssayRestServiceUnitSpec$_$spock_feature_0_3_closure3.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\test\bardRestApiWrapper-inplacePlugin\bard\core\rest\spring\AssayRestServiceUnitSpec$_$spock_feature_0_8_closure4.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\test\bardRestApiWrapper-inplacePlugin\bard\core\rest\spring\AssayRestServiceUnitSpec.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\test\bardRestApiWrapper-inplacePlugin\bard\core\rest\spring\CompoundRestServiceIntegrationSpec$_$spock_feature_1_23_closure1.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\test\bardRestApiWrapper-inplacePlugin\bard\core\rest\spring\CompoundRestServiceIntegrationSpec$_$spock_feature_1_23_closure2.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\test\bardRestApiWrapper-inplacePlugin\bard\core\rest\spring\CompoundRestServiceIntegrationSpec.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\test\bardRestApiWrapper-inplacePlugin\bard\core\rest\spring\CompoundRestServiceUnitSpec$_$spock_feature_0_10_closure4.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\test\bardRestApiWrapper-inplacePlugin\bard\core\rest\spring\CompoundRestServiceUnitSpec$_$spock_feature_0_11_closure5.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\test\bardRestApiWrapper-inplacePlugin\bard\core\rest\spring\CompoundRestServiceUnitSpec$_$spock_feature_0_12_closure6.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\test\bardRestApiWrapper-inplacePlugin\bard\core\rest\spring\CompoundRestServiceUnitSpec$_$spock_feature_0_13_closure7.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\test\bardRestApiWrapper-inplacePlugin\bard\core\rest\spring\CompoundRestServiceUnitSpec$_$spock_feature_0_14_closure8.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\test\bardRestApiWrapper-inplacePlugin\bard\core\rest\spring\CompoundRestServiceUnitSpec$_$spock_feature_0_15_closure9.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\test\bardRestApiWrapper-inplacePlugin\bard\core\rest\spring\CompoundRestServiceUnitSpec$_$spock_feature_0_6_closure1.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\test\bardRestApiWrapper-inplacePlugin\bard\core\rest\spring\CompoundRestServiceUnitSpec$_$spock_feature_0_7_closure2.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\test\bardRestApiWrapper-inplacePlugin\bard\core\rest\spring\CompoundRestServiceUnitSpec$_$spock_feature_0_8_closure3.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\test\bardRestApiWrapper-inplacePlugin\bard\core\rest\spring\CompoundRestServiceUnitSpec.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\test\bardRestApiWrapper-inplacePlugin\bard\core\rest\spring\ExperimentDataUnitSpec.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\test\bardRestApiWrapper-inplacePlugin\bard\core\rest\spring\ExperimentRestServiceIntegrationSpec.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\test\bardRestApiWrapper-inplacePlugin\bard\core\rest\spring\ExperimentRestServiceUnitSpec$_$spock_feature_0_1_closure1.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\test\bardRestApiWrapper-inplacePlugin\bard\core\rest\spring\ExperimentRestServiceUnitSpec$_$spock_feature_0_3_closure2.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\test\bardRestApiWrapper-inplacePlugin\bard\core\rest\spring\ExperimentRestServiceUnitSpec$_$spock_feature_0_4_closure3.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\test\bardRestApiWrapper-inplacePlugin\bard\core\rest\spring\ExperimentRestServiceUnitSpec$_$spock_feature_0_5_closure4.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\test\bardRestApiWrapper-inplacePlugin\bard\core\rest\spring\ExperimentRestServiceUnitSpec.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\test\bardRestApiWrapper-inplacePlugin\bard\core\rest\spring\ExperimentUnitSpec.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\test\bardRestApiWrapper-inplacePlugin\bard\core\rest\spring\ProjectRestServiceIntegrationSpec$_$spock_feature_1_8_closure1.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\test\bardRestApiWrapper-inplacePlugin\bard\core\rest\spring\ProjectRestServiceIntegrationSpec$_$spock_feature_1_8_closure2.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\test\bardRestApiWrapper-inplacePlugin\bard\core\rest\spring\ProjectRestServiceIntegrationSpec.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\test\bardRestApiWrapper-inplacePlugin\bard\core\rest\spring\ProjectRestServiceUnitSpec$_$spock_feature_0_0_closure1.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\test\bardRestApiWrapper-inplacePlugin\bard\core\rest\spring\ProjectRestServiceUnitSpec$_$spock_feature_0_3_closure2.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\test\bardRestApiWrapper-inplacePlugin\bard\core\rest\spring\ProjectRestServiceUnitSpec.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\test\bardRestApiWrapper-inplacePlugin\bard\core\rest\spring\ReadoutUnitSpec.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\test\bardRestApiWrapper-inplacePlugin\bard\core\rest\spring\RestCombinedServiceIntegrationSpec.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\test\bardRestApiWrapper-inplacePlugin\bard\core\rest\spring\util\FacetUnitSpec.class" afterPath="" />
+      <change type="DELETED" beforePath="C:\bardwebclient\bard-web-query\out\test\bardRestApiWrapper-inplacePlugin\jdo\JSONNodeTestHelper.class" afterPath="" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gitignore" afterPath="$PROJECT_DIR$/.gitignore" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/bard-rest-api-wrapper/grails-app/conf/spring/resources.groovy" afterPath="$PROJECT_DIR$/bard-rest-api-wrapper/grails-app/conf/spring/resources.groovy" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/bard-rest-api-wrapper/grails-app/services/bard/core/rest/spring/AbstractRestService.groovy" afterPath="$PROJECT_DIR$/bard-rest-api-wrapper/grails-app/services/bard/core/rest/spring/AbstractRestService.groovy" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/bard-rest-api-wrapper/grails-app/services/bard/core/rest/spring/AssayRestService.groovy" afterPath="$PROJECT_DIR$/bard-rest-api-wrapper/grails-app/services/bard/core/rest/spring/AssayRestService.groovy" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/bard-rest-api-wrapper/grails-app/services/bard/core/rest/spring/CompoundRestService.groovy" afterPath="$PROJECT_DIR$/bard-rest-api-wrapper/grails-app/services/bard/core/rest/spring/CompoundRestService.groovy" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/bard-rest-api-wrapper/grails-app/services/bard/core/rest/spring/ExperimentRestService.groovy" afterPath="$PROJECT_DIR$/bard-rest-api-wrapper/grails-app/services/bard/core/rest/spring/ExperimentRestService.groovy" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/bard-rest-api-wrapper/grails-app/services/bard/core/rest/spring/ProjectRestService.groovy" afterPath="$PROJECT_DIR$/bard-rest-api-wrapper/grails-app/services/bard/core/rest/spring/ProjectRestService.groovy" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/bard-rest-api-wrapper/src/groovy/bard/core/adapter/AssayAdapter.groovy" afterPath="$PROJECT_DIR$/bard-rest-api-wrapper/src/groovy/bard/core/adapter/AssayAdapter.groovy" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/bard-rest-api-wrapper/src/groovy/bard/core/adapter/CompoundAdapter.groovy" afterPath="$PROJECT_DIR$/bard-rest-api-wrapper/src/groovy/bard/core/adapter/CompoundAdapter.groovy" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/bard-rest-api-wrapper/src/groovy/bard/core/adapter/ProjectAdapter.groovy" afterPath="$PROJECT_DIR$/bard-rest-api-wrapper/src/groovy/bard/core/adapter/ProjectAdapter.groovy" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/bard-rest-api-wrapper/src/groovy/bard/core/interfaces/EntityNamedSources.groovy" afterPath="$PROJECT_DIR$/bard-rest-api-wrapper/src/groovy/bard/core/interfaces/EntityNamedSources.groovy" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/bard-rest-api-wrapper/src/groovy/bard/core/rest/spring/assays/AbstractAssay.groovy" afterPath="$PROJECT_DIR$/bard-rest-api-wrapper/src/groovy/bard/core/rest/spring/assays/AbstractAssay.groovy" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/bard-rest-api-wrapper/src/groovy/bard/core/rest/spring/assays/Assay.groovy" afterPath="$PROJECT_DIR$/bard-rest-api-wrapper/src/groovy/bard/core/rest/spring/assays/Assay.groovy" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/bard-rest-api-wrapper/src/groovy/bard/core/rest/spring/assays/AssayAnnotation.groovy" afterPath="$PROJECT_DIR$/bard-rest-api-wrapper/src/groovy/bard/core/rest/spring/assays/AssayAnnotation.groovy" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/bard-rest-api-wrapper/src/groovy/bard/core/rest/spring/assays/ExpandedAssay.groovy" afterPath="$PROJECT_DIR$/bard-rest-api-wrapper/src/groovy/bard/core/rest/spring/assays/ExpandedAssay.groovy" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/bard-rest-api-wrapper/src/groovy/bard/core/rest/spring/compounds/Compound.groovy" afterPath="$PROJECT_DIR$/bard-rest-api-wrapper/src/groovy/bard/core/rest/spring/compounds/Compound.groovy" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/bard-rest-api-wrapper/src/groovy/bard/core/rest/spring/compounds/CompoundAnnotations.groovy" afterPath="$PROJECT_DIR$/bard-rest-api-wrapper/src/groovy/bard/core/rest/spring/compounds/CompoundAnnotations.groovy" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/bard-rest-api-wrapper/src/groovy/bard/core/rest/spring/compounds/PromiscuityScore.groovy" afterPath="$PROJECT_DIR$/bard-rest-api-wrapper/src/groovy/bard/core/rest/spring/compounds/PromiscuityScore.groovy" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/bard-rest-api-wrapper/src/groovy/bard/core/rest/spring/experiment/Activity.groovy" afterPath="$PROJECT_DIR$/bard-rest-api-wrapper/src/groovy/bard/core/rest/spring/experiment/Activity.groovy" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/bard-rest-api-wrapper/src/groovy/bard/core/rest/spring/experiment/ExperimentAbstract.groovy" afterPath="$PROJECT_DIR$/bard-rest-api-wrapper/src/groovy/bard/core/rest/spring/experiment/ExperimentAbstract.groovy" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/bard-rest-api-wrapper/src/groovy/bard/core/rest/spring/experiment/ExperimentData.groovy" afterPath="$PROJECT_DIR$/bard-rest-api-wrapper/src/groovy/bard/core/rest/spring/experiment/ExperimentData.groovy" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/bard-rest-api-wrapper/src/groovy/bard/core/rest/spring/experiment/Readout.groovy" afterPath="$PROJECT_DIR$/bard-rest-api-wrapper/src/groovy/bard/core/rest/spring/experiment/Readout.groovy" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/bard-rest-api-wrapper/src/groovy/bard/core/rest/spring/project/Project.groovy" afterPath="$PROJECT_DIR$/bard-rest-api-wrapper/src/groovy/bard/core/rest/spring/project/Project.groovy" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/bard-rest-api-wrapper/src/groovy/bard/core/rest/spring/util/Counts.groovy" afterPath="$PROJECT_DIR$/bard-rest-api-wrapper/src/groovy/bard/core/rest/spring/util/Counts.groovy" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/bard-rest-api-wrapper/src/groovy/bard/core/rest/spring/util/Document.groovy" afterPath="$PROJECT_DIR$/bard-rest-api-wrapper/src/groovy/bard/core/rest/spring/util/Document.groovy" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/bard-rest-api-wrapper/src/groovy/bard/core/rest/spring/util/ETag.groovy" afterPath="$PROJECT_DIR$/bard-rest-api-wrapper/src/groovy/bard/core/rest/spring/util/ETag.groovy" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/bard-rest-api-wrapper/src/groovy/bard/core/rest/spring/util/ETagCollection.groovy" afterPath="$PROJECT_DIR$/bard-rest-api-wrapper/src/groovy/bard/core/rest/spring/util/ETagCollection.groovy" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/bard-rest-api-wrapper/src/groovy/bard/core/rest/spring/util/Facet.groovy" afterPath="$PROJECT_DIR$/bard-rest-api-wrapper/src/groovy/bard/core/rest/spring/util/Facet.groovy" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/bard-rest-api-wrapper/src/groovy/bard/core/rest/spring/util/MetaData.groovy" afterPath="$PROJECT_DIR$/bard-rest-api-wrapper/src/groovy/bard/core/rest/spring/util/MetaData.groovy" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/bard-rest-api-wrapper/src/groovy/bard/core/rest/spring/util/SearchResult.groovy" afterPath="$PROJECT_DIR$/bard-rest-api-wrapper/src/groovy/bard/core/rest/spring/util/SearchResult.groovy" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/bard-rest-api-wrapper/src/groovy/bard/core/rest/spring/util/Target.groovy" afterPath="$PROJECT_DIR$/bard-rest-api-wrapper/src/groovy/bard/core/rest/spring/util/Target.groovy" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/bard-rest-api-wrapper/test/integration/bard/core/rest/spring/AssayRestServiceIntegrationSpec.groovy" afterPath="$PROJECT_DIR$/bard-rest-api-wrapper/test/integration/bard/core/rest/spring/AssayRestServiceIntegrationSpec.groovy" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/bard-rest-api-wrapper/test/integration/bard/core/rest/spring/RestCombinedServiceIntegrationSpec.groovy" afterPath="$PROJECT_DIR$/bard-rest-api-wrapper/test/integration/bard/core/rest/spring/RestCombinedServiceIntegrationSpec.groovy" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/bard-rest-api-wrapper/test/unit/bard/core/DataSourceUnitSpec.groovy" afterPath="$PROJECT_DIR$/bard-rest-api-wrapper/test/unit/bard/core/DataSourceUnitSpec.groovy" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/bard-rest-api-wrapper/test/unit/bard/core/adapter/AssayAdapterUnitSpec.groovy" afterPath="$PROJECT_DIR$/bard-rest-api-wrapper/test/unit/bard/core/adapter/AssayAdapterUnitSpec.groovy" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/bard-rest-api-wrapper/test/unit/bard/core/adapter/CompoundAdapterUnitSpec.groovy" afterPath="$PROJECT_DIR$/bard-rest-api-wrapper/test/unit/bard/core/adapter/CompoundAdapterUnitSpec.groovy" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/bard-rest-api-wrapper/test/unit/bard/core/adapter/ProjectAdapterUnitSpec.groovy" afterPath="$PROJECT_DIR$/bard-rest-api-wrapper/test/unit/bard/core/adapter/ProjectAdapterUnitSpec.groovy" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/bard-web-client/grails-app/conf/spring/resources.groovy" afterPath="$PROJECT_DIR$/bard-web-client/grails-app/conf/spring/resources.groovy" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/bard-web-client/grails-app/services/bardqueryapi/QueryService.groovy" afterPath="$PROJECT_DIR$/bard-web-client/grails-app/services/bardqueryapi/QueryService.groovy" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/bard-web-client/grails-app/services/molspreadsheet/MolecularSpreadSheetService.groovy" afterPath="$PROJECT_DIR$/bard-web-client/grails-app/services/molspreadsheet/MolecularSpreadSheetService.groovy" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/bard-web-client/src/groovy/molspreadsheet/SpreadSheetActivity.groovy" afterPath="$PROJECT_DIR$/bard-web-client/src/groovy/molspreadsheet/SpreadSheetActivity.groovy" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/bard-web-client/test/integration/molspreadsheet/MolSpreadSheetDataBuilderIntegrationSpec.groovy" afterPath="$PROJECT_DIR$/bard-web-client/test/integration/molspreadsheet/MolSpreadSheetDataBuilderIntegrationSpec.groovy" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/bard-web-client/test/integration/molspreadsheet/MolecularSpreadSheetServiceIntegrationSpec.groovy" afterPath="$PROJECT_DIR$/bard-web-client/test/integration/molspreadsheet/MolecularSpreadSheetServiceIntegrationSpec.groovy" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/bard-web-client/test/unit/bardqueryapi/QueryServiceUnitSpec.groovy" afterPath="$PROJECT_DIR$/bard-web-client/test/unit/bardqueryapi/QueryServiceUnitSpec.groovy" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/bard-web-client/test/unit/molspreadsheet/MolecularSpreadSheetServiceUnitSpec.groovy" afterPath="$PROJECT_DIR$/bard-web-client/test/unit/molspreadsheet/MolecularSpreadSheetServiceUnitSpec.groovy" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/bard-web-client/test/unit/querycart/CartCompoundServiceUnitSpec.groovy" afterPath="$PROJECT_DIR$/bard-web-client/test/unit/querycart/CartCompoundServiceUnitSpec.groovy" />
     </list>
     <ignored path="bard-web-query.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -186,8 +694,8 @@
     <SUITE FILE_PATH="coverage/bard-web-query$test_serialize_json_to_ETagCollection__.coverage" NAME="test serialize json to ETagCollection() Coverage Results" MODIFIED="1354374436625" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" />
     <SUITE FILE_PATH="coverage/bard-web-query$test_serialization_to_ExperimentShow__.coverage" NAME="test serialization to ExperimentShow() Coverage Results" MODIFIED="1354379368979" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" />
     <SUITE FILE_PATH="coverage/bard-web-query$test_serialization_to_Project__.coverage" NAME="test serialization to Project() Coverage Results" MODIFIED="1354426648643" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" />
-    <SUITE FILE_PATH="coverage/bard-web-query$test_addCrcs_Empty_List__.coverage" NAME="test addCrcs Empty List() Coverage Results" MODIFIED="1354418330557" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" />
     <SUITE FILE_PATH="coverage/bard-web-query$test_serialize_json_to_metadata__.coverage" NAME="test serialize json to metadata() Coverage Results" MODIFIED="1354419361101" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" />
+    <SUITE FILE_PATH="coverage/bard-web-query$test_addCrcs_Empty_List__.coverage" NAME="test addCrcs Empty List() Coverage Results" MODIFIED="1354418330557" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" />
     <SUITE FILE_PATH="coverage/bard-web-query$test_serialize_json_to_facet__.coverage" NAME="test serialize json to facet() Coverage Results" MODIFIED="1354332744776" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" />
     <SUITE FILE_PATH="coverage/bard-web-query$test_serialization_to_AssayAnnotation__.coverage" NAME="test serialization to AssayAnnotation() Coverage Results" MODIFIED="1354419870511" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" />
   </component>
@@ -566,8 +1074,8 @@
       <property name="field_breakpoints_groupByClasses" value="true" />
       <property name="method_breakpoints_groupByClasses" value="true" />
       <property name="exception_breakpoints_viewId" value="TABLE" />
-      <property name="field_breakpoints_viewId" value="TABLE" />
       <property name="exception_breakpoints_groupByClasses" value="true" />
+      <property name="field_breakpoints_viewId" value="TABLE" />
       <property name="method_breakpoints_groupByMethods" value="false" />
     </ui_properties>
   </component>
@@ -576,30 +1084,46 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="ActivityOutcomeUnitSpec.groovy" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/bard-web-client/test/unit/bardqueryapi/ActivityOutcomeUnitSpec.groovy">
+      <file leaf-file-name="MolecularSpreadSheetServiceUnitSpec.groovy" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/bard-web-client/test/unit/molspreadsheet/MolecularSpreadSheetServiceUnitSpec.groovy">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="5" column="46" selection-start="89" selection-end="89" vertical-scroll-proportion="0.0">
+            <state line="26" column="46" selection-start="920" selection-end="920" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="CartCompoundServiceUnitSpec.groovy" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/bard-web-client/test/unit/querycart/CartCompoundServiceUnitSpec.groovy">
+      <file leaf-file-name=".gitignore" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/.gitignore">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="17" column="14" selection-start="481" selection-end="481" vertical-scroll-proportion="0.0">
-              <folding>
-                <element signature="e#19#59#0" expanded="true" />
-              </folding>
+            <state line="1" column="6" selection-start="10" selection-end="10" vertical-scroll-proportion="0.05214724">
+              <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="MolecularSpreadSheetServiceUnitSpec.groovy" pinned="false" current="true" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/bard-web-client/test/unit/molspreadsheet/MolecularSpreadSheetServiceUnitSpec.groovy">
+      <file leaf-file-name="_sarCartContent.gsp" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/bard-web-client/grails-app/views/bardWebInterface/_sarCartContent.gsp">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="26" column="46" selection-start="920" selection-end="920" vertical-scroll-proportion="0.45033112">
+            <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="-0.0">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="_saveToCartButton.gsp" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/bard-web-client/grails-app/views/bardWebInterface/_saveToCartButton.gsp">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="3" column="44" selection-start="238" selection-end="238" vertical-scroll-proportion="-1.0408163">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="cart.js" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/bard-web-client/web-app/js/cart.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="34" column="27" selection-start="877" selection-end="877" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -627,9 +1151,7 @@
         <entry file="file://$PROJECT_DIR$/bard-rest-api-wrapper/src/groovy/bard/core/adapter/CompoundAdapter.groovy">
           <provider selected="true" editor-type-id="text-editor">
             <state line="54" column="24" selection-start="1192" selection-end="1192" vertical-scroll-proportion="0.0">
-              <folding>
-                <element signature="e#29#81#0" expanded="true" />
-              </folding>
+              <folding />
             </state>
           </provider>
         </entry>
@@ -665,8 +1187,6 @@
   <component name="IdeDocumentHistory">
     <option name="changedFiles">
       <list>
-        <option value="$PROJECT_DIR$/bard-rest-api-wrapper/test/unit/bard/core/adapter/ProjectAdapterUnitSpec.groovy" />
-        <option value="$PROJECT_DIR$/bard-rest-api-wrapper/src/groovy/bard/core/adapter/AssayAdapter.groovy" />
         <option value="$PROJECT_DIR$/bard-rest-api-wrapper/test/unit/bard/core/adapter/AssayAdapterUnitSpec.groovy" />
         <option value="$PROJECT_DIR$/bard-rest-api-wrapper/test/unit/bard/core/rest/spring/AssayRestServiceUnitSpec.groovy" />
         <option value="$PROJECT_DIR$/bard-rest-api-wrapper/grails-app/services/bard/core/rest/spring/AbstractRestService.groovy" />
@@ -681,6 +1201,8 @@
         <option value="$PROJECT_DIR$/bard-rest-api-wrapper/src/groovy/bard/core/adapter/CompoundAdapter.groovy" />
         <option value="$PROJECT_DIR$/bard-web-client/grails-app/services/molspreadsheet/MolecularSpreadSheetService.groovy" />
         <option value="$PROJECT_DIR$/bard-web-client/test/unit/molspreadsheet/MolecularSpreadSheetServiceUnitSpec.groovy" />
+        <option value="$PROJECT_DIR$/bard-web-client/grails-app/views/bardWebInterface/_saveToCartButton.gsp" />
+        <option value="$PROJECT_DIR$/.gitignore" />
       </list>
     </option>
   </component>
@@ -721,6 +1243,16 @@
       <sortByType />
     </navigator>
     <panes>
+      <pane id="Scope">
+        <subPane subId="Project Files">
+          <PATH>
+            <PATH_ELEMENT USER_OBJECT="Root">
+              <option name="myItemId" value="" />
+              <option name="myItemType" value="" />
+            </PATH_ELEMENT>
+          </PATH>
+        </subPane>
+      </pane>
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -736,97 +1268,7 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="bard-web-query" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="bard-web-query" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="bard-web-query" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="bard-web-client" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="bard-web-query" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="bard-web-query" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="bard-web-client" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="test" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="unit" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="bard-web-query" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="bard-web-query" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="bard-web-client" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="test" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="unit" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="bardqueryapi" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="bard-web-query" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="bard-web-query" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="bard-web-client" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="test" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-        </subPane>
-      </pane>
-      <pane id="Scope">
-        <subPane subId="Project Files">
-          <PATH>
-            <PATH_ELEMENT USER_OBJECT="Root">
-              <option name="myItemId" value="" />
-              <option name="myItemType" value="" />
+              <option name="myItemType" value="com.cenqua.clover.idea.projectview.PsiDirectoryNodeWrapper" />
             </PATH_ELEMENT>
           </PATH>
         </subPane>
@@ -882,7 +1324,7 @@
       <recent name="bard.core.rest.spring" />
     </key>
   </component>
-  <component name="RunManager" selected="Grails.MolecularSpreadSheetServiceUnitSpec">
+  <component name="RunManager" selected="Grails.Grails:bard-web-client">
     <configuration default="false" name="AssayAdapterUnitSpec" type="GrailsRunConfigurationType" factoryName="Grails" temporary="true">
       <module name="bardRestApiWrapper-inplacePlugin" />
       <setting name="vmparams" value="" />
@@ -959,13 +1401,14 @@
         <option name="Make" enabled="false" />
       </method>
     </configuration>
-    <configuration default="true" type="GroovyScriptRunConfiguration" factoryName="Groovy">
+    <configuration default="true" type="GrailsRunConfigurationType" factoryName="Grails">
       <module name="" />
-      <setting name="path" value="" />
       <setting name="vmparams" value="" />
-      <setting name="params" value="" />
-      <setting name="workDir" value="C:\bardwebclient\bard-web-query" />
-      <setting name="debug" value="false" />
+      <setting name="cmdLine" value="run-app" />
+      <setting name="depsClasspath" value="true" />
+      <setting name="passParentEnv" value="true" />
+      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
+      <setting name="launchBrowser" value="true" />
       <method>
         <option name="AntTarget" enabled="false" />
         <option name="BuildArtifacts" enabled="false" />
@@ -984,14 +1427,13 @@
         <option name="Maven.BeforeRunTask" enabled="false" />
       </method>
     </configuration>
-    <configuration default="true" type="GrailsRunConfigurationType" factoryName="Grails">
+    <configuration default="true" type="GroovyScriptRunConfiguration" factoryName="Groovy">
       <module name="" />
+      <setting name="path" value="" />
       <setting name="vmparams" value="" />
-      <setting name="cmdLine" value="run-app" />
-      <setting name="depsClasspath" value="true" />
-      <setting name="passParentEnv" value="true" />
-      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
-      <setting name="launchBrowser" value="true" />
+      <setting name="params" value="" />
+      <setting name="workDir" value="C:\bardwebclient\bard-web-query" />
+      <setting name="debug" value="false" />
       <method>
         <option name="AntTarget" enabled="false" />
         <option name="BuildArtifacts" enabled="false" />
@@ -1018,24 +1460,6 @@
       <method>
         <option name="AntTarget" enabled="false" />
         <option name="BuildArtifacts" enabled="false" />
-        <option name="Maven.BeforeRunTask" enabled="false" />
-      </method>
-    </configuration>
-    <configuration default="true" type="Applet" factoryName="Applet">
-      <module name="" />
-      <option name="MAIN_CLASS_NAME" />
-      <option name="HTML_FILE_NAME" />
-      <option name="HTML_USED" value="false" />
-      <option name="WIDTH" value="400" />
-      <option name="HEIGHT" value="300" />
-      <option name="POLICY_FILE" value="$APPLICATION_HOME_DIR$/bin/appletviewer.policy" />
-      <option name="VM_PARAMETERS" />
-      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
-      <option name="ALTERNATIVE_JRE_PATH" />
-      <method>
-        <option name="AntTarget" enabled="false" />
-        <option name="BuildArtifacts" enabled="false" />
-        <option name="Make" enabled="true" />
         <option name="Maven.BeforeRunTask" enabled="false" />
       </method>
     </configuration>
@@ -1072,6 +1496,24 @@
         <option name="Maven.BeforeRunTask" enabled="false" />
       </method>
     </configuration>
+    <configuration default="true" type="Applet" factoryName="Applet">
+      <module name="" />
+      <option name="MAIN_CLASS_NAME" />
+      <option name="HTML_FILE_NAME" />
+      <option name="HTML_USED" value="false" />
+      <option name="WIDTH" value="400" />
+      <option name="HEIGHT" value="300" />
+      <option name="POLICY_FILE" value="$APPLICATION_HOME_DIR$/bin/appletviewer.policy" />
+      <option name="VM_PARAMETERS" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <method>
+        <option name="AntTarget" enabled="false" />
+        <option name="BuildArtifacts" enabled="false" />
+        <option name="Make" enabled="true" />
+        <option name="Maven.BeforeRunTask" enabled="false" />
+      </method>
+    </configuration>
     <configuration default="true" type="Application" factoryName="Application">
       <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
       <option name="MAIN_CLASS_NAME" />
@@ -1089,17 +1531,6 @@
         <option name="AntTarget" enabled="false" />
         <option name="BuildArtifacts" enabled="false" />
         <option name="Make" enabled="true" />
-        <option name="Maven.BeforeRunTask" enabled="false" />
-      </method>
-    </configuration>
-    <configuration default="true" type="JavascriptDebugSession" factoryName="Local">
-      <JSDebuggerConfigurationSettings>
-        <option name="engineId" value="embedded" />
-        <option name="fileUrl" />
-      </JSDebuggerConfigurationSettings>
-      <method>
-        <option name="AntTarget" enabled="false" />
-        <option name="BuildArtifacts" enabled="false" />
         <option name="Maven.BeforeRunTask" enabled="false" />
       </method>
     </configuration>
@@ -1126,6 +1557,17 @@
         <option name="AntTarget" enabled="false" />
         <option name="BuildArtifacts" enabled="false" />
         <option name="Make" enabled="true" />
+        <option name="Maven.BeforeRunTask" enabled="false" />
+      </method>
+    </configuration>
+    <configuration default="true" type="JavascriptDebugSession" factoryName="Local">
+      <JSDebuggerConfigurationSettings>
+        <option name="engineId" value="embedded" />
+        <option name="fileUrl" />
+      </JSDebuggerConfigurationSettings>
+      <method>
+        <option name="AntTarget" enabled="false" />
+        <option name="BuildArtifacts" enabled="false" />
         <option name="Maven.BeforeRunTask" enabled="false" />
       </method>
     </configuration>
@@ -1385,34 +1827,34 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1616" height="876" extended-state="6" />
-    <editor active="false" />
+    <editor active="true" />
     <layout>
-      <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Persistence" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="true" content_ui="tabs" />
-      <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.34497207" sideWeight="0.26640928" order="8" side_tool="true" content_ui="tabs" />
-      <window_info id="IDEtalk Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
-      <window_info id="IDEtalk" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32964888" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
-      <window_info id="Console" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.49720672" sideWeight="0.5" order="12" side_tool="false" content_ui="tabs" />
-      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
-      <window_info id="Coverage" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.23518041" sideWeight="0.62849164" order="0" side_tool="true" content_ui="tabs" />
-      <window_info id="Cloverage" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
-      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.2583763" sideWeight="0.5027933" order="0" side_tool="true" content_ui="combo" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.41061452" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Test Runs" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Data Sources" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3298969" sideWeight="0.59217876" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="JetGradle" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Persistence" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="true" content_ui="tabs" />
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.48184356" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.48184356" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.27234638" sideWeight="0.7290862" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="IDEtalk Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.34497207" sideWeight="0.26640928" order="8" side_tool="true" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Grails View" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.27541828" sideWeight="0.1452514" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="IDEtalk" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32964888" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
+      <window_info id="Cloverage" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Web" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="true" content_ui="tabs" />
+      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="true" content_ui="tabs" />
-      <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32947233" sideWeight="0.8547486" order="4" side_tool="false" content_ui="tabs" />
+      <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.2583763" sideWeight="0.5181564" order="0" side_tool="true" content_ui="combo" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.41061452" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Test Runs" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="JsTestDriver Server" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="13" side_tool="false" content_ui="tabs" />
+      <window_info id="Console" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.49720672" sideWeight="0.5" order="12" side_tool="false" content_ui="tabs" />
+      <window_info id="Coverage" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.23518041" sideWeight="0.62849164" order="0" side_tool="true" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
@@ -1479,40 +1921,6 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/bard-rest-api-wrapper/grails-app/services/bard/core/rest/spring/ExperimentRestService.groovy">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="158" column="22" selection-start="6287" selection-end="6287" vertical-scroll-proportion="-10.16">
-          <folding>
-            <element signature="e#31#75#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/bard-rest-api-wrapper/grails-app/services/bard/core/rest/spring/ProjectRestService.groovy">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="57" column="24" selection-start="2231" selection-end="2231" vertical-scroll-proportion="0.48502994">
-          <folding>
-            <element signature="e#31#60#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/bard-rest-api-wrapper/grails-app/services/bard/core/rest/spring/AssayRestService.groovy">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="49" column="43" selection-start="2093" selection-end="2093" vertical-scroll-proportion="0.35883906">
-          <folding>
-            <element signature="e#31#60#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/bard-rest-api-wrapper/test/unit/bard/core/rest/spring/ExperimentRestServiceUnitSpec.groovy">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="26" column="32" selection-start="752" selection-end="752" vertical-scroll-proportion="0.40762463">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/bard-rest-api-wrapper/grails-app/services/bard/core/rest/spring/AbstractRestService.groovy">
       <provider selected="true" editor-type-id="text-editor">
         <state line="166" column="29" selection-start="6105" selection-end="6105" vertical-scroll-proportion="0.5282486">
@@ -1538,6 +1946,13 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/bard-web-client/test/unit/bardqueryapi/BardWebInterfaceControllerUnitSpec.groovy">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="36" column="6" selection-start="1231" selection-end="1231" vertical-scroll-proportion="-33.2125">
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/bard-web-client/test/unit/bardqueryapi/ActivityOutcomeUnitSpec.groovy">
       <provider selected="true" editor-type-id="text-editor">
         <state line="5" column="46" selection-start="89" selection-end="89" vertical-scroll-proportion="0.0">
@@ -1545,16 +1960,16 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/bard-web-client/grails-app/services/querycart/CartCompoundService.groovy">
+    <entry file="file://$PROJECT_DIR$/bard-web-client/test/unit/querycart/CartCompoundServiceUnitSpec.groovy">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="16" column="0" selection-start="567" selection-end="567" vertical-scroll-proportion="0.0">
+        <state line="17" column="14" selection-start="481" selection-end="481" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/bard-web-client/test/unit/bardqueryapi/BardWebInterfaceControllerUnitSpec.groovy">
+    <entry file="file://$PROJECT_DIR$/bard-web-client/src/groovy/molspreadsheet/MolSpreadSheetDataBuilder.groovy">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="36" column="6" selection-start="1231" selection-end="1231" vertical-scroll-proportion="-33.2125">
+        <state line="102" column="40" selection-start="4441" selection-end="4441" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
@@ -1569,9 +1984,7 @@
     <entry file="file://$PROJECT_DIR$/bard-rest-api-wrapper/src/groovy/bard/core/adapter/CompoundAdapter.groovy">
       <provider selected="true" editor-type-id="text-editor">
         <state line="54" column="24" selection-start="1192" selection-end="1192" vertical-scroll-proportion="0.0">
-          <folding>
-            <element signature="e#29#81#0" expanded="true" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -1582,25 +1995,44 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/bard-web-client/src/groovy/molspreadsheet/MolSpreadSheetDataBuilder.groovy">
+    <entry file="file://$PROJECT_DIR$/bard-web-client/grails-app/services/querycart/CartCompoundService.groovy">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="102" column="40" selection-start="4441" selection-end="4441" vertical-scroll-proportion="0.0">
+        <state line="16" column="0" selection-start="567" selection-end="567" vertical-scroll-proportion="0.0">
           <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/bard-web-client/test/unit/querycart/CartCompoundServiceUnitSpec.groovy">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="17" column="14" selection-start="481" selection-end="481" vertical-scroll-proportion="0.0">
-          <folding>
-            <element signature="e#19#59#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/bard-web-client/test/unit/molspreadsheet/MolecularSpreadSheetServiceUnitSpec.groovy">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="26" column="46" selection-start="920" selection-end="920" vertical-scroll-proportion="0.45033112">
+        <state line="26" column="46" selection-start="920" selection-end="920" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/bard-web-client/grails-app/views/bardWebInterface/_sarCartContent.gsp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/bard-web-client/web-app/js/cart.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="34" column="27" selection-start="877" selection-end="877" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/bard-web-client/grails-app/views/bardWebInterface/_saveToCartButton.gsp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="3" column="44" selection-start="238" selection-end="238" vertical-scroll-proportion="-1.0408163">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/.gitignore">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="1" column="6" selection-start="10" selection-end="10" vertical-scroll-proportion="0.05214724">
           <folding />
         </state>
       </provider>
