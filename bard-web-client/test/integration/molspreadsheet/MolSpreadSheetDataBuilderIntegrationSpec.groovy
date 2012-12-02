@@ -1,10 +1,6 @@
 package molspreadsheet
 
 import bard.core.Experiment
-import bard.core.rest.RESTAssayService
-import bard.core.rest.RESTCompoundService
-import bard.core.rest.RESTExperimentService
-import bard.core.rest.RESTProjectService
 import com.metasieve.shoppingcart.ShoppingCartService
 import grails.plugin.spock.IntegrationSpec
 import org.junit.After
@@ -23,10 +19,6 @@ class MolSpreadSheetDataBuilderIntegrationSpec extends IntegrationSpec {
     MolecularSpreadSheetService molecularSpreadSheetService
     MolSpreadSheetData molSpreadSheetData = generateFakeData()
     MolSpreadSheetDataBuilder molSpreadSheetDataBuilder
-    RESTCompoundService restCompoundService
-    RESTExperimentService restExperimentService
-    RESTProjectService restProjectService
-    RESTAssayService restAssayService
     QueryCartService queryCartService
     ShoppingCartService shoppingCartService
 
@@ -73,16 +65,16 @@ class MolSpreadSheetDataBuilderIntegrationSpec extends IntegrationSpec {
 
 
         where:
-        dataIsSufficient | cartAssay             | cartProject             | cartCompound                  | expectedMolSpreadsheetDerivedMethod
-        false            | null                  | null                    | null                          | null
-        true             | new CartAssay("A", 1) | null                    | null                          | MolSpreadsheetDerivedMethod.NoCompounds_Assays_NoProjects
-        true             | null                  | new CartProject("P", 8) | null                          | MolSpreadsheetDerivedMethod.NoCompounds_NoAssays_Projects
+        dataIsSufficient | cartAssay             | cartProject             | cartCompound                        | expectedMolSpreadsheetDerivedMethod
+        false            | null                  | null                    | null                                | null
+        true             | new CartAssay("A", 1) | null                    | null                                | MolSpreadsheetDerivedMethod.NoCompounds_Assays_NoProjects
+        true             | null                  | new CartProject("P", 8) | null                                | MolSpreadsheetDerivedMethod.NoCompounds_NoAssays_Projects
         true             | null                  | null                    | new CartCompound("C", "c", 1, 0, 0) | null
         true             | null                  | new CartProject("P", 8) | new CartCompound("C", "c", 1, 0, 0) | MolSpreadsheetDerivedMethod.NoCompounds_NoAssays_Projects
         true             | new CartAssay("A", 1) | null                    | new CartCompound("C", "c", 1, 0, 0) | MolSpreadsheetDerivedMethod.NoCompounds_Assays_NoProjects
-        true             | new CartAssay("A", 1) | new CartProject("P", 8) | null                          | MolSpreadsheetDerivedMethod.NoCompounds_NoAssays_Projects
+        true             | new CartAssay("A", 1) | new CartProject("P", 8) | null                                | MolSpreadsheetDerivedMethod.NoCompounds_NoAssays_Projects
         true             | new CartAssay("A", 1) | new CartProject("P", 8) | new CartCompound("C", "c", 1, 0, 0) | MolSpreadsheetDerivedMethod.NoCompounds_NoAssays_Projects
-        false            | null                  | null                    | null                          | null
+        false            | null                  | null                    | null                                | null
     }
 
 //

@@ -9,7 +9,6 @@ import bard.core.adapter.ProjectAdapter
 import bard.core.rest.spring.AssayRestService
 import bard.core.rest.spring.CompoundRestService
 import bard.core.rest.spring.ProjectRestService
-import bard.core.rest.spring.RestCombinedService
 import bard.core.rest.spring.assays.Assay
 import bard.core.rest.spring.assays.ExpandedAssay
 import bard.core.rest.spring.assays.ExpandedAssayResult
@@ -31,7 +30,6 @@ class QueryService implements IQueryService {
     AssayRestService assayRestService
     CompoundRestService compoundRestService
     ProjectRestService projectRestService
-    RestCombinedService restCombinedService
     //========================================================== Free Text Searches ================================
     /**
      * Find Compounds by Text search
@@ -244,7 +242,6 @@ class QueryService implements IQueryService {
         return [projectAdapters: foundProjectAdapters, facets: facets, nHits: nhits]
     }
 
-
     //=============== Show Resources Given a Single ID ================
 
     /**
@@ -292,13 +289,13 @@ class QueryService implements IQueryService {
             final Project project = projectRestService.getProjectById(projectId)
             this.queryHelperService.stopStopWatch(sw, "show project ${projectId.toString()}")
             if (project) {
-                final List<ExperimentSearch> experiments = restCombinedService.findExperimentsByProjectId(projectId)
+                final List<ExperimentSearch> experiments = projectRestService.findExperimentsByProjectId(projectId)
                 if (experiments && !experiments.isEmpty()) {
                     experiments?.sort {
                         it?.role
                     }
                 }
-                final List<Assay> assays = restCombinedService.findAssaysByProjectId(projectId)
+                final List<Assay> assays = projectRestService.findAssaysByProjectId(projectId)
                 final ProjectAdapter projectAdapter = new ProjectAdapter(project)
                 return [projectAdapter: projectAdapter, experiments: experiments, assays: assays]
             }

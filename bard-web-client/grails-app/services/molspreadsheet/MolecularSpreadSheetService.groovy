@@ -2,9 +2,15 @@ package molspreadsheet
 
 import bard.core.adapter.CompoundAdapter
 import bard.core.interfaces.ExperimentRole
+import bard.core.rest.spring.AssayRestService
+import bard.core.rest.spring.CompoundRestService
+import bard.core.rest.spring.ExperimentRestService
+import bard.core.rest.spring.ProjectRestService
+import bard.core.rest.spring.assays.AbstractAssay
 import bard.core.rest.spring.assays.Assay
 import bard.core.rest.spring.assays.ExpandedAssay
 import bard.core.rest.spring.assays.ExpandedAssayResult
+import bard.core.rest.spring.compounds.Compound
 import bard.core.rest.spring.project.ExpandedProjectResult
 import bard.core.rest.spring.project.Project
 import bardqueryapi.IQueryService
@@ -14,10 +20,7 @@ import querycart.CartAssay
 import querycart.CartCompound
 import querycart.CartProject
 import querycart.QueryCartService
-import bard.core.rest.spring.*
 import bard.core.rest.spring.experiment.*
-import bard.core.rest.spring.assays.AbstractAssay
-import bard.core.rest.spring.compounds.Compound
 
 class MolecularSpreadSheetService {
     final static int START_DYNAMIC_COLUMNS = 4 //Where to start the dynamic columns
@@ -26,7 +29,6 @@ class MolecularSpreadSheetService {
     IQueryService queryService
     ExperimentRestService experimentRestService
     AssayRestService assayRestService
-    RestCombinedService restCombinedService
     CompoundRestService compoundRestService
     ProjectRestService projectRestService
 
@@ -91,7 +93,7 @@ class MolecularSpreadSheetService {
                 retrieveCartAssayFromShoppingCart(),
                 retrieveCartProjectFromShoppingCart())
 
-       return molSpreadSheetDataBuilderDirector.molSpreadSheetData
+        return molSpreadSheetDataBuilderDirector.molSpreadSheetData
     }
 
     /**
@@ -136,7 +138,7 @@ class MolecularSpreadSheetService {
         for (ExperimentSearch experiment : experimentList) {
             List<Long> idList = []
             if (experiment.id) {
-                idList = this.restCombinedService.compounds(experiment.id)
+                idList = this.experimentRestService.compoundsForExperiment(experiment.id)
             }
             if (etag == null) {
                 etag = this.compoundRestService.newETag("${new Date().toString()}", idList);
@@ -330,7 +332,7 @@ class MolecularSpreadSheetService {
         // Add every compound we can find in the compound adapters map
         List<CompoundAdapter> compoundAdaptersList = compoundAdapterMap.compoundAdapters
         int rowCount = 0
-        for (CompoundAdapter compoundAdapter in compoundAdaptersList) {
+        for (CompoundAdapter compoundAdapter : compoundAdaptersList) {
             String smiles = compoundAdapter.structureSMILES
             Long cid = compoundAdapter.pubChemCID
             String name = compoundAdapter.name
@@ -411,7 +413,7 @@ class MolecularSpreadSheetService {
 
         for (Long assayId : assayIds) {
             //TODO: We probably could post all the ids to this url. We need to investigate
-            final List<ExperimentSearch> experiments = restCombinedService.findExperimentsByAssayId(assayId)
+            final List<ExperimentSearch> experiments = assayRestService.findExperimentsByAssayId(assayId)
             if (experiments) {
                 allExperiments.addAll(experiments)
             }
@@ -553,10 +555,6 @@ class MolecularSpreadSheetService {
         return spreadSheetActivities
     }
 
-    protected Map extractActivityValues(final ExperimentSearch experiment, final Integer top = 10, final Integer skip = 0) {
-        final ExperimentData experimentData = experimentRestService.activities(experiment)
-        return extractActivityValuesFromExperimentData(experimentData, top, skip)
-    }
 
     protected Map extractActivityValuesFromExperimentData(final ExperimentData experimentData, final Integer top = 10, final Integer skip = 0) {
         List<Activity> activityValues = []

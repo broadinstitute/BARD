@@ -3,7 +3,6 @@ package molspreadsheet
 import bard.core.HillCurveValue
 import bard.core.rest.spring.CompoundRestService
 import bard.core.rest.spring.ExperimentRestService
-import bard.core.rest.spring.RestCombinedService
 import bard.core.rest.spring.assays.Assay
 import bard.core.rest.spring.experiment.Activity
 import bard.core.rest.spring.experiment.ExperimentData
@@ -19,6 +18,8 @@ import querycart.QueryCartService
 import spock.lang.Unroll
 
 import static junit.framework.Assert.assertNotNull
+import bard.core.rest.spring.ProjectRestService
+import bard.core.rest.spring.AssayRestService
 
 @Unroll
 class MolecularSpreadSheetServiceIntegrationSpec extends IntegrationSpec {
@@ -26,8 +27,9 @@ class MolecularSpreadSheetServiceIntegrationSpec extends IntegrationSpec {
     MolecularSpreadSheetService molecularSpreadSheetService
     MolSpreadSheetData molSpreadSheetData = generateFakeData()
     CompoundRestService compoundRestService
+    AssayRestService assayRestService
     ExperimentRestService experimentRestService
-    RestCombinedService restCombinedService
+    ProjectRestService projectRestService
     QueryCartService queryCartService
     ShoppingCartService shoppingCartService
 
@@ -204,8 +206,8 @@ class MolecularSpreadSheetServiceIntegrationSpec extends IntegrationSpec {
         when: "we have a molecularSpreadSheetService"
         assertNotNull molecularSpreadSheetService
 
-        List<ExperimentSearch> finalExperimentList = restCombinedService.findExperimentsByAssayId(assayId1)
-        List<ExperimentSearch> experiments = restCombinedService.findExperimentsByAssayId(assayId2)
+        List<ExperimentSearch> finalExperimentList = assayRestService.findExperimentsByAssayId(assayId1)
+        List<ExperimentSearch> experiments = assayRestService.findExperimentsByAssayId(assayId2)
         finalExperimentList.addAll(experiments)
         MolSpreadSheetData molSpreadSheetData = new MolSpreadSheetData()
         100.times {
@@ -241,7 +243,7 @@ class MolecularSpreadSheetServiceIntegrationSpec extends IntegrationSpec {
         long assayId1 = 519
 
         when: "we have a molecularSpreadSheetService"
-        List<ExperimentSearch> experiments = restCombinedService.findExperimentsByAssayId(assayId1)
+        List<ExperimentSearch> experiments = assayRestService.findExperimentsByAssayId(assayId1)
         MolSpreadSheetData molSpreadSheetData = new MolSpreadSheetData()
         5.times {
             molSpreadSheetData.mssHeaders << []
@@ -267,7 +269,7 @@ class MolecularSpreadSheetServiceIntegrationSpec extends IntegrationSpec {
         given:
         long assayId1 = 346
         when: "we have a molecularSpreadSheetService"
-        List<ExperimentSearch> experiments = restCombinedService.findExperimentsByAssayId(assayId1)
+        List<ExperimentSearch> experiments = assayRestService.findExperimentsByAssayId(assayId1)
         MolSpreadSheetData molSpreadSheetData = new MolSpreadSheetData()
         5.times {
             molSpreadSheetData.mssHeaders << []
@@ -295,7 +297,7 @@ class MolecularSpreadSheetServiceIntegrationSpec extends IntegrationSpec {
         long assayId1 = 346
 
         when: "we have a molecularSpreadSheetService"
-        List<ExperimentSearch> experiments = restCombinedService.findExperimentsByAssayId(assayId1)
+        List<ExperimentSearch> experiments = assayRestService.findExperimentsByAssayId(assayId1)
         MolSpreadSheetData molSpreadSheetData = new MolSpreadSheetData()
         4.times {
             molSpreadSheetData.mssHeaders << []
@@ -507,7 +509,7 @@ class MolecularSpreadSheetServiceIntegrationSpec extends IntegrationSpec {
     void "test retrieve single value"() {
         given: "That we have created"
         Long experimentId = new Long(883)
-        final List<Long> compoundIterator = restCombinedService.compounds(experimentId)
+        final List<Long> compoundIterator = experimentRestService.compoundsForExperiment(experimentId)
         when: "We call the findAct"
 
         List<Long> compoundList = compoundIterator.subList(0, 2)
@@ -523,7 +525,7 @@ class MolecularSpreadSheetServiceIntegrationSpec extends IntegrationSpec {
     void "test retrieve multiple values"() {
         given: "That we have identified experiemnt 346"
         final Long experimentId = new Long(346)
-        final List<Long> compoundIterator = restCombinedService.compounds(experimentId)
+        final List<Long> compoundIterator = experimentRestService.compoundsForExperiment(experimentId)
         when: "We call for the activities"
         List<Long> compoundList = compoundIterator.subList(0, 3)
         String etag = compoundRestService.newETag("find experiment 346 data", compoundList); // etag for 3 compounds
@@ -547,7 +549,7 @@ class MolecularSpreadSheetServiceIntegrationSpec extends IntegrationSpec {
         final Long experimentId = new Long(1140)
 
         when: "We call for the activities"
-        final List<Long> compoundIterator = restCombinedService.compounds(experimentId)
+        final List<Long> compoundIterator = experimentRestService.compoundsForExperiment(experimentId)
         List<Long> compoundList = compoundIterator.subList(0, 2)
         String etag = compoundRestService.newETag("find experiment 346 data", compoundList); // etag for 3 compounds
         ExperimentData experimentIterator = this.experimentRestService.activities(experimentId, etag);
@@ -574,9 +576,9 @@ class MolecularSpreadSheetServiceIntegrationSpec extends IntegrationSpec {
         cartProjectIdList.add(new Long(274))
         List<ExperimentSearch> allExperiments = []
         for (Long projectId : cartProjectIdList) {
-            List<Assay> assays = restCombinedService.findAssaysByProjectId(projectId)
+            List<Assay> assays = projectRestService.findAssaysByProjectId(projectId)
             for (Assay assay : assays) {
-                List<ExperimentSearch> experimentList = restCombinedService.findExperimentsByAssayId(assay.id)
+                List<ExperimentSearch> experimentList = assayRestService.findExperimentsByAssayId(assay.id)
                 allExperiments.addAll(experimentList)
 
             }

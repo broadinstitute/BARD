@@ -1,6 +1,10 @@
 package molspreadsheet
 
 import bard.core.adapter.CompoundAdapter
+import bard.core.rest.spring.AssayRestService
+import bard.core.rest.spring.CompoundRestService
+import bard.core.rest.spring.ExperimentRestService
+import bard.core.rest.spring.ProjectRestService
 import bard.core.rest.spring.assays.Assay
 import bard.core.rest.spring.compounds.Compound
 import bard.core.rest.spring.experiment.Activity
@@ -15,7 +19,6 @@ import querycart.QueryCartService
 import spock.lang.Shared
 import spock.lang.Specification
 import spock.lang.Unroll
-import bard.core.rest.spring.*
 
 /**
  * Created with IntelliJ IDEA.
@@ -27,11 +30,9 @@ import bard.core.rest.spring.*
 
 @Unroll
 @TestFor(MolecularSpreadSheetService)
-@Mixin(BardWebInterfaceControllerUnitSpec)
 class MolecularSpreadSheetServiceUnitSpec extends Specification {
 
     QueryCartService queryCartService
-    RestCombinedService restCombinedService
     ShoppingCartService shoppingCartService
     IQueryService queryService
     ExperimentRestService experimentRestService
@@ -43,9 +44,6 @@ class MolecularSpreadSheetServiceUnitSpec extends Specification {
 
 
     void setup() {
-        compoundAdapter.metaClass.structureSMILES = 'c1ccccc1'
-        compoundAdapter.metaClass.pubChemCID = 1 as Long
-        compoundAdapter.metaClass.name = 'name'
         this.experimentRestService = Mock(ExperimentRestService)
         this.compoundRestService = Mock(CompoundRestService)
         this.projectRestService = Mock(ProjectRestService)
@@ -53,28 +51,16 @@ class MolecularSpreadSheetServiceUnitSpec extends Specification {
         this.queryCartService = Mock(QueryCartService)
         this.shoppingCartService = Mock(ShoppingCartService)
         this.queryService = Mock(IQueryService)
-        this.restCombinedService = Mock(RestCombinedService)
         service.assayRestService = assayRestService
         service.compoundRestService = compoundRestService
         service.experimentRestService = experimentRestService
         service.projectRestService = projectRestService
         service.queryService = this.queryService
-        service.restCombinedService = this.restCombinedService
-
-
     }
-
-    void tearDown() {
-        // Tear down logic here
-    }
-
-
-
-
 
     void "test prepareForExport #label"() {
         given:
-        MolSpreadSheetData molSpreadSheetData = new MolSpreadSheetData()
+        final MolSpreadSheetData molSpreadSheetData = new MolSpreadSheetData()
 
         when:
         molSpreadSheetData.mssHeaders << ['a']
@@ -110,7 +96,7 @@ class MolecularSpreadSheetServiceUnitSpec extends Specification {
 
     void "test prepareForExport degenerate"() {
         given:
-        MolSpreadSheetData molSpreadSheetData = new MolSpreadSheetData()
+        final MolSpreadSheetData molSpreadSheetData = new MolSpreadSheetData()
 
         when:
         molSpreadSheetData.mssHeaders << ['a']
@@ -209,7 +195,7 @@ class MolecularSpreadSheetServiceUnitSpec extends Specification {
         then:
         compoundRestService.newETag(_, _) >> { null }
         and:
-        restCombinedService.compounds(_) >> {[123, 456]}
+        experimentRestService.compoundsForExperiment(_) >> {[123, 456]}
 
         assertNull eTag
     }
@@ -423,9 +409,12 @@ class MolecularSpreadSheetServiceUnitSpec extends Specification {
 
     CompoundAdapter buildCompoundAdapter(final Long cid) {
         final Compound compound = new Compound()
-        compound.setCid(cid.intValue());
-        compound.setNumActiveAssay(1)
-        compound.setNumAssay(5)
+
+        compound.smiles = 'c1ccccc1'
+        compound.cid = cid
+        compound.name = 'name'
+        compound.numActiveAssay = new Integer("1")
+        compound.numAssay = new Integer("5")
         return new CompoundAdapter(compound)
     }
 

@@ -1,4 +1,4 @@
-package bard.core.rest.spring
+package bard.core.rest.spring.experiment
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import spock.lang.Shared

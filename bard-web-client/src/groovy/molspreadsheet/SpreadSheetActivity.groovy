@@ -35,9 +35,7 @@ class SpreadSheetActivity {
                 if (!resultTypeNames.contains(hillCurveValue.id)) {
                     resultTypeNames.add(hillCurveValue.id)
                 }
-                if (hillCurveValue == null) {
-                    println "Null Hill Curve value"
-                } else {
+                if (hillCurveValue != null) {
                     this.hillCurveValueList << hillCurveValue
                 }
 

@@ -4,6 +4,10 @@ import bard.core.SearchParams
 import bard.core.adapter.AssayAdapter
 import bard.core.adapter.CompoundAdapter
 import bard.core.adapter.ProjectAdapter
+import bard.core.rest.spring.AssayRestService
+import bard.core.rest.spring.CompoundRestService
+import bard.core.rest.spring.ExperimentRestService
+import bard.core.rest.spring.ProjectRestService
 import bard.core.rest.spring.assays.Assay
 import bard.core.rest.spring.assays.ExpandedAssay
 import bard.core.rest.spring.assays.ExpandedAssayResult
@@ -20,7 +24,6 @@ import org.apache.commons.lang.time.StopWatch
 import spock.lang.Shared
 import spock.lang.Specification
 import spock.lang.Unroll
-import bard.core.rest.spring.*
 
 /**
  * See the API for {@link grails.test.mixin.support.GrailsUnitTestMixin} for usage instructions
@@ -33,14 +36,12 @@ class QueryServiceUnitSpec extends Specification {
     CompoundRestService compoundRestService
     ProjectRestService projectRestService
     ExperimentRestService experimentRestService
-    RestCombinedService restCombinedService
     @Shared ExpandedAssayResult expandedAssayResult = new ExpandedAssayResult()
     @Shared ExpandedCompoundResult expandedCompoundResult = new ExpandedCompoundResult()
     @Shared ExpandedAssay expandedAssay1 = new ExpandedAssay()
     @Shared ExpandedAssay expandedAssay2 = new ExpandedAssay()
     @Shared ExpandedProjectResult expandedProjectResult = new ExpandedProjectResult()
     @Shared Assay assay1 = new Assay(name: "A1")
-    @Shared Assay assay2 = new Assay(name: "A2")
     @Shared Compound compound1 = new Compound(name: "C1")
     @Shared Compound compound2 = new Compound(name: "C2")
     @Shared Project project1 = new Project(name: "P1")
@@ -57,15 +58,12 @@ class QueryServiceUnitSpec extends Specification {
         projectRestService = Mock(ProjectRestService)
         assayRestService = Mock(AssayRestService)
         experimentRestService = Mock(ExperimentRestService)
-        restCombinedService = Mock(RestCombinedService)
         queryHelperService = Mock(QueryHelperService)
 
         service.queryHelperService = queryHelperService
         service.assayRestService = assayRestService
         service.compoundRestService = compoundRestService
         service.projectRestService = projectRestService
-        service.restCombinedService = restCombinedService
-
     }
 
     void tearDown() {
@@ -111,8 +109,8 @@ class QueryServiceUnitSpec extends Specification {
         Map foundProjectAdapterMap = service.showProject(projectId)
         then: "The ProjectSearchResult document is displayed"
         projectRestService.getProjectById(_) >> {project}
-        restCombinedService.findExperimentsByProjectId(_) >> {experiments}
-        restCombinedService.findAssaysByProjectId(_) >> {assays}
+        projectRestService.findExperimentsByProjectId(_) >> {experiments}
+        projectRestService.findAssaysByProjectId(_) >> {assays}
 
         if (project) {
             assert foundProjectAdapterMap
@@ -287,7 +285,7 @@ class QueryServiceUnitSpec extends Specification {
      * {@link QueryService#findCompoundsByTextSearch(String, Integer, Integer, List)}
      *
      */
-    void "test Find Compounds By Text Search"() {
+    void "test Find Compounds By Text Search #label"() {
         given:
         StopWatch sw = Mock(StopWatch)
         ExpandedCompoundResult iter = Mock(ExpandedCompoundResult)
