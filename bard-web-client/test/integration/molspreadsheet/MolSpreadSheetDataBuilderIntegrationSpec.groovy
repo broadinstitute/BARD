@@ -1,6 +1,6 @@
 package molspreadsheet
 
-import bard.core.Experiment
+import bard.core.rest.spring.experiment.ExperimentSearch
 import com.metasieve.shoppingcart.ShoppingCartService
 import grails.plugin.spock.IntegrationSpec
 import org.junit.After
@@ -58,7 +58,7 @@ class MolSpreadSheetDataBuilderIntegrationSpec extends IntegrationSpec {
         }
         molSpreadSheetDataBuilder.holdCartResults(cartCompoundList, cartAssayList, cartProjectList)
         Map deriveListOfExperiments = molSpreadSheetDataBuilder.deriveListOfExperiments()
-        List<Experiment> experimentList = deriveListOfExperiments.experimentList
+        List<ExperimentSearch> experimentList = deriveListOfExperiments.experimentList
         MolSpreadsheetDerivedMethod molSpreadsheetDerivedMethod = deriveListOfExperiments.molSpreadsheetDerivedMethod
         assertNotNull experimentList
 

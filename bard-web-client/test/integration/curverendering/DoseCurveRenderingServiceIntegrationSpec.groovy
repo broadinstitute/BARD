@@ -1,11 +1,10 @@
 package curverendering
 
-import bard.core.Experiment
 import bard.core.HillCurveValue
-import bard.core.Value
-import bard.core.interfaces.SearchResult
 import bard.core.rest.spring.CompoundRestService
 import bard.core.rest.spring.ExperimentRestService
+import bard.core.rest.spring.experiment.Activity
+import bard.core.rest.spring.experiment.ExperimentData
 import bardqueryapi.DrcCurveCommand
 import grails.plugin.spock.IntegrationSpec
 import molspreadsheet.MolecularSpreadSheetService
@@ -15,8 +14,6 @@ import org.jfree.chart.JFreeChart
 import org.junit.After
 import org.junit.Before
 import spock.lang.Unroll
-import bard.core.rest.spring.experiment.ExperimentData
-import bard.core.rest.spring.experiment.Activity
 
 @Unroll
 class DoseCurveRenderingServiceIntegrationSpec extends IntegrationSpec {

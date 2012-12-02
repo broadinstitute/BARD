@@ -8,6 +8,8 @@ import spock.lang.Specification
 import grails.test.mixin.TestMixin
 import spock.lang.Unroll
 
+import bard.core.rest.spring.experiment.ExperimentSearch
+
 /**
  * Created with IntelliJ IDEA.
  * User: balexand
@@ -72,7 +74,7 @@ class MolSpreadSheetDataBuilderUnitSpec extends Specification {
 
         then: "The expected hashCode is returned"
         Map deriveListOfExperiments = molSpreadSheetDataBuilder.deriveListOfExperiments()
-        List<Experiment> experimentList = deriveListOfExperiments.experimentList
+        List<ExperimentSearch> experimentList = deriveListOfExperiments.experimentList
         MolSpreadsheetDerivedMethod molSpreadsheetDerivedMethod = deriveListOfExperiments.molSpreadsheetDerivedMethod
         assertNotNull experimentList
         assert experimentList.size() == 0
