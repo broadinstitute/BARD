@@ -33,8 +33,8 @@
                                         name="${JavaScriptUtility.cleanup(compoundAdapter.name)}"
                                         type="${querycart.QueryItemType.Compound}"
                                         smiles="${compoundAdapter.getStructureSMILES()}"
-                                        numAssayActive="${compoundAdapter.numberOfActiveAssays}"
-                                        numAssayTested="${compoundAdapter.numberOfAssays}"
+                                        numActive="${compoundAdapter.numberOfActiveAssays}"
+                                        numAssays="${compoundAdapter.numberOfAssays}"
                     />
                     <dl>
                         %{--<g:if test="${compoundAdapter.searchHighlight}">--}%
