@@ -35,11 +35,11 @@ class QueryCartController {
 
         QueryItem item = QueryItem.findByExternalIdAndQueryItemType(id, itemType)
         if (!item) {
-            switch(itemType) {
+            switch (itemType) {
                 case QueryItemType.Compound:
                     String smiles = params.smiles
-                    int numAssayActive = params.numAssayActive ? new Integer(params.numAssayActive) : 0
-                    int numAssayTested = params.numAssayTested ? new Integer(params.numAssayTested) : 0
+                    int numAssayActive = params.numActive ? new Integer(params.numActive) : 0
+                    int numAssayTested = params.numAssays ? new Integer(params.numAssays) : 0
                     item = new CartCompound(smiles, name, id, numAssayActive, numAssayTested)
                     break
                 case QueryItemType.Project:
@@ -58,7 +58,7 @@ class QueryCartController {
         if (!item.validate()) {
             response.status = 500
             return render(item.errors.allErrors.collect {
-                message(error:it,encodeAs:'HTML')
+                message(error: it, encodeAs: 'HTML')
             } as JSON)
         }
 
@@ -125,7 +125,7 @@ class QueryCartController {
                 errorResponse.text = 'Null QueryItemType passed as params.type'
             }
         }
-        catch(IllegalArgumentException e) {
+        catch (IllegalArgumentException e) {
             log.error("Invalid QueryItemType ${params.type}", e)
             errorResponse.status = 400
             errorResponse.text = "Invalid QueryItemType [${params.type}] passed as params.type"
@@ -142,7 +142,7 @@ class QueryCartController {
                 errorResponse.text = 'Null ID passed as params.id'
             }
         }
-        catch(NumberFormatException e) {
+        catch (NumberFormatException e) {
             log.error("Invalid ID ${params.id}", e)
             errorResponse.status = 400
             errorResponse.text = "Invalid ID [${params.id}] passed as params.id"

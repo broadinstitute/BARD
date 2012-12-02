@@ -36,11 +36,17 @@ QueryCart.prototype.addItemToCartHandler = function() {
     var name = $(this).attr('data-cart-name');
     var type = $(this).attr('data-cart-type');
     var smiles = $(this).attr('data-cart-smiles');
+    var numActive = $(this).attr('data-cart-numActive');
+    var numAssays=$(this).attr('data-cart-numAssays');
     jQuery.ajax({  type:'POST',
-        data:{'id': id,
+        data:{
+            'id': id,
             'type': type,
             'name': name,
-            'smiles': smiles},
+            'smiles': smiles,
+            'numActive':numActive,
+            'numAssays':numAssays
+        },
         url:'/bardwebclient/queryCart/addItem',
         success:function (data) {
             queryCart.publishCartChangeEvent('cart.itemAdded', id);
