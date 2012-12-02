@@ -1,24 +1,15 @@
 package bard.core.rest.spring.compounds;
 
 
-import org.apache.commons.lang.builder.EqualsBuilder
-import org.apache.commons.lang.builder.HashCodeBuilder
-import org.apache.commons.lang.builder.ToStringBuilder
-import com.fasterxml.jackson.annotation.*
+import bard.core.rest.spring.util.JsonUtil
+import com.fasterxml.jackson.annotation.JsonIgnore
+import com.fasterxml.jackson.annotation.JsonInclude
+import com.fasterxml.jackson.annotation.JsonProperty
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
-//@JsonIgnoreProperties
-public class Compound {
+public class Compound extends JsonUtil {
 
     private String etag;
-    @JsonProperty("preferred_term")
-    private String freeTextName;
-    @JsonProperty("iupac_name")
-    private String freeTextIupacName
-    @JsonProperty("compound_class")
-    private String freeTextCompoundClass;
-    @JsonProperty("iso_smiles")
-    private String freeTextSmiles;
 
 
     @JsonProperty("cid")
@@ -59,7 +50,6 @@ public class Compound {
     private Object highlight;
     @JsonProperty("resourcePath")
     private String resourcePath;
-    private Map<String, Object> additionalProperties = new HashMap<String, Object>();
     @JsonProperty("anno_key")
     private List<String> anno_key = new ArrayList<String>();
     @JsonProperty("anno_val")
@@ -122,7 +112,7 @@ public class Compound {
 
     @JsonProperty("smiles")
     public String getSmiles() {
-        return smiles ?: this.freeTextSmiles;
+        return smiles
     }
 
     @JsonProperty("smiles")
@@ -132,7 +122,7 @@ public class Compound {
 
     @JsonProperty("name")
     public String getName() {
-        return name ?: this.freeTextName;
+        return name
     }
 
     @JsonProperty("name")
@@ -142,7 +132,7 @@ public class Compound {
 
     @JsonProperty("iupacName")
     public String getIupacName() {
-        return iupacName ?: this.freeTextIupacName;
+        return iupacName
     }
 
     @JsonProperty("iupacName")
@@ -232,7 +222,7 @@ public class Compound {
 
     @JsonProperty("compoundClass")
     public String getCompoundClass() {
-        return compoundClass ?: this.freeTextCompoundClass;
+        return compoundClass
     }
 
     @JsonIgnore
@@ -272,42 +262,42 @@ public class Compound {
 
     @JsonProperty("preferred_term")
     String getFreeTextName() {
-        return freeTextName
+        return name
     }
 
     @JsonProperty("preferred_term")
     void setFreeTextName(String freeTextName) {
-        this.freeTextName = freeTextName
+        this.name = freeTextName
     }
 
     @JsonProperty("iupac_name")
     String getFreeTextIupacName() {
-        return freeTextIupacName
+        return this.iupacName
     }
 
     @JsonProperty("iupac_name")
     void setFreeTextIupacName(String freeTextIupacName) {
-        this.freeTextIupacName = freeTextIupacName
+        this.iupacName = freeTextIupacName
     }
 
     @JsonProperty("compound_class")
     String getFreeTextCompoundClass() {
-        return freeTextCompoundClass
+        return this.compoundClass
     }
 
     @JsonProperty("compound_class")
     void setFreeTextCompoundClass(String freeTextCompoundClass) {
-        this.freeTextCompoundClass = freeTextCompoundClass
+        this.compoundClass = freeTextCompoundClass
     }
 
     @JsonProperty("iso_smiles")
     String getFreeTextSmiles() {
-        return freeTextSmiles
+        return this.smiles
     }
 
     @JsonProperty("iso_smiles")
     void setFreeTextSmiles(String freeTextSmiles) {
-        this.freeTextSmiles = freeTextSmiles
+        this.smiles = freeTextSmiles
     }
 
 
@@ -331,31 +321,6 @@ public class Compound {
         this.resourcePath = resourcePath;
     }
 
-    @Override
-    public String toString() {
-        return ToStringBuilder.reflectionToString(this);
-    }
-
-    @Override
-    public int hashCode() {
-        return HashCodeBuilder.reflectionHashCode(this);
-    }
-
-    @Override
-    public boolean equals(Object other) {
-        return EqualsBuilder.reflectionEquals(this, other);
-    }
-
-    @JsonAnyGetter
-    public Map<String, Object> getAdditionalProperties() {
-        return this.additionalProperties;
-    }
-
-    @JsonAnySetter
-    public void setAdditionalProperties(String name, Object value) {
-        this.additionalProperties.put(name, value);
-    }
-
     public String getEtag() {
         return etag
     }
@@ -363,7 +328,8 @@ public class Compound {
     public void setEtag(String etag) {
         this.etag = etag
     }
-    public Integer getId(){
+
+    public Integer getId() {
         return this.cid;
     }
 

@@ -1,6 +1,5 @@
 package bard.core.rest.spring
 
-
 import bard.core.SearchParams
 import bard.core.SuggestParams
 import bard.core.rest.helper.RESTTestHelper
@@ -13,7 +12,7 @@ import spock.lang.Unroll
 import bard.core.rest.spring.assays.*
 
 import static org.junit.Assert.assertTrue
-import spock.lang.IgnoreRest
+import static org.junit.Assert.assertArrayEquals
 
 /**
  * Tests for RESTAssayService in JDO
@@ -31,6 +30,10 @@ class AssayRestServiceIntegrationSpec extends IntegrationSpec {
         when:
         final List<AssayAnnotation> annotations = assayRestService.findAnnotations(adid)
         then:
+        assert assaySearchResult.metaData
+        assert assaySearchResult.link
+        assert assaySearchResult.etag
+        assert assaySearchResult.facetsToValues
         assert annotations
         for (AssayAnnotation assayAnnotation : annotations) {
             // assert assayAnnotation?.display
@@ -55,6 +58,7 @@ class AssayRestServiceIntegrationSpec extends IntegrationSpec {
         }
 
     }
+
     void "getAssayAnnotationFromIds"() {
         given:
         List<Long> adids = [600L, 2868L]
@@ -191,9 +195,9 @@ class AssayRestServiceIntegrationSpec extends IntegrationSpec {
         searchParamsWithFilters.setFilters(filters);
 
         when:
-        SearchResult<ExpandedAssay> assayServiceSearchResultsWithNoFilters = this.assayRestService.findAssaysByFreeTextSearch(searchParamsWithNoFilters);
+        FreeTextAssayResult assayServiceSearchResultsWithNoFilters = this.assayRestService.findAssaysByFreeTextSearch(searchParamsWithNoFilters);
         and:
-        final SearchResult<ExpandedAssay> assayServiceSearchResultsWithFilters = this.assayRestService.findAssaysByFreeTextSearch(searchParamsWithFilters);
+        final FreeTextAssayResult assayServiceSearchResultsWithFilters = this.assayRestService.findAssaysByFreeTextSearch(searchParamsWithFilters);
         then:
         final long countWithNoFilters = assayServiceSearchResultsWithNoFilters.numberOfHits;
         final long countWithFilters = assayServiceSearchResultsWithFilters.numberOfHits;
@@ -274,9 +278,9 @@ class AssayRestServiceIntegrationSpec extends IntegrationSpec {
         searchParamsWithFilters.setFilters(filters);
 
         when:
-        SearchResult<ExpandedAssay> assayServiceSearchResultsWithNoFilters = this.assayRestService.findAssaysByFreeTextSearch(searchParamsWithNoFilters);
+        FreeTextAssayResult assayServiceSearchResultsWithNoFilters = this.assayRestService.findAssaysByFreeTextSearch(searchParamsWithNoFilters);
         and:
-        final SearchResult<ExpandedAssay> assayServiceSearchResultsWithFilters = this.assayRestService.findAssaysByFreeTextSearch(searchParamsWithFilters);
+        final FreeTextAssayResult assayServiceSearchResultsWithFilters = this.assayRestService.findAssaysByFreeTextSearch(searchParamsWithFilters);
 
         then:
 

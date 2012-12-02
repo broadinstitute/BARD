@@ -1,12 +1,7 @@
 package bard.core.rest.spring.util
 
-import org.apache.commons.lang.builder.EqualsBuilder
-import org.apache.commons.lang.builder.HashCodeBuilder
-import org.apache.commons.lang.builder.ToStringBuilder
-
-import javax.annotation.Generated
-
-import com.fasterxml.jackson.annotation.*
+import com.fasterxml.jackson.annotation.JsonInclude
+import com.fasterxml.jackson.annotation.JsonProperty
 
 /**
  * Created with IntelliJ IDEA.
@@ -16,15 +11,7 @@ import com.fasterxml.jackson.annotation.*
  * To change this template use File | Settings | File Templates.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@Generated("com.googlecode.jsonschema2pojo")
-@JsonPropertyOrder([
-"title",
-"doi",
-"abs",
-"pubmedId",
-"resourcePath"
-])
-public class Document {
+public class Document extends JsonUtil {
 
     @JsonProperty("title")
     private String title;
@@ -36,7 +23,6 @@ public class Document {
     private long pubmedId;
     @JsonProperty("resourcePath")
     private String resourcePath;
-    private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
     @JsonProperty("title")
     public String getTitle() {
@@ -87,30 +73,4 @@ public class Document {
     public void setResourcePath(String resourcePath) {
         this.resourcePath = resourcePath;
     }
-
-    @Override
-    public String toString() {
-        return ToStringBuilder.reflectionToString(this);
-    }
-
-    @Override
-    public int hashCode() {
-        return HashCodeBuilder.reflectionHashCode(this);
-    }
-
-    @Override
-    public boolean equals(Object other) {
-        return EqualsBuilder.reflectionEquals(this, other);
-    }
-
-    @JsonAnyGetter
-    public Map<String, Object> getAdditionalProperties() {
-        return this.additionalProperties;
-    }
-
-    @JsonAnySetter
-    public void setAdditionalProperties(String name, Object value) {
-        this.additionalProperties.put(name, value);
-    }
-
 }

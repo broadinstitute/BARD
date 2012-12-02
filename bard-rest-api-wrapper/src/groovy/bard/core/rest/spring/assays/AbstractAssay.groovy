@@ -1,28 +1,13 @@
 package bard.core.rest.spring.assays
 
-import com.fasterxml.jackson.annotation.JsonAnyGetter
-import com.fasterxml.jackson.annotation.JsonAnySetter
+import bard.core.rest.spring.util.JsonUtil
 import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.annotation.JsonProperty
-import org.apache.commons.lang3.builder.EqualsBuilder
-import org.apache.commons.lang3.builder.HashCodeBuilder
-import org.apache.commons.lang3.builder.ToStringBuilder
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class AbstractAssay {
+public class AbstractAssay extends JsonUtil {
     @JsonProperty("comments")
     private String comments;
-
-    @JsonProperty("comments")
-    public String getComments() {
-        return this.comments;
-    }
-
-    @JsonProperty("comments")
-    public void setComments(String comments) {
-        this.comments = comments;
-    }
-
     @JsonProperty("aid")
     private long aid;
     @JsonProperty("bardAssayId")
@@ -46,9 +31,9 @@ public class AbstractAssay {
     @JsonProperty("grantNo")
     private String grantNo;
     @JsonProperty("deposited")
-    private Object deposited;
+    private String deposited;
     @JsonProperty("updated")
-    private Object updated;
+    private String updated;
     @JsonProperty("kegg_disease_names")
     private List<String> kegg_disease_names = new ArrayList<String>();
     @JsonProperty("kegg_disease_cat")
@@ -59,7 +44,6 @@ public class AbstractAssay {
     private String description;
     @JsonProperty("protocol")
     private String protocol;
-    private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
     @Override
     @JsonProperty("assay_id")
@@ -194,22 +178,22 @@ public class AbstractAssay {
     }
 
     @JsonProperty("deposited")
-    public Object getDeposited() {
+    public String getDeposited() {
         return this.deposited;
     }
 
     @JsonProperty("deposited")
-    public void setDeposited(Object deposited) {
+    public void setDeposited(String deposited) {
         this.deposited = deposited;
     }
 
     @JsonProperty("updated")
-    public Object getUpdated() {
+    public String getUpdated() {
         return this.updated;
     }
 
     @JsonProperty("updated")
-    public void setUpdated(Object updated) {
+    public void setUpdated(String updated) {
         this.updated = updated;
     }
 
@@ -265,31 +249,14 @@ public class AbstractAssay {
         this.protocol = protocol;
     }
 
-
-    @Override
-    public String toString() {
-        return ToStringBuilder.reflectionToString(this);
+    @JsonProperty("comments")
+    public String getComments() {
+        return this.comments;
     }
 
-    @Override
-    public int hashCode() {
-        return HashCodeBuilder.reflectionHashCode(this);
+    @JsonProperty("comments")
+    public void setComments(String comments) {
+        this.comments = comments;
     }
-
-    @Override
-    public boolean equals(Object other) {
-        return EqualsBuilder.reflectionEquals(this, other);
-    }
-
-    @JsonAnyGetter
-    public Map<String, Object> getAdditionalProperties() {
-        return this.additionalProperties;
-    }
-
-    @JsonAnySetter
-    public void setAdditionalProperties(String name, Object value) {
-        this.additionalProperties.put(name, value);
-    }
-
 
 }

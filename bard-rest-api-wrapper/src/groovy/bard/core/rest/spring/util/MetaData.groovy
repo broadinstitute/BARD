@@ -9,8 +9,6 @@ import org.apache.commons.lang.builder.EqualsBuilder
 import org.apache.commons.lang.builder.HashCodeBuilder
 import org.apache.commons.lang.builder.ToStringBuilder
 
-import javax.annotation.Generated
-
 /**
  * Created with IntelliJ IDEA.
  * User: jasiedu
@@ -19,8 +17,7 @@ import javax.annotation.Generated
  * To change this template use File | Settings | File Templates.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@Generated("com.googlecode.jsonschema2pojo")
-public class MetaData {
+public class MetaData extends JsonUtil {
 
     @JsonProperty("nhit")
     private Integer nhit;
@@ -31,11 +28,21 @@ public class MetaData {
     @JsonProperty("elapsedTime")
     private Integer elapsedTime;
     @JsonProperty("matchingFields")
-    private Object matchingFields;
-    @JsonProperty("scores")
-    private Object scores;
-    private Map<String, Object> additionalProperties = new HashMap<String, Object>();
+    private MatchingFields matchingFields;
 
+    @JsonProperty("scores")
+    private Scores scores;
+
+
+    @JsonProperty("scores")
+    public Scores getScores() {
+        return this.scores;
+    }
+
+    @JsonProperty("scores")
+    public void setCounts(Scores scores) {
+        this.scores= scores;
+    }
     @JsonProperty("nhit")
     public Integer getNhit() {
         return nhit;
@@ -77,50 +84,14 @@ public class MetaData {
     }
 
     @JsonProperty("matchingFields")
-    public Object getMatchingFields() {
+    public MatchingFields getMatchingFields() {
         return matchingFields;
     }
 
     @JsonProperty("matchingFields")
-    public void setMatchingFields(Object matchingFields) {
+    public void setMatchingFields(MatchingFields matchingFields) {
         this.matchingFields = matchingFields;
     }
-
-    @JsonProperty("scores")
-    public Object getScores() {
-        return scores;
-    }
-
-    @JsonProperty("scores")
-    public void setScores(Object scores) {
-        this.scores = scores;
-    }
-
-    @Override
-    public String toString() {
-        return ToStringBuilder.reflectionToString(this);
-    }
-
-    @Override
-    public int hashCode() {
-        return HashCodeBuilder.reflectionHashCode(this);
-    }
-
-    @Override
-    public boolean equals(Object other) {
-        return EqualsBuilder.reflectionEquals(this, other);
-    }
-
-    @JsonAnyGetter
-    public Map<String, Object> getAdditionalProperties() {
-        return this.additionalProperties;
-    }
-
-    @JsonAnySetter
-    public void setAdditionalProperties(String name, Object value) {
-        this.additionalProperties.put(name, value);
-    }
-
     Collection<Value> facetsToValues() {
         Collection<Value> values = []
         for (Facet facet : this.facets) {

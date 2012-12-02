@@ -19,7 +19,10 @@ import spock.lang.Unroll
  */
 @Unroll
 class RestCombinedServiceIntegrationSpec extends IntegrationSpec {
-    RestCombinedService restCombinedService
+     ProjectRestService projectRestService
+    ExperimentRestService experimentRestService
+    CompoundRestService compoundRestService
+    AssayRestService assayRestService
     /**
      *
      */
@@ -27,7 +30,7 @@ class RestCombinedServiceIntegrationSpec extends IntegrationSpec {
         given:
         final Long eid = 883
         when:
-        final List<Long> cids = this.restCombinedService.compounds(eid)
+        final List<Long> cids = this.experimentRestService.compoundsForExperiment(eid)
         then:
         assert !cids.isEmpty()
         for (Long cid : cids) {
@@ -37,7 +40,7 @@ class RestCombinedServiceIntegrationSpec extends IntegrationSpec {
 
     void "test findProjectsByAssayId #label=#adid"() {
         when:
-        final ProjectResult projectResult = restCombinedService.findProjectsByAssayId(adid)
+        final ProjectResult projectResult = assayRestService.findProjectsByAssayId(adid)
         then:
         List<Project> projects = projectResult.projects
         and:
@@ -59,7 +62,7 @@ class RestCombinedServiceIntegrationSpec extends IntegrationSpec {
      */
     void "test findExperimentsByAssayId #label"() {
         when: "We call the get method of the the RESTAssayService with an assay ids"
-        List<ExperimentSearch> experiments = this.restCombinedService.findExperimentsByAssayId(adid)
+        List<ExperimentSearch> experiments = this.assayRestService.findExperimentsByAssayId(adid)
         then: "We expect to get back a list of assays"
         assert experiments
 
@@ -75,7 +78,7 @@ class RestCombinedServiceIntegrationSpec extends IntegrationSpec {
         given:
         Long cid = 999
         when:
-        final AssayResult assayResult = this.restCombinedService.findAssaysByCID(cid)
+        final AssayResult assayResult = this.compoundRestService.findAssaysByCID(cid)
         then:
         assert assayResult
         assert assayResult.assays
@@ -84,7 +87,7 @@ class RestCombinedServiceIntegrationSpec extends IntegrationSpec {
 
     void "test findProjectsByCID #label"() {
         when:
-        final ProjectResult projectResult = this.restCombinedService.findProjectsByCID(cid)
+        final ProjectResult projectResult = this.compoundRestService.findProjectsByCID(cid)
         then:
         final List<Project> projects = projectResult.projects
         assert !projects.isEmpty()
@@ -99,7 +102,7 @@ class RestCombinedServiceIntegrationSpec extends IntegrationSpec {
         given:
         Long eid = 2273
         when:
-        CompoundResult compoundResult = this.restCombinedService.findCompoundsByExperimentId(eid)
+        CompoundResult compoundResult = this.experimentRestService.findCompoundsByExperimentId(eid)
 
         then:
         assert compoundResult
@@ -112,7 +115,7 @@ class RestCombinedServiceIntegrationSpec extends IntegrationSpec {
         given:
         Long pid = 17
         when:
-        List<Assay> assays = this.restCombinedService.findAssaysByProjectId(pid)
+        List<Assay> assays = this.projectRestService.findAssaysByProjectId(pid)
         then:
         assert assays
     }
@@ -125,17 +128,17 @@ class RestCombinedServiceIntegrationSpec extends IntegrationSpec {
 
         final List<Long> cartProjectIdList = new ArrayList<Long>()
         cartProjectIdList.add(new Long(274))
-        ExpandedProjectResult projectResult = this.restCombinedService.projectRestService.searchProjectsByIds(cartProjectIdList)
+        ExpandedProjectResult projectResult = this.projectRestService.searchProjectsByIds(cartProjectIdList)
         final List<Project> projects = projectResult.projects
         final List<ExperimentSearch> allExperiments = []
         for (final Project project : projects) {
-            List<ExperimentSearch> experiments = this.restCombinedService.findExperimentsByProjectId(project.id)
+            List<ExperimentSearch> experiments = this.projectRestService.findExperimentsByProjectId(project.id)
             allExperiments.addAll(experiments)
         }
         when: "We define an etag for a compound used in this project"  /////////////
         final List<Long> cartCompoundIdList = new ArrayList<Long>()
         cartCompoundIdList.add(new Long(5281847))
-        String etag = this.restCombinedService.compoundRestService.newETag((new Date()).toString(), cartCompoundIdList);
+        String etag = this.compoundRestService.newETag((new Date()).toString(), cartCompoundIdList);
 
 
         then: "when we step through the value in the expt"    ////////
@@ -143,7 +146,7 @@ class RestCombinedServiceIntegrationSpec extends IntegrationSpec {
         int dataCount = 0
         for (ExperimentSearch experiment in allExperiments) {
 
-            ExperimentData experimentData = this.restCombinedService.experimentRestService.activities(experiment.id, etag)
+            ExperimentData experimentData = this.experimentRestService.activities(experiment.id, etag)
             dataCount = dataCount + experimentData.activities.size()
         }
 
@@ -158,11 +161,11 @@ class RestCombinedServiceIntegrationSpec extends IntegrationSpec {
      */
     void "test Get Assays with experiment #label"() {
         when: "We call the get method of the the RESTAssayService with an assay ids"
-        final ExpandedAssay assay = this.restCombinedService.assayRestService.getAssayById(adid)
+        final ExpandedAssay assay = this.assayRestService.getAssayById(adid)
 
         then: "We expect to get back a list of assays"
         assert assay
-        List<ExperimentSearch> experiments = this.restCombinedService.findExperimentsByAssayId(assay.id)
+        List<ExperimentSearch> experiments = this.assayRestService.findExperimentsByAssayId(assay.id)
         assert experiments
         for (ExperimentSearch experiment : experiments) {
             assert experiment
@@ -174,11 +177,11 @@ class RestCombinedServiceIntegrationSpec extends IntegrationSpec {
 
     void "test Get Assays with projects #label"() {
         when: "We call the get method of the the RESTAssayService with an assay ids"
-        final ExpandedAssay assay = this.restCombinedService.assayRestService.getAssayById(adid)
+        final ExpandedAssay assay = this.assayRestService.getAssayById(adid)
 
         then: "We expect to get back a list of assays"
         assert assay
-        ProjectResult projectResult = restCombinedService.findProjectsByAssayId(assay.id)
+        ProjectResult projectResult = assayRestService.findProjectsByAssayId(assay.id)
         final List<Project> projects = projectResult.projects
         assert projects
         for (Project project : projects) {
@@ -193,9 +196,9 @@ class RestCombinedServiceIntegrationSpec extends IntegrationSpec {
 
     void "test Project From Single Assay #label=#adid"() {
         given:
-        ExpandedAssay assay = restCombinedService.assayRestService.getAssayById(adid);
+        ExpandedAssay assay = assayRestService.getAssayById(adid);
         when:
-        ProjectResult projectResult = restCombinedService.findProjectsByAssayId(assay.id);
+        ProjectResult projectResult = assayRestService.findProjectsByAssayId(assay.id);
         then:
         assert projectResult.projects
         and:
@@ -211,14 +214,14 @@ class RestCombinedServiceIntegrationSpec extends IntegrationSpec {
     void "test projects with experiments #label"() {
 
         when: "The get method is called with the given PID: #pid"
-        Project project = this.restCombinedService.projectRestService.getProjectById(pid)
+        Project project = this.projectRestService.getProjectById(pid)
         then: "A ProjectSearchResult is returned with the expected information"
         assert project
         assert pid == project.id
         assert project.experimentCount
 
 
-        final List<ExperimentSearch> experiments = restCombinedService.findExperimentsByProjectId(project.id)
+        final List<ExperimentSearch> experiments = projectRestService.findExperimentsByProjectId(project.id)
         assert experiments
         for (ExperimentSearch experiment : experiments) {
             assert experiment
@@ -231,13 +234,13 @@ class RestCombinedServiceIntegrationSpec extends IntegrationSpec {
     void "test projects with assays #label"() {
 
         when: "The get method is called with the given PID: #pid"
-        Project project = this.restCombinedService.projectRestService.getProjectById(pid)
+        Project project = this.projectRestService.getProjectById(pid)
         then: "A ProjectSearchResult is returned with the expected information"
         assert project
         assert pid == project.id
         assert project.experimentCount
 
-        final List<Assay> assays = restCombinedService.findAssaysByProjectId(project.id)
+        final List<Assay> assays = projectRestService.findAssaysByProjectId(project.id)
         assert assays
         assert !assays.isEmpty()
         where:
@@ -247,11 +250,11 @@ class RestCombinedServiceIntegrationSpec extends IntegrationSpec {
 
     void "testExperimentsFromSingleProject"() {
         given:
-        Project project = this.restCombinedService.projectRestService.getProjectById(1);
+        Project project = this.projectRestService.getProjectById(1);
         assert project
 
         when:
-        List<ExperimentSearch> experiments = this.restCombinedService.findExperimentsByProjectId(project.projectId)
+        List<ExperimentSearch> experiments = this.projectRestService.findExperimentsByProjectId(project.projectId)
         then:
         assert experiments
     }
@@ -259,13 +262,13 @@ class RestCombinedServiceIntegrationSpec extends IntegrationSpec {
     void "test pulling an arbitrary set of compounds out of an experiment and then looking at their experimental values #label"() {
 
         when: "The get method is called with the given experiment ID: #experimentid"
-        final ExperimentShow experimentShow = this.restCombinedService.experimentRestService.getExperimentById(experimentid)
-        final List<Long> cids = this.restCombinedService.compounds(experimentid)
+        final ExperimentShow experimentShow = this.experimentRestService.getExperimentById(experimentid)
+        final List<Long> cids = this.experimentRestService.compoundsForExperiment(experimentid)
         then: "An experiment is returned with the expected information"
         assert experimentShow
         assert cids
-        String etag = restCombinedService.compoundRestService.newETag(label, cids);
-        ExperimentData experimentData = this.restCombinedService.experimentRestService.activities(experimentid, etag);
+        String etag = compoundRestService.newETag(label, cids);
+        ExperimentData experimentData = this.experimentRestService.activities(experimentid, etag);
         assert experimentData.activities
         assert experimentData.activities.get(0)
         where:
@@ -277,7 +280,7 @@ class RestCombinedServiceIntegrationSpec extends IntegrationSpec {
         given:
         Long pid = 17
         when:
-        List<ExperimentSearch> experiments = this.restCombinedService.findExperimentsByProjectId(pid)
+        List<ExperimentSearch> experiments = this.projectRestService.findExperimentsByProjectId(pid)
         then:
         assert experiments
     }
@@ -288,7 +291,7 @@ class RestCombinedServiceIntegrationSpec extends IntegrationSpec {
         given:
         final Long eid = 197
         when:
-        final ProjectResult projectResult = restCombinedService.findProjectsByExperimentId(eid)
+        final ProjectResult projectResult = experimentRestService.findProjectsByExperimentId(eid)
 
         then:
         assert projectResult
@@ -299,7 +302,7 @@ class RestCombinedServiceIntegrationSpec extends IntegrationSpec {
         given:
         Long cid = 313619
         when:
-        ExperimentSearchResult experimentResult = this.restCombinedService.findExperimentsByCID(cid)
+        ExperimentSearchResult experimentResult = this.compoundRestService.findExperimentsByCID(cid)
         then:
         assert experimentResult
         assert experimentResult.experiments

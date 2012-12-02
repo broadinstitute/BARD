@@ -9,11 +9,11 @@ import bard.core.rest.spring.compounds.Compound
 import bard.core.rest.spring.project.Project
 import bard.core.interfaces.ProjectAdapterInterface
 
+//TODO: All of the adapters should be deprecated soon. We should be able to use the
+//TODO: the objects directly
 public class ProjectAdapter implements ProjectAdapterInterface {
-    Project project
+    final Project project
 
-    public ProjectAdapter() {
-    }
 
     public ProjectAdapter(Project project) {
         this.project = project
@@ -45,7 +45,7 @@ public class ProjectAdapter implements ProjectAdapterInterface {
         final List<Probe> probes = new ArrayList<Probe>()
         final List<Compound> compounds = project.getProbes()
         for (Compound compound : compounds) {
-            Probe probe = new Probe(compound?.cid?.toString(), compound.probeId, compound.url, compound.smiles)
+            Probe probe = new Probe(compound.cid.toString(), compound.probeId, compound.url, compound.smiles)
             probes.add(probe)
         }
         return probes
@@ -53,7 +53,7 @@ public class ProjectAdapter implements ProjectAdapterInterface {
 
 
     public Integer getNumberOfExperiments() {
-        return project.experimentCount?.intValue() ?: 0
+        return project.experimentCount.intValue()
     }
 
     public Collection<Value> getAnnotations() {

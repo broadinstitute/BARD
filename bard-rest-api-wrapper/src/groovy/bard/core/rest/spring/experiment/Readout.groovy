@@ -10,9 +10,10 @@ import com.fasterxml.jackson.annotation.JsonProperty
 import org.apache.commons.lang.builder.EqualsBuilder
 import org.apache.commons.lang.builder.HashCodeBuilder
 import org.apache.commons.lang.builder.ToStringBuilder
+import bard.core.rest.spring.util.JsonUtil
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class Readout {
+public class Readout extends  JsonUtil{
 
     @JsonProperty("name")
     private String name;
@@ -32,7 +33,6 @@ public class Readout {
     private String concentrationUnits;
     @JsonProperty("responseUnit")
     private String responseUnit;
-    private Map<String, Object> additionalProperties = new HashMap<String, Object>();
     // data
     protected List<Double> conc = new ArrayList<Double>();
     protected List<Double> response = new ArrayList<Double>();
@@ -165,31 +165,6 @@ public class Readout {
     @JsonProperty("responseUnit")
     public void setResponseUnit(String responseUnit) {
         this.responseUnit = responseUnit;
-    }
-
-    @Override
-    public String toString() {
-        return ToStringBuilder.reflectionToString(this);
-    }
-
-    @Override
-    public int hashCode() {
-        return HashCodeBuilder.reflectionHashCode(this);
-    }
-
-    @Override
-    public boolean equals(Object other) {
-        return EqualsBuilder.reflectionEquals(this, other);
-    }
-
-    @JsonAnyGetter
-    public Map<String, Object> getAdditionalProperties() {
-        return this.additionalProperties;
-    }
-
-    @JsonAnySetter
-    public void setAdditionalProperties(String name, Object value) {
-        this.additionalProperties.put(name, value);
     }
 
     HillCurveValue toHillCurveValue() {

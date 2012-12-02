@@ -3,8 +3,6 @@ import bard.core.rest.spring.ProjectRestService
 import org.springframework.web.client.RestTemplate
 import bard.core.rest.spring.AssayRestService
 import bard.core.rest.spring.ExperimentRestService
-import bard.core.rest.spring.RestCombinedService
-import bard.core.rest.spring.RestCombinedService
 
 /**
  * Spring Configuration of resources
@@ -32,13 +30,5 @@ beans = {
     assayRestService(AssayRestService) {
         baseUrl = ncgcBaseURL
         restTemplate = ref('restTemplate')
-    }
-    restCombinedService(RestCombinedService){
-        baseUrl = ncgcBaseURL
-        restTemplate = ref('restTemplate')
-        experimentRestService=ref('experimentRestService')
-        compoundRestService=ref('compoundRestService')
-        assayRestService=ref('assayRestService')
-        projectRestService=ref('projectRestService')
     }
 }

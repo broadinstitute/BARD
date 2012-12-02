@@ -3,13 +3,8 @@ package bard.core.rest.spring.util
 import bard.core.DataSource
 import bard.core.IntValue
 import bard.core.Value
-import com.fasterxml.jackson.annotation.JsonAnyGetter
-import com.fasterxml.jackson.annotation.JsonAnySetter
 import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.annotation.JsonProperty
-import org.apache.commons.lang.builder.EqualsBuilder
-import org.apache.commons.lang.builder.HashCodeBuilder
-import org.apache.commons.lang.builder.ToStringBuilder
 
 /**
  * Created with IntelliJ IDEA.
@@ -19,23 +14,13 @@ import org.apache.commons.lang.builder.ToStringBuilder
  * To change this template use File | Settings | File Templates.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class Facet {
+public class Facet extends JsonUtil {
 
     @JsonProperty("facetName")
     private String facetName;
     @JsonProperty("counts")
     private Counts counts;
-    private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
-    @JsonProperty("facetName")
-    public String getFacetName() {
-        return facetName;
-    }
-
-    @JsonProperty("facetName")
-    public void setFacetName(String facetName) {
-        this.facetName = facetName;
-    }
 
     @JsonProperty("counts")
     public Counts getCounts() {
@@ -46,31 +31,16 @@ public class Facet {
     public void setCounts(Counts counts) {
         this.counts = counts;
     }
-
-    @Override
-    public String toString() {
-        return ToStringBuilder.reflectionToString(this);
+    @JsonProperty("facetName")
+    public String getFacetName() {
+        return facetName;
     }
 
-    @Override
-    public int hashCode() {
-        return HashCodeBuilder.reflectionHashCode(this);
+    @JsonProperty("facetName")
+    public void setFacetName(String facetName) {
+        this.facetName = facetName;
     }
 
-    @Override
-    public boolean equals(Object other) {
-        return EqualsBuilder.reflectionEquals(this, other);
-    }
-
-    @JsonAnyGetter
-    public Map<String, Object> getAdditionalProperties() {
-        return this.additionalProperties;
-    }
-
-    @JsonAnySetter
-    public void setAdditionalProperties(String name, Object value) {
-        this.additionalProperties.put(name, value);
-    }
 
     public Value toValue() {
         final Value facet = new Value(DataSource.DEFAULT, this.facetName);

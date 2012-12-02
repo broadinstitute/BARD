@@ -1,28 +1,10 @@
 package bard.core.rest.spring.util
 
-import org.apache.commons.lang.builder.EqualsBuilder
-import org.apache.commons.lang.builder.HashCodeBuilder
-import org.apache.commons.lang.builder.ToStringBuilder
-
-import javax.annotation.Generated
-
-import com.fasterxml.jackson.annotation.*
+import com.fasterxml.jackson.annotation.JsonInclude
+import com.fasterxml.jackson.annotation.JsonProperty
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@Generated("com.googlecode.jsonschema2pojo")
-@JsonPropertyOrder([
-"accessed",
-"etag_id",
-"count",
-"status",
-"created",
-"description",
-"name",
-"type",
-"url",
-"modified"
-])
-public class ETag {
+public class ETag extends JsonUtil{
 
     @JsonProperty("accessed")
     private long accessed;
@@ -44,7 +26,6 @@ public class ETag {
     private String url;
     @JsonProperty("modified")
     private long modified;
-    private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
     @JsonProperty("accessed")
     public long getAccessed() {
@@ -145,30 +126,4 @@ public class ETag {
     public void setModified(long modified) {
         this.modified = modified;
     }
-
-    @Override
-    public String toString() {
-        return ToStringBuilder.reflectionToString(this);
-    }
-
-    @Override
-    public int hashCode() {
-        return HashCodeBuilder.reflectionHashCode(this);
-    }
-
-    @Override
-    public boolean equals(Object other) {
-        return EqualsBuilder.reflectionEquals(this, other);
-    }
-
-    @JsonAnyGetter
-    public Map<String, Object> getAdditionalProperties() {
-        return this.additionalProperties;
-    }
-
-    @JsonAnySetter
-    public void setAdditionalProperties(String name, Object value) {
-        this.additionalProperties.put(name, value);
-    }
-
 }

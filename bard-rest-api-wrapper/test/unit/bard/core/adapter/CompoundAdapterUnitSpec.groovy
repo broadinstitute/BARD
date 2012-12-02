@@ -1,153 +1,79 @@
 package bard.core.adapter
 
-import bard.core.Format
 import bard.core.rest.spring.compounds.Compound
 import spock.lang.Specification
 import spock.lang.Unroll
+import spock.lang.Shared
+import com.fasterxml.jackson.databind.ObjectMapper
 
 @Unroll
 class CompoundAdapterUnitSpec extends Specification {
-    void setup() {
+    @Shared
+    ObjectMapper objectMapper = new ObjectMapper()
 
-    }
+    static final String COMPOUND_EXPANDED = '''
+   {
+       "cid": 2722,
+       "probeId":null,
+       "url": "http://pubchem.org",
+       "smiles": "OC1=C(Cl)C=C(Cl)C2=C1N=CC=C2",
+       "name": "Chloroxine",
+       "iupacName": "5,7-dichloroquinolin-8-ol",
+       "mwt": 214.048,
+       "tpsa": 33.1,
+       "exactMass": 212.975,
+       "xlogp": 3.5,
+       "complexity": 191,
+       "rotatable": 0,
+       "hbondAcceptor": 2,
+       "hbondDonor": 1,
+       "compoundClass": "Drug",
+       "numAssay": 500,
+       "numActiveAssay": 60,
+       "highlight": null,
+       "resourcePath": "/compounds/2722"
+   }
+'''
 
-    void tearDown() {
-        // Tear down logic here
-    }
 
-    void "test Constructor()"() {
 
+    void "test compound Adapter"() {
         given:
-        Compound compound = new Compound()
-        final String name = "name"
-        compound.name = name
-        when:
-        CompoundAdapter compoundAdapter = new CompoundAdapter(compound)
-        then:
-        assert compoundAdapter.name == name
-        assert !compoundAdapter.getProbeId()
-        assert !compoundAdapter.isDrug()
-        assert !compoundAdapter.isProbe()
-        assert compoundAdapter.compound
-        assert !compoundAdapter.getPubChemCID()
-        assert !compoundAdapter.getStructureMOL()
+        final Compound compound = objectMapper.readValue(COMPOUND_EXPANDED, Compound.class)
 
-    }
-
-    void "test No Args Constructor()"() {
-        when:
-        CompoundAdapter compoundAdapter = new CompoundAdapter()
-        then:
-        assert !compoundAdapter.name
-        assert !compoundAdapter.getProbeId()
-        assert !compoundAdapter.isDrug()
-        assert !compoundAdapter.isProbe()
-        assert !compoundAdapter.compound
-        assert !compoundAdapter.getPubChemCID()
-        assert !compoundAdapter.getStructureMOL()
-        assert !compoundAdapter.formula()
-        assert !compoundAdapter.getStructureNative()
-        assert !compoundAdapter.formula()
-        assert !compoundAdapter.mwt()
-        assert !compoundAdapter.exactMass()
-        assert !compoundAdapter.hbondDonor()
-        assert !compoundAdapter.hbondAcceptor()
-        assert !compoundAdapter.rotatable()
-        assert !compoundAdapter.definedStereo()
-        assert !compoundAdapter.stereocenters()
-        assert !compoundAdapter.TPSA()
-        assert !compoundAdapter.logP()
-        assert !compoundAdapter.ruleOf5()
-        assert !compoundAdapter.toFormat(Format.MOL)
-        assert !compoundAdapter.fingerprint()
-        assert !compoundAdapter.toImage(1, 1)
-    }
-
-    void "test set Compound with Molecular Value"() {
-        given:
-        final Compound compound = new Compound()
-        compound.name = "name"
-        compound.mwt = 2
-        compound.exactMass = 2
         when:
         final CompoundAdapter compoundAdapter = new CompoundAdapter(compound)
         then:
-        assert compoundAdapter.name
+        assert compoundAdapter.isDrug()
         assert !compoundAdapter.getProbeId()
-        assert !compoundAdapter.isDrug()
         assert !compoundAdapter.isProbe()
-        assert compoundAdapter.compound
-        assert !compoundAdapter.getPubChemCID()
+        assert compoundAdapter.getId() ==2722
+        assert compoundAdapter.getPubChemCID()==2722
+        assert compoundAdapter.getStructureSMILES() == "OC1=C(Cl)C=C(Cl)C2=C1N=CC=C2"
         assert !compoundAdapter.getStructureMOL()
         assert !compoundAdapter.formula()
-        assert !compoundAdapter.getStructureNative()
-        assert !compoundAdapter.formula()
-        assert compoundAdapter.mwt()
-        assert compoundAdapter.exactMass()
-        assert !compoundAdapter.hbondDonor()
-        assert !compoundAdapter.hbondAcceptor()
-        assert !compoundAdapter.rotatable()
-        assert !compoundAdapter.TPSA()
-        assert !compoundAdapter.logP()
-        assert !compoundAdapter.ruleOf5()
-        assert !compoundAdapter.toImage(1, 1)
-    }
-
-    void "test set Molecule"() {
-        given:
-        final Compound compound = new Compound()
-        compound.name = "name"
-        final CompoundAdapter compoundAdapter = new CompoundAdapter(compound)
-        when:
-        compoundAdapter.setMolecule("CC")
-        then:
-        assert compoundAdapter.name
-        assert !compoundAdapter.getProbeId()
-        assert !compoundAdapter.isDrug()
-        assert !compoundAdapter.isProbe()
-        assert compoundAdapter.compound
-        assert !compoundAdapter.getPubChemCID()
-        assert !compoundAdapter.formula()
-        assert !compoundAdapter.getStructureNative()
-        assert !compoundAdapter.formula()
-        assert !compoundAdapter.mwt()
-        assert !compoundAdapter.exactMass()
-        assert !compoundAdapter.hbondDonor()
-        assert !compoundAdapter.hbondAcceptor()
-        assert !compoundAdapter.rotatable()
-        assert !compoundAdapter.TPSA()
-        assert !compoundAdapter.logP()
-        assert !compoundAdapter.ruleOf5()
-        assert !compoundAdapter.toImage(1, 1)
-    }
-
-    void "test set Molecule with no Compound"() {
-        when:
-        final CompoundAdapter compoundAdapter = new CompoundAdapter()
-        then:
-        assert !compoundAdapter.name
-        assert !compoundAdapter.getProbeId()
-        assert !compoundAdapter.isDrug()
-        assert !compoundAdapter.isProbe()
-        assert !compoundAdapter.compound
-        assert !compoundAdapter.getPubChemCID()
-        assert !compoundAdapter.getStructureMOL()
-        assert !compoundAdapter.formula()
-        assert !compoundAdapter.getStructureNative()
-        assert !compoundAdapter.formula()
-        assert !compoundAdapter.mwt()
-        assert !compoundAdapter.exactMass()
-        assert !compoundAdapter.hbondDonor()
-        assert !compoundAdapter.hbondAcceptor()
-        assert !compoundAdapter.rotatable()
+        assert compoundAdapter.mwt()==214.048
+        assert compoundAdapter.exactMass() ==212.975
+        assert compoundAdapter.hbondDonor()==1
+        assert compoundAdapter.hbondAcceptor()==2
+        assert compoundAdapter.rotatable()==0
         assert !compoundAdapter.definedStereo()
         assert !compoundAdapter.stereocenters()
-        assert !compoundAdapter.TPSA()
-        assert !compoundAdapter.logP()
-        assert !compoundAdapter.ruleOf5()
-        assert !compoundAdapter.toFormat(Format.MOL)
-        assert !compoundAdapter.fingerprint()
-        assert !compoundAdapter.toImage(1, 1)
+
+        assert compoundAdapter.TPSA()==33.1
+        assert compoundAdapter.logP()==3.5
+        assert compoundAdapter.name=="Chloroxine"
+        assert compoundAdapter.getIupacName() =="5,7-dichloroquinolin-8-ol"
+        assert compoundAdapter.url=="http://pubchem.org"
+        assert compoundAdapter.getComplexity()==191
+        assert compoundAdapter.getCompoundClass()=="Drug"
+        assert compoundAdapter.getNumberOfAssays()==500
+        assert compoundAdapter.getNumberOfActiveAssays()==60
+        assert compoundAdapter.resourcePath() == "/compounds/2722"
+        assert !compoundAdapter.getStructureNative()
+        assert !compoundAdapter.formula()
+
+
     }
 }
 

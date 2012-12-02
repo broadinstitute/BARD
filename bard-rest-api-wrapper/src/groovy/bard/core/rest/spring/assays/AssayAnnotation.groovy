@@ -1,21 +1,12 @@
 package bard.core.rest.spring.assays;
 
-import org.apache.commons.lang.builder.EqualsBuilder
-import org.apache.commons.lang.builder.HashCodeBuilder
-import org.apache.commons.lang.builder.ToStringBuilder
-import com.fasterxml.jackson.annotation.*
+
+import bard.core.rest.spring.util.JsonUtil
+import com.fasterxml.jackson.annotation.JsonInclude
+import com.fasterxml.jackson.annotation.JsonProperty
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder([
-"source",
-"id",
-"display",
-"contextRef",
-"key",
-"value",
-"extValueId"
-])
-public class AssayAnnotation {
+public class AssayAnnotation extends JsonUtil {
 
     @JsonProperty("source")
     private String source;
@@ -31,7 +22,6 @@ public class AssayAnnotation {
     private String value;
     @JsonProperty("extValueId")
     private String extValueId;
-    private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
     @JsonProperty("source")
     public String getSource() {
@@ -102,30 +92,4 @@ public class AssayAnnotation {
     public void setExtValueId(String extValueId) {
         this.extValueId = extValueId;
     }
-
-    @Override
-    public String toString() {
-        return ToStringBuilder.reflectionToString(this);
-    }
-
-    @Override
-    public int hashCode() {
-        return HashCodeBuilder.reflectionHashCode(this);
-    }
-
-    @Override
-    public boolean equals(String other) {
-        return EqualsBuilder.reflectionEquals(this, other);
-    }
-
-    @JsonAnyGetter
-    public Map<String, String> getAdditionalProperties() {
-        return this.additionalProperties;
-    }
-
-    @JsonAnySetter
-    public void setAdditionalProperties(String name, String value) {
-        this.additionalProperties.put(name, value);
-    }
-
 }

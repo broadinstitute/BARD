@@ -1,17 +1,13 @@
 package bard.core.rest.spring.project
 
-import com.fasterxml.jackson.annotation.JsonAnyGetter
-import com.fasterxml.jackson.annotation.JsonAnySetter
+import bard.core.rest.spring.compounds.Compound
+import bard.core.rest.spring.util.JsonUtil
+import bard.core.rest.spring.util.Target
 import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.annotation.JsonProperty
-import org.apache.commons.lang3.builder.EqualsBuilder
-import org.apache.commons.lang3.builder.HashCodeBuilder
-import org.apache.commons.lang3.builder.ToStringBuilder
-import bard.core.rest.spring.compounds.Compound
-import bard.core.rest.spring.util.Target
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class Project {
+public class Project extends JsonUtil {
 
     @JsonProperty("projectId")
     private long projectId;
@@ -50,9 +46,9 @@ public class Project {
     @JsonProperty("grantNo")
     private String grantNo;
     @JsonProperty("deposited")
-    private Object deposited;
+    private String deposited;
     @JsonProperty("updated")
-    private Object updated;
+    private String updated;
     @JsonProperty("probes")
     private List<Compound> probes = new ArrayList<Compound>();
     @JsonProperty("probeIds")
@@ -62,22 +58,23 @@ public class Project {
     @JsonProperty("aids")
     private List<Long> aids = new ArrayList<Long>();
     @JsonProperty("publications")
-    private Object publications;
+    private String publications;
     @JsonProperty("targets")
     private List<Target> targets = new ArrayList<Target>();
     @JsonProperty("resourcePath")
     private String resourcePath;
     @JsonProperty("experimentCount")
     private long experimentCount;
-    private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
     @JsonProperty("projectId")
     public long getProjectId() {
         return projectId;
     }
-    public long getId(){
+
+    public long getId() {
         return this.getProjectId()
     }
+
     @JsonProperty("projectId")
     public void setProjectId(long projectId) {
         this.projectId = projectId;
@@ -254,22 +251,22 @@ public class Project {
     }
 
     @JsonProperty("deposited")
-    public Object getDeposited() {
+    public String getDeposited() {
         return deposited;
     }
 
     @JsonProperty("deposited")
-    public void setDeposited(Object deposited) {
+    public void setDeposited(String deposited) {
         this.deposited = deposited;
     }
 
     @JsonProperty("updated")
-    public Object getUpdated() {
+    public String getUpdated() {
         return updated;
     }
 
     @JsonProperty("updated")
-    public void setUpdated(Object updated) {
+    public void setUpdated(String updated) {
         this.updated = updated;
     }
 
@@ -314,12 +311,12 @@ public class Project {
     }
 
     @JsonProperty("publications")
-    public Object getPublications() {
+    public String getPublications() {
         return publications;
     }
 
     @JsonProperty("publications")
-    public void setPublications(Object publications) {
+    public void setPublications(String publications) {
         this.publications = publications;
     }
 
@@ -352,30 +349,4 @@ public class Project {
     public void setExperimentCount(long experimentCount) {
         this.experimentCount = experimentCount;
     }
-
-    @Override
-    public String toString() {
-        return ToStringBuilder.reflectionToString(this);
-    }
-
-    @Override
-    public int hashCode() {
-        return HashCodeBuilder.reflectionHashCode(this);
-    }
-
-    @Override
-    public boolean equals(Object other) {
-        return EqualsBuilder.reflectionEquals(this, other);
-    }
-
-    @JsonAnyGetter
-    public Map<String, Object> getAdditionalProperties() {
-        return this.additionalProperties;
-    }
-
-    @JsonAnySetter
-    public void setAdditionalProperties(String name, Object value) {
-        this.additionalProperties.put(name, value);
-    }
-
 }

@@ -2,7 +2,6 @@ package bard.core.rest.spring.assays
 
 import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.annotation.JsonProperty
-import bard.core.rest.spring.assays.AbstractAssay
 
 /**
  * Serialized usually from an ID search or contained in an expanded element (e.g Experiment)

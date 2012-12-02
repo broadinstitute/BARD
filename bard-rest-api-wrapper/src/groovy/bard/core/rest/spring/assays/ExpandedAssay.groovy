@@ -6,34 +6,8 @@ import bard.core.rest.spring.util.Document
 import bard.core.rest.spring.util.Target
 import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.annotation.JsonProperty
-import com.fasterxml.jackson.annotation.JsonPropertyOrder
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder([
-"aid",
-"bardAssayId",
-"capAssayId",
-"category",
-"type",
-"summary",
-"assays",
-"classification",
-"name",
-"source",
-"grantNo",
-"deposited",
-"updated",
-"documents",
-"targets",
-"experiments",
-"projects",
-"kegg_disease_names",
-"kegg_disease_cat",
-"resourcePath",
-"description",
-"protocol",
-"comments"
-])
 public class ExpandedAssay extends AbstractAssay {
     @JsonProperty("documents")
     private List<Document> documents = new ArrayList<Document>();

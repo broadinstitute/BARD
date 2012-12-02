@@ -1,149 +1,130 @@
 package bard.core.adapter;
 
 
-import bard.core.Format
+import bard.core.interfaces.CompoundAdapterInterface
 import bard.core.rest.spring.compounds.Compound
 import org.apache.commons.lang3.StringUtils
-import bard.core.interfaces.CompoundAdapterInterface
 
-public class CompoundAdapter implements CompoundAdapterInterface{
-    private final Object myLock = new Object()
-    Compound compound
-    private String probeId;
+public class CompoundAdapter implements CompoundAdapterInterface {
+    final Compound compound
 
-    public CompoundAdapter() {
-    }
-
-    public CompoundAdapter(Compound compound) {
+    public CompoundAdapter(final Compound compound) {
         this.compound = compound
     }
 
 
     public boolean isDrug() {
-        return compound?.compoundClass == 'Drug'
+        return this.compound.compoundClass == 'Drug'
     }
 
     public String getProbeId() {
-
-        if (this.probeId == null) {
-            synchronized (myLock) {
-                this.probeId = compound?.probeId ?: ""
-            }
-        }
-        return this.probeId
+        return this.compound.probeId
     }
 
     public boolean isProbe() {
         return StringUtils.isNotBlank(this.getProbeId())
     }
-    public Long getId(){
-        return getPubChemCID()
+
+    public Long getId() {
+        return this.getPubChemCID()
     }
+
+    @Deprecated //use getId instead
     public Long getPubChemCID() {
-        return compound?.cid
+        return this.compound.cid
     }
-
+    /**
+     *
+     * @return
+     */
+    @Deprecated //use getSmiles instead
     public String getStructureSMILES() {
-        return this.compound?.smiles
+        return this.compound.smiles
     }
 
+    @Deprecated //No longer used
     public String getStructureMOL() {
         return null
     }
 
+    @Deprecated // No longer used
     public Object getStructureNative() {
         return null
     }
 
+    @Deprecated //No longer available in pay load
     public String formula() {
         return "";
     }
 
     public Double mwt() {
-        return compound?.mwt
+        return this.compound.mwt
     }
 
     public Double exactMass() {
-        return compound?.exactMass
+        return this.compound.exactMass
     }
 
     public Integer hbondDonor() {
-        return compound?.hbondDonor
+        return compound.hbondDonor
     }
 
     public Integer hbondAcceptor() {
-        return compound?.hbondAcceptor
+        return compound.hbondAcceptor
     }
 
     public Integer rotatable() {
-        return compound?.rotatable
+        return compound.rotatable
     }
 
+    @Deprecated // No longer used
     public Integer definedStereo() {
         return null;
     }
 
+    @Deprecated //No longer used
     public Integer stereocenters() {
         return null;
     }
 
     public Double TPSA() {
-        return compound?.tpsa
+        return compound.tpsa
     }
 
     public Double logP() {
-        return compound?.xlogp
+        return compound.xlogp
     }
 
-    public Boolean ruleOf5() {
-        return null;
-    }
-
-    public int[] fingerprint() {
-        return null;
-    }
-
-    public Object toFormat(Format format) {
-        return null;
-    }
-
-    public byte[] toImage(int size, int background) {
-        return null
-    }
-
-    public void setMolecule(Object input) {
-
-    }
 
     public String getName() {
-        return compound?.name;
+        return compound.name;
     }
 
     public String getIupacName() {
-        return compound?.iupacName;
+        return compound.iupacName;
     }
 
     public String getUrl() {
-        return compound?.url
+        return compound.url
     }
 
     public Integer getComplexity() {
-        return compound?.complexity
+        return compound.complexity
     }
-
+    //TODO: Make compound class an Enum
     public String getCompoundClass() {
-        return compound?.compoundClass
+        return compound.compoundClass
     }
 
     public int getNumberOfAssays() {
-        return compound?.numAssay?.intValue()?:0
+        return compound.getNumAssay().intValue()
     }
 
     public int getNumberOfActiveAssays() {
-        return compound?.numActiveAssay?.intValue()?:0
+        return compound.getNumActiveAssay().intValue()
     }
 
     public String resourcePath() {
-        return compound?.resourcePath
+        return compound.resourcePath
     }
 }

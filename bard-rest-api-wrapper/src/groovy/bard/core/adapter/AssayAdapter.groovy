@@ -6,11 +6,8 @@ import bard.core.rest.spring.assays.AbstractAssay
 import bard.core.interfaces.*
 
 public class AssayAdapter implements AssayAdapterInterface {
-    private AbstractAssay assay
+    final AbstractAssay assay
 
-    public AssayAdapter() {
-
-    }
 
     public AssayAdapter(AbstractAssay assay) {
         this.assay = assay
@@ -24,22 +21,23 @@ public class AssayAdapter implements AssayAdapterInterface {
         return assay.getCapAssayId()
     }
 
+    public Long getBardAssayId() {
+        return assay.getBardAssayId()
+    }
+
 
 
     public AssayType getType() {
         int assayType = this.assay.getType()
-        if (assayType >= 0) {
-            return AssayType.valueOf(assayType)
-        }
-        return null
+        return AssayType.valueOf(assayType)
     }
 
     public AssayRole getRole() {
-        return AssayRole.valueOf(assay.classification?.intValue());
+        return AssayRole.valueOf(assay.classification.intValue());
     }
 
     public AssayCategory getCategory() {
-        return AssayCategory.valueOf(assay?.category?.intValue())
+        return AssayCategory.valueOf(assay.category.intValue())
     }
 
     public String getDescription() {
@@ -68,13 +66,6 @@ public class AssayAdapter implements AssayAdapterInterface {
 
     public Collection<Value> getAnnotations() {
         Collection<Value> annos = new ArrayList<Value>();
-//
-//        for (String srcName : this.srcNames) {
-//            Collection<Value> values = entity.getValues(new DataSource(srcName));
-//            if (values) {
-//                annos.addAll(values)
-//            }
-//        }
         return annos;
     }
 
@@ -89,10 +80,8 @@ public class AssayAdapter implements AssayAdapterInterface {
     //TODO: Change to values?
     public Map<String, List<String>> getKeggAnnotations() {
         Map<String, List<String>> annos = new HashMap<String, List<String>>()
-        if (assay) {
-            annos.put(EntityNamedSources.KEGGDiseaseCategoryAnnotationSource, assay.getKegg_disease_cat())
-            annos.put(EntityNamedSources.KEGGDiseaseNameAnnotationSource, assay.getKegg_disease_names())
-        }
+        annos.put(EntityNamedSources.KEGGDiseaseCategoryAnnotationSource, assay.getKegg_disease_cat())
+        annos.put(EntityNamedSources.KEGGDiseaseNameAnnotationSource, assay.getKegg_disease_names())
         return annos;
     }
 }

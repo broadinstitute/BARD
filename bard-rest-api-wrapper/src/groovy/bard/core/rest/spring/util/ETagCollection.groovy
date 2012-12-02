@@ -21,13 +21,12 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder
     "collection",
     "link"
 ])
-public class ETagCollection {
+public class ETagCollection extends JsonUtil{
 
     @JsonProperty("collection")
     private List<ETag> etags = new ArrayList<ETag>();
     @JsonProperty("link")
     private String link;
-    private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
     @JsonProperty("collection")
     public List<ETag> getEtags() {
@@ -49,29 +48,5 @@ public class ETagCollection {
         this.link = link;
     }
 
-    @Override
-    public String toString() {
-        return ToStringBuilder.reflectionToString(this);
-    }
-
-    @Override
-    public int hashCode() {
-        return HashCodeBuilder.reflectionHashCode(this);
-    }
-
-    @Override
-    public boolean equals(Object other) {
-        return EqualsBuilder.reflectionEquals(this, other);
-    }
-
-    @JsonAnyGetter
-    public Map<String, Object> getAdditionalProperties() {
-        return this.additionalProperties;
-    }
-
-    @JsonAnySetter
-    public void setAdditionalProperties(String name, Object value) {
-        this.additionalProperties.put(name, value);
-    }
 
 }

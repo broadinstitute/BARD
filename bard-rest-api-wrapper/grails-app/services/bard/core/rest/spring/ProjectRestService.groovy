@@ -1,20 +1,22 @@
 package bard.core.rest.spring
 
 import bard.core.SearchParams
-import bard.core.interfaces.EntityService
+import bard.core.interfaces.RestApiConstants
+import bard.core.rest.spring.assays.Assay
+import bard.core.rest.spring.experiment.ExperimentSearch
+import bard.core.rest.spring.project.ExpandedProjectResult
+import bard.core.rest.spring.project.Project
+import bard.core.rest.spring.util.MetaData
 import org.springframework.http.HttpEntity
 import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpMethod
 import org.springframework.util.LinkedMultiValueMap
 import org.springframework.util.MultiValueMap
-import bard.core.rest.spring.util.MetaData
-import bard.core.rest.spring.project.Project
-import bard.core.rest.spring.project.ExpandedProjectResult
 
 class ProjectRestService extends AbstractRestService {
 
     public String getResourceContext() {
-        return EntityService.PROJECTS_RESOURCE
+        return RestApiConstants.PROJECTS_RESOURCE
     }
     /**
      *
@@ -39,30 +41,29 @@ class ProjectRestService extends AbstractRestService {
      * @return {@link bard.core.rest.spring.project.ExpandedProjectResult}
      */
     public ExpandedProjectResult searchProjectsByIds(final List<Long> pids) {
-        final Map<String, Long> etags = [:]
-        MultiValueMap<String, String> map = new LinkedMultiValueMap<String, String>();
-        map.add("ids", pids.join(","));
+        if (pids) {
+            final Map<String, Long> etags = [:]
+            MultiValueMap<String, String> map = new LinkedMultiValueMap<String, String>();
+            map.add("ids", pids.join(","));
 
-        HttpHeaders headers = new HttpHeaders();
-        this.addETagsToHTTPHeader(headers, etags)
-        HttpEntity<List> entity = new HttpEntity<List>(map, headers);
-        final String url = this.buildURLToPostIds()
-        final HttpEntity<List> exchange = restTemplate.exchange(url, HttpMethod.POST, entity, List.class);
-        final List<Project> projects = exchange.getBody()
-        headers = exchange.getHeaders()
-        this.extractETagFromResponseHeader(headers, 0, etags)
-        int nhits = projects?.size();
-
-        if (nhits == 0) {
-            nhits = projects.size();
+            HttpHeaders headers = new HttpHeaders();
+            this.addETagsToHTTPHeader(headers, etags)
+            HttpEntity<List> entity = new HttpEntity<List>(map, headers);
+            final String url = this.buildURLToPostIds()
+            final HttpEntity<List> exchange = restTemplate.exchange(url, HttpMethod.POST, entity, List.class);
+            final List<Project> projects = exchange.getBody()
+            headers = exchange.getHeaders()
+            this.extractETagsFromResponseHeader(headers, 0, etags)
+            int nhits = projects.size();
+            final ExpandedProjectResult projectSearchResult = new ExpandedProjectResult()
+            projectSearchResult.setProjects(projects)
+            projectSearchResult.setEtags(etags)
+            final MetaData metaData = new MetaData()
+            metaData.nhit = nhits
+            projectSearchResult.setMetaData(metaData)
+            return projectSearchResult;
         }
-        final ExpandedProjectResult projectSearchResult = new ExpandedProjectResult()
-        projectSearchResult.setProjects(projects)
-        projectSearchResult.setEtags(etags)
-        final MetaData metaData = new MetaData()
-        metaData.nhit = nhits
-        projectSearchResult.setMetaData(metaData)
-        return projectSearchResult;
+        return null
 
     }
     /**
@@ -85,22 +86,47 @@ class ProjectRestService extends AbstractRestService {
      */
     @Override
     public String getSearchResource() {
-        String resourceName = EntityService.PROJECTS_RESOURCE
+        String resourceName = RestApiConstants.PROJECTS_RESOURCE
         return new StringBuilder(baseUrl).
-                append(EntityService.FORWARD_SLASH).
-                append(EntityService.SEARCH).
+                append(RestApiConstants.FORWARD_SLASH).
+                append(RestApiConstants.SEARCH).
                 append(resourceName).
-                append(EntityService.FORWARD_SLASH).
-                append(EntityService.QUESTION_MARK).
+                append(RestApiConstants.FORWARD_SLASH).
+                append(RestApiConstants.QUESTION_MARK).
                 toString();
     }
 
     @Override
     public String getResource() {
-        String resourceName = EntityService.PROJECTS_RESOURCE
+        String resourceName = RestApiConstants.PROJECTS_RESOURCE
         return new StringBuilder(baseUrl).
                 append(resourceName).
-                append(EntityService.FORWARD_SLASH).
+                append(RestApiConstants.FORWARD_SLASH).
                 toString();
+    }
+
+    public List<Assay> findAssaysByProjectId(Long pid) {
+        final StringBuilder resource =
+            new StringBuilder(
+                    this.getResource(pid.toString())).
+                    append(RestApiConstants.ASSAYS_RESOURCE).
+                    append(RestApiConstants.QUESTION_MARK).
+                    append(RestApiConstants.EXPAND_TRUE)
+        final URL url = new URL(resource.toString())
+        List<Assay> assays = (List<Assay>) this.restTemplate.getForObject(url.toURI(), Assay[].class)
+        return assays;
+    }
+
+    public List<ExperimentSearch> findExperimentsByProjectId(Long pid) {
+        final StringBuilder resource =
+            new StringBuilder(
+                    this.getResource(pid.toString())).
+                    append(RestApiConstants.EXPERIMENTS_RESOURCE).
+                    append(RestApiConstants.QUESTION_MARK).
+                    append(RestApiConstants.EXPAND_TRUE)
+        final URL url = new URL(resource.toString())
+        List<ExperimentSearch> experiments = (List<ExperimentSearch>) this.restTemplate.getForObject(url.toURI(), ExperimentSearch[].class)
+        return experiments
+
     }
 }

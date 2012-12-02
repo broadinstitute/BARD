@@ -16,7 +16,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder
  * To change this template use File | Settings | File Templates.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class Target {
+public class Target extends JsonUtil{
 
     @JsonProperty("acc")
     private String acc;
@@ -32,7 +32,6 @@ public class Target {
     private long taxId;
     @JsonProperty("resourcePath")
     private String resourcePath;
-    private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
     @JsonProperty("acc")
     public String getAcc() {
@@ -104,29 +103,6 @@ public class Target {
         this.resourcePath = resourcePath;
     }
 
-    @Override
-    public String toString() {
-        return ToStringBuilder.reflectionToString(this);
-    }
 
-    @Override
-    public int hashCode() {
-        return HashCodeBuilder.reflectionHashCode(this);
-    }
-
-    @Override
-    public boolean equals(Object other) {
-        return EqualsBuilder.reflectionEquals(this, other);
-    }
-
-    @JsonAnyGetter
-    public Map<String, Object> getAdditionalProperties() {
-        return this.additionalProperties;
-    }
-
-    @JsonAnySetter
-    public void setAdditionalProperties(String name, Object value) {
-        this.additionalProperties.put(name, value);
-    }
 
 }

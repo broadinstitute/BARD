@@ -99,6 +99,12 @@ class DataSourceUnitSpec extends Specification {
         label                         | dataSource
         "Compare to a different type" | new DataSource(name, version, url)
     }
+    void "test get Current"(){
+        when:
+        DataSource current = DataSource.getCurrent()
+        then:
+        assert current
+    }
 
 }
 

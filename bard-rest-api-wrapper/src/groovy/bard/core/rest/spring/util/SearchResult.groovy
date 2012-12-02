@@ -1,17 +1,14 @@
 package bard.core.rest.spring.util
 
-import org.apache.commons.lang.builder.EqualsBuilder
-import org.apache.commons.lang.builder.HashCodeBuilder
-import org.apache.commons.lang.builder.ToStringBuilder
-import com.fasterxml.jackson.annotation.*
-import bard.core.rest.spring.util.MetaData
-import bard.core.rest.spring.util.Facet
 import bard.core.Value
+import com.fasterxml.jackson.annotation.JsonIgnore
+import com.fasterxml.jackson.annotation.JsonInclude
+import com.fasterxml.jackson.annotation.JsonProperty
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class SearchResult {
+public class SearchResult extends JsonUtil {
 
-    private Map<String, Long> etags =[:]
+    private Map<String, Long> etags = [:]
 
     @JsonProperty("metaData")
     private MetaData metaData;
@@ -19,7 +16,6 @@ public class SearchResult {
     private String etag;
     @JsonProperty("link")
     private String link;
-    private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
 
     @JsonProperty("metaData")
@@ -34,8 +30,10 @@ public class SearchResult {
 
     @JsonProperty("etag")
     public String getEtag() {
-        if(!etag){
-            return etags.keySet()?.iterator()?.next()
+        if (!etag) {
+            if (etags) {
+                return etags.keySet().iterator().next()
+            }
         }
         return etag;
     }
@@ -55,41 +53,24 @@ public class SearchResult {
         this.link = link;
     }
 
-    @Override
-    public String toString() {
-        return ToStringBuilder.reflectionToString(this);
-    }
-
-    @Override
-    public int hashCode() {
-        return HashCodeBuilder.reflectionHashCode(this);
-    }
-
-    @Override
-    public boolean equals(Object other) {
-        return EqualsBuilder.reflectionEquals(this, other);
-    }
-
-    @JsonAnyGetter
-    public Map<String, Object> getAdditionalProperties() {
-        return this.additionalProperties;
-    }
-
-    @JsonAnySetter
-    public void setAdditionalProperties(String name, Object value) {
-        this.additionalProperties.put(name, value);
-    }
     @JsonIgnore
-    public int getNumberOfHits(){
-        return this.metaData?.nhit?:0
+    public int getNumberOfHits() {
+        return this.metaData?.nhit ?: 0
     }
+
     @JsonIgnore
     public List<Facet> getFacets() {
-        return this.metaData?.facets?:[]
+        return this.metaData?.facets ?: []
     }
-    public Collection<Value> getFacetsToValues(){
-        return getMetaData()?.facetsToValues()
+
+    public Collection<Value> getFacetsToValues() {
+        final MetaData metaData = getMetaData()
+        if (metaData) {
+            return metaData.facetsToValues()
+        }
+        return []
     }
+
     Map<String, Long> getEtags() {
         return etags
     }

@@ -1,13 +1,9 @@
 package bard.core.rest.spring.experiment
 
-import com.fasterxml.jackson.annotation.JsonAnyGetter
-import com.fasterxml.jackson.annotation.JsonAnySetter
+import bard.core.interfaces.ExperimentRole
+import bard.core.rest.spring.util.JsonUtil
 import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.annotation.JsonProperty
-import org.apache.commons.lang.builder.EqualsBuilder
-import org.apache.commons.lang.builder.HashCodeBuilder
-import org.apache.commons.lang.builder.ToStringBuilder
-import bard.core.interfaces.ExperimentRole
 
 /**
  * Created with IntelliJ IDEA.
@@ -17,7 +13,7 @@ import bard.core.interfaces.ExperimentRole
  * To change this template use File | Settings | File Templates.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public abstract class ExperimentAbstract {
+public abstract class ExperimentAbstract extends JsonUtil {
 
 
     private long id;
@@ -42,20 +38,19 @@ public abstract class ExperimentAbstract {
     @JsonProperty("description")
     private String description;
     @JsonProperty("source")
-    private Object source;
+    private String source;
     @JsonProperty("grantNo")
-    private Object grantNo;
+    private String grantNo;
     @JsonProperty("deposited")
-    private Object deposited;
+    private String deposited;
     @JsonProperty("updated")
-    private Object updated;
+    private String updated;
     @JsonProperty("hasProbe")
     private boolean hasProbe;
     @JsonProperty("projectIdList")
     private List<Long> projectIdList = new ArrayList<Long>();
     @JsonProperty("resourcePath")
     private String resourcePath;
-    private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
     @JsonProperty("exptId")
     public long getExptId() {
@@ -68,11 +63,12 @@ public abstract class ExperimentAbstract {
     }
 
     public long getId() {
-        if(exptId){
+        if (exptId) {
             this.id = exptId
         }
         return id;
     }
+
     @JsonProperty("pubchemAid")
     public long getPubchemAid() {
         return pubchemAid;
@@ -157,51 +153,53 @@ public abstract class ExperimentAbstract {
     public String getDescription() {
         return description;
     }
-     public ExperimentRole getRole(){
-         return ExperimentRole.valueOf(this.getClassification().intValue())
-     }
+
+    public ExperimentRole getRole() {
+        return ExperimentRole.valueOf(this.getClassification().intValue())
+    }
+
     @JsonProperty("description")
     public void setDescription(String description) {
         this.description = description;
     }
 
     @JsonProperty("source")
-    public Object getSource() {
+    public String getSource() {
         return source;
     }
 
     @JsonProperty("source")
-    public void setSource(Object source) {
+    public void setSource(String source) {
         this.source = source;
     }
 
     @JsonProperty("grantNo")
-    public Object getGrantNo() {
+    public String getGrantNo() {
         return grantNo;
     }
 
     @JsonProperty("grantNo")
-    public void setGrantNo(Object grantNo) {
+    public void setGrantNo(String grantNo) {
         this.grantNo = grantNo;
     }
 
     @JsonProperty("deposited")
-    public Object getDeposited() {
+    public String getDeposited() {
         return deposited;
     }
 
     @JsonProperty("deposited")
-    public void setDeposited(Object deposited) {
+    public void setDeposited(String deposited) {
         this.deposited = deposited;
     }
 
     @JsonProperty("updated")
-    public Object getUpdated() {
+    public String getUpdated() {
         return updated;
     }
 
     @JsonProperty("updated")
-    public void setUpdated(Object updated) {
+    public void setUpdated(String updated) {
         this.updated = updated;
     }
 
@@ -235,33 +233,10 @@ public abstract class ExperimentAbstract {
         this.resourcePath = resourcePath;
     }
 
-    @Override
-    public String toString() {
-        return ToStringBuilder.reflectionToString(this);
-    }
-
-    @Override
-    public int hashCode() {
-        return HashCodeBuilder.reflectionHashCode(this);
-    }
-
-    @Override
-    public boolean equals(Object other) {
-        return EqualsBuilder.reflectionEquals(this, other);
-    }
-
-    @JsonAnyGetter
-    public Map<String, Object> getAdditionalProperties() {
-        return this.additionalProperties;
-    }
-
-    @JsonAnySetter
-    public void setAdditionalProperties(String name, Object value) {
-        this.additionalProperties.put(name, value);
-    }
-    public int getProjectCount(){
+    public int getProjectCount() {
         return projectIdList.size()
     }
+
     public abstract Long getAdid();
 
 }
