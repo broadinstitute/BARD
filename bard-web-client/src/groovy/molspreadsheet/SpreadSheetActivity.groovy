@@ -21,6 +21,7 @@ class SpreadSheetActivity {
         this.cid = activity.cid
         this.eid = activity.eid
         this.sid = activity.sid
+
         if (activity.potency != null) {
             this.potency = new Double(activity.potency)
         }
@@ -30,17 +31,17 @@ class SpreadSheetActivity {
         final List<Readout> readouts = activity.readouts
         if (readouts) {
             for (Readout readout : readouts) {
-
-                final HillCurveValue hillCurveValue = readout.toHillCurveValue()
-                if (!resultTypeNames.contains(hillCurveValue.id)) {
-                    resultTypeNames.add(hillCurveValue.id)
-                }
-                if (hillCurveValue != null) {
-                    this.hillCurveValueList << hillCurveValue
-                }
-
+                readOutToHillCurveValue(resultTypeNames, readout)
             }
         }
+    }
+
+    void readOutToHillCurveValue(final List<String> resultTypeNames, final Readout readout) {
+        final HillCurveValue hillCurveValue = readout.toHillCurveValue()
+        if (!resultTypeNames.contains(hillCurveValue.id)) {
+            resultTypeNames.add(hillCurveValue.id)
+        }
+        this.hillCurveValueList << hillCurveValue
     }
 
 }

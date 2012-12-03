@@ -5,6 +5,7 @@ import bard.core.adapter.AssayAdapter
 import bard.core.adapter.CompoundAdapter
 import bard.core.adapter.ProjectAdapter
 import bard.core.rest.spring.assays.Assay
+import bard.core.rest.spring.assays.FreeTextAssayResult
 import bard.core.rest.spring.compounds.Compound
 import bard.core.rest.spring.compounds.ExpandedCompoundResult
 import bard.core.rest.spring.project.ExpandedProjectResult
@@ -187,6 +188,20 @@ class QueryServiceHelperUnitSpec extends Specification {
         "Single Compound"    | [new Compound(name: "c1")]                           | [new CompoundAdapter(new Compound(name: "c1"))]
         "Multiple Compounds" | [new Compound(name: "c1"), new Compound(name: "c2")] | [new CompoundAdapter(new Compound(name: "c1")), new CompoundAdapter(new Compound(name: "c2"))]
         "No Compounds"       | []                                                   | []
+
+    }
+
+    void "test assaysToAdapters - FreeTextAssays #label"() {
+        when:
+        final List<AssayAdapter> foundAssayAdapters = service.assaysToAdapters(assays)
+
+        then:
+        assert foundAssayAdapters.size() == expectedResults
+
+        where:
+        label         | assays                                                   | expectedResults
+        "No Assays"   | new FreeTextAssayResult()                                | 0
+        "With Assays" | new FreeTextAssayResult(assays: [new Assay(name: "c1")]) | 1
 
     }
 

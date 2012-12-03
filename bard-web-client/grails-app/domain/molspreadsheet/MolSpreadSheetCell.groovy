@@ -116,8 +116,8 @@ class MolSpreadSheetCell {
         this.molSpreadSheetCellType = molSpreadSheetCellType
         this.spreadSheetActivityStorage = spreadSheetActivityStorage
         if (this.molSpreadSheetCellType == MolSpreadSheetCellType.image) {
-            strInternalValue = new String(value1 ?: "")
-            supplementalInternalValue = new String(value2 ?: "")
+            strInternalValue = value1 ?: ""
+            supplementalInternalValue = value2 ?: ""
         }
     }
 

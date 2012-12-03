@@ -32,7 +32,6 @@ class MolSpreadSheetDataBuilderUnitSpec extends Specification {
     void tearDown() {
         // Tear down logic here
     }
-
     void "test populateMolSpreadSheet Non_Empty Compound Cart"() {
         given:
         MolSpreadSheetDataBuilder molSpreadSheetDataBuilder = new MolSpreadSheetDataBuilder()

@@ -184,7 +184,10 @@ class QueryService implements IQueryService {
             //facets = restCompoundService.getFacets(etag)
             ExpandedCompoundResult expandedCompoundResult = compoundRestService.searchCompoundsByIds(compoundIds)
             this.queryHelperService.stopStopWatch(sw, "find compounds by CIDs ${compoundIds.toString()}")
-            compoundAdapters.addAll(this.queryHelperService.compoundsToAdapters(expandedCompoundResult))
+
+            if (expandedCompoundResult) {
+                compoundAdapters.addAll(this.queryHelperService.compoundsToAdapters(expandedCompoundResult))
+            }
             //TODO: Even though facets are available they cannot be used for filtering
         }
         int nhits = compoundAdapters.size()
@@ -288,9 +291,12 @@ class QueryService implements IQueryService {
             StopWatch sw = this.queryHelperService.startStopWatch()
             final Project project = projectRestService.getProjectById(projectId)
             this.queryHelperService.stopStopWatch(sw, "show project ${projectId.toString()}")
+
+            //TODO: Here we make 2 other calls to the server to get the experiments and assays associated with this project
+            //TODO: Since we only display the names of the experiments and assays we should ask NCGC to change the payload to supply the names and ids
             if (project) {
                 final List<ExperimentSearch> experiments = projectRestService.findExperimentsByProjectId(projectId)
-                if (experiments && !experiments.isEmpty()) {
+                if (experiments) {
                     experiments?.sort {
                         it?.role
                     }

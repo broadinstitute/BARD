@@ -147,6 +147,17 @@ class QueryServiceUnitSpec extends Specification {
         "Return an Assay Adapter" | 872     | assay1
         "Unknown Assay"           | 872     | null
     }
+    void "test findCompoundsByCIDs - Non existing ids"() {
+        when:
+        Map responseMap = service.findCompoundsByCIDs([2,3])
+        then:
+        1 * compoundRestService.searchCompoundsByIds(_) >> {null}
+        and:
+        assert responseMap
+        assert responseMap.nHits == 0
+        assert !responseMap.facets
+        assert responseMap.compoundAdapters.size() == 0
+    }
     /**
      * {@link QueryService#findCompoundsByCIDs(List, List)}
      *
@@ -175,7 +186,7 @@ class QueryServiceUnitSpec extends Specification {
      * {@link QueryService#findAssaysByADIDs(List, List)}
      *
      */
-    void "test findAssaysByPIDs #label"() {
+    void "test findAssaysByADIDs #label"() {
         given:
         expandedAssayResult.assays = assay
         when:
@@ -195,6 +206,37 @@ class QueryServiceUnitSpec extends Specification {
         "Single Assay Id"     | [new Long(872)]                | [expandedAssay1]                 | 1                     | 1                    | [new AssayAdapter(expandedAssay1)]
         "Empty Assay Id list" | []                             | null                             | 0                     | 0                    | null
 
+    }
+    /**
+     * {@link QueryService#findAssaysByADIDs(List, List)}
+     *
+     */
+    void "test findAssaysByADIDs - Non existing ids"() {
+        when:
+        Map responseMap = service.findAssaysByADIDs([2,3])
+        then:
+        1 * assayRestService.searchAssaysByIds(_) >> {null}
+        and:
+        assert responseMap
+        assert responseMap.nHits == 0
+        assert !responseMap.facets
+        assert responseMap.assayAdapters.size() == 0
+    }
+
+    /**
+     * {@link QueryService#findProjectsByPIDs(List, List)}
+     *
+     */
+    void "test findProjectsByPIDs - Non existing ids"() {
+        when:
+        Map responseMap = service.findProjectsByPIDs([2,3])
+        then:
+        1 * projectRestService.searchProjectsByIds(_) >> {null}
+        and:
+        assert responseMap
+        assert responseMap.nHits == 0
+        assert !responseMap.facets
+        assert responseMap.projectAdapters.size() == 0
     }
     /**
      * {@link QueryService#findProjectsByPIDs(List, List)}
