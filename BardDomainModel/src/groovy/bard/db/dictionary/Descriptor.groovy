@@ -7,13 +7,12 @@ package bard.db.dictionary
  * Time: 9:47 PM
  * To change this template use File | Settings | File Templates.
  */
-abstract class Descriptor<T> {
+abstract class Descriptor<T extends Descriptor> {
 
     private static final int LABEL_MAX_SIZE = 128
     private static final int DESCRIPTION_MAX_SIZE = 1000
     private static final int ABBREVIATION_MAX_SIZE = 20
     private static final int SYNONYMS_MAX_SIZE = 1000
-    private static final int UNIT_MAX_SIZE = 128
     private static final int EXTERNAL_URL_MAX_SIZE = 1000
     private static final int ELEMENT_STATUS_MAX_SIZE = 20
     private static final int FULL_PATH_MAX_SIZE = 3000
@@ -47,7 +46,7 @@ abstract class Descriptor<T> {
 
         synonyms(nullable: true, maxSize: SYNONYMS_MAX_SIZE)
         externalURL(nullable: true, maxSize: EXTERNAL_URL_MAX_SIZE)
-        unit(nullable: true, maxSize: UNIT_MAX_SIZE)
+        unit(nullable: true)
     }
 /**
  * the mapping block isn't additive so it needs to be in the subclass to allow specifying the table

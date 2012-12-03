@@ -635,11 +635,11 @@ class XmlTestSamples {
 '''
 
     static String RESULT_TYPE1 = '''
-<resultType resultTypeElement='IC50' baseUnit='uM' resultTypeStatus='Published'>
-  <resultTypeName>IC50</resultTypeName>
-  <link rel='related' href='http://localhost:8080/dataExport/api/dictionary/element/341' type='application/vnd.bard.cap+xml;type=element' />
-</resultType>
-'''
+        <resultType resultTypeElement='IC50' baseUnit='uM' resultTypeStatus='Published'>
+          <resultTypeName>IC50</resultTypeName>
+          <link rel='related' href='http://localhost:8080/dataExport/api/dictionary/element/1' type='application/vnd.bard.cap+xml;type=element' />
+        </resultType>'''
+
     static String ELEMENT = '''
     <element elementId='1' readyForExtraction='Ready' elementStatus='Published'>
       <label>uM</label>
@@ -648,141 +648,137 @@ class XmlTestSamples {
     '''
 
     static String DICTIONARY = '''
-<dictionary>
-  <elements>
-    <element elementId='386' readyForExtraction='Ready' elementStatus='Published'>
-      <label>uM</label>
-      <link rel='edit' href='http://localhost:8080/dataExport/api/dictionary/element/386' type='application/vnd.bard.cap+xml;type=element' />
-    </element>
-    <element elementId='366' readyForExtraction='Ready' elementStatus='Published'>
-      <label>concentration</label>
-      <link rel='edit' href='http://localhost:8080/dataExport/api/dictionary/element/366' type='application/vnd.bard.cap+xml;type=element' />
-    </element>
-    <element elementId='123' readyForExtraction='Ready' elementStatus='Published'>
-      <label>unit of measurement</label>
-      <description>It is the inite magnitude of a physical quantity or of time. It has a quantity and a unit associated with it.</description>
-      <link rel='edit' href='http://localhost:8080/dataExport/api/dictionary/element/123' type='application/vnd.bard.cap+xml;type=element' />
-    </element>
-    <element elementId='372' readyForExtraction='Ready' elementStatus='Published'>
-      <label>Assay Explorer</label>
-      <link rel='edit' href='http://localhost:8080/dataExport/api/dictionary/element/372' type='application/vnd.bard.cap+xml;type=element' />
-    </element>
-    <element elementId='370' readyForExtraction='Ready' elementStatus='Published'>
-      <label>Number of points</label>
-      <link rel='edit' href='http://localhost:8080/dataExport/api/dictionary/element/370' type='application/vnd.bard.cap+xml;type=element' />
-    </element>
-    <element elementId='369' readyForExtraction='Ready' elementStatus='Published'>
-      <label>Number of exclusions</label>
-      <link rel='edit' href='http://localhost:8080/dataExport/api/dictionary/element/369' type='application/vnd.bard.cap+xml;type=element' />
-    </element>
-    <element elementId='368' readyForExtraction='Complete' elementStatus='Published'>
-      <label>software</label>
-      <link rel='edit' href='http://localhost:8080/dataExport/api/dictionary/element/368' type='application/vnd.bard.cap+xml;type=element' />
-    </element>
-    <element elementId='341' readyForExtraction='Ready' elementStatus='Published' unit='uM'>
-      <label>IC50</label>
-      <link rel='edit' href='http://localhost:8080/dataExport/api/dictionary/element/341' type='application/vnd.bard.cap+xml;type=element' />
-    </element>
-  </elements>
-  <elementHierarchies>
-    <elementHierarchy>
-      <childElement childElement='concentration'>
-        <link rel='edit' href='http://localhost:8080/dataExport/api/dictionary/element/366' type='application/vnd.bard.cap+xml;type=element' />
-      </childElement>
-      <parentElement parentElement='IC50'>
-        <link rel='edit' href='http://localhost:8080/dataExport/api/dictionary/element/341' type='application/vnd.bard.cap+xml;type=element' />
-      </parentElement>
-      <relationshipType>derives from</relationshipType>
-    </elementHierarchy>
-  </elementHierarchies>
-  <resultTypes>
-    <resultType resultTypeElement='IC50' baseUnit='uM' resultTypeStatus='Published'>
-      <resultTypeName>IC50</resultTypeName>
-      <link rel='related' href='http://localhost:8080/dataExport/api/dictionary/element/341' type='application/vnd.bard.cap+xml;type=element' />
-    </resultType>
-  </resultTypes>
-  <stages>
-    <stage stageElement='IC50'>
-      <stageName>construct variant assay</stageName>
-      <description>Description</description>
-      <link rel='related' href='http://localhost:8080/dataExport/api/dictionary/element/341' type='application/vnd.bard.cap+xml;type=element' />
-    </stage>
-  </stages>
-  <descriptors>
-    <descriptor descriptorElement='uM' descriptor='assay'>
-      <elementStatus>Published</elementStatus>
-      <label>assay phase</label>
-      <description>It refers to whether all the assay components are in solution or some are in solid phase, which determines their ability to scatter light.</description>
-      <link rel='edit' href='http://localhost:8080/dataExport/api/dictionary/element/386' type='application/vnd.bard.cap+xml;type=element' />
-    </descriptor>
-    <descriptor descriptorElement='concentration' descriptor='biology'>
-      <elementStatus>Published</elementStatus>
-      <label>macromolecule description</label>
-      <description>A long name for a gene or protein from a trusted international source (e.g., Entrez, UniProt).</description>
-      <link rel='edit' href='http://localhost:8080/dataExport/api/dictionary/element/366' type='application/vnd.bard.cap+xml;type=element' />
-    </descriptor>
-    <descriptor descriptorElement='unit of measurement' descriptor='instance'>
-      <elementStatus>Published</elementStatus>
-      <label>macromolecule description</label>
-      <description>A long name for a gene or protein from a trusted international source (e.g., Entrez, UniProt).</description>
-      <link rel='edit' href='http://localhost:8080/dataExport/api/dictionary/element/123' type='application/vnd.bard.cap+xml;type=element' />
-    </descriptor>
-  </descriptors>
-  <laboratories>
-    <laboratory laboratoryElement='IC50'>
-      <laboratoryName>LABORATORY</laboratoryName>
-      <description>Singular root to ensure tree viewers work</description>
-    </laboratory>
-  </laboratories>
-  <units>
-    <unit unitElement='unit of measurement' unit='UNIT'>
-      <description>Singular root to ensure tree viewers work</description>
-    </unit>
-    <unit unitElement='concentration' unit='concentration' />
-    <unit unitElement='uM' parentUnit='concentration' unit='uM' />
-  </units>
-  <unitConversions>
-    <unitConversion fromUnit='uM' toUnit='concentration' multiplier='2.5' offset='2.0'>
-      <formula>2*2</formula>
-    </unitConversion>
-  </unitConversions>
-</dictionary>
-'''
-    static String LABS = '''
-<laboratories>
-  <laboratory laboratoryElement='IC50'>
-    <laboratoryName>LABORATORY</laboratoryName>
-    <description>Singular root to ensure tree viewers work</description>
-  </laboratory>
-</laboratories>
-  '''
-    static String UNIT_CONVERSIONS = '''
-<unitConversions>
-  <unitConversion fromUnit='uM' toUnit='concentration' multiplier='2.5' offset='2.0'>
-    <formula>2*2</formula>
-  </unitConversion>
-</unitConversions>
-'''
-
-
-    static String UNITS = '''
-   <units>
-  <unit unitElement='unit of measurement' unit='UNIT'>
-    <description>Singular root to ensure tree viewers work</description>
-  </unit>
-  <unit unitElement='concentration' unit='concentration' />
-  <unit unitElement='uM' parentUnit='concentration' unit='uM' />
-</units>
+        <dictionary>
+          <elements>
+            <element elementId='1' readyForExtraction='Pending' elementStatus='Pending'>
+              <label>IC50</label>
+              <link rel='edit' href='http://localhost:8080/dataExport/api/dictionary/element/1' type='application/vnd.bard.cap+xml;type=element' />
+            </element>
+            <element elementId='2' readyForExtraction='Pending' elementStatus='Pending'>
+              <label>log IC50</label>
+              <link rel='edit' href='http://localhost:8080/dataExport/api/dictionary/element/2' type='application/vnd.bard.cap+xml;type=element' />
+            </element>
+            <element elementId='3' readyForExtraction='Pending' elementStatus='Pending'>
+              <label>label1</label>
+              <link rel='edit' href='http://localhost:8080/dataExport/api/dictionary/element/3' type='application/vnd.bard.cap+xml;type=element' />
+            </element>
+            <element elementId='4' readyForExtraction='Pending' elementStatus='Pending'>
+              <label>label2</label>
+              <link rel='edit' href='http://localhost:8080/dataExport/api/dictionary/element/4' type='application/vnd.bard.cap+xml;type=element' />
+            </element>
+            <element elementId='5' readyForExtraction='Pending' elementStatus='Pending'>
+              <label>label3</label>
+              <link rel='edit' href='http://localhost:8080/dataExport/api/dictionary/element/5' type='application/vnd.bard.cap+xml;type=element' />
+            </element>
+            <element elementId='6' readyForExtraction='Pending' elementStatus='Pending'>
+              <label>label4</label>
+              <link rel='edit' href='http://localhost:8080/dataExport/api/dictionary/element/6' type='application/vnd.bard.cap+xml;type=element' />
+            </element>
+            <element elementId='7' readyForExtraction='Pending' elementStatus='Pending'>
+              <label>label5</label>
+              <link rel='edit' href='http://localhost:8080/dataExport/api/dictionary/element/7' type='application/vnd.bard.cap+xml;type=element' />
+            </element>
+            <element elementId='8' readyForExtraction='Pending' elementStatus='Pending'>
+              <label>label6</label>
+              <link rel='edit' href='http://localhost:8080/dataExport/api/dictionary/element/8' type='application/vnd.bard.cap+xml;type=element' />
+            </element>
+            <element elementId='9' readyForExtraction='Pending' elementStatus='Pending'>
+              <label>label7</label>
+              <link rel='edit' href='http://localhost:8080/dataExport/api/dictionary/element/9' type='application/vnd.bard.cap+xml;type=element' />
+            </element>
+            <element elementId='10' readyForExtraction='Pending' elementStatus='Pending'>
+              <label>micromolar</label>
+              <link rel='edit' href='http://localhost:8080/dataExport/api/dictionary/element/10' type='application/vnd.bard.cap+xml;type=element' />
+            </element>
+            <element elementId='11' readyForExtraction='Pending' elementStatus='Pending'>
+              <label>millimolar</label>
+              <link rel='edit' href='http://localhost:8080/dataExport/api/dictionary/element/11' type='application/vnd.bard.cap+xml;type=element' />
+            </element>
+          </elements>
+          <elementHierarchies>
+            <elementHierarchy>
+              <childElement childElement='log IC50'>
+                <link rel='edit' href='http://localhost:8080/dataExport/api/dictionary/element/2' type='application/vnd.bard.cap+xml;type=element' />
+              </childElement>
+              <parentElement parentElement='IC50'>
+                <link rel='edit' href='http://localhost:8080/dataExport/api/dictionary/element/1' type='application/vnd.bard.cap+xml;type=element' />
+              </parentElement>
+              <relationshipType>subClassOf</relationshipType>
+            </elementHierarchy>
+          </elementHierarchies>
+          <resultTypes>
+            <resultType resultTypeElement='label1' resultTypeStatus='Pending'>
+              <resultTypeName>label1</resultTypeName>
+              <link rel='related' href='http://localhost:8080/dataExport/api/dictionary/element/3' type='application/vnd.bard.cap+xml;type=element' />
+            </resultType>
+          </resultTypes>
+          <stages>
+            <stage stageElement='label2'>
+              <stageName>label</stageName>
+              <link rel='related' href='http://localhost:8080/dataExport/api/dictionary/element/4' type='application/vnd.bard.cap+xml;type=element' />
+            </stage>
+          </stages>
+          <descriptors>
+            <descriptor descriptorElement='label3' descriptor='label'>
+              <elementStatus>Pending</elementStatus>
+              <label>label3</label>
+              <link rel='edit' href='http://localhost:8080/dataExport/api/dictionary/element/5' type='application/vnd.bard.cap+xml;type=element' />
+            </descriptor>
+            <descriptor descriptorElement='label4' descriptor='label'>
+              <elementStatus>Pending</elementStatus>
+              <label>label4</label>
+              <link rel='edit' href='http://localhost:8080/dataExport/api/dictionary/element/6' type='application/vnd.bard.cap+xml;type=element' />
+            </descriptor>
+            <descriptor descriptorElement='label5' descriptor='label'>
+              <elementStatus>Pending</elementStatus>
+              <label>label5</label>
+              <link rel='edit' href='http://localhost:8080/dataExport/api/dictionary/element/7' type='application/vnd.bard.cap+xml;type=element' />
+            </descriptor>
+          </descriptors>
+          <laboratories>
+            <laboratory laboratoryElement='label6'>
+              <laboratoryName>label</laboratoryName>
+              <description />
+            </laboratory>
+          </laboratories>
+          <units>
+            <unit unitElement='label7' />
+          </units>
+          <unitConversions>
+            <unitConversion fromUnit='micromolar' toUnit='millimolar' multiplier='1000.0' />
+          </unitConversions>
+        </dictionary>
     '''
 
+    static String LABS = '''
+        <laboratories>
+          <laboratory laboratoryElement='label1'>
+            <laboratoryName>label</laboratoryName>
+            <description />
+          </laboratory>
+          <laboratory laboratoryElement='label2'>
+            <laboratoryName>label</laboratoryName>
+            <description />
+          </laboratory>
+        </laboratories>'''
 
-
+    static String UNIT_CONVERSIONS = '''
+        <unitConversions>
+          <unitConversion fromUnit='micromolar' toUnit='millimolar' multiplier='1000.0' offset='5.0'>
+            <formula>2*2</formula>
+          </unitConversion>
+        </unitConversions> '''
+    static String UNITS = '''
+        <units>
+            <unit unitElement='concentration' />
+            <unit unitElement='uM' parentUnit='concentration' />
+        </units>'''
 
     static String RESULT_TYPES = '''
 <resultTypes>
   <resultType resultTypeElement='IC50' baseUnit='uM' resultTypeStatus='Published'>
     <resultTypeName>IC50</resultTypeName>
-    <link rel='related' href='http://localhost:8080/dataExport/api/dictionary/element/341' type='application/vnd.bard.cap+xml;type=element' />
+    <link rel='related' href='http://localhost:8080/dataExport/api/dictionary/element/1' type='application/vnd.bard.cap+xml;type=element' />
   </resultType>
 </resultTypes>
 '''
@@ -802,55 +798,37 @@ class XmlTestSamples {
 
 
     static String ELEMENT_HIERARCHIES = '''
-<elementHierarchies>
-  <elementHierarchy>
-    <childElement childElement='concentration'>
-      <link rel='edit' href='http://localhost:8080/dataExport/api/dictionary/element/366' type='application/vnd.bard.cap+xml;type=element' />
-    </childElement>
-    <parentElement parentElement='IC50'>
-      <link rel='edit' href='http://localhost:8080/dataExport/api/dictionary/element/341' type='application/vnd.bard.cap+xml;type=element' />
-    </parentElement>
-    <relationshipType>derives from</relationshipType>
-  </elementHierarchy>
-</elementHierarchies>
-'''
-
-    static String INSTANCE_DESCRIPTOR_UNIT = '''
-<descriptor abbreviation='abb' externalUrl='http://broad.org' unit='cm' descriptor='instance'>
-  <elementStatus>status</elementStatus>
-  <label>label</label>
-  <description>desc</description>
-  <synonyms>syn</synonyms>
-</descriptor>
-'''
-
-    static String BIOLOGY_DESCRIPTOR_UNIT = '''
-<descriptor abbreviation='abb' externalUrl='http://broad.org' unit='cm' descriptor='biology'>
-  <elementStatus>status</elementStatus>
-  <label>label</label>
-  <description>desc</description>
-  <synonyms>syn</synonyms>
-</descriptor>
-'''
+        <elementHierarchies>
+          <elementHierarchy>
+            <childElement childElement='log IC50'>
+              <link rel='edit' href='http://localhost:8080/dataExport/api/dictionary/element/2' type='application/vnd.bard.cap+xml;type=element' />
+            </childElement>
+            <parentElement parentElement='IC50'>
+              <link rel='edit' href='http://localhost:8080/dataExport/api/dictionary/element/1' type='application/vnd.bard.cap+xml;type=element' />
+            </parentElement>
+            <relationshipType>subClassOf</relationshipType>
+          </elementHierarchy>
+        </elementHierarchies> '''
 
 
     static String ASSAY_DESCRIPTOR_UNIT = '''
-<descriptor abbreviation='abb' externalUrl='http://broad.org' unit='cm' descriptor='assay'>
-  <elementStatus>status</elementStatus>
-  <label>label</label>
-  <description>desc</description>
-  <synonyms>syn</synonyms>
-</descriptor>
-'''
+        <descriptor descriptorElement='assay' abbreviation='abb' externalUrl='http://broad.org' unit='cm' descriptor='assay'>
+          <elementStatus>Pending</elementStatus>
+          <label>assay</label>
+          <description>desc</description>
+          <synonyms>syn</synonyms>
+          <link rel='edit' href='null' type='xml' />
+        </descriptor>
+    '''
 
     static String RESULT_TYPE_NO_PARENT = '''
-<resultType resultTypeElement='label' abbreviation='abb' resultTypeStatus='status'>
-  <resultTypeName>resultTypeName</resultTypeName>
-  <description>desc</description>
-  <synonyms>syn</synonyms>
-  <link rel='related' href='null' type='xml' />
-</resultType>
-'''
+        <resultType resultTypeElement='label' abbreviation='abb' resultTypeStatus='status'>
+          <resultTypeName>resultTypeName</resultTypeName>
+          <description>desc</description>
+          <synonyms>syn</synonyms>
+          <link rel='related' href='null' type='xml' />
+        </resultType>
+     '''
 
     static String RESULT_TYPE_FULL = '''
 <resultType resultTypeElement='label' parentResultType='resultTypeName' abbreviation='abb' baseUnit='cm' resultTypeStatus='status'>
@@ -909,26 +887,41 @@ class XmlTestSamples {
     '''
 
     static String STAGE_NO_PARENT = '''
-<stage stageElement='elementLabel'>
-  <stageName>Stage</stageName>
-  <description>desc</description>
-    <link rel='related' href='null' type='xml' />
-</stage>
-'''
+        <stage stageElement='elementLabel'>
+          <stageName>Stage</stageName>
+          <description>desc</description>
+            <link rel='related' href='null' type='xml' />
+        </stage>
+     '''
+
+    static String SINGLE_DESCRIPTOR_ELEMENTS = '''
+        <elementStatus>Pending</elementStatus>
+        <label>assay</label>
+        <link rel='edit' href='null' type='xml' />
+    '''.stripIndent().trim()
+
+    static String SINGLE_DESCRIPTOR_ALL_ELEMENTS = '''
+        <elementStatus>Pending</elementStatus>
+        <label>assay</label>
+        <description>des</description>
+        <synonyms>syn</synonyms>
+        <link rel='edit' href='null' type='xml' />
+     '''.stripIndent().trim()
 
     static String SINGLE_UNIT = '''
-<unit unitElement='label' unit='cm'>
-  <description>Centimetres</description>
-</unit>
-'''
+        <unit unitElement='cm' parentUnit='length unit'>
+          <description>Centimetres</description>
+        </unit>
+    '''
     static String SINGLE_UNIT_NO_DESCRIPTION = '''
-<unit unitElement='label' unit='cm'/>
-'''
+        <unit unitElement='cm'/>
+    '''
     static String SINGLE_UNIT_NO_PARENT = '''
-<unit unitElement='label' unit='cm'>
-  <description>Centimetres</description>
-</unit>
-'''
+        <unit unitElement='cm'>
+          <description>Centimetres</description>
+        </unit>
+    '''
+
     static String LABORATORY_SAMPLE_FULL = '''
 <laboratory laboratoryElement='Lab Element' parentLaboratory='Parent'>
   <laboratoryName>labName</laboratoryName>

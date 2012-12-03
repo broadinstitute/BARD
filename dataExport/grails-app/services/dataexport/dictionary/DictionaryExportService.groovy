@@ -11,6 +11,7 @@ import groovy.xml.MarkupBuilder
 
 import javax.sql.DataSource
 import bard.db.enums.ReadyForExtraction
+import bard.db.dictionary.ResultTypeTree
 
 /**
  * Top Level service for handling the
@@ -84,17 +85,11 @@ class DictionaryExportService {
         String errorMessage
 
         final Sql sql = new Sql(dataSource)
-        def resultTypeRow = sql.firstRow("SELECT * FROM RESULT_TYPE_TREE WHERE RESULT_TYPE_ID=?", [elementId])
+
+        def resultTypeRow = sql.firstRow("SELECT * FROM RESULT_TYPE_TREE WHERE RESULT_TYPE_ID=? ORDER BY NODE_ID", [elementId])
         if (resultTypeRow) {
-            Long parentNodeId = resultTypeRow.PARENT_NODE_ID
-            String parentResultTypeName = null
-            if (parentNodeId) {
-                def parentRow = sql.firstRow("SELECT RESULT_TYPE_NAME FROM RESULT_TYPE_TREE WHERE NODE_ID=?", [parentNodeId])
-                parentResultTypeName = parentRow.RESULT_TYPE_NAME
-            }
-            ResultTypeElement resultTypeElement = ResultTypeElement.get(resultTypeRow.RESULT_TYPE_ID)
-            ResultType resultType = new ResultType(resultTypeRow, parentResultTypeName, resultTypeElement?.label)
-            dictionaryExportHelperService.generateResultType(xml, resultType)
+            ResultTypeTree resultTypeTree = ResultTypeTree.read(resultTypeRow.NODE_ID)
+            dictionaryExportHelperService.generateResultType(xml, resultTypeTree)
             return 0
         }
         errorMessage = "Result Type with element id ${elementId} does not exists"
@@ -124,32 +119,4 @@ class DictionaryExportService {
     public void generateDictionary(final MarkupBuilder xml) {
         dictionaryExportHelperService.generateDictionary(xml)
     }
-}
-public class ResultType {
-    String resultTypeName
-    String description
-    String synonyms
-    Long resultTypeId
-    String abbreviation
-    String baseUnit
-    String resultTypeStatus
-    String parentResultTypeName
-    String resultTypeLabel
-
-    public ResultType() {
-
-    }
-
-    public ResultType(row, final String parentResultTypeName, final String resultTypeLabel) {
-        this.parentResultTypeName = parentResultTypeName
-        this.resultTypeLabel = resultTypeLabel
-        this.resultTypeId = row.RESULT_TYPE_ID
-        this.resultTypeStatus = row.RESULT_TYPE_STATUS
-        this.resultTypeName = row.RESULT_TYPE_NAME
-        this.description = row.DESCRIPTION
-        this.abbreviation = row.ABBREVIATION
-        this.synonyms = row.SYNONYMS
-        this.baseUnit = row.BASE_UNIT
-    }
-
 }
