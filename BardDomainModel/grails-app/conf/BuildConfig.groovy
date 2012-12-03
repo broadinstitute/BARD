@@ -37,7 +37,10 @@ grails.project.dependency.resolution = {
         compile(":database-migration:1.1") { export = true }
         compile(":build-test-data:2.0.3") { export =  true }
         compile(":console:1.2") { export = false }
-        compile(":fixtures:1.1") { export = true }
+        compile(":fixtures:1.1") { 
+            export = true
+            excludes('svn')
+        }
         compile(":clover:3.1.6") { export = false }
     }
 }
