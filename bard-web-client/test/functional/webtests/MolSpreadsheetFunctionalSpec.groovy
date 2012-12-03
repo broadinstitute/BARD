@@ -22,7 +22,7 @@ class MolSpreadsheetFunctionalSpec extends BardFunctionalSpec {
         searchBox << "1617"
         searchButton.click()
         at ResultsPage
-        waitFor(10, 0.5) { assaysTab.text().contains("(1)") }   // Wait for assay definitions to populate the tab
+        waitFor(20, 0.5) { assaysTab.text().contains("(1)") }   // Wait for assay definitions to populate the tab
         addAssayToCart("1617")
 
         when: "The user chooses to visualize the experimental results from that assay definition in the Molecular Spreadsheet"

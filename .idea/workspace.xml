@@ -2,18 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="1922f8e1-9b1f-4a78-b840-b1857f23d256" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/bard-web-client/grails-app/domain/molspreadsheet/MolSpreadSheetCell.groovy" afterPath="$PROJECT_DIR$/bard-web-client/grails-app/domain/molspreadsheet/MolSpreadSheetCell.groovy" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/bard-web-client/grails-app/domain/molspreadsheet/MolSpreadSheetData.groovy" afterPath="$PROJECT_DIR$/bard-web-client/grails-app/domain/molspreadsheet/MolSpreadSheetData.groovy" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/bard-web-client/grails-app/services/bardqueryapi/QueryService.groovy" afterPath="$PROJECT_DIR$/bard-web-client/grails-app/services/bardqueryapi/QueryService.groovy" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/bard-web-client/src/groovy/molspreadsheet/SpreadSheetActivity.groovy" afterPath="$PROJECT_DIR$/bard-web-client/src/groovy/molspreadsheet/SpreadSheetActivity.groovy" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/bard-web-client/test/unit/bardqueryapi/QueryServiceHelperUnitSpec.groovy" afterPath="$PROJECT_DIR$/bard-web-client/test/unit/bardqueryapi/QueryServiceHelperUnitSpec.groovy" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/bard-web-client/test/unit/bardqueryapi/QueryServiceUnitSpec.groovy" afterPath="$PROJECT_DIR$/bard-web-client/test/unit/bardqueryapi/QueryServiceUnitSpec.groovy" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/bard-web-client/test/unit/bardqueryapi/SpreadSheetActivityUnitSpec.groovy" afterPath="$PROJECT_DIR$/bard-web-client/test/unit/bardqueryapi/SpreadSheetActivityUnitSpec.groovy" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/bard-web-client/test/unit/molspreadsheet/MolSpreadSheetCellUnitSpec.groovy" afterPath="$PROJECT_DIR$/bard-web-client/test/unit/molspreadsheet/MolSpreadSheetCellUnitSpec.groovy" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/bard-web-client/test/unit/molspreadsheet/MolSpreadSheetDataBuilderUnitSpec.groovy" afterPath="$PROJECT_DIR$/bard-web-client/test/unit/molspreadsheet/MolSpreadSheetDataBuilderUnitSpec.groovy" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/bard-web-client/test/unit/molspreadsheet/MolSpreadSheetDataUnitSpec.groovy" afterPath="$PROJECT_DIR$/bard-web-client/test/unit/molspreadsheet/MolSpreadSheetDataUnitSpec.groovy" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/bard-web-client/test/unit/querycart/QueryCartControllerUnitSpec.groovy" afterPath="$PROJECT_DIR$/bard-web-client/test/unit/querycart/QueryCartControllerUnitSpec.groovy" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/bard-web-client/test/functional/webtests/MolSpreadsheetFunctionalSpec.groovy" afterPath="$PROJECT_DIR$/bard-web-client/test/functional/webtests/MolSpreadsheetFunctionalSpec.groovy" />
     </list>
     <ignored path="bard-web-query.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -459,10 +448,19 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="MolecularSpreadSheetServiceUnitSpec.groovy" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="MolecularSpreadSheetServiceUnitSpec.groovy" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/bard-web-client/test/unit/molspreadsheet/MolecularSpreadSheetServiceUnitSpec.groovy">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="59" column="4" selection-start="2268" selection-end="2268" vertical-scroll-proportion="0.2943723">
+            <state line="69" column="27" selection-start="2647" selection-end="2647" vertical-scroll-proportion="-12.24">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="MolSpreadsheetFunctionalSpec.groovy" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/bard-web-client/test/functional/webtests/MolSpreadsheetFunctionalSpec.groovy">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="24" column="17" selection-start="697" selection-end="697" vertical-scroll-proportion="0.26605505">
               <folding />
             </state>
           </provider>
@@ -501,7 +499,6 @@
   <component name="IdeDocumentHistory">
     <option name="changedFiles">
       <list>
-        <option value="$PROJECT_DIR$/bard-web-client/grails-app/views/bardWebInterface/_compounds.gsp" />
         <option value="$PROJECT_DIR$/bard-web-client/grails-app/views/bardWebInterface/_experimentResult.gsp" />
         <option value="$PROJECT_DIR$/bard-web-client/test/unit/bardqueryapi/QueryServiceUnitSpec.groovy" />
         <option value="$PROJECT_DIR$/bard-web-client/grails-app/services/bardqueryapi/QueryService.groovy" />
@@ -517,6 +514,7 @@
         <option value="$PROJECT_DIR$/bard-web-client/test/unit/bardqueryapi/SpreadSheetActivityUnitSpec.groovy" />
         <option value="$PROJECT_DIR$/bard-web-client/test/unit/molspreadsheet/MolSpreadSheetDataBuilderUnitSpec.groovy" />
         <option value="$PROJECT_DIR$/bard-web-client/test/unit/molspreadsheet/MolecularSpreadSheetServiceUnitSpec.groovy" />
+        <option value="$PROJECT_DIR$/bard-web-client/test/functional/webtests/MolSpreadsheetFunctionalSpec.groovy" />
       </list>
     </option>
   </component>
@@ -756,21 +754,7 @@
       <recent name="bard.core.rest.spring" />
     </key>
   </component>
-  <component name="RunManager" selected="Grails.test readOutToHillCurveValue(final List&lt;String&gt; resultTypeNames, final Readout readout)()">
-    <configuration default="false" name="test assaysToAdapters - FreeTextAssays #label()" type="GrailsRunConfigurationType" factoryName="Grails" temporary="true">
-      <module name="Bard-web-client" />
-      <setting name="vmparams" value="" />
-      <setting name="cmdLine" value="test-app unit: bardqueryapi.QueryServiceHelperUnitSpec.test assaysToAdapters - FreeTextAssays #label -echoOut" />
-      <setting name="depsClasspath" value="true" />
-      <setting name="passParentEnv" value="true" />
-      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
-      <setting name="launchBrowser" value="true" />
-      <RunnerSettings RunnerId="Run" />
-      <ConfigurationWrapper RunnerId="Run" />
-      <method>
-        <option name="Make" enabled="false" />
-      </method>
-    </configuration>
+  <component name="RunManager" selected="Grails.MolSpreadsheetFunctionalSpec">
     <configuration default="false" name="Test that we can build a few  molecular spreadsheet cells()" type="GrailsRunConfigurationType" factoryName="Grails" temporary="true">
       <module name="Bard-web-client" />
       <setting name="vmparams" value="" />
@@ -821,6 +805,20 @@
       <module name="Bard-web-client" />
       <setting name="vmparams" value="" />
       <setting name="cmdLine" value="test-app unit: bardqueryapi.SpreadSheetActivityUnitSpec.test readOutToHillCurveValue(final List&lt;String&gt; resultTypeNames, final Readout readout) -echoOut" />
+      <setting name="depsClasspath" value="true" />
+      <setting name="passParentEnv" value="true" />
+      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
+      <setting name="launchBrowser" value="true" />
+      <RunnerSettings RunnerId="Run" />
+      <ConfigurationWrapper RunnerId="Run" />
+      <method>
+        <option name="Make" enabled="false" />
+      </method>
+    </configuration>
+    <configuration default="false" name="MolSpreadsheetFunctionalSpec" type="GrailsRunConfigurationType" factoryName="Grails" temporary="true">
+      <module name="Bard-web-client" />
+      <setting name="vmparams" value="" />
+      <setting name="cmdLine" value="test-app functional: webtests.MolSpreadsheetFunctionalSpec -echoOut" />
       <setting name="depsClasspath" value="true" />
       <setting name="passParentEnv" value="true" />
       <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
@@ -1199,12 +1197,12 @@
       <item index="6" class="java.lang.String" itemvalue="Grails.testApplyFiltersWithAssayService()" />
       <item index="7" class="java.lang.String" itemvalue="Grails.Grails tests:unit" />
       <item index="8" class="java.lang.String" itemvalue="Grails.MolecularSpreadSheetServiceUnitSpec" />
-      <item index="9" class="java.lang.String" itemvalue="Grails.test assaysToAdapters - FreeTextAssays #label()" />
-      <item index="10" class="java.lang.String" itemvalue="Grails.Test that we can build a Basic molecular spreadsheet cell with image type()" />
-      <item index="11" class="java.lang.String" itemvalue="Grails.Test that we can build a few  molecular spreadsheet cells()" />
-      <item index="12" class="java.lang.String" itemvalue="Grails.MolSpreadSheetCellUnitSpec" />
-      <item index="13" class="java.lang.String" itemvalue="Grails.test successful addItem for #label()" />
-      <item index="14" class="java.lang.String" itemvalue="Grails.test readOutToHillCurveValue(final List&lt;String&gt; resultTypeNames, final Readout readout)()" />
+      <item index="9" class="java.lang.String" itemvalue="Grails.Test that we can build a Basic molecular spreadsheet cell with image type()" />
+      <item index="10" class="java.lang.String" itemvalue="Grails.Test that we can build a few  molecular spreadsheet cells()" />
+      <item index="11" class="java.lang.String" itemvalue="Grails.MolSpreadSheetCellUnitSpec" />
+      <item index="12" class="java.lang.String" itemvalue="Grails.test successful addItem for #label()" />
+      <item index="13" class="java.lang.String" itemvalue="Grails.test readOutToHillCurveValue(final List&lt;String&gt; resultTypeNames, final Readout readout)()" />
+      <item index="14" class="java.lang.String" itemvalue="Grails.MolSpreadsheetFunctionalSpec" />
     </list>
     <configuration name="&lt;template&gt;" type="WebApp" default="true" selected="false">
       <Host>localhost</Host>
@@ -1248,12 +1246,12 @@
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.34497207" sideWeight="0.26640928" order="8" side_tool="true" content_ui="tabs" />
       <window_info id="IDEtalk Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="IDEtalk" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.2849162" sideWeight="0.5" order="12" side_tool="false" content_ui="tabs" />
+      <window_info id="Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.2849162" sideWeight="0.5" order="12" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="Cloverage" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.23037323" sideWeight="0.7150838" order="0" side_tool="true" content_ui="combo" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3282123" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.23037323" sideWeight="0.67178774" order="0" side_tool="true" content_ui="combo" />
+      <window_info id="Run" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.3282123" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Test Runs" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Data Sources" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3298969" sideWeight="0.59217876" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="JetGradle" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
@@ -1340,13 +1338,6 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/bard-web-client/grails-app/controllers/bardqueryapi/BardWebInterfaceController.groovy">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="25" column="6" selection-start="684" selection-end="684" vertical-scroll-proportion="-7.652174">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/bard-web-client/test/unit/molspreadsheet/MolSpreadSheetDataUnitSpec.groovy">
       <provider selected="true" editor-type-id="text-editor">
         <state line="36" column="21" selection-start="890" selection-end="890" vertical-scroll-proportion="-0.35416666">
@@ -1461,7 +1452,14 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/bard-web-client/test/unit/molspreadsheet/MolecularSpreadSheetServiceUnitSpec.groovy">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="59" column="4" selection-start="2268" selection-end="2268" vertical-scroll-proportion="0.2943723">
+        <state line="69" column="27" selection-start="2647" selection-end="2647" vertical-scroll-proportion="-12.24">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/bard-web-client/test/functional/webtests/MolSpreadsheetFunctionalSpec.groovy">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="24" column="17" selection-start="697" selection-end="697" vertical-scroll-proportion="0.26605505">
           <folding />
         </state>
       </provider>
