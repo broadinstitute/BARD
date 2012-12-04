@@ -8,7 +8,6 @@ import bard.core.rest.spring.experiment.ExperimentData
 import bard.core.rest.spring.experiment.ExperimentSearch
 import bard.core.rest.spring.experiment.ExperimentSearchResult
 import bard.core.rest.spring.experiment.ExperimentShow
-import bard.core.rest.spring.project.ExpandedProjectResult
 import bard.core.rest.spring.project.Project
 import bard.core.rest.spring.project.ProjectResult
 import grails.plugin.spock.IntegrationSpec
@@ -128,7 +127,7 @@ class RestCombinedServiceIntegrationSpec extends IntegrationSpec {
 
         final List<Long> cartProjectIdList = new ArrayList<Long>()
         cartProjectIdList.add(new Long(274))
-        ExpandedProjectResult projectResult = this.projectRestService.searchProjectsByIds(cartProjectIdList)
+        ProjectResult projectResult = this.projectRestService.searchProjectsByIds(cartProjectIdList)
         final List<Project> projects = projectResult.projects
         final List<ExperimentSearch> allExperiments = []
         for (final Project project : projects) {

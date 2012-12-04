@@ -9,8 +9,8 @@ import bard.core.rest.spring.assays.Assay
 import bard.core.rest.spring.assays.FreeTextAssayResult
 import bard.core.rest.spring.compounds.Compound
 import bard.core.rest.spring.compounds.CompoundResult
-import bard.core.rest.spring.project.ExpandedProjectResult
 import bard.core.rest.spring.project.Project
+import bard.core.rest.spring.project.ProjectResult
 import org.apache.commons.lang.time.StopWatch
 
 import java.util.regex.Matcher
@@ -152,9 +152,9 @@ class QueryHelperService {
         return assayAdapters
     }
 
-    public List<ProjectAdapter> projectsToAdapters(final ExpandedProjectResult expandedProjectResult) {
+    public List<ProjectAdapter> projectsToAdapters(final ProjectResult projectResult) {
         final List<ProjectAdapter> projectAdapters = []
-        for (Project project : expandedProjectResult.projects) {
+        for (Project project : projectResult.projects) {
             projectAdapters.add(new ProjectAdapter(project))
         }
         return projectAdapters

@@ -45,13 +45,13 @@ public class AbstractAssay extends JsonUtil {
     @JsonProperty("protocol")
     private String protocol;
 
-    @Override
+
     @JsonProperty("assay_id")
     public long getAssayId() {
         return this.assayId;
     }
 
-    @Override
+
     @JsonProperty("assay_id")
     public void setAssayId(long assayId) {
         this.assayId = assayId;

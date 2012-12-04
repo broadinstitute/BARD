@@ -8,7 +8,7 @@ import bard.core.rest.spring.assays.Assay
 import bard.core.rest.spring.assays.FreeTextAssayResult
 import bard.core.rest.spring.compounds.Compound
 import bard.core.rest.spring.compounds.CompoundResult
-import bard.core.rest.spring.project.ExpandedProjectResult
+import bard.core.rest.spring.project.ProjectResult
 import bard.core.rest.spring.project.Project
 import grails.test.mixin.TestFor
 import spock.lang.Shared
@@ -225,10 +225,10 @@ class QueryServiceHelperUnitSpec extends Specification {
 
     void "test projectsToAdapters #label"() {
         given:
-        final ExpandedProjectResult expandedProjectResult = new ExpandedProjectResult()
-        expandedProjectResult.projects = projects
+        final ProjectResult projectResult = new ProjectResult()
+        projectResult.projects = projects
         when:
-        final List<ProjectAdapter> foundProjectsAdapters = service.projectsToAdapters(expandedProjectResult)
+        final List<ProjectAdapter> foundProjectsAdapters = service.projectsToAdapters(projectResult)
 
         then:
         assert foundProjectsAdapters.size() == expectedProjectsAdapters.size()

@@ -37,7 +37,7 @@ class AssayRestService extends AbstractRestService {
     /**
      *
      * @param list of pids
-     * @return {@link bard.core.rest.spring.project.ExpandedProjectResult}
+     * @return {@link bard.core.rest.spring.assays.ExpandedAssayResult}
      */
     public ExpandedAssayResult searchAssaysByIds(final List<Long> adids) {
         if (adids) {

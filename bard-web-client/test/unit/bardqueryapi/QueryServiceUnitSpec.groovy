@@ -16,8 +16,8 @@ import bard.core.rest.spring.compounds.Compound
 import bard.core.rest.spring.compounds.CompoundResult
 import bard.core.rest.spring.compounds.PromiscuityScore
 import bard.core.rest.spring.experiment.ExperimentSearch
-import bard.core.rest.spring.project.ExpandedProjectResult
 import bard.core.rest.spring.project.Project
+import bard.core.rest.spring.project.ProjectResult
 import bard.core.rest.spring.util.StructureSearchParams
 import grails.test.mixin.TestFor
 import org.apache.commons.lang.time.StopWatch
@@ -40,7 +40,7 @@ class QueryServiceUnitSpec extends Specification {
     @Shared CompoundResult compoundResult = new CompoundResult()
     @Shared ExpandedAssay expandedAssay1 = new ExpandedAssay()
     @Shared ExpandedAssay expandedAssay2 = new ExpandedAssay()
-    @Shared ExpandedProjectResult expandedProjectResult = new ExpandedProjectResult()
+    @Shared ProjectResult projectResult = new ProjectResult()
     @Shared Assay assay1 = new Assay(name: "A1")
     @Shared Compound compound1 = new Compound(name: "C1")
     @Shared Compound compound2 = new Compound(name: "C2")
@@ -244,12 +244,12 @@ class QueryServiceUnitSpec extends Specification {
      */
     void "test findProjectsByPIDs #label"() {
         given:
-        expandedProjectResult.projects = project
+        projectResult.projects = project
         when:
         Map responseMap = service.findProjectsByPIDs(projectIds)
         then:
         queryHelperService.projectsToAdapters(_) >> {projectAdapters}
-        expectedNumberOfCalls * projectRestService.searchProjectsByIds(_) >> {expandedProjectResult}
+        expectedNumberOfCalls * projectRestService.searchProjectsByIds(_) >> {projectResult}
         and:
         assert responseMap
         assert responseMap.nHits == expectedNumberOfHits
@@ -426,13 +426,13 @@ class QueryServiceUnitSpec extends Specification {
     void "test Find Projects By Text Search"() {
         given:
         StopWatch sw = Mock(StopWatch)
-        ExpandedProjectResult iter = Mock(ExpandedProjectResult)
+        ProjectResult projectResult = Mock(ProjectResult)
         when:
         Map map = service.findProjectsByTextSearch(searchString, 10, 0, [])
         then:
         _ * queryHelperService.startStopWatch() >> {sw}
         _ * queryHelperService.stopStopWatch(_, _) >> {}
-        _ * projectRestService.findProjectsByFreeTextSearch(_) >> {iter}
+        _ * projectRestService.findProjectsByFreeTextSearch(_) >> {projectResult}
         _ * queryHelperService.stripCustomStringFromSearchString(_) >> {"stuff"}
         _ * queryHelperService.constructSearchParams(_, _, _, _) >> { new SearchParams(searchString)}
         _ * queryHelperService.projectsToAdapters(_) >> {projectAdapter}
@@ -450,13 +450,13 @@ class QueryServiceUnitSpec extends Specification {
     void "test Find Projects By Text Search with defaults"() {
         given:
         StopWatch sw = Mock(StopWatch)
-        ExpandedProjectResult iter = Mock(ExpandedProjectResult)
+        ProjectResult projectResult = Mock(ProjectResult)
         when:
         Map map = service.findProjectsByTextSearch(searchString)
         then:
         _ * queryHelperService.startStopWatch() >> {sw}
         _ * queryHelperService.stopStopWatch(_, _) >> {}
-        _ * projectRestService.findProjectsByFreeTextSearch(_) >> {iter}
+        _ * projectRestService.findProjectsByFreeTextSearch(_) >> {projectResult}
         _ * queryHelperService.stripCustomStringFromSearchString(_) >> {"stuff"}
         _ * queryHelperService.constructSearchParams(_, _, _, _) >> { new SearchParams(searchString)}
         _ * queryHelperService.projectsToAdapters(_) >> {projectAdapter}

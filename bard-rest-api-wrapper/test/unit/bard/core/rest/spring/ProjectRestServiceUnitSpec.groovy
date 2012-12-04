@@ -2,8 +2,8 @@ package bard.core.rest.spring
 
 import bard.core.SearchParams
 import bard.core.interfaces.RestApiConstants
-import bard.core.rest.spring.project.ExpandedProjectResult
 import bard.core.rest.spring.project.Project
+import bard.core.rest.spring.project.ProjectResult
 import grails.test.mixin.TestFor
 import org.springframework.web.client.RestTemplate
 import spock.lang.Specification
@@ -48,10 +48,10 @@ class ProjectRestServiceUnitSpec extends Specification {
 
     void "searchProjectsByIds #label"() {
         when:
-        final ExpandedProjectResult expandedProjectResult = service.searchProjectsByIds(pids)
+        final ProjectResult projectResult = service.searchProjectsByIds(pids)
         then:
         0 * restTemplate.exchange(_, _, _, _)
-        assert expandedProjectResult == null
+        assert projectResult == null
         where:
         label                        | pids
         "With null pids"             | null
@@ -62,11 +62,11 @@ class ProjectRestServiceUnitSpec extends Specification {
         given:
         final SearchParams searchParams = new SearchParams("dna repair")
         when:
-        final ExpandedProjectResult expandedProjectResult =
+        final ProjectResult projectResult =
             service.findProjectsByFreeTextSearch(searchParams)
         then:
-        restTemplate.getForObject(_, _) >> {new ExpandedProjectResult()}
-        assert expandedProjectResult != null
+        restTemplate.getForObject(_, _) >> {new ProjectResult()}
+        assert projectResult != null
     }
 
     void "getSearchResource"() {

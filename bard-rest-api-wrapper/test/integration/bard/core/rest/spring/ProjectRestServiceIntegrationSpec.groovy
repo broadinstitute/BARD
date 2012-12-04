@@ -1,12 +1,11 @@
 package bard.core.rest.spring
 
-
 import bard.core.SearchParams
 import bard.core.SuggestParams
 import bard.core.rest.helper.RESTTestHelper
 import bard.core.rest.spring.compounds.Compound
-import bard.core.rest.spring.project.ExpandedProjectResult
 import bard.core.rest.spring.project.Project
+import bard.core.rest.spring.project.ProjectResult
 import bard.core.rest.spring.util.Facet
 import grails.plugin.spock.IntegrationSpec
 import spock.lang.Unroll
@@ -39,7 +38,7 @@ class ProjectRestServiceIntegrationSpec extends IntegrationSpec {
         //construct Search Params
         final SearchParams searchParams = new SearchParams("dna repair", filters);
         when:
-        ExpandedProjectResult projectSearchResult = this.projectRestService.findProjectsByFreeTextSearch(searchParams);
+        ProjectResult projectSearchResult = this.projectRestService.findProjectsByFreeTextSearch(searchParams);
         then:
         assert projectSearchResult, "ProjectService SearchResults must not be null"
 
@@ -81,7 +80,7 @@ class ProjectRestServiceIntegrationSpec extends IntegrationSpec {
         filters.add(["gomf_term", "zinc ion binding"] as String[])
         searchParams.filters = filters
         when: "We execute the search"
-        final ExpandedProjectResult projectSearchResult = this.projectRestService.findProjectsByFreeTextSearch(searchParams)
+        final ProjectResult projectSearchResult = this.projectRestService.findProjectsByFreeTextSearch(searchParams)
         then: "We expect the following"
         assert projectSearchResult.numberOfHits > 0
         assertProject(projectSearchResult.projects.get(0), true)
@@ -123,7 +122,7 @@ class ProjectRestServiceIntegrationSpec extends IntegrationSpec {
         params.setSkip(skip)
         params.setTop(top);
         when: "We we call search method of the the RestProjectService"
-        final ExpandedProjectResult projectSearchResult = projectRestService.findProjectsByFreeTextSearch(params)
+        final ProjectResult projectSearchResult = projectRestService.findProjectsByFreeTextSearch(params)
         then: "We expected to get back a list of 10 results"
         final List<Project> projects = projectSearchResult.projects
         assert projects != null
@@ -145,7 +144,7 @@ class ProjectRestServiceIntegrationSpec extends IntegrationSpec {
         params.setSkip(0)
         params.setTop(10);
         when: "We call search method of the the RestProjectService"
-        final ExpandedProjectResult projectSearchResult = projectRestService.findProjectsByFreeTextSearch(params)
+        final ProjectResult projectSearchResult = projectRestService.findProjectsByFreeTextSearch(params)
         and: "then we get the first project "
         assert projectSearchResult.projects
         final List<Project> projects = projectSearchResult.projects
@@ -176,9 +175,9 @@ class ProjectRestServiceIntegrationSpec extends IntegrationSpec {
         params2.setTop(10);
 
         when: "We call the search method of RestProjectService with params1"
-        final ExpandedProjectResult searchResults1 = projectRestService.findProjectsByFreeTextSearch(params1)
+        final ProjectResult searchResults1 = projectRestService.findProjectsByFreeTextSearch(params1)
         and: "params2"
-        final ExpandedProjectResult searchResults2 = projectRestService.findProjectsByFreeTextSearch(params2)
+        final ProjectResult searchResults2 = projectRestService.findProjectsByFreeTextSearch(params2)
 
 
         then: "We expect that the list of ids returned for each search, would be different"
@@ -196,7 +195,7 @@ class ProjectRestServiceIntegrationSpec extends IntegrationSpec {
         params.setSkip(0)
         params.setTop(1);
         when: "We we call search method of the the RESTProjectService"
-        final ExpandedProjectResult projectSearchResult = projectRestService.findProjectsByFreeTextSearch(params)
+        final ProjectResult projectSearchResult = projectRestService.findProjectsByFreeTextSearch(params)
         then: "We expected to get back unique facets"
         assertFacetIdsAreUnique(projectSearchResult.facets)
     }
@@ -210,7 +209,7 @@ class ProjectRestServiceIntegrationSpec extends IntegrationSpec {
         when: "We call the getFacets matehod"
         final List<Facet> facets = projectRestService.getFacetsByETag(etag.toString())
         and: "A list of projects"
-        final ExpandedProjectResult projectSearchResult = projectRestService.searchProjectsByIds(pids)
+        final ProjectResult projectSearchResult = projectRestService.searchProjectsByIds(pids)
         then: "We expect to get back a list of facets"
         assert !facets.isEmpty()
         assertFacetIdsAreUnique(facets)
@@ -224,7 +223,7 @@ class ProjectRestServiceIntegrationSpec extends IntegrationSpec {
      */
     void "test Get Projects #label"() {
         when: "We call the get method of the the ProjectRestService"
-        final ExpandedProjectResult projectSearchResult = projectRestService.searchProjectsByIds(pids)
+        final ProjectResult projectSearchResult = projectRestService.searchProjectsByIds(pids)
         then: "We expect to get back a list of 3 results"
         assertProjects(projectSearchResult.projects, false)
         assert projectSearchResult.numberOfHits == pids.size()

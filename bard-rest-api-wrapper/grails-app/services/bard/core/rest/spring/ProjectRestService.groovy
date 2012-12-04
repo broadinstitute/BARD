@@ -4,8 +4,8 @@ import bard.core.SearchParams
 import bard.core.interfaces.RestApiConstants
 import bard.core.rest.spring.assays.Assay
 import bard.core.rest.spring.experiment.ExperimentSearch
-import bard.core.rest.spring.project.ExpandedProjectResult
 import bard.core.rest.spring.project.Project
+import bard.core.rest.spring.project.ProjectResult
 import bard.core.rest.spring.util.MetaData
 import org.springframework.http.HttpEntity
 import org.springframework.http.HttpHeaders
@@ -38,9 +38,9 @@ class ProjectRestService extends AbstractRestService {
     /**
      *
      * @param list of pids
-     * @return {@link bard.core.rest.spring.project.ExpandedProjectResult}
+     * @return {@link bard.core.rest.spring.project.ProjectResult}
      */
-    public ExpandedProjectResult searchProjectsByIds(final List<Long> pids) {
+    public ProjectResult searchProjectsByIds(final List<Long> pids) {
         if (pids) {
             final Map<String, Long> etags = [:]
             MultiValueMap<String, String> map = new LinkedMultiValueMap<String, String>();
@@ -55,7 +55,7 @@ class ProjectRestService extends AbstractRestService {
             headers = exchange.getHeaders()
             this.extractETagsFromResponseHeader(headers, 0, etags)
             int nhits = projects.size();
-            final ExpandedProjectResult projectSearchResult = new ExpandedProjectResult()
+            final ProjectResult projectSearchResult = new ProjectResult()
             projectSearchResult.setProjects(projects)
             projectSearchResult.setEtags(etags)
             final MetaData metaData = new MetaData()
@@ -69,15 +69,15 @@ class ProjectRestService extends AbstractRestService {
     /**
      *
      * @param searchParams
-     * @return {@link ExpandedProjectResult}
+     * @return {@link ProjectResult}
      */
-    public ExpandedProjectResult findProjectsByFreeTextSearch(SearchParams searchParams) {
+    public ProjectResult findProjectsByFreeTextSearch(SearchParams searchParams) {
         final String urlString = this.buildSearchURL(searchParams)
         //We are passing the URI because we have already encoded the string
         //just passing in the string would cause the URI to be encoded twice
         //see http://static.springsource.org/spring/docs/3.0.x/javadoc-api/org/springframework/web/client/RestTemplate.html
         final URL url = new URL(urlString)
-        final ExpandedProjectResult projectSearchResult = this.restTemplate.getForObject(url.toURI(), ExpandedProjectResult.class)
+        final ProjectResult projectSearchResult = this.restTemplate.getForObject(url.toURI(), ProjectResult.class)
         return projectSearchResult
     }
     /**

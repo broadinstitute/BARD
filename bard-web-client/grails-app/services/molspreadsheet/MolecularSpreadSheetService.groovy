@@ -11,8 +11,8 @@ import bard.core.rest.spring.assays.Assay
 import bard.core.rest.spring.assays.ExpandedAssay
 import bard.core.rest.spring.assays.ExpandedAssayResult
 import bard.core.rest.spring.compounds.Compound
-import bard.core.rest.spring.project.ExpandedProjectResult
 import bard.core.rest.spring.project.Project
+import bard.core.rest.spring.project.ProjectResult
 import bardqueryapi.IQueryService
 import bardqueryapi.SearchFilter
 import com.metasieve.shoppingcart.ShoppingCartService
@@ -490,10 +490,10 @@ class MolecularSpreadSheetService {
         }
         List<Long> projectIds = cartProjects*.externalId
         List<ExperimentSearch> allExperiments = []
-        final ExpandedProjectResult expandedProjectResult = projectRestService.searchProjectsByIds(projectIds)
+        final ProjectResult projectResult = projectRestService.searchProjectsByIds(projectIds)
 
 
-        for (Project project : expandedProjectResult.projects) {
+        for (Project project : projectResult.projects) {
             final List<Long> eids = project.eids
             final ExperimentSearchResult experimentResult = experimentRestService.searchExperimentsByIds(eids)
             final List<ExperimentSearch> experiments = experimentResult.experiments

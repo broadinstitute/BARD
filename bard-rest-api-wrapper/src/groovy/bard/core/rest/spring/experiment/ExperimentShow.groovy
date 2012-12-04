@@ -7,6 +7,9 @@ import com.fasterxml.jackson.annotation.JsonProperty
 /**
  * For Show Experiment Pages/ getId pages
  *
+ * The URL that produces this kind of results:
+ *
+ *  http://bard.nih.gov/api/v10/experiments/1048?expand=true
  *
  * Created with IntelliJ IDEA.
  * User: jasiedu
@@ -16,6 +19,9 @@ import com.fasterxml.jackson.annotation.JsonProperty
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class ExperimentShow extends ExperimentAbstract {
+
+    //TODO: This should change after de-duplication. Right now there is a 1-1 mapping between
+    //assays and experiments
     @Override
     public Long getAdid() {
         if (assays) {

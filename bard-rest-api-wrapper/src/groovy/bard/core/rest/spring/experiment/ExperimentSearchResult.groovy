@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty
 
 import bard.core.rest.spring.util.SearchResult
 
+
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class ExperimentSearchResult extends SearchResult {
 

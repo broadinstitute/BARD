@@ -9,7 +9,7 @@ import com.fasterxml.jackson.annotation.JsonProperty
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class Project extends JsonUtil {
 
-    @JsonProperty("projectId")
+
     private long projectId;
     @JsonProperty("category")
     private long category;
@@ -78,6 +78,16 @@ public class Project extends JsonUtil {
     @JsonProperty("projectId")
     public void setProjectId(long projectId) {
         this.projectId = projectId;
+    }
+    @JsonProperty("proj_id")
+    public long getProjId() {
+        return this.projectId;
+    }
+
+
+    @JsonProperty("proj_id")
+    public void setProjId(long projId) {
+        this.projectId = projId;
     }
 
     @JsonProperty("category")

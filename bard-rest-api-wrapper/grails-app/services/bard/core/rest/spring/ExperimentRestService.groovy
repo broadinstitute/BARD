@@ -27,10 +27,11 @@ class ExperimentRestService extends AbstractRestService {
         final ExperimentShow experimentShow = this.restTemplate.getForObject(url, ExperimentShow.class, map)
         return experimentShow;
     }
+
     /**
      *
-     * @param list of pids
-     * @return {@link bard.core.rest.spring.project.ExpandedProjectResult}
+     * @param eids
+     * @return {@link ExperimentSearchResult}
      */
     public ExperimentSearchResult searchExperimentsByIds(final List<Long> eids) {
         if (eids) {

@@ -18,10 +18,6 @@ public class Assay extends AbstractAssay {
     private List<String> projects = new ArrayList<String>();
 
 
-
-
-
-
     @JsonProperty("documents")
     public List<String> getDocuments() {
         return documents;

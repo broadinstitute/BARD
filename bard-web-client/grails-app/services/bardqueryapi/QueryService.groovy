@@ -14,13 +14,13 @@ import bard.core.rest.spring.assays.ExpandedAssay
 import bard.core.rest.spring.assays.ExpandedAssayResult
 import bard.core.rest.spring.assays.FreeTextAssayResult
 import bard.core.rest.spring.compounds.Compound
+import bard.core.rest.spring.compounds.CompoundResult
 import bard.core.rest.spring.compounds.PromiscuityScore
 import bard.core.rest.spring.experiment.ExperimentSearch
-import bard.core.rest.spring.project.ExpandedProjectResult
 import bard.core.rest.spring.project.Project
+import bard.core.rest.spring.project.ProjectResult
 import bard.core.rest.spring.util.StructureSearchParams
 import org.apache.commons.lang.time.StopWatch
-import bard.core.rest.spring.compounds.CompoundResult
 
 class QueryService implements IQueryService {
     /**
@@ -111,11 +111,11 @@ class QueryService implements IQueryService {
             String updatedSearchString = this.queryHelperService.stripCustomStringFromSearchString(searchString)
             final SearchParams searchParams = this.queryHelperService.constructSearchParams(updatedSearchString, top, skip, searchFilters)
             StopWatch sw = this.queryHelperService.startStopWatch()
-            ExpandedProjectResult expandedProjectResult = projectRestService.findProjectsByFreeTextSearch(searchParams)
+            ProjectResult projectResult = projectRestService.findProjectsByFreeTextSearch(searchParams)
             this.queryHelperService.stopStopWatch(sw, "find projects by text search ${searchParams.toString()}")
-            foundProjectAdapters.addAll(this.queryHelperService.projectsToAdapters(expandedProjectResult))
-            facets = expandedProjectResult.getFacetsToValues()
-            nhits = expandedProjectResult.numberOfHits
+            foundProjectAdapters.addAll(this.queryHelperService.projectsToAdapters(projectResult))
+            facets = projectResult.getFacetsToValues()
+            nhits = projectResult.numberOfHits
             // eTag = searchIterator.ETag.toString()
         }
         return [projectAdapters: foundProjectAdapters, facets: facets, nHits: nhits]
@@ -232,10 +232,10 @@ class QueryService implements IQueryService {
         final List<ProjectAdapter> foundProjectAdapters = []
         if (projectIds) {
             StopWatch sw = this.queryHelperService.startStopWatch()
-            ExpandedProjectResult expandedProjectResult = projectRestService.searchProjectsByIds(projectIds)
+            final ProjectResult projectResult = projectRestService.searchProjectsByIds(projectIds)
             this.queryHelperService.stopStopWatch(sw, "find projects by PIDs ${projectIds.toString()}")
-            if (expandedProjectResult) {
-                final List<ProjectAdapter> projectsToAdapters = this.queryHelperService.projectsToAdapters(expandedProjectResult)
+            if (projectResult) {
+                final List<ProjectAdapter> projectsToAdapters = this.queryHelperService.projectsToAdapters(projectResult)
                 if (projectsToAdapters) {
                     foundProjectAdapters.addAll(projectsToAdapters)
                 }
