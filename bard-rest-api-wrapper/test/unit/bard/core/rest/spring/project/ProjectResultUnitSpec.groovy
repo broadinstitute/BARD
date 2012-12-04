@@ -124,6 +124,7 @@ class ProjectResultUnitSpec extends Specification {
         assert projects.size()==2
         assert projectResult.numberOfHits == 2
         assert projectResult.metaData
+        assert projectResult.projs.size() == projects.size()
         for(Project project: projects){
             assert project.getId()
         }

@@ -9,6 +9,13 @@ import spock.lang.Unroll
 class ProjectUnitSpec extends Specification {
     @Shared
     ObjectMapper objectMapper = new ObjectMapper()
+    public static final String PROJECT_FROM_FREE_TEXT = '''
+    {
+        "proj_id": "172",
+        "name": "Probe Development Summary of Inhibitors of the Human Apurinic/apyrimidinic Endonuclease 1 (APE1)",
+        "highlight": null
+    }
+   '''
 
     public static final String PROJECT = '''
     {
@@ -99,7 +106,12 @@ class ProjectUnitSpec extends Specification {
        "experimentCount": 12
     }
     '''
-
+    void "test serialization to Project - Free Text Search"() {
+        when:
+        final Project project = objectMapper.readValue(PROJECT_FROM_FREE_TEXT, Project.class)
+        then:
+        assert project.projId == project.projectId
+    }
     void "test serialization to Project"() {
         when:
         final Project project = objectMapper.readValue(PROJECT, Project.class)

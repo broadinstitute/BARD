@@ -180,6 +180,7 @@ class CompoundResultUnitSpec extends Specification {
         List<Compound> compounds = compoundResult.compounds
         assert compounds.size() == 6
         assert compoundResult.numberOfHits == compounds.size()
+        assert compoundResult.getCompds().size() == compounds.size()
         for(Compound compound : compounds){
             assert compound.id
         }
