@@ -1,35 +1,7 @@
-//// see docs at http://www.gradle.org/documentation
-//buildscript {
-///**
-// * example usage
-// * ./gradlew tasks             : to list the tasks available
-// * ./gradlew tasks --all       : a more verbose list
-// * ./gradlew test              : execute tests, report generated at build/reports/tests/index.html
-// */
-//// specify repos, order matters
-//    repositories {
-//        maven {
-//            url 'http://bard-repo.broadinstitute.org:8081/artifactory/bard-virtual-repo'
-//        }
-//    }
-//
-//
-//    dependencies {
-//        classpath group: 'com.github.timurstrekalov',
-//                name: 'gradle-saga-plugin', version: '1.3.0'
-//    }
-//}
-//
-//apply plugin: 'saga'
-//
-//saga {
-//    baseDir = new File('test/jasmine')
-//    outputDir = new File('build/coverage')
-//    includes = '**/*Runner.html'
-//    excludes="**/jasmine.js,**/jasmine-html.js,**/jasmine-jquery.js,**/jquery-1.7.1.js,**/jquery-ui-1.8.15.custom.js"
-//}
+// see docs at http://www.gradle.org/documentation
 // wrapper allows running without gradle being installed
-// ./gradlew [task]
+//./gradlew [task]
+
 task wrapper(type: Wrapper) {
     gradleVersion = '1.0'
 }
@@ -58,6 +30,6 @@ saga {
             '.+/CartSpec.js','.+/SearchSpec.js','.+/jasmine-jquery.js','.+/jquery-1.7.1.js','.+/jasmine.js','.+/jasmine-html.js','.+/JasmineAdapter.js','.+jquery-ui-1.8.15.custom.js'
     ]
 
-    sourcesToPreload = 'lib/**/*.js'
+    sourcesToPreload = 'web-app/js/**.js'
     //outputStrategy = 'BOTH'
 }
