@@ -5,7 +5,7 @@ import bard.core.adapter.AssayAdapter
 import bard.core.adapter.CompoundAdapter
 import bard.core.adapter.ProjectAdapter
 import bard.core.rest.spring.assays.Assay
-import bard.core.rest.spring.assays.FreeTextAssayResult
+import bard.core.rest.spring.assays.AssayResult
 import bard.core.rest.spring.compounds.Compound
 import bard.core.rest.spring.compounds.CompoundResult
 import bard.core.rest.spring.project.ProjectResult
@@ -199,9 +199,9 @@ class QueryServiceHelperUnitSpec extends Specification {
         assert foundAssayAdapters.size() == expectedResults
 
         where:
-        label         | assays                                                   | expectedResults
-        "No Assays"   | new FreeTextAssayResult()                                | 0
-        "With Assays" | new FreeTextAssayResult(assays: [new Assay(name: "c1")]) | 1
+        label         | assays                                           | expectedResults
+        "No Assays"   | new AssayResult()                                | 0
+        "With Assays" | new AssayResult(assays: [new Assay(name: "c1")]) | 1
 
     }
 

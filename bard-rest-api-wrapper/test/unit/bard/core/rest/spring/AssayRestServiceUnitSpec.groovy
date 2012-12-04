@@ -6,7 +6,7 @@ import bard.core.interfaces.RestApiConstants
 import bard.core.rest.spring.assays.AssayAnnotation
 import bard.core.rest.spring.assays.ExpandedAssay
 import bard.core.rest.spring.assays.ExpandedAssayResult
-import bard.core.rest.spring.assays.FreeTextAssayResult
+import bard.core.rest.spring.assays.AssayResult
 import grails.test.mixin.TestFor
 import org.springframework.web.client.RestTemplate
 import spock.lang.Specification
@@ -88,11 +88,11 @@ class AssayRestServiceUnitSpec extends Specification {
         given:
         final SearchParams searchParams = new SearchParams("dna repair")
         when:
-        final FreeTextAssayResult freeTextAssayResult =
+        final AssayResult assayResult =
             service.findAssaysByFreeTextSearch(searchParams)
         then:
-        restTemplate.getForObject(_, _) >> {new FreeTextAssayResult()}
-        assert freeTextAssayResult != null
+        restTemplate.getForObject(_, _) >> {new AssayResult()}
+        assert assayResult != null
     }
 
     void "getResourceContext"() {

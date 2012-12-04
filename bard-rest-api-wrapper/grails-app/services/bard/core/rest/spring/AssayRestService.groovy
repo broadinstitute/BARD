@@ -5,7 +5,7 @@ import bard.core.interfaces.RestApiConstants
 import bard.core.rest.spring.assays.AssayAnnotation
 import bard.core.rest.spring.assays.ExpandedAssay
 import bard.core.rest.spring.assays.ExpandedAssayResult
-import bard.core.rest.spring.assays.FreeTextAssayResult
+import bard.core.rest.spring.assays.AssayResult
 import bard.core.rest.spring.experiment.ExperimentSearch
 import bard.core.rest.spring.project.ProjectResult
 import bard.core.rest.spring.util.MetaData
@@ -68,16 +68,16 @@ class AssayRestService extends AbstractRestService {
     /**
      *
      * @param searchParams
-     * @return {@link bard.core.rest.spring.assays.FreeTextAssayResult}
+     * @return {@link bard.core.rest.spring.assays.AssayResult}
      */
-    public FreeTextAssayResult findAssaysByFreeTextSearch(SearchParams searchParams) {
+    public AssayResult findAssaysByFreeTextSearch(SearchParams searchParams) {
         final String urlString = this.buildSearchURL(searchParams)
         //We are passing the URI because we have already encoded the string
         //just passing in the string would cause the URI to be encoded twice
         //see http://static.springsource.org/spring/docs/3.0.x/javadoc-api/org/springframework/web/client/RestTemplate.html
         final URL url = new URL(urlString)
-        final FreeTextAssayResult assaySearchResult = this.restTemplate.getForObject(url.toURI(), FreeTextAssayResult.class)
-        return assaySearchResult
+        final AssayResult assayResult = this.restTemplate.getForObject(url.toURI(), AssayResult.class)
+        return assayResult
     }
 
     public String getResourceContext() {

@@ -96,7 +96,7 @@ class RESTTestHelper {
         assert assaySearch.category >= 0
         assert assaySearch.type >= 0
         assert assaySearch.experiments != null
-        assert assaySearch.projects != null
+        assert assaySearch.projectIds != null
         //assert assaySearch.documents
     }
     /**

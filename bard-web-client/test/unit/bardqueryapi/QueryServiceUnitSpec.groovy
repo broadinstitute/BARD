@@ -11,7 +11,6 @@ import bard.core.rest.spring.ProjectRestService
 import bard.core.rest.spring.assays.Assay
 import bard.core.rest.spring.assays.ExpandedAssay
 import bard.core.rest.spring.assays.ExpandedAssayResult
-import bard.core.rest.spring.assays.FreeTextAssayResult
 import bard.core.rest.spring.compounds.Compound
 import bard.core.rest.spring.compounds.CompoundResult
 import bard.core.rest.spring.compounds.PromiscuityScore
@@ -24,6 +23,7 @@ import org.apache.commons.lang.time.StopWatch
 import spock.lang.Shared
 import spock.lang.Specification
 import spock.lang.Unroll
+import bard.core.rest.spring.assays.AssayResult
 
 /**
  * See the API for {@link grails.test.mixin.support.GrailsUnitTestMixin} for usage instructions
@@ -378,13 +378,13 @@ class QueryServiceUnitSpec extends Specification {
     void "test Find Assays By Text Search with defaults"() {
         given:
         StopWatch sw = Mock(StopWatch)
-        FreeTextAssayResult iter = Mock(FreeTextAssayResult)
+        AssayResult assayResult = Mock(AssayResult)
         when:
         Map map = service.findAssaysByTextSearch(searchString)
         then:
         queryHelperService.startStopWatch() >> {sw}
         queryHelperService.stopStopWatch(_, _) >> {}
-        assayRestService.findAssaysByFreeTextSearch(_) >> {iter}
+        assayRestService.findAssaysByFreeTextSearch(_) >> {assayResult}
         queryHelperService.stripCustomStringFromSearchString(_) >> {"stuff"}
         queryHelperService.constructSearchParams(_, _, _, _) >> { new SearchParams(searchString)}
         queryHelperService.assaysToAdapters(_) >> {assayAdapter}
@@ -402,13 +402,13 @@ class QueryServiceUnitSpec extends Specification {
     void "test Find Assays By Text Search"() {
         given:
         StopWatch sw = Mock(StopWatch)
-        FreeTextAssayResult iter = Mock(FreeTextAssayResult)
+        AssayResult assayResult = Mock(AssayResult)
         when:
         Map map = service.findAssaysByTextSearch(searchString, 10, 0, [])
         then:
         queryHelperService.startStopWatch() >> {sw}
         queryHelperService.stopStopWatch(_, _) >> {}
-        assayRestService.findAssaysByFreeTextSearch(_) >> {iter}
+        assayRestService.findAssaysByFreeTextSearch(_) >> {assayResult}
         queryHelperService.stripCustomStringFromSearchString(_) >> {"stuff"}
         queryHelperService.constructSearchParams(_, _, _, _) >> { new SearchParams(searchString)}
         queryHelperService.assaysToAdapters(_) >> {assayAdapter}

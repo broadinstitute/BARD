@@ -12,7 +12,7 @@ import bard.core.rest.spring.ProjectRestService
 import bard.core.rest.spring.assays.Assay
 import bard.core.rest.spring.assays.ExpandedAssay
 import bard.core.rest.spring.assays.ExpandedAssayResult
-import bard.core.rest.spring.assays.FreeTextAssayResult
+import bard.core.rest.spring.assays.AssayResult
 import bard.core.rest.spring.compounds.Compound
 import bard.core.rest.spring.compounds.CompoundResult
 import bard.core.rest.spring.compounds.PromiscuityScore
@@ -83,11 +83,11 @@ class QueryService implements IQueryService {
             final SearchParams searchParams = this.queryHelperService.constructSearchParams(updatedSearchString, top, skip, searchFilters)
 
             StopWatch sw = this.queryHelperService.startStopWatch()
-            FreeTextAssayResult freeTextAssayResult = assayRestService.findAssaysByFreeTextSearch(searchParams)
+            final AssayResult assayResult = assayRestService.findAssaysByFreeTextSearch(searchParams)
             this.queryHelperService.stopStopWatch(sw, "find assays by text search ${searchParams.toString()}")
-            foundAssayAdapters.addAll(this.queryHelperService.assaysToAdapters(freeTextAssayResult))
-            facets = freeTextAssayResult.getFacetsToValues()
-            nhits = freeTextAssayResult.numberOfHits
+            foundAssayAdapters.addAll(this.queryHelperService.assaysToAdapters(assayResult))
+            facets = assayResult.getFacetsToValues()
+            nhits = assayResult.numberOfHits
             //eTag = searchIterator.ETag.toString()
         }
         return [assayAdapters: foundAssayAdapters, facets: facets, nHits: nhits]

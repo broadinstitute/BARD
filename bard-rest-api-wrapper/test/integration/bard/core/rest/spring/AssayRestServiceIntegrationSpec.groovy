@@ -6,13 +6,11 @@ import bard.core.rest.helper.RESTTestHelper
 import bard.core.rest.spring.util.Counts
 import bard.core.rest.spring.util.ETag
 import bard.core.rest.spring.util.Facet
-import bard.core.rest.spring.util.SearchResult
 import grails.plugin.spock.IntegrationSpec
 import spock.lang.Unroll
 import bard.core.rest.spring.assays.*
 
 import static org.junit.Assert.assertTrue
-import static org.junit.Assert.assertArrayEquals
 
 /**
  * Tests for RESTAssayService in JDO
@@ -25,15 +23,15 @@ class AssayRestServiceIntegrationSpec extends IntegrationSpec {
     void "getAssayAnnotationFromSearch"() {
         given:
         final SearchParams searchParams = new SearchParams("dna repair")
-        final FreeTextAssayResult assaySearchResult = assayRestService.findAssaysByFreeTextSearch(searchParams)
-        final long adid = assaySearchResult.assays.get(0).id
+        final AssayResult assayResult = assayRestService.findAssaysByFreeTextSearch(searchParams)
+        final long adid = assayResult.assays.get(0).id
         when:
         final List<AssayAnnotation> annotations = assayRestService.findAnnotations(adid)
         then:
-        assert assaySearchResult.metaData
-        assert assaySearchResult.link
-        assert assaySearchResult.etag
-        assert assaySearchResult.facetsToValues
+        assert assayResult.metaData
+        assert assayResult.link
+        assert assayResult.etag
+        assert assayResult.facetsToValues
         assert annotations
         for (AssayAnnotation assayAnnotation : annotations) {
             // assert assayAnnotation?.display
@@ -140,9 +138,9 @@ class AssayRestServiceIntegrationSpec extends IntegrationSpec {
         searchParamsWithFilters.setFilters(filters);
 
         when:
-        final FreeTextAssayResult assayServiceSearchResultsWithNoFilters = this.assayRestService.findAssaysByFreeTextSearch(searchParamsWithNoFilters);
+        final AssayResult assayServiceSearchResultsWithNoFilters = this.assayRestService.findAssaysByFreeTextSearch(searchParamsWithNoFilters);
         and:
-        final FreeTextAssayResult assayServiceSearchResultsWithFilters = this.assayRestService.findAssaysByFreeTextSearch(searchParamsWithFilters);
+        final AssayResult assayServiceSearchResultsWithFilters = this.assayRestService.findAssaysByFreeTextSearch(searchParamsWithFilters);
         then:
 
         List<Facet> facets = assayServiceSearchResultsWithNoFilters.getFacets();
@@ -195,9 +193,9 @@ class AssayRestServiceIntegrationSpec extends IntegrationSpec {
         searchParamsWithFilters.setFilters(filters);
 
         when:
-        FreeTextAssayResult assayServiceSearchResultsWithNoFilters = this.assayRestService.findAssaysByFreeTextSearch(searchParamsWithNoFilters);
+        AssayResult assayServiceSearchResultsWithNoFilters = this.assayRestService.findAssaysByFreeTextSearch(searchParamsWithNoFilters);
         and:
-        final FreeTextAssayResult assayServiceSearchResultsWithFilters = this.assayRestService.findAssaysByFreeTextSearch(searchParamsWithFilters);
+        final AssayResult assayServiceSearchResultsWithFilters = this.assayRestService.findAssaysByFreeTextSearch(searchParamsWithFilters);
         then:
         final long countWithNoFilters = assayServiceSearchResultsWithNoFilters.numberOfHits;
         final long countWithFilters = assayServiceSearchResultsWithFilters.numberOfHits;
@@ -223,9 +221,9 @@ class AssayRestServiceIntegrationSpec extends IntegrationSpec {
         searchParamsWithFilters.setTop(new Long(10));
         searchParamsWithFilters.setFilters(filters);
         when:
-        FreeTextAssayResult assayServiceSearchResultsWithNoFilters = this.assayRestService.findAssaysByFreeTextSearch(searchParamsWithNoFilters);
+        AssayResult assayServiceSearchResultsWithNoFilters = this.assayRestService.findAssaysByFreeTextSearch(searchParamsWithNoFilters);
         and:
-        FreeTextAssayResult assayServiceSearchResultsWithFilters = this.assayRestService.findAssaysByFreeTextSearch(searchParamsWithFilters);
+        AssayResult assayServiceSearchResultsWithFilters = this.assayRestService.findAssaysByFreeTextSearch(searchParamsWithFilters);
         then:
         final long countWithNoFilters = assayServiceSearchResultsWithNoFilters.numberOfHits;
         final long countWithFilters = assayServiceSearchResultsWithFilters.numberOfHits;
@@ -241,7 +239,7 @@ class AssayRestServiceIntegrationSpec extends IntegrationSpec {
         final SearchParams searchParams = constructSearchParamsWithFilters();
 
         when:
-        final FreeTextAssayResult assaysByFreeTextSearch = this.assayRestService.findAssaysByFreeTextSearch(searchParams)
+        final AssayResult assaysByFreeTextSearch = this.assayRestService.findAssaysByFreeTextSearch(searchParams)
 
         then:
         assertTrue("AssayService SearchResults from 'DNA repair query' must not be null", assaysByFreeTextSearch != null);
@@ -278,9 +276,9 @@ class AssayRestServiceIntegrationSpec extends IntegrationSpec {
         searchParamsWithFilters.setFilters(filters);
 
         when:
-        FreeTextAssayResult assayServiceSearchResultsWithNoFilters = this.assayRestService.findAssaysByFreeTextSearch(searchParamsWithNoFilters);
+        AssayResult assayServiceSearchResultsWithNoFilters = this.assayRestService.findAssaysByFreeTextSearch(searchParamsWithNoFilters);
         and:
-        final FreeTextAssayResult assayServiceSearchResultsWithFilters = this.assayRestService.findAssaysByFreeTextSearch(searchParamsWithFilters);
+        final AssayResult assayServiceSearchResultsWithFilters = this.assayRestService.findAssaysByFreeTextSearch(searchParamsWithFilters);
 
         then:
 
@@ -304,7 +302,7 @@ class AssayRestServiceIntegrationSpec extends IntegrationSpec {
 
         searchParamsFilters.setFilters(filters);
         when:
-        FreeTextAssayResult assaySearchResult = this.assayRestService.findAssaysByFreeTextSearch(searchParamsFilters);
+        AssayResult assaySearchResult = this.assayRestService.findAssaysByFreeTextSearch(searchParamsFilters);
         then:
         final long countWithFilters = assaySearchResult.numberOfHits
         assert countWithFilters > 0, "Expect at least one filter"
@@ -361,7 +359,7 @@ class AssayRestServiceIntegrationSpec extends IntegrationSpec {
         sp.setSkip(new Long(0));
         sp.setTop(new Long(10));
         when:
-        FreeTextAssayResult assaySearchResult = this.assayRestService.findAssaysByFreeTextSearch(sp);
+        AssayResult assaySearchResult = this.assayRestService.findAssaysByFreeTextSearch(sp);
         then:
         assert assaySearchResult.assays
         assertAssaySearches(assaySearchResult.assays)
@@ -376,7 +374,7 @@ class AssayRestServiceIntegrationSpec extends IntegrationSpec {
         and: "A search parameter is constructed using the filters and the search string 'dna repair'"
         SearchParams searchParams = new SearchParams("dna repair", filters);
         when: "The search method of a AssayService is invoked with the search params constructed above"
-        FreeTextAssayResult searchResult = this.assayRestService.findAssaysByFreeTextSearch(searchParams)
+        AssayResult searchResult = this.assayRestService.findAssaysByFreeTextSearch(searchParams)
         and: "We collect all of the assays into a collection"
         List<Assay> foundAssays = searchResult.assays
         then: "We can assert that the foundAssays Collection is not null and is not empty"
@@ -410,7 +408,7 @@ class AssayRestServiceIntegrationSpec extends IntegrationSpec {
         params.setSkip(skip)
         params.setTop(top);
         when: "We we call search method of the the RestAssayService"
-        final FreeTextAssayResult assaySearchResult = this.assayRestService.findAssaysByFreeTextSearch(params)
+        final AssayResult assaySearchResult = this.assayRestService.findAssaysByFreeTextSearch(params)
         then: "We expected to get back a list of #expectedNumberOfAssays assays"
         List<Assay> assays = assaySearchResult.assays
         assert assays
@@ -439,9 +437,9 @@ class AssayRestServiceIntegrationSpec extends IntegrationSpec {
         params2.setTop(10);
 
         when: "We call the search method of RestAssayService with params1"
-        final FreeTextAssayResult searchResult1 = this.assayRestService.findAssaysByFreeTextSearch(params1)
+        final AssayResult searchResult1 = this.assayRestService.findAssaysByFreeTextSearch(params1)
         and: "params2"
-        final FreeTextAssayResult searchResult2 = this.assayRestService.findAssaysByFreeTextSearch(params2)
+        final AssayResult searchResult2 = this.assayRestService.findAssaysByFreeTextSearch(params2)
 
 
         then: "We expect that the list of ids returned for each search, would be different"
@@ -460,7 +458,7 @@ class AssayRestServiceIntegrationSpec extends IntegrationSpec {
         params.setSkip(skip)
         params.setTop(top);
         when: "We we call search method of the the RestAssayService"
-        final FreeTextAssayResult searchResult = this.assayRestService.findAssaysByFreeTextSearch(params)
+        final AssayResult searchResult = this.assayRestService.findAssaysByFreeTextSearch(params)
         then: "We expected to get back a list of #expectedNumberOfAssays assays"
         Collection<Assay> assays = searchResult.assays
         assert assays
@@ -497,7 +495,7 @@ class AssayRestServiceIntegrationSpec extends IntegrationSpec {
         params.setSkip(0)
         params.setTop(10);
         when: "We we call search method of the the RESTAssayService"
-        final FreeTextAssayResult searchResult = this.assayRestService.findAssaysByFreeTextSearch(params)
+        final AssayResult searchResult = this.assayRestService.findAssaysByFreeTextSearch(params)
         then: "We expected to get back unique facets"
         assertFacetIdsAreUnique(searchResult.facets)
     }

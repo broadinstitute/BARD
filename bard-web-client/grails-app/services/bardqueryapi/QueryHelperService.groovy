@@ -6,7 +6,7 @@ import bard.core.adapter.CompoundAdapter
 import bard.core.adapter.ProjectAdapter
 import bard.core.rest.spring.assays.AbstractAssay
 import bard.core.rest.spring.assays.Assay
-import bard.core.rest.spring.assays.FreeTextAssayResult
+import bard.core.rest.spring.assays.AssayResult
 import bard.core.rest.spring.compounds.Compound
 import bard.core.rest.spring.compounds.CompoundResult
 import bard.core.rest.spring.project.Project
@@ -129,11 +129,11 @@ class QueryHelperService {
     }
     /**
      * convert a list Assay's to a list of AssayAdapter's
-     * @param assays {@link FreeTextAssayResult}
+     * @param assays {@link AssayResult}
      * @return list of {@link AssayAdapter}'s
      */
-    public List<AssayAdapter> assaysToAdapters(FreeTextAssayResult freeTextAssayResult) {
-        final List<Assay> assays = freeTextAssayResult.assays
+    public List<AssayAdapter> assaysToAdapters(final AssayResult assayResult) {
+        final List<Assay> assays = assayResult.assays
         if (assays) {
             return assaysToAdapters(assays)
         }
