@@ -21,4 +21,14 @@ public class CompoundResult extends SearchResult {
     public void setCompounds(List<Compound> compounds) {
         this.compounds = compounds;
     }
+    //Map docs to compounds so that the various JSON responses can share this class
+    @JsonProperty("docs")
+    public List<Compound> getCompds() {
+        return this.compounds;
+    }
+
+    @JsonProperty("docs")
+    public void setCompds(List<Compound> compounds) {
+        this.compounds = compounds;
+    }
 }

@@ -13,7 +13,7 @@ import bard.core.rest.spring.assays.ExpandedAssay
 import bard.core.rest.spring.assays.ExpandedAssayResult
 import bard.core.rest.spring.assays.FreeTextAssayResult
 import bard.core.rest.spring.compounds.Compound
-import bard.core.rest.spring.compounds.ExpandedCompoundResult
+import bard.core.rest.spring.compounds.CompoundResult
 import bard.core.rest.spring.compounds.PromiscuityScore
 import bard.core.rest.spring.experiment.ExperimentSearch
 import bard.core.rest.spring.project.ExpandedProjectResult
@@ -37,7 +37,7 @@ class QueryServiceUnitSpec extends Specification {
     ProjectRestService projectRestService
     ExperimentRestService experimentRestService
     @Shared ExpandedAssayResult expandedAssayResult = new ExpandedAssayResult()
-    @Shared ExpandedCompoundResult expandedCompoundResult = new ExpandedCompoundResult()
+    @Shared CompoundResult compoundResult = new CompoundResult()
     @Shared ExpandedAssay expandedAssay1 = new ExpandedAssay()
     @Shared ExpandedAssay expandedAssay2 = new ExpandedAssay()
     @Shared ExpandedProjectResult expandedProjectResult = new ExpandedProjectResult()
@@ -164,11 +164,11 @@ class QueryServiceUnitSpec extends Specification {
      */
     void "test findCompoundsByCIDs #label"() {
         given:
-        expandedCompoundResult.compounds = compound
+        compoundResult.compounds = compound
         when:
         Map responseMap = service.findCompoundsByCIDs(cids)
         then:
-        expectedNumberOfCalls * compoundRestService.searchCompoundsByIds(_) >> {expandedCompoundResult}
+        expectedNumberOfCalls * compoundRestService.searchCompoundsByIds(_) >> {compoundResult}
         and:
         assert responseMap
         assert responseMap.nHits == expectedNumberOfHits
@@ -270,7 +270,7 @@ class QueryServiceUnitSpec extends Specification {
      */
     void "test Structure Search No Filters #label"() {
         given:
-        ExpandedCompoundResult expandedCompoundResult = new ExpandedCompoundResult(compounds: [new Compound(smiles: smiles)])
+        final CompoundResult expandedCompoundResult = new CompoundResult(compounds: [new Compound(smiles: smiles)])
         when:
         service.structureSearch(smiles, structureSearchParamsType)
         then:
@@ -289,12 +289,12 @@ class QueryServiceUnitSpec extends Specification {
      */
     void "test Structure Search Empty Smiles"() {
         given:
-        ExpandedCompoundResult iter = Mock(ExpandedCompoundResult)
+        CompoundResult compoundResult = Mock(CompoundResult)
 
         when:
         final Map searchResults = service.structureSearch("", StructureSearchParams.Type.Substructure)
         then:
-        _ * compoundRestService.structureSearch(_, _) >> {iter}
+        _ * compoundRestService.structureSearch(_, _) >> {compoundResult}
         assert searchResults.nHits == 0
         assert searchResults.compoundAdapters.isEmpty()
         assert searchResults.facets.isEmpty()
@@ -305,7 +305,7 @@ class QueryServiceUnitSpec extends Specification {
      */
     void "test Structure Search #label"() {
         given:
-        ExpandedCompoundResult iter = Mock(ExpandedCompoundResult)
+        CompoundResult compoundResult = Mock(CompoundResult)
         List<SearchFilter> searchFilters = [new SearchFilter(filterName: "a", filterValue: "b")]
 
         List<String[]> filters = [["a", "b"] as String[]]
@@ -313,7 +313,7 @@ class QueryServiceUnitSpec extends Specification {
         service.structureSearch(smiles, structureSearchParamsType, searchFilters)
         then:
         queryHelperService.convertSearchFiltersToFilters(_) >> {filters}
-        compoundRestService.structureSearch(_) >> {iter}
+        compoundRestService.structureSearch(_) >> {compoundResult}
 
         where:
         label                    | structureSearchParamsType                 | smiles
@@ -330,13 +330,13 @@ class QueryServiceUnitSpec extends Specification {
     void "test Find Compounds By Text Search #label"() {
         given:
         StopWatch sw = Mock(StopWatch)
-        ExpandedCompoundResult iter = Mock(ExpandedCompoundResult)
+        final CompoundResult compoundResult = Mock(CompoundResult)
         when:
         Map map = service.findCompoundsByTextSearch(searchString, 10, 0, [])
         then:
         queryHelperService.startStopWatch() >> {sw}
         queryHelperService.stopStopWatch(_, _) >> {}
-        compoundRestService.findCompoundsByFreeTextSearch(_) >> {iter}
+        compoundRestService.findCompoundsByFreeTextSearch(_) >> {compoundResult}
         queryHelperService.stripCustomStringFromSearchString(_) >> {"stuff"}
         queryHelperService.constructSearchParams(_, _, _, _) >> { new SearchParams(searchString)}
         queryHelperService.compoundsToAdapters(_) >> {[new CompoundAdapter(compound1)]}
@@ -354,13 +354,13 @@ class QueryServiceUnitSpec extends Specification {
     void "test Find Compounds By Text Search with defaults #searchString"() {
         given:
         StopWatch sw = Mock(StopWatch)
-        ExpandedCompoundResult iter = Mock(ExpandedCompoundResult)
+        final CompoundResult compoundResult = Mock(CompoundResult)
         when:
         Map map = service.findCompoundsByTextSearch(searchString)
         then:
         queryHelperService.startStopWatch() >> {sw}
         queryHelperService.stopStopWatch(_, _) >> {}
-        compoundRestService.findCompoundsByFreeTextSearch(_) >> {iter}
+        compoundRestService.findCompoundsByFreeTextSearch(_) >> {compoundResult}
         queryHelperService.stripCustomStringFromSearchString(_) >> {"stuff"}
         queryHelperService.constructSearchParams(_, _, _, _) >> { new SearchParams(searchString)}
         queryHelperService.compoundsToAdapters(_) >> {[new CompoundAdapter(compound1)]}

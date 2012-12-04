@@ -7,7 +7,7 @@ import bard.core.adapter.ProjectAdapter
 import bard.core.rest.spring.assays.Assay
 import bard.core.rest.spring.assays.FreeTextAssayResult
 import bard.core.rest.spring.compounds.Compound
-import bard.core.rest.spring.compounds.ExpandedCompoundResult
+import bard.core.rest.spring.compounds.CompoundResult
 import bard.core.rest.spring.project.ExpandedProjectResult
 import bard.core.rest.spring.project.Project
 import grails.test.mixin.TestFor
@@ -174,10 +174,10 @@ class QueryServiceHelperUnitSpec extends Specification {
 
     void "test compoundsToAdapters #label"() {
         given:
-        ExpandedCompoundResult expandedCompoundResult = new ExpandedCompoundResult()
-        expandedCompoundResult.compounds = compounds
+        CompoundResult compoundResult = new CompoundResult()
+        compoundResult.compounds = compounds
         when:
-        final List<CompoundAdapter> foundCompoundAdapters = service.compoundsToAdapters(expandedCompoundResult)
+        final List<CompoundAdapter> foundCompoundAdapters = service.compoundsToAdapters(compoundResult)
 
         then:
         assert foundCompoundAdapters.size() == expectedCompoundAdapters.size()

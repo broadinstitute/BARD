@@ -4,17 +4,17 @@ import bard.core.SearchParams
 import bard.core.adapter.AssayAdapter
 import bard.core.adapter.CompoundAdapter
 import bard.core.adapter.ProjectAdapter
+import bard.core.rest.spring.assays.AbstractAssay
 import bard.core.rest.spring.assays.Assay
 import bard.core.rest.spring.assays.FreeTextAssayResult
-import bard.core.rest.spring.compounds.ExpandedCompoundResult
+import bard.core.rest.spring.compounds.Compound
+import bard.core.rest.spring.compounds.CompoundResult
 import bard.core.rest.spring.project.ExpandedProjectResult
 import bard.core.rest.spring.project.Project
 import org.apache.commons.lang.time.StopWatch
 
 import java.util.regex.Matcher
 import java.util.regex.Pattern
-import bard.core.rest.spring.compounds.Compound
-import bard.core.rest.spring.assays.AbstractAssay
 
 class QueryHelperService {
 
@@ -115,13 +115,13 @@ class QueryHelperService {
     //=========== Construct adapters ===================
     /**
      * Convert the list of compounds to the list of adapters
-     * @param compounds {@link ExpandedCompoundResult}'s
+     * @param compounds {@link CompoundResult}'s
      * @return List of {@link CompoundAdapter}'s
      */
-    final List<CompoundAdapter> compoundsToAdapters(final ExpandedCompoundResult expandedCompoundResult) {
+    final List<CompoundAdapter> compoundsToAdapters(final CompoundResult compoundResult) {
         final List<CompoundAdapter> compoundAdapters = []
 
-        for (Compound compound : expandedCompoundResult.compounds) {
+        for (Compound compound : compoundResult.compounds) {
             final CompoundAdapter compoundAdapter = new CompoundAdapter(compound)
             compoundAdapters.add(compoundAdapter)
         }

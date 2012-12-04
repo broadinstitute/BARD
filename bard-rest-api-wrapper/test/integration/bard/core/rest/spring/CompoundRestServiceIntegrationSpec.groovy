@@ -7,7 +7,7 @@ import bard.core.rest.helper.RESTTestHelper
 import bard.core.rest.spring.assays.Assay
 import bard.core.rest.spring.compounds.Compound
 import bard.core.rest.spring.compounds.CompoundAnnotations
-import bard.core.rest.spring.compounds.ExpandedCompoundResult
+import bard.core.rest.spring.compounds.CompoundResult
 import bard.core.rest.spring.compounds.PromiscuityScore
 import bard.core.rest.spring.util.Counts
 import bard.core.rest.spring.util.ETag
@@ -66,7 +66,7 @@ class CompoundRestServiceIntegrationSpec extends IntegrationSpec {
     void "test getMultipleCompoundAnnotations"() {
         given:
         List<Long> cids = [2722L, 5394L]
-        ExpandedCompoundResult cmpds = compoundRestService.searchCompoundsByIds(cids)
+        CompoundResult cmpds = compoundRestService.searchCompoundsByIds(cids)
         when:
         CompoundAnnotations compoundAnnotations = compoundRestService.findAnnotations(cmpds.compounds.get(0).cid)
         then:
@@ -91,9 +91,9 @@ class CompoundRestServiceIntegrationSpec extends IntegrationSpec {
         final String smiles = "O=S(*C)(Cc1ccc2ncc(CCNC)c2c1)=O";
         StructureSearchParams structureSearchParams = new StructureSearchParams(smiles, StructureSearchParams.Type.Superstructure);
         structureSearchParams.setSkip((long) 0).setTop((long) 2);
-        ExpandedCompoundResult compoundSearchResult = compoundRestService.findCompoundsByFreeTextSearch(structureSearchParams);
+        CompoundResult compoundResult = compoundRestService.findCompoundsByFreeTextSearch(structureSearchParams);
         and:
-        Compound compound = compoundSearchResult.compounds.get(0)
+        Compound compound = compoundResult.compounds.get(0)
 
         when:
         CompoundAnnotations compoundAnnotations = compoundRestService.findAnnotations(compound.cid)
@@ -122,18 +122,18 @@ class CompoundRestServiceIntegrationSpec extends IntegrationSpec {
         final SearchParams searchParams = new SearchParams("dna repair", filters);
 
         when:
-        ExpandedCompoundResult compoundSearchResult = this.compoundRestService.findCompoundsByFreeTextSearch(searchParams);
+        CompoundResult compoundResult = this.compoundRestService.findCompoundsByFreeTextSearch(searchParams);
         then:
-        final List<Compound> compounds = compoundSearchResult.compounds
+        final List<Compound> compounds = compoundResult.compounds
         assert compounds, "CompoundService SearchResults must not be null"
         assert !compounds.isEmpty(), "CompoundService SearchResults must not be empty"
-        assert compoundSearchResult.numberOfHits > 0, "CompoundService SearchResults must have at least one element"
+        assert compoundResult.numberOfHits > 0, "CompoundService SearchResults must have at least one element"
 
         for (Compound compound : compounds) {
             assert compound.getName(), "Compound  must have a name"
         }
 
-        final List<Facet> facets = compoundSearchResult.getFacets();
+        final List<Facet> facets = compoundResult.getFacets();
         assert facets != null, "List of Facets is not null"
         assert !facets.isEmpty(), "List of Facets is not empty"
 
@@ -184,12 +184,12 @@ class CompoundRestServiceIntegrationSpec extends IntegrationSpec {
 
     void "test Get Compounds, #label"() {
         when: "We call the get method of the the RESTCompoundService"
-        ExpandedCompoundResult compoundSearchResult = this.compoundRestService.searchCompoundsByIds(cids)
+        CompoundResult compoundResult = this.compoundRestService.searchCompoundsByIds(cids)
         then: "We expect to get back a list of 10 results"
-        assert compoundSearchResult.numberOfHits == cids.size()
-        assert compoundSearchResult.etag
-        assert compoundSearchResult.etags
-        assertCompounds(compoundSearchResult.compounds)
+        assert compoundResult.numberOfHits == cids.size()
+        assert compoundResult.etag
+        assert compoundResult.etags
+        assertCompounds(compoundResult.compounds)
 
         where:
         label                         | cids
@@ -210,7 +210,7 @@ class CompoundRestServiceIntegrationSpec extends IntegrationSpec {
         filters.add(["gobp_term", "Ras protein signal transduction"] as String[])
         searchParams.filters = filters
         when: "We execute the search"
-        final ExpandedCompoundResult searchResult = this.compoundRestService.findCompoundsByFreeTextSearch(searchParams)
+        final CompoundResult searchResult = this.compoundRestService.findCompoundsByFreeTextSearch(searchParams)
         then: "We expect the following"
         assert searchResult.numberOfHits > 0
     }
@@ -221,7 +221,7 @@ class CompoundRestServiceIntegrationSpec extends IntegrationSpec {
         params.setSkip(skip)
         params.setTop(top);
         when: "We we call search method of the the RESTCompoundService"
-        final ExpandedCompoundResult searchResult = this.compoundRestService.findCompoundsByFreeTextSearch(params)
+        final CompoundResult searchResult = this.compoundRestService.findCompoundsByFreeTextSearch(params)
         then: "We expected that the number of results should not exceed the number of counts on the Collection Filter(Approved drugs)"
 
         final List<Facet> facets = searchResult.facets
@@ -254,7 +254,7 @@ class CompoundRestServiceIntegrationSpec extends IntegrationSpec {
         BigDecimal threshold = 0.9
         structureSearchParams.setThreshold(threshold)
         when: "We call the search method of the Compound Service"
-        final ExpandedCompoundResult structureSearch = this.compoundRestService.structureSearch(structureSearchParams)
+        final CompoundResult structureSearch = this.compoundRestService.structureSearch(structureSearchParams)
         then: "The following assertions are true"
         List<Compound> compounds = structureSearch.compounds
         assertCompounds(compounds)
@@ -278,11 +278,11 @@ class CompoundRestServiceIntegrationSpec extends IntegrationSpec {
         structureSearchParams.setSkip(skip)
         structureSearchParams.setTop(top);
         when: "We call the search method of the Compound Service"
-        final ExpandedCompoundResult compoundSearchResult = this.compoundRestService.structureSearch(structureSearchParams)
+        final CompoundResult compoundResult = this.compoundRestService.structureSearch(structureSearchParams)
         then: "The following assertions are true"
-        List<Compound> compoundTemplates = compoundSearchResult.compounds
+        List<Compound> compoundTemplates = compoundResult.compounds
         assert !compoundTemplates.isEmpty()
-        assert compoundSearchResult.etags
+        assert compoundResult.etags
         where:
         label                  | structureSearchParamsType               | smiles                                                                   | skip | top | expectedNumberOfCompounds
         "Sub Structure Search" | StructureSearchParams.Type.Substructure | "[H]C1([H])CN(C([H])([H])C([H])([H])C1([H])[H])S(=O)(=O)C1=CC=C(NC)C=C1" | 0    | 2   | 1
@@ -335,14 +335,14 @@ class CompoundRestServiceIntegrationSpec extends IntegrationSpec {
         params.setSkip(skip)
         params.setTop(top);
         when: "We we call search method of the the RESTCompoundService"
-        final ExpandedCompoundResult compoundSearchResult = this.compoundRestService.findCompoundsByFreeTextSearch(params)
+        final CompoundResult compoundResult = this.compoundRestService.findCompoundsByFreeTextSearch(params)
         then: "We expected to get back a list of 10 results"
-        List<Compound> compoundTemplates = compoundSearchResult.compounds
+        List<Compound> compoundTemplates = compoundResult.compounds
         assert !compoundTemplates.isEmpty()
-        assert compoundSearchResult.numberOfHits >= expectedNumberOfCompounds
+        assert compoundResult.numberOfHits >= expectedNumberOfCompounds
         assert expectedNumberOfCompounds == compoundTemplates.size()
         assertCompounds(compoundTemplates)
-        assertFacets(compoundSearchResult.facets)
+        assertFacets(compoundResult.facets)
         where:
         label    | searchString | skip | top | expectedNumberOfCompounds
         "Search" | "dna repair" | 0    | 10  | 10
@@ -385,7 +385,7 @@ class CompoundRestServiceIntegrationSpec extends IntegrationSpec {
         searchParams.setTop(new Long(10));
 
         when:
-        final ExpandedCompoundResult compoundsByFreeTextSearch = this.compoundRestService.findCompoundsByFreeTextSearch(searchParams)
+        final CompoundResult compoundsByFreeTextSearch = this.compoundRestService.findCompoundsByFreeTextSearch(searchParams)
         then:
         assert compoundsByFreeTextSearch
         compoundsByFreeTextSearch.numberOfHits == 6
@@ -399,7 +399,7 @@ class CompoundRestServiceIntegrationSpec extends IntegrationSpec {
         params.setSkip(skip)
         params.setTop(top);
         when: "We we call search method of the the RESTCompoundService"
-        final ExpandedCompoundResult compoundsByFreeTextSearch = this.compoundRestService.findCompoundsByFreeTextSearch(params)
+        final CompoundResult compoundsByFreeTextSearch = this.compoundRestService.findCompoundsByFreeTextSearch(params)
         then:
         assert compoundsByFreeTextSearch
         final Compound compoundTemplate = compoundsByFreeTextSearch.compounds.get(0)
@@ -424,9 +424,9 @@ class CompoundRestServiceIntegrationSpec extends IntegrationSpec {
         params2.setTop(10);
 
         when: "We call the search method of RestCompoundService with params1"
-        final ExpandedCompoundResult compoundsByFreeTextSearch1 = this.compoundRestService.findCompoundsByFreeTextSearch(params1)
+        final CompoundResult compoundsByFreeTextSearch1 = this.compoundRestService.findCompoundsByFreeTextSearch(params1)
         and: "params2"
-        final ExpandedCompoundResult compoundsByFreeTextSearch2 = this.compoundRestService.findCompoundsByFreeTextSearch(params2)
+        final CompoundResult compoundsByFreeTextSearch2 = this.compoundRestService.findCompoundsByFreeTextSearch(params2)
 
 
         then: "We expect that the list of ids returned for each search, would be different"
@@ -445,7 +445,7 @@ class CompoundRestServiceIntegrationSpec extends IntegrationSpec {
         params.setSkip(0)
         params.setTop(10);
         when: "We we call the search method of the the RESTCompoundService with the params object"
-        final ExpandedCompoundResult compoundsByFreeTextSearch = this.compoundRestService.findCompoundsByFreeTextSearch(params)
+        final CompoundResult compoundsByFreeTextSearch = this.compoundRestService.findCompoundsByFreeTextSearch(params)
         then: "We expect to get back unique facets"
         assertFacetIdsAreUnique(compoundsByFreeTextSearch)
     }
@@ -475,10 +475,10 @@ class CompoundRestServiceIntegrationSpec extends IntegrationSpec {
         params.skip = skip
         params.top = top
         when:
-        final ExpandedCompoundResult compoundSearchResult = compoundRestService.structureSearch(params)
+        final CompoundResult compoundResult = compoundRestService.structureSearch(params)
         then:
-        assert compoundSearchResult.numberOfHits == expectedSize
-        assert compoundSearchResult.etags
+        assert compoundResult.numberOfHits == expectedSize
+        assert compoundResult.etags
         where:
         label                                | skip | top  | expectedSize | structureType                           | smiles
         "With Skip and Top"                  | 0    | 5    | 5            | StructureSearchParams.Type.Substructure | "n1cccc2ccccc12"

@@ -6,7 +6,7 @@ import bard.core.rest.spring.assays.Assay
 import bard.core.rest.spring.assays.AssayResult
 import bard.core.rest.spring.compounds.Compound
 import bard.core.rest.spring.compounds.CompoundAnnotations
-import bard.core.rest.spring.compounds.ExpandedCompoundResult
+import bard.core.rest.spring.compounds.CompoundResult
 import bard.core.rest.spring.compounds.PromiscuityScore
 import bard.core.rest.spring.experiment.ExperimentSearchResult
 import bard.core.rest.spring.project.ProjectResult
@@ -164,9 +164,9 @@ class CompoundRestService extends AbstractRestService {
     /**
      *
      * @param list of cids
-     * @return {@link ExpandedCompoundResult}
+     * @return {@link CompoundResult}
      */
-    public ExpandedCompoundResult searchCompoundsByIds(final List<Long> cids) {
+    public CompoundResult searchCompoundsByIds(final List<Long> cids) {
         if (cids) {
             final Map<String, Long> etags = [:]
             final MultiValueMap<String, String> map = new LinkedMultiValueMap<String, String>();
@@ -182,7 +182,7 @@ class CompoundRestService extends AbstractRestService {
             extractETagsFromResponseHeader(headers, 0, etags)
             int nhits = compounds.size();
 
-            final ExpandedCompoundResult compoundSearchResult = new ExpandedCompoundResult()
+            final CompoundResult compoundSearchResult = new CompoundResult()
             compoundSearchResult.setCompounds(compounds)
             compoundSearchResult.setEtags(etags)
             final MetaData metaData = new MetaData()
@@ -196,15 +196,15 @@ class CompoundRestService extends AbstractRestService {
     /**
      *
      * @param searchParams
-     * @return {@link ExpandedCompoundResult}
+     * @return {@link CompoundResult}
      */
-    public ExpandedCompoundResult findCompoundsByFreeTextSearch(SearchParams searchParams) {
+    public CompoundResult findCompoundsByFreeTextSearch(SearchParams searchParams) {
         final String urlString = buildSearchURL(searchParams)
         //We are passing the URI because we have already encoded the string
         //just passing in the string would cause the URI to be encoded twice
         //see http://static.springsource.org/spring/docs/3.0.x/javadoc-api/org/springframework/web/client/RestTemplate.html
         final URL url = new URL(urlString)
-        final ExpandedCompoundResult compoundSearchResult = this.restTemplate.getForObject(url.toURI(), ExpandedCompoundResult.class)
+        final CompoundResult compoundSearchResult = this.restTemplate.getForObject(url.toURI(), CompoundResult.class)
         return compoundSearchResult;
     }
     /**
@@ -234,7 +234,7 @@ class CompoundRestService extends AbstractRestService {
      * @param params
      * @return list of {@link Compound}'s
      */
-    public ExpandedCompoundResult structureSearch(StructureSearchParams params, final Map<String, Long> etags = [:]) {
+    public CompoundResult structureSearch(StructureSearchParams params, final Map<String, Long> etags = [:]) {
 
 
         final List<Compound> compoundTemplates = []
@@ -273,7 +273,7 @@ class CompoundRestService extends AbstractRestService {
         if (nhits == 0) {
             nhits = compoundTemplates.size();
         }
-        ExpandedCompoundResult compoundSearchResult = new ExpandedCompoundResult()
+        CompoundResult compoundSearchResult = new CompoundResult()
         compoundSearchResult.setCompounds(compoundTemplates)
         compoundSearchResult.setEtags(etags)
         final MetaData metaData = new MetaData()

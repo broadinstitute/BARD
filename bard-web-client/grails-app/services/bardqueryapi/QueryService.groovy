@@ -14,13 +14,13 @@ import bard.core.rest.spring.assays.ExpandedAssay
 import bard.core.rest.spring.assays.ExpandedAssayResult
 import bard.core.rest.spring.assays.FreeTextAssayResult
 import bard.core.rest.spring.compounds.Compound
-import bard.core.rest.spring.compounds.ExpandedCompoundResult
 import bard.core.rest.spring.compounds.PromiscuityScore
 import bard.core.rest.spring.experiment.ExperimentSearch
 import bard.core.rest.spring.project.ExpandedProjectResult
 import bard.core.rest.spring.project.Project
 import bard.core.rest.spring.util.StructureSearchParams
 import org.apache.commons.lang.time.StopWatch
+import bard.core.rest.spring.compounds.CompoundResult
 
 class QueryService implements IQueryService {
     /**
@@ -52,13 +52,13 @@ class QueryService implements IQueryService {
             final SearchParams searchParams = this.queryHelperService.constructSearchParams(updatedSearchString, top, skip, searchFilters)
             //do the search
             StopWatch sw = this.queryHelperService.startStopWatch()
-            ExpandedCompoundResult expandedCompoundResult = compoundRestService.findCompoundsByFreeTextSearch(searchParams)
+            CompoundResult compoundResult = compoundRestService.findCompoundsByFreeTextSearch(searchParams)
             this.queryHelperService.stopStopWatch(sw, "find compounds by text search ${searchParams.toString()}")
 
             //convert to adapters
-            foundCompoundAdapters.addAll(this.queryHelperService.compoundsToAdapters(expandedCompoundResult))
-            facets = expandedCompoundResult.getFacetsToValues()
-            nhits = expandedCompoundResult.numberOfHits
+            foundCompoundAdapters.addAll(this.queryHelperService.compoundsToAdapters(compoundResult))
+            facets = compoundResult.getFacetsToValues()
+            nhits = compoundResult.numberOfHits
             //   eTag = searchIterator.ETag.toString()
         }
         return [compoundAdapters: foundCompoundAdapters, facets: facets, nHits: nhits]
@@ -147,11 +147,11 @@ class QueryService implements IQueryService {
             }
             //do the search
             StopWatch sw = this.queryHelperService.startStopWatch()
-            ExpandedCompoundResult expandedCompoundResult = compoundRestService.structureSearch(structureSearchParams);
+            final CompoundResult compoundResult = compoundRestService.structureSearch(structureSearchParams);
             this.queryHelperService.stopStopWatch(sw, "structure search ${structureSearchParams.toString()}")
             //collect the results
             //convert to adapters
-            final List<CompoundAdapter> compoundsToAdapters = this.queryHelperService.compoundsToAdapters(expandedCompoundResult)
+            final List<CompoundAdapter> compoundsToAdapters = this.queryHelperService.compoundsToAdapters(compoundResult)
             if (compoundsToAdapters) {
                 compoundAdapters.addAll(compoundsToAdapters)
             }
@@ -182,11 +182,11 @@ class QueryService implements IQueryService {
             //  eTag = restCompoundService.newETag("Compound ETags", compoundIds).toString();
             //commenting out facets until we figure out how to apply filters to ID searches
             //facets = restCompoundService.getFacets(etag)
-            ExpandedCompoundResult expandedCompoundResult = compoundRestService.searchCompoundsByIds(compoundIds)
+            CompoundResult compoundResult = compoundRestService.searchCompoundsByIds(compoundIds)
             this.queryHelperService.stopStopWatch(sw, "find compounds by CIDs ${compoundIds.toString()}")
 
-            if (expandedCompoundResult) {
-                compoundAdapters.addAll(this.queryHelperService.compoundsToAdapters(expandedCompoundResult))
+            if (compoundResult) {
+                compoundAdapters.addAll(this.queryHelperService.compoundsToAdapters(compoundResult))
             }
             //TODO: Even though facets are available they cannot be used for filtering
         }

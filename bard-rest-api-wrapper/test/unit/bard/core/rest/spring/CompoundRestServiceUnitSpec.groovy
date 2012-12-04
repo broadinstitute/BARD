@@ -6,7 +6,7 @@ import bard.core.rest.spring.assays.Assay
 import bard.core.rest.spring.assays.AssayResult
 import bard.core.rest.spring.compounds.Compound
 import bard.core.rest.spring.compounds.CompoundAnnotations
-import bard.core.rest.spring.compounds.ExpandedCompoundResult
+import bard.core.rest.spring.compounds.CompoundResult
 import bard.core.rest.spring.compounds.PromiscuityScore
 import bard.core.rest.spring.util.ETag
 import bard.core.rest.spring.util.ETagCollection
@@ -139,10 +139,10 @@ class CompoundRestServiceUnitSpec extends Specification {
 
     void "searchCompoundsByIds #label"() {
         when:
-        final ExpandedCompoundResult expandedCompoundResult = service.searchCompoundsByIds(cids)
+        final CompoundResult compoundResult = service.searchCompoundsByIds(cids)
         then:
         0 * restTemplate.exchange(_, _, _, _)
-        assert expandedCompoundResult == null
+        assert compoundResult == null
         where:
         label                        | cids
         "With null cids"             | null
@@ -153,11 +153,11 @@ class CompoundRestServiceUnitSpec extends Specification {
         given:
         final SearchParams searchParams = new SearchParams("dna repair")
         when:
-        final ExpandedCompoundResult expandedCompoundResult =
+        final CompoundResult compoundResult =
             service.findCompoundsByFreeTextSearch(searchParams)
         then:
-        restTemplate.getForObject(_, _) >> {new ExpandedCompoundResult()}
-        assert expandedCompoundResult != null
+        restTemplate.getForObject(_, _) >> {new CompoundResult()}
+        assert compoundResult != null
     }
 
     void "findPromiscuityScoreForCompound"() {

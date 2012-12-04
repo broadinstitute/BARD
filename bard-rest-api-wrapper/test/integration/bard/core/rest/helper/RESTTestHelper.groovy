@@ -5,12 +5,13 @@ import bard.core.SuggestParams
 import bard.core.rest.spring.assays.Assay
 import bard.core.rest.spring.assays.ExpandedAssay
 import bard.core.rest.spring.compounds.Compound
-import bard.core.rest.spring.compounds.ExpandedCompoundResult
+
 import bard.core.rest.spring.project.Project
 import bard.core.rest.spring.util.Counts
 import bard.core.rest.spring.util.Facet
 
 import static org.junit.Assert.assertTrue
+import bard.core.rest.spring.compounds.CompoundResult
 
 /**
  * Created with IntelliJ IDEA.
@@ -143,8 +144,8 @@ class RESTTestHelper {
      * Assert that there are no duplicate keys in facets (We skip blank and nulll keys those are tested #assertFacetIdsAreNonBlank)
      * @param searchResults
      */
-    public void assertFacetIdsAreUnique(final ExpandedCompoundResult compoundsByFreeTextSearch) {
-        final List<Facet> facets = compoundsByFreeTextSearch.facets
+    public void assertFacetIdsAreUnique(final CompoundResult compoundResult) {
+        final List<Facet> facets = compoundResult.facets
         assertFacetIdsAreUnique(facets)
     }
     /**
