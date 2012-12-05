@@ -223,8 +223,8 @@ application/vnd.bard.cap+xml;type=dictionary should give the client the entire d
                                         <xs:element minOccurs="0" ref="link"/>
                                     </xs:sequence>
                                     <xs:attribute name="unitElement" type="xs:string" use="required"/>
-                                    <xs:attribute name="parentUnit" type="xs:string" use="optional"/>
-                                    <xs:attribute name="unit" type="xs:string" use="required"/>
+                                    <xs:attribute name="parentUnit" type="xs:string" use="optional"
+                                    />
                                 </xs:complexType>
                             </xs:element>
                         </xs:sequence>
@@ -254,99 +254,30 @@ application/vnd.bard.cap+xml;type=dictionary should give the client the entire d
             <xs:annotation>
                 <xs:documentation>A definition to say that the elementId attribute on an element must be unique throughout this document</xs:documentation>
             </xs:annotation>
-            <xs:selector xpath="dictionary/elements/element"/>
+            <xs:selector xpath="elements/element"/>
             <xs:field xpath="@elementId"/>
         </xs:key>
         <xs:key name="Element_Label_Key">
-            <xs:selector xpath="dictionary/elements/element"/>
-            <xs:field xpath="@label"/>
+            <xs:selector xpath="elements/element"/>
+            <xs:field xpath="label"/>
         </xs:key>
         <xs:keyref name="Element_LabelKeyRef" refer="Element_Label_Key">
-            <xs:selector xpath="dictionary/elementHierarchies/elementHierarchy"/>
+            <xs:selector xpath="elementHierarchies/elementHierarchy"/>
             <xs:field xpath="@parentElement | @childElement"/>
         </xs:keyref>
-        <xs:key name="Unit_Key_Name">
-            <xs:annotation>
-                <xs:documentation>Signifies that the unit attribute on a Unit element must be unique throughout this document</xs:documentation>
-            </xs:annotation>
-            <xs:selector xpath="units/unit"/>
-            <xs:field xpath="@unit"/>
-        </xs:key>
-        <xs:keyref name="Element_Unit_KeyNameRef" refer="Unit_Key_Name">
-            <xs:annotation>
-                <xs:documentation>The unit attribute on an element object must reference a Unit Key in this document</xs:documentation>
-            </xs:annotation>
-            <xs:selector xpath="elements/element"/>
-            <xs:field xpath="@unit"/>
-        </xs:keyref>
-        <xs:keyref name="Unit_Descriptor_KeyRef" refer="Unit_Key_Name">
-            <xs:annotation>
-                <xs:documentation>The unit attribute on the descriptors (instance, ass and biology)
-should reference a unit</xs:documentation>
-            </xs:annotation>
-            <xs:selector xpath="descriptiors/descriptor"/>
-            <xs:field xpath="@unit"/>
-        </xs:keyref>
-        <xs:keyref name="ResultType_BaseUnit_KeyNameRef" refer="Unit_Key_Name">
-            <xs:selector xpath="resultTypes/resultType"/>
-            <xs:field xpath="@baseUnit"/>
-        </xs:keyref>
-        <xs:keyref name="UnitConversion_FromUnit_KeyNameRef" refer="Unit_Key_Name">
-            <xs:selector xpath="unitConversions/unitConversion"/>
-            <xs:field xpath="@fromUnit"/>
-        </xs:keyref>
-        <xs:keyref name="UnitConversion_ToUnit_KeyNameRef" refer="Unit_Key_Name">
-            <xs:selector xpath="unitConversions/unitConversion"/>
-            <xs:field xpath="@toUnit"/>
-        </xs:keyref>
         <xs:keyref name="Element_LabelResultTypeKeyRef" refer="Element_Label_Key">
-            <xs:selector xpath="dictionary/elementHierarchies/elementHierarchy"/>
+            <xs:selector xpath="elementHierarchies/elementHierarchy"/>
             <xs:field xpath="@element"/>
         </xs:keyref>
         <xs:keyref name="Element_LabelStageElementKeyRef" refer="Element_Label_Key">
-            <xs:selector xpath="dictionary/stages/stage"/>
+            <xs:selector xpath="stages/stage"/>
             <xs:field xpath="@stageElement"/>
         </xs:keyref>
         <xs:keyref name="Element_LabKeyRef" refer="Element_Label_Key">
-            <xs:selector xpath="dictionary/laboratories/laboratory"/>
+            <xs:selector xpath="laboratories/laboratory"/>
             <xs:field xpath="@laboratoryElement"/>
         </xs:keyref>
-        <xs:keyref name="Element_UnitLabelKeyRef" refer="Element_Label_Key">
-            <xs:selector xpath="dictionary/units/unit"/>
-            <xs:field xpath="@unitElement"/>
-        </xs:keyref>
-        <xs:key name="ResultType_Name_Key">
-            <xs:selector xpath="dictionary/resultTypes/resultType"/>
-            <xs:field xpath="resultTypeName"/>
-        </xs:key>
-        <xs:keyref name="ResultTypeName_KeyRef" refer="ResultType_Name_Key">
-            <xs:selector xpath="dictionary/resultTypes/resultType"/>
-            <xs:field xpath="@parentResultType"/>
-        </xs:keyref>
-        <xs:key name="Stage_Key">
-            <xs:selector xpath="dictionary/stages/stage"/>
-            <xs:field xpath="stageName"/>
-        </xs:key>
-        <xs:keyref name="Stage_KeyRef" refer="Stage_Key">
-            <xs:selector xpath="dictionary/stages/stage"/>
-            <xs:field xpath="@parentStageName"/>
-        </xs:keyref>
-        <xs:key name="Laboratory_Key">
-            <xs:selector xpath="dictionary/laboratories/laboratory"/>
-            <xs:field xpath="laboratoryName"/>
-        </xs:key>
-        <xs:keyref name="Laboratory_KeyRef" refer="Laboratory_Key">
-            <xs:selector xpath="dictionary/laboratories/laboratory"/>
-            <xs:field xpath="@parentLaboratory"/>
-        </xs:keyref>
-        <xs:key name="Unit_Key">
-            <xs:selector xpath="dictionary/units/unit"/>
-            <xs:field xpath="unit"/>
-        </xs:key>
-        <xs:keyref name="Unit_KeyRef" refer="Unit_Key">
-            <xs:selector xpath="dictionary/units/unit"/>
-            <xs:field xpath="@parentUnit"/>
-        </xs:keyref>
+       
     </xs:element>
     <xs:complexType name="descriptorType">
         <xs:sequence>

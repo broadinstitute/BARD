@@ -15,7 +15,7 @@ import bard.db.dictionary.*
  *
  */
 @Unroll
-@Build([UnitTree, Element, UnitConversion])
+@Build([UnitTree, Element, UnitConversion, StageTree])
 class DictionaryExportHelperServiceUnitSpec extends Specification {
     DictionaryExportHelperService dictionaryExportHelperService
     LinkGenerator grailsLinkGenerator
@@ -75,14 +75,14 @@ class DictionaryExportHelperServiceUnitSpec extends Specification {
     void "test generate Attributes For Stage #label"() {
         when:
         final Map<String, String> mapResults =
-            this.dictionaryExportHelperService.generateAttributesForStage(stage)
+            this.dictionaryExportHelperService.generateAttributesForStage(stage.call())
         then:
         mapResults == results
 
         where:
-        label                   | stage                                                       | results
-        "With all attributes"   | new Stage(stageName: "stage1", label: "1", parentName: "2") | [stageElement: "1", parentStageName: "2"]
-        "With No Parent Statge" | new Stage(stageName: "stage1", label: "2")                  | [stageElement: "2"]
+        label                   | stage                                                                                                                | results
+        "With all attributes"   | { StageTree.build(element: Element.build(label: "1"), parent: StageTree.build(element: Element.build(label: "2"))) } | [stageElement: "1", parentStageName: "2"]
+        "With No Parent Statge" | { StageTree.build(element: Element.build(label: "2")) }                                                              | [stageElement: "2"]
 
     }
 //    /**
@@ -169,9 +169,9 @@ class DictionaryExportHelperServiceUnitSpec extends Specification {
         then:
         XmlTestAssertions.assertResults(results, this.writer.toString())
         where:
-        label                     | stage                                                                                                | results
-        "Full Stage"              | new Stage(stageName: "Stage", description: "desc", parentName: "parentStage", label: "elementLabel") | XmlTestSamples.STAGE_FULL
-        "Full Stage no parent Id" | new Stage(stageName: "Stage", description: "desc", label: "elementLabel")                            | XmlTestSamples.STAGE_NO_PARENT
+        label                     | stage                                                                                                                                              | results
+        "Full Stage"              | new StageTree(element: new Element(label: "elementLabel", description: "desc"), parent: new StageTree(element: new Element(label: "parentStage"))) | XmlTestSamples.STAGE_FULL
+        "Full Stage no parent Id" | new StageTree(element: new Element(label: "elementLabel", description: "desc"))                                                                           | XmlTestSamples.STAGE_NO_PARENT
     }
 
     void "test Generate Element Hierarchy #label"() {

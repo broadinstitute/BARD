@@ -68,17 +68,9 @@ class DictionaryExportHelperService {
         final Sql sql = new Sql(dataSource)
 
         xml.stages() {
-            sql.eachRow('SELECT * FROM STAGE_TREE') { stageRow ->
-                String parentName = null
-
-                final String label
-                Long parentNodeId = stageRow.PARENT_NODE_ID
-                if (parentNodeId) {
-                    def parentRow = sql.firstRow("SELECT STAGE FROM STAGE_TREE WHERE NODE_ID=?", [parentNodeId])
-                    parentName = parentRow.STAGE
-                }
-                StageElement stageElement = StageElement.get(stageRow.STAGE_ID)
-                generateStage(xml, new Stage(stageRow, parentName, stageElement?.label))
+            List<StageTree> stageTrees = StageTree.list()
+            for (StageTree stageTree in stageTrees) {
+                generateStage(xml, stageTree)
             }
         }
     }
@@ -110,16 +102,17 @@ class DictionaryExportHelperService {
  * @param xml
  * @param stageId
  */
-    public void generateStage(final MarkupBuilder xml, final Stage stage) {
-        final Map<String, String> attributes = generateAttributesForStage(stage)
+    public void generateStage(final MarkupBuilder xml, final StageTree stageTree) {
+        final Map<String, String> attributes = generateAttributesForStage(stageTree)
         xml.stage(attributes) {
-            if (stage.stageName) {
-                stageName(stage.stageName)
+            // TODO eleminate stageName
+            if (stageTree.element.label) {
+                stageName(stageTree.element.label)
             }
-            if (stage.description) {
-                description(stage.description)
+            if (stageTree.element.description) {
+                description(stageTree.element.description)
             }
-            final String href = grailsLinkGenerator.link(mapping: 'element', absolute: true, params: [id: stage.stageId]).toString()
+            final String href = grailsLinkGenerator.link(mapping: 'element', absolute: true, params: [id: stageTree.element.id]).toString()
             link(rel: 'related', href: "${href}", type: "${this.elementMediaType}")
         }
     }
@@ -129,7 +122,7 @@ class DictionaryExportHelperService {
  * @param xml
  */
     public void generateElements(final MarkupBuilder xml) {
-        List<Element> elements = Element.findAll()
+        List<Element> elements = Element.findAll(sort: 'id')
         xml.elements() {
             for (Element element : elements) {
                 generateElement(xml, element)
@@ -368,23 +361,21 @@ class DictionaryExportHelperService {
         final String elementHref = grailsLinkGenerator.link(mapping: 'element', absolute: true, params: [id: descriptor.element.id]).toString()
         xml.link(rel: 'edit', href: "${elementHref}", type: "${this.elementMediaType}")
     }
-/**
- *  Attributes for a Stage
- * @param stageId
- * @param parentStageId
- * @param stageStatus
- * @return Map for attribute
- */
-    public Map<String, String> generateAttributesForStage(final Stage stage) {
+    /**
+     *  Attributes for a Stage
+     * @param stageId
+     * @param parentStageId
+     * @param stageStatus
+     * @return Map for attribute
+     */
+    public Map<String, String> generateAttributesForStage(final StageTree stageTree) {
         final Map<String, String> attributes = [:]
-
         //use stageId to get the element label
-        if (stage.label) {
-            attributes.put('stageElement', stage.label)
+        if (stageTree.element.label) {
+            attributes.put('stageElement', stageTree.element.label)
         }
-
-        if (stage.parentName) {
-            attributes.put('parentStageName', stage.parentName)
+        if (stageTree.parent) {
+            attributes.put('parentStageName', stageTree.parent.element.label)
         }
         return attributes
     }
@@ -473,30 +464,6 @@ class DictionaryExportHelperService {
         // TODO eliminate descriptorElement or descriptor, they'll always have the same value
         attributes.put('descriptor', descriptor.element.label)
         return attributes;
-    }
-
-}
-
-
-public class Stage {
-    String label
-    String parentName
-    String stageName
-    String description
-    Long stageId
-    String stageStatus
-
-    Stage() {
-
-    }
-
-    Stage(def stageRow, final String parentName, final String label) {
-        this.stageName = stageRow.STAGE
-        this.description = stageRow.DESCRIPTION
-        this.stageId = stageRow.STAGE_ID
-        this.stageStatus = stageRow.STAGE_STATUS
-        this.parentName = parentName
-        this.label = label
     }
 }
 public class Laboratory {

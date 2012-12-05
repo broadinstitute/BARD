@@ -603,34 +603,34 @@ class XmlTestSamples {
     static String STAGES = '''
         <stages>
           <stage stageElement='label1'>
-            <stageName>label</stageName>
+            <stageName>label1</stageName>
             <link rel='related' href='http://localhost:8080/dataExport/api/dictionary/element/1' type='application/vnd.bard.cap+xml;type=element' />
           </stage>
           <stage stageElement='label2'>
-            <stageName>label</stageName>
+            <stageName>label2</stageName>
             <link rel='related' href='http://localhost:8080/dataExport/api/dictionary/element/2' type='application/vnd.bard.cap+xml;type=element' />
           </stage>
         </stages>'''
 
     static String STAGE = '''
         <stage stageElement='IC50'>
-          <stageName>construct variant assay</stageName>
+          <stageName>IC50</stageName>
           <description>Description</description>
-          <link rel='related' href='http://localhost:8080/dataExport/api/dictionary/element/341' type='application/vnd.bard.cap+xml;type=element' />
+          <link rel='related' href='http://localhost:8080/dataExport/api/dictionary/element/1' type='application/vnd.bard.cap+xml;type=element' />
         </stage> '''
 
     static String STAGE1 = '''
         <stage stageElement='IC50'>
-          <stageName>construct variant assay</stageName>
+          <stageName>IC50</stageName>
           <description>Description</description>
-          <link rel='related' href='http://localhost:8080/dataExport/api/dictionary/element/341' type='application/vnd.bard.cap+xml;type=element' />
+          <link rel='related' href='http://localhost:8080/dataExport/api/dictionary/element/1' type='application/vnd.bard.cap+xml;type=element' />
         </stage> '''
 
 
     static String RESULT_TYPE = '''
     <resultType resultTypeElement='IC50' baseUnit='uM' resultTypeStatus='Published'>
     <resultTypeName>IC50</resultTypeName>
-  <link rel='related' href='http://localhost:8080/dataExport/api/dictionary/element/341' type='application/vnd.bard.cap+xml;type=element' />
+  <link rel='related' href='http://localhost:8080/dataExport/api/dictionary/element/1' type='application/vnd.bard.cap+xml;type=element' />
     </resultType>
 '''
 
@@ -643,7 +643,7 @@ class XmlTestSamples {
     static String ELEMENT = '''
     <element elementId='1' readyForExtraction='Ready' elementStatus='Published'>
       <label>uM</label>
-      <link rel='edit' href='http://localhost:8080/dataExport/api/dictionary/element/386' type='application/vnd.bard.cap+xml;type=element' />
+      <link rel='edit' href='http://localhost:8080/dataExport/api/dictionary/element/1' type='application/vnd.bard.cap+xml;type=element' />
     </element>
     '''
 
@@ -714,7 +714,7 @@ class XmlTestSamples {
           </resultTypes>
           <stages>
             <stage stageElement='label2'>
-              <stageName>label</stageName>
+              <stageName>label2</stageName>
               <link rel='related' href='http://localhost:8080/dataExport/api/dictionary/element/4' type='application/vnd.bard.cap+xml;type=element' />
             </stage>
           </stages>
@@ -880,7 +880,7 @@ class XmlTestSamples {
 '''
     static String STAGE_FULL = '''
 <stage stageElement='elementLabel' parentStageName='parentStage'>
-  <stageName>Stage</stageName>
+  <stageName>elementLabel</stageName>
   <description>desc</description>
   <link rel='related' href='null' type='xml' />
 </stage>
@@ -888,7 +888,7 @@ class XmlTestSamples {
 
     static String STAGE_NO_PARENT = '''
         <stage stageElement='elementLabel'>
-          <stageName>Stage</stageName>
+          <stageName>elementLabel</stageName>
           <description>desc</description>
             <link rel='related' href='null' type='xml' />
         </stage>

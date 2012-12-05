@@ -1,8 +1,9 @@
 package dataexport.dictionary
 
 import bard.db.dictionary.Element
-import bard.db.dictionary.ResultTypeElement
-import bard.db.dictionary.StageElement
+import bard.db.dictionary.ResultTypeTree
+import bard.db.dictionary.StageTree
+import bard.db.enums.ReadyForExtraction
 import dataexport.registration.BardHttpResponse
 import dataexport.util.UtilityService
 import exceptions.NotFoundException
@@ -10,8 +11,6 @@ import groovy.sql.Sql
 import groovy.xml.MarkupBuilder
 
 import javax.sql.DataSource
-import bard.db.enums.ReadyForExtraction
-import bard.db.dictionary.ResultTypeTree
 
 /**
  * Top Level service for handling the
@@ -50,42 +49,33 @@ class DictionaryExportService {
      * The Id supplied is the Id if an Element, not the id of the Stage
      */
     public Long generateStage(final MarkupBuilder xml, final Long elementId) {
-        String errorMessage
+
         final Sql sql = new Sql(dataSource)
+        //TODO review this seems not correct ot just pick the first one, there can be several
         def stageRow = sql.firstRow("SELECT * FROM STAGE_TREE WHERE STAGE_ID=?", [elementId])
         if (stageRow) {
-            String parentName = null
-
-            final String label
-            Long parentNodeId = stageRow.PARENT_NODE_ID
-            if (parentNodeId) {
-                def parentRow = sql.firstRow("SELECT STAGE FROM STAGE_TREE WHERE NODE_ID=?", [parentNodeId])
-                parentName = parentRow.STAGE
-            }
-            StageElement stageElement = StageElement.get(stageRow.STAGE_ID)
-            Stage stage = new Stage(stageRow, parentName, stageElement?.label)
-            this.dictionaryExportHelperService.generateStage(xml, stage)
+            StageTree stageTree = StageTree.findById(stageRow.NODE_ID)
+            this.dictionaryExportHelperService.generateStage(xml, stageTree)
             return 0
         }
-
-        errorMessage = "Element with id ${elementId} does not exists"
+        String errorMessage = "Element with id ${elementId} does not exists"
         log.error(errorMessage)
         throw new NotFoundException(errorMessage)
     }
 
-    /**
-     *  Generate a resultType given a resultTypeId
-     *   <resultType></resultType>
-     * @param xml
-     * @param elementId - This usually is called by the Rest controller.
-     * The Id supplied is the Id if an Element, not the id of the ResultType
-     */
+/**
+ *  Generate a resultType given a resultTypeId
+ *   <resultType></resultType>
+ * @param xml
+ * @param elementId - This usually is called by the Rest controller.
+ * The Id supplied is the Id if an Element, not the id of the ResultType
+ */
     public Long generateResultType(final MarkupBuilder xml, final Long elementId) {
 
         String errorMessage
 
         final Sql sql = new Sql(dataSource)
-
+        //TODO review this seems odd, to selec the first one, a given element can appear several times
         def resultTypeRow = sql.firstRow("SELECT * FROM RESULT_TYPE_TREE WHERE RESULT_TYPE_ID=? ORDER BY NODE_ID", [elementId])
         if (resultTypeRow) {
             ResultTypeTree resultTypeTree = ResultTypeTree.read(resultTypeRow.NODE_ID)
@@ -97,12 +87,12 @@ class DictionaryExportService {
         throw new NotFoundException(errorMessage)
     }
 
-    /**
-     * Generate an element from an elementId
-     * <element elementId=""></element>
-     * @param xml
-     * @param elementId - This usually is called by the Rest controller.
-     */
+/**
+ * Generate an element from an elementId
+ * <element elementId=""></element>
+ * @param xml
+ * @param elementId - This usually is called by the Rest controller.
+ */
     public Long generateElement(final MarkupBuilder xml, final Long elementId) {
         final Element element = Element.get(elementId)
         if (element) {
@@ -113,10 +103,11 @@ class DictionaryExportService {
         log.error(errorMessage)
         throw new NotFoundException(errorMessage)
     }
-    /**
-     * Root node for generating the entire dictionary
-     */
+/**
+ * Root node for generating the entire dictionary
+ */
     public void generateDictionary(final MarkupBuilder xml) {
         dictionaryExportHelperService.generateDictionary(xml)
     }
+
 }

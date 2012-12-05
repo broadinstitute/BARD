@@ -163,25 +163,33 @@ class DictionaryExportHelperServiceIntegrationSpec extends IntegrationSpec {
 
     void "test generate Stages"() {
         given:
-
         2.times {def treeNode = StageTree.build(); treeNode.save(flush: true)}
+
         when:
         this.dictionaryExportHelperService.generateStages(this.markupBuilder)
+        println(this.writer.toString())
+
         then:
         XmlTestAssertions.assertResultsWithOverrideAttributes(results, this.writer.toString())
+
         where:
         label    | results
         "Stages" | XmlTestSamples.STAGES
-
     }
 
     void "test generate Stage"() {
         given:
-        final Stage stage = new Stage(stageName: 'construct variant assay', description: 'Description', stageId: 341, label: 'IC50')
+        def fixture = fixtureLoader.build {
+            element(Element, label: 'IC50', description: 'Description')
+            stageTree(StageTree, element: element)
+        }
+
         when:
-        this.dictionaryExportHelperService.generateStage(this.markupBuilder, stage)
+        this.dictionaryExportHelperService.generateStage(this.markupBuilder, fixture.stageTree)
+
         then:
         XmlTestAssertions.assertResults(results, this.writer.toString())
+
         where:
         label   | results
         "Stage" | XmlTestSamples.STAGE1
@@ -223,6 +231,7 @@ class DictionaryExportHelperServiceIntegrationSpec extends IntegrationSpec {
                 multiplier: 1000)
 
         when:
+        println(this.writer.toString())
         this.dictionaryExportHelperService.generateDictionary(this.markupBuilder)
         then:
 
