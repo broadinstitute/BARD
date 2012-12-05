@@ -10,11 +10,16 @@ import registration.AssayService
 import bard.db.project.ProjectExperiment
 import org.apache.commons.lang.time.StopWatch
 import bard.db.registration.ExternalSystem
+import javax.sql.DataSource
+import groovy.sql.Sql
+import groovy.sql.GroovyRowResult
+import bard.db.project.ProjectStep
 
 class ParseSwamidassProjectsService {
 
     AssayService assayService
     ProjectService projectService
+    DataSource dataSource
 
     public void buildBundles(File projectDirectory, Cluster cluster) {
         File bundlesFile = new File(projectDirectory, 'bundles')
@@ -183,6 +188,20 @@ class ParseSwamidassProjectsService {
         return null
     }
 
+    private Long findExperimentAID(Experiment experiment) {
+        List<Long> experimentAIDs = experiment.externalReferences.collect {ExternalReference externalReference ->
+            String aid = externalReference.extAssayRef - 'aid='
+            if (!aid.isNumber()) return null
+            return new Long(aid)
+        }
+        experimentAIDs.removeAll([null])
+        if (experimentAIDs) {
+            assert experimentAIDs.size() == 1, "experiment ${experiment.id} should be connected to one and only one PubChem AID (${experimentAIDs})"
+            return experimentAIDs.first()
+        }
+        return null
+    }
+
     private Experiment findExperimentByPubChemAID(Long aid) {
         def criteria = Experiment.createCriteria()
         List<Experiment> experiments = criteria.listDistinct {
@@ -199,4 +218,74 @@ class ParseSwamidassProjectsService {
         }
         return null
     }
+
+    /**
+     * 1. For each project in CAP:
+     * 2.   For each projectExperiment in project:
+     * 3.       Find if the experiment is a parent in the Swamidass model
+     * 4.           If a parent, check if the child exists in the current project as well.
+     * 5.               If yes, create a new ProjectStep
+     * 6.Since both the parent and the child projects HAVE to exist in the project context, it's enough to check only the parent->child path and we don't have to check the other direction (child->parent).
+     */
+    public void createProjectStepsFromSwamidassModel() {
+        StopWatch sw = new StopWatch()
+        sw.start()
+
+        Integer totalProjects = Project.count()
+        Integer count = 1
+        Project.list().each {Project project ->
+            Log.logger.info("(${count++}/${totalProjects}\t${sw}) Processing project ${project.id}")
+//            Long projectAID = findProjectAID(project)
+//            if (!projectAID) {
+//                Log.logger.error("(${count++}/${totalProjects}) We couldn't find a summary AID for project: ${project.id}")
+//                return
+//            }
+            //Iterate over all project's experiments
+            project.projectExperiments.each {ProjectExperiment parentProjectExperiment ->
+                Long parentExperimentAID = findExperimentAID(parentProjectExperiment.experiment)
+                if (!parentExperimentAID) {
+                    Log.logger.error("\tWe couldn't find a summary AID for experiment: ${experiment.id}")
+                    return
+                }
+                //Find if the experiment has children in the Swamidass model
+                List<swamidassParentChildDTO> foundChildren = getSwamidassChildrenByParentAID(parentExperimentAID)
+                Set<ProjectExperiment> foundChildrenProjectExperiments = project.projectExperiments.findAll {ProjectExperiment candidate ->
+                    return foundChildren*.childAID.contains(findExperimentAID(candidate.experiment))
+                }
+
+                //Create a project-step for each parent/child relation
+                foundChildrenProjectExperiments.each {ProjectExperiment childProjectExperiment ->
+                    if (childProjectExperiment == parentProjectExperiment) return //skip if an experiment points to itself
+                    ProjectStep newProjectStep = new ProjectStep(edgeName: "Discovered by Swamidass clustering",
+                            previousProjectExperiment: parentProjectExperiment,
+                            nextProjectExperiment: childProjectExperiment,
+                            dateCreated: new Date())
+
+                    newProjectStep.save(failOnError: true, flush: true)
+                    Log.logger.info("Successfully created a new project-step: parent-experinemt=${parentProjectExperiment.experiment.id} (aid=${parentExperimentAID}); child-experiment=${childProjectExperiment.experiment.id} (aid=${findExperimentAID(childProjectExperiment.experiment)})")
+                }
+            }
+        }
+        Log.logger.info("Total processing time: ${sw}")
+    }
+
+    private List<swamidassParentChildDTO> getSwamidassChildrenByParentAID(Long aid) {
+        def db = new Sql(this.dataSource)
+        String queryString = 'select * from swamidass_aids_heirarchy_view v where v.parent_aid = :PubchemAID'
+        String queryParam = "aid=${aid.toString()}"
+        List<swamidassParentChildDTO> parentChildList = db.rows(queryString, [PubchemAID: queryParam]).collect { GroovyRowResult rowResult ->
+            new swamidassParentChildDTO(
+                    parentAID: (rowResult['PARENT_AID'] - 'aid=') as long,
+                    childAID: (rowResult['CHILD_AID'] - 'aid=') as Long,
+                    clusterName: rowResult['CLUSTER_NAME'] as String)
+        }
+
+        return parentChildList*.childAID
+    }
+}
+
+class swamidassParentChildDTO {
+    Long parentAID
+    Long childAID
+    String clusterName
 }
