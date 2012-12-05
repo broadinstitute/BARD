@@ -250,7 +250,9 @@ class ParseSwamidassProjectsService {
                 //Find if the experiment has children in the Swamidass model
                 List<swamidassParentChildDTO> foundChildren = getSwamidassChildrenByParentAID(parentExperimentAID)
                 Set<ProjectExperiment> foundChildrenProjectExperiments = project.projectExperiments.findAll {ProjectExperiment candidate ->
-                    return foundChildren*.childAID.contains(findExperimentAID(candidate.experiment))
+                    final long candidateExperimentAID = findExperimentAID(candidate.experiment)
+                    List<Long> foundChildrenAIDs = foundChildren*.childAID
+                    return foundChildrenAIDs.contains(candidateExperimentAID)
                 }
 
                 //Create a project-step for each parent/child relation
@@ -280,7 +282,7 @@ class ParseSwamidassProjectsService {
                     clusterName: rowResult['CLUSTER_NAME'] as String)
         }
 
-        return parentChildList*.childAID
+        return parentChildList
     }
 }
 
