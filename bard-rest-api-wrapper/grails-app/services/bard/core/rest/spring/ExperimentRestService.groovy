@@ -70,16 +70,24 @@ class ExperimentRestService extends AbstractRestService {
     public ExperimentData activities(Long experimentId) {
         return activities(experimentId, null)
     }
-
+    /**
+     * This is for unbounded searching, we cap the number of records at:
+     *
+     * RestApiConstants.MAXIMUM_NUMBER_OF_EXPERIMENTS
+     *
+     * @param experimentId
+     * @param etag
+     * @return {@link ExperimentData}
+     */
     public ExperimentData activities(final Long experimentId, final String etag) {
         // unbounded fetching
-        int top = multiplier * multiplier;
-        int ratio = multiplier;
+        int top = multiplier * multiplier
+        int ratio = multiplier
         long skip = 0;
         final List<Activity> activities = []
         ExperimentData experimentData = new ExperimentData()
         while (true) {
-            final String resource = buildExperimentQuery(experimentId, etag, top, skip);
+            final String resource = buildExperimentQuery(experimentId, etag, top, skip)
             final URL url = new URL(resource)
             int currentSize
             List<Activity> currentActivities
@@ -92,7 +100,7 @@ class ExperimentRestService extends AbstractRestService {
             }
             if (currentActivities) {
                 currentSize = currentActivities.size()
-                activities.addAll(currentActivities);
+                activities.addAll(currentActivities)
             } else {
                 currentSize = 0
             }
@@ -105,6 +113,29 @@ class ExperimentRestService extends AbstractRestService {
 
         }
         experimentData.setActivities(activities)
+        return experimentData;
+    }
+    /**
+     *
+     * @param experimentId
+     * @param etag
+     * @param top
+     * @param skip
+     * @return {@link ExperimentData}
+     */
+    public ExperimentData activities(final Long experimentId, final String etag, final int top, final int skip) {
+        final String resource = buildExperimentQuery(experimentId, etag, top, skip);
+        final URL url = new URL(resource)
+        ExperimentData experimentData
+
+        if (etag) {
+            experimentData = new ExperimentData()
+            final List<Activity> activities = (this.restTemplate.getForObject(url.toURI(), Activity[].class)) as List<Activity>
+            experimentData.setActivities(activities)
+
+        } else {
+            experimentData = this.restTemplate.getForObject(url.toURI(), ExperimentData.class)
+        }
         return experimentData;
     }
 

@@ -523,7 +523,25 @@ class MolecularSpreadSheetService {
         }
         return spreadSheetActivities
     }
+    /**
+     *
+     * @param experiment
+     * @param compoundETag
+     * @return
+     */
+    List<SpreadSheetActivity> findActivitiesForCompounds(final Long experimentId, final String compoundETag,  final int top,final int skip) {
+        final List<SpreadSheetActivity> spreadSheetActivities = []
+        final ExperimentData experimentData = experimentRestService.activities(experimentId, compoundETag,top,skip);
 
+        for (Activity experimentValue : experimentData.activities) {
+            if (experimentValue) {
+                SpreadSheetActivity spreadSheetActivity = extractActivitiesFromExperiment(experimentValue)
+                spreadSheetActivity.experimentId = experimentId
+                spreadSheetActivities.add(spreadSheetActivity)
+            }
+        }
+        return spreadSheetActivities
+    }
 
     Map findExperimentDataById(final Long experimentId, final Integer top = 10, final Integer skip = 0) {
         List<SpreadSheetActivity> spreadSheetActivities = []

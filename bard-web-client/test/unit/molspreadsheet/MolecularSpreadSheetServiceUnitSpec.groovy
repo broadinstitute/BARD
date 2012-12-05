@@ -120,7 +120,7 @@ class MolecularSpreadSheetServiceUnitSpec extends Specification {
 
 
 
-    void "test findActivitiesForCompounds #label"() {
+    void "test findActivitiesForCompounds"() {
         given:
         Long experimentId = 2
         String compoundETag = null
@@ -133,7 +133,21 @@ class MolecularSpreadSheetServiceUnitSpec extends Specification {
         experimentRestService.activities(_, _) >> {experimentData}
         assert !spreadSheetActivities.isEmpty()
     }
-
+    void "test findActivitiesForCompounds with skip and top"() {
+        given:
+        Long experimentId = 2
+        int skip = 0
+        int top = 2
+        String compoundETag = null
+        ExperimentData experimentData = new ExperimentData(activities: [new Activity(potency: 2.0), new Activity(potency: 3.0)])
+        //add a null value
+        experimentData.activities.add(null)
+        when:
+        List<SpreadSheetActivity> spreadSheetActivities = service.findActivitiesForCompounds(experimentId, compoundETag,top,skip)
+        then:
+        experimentRestService.activities(_, _,_,_) >> {experimentData}
+        assert !spreadSheetActivities.isEmpty()
+    }
     void "test assays To Experiments"() {
         given:
         Collection<Assay> assays = [new Assay(assayId: 2)]
