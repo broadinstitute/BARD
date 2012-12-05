@@ -5,10 +5,10 @@ import bard.db.registration.Assay
 class Bundle {
 
     Integer bid
-    Set<Assay> assays
+    Set<String> assays
     Cluster cluster
 
-    static hasMany = [assays: Assay]
+    static hasMany = [assays: String]
 
     static belongsTo = [cluster: Cluster]
 
