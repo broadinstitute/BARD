@@ -1,14 +1,12 @@
 package swamidass.clustering
 
-import bard.db.registration.Assay
-
 class Bundle {
 
     Integer bid
-    Set<String> assays
+    Set<String> pubchemAIDs
     Cluster cluster
 
-    static hasMany = [assays: String]
+    static hasMany = [pubchemAIDs: String]
 
     static belongsTo = [cluster: Cluster]
 

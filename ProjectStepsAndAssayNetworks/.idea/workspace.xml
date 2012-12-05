@@ -2,25 +2,10 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="e13089c4-29a6-41e2-a6dd-5e7a8f3e0083" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/.name" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../BardDomainModel/grails-app/services/project/ProjectService.groovy" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../BardDomainModel/test/integration/bard/db/project/ProjectServiceIntegrationSpec.groovy" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/compiler.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/copyright/profiles_settings.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/encodings.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/gradle.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/misc.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/modules.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/scopes/scope_settings.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/uiDesigner.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/vcs.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/scripts/CreateProjectExperimentFromPubChemDepositors.groovy" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../.gitignore" afterPath="$PROJECT_DIR$/../.gitignore" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ParseSwamidassProjects.log" afterPath="$PROJECT_DIR$/ParseSwamidassProjects.log" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/grails-app/domain/swamidass/clustering/Bundle.groovy" afterPath="$PROJECT_DIR$/grails-app/domain/swamidass/clustering/Bundle.groovy" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/grails-app/services/swamidass/clustering/ParseSwamidassProjectsService.groovy" afterPath="$PROJECT_DIR$/grails-app/services/swamidass/clustering/ParseSwamidassProjectsService.groovy" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/scripts/parse_pcassay_depositorneighbor.groovy" afterPath="$PROJECT_DIR$/scripts/parse_pcassay_depositorneighbor.groovy" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/scripts/CreateProjectExperimentFromPubChemDepositors.groovy" afterPath="$PROJECT_DIR$/scripts/CreateProjectExperimentFromPubChemDepositors.groovy" />
     </list>
     <ignored path="ProjectStepsAndAssayNetworks.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -40,7 +25,7 @@
   </component>
   <component name="DebuggerManager">
     <line_breakpoints>
-      <breakpoint url="file://$PROJECT_DIR$/grails-app/services/swamidass/clustering/ParseSwamidassProjectsService.groovy" line="156" class="swamidass.clustering.ParseSwamidassProjectsService" package="swamidass.clustering">
+      <breakpoint url="file://$PROJECT_DIR$/grails-app/services/swamidass/clustering/ParseSwamidassProjectsService.groovy" line="154" class="swamidass.clustering.ParseSwamidassProjectsService" package="swamidass.clustering">
         <option name="ENABLED" value="true" />
         <option name="LOG_ENABLED" value="false" />
         <option name="LOG_EXPRESSION_ENABLED" value="false" />
@@ -53,7 +38,59 @@
         <option name="CONDITION" value="" />
         <option name="LOG_MESSAGE" value="" />
       </breakpoint>
-      <breakpoint url="file://$PROJECT_DIR$/grails-app/services/swamidass/clustering/ParseSwamidassProjectsService.groovy" line="159" class="swamidass.clustering.ParseSwamidassProjectsService" package="swamidass.clustering">
+      <breakpoint url="file://$PROJECT_DIR$/grails-app/services/swamidass/clustering/ParseSwamidassProjectsService.groovy" line="158" class="swamidass.clustering.ParseSwamidassProjectsService" package="swamidass.clustering">
+        <option name="ENABLED" value="true" />
+        <option name="LOG_ENABLED" value="false" />
+        <option name="LOG_EXPRESSION_ENABLED" value="false" />
+        <option name="SUSPEND_POLICY" value="SuspendAll" />
+        <option name="COUNT_FILTER_ENABLED" value="false" />
+        <option name="COUNT_FILTER" value="0" />
+        <option name="CONDITION_ENABLED" value="false" />
+        <option name="CLASS_FILTERS_ENABLED" value="false" />
+        <option name="INSTANCE_FILTERS_ENABLED" value="false" />
+        <option name="CONDITION" value="" />
+        <option name="LOG_MESSAGE" value="" />
+      </breakpoint>
+      <breakpoint url="file://$PROJECT_DIR$/grails-app/services/swamidass/clustering/ParseSwamidassProjectsService.groovy" line="162" class="swamidass.clustering.ParseSwamidassProjectsService" package="swamidass.clustering">
+        <option name="ENABLED" value="true" />
+        <option name="LOG_ENABLED" value="false" />
+        <option name="LOG_EXPRESSION_ENABLED" value="false" />
+        <option name="SUSPEND_POLICY" value="SuspendAll" />
+        <option name="COUNT_FILTER_ENABLED" value="false" />
+        <option name="COUNT_FILTER" value="0" />
+        <option name="CONDITION_ENABLED" value="false" />
+        <option name="CLASS_FILTERS_ENABLED" value="false" />
+        <option name="INSTANCE_FILTERS_ENABLED" value="false" />
+        <option name="CONDITION" value="" />
+        <option name="LOG_MESSAGE" value="" />
+      </breakpoint>
+      <breakpoint url="file://$PROJECT_DIR$/grails-app/services/swamidass/clustering/ParseSwamidassProjectsService.groovy" line="163" class="swamidass.clustering.ParseSwamidassProjectsService" package="swamidass.clustering">
+        <option name="ENABLED" value="true" />
+        <option name="LOG_ENABLED" value="false" />
+        <option name="LOG_EXPRESSION_ENABLED" value="false" />
+        <option name="SUSPEND_POLICY" value="SuspendAll" />
+        <option name="COUNT_FILTER_ENABLED" value="false" />
+        <option name="COUNT_FILTER" value="0" />
+        <option name="CONDITION_ENABLED" value="false" />
+        <option name="CLASS_FILTERS_ENABLED" value="false" />
+        <option name="INSTANCE_FILTERS_ENABLED" value="false" />
+        <option name="CONDITION" value="" />
+        <option name="LOG_MESSAGE" value="" />
+      </breakpoint>
+      <breakpoint url="file://$PROJECT_DIR$/grails-app/services/swamidass/clustering/ParseSwamidassProjectsService.groovy" line="164" class="swamidass.clustering.ParseSwamidassProjectsService" package="swamidass.clustering">
+        <option name="ENABLED" value="true" />
+        <option name="LOG_ENABLED" value="false" />
+        <option name="LOG_EXPRESSION_ENABLED" value="false" />
+        <option name="SUSPEND_POLICY" value="SuspendAll" />
+        <option name="COUNT_FILTER_ENABLED" value="false" />
+        <option name="COUNT_FILTER" value="0" />
+        <option name="CONDITION_ENABLED" value="false" />
+        <option name="CLASS_FILTERS_ENABLED" value="false" />
+        <option name="INSTANCE_FILTERS_ENABLED" value="false" />
+        <option name="CONDITION" value="" />
+        <option name="LOG_MESSAGE" value="" />
+      </breakpoint>
+      <breakpoint url="file://$PROJECT_DIR$/grails-app/services/swamidass/clustering/ParseSwamidassProjectsService.groovy" line="165" class="swamidass.clustering.ParseSwamidassProjectsService" package="swamidass.clustering">
         <option name="ENABLED" value="true" />
         <option name="LOG_ENABLED" value="false" />
         <option name="LOG_EXPRESSION_ENABLED" value="false" />
@@ -110,7 +147,7 @@
       <file leaf-file-name="CreateProjectExperimentFromPubChemDepositors.groovy" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/scripts/CreateProjectExperimentFromPubChemDepositors.groovy">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="18" column="47" selection-start="739" selection-end="739" vertical-scroll-proportion="0.0">
+            <state line="20" column="53" selection-start="912" selection-end="912" vertical-scroll-proportion="0.0">
               <folding>
                 <element signature="e#0#29#0" expanded="true" />
               </folding>
@@ -121,7 +158,7 @@
       <file leaf-file-name="ParseSwamidassProjectsService.groovy" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/grails-app/services/swamidass/clustering/ParseSwamidassProjectsService.groovy">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="29" column="25" selection-start="1187" selection-end="1191" vertical-scroll-proportion="0.28412256">
+            <state line="144" column="0" selection-start="7180" selection-end="7180" vertical-scroll-proportion="0.19788918">
               <folding>
                 <element signature="e#30#66#0" expanded="true" />
               </folding>
@@ -156,23 +193,12 @@
       <file leaf-file-name="Bundle.groovy" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/grails-app/domain/swamidass/clustering/Bundle.groovy">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="10" column="36" selection-start="177" selection-end="177" vertical-scroll-proportion="-3.9534883">
+            <state line="5" column="27" selection-start="78" selection-end="89" vertical-scroll-proportion="-1.9767442">
               <folding />
             </state>
           </provider>
           <provider editor-type-id="org.jetbrains.plugins.grails.perspectives.DomainClassesRelationsEditorProvider">
             <state />
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="ParseSwamidassProjects.groovy" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/scripts/ParseSwamidassProjects.groovy">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="23" column="41" selection-start="897" selection-end="897" vertical-scroll-proportion="0.0">
-              <folding>
-                <element signature="e#0#25#0" expanded="true" />
-              </folding>
-            </state>
           </provider>
         </entry>
       </file>
@@ -191,8 +217,8 @@
       <list>
         <option value="$PROJECT_DIR$/../BardDomainModel/grails-app/domain/bard/db/experiment/Experiment.groovy" />
         <option value="$PROJECT_DIR$/scripts/parse_pcassay_depositorneighbor.groovy" />
-        <option value="$PROJECT_DIR$/scripts/CreateProjectExperimentFromPubChemDepositors.groovy" />
         <option value="$PROJECT_DIR$/grails-app/domain/swamidass/clustering/Bundle.groovy" />
+        <option value="$PROJECT_DIR$/scripts/CreateProjectExperimentFromPubChemDepositors.groovy" />
         <option value="$PROJECT_DIR$/grails-app/services/swamidass/clustering/ParseSwamidassProjectsService.groovy" />
       </list>
     </option>
@@ -266,6 +292,7 @@
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="MemberChooser.showClasses" value="true" />
     <property name="GoToClass.includeLibraries" value="false" />
+    <property name="dynamic.classpath" value="false" />
     <property name="options.splitter.details.proportions" value="0.2" />
     <property name="options.searchVisible" value="true" />
   </component>
@@ -408,11 +435,19 @@
     <configuration default="false" name="Grails:ProjectStepsAndAssayNetworks" type="GrailsRunConfigurationType" factoryName="Grails">
       <module name="ProjectStepsAndAssayNetworks" />
       <setting name="vmparams" value="" />
-      <setting name="cmdLine" value="run-app" />
+      <setting name="cmdLine" value="run-app -Dgrails.env=gwalzer_barddev" />
       <setting name="depsClasspath" value="true" />
       <setting name="passParentEnv" value="true" />
       <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
       <setting name="launchBrowser" value="true" />
+      <RunnerSettings RunnerId="Debug">
+        <option name="DEBUG_PORT" value="" />
+        <option name="TRANSPORT" value="0" />
+        <option name="LOCAL" value="true" />
+      </RunnerSettings>
+      <RunnerSettings RunnerId="Run" />
+      <ConfigurationWrapper RunnerId="Debug" />
+      <ConfigurationWrapper RunnerId="Run" />
       <method>
         <option name="Make" enabled="false" />
       </method>
@@ -476,7 +511,7 @@
       <window_info id="Persistence" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="true" content_ui="tabs" />
       <window_info id="JetGradle" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3299712" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.39913544" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="IDEtalk Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
@@ -492,7 +527,7 @@
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.24967825" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3299712" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
@@ -694,18 +729,18 @@
         <state />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/scripts/CreateProjectExperimentFromPubChemDepositors.groovy">
+    <entry file="file://$PROJECT_DIR$/scripts/ParseSwamidassProjects.groovy">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="18" column="47" selection-start="739" selection-end="739" vertical-scroll-proportion="0.0">
+        <state line="23" column="40" selection-start="896" selection-end="896" vertical-scroll-proportion="0.4738095">
           <folding>
-            <element signature="e#0#29#0" expanded="true" />
+            <element signature="e#0#25#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/grails-app/domain/swamidass/clustering/Bundle.groovy">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="10" column="36" selection-start="177" selection-end="177" vertical-scroll-proportion="-3.9534883">
+        <state line="5" column="27" selection-start="78" selection-end="89" vertical-scroll-proportion="-1.9767442">
           <folding />
         </state>
       </provider>
@@ -713,18 +748,18 @@
         <state />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/scripts/ParseSwamidassProjects.groovy">
+    <entry file="file://$PROJECT_DIR$/scripts/CreateProjectExperimentFromPubChemDepositors.groovy">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="23" column="41" selection-start="897" selection-end="897" vertical-scroll-proportion="0.0">
+        <state line="20" column="53" selection-start="912" selection-end="912" vertical-scroll-proportion="0.0">
           <folding>
-            <element signature="e#0#25#0" expanded="true" />
+            <element signature="e#0#29#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/grails-app/services/swamidass/clustering/ParseSwamidassProjectsService.groovy">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="29" column="25" selection-start="1187" selection-end="1191" vertical-scroll-proportion="0.28412256">
+        <state line="144" column="0" selection-start="7180" selection-end="7180" vertical-scroll-proportion="0.19788918">
           <folding>
             <element signature="e#30#66#0" expanded="true" />
           </folding>

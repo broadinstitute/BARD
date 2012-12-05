@@ -15,11 +15,11 @@ File infile = new File(path, filename)
 
 Project.withTransaction {DefaultTransactionStatus status ->
 
-//Update existing projects in CAP with new depositors assays (experiments).
-    parseSwamidassProjectsService.updateExistingProjectFromDepositorNeighbor()
+//Update existing projects in CAP with new depositors pubchemAIDs (experiments).
+//    parseSwamidassProjectsService.updateExistingProjectFromDepositorNeighbor()
 //Create new projects (and their experiments) from the PubChem Summary AID file.
-//    parseSwamidassProjectsService.createNewProjectFromPubChemSummaryAIDs(infile)
+    parseSwamidassProjectsService.createNewProjectFromPubChemSummaryAIDs(infile)
 
     //comment out to commit the transaction
-//    status.setRollbackOnly()
+    status.setRollbackOnly()
 }

@@ -2,7 +2,7 @@ package swamidass.clustering
 
 import bard.db.experiment.Experiment
 import bard.db.project.Project
-import bard.db.registration.Assay
+
 import bard.db.registration.ExternalReference
 import depositor.neighbor.Relation
 import project.ProjectService
@@ -27,22 +27,10 @@ class ParseSwamidassProjectsService {
                 String[] values = line.trim().split('\t')
                 assert values.size() == 2, "we must have a value in each one of the BID/BUNDLE columns of the bundle file"
                 Integer BID = new Integer(values[0].trim())
-                List<Long> AIDs = values[1].split(',').collect { new Long(it.trim() - 'AID')} //e.g., AID1,AID5,AID7
+                List<String> AIDs = values[1].split(',').collect { 'aid=' + (it.trim() - 'AID')} //e.g., AID1,AID5,AID7
                 assert AIDs.size() >= 1, "We expect at least one AID in each row of the BUNDLE column: ${values[1]}"
 
-                //Get all assays by aids
-                List<Assay> assays = AIDs.collect {Long aid ->
-                    List<Assay> foundAssays = assayService.findByPubChemAid(aid)
-                    assert foundAssays.size() <= 1, "We expect one assay the most when searching by aid: ${foundAssays.dump()}"
-                    if (!foundAssays) {
-                        Log.logger.error("We couldn't find a matching assay for AID=${aid}")
-                        return null
-                    }
-                    return foundAssays.first() //and only one
-                }
-                assays.removeAll([null])//remove all the null items - the ones we couldn't find a matching Assay to an AID
-//                assert assays, "We expect to have at least one valid assay in each bundle"
-                Bundle bundle = new Bundle(bid: BID, assays: assays)
+                Bundle bundle = new Bundle(bid: BID, pubchemAIDs: AIDs)
                 cluster.addToBundles(bundle)
             }
         }
@@ -102,7 +90,7 @@ class ParseSwamidassProjectsService {
         return projectService.findProjectByPubChemAid(aid)
     }
 
-    //Update existing projects in CAP with new depositors assays (experiments).
+    //Update existing projects in CAP with new depositors pubchemAIDs (experiments).
     public void updateExistingProjectFromDepositorNeighbor() {
         StopWatch sw = new StopWatch()
         sw.start()
@@ -159,6 +147,7 @@ class ParseSwamidassProjectsService {
                 assert projects.size() <= 1, "There should be at most one project given a Summary AID: ${summaryAID}; found: ${projects*.id}"
                 if (projects.size() == 1) {
                     Log.logger.info("Found project (${projects.first().id}) for summary-AID=${summaryAID}; no need to do anyhing")
+                    return
                 }
 
                 //Create a new project with a new ExternalReference
