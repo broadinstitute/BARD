@@ -10,13 +10,13 @@ import bard.db.model.AbstractContextItem
  * To change this template use File | Settings | File Templates.
  */
 class ProjectContextItem extends AbstractContextItem {
-    ProjectContext projectContext
+    ProjectContext context
 
-    static belongsTo = [projectContext: ProjectContext]
+    static belongsTo = [context: ProjectContext]
 
     static mapping = {
         id(column: 'PROJECT_CONTEXT_ITEM_ID', generator: 'sequence', params: [sequence: 'PROJECT_CONTEXT_ITEM_ID_SEQ'])
-        projectContext(column: 'PROJECT_CONTEXT_ID')
+        context(column: 'PROJECT_CONTEXT_ID')
         attributeElement(column: 'ATTRIBUTE_ID')
         valueElement(column: 'VALUE_ID')
         qualifier(column: "QUALIFIER", sqlType: "char", length: 2)

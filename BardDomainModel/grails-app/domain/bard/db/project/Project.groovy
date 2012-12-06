@@ -10,7 +10,7 @@ class Project {
     private static final int DESCRIPTION_MAX_SIZE = 1000
     private static final int GROUP_TYPE_MAX_SIZE = 20
 
-    String projectName
+    String name
     String groupType
     String description
     ReadyForExtraction readyForExtraction = ReadyForExtraction.Pending
@@ -19,24 +19,25 @@ class Project {
     Date lastUpdated
     String modifiedBy
 
-    List<ProjectContext> projectContexts = [] as List
+    List<ProjectContext> contexts = [] as List
     Set<ProjectExperiment> projectExperiments = [] as Set
 
     Set<ExternalReference> externalReferences = [] as Set
-    Set<ProjectDocument> projectDocuments = [] as Set
+    Set<ProjectDocument> documents = [] as Set
 
     static hasMany = [projectExperiments: ProjectExperiment,
             externalReferences: ExternalReference,
-            projectContexts:ProjectContext,
-            projectDocuments: ProjectDocument]
+            contexts:ProjectContext,
+            documents: ProjectDocument]
 
     static mapping = {
         id(column: "PROJECT_ID", generator: "sequence", params: [sequence: 'PROJECT_ID_SEQ'])
-        projectContexts(indexColumn: [name: 'DISPLAY_ORDER'], lazy: 'false')
+        name(column: "PROJECT_NAME")
+        contexts(indexColumn: [name: 'DISPLAY_ORDER'], lazy: 'false')
     }
 
     static constraints = {
-        projectName( maxSize: PROJECT_NAME_MAX_SIZE, blank: false)
+        name( maxSize: PROJECT_NAME_MAX_SIZE, blank: false)
         // TODO make enum
         groupType( maxSize: GROUP_TYPE_MAX_SIZE, nullable:false, blank: false, inList: ['Project', 'Probe Report', 'Campaign', 'Panel', 'Study', 'Template'])
         description(nullable: true, blank: false , maxSize: DESCRIPTION_MAX_SIZE)
