@@ -235,48 +235,46 @@ class ParseSwamidassProjectsService {
         Integer count = 1
         Project.list().each {Project project ->
             Log.logger.info("(${count++}/${totalProjects}\t${sw}) Processing project ${project.id}")
-//            Long projectAID = findProjectAID(project)
-//            if (!projectAID) {
-//                Log.logger.error("(${count++}/${totalProjects}) We couldn't find a summary AID for project: ${project.id}")
-//                return
-//            }
             //Iterate over all project's experiments
-            project.projectExperiments.each {ProjectExperiment parentProjectExperiment ->
+            project.projectExperiments.toList().sort{a, b -> a.id <=> b.id}.each {ProjectExperiment parentProjectExperiment ->
                 Long parentExperimentAID = findExperimentAID(parentProjectExperiment.experiment)
                 if (!parentExperimentAID) {
                     Log.logger.error("\tWe couldn't find a summary AID for experiment: ${experiment.id}")
                     return
                 }
-                //Find if the experiment has children in the Swamidass model
-                List<swamidassParentChildDTO> foundChildren = getSwamidassChildrenByParentAID(parentExperimentAID)
-                Set<ProjectExperiment> foundChildrenProjectExperiments = project.projectExperiments.findAll {ProjectExperiment candidate ->
-                    final long candidateExperimentAID = findExperimentAID(candidate.experiment)
-                    List<Long> foundChildrenAIDs = foundChildren*.childAID
-                    return foundChildrenAIDs.contains(candidateExperimentAID)
-                }
 
-                //Create a project-step for each parent/child relation
-                foundChildrenProjectExperiments.each {ProjectExperiment childProjectExperiment ->
-                    if (childProjectExperiment == parentProjectExperiment) return //skip if an experiment points to itself
-                    ProjectStep newProjectStep = new ProjectStep(edgeName: "Discovered by Swamidass clustering",
-                            previousProjectExperiment: parentProjectExperiment,
-                            nextProjectExperiment: childProjectExperiment,
-                            dateCreated: new Date())
+                //Find all the children in the Swamidass model given a parent experiment
+                List<SwamidassParentChildDTO> foundChildrenDTOs = getSwamidassAssayChildrenByParentAID(parentExperimentAID)
+                //Iterate over all the remaining project experiment to see if any is a child in the Swamidass model.
+                project.projectExperiments.toList().sort{a, b -> a.id <=> b.id}.each {ProjectExperiment candidateChild ->
+                    if (candidateChild == parentProjectExperiment) return
 
-                    newProjectStep.save(failOnError: true, flush: true)
-                    Log.logger.info("Successfully created a new project-step: parent-experinemt=${parentProjectExperiment.experiment.id} (aid=${parentExperimentAID}); child-experiment=${childProjectExperiment.experiment.id} (aid=${findExperimentAID(childProjectExperiment.experiment)})")
+                    List<SwamidassParentChildDTO> foundChildrenIntersectionWithProjectExperiment = findDTOsWithProjectExperiment(foundChildrenDTOs, candidateChild)
+                    if (foundChildrenIntersectionWithProjectExperiment) {
+                        //Create and persist a new projectStep
+                        String clusterNames = foundChildrenIntersectionWithProjectExperiment*.clusterName.join(',')
+                        ProjectStep newProjectStep = new ProjectStep(edgeName: "Discovered by Swamidass clustering (${clusterNames})",
+                                previousProjectExperiment: parentProjectExperiment,
+                                nextProjectExperiment: candidateChild,
+                                dateCreated: new Date())
+
+                        newProjectStep.save(failOnError: true, flush: true)
+                        Log.logger.info("""Successfully created a new project-step: \
+parent-experinemt=${parentProjectExperiment.experiment.id} (aid=${parentExperimentAID}); \
+child-experiment=${candidateChild.experiment.id} (aid=${findExperimentAID(candidateChild.experiment)}); clusters=($clusterNames)""")
+                    }
                 }
             }
         }
         Log.logger.info("Total processing time: ${sw}")
     }
 
-    private List<swamidassParentChildDTO> getSwamidassChildrenByParentAID(Long aid) {
+    private List<SwamidassParentChildDTO> getSwamidassAssayChildrenByParentAID(Long aid) {
         def db = new Sql(this.dataSource)
-        String queryString = 'select * from swamidass_aids_heirarchy_view v where v.parent_aid = :PubchemAID'
+        String queryString = 'select * from swamidass_aids_heirarchy_view v where v.parent_aid = :PubchemAID and v.child_aid != :PubchemAID'
         String queryParam = "aid=${aid.toString()}"
-        List<swamidassParentChildDTO> parentChildList = db.rows(queryString, [PubchemAID: queryParam]).collect { GroovyRowResult rowResult ->
-            new swamidassParentChildDTO(
+        List<SwamidassParentChildDTO> parentChildList = db.rows(queryString, [PubchemAID: queryParam]).collect { GroovyRowResult rowResult ->
+            new SwamidassParentChildDTO(
                     parentAID: (rowResult['PARENT_AID'] - 'aid=') as long,
                     childAID: (rowResult['CHILD_AID'] - 'aid=') as Long,
                     clusterName: rowResult['CLUSTER_NAME'] as String)
@@ -284,9 +282,17 @@ class ParseSwamidassProjectsService {
 
         return parentChildList
     }
+
+    private List<SwamidassParentChildDTO> findDTOsWithProjectExperiment(List<SwamidassParentChildDTO> dtos, ProjectExperiment projectExperiment) {
+        final long projectExperimentAID = findExperimentAID(projectExperiment.experiment)
+        assert projectExperimentAID, "We must be able to resolve the experiment to an AID: ${projectExperiment.id}"
+
+        List<SwamidassParentChildDTO> foundChildDTOs = dtos.findAll {SwamidassParentChildDTO dto -> dto.childAID == projectExperimentAID}
+        return foundChildDTOs
+    }
 }
 
-class swamidassParentChildDTO {
+class SwamidassParentChildDTO {
     Long parentAID
     Long childAID
     String clusterName

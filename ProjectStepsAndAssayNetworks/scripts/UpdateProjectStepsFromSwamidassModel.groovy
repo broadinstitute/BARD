@@ -17,5 +17,5 @@ Project.withTransaction {DefaultTransactionStatus status ->
 
     parseSwamidassProjectsService.createProjectStepsFromSwamidassModel()
     //comment out to commit the transaction
-    status.setRollbackOnly()
+//    status.setRollbackOnly()
 }
