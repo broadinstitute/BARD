@@ -184,18 +184,6 @@ class AssayExportHelperService extends ExportAbstractService {
 
     }
 
-    public void generateAssayDocuments(
-            final MarkupBuilder markupBuilder,
-            final Set<AssayDocument> assayDocuments) {
-        if (assayDocuments) {
-            markupBuilder.assayDocuments() {
-                for (AssayDocument assayDocument : assayDocuments) {
-                    generateDocument(markupBuilder, assayDocument)
-                }
-            }
-        }
-    }
-
     /**
      *
      * @param markupBuilder

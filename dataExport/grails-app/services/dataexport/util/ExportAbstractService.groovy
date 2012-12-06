@@ -27,20 +27,20 @@ class ExportAbstractService {
                     markupBuilder, grailsLinkGenerator)
         }
     }
-
+// TODO look into why this code is here
     protected String generateHref(final Map map, final LinkGenerator grailsLinkGenerator) {
         final String mappingVal = map.get("mapping")
         final Map parameters = (Map) map.get("params")
         Long idVal = null
         Map paramMap = [:]
         if (parameters) {
-            idVal = (Long) parameters.get("Id")
+            idVal = (Long) parameters.get("id")
             if (parameters.get("offset") > -1) {
                 paramMap.put("offset", parameters.get("offset"))
             }
         }
         if (idVal) {
-            paramMap.put(id: idVal)
+            paramMap.put("id", idVal)
         }
         if (paramMap.isEmpty()) {
             return grailsLinkGenerator.link(mapping: mappingVal, absolute: true).toString()
@@ -107,14 +107,14 @@ class ExportAbstractService {
         }
     }
 
-    protected Map<String, String> createAttributesForContextItem(final AbstractContextItem contextItem,
-                                                                 final Long contextItemId,
-                                                                 final String resourceName, final int displayOrder) {
+    protected Map<String, String> createAttributesForContextItem(AbstractContextItem contextItem, String attributeType, Long contextItemId, String resourceName, int displayOrder) {
         final Map<String, String> attributes = [:]
         final String idName = resourceName + "Id"
         attributes.put(idName, contextItemId.toString())
         attributes.put('displayOrder', displayOrder.toString())
-
+        if(attributeType){
+            attributes.put('attributeType',attributeType)
+        }
         if (contextItem.qualifier) {
             attributes.put('qualifier', contextItem.qualifier)
         }
@@ -142,7 +142,7 @@ class ExportAbstractService {
                                        final LinkGenerator linkGenerator,
                                        final Long contextItemId,
                                        final int displayOrder) {
-        final Map<String, String> attributes = createAttributesForContextItem(contextItem, contextItemId, resourceName, displayOrder)
+        final Map<String, String> attributes = createAttributesForContextItem(contextItem, attributeType, contextItemId, resourceName, displayOrder)
 
         markupBuilder."${resourceName}"(attributes) {
             final Element valueElement = contextItem.valueElement

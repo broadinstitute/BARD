@@ -20,6 +20,7 @@ class ResetSequenceUtil {
     }
 
     public void resetAllSequences() {
+        Sql sql = new Sql(dataSource)
         def sequenceNames = []
         sql.eachRow('''select SEQUENCE_NAME from user_sequences''') {row ->
             sequenceNames.add(row.SEQUENCE_NAME)

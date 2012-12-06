@@ -130,7 +130,7 @@ class AssayExportHelperServiceUnitSpec extends Specification {
 
     void "create Attributes For AssayContextItem"() {
         given: "A DTO"
-        final Map<String, String> results = [assayContextItemId: "1", displayOrder: "0", qualifier: "< ", valueDisplay: "Display", valueNum: "5.0", valueMin: "6.0", valueMax: "7.0"]
+        final Map<String, String> results = [assayContextItemId: "1", displayOrder: "0",attributeType: "Fixed", qualifier: "< ", valueDisplay: "Display", valueNum: "5.0", valueMin: "6.0", valueMax: "7.0"]
 
         Element attributeElement = new Element(label: "attributeLabel")
         Element valueElement = new Element(label: "valueLabel")
@@ -145,7 +145,7 @@ class AssayExportHelperServiceUnitSpec extends Specification {
                     modifiedBy: "Bard",
                     qualifier: "< ")
         when: "We pass in a assayContextItem we get an expected map"
-        Map<String, String> attributes = this.assayExportHelperService.createAttributesForContextItem(assayContextItem,assayContextItem.id,'assayContextItem',0)
+        Map<String, String> attributes = this.assayExportHelperService.createAttributesForContextItem(assayContextItem, assayContextItem.attributeType.name(), assayContextItem.id, 'assayContextItem', 0)
         then: "A map with the expected key/value pairs is generated"
         attributes == results
     }

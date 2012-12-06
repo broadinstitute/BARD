@@ -354,14 +354,14 @@ class XmlTestSamples {
         </assayDocument>'''
 
     static final String ASSAY_CONTEXT_ITEM_WITH_ATTRIBUTE = '''
-        <assayContextItem assayContextItemId='1' displayOrder='0' qualifier='&lt;' valueDisplay='Display' valueNum='5.0' valueMin='6.0' valueMax='7.0'>
+        <assayContextItem assayContextItemId='1' displayOrder='0' attributeType='Fixed' qualifier='&lt;' valueDisplay='Display' valueNum='5.0' valueMin='6.0' valueMax='7.0'>
           <attributeId attributeType='Fixed' label='attributeLabel'>
             <link rel='related' href='null' type='xml' />
           </attributeId>
         </assayContextItem>'''
 
     static final String ASSAY_CONTEXT_ITEM_WITH_ATTRIBUTE_AND_VALUE = '''
-        <assayContextItem assayContextItemId='1' displayOrder='0' qualifier='&lt;' valueDisplay='Display' valueNum='5.0' valueMin='6.0' valueMax='7.0'>
+        <assayContextItem assayContextItemId='1' displayOrder='0' attributeType='Fixed' qualifier='&lt;' valueDisplay='Display' valueNum='5.0' valueMin='6.0' valueMax='7.0'>
           <valueId label='valueLabel'>
             <link rel='related' href='null' type='xml' />
           </valueId>
@@ -427,7 +427,7 @@ class XmlTestSamples {
         <assayContext assayContextId='1' displayOrder='0'>
           <contextName>contextName</contextName>
           <assayContextItems>
-            <assayContextItem assayContextItemId='1' displayOrder='0'>
+            <assayContextItem assayContextItemId='1' displayOrder='0' attributeType='Fixed'>
               <attributeId attributeType='Fixed' label='label1'>
                 <link rel='related' href='null' type='xml' />
               </attributeId>
@@ -453,6 +453,42 @@ class XmlTestSamples {
   <link rel='related' type='application/vnd.bard.cap+xml;type=experiment' href='http://localhost:8080/dataExport/api/experiments/23' />
 </links>
 '''
+
+    static String ASSAY_FULL_DOC = '''
+        <assay assayId='1' readyForExtraction='Pending' assayVersion='assayVersi' assayType='Regular' status='Pending'>
+          <assayShortName>assayShortName</assayShortName>
+          <assayName>assayName</assayName>
+          <assayContexts>
+            <assayContext assayContextId='1' displayOrder='0'>
+              <contextName />
+              <assayContextItems>
+                <assayContextItem assayContextItemId='1' displayOrder='0' attributeType='Fixed'>
+                  <attributeId attributeType='Fixed' label='label1'>
+                    <link rel='related' href='http://localhost:8080/dataExport/api/dictionary/element/1' type='application/vnd.bard.cap+xml;type=element' />
+                  </attributeId>
+                </assayContextItem>
+              </assayContextItems>
+              <measureRefs>
+                <measureRef>1</measureRef>
+              </measureRefs>
+            </assayContext>
+          </assayContexts>
+          <measures>
+            <measure measureId='1'>
+              <resultTypeRef label='label1'>
+                <link rel='related' href='http://localhost:8080/dataExport/api/dictionary/element/1' type='application/vnd.bard.cap+xml;type=resultType' />
+              </resultTypeRef>
+              <assayContextRefs>
+                <assayContextRef>1</assayContextRef>
+              </assayContextRefs>
+            </measure>
+          </measures>
+          <link rel='edit' href='http://localhost:8080/dataExport/api/assays/1' type='application/vnd.bard.cap+xml;type=assay' />
+          <link rel='self' href='http://localhost:8080/dataExport/api/assays/1' type='application/vnd.bard.cap+xml;type=assay' />
+          <link rel='up' href='http://localhost:8080/dataExport/api/assays' type='application/vnd.bard.cap+xml;type=assays' />
+          <link rel='item' href='http://localhost:8080/dataExport/api/assayDocument/1' type='application/vnd.bard.cap+xml;type=assayDoc' />
+        </assay>
+     '''
     static String PROJECT_FROM_SERVER = '''
    <project projectId='1' readyForExtraction='Ready' groupType='Project'>
    <projectName>Scripps special project #1</projectName>
@@ -482,7 +518,7 @@ class XmlTestSamples {
 '''
     static String ASSAYS_FROM_SERVER = '''
     <assays count='1'>
-    <link rel='related' title='1' type='application/vnd.bard.cap+xml;type=assay' href='http://localhost:8080/dataExport/api/assays/1'/>
+        <link rel='related' assayShortName='assayShortName' type='application/vnd.bard.cap+xml;type=assay' href='http://localhost:8080/dataExport/api/assays/1'/>
     </assays>
     '''
 
@@ -492,81 +528,47 @@ class XmlTestSamples {
 </assays>
 '''
 
-    static String ASSAY_DOCUMENTS = '''
-       <assayDocuments>
-    <assayDocument documentType='Protocol'>
-    <documentName>Dose-response biochemical assay of inhibitors of Rho kinase 2 (Rock2)</documentName>
-    <link rel='item' href='http://localhost:8080/dataExport/api/assayDocument/1' type='application/vnd.bard.cap+xml;type=assayDoc' />
-    </assayDocument>
-  <assayDocument documentType='Protocol'>
-    <documentName>Dose-response biochemical assay of inhibitors of Rho kinase 2 (Rock2) pt 2</documentName>
-    <link rel='item' href='http://localhost:8080/dataExport/api/assayDocument/2' type='application/vnd.bard.cap+xml;type=assayDoc' />
-    </assayDocument>
-</assayDocuments>
+    static String ASSAY_DOCUMENT = '''
+
+          <assayDocument documentType='Protocol'>
+            <documentName>a doc</documentName>
+            <documentContent>content</documentContent>
+            <link rel='self' href='http://localhost:8080/dataExport/api/assayDocument/1' type='application/vnd.bard.cap+xml;type=assayDoc' />
+            <link rel='related' href='http://localhost:8080/dataExport/api/assays/1' type='application/vnd.bard.cap+xml;type=assay' />
+          </assayDocument>
+
     '''
-    static String MEASURES = '''
-    <measures>
-    <measure assayContextRef='Context for IC50'>
-    <resultTypeRef label='IC50'>
-    <link rel='related' href='http://localhost:8080/dataExport/api/dictionary/resultType/341' type='application/vnd.bard.cap+xml;type=resultType' />
-    </resultTypeRef>
-    <entryUnit unit='uM' />
-    </measure>
-</measures>
-'''
-
-
-    static String MEASURE_CONTEXT_ITEMS = '''
-<assayContextItems>
-  <assayContextItem assayContextItemId='36' assayContextItemRef='34' assayContextRef='Context for IC50' valueDisplay='0 - 4' valueMax='4.0'>
-    <attributeId attributeType='Range' label='Number of exclusions'>
-      <link rel='related' href='http://localhost:8080/dataExport/api/dictionary/element/369' type='application/vnd.bard.cap+xml;type=element' />
-    </attributeId>
-  </assayContextItem>
-  <assayContextItem assayContextItemId='34' assayContextRef='Context for IC50' valueDisplay='Assay Explorer '>
-    <valueId label='Assay Explorer'>
-      <link rel='related' href='http://localhost:8080/dataExport/api/dictionary/element/372' type='application/vnd.bard.cap+xml;type=element' />
-    </valueId>
-    <attributeId attributeType='Fixed' label='software'>
-      <link rel='related' href='http://localhost:8080/dataExport/api/dictionary/element/368' type='application/vnd.bard.cap+xml;type=element' />
-    </attributeId>
-  </assayContextItem>
-  <assayContextItem assayContextItemId='35' assayContextItemRef='34' assayContextRef='Context for IC50' valueDisplay='30' valueNum='30.0'>
-    <attributeId attributeType='Fixed' label='Number of points'>
-      <link rel='related' href='http://localhost:8080/dataExport/api/dictionary/element/370' type='application/vnd.bard.cap+xml;type=element' />
-    </attributeId>
-  </assayContextItem>
-</assayContextItems>
-'''
+    static String ASSAY_CONTEXT_WITH_MEASURES = '''
+        <assayContexts>
+          <assayContext assayContextId='1' displayOrder='0'>
+            <contextName>Context for IC50</contextName>
+            <measureRefs>
+              <measureRef>1</measureRef>
+            </measureRefs>
+          </assayContext>
+        </assayContexts>
+    '''
 
 
     static String ASSAY_CONTEXTS = '''
-<assayContexts>
-  <assayContext>
-    <contextName>Context for IC50</contextName>
-    <assayContextItems>
-      <assayContextItem assayContextItemId='34' assayContextRef='Context for IC50' valueDisplay='Assay Explorer '>
-        <valueId label='Assay Explorer'>
-          <link rel='related' href='http://localhost:8080/dataExport/api/dictionary/element/372' type='application/vnd.bard.cap+xml;type=element' />
-        </valueId>
-        <attributeId attributeType='Fixed' label='software'>
-          <link rel='related' href='http://localhost:8080/dataExport/api/dictionary/element/368' type='application/vnd.bard.cap+xml;type=element' />
-        </attributeId>
-      </assayContextItem>
-      <assayContextItem assayContextItemId='35' assayContextRef='Context for IC50' valueDisplay='30' valueNum='30.0'>
-        <attributeId attributeType='Fixed' label='Number of points'>
-          <link rel='related' href='http://localhost:8080/dataExport/api/dictionary/element/370' type='application/vnd.bard.cap+xml;type=element' />
-        </attributeId>
-      </assayContextItem>
-      <assayContextItem assayContextItemId='36' assayContextRef='Context for IC50' valueDisplay='0 - 4' valueMax='4.0'>
-        <attributeId attributeType='Range' label='Number of exclusions'>
-          <link rel='related' href='http://localhost:8080/dataExport/api/dictionary/element/369' type='application/vnd.bard.cap+xml;type=element' />
-        </attributeId>
-      </assayContextItem>
-    </assayContextItems>
-  </assayContext>
-</assayContexts>
-'''
+        <assayContexts>
+          <assayContext assayContextId='1' displayOrder='0'>
+            <contextName>Context for IC50</contextName>
+            <assayContextItems>
+              <assayContextItem assayContextItemId='1' displayOrder='0' valueDisplay='Assay Explorer' attributeType='Fixed'>
+                <attributeId attributeType='Fixed' label='software'>
+                  <link rel='related' href='http://localhost:8080/dataExport/api/dictionary/element/1' type='application/vnd.bard.cap+xml;type=element' />
+                </attributeId>
+              </assayContextItem>
+              <assayContextItem assayContextItemId='2' displayOrder='1' attributeType='Fixed'>
+                <attributeId attributeType='Fixed' label='a label'>
+                  <link rel='related' href='http://localhost:8080/dataExport/api/dictionary/element/2' type='application/vnd.bard.cap+xml;type=element' />
+                </attributeId>
+              </assayContextItem>
+            </assayContextItems>
+          </assayContext>
+        </assayContexts>
+     '''
 
     static String BARD_DATA_EXPORT_UNIT = '''
                                         <bardexport>
