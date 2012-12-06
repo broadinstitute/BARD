@@ -203,7 +203,7 @@ application/vnd.bard.cap+xml;type=assay</xs:documentation>
         <xs:complexContent>
             <xs:extension base="abstractContextType">
                 <xs:sequence>
-                    <xs:element ref="assayContextItems"/>
+                    <xs:element ref="assayContextItems" minOccurs="0"/>
                     <xs:element minOccurs="0" name="measureRefs">
                         <xs:complexType>
                             <xs:sequence>
