@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-<title>Data Dictionary Manager</title>
+<title>CAP Business layer</title>
 <link href="../../../css/ea.css" rel="stylesheet" type="text/css" />
 <script>
 function initPage(src) {	
@@ -34,15 +34,15 @@ function nameClassifier(name, separator)
 <div class="pageHeader"></div>
 <div class="PageBody">
 	<div id="name_classifier" style="display: none;"></div>
-	<span class="ObjectTitle"><script type="text/javascript">document.write(nameClassifier("Data Dictionary Manager", " : "))</script>  : Public  &lt;&lt;Web&gt;&gt; Component</span>
+	<span class="ObjectTitle"><script type="text/javascript">document.write(nameClassifier("CAP Business layer", " : "))</script>  : Public  &lt;&lt;grails&gt;&gt; Component</span>
 	<table border="0" cellpadding="0" cellspacing="0" class="ObjectDetails">
 		<tr>
 			<td width="15%" class="ObjectDetailsTopic">Created:</td>
-			<td width="85%" class="ObjectDetailsValue">9/9/2011 9:33:04 AM</td>
+			<td width="85%" class="ObjectDetailsValue">6/8/2012 9:28:00 AM</td>
 		</tr>
 		<tr>
 			<td class="ObjectDetailsTopic">Modified:</td>
-			<td class="ObjectDetailsValue">9/9/2011 9:45:10 AM</td>
+			<td class="ObjectDetailsValue">6/8/2012 9:28:00 AM</td>
 		</tr>
 		<tr style="height: 10px"><td colspan="2"></td></tr>
 		<tr>
@@ -51,7 +51,7 @@ function nameClassifier(name, separator)
 		</tr>
 		<tr id="proj00" style="display: none;">
 			<td class="ObjectDetailsTopic" style="padding-left: 18px;">Author:</td>
-			<td class="ObjectDetailsValue">Owner</td>
+			<td class="ObjectDetailsValue">Simon</td>
 		</tr>
 		<tr id="proj01" style="display: none;">
 			<td class="ObjectDetailsTopic" style="padding-left: 18px;">Version:</td>
@@ -87,19 +87,95 @@ function nameClassifier(name, separator)
 		</tr>
 		<tr id="adv00" style="display: none;">
 			<td class="ObjectDetailsTopic" style="padding-left: 18px;">UUID:</td>
-			<td class="ObjectDetailsValue">{01130442-D581-4028-8913-7FB66286393A}</td>
+			<td class="ObjectDetailsValue">{E091C05A-EB0A-4553-9541-B0DFC98E4BCB}</td>
 		</tr>
 		<tr id="adv01" style="display: none;">
 			<td class="ObjectDetailsTopic" style="padding-left: 18px;">Appears In:</td>
-			<td class="ObjectDetailsValue"><a href="EA1040.htm">MLBD overview</a>, <a href="EA1038.htm">MLBD migration</a>, <a href="EA1024.htm">Data entry info flow</a>, <a href="EA1034.htm">MLBD data upload</a>, <a href="EA1030.htm">MLBD Application stacks</a></td>
+			<td class="ObjectDetailsValue"><a href="EA1034.htm">BARD application interactions</a>, <a href="EA1032.htm">AddPendingElement</a></td>
 		</tr>
 	</table>
 	
 	<div class="TableGroup" id="TableGroup">
 		<ul class="ItemTitle">
+			<li onClick="parent.toggleItem('MessagesTo');" id="MessagesToTitle">Messages To</li>
+			<li onClick="parent.toggleItem('MessagesFrom');" id="MessagesFromTitle">Messages From</li>
 			<li onClick="parent.toggleItem('CustomProperties');" id="CustomPropertiesTitle">Advanced</li>
 			<li onClick="parent.toggleItem('Links');" id="LinksTitle">Other Links</li>
 		</ul>
+		<div class="ItemBody" id="MessagesToTable">
+			<table border="0" cellspacing="0" cellpadding="0" class="Table">
+				<tr>
+					<td width="50%" class="TableHeading">Element</td>
+					<td width="50%" class="TableHeading">Message</td>
+				</tr>
+				<tr>
+					<td width="50%" class="TableRow" valign="top"><a href="EA1102.htm">«hibernate» Ontology Data Access</a></td>
+					<td width="50%" class="TableRow" valign="top">addPendingElement(Dictionary Element,  int)</td>
+				</tr>
+		   		<tr>
+					<td class="TableRowBottomDashed"  colspan="2">
+						<div class="DetailsDivParent"><img src="../../../images/minus03.gif" align="absmiddle" id="DetailsImageMessage1303" onclick="parent.toggleDiv('detailsDIVMessage1303', 'DetailsImageMessage1303')" />Details:
+							<div id="detailsDIVMessage1303" class="DetailsDiv" >
+							<strong>Type:</strong> Sequence Synchronous Call<br />
+							&nbsp;
+							</div>
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<td width="50%" class="TableRow" valign="top"><a href="EA1102.htm">«hibernate» Ontology Data Access</a></td>
+					<td width="50%" class="TableRow" valign="top">getElement(int)</td>
+				</tr>
+		   		<tr>
+					<td class="TableRowBottomDashed"  colspan="2">
+						<div class="DetailsDivParent"><img src="../../../images/minus03.gif" align="absmiddle" id="DetailsImageMessage1304" onclick="parent.toggleDiv('detailsDIVMessage1304', 'DetailsImageMessage1304')" />Details:
+							<div id="detailsDIVMessage1304" class="DetailsDiv" >
+							<strong>Type:</strong> Sequence Synchronous Call<br />
+							&nbsp;
+							</div>
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<td width="50%" class="TableRow" valign="top"><a href="EA1102.htm">«hibernate» Ontology Data Access</a></td>
+					<td width="50%" class="TableRow" valign="top">getElement(int)</td>
+				</tr>
+		   		<tr>
+					<td class="TableRowBottomDashed"  colspan="2">
+						<div class="DetailsDivParent"><img src="../../../images/minus03.gif" align="absmiddle" id="DetailsImageMessage1305" onclick="parent.toggleDiv('detailsDIVMessage1305', 'DetailsImageMessage1305')" />Details:
+							<div id="detailsDIVMessage1305" class="DetailsDiv" >
+							<strong>Type:</strong> Sequence Synchronous Call<br />
+							&nbsp;
+							</div>
+						</div>
+					</td>
+				</tr>
+
+			</table>
+		</div>
+		<div class="ItemBody" id="MessagesFromTable">
+			<table border="0" cellspacing="0" cellpadding="0" class="Table">
+				<tr>
+					<td width="50%" class="TableHeading">Element</td>
+					<td width="50%" class="TableHeading">Message</td>
+				</tr>
+				<tr>
+					<td width="50%" class="TableRow" valign="top"><a href="EA1102.htm">«hibernate» Ontology Data Access</a></td>
+					<td width="50%" class="TableRow" valign="top">202 (accepted)</td>
+				</tr>
+		   		<tr>
+					<td class="TableRowBottomDashed"  colspan="2">
+						<div class="DetailsDivParent"><img src="../../../images/minus03.gif" align="absmiddle" id="DetailsImageMessage1306" onclick="parent.toggleDiv('detailsDIVMessage1306', 'DetailsImageMessage1306')" />Details:
+							<div id="detailsDIVMessage1306" class="DetailsDiv" >
+							<strong>Type:</strong> Sequence Synchronous Call<br />
+							&nbsp;
+							</div>
+						</div>
+					</td>
+				</tr>
+
+			</table>
+		</div>
 		<div class="ItemBody" id="CustomPropertiesTable">
 			<table border="0" cellspacing="0" cellpadding="0" class="Table">
 				<tr>
@@ -122,27 +198,33 @@ function nameClassifier(name, separator)
 					<td width="40%" class="TableHeading">Notes</td>
 				</tr>
 				<tr>
-					<td width="30%" class="TableRow" valign="top"><a href="EA1082.htm">External Ontology</a></td>
-					<td width="15%" class="TableRow" valign="top">Component</td>
-					<td width="15%" class="TableRow" valign="top">Information Flow</td>
-					<td width="40%" class="TableRow" valign="top">&nbsp;</td>
-				</tr>
-				<tr>
-					<td width="30%" class="TableRow" valign="top"><a href="EA1081.htm">External Dictionary</a></td>
-					<td width="15%" class="TableRow" valign="top">Component</td>
-					<td width="15%" class="TableRow" valign="top">Information Flow</td>
-					<td width="40%" class="TableRow" valign="top">&nbsp;</td>
-				</tr>
-				<tr>
-					<td width="30%" class="TableRow" valign="top"><a href="EA1062.htm">Catalog Rules Engine</a></td>
+					<td width="30%" class="TableRow" valign="top"><a href="EA1072.htm">CAP UI</a></td>
 					<td width="15%" class="TableRow" valign="top">Component</td>
 					<td width="15%" class="TableRow" valign="top">Dependency</td>
 					<td width="40%" class="TableRow" valign="top">&nbsp;</td>
 				</tr>
 				<tr>
-					<td width="30%" class="TableRow" valign="top"><a href="EA1055.htm">«Web» Assay Catalog Registry</a></td>
+					<td width="30%" class="TableRow" valign="top"><a href="EA1102.htm">«hibernate» Ontology Data Access</a></td>
 					<td width="15%" class="TableRow" valign="top">Component</td>
-					<td width="15%" class="TableRow" valign="top">Information Flow</td>
+					<td width="15%" class="TableRow" valign="top">Dependency</td>
+					<td width="40%" class="TableRow" valign="top">&nbsp;</td>
+				</tr>
+				<tr>
+					<td width="30%" class="TableRow" valign="top"><a href="EA1071.htm">«hibernate» CAP data access</a></td>
+					<td width="15%" class="TableRow" valign="top">Component</td>
+					<td width="15%" class="TableRow" valign="top">Dependency</td>
+					<td width="40%" class="TableRow" valign="top">&nbsp;</td>
+				</tr>
+				<tr>
+					<td width="30%" class="TableRow" valign="top"><a href="EA1102.htm">«hibernate» Ontology Data Access</a></td>
+					<td width="15%" class="TableRow" valign="top">Component</td>
+					<td width="15%" class="TableRow" valign="top">Dependency</td>
+					<td width="40%" class="TableRow" valign="top">&nbsp;</td>
+				</tr>
+				<tr>
+					<td width="30%" class="TableRow" valign="top"><a href="EA1088.htm">«hibernate» Deposition data access</a></td>
+					<td width="15%" class="TableRow" valign="top">Component</td>
+					<td width="15%" class="TableRow" valign="top">Dependency</td>
 					<td width="40%" class="TableRow" valign="top">&nbsp;</td>
 				</tr>
 

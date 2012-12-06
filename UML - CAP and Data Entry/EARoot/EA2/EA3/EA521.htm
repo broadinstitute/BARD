@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-<title>Select existing assay?</title>
+<title>Design and run experiments</title>
 <link href="../../../css/ea.css" rel="stylesheet" type="text/css" />
 <script>
 function initPage(src) {	
@@ -34,15 +34,15 @@ function nameClassifier(name, separator)
 <div class="pageHeader"></div>
 <div class="PageBody">
 	<div id="name_classifier" style="display: none;"></div>
-	<span class="ObjectTitle"><script type="text/javascript">document.write(nameClassifier("Select existing assay?", " : "))</script>  : Public   Decision</span>
+	<span class="ObjectTitle"><script type="text/javascript">document.write(nameClassifier("Design and run experiments", " : "))</script>  : Public  &lt;&lt;process&gt;&gt; Process</span>
 	<table border="0" cellpadding="0" cellspacing="0" class="ObjectDetails">
 		<tr>
 			<td width="15%" class="ObjectDetailsTopic">Created:</td>
-			<td width="85%" class="ObjectDetailsValue">10/11/2012 10:51:13 AM</td>
+			<td width="85%" class="ObjectDetailsValue">10/18/2012 12:52:49 PM</td>
 		</tr>
 		<tr>
 			<td class="ObjectDetailsTopic">Modified:</td>
-			<td class="ObjectDetailsValue">10/11/2012 3:07:53 PM</td>
+			<td class="ObjectDetailsValue">10/18/2012 12:53:39 PM</td>
 		</tr>
 		<tr style="height: 10px"><td colspan="2"></td></tr>
 		<tr>
@@ -87,11 +87,11 @@ function nameClassifier(name, separator)
 		</tr>
 		<tr id="adv00" style="display: none;">
 			<td class="ObjectDetailsTopic" style="padding-left: 18px;">UUID:</td>
-			<td class="ObjectDetailsValue">{B06A4710-C3F4-4134-BB85-5FEE1B731AC6}</td>
+			<td class="ObjectDetailsValue">{F404BD16-E544-4c9b-9F21-EFE6147B898B}</td>
 		</tr>
 		<tr id="adv01" style="display: none;">
 			<td class="ObjectDetailsTopic" style="padding-left: 18px;">Appears In:</td>
-			<td class="ObjectDetailsValue"><a href="EA492.htm">Assigning an Assay ID</a></td>
+			<td class="ObjectDetailsValue"><a href="EA506.htm">Project management</a></td>
 		</tr>
 	</table>
 	
@@ -99,6 +99,8 @@ function nameClassifier(name, separator)
 		<ul class="ItemTitle">
 			<li onClick="parent.toggleItem('FlowTo');" id="FlowToTitle">Flow To</li>
 			<li onClick="parent.toggleItem('FlowFrom');" id="FlowFromTitle">Flow From</li>
+			<li onClick="parent.toggleItem('CustomProperties');" id="CustomPropertiesTitle">Advanced</li>
+			<li onClick="parent.toggleItem('Links');" id="LinksTitle">Other Links</li>
 		</ul>
 		<div class="ItemBody" id="FlowToTable">
 			<table border="0" cellspacing="0" cellpadding="0" class="Table">
@@ -108,45 +110,15 @@ function nameClassifier(name, separator)
 				</tr>
 				<tr>
 					<td width="50%" class="TableRow" valign="top">
-						<a href="EA507.htm">Create/Edit assay definition items</a><br />
+						<a href="EA534.htm">Store result values,  context(s)</a><br />
 						Activity &nbsp;
 					</td>
 					<td width="50%" class="TableRow" valign="top">&nbsp;</td>					
 				</tr>
 				<tr>
 					<td class="TableRowBottomDashed"  colspan="2">
-						<div class="DetailsDivParent"><img src="../../../images/minus03.gif" align="absmiddle" id="DetailsImageLinkFlow497" onclick="parent.toggleDiv('detailsDIVLinkFlow497', 'DetailsImageLinkFlow497')" />Details:
-							<div id="detailsDIVLinkFlow497" class="DetailsDiv" >
-							&nbsp;
-							</div>
-						</div>
-					</td>
-				</tr>				<tr>
-					<td width="50%" class="TableRow" valign="top">
-						<a href="EA502.htm">Assay ID issued</a><br />
-						StateNode &nbsp;
-					</td>
-					<td width="50%" class="TableRow" valign="top">&nbsp;</td>					
-				</tr>
-				<tr>
-					<td class="TableRowBottomDashed"  colspan="2">
-						<div class="DetailsDivParent"><img src="../../../images/minus03.gif" align="absmiddle" id="DetailsImageLinkFlow498" onclick="parent.toggleDiv('detailsDIVLinkFlow498', 'DetailsImageLinkFlow498')" />Details:
-							<div id="detailsDIVLinkFlow498" class="DetailsDiv" >
-							&nbsp;
-							</div>
-						</div>
-					</td>
-				</tr>				<tr>
-					<td width="50%" class="TableRow" valign="top">
-						<a href="EA512.htm">Enter assay basics</a><br />
-						Activity &nbsp;
-					</td>
-					<td width="50%" class="TableRow" valign="top">&nbsp;</td>					
-				</tr>
-				<tr>
-					<td class="TableRowBottomDashed"  colspan="2">
-						<div class="DetailsDivParent"><img src="../../../images/minus03.gif" align="absmiddle" id="DetailsImageLinkFlow499" onclick="parent.toggleDiv('detailsDIVLinkFlow499', 'DetailsImageLinkFlow499')" />Details:
-							<div id="detailsDIVLinkFlow499" class="DetailsDiv" >
+						<div class="DetailsDivParent"><img src="../../../images/minus03.gif" align="absmiddle" id="DetailsImageLinkFlow500" onclick="parent.toggleDiv('detailsDIVLinkFlow500', 'DetailsImageLinkFlow500')" />Details:
+							<div id="detailsDIVLinkFlow500" class="DetailsDiv" >
 							&nbsp;
 							</div>
 						</div>
@@ -162,20 +134,80 @@ function nameClassifier(name, separator)
 				</tr>
 				<tr>
 					<td width="50%" class="TableRow" valign="top">
-						<a href="EA519.htm">Review list of suggested 'similar' assays</a><br />
+						<a href="EA526.htm">Grant application specifying biology,  assays and flow</a><br />
 						Activity &nbsp;
 					</td>
 					<td width="50%" class="TableRow" valign="top">&nbsp;</td>					
 				</tr>
 				<tr>
 					<td class="TableRowBottomDashed"  colspan="2">
-						<div class="DetailsDivParent"><img src="../../../images/minus03.gif" align="absmiddle" id="DetailsImageLinkFlow500" onclick="parent.toggleDiv('detailsDIVLinkFlow500', 'DetailsImageLinkFlow500')" />Details:
-							<div id="detailsDIVLinkFlow500" class="DetailsDiv" >
+						<div class="DetailsDivParent"><img src="../../../images/minus03.gif" align="absmiddle" id="DetailsImageLinkFlow501" onclick="parent.toggleDiv('detailsDIVLinkFlow501', 'DetailsImageLinkFlow501')" />Details:
+							<div id="detailsDIVLinkFlow501" class="DetailsDiv" >
+							&nbsp;
+							</div>
+						</div>
+					</td>
+				</tr>				<tr>
+					<td width="50%" class="TableRow" valign="top">
+						<a href="EA534.htm">Store result values,  context(s)</a><br />
+						Activity &nbsp;
+					</td>
+					<td width="50%" class="TableRow" valign="top">&nbsp;</td>					
+				</tr>
+				<tr>
+					<td class="TableRowBottomDashed"  colspan="2">
+						<div class="DetailsDivParent"><img src="../../../images/minus03.gif" align="absmiddle" id="DetailsImageLinkFlow502" onclick="parent.toggleDiv('detailsDIVLinkFlow502', 'DetailsImageLinkFlow502')" />Details:
+							<div id="detailsDIVLinkFlow502" class="DetailsDiv" >
+							&nbsp;
+							</div>
+						</div>
+					</td>
+				</tr>				<tr>
+					<td width="50%" class="TableRow" valign="top">
+						<a href="EA529.htm">Record Project Steps (Decisions)</a><br />
+						Activity &nbsp;
+					</td>
+					<td width="50%" class="TableRow" valign="top">&nbsp;</td>					
+				</tr>
+				<tr>
+					<td class="TableRowBottomDashed"  colspan="2">
+						<div class="DetailsDivParent"><img src="../../../images/minus03.gif" align="absmiddle" id="DetailsImageLinkFlow503" onclick="parent.toggleDiv('detailsDIVLinkFlow503', 'DetailsImageLinkFlow503')" />Details:
+							<div id="detailsDIVLinkFlow503" class="DetailsDiv" >
 							&nbsp;
 							</div>
 						</div>
 					</td>
 				</tr>
+			</table>
+		</div>
+		<div class="ItemBody" id="CustomPropertiesTable">
+			<table border="0" cellspacing="0" cellpadding="0" class="Table">
+				<tr>
+					<td width="30%" class="TableHeading">Property</td>
+					<td width="70%" class="TableHeading">Value</td>
+				</tr>
+			<tr>
+				<td width="30%" class="TableRow">isReadOnly:</td>
+				<td width="70%" class="TableRow">false</td>
+			</tr>
+
+
+			</table>
+		</div>		<div class="ItemBody" id="LinksTable">
+			<table align="center" border="0" cellspacing="0" cellpadding="0" class="Table">
+				<tr>
+					<td width="30%" class="TableHeading">Object</td>
+					<td width="15%" class="TableHeading">Type</td>
+					<td width="15%" class="TableHeading">Connection</td>
+					<td width="40%" class="TableHeading">Notes</td>
+				</tr>
+				<tr>
+					<td width="30%" class="TableRow" valign="top"><a href="EA528.htm">«information» proposed Assay list and workflow</a></td>
+					<td width="15%" class="TableRow" valign="top">Entity</td>
+					<td width="15%" class="TableRow" valign="top">Dependency</td>
+					<td width="40%" class="TableRow" valign="top">&nbsp;</td>
+				</tr>
+
 			</table>
 		</div>
 	</div>

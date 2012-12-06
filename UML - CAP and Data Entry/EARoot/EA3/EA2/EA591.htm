@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-<title>Find a Project</title>
+<title>Add an Experiment to a Project</title>
 <link href="../../../css/ea.css" rel="stylesheet" type="text/css" />
 <script>
 function initPage(src) {	
@@ -34,15 +34,15 @@ function nameClassifier(name, separator)
 <div class="pageHeader"></div>
 <div class="PageBody">
 	<div id="name_classifier" style="display: none;"></div>
-	<span class="ObjectTitle"><script type="text/javascript">document.write(nameClassifier("Find a Project", " : "))</script>  : Public   UseCase</span>
+	<span class="ObjectTitle"><script type="text/javascript">document.write(nameClassifier("Add an Experiment to a Project", " : "))</script>  : Public   UseCase</span>
 	<table border="0" cellpadding="0" cellspacing="0" class="ObjectDetails">
 		<tr>
 			<td width="15%" class="ObjectDetailsTopic">Created:</td>
-			<td width="85%" class="ObjectDetailsValue">10/8/2012 1:45:18 PM</td>
+			<td width="85%" class="ObjectDetailsValue">10/5/2012 5:44:39 PM</td>
 		</tr>
 		<tr>
 			<td class="ObjectDetailsTopic">Modified:</td>
-			<td class="ObjectDetailsValue">10/18/2012 4:15:50 PM</td>
+			<td class="ObjectDetailsValue">11/12/2012 4:47:09 PM</td>
 		</tr>
 		<tr style="height: 10px"><td colspan="2"></td></tr>
 		<tr>
@@ -87,19 +87,20 @@ function nameClassifier(name, separator)
 		</tr>
 		<tr id="adv00" style="display: none;">
 			<td class="ObjectDetailsTopic" style="padding-left: 18px;">UUID:</td>
-			<td class="ObjectDetailsValue">{50C37966-29FA-407a-84E3-29E23FA8ED7D}</td>
+			<td class="ObjectDetailsValue">{03C18DDD-B421-4c47-A936-DF3E29E49888}</td>
 		</tr>
 		<tr id="adv01" style="display: none;">
 			<td class="ObjectDetailsTopic" style="padding-left: 18px;">Appears In:</td>
-			<td class="ObjectDetailsValue"><a href="EA556.htm">CAP Use cases</a></td>
+			<td class="ObjectDetailsValue"><a href="EA568.htm">CAP Use cases</a></td>
 		</tr>
 	</table>
-	<div class="ObjectDetailsNotes"> A scientist enters the project ID to find the project, for quick access to the project within CAP&lt;br /&gt;&lt;/p&gt;&lt;p&gt;Mainly handled by BARD Web Query or BARD thick &lt;br /&gt;&lt;/p&gt;</div>
+	<div class="ObjectDetailsNotes"> given an existing project and an existing experiment, a scientist indicates that the experiment is associated with project and what &quot;step&quot; of the project it was</div>
 
 	<div class="TableGroup" id="TableGroup">
 		<ul class="ItemTitle">
 			<li onClick="parent.toggleItem('AssociationsFrom');" id="AssociationsFromTitle">Associations From</li>
 			<li onClick="parent.toggleItem('TaggedVal');" id="TaggedValTitle">Tagged Values</li>
+			<li onClick="parent.toggleItem('Links');" id="LinksTitle">Other Links</li>
 		</ul>
 		<div class="ItemBody" id="AssociationsFromTable">
 			<table border="0" cellspacing="0" cellpadding="0" class="Table">
@@ -110,7 +111,7 @@ function nameClassifier(name, separator)
 				</tr>
 				<tr>
 					<td width="40%" class="TableRow" valign="top">
-						<a href="../EA1/EA548.htm">Public User</a><br />
+						<a href="../EA1/EA559.htm">Project Manager</a><br />
 						Actor &nbsp;
 					</td>
 					<td width="30%" class="TableRow" valign="top">
@@ -124,8 +125,8 @@ function nameClassifier(name, separator)
 				</tr>
 				<tr>
 					<td class="TableRowBottomDashed"  colspan="3">
-						<div class="DetailsDivParent"><img src="../../../images/minus03.gif" align="absmiddle" id="DetailsImageLink557" onclick="parent.toggleDiv('detailsDIVLink557','DetailsImageLink557')" />Details:
-							<div id="detailsDIVLink557" class="DetailsDiv" >
+						<div class="DetailsDivParent"><img src="../../../images/minus03.gif" align="absmiddle" id="DetailsImageLink561" onclick="parent.toggleDiv('detailsDIVLink561','DetailsImageLink561')" />Details:
+							<div id="detailsDIVLink561" class="DetailsDiv" >
 							&nbsp;
 							</div>
 						</div>
@@ -146,15 +147,32 @@ function nameClassifier(name, separator)
 			</tr>	
 			<tr>
 				<td class="TableRowBottomDashed"  colspan="2">
-					<div class="DetailsDivParent"><img src="../../../images/minus03.gif" align="absmiddle" id="DetailsImageScenario558" onclick="parent.toggleDiv('detailsDIVScenario558','DetailsImageScenario558')" />Details:
-						<div id="detailsDIVScenario558" class="DetailsDiv" >
+					<div class="DetailsDivParent"><img src="../../../images/minus03.gif" align="absmiddle" id="DetailsImageScenario562" onclick="parent.toggleDiv('detailsDIVScenario562','DetailsImageScenario562')" />Details:
+						<div id="detailsDIVScenario562" class="DetailsDiv" >
 						&nbsp;
 						</div>
 					</div>
 				</td>
 			</tr>
 	</table>
-</div>	</div>
+</div>		<div class="ItemBody" id="LinksTable">
+			<table align="center" border="0" cellspacing="0" cellpadding="0" class="Table">
+				<tr>
+					<td width="30%" class="TableHeading">Object</td>
+					<td width="15%" class="TableHeading">Type</td>
+					<td width="15%" class="TableHeading">Connection</td>
+					<td width="40%" class="TableHeading">Notes</td>
+				</tr>
+				<tr>
+					<td width="30%" class="TableRow" valign="top"><a href="EA602.htm">Edit Project annotations</a></td>
+					<td width="15%" class="TableRow" valign="top">UseCase</td>
+					<td width="15%" class="TableRow" valign="top">Extends</td>
+					<td width="40%" class="TableRow" valign="top">&nbsp;</td>
+				</tr>
+
+			</table>
+		</div>
+	</div>
 <div class="pageFooter"></div>
  
 </body>

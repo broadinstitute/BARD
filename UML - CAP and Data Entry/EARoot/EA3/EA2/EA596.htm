@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-<title>Import and Match Elements from a File</title>
+<title>Create an Assay Definition</title>
 <link href="../../../css/ea.css" rel="stylesheet" type="text/css" />
 <script>
 function initPage(src) {	
@@ -34,15 +34,15 @@ function nameClassifier(name, separator)
 <div class="pageHeader"></div>
 <div class="PageBody">
 	<div id="name_classifier" style="display: none;"></div>
-	<span class="ObjectTitle"><script type="text/javascript">document.write(nameClassifier("Import and Match Elements from a File", " : "))</script>  : Public   UseCase</span>
+	<span class="ObjectTitle"><script type="text/javascript">document.write(nameClassifier("Create an Assay Definition", " : "))</script>  : Public   UseCase</span>
 	<table border="0" cellpadding="0" cellspacing="0" class="ObjectDetails">
 		<tr>
 			<td width="15%" class="ObjectDetailsTopic">Created:</td>
-			<td width="85%" class="ObjectDetailsValue">10/5/2012 5:47:28 PM</td>
+			<td width="85%" class="ObjectDetailsValue">10/5/2012 5:38:23 PM</td>
 		</tr>
 		<tr>
 			<td class="ObjectDetailsTopic">Modified:</td>
-			<td class="ObjectDetailsValue">10/18/2012 4:19:02 PM</td>
+			<td class="ObjectDetailsValue">10/15/2012 8:34:27 AM</td>
 		</tr>
 		<tr style="height: 10px"><td colspan="2"></td></tr>
 		<tr>
@@ -87,19 +87,19 @@ function nameClassifier(name, separator)
 		</tr>
 		<tr id="adv00" style="display: none;">
 			<td class="ObjectDetailsTopic" style="padding-left: 18px;">UUID:</td>
-			<td class="ObjectDetailsValue">{ADA54F39-3D9E-4cf8-A1A8-7C0EC0BB3762}</td>
+			<td class="ObjectDetailsValue">{02417C78-BC5F-4556-8675-A30D93006B50}</td>
 		</tr>
 		<tr id="adv01" style="display: none;">
 			<td class="ObjectDetailsTopic" style="padding-left: 18px;">Appears In:</td>
-			<td class="ObjectDetailsValue"><a href="EA556.htm">CAP Use cases</a></td>
+			<td class="ObjectDetailsValue"><a href="EA568.htm">CAP Use cases</a></td>
 		</tr>
 	</table>
-	<div class="ObjectDetailsNotes"> Scientist provides a formatted file containing elements and their definitions, system reads the file, matches elements in the file to those already existing in the system, adds unmatched elements</div>
-
+	
 	<div class="TableGroup" id="TableGroup">
 		<ul class="ItemTitle">
 			<li onClick="parent.toggleItem('AssociationsFrom');" id="AssociationsFromTitle">Associations From</li>
 			<li onClick="parent.toggleItem('TaggedVal');" id="TaggedValTitle">Tagged Values</li>
+			<li onClick="parent.toggleItem('Links');" id="LinksTitle">Other Links</li>
 		</ul>
 		<div class="ItemBody" id="AssociationsFromTable">
 			<table border="0" cellspacing="0" cellpadding="0" class="Table">
@@ -110,7 +110,7 @@ function nameClassifier(name, separator)
 				</tr>
 				<tr>
 					<td width="40%" class="TableRow" valign="top">
-						<a href="../EA1/EA545.htm">Dictionary Curator</a><br />
+						<a href="../EA1/EA552.htm">Assay Registrar</a><br />
 						Actor &nbsp;
 					</td>
 					<td width="30%" class="TableRow" valign="top">
@@ -124,8 +124,8 @@ function nameClassifier(name, separator)
 				</tr>
 				<tr>
 					<td class="TableRowBottomDashed"  colspan="3">
-						<div class="DetailsDivParent"><img src="../../../images/minus03.gif" align="absmiddle" id="DetailsImageLink567" onclick="parent.toggleDiv('detailsDIVLink567','DetailsImageLink567')" />Details:
-							<div id="detailsDIVLink567" class="DetailsDiv" >
+						<div class="DetailsDivParent"><img src="../../../images/minus03.gif" align="absmiddle" id="DetailsImageLink571" onclick="parent.toggleDiv('detailsDIVLink571','DetailsImageLink571')" />Details:
+							<div id="detailsDIVLink571" class="DetailsDiv" >
 							&nbsp;
 							</div>
 						</div>
@@ -146,15 +146,44 @@ function nameClassifier(name, separator)
 			</tr>	
 			<tr>
 				<td class="TableRowBottomDashed"  colspan="2">
-					<div class="DetailsDivParent"><img src="../../../images/minus03.gif" align="absmiddle" id="DetailsImageScenario568" onclick="parent.toggleDiv('detailsDIVScenario568','DetailsImageScenario568')" />Details:
-						<div id="detailsDIVScenario568" class="DetailsDiv" >
+					<div class="DetailsDivParent"><img src="../../../images/minus03.gif" align="absmiddle" id="DetailsImageScenario572" onclick="parent.toggleDiv('detailsDIVScenario572','DetailsImageScenario572')" />Details:
+						<div id="detailsDIVScenario572" class="DetailsDiv" >
 						&nbsp;
 						</div>
 					</div>
 				</td>
 			</tr>
 	</table>
-</div>	</div>
+</div>		<div class="ItemBody" id="LinksTable">
+			<table align="center" border="0" cellspacing="0" cellpadding="0" class="Table">
+				<tr>
+					<td width="30%" class="TableHeading">Object</td>
+					<td width="15%" class="TableHeading">Type</td>
+					<td width="15%" class="TableHeading">Connection</td>
+					<td width="40%" class="TableHeading">Notes</td>
+				</tr>
+				<tr>
+					<td width="30%" class="TableRow" valign="top"><a href="EA612.htm">Start a new, blank assay definition</a></td>
+					<td width="15%" class="TableRow" valign="top">UseCase</td>
+					<td width="15%" class="TableRow" valign="top">Generalization</td>
+					<td width="40%" class="TableRow" valign="top">&nbsp;</td>
+				</tr>
+				<tr>
+					<td width="30%" class="TableRow" valign="top"><a href="EA594.htm">Clone an existing assay for editing</a></td>
+					<td width="15%" class="TableRow" valign="top">UseCase</td>
+					<td width="15%" class="TableRow" valign="top">Generalization</td>
+					<td width="40%" class="TableRow" valign="top">&nbsp;</td>
+				</tr>
+				<tr>
+					<td width="30%" class="TableRow" valign="top"><a href="EA600.htm">Edit an assay definition</a></td>
+					<td width="15%" class="TableRow" valign="top">UseCase</td>
+					<td width="15%" class="TableRow" valign="top">Extends</td>
+					<td width="40%" class="TableRow" valign="top">&nbsp;</td>
+				</tr>
+
+			</table>
+		</div>
+	</div>
 <div class="pageFooter"></div>
  
 </body>

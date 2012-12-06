@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-<title>Add citations, references</title>
+<title>Use Assay Def to create Results template</title>
 <link href="../../../css/ea.css" rel="stylesheet" type="text/css" />
 <script>
 function initPage(src) {	
@@ -34,15 +34,15 @@ function nameClassifier(name, separator)
 <div class="pageHeader"></div>
 <div class="PageBody">
 	<div id="name_classifier" style="display: none;"></div>
-	<span class="ObjectTitle"><script type="text/javascript">document.write(nameClassifier("Add citations, references", " : "))</script>  : Public   Activity</span>
+	<span class="ObjectTitle"><script type="text/javascript">document.write(nameClassifier("Use Assay Def to create Results template", " : "))</script>  : Public   UseCase</span>
 	<table border="0" cellpadding="0" cellspacing="0" class="ObjectDetails">
 		<tr>
 			<td width="15%" class="ObjectDetailsTopic">Created:</td>
-			<td width="85%" class="ObjectDetailsValue">11/12/2012 5:24:13 PM</td>
+			<td width="85%" class="ObjectDetailsValue">10/5/2012 5:36:20 PM</td>
 		</tr>
 		<tr>
 			<td class="ObjectDetailsTopic">Modified:</td>
-			<td class="ObjectDetailsValue">11/12/2012 5:24:24 PM</td>
+			<td class="ObjectDetailsValue">10/18/2012 4:17:20 PM</td>
 		</tr>
 		<tr style="height: 10px"><td colspan="2"></td></tr>
 		<tr>
@@ -87,82 +87,74 @@ function nameClassifier(name, separator)
 		</tr>
 		<tr id="adv00" style="display: none;">
 			<td class="ObjectDetailsTopic" style="padding-left: 18px;">UUID:</td>
-			<td class="ObjectDetailsValue">{B9FEC975-81A3-4257-A203-7032111A6A9A}</td>
+			<td class="ObjectDetailsValue">{A7F0F657-2EDD-4c13-9FB9-903C83539CB9}</td>
 		</tr>
 		<tr id="adv01" style="display: none;">
 			<td class="ObjectDetailsTopic" style="padding-left: 18px;">Appears In:</td>
-			<td class="ObjectDetailsValue"><a href="EA554.htm">Apply Access controls for editing</a></td>
+			<td class="ObjectDetailsValue"><a href="EA568.htm">CAP Use cases</a></td>
 		</tr>
 	</table>
-	
+	<div class="ObjectDetailsNotes"> Step 1 in the creation process of a result.&#160; Scientist uses provides an existing assay definition, possibly filling in some values (as required by the assay definition attributes which specify numeric ranges / lists) and then the system generates template the scientist can fill in with data for subsequent upload</div>
+
 	<div class="TableGroup" id="TableGroup">
 		<ul class="ItemTitle">
-			<li onClick="parent.toggleItem('FlowTo');" id="FlowToTitle">Flow To</li>
-			<li onClick="parent.toggleItem('FlowFrom');" id="FlowFromTitle">Flow From</li>
-			<li onClick="parent.toggleItem('CustomProperties');" id="CustomPropertiesTitle">Advanced</li>
+			<li onClick="parent.toggleItem('AssociationsFrom');" id="AssociationsFromTitle">Associations From</li>
+			<li onClick="parent.toggleItem('TaggedVal');" id="TaggedValTitle">Tagged Values</li>
 		</ul>
-		<div class="ItemBody" id="FlowToTable">
+		<div class="ItemBody" id="AssociationsFromTable">
 			<table border="0" cellspacing="0" cellpadding="0" class="Table">
 				<tr>
-					<td width="50%" class="TableHeading">Element</td>
-					<td width="50%" class="TableHeading">Name</td>
+					<td width="40%" class="TableHeading">Element</td>
+					<td width="30%" class="TableHeading">Source Role</td>
+					<td width="30%" class="TableHeading">Target Role</td>
 				</tr>
 				<tr>
-					<td width="50%" class="TableRow" valign="top">
-						<a href="EA669.htm">saved with temporary ID</a><br />
-						StateNode &nbsp;
+					<td width="40%" class="TableRow" valign="top">
+						<a href="../EA1/EA562.htm">Results Depositor</a><br />
+						Actor &nbsp;
 					</td>
-					<td width="50%" class="TableRow" valign="top">&nbsp;</td>					
+					<td width="30%" class="TableRow" valign="top">
+						<strong>Name:</strong> &nbsp;<br />
+						&nbsp;
+					</td>
+					<td width="30%" class="TableRow" valign="top">
+						<strong>Name:</strong> &nbsp;<br />
+						&nbsp;	
+					</td>
 				</tr>
 				<tr>
-					<td class="TableRowBottomDashed"  colspan="2">
-						<div class="DetailsDivParent"><img src="../../../images/minus03.gif" align="absmiddle" id="DetailsImageLinkFlow606" onclick="parent.toggleDiv('detailsDIVLinkFlow606', 'DetailsImageLinkFlow606')" />Details:
-							<div id="detailsDIVLinkFlow606" class="DetailsDiv" >
+					<td class="TableRowBottomDashed"  colspan="3">
+						<div class="DetailsDivParent"><img src="../../../images/minus03.gif" align="absmiddle" id="DetailsImageLink601" onclick="parent.toggleDiv('detailsDIVLink601','DetailsImageLink601')" />Details:
+							<div id="detailsDIVLink601" class="DetailsDiv" >
 							&nbsp;
 							</div>
 						</div>
 					</td>
 				</tr>
+
 			</table>
 		</div>
-		<div class="ItemBody" id="FlowFromTable">
-			<table border="0" cellspacing="0" cellpadding="0" class="Table">
-				<tr>
-					<td width="50%" class="TableHeading">Element</td>
-					<td width="50%" class="TableHeading">Name</td>
-				</tr>
-				<tr>
-					<td width="50%" class="TableRow" valign="top">
-						<a href="EA615.htm">Choose part to edit</a><br />
-						Decision &nbsp;
-					</td>
-					<td width="50%" class="TableRow" valign="top">&nbsp;</td>					
-				</tr>
-				<tr>
-					<td class="TableRowBottomDashed"  colspan="2">
-						<div class="DetailsDivParent"><img src="../../../images/minus03.gif" align="absmiddle" id="DetailsImageLinkFlow607" onclick="parent.toggleDiv('detailsDIVLinkFlow607', 'DetailsImageLinkFlow607')" />Details:
-							<div id="detailsDIVLinkFlow607" class="DetailsDiv" >
-							&nbsp;
-							</div>
-						</div>
-					</td>
-				</tr>
-			</table>
-		</div>
-		<div class="ItemBody" id="CustomPropertiesTable">
-			<table border="0" cellspacing="0" cellpadding="0" class="Table">
-				<tr>
-					<td width="30%" class="TableHeading">Property</td>
-					<td width="70%" class="TableHeading">Value</td>
-				</tr>
+<div class="ItemBody" id="TaggedValTable">
+	<table align="center" border="0" cellspacing="0" cellpadding="0" class="Table">
+		<tr>
+			<td width="50%" class="TableHeading">Tag</td>
+			<td width="50%" class="TableHeading">Value</td>
+		</tr>
+					<tr>
+				<td width="50%" class="TableRow" valign="top">Priority</td>
+				<td width="50%" class="TableRow" valign="top">10</td>
+			</tr>	
 			<tr>
-				<td width="30%" class="TableRow">isReadOnly:</td>
-				<td width="70%" class="TableRow">false</td>
+				<td class="TableRowBottomDashed"  colspan="2">
+					<div class="DetailsDivParent"><img src="../../../images/minus03.gif" align="absmiddle" id="DetailsImageScenario602" onclick="parent.toggleDiv('detailsDIVScenario602','DetailsImageScenario602')" />Details:
+						<div id="detailsDIVScenario602" class="DetailsDiv" >
+						&nbsp;
+						</div>
+					</div>
+				</td>
 			</tr>
-
-
-			</table>
-		</div>	</div>
+	</table>
+</div>	</div>
 <div class="pageFooter"></div>
  
 </body>
