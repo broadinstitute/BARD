@@ -16,3 +16,4 @@ atlassian-ide-plugin.xml
 .idea/misc.xml
 .idea/vcs.xml
 logs/
+*.log
