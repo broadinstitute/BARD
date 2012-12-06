@@ -1,10 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="e13089c4-29a6-41e2-a6dd-5e7a8f3e0083" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/grails-app/services/swamidass/clustering/ParseSwamidassProjectsService.groovy" afterPath="$PROJECT_DIR$/grails-app/services/swamidass/clustering/ParseSwamidassProjectsService.groovy" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/scripts/UpdateProjectStepsFromSwamidassModel.groovy" afterPath="$PROJECT_DIR$/scripts/UpdateProjectStepsFromSwamidassModel.groovy" />
-    </list>
+    <list default="true" id="e13089c4-29a6-41e2-a6dd-5e7a8f3e0083" name="Default" comment="" />
     <ignored path="ProjectStepsAndAssayNetworks.iws" />
     <ignored path=".idea/workspace.xml" />
     <ignored path="$USER_HOME$/.grails/" />
@@ -195,30 +192,7 @@
     <favorites_list name="ProjectStepsAndAssayNetworks" />
   </component>
   <component name="FileEditorManager">
-    <leaf>
-      <file leaf-file-name="ParseSwamidassProjectsService.groovy" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/grails-app/services/swamidass/clustering/ParseSwamidassProjectsService.groovy">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="248" column="80" selection-start="12417" selection-end="12417" vertical-scroll-proportion="0.0">
-              <folding>
-                <element signature="e#30#66#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="UpdateProjectStepsFromSwamidassModel.groovy" pinned="false" current="true" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/scripts/UpdateProjectStepsFromSwamidassModel.groovy">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="20" column="30" selection-start="765" selection-end="765" vertical-scroll-proportion="0.5238829">
-              <folding>
-                <element signature="e#0#29#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-    </leaf>
+    <leaf />
   </component>
   <component name="FindManager">
     <FindUsagesManager>
@@ -526,7 +500,7 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1616" height="834" extended-state="6" />
-    <editor active="true" />
+    <editor active="false" />
     <layout>
       <window_info id="Data Sources" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
@@ -757,7 +731,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/grails-app/services/swamidass/clustering/ParseSwamidassProjectsService.groovy">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="248" column="80" selection-start="12417" selection-end="12417" vertical-scroll-proportion="0.0">
+        <state line="248" column="80" selection-start="12417" selection-end="12417" vertical-scroll-proportion="0.5455975">
           <folding>
             <element signature="e#30#66#0" expanded="true" />
           </folding>
