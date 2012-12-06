@@ -24,12 +24,12 @@ class ProjectServiceIntegrationSpec extends IntegrationSpec {
 
         given:
         def fixture = fixtureLoader.build {
-            project1(Project, projectName: 'project1')
+            project1(Project, name: 'project1')
             for (int i in 1..2) {
                 "extRef${i}"(ExternalReference, extAssayRef: "aid=-${i}", project: project1)
             }
 
-            project2(Project, projectName: 'project2')
+            project2(Project, name: 'project2')
             extRef3(ExternalReference, extAssayRef: 'aid=-1', project: project2)
         }
 
@@ -37,7 +37,7 @@ class ProjectServiceIntegrationSpec extends IntegrationSpec {
         List<Project> foundProjects = projectService.findProjectByPubChemAid(aid)
 
         then:
-        assert foundProjects*.projectName.sort() == expectedProjectNames
+        assert foundProjects*.name.sort() == expectedProjectNames
 
         where:
         label                                           | aid       | expectedProjectNames

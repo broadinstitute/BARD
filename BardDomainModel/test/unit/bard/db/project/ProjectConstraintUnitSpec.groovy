@@ -30,7 +30,7 @@ class ProjectConstraintUnitSpec extends Specification {
     }
 
     void "test projectName constraints #desc projectName: '#valueUnderTest'"() {
-        final String field = 'projectName'
+        final String field = 'name'
 
         when: 'a value is set for the field under test'
         domainInstance[(field)] = valueUnderTest
