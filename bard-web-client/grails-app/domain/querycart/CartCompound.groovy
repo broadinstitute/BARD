@@ -1,24 +1,25 @@
 package querycart
 
 import org.apache.commons.lang.StringUtils
-import bard.core.adapter.CompoundAdapter
-import bardqueryapi.IQueryService
-import javax.persistence.Transient
 
 class CartCompound extends QueryItem {
 
     static final int MAXIMUM_SMILES_FIELD_LENGTH = 1024
 
     String smiles
+    int numAssayActive
+    int numAssayTested
 
     CartCompound() {
         this.queryItemType = QueryItemType.Compound
     }
 
-    CartCompound(String smiles, String name, Long compoundId) {
+    CartCompound(String smiles, String name, Long compoundId, int numAssayActive, int numAssayTested) {
         this.smiles = smiles
         this.name = name
         this.externalId = compoundId
+        this.numAssayActive = numAssayActive
+        this.numAssayTested = numAssayTested
         this.queryItemType = QueryItemType.Compound
     }
 

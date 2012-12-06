@@ -39,10 +39,10 @@ class CartAssayUnitSpec extends Specification {
         then:
         assert assayAsString == expectedTitle
         where:
-        label                  | cartAssay                               | expectedTitle
-        "Empty Title"          | new CartAssay()                         | ""
-        "Null String as title" | new CartAssay("null", 100)              | ""
-        "With title"           | new CartAssay("Some Title", 110)        | "Some Title"
+        label                  | cartAssay                        | expectedTitle
+        "Empty Title"          | new CartAssay()                  | ""
+        "Null String as title" | new CartAssay("null", 100)       | ""
+        "With title"           | new CartAssay("Some Title", 110) | "Some Title"
     }
 
     void "Test equals #label"() {
@@ -52,10 +52,10 @@ class CartAssayUnitSpec extends Specification {
         then:
         equals == equality
         where:
-        label               | cartAssay                               | otherCartAssay                          | equality
-        "Other is null"     | new CartAssay()                         | null                                    | false
-        "Different classes" | new CartAssay()                         | 20                                      | false
-        "Equality"          | new CartAssay("Some Title", 120)        | new CartAssay("Some Title", 120)               | true
+        label               | cartAssay                        | otherCartAssay                   | equality
+        "Other is null"     | new CartAssay()                  | null                             | false
+        "Different classes" | new CartAssay()                  | 20                               | false
+        "Equality"          | new CartAssay("Some Title", 120) | new CartAssay("Some Title", 120) | true
 
 
     }

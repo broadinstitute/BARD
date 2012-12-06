@@ -1,11 +1,9 @@
 package bardqueryapi
 
-import bard.core.HillCurveValue
+import bard.core.rest.spring.experiment.Readout
+import molspreadsheet.SpreadSheetActivity
 import spock.lang.Specification
 import spock.lang.Unroll
-import molspreadsheet.SpreadSheetActivity
-
-import static junit.framework.Assert.assertNotNull
 
 /**
  * See the API for {@link grails.test.mixin.support.GrailsUnitTestMixin} for usage instructions
@@ -13,22 +11,16 @@ import static junit.framework.Assert.assertNotNull
 @Unroll
 class SpreadSheetActivityUnitSpec extends Specification {
 
-    void setup() {
-        // Setup logic here
-    }
 
-    void tearDown() {
-        // Tear down logic here
-    }
-    /**
-     * {@link SpreadSheetActivity#interpretHillCurveValue}
-     */
-
-    void "test interpret Hill Curve Value with null HillCurveValue"() {
+    void "test readOutToHillCurveValue(final List<String> resultTypeNames, final Readout readout)"() {
+        given:
+        SpreadSheetActivity spreadSheetActivity = new SpreadSheetActivity()
+        Readout readout = new Readout()
+        List<String> resultTypeNames = []
         when:
-        final SpreadSheetActivity spreadSheetActivity = new SpreadSheetActivity()
+        spreadSheetActivity.readOutToHillCurveValue(resultTypeNames, readout)
         then:
-        assertNotNull spreadSheetActivity
+        assert resultTypeNames
     }
 
 }

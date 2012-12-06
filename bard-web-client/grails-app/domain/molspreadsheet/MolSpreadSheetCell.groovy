@@ -25,31 +25,29 @@ class MolSpreadSheetCell {
         supplementalInternalValue(nullable: true)
         spreadSheetActivityStorage(nullable: true)
     }
-    public MolSpreadSheetCell (){
+
+    public MolSpreadSheetCell() {
 
     }
 
-    public MolSpreadSheetCell (MolSpreadSheetCell molSpreadSheetCellToCopy) {
-        this.activity =  molSpreadSheetCellToCopy.activity
-        this.molSpreadSheetCellType =  molSpreadSheetCellToCopy.molSpreadSheetCellType
-        this.strInternalValue =  molSpreadSheetCellToCopy.strInternalValue
-        this.intInternalValue =  molSpreadSheetCellToCopy.intInternalValue
-        this.supplementalInternalValue =  molSpreadSheetCellToCopy.supplementalInternalValue
-        this.spreadSheetActivityStorage =  null
+    public MolSpreadSheetCell(MolSpreadSheetCell molSpreadSheetCellToCopy) {
+        this.activity = molSpreadSheetCellToCopy.activity
+        this.molSpreadSheetCellType = molSpreadSheetCellToCopy.molSpreadSheetCellType
+        this.strInternalValue = molSpreadSheetCellToCopy.strInternalValue
+        this.intInternalValue = molSpreadSheetCellToCopy.intInternalValue
+        this.supplementalInternalValue = molSpreadSheetCellToCopy.supplementalInternalValue
+        this.spreadSheetActivityStorage = null
     }
 
 
-    public MolSpreadSheetCell (MolSpreadSheetCell molSpreadSheetCellToCopy, int exptIndex) {
-        this.activity =  molSpreadSheetCellToCopy.activity
-        this.molSpreadSheetCellType =  molSpreadSheetCellToCopy.molSpreadSheetCellType
-        this.strInternalValue =  molSpreadSheetCellToCopy.strInternalValue
-        this.intInternalValue =  molSpreadSheetCellToCopy.intInternalValue
-        this.supplementalInternalValue =  molSpreadSheetCellToCopy.supplementalInternalValue
-        this.spreadSheetActivityStorage =  new SpreadSheetActivityStorage(molSpreadSheetCellToCopy.spreadSheetActivityStorage,exptIndex)
+    public MolSpreadSheetCell(MolSpreadSheetCell molSpreadSheetCellToCopy, int exptIndex) {
+        this.activity = molSpreadSheetCellToCopy.activity
+        this.molSpreadSheetCellType = molSpreadSheetCellToCopy.molSpreadSheetCellType
+        this.strInternalValue = molSpreadSheetCellToCopy.strInternalValue
+        this.intInternalValue = molSpreadSheetCellToCopy.intInternalValue
+        this.supplementalInternalValue = molSpreadSheetCellToCopy.supplementalInternalValue
+        this.spreadSheetActivityStorage = new SpreadSheetActivityStorage(molSpreadSheetCellToCopy.spreadSheetActivityStorage, exptIndex)
     }
-
-
-
 
     /**
      *  non image, no units  specified
@@ -67,7 +65,7 @@ class MolSpreadSheetCell {
                 intInternalValue = new Integer(value)
             }
         }
-        if (this.molSpreadSheetCellType == MolSpreadSheetCellType.string){
+        if (this.molSpreadSheetCellType == MolSpreadSheetCellType.string) {
             strInternalValue = value
         }
     }
@@ -85,30 +83,28 @@ class MolSpreadSheetCell {
 
 
 
-    MolSpreadSheetCell( SpreadSheetActivity spreadSheetActivity ) {
+    MolSpreadSheetCell(SpreadSheetActivity spreadSheetActivity) {
         this.molSpreadSheetCellType = MolSpreadSheetCellType.numeric
-        this.spreadSheetActivityStorage = new SpreadSheetActivityStorage( eid: spreadSheetActivity.eid,
-                                                                          cid:  spreadSheetActivity.cid,
-                                                                          sid:spreadSheetActivity.sid,
-                                                                          activityOutcome: spreadSheetActivity.activityOutcome )
+        this.spreadSheetActivityStorage = new SpreadSheetActivityStorage(eid: spreadSheetActivity.eid,
+                cid: spreadSheetActivity.cid,
+                sid: spreadSheetActivity.sid,
+                activityOutcome: spreadSheetActivity.activityOutcome)
         for (HillCurveValue hillCurveValue in spreadSheetActivity.hillCurveValueList) {
-             HillCurveValueHolder hillCurveValueHolder =  new HillCurveValueHolder(  identifier: hillCurveValue.id,
-                     s0: hillCurveValue.s0,
+            HillCurveValueHolder hillCurveValueHolder = new HillCurveValueHolder(identifier: hillCurveValue.id,
+                    s0: hillCurveValue.s0,
                     sInf: hillCurveValue.sInf,
                     slope: hillCurveValue.slope,
                     coef: hillCurveValue.coef,
                     conc: hillCurveValue.conc,
                     response: hillCurveValue.response)
-            if (!this.spreadSheetActivityStorage.columnNames.contains(hillCurveValue.id))
+            if (!this.spreadSheetActivityStorage.columnNames.contains(hillCurveValue.id)) {
                 this.spreadSheetActivityStorage.columnNames << hillCurveValue.id
-            hillCurveValueHolder.subColumnIndex  =  this.spreadSheetActivityStorage.columnNames.indexOf(hillCurveValue.id)
-            this.spreadSheetActivityStorage.hillCurveValueHolderList  << hillCurveValueHolder
+            }
+            hillCurveValueHolder.subColumnIndex = this.spreadSheetActivityStorage.columnNames.indexOf(hillCurveValue.id)
+            this.spreadSheetActivityStorage.hillCurveValueHolderList << hillCurveValueHolder
         }
 
     }
-
-
-
 
     /**
      * ctor for images
@@ -120,8 +116,8 @@ class MolSpreadSheetCell {
         this.molSpreadSheetCellType = molSpreadSheetCellType
         this.spreadSheetActivityStorage = spreadSheetActivityStorage
         if (this.molSpreadSheetCellType == MolSpreadSheetCellType.image) {
-            strInternalValue = new String(value1?:"")
-            supplementalInternalValue = new String(value2?:"")
+            strInternalValue = value1 ?: ""
+            supplementalInternalValue = value2 ?: ""
         }
     }
 
@@ -139,8 +135,6 @@ class MolSpreadSheetCell {
         returnValue
     }
 
-
-
     /**
      *
      * @return
@@ -154,7 +148,7 @@ class MolSpreadSheetCell {
     @Override
     String toString() {
         String returnValue = null
-         if (molSpreadSheetCellType == MolSpreadSheetCellType.identifier) {
+        if (molSpreadSheetCellType == MolSpreadSheetCellType.identifier) {
             returnValue = intInternalValue
         } else if (molSpreadSheetCellType == MolSpreadSheetCellType.string) {
             returnValue = strInternalValue

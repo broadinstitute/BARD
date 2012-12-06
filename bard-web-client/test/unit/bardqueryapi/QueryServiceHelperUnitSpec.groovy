@@ -1,12 +1,15 @@
 package bardqueryapi
 
-import bard.core.Assay
-import bard.core.Compound
-import bard.core.Project
 import bard.core.SearchParams
 import bard.core.adapter.AssayAdapter
 import bard.core.adapter.CompoundAdapter
 import bard.core.adapter.ProjectAdapter
+import bard.core.rest.spring.assays.Assay
+import bard.core.rest.spring.assays.AssayResult
+import bard.core.rest.spring.compounds.Compound
+import bard.core.rest.spring.compounds.CompoundResult
+import bard.core.rest.spring.project.ProjectResult
+import bard.core.rest.spring.project.Project
 import grails.test.mixin.TestFor
 import spock.lang.Shared
 import spock.lang.Specification
@@ -170,20 +173,35 @@ class QueryServiceHelperUnitSpec extends Specification {
     }
 
     void "test compoundsToAdapters #label"() {
+        given:
+        CompoundResult compoundResult = new CompoundResult()
+        compoundResult.compounds = compounds
         when:
-        final List<CompoundAdapter> foundCompoundAdapters = service.compoundsToAdapters(compounds)
+        final List<CompoundAdapter> foundCompoundAdapters = service.compoundsToAdapters(compoundResult)
 
         then:
         assert foundCompoundAdapters.size() == expectedCompoundAdapters.size()
-        for (int index = 0; index < foundCompoundAdapters.size(); index++) {
-            assert foundCompoundAdapters.get(index).name == expectedCompoundAdapters.get(index).name
-        }
+
 
         where:
-        label                | compounds                                | expectedCompoundAdapters
-        "Single Compound"    | [new Compound("c1")]                     | [new CompoundAdapter(new Compound("c1"))]
-        "Multiple Compounds" | [new Compound("c1"), new Compound("c2")] | [new CompoundAdapter(new Compound("c1")), new CompoundAdapter(new Compound("c2"))]
-        "No Compounds"       | []                                       | []
+        label                | compounds                                            | expectedCompoundAdapters
+        "Single Compound"    | [new Compound(name: "c1")]                           | [new CompoundAdapter(new Compound(name: "c1"))]
+        "Multiple Compounds" | [new Compound(name: "c1"), new Compound(name: "c2")] | [new CompoundAdapter(new Compound(name: "c1")), new CompoundAdapter(new Compound(name: "c2"))]
+        "No Compounds"       | []                                                   | []
+
+    }
+
+    void "test assaysToAdapters - FreeTextAssays #label"() {
+        when:
+        final List<AssayAdapter> foundAssayAdapters = service.assaysToAdapters(assays)
+
+        then:
+        assert foundAssayAdapters.size() == expectedResults
+
+        where:
+        label         | assays                                           | expectedResults
+        "No Assays"   | new AssayResult()                                | 0
+        "With Assays" | new AssayResult(assays: [new Assay(name: "c1")]) | 1
 
     }
 
@@ -198,16 +216,19 @@ class QueryServiceHelperUnitSpec extends Specification {
         }
 
         where:
-        label             | assays                             | expectedAssayAdapters
-        "Single Assay"    | [new Assay("c1")]                  | [new AssayAdapter(new Assay("c1"))]
-        "Multiple Assays" | [new Assay("c1"), new Assay("c2")] | [new AssayAdapter(new Assay("c1")), new AssayAdapter(new Assay("c2"))]
-        "No Assays"       | []                                 | []
+        label             | assays                                         | expectedAssayAdapters
+        "Single Assay"    | [new Assay(name: "c1")]                        | [new AssayAdapter(new Assay(name: "c1"))]
+        "Multiple Assays" | [new Assay(name: "c1"), new Assay(name: "c2")] | [new AssayAdapter(new Assay(name: "c1")), new AssayAdapter(new Assay(name: "c2"))]
+        "No Assays"       | []                                             | []
 
     }
 
     void "test projectsToAdapters #label"() {
+        given:
+        final ProjectResult projectResult = new ProjectResult()
+        projectResult.projects = projects
         when:
-        final List<ProjectAdapter> foundProjectsAdapters = service.projectsToAdapters(projects)
+        final List<ProjectAdapter> foundProjectsAdapters = service.projectsToAdapters(projectResult)
 
         then:
         assert foundProjectsAdapters.size() == expectedProjectsAdapters.size()
@@ -216,10 +237,10 @@ class QueryServiceHelperUnitSpec extends Specification {
         }
 
         where:
-        label               | projects                               | expectedProjectsAdapters
-        "Single Project"    | [new Project("c1")]                    | [new ProjectAdapter(new Project("c1"))]
-        "Multiple Projects" | [new Project("c1"), new Project("c2")] | [new ProjectAdapter(new Project("c1")), new ProjectAdapter(new Project("c2"))]
-        "No Projects"       | []                                     | []
+        label                        | projects                                           | expectedProjectsAdapters
+        "Single ProjectSearchResult" | [new Project(name: "c1")]                          | [new ProjectAdapter(new Project(name: "c1"))]
+        "Multiple Projects"          | [new Project(name: "c1"), new Project(name: "c2")] | [new ProjectAdapter(new Project(name: "c1")), new ProjectAdapter(new Project(name: "c2"))]
+        "No Projects"                | []                                                 | []
 
     }
 

@@ -35,10 +35,12 @@ class QueryCartController {
 
         QueryItem item = QueryItem.findByExternalIdAndQueryItemType(id, itemType)
         if (!item) {
-            switch(itemType) {
+            switch (itemType) {
                 case QueryItemType.Compound:
                     String smiles = params.smiles
-                    item = new CartCompound(smiles, name, id)
+                    int numAssayActive = params.numActive ? new Integer(params.numActive) : 0
+                    int numAssayTested = params.numAssays ? new Integer(params.numAssays) : 0
+                    item = new CartCompound(smiles, name, id, numAssayActive, numAssayTested)
                     break
                 case QueryItemType.Project:
                     item = new CartProject(name, id)
@@ -56,7 +58,7 @@ class QueryCartController {
         if (!item.validate()) {
             response.status = 500
             return render(item.errors.allErrors.collect {
-                message(error:it,encodeAs:'HTML')
+                message(error: it, encodeAs: 'HTML')
             } as JSON)
         }
 
@@ -123,7 +125,7 @@ class QueryCartController {
                 errorResponse.text = 'Null QueryItemType passed as params.type'
             }
         }
-        catch(IllegalArgumentException e) {
+        catch (IllegalArgumentException e) {
             log.error("Invalid QueryItemType ${params.type}", e)
             errorResponse.status = 400
             errorResponse.text = "Invalid QueryItemType [${params.type}] passed as params.type"
@@ -140,7 +142,7 @@ class QueryCartController {
                 errorResponse.text = 'Null ID passed as params.id'
             }
         }
-        catch(NumberFormatException e) {
+        catch (NumberFormatException e) {
             log.error("Invalid ID ${params.id}", e)
             errorResponse.status = 400
             errorResponse.text = "Invalid ID [${params.id}] passed as params.id"

@@ -1,27 +1,40 @@
+import bard.core.rest.spring.AssayRestService
+import bard.core.rest.spring.CompoundRestService
+import bard.core.rest.spring.ExperimentRestService
+import bard.core.rest.spring.ProjectRestService
 import bardqueryapi.QueryService
 import grails.util.GrailsUtil
 import mockServices.MockQueryService
+import org.springframework.web.client.RestTemplate
 
 /**
  * Spring Configuration of resources
  */
 beans = {
     final String ncgcBaseURL = grailsApplication.config.ncgc.server.root.url
-    restAssayService(bard.core.rest.RESTAssayService, ncgcBaseURL) {}
-    restProjectService(bard.core.rest.RESTProjectService, ncgcBaseURL) {}
-    restExperimentService(bard.core.rest.RESTExperimentService, ncgcBaseURL) {
-        restAssayService = ref('restAssayService')
+    final String badApplePromiscuityUrl = grailsApplication.config.promiscuity.badapple.url
+    restTemplate(RestTemplate) {
     }
-    restCompoundService(bard.core.rest.RESTCompoundService, ncgcBaseURL) {}
-    restSubstanceService(bard.core.rest.RESTSubstanceService, ncgcBaseURL) {}
 
-    combinedRestService(bard.core.rest.CombinedRestService) {
-        restSubstanceService = ref('restSubstanceService')
-        restCompoundService = ref('restCompoundService')
-        restExperimentService = ref('restExperimentService')
-        restProjectService = ref('restProjectService')
-        restAssayService = ref('restAssayService')
+    compoundRestService(CompoundRestService) {
+        baseUrl = ncgcBaseURL
+        promiscuityUrl = badApplePromiscuityUrl
+        restTemplate = ref('restTemplate')
     }
+
+    experimentRestService(ExperimentRestService) {
+        baseUrl = ncgcBaseURL
+        restTemplate = ref('restTemplate')
+    }
+    projectRestService(ProjectRestService) {
+        baseUrl = ncgcBaseURL
+        restTemplate = ref('restTemplate')
+    }
+    assayRestService(AssayRestService) {
+        baseUrl = ncgcBaseURL
+        restTemplate = ref('restTemplate')
+    }
+
     switch (GrailsUtil.environment) {
         case "offline":
             queryService(MockQueryService) {
@@ -31,10 +44,9 @@ beans = {
         default:
             queryService(QueryService) {
                 queryHelperService = ref('queryHelperService')
-                restCompoundService = ref('restCompoundService')
-                restProjectService = ref('restProjectService')
-                combinedRestService = ref('combinedRestService')
-                restAssayService = ref('restAssayService')
+                compoundRestService = ref('compoundRestService')
+                projectRestService = ref('projectRestService')
+                assayRestService = ref('assayRestService')
             }
     }
     crowdAuthenticationProvider(org.broadinstitute.cbip.crowd.CrowdAuthenticationProviderService) {// beans here

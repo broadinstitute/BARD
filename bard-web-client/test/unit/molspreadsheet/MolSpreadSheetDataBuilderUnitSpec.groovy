@@ -1,6 +1,5 @@
 package molspreadsheet
 
-import bard.core.Experiment
 import querycart.CartAssay
 import querycart.CartCompound
 import querycart.CartProject
@@ -8,6 +7,8 @@ import grails.test.mixin.support.GrailsUnitTestMixin
 import spock.lang.Specification
 import grails.test.mixin.TestMixin
 import spock.lang.Unroll
+
+import bard.core.rest.spring.experiment.ExperimentSearch
 
 /**
  * Created with IntelliJ IDEA.
@@ -19,6 +20,7 @@ import spock.lang.Unroll
 
 @TestMixin(GrailsUnitTestMixin)
 @Unroll
+
 class MolSpreadSheetDataBuilderUnitSpec extends Specification {
 
     MolecularSpreadSheetService molecularSpreadSheetService
@@ -30,12 +32,11 @@ class MolSpreadSheetDataBuilderUnitSpec extends Specification {
     void tearDown() {
         // Tear down logic here
     }
-
     void "test populateMolSpreadSheet Non_Empty Compound Cart"() {
         given:
         MolSpreadSheetDataBuilder molSpreadSheetDataBuilder = new MolSpreadSheetDataBuilder()
         molSpreadSheetDataBuilder.molecularSpreadSheetService = this.molecularSpreadSheetService
-        molSpreadSheetDataBuilder.cartCompoundList = [new CartCompound("C","C",200)]
+        molSpreadSheetDataBuilder.cartCompoundList = [new CartCompound("C", "C", 200, 0, 0)]
         when:
         molSpreadSheetDataBuilder.populateMolSpreadSheet([], MolSpreadsheetDerivedMethod.Compounds_NoAssays_NoProjects)
         then:
@@ -72,7 +73,7 @@ class MolSpreadSheetDataBuilderUnitSpec extends Specification {
 
         then: "The expected hashCode is returned"
         Map deriveListOfExperiments = molSpreadSheetDataBuilder.deriveListOfExperiments()
-        List<Experiment> experimentList = deriveListOfExperiments.experimentList
+        List<ExperimentSearch> experimentList = deriveListOfExperiments.experimentList
         MolSpreadsheetDerivedMethod molSpreadsheetDerivedMethod = deriveListOfExperiments.molSpreadsheetDerivedMethod
         assertNotNull experimentList
         assert experimentList.size() == 0

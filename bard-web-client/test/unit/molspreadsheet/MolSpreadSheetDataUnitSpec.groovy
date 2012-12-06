@@ -60,6 +60,16 @@ class MolSpreadSheetDataUnitSpec extends Specification {
         assert returnValue[1]."fullAssayName"=='HTS small molecules'
     }
 
+    void "test determineResponseTypesPerAssay - mapColumnsToAssay is Empty"() {
+        given:
+        MolSpreadSheetData molSpreadSheetData = new MolSpreadSheetData()
+
+        when:
+        List <LinkedHashMap<String,String>> returnValue  = molSpreadSheetData.determineResponseTypesPerAssay()
+
+        then:
+        assert returnValue.isEmpty()
+    }
 
 
     void "Test displayValue method"() {

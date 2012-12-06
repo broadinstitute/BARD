@@ -1,12 +1,16 @@
 package bardqueryapi
 
-import bard.core.Assay
-import bard.core.Compound
-import bard.core.Project
 import bard.core.SearchParams
 import bard.core.adapter.AssayAdapter
 import bard.core.adapter.CompoundAdapter
 import bard.core.adapter.ProjectAdapter
+import bard.core.rest.spring.assays.AbstractAssay
+import bard.core.rest.spring.assays.Assay
+import bard.core.rest.spring.assays.AssayResult
+import bard.core.rest.spring.compounds.Compound
+import bard.core.rest.spring.compounds.CompoundResult
+import bard.core.rest.spring.project.Project
+import bard.core.rest.spring.project.ProjectResult
 import org.apache.commons.lang.time.StopWatch
 
 import java.util.regex.Matcher
@@ -111,12 +115,13 @@ class QueryHelperService {
     //=========== Construct adapters ===================
     /**
      * Convert the list of compounds to the list of adapters
-     * @param compounds {@link Compound}'s
+     * @param compounds {@link CompoundResult}'s
      * @return List of {@link CompoundAdapter}'s
      */
-    final List<CompoundAdapter> compoundsToAdapters(final Collection<Compound> compounds) {
+    final List<CompoundAdapter> compoundsToAdapters(final CompoundResult compoundResult) {
         final List<CompoundAdapter> compoundAdapters = []
-        for (Compound compound : compounds) {
+
+        for (Compound compound : compoundResult.compounds) {
             final CompoundAdapter compoundAdapter = new CompoundAdapter(compound)
             compoundAdapters.add(compoundAdapter)
         }
@@ -124,29 +129,36 @@ class QueryHelperService {
     }
     /**
      * convert a list Assay's to a list of AssayAdapter's
+     * @param assays {@link AssayResult}
+     * @return list of {@link AssayAdapter}'s
+     */
+    public List<AssayAdapter> assaysToAdapters(final AssayResult assayResult) {
+        final List<Assay> assays = assayResult.assays
+        if (assays) {
+            return assaysToAdapters(assays)
+        }
+        return []
+    }
+    /**
+     * convert a list Assay's to a list of AssayAdapter's
      * @param assays {@link Assay}
      * @return list of {@link AssayAdapter}'s
      */
-    public List<AssayAdapter> assaysToAdapters(final Collection<Assay> assays) {
+    public List<AssayAdapter> assaysToAdapters(List<AbstractAssay> assays) {
         final List<AssayAdapter> assayAdapters = []
-        for (Assay assay : assays) {
+        for (AbstractAssay assay : assays) {
             assayAdapters.add(new AssayAdapter(assay))
         }
         return assayAdapters
     }
-    /**
-     * convert Project's to ProjectAdapter's
-     * @param projects {@link Project}'s
-     * @return list of {@link ProjectAdapter}'s
-     */
-    public List<ProjectAdapter> projectsToAdapters(final Collection<Project> projects) {
+
+    public List<ProjectAdapter> projectsToAdapters(final ProjectResult projectResult) {
         final List<ProjectAdapter> projectAdapters = []
-        for (Project project : projects) {
+        for (Project project : projectResult.projects) {
             projectAdapters.add(new ProjectAdapter(project))
         }
         return projectAdapters
     }
-
     /**
      * Extract filters from the search string if any
      * @param searchFilters {@link SearchFilter}'s

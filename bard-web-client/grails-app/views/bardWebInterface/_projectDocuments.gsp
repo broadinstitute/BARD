@@ -1,7 +1,7 @@
 <dl>
-    <g:if test="${projectAdapter?.project?.description}">
+    <g:if test="${projectAdapter?.description}">
         <dt>Description</dt>
-        <dd>${projectAdapter.project.description}</dd>
+        <dd>${projectAdapter.description}</dd>
     </g:if>
 
 </dl>

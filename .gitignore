@@ -1,3 +1,7 @@
+out/
+.idea/**.*
+.idea
+.idea/workspace.xml
 /.clover
 *.war
 *.iws

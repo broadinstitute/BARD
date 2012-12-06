@@ -1,145 +1,130 @@
 package bard.core.adapter;
 
 
-import bard.core.Compound
-import bard.core.Format
-import bard.core.MolecularValue
-import bard.core.Value
-import bard.core.interfaces.MolecularData
+import bard.core.interfaces.CompoundAdapterInterface
+import bard.core.rest.spring.compounds.Compound
 import org.apache.commons.lang3.StringUtils
 
-public class CompoundAdapter
-extends EntityAdapter<Compound> implements MolecularData {
-    private final Object myLock = new Object()
+public class CompoundAdapter implements CompoundAdapterInterface {
+    final Compound compound
 
-
-    protected MolecularValue mv;
-    private String probeId;
-
-    public CompoundAdapter() {
+    public CompoundAdapter(final Compound compound) {
+        this.compound = compound
     }
 
-    public CompoundAdapter(Compound compound) {
-        setCompound(compound);
-    }
 
     public boolean isDrug() {
-        return this.getCompound()?.isDrug()
+        return this.compound.compoundClass == 'Drug'
     }
 
     public String getProbeId() {
-        if (this.probeId == null) {
-            synchronized (myLock) {
-                if (this.getCompound()?.getValue(Compound.ProbeIDValue)) {
-                    this.probeId = this.getCompound().getValue(Compound.ProbeIDValue).toString()
-                } else {
-                    this.probeId = ""
-                }
-            }
-        }
-        return this.probeId
+        return this.compound.probeId
     }
 
     public boolean isProbe() {
         return StringUtils.isNotBlank(this.getProbeId())
     }
 
-    public Compound getCompound() { return (Compound) getEntity(); }
-
-    public void setCompound(Compound compound) {
-        setEntity(compound);
-        mv = (MolecularValue) compound.getValue(Compound.MolecularValue);
+    public Long getId() {
+        return this.getPubChemCID()
     }
 
-    public List<Long> getPubChemSIDs() {
-        Collection<Value> values =
-            getEntity().getValues(Compound.PubChemSIDValue);
-        List<Long> sids = [];
-        for (Value value : values) {
-            sids.add((Long) value.getValue());
-        }
-        return sids;
-    }
-
+    @Deprecated //use getId instead
     public Long getPubChemCID() {
-        Value cid = getEntity()?.getValue(Compound.PubChemCIDValue);
-        if (cid) {
-            return (Long) cid.getValue()
-        }
+        return this.compound.cid
+    }
+    /**
+     *
+     * @return
+     */
+    @Deprecated //use getSmiles instead
+    public String getStructureSMILES() {
+        return this.compound.smiles
+    }
+
+    @Deprecated //No longer used
+    public String getStructureMOL() {
         return null
     }
 
-    public String getStructureSMILES() {
-        return (String) toFormat(Format.SMILES);
-    }
-
-    public String getStructureMOL() {
-        return (String) toFormat(Format.MOL);
-    }
-
+    @Deprecated // No longer used
     public Object getStructureNative() {
-        return toFormat(Format.NATIVE);
+        return null
     }
 
-    /*
-    * MolecularData interface
-    */
-
+    @Deprecated //No longer available in pay load
     public String formula() {
-        return mv ? mv.formula() : "";
+        return "";
     }
 
-    public Double mwt() { return mv ? mv.mwt() : null; }
+    public Double mwt() {
+        return this.compound.mwt
+    }
 
-    public Double exactMass() { return mv ? mv.exactMass() : null; }
+    public Double exactMass() {
+        return this.compound.exactMass
+    }
 
     public Integer hbondDonor() {
-        return mv ? mv.hbondDonor() : null;
+        return compound.hbondDonor
     }
 
     public Integer hbondAcceptor() {
-        return mv ? mv.hbondAcceptor() : null;
+        return compound.hbondAcceptor
     }
 
     public Integer rotatable() {
-        return mv ? mv.rotatable() : null;
+        return compound.rotatable
     }
 
+    @Deprecated // No longer used
     public Integer definedStereo() {
-        return mv ? mv.definedStereo() : null;
+        return null;
     }
 
+    @Deprecated //No longer used
     public Integer stereocenters() {
-        return mv ? mv.stereocenters() : null;
+        return null;
     }
 
     public Double TPSA() {
-        return mv ? mv.TPSA() : null;
+        return compound.tpsa
     }
 
     public Double logP() {
-        return mv ? mv.logP() : null;
+        return compound.xlogp
     }
 
-    public Boolean ruleOf5() {
-        return mv ? mv.ruleOf5() : null;
-    }
-    //TODO: Add chemaxon library for this to work
-    public int[] fingerprint() {
-        return mv ? mv.fingerprint() : null;
+
+    public String getName() {
+        return compound.name;
     }
 
-    public Object toFormat(Format format) {
-        return mv ? mv.toFormat(format) : null;
+    public String getIupacName() {
+        return compound.iupacName;
     }
 
-    public byte[] toImage(int size, int background) {
-        return mv ? mv.toImage(size, background) : null;
+    public String getUrl() {
+        return compound.url
     }
 
-    public void setMolecule(Object input) {
-        if (mv) {
-            mv.setMolecule(input);
-        }
+    public Integer getComplexity() {
+        return compound.complexity
+    }
+    //TODO: Make compound class an Enum
+    public String getCompoundClass() {
+        return compound.compoundClass
+    }
+
+    public int getNumberOfAssays() {
+        return compound.getNumAssay().intValue()
+    }
+
+    public int getNumberOfActiveAssays() {
+        return compound.getNumActiveAssay().intValue()
+    }
+
+    public String resourcePath() {
+        return compound.resourcePath
     }
 }

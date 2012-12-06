@@ -14,7 +14,8 @@ class CartCompoundService {
         assert compoundAdapters.size() <= 1, "CompoundAdapter must be unique given a CID"
         CompoundAdapter compoundAdapter = compoundAdapters ? compoundAdapters.first() : null
         if (compoundAdapter) {
-            cartCompound = new CartCompound(compoundAdapter.structureSMILES, compoundAdapter.name, compoundAdapter.id)
+            cartCompound = new CartCompound(compoundAdapter.structureSMILES, compoundAdapter.name,
+                    compoundAdapter.id, compoundAdapter.numberOfActiveAssays, compoundAdapter.numberOfAssays)
         }
 
         return cartCompound

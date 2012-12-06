@@ -22,7 +22,7 @@ class IDSearchTypeUnitSpec extends Specification {
         label                 | searchType        | expectedLabel
         "Assay Definition ID" | IDSearchType.ADID | "Assay Definition IDs"
         "Compound ID"         | IDSearchType.CID  | "PubChem CIDs"
-        "Project ID"          | IDSearchType.PID  | "Project IDs"
+        "ProjectSearchResult ID"          | IDSearchType.PID  | "ProjectSearchResult IDs"
     }
 
 }

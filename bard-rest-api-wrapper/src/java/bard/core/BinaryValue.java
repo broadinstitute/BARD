@@ -20,7 +20,7 @@ public class BinaryValue extends Value {
 
     public BinaryValue(Value parent, String id, byte[] value) {
         super(parent, id);
-       this.setValue(value);
+        this.setValue(value);
     }
 
     public BinaryValue(DataSource source, String id) {
@@ -28,7 +28,7 @@ public class BinaryValue extends Value {
     }
 
     public BinaryValue(DataSource source, String id, byte[] value) {
-        this(source, id, value, 0, value == null? 0: value.length);
+        this(source, id, value, 0, value == null ? 0 : value.length);
     }
 
     public BinaryValue(DataSource source, String id,
@@ -40,7 +40,7 @@ public class BinaryValue extends Value {
     }
 
     public void setValue(byte[] value) {
-        setValue(value, 0, value == null ? 0 :value.length);
+        setValue(value, 0, value == null ? 0 : value.length);
     }
 
     public void setValue(byte[] value, int offset, int length) {

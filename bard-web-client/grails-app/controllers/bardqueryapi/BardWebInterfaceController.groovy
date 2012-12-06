@@ -1,11 +1,12 @@
 package bardqueryapi
 
-import bard.core.PromiscuityScore
-import bard.core.StructureSearchParams
+
 import bard.core.Value
 import bard.core.adapter.AssayAdapter
 import bard.core.adapter.CompoundAdapter
 import bard.core.adapter.ProjectAdapter
+import bard.core.rest.spring.compounds.PromiscuityScore
+import bard.core.rest.spring.util.StructureSearchParams
 import grails.plugins.springsecurity.Secured
 import molspreadsheet.MolecularSpreadSheetService
 import org.apache.commons.lang.StringUtils
@@ -88,17 +89,7 @@ class BardWebInterfaceController {
 
     }
 
-    def activeVrsTested(Long cid) {
-        if (cid) {
-            //Get the Promiscuity score for this CID
-            int activeAssays = this.queryService.getNumberTestedAssays(cid, true)
-            int testedAssays = this.queryService.getNumberTestedAssays(cid, false)
-            render(template: 'assaysActiveVrsTested', model: [activeAssays: activeAssays, testedAssays: testedAssays])
-            return
-        }
-        flash.message = "Error Getting Active vrs Tested Assays for Compound ${cid}"
-        return response.sendError(HttpServletResponse.SC_BAD_REQUEST, "${flash.message}")
-    }
+
 
     def promiscuity(Long cid) {
         if (cid) {
@@ -223,7 +214,7 @@ class BardWebInterfaceController {
         }
     }
     /**
-     * Given a list of Project ids, invoke this action
+     * Given a list of ProjectSearchResult ids, invoke this action
      */
     def searchProjectsByIDs(SearchCommand searchCommand) {
 
@@ -256,7 +247,7 @@ class BardWebInterfaceController {
             catch (Exception exp) {
                 log.error(exp)
                 return response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR.intValue(),
-                        "Project search has encountered an error:\n${exp.message}")
+                        "ProjectSearchResult search has encountered an error:\n${exp.message}")
             }
         } else {
             flash.message = 'Search String is required'
@@ -361,7 +352,7 @@ class BardWebInterfaceController {
                         searchString: params.searchString])
             }
             else {
-                final String message = "Could not find Project Id ${projectId}"
+                final String message = "Could not find ProjectSearchResult Id ${projectId}"
                 flash.message = message
                 return response.sendError(HttpServletResponse.SC_NOT_FOUND,
                         message)
@@ -371,7 +362,7 @@ class BardWebInterfaceController {
         catch (Exception exp) {
             log.error(exp)
             return response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR.intValue(),
-                    "Search For Project Id ${projectId}:\n${exp.message}")
+                    "Search For ProjectSearchResult Id ${projectId}:\n${exp.message}")
         }
     }
 
@@ -546,10 +537,10 @@ class SearchHelper {
             catch (Exception exp) {
                 log.error("Error performing project search", exp)
                 return response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR,
-                        "Project search has encountered an error:\n${exp.message}")
+                        "ProjectSearchResult search has encountered an error:\n${exp.message}")
             }
         } else {
-            log.error("Search String required for Project searches");
+            log.error("Search String required for ProjectSearchResult searches");
             return response.sendError(HttpServletResponse.SC_BAD_REQUEST,
                     "Search String required")
         }
@@ -588,8 +579,16 @@ class SearchHelper {
      * not need to add the search string to the paging object
      */
     protected void removeDuplicatesFromSearchString(SearchCommand searchCommand) {
-        Set<String> searchCommandSplit = searchCommand.searchString.trim().split(",") as Set<String>
-        searchCommand.searchString = searchCommandSplit.join(",")
+        List<String> searchCommandSplit = []
+        if(!searchCommand.searchString.matches(/[^"]*"[^"]+"/))  {
+            // This is a little complicated.
+            // If the search string contains a quote-delimited string anywhere in it, take the search string as it is.
+            // Otherwise, split it on commas, then remove the duplicates.
+            // We could do this with a Set instead of performing unique() on the list, but then the order gets a little scrambled.
+            // Regex: Zero or more things that aren't ", then ", then one or more things that aren't " (so empty strings are not allowed), then "
+            searchCommandSplit.addAll(searchCommand.searchString.trim().split(",") as List<String>)
+            searchCommand.searchString = searchCommandSplit.unique().join(",")
+        }
         params.searchString = searchCommand.searchString
 
     }

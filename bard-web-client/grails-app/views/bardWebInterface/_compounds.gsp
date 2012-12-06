@@ -1,4 +1,4 @@
-<%@ page import="bard.core.interfaces.CompoundValues; bardqueryapi.FacetFormType; bardqueryapi.JavaScriptUtility" %>
+<%@ page import="bardqueryapi.FacetFormType; bardqueryapi.JavaScriptUtility" %>
 <%@ page import="grails.converters.JSON" %>
 <g:hiddenField name="totalCompounds" id="totalCompounds" value="${nhits}"/>
 <div class="row-fluid">
@@ -32,12 +32,15 @@
                     <g:saveToCartButton id="${compoundAdapter.pubChemCID}"
                                         name="${JavaScriptUtility.cleanup(compoundAdapter.name)}"
                                         type="${querycart.QueryItemType.Compound}"
-                                        smiles="${compoundAdapter.getStructureSMILES()}"/>
+                                        smiles="${compoundAdapter.getStructureSMILES()}"
+                                        numActive="${compoundAdapter.numberOfActiveAssays}"
+                                        numAssays="${compoundAdapter.numberOfAssays}"
+                    />
                     <dl>
-                        <g:if test="${compoundAdapter.searchHighlight}">
-                            <dt>Search Match (highlighted in bold):</dt>
-                            <dd>&hellip;${compoundAdapter.searchHighlight}&hellip;</dd>
-                        </g:if>
+                        %{--<g:if test="${compoundAdapter.searchHighlight}">--}%
+                            %{--<dt>Search Match (highlighted in bold):</dt>--}%
+                            %{--<dd>&hellip;${compoundAdapter.searchHighlight}&hellip;</dd>--}%
+                        %{--</g:if>--}%
                         <g:if test="${compoundAdapter.isDrug()}">
                             <p><span class="badge badge-success">Drug</span></p>
                         </g:if>
@@ -46,9 +49,12 @@
                         </g:elseif>
                         <dt>Assays - Active vs Tested:</dt>
                         <dd>
-                            <div class="activeVrsTested"
-                                 href="${createLink(controller: 'bardWebInterface', action: 'activeVrsTested', params: [cid: compoundAdapter.pubChemCID])}"
-                                 id="${compoundAdapter.pubChemCID}_tested"></div>
+                            <div class="activeVrsTested">
+                                <div>
+                                    <span class="badge badge-info">${compoundAdapter?.numberOfActiveAssays} / ${compoundAdapter?.numberOfAssays}</span>
+                                </div>
+
+                                 </div>
                         </dd>
 
                         <dt>Scaffold Promiscuity Analysis:</dt>

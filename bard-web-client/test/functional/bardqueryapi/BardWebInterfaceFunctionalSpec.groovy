@@ -1,6 +1,6 @@
 package bardqueryapi
 
-import bard.core.StructureSearchParams
+import bard.core.rest.spring.util.StructureSearchParams
 import grails.converters.JSON
 import grails.plugin.remotecontrol.RemoteControl
 import groovyx.net.http.HttpResponseDecorator
@@ -54,7 +54,7 @@ class BardWebInterfaceFunctionalSpec extends Specification {
         where:
         label                 | cid  | statusCode
         "Empty CID String"    | null | HttpServletResponse.SC_BAD_REQUEST
-        "CID- Does not exist" | -1   | HttpServletResponse.SC_NOT_FOUND
+        "CID- Does not exist" | -1   | HttpServletResponse.SC_BAD_REQUEST
     }
 
     def "Test Search querying: #label"() {

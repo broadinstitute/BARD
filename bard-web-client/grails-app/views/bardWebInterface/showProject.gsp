@@ -3,7 +3,7 @@
 <html>
 <head>
     <meta name="layout" content="logoSearchCartAndFooter"/>
-    <title>BARD : Project : ID ${projectAdapter?.project?.id}</title>
+    <title>BARD : Project : ID ${projectAdapter?.id}</title>
     <r:script>
         $(document).ready(function () {
             $("#accordion").accordion({ autoHeight:false });
@@ -16,9 +16,9 @@
 <body>
 <div class="row-fluid">
     <div class="span12 page-header">
-        <h1>Project: ${projectAdapter?.name} <small>(Project ID: ${projectAdapter?.project?.id})</small></h1>
-        <g:saveToCartButton id="${projectAdapter?.project?.id}"
-                            name="${JavaScriptUtility.cleanup(projectAdapter?.project?.name)}"
+        <h1>Project: ${projectAdapter?.name} <small>(Project ID: ${projectAdapter?.id})</small></h1>
+        <g:saveToCartButton id="${projectAdapter?.id}"
+                            name="${JavaScriptUtility.cleanup(projectAdapter?.name)}"
                             type="${querycart.QueryItemType.Project}"/>
     </div>
 </div>
@@ -26,13 +26,13 @@
 <div class="row-fluid">
     <div class="span4">
         <dl class="dl-horizontal dl-horizontal-wide">
-            <g:if test="${projectAdapter?.project?.getValue('grant number')}">
+            <g:if test="${projectAdapter?.grantNumber}">
                 <dt>Grant Number:</dt>
-                <dd>${projectAdapter.project.getValue('grant number').value}</dd>
+                <dd>${projectAdapter.grantNumber}</dd>
             </g:if>
-            <g:if test="${projectAdapter?.project?.getValue('laboratory name')}">
+            <g:if test="${projectAdapter?.laboratoryName}">
                 <dt>Laboratory Name:</dt>
-                <dd>${projectAdapter.project.getValue('laboratory name').value}</dd>
+                <dd>${projectAdapter.laboratoryName}</dd>
             </g:if>
             <g:if test="${projectAdapter?.getNumberOfExperiments()}">
                 <dt>Number Of Experiments:</dt>
@@ -53,15 +53,17 @@
                         <div class="caption">
                             <h3>Probe ML#: ${probe.probeId}</h3>
                             <ul>
-                                    <li><a href="${probe.url}">Download probe report from Molecular Library BookShelf</a></li>
-                                    <li><g:link controller="bardWebInterface" action="showCompound"
-                                                params="[cid: probe.cid]">Show Compound Details in BARD</g:link></li>
-                                    <li><a href="http://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?cid=${probe.cid}" target="_blank">View CID ${probe.cid} in PubChem</a></li>
-                                    <li><g:link controller="molSpreadSheet" action="showExperimentDetails"
-                                                params="[cid: probe.cid, pid: projectAdapter.project.id]" data-placement="top"
-                                                class="projectTooltip"
-                                                rel="tooltip"
-                                                data-original-title="Please note: Query Cart would be reset!">Show Experimental Details</g:link></li>
+                                <li><a href="${probe.url}">Download probe report from Molecular Library BookShelf</a>
+                                </li>
+                                <li><g:link controller="bardWebInterface" action="showCompound"
+                                            params="[cid: probe.cid]">Show Compound Details in BARD</g:link></li>
+                                <li><a href="http://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?cid=${probe.cid}"
+                                       target="_blank">View CID ${probe.cid} in PubChem</a></li>
+                                <li><g:link controller="molSpreadSheet" action="showExperimentDetails"
+                                            params="[cid: probe.cid, pid: projectAdapter.id]" data-placement="top"
+                                            class="projectTooltip"
+                                            rel="tooltip"
+                                            data-original-title="Please note: Query Cart would be reset!">Show Experimental Details</g:link></li>
                             </ul>
                         </div>
                     </div>
@@ -92,7 +94,7 @@
             <div class="accordion-heading">
                 <a href="#annotations-header" id="annotations-header" class="accordion-toggle" data-toggle="collapse"
                    data-target="#annotations-info"><i
-                        class="icon-chevron-right"></i> Annotations (${projectAdapter.annotations.size()})</a>
+                        class="icon-chevron-right"></i> Annotations (${projectAdapter?.annotations?.size()})</a>
 
                 <div id="annotations-info" class="accordion-body collapse">
                     <div class="accordion-inner">
@@ -114,7 +116,7 @@
 
                 <div id="document-info" class="accordion-body in collapse">
                     <div class="accordion-inner">
-                        <g:textBlock>${projectAdapter.project.description}</g:textBlock>
+                        <g:textBlock>${projectAdapter?.description}</g:textBlock>
                     </div>
                 </div>
             </div>
@@ -124,7 +126,7 @@
             <div class="accordion-heading">
                 <a href="#experiments-header" id="experiments-header" class="accordion-toggle" data-toggle="collapse"
                    data-target="#experiments-info"><i
-                        class="icon-chevron-right"></i> Experiments (${projectAdapter.numberOfExperiments})</a>
+                        class="icon-chevron-right"></i> Experiments (${projectAdapter?.getNumberOfExperiments()})</a>
 
                 <div id="experiments-info" class="accordion-body collapse">
                     <div class="accordion-inner">

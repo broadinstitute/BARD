@@ -1,58 +1,128 @@
 package bard.core.adapter
 
-import bard.core.DataSource
-import bard.core.Project
-import bard.core.StringValue
+import bard.core.rest.spring.project.Project
+import com.fasterxml.jackson.databind.ObjectMapper
+import spock.lang.Shared
 import spock.lang.Specification
 import spock.lang.Unroll
-import bard.core.interfaces.EntityNamedSources
 
 @Unroll
 class ProjectAdapterUnitSpec extends Specification {
-    void setup() {
+    @Shared
+    ObjectMapper objectMapper = new ObjectMapper()
 
+    public static final String PROJECT = '''
+    {
+       "projectId": 17,
+       "category": 0,
+       "type": 0,
+       "classification": 0,
+       "name": "Confirmation qHTS Assay for Inhibitors of 12-hLO (12-human lipoxygenase)",
+       "description": "NIH Molecular Libraries Probe",
+       "source": "NCGC",
+       "gobp_id": null,
+       "gobp_term": null,
+       "gomf_term": null,
+       "gomf_id": null,
+       "gocc_id": null,
+       "gocc_term": null,
+       "av_dict_label":
+       [
+           "X01 MH083262-01",
+           "NCGC"
+        ],
+       "ak_dict_label":
+       [
+           "grant number",
+           "laboratory name"
+       ],
+       "kegg_disease_names":
+       [
+           "Lou Gehrig's disease"
+       ],
+       "kegg_disease_cat":
+       [
+           "Neurodegenerative disease"
+       ],
+       "probes":
+       [
+           {
+               "cid": 9795907,
+               "probeId": "ML103",
+               "url": "https://mli.nih.gov/mli/?dl_id=976",
+               "smiles": "NC1=C2C(=CS1)C(=NN(C2=O)C3=CC=CC=C3)C(O)=O",
+               "name": "ML103",
+               "iupacName": "5-amino-4-oxo-3-phenylthieno[3,4-d]pyridazine-1-carboxylic acid",
+               "mwt": 287.294,
+               "tpsa": 124,
+               "exactMass": 287.036,
+               "xlogp": 2.3,
+               "complexity": 462,
+               "rotatable": 2,
+               "hbondAcceptor": 6,
+               "hbondDonor": 2,
+               "compoundClass": "ML Probe",
+               "numAssay": 267,
+               "numActiveAssay": 6,
+               "highlight": null,
+               "resourcePath": "/compounds/9795907"
+           }
+       ],
+       "probeIds":
+       [
+           9795907
+       ],
+       "eids":
+       [
+           1472
+       ],
+       "targets":
+       [
+           {
+               "acc": "P10636",
+               "name": "Microtubule-associated protein tau",
+               "description": null,
+               "status": "Reviewed",
+               "geneId": 4137,
+               "taxId": 9606,
+               "resourcePath": "/targets/accession/P10636"
+           }
+       ],
+       "resourcePath": "/projects/17",
+       "experimentCount": 12
     }
+    '''
 
-    void tearDown() {
-        // Tear down logic here
-    }
-
-    void "test Constructor()"() {
+    void "test getters"() {
 
         given:
-        Project project = new Project("name")
+        final Project project = objectMapper.readValue(PROJECT, Project.class)
         when:
         ProjectAdapter projectAdapter = new ProjectAdapter(project)
         then:
-        assert projectAdapter.name == "name"
-        assert !projectAdapter.getGrantNumber()
-        assert !projectAdapter.getLaboratoryName()
+        assert projectAdapter.getId() == 17
+        assert projectAdapter.name == "Confirmation qHTS Assay for Inhibitors of 12-hLO (12-human lipoxygenase)"
+        assert projectAdapter.description == "NIH Molecular Libraries Probe"
+        assert projectAdapter.getGrantNumber() == "X01 MH083262-01"
+        assert projectAdapter.getLaboratoryName() == "NCGC"
+        assert projectAdapter.getProbes()
+        assert projectAdapter.numberOfExperiments == 12
+        assert projectAdapter.annotations
+        assert projectAdapter.dictionaryTerms
+        assert projectAdapter.keggAnnotations
     }
 
-    void "test getters()"() {
+    void "test with grantNo"() {
 
         given:
-        DataSource dataSource = new DataSource("name", "version", "url")
-        DataSource dataSourceAnnotations = new DataSource( EntityNamedSources.CAPAnnotationSource, "version", "url")
-
-        String grantNo = "GR001"
-        String lab = "lab"
-        Project project = new Project("name")
-        project.addValue(new StringValue
-        (dataSource, "grant number", grantNo));
-        project.addValue(new StringValue
-        (dataSource, "laboratory name", lab));
-        project.addValue(new StringValue
-        (dataSourceAnnotations, "Annotation", lab));
+        final Project project = new Project(grantNo: "X01 MH083262-01")
         when:
         ProjectAdapter projectAdapter = new ProjectAdapter(project)
         then:
-        assert projectAdapter.name == "name"
-        assert projectAdapter.getGrantNumber() == grantNo
-        assert projectAdapter.getLaboratoryName() == lab
-        assert projectAdapter.getNumberOfExperiments() == null
-        assert !projectAdapter.getAnnotations().isEmpty()
+        assert projectAdapter.getGrantNumber() == "X01 MH083262-01"
     }
+
 
 }
+
 

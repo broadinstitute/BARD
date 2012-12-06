@@ -1,17 +1,13 @@
 package querycart
 
+import bard.core.adapter.CompoundAdapter
+import bard.core.rest.spring.compounds.Compound
+import bardqueryapi.IQueryService
+import bardqueryapi.QueryService
 import grails.test.mixin.TestFor
+import spock.lang.Shared
 import spock.lang.Specification
 import spock.lang.Unroll
-import bardqueryapi.IQueryService
-import spock.lang.Shared
-import bardqueryapi.QueryService
-import bard.core.adapter.CompoundAdapter
-import bard.core.Compound
-import bard.core.DataSource
-import bard.core.interfaces.MolecularData
-import bard.core.impl.MolecularDataJChemImpl
-import bard.core.MolecularValue
 
 /**
  * See the API for {@link grails.test.mixin.support.GrailsUnitTestMixin} for usage instructions
@@ -22,12 +18,11 @@ import bard.core.MolecularValue
 class CartCompoundServiceUnitSpec extends Specification {
 
     IQueryService queryService
-    @Shared CompoundAdapter compoundAdapter = new CompoundAdapter(new Compound("name1"))
+    @Shared CompoundAdapter compoundAdapter = new CompoundAdapter(new Compound(name: "name1", cid: 1L, numActiveAssay: 0, numAssay: 0))
 
     void setup() {
         queryService = Mock(QueryService)
         service.queryService = this.queryService
-        this.compoundAdapter.compound.setId(1L)
     }
 
     void tearDown() {
@@ -44,8 +39,8 @@ class CartCompoundServiceUnitSpec extends Specification {
         assert returnedCartCompound?.externalId == expectedCartCompoundId
 
         where:
-        label                      | cid  | compoundAdapters       | expectedCartCompoundName | expectedCartCompoundId
-        "found a compoundAdapter"  | 123L | [this.compoundAdapter] | 'name1'                  | 1L
-        "no compoundAdapter found" | 123L | []                     | null                     | null
+        label                      | cid  | compoundAdapters  | expectedCartCompoundName | expectedCartCompoundId
+        "found a compoundAdapter"  | 123L | [compoundAdapter] | 'name1'                  | 1L
+        "no compoundAdapter found" | 123L | []                | null                     | null
     }
 }

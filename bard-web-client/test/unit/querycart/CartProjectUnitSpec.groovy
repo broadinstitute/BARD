@@ -25,12 +25,12 @@ class CartProjectUnitSpec extends Specification {
     void "test constructor with integer"() {
         given:
         int projectId = 2
-        final String projectName = "Project title"
+        final String projectName = "ProjectSearchResult title"
         when:
         CartProject cartProject = new CartProject(projectName, projectId)
 
         then:
-        assert cartProject.name == 'Project title'
+        assert cartProject.name == 'ProjectSearchResult title'
         assert cartProject.externalId == projectId
     }
 
@@ -46,10 +46,10 @@ class CartProjectUnitSpec extends Specification {
 
         where:
         label                         | projectName  | expectedTitle
-        "Empty Project Name"          | ""           | ""
-        "Null String as Project Name" | ""           | ""
-        "With Project Name"           | "Some Title" | "Some Title"
-        "Null Project Name"           | null         | ""
+        "Empty ProjectSearchResult Name"          | ""           | ""
+        "Null String as ProjectSearchResult Name" | ""           | ""
+        "With ProjectSearchResult Name"           | "Some Title" | "Some Title"
+        "Null ProjectSearchResult Name"           | null         | ""
 
     }
 
@@ -134,7 +134,7 @@ class CartProjectUnitSpec extends Specification {
 
         where:
         label                      | projectName    | valid
-        "Project Name is null"     | ""             | false
-        "Project Name is not null" | "Some Project" | true
+        "ProjectSearchResult Name is null"     | ""             | false
+        "ProjectSearchResult Name is not null" | "Some ProjectSearchResult" | true
     }
 }

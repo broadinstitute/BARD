@@ -100,23 +100,26 @@ class MolSpreadSheetData {
 
 
 
-    List <LinkedHashMap<String,String>> determineResponseTypesPerAssay () {
-        List <LinkedHashMap<String,String>> returnValue = []
-        LinkedHashMap<String,Integer> accumulator =  [:]
+    List<LinkedHashMap<String, String>> determineResponseTypesPerAssay() {
+        List<LinkedHashMap<String, String>> returnValue = []
+        LinkedHashMap<String, Integer> accumulator = [:]
         List<String> assayNames = []
-        if (mapColumnsToAssay.size()>4)  {
-            for (int i in 4..(mapColumnsToAssay.size()-1))  {
-                  if (accumulator.containsKey(mapColumnsToAssay[i]))  {
-                      (accumulator[mapColumnsToAssay[i]]) ++
-                  } else {
+        if (mapColumnsToAssay.size() > 4) {
+            for (int i in 4..(mapColumnsToAssay.size() - 1)) {
+                if (accumulator.containsKey(mapColumnsToAssay[i])) {
+                    (accumulator[mapColumnsToAssay[i]])++
+                } else {
                     (accumulator[mapColumnsToAssay[i]]) = 0
                     assayNames << mapColumnsToAssay[i]
                 }
             }
         }
-        for (int i in 0..(assayNames.size()-1))  {
-            returnValue << ["assayName":assayNames[i],"numberOfResultTypes":(accumulator[assayNames[i]]+1),"fullAssayName":experimentFullNameList[i]]
+        //TODO: Assay Names seems to be zero in some cases. Is it possible?
+        if (assayNames) {
+            for (int i in 0..(assayNames.size() - 1)) {
+                returnValue << ["assayName": assayNames[i], "numberOfResultTypes": (accumulator[assayNames[i]] + 1), "fullAssayName": experimentFullNameList[i]]
 
+            }
         }
         returnValue
     }
@@ -133,7 +136,6 @@ class MolSpreadSheetData {
         //mssHeaders (nullable: false)
         molSpreadsheetDerivedMethod(nullable: true)
     }
-
 
 
 }

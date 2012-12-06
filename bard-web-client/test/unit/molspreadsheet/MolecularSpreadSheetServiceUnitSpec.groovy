@@ -1,7 +1,15 @@
 package molspreadsheet
 
 import bard.core.adapter.CompoundAdapter
-import bard.core.interfaces.SearchResult
+import bard.core.rest.spring.AssayRestService
+import bard.core.rest.spring.CompoundRestService
+import bard.core.rest.spring.ExperimentRestService
+import bard.core.rest.spring.ProjectRestService
+import bard.core.rest.spring.assays.Assay
+import bard.core.rest.spring.compounds.Compound
+import bard.core.rest.spring.experiment.Activity
+import bard.core.rest.spring.experiment.ExperimentData
+import bard.core.rest.spring.experiment.ExperimentSearch
 import bardqueryapi.BardWebInterfaceControllerUnitSpec
 import bardqueryapi.IQueryService
 import com.metasieve.shoppingcart.ShoppingCartService
@@ -11,8 +19,6 @@ import querycart.QueryCartService
 import spock.lang.Shared
 import spock.lang.Specification
 import spock.lang.Unroll
-import bard.core.*
-import bard.core.rest.*
 
 /**
  * Created with IntelliJ IDEA.
@@ -24,54 +30,37 @@ import bard.core.rest.*
 
 @Unroll
 @TestFor(MolecularSpreadSheetService)
-@Mixin(BardWebInterfaceControllerUnitSpec)
 class MolecularSpreadSheetServiceUnitSpec extends Specification {
 
     QueryCartService queryCartService
-    CombinedRestService combinedRestService
     ShoppingCartService shoppingCartService
     IQueryService queryService
-    RESTExperimentService restExperimentService
-    RESTAssayService restAssayService
-    RESTCompoundService restCompoundService
-    RESTProjectService restProjectService
-    CompoundAdapter compoundAdapter = buildCompoundAdapter(6 as Long, [842121 as Long])
-    @Shared Map compoundAdapterMap = [compoundAdapters: [buildCompoundAdapter(6 as Long, [842121 as Long])], facets: null, nHits: 0]
+    ExperimentRestService experimentRestService
+    AssayRestService assayRestService
+    CompoundRestService compoundRestService
+    ProjectRestService projectRestService
+    CompoundAdapter compoundAdapter = buildCompoundAdapter(6L)
+    @Shared Map compoundAdapterMap = [compoundAdapters: [buildCompoundAdapter(6L)], facets: null, nHits: 0]
 
 
     void setup() {
-        compoundAdapter.metaClass.structureSMILES = 'c1ccccc1'
-        compoundAdapter.metaClass.pubChemCID = 1 as Long
-        compoundAdapter.metaClass.name = 'name'
-        this.restExperimentService = Mock(RESTExperimentService)
-        this.restCompoundService = Mock(RESTCompoundService)
-        this.restProjectService = Mock(RESTProjectService)
-        this.restAssayService = Mock(RESTAssayService)
+        this.experimentRestService = Mock(ExperimentRestService)
+        this.compoundRestService = Mock(CompoundRestService)
+        this.projectRestService = Mock(ProjectRestService)
+        this.assayRestService = Mock(AssayRestService)
         this.queryCartService = Mock(QueryCartService)
         this.shoppingCartService = Mock(ShoppingCartService)
         this.queryService = Mock(IQueryService)
-        this.combinedRestService=Mock(CombinedRestService)
-        service.restAssayService = restAssayService
-        service.restCompoundService = restCompoundService
-        service.restExperimentService = restExperimentService
-        service.restProjectService = restProjectService
+        service.assayRestService = assayRestService
+        service.compoundRestService = compoundRestService
+        service.experimentRestService = experimentRestService
+        service.projectRestService = projectRestService
         service.queryService = this.queryService
-        service.combinedRestService = this.combinedRestService
-
-
     }
-
-    void tearDown() {
-        // Tear down logic here
-    }
-
-
-
-
 
     void "test prepareForExport #label"() {
         given:
-        MolSpreadSheetData molSpreadSheetData = new MolSpreadSheetData()
+        final MolSpreadSheetData molSpreadSheetData = new MolSpreadSheetData()
 
         when:
         molSpreadSheetData.mssHeaders << ['a']
@@ -85,70 +74,85 @@ class MolecularSpreadSheetServiceUnitSpec extends Specification {
         MolSpreadSheetCell molSpreadSheetCell2 = new MolSpreadSheetCell("2.1", MolSpreadSheetCellType.numeric)
         molSpreadSheetCell2.spreadSheetActivityStorage = new SpreadSheetActivityStorage()
         molSpreadSheetData.mssData = [:]
-        molSpreadSheetData.mssData.put("1_0", molSpreadSheetCell0 )
-        molSpreadSheetData.mssData.put("1_1", molSpreadSheetCell1 )
-        molSpreadSheetData.mssData.put("1_3", molSpreadSheetCell1 )
-        molSpreadSheetData.mssData.put("1_4", molSpreadSheetCell1 )
-        molSpreadSheetData.mssData.put("1_5",molSpreadSheetCell2 )
-        molSpreadSheetData.rowPointer[0L]=0
-        molSpreadSheetData.rowPointer[1L]=1
-        LinkedHashMap<String, Object> dataForExporting = service.prepareForExport ( molSpreadSheetData )
+        molSpreadSheetData.mssData.put("1_0", molSpreadSheetCell0)
+        molSpreadSheetData.mssData.put("1_1", molSpreadSheetCell1)
+        molSpreadSheetData.mssData.put("1_3", molSpreadSheetCell1)
+        molSpreadSheetData.mssData.put("1_4", molSpreadSheetCell1)
+        molSpreadSheetData.mssData.put("1_5", molSpreadSheetCell2)
+        molSpreadSheetData.rowPointer[0L] = 0
+        molSpreadSheetData.rowPointer[1L] = 1
+        LinkedHashMap<String, Object> dataForExporting = service.prepareForExport(molSpreadSheetData)
 
         then:
-        assertNotNull  dataForExporting
-        assertNotNull  dataForExporting."labels"
-        assert  (dataForExporting["labels"]).size()==6
-        assertNotNull  dataForExporting."fields"
-        assert  (dataForExporting["fields"]).size()==5
-        assertNotNull  dataForExporting."data"
-        assert  (dataForExporting["data"]).size()==2
+        assertNotNull dataForExporting
+        assertNotNull dataForExporting."labels"
+        assert (dataForExporting["labels"]).size() == 6
+        assertNotNull dataForExporting."fields"
+        assert (dataForExporting["fields"]).size() == 5
+        assertNotNull dataForExporting."data"
+        assert (dataForExporting["data"]).size() == 2
 
     }
+
     void "test prepareForExport degenerate"() {
         given:
-        MolSpreadSheetData molSpreadSheetData = new MolSpreadSheetData()
+        final MolSpreadSheetData molSpreadSheetData = new MolSpreadSheetData()
 
         when:
         molSpreadSheetData.mssHeaders << ['a']
         molSpreadSheetData.mssHeaders << ['b']
         molSpreadSheetData.mssHeaders << ['c']
         molSpreadSheetData.mssData = [:]
-        molSpreadSheetData.rowPointer[0L]=0
-        LinkedHashMap<String, Object> dataForExporting = service.prepareForExport ( molSpreadSheetData )
+        molSpreadSheetData.rowPointer[0L] = 0
+        LinkedHashMap<String, Object> dataForExporting = service.prepareForExport(molSpreadSheetData)
 
         then:
-        assertNotNull  dataForExporting
-        assertNotNull  dataForExporting."labels"
-        assert  (dataForExporting["labels"]).size()==3
-        assertNotNull  dataForExporting."fields"
-        assert  (dataForExporting["fields"]).size()==2
-        assertNotNull  dataForExporting."data"
-        assert  (dataForExporting["data"]).size()==1
+        assertNotNull dataForExporting
+        assertNotNull dataForExporting."labels"
+        assert (dataForExporting["labels"]).size() == 3
+        assertNotNull dataForExporting."fields"
+        assert (dataForExporting["fields"]).size() == 2
+        assertNotNull dataForExporting."data"
+        assert (dataForExporting["data"]).size() == 1
 
     }
 
 
 
 
-    void "test findActivitiesForCompounds #label"(){
+    void "test findActivitiesForCompounds"() {
         given:
-        Experiment experiment = new Experiment()
-        Object compoundETag = null
-        SearchResult<Value> experimentalResults = new ActivitySearchResult(restExperimentService, experiment)
+        Long experimentId = 2
+        String compoundETag = null
+        ExperimentData experimentData = new ExperimentData(activities: [new Activity(potency: 2.0), new Activity(potency: 3.0)])
         //add a null value
-        experimentalResults.searchResults.add(null)
+        experimentData.activities.add(null)
         when:
-        List<SpreadSheetActivity> spreadSheetActivities = service.findActivitiesForCompounds(experiment, compoundETag)
+        List<SpreadSheetActivity> spreadSheetActivities = service.findActivitiesForCompounds(experimentId, compoundETag)
         then:
-        restExperimentService.activities(_, _) >> {experimentalResults}
-        assert spreadSheetActivities.isEmpty()
+        experimentRestService.activities(_, _) >> {experimentData}
+        assert !spreadSheetActivities.isEmpty()
     }
-
+    void "test findActivitiesForCompounds with skip and top"() {
+        given:
+        Long experimentId = 2
+        int skip = 0
+        int top = 2
+        String compoundETag = null
+        ExperimentData experimentData = new ExperimentData(activities: [new Activity(potency: 2.0), new Activity(potency: 3.0)])
+        //add a null value
+        experimentData.activities.add(null)
+        when:
+        List<SpreadSheetActivity> spreadSheetActivities = service.findActivitiesForCompounds(experimentId, compoundETag,top,skip)
+        then:
+        experimentRestService.activities(_, _,_,_) >> {experimentData}
+        assert !spreadSheetActivities.isEmpty()
+    }
     void "test assays To Experiments"() {
         given:
-        Collection<Assay> assays = [new Assay(name: "A1")]
+        Collection<Assay> assays = [new Assay(assayId: 2)]
         when:
-        List<Experiment> experiments = service.assaysToExperiments(assays)
+        List<ExperimentSearch> experiments = service.assaysToExperiments(assays)
         then:
         assert experiments.isEmpty()
     }
@@ -183,7 +187,7 @@ class MolecularSpreadSheetServiceUnitSpec extends Specification {
         when:
         Map resultsMap = service.findExperimentDataById(experimentId, top, skip)
         then:
-        restExperimentService.get(_) >> {null}
+        experimentRestService.getExperimentById(_) >> {null}
         and:
         assert resultsMap
         assert resultsMap.experiment == null
@@ -196,139 +200,104 @@ class MolecularSpreadSheetServiceUnitSpec extends Specification {
 
     void "test null cmp iterator in retrieveImpliedCompoundsEtagFromAssaySpecification"() {
         given:
-        final List<Experiment> experimentList = []
-
-        SearchResult<Compound> compoundSearchResult = Mock(SearchResult)
-        experimentList << new Experiment()
+        final List<ExperimentSearch> experimentList = []
+        experimentList << new ExperimentSearch()
 
         when:
-        Object eTag = service.retrieveImpliedCompoundsEtagFromAssaySpecification(experimentList)
+        String eTag = service.retrieveImpliedCompoundsEtagFromAssaySpecification(experimentList)
 
         then:
-        restCompoundService.newETag(_) >> { new Object() }
+        compoundRestService.newETag(_, _) >> { null }
         and:
-        combinedRestService.compounds(_) >> {compoundSearchResult}
+        experimentRestService.compoundsForExperiment(_) >> {[123, 456]}
 
         assertNull eTag
     }
 
-
-    void "test extractActivityValues #label"() {
+    void "test extractActivityValuesFromExperimentData skip >= totalNumberOfRecords"() {
         given:
-        final Experiment experiment = new Experiment()
-        final Integer top = 10
-        final Integer skip = 0
-        SearchResult<Value> experimentValueIterator = Mock(SearchResult)
+        int top = 10
+        int skip = 2
+        ExperimentData experimentData = new ExperimentData(activities: [new Activity(potency: 2.0), new Activity(potency: 3.0)])
         when:
-        Map map = service.extractActivityValues(experiment, top, skip)
+        Map map = service.extractActivityValuesFromExperimentData(experimentData, top, skip)
         then:
-        restExperimentService.activities(_) >> {experimentValueIterator}
-        and:
-        assert map
+        assert !map.activityValues
+        assert map.totalNumberOfRecords == 2
+
     }
 
-    void "test extractActivityValuesFromExperimentIterator #label, null experimentIterator"() {
-        when:
-        final Map map = service.extractActivityValuesFromExperimentValueIterator(experimentIterator, top, skip)
-        then:
-        assert map
-        assert map.totalNumberOfRecords == expectedNumberOfRecords
-        assert map.activityValues.size() == expectedNumberOfRecords
-
-        where:
-        label           | top | skip | expectedNumberOfRecords | experimentIterator
-        "Null iterator" | 10  | 0    | 0                       | null
-    }
-
-    void "test extractActivityValuesFromExperimentIterator #label"() {
+    void "test extractActivityValuesFromExperimentData top >= totalNumberOfRecords"() {
         given:
-        SearchResult<Value> experimentValueIterator = Mock(SearchResult)
+        int top = 2
+        int skip = 1
+        ExperimentData experimentData = new ExperimentData(activities: [new Activity(potency: 2.0), new Activity(potency: 3.0)])
         when:
-        final Map map = service.extractActivityValuesFromExperimentValueIterator(experimentValueIterator, top, skip)
+        Map map = service.extractActivityValuesFromExperimentData(experimentData, top, skip)
         then:
-        numberOfTimesNextIsCalled * experimentValueIterator.next(_, _) >> {expectedNext}
-        numberOfTimesNextIsCalled * experimentValueIterator.count >> {expectedTotalRecords}
-        assert map
-        assert map.totalNumberOfRecords == expectedTotalRecords
-        assert map.activityValues.size() == expectedTotalActivities
+        assert map.activityValues.size() == 2
+        assert map.totalNumberOfRecords == 2
 
-        where:
-        label                | top | skip | numberOfTimesNextIsCalled | expectedNext                                                           | expectedTotalRecords | expectedTotalActivities
-        "Top and skip = 0"   | 0   | 0    | 1                         | []                                                                     | 0                    | 0
-        "Top=1 and skip = 1" | 1   | 1    | 1                         | [new Value(new DataSource("name")), new Value(new DataSource("name"))] | 1                    | 2
+    }
+
+    void "test extractActivityValuesFromExperimentData skip + top > totalNumberOfRecords"() {
+        given:
+        int top = 2
+        int skip = 2
+        ExperimentData experimentData = new ExperimentData(activities: [new Activity(potency: 2.0), new Activity(potency: 3.0), new Activity(potency: 3.0)])
+        when:
+        Map map = service.extractActivityValuesFromExperimentData(experimentData, top, skip)
+        then:
+        assert map.activityValues.size() == 1
+        assert map.totalNumberOfRecords == 3
+
     }
 
 
-    void "test addCurrentActivityToSpreadSheet when experimentValue has no children"() {
-        given: "we have an experiment"
-        SpreadSheetActivity spreadSheetActivity = new SpreadSheetActivity()
-        List<String> columnNames = []
-        final Value experimentalValue = new Value(new DataSource("name"))
-        experimentalValue.id = identifier
-        experimentalValue.metaClass.value = incomingValue
+    void "test extractActivityValuesFromExperimentData skip + top == totalNumberOfRecords"() {
+        given:
+        int top = 1
+        int skip = 2
+        ExperimentData experimentData = new ExperimentData(activities: [new Activity(potency: 2.0), new Activity(potency: 3.0), new Activity(potency: 3.0)])
+        when:
+        Map map = service.extractActivityValuesFromExperimentData(experimentData, top, skip)
+        then:
+        assert map.activityValues.size() == 1
+        assert map.totalNumberOfRecords == 3
 
-        when: "we want to pull out the active values"
-        service.addCurrentActivityToSpreadSheet(columnNames, spreadSheetActivity, experimentalValue)
-
-        then: "prove that the active values are available"
-        assert returnRelevantNumber(identifier, spreadSheetActivity) == returnValue
-
-        where:
-        incomingValue | identifier | returnValue
-        47 as Double  | "potency"  | 47 as Double
-        47 as Long    | "outcome"  | null
-        47 as Long    | "eid"      | 47 as Long
-        47 as Long    | "cid"      | 47 as Long
-        47 as Long    | "sid"      | 47 as Long
     }
 
 
+    void "test extractActivityValuesFromExperimentData"() {
+        given:
+        int top = 3
+        int skip = 0
+        ExperimentData experimentData = new ExperimentData(activities: [new Activity(potency: 2.0), new Activity(potency: 3.0), new Activity(potency: 3.0)])
+        when:
+        Map map = service.extractActivityValuesFromExperimentData(experimentData, top, skip)
+        then:
+        assert map.activityValues.size() == 3
+        assert map.totalNumberOfRecords == 3
 
-
-    void "test error value of addCurrentActivityToSpreadSheet "() {
-        given: "we have an experiment"
-        SpreadSheetActivity spreadSheetActivity = new SpreadSheetActivity()
-        List<String> columnNames = []
-        final Value experimentalValue = new Value(new DataSource("name"))
-
-        when: "we want to pull out the active values"
-        experimentalValue.id = "foo"
-
-        then: "prove that the active values are available"
-        shouldFail {service.addCurrentActivityToSpreadSheet(columnNames, spreadSheetActivity, experimentalValue)}
-    }
-
-    def returnRelevantNumber(String identifier, SpreadSheetActivity spreadSheetActivity) {
-        def returnValue = null
-        switch (identifier) {
-            case "potency":
-                returnValue = (Double) spreadSheetActivity.potency
-                break
-            case "outcome":
-                returnValue = spreadSheetActivity.activityOutcome
-                break
-            case "eid":
-                returnValue = spreadSheetActivity.eid
-                break
-            case "cid":
-                returnValue = spreadSheetActivity.cid
-                break
-            case "sid":
-                returnValue = spreadSheetActivity.sid
-                break
-            default:
-                assert false, "Unexpected Identifier: ${identifier} is unknown"
-        }
-        return returnValue
     }
 
 
+    void "test extractActivityValuesFromExperimentData default skip and top"() {
+        given:
+        ExperimentData experimentData = new ExperimentData(activities: [new Activity(potency: 2.0), new Activity(potency: 3.0), new Activity(potency: 3.0)])
+        when:
+        Map map = service.extractActivityValuesFromExperimentData(experimentData)
+        then:
+        assert map.activityValues.size() == 3
+        assert map.totalNumberOfRecords == 3
+
+    }
 
 
     void "test populateMolSpreadSheetColumnMetadata when experiment list is empty"() {
         given: "we have an experiment"
         final MolSpreadSheetData molSpreadSheetData = new MolSpreadSheetData()
-        final List<Experiment> experimentList = []
+        final List<ExperimentSearch> experimentList = []
 
         when: "we want to pull out the active values"
         service.populateMolSpreadSheetColumnMetadata(molSpreadSheetData, experimentList)
@@ -348,7 +317,7 @@ class MolecularSpreadSheetServiceUnitSpec extends Specification {
     void "test populateMolSpreadSheetColumnMetadata when experiment list is empty and mssheader is null"() {
         given: "we have an experiment"
         final MolSpreadSheetData molSpreadSheetData = new MolSpreadSheetData()
-        final List<Experiment> experimentList = []
+        final List<ExperimentSearch> experimentList = []
 
         when: "we want to pull out the active values"
         service.populateMolSpreadSheetColumnMetadata(molSpreadSheetData, experimentList)
@@ -367,10 +336,10 @@ class MolecularSpreadSheetServiceUnitSpec extends Specification {
     void "test populateMolSpreadSheetColumnMetadata when experiment list is not empty"() {
         given: "we have an experiment"
         final MolSpreadSheetData molSpreadSheetData = new MolSpreadSheetData()
-        final List<Experiment> experimentList = []
-        experimentList << new bard.core.Experiment("a")
-        experimentList << new bard.core.Experiment("b")
-        experimentList << new bard.core.Experiment("c")
+        final List<ExperimentSearch> experimentList = []
+        experimentList << new ExperimentSearch(name: "a")
+        experimentList << new ExperimentSearch(name: "b")
+        experimentList << new ExperimentSearch(name: "c")
 
         when: "we want to pull out the active values"
         service.populateMolSpreadSheetColumnMetadata(molSpreadSheetData, experimentList)
@@ -394,7 +363,7 @@ class MolecularSpreadSheetServiceUnitSpec extends Specification {
         molSpreadSheetData.rowPointer = new LinkedHashMap<Long, Integer>()
         molSpreadSheetData.mssData = new LinkedHashMap<String, MolSpreadSheetCell>()
         List<CartCompound> cartCompoundList = []
-        cartCompoundList.add(new CartCompound("c1ccccc1", "benzene", 47))
+        cartCompoundList.add(new CartCompound("c1ccccc1", "benzene", 47, 0, 0))
         Map<String, MolSpreadSheetCell> dataMap = [:]
 
         when: "we want to pull out the active values"
@@ -426,7 +395,7 @@ class MolecularSpreadSheetServiceUnitSpec extends Specification {
     void "test cartAssaysToExperiments with null inputs"() {
 
         when:
-        List<Experiment> experimentResult = service.cartAssaysToExperiments(null, null)
+        List<ExperimentSearch> experimentResult = service.cartAssaysToExperiments(null, null)
 
         then:
         assert experimentResult == []
@@ -436,7 +405,7 @@ class MolecularSpreadSheetServiceUnitSpec extends Specification {
     void "test cartCompoundsToExperiments with null input"() {
 
         when:
-        List<Experiment> experimentResult = service.cartCompoundsToExperiments(null)
+        List<ExperimentSearch> experimentResult = service.cartCompoundsToExperiments(null)
 
         then:
         assert experimentResult == []
@@ -445,22 +414,21 @@ class MolecularSpreadSheetServiceUnitSpec extends Specification {
 
     void "test cartProjectsToExperiments with null input"() {
         when:
-        List<Experiment> experimentResult = service.cartProjectsToExperiments(null)
+        List<ExperimentSearch> experimentResult = service.cartProjectsToExperiments(null)
 
         then:
         assert experimentResult == []
 
     }
 
-    CompoundAdapter buildCompoundAdapter(final Long cid, final List<Long> sids) {
+    CompoundAdapter buildCompoundAdapter(final Long cid) {
         final Compound compound = new Compound()
-        final DataSource source = new DataSource("stuff", "v1")
-        compound.setId(cid);
-        for (Long sid : sids) {
-            compound.addValue(new LongValue(source, Compound.PubChemSIDValue, sid));
-        }
-        // redundant
-        compound.addValue(new LongValue(source, Compound.PubChemCIDValue, cid));
+
+        compound.smiles = 'c1ccccc1'
+        compound.cid = cid
+        compound.name = 'name'
+        compound.numActiveAssay = new Integer("1")
+        compound.numAssay = new Integer("5")
         return new CompoundAdapter(compound)
     }
 
