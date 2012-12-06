@@ -3,13 +3,13 @@ package dataexport.registration
 import bard.db.dictionary.Element
 import common.tests.XmlTestAssertions
 import common.tests.XmlTestSamples
+import grails.buildtestdata.TestDataConfigurationHolder
 import grails.buildtestdata.mixin.Build
 import groovy.xml.MarkupBuilder
 import org.codehaus.groovy.grails.web.mapping.LinkGenerator
 import spock.lang.Specification
 import spock.lang.Unroll
 import bard.db.registration.*
-import grails.buildtestdata.TestDataConfigurationHolder
 
 /**
  * Created with IntelliJ IDEA.
@@ -85,17 +85,22 @@ class AssayExportHelperServiceUnitSpec extends Specification {
     }
 
     void "test generate #label"() {
-        def localAc = valueUnderTest.call()
+        given:
+        AssayContext assayContext = createAssayContext()
+        valueUnderTest.call(assayContext)
+
         when: "We attempt to generate a measure context in xml"
-        this.assayExportHelperService.generateAssayContext(this.markupBuilder, localAc)
+        this.assayExportHelperService.generateAssayContext(this.markupBuilder, assayContext)
+
         then: "A valid xml measure context is generated with the expected measure context id and name"
         XmlTestAssertions.assertResults(results, this.writer.toString())
+
         where:
-        label                                         | valueUnderTest                                                                                        | results
-        "minimal AssayContext "                       | {createAssayContext()}                                                                                | XmlTestSamples.MINIMAL_ASSAY_CONTEXT
-        "minimal AssayContext with contextGroup"      | {createAssayContext(contextGroup: 'contextGroup')}                                                    | XmlTestSamples.MINIMAL_ASSAY_CONTEXT_WITH_CONTEXT_GROUP
-        "minimal AssayContext with assayContextItems" | {def aci = AssayContextItem.build(); aci.assayContext.contextName = 'contextName'; aci.assayContext } | XmlTestSamples.MINIMAL_ASSAY_CONTEXT_WITH_ASSAY_CONTEXT_ITEM
-        "minimal AssayContext with measureRefs"       | {def ac = createAssayContext(); ac.addToAssayContextMeasures(AssayContextMeasure.build()); ac}        | XmlTestSamples.MINIMAL_ASSAY_CONTEXT_WITH_MEASURE_REFS
+        label                                         | valueUnderTest                                                                     | results
+        "minimal AssayContext "                       | {}                                                                                 | XmlTestSamples.MINIMAL_ASSAY_CONTEXT
+        "minimal AssayContext with contextGroup"      | {ac -> ac.contextGroup = 'contextGroup'}                                           | XmlTestSamples.MINIMAL_ASSAY_CONTEXT_WITH_CONTEXT_GROUP
+        "minimal AssayContext with assayContextItems" | {ac -> ac.contextName = 'contextName'; AssayContextItem.build(assayContext: ac); } | XmlTestSamples.MINIMAL_ASSAY_CONTEXT_WITH_ASSAY_CONTEXT_ITEM
+        "minimal AssayContext with measureRefs"       | {ac -> ac.addToAssayContextMeasures(AssayContextMeasure.build(assayContext: ac));} | XmlTestSamples.MINIMAL_ASSAY_CONTEXT_WITH_MEASURE_REFS
 
     }
 
@@ -130,7 +135,7 @@ class AssayExportHelperServiceUnitSpec extends Specification {
 
     void "create Attributes For AssayContextItem"() {
         given: "A DTO"
-        final Map<String, String> results = [assayContextItemId: "1", displayOrder: "0",attributeType: "Fixed", qualifier: "< ", valueDisplay: "Display", valueNum: "5.0", valueMin: "6.0", valueMax: "7.0"]
+        final Map<String, String> results = [assayContextItemId: "1", displayOrder: "0", attributeType: "Fixed", qualifier: "< ", valueDisplay: "Display", valueNum: "5.0", valueMin: "6.0", valueMax: "7.0"]
 
         Element attributeElement = new Element(label: "attributeLabel")
         Element valueElement = new Element(label: "valueLabel")
@@ -155,8 +160,8 @@ class AssayExportHelperServiceUnitSpec extends Specification {
         final AssayDocument assayDocument = AssayDocument.build(documentType: documentType, documentContent: documentContent)
         when: "We attempt to generate an Assay document"
         this.assayExportHelperService.generateDocument(this.grailsLinkGenerator,
-                this.markupBuilder,assayDocument,'assayDocument','assay',
-                assayDocument.id,assayDocument.assay.id,
+                this.markupBuilder, assayDocument, 'assayDocument', 'assay',
+                assayDocument.id, assayDocument.assay.id,
                 this.assayExportHelperService.mediaTypesDTO.assayDocMediaType,
                 this.assayExportHelperService.mediaTypesDTO.assayMediaType
         )
