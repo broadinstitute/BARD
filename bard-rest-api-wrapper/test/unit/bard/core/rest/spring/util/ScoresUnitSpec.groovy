@@ -40,8 +40,9 @@ class ScoresUnitSpec extends Specification {
         then:
         assert scores
         final Map<String, Double> scoreMap = scores.getScoreMap()
-        assert scoreMap.size() == 7
-        Double a = scoreMap.get("a")
+        assert scoreMap.size() == 1
+        Double a = scoreMap.get("scores")   .getAt("a")
+     //   Double a = scoreMap.get("a")
         assert a == 2.1923265
     }
 

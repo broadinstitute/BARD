@@ -654,17 +654,17 @@ class MolecularSpreadSheetServiceIntegrationSpec extends IntegrationSpec {
 //    }
 
 
-    void "tests findActivitiesForCompounds #label"() {
-        given: "That we have created an ETag from a list of CIDs"
-        final String etag = compoundRestService.newETag("Compound ETags", cids);
-        when: "We call the findActivitiesForCompounds() method with the experiment and the ETag"
-        final List<SpreadSheetActivity> activities = molecularSpreadSheetService.findActivitiesForCompounds(experimentId, etag)
-        then: "We expect experiments for each of the assays to be found"
-        assert activities
-        where:
-        label                                    | cids                                                   | experimentId
-        "An existing experiment with activities" | [new Long(164981), new Long(411519), new Long(483860)] | new Long(1326)
-    }
+//    void "tests findActivitiesForCompounds #label"() {
+//        given: "That we have created an ETag from a list of CIDs"
+//        final String etag = compoundRestService.newETag("Compound ETags", cids);
+//        when: "We call the findActivitiesForCompounds() method with the experiment and the ETag"
+//        final List<SpreadSheetActivity> activities = molecularSpreadSheetService.findActivitiesForCompounds(experimentId, etag)
+//        then: "We expect experiments for each of the assays to be found"
+//        assert activities
+//        where:
+//        label                                    | cids                                                   | experimentId
+//        "An existing experiment with activities" | [new Long(164981), new Long(411519), new Long(483860)] | new Long(1326)
+//    }
 
     void "tests retrieveExperimentalData"() {
         when:

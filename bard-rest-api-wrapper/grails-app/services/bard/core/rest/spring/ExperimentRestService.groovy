@@ -27,10 +27,9 @@ class ExperimentRestService extends AbstractRestService {
         final ExperimentShow experimentShow = this.restTemplate.getForObject(url, ExperimentShow.class, map)
         return experimentShow;
     }
-
     /**
      *
-     * @param eids
+     * @param list of pids
      * @return {@link ExperimentSearchResult}
      */
     public ExperimentSearchResult searchExperimentsByIds(final List<Long> eids) {
@@ -63,31 +62,25 @@ class ExperimentRestService extends AbstractRestService {
 
     }
 
-    public ExperimentData activities(ExperimentSearch experiment) {
-        return activities(experiment.getId())
-    }
-
+//    public ExperimentData activities(ExperimentSearch experiment) {
+//        return activities(experiment.getId())
+//    }
     public ExperimentData activities(Long experimentId) {
         return activities(experimentId, null)
     }
-    /**
-     * This is for unbounded searching, we cap the number of records at:
-     *
-     * RestApiConstants.MAXIMUM_NUMBER_OF_EXPERIMENTS
-     *
-     * @param experimentId
-     * @param etag
-     * @return {@link ExperimentData}
-     */
+//    public ExperimentData activities(Long experimentId, final Integer top, final Integer skip) {
+//        return activities(experimentId, null,top,skip)
+//    }
+
     public ExperimentData activities(final Long experimentId, final String etag) {
         // unbounded fetching
-        int top = multiplier * multiplier
-        int ratio = multiplier
-        long skip = 0;
+        Integer top = multiplier * multiplier;
+        int ratio = multiplier;
+        Integer skip = 0;
         final List<Activity> activities = []
         ExperimentData experimentData = new ExperimentData()
         while (true) {
-            final String resource = buildExperimentQuery(experimentId, etag, top, skip)
+            final String resource = buildExperimentQuery(experimentId, etag, top, skip);
             final URL url = new URL(resource)
             int currentSize
             List<Activity> currentActivities
@@ -100,7 +93,7 @@ class ExperimentRestService extends AbstractRestService {
             }
             if (currentActivities) {
                 currentSize = currentActivities.size()
-                activities.addAll(currentActivities)
+                activities.addAll(currentActivities);
             } else {
                 currentSize = 0
             }
@@ -121,24 +114,22 @@ class ExperimentRestService extends AbstractRestService {
      * @param etag
      * @param top
      * @param skip
-     * @return {@link ExperimentData}
+     * @return ExperimentData
      */
-    public ExperimentData activities(final Long experimentId, final String etag, final int top, final int skip) {
-        final String resource = buildExperimentQuery(experimentId, etag, top, skip);
+    public ExperimentData activities(final Long experimentId, final String etag, final Integer top, final Integer skip) {
+        final String resource = buildExperimentQuery(experimentId, etag, top, skip)
         final URL url = new URL(resource)
         ExperimentData experimentData
 
         if (etag) {
-            experimentData = new ExperimentData()
-            final List<Activity> activities = (this.restTemplate.getForObject(url.toURI(), Activity[].class)) as List<Activity>
-            experimentData.setActivities(activities)
-
+          experimentData = new ExperimentData()
+          final List<Activity> activities = (this.restTemplate.getForObject(url.toURI(), Activity[].class)) as List<Activity>
+          experimentData.setActivities(activities)
         } else {
             experimentData = this.restTemplate.getForObject(url.toURI(), ExperimentData.class)
         }
-        return experimentData;
+        return experimentData
     }
-
     /**
      *
      * @return a url prefix for free text compound searches

@@ -12,13 +12,16 @@ import com.fasterxml.jackson.annotation.JsonProperty
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class ExperimentSearch extends ExperimentAbstract {
 
+    @JsonProperty("assayId")
+    private long assayId;
+    @JsonProperty("assays")
+    private long assays;
+
     @Override
     public Long getAdid() {
         return assayId
     }
 
-    @JsonProperty("assayId")
-    private long assayId;
 
     @JsonProperty("assayId")
     public long getAssayId() {
@@ -30,8 +33,7 @@ public class ExperimentSearch extends ExperimentAbstract {
         this.assayId = assayId;
     }
 
-    @JsonProperty("assays")
-    private long assays;
+
 
     @JsonProperty("assays")
     public long getAssays() {

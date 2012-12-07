@@ -8,6 +8,7 @@ import org.springframework.web.client.RestTemplate
 import spock.lang.Specification
 import spock.lang.Unroll
 import bard.core.rest.spring.experiment.*
+import spock.lang.IgnoreRest
 
 @Unroll
 @TestFor(ExperimentRestService)
@@ -99,7 +100,7 @@ class ExperimentRestServiceUnitSpec extends Specification {
         final Long experimentId = 200
         final ExperimentSearch experimentSearch = new ExperimentSearch(exptId: experimentId)
         when:
-        ExperimentData experimentData = service.activities(experimentSearch)
+        ExperimentData experimentData = service.activities(experimentSearch.id)
         then:
         this.restTemplate.getForObject(_, _) >> {new ExperimentData(activities: [new Activity()])}
         assert experimentData
@@ -125,13 +126,13 @@ class ExperimentRestServiceUnitSpec extends Specification {
     void "buildExperimentQuery #label"() {
 
         when:
-        String url = service.buildExperimentQuery(experimentId, etag, skip, top)
+        String url = service.buildExperimentQuery(experimentId, etag,  top,skip)
         then:
         assert url == expectedURL
         where:
         label       | experimentId | skip | top | etag   | expectedURL
-        "With ETag" | 2            | 0    | 10  | "etag" | "http://ncgc/experiments/2/etag/etag/exptdata?skip=10&top=0&expand=true"
-        "No ETag"   | 2            | 0    | 10  | null   | "http://ncgc/experiments/2/exptdata?skip=10&top=0&expand=true"
+        "With ETag" | 2            | 0    | 10  | "etag" | "http://ncgc/experiments/2/etag/etag/exptdata?skip=0&top=10&expand=true"
+        "No ETag"   | 2            | 0    | 10  | null   | "http://ncgc/experiments/2/exptdata?skip=0&top=10&expand=true"
     }
 
     void "buildQueryForCollectionOfETags"() {

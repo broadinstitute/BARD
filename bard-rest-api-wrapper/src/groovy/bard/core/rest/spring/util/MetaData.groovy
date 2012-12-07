@@ -1,13 +1,8 @@
 package bard.core.rest.spring.util
 
 import bard.core.Value
-import com.fasterxml.jackson.annotation.JsonAnyGetter
-import com.fasterxml.jackson.annotation.JsonAnySetter
 import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.annotation.JsonProperty
-import org.apache.commons.lang.builder.EqualsBuilder
-import org.apache.commons.lang.builder.HashCodeBuilder
-import org.apache.commons.lang.builder.ToStringBuilder
 
 /**
  * Created with IntelliJ IDEA.
@@ -41,8 +36,9 @@ public class MetaData extends JsonUtil {
 
     @JsonProperty("scores")
     public void setCounts(Scores scores) {
-        this.scores= scores;
+        this.scores = scores;
     }
+
     @JsonProperty("nhit")
     public Integer getNhit() {
         return nhit;
@@ -92,6 +88,29 @@ public class MetaData extends JsonUtil {
     public void setMatchingFields(MatchingFields matchingFields) {
         this.matchingFields = matchingFields;
     }
+    /**
+     * Use the id of each response to get the score
+     * @param key
+     * @return
+     */
+    public Double getScore(String key) {
+        if (this.scores) {
+            return this.scores.getScore(key)
+        }
+        return 0.0
+    }
+    /**
+     * Use the id of each response to get the matching field
+     * @param key
+     * @return
+     */
+    public NameDescription getMatchingField(String key) {
+        if (this.matchingFields) {
+            return matchingFields.getNamedField(key)
+        }
+        return null
+    }
+
     Collection<Value> facetsToValues() {
         Collection<Value> values = []
         for (Facet facet : this.facets) {

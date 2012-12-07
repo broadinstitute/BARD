@@ -8,6 +8,7 @@ import bard.core.interfaces.AssayType
 
 public interface AssayAdapterInterface {
     public String getName()
+    public String getHighlight();
 
     public Long getCapAssayId()
 

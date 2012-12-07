@@ -823,7 +823,7 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
         final Assay assay = new Assay()
         assay.setName(name)
         assay.setAssayId(adid)
-        return new AssayAdapter(assay)
+        return new AssayAdapter(assay, 0, null)
     }
 
     ProjectAdapter buildProjectAdapter(final Long pid, final String name) {

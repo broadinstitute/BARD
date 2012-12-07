@@ -1,7 +1,6 @@
 package molspreadsheet
 
 import bard.core.adapter.CompoundAdapter
-import bard.core.interfaces.ExperimentRole
 import bard.core.rest.spring.AssayRestService
 import bard.core.rest.spring.CompoundRestService
 import bard.core.rest.spring.ExperimentRestService
@@ -10,7 +9,6 @@ import bard.core.rest.spring.assays.AbstractAssay
 import bard.core.rest.spring.assays.Assay
 import bard.core.rest.spring.assays.ExpandedAssay
 import bard.core.rest.spring.assays.ExpandedAssayResult
-import bard.core.rest.spring.compounds.Compound
 import bard.core.rest.spring.project.Project
 import bard.core.rest.spring.project.ProjectResult
 import bardqueryapi.IQueryService
@@ -368,7 +366,6 @@ class MolecularSpreadSheetService {
         //we will use this to get the promiscuity score
         dataMap.put("${rowCount}_2".toString(), new MolSpreadSheetCell(compoundId.toString(), MolSpreadSheetCellType.identifier))
         //we will use this to get the 'active vrs tested' column
-        final Compound compound = compoundRestService.getCompoundById(compoundId)
         dataMap.put("${rowCount}_3".toString(), new MolSpreadSheetCell("${numAssayActive} / ${numAssayTested}", MolSpreadSheetCellType.string))
 
         return molSpreadSheetData
@@ -399,7 +396,7 @@ class MolecularSpreadSheetService {
      * @param cartAssays
      * @return
      */
-    protected List<ExperimentSearch> assaysToExperiments(final Collection<AbstractAssay> assays) {
+    protected List<ExperimentSearch> assaysToExperiments(final List<? extends AbstractAssay> assays) {
         List<Long> assayIds = assays*.id
         return assayIdsToExperiments(assayIds)
     }
@@ -488,8 +485,8 @@ class MolecularSpreadSheetService {
         if (!cartProjects) {
             return []
         }
-        List<Long> projectIds = cartProjects*.externalId
-        List<ExperimentSearch> allExperiments = []
+        final List<Long> projectIds = cartProjects*.externalId
+        final List<ExperimentSearch> allExperiments = []
         final ProjectResult projectResult = projectRestService.searchProjectsByIds(projectIds)
 
 
@@ -504,66 +501,78 @@ class MolecularSpreadSheetService {
         return allExperiments
     }
 
+//    /**
+//     *
+//     * @param experiment
+//     * @param compoundETag
+//     * @return
+//     */
+//    List<SpreadSheetActivity> findActivitiesForCompounds(final Long experimentId, final String compoundETag) {
+//        final List<SpreadSheetActivity> spreadSheetActivities = []
+//        final ExperimentData experimentData = experimentRestService.activities(experimentId, compoundETag);
+//
+//        for (Activity experimentValue : experimentData.activities) {
+//            if (experimentValue) {
+//                SpreadSheetActivity spreadSheetActivity = extractActivitiesFromExperiment(experimentValue)
+//                spreadSheetActivity.experimentId = experimentId
+//                spreadSheetActivities.add(spreadSheetActivity)
+//            }
+//        }
+//        return spreadSheetActivities
+//    }
+//    /**
+//     *
+//     * @param experiment
+//     * @param compoundETag
+//     * @return
+//     */
+//    List<SpreadSheetActivity> findActivitiesForCompounds(final Long experimentId, final String compoundETag, final int top, final int skip) {
+//        final List<SpreadSheetActivity> spreadSheetActivities = []
+//        final ExperimentData experimentData = experimentRestService.activities(experimentId, compoundETag, top, skip);
+//
+//        for (Activity experimentValue : experimentData.activities) {
+//            if (experimentValue) {
+//                SpreadSheetActivity spreadSheetActivity = extractActivitiesFromExperiment(experimentValue)
+//                spreadSheetActivity.experimentId = experimentId
+//                spreadSheetActivities.add(spreadSheetActivity)
+//            }
+//        }
+//        return spreadSheetActivities
+//    }
     /**
-     *
-     * @param experiment
-     * @param compoundETag
-     * @return
+     * Used for Show Experiment Page. Perhaps we should move this to the Query Service
+     * @param experimentId
+     * @param top
+     * @param skip
+     * @return Map of data to use to display an experiment
      */
-    List<SpreadSheetActivity> findActivitiesForCompounds(final Long experimentId, final String compoundETag) {
+    Map findExperimentDataById(final Long experimentId, final Integer top, final Integer skip) {
         final List<SpreadSheetActivity> spreadSheetActivities = []
-        final ExperimentData experimentData = experimentRestService.activities(experimentId, compoundETag);
 
-        for (Activity experimentValue : experimentData.activities) {
-            if (experimentValue) {
-                SpreadSheetActivity spreadSheetActivity = extractActivitiesFromExperiment(experimentValue)
-                spreadSheetActivity.experimentId = experimentId
-                spreadSheetActivities.add(spreadSheetActivity)
-            }
-        }
-        return spreadSheetActivities
-    }
-    /**
-     *
-     * @param experiment
-     * @param compoundETag
-     * @return
-     */
-    List<SpreadSheetActivity> findActivitiesForCompounds(final Long experimentId, final String compoundETag,  final int top,final int skip) {
-        final List<SpreadSheetActivity> spreadSheetActivities = []
-        final ExperimentData experimentData = experimentRestService.activities(experimentId, compoundETag,top,skip);
-
-        for (Activity experimentValue : experimentData.activities) {
-            if (experimentValue) {
-                SpreadSheetActivity spreadSheetActivity = extractActivitiesFromExperiment(experimentValue)
-                spreadSheetActivity.experimentId = experimentId
-                spreadSheetActivities.add(spreadSheetActivity)
-            }
-        }
-        return spreadSheetActivities
-    }
-
-    Map findExperimentDataById(final Long experimentId, final Integer top = 10, final Integer skip = 0) {
-        List<SpreadSheetActivity> spreadSheetActivities = []
-        long totalNumberOfRecords = 0
-        ExperimentRole role = null
-        ExperimentShow experimentShow = experimentRestService.getExperimentById(experimentId)
+        final ExperimentShow experimentShow = experimentRestService.getExperimentById(experimentId)
+        long totalNumberOfRecords = experimentShow?.getCompounds() ?: 0
         if (experimentShow) {
-            role = experimentShow.role
-            final Map activityValuesMap = extractActivityValuesWithExperiment(experimentId, top, skip)
-            final List<Activity> activityValues = activityValuesMap.activityValues
-            totalNumberOfRecords = activityValuesMap.totalNumberOfRecords
+            final ExperimentData experimentData = extractActivityValuesWithExperiment(experimentId, top, skip)
+            final List<Activity> activityValues = experimentData.activities
             spreadSheetActivities = createSpreadSheetActivitiesFromActivityValues(activityValues)
 
         }
-        return [total: totalNumberOfRecords, spreadSheetActivities: spreadSheetActivities, role: role, experiment: experimentShow]
+        return [total: totalNumberOfRecords, spreadSheetActivities: spreadSheetActivities, experiment: experimentShow]
     }
-
-    protected Map extractActivityValuesWithExperiment(final Long experimentId, final Integer top = 10, final Integer skip = 0) {
-        ExperimentData experimentData = experimentRestService.activities(experimentId);
-        return extractActivityValuesFromExperimentData(experimentData, top, skip)
+    /**
+     * Used by show Experiment Page
+     * @param experimentId
+     * @param top
+     * @param skip
+     * @return ExperimentData
+     */
+    protected ExperimentData extractActivityValuesWithExperiment(final Long experimentId, final Integer top, final Integer skip) {
+        return experimentRestService.activities(experimentId, null, top, skip)
     }
-
+    /**
+     * @param activityValues
+     * @return list
+     */
     protected List<SpreadSheetActivity> createSpreadSheetActivitiesFromActivityValues(final List<Activity> activityValues) {
         List<SpreadSheetActivity> spreadSheetActivities = []
         for (Activity experimentValue : activityValues) {

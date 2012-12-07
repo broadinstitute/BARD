@@ -1,14 +1,9 @@
 package bard.core.rest.spring
 
-
 import bard.core.SearchParams
 import bard.core.SuggestParams
 import bard.core.rest.helper.RESTTestHelper
 import bard.core.rest.spring.assays.Assay
-import bard.core.rest.spring.compounds.Compound
-import bard.core.rest.spring.compounds.CompoundAnnotations
-import bard.core.rest.spring.compounds.CompoundResult
-import bard.core.rest.spring.compounds.PromiscuityScore
 import bard.core.rest.spring.util.Counts
 import bard.core.rest.spring.util.ETag
 import bard.core.rest.spring.util.Facet
@@ -16,6 +11,7 @@ import bard.core.rest.spring.util.StructureSearchParams
 import grails.plugin.spock.IntegrationSpec
 import org.springframework.web.client.HttpClientErrorException
 import spock.lang.Unroll
+import bard.core.rest.spring.compounds.*
 
 /**
  * Tests for CompoundRestService in JDO
@@ -24,6 +20,21 @@ import spock.lang.Unroll
 @Unroll
 class CompoundRestServiceIntegrationSpec extends IntegrationSpec {
     CompoundRestService compoundRestService
+
+    void "test getSummaryForCompound"() {
+        given:
+        Long cid = 16760208
+        when:
+        CompoundSummary compoundSummary = compoundRestService.getSummaryForCompound(cid)
+        then:
+        assert compoundSummary
+        assert compoundSummary.hitAssays
+        assert compoundSummary.hitExptdata
+        assert compoundSummary.nhit
+        assert compoundSummary.ntest
+        assert compoundSummary.testedAssays
+        assert compoundSummary.testedExptdata
+    }
 
     void "test retrieving assays from a compound #label"() {
 

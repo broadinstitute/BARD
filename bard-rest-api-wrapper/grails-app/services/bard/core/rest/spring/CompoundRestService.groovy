@@ -4,10 +4,6 @@ import bard.core.SearchParams
 import bard.core.interfaces.RestApiConstants
 import bard.core.rest.spring.assays.Assay
 import bard.core.rest.spring.assays.AssayResult
-import bard.core.rest.spring.compounds.Compound
-import bard.core.rest.spring.compounds.CompoundAnnotations
-import bard.core.rest.spring.compounds.CompoundResult
-import bard.core.rest.spring.compounds.PromiscuityScore
 import bard.core.rest.spring.experiment.ExperimentSearchResult
 import bard.core.rest.spring.project.ProjectResult
 import bard.core.rest.spring.util.MetaData
@@ -17,6 +13,11 @@ import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpMethod
 import org.springframework.util.LinkedMultiValueMap
 import org.springframework.util.MultiValueMap
+import bard.core.rest.spring.compounds.CompoundSummary
+import bard.core.rest.spring.compounds.CompoundAnnotations
+import bard.core.rest.spring.compounds.Compound
+import bard.core.rest.spring.compounds.CompoundResult
+import bard.core.rest.spring.compounds.PromiscuityScore
 
 class CompoundRestService extends AbstractRestService {
 
@@ -71,6 +72,13 @@ class CompoundRestService extends AbstractRestService {
         }
         return url.toString();
 
+    }
+    protected String buildQueryForCompoundSummary(final Long cid){
+        StringBuilder url = new StringBuilder();
+        url.append(getResource(cid.toString())).
+                append(RestApiConstants.SUMMARY);
+
+        return url.toString();
     }
     /**
      * Create a url to do a structure search
@@ -131,6 +139,13 @@ class CompoundRestService extends AbstractRestService {
             log.error(message);
             throw new IllegalArgumentException(message);
         }
+    }
+
+    public CompoundSummary getSummaryForCompound(final Long cid) {
+        final String resource = buildQueryForCompoundSummary(cid)
+        final URL url = new URL(resource)
+        final CompoundSummary compoundSummary = this.restTemplate.getForObject(url.toURI(), CompoundSummary.class)
+        return compoundSummary
     }
 
     public List<Assay> getTestedAssays(Long cid, boolean activeOnly) {

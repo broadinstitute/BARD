@@ -4,14 +4,37 @@ package bard.core.adapter;
 import bard.core.interfaces.CompoundAdapterInterface
 import bard.core.rest.spring.compounds.Compound
 import org.apache.commons.lang3.StringUtils
+import bard.core.rest.spring.util.NameDescription
 
 public class CompoundAdapter implements CompoundAdapterInterface {
     final Compound compound
+    final Double score
+    final NameDescription matchingField
 
-    public CompoundAdapter(final Compound compound) {
+
+    public CompoundAdapter(Compound compound, Double score = 0, NameDescription matchingField = null) {
         this.compound = compound
+        this.score = score
+        this.matchingField = matchingField
     }
 
+    public Double getScore(){
+        return this.score
+    }
+    public NameDescription  getMatchingField(){
+        return this.matchingField
+    }
+
+    @Override
+    String getHighlight() {
+        String matchFieldName = getMatchingField()?.getName()
+        if(matchFieldName){
+            //TODO: Talk to Steve about formating
+            return "Score: " + this.getScore() + " Matched Field: " + matchFieldName
+        }
+        return ""
+
+    }
 
     public boolean isDrug() {
         return this.compound.compoundClass == 'Drug'

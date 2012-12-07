@@ -38,7 +38,7 @@ abstract class AbstractRestService {
                 append(RestApiConstants.TOP).append(params.getNumSuggestion()).toString();
     }
 
-    String buildExperimentQuery(final Long experimentId, final String etag, final long top, final long skip) {
+    String buildExperimentQuery(final Long experimentId, final String etag, final Integer top, final Integer skip) {
         final StringBuilder resource = new StringBuilder(getResource(experimentId.toString()));
 
         if (etag) {
@@ -48,13 +48,15 @@ abstract class AbstractRestService {
                     append(etag);
         }
         resource.append(RestApiConstants.EXPTDATA_RESOURCE).
-                append(RestApiConstants.QUESTION_MARK).
-                append(RestApiConstants.SKIP).
-                append(skip).
-                append(RestApiConstants.TOP).
-                append(top).
-                append(RestApiConstants.AMPERSAND).
-                append(RestApiConstants.EXPAND_TRUE);
+                append(RestApiConstants.QUESTION_MARK);
+        if (top) {
+            resource.append(RestApiConstants.SKIP).
+                    append(skip).
+                    append(RestApiConstants.TOP).
+                    append(top).
+                    append(RestApiConstants.AMPERSAND)
+        }
+        resource.append(RestApiConstants.EXPAND_TRUE);
         return resource.toString();
     }
 

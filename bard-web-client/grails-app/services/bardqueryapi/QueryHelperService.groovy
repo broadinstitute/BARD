@@ -11,6 +11,8 @@ import bard.core.rest.spring.compounds.Compound
 import bard.core.rest.spring.compounds.CompoundResult
 import bard.core.rest.spring.project.Project
 import bard.core.rest.spring.project.ProjectResult
+import bard.core.rest.spring.util.MetaData
+import bard.core.rest.spring.util.NameDescription
 import org.apache.commons.lang.time.StopWatch
 
 import java.util.regex.Matcher
@@ -120,9 +122,15 @@ class QueryHelperService {
      */
     final List<CompoundAdapter> compoundsToAdapters(final CompoundResult compoundResult) {
         final List<CompoundAdapter> compoundAdapters = []
-
+        final MetaData metaData = compoundResult.metaData
         for (Compound compound : compoundResult.compounds) {
-            final CompoundAdapter compoundAdapter = new CompoundAdapter(compound)
+            Double score = null
+            NameDescription nameDescription = null
+            if (metaData) {
+                score = metaData.getScore(compound.id.toString())
+                nameDescription = metaData.getMatchingField(compound.id.toString())
+            }
+            final CompoundAdapter compoundAdapter = new CompoundAdapter(compound,score,nameDescription)
             compoundAdapters.add(compoundAdapter)
         }
         return compoundAdapters
@@ -134,28 +142,45 @@ class QueryHelperService {
      */
     public List<AssayAdapter> assaysToAdapters(final AssayResult assayResult) {
         final List<Assay> assays = assayResult.assays
+        final MetaData metaData = assayResult.metaData
         if (assays) {
-            return assaysToAdapters(assays)
+            return assaysToAdapters(assays, metaData)
         }
         return []
     }
     /**
      * convert a list Assay's to a list of AssayAdapter's
      * @param assays {@link Assay}
+     * @param metaData {@link MetaData}
      * @return list of {@link AssayAdapter}'s
      */
-    public List<AssayAdapter> assaysToAdapters(List<AbstractAssay> assays) {
+    public List<AssayAdapter> assaysToAdapters(final List<AbstractAssay> assays, final MetaData metaData) {
         final List<AssayAdapter> assayAdapters = []
         for (AbstractAssay assay : assays) {
-            assayAdapters.add(new AssayAdapter(assay))
+            Double score = null
+            NameDescription nameDescription = null
+            if (metaData) {
+                score = metaData.getScore(assay.id.toString())
+                nameDescription = metaData.getMatchingField(assay.id.toString())
+            }
+            final AssayAdapter assayAdapter = new AssayAdapter(assay, score, nameDescription)
+            assayAdapters.add(assayAdapter)
         }
         return assayAdapters
     }
 
     public List<ProjectAdapter> projectsToAdapters(final ProjectResult projectResult) {
         final List<ProjectAdapter> projectAdapters = []
+        final MetaData metaData = projectResult.metaData
         for (Project project : projectResult.projects) {
-            projectAdapters.add(new ProjectAdapter(project))
+            Double score = null
+            NameDescription nameDescription = null
+            if (metaData) {
+                score = metaData.getScore(project.id.toString())
+                nameDescription = metaData.getMatchingField(project.id.toString())
+            }
+            final ProjectAdapter projectAdapter = new ProjectAdapter(project, score, nameDescription)
+            projectAdapters.add(projectAdapter)
         }
         return projectAdapters
     }

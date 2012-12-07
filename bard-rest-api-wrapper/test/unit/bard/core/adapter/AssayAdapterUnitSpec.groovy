@@ -4,6 +4,7 @@ import bard.core.interfaces.AssayCategory
 import bard.core.interfaces.AssayRole
 import bard.core.interfaces.AssayType
 import bard.core.rest.spring.assays.Assay
+import bard.core.rest.spring.util.NameDescription
 import com.fasterxml.jackson.databind.ObjectMapper
 import spock.lang.Shared
 import spock.lang.Specification
@@ -65,8 +66,18 @@ class AssayAdapterUnitSpec extends Specification {
 
         given:
         final Assay assay = objectMapper.readValue(ASSAY, Assay.class)
+        Double score = 2
+        NameDescription nameDescription = new NameDescription(description: "description", name: "name")
+//        final Map<String, Map<String, String>> map =  new HashMap<String, Map<String,String>>()
+//
+//        MetaData metaData = new MetaData()
+//        Scores scores = new Scores()
+//        scores.additionalProperties.put("17","2")
+//
+//        metaData.additionalProperties.put("matchingFields",["17":["name":"name", "description":"description"]])
+//        metaData.scores = scores
         when:
-        AssayAdapter assayAdapter = new AssayAdapter(assay)
+        AssayAdapter assayAdapter = new AssayAdapter(assay, score, nameDescription)
 
         then:
         assert assayAdapter.name == "Confirmation qHTS Assay for Inhibitors of 12-hLO (12-human lipoxygenase)"
@@ -85,6 +96,9 @@ class AssayAdapterUnitSpec extends Specification {
         assert !assayAdapter.protocol
         assert !assayAdapter.comments
         assert assayAdapter.getCategory() == AssayCategory.MLSCN
+        assert assayAdapter.score == score
+        assert assayAdapter.matchingField.name == nameDescription.name
+        assert assayAdapter.matchingField.description == nameDescription.description
     }
 
 

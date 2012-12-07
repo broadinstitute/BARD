@@ -1,8 +1,5 @@
-import bard.core.rest.spring.CompoundRestService
-import bard.core.rest.spring.ProjectRestService
 import org.springframework.web.client.RestTemplate
-import bard.core.rest.spring.AssayRestService
-import bard.core.rest.spring.ExperimentRestService
+import bard.core.rest.spring.*
 
 /**
  * Spring Configuration of resources
@@ -18,7 +15,10 @@ beans = {
         promiscuityUrl = badApplePromiscuityUrl
         restTemplate = ref('restTemplate')
     }
-
+    substanceRestService(SubstanceRestService) {
+        baseUrl = ncgcBaseURL
+        restTemplate = ref('restTemplate')
+    }
     experimentRestService(ExperimentRestService) {
         baseUrl = ncgcBaseURL
         restTemplate = ref('restTemplate')

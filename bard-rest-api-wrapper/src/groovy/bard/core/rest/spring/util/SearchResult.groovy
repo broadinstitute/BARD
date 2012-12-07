@@ -78,5 +78,20 @@ public class SearchResult extends JsonUtil {
     void setEtags(Map<String, Long> etags) {
         this.etags = etags
     }
-
+    /**
+     * Use the id of each response to get the score
+     * @param key
+     * @return
+     */
+    public Double getScore(String key) {
+        return this.metaData.getScore(key)
+    }
+    /**
+     * Use the id of each response to get the matching field
+     * @param key
+     * @return
+     */
+    public NameDescription getMatchingField(String key) {
+        this.metaData.getMatchingField(key)
+    }
 }

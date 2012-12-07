@@ -4,10 +4,6 @@ import bard.core.SearchParams
 import bard.core.interfaces.RestApiConstants
 import bard.core.rest.spring.assays.Assay
 import bard.core.rest.spring.assays.AssayResult
-import bard.core.rest.spring.compounds.Compound
-import bard.core.rest.spring.compounds.CompoundAnnotations
-import bard.core.rest.spring.compounds.CompoundResult
-import bard.core.rest.spring.compounds.PromiscuityScore
 import bard.core.rest.spring.util.ETag
 import bard.core.rest.spring.util.ETagCollection
 import bard.core.rest.spring.util.Facet
@@ -16,6 +12,7 @@ import grails.test.mixin.TestFor
 import org.springframework.web.client.RestTemplate
 import spock.lang.Specification
 import spock.lang.Unroll
+import bard.core.rest.spring.compounds.*
 
 @Unroll
 @TestFor(CompoundRestService)
@@ -98,6 +95,24 @@ class CompoundRestServiceUnitSpec extends Specification {
         "Similarity"      | StructureSearchParams.Type.Similarity     | "http://ncgc/compounds/?filter=query[structure]&type=sim&cutoff=0.700&expand=true&top=100&skip=0"
 
 
+    }
+
+    void "buildQueryForCompoundSummary"() {
+        when:
+        String query = service.buildQueryForCompoundSummary(2L)
+        then:
+        assert query == "http://ncgc/compounds/2/summary"
+
+    }
+
+    void "Get summary for compound"() {
+        given:
+        Long cid = 2
+        when:
+        CompoundSummary compoundSummary = service.getSummaryForCompound(cid)
+        then:
+        restTemplate.getForObject(_, _) >> {new CompoundSummary()}
+        assert compoundSummary
     }
 
     void "getTestedAssays #label"() {

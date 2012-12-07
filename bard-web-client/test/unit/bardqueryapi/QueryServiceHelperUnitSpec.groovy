@@ -8,8 +8,8 @@ import bard.core.rest.spring.assays.Assay
 import bard.core.rest.spring.assays.AssayResult
 import bard.core.rest.spring.compounds.Compound
 import bard.core.rest.spring.compounds.CompoundResult
-import bard.core.rest.spring.project.ProjectResult
 import bard.core.rest.spring.project.Project
+import bard.core.rest.spring.project.ProjectResult
 import grails.test.mixin.TestFor
 import spock.lang.Shared
 import spock.lang.Specification
@@ -207,7 +207,7 @@ class QueryServiceHelperUnitSpec extends Specification {
 
     void "test assaysToAdapters #label"() {
         when:
-        final List<AssayAdapter> foundAssayAdapters = service.assaysToAdapters(assays)
+        final List<AssayAdapter> foundAssayAdapters = service.assaysToAdapters(assays, null)
 
         then:
         assert foundAssayAdapters.size() == expectedAssayAdapters.size()

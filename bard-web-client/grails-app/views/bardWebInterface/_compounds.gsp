@@ -37,10 +37,10 @@
                                         numAssays="${compoundAdapter.numberOfAssays}"
                     />
                     <dl>
-                        %{--<g:if test="${compoundAdapter.searchHighlight}">--}%
-                            %{--<dt>Search Match (highlighted in bold):</dt>--}%
-                            %{--<dd>&hellip;${compoundAdapter.searchHighlight}&hellip;</dd>--}%
-                        %{--</g:if>--}%
+                        <g:if test="${compoundAdapter.highlight}">
+                            <dt>Search Match (highlighted in bold):</dt>
+                            <dd>&hellip;${compoundAdapter.highlight}&hellip;</dd>
+                        </g:if>
                         <g:if test="${compoundAdapter.isDrug()}">
                             <p><span class="badge badge-success">Drug</span></p>
                         </g:if>

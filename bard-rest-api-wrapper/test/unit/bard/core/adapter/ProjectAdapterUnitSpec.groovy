@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import spock.lang.Shared
 import spock.lang.Specification
 import spock.lang.Unroll
+import bard.core.rest.spring.util.NameDescription
 
 @Unroll
 class ProjectAdapterUnitSpec extends Specification {
@@ -98,7 +99,7 @@ class ProjectAdapterUnitSpec extends Specification {
         given:
         final Project project = objectMapper.readValue(PROJECT, Project.class)
         when:
-        ProjectAdapter projectAdapter = new ProjectAdapter(project)
+        ProjectAdapter projectAdapter = new ProjectAdapter(project, 2, new NameDescription(name: "name", description: "description"))
         then:
         assert projectAdapter.getId() == 17
         assert projectAdapter.name == "Confirmation qHTS Assay for Inhibitors of 12-hLO (12-human lipoxygenase)"
@@ -110,6 +111,9 @@ class ProjectAdapterUnitSpec extends Specification {
         assert projectAdapter.annotations
         assert projectAdapter.dictionaryTerms
         assert projectAdapter.keggAnnotations
+        assert projectAdapter.matchingField.name=="name"
+        assert projectAdapter.score == 2
+        assert projectAdapter.matchingField.description=="description"
     }
 
     void "test with grantNo"() {

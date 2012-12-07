@@ -29,24 +29,16 @@ class MatchingFieldsUnitSpec extends Specification {
     '''
 
 
-    void setup() {
-
-    }
-
-    void tearDown() {
-        // Tear down logic here
-    }
-
     void "test serialize json to matchingFields"() {
         when:
         MatchingFields matchingFields = objectMapper.readValue(MATCHING_FIELDS_NODE, MatchingFields.class)
         then:
         assert matchingFields
-        Map<String, NameDescription> map = matchingFields.getMatchingFieldsMap()
+        final Map<String, NameDescription> map = matchingFields.getMatchingFieldsMap()
         assert  map
-        assert map.size() == 2
-        assert map.get("781")
-        assert map.get("782")
+        assert map.size() == 1
+        final NameDescription description = map.get("matchingFields")
+        assert description.getName() == "781"
     }
 
 }

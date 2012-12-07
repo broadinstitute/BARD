@@ -3,14 +3,37 @@ package bard.core.adapter;
 
 import bard.core.Value
 import bard.core.rest.spring.assays.AbstractAssay
+import bard.core.rest.spring.util.NameDescription
 import bard.core.interfaces.*
 
 public class AssayAdapter implements AssayAdapterInterface {
     final AbstractAssay assay
+    final Double score
+    final NameDescription matchingField
 
 
-    public AssayAdapter(AbstractAssay assay) {
+    public AssayAdapter(final AbstractAssay assay, final Double score=0, final NameDescription nameDescription=null) {
         this.assay = assay
+        this.score = score
+        this.matchingField = nameDescription
+    }
+
+    @Override
+    String getHighlight() {
+        String matchFieldName = getMatchingField()?.getName()
+        if(matchFieldName){
+            //TODO: Talk to Steve about formating
+            return "Score: " + this.getScore() + " Matched Field: " + matchFieldName
+        }
+        return ""
+
+    }
+    Double getScore() {
+        return this.score
+    }
+
+    NameDescription getMatchingField() {
+        return this.matchingField
     }
 
     public String getName() {
