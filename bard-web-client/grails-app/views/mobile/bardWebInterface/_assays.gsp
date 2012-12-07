@@ -29,3 +29,5 @@
         <a href="#searchResults" data-role="button" data-inline="true" data-icon="back" data-transition="none">Back</a>
     </p>
 </div>
+
+<p><a href="#searchResults" data-role="button" data-inline="true" data-icon="back" data-transition="none">Back</a></p>

@@ -29,7 +29,6 @@ class BardWebInterfaceController {
     def shoppingCartService
     IQueryService queryService
     MolecularSpreadSheetService molecularSpreadSheetService
-    MobileService mobileService
     List<SearchFilter> filters = []
 
     //An AfterInterceptor to handle mobile-view routing.
@@ -47,11 +46,15 @@ class BardWebInterfaceController {
         }
     }
 
+    Boolean isMobile() {
+        return mobileService.detect(request)
+    }
+
     def index() {
     }
 
     def search() {
-        searchflash.searchString = params.searchString
+        flash.searchString = params.searchString
         redirect(action: 'searchResults')
     }
 
@@ -374,7 +377,7 @@ class BardWebInterfaceController {
      */
     def searchCompounds(SearchCommand searchCommand) {
 
-        handleCompoundSearches(this.queryService, searchCommand)
+        handleCompoundSearches(this.queryService, searchCommand, isMobile())
 
     }
     /**
@@ -383,14 +386,14 @@ class BardWebInterfaceController {
      */
     def searchAssays(SearchCommand searchCommand) {
 
-        handleAssaySearches(this.queryService, searchCommand, request)
+        handleAssaySearches(this.queryService, searchCommand, isMobile())
     }
     /**
      *
      * Find Projects annotated with Search String
      */
     def searchProjects(SearchCommand searchCommand) {
-        handleProjectSearches(this.queryService, searchCommand)
+        handleProjectSearches(this.queryService, searchCommand, isMobile())
     }
 
     /**
@@ -452,7 +455,7 @@ class SearchHelper {
         return structureSearchResultsMap
     }
 
-    def handleAssaySearches(final bardqueryapi.IQueryService queryService, final SearchCommand searchCommand, HttpServletRequest request = null) {
+    def handleAssaySearches(final bardqueryapi.IQueryService queryService, final SearchCommand searchCommand, Boolean isMobile = false) {
         if (StringUtils.isNotBlank(searchCommand.searchString)) {
             removeDuplicatesFromSearchString(searchCommand)
             final List<SearchFilter> searchFilters = searchCommand.appliedFilters ?: []
@@ -465,7 +468,7 @@ class SearchHelper {
                 int skip = searchParams.skip
 
                 final Map assaysByTextSearchResultsMap = queryService.findAssaysByTextSearch(searchString, top, skip, searchFilters)
-                String template = mobileService.detect(request) ? "/mobile/bardWebInterface/assays" : "assays"
+                String template = isMobile ? "/mobile/bardWebInterface/assays" : "assays"
                     render(template: template, model: [
                         assayAdapters: assaysByTextSearchResultsMap.assayAdapters,
                         facets: assaysByTextSearchResultsMap.facets,
@@ -485,7 +488,7 @@ class SearchHelper {
         }
     }
 
-    def handleCompoundSearches(final bardqueryapi.IQueryService queryService, final SearchCommand searchCommand) {
+    def handleCompoundSearches(final bardqueryapi.IQueryService queryService, final SearchCommand searchCommand, Boolean isMobile = false) {
 
         if (StringUtils.isNotBlank(searchCommand.searchString)) {
 
@@ -498,7 +501,8 @@ class SearchHelper {
                 final int top = searchParams.top
                 final int skip = searchParams.skip
                 final Map compoundsByTextSearchResultsMap = queryService.findCompoundsByTextSearch(searchString, top, skip, searchFilters)
-                render(template: 'compounds',
+                String template = isMobile ? "/mobile/bardWebInterface/compounds" : "compounds"
+                render(template: template,
                         model: [
                                 compoundAdapters: compoundsByTextSearchResultsMap.compoundAdapters,
                                 facets: compoundsByTextSearchResultsMap.facets,
@@ -520,7 +524,7 @@ class SearchHelper {
 
     }
 
-    def handleProjectSearches(final bardqueryapi.IQueryService queryService, final SearchCommand searchCommand) {
+    def handleProjectSearches(final bardqueryapi.IQueryService queryService, final SearchCommand searchCommand, Boolean isMobile = false) {
 
         if (StringUtils.isNotBlank(searchCommand.searchString)) {
             removeDuplicatesFromSearchString(searchCommand)
@@ -532,7 +536,8 @@ class SearchHelper {
                 int top = searchParams.top
                 int skip = searchParams.skip
                 final Map projectsByTextSearch = queryService.findProjectsByTextSearch(searchString, top, skip, searchFilters)
-                render(template: 'projects', model: [
+                String template = isMobile ? "/mobile/bardWebInterface/projects" : "projects"
+                render(template: template, model: [
                         projectAdapters: projectsByTextSearch.projectAdapters,
                         facets: projectsByTextSearch.facets,
                         nhits: projectsByTextSearch.nHits,

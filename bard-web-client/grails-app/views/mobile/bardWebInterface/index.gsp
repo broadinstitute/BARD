@@ -12,12 +12,12 @@
 <head>
     <title>BioAssay Research Database</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <r:require modules="jqueryMobile, jqueryMobileInit, autocomplete, search"/>
+    <r:require modules="jqueryMobile, jqueryMobileInit, autocomplete, search, promiscuity, activeVrsTested, bootstrap"/>
     <r:layoutResources/>
     <r:script>
         $(document).ready(function () {
             $('#searchButton').click(function () {
-//                        Trriger the search process (in search.js)
+//              Triggers the search process (in search.js). We use the button-link instead of a standard button-submit element
                 var searchString = $("#searchString").val();
                 handleMainFormSubmit(searchString);
             });
@@ -26,7 +26,16 @@
         $(document).on('search.complete', function () {
             //We need to disable ajax behaviour on the pagination links for the mobile experiencr to woek
             $('#paginateBar a').attr("data-ajax", "false");
+            //Adjust the structure thumbnail images to the mobile screen size.
+            adjustStructureThumbnailSize()
         });
+
+        function adjustStructureThumbnailSize() {
+            var w = Math.round(window.innerWidth / 3);
+            var width = (w > 180) ? 180 : w;
+            var height = Math.round(width * 5/6);
+            $('#structureThumbnail').attr('width', width).attr('height', height);
+        }
     </r:script>
 
     %{--<style>--}%
