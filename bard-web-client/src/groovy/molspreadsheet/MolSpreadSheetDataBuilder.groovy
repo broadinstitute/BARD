@@ -1,9 +1,9 @@
 package molspreadsheet
 
+import bard.core.adapter.CompoundAdapter
+import bard.core.rest.spring.compounds.CompoundResult
 import bard.core.rest.spring.experiment.ExperimentSearch
-import querycart.CartAssay
-import querycart.CartCompound
-import querycart.CartProject
+import org.apache.log4j.Logger
 
 /**
  * Created with IntelliJ IDEA.
@@ -14,11 +14,9 @@ import querycart.CartProject
  */
 
 class MolSpreadSheetDataBuilder {
+    static final Logger log = Logger.getLogger(MolSpreadSheetDataBuilder.class)
     protected MolecularSpreadSheetService molecularSpreadSheetService
     MolSpreadSheetData molSpreadSheetData
-    List<CartCompound> cartCompoundList = []
-    List<CartAssay> cartAssayList = []
-    List<CartProject> cartProjectList = []
     Object etag
     Map<String, MolSpreadSheetCell> dataMap = [:]
     List<SpreadSheetActivity> spreadSheetActivityList = []
@@ -33,38 +31,31 @@ class MolSpreadSheetDataBuilder {
 
     MolSpreadSheetData getMolSpreadSheetData() { molSpreadSheetData }
 
-
-    void holdCartResults(List<CartCompound> cartCompoundList, List<CartAssay> cartAssayList, List<CartProject> cartProjectList) {
-        this.cartCompoundList = cartCompoundList
-        this.cartAssayList = cartAssayList
-        this.cartProjectList = cartProjectList
-    }
-
     /**
-     *
+     *  This implementation does not require a Query Cart
      * @return
      */
-    Map deriveListOfExperiments() {
+    Map deriveListOfExperimentsFromIds(List<Long> pids, List<Long> adids, List<Long> cids) {
         List<ExperimentSearch> experimentList = []
-        MolSpreadsheetDerivedMethod molSpreadsheetDerivedMethod
+        MolSpreadsheetDerivedMethod molSpreadsheetDerivedMethod = null
 
         try {
             // Any projects can be converted to assays, then assays to experiments
-            if (!this.cartProjectList?.isEmpty()) {
-                experimentList = molecularSpreadSheetService.cartProjectsToExperiments(this.cartProjectList)
+            if (!pids.isEmpty()) {
+                experimentList = molecularSpreadSheetService.projectIdsToExperiments(pids)
                 molSpreadsheetDerivedMethod = MolSpreadsheetDerivedMethod.NoCompounds_NoAssays_Projects
             }
 
             // Any assays explicitly selected on the cart are added to the  experimentList
-            if (!this.cartAssayList?.isEmpty()) {
-                experimentList = molecularSpreadSheetService.cartAssaysToExperiments(experimentList, this.cartAssayList)
+            if (!adids.isEmpty()) {
+                experimentList = molecularSpreadSheetService.assayIdsToExperiments(experimentList, adids)
                 molSpreadsheetDerivedMethod = MolSpreadsheetDerivedMethod.NoCompounds_Assays_NoProjects
             }
 
             // If we get to this point and have no experiments selected but we DO have a compound (s), then the user
             //  may be looking to derive their assays on the basis of compounds. We can do that.
-            if ((experimentList.isEmpty()) && (!this.cartCompoundList?.isEmpty())) {
-                experimentList = molecularSpreadSheetService.cartCompoundsToExperiments(this.cartCompoundList)
+            if ((experimentList.isEmpty()) && (!cids.isEmpty())) {
+                experimentList = molecularSpreadSheetService.compoundIdsToExperiments(cids)
                 molSpreadsheetDerivedMethod = MolSpreadsheetDerivedMethod.Compounds_NoAssays_NoProjects
             }
 
@@ -72,16 +63,15 @@ class MolSpreadSheetDataBuilder {
         } catch (Exception exception) {
             // The shopping cart plugins sometimes throwns an exception though it seems to always keep working
             //TODO: If we know the specific exception that it throws then we should catch the specific one
-            exception.printStackTrace()
+            log.error(exception)
         }
 
         return [experimentList: experimentList, molSpreadsheetDerivedMethod: molSpreadsheetDerivedMethod]
     }
 
-
-
-
-    void populateMolSpreadSheet(List<ExperimentSearch> experimentList, MolSpreadsheetDerivedMethod molSpreadsheetDerivedMethod) {
+    void populateMolSpreadSheetWithCids(final List<ExperimentSearch> experimentList,
+                                        final MolSpreadsheetDerivedMethod molSpreadsheetDerivedMethod,
+                                        final List<Long> cids) {
 
         // this is the variable we plan to fill
         molSpreadSheetData = new MolSpreadSheetData()
@@ -94,19 +84,19 @@ class MolSpreadSheetDataBuilder {
         molecularSpreadSheetService.populateMolSpreadSheetColumnMetadata(molSpreadSheetData, experimentList)
 
         // next deal with the compounds
-        if (cartCompoundList.isEmpty()) {
+        if (!cids) {
             // Explicitly specified assay, for which we will retrieve all compounds
             etag = molecularSpreadSheetService.retrieveImpliedCompoundsEtagFromAssaySpecification(experimentList)
             spreadSheetActivityList = molecularSpreadSheetService.extractMolSpreadSheetData(molSpreadSheetData, experimentList, etag)
-            // spreadSheetActivityList = molecularSpreadSheetService.extractMolSpreadSheetData(molSpreadSheetData, experimentList, [])
             Map map = molecularSpreadSheetService.convertSpreadSheetActivityToCompoundInformation(spreadSheetActivityList)
             molecularSpreadSheetService.populateMolSpreadSheetRowMetadata(molSpreadSheetData, map, this.dataMap)
 
         } else {
-
+            final CompoundResult compoundResult = this.molecularSpreadSheetService.compoundRestService.searchCompoundsByIds(cids)
+            final List<CompoundAdapter> compoundAdapters = this.molecularSpreadSheetService.queryService.queryHelperService.compoundsToAdapters(compoundResult)
+            etag = molecularSpreadSheetService.generateETagFromCids(cids)
             // Explicitly specified assays and explicitly specified compounds
-            molecularSpreadSheetService.populateMolSpreadSheetRowMetadata(molSpreadSheetData, cartCompoundList, this.dataMap)
-            etag = molecularSpreadSheetService.generateETagFromCartCompounds(cartCompoundList)
+            molecularSpreadSheetService.populateMolSpreadSheetRowMetadataFromCompoundAdapters(molSpreadSheetData, compoundAdapters, this.dataMap)
             spreadSheetActivityList = molecularSpreadSheetService.extractMolSpreadSheetData(molSpreadSheetData, experimentList, etag)
         }
 
@@ -115,8 +105,6 @@ class MolSpreadSheetDataBuilder {
         molecularSpreadSheetService.fillInTheMissingCellsAndConvertToExpandedMatrix(molSpreadSheetData, this.dataMap)
         molecularSpreadSheetService.prepareMapOfColumnsToAssay(molSpreadSheetData)
     }
-
-
 }
 
 class MolSpreadSheetDataBuilderDirector {
@@ -130,17 +118,16 @@ class MolSpreadSheetDataBuilderDirector {
         this.molSpreadSheetDataBuilder.molSpreadSheetData
     }
 
-    void constructMolSpreadSheetData(List<CartCompound> cartCompoundList,
-                                     List<CartAssay> cartAssayList,
-                                     List<CartProject> cartProjectList) {
+    void constructMolSpreadSheetDataFromIds(final List<Long> cids,
+                                            final List<Long> adids,
+                                            final List<Long> pids) {
 
-        molSpreadSheetDataBuilder.holdCartResults(cartCompoundList, cartAssayList, cartProjectList)
-
-        Map deriveListOfExperiments = molSpreadSheetDataBuilder.deriveListOfExperiments()
+        Map deriveListOfExperiments = molSpreadSheetDataBuilder.deriveListOfExperimentsFromIds(pids, adids, cids)
         List<ExperimentSearch> experimentList = deriveListOfExperiments.experimentList
         MolSpreadsheetDerivedMethod molSpreadsheetDerivedMethod = deriveListOfExperiments.molSpreadsheetDerivedMethod
 
-        molSpreadSheetDataBuilder.populateMolSpreadSheet(experimentList, molSpreadsheetDerivedMethod)
+
+        molSpreadSheetDataBuilder.populateMolSpreadSheetWithCids(experimentList, molSpreadsheetDerivedMethod, cids)
     }
 
 }

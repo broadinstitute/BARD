@@ -7,13 +7,11 @@ import grails.plugin.spock.IntegrationSpec
 
 import static org.junit.Assert.assertNotNull
 import static org.junit.Assert.assertNull
-import molspreadsheet.MolecularSpreadSheetService
 
 class ShoppingCartServiceIntegrationSpec extends IntegrationSpec {
 
     ShoppingCartService shoppingCartService
     QueryCartService queryCartService
-    MolecularSpreadSheetService molecularSpreadSheetService
 
     void setup() {
         // Setup logic here
@@ -64,8 +62,6 @@ class ShoppingCartServiceIntegrationSpec extends IntegrationSpec {
 
     void "Test retrieveCartAssayFromShoppingCart"() {
         given: "A shopping cart"
-        assertNotNull shoppingCartService
-        assertNotNull  molecularSpreadSheetService
 
         CartAssay cartAssay = new CartAssay("This is an assay", 1)
 
@@ -76,15 +72,13 @@ class ShoppingCartServiceIntegrationSpec extends IntegrationSpec {
         }
 
         then: "We get back a list assay ids"
-        List<CartAssay> cartAssayList =  molecularSpreadSheetService.retrieveCartAssayFromShoppingCart()
+        List<CartAssay> cartAssayList = queryCartService.retrieveCartAssayFromShoppingCart()
         assert cartAssayList.size() == 1   // these are unique entries
     }
 
 
     void "Test retrieveCartCompoundFromShoppingCart"() {
         given: "A shopping cart"
-        assertNotNull shoppingCartService
-        assertNotNull  molecularSpreadSheetService
 
         CartCompound cartCompound = new CartCompound("c1ccccc1", "cmpd name", 47, 0, 0)
 
@@ -95,7 +89,7 @@ class ShoppingCartServiceIntegrationSpec extends IntegrationSpec {
         }
 
         then: "We get back a list assay ids"
-        List<CartCompound> cartCompoundList =  molecularSpreadSheetService.retrieveCartCompoundFromShoppingCart()
+        List<CartCompound> cartCompoundList = queryCartService.retrieveCartCompoundFromShoppingCart()
         assert cartCompoundList.size() == 1   // these are unique entries
     }
 
@@ -103,8 +97,6 @@ class ShoppingCartServiceIntegrationSpec extends IntegrationSpec {
 
     void "Test retrieveCartProjectFromShoppingCart"() {
         given: "A shopping cart"
-        assertNotNull shoppingCartService
-        assertNotNull  molecularSpreadSheetService
 
         CartProject cartProject = new CartProject("my project", 1)
 
@@ -115,7 +107,7 @@ class ShoppingCartServiceIntegrationSpec extends IntegrationSpec {
         }
 
         then: "We get back a list assay ids"
-        List<CartProject> cartProjectList =  molecularSpreadSheetService.retrieveCartProjectFromShoppingCart()
+        List<CartProject> cartProjectList = queryCartService.retrieveCartProjectFromShoppingCart()
         assert cartProjectList.size() == 1   // these are unique entries
     }
 

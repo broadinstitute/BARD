@@ -11,8 +11,6 @@ import querycart.CartProject
 import querycart.QueryCartService
 import spock.lang.Unroll
 
-import static junit.framework.Assert.assertNotNull
-
 @Unroll
 class MolSpreadSheetDataBuilderIntegrationSpec extends IntegrationSpec {
 
@@ -26,8 +24,6 @@ class MolSpreadSheetDataBuilderIntegrationSpec extends IntegrationSpec {
     @Before
     void setup() {
         molSpreadSheetDataBuilder = new MolSpreadSheetDataBuilder(this.molecularSpreadSheetService)
-        this.queryCartService = molecularSpreadSheetService.queryCartService
-        this.shoppingCartService = molecularSpreadSheetService.shoppingCartService
     }
 
     @After
@@ -35,46 +31,42 @@ class MolSpreadSheetDataBuilderIntegrationSpec extends IntegrationSpec {
 
     }
 
-    void "test different combinations through deriveListOfExperiments"() {
-
-        when: "we have a molecularSpreadSheetService"
-        assertNotNull molecularSpreadSheetService
-        assertNotNull queryCartService
-        assertNotNull molSpreadSheetDataBuilder
-        List<CartCompound> cartCompoundList = []
-        List<CartAssay> cartAssayList = []
-        List<CartProject> cartProjectList = []
-
-
-        then: "we should be able to generate the core molSpreadSheetData, with valid empty data holders"
+    void "test different combinations through deriveListOfExperiments #label"() {
+        given:
+        List<Long> pids = []
+        List<Long> adids = []
+        List<Long> cids = []
         if (cartAssay) {
-            cartAssayList << cartAssay
+            adids << cartAssay.externalId
         }
         if (cartCompound) {
-            cartCompoundList << cartCompound
+            cids << cartCompound.externalId
         }
         if (cartProject) {
-            cartProjectList << cartProject
+            pids << cartProject.externalId
         }
-        molSpreadSheetDataBuilder.holdCartResults(cartCompoundList, cartAssayList, cartProjectList)
-        Map deriveListOfExperiments = molSpreadSheetDataBuilder.deriveListOfExperiments()
+
+        when: "we have a molecularSpreadSheetService"
+        Map deriveListOfExperiments = molSpreadSheetDataBuilder.deriveListOfExperimentsFromIds(pids, adids, cids)
+
+        then: "we should be able to generate the core molSpreadSheetData, with valid empty data holders"
         List<ExperimentSearch> experimentList = deriveListOfExperiments.experimentList
         MolSpreadsheetDerivedMethod molSpreadsheetDerivedMethod = deriveListOfExperiments.molSpreadsheetDerivedMethod
-        assertNotNull experimentList
+        assert experimentList != null
 
 
 
         where:
-        dataIsSufficient | cartAssay             | cartProject             | cartCompound                        | expectedMolSpreadsheetDerivedMethod
-        false            | null                  | null                    | null                                | null
-        true             | new CartAssay("A", 1) | null                    | null                                | MolSpreadsheetDerivedMethod.NoCompounds_Assays_NoProjects
-        true             | null                  | new CartProject("P", 8) | null                                | MolSpreadsheetDerivedMethod.NoCompounds_NoAssays_Projects
-        true             | null                  | null                    | new CartCompound("C", "c", 1, 0, 0) | null
-        true             | null                  | new CartProject("P", 8) | new CartCompound("C", "c", 1, 0, 0) | MolSpreadsheetDerivedMethod.NoCompounds_NoAssays_Projects
-        true             | new CartAssay("A", 1) | null                    | new CartCompound("C", "c", 1, 0, 0) | MolSpreadsheetDerivedMethod.NoCompounds_Assays_NoProjects
-        true             | new CartAssay("A", 1) | new CartProject("P", 8) | null                                | MolSpreadsheetDerivedMethod.NoCompounds_NoAssays_Projects
-        true             | new CartAssay("A", 1) | new CartProject("P", 8) | new CartCompound("C", "c", 1, 0, 0) | MolSpreadsheetDerivedMethod.NoCompounds_NoAssays_Projects
-        false            | null                  | null                    | null                                | null
+        label                         | dataIsSufficient | cartAssay             | cartProject             | cartCompound                        | expectedMolSpreadsheetDerivedMethod
+        "All null"                    | false            | null                  | null                    | null                                | null
+        "Assay"                       | true             | new CartAssay("A", 1) | null                    | null                                | MolSpreadsheetDerivedMethod.NoCompounds_Assays_NoProjects
+        "Project"                     | true             | null                  | new CartProject("P", 8) | null                                | MolSpreadsheetDerivedMethod.NoCompounds_NoAssays_Projects
+        "Compound"                    | true             | null                  | null                    | new CartCompound("C", "c", 1, 0, 0) | null
+        "Project and Compound"        | true             | null                  | new CartProject("P", 8) | new CartCompound("C", "c", 1, 0, 0) | MolSpreadsheetDerivedMethod.NoCompounds_NoAssays_Projects
+        "Assay and Compound"          | true             | new CartAssay("A", 1) | null                    | new CartCompound("C", "c", 1, 0, 0) | MolSpreadsheetDerivedMethod.NoCompounds_Assays_NoProjects
+        "Assay and Project"           | true             | new CartAssay("A", 1) | new CartProject("P", 8) | null                                | MolSpreadsheetDerivedMethod.NoCompounds_NoAssays_Projects
+        "Assay, Project and Compound" | true             | new CartAssay("A", 1) | new CartProject("P", 8) | new CartCompound("C", "c", 1, 0, 0) | MolSpreadsheetDerivedMethod.NoCompounds_NoAssays_Projects
+        "None"                        | false            | null                  | null                    | null                                | null
     }
 
 //
