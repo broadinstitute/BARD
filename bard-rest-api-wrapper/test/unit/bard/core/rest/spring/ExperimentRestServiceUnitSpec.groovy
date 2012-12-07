@@ -148,7 +148,7 @@ class ExperimentRestServiceUnitSpec extends Specification {
         when:
         String url = service.buildETagQuery(etag)
         then:
-        assert url == "etag/AB100ET/facets"
+        assert url == "etag/AB100ET"
     }
 
     void "addTopAndSkip default skip and top #label"() {

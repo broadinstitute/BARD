@@ -1,4 +1,5 @@
 out/
+build/
 .idea/**.*
 .idea
 .idea/workspace.xml
