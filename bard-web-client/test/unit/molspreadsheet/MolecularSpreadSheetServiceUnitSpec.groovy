@@ -10,11 +10,9 @@ import bard.core.rest.spring.compounds.Compound
 import bard.core.rest.spring.experiment.Activity
 import bard.core.rest.spring.experiment.ExperimentData
 import bard.core.rest.spring.experiment.ExperimentSearch
-
 import bardqueryapi.IQueryService
 import com.metasieve.shoppingcart.ShoppingCartService
 import grails.test.mixin.TestFor
-import querycart.CartCompound
 import querycart.QueryCartService
 import spock.lang.Shared
 import spock.lang.Specification
@@ -116,7 +114,6 @@ class MolecularSpreadSheetServiceUnitSpec extends Specification {
         assert (dataForExporting["data"]).size() == 1
 
     }
-
 
 //    void "test findActivitiesForCompounds"() {
 //        given:
@@ -360,12 +357,13 @@ class MolecularSpreadSheetServiceUnitSpec extends Specification {
         final MolSpreadSheetData molSpreadSheetData = new MolSpreadSheetData()
         molSpreadSheetData.rowPointer = new LinkedHashMap<Long, Integer>()
         molSpreadSheetData.mssData = new LinkedHashMap<String, MolSpreadSheetCell>()
-        List<CartCompound> cartCompoundList = []
-        cartCompoundList.add(new CartCompound("c1ccccc1", "benzene", 47, 0, 0))
+        //  List<CartCompound> cartCompoundList = []
+        //cartCompoundList.add(new CartCompound("c1ccccc1", "benzene", 47, 0, 0))
         Map<String, MolSpreadSheetCell> dataMap = [:]
 
+        // final MolSpreadSheetData molSpreadSheetData, final Map compoundAdapterMap, Map<String, MolSpreadSheetCell> dataMap
         when: "we want to pull out the active values"
-        service.populateMolSpreadSheetRowMetadata(molSpreadSheetData, cartCompoundList, dataMap)
+        service.populateMolSpreadSheetRowMetadata(molSpreadSheetData, [:], dataMap)
 
         then: "prove that the active values are available"
         assertNotNull molSpreadSheetData
@@ -390,34 +388,10 @@ class MolecularSpreadSheetServiceUnitSpec extends Specification {
         assert molSpreadSheetData.mssHeaders.flatten().size() == 0
     }
 
-    void "test cartAssaysToExperiments with null inputs"() {
 
-        when:
-        List<ExperimentSearch> experimentResult = service.cartAssaysToExperiments(null, null)
 
-        then:
-        assert experimentResult == []
 
-    }
 
-    void "test cartCompoundsToExperiments with null input"() {
-
-        when:
-        List<ExperimentSearch> experimentResult = service.cartCompoundsToExperiments(null)
-
-        then:
-        assert experimentResult == []
-
-    }
-
-    void "test cartProjectsToExperiments with null input"() {
-        when:
-        List<ExperimentSearch> experimentResult = service.cartProjectsToExperiments(null)
-
-        then:
-        assert experimentResult == []
-
-    }
 
     CompoundAdapter buildCompoundAdapter(final Long cid) {
         final Compound compound = new Compound()

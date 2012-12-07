@@ -10,6 +10,64 @@ class QueryCartService {
     static final String cartCompound = "CartCompound"
     static final String cartProject = "CartProject"
 
+
+    /**
+     * When do we have sufficient data to charge often try to build a spreadsheet?
+     *
+     * @return
+     */
+    Boolean weHaveEnoughDataToMakeASpreadsheet() {
+        boolean returnValue = false
+        Map<String, List> itemsInShoppingCart = this.groupUniqueContentsByType(shoppingCartService)
+        if (this.totalNumberOfUniqueItemsInCart(itemsInShoppingCart, QueryCartService.cartProject) > 0) {
+            returnValue = true
+        }
+        else if (this.totalNumberOfUniqueItemsInCart(itemsInShoppingCart,
+                QueryCartService.cartAssay) > 0) {
+            returnValue = true
+        }
+        else if (this.totalNumberOfUniqueItemsInCart(itemsInShoppingCart,
+                QueryCartService.cartCompound) > 0) {
+            returnValue = true
+        }
+        return returnValue
+    }
+
+    List<CartCompound> retrieveCartCompoundFromShoppingCart() {
+        List<CartCompound> cartCompoundList = []
+        for (CartCompound cartCompound in (this.groupUniqueContentsByType(shoppingCartService)[(QueryCartService.cartCompound)])) {
+            cartCompoundList.add(cartCompound)
+        }
+        return cartCompoundList
+    }
+    List<Long> retrieveCartCompoundIdsFromShoppingCart() {
+        List<CartCompound> cartCompoundList  = retrieveCartCompoundFromShoppingCart()
+        return cartCompoundList*.externalId
+    }
+    List<Long> retrieveCartAssayIdsFromShoppingCart() {
+        List<CartAssay> cartAssayList = retrieveCartAssayFromShoppingCart()
+        return cartAssayList*.externalId
+    }
+    List<Long> retrieveCartProjectIdsFromShoppingCart() {
+        List<CartProject> cartProjectList = retrieveCartProjectFromShoppingCart()
+        return cartProjectList*.externalId
+    }
+    List<CartAssay> retrieveCartAssayFromShoppingCart() {
+        List<CartAssay> cartAssayList = []
+        for (CartAssay cartAssay in (this.groupUniqueContentsByType(shoppingCartService)[(QueryCartService.cartAssay)])) {
+            cartAssayList.add(cartAssay)
+        }
+        return cartAssayList
+    }
+
+    List<CartProject> retrieveCartProjectFromShoppingCart() {
+        List<CartProject> cartProjectList = []
+        for (CartProject cartProject in (this.groupUniqueContentsByType(shoppingCartService)[(QueryCartService.cartProject)])) {
+            cartProjectList.add(cartProject)
+        }
+        return cartProjectList
+    }
+
     /**
      * Count up all the elements of all different types. Do NOT attempt to detect overlap ( that is,
      * if you have a compound record, and you also have an assay record, but the assay also happens

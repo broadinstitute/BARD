@@ -86,8 +86,6 @@ abstract class AbstractRestService {
         return new StringBuilder(RestApiConstants.ETAG).
                 append(RestApiConstants.FORWARD_SLASH).
                 append(etag).
-                append(RestApiConstants.FORWARD_SLASH).
-                append(RestApiConstants.FACETS).
                 toString();
     }
 
@@ -256,7 +254,8 @@ abstract class AbstractRestService {
 
 
     public List<Facet> getFacetsByETag(String etag) {
-        final String resource = buildETagQuery(etag);
+        final String resource = buildETagQuery(etag) + RestApiConstants.FORWARD_SLASH + RestApiConstants.FACETS
+
         final String urlString = getResource(resource);
         final URL url = new URL(urlString)
         //Using Facte[] to get around issue reported here : https://jira.springsource.org/browse/SPR-7002
