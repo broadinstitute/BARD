@@ -66,6 +66,7 @@ modules = {
         resource url:"css/jquery.mobile-1.2.0/jquery.mobile-1.2.0.min.css"
         resource url:"js/jquery.mobile-1.2.0/jquery.mobile-1.2.0.js"
         resource url:"js/jquery.mobile-1.2.0/jquery.mobile-1.2.0.min.js"
+        resource url:"css/bard-mobile.css"
     }
     jqueryMobileInit {
         resource url:"js/jqueryMobileInit.js"

@@ -13,6 +13,7 @@ import org.apache.commons.lang.StringUtils
 
 import javax.servlet.http.HttpServletResponse
 import grails.converters.JSON
+import javax.servlet.http.HttpServletRequest
 
 /**
  *
@@ -50,7 +51,7 @@ class BardWebInterfaceController {
     }
 
     def search() {
-        flash.searchString = params.searchString
+        searchflash.searchString = params.searchString
         redirect(action: 'searchResults')
     }
 
@@ -382,7 +383,7 @@ class BardWebInterfaceController {
      */
     def searchAssays(SearchCommand searchCommand) {
 
-        handleAssaySearches(this.queryService, searchCommand)
+        handleAssaySearches(this.queryService, searchCommand, request)
     }
     /**
      *
@@ -421,6 +422,9 @@ class BardWebInterfaceController {
  */
 class SearchHelper {
 
+    org.springframework.context.ApplicationContext ctx = org.codehaus.groovy.grails.web.context.ServletContextHolder.servletContext.getAttribute(org.codehaus.groovy.grails.web.servlet.GrailsApplicationAttributes.APPLICATION_CONTEXT);
+    MobileService mobileService = ctx.getBean('mobileService')
+
     Map handleStructureSearch(final bardqueryapi.IQueryService queryService, final SearchCommand searchCommand) {
         Map structureSearchResultsMap = [:]
         params.max = 50
@@ -448,7 +452,7 @@ class SearchHelper {
         return structureSearchResultsMap
     }
 
-    def handleAssaySearches(final bardqueryapi.IQueryService queryService, final SearchCommand searchCommand) {
+    def handleAssaySearches(final bardqueryapi.IQueryService queryService, final SearchCommand searchCommand, HttpServletRequest request = null) {
         if (StringUtils.isNotBlank(searchCommand.searchString)) {
             removeDuplicatesFromSearchString(searchCommand)
             final List<SearchFilter> searchFilters = searchCommand.appliedFilters ?: []
@@ -461,7 +465,8 @@ class SearchHelper {
                 int skip = searchParams.skip
 
                 final Map assaysByTextSearchResultsMap = queryService.findAssaysByTextSearch(searchString, top, skip, searchFilters)
-                render(template: 'assays', model: [
+                String template = mobileService.detect(request) ? "/mobile/bardWebInterface/assays" : "assays"
+                    render(template: template, model: [
                         assayAdapters: assaysByTextSearchResultsMap.assayAdapters,
                         facets: assaysByTextSearchResultsMap.facets,
                         nhits: assaysByTextSearchResultsMap.nHits,
