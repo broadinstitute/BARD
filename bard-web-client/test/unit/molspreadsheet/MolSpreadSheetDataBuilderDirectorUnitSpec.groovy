@@ -16,9 +16,24 @@ class MolSpreadSheetDataBuilderDirectorUnitSpec extends Specification {
     void setup() {
     }
 
-    void tearDown() {
-    }
 
+
+    void "test deriveListOfExperimentsFromIds - Throws Exception"() {
+        given:
+        final List<Long> pids = [2]
+        final List<Long> adids = []
+        final List<Long> cids = []
+        MolSpreadSheetDataBuilder molSpreadSheetDataBuilder = new MolSpreadSheetDataBuilder()
+        MolecularSpreadSheetService molecularSpreadSheetService = Mock(MolecularSpreadSheetService)
+        molSpreadSheetDataBuilder.molecularSpreadSheetService = molecularSpreadSheetService
+        when:
+        Map map = molSpreadSheetDataBuilder.deriveListOfExperimentsFromIds(pids, cids, adids)
+        then:
+        1 * molecularSpreadSheetService.projectIdsToExperiments(pids) >> {new RuntimeException()}
+        assert map
+        assert !map.experimentList
+        assert !map.molSpreadsheetDerivedMethod
+    }
 
     void "test set mol spreadsheet data builder"() {
         when:
@@ -29,7 +44,7 @@ class MolSpreadSheetDataBuilderDirectorUnitSpec extends Specification {
         molSpreadSheetDataBuilderDirector.setMolSpreadSheetDataBuilder(molSpreadSheetDataBuilder)
 
         then:
-        assertNotNull molSpreadSheetDataBuilderDirector.molSpreadSheetData
+        assert molSpreadSheetDataBuilderDirector.molSpreadSheetData
         assert molSpreadSheetDataBuilderDirector.molSpreadSheetData == molSpreadSheetDataBuilder.molSpreadSheetData
 
     }

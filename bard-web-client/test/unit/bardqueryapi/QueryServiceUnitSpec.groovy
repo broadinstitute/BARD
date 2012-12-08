@@ -92,7 +92,32 @@ class QueryServiceUnitSpec extends Specification {
         "Unknown Compound"          | 872        | null
         "Null CompoundId"           | null       | null
     }
+    /**
+     * {@link QueryService#showProject(Long)}
+     *
+     */
+    void "test Show Project - No Experiments associated to Project"() {
 
+        given:
+        List<Assay> assays = Mock(List)
+
+        when:
+        Map foundProjectAdapterMap = service.showProject(projectId)
+        then:
+        projectRestService.getProjectById(_) >> {project}
+        projectRestService.findExperimentsByProjectId(_) >> {[]}
+        projectRestService.findAssaysByProjectId(_) >> {assays}
+        assert foundProjectAdapterMap
+        ProjectAdapter foundProjectAdapter = foundProjectAdapterMap.projectAdapter
+        assert foundProjectAdapter
+        assert foundProjectAdapter.project
+        assert !foundProjectAdapterMap.experiments
+
+        where:
+        label                                   | projectId | project
+        "Project has no Experiment association" | 872       | project1
+
+    }
     /**
      * {@link QueryService#showProject(Long)}
      *
@@ -138,14 +163,31 @@ class QueryServiceUnitSpec extends Specification {
         when: "Client enters a assay ID and the showAssay method is called"
         Map foundAssayMap = service.showAssay(assayId)
         then: "The Assay document is displayed"
-        assayRestService.getAssayById(_) >> {expandedAssay}
+        numberOfExceptedCalls * assayRestService.getAssayById(_) >> {expandedAssay}
         assert foundAssayMap
         assert foundAssayMap.assayAdapter
 
         where:
-        label                     | assayId | assay
-        "Return an Assay Adapter" | 872     | assay1
-        "Unknown Assay"           | 872     | null
+        label                     | assayId | assay  | numberOfExceptedCalls
+        "Return an Assay Adapter" | 872     | assay1 | 1
+        "Unknown Assay"           | 872     | null   | 1
+    }
+    /**
+     * {@link QueryService#showAssay(Long)}
+     *
+     */
+    void "test Show Assay - Null AssayId"() {
+        given:
+        ExpandedAssay expandedAssay = new ExpandedAssay()
+        when: "Client enters a assay ID and the showAssay method is called"
+        Map foundAssayMap = service.showAssay(assayId)
+        then: "The Assay document is displayed"
+        0 * assayRestService.getAssayById(_) >> {expandedAssay}
+        assert !foundAssayMap
+
+        where:
+        label           | assayId | assay
+        "Null assay Id" | null    | null
     }
 
     void "test findCompoundsByCIDs - Non existing ids"() {

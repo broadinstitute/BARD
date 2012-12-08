@@ -302,7 +302,7 @@ class QueryService implements IQueryService {
             if (project) {
                 final List<ExperimentSearch> experiments = projectRestService.findExperimentsByProjectId(projectId)
                 if (experiments) {
-                    experiments?.sort {
+                    experiments.sort {
                         it?.role
                     }
                 }

@@ -30,7 +30,7 @@ class SubstanceRestService extends AbstractRestService {
             final MultiValueMap<String, String> map = new LinkedMultiValueMap<String, String>();
             map.add("ids", sids.join(","));
             map.add("eids", bardExperimentIds.join(","));
-            final List<Activity> activitiesFound = this.restTemplate.postForObject(url, map, Activity[].class);
+            final List<Activity> activitiesFound = this.restTemplate.postForObject(url, map, Activity[].class) as List<Activity>;
             activities.addAll(activitiesFound)
         }
         return activities
@@ -143,9 +143,6 @@ class SubstanceRestService extends AbstractRestService {
             case SubstanceSearchType.MLSMR_SOURCE_NAME:
                 urlBuilder.append(RestApiConstants.AMPERSAND)
                 urlBuilder.append(substanceSearchType.getFilter())
-                break;
-            default:
-                //Do nothing
                 break;
         }
         return urlBuilder.toString();

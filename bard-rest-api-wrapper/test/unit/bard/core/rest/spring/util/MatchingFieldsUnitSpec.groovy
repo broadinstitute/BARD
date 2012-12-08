@@ -9,23 +9,19 @@ import spock.lang.Unroll
 class MatchingFieldsUnitSpec extends Specification {
     @Shared
     ObjectMapper objectMapper = new ObjectMapper()
-    public static final String MATCHING_FIELDS_NODE =
-        '''
-    {
-       "matchingFields":
+    public static final String MATCHING_FIELDS_NODE ='''
+   {
+       "781":
        {
-           "781":
-           {
-               "description": "Cancer cells divide rapidly",
-                "name": "qHTS screen for small molecules that"
-            },
-           "782":
-           {
-               "description": "Cancer cells",
-               "name": "qHTS screen for small molecules that"
-           }
+           "description": "Cancer cells divide rapidly",
+            "name": "qHTS screen for small molecules that"
+        },
+       "782":
+       {
+           "description": "Cancer cells",
+           "name": "qHTS screen for small molecules that"
        }
-    }
+   }
     '''
 
 
@@ -36,9 +32,11 @@ class MatchingFieldsUnitSpec extends Specification {
         assert matchingFields
         final Map<String, NameDescription> map = matchingFields.getMatchingFieldsMap()
         assert  map
-        assert map.size() == 1
-        final NameDescription description = map.get("matchingFields")
-        assert description.getName() == "781"
+        assert map.size() == 2
+        NameDescription nameDescription  = matchingFields.getNamedField("781")
+        assert nameDescription
+        assert nameDescription.name
+        assert !nameDescription.description
     }
 
 }

@@ -9,6 +9,7 @@ import bard.core.rest.spring.substances.Substance
 import bard.core.rest.spring.substances.SubstanceResult
 import bard.core.rest.spring.util.SubstanceSearchType
 import grails.test.mixin.TestFor
+import org.springframework.web.client.RestClientException
 import org.springframework.web.client.RestTemplate
 import spock.lang.Specification
 import spock.lang.Unroll
@@ -36,6 +37,18 @@ class SubstanceRestServiceUnitSpec extends Specification {
         label                    | sid | substance       | noErrors
         "Existing Substance"     | 179 | new Substance() | true
         "Non-Existing Substance" | -1  | null            | false
+    }
+
+    void "getSubstanceById with Exception"() {
+        when:
+        final Substance foundSubstance = service.getSubstanceById(sid)
+
+        then:
+        restTemplate.getForObject(_, _, _) >> {new RestClientException()}
+        assert foundSubstance == null
+        where:
+        label                    | sid | substance | noErrors
+        "Non-Existing Substance" | -1  | null      | false
     }
 
     void "getResourceContext"() {
@@ -124,14 +137,16 @@ class SubstanceRestServiceUnitSpec extends Specification {
         assert experimentSearchResult
     }
 
-    void "buildSearchURL"() {
-        given:
-        final SearchParams searchParam = new SearchParams(skip: 0, top: 10)
-
+    void "buildSearchURL #label"() {
         when:
-        String url = service.buildURLForSearch(SubstanceSearchType.MLSMR, searchParam)
+        String url = service.buildURLForSearch(substanceType, searchParams)
         then:
-        assert url == "http://ncgc/substances/?skip=0&top=10&expand=true&filter=MLSMR"
+        assert url == expectedURL
+        where:
+        label                               | searchParams                       | expectedURL                                                      | substanceType
+        "With Search Params"                | new SearchParams(skip: 0, top: 10) | "http://ncgc/substances/?skip=0&top=10&expand=true&filter=MLSMR" | SubstanceSearchType.MLSMR
+        "With Search Params No skip or Top" | new SearchParams()                 | "http://ncgc/substances/?expand=true&filter=MLSMR"               | SubstanceSearchType.MLSMR
+        "Without Search Params"             | null                               | "http://ncgc/substances/?expand=true"                            | null
     }
 
     void "findSubstances"() {

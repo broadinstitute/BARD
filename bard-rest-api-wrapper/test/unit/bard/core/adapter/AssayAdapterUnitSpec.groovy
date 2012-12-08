@@ -61,6 +61,16 @@ class AssayAdapterUnitSpec extends Specification {
 
 
 
+    void "test Highlight"() {
+        given:
+        final Assay assay = new Assay()
+
+        when:
+        AssayAdapter assayAdapter = new AssayAdapter(assay)
+        then:
+        assert !assayAdapter.highlight
+
+    }
 
     void "test getters"() {
 
@@ -68,14 +78,6 @@ class AssayAdapterUnitSpec extends Specification {
         final Assay assay = objectMapper.readValue(ASSAY, Assay.class)
         Double score = 2
         NameDescription nameDescription = new NameDescription(description: "description", name: "name")
-//        final Map<String, Map<String, String>> map =  new HashMap<String, Map<String,String>>()
-//
-//        MetaData metaData = new MetaData()
-//        Scores scores = new Scores()
-//        scores.additionalProperties.put("17","2")
-//
-//        metaData.additionalProperties.put("matchingFields",["17":["name":"name", "description":"description"]])
-//        metaData.scores = scores
         when:
         AssayAdapter assayAdapter = new AssayAdapter(assay, score, nameDescription)
 
@@ -99,6 +101,7 @@ class AssayAdapterUnitSpec extends Specification {
         assert assayAdapter.score == score
         assert assayAdapter.matchingField.name == nameDescription.name
         assert assayAdapter.matchingField.description == nameDescription.description
+        assert assayAdapter.highlight == "Score: 2.0 Matched Field: name"
     }
 
 

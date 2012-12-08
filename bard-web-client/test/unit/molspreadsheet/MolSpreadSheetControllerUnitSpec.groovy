@@ -36,10 +36,6 @@ class MolSpreadSheetControllerUnitSpec extends Specification {
         molSpreadSheetData.molSpreadsheetDerivedMethod = MolSpreadsheetDerivedMethod.Compounds_NoAssays_NoProjects
     }
 
-    void tearDown() {
-        // Tear down logic here
-    }
-
     void "test Index"() {
 
         when:
@@ -59,7 +55,25 @@ class MolSpreadSheetControllerUnitSpec extends Specification {
         assert true
     }
 
+    void "test molecularSpreadSheet with ids"() {
+        given:
+        params.cid = cid
+        params.pid = pid
+        params.adid = adid
+        when:
+        controller.molecularSpreadSheet()
 
+        then:
+
+        molecularSpreadSheetService.retrieveExperimentalDataFromIds(_, _, _) >> {new MolSpreadSheetData()}
+        assert response.contentAsString.contains("molecular spreadsheet")
+        assert response.status == 200
+        where:
+        label       | cid | adid | pid
+        "With CID"  | "2" | ""   | ""
+        "With PID"  | ""  | ""   | "2"
+        "With ADID" | ""  | "2"  | ""
+    }
 
 
     void "test molecularSpreadSheet with data"() {
@@ -72,7 +86,15 @@ class MolSpreadSheetControllerUnitSpec extends Specification {
         assert response.contentAsString.contains("molecular spreadsheet")
         assert response.status == 200
     }
+    void "test molecularSpreadSheet with data - With Exception"() {
+        when:
+        controller.molecularSpreadSheet()
 
+        then:
+        molecularSpreadSheetService.retrieveExperimentalDataFromIds(_, _, _) >> {new Exception()}
+        assert response.status == 200
+        assert flash.message == "Could not generate SpreadSheet for current Query Cart Contents"
+    }
 
     void "test molecularSpreadSheet with data and flash.message"() {
         when:

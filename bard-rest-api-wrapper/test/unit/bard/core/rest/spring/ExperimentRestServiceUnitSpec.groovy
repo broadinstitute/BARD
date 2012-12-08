@@ -8,7 +8,6 @@ import org.springframework.web.client.RestTemplate
 import spock.lang.Specification
 import spock.lang.Unroll
 import bard.core.rest.spring.experiment.*
-import spock.lang.IgnoreRest
 
 @Unroll
 @TestFor(ExperimentRestService)
@@ -23,6 +22,32 @@ class ExperimentRestServiceUnitSpec extends Specification {
         service.baseUrl = "http://ncgc"
     }
 
+    void "activities with no ETag"() {
+        given:
+        final Long experimentId = new Long("2")
+        final String etag = null
+        final Integer top = 10
+        final Integer skip = 0
+        when:
+        final ExperimentData experimentData = service.activities(experimentId,etag, top, skip)
+        then:
+        this.restTemplate.getForObject(_,_) >> {new ExperimentData()}
+        assert experimentData
+
+    }
+    void "activities with ETag"() {
+        given:
+        final Long experimentId = new Long("2")
+        final String etag = "etag"
+        final Integer top = 10
+        final Integer skip = 0
+        when:
+        final ExperimentData experimentData = service.activities(experimentId,etag, top, skip)
+        then:
+        this.restTemplate.getForObject(_,_) >> {[new Activity()]}
+        assert experimentData
+
+    }
     void "getResourceContext"() {
         when:
         String resourceContext = service.getResourceContext()
@@ -126,7 +151,7 @@ class ExperimentRestServiceUnitSpec extends Specification {
     void "buildExperimentQuery #label"() {
 
         when:
-        String url = service.buildExperimentQuery(experimentId, etag,  top,skip)
+        String url = service.buildExperimentQuery(experimentId, etag, top, skip)
         then:
         assert url == expectedURL
         where:

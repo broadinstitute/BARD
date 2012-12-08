@@ -54,7 +54,7 @@ class MolSpreadSheetController {
                 render(template: 'spreadSheet', model: [molSpreadSheetData: new MolSpreadSheetData()])
             }
         } catch (Exception ee) {
-            String errorMessage = "Could not generate SpreadSheet for current Query Cart Contents "
+            String errorMessage = "Could not generate SpreadSheet for current Query Cart Contents"
             flash.message = errorMessage
             log.error(errorMessage, ee)
         }

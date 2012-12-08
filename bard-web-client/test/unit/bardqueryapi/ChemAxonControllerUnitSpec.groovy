@@ -33,7 +33,7 @@ class ChemAxonControllerUnitSpec extends Specification {
     }
 
     /**
-     * {@link ActivityOutcome#getLabel()}
+     * {@link ChemAxonController#generateStructureImageFromSmiles}
      */
     void "test generateStructureImageFromSmiles #label"() {
         when:
@@ -52,15 +52,23 @@ class ChemAxonControllerUnitSpec extends Specification {
         "get back an empty byte array" | 'C1=CC2=C(C=C1)C=CC=C2' | 200 as Integer | 200 as Integer | [] as byte[]        | 0
         "smiles is null"               | ''                      | 200 as Integer | 200 as Integer | [1, 2, 3] as byte[] | 0
     }
-
     /**
-     * {@link ActivityOutcome#getLabel()}
+     * {@link ChemAxonController#generateStructureImageFromSmiles}
+     */
+    void "test generateStructureImageFromSmiles - throws Exception"() {
+        when:
+        controller.generateStructureImageFromSmiles("CC", 10, 10)
+        final byte[] returnedImage = response.contentAsByteArray
+
+        then:
+        chemAxonService.generateStructurePNG(_, _, _) >> {new Exception()}
+        assert returnedImage.size() == 0
+    }
+    /**
+     * {@link ChemAxonController#generateStructureImageFromCID}
      */
     void "test generateStructureImage from CID #label"() {
         when:
-//        controller.params.cid = cid
-//        controller.params.width = width
-//        controller.params.height = height
         controller.generateStructureImageFromCID(cid, width, height)
         final byte[] returnedImage = response.contentAsByteArray
 
@@ -75,6 +83,19 @@ class ChemAxonControllerUnitSpec extends Specification {
         "no compoundAdapters"          | 'C1=CC2=C(C=C1)C=CC=C2' | 300 as Integer | 300 as Integer | [1, 2, 3] as byte[] | 1234 as Long | 0                     | null
         "get back an empty byte array" | 'C1=CC2=C(C=C1)C=CC=C2' | 200 as Integer | 200 as Integer | [] as byte[]        | 1234 as Long | 0                     | compoundAdapter
         "cid is null"                  | 'C1=CC2=C(C=C1)C=CC=C2' | 300 as Integer | 300 as Integer | [1, 2, 3] as byte[] | null         | 0                     | compoundAdapter
+    }
+
+    /**
+     * {@link ChemAxonController#generateStructureImageFromCID}
+     */
+    void "test generateStructureImage from CID - throws Exception"() {
+        when:
+        controller.generateStructureImageFromCID(200, 200, 200)
+        final byte[] returnedImage = response.contentAsByteArray
+
+        then:
+        queryService.showCompound(_) >> {new Exception()}
+        assert returnedImage.size() == 0
     }
 
     CompoundAdapter buildCompoundAdapter(final int cid, final String smiles) {

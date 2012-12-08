@@ -114,6 +114,7 @@ class ProjectAdapterUnitSpec extends Specification {
         assert projectAdapter.matchingField.name=="name"
         assert projectAdapter.score == 2
         assert projectAdapter.matchingField.description=="description"
+        assert projectAdapter.highlight == "Score: 2.0 Matched Field: name"
     }
 
     void "test with grantNo"() {
@@ -124,6 +125,7 @@ class ProjectAdapterUnitSpec extends Specification {
         ProjectAdapter projectAdapter = new ProjectAdapter(project)
         then:
         assert projectAdapter.getGrantNumber() == "X01 MH083262-01"
+        assert !projectAdapter.highlight
     }
 
 

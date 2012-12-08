@@ -6,22 +6,17 @@ import com.fasterxml.jackson.annotation.JsonInclude
 public class MatchingFields extends JsonUtil {
 
     Map<String, NameDescription> getMatchingFieldsMap() {
-        final Map<String, Map<String, String>> map =
-            (Map<String, Map<String, String>>) this.getAdditionalProperties()
         final Map<String, NameDescription> matchingFields = [:]
-        final Iterator<String> iterator = map.keySet().iterator()
-        while (iterator.hasNext()) {
-            final String key = iterator.next()
-            Map<String, String> vals = map.get(key)
-            //we expect only one value in the list
-            final List<String> keys = vals.keySet() as List<String>
-
-            //the key is the field name
-            final String name = keys.get(0)
-            //the value is the description
-            final String description = vals.get(name)
-            NameDescription nameDescription = new NameDescription(name: name, description: description)
-            matchingFields.put(key, nameDescription)
+        final Map<String, Object> map = this.getAdditionalProperties()
+        map.collect { entry1 ->
+            String key1 = entry1.key
+            LinkedHashMap<String,String> vals = entry1.value
+            vals.collect { entry2 ->
+               String key2 = entry2.key
+               NameDescription nameDescription = new NameDescription(name: key2, description: "")
+               matchingFields.put(key1, nameDescription)
+                return
+            }
         }
         return matchingFields
     }

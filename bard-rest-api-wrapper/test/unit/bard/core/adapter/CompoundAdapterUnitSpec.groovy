@@ -76,6 +76,14 @@ class CompoundAdapterUnitSpec extends Specification {
         assert compoundAdapter.matchingField.name=="name"
         assert compoundAdapter.matchingField.description=="description"
         assert compoundAdapter.score==2
+        assert compoundAdapter.highlight == "Score: 2.0 Matched Field: name"
+
+    }
+    void "test compound Adapter with no highlight field"() {
+        when:
+        final CompoundAdapter compoundAdapter = new CompoundAdapter(new Compound())
+        then:
+        assert !compoundAdapter.highlight
 
     }
 }

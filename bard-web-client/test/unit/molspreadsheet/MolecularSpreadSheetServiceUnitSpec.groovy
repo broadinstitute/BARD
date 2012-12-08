@@ -7,9 +7,10 @@ import bard.core.rest.spring.ExperimentRestService
 import bard.core.rest.spring.ProjectRestService
 import bard.core.rest.spring.assays.Assay
 import bard.core.rest.spring.compounds.Compound
-import bard.core.rest.spring.experiment.Activity
-import bard.core.rest.spring.experiment.ExperimentData
 import bard.core.rest.spring.experiment.ExperimentSearch
+import bard.core.rest.spring.experiment.ExperimentSearchResult
+import bard.core.rest.spring.project.Project
+import bard.core.rest.spring.project.ProjectResult
 import bardqueryapi.IQueryService
 import com.metasieve.shoppingcart.ShoppingCartService
 import grails.test.mixin.TestFor
@@ -209,83 +210,72 @@ class MolecularSpreadSheetServiceUnitSpec extends Specification {
         assertNull eTag
     }
 
-    void "test extractActivityValuesFromExperimentData skip >= totalNumberOfRecords"() {
+    void "test addFixedColumnData"() {
         given:
-        int top = 10
-        int skip = 2
-        ExperimentData experimentData = new ExperimentData(activities: [new Activity(potency: 2.0), new Activity(potency: 3.0)])
+        final LinkedHashMap<String, String> mapForThisRow = [:]
+        final MolSpreadSheetData molSpreadSheetData = new MolSpreadSheetData()
+        final int rowCnt = 0
         when:
-        Map map = service.extractActivityValuesFromExperimentData(experimentData, top, skip)
+        service.addFixedColumnData(mapForThisRow, molSpreadSheetData, rowCnt)
         then:
-        assert !map.activityValues
-        assert map.totalNumberOfRecords == 2
+        assert mapForThisRow.size() == 3
+        assert mapForThisRow["molstruct"] == "Unknown smiles"
+        assert mapForThisRow["cid"] == "_"
+        assert mapForThisRow["c3"] == "_"
+
 
     }
 
-    void "test extractActivityValuesFromExperimentData top >= totalNumberOfRecords"() {
-        given:
-        int top = 2
-        int skip = 1
-        ExperimentData experimentData = new ExperimentData(activities: [new Activity(potency: 2.0), new Activity(potency: 3.0)])
+    void "test assaysToExperiments with an empty list of assays"() {
         when:
-        Map map = service.extractActivityValuesFromExperimentData(experimentData, top, skip)
+        List<ExperimentSearch> experimentSearches = service.assaysToExperiments([])
         then:
-        assert map.activityValues.size() == 2
-        assert map.totalNumberOfRecords == 2
+        0 * assayRestService.findExperimentsByAssayId(_) >> {[new ExperimentSearch()]}
+        assert !experimentSearches
+    }
+
+    void "test projectIdsToExperiments"() {
+        given:
+        final List<Long> pids = [2, 4]
+        when:
+        final List<ExperimentSearch> experimentSearches = service.projectIdsToExperiments(pids)
+        then:
+        projectRestService.searchProjectsByIds(_) >> {projectResult}
+        expectedNumberOfMethodCalls * experimentRestService.searchExperimentsByIds(_) >> { new ExperimentSearchResult(experiments: [new ExperimentSearch()])}
+        assert experimentSearches.size() == expectedSize
+        where:
+        label                              | projectResult                                         | expectedSize | expectedNumberOfMethodCalls
+        "Return list of experiments"       | new ProjectResult(projects: [new Project(eids: [1])]) | 1            | 1
+        "Return empty list of experiments" | null                                                  | 0            | 0
+    }
+
+    void "test projectsToExperiments #label"() {
+        when:
+        List<ExperimentSearch> experiments = service.projectsToExperiments(projectResult)
+        then:
+        expectedNumberOfMethodCalls * experimentRestService.searchExperimentsByIds(_) >> { new ExperimentSearchResult(experiments: [new ExperimentSearch()])}
+        assert experiments.size() == expectedSize
+        where:
+        label                              | projectResult                                         | expectedSize | expectedNumberOfMethodCalls
+        "With ExperimentSearchResult"      | new ProjectResult(projects: [new Project(eids: [1])]) | 1            | 1
+        "With Null ExperimentSearchResult" | null                                                  | 0            | 0
+
 
     }
 
-    void "test extractActivityValuesFromExperimentData skip + top > totalNumberOfRecords"() {
+    void "test projectToExperiment #label"() {
         given:
-        int top = 2
-        int skip = 2
-        ExperimentData experimentData = new ExperimentData(activities: [new Activity(potency: 2.0), new Activity(potency: 3.0), new Activity(potency: 3.0)])
+        final List<Long> eids = [2, 4]
+        final List<ExperimentSearch> allExperiments = []
         when:
-        Map map = service.extractActivityValuesFromExperimentData(experimentData, top, skip)
+        service.projectToExperiment(eids, allExperiments)
         then:
-        assert map.activityValues.size() == 1
-        assert map.totalNumberOfRecords == 3
-
-    }
-
-
-    void "test extractActivityValuesFromExperimentData skip + top == totalNumberOfRecords"() {
-        given:
-        int top = 1
-        int skip = 2
-        ExperimentData experimentData = new ExperimentData(activities: [new Activity(potency: 2.0), new Activity(potency: 3.0), new Activity(potency: 3.0)])
-        when:
-        Map map = service.extractActivityValuesFromExperimentData(experimentData, top, skip)
-        then:
-        assert map.activityValues.size() == 1
-        assert map.totalNumberOfRecords == 3
-
-    }
-
-
-    void "test extractActivityValuesFromExperimentData"() {
-        given:
-        int top = 3
-        int skip = 0
-        ExperimentData experimentData = new ExperimentData(activities: [new Activity(potency: 2.0), new Activity(potency: 3.0), new Activity(potency: 3.0)])
-        when:
-        Map map = service.extractActivityValuesFromExperimentData(experimentData, top, skip)
-        then:
-        assert map.activityValues.size() == 3
-        assert map.totalNumberOfRecords == 3
-
-    }
-
-
-    void "test extractActivityValuesFromExperimentData default skip and top"() {
-        given:
-        ExperimentData experimentData = new ExperimentData(activities: [new Activity(potency: 2.0), new Activity(potency: 3.0), new Activity(potency: 3.0)])
-        when:
-        Map map = service.extractActivityValuesFromExperimentData(experimentData)
-        then:
-        assert map.activityValues.size() == 3
-        assert map.totalNumberOfRecords == 3
-
+        experimentRestService.searchExperimentsByIds(_) >> {experimentSearchResult}
+        allExperiments.size() == expectedSize
+        where:
+        label                              | experimentSearchResult                                            | expectedSize
+        "With ExperimentSearchResult"      | new ExperimentSearchResult(experiments: [new ExperimentSearch()]) | 1
+        "With Null ExperimentSearchResult" | null                                                              | 0
     }
 
 
