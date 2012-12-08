@@ -1050,7 +1050,35 @@ END reset_sequence;
                     from exprmt_context_item eci2
                     where eci2.exprmt_context_Item_id = eci.exprmt_context_item_id);
 
-           -- insert step context
+          INSERT INTO project_step
+              (PROJECT_STEP_ID,
+              VERSION,
+              NEXT_PROJECT_EXPERIMENT_ID,
+              PREV_PROJECT_EXPERIMENT_ID,
+              DATE_CREATED,
+              EDGE_NAME,
+              LAST_UPDATED,
+              MODIFIED_BY)
+          SELECT PROJECT_STEP_ID,
+              VERSION,
+              NEXT_PROJECT_EXPERIMENT_ID,
+              PREV_PROJECT_EXPERIMENT_ID,
+              DATE_CREATED,
+              EDGE_NAME,
+              LAST_UPDATED,
+              MODIFIED_BY
+          FROM data_mig.project_step ps
+          WHERE NOT EXISTS (SELECT 1
+                    FROM project_step ps2
+                    WHERE ps2.project_step_id = ps.project_step_id)
+            AND EXISTS (SELECT 1
+                    FROM project_experiment pe
+                    WHERE pe.project_experiment_id = ps.prev_project_experiment_id)
+            AND EXISTS (SELECT 1
+                    FROM project_experiment pe
+                    WHERE pe.project_experiment_id = ps.next_project_experiment_id);
+
+                    -- insert step context
             insert into step_context
                 (STEP_CONTEXT_ID,
                 PROJECT_STEP_ID,
