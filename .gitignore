@@ -1,8 +1,7 @@
 build/
 out/
-.idea/**.*
-.idea
-.idea/workspace.xml
+/.idea
+/.idea/workspace.xml
 /.clover
 *.war
 *.iws
