@@ -220,8 +220,8 @@ class MolecularSpreadSheetServiceUnitSpec extends Specification {
         then:
         assert mapForThisRow.size() == 3
         assert mapForThisRow["molstruct"] == "Unknown smiles"
-        assert mapForThisRow["cid"] == "_"
-        assert mapForThisRow["c3"] == "_"
+        assert mapForThisRow["cid"] == "-"
+        assert mapForThisRow["c3"] == "-"
 
 
     }
