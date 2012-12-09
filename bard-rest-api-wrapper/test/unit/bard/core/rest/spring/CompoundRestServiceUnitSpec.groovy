@@ -202,6 +202,24 @@ class CompoundRestServiceUnitSpec extends Specification {
         restTemplate.getForObject(_, _) >> {"1"}
         assert count == 1
     }
+
+    void "test findCompoundsByETag"() {
+        when:
+        CompoundResult returnedCompoundResult = service.findCompoundsByETag(eTagName)
+
+        then:
+        //Expecting two calls:
+        // 1st: for findCompoundsByETag -> findAllETagsForResource
+        // 2nd: for findCompoundsByETag -> List<Compound>
+        (0..2) * this.restTemplate.getForObject(_, _) >>> [new ETagCollection(etags: etags), compounds]
+        assert returnedCompoundResult.compounds == expextedCompounds
+
+        where:
+        label                 | eTagName   | etags                        | compounds                         | expextedCompounds
+        'etag name found'     | 'etagName' | [new ETag(name: 'etagName')] | [new Compound(name: 'compound1')] | [new Compound(name: 'compound1')]
+        'etag name not found' | 'noName'   | [new ETag(name: 'etagName')] | [new Compound(name: 'compound1')] | []
+        'no compounds found'  | 'etagName' | [new ETag(name: 'etagName')] | []                                | []
+    }
 }
 
 

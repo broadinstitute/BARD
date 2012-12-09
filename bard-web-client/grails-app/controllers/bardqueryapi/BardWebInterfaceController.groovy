@@ -1,10 +1,10 @@
 package bardqueryapi
 
-
 import bard.core.Value
 import bard.core.adapter.AssayAdapter
 import bard.core.adapter.CompoundAdapter
 import bard.core.adapter.ProjectAdapter
+import bard.core.rest.spring.compounds.CompoundResult
 import bard.core.rest.spring.compounds.PromiscuityScore
 import bard.core.rest.spring.util.StructureSearchParams
 import grails.plugins.springsecurity.Secured
@@ -12,8 +12,7 @@ import molspreadsheet.MolecularSpreadSheetService
 import org.apache.commons.lang.StringUtils
 
 import javax.servlet.http.HttpServletResponse
-import grails.converters.JSON
-import javax.servlet.http.HttpServletRequest
+import bard.core.rest.spring.CompoundRestService
 
 /**
  *
@@ -29,7 +28,9 @@ class BardWebInterfaceController {
     def shoppingCartService
     IQueryService queryService
     MolecularSpreadSheetService molecularSpreadSheetService
+//    CompoundRestService compoundRestService
     List<SearchFilter> filters = []
+    final static String PROBE_ETAG_NAME = 'MLP Probes'
 
     //An AfterInterceptor to handle mobile-view routing.
     def afterInterceptor = [action: this.&handleMobile]
@@ -418,6 +419,19 @@ class BardWebInterfaceController {
         session.putValue('mobileExperienceDisabled', true)
         redirect(action: 'index')
     }
+
+    def showProbeList() {
+        CompoundResult compoundResult = queryService.compoundRestService.findCompoundsByETag(PROBE_ETAG_NAME)
+        List<CompoundAdapter> compoundAdapters = queryService.queryHelperService.compoundsToAdapters(compoundResult)
+        render(template: "/mobile/bardWebInterface/compounds",
+                model: [
+                        compoundAdapters: compoundAdapters,
+                        facets: [],
+                        nhits: compoundAdapters.size(),
+                        searchString: flash.searchString,
+                        appliedFilters: [:]]
+        )
+    }
 }
 /**
  * We would use this helper class as Mixin for
@@ -469,7 +483,7 @@ class SearchHelper {
 
                 final Map assaysByTextSearchResultsMap = queryService.findAssaysByTextSearch(searchString, top, skip, searchFilters)
                 String template = isMobile ? "/mobile/bardWebInterface/assays" : "assays"
-                    render(template: template, model: [
+                render(template: template, model: [
                         assayAdapters: assaysByTextSearchResultsMap.assayAdapters,
                         facets: assaysByTextSearchResultsMap.facets,
                         nhits: assaysByTextSearchResultsMap.nHits,
@@ -590,7 +604,7 @@ class SearchHelper {
      */
     protected void removeDuplicatesFromSearchString(SearchCommand searchCommand) {
         List<String> searchCommandSplit = []
-        if(!searchCommand.searchString.matches(/[^"]*"[^"]+"/))  {
+        if (!searchCommand.searchString.matches(/[^"]*"[^"]+"/)) {
             // This is a little complicated.
             // If the search string contains a quote-delimited string anywhere in it, take the search string as it is.
             // Otherwise, split it on commas, then remove the duplicates.

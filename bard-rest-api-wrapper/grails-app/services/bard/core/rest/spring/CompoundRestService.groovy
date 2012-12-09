@@ -10,6 +10,7 @@ import bard.core.rest.spring.compounds.CompoundResult
 import bard.core.rest.spring.compounds.PromiscuityScore
 import bard.core.rest.spring.experiment.ExperimentSearchResult
 import bard.core.rest.spring.project.ProjectResult
+import bard.core.rest.spring.util.ETag
 import bard.core.rest.spring.util.MetaData
 import bard.core.rest.spring.util.StructureSearchParams
 import org.springframework.http.HttpEntity
@@ -319,5 +320,28 @@ class CompoundRestService extends AbstractRestService {
         ProjectResult projectResult = this.restTemplate.getForObject(url.toURI(), ProjectResult.class)
         projectResult
 
+    }
+
+    /**
+     * Returns a list of Compounds (inside a CompoundResult wrapper) given an ETag eTagName
+     * @param eTagName
+     * @return
+     */
+    public CompoundResult findCompoundsByETag(String eTagName) {
+        List<ETag> etags = findAllETagsForResource()
+        ETag matchedETag = etags.find {ETag eTag -> eTag.name == eTagName};
+        if (!matchedETag) {
+            return new CompoundResult()
+        }
+
+        String urlToCompounds = getResource() + RestApiConstants.ETAG + RestApiConstants.FORWARD_SLASH + matchedETag.etag_id
+
+        //We are passing the URI because we have already encoded the string
+        //just passing in the string would cause the URI to be encoded twice
+        //see http://static.springsource.org/spring/docs/3.0.x/javadoc-api/org/springframework/web/client/RestTemplate.html
+        final URL url = new URL(urlToCompounds)
+        final List<Compound> compounds = this.restTemplate.getForObject(url.toURI(), Compound[].class) as List<Compound>
+        CompoundResult compoundResult = new CompoundResult(compounds: compounds)
+        return compoundResult
     }
 }
