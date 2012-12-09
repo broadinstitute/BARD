@@ -133,6 +133,7 @@ class QueryService implements IQueryService {
     Map structureSearch(final String smiles, final StructureSearchParams.Type structureSearchParamsType, final List<SearchFilter> searchFilters = [], final Integer top = 50, final Integer skip = 0) {
         final List<CompoundAdapter> compoundAdapters = []
         Collection<Value> facets = []
+        int nhits = 0
         String eTag = null
         if (smiles) {
             //construct search parameters
@@ -152,6 +153,7 @@ class QueryService implements IQueryService {
             this.queryHelperService.stopStopWatch(sw, "structure search ${structureSearchParams.toString()}")
             //collect the results
             //convert to adapters
+            nhits = compoundResult.numberOfHits
             final List<CompoundAdapter> compoundsToAdapters = this.queryHelperService.compoundsToAdapters(compoundResult)
             if (compoundsToAdapters) {
                 compoundAdapters.addAll(compoundsToAdapters)
@@ -161,7 +163,7 @@ class QueryService implements IQueryService {
             //facets = searchIterator.facets
             eTag = compoundResult.etag
         }
-        int nhits = compoundAdapters.size()
+
         return [compoundAdapters: compoundAdapters, facets: facets, nHits: nhits, eTag: eTag]
     }
 

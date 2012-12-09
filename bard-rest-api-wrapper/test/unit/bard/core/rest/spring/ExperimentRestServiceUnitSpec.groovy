@@ -29,12 +29,13 @@ class ExperimentRestServiceUnitSpec extends Specification {
         final Integer top = 10
         final Integer skip = 0
         when:
-        final ExperimentData experimentData = service.activities(experimentId,etag, top, skip)
+        final ExperimentData experimentData = service.activities(experimentId, etag, top, skip)
         then:
-        this.restTemplate.getForObject(_,_) >> {new ExperimentData()}
+        this.restTemplate.getForObject(_, _) >> {new ExperimentData()}
         assert experimentData
 
     }
+
     void "activities with ETag"() {
         given:
         final Long experimentId = new Long("2")
@@ -42,12 +43,13 @@ class ExperimentRestServiceUnitSpec extends Specification {
         final Integer top = 10
         final Integer skip = 0
         when:
-        final ExperimentData experimentData = service.activities(experimentId,etag, top, skip)
+        final ExperimentData experimentData = service.activities(experimentId, etag, top, skip)
         then:
-        this.restTemplate.getForObject(_,_) >> {[new Activity()]}
+        this.restTemplate.getForObject(_, _) >> {[new Activity()]}
         assert experimentData
 
     }
+
     void "getResourceContext"() {
         when:
         String resourceContext = service.getResourceContext()
@@ -155,9 +157,23 @@ class ExperimentRestServiceUnitSpec extends Specification {
         then:
         assert url == expectedURL
         where:
-        label       | experimentId | skip | top | etag   | expectedURL
-        "With ETag" | 2            | 0    | 10  | "etag" | "http://ncgc/experiments/2/etag/etag/exptdata?skip=0&top=10&expand=true"
-        "No ETag"   | 2            | 0    | 10  | null   | "http://ncgc/experiments/2/exptdata?skip=0&top=10&expand=true"
+        label                  | experimentId | skip | top | etag   | expectedURL
+        "With ETag"            | 2            | 0    | 10  | "etag" | "http://ncgc/experiments/2/etag/etag/exptdata?skip=0&top=10&expand=true"
+        "No ETag"              | 2            | 0    | 10  | null   | "http://ncgc/experiments/2/exptdata?skip=0&top=10&expand=true"
+        "No ETag, Top is zero" | 2            | 0    | 0   | null   | "http://ncgc/experiments/2/exptdata?expand=true"
+    }
+
+    void "getResourceCount with SearchParams #label"() {
+        when:
+        int count = service.getResourceCount(searchParams)
+        then:
+        this.restTemplate.getForObject(_, _) >> {"2"}
+        assert count == 2
+        where:
+        label       | searchParams
+        "Top == 10" | new SearchParams(top: 10, skip: 0)
+        "Top == 0"  | new SearchParams()
+
     }
 
     void "buildQueryForCollectionOfETags"() {

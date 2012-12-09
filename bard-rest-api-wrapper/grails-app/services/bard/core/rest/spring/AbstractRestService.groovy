@@ -320,12 +320,35 @@ abstract class AbstractRestService {
      */
     public long getResourceCount() {
         final String resource = getResource(RestApiConstants._COUNT);
+        return getResourceCount(resource);
+    }
+    /**
+     * Get a count of entities making up a resource
+     * @return the number of  entities
+     */
+    public long getResourceCount(final String resource) {
+
         final URL url = new URL(resource)
         final String countString = this.restTemplate.getForObject(url.toURI(), String.class)
         Long count = Long.parseLong(countString)
         return count;
     }
-
+    /**
+     * Get a count of entities making up a resource
+     * @return the number of  entities
+     */
+    public long getResourceCount(final SearchParams searchParams) {
+        final StringBuilder resource = new StringBuilder(getResource(RestApiConstants._COUNT));
+        if (searchParams.getTop()) {
+            resource.append(RestApiConstants.QUESTION_MARK);
+            resource.append(RestApiConstants.SKIP).
+                    append(searchParams.getSkip()).
+                    append(RestApiConstants.TOP).
+                    append(searchParams.getTop())
+        }
+        resource.append(buildFilters(searchParams))
+        return getResourceCount(resource.toString())
+    }
     public abstract String getResource();
 
     public abstract String getSearchResource();

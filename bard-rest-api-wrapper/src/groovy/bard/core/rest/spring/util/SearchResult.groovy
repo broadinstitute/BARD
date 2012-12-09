@@ -8,7 +8,7 @@ import com.fasterxml.jackson.annotation.JsonProperty
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class SearchResult extends JsonUtil {
 
-    private Map<String, Long> etags = [:]
+    Map<String, Long> etags = [:]
 
     @JsonProperty("metaData")
     private MetaData metaData;

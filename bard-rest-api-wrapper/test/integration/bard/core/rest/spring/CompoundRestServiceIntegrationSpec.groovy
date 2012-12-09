@@ -488,7 +488,7 @@ class CompoundRestServiceIntegrationSpec extends IntegrationSpec {
         when:
         final CompoundResult compoundResult = compoundRestService.structureSearch(params)
         then:
-        assert compoundResult.numberOfHits == expectedSize
+        assert compoundResult.numberOfHits >= expectedSize
         assert compoundResult.etags
         where:
         label                                | skip | top  | expectedSize | structureType                           | smiles

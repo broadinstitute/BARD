@@ -24,16 +24,9 @@ grails.project.dependency.resolution = {
             exclude "xml-api"
         }
         compile 'org.apache.commons:commons-lang3:3.1'
-        provided 'org.apache.httpcomponents:httpcomponents-core:4.1.3'
-        compile('org.apache.httpcomponents:httpclient:4.1.2') {
-            excludes "commons-codec", "commons-logging"
-        }
-
         compile 'com.fasterxml.jackson.core:jackson-annotations:2.0.0'
         compile 'com.fasterxml.jackson.core:jackson-core:2.0.0'
         compile 'com.fasterxml.jackson.core:jackson-databind:2.0.0'
-        //compile 'com.thoughtworks.xstream:xstream:1.4.2'
-
 
         // specify dependencies here under either 'build', 'compile', 'runtime', 'test' or 'provided' scopes eg.
         test("org.spockframework:spock-core:0.6-groovy-1.8") {
@@ -49,7 +42,7 @@ grails.project.dependency.resolution = {
             export = false
         }
         test ":spock:0.6"
-	test ":codenarc:0.15"
+        test ":codenarc:0.15"
         compile ":clover:3.1.6"
     }
 }

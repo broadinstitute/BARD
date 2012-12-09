@@ -62,16 +62,12 @@ class ExperimentRestService extends AbstractRestService {
 
     }
 
-//    public ExperimentData activities(ExperimentSearch experiment) {
-//        return activities(experiment.getId())
-//    }
+
     public ExperimentData activities(Long experimentId) {
         return activities(experimentId, null)
     }
-//    public ExperimentData activities(Long experimentId, final Integer top, final Integer skip) {
-//        return activities(experimentId, null,top,skip)
-//    }
 
+    //TODO: Probably make two calls here, first to get the count and second to use it for parallel processing
     public ExperimentData activities(final Long experimentId, final String etag) {
         // unbounded fetching
         Integer top = multiplier * multiplier;
@@ -122,9 +118,9 @@ class ExperimentRestService extends AbstractRestService {
         ExperimentData experimentData
 
         if (etag) {
-          experimentData = new ExperimentData()
-          final List<Activity> activities = (this.restTemplate.getForObject(url.toURI(), Activity[].class)) as List<Activity>
-          experimentData.setActivities(activities)
+            experimentData = new ExperimentData()
+            final List<Activity> activities = (this.restTemplate.getForObject(url.toURI(), Activity[].class)) as List<Activity>
+            experimentData.setActivities(activities)
         } else {
             experimentData = this.restTemplate.getForObject(url.toURI(), ExperimentData.class)
         }

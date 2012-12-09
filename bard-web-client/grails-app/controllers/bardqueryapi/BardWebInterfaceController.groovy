@@ -94,7 +94,7 @@ class BardWebInterfaceController {
                 }
             } catch (Exception ee) { //error is thrown
                 String errorMessage = "Could not get promiscuity score for ${cid}"
-                log.error(errorMessage, ee)
+                log.error(errorMessage)
                 return response.sendError(HttpServletResponse.SC_BAD_REQUEST,
                         "${errorMessage}")
             }
@@ -417,8 +417,10 @@ class SearchHelper {
 
     Map handleStructureSearch(final bardqueryapi.IQueryService queryService, final SearchCommand searchCommand) {
         Map structureSearchResultsMap = [:]
-        params.max = 50
-        params.offset = 0
+        Map<String, Integer> searchParams = handleSearchParams()
+        final Integer top = searchParams.top
+        final Integer skip = searchParams.skip
+
         removeDuplicatesFromSearchString(searchCommand)
         final String[] searchStringSplit = searchCommand.searchString.split(":")
         if (searchStringSplit.length == 2) {
@@ -429,7 +431,7 @@ class SearchHelper {
             final String smiles = searchStringSplit[1]
             //we make the first character capitalized to match the ENUM
             final StructureSearchParams.Type searchType = searchTypeString.toLowerCase().capitalize() as StructureSearchParams.Type
-            Map compoundAdapterMap = queryService.structureSearch(smiles, searchType, searchFilters, 50, 0)
+            Map compoundAdapterMap = queryService.structureSearch(smiles, searchType, searchFilters, top, skip)
             List<CompoundAdapter> compoundAdapters = compoundAdapterMap.compoundAdapters
             structureSearchResultsMap = [
                     compoundAdapters: compoundAdapters,

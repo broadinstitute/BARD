@@ -6,6 +6,7 @@ import bardqueryapi.QueryService
 import grails.util.GrailsUtil
 import mockServices.MockQueryService
 import org.springframework.web.client.RestTemplate
+import java.util.concurrent.Executors
 
 /**
  * Spring Configuration of resources
@@ -20,6 +21,7 @@ beans = {
         baseUrl = ncgcBaseURL
         promiscuityUrl = badApplePromiscuityUrl
         restTemplate = ref('restTemplate')
+        executorService = Executors.newCachedThreadPool()
     }
 
     experimentRestService(ExperimentRestService) {

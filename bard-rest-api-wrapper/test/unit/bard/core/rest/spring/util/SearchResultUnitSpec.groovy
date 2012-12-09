@@ -11,6 +11,19 @@ import bard.core.rest.spring.experiment.ExperimentSearchResult
 class SearchResultUnitSpec extends Specification {
 
     void "test defaults"() {
+        given:
+        Map<String, Long> etags = ["etag":"etag"]
+        when:
+        ExperimentSearchResult experimentSearchResult = new ExperimentSearchResult(etags: etags)
+        then:
+        assert experimentSearchResult.etag=="etag"
+        assert experimentSearchResult.numberOfHits == 0
+        assert !experimentSearchResult.facets
+        assert !experimentSearchResult.getExpes()
+        assert !experimentSearchResult.getExperiments()
+        assert !experimentSearchResult.getFacetsToValues()
+    }
+    void "test defaults with no etag"() {
         when:
         ExperimentSearchResult experimentSearchResult = new ExperimentSearchResult()
         then:
@@ -19,7 +32,6 @@ class SearchResultUnitSpec extends Specification {
         assert !experimentSearchResult.facets
         assert !experimentSearchResult.getExpes()
         assert !experimentSearchResult.getExperiments()
-        assert !experimentSearchResult.getFacetsToValues()
     }
     void "test defaults with etag"() {
         when:
