@@ -135,10 +135,6 @@ application/vnd.bard.cap+xml;type=assay</xs:documentation>
             <xs:selector xpath="assayContexts/assayContext"/>
             <xs:field xpath="@assayContextId"/>
         </xs:key>
-        <xs:key name="AssayContextItem_Key">
-            <xs:selector xpath="assayContexts/assayContext/assayContextItems/assayContextItem"/>
-            <xs:field xpath="@assayContextItemId"/>
-        </xs:key>
         <xs:key name="Measure_Key">
             <xs:selector xpath="measures/measure"/>
             <xs:field xpath="@measureId"/>

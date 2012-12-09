@@ -719,7 +719,7 @@ class XmlTestSamples {
           <measures>
             <measure measureId='1'>
               <resultTypeRef label='label1'>
-                <link rel='related' href='http://localhost:8080/dataExport/api/dictionary/element/1' type='application/vnd.bard.cap+xml;type=resultType' />
+                <link rel='related' href='http://localhost:8080/dataExport/api/dictionary/element/1' type='application/vnd.bard.cap+xml;type=element' />
               </resultTypeRef>
               <assayContextRefs>
                 <assayContextRef>1</assayContextRef>

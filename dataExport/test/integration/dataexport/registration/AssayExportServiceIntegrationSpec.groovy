@@ -96,7 +96,7 @@ class AssayExportServiceIntegrationSpec extends IntegrationSpec {
 
     }
 
-    void "test generate and validate Assay #label #assayId"() {
+    void "test generate and validate Assay"() {
 
         given:
         Element element = Element.build()
