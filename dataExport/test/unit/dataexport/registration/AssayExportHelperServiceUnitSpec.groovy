@@ -93,6 +93,7 @@ class AssayExportHelperServiceUnitSpec extends Specification {
         this.assayExportHelperService.generateAssayContext(this.markupBuilder, assayContext)
 
         then: "A valid xml measure context is generated with the expected measure context id and name"
+        println(this.writer.toString())
         XmlTestAssertions.assertResults(results, this.writer.toString())
 
         where:
@@ -135,7 +136,7 @@ class AssayExportHelperServiceUnitSpec extends Specification {
 
     void "create Attributes For AssayContextItem"() {
         given: "A DTO"
-        final Map<String, String> results = [assayContextItemId: "1", displayOrder: "0", attributeType: "Fixed", qualifier: "< ", valueDisplay: "Display", valueNum: "5.0", valueMin: "6.0", valueMax: "7.0"]
+        final Map<String, String> results = [displayOrder: "0", attributeType: "Fixed", qualifier: "< ", valueDisplay: "Display", valueNum: "5.0", valueMin: "6.0", valueMax: "7.0"]
 
         Element attributeElement = new Element(label: "attributeLabel")
         Element valueElement = new Element(label: "valueLabel")

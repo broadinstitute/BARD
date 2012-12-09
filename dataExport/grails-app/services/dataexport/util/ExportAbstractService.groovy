@@ -109,7 +109,6 @@ class ExportAbstractService {
 
     protected Map<String, String> createAttributesForContextItem(AbstractContextItem contextItem, String attributeType, Long contextItemId, String resourceName, int displayOrder) {
         final Map<String, String> attributes = [:]
-        attributes.put('id', contextItemId.toString())
         attributes.put('displayOrder', displayOrder.toString())
         if(attributeType){
             attributes.put('attributeType',attributeType)

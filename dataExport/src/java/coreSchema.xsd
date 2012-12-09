@@ -189,9 +189,7 @@
     </xs:complexType>
     <xs:complexType name="contextItemType">
         <xs:complexContent>
-            <xs:extension base="abstractContextItemType">
-                <xs:attribute name="id" type="bardID"/>
-            </xs:extension>
+            <xs:extension base="abstractContextItemType"> </xs:extension>
         </xs:complexContent>
     </xs:complexType>
     <xs:complexType name="contextType">
