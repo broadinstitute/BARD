@@ -535,110 +535,156 @@ class XmlTestSamples {
             <link rel='item' href='http://localhost:8080/dataExport/api/assayDocument/1' type='application/vnd.bard.cap+xml;type=assayDoc' />
         </assayDocument>'''
 
-    static final String MINIMAL_ASSAY_DOCUMENT = '''
+    static final String ASSAY_DOCUMENT_MINIMAL = '''
         <assayDocument documentType='Description'>
             <documentName>documentName</documentName>
-            <link rel='self' href='null' type='xml' />
-            <link rel='related' href='null' type='xml' />
+            <link rel='self' href='null' type='application/vnd.bard.cap+xml;type=assayDoc' />
+            <link rel='related' href='null' type='application/vnd.bard.cap+xml;type=assay' />
         </assayDocument>'''
 
     static final String ASSAY_DOCUMENT_WITH_CONTENT = '''
         <assayDocument documentType='Description'>
             <documentName>documentName</documentName>
-            <documentContent>Content</documentContent>
-            <link rel='self' href='null' type='xml' />
-            <link rel='related' href='null' type='xml' />
+            <documentContent>documentContent</documentContent>
+            <link rel='self' href='null' type='application/vnd.bard.cap+xml;type=assayDoc' />
+            <link rel='related' href='null' type='application/vnd.bard.cap+xml;type=assay' />
         </assayDocument>'''
 
     static final String ASSAY_CONTEXT_ITEM_WITH_ATTRIBUTE = '''
         <assayContextItem displayOrder='0' attributeType='Fixed' qualifier='&lt;' valueDisplay='Display' valueNum='5.0' valueMin='6.0' valueMax='7.0'>
-          <attributeId attributeType='Fixed' label='attributeLabel'>
-            <link rel='related' href='null' type='xml' />
+          <attributeId label='attributeLabel'>
+            <link rel='related' href='null' type='application/vnd.bard.cap+xml;type=element' />
           </attributeId>
         </assayContextItem>'''
 
     static final String ASSAY_CONTEXT_ITEM_WITH_ATTRIBUTE_AND_VALUE = '''
         <assayContextItem displayOrder='0' attributeType='Fixed' qualifier='&lt;' valueDisplay='Display' valueNum='5.0' valueMin='6.0' valueMax='7.0'>
           <valueId label='valueLabel'>
-            <link rel='related' href='null' type='xml' />
+            <link rel='related' href='null' type='application/vnd.bard.cap+xml;type=element' />
           </valueId>
-          <attributeId attributeType='Fixed' label='attributeLabel'>
-            <link rel='related' href='null' type='xml' />
+          <attributeId label='attributeLabel'>
+            <link rel='related' href='null' type='application/vnd.bard.cap+xml;type=element' />
           </attributeId>
         </assayContextItem>'''
 
-    static final String MINIMAL_MEASURE = '''
+    static final String MEASURE_MINIMAL = '''
         <measure measureId='1'>
-          <resultTypeRef label='resultType'>
-            <link rel='related' href='null' type='xml' />
+          <resultTypeRef label='label1'>
+            <link rel='related' href='null' type='application/vnd.bard.cap+xml;type=element' />
           </resultTypeRef>
         </measure>'''
-    static final String MINIMAL_MEASURE_WITH_PARENT_MEASURE_REF = '''
+    static final String MEASURE_WITH_PARENT_MEASURE_REF = '''
         <measure measureId='2' parentMeasureRef='1'>
-          <resultTypeRef label='resultType'>
-            <link rel='related' href='null' type='xml' />
+          <resultTypeRef label='label2'>
+            <link rel='related' href='null' type='application/vnd.bard.cap+xml;type=element' />
           </resultTypeRef>
         </measure>'''
 
-    static final String MINIMAL_MEASURE_WITH_STATS_MODIFIER_REF = '''
+    static final String MEASURE_WITH_STATS_MODIFIER_REF = '''
         <measure measureId='1'>
-          <resultTypeRef label='resultType'>
-            <link rel='related' href='null' type='xml' />
+          <resultTypeRef label='label1'>
+            <link rel='related' href='null' type='application/vnd.bard.cap+xml;type=element' />
           </resultTypeRef>
           <statsModifierRef label='statsModifier'>
-            <link rel='related' href='null' type='xml' />
+            <link rel='related' href='null' type='application/vnd.bard.cap+xml;type=element' />
           </statsModifierRef>
         </measure>'''
 
-    static final String MINIMAL_MEASURE_WITH_ENTRY_UNIT_REF = '''
+    static final String MEASURE_WITH_ENTRY_UNIT_REF = '''
         <measure measureId='1'>
-          <resultTypeRef label='resultType'>
-            <link rel='related' href='null' type='xml' />
+          <resultTypeRef label='label1'>
+            <link rel='related' href='null' type='application/vnd.bard.cap+xml;type=element' />
           </resultTypeRef>
           <entryUnitRef label='entryUnit'>
-            <link rel='related' href='null' type='xml' />
+            <link rel='related' href='null' type='application/vnd.bard.cap+xml;type=element' />
           </entryUnitRef>
         </measure>'''
-    static final String MINIMAL_MEASURE_WITH_ASSAY_CONTEXT_REFS = '''
+    static final String MEASURE_WITH_ONE_ASSAY_CONTEXT_REF = '''
         <measure measureId='1' >
-          <resultTypeRef label='resultType'>
-            <link rel='related' href='null' type='xml' />
+          <resultTypeRef label='label1'>
+            <link rel='related' href='null' type='application/vnd.bard.cap+xml;type=element' />
           </resultTypeRef>
           <assayContextRefs>
-            <assayContextRef>20</assayContextRef>
+            <assayContextRef>1</assayContextRef>
           </assayContextRefs>
         </measure>'''
+    static final String MEASURE_WITH_TWO_ASSAY_CONTEXT_REF = '''
+        <measure measureId='1' >
+          <resultTypeRef label='label1'>
+            <link rel='related' href='null' type='application/vnd.bard.cap+xml;type=element' />
+          </resultTypeRef>
+          <assayContextRefs>
+            <assayContextRef>1</assayContextRef>
+            <assayContextRef>2</assayContextRef>
+          </assayContextRefs>
+        </measure>
+     '''
 
-    static final String MINIMAL_ASSAY_CONTEXT = '''
+    static final String ASSAY_CONTEXT_MINIMAL = '''
+        <assayContext assayContextId='1' displayOrder='0'>
+          <contextName/>
+        </assayContext>
+     '''
+    static final String ASSAY_CONTEXT_WITH_CONTEXT_NAME = '''
         <assayContext assayContextId='1' displayOrder='0'>
           <contextName>contextName</contextName>
-        </assayContext> '''
+        </assayContext>
+     '''
 
-    static final String MINIMAL_ASSAY_CONTEXT_WITH_CONTEXT_GROUP = '''
+    static final String ASSAY_CONTEXT_WITH_CONTEXT_GROUP = '''
         <assayContext assayContextId='1' displayOrder='0'>
-          <contextName>contextName</contextName>
+          <contextName/>
           <contextGroup>contextGroup</contextGroup>
-        </assayContext> '''
+        </assayContext>
+     '''
 
-    static final String MINIMAL_ASSAY_CONTEXT_WITH_ASSAY_CONTEXT_ITEM = '''
+    static final String ASSAY_CONTEXT_WITH_ONE_CONTEXT_ITEM = '''
         <assayContext assayContextId='1' displayOrder='0'>
-          <contextName>contextName</contextName>
+          <contextName/>
           <assayContextItems>
             <assayContextItem displayOrder='0' attributeType='Fixed'>
-              <attributeId attributeType='Fixed' label='label1'>
-                <link rel='related' href='null' type='xml' />
+              <attributeId label='label1'>
+                <link rel='related' href='null' type='application/vnd.bard.cap+xml;type=element' />
               </attributeId>
             </assayContextItem>
           </assayContextItems>
-        </assayContext> '''
-
-    static final String MINIMAL_ASSAY_CONTEXT_WITH_MEASURE_REFS = '''
+        </assayContext>
+     '''
+    static final String ASSAY_CONTEXT_WITH_TWO_CONTEXT_ITEMS = '''
         <assayContext assayContextId='1' displayOrder='0'>
-          <contextName>contextName</contextName>
+          <contextName/>
+          <assayContextItems>
+            <assayContextItem displayOrder='0' attributeType='Fixed'>
+              <attributeId label='label1'>
+                <link rel='related' href='null' type='application/vnd.bard.cap+xml;type=element' />
+              </attributeId>
+            </assayContextItem>
+            <assayContextItem displayOrder='1' attributeType='Fixed'>
+              <attributeId label='label2'>
+                <link rel='related' href='null' type='application/vnd.bard.cap+xml;type=element' />
+              </attributeId>
+            </assayContextItem>
+          </assayContextItems>
+        </assayContext>
+     '''
+    static final String MINIMAL_ASSAY_CONTEXT_WITH_ONE_MEASURE_REF = '''
+        <assayContext assayContextId='1' displayOrder='0'>
+          <contextName/>
           <measureRefs>
             <measureRef>1</measureRef>
           </measureRefs>
-        </assayContext> '''
+        </assayContext>
+     '''
+
+    static final String MINIMAL_ASSAY_CONTEXT_WITH_TWO_MEASURE_REFS = '''
+        <assayContext assayContextId='1' displayOrder='0'>
+          <contextName/>
+          <measureRefs>
+            <measureRef>1</measureRef>
+            <measureRef>2</measureRef>
+          </measureRefs>
+        </assayContext>
+     '''
 
     static String ASSAY_LINKS = '''
 <links>
@@ -660,7 +706,7 @@ class XmlTestSamples {
               <contextName />
               <assayContextItems>
                 <assayContextItem displayOrder='0' attributeType='Fixed'>
-                  <attributeId attributeType='Fixed' label='label1'>
+                  <attributeId label='label1'>
                     <link rel='related' href='http://localhost:8080/dataExport/api/dictionary/element/1' type='application/vnd.bard.cap+xml;type=element' />
                   </attributeId>
                 </assayContextItem>
@@ -753,12 +799,12 @@ class XmlTestSamples {
             <contextName>Context for IC50</contextName>
             <assayContextItems>
               <assayContextItem displayOrder='0' valueDisplay='Assay Explorer' attributeType='Fixed'>
-                <attributeId attributeType='Fixed' label='software'>
+                <attributeId label='software'>
                   <link rel='related' href='http://localhost:8080/dataExport/api/dictionary/element/1' type='application/vnd.bard.cap+xml;type=element' />
                 </attributeId>
               </assayContextItem>
               <assayContextItem displayOrder='1' attributeType='Fixed'>
-                <attributeId attributeType='Fixed' label='a label'>
+                <attributeId label='a label'>
                   <link rel='related' href='http://localhost:8080/dataExport/api/dictionary/element/2' type='application/vnd.bard.cap+xml;type=element' />
                 </attributeId>
               </assayContextItem>

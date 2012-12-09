@@ -2,14 +2,17 @@ package dataexport.registration
 
 import bard.db.dictionary.Element
 import common.tests.XmlTestAssertions
-import common.tests.XmlTestSamples
 import grails.buildtestdata.TestDataConfigurationHolder
 import grails.buildtestdata.mixin.Build
 import groovy.xml.MarkupBuilder
 import org.codehaus.groovy.grails.web.mapping.LinkGenerator
+import org.springframework.core.io.FileSystemResource
+import org.springframework.core.io.Resource
 import spock.lang.Specification
 import spock.lang.Unroll
 import bard.db.registration.*
+
+import static common.tests.XmlTestSamples.*
 
 /**
  * Created with IntelliJ IDEA.
@@ -26,82 +29,48 @@ class AssayExportHelperServiceUnitSpec extends Specification {
     LinkGenerator grailsLinkGenerator
     AssayExportHelperService assayExportHelperService
 
+    Resource assaySchema = new FileSystemResource(new File("src/java/assaySchema.xsd"))
+
     void setup() {
-        TestDataConfigurationHolder.reset()
         grailsLinkGenerator = Mock(LinkGenerator.class)
-        final MediaTypesDTO mediaTypesDTO = new MediaTypesDTO(resultTypeMediaType: "xml", elementMediaType: "xml", assaysMediaType: "xml", assayMediaType: "xml", assayDocMediaType: "xml")
+        final MediaTypesDTO mediaTypesDTO =
+            new MediaTypesDTO(elementMediaType: "application/vnd.bard.cap+xml;type=element",
+                    assaysMediaType: "application/vnd.bard.cap+xml;type=assays",
+                    assayMediaType: "application/vnd.bard.cap+xml;type=assay",
+                    assayDocMediaType: "application/vnd.bard.cap+xml;type=assayDoc",
+                    resultTypeMediaType: "application/vnd.bard.cap+xml;type=resultType")
         this.assayExportHelperService =
             new AssayExportHelperService(mediaTypesDTO)
         this.assayExportHelperService.grailsLinkGenerator = grailsLinkGenerator
         this.writer = new StringWriter()
         this.markupBuilder = new MarkupBuilder(writer)
+        TestDataConfigurationHolder.reset()
     }
 
-    /**
-     * uses passed in map but manually sets the ID property as this can't be set the map constructor
-     * @return a measure
-     */
-    Measure createMeasure(Map map = [:]) {
-        // resulttype is required so included unless specifically passed in
-        if (!map.containsKey('resultType')) {
-            map.resultType = new Element(label: "resultType")
-        }
-        Measure measure = new Measure(map)
-        measure.@id = map.id ?: 1
-        measure
-    }
-
-    /**
-     * create a assayContext with required fields
-     * @param map
-     * @return
-     */
-    AssayContext createAssayContext(Map map = [:]) {
-        if (!map.containsKey('contextName')) {
-            map.contextName = 'contextName'
-        }
-        AssayContext assayContext = AssayContext.build(map)
-        assayContext.@id = map.id ?: 1
-        assayContext
-    }
-
-    AssayContextItem createAssayContextItem(Map map = [:]) {
-        AssayContextItem.build(map)
-    }
-
-    void "test generate Measure #label"() {
-        when: "We attempt to generate a measure in xml"
-        this.assayExportHelperService.generateMeasure(this.markupBuilder, measure.call())
-        then: "A valid xml measure is generated with the expected measure attributes, result type and entry unit"
-        XmlTestAssertions.assertResults(results, this.writer.toString())
-        where:
-        label                                    | measure                                                                                                    | results
-        "minimal Measure"                        | {createMeasure()}                                                                                          | XmlTestSamples.MINIMAL_MEASURE
-        "minimal Measure with parentMeasureRef"  | {createMeasure(id: 2, parentMeasure: createMeasure())}                                                     | XmlTestSamples.MINIMAL_MEASURE_WITH_PARENT_MEASURE_REF
-        "minimal Measure with statsModifierRef"  | {createMeasure(statsModifier: new Element(label: "statsModifier"))}                                        | XmlTestSamples.MINIMAL_MEASURE_WITH_STATS_MODIFIER_REF
-        "minimal Measure with entryUnitRef"      | {createMeasure(entryUnit: new Element(label: "entryUnit"))}                                                | XmlTestSamples.MINIMAL_MEASURE_WITH_ENTRY_UNIT_REF
-        "minimal Measure with assayContextRefs " | {createMeasure(assayContextMeasures: [new AssayContextMeasure(assayContext: createAssayContext(id: 20))])} | XmlTestSamples.MINIMAL_MEASURE_WITH_ASSAY_CONTEXT_REFS
-
-    }
-
-    void "test generate #label"() {
+    void "test generate AssayContext #label"() {
         given:
-        AssayContext assayContext = createAssayContext()
-        valueUnderTest.call(assayContext)
+        AssayContext assayContext = AssayContext.build(map)
+        numItems.times {AssayContextItem.build(assayContext: assayContext)}
+        numMeasureRefs.times {AssayContextMeasure.build(assayContext: assayContext)}
 
         when: "We attempt to generate a measure context in xml"
         this.assayExportHelperService.generateAssayContext(this.markupBuilder, assayContext)
 
         then: "A valid xml measure context is generated with the expected measure context id and name"
-        println(this.writer.toString())
-        XmlTestAssertions.assertResults(results, this.writer.toString())
+        String actualXml = this.writer.toString()
+        println(actualXml)
+        XmlTestAssertions.assertResults(results, actualXml)
+        XmlTestAssertions.validate(assaySchema, actualXml)
 
         where:
-        label                                         | valueUnderTest                                                                     | results
-        "minimal AssayContext "                       | {}                                                                                 | XmlTestSamples.MINIMAL_ASSAY_CONTEXT
-        "minimal AssayContext with contextGroup"      | {ac -> ac.contextGroup = 'contextGroup'}                                           | XmlTestSamples.MINIMAL_ASSAY_CONTEXT_WITH_CONTEXT_GROUP
-        "minimal AssayContext with assayContextItems" | {ac -> ac.contextName = 'contextName'; AssayContextItem.build(assayContext: ac); } | XmlTestSamples.MINIMAL_ASSAY_CONTEXT_WITH_ASSAY_CONTEXT_ITEM
-        "minimal AssayContext with measureRefs"       | {ac -> ac.addToAssayContextMeasures(AssayContextMeasure.build(assayContext: ac));} | XmlTestSamples.MINIMAL_ASSAY_CONTEXT_WITH_MEASURE_REFS
+        label                 | results                                     | numItems | numMeasureRefs | map
+        "Minimal"             | ASSAY_CONTEXT_MINIMAL                       | 0        | 0              | [:]
+        "with name"           | ASSAY_CONTEXT_WITH_CONTEXT_NAME             | 0        | 0              | [contextName: 'contextName']
+        "with group"          | ASSAY_CONTEXT_WITH_CONTEXT_GROUP            | 0        | 0              | [contextGroup: 'contextGroup']
+        "with 1 contextItem"  | ASSAY_CONTEXT_WITH_ONE_CONTEXT_ITEM         | 1        | 0              | [:]
+        "with 2 contextItems" | ASSAY_CONTEXT_WITH_TWO_CONTEXT_ITEMS        | 2        | 0              | [:]
+        "with measureRefs"    | MINIMAL_ASSAY_CONTEXT_WITH_ONE_MEASURE_REF  | 0        | 1              | [:]
+        "with measureRefs"    | MINIMAL_ASSAY_CONTEXT_WITH_TWO_MEASURE_REFS | 0        | 2              | [:]
 
     }
 
@@ -113,7 +82,7 @@ class AssayExportHelperServiceUnitSpec extends Specification {
             valueElement = new Element(label: valueLabel)
         }
         final AssayContextItem assayContextItem =
-            createAssayContextItem(attributeType: AttributeType.Fixed,
+            AssayContextItem.build(attributeType: AttributeType.Fixed,
                     attributeElement: attributeElement,
                     valueElement: valueElement,
                     valueDisplay: "Display",
@@ -126,22 +95,27 @@ class AssayExportHelperServiceUnitSpec extends Specification {
 
         when: "We pass in a assay context item we get a good xml document"
         this.assayExportHelperService.generateAssayContextItem(this.markupBuilder, assayContextItem)
+
         then: "We expect back an xml document"
-        XmlTestAssertions.assertResults(results, this.writer.toString())
+        String actualXml = this.writer.toString()
+        println(actualXml)
+        XmlTestAssertions.assertResults(results, actualXml)
+        XmlTestAssertions.validate(assaySchema, actualXml)
+
         where:
         label                      | attributeLabel   | valueLabel   | results
-        "with attribute only"      | "attributeLabel" | null         | XmlTestSamples.ASSAY_CONTEXT_ITEM_WITH_ATTRIBUTE
-        "with attribute and value" | "attributeLabel" | "valueLabel" | XmlTestSamples.ASSAY_CONTEXT_ITEM_WITH_ATTRIBUTE_AND_VALUE
+        "with attribute only"      | "attributeLabel" | null         | ASSAY_CONTEXT_ITEM_WITH_ATTRIBUTE
+        "with attribute and value" | "attributeLabel" | "valueLabel" | ASSAY_CONTEXT_ITEM_WITH_ATTRIBUTE_AND_VALUE
     }
 
     void "create Attributes For AssayContextItem"() {
-        given: "A DTO"
+        given:
         final Map<String, String> results = [displayOrder: "0", attributeType: "Fixed", qualifier: "< ", valueDisplay: "Display", valueNum: "5.0", valueMin: "6.0", valueMax: "7.0"]
 
         Element attributeElement = new Element(label: "attributeLabel")
         Element valueElement = new Element(label: "valueLabel")
         final AssayContextItem assayContextItem =
-            createAssayContextItem(attributeType: AttributeType.Fixed,
+            AssayContextItem.build(attributeType: AttributeType.Fixed,
                     attributeElement: attributeElement,
                     valueElement: valueElement,
                     valueDisplay: "Display",
@@ -150,15 +124,39 @@ class AssayExportHelperServiceUnitSpec extends Specification {
                     valueNum: new Float("5.0"),
                     modifiedBy: "Bard",
                     qualifier: "< ")
+
         when: "We pass in a assayContextItem we get an expected map"
         Map<String, String> attributes = this.assayExportHelperService.createAttributesForContextItem(assayContextItem, assayContextItem.attributeType.name(), assayContextItem.id, 'assayContextItem', 0)
+
         then: "A map with the expected key/value pairs is generated"
         attributes == results
     }
 
+    void "test generate Measure #label"() {
+        given:
+        Measure measure = Measure.build(mapClosure.call())
+        numAssayContextMeasureRefs.times { AssayContextMeasure.build(measure: measure)}
+
+        when: "We attempt to generate a measure in xml"
+        this.assayExportHelperService.generateMeasure(this.markupBuilder, measure)
+        then: "A valid xml measure is generated with the expected measure attributes, result type and entry unit"
+        println(this.writer.toString())
+        XmlTestAssertions.assertResults(results, this.writer.toString())
+
+        where:
+        label                   | results                            | mapClosure                                               | numAssayContextMeasureRefs
+        "minimal"               | MEASURE_MINIMAL                    | {[:]}                                                    | 0
+        "with parentMeasureRef" | MEASURE_WITH_PARENT_MEASURE_REF    | {[parentMeasure: Measure.build()]}                       | 0
+        "with statsModifierRef" | MEASURE_WITH_STATS_MODIFIER_REF    | {[statsModifier: Element.build(label: "statsModifier")]} | 0
+        "with entryUnitRef"     | MEASURE_WITH_ENTRY_UNIT_REF        | {[entryUnit: Element.build(label: "entryUnit")]}         | 0
+        "with assayContextRefs" | MEASURE_WITH_ONE_ASSAY_CONTEXT_REF | { [:] }                                                  | 1
+        "with assayContextRefs" | MEASURE_WITH_TWO_ASSAY_CONTEXT_REF | { [:] }                                                  | 2
+    }
+
     void "test generate AssayDocument #label"() {
         given:
-        final AssayDocument assayDocument = AssayDocument.build(documentType: documentType, documentContent: documentContent)
+        AssayDocument assayDocument = AssayDocument.build(map)
+
         when: "We attempt to generate an Assay document"
         this.assayExportHelperService.generateDocument(this.grailsLinkGenerator,
                 this.markupBuilder, assayDocument, 'assayDocument', 'assay',
@@ -166,11 +164,16 @@ class AssayExportHelperServiceUnitSpec extends Specification {
                 this.assayExportHelperService.mediaTypesDTO.assayDocMediaType,
                 this.assayExportHelperService.mediaTypesDTO.assayMediaType
         )
+
         then: "A valid xml document is generated and is similar to the expected document"
-        XmlTestAssertions.assertResults(results, this.writer.toString())
+        String actualXml = this.writer.toString()
+        println(actualXml)
+        XmlTestAssertions.assertResults(results, actualXml)
+        XmlTestAssertions.validate(assaySchema, actualXml)
+
         where:
-        label                                | documentType  | documentContent | results
-        "minimal AssayDocument"              | "Description" | null            | XmlTestSamples.MINIMAL_ASSAY_DOCUMENT
-        "minimal AssayDocument with content" | "Description" | "Content"       | XmlTestSamples.ASSAY_DOCUMENT_WITH_CONTENT
+        label          | results                     | map
+        "minimal"      | ASSAY_DOCUMENT_MINIMAL      | [:]
+        "with content" | ASSAY_DOCUMENT_WITH_CONTENT | [documentContent: 'documentContent']
     }
 }

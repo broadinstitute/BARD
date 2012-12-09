@@ -63,7 +63,7 @@ class AssayExportHelperService extends ExportAbstractService {
         markupBuilder.measure(attributes) {
             final Element resultType = measure.resultType
             if (resultType) { //this is the result type
-                createElementRef(markupBuilder, resultType, 'resultTypeRef', this.mediaTypesDTO.resultTypeMediaType)
+                createElementRef(markupBuilder, resultType, 'resultTypeRef', this.mediaTypesDTO.elementMediaType)
             }
             final Element statsModifier = measure.statsModifier
             if (statsModifier) {

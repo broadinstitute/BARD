@@ -42,7 +42,7 @@ class ProjectExportServiceUnitSpec extends Specification {
 
         MediaTypesDTO mediaTypesDTO =
             new MediaTypesDTO(projectMediaType: "application/vnd.bard.cap+xml;type=project",
-                    projectsMediaType: "application/vnd.bard.cap+xml;type=projects",                    
+                    projectsMediaType: "application/vnd.bard.cap+xml;type=projects",
                     externalReferenceMediaType: "application/vnd.bard.cap+xml;type=externalReference",
                     elementMediaType: "application/vnd.bard.cap+xml;type=element",
                     experimentMediaType: "application/vnd.bard.cap+xml;type=experiment",
@@ -214,9 +214,9 @@ class ProjectExportServiceUnitSpec extends Specification {
         XmlTestAssertions.validate(projectSchema, actualXml)
 
         where:
-        label              | results                       | map
-        "Minimal document" | PROJECT_DOCUMENT_MINIMAL      | [:]
-        "Minimal document" | PROJECT_DOCUMENT_WITH_CONTENT | [documentContent: 'documentContent']
+        label          | results                       | map
+        "Minimal"      | PROJECT_DOCUMENT_MINIMAL      | [:]
+        "with content" | PROJECT_DOCUMENT_WITH_CONTENT | [documentContent: 'documentContent']
 
     }
 

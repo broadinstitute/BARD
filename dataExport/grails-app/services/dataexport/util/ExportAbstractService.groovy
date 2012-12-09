@@ -110,8 +110,8 @@ class ExportAbstractService {
     protected Map<String, String> createAttributesForContextItem(AbstractContextItem contextItem, String attributeType, Long contextItemId, String resourceName, int displayOrder) {
         final Map<String, String> attributes = [:]
         attributes.put('displayOrder', displayOrder.toString())
-        if(attributeType){
-            attributes.put('attributeType',attributeType)
+        if (attributeType) {
+            attributes.put('attributeType', attributeType)
         }
         if (contextItem.qualifier) {
             attributes.put('qualifier', contextItem.qualifier)
@@ -164,14 +164,7 @@ class ExportAbstractService {
             }
             //add attributeId element
             if (attributeElement) {
-
-                final Map<String, String> attributeIdAttributes = [:]
-                if (attributeType) {
-                    attributeIdAttributes.put("attributeType", attributeType)
-                }
-                attributeIdAttributes.put("label", attributeElement.label)
-
-                attributeId(attributeIdAttributes) {
+                attributeId([label: attributeElement.label]) {
                     generateLink(
                             [
                                     mapping: 'element',
