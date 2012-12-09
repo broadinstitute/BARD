@@ -59,40 +59,7 @@ class XmlTestSamples {
 </resultContextItems>
 '''
 
-    static final String PROJECT_STEPS_UNIT = '''
-<projectSteps>
-  <projectStep>
-    <description>description</description>
-    <precedingExperiment id='null'>
-      <link rel='related' href='null' type='experimentMediaType' />
-    </precedingExperiment>
-    <link rel='related' href='null' type='projectMediaType' />
-  </projectStep>
-</projectSteps>
-'''
-    static final String PROJECT_STEP_UNIT = '''
-  <projectStep>
-    <description>description</description>
-    <precedingExperiment id='null'>
-      <link rel='related' href='null' type='experimentMediaType' />
-    </precedingExperiment>
-    <link rel='related' href='null' type='projectMediaType' />
-   </projectStep>
-'''
-    static final String PROJECT_STEP_UNIT_NO_CHILD_ELEMENTS = '''
-    <projectStep>
-    <description>description</description>
-    <link rel='related' href='null' type='projectMediaType' />
-    </projectStep>
-'''
-    static final String PROJECT_STEPS_UNIT_NO_CHILD_ELEMENTS = '''
-    <projectSteps>
-    <projectStep>
-    <description>description</description>
-    <link rel='related' href='null' type='projectMediaType' />
-    </projectStep>
-</projectSteps>
-'''
+
     static final String EXTERNAL_REFERENCES_UNT = '''
 <externalReferences>
 <externalReference>
@@ -152,6 +119,16 @@ class XmlTestSamples {
 </experiments>
 '''
 
+    static final String PROJECTS_NO_PROJECTS_READY = '''
+        <projects count='0' />
+    '''
+
+    static final String PROJECTS_ONE_PROJEC_READY = '''
+        <projects count='1'>
+            <link rel='item' href='null' type='application/vnd.bard.cap+xml;type=project' />
+        </projects>
+    '''
+
     static final String PROJECTS = '''
 <projects count='2'>
     <project projectId='1' readyForExtraction='Ready' groupType='Project'>
@@ -195,84 +172,305 @@ class XmlTestSamples {
     <link rel='up' href='http://localhost:8080/dataExport/api/projects' type='application/vnd.bard.cap+xml;type=projects' />
     </project>
 '''
-    static final String STEP_CONTEXT_MINIMAL = '''
-                                                <stepContext stepContextId='1' displayOrder='0'>
-                                                  <contextName>contextName</contextName>
-                                                  <contextGroup>contextGroup</contextGroup>
-                                                  <stepContextItems />
-                                                </stepContext>
-                                                '''
-    static final String PROJECT_CONTEXT_MINIMAL = '''
-                                                     <projectContext projectContextId='1' displayOrder='0'>
-                                                        <contextName>contextName</contextName>
-                                                        <contextGroup>contextGroup</contextGroup>
-                                                        <projectContextItems />
-                                                     </projectContext>
-                                                     '''
-    static final String PROJECT_CONTEXT_ITEMS_MINIMAL = '''
-                                            <projectContextItems>
-                                              <projectContextItem projectContextItemId='1' displayOrder='0'>
-                                                <attributeId label='label1'>
-                                                  <link rel='related' href='null' type='elementMediaType' />
-                                                </attributeId>
-                                              </projectContextItem>
-                                            </projectContextItems>
-                                            '''
-    static final String STEP_CONTEXT_ITEM_MINIMAL = '''
-                                                        <stepContextItem stepContextItemId='1' displayOrder='0'>
-                                                        <attributeId label='label2'>
-                                                        <link rel='related' href='null' type='elementMediaType' />
-                                                        </attributeId>
-                                                        </stepContextItem>
-                                                        '''
+
+    static final String PROJECT_DOCUMENT_MINIMAL = '''
+        <projectDocument documentType='Description'>
+          <documentName>documentName</documentName>
+          <link rel='self' href='null' type='application/vnd.bard.cap+xml;type=projectDoc' />
+          <link rel='related' href='null' type='application/vnd.bard.cap+xml;type=project' />
+        </projectDocument>
+    '''
+    static final String PROJECT_DOCUMENT_WITH_CONTENT = '''
+        <projectDocument documentType='Description'>
+          <documentName>documentName</documentName>
+          <documentContent>documentContent</documentContent>
+          <link rel='self' href='null' type='application/vnd.bard.cap+xml;type=projectDoc' />
+          <link rel='related' href='null' type='application/vnd.bard.cap+xml;type=project' />
+        </projectDocument>
+    '''
+    static final String CONTEXT_MINIMAL = '''
+         <context id='1' displayOrder='0'>
+            <contextName />
+         </context>
+     '''
+
+    static final String CONTEXT_MINIMAL_WITH_NAME = '''
+         <context id='1' displayOrder='0'>
+            <contextName>contextName</contextName>
+         </context>
+     '''
+    static final String CONTEXT_MINIMAL_WITH_GROUP = '''
+         <context id='1' displayOrder='0'>
+            <contextName/>
+            <contextGroup>contextGroup</contextGroup>
+         </context>
+     '''
+    static final String CONTEXT_MINIMAL_WITH_ONE_ITEM = '''
+         <context id='1' displayOrder='0'>
+            <contextName />
+            <contextItems>
+                <contextItem id='1' displayOrder='0'>
+                  <attributeId label='label1'>
+                    <link rel='related' href='null' type='application/vnd.bard.cap+xml;type=element' />
+                  </attributeId>
+                </contextItem>
+            </contextItems>
+         </context>
+     '''
+    static final String CONTEXT_MINIMAL_WITH_TWO_ITEMS = '''
+         <context id='1' displayOrder='0'>
+            <contextName />
+            <contextItems>
+                <contextItem id='1' displayOrder='0'>
+                  <attributeId label='label1'>
+                    <link rel='related' href='null' type='application/vnd.bard.cap+xml;type=element' />
+                  </attributeId>
+                </contextItem>
+                <contextItem id='2' displayOrder='1'>
+                  <attributeId label='label2'>
+                    <link rel='related' href='null' type='application/vnd.bard.cap+xml;type=element' />
+                  </attributeId>
+                </contextItem>
+            </contextItems>
+         </context>
+     '''
+    static final String PROJECT_CONTEXTS_ONE = '''
+        <contexts>
+          <context id='1' displayOrder='0'>
+            <contextName />
+          </context>
+        </contexts>
+    '''
+    static final String PROJECT_CONTEXTS_TWO = '''
+            <contexts>
+              <context id='1' displayOrder='0'>
+                <contextName />
+              </context>
+              <context id='2' displayOrder='1'>
+                  <contextName />
+              </context>
+            </contexts>
+        '''
+    static final String PROJECT_EXPERIMENT_MINIMAL = '''
+        <projectExperiment projectExperimentId='1'>
+            <experimentRef label='experimentName'>
+                <link rel='related' href='null' type='application/vnd.bard.cap+xml;type=experiment' />
+            </experimentRef>
+        </projectExperiment>
+    '''
+    static final String PROJECT_EXPERIMENT_WITH_STAGEREF = '''
+        <projectExperiment projectExperimentId='1'>
+            <experimentRef label='experimentName'>
+                <link rel='related' href='null' type='application/vnd.bard.cap+xml;type=experiment' />
+            </experimentRef>
+            <stageRef label='stage'>
+                <link rel='related' href='null' type='application/vnd.bard.cap+xml;type=element' />
+            </stageRef>
+        </projectExperiment>
+    '''
+    static final String PROJECT_EXPERIMENT_WITH_CONTEXT = '''
+        <projectExperiment projectExperimentId='1'>
+            <experimentRef label='experimentName'>
+                <link rel='related' href='null' type='application/vnd.bard.cap+xml;type=experiment' />
+            </experimentRef>
+            <contexts>
+                <context id='1' displayOrder='0'>
+                  <contextName />
+                </context>
+            </contexts>
+        </projectExperiment>
+    '''
     static final String PROJECT_STEP_MINIMAL = '''
-                                                <projectStep projectStepId='1'>
-                                                    <description />
-                                                    <experimentRef label='experimentName'>
-                                                        <link rel='related' href='null' type='experimentMediaType' />
-                                                    </experimentRef>
-                                                </projectStep>
-                                                    '''
-    static final String PROJECT_CONTEXT_ITEM_MINIMAL = '''
-                                                    <projectContextItem projectContextItemId='1' displayOrder='0'>
-                                                      <attributeId label='label3'>
-                                                        <link rel='related' href='null' type='elementMediaType' />
-                                                      </attributeId>
-                                                    </projectContextItem>
-                                                    '''
-    static final String PROJECT_WITH_DESCRIPTION = '''
-                                                    <project projectId='1' readyForExtraction='Ready' groupType='Panel'>
-                                                      <projectName>Project Name2</projectName>
-                                                      <description>Broad</description>
-                                                      <link rel='edit' href='null' type='projectMediaType' />
-                                                      <link rel='up' href='null' type='projectsMediaType' />
-                                                    </project>
-                                                    '''
-//Note that the 'root' node is only included in this test case for validation purposes
-//Without the 'root' node the XML would not be valid
-    static final String PROJECT_LINKS_WITH_EXTERNAL_REFERENCE = '''
-                                                                <root>
-                                                                    <link rel='edit' href='null' type='projectMediaType' />
-                                                                    <link rel='up' href='null' type='projectsMediaType' />
-                                                                    <link rel='related' type='externalReferenceMediaType' href='null' />
-                                                                    <link rel='related' type='externalReferenceMediaType' href='null' />
-                                                                </root>
-                                                              '''
-//Note that the 'root' node is only included in this test case for validation purposes
-//Without the 'root' node the XML would not be valid
-    static final String PROJECT_LINKS_WITHOUT_EXTERNAL_REFERENCE = '''
-                                                                    <root>
-                                                                        <link rel='edit' href='null' type='projectMediaType' />
-                                                                        <link rel='up' href='null' type='projectsMediaType' />
-                                                                    </root>
-                                                                    '''
+          <projectStep projectStepId='1' nextProjectExperimentRef='1' precedingProjectExperimentRef='1' />
+    '''
+    static final String PROJECT_STEP_WITH_EDGE_NAME = '''
+        <projectStep projectStepId='1' nextProjectExperimentRef='1' precedingProjectExperimentRef='1'>
+            <edgeName>edge</edgeName>
+        </projectStep>
+    '''
+    static final String PROJECT_STEP_WITH_CONTEXT = '''
+        <projectStep projectStepId='1' nextProjectExperimentRef='1' precedingProjectExperimentRef='1'>
+            <contexts>
+                <context id='1' displayOrder='0'>
+                  <contextName />
+                </context>
+            </contexts>
+        </projectStep>
+    '''
+
     static final String PROJECT_MINIMAL = '''
-                                            <project projectId='' readyForExtraction='Ready' groupType='Project'>
-                                              <projectName>Project Name1</projectName>
-                                              <link rel='edit' href='null' type='projectMediaType' />
-                                              <link rel='up' href='null' type='projectsMediaType' />
-                                            </project>
-                                          '''
+        <project projectId='1' readyForExtraction='Ready' groupType='Project'>
+            <projectName>projectName</projectName>
+            <link rel='edit' href='null' type='application/vnd.bard.cap+xml;type=project' />
+            <link rel='up' href='null' type='application/vnd.bard.cap+xml;type=projects' />
+        </project>
+    '''
+    static final String PROJECT_WITH_DESCRIPTION = '''
+        <project projectId='1' readyForExtraction='Ready' groupType='Project'>
+            <projectName>projectName</projectName>
+            <description>description</description>
+            <link rel='edit' href='null' type='application/vnd.bard.cap+xml;type=project' />
+            <link rel='up' href='null' type='application/vnd.bard.cap+xml;type=projects' />
+        </project>
+    '''
+    static final String PROJECT_ONE_EXTERNAL_REFERENCE = '''
+        <project projectId='1' readyForExtraction='Ready' groupType='Project'>
+            <projectName>projectName</projectName>
+            <link rel='edit' href='null' type='application/vnd.bard.cap+xml;type=project' />
+            <link rel='up' href='null' type='application/vnd.bard.cap+xml;type=projects' />
+            <link rel='item' href='null' type='application/vnd.bard.cap+xml;type=externalReference' />
+        </project>
+    '''
+    static final String PROJECT_TWO_EXTERNAL_REFERENCES = '''
+        <project projectId='1' readyForExtraction='Ready' groupType='Project'>
+            <projectName>projectName</projectName>
+            <link rel='edit' href='null' type='application/vnd.bard.cap+xml;type=project' />
+            <link rel='up' href='null' type='application/vnd.bard.cap+xml;type=projects' />
+            <link rel='item' href='null' type='application/vnd.bard.cap+xml;type=externalReference' />
+            <link rel='item' href='null' type='application/vnd.bard.cap+xml;type=externalReference' />
+        </project>
+    '''
+    static final String PROJECT_ONE_DOCUMENT = '''
+        <project projectId='1' readyForExtraction='Ready' groupType='Project'>
+            <projectName>projectName</projectName>
+            <link rel='edit' href='null' type='application/vnd.bard.cap+xml;type=project' />
+            <link rel='up' href='null' type='application/vnd.bard.cap+xml;type=projects' />
+            <link rel='item' href='null' type='application/vnd.bard.cap+xml;type=projectDoc' />
+        </project>
+    '''
+    static final String PROJECT_TWO_DOCUMENTS = '''
+        <project projectId='1' readyForExtraction='Ready' groupType='Project'>
+            <projectName>projectName</projectName>
+            <link rel='edit' href='null' type='application/vnd.bard.cap+xml;type=project' />
+            <link rel='up' href='null' type='application/vnd.bard.cap+xml;type=projects' />
+            <link rel='item' href='null' type='application/vnd.bard.cap+xml;type=projectDoc' />
+            <link rel='item' href='null' type='application/vnd.bard.cap+xml;type=projectDoc' />
+        </project>
+    '''
+    static final String PROJECT_WITH_ONE_CONTEXT = '''
+        <project projectId='1' readyForExtraction='Ready' groupType='Project'>
+            <projectName>projectName</projectName>
+            <contexts>
+                <context id='1' displayOrder='0'>
+                  <contextName />
+                </context>
+            </contexts>
+            <link rel='edit' href='null' type='application/vnd.bard.cap+xml;type=project' />
+            <link rel='up' href='null' type='application/vnd.bard.cap+xml;type=projects' />
+        </project>
+    '''
+    static final String PROJECT_WITH_TWO_CONTEXT = '''
+        <project projectId='1' readyForExtraction='Ready' groupType='Project'>
+            <projectName>projectName</projectName>
+            <contexts>
+                <context id='1' displayOrder='0'>
+                  <contextName />
+                </context>
+                <context id='2' displayOrder='1'>
+                  <contextName />
+                </context>
+            </contexts>
+            <link rel='edit' href='null' type='application/vnd.bard.cap+xml;type=project' />
+            <link rel='up' href='null' type='application/vnd.bard.cap+xml;type=projects' />
+        </project>
+    '''
+    static final String PROJECT_WITH_CONTEXT_ONE_ITEM = '''
+        <project projectId='1' readyForExtraction='Ready' groupType='Project'>
+            <projectName>projectName</projectName>
+            <contexts>
+                <context id='1' displayOrder='0'>
+                  <contextName />
+                  <contextItems>
+                      <contextItem id='1' displayOrder='0'>
+                        <attributeId label='label1'>
+                          <link rel='related' href='null' type='application/vnd.bard.cap+xml;type=element' />
+                        </attributeId>
+                      </contextItem>
+                  </contextItems>
+                </context>
+            </contexts>
+            <link rel='edit' href='null' type='application/vnd.bard.cap+xml;type=project' />
+            <link rel='up' href='null' type='application/vnd.bard.cap+xml;type=projects' />
+        </project>
+    '''
+    static final String PROJECT_WITH_EXPERIMENT = '''
+        <project projectId='1' readyForExtraction='Ready' groupType='Project'>
+            <projectName>projectName</projectName>
+            <projectExperiments>
+                <projectExperiment projectExperimentId='1'>
+                  <experimentRef label='experimentName'>
+                    <link rel='related' href='null' type='application/vnd.bard.cap+xml;type=experiment' />
+                  </experimentRef>
+                </projectExperiment>
+              </projectExperiments>
+            <link rel='edit' href='null' type='application/vnd.bard.cap+xml;type=project' />
+            <link rel='up' href='null' type='application/vnd.bard.cap+xml;type=projects' />
+        </project>
+    '''
+    static final String PROJECT_WITH_EXPERIMENT_WITH_ONE_CONTEXT = '''
+        <project projectId='1' readyForExtraction='Ready' groupType='Project'>
+            <projectName>projectName</projectName>
+            <projectExperiments>
+                <projectExperiment projectExperimentId='1'>
+                  <experimentRef label='experimentName'>
+                    <link rel='related' href='null' type='application/vnd.bard.cap+xml;type=experiment' />
+                  </experimentRef>
+                  <contexts>
+                    <context id='1' displayOrder='0'>
+                      <contextName />
+                    </context>
+                  </contexts>
+                </projectExperiment>
+              </projectExperiments>
+            <link rel='edit' href='null' type='application/vnd.bard.cap+xml;type=project' />
+            <link rel='up' href='null' type='application/vnd.bard.cap+xml;type=projects' />
+        </project>
+    '''
+    static final String PROJECT_WITH_EXPERIMENT_WITH_TWO_CONTEXT = '''
+        <project projectId='1' readyForExtraction='Ready' groupType='Project'>
+            <projectName>projectName</projectName>
+            <projectExperiments>
+                <projectExperiment projectExperimentId='1'>
+                  <experimentRef label='experimentName'>
+                    <link rel='related' href='null' type='application/vnd.bard.cap+xml;type=experiment' />
+                  </experimentRef>
+                  <contexts>
+                    <context id='1' displayOrder='0'>
+                      <contextName />
+                    </context>
+                    <context id='2' displayOrder='1'>
+                      <contextName />
+                    </context>
+                  </contexts>
+                </projectExperiment>
+              </projectExperiments>
+            <link rel='edit' href='null' type='application/vnd.bard.cap+xml;type=project' />
+            <link rel='up' href='null' type='application/vnd.bard.cap+xml;type=projects' />
+        </project>
+    '''
+    static final String PROJECT_WITH_TWO_EXPERIMENTS_ONE_PROJECT_STEP = '''
+        <project projectId='1' readyForExtraction='Ready' groupType='Project'>
+            <projectName>projectName</projectName>
+            <projectExperiments>
+                <projectExperiment projectExperimentId='1'>
+                  <experimentRef label='experimentName'>
+                    <link rel='related' href='null' type='application/vnd.bard.cap+xml;type=experiment' />
+                  </experimentRef>
+                </projectExperiment>
+                <projectExperiment projectExperimentId='2'>
+                  <experimentRef label='experimentName'>
+                    <link rel='related' href='null' type='application/vnd.bard.cap+xml;type=experiment' />
+                  </experimentRef>
+                </projectExperiment>
+            </projectExperiments>
+            <projectSteps>
+                <projectStep projectStepId='1' nextProjectExperimentRef='2' precedingProjectExperimentRef='1' />
+            </projectSteps>
+            <link rel='edit' href='null' type='application/vnd.bard.cap+xml;type=project' />
+            <link rel='up' href='null' type='application/vnd.bard.cap+xml;type=projects' />
+        </project>
+    '''
+
     static final String ASSAY_NO_DESIGNER_UNIT = '''
         <assay assayId='1' readyForExtraction='Pending' assayVersion='assayVersi' assayType='Regular' status='Pending'>
           <assayShortName>assayShortName</assayShortName>

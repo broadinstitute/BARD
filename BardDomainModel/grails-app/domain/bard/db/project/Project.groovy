@@ -1,7 +1,7 @@
 package bard.db.project
 
-import bard.db.registration.ExternalReference
 import bard.db.enums.ReadyForExtraction
+import bard.db.registration.ExternalReference
 
 class Project {
     private static final int PROJECT_NAME_MAX_SIZE = 256
@@ -27,7 +27,7 @@ class Project {
 
     static hasMany = [projectExperiments: ProjectExperiment,
             externalReferences: ExternalReference,
-            projectContexts:ProjectContext,
+            projectContexts: ProjectContext,
             projectDocuments: ProjectDocument]
 
     static mapping = {
@@ -36,14 +36,28 @@ class Project {
     }
 
     static constraints = {
-        projectName( maxSize: PROJECT_NAME_MAX_SIZE, blank: false)
+        projectName(maxSize: PROJECT_NAME_MAX_SIZE, blank: false)
         // TODO make enum
-        groupType( maxSize: GROUP_TYPE_MAX_SIZE, nullable:false, blank: false, inList: ['Project', 'Probe Report', 'Campaign', 'Panel', 'Study', 'Template'])
-        description(nullable: true, blank: false , maxSize: DESCRIPTION_MAX_SIZE)
+        groupType(maxSize: GROUP_TYPE_MAX_SIZE, nullable: false, blank: false, inList: ['Project', 'Probe Report', 'Campaign', 'Panel', 'Study', 'Template'])
+        description(nullable: true, blank: false, maxSize: DESCRIPTION_MAX_SIZE)
         readyForExtraction(maxSize: READY_FOR_EXTRACTION_MAX_SIZE, nullable: false)
 
         dateCreated(nullable: false)
         lastUpdated(nullable: true)
         modifiedBy(nullable: true, blank: false, maxSize: MODIFIED_BY_MAX_SIZE)
+    }
+    /**
+     * for all the associated projectExperiments, using the spread dot operator
+     * to get the following and preceding Sets of ProjectSteps.
+     *
+     * this results in a set of sets, flatten collapses this to 1 level, as we're
+     * using a Set<ProjectStep> we should get just the distinct ProjectSteps
+     * @return
+     */
+    Set<ProjectStep> getProjectSteps() {
+        Set<ProjectStep> projectSteps = [] as Set
+        projectSteps.addAll(this.projectExperiments*.followingProjectSteps)
+        projectSteps.addAll(this.projectExperiments*.precedingProjectSteps)
+        projectSteps.flatten()
     }
 }

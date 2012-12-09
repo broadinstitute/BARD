@@ -64,6 +64,7 @@
                         <xs:enumeration value="application/vnd.bard.cap+xml;type=externalReference"/>
                         <xs:enumeration value="application/vnd.bard.cap+xml;type=externalSystems"/>
                         <xs:enumeration value="application/vnd.bard.cap+xml;type=externalSystem"/>
+                        <xs:enumeration value="application/vnd.bard.cap+xml;type=projectDoc"/>
                     </xs:restriction>
                 </xs:simpleType>
             </xs:attribute>
@@ -167,16 +168,6 @@
                     <xs:sequence>
                         <xs:element maxOccurs="1" minOccurs="0" ref="link"/>
                     </xs:sequence>
-                    <xs:attribute name="attributeType" use="required">
-                        <xs:simpleType>
-                            <xs:restriction base="xs:string">
-                                <xs:enumeration value="List"/>
-                                <xs:enumeration value="Range"/>
-                                <xs:enumeration value="Number"/>
-                                <xs:enumeration value="Fixed"/>
-                            </xs:restriction>
-                        </xs:simpleType>
-                    </xs:attribute>
                     <xs:attribute name="label" type="xs:string" use="required"/>
                 </xs:complexType>
             </xs:element>
@@ -195,5 +186,33 @@
             <xs:element minOccurs="0" name="contextGroup" type="xs:string"/>
         </xs:sequence>
         <xs:attribute name="displayOrder" type="xs:int"/>
+    </xs:complexType>
+    <xs:complexType name="contextItemType">
+        <xs:complexContent>
+            <xs:extension base="abstractContextItemType">
+                <xs:attribute name="id" type="bardID"/>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    <xs:complexType name="contextType">
+        <xs:complexContent>
+            <xs:extension base="abstractContextType">
+                <xs:sequence>
+                    <xs:element minOccurs="0" name="contextItems">
+                        <xs:complexType>
+                            <xs:sequence>
+                                <xs:element maxOccurs="unbounded" name="contextItem"
+                                    type="contextItemType">
+                                    <xs:annotation>
+                                        <xs:documentation>We include the group result context Id and the result context item Id so that the client can walk the tree from child to parent</xs:documentation>
+                                    </xs:annotation>
+                                </xs:element>
+                            </xs:sequence>
+                        </xs:complexType>
+                    </xs:element>
+                </xs:sequence>
+                <xs:attribute name="id" type="bardID" use="required"/>
+            </xs:extension>
+        </xs:complexContent>
     </xs:complexType>
 </xs:schema>

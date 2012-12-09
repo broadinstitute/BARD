@@ -82,29 +82,41 @@ ExternalResources
 Projects
     xsd - Now lists a list of linked Project's just like Assays
         - This is because projects have too many elements now
-          and the potential exists that we may have to addd
-	    paging.
-	// TODO confirm
-	xsd - removed /project/projectDocuments elements, assay documents will be in links element
+          and the potential exists that we may have to add paging.
 Project
     xsd - moved /project/projectContextItems
-              to /project/projectContexts/projectContext/projectContextItems
-    xsd - added /project/projectContexts/projextContext ( extends an abstractContextType )
-    xsd - added Project Documents
+              to /project/contexts/context/contextItems
+    xsd - added /project/contexts/context ( extends an abstractContextType )
+    xsd - added links for Project Documents references
     xsd - added links for external references
+ProjectExperiment
+    xsd - added /project/projectExperiments/projectExperiment
+    xsd - added /project/projectExperiments/projectExperiment/experimentRef
+                which contains a link to the Experiment resource
+    xsd - added optional stageRef
+                /project/projectExperiments/projectExperiment/stageRef
+                which contains a link to the Element resource
+    xsd - added optional contexts and contextItems
+                /project/projectExperiments/projectExperiment/contexts/context
+                /project/projectExperiments/projectExperiment/contexts/context/contextItems/contextItem
 
 // Some addition Changes coming, namely ProjectSteps no longer directly associated with projects
 // a new concept of ProjectExperiment links projects and experiments, projectExperiments are linked together with
 // ProjectSteps to provide some ordering/sequencing to experiments within a project, not available yet
 //
-Project Step
-    xsd - addeed experimentRef
-    xsd - added proceedingExperimentRef
+Project Step /project/projectSteps/projectStep
+    xsd - added nextProjectExperimentRef      ( relative ref to /project/projectExperiments/projectExperiment/@projectExperimentId )
+    xsd - added precedingProjectExperimentRef ( relative ref to /project/projectExperiments/projectExperiment/@projectExperimentId )
+    xsd - added optional edgeName element
     xsd - removed links
     xsd - added step Contexts
-StepContext
-    xsd - ( just like assay context and projext context )
-    xsd  - step contexts have stepcontextitem
+          /project/projectSteps/projectStep/contexts
+          /project/projectSteps/projectStep/contexts/context
+          /project/projectSteps/projectStep/contexts/context/contextItems
+          /project/projectSteps/projectStep/contexts/context/contextItems/contextItem
+ProjectDocuments
+    xsd - remains top level resource
+
 
 
 

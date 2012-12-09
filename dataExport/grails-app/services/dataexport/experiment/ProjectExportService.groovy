@@ -1,5 +1,6 @@
 package dataexport.experiment
 
+import bard.db.dictionary.Element
 import bard.db.enums.ReadyForExtraction
 import bard.db.experiment.Experiment
 import bard.db.model.AbstractContext
@@ -42,26 +43,14 @@ class ProjectExportService extends ExportAbstractService {
      * @param projectStep
      */
     protected void generateProjectStep(final MarkupBuilder markupBuilder, final ProjectStep projectStep) {
+        Map attributes = [projectStepId: projectStep.id,
+                nextProjectExperimentRef: projectStep.nextProjectExperiment.id,
+                precedingProjectExperimentRef: projectStep.previousProjectExperiment.id]
 
-        markupBuilder.projectStep(projectStepId: projectStep.id.toString()) {
-            description(projectStep.description)
-            final Experiment experiment = projectStep.experiment
-            experimentRef(label: experiment.experimentName) {
-                Map map = [mapping: 'experiment', rel: 'related',
-                        mediaType: this.mediaTypesDTO.experimentMediaType,
-                        params: [id: experiment.id]]
-                generateLink(map, markupBuilder, this.grailsLinkGenerator)
-            }
-            final Experiment precedingExperiment = projectStep.precedingExperiment
-            if (precedingExperiment) {
-                precedingExperimentRef(label: precedingExperiment.experimentName) {
-                    Map map = [
-                            mapping: 'experiment', rel: 'related',
-                            mediaType: this.mediaTypesDTO.experimentsMediaType,
-                            params: [id: precedingExperiment.id]
-                    ]
-                    generateLink(map, markupBuilder, this.grailsLinkGenerator)
-                }
+        markupBuilder.projectStep(attributes) {
+            String edgeName = projectStep.edgeName
+            if (edgeName) {
+                markupBuilder.edgeName(edgeName)
             }
             if (projectStep.stepContexts) {
                 generateStepContexts(markupBuilder, projectStep.stepContexts)
@@ -69,14 +58,6 @@ class ProjectExportService extends ExportAbstractService {
         }
     }
 
-    protected void generateProjectSteps(final MarkupBuilder markupBuilder, Set<ProjectStep> projectStepSet) {
-        markupBuilder.projectSteps() {
-            for (ProjectStep projectStep : projectStepSet) {
-                generateProjectStep(markupBuilder, projectStep)
-            }
-
-        }
-    }
     /**
      * Generate a Project
      * @param markupBuilder
@@ -91,23 +72,39 @@ class ProjectExportService extends ExportAbstractService {
         if (project.groupType) {
             attributes.put('groupType', project.groupType)
         }
-        markupBuilder.project(
-                attributes
-        ) {
+        markupBuilder.project(attributes) {
             if (project.projectName) {
                 projectName(project.projectName)
             }
             if (project.description) {
                 description(project.description)
             }
-            if (project.projectSteps) {
-                generateProjectSteps(markupBuilder, project.projectSteps)
-            }
             if (project.projectContexts) {
                 generateProjectContexts(markupBuilder, project.projectContexts)
             }
-
+            if (project.projectExperiments) {
+                generateProjectExperiments(markupBuilder, project.projectExperiments)
+            }
+            if (project.projectSteps) {
+                generateProjectSteps(markupBuilder, project.projectSteps)
+            }
             generateProjectLinks(markupBuilder, project)
+        }
+    }
+
+    protected void generateProjectSteps(MarkupBuilder markupBuilder, Set<ProjectStep> projectSteps) {
+        markupBuilder.projectSteps{
+            for(ProjectStep projectStep in projectSteps){
+                generateProjectStep(markupBuilder, projectStep)
+            }
+        }
+    }
+
+    protected void generateProjectExperiments(MarkupBuilder markupBuilder, Set<ProjectExperiment> projectExperiments) {
+        markupBuilder.projectExperiments() {
+            for (ProjectExperiment projectExperiment : projectExperiments) {
+                generateProjectExperiment(markupBuilder, projectExperiment)
+            }
         }
     }
 
@@ -137,27 +134,28 @@ class ProjectExportService extends ExportAbstractService {
      * @param projectContextItems
      */
     protected void generateProjectContextItems(final MarkupBuilder markupBuilder, List<ProjectContextItem> projectContextItems) {
-        markupBuilder.projectContextItems() {
-            for (ProjectContextItem projectContextItem : projectContextItems) {
-                generateProjectContextItem(markupBuilder, projectContextItem)
+        if (projectContextItems) {
+            markupBuilder.contextItems() {
+                for (ProjectContextItem projectContextItem : projectContextItems) {
+                    generateProjectContextItem(markupBuilder, projectContextItem)
+                }
             }
-
         }
     }
 
     protected void generateProjectContextItem(final MarkupBuilder markupBuilder, final ProjectContextItem projectContextItem) {
         generateContextItem(
                 markupBuilder, projectContextItem,
-                null, "projectContextItem",
+                null, "contextItem",
                 this.mediaTypesDTO.elementMediaType,
                 grailsLinkGenerator, projectContextItem.id,
                 projectContextItem.projectContext.projectContextItems.indexOf(projectContextItem))
     }
 
     protected void generateProjectContext(final MarkupBuilder markupBuilder, final ProjectContext projectContext) {
-        def attributes = ['projectContextId': projectContext.id,
+        def attributes = ['id': projectContext.id,
                 'displayOrder': projectContext.project.projectContexts.indexOf(projectContext)]
-        markupBuilder.projectContext(attributes) {
+        markupBuilder.context(attributes) {
             //TODO: AssayContext uses preferred Name. Is it something we should do?
             addContextInformation(markupBuilder, projectContext)
             generateProjectContextItems(markupBuilder, projectContext.projectContextItems)
@@ -172,9 +170,9 @@ class ProjectExportService extends ExportAbstractService {
     }
 
     protected void generateStepContext(final MarkupBuilder markupBuilder, final StepContext stepContext) {
-        def attributes = ['stepContextId': stepContext.id,
+        def attributes = ['id': stepContext.id,
                 'displayOrder': stepContext.projectStep.stepContexts.indexOf(stepContext)]
-        markupBuilder.stepContext(attributes) {
+        markupBuilder.context(attributes) {
             //TODO: AssayContext uses preferred Name. Is it something we should do?
             addContextInformation(markupBuilder, stepContext)
             generateStepContextItems(markupBuilder, stepContext.stepContextItems)
@@ -182,18 +180,20 @@ class ProjectExportService extends ExportAbstractService {
     }
 
     protected void generateStepContextItems(final MarkupBuilder markupBuilder, List<StepContextItem> stepContextItems) {
-        markupBuilder.stepContextItems() {
-            for (StepContextItem stepContextItem : stepContextItems) {
-                generateStepContextItem(markupBuilder, stepContextItem)
-            }
+        if (stepContextItems) {
+            markupBuilder.contextItems() {
+                for (StepContextItem stepContextItem : stepContextItems) {
+                    generateStepContextItem(markupBuilder, stepContextItem)
+                }
 
+            }
         }
     }
 
     protected void generateStepContextItem(final MarkupBuilder markupBuilder, final StepContextItem stepContextItem) {
         generateContextItem(
                 markupBuilder, stepContextItem,
-                null, "stepContextItem",
+                null, "contextItem",
                 this.mediaTypesDTO.elementMediaType,
                 grailsLinkGenerator, stepContextItem.id,
                 stepContextItem.stepContext.stepContextItems.indexOf(stepContextItem))
@@ -204,16 +204,17 @@ class ProjectExportService extends ExportAbstractService {
      * @param projectContexts
      */
     protected void generateProjectContexts(final MarkupBuilder markupBuilder, final List<ProjectContext> projectContexts) {
-        markupBuilder.projectContexts() {
-            for (ProjectContext projectContext : projectContexts) {
-                generateProjectContext(markupBuilder, projectContext)
+        if (projectContexts) {
+            markupBuilder.contexts() {
+                for (ProjectContext projectContext : projectContexts) {
+                    generateProjectContext(markupBuilder, projectContext)
+                }
             }
         }
-
     }
 
     protected void generateStepContexts(final MarkupBuilder markupBuilder, final List<StepContext> stepContexts) {
-        markupBuilder.stepContexts() {
+        markupBuilder.contexts() {
             for (StepContext stepContext : stepContexts) {
                 generateStepContext(markupBuilder, stepContext)
             }
@@ -275,5 +276,77 @@ class ProjectExportService extends ExportAbstractService {
         }
         generateProjectDocument(markupBuilder, projectDocument)
         return projectDocument.version
+    }
+
+    protected void generateProjectExperiment(MarkupBuilder markupBuilder, ProjectExperiment projectExperiment) {
+        markupBuilder.projectExperiment(projectExperimentId: projectExperiment.id) {
+            Experiment experiment = projectExperiment.experiment
+            experimentRef(label: experiment.experimentName) {
+                Map map = [
+                        mapping: 'experiment',
+                        absolute: true,
+                        rel: 'related',
+                        mediaType: this.mediaTypesDTO.experimentMediaType,
+                        params: [id: experiment.id]
+                ]
+                generateLink(map, markupBuilder, this.grailsLinkGenerator)
+            }
+            Element stage = projectExperiment.stage
+            if (projectExperiment.stage) {
+                stageRef(label: stage.label) {
+                    Map map = [
+                            mapping: 'element',
+                            absolute: true,
+                            rel: 'related',
+                            mediaType: this.mediaTypesDTO.elementMediaType,
+                            params: [id: stage.id]
+                    ]
+                    generateLink(map, markupBuilder, this.grailsLinkGenerator)
+                }
+            }
+            generateProjectExperimentContexts(markupBuilder, projectExperiment.projectExperimentContexts)
+        }
+    }
+
+    protected void generateProjectExperimentContexts(MarkupBuilder markupBuilder, List<ProjectExperimentContext> projectExperimentContexts) {
+        if (projectExperimentContexts) {
+            markupBuilder.contexts() {
+                for (ProjectExperimentContext projectExperimentContext : projectExperimentContexts) {
+                    generateProjectExperimentContext(markupBuilder, projectExperimentContext)
+                }
+            }
+        }
+    }
+
+    protected void generateProjectExperimentContext(MarkupBuilder markupBuilder, ProjectExperimentContext projectExperimentContext) {
+        Map attributes = ['id': projectExperimentContext.id,
+                'displayOrder': projectExperimentContext.projectExperiment.projectExperimentContexts.indexOf(projectExperimentContext)]
+        markupBuilder.context(attributes) {
+            //TODO: AssayContext uses preferred Name. Is it something we should do?
+            addContextInformation(markupBuilder, projectExperimentContext)
+            generateProjectExperimentContextItems(markupBuilder, projectExperimentContext.contextItems)
+        }
+    }
+
+    protected void generateProjectExperimentContextItems(MarkupBuilder markupBuilder, List<ProjectExperimentContextItem> projectExperimentContextItems) {
+        if (projectExperimentContextItems) {
+            markupBuilder.contextItems() {
+                for (ProjectExperimentContextItem projectExperimentContextItem : projectExperimentContextItems) {
+                    generateProjectExperimentContextItem(markupBuilder, projectExperimentContextItem)
+                }
+            }
+        }
+    }
+
+    protected void generateProjectExperimentContextItem(MarkupBuilder markupBuilder, ProjectExperimentContextItem projectExperimentContextItem) {
+        generateContextItem(
+                markupBuilder,
+                projectExperimentContextItem,
+                null,
+                "contextItem",
+                this.mediaTypesDTO.elementMediaType,
+                grailsLinkGenerator,
+                projectExperimentContextItem.id,
+                projectExperimentContextItem.context.contextItems.indexOf(projectExperimentContextItem))
     }
 }

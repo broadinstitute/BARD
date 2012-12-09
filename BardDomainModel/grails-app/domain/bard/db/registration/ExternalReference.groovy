@@ -18,21 +18,6 @@ class ExternalReference implements Serializable {
     Date lastUpdated
     String modifiedBy
 
-    int hashCode() {
-        def builder = new HashCodeBuilder()
-        builder.append externalSystem
-        builder.append extAssayRef
-        builder.toHashCode()
-    }
-
-    boolean equals(other) {
-        if (other == null) return false
-        def builder = new EqualsBuilder()
-        builder.append externalSystem, other.externalSystem
-        builder.append extAssayRef, other.extAssayRef
-        builder.isEquals()
-    }
-
     static belongsTo = [project:Project, experiment:Experiment]
 
     static mapping = {

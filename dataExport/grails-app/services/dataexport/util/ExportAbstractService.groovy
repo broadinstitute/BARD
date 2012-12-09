@@ -20,7 +20,7 @@ class ExportAbstractService {
             generateLink(
                     [
                             mapping: 'externalReference',
-                            absolute: true, rel: 'related',
+                            absolute: true, rel: 'item',
                             mediaType: mediaTypesDTO.externalReferenceMediaType,
                             params: [id: externalReference.id]
                     ],
@@ -109,8 +109,7 @@ class ExportAbstractService {
 
     protected Map<String, String> createAttributesForContextItem(AbstractContextItem contextItem, String attributeType, Long contextItemId, String resourceName, int displayOrder) {
         final Map<String, String> attributes = [:]
-        final String idName = resourceName + "Id"
-        attributes.put(idName, contextItemId.toString())
+        attributes.put('id', contextItemId.toString())
         attributes.put('displayOrder', displayOrder.toString())
         if(attributeType){
             attributes.put('attributeType',attributeType)
