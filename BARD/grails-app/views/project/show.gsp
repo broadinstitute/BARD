@@ -10,7 +10,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <r:require modules="core,bootstrap, assayshow"/>
+    <r:require modules="core,bootstrap, assayshow,projectstep"/>
     <meta name="layout" content="basic"/>
     <link rel="stylesheet" href="${resource(dir: 'css', file: 'card.css')}" type="text/css">
     <link rel="stylesheet" href="${resource(dir: 'css', file: 'bootstrap-plus.css')}" type="text/css">
@@ -61,6 +61,9 @@
 
             <h3><a href="#">Context Items</a></h3>
             <g:render template="../contextItem/show" model="['contexts': instance.contexts]"/>
+
+            <h3><a href="#">Experiments and steps</a></h3>
+            <g:render template="showstep" model="['experiments': instance.projectExperiments, 'pegraph': pexperiment]"/>
         </div>
     </div>
 </g:if>

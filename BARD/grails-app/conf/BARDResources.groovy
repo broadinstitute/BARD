@@ -31,6 +31,9 @@ modules = {
 	assayshow {
 		resource url: '/js/cap/assay.show.js'
 	}
+    projectstep {
+        resource url: '/js/projectstep/arbor.js'
+    }
 	images {
 	}
 }

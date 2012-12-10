@@ -1,10 +1,8 @@
 package bard.db.project
 
-import bard.db.enums.ReadyForExtraction
-import bard.db.registration.ExternalReference
-
 class ProjectController {
     static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
+    ProjectExperimentRenderService projectExperimentRenderService
 
     def show() {
         def projectInstance = Project.get(params.id)
@@ -12,7 +10,14 @@ class ProjectController {
             flash.message = message(code: 'default.not.found.message', args: [message(code: 'project.label', default: 'Project'), params.id])
             return
         }
-        [instance: projectInstance]
+        [instance: projectInstance, pexperiment:projectExperimentRenderService.contructGraph(projectInstance)]
+    }
+
+    // TODO: use ajax call to get graph
+    def ajaxPexpriments() {
+        def projectid = params['projectid']
+        def projectInstance = Project.get(params.id)
+        projectExperimentRenderService.contructGraph(projectInstance)
     }
 }
 
