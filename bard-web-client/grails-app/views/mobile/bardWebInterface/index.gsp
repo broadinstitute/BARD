@@ -21,6 +21,9 @@
                 var searchString = $("#searchString").val();
                 handleMainFormSubmit(searchString);
             });
+
+//          Hnadle the proble-list ajax-updating
+            handleSearch('/bardwebclient/bardWebInterface/showProbeList', '', 'probeListTab', 'totalCompounds', 'Probes ', 'probeListDiv');
         });
 
         $(document).on('search.complete', function () {
@@ -30,10 +33,11 @@
             adjustStructureThumbnailSize()
         });
 
+        //      We need that to adjust the size of the structure image dynamically based on the screen size
         function adjustStructureThumbnailSize() {
             var w = Math.round(window.innerWidth / 3);
             var width = (w > 180) ? 180 : w;
-            var height = Math.round(width * 5/6);
+            var height = Math.round(width * 5 / 6);
             $('#structureThumbnail').attr('width', width).attr('height', height);
         }
     </r:script>
@@ -47,7 +51,7 @@
 
 <body>
 
-<div data-role="page" id="search">
+<div data-role="page" id="home">
     <div>
         <g:render template="/layouts/templates/mobileLoginStrip"/>
     </div>
@@ -58,31 +62,19 @@
                  alt="BioAssay Research Database"/>
         </a>
 
-        <g:form name="searchForm" controller="bardWebInterface" action="search" id="searchForm" data-ajax="false">
-            <div data-role="fieldcontain">
-                <label for="searchString">Search BARD:</label>
-                <input type="search" name="searchString" id="searchString"
-                       value="${flash.searchString ?: params?.searchString}"/>
-            </div>
+        <p><br></p>
 
-        %{--<button value="Search" name="search" id="searchButton" data-theme="b" type="submit" class="ui-btn-hidden"--}%
-        %{--aria-disabled="false" data-inline="true" data-theme="b">Submit</button>--}%
+        <p><a href="#probeList" data-role="button" data-icon="arrow-r" data-iconpos="right" data-transition="slide"
+              id="probeListTab">Probes (0)</a></p>
 
-            <a id="searchButton" data-inline="true" data-transition="slide" data-role="button" href="#searchResults"
-               data-corners="true"
-               data-shadow="true" data-iconshadow="true" data-wrapperels="span" data-theme="b"
-               class="ui-btn ui-shadow ui-btn-corner-all ui-btn-inline ui-btn-up-b"><span
-                    class="ui-btn-inner ui-btn-corner-all"><span class="ui-btn-text">Submit</span></span></a>
-        </g:form>
-        <div>
-            <g:link controller="bardWebInterface" action="turnoffMobileExperience" data-ajax="false">
-                <g:message code="mobile.disable.experience" default="Switch to the regular website"/>
-            </g:link>
-        </div>
-    </div><!-- /content -->
-</div><!-- /page -->
 
-<g:render template="/mobile/bardWebInterface/searchResults"/>
+        <p><a href="#search" data-role="button" data-icon="arrow-r" data-iconpos="right" data-transition="slide"
+              id="searchTab">Search BARD</a></p>
+    </div>
+</div>
+
+<g:render template="/mobile/bardWebInterface/search"/>
+<g:render template="/mobile/bardWebInterface/probeList"/>
 
 <r:layoutResources/>
 </body>

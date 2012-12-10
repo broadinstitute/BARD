@@ -2,9 +2,9 @@
 <%@ page import="grails.converters.JSON" %>
 <g:hiddenField name="totalCompounds" id="totalCompounds" value="${nhits}"/>
 
-<div data-role="header">
-    <h1>Compounds</h1>
-</div><!-- /header -->
+%{--<div data-role="header">--}%
+    %{--<h1>Compounds</h1>--}%
+%{--</div><!-- /header -->--}%
 
 
 <div data-role="content">
@@ -65,5 +65,3 @@
         <div class="tab-message">No search results found</div>
     </g:else>
 </div>
-
-<p><a href="#searchResults" data-role="button" data-inline="true" data-icon="back" data-transition="none">Back</a></p>
