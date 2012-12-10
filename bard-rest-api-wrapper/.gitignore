@@ -1,9 +1,8 @@
-/build
-out/
 build/
-.idea/**.*
-.idea
-.idea/workspace.xml
+target
+out/
+/.idea
+/.idea/workspace.xml
 /.clover
 *.war
 *.iws
@@ -31,5 +30,3 @@ testChar*.*
 testDRC*.*
 emacs-*.*.*
 **/cloverlicense/*.*
-build
-target
