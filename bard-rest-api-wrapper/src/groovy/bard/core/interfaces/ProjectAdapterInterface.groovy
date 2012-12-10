@@ -6,6 +6,7 @@ import bard.core.Value
 
 public interface ProjectAdapterInterface {
 
+    public String getHighlight();
 
     public Long getId();
 

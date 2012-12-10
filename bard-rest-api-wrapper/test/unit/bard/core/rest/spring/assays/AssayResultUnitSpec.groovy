@@ -98,8 +98,10 @@ class AssayResultUnitSpec extends Specification {
         when:
         final AssayResult assayResult = objectMapper.readValue(ASSAY_FREE_TEXT, AssayResult.class)
         then:
+        assert assayResult.getMatchingField("770").name == "name"
+        assert assayResult.getScore("770") == 3.0651672
         assert assayResult.getAssayDocs() == assayResult.getAssays()
-        for(Assay assay : assayResult.getAssayDocs()){
+        for (Assay assay : assayResult.getAssayDocs()) {
             assert assay.id
         }
     }

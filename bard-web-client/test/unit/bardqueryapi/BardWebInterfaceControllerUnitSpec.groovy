@@ -149,7 +149,6 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
         then:
         _ * this.queryService.findPromiscuityScoreForCID(_) >> {throw new HttpException("Error Message")}
         assert response.status == HttpServletResponse.SC_BAD_REQUEST
-        assert flash.message == "Could not get promiscuity score for ${cid}"
     }
 
     void "test promiscuity action with status code 404"() {
@@ -823,7 +822,7 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
         final Assay assay = new Assay()
         assay.setName(name)
         assay.setAssayId(adid)
-        return new AssayAdapter(assay)
+        return new AssayAdapter(assay, 0, null)
     }
 
     ProjectAdapter buildProjectAdapter(final Long pid, final String name) {

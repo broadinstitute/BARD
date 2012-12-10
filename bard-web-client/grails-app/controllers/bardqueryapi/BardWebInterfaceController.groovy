@@ -70,24 +70,27 @@ class BardWebInterfaceController {
         try {
             if (id) {
                 Map<String, Integer> searchParams = handleSearchParams()
-                final int top = searchParams.top
-                final int skip = searchParams.skip
+                final Integer top = searchParams.top
+                final Integer skip = searchParams.skip
                 final Map experimentDataMap = molecularSpreadSheetService.findExperimentDataById(id, top, skip)
                 if (experimentDataMap) {
                     render(template: 'experimentResult', model: [experimentDataMap: experimentDataMap, searchString: params.searchString])
                 } else {
                     flash.message = "Experiment ID ${id} not found"
+                    log.error(flash.message)
                     return response.sendError(HttpServletResponse.SC_NOT_FOUND,
                             "${flash.message}")
                 }
             } else {
                 flash.message = 'ID is a required Field'
+                log.error(flash.message)
                 return response.sendError(HttpServletResponse.SC_BAD_REQUEST,
                         "${flash.message}")
             }
         } catch (Exception ee) {
-            log.error(ee)
+
             flash.message = "Problem finding Experiment ${id}"
+            log.error(flash.message, ee)
             return response.sendError(HttpServletResponse.SC_NOT_FOUND,
                     "${flash.message}")
         }
@@ -106,17 +109,19 @@ class BardWebInterfaceController {
                     render(template: 'promiscuity', model: [scaffolds: promiscuityScore.scaffolds])
                 }
                 else { //status code of NOT OK returned. Usually CID has no promiscuity score
+                    log.error(results.message)
                     return response.sendError(results.status,
                             "${results.message}")
                 }
             } catch (Exception ee) { //error is thrown
-                log.error(ee)
-                flash.message = "Could not get promiscuity score for ${cid}"
+                String errorMessage = "Could not get promiscuity score for ${cid}"
+                log.error(errorMessage)
                 return response.sendError(HttpServletResponse.SC_BAD_REQUEST,
-                        "${flash.message}")
+                        "${errorMessage}")
             }
         } else {
-            flash.message = "A valid CID is required"
+            flash.message = "A valid CID is required for promiscuity score"
+            log.error(flash.message)
             return response.sendError(HttpServletResponse.SC_BAD_REQUEST,
                     "${flash.message}")
 
@@ -169,6 +174,7 @@ class BardWebInterfaceController {
             }
         } else {
             flash.message = 'Search String is required'
+            log.error(flash.message)
             return response.sendError(HttpServletResponse.SC_BAD_REQUEST,
                     "Search String is required")
         }
@@ -214,6 +220,7 @@ class BardWebInterfaceController {
             }
         } else {
             flash.message = 'Search String is required'
+            log.error(flash.message)
             return response.sendError(HttpServletResponse.SC_BAD_REQUEST,
                     "Search String is required")
         }
@@ -250,12 +257,13 @@ class BardWebInterfaceController {
                         appliedFilters: getAppliedFilters(searchFilters, projectAdapterMap.facets)])
             }
             catch (Exception exp) {
-                log.error(exp)
+                log.error('Error while searching project by ids : ' + searchCommand.searchString, exp)
                 return response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR.intValue(),
                         "ProjectSearchResult search has encountered an error:\n${exp.message}")
             }
         } else {
-            flash.message = 'Search String is required'
+            flash.message = 'Search String is required for project search by Ids'
+            log.error(flash.message)
             return response.sendError(HttpServletResponse.SC_BAD_REQUEST,
                     "Search String is required")
 
@@ -279,13 +287,16 @@ class BardWebInterfaceController {
                 }
             }
             flash.message = "Search String is required, must be of the form StructureSearchType:Smiles"
+            log.error(flash.message)
             response.sendError(HttpServletResponse.SC_BAD_REQUEST,
                     "${flash.message}")
         }
         catch (Exception exp) {
-            log.error(exp)
+
+            final String errorMessage = "Structure search has encountered an error:\n${exp.message}"
+            log.error(errorMessage, exp)
             response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR.intValue(),
-                    "Structure search has encountered an error:\n${exp.message}")
+                    errorMessage)
         }
     }
     //============================================ Show Pages ===================================================================
@@ -306,14 +317,16 @@ class BardWebInterfaceController {
             else {
                 final String message = "Could not find Compound Id ${cid}"
                 flash.message = message
+                log.error(message)
                 return response.sendError(HttpServletResponse.SC_NOT_FOUND,
                         message)
             }
         }
         catch (Exception exp) {
-            log.error(exp)
+            final String errorMessage = "Show compound page has encountered an error:\n${exp.message}"
+            log.error(errorMessage, exp)
             return response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR.intValue(),
-                    "Structure search has encountered an error:\n${exp.message}")
+                    errorMessage)
         }
     }
     /**
@@ -336,14 +349,15 @@ class BardWebInterfaceController {
             else {
                 final String message = "Could not find Assay Id ${assayId}"
                 flash.message = message
+                log.error(message)
                 return response.sendError(HttpServletResponse.SC_NOT_FOUND,
                         message)
             }
         }
         catch (Exception exp) {
-            log.error(exp)
-            return response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR.intValue(),
-                    "Search For Assay Id ${assayId}:\n${exp.message}")
+            final String errorMessage = "Search For Assay Id ${assayId}:\n${exp.message}"
+            log.error(errorMessage, exp)
+            return response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR.intValue(), errorMessage)
         }
     }
 
@@ -357,17 +371,17 @@ class BardWebInterfaceController {
                         searchString: params.searchString])
             }
             else {
-                final String message = "Could not find ProjectSearchResult Id ${projectId}"
+                final String message = "Could not find Project Id ${projectId}"
                 flash.message = message
-                return response.sendError(HttpServletResponse.SC_NOT_FOUND,
-                        message)
+                log.error(message)
+                return response.sendError(HttpServletResponse.SC_NOT_FOUND, message)
 
             }
         }
         catch (Exception exp) {
-            log.error(exp)
-            return response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR.intValue(),
-                    "Search For ProjectSearchResult Id ${projectId}:\n${exp.message}")
+            final String errorMessage = "Search For Project By Id ${projectId}:\n${exp.message}"
+            log.error(errorMessage, exp)
+            return response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR.intValue(), errorMessage)
         }
     }
 
@@ -409,9 +423,10 @@ class BardWebInterfaceController {
             }
         }
         catch (Exception exp) {
-            log.error(exp)
+            final String errorMessage = "AutoComplete encoutered an error :\n${exp.message}"
+            log.error(errorMessage, exp)
             return response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR.intValue(),
-                    "AutoComplete encoutered an error :\n${exp.message}")
+                    errorMessage)
         }
     }
 
@@ -444,8 +459,10 @@ class SearchHelper {
 
     Map handleStructureSearch(final bardqueryapi.IQueryService queryService, final SearchCommand searchCommand) {
         Map structureSearchResultsMap = [:]
-        params.max = 50
-        params.offset = 0
+        Map<String, Integer> searchParams = handleSearchParams()
+        final Integer top = searchParams.top
+        final Integer skip = searchParams.skip
+
         removeDuplicatesFromSearchString(searchCommand)
         final String[] searchStringSplit = searchCommand.searchString.split(":")
         if (searchStringSplit.length == 2) {
@@ -456,7 +473,7 @@ class SearchHelper {
             final String smiles = searchStringSplit[1]
             //we make the first character capitalized to match the ENUM
             final StructureSearchParams.Type searchType = searchTypeString.toLowerCase().capitalize() as StructureSearchParams.Type
-            Map compoundAdapterMap = queryService.structureSearch(smiles, searchType, searchFilters, 50, 0)
+            Map compoundAdapterMap = queryService.structureSearch(smiles, searchType, searchFilters, top, skip)
             List<CompoundAdapter> compoundAdapters = compoundAdapterMap.compoundAdapters
             structureSearchResultsMap = [
                     compoundAdapters: compoundAdapters,
@@ -531,9 +548,10 @@ class SearchHelper {
                         "Compound search has encountered an error:\n${exp.message}")
             }
         } else {
-            log.error('Search String required for Compound Searches')
+            final String errorMessage = 'Search String required for Compound Searches'
+            log.error(errorMessage)
             return response.sendError(HttpServletResponse.SC_BAD_REQUEST,
-                    "Search String required cor Compound Searches")
+                    errorMessage)
         }
 
     }

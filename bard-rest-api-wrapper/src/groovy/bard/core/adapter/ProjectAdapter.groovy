@@ -8,17 +8,37 @@ import bard.core.interfaces.EntityNamedSources
 import bard.core.rest.spring.compounds.Compound
 import bard.core.rest.spring.project.Project
 import bard.core.interfaces.ProjectAdapterInterface
+import bard.core.rest.spring.util.NameDescription
 
-//TODO: All of the adapters should be deprecated soon. We should be able to use the
-//TODO: the objects directly
+
 public class ProjectAdapter implements ProjectAdapterInterface {
     final Project project
+    final Double score
+    final NameDescription matchingField
 
-
-    public ProjectAdapter(Project project) {
+    public ProjectAdapter(Project project, Double score=0, NameDescription nameDescription=null) {
         this.project = project
+        this.score = score
+        this.matchingField = nameDescription
     }
 
+    @Override
+    String getHighlight() {
+        String matchFieldName = getMatchingField()?.getName()
+        if(matchFieldName){
+            //TODO: Talk to Steve about formating
+            return "Score: " + this.getScore() + " Matched Field: " + matchFieldName
+        }
+        return ""
+
+    }
+    public Double getScore() {
+        return score
+    }
+
+    public NameDescription getMatchingField() {
+        return matchingField
+    }
 
     public Long getId() {
         return project.projectId

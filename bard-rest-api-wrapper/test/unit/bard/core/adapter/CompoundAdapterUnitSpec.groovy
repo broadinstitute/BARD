@@ -5,6 +5,7 @@ import spock.lang.Specification
 import spock.lang.Unroll
 import spock.lang.Shared
 import com.fasterxml.jackson.databind.ObjectMapper
+import bard.core.rest.spring.util.NameDescription
 
 @Unroll
 class CompoundAdapterUnitSpec extends Specification {
@@ -42,7 +43,7 @@ class CompoundAdapterUnitSpec extends Specification {
         final Compound compound = objectMapper.readValue(COMPOUND_EXPANDED, Compound.class)
 
         when:
-        final CompoundAdapter compoundAdapter = new CompoundAdapter(compound)
+        final CompoundAdapter compoundAdapter = new CompoundAdapter(compound, new Double("2"), new NameDescription(name: "name", description: "description"))
         then:
         assert compoundAdapter.isDrug()
         assert !compoundAdapter.getProbeId()
@@ -72,7 +73,17 @@ class CompoundAdapterUnitSpec extends Specification {
         assert compoundAdapter.resourcePath() == "/compounds/2722"
         assert !compoundAdapter.getStructureNative()
         assert !compoundAdapter.formula()
+        assert compoundAdapter.matchingField.name=="name"
+        assert compoundAdapter.matchingField.description=="description"
+        assert compoundAdapter.score==2
+        assert compoundAdapter.highlight == "Score: 2.0 Matched Field: name"
 
+    }
+    void "test compound Adapter with no highlight field"() {
+        when:
+        final CompoundAdapter compoundAdapter = new CompoundAdapter(new Compound())
+        then:
+        assert !compoundAdapter.highlight
 
     }
 }

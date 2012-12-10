@@ -47,7 +47,13 @@ class MetaDataUnitSpec extends Specification {
     void tearDown() {
         // Tear down logic here
     }
-
+   void "test MetaData optional Fields"(){
+       when:
+       MetaData metaData = new MetaData()
+       then:
+       assert metaData.getScore("Some Key") == 0.0
+       assert metaData.getMatchingField("Some Key") ==null
+   }
     void "test serialize json to metadata"() {
         when:
         MetaData metaData = objectMapper.readValue(METADATA_NODE, MetaData.class)
@@ -70,6 +76,9 @@ class MetaDataUnitSpec extends Specification {
         assert facet.toString()
         assert facet.toValue()
         assert metaData.facetsToValues()
+        assert metaData.getScore("770") ==2.1923265
+        final String name = metaData.getMatchingField("781").getName()
+        assert (name == "description") || (name == "name")
     }
 
 }

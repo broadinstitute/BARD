@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.annotation.JsonProperty
 
 import bard.core.rest.spring.util.SearchResult
+import bard.core.rest.spring.util.NameDescription
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class AssayResult extends SearchResult {
@@ -33,4 +34,6 @@ public class AssayResult extends SearchResult {
     public void setAssayDocs(List<Assay> assays) {
         this.assays = assays;
     }
+
+
 }

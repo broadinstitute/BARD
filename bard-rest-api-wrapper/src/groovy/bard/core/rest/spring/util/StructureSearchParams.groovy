@@ -49,7 +49,17 @@ class StructureSearchParams extends SearchParams {
     public StructureSearchParams() {
        super()
     }
-
+   public StructureSearchParams(final StructureSearchParams structureSearchParams){
+       super()
+       this.threshold = structureSearchParams.threshold
+       this.query = structureSearchParams.query
+       this.type = structureSearchParams.type
+       this.skip = structureSearchParams.skip
+       this.top = structureSearchParams.top
+       this.method = structureSearchParams.method
+       this.metric = structureSearchParams.metric
+       this.filters = structureSearchParams.filters //filters are not cloned
+   }
     public StructureSearchParams(String query) {
         this(query, Type.Substructure);
     }

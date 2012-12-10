@@ -14,24 +14,32 @@ class ChemAxonController {
     }
 
     def generateStructureImageFromSmiles(String smiles, Integer width, Integer height) {
-        byte[] bytes = []
-        Integer w = (width ?: 300) as Integer
-        Integer h = (height ?: 300) as Integer
+        try {
+            byte[] bytes = []
+            Integer w = (width ?: 300) as Integer
+            Integer h = (height ?: 300) as Integer
 
-        if (smiles) {
-            bytes = chemAxonService.generateStructurePNG(smiles, w, h)
+            if (smiles) {
+                bytes = chemAxonService.generateStructurePNG(smiles, w, h)
+            }
+
+            response.contentType = 'image/png'
+            response.outputStream.setBytes(bytes)
+        } catch (Exception ee) {
+            log.error("Could not generate structure for smiles : ${smiles}", ee)
         }
-
-        response.contentType = 'image/png'
-        response.outputStream.setBytes(bytes)
     }
 
 
     def generateStructureImageFromCID(Long cid, Integer width, Integer height) {
-        CompoundAdapter compoundAdapter = cid ? this.queryService.showCompound(cid) : null
-        if (compoundAdapter) {
-            String smiles = compoundAdapter.structureSMILES
-            generateStructureImageFromSmiles(smiles, width, height)
+        try {
+            CompoundAdapter compoundAdapter = cid ? this.queryService.showCompound(cid) : null
+            if (compoundAdapter) {
+                String smiles = compoundAdapter.structureSMILES
+                generateStructureImageFromSmiles(smiles, width, height)
+            }
+        } catch (Exception ee) {
+            log.error("Could not generate structure for cid : ${cid}", ee)
         }
     }
 

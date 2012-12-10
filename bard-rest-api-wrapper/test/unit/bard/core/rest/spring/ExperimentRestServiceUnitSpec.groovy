@@ -22,6 +22,34 @@ class ExperimentRestServiceUnitSpec extends Specification {
         service.baseUrl = "http://ncgc"
     }
 
+    void "activities with no ETag"() {
+        given:
+        final Long experimentId = new Long("2")
+        final String etag = null
+        final Integer top = 10
+        final Integer skip = 0
+        when:
+        final ExperimentData experimentData = service.activities(experimentId, etag, top, skip)
+        then:
+        this.restTemplate.getForObject(_, _) >> {new ExperimentData()}
+        assert experimentData
+
+    }
+
+    void "activities with ETag"() {
+        given:
+        final Long experimentId = new Long("2")
+        final String etag = "etag"
+        final Integer top = 10
+        final Integer skip = 0
+        when:
+        final ExperimentData experimentData = service.activities(experimentId, etag, top, skip)
+        then:
+        this.restTemplate.getForObject(_, _) >> {[new Activity()]}
+        assert experimentData
+
+    }
+
     void "getResourceContext"() {
         when:
         String resourceContext = service.getResourceContext()
@@ -99,7 +127,7 @@ class ExperimentRestServiceUnitSpec extends Specification {
         final Long experimentId = 200
         final ExperimentSearch experimentSearch = new ExperimentSearch(exptId: experimentId)
         when:
-        ExperimentData experimentData = service.activities(experimentSearch)
+        ExperimentData experimentData = service.activities(experimentSearch.id)
         then:
         this.restTemplate.getForObject(_, _) >> {new ExperimentData(activities: [new Activity()])}
         assert experimentData
@@ -125,13 +153,27 @@ class ExperimentRestServiceUnitSpec extends Specification {
     void "buildExperimentQuery #label"() {
 
         when:
-        String url = service.buildExperimentQuery(experimentId, etag, skip, top)
+        String url = service.buildExperimentQuery(experimentId, etag, top, skip)
         then:
         assert url == expectedURL
         where:
-        label       | experimentId | skip | top | etag   | expectedURL
-        "With ETag" | 2            | 0    | 10  | "etag" | "http://ncgc/experiments/2/etag/etag/exptdata?skip=10&top=0&expand=true"
-        "No ETag"   | 2            | 0    | 10  | null   | "http://ncgc/experiments/2/exptdata?skip=10&top=0&expand=true"
+        label                  | experimentId | skip | top | etag   | expectedURL
+        "With ETag"            | 2            | 0    | 10  | "etag" | "http://ncgc/experiments/2/etag/etag/exptdata?skip=0&top=10&expand=true"
+        "No ETag"              | 2            | 0    | 10  | null   | "http://ncgc/experiments/2/exptdata?skip=0&top=10&expand=true"
+        "No ETag, Top is zero" | 2            | 0    | 0   | null   | "http://ncgc/experiments/2/exptdata?expand=true"
+    }
+
+    void "getResourceCount with SearchParams #label"() {
+        when:
+        int count = service.getResourceCount(searchParams)
+        then:
+        this.restTemplate.getForObject(_, _) >> {"2"}
+        assert count == 2
+        where:
+        label       | searchParams
+        "Top == 10" | new SearchParams(top: 10, skip: 0)
+        "Top == 0"  | new SearchParams()
+
     }
 
     void "buildQueryForCollectionOfETags"() {
@@ -147,7 +189,7 @@ class ExperimentRestServiceUnitSpec extends Specification {
         when:
         String url = service.buildETagQuery(etag)
         then:
-        assert url == "etag/AB100ET/facets"
+        assert url == "etag/AB100ET"
     }
 
     void "addTopAndSkip default skip and top #label"() {

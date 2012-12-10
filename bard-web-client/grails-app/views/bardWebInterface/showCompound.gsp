@@ -91,8 +91,8 @@
             <dd>${compound.definedStereo()}</dd>
             <dt>Stereocenters:</dt>
             <dd>${compound.stereocenters()}</dd>
-            <dt>Is 'rule of 5' compliant:</dt>
-            <dd>${compound.ruleOf5() ? 'Yes' : 'No'}</dd>
+            %{--<dt>Is 'rule of 5' compliant:</dt>--}%
+            %{--<dd>${compound.ruleOf5() ? 'Yes' : 'No'}</dd>--}%
         </dl>
     </div>
 

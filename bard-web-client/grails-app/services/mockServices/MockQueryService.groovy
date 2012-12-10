@@ -386,6 +386,11 @@ class MockAssayAdapter implements AssayAdapterInterface {
     String source
     Long aid
 
+    @Override
+    String getHighlight() {
+        return "Score: 2.0, Matched Field: Name"
+    }
+
     MockAssayAdapter() {
         super()
     }
@@ -497,6 +502,11 @@ class MockProjectAdapter implements ProjectAdapterInterface {
     String labName
     Integer numExperiments
     Collection<Value> annotations = []
+
+    @Override
+    String getHighlight() {
+        return "Score: 2.0, Matched Field: Name"
+    }
 
     @Override
     Long getId() {
@@ -674,5 +684,10 @@ class MockCompoundAdapter implements CompoundAdapterInterface {
     @Override
     Long getId() {
         return this.id ?: pubChemCID ?: 2  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
+    String getHighlight() {
+        return "Score: 2.0, Matched Field: Name"
     }
 }

@@ -17,18 +17,29 @@ class SpreadSheetActivity {
     ActivityOutcome activityOutcome = ActivityOutcome.UNSPECIFIED
     List<HillCurveValue> hillCurveValueList = []
 
-    public void activityToSpreadSheetActivity(Activity activity, final List<String> resultTypeNames) {
+    public void activityToSpreadSheetActivity(final Activity activity, final List<String> resultTypeNames) {
         this.cid = activity.cid
         this.eid = activity.eid
         this.sid = activity.sid
+        this.addPotency(activity)
+        this.addOutCome(activity)
+        final List<Readout> readouts = activity.readouts
+        readOutsToHillCurveValues(readouts, resultTypeNames)
+    }
 
-        if (activity.potency != null) {
+    void addPotency(final Activity activity) {
+        if (activity.potency) {
             this.potency = new Double(activity.potency)
         }
+    }
+
+    void addOutCome(final Activity activity) {
         if (activity.outcome != null) {
             this.activityOutcome = ActivityOutcome.findActivityOutcome(activity.outcome.intValue())
         }
-        final List<Readout> readouts = activity.readouts
+    }
+
+    void readOutsToHillCurveValues(final List<Readout> readouts, final List<String> resultTypeNames) {
         if (readouts) {
             for (Readout readout : readouts) {
                 readOutToHillCurveValue(resultTypeNames, readout)
@@ -38,6 +49,7 @@ class SpreadSheetActivity {
 
     void readOutToHillCurveValue(final List<String> resultTypeNames, final Readout readout) {
         final HillCurveValue hillCurveValue = readout.toHillCurveValue()
+
         if (!resultTypeNames.contains(hillCurveValue.id)) {
             resultTypeNames.add(hillCurveValue.id)
         }

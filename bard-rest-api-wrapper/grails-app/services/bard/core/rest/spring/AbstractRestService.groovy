@@ -38,7 +38,7 @@ abstract class AbstractRestService {
                 append(RestApiConstants.TOP).append(params.getNumSuggestion()).toString();
     }
 
-    String buildExperimentQuery(final Long experimentId, final String etag, final long top, final long skip) {
+    String buildExperimentQuery(final Long experimentId, final String etag, final Integer top, final Integer skip) {
         final StringBuilder resource = new StringBuilder(getResource(experimentId.toString()));
 
         if (etag) {
@@ -48,13 +48,15 @@ abstract class AbstractRestService {
                     append(etag);
         }
         resource.append(RestApiConstants.EXPTDATA_RESOURCE).
-                append(RestApiConstants.QUESTION_MARK).
-                append(RestApiConstants.SKIP).
-                append(skip).
-                append(RestApiConstants.TOP).
-                append(top).
-                append(RestApiConstants.AMPERSAND).
-                append(RestApiConstants.EXPAND_TRUE);
+                append(RestApiConstants.QUESTION_MARK);
+        if (top) {
+            resource.append(RestApiConstants.SKIP).
+                    append(skip).
+                    append(RestApiConstants.TOP).
+                    append(top).
+                    append(RestApiConstants.AMPERSAND)
+        }
+        resource.append(RestApiConstants.EXPAND_TRUE);
         return resource.toString();
     }
 
@@ -84,8 +86,6 @@ abstract class AbstractRestService {
         return new StringBuilder(RestApiConstants.ETAG).
                 append(RestApiConstants.FORWARD_SLASH).
                 append(etag).
-                append(RestApiConstants.FORWARD_SLASH).
-                append(RestApiConstants.FACETS).
                 toString();
     }
 
@@ -254,7 +254,8 @@ abstract class AbstractRestService {
 
 
     public List<Facet> getFacetsByETag(String etag) {
-        final String resource = buildETagQuery(etag);
+        final String resource = buildETagQuery(etag) + RestApiConstants.FORWARD_SLASH + RestApiConstants.FACETS
+
         final String urlString = getResource(resource);
         final URL url = new URL(urlString)
         //Using Facte[] to get around issue reported here : https://jira.springsource.org/browse/SPR-7002
@@ -319,12 +320,35 @@ abstract class AbstractRestService {
      */
     public long getResourceCount() {
         final String resource = getResource(RestApiConstants._COUNT);
+        return getResourceCount(resource);
+    }
+    /**
+     * Get a count of entities making up a resource
+     * @return the number of  entities
+     */
+    public long getResourceCount(final String resource) {
+
         final URL url = new URL(resource)
         final String countString = this.restTemplate.getForObject(url.toURI(), String.class)
         Long count = Long.parseLong(countString)
         return count;
     }
-
+    /**
+     * Get a count of entities making up a resource
+     * @return the number of  entities
+     */
+    public long getResourceCount(final SearchParams searchParams) {
+        final StringBuilder resource = new StringBuilder(getResource(RestApiConstants._COUNT));
+        if (searchParams.getTop()) {
+            resource.append(RestApiConstants.QUESTION_MARK);
+            resource.append(RestApiConstants.SKIP).
+                    append(searchParams.getSkip()).
+                    append(RestApiConstants.TOP).
+                    append(searchParams.getTop())
+        }
+        resource.append(buildFilters(searchParams))
+        return getResourceCount(resource.toString())
+    }
     public abstract String getResource();
 
     public abstract String getSearchResource();

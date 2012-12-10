@@ -47,6 +47,8 @@ class CompoundUnitSpec extends Specification {
         assert !compound.getResourcePath()
         assert !compound.getAnno_key()
         assert !compound.getAnno_val()
+        assert compound.isDrug()
+        assert !compound.isProbe()
     }
 
 

@@ -4,10 +4,6 @@ import bard.core.SearchParams
 import bard.core.interfaces.RestApiConstants
 import bard.core.rest.spring.assays.Assay
 import bard.core.rest.spring.assays.AssayResult
-import bard.core.rest.spring.compounds.Compound
-import bard.core.rest.spring.compounds.CompoundAnnotations
-import bard.core.rest.spring.compounds.CompoundResult
-import bard.core.rest.spring.compounds.PromiscuityScore
 import bard.core.rest.spring.experiment.ExperimentSearchResult
 import bard.core.rest.spring.project.ProjectResult
 import bard.core.rest.spring.util.ETag
@@ -19,8 +15,15 @@ import org.springframework.http.HttpMethod
 import org.springframework.util.LinkedMultiValueMap
 import org.springframework.util.MultiValueMap
 
-class CompoundRestService extends AbstractRestService {
+import java.util.concurrent.Callable
+import java.util.concurrent.ExecutorService
+import java.util.concurrent.FutureTask
+import java.util.concurrent.TimeUnit
 
+import bard.core.rest.spring.compounds.*
+
+class CompoundRestService extends AbstractRestService {
+    ExecutorService executorService
 
     public String getResourceContext() {
         return RestApiConstants.COMPOUNDS_RESOURCE;
@@ -73,16 +76,24 @@ class CompoundRestService extends AbstractRestService {
         return url.toString();
 
     }
+
+    protected String buildQueryForCompoundSummary(final Long cid) {
+        StringBuilder url = new StringBuilder();
+        url.append(getResource(cid.toString())).
+                append(RestApiConstants.SUMMARY);
+
+        return url.toString();
+    }
     /**
      * Create a url to do a structure search
      * @param structureSearchParam
      * @return url for structure searches
      */
-    public String buildStructureSearchURL(final StructureSearchParams structureSearchParam) {
+    public String buildStructureSearchURL(StructureSearchParams structureSearchParam, boolean withCount) {
         final StructureSearchParams.Type structureType = structureSearchParam.type
         final Double threshold = structureSearchParam.threshold
         final String query = structureSearchParam.query
-        final String resource = getResource()
+        String resource = withCount ? getResource(RestApiConstants._COUNT) : getResource()
         final StringBuilder url = new StringBuilder();
         try {
             url.append(resource).append(RestApiConstants.FILTER_QUESTION).append(
@@ -132,6 +143,13 @@ class CompoundRestService extends AbstractRestService {
             log.error(message);
             throw new IllegalArgumentException(message);
         }
+    }
+
+    public CompoundSummary getSummaryForCompound(final Long cid) {
+        final String resource = buildQueryForCompoundSummary(cid)
+        final URL url = new URL(resource)
+        final CompoundSummary compoundSummary = this.restTemplate.getForObject(url.toURI(), CompoundSummary.class)
+        return compoundSummary
     }
 
     public List<Assay> getTestedAssays(Long cid, boolean activeOnly) {
@@ -218,6 +236,7 @@ class CompoundRestService extends AbstractRestService {
         final Map map = [cid: cid, expand: "true", mediaType: "XML"]
         final PromiscuityScore promiscuityScore = this.restTemplate.getForObject(url, PromiscuityScore.class, map)
         return promiscuityScore;
+
     }
     /**
      *
@@ -229,58 +248,95 @@ class CompoundRestService extends AbstractRestService {
         final List<String> synonyms = this.restTemplate.getForObject(url, List.class, cid, "true")
         return synonyms;
     }
+    /**
+     * Return the number of records that match this query
+     * @param params
+     * @param withCount
+     * @return
+     */
+
+    def getStructureCount = {StructureSearchParams params ->
+        String resource = buildStructureSearchURL(params, true)
+        return this.getResourceCount(resource)
+    }
+    def doStructureSearch = {StructureSearchParams structureSearchParams, Map<String, Long> etags ->
+        final StructureSearchParams clonedParams = new StructureSearchParams(structureSearchParams)
+
+        if (!clonedParams.getSkip()) {
+            clonedParams.setSkip(0)
+        }
+        if (!clonedParams.getTop()) {
+            clonedParams.setTop(10)
+        }
+        final long skip = clonedParams.getSkip()
+        HttpHeaders requestHeaders = new HttpHeaders();
+        addETagsToHTTPHeader(requestHeaders, etags)
+        HttpEntity<List> entity = new HttpEntity<List>(requestHeaders);
+
+
+        final String structureSearchURL = buildStructureSearchURL(clonedParams, false)
+        final URL url = new URL(structureSearchURL)
+        //We are passing the URI because we have already encoded the string
+        //just passing in the string would cause the URI to be encoded twice
+        //see http://static.springsource.org/spring/docs/3.0.x/javadoc-api/org/springframework/web/client/RestTemplate.html
+        final HttpEntity<List> exchange = restTemplate.exchange(url.toURI(), HttpMethod.GET, entity, List.class);
+        List<Compound> compounds = exchange.getBody()
+        final HttpHeaders headers = exchange.getHeaders()
+        extractETagsFromResponseHeader(headers, skip, etags)
+        CompoundResult compoundSearchResult = new CompoundResult()
+        compoundSearchResult.setCompounds(compounds)
+        compoundSearchResult.setEtags(etags)
+        return compoundSearchResult
+    }
 
     /**
-     *
-     * @param params
-     * @return list of {@link Compound}'s
+     * Handle the tasks after execution
+     * @param results
+     * @return
      */
-    public CompoundResult structureSearch(StructureSearchParams params, final Map<String, Long> etags = [:]) {
+    protected CompoundResult handleFutures(List<FutureTask<Object>> results) {
+        try {
+            //assert that there are 2 objects in the list
+            assert results.size() == 2
 
+            //the first task in the queue is the number of hits
+            final FutureTask<Long> numberHitsFutureTask = (FutureTask<Long>) results.get(0)
+            //we could check if its done, but we can assume it is, otherwise invokeAll would not complete
+            int nhits = numberHitsFutureTask.get().intValue()
 
-        final List<Compound> compoundTemplates = []
-        if (!params.getSkip()) {
-            params.setSkip(0)
-        }
-        if (!params.getTop()) {
-            params.setTop(100)
-        }
-        long top = params.getTop()
-        long skip = params.getSkip()
-
-        int nhits = 0
-        while (true) {
-            HttpHeaders requestHeaders = new HttpHeaders();
-            addETagsToHTTPHeader(requestHeaders, etags)
-            HttpEntity<List> entity = new HttpEntity<List>(requestHeaders);
-
-
-            final String structureSearchURL = buildStructureSearchURL(params)
-            final URL url = new URL(structureSearchURL)
-            //We are passing the URI because we have already encoded the string
-            //just passing in the string would cause the URI to be encoded twice
-            //see http://static.springsource.org/spring/docs/3.0.x/javadoc-api/org/springframework/web/client/RestTemplate.html
-            final HttpEntity<List> exchange = restTemplate.exchange(url.toURI(), HttpMethod.GET, entity, List.class);
-            List<Compound> results = exchange.getBody()
-            compoundTemplates.addAll(results)
-            final HttpHeaders headers = exchange.getHeaders()
-            extractETagsFromResponseHeader(headers, skip, etags)
-            nhits += results.size();
-            if (params.getTop() != null || results.size() < top) {
-                break;
+            //second task is the structure search
+            final FutureTask<CompoundResult> structureResultsTask = (FutureTask<CompoundResult>) results.get(1)
+            final CompoundResult compoundResult = structureResultsTask.get()
+            if (nhits <= 0) {
+                nhits = compoundResult.compounds?.size() ?: 0
             }
-            skip += results.size();
+
+            final MetaData metaData = new MetaData()
+            metaData.nhit = nhits
+            compoundResult.setMetaData(metaData)
+            return compoundResult;
         }
-        if (nhits == 0) {
-            nhits = compoundTemplates.size();
+        catch (Exception e) {
+            log.error("Futures threw an Exception", e)
         }
-        CompoundResult compoundSearchResult = new CompoundResult()
-        compoundSearchResult.setCompounds(compoundTemplates)
-        compoundSearchResult.setEtags(etags)
-        final MetaData metaData = new MetaData()
-        metaData.nhit = nhits
-        compoundSearchResult.setMetaData(metaData)
-        return compoundSearchResult;
+        return null
+    }
+    /*
+    * @param params
+    * @return list of {@link Compound}'s
+    */
+
+    public CompoundResult structureSearch(StructureSearchParams params, final Map<String, Long> etags = [:]) {
+        //first get the number of hits, we  should do this concurrently
+        //TODO: If we already have the number of hits we do not need to get it again
+
+        //prepare task to run concurrently add time out of 50 seconds
+        def tasks = []
+        tasks << (getStructureCount.curry(params) as Callable)
+        tasks << (doStructureSearch.curry(params, etags) as Callable)
+        //we set this to time out in 50 seconds
+        final List<FutureTask<Object>> results = executorService.invokeAll(tasks, 50, TimeUnit.SECONDS)
+        return handleFutures(results)
     }
 
     public ExperimentSearchResult findExperimentsByCID(final Long cid) {
@@ -291,7 +347,7 @@ class CompoundRestService extends AbstractRestService {
                     append(RestApiConstants.QUESTION_MARK).
                     append(RestApiConstants.EXPAND_TRUE)
         final URL url = new URL(resource.toString())
-        ExperimentSearchResult experimentResult = this.restTemplate.getForObject(url.toURI(), ExperimentSearchResult.class)
+        final ExperimentSearchResult experimentResult = this.restTemplate.getForObject(url.toURI(), ExperimentSearchResult.class)
         return experimentResult
 
     }
@@ -304,7 +360,7 @@ class CompoundRestService extends AbstractRestService {
                     append(RestApiConstants.QUESTION_MARK).
                     append(RestApiConstants.EXPAND_TRUE)
         final URL url = new URL(resource.toString())
-        AssayResult assayResult = this.restTemplate.getForObject(url.toURI(), AssayResult.class)
+        final AssayResult assayResult = this.restTemplate.getForObject(url.toURI(), AssayResult.class)
         assayResult
 
     }

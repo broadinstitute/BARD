@@ -13,7 +13,7 @@ public interface RestApiConstants {
     final int MAXIMUM_NUMBER_OF_COMPOUNDS = 500;
     final int MAXIMUM_NUMBER_OF_EXPERIMENTS = 1000;
     final String ANNOTATIONS = "/annotations";
-
+    final String SUBSTANCES_RESOURCE = "/substances";
     //relative path to the experiment resource
     final String EXPERIMENTS_RESOURCE = "/experiments";
     //relative path to the assays resource
@@ -39,6 +39,7 @@ public interface RestApiConstants {
     final String AMPERSAND = "&";
     final String SOLR_QUERY_PARAM_NAME = "q=";
     final String QUESTION_MARK = "?";
+    final String SUMMARY = "/summary";
     final String COLON = ":";
     final String RIGHT_PAREN = ")";
     final String FQ = "fq";

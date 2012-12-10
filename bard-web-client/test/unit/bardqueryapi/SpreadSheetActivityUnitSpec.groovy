@@ -1,5 +1,6 @@
 package bardqueryapi
 
+import bard.core.rest.spring.experiment.Activity
 import bard.core.rest.spring.experiment.Readout
 import molspreadsheet.SpreadSheetActivity
 import spock.lang.Specification
@@ -10,7 +11,14 @@ import spock.lang.Unroll
  */
 @Unroll
 class SpreadSheetActivityUnitSpec extends Specification {
-
+    void "test readOutsToHillCurveValues"() {
+        given:
+        SpreadSheetActivity spreadSheetActivity = new SpreadSheetActivity()
+        when:
+        spreadSheetActivity.readOutsToHillCurveValues([], [])
+        then:
+        assert !spreadSheetActivity.hillCurveValueList
+    }
 
     void "test readOutToHillCurveValue(final List<String> resultTypeNames, final Readout readout)"() {
         given:
@@ -23,4 +31,29 @@ class SpreadSheetActivityUnitSpec extends Specification {
         assert resultTypeNames
     }
 
+    void "test addPotency #label"() {
+        given:
+        SpreadSheetActivity spreadSheetActivity = new SpreadSheetActivity()
+        when:
+        spreadSheetActivity.addPotency(activity)
+        then:
+        assert (spreadSheetActivity.potency != null) == expected
+        where:
+        label             | activity                   | expected
+        "With potency"    | new Activity(potency: "2") | true
+        "Without potency" | new Activity()             | false
+    }
+
+    void "test addOutCome #label"() {
+        given:
+        SpreadSheetActivity spreadSheetActivity = new SpreadSheetActivity()
+        when:
+        spreadSheetActivity.addOutCome(activity)
+        then:
+        assert spreadSheetActivity.activityOutcome == expected
+        where:
+        label             | activity                 | expected
+        "With outcome"    | new Activity(outcome: 2) | ActivityOutcome.ACTIVE
+        "Without outcome" | new Activity()           | ActivityOutcome.UNSPECIFIED
+    }
 }

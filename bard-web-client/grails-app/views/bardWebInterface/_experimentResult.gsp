@@ -6,12 +6,13 @@
   To change this template use File | Settings | File Templates.
 --%>
 
-<%@ page import="results.ExperimentalValue; molspreadsheet.MolSpreadSheetCell; bard.core.interfaces.ExperimentValues" contentType="text/html;charset=UTF-8" %>
+<%@ page import="results.ExperimentalValueType; results.ExperimentalValueUnit; results.ExperimentalValue; molspreadsheet.MolSpreadSheetCell; bard.core.interfaces.ExperimentValues" contentType="text/html;charset=UTF-8" %>
 
 <p><b>Title: ${experimentDataMap?.experiment?.name}</b></p>
 
 <p><b>Assay ID : <g:link controller="bardWebInterface" action="showAssay"
-                         id="${experimentDataMap?.experiment?.adid}" params='[searchString:"${searchString}"]'>${experimentDataMap?.experiment?.adid}</g:link></b>
+                         id="${experimentDataMap?.experiment?.adid}"
+                         params='[searchString: "${searchString}"]'>${experimentDataMap?.experiment?.adid}</g:link></b>
 </p>
 
 <div class="row-fluid">
@@ -24,7 +25,7 @@
             <th>Outcome</th>
             <th>Potency</th>
             <g:if test="${!experimentDataMap?.spreadSheetActivities?.isEmpty()}">
-               <g:each in="${experimentDataMap?.spreadSheetActivities?.get(0)?.hillCurveValueList}" var="readout">
+                <g:each in="${experimentDataMap?.spreadSheetActivities?.get(0)?.hillCurveValueList}" var="readout">
                     <th>${readout.id}</th>
                     <g:if test="${readout.response.length > 1}">
                         <th>${readout.id} Plot</th>
@@ -37,7 +38,7 @@
             <tr>
                 <td><a href="http://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=${experimentData.sid}">${experimentData.sid}</a>
                 </td>
-                <td><a href="${createLink(controller: 'bardWebInterface', action: 'showCompound', params: [cid: experimentData.cid,searchString:"${searchString}"])}">${experimentData.cid}</a>
+                <td><a href="${createLink(controller: 'bardWebInterface', action: 'showCompound', params: [cid: experimentData.cid, searchString: "${searchString}"])}">${experimentData.cid}</a>
                 </td>
                 <td style="min-width: 180px;">
                     <img alt="SID: ${experimentData.sid}" title="SID: ${experimentData.sid}"

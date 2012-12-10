@@ -4,10 +4,6 @@ import bard.core.SearchParams
 import bard.core.interfaces.RestApiConstants
 import bard.core.rest.spring.assays.Assay
 import bard.core.rest.spring.assays.AssayResult
-import bard.core.rest.spring.compounds.Compound
-import bard.core.rest.spring.compounds.CompoundAnnotations
-import bard.core.rest.spring.compounds.CompoundResult
-import bard.core.rest.spring.compounds.PromiscuityScore
 import bard.core.rest.spring.util.ETag
 import bard.core.rest.spring.util.ETagCollection
 import bard.core.rest.spring.util.Facet
@@ -16,6 +12,10 @@ import grails.test.mixin.TestFor
 import org.springframework.web.client.RestTemplate
 import spock.lang.Specification
 import spock.lang.Unroll
+import bard.core.rest.spring.compounds.*
+import org.springframework.http.HttpEntity
+import org.springframework.http.ResponseEntity
+import org.springframework.http.HttpStatus
 
 @Unroll
 @TestFor(CompoundRestService)
@@ -86,18 +86,56 @@ class CompoundRestServiceUnitSpec extends Specification {
     void "buildStructureSearchURL #label"() {
         given:
         final StructureSearchParams structureSearchParam = new StructureSearchParams("query", structureSearchType)
+        if (withSkip) {
+            structureSearchParam.setSkip(2)
+        }
         when:
-        final String url = service.buildStructureSearchURL(structureSearchParam)
+        final String url = service.buildStructureSearchURL(structureSearchParam, false)
         then:
         assert url == expectedURL
         where:
-        label             | structureSearchType                       | expectedURL
-        "Sub Structure"   | StructureSearchParams.Type.Substructure   | "http://ncgc/compounds/?filter=query[structure]&type=sub&expand=true&top=100&skip=0"
-        "Super Structure" | StructureSearchParams.Type.Superstructure | "http://ncgc/compounds/?filter=query[structure]&type=sup&expand=true&top=100&skip=0"
-        "Exact"           | StructureSearchParams.Type.Exact          | "http://ncgc/compounds/?filter=query[structure]&type=exact&expand=true&top=100&skip=0"
-        "Similarity"      | StructureSearchParams.Type.Similarity     | "http://ncgc/compounds/?filter=query[structure]&type=sim&cutoff=0.700&expand=true&top=100&skip=0"
+        label             | withSkip | structureSearchType                       | expectedURL
+        "Sub Structure"   | true     | StructureSearchParams.Type.Substructure   | "http://ncgc/compounds/?filter=query[structure]&type=sub&expand=true&top=100&skip=2"
+        "Super Structure" | false    | StructureSearchParams.Type.Superstructure | "http://ncgc/compounds/?filter=query[structure]&type=sup&expand=true&top=100&skip=0"
+        "Exact"           | false    | StructureSearchParams.Type.Exact          | "http://ncgc/compounds/?filter=query[structure]&type=exact&expand=true&top=100&skip=0"
+        "Similarity"      | false    | StructureSearchParams.Type.Similarity     | "http://ncgc/compounds/?filter=query[structure]&type=sim&cutoff=0.700&expand=true&top=100&skip=0"
+    }
 
+    void "doStructureSearch"() {
+        given:
+        final StructureSearchParams structureSearchParam = new StructureSearchParams("query", StructureSearchParams.Type.Substructure)
+        final Map<String, Long> eTags = [:]
+        when:
+        CompoundResult compoundSearchResult = service.doStructureSearch(structureSearchParam, eTags)
+        then:
+        restTemplate.exchange(_,_,_,_) >> {new ResponseEntity(HttpStatus.ACCEPTED)}
+        assert compoundSearchResult
 
+    }
+    void "handleFutures with Exception"(){
+        when:
+        final CompoundResult futures = service.handleFutures([1, 2])
+        then:
+        assert !futures
+
+    }
+
+    void "buildQueryForCompoundSummary"() {
+        when:
+        String query = service.buildQueryForCompoundSummary(2L)
+        then:
+        assert query == "http://ncgc/compounds/2/summary"
+
+    }
+
+    void "Get summary for compound"() {
+        given:
+        Long cid = 2
+        when:
+        CompoundSummary compoundSummary = service.getSummaryForCompound(cid)
+        then:
+        restTemplate.getForObject(_, _) >> {new CompoundSummary()}
+        assert compoundSummary
     }
 
     void "getTestedAssays #label"() {
