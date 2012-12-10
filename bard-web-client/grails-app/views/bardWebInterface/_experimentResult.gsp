@@ -36,9 +36,12 @@
         </thead>
         <g:each in="${experimentDataMap?.spreadSheetActivities}" var="experimentData">
             <tr>
-                <td><a href="http://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=${experimentData.sid}">${experimentData.sid}</a>
+                <td>
+                    <img src="${resource(dir: 'images', file: 'pubchem-logo-sm.png')}" alt="PubChem" />
+                    <a href="http://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=${experimentData.sid}">${experimentData.sid}</a>
                 </td>
-                <td><a href="${createLink(controller: 'bardWebInterface', action: 'showCompound', params: [cid: experimentData.cid, searchString: "${searchString}"])}">${experimentData.cid}</a>
+                <td>
+                    <a href="${createLink(controller: 'bardWebInterface', action: 'showCompound', params: [cid: experimentData.cid, searchString: "${searchString}"])}">${experimentData.cid}</a>
                 </td>
                 <td style="min-width: 180px;">
                     <img alt="SID: ${experimentData.sid}" title="SID: ${experimentData.sid}"
