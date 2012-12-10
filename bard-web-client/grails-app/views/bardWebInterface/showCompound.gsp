@@ -4,7 +4,7 @@
 <head>
     <meta name="layout" content="logoSearchCartAndFooter"/>
     <title>BARD : Compound : ${compound?.name} : PubChem CID ${compound.pubChemCID}</title>
-    <r:require modules="promiscuity"/>
+    <r:require modules="promiscuity,substances"/>
 </head>
 
 <body>
@@ -180,18 +180,10 @@
         </div>
     </div>
 </g:if>
+<div class="row-fluid" id="sids" href='${createLink(controller:"bardWebInterface", action: "findSubstanceIds", id:compound.id)}'>
 
-%{--<div class="row-fluid">--}%
-    %{--<div class="span12">--}%
-        %{--<h3>PubChem Substances</h3>--}%
-        %{--<ul class="horizontal-block-list">--}%
-            %{--<g:each in="${compound.pubChemSIDs.sort()}" var="pubChemSID">--}%
-                %{--<li><a href="http://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=${pubChemSID}">${pubChemSID}</a>--}%
-                %{--</li>--}%
-            %{--</g:each>--}%
-        %{--</ul>--}%
-    %{--</div>--}%
-%{--</div>--}%
+</div>
+
 
 <g:if test="${compound?.getOtherAnnotationValue('COLLECTION')}">
     <div class="row-fluid">
@@ -215,6 +207,6 @@
         </div>
     </div>
 </g:if>
-<r:require modules="promiscuity"/>
+<r:require modules="promiscuity,substances"/>
 </body>
 </html>

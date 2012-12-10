@@ -111,7 +111,7 @@ class SubstanceRestServiceUnitSpec extends Specification {
         given:
         Long cid = 123
         when:
-        List<Substance> substances = service.findSubstancesByCid(cid)
+        List<Substance> substances = service.findSubstancesByCidExpandedSearch(cid)
         then:
         restTemplate.getForObject(_, _) >> {[new Substance()]}
         assert substances

@@ -9,6 +9,7 @@ import bard.core.adapter.ProjectAdapter
 import bard.core.rest.spring.AssayRestService
 import bard.core.rest.spring.CompoundRestService
 import bard.core.rest.spring.ProjectRestService
+import bard.core.rest.spring.SubstanceRestService
 import bard.core.rest.spring.assays.Assay
 import bard.core.rest.spring.assays.AssayResult
 import bard.core.rest.spring.assays.ExpandedAssay
@@ -30,6 +31,7 @@ class QueryService implements IQueryService {
     AssayRestService assayRestService
     CompoundRestService compoundRestService
     ProjectRestService projectRestService
+    SubstanceRestService substanceRestService
     //========================================================== Free Text Searches ================================
     /**
      * Find Compounds by Text search
@@ -166,7 +168,16 @@ class QueryService implements IQueryService {
 
         return [compoundAdapters: compoundAdapters, facets: facets, nHits: nhits, eTag: eTag]
     }
+    /*
+    * Returns an unexpanded list of sids
+     */
 
+    List<Long> findSubstancesByCid(Long cid) {
+        if (cid) {
+            return substanceRestService.findSubstancesByCid(cid)
+        }
+        return []
+    }
     //===================== Find Resources given a list of IDs ================================
     /**
      * Given a list of Compound Ids return all the compounds that were found

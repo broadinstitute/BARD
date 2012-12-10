@@ -59,13 +59,22 @@ class SubstanceRestServiceIntegrationSpec extends IntegrationSpec {
         "With sids and exptdata ids" | [103050164, 103050165, 333] | [1417, 1418]
     }
 
-    void "findSubstancesByCid"() {
+    void "findSubstancesByCid Expanded Search"() {
         given:
         Long cid = 2722
         when:
-        List<Substance> substances = substanceRestService.findSubstancesByCid(cid)
+        List<Substance> substances = substanceRestService.findSubstancesByCidExpandedSearch(cid)
         then:
         assert substances
+    }
+    void "findSubstancesByCid Not expanded"() {
+        given:
+        Long cid = 2722
+        when:
+        List<Long> substances = substanceRestService.findSubstancesByCid(cid)
+        then:
+        assert substances
+        assert substances.contains(new Long(70319))
     }
 
     void "findExperimentDataBySid"() {

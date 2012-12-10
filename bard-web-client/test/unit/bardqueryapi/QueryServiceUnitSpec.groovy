@@ -24,6 +24,7 @@ import org.apache.commons.lang.time.StopWatch
 import spock.lang.Shared
 import spock.lang.Specification
 import spock.lang.Unroll
+import bard.core.rest.spring.SubstanceRestService
 
 /**
  * See the API for {@link grails.test.mixin.support.GrailsUnitTestMixin} for usage instructions
@@ -36,6 +37,7 @@ class QueryServiceUnitSpec extends Specification {
     CompoundRestService compoundRestService
     ProjectRestService projectRestService
     ExperimentRestService experimentRestService
+    SubstanceRestService substanceRestService
     @Shared ExpandedAssayResult expandedAssayResult = new ExpandedAssayResult()
     @Shared CompoundResult compoundResult = new CompoundResult()
     @Shared ExpandedAssay expandedAssay1 = new ExpandedAssay()
@@ -58,17 +60,33 @@ class QueryServiceUnitSpec extends Specification {
         projectRestService = Mock(ProjectRestService)
         assayRestService = Mock(AssayRestService)
         experimentRestService = Mock(ExperimentRestService)
+        substanceRestService = Mock(SubstanceRestService)
         queryHelperService = Mock(QueryHelperService)
 
         service.queryHelperService = queryHelperService
         service.assayRestService = assayRestService
         service.compoundRestService = compoundRestService
         service.projectRestService = projectRestService
+        service.substanceRestService = substanceRestService
     }
 
-    void tearDown() {
-        // Tear down logic here
+    void "test findSubstancesByCid #label"() {
+        when:
+        List<Long> sids = service.findSubstancesByCid(cid)
+        then:
+        substanceRestService.findSubstancesByCid(cid) >> {foundSIDS}
+        assert sids.size() == expectedSIDS.size()
+        assert sids.size() == foundSIDS.size()
+
+
+        where:
+        label             | cid  | expectedSIDS | foundSIDS
+        "CID has SIDS"    | 2722 | [2, 3]       | ["/substances/2", "/substances/3"]
+        "CID has no SIDS" | 222  | []           | []
+
+
     }
+
     /**
      * {@link QueryService#showCompound(Long)}
      *

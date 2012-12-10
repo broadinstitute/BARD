@@ -16,6 +16,10 @@ import bard.core.interfaces.*
 class MockQueryService implements IQueryService {
     QueryHelperService queryHelperService
 
+    List<Long> findSubstancesByCid(Long cid) {
+        return [1234,5678,91011]
+    }
+
     final Map<Long, MockCompoundAdapter> mockCompoundAdapterMap = [:]
 
     final Map<Long, MockAssayAdapter> mockAssayAdapterMap = [:]
