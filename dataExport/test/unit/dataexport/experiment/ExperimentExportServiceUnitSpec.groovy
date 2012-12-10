@@ -138,7 +138,7 @@ class ExperimentExportServiceUnitSpec extends Specification {
 
         where:
         label                  | valueUnderTest                                    | results
-        "Experiment - Minimal" | {Experiment.build(experimentName: "Experiment2")} | [experimentId: 1, experimentName: 'Experiment2', status: 'Pending', readyForExtraction: 'Pending']
+        "Experiment - Minimal" | {Experiment.build(experimentName: "Experiment2")} | [experimentId: 1, status: 'Pending', readyForExtraction: 'Pending']
     }
 
     void "test Generate Experiment Not Found Exception"() {

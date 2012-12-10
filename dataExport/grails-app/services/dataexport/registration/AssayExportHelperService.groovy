@@ -14,11 +14,7 @@ import bard.db.registration.*
  */
 class AssayExportHelperService extends ExportAbstractService {
     LinkGenerator grailsLinkGenerator
-    final MediaTypesDTO mediaTypesDTO
-
-    AssayExportHelperService(final MediaTypesDTO mediaTypesDTO) {
-        this.mediaTypesDTO = mediaTypesDTO
-    }
+    MediaTypesDTO mediaTypesDTO
 
     protected void generateAssayContext(final MarkupBuilder markupBuilder, final AssayContext assayContext) {
         def attributes = ['assayContextId': assayContext.id,

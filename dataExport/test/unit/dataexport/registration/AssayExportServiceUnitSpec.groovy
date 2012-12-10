@@ -26,7 +26,8 @@ class AssayExportServiceUnitSpec extends Specification {
     Writer writer
     MarkupBuilder markupBuilder
 
-    AssayExportService assayExportService
+    AssayExportService assayExportService = new AssayExportService()
+    AssayExportHelperService assayExportHelperService = new AssayExportHelperService()
 
     void setup() {
         LinkGenerator grailsLinkGenerator = Mock(LinkGenerator.class)
@@ -34,9 +35,9 @@ class AssayExportServiceUnitSpec extends Specification {
             new MediaTypesDTO(resultTypeMediaType: "xml", elementMediaType: "xml", assaysMediaType: "xml", assayMediaType: "xml", assayDocMediaType: "xml")
 
         this.assayExportService = this.service
-        AssayExportHelperService assayExportHelperService =
-            new AssayExportHelperService(mediaTypesDTO)
-        assayExportHelperService.grailsLinkGenerator = grailsLinkGenerator
+        // TODO seems odd to be wiring in this collaborator, seems like it should be mocked instead
+        this.assayExportHelperService.mediaTypesDTO = mediaTypesDTO
+        this.assayExportHelperService.grailsLinkGenerator = grailsLinkGenerator
         this.assayExportService.assayExportHelperService = assayExportHelperService
         this.writer = new StringWriter()
         this.markupBuilder = new MarkupBuilder(writer)

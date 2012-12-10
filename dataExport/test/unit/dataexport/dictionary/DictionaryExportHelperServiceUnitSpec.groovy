@@ -17,19 +17,18 @@ import bard.db.dictionary.*
 @Unroll
 @Build([UnitTree, Element, UnitConversion, StageTree])
 class DictionaryExportHelperServiceUnitSpec extends Specification {
-    DictionaryExportHelperService dictionaryExportHelperService
+    DictionaryExportHelperService dictionaryExportHelperService = new DictionaryExportHelperService()
     LinkGenerator grailsLinkGenerator
     Writer writer
     MarkupBuilder markupBuilder
 
     void setup() {
         grailsLinkGenerator = Mock(LinkGenerator.class)
-        this.dictionaryExportHelperService =
-            new DictionaryExportHelperService(new MediaTypesDTO(elementMediaType: "xml"))
+        this.dictionaryExportHelperService.mediaTypesDTO = new MediaTypesDTO(elementMediaType: "xml")
         this.dictionaryExportHelperService.grailsLinkGenerator = grailsLinkGenerator
+
         this.writer = new StringWriter()
         this.markupBuilder = new MarkupBuilder(writer)
-
     }
 
     void tearDown() {
@@ -171,7 +170,7 @@ class DictionaryExportHelperServiceUnitSpec extends Specification {
         where:
         label                     | stage                                                                                                                                              | results
         "Full Stage"              | new StageTree(element: new Element(label: "elementLabel", description: "desc"), parent: new StageTree(element: new Element(label: "parentStage"))) | XmlTestSamples.STAGE_FULL
-        "Full Stage no parent Id" | new StageTree(element: new Element(label: "elementLabel", description: "desc"))                                                                           | XmlTestSamples.STAGE_NO_PARENT
+        "Full Stage no parent Id" | new StageTree(element: new Element(label: "elementLabel", description: "desc"))                                                                    | XmlTestSamples.STAGE_NO_PARENT
     }
 
     void "test Generate Element Hierarchy #label"() {

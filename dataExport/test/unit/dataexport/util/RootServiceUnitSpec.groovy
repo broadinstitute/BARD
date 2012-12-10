@@ -13,7 +13,7 @@ import spock.lang.Unroll
  */
 @Unroll
 class RootServiceUnitSpec extends Specification {
-    RootService rootService
+    RootService rootService = new RootService()
     LinkGenerator grailsLinkGenerator
     Writer writer
     MarkupBuilder markupBuilder
@@ -29,8 +29,7 @@ class RootServiceUnitSpec extends Specification {
                     externalSystemsMediaType: "externalSystems",
                     externalReferencesMediaType: "externalReferences"
             )
-        this.rootService =
-            new RootService(mediaTypesDTO)
+        this.rootService.mediaTypesDTO = mediaTypesDTO
         this.rootService.grailsLinkGenerator = grailsLinkGenerator
         this.writer = new StringWriter()
         this.markupBuilder = new MarkupBuilder(writer)

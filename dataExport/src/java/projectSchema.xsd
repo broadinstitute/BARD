@@ -90,14 +90,6 @@ precedingExperimentRef references an experiment resource</xs:documentation>
             <xs:attribute name="precedingProjectExperimentRef" type="bardID"/>
         </xs:complexType>
     </xs:element>
-    <xs:element name="contexts">
-        <xs:complexType>
-            <xs:sequence>
-                <xs:element maxOccurs="unbounded" ref="context"/>
-            </xs:sequence>
-        </xs:complexType>
-    </xs:element>
-    <xs:element name="context" type="contextType"/>
     <xs:element name="projectExperiment">
         <xs:complexType>
             <xs:sequence>

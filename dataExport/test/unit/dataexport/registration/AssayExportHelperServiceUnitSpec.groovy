@@ -27,7 +27,7 @@ class AssayExportHelperServiceUnitSpec extends Specification {
     Writer writer
     MarkupBuilder markupBuilder
     LinkGenerator grailsLinkGenerator
-    AssayExportHelperService assayExportHelperService
+    AssayExportHelperService assayExportHelperService = new AssayExportHelperService()
 
     Resource assaySchema = new FileSystemResource(new File("src/java/assaySchema.xsd"))
 
@@ -39,9 +39,9 @@ class AssayExportHelperServiceUnitSpec extends Specification {
                     assayMediaType: "application/vnd.bard.cap+xml;type=assay",
                     assayDocMediaType: "application/vnd.bard.cap+xml;type=assayDoc",
                     resultTypeMediaType: "application/vnd.bard.cap+xml;type=resultType")
-        this.assayExportHelperService =
-            new AssayExportHelperService(mediaTypesDTO)
+        this.assayExportHelperService.mediaTypesDTO = mediaTypesDTO
         this.assayExportHelperService.grailsLinkGenerator = grailsLinkGenerator
+
         this.writer = new StringWriter()
         this.markupBuilder = new MarkupBuilder(writer)
         TestDataConfigurationHolder.reset()

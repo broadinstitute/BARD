@@ -14,12 +14,13 @@ import bard.db.dictionary.*
  */
 class DictionaryExportHelperService {
     LinkGenerator grailsLinkGenerator
-    String elementMediaType
+    MediaTypesDTO mediaTypesDTO
     List<LaboratoryElement> laboratories
     DataSource dataSource
 
-    DictionaryExportHelperService(final MediaTypesDTO mediaTypesDTO) {
-        this.elementMediaType = mediaTypesDTO.elementMediaType
+
+    String getElementMediaType(){
+        this.mediaTypesDTO.elementMediaType
     }
     /**
      * Root node for generating the entire dictionary
@@ -113,7 +114,7 @@ class DictionaryExportHelperService {
                 description(stageTree.element.description)
             }
             final String href = grailsLinkGenerator.link(mapping: 'element', absolute: true, params: [id: stageTree.element.id]).toString()
-            link(rel: 'related', href: "${href}", type: "${this.elementMediaType}")
+            link(rel: 'related', href: "${href}", type: "${this.getElementMediaType()}")
         }
     }
 /**
@@ -163,7 +164,7 @@ class DictionaryExportHelperService {
             }
 
             final String href = grailsLinkGenerator.link(mapping: 'element', absolute: true, params: [id: resultTypeTree.element.id]).toString()
-            link(rel: 'related', href: "${href}", type: "${this.elementMediaType}")
+            link(rel: 'related', href: "${href}", type: "${this.getElementMediaType()}")
         }
     }
 /**
@@ -275,7 +276,7 @@ class DictionaryExportHelperService {
             }
             //now generate links for editing the element
             //clients can use this link to indicate that they have consumed the element
-            final String ELEMENT_MEDIA_TYPE = this.elementMediaType
+            final String ELEMENT_MEDIA_TYPE = this.getElementMediaType()
             final String elementHref = grailsLinkGenerator.link(mapping: 'element', absolute: true, params: [id: element.id])
             link(rel: 'edit', href: "${elementHref}", type: "${ELEMENT_MEDIA_TYPE}")
             if (element?.unit) {
@@ -296,12 +297,12 @@ class DictionaryExportHelperService {
         xml.elementHierarchy() {
             childElement(childElement: elementHierarchy.childElement.label) {
                 final String elementHref = grailsLinkGenerator.link(mapping: 'element', absolute: true, params: [id: elementHierarchy.childElement.id]).toString()
-                link(rel: 'edit', href: "${elementHref}", type: "${this.elementMediaType}")
+                link(rel: 'edit', href: "${elementHref}", type: "${this.getElementMediaType()}")
             }
             if (elementHierarchy.parentElement) {
                 parentElement(parentElement: elementHierarchy.parentElement.label) {
                     final String elementHref = grailsLinkGenerator.link(mapping: 'element', absolute: true, params: [id: elementHierarchy.parentElement.id]).toString()
-                    link(rel: 'edit', href: "${elementHref}", type: "${this.elementMediaType}")
+                    link(rel: 'edit', href: "${elementHref}", type: "${this.getElementMediaType()}")
                 }
             }
             relationshipType(elementHierarchy.relationshipType)
@@ -359,7 +360,7 @@ class DictionaryExportHelperService {
             xml.synonyms(descriptor.element.synonyms)
         }
         final String elementHref = grailsLinkGenerator.link(mapping: 'element', absolute: true, params: [id: descriptor.element.id]).toString()
-        xml.link(rel: 'edit', href: "${elementHref}", type: "${this.elementMediaType}")
+        xml.link(rel: 'edit', href: "${elementHref}", type: "${this.getElementMediaType()}")
     }
     /**
      *  Attributes for a Stage

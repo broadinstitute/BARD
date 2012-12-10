@@ -38,20 +38,9 @@ The link with 'edit' relation should be used to set the status of this experimen
         </xs:annotation>
         <xs:complexType>
             <xs:sequence>
-                <xs:element name="experimenttName" type="xs:string"/>
+                <xs:element name="experimentName" type="xs:string"/>
                 <xs:element minOccurs="0" ref="description"/>
-                <xs:element minOccurs="0" name="experimentContexts">
-                    <xs:complexType>
-                        <xs:sequence>
-                            <xs:element name="experimentContext" maxOccurs="unbounded"
-                                type="experimentContexType">
-                                <xs:annotation>
-                                    <xs:documentation>We include the group result context Id and the result context item Id so that the client can walk the tree from child to parent</xs:documentation>
-                                </xs:annotation>
-                            </xs:element>
-                        </xs:sequence>
-                    </xs:complexType>
-                </xs:element>
+                <xs:element minOccurs="0" ref="contexts"/>
                 <xs:element maxOccurs="unbounded" minOccurs="1" ref="link">
                     <xs:annotation>
                         <xs:documentation>Link to self

@@ -1,35 +1,47 @@
 package dataexport.experiment
 
-import bard.db.enums.ReadyForExtraction
 import bard.db.project.Project
 import common.tests.XmlTestAssertions
-import common.tests.XmlTestSamples
 import dataexport.registration.BardHttpResponse
+import dataexport.util.ResetSequenceUtil
 import exceptions.NotFoundException
+import grails.buildtestdata.TestDataConfigurationHolder
 import grails.plugin.spock.IntegrationSpec
 import groovy.xml.MarkupBuilder
 import org.custommonkey.xmlunit.XMLAssert
-
-import javax.servlet.http.HttpServletResponse
-import javax.xml.XMLConstants
-import javax.xml.transform.stream.StreamSource
-import javax.xml.validation.Schema
-import javax.xml.validation.SchemaFactory
-import javax.xml.validation.Validator
+import org.springframework.core.io.Resource
 import spock.lang.Unroll
+
+import javax.sql.DataSource
+
+import static bard.db.enums.ReadyForExtraction.Complete
+import static bard.db.enums.ReadyForExtraction.Ready
+import static javax.servlet.http.HttpServletResponse.*
 
 @Unroll
 class ProjectExportServiceIntegrationSpec extends IntegrationSpec {
-    static final String BARD_PROJECT_EXPORT_SCHEMA = "src/java/projectSchema.xsd"
+    static final String BARD_PROJECT_EXPORT_SCHEMA = "classpath:projectSchema.xsd"
 
     ProjectExportService projectExportService
     Writer writer
     MarkupBuilder markupBuilder
+    DataSource dataSource
+    ResetSequenceUtil resetSequenceUtil
+    def grailsApplication
+    Resource schemaResource
+
 
     void setup() {
         this.writer = new StringWriter()
         this.markupBuilder = new MarkupBuilder(this.writer)
 
+        TestDataConfigurationHolder.reset()
+        resetSequenceUtil = new ResetSequenceUtil(dataSource)
+        ['PROJECT_ID_SEQ'
+        ].each {
+            this.resetSequenceUtil.resetSequence(it)
+        }
+        schemaResource = grailsApplication.mainContext.getResource(BARD_PROJECT_EXPORT_SCHEMA)
     }
 
     void tearDown() {
@@ -39,7 +51,7 @@ class ProjectExportServiceIntegrationSpec extends IntegrationSpec {
     void "test update Not Found Status"() {
         given: "Given a non-existing Project"
         when: "We call the project service to update this project"
-        this.projectExportService.update(new Long(100000), 0, ReadyForExtraction.Complete.toString())
+        this.projectExportService.update(new Long(100000), 0, Complete.toString())
 
         then: "An exception is thrown, indicating that the project does not exist"
         thrown(NotFoundException)
@@ -47,56 +59,57 @@ class ProjectExportServiceIntegrationSpec extends IntegrationSpec {
 
     void "test update #label"() {
         given: "Given a Project with id #id and version #version"
+        Project.build(readyForExtraction: initialReadyForExtraction)
+
         when: "We call the project service to update this assay"
-        final BardHttpResponse bardHttpResponse = this.projectExportService.update(projectId, version, status)
+        final BardHttpResponse bardHttpResponse = this.projectExportService.update(projectId, version, "Complete")
 
         then: "An ETag of #expectedETag is returned together with an HTTP Status of #expectedStatusCode"
         assert bardHttpResponse
         assert bardHttpResponse.ETag == expectedETag
         assert bardHttpResponse.httpResponseCode == expectedStatusCode
-        assert Project.get(projectId).readyForExtraction == expectStatus
+        assert Project.get(projectId).readyForExtraction == expectedReadyForExtraction
+
         where:
-        label                                             | expectedStatusCode                         | expectedETag | projectId   | version | status     | expectStatus
-        "Return OK and ETag 1"                            | HttpServletResponse.SC_OK                  | new Long(1)  | new Long(1) | 0       | "Complete" | ReadyForExtraction.Complete
-        "Return CONFLICT and ETag 0"                      | HttpServletResponse.SC_CONFLICT            | new Long(0)  | new Long(1) | -1      | "Complete" | ReadyForExtraction.Ready
-        "Return PRECONDITION_FAILED and ETag 0"           | HttpServletResponse.SC_PRECONDITION_FAILED | new Long(0)  | new Long(1) | 2       | "Complete" | ReadyForExtraction.Ready
-        "Return OK and ETag 0, Already completed Project" | HttpServletResponse.SC_OK                  | new Long(0)  | new Long(3) | 0       | "Complete" | ReadyForExtraction.Complete
+        label                                             | expectedStatusCode     | expectedETag | projectId | version | initialReadyForExtraction | expectedReadyForExtraction
+        "Return OK and ETag 1"                            | SC_OK                  | 1            | 1         | 0       | Ready                     | Complete
+        "Return CONFLICT and ETag 0"                      | SC_CONFLICT            | 0            | 1         | -1      | Ready                     | Ready
+        "Return PRECONDITION_FAILED and ETag 0"           | SC_PRECONDITION_FAILED | 0            | 1         | 2       | Ready                     | Ready
+        "Return OK and ETag 0, Already completed Project" | SC_OK                  | 0            | 1         | 0       | Complete                  | Complete
     }
 
-    void "test generate and validate Project #label"() {
+    void "test generate and validate Project "() {
         given: "Given a Project"
-        final Project project = Project.get(1)
+        final Project project = Project.build()
 
         when: "A service call is made to generate the project"
         this.projectExportService.generateProject(this.markupBuilder, project.id)
+
         then: "An XML is generated that conforms to the expected XML"
-
-
-        final SchemaFactory factory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI)
-        final Schema schema = factory.newSchema(new StreamSource(new FileReader(BARD_PROJECT_EXPORT_SCHEMA)))
-        final Validator validator = schema.newValidator()
-        validator.validate(new StreamSource(new StringReader(this.writer.toString())))
+        XmlTestAssertions.validate(schemaResource, this.writer.toString())
     }
 
     void "test generate and validate Project given an id #label"() {
+        given: "Given a Project"
+        final Project project = Project.build()
 
         when: "A service call is made to generate the project"
-        this.projectExportService.generateProject(this.markupBuilder, new Long("1"))
-        then: "An XML is generated that conforms to the expected XML"
-        final SchemaFactory factory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI)
-        final Schema schema = factory.newSchema(new StreamSource(new FileReader(BARD_PROJECT_EXPORT_SCHEMA)))
-        final Validator validator = schema.newValidator()
-        validator.validate(new StreamSource(new StringReader(this.writer.toString())))
+        this.projectExportService.generateProject(this.markupBuilder, project.id)
 
+        then: "An XML is generated that conforms to the expected XML"
+        XmlTestAssertions.validate(schemaResource, this.writer.toString())
     }
 
-
-    void "test generate and validate Projects #label"() {
+    void "test generate and validate Projects"() {
         given: "Given there is at least one project ready for extraction"
+        Project project = Project.build(readyForExtraction: Ready)
+        project.save(flush: true)
+
         when: "A service call is made to generate a list of projects ready to be extracted"
         this.projectExportService.generateProjects(this.markupBuilder)
+
         then: "An XML is generated that conforms to the expected XML"
-        XMLAssert.assertXpathEvaluatesTo("2", "//projects/@count", this.writer.toString());
+        XMLAssert.assertXpathEvaluatesTo("1", "//projects/@count", this.writer.toString());
 
     }
 }

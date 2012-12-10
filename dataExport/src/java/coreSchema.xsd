@@ -213,4 +213,12 @@
             </xs:extension>
         </xs:complexContent>
     </xs:complexType>
+    <xs:element name="contexts">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element maxOccurs="unbounded" ref="context"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="context" type="contextType"/>
 </xs:schema>

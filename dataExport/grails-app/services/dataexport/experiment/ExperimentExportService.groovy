@@ -127,7 +127,6 @@ class ExperimentExportService extends ExportAbstractService {
         Map<String, String> attributes = [:]
 
         attributes.put("experimentId", experiment.id?.toString())
-        attributes.put('experimentName', experiment.experimentName)
         attributes.put('status', experiment.experimentStatus.toString())
         attributes.put('readyForExtraction', experiment.readyForExtraction.toString())
 
@@ -162,6 +161,7 @@ class ExperimentExportService extends ExportAbstractService {
         final Map<String, String> attributes = generateAttributesForExperiment(experiment)
 
         markupBuilder.experiment(attributes) {
+            experimentName(experiment.experimentName)
             if (experiment.description) {
                 description(experiment.description)
             }

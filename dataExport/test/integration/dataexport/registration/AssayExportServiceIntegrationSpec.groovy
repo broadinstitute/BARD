@@ -1,7 +1,6 @@
 package dataexport.registration
 
 import bard.db.dictionary.Element
-import bard.db.enums.ReadyForExtraction
 import common.tests.XmlTestAssertions
 import common.tests.XmlTestSamples
 import dataexport.util.ResetSequenceUtil
@@ -16,6 +15,8 @@ import javax.sql.DataSource
 
 import bard.db.registration.*
 
+import static bard.db.enums.ReadyForExtraction.Complete
+import static bard.db.enums.ReadyForExtraction.Ready
 import static javax.servlet.http.HttpServletResponse.*
 
 @Unroll
@@ -33,17 +34,15 @@ class AssayExportServiceIntegrationSpec extends IntegrationSpec {
     void setup() {
         this.writer = new StringWriter()
         this.markupBuilder = new MarkupBuilder(this.writer)
-        resetSequenceUtil = new ResetSequenceUtil(dataSource)
 
         TestDataConfigurationHolder.reset()
-
+        resetSequenceUtil = new ResetSequenceUtil(dataSource)
         ['ASSAY_ID_SEQ',
-                'ASSAY_CONTEXT_ID_SEQ',
-                'ASSAY_CONTEXT_ITEM_ID_SEQ',
-                'ASSAY_CONTEXT_MEASURE_ID_SEQ',
-                'ASSAY_DOCUMENT_ID_SEQ',
-                'ELEMENT_ID_SEQ',
-                'MEASURE_ID_SEQ'].each {
+            'ASSAY_CONTEXT_ID_SEQ',
+            'ASSAY_CONTEXT_MEASURE_ID_SEQ',
+            'ASSAY_DOCUMENT_ID_SEQ',
+            'ELEMENT_ID_SEQ',
+            'MEASURE_ID_SEQ'].each {
             this.resetSequenceUtil.resetSequence(it)
         }
         schemaResource = grailsApplication.mainContext.getResource(BARD_ASSAY_EXPORT_SCHEMA)
@@ -56,7 +55,7 @@ class AssayExportServiceIntegrationSpec extends IntegrationSpec {
     void "test update Not Found Status"() {
         given: "Given a non-existing Assay"
         when: "We call the assay service to update this assay"
-        this.assayExportService.update(new Long(100000), 0, ReadyForExtraction.Complete.toString())
+        this.assayExportService.update(new Long(100000), 0, Complete.toString())
 
         then: "An exception is thrown, indicating that the project does not exist"
         thrown(NotFoundException)
@@ -76,11 +75,11 @@ class AssayExportServiceIntegrationSpec extends IntegrationSpec {
         assert Assay.get(assayId).readyForExtraction == expectedReadyForExtraction
 
         where:
-        label                                           | expectedStatusCode     | expectedETag | assayId | version | initialReadyForExtraction   | expectedReadyForExtraction
-        "Return OK and ETag 1"                          | SC_OK                  | 1            | 1       | 0       | ReadyForExtraction.Ready    | ReadyForExtraction.Complete
-        "Return CONFLICT and ETag 0"                    | SC_CONFLICT            | 0            | 1       | -1      | ReadyForExtraction.Ready    | ReadyForExtraction.Ready
-        "Return PRECONDITION_FAILED and ETag 0"         | SC_PRECONDITION_FAILED | 0            | 1       | 2       | ReadyForExtraction.Ready    | ReadyForExtraction.Ready
-        "Return OK and ETag 0, Already completed Assay" | SC_OK                  | 0            | 1       | 0       | ReadyForExtraction.Complete | ReadyForExtraction.Complete
+        label                                           | expectedStatusCode     | expectedETag | assayId | version | initialReadyForExtraction | expectedReadyForExtraction
+        "Return OK and ETag 1"                          | SC_OK                  | 1            | 1       | 0       | Ready                     | Complete
+        "Return CONFLICT and ETag 0"                    | SC_CONFLICT            | 0            | 1       | -1      | Ready                     | Ready
+        "Return PRECONDITION_FAILED and ETag 0"         | SC_PRECONDITION_FAILED | 0            | 1       | 2       | Ready                     | Ready
+        "Return OK and ETag 0, Already completed Assay" | SC_OK                  | 0            | 1       | 0       | Complete                  | Complete
     }
 
     void "test generate and validate AssayDocument"() {
@@ -124,7 +123,7 @@ class AssayExportServiceIntegrationSpec extends IntegrationSpec {
 
     void "test generate and validate Assays #label"() {
         given: "Given there is at least one assay ready for extraction"
-        Assay.build(readyForExtraction: ReadyForExtraction.Ready)
+        Assay.build(readyForExtraction: Ready)
 
         when: "A service call is made to generate a list of assays ready to be extracted"
         this.assayExportService.generateAssays(this.markupBuilder)

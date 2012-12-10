@@ -6,10 +6,12 @@ import dataexport.registration.BardHttpResponse
 import exceptions.NotFoundException
 import grails.plugin.spock.IntegrationSpec
 import groovy.xml.MarkupBuilder
+import org.custommonkey.xmlunit.XMLAssert
 import spock.lang.Unroll
 
-import javax.servlet.http.HttpServletResponse
-import org.custommonkey.xmlunit.XMLAssert
+import static bard.db.enums.ReadyForExtraction.Complete
+import static bard.db.enums.ReadyForExtraction.Ready
+import static javax.servlet.http.HttpServletResponse.*
 
 @Unroll
 class ResultExportServiceIntegrationSpec extends IntegrationSpec {
@@ -51,36 +53,32 @@ class ResultExportServiceIntegrationSpec extends IntegrationSpec {
 
     void "test Generate Result"() {
         given: "Given a Result with id #id and version #version"
+        Result result = Result.build(readyForExtraction: ReadyForExtraction.Ready)
+
         when: "We call the result service to generate this result"
-        this.resultExportService.generateResult(this.markupBuilder, resultId)
+        this.resultExportService.generateResult(this.markupBuilder, result.id)
 
         then: "A result is generated"
         XMLAssert.assertXpathEvaluatesTo("1", "count(//result)", this.writer.toString());
-        XMLAssert.assertXpathEvaluatesTo("1", "count(//resultContextItems)", this.writer.toString());
-        XMLAssert.assertXpathEvaluatesTo("1", "count(//resultContextItem)", this.writer.toString());
-        where:
-        resultId      | version | status
-        new Long(533) | 0       | "InComplete"
     }
 
     void "test update #label"() {
         given: "Given a Result with id #id and version #version"
+        Result result = Result.build(readyForExtraction: initialReadyForExtraction)
+
         when: "We call the result service to update this result"
-        final BardHttpResponse bardHttpResponse = this.resultExportService.update(resultId, version, status)
+        final BardHttpResponse bardHttpResponse = this.resultExportService.update(result.id, version, "Complete")
 
         then: "An ETag of #expectedETag is returned together with an HTTP Status of #expectedStatusCode"
         assert bardHttpResponse
         assert bardHttpResponse.ETag == expectedETag
         assert bardHttpResponse.httpResponseCode == expectedStatusCode
-        assert Result.get(resultId).readyForExtraction == expectedStatus
+        assert result.readyForExtraction == expectedReadyForExtraction
         where:
-        label                                            | expectedStatusCode                         | expectedETag | resultId      | version | status     | expectedStatus
-        "Return OK and ETag 1"                           | HttpServletResponse.SC_OK                  | new Long(1)  | new Long(533) | 0       | "Complete" | ReadyForExtraction.Complete
-        "Return CONFLICT and ETag 0"                     | HttpServletResponse.SC_CONFLICT            | new Long(0)  | new Long(533) | -1      | "Complete" | ReadyForExtraction.Ready
-        "Return PRECONDITION_FAILED and ETag 0"          | HttpServletResponse.SC_PRECONDITION_FAILED | new Long(0)  | new Long(533) | 2       | "Complete" | ReadyForExtraction.Ready
-        "Return OK and ETag 0, Already completed Result" | HttpServletResponse.SC_OK                  | new Long(0)  | new Long(532) | 0       | "Complete" | ReadyForExtraction.Complete
-
+        label                                            | expectedStatusCode     | expectedETag | resultId | version | initialReadyForExtraction | expectedReadyForExtraction
+        "Return OK and ETag 1"                           | SC_OK                  | 1            | 533      | 0       | Ready                     | Complete
+        "Return CONFLICT and ETag 0"                     | SC_CONFLICT            | 0            | 533      | -1      | Ready                     | Ready
+        "Return PRECONDITION_FAILED and ETag 0"          | SC_PRECONDITION_FAILED | 0            | 533      | 2       | Ready                     | Ready
+        "Return OK and ETag 0, Already completed Result" | SC_OK                  | 0            | 532      | 0       | Complete                  | Complete
     }
-
-
 }

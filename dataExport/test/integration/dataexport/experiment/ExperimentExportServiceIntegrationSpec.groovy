@@ -1,21 +1,20 @@
 package dataexport.experiment
 
+import bard.db.enums.ReadyForExtraction
 import bard.db.experiment.Experiment
-import bard.db.registration.ExternalReference
+import bard.db.experiment.Result
+import common.tests.XmlTestAssertions
 import dataexport.registration.BardHttpResponse
 import exceptions.NotFoundException
 import grails.plugin.spock.IntegrationSpec
 import groovy.xml.MarkupBuilder
-import org.custommonkey.xmlunit.XMLAssert
+import org.springframework.core.io.Resource
 import spock.lang.Unroll
 
-import javax.servlet.http.HttpServletResponse
-import javax.xml.XMLConstants
-import javax.xml.transform.stream.StreamSource
-import javax.xml.validation.Schema
-import javax.xml.validation.SchemaFactory
-import javax.xml.validation.Validator
-import bard.db.enums.ReadyForExtraction
+import static bard.db.enums.ReadyForExtraction.Complete
+import static bard.db.enums.ReadyForExtraction.Ready
+import static javax.servlet.http.HttpServletResponse.*
+import org.springframework.core.io.FileSystemResource
 
 @Unroll
 class ExperimentExportServiceIntegrationSpec extends IntegrationSpec {
@@ -24,11 +23,12 @@ class ExperimentExportServiceIntegrationSpec extends IntegrationSpec {
     ExperimentExportService experimentExportService
     Writer writer
     MarkupBuilder markupBuilder
+    def grailsApplication
+    Resource schemaResource = new FileSystemResource(new File(BARD_EXPERIMENT_EXPORT_SCHEMA))
 
     void setup() {
         this.writer = new StringWriter()
         this.markupBuilder = new MarkupBuilder(this.writer)
-
     }
 
     void tearDown() {
@@ -37,27 +37,32 @@ class ExperimentExportServiceIntegrationSpec extends IntegrationSpec {
 
     void "test update #label"() {
         given: "Given an Experiment with id #id and version #version"
+        Experiment experiment = Experiment.build(readyForExtraction: initialReadyForExtraction)
+        numResults.times {Result.build(readyForExtraction: Ready, experiment: experiment)}
+
         when: "We call the experiment service to update this experiment"
-        final BardHttpResponse bardHttpResponse = this.experimentExportService.update(experimentId, version, status)
+        final BardHttpResponse bardHttpResponse = this.experimentExportService.update(experiment.id, version, 'Complete')
 
         then: "An ETag of #expectedETag is returned together with an HTTP Status of #expectedStatusCode"
         assert bardHttpResponse
         assert bardHttpResponse.ETag == expectedETag
         assert bardHttpResponse.httpResponseCode == expectedStatusCode
-        assert Experiment.get(experimentId).readyForExtraction == expectedStatus
+        assert Experiment.get(experiment.id).readyForExtraction == expectedReadyForExtraction
+
         where:
-        label                                                | expectedStatusCode                         | expectedETag | experimentId | version | status     | expectedStatus
-        "Return OK and ETag 1"                               | HttpServletResponse.SC_OK                  | new Long(1)  | new Long(1)  | 0       | "Complete" | ReadyForExtraction.Complete
-        "Return NOT_ACCEPTABLE and ETag 0"                   | HttpServletResponse.SC_NOT_ACCEPTABLE      | new Long(0)  | new Long(2)  | 0       | "Complete" | ReadyForExtraction.Ready
-        "Return CONFLICT and ETag 0"                         | HttpServletResponse.SC_CONFLICT            | new Long(0)  | new Long(1)  | -1      | "Complete" | ReadyForExtraction.Ready
-        "Return PRECONDITION_FAILED and ETag 0"              | HttpServletResponse.SC_PRECONDITION_FAILED | new Long(0)  | new Long(1)  | 2       | "Complete" | ReadyForExtraction.Ready
-        "Return OK and ETag 0, Already completed Experiment" | HttpServletResponse.SC_OK                  | new Long(0)  | new Long(23) | 0       | "Complete" | ReadyForExtraction.Complete
+        label                                                | expectedStatusCode     | expectedETag | version | numResults | initialReadyForExtraction | expectedReadyForExtraction
+        "Return OK and ETag 1"                               | SC_OK                  | 1            | 0       | 0          | Ready                     | Complete
+        "Return NOT_ACCEPTABLE and ETag 0"                   | SC_NOT_ACCEPTABLE      | 0            | 0       | 1          | Ready                     | ReadyForExtraction.Ready
+        "Return CONFLICT and ETag 0"                         | SC_CONFLICT            | 0            | -1      | 0          | Ready                     | ReadyForExtraction.Ready
+        "Return PRECONDITION_FAILED and ETag 0"              | SC_PRECONDITION_FAILED | 0            | 2       | 0          | Ready                     | ReadyForExtraction.Ready
+        "Return OK and ETag 0, Already completed Experiment" | SC_OK                  | 0            | 0       | 0          | Complete                  | ReadyForExtraction.Complete
     }
 
 
 
     void "test update Not Found Status"() {
         given: "Given a non-existing Experiment"
+
         when: "We call the experiment service to update this experiment"
         this.experimentExportService.update(new Long(100000), 0, ReadyForExtraction.Complete.toString())
 
@@ -67,30 +72,28 @@ class ExperimentExportServiceIntegrationSpec extends IntegrationSpec {
 
     void "test generate and validate Experiment with id"() {
         given: "Given an Experiment"
-        final Experiment experiment = Experiment.get(1)
+        final Experiment experiment = Experiment.build(readyForExtraction: Ready)
 
         when: "A service call is made to generate the experiment"
         this.experimentExportService.generateExperiment(this.markupBuilder, experiment.id)
-        then: "An XML is generated that conforms to the expected XML"
-        final SchemaFactory factory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI)
-        final Schema schema = factory.newSchema(new StreamSource(new FileReader(BARD_EXPERIMENT_EXPORT_SCHEMA)))
-        final Validator validator = schema.newValidator()
-        validator.validate(new StreamSource(new StringReader(this.writer.toString())))
 
+        then: "An XML is generated that conforms to the expected XML"
+        String actualXml = this.writer.toString()
+        println(actualXml)
+        XmlTestAssertions.validate(schemaResource, actualXml)
     }
 
     void "test generate and validate Experiment"() {
         given: "Given an Experiment"
-        final Experiment experiment = Experiment.get(1)
+        final Experiment experiment = Experiment.build(readyForExtraction: Ready)
 
         when: "A service call is made to generate the experiment"
         this.experimentExportService.generateExperiment(this.markupBuilder, experiment)
-        then: "An XML is generated that conforms to the expected XML"
-        final SchemaFactory factory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI)
-        final Schema schema = factory.newSchema(new StreamSource(new FileReader(BARD_EXPERIMENT_EXPORT_SCHEMA)))
-        final Validator validator = schema.newValidator()
-        validator.validate(new StreamSource(new StringReader(this.writer.toString())))
 
+        then: "An XML is generated that conforms to the expected XML"
+        String actualXml = this.writer.toString()
+        println(actualXml)
+        XmlTestAssertions.validate(schemaResource, actualXml)
     }
 
     void "test generate and validate Experiments"() {
@@ -99,11 +102,10 @@ class ExperimentExportServiceIntegrationSpec extends IntegrationSpec {
 
         when: "A service call is made to generate the experiments"
         this.experimentExportService.generateExperiments(this.markupBuilder, 0)
+
         then: "An XML is generated that conforms to the expected XML"
-        final SchemaFactory factory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI)
-        final Schema schema = factory.newSchema(new StreamSource(new FileReader(BARD_EXPERIMENT_EXPORT_SCHEMA)))
-        final Validator validator = schema.newValidator()
-        validator.validate(new StreamSource(new StringReader(this.writer.toString())))
+        String actualXml = this.writer.toString()
+        XmlTestAssertions.validate(schemaResource, actualXml)
     }
 
 //    void "test generate external references"() {
