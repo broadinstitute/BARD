@@ -45,27 +45,27 @@
                 <dt>Probe ID:</dt>
                 <dd>${compound.probeId}</dd>
             </g:if>
-            %{-- TODO: Make a call to get synonyms<g:if test="${compound?.compound?.getValue('Synonyms')}">--}%
-                %{--<dt>Synonyms:</dt>--}%
-                %{--<dd>${compound?.compound?.getValues('Synonyms')?.collect {it.value}?.join(', ')}</dd>--}%
-            %{--</g:if>--}%
+             <g:if test="${compound?.getSynonyms()}">
+                <dt>Synonyms:</dt>
+                <dd>${compound?.getSynonyms()?.collect {it}?.join(', ')}</dd>
+            </g:if>
             <dt>SMILES:</dt>
             <dd>${compound?.getStructureSMILES()}</dd>
             %{-- TODO <dt>Formula:</dt>--}%
             %{--<dd>${compound?.formula()}</dd>--}%
-            %{--<g:if test="${compound?.compound?.getValue(bard.core.Compound.CASValue)}">--}%
-                %{--<dt>CAS Registry Numbers:</dt>--}%
-                %{--<dd>${compound?.compound?.getValues(bard.core.interfaces.CompoundValues.CASValue)?.collect {it.value}?.join(', ')}</dd>--}%
-            %{--</g:if>--}%
-            %{--<g:if test="${compound?.compound?.getValue(bard.core.Compound.UNIIValue)}">--}%
-                %{--<dt>Unique Ingredient Identifier:</dt>--}%
-                %{--<dd>${compound?.compound?.getValue(bard.core.interfaces.CompoundValues.UNIIValue)?.value}</dd>--}%
-            %{--</g:if>--}%
-            %{--<g:if test="${compound?.compound?.getValue('Wikipedia')}">--}%
-                %{--<dt>Wikipedia Entry:</dt>--}%
-                %{--<dd><a href="${compound?.compound?.getValue('Wikipedia')?.value}"--}%
-                       %{--target="_blank">${compound?.compound?.getValue('Wikipedia')?.value}</a></dd>--}%
-            %{--</g:if>--}%
+            <g:if test="${compound?.getRegistryNumbers()}">
+                <dt>CAS Registry Numbers:</dt>
+                <dd>${compound?.getRegistryNumbers()?.collect {it}?.join(', ')}</dd>
+            </g:if>
+            <g:if test="${compound?.getUniqueIngredientIdentifier()}">
+                <dt>Unique Ingredient Identifier:</dt>
+                <dd>${compound?.getUniqueIngredientIdentifier()}</dd>
+            </g:if>
+            <g:if test="${compound?.getOtherAnnotationValue('Wikipedia')}">
+                <dt>Wikipedia Entry:</dt>
+                <dd><a href="${compound?.getOtherAnnotationValue('Wikipedia').get(0)}"
+                       target="_blank">${compound?.getOtherAnnotationValue('Wikipedia').get(0)}</a></dd>
+            </g:if>
         </dl>
     </div>
 </div>
@@ -91,8 +91,6 @@
             <dd>${compound.definedStereo()}</dd>
             <dt>Stereocenters:</dt>
             <dd>${compound.stereocenters()}</dd>
-            %{--<dt>Is 'rule of 5' compliant:</dt>--}%
-            %{--<dd>${compound.ruleOf5() ? 'Yes' : 'No'}</dd>--}%
         </dl>
     </div>
 
@@ -117,71 +115,71 @@
     </div>
 </div>
 
-%{--<g:if test="${compound?.compound?.getValue('CompoundMOA')}">--}%
-    %{--<div class="row-fluid">--}%
-        %{--<div class="span12">--}%
-            %{--<h3>Mechanism of Action</h3>--}%
-            %{--<ul class="unstyled">--}%
-                %{--<g:each in="${compound?.compound?.getValues('CompoundMOA')?.collect {it.value}}" var="moa">--}%
-                    %{--<li>${moa}</li>--}%
-                %{--</g:each>--}%
-            %{--</ul>--}%
-        %{--</div>--}%
-    %{--</div>--}%
-%{--</g:if>--}%
+<g:if test="${compound?.getMechanismOfAction()}">
+    <div class="row-fluid">
+        <div class="span12">
+            <h3>Mechanism of Action</h3>
+            <ul class="unstyled">
+                <g:each in="${compound?.getMechanismOfAction()?.collect {it}}" var="moa">
+                    <li>${moa}</li>
+                </g:each>
+            </ul>
+        </div>
+    </div>
+</g:if>
 
-%{--<g:if test="${compound?.compound?.getValue('CompoundIndication')}">--}%
-    %{--<div class="row-fluid">--}%
-        %{--<div class="span12">--}%
-            %{--<h3>Therapeutic Indication</h3>--}%
-            %{--<ul class="unstyled">--}%
-                %{--<g:each in="${compound?.compound?.getValues('CompoundIndication')?.collect {it.value}}"--}%
-                        %{--var="indication">--}%
-                    %{--<li>${indication}</li>--}%
-                %{--</g:each>--}%
-            %{--</ul>--}%
-        %{--</div>--}%
-    %{--</div>--}%
-%{--</g:if>--}%
+<g:if test="${compound?.getTherapeuticIndication()}">
+    <div class="row-fluid">
+        <div class="span12">
+            <h3>Therapeutic Indication</h3>
+            <ul class="unstyled">
+                <g:each in="${compound?.getTherapeuticIndication()?.collect {it}}"
+                        var="indication">
+                    <li>${indication}</li>
+                </g:each>
+            </ul>
+        </div>
+    </div>
+</g:if>
 
-%{--<g:if test="${compound?.compound?.getValue('CLINICALTRIALS')}">--}%
-    %{--<div class="row-fluid">--}%
-        %{--<div class="span12">--}%
-            %{--<h3>Clinical Trials</h3>--}%
-            %{--<ul class="horizontal-block-list">--}%
-                %{--<g:each in="${compound?.compound?.getValues('CLINICALTRIALS')?.collect {it.value}}" var="trial">--}%
-                    %{--<li><a href="http://clinicaltrials.gov/ct2/show/${trial}">${trial}</a></li>--}%
-                %{--</g:each>--}%
-            %{--</ul>--}%
-        %{--</div>--}%
-    %{--</div>--}%
-%{--</g:if>--}%
+<g:if test="${compound?.getOtherAnnotationValue('CLINICALTRIALS')}">
+    <div class="row-fluid">
+        <div class="span12">
+            <h3>Clinical Trials</h3>
+            <ul class="horizontal-block-list">
+                <g:each in="${compound?.getOtherAnnotationValue('CLINICALTRIALS')?.collect {it}}" var="trial">
+                    <li><a href="http://clinicaltrials.gov/ct2/show/${trial}">${trial}</a></li>
+                </g:each>
+            </ul>
+        </div>
+    </div>
+</g:if>
 
-%{--<g:if test="${compound?.compound?.getValue('CompoundDrugLabelRx')}">--}%
-    %{--<div class="row-fluid">--}%
-        %{--<div class="span12">--}%
-            %{--<h3>Prescription Drug Label</h3>--}%
-            %{--<ul class="unstyled">--}%
-                %{--<g:each in="${compound?.compound?.getValues('CompoundDrugLabelRx')?.collect {it.value}}" var="rxlabel">--}%
-                    %{--<li>${rxlabel}</li>--}%
-                %{--</g:each>--}%
-            %{--</ul>--}%
-        %{--</div>--}%
-    %{--</div>--}%
-%{--</g:if>--}%
+<g:if test="${compound?.getPrescriptionDrugLabel()}">
+    <div class="row-fluid">
+        <div class="span12">
+            <h3>Prescription Drug Label</h3>
+            <ul class="unstyled">
+                <g:each in="${compound?.getPrescriptionDrugLabel()?.collect {it}}" var="rxlabel">
+                    <li>${rxlabel}</li>
+                </g:each>
+            </ul>
+        </div>
+    </div>
+</g:if>
 
-%{--<g:if test="${compound?.compound?.getValue('TARGETS')}">--}%
-    %{--<div class="row-fluid">--}%
-        %{--<div class="span12">--}%
-            %{--<h3>Targets</h3>--}%
-            %{--<ul class="unstyled">--}%
-                %{--<g:each in="${compound?.compound?.getValues('TARGETS')?.collect {it.value}.sort()}" var="target">--}%
-                    %{--<li>${target}</li>--}%
-                %{--</g:each>--}%
-            %{--</ul>--}%
-        %{--</div>--}%
-    %{--</div>--}%
-%{--</g:if>--}%
+<g:if test="${compound?.getOtherAnnotationValue('TARGETS')}">
+    <div class="row-fluid">
+        <div class="span12">
+            <h3>Targets</h3>
+            <ul class="unstyled">
+                <g:each in="${compound?.getOtherAnnotationValue('TARGETS')?.collect {it}.sort()}" var="target">
+                    <li>${target}</li>
+                </g:each>
+            </ul>
+        </div>
+    </div>
+</g:if>
 
 %{--<div class="row-fluid">--}%
     %{--<div class="span12">--}%
@@ -195,28 +193,28 @@
     %{--</div>--}%
 %{--</div>--}%
 
-%{--<g:if test="${compound?.compound?.getValue('COLLECTION')}">--}%
-    %{--<div class="row-fluid">--}%
-        %{--<div class="span12">--}%
-            %{--<h3>Compound Collections</h3>--}%
-            %{--<ul class="unstyled">--}%
-                %{--<g:each in="${compound?.compound?.getValues('COLLECTION')?.collect {it.value}.sort()}" var="collection">--}%
-                    %{--<li>${collection}</li>--}%
-                %{--</g:each>--}%
-            %{--</ul>--}%
-        %{--</div>--}%
-    %{--</div>--}%
-%{--</g:if>--}%
+<g:if test="${compound?.getOtherAnnotationValue('COLLECTION')}">
+    <div class="row-fluid">
+        <div class="span12">
+            <h3>Compound Collections</h3>
+            <ul class="unstyled">
+                <g:each in="${compound?.getOtherAnnotationValue('COLLECTION')?.collect {it}.sort()}" var="collection">
+                    <li>${collection}</li>
+                </g:each>
+            </ul>
+        </div>
+    </div>
+</g:if>
 
-%{--<g:if test="${compound?.compound?.getValue('CompoundSpectra')}">--}%
-    %{--<div class="row-fluid">--}%
-        %{--<div class="span12">--}%
-            %{--<h3>Compound Spectra</h3>--}%
-            %{--<img src="${compound?.compound?.getValue('CompoundSpectra')?.value}"--}%
-                 %{--alt="Compound spectra for ${compound.pubChemCID}">--}%
-        %{--</div>--}%
-    %{--</div>--}%
-%{--</g:if>--}%
+<g:if test="${compound?.getOtherAnnotationValue('CompoundSpectra')}">
+    <div class="row-fluid">
+        <div class="span12">
+            <h3>Compound Spectra</h3>
+            <img src="${compound?.getOtherAnnotationValue('CompoundSpectra').get(0)}"
+                 alt="Compound spectra for ${compound.pubChemCID}">
+        </div>
+    </div>
+</g:if>
 <r:require modules="promiscuity"/>
 </body>
 </html>

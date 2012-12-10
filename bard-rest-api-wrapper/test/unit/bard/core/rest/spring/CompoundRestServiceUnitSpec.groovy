@@ -9,22 +9,27 @@ import bard.core.rest.spring.util.ETagCollection
 import bard.core.rest.spring.util.Facet
 import bard.core.rest.spring.util.StructureSearchParams
 import grails.test.mixin.TestFor
+import org.springframework.http.HttpStatus
+import org.springframework.http.ResponseEntity
 import org.springframework.web.client.RestTemplate
 import spock.lang.Specification
 import spock.lang.Unroll
+
+import java.util.concurrent.ExecutorService
+import java.util.concurrent.FutureTask
+
 import bard.core.rest.spring.compounds.*
-import org.springframework.http.HttpEntity
-import org.springframework.http.ResponseEntity
-import org.springframework.http.HttpStatus
 
 @Unroll
 @TestFor(CompoundRestService)
 class CompoundRestServiceUnitSpec extends Specification {
     RestTemplate restTemplate
-
+    ExecutorService executorService
 
     void setup() {
         this.restTemplate = Mock(RestTemplate)
+        this.executorService = Mock(ExecutorService)
+        service.executorService = this.executorService
         service.restTemplate = this.restTemplate
         service.promiscuityUrl = "badapple"
         service.baseUrl = "http://ncgc"
@@ -108,11 +113,12 @@ class CompoundRestServiceUnitSpec extends Specification {
         when:
         CompoundResult compoundSearchResult = service.doStructureSearch(structureSearchParam, eTags)
         then:
-        restTemplate.exchange(_,_,_,_) >> {new ResponseEntity(HttpStatus.ACCEPTED)}
+        restTemplate.exchange(_, _, _, _) >> {new ResponseEntity(HttpStatus.ACCEPTED)}
         assert compoundSearchResult
 
     }
-    void "handleFutures with Exception"(){
+
+    void "handleFutures with Exception"() {
         when:
         final CompoundResult futures = service.handleFutures([1, 2])
         then:
@@ -164,10 +170,16 @@ class CompoundRestServiceUnitSpec extends Specification {
     }
 
     void "getCompoundById #label"() {
+        given:
+        FutureTask<CompoundAnnotations> compoundAnnotationsTask = Mock(FutureTask)
+        FutureTask<Compound> compoundTask = Mock(FutureTask)
         when:
         Compound foundCompound = service.getCompoundById(cid)
         then:
         restTemplate.getForObject(_, _, _) >> {compounds}
+        compoundAnnotationsTask.get() >> {null}
+        compoundTask.get() >> {compounds.get(0)}
+        executorService.invokeAll(_, _, _) >> {[compoundAnnotationsTask, compoundTask]}
         assert (foundCompound != null) == noErrors
         where:
         label                   | cid | compounds        | noErrors

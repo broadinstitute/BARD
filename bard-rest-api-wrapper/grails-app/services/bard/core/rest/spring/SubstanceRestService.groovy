@@ -80,13 +80,15 @@ class SubstanceRestService extends AbstractRestService {
                 toString();
     }
 
-    public List<Substance> findSubstancesByCid(final Long cid) {
+    public List<Substance> findSubstancesByCid(Long cid, boolean expand = true) {
         final StringBuilder resource =
             new StringBuilder(this.getResource(RestApiConstants.CID)).
                     append(RestApiConstants.FORWARD_SLASH).
-                    append(cid.toString()).
-                    append(RestApiConstants.QUESTION_MARK).
+                    append(cid.toString())
+        if (expand) {
+            resource.append(RestApiConstants.QUESTION_MARK).
                     append(RestApiConstants.EXPAND_TRUE)
+        }
         final URL url = new URL(resource.toString())
         final List<Substance> substances = (List<Substance>) this.restTemplate.getForObject(url.toURI(), Substance[].class)
         return substances;

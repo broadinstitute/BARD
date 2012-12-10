@@ -87,7 +87,7 @@ class CompoundRestServiceIntegrationSpec extends IntegrationSpec {
 
     }
 
-    void "test getSingleCompoundAnnotations"() {
+    void "test findCompoundAnnotations"() {
         given:
         Compound compound = compoundRestService.getCompoundById(2722);
         when:
@@ -330,9 +330,9 @@ class CompoundRestServiceIntegrationSpec extends IntegrationSpec {
      */
     void "test Fail, CID does not exists: #label"() {
         when: "The get method is called with the given CID: #cid"
-        this.compoundRestService.getCompoundById(cid)
+        Compound compound = this.compoundRestService.getCompoundById(cid)
         then: "No Compound is returned with the expected information"
-        thrown(HttpClientErrorException)
+        assert !compound
         where:
         label                          | cid
         "Find a non-existing compound" | new Integer(-658342)
@@ -464,10 +464,12 @@ class CompoundRestServiceIntegrationSpec extends IntegrationSpec {
 
     void "test Get a Single Compound #label"() {
         when: "The get method is called with the given CID: #cid"
-        final Compound compoundTemplate = this.compoundRestService.getCompoundById(cid)
+        final Compound compound = this.compoundRestService.getCompoundById(cid)
         then: "A Compound is returned with the expected information"
-        assert compoundTemplate.smiles == expectedSmiles
-        assert compoundTemplate.cid == cid
+        assert compound.smiles == expectedSmiles
+        assert compound.cid == cid
+        assert compound.compoundAnnotations
+        assert compound.compoundAnnotations.compoundCollection
         where:
         label                       | cid               | expectedSmiles
         "Find an existing compound" | new Integer(2722) | "OC1=C(Cl)C=C(Cl)C2=C1N=CC=C2"

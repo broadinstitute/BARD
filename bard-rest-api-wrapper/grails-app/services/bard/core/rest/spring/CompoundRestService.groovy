@@ -159,27 +159,23 @@ class CompoundRestService extends AbstractRestService {
         return assayResult.assays
     }
 
-    public CompoundAnnotations findAnnotations(Long cid) {
-        final String resource = getResource(cid.toString() + RestApiConstants.ANNOTATIONS)
-        final URL url = new URL(resource)
-        final CompoundAnnotations annotations = this.restTemplate.getForObject(url.toURI(), CompoundAnnotations.class)
-        return annotations;
-    }
+
     /**
      *
      * @param compound
      * @return {@link bard.core.rest.spring.compounds.Compound}
      */
     public Compound getCompoundById(Long cid) {
-        final String url = buildEntityURL() + "?expand={expand}"
-        final Map map = [id: cid, expand: "true"]
-
-        final List<Compound> compounds = this.restTemplate.getForObject(url, List.class, map)
-        if (compounds) {
-            return compounds.get(0)
-        }
-        return null;
+        //lets also get the annotations and the sids
+        //prepare task to run concurrently add time out of 50 seconds
+        def tasks = []
+        tasks << (findAnnotations.curry(cid) as Callable)
+        tasks << (findCompoundById.curry(cid) as Callable)
+        //we set this to time out in 50 seconds
+        final List<FutureTask<Object>> results = executorService.invokeAll(tasks, 50, TimeUnit.SECONDS)
+        return handleCompoundByIdFutures(results)
     }
+
     /**
      *
      * @param list of cids
@@ -248,6 +244,165 @@ class CompoundRestService extends AbstractRestService {
         final List<String> synonyms = this.restTemplate.getForObject(url, List.class, cid, "true")
         return synonyms;
     }
+
+    /*
+    * @param params
+    * @return list of {@link Compound}'s
+    */
+
+    public CompoundResult structureSearch(StructureSearchParams params, final Map<String, Long> etags = [:]) {
+        //first get the number of hits, we  should do this concurrently
+        //TODO: If we already have the number of hits we do not need to get it again
+
+        //prepare task to run concurrently add time out of 50 seconds
+        def tasks = []
+        tasks << (getStructureCount.curry(params) as Callable)
+        tasks << (doStructureSearch.curry(params, etags) as Callable)
+        //we set this to time out in 50 seconds
+        final List<FutureTask<Object>> results = executorService.invokeAll(tasks, 50, TimeUnit.SECONDS)
+        return handleFutures(results)
+    }
+
+    public ExperimentSearchResult findExperimentsByCID(final Long cid) {
+        final StringBuilder resource =
+            new StringBuilder(
+                    this.getResource(cid.toString())).
+                    append(RestApiConstants.EXPERIMENTS_RESOURCE).
+                    append(RestApiConstants.QUESTION_MARK).
+                    append(RestApiConstants.EXPAND_TRUE)
+        final URL url = new URL(resource.toString())
+        final ExperimentSearchResult experimentResult = this.restTemplate.getForObject(url.toURI(), ExperimentSearchResult.class)
+        return experimentResult
+
+    }
+
+    public AssayResult findAssaysByCID(Long cid) {
+        final StringBuilder resource =
+            new StringBuilder(
+                    this.getResource(cid.toString())).
+                    append(RestApiConstants.ASSAYS_RESOURCE).
+                    append(RestApiConstants.QUESTION_MARK).
+                    append(RestApiConstants.EXPAND_TRUE)
+        final URL url = new URL(resource.toString())
+        final AssayResult assayResult = this.restTemplate.getForObject(url.toURI(), AssayResult.class)
+        return assayResult
+
+    }
+
+    public ProjectResult findProjectsByCID(Long cid) {
+        final StringBuilder resource =
+            new StringBuilder(
+                    this.getResource(cid.toString())).
+                    append(RestApiConstants.PROJECTS_RESOURCE).
+                    append(RestApiConstants.QUESTION_MARK).
+                    append(RestApiConstants.EXPAND_TRUE)
+        final URL url = new URL(resource.toString())
+        ProjectResult projectResult = this.restTemplate.getForObject(url.toURI(), ProjectResult.class)
+        return projectResult
+
+    }
+
+    /**
+     * Returns a list of Compounds (inside a CompoundResult wrapper) given an ETag eTagName
+     * @param eTagName
+     * @return
+     */
+    public CompoundResult findCompoundsByETag(String eTagName) {
+        List<ETag> etags = findAllETagsForResource()
+        ETag matchedETag = etags.find {ETag eTag -> eTag.name == eTagName};
+        if (!matchedETag) {
+            return new CompoundResult()
+        }
+
+        String urlToCompounds = getResource() + RestApiConstants.ETAG + RestApiConstants.FORWARD_SLASH + matchedETag.etag_id
+
+        //We are passing the URI because we have already encoded the string
+        //just passing in the string would cause the URI to be encoded twice
+        //see http://static.springsource.org/spring/docs/3.0.x/javadoc-api/org/springframework/web/client/RestTemplate.html
+        final URL url = new URL(urlToCompounds)
+        final List<Compound> compounds = this.restTemplate.getForObject(url.toURI(), Compound[].class) as List<Compound>
+        CompoundResult compoundResult = new CompoundResult(compounds: compounds)
+        return compoundResult
+    }
+
+    //===================== Concurrency code ==================
+    protected Compound handleCompoundByIdFutures(List<FutureTask<Object>> results) {
+        Compound compound = null
+        try {
+            //assert that there are 2 objects in the list
+            assert results.size() == 2
+
+            //the first task in the queue is the annotations
+            final FutureTask<CompoundAnnotations> compoundAnnotationsTask = (FutureTask<CompoundAnnotations>) results.get(0)
+            final CompoundAnnotations compoundAnnotations = compoundAnnotationsTask.get()
+            //second task is the compound search
+            final FutureTask<Compound> compoundTask = (FutureTask<Compound>) results.get(1)
+            compound = compoundTask.get()
+            if(compound){
+                if(compoundAnnotations){
+                    compound.setCompoundAnnotations(compoundAnnotations)
+                }
+            }
+        }
+        catch (Exception e) {
+            log.error("Futures threw an Exception", e)
+        }
+        return compound
+    }
+    /**
+     * Handle the tasks after execution
+     * @param results
+     * @return
+     */
+    protected CompoundResult handleFutures(List<FutureTask<Object>> results) {
+        try {
+            //assert that there are 2 objects in the list
+            assert results.size() == 2
+
+            //the first task in the queue is the number of hits
+            final FutureTask<Long> numberHitsFutureTask = (FutureTask<Long>) results.get(0)
+            //we could check if its done, but we can assume it is, otherwise invokeAll would not complete
+            int nhits = numberHitsFutureTask.get().intValue()
+
+            //second task is the structure search
+            final FutureTask<CompoundResult> structureResultsTask = (FutureTask<CompoundResult>) results.get(1)
+            final CompoundResult compoundResult = structureResultsTask.get()
+            if (nhits <= 0) {
+                nhits = compoundResult.compounds?.size() ?: 0
+            }
+
+            final MetaData metaData = new MetaData()
+            metaData.nhit = nhits
+            compoundResult.setMetaData(metaData)
+            return compoundResult;
+        }
+        catch (Exception e) {
+            log.error("Futures threw an Exception", e)
+        }
+        return null
+    }
+    def findAnnotations= {Long cid ->
+        final String resource = getResource(cid.toString() + RestApiConstants.ANNOTATIONS)
+        final URL url = new URL(resource)
+        final CompoundAnnotations annotations = this.restTemplate.getForObject(url.toURI(), CompoundAnnotations.class)
+        return annotations;
+    }
+    /**
+     *
+     * @param compound
+     * @return {@link bard.core.rest.spring.compounds.Compound}
+     */
+    def findCompoundById = { Long cid ->
+        //lets also get the annotations and the sids
+        final String url = buildEntityURL() + "?expand={expand}"
+        final Map map = [id: cid, expand: "true"]
+
+        final List<Compound> compounds = this.restTemplate.getForObject(url, List.class, map)
+        if (compounds) {
+            return compounds.get(0)
+        }
+        return null;
+    }
     /**
      * Return the number of records that match this query
      * @param params
@@ -289,115 +444,6 @@ class CompoundRestService extends AbstractRestService {
         return compoundSearchResult
     }
 
-    /**
-     * Handle the tasks after execution
-     * @param results
-     * @return
-     */
-    protected CompoundResult handleFutures(List<FutureTask<Object>> results) {
-        try {
-            //assert that there are 2 objects in the list
-            assert results.size() == 2
 
-            //the first task in the queue is the number of hits
-            final FutureTask<Long> numberHitsFutureTask = (FutureTask<Long>) results.get(0)
-            //we could check if its done, but we can assume it is, otherwise invokeAll would not complete
-            int nhits = numberHitsFutureTask.get().intValue()
 
-            //second task is the structure search
-            final FutureTask<CompoundResult> structureResultsTask = (FutureTask<CompoundResult>) results.get(1)
-            final CompoundResult compoundResult = structureResultsTask.get()
-            if (nhits <= 0) {
-                nhits = compoundResult.compounds?.size() ?: 0
-            }
-
-            final MetaData metaData = new MetaData()
-            metaData.nhit = nhits
-            compoundResult.setMetaData(metaData)
-            return compoundResult;
-        }
-        catch (Exception e) {
-            log.error("Futures threw an Exception", e)
-        }
-        return null
-    }
-    /*
-    * @param params
-    * @return list of {@link Compound}'s
-    */
-
-    public CompoundResult structureSearch(StructureSearchParams params, final Map<String, Long> etags = [:]) {
-        //first get the number of hits, we  should do this concurrently
-        //TODO: If we already have the number of hits we do not need to get it again
-
-        //prepare task to run concurrently add time out of 50 seconds
-        def tasks = []
-        tasks << (getStructureCount.curry(params) as Callable)
-        tasks << (doStructureSearch.curry(params, etags) as Callable)
-        //we set this to time out in 50 seconds
-        final List<FutureTask<Object>> results = executorService.invokeAll(tasks, 50, TimeUnit.SECONDS)
-        return handleFutures(results)
-    }
-
-    public ExperimentSearchResult findExperimentsByCID(final Long cid) {
-        final StringBuilder resource =
-            new StringBuilder(
-                    this.getResource(cid.toString())).
-                    append(RestApiConstants.EXPERIMENTS_RESOURCE).
-                    append(RestApiConstants.QUESTION_MARK).
-                    append(RestApiConstants.EXPAND_TRUE)
-        final URL url = new URL(resource.toString())
-        final ExperimentSearchResult experimentResult = this.restTemplate.getForObject(url.toURI(), ExperimentSearchResult.class)
-        return experimentResult
-
-    }
-
-    public AssayResult findAssaysByCID(Long cid) {
-        final StringBuilder resource =
-            new StringBuilder(
-                    this.getResource(cid.toString())).
-                    append(RestApiConstants.ASSAYS_RESOURCE).
-                    append(RestApiConstants.QUESTION_MARK).
-                    append(RestApiConstants.EXPAND_TRUE)
-        final URL url = new URL(resource.toString())
-        final AssayResult assayResult = this.restTemplate.getForObject(url.toURI(), AssayResult.class)
-        assayResult
-
-    }
-
-    public ProjectResult findProjectsByCID(Long cid) {
-        final StringBuilder resource =
-            new StringBuilder(
-                    this.getResource(cid.toString())).
-                    append(RestApiConstants.PROJECTS_RESOURCE).
-                    append(RestApiConstants.QUESTION_MARK).
-                    append(RestApiConstants.EXPAND_TRUE)
-        final URL url = new URL(resource.toString())
-        ProjectResult projectResult = this.restTemplate.getForObject(url.toURI(), ProjectResult.class)
-        projectResult
-
-    }
-
-    /**
-     * Returns a list of Compounds (inside a CompoundResult wrapper) given an ETag eTagName
-     * @param eTagName
-     * @return
-     */
-    public CompoundResult findCompoundsByETag(String eTagName) {
-        List<ETag> etags = findAllETagsForResource()
-        ETag matchedETag = etags.find {ETag eTag -> eTag.name == eTagName};
-        if (!matchedETag) {
-            return new CompoundResult()
-        }
-
-        String urlToCompounds = getResource() + RestApiConstants.ETAG + RestApiConstants.FORWARD_SLASH + matchedETag.etag_id
-
-        //We are passing the URI because we have already encoded the string
-        //just passing in the string would cause the URI to be encoded twice
-        //see http://static.springsource.org/spring/docs/3.0.x/javadoc-api/org/springframework/web/client/RestTemplate.html
-        final URL url = new URL(urlToCompounds)
-        final List<Compound> compounds = this.restTemplate.getForObject(url.toURI(), Compound[].class) as List<Compound>
-        CompoundResult compoundResult = new CompoundResult(compounds: compounds)
-        return compoundResult
-    }
 }

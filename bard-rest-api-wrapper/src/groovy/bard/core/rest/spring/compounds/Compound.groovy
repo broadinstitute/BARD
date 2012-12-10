@@ -11,6 +11,7 @@ public class Compound extends JsonUtil {
 
     private String etag;
 
+    private CompoundAnnotations compoundAnnotations
 
     @JsonProperty("cid")
     private Integer cid;
@@ -59,7 +60,13 @@ public class Compound extends JsonUtil {
     public Compound() {
 
     }
+    CompoundAnnotations getCompoundAnnotations() {
+        return compoundAnnotations
+    }
 
+    void setCompoundAnnotations(CompoundAnnotations compoundAnnotations) {
+        this.compoundAnnotations = compoundAnnotations
+    }
     @JsonProperty("anno_key")
     public List<String> getAnno_key() {
         return anno_key;

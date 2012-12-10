@@ -5,6 +5,7 @@ import bard.core.interfaces.CompoundAdapterInterface
 import bard.core.rest.spring.compounds.Compound
 import org.apache.commons.lang3.StringUtils
 import bard.core.rest.spring.util.NameDescription
+import bard.core.rest.spring.compounds.CompoundAnnotations
 
 public class CompoundAdapter implements CompoundAdapterInterface {
     final Compound compound
@@ -17,7 +18,32 @@ public class CompoundAdapter implements CompoundAdapterInterface {
         this.score = score
         this.matchingField = matchingField
     }
+    public List<String> getSynonyms(){
+        return this.compound.getCompoundAnnotations()?.getSynonyms() ?: []
+    }
+    public List<String> getRegistryNumbers(){
+        return this.compound.getCompoundAnnotations()?.getRegistryNumbers()?:[]
+    }
+    public String getUniqueIngredientIdentifier(){
+        return this.compound.compoundAnnotations?.getUniqueIngredientIdentifier()?:[]
+    }
+    public List<String> getMechanismOfAction(){
+        return this.compound.compoundAnnotations?.getMechanismOfAction()?:[]
+    }
+    public List<String> getTherapeuticIndication(){
+        return this.compound.compoundAnnotations?.getTherapeuticIndication()?:[]
+    }
+    public List<String> getPrescriptionDrugLabel(){
+        return this.compound.compoundAnnotations?.getPrescriptionDrugLabel()?:[]
+    }
+    public List<String> getOtherAnnotationValue(String key){
 
+        CompoundAnnotations compoundAnnotations = this.compound.compoundAnnotations
+        if(compoundAnnotations){
+            return compoundAnnotations.annotations.get(key)?:[]
+        }
+        return []
+    }
     public Double getScore(){
         return this.score
     }
