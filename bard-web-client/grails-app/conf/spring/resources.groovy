@@ -7,6 +7,7 @@ import grails.util.GrailsUtil
 import mockServices.MockQueryService
 import org.springframework.web.client.RestTemplate
 import java.util.concurrent.Executors
+import bard.core.rest.spring.SubstanceRestService
 
 /**
  * Spring Configuration of resources
@@ -14,8 +15,7 @@ import java.util.concurrent.Executors
 beans = {
     final String ncgcBaseURL = grailsApplication.config.ncgc.server.root.url
     final String badApplePromiscuityUrl = grailsApplication.config.promiscuity.badapple.url
-    restTemplate(RestTemplate) {
-    }
+    restTemplate(RestTemplate)
 
     compoundRestService(CompoundRestService) {
         baseUrl = ncgcBaseURL
@@ -36,7 +36,10 @@ beans = {
         baseUrl = ncgcBaseURL
         restTemplate = ref('restTemplate')
     }
-
+    substanceRestService(SubstanceRestService) {
+        baseUrl = ncgcBaseURL
+        restTemplate = ref('restTemplate')
+    }
     switch (GrailsUtil.environment) {
         case "offline":
             queryService(MockQueryService) {
@@ -49,6 +52,7 @@ beans = {
                 compoundRestService = ref('compoundRestService')
                 projectRestService = ref('projectRestService')
                 assayRestService = ref('assayRestService')
+                substanceRestService=ref('substanceRestService')
             }
     }
     crowdAuthenticationProvider(org.broadinstitute.cbip.crowd.CrowdAuthenticationProviderService) {// beans here
