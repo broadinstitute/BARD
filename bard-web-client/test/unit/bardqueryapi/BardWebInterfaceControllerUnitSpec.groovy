@@ -38,6 +38,7 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
     MolecularSpreadSheetService molecularSpreadSheetService
     QueryService queryService
     ShoppingCartService shoppingCartService
+    MobileService mobileService
 
     @Shared List<SearchFilter> searchFilters = [new SearchFilter(filterName: 'group1', filterValue: 'facet1'), new SearchFilter(filterName: 'group2', filterValue: 'facet2')]
     @Shared Value facet1 = new IntValue(source: new DataSource(), id: 'group1', value: null, children: [new IntValue(source: new DataSource(), id: 'facet1', value: 1)])
@@ -56,6 +57,8 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
         views['/bardWebInterface/_assays.gsp'] = 'mock content'
         views['/bardWebInterface/_projects.gsp'] = 'mock content'
         views['/bardWebInterface/_compounds.gsp'] = 'mock content'
+        mobileService = Mock(MobileService)
+        controller.mobileService = this.mobileService
     }
 
     void "test index"() {
@@ -249,6 +252,7 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
         controller.searchProjects(searchCommand)
         then:
         _ * this.queryService.findProjectsByTextSearch(_, _, _, _) >> {projectAdapterMap}
+        this.mobileService.detect(_) >> {false}
         assert response.status == statusCode
         where:
         label                 | searchString | statusCode                         | projectAdapterMap

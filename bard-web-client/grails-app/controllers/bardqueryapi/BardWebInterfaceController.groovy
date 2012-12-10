@@ -28,6 +28,7 @@ class BardWebInterfaceController {
     def shoppingCartService
     IQueryService queryService
     MolecularSpreadSheetService molecularSpreadSheetService
+    MobileService mobileService
 //    CompoundRestService compoundRestService
     List<SearchFilter> filters = []
     final static String PROBE_ETAG_NAME = 'MLP Probes'
@@ -454,8 +455,8 @@ class BardWebInterfaceController {
  */
 class SearchHelper {
 
-    org.springframework.context.ApplicationContext ctx = org.codehaus.groovy.grails.web.context.ServletContextHolder.servletContext.getAttribute(org.codehaus.groovy.grails.web.servlet.GrailsApplicationAttributes.APPLICATION_CONTEXT);
-    MobileService mobileService = ctx.getBean('mobileService')
+//    org.springframework.context.ApplicationContext ctx = org.codehaus.groovy.grails.web.context.ServletContextHolder.servletContext.getAttribute(org.codehaus.groovy.grails.web.servlet.GrailsApplicationAttributes.APPLICATION_CONTEXT);
+//    MobileService mobileService = ctx.getBean('mobileService')
 
     Map handleStructureSearch(final bardqueryapi.IQueryService queryService, final SearchCommand searchCommand) {
         Map structureSearchResultsMap = [:]
