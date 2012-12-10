@@ -8,7 +8,7 @@ package webtests.pages
  * To change this template use File | Settings | File Templates.
  */
 class LoginPage extends ScaffoldPage {
-    static url = "login/auth"
+    static url = ""
 
     static at = { title == "BioAssay Research Database" }
 
