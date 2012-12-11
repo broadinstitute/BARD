@@ -7,44 +7,20 @@
 --%>
 
 
-<%-- A template for showing summary for both project and assay def --%>
-
-<r:script>
-    $('#contextItemsTable').dataTable({
-        "bJQueryUI": true,
-        "sPaginationType": "full_numbers"
-    });
-</r:script>
-<div>
-    <g:if test="${contexts}">
-        <div>
-            <table id="contextItemsTable" cellpadding="0" cellspacing="0" border="0" class="display">
-                <thead>
-                <tr>
-                    <th>Attribute Element</th>
-                    <th>Value Display</th>
-                    <th>Value</th>
-                    <th>Value Min</th>
-                    <th>Value Max</th>
+<%-- A template for showing summary for both project and assay def, show as card --%>
+<div id="card-${context.id}" class="span6 card roundedBorder card-table-container">
+    <table class="table table-hover">
+        <caption id="${context.id}" class="assay_context">
+            <div class="cardTitle">${context.contextName}</div>
+        </caption>
+        <tbody>
+            <g:each in="${context.contextItems}" status="i" var="contextItem">
+                <tr id="${contextItem.id}" class='context_item_row'>
+                    <td class="attributeLabel">${contextItem.attributeElement?.label}</td>
+                    <td class="valuedLabel">${contextItem.valueDisplay}</td>
                 </tr>
-                </thead>
-                <tbody>
-                <g:each in="${contexts}" status="a" var="context">
-                    <g:each in="${context?.contextItems}" status="i" var="contextItem">
-                        <tr>
-                            <td>${fieldValue(bean: contextItem, field: "attributeElement.label")}</td>
-                            <td>${fieldValue(bean: contextItem, field: "valueDisplay")}</td>
-                            <td>${fieldValue(bean: contextItem, field: "valueNum")}</td>
-                            <td>${fieldValue(bean: contextItem, field: "valueMin")}</td>
-                            <td>${fieldValue(bean: contextItem, field: "valueMax")}</td>
-                        </tr>
-                    </g:each>
-                </g:each>
-                </tbody>
-            </table>
-        </div>
-    </g:if>
-    <g:else>
-        <span>No Contexts Items found</span>
-    </g:else>
+            </g:each>
+        </tbody>
+    </table>
 </div>
+

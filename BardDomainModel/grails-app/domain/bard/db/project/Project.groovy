@@ -61,4 +61,16 @@ class Project {
         projectSteps.addAll(this.projectExperiments*.precedingProjectSteps)
         projectSteps.flatten()
     }
+
+    Map<String, List<ProjectContext>> getContextsWithGroup() {
+        Map<String, List<ProjectContext>> m = [:]
+        contexts.each{
+            ProjectContext context ->
+            if (!m.get(context.contextGroup)) {
+                m.put(context.contextGroup, [])
+            }
+            m.get(context.contextGroup).add(context)
+        }
+        return m
+    }
 }

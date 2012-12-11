@@ -57,10 +57,10 @@
             <g:render template="../document/show" model="['documents': instance.documents]"/>
 
             <h3><a href="#">Contexts</a></h3>
-            <g:render template="../context/show" model="['contexts': instance.contexts]"/>
+            <g:render template="../context/show" model="['contexts': instance.contextsWithGroup]"/>
 
-            <h3><a href="#">Context Items</a></h3>
-            <g:render template="../contextItem/show" model="['contexts': instance.contexts]"/>
+            %{--<h3><a href="#">Context Items</a></h3>--}%
+            %{--<g:render template="../contextItem/show" model="['contexts': instance.contexts]"/>--}%
 
             <h3><a href="#">Experiments and steps</a></h3>
             <g:render template="showstep" model="['experiments': instance.projectExperiments, 'pegraph': pexperiment]"/>
