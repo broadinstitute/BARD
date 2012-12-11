@@ -6,6 +6,7 @@ import spock.lang.Unroll
 import spock.lang.Shared
 import com.fasterxml.jackson.databind.ObjectMapper
 import bard.core.rest.spring.util.NameDescription
+import bard.core.rest.spring.compounds.CompoundAnnotations
 
 @Unroll
 class CompoundAdapterUnitSpec extends Specification {
@@ -35,16 +36,159 @@ class CompoundAdapterUnitSpec extends Specification {
        "resourcePath": "/compounds/2722"
    }
 '''
+    static final String COMPOUND_ANNOTATIONS = '''
+    {
+       "anno_key":[
+          "CompoundSpectra",
+          "DOCUMENTS",
+          "DOCUMENTS",
+          "CompoundUNII",
+          "CompoundCAS",
+          "CompoundCAS",
+          "CompoundCAS",
+          "CompoundCAS",
+          "CompoundIndication",
+          "CompoundIndication",
+          "CompoundIndication",
+          "CompoundDrugLabelRx",
+          "COLLECTION",
+          "COLLECTION",
+          "COLLECTION",
+          "COLLECTION",
+          "COLLECTION",
+          "COLLECTION",
+          "COLLECTION",
+          "COLLECTION",
+          "COLLECTION",
+          "COLLECTION",
+          "COLLECTION",
+          "COLLECTION",
+          "COLLECTION",
+          "COLLECTION",
+          "COLLECTION",
+          "Synonyms",
+          "Synonyms",
+          "Synonyms",
+          "Synonyms",
+          "Synonyms",
+          "Synonyms",
+          "Synonyms",
+          "Synonyms",
+          "Synonyms",
+          "Synonyms",
+          "Synonyms",
+          "Synonyms",
+          "Synonyms",
+          "Synonyms",
+          "Synonyms",
+          "Synonyms",
+          "Synonyms",
+          "Synonyms",
+          "Synonyms",
+          "Synonyms",
+          "Synonyms",
+          "Synonyms",
+          "CompoundMOA",
+          "CompoundMOA"
+       ],
+       "anno_val":[
+          "http://tripod.nih.gov/npc/spectra/NCGC00095264.png",
+          "1820340",
+          "7513790",
+          "2I8BD50I8B",
+          "773-76-2",
+          "8067-69-4",
+          "8021-96-3",
+          "81117-07-9",
+          "Dermatologic",
+          "Antiseptic",
+          "Used in the treatment of dandruff and mild to moderately severe seborrheic dermatitis of the scalp.",
+          "0072-6850;CAPITROL;shampoo;chloroxine;20 mg in 1 g;2I8BD50I8B",
+          "NPC informatics|NPC-7244033|ChemDiv, Inc:3406-0528|Microsource:MS-1503202",
+          "HTS amenable drugs",
+          "Approved drugs",
+          "FDA orange book",
+          "FDA drugs@FDA",
+          "FDA NDC",
+          "KEGG",
+          "Human approved drugs",
+          "FDA approved",
+          "FDA maximum daily dose",
+          "FDA human approved",
+          "DrugBank v3.0|DB01243",
+          "FDA DailyMed",
+          "NPC screening|NCGC00095264",
+          "QC spectra",
+          "Quixalin",
+          "Capitrol",
+          "Dichloroquine",
+          "5,7-Dichloro-8-quinolinol",
+          "Dichlorohydroxyquinoline",
+          "Chloroxine",
+          "Chlorhydroxyquinoline",
+          "Chloroxine hydrofluoride",
+          "Chlorquinol",
+          "Halquinols",
+          "Halquinol",
+          "Chlofucid",
+          "Clofuzid",
+          "Endiaron",
+          "Quesyl",
+          "Quinolor",
+          "CHQ",
+          "Chloroxyquinoline",
+          "Dichloroquinolinol",
+          "Dichloroxin",
+          "Dikhloroskin",
+          "5,7-dichloroquinolin-8-ol",
+          "Antiseborrheic Agents",
+          "Although the mechanism of action is not understood, chloroxine may slow down mitotic activity in the epidermis, thereby reducing excessive scaling associated with dandruff or seborrheic dermatitis of the scalp. Chloroxine induces SOS-DNA repair in E. coli, so chloroxine may be genotoxic to bacteria."
+       ]
+    }
+    '''
 
 
 
     void "test compound Adapter"() {
         given:
         final Compound compound = objectMapper.readValue(COMPOUND_EXPANDED, Compound.class)
+        compound.compoundAnnotations = new CompoundAnnotations()
 
         when:
         final CompoundAdapter compoundAdapter = new CompoundAdapter(compound, new Double("2"), new NameDescription(name: "name", description: "description"))
         then:
+        assertCompounds(compoundAdapter)
+        assert !compoundAdapter.getSynonyms()
+        assert !compoundAdapter.getRegistryNumbers()
+        assert !compoundAdapter.getUniqueIngredientIdentifier()
+        assert !compoundAdapter.getMechanismOfAction()
+        assert !compoundAdapter.getTherapeuticIndication()
+        assert !compoundAdapter.getPrescriptionDrugLabel()
+        assert !compoundAdapter.getOtherAnnotationValue("key")
+
+    }
+    void "test compound Adapter with no highlight field"() {
+        when:
+        final CompoundAdapter compoundAdapter = new CompoundAdapter(new Compound())
+        then:
+        assert !compoundAdapter.highlight
+        assert !compoundAdapter.getOtherAnnotationValue("SomeValues")
+
+    }
+    void "test Compound Adapter with Annotations"(){
+        given:
+        final Compound compound = objectMapper.readValue(COMPOUND_EXPANDED, Compound.class)
+        final CompoundAnnotations compoundAnnotations = objectMapper.readValue(COMPOUND_ANNOTATIONS, CompoundAnnotations.class)
+        compound.compoundAnnotations = compoundAnnotations
+        when:
+        final CompoundAdapter compoundAdapter = new CompoundAdapter(compound, new Double("2"), new NameDescription(name: "name", description: "description"))
+        then:
+        assertCompounds(compoundAdapter)
+        assertAnnotations(compoundAdapter)
+
+
+    }
+    void assertCompounds(final CompoundAdapter compoundAdapter){
         assert compoundAdapter.isDrug()
         assert !compoundAdapter.getProbeId()
         assert !compoundAdapter.isProbe()
@@ -77,13 +221,24 @@ class CompoundAdapterUnitSpec extends Specification {
         assert compoundAdapter.matchingField.description=="description"
         assert compoundAdapter.score==2
         assert compoundAdapter.highlight == "Score: 2.0 Matched Field: name"
-
     }
-    void "test compound Adapter with no highlight field"() {
-        when:
-        final CompoundAdapter compoundAdapter = new CompoundAdapter(new Compound())
-        then:
-        assert !compoundAdapter.highlight
+    void assertAnnotations(CompoundAdapter compoundAdapter){
+
+
+        assert compoundAdapter.getOtherAnnotationValue("COLLECTION").size() == 15
+        assert compoundAdapter.getOtherAnnotationValue("DOCUMENTS").size() == 2
+        assert compoundAdapter.getSynonyms().size() == 22
+        assert compoundAdapter.getUniqueIngredientIdentifier() == "2I8BD50I8B"
+
+        assert compoundAdapter.getRegistryNumbers().size() ==4
+
+        assert compoundAdapter.getTherapeuticIndication().size()==3
+
+        assert compoundAdapter.getPrescriptionDrugLabel().size()==1
+
+        assert compoundAdapter.getMechanismOfAction().size() == 2
+
+        assert compoundAdapter.getOtherAnnotationValue("CompoundSpectra").size()==1
 
     }
 }

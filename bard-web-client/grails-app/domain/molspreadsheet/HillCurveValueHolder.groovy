@@ -2,7 +2,6 @@ package molspreadsheet
 
 import org.slf4j.LoggerFactory
 import results.ExperimentalValue
-import bard.core.HillCurveValue
 
 class HillCurveValueHolder {
 

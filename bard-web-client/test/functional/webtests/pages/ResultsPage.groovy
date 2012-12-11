@@ -17,7 +17,7 @@ class ResultsPage extends HomePage {
 
         addAssayToCart(wait: true) { assayId ->
             $(".addToCartCheckbox[data-cart-id=\"$assayId\"][data-cart-type=AssayDefinition]").click()
-            waitFor(5, 0.5) { queryCart.contentSummary.text() != "Empty" }
+            waitFor(10, 0.5) { queryCart.contentSummary.text() != "Empty" }
         }
     }
 }

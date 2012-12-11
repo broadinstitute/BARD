@@ -80,20 +80,37 @@ class SubstanceRestService extends AbstractRestService {
                 toString();
     }
 
-    public List<Substance> findSubstancesByCid(Long cid, boolean expand = true) {
+    public List<Substance> findSubstancesByCidExpandedSearch(Long cid) {
         final StringBuilder resource =
             new StringBuilder(this.getResource(RestApiConstants.CID)).
                     append(RestApiConstants.FORWARD_SLASH).
                     append(cid.toString())
-        if (expand) {
-            resource.append(RestApiConstants.QUESTION_MARK).
-                    append(RestApiConstants.EXPAND_TRUE)
-        }
+        resource.append(RestApiConstants.QUESTION_MARK).
+                append(RestApiConstants.EXPAND_TRUE)
+
         final URL url = new URL(resource.toString())
         final List<Substance> substances = (List<Substance>) this.restTemplate.getForObject(url.toURI(), Substance[].class)
         return substances;
     }
+    /**
+     * Returns a lis of sids
+     * @param cid
+     * @return
+     */
+    public List<Long> findSubstancesByCid(Long cid) {
+        final StringBuilder resource =
+            new StringBuilder(this.getResource(RestApiConstants.CID)).
+                    append(RestApiConstants.FORWARD_SLASH).
+                    append(cid.toString())
 
+
+        final URL url = new URL(resource.toString())
+        List<String> sidUrls = this.restTemplate.getForObject(url.toURI(), String[].class) as List<String>
+        if (sidUrls) {
+            return sidUrls.collect {String s -> new Long(s.substring(s.lastIndexOf("/") + 1).trim())}
+        }
+        return []
+    }
     public ExperimentData findExperimentDataBySid(final Long sid) {
         final StringBuilder resource =
             new StringBuilder(this.getResource(sid.toString())).

@@ -25,7 +25,7 @@ public class CompoundAdapter implements CompoundAdapterInterface {
         return this.compound.getCompoundAnnotations()?.getRegistryNumbers()?:[]
     }
     public String getUniqueIngredientIdentifier(){
-        return this.compound.compoundAnnotations?.getUniqueIngredientIdentifier()?:[]
+        return this.compound.compoundAnnotations?.getUniqueIngredientIdentifier()?: ""
     }
     public List<String> getMechanismOfAction(){
         return this.compound.compoundAnnotations?.getMechanismOfAction()?:[]
@@ -55,7 +55,7 @@ public class CompoundAdapter implements CompoundAdapterInterface {
     String getHighlight() {
         String matchFieldName = getMatchingField()?.getName()
         if(matchFieldName){
-            //TODO: Talk to Steve about formating
+            //TODO: Talk to Steve about formatting
             return "Score: " + this.getScore() + " Matched Field: " + matchFieldName
         }
         return ""

@@ -100,6 +100,32 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
     }
 
 
+    void "test find substance Ids #label"() {
+        when:
+        controller.findSubstanceIds(cid)
+        then:
+        _ * this.queryService.findSubstancesByCid(_) >> {sids}
+        assert response.status == statusCode
+
+        where:
+        label              | cid  | statusCode                | sids
+        "Null CID"         | null | HttpServletResponse.SC_OK | []
+        "Existing CID"     | 567  | HttpServletResponse.SC_OK | [2, 3]
+        "CID with no SIDs" | 56   | HttpServletResponse.SC_OK | []
+
+    }
+
+    void "test findSubstanceIds With Exception"() {
+        given:
+        Long id = 234
+        when:
+        controller.findSubstanceIds(id)
+        then:
+        this.queryService.findSubstancesByCid(_) >> {throw new HttpException("Some message")}
+        assert response.status == 500
+
+    }
+
     void "test showExperimentResult #label"() {
         when:
         controller.showExperimentResult(eid)

@@ -41,6 +41,9 @@ modules = {
         //resource url:'/js/jquery.address-1.4/jquery.address-1.4.js?state=/'
         resource url:"css/promiscuity.css"
     }
+    substances {
+        resource url:"js/substances.js"
+     }
     activeVrsTested {
         resource url:"js/activeVrsTested.js"
      }

@@ -12,7 +12,6 @@ import molspreadsheet.MolecularSpreadSheetService
 import org.apache.commons.lang.StringUtils
 
 import javax.servlet.http.HttpServletResponse
-import bard.core.rest.spring.CompoundRestService
 
 /**
  *
@@ -296,6 +295,26 @@ class BardWebInterfaceController {
             final String errorMessage = "Structure search has encountered an error:\n${exp.message}"
             log.error(errorMessage, exp)
             response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR.intValue(),
+                    errorMessage)
+        }
+    }
+    /**
+     *
+     * @param cid - Given a single CID
+     *
+     */
+    def findSubstanceIds(Long cid) {
+        try {
+            Long compoundId = cid ?: params.id as Long//if '' param is provided, use that; otherwise, try the default id one
+
+            final List<Long> sids = this.queryService.findSubstancesByCid(compoundId)
+            render(template: "substanceIds", model: [sids: sids])
+
+        }
+        catch (Exception exp) {
+            final String errorMessage = "Show compound page has encountered an error while trying to fetch SIDs:\n${exp.message}"
+            log.error(errorMessage, exp)
+            return response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR.intValue(),
                     errorMessage)
         }
     }

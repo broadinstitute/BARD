@@ -5,7 +5,7 @@ import bard.core.rest.spring.util.StructureSearchParams
 
 public interface IQueryService {
 
-
+    List<Long> findSubstancesByCid(Long cid) ;
     /**
      *
      * @param cid

@@ -20,10 +20,20 @@ class SpreadSheetActivityUnitSpec extends Specification {
         assert !spreadSheetActivity.hillCurveValueList
     }
 
-    void "test readOutToHillCurveValue(final List<String> resultTypeNames, final Readout readout)"() {
+    void "test readOutToHillCurveValue with empty Read outs"() {
         given:
         SpreadSheetActivity spreadSheetActivity = new SpreadSheetActivity()
         Readout readout = new Readout()
+        List<String> resultTypeNames = []
+        when:
+        spreadSheetActivity.readOutToHillCurveValue(resultTypeNames, readout)
+        then:
+        assert !resultTypeNames
+    }
+    void "test readOutToHillCurveValue"() {
+        given:
+        SpreadSheetActivity spreadSheetActivity = new SpreadSheetActivity()
+        Readout readout = new Readout(name: "name")
         List<String> resultTypeNames = []
         when:
         spreadSheetActivity.readOutToHillCurveValue(resultTypeNames, readout)
