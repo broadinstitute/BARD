@@ -3,14 +3,9 @@ package bard.core.rest.spring.experiment
 import bard.core.DataSource
 import bard.core.HillCurveValue
 import bard.core.Value
-import com.fasterxml.jackson.annotation.JsonAnyGetter
-import com.fasterxml.jackson.annotation.JsonAnySetter
+import bard.core.rest.spring.util.JsonUtil
 import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.annotation.JsonProperty
-import org.apache.commons.lang.builder.EqualsBuilder
-import org.apache.commons.lang.builder.HashCodeBuilder
-import org.apache.commons.lang.builder.ToStringBuilder
-import bard.core.rest.spring.util.JsonUtil
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class Readout extends  JsonUtil{
@@ -172,8 +167,8 @@ public class Readout extends  JsonUtil{
         HillCurveValue hillCurveValue = new HillCurveValue(parent, this.name)
         hillCurveValue.coef = this.coef
         hillCurveValue.slope = this.slope
-        hillCurveValue.conc = this.conc
-        hillCurveValue.response = this.response
+        hillCurveValue.conc = this.conc?:[]
+        hillCurveValue.response = this.response?:[]
         hillCurveValue.s0 = this.s0
         hillCurveValue.sinf = this.sInf
         hillCurveValue.concentrationUnits = this.concentrationUnits

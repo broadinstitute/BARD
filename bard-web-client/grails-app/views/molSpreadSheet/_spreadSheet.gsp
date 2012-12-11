@@ -143,13 +143,17 @@
                                 <td class="molSpreadSheet" property="var${currentCol}">
                                 <p>
 
-
+                               <g:if test="${hillCurveValueHolder?.identifier}">
                                 <div data-detail-id="drc_${spreadSheetActivityStorage.sid}_${colCnt}"
                                      class="drc-popover-link btn btn-link"
                                      data-original-title="${hillCurveValueHolder.identifier}"
                                      data-html="true"
                                      data-trigger="hover">
                                     ${hillCurveValueHolder.toString()}</div>
+                               </g:if>
+                                %{--<g:else>--}%
+                                    %{--${hillCurveValueHolder.toString()}--}%
+                                %{--</g:else>--}%
                                 </p>
 
 

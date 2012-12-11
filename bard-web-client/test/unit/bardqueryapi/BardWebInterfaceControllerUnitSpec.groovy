@@ -27,6 +27,7 @@ import spock.lang.Specification
 import spock.lang.Unroll
 
 import javax.servlet.http.HttpServletResponse
+import org.springframework.web.servlet.ModelAndView
 
 /**
  * See the API for {@link grails.test.mixin.support.GrailsUnitTestMixin} for usage instructions
@@ -841,6 +842,40 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
         []               | []                 | []                  | "no (empty) filter; no (empty) facet; no overlapping"
     }
 
+    void "test handleMobile #label"() {
+        given:
+        ModelAndView modelAndView = new ModelAndView(viewName: viewName)
+
+        when:
+        controller.handleMobile(dataModel, modelAndView)
+
+        then:
+        1 * this.mobileService.detect(_) >> {isMobile}
+        (0..1) * this.mobileService.gspExists(_) >> {gspExists}
+        assert modelAndView.viewName == expectedViewName
+
+        where:
+        dataModel          | viewName | isMobile | gspExists | expectedViewName                            | label
+        [data: 'someData'] | '/view1' | true     | true      | '/mobile/view1'                             | 'mobile-platform request'
+        [data: 'someData'] | '/view1' | false    | true      | '/view1'                                    | 'regular request'
+        [data: 'someData'] | '/view1' | true     | false     | '/mobile/bardWebInterface/missingPageError' | 'missing GSP'
+    }
+
+    void "test isMobile #label"() {
+        given:
+
+        when:
+        Boolean result = controller.isMobile()
+
+        then:
+        1 * this.mobileService.detect(_) >> {isMobile}
+        assert result == isMobile
+
+        where:
+        isMobile | label
+        true     | 'mobile-platform request'
+        false    | 'regular request'
+    }
 
     CompoundAdapter buildCompoundAdapter(final Long cid) {
         final Compound compound = new Compound()

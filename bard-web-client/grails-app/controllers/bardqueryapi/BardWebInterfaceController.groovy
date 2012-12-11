@@ -28,14 +28,13 @@ class BardWebInterfaceController {
     IQueryService queryService
     MolecularSpreadSheetService molecularSpreadSheetService
     MobileService mobileService
-//    CompoundRestService compoundRestService
     List<SearchFilter> filters = []
     final static String PROBE_ETAG_NAME = 'MLP Probes'
 
     //An AfterInterceptor to handle mobile-view routing.
     def afterInterceptor = [action: this.&handleMobile]
 
-    private handleMobile(model, modelAndView) {
+    protected handleMobile(model, modelAndView) {
         if (modelAndView && mobileService.detect(request)) {
             String newView = '/mobile' + modelAndView.viewName
             if (mobileService.gspExists(newView)) {
