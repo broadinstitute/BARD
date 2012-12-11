@@ -9,20 +9,27 @@
 
 <%-- A template for showing summary for both project and assay def --%>
 
-<div>
-<g:if test="${contexts}">
-    <li>
-    <g:each in="${contexts.sort{it.id}}" var="context">
-        <g:if test="$context?.contextName}">
-            <li>
-                <g:message code="context.contextName.label" default="Name: " />
-                <span><g:fieldValue bean="${context}" field="contextName"/></span>
-            </li>
-        </g:if>
-    </g:each>
-    </li>
-</g:if>
-<g:else>
-    <span>No Contexts found</span>
-</g:else>
+<div id="cardView" class="cardView" class="row-fluid">
+
+    <div class="span12">
+
+        <div class="row-fluid">
+            <div id="cardHolder" class="span12">
+                <g:each in="${contexts}" var="context">
+                    <div id="${context.contextName}"  class="roundedBorder card-group ${context.contextName}">
+
+                        <div class="row-fluid">
+                            <h5 class="span12">${context.contextName}</h5>
+                        </div>
+
+                        <div class="row-fluid">
+                            <g:render template="../contextItem/show" model="['context': context]"/>
+                        </div>
+
+                    </div>
+                </g:each>
+            </div>
+        </div>
+
+    </div>
 </div>
