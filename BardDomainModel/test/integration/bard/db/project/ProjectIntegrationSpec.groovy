@@ -37,7 +37,7 @@ class ProjectIntegrationSpec extends IntegrationSpec {
 
     void initializeProjectContextItem() {
         contextItem = ProjectContextItem.buildWithoutSave()
-        contextaddToContextItems(contextItem)
+        projectContext.addToContextItems(contextItem)
         contextItem.attributeElement.save()
     }
 
@@ -47,8 +47,8 @@ class ProjectIntegrationSpec extends IntegrationSpec {
     }
 
     void initializeProjectContext() {
-        context= ProjectContext.buildWithoutSave()
-        domainInstance.addToContexts(context)
+        projectContext = ProjectContext.buildWithoutSave()
+        domainInstance.addToContexts(projectContext)
         projectContext
     }
 
@@ -63,14 +63,14 @@ class ProjectIntegrationSpec extends IntegrationSpec {
         projectExperimentContextItem.attributeElement.save()
     }
 
-    void "test contextcascade save"() {
+    void "test context cascade save"() {
         given:
         initializeProjectContext()
-        assert contextid == null
+        assert projectContext.id == null
         when:
         domainInstance.save(flush: true)
         then:
-        contextid != null
+        projectContext.id != null
     }
 
     void "test contextItems cascade save"() {

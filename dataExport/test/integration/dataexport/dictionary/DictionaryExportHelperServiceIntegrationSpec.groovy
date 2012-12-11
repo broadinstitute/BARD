@@ -202,8 +202,11 @@ class DictionaryExportHelperServiceIntegrationSpec extends IntegrationSpec {
         2.times {def treeNode = LaboratoryTree.build(); treeNode.save(flush: true)}
         when:
         this.dictionaryExportHelperService.generateLabs(this.markupBuilder)
+
         then:
+        println(this.writer.toString())
         XmlTestAssertions.assertResults(results, this.writer.toString())
+
         where:
         label  | results
         "Labs" | XmlTestSamples.LABS

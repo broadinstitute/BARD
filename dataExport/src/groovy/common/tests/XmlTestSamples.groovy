@@ -1112,11 +1112,11 @@ class XmlTestSamples {
 
     static String LABS = '''
         <laboratories>
-          <laboratory laboratoryElement='label1'>
+          <laboratory laboratoryElement="label1">
             <laboratoryName>label</laboratoryName>
             <description />
           </laboratory>
-          <laboratory laboratoryElement='label2'>
+          <laboratory laboratoryElement="label2">
             <laboratoryName>label</laboratoryName>
             <description />
           </laboratory>
