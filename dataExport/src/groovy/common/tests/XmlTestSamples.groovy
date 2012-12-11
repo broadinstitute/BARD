@@ -68,13 +68,13 @@ class XmlTestSamples {
     '''
 
     static final String EXPERIMENT_MEASURE_MINIMAL = '''
-        <experimentMeasure measureRef='1'  />
+        <experimentMeasure experimentMeasureId='1' measureRef='1'  />
     '''
     static final String EXPERIMENT_MEASURE_WITH_PARENT_REF = '''
-        <experimentMeasure measureRef='2'  parentExperimentMeasureRef='1'  />
+        <experimentMeasure experimentMeasureId='2' measureRef='2'  parentExperimentMeasureRef='1'  />
     '''
     static final String EXPERIMENT_MEASURE_WITH_PARENT_REF_AND_RELATIONSHIP = '''
-        <experimentMeasure measureRef='2'  parentExperimentMeasureRef='1' parentChildRelationship='Derived from' />
+        <experimentMeasure experimentMeasureId='2' measureRef='2'  parentExperimentMeasureRef='1' parentChildRelationship='Derived from' />
     '''
     static final String EXTERNAL_REFERENCES_UNT = '''
         <externalReferences>
@@ -177,7 +177,7 @@ class XmlTestSamples {
                 </context>
             </contexts>
             <experimentMeasures>
-                <experimentMeasure measureRef='1'/>
+                <experimentMeasure experimentMeasureId='1' measureRef='1'/>
             </experimentMeasures>
             <link rel='related' href='null' type='application/vnd.bard.cap+xml;type=assay' />
             <link rel='up' href='null' type='application/vnd.bard.cap+xml;type=experiments' />
@@ -190,7 +190,7 @@ class XmlTestSamples {
         <experiment experimentId='1' status='Pending' readyForExtraction='Pending'>
             <experimentName>experimentName</experimentName>
             <experimentMeasures>
-                <experimentMeasure measureRef='1'/>
+                <experimentMeasure experimentMeasureId='1' measureRef='1'/>
             </experimentMeasures>
             <link rel='related' href='null' type='application/vnd.bard.cap+xml;type=assay' />
             <link rel='up' href='null' type='application/vnd.bard.cap+xml;type=experiments' />
@@ -202,8 +202,8 @@ class XmlTestSamples {
         <experiment experimentId='1' status='Pending' readyForExtraction='Pending'>
             <experimentName>experimentName</experimentName>
             <experimentMeasures>
-                <experimentMeasure measureRef='1'/>
-                <experimentMeasure measureRef='2'/>
+                <experimentMeasure experimentMeasureId='1' measureRef='1'/>
+                <experimentMeasure experimentMeasureId='2' measureRef='2'/>
             </experimentMeasures>
             <link rel='related' href='null' type='application/vnd.bard.cap+xml;type=assay' />
             <link rel='up' href='null' type='application/vnd.bard.cap+xml;type=experiments' />

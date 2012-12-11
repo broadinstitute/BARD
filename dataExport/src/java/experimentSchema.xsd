@@ -47,6 +47,15 @@ The link with 'edit' relation should be used to set the status of this experimen
                             <xs:element maxOccurs="unbounded" ref="experimentMeasure"/>
                         </xs:sequence>
                     </xs:complexType>
+                    <xs:key name="experimentMeasureId_Key">
+                        <xs:selector xpath="experimentMeasure"/>
+                        <xs:field xpath="@experimentMeasureId"/>
+                    </xs:key>
+                    <xs:keyref name="parentExperimentMeasureRef_KeyRef"
+                        refer="experimentMeasureId_Key">
+                        <xs:selector xpath="experimentMeasure"/>
+                        <xs:field xpath="@parentExperimentMeasureRef"/>
+                    </xs:keyref>
                 </xs:element>
                 <xs:element maxOccurs="unbounded" minOccurs="1" ref="link">
                     <xs:annotation>
@@ -229,6 +238,7 @@ Link to parent experiment
     </xs:element>
     <xs:element name="experimentMeasure">
         <xs:complexType>
+            <xs:attribute name="experimentMeasureId" type="bardID" use="required"/>
             <xs:attribute name="measureRef" type="bardID" use="required"/>
             <xs:attribute name="parentExperimentMeasureRef" type="bardID"/>
             <xs:attribute name="parentChildRelationship"/>

@@ -170,21 +170,21 @@ class ExperimentExportService extends ExportAbstractService {
         }
     }
 
-    protected void  generateExperimentMeasures(MarkupBuilder markupBuilder, Set<ExperimentMeasure> experimentMeasures) {
-        if(experimentMeasures){
-            markupBuilder.experimentMeasures(){
-                for(ExperimentMeasure experimentMeasure in experimentMeasures){
-                    generateExperimentMeasure(markupBuilder,experimentMeasure)
+    protected void generateExperimentMeasures(MarkupBuilder markupBuilder, Set<ExperimentMeasure> experimentMeasures) {
+        if (experimentMeasures) {
+            markupBuilder.experimentMeasures() {
+                for (ExperimentMeasure experimentMeasure in experimentMeasures) {
+                    generateExperimentMeasure(markupBuilder, experimentMeasure)
                 }
             }
         }
     }
 
     protected void generateExperimentContexts(MarkupBuilder markupBuilder, List<ExperimentContext> experimentContexts) {
-        if(experimentContexts){
+        if (experimentContexts) {
             markupBuilder.contexts() {
-                for(ExperimentContext context in experimentContexts){
-                    generateExperimentContext(markupBuilder,context)
+                for (ExperimentContext context in experimentContexts) {
+                    generateExperimentContext(markupBuilder, context)
                 }
             }
         }
@@ -276,7 +276,8 @@ class ExperimentExportService extends ExportAbstractService {
     }
 
     protected void generateExperimentMeasure(final MarkupBuilder markupBuilder, final ExperimentMeasure experimentMeasure) {
-        Map attributes = [measureRef: experimentMeasure.measure.id]
+        Map attributes = [experimentMeasureId: experimentMeasure.id,
+                measureRef: experimentMeasure.measure.id]
         ExperimentMeasure parent = experimentMeasure.parent
         if (parent) {
             attributes.put('parentExperimentMeasureRef', parent.id)

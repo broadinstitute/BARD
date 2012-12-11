@@ -219,6 +219,10 @@
                 <xs:element maxOccurs="unbounded" ref="context"/>
             </xs:sequence>
         </xs:complexType>
+        <xs:key name="contextId_Key">
+            <xs:selector xpath="context"/>
+            <xs:field xpath="@id"/>
+        </xs:key>
     </xs:element>
     <xs:element name="context" type="contextType"/>
 </xs:schema>
