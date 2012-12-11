@@ -89,11 +89,11 @@ class ProjectExportServiceUnitSpec extends Specification {
 
     void "generate ProjectContext #label"() {
         given:
-        ProjectContext projectContext = ProjectContext.build(map)
-        numItems.times {ProjectContextItem.build(projectContext: projectContext)}
+        ProjectContext context = ProjectContext.build(map)
+        numItems.times {ProjectContextItem.build(context: context)}
 
         when:
-        this.projectExportService.generateProjectContext(this.markupBuilder, projectContext)
+        this.projectExportService.generateProjectContext(this.markupBuilder, context)
 
         then:
         String actualXml = this.writer.toString()

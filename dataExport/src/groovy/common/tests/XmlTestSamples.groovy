@@ -413,14 +413,14 @@ class XmlTestSamples {
 
     static final String PROJECT_MINIMAL = '''
         <project projectId='1' readyForExtraction='Ready' groupType='Project'>
-            <projectName>projectName</projectName>
+            <projectName>name</projectName>
             <link rel='edit' href='null' type='application/vnd.bard.cap+xml;type=project' />
             <link rel='up' href='null' type='application/vnd.bard.cap+xml;type=projects' />
         </project>
     '''
     static final String PROJECT_WITH_DESCRIPTION = '''
         <project projectId='1' readyForExtraction='Ready' groupType='Project'>
-            <projectName>projectName</projectName>
+            <projectName>name</projectName>
             <description>description</description>
             <link rel='edit' href='null' type='application/vnd.bard.cap+xml;type=project' />
             <link rel='up' href='null' type='application/vnd.bard.cap+xml;type=projects' />
@@ -428,7 +428,7 @@ class XmlTestSamples {
     '''
     static final String PROJECT_ONE_EXTERNAL_REFERENCE = '''
         <project projectId='1' readyForExtraction='Ready' groupType='Project'>
-            <projectName>projectName</projectName>
+            <projectName>name</projectName>
             <link rel='edit' href='null' type='application/vnd.bard.cap+xml;type=project' />
             <link rel='up' href='null' type='application/vnd.bard.cap+xml;type=projects' />
             <link rel='item' href='null' type='application/vnd.bard.cap+xml;type=externalReference' />
@@ -436,7 +436,7 @@ class XmlTestSamples {
     '''
     static final String PROJECT_TWO_EXTERNAL_REFERENCES = '''
         <project projectId='1' readyForExtraction='Ready' groupType='Project'>
-            <projectName>projectName</projectName>
+            <projectName>name</projectName>
             <link rel='edit' href='null' type='application/vnd.bard.cap+xml;type=project' />
             <link rel='up' href='null' type='application/vnd.bard.cap+xml;type=projects' />
             <link rel='item' href='null' type='application/vnd.bard.cap+xml;type=externalReference' />
@@ -445,7 +445,7 @@ class XmlTestSamples {
     '''
     static final String PROJECT_ONE_DOCUMENT = '''
         <project projectId='1' readyForExtraction='Ready' groupType='Project'>
-            <projectName>projectName</projectName>
+            <projectName>name</projectName>
             <link rel='edit' href='null' type='application/vnd.bard.cap+xml;type=project' />
             <link rel='up' href='null' type='application/vnd.bard.cap+xml;type=projects' />
             <link rel='item' href='null' type='application/vnd.bard.cap+xml;type=projectDoc' />
@@ -453,7 +453,7 @@ class XmlTestSamples {
     '''
     static final String PROJECT_TWO_DOCUMENTS = '''
         <project projectId='1' readyForExtraction='Ready' groupType='Project'>
-            <projectName>projectName</projectName>
+            <projectName>name</projectName>
             <link rel='edit' href='null' type='application/vnd.bard.cap+xml;type=project' />
             <link rel='up' href='null' type='application/vnd.bard.cap+xml;type=projects' />
             <link rel='item' href='null' type='application/vnd.bard.cap+xml;type=projectDoc' />
@@ -462,7 +462,7 @@ class XmlTestSamples {
     '''
     static final String PROJECT_WITH_ONE_CONTEXT = '''
         <project projectId='1' readyForExtraction='Ready' groupType='Project'>
-            <projectName>projectName</projectName>
+            <projectName>name</projectName>
             <contexts>
                 <context id='1' displayOrder='0'>
                   <contextName />
@@ -474,7 +474,7 @@ class XmlTestSamples {
     '''
     static final String PROJECT_WITH_TWO_CONTEXT = '''
         <project projectId='1' readyForExtraction='Ready' groupType='Project'>
-            <projectName>projectName</projectName>
+            <projectName>name</projectName>
             <contexts>
                 <context id='1' displayOrder='0'>
                   <contextName />
@@ -489,7 +489,7 @@ class XmlTestSamples {
     '''
     static final String PROJECT_WITH_ONE_CONTEXT_ONE_EXPERIMENT = '''
         <project projectId='1' readyForExtraction='Ready' groupType='Project'>
-            <projectName>projectName</projectName>
+            <projectName>name</projectName>
             <contexts>
                 <context id='1' displayOrder='0'>
                   <contextName />
@@ -509,7 +509,7 @@ class XmlTestSamples {
 
     static final String PROJECT_WITH_EXPERIMENT = '''
         <project projectId='1' readyForExtraction='Ready' groupType='Project'>
-            <projectName>projectName</projectName>
+            <projectName>name</projectName>
             <projectExperiments>
                 <projectExperiment projectExperimentId='1'>
                   <experimentRef label='experimentName'>
@@ -523,7 +523,7 @@ class XmlTestSamples {
     '''
     static final String PROJECT_WITH_EXPERIMENT_WITH_ONE_CONTEXT = '''
         <project projectId='1' readyForExtraction='Ready' groupType='Project'>
-            <projectName>projectName</projectName>
+            <projectName>name</projectName>
             <projectExperiments>
                 <projectExperiment projectExperimentId='1'>
                   <experimentRef label='experimentName'>
@@ -542,7 +542,7 @@ class XmlTestSamples {
     '''
     static final String PROJECT_WITH_EXPERIMENT_WITH_TWO_CONTEXT = '''
         <project projectId='1' readyForExtraction='Ready' groupType='Project'>
-            <projectName>projectName</projectName>
+            <projectName>name</projectName>
             <projectExperiments>
                 <projectExperiment projectExperimentId='1'>
                   <experimentRef label='experimentName'>
@@ -564,7 +564,7 @@ class XmlTestSamples {
     '''
     static final String PROJECT_WITH_TWO_EXPERIMENTS_ONE_PROJECT_STEP = '''
         <project projectId='1' readyForExtraction='Ready' groupType='Project'>
-            <projectName>projectName</projectName>
+            <projectName>name</projectName>
             <projectExperiments>
                 <projectExperiment projectExperimentId='1'>
                   <experimentRef label='experimentName'>

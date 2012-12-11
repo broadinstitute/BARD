@@ -16,7 +16,7 @@ class ProjectIntegrationSpec extends IntegrationSpec {
 
     Project domainInstance
     ProjectContext projectContext
-    ProjectContextItem projectContextItem
+    ProjectContextItem contextItem
 
     ProjectExperiment projectExperiment
     ProjectExperimentContext projectExperimentContext
@@ -36,9 +36,9 @@ class ProjectIntegrationSpec extends IntegrationSpec {
     }
 
     void initializeProjectContextItem() {
-        projectContextItem = ProjectContextItem.buildWithoutSave()
-        projectContext.addToContextItems(projectContextItem)
-        projectContextItem.attributeElement.save()
+        contextItem = ProjectContextItem.buildWithoutSave()
+        contextaddToContextItems(contextItem)
+        contextItem.attributeElement.save()
     }
 
     void initializeExternalReference() {
@@ -47,8 +47,8 @@ class ProjectIntegrationSpec extends IntegrationSpec {
     }
 
     void initializeProjectContext() {
-        projectContext = ProjectContext.buildWithoutSave()
-        domainInstance.addToContexts(projectContext)
+        context= ProjectContext.buildWithoutSave()
+        domainInstance.addToContexts(context)
         projectContext
     }
 
@@ -63,25 +63,25 @@ class ProjectIntegrationSpec extends IntegrationSpec {
         projectExperimentContextItem.attributeElement.save()
     }
 
-    void "test projectContext cascade save"() {
+    void "test contextcascade save"() {
         given:
         initializeProjectContext()
-        assert projectContext.id == null
+        assert contextid == null
         when:
         domainInstance.save(flush: true)
         then:
-        projectContext.id != null
+        contextid != null
     }
 
-    void "test projectContextItems cascade save"() {
+    void "test contextItems cascade save"() {
         given:
         initializeProjectContext()
         initializeProjectContextItem()
-        assert projectContextItem.id == null
+        assert contextItem.id == null
         when:
         domainInstance.save(flush: true)
         then:
-        projectContextItem.id != null
+        contextItem.id != null
     }
 
     void "test projectExperiments cascade save"() {

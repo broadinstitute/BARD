@@ -3,7 +3,7 @@ package dataexport.experiment
 import bard.db.dictionary.Element
 import bard.db.enums.ReadyForExtraction
 import bard.db.experiment.Experiment
-import bard.db.model.AbstractContext
+
 import bard.db.registration.ExternalReference
 import dataexport.registration.BardHttpResponse
 import dataexport.registration.MediaTypesDTO
@@ -73,14 +73,14 @@ class ProjectExportService extends ExportAbstractService {
             attributes.put('groupType', project.groupType)
         }
         markupBuilder.project(attributes) {
-            if (project.projectName) {
-                projectName(project.projectName)
+            if (project.name) {
+                projectName(project.name)
             }
             if (project.description) {
                 description(project.description)
             }
-            if (project.projectContexts) {
-                generateProjectContexts(markupBuilder, project.projectContexts)
+            if (project.contexts) {
+                generateProjectContexts(markupBuilder, project.contexts)
             }
             if (project.projectExperiments) {
                 generateProjectExperiments(markupBuilder, project.projectExperiments)
@@ -120,7 +120,7 @@ class ProjectExportService extends ExportAbstractService {
         generateExternalReferencesLink(markupBuilder, externalReferences as List<ExternalReference>, this.grailsLinkGenerator, this.mediaTypesDTO)
 
         //add links for each document
-        for (ProjectDocument projectDocument : project.projectDocuments) {
+        for (ProjectDocument projectDocument : project.documents) {
             map = [mapping: 'projectDocument', absolute: true, rel: 'item', mediaType: this.mediaTypesDTO.projectDocMediaType, params: [id: projectDocument.id]]
             generateLink(map, markupBuilder, this.grailsLinkGenerator)
         }
@@ -131,34 +131,34 @@ class ProjectExportService extends ExportAbstractService {
      *
      *
      * @param markupBuilder
-     * @param projectContextItems
+     * @param contextItems
      */
-    protected void generateProjectContextItems(final MarkupBuilder markupBuilder, List<ProjectContextItem> projectContextItems) {
-        if (projectContextItems) {
+    protected void generateProjectContextItems(final MarkupBuilder markupBuilder, List<ProjectContextItem> contextItems) {
+        if (contextItems) {
             markupBuilder.contextItems() {
-                for (ProjectContextItem projectContextItem : projectContextItems) {
-                    generateProjectContextItem(markupBuilder, projectContextItem)
+                for (ProjectContextItem contextItem : contextItems) {
+                    generateProjectContextItem(markupBuilder, contextItem)
                 }
             }
         }
     }
 
-    protected void generateProjectContextItem(final MarkupBuilder markupBuilder, final ProjectContextItem projectContextItem) {
+    protected void generateProjectContextItem(final MarkupBuilder markupBuilder, final ProjectContextItem contextItem) {
         generateContextItem(
-                markupBuilder, projectContextItem,
+                markupBuilder, contextItem,
                 null, "contextItem",
                 this.mediaTypesDTO.elementMediaType,
-                grailsLinkGenerator, projectContextItem.id,
-                projectContextItem.projectContext.projectContextItems.indexOf(projectContextItem))
+                grailsLinkGenerator, contextItem.id,
+                contextItem.context.contextItems.indexOf(contextItem))
     }
 
-    protected void generateProjectContext(final MarkupBuilder markupBuilder, final ProjectContext projectContext) {
-        def attributes = ['id': projectContext.id,
-                'displayOrder': projectContext.project.projectContexts.indexOf(projectContext)]
+    protected void generateProjectContext(final MarkupBuilder markupBuilder, final ProjectContext context) {
+        def attributes = ['id': context.id,
+                'displayOrder': context.project.contexts.indexOf(context)]
         markupBuilder.context(attributes) {
             //TODO: AssayContext uses preferred Name. Is it something we should do?
-            addContextInformation(markupBuilder, projectContext)
-            generateProjectContextItems(markupBuilder, projectContext.projectContextItems)
+            addContextInformation(markupBuilder, context)
+            generateProjectContextItems(markupBuilder, context.contextItems)
         }
     }
 
@@ -196,13 +196,13 @@ class ProjectExportService extends ExportAbstractService {
     /**
      * Generate a project contexts
      * @param markupBuilder
-     * @param projectContexts
+     * @param context
      */
-    protected void generateProjectContexts(final MarkupBuilder markupBuilder, final List<ProjectContext> projectContexts) {
-        if (projectContexts) {
+    protected void generateProjectContexts(final MarkupBuilder markupBuilder, final List<ProjectContext> contexts) {
+        if (contexts) {
             markupBuilder.contexts() {
-                for (ProjectContext projectContext : projectContexts) {
-                    generateProjectContext(markupBuilder, projectContext)
+                for (ProjectContext context: contexts) {
+                    generateProjectContext(markupBuilder, context)
                 }
             }
         }
