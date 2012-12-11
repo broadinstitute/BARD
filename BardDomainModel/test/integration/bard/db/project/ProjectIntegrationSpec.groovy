@@ -37,7 +37,7 @@ class ProjectIntegrationSpec extends IntegrationSpec {
 
     void initializeProjectContextItem() {
         projectContextItem = ProjectContextItem.buildWithoutSave()
-        projectContext.addToProjectContextItems(projectContextItem)
+        projectContext.addToContextItems(projectContextItem)
         projectContextItem.attributeElement.save()
     }
 
@@ -48,7 +48,7 @@ class ProjectIntegrationSpec extends IntegrationSpec {
 
     void initializeProjectContext() {
         projectContext = ProjectContext.buildWithoutSave()
-        domainInstance.addToProjectContexts(projectContext)
+        domainInstance.addToContexts(projectContext)
         projectContext
     }
 

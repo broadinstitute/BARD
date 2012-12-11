@@ -1,6 +1,6 @@
-import projectstepsandassaynetworks.depositor.neighbor.Relation
 import org.springframework.transaction.support.DefaultTransactionStatus
 import org.apache.commons.lang.time.StopWatch
+import depositor.neighbor.Relation
 
 /**
  * Parses and persists the parent/child AID relationships that the PubChem depositors have been uploaded.
