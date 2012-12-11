@@ -15,7 +15,7 @@ class ResultsPage extends HomePage {
         compoundsTab(required: true) { $("#compoundsTab") }
         projectsTab(required: true) { $("#projectsTab") }
 
-        addAssayToCart(wait: true) { assayId ->
+        addAssayToCart { assayId ->
             $(".addToCartCheckbox[data-cart-id=\"$assayId\"][data-cart-type=AssayDefinition]").click()
             waitFor(10, 0.5) { queryCart.contentSummary.text() != "Empty" }
         }
