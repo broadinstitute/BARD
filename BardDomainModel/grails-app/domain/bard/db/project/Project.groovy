@@ -47,4 +47,16 @@ class Project {
         lastUpdated(nullable: true)
         modifiedBy(nullable: true, blank: false, maxSize: MODIFIED_BY_MAX_SIZE)
     }
+
+    Map<String, List<ProjectContext>> getContextsWithGroup() {
+        Map<String, List<ProjectContext>> m = [:]
+        contexts.each{
+            ProjectContext context ->
+            if (!m.get(context.contextGroup)) {
+                m.put(context.contextGroup, [])
+            }
+            m.get(context.contextGroup).add(context)
+        }
+        return m
+    }
 }
