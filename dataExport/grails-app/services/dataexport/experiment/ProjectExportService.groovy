@@ -162,12 +162,7 @@ class ProjectExportService extends ExportAbstractService {
         }
     }
 
-    private void addContextInformation(final MarkupBuilder markupBuilder, final AbstractContext context) {
-        markupBuilder.contextName(context.contextName)
-        if (context.contextGroup) {
-            markupBuilder.contextGroup(context.contextGroup)
-        }
-    }
+
 
     protected void generateStepContext(final MarkupBuilder markupBuilder, final StepContext stepContext) {
         def attributes = ['id': stepContext.id,

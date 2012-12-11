@@ -58,17 +58,34 @@ class XmlTestSamples {
 </resultContextItems>
 '''
 
+    static final String EXPERIMENTS_NONE_READY = '''
+        <experiments count='0' />
+    '''
+    static final String EXPERIMENTS_ONE_READY = '''
+        <experiments count='1'>
+          <link rel='related' href='http://localhost:8080/dataExport/api/experiments/1' type='application/vnd.bard.cap+xml;type=experiment' />
+        </experiments>
+    '''
 
+    static final String EXPERIMENT_MEASURE_MINIMAL = '''
+        <experimentMeasure measureRef='1'  />
+    '''
+    static final String EXPERIMENT_MEASURE_WITH_PARENT_REF = '''
+        <experimentMeasure measureRef='2'  parentExperimentMeasureRef='1'  />
+    '''
+    static final String EXPERIMENT_MEASURE_WITH_PARENT_REF_AND_RELATIONSHIP = '''
+        <experimentMeasure measureRef='2'  parentExperimentMeasureRef='1' parentChildRelationship='Derived from' />
+    '''
     static final String EXTERNAL_REFERENCES_UNT = '''
-<externalReferences>
-<externalReference>
-    <externalAssayRef>External Assay Ref</externalAssayRef>
-  <externalSystem name='systemName' owner='owner'>
-    <systemUrl>http://broad.org</systemUrl>
-  </externalSystem>
-    <link rel='related' href='null' type='projectMediaType' />
-    </externalReference>
-    </externalReferences>
+        <externalReferences>
+            <externalReference>
+                <externalAssayRef>External Assay Ref</externalAssayRef>
+                <externalSystem name='systemName' owner='owner'>
+                <systemUrl>http://broad.org</systemUrl>
+            </externalSystem>
+            <link rel='related' href='null' type='projectMediaType' />
+            </externalReference>
+        </externalReferences>
     '''
     static final String EXTERNAL_REFERENCE_UNT = '''
 <externalReference>
@@ -80,24 +97,121 @@ class XmlTestSamples {
     </externalReference>
     '''
 
-    static final String EXPERIMENT_UNIT_ONLY_ATTRIBUTES = '''
-<experiment experimentId='' experimentName='Experiment1' status='Pending' readyForExtraction='Pending' holdUntilDate='1969-12-31T19:00:00.000-05:00' runDateFrom='1969-12-31T19:00:00.000-05:00' runDateTo='1969-12-31T19:00:00.000-05:00'>
-  <link rel='related' href='null' type='assayMediaType' />
-  <link rel='up' href='null' type='experimentsMediaType' />
-  <link rel='related' href='null' type='resultsMediaType' />
-  <link rel='edit' href='null' type='experimentMediaType' />
-</experiment>
+    static final String EXPERIMENT_MINIMAL = '''
+        <experiment experimentId='1' status='Pending' readyForExtraction='Pending'>
+            <experimentName>experimentName</experimentName>
+            <link rel='related' href='null' type='application/vnd.bard.cap+xml;type=assay' />
+            <link rel='up' href='null' type='application/vnd.bard.cap+xml;type=experiments' />
+            <link rel='related' href='null' type='application/vnd.bard.cap+xml;type=result' />
+            <link rel='edit' href='null' type='application/vnd.bard.cap+xml;type=experiment' />
+        </experiment>
     '''
-    static final String EXPERIMENT_FULL = '''
-                                            <experiment experimentId='' experimentName='Experiment1' status='Pending' readyForExtraction='Pending' holdUntilDate='1969-12-31T19:00:00.000-05:00' runDateFrom='1969-12-31T19:00:00.000-05:00' runDateTo='1969-12-31T19:00:00.000-05:00'>
-                                              <description>Broad</description>
-                                              <link rel='related' href='null' type='assayMediaType' />
-                                              <link rel='up' href='null' type='experimentsMediaType' />
-                                              <link rel='related' href='null' type='resultsMediaType' />
-                                              <link rel='edit' href='null' type='experimentMediaType' />
-                                              <link rel='item' href='null' type='externalReferenceMediaType' />
-                                            </experiment>
-                                    '''
+    static final String EXPERIMENT_WITH_OPTIONAL_PROPERTIES = '''
+        <experiment experimentId='1' status='Pending' readyForExtraction='Pending' holdUntilDate='1969-12-31T19:00:00.000-05:00' runDateFrom='1969-12-31T19:00:00.000-05:00' runDateTo='1969-12-31T19:00:00.000-05:00'>
+            <experimentName>experimentName</experimentName>
+            <description>description</description>
+            <link rel='related' href='null' type='application/vnd.bard.cap+xml;type=assay' />
+            <link rel='up' href='null' type='application/vnd.bard.cap+xml;type=experiments' />
+            <link rel='related' href='null' type='application/vnd.bard.cap+xml;type=result' />
+            <link rel='edit' href='null' type='application/vnd.bard.cap+xml;type=experiment' />
+        </experiment>
+    '''
+    static final String EXPERIMENT_WITH_ONE_EXT_REF = '''
+        <experiment experimentId='1' status='Pending' readyForExtraction='Pending'>
+            <experimentName>experimentName</experimentName>
+            <link rel='related' href='null' type='application/vnd.bard.cap+xml;type=assay' />
+            <link rel='up' href='null' type='application/vnd.bard.cap+xml;type=experiments' />
+            <link rel='related' href='null' type='application/vnd.bard.cap+xml;type=result' />
+            <link rel='edit' href='null' type='application/vnd.bard.cap+xml;type=experiment' />
+            <link rel='item' href='null' type='application/vnd.bard.cap+xml;type=externalReference' />
+        </experiment>
+    '''
+    static final String EXPERIMENT_WITH_TWO_EXT_REF = '''
+        <experiment experimentId='1' status='Pending' readyForExtraction='Pending'>
+            <experimentName>experimentName</experimentName>
+            <link rel='related' href='null' type='application/vnd.bard.cap+xml;type=assay' />
+            <link rel='up' href='null' type='application/vnd.bard.cap+xml;type=experiments' />
+            <link rel='related' href='null' type='application/vnd.bard.cap+xml;type=result' />
+            <link rel='edit' href='null' type='application/vnd.bard.cap+xml;type=experiment' />
+            <link rel='item' href='null' type='application/vnd.bard.cap+xml;type=externalReference' />
+            <link rel='item' href='null' type='application/vnd.bard.cap+xml;type=externalReference' />
+        </experiment>
+    '''
+    static final String EXPERIMENT_WITH_ONE_CONTEXT = '''
+        <experiment experimentId='1' status='Pending' readyForExtraction='Pending'>
+            <experimentName>experimentName</experimentName>
+            <contexts>
+                <context id='1' displayOrder='0'>
+                  <contextName />
+                </context>
+            </contexts>
+            <link rel='related' href='null' type='application/vnd.bard.cap+xml;type=assay' />
+            <link rel='up' href='null' type='application/vnd.bard.cap+xml;type=experiments' />
+            <link rel='related' href='null' type='application/vnd.bard.cap+xml;type=result' />
+            <link rel='edit' href='null' type='application/vnd.bard.cap+xml;type=experiment' />
+        </experiment>
+    '''
+    static final String EXPERIMENT_WITH_TWO_CONTEXT = '''
+        <experiment experimentId='1' status='Pending' readyForExtraction='Pending'>
+            <experimentName>experimentName</experimentName>
+            <contexts>
+                <context id='1' displayOrder='0'>
+                  <contextName />
+                </context>
+                <context id='2' displayOrder='1'>
+                  <contextName />
+                </context>
+            </contexts>
+            <link rel='related' href='null' type='application/vnd.bard.cap+xml;type=assay' />
+            <link rel='up' href='null' type='application/vnd.bard.cap+xml;type=experiments' />
+            <link rel='related' href='null' type='application/vnd.bard.cap+xml;type=result' />
+            <link rel='edit' href='null' type='application/vnd.bard.cap+xml;type=experiment' />
+        </experiment>
+    '''
+    static final String EXPERIMENT_WITH_ONE_CONTEXT_ONE_EXPERIMENT_MEASURE = '''
+        <experiment experimentId='1' status='Pending' readyForExtraction='Pending'>
+            <experimentName>experimentName</experimentName>
+            <contexts>
+                <context id='1' displayOrder='0'>
+                  <contextName />
+                </context>
+            </contexts>
+            <experimentMeasures>
+                <experimentMeasure measureRef='1'/>
+            </experimentMeasures>
+            <link rel='related' href='null' type='application/vnd.bard.cap+xml;type=assay' />
+            <link rel='up' href='null' type='application/vnd.bard.cap+xml;type=experiments' />
+            <link rel='related' href='null' type='application/vnd.bard.cap+xml;type=result' />
+            <link rel='edit' href='null' type='application/vnd.bard.cap+xml;type=experiment' />
+        </experiment>
+    '''
+
+    static final String EXPERIMENT_WITH_ONE_EXPERIMENT_MEASURE = '''
+        <experiment experimentId='1' status='Pending' readyForExtraction='Pending'>
+            <experimentName>experimentName</experimentName>
+            <experimentMeasures>
+                <experimentMeasure measureRef='1'/>
+            </experimentMeasures>
+            <link rel='related' href='null' type='application/vnd.bard.cap+xml;type=assay' />
+            <link rel='up' href='null' type='application/vnd.bard.cap+xml;type=experiments' />
+            <link rel='related' href='null' type='application/vnd.bard.cap+xml;type=result' />
+            <link rel='edit' href='null' type='application/vnd.bard.cap+xml;type=experiment' />
+        </experiment>
+    '''
+    static final String EXPERIMENT_WITH_TWO_EXPERIMENT_MEASURE = '''
+        <experiment experimentId='1' status='Pending' readyForExtraction='Pending'>
+            <experimentName>experimentName</experimentName>
+            <experimentMeasures>
+                <experimentMeasure measureRef='1'/>
+                <experimentMeasure measureRef='2'/>
+            </experimentMeasures>
+            <link rel='related' href='null' type='application/vnd.bard.cap+xml;type=assay' />
+            <link rel='up' href='null' type='application/vnd.bard.cap+xml;type=experiments' />
+            <link rel='related' href='null' type='application/vnd.bard.cap+xml;type=result' />
+            <link rel='edit' href='null' type='application/vnd.bard.cap+xml;type=experiment' />
+        </experiment>
+    '''
+
     static final String EXPERIMENTS_2_RECORDS_UNIT = '''
    <experiments count='2'>
   <link rel='related' type='experimentMediaType' href='null' />
@@ -373,25 +487,26 @@ class XmlTestSamples {
             <link rel='up' href='null' type='application/vnd.bard.cap+xml;type=projects' />
         </project>
     '''
-    static final String PROJECT_WITH_CONTEXT_ONE_ITEM = '''
+    static final String PROJECT_WITH_ONE_CONTEXT_ONE_EXPERIMENT = '''
         <project projectId='1' readyForExtraction='Ready' groupType='Project'>
             <projectName>projectName</projectName>
             <contexts>
                 <context id='1' displayOrder='0'>
                   <contextName />
-                  <contextItems>
-                      <contextItem displayOrder='0'>
-                        <attributeId label='label1'>
-                          <link rel='related' href='null' type='application/vnd.bard.cap+xml;type=element' />
-                        </attributeId>
-                      </contextItem>
-                  </contextItems>
                 </context>
             </contexts>
+            <projectExperiments>
+                <projectExperiment projectExperimentId='1'>
+                  <experimentRef label='experimentName'>
+                    <link rel='related' href='null' type='application/vnd.bard.cap+xml;type=experiment' />
+                  </experimentRef>
+                </projectExperiment>
+            </projectExperiments>
             <link rel='edit' href='null' type='application/vnd.bard.cap+xml;type=project' />
             <link rel='up' href='null' type='application/vnd.bard.cap+xml;type=projects' />
         </project>
     '''
+
     static final String PROJECT_WITH_EXPERIMENT = '''
         <project projectId='1' readyForExtraction='Ready' groupType='Project'>
             <projectName>projectName</projectName>
@@ -401,7 +516,7 @@ class XmlTestSamples {
                     <link rel='related' href='null' type='application/vnd.bard.cap+xml;type=experiment' />
                   </experimentRef>
                 </projectExperiment>
-              </projectExperiments>
+            </projectExperiments>
             <link rel='edit' href='null' type='application/vnd.bard.cap+xml;type=project' />
             <link rel='up' href='null' type='application/vnd.bard.cap+xml;type=projects' />
         </project>

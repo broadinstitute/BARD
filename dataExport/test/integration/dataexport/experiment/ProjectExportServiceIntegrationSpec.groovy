@@ -30,7 +30,6 @@ class ProjectExportServiceIntegrationSpec extends IntegrationSpec {
     def grailsApplication
     Resource schemaResource
 
-
     void setup() {
         this.writer = new StringWriter()
         this.markupBuilder = new MarkupBuilder(this.writer)

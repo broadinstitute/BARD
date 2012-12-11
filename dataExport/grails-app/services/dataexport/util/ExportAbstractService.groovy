@@ -1,6 +1,7 @@
 package dataexport.util
 
 import bard.db.dictionary.Element
+import bard.db.model.AbstractContext
 import bard.db.model.AbstractContextItem
 import bard.db.model.AbstractDocument
 import bard.db.registration.ExternalReference
@@ -182,5 +183,12 @@ class ExportAbstractService {
             }
         }
 
+    }
+
+    protected void addContextInformation(final MarkupBuilder markupBuilder, final AbstractContext context) {
+        markupBuilder.contextName(context.contextName)
+        if (context.contextGroup) {
+            markupBuilder.contextGroup(context.contextGroup)
+        }
     }
 }

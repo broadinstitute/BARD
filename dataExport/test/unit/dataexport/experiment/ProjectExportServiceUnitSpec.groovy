@@ -256,6 +256,8 @@ class ProjectExportServiceUnitSpec extends Specification {
         "With 1 context"                    | PROJECT_WITH_ONE_CONTEXT                      | 0         | 0      | 1         | 0         | 0            | 0          | [:]
         "With 2 contexts"                   | PROJECT_WITH_TWO_CONTEXT                      | 0         | 0      | 2         | 0         | 0            | 0          | [:]
 
+        "With 1 context and 1 experiment"   | PROJECT_WITH_ONE_CONTEXT_ONE_EXPERIMENT       | 0         | 0      | 1         | 1         | 0            | 0          | [:]
+
         "With 1 experiment"                 | PROJECT_WITH_EXPERIMENT                       | 0         | 0      | 0         | 1         | 0            | 0          | [:]
         "With 1 experiment 1 context"       | PROJECT_WITH_EXPERIMENT_WITH_ONE_CONTEXT      | 0         | 0      | 0         | 1         | 1            | 0          | [:]
         "With 1 experiment 2 context"       | PROJECT_WITH_EXPERIMENT_WITH_TWO_CONTEXT      | 0         | 0      | 0         | 1         | 2            | 0          | [:]

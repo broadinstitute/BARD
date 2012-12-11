@@ -41,6 +41,13 @@ The link with 'edit' relation should be used to set the status of this experimen
                 <xs:element name="experimentName" type="xs:string"/>
                 <xs:element minOccurs="0" ref="description"/>
                 <xs:element minOccurs="0" ref="contexts"/>
+                <xs:element minOccurs="0" name="experimentMeasures">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element maxOccurs="unbounded" ref="experimentMeasure"/>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
                 <xs:element maxOccurs="unbounded" minOccurs="1" ref="link">
                     <xs:annotation>
                         <xs:documentation>Link to self
@@ -63,7 +70,7 @@ Link to Project and Assay</xs:documentation>
                     </xs:restriction>
                 </xs:simpleType>
             </xs:attribute>
-            <xs:attribute ref="readyForExtraction"/>
+            <xs:attribute ref="readyForExtraction" use="required"/>
         </xs:complexType>
     </xs:element>
     <xs:element name="results">
@@ -218,6 +225,13 @@ Link to parent experiment
             <xs:sequence>
                 <xs:element name="experimentContextItem" type="experimentContextItemType"/>
             </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="experimentMeasure">
+        <xs:complexType>
+            <xs:attribute name="measureRef" type="bardID" use="required"/>
+            <xs:attribute name="parentExperimentMeasureRef" type="bardID"/>
+            <xs:attribute name="parentChildRelationship"/>
         </xs:complexType>
     </xs:element>
 </xs:schema>

@@ -64,7 +64,7 @@ application/vnd.bard.cap+xml;type=project</xs:documentation>
                     </xs:restriction>
                 </xs:simpleType>
             </xs:attribute>
-            <xs:attribute ref="readyForExtraction"/>
+            <xs:attribute ref="readyForExtraction" use="required"/>
         </xs:complexType>
     </xs:element>
     <xs:element name="projectDocument" type="documentType"> </xs:element>

@@ -5,16 +5,22 @@ import bard.db.experiment.Experiment
 import bard.db.experiment.Result
 import common.tests.XmlTestAssertions
 import dataexport.registration.BardHttpResponse
+import dataexport.util.ResetSequenceUtil
 import exceptions.NotFoundException
+import grails.buildtestdata.TestDataConfigurationHolder
 import grails.plugin.spock.IntegrationSpec
 import groovy.xml.MarkupBuilder
+import org.springframework.core.io.FileSystemResource
 import org.springframework.core.io.Resource
+import spock.lang.IgnoreRest
 import spock.lang.Unroll
 
-import static bard.db.enums.ReadyForExtraction.Complete
-import static bard.db.enums.ReadyForExtraction.Ready
+import javax.sql.DataSource
+
+import static bard.db.enums.ReadyForExtraction.*
+import static common.tests.XmlTestSamples.EXPERIMENTS_NONE_READY
+import static common.tests.XmlTestSamples.EXPERIMENTS_ONE_READY
 import static javax.servlet.http.HttpServletResponse.*
-import org.springframework.core.io.FileSystemResource
 
 @Unroll
 class ExperimentExportServiceIntegrationSpec extends IntegrationSpec {
@@ -23,16 +29,48 @@ class ExperimentExportServiceIntegrationSpec extends IntegrationSpec {
     ExperimentExportService experimentExportService
     Writer writer
     MarkupBuilder markupBuilder
+
+    DataSource dataSource
+    ResetSequenceUtil resetSequenceUtil
     def grailsApplication
     Resource schemaResource = new FileSystemResource(new File(BARD_EXPERIMENT_EXPORT_SCHEMA))
 
     void setup() {
         this.writer = new StringWriter()
         this.markupBuilder = new MarkupBuilder(this.writer)
+
+        TestDataConfigurationHolder.reset()
+        resetSequenceUtil = new ResetSequenceUtil(dataSource)
+        ['EXPERIMENT_ID_SEQ'
+        ].each {
+            this.resetSequenceUtil.resetSequence(it)
+        }
     }
 
     void tearDown() {
         // Tear down logic here
+    }
+
+    void "test Generate Experiments #label"() {
+        given:
+        for (ReadyForExtraction rfe in readyForExtractionList) {
+            Experiment.build(readyForExtraction: rfe)
+        }
+
+        when:
+        this.experimentExportService.generateExperiments(this.markupBuilder, 0)
+
+        then:
+        String actualXml = this.writer.toString()
+        println(actualXml)
+        XmlTestAssertions.assertResults(expectedXml, actualXml)
+        XmlTestAssertions.validate(schemaResource, actualXml)
+
+        where:
+        label                       | readyForExtractionList              | expectedXml
+        "no experiments"            | []                                  | EXPERIMENTS_NONE_READY
+        "one experiment ready"      | [Ready]                             | EXPERIMENTS_ONE_READY
+        "only one experiment Ready" | [Ready, Pending, Started, Complete] | EXPERIMENTS_ONE_READY
     }
 
     void "test update #label"() {
@@ -57,8 +95,6 @@ class ExperimentExportServiceIntegrationSpec extends IntegrationSpec {
         "Return PRECONDITION_FAILED and ETag 0"              | SC_PRECONDITION_FAILED | 0            | 2       | 0          | Ready                     | ReadyForExtraction.Ready
         "Return OK and ETag 0, Already completed Experiment" | SC_OK                  | 0            | 0       | 0          | Complete                  | ReadyForExtraction.Complete
     }
-
-
 
     void "test update Not Found Status"() {
         given: "Given a non-existing Experiment"
