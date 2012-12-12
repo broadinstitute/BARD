@@ -80,8 +80,7 @@ class ExternalReferenceExportService extends ExportAbstractService {
             generateLink(
                     [
                             mapping: 'externalSystems', absolute: true,
-                            rel: 'up', mediaType: this.mediaTypesDTO.externalSystemsMediaType,
-                            params: [id: externalSystem.id]
+                            rel: 'up', mediaType: this.mediaTypesDTO.externalSystemsMediaType
                     ],
                     markupBuilder,
                     this.grailsLinkGenerator
