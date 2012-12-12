@@ -31,13 +31,12 @@ import static common.tests.XmlTestSamples.*
 @TestFor(ExperimentExportService)
 @Build([Experiment, ExperimentContext, ExperimentContextItem, ExperimentMeasure, ExternalReference])
 class ExperimentExportServiceUnitSpec extends Specification {
-    static final String BARD_EXPERIMENT_EXPORT_SCHEMA = "src/java/experimentSchema.xsd"
     Writer writer
     MarkupBuilder markupBuilder
 
     ExperimentExportService experimentExportService
     final int maxNumberOfExperimentsPerPage = 2
-    Resource schemaResource = new FileSystemResource(new File(BARD_EXPERIMENT_EXPORT_SCHEMA))
+    Resource schemaResource = new FileSystemResource(new File("web-app/schemas/experimentSchema.xsd"))
 
     void setup() {
         this.experimentExportService = this.service

@@ -16,7 +16,7 @@ import javax.sql.DataSource
  * Top Level service for handling the
  * generation of dictionary and dictionary elements
  *
- * Please, familiarize yourself with the dictionary.xsd located in the BARD repos
+ * Please, familiarize yourself with the dictionary.xsd located in web-app/schemas/
  *
  */
 class DictionaryExportService {

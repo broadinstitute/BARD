@@ -14,18 +14,16 @@ import spock.lang.Unroll
 import javax.sql.DataSource
 
 import bard.db.registration.*
+import org.springframework.core.io.FileSystemResource
 
 @Unroll
 class AssayExportHelperServiceIntegrationSpec extends IntegrationSpec {
-    static final String BARD_ASSAY_EXPORT_SCHEMA = "classpath:assaySchema.xsd"
-
     AssayExportHelperService assayExportHelperService
     Writer writer
     MarkupBuilder markupBuilder
     DataSource dataSource
     ResetSequenceUtil resetSequenceUtil
-    def grailsApplication
-
+    Resource schemaResource = new FileSystemResource(new File("web-app/schemas/assaySchema.xsd"))
     void setup() {
         this.writer = new StringWriter()
         this.markupBuilder = new MarkupBuilder(this.writer)
@@ -95,8 +93,6 @@ class AssayExportHelperServiceIntegrationSpec extends IntegrationSpec {
         then: "An XML is generated that conforms to the expected XML"
         String actualXml = this.writer.toString()
         XmlTestAssertions.assertResults(XmlTestSamples.ASSAY_FULL_DOC, actualXml)
-
-        Resource schemaResource = grailsApplication.mainContext.getResource(BARD_ASSAY_EXPORT_SCHEMA)
         XmlTestAssertions.validate(schemaResource, actualXml)
     }
 

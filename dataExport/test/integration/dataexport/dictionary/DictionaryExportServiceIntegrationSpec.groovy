@@ -21,10 +21,11 @@ import javax.xml.validation.Validator
 import bard.db.dictionary.*
 
 import static javax.servlet.http.HttpServletResponse.*
+import org.springframework.core.io.Resource
+import org.springframework.core.io.FileSystemResource
 
 @Unroll
 class DictionaryExportServiceIntegrationSpec extends IntegrationSpec {
-    static final String BARD_DICTIONARY_EXPORT_SCHEMA = "dictionarySchema.xsd"
     DictionaryExportService dictionaryExportService
 
     Writer writer
@@ -33,7 +34,7 @@ class DictionaryExportServiceIntegrationSpec extends IntegrationSpec {
     DataSource dataSource
     ResetSequenceUtil resetSequenceUtil
     def fixtureLoader
-    def grailsApplication
+    Resource schemaResource = new FileSystemResource(new File("web-app/schemas/dictionarySchema.xsd"))
 
     void setup() {
         this.writer = new StringWriter()
@@ -191,11 +192,9 @@ class DictionaryExportServiceIntegrationSpec extends IntegrationSpec {
         this.dictionaryExportService.generateDictionary(this.markupBuilder)
 
         then:
-        XmlTestAssertions.assertResultsWithOverrideAttributes(results, this.writer.toString())
-        final SchemaFactory factory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI)
-        final Schema schema = factory.newSchema(grailsApplication.mainContext.getResource("classpath:${BARD_DICTIONARY_EXPORT_SCHEMA}").getFile())
-        final Validator validator = schema.newValidator()
-        validator.validate(new StreamSource(new StringReader(results)))
+        String actualXml = this.writer.toString()
+        XmlTestAssertions.assertResultsWithOverrideAttributes(results, actualXml)
+        XmlTestAssertions.validate(schemaResource, actualXml)
 
         where:
         label        | results

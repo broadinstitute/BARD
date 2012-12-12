@@ -29,7 +29,7 @@ class AssayExportHelperServiceUnitSpec extends Specification {
     LinkGenerator grailsLinkGenerator
     AssayExportHelperService assayExportHelperService = new AssayExportHelperService()
 
-    Resource assaySchema = new FileSystemResource(new File("src/java/assaySchema.xsd"))
+    Resource assaySchema = new FileSystemResource(new File("web-app/schemas/assaySchema.xsd"))
 
     void setup() {
         grailsLinkGenerator = Mock(LinkGenerator.class)

@@ -35,7 +35,7 @@ class ProjectExportServiceUnitSpec extends Specification {
 
     ProjectExportService projectExportService
 
-    Resource projectSchema = new FileSystemResource(new File("src/java/projectSchema.xsd"))
+    Resource projectSchema = new FileSystemResource(new File("web-app/schemas/projectSchema.xsd"))
 
     void setup() {
         LinkGenerator grailsLinkGenerator = Mock(LinkGenerator.class)

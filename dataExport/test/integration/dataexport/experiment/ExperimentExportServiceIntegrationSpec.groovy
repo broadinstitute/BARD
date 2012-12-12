@@ -24,8 +24,6 @@ import static javax.servlet.http.HttpServletResponse.*
 
 @Unroll
 class ExperimentExportServiceIntegrationSpec extends IntegrationSpec {
-    static final String BARD_EXPERIMENT_EXPORT_SCHEMA = "src/java/experimentSchema.xsd"
-
     ExperimentExportService experimentExportService
     Writer writer
     MarkupBuilder markupBuilder
@@ -33,7 +31,7 @@ class ExperimentExportServiceIntegrationSpec extends IntegrationSpec {
     DataSource dataSource
     ResetSequenceUtil resetSequenceUtil
     def grailsApplication
-    Resource schemaResource = new FileSystemResource(new File(BARD_EXPERIMENT_EXPORT_SCHEMA))
+    Resource schemaResource = new FileSystemResource(new File("web-app/schemas/experimentSchema.xsd"))
 
     void setup() {
         this.writer = new StringWriter()

@@ -17,18 +17,17 @@ import javax.sql.DataSource
 import static bard.db.enums.ReadyForExtraction.Complete
 import static bard.db.enums.ReadyForExtraction.Ready
 import static javax.servlet.http.HttpServletResponse.*
+import org.springframework.core.io.FileSystemResource
 
 @Unroll
 class ProjectExportServiceIntegrationSpec extends IntegrationSpec {
-    static final String BARD_PROJECT_EXPORT_SCHEMA = "classpath:projectSchema.xsd"
-
     ProjectExportService projectExportService
     Writer writer
     MarkupBuilder markupBuilder
     DataSource dataSource
     ResetSequenceUtil resetSequenceUtil
     def grailsApplication
-    Resource schemaResource
+    Resource schemaResource =new FileSystemResource(new File("web-app/schemas/projectSchema.xsd"))
 
     void setup() {
         this.writer = new StringWriter()
@@ -40,7 +39,7 @@ class ProjectExportServiceIntegrationSpec extends IntegrationSpec {
         ].each {
             this.resetSequenceUtil.resetSequence(it)
         }
-        schemaResource = grailsApplication.mainContext.getResource(BARD_PROJECT_EXPORT_SCHEMA)
+
     }
 
     void tearDown() {

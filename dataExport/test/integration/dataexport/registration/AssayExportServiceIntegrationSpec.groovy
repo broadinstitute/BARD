@@ -18,18 +18,16 @@ import bard.db.registration.*
 import static bard.db.enums.ReadyForExtraction.Complete
 import static bard.db.enums.ReadyForExtraction.Ready
 import static javax.servlet.http.HttpServletResponse.*
+import org.springframework.core.io.FileSystemResource
 
 @Unroll
 class AssayExportServiceIntegrationSpec extends IntegrationSpec {
-    static final String BARD_ASSAY_EXPORT_SCHEMA = "classpath:assaySchema.xsd"
-
     AssayExportService assayExportService
     Writer writer
     MarkupBuilder markupBuilder
     DataSource dataSource
     ResetSequenceUtil resetSequenceUtil
-    def grailsApplication
-    Resource schemaResource
+    Resource schemaResource= new FileSystemResource(new File("web-app/schemas/assaySchema.xsd"))
 
     void setup() {
         this.writer = new StringWriter()
@@ -45,7 +43,7 @@ class AssayExportServiceIntegrationSpec extends IntegrationSpec {
             'MEASURE_ID_SEQ'].each {
             this.resetSequenceUtil.resetSequence(it)
         }
-        schemaResource = grailsApplication.mainContext.getResource(BARD_ASSAY_EXPORT_SCHEMA)
+
     }
 
     void tearDown() {
@@ -90,9 +88,7 @@ class AssayExportServiceIntegrationSpec extends IntegrationSpec {
         this.assayExportService.generateAssayDocument(this.markupBuilder, assayDocument.id)
 
         then: "An XML is generated that conforms to the expected XML"
-        Resource schemaResource = this.grailsApplication.mainContext.getResource(BARD_ASSAY_EXPORT_SCHEMA)
         XmlTestAssertions.validate(schemaResource, this.writer.toString())
-
     }
 
     void "test generate and validate Assay"() {
@@ -114,8 +110,6 @@ class AssayExportServiceIntegrationSpec extends IntegrationSpec {
         then: "An XML is generated that conforms to the expected XML"
         String actualXml = this.writer.toString()
         XmlTestAssertions.assertResults(XmlTestSamples.ASSAY_FULL_DOC, actualXml)
-
-
         XmlTestAssertions.validate(schemaResource, actualXml)
     }
 
