@@ -24,7 +24,7 @@ delete from STEP_CONTEXT_ITEM;
 delete from STEP_CONTEXT;
 delete from PROJECT_STEP;
 delete from PRJCT_EXPRMT_CONTEXT;
-delete from PRJCT_EXPRMT_CONTEXT_ITEM;
+delete from PRJCT_EXPRMT_CNTXT_ITEM;
 delete from PROJECT_EXPERIMENT;
 delete from PROJECT_DOCUMENT;
 delete from PROJECT_CONTEXT_ITEM;

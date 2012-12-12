@@ -15,8 +15,8 @@ class ProjectExperimentContextItem extends AbstractContextItem {
     static belongsTo = [context: ProjectExperimentContext]
 
     static mapping = {
-        table('PRJCT_EXPRMT_CONTEXT_ITEM')
-        id(column: 'PRJCT_EXPRMT_CONTEXT_ITEM_ID', generator: 'sequence', params: [sequence: 'PRJCT_EXPRMT_CNTXT_ITEM_ID_SEQ'])
+        table('PRJCT_EXPRMT_CNTXT_ITEM')
+        id(column: 'PRJCT_EXPRMT_CNTXT_ITEM_ID', generator: 'sequence', params: [sequence: 'PRJCT_EXPRMT_CNTXT_ITEM_ID_SEQ'])
         valueElement(column: "value_id", fetch: 'join')
         attributeElement(column: "attribute_id", fetch: 'join')
         qualifier(column: "qualifier", sqlType: "char", length: 2)
