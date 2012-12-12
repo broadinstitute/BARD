@@ -12,10 +12,6 @@ class UrlMappings {
         name dictionary: "/api/dictionary"(controller: "dictionaryRest") {
             action = [GET: "dictionary"]
         }
-
-        name externalReferences:"/api/externalReferences"(controller: "dictionaryRest") {
-            action = [GET: "externalReferences"]
-        }
         name resultType: "/api/dictionary/resultType/$id"(controller: "dictionaryRest") {
             action = [GET: "resultType"]
         }
