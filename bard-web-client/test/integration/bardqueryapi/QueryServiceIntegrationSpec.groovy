@@ -107,7 +107,25 @@ class QueryServiceIntegrationSpec extends IntegrationSpec {
         assert assayAdapter.category == AssayCategory.MLPCN
         assert assayAdapter.description
     }
+    /**
+     * Do structure searches
+     */
+    void "test Structure Search with CIDS #label"() {
+        when: ""
+        final Map compoundAdapterMap = queryService.structureSearch(cid, structureSearchParamsType, [], top, skip)
+        then:
+        assert compoundAdapterMap
+        final List<CompoundAdapter> compoundAdapters = compoundAdapterMap.compoundAdapters
+        assert compoundAdapters
+        assert compoundAdapterMap.nHits > 0
 
+        where:
+        label                    | structureSearchParamsType                 | cid    | skip | top | numberOfCompounds
+        "Super structure search" | StructureSearchParams.Type.Superstructure | 5358   | 0    | 10  | 3
+        "Similarity Search"      | StructureSearchParams.Type.Similarity     | 123606 | 0    | 10  | 1
+        "Substructure"           | StructureSearchParams.Type.Substructure   | 237    | 0    | 10  | 10
+        "salicylic acid exact"   | StructureSearchParams.Type.Exact          | 338    | 0    | 10  | 1
+    }
     /**
      * Do structure searches
      */

@@ -4,7 +4,7 @@
 <head>
     <meta name="layout" content="logoSearchCartAndFooter"/>
     <title>BARD : Compound : ${compound?.name} : PubChem CID ${compound.pubChemCID}</title>
-    <r:require modules="promiscuity,substances"/>
+    <r:require modules="promiscuity,substances,compoundOptions"/>
 </head>
 
 <body>
@@ -97,11 +97,14 @@
     <div class="span5">
         <ul class="thumbnails">
             <li>
-                <g:link class="thumbnail" controller="chemAxon" action="generateStructureImageFromSmiles"
-                        params="[smiles: compound?.structureSMILES, width: 600, height: 600]" target="_blank">
-                    <img alt="${compound?.structureSMILES}" title="${compound.name}"
-                         src="${createLink(controller: 'chemAxon', action: 'generateStructureImageFromSmiles', params: [smiles: compound?.structureSMILES, width: 400, height: 300])}"/>
-                </g:link>
+                <g:compoundOptions sid="${compound?.pubChemCID}" cid="${compound?.pubChemCID}" smiles="${compound?.structureSMILES}" imageWidth="400" imageHeight="300"/>
+
+                %{--<g:link class="thumbnail" controller="chemAxon" action="generateStructureImageFromSmiles"--}%
+                        %{--params="[smiles: compound?.structureSMILES, width: 600, height: 600]" target="_blank">--}%
+                    %{----}%
+                    %{--<img alt="${compound?.structureSMILES}" title="${compound.name}"--}%
+                         %{--src="${createLink(controller: 'chemAxon', action: 'generateStructureImageFromSmiles', params: [smiles: compound?.structureSMILES, width: 400, height: 300])}"/>--}%
+                %{--</g:link>--}%
             </li>
         </ul>
     </div>

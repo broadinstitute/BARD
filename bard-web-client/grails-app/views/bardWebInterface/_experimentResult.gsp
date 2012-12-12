@@ -10,9 +10,12 @@
 
 <p><b>Title: ${experimentDataMap?.experiment?.name}</b></p>
 
-<p><b>Assay ID : <g:link controller="bardWebInterface" action="showAssay"
-                         id="${experimentDataMap?.experiment?.adid}"
-                         params='[searchString: "${searchString}"]'>${experimentDataMap?.experiment?.adid}</g:link></b>
+<p>
+    <b>Assay ID : <g:link controller="bardWebInterface" action="showAssay"
+                         id="${experimentDataMap?.experiment?.adid}" params='[searchString: "${searchString}"]'>
+                ${experimentDataMap?.experiment?.adid}
+        </g:link>
+    </b>
 </p>
 
 <div class="row-fluid">
@@ -41,11 +44,10 @@
                     <a href="http://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=${experimentData.sid}">${experimentData.sid}</a>
                 </td>
                 <td>
-                    <a href="${createLink(controller: 'bardWebInterface', action: 'showCompound', params: [cid: experimentData.cid, searchString: "${searchString}"])}">${experimentData.cid}</a>
+                     <a href="${createLink(controller: 'bardWebInterface', action: 'showCompound', params: [cid: experimentData.cid, searchString: "${searchString}"])}">${experimentData.cid}</a>
                 </td>
                 <td style="min-width: 180px;">
-                    <img alt="SID: ${experimentData.sid}" title="SID: ${experimentData.sid}"
-                         src="${createLink(controller: 'chemAxon', action: 'generateStructureImageFromCID', params: [cid: experimentData.cid, width: 180, height: 150])}"/>
+                    <g:compoundOptions sid="${experimentData.sid}" cid="${experimentData.cid}" imageWidth="180" imageHeight="150"/>
                 </td>
                 <td>${experimentData.activityOutcome?.label}</td>
                 <td>

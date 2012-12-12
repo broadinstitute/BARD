@@ -27,12 +27,15 @@ import spock.lang.Specification
 import spock.lang.Unroll
 
 import javax.servlet.http.HttpServletResponse
+import grails.test.mixin.Mock
+import bardwebquery.CompoundOptionsTagLib
 
 /**
  * See the API for {@link grails.test.mixin.support.GrailsUnitTestMixin} for usage instructions
  */
 @TestMixin(GrailsUnitTestMixin)
 @TestFor(BardWebInterfaceController)
+@Mock(CompoundOptionsTagLib)
 @Unroll
 class BardWebInterfaceControllerUnitSpec extends Specification {
     MolecularSpreadSheetService molecularSpreadSheetService
