@@ -779,6 +779,22 @@ END reset_sequence;
             from project_step ps2
             WHERE ps2.project_step_id = ps.project_step_id);
 
+        INSERT INTO project_experiment
+            SELECT PROJECT_EXPERIMENT_ID ,
+                    EXPERIMENT_ID,
+                    PROJECT_ID,
+                    STAGE_ID,
+                    VERSION,
+                    DATE_CREATED,
+                    LAST_UPDATED,
+                    MODIFIED_BY
+            FROM data_mig.project_experiment pe
+            WHERE EXISTS (select 1 from experiment e
+                        where e.experiment_id = pe.experiment_id)
+              AND EXISTS (select 1 from project e
+                        where e.project_id = pe.project_id)
+              AND NOT EXISTS (select 1 from project_experiment e
+                        where e.project_experiment_id = pe.project_experiment_id);
 
 
         INSERT INTO assay_context_measure
@@ -932,8 +948,8 @@ END reset_sequence;
                       FROM prjct_exprmt_context pc
                       WHERE pc.prjct_exprmt_CONTEXT_ID = dpc.prjct_exprmt_CONTEXT_ID);
 
-        insert into prjct_exprmt_context_item
-            (PRJCT_EXPRMT_CONTEXT_ITEM_ID,
+        insert into prjct_exprmt_cntxt_item
+            (prjct_exprmt_cntxt_ITEM_ID,
             PRJCT_EXPRMT_CONTEXT_ID,
             DISPLAY_ORDER,
             ATTRIBUTE_ID,
@@ -949,7 +965,7 @@ END reset_sequence;
             LAST_UPDATED,
             MODIFIED_BY
             )
-        select PRJCT_EXPRMT_CONTEXT_ITEM_ID,
+        select prjct_exprmt_cntxt_ITEM_ID,
             PRJCT_EXPRMT_CONTEXT_ID,
             DISPLAY_ORDER,
             ATTRIBUTE_ID,
@@ -964,10 +980,10 @@ END reset_sequence;
             DATE_CREATED,
             LAST_UPDATED,
             MODIFIED_BY
-        from data_mig.prjct_exprmt_context_item dpci
+        from data_mig.prjct_exprmt_cntxt_item dpci
         where NOT EXISTS (SELECT 1
-                      FROM prjct_exprmt_context_item pci
-                      WHERE pci.PRJCT_EXPRMT_CONTEXT_ITEM_ID = dpci.PRJCT_EXPRMT_CONTEXT_ITEM_ID)
+                      FROM prjct_exprmt_cntxt_item pci
+                      WHERE pci.prjct_exprmt_cntxt_ITEM_ID = dpci.prjct_exprmt_cntxt_ITEM_ID)
           AND EXISTS (SELECT 1
                       FROM prjct_exprmt_context pc
                       WHERE pc.PRJCT_EXPRMT_CONTEXT_ID = dpci.PRJCT_EXPRMT_CONTEXT_ID);
@@ -1053,7 +1069,35 @@ END reset_sequence;
                     from exprmt_context_item eci2
                     where eci2.exprmt_context_Item_id = eci.exprmt_context_item_id);
 
-           -- insert step context
+          INSERT INTO project_step
+              (PROJECT_STEP_ID,
+              VERSION,
+              NEXT_PROJECT_EXPERIMENT_ID,
+              PREV_PROJECT_EXPERIMENT_ID,
+              DATE_CREATED,
+              EDGE_NAME,
+              LAST_UPDATED,
+              MODIFIED_BY)
+          SELECT PROJECT_STEP_ID,
+              VERSION,
+              NEXT_PROJECT_EXPERIMENT_ID,
+              PREV_PROJECT_EXPERIMENT_ID,
+              DATE_CREATED,
+              EDGE_NAME,
+              LAST_UPDATED,
+              MODIFIED_BY
+          FROM data_mig.project_step ps
+          WHERE NOT EXISTS (SELECT 1
+                    FROM project_step ps2
+                    WHERE ps2.project_step_id = ps.project_step_id)
+            AND EXISTS (SELECT 1
+                    FROM project_experiment pe
+                    WHERE pe.project_experiment_id = ps.prev_project_experiment_id)
+            AND EXISTS (SELECT 1
+                    FROM project_experiment pe
+                    WHERE pe.project_experiment_id = ps.next_project_experiment_id);
+
+                    -- insert step context
             insert into step_context
                 (STEP_CONTEXT_ID,
                 PROJECT_STEP_ID,

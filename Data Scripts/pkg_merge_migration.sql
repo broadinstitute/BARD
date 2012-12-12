@@ -18,10 +18,6 @@ as
          an_assay_id    in number default null,
          ab_load_ref_data   in  boolean default true);
 
-    procedure merge_migrate
-        (av_source_schema   in varchar2,
-         av_assay_id_range    in varchar2);
-
     PROCEDURE Generate_Migration_stats
         (avi_refresh IN VARCHAR2 DEFAULT 'Increment');
 
@@ -91,6 +87,8 @@ TYPE R_assay_context  IS RECORD (
     ASSAY_CONTEXT_ID	ASSAY_CONTEXT.ASSAY_CONTEXT_ID%type,
 		ASSAY_ID	ASSAY_CONTEXT.ASSAY_ID%type,
 		CONTEXT_NAME	ASSAY_CONTEXT.CONTEXT_NAME%type,
+    CONTEXT_GROUP ASSAY_CONTEXT.CONTEXT_GROUP%type,
+    DISPLAY_ORDER ASSAY_CONTEXT.DISPLAY_ORDER%type,
 		VERSION	ASSAY_CONTEXT.VERSION%type,
 		DATE_CREATED	ASSAY_CONTEXT.DATE_CREATED%type,
 		LAST_UPDATED	ASSAY_CONTEXT.LAST_UPDATED%type,
@@ -115,6 +113,7 @@ TYPE R_assay_context_item  IS RECORD (
 		MODIFIED_BY	ASSAY_CONTEXT_ITEM.MODIFIED_BY%type
 		);
 TYPE R_assay_context_measure  IS RECORD (
+		ASSAY_CONTEXT_MEASURE_ID	ASSAY_CONTEXT_MEASURE.ASSAY_CONTEXT_MEASURE_ID%type,
 		MEASURE_ID	ASSAY_CONTEXT_MEASURE.MEASURE_ID%type,
     ASSAY_CONTEXT_ID	ASSAY_CONTEXT_MEASURE.ASSAY_CONTEXT_ID%type,
 		VERSION	ASSAY_CONTEXT_MEASURE.VERSION%type,
@@ -178,6 +177,8 @@ TYPE R_exprmt_context  IS RECORD (
     EXPRMT_CONTEXT_ID	EXPRMT_CONTEXT.EXPRMT_CONTEXT_ID%type,
 		EXPERIMENT_ID	EXPRMT_CONTEXT.EXPERIMENT_ID%type,
 		CONTEXT_NAME	EXPRMT_CONTEXT.CONTEXT_NAME%type,
+    CONTEXT_GROUP EXPRMT_CONTEXT.CONTEXT_GROUP%type,
+    DISPLAY_ORDER EXPRMT_CONTEXT.DISPLAY_ORDER%type,
 		VERSION	EXPRMT_CONTEXT.VERSION%type,
 		DATE_CREATED	EXPRMT_CONTEXT.DATE_CREATED%type,
 		LAST_UPDATED	EXPRMT_CONTEXT.LAST_UPDATED%type,
@@ -199,6 +200,16 @@ TYPE r_exprmt_context_item IS RECORD (
 		DATE_CREATED	EXPRMT_CONTEXT_ITEM.DATE_CREATED%type,
 		LAST_UPDATED	EXPRMT_CONTEXT_ITEM.LAST_UPDATED%type,
 		MODIFIED_BY	EXPRMT_CONTEXT_ITEM.MODIFIED_BY%type
+		);
+TYPE R_exprmt_measure  IS RECORD (
+		EXPRMT_MEASURE_ID	exprmt_measure.EXPRMT_MEASURE_ID%type,
+		MEASURE_ID	exprmt_measure.MEASURE_ID%type,
+		PARENT_EXPRMT_MEASURE_ID	exprmt_measure.PARENT_EXPRMT_MEASURE_ID%type,
+    EXPERIMENT_ID	exprmt_measure.EXPERIMENT_ID%type,
+		VERSION	exprmt_measure.VERSION%type,
+		DATE_CREATED	exprmt_measure.DATE_CREATED%type,
+		LAST_UPDATED	exprmt_measure.LAST_UPDATED%type,
+		MODIFIED_BY	exprmt_measure.MODIFIED_BY%type
 		);
 TYPE R_external_referencE_aid IS RECORD (
 		EXT_ASSAY_REF	EXTERNAL_REFERENCE.EXT_ASSAY_REF%TYPE
@@ -229,6 +240,7 @@ TYPE R_measure IS RECORD (
 		ASSAY_ID	MEASURE.ASSAY_ID%type,
 		PARENT_MEASURE_ID	MEASURE.PARENT_MEASURE_ID%type,
 		RESULT_TYPE_ID	MEASURE.RESULT_TYPE_ID%type,
+		STATS_MODIFIER_ID	MEASURE.STATS_MODIFIER_ID%type,
 		ENTRY_UNIT_ID	MEASURE.ENTRY_UNIT_ID%type,
 		VERSION	MEASURE.VERSION%type,
 		DATE_CREATED	MEASURE.DATE_CREATED%type,
@@ -270,6 +282,8 @@ TYPE R_PROJECT_context  IS RECORD (
     PROJECT_context_ID	PROJECT_context.PROJECT_context_ID%type,
 		PROJECT_ID	PROJECT_context.PROJECT_ID%type,
 		CONTEXT_NAME	PROJECT_context.CONTEXT_NAME%type,
+    CONTEXT_GROUP PROJECT_context.CONTEXT_GROUP%type,
+    DISPLAY_ORDER PROJECT_context.DISPLAY_ORDER%type,
 		VERSION	PROJECT_context.VERSION%type,
 		DATE_CREATED	PROJECT_context.DATE_CREATED%type,
 		LAST_UPDATED	PROJECT_context.LAST_UPDATED%type,
@@ -303,12 +317,49 @@ TYPE R_project_document IS RECORD (
 		LAST_UPDATED	PROJECT_DOCUMENT.LAST_UPDATED%type,
 		MODIFIED_BY	PROJECT_DOCUMENT.MODIFIED_BY%type
 		);
+TYPE R_project_EXPERIMENT IS RECORD (
+		PROJECT_EXPERIMENT_ID	PROJECT_EXPERIMENT.PROJECT_EXPERIMENT_ID%type,
+		PROJECT_ID	PROJECT_EXPERIMENT.PROJECT_ID%type,
+		experiment_ID	PROJECT_EXPERIMENT.experiment_ID%type,
+		STAGE_ID	PROJECT_EXPERIMENT.STAGE_ID%type,
+		VERSION	PROJECT_EXPERIMENT.VERSION%type,
+		DATE_CREATED	PROJECT_EXPERIMENT.DATE_CREATED%type,
+		LAST_UPDATED	PROJECT_EXPERIMENT.LAST_UPDATED%type,
+		MODIFIED_BY	PROJECT_EXPERIMENT.MODIFIED_BY%type
+		);
+TYPE R_prjct_exprmt_context  IS RECORD (
+    prjct_exprmt_CONTEXT_ID	prjct_exprmt_context.prjct_exprmt_CONTEXT_ID%type,
+		PROJECT_EXPERIMENT_ID	prjct_exprmt_context.PROJECT_EXPERIMENT_ID%type,
+		CONTEXT_NAME	prjct_exprmt_context.CONTEXT_NAME%type,
+    CONTEXT_GROUP prjct_exprmt_context.CONTEXT_GROUP%type,
+    DISPLAY_ORDER prjct_exprmt_context.DISPLAY_ORDER%type,
+		VERSION	prjct_exprmt_context.VERSION%type,
+		DATE_CREATED	prjct_exprmt_context.DATE_CREATED%type,
+		LAST_UPDATED	prjct_exprmt_context.LAST_UPDATED%type,
+		MODIFIED_BY	prjct_exprmt_context.MODIFIED_BY%type
+		);
+TYPE R_prjct_exprmt_context_item  IS RECORD (
+		prjct_exprmt_context_ITEM_ID	prjct_exprmt_context_item.prjct_exprmt_context_ITEM_ID%type,
+		prjct_exprmt_context_ID	prjct_exprmt_context_item.prjct_exprmt_context_ID%type,
+		DISPLAY_ORDER	prjct_exprmt_context_item.DISPLAY_ORDER%type,
+		ATTRIBUTE_ID	prjct_exprmt_context_item.ATTRIBUTE_ID%type,
+		VALUE_ID	prjct_exprmt_context_item.VALUE_ID%type,
+		EXT_VALUE_ID	prjct_exprmt_context_item.EXT_VALUE_ID%type,
+		QUALIFIER	prjct_exprmt_context_item.QUALIFIER%type,
+		VALUE_NUM	prjct_exprmt_context_item.VALUE_NUM%type,
+		VALUE_MIN	prjct_exprmt_context_item.VALUE_MIN%type,
+		VALUE_MAX	prjct_exprmt_context_item.VALUE_MAX%type,
+		VALUE_DISPLAY	prjct_exprmt_context_item.VALUE_DISPLAY%type,
+		VERSION	prjct_exprmt_context_item.VERSION%type,
+		DATE_CREATED	prjct_exprmt_context_item.DATE_CREATED%type,
+		LAST_UPDATED	prjct_exprmt_context_item.LAST_UPDATED%type,
+		MODIFIED_BY	prjct_exprmt_context_item.MODIFIED_BY%type
+		);
 TYPE R_project_step IS RECORD (
 		PROJECT_STEP_ID	PROJECT_STEP.PROJECT_STEP_ID%type,
-		PROJECT_ID	PROJECT_STEP.PROJECT_ID%type,
-		EXPERIMENT_ID	PROJECT_STEP.EXPERIMENT_ID%type,
-		FOLLOWS_EXPERIMENT_ID	PROJECT_STEP.FOLLOWS_EXPERIMENT_ID%type,
-		DESCRIPTION	PROJECT_STEP.DESCRIPTION%type,
+		next_PROJECT_experiment_ID	PROJECT_STEP.next_PROJECT_experiment_ID%type,
+		prev_PROJECT_experiment_ID	PROJECT_STEP.prev_PROJECT_experiment_ID%type,
+		edge_name	PROJECT_STEP.edge_name%type,
 		VERSION	PROJECT_STEP.VERSION%type,
 		DATE_CREATED	PROJECT_STEP.DATE_CREATED%type,
 		LAST_UPDATED	PROJECT_STEP.LAST_UPDATED%type,
@@ -321,6 +372,7 @@ TYPE R_result IS RECORD (
 		EXPERIMENT_ID	RESULT.EXPERIMENT_ID%type,
 		SUBSTANCE_ID	RESULT.SUBSTANCE_ID%type,
 		RESULT_TYPE_ID	RESULT.RESULT_TYPE_ID%type,
+		STATS_MODIFIER_ID	RESULT.STATS_MODIFIER_ID%type,
 		REPLICATE_NO	RESULT.REPLICATE_NO%type,
 		VALUE_DISPLAY	RESULT.VALUE_DISPLAY%type,
 		VALUE_NUM	RESULT.VALUE_NUM%type,
@@ -362,6 +414,8 @@ TYPE R_step_context  IS RECORD (
     STEP_CONTEXT_ID	step_context.STEP_CONTEXT_ID%type,
 		PROJECT_STEP_ID	step_context.PROJECT_STEP_ID%type,
 		CONTEXT_NAME	step_context.CONTEXT_NAME%type,
+    CONTEXT_GROUP step_context.CONTEXT_GROUP%type,
+    DISPLAY_ORDER step_context.DISPLAY_ORDER%type,
 		VERSION	step_context.VERSION%type,
 		DATE_CREATED	step_context.DATE_CREATED%type,
 		LAST_UPDATED	step_context.LAST_UPDATED%type,
@@ -462,10 +516,10 @@ TYPE R_unit_conversion IS RECORD (
 
     begin
 
-        if av_src_schema = 'southern'
+        if av_src_schema = 'schatwin'
         then
             -- call the procedure in the source schema
-            southern.MERGE_MIGRATION.open_LOCAL_cursor
+            schatwin.MERGE_MIGRATION.open_LOCAL_cursor
                       (av_src_schema,   -- used as the name in the modified_by column
                        av_table_name,
                        an_identifier,
@@ -2000,57 +2054,31 @@ TYPE R_unit_conversion IS RECORD (
          aro_trgt out r_project_step)
          return boolean
     as
-        ln_trgt_experiment_id    number := null;    -- preset these in case they are skipped below
-        ln_trgt_stage_id    number := null;    -- preset these in case they are skipped below
-        ln_trgt_follows_experiment_id    number := null;    -- preset these in case they are skipped below
-        ln_trgt_project_id    number;
+        ln_trgt_nxt_prjct_exprmt_id    number := null;    -- preset these in case they are skipped below
+        ln_trgt_prv_prjct_exprmt_id    number := null;    -- preset these in case they are skipped below
         ln_trgt_project_step_id    number;
         --ln_trgt_external_reference_id    number;
-        le_experiment_id_null    exception;
-        le_follows_experiment_id_null    exception;
-        le_element_id_null    exception;
+        le_nxt_prjct_exprmt_id_null    exception;
+        le_prv_prjct_exprmt_id_null    exception;
 
     begin
-        -- there are three possible FK in project_step, 2 to Experiment and 1 to Project
+        -- there are two possible FK in project_step to Project_Experiment
 
-        get_mapping_id(pv_src_schema, 'EXPERIMENT', ar_src.experiment_id, ln_trgt_experiment_id);
+        get_mapping_id(pv_src_schema, 'PROJECT_EXPERIMENT', ar_src.next_project_experiment_id, ln_trgt_nxt_prjct_exprmt_id);
 
-        if ln_trgt_experiment_id is null
+        if ln_trgt_nxt_prjct_exprmt_id is null
         then
             -- we can't insert this record until the other experiment arrives
-            raise le_experiment_id_null;
+            raise le_nxt_prjct_exprmt_id_null;
         end if;
 
-        if ar_src.follows_experiment_id is not null
+        get_mapping_id(pv_src_schema, 'PROJECT_EXPERIMENT', ar_src.prev_project_experiment_id, ln_trgt_prv_prjct_exprmt_id);
+
+        if ln_trgt_prv_prjct_exprmt_id is null
         then
-            get_mapping_id(pv_src_schema, 'EXPERIMENT', ar_src.experiment_id, ln_trgt_follows_experiment_id);
-
-            if ln_trgt_experiment_id is null
-            then
-                -- we can't insert this record until the other experiment arrives
-                raise le_follows_experiment_id_null;
-            end if;
+            -- we can't insert this record until the other experiment arrives
+            raise le_prv_prjct_exprmt_id_null;
         end if;
-
-        get_mapping_id(pv_src_schema, 'PROJECT', ar_src.project_id, ln_trgt_project_id);
-
-        if ln_trgt_project_id is null
-        then
-            --let's go off and get this, and populate the project table on demand
-            get_project (ar_src.project_id);
-
-            get_mapping_id(pv_src_schema, 'PROJECT', ar_src.project_id, ln_trgt_project_id);
-
-        end if;
---        if ar_src.stage_id is not null
---        then
---            get_mapping_id(pv_src_schema, 'ELEMENT', ar_src.stage_id, ln_trgt_stage_id);
---            if ln_trgt_stage_id is null
---            then
---                raise le_element_id_null;
---            end if;
---        end if;
-
 
         get_mapping_id(pv_src_schema, 'PROJECT_STEP', ar_src.project_step_id, ln_trgt_project_step_id);
 
@@ -2058,33 +2086,26 @@ TYPE R_unit_conversion IS RECORD (
         -- assumes that the element table is identical - same IDs!!!
         aro_trgt := ar_src;
         aro_trgt.project_step_ID := ln_trgt_project_step_id;
-        aro_trgt.FOLLOWS_EXPERIMENT_ID := ln_trgt_follows_experiment_id;
-        aro_trgt.EXPERIMENT_ID := ln_trgt_experiment_id;
-        --aro_trgt.STAGE_ID := ln_trgt_stage_id;
-        aro_trgt.PROJECT_ID := ln_trgt_project_id;
+        aro_trgt.NEXT_PROJECT_EXPERIMENT_ID := ln_trgt_nxt_prjct_exprmt_id;
+        aro_trgt.PREV_PROJECT_EXPERIMENT_ID := ln_trgt_prv_prjct_exprmt_id;
         aro_trgt.LAST_UPDATED := nvl(ar_src.LAST_UPDATED, sysdate);
         aro_trgt.MODIFIED_BY := nvl(ar_src.MODIFIED_BY, pv_src_schema);
         return true;
 
     exception
-        when le_experiment_id_null
+        when le_nxt_prjct_exprmt_id_null
         then
-            log_error(-20001, 'target Experiment_id is null', 'map_project_step',
-                 'source experiment_id = ' || to_char(ar_src.experiment_id));
+            log_error(-20001, 'target Next_Project_Experiment_id is null', 'map_project_step',
+                 'source experiment_id = ' || to_char(ar_src.NEXT_PROJECT_EXPERIMENT_ID));
             return false;
-        when le_follows_experiment_id_null
+        when le_prv_prjct_exprmt_id_null
         then
-            log_error(-20001, 'target follows_Experiment_id is null', 'map_project_step',
-                 'source experiment_id = ' || to_char(ar_src.follows_experiment_id));
+            log_error(-20001, 'target Prev_Project_Experiment_id is null', 'map_project_step',
+                 'source experiment_id = ' || to_char(ar_src.PREV_PROJECT_EXPERIMENT_ID));
             return false;
---        when le_element_id_null
---        then
---            log_error(-20001, 'target stage_id is null', 'map_project_step',
---                 'source stage_id = ' || to_char(ar_src.stage_id));
---            return false;
         when others
         then
-            log_error(sqlcode, sqlerrm, 'map_external_reference');
+            log_error(sqlcode, sqlerrm, 'map_project_step');
             return false;
     end map_project_step;
 
@@ -2235,6 +2256,58 @@ TYPE R_unit_conversion IS RECORD (
             log_error(sqlcode, sqlerrm, 'map_element');
             return false;
     end map_element;
+
+    function map_project_experiment
+        (ar_src in r_project_experiment,
+         aro_trgt out r_project_experiment)
+         return boolean
+    as
+        ln_trgt_project_id    number := null;    -- preset these in case they are skipped below
+        ln_trgt_stage_id    number := null;    -- preset these in case they are skipped below
+        ln_trgt_experiment_id    number := null;    -- preset these in case they are skipped below
+        ln_trgt_project_experiment_id    number;
+        le_project_id_null    exception;
+
+    begin
+        -- there are two possible FK in assay_context_measure for measure and assay_context
+
+        get_mapping_id(pv_src_schema, 'EXPERIMENT', ar_src.experiment_id, ln_trgt_experiment_id);
+        IF ar_src.stage_id IS NOT NULL
+        THEN
+            get_mapping_id(pv_src_schema, 'ELEMENT', ar_src.stage_id, ln_trgt_stage_id);
+        END IF;
+
+        get_mapping_id(pv_src_schema, 'PROJECT', ar_src.project_id, ln_trgt_project_id);
+        if ln_trgt_project_id is null
+        then
+            -- we can't insert this record until the project arrives
+            raise le_project_id_null;
+        end if;
+
+        get_mapping_id(pv_src_schema, 'PROJECT_EXPERIMENT', ar_src.project_experiment_id, ln_trgt_project_experiment_id);
+
+        aro_trgt := ar_src;
+        aro_trgt.EXPERIMENT_ID := ln_trgt_experiment_id;
+        aro_trgt.PROJECT_ID := ln_trgt_project_id;
+        aro_trgt.stage_ID := ln_trgt_stage_id;
+        aro_trgt.PROJECT_EXPERIMENT_ID := ln_trgt_project_experiment_id;
+        aro_trgt.LAST_UPDATED := nvl(ar_src.LAST_UPDATED, sysdate);
+        aro_trgt.MODIFIED_BY := nvl(ar_src.MODIFIED_BY, pv_src_schema);
+        return true;
+
+    exception
+        when le_project_id_null
+        then
+            -- let's not log all these errors, they don't mean a lot.
+            --log_error(-20001, 'target measure_id is null', 'map_assay_context_measure',
+            --     'source measure_id = ' || to_char(ar_src.measure_id));
+            return false;
+         when others
+        then
+            log_error(sqlcode, sqlerrm, 'map_project_experiment');
+            return false;
+    end map_project_experiment;
+
 
     function map_assay_context_measure
         (ar_src in r_assay_context_measure,
@@ -2738,13 +2811,13 @@ TYPE R_unit_conversion IS RECORD (
         select experiment_id from external_reference
          where experiment_id = cr_experiment_id
          union all
-         select experiment_id from project_step
+         select experiment_id from project_experiment
          where experiment_id = cr_experiment_id
          union all
-         select follows_experiment_id from project_step
-         where follows_experiment_id = cr_experiment_id
-         union all
          select experiment_id from result
+         where experiment_id = cr_experiment_id
+         union all
+         select experiment_id from exprmt_measure
          where experiment_id = cr_experiment_id
          union all
          select experiment_id from exprmt_context
@@ -2971,37 +3044,48 @@ TYPE R_unit_conversion IS RECORD (
         then
             -- this is a top level table, remove everything not used in project_step
             -- or referernced in external_reference
-            delete from identifier_mapping
+            delete from identifier_mapping im
             where table_name = av_table_name
             and not exists (select 1
-                from project_step pe
-                where pe.project_step_id = target_id)
+                from project_experiment pe
+                where pe.project_id = im.target_id)
+            and not exists (select 1
+                from project_context pc
+                where pc.project_id = im.target_id)
             and not exists (select project_id
                 from external_reference er
-                where er.project_id = target_id);
+                where er.project_id = im.target_id);
 
             delete from project p
             where not exists (select 1
-                from project_step pe
+                from project_experiment pe
                 where pe.project_id = p.project_id)
-            and not exists (select project_id
+            and not exists (select 1
+                from project_context pc
+                where pc.project_id = p.project_id)
+            and not exists (select an_id
                 from external_reference er
                 where er.project_id = p.project_id);
 
 
-        elsif av_table_name = 'PROJECT_STEP'
+        elsif av_table_name = 'PROJECT_EXPERIMENT'
         then
             delete from identifier_mapping
-            where target_id in
-                (select project_step_id
-                 from project_step
-                 where experiment_id = an_id
-                    or follows_experiment_id = an_id)
-              and table_name = av_table_name;
+            where table_name = av_table_name
+             AND target_id in
+                (select project_experiment_id
+                 from project_experiment
+                 where experiment_id = an_id)
+              and NOT EXISTS (SELECT 1
+                  FROM prjct_exprmt_context pec
+                  WHERE pec.project_experiment_id = target_id);
 
-            delete from project_step
+            delete from project_experiment pe
             where experiment_id = an_id
-               or follows_experiment_id = an_id;
+             and NOT EXISTS (SELECT 1
+                  FROM prjct_exprmt_context pec
+                  WHERE pec.project_experiment_id = pe.project_experiment_id);
+
 
         elsif av_table_name = 'PROJECT_DOCUMENT'
         then
@@ -3990,18 +4074,16 @@ TYPE R_unit_conversion IS RECORD (
         is
         select project_step_id
         from project_step
-        where experiment_id = ar_row.experiment_id
-          and project_id = ar_row.project_id
-          and nvl(follows_experiment_id, -200) = nvl(ar_row.follows_experiment_id, -200);
+        where next_project_experiment_id = ar_row.next_project_experiment_id
+          and prev_project_experiment_id = ar_row.prev_project_experiment_id;
 
     begin
 
         ln_trgt_project_step_id := ar_row.project_step_id;
-        lv_statement := to_char(ar_row.PROJECT_ID)
+        lv_statement := to_char(ar_row.next_project_experiment_id)
 --                    || ', ' || to_char(ar_row.STAGE_ID)
-                    || ', ' || to_char(ar_row.EXPERIMENT_ID)
-                    || ', ' || to_char(ar_row.FOLLOWS_EXPERIMENT_ID)
-                    || ', ' || substr(ar_row.DESCRIPTION, 1, 500);
+                    || ', ' || to_char(ar_row.prev_project_experiment_id)
+                    || ', ' || substr(ar_row.edge_name, 1, 500);
 
 
         -- second attempt to find using the natural key (label)
@@ -4017,11 +4099,9 @@ TYPE R_unit_conversion IS RECORD (
 
         -- if it exists, update the external_system record
             update project_step set
-                PROJECT_ID = ar_row.PROJECT_ID,
---                STAGE_ID = ar_row.STAGE_ID,
-                EXPERIMENT_ID = ar_row.EXPERIMENT_ID,
-                FOLLOWS_EXPERIMENT_ID = ar_row.FOLLOWS_EXPERIMENT_ID,
-                DESCRIPTION = ar_row.DESCRIPTION,
+                next_project_experiment_id = ar_row.next_project_experiment_id,
+                prev_project_experiment_id = ar_row.prev_project_experiment_id,
+                edge_name = ar_row.edge_name,
                 VERSION = ar_row.VERSION,
                 DATE_CREATED = ar_row.DATE_CREATED,
                 LAST_UPDATED = ar_row.LAST_UPDATED,
@@ -4047,22 +4127,18 @@ TYPE R_unit_conversion IS RECORD (
 
             insert into project_step (
                 project_step_ID,
-                PROJECT_ID,
---                STAGE_ID,
-                EXPERIMENT_ID,
-                FOLLOWS_EXPERIMENT_ID,
-                DESCRIPTION,
+                next_project_experiment_id,
+                prev_project_experiment_id,
+                edge_name,
                 VERSION,
                 DATE_CREATED,
                 LAST_UPDATED,
                 MODIFIED_BY
             ) values (
                 ln_trgt_project_step_id,
-                ar_row.PROJECT_ID,
---                ar_row.STAGE_ID,
-                ar_row.EXPERIMENT_ID,
-                ar_row.FOLLOWS_EXPERIMENT_ID,
-                ar_row.DESCRIPTION,
+                ar_row.next_project_experiment_id,
+                ar_row.prev_project_experiment_id,
+                ar_row.edge_name,
                 ar_row.VERSION,
                 ar_row.DATE_CREATED,
                 ar_row.LAST_UPDATED,
@@ -4547,13 +4623,15 @@ TYPE R_unit_conversion IS RECORD (
         from measure
         where assay_id = ar_row.assay_id
           and result_type_id = ar_row.result_type_id
-          and parent_measure_id = ar_row.parent_measure_id;
+          and Nvl(stats_modifier_id, -100) = Nvl(ar_row.stats_modifier_id, -100)
+          and Nvl(parent_measure_id, -200) = Nvl(ar_row.parent_measure_id, -200);
 
     begin
         ln_trgt_measure_id := ar_row.measure_id;
         lv_statement := to_char(ar_row.assay_ID)
         || ', ' || to_char(ar_row.PARENT_MEASURE_ID)
         || ', ' || to_char(ar_row.RESULT_TYPE_ID)
+        || ', ' || to_char(ar_row.STATS_MODIFIER_ID)
         || ', ' || To_Char(ar_row.ENTRY_UNIT_ID);
 
         if ln_trgt_measure_id is null
@@ -4573,6 +4651,7 @@ TYPE R_unit_conversion IS RECORD (
                 ASSAY_ID = ar_row.ASSAY_ID,
                 PARENT_MEASURE_ID = ar_row.PARENT_MEASURE_ID,
                 RESULT_TYPE_ID = ar_row.RESULT_TYPE_ID,
+                STATS_MODIFIER_ID = ar_row.STATS_MODIFIER_ID,
                 ENTRY_UNIT_ID = ar_row.ENTRY_UNIT_ID,
                 VERSION = ar_row.VERSION,
                 DATE_CREATED = ar_row.DATE_CREATED,
@@ -4603,6 +4682,7 @@ TYPE R_unit_conversion IS RECORD (
                 ASSAY_ID,
                 PARENT_MEASURE_ID,
                 RESULT_TYPE_ID,
+                STATS_MODIFIER_ID,
                 ENTRY_UNIT_ID,
                 VERSION,
                 DATE_CREATED,
@@ -4613,6 +4693,7 @@ TYPE R_unit_conversion IS RECORD (
                 ar_row.ASSAY_ID,
                 ar_row.PARENT_MEASURE_ID,
                 ar_row.RESULT_TYPE_ID,
+                ar_row.STATS_MODIFIER_ID,
                 ar_row.ENTRY_UNIT_ID,
                 ar_row.VERSION,
                 ar_row.DATE_CREATED,
@@ -4730,11 +4811,20 @@ TYPE R_unit_conversion IS RECORD (
         lr_src_measure r_measure;
         lr_trgt_measure  r_measure;
         ln_trgt_measure_id  number;
+        ln_trgt_assay_id    NUMBER;
 
     begin
         -- the target measure rows have already been deleted
         --dbms_output.put_line('arrived in get_measure, source schema=' ||pv_src_schema
         --        || ' assay_id=' || to_char(an_src_assay_id));
+
+        get_mapping_id(pv_src_schema, 'ASSAY', an_src_assay_id, ln_trgt_assay_id);
+        if ln_trgt_assay_id is not null
+        then
+            cleanout_data_mig('EXPRMT_MEASURE', ln_trgt_assay_id, pv_src_schema);
+            -- DON'T CLEAN OUT mEASURE, THEN WE CAN UPDATE AND PREVENT DUPLICATES
+        END IF;
+
         open_src_cursor(pv_src_schema, 'MEASURE', an_src_assay_id, cur_measure);
 
         loop
@@ -4753,7 +4843,6 @@ TYPE R_unit_conversion IS RECORD (
             end if;
         end loop;
         close cur_measure;
-
 
     exception
         when others
@@ -5045,12 +5134,13 @@ TYPE R_unit_conversion IS RECORD (
     begin
         -- find the rows in the target
         -- and delete them
-        --   but relase the child rows by making the FK columns null
+        -- but relase the child rows by making the FK columns null
         -- also find the mapping rows and delete those
         get_mapping_id(pv_src_schema, 'ASSAY', an_src_assay_id, ln_trgt_assay_id);
         if ln_trgt_assay_id is not null
         then
             cleanout_data_mig('ASSAY_CONTEXT_ITEM', ln_trgt_assay_id, pv_src_schema);
+            cleanout_data_mig('ASSAY_CONTEXT_MEASURE', ln_trgt_assay_id, pv_src_schema);
             cleanout_data_mig('ASSAY_CONTEXT', ln_trgt_assay_id, pv_src_schema);
         end if;
 
@@ -5065,21 +5155,16 @@ TYPE R_unit_conversion IS RECORD (
 
                 save_assay_context (lr_trgt_assay_context, lr_src_assay_context.assay_context_id,
                     ln_trgt_assay_context_id);
+                get_assay_context_item(lr_src_assay_context.assay_context_id);
+                -- Leave the assay_context_measure until we have the measures in place
+
             end if;
 
-            get_assay_context_item(lr_src_assay_context.assay_context_id);
 
         end loop;
         close cur_assay_context;
 
-        -- must do these as a sub-call from assay_context.
-        -- They rely on the fact that all the assay_context IDs have been mapped in
-        -- identifier_mapping
-        -- dbms_output.put_line('call to get_measure, src_assay_id=' ||to_char(an_src_assay_id));
-        get_measure(an_src_assay_id);
-
-
-    exception
+     exception
         when others
         then
             if cur_assay_context%isopen
@@ -6004,6 +6089,205 @@ TYPE R_unit_conversion IS RECORD (
             log_error(sqlcode, sqlerrm, 'get_exprmt_context');
     end get_exprmt_context;
 
+    procedure get_prjct_exprmt_context
+        (an_src_project_experiment_id    in  number)
+    as
+        cur_prjct_exprmt_context      r_cursor;
+        lr_src_prjct_exprmt_context   r_prjct_exprmt_context;
+        lr_trgt_prjct_exprmt_context  r_prjct_exprmt_context;
+        ln_trgt_prjct_exprmt_context_id  number;
+        ln_trgt_project_experiment_id    number  := null;
+
+    begin
+        -- find the rows in the target
+        -- and delete them
+        -- but relase the child rows by making the FK columns null
+        -- also find the mapping rows and delete those
+        get_mapping_id(pv_src_schema, 'PROJECT_EXPERIMENT', an_src_project_experiment_id, ln_trgt_project_experiment_id);
+        if ln_trgt_project_experiment_id is not null
+        then
+            cleanout_data_mig('PRJCT_EXPRMT_CONTEXT_ITEM', ln_trgt_project_experiment_id, pv_src_schema);
+        end if;
+
+        open_src_cursor(pv_src_schema, 'PRJCT_EXPRMT_CONTEXT', an_src_project_experiment_id, cur_assay_context);
+
+        loop
+            fetch cur_assay_context into lr_src_assay_context;
+            exit when cur_assay_context%notfound;
+
+            if map_assay_context (lr_src_assay_context, lr_trgt_assay_context)
+            then
+
+                save_assay_context (lr_trgt_assay_context, lr_src_assay_context.assay_context_id,
+                    ln_trgt_assay_context_id);
+                get_assay_context_item(lr_src_assay_context.assay_context_id);
+                -- Leave the assay_context_measure until we have the measures in place
+
+            end if;
+
+
+        end loop;
+        close cur_assay_context;
+
+     exception
+        when others
+        then
+            if cur_assay_context%isopen
+            then
+                close cur_assay_context;
+            end if;
+
+            log_error(sqlcode, sqlerrm, 'get_assay_context');
+    end get_prjct_exprmt_context;
+
+    procedure save_project_experiment
+        (ar_row in r_project_experiment,
+         an_src_project_experiment_id   in  number,
+         ano_project_experiment_id   out number)
+    as
+        ln_trgt_project_experiment_id   number;
+        lv_statement    varchar2(4000);
+
+        CURSOR cur_project_experiment_AK
+        IS
+        SELECT project_experiment_id
+        FROM project_experiment
+        WHERE project_id = ar_row.project_id
+        AND experiment_id = ar_row.experiment_id;
+
+
+    begin
+        ln_trgt_project_experiment_id := ar_row.project_experiment_id;
+        lv_statement := to_char(ar_row.project_experiment_ID)
+                || ', ' || to_char(ar_row.project_ID)
+                || ', ' || to_char(ar_row.experiment_ID)
+                || ', ' || to_char(ar_row.stage_ID);
+
+        if ln_trgt_project_experiment_id is NOT NULL
+        THEN
+             OPEN cur_project_experiment_ak;
+             FETCH cur_project_experiment_ak INTO ln_trgt_project_experiment_id;
+             CLOSE cur_project_experiment_ak;
+        END IF;
+
+        if ln_trgt_project_experiment_id is NOT NULL
+        THEN
+        -- if it exists, update the record
+            update project_experiment set
+                EXPERIMENT_ID = ar_row.EXPERIMENT_ID,
+                project_id = ar_row.PROJECT_ID,
+                STAGE_id = ar_row.STAGE_ID,
+                VERSION = ar_row.VERSION,
+                DATE_CREATED = ar_row.DATE_CREATED,
+                LAST_UPDATED = ar_row.LAST_UPDATED,
+                MODIFIED_BY = ar_row.MODIFIED_BY
+            where project_experiment_id = ln_trgt_project_experiment_id;
+
+           if sql%rowcount < 1
+           then
+              ln_trgt_project_experiment_id := null;
+           else
+              save_mapping(pv_src_schema, 'PROJECT_EXPERIMENT', an_src_project_experiment_id, ln_trgt_project_experiment_id);
+              log_statement('PROJECT_EXPERIMENT', ln_trgt_project_experiment_id, 'UPDATE', lv_statement);
+           end if;
+
+        end if;
+
+        IF ln_trgt_project_experiment_id is NULL    -- if not insert a new row (non duplicate !)
+        THEN
+
+            select project_experiment_id_seq.nextval
+            into ln_trgt_project_experiment_id
+            from dual;
+
+
+             insert into project_experiment (
+                PROJECT_EXPERIMENT_ID,
+                EXPERIMENT_ID,
+                PROJECT_ID,
+                STAGE_ID,
+                VERSION,
+                DATE_CREATED,
+                LAST_UPDATED,
+                MODIFIED_BY)
+            SELECT ln_trgt_project_experiment_id,
+                ar_row.EXPERIMENT_ID,
+                ar_row.PROJECT_ID,
+                ar_row.STAGE_ID,
+                ar_row.VERSION,
+                ar_row.DATE_CREATED,
+                ar_row.LAST_UPDATED,
+                ar_row.MODIFIED_BY
+            FROM dual
+            WHERE NOT EXISTS
+                  (SELECT 1 FROM project_experiment pe
+                   WHERE pe.project_id = ar_row.project_id
+                     AND pe.experiment_id = ar_row.experiment_id);
+
+            save_mapping(pv_src_schema, 'PROJECT_EXPERIMENT',
+                    an_src_project_experiment_id,
+                    ln_trgt_project_experiment_id);
+
+            log_statement('PROJECT_EXPERIMENT',ln_trgt_project_experiment_id,
+                  'INSERT', lv_statement);
+        end if;
+
+        ano_project_experiment_id := ln_trgt_project_experiment_id;
+
+    exception
+        when others
+        then
+             log_error(sqlcode, sqlerrm, 'save_PROJECT_EXPERIMENT');
+    end save_PROJECT_EXPERIMENT;
+
+    procedure get_project_experiment
+        (an_src_experiment_id    in  number)
+    as
+        cur_project_experiment  r_cursor;
+        ln_trgt_project_experiment_id   number;
+        ln_trgt_project_id   number;
+        lr_trgt_project_experiment  r_project_experiment;
+        lr_src_project_experiment  r_project_experiment;
+
+    begin
+
+        open_src_cursor(pv_src_schema, 'PROJECT_EXPERIMENT', an_src_experiment_id, cur_project_experiment);
+
+        loop
+            fetch cur_project_experiment into lr_src_project_experiment;
+            exit when cur_project_experiment%notfound;
+
+            -- if the project does not exist we need to insert it
+            get_mapping_id(pv_src_schema, 'PROJECT', lr_src_project_experiment.PROJECT_ID, ln_trgt_project_id);
+            if ln_trgt_project_id is null
+            then
+                get_project(lr_src_project_experiment.PROJECT_ID);
+            end if;
+
+            if map_project_experiment(lr_src_project_experiment, lr_trgt_project_experiment)
+            then
+
+                save_project_experiment (lr_trgt_project_experiment,
+                            lr_src_project_experiment.project_experiment_id,
+                            ln_trgt_project_experiment_id);
+
+                get_prjct_exprmt_context(lr_src_project_experiment.project_experiment_id);
+
+            end if;
+        end loop;
+
+        close cur_project_experiment;
+
+    exception
+        when others
+        then
+            if cur_project_experiment%isopen
+            then
+                close cur_project_experiment;
+            end if;
+    end get_project_experiment;
+
+
 
     procedure get_experiment
         (an_src_assay_id    in  number)
@@ -6026,15 +6310,15 @@ TYPE R_unit_conversion IS RECORD (
             then
                 save_experiment(lr_trgt_experiment, lr_src_experiment.experiment_id, ln_trgt_experiment_id);
 
+                get_project_experiment(lr_src_experiment.experiment_id);
                 get_project_step(lr_src_experiment.experiment_id);
-
                 get_external_reference(lr_src_experiment.experiment_id);
 
                 cleanout_data_mig ('RESULT', ln_trgt_experiment_id, pv_src_schema);
+                cleanout_data_mig ('EXPRMT_CONTEXT_ITEM', ln_trgt_experiment_id, pv_src_schema);
                 cleanout_data_mig ('EXPRMT_CONTEXT', ln_trgt_experiment_id, pv_src_schema);
 
                 get_exprmt_context(lr_src_experiment.experiment_id);
-
                 get_result(lr_src_experiment.experiment_id);
 
             end if;
@@ -6214,13 +6498,11 @@ TYPE R_unit_conversion IS RECORD (
             then
                 save_assay (lr_trgt_assay, lr_src_assay.assay_id, ln_assay_id);
 
-                get_experiment(lr_src_assay.assay_id);
-
                 get_assay_document(lr_src_assay.assay_id);
-
                 get_assay_context(lr_src_assay.assay_id);
-
                 get_measure(lr_src_assay.assay_id);
+                -- This will work back up the tree to get the project related information for this assay
+                get_experiment(lr_src_assay.assay_id);
 
                 log_statement('timer', 0, 'END',
                    'Assay '|| to_char(lr_src_assay.assay_id));
@@ -6241,92 +6523,6 @@ TYPE R_unit_conversion IS RECORD (
             end if;
             null;
     end get_assay;
-
-    procedure merge_migrate
-        (av_source_schema   in varchar2,
-         av_assay_id_range    in varchar2)
-    as
-    -- this version parses the string into a range and then calls the assay by assay version
-        lv_range_min    varchar2(100);
-        lv_range_max    varchar2(100);
-        ln_pos          number;
-        ln_start_id     number;
-        ln_end_id       number;
-        lv_range_separator    char(1) := '-';
-        cur_assay_count r_cursor;
-        le_not_a_range exception;
-
-        function is_numeric (lv_string in varchar2) return boolean
-        as
-            -- watch for null propogation, nulls tanslate to true
-            ln_number   number;
-        begin
-            ln_number := to_number(lv_string);
-            return true;
-
-        exception
-            when others
-            then
-                return false;
-        end is_numeric;
-
-    begin
-        -- put this into a package level variable so it's available all over
-        -- saves lots of parameter passing!!
-        pv_src_schema := lower (av_source_schema);
-
-        ln_pos := instr(av_assay_id_range, lv_range_separator);
-        if ln_pos = 0
-        then
-            raise le_not_a_range;
-        end if;
-
-        lv_range_min := trim(substr(av_assay_id_range, 1, ln_pos - 1));
-        lv_range_max := trim(substr(av_assay_id_range, ln_pos + 1));
-
-        if is_numeric(lv_range_min)
-        then
-            ln_start_id := to_number(lv_range_min);
-
-            if is_numeric(lv_range_max)
-            then
-                ln_end_id := to_number(lv_range_max);
-                if ln_end_id is null then
-                    open_src_cursor(pv_src_schema,'ASSAY_COUNT', NULL, cur_assay_count);
-                    fetch cur_assay_count into ln_end_id;
-                    close cur_assay_count;
-                end if;
-
-                -- NOW GO DO THE MIGRATION
-
-                for ln_assay_id in ln_start_id..ln_end_id
-                loop
-                    if ln_assay_id = ln_start_id
-                    then
-                        get_ontology;   -- no children - thos come from element
-                        get_element;    -- and all its direct children
-                        get_external_system;    -- no children - those come from experiment and project
-                        get_project;    -- this could be handled on the fly, but we want them all
-                    end if;
-
-                    get_assay (ln_assay_id);
-                    commit;
-
-                end loop;
-            end if;
-        end if;
-
-
-    exception
-        when le_not_a_range
-        then
-            log_error(-20001, 'Not a valid range; needs a dash', 'merge_migrate (syntax 2)',
-                'input string = ' || av_assay_id_range);
-        when others
-        then
-            null;
-    end merge_migrate;
-
 
     procedure merge_migrate
         (av_source_schema   in   varchar2,
@@ -6350,7 +6546,7 @@ TYPE R_unit_conversion IS RECORD (
             get_ontology;   -- no children - thos come from element
             get_element;    -- and all its direct children
             get_external_system;    -- no children - those come from experiment and project
-            get_project;    -- this could be handled on the fly, but we want them all
+            --get_project;    -- this could be handled on the fly, but we want them all
             log_statement('timer',0, 'END', 'Reference tables ');
             commit;
         end if;
@@ -6654,538 +6850,611 @@ TYPE R_unit_conversion IS RECORD (
             av_table_name  in  varchar2,
             an_identifier  in number,
             aco_cursor in out r_cursor)
-as
-    le_no_table_defined exception;
+    as
+        le_no_table_defined exception;
 
-BEGIN
-    if av_table_name = 'ASSAY'
-    then
-        open aco_cursor for
-        select ASSAY_ID,
-            ASSAY_STATUS,
-            ASSAY_SHORT_NAME,
-            ASSAY_NAME,
-            ASSAY_VERSION,
-            ASSAY_TYPE,
-            DESIGNED_BY,
-            READY_FOR_EXTRACTION,
-            VERSION,
-            DATE_CREATED,
-            LAST_UPDATED,
-            MODIFIED_BY
-        from assay
-        where assay_id = an_identifier
-            or an_identifier is null;
+    BEGIN
+        if av_table_name = 'ASSAY'
+        then
+            open aco_cursor for
+            select ASSAY_ID,
+                ASSAY_STATUS,
+                ASSAY_SHORT_NAME,
+                ASSAY_NAME,
+                ASSAY_VERSION,
+                ASSAY_TYPE,
+                DESIGNED_BY,
+                READY_FOR_EXTRACTION,
+                VERSION,
+                DATE_CREATED,
+                LAST_UPDATED,
+                MODIFIED_BY
+            from assay
+            where assay_id = an_identifier
+                or an_identifier is null;
 
-    elsif av_table_name = 'ASSAY_COUNT'
-    then
-        -- used when an unlimited range is asked for
-        open aco_cursor for
-        select MAX(ASSAY_ID)
-        from assay;
+        elsif av_table_name = 'ASSAY_COUNT'
+        then
+            -- used when an unlimited range is asked for
+            open aco_cursor for
+            select MAX(ASSAY_ID)
+            from assay;
 
-    elsif av_table_name = 'EXPERIMENT'
-    then
-        open aco_cursor for
-        select EXPERIMENT_ID,
-            EXPERIMENT_NAME,
-            EXPERIMENT_STATUS,
-            READY_FOR_EXTRACTION,
-            ASSAY_ID,
-            --LABORATORY_ID,
-            RUN_DATE_FROM,
-            RUN_DATE_TO,
-            HOLD_UNTIL_DATE,
-            DESCRIPTION,
-            VERSION,
-            DATE_CREATED,
-            LAST_UPDATED,
-            MODIFIED_BY
-        from experiment
-        where assay_id = an_identifier;
-        -- dbms_output.put_line('open curosr for experiment by assay');
+        elsif av_table_name = 'EXPERIMENT'
+        then
+            open aco_cursor for
+            select EXPERIMENT_ID,
+                EXPERIMENT_NAME,
+                EXPERIMENT_STATUS,
+                READY_FOR_EXTRACTION,
+                ASSAY_ID,
+                RUN_DATE_FROM,
+                RUN_DATE_TO,
+                HOLD_UNTIL_DATE,
+                DESCRIPTION,
+                VERSION,
+                DATE_CREATED,
+                LAST_UPDATED,
+                MODIFIED_BY
+            from experiment
+            where assay_id = an_identifier;
+            -- dbms_output.put_line('open curosr for experiment by assay');
 
-    elsif av_table_name = 'EXTERNAL_REFERENCE_AID'
-    then
-        open aco_cursor for
-        select ext_assay_ref
-        from external_reference er,
-              experiment e
-        where er.experiment_id = e.experiment_id
-        and e.assay_id = an_identifier;
+        elsif av_table_name = 'EXTERNAL_REFERENCE_AID'
+        then
+            open aco_cursor for
+            select ext_assay_ref
+            from external_reference er,
+                  experiment e
+            where er.experiment_id = e.experiment_id
+            and e.assay_id = an_identifier;
 
-    elsif av_table_name = 'EXTERNAL_REFERENCE'
-    then
-        open aco_cursor for
-        select EXTERNAL_REFERENCE_ID,
-            EXTERNAL_SYSTEM_ID,
-            EXPERIMENT_ID,
-            PROJECT_ID,
-            EXT_ASSAY_REF,
-            VERSION,
-            DATE_CREATED,
-            LAST_UPDATED,
-            MODIFIED_BY
-        from external_reference
-        where experiment_id = an_identifier;
+        elsif av_table_name = 'EXTERNAL_REFERENCE'
+        then
+            open aco_cursor for
+            select EXTERNAL_REFERENCE_ID,
+                EXTERNAL_SYSTEM_ID,
+                EXPERIMENT_ID,
+                PROJECT_ID,
+                EXT_ASSAY_REF,
+                VERSION,
+                DATE_CREATED,
+                LAST_UPDATED,
+                MODIFIED_BY
+            from external_reference
+            where experiment_id = an_identifier;
 
-    elsif av_table_name = 'EXTERNAL_REFERENCE_project'
-    then
-        open aco_cursor for
-        select EXTERNAL_REFERENCE_ID,
-            EXTERNAL_SYSTEM_ID,
-            EXPERIMENT_ID,
-            PROJECT_ID,
-            EXT_ASSAY_REF,
-            VERSION,
-            DATE_CREATED,
-            LAST_UPDATED,
-            MODIFIED_BY
-        from external_reference
-        where project_id = an_identifier;
+        elsif av_table_name = 'EXTERNAL_REFERENCE_project'
+        then
+            open aco_cursor for
+            select EXTERNAL_REFERENCE_ID,
+                EXTERNAL_SYSTEM_ID,
+                EXPERIMENT_ID,
+                PROJECT_ID,
+                EXT_ASSAY_REF,
+                VERSION,
+                DATE_CREATED,
+                LAST_UPDATED,
+                MODIFIED_BY
+            from external_reference
+            where project_id = an_identifier;
 
-    elsif av_table_name = 'PROJECT_STEP'
-    then
-        -- beware this one, it may retrieve follows_experiments that you
-        -- have not yet migrated
-        open aco_cursor for
-        select PROJECT_STEP_ID,
-            PROJECT_ID,
-            --STAGE_ID,
-            EXPERIMENT_ID,
-            FOLLOWS_EXPERIMENT_ID,
-            DESCRIPTION,
-            VERSION,
-            DATE_CREATED,
-            LAST_UPDATED,
-            MODIFIED_BY
-        from project_step
-        where experiment_id = an_identifier
-            or nvl(follows_experiment_id, an_identifier) = an_identifier;
+        elsif av_table_name = 'PROJECT_STEP'
+        then
+            -- beware this one, it may retrieve follows_experiments that you
+            -- have not yet migrated
+            open aco_cursor for
+            select PROJECT_STEP_ID,
+                next_project_experiment_id,
+                prev_project_experiment_id,
+                edge_name,
+                VERSION,
+                DATE_CREATED,
+                LAST_UPDATED,
+                MODIFIED_BY
+            from project_step
+            where next_project_experiment_id = an_identifier
+                or prev_project_experiment_id = an_identifier;
 
-    elsif av_table_name = 'ASSAY_DOCUMENT'
-    then
-        -- only get the ones that are relevant to the source schema
-        -- expecially the blank CLOBs
-        open aco_cursor for
-        select ASSAY_DOCUMENT_ID,
-            ASSAY_ID,
-            DOCUMENT_NAME,
-            DOCUMENT_TYPE,
-            DOCUMENT_CONTENT,   -- careful!! this is a CLOB
-            VERSION,
-            DATE_CREATED,
-            LAST_UPDATED,
-            MODIFIED_BY
-        from assay_document
-        where assay_id = an_identifier
-          and length(document_content) > 0;
-          --and nvl(modified_by, av_modified_by) = av_modified_by;
+        elsif av_table_name = 'ASSAY_DOCUMENT'
+        then
+            -- only get the ones that are relevant to the source schema
+            -- expecially the blank CLOBs
+            open aco_cursor for
+            select ASSAY_DOCUMENT_ID,
+                ASSAY_ID,
+                DOCUMENT_NAME,
+                DOCUMENT_TYPE,
+                DOCUMENT_CONTENT,   -- careful!! this is a CLOB
+                VERSION,
+                DATE_CREATED,
+                LAST_UPDATED,
+                MODIFIED_BY
+            from assay_document
+            where assay_id = an_identifier
+              and length(document_content) > 0;
+              --and nvl(modified_by, av_modified_by) = av_modified_by;
 
-    elsif av_table_name = 'PROJECT_DOCUMENT'
-    then
-        -- only get the ones that are relevant to the source schema
-        -- expecially the blank CLOBs
-        open aco_cursor for
-        select PROJECT_DOCUMENT_ID,
-            PROJECT_ID,
-            DOCUMENT_NAME,
-            DOCUMENT_TYPE,
-            DOCUMENT_CONTENT,   -- careful!! this is a CLOB
-            VERSION,
-            DATE_CREATED,
-            LAST_UPDATED,
-            MODIFIED_BY
-        from project_document
-        where project_id = an_identifier
-          and length(document_content) > 0;
-          --and nvl(modified_by, av_modified_by) = av_modified_by;
+        elsif av_table_name = 'PROJECT_DOCUMENT'
+        then
+            -- only get the ones that are relevant to the source schema
+            -- expecially the blank CLOBs
+            open aco_cursor for
+            select PROJECT_DOCUMENT_ID,
+                PROJECT_ID,
+                DOCUMENT_NAME,
+                DOCUMENT_TYPE,
+                DOCUMENT_CONTENT,   -- careful!! this is a CLOB
+                VERSION,
+                DATE_CREATED,
+                LAST_UPDATED,
+                MODIFIED_BY
+            from project_document
+            where project_id = an_identifier
+              and length(document_content) > 0;
+              --and nvl(modified_by, av_modified_by) = av_modified_by;
 
-    elsif av_table_name = 'RESULT'
-    then
-        open aco_cursor for
-        select RESULT_ID,
-            RESULT_STATUS,
-            READY_FOR_EXTRACTION,
-            EXPERIMENT_ID,
-            SUBSTANCE_ID,
-            RESULT_TYPE_ID,
-            REPLICATE_NO,
-            VALUE_DISPLAY,
-            VALUE_NUM,
-            VALUE_MIN,
-            VALUE_MAX,
-            QUALIFIER,
-            VERSION,
-            DATE_CREATED,
-            LAST_UPDATED,
-            MODIFIED_BY
-        from result
-        where experiment_id = an_identifier;
+        elsif av_table_name = 'RESULT'
+        then
+            open aco_cursor for
+            select RESULT_ID,
+                RESULT_STATUS,
+                READY_FOR_EXTRACTION,
+                EXPERIMENT_ID,
+                SUBSTANCE_ID,
+                RESULT_TYPE_ID,
+                STATS_MODIFIER_ID,
+                REPLICATE_NO,
+                VALUE_DISPLAY,
+                VALUE_NUM,
+                VALUE_MIN,
+                VALUE_MAX,
+                QUALIFIER,
+                VERSION,
+                DATE_CREATED,
+                LAST_UPDATED,
+                MODIFIED_BY
+            from result
+            where experiment_id = an_identifier;
 
-    elsif av_table_name = 'RSLT_CONTEXT_ITEM'
-    then
-        -- must sort these to ensure the parents go into the target first
-        -- just ensure the group...ID is not nulled!
-        --dbms_output.put_line ('open_src_cursor, result=' ||to_char(an_identifier));
-        open aco_cursor for
-        select RSLT_CONTEXT_ITEM_ID,
-              RESULT_ID,
-              ATTRIBUTE_ID ,
-              DISPLAY_ORDER,
-              VALUE_ID,
-              EXT_VALUE_ID,
-              QUALIFIER,
-              VALUE_NUM,
-              VALUE_MIN ,
-              VALUE_MAX,
-              VALUE_DISPLAY,
-              VERSION,
-              DATE_CREATED,
-              LAST_UPDATED,
-              MODIFIED_BY
-        from rslt_context_item
-        where result_id = an_identifier;
+        elsif av_table_name = 'RSLT_CONTEXT_ITEM'
+        then
+            -- must sort these to ensure the parents go into the target first
+            -- just ensure the group...ID is not nulled!
+            --dbms_output.put_line ('open_src_cursor, result=' ||to_char(an_identifier));
+            open aco_cursor for
+            select RSLT_CONTEXT_ITEM_ID,
+                  RESULT_ID,
+                  ATTRIBUTE_ID ,
+                  DISPLAY_ORDER,
+                  VALUE_ID,
+                  EXT_VALUE_ID,
+                  QUALIFIER,
+                  VALUE_NUM,
+                  VALUE_MIN ,
+                  VALUE_MAX,
+                  VALUE_DISPLAY,
+                  VERSION,
+                  DATE_CREATED,
+                  LAST_UPDATED,
+                  MODIFIED_BY
+            from rslt_context_item
+            where result_id = an_identifier;
 
-    elsif av_table_name = 'EXPRMT_CONTEXT_ITEM'
-    then
-          open aco_cursor for
-        select EXPRMT_CONTEXT_ITEM_ID,
-            EXPRMT_CONTEXT_ID,
-            DISPLAY_ORDER,
-            ATTRIBUTE_ID,
-            VALUE_ID,
-            EXT_VALUE_ID,
-            QUALIFIER,
-            VALUE_NUM,
-            VALUE_MIN,
-            VALUE_MAX,
-            VALUE_DISPLAY,
-            VERSION,
-            DATE_CREATED,
-            LAST_UPDATED,
-            MODIFIED_BY
-        from exprmt_context_item
-        where EXPRMT_CONTEXT_ID = an_identifier;
+        elsif av_table_name = 'EXPRMT_CONTEXT_ITEM'
+        then
+              open aco_cursor for
+            select EXPRMT_CONTEXT_ITEM_ID,
+                EXPRMT_CONTEXT_ID,
+                DISPLAY_ORDER,
+                ATTRIBUTE_ID,
+                VALUE_ID,
+                EXT_VALUE_ID,
+                QUALIFIER,
+                VALUE_NUM,
+                VALUE_MIN,
+                VALUE_MAX,
+                VALUE_DISPLAY,
+                VERSION,
+                DATE_CREATED,
+                LAST_UPDATED,
+                MODIFIED_BY
+            from exprmt_context_item
+            where EXPRMT_CONTEXT_ID = an_identifier;
 
 
-    elsif av_table_name = 'STEP_CONTEXT_ITEM'
-    then
-          open aco_cursor for
-        select STEP_CONTEXT_ITEM_ID,
-            STEP_CONTEXT_ID,
-            DISPLAY_ORDER,
-            ATTRIBUTE_ID,
-            VALUE_ID,
-            EXT_VALUE_ID,
-            QUALIFIER,
-            VALUE_NUM,
-            VALUE_MIN,
-            VALUE_MAX,
-            VALUE_DISPLAY,
-            VERSION,
-            DATE_CREATED,
-            LAST_UPDATED,
-            MODIFIED_BY
-        from step_context_item
-        where STEP_CONTEXT_ID = an_identifier;
+        elsif av_table_name = 'STEP_CONTEXT_ITEM'
+        then
+              open aco_cursor for
+            select STEP_CONTEXT_ITEM_ID,
+                STEP_CONTEXT_ID,
+                DISPLAY_ORDER,
+                ATTRIBUTE_ID,
+                VALUE_ID,
+                EXT_VALUE_ID,
+                QUALIFIER,
+                VALUE_NUM,
+                VALUE_MIN,
+                VALUE_MAX,
+                VALUE_DISPLAY,
+                VERSION,
+                DATE_CREATED,
+                LAST_UPDATED,
+                MODIFIED_BY
+            from step_context_item
+            where STEP_CONTEXT_ID = an_identifier;
 
 
-    elsif av_table_name = 'RESULT_HIERARCHY'
-    then
-        -- this gets all hierarchy records for the experiment
-        open aco_cursor for
-        select rh.RESULT_ID,
-            rh.PARENT_RESULT_ID,
-            rh.HIERARCHY_TYPE,
-            rh.VERSION,
-            rh.DATE_CREATED,
-            rh.LAST_UPDATED,
-            rh.MODIFIED_BY
-        from result_hierarchy rh
-        where EXISTS (SELECT 1
-                FROM result r
-                WHERE r.result_id = rh.result_id
-                AND r.experiment_id = an_identifier)
-          OR exists (SELECT 1
-                FROM result r
-                WHERE r.result_id = rh.parent_result_id
-                AND r.experiment_id = an_identifier);
+        elsif av_table_name = 'RESULT_HIERARCHY'
+        then
+            -- this gets all hierarchy records for the experiment
+            open aco_cursor for
+            select rh.RESULT_ID,
+                rh.PARENT_RESULT_ID,
+                rh.HIERARCHY_TYPE,
+                rh.VERSION,
+                rh.DATE_CREATED,
+                rh.LAST_UPDATED,
+                rh.MODIFIED_BY
+            from result_hierarchy rh
+            where EXISTS (SELECT 1
+                    FROM result r
+                    WHERE r.result_id = rh.result_id
+                    AND r.experiment_id = an_identifier)
+              OR exists (SELECT 1
+                    FROM result r
+                    WHERE r.result_id = rh.parent_result_id
+                    AND r.experiment_id = an_identifier);
 
-    elsif av_table_name = 'EXTERNAL_SYSTEM'
-    then
-        open aco_cursor for
-        select EXTERNAL_SYSTEM_ID,
-            SYSTEM_NAME,
-            OWNER,
-            SYSTEM_URL,
-            VERSION,
-            DATE_CREATED,
-            LAST_UPDATED,
-            MODIFIED_BY
-        from external_system
-        where external_system_id = an_identifier
-            or an_identifier is null;
+        elsif av_table_name = 'EXTERNAL_SYSTEM'
+        then
+            open aco_cursor for
+            select EXTERNAL_SYSTEM_ID,
+                SYSTEM_NAME,
+                OWNER,
+                SYSTEM_URL,
+                VERSION,
+                DATE_CREATED,
+                LAST_UPDATED,
+                MODIFIED_BY
+            from external_system
+            where external_system_id = an_identifier
+                or an_identifier is null;
 
-    elsif av_table_name = 'PROJECT'
-    then
-        open aco_cursor for
-        select PROJECT_ID,
-            PROJECT_NAME,
-            GROUP_TYPE,
-            DESCRIPTION,
-            READY_FOR_EXTRACTION,
-            VERSION,
-            DATE_CREATED,
-            LAST_UPDATED,
-            MODIFIED_BY
-        from project
-        where project_id = an_identifier
-            or an_identifier is null;
+        elsif av_table_name = 'PROJECT'
+        then
+            open aco_cursor for
+            select PROJECT_ID,
+                PROJECT_NAME,
+                GROUP_TYPE,
+                DESCRIPTION,
+                READY_FOR_EXTRACTION,
+                VERSION,
+                DATE_CREATED,
+                LAST_UPDATED,
+                MODIFIED_BY
+            from project
+            where project_id = an_identifier
+                or an_identifier is null;
 
-    elsif av_table_name = 'PROJECT_CONTEXT_ITEM'
-    then
-        -- just ensure the group...ID is not nulled!
-        open aco_cursor for
-        select PROJECT_CONTEXT_ITEM_ID, --was MEASURE_CONTEXT_ITEM_ID,-- SJC 8/17/12
-            PROJECT_CONTEXT_ID,
-            DISPLAY_ORDER,   -- was nvl(GROUP_MEASURE_CONTEXT_ITEM_ID, ASSAY_CONTEXT_ITEM_ID) -- sjc 8/17/12
-            ATTRIBUTE_ID,
-            QUALIFIER,
-            VALUE_ID,
-            EXT_VALUE_ID,
-            VALUE_DISPLAY,
-            VALUE_NUM,
-            VALUE_MIN,
-            VALUE_MAX,
-            VERSION,
-            DATE_CREATED,
-            LAST_UPDATED,
-            MODIFIED_BY
-        from project_context_item
-        where project_context_id = an_identifier;
-        -- don't need an order any more as there's no circular reference
+        elsif av_table_name = 'PROJECT_CONTEXT_ITEM'
+        then
+            -- just ensure the group...ID is not nulled!
+            open aco_cursor for
+            select PROJECT_CONTEXT_ITEM_ID, --was MEASURE_CONTEXT_ITEM_ID,-- SJC 8/17/12
+                PROJECT_CONTEXT_ID,
+                DISPLAY_ORDER,   -- was nvl(GROUP_MEASURE_CONTEXT_ITEM_ID, ASSAY_CONTEXT_ITEM_ID) -- sjc 8/17/12
+                ATTRIBUTE_ID,
+                QUALIFIER,
+                VALUE_ID,
+                EXT_VALUE_ID,
+                VALUE_DISPLAY,
+                VALUE_NUM,
+                VALUE_MIN,
+                VALUE_MAX,
+                VERSION,
+                DATE_CREATED,
+                LAST_UPDATED,
+                MODIFIED_BY
+            from project_context_item
+            where project_context_id = an_identifier;
+            -- don't need an order any more as there's no circular reference
 
-    elsif av_table_name = 'ASSAY_CONTEXT_ITEM'
-    then
-        -- just ensure the group...ID is not nulled!
-        open aco_cursor for
-        select ASSAY_CONTEXT_ITEM_ID, --was MEASURE_CONTEXT_ITEM_ID,-- SJC 8/17/12
-            DISPLAY_ORDER,   -- was nvl(GROUP_MEASURE_CONTEXT_ITEM_ID, ASSAY_CONTEXT_ITEM_ID) -- sjc 8/17/12
-            ASSAY_CONTEXT_ID,
-            ATTRIBUTE_TYPE,
-            ATTRIBUTE_ID,
-            QUALIFIER,
-            VALUE_ID,
-            EXT_VALUE_ID,
-            VALUE_DISPLAY,
-            VALUE_NUM,
-            VALUE_MIN,
-            VALUE_MAX,
-            VERSION,
-            DATE_CREATED,
-            LAST_UPDATED,
-            MODIFIED_BY
-        from assay_context_item
-        where assay_context_id = an_identifier;
-        -- don't need an order any more as there's no circular reference
+        elsif av_table_name = 'ASSAY_CONTEXT_ITEM'
+        then
+            -- just ensure the group...ID is not nulled!
+            open aco_cursor for
+            select ASSAY_CONTEXT_ITEM_ID, --was MEASURE_CONTEXT_ITEM_ID,-- SJC 8/17/12
+                DISPLAY_ORDER,   -- was nvl(GROUP_MEASURE_CONTEXT_ITEM_ID, ASSAY_CONTEXT_ITEM_ID) -- sjc 8/17/12
+                ASSAY_CONTEXT_ID,
+                ATTRIBUTE_TYPE,
+                ATTRIBUTE_ID,
+                QUALIFIER,
+                VALUE_ID,
+                EXT_VALUE_ID,
+                VALUE_DISPLAY,
+                VALUE_NUM,
+                VALUE_MIN,
+                VALUE_MAX,
+                VERSION,
+                DATE_CREATED,
+                LAST_UPDATED,
+                MODIFIED_BY
+            from assay_context_item
+            where assay_context_id = an_identifier;
+            -- don't need an order any more as there's no circular reference
 
-    elsif av_table_name = 'ASSAY_CONTEXT'
-    then
-        open aco_cursor for
-        select ASSAY_CONTEXT_ID,
-            ASSAY_ID,
-            CONTEXT_NAME,
-            VERSION,
-            DATE_CREATED,
-            LAST_UPDATED,
-            MODIFIED_BY
-        from assay_context
-        where assay_id = an_identifier;
+        elsif av_table_name = 'ASSAY_CONTEXT'
+        then
+            open aco_cursor for
+            select ASSAY_CONTEXT_ID,
+                ASSAY_ID,
+                CONTEXT_NAME,
+                CONTEXT_GROUP,
+                DISPLAY_ORDER,
+                VERSION,
+                DATE_CREATED,
+                LAST_UPDATED,
+                MODIFIED_BY
+            from assay_context
+            where assay_id = an_identifier;
 
-    elsif av_table_name = 'PROJECT_CONTEXT'
-    then
-        open aco_cursor for
-        select PROJECT_CONTEXT_ID,
-            PROJECT_ID,
-            CONTEXT_NAME,
-            VERSION,
-            DATE_CREATED,
-            LAST_UPDATED,
-            MODIFIED_BY
-        from project_context
-        where project_id = an_identifier;
+        elsif av_table_name = 'PROJECT_CONTEXT'
+        then
+            open aco_cursor for
+            select PROJECT_CONTEXT_ID,
+                PROJECT_ID,
+                CONTEXT_NAME,
+                CONTEXT_GROUP,
+                DISPLAY_ORDER,
+                VERSION,
+                DATE_CREATED,
+                LAST_UPDATED,
+                MODIFIED_BY
+            from project_context
+            where project_id = an_identifier;
 
-    elsif av_table_name = 'EXPRMT_CONTEXT'
-    then
-        open aco_cursor for
-        select EXPRMT_CONTEXT_ID,
-            EXPERIMENT_ID,
-            CONTEXT_NAME,
-            VERSION,
-            DATE_CREATED,
-            LAST_UPDATED,
-            MODIFIED_BY
-        from exprmt_context
-        where experiment_id = an_identifier;
+        elsif av_table_name = 'EXPRMT_CONTEXT'
+        then
+            open aco_cursor for
+            select EXPRMT_CONTEXT_ID,
+                EXPERIMENT_ID,
+                CONTEXT_NAME,
+                CONTEXT_GROUP,
+                DISPLAY_ORDER,
+                VERSION,
+                DATE_CREATED,
+                LAST_UPDATED,
+                MODIFIED_BY
+            from exprmt_context
+            where experiment_id = an_identifier;
 
-    elsif av_table_name = 'STEP_CONTEXT'
-    then
-        open aco_cursor for
-        select STEP_CONTEXT_ID,
-            PROJECT_STEP_ID,
-            CONTEXT_NAME,
-            VERSION,
-            DATE_CREATED,
-            LAST_UPDATED,
-            MODIFIED_BY
-        from step_context
-        where project_step_id = an_identifier;
+        elsif av_table_name = 'STEP_CONTEXT'
+        then
+            open aco_cursor for
+            select STEP_CONTEXT_ID,
+                PROJECT_STEP_ID,
+                CONTEXT_NAME,
+                CONTEXT_GROUP,
+                DISPLAY_ORDER,
+                VERSION,
+                DATE_CREATED,
+                LAST_UPDATED,
+                MODIFIED_BY
+            from step_context
+            where project_step_id = an_identifier;
 
-    elsif av_table_name = 'MEASURE'
-    then
-        -- this has a parantage circular relationship
-        -- so we need to be careful of the order of insertion
-        -- DBMS_output.put_line('arrived in open src cursor, assay_id='  || to_char(an_identifier));
-        open aco_cursor for
-        select MEASURE_ID,
-            ASSAY_ID,
-            PARENT_MEASURE_ID,
-            RESULT_TYPE_ID,
-            ENTRY_UNIT_ID,
-            VERSION,
-            DATE_CREATED,
-            LAST_UPDATED,
-            MODIFIED_BY
-        from measure
-        where assay_id = an_identifier
-        connect by prior measure_id = parent_measure_id
-        start with (parent_measure_id is NULL
-                OR parent_measure_id = measure_id);
+        elsif av_table_name = 'MEASURE'
+        then
+            -- this has a parantage circular relationship
+            -- so we need to be careful of the order of insertion
+            -- DBMS_output.put_line('arrived in open src cursor, assay_id='  || to_char(an_identifier));
+            open aco_cursor for
+            select MEASURE_ID,
+                ASSAY_ID,
+                PARENT_MEASURE_ID,
+                RESULT_TYPE_ID,
+                STATS_MODIFIER_ID,
+                ENTRY_UNIT_ID,
+                VERSION,
+                DATE_CREATED,
+                LAST_UPDATED,
+                MODIFIED_BY
+            from measure
+            where assay_id = an_identifier
+            connect by prior measure_id = parent_measure_id
+            start with (parent_measure_id is NULL
+                    OR parent_measure_id = measure_id);
 
-    elsif av_table_name = 'ASSAY_CONTEXT_MEASURE'
-    then
-        open aco_cursor for
-        select MEASURE_ID,
-            ASSAY_CONTEXT_ID,
-            VERSION,
-            DATE_CREATED,
-            LAST_UPDATED,
-            MODIFIED_BY
-        from assay_context_measure
-        where measure_id = an_identifier;
+        elsif av_table_name = 'ASSAY_CONTEXT_MEASURE'
+        then
+            open aco_cursor for
+            select ASSAY_CONTEXT_MEASURE_ID,
+                MEASURE_ID,
+                ASSAY_CONTEXT_ID,
+                VERSION,
+                DATE_CREATED,
+                LAST_UPDATED,
+                MODIFIED_BY
+            from assay_context_measure
+            where measure_id = an_identifier;
 
-    elsif av_table_name = 'TREE_ROOT'
-    then
-        open aco_cursor for
-        select TREE_ROOT_ID,
-            TREE_NAME,
-            ELEMENT_ID,
-            RELATIONSHIP_TYPE,
-            VERSION,
-            DATE_CREATED,
-            LAST_UPDATED,
-            MODIFIED_BY
-        from tree_root
-        where (element_id = an_identifier
-            or an_identifier is null);
+        elsif av_table_name = 'TREE_ROOT'
+        then
+            open aco_cursor for
+            select TREE_ROOT_ID,
+                TREE_NAME,
+                ELEMENT_ID,
+                RELATIONSHIP_TYPE,
+                VERSION,
+                DATE_CREATED,
+                LAST_UPDATED,
+                MODIFIED_BY
+            from tree_root
+            where (element_id = an_identifier
+                or an_identifier is null);
 
-    elsif av_table_name = 'ELEMENT'
-    then
-        -- this has a parantage circular relationship
-        -- so we need to be careful of the order of insertion
-        open aco_cursor for
-        select ELEMENT_ID,
-            ELEMENT_STATUS,
-            LABEL,
-            DESCRIPTION,
-            ABBREVIATION,
-            SYNONYMS,
-            UNIT_ID,
-            BARD_URI,
-            EXTERNAL_URL,
-            READY_FOR_EXTRACTION,
-            VERSION,
-            DATE_CREATED,
-            LAST_UPDATED,
-            MODIFIED_BY
-        from element
-        where (element_id = an_identifier
-            or an_identifier is null)
-        order by nvl(unit_id, ' '), element_id;
+        elsif av_table_name = 'ELEMENT'
+        then
+            -- this has a parantage circular relationship
+            -- so we need to be careful of the order of insertion
+            open aco_cursor for
+            select ELEMENT_ID,
+                ELEMENT_STATUS,
+                LABEL,
+                DESCRIPTION,
+                ABBREVIATION,
+                SYNONYMS,
+                UNIT_ID,
+                BARD_URI,
+                EXTERNAL_URL,
+                READY_FOR_EXTRACTION,
+                VERSION,
+                DATE_CREATED,
+                LAST_UPDATED,
+                MODIFIED_BY
+            from element
+            where (element_id = an_identifier
+                or an_identifier is null)
+            order by nvl(unit_id, ' '), element_id;
 
-    elsif av_table_name = 'ELEMENT_HIERARCHY'
-    then
-        open aco_cursor for
-        select ELEMENT_HIERARCHY_ID,
-            PARENT_ELEMENT_ID,
-            CHILD_ELEMENT_ID,
-            RELATIONSHIP_TYPE,
-            VERSION,
-            DATE_CREATED,
-            LAST_UPDATED,
-            MODIFIED_BY
-        from element_hierarchy
-        where (parent_element_id = an_identifier
-            or child_element_id = an_identifier);
+        elsif av_table_name = 'ELEMENT_HIERARCHY'
+        then
+            open aco_cursor for
+            select ELEMENT_HIERARCHY_ID,
+                PARENT_ELEMENT_ID,
+                CHILD_ELEMENT_ID,
+                RELATIONSHIP_TYPE,
+                VERSION,
+                DATE_CREATED,
+                LAST_UPDATED,
+                MODIFIED_BY
+            from element_hierarchy
+            where (parent_element_id = an_identifier
+                or child_element_id = an_identifier);
 
-    elsif av_table_name = 'ONTOLOGY_ITEM'
-    then
-        -- only get the ones that are relevant to the source schema
-        open aco_cursor for
-        select ONTOLOGY_ITEM_ID,
-            ONTOLOGY_ID,
-            ELEMENT_ID,
-            ITEM_REFERENCE,
-            VERSION,
-            DATE_CREATED,
-            LAST_UPDATED,
-            MODIFIED_BY
-        from ontology_item
-        where element_id = an_identifier;
+        elsif av_table_name = 'ONTOLOGY_ITEM'
+        then
+            -- only get the ones that are relevant to the source schema
+            open aco_cursor for
+            select ONTOLOGY_ITEM_ID,
+                ONTOLOGY_ID,
+                ELEMENT_ID,
+                ITEM_REFERENCE,
+                VERSION,
+                DATE_CREATED,
+                LAST_UPDATED,
+                MODIFIED_BY
+            from ontology_item
+            where element_id = an_identifier;
 
-    elsif av_table_name = 'UNIT_CONVERSION'
-    then
-        --get all of them - the PK is not helpful here (not an ID)
-        open aco_cursor for
-        select FROM_UNIT_ID,
-            TO_UNIT_ID,
-            MULTIPLIER,
-            OFFSET,
-            FORMULA,
-            VERSION,
-            DATE_CREATED,
-            LAST_UPDATED,
-            MODIFIED_BY
-        from unit_conversion;
+        elsif av_table_name = 'UNIT_CONVERSION'
+        then
+            --get all of them - the PK is not helpful here (not an ID)
+            open aco_cursor for
+            select FROM_UNIT_ID,
+                TO_UNIT_ID,
+                MULTIPLIER,
+                OFFSET,
+                FORMULA,
+                VERSION,
+                DATE_CREATED,
+                LAST_UPDATED,
+                MODIFIED_BY
+            from unit_conversion;
 
-    elsif av_table_name = 'ONTOLOGY'
-    then
-        open aco_cursor for
-        select ONTOLOGY_ID,
-            ONTOLOGY_NAME,
-            ABBREVIATION,
-            SYSTEM_URL,
-            VERSION,
-            DATE_CREATED,
-            LAST_UPDATED,
-            MODIFIED_BY
-        from ontology
-        where ontology_id = an_identifier
-            or an_identifier is null;
+        elsif av_table_name = 'ONTOLOGY'
+        then
+            open aco_cursor for
+            select ONTOLOGY_ID,
+                ONTOLOGY_NAME,
+                ABBREVIATION,
+                SYSTEM_URL,
+                VERSION,
+                DATE_CREATED,
+                LAST_UPDATED,
+                MODIFIED_BY
+            from ontology
+            where ontology_id = an_identifier
+                or an_identifier is null;
 
-    else
-        raise le_no_table_defined;
-    end if;
+        elsif av_table_name = 'EXPRMT_MEASURE'
+        then
+            open aco_cursor for
+            select EXPRMT_MEASURE_ID,
+		            MEASURE_ID,
+		            PARENT_EXPRMT_MEASURE_ID,
+                EXPERIMENT_ID,
+                VERSION,
+                DATE_CREATED,
+                LAST_UPDATED,
+                MODIFIED_BY
+            from exprmt_measure
+            where experiment_id = an_identifier
+                or an_identifier is null;
 
-exception
-    when le_no_table_defined
-    then
-        raise_application_error(-20002, 'No cursor defined for the table in this source - open_local_cursor');
-    when others
-    then
-        raise_application_error (sqlcode, sqlerrm);
-end open_LOCAL_cursor;
+        elsif av_table_name = 'PROJECT_EXPERIMENT'
+        then
+            open aco_cursor for
+            select PROJECT_EXPERIMENT_ID,
+		            PROJECT_ID,
+		            EXPERIMENT_ID,
+                STAGE_ID,
+                VERSION,
+                DATE_CREATED,
+                LAST_UPDATED,
+                MODIFIED_BY
+            from project_experiment
+            where experiment_id = Nvl(an_identifier, EXPERIMENT_ID);
+
+        elsif av_table_name = 'PRJCT_EXPRMT_CONTEXT'
+        then
+            open aco_cursor for
+            select prjct_exprmt_context_ID,
+		            PROJECT_EXPERIMENT_ID,
+		            CONTEXT_NAME,
+                CONTEXT_GROUP,
+                DISPLAY_ORDER,
+                VERSION,
+                DATE_CREATED,
+                LAST_UPDATED,
+                MODIFIED_BY
+            from prjct_exprmt_context
+            where PROJECT_EXPERIMENT_ID = Nvl(an_identifier, PROJECT_EXPERIMENT_ID);
+
+        elsif av_table_name = 'PRJCT_EXPRMT_CONTEXT_ITEM'
+        then
+            open aco_cursor for
+            select prjct_exprmt_context_ITEM_ID,
+		            prjct_exprmt_context_ID,
+		            DISPLAY_ORDER,
+		            ATTRIBUTE_ID,
+		            VALUE_ID,
+		            EXT_VALUE_ID,
+		            QUALIFIER,
+		            VALUE_NUM,
+		            VALUE_MIN,
+		            VALUE_MAX,
+		            VALUE_DISPLAY,
+                VERSION,
+                DATE_CREATED,
+                LAST_UPDATED,
+                MODIFIED_BY
+            from prjct_exprmt_context_item
+            where prjct_exprmt_context_ID = an_identifier;
+
+        else
+            raise le_no_table_defined;
+        end if;
+
+    exception
+        when le_no_table_defined
+        then
+            raise_application_error(-20002, 'No cursor defined for the table in this source - open_local_cursor');
+        when others
+        then
+            raise_application_error (sqlcode, sqlerrm);
+    end open_LOCAL_cursor;
 
 end Merge_Migration;
 /
