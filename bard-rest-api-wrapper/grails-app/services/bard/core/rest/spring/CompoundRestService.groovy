@@ -261,7 +261,7 @@ class CompoundRestService extends AbstractRestService {
         tasks << (doStructureSearch.curry(params, etags) as Callable)
         //we set this to time out in 50 seconds
         final List<FutureTask<Object>> results = executorService.invokeAll(tasks, 50, TimeUnit.SECONDS)
-        return handleFutures(results, nhits)
+        return handleStructureSearchFutures(results, nhits)
     }
 
     public ExperimentSearchResult findExperimentsByCID(final Long cid) {
@@ -355,10 +355,10 @@ class CompoundRestService extends AbstractRestService {
      * @param results
      * @return
      */
-    protected CompoundResult handleFutures(final List<FutureTask<Object>> results, final Integer nhits = -1) {
+    protected CompoundResult handleStructureSearchFutures(final List<FutureTask<Object>> results, final Integer nhits = -1) {
         try {
             //assert that there are 2 objects in the list
-            assert results.size() == 2
+           // assert results.size() == 2
             int numHits = nhits
             FutureTask<CompoundResult> structureResultsTask = null
             if (nhits <= 0) {

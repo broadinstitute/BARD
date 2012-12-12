@@ -106,6 +106,69 @@ class CompoundRestServiceUnitSpec extends Specification {
         "Similarity"      | false    | StructureSearchParams.Type.Similarity     | "http://ncgc/compounds/?filter=query[structure]&type=sim&cutoff=0.700&expand=true&top=100&skip=0"
     }
 
+    void "structureSearch #label"() {
+        given:
+        FutureTask<CompoundResult> compoundResultTask = Mock(FutureTask)
+        FutureTask<Long> numberOfHitsTask = Mock(FutureTask)
+        final List<FutureTask<Object>> results = [numberOfHitsTask, compoundResultTask]
+        final StructureSearchParams structureSearchParam = new StructureSearchParams("query", StructureSearchParams.Type.Substructure)
+        final Map<String, Long> eTags = [:]
+        when:
+        CompoundResult compoundSearchResult = service.structureSearch(structureSearchParam, eTags, nhits)
+        then:
+        results.get(0) >> {numberOfHitsTask}
+        results.get(1) >> {compoundResultTask}
+        numberOfHitsTask.get() >> {new Long("2")}
+        compoundResultTask.get() >> {new CompoundResult()}
+        executorService.invokeAll(_, _, _) >> {results}
+        restTemplate.getForObject(_, _) >> {"2"}
+        restTemplate.exchange(_, _, _, _) >> {new ResponseEntity(HttpStatus.ACCEPTED)}
+        assert compoundSearchResult
+        assert compoundSearchResult.numberOfHits == 2
+        where:
+        label                  | nhits
+        "Number of hits == -1" | -1
+        "Number of hits == 0"  | 0
+        //"Number of hits == 10" | 10
+
+    }
+    void "handleCompoundByIdFutures #label"(){
+        given:
+        FutureTask<CompoundAnnotations> compoundAnnotationsTask = Mock(FutureTask)
+        FutureTask<Compound> compoundTask = Mock(FutureTask)
+        when:
+        Compound compound = service.handleCompoundByIdFutures([compoundAnnotationsTask, compoundTask])
+        then:
+        compoundTask.get() >> {null}
+        compoundAnnotationsTask.get() >> {null}
+        assert !compound
+
+
+
+
+    }
+    void "structureSearch nhits #label"() {
+        given:
+        FutureTask<CompoundResult> compoundResultTask = Mock(FutureTask)
+
+        final List<FutureTask<Object>> results = [compoundResultTask]
+        final StructureSearchParams structureSearchParam = new StructureSearchParams("query", StructureSearchParams.Type.Substructure)
+        final Map<String, Long> eTags = [:]
+        when:
+        CompoundResult compoundSearchResult = service.structureSearch(structureSearchParam, eTags, nhits)
+        then:
+        results.get(0) >> {compoundResultTask}
+        compoundResultTask.get() >> {new CompoundResult()}
+        executorService.invokeAll(_, _, _) >> {results}
+        restTemplate.exchange(_, _, _, _) >> {new ResponseEntity(HttpStatus.ACCEPTED)}
+        assert compoundSearchResult
+        assert compoundSearchResult.numberOfHits == 10
+        where:
+        label                  | nhits
+        "Number of hits == 10" | 10
+
+    }
+
     void "doStructureSearch"() {
         given:
         final StructureSearchParams structureSearchParam = new StructureSearchParams("query", StructureSearchParams.Type.Substructure)
@@ -118,11 +181,49 @@ class CompoundRestServiceUnitSpec extends Specification {
 
     }
 
-    void "handleFutures with Exception"() {
+    void "handleStructureSearchFutures with Exception"() {
         when:
-        final CompoundResult futures = service.handleFutures([1, 2])
+        final CompoundResult futures = service.handleStructureSearchFutures([1, 2])
         then:
         assert !futures
+
+    }
+
+    void "handleStructureSearchFutures #label"() {
+        given:
+        FutureTask<Long> numberHitsFutureTask = Mock(FutureTask)
+        FutureTask<CompoundResult> compoundResultFutureTask = Mock(FutureTask)
+
+        List<FutureTask<Object>> futures = [numberHitsFutureTask, compoundResultFutureTask]
+        when:
+        final CompoundResult compoundResult = service.handleStructureSearchFutures(futures, numberHits)
+        then:
+        numberTimesExecuted * numberHitsFutureTask.get() >> {expectedNumberOFHits}
+        compoundResultFutureTask.get() >> {new CompoundResult()}
+        assert compoundResult
+        assert compoundResult.numberOfHits == expectedNumberOFHits
+        where:
+        label         | numberHits | expectedNumberOFHits | numberTimesExecuted
+        "nHits == -1" | -1         | 3                    | 1
+        "nHits == 0"  | 0          | 3                    | 1
+    }
+
+    void "handleStructureSearchFutures - #label"() {
+        given:
+        FutureTask<Long> numberHitsFutureTask = Mock(FutureTask)
+        FutureTask<CompoundResult> compoundResultFutureTask = Mock(FutureTask)
+
+        List<FutureTask<Object>> futures = [compoundResultFutureTask]
+        when:
+        final CompoundResult compoundResult = service.handleStructureSearchFutures(futures, numberHits)
+        then:
+        compoundResultFutureTask.get() >> {new CompoundResult(compounds: compounds)}
+        assert compoundResult
+        assert compoundResult.numberOfHits == expectedNumberOFHits
+        where:
+        label        | numberHits | expectedNumberOFHits | numberTimesExecuted | compounds
+        "nHits == 1" | 1          | 1                    | 0                   | []
+        "nHits == 1" | 1          | 1                    | 0                   | null
 
     }
 
@@ -269,6 +370,20 @@ class CompoundRestServiceUnitSpec extends Specification {
         'etag name found'     | 'etagName' | [new ETag(name: 'etagName')] | [new Compound(name: 'compound1')] | [new Compound(name: 'compound1')]
         'etag name not found' | 'noName'   | [new ETag(name: 'etagName')] | [new Compound(name: 'compound1')] | []
         'no compounds found'  | 'etagName' | [new ETag(name: 'etagName')] | []                                | []
+    }
+
+    void "test findCompoundById #label"() {
+        when:
+        final Compound returnedCompound = service.findCompoundById(cid)
+
+        then:
+        1 * this.restTemplate.getForObject(_, _, _) >> {compounds}
+        assert (returnedCompound == null) == expectedResults
+
+        where:
+        label             | cid | compounds                         | expectedResults
+        'Return compound' | 123 | [new Compound(name: 'compound1')] | false
+        'Return null'     | 345 | []                                | true
     }
 }
 

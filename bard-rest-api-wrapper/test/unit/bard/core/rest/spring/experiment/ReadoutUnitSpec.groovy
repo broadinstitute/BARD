@@ -125,7 +125,28 @@ class ReadoutUnitSpec extends Specification {
         readout.addCrcs(cr)
         then:
         assert readout.getCr()
+    }
+    void "test toHillCurveValue with Points"() {
+        given:
 
+        Readout readout = new Readout()
+        readout.addPoint(2,2)
+        when:
+        readout.toHillCurveValue()
+        then:
+        assert readout.getConc()
+        assert readout.getResponse()
+
+    }
+    void "test toHillCurveValue with no Points"() {
+        given:
+
+        Readout readout = new Readout()
+        when:
+        readout.toHillCurveValue()
+        then:
+        assert !readout.getConc()
+        assert !readout.getResponse()
 
     }
 }

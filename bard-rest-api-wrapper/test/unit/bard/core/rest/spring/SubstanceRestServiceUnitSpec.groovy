@@ -107,7 +107,7 @@ class SubstanceRestServiceUnitSpec extends Specification {
         assert searchResource == "http://ncgc/substances/"
     }
 
-    void "findSubstancesByCid"() {
+    void "findSubstancesByCidExpandedSearch"() {
         given:
         Long cid = 123
         when:
@@ -115,6 +115,21 @@ class SubstanceRestServiceUnitSpec extends Specification {
         then:
         restTemplate.getForObject(_, _) >> {[new Substance()]}
         assert substances
+
+
+    }
+
+    void "findSubstancesByCid #label"() {
+        when:
+        List<Long> substances = service.findSubstancesByCid(cid)
+        then:
+        restTemplate.getForObject(_, _) >> {expectedSubstances}
+        assert substances.isEmpty() == expectedResults
+
+        where:
+        label                               | cid | expectedSubstances   | expectedResults
+        "Return a list of substance"        | 233 | ["/a/123", "/b/234"] | false
+        "Return an empty list of substance" | 233 | []                   | true
     }
 
     void "findExperimentDataBySid"() {

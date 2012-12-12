@@ -167,6 +167,7 @@ class CompoundAdapterUnitSpec extends Specification {
         assert !compoundAdapter.getOtherAnnotationValue("key")
 
     }
+
     void "test compound Adapter with no highlight field"() {
         when:
         final CompoundAdapter compoundAdapter = new CompoundAdapter(new Compound())
@@ -175,7 +176,8 @@ class CompoundAdapterUnitSpec extends Specification {
         assert !compoundAdapter.getOtherAnnotationValue("SomeValues")
 
     }
-    void "test Compound Adapter with Annotations"(){
+
+    void "test Compound Adapter with Annotations"() {
         given:
         final Compound compound = objectMapper.readValue(COMPOUND_EXPANDED, Compound.class)
         final CompoundAnnotations compoundAnnotations = objectMapper.readValue(COMPOUND_ANNOTATIONS, CompoundAnnotations.class)
@@ -188,41 +190,56 @@ class CompoundAdapterUnitSpec extends Specification {
 
 
     }
-    void assertCompounds(final CompoundAdapter compoundAdapter){
+
+    void "test get Synonyms"() {
+        when:
+        final CompoundAdapter compoundAdapter =
+            new CompoundAdapter(new Compound(), new Double("2"), new NameDescription(name: "name", description: "description"))
+        then:
+        compoundAdapter.getSynonyms().isEmpty()
+        !compoundAdapter.getRegistryNumbers()
+        !compoundAdapter.getUniqueIngredientIdentifier()
+        !compoundAdapter.getMechanismOfAction()
+        !compoundAdapter.getTherapeuticIndication()
+        !compoundAdapter.getPrescriptionDrugLabel()
+    }
+
+    void assertCompounds(final CompoundAdapter compoundAdapter) {
         assert compoundAdapter.isDrug()
         assert !compoundAdapter.getProbeId()
         assert !compoundAdapter.isProbe()
-        assert compoundAdapter.getId() ==2722
-        assert compoundAdapter.getPubChemCID()==2722
+        assert compoundAdapter.getId() == 2722
+        assert compoundAdapter.getPubChemCID() == 2722
         assert compoundAdapter.getStructureSMILES() == "OC1=C(Cl)C=C(Cl)C2=C1N=CC=C2"
         assert !compoundAdapter.getStructureMOL()
         assert !compoundAdapter.formula()
-        assert compoundAdapter.mwt()==214.048
-        assert compoundAdapter.exactMass() ==212.975
-        assert compoundAdapter.hbondDonor()==1
-        assert compoundAdapter.hbondAcceptor()==2
-        assert compoundAdapter.rotatable()==0
+        assert compoundAdapter.mwt() == 214.048
+        assert compoundAdapter.exactMass() == 212.975
+        assert compoundAdapter.hbondDonor() == 1
+        assert compoundAdapter.hbondAcceptor() == 2
+        assert compoundAdapter.rotatable() == 0
         assert !compoundAdapter.definedStereo()
         assert !compoundAdapter.stereocenters()
 
-        assert compoundAdapter.TPSA()==33.1
-        assert compoundAdapter.logP()==3.5
-        assert compoundAdapter.name=="Chloroxine"
-        assert compoundAdapter.getIupacName() =="5,7-dichloroquinolin-8-ol"
-        assert compoundAdapter.url=="http://pubchem.org"
-        assert compoundAdapter.getComplexity()==191
-        assert compoundAdapter.getCompoundClass()=="Drug"
-        assert compoundAdapter.getNumberOfAssays()==500
-        assert compoundAdapter.getNumberOfActiveAssays()==60
+        assert compoundAdapter.TPSA() == 33.1
+        assert compoundAdapter.logP() == 3.5
+        assert compoundAdapter.name == "Chloroxine"
+        assert compoundAdapter.getIupacName() == "5,7-dichloroquinolin-8-ol"
+        assert compoundAdapter.url == "http://pubchem.org"
+        assert compoundAdapter.getComplexity() == 191
+        assert compoundAdapter.getCompoundClass() == "Drug"
+        assert compoundAdapter.getNumberOfAssays() == 500
+        assert compoundAdapter.getNumberOfActiveAssays() == 60
         assert compoundAdapter.resourcePath() == "/compounds/2722"
         assert !compoundAdapter.getStructureNative()
         assert !compoundAdapter.formula()
-        assert compoundAdapter.matchingField.name=="name"
-        assert compoundAdapter.matchingField.description=="description"
-        assert compoundAdapter.score==2
+        assert compoundAdapter.matchingField.name == "name"
+        assert compoundAdapter.matchingField.description == "description"
+        assert compoundAdapter.score == 2
         assert compoundAdapter.highlight == "Score: 2.0 Matched Field: name"
     }
-    void assertAnnotations(CompoundAdapter compoundAdapter){
+
+    void assertAnnotations(CompoundAdapter compoundAdapter) {
 
 
         assert compoundAdapter.getOtherAnnotationValue("COLLECTION").size() == 15
@@ -230,16 +247,17 @@ class CompoundAdapterUnitSpec extends Specification {
         assert compoundAdapter.getSynonyms().size() == 22
         assert compoundAdapter.getUniqueIngredientIdentifier() == "2I8BD50I8B"
 
-        assert compoundAdapter.getRegistryNumbers().size() ==4
+        assert compoundAdapter.getRegistryNumbers().size() == 4
 
-        assert compoundAdapter.getTherapeuticIndication().size()==3
+        assert compoundAdapter.getTherapeuticIndication().size() == 3
 
-        assert compoundAdapter.getPrescriptionDrugLabel().size()==1
+        assert compoundAdapter.getPrescriptionDrugLabel().size() == 1
 
         assert compoundAdapter.getMechanismOfAction().size() == 2
 
-        assert compoundAdapter.getOtherAnnotationValue("CompoundSpectra").size()==1
+        assert compoundAdapter.getOtherAnnotationValue("CompoundSpectra").size() == 1
 
     }
+
 }
 
