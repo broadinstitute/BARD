@@ -1,6 +1,6 @@
 databaseChangeLog = {
 
-    changeSet(author: "ddurkin", id: "grant select", dbms: 'oracle', context:'grant-selects,standard',runAlways: 'true') {
+    changeSet(author: "ddurkin", id: "grant select", dbms: 'oracle', context:'grant-selects',runAlways: 'true') {
         grailsChange {
             change {
 
