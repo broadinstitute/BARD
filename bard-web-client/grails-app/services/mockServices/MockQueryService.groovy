@@ -112,7 +112,10 @@ class MockQueryService implements IQueryService {
     Map structureSearch(final String smiles, final StructureSearchParams.Type structureSearchParamsType, final List<SearchFilter> searchFilters = [], final Integer top = 50, final Integer skip = 0) {
         return findCompoundsByTextSearch("", 10, 0, searchFilters)
     }
-
+    @Override
+    Map structureSearch(Integer cid, StructureSearchParams.Type structureSearchParamsType, List<SearchFilter> searchFilters, Integer top, Integer skip) {
+        return findCompoundsByTextSearch("", 10, 0, searchFilters)
+    }
     //===================== Find Resources given a list of IDs ================================
     /**
      * Given a list of Compound Ids return all the compounds that were found
@@ -377,6 +380,8 @@ Screening Center: NIH Chemical Genomics Center [NCGC]'''
         mockedExperiment.pubchemAid = 2712
         mockExperimentMap.put(mockedExperiment.id, mockedExperiment)
     }
+
+
 }
 class MockAssayAdapter implements AssayAdapterInterface {
     String name
