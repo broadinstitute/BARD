@@ -1,5 +1,6 @@
 package dataexport.cap.experiment
 
+import dataexport.cap.registration.UpdateStatusHelper
 import dataexport.experiment.ExperimentExportService
 import dataexport.experiment.ResultExportService
 import exceptions.NotFoundException
@@ -10,7 +11,6 @@ import org.codehaus.groovy.grails.web.servlet.HttpHeaders
 
 import javax.servlet.http.HttpServletResponse
 import javax.xml.stream.XMLOutputFactory
-import dataexport.cap.registration.UpdateStatusHelper
 
 /**
  * Please note that the DataExportFilters is applied to all incoming request.
@@ -46,11 +46,10 @@ class ExperimentRestController {
             if (mimeType == request.getHeader(HttpHeaders.ACCEPT)) {
                 final int offset = params.offset ? new Integer(params.offset) : 0
 
-                final XMLOutputFactory factory = XMLOutputFactory.newInstance()
                 final StringWriter markupWriter = new StringWriter()
-                final StaxBuilder staxBuilder = new StaxBuilder(factory.createXMLStreamWriter(markupWriter))
+                final MarkupBuilder markupBuilder = new MarkupBuilder(markupWriter)
 
-                final boolean hasMoreExperiments = this.experimentExportService.generateExperiments(staxBuilder, offset)
+                final boolean hasMoreExperiments = this.experimentExportService.generateExperiments(markupBuilder, offset)
                 if (hasMoreExperiments) {
                     //we set the header to 206
                     response.status = HttpServletResponse.SC_PARTIAL_CONTENT
@@ -163,7 +162,7 @@ class ExperimentRestController {
     }
 
     def updateResult(Long id) {
-       updateDomainObject(this.resultExportService,id)
+        updateDomainObject(this.resultExportService, id)
     }
     /**
      * We lock it so that no operation can update results and the current experiment
@@ -172,6 +171,6 @@ class ExperimentRestController {
      * @return
      */
     def updateExperiment(Integer id) {
-        updateDomainObject(this.experimentExportService,id)
+        updateDomainObject(this.experimentExportService, id)
     }
 }
