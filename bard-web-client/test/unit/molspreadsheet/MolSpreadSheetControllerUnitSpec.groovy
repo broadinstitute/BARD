@@ -92,7 +92,7 @@ class MolSpreadSheetControllerUnitSpec extends Specification {
 
         then:
         molecularSpreadSheetService.retrieveExperimentalDataFromIds(_, _, _) >> {new Exception()}
-        assert response.status == 200
+        assert response.status == 400
         assert flash.message == "Could not generate SpreadSheet for current Query Cart Contents"
     }
 

@@ -4,13 +4,7 @@
 <head>
     <meta name="layout" content="logoSearchCartAndFooter"/>
     <title>BARD : Project : ID ${projectAdapter?.id}</title>
-    <r:script>
-        $(document).ready(function () {
-            $("#accordion").accordion({ autoHeight:false });
-            $('.projectTooltip').tooltip();
-        })
-    </r:script>
-
+    <r:require modules="projects,compoundOptions"/>
 </head>
 
 <body>
@@ -46,10 +40,11 @@
             <g:each var="probe" in="${projectAdapter?.probes}" status="i">
                 <li class="span4">
                     <div class="thumbnail">
-                        <g:link controller="bardWebInterface" action="showCompound" params="[cid: probe.cid]">
-                            <img alt="${probe?.smiles}" title="${probe.probeId}"
-                                 src="${createLink(controller: 'chemAxon', action: 'generateStructureImageFromSmiles', params: [smiles: probe.smiles, width: 300, height: 200])}"/>
-                        </g:link>
+                        <g:compoundOptions cid="${probe.cid}" sid="${probe.cid}" smiles="${probe?.smiles}" imageHeight="200" imageWidth="300"/>
+                        %{--<g:link controller="bardWebInterface" action="showCompound" params="[cid: probe.cid]">--}%
+                            %{--<img alt="${probe?.smiles}" title="${probe.probeId}"--}%
+                                 %{--src="${createLink(controller: 'chemAxon', action: 'generateStructureImageFromSmiles', params: [smiles: probe.smiles, width: 300, height: 200])}"/>--}%
+                        %{--</g:link>--}%
                         <div class="caption">
                             <h3>Probe ML#: ${probe.probeId}</h3>
                             <ul>
@@ -63,7 +58,7 @@
                                             params="[cid: probe.cid, pid: projectAdapter.id]" data-placement="top"
                                             class="projectTooltip"
                                             rel="tooltip"
-                                            data-original-title="Please note: Query Cart would be reset!">Show Experimental Details</g:link></li>
+                                            data-original-title="">Show Experimental Details</g:link></li>
                             </ul>
                         </div>
                     </div>

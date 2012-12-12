@@ -17,6 +17,9 @@ modules = {
     }
     images {
     }
+    projects{
+        resource url:"js/projects.js"
+    }
     //Adding version allows clients to not cache javascript
     search {
         resource url:"js/search.js"
@@ -24,6 +27,9 @@ modules = {
     }
     idSearch {
         resource url:"js/idSearchDialog.js"
+    }
+    compoundOptions {
+        resource url:"js/compoundOptions.js"
     }
     structureSearch {
         resource url:"js/structureSearchDialog.js"

@@ -28,7 +28,7 @@ class SpreadSheetActivityUnitSpec extends Specification {
         when:
         spreadSheetActivity.readOutToHillCurveValue(resultTypeNames, readout)
         then:
-        assert !resultTypeNames
+        assert resultTypeNames
     }
     void "test readOutToHillCurveValue"() {
         given:

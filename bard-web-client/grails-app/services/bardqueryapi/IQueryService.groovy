@@ -46,6 +46,15 @@ public interface IQueryService {
 
     //====================================== Structure Searches ========================================
     /**
+     * @param cid
+     * @param structureSearchParamsType {@link StructureSearchParams}
+     * @param top
+     * @param skip
+     * @return Map
+     */
+    Map structureSearch(final Integer cid, final StructureSearchParams.Type structureSearchParamsType, final List<SearchFilter> searchFilters, final Integer top, final Integer skip);
+
+    /**
      * @param smiles
      * @param structureSearchParamsType {@link StructureSearchParams}
      * @param top

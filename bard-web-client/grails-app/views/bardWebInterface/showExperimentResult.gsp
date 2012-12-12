@@ -12,7 +12,7 @@
 <head>
     <meta name="layout" content="logoSearchCartAndFooter"/>
     <title>BARD : Experiment Result : ${experimentId}</title>
-    <r:require modules="experimentData"/>
+    <r:require modules="experimentData, bootstrap, compoundOptions"/>
 </head>
 
 <body>

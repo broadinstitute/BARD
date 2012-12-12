@@ -13,7 +13,9 @@ import bard.core.rest.spring.compounds.PromiscuityScore
 import bard.core.rest.spring.compounds.Scaffold
 import bard.core.rest.spring.experiment.ExperimentSearch
 import bard.core.rest.spring.project.Project
+import bardwebquery.CompoundOptionsTagLib
 import com.metasieve.shoppingcart.ShoppingCartService
+import grails.test.mixin.Mock
 import grails.test.mixin.TestFor
 import grails.test.mixin.TestMixin
 import grails.test.mixin.support.GrailsUnitTestMixin
@@ -21,19 +23,20 @@ import molspreadsheet.MolecularSpreadSheetService
 import molspreadsheet.SpreadSheetActivity
 import org.apache.http.HttpException
 import org.json.JSONArray
+import org.springframework.web.servlet.ModelAndView
 import querycart.CartAssay
 import spock.lang.Shared
 import spock.lang.Specification
 import spock.lang.Unroll
 
 import javax.servlet.http.HttpServletResponse
-import org.springframework.web.servlet.ModelAndView
 
 /**
  * See the API for {@link grails.test.mixin.support.GrailsUnitTestMixin} for usage instructions
  */
 @TestMixin(GrailsUnitTestMixin)
 @TestFor(BardWebInterfaceController)
+@Mock(CompoundOptionsTagLib)
 @Unroll
 class BardWebInterfaceControllerUnitSpec extends Specification {
     MolecularSpreadSheetService molecularSpreadSheetService

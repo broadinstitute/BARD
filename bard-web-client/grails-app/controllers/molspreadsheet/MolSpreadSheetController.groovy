@@ -4,6 +4,7 @@ import de.andreasschmitt.export.ExportService
 import grails.plugins.springsecurity.Secured
 import org.codehaus.groovy.grails.commons.GrailsApplication
 import querycart.QueryCartService
+import javax.servlet.http.HttpServletResponse
 
 @Secured(['isFullyAuthenticated()'])
 class MolSpreadSheetController {
@@ -57,6 +58,8 @@ class MolSpreadSheetController {
             String errorMessage = "Could not generate SpreadSheet for current Query Cart Contents"
             flash.message = errorMessage
             log.error(errorMessage, ee)
+            return response.sendError(HttpServletResponse.SC_BAD_REQUEST,
+                    "${flash.message}")
         }
 
     }

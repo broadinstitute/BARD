@@ -26,6 +26,7 @@ function populatePage(url) {
         },
         success:function (experimentalResultsData) {
             $('#experimentalResults').html(experimentalResultsData);
+            $(".pop_smiles").popover();
 
         },
         error:function () {

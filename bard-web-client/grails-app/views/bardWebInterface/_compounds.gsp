@@ -14,8 +14,7 @@
         <g:each var="compoundAdapter" in="${compoundAdapters}">
             <tr>
                 <td style="min-width: 180px;">
-                    <img alt="${compoundAdapter.structureSMILES}" title="${compoundAdapter.name}"
-                         src="${createLink(controller: 'chemAxon', action: 'generateStructureImageFromSmiles', params: [smiles: compoundAdapter.structureSMILES, width: 180, height: 150])}"/>
+                    <g:compoundOptions sid="${compoundAdapter.pubChemCID}" cid="${compoundAdapter.pubChemCID}" smiles="${compoundAdapter.structureSMILES}" imageWidth="180" imageHeight="150"/>
                 </td>
                 <td>
                     <h3>

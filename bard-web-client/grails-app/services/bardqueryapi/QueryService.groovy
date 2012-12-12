@@ -125,14 +125,18 @@ class QueryService implements IQueryService {
     }
 
     //====================================== Structure Searches ========================================
-    /**
+    Map structureSearch(final Integer cid, final StructureSearchParams.Type structureSearchParamsType, final List<SearchFilter> searchFilters = [], final Integer top = 10, final Integer skip = 0) {
+        final Compound compound = this.compoundRestService.getCompoundById(cid)
+        return structureSearch(compound.smiles,structureSearchParamsType,searchFilters,top,skip)
+    }
+        /**
      * @param smiles
      * @param structureSearchParamsType {@link StructureSearchParams}
      * @param top
      * @param skip
      * @return Map
      */
-    Map structureSearch(final String smiles, final StructureSearchParams.Type structureSearchParamsType, final List<SearchFilter> searchFilters = [], final Integer top = 50, final Integer skip = 0) {
+    Map structureSearch(final String smiles, final StructureSearchParams.Type structureSearchParamsType, final List<SearchFilter> searchFilters = [], final Integer top = 10, final Integer skip = 0) {
         final List<CompoundAdapter> compoundAdapters = []
         Collection<Value> facets = []
         int nhits = 0

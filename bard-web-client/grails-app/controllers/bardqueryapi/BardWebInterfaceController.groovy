@@ -272,6 +272,16 @@ class BardWebInterfaceController {
     }
 
     //=================== Structure Searches (Exact, Similarity, SubStructure, Exact and SupeStructure Searches ===================
+    def searchStructuresWithCID (SearchCommand searchCommand){
+        if (StringUtils.isNotBlank(searchCommand.searchString)) {
+            Map map = handleStructureSearch(queryService, searchCommand)
+            if (map) {
+                render(template: 'compounds', model: map)
+                return
+            }
+        }
+    }
+
     /**
      *
      * Do structure searches
@@ -490,9 +500,15 @@ class SearchHelper {
 
             final String searchTypeString = searchStringSplit[0]
             final String smiles = searchStringSplit[1]
+            //if smiles is a number then assume that is is a CID
             //we make the first character capitalized to match the ENUM
             final StructureSearchParams.Type searchType = searchTypeString.toLowerCase().capitalize() as StructureSearchParams.Type
-            Map compoundAdapterMap = queryService.structureSearch(smiles, searchType, searchFilters, top, skip)
+            Map compoundAdapterMap = null
+            if(smiles.isInteger()){ //we assume that this is a CID
+                compoundAdapterMap = queryService.structureSearch(new Integer(smiles), searchType, searchFilters, top, skip)
+            }else{
+                compoundAdapterMap = queryService.structureSearch(smiles, searchType, searchFilters, top, skip)
+            }
             List<CompoundAdapter> compoundAdapters = compoundAdapterMap.compoundAdapters
             structureSearchResultsMap = [
                     compoundAdapters: compoundAdapters,
