@@ -929,8 +929,8 @@ END reset_sequence;
                       FROM prjct_exprmt_context pc
                       WHERE pc.prjct_exprmt_CONTEXT_ID = dpc.prjct_exprmt_CONTEXT_ID);
 
-        insert into prjct_exprmt_context_item
-            (PRJCT_EXPRMT_CONTEXT_ITEM_ID,
+        insert into prjct_exprmt_cntxt_item
+            (prjct_exprmt_cntxt_ITEM_ID,
             PRJCT_EXPRMT_CONTEXT_ID,
             DISPLAY_ORDER,
             ATTRIBUTE_ID,
@@ -946,7 +946,7 @@ END reset_sequence;
             LAST_UPDATED,
             MODIFIED_BY
             )
-        select PRJCT_EXPRMT_CONTEXT_ITEM_ID,
+        select prjct_exprmt_cntxt_ITEM_ID,
             PRJCT_EXPRMT_CONTEXT_ID,
             DISPLAY_ORDER,
             ATTRIBUTE_ID,
@@ -961,10 +961,10 @@ END reset_sequence;
             DATE_CREATED,
             LAST_UPDATED,
             MODIFIED_BY
-        from data_mig.prjct_exprmt_context_item dpci
+        from data_mig.prjct_exprmt_cntxt_item dpci
         where NOT EXISTS (SELECT 1
-                      FROM prjct_exprmt_context_item pci
-                      WHERE pci.PRJCT_EXPRMT_CONTEXT_ITEM_ID = dpci.PRJCT_EXPRMT_CONTEXT_ITEM_ID)
+                      FROM prjct_exprmt_cntxt_item pci
+                      WHERE pci.prjct_exprmt_cntxt_ITEM_ID = dpci.prjct_exprmt_cntxt_ITEM_ID)
           AND EXISTS (SELECT 1
                       FROM prjct_exprmt_context pc
                       WHERE pc.PRJCT_EXPRMT_CONTEXT_ID = dpci.PRJCT_EXPRMT_CONTEXT_ID);

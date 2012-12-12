@@ -16,8 +16,15 @@ DECLARE
 begin
     for rec_sequence in cur_sequence
     loop
-        lv_table_name := replace(rec_sequence.sequence_name, '_ID_SEQ', null);
-        lv_primary_key := replace(rec_sequence.sequence_name, '_SEQ', null);
+--        IF rec_sequence.sequence_name = 'PRJCT_EXPRMT_CNTXT_ITEM_ID_SEQ'
+--        THEN
+--            lv_table_name := 'PRJCT_EXPRMT_CONTEXT_ITEM';
+--            lv_primary_key :=  'PRJCT_EXPRMT_CONTEXT_ITEM_ID';
+--        ELSE
+            lv_table_name := replace(rec_sequence.sequence_name, '_ID_SEQ', null);
+            lv_primary_key := replace(rec_sequence.sequence_name, '_SEQ', null);
+--        END IF;
+
 
         lv_max_sql := 'select nvl(max(' || lv_primary_key || '), 0) from ' || lv_table_name;
         begin
