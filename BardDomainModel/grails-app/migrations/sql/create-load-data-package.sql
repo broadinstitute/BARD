@@ -3,6 +3,7 @@
 --
 CREATE OR REPLACE package load_data
 as
+    procedure reset_sequence;
 
     procedure Load_reference;
 
@@ -26,6 +27,70 @@ as
     --
     --
     ----------------------------------------------------------------------
+    procedure reset_sequence
+    as
+    cursor cur_sequence
+    is
+    select sequence_name
+    from user_sequences
+    WHERE sequence_name LIKE '%_ID_SEQ';
+
+    lv_max_sql  varchar2(1000);
+    lv_drop_sql varchar2(1000);
+    lv_create_sql   varchar2(1000);
+    lv_grant_sql    varchar2(1000);
+    lv_table_name   varchar2(50);
+    lv_primary_key  varchar2(50);
+    ln_max_id   number;
+
+begin
+    for rec_sequence in cur_sequence
+    loop
+        lv_table_name := replace(rec_sequence.sequence_name, '_ID_SEQ', null);
+        lv_primary_key := replace(rec_sequence.sequence_name, '_SEQ', null);
+
+        lv_max_sql := 'select nvl(max(' || lv_primary_key || '), 0) from ' || lv_table_name;
+        begin
+            --dbms_output.put_line(lv_max_sql);
+            EXECUTE IMMEDIATE lv_max_sql INTO ln_max_ID;
+
+            lv_drop_sql := 'drop sequence ' || rec_sequence.sequence_name;
+            --dbms_output.put_line(lv_drop_sql);
+            EXECUTE IMMEDIATE lv_drop_sql;
+
+            lv_create_sql := 'create sequence ' || rec_sequence.sequence_name
+                    || ' start with ' || to_char(ln_max_id + 1)
+                    || ' increment by 1 nominvalue maxvalue 2147483648 nocycle ';
+            IF rec_sequence.sequence_name = 'RESULT_ID_SEQ'
+            THEN
+                lv_create_sql := lv_create_sql || 'cache 10000 noorder';
+            ELSE
+                lv_create_sql := lv_create_sql || 'cache 20 noorder';
+            END IF;
+            --dbms_output.put_line(lv_create_sql);
+
+            lv_grant_sql := 'grant select on ' || rec_sequence.sequence_name
+                    || ' to schatwin';
+            --dbms_output.put_line(lv_grant_sql);
+            EXECUTE IMMEDIATE lv_create_sql;
+            EXECUTE IMMEDIATE lv_grant_sql;
+
+        exception
+            when others
+            then
+                null;   --dbms_output.put_line (to_char(sqlcode) || ', ' || sqlerrm);
+
+        end;
+
+    end loop;
+
+    if cur_sequence%isopen
+    then
+        close cur_sequence;
+    end if;
+
+END reset_sequence;
+
 
     procedure Load_reference
     as
@@ -200,6 +265,7 @@ as
             manage_ontology.make_trees;
             commit;
 
+            --reset_sequence;
 
         end if;
 
@@ -353,6 +419,7 @@ as
         -- loop again to get the project experiments
         -- with predecessors
 
+        -- reset_sequence;
 
     end load_assay_with_result;
 
@@ -712,6 +779,22 @@ as
             from project_step ps2
             WHERE ps2.project_step_id = ps.project_step_id);
 
+        INSERT INTO project_experiment
+            SELECT PROJECT_EXPERIMENT_ID ,
+                    EXPERIMENT_ID,
+                    PROJECT_ID,
+                    STAGE_ID,
+                    VERSION,
+                    DATE_CREATED,
+                    LAST_UPDATED,
+                    MODIFIED_BY
+            FROM data_mig.project_experiment pe
+            WHERE EXISTS (select 1 from experiment e
+                        where e.experiment_id = pe.experiment_id)
+              AND EXISTS (select 1 from project e
+                        where e.project_id = pe.project_id)
+              AND NOT EXISTS (select 1 from project_experiment e
+                        where e.project_experiment_id = pe.project_experiment_id);
 
 
         INSERT INTO assay_context_measure
@@ -865,8 +948,8 @@ as
                       FROM prjct_exprmt_context pc
                       WHERE pc.prjct_exprmt_CONTEXT_ID = dpc.prjct_exprmt_CONTEXT_ID);
 
-        insert into prjct_exprmt_context_item
-            (PRJCT_EXPRMT_CONTEXT_ITEM_ID,
+        insert into prjct_exprmt_cntxt_item
+            (prjct_exprmt_cntxt_ITEM_ID,
             PRJCT_EXPRMT_CONTEXT_ID,
             DISPLAY_ORDER,
             ATTRIBUTE_ID,
@@ -882,7 +965,7 @@ as
             LAST_UPDATED,
             MODIFIED_BY
             )
-        select PRJCT_EXPRMT_CONTEXT_ITEM_ID,
+        select prjct_exprmt_cntxt_ITEM_ID,
             PRJCT_EXPRMT_CONTEXT_ID,
             DISPLAY_ORDER,
             ATTRIBUTE_ID,
@@ -897,10 +980,10 @@ as
             DATE_CREATED,
             LAST_UPDATED,
             MODIFIED_BY
-        from data_mig.prjct_exprmt_context_item dpci
+        from data_mig.prjct_exprmt_cntxt_item dpci
         where NOT EXISTS (SELECT 1
-                      FROM prjct_exprmt_context_item pci
-                      WHERE pci.PRJCT_EXPRMT_CONTEXT_ITEM_ID = dpci.PRJCT_EXPRMT_CONTEXT_ITEM_ID)
+                      FROM prjct_exprmt_cntxt_item pci
+                      WHERE pci.prjct_exprmt_cntxt_ITEM_ID = dpci.prjct_exprmt_cntxt_ITEM_ID)
           AND EXISTS (SELECT 1
                       FROM prjct_exprmt_context pc
                       WHERE pc.PRJCT_EXPRMT_CONTEXT_ID = dpci.PRJCT_EXPRMT_CONTEXT_ID);
@@ -986,7 +1069,35 @@ as
                     from exprmt_context_item eci2
                     where eci2.exprmt_context_Item_id = eci.exprmt_context_item_id);
 
-           -- insert step context
+          INSERT INTO project_step
+              (PROJECT_STEP_ID,
+              VERSION,
+              NEXT_PROJECT_EXPERIMENT_ID,
+              PREV_PROJECT_EXPERIMENT_ID,
+              DATE_CREATED,
+              EDGE_NAME,
+              LAST_UPDATED,
+              MODIFIED_BY)
+          SELECT PROJECT_STEP_ID,
+              VERSION,
+              NEXT_PROJECT_EXPERIMENT_ID,
+              PREV_PROJECT_EXPERIMENT_ID,
+              DATE_CREATED,
+              EDGE_NAME,
+              LAST_UPDATED,
+              MODIFIED_BY
+          FROM data_mig.project_step ps
+          WHERE NOT EXISTS (SELECT 1
+                    FROM project_step ps2
+                    WHERE ps2.project_step_id = ps.project_step_id)
+            AND EXISTS (SELECT 1
+                    FROM project_experiment pe
+                    WHERE pe.project_experiment_id = ps.prev_project_experiment_id)
+            AND EXISTS (SELECT 1
+                    FROM project_experiment pe
+                    WHERE pe.project_experiment_id = ps.next_project_experiment_id);
+
+                    -- insert step context
             insert into step_context
                 (STEP_CONTEXT_ID,
                 PROJECT_STEP_ID,
@@ -1128,6 +1239,8 @@ as
             commit;
 
         end loop;
+
+        reset_sequence;
 
      end load_assay;
 end load_data;
