@@ -24,19 +24,18 @@ class UrlMappings {
         name externalReferences:"/api/externalReferences"(controller: "externalReferenceRest") {
             action = [GET: "externalReferences"]
         }
-        name externalReference:"/api/externalReference/$id"(controller: "externalReferenceRest") {
+        name externalReference:"/api/externalReferences/$id"(controller: "externalReferenceRest") {
             action = [GET: "externalReference"]
         }
         name externalSystems:"/api/externalSystems"(controller: "externalReferenceRest") {
             action = [GET: "externalSystems"]
         }
-        name externalSystem:"/api/externalSystem/$id"(controller: "externalReferenceRest") {
+        name externalSystem:"/api/externalSystems/$id"(controller: "externalReferenceRest") {
             action = [GET: "externalSystem"]
         }
         name assays: "/api/assays"(controller: "assayRest") {
             action = [GET: "assays"]
         }
-
         name assay: "/api/assays/$id"(controller: "assayRest") {
             action = [GET: "assay", PUT: "updateAssay"]
         }
@@ -46,7 +45,6 @@ class UrlMappings {
         name projects: "/api/projects"(controller: "projectRest") {
             action = [GET: "projects"]
         }
-
         name project: "/api/projects/$id"(controller: "projectRest") {
             action = [GET: "project", PUT: "updateProject"]
         }
