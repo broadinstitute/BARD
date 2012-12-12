@@ -272,15 +272,6 @@ class BardWebInterfaceController {
     }
 
     //=================== Structure Searches (Exact, Similarity, SubStructure, Exact and SupeStructure Searches ===================
-    def searchStructuresWithCID (SearchCommand searchCommand){
-        if (StringUtils.isNotBlank(searchCommand.searchString)) {
-            Map map = handleStructureSearch(queryService, searchCommand)
-            if (map) {
-                render(template: 'compounds', model: map)
-                return
-            }
-        }
-    }
 
     /**
      *

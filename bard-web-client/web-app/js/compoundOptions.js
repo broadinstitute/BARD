@@ -12,7 +12,6 @@ $(document).ready(function () {
     });
     $(document).on("click", "a.analogs", function(){
         var searchString = $(this).attr('data-structure-search-params');
-//        searchString = "Similarity:" + searchString
         $('#searchString').attr('value', searchString);
         $('#searchForm').submit();
     });
