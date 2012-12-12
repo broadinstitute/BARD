@@ -159,7 +159,6 @@ class CompoundRestService extends AbstractRestService {
         return assayResult.assays
     }
 
-
     /**
      *
      * @param compound
@@ -250,17 +249,19 @@ class CompoundRestService extends AbstractRestService {
     * @return list of {@link Compound}'s
     */
 
-    public CompoundResult structureSearch(StructureSearchParams params, final Map<String, Long> etags = [:]) {
+    public CompoundResult structureSearch(StructureSearchParams params, Map<String, Long> etags = [:], Integer nhits = -1) {
         //first get the number of hits, we  should do this concurrently
         //TODO: If we already have the number of hits we do not need to get it again
 
         //prepare task to run concurrently add time out of 50 seconds
         def tasks = []
-        tasks << (getStructureCount.curry(params) as Callable)
+        if (nhits <= 0) { // we only do this if we do not already know the number of hits
+            tasks << (getStructureCount.curry(params) as Callable)
+        }
         tasks << (doStructureSearch.curry(params, etags) as Callable)
         //we set this to time out in 50 seconds
         final List<FutureTask<Object>> results = executorService.invokeAll(tasks, 50, TimeUnit.SECONDS)
-        return handleFutures(results)
+        return handleFutures(results, nhits)
     }
 
     public ExperimentSearchResult findExperimentsByCID(final Long cid) {
@@ -326,7 +327,7 @@ class CompoundRestService extends AbstractRestService {
     }
 
     //===================== Concurrency code ==================
-    protected Compound handleCompoundByIdFutures(List<FutureTask<Object>> results) {
+    protected Compound handleCompoundByIdFutures(final List<FutureTask<Object>> results) {
         Compound compound = null
         try {
             //assert that there are 2 objects in the list
@@ -338,8 +339,8 @@ class CompoundRestService extends AbstractRestService {
             //second task is the compound search
             final FutureTask<Compound> compoundTask = (FutureTask<Compound>) results.get(1)
             compound = compoundTask.get()
-            if(compound){
-                if(compoundAnnotations){
+            if (compound) {
+                if (compoundAnnotations) {
                     compound.setCompoundAnnotations(compoundAnnotations)
                 }
             }
@@ -354,25 +355,30 @@ class CompoundRestService extends AbstractRestService {
      * @param results
      * @return
      */
-    protected CompoundResult handleFutures(List<FutureTask<Object>> results) {
+    protected CompoundResult handleFutures(final List<FutureTask<Object>> results, final Integer nhits = -1) {
         try {
             //assert that there are 2 objects in the list
             assert results.size() == 2
-
-            //the first task in the queue is the number of hits
-            final FutureTask<Long> numberHitsFutureTask = (FutureTask<Long>) results.get(0)
-            //we could check if its done, but we can assume it is, otherwise invokeAll would not complete
-            int nhits = numberHitsFutureTask.get().intValue()
-
-            //second task is the structure search
-            final FutureTask<CompoundResult> structureResultsTask = (FutureTask<CompoundResult>) results.get(1)
-            final CompoundResult compoundResult = structureResultsTask.get()
+            int numHits = nhits
+            FutureTask<CompoundResult> structureResultsTask = null
             if (nhits <= 0) {
-                nhits = compoundResult.compounds?.size() ?: 0
+                //the first task in the queue is the number of hits
+                final FutureTask<Long> numberHitsFutureTask = (FutureTask<Long>) results.get(0)
+                //we could check if its done, but we can assume it is, otherwise invokeAll would not complete
+                numHits = numberHitsFutureTask.get().intValue()
+                structureResultsTask = (FutureTask<CompoundResult>) results.get(1)
+            } else {
+                //second task is the structure search
+                structureResultsTask = (FutureTask<CompoundResult>) results.get(0)
+            }
+
+            final CompoundResult compoundResult = structureResultsTask.get()
+            if (numHits <= 0) {
+                numHits = compoundResult.compounds?.size() ?: 0
             }
 
             final MetaData metaData = new MetaData()
-            metaData.nhit = nhits
+            metaData.nhit = numHits > 0 ? numHits : 0
             compoundResult.setMetaData(metaData)
             return compoundResult;
         }
@@ -381,7 +387,8 @@ class CompoundRestService extends AbstractRestService {
         }
         return null
     }
-    def findAnnotations= {Long cid ->
+
+    def findAnnotations = {Long cid ->
         final String resource = getResource(cid.toString() + RestApiConstants.ANNOTATIONS)
         final URL url = new URL(resource)
         final CompoundAnnotations annotations = this.restTemplate.getForObject(url.toURI(), CompoundAnnotations.class)
@@ -443,7 +450,6 @@ class CompoundRestService extends AbstractRestService {
         compoundSearchResult.setEtags(etags)
         return compoundSearchResult
     }
-
 
 
 }

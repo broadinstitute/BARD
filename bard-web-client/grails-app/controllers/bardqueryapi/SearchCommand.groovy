@@ -12,6 +12,7 @@ class SearchCommand {
     String formName
     String offset
     String max
+    String nhits //the number of hits if we already have it
 
     /**
      * {@link SearchFilter}'s

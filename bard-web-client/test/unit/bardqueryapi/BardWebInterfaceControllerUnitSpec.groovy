@@ -447,7 +447,7 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
         request.method = 'GET'
         controller.searchStructures(searchCommand)
         then:
-        _ * this.queryService.structureSearch(_, _, _, _, _) >> {compoundAdapterMap}
+        _ * this.queryService.structureSearch(_, _, _, _, _, _) >> {compoundAdapterMap}
         and:
         flash.message == flashMessage
         response.status == statusCode
@@ -468,7 +468,7 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
         request.method = 'GET'
         controller.searchStructures(searchCommand)
         then:
-        _ * this.queryService.structureSearch(_, _, _, _, _) >> {new RuntimeException("Error Message")}
+        _ * this.queryService.structureSearch(_, _, _, _, _, 0) >> {new RuntimeException("Error Message")}
         and:
         response.status == HttpServletResponse.SC_INTERNAL_SERVER_ERROR
     }

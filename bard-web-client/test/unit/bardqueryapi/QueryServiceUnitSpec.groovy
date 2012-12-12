@@ -356,12 +356,12 @@ class QueryServiceUnitSpec extends Specification {
         final Map searchResults = service.structureSearch("", StructureSearchParams.Type.Substructure)
         then:
         _ * compoundRestService.structureSearch(_, _) >> {compoundResult}
-        assert searchResults.nHits == 0
+        assert searchResults.nHits == -1
         assert searchResults.compoundAdapters.isEmpty()
         assert searchResults.facets.isEmpty()
     }
     /**
-     * {@link QueryService#structureSearch(String, StructureSearchParams.Type, List, int, int)}
+     * {@link bardqueryapi.IQueryService#structureSearch(String, Type, List < SearchFilter >, Integer, Integer, Integer)}
      *
      */
     void "test Structure Search #label"() {

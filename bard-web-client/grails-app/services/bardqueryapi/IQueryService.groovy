@@ -50,9 +50,10 @@ public interface IQueryService {
      * @param structureSearchParamsType {@link StructureSearchParams}
      * @param top
      * @param skip
+     * @param nhits - The number of hits if we already have it
      * @return Map
      */
-    Map structureSearch(final Integer cid, final StructureSearchParams.Type structureSearchParamsType, final List<SearchFilter> searchFilters, final Integer top, final Integer skip);
+    Map structureSearch(Integer cid, StructureSearchParams.Type structureSearchParamsType, List<SearchFilter> searchFilters, Integer top, Integer skip, Integer nhits);
 
     /**
      * @param smiles
@@ -61,7 +62,7 @@ public interface IQueryService {
      * @param skip
      * @return Map
      */
-    Map structureSearch(final String smiles, final StructureSearchParams.Type structureSearchParamsType, final List<SearchFilter> searchFilters, final Integer top, final Integer skip);
+    Map structureSearch(String smiles, StructureSearchParams.Type structureSearchParamsType, List<SearchFilter> searchFilters, Integer top, Integer skip, Integer nhits);
 
     //===================== Find Resources given a list of IDs ================================
     /**

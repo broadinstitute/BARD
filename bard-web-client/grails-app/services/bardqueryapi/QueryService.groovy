@@ -125,9 +125,9 @@ class QueryService implements IQueryService {
     }
 
     //====================================== Structure Searches ========================================
-    Map structureSearch(final Integer cid, final StructureSearchParams.Type structureSearchParamsType, final List<SearchFilter> searchFilters = [], final Integer top = 10, final Integer skip = 0) {
+    Map structureSearch(Integer cid, StructureSearchParams.Type structureSearchParamsType, List<SearchFilter> searchFilters = [], Integer top = 10, Integer skip=0, Integer nhits=-1) {
         final Compound compound = this.compoundRestService.getCompoundById(cid)
-        return structureSearch(compound.smiles,structureSearchParamsType,searchFilters,top,skip)
+        return structureSearch(compound.smiles, structureSearchParamsType, searchFilters, top, skip, nhits)
     }
         /**
      * @param smiles
@@ -136,10 +136,10 @@ class QueryService implements IQueryService {
      * @param skip
      * @return Map
      */
-    Map structureSearch(final String smiles, final StructureSearchParams.Type structureSearchParamsType, final List<SearchFilter> searchFilters = [], final Integer top = 10, final Integer skip = 0) {
+    Map structureSearch(String smiles, StructureSearchParams.Type structureSearchParamsType, List<SearchFilter> searchFilters=[], Integer top=10, Integer skip=0, Integer nhits=-1) {
         final List<CompoundAdapter> compoundAdapters = []
         Collection<Value> facets = []
-        int nhits = 0
+        int numHits = nhits
         String eTag = null
         if (smiles) {
             //construct search parameters
@@ -159,7 +159,9 @@ class QueryService implements IQueryService {
             this.queryHelperService.stopStopWatch(sw, "structure search ${structureSearchParams.toString()}")
             //collect the results
             //convert to adapters
-            nhits = compoundResult.numberOfHits
+            if(nhits < 0){
+                numHits = compoundResult.numberOfHits
+            }
             final List<CompoundAdapter> compoundsToAdapters = this.queryHelperService.compoundsToAdapters(compoundResult)
             if (compoundsToAdapters) {
                 compoundAdapters.addAll(compoundsToAdapters)
@@ -170,7 +172,7 @@ class QueryService implements IQueryService {
             eTag = compoundResult.etag
         }
 
-        return [compoundAdapters: compoundAdapters, facets: facets, nHits: nhits, eTag: eTag]
+        return [compoundAdapters: compoundAdapters, facets: facets, nHits: numHits, eTag: eTag]
     }
     /*
     * Returns an unexpanded list of sids

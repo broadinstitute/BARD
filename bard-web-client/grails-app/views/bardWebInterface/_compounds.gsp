@@ -69,7 +69,7 @@
     </table>
 
     <div class="pagination">
-        <g:paginate total="${nhits ? nhits : 0}" params='[searchString: "${searchString}"]'/>
+        <g:paginate total="${nhits ? nhits : 0}" params='[searchString: "${searchString}", nhits: "${nhits ? nhits : 0}"]'/>
     </div>
 </g:if>
 <g:else>

@@ -482,6 +482,7 @@ class SearchHelper {
         Map<String, Integer> searchParams = handleSearchParams()
         final Integer top = searchParams.top
         final Integer skip = searchParams.skip
+        final Integer nhits = searchParams.nhits
 
         removeDuplicatesFromSearchString(searchCommand)
         final String[] searchStringSplit = searchCommand.searchString.split(":")
@@ -496,9 +497,9 @@ class SearchHelper {
             final StructureSearchParams.Type searchType = searchTypeString.toLowerCase().capitalize() as StructureSearchParams.Type
             Map compoundAdapterMap = null
             if(smiles.isInteger()){ //we assume that this is a CID
-                compoundAdapterMap = queryService.structureSearch(new Integer(smiles), searchType, searchFilters, top, skip)
+                compoundAdapterMap = queryService.structureSearch(new Integer(smiles), searchType, searchFilters, top, skip, 0)
             }else{
-                compoundAdapterMap = queryService.structureSearch(smiles, searchType, searchFilters, top, skip)
+                compoundAdapterMap = queryService.structureSearch(smiles, searchType, searchFilters, top, skip, -1)
             }
             List<CompoundAdapter> compoundAdapters = compoundAdapterMap.compoundAdapters
             structureSearchResultsMap = [
@@ -621,8 +622,8 @@ class SearchHelper {
     public Map<String, Integer> handleSearchParams() {
         params.max = Math.min(params.max ? params.int('max') : 10, 100)
         params.offset = params.offset ? params.int('offset') : 0
-
-        return [top: new Integer(params.max), skip: new Integer(params.offset)]
+        params.nhits = params.nhits ? params.int('nhits') : 0
+        return [top: new Integer(params.max), skip: new Integer(params.offset), nhits: new Integer(params.nhits)]
     }
     /**
      * Strip out all empty spaces, split on ',' and return as a list of longs

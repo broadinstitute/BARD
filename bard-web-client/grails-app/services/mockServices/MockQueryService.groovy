@@ -109,11 +109,11 @@ class MockQueryService implements IQueryService {
      * @param skip
      * @return of compounds
      */
-    Map structureSearch(final String smiles, final StructureSearchParams.Type structureSearchParamsType, final List<SearchFilter> searchFilters = [], final Integer top = 50, final Integer skip = 0) {
+    Map structureSearch(String smiles, StructureSearchParams.Type structureSearchParamsType, List<SearchFilter> searchFilters=[], Integer top=10, Integer skip=0, Integer nhits=-1) {
         return findCompoundsByTextSearch("", 10, 0, searchFilters)
     }
     @Override
-    Map structureSearch(Integer cid, StructureSearchParams.Type structureSearchParamsType, List<SearchFilter> searchFilters, Integer top, Integer skip) {
+    Map structureSearch(Integer cid, StructureSearchParams.Type structureSearchParamsType, List<SearchFilter> searchFilters = [], Integer top = 10, Integer skip=0, Integer nhits=-1) {
         return findCompoundsByTextSearch("", 10, 0, searchFilters)
     }
     //===================== Find Resources given a list of IDs ================================
