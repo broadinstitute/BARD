@@ -42,12 +42,13 @@
     <div class="span10">
         <g:if test="${molSpreadSheetData?.getColumnCount() > 0}">
             <g:set var="columnWidth" value="${100.0 / ((molSpreadSheetData?.getColumnCount() - 1) as float)}"/>
-            <label class="checkbox">
-                <input type="checkbox" defaultChecked="checked" checked name="showPromiscuityScores"
-                       id="showPromiscuityScores">
-                Hide Promiscuity Scores
-            </label>
-            <table cellpadding="0" cellspacing="0" border="0" class="molSpreadSheet display" id="molspreadsheet"
+                <label class="checkbox" class="pull-left">
+                    <input type="checkbox" defaultChecked="checked" checked name="showPromiscuityScores"
+                           id="showPromiscuityScores">
+                    Hide Promiscuity Scores
+                </label>
+                <a class="pull-right">Transpose</a>
+             <table cellpadding="0" cellspacing="0" border="0" class="molSpreadSheet display" id="molspreadsheet"
                    width="100%">
                 <thead>
                 <tr class="molSpreadSheetHead">
