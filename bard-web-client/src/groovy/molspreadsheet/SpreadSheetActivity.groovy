@@ -49,14 +49,14 @@ class SpreadSheetActivity {
 
     void readOutToHillCurveValue(final List<String> resultTypeNames, final Readout readout) {
         final HillCurveValue hillCurveValue = readout.toHillCurveValue()
-        if (hillCurveValue) {
+       // if (hillCurveValue) {
           //  if (hillCurveValue.id) {
                 if (!resultTypeNames.contains(hillCurveValue.id)) {
                     resultTypeNames.add(hillCurveValue.id)
                 }
                 this.hillCurveValueList << hillCurveValue
             //}
-        }
+       // }
 
     }
 

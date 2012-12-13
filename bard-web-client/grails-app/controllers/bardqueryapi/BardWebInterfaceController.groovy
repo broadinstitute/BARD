@@ -29,7 +29,6 @@ class BardWebInterfaceController {
     MolecularSpreadSheetService molecularSpreadSheetService
     MobileService mobileService
     List<SearchFilter> filters = []
-    final static String PROBE_ETAG_NAME = 'MLP Probes'
 
     //An AfterInterceptor to handle mobile-view routing.
     def afterInterceptor = [action: this.&handleMobile]
@@ -456,16 +455,9 @@ class BardWebInterfaceController {
     }
 
     def showProbeList() {
-        CompoundResult compoundResult = queryService.compoundRestService.findCompoundsByETag(PROBE_ETAG_NAME)
-        List<CompoundAdapter> compoundAdapters = queryService.queryHelperService.compoundsToAdapters(compoundResult)
-        render(template: "/mobile/bardWebInterface/compounds",
-                model: [
-                        compoundAdapters: compoundAdapters,
-                        facets: [],
-                        nhits: compoundAdapters.size(),
-                        searchString: flash.searchString,
-                        appliedFilters: [:]]
-        )
+        Map results = queryService.showProbeList()
+        results.put("searchString",flash.searchString)
+        render(template: "/mobile/bardWebInterface/compounds", model: results)
     }
 }
 /**
@@ -478,8 +470,8 @@ class SearchHelper {
 //    MobileService mobileService = ctx.getBean('mobileService')
 
     Map handleStructureSearch(final bardqueryapi.IQueryService queryService, final SearchCommand searchCommand) {
-        Map structureSearchResultsMap = [:]
-        Map<String, Integer> searchParams = handleSearchParams()
+        final Map structureSearchResultsMap = [:]
+        final Map<String, Integer> searchParams = handleSearchParams()
         final Integer top = searchParams.top
         final Integer skip = searchParams.skip
         final Integer nhits = searchParams.nhits
@@ -496,10 +488,10 @@ class SearchHelper {
             //we make the first character capitalized to match the ENUM
             final StructureSearchParams.Type searchType = searchTypeString.toLowerCase().capitalize() as StructureSearchParams.Type
             Map compoundAdapterMap = null
-            if(smiles.isInteger()){ //we assume that this is a CID
-                compoundAdapterMap = queryService.structureSearch(new Integer(smiles), searchType, searchFilters, top, skip, 0)
-            }else{
-                compoundAdapterMap = queryService.structureSearch(smiles, searchType, searchFilters, top, skip, -1)
+            if (smiles.isInteger()) { //we assume that this is a CID
+                compoundAdapterMap = queryService.structureSearch(new Integer(smiles), searchType, searchFilters, top, skip, nhits)
+            } else {
+                compoundAdapterMap = queryService.structureSearch(smiles, searchType, searchFilters, top, skip, nhits)
             }
             List<CompoundAdapter> compoundAdapters = compoundAdapterMap.compoundAdapters
             structureSearchResultsMap = [

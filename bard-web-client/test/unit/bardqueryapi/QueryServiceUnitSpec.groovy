@@ -83,6 +83,7 @@ class QueryServiceUnitSpec extends Specification {
         label             | cid  | expectedSIDS | foundSIDS
         "CID has SIDS"    | 2722 | [2, 3]       | ["/substances/2", "/substances/3"]
         "CID has no SIDS" | 222  | []           | []
+        "CID is null"     | null | []           | []
 
 
     }
@@ -324,7 +325,15 @@ class QueryServiceUnitSpec extends Specification {
         "Empty ProjectSearchResult Id list" | []                             | null                 | 0                     | 0                    | null
 
     }
+    void "test showProbeList"(){
+        when:
+        Map map = service.showProbeList()
+        then:
+        compoundRestService.findCompoundsByETag(_) >> {new CompoundResult(compounds: [new Compound()])}
+        queryHelperService.compoundsToAdapters(_) >> {[new CompoundAdapter()]}
+        assert map
 
+    }
     /**
      * {@link QueryService#structureSearch(String, bard.core.rest.spring.util.StructureSearchParams.Type)}
      *
@@ -333,7 +342,7 @@ class QueryServiceUnitSpec extends Specification {
         given:
         final CompoundResult expandedCompoundResult = new CompoundResult(compounds: [new Compound(smiles: smiles)])
         when:
-        service.structureSearch(smiles, structureSearchParamsType)
+        service.structureSearch(smiles, structureSearchParamsType,[],10,0,10)
         then:
         compoundRestService.structureSearch(_) >> {expandedCompoundResult}
 
@@ -361,7 +370,7 @@ class QueryServiceUnitSpec extends Specification {
         assert searchResults.facets.isEmpty()
     }
     /**
-     * {@link bardqueryapi.IQueryService#structureSearch(String, Type, List < SearchFilter >, Integer, Integer, Integer)}
+     * {@link bardqueryapi.IQueryService#structureSearch}
      *
      */
     void "test Structure Search #label"() {

@@ -55,6 +55,7 @@ public interface IQueryService {
      */
     Map structureSearch(Integer cid, StructureSearchParams.Type structureSearchParamsType, List<SearchFilter> searchFilters, Integer top, Integer skip, Integer nhits);
 
+    Map showProbeList()
     /**
      * @param smiles
      * @param structureSearchParamsType {@link StructureSearchParams}

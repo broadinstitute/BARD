@@ -24,6 +24,8 @@ import bard.core.rest.spring.util.StructureSearchParams
 import org.apache.commons.lang.time.StopWatch
 
 class QueryService implements IQueryService {
+    final static String PROBE_ETAG_NAME = 'MLP Probes'
+
     /**
      * {@link QueryHelperService}
      */
@@ -125,18 +127,30 @@ class QueryService implements IQueryService {
     }
 
     //====================================== Structure Searches ========================================
-    Map structureSearch(Integer cid, StructureSearchParams.Type structureSearchParamsType, List<SearchFilter> searchFilters = [], Integer top = 10, Integer skip=0, Integer nhits=-1) {
+    Map structureSearch(Integer cid, StructureSearchParams.Type structureSearchParamsType, List<SearchFilter> searchFilters = [], Integer top = 10, Integer skip = 0, Integer nhits = -1) {
         final Compound compound = this.compoundRestService.getCompoundById(cid)
         return structureSearch(compound.smiles, structureSearchParamsType, searchFilters, top, skip, nhits)
     }
-        /**
+
+    Map showProbeList() {
+        final CompoundResult compoundResult = compoundRestService.findCompoundsByETag(PROBE_ETAG_NAME)
+        final List<CompoundAdapter> compoundAdapters = queryHelperService.compoundsToAdapters(compoundResult)
+        return [
+                compoundAdapters: compoundAdapters,
+                facets: [],
+                nhits: compoundAdapters.size(),
+                appliedFilters: [:]
+        ]
+
+    }
+    /**
      * @param smiles
      * @param structureSearchParamsType {@link StructureSearchParams}
      * @param top
      * @param skip
      * @return Map
      */
-    Map structureSearch(String smiles, StructureSearchParams.Type structureSearchParamsType, List<SearchFilter> searchFilters=[], Integer top=10, Integer skip=0, Integer nhits=-1) {
+    Map structureSearch(String smiles, StructureSearchParams.Type structureSearchParamsType, List<SearchFilter> searchFilters = [], Integer top = 10, Integer skip = 0, Integer nhits = -1) {
         final List<CompoundAdapter> compoundAdapters = []
         Collection<Value> facets = []
         int numHits = nhits
@@ -159,7 +173,7 @@ class QueryService implements IQueryService {
             this.queryHelperService.stopStopWatch(sw, "structure search ${structureSearchParams.toString()}")
             //collect the results
             //convert to adapters
-            if(nhits < 0){
+            if (nhits < 0) {
                 numHits = compoundResult.numberOfHits
             }
             final List<CompoundAdapter> compoundsToAdapters = this.queryHelperService.compoundsToAdapters(compoundResult)
@@ -322,7 +336,7 @@ class QueryService implements IQueryService {
                 final List<ExperimentSearch> experiments = projectRestService.findExperimentsByProjectId(projectId)
                 if (experiments) {
                     experiments.sort {
-                        it?.role
+                        it.role
                     }
                 }
                 final List<Assay> assays = projectRestService.findAssaysByProjectId(projectId)

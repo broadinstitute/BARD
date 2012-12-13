@@ -17,7 +17,7 @@ class MockQueryService implements IQueryService {
     QueryHelperService queryHelperService
 
     List<Long> findSubstancesByCid(Long cid) {
-        return [1234,5678,91011]
+        return [1234, 5678, 91011]
     }
 
     final Map<Long, MockCompoundAdapter> mockCompoundAdapterMap = [:]
@@ -109,11 +109,12 @@ class MockQueryService implements IQueryService {
      * @param skip
      * @return of compounds
      */
-    Map structureSearch(String smiles, StructureSearchParams.Type structureSearchParamsType, List<SearchFilter> searchFilters=[], Integer top=10, Integer skip=0, Integer nhits=-1) {
+    Map structureSearch(String smiles, StructureSearchParams.Type structureSearchParamsType, List<SearchFilter> searchFilters = [], Integer top = 10, Integer skip = 0, Integer nhits = -1) {
         return findCompoundsByTextSearch("", 10, 0, searchFilters)
     }
+
     @Override
-    Map structureSearch(Integer cid, StructureSearchParams.Type structureSearchParamsType, List<SearchFilter> searchFilters = [], Integer top = 10, Integer skip=0, Integer nhits=-1) {
+    Map structureSearch(Integer cid, StructureSearchParams.Type structureSearchParamsType, List<SearchFilter> searchFilters = [], Integer top = 10, Integer skip = 0, Integer nhits = -1) {
         return findCompoundsByTextSearch("", 10, 0, searchFilters)
     }
     //===================== Find Resources given a list of IDs ================================
@@ -381,7 +382,21 @@ Screening Center: NIH Chemical Genomics Center [NCGC]'''
         mockExperimentMap.put(mockedExperiment.id, mockedExperiment)
     }
 
+    @Override
+    Map showProbeList() {
+        final List<CompoundAdapter> foundCompoundAdapters = []
 
+        Set<Long> keySet = mockCompoundAdapterMap.keySet()
+        for (Long key : keySet) {
+            foundCompoundAdapters.add((MockCompoundAdapter) mockCompoundAdapterMap.get(key))
+        }
+        return [
+                compoundAdapters: foundCompoundAdapters,
+                facets: [],
+                nhits: foundCompoundAdapters.size(),
+                appliedFilters: [:]
+        ]
+    }
 }
 class MockAssayAdapter implements AssayAdapterInterface {
     String name

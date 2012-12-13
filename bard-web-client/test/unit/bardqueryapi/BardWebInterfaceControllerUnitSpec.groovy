@@ -457,6 +457,31 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
         "Throws Exception"    | "1234,5678"  | 'Search String is required, must be of the form StructureSearchType:Smiles' | searchFilters1 | HttpServletResponse.SC_BAD_REQUEST | null
         "Success"             | "Exact:CCC"  | null                                                                        | searchFilters1 | HttpServletResponse.SC_OK          | [compoundAdapters: [buildCompoundAdapter(4567)], facets: [], nHits: 2]
         "Success No Filters"  | "Exact:CCC"  | null                                                                        | []             | HttpServletResponse.SC_OK          | [compoundAdapters: [buildCompoundAdapter(4567)], facets: [], nHits: 2]
+        "Success With CID"    | "Exact:222"  | null                                                                        | []             | HttpServletResponse.SC_OK          | [compoundAdapters: [buildCompoundAdapter(4567)], facets: [], nHits: 2]
+
+    }
+
+    void "test handleStructureSearch#label"() {
+        given:
+        mockCommandObject(SearchCommand)
+        params.formName = FacetFormType.CompoundFacetForm.toString()
+        Map paramMap = [formName: FacetFormType.CompoundFacetForm.toString(), searchString: searchString, filters: filters]
+        controller.metaClass.getParams {-> paramMap}
+        SearchCommand searchCommand = new SearchCommand(paramMap)
+        when:
+        request.method = 'GET'
+        Map map = controller.handleStructureSearch(this.queryService, searchCommand)
+        then:
+        _ * this.queryService.structureSearch(_, _, _, _, _, _) >> {compoundAdapterMap}
+        and:
+        assert response.status == 200
+        where:
+        label                 | searchString | flashMessage                                                                | filters        | compoundAdapterMap
+        "Empty Search String" | ""           | 'Search String is required, must be of the form StructureSearchType:Smiles' | searchFilters1 | null
+        "Throws Exception"    | "1234,5678"  | 'Search String is required, must be of the form StructureSearchType:Smiles' | searchFilters1 | null
+        "Success"             | "Exact:CCC"  | null                                                                        | searchFilters1 | [compoundAdapters: [buildCompoundAdapter(4567)], facets: [], nHits: 2]
+        "Success No Filters"  | "Exact:CCC"  | null                                                                        | []             | [compoundAdapters: [buildCompoundAdapter(4567)], facets: [], nHits: 2]
+        "Success with CID"    | "Exact:222"  | null                                                                        | []             | [compoundAdapters: [buildCompoundAdapter(4567)], facets: [], nHits: 2]
 
     }
 
@@ -878,6 +903,25 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
         isMobile | label
         true     | 'mobile-platform request'
         false    | 'regular request'
+    }
+
+    void "test handleSearchParams #label"() {
+        given:
+        params.max = maxParam
+        params.offset = offsetParam
+        params.nhits = nhitsParam
+        when:
+        final Map<String, Integer> parameters = controller.handleSearchParams()
+        then:
+        assert parameters["top"] == max
+        assert parameters["skip"] == offset
+        assert parameters["nhits"] == nhits
+
+        where:
+        label                         | maxParam | offsetParam | nhitsParam | max | offset | nhits
+        "Parameters are all null"     | null     | null        | null       | 10  | 0      | 0
+        "Parameters are all non-null" | "2"      | "2"         | "2"        | 2   | 2      | 2
+
     }
 
     CompoundAdapter buildCompoundAdapter(final Long cid) {
