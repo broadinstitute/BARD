@@ -6,7 +6,7 @@
 <head>
     <meta name="layout" content="logoSearchCartAndFooter"/>
     <title>Molecular spreadsheet</title>
-    <r:require modules="molecularSpreadSheet,promiscuity,activeVrsTested,compoundOptions"/>
+    <r:require modules="molecularSpreadSheet,promiscuity,compoundOptions"/>
 </head>
 
 <body>

@@ -2,7 +2,9 @@
 <html>
 <head>
     <meta name="layout" content="logoSearchCartAndFooter"/>
-    <r:require modules="search,promiscuity,activeVrsTested,compoundOptions"/>
+
+    <r:require modules="search,promiscuity,compoundOptions"/>
+
 </head>
 
 <body>
@@ -34,7 +36,7 @@
         </div>
     </div>
 
-    <r:require modules="search,promiscuity,activeVrsTested"/>
+    <r:require modules="search,promiscuity"/>
 
 </div>
 </body>

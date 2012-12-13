@@ -9,6 +9,10 @@ var errorImageTwitterBootstrap = '<img src=""  class="icon-exclamation-sign" alt
 //You do that to optimize this regular expression
 //see http://www.regular-expressions.info/brackets.html
 var NUMBER_MATCHING_REGEX = /^\s*\d+\s*(?:,?\s*\d+\s*)*$/;
+var TAB_ICON = '<span class="ui-icon ui-icon-notice"></span>'
+//var START_TAB_ICON = '<span class="ui-icon ui-icon-circle-check">'
+//var END_TAB_ICON = '</span>'
+
 
 $(document).ready(function () {
 
@@ -115,7 +119,8 @@ function handleStructureSearch(url, currentFormId) {
         },
         success:function (data) {
             $("#compounds").html(data);
-            var compoundTotal = 'Compounds (' + $("#totalCompounds").val() + ')';
+             var compoundTotal = TAB_ICON + ' Compounds (' + $("#totalCompounds").val() + ')';
+
             $("#compoundsTab").html(compoundTotal);
             $("#compounds").tab('show');
         },
@@ -153,7 +158,12 @@ function handleSearch(controllerAction, currentFormId, tabId, totalHitsForResour
         },
         success:function (data) {
             $(updateDivId).html(data);
-            var total = prefixOfTextToAppearOnTab + '(' + $(totalHitsElement).val() + ')';
+            var totalHits = $(totalHitsElement).val();
+            var total = prefixOfTextToAppearOnTab + '(' + totalHits + ')';
+            if(totalHits > 0){
+                total = TAB_ICON + total
+            }
+
             $(tabDivElement).html(total);
         },
         error:function (request, status, error) {
