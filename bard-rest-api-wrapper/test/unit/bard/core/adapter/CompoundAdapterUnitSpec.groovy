@@ -202,6 +202,8 @@ class CompoundAdapterUnitSpec extends Specification {
         !compoundAdapter.getMechanismOfAction()
         !compoundAdapter.getTherapeuticIndication()
         !compoundAdapter.getPrescriptionDrugLabel()
+        compoundAdapter.getNumberOfActiveAssays() == 0
+        compoundAdapter.getNumberOfAssays() == 0
     }
 
     void assertCompounds(final CompoundAdapter compoundAdapter) {
