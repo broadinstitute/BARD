@@ -97,6 +97,33 @@ SET assay_context_measure_id =
       FROM assay_context_measure  eci2
       WHERE eci2.assay_context_measure_id <= eci.assay_context_measure_id);
 
+UPDATE exprmt_measure eci
+SET exprmt_measure_id =
+    (SELECT Count(*)
+      FROM exprmt_measure  eci2
+      WHERE eci2.exprmt_measure_id <= eci.exprmt_measure_id);
+
+UPDATE prjct_exprmt_cntxt_item eci
+SET prjct_exprmt_cntxt_item_id =
+    (SELECT Count(*)
+      FROM prjct_exprmt_cntxt_item  eci2
+      WHERE eci2.prjct_exprmt_cntxt_item_id <= eci.prjct_exprmt_cntxt_item_id);
+
+UPDATE project_context_item eci
+SET project_context_item_id =
+    (SELECT Count(*)
+      FROM project_context_item  eci2
+      WHERE eci2.project_context_item_id <= eci.project_context_item_id);
+
+UPDATE step_context_item eci
+SET step_context_item_id =
+    (SELECT Count(*)
+      FROM step_context_item  eci2
+      WHERE eci2.step_context_item_id <= eci.step_context_item_id);
+
+
+
+
 DECLARE
     cursor cur_sequence
     is
