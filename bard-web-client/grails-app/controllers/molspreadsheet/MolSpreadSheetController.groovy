@@ -14,6 +14,7 @@ class MolSpreadSheetController {
     GrailsApplication grailsApplication  //inject GrailsApplication
 
     def index() {
+        flash.transpose = params.transpose
         render(view: 'molecularSpreadSheet')
     }
 
@@ -23,6 +24,7 @@ class MolSpreadSheetController {
 
     def molecularSpreadSheet() {
         MolSpreadSheetData molSpreadSheetData
+        Boolean transpose = (flash.transpose!=null)
         try {
             List<Long> cids = []
             List<Long> pids = []
@@ -50,7 +52,11 @@ class MolSpreadSheetController {
                     flash.message = message(code: 'show.only.active.compounds', default:
                             "Please note: Only active compounds are shown in the Molecular Spreadsheet")
                 }
-                render(template: 'spreadSheet', model: [molSpreadSheetData: molSpreadSheetData])
+                if (transpose) {
+                    render(template: 'tSpreadSheet', model: [molSpreadSheetData: molSpreadSheetData])
+                } else {
+                    render(template: 'spreadSheet', model: [molSpreadSheetData: molSpreadSheetData])
+                }
             } else {
                 render(template: 'spreadSheet', model: [molSpreadSheetData: new MolSpreadSheetData()])
             }

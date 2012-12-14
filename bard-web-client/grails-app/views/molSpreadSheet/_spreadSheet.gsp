@@ -47,7 +47,7 @@
                            id="showPromiscuityScores">
                     Hide Promiscuity Scores
                 </label>
-                <a class="pull-right">Transpose</a>
+                <a href="../molSpreadSheet/index?transpose=true" class="pull-right">Transpose</a>
              <table cellpadding="0" cellspacing="0" border="0" class="molSpreadSheet display" id="molspreadsheet"
                    width="100%">
                 <thead>
