@@ -39,5 +39,8 @@ var PromiscuityHandler = {
 $(document).on('search.complete', '#compounds', PromiscuityHandler.setup);
 
 $(document).ready(function () {
+    $(document).on("click", "html", function () {
+        $('.popover-link').popover('hide');
+    });
     PromiscuityHandler.setup();
 });
