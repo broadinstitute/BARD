@@ -29,12 +29,12 @@ class NumericValueUnitSpec extends Specification {
         currentNumericValue.getSource().getName() == dataSourceName
         currentNumericValue.getValue() == expectedValue
         where:
-        label                               | numericValue                                                | expectedId               | dataSourceName | expectedValue
-        "3 arg constructor"                 | new NumericValue(parent, id, new Double("2"))               | id                       | name           | 2.0
-        "3 arg constructor with datasource" | new NumericValue(dataSource, id, new Double("2") as Number) | id                       | name           | 2.0
-        "2 arg constructor with datasource" | new NumericValue(dataSource, id)                            | id                       | name           | null
-        "2 arg constructor"                 | new NumericValue(parent, id)                                | id                       | name           | null
-        "1 arg constructor"                 | new NumericValue(parent)                                    | "bard.core.NumericValue" | name           | null
+        label                               | numericValue                                          | expectedId               | dataSourceName | expectedValue
+        "3 arg constructor"                 | new NumericValue(parent, id, new BigDecimal("2"))     | id                       | name           | 2.0
+        "3 arg constructor with datasource" | new NumericValue(dataSource, id, new BigDecimal("2")) | id                       | name           | 2.0
+        "2 arg constructor with datasource" | new NumericValue(dataSource, id)                      | id                       | name           | null
+        "2 arg constructor"                 | new NumericValue(parent, id)                          | id                       | name           | null
+        "1 arg constructor"                 | new NumericValue(parent)                              | "bard.core.NumericValue" | name           | null
     }
 
     void "test Empty Constructors"() {
@@ -48,6 +48,7 @@ class NumericValueUnitSpec extends Specification {
         label                   | numericValue
         "Empty arg constructor" | new NumericValue()
     }
+
     void "test setters"() {
         given:
         NumericValue currentNumericValue = numericValue
