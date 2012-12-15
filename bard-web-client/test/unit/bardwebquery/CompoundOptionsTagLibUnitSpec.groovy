@@ -20,7 +20,7 @@ class CompoundOptionsTagLibUnitSpec extends Specification {
         String actualResults = applyTemplate(template, [cid: cid, smiles: smiles, sid: sid, imageWidth: imageWidth, imageHeight: imageHeight]).toString()
         then:
         assert actualResults.contains("chemAxon/generateStructureImageFromSmiles?smiles=CC&width=1&height=1")
-        assert actualResults.contains("button data-detail-id=\"sid_1\" class=\"popover-link btn btn-small\" data-original-title=")
+        assert actualResults.contains("Search For Analogs")
         where:
         label                  | cid | smiles | sid | imageWidth | imageHeight
         "Template with Smiles" | 1   | 'CC'   | 1   | 1          | 1
