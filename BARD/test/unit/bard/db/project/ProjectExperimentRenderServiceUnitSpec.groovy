@@ -8,6 +8,9 @@ import org.junit.*
 import spock.lang.Specification
 import grails.buildtestdata.mixin.Build
 import spock.lang.Unroll
+import bard.db.experiment.Experiment
+import bard.db.registration.Assay
+import bard.db.dictionary.Element
 
 /**
  * Created with IntelliJ IDEA.
@@ -17,27 +20,89 @@ import spock.lang.Unroll
  * To change this template use File | Settings | File Templates.
  */
 @TestFor(ProjectExperimentRenderService)
-@Build([Project, ProjectExperiment, ProjectStep])
+@Build([Project, ProjectExperiment, ProjectStep, Experiment, Assay, Element])
 @Unroll
-class ProjectExperimentRenderServiceUnitSpec extends Specification{
+class ProjectExperimentRenderServiceUnitSpec extends Specification {
     ProjectExperimentRenderService renderService = new ProjectExperimentRenderService()
 
-    void "test isIsolatedNode #desc"(){
+
+    void "test isIsolatedNode #desc"() {
         given: "an "
 
         ProjectExperiment pe = ProjectExperiment.build(followingProjectSteps: createProjectSteps(numberOfFollowingSteps),
                 precedingProjectSteps: createProjectSteps(numberOfPrecedingSteps))
         when:
-        renderService.isIsolatedNode(pe)
+        def result = renderService.isIsolatedNode(pe)
 
         then:
-        assert isIsolatedNode == renderService.isIsolatedNode(pe)
+        assert isIsolatedNode == result
 
         where:
-        desc            |numberOfFollowingSteps             |numberOfPrecedingSteps             |isIsolatedNode
-        "No steps"      |0                                  |0                                  |true
-        "Have preceding step"   |0                          |1                                  |false
-        "Have following step"   |1                          |0                                  |false
+        desc                  | numberOfFollowingSteps | numberOfPrecedingSteps | isIsolatedNode
+        "No steps"            | 0                      | 0                      | true
+        "Have preceding step" | 0                      | 1                      | false
+        "Have following step" | 1                      | 0                      | false
+
+    }
+
+    void "test constructNode #desc"() {
+
+        given: "an "
+
+        ProjectExperiment pe = ProjectExperiment.build(id: 1, experiment: Experiment.build(id: 2, experimentName: "experimentName", assay: Assay.build(id: 3)),
+                followingProjectSteps: createProjectSteps(0),
+                precedingProjectSteps: createProjectSteps(0),
+                stage: Element.build(label: "stageLabel")
+        )
+        when:
+        Node node = renderService.constructNode(pe)
+
+        then:
+        assert id == node.id
+        assert eid == node.keyValues["eid"]
+        assert assay == node.keyValues["assay"]
+        assert ename == node.keyValues["ename"]
+        assert stage == node.keyValues["stage"]
+
+        where:
+        desc             | id  | eid | assay | ename            | stage
+        "construct node" | "1" | 2   | 3     | "experimentName" | "stageLabel"
+    }
+
+    void "testContructEdge #desc"() {
+        given: "an "
+
+        ProjectStep st = ProjectStep.build()
+        List<Long> processingQ = []
+
+        when:
+        Edge edge = renderService.constructEdge(st, processingQ)
+
+        then:
+        assert edge == new Edge(from: st?.previousProjectExperiment?.id, to: st?.nextProjectExperiment?.id, label: st?.edgeName)
+        processingQ.size == 2
+
+    }
+
+    void "test constructEdges #desc"() {
+        given: "an "
+
+        ProjectExperiment pe = ProjectExperiment.build(followingProjectSteps: createProjectSteps(numberOfFollowingSteps),
+                precedingProjectSteps: createProjectSteps(numberOfPrecedingSteps))
+        List<Long> processingQ = []
+        when:
+        def edges = renderService.constructEdges(pe, processingQ)
+
+        then:
+        assert edges.size() == numberOfEdges
+        assert processingQ.size() == sizeOfQ
+
+        where:
+        desc                                         | numberOfFollowingSteps | numberOfPrecedingSteps | numberOfEdges | sizeOfQ
+        "No steps"                                   | 0                      | 0                      | 0             | 0
+        "Have 1 preceding step"                      | 0                      | 1                      | 1             | 2
+        "Have 1 following step"                      | 1                      | 0                      | 1             | 2
+        "Have 1 following step and 1 preceding stpe" | 1                      | 1                      | 2             | 4
 
     }
 
@@ -45,7 +110,7 @@ class ProjectExperimentRenderServiceUnitSpec extends Specification{
 
     def createProjectSteps(int i) {
         def steps = []
-        i.times{
+        i.times {
             steps.add(ProjectStep.build())
         }
         return steps

@@ -2,6 +2,7 @@ package bard.db.project
 
 import bard.db.enums.ReadyForExtraction
 import bard.db.registration.ExternalReference
+import bard.db.dictionary.Descriptor
 
 class Project {
     private static final int PROJECT_NAME_MAX_SIZE = 256
@@ -66,10 +67,22 @@ class Project {
         Map<String, List<ProjectContext>> m = [:]
         contexts.each{
             ProjectContext context ->
-            if (!m.get(context.contextGroup)) {
-                m.put(context.contextGroup, [])
+ //            String group = context.contextGroup ?context.contextGroup:"no group name"
+            Descriptor descriptor = context.preferredDescriptor
+            String group;
+            if(descriptor){
+
+                List<Descriptor> path = descriptor.getPath()
+                int toIndexExclusive = Math.min(2, path.size())
+                group = path.subList(0,toIndexExclusive).collect{ it.label }.join(' > ')
             }
-            m.get(context.contextGroup).add(context)
+            else {
+                group = 'uncategorized cards'
+            }
+            if (!m.get(group)) {
+                m.put(group, [])
+            }
+            m.get(group).add(context)
         }
         return m
     }

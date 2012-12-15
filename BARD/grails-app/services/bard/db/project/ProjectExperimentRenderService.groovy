@@ -6,6 +6,8 @@ import org.apache.commons.lang.builder.HashCodeBuilder
 
 /**
  * This is a service that return a list of nodes and edges in JSON format to be displayed in views.
+ * The service can be reused with different view implementation if view requires similar objects.
+ * Otherwise, this service can be adapted to provide more information to view for displaying purpose.
  */
 class ProjectExperimentRenderService {
     /**
@@ -44,7 +46,7 @@ class ProjectExperimentRenderService {
             }
         }
         def result = ["connectedNodes": nodes, "edges": edges, "isolatedNodes": isolatedNodes]
-        print new JSON(result)
+        //print new JSON(result)
         return new JSON(result)
     }
 

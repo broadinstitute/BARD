@@ -11,7 +11,7 @@
 <div id="card-${context.id}" class="span6 card roundedBorder card-table-container">
     <table class="table table-hover">
         <caption id="${context.id}" class="assay_context">
-            <div class="cardTitle">${context.contextName}</div>
+            <div class="cardTitle">${context.preferredName}</div>
         </caption>
         <tbody>
             <g:each in="${context.contextItems}" status="i" var="contextItem">
