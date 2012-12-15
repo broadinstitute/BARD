@@ -35,7 +35,7 @@ public class HillCurveValue extends Value {
     }
 
     @Override
-    public Object getValue () { return slope; }
+    public Double getValue () { return slope; }
 
     public String getConcentrationUnits(){
         return this.concentrationUnits;
@@ -80,5 +80,16 @@ public class HillCurveValue extends Value {
         return z0 + ((zinf - z0)  
                           / (1. + Math.exp(ln10 * coef * 
                                            (logslope - logconc))));
+    }
+    /**
+     * Subclasses should override this
+     * @param o
+     * @return
+     */
+    @Override
+    public int compareTo(Object o) {
+        HillCurveValue that = (HillCurveValue)o;
+
+        return this.getValue().compareTo(that.getValue());
     }
 }

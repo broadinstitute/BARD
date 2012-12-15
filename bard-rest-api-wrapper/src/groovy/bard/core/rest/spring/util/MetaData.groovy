@@ -119,7 +119,7 @@ public class MetaData extends JsonUtil {
                 values.add(value)
             }
         }
-        return values;
+        return values.sort();
     }
 
 }

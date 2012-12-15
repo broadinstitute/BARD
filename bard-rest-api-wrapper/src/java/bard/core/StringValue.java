@@ -33,4 +33,20 @@ public class StringValue extends Value {
 
     @Override
     public String getValue () { return value; }
+    /**
+     * Subclasses should override this
+     * @param o
+     * @return
+     */
+    @Override
+    public int compareTo(Object o) {
+        StringValue that = (StringValue)o;
+        //reverse
+        final int compare = this.getValue().compareTo(that.getValue());
+        if(compare == 0){
+            //then lets compare the names
+            return this.id.compareTo(that.id);
+        }
+        return compare * -1;
+    }
 }
