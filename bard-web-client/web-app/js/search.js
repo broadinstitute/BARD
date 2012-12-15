@@ -9,10 +9,7 @@ var errorImageTwitterBootstrap = '<img src=""  class="icon-exclamation-sign" alt
 //You do that to optimize this regular expression
 //see http://www.regular-expressions.info/brackets.html
 var NUMBER_MATCHING_REGEX = /^\s*\d+\s*(?:,?\s*\d+\s*)*$/;
-var TAB_ICON = '<span class="ui-icon ui-icon-notice"></span>'
-//var START_TAB_ICON = '<span class="ui-icon ui-icon-circle-check">'
-//var END_TAB_ICON = '</span>'
-
+var TAB_ICON = '<span class="label label-important">New</span>'
 
 $(document).ready(function () {
 
