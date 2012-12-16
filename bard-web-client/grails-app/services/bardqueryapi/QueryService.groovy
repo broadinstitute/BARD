@@ -173,7 +173,7 @@ class QueryService implements IQueryService {
             this.queryHelperService.stopStopWatch(sw, "structure search ${structureSearchParams.toString()}")
             //collect the results
             //convert to adapters
-            if (nhits < 0) {
+            if (nhits <= 0) {
                 numHits = compoundResult.numberOfHits
             }
             final List<CompoundAdapter> compoundsToAdapters = this.queryHelperService.compoundsToAdapters(compoundResult)
