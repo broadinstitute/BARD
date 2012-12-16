@@ -23,15 +23,17 @@
 
 <div class="row-fluid">
     <div class="span6">
-        <g:render template="assaySummary" model="[assayAdapter:assayAdapter]"/>
+        <g:render template="assaySummary" model="[assayAdapter: assayAdapter]"/>
     </div>
+
     <div class="span6">
         <dl>
             <dt>Associated Projects:</dt>
             <dd>
                 <ul>
-                     <g:each in="${projects}" var="project">
-                        <li><g:link controller="bardWebInterface" action="showProject" id="${project.id}" params='[searchString:"${searchString}"]'>${project.name} <small>(Project ID: ${project.id})</small></g:link>
+                    <g:each in="${projects}" var="project">
+                        <li><g:link controller="bardWebInterface" action="showProject" id="${project.id}"
+                                    params='[searchString: "${searchString}"]'>${project.name} <small>(Project ID: ${project.id})</small></g:link>
                         </li>
                     </g:each>
                 </ul>
@@ -63,12 +65,25 @@
 
                 <div id="assay-bio-info" class="accordion-body collapse">
                     <div class="accordion-inner">
-                        <dl>
-                        %{-- TODO: Make annother call to get annotations . KEGG Terms are available<g:each in="${assayAdapter?.annotations}" var="annotation">--}%
-                            %{--<dt>${annotation.id}</dt>--}%
-                            %{--<dd>${annotation.value}</dd>--}%
-                        %{--</g:each>--}%
-                        </dl>
+                        <g:if test="${assayAdapter?.keggDiseaseCategories}">
+                            <dl>
+                                %{--TODO: Make annother call to get other annotations--}%
+                                <dt>Kegg Disease Categories</dt>
+                                <g:each in="${assayAdapter?.keggDiseaseCategories}" var="annotation">
+
+                                    <dd>${annotation}</dd>
+                                </g:each>
+                            </dl>
+                        </g:if>
+                        <g:if test="${assayAdapter?.keggDiseaseNames}">
+                            <dl>
+                                <dt>Kegg Disease Names</dt>
+                                <g:each in="${assayAdapter?.keggDiseaseNames}" var="annotation">
+
+                                    <dd>${annotation}</dd>
+                                </g:each>
+                            </dl>
+                        </g:if>
                     </div>
                 </div>
             </div>
@@ -98,7 +113,7 @@
 
                 <div id="result-info" class="accordion-body collapse">
                     <div class="accordion-inner">
-                        <g:render template="experiments" model="[experiments: experiments, showAssaySummary: false]" />
+                        <g:render template="experiments" model="[experiments: experiments, showAssaySummary: false]"/>
                     </div>
                 </div>
             </div>
