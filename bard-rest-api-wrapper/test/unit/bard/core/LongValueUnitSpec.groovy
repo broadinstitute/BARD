@@ -35,6 +35,20 @@ class LongValueUnitSpec extends Specification {
         "1 arg constructor"                 | new LongValue(parent)            | "bard.core.LongValue" | name           | null
     }
 
+    void "test compareTo #label"() {
+        when:
+        int foundValue = longValue1.compareTo(longValue2)
+        then:
+        assert foundValue == expectedValue
+        where:
+        label                        | longValue1                                            | longValue2                                            | expectedValue
+        "value1==value2"             | new LongValue(source: dataSource, id: id, value: 2)   | new LongValue(source: dataSource, id: id, value: 2)   | 0
+        "value1==value2 compare ids" | new LongValue(source: dataSource, id: id, value: 2)   | new LongValue(source: dataSource, id: "JD", value: 2) | -1
+        "value1 > value2"            | new LongValue(source: dataSource, id: id, value: 2)   | new LongValue(source: dataSource, id: "JD", value: 4) | 1
+        "Value1 < value2"            | new LongValue(source: dataSource, id: "JD", value: 4) | new LongValue(source: dataSource, id: id, value: 2)   | -1
+
+    }
+
     void "test Empty Constructors"() {
         when:
         LongValue currentLongValue = longValue

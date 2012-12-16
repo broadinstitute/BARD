@@ -69,7 +69,7 @@
                             <dl>
                                 %{--TODO: Make annother call to get other annotations--}%
                                 <dt>Kegg Disease Categories</dt>
-                                <g:each in="${assayAdapter?.keggDiseaseCategories}" var="annotation">
+                                <g:each in="${assayAdapter.keggDiseaseCategories}" var="annotation">
 
                                     <dd>${annotation}</dd>
                                 </g:each>
@@ -78,7 +78,7 @@
                         <g:if test="${assayAdapter?.keggDiseaseNames}">
                             <dl>
                                 <dt>Kegg Disease Names</dt>
-                                <g:each in="${assayAdapter?.keggDiseaseNames}" var="annotation">
+                                <g:each in="${assayAdapter.keggDiseaseNames}" var="annotation">
 
                                     <dd>${annotation}</dd>
                                 </g:each>
@@ -88,6 +88,9 @@
                 </div>
             </div>
         </div>
+        <g:if test="${assayAdapter.targets}">
+            <g:render template="targets" model="['targets': assayAdapter.targets]"/>
+        </g:if>
 
         <div class="accordion-group">
             <div class="accordion-heading">
@@ -105,7 +108,9 @@
                 </div>
             </div>
         </div>
-
+        <g:if test="${assayAdapter.documents}">
+            <g:render template="publications" model="['documents': assayAdapter.documents]"/>
+        </g:if>
         <div class="accordion-group">
             <div class="accordion-heading">
                 <a href="#results-header" id="results-header" class="accordion-toggle" data-toggle="collapse"

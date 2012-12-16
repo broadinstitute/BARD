@@ -378,7 +378,7 @@ class CompoundRestService extends AbstractRestService {
             }
 
             final MetaData metaData = new MetaData()
-            metaData.nhit = numHits > 0 ? numHits : 0
+            metaData.nhit = numHits
             compoundResult.setMetaData(metaData)
             return compoundResult;
         }

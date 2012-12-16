@@ -19,6 +19,20 @@ class IntValueUnitSpec extends Specification {
         // Tear down logic here
     }
 
+    void "test compareTo #label"() {
+        when:
+        int foundValue = intValue1.compareTo(intValue2)
+        then:
+        assert foundValue == expectedValue
+        where:
+        label                        | intValue1                                            | intValue2                                            | expectedValue
+        "value1==value2"             | new IntValue(source: dataSource, id: id, value: 2)   | new IntValue(source: dataSource, id: id, value: 2)   | 0
+        "value1==value2 compare ids" | new IntValue(source: dataSource, id: id, value: 2)   | new IntValue(source: dataSource, id: "JD", value: 2) | -1
+        "value1 > value2"            | new IntValue(source: dataSource, id: id, value: 2)   | new IntValue(source: dataSource, id: "JD", value: 4) | 1
+        "Value1 < value2"            | new IntValue(source: dataSource, id: "JD", value: 4) | new IntValue(source: dataSource, id: id, value: 2)   | -1
+
+    }
+
     void "test Constructors #label"() {
         when:
         IntValue currentIntValue = intValue

@@ -33,6 +33,19 @@ class HillCurveValueUnitSpec extends Specification {
         "Empty arg constructor"             | new HillCurveValue()
     }
 
+    void "test compareTo #label"() {
+        when:
+        int foundValue = hillCurveValue1.compareTo(hillCurveValue2)
+        then:
+        assert foundValue == expectedValue
+        where:
+        label             | hillCurveValue1                                          | hillCurveValue2                                            | expectedValue
+        "compareTo == 0"  | new HillCurveValue(source: dataSource, id: id, slope: 2) | new HillCurveValue(source: dataSource, id: id, slope: 2)   | 0
+        "compareTo == 1"  | new HillCurveValue(source: dataSource, id: id, slope: 2) | new HillCurveValue(source: dataSource, id: "JD", slope: 2) | -1
+        "compareTo == -1" | new HillCurveValue(source: dataSource, id: id, slope: 4) | new HillCurveValue(source: dataSource, id: id, slope: 2)   | 1
+
+    }
+
     void "test add"() {
         given:
         final Double concentration = new Double("2.0")

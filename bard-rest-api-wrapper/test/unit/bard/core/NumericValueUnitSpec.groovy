@@ -37,6 +37,20 @@ class NumericValueUnitSpec extends Specification {
         "1 arg constructor"                 | new NumericValue(parent)                              | "bard.core.NumericValue" | name           | null
     }
 
+    void "test compareTo #label"() {
+        when:
+        int foundValue = numericValue1.compareTo(numericValue2)
+        then:
+        assert foundValue == expectedValue
+        where:
+        label                        | numericValue1                                            | numericValue2                                            | expectedValue
+        "value1==value2"             | new NumericValue(source: dataSource, id: id, value: 2)   | new NumericValue(source: dataSource, id: id, value: 2)   | 0
+        "value1==value2 compare ids" | new NumericValue(source: dataSource, id: id, value: 2)   | new NumericValue(source: dataSource, id: "JD", value: 2) | -1
+        "value1 > value2"            | new NumericValue(source: dataSource, id: id, value: 2)   | new NumericValue(source: dataSource, id: "JD", value: 4) | 1
+        "Value1 < value2"            | new NumericValue(source: dataSource, id: "JD", value: 4) | new NumericValue(source: dataSource, id: id, value: 2)   | -1
+
+    }
+
     void "test Empty Constructors"() {
         when:
         NumericValue currentNumericValue = numericValue

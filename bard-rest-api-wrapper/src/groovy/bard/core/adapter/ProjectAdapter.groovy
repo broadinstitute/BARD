@@ -9,6 +9,8 @@ import bard.core.rest.spring.compounds.Compound
 import bard.core.rest.spring.project.Project
 import bard.core.interfaces.ProjectAdapterInterface
 import bard.core.rest.spring.util.NameDescription
+import bard.core.rest.spring.util.Document
+import bard.core.rest.spring.util.Target
 
 
 public class ProjectAdapter implements ProjectAdapterInterface {
@@ -75,7 +77,12 @@ public class ProjectAdapter implements ProjectAdapterInterface {
     public Integer getNumberOfExperiments() {
         return project.experimentCount.intValue()
     }
-
+    public List<Document> getDocuments(){
+        return project.getPublications()
+    }
+    public List<Target> getTargets(){
+       return project.getTargets()
+    }
     public Collection<Value> getAnnotations() {
         final Collection<Value> annos = new ArrayList<Value>();
         final Map<String, String> terms = getDictionaryTerms()
@@ -86,7 +93,9 @@ public class ProjectAdapter implements ProjectAdapterInterface {
 
         return annos;
     }
-
+    public int getNumberOfAnnotations(){
+        return this.annotations.size() + this.getKeggDiseaseCategories().size() + this.getKeggDiseaseNames().size()
+    }
     public Map<String, String> getDictionaryTerms() {
         Map<String, String> dictionaryTerms = [:]
         final List<String> keys = project.getAk_dict_label()
@@ -106,6 +115,13 @@ public class ProjectAdapter implements ProjectAdapterInterface {
         annos.put(EntityNamedSources.KEGGDiseaseCategoryAnnotationSource, project.getKegg_disease_cat())
         annos.put(EntityNamedSources.KEGGDiseaseNameAnnotationSource, project.getKegg_disease_names())
         return annos;
+    }
+    public List<String> getKeggDiseaseNames() {
+        return project.getKegg_disease_names()
+    }
+    //TODO Perhaps convert to values
+    public List<String> getKeggDiseaseCategories() {
+        return project.getKegg_disease_cat()
     }
 
 }

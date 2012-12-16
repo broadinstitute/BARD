@@ -5,6 +5,7 @@ import bard.core.rest.spring.util.JsonUtil
 import bard.core.rest.spring.util.Target
 import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.annotation.JsonProperty
+import bard.core.rest.spring.util.Document
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class Project extends JsonUtil {
@@ -58,7 +59,7 @@ public class Project extends JsonUtil {
     @JsonProperty("aids")
     private List<Long> aids = new ArrayList<Long>();
     @JsonProperty("publications")
-    private String publications;
+    private Document publications;
     @JsonProperty("targets")
     private List<Target> targets = new ArrayList<Target>();
     @JsonProperty("resourcePath")
@@ -321,12 +322,12 @@ public class Project extends JsonUtil {
     }
 
     @JsonProperty("publications")
-    public String getPublications() {
+    public Document getPublications() {
         return publications;
     }
 
     @JsonProperty("publications")
-    public void setPublications(String publications) {
+    public void setPublications(Document publications) {
         this.publications = publications;
     }
 
