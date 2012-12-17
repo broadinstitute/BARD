@@ -5,6 +5,9 @@ $(document).ready(function () {
         show:false
     });
     $('#idModalDiv').css('width', 'auto') //Disable the default width=560px from bootstrap.css
+    $("#idModalDiv").draggable({
+        handle: ".modal-header"
+    });
     $('#idSearchButton').click(function () {
         var idSearchTypeSelected = $('input:radio[name=idSearchType]:checked').val();
         var ids = $('#idSearchString').val()

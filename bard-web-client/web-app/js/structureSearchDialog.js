@@ -12,6 +12,9 @@ $(document).ready(function () {
     $('#modalDiv').modal({
         show:false
     });
+    $("#modalDiv").draggable({
+        handle: ".modal-header"
+    });
     $('#modalDiv').css('width', 'auto') //Disable the default width=560px from bootstrap.css
     $('#structureSearchButton').click(function () {
         var structureSearchTypeSelected = $('input:radio[name=structureSearchType]:checked').val();
