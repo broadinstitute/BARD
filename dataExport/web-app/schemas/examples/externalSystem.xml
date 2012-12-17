@@ -1,0 +1,5 @@
+<externalSystem name='PubChem' owner='NIH'>
+  <systemUrl>http://pubchem.ncbi.nlm.nih.gov/assay/assay.cgi?</systemUrl>
+  <link rel='self' href='https://bard.broadinstitute.org/dataExport/api/externalSystems/1' type='application/vnd.bard.cap+xml;type=externalSystem' />
+  <link rel='up' href='https://bard.broadinstitute.org/dataExport/api/externalSystems' type='application/vnd.bard.cap+xml;type=externalSystems' />
+</externalSystem>

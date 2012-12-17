@@ -1,0 +1,5 @@
+<project projectId='1' readyForExtraction='Ready' groupType='Project'>
+  <projectName>Scripps special project #1</projectName>
+  <link rel='edit' href='https://bard.broadinstitute.org/dataExport/api/projects/1' type='application/vnd.bard.cap+xml;type=project' />
+  <link rel='up' href='https://bard.broadinstitute.org/dataExport/api/projects' type='application/vnd.bard.cap+xml;type=projects' />
+</project>

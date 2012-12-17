@@ -1,0 +1,6 @@
+<assayDocument documentType='Description'>
+  <documentName>Description</documentName>
+  <documentContent>The antitumor activity of compounds was measured in mice bearing transplantable tumors. Survival or tumor size were measured and the results are expressed as the measurement made in the treated group (T) divided by the measurement made in the vehicle treated control group (C). The tumor model used in this assay is Colon 26 Adenocarcinoma (intraperitoneal) in CD2F1 (CDF1) mice </documentContent>
+  <link rel='self' href='https://bard.broadinstitute.org/dataExport/api/assayDocument/1' type='application/vnd.bard.cap+xml;type=assayDoc' />
+  <link rel='related' href='https://bard.broadinstitute.org/dataExport/api/assays/253' type='application/vnd.bard.cap+xml;type=assay' />
+</assayDocument>

@@ -1,0 +1,8 @@
+<experiment experimentId='4178' status='Pending' readyForExtraction='Ready' holdUntilDate='0001-01-01T00:00:00.000-05:00'>
+  <experimentName>Homogeneous Time-Resolved Fluorescence Resonance Energy Transfer (HTRF) Assay</experimentName>
+  <link rel='related' href='https://bard.broadinstitute.org/dataExport/api/assays/4183' type='application/vnd.bard.cap+xml;type=assay' />
+  <link rel='up' href='https://bard.broadinstitute.org/dataExport/api/experiments' type='application/vnd.bard.cap+xml;type=experiments' />
+  <link rel='related' href='https://bard.broadinstitute.org/dataExport/api/experiments/4178/results?offset=0' type='application/vnd.bard.cap+xml;type=results' />
+  <link rel='edit' href='https://bard.broadinstitute.org/dataExport/api/experiments/4178' type='application/vnd.bard.cap+xml;type=experiment' />
+  <link rel='item' href='https://bard.broadinstitute.org/dataExport/api/externalReferences/2155' type='application/vnd.bard.cap+xml;type=externalReference' />
+</experiment>

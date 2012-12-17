@@ -1,0 +1,8 @@
+<bardexport>
+  <link rel='item' title='The BARD Dictionary' href='https://bard.broadinstitute.org/dataExport/api/dictionary' type='application/vnd.bard.cap+xml;type=dictionary' />
+  <link rel='item' title='List of assays, ready for extraction' href='https://bard.broadinstitute.org/dataExport/api/assays' type='application/vnd.bard.cap+xml;type=assays' />
+  <link rel='item' title='List of projects, ready for extraction' href='https://bard.broadinstitute.org/dataExport/api/projects' type='application/vnd.bard.cap+xml;type=projects' />
+  <link rel='item' title='List of experiments, ready for extraction' type='application/vnd.bard.cap+xml;type=experiments' href='https://bard.broadinstitute.org/dataExport/api/experiments' />
+  <link rel='item' title='List of external references' type='application/vnd.bard.cap+xml;type=externalReferences' href='https://bard.broadinstitute.org/dataExport/api/externalReferences' />
+  <link rel='item' title='List of external systems' type='application/vnd.bard.cap+xml;type=externalSystems' href='https://bard.broadinstitute.org/dataExport/api/externalSystems' />
+</bardexport>

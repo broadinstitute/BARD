@@ -1,0 +1,6 @@
+<externalReference>
+  <externalAssayRef>aid=624103</externalAssayRef>
+  <link rel='related' href='https://bard.broadinstitute.org/dataExport/api/externalSystems/1' type='application/vnd.bard.cap+xml;type=externalSystem' />
+  <link rel='self' href='https://bard.broadinstitute.org/dataExport/api/externalReferences/1' type='application/vnd.bard.cap+xml;type=externalReference' />
+  <link rel='up' href='https://bard.broadinstitute.org/dataExport/api/externalReferences' type='application/vnd.bard.cap+xml;type=externalReferences' />
+</externalReference>
