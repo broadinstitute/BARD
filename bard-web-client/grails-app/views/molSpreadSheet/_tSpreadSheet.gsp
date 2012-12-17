@@ -80,9 +80,9 @@
                 <% int currentRowCounter =0 %>
                 <g:set var="assayHeaders" value="${molSpreadSheetData.determineResponseTypesPerAssay()}" />
                 <g:if test="${(assayHeaders.size()>0)}">
+                    <g:set var="assayHeaderIterator" value="${assayHeaders.iterator()}" />
                     <g:each var="colHeader" in="${molSpreadSheetData?.getColumns()}">
                         <g:if test="${currentRowCounter > 3}">
-                            <g:set var="assayHeaderIterator" value="${assayHeaders.iterator()}" />
                             <tr>
                                 <g:if test="${(rowsToSkipBeforeNextAssayid==0)}">
                                     <g:set var="currentAssayIdHeader" value="${assayHeaderIterator.next()}" />
