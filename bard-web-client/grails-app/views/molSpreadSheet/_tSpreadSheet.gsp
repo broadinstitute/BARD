@@ -28,7 +28,7 @@
             <table cellpadding="0" cellspacing="0" border="1" class="molSpreadSheet display" id="molspreadsheet"
                    width="100%">
                 <tr>
-                    <th class="molSpreadSheetImg">Molecular structure</th>
+                    <th class="molSpreadSheetImg" colspan=2>Molecular structure</th>
                     <g:each var="rowCnt" in="${0..(molSpreadSheetData.getRowCount() - 1)}">
                         <td class="molSpreadSheetImg">
                             <% String retrievedSmiles = """${molSpreadSheetData?.displayValue(rowCnt, 0)."smiles"}""".toString() %>
@@ -43,7 +43,7 @@
                     </g:each>
                 </tr>
                 <tr>
-                    <th class="molSpreadSheetImg">CID</th>
+                    <th class="molSpreadSheetImg"  colspan=2>CID</th>
                     <g:each var="rowCnt" in="${0..(molSpreadSheetData.getRowCount() - 1)}">
                         <% cid = """${molSpreadSheetData?.displayValue(rowCnt, 1)?."value"}""".toString() %>
                         <td class="molSpreadSheet" property="cid">
@@ -53,7 +53,7 @@
                 </tr>
 
                 <tr>
-                    <th class="molSpreadSheetImg"><%="${((columnHeaders?.size() > 2)?(columnHeaders[2]):'promiscuity')}"%></th>
+                    <th class="molSpreadSheetImg"  colspan=2><%="${((columnHeaders?.size() > 2)?(columnHeaders[2]):'promiscuity')}"%></th>
                     <g:each var="rowCnt" in="${0..(molSpreadSheetData.getRowCount() - 1)}">
                         <% cid = """${molSpreadSheetData?.displayValue(rowCnt, 1)?."value"}""".toString() %>
                         <td class="molSpreadSheet">
@@ -65,7 +65,7 @@
                 </tr>
 
                 <tr>
-                    <th class="molSpreadSheetImg"><%="${((columnHeaders?.size() > 3)?(columnHeaders[3]):'inactive/active')}"%></th>
+                    <th class="molSpreadSheetImg"  colspan=2><%="${((columnHeaders?.size() > 3)?(columnHeaders[3]):'inactive/active')}"%></th>
                     <g:each var="rowCnt" in="${0..(molSpreadSheetData.getRowCount() - 1)}">
                         <% String activeVrsTested = """${molSpreadSheetData?.displayValue(rowCnt, 3)?."value"}""".toString() %>
                         <td class="molSpreadSheet" property="cid">
@@ -76,7 +76,92 @@
                     </g:each>
                 </tr>
 
-            </table>
+                <% int rowsToSkipBeforeNextAssayid = 0 %>
+                <% int currentRowCounter =0 %>
+                <g:set var="assayHeaders" value="${molSpreadSheetData.determineResponseTypesPerAssay()}" />
+                <g:if test="${(assayHeaders.size()>0)}">
+                    <g:each var="colHeader" in="${molSpreadSheetData?.getColumns()}">
+                        <g:if test="${currentRowCounter > 3}">
+                            <g:set var="assayHeaderIterator" value="${assayHeaders.iterator()}" />
+                            <tr>
+                                <g:if test="${(rowsToSkipBeforeNextAssayid==0)}">
+                                    <g:set var="currentAssayIdHeader" value="${assayHeaderIterator.next()}" />
+                                    <%rowsToSkipBeforeNextAssayid = currentAssayIdHeader."numberOfResultTypes"%>
+                                    <th class="molSpreadSheetHeadData" rel="tooltip"
+                                        rowspan="<%=rowsToSkipBeforeNextAssayid%>"
+                                        title="<%=currentAssayIdHeader."fullAssayName"%>"><a
+                                            href="../bardWebInterface/showAssay/<%=currentAssayIdHeader."assayName"%>">
+                                        ADID=<%=currentAssayIdHeader."assayName"%></a>
+                                    </th>
+                                </g:if>
+                                <%rowsToSkipBeforeNextAssayid--%>
+                                <th class="molSpreadSheetHeadData">${colHeader}
+                                </th>
+
+
+
+                                <g:each var="rowCnt" in="${0..(molSpreadSheetData.getRowCount() - 1)}">
+                                    <% SpreadSheetActivityStorage spreadSheetActivityStorage = molSpreadSheetData?.findSpreadSheetActivity(rowCnt, currentRowCounter) %>
+                                    <% int currentCol = currentRowCounter %>
+                                        <div>
+                                            <g:if test="${spreadSheetActivityStorage != null}">
+                                                <td class="molSpreadSheet" property="var${currentCol}">
+
+                                                    <% HillCurveValueHolder hillCurveValueHolder = spreadSheetActivityStorage.getHillCurveValueHolderList()[0] %>
+                                                      <p>
+
+                                                    <g:if test="${hillCurveValueHolder?.identifier}">
+                                                        <div data-detail-id="drc_${spreadSheetActivityStorage.sid}_${colCnt}"
+                                                             class="drc-popover-link btn btn-link"
+                                                             data-original-title="${hillCurveValueHolder.identifier}"
+                                                             data-html="true"
+                                                             data-trigger="hover">
+                                                            ${hillCurveValueHolder.toString()}</div>
+                                                    </g:if>
+                                                    </p>
+
+
+                                                    <g:if test="${hillCurveValueHolder?.conc?.size() > 1}">
+                                                        <div class='popover-content-wrapper'
+                                                             id="drc_${spreadSheetActivityStorage.sid}_${colCnt}"
+                                                             style="display: none;">
+                                                            <div class="center-aligned">
+                                                                <img alt="${spreadSheetActivityStorage.sid}"
+                                                                     title="Substance Id : ${spreadSheetActivityStorage.sid}"
+                                                                     src="${createLink(
+                                                                             controller: 'doseResponseCurve',
+                                                                             action: 'doseResponseCurve',
+                                                                             params: [
+                                                                                     sinf: hillCurveValueHolder?.sInf,
+                                                                                     s0: hillCurveValueHolder?.s0,
+                                                                                     ac50: hillCurveValueHolder?.slope,
+                                                                                     hillSlope: hillCurveValueHolder?.coef,
+                                                                                     concentrations: hillCurveValueHolder?.conc,
+                                                                                     activities: hillCurveValueHolder?.response,
+                                                                                     yAxisLabel: hillCurveValueHolder?.identifier
+                                                                             ]
+                                                                     )}"/>
+                                                            </div>
+                                                        </div>
+
+                                                    </g:if>
+
+                                                    </td>
+                                            </g:if>
+                                            <g:else>
+                                                <td class="molSpreadSheet" property="var${currentRowCounter}">
+                                                    Not tested in this experiment
+                                                </td>
+                                            </g:else>
+                                        </div>
+                                 </g:each>
+
+                            </tr>
+                        </g:if>
+                        <% currentRowCounter++ %>
+                    </g:each>
+                </g:if>
+             </table>
         </g:if>
         <g:else>
             <div class="alert">
