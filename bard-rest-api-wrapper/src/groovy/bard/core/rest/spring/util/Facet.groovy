@@ -31,6 +31,7 @@ public class Facet extends JsonUtil {
     public void setCounts(Counts counts) {
         this.counts = counts;
     }
+
     @JsonProperty("facetName")
     public String getFacetName() {
         return facetName;
@@ -46,12 +47,15 @@ public class Facet extends JsonUtil {
         final Value facet = new Value(DataSource.DEFAULT, this.facetName);
         final Counts counts = this.getCounts()
         final Map<String, Object> additionalProperties = counts.getAdditionalProperties()
-        boolean hasAtleastOneValue = 0//We will ignore empty facets
+        boolean hasAtleastOneValue = false//We will ignore empty facets
         for (String key : additionalProperties.keySet()) {
             final Object object = additionalProperties.get(key)
             if (object != null) {
-                new IntValue(facet, key, (Integer) object);
-                hasAtleastOneValue = true
+                int facetCount = (Integer) object
+                if (facetCount) {
+                    new IntValue(facet, key, facetCount);
+                    hasAtleastOneValue = true
+                }
             }
         }
         if (hasAtleastOneValue) {
