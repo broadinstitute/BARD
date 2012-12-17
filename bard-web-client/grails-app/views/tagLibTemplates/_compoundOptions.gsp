@@ -6,7 +6,7 @@ Similarity:CCC
 <div>
     <div class="btn-group">
         <g:if test="${smiles}">
-            <img alt="${smiles}" title="Click to Copy SMILES"
+            <img alt="${smiles}"
                  src="${createLink(controller: 'chemAxon', action: 'generateStructureImageFromSmiles', params: [smiles: smiles, width: imageWidth, height: imageHeight])}"/>
         </g:if>
         <g:else>
@@ -22,14 +22,4 @@ Similarity:CCC
         </ul>
     </div>
 </div>
-
-%{--<div class='popover-content-wrapper' id="sid_${sid}" style="display: none;">--}%
-    %{--<div class="center-aligned">--}%
-        %{--<g:if test="${smiles}">--}%
-            %{--Smiles : ${smiles} <br/>--}%
-        %{--</g:if>--}%
-        %{--<a href="#" class="analogs" data-structure-search-params="Similarity:${cid}">Search For Analogs</a>--}%
-
-    %{--</div>--}%
-%{--</div>--}%
 
