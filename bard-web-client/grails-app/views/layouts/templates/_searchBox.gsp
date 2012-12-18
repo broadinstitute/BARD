@@ -11,8 +11,9 @@
 
     <div class="row-fluid">
         <div class="span10">
-            <div class="pull-right"><i class="icon-search"></i> <a data-toggle="modal"
-                                                                   href="#modalDiv">Draw or paste a structure</a> or <a
+            <div class="pull-right"><a data-toggle="modal"
+                                                                   href="#modalDiv">
+                <img src="${resource(dir: 'images', file: 'structureEditIcon.png')}" alt="Draw or paste a structure" title="Draw or paste a structure"/> Draw or paste a structure</a> or <a
                     data-toggle="modal" href="#idModalDiv">list of IDs for search</a></div>
         </div>
     </div>
