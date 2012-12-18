@@ -1,11 +1,9 @@
 <r:require module="autocomplete"/>
 <noscript>
-    <h3>BARD uses JavaScript</h3>
-    <ul>
-        <li>Please use a JavaScript-aware browser.</li>
-        <li>See instructions to enable Javascript for your browser <a href="http://enable-javascript.com/">here</a></li>
-    </ul>
-</noscript>
+    For full functionality of this site it is necessary to enable JavaScript.
+    Here are the <a href="http://www.enable-javascript.com/" target="_blank">
+    instructions how to enable JavaScript in your web browser</a>.
+</noscript>ß
 <g:form name="searchForm" controller="bardWebInterface" action="search" id="searchForm">
     <div class="row-fluid" style="margin-top: 15px;">
         <div class="input-append">
