@@ -12,9 +12,11 @@ class MolSpreadSheetController {
     ExportService exportService
     QueryCartService queryCartService
     GrailsApplication grailsApplication  //inject GrailsApplication
+    RetainSpreadsheetService retainSpreadsheetService
 
     def index() {
         flash.transpose = params.transpose
+        flash.norefresh = params.norefresh
         render(view: 'molecularSpreadSheet')
     }
 
@@ -25,6 +27,7 @@ class MolSpreadSheetController {
     def molecularSpreadSheet() {
         MolSpreadSheetData molSpreadSheetData
         Boolean transpose = (flash.transpose!=null)
+        Boolean noRefreshNeeded = (flash.norefresh!=null)
         try {
             List<Long> cids = []
             List<Long> pids = []
@@ -39,7 +42,12 @@ class MolSpreadSheetController {
                 pids = queryCartService.retrieveCartProjectIdsFromShoppingCart()
                 adids = queryCartService.retrieveCartAssayIdsFromShoppingCart()
             }
-            molSpreadSheetData = molecularSpreadSheetService.retrieveExperimentalDataFromIds(cids, adids, pids)
+            if (noRefreshNeeded && (retainSpreadsheetService.retrieveMolSpreadsheetData()!=null)){
+                molSpreadSheetData = retainSpreadsheetService.retrieveMolSpreadsheetData()
+            } else {
+                molSpreadSheetData = molecularSpreadSheetService.retrieveExperimentalDataFromIds(cids, adids, pids)
+            }
+            retainSpreadsheetService.addMolSpreadsheetData(molSpreadSheetData)
             if (molSpreadSheetData) {
                 if (params?.format && params.format != "html") {
                     response.contentType = grailsApplication.config.grails.mime.types[params.format]

@@ -3,6 +3,14 @@
 <%@ page import="com.metasieve.shoppingcart.ShoppingCartService;" %>
 
 <script type="text/javascript">
+    $(document).ready(function () {
+        $('#showPromiscuityScores').click(function () {
+            $('tr:nth-child(3)').toggle();
+            PromiscuityHandler.setup();
+        });
+        $('tr:nth-child(3)').toggle();
+        $("[rel=tooltip]").tooltip();
+    });
 </script>
 
 <div class="row-fluid">
@@ -24,7 +32,7 @@
                        id="showPromiscuityScores">
                 Hide Promiscuity Scores
             </label>
-            <a href="../molSpreadSheet/index" class="pull-right">Re-Transpose</a>
+            <a href="../molSpreadSheet/index?norefresh=true" class="pull-right">Re-Transpose</a>
             <table cellpadding="0" cellspacing="0" border="1" class="molSpreadSheet display" id="molspreadsheet"
                    width="100%">
                 <tr>
