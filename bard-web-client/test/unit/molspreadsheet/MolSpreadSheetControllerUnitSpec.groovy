@@ -22,11 +22,13 @@ class MolSpreadSheetControllerUnitSpec extends Specification {
     MolecularSpreadSheetService molecularSpreadSheetService
     ExportService exportService
     QueryCartService queryCartService
+    RetainSpreadsheetService retainSpreadsheetService = new RetainSpreadsheetService()
     @Shared MolSpreadSheetData molSpreadSheetData = new MolSpreadSheetData()
 
 
 
     void setup() {
+        controller.retainSpreadsheetService = retainSpreadsheetService
         this.molecularSpreadSheetService = Mock(MolecularSpreadSheetService)
         controller.molecularSpreadSheetService = this.molecularSpreadSheetService
         this.exportService = Mock(ExportService)
@@ -35,6 +37,68 @@ class MolSpreadSheetControllerUnitSpec extends Specification {
         controller.exportService = this.exportService
         molSpreadSheetData.molSpreadsheetDerivedMethod = MolSpreadsheetDerivedMethod.Compounds_NoAssays_NoProjects
     }
+
+    void "test index transpose and norefresh parameters"() {
+        given:
+        params.norefresh = norefresh
+        params.transpose = transpose
+
+        when:
+        controller.index()
+
+        then:
+        assert response.status == 200
+
+        where:
+        label                           | norefresh     | transpose
+        "no refresh your transpose"     | null          | null
+        "refresh only"                  | "true"        | null
+        "transpose only"                | null          | "true"
+        "refresh and transpose"         | null          | "true"
+
+    }
+
+
+
+
+
+    void "test molecularSpreadSheet transpose and norefresh parameters"() {
+        given:
+        controller.flash.norefresh = norefresh
+        controller.flash.transpose = transpose
+        controller.retainSpreadsheetService.molSpreadSheetData = molSpreadSheetData
+
+        when:
+        controller.molecularSpreadSheet()
+
+        then:
+        assert response.status == 200
+
+        where:
+        label                           | norefresh     | transpose |   molSpreadSheetData
+        "no refresh your transpose"     | null          | null      |   null
+        "refresh only"                  | "true"        | null      |   null
+        "transpose only"                | null          | "true"    |   null
+        "refresh and transpose"         | "true"        | "true"    |   null
+        "no refresh your transpose"     | null          | null      |   new MolSpreadSheetData()
+        "refresh only"                  | "true"        | null      |   new MolSpreadSheetData()
+        "transpose only"                | null          | "true"    |   new MolSpreadSheetData()
+        "refresh and transpose"         | "true"        | "true"    |   new MolSpreadSheetData()
+    }
+
+
+//    void "test no flash"() {
+//        given:
+//        controller.flash = null
+//
+//        when:
+//        controller.molecularSpreadSheet()
+//
+//        then:
+//        assert response.status == 200
+//    }
+
+
 
     void "test Index"() {
 

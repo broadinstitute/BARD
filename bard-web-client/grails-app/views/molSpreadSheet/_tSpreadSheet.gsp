@@ -32,7 +32,7 @@
                        id="showPromiscuityScores">
                 Hide Promiscuity Scores
             </label>
-            <a href="../molSpreadSheet/index?norefresh=true" class="pull-right">Re-Transpose</a>
+            <a href="../molSpreadSheet/index?norefresh=true" class="pull-right tranposeSymbol" title="Transpose array elements">T</a>
             <table cellpadding="0" cellspacing="0" border="1" class="molSpreadSheet display" id="molspreadsheet"
                    width="100%">
                 <tr>

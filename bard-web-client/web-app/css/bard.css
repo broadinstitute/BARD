@@ -422,3 +422,12 @@ td.molSpreadSheet{
     border-left: 1px solid;
     text-align: center;
 }
+.tranposeSymbol {
+    position: relative;
+    font-size: 24px;
+    font-family: "Courier New", monospace;
+    font-weight: bold;
+    left: -25px;
+    top: -25px;
+    text-decoration-color: #00E0FF;
+}

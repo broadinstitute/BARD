@@ -1,26 +1,34 @@
 package molspreadsheet
 
-import static org.junit.Assert.*
-
-import grails.test.mixin.*
-import grails.test.mixin.support.*
-import org.junit.*
+import grails.test.mixin.TestFor
+import spock.lang.Unroll
+import spock.lang.Specification
 
 /**
  * See the API for {@link grails.test.mixin.support.GrailsUnitTestMixin} for usage instructions
  */
-@TestMixin(GrailsUnitTestMixin)
-class RetainSpreadsheetServiceSpec {
+@Unroll
+@TestFor(RetainSpreadsheetService)
+class RetainSpreadsheetServiceSpec  extends Specification{
 
-    void setUp() {
+    void setup() {
         // Setup logic here
     }
 
-    void tearDown() {
-        // Tear down logic here
-    }
+    //  Given that the service has no methods and only one data object is not too terribly much to test
+    void testMolSpreadSheetData() {
+        given:
+        final MolSpreadSheetData molSpreadSheetData = new MolSpreadSheetData()
 
-    void testSomething() {
-        fail "Implement me"
+        when:
+        int i=1
+        assertNull service.molSpreadSheetData
+        service.molSpreadSheetData = molSpreadSheetData
+
+        then:
+        assert i==1
+        assertNotNull service.molSpreadSheetData
+        service.setMolSpreadSheetData(null)
+        assertNull service.molSpreadSheetData
     }
 }
