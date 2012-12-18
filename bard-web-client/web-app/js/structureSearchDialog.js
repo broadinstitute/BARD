@@ -9,6 +9,21 @@ var adjustMarvinSketchWindow = function () {
 $(window.parent).resize(adjustMarvinSketchWindow);
 
 $(document).ready(function () {
+//    $(document).bind("idStructureSearchBoxEvent", function(event, params) {
+//        var marvinSketch = $('#MarvinSketch')[0];
+//        alert(marvinSketch)
+//            if(document.MarvinSketch != null) {
+//                if(params.length ){
+//                    document.MarvinSketch.setMol(params);
+//                }
+//
+//            } else {
+//                alert("Cannot load molecule:\n"+
+//                    "no JavaScript to Java communication in your browser.\n");
+//            }
+//
+//
+//    });
     $('#modalDiv').modal({
         show:false
     });
@@ -16,6 +31,13 @@ $(document).ready(function () {
         handle: ".modal-header"
     });
     $('#modalDiv').css('width', 'auto') //Disable the default width=560px from bootstrap.css
+    $('#modalDiv').on('show', function () {
+//        var currentSearch = $('#searchString').val()
+////        //populate the Id Box if the search box contains id searches
+//        if (currentSearch.length) {
+//            $(document).trigger("idStructureSearchBoxEvent", currentSearch);
+//        }
+    });
     $('#structureSearchButton').click(function () {
         var structureSearchTypeSelected = $('input:radio[name=structureSearchType]:checked').val();
         var marvinSketch = $('#MarvinSketch')[0];
