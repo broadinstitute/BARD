@@ -1,5 +1,11 @@
 <r:require module="autocomplete"/>
-
+<noscript>
+    <h3>BARD uses JavaScript</h3>
+    <ul>
+        <li>Please use a JavaScript-aware browser.</li>
+        <li>Make sure that JavaScript is enabled.</li>
+    </ul>
+</noscript>
 <g:form name="searchForm" controller="bardWebInterface" action="search" id="searchForm">
     <div class="row-fluid" style="margin-top: 15px;">
         <div class="input-append">
@@ -11,9 +17,9 @@
 
     <div class="row-fluid">
         <div class="span10">
-            <div class="pull-right"><a data-toggle="modal"
-                                                                   href="#modalDiv">
-                <img src="${resource(dir: 'images', file: 'structureEditIcon.png')}" alt="Draw or paste a structure" title="Draw or paste a structure"/> Draw or paste a structure</a> or <a
+            <div class="pull-right"><a data-toggle="modal" href="#modalDiv">
+                <img src="${resource(dir: 'images', file: 'structureEditIcon.png')}" alt="Draw or paste a structure"
+                     title="Draw or paste a structure"/> Draw or paste a structure</a> or <a
                     data-toggle="modal" href="#idModalDiv">list of IDs for search</a></div>
         </div>
     </div>
@@ -21,3 +27,5 @@
 
 <g:render template="/layouts/templates/structureSearchBox"/>
 <g:render template="/layouts/templates/IdSearchBox"/>
+
+document.write("Is Java enabled? " + navigator.javaEnabled() );
