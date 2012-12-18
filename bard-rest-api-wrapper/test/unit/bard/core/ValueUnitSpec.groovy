@@ -18,6 +18,20 @@ class ValueUnitSpec extends Specification {
         // Tear down logic here
     }
 
+    void "test compareTo #label"() {
+        when:
+        int foundValue = longValue1.compareTo(longValue2)
+        then:
+        assert foundValue == expectedValue
+        where:
+        label                        | longValue1                              | longValue2                                | expectedValue
+        "value1==value2"             | new Value(source: dataSource, id: id)   | new Value(source: dataSource, id: id)     | 0
+        "value1==value2 compare ids" | new Value(source: dataSource, id: id)   | new Value(source: dataSource, id: "JD")   | 0
+        "value1 > value2"            | new Value(source: dataSource, id: id)   | new Value(source: dataSource, id: "JD")   | 0
+        "Value1 < value2"            | new Value(source: dataSource, id: "JD") | new LongValue(source: dataSource, id: id) | 0
+
+    }
+
     void "test Constructors #label"() {
         when:
         Value currentValue = value
@@ -50,10 +64,11 @@ class ValueUnitSpec extends Specification {
         assert value.id == id
         assert value.getURL() == "url"
     }
+
     void "test add Children"() {
         given:
-        Value value = new Value(dataSource,id)
-        Value child = new Value(dataSource,"someOtherId")
+        Value value = new Value(dataSource, id)
+        Value child = new Value(dataSource, "someOtherId")
         when:
         value.addValue(child)
         then:

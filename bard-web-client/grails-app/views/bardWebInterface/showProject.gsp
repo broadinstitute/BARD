@@ -41,10 +41,6 @@
                 <li class="span4">
                     <div class="thumbnail">
                         <g:compoundOptions cid="${probe.cid}" sid="${probe.cid}" smiles="${probe?.smiles}" imageHeight="200" imageWidth="300"/>
-                        %{--<g:link controller="bardWebInterface" action="showCompound" params="[cid: probe.cid]">--}%
-                            %{--<img alt="${probe?.smiles}" title="${probe.probeId}"--}%
-                                 %{--src="${createLink(controller: 'chemAxon', action: 'generateStructureImageFromSmiles', params: [smiles: probe.smiles, width: 300, height: 200])}"/>--}%
-                        %{--</g:link>--}%
                         <div class="caption">
                             <h3>Probe ML#: ${probe.probeId}</h3>
                             <ul>
@@ -89,7 +85,7 @@
             <div class="accordion-heading">
                 <a href="#annotations-header" id="annotations-header" class="accordion-toggle" data-toggle="collapse"
                    data-target="#annotations-info"><i
-                        class="icon-chevron-right"></i> Annotations (${projectAdapter?.annotations?.size()})</a>
+                        class="icon-chevron-right"></i> Annotations (${projectAdapter?.numberOfAnnotations})</a>
 
                 <div id="annotations-info" class="accordion-body collapse">
                     <div class="accordion-inner">
@@ -99,6 +95,25 @@
                                 <dd>${annotation.value}</dd>
                             </g:each>
                         </dl>
+                        <g:if test="${projectAdapter?.keggDiseaseCategories}">
+                            <dl>
+                                %{--TODO: Make annother call to get other annotations--}%
+                                <dt>Kegg Disease Categories</dt>
+                                <g:each in="${projectAdapter.keggDiseaseCategories}" var="annotation">
+
+                                    <dd>${annotation}</dd>
+                                </g:each>
+                            </dl>
+                        </g:if>
+                        <g:if test="${projectAdapter?.keggDiseaseNames}">
+                            <dl>
+                                <dt>Kegg Disease Names</dt>
+                                <g:each in="${projectAdapter.keggDiseaseNames}" var="annotation">
+
+                                    <dd>${annotation}</dd>
+                                </g:each>
+                            </dl>
+                        </g:if>
                     </div>
                 </div>
             </div>
@@ -116,7 +131,12 @@
                 </div>
             </div>
         </div>
-
+        <g:if test="${projectAdapter.targets}">
+            <g:render template="targets" model="['targets': projectAdapter.targets]"/>
+        </g:if>
+        <g:if test="${projectAdapter.documents}">
+            <g:render template="publications" model="['documents': projectAdapter.documents]"/>
+        </g:if>
         <div class="accordion-group">
             <div class="accordion-heading">
                 <a href="#experiments-header" id="experiments-header" class="accordion-toggle" data-toggle="collapse"

@@ -50,9 +50,9 @@ modules = {
     substances {
         resource url:"js/substances.js"
      }
-    activeVrsTested {
-        resource url:"js/activeVrsTested.js"
-     }
+//    activeVrsTested {
+//        resource url:"js/activeVrsTested.js"
+//     }
     molecularSpreadSheet {
         resource url:"js/molecularSpreadSheet.js"
         resource url:"js/DataTables-1.9.4/jquery.dataTables.js"

@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.*;
 
 
-public class Value implements Serializable {
+public class Value implements Serializable, Comparable {
     private static final long serialVersionUID = 0x36d23c591aa3c2d4l;
 
     protected DataSource source;
@@ -78,6 +78,7 @@ public class Value implements Serializable {
     public Collection<Value> getChildren(String id) {
         List<Value> children = new ArrayList<Value>();
         getChildren(children, this, id);
+         Collections.sort(children);
         return children;
     }
 
@@ -93,6 +94,7 @@ public class Value implements Serializable {
         for (Value v : value.children) {
             getChildren(children, v, id);
         }
+        Collections.sort(children);
     }
 
     public void addValue(Value child) {
@@ -100,6 +102,7 @@ public class Value implements Serializable {
     }
 
     public Collection<Value> getChildren() {
+        Collections.sort(children);
         return Collections.unmodifiableCollection(children);
     }
 
@@ -109,5 +112,15 @@ public class Value implements Serializable {
 
     public boolean isTerminal() {
         return children.isEmpty();
+    }
+
+    /**
+     * Subclasses should override this
+     * @param o
+     * @return
+     */
+    @Override
+    public int compareTo(Object o) {
+        return 0;
     }
 }

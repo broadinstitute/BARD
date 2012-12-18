@@ -51,8 +51,6 @@
             </g:if>
             <dt>SMILES:</dt>
             <dd>${compound?.getStructureSMILES()}</dd>
-            %{-- TODO <dt>Formula:</dt>--}%
-            %{--<dd>${compound?.formula()}</dd>--}%
             <g:if test="${compound?.getRegistryNumbers()}">
                 <dt>CAS Registry Numbers:</dt>
                 <dd>${compound?.getRegistryNumbers()?.collect {it}?.join(', ')}</dd>
@@ -98,13 +96,6 @@
         <ul class="thumbnails">
             <li>
                 <g:compoundOptions sid="${compound?.pubChemCID}" cid="${compound?.pubChemCID}" smiles="${compound?.structureSMILES}" imageWidth="400" imageHeight="300"/>
-
-                %{--<g:link class="thumbnail" controller="chemAxon" action="generateStructureImageFromSmiles"--}%
-                        %{--params="[smiles: compound?.structureSMILES, width: 600, height: 600]" target="_blank">--}%
-                    %{----}%
-                    %{--<img alt="${compound?.structureSMILES}" title="${compound.name}"--}%
-                         %{--src="${createLink(controller: 'chemAxon', action: 'generateStructureImageFromSmiles', params: [smiles: compound?.structureSMILES, width: 400, height: 300])}"/>--}%
-                %{--</g:link>--}%
             </li>
         </ul>
     </div>

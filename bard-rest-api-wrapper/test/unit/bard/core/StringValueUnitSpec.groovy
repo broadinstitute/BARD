@@ -19,6 +19,20 @@ class StringValueUnitSpec extends Specification {
         // Tear down logic here
     }
 
+    void "test compareTo #label"() {
+        when:
+        int foundValue = stringValue1.compareTo(stringValue2)
+        then:
+        assert foundValue == expectedValue
+        where:
+        label                        | stringValue1                                              | stringValue2                                              | expectedValue
+        "value1==value2"             | new StringValue(source: dataSource, id: id, value: "2")   | new StringValue(source: dataSource, id: id, value: "2")   | 0
+        "value1==value2 compare ids" | new StringValue(source: dataSource, id: id, value: "2")   | new StringValue(source: dataSource, id: "JD", value: "2") | -1
+        "value1 > value2"            | new StringValue(source: dataSource, id: id, value: "2")   | new StringValue(source: dataSource, id: "JD", value: "4") | 2
+        "Value1 < value2"            | new StringValue(source: dataSource, id: "JD", value: "4") | new StringValue(source: dataSource, id: id, value: "2")   | -2
+
+    }
+
     void "test Constructors #label"() {
         when:
         StringValue currentStringValue = stringValue

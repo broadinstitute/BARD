@@ -132,7 +132,8 @@ class CompoundRestServiceUnitSpec extends Specification {
         //"Number of hits == 10" | 10
 
     }
-    void "handleCompoundByIdFutures #label"(){
+
+    void "handleCompoundByIdFutures #label"() {
         given:
         FutureTask<CompoundAnnotations> compoundAnnotationsTask = Mock(FutureTask)
         FutureTask<Compound> compoundTask = Mock(FutureTask)
@@ -144,9 +145,8 @@ class CompoundRestServiceUnitSpec extends Specification {
         assert !compound
 
 
-
-
     }
+
     void "structureSearch nhits #label"() {
         given:
         FutureTask<CompoundResult> compoundResultTask = Mock(FutureTask)
@@ -203,9 +203,10 @@ class CompoundRestServiceUnitSpec extends Specification {
         assert compoundResult
         assert compoundResult.numberOfHits == expectedNumberOFHits
         where:
-        label         | numberHits | expectedNumberOFHits | numberTimesExecuted
-        "nHits == -1" | -1         | 3                    | 1
-        "nHits == 0"  | 0          | 3                    | 1
+        label                       | numberHits | expectedNumberOFHits | numberTimesExecuted
+        "nHits == -1"               | -1         | 3                    | 1
+        "nHits == 0"                | 0          | 3                    | 1
+        "expectedNumberOFHits == 0" | 0          | 0                    | 1
     }
 
     void "handleStructureSearchFutures - #label"() {

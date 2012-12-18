@@ -5,6 +5,10 @@ import bard.core.Value
 import bard.core.rest.spring.assays.AbstractAssay
 import bard.core.rest.spring.util.NameDescription
 import bard.core.interfaces.*
+import bard.core.rest.spring.util.Document
+import bard.core.rest.spring.assays.ExpandedAssay
+import bard.core.rest.spring.assays.Assay
+import bard.core.rest.spring.util.Target
 
 public class AssayAdapter implements AssayAdapterInterface {
     final AbstractAssay assay
@@ -106,5 +110,43 @@ public class AssayAdapter implements AssayAdapterInterface {
         annos.put(EntityNamedSources.KEGGDiseaseCategoryAnnotationSource, assay.getKegg_disease_cat())
         annos.put(EntityNamedSources.KEGGDiseaseNameAnnotationSource, assay.getKegg_disease_names())
         return annos;
+    }
+    public List<Document> getDocuments(){
+        if(assay instanceof ExpandedAssay){
+            ExpandedAssay expandedAssay = (ExpandedAssay)assay
+            return expandedAssay.getDocuments()
+        }
+       return []
+    }
+    public List<Target> getTargets(){
+        if(assay instanceof ExpandedAssay){
+            ExpandedAssay expandedAssay = (ExpandedAssay)assay
+            return expandedAssay.getTargets()
+        }
+        return []
+    }
+    public List<String> getTargetIds(){
+        List<String> targetIds = []
+        if(assay instanceof ExpandedAssay){
+            ExpandedAssay expandedAssay = (ExpandedAssay)assay
+            targetIds << expandedAssay.targets*.acc
+        }
+        if(assay instanceof Assay) {
+            Assay assay1 = (Assay)assay
+            targetIds << assay1.targetIds
+        }
+        return targetIds
+    }
+    public List<String> getDocumentIds(){
+        List<String> documentIds = []
+        if(assay instanceof ExpandedAssay){
+            ExpandedAssay expandedAssay = (ExpandedAssay)assay
+            documentIds << expandedAssay.documents*.pubmedId
+        }
+        if(assay instanceof Assay) {
+            Assay assay1 = (Assay)assay
+            documentIds << assay1.documentIds
+        }
+        return documentIds
     }
 }

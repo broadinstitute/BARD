@@ -115,6 +115,12 @@ class ProjectAdapterUnitSpec extends Specification {
         assert projectAdapter.score == 2
         assert projectAdapter.matchingField.description=="description"
         assert projectAdapter.highlight == "Score: 2.0 Matched Field: name"
+        assert projectAdapter.targets
+        assert !projectAdapter.documents
+        assert projectAdapter.numberOfAnnotations == 4
+        assert projectAdapter.getKeggAnnotations()
+        assert projectAdapter.getKeggDiseaseCategories()
+        assert projectAdapter.getKeggDiseaseNames()
     }
 
     void "test with grantNo"() {

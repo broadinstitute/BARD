@@ -4,30 +4,22 @@ Similarity:CCC
 
 --}%
 <div>
-<g:if test="${smiles}">
-    <img alt="${smiles}" title="Click to Copy SMILES"
-         src="${createLink(controller: 'chemAxon', action: 'generateStructureImageFromSmiles', params: [smiles: smiles, width: imageWidth, height: imageHeight])}"/>
-</g:if>
-<g:else>
-    <img alt="SID: ${sid}" title="SID: ${sid}"
-         src="${createLink(controller: 'chemAxon', action: 'generateStructureImageFromCID', params: [cid: cid, width: imageWidth, height: imageHeight])}"/>
-</g:else>
-<button data-detail-id="sid_${sid}" class="popover-link btn btn-small" data-original-title=""
-        data-html="true" data-trigger="click">
-
-  <span class="label label-info">Info</span>
-</button>
-</div>
-
-<div class='popover-content-wrapper' id="sid_${sid}" style="display: none;">
-    <div class="center-aligned">
+    <div class="btn-group">
         <g:if test="${smiles}">
-            Smiles : ${smiles} <br/>
-            <a href="#" class="analogs" data-structure-search-params="Similarity:${smiles}">Search For Analogs</a>
+            <img alt="${smiles}"
+                 src="${createLink(controller: 'chemAxon', action: 'generateStructureImageFromSmiles', params: [smiles: smiles, width: imageWidth, height: imageHeight])}"/>
         </g:if>
         <g:else>
-            <a href="#" class="analogs" data-structure-search-params="Similarity:${cid}">Search For Analogs</a>
+            <img alt="SID: ${sid}" title="SID: ${sid}"
+                 src="${createLink(controller: 'chemAxon', action: 'generateStructureImageFromCID', params: [cid: cid, width: imageWidth, height: imageHeight])}"/>
         </g:else>
+        <button class="btn btn-info dropdown-toggle" data-toggle="dropdown">Info <span class="caret"></span></button>
+        <ul class="dropdown-menu">
+            <g:if test="${smiles}">
+                <li>Smiles : ${smiles} </li>
+            </g:if>
+            <li><a href="#" data-detail-id="sid_${sid}"  class="analogs" data-structure-search-params="Similarity:${cid}">Search For Analogs</a> </li>
+        </ul>
     </div>
 </div>
 

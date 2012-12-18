@@ -32,5 +32,22 @@ public class LongValue extends Value {
     }
 
     @Override
-    public Object getValue () { return value; }
+    public Long getValue () { return value; }
+    /**
+     * Subclasses should override this
+     * @param o
+     * @return
+     */
+    @Override
+    public int compareTo(Object o) {
+        LongValue that = (LongValue)o;
+         //reverse
+        //if same then sort by name
+        final int compare = this.getValue().compareTo(that.getValue());
+        if(compare == 0){
+            //then lets compare the names
+            return this.id.compareTo(that.id);
+        }
+        return compare * -1;
+    }
 }
