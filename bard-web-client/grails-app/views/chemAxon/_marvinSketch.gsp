@@ -2,6 +2,7 @@
 <script type="text/javascript" SRC="${request.contextPath}/marvin/marvin.js"></script>
 <script type="text/javascript" src="${request.contextPath}/marvin/js2java.js"></script>
 <script type="text/javascript">
+    %{-- if java is enabled document.write("Is Java enabled? " + navigator.javaEnabled() );--}%
     var isJs2Java = isLiveConnect();
     var SELECTED = false
     msketch_mayscript = true;

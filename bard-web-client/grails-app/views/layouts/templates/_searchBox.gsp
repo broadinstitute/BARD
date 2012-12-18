@@ -3,7 +3,7 @@
     <h3>BARD uses JavaScript</h3>
     <ul>
         <li>Please use a JavaScript-aware browser.</li>
-        <li>Make sure that JavaScript is enabled.</li>
+        <li>See instructions to enable Javascript for your browser <a href="http://enable-javascript.com/">here</a></li>
     </ul>
 </noscript>
 <g:form name="searchForm" controller="bardWebInterface" action="search" id="searchForm">
@@ -28,4 +28,3 @@
 <g:render template="/layouts/templates/structureSearchBox"/>
 <g:render template="/layouts/templates/IdSearchBox"/>
 
-document.write("Is Java enabled? " + navigator.javaEnabled() );
