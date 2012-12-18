@@ -1,9 +1,10 @@
 <r:require module="autocomplete"/>
 <noscript>
-    For full functionality of this site it is necessary to enable JavaScript.
-    Here are the <a href="http://www.enable-javascript.com/" target="_blank">
-    instructions how to enable JavaScript in your web browser</a>.
-</noscript>ß
+    <a href="http://www.enable-javascript.com/" target="_blank">
+        <img src="${resource(dir: 'images', file: 'enable_js.png')}"
+             alt="Please enable JavaScript to access the full functionality of this site." />
+    </a>
+</noscript>
 <g:form name="searchForm" controller="bardWebInterface" action="search" id="searchForm">
     <div class="row-fluid" style="margin-top: 15px;">
         <div class="input-append">
