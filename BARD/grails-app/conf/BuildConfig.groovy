@@ -82,7 +82,7 @@ grails.project.dependency.resolution = {
 
         runtime ":jquery:1.7.1"
         runtime ":jquery-ui:1.8.15"
-        runtime ":resources:1.1.6"		
+        runtime ":resources:1.1.6"
         // test scope
         test ":spock:0.6"
         test ":geb:$gebVersion"
@@ -112,3 +112,5 @@ clover {
     includes = ['**/*.groovy', '**/*.java']
     excludes = ['**/bardwebquery/**.*', '**/*Spec*.*', '**/mockServices/**.*', '**/conf/**', '**/GridController.*', '**/mockServices/**.*']
 }
+// used for tomcat when running grails run-war
+grails.tomcat.jvmArgs = ["-server", "-XX:MaxPermSize=256m", "-Xmx768m"]
