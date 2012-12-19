@@ -91,6 +91,13 @@ BEGIN
 --    then set name = value
              lv_context_name := 'project management';
 
+         ELSIF lr_project_context.attributes LIKE '%protein%'
+            OR lr_project_context.attributes LIKE '%gene%'
+         THEN
+--    if group contains 'number'
+--    then set name = value
+             lv_context_name := 'biological component';
+
          ELSIF lr_project_context.attributes LIKE '%number%'
          THEN
 --    if group contains 'number'
@@ -113,7 +120,7 @@ BEGIN
 
          ELSE
              --lv_context_name := NULL;
-             lv_context_name := '<Needs a name>';
+             lv_context_name := 'Type a name here';
          END IF;
 
         IF lv_context_name IS NOT NULL

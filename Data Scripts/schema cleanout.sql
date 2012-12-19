@@ -56,3 +56,4 @@ delete from EXPERIMENT ;
 delete from ASSAY ;
 delete from PROJECT ;
 
+SELECT Count(*) FROM result;

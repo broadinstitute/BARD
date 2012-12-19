@@ -101,6 +101,12 @@ BEGIN
 --    then set name = value
              lv_context_name := 'biology';
 
+         ELSIF lr_assay_context.attributes LIKE '%protein%'
+         THEN
+--    if group contains 'biology/ical'
+--    then set name = value
+             lv_context_name := 'biological component';
+
          ELSIF lr_assay_context.attributes LIKE '%assay format%'
                 OR
                lr_assay_context.attributes LIKE '%assay type%'
@@ -111,7 +117,7 @@ BEGIN
 
          ELSE
              --lv_context_name := NULL;
-             lv_context_name := '<Needs a name>';
+             lv_context_name := 'Type a name here';
          END IF;
 
         IF lv_context_name IS NOT NULL
