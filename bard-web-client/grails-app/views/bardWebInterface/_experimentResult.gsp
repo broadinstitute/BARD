@@ -12,9 +12,9 @@
 
 <p>
     <b>Assay ID : <g:link controller="bardWebInterface" action="showAssay"
-                         id="${experimentDataMap?.experiment?.adid}" params='[searchString: "${searchString}"]'>
-                ${experimentDataMap?.experiment?.adid}
-        </g:link>
+                          id="${experimentDataMap?.experiment?.adid}" params='[searchString: "${searchString}"]'>
+        ${experimentDataMap?.experiment?.adid}
+    </g:link>
     </b>
 </p>
 
@@ -40,14 +40,15 @@
         <g:each in="${experimentDataMap?.spreadSheetActivities}" var="experimentData">
             <tr>
                 <td>
-                    <img src="${resource(dir: 'images', file: 'pubchem-logo-sm.png')}" alt="PubChem" />
+                    <img src="${resource(dir: 'images', file: 'pubchem-logo-sm.png')}" alt="PubChem"/>
                     <a href="http://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=${experimentData.sid}">${experimentData.sid}</a>
                 </td>
                 <td>
-                     <a href="${createLink(controller: 'bardWebInterface', action: 'showCompound', params: [cid: experimentData.cid, searchString: "${searchString}"])}">${experimentData.cid}</a>
+                    <a href="${createLink(controller: 'bardWebInterface', action: 'showCompound', params: [cid: experimentData.cid, searchString: "${searchString}"])}">${experimentData.cid}</a>
                 </td>
                 <td style="min-width: 180px;">
-                    <g:compoundOptions sid="${experimentData.sid}" cid="${experimentData.cid}" imageWidth="180" imageHeight="150"/>
+                    <g:compoundOptions sid="${experimentData.sid}" cid="${experimentData.cid}" imageWidth="180"
+                                       imageHeight="150"/>
                 </td>
                 <td>${experimentData.activityOutcome?.label}</td>
                 <td>
@@ -63,13 +64,24 @@
                     <td>
                         <g:each in="${0..(readout.size() - 1)}" var="i">
                             <%
-                                ExperimentalValue resp = new ExperimentalValue(readout.response[i], false)
-                                ExperimentalValue conc = new ExperimentalValue(readout.conc[i], ExperimentalValueUnit.getByValue(readout?.concentrationUnits), ExperimentalValueType.numeric)
+                                Double responseValue = readout.response[i]
+                                Double concentrationValue = readout.conc[i]
+                                String responseString = ""
+                                String concentrationString = ""
+                                if (responseValue != null) {
+                                    ExperimentalValue resp = new ExperimentalValue(responseValue, false)
+                                    responseString = resp.toString()
+                                }
+                                if (concentrationValue != null) {
+                                    ExperimentalValue conc =
+                                        new ExperimentalValue(concentrationValue,
+                                                ExperimentalValueUnit.getByValue(readout?.concentrationUnits),
+                                                ExperimentalValueType.numeric)
+                                    concentrationString = "@ " + conc.toString()
+                                }
                             %>
-                            ${resp.toString()}
-                            <g:if test="${readout.conc[i]}">
-                                @ ${conc.toString()}
-                            </g:if>
+
+                            ${responseString} ${concentrationString}
                             <br/>
                         </g:each>
                     </td>
