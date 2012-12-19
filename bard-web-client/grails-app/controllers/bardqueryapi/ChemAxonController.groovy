@@ -2,10 +2,12 @@ package bardqueryapi
 
 import bard.core.adapter.CompoundAdapter
 import grails.plugins.springsecurity.Secured
+import bard.core.rest.spring.util.StructureSearchParams
+import java.awt.image.BufferedImage
+import javax.imageio.ImageIO
 
 @Secured(['isFullyAuthenticated()'])
 class ChemAxonController {
-
     ChemAxonService chemAxonService
     IQueryService queryService
 
@@ -15,9 +17,18 @@ class ChemAxonController {
 
     def generateStructureImageFromSmiles(String smiles, Integer width, Integer height) {
         try {
-            byte[] bytes = []
             Integer w = (width ?: 300) as Integer
             Integer h = (height ?: 300) as Integer
+
+            if (!smiles) {
+                final BufferedImage resizedImage = chemAxonService.getDefaultImage(w, h)
+                response.contentType = 'image/png'
+                ImageIO.write(resizedImage, "png", response.outputStream)
+                return
+            }
+
+
+            byte[] bytes = []
 
             if (smiles) {
                 bytes = chemAxonService.generateStructurePNG(smiles, w, h)
@@ -42,6 +53,7 @@ class ChemAxonController {
             log.error("Could not generate structure for cid : ${cid}", ee)
         }
     }
-
     def marvinSketch() {}
+
+
 }
