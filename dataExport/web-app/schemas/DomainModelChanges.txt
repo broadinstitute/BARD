@@ -50,7 +50,7 @@ ExperimentContext ( extends AbstractContextType )
 
 ExperimentContextItem ( extends AbstractContextItemType )
     xsd - moved /experiment/experimentContextItems to
-                /experiment/experimentContexts/experimentContext/experimentContextItems (extends abstractContextItemType )
+                /experiment/contexts/context/contextItems (extends abstractContextItemType )
                 ( just like assayContext and assayContextItem )
     xsd - removed project steps
     xsd - removed externalReferences, will be converted to links with External Reference becoming top level resource
