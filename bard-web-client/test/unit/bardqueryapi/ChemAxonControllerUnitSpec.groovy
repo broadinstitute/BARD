@@ -8,6 +8,7 @@ import grails.test.mixin.support.GrailsUnitTestMixin
 import spock.lang.Shared
 import spock.lang.Specification
 import spock.lang.Unroll
+import java.awt.image.BufferedImage
 
 /**
  * Created with IntelliJ IDEA.
@@ -31,7 +32,26 @@ class ChemAxonControllerUnitSpec extends Specification {
         queryService = Mock(QueryService)
         controller.queryService = queryService
     }
+    /**
+     * {@link ChemAxonController#generateStructureImageFromSmiles}
+     */
+    void "test generateStructureImage empty smiles - Should return default image"() {
+        when:
+        controller.generateStructureImageFromSmiles(smiles, width, height)
+        final String type = response.contentType
 
+        then:
+        chemAxonService.getDefaultImage(width, height) >> {new BufferedImage(width,height,5)}
+        0 * chemAxonService.generateStructurePNG(_, _, _) >> {bytesArra}
+        assert type == "image/png"
+        assert response.contentAsByteArray
+        //assert returnedImage.size() == expectedByteArraySize
+
+        where:
+        label             | smiles | width          | height         | bytesArra
+        "smiles is empty" | ''     | 200 as Integer | 200 as Integer | [1, 2, 3] as byte[]
+        "smiles is null"  | null   | 200 as Integer | 200 as Integer | [1, 2, 3] as byte[]
+    }
     /**
      * {@link ChemAxonController#generateStructureImageFromSmiles}
      */

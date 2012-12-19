@@ -4,20 +4,17 @@ import grails.plugin.spock.IntegrationSpec
 import org.junit.After
 import org.junit.Before
 import spock.lang.Unroll
+import java.awt.image.BufferedImage
 
 @Unroll
 class ChemAxonServiceIntegrationSpec extends IntegrationSpec {
 
     ChemAxonService chemAxonService
-
-    @Before
-    void setup() {
-
-    }
-
-    @After
-    void tearDown() {
-
+    void "test getDefaultImage"(){
+        when:
+        BufferedImage image = chemAxonService.getDefaultImage(20, 20)
+        then:
+        assert image
     }
     /**
      * {@link ChemAxonService#generateImageBytes(String, JChemBinFormat)}
