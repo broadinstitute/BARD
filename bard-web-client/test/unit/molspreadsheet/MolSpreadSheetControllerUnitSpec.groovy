@@ -64,8 +64,8 @@ class MolSpreadSheetControllerUnitSpec extends Specification {
 
     void "test molecularSpreadSheet transpose and norefresh parameters"() {
         given:
-        controller.flash.norefresh = norefresh
-        controller.flash.transpose = transpose
+        params.norefresh = norefresh
+        params.transpose = transpose
         controller.retainSpreadsheetService.molSpreadSheetData = molSpreadSheetData
 
         when:
