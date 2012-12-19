@@ -1,8 +1,24 @@
-<experiment experimentId='4178' status='Pending' readyForExtraction='Ready' holdUntilDate='0001-01-01T00:00:00.000-05:00'>
-  <experimentName>Homogeneous Time-Resolved Fluorescence Resonance Energy Transfer (HTRF) Assay</experimentName>
-  <link rel='related' href='https://bard.broadinstitute.org/dataExport/api/assays/4183' type='application/vnd.bard.cap+xml;type=assay' />
+<experiment experimentId='1211' status='Pending' readyForExtraction='Ready' holdUntilDate='2011-09-01T00:00:00.000-04:00'>
+  <experimentName>Late stage assay provider results from the probe development effort to identify inhibitors of LYPLA1 and LYPLA2: Gel-based Activity-Based Protein Profiling (ABPP) IC50 for off-target ABHD11</experimentName>
+  <contexts>
+    <context id='3' displayOrder='0'>
+      <contextName>&lt;needs a name&gt;</contextName>
+      <contextItems>
+        <contextItem displayOrder='0' valueDisplay='100800' valueNum='100800.0'>
+          <attributeId label='incubation time'>
+            <link rel='related' href='https://bard.broadinstitute.org/dataExport/api/dictionary/element/149' type='application/vnd.bard.cap+xml;type=element' />
+          </attributeId>
+        </contextItem>
+      </contextItems>
+    </context>
+  </contexts>
+  <experimentMeasures>
+    <experimentMeasure experimentMeasureId='14400' measureRef='17754' />
+    <experimentMeasure experimentMeasureId='14401' measureRef='17755' />
+  </experimentMeasures>
+  <link rel='related' href='https://bard.broadinstitute.org/dataExport/api/assays/1217' type='application/vnd.bard.cap+xml;type=assay' />
   <link rel='up' href='https://bard.broadinstitute.org/dataExport/api/experiments' type='application/vnd.bard.cap+xml;type=experiments' />
-  <link rel='related' href='https://bard.broadinstitute.org/dataExport/api/experiments/4178/results?offset=0' type='application/vnd.bard.cap+xml;type=results' />
-  <link rel='edit' href='https://bard.broadinstitute.org/dataExport/api/experiments/4178' type='application/vnd.bard.cap+xml;type=experiment' />
-  <link rel='item' href='https://bard.broadinstitute.org/dataExport/api/externalReferences/2155' type='application/vnd.bard.cap+xml;type=externalReference' />
+  <link rel='related' href='https://bard.broadinstitute.org/dataExport/api/experiments/1211/results?offset=0' type='application/vnd.bard.cap+xml;type=results' />
+  <link rel='edit' href='https://bard.broadinstitute.org/dataExport/api/experiments/1211' type='application/vnd.bard.cap+xml;type=experiment' />
+  <link rel='item' href='https://bard.broadinstitute.org/dataExport/api/externalReferences/5023' type='application/vnd.bard.cap+xml;type=externalReference' />
 </experiment>
