@@ -15,9 +15,7 @@ class MolSpreadSheetController {
     RetainSpreadsheetService retainSpreadsheetService
 
     def index() {
-        flash.transpose = params.transpose
-        flash.norefresh = params.norefresh
-        render(view: 'molecularSpreadSheet' )
+        render(view: 'molecularSpreadSheet', model: [transpose: params.transpose, norefresh: params.norefresh] )
     }
 
     def showExperimentDetails(Long pid, Long cid) {
@@ -26,8 +24,8 @@ class MolSpreadSheetController {
 
     def molecularSpreadSheet() {
         MolSpreadSheetData molSpreadSheetData
-        Boolean transpose = (flash.transpose!=null)
-        Boolean noRefreshNeeded = (flash.norefresh!=null)
+        Boolean transpose = (params.transpose=="true")
+        Boolean noRefreshNeeded = (params.norefresh=="true")
         try {
             List<Long> cids = []
             List<Long> pids = []

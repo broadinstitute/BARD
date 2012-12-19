@@ -12,6 +12,7 @@
         $('td:nth-child(3)').toggle();
         $('#promiscuitycol').toggle();
         $("[rel=tooltip]").tooltip();
+<g:if test="${molSpreadSheetData?.getRowCount() > 0}">
         $('#molspreadsheet').dataTable({
                     "bStateSave":true,
                     "aoColumnDefs":[
@@ -26,6 +27,7 @@
                     ]
                 }
         );
+        </g:if>
     });
 </script>
 
@@ -40,7 +42,7 @@
     </div>
 
     <div class="span10">
-        <g:if test="${molSpreadSheetData?.getColumnCount() > 0}">
+        <g:if test="${molSpreadSheetData?.getRowCount() > 0}">
             <g:set var="columnWidth" value="${100.0 / ((molSpreadSheetData?.getColumnCount() - 1) as float)}"/>
                 <label class="checkbox" class="pull-left">
                     <input type="checkbox" defaultChecked="checked" checked name="showPromiscuityScores"
@@ -202,7 +204,9 @@
     </div>
 
     <div class="span10 pull-right">
-        <export:formats/>
+<g:if test="${molSpreadSheetData?.getRowCount() > 0}">
+    <export:formats/>
+</g:if>
     </div>
 </div>
 
