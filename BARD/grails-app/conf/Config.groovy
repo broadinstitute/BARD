@@ -104,7 +104,7 @@ grails.plugin.reveng.jdbcDriverJarDep = 'mysql:mysql-connector-java:5.1.16'
 //grails.plugin.reveng.includeTables = ['Test_Measure_Context_Item']
 
 bard.services.elasticSearchService.restNode.baseUrl = 'http://bard-dev-vm:9200'
-bard.home.page='http://localhost:8080/bardwebquery'
+bard.home.page='http://localhost:8080/bardwebclient'
 
 //grails.plugins.springsecurity.successHandler.defaultTargetUrl = '/home'
 grails {
