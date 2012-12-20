@@ -26,7 +26,7 @@
 	        </div>
 	    </div>
 	</div>
-	
+
 	<div class="alert">
  		<button type="button" class="close" data-dismiss="alert">×</button>
   		<strong>Tips:</strong> Edits will be saved immediately. You can drag items within cards to other cards, or use menus on individual cards to move items.
@@ -57,16 +57,8 @@
 	            <h3><a href="#">Documents</a></h3>
 	            <g:render template="assayDocumentsView" model="['assayInstance': assayInstance]"/>
 
-	            <h3><a href="#">Assay Contexts</a></h3>
-	            <g:render template="measureContextsView" model="['assayInstance': assayInstance]"/>
-
 	            <h3><a href="#">Measures</a></h3>
 	            <g:render template="measuresView" model="['assayInstance': assayInstance]"/>
-
-	            <h3><a href="#">Assay Context Items</a></h3>
-	            <g:render template="measureContextItemsView" model="['assayInstance': assayInstance]"/>
-
-
 	        </div>    <!-- End accordion -->
 	    </div>
     </g:if>
