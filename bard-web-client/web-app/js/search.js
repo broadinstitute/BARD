@@ -69,6 +69,21 @@ $(document).ready(function () {
     if ($("#searchString").val() != null) {
         $('#searchForm').submit();
     }
+    //=== Handle Paging. We bind to all of the paging css classes on the anchor tag ===
+    $("a.facetDiv").live('click', function (event) {
+        event.preventDefault();	// prevent the default action behaviour to happen
+        // $.address.value($(this).attr('href'));
+        var facetId = $(this).attr('div_id');
+        var facetText = $(this).text();
+        if(facetText=='More'){
+            $("#" + facetId).attr('class','showFacet')
+             $(this).text("Less")
+        }
+        if(facetText=='Less'){
+            $("#" + facetId).attr('class','hideFacet')
+             $(this).text("More")
+        }
+    });
 
 });
 /**

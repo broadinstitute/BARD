@@ -6,7 +6,9 @@
                     action="applyFilters">
                 <g:submitButton name="applyFilters" value="Apply Filters" id="${formName}_Button"
                                 class="btn btn-small"/>
-                <input type="button" class="btn btn-small" id="${formName}_ResetButton" value="Clear All Filters" name="resetFilters">
+                <input type="button" class="btn btn-small" id="${formName}_ResetButton" value="Clear All Filters"
+                       name="resetFilters">
+
                 <h2>Filters</h2>
                 <g:hiddenField name="searchString" value="${params?.searchString}"/>
 
@@ -32,7 +34,11 @@
 
                     <fieldset>
                         <h3>${parentFacet.id.replaceAll("_", " ").toLowerCase().capitalize()}</h3>
-                        <g:each in="${parentFacet.children}" var="childFacet">
+                        <g:set var="childSize" value="${parentFacet.children.size()}"/>
+                        <g:each in="${parentFacet.children}" var="childFacet" status="counter">
+                            <g:if test="${counter == 4 && childSize > 5}">
+                                <div id="${parentFacet.id}_${formName.toString()}" class='hideFacet'>
+                            </g:if>
                             <g:if test="${childFacet.id}">
                                 <label class="checkbox">
                                     <g:set var="checked"
@@ -43,7 +49,14 @@
                                 <g:hiddenField name="filters[${childIndex}].filterName" value="${parentFacet.id}"/>
                                 <g:set var="childIndex" value="${childIndex + 1}"/>
                             </g:if>
+                            <g:if test="${counter >= 4 && childSize > 5 && counter == childSize - 1}">
+                                </div>
+                            </g:if>
                         </g:each>
+                        <g:if test="${childSize > 5}">
+                            <a href="#" class='facetDiv' div_id="${parentFacet.id}_${formName.toString()}">More</a>
+                        </g:if>
+
                     %{--Add all the filters that were selected in the preceding search but didn't come back in the facets--}%
                         <g:each in="${appliedFilters?.appliedFiltersNotInFacetsGrouped?.get(parentFacet.id) ?: []}"
                                 var="filter">
