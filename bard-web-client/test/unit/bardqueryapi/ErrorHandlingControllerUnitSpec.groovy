@@ -28,11 +28,10 @@ class ErrorHandlingControllerUnitSpec extends Specification {
         String browser = "Firefox"
 
         when:
-        def resp = controller.handleJsErrors(error, url, line, browser)
+        controller.handleJsErrors(error, url, line, browser)
         then:
         assert response.status == 200
-        assert resp.contains("Message:error on line 230 using browser:Firefox at URL:url")
-
+        assert response.contentAsString.contains("Message:error on line 230 using browser:Firefox at URL:url")
     }
 
     void "test findNonPrivateIpAddress #label"() {
