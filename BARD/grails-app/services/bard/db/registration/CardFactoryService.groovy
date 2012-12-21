@@ -35,7 +35,7 @@ class CardFactoryService {
 
             List<Descriptor> path = descriptor.getPath()
             int toIndexExclusive = Math.min(2, path.size())
-            cardDto.assaySection = path.subList(0,toIndexExclusive).collect{ it.label }.join(' > ')
+            cardDto.assaySection = path.subList(0,toIndexExclusive).collect{ it.label }.join('> ')
         }
         else {
             cardDto.assaySection = 'uncategorized cards'
