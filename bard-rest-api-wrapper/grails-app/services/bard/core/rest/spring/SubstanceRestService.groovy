@@ -26,11 +26,12 @@ class SubstanceRestService extends AbstractRestService {
         final List<Activity> activities = []
 
         if (sids && bardExperimentIds) {
-            final String url = buildExperimentQuery()
+            final String urlString = buildExperimentQuery()
             final MultiValueMap<String, String> map = new LinkedMultiValueMap<String, String>();
             map.add("ids", sids.join(","));
             map.add("eids", bardExperimentIds.join(","));
-            final List<Activity> activitiesFound = this.restTemplate.postForObject(url, map, Activity[].class) as List<Activity>;
+            final URL url = new URL(urlString)
+            final List<Activity> activitiesFound = this.postForObject(url.toURI(), Activity[].class, map) as List<Activity>;
             activities.addAll(activitiesFound)
         }
         return activities
@@ -49,13 +50,9 @@ class SubstanceRestService extends AbstractRestService {
     public Substance getSubstanceById(final Long sid) {
         final String url = this.buildEntityURL() + "?expand={expand}"
         final Map map = [id: sid, expand: "true"]
-        try {
-            final Substance substance = this.restTemplate.getForObject(url, Substance.class, map)
-            return substance
-        } catch (Exception ee) {
-            log.error(ee)
-        }
-        return null;
+        final Substance substance = (Substance) this.getForObject(url, Substance.class, map)
+        return substance
+
     }
 
     /**
@@ -89,7 +86,7 @@ class SubstanceRestService extends AbstractRestService {
                 append(RestApiConstants.EXPAND_TRUE)
 
         final URL url = new URL(resource.toString())
-        final List<Substance> substances = (List<Substance>) this.restTemplate.getForObject(url.toURI(), Substance[].class)
+        final List<Substance> substances = getForObject(url.toURI(), Substance[].class) as List<Substance>
         return substances;
     }
     /**
@@ -105,12 +102,13 @@ class SubstanceRestService extends AbstractRestService {
 
 
         final URL url = new URL(resource.toString())
-        List<String> sidUrls = this.restTemplate.getForObject(url.toURI(), String[].class) as List<String>
+        List<String> sidUrls = getForObject(url.toURI(), String[].class) as List<String>
         if (sidUrls) {
             return sidUrls.collect {String s -> new Long(s.substring(s.lastIndexOf("/") + 1).trim())}
         }
         return []
     }
+
     public ExperimentData findExperimentDataBySid(final Long sid) {
         final StringBuilder resource =
             new StringBuilder(this.getResource(sid.toString())).
@@ -118,7 +116,7 @@ class SubstanceRestService extends AbstractRestService {
                     append(RestApiConstants.QUESTION_MARK).
                     append(RestApiConstants.EXPAND_TRUE)
         final URL url = new URL(resource.toString())
-        final ExperimentData experimentData = this.restTemplate.getForObject(url.toURI(), ExperimentData.class)
+        final ExperimentData experimentData = (ExperimentData) getForObject(url.toURI(), ExperimentData.class)
         return experimentData;
     }
 
@@ -129,7 +127,7 @@ class SubstanceRestService extends AbstractRestService {
                     append(RestApiConstants.QUESTION_MARK).
                     append(RestApiConstants.EXPAND_TRUE)
         final URL url = new URL(resource.toString())
-        ExperimentSearchResult experiments = this.restTemplate.getForObject(url.toURI(), ExperimentSearchResult.class)
+        ExperimentSearchResult experiments = (ExperimentSearchResult) getForObject(url.toURI(), ExperimentSearchResult.class)
         return experiments
 
     }
@@ -174,8 +172,7 @@ class SubstanceRestService extends AbstractRestService {
      */
     public SubstanceResult findSubstances(final SubstanceSearchType substanceSearchType, final SearchParams searchParams) {
         final String urlString = buildURLForSearch(substanceSearchType, searchParams)
-        final URL url = new URL(urlString)
-        final SubstanceResult substanceResult = this.restTemplate.getForObject(url.toURI(), SubstanceResult.class)
+        final SubstanceResult substanceResult = (SubstanceResult) getForObject(urlString, SubstanceResult.class,[:])
         return substanceResult
     }
 

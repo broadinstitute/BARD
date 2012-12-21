@@ -76,7 +76,7 @@ class AssayRestServiceUnitSpec extends Specification {
         when:
         final ExpandedAssayResult expandedAssayResult = service.searchAssaysByIds(adids)
         then:
-        0 * restTemplate.exchange(_, _, _, _)
+        0 * restTemplate.postExchange(_, _, _, _)
         assert expandedAssayResult == null
         where:
         label                         | adids

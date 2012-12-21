@@ -1,6 +1,7 @@
 package bard.core.rest.spring
 
 import bard.core.SearchParams
+import bard.core.exceptions.RestApiException
 import bard.core.interfaces.RestApiConstants
 import bard.core.rest.spring.assays.Assay
 import bard.core.rest.spring.assays.AssayResult
@@ -11,7 +12,6 @@ import bard.core.rest.spring.util.MetaData
 import bard.core.rest.spring.util.StructureSearchParams
 import org.springframework.http.HttpEntity
 import org.springframework.http.HttpHeaders
-import org.springframework.http.HttpMethod
 import org.springframework.util.LinkedMultiValueMap
 import org.springframework.util.MultiValueMap
 
@@ -148,14 +148,14 @@ class CompoundRestService extends AbstractRestService {
     public CompoundSummary getSummaryForCompound(final Long cid) {
         final String resource = buildQueryForCompoundSummary(cid)
         final URL url = new URL(resource)
-        final CompoundSummary compoundSummary = this.restTemplate.getForObject(url.toURI(), CompoundSummary.class)
+        final CompoundSummary compoundSummary = (CompoundSummary) getForObject(url.toURI(), CompoundSummary.class)
         return compoundSummary
     }
 
     public List<Assay> getTestedAssays(Long cid, boolean activeOnly) {
         final String resource = buildQueryForTestedAssays(cid, activeOnly);
         final URL url = new URL(resource)
-        final AssayResult assayResult = this.restTemplate.getForObject(url.toURI(), AssayResult.class)
+        final AssayResult assayResult = (AssayResult) getForObject(url.toURI(), AssayResult.class)
         return assayResult.assays
     }
 
@@ -190,7 +190,7 @@ class CompoundRestService extends AbstractRestService {
             addETagsToHTTPHeader(headers, etags)
             final HttpEntity entity = new HttpEntity(map, headers);
             final String url = buildURLToPostIds()
-            final HttpEntity<List> exchange = restTemplate.exchange(url, HttpMethod.POST, entity, List.class);
+            final HttpEntity<List> exchange = postExchange(url, entity, List.class) as HttpEntity<List>
             final List<Compound> compounds = exchange.getBody()
             headers = exchange.getHeaders()
             extractETagsFromResponseHeader(headers, 0, etags)
@@ -218,7 +218,7 @@ class CompoundRestService extends AbstractRestService {
         //just passing in the string would cause the URI to be encoded twice
         //see http://static.springsource.org/spring/docs/3.0.x/javadoc-api/org/springframework/web/client/RestTemplate.html
         final URL url = new URL(urlString)
-        final CompoundResult compoundSearchResult = this.restTemplate.getForObject(url.toURI(), CompoundResult.class)
+        final CompoundResult compoundSearchResult = (CompoundResult) getForObject(url.toURI(), CompoundResult.class)
         return compoundSearchResult;
     }
     /**
@@ -229,7 +229,7 @@ class CompoundRestService extends AbstractRestService {
     public PromiscuityScore findPromiscuityScoreForCompound(final Long cid) {
         final String url = buildPromiscuityScoreURL()
         final Map map = [cid: cid, expand: "true", mediaType: "XML"]
-        final PromiscuityScore promiscuityScore = this.restTemplate.getForObject(url, PromiscuityScore.class, map)
+        final PromiscuityScore promiscuityScore = (PromiscuityScore) getForObject(url, PromiscuityScore.class, map)
         return promiscuityScore;
 
     }
@@ -240,7 +240,8 @@ class CompoundRestService extends AbstractRestService {
      */
     public List<String> getSynonymsForCompound(Long cid) {
         final String url = this.buildEntityURL() + RestApiConstants.SYNONYMS + "?expand={expand}"
-        final List<String> synonyms = this.restTemplate.getForObject(url, List.class, cid, "true")
+        Map map = [expand: "true", id: cid]
+        final List<String> synonyms = getForObject(url, List.class, map) as List<String>
         return synonyms;
     }
 
@@ -272,7 +273,7 @@ class CompoundRestService extends AbstractRestService {
                     append(RestApiConstants.QUESTION_MARK).
                     append(RestApiConstants.EXPAND_TRUE)
         final URL url = new URL(resource.toString())
-        final ExperimentSearchResult experimentResult = this.restTemplate.getForObject(url.toURI(), ExperimentSearchResult.class)
+        final ExperimentSearchResult experimentResult = (ExperimentSearchResult) getForObject(url.toURI(), ExperimentSearchResult.class)
         return experimentResult
 
     }
@@ -285,7 +286,7 @@ class CompoundRestService extends AbstractRestService {
                     append(RestApiConstants.QUESTION_MARK).
                     append(RestApiConstants.EXPAND_TRUE)
         final URL url = new URL(resource.toString())
-        final AssayResult assayResult = this.restTemplate.getForObject(url.toURI(), AssayResult.class)
+        final AssayResult assayResult = (AssayResult) getForObject(url.toURI(), AssayResult.class)
         return assayResult
 
     }
@@ -298,7 +299,7 @@ class CompoundRestService extends AbstractRestService {
                     append(RestApiConstants.QUESTION_MARK).
                     append(RestApiConstants.EXPAND_TRUE)
         final URL url = new URL(resource.toString())
-        ProjectResult projectResult = this.restTemplate.getForObject(url.toURI(), ProjectResult.class)
+        ProjectResult projectResult = (ProjectResult) getForObject(url.toURI(), ProjectResult.class)
         return projectResult
 
     }
@@ -321,14 +322,13 @@ class CompoundRestService extends AbstractRestService {
         //just passing in the string would cause the URI to be encoded twice
         //see http://static.springsource.org/spring/docs/3.0.x/javadoc-api/org/springframework/web/client/RestTemplate.html
         final URL url = new URL(urlToCompounds)
-        final List<Compound> compounds = this.restTemplate.getForObject(url.toURI(), Compound[].class) as List<Compound>
+        final List<Compound> compounds = this.getForObject(url.toURI(), Compound[].class) as List<Compound>
         CompoundResult compoundResult = new CompoundResult(compounds: compounds)
         return compoundResult
     }
 
     //===================== Concurrency code ==================
     protected Compound handleCompoundByIdFutures(final List<FutureTask<Object>> results) {
-        Compound compound = null
         try {
             //assert that there are 2 objects in the list
             assert results.size() == 2
@@ -338,17 +338,19 @@ class CompoundRestService extends AbstractRestService {
             final CompoundAnnotations compoundAnnotations = compoundAnnotationsTask.get()
             //second task is the compound search
             final FutureTask<Compound> compoundTask = (FutureTask<Compound>) results.get(1)
-            compound = compoundTask.get()
+            Compound compound = compoundTask.get()
             if (compound) {
                 if (compoundAnnotations) {
                     compound.setCompoundAnnotations(compoundAnnotations)
                 }
             }
+            return compound
         }
         catch (Exception e) {
             log.error("Futures threw an Exception", e)
+            throw new RestApiException(e)
         }
-        return compound
+
     }
     /**
      * Handle the tasks after execution
@@ -358,9 +360,9 @@ class CompoundRestService extends AbstractRestService {
     protected CompoundResult handleStructureSearchFutures(final List<FutureTask<Object>> results, final Integer nhits = -1) {
         try {
             //assert that there are 2 objects in the list
-           // assert results.size() == 2
+            // assert results.size() == 2
             int numHits = nhits
-            FutureTask<CompoundResult> structureResultsTask = null
+            FutureTask<CompoundResult> structureResultsTask
             if (nhits <= 0) {
                 //the first task in the queue is the number of hits
                 final FutureTask<Long> numberHitsFutureTask = (FutureTask<Long>) results.get(0)
@@ -384,14 +386,14 @@ class CompoundRestService extends AbstractRestService {
         }
         catch (Exception e) {
             log.error("Futures threw an Exception", e)
+            throw new RestApiException(e)
         }
-        return null
     }
 
     def findAnnotations = {Long cid ->
         final String resource = getResource(cid.toString() + RestApiConstants.ANNOTATIONS)
         final URL url = new URL(resource)
-        final CompoundAnnotations annotations = this.restTemplate.getForObject(url.toURI(), CompoundAnnotations.class)
+        final CompoundAnnotations annotations = (CompoundAnnotations) getForObject(url.toURI(), CompoundAnnotations.class)
         return annotations;
     }
     /**
@@ -404,7 +406,7 @@ class CompoundRestService extends AbstractRestService {
         final String url = buildEntityURL() + "?expand={expand}"
         final Map map = [id: cid, expand: "true"]
 
-        final List<Compound> compounds = this.restTemplate.getForObject(url, List.class, map)
+        final List<Compound> compounds = getForObject(url, List.class, map) as List<Compound>
         if (compounds) {
             return compounds.get(0)
         }
@@ -441,7 +443,8 @@ class CompoundRestService extends AbstractRestService {
         //We are passing the URI because we have already encoded the string
         //just passing in the string would cause the URI to be encoded twice
         //see http://static.springsource.org/spring/docs/3.0.x/javadoc-api/org/springframework/web/client/RestTemplate.html
-        final HttpEntity<List> exchange = restTemplate.exchange(url.toURI(), HttpMethod.GET, entity, List.class);
+
+        final HttpEntity<List> exchange = getExchange(url.toURI(), entity, List.class) as HttpEntity<List>
         List<Compound> compounds = exchange.getBody()
         final HttpHeaders headers = exchange.getHeaders()
         extractETagsFromResponseHeader(headers, skip, etags)

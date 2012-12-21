@@ -12,7 +12,9 @@ import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpMethod
 import org.springframework.util.LinkedMultiValueMap
 import org.springframework.util.MultiValueMap
+import org.springframework.web.client.RestClientException
 import org.springframework.web.client.RestTemplate
+import bard.core.exceptions.RestApiException
 
 abstract class AbstractRestService {
     String baseUrl
@@ -222,7 +224,7 @@ abstract class AbstractRestService {
     public Map<String, List<String>> suggest(SuggestParams params) {
         final String resource = buildSuggestQuery(params)
         final URL url = new URL(resource)
-        final Map<String, List<String>> suggestions = this.restTemplate.getForObject(url.toURI(), Map.class)
+        final Map<String, List<String>> suggestions = (Map) getForObject(url.toURI(), Map.class)
         return suggestions;
     }
 
@@ -247,7 +249,7 @@ abstract class AbstractRestService {
         final String resource = buildQueryForCollectionOfETags(top, skip);
         final URL url = new URL(resource)
         //Using ETag[] to get around issue reported here : https://jira.springsource.org/browse/SPR-7002
-        ETagCollection eTagCollection = this.restTemplate.getForObject(url.toURI(), ETagCollection.class)
+        ETagCollection eTagCollection = (ETagCollection) getForObject(url.toURI(), ETagCollection.class)
 
         return eTagCollection.etags
     }
@@ -259,7 +261,7 @@ abstract class AbstractRestService {
         final String urlString = getResource(resource);
         final URL url = new URL(urlString)
         //Using Facte[] to get around issue reported here : https://jira.springsource.org/browse/SPR-7002
-        final List<Facet> facets = (this.restTemplate.getForObject(url.toURI(), Facet[].class)) as List<Facet>
+        final List<Facet> facets = (getForObject(url.toURI(), Facet[].class)) as List<Facet>
 
         return facets;
     }
@@ -329,7 +331,7 @@ abstract class AbstractRestService {
     public long getResourceCount(final String resource) {
 
         final URL url = new URL(resource)
-        final String countString = this.restTemplate.getForObject(url.toURI(), String.class)
+        final String countString = (String) getForObject(url.toURI(), String.class)
         Long count = Long.parseLong(countString)
         return count;
     }
@@ -349,6 +351,55 @@ abstract class AbstractRestService {
         resource.append(buildFilters(searchParams))
         return getResourceCount(resource.toString())
     }
+
+    public Object getForObject(URI uri, Class clazz) {
+        try {
+            return this.restTemplate.getForObject(uri, clazz)
+        } catch (RestClientException restClientException) {
+            log.error(uri.toString(), restClientException)
+            throw new RestApiException(restClientException)
+        }
+
+    }
+
+    public Object getForObject(String uri, Class clazz, Map map = [:]) {
+        try {
+            return this.restTemplate.getForObject(uri, clazz, map)
+        } catch (RestClientException restClientException) {
+            log.error(uri.toString(), restClientException)
+            throw new RestApiException(restClientException)
+        }
+
+    }
+
+    public Object postForObject(URI uri, Class clazz, Map map = [:]) {
+        try {
+            return this.restTemplate.postForObject(uri, map, clazz)
+        } catch (RestClientException restClientException) {
+            log.error(uri.toString(), restClientException)
+            throw new RestApiException(restClientException)
+        }
+    }
+
+    public Object postExchange(String url, HttpEntity<List> entity, Class clazz) {
+        try {
+            return restTemplate.exchange(url, HttpMethod.POST, entity, clazz);
+        } catch (RestClientException restClientException) {
+            log.error(url.toString(), restClientException)
+            throw new RestApiException(restClientException)
+        }
+    }
+
+    public Object getExchange(URI uri, HttpEntity<List> entity, Class clazz) {
+        try {
+            return restTemplate.exchange(uri, HttpMethod.GET, entity, clazz);
+        } catch (RestClientException restClientException) {
+            log.error(uri.toString(), restClientException)
+            throw new RestApiException(restClientException)
+        }
+    }
+
+
     public abstract String getResource();
 
     public abstract String getSearchResource();

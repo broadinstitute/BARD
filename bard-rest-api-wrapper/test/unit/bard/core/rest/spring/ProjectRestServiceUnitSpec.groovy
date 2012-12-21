@@ -50,7 +50,7 @@ class ProjectRestServiceUnitSpec extends Specification {
         when:
         final ProjectResult projectResult = service.searchProjectsByIds(pids)
         then:
-        0 * restTemplate.exchange(_, _, _, _)
+        0 * restTemplate.postExchange(_, _, _, _)
         assert projectResult == null
         where:
         label                        | pids

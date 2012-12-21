@@ -6,7 +6,6 @@ import bard.core.rest.spring.project.ProjectResult
 import bard.core.rest.spring.util.MetaData
 import org.springframework.http.HttpEntity
 import org.springframework.http.HttpHeaders
-import org.springframework.http.HttpMethod
 import org.springframework.util.LinkedMultiValueMap
 import org.springframework.util.MultiValueMap
 import bard.core.rest.spring.experiment.*
@@ -24,7 +23,7 @@ class ExperimentRestService extends AbstractRestService {
     public ExperimentShow getExperimentById(Long eid) {
         final String url = buildEntityURL() + "?expand={expand}"
         final Map map = [id: eid, expand: "true"]
-        final ExperimentShow experimentShow = this.restTemplate.getForObject(url, ExperimentShow.class, map)
+        final ExperimentShow experimentShow = (ExperimentShow)this.getForObject(url, ExperimentShow.class, map)
         return experimentShow;
     }
     /**
@@ -43,8 +42,7 @@ class ExperimentRestService extends AbstractRestService {
             HttpEntity<List> entity = new HttpEntity<List>(map, headers);
             final String url = this.buildURLToPostIds()
 
-            final HttpEntity<List> exchange = restTemplate.exchange(url, HttpMethod.POST, entity, ExperimentSearch[].class);
-
+            final HttpEntity<List> exchange = postExchange(url,entity,ExperimentSearch[].class) as HttpEntity<List>
             final List<ExperimentSearch> experiments = exchange.getBody()
             headers = exchange.getHeaders()
             this.extractETagsFromResponseHeader(headers, 0, etags)
@@ -81,10 +79,10 @@ class ExperimentRestService extends AbstractRestService {
             int currentSize
             List<Activity> currentActivities
             if (etag) {
-                currentActivities = (this.restTemplate.getForObject(url.toURI(), Activity[].class)) as List<Activity>
+                currentActivities = (getForObject(url.toURI(), Activity[].class)) as List<Activity>
 
             } else {
-                final ExperimentData currentExperimentData = this.restTemplate.getForObject(url.toURI(), ExperimentData.class)
+                final ExperimentData currentExperimentData = (ExperimentData)this.getForObject(url.toURI(), ExperimentData.class)
                 currentActivities = currentExperimentData.activities
             }
             if (currentActivities) {
@@ -119,10 +117,10 @@ class ExperimentRestService extends AbstractRestService {
 
         if (etag) {
             experimentData = new ExperimentData()
-            final List<Activity> activities = (this.restTemplate.getForObject(url.toURI(), Activity[].class)) as List<Activity>
+            final List<Activity> activities = (this.getForObject(url.toURI(), Activity[].class)) as List<Activity>
             experimentData.setActivities(activities)
         } else {
-            experimentData = this.restTemplate.getForObject(url.toURI(), ExperimentData.class)
+            experimentData = (ExperimentData)this.getForObject(url.toURI(), ExperimentData.class)
         }
         return experimentData
     }
@@ -159,7 +157,7 @@ class ExperimentRestService extends AbstractRestService {
                     append(RestApiConstants.QUESTION_MARK).
                     append(RestApiConstants.EXPAND_TRUE)
         final URL url = new URL(resource.toString())
-        CompoundResult compoundResult = this.restTemplate.getForObject(url.toURI(), CompoundResult.class)
+        CompoundResult compoundResult = (CompoundResult)this.getForObject(url.toURI(), CompoundResult.class)
         return compoundResult
     }
 
@@ -171,14 +169,14 @@ class ExperimentRestService extends AbstractRestService {
                     append(RestApiConstants.QUESTION_MARK).
                     append(RestApiConstants.EXPAND_TRUE)
         final URL url = new URL(resource.toString())
-        final ProjectResult projectResult = this.restTemplate.getForObject(url.toURI(), ProjectResult.class)
+        final ProjectResult projectResult = (ProjectResult)this.getForObject(url.toURI(), ProjectResult.class)
         return projectResult
     }
     //TODO: Right now this returns the default number of compounds, which is 500
     public List<Long> compoundsForExperiment(Long experimentId) {
         String resource = this.getResource(experimentId.toString()) + RestApiConstants.COMPOUNDS_RESOURCE;
         final URL url = new URL(resource)
-        Map<String, Object> response = this.restTemplate.getForObject(url.toURI(), Map.class)
+        Map<String, Object> response = (Map)this.getForObject(url.toURI(), Map.class)
         List<String> compoundURLs = (List<String>) response.get("collection")
         if (compoundURLs) {
             return compoundURLs.collect {String s -> new Long(s.substring(s.lastIndexOf("/") + 1).trim())}

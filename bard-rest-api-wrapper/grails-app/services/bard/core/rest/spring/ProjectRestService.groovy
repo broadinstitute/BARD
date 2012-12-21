@@ -9,7 +9,6 @@ import bard.core.rest.spring.project.ProjectResult
 import bard.core.rest.spring.util.MetaData
 import org.springframework.http.HttpEntity
 import org.springframework.http.HttpHeaders
-import org.springframework.http.HttpMethod
 import org.springframework.util.LinkedMultiValueMap
 import org.springframework.util.MultiValueMap
 
@@ -26,13 +25,9 @@ class ProjectRestService extends AbstractRestService {
     public Project getProjectById(final Long pid) {
         final String url = this.buildEntityURL() + "?expand={expand}"
         final Map map = [id: pid, expand: "true"]
-        try {
-            final Project project = this.restTemplate.getForObject(url, Project.class, map)
-            return project
-        } catch (Exception ee) {
-            log.error(ee)
-        }
-        return null;
+        final Project project = (Project) this.getForObject(url, Project.class, map)
+        return project
+
     }
 
     /**
@@ -50,7 +45,7 @@ class ProjectRestService extends AbstractRestService {
             this.addETagsToHTTPHeader(headers, etags)
             HttpEntity<List> entity = new HttpEntity<List>(map, headers);
             final String url = this.buildURLToPostIds()
-            final HttpEntity<List> exchange = restTemplate.exchange(url, HttpMethod.POST, entity, List.class);
+            final HttpEntity<List> exchange = postExchange(url, entity, List.class) as HttpEntity<List>
             final List<Project> projects = exchange.getBody()
             headers = exchange.getHeaders()
             this.extractETagsFromResponseHeader(headers, 0, etags)
@@ -77,7 +72,7 @@ class ProjectRestService extends AbstractRestService {
         //just passing in the string would cause the URI to be encoded twice
         //see http://static.springsource.org/spring/docs/3.0.x/javadoc-api/org/springframework/web/client/RestTemplate.html
         final URL url = new URL(urlString)
-        final ProjectResult projectSearchResult = this.restTemplate.getForObject(url.toURI(), ProjectResult.class)
+        final ProjectResult projectSearchResult = (ProjectResult) this.getForObject(url.toURI(), ProjectResult.class)
         return projectSearchResult
     }
     /**
@@ -113,7 +108,7 @@ class ProjectRestService extends AbstractRestService {
                     append(RestApiConstants.QUESTION_MARK).
                     append(RestApiConstants.EXPAND_TRUE)
         final URL url = new URL(resource.toString())
-        List<Assay> assays = (List<Assay>) this.restTemplate.getForObject(url.toURI(), Assay[].class)
+        List<Assay> assays = getForObject(url.toURI(), Assay[].class) as List<Assay>
         return assays;
     }
 
@@ -125,7 +120,7 @@ class ProjectRestService extends AbstractRestService {
                     append(RestApiConstants.QUESTION_MARK).
                     append(RestApiConstants.EXPAND_TRUE)
         final URL url = new URL(resource.toString())
-        List<ExperimentSearch> experiments = (List<ExperimentSearch>) this.restTemplate.getForObject(url.toURI(), ExperimentSearch[].class)
+        List<ExperimentSearch> experiments = this.getForObject(url.toURI(), ExperimentSearch[].class) as List<ExperimentSearch>
         return experiments
 
     }

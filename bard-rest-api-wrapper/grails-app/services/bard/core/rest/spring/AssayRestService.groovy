@@ -11,7 +11,7 @@ import bard.core.rest.spring.project.ProjectResult
 import bard.core.rest.spring.util.MetaData
 import org.springframework.http.HttpEntity
 import org.springframework.http.HttpHeaders
-import org.springframework.http.HttpMethod
+
 import org.springframework.util.LinkedMultiValueMap
 import org.springframework.util.MultiValueMap
 
@@ -20,7 +20,7 @@ class AssayRestService extends AbstractRestService {
     public List<AssayAnnotation> findAnnotations(final Long adid) {
         final String resource = getResource(adid.toString() + RestApiConstants.ANNOTATIONS)
         final URL url = new URL(resource)
-        final List<AssayAnnotation> annotations = (this.restTemplate.getForObject(url.toURI(), AssayAnnotation[].class)) as List<AssayAnnotation>
+        final List<AssayAnnotation> annotations = getForObject(url.toURI(), AssayAnnotation[].class) as List<AssayAnnotation>
         return annotations;
     }
     /**
@@ -31,7 +31,7 @@ class AssayRestService extends AbstractRestService {
     public ExpandedAssay getAssayById(final Long adid) {
         final String url = buildEntityURL() + "?expand={expand}"
         final Map map = [id: adid, expand: "true"]
-        ExpandedAssay assay = this.restTemplate.getForObject(url, ExpandedAssay.class, map)
+        ExpandedAssay assay = (ExpandedAssay)getForObject(url, ExpandedAssay.class, map)
         return assay;
     }
     /**
@@ -49,7 +49,7 @@ class AssayRestService extends AbstractRestService {
             this.addETagsToHTTPHeader(headers, etags)
             HttpEntity<List> entity = new HttpEntity<List>(map, headers);
             final String url = this.buildURLToPostIds()
-            final HttpEntity<List> exchange = restTemplate.exchange(url, HttpMethod.POST, entity, ExpandedAssay[].class);
+            final HttpEntity<List> exchange = postExchange(url, entity, ExpandedAssay[].class) as HttpEntity<List>
             final List<ExpandedAssay> assays = exchange.getBody()
             headers = exchange.getHeaders()
             this.extractETagsFromResponseHeader(headers, 0, etags)
@@ -76,7 +76,7 @@ class AssayRestService extends AbstractRestService {
         //just passing in the string would cause the URI to be encoded twice
         //see http://static.springsource.org/spring/docs/3.0.x/javadoc-api/org/springframework/web/client/RestTemplate.html
         final URL url = new URL(urlString)
-        final AssayResult assayResult = this.restTemplate.getForObject(url.toURI(), AssayResult.class)
+        final AssayResult assayResult = (AssayResult)getForObject(url.toURI(), AssayResult.class)
         return assayResult
     }
 
@@ -117,7 +117,7 @@ class AssayRestService extends AbstractRestService {
                     append(RestApiConstants.EXPAND_TRUE)
         final URL url = new URL(resource.toString())
 
-        List<ExperimentSearch> experiments = (List<ExperimentSearch>) this.restTemplate.getForObject(url.toURI(), ExperimentSearch[].class)
+        List<ExperimentSearch> experiments = (List<ExperimentSearch>) getForObject(url.toURI(), ExperimentSearch[].class)
         return experiments
     }
 
@@ -129,7 +129,7 @@ class AssayRestService extends AbstractRestService {
                     append(RestApiConstants.QUESTION_MARK).
                     append(RestApiConstants.EXPAND_TRUE)
         final URL url = new URL(resource.toString())
-        ProjectResult projectResult = this.restTemplate.getForObject(url.toURI(), ProjectResult.class)
+        ProjectResult projectResult = (ProjectResult)getForObject(url.toURI(), ProjectResult.class)
         projectResult
 
     }

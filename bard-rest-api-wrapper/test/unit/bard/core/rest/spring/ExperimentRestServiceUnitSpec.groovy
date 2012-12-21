@@ -88,7 +88,7 @@ class ExperimentRestServiceUnitSpec extends Specification {
         when:
         final ExperimentSearchResult experimentSearchResult = service.searchExperimentsByIds(eids)
         then:
-        0 * restTemplate.exchange(_, _, _, _)
+        0 * restTemplate.postExchange(_, _, _, _)
         assert experimentSearchResult == null
         where:
         label                        | eids

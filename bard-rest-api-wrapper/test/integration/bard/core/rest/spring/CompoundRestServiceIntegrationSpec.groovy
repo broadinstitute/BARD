@@ -12,6 +12,7 @@ import grails.plugin.spock.IntegrationSpec
 import org.springframework.web.client.HttpClientErrorException
 import spock.lang.Unroll
 import bard.core.rest.spring.compounds.*
+import bard.core.exceptions.RestApiException
 
 /**
  * Tests for CompoundRestService in JDO
@@ -306,7 +307,7 @@ class CompoundRestServiceIntegrationSpec extends IntegrationSpec {
         when: "The getPromiscuity method is called with the CID: #cid"
         this.compoundRestService.findPromiscuityScoreForCompound(cid)
         then: "A Compound is returned with the expected information"
-        thrown(HttpClientErrorException)
+        thrown(RestApiException)
         where:
         label                             | cid      | scaffoldSize
         "A CID with no Promiscuity Score" | 16760208 | 0
@@ -332,7 +333,7 @@ class CompoundRestServiceIntegrationSpec extends IntegrationSpec {
         when: "The get method is called with the given CID: #cid"
         Compound compound = this.compoundRestService.getCompoundById(cid)
         then: "No Compound is returned with the expected information"
-        assert !compound
+        thrown(RestApiException)
         where:
         label                          | cid
         "Find a non-existing compound" | new Integer(-658342)

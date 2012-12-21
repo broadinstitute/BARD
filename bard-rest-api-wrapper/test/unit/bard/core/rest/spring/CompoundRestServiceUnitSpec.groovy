@@ -19,6 +19,8 @@ import java.util.concurrent.ExecutorService
 import java.util.concurrent.FutureTask
 
 import bard.core.rest.spring.compounds.*
+import spock.lang.IgnoreRest
+import bard.core.exceptions.RestApiException
 
 @Unroll
 @TestFor(CompoundRestService)
@@ -121,8 +123,8 @@ class CompoundRestServiceUnitSpec extends Specification {
         numberOfHitsTask.get() >> {new Long("2")}
         compoundResultTask.get() >> {new CompoundResult()}
         executorService.invokeAll(_, _, _) >> {results}
-        restTemplate.getForObject(_, _) >> {"2"}
-        restTemplate.exchange(_, _, _, _) >> {new ResponseEntity(HttpStatus.ACCEPTED)}
+        restTemplate.getForObject(_, _, [:]) >> {"2"}
+        restTemplate.postExchange(_, _, _, _) >> {new ResponseEntity(HttpStatus.ACCEPTED)}
         assert compoundSearchResult
         assert compoundSearchResult.numberOfHits == 2
         where:
@@ -160,7 +162,7 @@ class CompoundRestServiceUnitSpec extends Specification {
         results.get(0) >> {compoundResultTask}
         compoundResultTask.get() >> {new CompoundResult()}
         executorService.invokeAll(_, _, _) >> {results}
-        restTemplate.exchange(_, _, _, _) >> {new ResponseEntity(HttpStatus.ACCEPTED)}
+        restTemplate.postExchange(_, _, _, _) >> {new ResponseEntity(HttpStatus.ACCEPTED)}
         assert compoundSearchResult
         assert compoundSearchResult.numberOfHits == 10
         where:
@@ -185,7 +187,7 @@ class CompoundRestServiceUnitSpec extends Specification {
         when:
         final CompoundResult futures = service.handleStructureSearchFutures([1, 2])
         then:
-        assert !futures
+        thrown(RestApiException)
 
     }
 
@@ -271,6 +273,18 @@ class CompoundRestServiceUnitSpec extends Specification {
         assert annotations
     }
 
+    void "getCompoundById - Exception #label"() {
+
+        when:
+        service.getCompoundById(cid)
+        then:
+        restTemplate.getForObject(_, _, _) >> {compounds}
+        thrown(RestApiException)
+        where:
+        label                   | cid | compounds | noErrors
+        "Non_Existing Compound" | -1  | null      | false
+    }
+
     void "getCompoundById #label"() {
         given:
         FutureTask<CompoundAnnotations> compoundAnnotationsTask = Mock(FutureTask)
@@ -284,16 +298,15 @@ class CompoundRestServiceUnitSpec extends Specification {
         executorService.invokeAll(_, _, _) >> {[compoundAnnotationsTask, compoundTask]}
         assert (foundCompound != null) == noErrors
         where:
-        label                   | cid | compounds        | noErrors
-        "Existing Compound"     | 179 | [new Compound()] | true
-        "Non_Existing Compound" | -1  | null             | false
+        label               | cid | compounds        | noErrors
+        "Existing Compound" | 179 | [new Compound()] | true
     }
 
     void "searchCompoundsByIds #label"() {
         when:
         final CompoundResult compoundResult = service.searchCompoundsByIds(cids)
         then:
-        0 * restTemplate.exchange(_, _, _, _)
+        0 * restTemplate.postExchange(_, _, _, _)
         assert compoundResult == null
         where:
         label                        | cids
@@ -326,7 +339,7 @@ class CompoundRestServiceUnitSpec extends Specification {
         when:
         List<String> synonyms = service.getSynonymsForCompound(200)
         then:
-        restTemplate.getForObject(_, _, _, _) >> {["String"]}
+        restTemplate.getForObject(_, _, _) >> {["String"]}
         assert synonyms
     }
 
@@ -355,7 +368,7 @@ class CompoundRestServiceUnitSpec extends Specification {
         assert count == 1
     }
 
-    void "test findCompoundsByETag"() {
+    void "test findCompoundsByETag #label"() {
         when:
         CompoundResult returnedCompoundResult = service.findCompoundsByETag(eTagName)
 
