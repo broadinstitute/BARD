@@ -1,58 +1,42 @@
 %{--//Wrap this in a grails if statement. Only run on production--}%
-<script type="text/javascript">
-
-    //report error messages
-    window.onerror = bardClientErrorHandler;
-    //    Handle javascript errors
-    function bardClientErrorHandler(message, url, line) {
-        $.ajax({
-            cache:false,
-            type:"post",
-            data:{error:message, url:url, line:line, browser:navigator.userAgent},
-            url:"/bardwebclient/ErrorHandling/errors",
-            async:true
-        });
-        return true;
-    }
-</script>
 %{--Handle DEV--}%
-<g:if env="oracledev">
-    <script type="text/javascript">
-        //Google Analytics
-        var _gaq = _gaq || [];
-        _gaq.push(['_setAccount', 'UA-37197267-1']);
-        _gaq.push(['_trackPageview']);
+%{--<g:if env="oracledev">--}%
+    %{--<script type="text/javascript">--}%
+        %{--//Google Analytics--}%
+        %{--var _gaq = _gaq || [];--}%
+        %{--_gaq.push(['_setAccount', 'UA-37197267-1']);--}%
+        %{--_gaq.push(['_trackPageview']);--}%
 
-        (function () {
-            var ga = document.createElement('script');
-            ga.type = 'text/javascript';
-            ga.async = true;
-            ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-            var s = document.getElementsByTagName('script')[0];
-            s.parentNode.insertBefore(ga, s);
-        })();
+        %{--(function () {--}%
+            %{--var ga = document.createElement('script');--}%
+            %{--ga.type = 'text/javascript';--}%
+            %{--ga.async = true;--}%
+            %{--ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';--}%
+            %{--var s = document.getElementsByTagName('script')[0];--}%
+            %{--s.parentNode.insertBefore(ga, s);--}%
+        %{--})();--}%
 
-    </script>
-</g:if>
+    %{--</script>--}%
+%{--</g:if>--}%
 %{--Handle QA--}%
-<g:if env="oracleqa">
-    <script type="text/javascript">
-        //Google Analytics
-        var _gaq = _gaq || [];
-        _gaq.push(['_setAccount', 'UA-37181930-1']);
-        _gaq.push(['_trackPageview']);
+%{--<g:if env="oracleqa">--}%
+    %{--<script type="text/javascript">--}%
+        %{--//Google Analytics--}%
+        %{--var _gaq = _gaq || [];--}%
+        %{--_gaq.push(['_setAccount', 'UA-37181930-1']);--}%
+        %{--_gaq.push(['_trackPageview']);--}%
 
-        (function () {
-            var ga = document.createElement('script');
-            ga.type = 'text/javascript';
-            ga.async = true;
-            ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-            var s = document.getElementsByTagName('script')[0];
-            s.parentNode.insertBefore(ga, s);
-        })();
+        %{--(function () {--}%
+            %{--var ga = document.createElement('script');--}%
+            %{--ga.type = 'text/javascript';--}%
+            %{--ga.async = true;--}%
+            %{--ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';--}%
+            %{--var s = document.getElementsByTagName('script')[0];--}%
+            %{--s.parentNode.insertBefore(ga, s);--}%
+        %{--})();--}%
 
-    </script>
-</g:if>
+    %{--</script>--}%
+%{--</g:if>--}%
 <r:require module="autocomplete"/>
 <noscript>
     <a href="http://www.enable-javascript.com/" target="_blank">
@@ -60,6 +44,9 @@
              alt="Please enable JavaScript to access the full functionality of this site."/>
     </a>
 </noscript>
+<script type="text/javascript">
+    blah;
+</script>
 <g:form name="searchForm" controller="bardWebInterface" action="search" id="searchForm">
     <div class="row-fluid" style="margin-top: 15px;">
         <div class="input-append">

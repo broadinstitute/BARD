@@ -80,6 +80,7 @@ grails.project.dependency.resolution = {
         test ":remote-control:1.2"
         compile ":clover:3.1.6"
         compile ":spring-mobile:0.4"
+        compile ":google-analytics:2.0"
     }
 }
 
