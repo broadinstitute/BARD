@@ -22,6 +22,7 @@ import bard.core.rest.spring.project.Project
 import bard.core.rest.spring.project.ProjectResult
 import bard.core.rest.spring.util.StructureSearchParams
 import org.apache.commons.lang.time.StopWatch
+import bard.core.rest.spring.compounds.CompoundSummary
 
 class QueryService implements IQueryService {
     final static String PROBE_ETAG_NAME = 'MLP Probes'
@@ -188,9 +189,18 @@ class QueryService implements IQueryService {
 
         return [compoundAdapters: compoundAdapters, facets: facets, nHits: numHits, eTag: eTag]
     }
-    /*
-    * Returns an unexpanded list of sids
+    /**
+     *
+     * @param cid
+     * @return {@link CompoundSummary}
      */
+    public CompoundSummary getSummaryForCompound(final Long cid) {
+        return this.compoundRestService.getSummaryForCompound(cid)
+    }
+
+        /*
+       * Returns an unexpanded list of sids
+        */
 
     List<Long> findSubstancesByCid(Long cid) {
         if (cid) {

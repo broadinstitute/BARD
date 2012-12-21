@@ -2,10 +2,18 @@ package bardqueryapi
 
 import bard.core.adapter.CompoundAdapter
 import bard.core.rest.spring.util.StructureSearchParams
+import bard.core.rest.spring.compounds.CompoundSummary
 
 public interface IQueryService {
+    /**
+     *
+     * @param cid
+     * @return {@link bard.core.rest.spring.compounds.CompoundSummary}
+     */
+    public CompoundSummary getSummaryForCompound(final Long cid);
 
-    List<Long> findSubstancesByCid(Long cid) ;
+
+        List<Long> findSubstancesByCid(Long cid) ;
     /**
      *
      * @param cid
