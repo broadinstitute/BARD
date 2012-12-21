@@ -2,6 +2,13 @@ import grails.util.Environment
 import org.apache.log4j.DailyRollingFileAppender
 import org.springframework.security.web.authentication.AbstractAuthenticationTargetUrlRequestHandler
 
+//TODO: Override In Production. Also add greenmail.disabled=true so Green mail is disabled
+grails.mail.port = com.icegreen.greenmail.util.ServerSetupTest.SMTP.port
+grails.mail.default.from = "noreply@broadinstitute.org"
+grails.mail.default.to = "noreply@broadinstitute.org"
+grails.mail.host = "smtp.broadinstitute.org"
+grails.mail.host = "localhost"
+
 //TODO: Override in dev, qa and prod to point to the current stable release
 ncgc.server.root.url = "http://bard.nih.gov/api/v10"
 promiscuity.badapple.url="${ncgc.server.root.url}/plugins/badapple/prom/cid/"
