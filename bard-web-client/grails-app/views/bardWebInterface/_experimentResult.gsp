@@ -40,7 +40,7 @@
         <g:each in="${experimentDataMap?.spreadSheetActivities}" var="experimentData">
             <tr>
                 <td>
-                    <img src="${resource(dir: 'images', file: 'pubchem-logo-sm.png')}" alt="PubChem"/>
+                    <img src="${resource(dir: 'images', file: 'pubchem.png')}" alt="PubChem"/>
                     <a href="http://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=${experimentData.sid}">${experimentData.sid}</a>
                 </td>
                 <td>
