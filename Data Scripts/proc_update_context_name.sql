@@ -9,21 +9,22 @@ AS
       grp_attr.assay_context_id,
       Sum(grp_attr.aci_count) aci_count,
       LISTAGG(grp_attr.ATTRIBUTE, ';') WITHIN GROUP (ORDER BY grp_attr.ATTRIBUTE) attributes
-FROM (SELECT ac.assay_id,
+     FROM (SELECT ac.assay_id,
             ac.assay_context_id,
             e.label attribute,
             Count(*) aci_count
-      FROM assay_context ac,
-          assay_context_item aci,
-          element e
-      WHERE aci.assay_context_id = ac.assay_context_id
-        AND e.element_id = aci.attribute_id
-        AND ac.assay_id = Nvl(cn_assay_id, ac.assay_id)
-      GROUP BY ac.assay_id,
-            ac.assay_context_id,
-            e.label) grp_attr
-GROUP BY grp_attr.assay_id,
-      grp_attr.assay_context_id;
+            FROM assay_context ac,
+                assay_context_item aci,
+                element e
+            WHERE aci.assay_context_id = ac.assay_context_id
+              AND e.element_id = aci.attribute_id
+              AND ac.assay_id = Nvl(cn_assay_id, ac.assay_id)
+              AND ac.context_name NOT LIKE 'Context for%'
+            GROUP BY ac.assay_id,
+                  ac.assay_context_id,
+                  e.label) grp_attr
+     GROUP BY grp_attr.assay_id,
+            grp_attr.assay_context_id;
 
     lv_context_name  element.label%TYPE;
 

@@ -2118,6 +2118,11 @@ CREATE INDEX FK_EXT_REFERENCE_PROJECT ON EXTERNAL_REFERENCE(PROJECT_ID)
 
 CREATE UNIQUE INDEX AK_EXT_REFERENCE ON EXTERNAL_REFERENCE(EXTERNAL_SYSTEM_ID, EXPERIMENT_ID, PROJECT_ID, EXT_ASSAY_REF)
 ;
+--CREATE UNIQUE INDEX ak2_external_reference
+--            ON external_reference (ext_assay_ref,
+--                                   Decode(experiment_id, NULL,0,1),
+--                                   Decode(project_id, NULL,0,1),
+--                                   external_system_id);
 --
 -- INDEX: AK_FAVORITE
 --

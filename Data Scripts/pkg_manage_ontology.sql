@@ -729,6 +729,15 @@ as
                value_display = replace(value_display, lv_old_label, lv_new_label)
          where value_id = ani_element_id;
 
+        update prjct_exprmt_cntxt_item
+           set attribute_id = ani_new_element_id
+         where attribute_id = ani_element_id;
+
+        update prjct_exprmt_cntxt_item
+           set value_id = ani_new_element_id,
+               value_display = replace(value_display, lv_old_label, lv_new_label)
+         where value_id = ani_element_id;
+
         update step_context_item
            set attribute_id = ani_new_element_id
          where attribute_id = ani_element_id;
@@ -760,32 +769,56 @@ as
                value_display = replace(value_display, lv_old_label, lv_new_label)
          where value_id = ani_element_id;
 
-        update measure
+        update measure m
            set result_type_id = ani_new_element_id
          where result_type_id = ani_element_id;
 
---        update project_step
---           set stage_id = ani_new_element_id
---         where stage_id = ani_element_id;
+        update measure m
+           set stats_modifier_id = ani_new_element_id
+         where stats_modifier_id = ani_element_id;
 
---        update experiment
---           set laboratory_id = ani_new_element_id
---         where laboratory_id = ani_element_id;
+        update result m
+           set result_type_id = ani_new_element_id
+         where result_type_id = ani_element_id;
 
---        update unit_conversion uc
---          set uc.from_unit_id = ani_new_element_id
---        where uc.from_unit_id = ani_element_id
---          and not exists (select 1 from unit_conversion uc2
---            where uc2.from_unit_id = ani_new_element_id
---            and uc2.to_unit_id = uc.to_unit_id);
+        update result m
+           set stats_modifier_id = ani_new_element_id
+         where stats_modifier_id = ani_element_id;
 
---        update unit_conversion uc
---          set uc.to_unit_id = ani_new_element_id
---        where uc.to_unit_id = ani_element_id
---          and not exists (select 1 from unit_conversion uc2
---            where uc2.to_unit_id = ani_new_element_id
---            and uc2.from_unit_id = uc.from_unit_id);
+        update measure
+           set entry_unit_id = ani_new_element_id
+         where entry_unit_id = ani_element_id;
 
+        update project_experiment
+           set stage_id = ani_new_element_id
+         where stage_id = ani_element_id;
+
+        update element
+           set unit_id = ani_new_element_id
+         where unit_id = ani_element_id;
+
+        update unit_conversion uc
+          set uc.from_unit_id = ani_new_element_id
+        where uc.from_unit_id = ani_element_id
+          and not exists (select 1 from unit_conversion uc2
+            where uc2.from_unit_id = ani_new_element_id
+            and uc2.to_unit_id = uc.to_unit_id);
+
+        update unit_conversion uc
+          set uc.to_unit_id = ani_new_element_id
+        where uc.to_unit_id = ani_element_id
+          and not exists (select 1 from unit_conversion uc2
+            where uc2.to_unit_id = ani_new_element_id
+            and uc2.from_unit_id = uc.from_unit_id);
+
+        update unit_conversion uc
+              set uc.from_unit_id = ani_new_element_id
+            where uc.from_unit_id = ani_element_id
+              and not exists (select 1 from unit_conversion uc2
+                where uc2.from_unit_id = ani_new_element_id
+                and uc2.to_unit_id = uc.to_unit_id);
+
+          -- this IS handled BY the element deletion
 --        update element_hierarchy eh
 --          set eh.parent_element_id = ani_new_element_id
 --        where eh.parent_element_id = ani_element_id

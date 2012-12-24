@@ -57,29 +57,29 @@ AS
                                          ani_parent_measure_id IN NUMBER,
                                          ari_resulttype IN r_resulttype);
 
-    function save_measure (ani_parent_measure_id IN NUMBER,
-                          ari_measure IN r_resulttype)
-        RETURN NUMBER;
+--    function save_measure (ani_parent_measure_id IN NUMBER,
+--                          ari_measure IN r_resulttype)
+--        RETURN NUMBER;
 
-    FUNCTION save_context_item_set (ari_resultType  IN  r_resultType)
-        RETURN NUMBER;
+--    FUNCTION save_context_item_set (ari_resultType  IN  r_resultType)
+--        RETURN NUMBER;
 
-    PROCEDURE save_assay_context_measure (ani_assay_context_id IN number,
-                               ani_measure_id IN number);
+--    PROCEDURE save_assay_context_measure (ani_assay_context_id IN number,
+--                               ani_measure_id IN number);
 
-    PROCEDURE save_exprmt_measure (ani_experiment_id IN number,
-                                ani_measure_id IN number,
-                                ani_parent_measure_id IN NUMBER,
-                                avi_relationship IN varchar2);
+--    PROCEDURE save_exprmt_measure (ani_experiment_id IN number,
+--                                ani_measure_id IN number,
+--                                ani_parent_measure_id IN NUMBER,
+--                                avi_relationship IN varchar2);
 
-    PROCEDURE delete_measure (ani_assay_id IN NUMBER,
-                             ani_experiment_id IN number,
-                             avi_owner IN varchar2);
+--    PROCEDURE delete_measure (ani_assay_id IN NUMBER,
+--                             ani_experiment_id IN number,
+--                             avi_owner IN varchar2);
 
-    procedure log_error (an_errnum   in  number,
-                  av_errmsg  in varchar2,
-                  av_location    in varchar2,
-                  av_comment in varchar2 default null);
+--    procedure log_error (an_errnum   in  number,
+--                  av_errmsg  in varchar2,
+--                  av_location    in varchar2,
+--                  av_comment in varchar2 default null);
 
 END Result_map_util;
 /
@@ -90,6 +90,165 @@ as
     pn_max_recursion_level CONSTANT BINARY_INTEGER := 5;
 
     pv_modified_by CONSTANT VARCHAR2(40) := 'resultmap';
+
+    pb_Reuse_IDs  CONSTANT BOOLEAN := TRUE;
+
+    function get_new_id (avi_sequence_name IN VARCHAR2)
+        RETURN NUMBER
+    AS
+        ln_next_id  NUMBER;
+        lv_table_name VARCHAR2(30);
+        lv_column_name VARCHAR2(30);
+        lv_sql          VARCHAR2(1000);
+        lv_sequence_name  VARCHAR2(30);
+
+    BEGIN
+        lv_sequence_name := Upper (avi_sequence_name);
+
+        IF lv_sequence_name NOT LIKE '%_ID_SEQ'
+        THEN RETURN null;
+        END IF;
+
+        lv_table_name := REPLACE (lv_sequence_name, '_ID_SEQ', '');
+        lv_column_name := REPLACE (lv_sequence_name, '_SEQ', '');
+
+        IF pb_reuse_IDs
+        THEN
+            lv_sql := 'select ' || lv_column_name || ' + 1
+                        from ' || lv_table_name || ' t1
+                        where not exists (select 1
+                                  from ' || lv_table_name || ' t2
+                                  where t2.' || lv_column_name || ' = t1.' || lv_column_name || ' + 1)
+                          and rownum = 1
+                          and ' || lv_column_name || ' < (select max('|| lv_column_name || ')
+                                      from ' || lv_table_name || ')';
+
+        ELSE
+            lv_sql := 'SELECT ' || lv_sequence_name || '.NEXTVAL FROM dual';
+
+        END IF;
+        -- Dbms_Output.put_line (lv_sql);
+        begin
+            EXECUTE IMMEDIATE lv_sql INTO ln_next_id;
+        EXCEPTION
+            WHEN No_Data_Found       -- means the table is completely empty
+            then
+                lv_sql := 'SELECT ' || lv_sequence_name || '.NEXTVAL FROM dual';
+                EXECUTE IMMEDIATE lv_sql INTO ln_next_id;
+            WHEN OTHERS
+            THEN
+                RAISE;
+         END;
+
+        -- dbms_output.put_line (lv_column_name || '= '|| To_Char(ln_next_id));
+        RETURN ln_next_id;
+
+    END get_new_id;
+
+    PROCEDURE delete_measure (ani_assay_id IN NUMBER,
+                             ani_experiment_id IN number,
+                             avi_owner IN varchar2)
+    AS
+
+    BEGIN
+        -- exrmpt_measure
+        -- assay_context_measure
+        -- measure
+        DELETE from exprmt_measure
+        WHERE experiment_id = ani_experiment_id
+        AND modified_by = avi_owner;
+
+        DELETE FROM assay_context_measure acm
+        WHERE EXISTS (SELECT 1
+            FROM measure m
+            WHERE m.measure_id = acm.measure_id
+              AND m.assay_id = ani_assay_id
+              AND m.modified_by = avi_owner);
+
+        DELETE FROM  measure m
+        WHERE assay_id = ani_assay_id
+          AND modified_by = avi_owner
+          AND NOT EXISTS (SELECT 1
+              FROM assay_context_measure acm
+              WHERE acm.measure_id = m.measure_id)
+          AND NOT EXISTS (SELECT 1
+              FROM exprmt_measure acm
+              WHERE acm.measure_id = m.measure_id);
+
+        -- should there be a check here for the ones that weren't deleted?
+
+    END delete_measure;
+
+    function save_measure (ani_parent_measure_id IN NUMBER,
+                          ari_measure IN r_resulttype)
+        RETURN NUMBER
+    AS
+        ln_measure_id     NUMBER := null;
+        Ln_entry_unit_id  NUMBER;
+
+        CURSOR cur_measure
+        IS
+        SELECT measure_id
+        FROM measure
+        WHERE assay_id = ari_measure.assay_id
+          AND result_type_id = ari_measure.result_type_id
+          AND Nvl(stats_modifier_id, -100) = Nvl(ari_measure.stats_modifier_id, -100)
+          AND Nvl(parent_measure_id, -200) = Nvl(ani_parent_measure_id, -200);
+
+    BEGIN
+        -- check the arguments
+         IF ari_measure.assay_id IS NULL
+        OR ari_measure.result_type_id IS NULL
+        THEN
+            ln_measure_id := -1;
+            RETURN ln_measure_id;
+        END IF;
+
+       -- try to find an existing measure using the AK
+        OPEN cur_measure;
+        FETCH cur_measure INTO ln_measure_id;
+        CLOSE cur_measure;
+
+        -- if it exists update parent_measure_id and units
+            -- and return the measure_id
+        -- if not insert a new measure row
+        IF ln_measure_id IS NULL
+        THEN
+            SELECT unit_id
+            INTO ln_entry_unit_id
+            FROM element
+            WHERE element_id = ari_measure.result_type_id;
+
+            ln_measure_id := get_new_id ('measure_id_seq');
+
+            INSERT INTO measure
+                (Measure_id,
+                 assay_id,
+                 result_type_id,
+                 stats_modifier_id,
+                 entry_unit_id,
+                 parent_measure_id,
+                 version,
+                 date_created,
+                 last_updated,
+                 modified_by)
+            VALUES
+                (ln_Measure_id,
+                 ari_measure.assay_id,
+                 ari_measure.result_type_id,
+                 ari_measure.stats_modifier_id,
+                 ln_entry_unit_id,
+                 ani_parent_measure_id,
+                 0,
+                 sysdate,
+                 null,
+                 pv_modified_by);
+
+        END IF;
+
+        RETURN ln_measure_id;
+
+    END save_measure;
 
     PROCEDURE transfer_result_map (avi_AID IN VARCHAR2 DEFAULT NULL)
     AS
@@ -198,39 +357,300 @@ as
 
     END transfer_result_map;
 
-    PROCEDURE delete_measure (ani_assay_id IN NUMBER,
-                             ani_experiment_id IN number,
-                             avi_owner IN varchar2)
+    procedure log_error (an_errnum    in  number,
+                        av_errmsg     in varchar2,
+                        av_location   in varchar2,
+                        av_comment    in varchar2 default null)
+    as
+    begin
+        insert into error_log
+           ( ERROR_LOG_ID,
+             ERROR_DATE,
+             procedure_name,
+             ERR_NUM,
+             ERR_MSG,
+             ERR_COMMENT
+           ) values (
+             ERROR_LOG_ID_SEQ.NEXTVAL,
+             sysdate,
+             av_location,
+             an_errnum,
+             av_errmsg,
+             av_comment
+           );
+
+
+    exception
+        when others
+        then
+            null;
+    end log_error;
+
+    FUNCTION save_context_item_set (ari_resultType  IN  r_resultType)
+        RETURN NUMBER
     AS
+        CURSOR cur_matching_context
+        IS
+        SELECT aci.assay_context_id
+        FROM temp_context_item tci,
+            assay_context_item aci,
+            assay_context ac
+        WHERE ac.assay_context_id = aci.assay_context_id
+          AND ac.assay_id = tci.assay_id
+          AND aci.attribute_id = tci.attribute_id
+          AND Nvl(aci.value_num, -99999.999) = Nvl(tci.concentration, -99999.999)
+        GROUP BY aci.assay_context_id
+        HAVING Count(*) = (SELECT Count(*) FRoM temp_context_item)
+          AND Count(*) = (SELECT Count(*) FroM assay_context_item aci2
+                                          WHERE aci2.assay_context_id = aci.assay_context_id);
+
+        CURSOR cur_temp_context_item
+        IS
+        SELECT display_order,
+             ext_assay_ref,
+             assay_id,
+             experiment_id,
+             attribute_id,
+             aid,
+             resulttype,
+             stats_modifier,
+             contextitem,
+             concentration,
+             concentrationunit,
+             Decode ((SELECT Count(*)
+                     FROM temp_context_item tci2
+                     WHERE tci2.contextItem = tci.contextItem),
+                     0,'Free',
+                     1,'Free',
+                     'List') attribute_type
+        FROM temp_context_item tci
+        ORDER BY display_order;
+
+        ln_assay_context_id NUMBER := null;
+        ln_assay_context_item_id NUMBER ;
 
     BEGIN
-        -- exrmpt_measure
-        -- assay_context_measure
-        -- measure
-        DELETE from exprmt_measure
+
+        -- clean out the temp table
+        DELETE FROM temp_context_item;
+        -- get the context_item set from the result_map table
+        -- AND save IN a TEMPORARY table
+        -- need special care to find a set of 'List' type items
+            -- look for the attribute without the value
+            -- insert items with values with a check to prevent inserting duplicates
+        -- save the items in a temp table
+        INSERT INTO temp_context_item
+            (display_order,
+             ext_assay_ref,
+             assay_id,
+             experiment_id,
+             attribute_id,
+             aid,
+             resulttype,
+             stats_modifier,
+             contextitem,
+             concentration,
+             concentrationunit)
+        SELECT ROWNUM - 1 display_order,
+              ci.*
+        FROM (SELECT er.ext_assay_ref,
+                  e.assay_id,
+                  e.experiment_id,
+                  el_ci.element_id attribute_id,
+                  rm.*
+              FROM (SELECT rm_rt.aid, rm_rt.resultType, rm_rt.stats_modifier, rm_ci.contextItem, rm_ci.concentration, rm_ci.concentrationunit
+                  FROM southern.result_map rm_rt,
+                      southern.result_map rm_ci
+                  WHERE Nvl(rm_ci.contextTID, rm_ci.tid) = rm_rt.tid
+                    AND rm_ci.aid = rm_rt.aid
+                    AND rm_ci.contextItem IS NOT null
+                    AND rm_rt.resultType = ari_resultType.resultType
+                    AND rm_rt.resultType IS NOT null
+                    AND Nvl(rm_rt.stats_modifier, '#####') = Nvl(ari_resultType.stats_modifier, '#####')
+                    AND rm_rt.aid = ari_resultType.aid
+                  GROUP BY rm_rt.aid, rm_rt.resultType, rm_rt.stats_modifier, rm_ci.contextItem, rm_ci.concentration, rm_ci.concentrationunit) rm,
+                  element el_ci,
+                  external_reference er,
+                  experiment e
+              WHERE er.ext_assay_ref = 'aid=' || rm.aid
+                AND e.experiment_id = er.experiment_id
+                AND el_ci.label (+) = rm.contextItem
+                ORDER BY rm.aid, rm.contextItem, rm.concentration) ci;
+
+        IF SQL%ROWCOUNT = 0
+        THEN return NULL;
+            -- nothing got inserted, so we can make a quick exit
+        END IF;
+
+        -- query to find an existing matching set
+        OPEN cur_matching_context;
+        FETCH cur_matching_context INTO ln_assay_context_id;
+        CLOSE cur_matching_context;
+
+        IF ln_assay_context_id IS NULL
+        THEN
+            -- not found create an assay_context
+            ln_assay_context_id := get_new_id ('assay_context_id_seq');
+
+            INSERT INTO assay_context
+                (assay_context_id,
+                 assay_id,
+                 context_name,
+                 context_group,
+                 display_order,
+                 modified_by)
+            VALUES
+                (ln_assay_context_id,
+                 ari_resultType.assay_id,
+                 'Context for ' || ari_resultType.resultType,
+                 'Result Detail',
+                 0,
+                 pv_modified_by);
+            -- cycle thru the items saving each as you go
+            FOR lr_context_item IN  cur_temp_context_item
+            LOOP
+                -- check the inputs
+                IF lr_context_item.attribute_id IS NULL
+                    OR
+                    lr_context_item.assay_id is NULL
+                THEN
+                    -- log the error;
+                    log_error (-90002, 'Attribute not in Element', 'save_context_item_set',
+                            'resultType=' || lr_context_item.resultType || lr_context_item.stats_modifier
+                            || ', Attr_Id='|| To_Char(lr_context_item.attribute_id)
+                            || ', attribute=' || lr_context_item.contextItem
+                            || ', Assay=' || To_Char(lr_context_item.assay_id)
+                            || ', AID='|| To_Char(lr_context_item.aid));
+
+
+                else
+                    ln_assay_context_item_id := get_new_id ('assay_context_item_id_seq');
+                    INSERT INTO assay_context_item
+                        (assay_context_item_id,
+                        assay_context_id,
+                        display_order,
+                        attribute_type,
+                        attribute_id,
+                        --value_id,
+                        value_display,
+                        value_num,
+                        modified_by)
+                    VALUES(
+                        ln_assay_context_item_id,
+                        ln_assay_context_id,
+                        lr_context_item.display_order,
+                        lr_context_item.attribute_type,
+                        lr_context_item.attribute_id,
+                        --value_id,
+                        lr_context_item.concentration || ' ' || lr_context_item.concentrationunit,
+                        lr_context_item.concentration,
+                        pv_modified_by);
+
+                END IF;
+
+            END LOOP;
+        END IF;
+
+        RETURN ln_assay_context_id;
+
+    END save_context_item_set;
+
+    PROCEDURE save_assay_context_measure (ani_assay_context_id IN number,
+                               ani_measure_id IN number)
+    AS
+        ln_assay_context_measure_id NUMBER := null;
+
+        CURSOR cur_assay_context_measure
+        IS
+        SELECT assay_context_measure_id
+        FROM assay_context_measure acm
+        WHERE assay_context_id = ani_assay_context_id
+          AND measure_id = ani_measure_id;
+
+
+    BEGIN
+        -- try inserting but don't overwrite an existing entry
+        open cur_assay_context_measure;
+        fetch cur_assay_context_measure INto ln_assay_context_measure_id;
+        CLOSE cur_assay_context_measure;
+
+        IF ln_assay_context_measure_id IS NULL
+        then
+            ln_assay_context_measure_id := get_new_id ('assay_context_measure_id_seq');
+
+            INSERT INTO assay_context_measure
+                (assay_context_measure_id,
+                assay_context_id,
+                measure_id,
+                modified_by)
+            VALUES (ln_assay_context_measure_id,
+                ani_assay_context_id,
+                ani_measure_id,
+                pv_modified_by);
+
+          END IF;
+
+    END save_assay_context_measure;
+
+    PROCEDURE save_exprmt_measure (ani_experiment_id IN number,
+                                ani_measure_id IN number,
+                                ani_parent_measure_id IN NUMBER,
+                                avi_relationship IN varchar2)
+    AS
+         CURSOR cur_exprmt_measure
+         IS
+         SELECT exprmt_measure_id
+         FROM exprmt_measure
+         WHERE experiment_id = ani_experiment_id
+           AND measure_id = ani_parent_measure_id;
+
+        ln_parent_exprmt_measure_id NUMBER := null;
+        ln_exprmt_measure_id NUMBER;
+        ln_exists           NUMBER := 0;
+    BEGIN
+        -- cleanup typos in the relationship
+--        lv_relationship := Decode (Lower(Trim(avi_relationship)),
+--                                  'derives', 'Derived from',
+--                                  'child', 'has Child',
+--                                  'sibling', 'has Sibling',
+--                                  NULL);
+        -- discover the ID of the parent exprmt_measure
+        -- This works because we are walking down the parentage tree
+        OPEN cur_exprmt_measure;
+        FETCH cur_exprmt_measure INTO ln_parent_exprmt_measure_id;
+        CLOSE cur_exprmt_measure;
+        --- doesn't matter if we don't find a parent, cos the measure might not have one!
+
+        -- now insert the exprmt_measure
+        SELECT Count(*)  INTO ln_exists
+        FROM exprmt_measure
         WHERE experiment_id = ani_experiment_id
-        AND modified_by = avi_owner;
+          AND measure_id = ani_measure_id
+          AND Nvl(parent_exprmt_measure_id, -600) = Nvl(ln_parent_exprmt_measure_id, -600);
 
-        DELETE FROM assay_context_measure acm
-        WHERE EXISTS (SELECT 1
-            FROM measure m
-            WHERE m.measure_id = acm.measure_id
-              AND m.assay_id = ani_assay_id
-              AND m.modified_by = avi_owner);
+        IF ln_exists = 0 OR ln_exists IS null
+        THEN
+            ln_exprmt_measure_id := get_new_id ('exprmt_measure_id_seq');
+            INSERT INTO exprmt_measure
+                (exprmt_measure_id,
+                parent_exprmt_measure_id,
+                parent_child_relationship,
+                experiment_id,
+                measure_id,
+                modified_by)
+            VALUES( ln_exprmt_measure_id,
+                ln_parent_exprmt_measure_id,
+                Decode (Lower(Trim(avi_relationship)),
+                                      'derives', 'Derived from',
+                                      'child', 'has Child',
+                                      'sibling', 'has Sibling',
+                                      NULL),
+                ani_experiment_id,
+                ani_measure_id,
+                pv_modified_by);
 
-        DELETE FROM  measure m
-        WHERE assay_id = ani_assay_id
-          AND modified_by = avi_owner
-          AND NOT EXISTS (SELECT 1
-              FROM assay_context_measure acm
-              WHERE acm.measure_id = m.measure_id)
-          AND NOT EXISTS (SELECT 1
-              FROM exprmt_measure acm
-              WHERE acm.measure_id = m.measure_id);
-
-        -- should there be a check here for the ones that weren't deleted?
-
-    END delete_measure;
+        END IF;
+    END save_exprmt_measure;
 
     PROCEDURE save_measure_and_children (ani_recursion_level  IN binary_integer,
                                          ani_parent_measure_id IN NUMBER,
@@ -335,353 +755,5 @@ as
             RAISE;
 
     END save_measure_and_children;
-
-    function save_measure (ani_parent_measure_id IN NUMBER,
-                          ari_measure IN r_resulttype)
-        RETURN NUMBER
-    AS
-        ln_measure_id     NUMBER := null;
-        Ln_entry_unit_id  NUMBER;
-
-        CURSOR cur_measure
-        IS
-        SELECT measure_id
-        FROM measure
-        WHERE assay_id = ari_measure.assay_id
-          AND result_type_id = ari_measure.result_type_id
-          AND Nvl(stats_modifier_id, -100) = Nvl(ari_measure.stats_modifier_id, -100)
-          AND Nvl(parent_measure_id, -200) = Nvl(ani_parent_measure_id, -200);
-
-    BEGIN
-        -- check the arguments
-         IF ari_measure.assay_id IS NULL
-        OR ari_measure.result_type_id IS NULL
-        THEN
-            ln_measure_id := -1;
-            RETURN ln_measure_id;
-        END IF;
-
-       -- try to find an existing measure using the AK
-        OPEN cur_measure;
-        FETCH cur_measure INTO ln_measure_id;
-        CLOSE cur_measure;
-
-        -- if it exists update parent_measure_id and units
-            -- and return the measure_id
-        -- if not insert a new measure row
-        IF ln_measure_id IS NULL
-        THEN
-            SELECT unit_id
-            INTO ln_entry_unit_id
-            FROM element
-            WHERE element_id = ari_measure.result_type_id;
-
-            SELECT measure_id_seq.NEXTVAL INTO ln_measure_id
-            FROM dual;
-
-            INSERT INTO measure
-                (Measure_id,
-                 assay_id,
-                 result_type_id,
-                 stats_modifier_id,
-                 entry_unit_id,
-                 parent_measure_id,
-                 version,
-                 date_created,
-                 last_updated,
-                 modified_by)
-            VALUES
-                (ln_Measure_id,
-                 ari_measure.assay_id,
-                 ari_measure.result_type_id,
-                 ari_measure.stats_modifier_id,
-                 ln_entry_unit_id,
-                 ani_parent_measure_id,
-                 0,
-                 sysdate,
-                 null,
-                 pv_modified_by);
-
-        END IF;
-
-        RETURN ln_measure_id;
-
-    END save_measure;
-
-    FUNCTION save_context_item_set (ari_resultType  IN  r_resultType)
-        RETURN NUMBER
-    AS
-        CURSOR cur_matching_context
-        IS
-        SELECT aci.assay_context_id
-        FROM temp_context_item tci,
-            assay_context_item aci,
-            assay_context ac
-        WHERE ac.assay_context_id = aci.assay_context_id
-          AND ac.assay_id = tci.assay_id
-          AND aci.attribute_id = tci.attribute_id
-          AND Nvl(aci.value_num, -99999.999) = Nvl(tci.concentration, -99999.999)
-        GROUP BY aci.assay_context_id
-        HAVING Count(*) = (SELECT Count(*) FRoM temp_context_item)
-          AND Count(*) = (SELECT Count(*) FroM assay_context_item aci2
-                                          WHERE aci2.assay_context_id = aci.assay_context_id);
-
-        CURSOR cur_temp_context_item
-        IS
-        SELECT display_order,
-             ext_assay_ref,
-             assay_id,
-             experiment_id,
-             attribute_id,
-             aid,
-             resulttype,
-             stats_modifier,
-             contextitem,
-             concentration,
-             concentrationunit,
-             Decode ((SELECT Count(*)
-                     FROM temp_context_item tci2
-                     WHERE tci2.contextItem = tci.contextItem),
-                     0,'Free',
-                     1,'Free',
-                     'List') attribute_type
-        FROM temp_context_item tci
-        ORDER BY display_order;
-
-        ln_assay_context_id NUMBER := null;
-
-    BEGIN
-
-        -- clean out the temp table
-        DELETE FROM temp_context_item;
-        -- get the context_item set from the result_map table
-        -- AND save IN a TEMPORARY table
-        -- need special care to find a set of 'List' type items
-            -- look for the attribute without the value
-            -- insert items with values with a check to prevent inserting duplicates
-        -- save the items in a temp table
-        INSERT INTO temp_context_item
-            (display_order,
-             ext_assay_ref,
-             assay_id,
-             experiment_id,
-             attribute_id,
-             aid,
-             resulttype,
-             stats_modifier,
-             contextitem,
-             concentration,
-             concentrationunit)
-        SELECT ROWNUM - 1 display_order,
-              ci.*
-        FROM (SELECT er.ext_assay_ref,
-                  e.assay_id,
-                  e.experiment_id,
-                  el_ci.element_id attribute_id,
-                  rm.*
-              FROM (SELECT rm_rt.aid, rm_rt.resultType, rm_rt.stats_modifier, rm_ci.contextItem, rm_ci.concentration, rm_ci.concentrationunit
-                  FROM southern.result_map rm_rt,
-                      southern.result_map rm_ci
-                  WHERE Nvl(rm_ci.contextTID, rm_ci.tid) = rm_rt.tid
-                    AND rm_ci.aid = rm_rt.aid
-                    AND rm_ci.contextItem IS NOT null
-                    AND rm_rt.resultType = ari_resultType.resultType
-                    AND rm_rt.resultType IS NOT null
-                    AND Nvl(rm_rt.stats_modifier, '#####') = Nvl(ari_resultType.stats_modifier, '#####')
-                    AND rm_rt.aid = ari_resultType.aid
-                  GROUP BY rm_rt.aid, rm_rt.resultType, rm_rt.stats_modifier, rm_ci.contextItem, rm_ci.concentration, rm_ci.concentrationunit) rm,
-                  element el_ci,
-                  external_reference er,
-                  experiment e
-              WHERE er.ext_assay_ref = 'aid=' || rm.aid
-                AND e.experiment_id = er.experiment_id
-                AND el_ci.label (+) = rm.contextItem
-                ORDER BY rm.aid, rm.contextItem, rm.concentration) ci;
-
-        IF SQL%ROWCOUNT = 0
-        THEN return NULL;
-            -- nothing got inserted, so we can make a quick exit
-        END IF;
-
-        -- query to find an existing matching set
-        OPEN cur_matching_context;
-        FETCH cur_matching_context INTO ln_assay_context_id;
-        CLOSE cur_matching_context;
-
-        IF ln_assay_context_id IS NULL
-        THEN
-            -- not found create an assay_context
-            SELECT assay_context_id_seq.NEXTVAL
-            INTO ln_assay_context_id
-            FROM dual;
-
-            INSERT INTO assay_context
-                (assay_context_id,
-                 assay_id,
-                 context_name,
-                 context_group,
-                 display_order,
-                 modified_by)
-            VALUES
-                (ln_assay_context_id,
-                 ari_resultType.assay_id,
-                 'Type a name',
-                 'TBD',
-                 0,
-                 pv_modified_by);
-            -- cycle thru the items saving each as you go
-            FOR lr_context_item IN  cur_temp_context_item
-            LOOP
-                -- check the inputs
-                IF lr_context_item.attribute_id IS NULL
-                    OR
-                    lr_context_item.assay_id is NULL
-                THEN
-                    -- log the error;
-                    log_error (-90002, 'Attribute not in Element', 'save_context_item_set',
-                            'resultType=' || lr_context_item.resultType || lr_context_item.stats_modifier
-                            || ', Attr_Id='|| To_Char(lr_context_item.attribute_id)
-                            || ', attribute=' || lr_context_item.contextItem
-                            || ', Assay=' || To_Char(lr_context_item.assay_id)
-                            || ', AID='|| To_Char(lr_context_item.aid));
-
-
-                else
-                    INSERT INTO assay_context_item
-                        (assay_context_item_id,
-                        assay_context_id,
-                        display_order,
-                        attribute_type,
-                        attribute_id,
-                        --value_id,
-                        value_display,
-                        value_num,
-                        modified_by)
-                    SELECT
-                        assay_context_item_id_seq.nextval,
-                        ln_assay_context_id,
-                        lr_context_item.display_order,
-                        lr_context_item.attribute_type,
-                        lr_context_item.attribute_id,
-                        --value_id,
-                        lr_context_item.concentration || ' ' || lr_context_item.concentrationunit value_display,
-                        lr_context_item.concentration value_num,
-                        pv_modified_by
-                    FROM dual;
-                END IF;
-
-            END LOOP;
-        END IF;
-
-        RETURN ln_assay_context_id;
-
-    END save_context_item_set;
-
-    PROCEDURE save_assay_context_measure (ani_assay_context_id IN number,
-                               ani_measure_id IN number)
-    AS
-
-    BEGIN
-        -- try inserting but don't overwrite an existing entry
-        INSERT INTO assay_context_measure
-            (assay_context_measure_id,
-             assay_context_id,
-             measure_id,
-             modified_by)
-        SELECT assay_context_measure_id_seq.nextval,
-             ani_assay_context_id,
-             ani_measure_id,
-             pv_modified_by
-        FROM dual
-        WHERE NOT EXISTS (SELECT 1
-              FROM assay_context_measure acm
-              WHERE assay_context_id = ani_assay_context_id
-                AND measure_id = ani_measure_id);
-
-    END save_assay_context_measure;
-
-    PROCEDURE save_exprmt_measure (ani_experiment_id IN number,
-                                ani_measure_id IN number,
-                                ani_parent_measure_id IN NUMBER,
-                                avi_relationship IN varchar2)
-    AS
-         CURSOR cur_exprmt_measure
-         IS
-         SELECT exprmt_measure_id
-         FROM exprmt_measure
-         WHERE experiment_id = ani_experiment_id
-           AND measure_id = ani_parent_measure_id;
-
-        ln_parent_exprmt_measure_id NUMBER := null;
-
-    BEGIN
-        -- cleanup typos in the relationship
---        lv_relationship := Decode (Lower(Trim(avi_relationship)),
---                                  'derives', 'Derived from',
---                                  'child', 'has Child',
---                                  'sibling', 'has Sibling',
---                                  NULL);
-        -- discover the ID of the parent exprmt_measure
-        -- This works because we are walking down the parentage tree
-        OPEN cur_exprmt_measure;
-        FETCH cur_exprmt_measure INTO ln_parent_exprmt_measure_id;
-        CLOSE cur_exprmt_measure;
-        --- doesn't matter if we don't find a parent, cos the measure might not have one!
-
-        -- now insert the exprmt_measure
-        INSERT INTO exprmt_measure
-            (exprmt_measure_id,
-            parent_exprmt_measure_id,
-            parent_child_relationship,
-            experiment_id,
-            measure_id,
-            modified_by)
-        SELECT exprmt_measure_id_seq.nextval,
-            ln_parent_exprmt_measure_id,
-            Decode (Lower(Trim(avi_relationship)),
-                                  'derives', 'Derived from',
-                                  'child', 'has Child',
-                                  'sibling', 'has Sibling',
-                                  NULL),
-            ani_experiment_id,
-            ani_measure_id,
-            pv_modified_by
-        FROM dual
-        WHERE NOT EXISTS (SELECT 1
-              FROM exprmt_measure
-              WHERE experiment_id = ani_experiment_id
-                AND measure_id = ani_measure_id
-                AND Nvl(parent_exprmt_measure_id, -600) = Nvl(ln_parent_exprmt_measure_id, -600));
-
-    END save_exprmt_measure;
-
-    procedure log_error (an_errnum    in  number,
-                        av_errmsg     in varchar2,
-                        av_location   in varchar2,
-                        av_comment    in varchar2 default null)
-    as
-    begin
-        insert into error_log
-           ( ERROR_LOG_ID,
-             ERROR_DATE,
-             procedure_name,
-             ERR_NUM,
-             ERR_MSG,
-             ERR_COMMENT
-           ) values (
-             ERROR_LOG_ID_SEQ.NEXTVAL,
-             sysdate,
-             av_location,
-             an_errnum,
-             av_errmsg,
-             av_comment
-           );
-
-
-    exception
-        when others
-        then
-            null;
-    end log_error;
 
 END result_map_util;
