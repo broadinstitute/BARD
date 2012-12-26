@@ -42,6 +42,7 @@ $(document).ready(function () {
         resetAllFilters('ProjectFacetForm');
     });
     $('#CompoundFacetForm').live('submit', function (event) {
+
         var searchString = $("#searchString").val();
         handleFilteredQuery(searchString, 'CompoundFacetForm', 'CompoundFacetForm', 'compoundsTab', "totalCompounds", 'compounds', 'Compounds ');
         return false; //do not submit form the normal way, use Ajax instead
@@ -58,7 +59,8 @@ $(document).ready(function () {
     }
 
     //=== Handle Paging. We bind to all of the paging css classes on the anchor tag ===
-    $("a.step,a.nextLink,a.prevLink").live('click', function (event) {
+    $(document).on("click", "a.step,a.nextLink,a.prevLink", function (event) {
+        // $("a.step,a.nextLink,a.prevLink").live('click', function (event) {
         event.preventDefault();	// prevent the default action behaviour to happen
         var url = $(this).attr('href');
 
@@ -69,23 +71,25 @@ $(document).ready(function () {
     if ($("#searchString").val() != null) {
         $('#searchForm').submit();
     }
-    //=== Handle Paging. We bind to all of the paging css classes on the anchor tag ===
-    $("a.facetDiv").live('click', function (event) {
+
+
+    //=== Handle the hide/show of facets ===
+    $(document).on("click", "a.facetDiv", function (event) {
         event.preventDefault();	// prevent the default action behaviour to happen
-        // $.address.value($(this).attr('href'));
-        var facetId = $(this).attr('div_id');
-        var facetText = $(this).text();
-        if(facetText=='More'){
-            $("#" + facetId).attr('class','showFacet')
-             $(this).text("Less")
+        var facetId = $(this).attr('div_id'); //get the current div
+        var facetText = $(this).text();//Get the current text, either 'Less' or 'More'
+        if (facetText == 'More') { //If the text is 'More' set to 'Less' and change the style to 'display:block'
+            $("#" + facetId).css('display', 'block')
+            $(this).text("Less")
         }
-        if(facetText=='Less'){
-            $("#" + facetId).attr('class','hideFacet')
-             $(this).text("More")
+        if (facetText == 'Less') {//If the text is 'Less' set to 'More' and change the style to 'display:none'
+            $("#" + facetId).css('display', 'none')
+            $(this).text("More")
         }
     });
 
 });
+
 /**
  * Handle paging using Ajax
  * TODO: Only paging on the main form is supported.
@@ -131,7 +135,7 @@ function handleStructureSearch(url, currentFormId) {
         },
         success:function (data) {
             $("#compounds").html(data);
-             var compoundTotal = TAB_ICON + ' Compounds (' + $("#totalCompounds").val() + ')';
+            var compoundTotal = TAB_ICON + ' Compounds (' + $("#totalCompounds").val() + ')';
 
             $("#compoundsTab").html(compoundTotal);
             $("#compounds").tab('show');
@@ -172,7 +176,7 @@ function handleSearch(controllerAction, currentFormId, tabId, totalHitsForResour
             $(updateDivId).html(data);
             var totalHits = $(totalHitsElement).val();
             var total = prefixOfTextToAppearOnTab + '(' + totalHits + ')';
-            if(totalHits > 0){
+            if (totalHits > 0) {
                 total = TAB_ICON + total
             }
 
@@ -263,7 +267,7 @@ function findTheAppropriateControllerActionFromFacetType(searchType, facetFormTy
     return "EMPTY"
 
 }
-function showTab(tabId){
+function showTab(tabId) {
     var tab = "#" + tabId;
     $(tab).tab('show');
 }
@@ -281,17 +285,17 @@ function handleMainFormSubmit(searchString) {
             break;
         case 'ADID':
             activateCurrentTab('assaysTab');
-           showTab("assays");
+            showTab("assays");
             handleSearch('/bardwebclient/bardWebInterface/searchAssaysByIDs', 'searchForm', 'assaysTab', 'totalAssays', 'Assay Definitions ', 'assays');
-             break;
+            break;
         case 'CID':
-            activateCurrentTab('compoundsTab') ;
-             showTab("compounds");
+            activateCurrentTab('compoundsTab');
+            showTab("compounds");
             handleSearch('/bardwebclient/bardWebInterface/searchCompoundsByIDs', 'searchForm', 'compoundsTab', 'totalCompounds', 'Compounds ', 'compounds');
             break;
         case 'PID':
             activateCurrentTab('projectsTab');
-           // $("#projects").tab('show');
+            // $("#projects").tab('show');
             showTab("projects");
             handleSearch('/bardwebclient/bardWebInterface/searchProjectsByIDs', 'searchForm', 'projectsTab', 'totalProjects', 'Projects ', 'projects');
             break;

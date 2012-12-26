@@ -234,7 +234,7 @@ class CompoundRestServiceUnitSpec extends Specification {
         when:
         String query = service.buildQueryForCompoundSummary(2L)
         then:
-        assert query == "http://ncgc/compounds/2/summary"
+        assert query == "http://ncgc/compounds/2/summary?expand=true"
 
     }
 

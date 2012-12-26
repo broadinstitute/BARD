@@ -6,9 +6,11 @@ $(document).ready(function () {
     // Add jQuery Address functionality to the paging links
 
     //=== Handle Paging. We bind to all of the paging css classes on the anchor tag ===
-    $("a.step,a.nextLink,a.prevLink").live('click', function (event) {
+    $(document).on("click", "a.step,a.nextLink,a.prevLink", function (event) {
+
+        // $("a.step,a.nextLink,a.prevLink").live('click', function (event) {
         event.preventDefault();	// prevent the default action behaviour to happen
-       // $.address.value($(this).attr('href'));
+        // $.address.value($(this).attr('href'));
         var pagingurl = $(this).attr('href');
 
         populatePage(pagingurl);

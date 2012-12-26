@@ -4,6 +4,7 @@ import bard.core.rest.spring.experiment.Activity
 import bard.core.rest.spring.util.JsonUtil
 import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.annotation.JsonProperty
+import bard.core.rest.spring.assays.Assay
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class CompoundSummary extends JsonUtil {
@@ -14,7 +15,7 @@ public class CompoundSummary extends JsonUtil {
     private List<Activity> testedExptdata = new ArrayList<Activity>();
 
     @JsonProperty("testedAssays")
-    private List<String> testedAssays = new ArrayList<String>();
+    private List<Assay> testedAssays = new ArrayList<Assay>();
 
 
     @JsonProperty("nhit")
@@ -39,12 +40,12 @@ public class CompoundSummary extends JsonUtil {
     }
 
     @JsonProperty("testedAssays")
-    public List<String> getTestedAssays() {
+    public List<Assay> getTestedAssays() {
         return testedAssays;
     }
 
     @JsonProperty("testedAssays")
-    public void setTestedAssays(List<String> testedAssays) {
+    public void setTestedAssays(List<Assay> testedAssays) {
         this.testedAssays = testedAssays;
     }
 
@@ -86,6 +87,15 @@ public class CompoundSummary extends JsonUtil {
     @JsonProperty("hitExptdata")
     public void setHitExptdata(List<Activity> hitExptdata) {
         this.hitExptdata = hitExptdata;
+    }
+
+    CompoundBioActivity buildBioActivitySummary(){
+        CompoundBioActivity compoundBioActivity = new CompoundBioActivity()
+        compoundBioActivity.numberActive = this.nhit
+        compoundBioActivity.numberTested=this.ntest
+
+
+
     }
 
 }

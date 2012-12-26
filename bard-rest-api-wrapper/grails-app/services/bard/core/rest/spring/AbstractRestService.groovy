@@ -362,21 +362,23 @@ abstract class AbstractRestService {
 
     }
 
-    public Object getForObject(String uri, Class clazz, Map map = [:]) {
+    public Object getForObject(final String uri, final Class clazz, Map map = [:]) {
         try {
             return this.restTemplate.getForObject(uri, clazz, map)
         } catch (RestClientException restClientException) {
-            log.error(uri.toString(), restClientException)
+            final String uriString = uri + map
+            log.error(uriString, restClientException)
             throw new RestApiException(restClientException)
         }
 
     }
 
-    public Object postForObject(URI uri, Class clazz, Map map = [:]) {
+    public Object postForObject(final URI uri, final Class clazz, Map map = [:]) {
         try {
             return this.restTemplate.postForObject(uri, map, clazz)
         } catch (RestClientException restClientException) {
-            log.error(uri.toString(), restClientException)
+            final String uriString = uri.toString()+ map
+            log.error(uriString, restClientException)
             throw new RestApiException(restClientException)
         }
     }

@@ -1,9 +1,4 @@
 .facetDiv{
     padding-left: 18px;
 }
-div.hideFacet{
-   display: none;
-}
-div.showFacet {
-    display: block;
-}
+

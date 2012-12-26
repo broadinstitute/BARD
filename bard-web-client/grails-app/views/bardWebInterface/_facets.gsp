@@ -37,14 +37,14 @@
                         <g:set var="childSize" value="${parentFacet.children.size()}"/>
                         <g:each in="${parentFacet.children}" var="childFacet" status="counter">
                             <g:if test="${counter == 4 && childSize > 5}">
-                                <div id="${parentFacet.id}_${formName.toString()}" class='hideFacet'>
+                                <div id="${parentFacet.id}_${formName.toString()}" style="display: none;">
                             </g:if>
                             <g:if test="${childFacet.id}">
                                 <label class="checkbox">
                                     <g:set var="checked"
                                            value="${appliedFilters?.searchFilters?.find { SearchFilter filter -> ((filter.filterName.trim().replace('"', '').equalsIgnoreCase(parentFacet.id.trim())) && (filter.filterValue.trim().replace('"', '').equalsIgnoreCase(childFacet.id)))}}"/>
                                     <g:checkBox name="filters[${childIndex}].filterValue" value="${childFacet.id}"
-                                                checked="${checked}"/> ${childFacet.id} (${childFacet.value})
+                                                checked="${checked}" class="${formName}_Chk"/> ${childFacet.id} (${childFacet.value})
                                 </label>
                                 <g:hiddenField name="filters[${childIndex}].filterName" value="${parentFacet.id}"/>
                                 <g:set var="childIndex" value="${childIndex + 1}"/>
@@ -62,7 +62,7 @@
                                 var="filter">
                             <label class="checkbox">
                                 <g:checkBox name="filters[${childIndex}].filterValue" value="${filter.filterValue}"
-                                            checked="true"/> ${filter.filterValue} (0)
+                                            checked="true" class="${formName}_Chk"/> ${filter.filterValue} (0)
                             </label>
                             <g:hiddenField name="filters[${childIndex}].filterName" value="${filter.filterName}"/>
                             <g:set var="childIndex" value="${childIndex + 1}"/>

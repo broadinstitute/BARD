@@ -26,6 +26,7 @@
     <g:if test="${assayAdapter.aid}">
         <dt>PubChem AID:</dt>
         <dd><a href="http://pubchem.ncbi.nlm.nih.gov/assay/assay.cgi?aid=${assayAdapter.aid}" target="_blank">
+            <img src="${resource(dir: 'images', file: 'pubchem.png')}" alt="PubChem"/>
             ${assayAdapter.aid}
         </a>
         </dd>

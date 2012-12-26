@@ -40,8 +40,9 @@
         <g:each in="${experimentDataMap?.spreadSheetActivities}" var="experimentData">
             <tr>
                 <td>
-                    <img src="${resource(dir: 'images', file: 'pubchem.png')}" alt="PubChem"/>
-                    <a href="http://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=${experimentData.sid}">${experimentData.sid}</a>
+                    <a href="http://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=${experimentData.sid}">
+                        <img src="${resource(dir: 'images', file: 'pubchem.png')}" alt="PubChem"/>
+                        ${experimentData.sid}</a>
                 </td>
                 <td>
                     <a href="${createLink(controller: 'bardWebInterface', action: 'showCompound', params: [cid: experimentData.cid, searchString: "${searchString}"])}">${experimentData.cid}</a>

@@ -80,7 +80,9 @@ class CompoundRestService extends AbstractRestService {
     protected String buildQueryForCompoundSummary(final Long cid) {
         StringBuilder url = new StringBuilder();
         url.append(getResource(cid.toString())).
-                append(RestApiConstants.SUMMARY);
+                append(RestApiConstants.SUMMARY).
+                append(RestApiConstants.QUESTION_MARK).
+                append(RestApiConstants.EXPAND_TRUE)
 
         return url.toString();
     }
