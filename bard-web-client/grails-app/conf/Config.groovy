@@ -1,17 +1,12 @@
 import grails.util.Environment
 import org.apache.log4j.DailyRollingFileAppender
 import org.springframework.security.web.authentication.AbstractAuthenticationTargetUrlRequestHandler
-
-//TODO: Override In Production. Also add greenmail.disabled=true so Green mail is disabled
-grails.mail.port = com.icegreen.greenmail.util.ServerSetupTest.SMTP.port
-grails.mail.default.from = "noreply@broadinstitute.org"
-grails.mail.default.to = "noreply@broadinstitute.org"
-grails.mail.host = "smtp.broadinstitute.org"
-grails.mail.host = "localhost"
+import org.apache.log4j.net.SMTPAppender
+import org.apache.log4j.Level
 
 //TODO: Override in dev, qa and prod to point to the current stable release
 ncgc.server.root.url = "http://bard.nih.gov/api/v10"
-promiscuity.badapple.url="${ncgc.server.root.url}/plugins/badapple/prom/cid/"
+promiscuity.badapple.url = "${ncgc.server.root.url}/plugins/badapple/prom/cid/"
 //override in config file for environment
 server.port = System.properties.getProperty('server.port') ?: 8080
 grails.serverURL = "http://localhost:${server.port}/bardwebclient"
@@ -19,8 +14,7 @@ grails.serverURL = "http://localhost:${server.port}/bardwebclient"
 bard.cap.home = "http://localhost:8081/BARD/"
 bard.cap.assay = "${bard.cap.home}assayDefinition/show/"
 
-//Override in appropriate config file,. Note that by default analytics is turned off.
-google.analytics.webPropertyID = "UA-xxxxxx-x"
+
 
 grails.project.groupId = appName // change this to alter the default package name and Maven publishing destination
 grails.mime.file.extensions = true // enables the parsing of file extensions from URLs into the request format
@@ -86,41 +80,7 @@ environments {
 }
 
 // log4j configuration
-log4j = {
-    // Example of changing the log pattern for the default console
-    // appender:
-    //
-    appenders {
-//        console name:'stdout', layout:pattern(conversionPattern: '%c{2} %m%n')
-        appender new DailyRollingFileAppender(
-                name: "NCGCResponseTimeAppender",
-                file: "logs/" + Environment.current.name + "/NCGC_ResponseTime.log",
-                layout: pattern(conversionPattern: '%m%n'),
-                immediateFlush: true,
-                threshold: org.apache.log4j.Level.INFO,
-                datePattern: "'.'yyyy-MM-dd"
-        )
-    }
 
-    environments {
-
-    }
-
-    //Capture the response time (round-trip + response parsing time) from NCGC API requests.
-    info NCGCResponseTimeAppender: ['grails.app.services.bardqueryapi.QueryService', 'grails.app.services.elasticsearchplugin.QueryExecutorService']
-
-    error 'org.codehaus.groovy.grails.web.servlet',  //  controllers
-            'org.codehaus.groovy.grails.web.pages', //  GSP
-            'org.codehaus.groovy.grails.web.sitemesh', //  layouts
-            'org.codehaus.groovy.grails.web.mapping.filter', // URL mapping
-            'org.codehaus.groovy.grails.web.mapping', // URL mapping
-            'org.codehaus.groovy.grails.commons', // core / classloading
-            'org.codehaus.groovy.grails.plugins', // plugins
-            'org.codehaus.groovy.grails.orm.hibernate', // hibernate integration
-            'org.springframework',
-            'org.hibernate',
-            'net.sf.ehcache.hibernate'
-}
 CbipCrowd {
     application.url = 'https://crowd.somewhere.com/crowd/'
     application.username = 'bard'
@@ -167,6 +127,14 @@ grails {
     }
 }
 
+//TODO: Override In Production. Also add greenmail.disabled=true so Green mail is disabled
+grails.mail.port = com.icegreen.greenmail.util.ServerSetupTest.SMTP.port
+grails.mail.default.from = "noreply@broadinstitute.org"
+grails.mail.default.to = "noreply@broadinstitute.org"
+grails.mail.host = "localhost"
+grails.mail.default.subject="Error From BARD Web Query"
+google.analytics.webPropertyID = "UA-xxxxxx-x"
+
 /**
  * Loads external config files from the .grails subfolder in the user's home directory
  * Home directory in Windows is usually: C:\Users\<username>\.grails
@@ -200,5 +168,40 @@ if (appName) {
         else {
             println "Skipping Config.groovy overrides: $primaryFullName and $secondaryFullName not found"
         }
+    }
+}
+
+log4j = {
+    appenders {
+        // This should work on both windows and unix
+        appender new DailyRollingFileAppender(
+                name: "NCGCResponseTimeAppender",
+                file: "logs/" + Environment.current.name + "/NCGC_ResponseTime.log",
+                layout: pattern(conversionPattern: '%m%n'),
+                immediateFlush: true,
+                threshold: org.apache.log4j.Level.INFO,
+                datePattern: "'.'yyyy-MM-dd"
+        )
+
+
+        def patternLayout = new org.apache.log4j.PatternLayout()
+        patternLayout.setConversionPattern("%d [%t] %-5p %c - %m%n")
+        def mailAppender = new SMTPAppender()
+        mailAppender.setSMTPPort(config.grails.mail.port)
+        mailAppender.setFrom(config.grails.mail.default.from)
+        mailAppender.setTo(config.grails.mail.default.to)
+        mailAppender.setSubject(config.grails.mail.default.subject)
+        mailAppender.setSMTPHost(config.grails.mail.host)
+        mailAppender.setLayout(patternLayout)
+        appender name: 'mail', mailAppender
+    }
+    //Capture the response time (round-trip + response parsing time) from NCGC API requests.
+    info NCGCResponseTimeAppender: ['grails.app.services.bardqueryapi.QueryService']
+
+
+    root {
+        debug 'stdout'
+        error 'mail', 'fileAppender'
+        additivity = true
     }
 }
