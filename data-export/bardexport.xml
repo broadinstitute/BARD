@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<bardexport xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
- xsi:noNamespaceSchemaLocation="BARDexportSchema.xsd">
-    <link rel='item' title='List of assays, ready for extraction' href='http://localhost/api/cap/assays' type='application/vnd.bard.cap+xml;type=assays' />
-    <link rel='item' title='The BARD Dictionary' href='http://localhost/api/dictionary' type='application/vnd.bard.cap+xml;type=dictionary' />
-    <link rel='item' title='List of projects, ready for extraction' type='application/vnd.bard.cap+xml;type=projects' href='http://localhost/api/projects' />
-    <link rel='item' title='List of experiments, ready for extraction' type='application/vnd.bard.cap+xml;type=experiments' href='http://localhost/api/data' />
-</bardexport>
