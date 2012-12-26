@@ -89,13 +89,13 @@ public class CompoundSummary extends JsonUtil {
         this.hitExptdata = hitExptdata;
     }
 
-    CompoundBioActivity buildBioActivitySummary(){
-        CompoundBioActivity compoundBioActivity = new CompoundBioActivity()
-        compoundBioActivity.numberActive = this.nhit
-        compoundBioActivity.numberTested=this.ntest
-
-
-
-    }
+//    CompoundBioActivity buildBioActivitySummary(){
+//        CompoundBioActivity compoundBioActivity = new CompoundBioActivity()
+//        compoundBioActivity.numberActive = this.nhit
+//        compoundBioActivity.numberTested=this.ntest
+//
+//
+//
+//    }
 
 }
