@@ -3,8 +3,8 @@ package bard.dm.cars.domainspreadsheetmapping
 import bard.db.registration.ExternalSystem
 
 import bard.dm.Log
-import bard.db.experiment.Project
-import bard.db.experiment.ProjectStep
+import bard.db.project.Project
+import bard.db.project.ProjectStep
 import bard.db.registration.ExternalReference
 import bard.dm.cars.spreadsheet.CarsProject
 

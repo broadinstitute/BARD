@@ -1,6 +1,6 @@
 package bard.dm.cars.domainspreadsheetmapping
 
-import bard.db.experiment.Project
+import bard.db.project.Project
 
 import bard.dm.cars.spreadsheet.CarsProject
 import bard.db.registration.ExternalReference

@@ -2,7 +2,7 @@ package bard.dm.cars.domainspreadsheetmapping
 
 import bard.dm.Log
 import bard.db.dictionary.Element
-import bard.db.experiment.ProjectContextItem
+import bard.db.project.ProjectContextItem
 
 /**
  * Created with IntelliJ IDEA.
@@ -33,7 +33,7 @@ class ProjectAnnotater {
 
             Set<Element> carsAttributeSet = new HashSet<Element>(carsBardMapping.projectAttributePropertyNameMap.keySet())
 
-            projectPair.project.projectContextItems.each {ProjectContextItem projectContextItem ->
+            projectPair.project.contexts.each {ProjectContextItem projectContextItem ->
                 if (carsAttributeSet.remove(projectContextItem.attributeElement)) {
                     Log.logger.info("\t\tannotation already present for " + projectContextItem.attributeElement.id + " " + projectContextItem.attributeElement.label)
                 }
