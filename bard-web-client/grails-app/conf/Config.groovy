@@ -193,15 +193,16 @@ log4j = {
 
         def patternLayout = new org.apache.log4j.PatternLayout()
         patternLayout.setConversionPattern("%d [%t] %-5p %c - %m%n")
-        def mailAppender = new SMTPAppender()
-        mailAppender.setSMTPPort(config.grails.mail.port)
-        mailAppender.setFrom(config.grails.mail.default.from)
-        mailAppender.setTo(config.grails.mail.default.to)
-        mailAppender.setSubject(config.grails.mail.default.subject)
-        mailAppender.setSMTPHost(config.grails.mail.host)
-        mailAppender.setLayout(patternLayout)
-        appender name: 'mail', mailAppender
-    }
+        appender new SMTPAppender(
+                name:"mail",
+                smtpPort:config.grails.mail.port,
+                from:config.grails.mail.default.from,
+                to: config.grails.mail.default.to,
+                subject:config.grails.mail.default.subject,
+                smtpHost:config.grails.mail.host,
+                layout: patternLayout
+        )
+     }
 
     //Capture errors from the NCGC API (via JDO)
     error NCGCErrorAppender: ['grails.app.services.bard.core.rest.spring.AbstractRestService']
