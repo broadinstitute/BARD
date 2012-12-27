@@ -132,7 +132,7 @@ grails.mail.port = com.icegreen.greenmail.util.ServerSetupTest.SMTP.port
 grails.mail.default.from = "noreply@broadinstitute.org"
 grails.mail.default.to = "noreply@broadinstitute.org"
 grails.mail.host = "localhost"
-grails.mail.default.subject="Error From BARD Web Query"
+grails.mail.default.subject = "Error From BARD Web Query"
 google.analytics.webPropertyID = "UA-xxxxxx-x"
 
 /**
@@ -175,14 +175,21 @@ log4j = {
     appenders {
         // This should work on both windows and unix
         appender new DailyRollingFileAppender(
-                name: "NCGCResponseTimeAppender",
-                file: "logs/" + Environment.current.name + "/NCGC_ResponseTime.log",
+                name: "NCGCErrorAppender",
+                file: "logs/" + Environment.current.name + "/NCGC_Errors.log",
                 layout: pattern(conversionPattern: '%m%n'),
                 immediateFlush: true,
-                threshold: org.apache.log4j.Level.INFO,
+                threshold: org.apache.log4j.Level.ERROR,
                 datePattern: "'.'yyyy-MM-dd"
         )
-
+        appender new DailyRollingFileAppender(
+                name: "JavaScriptErrorsAppender",
+                file: "logs/" + Environment.current.name + "/Client_JavaScript_Errors.log",
+                layout: pattern(conversionPattern: '%m%n'),
+                immediateFlush: true,
+                threshold: org.apache.log4j.Level.ERROR,
+                datePattern: "'.'yyyy-MM-dd"
+        )
 
         def patternLayout = new org.apache.log4j.PatternLayout()
         patternLayout.setConversionPattern("%d [%t] %-5p %c - %m%n")
@@ -195,9 +202,11 @@ log4j = {
         mailAppender.setLayout(patternLayout)
         appender name: 'mail', mailAppender
     }
-    //Capture the response time (round-trip + response parsing time) from NCGC API requests.
-    info NCGCResponseTimeAppender: ['grails.app.services.bardqueryapi.QueryService']
 
+    //Capture errors from the NCGC API (via JDO)
+    error NCGCErrorAppender: ['grails.app.services.bard.core.rest.spring.AbstractRestService']
+    //Capture JavaScript errors from the client (via the ErrorHandling controller)
+    error JavaScriptErrorsAppender: ['grails.app.controllers.bardqueryapi.ErrorHandlingController']
 
     root {
         debug 'stdout'
