@@ -22,23 +22,28 @@ beans = {
         promiscuityUrl = badApplePromiscuityUrl
         restTemplate = ref('restTemplate')
         executorService = Executors.newCachedThreadPool()
+        loggerService = ref('loggerService')
     }
 
     experimentRestService(ExperimentRestService) {
         baseUrl = ncgcBaseURL
         restTemplate = ref('restTemplate')
+        loggerService = ref('loggerService')
     }
     projectRestService(ProjectRestService) {
         baseUrl = ncgcBaseURL
         restTemplate = ref('restTemplate')
+        loggerService = ref('loggerService')
     }
     assayRestService(AssayRestService) {
         baseUrl = ncgcBaseURL
         restTemplate = ref('restTemplate')
+        loggerService = ref('loggerService')
     }
     substanceRestService(SubstanceRestService) {
         baseUrl = ncgcBaseURL
         restTemplate = ref('restTemplate')
+        loggerService = ref('loggerService')
     }
     switch (GrailsUtil.environment) {
         case "offline":
