@@ -17,8 +17,9 @@ class Log {
 
     static FileAppender fileAppender
 
-    private static String filePath = "test/exampleData/dnaRepairLoad.log"
-    //"test/exampleData/assayDeDuplication.log"//"test/exampleData/parseCarsSpreadsheet.log"
+    private static String filePath = "test/exampleData/assayDeDuplication.log"
+    //// "test/exampleData/dnaRepairLoad.log"
+    //"test/exampleData/parseCarsSpreadsheet.log"
 
     private static Logger initializeLogger() {
         Logger logger = Logger.getLogger("parseCarsSpreadsheetScriptLogger")

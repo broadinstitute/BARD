@@ -2,165 +2,18 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="859896cc-9815-4eea-b811-695a0ad1bfe5" name="Default" comment="">
-      <change type="MOVED" beforePath="C:\Local\code_and_repos\BARD\DnaRepairSpreadsheetParser\.gitignore" afterPath="$PROJECT_DIR$/.gitignore" />
-      <change type="MOVED" beforePath="C:\Local\code_and_repos\BARD\DnaRepairSpreadsheetParser\.idea\.name" afterPath="$PROJECT_DIR$/.idea/.name" />
-      <change type="MOVED" beforePath="C:\Local\code_and_repos\BARD\DnaRepairSpreadsheetParser\.idea\compiler.xml" afterPath="$PROJECT_DIR$/.idea/compiler.xml" />
-      <change type="MOVED" beforePath="C:\Local\code_and_repos\BARD\DnaRepairSpreadsheetParser\.idea\copyright\profiles_settings.xml" afterPath="$PROJECT_DIR$/.idea/copyright/profiles_settings.xml" />
-      <change type="MOVED" beforePath="C:\Local\code_and_repos\BARD\DnaRepairSpreadsheetParser\.idea\encodings.xml" afterPath="$PROJECT_DIR$/.idea/encodings.xml" />
-      <change type="MOVED" beforePath="C:\Local\code_and_repos\BARD\DnaRepairSpreadsheetParser\.idea\gradle.xml" afterPath="$PROJECT_DIR$/.idea/gradle.xml" />
-      <change type="MOVED" beforePath="C:\Local\code_and_repos\BARD\DnaRepairSpreadsheetParser\.idea\misc.xml" afterPath="$PROJECT_DIR$/.idea/misc.xml" />
-      <change type="MOVED" beforePath="C:\Local\code_and_repos\BARD\DnaRepairSpreadsheetParser\.idea\modules.xml" afterPath="$PROJECT_DIR$/.idea/modules.xml" />
-      <change type="MOVED" beforePath="C:\Local\code_and_repos\BARD\DnaRepairSpreadsheetParser\.idea\scopes\scope_settings.xml" afterPath="$PROJECT_DIR$/.idea/scopes/scope_settings.xml" />
-      <change type="MOVED" beforePath="C:\Local\code_and_repos\BARD\DnaRepairSpreadsheetParser\.idea\uiDesigner.xml" afterPath="$PROJECT_DIR$/.idea/uiDesigner.xml" />
-      <change type="MOVED" beforePath="C:\Local\code_and_repos\BARD\DnaRepairSpreadsheetParser\.idea\vcs.xml" afterPath="$PROJECT_DIR$/.idea/vcs.xml" />
-      <change type="MOVED" beforePath="C:\Local\code_and_repos\BARD\DnaRepairSpreadsheetParser\.idea\workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MOVED" beforePath="C:\Local\code_and_repos\BARD\DnaRepairSpreadsheetParser\application.properties" afterPath="$PROJECT_DIR$/application.properties" />
-      <change type="MOVED" beforePath="C:\Local\code_and_repos\BARD\DnaRepairSpreadsheetParser\grails-app\conf\ApplicationResources.groovy" afterPath="$PROJECT_DIR$/grails-app/conf/ApplicationResources.groovy" />
-      <change type="MOVED" beforePath="C:\Local\code_and_repos\BARD\DnaRepairSpreadsheetParser\grails-app\conf\BootStrap.groovy" afterPath="$PROJECT_DIR$/grails-app/conf/BootStrap.groovy" />
-      <change type="MOVED" beforePath="C:\Local\code_and_repos\BARD\DnaRepairSpreadsheetParser\grails-app\conf\BuildConfig.groovy" afterPath="$PROJECT_DIR$/grails-app/conf/BuildConfig.groovy" />
-      <change type="MOVED" beforePath="C:\Local\code_and_repos\BARD\DnaRepairSpreadsheetParser\grails-app\conf\Config.groovy" afterPath="$PROJECT_DIR$/grails-app/conf/Config.groovy" />
-      <change type="MOVED" beforePath="C:\Local\code_and_repos\BARD\DnaRepairSpreadsheetParser\grails-app\conf\DataSource.groovy" afterPath="$PROJECT_DIR$/grails-app/conf/DataSource.groovy" />
-      <change type="MOVED" beforePath="C:\Local\code_and_repos\BARD\DnaRepairSpreadsheetParser\grails-app\conf\UrlMappings.groovy" afterPath="$PROJECT_DIR$/grails-app/conf/UrlMappings.groovy" />
-      <change type="MOVED" beforePath="C:\Local\code_and_repos\BARD\DnaRepairSpreadsheetParser\grails-app\conf\resources\ElementFieldMapping.config" afterPath="$PROJECT_DIR$/grails-app/conf/resources/ElementFieldMapping.config" />
-      <change type="MOVED" beforePath="C:\Local\code_and_repos\BARD\DnaRepairSpreadsheetParser\grails-app\conf\resources\HeaderMappings.config" afterPath="$PROJECT_DIR$/grails-app/conf/resources/HeaderMappings.config" />
-      <change type="MOVED" beforePath="C:\Local\code_and_repos\BARD\DnaRepairSpreadsheetParser\grails-app\conf\spring\resources.groovy" afterPath="$PROJECT_DIR$/grails-app/conf/spring/resources.groovy" />
-      <change type="MOVED" beforePath="C:\Local\code_and_repos\BARD\DnaRepairSpreadsheetParser\grails-app\i18n\messages.properties" afterPath="$PROJECT_DIR$/grails-app/i18n/messages.properties" />
-      <change type="MOVED" beforePath="C:\Local\code_and_repos\BARD\DnaRepairSpreadsheetParser\grails-app\i18n\messages_cs_CZ.properties" afterPath="$PROJECT_DIR$/grails-app/i18n/messages_cs_CZ.properties" />
-      <change type="MOVED" beforePath="C:\Local\code_and_repos\BARD\DnaRepairSpreadsheetParser\grails-app\i18n\messages_da.properties" afterPath="$PROJECT_DIR$/grails-app/i18n/messages_da.properties" />
-      <change type="MOVED" beforePath="C:\Local\code_and_repos\BARD\DnaRepairSpreadsheetParser\grails-app\i18n\messages_de.properties" afterPath="$PROJECT_DIR$/grails-app/i18n/messages_de.properties" />
-      <change type="MOVED" beforePath="C:\Local\code_and_repos\BARD\DnaRepairSpreadsheetParser\grails-app\i18n\messages_es.properties" afterPath="$PROJECT_DIR$/grails-app/i18n/messages_es.properties" />
-      <change type="MOVED" beforePath="C:\Local\code_and_repos\BARD\DnaRepairSpreadsheetParser\grails-app\i18n\messages_fr.properties" afterPath="$PROJECT_DIR$/grails-app/i18n/messages_fr.properties" />
-      <change type="MOVED" beforePath="C:\Local\code_and_repos\BARD\DnaRepairSpreadsheetParser\grails-app\i18n\messages_it.properties" afterPath="$PROJECT_DIR$/grails-app/i18n/messages_it.properties" />
-      <change type="MOVED" beforePath="C:\Local\code_and_repos\BARD\DnaRepairSpreadsheetParser\grails-app\i18n\messages_ja.properties" afterPath="$PROJECT_DIR$/grails-app/i18n/messages_ja.properties" />
-      <change type="MOVED" beforePath="C:\Local\code_and_repos\BARD\DnaRepairSpreadsheetParser\grails-app\i18n\messages_nl.properties" afterPath="$PROJECT_DIR$/grails-app/i18n/messages_nl.properties" />
-      <change type="MOVED" beforePath="C:\Local\code_and_repos\BARD\DnaRepairSpreadsheetParser\grails-app\i18n\messages_pt_BR.properties" afterPath="$PROJECT_DIR$/grails-app/i18n/messages_pt_BR.properties" />
-      <change type="MOVED" beforePath="C:\Local\code_and_repos\BARD\DnaRepairSpreadsheetParser\grails-app\i18n\messages_pt_PT.properties" afterPath="$PROJECT_DIR$/grails-app/i18n/messages_pt_PT.properties" />
-      <change type="MOVED" beforePath="C:\Local\code_and_repos\BARD\DnaRepairSpreadsheetParser\grails-app\i18n\messages_ru.properties" afterPath="$PROJECT_DIR$/grails-app/i18n/messages_ru.properties" />
-      <change type="MOVED" beforePath="C:\Local\code_and_repos\BARD\DnaRepairSpreadsheetParser\grails-app\i18n\messages_sv.properties" afterPath="$PROJECT_DIR$/grails-app/i18n/messages_sv.properties" />
-      <change type="MOVED" beforePath="C:\Local\code_and_repos\BARD\DnaRepairSpreadsheetParser\grails-app\i18n\messages_th.properties" afterPath="$PROJECT_DIR$/grails-app/i18n/messages_th.properties" />
-      <change type="MOVED" beforePath="C:\Local\code_and_repos\BARD\DnaRepairSpreadsheetParser\grails-app\i18n\messages_zh_CN.properties" afterPath="$PROJECT_DIR$/grails-app/i18n/messages_zh_CN.properties" />
-      <change type="MOVED" beforePath="C:\Local\code_and_repos\BARD\DnaRepairSpreadsheetParser\grails-app\services\dnarepairspreadsheet\DnaSpreadsheetService.groovy" afterPath="$PROJECT_DIR$/grails-app/services/dnarepairspreadsheet/DnaSpreadsheetService.groovy" />
-      <change type="MOVED" beforePath="C:\Local\code_and_repos\BARD\DnaRepairSpreadsheetParser\grails-app\services\postUploadProcessing\ContextGroupService.groovy" afterPath="$PROJECT_DIR$/grails-app/services/postUploadProcessing/ContextGroupService.groovy" />
-      <change type="MOVED" beforePath="C:\Local\code_and_repos\BARD\DnaRepairSpreadsheetParser\grails-app\views\error.gsp" afterPath="$PROJECT_DIR$/grails-app/views/error.gsp" />
-      <change type="MOVED" beforePath="C:\Local\code_and_repos\BARD\DnaRepairSpreadsheetParser\grails-app\views\index.gsp" afterPath="$PROJECT_DIR$/grails-app/views/index.gsp" />
-      <change type="MOVED" beforePath="C:\Local\code_and_repos\BARD\DnaRepairSpreadsheetParser\grails-app\views\layouts\main.gsp" afterPath="$PROJECT_DIR$/grails-app/views/layouts/main.gsp" />
-      <change type="MOVED" beforePath="C:\Local\code_and_repos\BARD\DnaRepairSpreadsheetParser\lib\javacsv.jar" afterPath="$PROJECT_DIR$/lib/javacsv.jar" />
-      <change type="MOVED" beforePath="C:\Local\code_and_repos\BARD\DnaRepairSpreadsheetParser\out\production\DnaRepairSpreadsheet-grailsPlugins\messages.properties" afterPath="$PROJECT_DIR$/out/production/DnaRepairSpreadsheet-grailsPlugins/messages.properties" />
-      <change type="MOVED" beforePath="C:\Local\code_and_repos\BARD\DnaRepairSpreadsheetParser\out\production\bardDomainModel-inplacePlugin\messages.properties" afterPath="$PROJECT_DIR$/out/production/bardDomainModel-inplacePlugin/messages.properties" />
-      <change type="MOVED" beforePath="C:\Local\code_and_repos\BARD\DnaRepairSpreadsheetParser\scripts\ParseSpreadsheet.groovy" afterPath="$PROJECT_DIR$/scripts/ParseSpreadsheet.groovy" />
-      <change type="MOVED" beforePath="C:\Local\code_and_repos\BARD\DnaRepairSpreadsheetParser\scripts\assayCompare\AssayDeDuplicationScript.groovy" afterPath="$PROJECT_DIR$/scripts/assayCompare/AssayDeDuplicationScript.groovy" />
-      <change type="MOVED" beforePath="C:\Local\code_and_repos\BARD\DnaRepairSpreadsheetParser\scripts\loadCars\ParseCarsSpreadsheet.groovy" afterPath="$PROJECT_DIR$/scripts/loadCars/ParseCarsSpreadsheet.groovy" />
-      <change type="MOVED" beforePath="C:\Local\code_and_repos\BARD\DnaRepairSpreadsheetParser\scripts\postUploadProcessingScript.groovy" afterPath="$PROJECT_DIR$/scripts/postUploadProcessingScript.groovy" />
-      <change type="MOVED" beforePath="C:\Local\code_and_repos\BARD\DnaRepairSpreadsheetParser\src\groovy\bard\dm\Log.groovy" afterPath="$PROJECT_DIR$/src/groovy/bard/dm/Log.groovy" />
-      <change type="MOVED" beforePath="C:\Local\code_and_repos\BARD\DnaRepairSpreadsheetParser\src\groovy\bard\dm\assaycompare\AssayCompare.groovy" afterPath="$PROJECT_DIR$/src/groovy/bard/dm/assaycompare/AssayCompare.groovy" />
-      <change type="MOVED" beforePath="C:\Local\code_and_repos\BARD\DnaRepairSpreadsheetParser\src\groovy\bard\dm\assaycompare\AssayContextCompare.groovy" afterPath="$PROJECT_DIR$/src/groovy/bard/dm/assaycompare/AssayContextCompare.groovy" />
-      <change type="MOVED" beforePath="C:\Local\code_and_repos\BARD\DnaRepairSpreadsheetParser\src\groovy\bard\dm\assaycompare\AssayContextItemCompare.groovy" afterPath="$PROJECT_DIR$/src/groovy/bard/dm/assaycompare/AssayContextItemCompare.groovy" />
-      <change type="MOVED" beforePath="C:\Local\code_and_repos\BARD\DnaRepairSpreadsheetParser\src\groovy\bard\dm\assaycompare\AssayContextItemMatchTripleBuilder.groovy" afterPath="$PROJECT_DIR$/src/groovy/bard/dm/assaycompare/AssayContextItemMatchTripleBuilder.groovy" />
-      <change type="MOVED" beforePath="C:\Local\code_and_repos\BARD\DnaRepairSpreadsheetParser\src\groovy\bard\dm\assaycompare\AssayContextMatchTripleBuilder.groovy" afterPath="$PROJECT_DIR$/src/groovy/bard/dm/assaycompare/AssayContextMatchTripleBuilder.groovy" />
-      <change type="MOVED" beforePath="C:\Local\code_and_repos\BARD\DnaRepairSpreadsheetParser\src\groovy\bard\dm\assaycompare\AssayDuplicateFinder.groovy" afterPath="$PROJECT_DIR$/src/groovy/bard/dm/assaycompare/AssayDuplicateFinder.groovy" />
-      <change type="MOVED" beforePath="C:\Local\code_and_repos\BARD\DnaRepairSpreadsheetParser\src\groovy\bard\dm\assaycompare\AssayMatch.groovy" afterPath="$PROJECT_DIR$/src/groovy/bard/dm/assaycompare/AssayMatch.groovy" />
-      <change type="MOVED" beforePath="C:\Local\code_and_repos\BARD\DnaRepairSpreadsheetParser\src\groovy\bard\dm\assaycompare\CompareUsingMatches.groovy" afterPath="$PROJECT_DIR$/src/groovy/bard/dm/assaycompare/CompareUsingMatches.groovy" />
-      <change type="MOVED" beforePath="C:\Local\code_and_repos\BARD\DnaRepairSpreadsheetParser\src\groovy\bard\dm\assaycompare\ComparisonResult.groovy" afterPath="$PROJECT_DIR$/src/groovy/bard/dm/assaycompare/ComparisonResult.groovy" />
-      <change type="MOVED" beforePath="C:\Local\code_and_repos\BARD\DnaRepairSpreadsheetParser\src\groovy\bard\dm\assaycompare\ContextItemComparisonResultEnum.groovy" afterPath="$PROJECT_DIR$/src/groovy/bard/dm/assaycompare/ContextItemComparisonResultEnum.groovy" />
-      <change type="MOVED" beforePath="C:\Local\code_and_repos\BARD\DnaRepairSpreadsheetParser\src\groovy\bard\dm\assaycompare\ContextItemMatchTriple.groovy" afterPath="$PROJECT_DIR$/src/groovy/bard/dm/assaycompare/ContextItemMatchTriple.groovy" />
-      <change type="MOVED" beforePath="C:\Local\code_and_repos\BARD\DnaRepairSpreadsheetParser\src\groovy\bard\dm\assaycompare\MatchTriple.groovy" afterPath="$PROJECT_DIR$/src/groovy/bard/dm/assaycompare/MatchTriple.groovy" />
-      <change type="MOVED" beforePath="C:\Local\code_and_repos\BARD\DnaRepairSpreadsheetParser\src\groovy\bard\dm\assaycompare\MatchTripleBuilder.groovy" afterPath="$PROJECT_DIR$/src/groovy/bard/dm/assaycompare/MatchTripleBuilder.groovy" />
-      <change type="MOVED" beforePath="C:\Local\code_and_repos\BARD\DnaRepairSpreadsheetParser\src\groovy\bard\dm\cars\domainspreadsheetmapping\CarsBardMapping.groovy" afterPath="$PROJECT_DIR$/src/groovy/bard/dm/cars/domainspreadsheetmapping/CarsBardMapping.groovy" />
-      <change type="MOVED" beforePath="C:\Local\code_and_repos\BARD\DnaRepairSpreadsheetParser\src\groovy\bard\dm\cars\domainspreadsheetmapping\ExperimentMapper.groovy" afterPath="$PROJECT_DIR$/src/groovy/bard/dm/cars/domainspreadsheetmapping/ExperimentMapper.groovy" />
-      <change type="MOVED" beforePath="C:\Local\code_and_repos\BARD\DnaRepairSpreadsheetParser\src\groovy\bard\dm\cars\domainspreadsheetmapping\ExperimentPair.groovy" afterPath="$PROJECT_DIR$/src/groovy/bard/dm/cars/domainspreadsheetmapping/ExperimentPair.groovy" />
-      <change type="MOVED" beforePath="C:\Local\code_and_repos\BARD\DnaRepairSpreadsheetParser\src\groovy\bard\dm\cars\domainspreadsheetmapping\ProjectAnnotater.groovy" afterPath="$PROJECT_DIR$/src/groovy/bard/dm/cars/domainspreadsheetmapping/ProjectAnnotater.groovy" />
-      <change type="MOVED" beforePath="C:\Local\code_and_repos\BARD\DnaRepairSpreadsheetParser\src\groovy\bard\dm\cars\domainspreadsheetmapping\ProjectMapperBuilder.groovy" afterPath="$PROJECT_DIR$/src/groovy/bard/dm/cars/domainspreadsheetmapping/ProjectMapperBuilder.groovy" />
-      <change type="MOVED" beforePath="C:\Local\code_and_repos\BARD\DnaRepairSpreadsheetParser\src\groovy\bard\dm\cars\domainspreadsheetmapping\ProjectPair.groovy" afterPath="$PROJECT_DIR$/src/groovy/bard/dm/cars/domainspreadsheetmapping/ProjectPair.groovy" />
-      <change type="MOVED" beforePath="C:\Local\code_and_repos\BARD\DnaRepairSpreadsheetParser\src\groovy\bard\dm\cars\domainspreadsheetmapping\ProjectStepAnnotater.groovy" afterPath="$PROJECT_DIR$/src/groovy/bard/dm/cars/domainspreadsheetmapping/ProjectStepAnnotater.groovy" />
-      <change type="MOVED" beforePath="C:\Local\code_and_repos\BARD\DnaRepairSpreadsheetParser\src\groovy\bard\dm\cars\domainspreadsheetmapping\ProjectStepMapperBuilder.groovy" afterPath="$PROJECT_DIR$/src/groovy/bard/dm/cars/domainspreadsheetmapping/ProjectStepMapperBuilder.groovy" />
-      <change type="MOVED" beforePath="C:\Local\code_and_repos\BARD\DnaRepairSpreadsheetParser\src\groovy\bard\dm\cars\domainspreadsheetmapping\ProjectStepPair.groovy" afterPath="$PROJECT_DIR$/src/groovy/bard/dm/cars/domainspreadsheetmapping/ProjectStepPair.groovy" />
-      <change type="MOVED" beforePath="C:\Local\code_and_repos\BARD\DnaRepairSpreadsheetParser\src\groovy\bard\dm\cars\spreadsheet\CarsExperiment.groovy" afterPath="$PROJECT_DIR$/src/groovy/bard/dm/cars/spreadsheet/CarsExperiment.groovy" />
-      <change type="MOVED" beforePath="C:\Local\code_and_repos\BARD\DnaRepairSpreadsheetParser\src\groovy\bard\dm\cars\spreadsheet\CarsProject.groovy" afterPath="$PROJECT_DIR$/src/groovy/bard/dm/cars/spreadsheet/CarsProject.groovy" />
-      <change type="MOVED" beforePath="C:\Local\code_and_repos\BARD\DnaRepairSpreadsheetParser\src\groovy\bard\dm\cars\spreadsheet\CarsSpreadsheetReader.groovy" afterPath="$PROJECT_DIR$/src/groovy/bard/dm/cars/spreadsheet/CarsSpreadsheetReader.groovy" />
-      <change type="MOVED" beforePath="C:\Local\code_and_repos\BARD\DnaRepairSpreadsheetParser\src\groovy\bard\dm\cars\spreadsheet\CarsSpreadsheetValidator.groovy" afterPath="$PROJECT_DIR$/src/groovy/bard/dm/cars/spreadsheet/CarsSpreadsheetValidator.groovy" />
-      <change type="MOVED" beforePath="C:\Local\code_and_repos\BARD\DnaRepairSpreadsheetParser\src\groovy\bard\dm\cars\spreadsheet\HeaderNames.groovy" afterPath="$PROJECT_DIR$/src/groovy/bard/dm/cars/spreadsheet/HeaderNames.groovy" />
-      <change type="MOVED" beforePath="C:\Local\code_and_repos\BARD\DnaRepairSpreadsheetParser\src\groovy\bard\dm\cars\spreadsheet\HeaderNamesReader.groovy" afterPath="$PROJECT_DIR$/src/groovy/bard/dm/cars/spreadsheet/HeaderNamesReader.groovy" />
-      <change type="MOVED" beforePath="C:\Local\code_and_repos\BARD\DnaRepairSpreadsheetParser\src\groovy\bard\dm\minimumassayannotation\AssayContextGroupsBuilder.groovy" afterPath="$PROJECT_DIR$/src/groovy/bard/dm/minimumassayannotation/AssayContextGroupsBuilder.groovy" />
-      <change type="MOVED" beforePath="C:\Local\code_and_repos\BARD\DnaRepairSpreadsheetParser\src\groovy\bard\dm\minimumassayannotation\Attribute.groovy" afterPath="$PROJECT_DIR$/src/groovy/bard/dm/minimumassayannotation/Attribute.groovy" />
-      <change type="MOVED" beforePath="C:\Local\code_and_repos\BARD\DnaRepairSpreadsheetParser\src\groovy\bard\dm\minimumassayannotation\AttributeNameMappingBuilder.groovy" afterPath="$PROJECT_DIR$/src/groovy/bard/dm/minimumassayannotation/AttributeNameMappingBuilder.groovy" />
-      <change type="MOVED" beforePath="C:\Local\code_and_repos\BARD\DnaRepairSpreadsheetParser\src\groovy\bard\dm\minimumassayannotation\AttributesContentsCleaner.groovy" afterPath="$PROJECT_DIR$/src/groovy/bard/dm/minimumassayannotation/AttributesContentsCleaner.groovy" />
-      <change type="MOVED" beforePath="C:\Local\code_and_repos\BARD\DnaRepairSpreadsheetParser\src\groovy\bard\dm\minimumassayannotation\ContextDtoFromContextGroupCreator.groovy" afterPath="$PROJECT_DIR$/src/groovy/bard/dm/minimumassayannotation/ContextDtoFromContextGroupCreator.groovy" />
-      <change type="MOVED" beforePath="C:\Local\code_and_repos\BARD\DnaRepairSpreadsheetParser\src\groovy\bard\dm\minimumassayannotation\ContextGroup.groovy" afterPath="$PROJECT_DIR$/src/groovy/bard/dm/minimumassayannotation/ContextGroup.groovy" />
-      <change type="MOVED" beforePath="C:\Local\code_and_repos\BARD\DnaRepairSpreadsheetParser\src\groovy\bard\dm\minimumassayannotation\ParseAndBuildAttributeGroups.groovy" afterPath="$PROJECT_DIR$/src/groovy/bard/dm/minimumassayannotation/ParseAndBuildAttributeGroups.groovy" />
-      <change type="MOVED" beforePath="C:\Local\code_and_repos\BARD\DnaRepairSpreadsheetParser\src\groovy\bard\dm\minimumassayannotation\validateCreatePersist\AssayContextsValidatorCreatorAndPersistor.groovy" afterPath="$PROJECT_DIR$/src/groovy/bard/dm/minimumassayannotation/validateCreatePersist/AssayContextsValidatorCreatorAndPersistor.groovy" />
-      <change type="MOVED" beforePath="C:\Local\code_and_repos\BARD\DnaRepairSpreadsheetParser\src\groovy\bard\dm\minimumassayannotation\validateCreatePersist\AttributeContentAgainstElementTableValidator.groovy" afterPath="$PROJECT_DIR$/src/groovy/bard/dm/minimumassayannotation/validateCreatePersist/AttributeContentAgainstElementTableValidator.groovy" />
-      <change type="MOVED" beforePath="C:\Local\code_and_repos\BARD\DnaRepairSpreadsheetParser\src\groovy\bard\dm\minimumassayannotation\validateCreatePersist\MeasureContextsValidatorCreatorAndPersistor.groovy" afterPath="$PROJECT_DIR$/src/groovy/bard/dm/minimumassayannotation/validateCreatePersist/MeasureContextsValidatorCreatorAndPersistor.groovy" />
-      <change type="MOVED" beforePath="C:\Local\code_and_repos\BARD\DnaRepairSpreadsheetParser\src\groovy\bard\dm\minimumassayannotation\validateCreatePersist\ValidatorCreatorAndPersistor.groovy" afterPath="$PROJECT_DIR$/src/groovy/bard/dm/minimumassayannotation/validateCreatePersist/ValidatorCreatorAndPersistor.groovy" />
-      <change type="MOVED" beforePath="C:\Local\code_and_repos\BARD\DnaRepairSpreadsheetParser\src\groovy\bard\dm\postUploadProcessing\ContextChange.groovy" afterPath="$PROJECT_DIR$/src/groovy/bard/dm/postUploadProcessing/ContextChange.groovy" />
-      <change type="MOVED" beforePath="C:\Local\code_and_repos\BARD\DnaRepairSpreadsheetParser\test\exampleData\BurnhamAssays\Burnham Center for Chemical Genomics_edited_2012010_Michael.xlsx" afterPath="$PROJECT_DIR$/test/exampleData/BurnhamAssays/Burnham Center for Chemical Genomics_edited_2012010_Michael.xlsx" />
-      <change type="MOVED" beforePath="C:\Local\code_and_repos\BARD\DnaRepairSpreadsheetParser\test\exampleData\BurnhamAssays\Burnham Center for Chemical Genomics_edited_20120910_Gavin-ip.xlsx" afterPath="$PROJECT_DIR$/test/exampleData/BurnhamAssays/Burnham Center for Chemical Genomics_edited_20120910_Gavin-ip.xlsx" />
-      <change type="MOVED" beforePath="C:\Local\code_and_repos\BARD\DnaRepairSpreadsheetParser\test\exampleData\BurnhamAssays\Burnham Center for Chemical Genomics_edited_20120910_Siobhan_SV.xlsx" afterPath="$PROJECT_DIR$/test/exampleData/BurnhamAssays/Burnham Center for Chemical Genomics_edited_20120910_Siobhan_SV.xlsx" />
-      <change type="MOVED" beforePath="C:\Local\code_and_repos\BARD\DnaRepairSpreadsheetParser\test\exampleData\BurnhamAssays\Burnham Center for Chemical Genomics_edited_20120910_TC_red.xlsx" afterPath="$PROJECT_DIR$/test/exampleData/BurnhamAssays/Burnham Center for Chemical Genomics_edited_20120910_TC_red.xlsx" />
-      <change type="MOVED" beforePath="C:\Local\code_and_repos\BARD\DnaRepairSpreadsheetParser\test\exampleData\broadAssays\Broad Institute- Jimmy Theriault V6.xlsx" afterPath="$PROJECT_DIR$/test/exampleData/broadAssays/Broad Institute- Jimmy Theriault V6.xlsx" />
-      <change type="MOVED" beforePath="C:\Local\code_and_repos\BARD\DnaRepairSpreadsheetParser\test\exampleData\broadAssays\Broad Institute-Hartland.xlsx" afterPath="$PROJECT_DIR$/test/exampleData/broadAssays/Broad Institute-Hartland.xlsx" />
-      <change type="MOVED" beforePath="C:\Local\code_and_repos\BARD\DnaRepairSpreadsheetParser\test\exampleData\broadAssays\Broad Institute-Lili.xlsx" afterPath="$PROJECT_DIR$/test/exampleData/broadAssays/Broad Institute-Lili.xlsx" />
-      <change type="MOVED" beforePath="C:\Local\code_and_repos\BARD\DnaRepairSpreadsheetParser\test\exampleData\broadAssays\Broad Institute-Melissa's BARD annotations.xlsx" afterPath="$PROJECT_DIR$/test/exampleData/broadAssays/Broad Institute-Melissa's BARD annotations.xlsx" />
-      <change type="MOVED" beforePath="C:\Local\code_and_repos\BARD\DnaRepairSpreadsheetParser\test\exampleData\broadAssays\Broad Institute-dwassaf.xlsx" afterPath="$PROJECT_DIR$/test/exampleData/broadAssays/Broad Institute-dwassaf.xlsx" />
-      <change type="MOVED" beforePath="C:\Local\code_and_repos\BARD\DnaRepairSpreadsheetParser\test\exampleData\broadAssays\Broad Institute_FA_SM_2.xlsx.IGNORE" afterPath="$PROJECT_DIR$/test/exampleData/broadAssays/Broad Institute_FA_SM_2.xlsx.IGNORE" />
-      <change type="MOVED" beforePath="C:\Local\code_and_repos\BARD\DnaRepairSpreadsheetParser\test\exampleData\broadAssays\Broad Institute_jnegri_V2.xlsx" afterPath="$PROJECT_DIR$/test/exampleData/broadAssays/Broad Institute_jnegri_V2.xlsx" />
-      <change type="MOVED" beforePath="C:\Local\code_and_repos\BARD\DnaRepairSpreadsheetParser\test\exampleData\broadAssays\Broad Institute_jspoon_part_1.xlsx" afterPath="$PROJECT_DIR$/test/exampleData/broadAssays/Broad Institute_jspoon_part_1.xlsx" />
-      <change type="MOVED" beforePath="C:\Local\code_and_repos\BARD\DnaRepairSpreadsheetParser\test\exampleData\broadAssays\Broad Institute_nross.xlsx" afterPath="$PROJECT_DIR$/test/exampleData/broadAssays/Broad Institute_nross.xlsx" />
-      <change type="MOVED" beforePath="C:\Local\code_and_repos\BARD\DnaRepairSpreadsheetParser\test\exampleData\broadAssays\Broad_Secondary_Completed-Krittika.xlsx" afterPath="$PROJECT_DIR$/test/exampleData/broadAssays/Broad_Secondary_Completed-Krittika.xlsx" />
-      <change type="MOVED" beforePath="C:\Local\code_and_repos\BARD\DnaRepairSpreadsheetParser\test\exampleData\broadAssays\NMMLSC_AW20120913.xlsx" afterPath="$PROJECT_DIR$/test/exampleData/broadAssays/NMMLSC_AW20120913.xlsx" />
-      <change type="MOVED" beforePath="C:\Local\code_and_repos\BARD\DnaRepairSpreadsheetParser\test\exampleData\dnarepairmindataspreadsheets\Broad+others-DNA_repair.xlsx" afterPath="$PROJECT_DIR$/test/exampleData/dnarepairmindataspreadsheets/Broad+others-DNA_repair.xlsx" />
-      <change type="MOVED" beforePath="C:\Local\code_and_repos\BARD\DnaRepairSpreadsheetParser\test\exampleData\dnarepairmindataspreadsheets\Burnham Center for Chemical Genomics-DNA repair only.xlsx" afterPath="$PROJECT_DIR$/test/exampleData/dnarepairmindataspreadsheets/Burnham Center for Chemical Genomics-DNA repair only.xlsx" />
-      <change type="MOVED" beforePath="C:\Local\code_and_repos\BARD\DnaRepairSpreadsheetParser\test\exampleData\dnarepairmindataspreadsheets\NCGC-DNA repair.xlsx" afterPath="$PROJECT_DIR$/test/exampleData/dnarepairmindataspreadsheets/NCGC-DNA repair.xlsx" />
-      <change type="MOVED" beforePath="C:\Local\code_and_repos\BARD\DnaRepairSpreadsheetParser\test\exampleData\dnarepairmindataspreadsheets\The Scripps Research Institute Molecular Screening Center-DNA repair.xlsx" afterPath="$PROJECT_DIR$/test/exampleData/dnarepairmindataspreadsheets/The Scripps Research Institute Molecular Screening Center-DNA repair.xlsx" />
-      <change type="MOVED" beforePath="C:\Local\code_and_repos\BARD\DnaRepairSpreadsheetParser\test\exampleData\minAssayAnnotationSpreadsheets\BARD_Broad_Raj.xlsx" afterPath="$PROJECT_DIR$/test/exampleData/minAssayAnnotationSpreadsheets/BARD_Broad_Raj.xlsx" />
-      <change type="MOVED" beforePath="C:\Local\code_and_repos\BARD\DnaRepairSpreadsheetParser\test\exampleData\minAssayAnnotationSpreadsheets\Broad Institute-BARD-dominick.xlsx" afterPath="$PROJECT_DIR$/test/exampleData/minAssayAnnotationSpreadsheets/Broad Institute-BARD-dominick.xlsx" />
-      <change type="MOVED" beforePath="C:\Local\code_and_repos\BARD\DnaRepairSpreadsheetParser\test\exampleData\minAssayAnnotationSpreadsheets\Broad Institute-Carol_Khodier.xls" afterPath="$PROJECT_DIR$/test/exampleData/minAssayAnnotationSpreadsheets/Broad Institute-Carol_Khodier.xls" />
-      <change type="MOVED" beforePath="C:\Local\code_and_repos\BARD\DnaRepairSpreadsheetParser\test\exampleData\minAssayAnnotationSpreadsheets\Broad Institute-Jbittker.xlsx" afterPath="$PROJECT_DIR$/test/exampleData/minAssayAnnotationSpreadsheets/Broad Institute-Jbittker.xlsx" />
-      <change type="MOVED" beforePath="C:\Local\code_and_repos\BARD\DnaRepairSpreadsheetParser\test\exampleData\minAssayAnnotationSpreadsheets\Broad InstituteFaloon-rev10-09.xlsx" afterPath="$PROJECT_DIR$/test/exampleData/minAssayAnnotationSpreadsheets/Broad InstituteFaloon-rev10-09.xlsx" />
-      <change type="MOVED" beforePath="C:\Local\code_and_repos\BARD\DnaRepairSpreadsheetParser\test\exampleData\minAssayAnnotationSpreadsheets\Broad Institute_LV1-rev10-09.xlsx" afterPath="$PROJECT_DIR$/test/exampleData/minAssayAnnotationSpreadsheets/Broad Institute_LV1-rev10-09.xlsx" />
-      <change type="MOVED" beforePath="C:\Local\code_and_repos\BARD\DnaRepairSpreadsheetParser\test\exampleData\minAssayAnnotationSpreadsheets\Broad Institute_MH.xlsx" afterPath="$PROJECT_DIR$/test/exampleData/minAssayAnnotationSpreadsheets/Broad Institute_MH.xlsx" />
-      <change type="MOVED" beforePath="C:\Local\code_and_repos\BARD\DnaRepairSpreadsheetParser\test\exampleData\minAssayAnnotationSpreadsheets\Broad Institute_jspoon_part_2.xlsx" afterPath="$PROJECT_DIR$/test/exampleData/minAssayAnnotationSpreadsheets/Broad Institute_jspoon_part_2.xlsx" />
-      <change type="MOVED" beforePath="C:\Local\code_and_repos\BARD\DnaRepairSpreadsheetParser\test\exampleData\minAssayAnnotationSpreadsheets\Broad Institute_lcarmody_edited.xlsx" afterPath="$PROJECT_DIR$/test/exampleData/minAssayAnnotationSpreadsheets/Broad Institute_lcarmody_edited.xlsx" />
-      <change type="MOVED" beforePath="C:\Local\code_and_repos\BARD\DnaRepairSpreadsheetParser\test\exampleData\minAssayAnnotationSpreadsheets\Broad Institute_mulligan.xlsx" afterPath="$PROJECT_DIR$/test/exampleData/minAssayAnnotationSpreadsheets/Broad Institute_mulligan.xlsx" />
-      <change type="MOVED" beforePath="C:\Local\code_and_repos\BARD\DnaRepairSpreadsheetParser\test\exampleData\minAssayAnnotationSpreadsheets\Broad Institute_rjs-1.xlsx" afterPath="$PROJECT_DIR$/test/exampleData/minAssayAnnotationSpreadsheets/Broad Institute_rjs-1.xlsx" />
-      <change type="MOVED" beforePath="C:\Local\code_and_repos\BARD\DnaRepairSpreadsheetParser\test\exampleData\minAssayAnnotationSpreadsheets\Broad Institute_yzhang.xlsx" afterPath="$PROJECT_DIR$/test/exampleData/minAssayAnnotationSpreadsheets/Broad Institute_yzhang.xlsx" />
-      <change type="MOVED" beforePath="C:\Local\code_and_repos\BARD\DnaRepairSpreadsheetParser\test\exampleData\minAssayAnnotationSpreadsheets\NCGC_CAP_120913.xlsx.IGNORE" afterPath="$PROJECT_DIR$/test/exampleData/minAssayAnnotationSpreadsheets/NCGC_CAP_120913.xlsx.IGNORE" />
-      <change type="MOVED" beforePath="C:\Local\code_and_repos\BARD\DnaRepairSpreadsheetParser\test\exampleData\postUploadProcessing\post-processing.xlsx" afterPath="$PROJECT_DIR$/test/exampleData/postUploadProcessing/post-processing.xlsx" />
-      <change type="MOVED" beforePath="C:\Local\code_and_repos\BARD\DnaRepairSpreadsheetParser\test\integration\AssayCompareIntegrationTest.groovy" afterPath="$PROJECT_DIR$/test/integration/AssayCompareIntegrationTest.groovy" />
-      <change type="MOVED" beforePath="C:\Local\code_and_repos\BARD\DnaRepairSpreadsheetParser\test\unit\AssayContextCompareTest.groovy" afterPath="$PROJECT_DIR$/test/unit/AssayContextCompareTest.groovy" />
-      <change type="MOVED" beforePath="C:\Local\code_and_repos\BARD\DnaRepairSpreadsheetParser\test\unit\AssayContextItemCompareTest.groovy" afterPath="$PROJECT_DIR$/test/unit/AssayContextItemCompareTest.groovy" />
-      <change type="MOVED" beforePath="C:\Local\code_and_repos\BARD\DnaRepairSpreadsheetParser\test\unit\dnarepairspreadsheet\DnaSpreadsheetServiceTests.groovy" afterPath="$PROJECT_DIR$/test/unit/dnarepairspreadsheet/DnaSpreadsheetServiceTests.groovy" />
-      <change type="MOVED" beforePath="C:\Local\code_and_repos\BARD\DnaRepairSpreadsheetParser\test\unit\postUploadProcessing\ContextGroupServiceTests.groovy" afterPath="$PROJECT_DIR$/test/unit/postUploadProcessing/ContextGroupServiceTests.groovy" />
-      <change type="MOVED" beforePath="C:\Local\code_and_repos\BARD\DnaRepairSpreadsheetParser\web-app\WEB-INF\applicationContext.xml" afterPath="$PROJECT_DIR$/web-app/WEB-INF/applicationContext.xml" />
-      <change type="MOVED" beforePath="C:\Local\code_and_repos\BARD\DnaRepairSpreadsheetParser\web-app\WEB-INF\sitemesh.xml" afterPath="$PROJECT_DIR$/web-app/WEB-INF/sitemesh.xml" />
-      <change type="MOVED" beforePath="C:\Local\code_and_repos\BARD\DnaRepairSpreadsheetParser\web-app\WEB-INF\tld\c.tld" afterPath="$PROJECT_DIR$/web-app/WEB-INF/tld/c.tld" />
-      <change type="MOVED" beforePath="C:\Local\code_and_repos\BARD\DnaRepairSpreadsheetParser\web-app\WEB-INF\tld\fmt.tld" afterPath="$PROJECT_DIR$/web-app/WEB-INF/tld/fmt.tld" />
-      <change type="MOVED" beforePath="C:\Local\code_and_repos\BARD\DnaRepairSpreadsheetParser\web-app\WEB-INF\tld\grails.tld" afterPath="$PROJECT_DIR$/web-app/WEB-INF/tld/grails.tld" />
-      <change type="MOVED" beforePath="C:\Local\code_and_repos\BARD\DnaRepairSpreadsheetParser\web-app\WEB-INF\tld\spring.tld" afterPath="$PROJECT_DIR$/web-app/WEB-INF/tld/spring.tld" />
-      <change type="MOVED" beforePath="C:\Local\code_and_repos\BARD\DnaRepairSpreadsheetParser\web-app\css\errors.css" afterPath="$PROJECT_DIR$/web-app/css/errors.css" />
-      <change type="MOVED" beforePath="C:\Local\code_and_repos\BARD\DnaRepairSpreadsheetParser\web-app\css\main.css" afterPath="$PROJECT_DIR$/web-app/css/main.css" />
-      <change type="MOVED" beforePath="C:\Local\code_and_repos\BARD\DnaRepairSpreadsheetParser\web-app\css\mobile.css" afterPath="$PROJECT_DIR$/web-app/css/mobile.css" />
-      <change type="MOVED" beforePath="C:\Local\code_and_repos\BARD\DnaRepairSpreadsheetParser\web-app\images\apple-touch-icon-retina.png" afterPath="$PROJECT_DIR$/web-app/images/apple-touch-icon-retina.png" />
-      <change type="MOVED" beforePath="C:\Local\code_and_repos\BARD\DnaRepairSpreadsheetParser\web-app\images\apple-touch-icon.png" afterPath="$PROJECT_DIR$/web-app/images/apple-touch-icon.png" />
-      <change type="MOVED" beforePath="C:\Local\code_and_repos\BARD\DnaRepairSpreadsheetParser\web-app\images\favicon.ico" afterPath="$PROJECT_DIR$/web-app/images/favicon.ico" />
-      <change type="MOVED" beforePath="C:\Local\code_and_repos\BARD\DnaRepairSpreadsheetParser\web-app\images\grails_logo.jpg" afterPath="$PROJECT_DIR$/web-app/images/grails_logo.jpg" />
-      <change type="MOVED" beforePath="C:\Local\code_and_repos\BARD\DnaRepairSpreadsheetParser\web-app\images\grails_logo.png" afterPath="$PROJECT_DIR$/web-app/images/grails_logo.png" />
-      <change type="MOVED" beforePath="C:\Local\code_and_repos\BARD\DnaRepairSpreadsheetParser\web-app\images\leftnav_btm.png" afterPath="$PROJECT_DIR$/web-app/images/leftnav_btm.png" />
-      <change type="MOVED" beforePath="C:\Local\code_and_repos\BARD\DnaRepairSpreadsheetParser\web-app\images\leftnav_midstretch.png" afterPath="$PROJECT_DIR$/web-app/images/leftnav_midstretch.png" />
-      <change type="MOVED" beforePath="C:\Local\code_and_repos\BARD\DnaRepairSpreadsheetParser\web-app\images\leftnav_top.png" afterPath="$PROJECT_DIR$/web-app/images/leftnav_top.png" />
-      <change type="MOVED" beforePath="C:\Local\code_and_repos\BARD\DnaRepairSpreadsheetParser\web-app\images\skin\database_add.png" afterPath="$PROJECT_DIR$/web-app/images/skin/database_add.png" />
-      <change type="MOVED" beforePath="C:\Local\code_and_repos\BARD\DnaRepairSpreadsheetParser\web-app\images\skin\database_delete.png" afterPath="$PROJECT_DIR$/web-app/images/skin/database_delete.png" />
-      <change type="MOVED" beforePath="C:\Local\code_and_repos\BARD\DnaRepairSpreadsheetParser\web-app\images\skin\database_edit.png" afterPath="$PROJECT_DIR$/web-app/images/skin/database_edit.png" />
-      <change type="MOVED" beforePath="C:\Local\code_and_repos\BARD\DnaRepairSpreadsheetParser\web-app\images\skin\database_save.png" afterPath="$PROJECT_DIR$/web-app/images/skin/database_save.png" />
-      <change type="MOVED" beforePath="C:\Local\code_and_repos\BARD\DnaRepairSpreadsheetParser\web-app\images\skin\database_table.png" afterPath="$PROJECT_DIR$/web-app/images/skin/database_table.png" />
-      <change type="MOVED" beforePath="C:\Local\code_and_repos\BARD\DnaRepairSpreadsheetParser\web-app\images\skin\exclamation.png" afterPath="$PROJECT_DIR$/web-app/images/skin/exclamation.png" />
-      <change type="MOVED" beforePath="C:\Local\code_and_repos\BARD\DnaRepairSpreadsheetParser\web-app\images\skin\house.png" afterPath="$PROJECT_DIR$/web-app/images/skin/house.png" />
-      <change type="MOVED" beforePath="C:\Local\code_and_repos\BARD\DnaRepairSpreadsheetParser\web-app\images\skin\information.png" afterPath="$PROJECT_DIR$/web-app/images/skin/information.png" />
-      <change type="MOVED" beforePath="C:\Local\code_and_repos\BARD\DnaRepairSpreadsheetParser\web-app\images\skin\shadow.jpg" afterPath="$PROJECT_DIR$/web-app/images/skin/shadow.jpg" />
-      <change type="MOVED" beforePath="C:\Local\code_and_repos\BARD\DnaRepairSpreadsheetParser\web-app\images\skin\sorted_asc.gif" afterPath="$PROJECT_DIR$/web-app/images/skin/sorted_asc.gif" />
-      <change type="MOVED" beforePath="C:\Local\code_and_repos\BARD\DnaRepairSpreadsheetParser\web-app\images\skin\sorted_desc.gif" afterPath="$PROJECT_DIR$/web-app/images/skin/sorted_desc.gif" />
-      <change type="MOVED" beforePath="C:\Local\code_and_repos\BARD\DnaRepairSpreadsheetParser\web-app\images\spinner.gif" afterPath="$PROJECT_DIR$/web-app/images/spinner.gif" />
-      <change type="MOVED" beforePath="C:\Local\code_and_repos\BARD\DnaRepairSpreadsheetParser\web-app\images\springsource.png" afterPath="$PROJECT_DIR$/web-app/images/springsource.png" />
-      <change type="MOVED" beforePath="C:\Local\code_and_repos\BARD\DnaRepairSpreadsheetParser\web-app\js\application.js" afterPath="$PROJECT_DIR$/web-app/js/application.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/scripts/assayCompare/assaycleanup/TestAssayCleanupScript.groovy" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/groovy/bard/dm/assaycompare/assaycleanup/AssayCleaner.groovy" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/groovy/bard/dm/assaycompare/assaycleanup/DuplicateWriter.groovy" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/groovy/bard/dm/assaycompare/assaycleanup/LimitedAssayContext.groovy" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/groovy/bard/dm/assaycompare/assaycleanup/LimitedAssayContextCompare.groovy" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/groovy/bard/dm/assaycompare/assaycleanup/TestAssayCleanup.groovy" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gitignore" afterPath="$PROJECT_DIR$/.gitignore" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/scripts/assayCompare/AssayDeDuplicationScript.groovy" afterPath="$PROJECT_DIR$/scripts/assayCompare/AssayDeDuplicationScript.groovy" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/groovy/bard/dm/Log.groovy" afterPath="$PROJECT_DIR$/src/groovy/bard/dm/Log.groovy" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/groovy/bard/dm/assaycompare/AssayDuplicateFinder.groovy" afterPath="$PROJECT_DIR$/src/groovy/bard/dm/assaycompare/AssayDuplicateFinder.groovy" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/groovy/bard/dm/assaycompare/AssayMatch.groovy" afterPath="$PROJECT_DIR$/src/groovy/bard/dm/assaycompare/AssayMatch.groovy" />
     </list>
     <ignored path="DnaRepairSpreadsheetParser.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -273,24 +126,30 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="ProjectAnnotater.groovy" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/groovy/bard/dm/cars/domainspreadsheetmapping/ProjectAnnotater.groovy">
+      <file leaf-file-name="AssayCleaner.groovy" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/groovy/bard/dm/assaycompare/assaycleanup/AssayCleaner.groovy">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="4" column="20" selection-start="120" selection-end="120" vertical-scroll-proportion="0.0">
+            <state line="82" column="94" selection-start="3940" selection-end="3940" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Project.groovy" pinned="false" current="true" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/../BardDomainModel/grails-app/domain/bard/db/project/Project.groovy">
+      <file leaf-file-name="AssayDeDuplicationScript.groovy" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/scripts/assayCompare/AssayDeDuplicationScript.groovy">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="6" column="6" selection-start="155" selection-end="155" vertical-scroll-proportion="0.16957606">
+            <state line="4" column="38" selection-start="175" selection-end="175" vertical-scroll-proportion="0.098265894">
               <folding />
             </state>
           </provider>
-          <provider editor-type-id="org.jetbrains.plugins.grails.perspectives.DomainClassesRelationsEditorProvider">
-            <state />
+        </entry>
+      </file>
+      <file leaf-file-name="AssayDuplicateFinder.groovy" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/groovy/bard/dm/assaycompare/AssayDuplicateFinder.groovy">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="139" column="107" selection-start="6100" selection-end="6100" vertical-scroll-proportion="0.0">
+              <folding />
+            </state>
           </provider>
         </entry>
       </file>
@@ -307,15 +166,22 @@
   <component name="IdeDocumentHistory">
     <option name="changedFiles">
       <list>
-        <option value="$PROJECT_DIR$/src/groovy/bard/dm/minimumassayannotation/validateCreatePersist/AssayContextsValidatorCreatorAndPersistor.groovy" />
-        <option value="$PROJECT_DIR$/src/groovy/bard/dm/minimumassayannotation/validateCreatePersist/MeasureContextsValidatorCreatorAndPersistor.groovy" />
-        <option value="$PROJECT_DIR$/scripts/loadCars/ParseCarsSpreadsheet.groovy" />
-        <option value="$PROJECT_DIR$/src/groovy/bard/dm/cars/domainspreadsheetmapping/ProjectPair.groovy" />
-        <option value="$PROJECT_DIR$/src/groovy/bard/dm/cars/domainspreadsheetmapping/ProjectAnnotater.groovy" />
-        <option value="$PROJECT_DIR$/src/groovy/bard/dm/cars/domainspreadsheetmapping/ProjectMapperBuilder.groovy" />
-        <option value="$PROJECT_DIR$/src/groovy/bard/dm/cars/domainspreadsheetmapping/ProjectStepAnnotater.groovy" />
-        <option value="$PROJECT_DIR$/src/groovy/bard/dm/cars/domainspreadsheetmapping/ProjectStepMapperBuilder.groovy" />
-        <option value="$PROJECT_DIR$/src/groovy/bard/dm/cars/domainspreadsheetmapping/ProjectStepPair.groovy" />
+        <option value="$PROJECT_DIR$/src/groovy/bard/dm/Log.groovy" />
+        <option value="$PROJECT_DIR$/src/groovy/bard/dm/assaycompare/AssayDuplicateFinder.groovy" />
+        <option value="$PROJECT_DIR$/src/groovy/bard/dm/assaycompare/LimitedAssayContext.groovy" />
+        <option value="$PROJECT_DIR$/src/groovy/bard/dm/assaycompare/LimitedAssayContextCompare.groovy" />
+        <option value="$PROJECT_DIR$/src/groovy/bard/dm/assaycompare/AssayCleanup.groovy" />
+        <option value="$PROJECT_DIR$/scripts/assayCompare/assaycleanup/TestAssayCleanup.groovy" />
+        <option value="$PROJECT_DIR$/src/groovy/bard/dm/assaycompare/assaycleanup/LimitedAssayContextCompare.groovy" />
+        <option value="$PROJECT_DIR$/src/groovy/bard/dm/assaycompare/assaycleanup/LimitedAssayContextItemMatchTripleBuilder.groovy" />
+        <option value="$PROJECT_DIR$/src/groovy/bard/dm/assaycompare/assaycleanup/LimitedAssayContext.groovy" />
+        <option value="$PROJECT_DIR$/src/groovy/bard/dm/assaycompare/AssayMatch.groovy" />
+        <option value="$PROJECT_DIR$/src/groovy/bard/dm/assaycompare/assaycleanup/AssayCleanup.groovy" />
+        <option value="$PROJECT_DIR$/src/groovy/bard/dm/assaycompare/assaycleanup/TestAssayCleanup.groovy" />
+        <option value="$PROJECT_DIR$/scripts/assayCompare/assaycleanup/TestAssayCleanupScript.groovy" />
+        <option value="$PROJECT_DIR$/src/groovy/bard/dm/assaycompare/assaycleanup/AssayCleaner.groovy" />
+        <option value="$PROJECT_DIR$/src/groovy/bard/dm/assaycompare/assaycleanup/DuplicateWriter.groovy" />
+        <option value="$PROJECT_DIR$/scripts/assayCompare/AssayDeDuplicationScript.groovy" />
       </list>
     </option>
   </component>
@@ -356,16 +222,6 @@
       <sortByType />
     </navigator>
     <panes>
-      <pane id="Scope">
-        <subPane subId="Project Files">
-          <PATH>
-            <PATH_ELEMENT USER_OBJECT="Root">
-              <option name="myItemId" value="" />
-              <option name="myItemType" value="" />
-            </PATH_ELEMENT>
-          </PATH>
-        </subPane>
-      </pane>
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -394,7 +250,25 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
+              <option name="myItemId" value="test" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="unit" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="MinAssayAnnotParser" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="MinAssayAnnotParser" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="test" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -409,40 +283,6 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="groovy" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="dm" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="MinAssayAnnotParser" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="MinAssayAnnotParser" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="groovy" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="dm" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="cars" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -467,12 +307,30 @@
               <option name="myItemId" value="dm" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
+          </PATH>
+          <PATH>
             <PATH_ELEMENT>
-              <option name="myItemId" value="cars" />
+              <option name="myItemId" value="MinAssayAnnotParser" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="MinAssayAnnotParser" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="domainspreadsheetmapping" />
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="groovy" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="dm" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="assaycompare" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -486,7 +344,23 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="grails-app" />
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="groovy" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="dm" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="assaycompare" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="assaycleanup" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -500,11 +374,7 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="grails-app" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="conf" />
+              <option name="myItemId" value="scripts" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -514,7 +384,15 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="BardDomainModel" />
+              <option name="myItemId" value="MinAssayAnnotParser" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="scripts" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="assayCompare" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -524,65 +402,44 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="BardDomainModel" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="grails-app" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
               <option name="myItemId" value="MinAssayAnnotParser" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="BardDomainModel" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="grails-app" />
+              <option name="myItemId" value="scripts" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="domain" />
+              <option name="myItemId" value="assayCompare" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="db" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="MinAssayAnnotParser" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="BardDomainModel" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="grails-app" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="domain" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="db" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="project" />
+              <option name="myItemId" value="assaycleanup" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
         </subPane>
       </pane>
-      <pane id="PackagesPane" />
+      <pane id="PackagesPane">
+        <subPane>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="MinAssayAnnotParser" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageViewProjectNode" />
+            </PATH_ELEMENT>
+          </PATH>
+        </subPane>
+      </pane>
+      <pane id="Scope">
+        <subPane subId="Project Files">
+          <PATH>
+            <PATH_ELEMENT USER_OBJECT="Root">
+              <option name="myItemId" value="" />
+              <option name="myItemType" value="" />
+            </PATH_ELEMENT>
+          </PATH>
+        </subPane>
+      </pane>
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -590,21 +447,35 @@
     <property name="GoToClass.toSaveIncludeLibraries" value="false" />
     <property name="options.splitter.main.proportions" value="0.3" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="recentsLimit" value="5" />
-    <property name="options.lastSelected" value="Groovy compiler" />
     <property name="MemberChooser.sorted" value="false" />
+    <property name="options.lastSelected" value="Groovy compiler" />
+    <property name="recentsLimit" value="5" />
     <property name="MemberChooser.showClasses" value="true" />
     <property name="GoToClass.includeLibraries" value="false" />
-    <property name="options.searchVisible" value="true" />
-    <property name="options.splitter.details.proportions" value="0.2" />
     <property name="MemberChooser.copyJavadoc" value="false" />
+    <property name="options.splitter.details.proportions" value="0.2" />
+    <property name="options.searchVisible" value="true" />
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\GIT_REPOS\BARD\DnaRepairSpreadsheetParser\test\exampleData\singleFile" />
     </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Local\code_and_repos\BARD\MinAssayAnnotParser\scripts\assayCompare\assaycleanup" />
+    </key>
   </component>
   <component name="RunManager" selected="Grails.Grails:MinAssayAnnotParser">
+    <configuration default="true" type="#org.jetbrains.idea.devkit.run.PluginConfigurationType" factoryName="Plugin">
+      <module name="" />
+      <option name="VM_PARAMETERS" value="-Xmx512m -Xms256m -XX:MaxPermSize=250m" />
+      <option name="PROGRAM_PARAMETERS" />
+      <method>
+        <option name="AntTarget" enabled="false" />
+        <option name="BuildArtifacts" enabled="false" />
+        <option name="Make" enabled="true" />
+        <option name="Maven.BeforeRunTask" enabled="false" />
+      </method>
+    </configuration>
     <configuration default="true" type="GrailsRunConfigurationType" factoryName="Grails">
       <module name="" />
       <setting name="vmparams" value="" />
@@ -620,10 +491,13 @@
         <option name="Maven.BeforeRunTask" enabled="false" />
       </method>
     </configuration>
-    <configuration default="true" type="#org.jetbrains.idea.devkit.run.PluginConfigurationType" factoryName="Plugin">
+    <configuration default="true" type="GroovyScriptRunConfiguration" factoryName="Groovy">
       <module name="" />
-      <option name="VM_PARAMETERS" value="-Xmx512m -Xms256m -XX:MaxPermSize=250m" />
-      <option name="PROGRAM_PARAMETERS" />
+      <setting name="path" value="" />
+      <setting name="vmparams" value="" />
+      <setting name="params" value="" />
+      <setting name="workDir" value="C:\Local\code_and_repos\BARD\MinAssayAnnotParser" />
+      <setting name="debug" value="false" />
       <method>
         <option name="AntTarget" enabled="false" />
         <option name="BuildArtifacts" enabled="false" />
@@ -640,24 +514,6 @@
       <method>
         <option name="AntTarget" enabled="false" />
         <option name="BuildArtifacts" enabled="false" />
-        <option name="Maven.BeforeRunTask" enabled="false" />
-      </method>
-    </configuration>
-    <configuration default="true" type="Applet" factoryName="Applet">
-      <module name="" />
-      <option name="MAIN_CLASS_NAME" />
-      <option name="HTML_FILE_NAME" />
-      <option name="HTML_USED" value="false" />
-      <option name="WIDTH" value="400" />
-      <option name="HEIGHT" value="300" />
-      <option name="POLICY_FILE" value="$APPLICATION_HOME_DIR$/bin/appletviewer.policy" />
-      <option name="VM_PARAMETERS" />
-      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
-      <option name="ALTERNATIVE_JRE_PATH" />
-      <method>
-        <option name="AntTarget" enabled="false" />
-        <option name="BuildArtifacts" enabled="false" />
-        <option name="Make" enabled="true" />
         <option name="Maven.BeforeRunTask" enabled="false" />
       </method>
     </configuration>
@@ -687,6 +543,24 @@
       <envs />
       <properties />
       <listeners />
+      <method>
+        <option name="AntTarget" enabled="false" />
+        <option name="BuildArtifacts" enabled="false" />
+        <option name="Make" enabled="true" />
+        <option name="Maven.BeforeRunTask" enabled="false" />
+      </method>
+    </configuration>
+    <configuration default="true" type="Applet" factoryName="Applet">
+      <module name="" />
+      <option name="MAIN_CLASS_NAME" />
+      <option name="HTML_FILE_NAME" />
+      <option name="HTML_USED" value="false" />
+      <option name="WIDTH" value="400" />
+      <option name="HEIGHT" value="300" />
+      <option name="POLICY_FILE" value="$APPLICATION_HOME_DIR$/bin/appletviewer.policy" />
+      <option name="VM_PARAMETERS" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
       <method>
         <option name="AntTarget" enabled="false" />
         <option name="BuildArtifacts" enabled="false" />
@@ -805,29 +679,29 @@
     <frame x="-4" y="-4" width="1608" height="864" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info id="Data Sources" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Data Sources" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Persistence" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="JetGradle" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Persistence" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
+      <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="IDEtalk Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32775453" sideWeight="0.49806702" order="7" side_tool="true" content_ui="tabs" />
-      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
-      <window_info id="Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.32775453" sideWeight="0.4974227" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="IDEtalk" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Grails View" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32947233" sideWeight="0.67224544" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Web" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
+      <window_info id="IDEtalk Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32775453" sideWeight="0.49806702" order="8" side_tool="true" content_ui="tabs" />
+      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
+      <window_info id="Grails View" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32947233" sideWeight="0.67224544" order="4" side_tool="false" content_ui="tabs" />
+      <window_info id="IDEtalk" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
+      <window_info id="Web" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="true" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="true" content_ui="tabs" />
-      <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.24935567" sideWeight="0.67224544" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.22972973" sideWeight="0.67224544" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Cloverage" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.32775453" sideWeight="0.4974227" order="9" side_tool="false" content_ui="tabs" />
+      <window_info id="Cloverage" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
-      <window_info id="Test Runs" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Test Runs" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.32853025" sideWeight="0.49484536" order="1" side_tool="false" content_ui="tabs" />
@@ -924,109 +798,94 @@
     <breakpoint-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/groovy/bard/dm/minimumassayannotation/AssayContextGroupsBuilder.groovy">
+    <entry file="file://$PROJECT_DIR$/test/integration/AssayCompareIntegrationTest.groovy">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="31" column="76" selection-start="1223" selection-end="1223" vertical-scroll-proportion="0.0" />
+        <state line="9" column="6" selection-start="235" selection-end="235" vertical-scroll-proportion="0.297593" />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/groovy/bard/dm/minimumassayannotation/validateCreatePersist/AssayContextsValidatorCreatorAndPersistor.groovy">
+    <entry file="file://$PROJECT_DIR$/test/unit/AssayContextCompareTest.groovy">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="160" column="44" selection-start="9605" selection-end="9605" vertical-scroll-proportion="0.0" />
+        <state line="18" column="6" selection-start="580" selection-end="580" vertical-scroll-proportion="0.3445946" />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/groovy/bard/dm/minimumassayannotation/validateCreatePersist/MeasureContextsValidatorCreatorAndPersistor.groovy">
+    <entry file="file://$PROJECT_DIR$/src/groovy/bard/dm/assaycompare/AssayContextCompare.groovy">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="35" column="47" selection-start="1505" selection-end="1540" vertical-scroll-proportion="0.0" />
+        <state line="17" column="47" selection-start="503" selection-end="503" vertical-scroll-proportion="0.26773456" />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/scripts/loadCars/ParseCarsSpreadsheet.groovy">
+    <entry file="file://$PROJECT_DIR$/src/groovy/bard/dm/assaycompare/AssayContextItemMatchTripleBuilder.groovy">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="43" column="61" selection-start="1885" selection-end="1885" vertical-scroll-proportion="0.47663552" />
+        <state line="17" column="11" selection-start="558" selection-end="558" vertical-scroll-proportion="0.409611" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/groovy/bard/dm/assaycompare/assaycleanup/LimitedAssayContextCompare.groovy">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="21" column="117" selection-start="819" selection-end="819" vertical-scroll-proportion="0.44420132" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/groovy/bard/dm/assaycompare/CompareUsingMatches.groovy">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="65" column="0" selection-start="2564" selection-end="2564" vertical-scroll-proportion="0.9256017" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/groovy/bard/dm/assaycompare/assaycleanup/LimitedAssayContext.groovy">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="17" column="66" selection-start="448" selection-end="448" vertical-scroll-proportion="0.63238513" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/test/unit/AssayContextItemCompareTest.groovy">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="45" column="4" selection-start="1731" selection-end="1731" vertical-scroll-proportion="0.49774775" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/groovy/bard/dm/assaycompare/AssayMatch.groovy">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="32" column="92" selection-start="827" selection-end="827" vertical-scroll-proportion="0.8512035" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/groovy/bard/dm/assaycompare/assaycleanup/TestAssayCleanup.groovy">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="95" column="0" selection-start="3797" selection-end="3797" vertical-scroll-proportion="0.9256017" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/scripts/assayCompare/assaycleanup/TestAssayCleanupScript.groovy">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="1" column="29" selection-start="48" selection-end="48" vertical-scroll-proportion="0.037199125" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/groovy/bard/dm/assaycompare/AssayDuplicateFinder.groovy">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="139" column="107" selection-start="6100" selection-end="6100" vertical-scroll-proportion="0.0" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/groovy/bard/dm/Log.groovy">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="23" column="74" selection-start="659" selection-end="691" vertical-scroll-proportion="0.77097505" />
+        <state line="14" column="6" selection-start="311" selection-end="311" vertical-scroll-proportion="0.27023122">
+          <folding />
+        </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/../BardDomainModel/grails-app/conf/DataSource.groovy">
+    <entry file="file://$PROJECT_DIR$/src/groovy/bard/dm/assaycompare/assaycleanup/AssayCleaner.groovy">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" />
+        <state line="82" column="94" selection-start="3940" selection-end="3940" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/groovy/bard/dm/cars/domainspreadsheetmapping/ProjectPair.groovy">
+    <entry file="file://$PROJECT_DIR$/src/groovy/bard/dm/assaycompare/assaycleanup/DuplicateWriter.groovy">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="23" column="31" selection-start="689" selection-end="689" vertical-scroll-proportion="0.81400436">
+        <state line="12" column="6" selection-start="288" selection-end="288" vertical-scroll-proportion="0.2947977">
           <folding>
-            <element signature="e#47#77#0" expanded="true" />
+            <element signature="e#43#81#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/groovy/bard/dm/cars/domainspreadsheetmapping/ProjectStepPair.groovy">
+    <entry file="file://$PROJECT_DIR$/scripts/assayCompare/AssayDeDuplicationScript.groovy">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="2" column="22" selection-start="69" selection-end="69" vertical-scroll-proportion="0.0778032">
+        <state line="4" column="38" selection-start="175" selection-end="175" vertical-scroll-proportion="0.098265894">
           <folding />
         </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/groovy/bard/dm/cars/domainspreadsheetmapping/ProjectStepMapperBuilder.groovy">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="9" column="22" selection-start="326" selection-end="326" vertical-scroll-proportion="0.36084905">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/groovy/bard/dm/cars/domainspreadsheetmapping/ProjectStepAnnotater.groovy">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="4" column="0" selection-start="100" selection-end="100" vertical-scroll-proportion="0.1487965">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/groovy/bard/dm/cars/domainspreadsheetmapping/ProjectMapperBuilder.groovy">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="7" column="0" selection-start="176" selection-end="176" vertical-scroll-proportion="0.268018">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/scripts/postUploadProcessingScript.groovy">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="28" column="48" selection-start="1357" selection-end="1357" vertical-scroll-proportion="0.1487965">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/scripts/ParseSpreadsheet.groovy">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="22" column="1" selection-start="1120" selection-end="1120" vertical-scroll-proportion="0.038288288">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/grails-app/conf/DataSource.groovy">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="-4.5273523">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/groovy/bard/dm/cars/domainspreadsheetmapping/ProjectAnnotater.groovy">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="4" column="20" selection-start="120" selection-end="120" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../BardDomainModel/grails-app/domain/bard/db/project/Project.groovy">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="6" column="6" selection-start="155" selection-end="155" vertical-scroll-proportion="0.16957606">
-          <folding />
-        </state>
-      </provider>
-      <provider editor-type-id="org.jetbrains.plugins.grails.perspectives.DomainClassesRelationsEditorProvider">
-        <state />
       </provider>
     </entry>
   </component>

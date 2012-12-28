@@ -14,7 +14,7 @@ import bard.db.registration.Assay
  */
 class AssayDuplicateFinder {
 
-    void findDuplicates() {
+    void findDuplicates(List<Assay> assayList) {
         final Date startDate = new Date()
         Log.logger.info("Start assay de-duplication ${startDate}")
 
@@ -23,12 +23,6 @@ class AssayDuplicateFinder {
         final AssayCompare assayCompare = new AssayCompare()
 
         try {
-            //Assay.withTransaction { DefaultTransactionStatus status ->
-            List<Assay> assayList = Assay.findAll() //[Assay.findById(112), Assay.findById(87)]
-            Date loadDate = new Date()
-            final loadTime = (loadDate.time - startDate.time) / 60000.0
-            Log.logger.info("loaded ${assayList.size()} assays. load time[min]: ${loadTime} finished load: ${loadDate}")
-
             Set<Assay> exactMatches = new HashSet<Assay>()
 
             Map<Assay, AssayMatch> assayAssayMatchMap = new HashMap<Assay, AssayMatch>()
@@ -100,10 +94,6 @@ class AssayDuplicateFinder {
                     }
                 }
             }
-
-
-            //    status.setRollbackOnly()
-            //}
         } catch (Exception e) {
             e.printStackTrace()
         } finally {
@@ -140,7 +130,9 @@ class AssayDuplicateFinder {
 
     }
 
-    private void checkForDuplicateContexts(List<AssayContext> assayContextList, AssayContextCompare contextCompare, long assayId, AssayContextItemCompare itemCompare) {
+    private void checkForDuplicateContexts(List<AssayContext> assayContextList, AssayContextCompare contextCompare,
+                                           long assayId, AssayContextItemCompare itemCompare) {
+
         for (int i = 0; i < assayContextList.size(); i++) {
             AssayContext ac1 = assayContextList.get(i)
             checkForDuplicateContextItems(ac1.assayContextItems, itemCompare, assayId, ac1.id)

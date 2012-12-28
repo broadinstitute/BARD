@@ -6,3 +6,6 @@ test/exampleData/assayDeDuplication.log
 test/exampleData/duplication analysis.xlsx
 test/exampleData/parseCarsSpreadsheet.log
 test/exampleData/dnaRepairLoad.log
+test/exampleData/duplicate_assay_context_items.csv
+test/exampleData/duplicate_assay_context_items_in_duplicate_contexts.csv
+test/exampleData/duplicate_assay_contexts.csv

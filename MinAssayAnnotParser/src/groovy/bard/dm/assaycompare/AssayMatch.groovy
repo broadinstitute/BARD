@@ -2,6 +2,8 @@ package bard.dm.assaycompare
 
 import bard.db.registration.Assay
 
+import bard.dm.assaycompare.assaycleanup.LimitedAssayContext
+
 /**
  * Created with IntelliJ IDEA.
  * User: dlahr
@@ -16,11 +18,18 @@ class AssayMatch {
 
     Set<Assay> subsetOfThis
 
+    List<LimitedAssayContext> limitedAssayContextList
+
+    Map<LimitedAssayContext, LimitedAssayContext> duplicateOriginalContextMap
 
     public AssayMatch(Assay assay) {
         this.assay = assay
 
         exactMatches = new HashSet<Assay>()
         subsetOfThis = new HashSet<Assay>()
+
+        limitedAssayContextList = new LinkedList<LimitedAssayContext>()
+
+        duplicateOriginalContextMap = new HashMap<LimitedAssayContext, LimitedAssayContext>()
     }
 }
