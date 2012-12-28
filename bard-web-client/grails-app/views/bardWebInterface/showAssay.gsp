@@ -3,6 +3,7 @@
 <html xmlns="http://www.w3.org/1999/html">
 <head>
     <meta name="layout" content="logoSearchCartAndFooter"/>
+    <r:require modules="showAssay"/>
     <title>BARD : Assay Definition : ADID ${assayAdapter?.id}</title>
 </head>
 
@@ -41,27 +42,17 @@
         </dl>
     </div>
 </div>
-<r:script>
-    $(document).ready(function () {
-        $('.collapse').on('show', function () {
-            var icon = $(this).siblings().find("i.icon-chevron-right");
-            icon.removeClass('icon-chevron-right').addClass('icon-chevron-down');
-        });
-        $('.collapse').on('hide', function () {
-            var icon = $(this).siblings().find("i.icon-chevron-down");
-            icon.removeClass('icon-chevron-down').addClass('icon-chevron-right');
-        });
-    })
-</r:script>
+
 <div class="row-fluid">
-    <div class="span12 accordion">
+    <div class="span12 accordion" id="accordionParent">
 
         <div class="accordion-group">
             <div class="accordion-heading">
-                <a href="#assay-header" id="assay-header" class="accordion-toggle" data-toggle="collapse"
-                   data-target="#assay-bio-info"><i
-                        class="icon-chevron-right"></i> Assay and Biology Details
+                <a href="#assay-bio-info" class="accordion-toggle" data-toggle="collapse"
+                   data-parent="#accordionParent" data-target="#assay-bio-info">
+                    <i class="icon-chevron-right"></i> Assay and Biology Details
                 </a>
+
 
                 <div id="assay-bio-info" class="accordion-body collapse">
                     <div class="accordion-inner">
@@ -79,7 +70,6 @@
                             <dl>
                                 <dt>Kegg Disease Names</dt>
                                 <g:each in="${assayAdapter.keggDiseaseNames}" var="annotation">
-
                                     <dd>${annotation}</dd>
                                 </g:each>
                             </dl>
@@ -94,8 +84,9 @@
 
         <div class="accordion-group">
             <div class="accordion-heading">
-                <a href="#document-header" id="document-header" class="accordion-toggle" data-toggle="collapse"
-                   data-target="#document-info"><i class="icon-chevron-right"></i> Documents
+                <a href="#document-info" class="accordion-toggle" data-toggle="collapse"
+                   data-target="#document-info" data-parent="#accordionParent"><i
+                        class="icon-chevron-right"></i> Documents
                     <small>(${[(assayAdapter.protocol ? 'protocol' : 'no protocol'),
                             (assayAdapter.description ? 'description' : 'no description'),
                             (assayAdapter.comments ? 'comments' : 'no comments')].join(', ')})</small>
@@ -108,13 +99,15 @@
                 </div>
             </div>
         </div>
+
         <g:if test="${assayAdapter.documents}">
             <g:render template="publications" model="['documents': assayAdapter.documents]"/>
         </g:if>
         <div class="accordion-group">
             <div class="accordion-heading">
-                <a href="#results-header" id="results-header" class="accordion-toggle" data-toggle="collapse"
-                   data-target="#result-info"><i class="icon-chevron-right"></i> Experiments (${experiments.size()})</a>
+                <a href="#result-info" class="accordion-toggle" data-toggle="collapse"
+                   data-target="#result-info" data-parent="#accordionParent"><i
+                        class="icon-chevron-right"></i> Experiments (${experiments.size()})</a>
 
                 <div id="result-info" class="accordion-body collapse">
                     <div class="accordion-inner">
@@ -123,8 +116,8 @@
                 </div>
             </div>
         </div>
-
     </div>
+
 </div>
 </body>
 </html>

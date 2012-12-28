@@ -17,8 +17,12 @@ modules = {
     }
     images {
     }
+    showAssay {
+        resource url:"js/coreShowProjectAssay.js"
+    }
+
     projects {
-        resource url: "js/projects.js"
+        resource url: "js/coreShowProjectAssay.js"
     }
     //Adding version allows clients to not cache javascript
     search {

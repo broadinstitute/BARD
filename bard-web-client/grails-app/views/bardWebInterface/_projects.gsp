@@ -13,7 +13,7 @@
         <g:each var="projectAdapter" in="${projectAdapters}">
             <li>
                 <h3><g:link action="showProject" id="${projectAdapter.id}"
-                            params='[searchString: "${searchString}"]'>${projectAdapter.name} <small>(Project ID: ${projectAdapter.id})</small></g:link>
+                            params='[searchString: "${searchString}"]' target="external">${projectAdapter.name} <small>(Project ID: ${projectAdapter.id})</small></g:link>
                 </h3>
                 <g:saveToCartButton id="${projectAdapter.id}"
                                     name="${JavaScriptUtility.cleanup(projectAdapter.name)}"
