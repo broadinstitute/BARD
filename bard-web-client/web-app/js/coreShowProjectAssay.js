@@ -15,7 +15,6 @@ function toggleCollapse(currentHref) {
 
     if ($('#description-info').hasClass('in')) {
         $('#description-info').collapse('hide');
-
     }
 
     if ($('#assays-info').hasClass('in')) {
@@ -43,7 +42,20 @@ function toggleCollapse(currentHref) {
 
     }
     if ($('#experiments-info').hasClass('in')) {
-        $('#experiments-info').collapse('hide');
+
+        descriptionExptHasClass = false;
+        if (currentHref.indexOf('accordionDescriptionContent_') > -1) {//the current clicked node is a description node
+            descriptionExptHasClass = true;
+            $('.resultsdescriptions').each(function () {  //if any of the description nodes is already open, then close them
+                if ($(this).hasClass('in')) {
+                    $(this).collapse('hide');
+
+                }
+            });
+        }
+        if (!descriptionExptHasClass) { //Only close this if all children are closed
+            $('#experiments-info').collapse('hide');
+        }
     }
     if ($('#assay-bio-info').hasClass('in')) {
         $('#assay-bio-info').collapse('hide');
@@ -128,7 +140,7 @@ $(document).ready(function () {
     // function for the reference is processed when you click on the link
     function handlerAnchors() {
         // keep the link in the browser history
-        toggleCollapse(this.href)
+        toggleCollapse(this.href);
         history.pushState(null, null, this.href);
         // do not give a default action
         return false;
@@ -182,12 +194,12 @@ $(document).ready(function () {
     });
     $(".collapse").click(function () {
         //find all with class and toggle
-        $(this).collapse('show')
+        $(this).collapse('show');
     });
     //Trigger this event just in case someone bookmarks anny of the accordions
     // $(window).trigger('hashchange');
     var returnLocation = history.location || document.location;
-    locationHashChanged(returnLocation)
+    locationHashChanged(returnLocation);
 
 });
 
