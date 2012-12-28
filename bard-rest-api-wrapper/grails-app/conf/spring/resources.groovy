@@ -11,35 +11,34 @@ beans = {
 
     final String ncgcBaseURL = grailsApplication.config.ncgc.server.root.url
     final String badApplePromiscuityUrl = grailsApplication.config.promiscuity.badapple.url
-
-    restTemplate(RestTemplate) {
-    }
+    restTemplate(RestTemplate)
 
     compoundRestService(CompoundRestService) {
         baseUrl = ncgcBaseURL
         promiscuityUrl = badApplePromiscuityUrl
         restTemplate = ref('restTemplate')
         executorService = Executors.newCachedThreadPool()
+        loggerService = ref('loggerService')
     }
-    substanceRestService(SubstanceRestService) {
-        baseUrl = ncgcBaseURL
-        restTemplate = ref('restTemplate')
-        //executorService = ref('executorService')
 
-    }
     experimentRestService(ExperimentRestService) {
         baseUrl = ncgcBaseURL
         restTemplate = ref('restTemplate')
-        //executorService = ref('executorService')
+        loggerService = ref('loggerService')
     }
     projectRestService(ProjectRestService) {
         baseUrl = ncgcBaseURL
         restTemplate = ref('restTemplate')
-        //executorService = ref('executorService')
+        loggerService = ref('loggerService')
     }
     assayRestService(AssayRestService) {
         baseUrl = ncgcBaseURL
         restTemplate = ref('restTemplate')
-        //executorService = ref('executorService')
+        loggerService = ref('loggerService')
+    }
+    substanceRestService(SubstanceRestService) {
+        baseUrl = ncgcBaseURL
+        restTemplate = ref('restTemplate')
+        loggerService = ref('loggerService')
     }
 }
