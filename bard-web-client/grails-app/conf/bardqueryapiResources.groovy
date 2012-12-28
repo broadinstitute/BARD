@@ -18,10 +18,12 @@ modules = {
     images {
     }
     showAssay {
+        resource url:"js/html5historyapi/history.js"
         resource url:"js/coreShowProjectAssay.js"
     }
 
     projects {
+        resource url:"js/html5historyapi/history.js"
         resource url: "js/coreShowProjectAssay.js"
     }
     //Adding version allows clients to not cache javascript
