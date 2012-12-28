@@ -133,6 +133,8 @@ grails.mail.default.from = "noreply@broadinstitute.org"
 grails.mail.default.to = "noreply@broadinstitute.org"
 grails.mail.host = "localhost"
 grails.mail.default.subject = "Error From BARD Web Query"
+
+//TODO Replace with the analytics ID
 google.analytics.webPropertyID = "UA-xxxxxx-x"
 
 /**

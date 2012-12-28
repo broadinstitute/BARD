@@ -527,7 +527,9 @@ class MockQueryService implements IQueryService {
      */
     Map showAssay(final Long assayId) {
 
-        return mockAssayAdapterMap.get(assayId)
+        AssayAdapter assayAdapter = mockAssayAdapterMap.get(assayId)
+        MockExperiment mockExperiment = mockExperimentMap.get(1904)
+        return [assayAdapter: assayAdapter, experiments: [mockExperiment], projects: []]
     }
     /**
      * Given a projectId, get detailed Project information from the JDO
