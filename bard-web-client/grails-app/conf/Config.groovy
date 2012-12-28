@@ -1,8 +1,7 @@
 import grails.util.Environment
 import org.apache.log4j.DailyRollingFileAppender
-import org.springframework.security.web.authentication.AbstractAuthenticationTargetUrlRequestHandler
 import org.apache.log4j.net.SMTPAppender
-import org.apache.log4j.Level
+import org.springframework.security.web.authentication.AbstractAuthenticationTargetUrlRequestHandler
 
 //TODO: Override in dev, qa and prod to point to the current stable release
 ncgc.server.root.url = "http://bard.nih.gov/api/v10"
@@ -190,24 +189,37 @@ log4j = {
                 threshold: org.apache.log4j.Level.ERROR,
                 datePattern: "'.'yyyy-MM-dd"
         )
+        appenders {
+            // This should work on both windows and unix
+            appender new DailyRollingFileAppender(
+                    name: "NCGCRestApiTimingAppender",
+                    file: "logs/" + Environment.current.name + "/NCGC_StopWatch.log",
+                    layout: pattern(conversionPattern: '%m%n'),
+                    immediateFlush: true,
+                    threshold: org.apache.log4j.Level.INFO,
+                    datePattern: "'.'yyyy-MM-dd"
+            )
+        }
 
         def patternLayout = new org.apache.log4j.PatternLayout()
         patternLayout.setConversionPattern("%d [%t] %-5p %c - %m%n")
         appender new SMTPAppender(
-                name:"mail",
-                smtpPort:config.grails.mail.port,
-                from:config.grails.mail.default.from,
+                name: "mail",
+                smtpPort: config.grails.mail.port,
+                from: config.grails.mail.default.from,
                 to: config.grails.mail.default.to,
-                subject:config.grails.mail.default.subject,
-                smtpHost:config.grails.mail.host,
+                subject: config.grails.mail.default.subject,
+                smtpHost: config.grails.mail.host,
                 layout: patternLayout
         )
-     }
+    }
 
     //Capture errors from the NCGC API (via JDO)
     error NCGCErrorAppender: ['grails.app.services.bard.core.rest.spring.AbstractRestService']
     //Capture JavaScript errors from the client (via the ErrorHandling controller)
     error JavaScriptErrorsAppender: ['grails.app.controllers.bardqueryapi.ErrorHandlingController']
+    //Capture NCGC REST API roundtrip timing.
+    info NCGCRestApiTimingAppender: ['grails.app.services.bard.core.helper.LoggerService']
 
     root {
         debug 'stdout'

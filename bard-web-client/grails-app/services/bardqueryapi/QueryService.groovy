@@ -56,9 +56,7 @@ class QueryService implements IQueryService {
 
             final SearchParams searchParams = this.queryHelperService.constructSearchParams(updatedSearchString, top, skip, searchFilters)
             //do the search
-            StopWatch sw = this.queryHelperService.startStopWatch()
             CompoundResult compoundResult = compoundRestService.findCompoundsByFreeTextSearch(searchParams)
-            this.queryHelperService.stopStopWatch(sw, "find compounds by text search ${searchParams.toString()}")
 
             //convert to adapters
             foundCompoundAdapters.addAll(this.queryHelperService.compoundsToAdapters(compoundResult))
@@ -87,9 +85,7 @@ class QueryService implements IQueryService {
 
             final SearchParams searchParams = this.queryHelperService.constructSearchParams(updatedSearchString, top, skip, searchFilters)
 
-            StopWatch sw = this.queryHelperService.startStopWatch()
             final AssayResult assayResult = assayRestService.findAssaysByFreeTextSearch(searchParams)
-            this.queryHelperService.stopStopWatch(sw, "find assays by text search ${searchParams.toString()}")
             final List<AssayAdapter> adapters = this.queryHelperService.assaysToAdapters(assayResult)
             foundAssayAdapters.addAll(adapters)
             facets = assayResult.getFacetsToValues()
@@ -116,9 +112,7 @@ class QueryService implements IQueryService {
             //re-normalize the search string to strip out custom syntax (e.g gobp:SearchString now becomes SearchString)
             String updatedSearchString = this.queryHelperService.stripCustomStringFromSearchString(searchString)
             final SearchParams searchParams = this.queryHelperService.constructSearchParams(updatedSearchString, top, skip, searchFilters)
-            StopWatch sw = this.queryHelperService.startStopWatch()
             ProjectResult projectResult = projectRestService.findProjectsByFreeTextSearch(searchParams)
-            this.queryHelperService.stopStopWatch(sw, "find projects by text search ${searchParams.toString()}")
             foundProjectAdapters.addAll(this.queryHelperService.projectsToAdapters(projectResult))
             facets = projectResult.getFacetsToValues()
             nhits = projectResult.numberOfHits
@@ -169,9 +163,7 @@ class QueryService implements IQueryService {
                 structureSearchParams.setFilters(filters)
             }
             //do the search
-            StopWatch sw = this.queryHelperService.startStopWatch()
             final CompoundResult compoundResult = compoundRestService.structureSearch(structureSearchParams);
-            this.queryHelperService.stopStopWatch(sw, "structure search ${structureSearchParams.toString()}")
             //collect the results
             //convert to adapters
             if (nhits <= 0) {
@@ -222,12 +214,10 @@ class QueryService implements IQueryService {
         String eTag = null
         if (compoundIds) {
             //create ETAG using a random name
-            StopWatch sw = this.queryHelperService.startStopWatch()
             //  eTag = restCompoundService.newETag("Compound ETags", compoundIds).toString();
             //commenting out facets until we figure out how to apply filters to ID searches
             //facets = restCompoundService.getFacets(etag)
             CompoundResult compoundResult = compoundRestService.searchCompoundsByIds(compoundIds)
-            this.queryHelperService.stopStopWatch(sw, "find compounds by CIDs ${compoundIds.toString()}")
 
             if (compoundResult) {
                 compoundAdapters.addAll(this.queryHelperService.compoundsToAdapters(compoundResult))
@@ -250,9 +240,7 @@ class QueryService implements IQueryService {
         Collection<Value> facets = []
         String eTag = null
         if (assayIds) {
-            StopWatch sw = this.queryHelperService.startStopWatch()
             ExpandedAssayResult expandedAssayResult = this.assayRestService.searchAssaysByIds(assayIds)
-            this.queryHelperService.stopStopWatch(sw, "find assays by ADIDs ${assayIds.toString()}")
             if (expandedAssayResult) {
                 final List<ExpandedAssay> assays = expandedAssayResult.assays
                 if (assays) {
@@ -278,9 +266,7 @@ class QueryService implements IQueryService {
         final List<ProjectAdapter> foundProjectAdapters = []
         String eTag = null
         if (projectIds) {
-            StopWatch sw = this.queryHelperService.startStopWatch()
             final ProjectResult projectResult = projectRestService.searchProjectsByIds(projectIds)
-            this.queryHelperService.stopStopWatch(sw, "find projects by PIDs ${projectIds.toString()}")
             if (projectResult) {
                 final List<ProjectAdapter> projectsToAdapters = this.queryHelperService.projectsToAdapters(projectResult)
                 if (projectsToAdapters) {
@@ -302,9 +288,7 @@ class QueryService implements IQueryService {
      */
     CompoundAdapter showCompound(final Long compoundId) {
         if (compoundId) {
-            StopWatch sw = this.queryHelperService.startStopWatch()
             final Compound compound = compoundRestService.getCompoundById(compoundId)
-            this.queryHelperService.stopStopWatch(sw, "show compound ${compoundId.toString()}")
             if (compound) {
                 return new CompoundAdapter(compound)
             }
@@ -319,8 +303,6 @@ class QueryService implements IQueryService {
      */
     Map showAssay(final Long assayId) {
         if (assayId) {
-            StopWatch sw = this.queryHelperService.startStopWatch()
-            this.queryHelperService.stopStopWatch(sw, "show assay ${assayId.toString()}")
             ExpandedAssay assay = assayRestService.getAssayById(assayId)
             List<ExperimentSearch> experiments = assay.experiments
             final List<Project> projects = assay.projects
@@ -336,9 +318,7 @@ class QueryService implements IQueryService {
      */
     Map showProject(final Long projectId) {
         if (projectId) {
-            StopWatch sw = this.queryHelperService.startStopWatch()
             final Project project = projectRestService.getProjectById(projectId)
-            this.queryHelperService.stopStopWatch(sw, "show project ${projectId.toString()}")
 
             //TODO: Here we make 2 other calls to the server to get the experiments and assays associated with this project
             //TODO: Since we only display the names of the experiments and assays we should ask NCGC to change the payload to supply the names and ids
