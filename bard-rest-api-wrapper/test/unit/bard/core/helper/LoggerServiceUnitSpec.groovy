@@ -17,7 +17,7 @@ class LoggerServiceUnitSpec extends Specification {
         // Tear down logic here
     }
 
-    void "test startStopWatch()"() {
+    void "test startStopWatch"() {
         given:
 
         when:
@@ -27,7 +27,7 @@ class LoggerServiceUnitSpec extends Specification {
         assert sw.nanoTime > 0
     }
 
-    void "test stopStopWatch()"() {
+    void "test stopStopWatch"() {
         given:
         StopWatch sw = new StopWatch()
         sw.start()

@@ -359,7 +359,7 @@ abstract class AbstractRestService {
         try {
             StopWatch sw = this.loggerService.startStopWatch()
             def result = this.restTemplate.getForObject(uri, clazz)
-            this.loggerService.stopStopWatch(sw, "method=getForObject(URI uri, Class clazz); uri='${uri}'; class=${clazz}; result=${result.dump()}")
+            this.loggerService.stopStopWatch(sw, "method=getForObject(URI uri, Class clazz); uri='${uri}'; class=${clazz}")
             return result
         } catch (RestClientException restClientException) {
             log.error(uri.toString(), restClientException)
@@ -372,7 +372,7 @@ abstract class AbstractRestService {
         try {
             StopWatch sw = this.loggerService.startStopWatch()
             def result = this.restTemplate.getForObject(uri, clazz, map)
-            this.loggerService.stopStopWatch(sw, "method=getForObject(final String uri, final Class clazz, Map map = [:]); uri='${uri}'; class=${clazz}; map=${map}; result=${result.dump()}")
+            this.loggerService.stopStopWatch(sw, "method=getForObject(final String uri, final Class clazz, Map map = [:]); uri='${uri}'; class=${clazz}; map=${map}")
             return result
         } catch (RestClientException restClientException) {
             final String uriString = uri + map
@@ -386,7 +386,7 @@ abstract class AbstractRestService {
         try {
             StopWatch sw = this.loggerService.startStopWatch()
             def result = this.restTemplate.postForObject(uri, map, clazz)
-            this.loggerService.stopStopWatch(sw, "method=postForObject(final URI uri, final Class clazz, Map map = [:]); uri='${uri}'; class=${clazz}; map=${map}; result=${result.dump()}")
+            this.loggerService.stopStopWatch(sw, "method=postForObject(final URI uri, final Class clazz, Map map = [:]); uri='${uri}'; class=${clazz}; map=${map}")
             return result
         } catch (RestClientException restClientException) {
             final String uriString = uri.toString() + map
@@ -399,7 +399,7 @@ abstract class AbstractRestService {
         try {
             StopWatch sw = this.loggerService.startStopWatch()
             def result = restTemplate.exchange(url, HttpMethod.POST, entity, clazz);
-            this.loggerService.stopStopWatch(sw, "method=postExchange(String url, HttpEntity<List> entity, Class clazz); url='${url}'; entity=${entity.dump()}; class=${clazz};result=${result.dump()}")
+            this.loggerService.stopStopWatch(sw, "method=postExchange(String url, HttpEntity<List> entity, Class clazz); url='${url}'; entity=${entity?.dump()}; class=${clazz}")
             return result
         } catch (RestClientException restClientException) {
             log.error(url.toString(), restClientException)
@@ -411,7 +411,7 @@ abstract class AbstractRestService {
         try {
             StopWatch sw = this.loggerService.startStopWatch()
             def result = restTemplate.exchange(uri, HttpMethod.GET, entity, clazz);
-            this.loggerService.stopStopWatch(sw, "method=getExchange(URI uri, HttpEntity<List> entity, Class clazz); uri='${uri}'; entity=${entity.dump()}; class=${clazz};result=${result.dump()}")
+            this.loggerService.stopStopWatch(sw, "method=getExchange(URI uri, HttpEntity<List> entity, Class clazz); uri='${uri}'; entity=${entity?.dump()}; class=${clazz}")
             return result
         } catch (RestClientException restClientException) {
             log.error(uri.toString(), restClientException)

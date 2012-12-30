@@ -3,6 +3,7 @@ import org.springframework.web.client.RestTemplate
 import java.util.concurrent.Executors
 
 import bard.core.rest.spring.*
+import bard.core.helper.LoggerService
 
 /**
  * Spring Configuration of resources
@@ -12,6 +13,7 @@ beans = {
     final String ncgcBaseURL = grailsApplication.config.ncgc.server.root.url
     final String badApplePromiscuityUrl = grailsApplication.config.promiscuity.badapple.url
     restTemplate(RestTemplate)
+    loggerService(LoggerService)
 
     compoundRestService(CompoundRestService) {
         baseUrl = ncgcBaseURL

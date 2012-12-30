@@ -8,17 +8,21 @@ import grails.test.mixin.TestFor
 import org.springframework.web.client.RestTemplate
 import spock.lang.Specification
 import spock.lang.Unroll
+import bard.core.helper.LoggerService
 
 @Unroll
 @TestFor(ProjectRestService)
 class ProjectRestServiceUnitSpec extends Specification {
     RestTemplate restTemplate
+    LoggerService loggerService
 
     void setup() {
         this.restTemplate = Mock(RestTemplate)
         service.restTemplate = this.restTemplate
         service.promiscuityUrl = "badapple"
         service.baseUrl = "http://ncgc"
+        this.loggerService = Mock(LoggerService)
+        service.loggerService = this.loggerService
     }
 
     void tearDown() {

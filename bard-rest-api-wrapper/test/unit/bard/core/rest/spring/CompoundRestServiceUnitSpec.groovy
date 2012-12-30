@@ -21,12 +21,14 @@ import java.util.concurrent.FutureTask
 import bard.core.rest.spring.compounds.*
 import spock.lang.IgnoreRest
 import bard.core.exceptions.RestApiException
+import bard.core.helper.LoggerService
 
 @Unroll
 @TestFor(CompoundRestService)
 class CompoundRestServiceUnitSpec extends Specification {
     RestTemplate restTemplate
     ExecutorService executorService
+    LoggerService loggerService
 
     void setup() {
         this.restTemplate = Mock(RestTemplate)
@@ -35,6 +37,8 @@ class CompoundRestServiceUnitSpec extends Specification {
         service.restTemplate = this.restTemplate
         service.promiscuityUrl = "badapple"
         service.baseUrl = "http://ncgc"
+        this.loggerService = Mock(LoggerService)
+        service.loggerService = this.loggerService
     }
 
     void tearDown() {
