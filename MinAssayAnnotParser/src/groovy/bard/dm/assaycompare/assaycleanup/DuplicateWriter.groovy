@@ -45,7 +45,13 @@ class DuplicateWriter {
         }
     }
 
-    public closeAll() {
+    public void flushAll() {
+        contextWriter.flush()
+        itemWriter.flush()
+        dupContextItemWriter.flush()
+    }
+
+    public void closeAll() {
         contextWriter.close()
         itemWriter.close()
         dupContextItemWriter.close()

@@ -2,18 +2,14 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="859896cc-9815-4eea-b811-695a0ad1bfe5" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/scripts/assayCompare/assaycleanup/TestAssayCleanupScript.groovy" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/groovy/bard/dm/assaycompare/assaycleanup/AssayCleaner.groovy" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/groovy/bard/dm/assaycompare/assaycleanup/DuplicateWriter.groovy" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/groovy/bard/dm/assaycompare/assaycleanup/LimitedAssayContext.groovy" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/groovy/bard/dm/assaycompare/assaycleanup/LimitedAssayContextCompare.groovy" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/groovy/bard/dm/assaycompare/assaycleanup/TestAssayCleanup.groovy" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gitignore" afterPath="$PROJECT_DIR$/.gitignore" />
+      <change type="MOVED" beforePath="C:\Local\code_and_repos\BARD\MinAssayAnnotParser\src\groovy\bard\dm\assaycompare\assaycleanup\AssayCleaner.groovy" afterPath="$PROJECT_DIR$/src/groovy/bard/dm/assaycompare/assaycleanup/AssayContextAndItemDuplicateFinder.groovy" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/scripts/assayCompare/AssayDeDuplicationScript.groovy" afterPath="$PROJECT_DIR$/scripts/assayCompare/AssayDeDuplicationScript.groovy" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/groovy/bard/dm/Log.groovy" afterPath="$PROJECT_DIR$/src/groovy/bard/dm/Log.groovy" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/groovy/bard/dm/assaycompare/AssayDuplicateFinder.groovy" afterPath="$PROJECT_DIR$/src/groovy/bard/dm/assaycompare/AssayDuplicateFinder.groovy" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/groovy/bard/dm/assaycompare/AssayMatch.groovy" afterPath="$PROJECT_DIR$/src/groovy/bard/dm/assaycompare/AssayMatch.groovy" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/groovy/bard/dm/assaycompare/assaycleanup/AssayCleaner.groovy" afterPath="$PROJECT_DIR$/src/groovy/bard/dm/assaycompare/assaycleanup/AssayCleaner.groovy" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/groovy/bard/dm/assaycompare/assaycleanup/DuplicateWriter.groovy" afterPath="$PROJECT_DIR$/src/groovy/bard/dm/assaycompare/assaycleanup/DuplicateWriter.groovy" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/groovy/bard/dm/assaycompare/assaycleanup/TestAssayCleanup.groovy" afterPath="$PROJECT_DIR$/src/groovy/bard/dm/assaycompare/assaycleanup/TestAssayCleanup.groovy" />
     </list>
     <ignored path="DnaRepairSpreadsheetParser.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -126,10 +122,10 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="AssayCleaner.groovy" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/groovy/bard/dm/assaycompare/assaycleanup/AssayCleaner.groovy">
+      <file leaf-file-name="AssayContextAndItemDuplicateFinder.groovy" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/groovy/bard/dm/assaycompare/assaycleanup/AssayContextAndItemDuplicateFinder.groovy">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="82" column="94" selection-start="3940" selection-end="3940" vertical-scroll-proportion="0.0">
+            <state line="82" column="94" selection-start="3962" selection-end="3962" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -138,8 +134,10 @@
       <file leaf-file-name="AssayDeDuplicationScript.groovy" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/scripts/assayCompare/AssayDeDuplicationScript.groovy">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="4" column="38" selection-start="175" selection-end="175" vertical-scroll-proportion="0.098265894">
-              <folding />
+            <state line="32" column="180" selection-start="1521" selection-end="1521" vertical-scroll-proportion="0.10722101">
+              <folding>
+                <element signature="e#0#33#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -147,7 +145,7 @@
       <file leaf-file-name="AssayDuplicateFinder.groovy" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/groovy/bard/dm/assaycompare/AssayDuplicateFinder.groovy">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="139" column="107" selection-start="6100" selection-end="6100" vertical-scroll-proportion="0.0">
+            <state line="122" column="52" selection-start="6153" selection-end="6153" vertical-scroll-proportion="-13.2">
               <folding />
             </state>
           </provider>
@@ -166,8 +164,6 @@
   <component name="IdeDocumentHistory">
     <option name="changedFiles">
       <list>
-        <option value="$PROJECT_DIR$/src/groovy/bard/dm/Log.groovy" />
-        <option value="$PROJECT_DIR$/src/groovy/bard/dm/assaycompare/AssayDuplicateFinder.groovy" />
         <option value="$PROJECT_DIR$/src/groovy/bard/dm/assaycompare/LimitedAssayContext.groovy" />
         <option value="$PROJECT_DIR$/src/groovy/bard/dm/assaycompare/LimitedAssayContextCompare.groovy" />
         <option value="$PROJECT_DIR$/src/groovy/bard/dm/assaycompare/AssayCleanup.groovy" />
@@ -175,13 +171,15 @@
         <option value="$PROJECT_DIR$/src/groovy/bard/dm/assaycompare/assaycleanup/LimitedAssayContextCompare.groovy" />
         <option value="$PROJECT_DIR$/src/groovy/bard/dm/assaycompare/assaycleanup/LimitedAssayContextItemMatchTripleBuilder.groovy" />
         <option value="$PROJECT_DIR$/src/groovy/bard/dm/assaycompare/assaycleanup/LimitedAssayContext.groovy" />
-        <option value="$PROJECT_DIR$/src/groovy/bard/dm/assaycompare/AssayMatch.groovy" />
         <option value="$PROJECT_DIR$/src/groovy/bard/dm/assaycompare/assaycleanup/AssayCleanup.groovy" />
         <option value="$PROJECT_DIR$/src/groovy/bard/dm/assaycompare/assaycleanup/TestAssayCleanup.groovy" />
         <option value="$PROJECT_DIR$/scripts/assayCompare/assaycleanup/TestAssayCleanupScript.groovy" />
-        <option value="$PROJECT_DIR$/src/groovy/bard/dm/assaycompare/assaycleanup/AssayCleaner.groovy" />
+        <option value="$PROJECT_DIR$/src/groovy/bard/dm/assaycompare/assaycleanup/AssayContextAndItemDuplicateFinder.groovy" />
         <option value="$PROJECT_DIR$/src/groovy/bard/dm/assaycompare/assaycleanup/DuplicateWriter.groovy" />
+        <option value="$PROJECT_DIR$/src/groovy/bard/dm/assaycompare/assaycleanup/AssayCleaner.groovy" />
+        <option value="$PROJECT_DIR$/src/groovy/bard/dm/assaycompare/AssayMatch.groovy" />
         <option value="$PROJECT_DIR$/scripts/assayCompare/AssayDeDuplicationScript.groovy" />
+        <option value="$PROJECT_DIR$/src/groovy/bard/dm/assaycompare/AssayDuplicateFinder.groovy" />
       </list>
     </option>
   </component>
@@ -222,6 +220,26 @@
       <sortByType />
     </navigator>
     <panes>
+      <pane id="Scope">
+        <subPane subId="Project Files">
+          <PATH>
+            <PATH_ELEMENT USER_OBJECT="Root">
+              <option name="myItemId" value="" />
+              <option name="myItemType" value="" />
+            </PATH_ELEMENT>
+          </PATH>
+        </subPane>
+      </pane>
+      <pane id="PackagesPane">
+        <subPane>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="MinAssayAnnotParser" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageViewProjectNode" />
+            </PATH_ELEMENT>
+          </PATH>
+        </subPane>
+      </pane>
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -250,38 +268,6 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="test" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="unit" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="MinAssayAnnotParser" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="MinAssayAnnotParser" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="test" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="MinAssayAnnotParser" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="MinAssayAnnotParser" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
               <option name="myItemId" value="src" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
@@ -362,80 +348,6 @@
             <PATH_ELEMENT>
               <option name="myItemId" value="assaycleanup" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="MinAssayAnnotParser" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="MinAssayAnnotParser" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="scripts" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="MinAssayAnnotParser" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="MinAssayAnnotParser" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="scripts" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="assayCompare" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="MinAssayAnnotParser" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="MinAssayAnnotParser" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="scripts" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="assayCompare" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="assaycleanup" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-        </subPane>
-      </pane>
-      <pane id="PackagesPane">
-        <subPane>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="MinAssayAnnotParser" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageViewProjectNode" />
-            </PATH_ELEMENT>
-          </PATH>
-        </subPane>
-      </pane>
-      <pane id="Scope">
-        <subPane subId="Project Files">
-          <PATH>
-            <PATH_ELEMENT USER_OBJECT="Root">
-              <option name="myItemId" value="" />
-              <option name="myItemType" value="" />
             </PATH_ELEMENT>
           </PATH>
         </subPane>
@@ -447,14 +359,14 @@
     <property name="GoToClass.toSaveIncludeLibraries" value="false" />
     <property name="options.splitter.main.proportions" value="0.3" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="MemberChooser.sorted" value="false" />
-    <property name="options.lastSelected" value="Groovy compiler" />
     <property name="recentsLimit" value="5" />
+    <property name="options.lastSelected" value="Groovy compiler" />
+    <property name="MemberChooser.sorted" value="false" />
     <property name="MemberChooser.showClasses" value="true" />
     <property name="GoToClass.includeLibraries" value="false" />
-    <property name="MemberChooser.copyJavadoc" value="false" />
-    <property name="options.splitter.details.proportions" value="0.2" />
     <property name="options.searchVisible" value="true" />
+    <property name="options.splitter.details.proportions" value="0.2" />
+    <property name="MemberChooser.copyJavadoc" value="false" />
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
@@ -465,10 +377,13 @@
     </key>
   </component>
   <component name="RunManager" selected="Grails.Grails:MinAssayAnnotParser">
-    <configuration default="true" type="#org.jetbrains.idea.devkit.run.PluginConfigurationType" factoryName="Plugin">
+    <configuration default="true" type="GroovyScriptRunConfiguration" factoryName="Groovy">
       <module name="" />
-      <option name="VM_PARAMETERS" value="-Xmx512m -Xms256m -XX:MaxPermSize=250m" />
-      <option name="PROGRAM_PARAMETERS" />
+      <setting name="path" value="" />
+      <setting name="vmparams" value="" />
+      <setting name="params" value="" />
+      <setting name="workDir" value="C:\Local\code_and_repos\BARD\MinAssayAnnotParser" />
+      <setting name="debug" value="false" />
       <method>
         <option name="AntTarget" enabled="false" />
         <option name="BuildArtifacts" enabled="false" />
@@ -491,13 +406,10 @@
         <option name="Maven.BeforeRunTask" enabled="false" />
       </method>
     </configuration>
-    <configuration default="true" type="GroovyScriptRunConfiguration" factoryName="Groovy">
+    <configuration default="true" type="#org.jetbrains.idea.devkit.run.PluginConfigurationType" factoryName="Plugin">
       <module name="" />
-      <setting name="path" value="" />
-      <setting name="vmparams" value="" />
-      <setting name="params" value="" />
-      <setting name="workDir" value="C:\Local\code_and_repos\BARD\MinAssayAnnotParser" />
-      <setting name="debug" value="false" />
+      <option name="VM_PARAMETERS" value="-Xmx512m -Xms256m -XX:MaxPermSize=250m" />
+      <option name="PROGRAM_PARAMETERS" />
       <method>
         <option name="AntTarget" enabled="false" />
         <option name="BuildArtifacts" enabled="false" />
@@ -514,6 +426,24 @@
       <method>
         <option name="AntTarget" enabled="false" />
         <option name="BuildArtifacts" enabled="false" />
+        <option name="Maven.BeforeRunTask" enabled="false" />
+      </method>
+    </configuration>
+    <configuration default="true" type="Applet" factoryName="Applet">
+      <module name="" />
+      <option name="MAIN_CLASS_NAME" />
+      <option name="HTML_FILE_NAME" />
+      <option name="HTML_USED" value="false" />
+      <option name="WIDTH" value="400" />
+      <option name="HEIGHT" value="300" />
+      <option name="POLICY_FILE" value="$APPLICATION_HOME_DIR$/bin/appletviewer.policy" />
+      <option name="VM_PARAMETERS" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <method>
+        <option name="AntTarget" enabled="false" />
+        <option name="BuildArtifacts" enabled="false" />
+        <option name="Make" enabled="true" />
         <option name="Maven.BeforeRunTask" enabled="false" />
       </method>
     </configuration>
@@ -543,24 +473,6 @@
       <envs />
       <properties />
       <listeners />
-      <method>
-        <option name="AntTarget" enabled="false" />
-        <option name="BuildArtifacts" enabled="false" />
-        <option name="Make" enabled="true" />
-        <option name="Maven.BeforeRunTask" enabled="false" />
-      </method>
-    </configuration>
-    <configuration default="true" type="Applet" factoryName="Applet">
-      <module name="" />
-      <option name="MAIN_CLASS_NAME" />
-      <option name="HTML_FILE_NAME" />
-      <option name="HTML_USED" value="false" />
-      <option name="WIDTH" value="400" />
-      <option name="HEIGHT" value="300" />
-      <option name="POLICY_FILE" value="$APPLICATION_HOME_DIR$/bin/appletviewer.policy" />
-      <option name="VM_PARAMETERS" />
-      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
-      <option name="ALTERNATIVE_JRE_PATH" />
       <method>
         <option name="AntTarget" enabled="false" />
         <option name="BuildArtifacts" enabled="false" />
@@ -684,11 +596,13 @@
       <window_info id="JetGradle" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Persistence" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32775453" sideWeight="0.49484536" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="IDEtalk Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32775453" sideWeight="0.49806702" order="8" side_tool="true" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
+      <window_info id="Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.32775453" sideWeight="0.4974227" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Grails View" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32947233" sideWeight="0.67224544" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="IDEtalk" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
@@ -696,15 +610,13 @@
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="true" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.22972973" sideWeight="0.67224544" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.22908624" sideWeight="0.67224544" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.32775453" sideWeight="0.4974227" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Cloverage" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Test Runs" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.32853025" sideWeight="0.49484536" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
     </layout>
@@ -798,49 +710,9 @@
     <breakpoint-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/test/integration/AssayCompareIntegrationTest.groovy">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="9" column="6" selection-start="235" selection-end="235" vertical-scroll-proportion="0.297593" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/test/unit/AssayContextCompareTest.groovy">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="18" column="6" selection-start="580" selection-end="580" vertical-scroll-proportion="0.3445946" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/groovy/bard/dm/assaycompare/AssayContextCompare.groovy">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="17" column="47" selection-start="503" selection-end="503" vertical-scroll-proportion="0.26773456" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/groovy/bard/dm/assaycompare/AssayContextItemMatchTripleBuilder.groovy">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="17" column="11" selection-start="558" selection-end="558" vertical-scroll-proportion="0.409611" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/groovy/bard/dm/assaycompare/assaycleanup/LimitedAssayContextCompare.groovy">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="21" column="117" selection-start="819" selection-end="819" vertical-scroll-proportion="0.44420132" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/groovy/bard/dm/assaycompare/CompareUsingMatches.groovy">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="65" column="0" selection-start="2564" selection-end="2564" vertical-scroll-proportion="0.9256017" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/groovy/bard/dm/assaycompare/assaycleanup/LimitedAssayContext.groovy">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="17" column="66" selection-start="448" selection-end="448" vertical-scroll-proportion="0.63238513" />
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/test/unit/AssayContextItemCompareTest.groovy">
       <provider selected="true" editor-type-id="text-editor">
         <state line="45" column="4" selection-start="1731" selection-end="1731" vertical-scroll-proportion="0.49774775" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/groovy/bard/dm/assaycompare/AssayMatch.groovy">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="32" column="92" selection-start="827" selection-end="827" vertical-scroll-proportion="0.8512035" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/groovy/bard/dm/assaycompare/assaycleanup/TestAssayCleanup.groovy">
@@ -853,11 +725,6 @@
         <state line="1" column="29" selection-start="48" selection-end="48" vertical-scroll-proportion="0.037199125" />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/groovy/bard/dm/assaycompare/AssayDuplicateFinder.groovy">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="139" column="107" selection-start="6100" selection-end="6100" vertical-scroll-proportion="0.0" />
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/groovy/bard/dm/Log.groovy">
       <provider selected="true" editor-type-id="text-editor">
         <state line="14" column="6" selection-start="311" selection-end="311" vertical-scroll-proportion="0.27023122">
@@ -865,26 +732,102 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/groovy/bard/dm/assaycompare/assaycleanup/AssayCleaner.groovy">
+    <entry file="file://$PROJECT_DIR$/src/groovy/bard/dm/assaycompare/assaycleanup/AssayContextAndItemDuplicateFinder.groovy">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="82" column="94" selection-start="3940" selection-end="3940" vertical-scroll-proportion="0.0">
+        <state line="82" column="94" selection-start="3962" selection-end="3962" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/groovy/bard/dm/assaycompare/assaycleanup/DuplicateWriter.groovy">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="12" column="6" selection-start="288" selection-end="288" vertical-scroll-proportion="0.2947977">
+        <state line="50" column="36" selection-start="2270" selection-end="2270" vertical-scroll-proportion="0.77803206">
           <folding>
             <element signature="e#43#81#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/groovy/bard/dm/minimumassayannotation/validateCreatePersist/AssayContextsValidatorCreatorAndPersistor.groovy">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="161" column="28" selection-start="9645" selection-end="9645" vertical-scroll-proportion="0.3445946">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/grails-app/conf/DataSource.groovy">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="131" column="1" selection-start="4378" selection-end="4378" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../BardDomainModel/grails-app/domain/bard/db/registration/Assay.groovy">
+      <provider editor-type-id="org.jetbrains.plugins.grails.perspectives.DomainClassesRelationsEditorProvider">
+        <state />
+      </provider>
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="30" column="19" selection-start="993" selection-end="993" vertical-scroll-proportion="-6.72093">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../BardDomainModel/grails-app/domain/bard/db/registration/AssayContext.groovy">
+      <provider editor-type-id="org.jetbrains.plugins.grails.perspectives.DomainClassesRelationsEditorProvider">
+        <state />
+      </provider>
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="21" column="17" selection-start="842" selection-end="842" vertical-scroll-proportion="-7.5116277">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../BardDomainModel/grails-app/domain/bard/db/registration/AssayContextItem.groovy">
+      <provider editor-type-id="org.jetbrains.plugins.grails.perspectives.DomainClassesRelationsEditorProvider">
+        <state />
+      </provider>
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="4" column="6" selection-start="78" selection-end="78" vertical-scroll-proportion="-1.5813954">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../BardDomainModel/grails-app/migrations/execute-load-data.groovy">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/groovy/bard/dm/assaycompare/assaycleanup/AssayCleaner.groovy">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="29" column="1" selection-start="1020" selection-end="1020" vertical-scroll-proportion="1.0787746">
+          <folding>
+            <element signature="e#43#81#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/groovy/bard/dm/assaycompare/AssayMatch.groovy">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="35" column="93" selection-start="955" selection-end="955" vertical-scroll-proportion="0.88840264">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/groovy/bard/dm/assaycompare/AssayDuplicateFinder.groovy">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="122" column="52" selection-start="6153" selection-end="6153" vertical-scroll-proportion="-13.2">
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/scripts/assayCompare/AssayDeDuplicationScript.groovy">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="4" column="38" selection-start="175" selection-end="175" vertical-scroll-proportion="0.098265894">
-          <folding />
+        <state line="32" column="180" selection-start="1521" selection-end="1521" vertical-scroll-proportion="0.10722101">
+          <folding>
+            <element signature="e#0#33#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>

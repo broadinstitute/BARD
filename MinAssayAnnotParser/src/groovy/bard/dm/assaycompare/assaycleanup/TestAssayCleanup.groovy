@@ -28,7 +28,7 @@ class TestAssayCleanup {
 
         assert assay.assayContexts.size() == 2
 
-        final AssayCleaner assayCleanup = new AssayCleaner()
+        final AssayContextAndItemDuplicateFinder assayCleanup = new AssayContextAndItemDuplicateFinder()
         AssayMatch assayMatch = assayCleanup.removeDuplicateContextsAndItems(assay)
         assert assayMatch.limitedAssayContextList.size() == 1
         assert assayMatch.limitedAssayContextList.get(0).itemSet.size() == 1
@@ -55,7 +55,7 @@ class TestAssayCleanup {
         assay.assayContexts.add(context)
         AssayMatch assayMatch = new AssayMatch(assay)
 
-        AssayCleaner.buildLimitedAssayContexts(assayMatch)
+        AssayContextAndItemDuplicateFinder.buildLimitedAssayContexts(assayMatch)
 
         assert assayMatch.limitedAssayContextList.size() == 1
         LimitedAssayContext lac = assayMatch.limitedAssayContextList.get(0)
@@ -70,7 +70,7 @@ class TestAssayCleanup {
 
         assayMatch = new AssayMatch(assay)
 
-        AssayCleaner.buildLimitedAssayContexts(assayMatch)
+        AssayContextAndItemDuplicateFinder.buildLimitedAssayContexts(assayMatch)
 
         assert assayMatch.limitedAssayContextList.size() == 1
         lac = assayMatch.limitedAssayContextList.get(0)

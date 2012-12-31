@@ -14,9 +14,11 @@ import bard.dm.assaycompare.assaycleanup.LimitedAssayContext
 class AssayMatch {
     Assay assay
 
-    Set<Assay> exactMatches
+//    Set<Assay> exactMatches
 
-    Set<Assay> subsetOfThis
+//    Set<Assay> subsetOfThis
+
+//    Map<Assay, Integer> partialMatchCountMap
 
     List<LimitedAssayContext> limitedAssayContextList
 
@@ -25,8 +27,9 @@ class AssayMatch {
     public AssayMatch(Assay assay) {
         this.assay = assay
 
-        exactMatches = new HashSet<Assay>()
-        subsetOfThis = new HashSet<Assay>()
+//        exactMatches = new HashSet<Assay>()
+//        subsetOfThis = new HashSet<Assay>()
+//        partialMatchCountMap = new HashMap<Assay, Integer>()
 
         limitedAssayContextList = new LinkedList<LimitedAssayContext>()
 
