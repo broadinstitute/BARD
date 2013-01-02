@@ -49,6 +49,8 @@ AssayContext.withTransaction {status ->
 }
 
 //run de-duplication
-AssayDuplicateFinder assayDuplicateFinder = new AssayDuplicateFinder("test/exampleData/assay_duplication_stats.csv")
-assayDuplicateFinder.findDuplicates(assayMatchList)
+//AssayDuplicateFinder assayDuplicateFinder = new AssayDuplicateFinder("test/exampleData/assay_duplication_stats.csv")
+//assayDuplicateFinder.findDuplicates(assayMatchList)
+
+Log.fileAppender.close()
 

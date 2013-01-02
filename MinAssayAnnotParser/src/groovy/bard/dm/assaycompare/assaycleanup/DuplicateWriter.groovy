@@ -17,8 +17,13 @@ class DuplicateWriter {
 
     public DuplicateWriter() {
         itemWriter = new BufferedWriter(new FileWriter("test/exampleData/duplicate_assay_context_items.csv"))
+        itemWriter.writeLine("assay_id,assay_context_id,assay_context_item_id1,assay_context_item_id2")
+
         dupContextItemWriter = new BufferedWriter(new FileWriter("test/exampleData/duplicate_assay_context_items_in_duplicate_contexts.csv"))
+        dupContextItemWriter.writeLine("assay_id,assay_context_id,assay_context_item_id1, assay_context_item_id2")
+
         contextWriter = new BufferedWriter(new FileWriter("test/exampleData/duplicate_assay_contexts.csv"))
+        contextWriter.writeLine("assay_id,asssay_context_id1,assay_context_id2")
     }
 
     public void write(AssayMatch assayMatch) {
