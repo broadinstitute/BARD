@@ -3,15 +3,16 @@ package bardqueryapi
 import grails.plugins.springsecurity.SpringSecurityService
 import org.codehaus.groovy.grails.plugins.springsecurity.SpringSecurityUtils
 import org.codehaus.groovy.grails.web.context.ServletContextHolder
+import javax.servlet.http.HttpServletRequest
 
 class MobileService {
 
     SpringSecurityService springSecurityService
     def grailsApplication
 
-    Boolean detect(request) {
+    Boolean detect(HttpServletRequest request) {
 
-        if (request.session.'mobileExperienceDisabled') {
+        if (request.session.getAttribute('mobileExperienceDisabled')) {
             return false
         }
 
