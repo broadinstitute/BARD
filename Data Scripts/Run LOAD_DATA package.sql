@@ -16,15 +16,8 @@ DECLARE
 begin
     for rec_sequence in cur_sequence
     loop
---        IF rec_sequence.sequence_name = 'PRJCT_EXPRMT_CNTXT_ITEM_ID_SEQ'
---        THEN
---            lv_table_name := 'PRJCT_EXPRMT_CONTEXT_ITEM';
---            lv_primary_key :=  'PRJCT_EXPRMT_CONTEXT_ITEM_ID';
---        ELSE
-            lv_table_name := replace(rec_sequence.sequence_name, '_ID_SEQ', null);
-            lv_primary_key := replace(rec_sequence.sequence_name, '_SEQ', null);
---        END IF;
-
+        lv_table_name := replace(rec_sequence.sequence_name, '_ID_SEQ', null);
+        lv_primary_key := replace(rec_sequence.sequence_name, '_SEQ', null);
 
         lv_max_sql := 'select nvl(max(' || lv_primary_key || '), 0) from ' || lv_table_name;
         begin
@@ -75,7 +68,9 @@ BEGIN
 END;
 /
 BEGIN
-  manage_ontology.make_trees;
+  --update_context_name;
+  update_assay_short_name;
+  --manage_ontology.make_trees;
 END;
 /
 
@@ -84,6 +79,12 @@ SET exprmt_context_item_id =
     (SELECT Count(*)
       FROM exprmt_context_item  eci2
       WHERE eci2.exprmt_context_item_id <= eci.exprmt_context_item_id);
+
+UPDATE exprmt_measure eci
+SET exprmt_measure_id =
+    (SELECT Count(*)
+      FROM exprmt+measure  eci2
+      WHERE eci2.exprmt_measure_id <= eci.exprmt_measure_id);
 
 UPDATE assay_context_item eci
 SET assay_context_item_id =
@@ -96,33 +97,6 @@ SET assay_context_measure_id =
     (SELECT Count(*)
       FROM assay_context_measure  eci2
       WHERE eci2.assay_context_measure_id <= eci.assay_context_measure_id);
-
-UPDATE exprmt_measure eci
-SET exprmt_measure_id =
-    (SELECT Count(*)
-      FROM exprmt_measure  eci2
-      WHERE eci2.exprmt_measure_id <= eci.exprmt_measure_id);
-
-UPDATE prjct_exprmt_cntxt_item eci
-SET prjct_exprmt_cntxt_item_id =
-    (SELECT Count(*)
-      FROM prjct_exprmt_cntxt_item  eci2
-      WHERE eci2.prjct_exprmt_cntxt_item_id <= eci.prjct_exprmt_cntxt_item_id);
-
-UPDATE project_context_item eci
-SET project_context_item_id =
-    (SELECT Count(*)
-      FROM project_context_item  eci2
-      WHERE eci2.project_context_item_id <= eci.project_context_item_id);
-
-UPDATE step_context_item eci
-SET step_context_item_id =
-    (SELECT Count(*)
-      FROM step_context_item  eci2
-      WHERE eci2.step_context_item_id <= eci.step_context_item_id);
-
-
-
 
 DECLARE
     cursor cur_sequence
