@@ -56,13 +56,13 @@ class SpreadsheetElementsTagLib {
                                                    controller: 'doseResponseCurve',
                                                    action: 'doseResponseCurve',
                                                     params: [
-                                                            sinf: hillCurveValueHolder?.sInf,
-                                                            s0: hillCurveValueHolder?.s0,
-                                                            ac50: hillCurveValueHolder?.slope,
-                                                            hillSlope: hillCurveValueHolder?.coef,
-                                                            concentrations: hillCurveValueHolder?.conc,
-                                                            activities: hillCurveValueHolder?.response,
-                                                            yAxisLabel: hillCurveValueHolder?.identifier
+                                                            sinf: hillCurveValueHolder.sInf,
+                                                            s0: hillCurveValueHolder.s0,
+                                                            ac50: hillCurveValueHolder.slope,
+                                                            hillSlope: hillCurveValueHolder.coef,
+                                                            concentrations: hillCurveValueHolder.conc,
+                                                            activities: hillCurveValueHolder.response,
+                                                            yAxisLabel: hillCurveValueHolder.identifier
                                                      ]
                                                     )}"/>
                                </div>
@@ -78,8 +78,3 @@ class SpreadsheetElementsTagLib {
 
     }
 }
-//    protected f(str) {
-//        return str?.replaceAll('([\\S\\+]+://\\S+)', '<a href="$1">$1</a>')
-//    }
-
-//}
