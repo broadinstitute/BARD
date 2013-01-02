@@ -13,7 +13,6 @@ import bard.core.rest.spring.project.Project
 import bard.core.rest.spring.project.ProjectResult
 import bard.core.rest.spring.util.MetaData
 import bard.core.rest.spring.util.NameDescription
-import org.apache.commons.lang.time.StopWatch
 
 import java.util.regex.Matcher
 import java.util.regex.Pattern
@@ -298,25 +297,5 @@ class QueryHelperService {
             }
         }
         return null
-    }
-    /**
-     * Start the stop-watch that measure network traffic time for any of the JDO services.
-     * @return StopWatch
-     */
-    public StopWatch startStopWatch() {
-        StopWatch sw = new StopWatch()
-        sw.start()
-        return sw
-    }
-
-    /**
-     * Stop the stop-watch and log the time.
-     * @param sw
-     */
-    public void stopStopWatch(StopWatch sw, String loggingString) {
-        sw.stop()
-        Date now = new Date()
-        Map loggingMap = [time: now.format('MM/dd/yyyy  HH:mm:ss.S'), responseTimeInMilliSeconds: sw.time, info: loggingString]
-        log.info(loggingMap.toString())
     }
 }

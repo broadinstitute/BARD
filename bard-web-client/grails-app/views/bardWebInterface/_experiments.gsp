@@ -22,7 +22,7 @@
                                                %{--model="[assayAdapter: experiment?.getAssay()]"/></div>--}%
                             </g:if>
                             |
-                            <a data-toggle="collapse" data-parent="#accordionDescription"
+                            <a data-toggle="collapse" data-parent="#accordionDescription" class="resultsdescriptions"
                                href="#accordionDescriptionContent_${i}">View Description</a>
                         </span></p>
                     </div>

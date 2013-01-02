@@ -2,11 +2,14 @@ package bard.core.rest.spring
 
 import bard.core.SearchParams
 import bard.core.SuggestParams
+import bard.core.exceptions.RestApiException
+import bard.core.helper.LoggerService
 import bard.core.interfaces.RestApiConstants
 import bard.core.rest.spring.util.ETag
 import bard.core.rest.spring.util.ETagCollection
 import bard.core.rest.spring.util.Facet
 import org.apache.commons.lang3.StringUtils
+import org.apache.commons.lang3.time.StopWatch
 import org.springframework.http.HttpEntity
 import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpMethod
@@ -14,13 +17,13 @@ import org.springframework.util.LinkedMultiValueMap
 import org.springframework.util.MultiValueMap
 import org.springframework.web.client.RestClientException
 import org.springframework.web.client.RestTemplate
-import bard.core.exceptions.RestApiException
 
 abstract class AbstractRestService {
     String baseUrl
     String promiscuityUrl
     RestTemplate restTemplate
     final static int multiplier = 5;
+    LoggerService loggerService
 
     /**
      * @param params
@@ -354,7 +357,10 @@ abstract class AbstractRestService {
 
     public Object getForObject(URI uri, Class clazz) {
         try {
-            return this.restTemplate.getForObject(uri, clazz)
+            StopWatch sw = this.loggerService.startStopWatch()
+            def result = this.restTemplate.getForObject(uri, clazz)
+            this.loggerService.stopStopWatch(sw, "method=getForObject(URI uri, Class clazz); uri='${uri}'; class=${clazz}")
+            return result
         } catch (RestClientException restClientException) {
             log.error(uri.toString(), restClientException)
             throw new RestApiException(restClientException)
@@ -364,7 +370,10 @@ abstract class AbstractRestService {
 
     public Object getForObject(final String uri, final Class clazz, Map map = [:]) {
         try {
-            return this.restTemplate.getForObject(uri, clazz, map)
+            StopWatch sw = this.loggerService.startStopWatch()
+            def result = this.restTemplate.getForObject(uri, clazz, map)
+            this.loggerService.stopStopWatch(sw, "method=getForObject(final String uri, final Class clazz, Map map = [:]); uri='${uri}'; class=${clazz}; map=${map}")
+            return result
         } catch (RestClientException restClientException) {
             final String uriString = uri + map
             log.error(uriString, restClientException)
@@ -375,9 +384,12 @@ abstract class AbstractRestService {
 
     public Object postForObject(final URI uri, final Class clazz, Map map = [:]) {
         try {
-            return this.restTemplate.postForObject(uri, map, clazz)
+            StopWatch sw = this.loggerService.startStopWatch()
+            def result = this.restTemplate.postForObject(uri, map, clazz)
+            this.loggerService.stopStopWatch(sw, "method=postForObject(final URI uri, final Class clazz, Map map = [:]); uri='${uri}'; class=${clazz}; map=${map}")
+            return result
         } catch (RestClientException restClientException) {
-            final String uriString = uri.toString()+ map
+            final String uriString = uri.toString() + map
             log.error(uriString, restClientException)
             throw new RestApiException(restClientException)
         }
@@ -385,7 +397,10 @@ abstract class AbstractRestService {
 
     public Object postExchange(String url, HttpEntity<List> entity, Class clazz) {
         try {
-            return restTemplate.exchange(url, HttpMethod.POST, entity, clazz);
+            StopWatch sw = this.loggerService.startStopWatch()
+            def result = restTemplate.exchange(url, HttpMethod.POST, entity, clazz);
+            this.loggerService.stopStopWatch(sw, "method=postExchange(String url, HttpEntity<List> entity, Class clazz); url='${url}'; entity=${entity?.dump()}; class=${clazz}")
+            return result
         } catch (RestClientException restClientException) {
             log.error(url.toString(), restClientException)
             throw new RestApiException(restClientException)
@@ -394,7 +409,10 @@ abstract class AbstractRestService {
 
     public Object getExchange(URI uri, HttpEntity<List> entity, Class clazz) {
         try {
-            return restTemplate.exchange(uri, HttpMethod.GET, entity, clazz);
+            StopWatch sw = this.loggerService.startStopWatch()
+            def result = restTemplate.exchange(uri, HttpMethod.GET, entity, clazz);
+            this.loggerService.stopStopWatch(sw, "method=getExchange(URI uri, HttpEntity<List> entity, Class clazz); uri='${uri}'; entity=${entity?.dump()}; class=${clazz}")
+            return result
         } catch (RestClientException restClientException) {
             log.error(uri.toString(), restClientException)
             throw new RestApiException(restClientException)
