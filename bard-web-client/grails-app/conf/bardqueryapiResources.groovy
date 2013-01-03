@@ -17,12 +17,7 @@ modules = {
     }
     images {
     }
-    showAssay {
-        resource url:"js/html5historyapi/history.js"
-        resource url:"js/coreShowProjectAssay.js"
-    }
-
-    projects {
+    showProjectAssay {
         resource url:"js/html5historyapi/history.js"
         resource url: "js/coreShowProjectAssay.js"
     }

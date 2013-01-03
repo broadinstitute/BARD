@@ -1,3 +1,7 @@
+/**
+ * Collapse all open accordions, so that we have only one active at any time
+ * @param currentHref
+ */
 function toggleCollapse(currentHref) {
     //Common
     if ($('#target-info').hasClass('in')) {
@@ -42,7 +46,7 @@ function toggleCollapse(currentHref) {
 
     }
     if ($('#experiments-info').hasClass('in')) {
-
+        //Note that description nodes are embedded inside the experiment node
         descriptionExptHasClass = false;
         if (currentHref.indexOf('accordionDescriptionContent_') > -1) {//the current clicked node is a description node
             descriptionExptHasClass = true;
@@ -62,8 +66,14 @@ function toggleCollapse(currentHref) {
     }
 
 }
+/**
+ * Find the current open accordion and close it
+ *
+ * Note that we are binding both the showAssay and showProject accordions
+ * @param returnLocation
+ */
 function locationHashChanged(returnLocation) {
-    //common
+    //Common to both pages
     if (returnLocation.hash === "#target-info") {
         if (!$('#target-info').hasClass('in')) {
             toggleCollapse(returnLocation.href);
@@ -149,11 +159,12 @@ $(document).ready(function () {
     // looking for all the links with class accordion-toggle
     var anchors = $('a.accordion-toggle');
 
-    // hang on the event, all references in this document
-    for (var i = 0; i < anchors.length; i++) {
-        anchors[ i ].onclick = handlerAnchors;
+    //bind click events
+    for (var j = 0; j < anchors.length; j++) {
+        anchors[ j ].onclick = handlerAnchors;
     }
 
+    //find all anchors with  resultsdescriptions class
     anchors = $('a.resultsdescriptions');
     // hang on the event, all references in this document
     for (var i = 0; i < anchors.length; i++) {
@@ -175,28 +186,28 @@ $(document).ready(function () {
          */
         var returnLocation = history.location || document.location;
         locationHashChanged(returnLocation);
-
-        // here can cause data loading, etc.
-
-
-        // just post
-        // alert("We returned to the page with a link: " + returnLocation.href);
     };
+
     $("#accordion").accordion({ autoHeight:false });
     $('.projectTooltip').tooltip();
+
+    //bind show event to accordion
     $('.collapse').on('show', function () {
         var icon = $(this).siblings().find("i.icon-chevron-right");
         icon.removeClass('icon-chevron-right').addClass('icon-chevron-down');
     });
+
+    //bind hide event to accordion
     $('.collapse').on('hide', function () {
         var icon = $(this).siblings().find("i.icon-chevron-down");
         icon.removeClass('icon-chevron-down').addClass('icon-chevron-right');
     });
+    //bind click event to accordion
     $(".collapse").click(function () {
         //find all with class and toggle
         $(this).collapse('show');
     });
-    //Trigger this event just in case someone bookmarks anny of the accordions
+    //Trigger this event just in case someone bookmarks any of the accordions
     // $(window).trigger('hashchange');
     var returnLocation = history.location || document.location;
     locationHashChanged(returnLocation);

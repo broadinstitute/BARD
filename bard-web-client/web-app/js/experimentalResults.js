@@ -7,10 +7,7 @@ $(document).ready(function () {
 
     //=== Handle Paging. We bind to all of the paging css classes on the anchor tag ===
     $(document).on("click", "a.step,a.nextLink,a.prevLink", function (event) {
-
-        // $("a.step,a.nextLink,a.prevLink").live('click', function (event) {
         event.preventDefault();	// prevent the default action behaviour to happen
-        // $.address.value($(this).attr('href'));
         var pagingurl = $(this).attr('href');
 
         populatePage(pagingurl);

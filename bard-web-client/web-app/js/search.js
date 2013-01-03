@@ -9,58 +9,57 @@ var errorImageTwitterBootstrap = '<img src=""  class="icon-exclamation-sign" alt
 //You do that to optimize this regular expression
 //see http://www.regular-expressions.info/brackets.html
 var NUMBER_MATCHING_REGEX = /^\s*\d+\s*(?:,?\s*\d+\s*)*$/;
-var TAB_ICON = '<span class="label label-important">New</span>'
+var TAB_ICON = '<span class="label label-important">New</span>';
 
 $(document).ready(function () {
 
-    //set up form submission
+    //set up main form submission
     $('#searchForm').submit(function (event) {
+        event.preventDefault();	// prevent the default action behaviour to happen
         var searchString = $("#searchString").val();
         handleMainFormSubmit(searchString);
         return false; //do not submit form the normal way, use Ajax instead
 
     });
 
-    //set up filter form submissions
-    //We are using live because we want to do late binding
+    //set up filter form submissions, for all 3 tabs
+    //We are using on because we want to do late binding
     //these forms would not exist when the document first loads
-    $('#AssayFacetForm').live('submit', function (event) {
+    $(document).on("submit", "#AssayFacetForm", function (event) {
+        event.preventDefault();	// prevent the default action behaviour to happen
         var searchString = $("#searchString").val();
         handleFilteredQuery(searchString, 'AssayFacetForm', 'AssayFacetForm', 'assaysTab', 'totalAssays', 'assays', 'Assay Definitions ');
         return false; //do not submit form the normal way, use Ajax instead
 
     });
-    $('#AssayFacetForm_ResetButton').live('click', function () {
-        resetAllFilters('AssayFacetForm');
-    });
-    $('#ProjectFacetForm').live('submit', function (event) {
+    $(document).on("submit", "#ProjectFacetForm", function (event) {
+        event.preventDefault();	// prevent the default action behaviour to happen
         var searchString = $("#searchString").val();
         handleFilteredQuery(searchString, 'ProjectFacetForm', 'ProjectFacetForm', 'projectsTab', 'totalProjects', 'projects', 'Projects ');
         return false; //do not submit form the normal way, use Ajax instead
     });
-    $('#ProjectFacetForm_ResetButton').live('click', function () {
-        resetAllFilters('ProjectFacetForm');
-    });
-    $('#CompoundFacetForm').live('submit', function (event) {
-
+    $(document).on("submit", "#CompoundFacetForm", function (event) {
+        event.preventDefault();	// prevent the default action behaviour to happen
         var searchString = $("#searchString").val();
         handleFilteredQuery(searchString, 'CompoundFacetForm', 'CompoundFacetForm', 'compoundsTab', "totalCompounds", 'compounds', 'Compounds ');
         return false; //do not submit form the normal way, use Ajax instead
     });
-    $('#CompoundFacetForm_ResetButton').live('click', function () {
+
+
+    //bind buttons to reset filters
+    $(document).on("click", "#AssayFacetForm_ResetButton", function () {
+        resetAllFilters('AssayFacetForm');
+    });
+    $(document).on("click", "#ProjectFacetForm_ResetButton", function () {
+        resetAllFilters('ProjectFacetForm');
+    });
+    $(document).on("click", "#CompoundFacetForm_ResetButton", function () {
         resetAllFilters('CompoundFacetForm');
     });
 
-    function resetAllFilters(facetForm) {
-        //Uncheck all filters
-        $('#' + facetForm + ' input[type="checkbox"]').attr('checked', false);
-        //Resubmit the form
-        $('#' + facetForm).submit()
-    }
 
     //=== Handle Paging. We bind to all of the paging css classes on the anchor tag ===
     $(document).on("click", "a.step,a.nextLink,a.prevLink", function (event) {
-        // $("a.step,a.nextLink,a.prevLink").live('click', function (event) {
         event.preventDefault();	// prevent the default action behaviour to happen
         var url = $(this).attr('href');
 
@@ -79,17 +78,22 @@ $(document).ready(function () {
         var facetId = $(this).attr('div_id'); //get the current div
         var facetText = $(this).text();//Get the current text, either 'Less' or 'More'
         if (facetText == 'More') { //If the text is 'More' set to 'Less' and change the style to 'display:block'
-            $("#" + facetId).css('display', 'block')
-            $(this).text("Less")
+            $("#" + facetId).css('display', 'block');
+            $(this).text("Less");
         }
         if (facetText == 'Less') {//If the text is 'Less' set to 'More' and change the style to 'display:none'
-            $("#" + facetId).css('display', 'none')
-            $(this).text("More")
+            $("#" + facetId).css('display', 'none');
+            $(this).text("More");
         }
     });
 
 });
-
+function resetAllFilters(facetForm) {
+    //Uncheck all filters for the current form
+    $('#' + facetForm + ' input[type="checkbox"]').attr('checked', false);
+    //Resubmit the form
+    $('#' + facetForm).submit();
+}
 /**
  * Handle paging using Ajax
  * TODO: Only paging on the main form is supported.
@@ -412,7 +416,7 @@ function findSearchType(searchString) {
     var searchType = searchStringSplit[0];
     if (searchStringSplit.length == 2 && $.trim(searchStringSplit[1]).length) { //has to be of the form Exact:CCC so there must be 2 things in the array
         searchType = searchType.toLowerCase();
-        var stringAfterColon = $.trim(searchStringSplit[1])
+        var stringAfterColon = $.trim(searchStringSplit[1]);
         switch (searchType) { //must be one of these to qualify as a structure search
             case 'exact':
             case 'substructure':
@@ -423,15 +427,17 @@ function findSearchType(searchString) {
                 if (stringAfterColon.match(NUMBER_MATCHING_REGEX)) {//this is an id match
                     return 'ADID';
                 }
-
+                break;
             case 'cid':  //this is a compound search with ids
                 if (stringAfterColon.match(NUMBER_MATCHING_REGEX)) {//this is an id match
                     return 'CID'
                 }
+                break;
             case 'pid':  //this is an project search with ids
                 if (stringAfterColon.match(NUMBER_MATCHING_REGEX)) {//this is an id match
                     return 'PID'
                 }
+                break;
         }
     } else if (searchStringSplit.length == 2 && !$.trim(searchStringSplit[1]).length) { //e.g Exact: with no smile string
         return "EMPTY";

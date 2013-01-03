@@ -19,7 +19,7 @@
                 <td>
                     <h3>
                         <g:link action="showCompound" id="${compoundAdapter.pubChemCID}"
-                                params='[searchString: "${searchString}"]' target="external">
+                                params='[searchString: "${searchString}"]'>
                             <g:if test="${compoundAdapter.name}">
                                 ${compoundAdapter.name} <small>(PubChem CID: ${compoundAdapter.pubChemCID})</small>
                             </g:if>

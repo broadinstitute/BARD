@@ -4,7 +4,7 @@
     <head>
         <meta name="layout" content="logoSearchCartAndFooter"/>
         <title>BARD : Project : ID ${projectAdapter?.id}</title>
-        <r:require modules="projects,compoundOptions"/>
+        <r:require modules="showProjectAssay,compoundOptions"/>
     </head>
 
     <body>
