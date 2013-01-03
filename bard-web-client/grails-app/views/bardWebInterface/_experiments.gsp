@@ -18,8 +18,8 @@
                             <g:link controller="bardWebInterface" action="showExperiment" id="${experiment.id}"
                                     params='[searchString: "${searchString}"]'>View Results</g:link>
                             <g:if test="${showAssaySummary}">
-                                %{-- TODO <div><g:render template="assaySummary"--}%
-                                               %{--model="[assayAdapter: experiment?.getAssay()]"/></div>--}%
+                                 <div><g:render template="assaySummary"
+                                               model="[assayAdapter: experiment?.getAssay()]"/></div>
                             </g:if>
                             |
                             <a data-toggle="collapse" data-parent="#accordionDescription" class="resultsdescriptions"

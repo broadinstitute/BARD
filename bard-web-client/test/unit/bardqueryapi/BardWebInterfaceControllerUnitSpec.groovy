@@ -30,6 +30,7 @@ import spock.lang.Specification
 import spock.lang.Unroll
 
 import javax.servlet.http.HttpServletResponse
+import spock.lang.IgnoreRest
 
 /**
  * See the API for {@link grails.test.mixin.support.GrailsUnitTestMixin} for usage instructions
@@ -91,16 +92,6 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
         assert response.status == 200
     }
 
-    void "test showExperiment #label"() {
-        given:
-        params.id = "222"
-        when:
-        controller.showExperiment()
-        then:
-        assert response.status == 200
-        assert view == '/bardWebInterface/showExperimentResult'
-        assert model.experimentId == "222"
-    }
 
 
     void "test find substance Ids #label"() {
@@ -129,9 +120,24 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
 
     }
 
-    void "test showExperimentResult #label"() {
+
+    void "test showExperiment with Ajax"() {
+        given:
+        Map experimentData = [total: 2, experimentId: 222, spreadSheetActivities: [
+                new SpreadSheetActivity(eid: new Long(567), cid: new Long(1), sid: new Long(20))],
+                role: ExperimentRole.Counterscreen, experiment: new ExperimentSearch(name: 'name', assayId: 1)]
+        params.id = "222"
+        request.addHeader("X-Requested-With", "XMLHttpRequest")
         when:
-        controller.showExperimentResult(eid)
+        controller.showExperiment()
+        then:
+        this.molecularSpreadSheetService.findExperimentDataById(_, _, _) >> {experimentData}
+        assert response.status == 200
+    }
+
+    void "test showExperiment #label"() {
+        when:
+        controller.showExperiment(eid)
         then:
         _ * this.molecularSpreadSheetService.findExperimentDataById(_, _, _) >> {experimentData}
         assert response.status == statusCode
@@ -145,11 +151,11 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
                 role: ExperimentRole.Counterscreen, experiment: new ExperimentSearch(name: 'name', assayId: 1)]
     }
 
-    void "test showExperimentResult With Exception"() {
+    void "test showExperiment With Exception"() {
         given:
         Long id = 234
         when:
-        controller.showExperimentResult(id)
+        controller.showExperiment(id)
         then:
         _ * this.molecularSpreadSheetService.findExperimentDataById(_, _, _) >> {throw new HttpException("Some message")}
         assert response.status == 404
