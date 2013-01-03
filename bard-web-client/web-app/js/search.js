@@ -9,7 +9,7 @@ var errorImageTwitterBootstrap = '<img src=""  class="icon-exclamation-sign" alt
 //You do that to optimize this regular expression
 //see http://www.regular-expressions.info/brackets.html
 var NUMBER_MATCHING_REGEX = /^\s*\d+\s*(?:,?\s*\d+\s*)*$/;
-var TAB_ICON = '<span class="label label-important">New</span>';
+var TAB_ICON_CLASS = 'badge badge-important';
 
 $(document).ready(function () {
 
@@ -139,7 +139,7 @@ function handleStructureSearch(url, currentFormId) {
         },
         success:function (data) {
             $("#compounds").html(data);
-            var compoundTotal = TAB_ICON + ' Compounds (' + $("#totalCompounds").val() + ')';
+            var compoundTotal = ' Compounds <span class="'+ TAB_ICON_CLASS +'">' + $("#totalCompounds").val() + '</span>';
 
             $("#compoundsTab").html(compoundTotal);
             $("#compounds").tab('show');
@@ -179,9 +179,12 @@ function handleSearch(controllerAction, currentFormId, tabId, totalHitsForResour
         success:function (data) {
             $(updateDivId).html(data);
             var totalHits = $(totalHitsElement).val();
-            var total = prefixOfTextToAppearOnTab + '(' + totalHits + ')';
+            var total = prefixOfTextToAppearOnTab;
             if (totalHits > 0) {
-                total = TAB_ICON + total
+                total += ' <span class="'+ TAB_ICON_CLASS +'">' + totalHits + '</span>';
+            }
+            else {
+                total += ' (0)'
             }
 
             $(tabDivElement).html(total);

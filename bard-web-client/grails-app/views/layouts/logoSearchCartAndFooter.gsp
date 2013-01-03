@@ -48,10 +48,10 @@
         </div>
 
         <div class="span3">
-            <g:render template="/layouts/templates/queryCart"/>
             <div class="center-aligned">
                 <g:render template="/layouts/templates/loginStrip"/>
             </div>
+            <g:render template="/layouts/templates/queryCart"/>
         </div>
 
     </div>

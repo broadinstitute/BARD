@@ -37,13 +37,13 @@ h1 {
 
 .nav-tabs {
     margin-bottom: 0;
-    padding-left: 20%;
+    padding-left: 25%;
 } /* Override of default margin */
 
 .tab-pane {
     padding: 20px;
     margin-bottom: 30px;
-    border: 1px solid #ddd;
+    border: 1px solid Black;
 }
 
 .tab-content > .active, .pill-content > .active {
@@ -52,8 +52,32 @@ h1 {
     min-height: 200px;
 }
 
+.nav-tabs {
+    border-bottom-color: Black;
+}
+
+.nav-tabs > .active > a, .nav-tabs > .active > a:hover {
+    border-color: Black;
+    border-bottom-color: transparent;
+    color: Black;
+}
+
+.nav-tabs > li > a {
+    border-color: Grey;
+    border-bottom-color: Black;
+    background-color: #babec1;
+    color: Black;
+}
+
+.nav-tabs > li > a:hover {
+    border-color: #936288;
+    border-bottom-color: Black;
+    background-color: white;
+    color: #936288;
+}
+
 .well {
-    background-color: #efe8d8;
+    background-color: #f2f5f1;
 }
 
 .tab-message {
@@ -430,4 +454,8 @@ td.molSpreadSheet{
     left: -25px;
     top: -25px;
     text-decoration-color: #00E0FF;
+}
+
+#login-form form {
+    margin: 2px;
 }
