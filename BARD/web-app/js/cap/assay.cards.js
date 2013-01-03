@@ -425,9 +425,9 @@ function editCardItem(){
 	
 }
 
-function launchAddItemWizard(assayContextId, cardSection){
+function launchAddItemWizard(assayContextId){
 	
-	var data = {'assayContextId':assayContextId, 'cardSection':cardSection};
+	var data = {'assayContextId':assayContextId};
 	$.ajax({
     	type:'POST',
         url:'../../addItemWizard/addItemWizard',
