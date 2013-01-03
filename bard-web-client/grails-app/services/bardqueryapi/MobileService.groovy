@@ -42,7 +42,8 @@ class MobileService {
 
 
     Boolean gspExists(String gspName) {
-        return getAvailableGSPs().find { String gsp -> ('/' + gsp - '.gsp') == gspName}
+        List<String> gsps = getAvailableGSPs()
+        return gsps.find { String gsp -> ('/' + gsp - '.gsp') == gspName} ?: false
     }
 
 
@@ -71,7 +72,8 @@ class MobileService {
 
     private void findWarGsps(String current, List gsps) {
         def servletContext = ServletContextHolder.servletContext
-        for (String path in servletContext.getResourcePaths(current)) {
+        final paths = servletContext.getResourcePaths(current)
+        for (String path in paths) {
             if (path.endsWith('.gsp')) {
                 gsps << (path - '/WEB-INF/grails-app/views/')
             }
