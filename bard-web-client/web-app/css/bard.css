@@ -459,3 +459,26 @@ td.molSpreadSheet{
 #login-form form {
     margin: 2px;
 }
+
+.compound-info {
+    position: relative;
+}
+
+.compound-info-dropdown {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+}
+
+.compound-info-dropdown .btn {
+    background: rgba(255,255,255,0.5);
+}
+
+.compound-info-dropdown .dropdown-menu {
+    text-align: left;
+    padding: 3px;
+}
+
+.compound-info-dropdown .dropdown-menu a {
+    padding: 0;
+}

@@ -27,6 +27,12 @@
                                 PubChem CID: ${compoundAdapter.pubChemCID}
                             </g:else>
                         </g:link>
+                        <g:if test="${compoundAdapter.isDrug()}">
+                            <span class="badge badge-success">Drug</span>
+                        </g:if>
+                        <g:elseif test="${compoundAdapter.isProbe()}">
+                            <span class="badge badge-info">Probe</span>
+                        </g:elseif>
                     </h3>
                     <g:saveToCartButton id="${compoundAdapter.pubChemCID}"
                                         name="${JavaScriptUtility.cleanup(compoundAdapter.name)}"
@@ -40,12 +46,6 @@
                             <dt>Search Match (highlighted in bold):</dt>
                             <dd>&hellip;${compoundAdapter.highlight}&hellip;</dd>
                         </g:if>
-                        <g:if test="${compoundAdapter.isDrug()}">
-                            <p><span class="badge badge-success">Drug</span></p>
-                        </g:if>
-                        <g:elseif test="${compoundAdapter.isProbe()}">
-                            <p><span class="badge badge-info">Probe</span></p>
-                        </g:elseif>
                         <dt>Assays - Active vs Tested:</dt>
                         <dd>
                             <div class="activeVrsTested">

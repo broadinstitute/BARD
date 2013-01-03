@@ -3,18 +3,18 @@ examples Similarity:1234
 Similarity:CCC
 
 --}%
-<div>
-    <small>
+<div class="compound-info">
+    <g:if test="${smiles}">
+        <img alt="${smiles}"
+             src="${createLink(controller: 'chemAxon', action: 'generateStructureImageFromSmiles', params: [smiles: smiles, width: imageWidth, height: imageHeight])}"/>
+    </g:if>
+    <g:else>
+        <img alt="SID: ${sid}" title="SID: ${sid}"
+             src="${createLink(controller: 'chemAxon', action: 'generateStructureImageFromCID', params: [cid: cid, width: imageWidth, height: imageHeight])}"/>
+    </g:else>
+    <div class="compound-info-dropdown">
         <span class="btn-group">
-            <g:if test="${smiles}">
-                <img alt="${smiles}"
-                     src="${createLink(controller: 'chemAxon', action: 'generateStructureImageFromSmiles', params: [smiles: smiles, width: imageWidth, height: imageHeight])}"/>
-            </g:if>
-            <g:else>
-                <img alt="SID: ${sid}" title="SID: ${sid}"
-                     src="${createLink(controller: 'chemAxon', action: 'generateStructureImageFromCID', params: [cid: cid, width: imageWidth, height: imageHeight])}"/>
-            </g:else>
-            <button class="btn btn-info dropdown-toggle" data-toggle="dropdown">Info <span class="caret"></span>
+            <button class="btn btn-mini dropdown-toggle" data-toggle="dropdown"><i class="icon-info-sign"></i> <span class="caret"></span>
             </button>
             <ul class="dropdown-menu">
                 <g:if test="${smiles}">
@@ -24,6 +24,6 @@ Similarity:CCC
                        data-structure-search-params="Similarity:${cid}">Search For Analogs</a></li>
             </ul>
         </span>
-    </small>
+    </div>
 </div>
 
