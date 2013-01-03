@@ -1,4 +1,4 @@
-<%@ page import="bard.db.registration.*" %>
+ƒ<%@ page import="bard.db.registration.*" %>
 <!DOCTYPE html>
 <html>
 <head>

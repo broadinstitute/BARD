@@ -10,11 +10,11 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <r:require modules="core,bootstrap, assayshow,projectstep"/>
+    <r:require modules="core,bootstrap, assaycards,projectstep"/>
     <meta name="layout" content="basic"/>
     <link rel="stylesheet" href="${resource(dir: 'css', file: 'card.css')}" type="text/css">
     <link rel="stylesheet" href="${resource(dir: 'css', file: 'bootstrap-plus.css')}" type="text/css">
-    <title>Show Project</title>
+    <title>Edit Project</title>
 </head>
 
 <body>
@@ -22,16 +22,21 @@
     <div class="span12">
         <div class="well well-small">
             <div class="pull-left">
-                <h4>View Project (PID: ${instance?.id})</h4>
+                <h4>Edit Project (PID: ${instance?.id})</h4>
             </div>
             <g:if test="${instance?.id}">
                 <div class="pull-right">
-                    <g:link action="edit" id="${instance?.id}" class="btn btn-small btn-info">Edit</g:link>
-                    <g:link action="edit" id="${instance?.id}" class="btn btn-small btn-info">Clone</g:link>
+                    <g:link action="show" id="${instance?.id}" class="btn btn-small btn-primary">Finish Editing</g:link>
+                    %{--<g:link action="show" id="${assayInstance?.id}" class="btn btn-small">Cancel</g:link>--}%
                 </div>
             </g:if>
         </div>
     </div>
+</div>
+
+<div class="alert">
+    <button type="button" class="close" data-dismiss="alert">×</button>
+    <strong>Tips:</strong> Edits will be saved immediately. You can drag items within cards to other cards, or use menus on individual cards to move items.
 </div>
 
 <g:if test="${flash.message}">
@@ -57,7 +62,7 @@
             <g:render template="../document/show" model="['documents': instance.documents]"/>
 
             <h3><a href="#">Contexts</a></h3>
-            <g:render template="../context/show" model="['contexts': instance.contextsWithGroup]"/>
+            <g:render template="../context/edit" model="['contexts': instance.contextsWithGroup, 'instanceId': instance.id]"/>
 
             <h3><a href="#">Experiments and steps</a></h3>
             <g:render template="showstep" model="['experiments': instance.projectExperiments, 'pegraph': pexperiment]"/>
