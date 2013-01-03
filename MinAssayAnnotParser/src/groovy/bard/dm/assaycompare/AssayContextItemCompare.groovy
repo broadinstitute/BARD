@@ -3,6 +3,7 @@ package bard.dm.assaycompare
 import bard.db.registration.AssayContextItem
 import bard.db.registration.AttributeType
 import bard.dm.Log
+import org.apache.commons.lang3.StringUtils
 
 /**
  * Created with IntelliJ IDEA.
@@ -72,7 +73,8 @@ class AssayContextItemCompare {
                     }
                 }
             //always do the valueDisplay comparison last!  everything else takes priority in comparison.  Only compare this if all other options have failed
-            } else if (aci1.valueDisplay && aci1.valueDisplay.trim().equalsIgnoreCase(aci2.valueDisplay?.trim())) { //attempt to compare values as value display (aka free text)
+            } else if (StringUtils.isNotBlank(aci1.valueDisplay) && StringUtils.isNotBlank(aci2.valueDisplay)
+                    && aci1.valueDisplay.trim().equalsIgnoreCase(aci2.valueDisplay.trim())) { //attempt to compare values as value display (aka free text)
                 return ContextItemComparisonResultEnum.ExactMatch
             }
         }
