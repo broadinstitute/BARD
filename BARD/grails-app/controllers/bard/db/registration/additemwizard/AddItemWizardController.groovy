@@ -3,28 +3,9 @@ package bard.db.registration.additemwizard
 /**
  * ajaxflow Controller
  *
- * @author	ycruz
+ * @author	Jeroen Wesbeek <work@osx.eu>
  * @package AjaxFlow
  */
-
-class AttributeCommand implements Serializable {
-	
-	Long elementId
-	String path
-	String assayContextId
-}
-
-class ValueTypeCommand implements Serializable {
-
-	String valueTypeOption
-}
-
-class FixedValueCommand implements Serializable {
-	
-	Long valueId
-	String qualifier
-}
-
 class AddItemWizardController {
 	// the pluginManager is used to check if the Grom
 	// plugin is available so we can 'Grom' development
@@ -40,13 +21,18 @@ class AddItemWizardController {
 		// Grom a development message
 		if (pluginManager.getGrailsPlugin('grom')) "redirecting into the webflow".grom()
 
+		/**
+		 * Do you believe it in your head?
+		 * I can go with the flow
+		 * Don't say it doesn't matter (with the flow) matter anymore
+		 * I can go with the flow (I can go)
+		 * Do you believe it in your head?
+		 */
 		redirect(action: 'pages')
 	}
 	
-	def addItemWizard(Long assayContextId, String cardSection){
-		println "assayContextId: " + assayContextId
-		println "Section: " + cardSection
-		render(template: "common/ajaxflow", model: [assayContextId: assayContextId, path: cardSection])
+	def addItemWizard(Long assayContextId){
+		render(template: "common/ajaxflow")
 	}
 
 	/**
@@ -106,12 +92,8 @@ class AddItemWizardController {
 				flow.page = 1
 				success()
 			}
-			on("next") { AttributeCommand cmd ->
-				flow.attribute = cmd
-				println "calling closure for AttributeCommand ${cmd.dump()}"
-				println "Params: ${params}"
-				flow.page = 2
-				success()
+			on("next") {
+				// put your bussiness logic (if applicable) in here
 			}.to "pageTwo"
 			on("toPageTwo") {
 				// put your bussiness logic (if applicable) in here
