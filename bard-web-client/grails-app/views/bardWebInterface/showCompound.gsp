@@ -21,7 +21,9 @@
         <g:saveToCartButton id="${compound.pubChemCID}"
                             name="${JavaScriptUtility.cleanup(compound.name)}"
                             type="${querycart.QueryItemType.Compound}"
-                            smiles="${compound.getStructureSMILES()}"/>
+                            smiles="${compound.getStructureSMILES()}"
+                            numActive="${compound.numberOfActiveAssays}"
+                            numAssays="${compound.numberOfAssays}" />
     </div>
 </div>
 
