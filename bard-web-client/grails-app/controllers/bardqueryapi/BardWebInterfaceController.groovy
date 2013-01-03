@@ -4,7 +4,6 @@ import bard.core.Value
 import bard.core.adapter.AssayAdapter
 import bard.core.adapter.CompoundAdapter
 import bard.core.adapter.ProjectAdapter
-import bard.core.rest.spring.compounds.CompoundResult
 import bard.core.rest.spring.compounds.PromiscuityScore
 import bard.core.rest.spring.util.StructureSearchParams
 import grails.plugins.springsecurity.Secured
@@ -60,11 +59,7 @@ class BardWebInterfaceController {
     def searchResults() {
     }
 
-    def showExperiment() {
-        render(view: 'showExperimentResult', model: [experimentId: params.id, searchString: params.searchString])
-    }
-
-    def showExperimentResult(Long id) {
+    def showExperiment(Long id) {
         try {
             if (id) {
                 Map<String, Integer> searchParams = handleSearchParams()
@@ -72,13 +67,21 @@ class BardWebInterfaceController {
                 final Integer skip = searchParams.skip
                 final Map experimentDataMap = molecularSpreadSheetService.findExperimentDataById(id, top, skip)
                 if (experimentDataMap) {
-                    render(template: 'experimentResult', model: [experimentDataMap: experimentDataMap, searchString: params.searchString])
+                    final Map modelMap = [experimentId: params.id, experimentDataMap: experimentDataMap]
+                    if (request.getHeader('X-Requested-With') == 'XMLHttpRequest') {  //if ajax then render template
+                        render(template: 'experimentResult', model: modelMap)
+                        return
+                    }
+                    //this should do a full page reload
+                    render(view: 'showExperiment', model: modelMap)
+
                 } else {
                     flash.message = "Experiment ID ${id} not found"
                     log.error(flash.message)
                     return response.sendError(HttpServletResponse.SC_NOT_FOUND,
                             "${flash.message}")
                 }
+
             } else {
                 flash.message = 'ID is a required Field'
                 log.error(flash.message)
@@ -92,10 +95,7 @@ class BardWebInterfaceController {
             return response.sendError(HttpServletResponse.SC_NOT_FOUND,
                     "${flash.message}")
         }
-
     }
-
-
 
     def promiscuity(Long cid) {
         if (cid) {
@@ -456,7 +456,7 @@ class BardWebInterfaceController {
 
     def showProbeList() {
         Map results = queryService.showProbeList()
-        results.put("searchString",flash.searchString)
+        results.put("searchString", flash.searchString)
         render(template: "/mobile/bardWebInterface/compounds", model: results)
     }
 }
