@@ -778,7 +778,7 @@ describe("Testing search.js", function () {
             handleSearch('controllerAction', 'currentFormId', 'tabId', 'totalHitsForResourceId', 'displayStringPrefix', 'updateDiv');
 
             //do assertions
-            expect($('#tabId')).toHaveText('displayStringPrefix(0)');
+            expect($('#tabId')).toHaveText('displayStringPrefix (0)');
             expect($('#updateDiv')).toHaveText(fakeData);
         });
 
@@ -826,7 +826,7 @@ describe("Testing search.js", function () {
             });
 
             handleSearch('controllerAction', 'currentFormId', 'tabId', 'totalHitsForResourceId', 'displayStringPrefix', 'updateDiv');
-            expect($('#tabId')).toHaveText('displayStringPrefix(0)');
+            expect($('#tabId')).toHaveText('displayStringPrefix (0)');
             expect($('#updateDiv')).toHaveText(fakeData);
 
         });
