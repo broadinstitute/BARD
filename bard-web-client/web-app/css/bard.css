@@ -213,11 +213,13 @@ div.facets {
 }
 
 ul.results > li {
-    padding-top: 10px;
-    padding-bottom: 10px;
+    padding: 5px 10px;
     border-top: 1px solid #d3d3d3;
 }
 
+ul.results > li:nth-child(odd), .table-striped tbody tr:nth-child(odd) td {
+    background-color: #f2f5f1;
+}
 
 .indicatorpanel {
     position: absolute;

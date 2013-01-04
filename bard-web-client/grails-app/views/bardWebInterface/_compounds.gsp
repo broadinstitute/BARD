@@ -10,7 +10,7 @@
     <div class="span12">
 </g:else>
 <g:if test="${nhits > 0}">
-    <table class="table">
+    <table class="table table-striped">
         <g:each var="compoundAdapter" in="${compoundAdapters}">
             <tr>
                 <td style="min-width: 180px;">
