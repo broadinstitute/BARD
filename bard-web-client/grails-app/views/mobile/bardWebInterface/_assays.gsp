@@ -10,9 +10,10 @@
         <ul>
             <g:each var="assayAdapter" in="${assayAdapters}">
                 <li>
-                    <h3><g:link action="showAssay" id="${assayAdapter.id}"
-                                params='[searchString: "${searchString}"]'>${assayAdapter.name} <small>(ADID: ${assayAdapter.id})</small></g:link>
-                    </h3>
+                %{--<h3>--}%
+                    <g:link action="showAssay" id="${assayAdapter.id}"
+                            params='[searchString: "${searchString}"]'>${assayAdapter.name} <small>(ADID: ${assayAdapter.id})</small></g:link>
+                %{--</h3>--}%
                 </li>
             </g:each>
         </ul>

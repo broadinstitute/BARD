@@ -3,7 +3,7 @@
 <g:hiddenField name="totalCompounds" id="totalCompounds" value="${nhits}"/>
 
 %{--<div data-role="header">--}%
-    %{--<h1>Compounds</h1>--}%
+%{--<h1>Compounds</h1>--}%
 %{--</div><!-- /header -->--}%
 
 
@@ -13,21 +13,20 @@
             <g:each var="compoundAdapter" in="${compoundAdapters}">
                 <tr>
                     <td>
-                        <img id="structureThumbnail" alt="${compoundAdapter.structureSMILES}" title="${compoundAdapter.name}"
+                        <img class="structureThumbnail" alt="${compoundAdapter.structureSMILES}"
+                             title="${compoundAdapter.name}"
                              src="${createLink(controller: 'chemAxon', action: 'generateStructureImageFromSmiles', params: [smiles: compoundAdapter.structureSMILES, width: 180, height: 150])}"/>
                     </td>
                     <td>
-                        <h3>
-                            <g:link action="showCompound" id="${compoundAdapter.pubChemCID}"
-                                    params='[searchString: "${searchString}"]'>
-                                <g:if test="${compoundAdapter.name}">
-                                    ${compoundAdapter.name} <small>(PubChem CID: ${compoundAdapter.pubChemCID})</small>
-                                </g:if>
-                                <g:else>
-                                    PubChem CID: ${compoundAdapter.pubChemCID}
-                                </g:else>
-                            </g:link>
-                        </h3>
+                        <g:link action="showCompound" id="${compoundAdapter.pubChemCID}"
+                                params='[searchString: "${searchString}"]'>
+                            <g:if test="${compoundAdapter.name}">
+                                ${compoundAdapter.name} <small>(PubChem CID: ${compoundAdapter.pubChemCID})</small>
+                            </g:if>
+                            <g:else>
+                                PubChem CID: ${compoundAdapter.pubChemCID}
+                            </g:else>
+                        </g:link>
                         <dl>
                             <g:if test="${compoundAdapter.isDrug()}">
                                 <p><span class="badge badge-success">Drug</span></p>
