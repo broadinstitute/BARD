@@ -71,4 +71,12 @@ class AssayContext extends AbstractContext{
         }
         return preferredName
     }
+
+    /**
+     * duck typing for context
+     * @return list of assayContextItems
+     */
+    List<AssayContextItem> getContextItems(){
+        this.assayContextItems
+    }
 }

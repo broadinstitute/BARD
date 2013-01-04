@@ -42,14 +42,14 @@
     <g:if test="${assayInstance?.id}">
 	    <div class="row-fluid">
 	        <div id="accordion" class="span12">
-	            <h3><a href="#">Summary</a></h3>
-	            <g:render template="assaySummaryView" model="['assayInstance': assayInstance]"/>
+                <h3><a href="#">Summary</a></h3>
+                <g:render template="../summary/show" model="['summary': assayInstance]"/>
 
-	            <h3><a href="#">Assay and Biology Details</a></h3>
-	            <g:render template="cardDtoView" model="['cardDtoMap': cardDtoMap, 'assayId': assayInstance.id]"/>
+                <h3><a href="#">Documents</a></h3>
+                <g:render template="../document/show" model="['documents': assayInstance.documents]"/>
 
-	            <h3><a href="#">Documents</a></h3>
-	            <g:render template="assayDocumentsView" model="['assayInstance': assayInstance]"/>
+                <h3><a href="#">Contexts</a></h3>
+                <g:render template="../context/show" model="['contexts': assayInstance.groupContexts()]"/>
 
 	            <h3><a href="#">Measures</a></h3>
 	            <g:render template="measuresView" model="['assayInstance': assayInstance]"/>

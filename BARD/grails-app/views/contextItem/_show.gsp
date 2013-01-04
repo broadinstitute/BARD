@@ -11,7 +11,15 @@
 <div id="card-${context.id}" class="span6 card roundedBorder card-table-container">
     <table class="table table-hover">
         <caption id="${context.id}" class="assay_context">
-            <div class="cardTitle">${context.preferredName}</div>
+            <div class="cardTitle">
+                 <p>${context.preferredName}</p>
+                <g:if test="${context.assayContextMeasures}">
+                    <g:each in="${context.assayContextMeasures}" var="assayContextMeasure" >
+                        <p>${assayContextMeasure.measure.resultType.label}</p>
+                    </g:each>
+                </g:if>
+                <p></p>
+            </div>
         </caption>
         <tbody>
             <g:each in="${context.contextItems}" status="i" var="contextItem">

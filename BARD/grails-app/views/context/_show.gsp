@@ -16,7 +16,7 @@
         <div class="row-fluid">
             <div id="cardHolder" class="span12">
                 <g:each in="${contexts}" var="entry">
-                    <div id="${entry.key}"  class="roundedBorder card-group ${entry.key}">
+                    <div id="${entry.key}"  class="roundedBorder card-group ${entry.key.replaceAll(/( |> )/, '-')}">
 
                         <div class="row-fluid">
                             <h5 class="span12">${entry.key}</h5>
