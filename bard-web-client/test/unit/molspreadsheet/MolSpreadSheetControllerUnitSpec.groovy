@@ -115,7 +115,7 @@ class MolSpreadSheetControllerUnitSpec extends Specification {
 
         then:
         assert response.status == 200
-        assert response.contentAsString.contains("Cannot display molecular spreadsheet without at least one assay")
+        assert response.contentAsString.contains("Cannot display molecular spreadsheet without at least one compound")
         assert true
     }
 
