@@ -185,7 +185,7 @@
 
             var isolatedNodes = graphInJSON.isolatedNodes;
             for (var i = 0; i < isolatedNodes.length; i++) {
-                var keyValues = connectedNodes[i].keyValues;
+                var keyValues = isolatedNodes[i].keyValues;
                 sys.addNode(isolatedNodes[i].id,
                             {alone:true, name: keyValues.eid, name1: keyValues.stage,
                             fixed: true, x: 10, y: 10,
