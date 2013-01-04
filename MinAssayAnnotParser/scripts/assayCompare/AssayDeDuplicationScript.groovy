@@ -8,7 +8,9 @@ import bard.db.registration.AssayContext
 import bard.dm.assaycompare.assaycleanup.AssayCleaner
 import bard.dm.assaycompare.AssayDuplicateFinder
 
+Log.initializeLogger("test/exampleData/assayDeDuplication.log")
 Log.logger.setLevel(Level.DEBUG)
+
 //load assays from database
 Log.logger.info("begin loading assays")
 final Date startLoadDate = new Date()
@@ -52,5 +54,5 @@ AssayContext.withTransaction {status ->
 //AssayDuplicateFinder assayDuplicateFinder = new AssayDuplicateFinder("test/exampleData/assay_duplication_stats.csv")
 //assayDuplicateFinder.findDuplicates(assayMatchList)
 
-Log.fileAppender.close()
+Log.close()
 

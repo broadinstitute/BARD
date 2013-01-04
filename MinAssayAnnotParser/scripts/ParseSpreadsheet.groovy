@@ -16,6 +16,7 @@ import org.apache.log4j.DailyRollingFileAppender
 import org.apache.log4j.Layout
 import org.apache.log4j.PatternLayout
 
+Log.initializeLogger("test/exampleData/dnaRepairLoad.log")
 final Date startDate = new Date()
 Log.logger.info("Start load of minimum assay annotation spreadsheets ${startDate}")
 
@@ -93,6 +94,6 @@ for (File inputFile : inputFileList) {
 final Date endDate = new Date()
 final double durationMin = (endDate.time - startDate.time) / 60000.0
 Log.logger.info("finished at ${endDate}   duration[min]: ${durationMin}")
-
+Log.close()
 
 return false

@@ -38,6 +38,7 @@ class ContextDtoFromContextGroupCreator {
             String attValueCell = attribute.value
             def attrValue = getCellContent(attValueCell, row, sheet)
 
+            //TODO add this check back, but only write to log that the discrepancy occurred.
 //            //Attribute key must exist; attribute value must exist UNLESS it is of type Free
 //            if ((!attrKey) || (!attrValue && (attribute.attributeType != AttributeType.Free))) return
             //Attribute ket and value must exist

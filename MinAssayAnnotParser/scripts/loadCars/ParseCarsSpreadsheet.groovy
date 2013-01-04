@@ -1,4 +1,3 @@
-import bard.db.dictionary.Element
 import bard.dm.cars.spreadsheet.CarsSpreadsheetReader
 import bard.dm.cars.spreadsheet.CarsSpreadsheetValidator
 import bard.dm.Log
@@ -6,19 +5,13 @@ import bard.dm.cars.domainspreadsheetmapping.ProjectPair
 import bard.dm.cars.domainspreadsheetmapping.ProjectMapperBuilder
 import bard.dm.cars.domainspreadsheetmapping.CarsBardMapping
 import bard.dm.cars.domainspreadsheetmapping.ProjectAnnotater
-import bard.db.experiment.StepContextItem
-import bard.dm.cars.spreadsheet.CarsExperiment
 import bard.dm.cars.spreadsheet.CarsProject
-import bard.dm.cars.domainspreadsheetmapping.ProjectStepPair
 import bard.dm.cars.domainspreadsheetmapping.ProjectStepMapperBuilder
 import bard.dm.cars.domainspreadsheetmapping.ProjectStepAnnotater
-import bard.db.experiment.Project
-import bard.db.experiment.ProjectStep
-import bard.db.experiment.ProjectContextItem
-import bard.db.registration.ExternalReference
-import bard.db.registration.ExternalSystem
 import org.springframework.transaction.support.DefaultTransactionStatus
+import bard.db.project.Project
 
+Log.initializeLogger("test/exampleData/parseCarsSpreadsheet.log")
 println("Start script")
 
 //constants
@@ -68,10 +61,10 @@ try {
 } catch (Exception e) {
     e.printStackTrace()
 } finally {
-    Log.fileAppender.close()
     final Date endDate = new Date()
     double runningTime = ((double)(endDate.time - startDate.time)) / 60000.0
     Log.logger.info("time to run(min): " + runningTime)
+    Log.close()
 }
 
 println("Finished with script")
