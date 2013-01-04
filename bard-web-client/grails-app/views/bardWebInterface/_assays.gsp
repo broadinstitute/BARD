@@ -17,9 +17,9 @@
                                     name="${JavaScriptUtility.cleanup(assayAdapter.name)}"
                                     type="${querycart.QueryItemType.AssayDefinition}"/>
                 <g:if test="${assayAdapter.highlight}">
-                    <dl>
-                        <dt>Search Match (highlighted in bold):</dt>
-                        <dd>&hellip;${assayAdapter.highlight}&hellip;</dd>
+                    <dl class="dl-horizontal">
+                        <dt>Search Match:</dt>
+                        <dd>${assayAdapter.highlight}</dd>
                     </dl>
                 </g:if>
             </li>

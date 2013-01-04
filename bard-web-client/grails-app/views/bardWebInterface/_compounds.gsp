@@ -43,8 +43,8 @@
                     />
                     <dl>
                         <g:if test="${compoundAdapter.highlight}">
-                            <dt>Search Match (highlighted in bold):</dt>
-                            <dd>&hellip;${compoundAdapter.highlight}&hellip;</dd>
+                            <dt>Search Match:</dt>
+                            <dd>${compoundAdapter.highlight}</dd>
                         </g:if>
                         <dt>Assays - Active vs Tested:</dt>
                         <dd>

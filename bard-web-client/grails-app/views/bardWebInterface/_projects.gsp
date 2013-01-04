@@ -19,9 +19,9 @@
                                     name="${JavaScriptUtility.cleanup(projectAdapter.name)}"
                                     type="${querycart.QueryItemType.Project}"/>
                 <g:if test="${projectAdapter.highlight}">
-                    <dl>
-                        <dt>Search Match (highlighted in bold):</dt>
-                        <dd>&hellip;${projectAdapter.highlight}&hellip;</dd>
+                    <dl class="dl-horizontal">
+                        <dt>Search Match:</dt>
+                        <dd>${projectAdapter.highlight}</dd>
                     </dl>
                 </g:if>
                 <g:if test="${projectAdapter?.getNumberOfExperiments()}">
