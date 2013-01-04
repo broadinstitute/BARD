@@ -144,12 +144,12 @@ class MolecularSpreadSheetServiceIntegrationSpec extends IntegrationSpec {
         where:
         dataIsSufficient | cartAssay             | cartProject             | cartCompound
         false            | null                  | null                    | null
-        true             | new CartAssay("A", 1) | null                    | null
-        true             | null                  | new CartProject("P", 8) | null
+        false            | new CartAssay("A", 1) | null                    | null
+        false            | null                  | new CartProject("P", 8) | null
         true             | null                  | null                    | new CartCompound("C", "c", 1, 0, 0)
         true             | null                  | new CartProject("P", 8) | new CartCompound("C", "c", 1, 0, 0)
         true             | new CartAssay("A", 1) | null                    | new CartCompound("C", "c", 1, 0, 0)
-        true             | new CartAssay("A", 1) | new CartProject("P", 8) | null
+        false            | new CartAssay("A", 1) | new CartProject("P", 8) | null
         true             | new CartAssay("A", 1) | new CartProject("P", 8) | new CartCompound("C", "c", 1, 0, 0)
         false            | null                  | null                    | null
     }

@@ -128,10 +128,7 @@
             </table>
         </g:if>
         <g:else>
-            <div class="alert">
-                <button class="close" data-dismiss="alert">×</button>
-                Cannot display molecular spreadsheet without at least one assay or one compound
-            </div>
+            <g:render template="../molSpreadSheet/noSpreadSheet"/>
         </g:else>
 
     </div>

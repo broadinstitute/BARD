@@ -19,14 +19,7 @@ class QueryCartService {
     Boolean weHaveEnoughDataToMakeASpreadsheet() {
         boolean returnValue = false
         Map<String, List> itemsInShoppingCart = this.groupUniqueContentsByType(shoppingCartService)
-        if (this.totalNumberOfUniqueItemsInCart(itemsInShoppingCart, QueryCartService.cartProject) > 0) {
-            returnValue = true
-        }
-        else if (this.totalNumberOfUniqueItemsInCart(itemsInShoppingCart,
-                QueryCartService.cartAssay) > 0) {
-            returnValue = true
-        }
-        else if (this.totalNumberOfUniqueItemsInCart(itemsInShoppingCart,
+        if (this.totalNumberOfUniqueItemsInCart(itemsInShoppingCart,
                 QueryCartService.cartCompound) > 0) {
             returnValue = true
         }
