@@ -1,6 +1,22 @@
 <%@ page import="molspreadsheet.HillCurveValueHolder; molspreadsheet.SpreadSheetActivityStorage; molspreadsheet.MolSpreadSheetData; molspreadsheet.SpreadSheetActivity; molspreadsheet.MolecularSpreadSheetService; bardqueryapi.FacetFormType" %>
 <%@ page import="molspreadsheet.MolSpreadSheetCellType; molspreadsheet.MolSpreadSheetCell;" %>
 <%@ page import="com.metasieve.shoppingcart.ShoppingCartService;" %>
+<script type="text/javascript">
+    jQuery.extend( jQuery.fn.dataTableExt.oSort, {
+        "num-html-pre": function ( a ) {
+            var x = a.replace( /<.*?>/g, "" );
+            return parseFloat( x );
+        },
+
+        "num-html-asc": function ( a, b ) {
+            return ((a < b) ? -1 : ((a > b) ? 1 : 0));
+        },
+
+        "num-html-desc": function ( a, b ) {
+            return ((a < b) ? 1 : ((a > b) ? -1 : 0));
+        }
+    } );
+</script>
 
 <script type="text/javascript">
     $(document).ready(function () {
@@ -16,7 +32,12 @@
         $('#molspreadsheet').dataTable({
                     "bStateSave":true,
                     "aoColumnDefs":[
-                        {"bSortable":false, 'aTargets':[0]}
+                        {"bSortable":false, 'aTargets':[0]},
+                        <g:each var="column" in="${1..(molSpreadSheetData.getColumnCount()-1)}">
+                        {"sType":"num-html", 'aTargets':[${column}]}
+                        <g:if test="${column<(molSpreadSheetData.getColumnCount()-1)}">,
+                        </g:if>
+                        </g:each>
                     ],
                     <g:if test="${molSpreadSheetData.getRowCount()>50}">%{--If we have a lot of data then use full-featured pagination--}%
                     "sPaginationType":"full_numbers",
@@ -30,7 +51,6 @@
         </g:if>
     });
 </script>
-
 <div class="row-fluid">
     <g:if test="${flash.message}">
         <div class="span12" role="status"><p style="color: #3A87AD;">${flash.message}</p></div>
