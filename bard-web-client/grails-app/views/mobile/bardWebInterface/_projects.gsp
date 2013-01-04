@@ -2,7 +2,7 @@
 <g:hiddenField name="totalProjects" id="totalProjects" value="${nhits}"/>
 
 <div data-role="header">
-    <h1>Assays</h1>
+    <h1>Projects</h1>
 </div><!-- /header -->
 
 <div data-role="content">
@@ -10,9 +10,10 @@
         <ul class="unstyled results">
             <g:each var="projectAdapter" in="${projectAdapters}">
                 <li>
-                    <h3><g:link action="showProject" id="${projectAdapter.id}"
-                                params='[searchString: "${searchString}"]'>${projectAdapter.name} <small>(Project ID: ${projectAdapter.id})</small></g:link>
-                    </h3>
+                %{--<h3>--}%
+                    <g:link action="showProject" id="${projectAdapter.id}"
+                            params='[searchString: "${searchString}"]'>${projectAdapter.name} <small>(Project ID: ${projectAdapter.id})</small></g:link>
+                %{--</h3>--}%
                     <g:if test="${projectAdapter?.getNumberOfExperiments()}">
                         <dl>
                             <dt>Number Of Experiments:</dt>

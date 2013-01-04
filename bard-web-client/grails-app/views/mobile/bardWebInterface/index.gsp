@@ -12,7 +12,7 @@
 <head>
     <title>BioAssay Research Database</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <r:require modules="jqueryMobile, jqueryMobileInit, autocomplete, search, promiscuity, bootstrap"/>
+    <r:require modules="jqueryMobile, jqueryMobileInit, autocomplete, search, promiscuity, bootstrap, core"/>
     <r:layoutResources/>
     <r:script>
         $(document).ready(function () {
@@ -33,12 +33,15 @@
             adjustStructureThumbnailSize()
         });
 
+        //Resize structure thumbnails with every window-resize even.
+        $(window).resize(adjustStructureThumbnailSize);
+
         //      We need that to adjust the size of the structure image dynamically based on the screen size
         function adjustStructureThumbnailSize() {
             var w = Math.round(window.innerWidth / 3);
             var width = (w > 180) ? 180 : w;
             var height = Math.round(width * 5 / 6);
-            $('#structureThumbnail').attr('width', width).attr('height', height);
+            $('.structureThumbnail').attr('width', width).attr('height', height);
         }
     </r:script>
 
