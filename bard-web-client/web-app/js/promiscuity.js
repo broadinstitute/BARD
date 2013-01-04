@@ -22,7 +22,8 @@ var PromiscuityHandler = {
                             var scaffoldId = $(this).attr('data-detail-id');
                             return $('#' + scaffoldId).html();
                         },
-                        placement: 'bottom'
+                        placement: 'bottom',
+                        html: true
                     });
                 },
                 error:function() {
@@ -39,8 +40,8 @@ var PromiscuityHandler = {
 $(document).on('search.complete', '#compounds', PromiscuityHandler.setup);
 
 $(document).ready(function () {
-    $(document).on("click", "html", function () {
-        $('.popover-link').popover('hide');
-    });
+//    $(document).on("click", "html", function () {
+//        $('.popover-link').popover('hide');
+//    });
     PromiscuityHandler.setup();
 });
