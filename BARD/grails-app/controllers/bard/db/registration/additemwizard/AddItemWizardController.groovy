@@ -3,9 +3,28 @@ package bard.db.registration.additemwizard
 /**
  * ajaxflow Controller
  *
- * @author	Jeroen Wesbeek <work@osx.eu>
+ * @author	ycruz
  * @package AjaxFlow
  */
+
+class AttributeCommand implements Serializable {
+	
+	Long elementId
+	String path
+	String assayContextId
+}
+
+class ValueTypeCommand implements Serializable {
+
+	String valueTypeOption
+}
+
+class FixedValueCommand implements Serializable {
+	
+	Long valueId
+	String qualifier
+}
+
 class AddItemWizardController {
 	// the pluginManager is used to check if the Grom
 	// plugin is available so we can 'Grom' development
@@ -21,18 +40,13 @@ class AddItemWizardController {
 		// Grom a development message
 		if (pluginManager.getGrailsPlugin('grom')) "redirecting into the webflow".grom()
 
-		/**
-		 * Do you believe it in your head?
-		 * I can go with the flow
-		 * Don't say it doesn't matter (with the flow) matter anymore
-		 * I can go with the flow (I can go)
-		 * Do you believe it in your head?
-		 */
 		redirect(action: 'pages')
 	}
 	
-	def addItemWizard(Long assayContextId){
-		render(template: "common/ajaxflow")
+	def addItemWizard(Long assayContextId, String cardSection){
+		println "assayContextId: " + assayContextId
+		println "Section: " + cardSection
+		render(template: "common/ajaxflow", model: [assayContextId: assayContextId, path: cardSection])
 	}
 
 	/**
@@ -69,18 +83,18 @@ class AddItemWizardController {
 		// triggers the 'next' action (hence, the main
 		// page dynamically renders the study template
 		// and makes the flow jump to the study logic)
-		mainPage {
-			render(view: "/AddItemWizard/index")
-			onRender {
-				// Grom a development message
-				if (pluginManager.getGrailsPlugin('grom')) "rendering the main Ajaxflow page (index.gsp)".grom()
-
-				// let the view know we're in page 1
-				flow.page = 1
-				success()
-			}
-			on("next").to "pageOne"
-		}
+//		mainPage {
+//			render(view: "/AddItemWizard/index")
+//			onRender {
+//				// Grom a development message
+//				if (pluginManager.getGrailsPlugin('grom')) "rendering the main Ajaxflow page (index.gsp)".grom()
+//
+//				// let the view know we're in page 1
+//				flow.page = 1
+//				success()
+//			}
+//			on("next").to "pageOne"
+//		}
 
 		// first wizard page
 		pageOne {
@@ -92,8 +106,12 @@ class AddItemWizardController {
 				flow.page = 1
 				success()
 			}
-			on("next") {
-				// put your bussiness logic (if applicable) in here
+			on("next") { AttributeCommand cmd ->
+				flow.attribute = cmd
+				println "calling closure for AttributeCommand ${cmd.dump()}"
+				println "Params: ${params}"
+				flow.page = 2
+				success()
 			}.to "pageTwo"
 			on("toPageTwo") {
 				// put your bussiness logic (if applicable) in here
@@ -160,7 +178,7 @@ class AddItemWizardController {
 				flow.page = 4
 				success()
 			}
-			on("next") {
+			on("save") {
 				// put some logic in here
 				flow.page = 5
 			}.to "save"

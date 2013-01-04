@@ -1,9 +1,6 @@
 <%
 /**
  * fourth wizard page / tab
- *
- * @author	Jeroen Wesbeek <work@osx.eu>
- * @package AjaxFlow
  */
 %>
 <af:page>
