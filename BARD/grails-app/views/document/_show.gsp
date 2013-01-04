@@ -28,30 +28,36 @@
 --%>
 
 <div>
+    <g:if test="${documents}">
+        <g:set var="documentMap" value="${documents.sort { it.documentName }.groupBy { it.documentType }}"/>
+        <g:each in="${bard.db.model.IDocumentType.DOCUMENT_TYPE_DISPLAY_ORDER}" var="type">
+            <g:set var="documentTypeList" value="${documentMap.get(type)}"/>
+            <g:if test="${documentTypeList}">
+                <h4>${type}<g:if test="${documentTypeList.size()>1}">(s)</g:if>:</h4>
+                <dl class="dl-horizontal">
+                <g:each in="${documentTypeList}" var="document">
+                    <dt><g:message code="document.content.label" default="Name:"/></dt>
+                    <dd><g:fieldValue bean="${document}" field="documentName"/></dd>
 
-<g:if test="${documents}">
-    <li>
-    <g:each in="${documents.sort{it.documentType}}" var="document">
-        <g:if test="${document?.documentName}">
-            <li>
-                <span id="documentName-label"><g:message code="document.documentName.label" default="Name: " /></span>
-                <span><g:fieldValue bean="${document}" field="documentName"/></span>
-            </li>
-        </g:if>
-
-        <g:if test="${document?.documentContent}">
-            <li>
-                <g:message code="document.documentContent.label" default="Content:" />
-                <span><g:fieldValue bean="${document}" field="documentContent"/></span>
-            </li>
-        </g:if>
-        <br/>
-    </g:each>
-    </li>
-</g:if>
-<g:else>
-    <span>No documents found</span>
-</g:else>
-
+                    <dt><g:message code="document.content.label" default="Content:"/></dt>
+                    <dd>
+                        <g:if test="${ document.documentType in [bard.db.model.IDocumentType.DOCUMENT_TYPE_EXTERNAL_URL, bard.db.model.IDocumentType.DOCUMENT_TYPE_PAPER]}">
+                            <a href="${document.documentContent}">
+                                <g:fieldValue bean="${document}" field="documentContent"/>
+                            </a>
+                        </g:if>
+                        <g:else>
+                            <g:fieldValue bean="${document}" field="documentContent"/>
+                        </g:else>
+                    </dd>
+                    <br/>
+                </g:each>
+            </g:if>
+        </g:each>
+        </dl>
+    </g:if>
+    <g:else>
+        <span>No documents found</span>
+    </g:else>
 </div>
 

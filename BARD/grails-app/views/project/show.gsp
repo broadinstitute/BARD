@@ -53,14 +53,14 @@
             <h3><a href="#">Summary</a></h3>
             <g:render template="../summary/show" model="['summary': instance]"/>
 
-            <h3><a href="#">Documents</a></h3>
-            <g:render template="../document/show" model="['documents': instance.documents]"/>
-
             <h3><a href="#">Contexts</a></h3>
             <g:render template="../context/show" model="['contexts': instance.contextsWithGroup]"/>
 
             <h3><a href="#">Experiments and steps</a></h3>
             <g:render template="showstep" model="['experiments': instance.projectExperiments, 'pegraph': pexperiment]"/>
+
+            <h3><a href="#">Documents</a></h3>
+            <g:render template="../document/show" model="['documents': instance.documents]"/>
         </div>
     </div>
 </g:if>
