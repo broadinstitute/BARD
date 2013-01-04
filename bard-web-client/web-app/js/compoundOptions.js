@@ -1,8 +1,8 @@
 $(document).ready(function () {
 
-    $(document).on("click", "html", function () {
-        $('.popover-link').popover('hide');
-    });
+//    $(document).on("click", "html", function () {
+//        $('.popover-link').popover('hide');
+//    });
     //display pop-over, need to figure why we need to do two clicks
 //    $(document).on("click", ".popover-link", function () {
 //        $('.popover-link').popover({
