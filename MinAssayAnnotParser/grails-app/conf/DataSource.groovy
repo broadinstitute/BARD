@@ -122,26 +122,4 @@ environments {
             }
         }
     }
-
-    dlahr {
-        dataSource {
-            //dbCreate = "update"
-            url = "jdbc:oracle:thin:@vmbarddev:1521:barddev"
-            driverClassName = "oracle.jdbc.driver.OracleDriver"
-            dialect = bard.SequencePerTableOracleDialect
-            username = "dlahr_bard"
-            password="ch3mb10"
-            pooled = true
-            properties {
-                maxActive = -1
-                minEvictableIdleTimeMillis=1800000
-                timeBetweenEvictionRunsMillis=1800000
-                numTestsPerEvictionRun=3
-                testOnBorrow=true
-                testWhileIdle=true
-                testOnReturn=true
-                validationQuery="SELECT 1 from dual"
-            }
-        }
-    }
 }
