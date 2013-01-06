@@ -18,13 +18,11 @@ class Log {
     private static FileAppender fileAppender
 
     public static Logger initializeLogger(String filePath) {
-        Logger logger = Logger.getLogger("parseCarsSpreadsheetScriptLogger")
+        logger = Logger.getLogger("parseCarsSpreadsheetScriptLogger")
         logger.setLevel(Level.ALL)
 
         fileAppender = new FileAppender(new SimpleLayout(),  filePath, false)
         logger.addAppender(fileAppender)
-
-        return logger
     }
 
     public static void close() {

@@ -5,56 +5,71 @@ import bard.db.registration.AttributeType
 import bard.dm.Log
 import bard.dm.minimumassayannotation.Attribute
 import bard.dm.minimumassayannotation.ContextDTO
+import bard.dm.minimumassayannotation.LoadResultsWriter
 
 /**
  * Make sure that all the attribute's key and value match against valid values in the Element table
  */
 class AttributeContentAgainstElementTableValidator {
+
+    private final LoadResultsWriter loadResultsWriter
+
+    public AttributeContentAgainstElementTableValidator(LoadResultsWriter loadResultsWriter) {
+        this.loadResultsWriter = loadResultsWriter
+    }
+
     /**
      * Make sure that all the attribute's key and value match against valid values in the Element table
      *
      * @param assayContextList
      */
-    void validate(List<ContextDTO> assayContextList, Map attributeNameMapping) {
-        //Move all the attributes into a sorted-set to search against the database
-        SortedSet<String> attributeVocabulary = [] as SortedSet
+    boolean validate(List<ContextDTO> assayContextList, Map attributeNameMapping) {
+
         assayContextList.each {ContextDTO assayContextDTO ->
             assayContextDTO.attributes.each {Attribute attribute ->
-                //Add all keys
-                attributeVocabulary.add(attribute.key)
-                //Add all the values, except for the ones that are numeric values or a type-in field or a Free-type field
+
+                if (! checkForElement(attribute.key, assayContextDTO.aid, assayContextDTO.name)) {
+                    return false
+                }
+
+                //Check that the value is defined in the database,
+                // except for the ones that are numeric values or a type-in field or a Free-type field
                 if (attribute.value &&
                         (attribute.value instanceof String) &&
                         !attribute.typeIn &&
                         (attribute.attributeType != AttributeType.Free)) {
-                    attributeVocabulary.add(attribute.value)
+
+                    if (! checkForElement(attribute.value, assayContextDTO.aid, assayContextDTO.name)) {
+                        return false
+                    }
+
                 }
-                //Add the concentration-units if exists
+
+                //If concentration units are present check that they are defined in the database
                 if (attribute.concentrationUnits) {
-                    attributeVocabulary.add(attribute.concentrationUnits)
+                    if (! checkForElement(attribute.concentrationUnits, assayContextDTO.aid, assayContextDTO.name)) {
+                        return false
+                    }
                 }
             }
         }
 
-        List<Element> foundElements = []
-        List<String> missingAttributes = []
-        attributeVocabulary.each {String attr ->
-//            Log.logger.info("Attribute: '${attr}'")
-            //Swap the attribute name with the mapping we have (e.g., '[detector] assay component (type in)' --> 'assay component'
-//            attr = attributeNameMapping.containsKey(attr) ? attributeNameMapping.get(attr) : attr
-            Element element = Element.findByLabelIlike(attr)
-            //    Log.logger.info("Element: ${element}")
-            if (element) {
-                foundElements << element
-            }
-            else {
-                missingAttributes << attr
-            }
+        return true
+    }
+
+    private boolean checkForElement(String elementLabel, Long aid, String assayContextDtoName) {
+        Element element = Element.findByLabelIlike(elementLabel)
+
+        if (element) {
+            return true;
+        } else {
+            final String message = "Attributes in context not found in database:  $elementLabel"
+            Log.logger.error(message)
+            loadResultsWriter.write(aid, null, assayContextDtoName, LoadResultsWriter.LoadResultType.fail, message)
+
+            return false
         }
-
-
-        Log.logger.info("Found elements: ${foundElements.collect {Element element -> [element.id, element.label]}}")
-        Log.logger.error("Missing attributes: ${missingAttributes}")
-        assert missingAttributes.isEmpty(), "We could not have missing attributes - all attributes should be validatied against the Element table"
     }
 }
+
+

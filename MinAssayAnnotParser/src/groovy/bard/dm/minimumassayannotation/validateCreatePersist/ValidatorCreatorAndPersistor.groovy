@@ -2,6 +2,7 @@ package bard.dm.minimumassayannotation.validateCreatePersist
 
 import bard.db.registration.Assay
 import bard.dm.minimumassayannotation.ContextDTO
+import bard.dm.minimumassayannotation.LoadResultsWriter
 
 /**
  * Created with IntelliJ IDEA.
@@ -13,10 +14,11 @@ import bard.dm.minimumassayannotation.ContextDTO
 abstract class ValidatorCreatorAndPersistor {
     final String modifiedBy
 
+    final LoadResultsWriter loadResultsWriter
 
-
-    ValidatorCreatorAndPersistor(String modifiedBy) {
+    ValidatorCreatorAndPersistor(String modifiedBy, LoadResultsWriter loadResultsWriter) {
         this.modifiedBy = modifiedBy
+        this.loadResultsWriter = loadResultsWriter
     }
 
     /**
@@ -39,21 +41,7 @@ abstract class ValidatorCreatorAndPersistor {
         return (results && (results.size() == 1)) ? results.first() : null
     }
 
-    /**
-     * Make sure all the aid map to valid Assay IDs
-     *
-     * @param assayContextListCleaned
-     */
-    void validate(List<ContextDTO> assayContextListCleaned) {
-    //Build aid-to-AssayId mapping and validate that all aid exist
-        Map<Long, Assay> aidToAssayMap = [:]
-        assayContextListCleaned*.aid.unique().each { Long AID ->
-            Assay assay = getAssayFromAid(AID)
-    //        assert assay, "Could not find an Assay that is associated with aid ${AID}"
-            aidToAssayMap.put(AID, assay)
-        }
-
-        Map<Long, Assay> failedMapping = aidToAssayMap.findAll {aid, assay -> !assay}
-    //    assert failedMapping.isEmpty(), "There must be only one and only one AssayId for each aid. Some aids are not associated with an assay: ${failedMapping.keySet()}"
+    void writeMessageWhenAidNotFoundInDb(Long aid, String contextName) {
+        loadResultsWriter.write(aid, null, contextName, LoadResultsWriter.LoadResultType.fail, "could not find ADID for AID")
     }
 }

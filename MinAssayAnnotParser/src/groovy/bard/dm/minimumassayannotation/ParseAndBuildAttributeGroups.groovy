@@ -12,6 +12,12 @@ import org.apache.poi.ss.usermodel.Row
 class ParseAndBuildAttributeGroups {
     private static final int maxRowNum = 6000
 
+    private final LoadResultsWriter loadResultsWriter
+
+    public ParseAndBuildAttributeGroups(LoadResultsWriter loadResultsWriter) {
+        this.loadResultsWriter = loadResultsWriter
+    }
+
     /**
      * Parses the input-stream spreadsheet and extracts all the values from the cells based on the list of attribute-groups.
      * an attribute group represents a group of key/value pairs (attributes) that should all be group together in a single assay or project context.
@@ -21,10 +27,16 @@ class ParseAndBuildAttributeGroups {
      * @param assayGroup
      * @return
      */
-     List<List<ContextDTO>> build(FileInputStream inp, int START_ROW, List<List<ContextGroup>> contextGroupList) {
-        Workbook wb = new XSSFWorkbook(inp);
+    List<List<ContextDTO>> build(File inputFile, int START_ROW, List<List<ContextGroup>> contextGroupList) {
+        final Workbook wb
+        try {
+            wb = new XSSFWorkbook(new FileInputStream(inputFile))
+        } catch (IllegalStateException e) {
+            throw new CouldNotReadExcelFileException()
+        }
+
         Sheet sheet = wb.getSheetAt(0);
-        Integer aid
+        Integer aid = null
         Integer rowCount = 0 //rows in spreadsheet are zero-based
         List<ContextDTO> assayContextDtoList = []
         List<ContextDTO> measureContextDtoList = []
@@ -55,32 +67,37 @@ class ParseAndBuildAttributeGroups {
                 }
                 aid = newAid
             }
-            assert aid, "Couldn't find AID: ${aidFromCell}"
+            if (! aid) {
+                loadResultsWriter.write(aidFromCell, null, null, LoadResultsWriter.LoadResultType.fail,
+                        "could not parse AID on row ${row.rowNum} in file $inputFile")
+            } else {
+                //Iterate over all assay-groups' contexts
+                assayGroup.each {ContextGroup contextGroup ->
+                    ContextDTO assayContextDTO = contextDtoFromContextGroupCreator.create(contextGroup, row, sheet)
 
-
-            //Iterate over all assay-groups' contexts
-            assayGroup.each {ContextGroup contextGroup ->
-                ContextDTO assayContextDTO = contextDtoFromContextGroupCreator.create(contextGroup, row, sheet)
-
-                if (assayContextDTO.attributes) {
-                    assayContextDTO.aid = aid
-                    assayContextDTO.name = contextGroup.name
-                    assayContextDtoList << assayContextDTO
+                    if (assayContextDTO.attributes) {
+                        assayContextDTO.aid = aid
+                        assayContextDTO.name = contextGroup.name
+                        assayContextDtoList << assayContextDTO
+                    }
                 }
-            }
 
-            //Iterate over all measure-groups' contexts
-            measureContextGroups.each {ContextGroup contextGroup ->
-                ContextDTO measureContextDTO = contextDtoFromContextGroupCreator.create(contextGroup, row, sheet)
+                //Iterate over all measure-groups' contexts
+                measureContextGroups.each {ContextGroup contextGroup ->
+                    ContextDTO measureContextDTO = contextDtoFromContextGroupCreator.create(contextGroup, row, sheet)
 
-                if (measureContextDTO.attributes) {
-                    measureContextDTO.aid = aid
-                    measureContextDTO.name = contextGroup.name
-                    measureContextDtoList << measureContextDTO
+                    if (measureContextDTO.attributes) {
+                        measureContextDTO.aid = aid
+                        measureContextDTO.name = contextGroup.name
+                        measureContextDtoList << measureContextDTO
+                    }
                 }
             }
         }
 
         return [assayContextDtoList, measureContextDtoList]
     }
+}
+
+class CouldNotReadExcelFileException extends Exception {
 }
