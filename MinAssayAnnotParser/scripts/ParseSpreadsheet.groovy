@@ -1,5 +1,5 @@
 import bard.db.registration.AttributeType
-import bard.dm.minimumassayannotation.Attribute
+import bard.dm.minimumassayannotation.ContextItemDto
 import bard.dm.minimumassayannotation.ContextGroup
 import bard.dm.minimumassayannotation.AssayContextGroupsBuilder
 import bard.dm.minimumassayannotation.AttributeNameMappingBuilder
@@ -18,6 +18,7 @@ import org.apache.log4j.PatternLayout
 import bard.dm.minimumassayannotation.LoadResultsWriter
 import bard.db.registration.AssayContext
 import bard.dm.minimumassayannotation.CouldNotReadExcelFileException
+import bard.dm.minimumassayannotation.ContextItemDto
 
 Log.initializeLogger("test/exampleData/logsAndOutput/dlahr_test_2013-01-05.log")
 final Date startDate = new Date()
@@ -50,7 +51,7 @@ Log.logger.info("loading ${inputFileList.size()} files found in ${inputDirPathAr
 
 println("build mapping of columns to attributes and values")
 List<ContextGroup> spreadsheetAssayContextGroups = (new AssayContextGroupsBuilder()).build()
-List<Attribute> resultType = [new Attribute('2/Y', '$/Y', AttributeType.Fixed)]
+List<ContextItemDto> resultType = [new ContextItemDto('2/Y', '$/Y', AttributeType.Fixed)]
 List<ContextGroup> spreadsheetResultTypeContextGroups = [new ContextGroup(name: 'resultType', attributes: resultType)]
 
 

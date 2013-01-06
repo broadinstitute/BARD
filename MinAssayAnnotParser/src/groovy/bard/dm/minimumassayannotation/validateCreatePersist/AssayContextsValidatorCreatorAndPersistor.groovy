@@ -6,13 +6,14 @@ import bard.db.dictionary.Element
 import bard.db.registration.AttributeType
 import org.apache.commons.lang.StringUtils
 import bard.dm.minimumassayannotation.ContextDTO
-import bard.dm.minimumassayannotation.Attribute
+
 import bard.dm.assaycompare.AssayContextCompare
 import bard.dm.assaycompare.ComparisonResult
 import bard.dm.assaycompare.ContextItemComparisonResultEnum
 import bard.dm.assaycompare.ComparisonResultEnum
 import bard.dm.Log
 import bard.dm.minimumassayannotation.LoadResultsWriter
+import bard.dm.minimumassayannotation.ContextItemDto
 
 /**
  * Creates and persists AssayContexts and AssayContextItems from the group of attributes we created earlier.
@@ -84,7 +85,7 @@ class AssayContextsValidatorCreatorAndPersistor extends ValidatorCreatorAndPersi
                 assayContext.contextName = assayContextDTO.name
 
                 //create the assay-context-item and add them to assay-context
-                assayContextDTO.attributes.each { Attribute attribute ->
+                assayContextDTO.attributes.each { ContextItemDto attribute ->
                     AssayContextItem assayContextItem = new AssayContextItem()
                     assayContextItem.assayContext = assayContext
                     assayContextItem.attributeType = attribute.attributeType

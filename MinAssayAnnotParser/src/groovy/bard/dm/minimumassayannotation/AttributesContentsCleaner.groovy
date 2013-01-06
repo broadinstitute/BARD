@@ -25,7 +25,7 @@ class AttributesContentsCleaner {
             assayCtxDTO.name = assayContextDTO.name
             assayCtxDTO.aid = assayContextDTO.aid
 
-            assayContextDTO.attributes.each {Attribute attribute ->
+            assayContextDTO.attributes.each {ContextItemDto attribute ->
 
                 String ky = trimAndMapKey(attribute.key, attributeNameMapping)
 
@@ -51,7 +51,7 @@ class AttributesContentsCleaner {
 
                 String concentrationUnits = trimAndMapKey(attribute.concentrationUnits, attributeNameMapping)
 
-                Attribute attr = new Attribute(attribute)
+                ContextItemDto attr = new ContextItemDto(attribute)
                 attr.key = ky
                 attr.value = val
                 attr.concentrationUnits = concentrationUnits

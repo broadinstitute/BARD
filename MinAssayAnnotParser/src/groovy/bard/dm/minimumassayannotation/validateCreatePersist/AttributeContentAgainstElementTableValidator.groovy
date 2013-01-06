@@ -3,7 +3,7 @@ package bard.dm.minimumassayannotation.validateCreatePersist
 import bard.db.dictionary.Element
 import bard.db.registration.AttributeType
 import bard.dm.Log
-import bard.dm.minimumassayannotation.Attribute
+import bard.dm.minimumassayannotation.ContextItemDto
 import bard.dm.minimumassayannotation.ContextDTO
 import bard.dm.minimumassayannotation.LoadResultsWriter
 
@@ -26,7 +26,7 @@ class AttributeContentAgainstElementTableValidator {
     boolean validate(List<ContextDTO> assayContextList, Map attributeNameMapping) {
 
         assayContextList.each {ContextDTO assayContextDTO ->
-            assayContextDTO.attributes.each {Attribute attribute ->
+            assayContextDTO.attributes.each {ContextItemDto attribute ->
 
                 if (! checkForElement(attribute.key, assayContextDTO.aid, assayContextDTO.name)) {
                     return false

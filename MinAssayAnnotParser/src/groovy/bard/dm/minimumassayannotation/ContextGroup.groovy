@@ -5,7 +5,7 @@ package bard.dm.minimumassayannotation
  */
 class ContextGroup {
     String name;
-    List<Attribute> attributes = [];
+    List<ContextItemDto> attributes = [];
 }
 
 class ContextDTO extends ContextGroup {
