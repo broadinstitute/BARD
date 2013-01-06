@@ -8,15 +8,14 @@ import bard.db.registration.AssayContext
 import bard.dm.assaycompare.assaycleanup.AssayCleaner
 import bard.dm.assaycompare.AssayDuplicateFinder
 
-Log.initializeLogger("test/exampleData/assayDeDuplication.log")
+Log.initializeLogger("test/exampleData/logsAndOutput/assayDeDuplication.log")
 Log.logger.setLevel(Level.DEBUG)
 
 //load assays from database
 Log.logger.info("begin loading assays")
 final Date startLoadDate = new Date()
 List<Assay> assayList = Assay.findAll()
-    //[Assay.findById(23), Assay.findById(249), Assay.findById(24), Assay.findById(3179), Assay.findById(27), Assay.findById(2274)] //partial, subset, exact assay match examples
-    //findAllByDesignedBy("Broad Institute")
+
 final Date endLoadDate = new Date()
 final loadTime = (endLoadDate.time - startLoadDate.time) / 60000.0
 Log.logger.info("loaded ${assayList.size()} assays. load time[min]: ${loadTime} finished load: ${endLoadDate}")
@@ -24,7 +23,7 @@ Log.logger.info("loaded ${assayList.size()} assays. load time[min]: ${loadTime} 
 
 Log.logger.info("Clean up duplicate assay context items with assay contexts, and assay contexts within assays")
 
-DuplicateWriter duplicateWriter = new DuplicateWriter()
+DuplicateWriter duplicateWriter = new DuplicateWriter("test/exampleData/logsAndOutput")
 AssayContextAndItemDuplicateFinder assayContextAndItemDuplicateFinder = new AssayContextAndItemDuplicateFinder()
 AssayCleaner assayCleaner = new AssayCleaner()
 
@@ -46,7 +45,7 @@ AssayContext.withTransaction {status ->
     }
     duplicateWriter.closeAll()
 
-
+    //uncomment line below to cause all changes to be rolled back
 //    status.setRollbackOnly()
 }
 

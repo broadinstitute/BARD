@@ -15,14 +15,15 @@ class DuplicateWriter {
     BufferedWriter itemWriter
     BufferedWriter dupContextItemWriter
 
-    public DuplicateWriter() {
-        itemWriter = new BufferedWriter(new FileWriter("test/exampleData/duplicate_assay_context_items.csv"))
+    public DuplicateWriter(String outputDirectory) {
+        itemWriter = new BufferedWriter(new FileWriter(new File(outputDirectory, "duplicate_assay_context_items.csv")))
         itemWriter.writeLine("assay_id,assay_context_id,assay_context_item_id1,assay_context_item_id2")
 
-        dupContextItemWriter = new BufferedWriter(new FileWriter("test/exampleData/duplicate_assay_context_items_in_duplicate_contexts.csv"))
+        dupContextItemWriter = new BufferedWriter(new FileWriter(new File(outputDirectory,
+                "duplicate_assay_context_items_in_duplicate_contexts.csv")))
         dupContextItemWriter.writeLine("assay_id,assay_context_id,assay_context_item_id1, assay_context_item_id2")
 
-        contextWriter = new BufferedWriter(new FileWriter("test/exampleData/duplicate_assay_contexts.csv"))
+        contextWriter = new BufferedWriter(new FileWriter(new File(outputDirectory, "duplicate_assay_contexts.csv")))
         contextWriter.writeLine("assay_id,asssay_context_id1,assay_context_id2")
     }
 

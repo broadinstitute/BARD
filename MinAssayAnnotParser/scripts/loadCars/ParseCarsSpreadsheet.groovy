@@ -11,7 +11,7 @@ import bard.dm.cars.domainspreadsheetmapping.ProjectStepAnnotater
 import org.springframework.transaction.support.DefaultTransactionStatus
 import bard.db.project.Project
 
-Log.initializeLogger("test/exampleData/parseCarsSpreadsheet.log")
+Log.initializeLogger("test/exampleData/logsAndOutput/parseCarsSpreadsheet.log")
 println("Start script")
 
 //constants

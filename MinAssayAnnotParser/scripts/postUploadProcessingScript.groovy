@@ -5,7 +5,7 @@ import bard.dm.postUploadProcessing.ContextChange
 import bard.db.registration.AssayContext
 import org.springframework.transaction.TransactionStatus
 
-Log.initializeLogger("test/exampleData/dnaRepairLoad.log")
+Log.initializeLogger("test/exampleData/logsAndOutput/dnaRepairLoad.log")
 final Date startDate = new Date()
 Log.logger.info("Start post-processing the spreadsheet uplaods ${startDate}")
 
