@@ -1,8 +1,8 @@
 package bard.dm.minimumassayannotation.validateCreatePersist
 
 import bard.db.registration.Assay
-import bard.dm.minimumassayannotation.ContextDTO
-import bard.dm.minimumassayannotation.LoadResultsWriter
+
+import bard.dm.minimumassayannotation.ContextLoadResultsWriter
 
 /**
  * Created with IntelliJ IDEA.
@@ -14,9 +14,9 @@ import bard.dm.minimumassayannotation.LoadResultsWriter
 abstract class ValidatorCreatorAndPersistor {
     final String modifiedBy
 
-    final LoadResultsWriter loadResultsWriter
+    final ContextLoadResultsWriter loadResultsWriter
 
-    ValidatorCreatorAndPersistor(String modifiedBy, LoadResultsWriter loadResultsWriter) {
+    ValidatorCreatorAndPersistor(String modifiedBy, ContextLoadResultsWriter loadResultsWriter) {
         this.modifiedBy = modifiedBy
         this.loadResultsWriter = loadResultsWriter
     }
@@ -42,6 +42,6 @@ abstract class ValidatorCreatorAndPersistor {
     }
 
     void writeMessageWhenAidNotFoundInDb(Long aid, String contextName) {
-        loadResultsWriter.write(aid, null, contextName, LoadResultsWriter.LoadResultType.fail, "could not find ADID for AID")
+        loadResultsWriter.write(aid, null, contextName, ContextLoadResultsWriter.LoadResultType.fail, "could not find ADID for AID")
     }
 }

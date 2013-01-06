@@ -5,16 +5,16 @@ import bard.db.registration.AttributeType
 import bard.dm.Log
 import bard.dm.minimumassayannotation.ContextItemDto
 import bard.dm.minimumassayannotation.ContextDTO
-import bard.dm.minimumassayannotation.LoadResultsWriter
+import bard.dm.minimumassayannotation.ContextLoadResultsWriter
 
 /**
  * Make sure that all the attribute's key and value match against valid values in the Element table
  */
 class AttributeContentAgainstElementTableValidator {
 
-    private final LoadResultsWriter loadResultsWriter
+    private final ContextLoadResultsWriter loadResultsWriter
 
-    public AttributeContentAgainstElementTableValidator(LoadResultsWriter loadResultsWriter) {
+    public AttributeContentAgainstElementTableValidator(ContextLoadResultsWriter loadResultsWriter) {
         this.loadResultsWriter = loadResultsWriter
     }
 
@@ -65,7 +65,7 @@ class AttributeContentAgainstElementTableValidator {
         } else {
             final String message = "Attributes in context not found in database:  $elementLabel"
             Log.logger.error(message)
-            loadResultsWriter.write(aid, null, assayContextDtoName, LoadResultsWriter.LoadResultType.fail, message)
+            loadResultsWriter.write(aid, null, assayContextDtoName, ContextLoadResultsWriter.LoadResultType.fail, message)
 
             return false
         }

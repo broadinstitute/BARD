@@ -4,8 +4,8 @@ import bard.db.registration.Measure
 import bard.db.dictionary.Element
 import bard.dm.minimumassayannotation.ContextDTO
 import bard.dm.Log
-import bard.dm.minimumassayannotation.LoadResultsWriter
-import bard.dm.minimumassayannotation.LoadResultsWriter.LoadResultType
+import bard.dm.minimumassayannotation.ContextLoadResultsWriter
+import bard.dm.minimumassayannotation.ContextLoadResultsWriter.LoadResultType
 
 /**
  * Creates and persists a Measure object from the group of attributes we created earlier.
@@ -14,7 +14,7 @@ import bard.dm.minimumassayannotation.LoadResultsWriter.LoadResultType
  */
 class MeasureContextsValidatorCreatorAndPersistor extends ValidatorCreatorAndPersistor {
 
-    MeasureContextsValidatorCreatorAndPersistor(String modifiedBy, LoadResultsWriter loadResultsWriter) {
+    MeasureContextsValidatorCreatorAndPersistor(String modifiedBy, ContextLoadResultsWriter loadResultsWriter) {
         super(modifiedBy, loadResultsWriter)
     }
 
@@ -25,7 +25,7 @@ class MeasureContextsValidatorCreatorAndPersistor extends ValidatorCreatorAndPer
      *
      * @param measureContextListCleaned
      */
-    void createAndPersist(List<ContextDTO> measureContextList) {
+    boolean createAndPersist(List<ContextDTO> measureContextList) {
 
         Integer totalMeasureContext = 0
         measureContextList.each { ContextDTO measureContextDTO -> totalMeasureContext += measureContextDTO.attributes.size()}
@@ -43,23 +43,23 @@ class MeasureContextsValidatorCreatorAndPersistor extends ValidatorCreatorAndPer
                     totalMeasureContext -= measureContextDTO.attributes.size()
                     super.writeMessageWhenAidNotFoundInDb(measureContextDTO.aid, measureContextDTO.name)
                     status.setRollbackOnly()
-                    return
+                    return false
                 }
 
                 if (measureContextDTO.attributes.size() == 1) {
                     super.loadResultsWriter.write(measureContextDTO.aid, measureContext.assay.id, measureContextDTO.name,
                             LoadResultType.fail, "more than 1 attribute found in measure context should only be 1")
                     status.setRollbackOnly()
-                    return
+                    return false
                 }
 
                 Element element = Element.findByLabelIlike(measureContextDTO.attributes.first().value) //The value is the result-type
                 if (!element) {
                     final String message = "We must have an element for the measure-context-item attribute / result type: '${measureContextDTO.attributes.first().value}'"
                     super.loadResultsWriter.write(measureContextDTO.aid, measureContext.assay.id, measureContextDTO.name,
-                            LoadResultsWriter.LoadResultType.fail, message)
+                            ContextLoadResultsWriter.LoadResultType.fail, message)
                     status.setRollbackOnly()
-                    return
+                    return false
                 }
                 measureContext.resultType = element
                 Log.logger.info("Measure's Assay ID: ${measureContext.assay.id} (${tally++}/${totalMeasureContext})")
@@ -72,7 +72,7 @@ class MeasureContextsValidatorCreatorAndPersistor extends ValidatorCreatorAndPer
                     super.loadResultsWriter.write(measureContextDTO.aid, measureContext.assay.id, measureContextDTO.name,
                             LoadResultType.alreadyLoaded, null)
                     status.setRollbackOnly()
-                    return
+                    return false
                 }
 
                 measureContext.save()
@@ -84,7 +84,7 @@ class MeasureContextsValidatorCreatorAndPersistor extends ValidatorCreatorAndPer
                     message = "MeasureContext Errors: ${measureContext.errors}"
                     Log.logger.info(message)
                     status.setRollbackOnly()
-                    return
+                    return false
                 } else {
                     loadResultType = LoadResultType.success
                     message = ""
@@ -92,5 +92,7 @@ class MeasureContextsValidatorCreatorAndPersistor extends ValidatorCreatorAndPer
                 super.loadResultsWriter.write(measureContextDTO.aid, measureContext.assay.id, measureContextDTO.name, loadResultType, message)
             }
         }
+
+        return true
     }
 }

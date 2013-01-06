@@ -5,20 +5,23 @@ import org.apache.commons.lang3.StringUtils
 /**
  * Created with IntelliJ IDEA.
  * User: dlahr
- * Date: 1/4/13
- * Time: 3:38 PM
+ * Date: 1/6/13
+ * Time: 1:52 PM
  * To change this template use File | Settings | File Templates.
  */
-class LoadResultsWriter {
+class AssayLoadResultsWriter {
     private BufferedWriter writer
 
-    public LoadResultsWriter(String resultFilePath) {
+    public AssayLoadResultsWriter(String resultFilePath) {
         writer = new BufferedWriter(new FileWriter(resultFilePath))
-        writer.writeLine("aid, adid, load_result_type, num_potential_contexts_to_load, num_existing_contexts, num_contexts_loaded, message")
+        writer.writeLine("filename, row_num, aid, status, message")
     }
 
-    public void write(def aid, Long adid, String contextName, LoadResultType resultType, String message) {
-        def lineData = [aid, adid, contextName, resultType, message]
+    public void write(AssayDto assayDto, LoadResultType resultType, String message) {
+        final def aidOutput = assayDto.aid ? assayDto.aid : assayDto.aidFromCell
+
+        def lineData = [assayDto.sourceFile.name, assayDto.rowNum, aidOutput, resultType, message]
+
         StringBuilder line = new StringBuilder()
         for (def lineDatum : lineData) {
             line.append(StringUtils.defaultString(lineDatum.toString())).append(", ")
@@ -33,6 +36,6 @@ class LoadResultsWriter {
     }
 
     public enum LoadResultType {
-        success, alreadyLoaded, deleteOriginal, fail
+        success, assayContextSuccessOnly, fail
     }
 }
