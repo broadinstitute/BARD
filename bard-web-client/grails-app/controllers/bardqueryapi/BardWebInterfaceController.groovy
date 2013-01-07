@@ -11,6 +11,7 @@ import molspreadsheet.MolecularSpreadSheetService
 import org.apache.commons.lang.StringUtils
 
 import javax.servlet.http.HttpServletResponse
+import org.springframework.http.HttpStatus
 
 /**
  *
@@ -113,7 +114,13 @@ class BardWebInterfaceController {
                 }
             } catch (Exception ee) { //error is thrown
                 String errorMessage = "Could not get promiscuity score for ${cid}"
-                log.error(errorMessage)
+                //Since the 404 - Not Found are too common, we want them as warnings only.
+                if (ee?.cause?.statusCode?.value != HttpServletResponse.SC_NOT_FOUND) {
+                    log.error(errorMessage)
+                }
+                else {
+                    log.warn(errorMessage)
+                }
                 return response.sendError(HttpServletResponse.SC_BAD_REQUEST,
                         "${errorMessage}")
             }
