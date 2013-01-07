@@ -210,7 +210,7 @@ log4j = {
                 smtpPort: config.grails.mail.port,
                 from: config.grails.mail.default.from,
                 to: config.grails.mail.default.to,
-                subject: config.grails.mail.default.subject,
+                subject: "[${InetAddress.getLocalHost().getHostName()}]" + config.grails.mail.default.subject,
                 smtpHost: config.grails.mail.host,
                 layout: patternLayout
         )
