@@ -30,7 +30,7 @@
         $("[rel=tooltip]").tooltip();
         <g:if test="${((molSpreadSheetData?.getRowCount() > 0) && (molSpreadSheetData.getColumnCount()>4))}">
         $('#molspreadsheet').dataTable({
-                    "bStateSave":true,
+                    "bStateSave":false,
                     "aoColumnDefs":[
                         {"bSortable":false, 'aTargets':[0]},
                         <g:each var="column" in="${1..(molSpreadSheetData.getColumnCount()-1)}">
