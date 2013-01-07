@@ -28,7 +28,7 @@
         $('td:nth-child(3)').toggle();
         $('#promiscuitycol').toggle();
         $("[rel=tooltip]").tooltip();
-<g:if test="${molSpreadSheetData?.getRowCount() > 0}">
+        <g:if test="${((molSpreadSheetData?.getRowCount() > 0) && (molSpreadSheetData.getColumnCount()>4))}">
         $('#molspreadsheet').dataTable({
                     "bStateSave":true,
                     "aoColumnDefs":[
