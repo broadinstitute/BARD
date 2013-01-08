@@ -225,8 +225,9 @@ log4j = {
 
 
     error additivity: false,
-    //Capture errors from the NCGC API (via JDO)
-    NCGCErrorAppender: ['grails.app.services.bard.core.rest.spring.AbstractRestService'],
+    //Capture errors from the NCGC API (via JDO) but DO NOT send emails about them.
+    NCGCErrorAppender: ['grails.app.services.bard.core.rest.spring.AbstractRestService']
+    error additivity: true,
     //Capture JavaScript errors from the client (via the ErrorHandling controller)
     JavaScriptErrorsAppender: ['grails.app.controllers.bardqueryapi.ErrorHandlingController']
 
