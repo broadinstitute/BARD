@@ -115,6 +115,6 @@
     </div>
 
     <div class="span10 pull-right">
-        <export:formats/>
+        <export:formats formats="['csv', 'excel', 'pdf']"/>
     </div>
 </div>
