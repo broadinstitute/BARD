@@ -210,22 +210,26 @@ log4j = {
                 smtpPort: config.grails.mail.port,
                 from: config.grails.mail.default.from,
                 to: config.grails.mail.default.to,
-                subject: "[${InetAddress.getLocalHost().getHostName()}]" + config.grails.mail.default.subject,
+                subject: "[${InetAddress.getLocalHost().getHostName()}] " + config.grails.mail.default.subject,
                 smtpHost: config.grails.mail.host,
-                layout: patternLayout
+                layout: patternLayout,
+                threshold: org.apache.log4j.Level.ERROR
         )
     }
-
-    //Capture errors from the NCGC API (via JDO)
-    error NCGCErrorAppender: ['grails.app.services.bard.core.rest.spring.AbstractRestService']
-    //Capture JavaScript errors from the client (via the ErrorHandling controller)
-    error JavaScriptErrorsAppender: ['grails.app.controllers.bardqueryapi.ErrorHandlingController']
-    //Capture NCGC REST API roundtrip timing.
-    info NCGCRestApiTimingAppender: ['grails.app.services.bard.core.helper.LoggerService']
 
     root {
         debug 'stdout'
         error 'mail', 'fileAppender'
-        additivity = true
+        additivity true
     }
+
+
+    error additivity: false,
+    //Capture errors from the NCGC API (via JDO)
+    NCGCErrorAppender: ['grails.app.services.bard.core.rest.spring.AbstractRestService'],
+    //Capture JavaScript errors from the client (via the ErrorHandling controller)
+    JavaScriptErrorsAppender: ['grails.app.controllers.bardqueryapi.ErrorHandlingController']
+
+    //Capture NCGC REST API roundtrip timing.
+    info NCGCRestApiTimingAppender: ['grails.app.services.bard.core.helper.LoggerService']
 }
