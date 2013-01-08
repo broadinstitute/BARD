@@ -11,7 +11,8 @@ class AttributeCommand implements Serializable {
 	
 	Long elementId
 	String path
-	String assayContextId
+	String assayContextIdValue
+	String currentValue
 }
 
 class ValueTypeCommand implements Serializable {
@@ -44,8 +45,6 @@ class AddItemWizardController {
 	}
 	
 	def addItemWizard(Long assayContextId, String cardSection){
-		println "assayContextId: " + assayContextId
-		println "Section: " + cardSection
 		render(template: "common/ajaxflow", model: [assayContextId: assayContextId, path: cardSection])
 	}
 
@@ -75,6 +74,8 @@ class AddItemWizardController {
 			]
 			flow.cancel = true;
 			flow.quickSave = true;
+			flow.attribute = null;
+			flow.valueType = null;
 
 			success()
 		}
@@ -108,16 +109,17 @@ class AddItemWizardController {
 			}
 			on("next") { AttributeCommand cmd ->
 				flow.attribute = cmd
-				println "calling closure for AttributeCommand ${cmd.dump()}"
-				println "Params: ${params}"
+//				println "calling closure for AttributeCommand ${cmd.dump()}"
+//				println "Params: ${params}"
 				flow.page = 2
 				success()
 			}.to "pageTwo"
-			on("toPageTwo") {
-				// put your bussiness logic (if applicable) in here
+			on("toPageTwo") { 
 			}.to "pageTwo"
-			on("toPageThree") {
-				// put your bussiness logic (if applicable) in here
+			on("toPageThree") { ValueTypeCommand cmd ->
+				 flow.valueType = cmd
+				 flow.page = 3
+				 success()				
 			}.to "pageThree"
 			on("toPageFour") {
 				// put your bussiness logic (if applicable) in here

@@ -25,10 +25,8 @@
                 if (console) {
                         console.log('calling onPage() which can be used to attach generic javascript handlers to DOM elements of a rendered page / partial');
                 }
-                var sectionPath = $("#sectionPath").val();
-    			console.log('sectionPath var = ' + sectionPath);
-    			var cardAssayContextId = $("#cardAssayContextId").val();
-    			console.log('cardAssayContextId var = ' + cardAssayContextId);
+    			console.log('sectionPath var = ' + $("#sectionPath").val());
+    			console.log('cardAssayContextId var = ' + $("#cardAssayContextId").val());
                 initializePageOne();
                 initializePageThree();
         }
@@ -46,11 +44,9 @@
             			var cardAssayContextId = $("#cardAssayContextId").val();
             			console.log('Auto-complete cardAssayContextId var = ' + cardAssayContextId);
             			$("#path").val(sectionPath);
-            			$("#assayContextId").val(cardAssayContextId);
-            			var cardAssaySection = $("#path").val();
-            			console.log('cardAssaySection var = ' + cardAssaySection);
-            			var assayContextId = $("#assayContextId").val();
-            			console.log('assayContextId var = ' + assayContextId);
+            			$("#assayContextIdValue").val(cardAssayContextId);
+            			console.log('cardAssaySection var = ' + $("#path").val());
+            			console.log('assayContextId var = ' + $("#assayContextIdValue").val());
         				$.getJSON( 
                 				"/BARD/ontologyJSon/getDescriptors",
                 				{
@@ -63,7 +59,7 @@
 
         			select: function( event, ui ) {
                         $( "#currentValue" ).val( ui.item.value );
-                        $( "#elementId" ).val( ui.item.elementId );                        
+                        $( "#elementId" ).val( ui.item.elementId );                    
                     }
                 			
         	}
