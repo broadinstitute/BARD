@@ -12,6 +12,12 @@ import org.apache.poi.ss.usermodel.Row
 class ParseAndBuildAttributeGroups {
     private static final int maxRowNum = 6000
 
+    private final ContextLoadResultsWriter loadResultsWriter
+
+    public ParseAndBuildAttributeGroups(ContextLoadResultsWriter loadResultsWriter) {
+        this.loadResultsWriter = loadResultsWriter
+    }
+
     /**
      * Parses the input-stream spreadsheet and extracts all the values from the cells based on the list of attribute-groups.
      * an attribute group represents a group of key/value pairs (attributes) that should all be group together in a single assay or project context.
@@ -21,13 +27,20 @@ class ParseAndBuildAttributeGroups {
      * @param assayGroup
      * @return
      */
-     List<List<ContextDTO>> build(FileInputStream inp, int START_ROW, List<List<ContextGroup>> contextGroupList) {
-        Workbook wb = new XSSFWorkbook(inp);
+    List<AssayDto> build(File inputFile, int START_ROW, List<List<ContextGroup>> contextGroupList) {
+        final Workbook wb
+        try {
+            wb = new XSSFWorkbook(new FileInputStream(inputFile))
+        } catch (IllegalStateException e) {
+            throw new CouldNotReadExcelFileException()
+        }
+
+        List<AssayDto> assayDtoList = new LinkedList<AssayDto>()
+        AssayDto currentAssayDto = null
+
         Sheet sheet = wb.getSheetAt(0);
-        Integer aid
+        Integer aid = null
         Integer rowCount = 0 //rows in spreadsheet are zero-based
-        List<ContextDTO> assayContextDtoList = []
-        List<ContextDTO> measureContextDtoList = []
 
         List<ContextGroup> assayGroup = contextGroupList[0]
         List<ContextGroup> measureContextGroups = contextGroupList[1]
@@ -47,15 +60,14 @@ class ParseAndBuildAttributeGroups {
             //if we encountered a new AID, update the current-aid with the new one. Else, leave the existing one.
             if (aidFromCell) {
                 aidFromCell = aidFromCell.trim()
-                Integer newAid = null
-                if (aidFromCell.isDouble()) {
-                    newAid = new Integer((int)new Double(aidFromCell))
-                } else if (aidFromCell.isInteger()) {
-                    newAid = new Integer(aidFromCell)
+
+                if ((currentAssayDto != null && currentAssayDto.aidFromCell != aidFromCell)
+                        || null == currentAssayDto) {
+
+                    currentAssayDto = new AssayDto(aidFromCell, inputFile, row.rowNum)
+                    assayDtoList.add(currentAssayDto)
                 }
-                aid = newAid
             }
-            assert aid, "Couldn't find AID: ${aidFromCell}"
 
 
             //Iterate over all assay-groups' contexts
@@ -63,9 +75,10 @@ class ParseAndBuildAttributeGroups {
                 ContextDTO assayContextDTO = contextDtoFromContextGroupCreator.create(contextGroup, row, sheet)
 
                 if (assayContextDTO.attributes) {
-                    assayContextDTO.aid = aid
+                    assayContextDTO.aid = currentAssayDto.aid
                     assayContextDTO.name = contextGroup.name
-                    assayContextDtoList << assayContextDTO
+
+                    currentAssayDto.assayContextDTOList.add(assayContextDTO)
                 }
             }
 
@@ -74,13 +87,17 @@ class ParseAndBuildAttributeGroups {
                 ContextDTO measureContextDTO = contextDtoFromContextGroupCreator.create(contextGroup, row, sheet)
 
                 if (measureContextDTO.attributes) {
-                    measureContextDTO.aid = aid
+                    measureContextDTO.aid = currentAssayDto.aid
                     measureContextDTO.name = contextGroup.name
-                    measureContextDtoList << measureContextDTO
+                    currentAssayDto.measureContextDTOList.add(measureContextDTO)
                 }
             }
+
         }
 
-        return [assayContextDtoList, measureContextDtoList]
+        return assayDtoList
     }
+}
+
+class CouldNotReadExcelFileException extends Exception {
 }

@@ -21,7 +21,7 @@ class ContextDtoFromContextGroupCreator {
     ContextDTO create(ContextGroup contextGroup, Row row, Sheet sheet) {
         ContextDTO contextDTO = new ContextDTO()
 
-        contextGroup.attributes.each {Attribute attribute ->
+        contextGroup.attributes.each {ContextItemDto attribute ->
             //Get the attribute's key-content from cell
             String attKeyCellId = attribute.key
             def attrKey = getCellContent(attKeyCellId, row, sheet)
@@ -38,6 +38,7 @@ class ContextDtoFromContextGroupCreator {
             String attValueCell = attribute.value
             def attrValue = getCellContent(attValueCell, row, sheet)
 
+            //TODO add this check back, but only write to log that the discrepancy occurred.
 //            //Attribute key must exist; attribute value must exist UNLESS it is of type Free
 //            if ((!attrKey) || (!attrValue && (attribute.attributeType != AttributeType.Free))) return
             //Attribute ket and value must exist
@@ -50,7 +51,7 @@ class ContextDtoFromContextGroupCreator {
                 assert attrConcentrationUnits instanceof String, "ConcentrationUnits must be a string (Row=${row.rowNum + 1}/CellID=${attConcentrationUnitsCellId})"
 
             //Create a new attribute and add it to the context's attributes collection.
-            Attribute attr = new Attribute(attrKey, attrValue, attribute.attributeType, attribute.typeIn, attrQualifier, attrConcentrationUnits)
+            ContextItemDto attr = new ContextItemDto(attrKey, attrValue, attribute.attributeType, attribute.typeIn, attrQualifier, attrConcentrationUnits)
 
             contextDTO.attributes << attr
         }
