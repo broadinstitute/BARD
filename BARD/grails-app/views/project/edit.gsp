@@ -62,7 +62,7 @@
             <g:render template="../document/show" model="['documents': instance.documents]"/>
 
             <h3><a href="#">Contexts</a></h3>
-            <g:render template="../context/edit" model="['contexts': instance.contextsWithGroup, 'instanceId': instance.id]"/>
+            <g:render template="../context/edit" model="['contexts': instance.groupContexts(), 'instanceId': instance.id]"/>
 
             <h3><a href="#">Experiments and steps</a></h3>
             <g:render template="showstep" model="['experiments': instance.projectExperiments, 'pegraph': pexperiment]"/>

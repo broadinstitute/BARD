@@ -1,10 +1,10 @@
 package bard.db.registration
 
-import bard.db.dictionary.Descriptor
 import bard.db.enums.ReadyForExtraction
 import bard.db.experiment.Experiment
+import bard.db.model.AbstractContextOwner
 
-class Assay {
+class Assay extends AbstractContextOwner{
 
     private static final int ASSAY_STATUS_MAX_SIZE = 20
     private static final int ASSAY_NAME_MAX_SIZE = 1000
@@ -68,25 +68,6 @@ class Assay {
         return assayContextItems as List<AssayContextItem>
     }
 
-    /**
-     * Create a map where all the assayContexts are grouped a common root in the ontology hierarchy based on a prefered
-     * descriptor for the context.
-     *
-     * @return a Map keyed by the first 2 levels of the ontology hierarchy path with a each key having a list of assayContexts
-     */
-    Map<String, AssayContext> groupContexts() {
-
-
-        Map<String, List<AssayContext>> mapByPath = this.assayContexts.groupBy { AssayContext assayContext ->
-            String mapKey = 'uncategorized cards'
-            Descriptor descriptor = assayContext.preferredDescriptor
-            if (descriptor) {
-                mapKey = descriptor.generateOntologyBreadCrumb(2)
-            }
-            mapKey
-        }
-        mapByPath as TreeMap<String, List<AssayContext>>
-    }
 
     /**
      * duck typing to look like project
@@ -102,9 +83,16 @@ class Assay {
     String getName() {
         this.assayName
     }
-
-    String getDescription(){
+    /**
+     * duck typing to look like project for summary/_show template
+     */
+    String getDescription() {
         this.assayName
+    }
+
+
+    List<AssayContext> getContexts(){
+        this.assayContexts
     }
 
 }

@@ -69,7 +69,7 @@
 
                     <div id="target-contexts-info" class="accordion-body in collapse">
                         <div class="accordion-inner">
-                            <g:render template="../context/show" model="['contexts': assayInstance.groupContexts()]"/>
+                            <g:render template="../context/show" model="[contextOwner: assayInstance, contexts: assayInstance.groupContexts()]"/>
                         </div>
                     </div>
                 </div>

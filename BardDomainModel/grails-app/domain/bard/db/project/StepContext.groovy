@@ -24,4 +24,9 @@ class StepContext extends AbstractContext {
         id(column: "STEP_CONTEXT_ID", generator: "sequence", params: [sequence: 'STEP_CONTEXT_ID_SEQ'])
         stepContextItems(indexColumn: [name: 'DISPLAY_ORDER'], lazy: 'false')
     }
+
+    @Override
+    List<StepContextItem> getContextItems() {
+        return getStepContextItems()
+    }
 }

@@ -24,4 +24,8 @@ class ExperimentContext extends AbstractContext{
         experimentContextItems(indexColumn: [name: 'DISPLAY_ORDER'], lazy: 'false')
     }
 
+    @Override
+    List<ExperimentContextItem> getContextItems() {
+        return getExperimentContextItems()
+    }
 }

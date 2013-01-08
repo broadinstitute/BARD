@@ -49,20 +49,76 @@
 
 <g:if test="${instance?.id}">
     <div class="row-fluid">
-        <div id="accordion" class="span12">
-            <h3><a href="#">Summary</a></h3>
-            <g:render template="../summary/show" model="['summary': instance]"/>
+        <div id="accordion-foo" class="span12 accordion">
+            <div class="accordion-group">
+                <div class="accordion-heading">
+                    <a href="#summary-header" id="summary-header" class="accordion-toggle" data-toggle="collapse"
+                       data-target="#target-summary-info">
+                        <i class="icon-chevron-down"></i>
+                        Summary
+                    </a>
 
-            <h3><a href="#">Contexts</a></h3>
-            <g:render template="../context/show" model="['contexts': instance.contextsWithGroup]"/>
+                    <div id="target-summary-info" class="accordion-body in collapse">
+                        <div class="accordion-inner">
+                            <g:render template="../summary/show" model="['summary': instance]"/>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
-            <h3><a href="#">Experiments and steps</a></h3>
-            <g:render template="showstep" model="['experiments': instance.projectExperiments, 'pegraph': pexperiment]"/>
 
-            <h3><a href="#">Documents</a></h3>
-            <g:render template="../document/show" model="['documents': instance.documents]"/>
-        </div>
+            <div class="accordion-group">
+                <div class="accordion-heading">
+                    <a href="#contexts-header" id="contexts-header" class="accordion-toggle" data-toggle="collapse"
+                       data-target="#target-contexts-info">
+                        <i class="icon-chevron-down"></i>
+                        Contexts
+                    </a>
+
+                    <div id="target-contexts-info" class="accordion-body in collapse">
+                        <div class="accordion-inner">
+                            <g:render template="../context/show"
+                                      model="[contextOwner: instance, contexts: instance.groupContexts()]"/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="accordion-group">
+                <div class="accordion-heading">
+                    <a href="#experiment-and-step-header" id="experiment-and-step-header" class="accordion-toggle"
+                       data-toggle="collapse"
+                       data-target="#target-experiment-and-step-info">
+                        <i class="icon-chevron-down"></i>
+                        Experiments and steps
+                    </a>
+
+                    <div id="target-experiment-and-step-info" class="accordion-body in collapse">
+                        <div class="accordion-inner">
+                            <g:render template="showstep" model="['experiments': instance.projectExperiments, 'pegraph': pexperiment]"/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="accordion-group">
+                <div class="accordion-heading">
+                    <a href="#documents-header" id="documents-header" class="accordion-toggle" data-toggle="collapse"
+                       data-target="#target-documents-info">
+                        <i class="icon-chevron-down"></i>
+                        Documents
+                    </a>
+
+                    <div id="target-documents-info" class="accordion-body in collapse">
+                        <div class="accordion-inner">
+                            <g:render template="../document/show" model="['documents': instance.documents]"/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>    <!-- End accordion -->
     </div>
+
 </g:if>
 
 </body>

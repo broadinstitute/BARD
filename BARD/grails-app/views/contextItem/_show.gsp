@@ -8,11 +8,11 @@
 
 
 <%-- A template for showing summary for both project and assay def, show as card --%>
-<div id="card-${context.id}" class="span6 card roundedBorder card-table-container">
+<div id="card-${context.id}" class="card roundedBorder card-table-container">
     <table class="table table-hover">
         <caption id="${context.id}" class="assay_context">
             <div class="cardTitle">
-            <p>${context.preferredName}
+                <p>${context.preferredName}</p>
                 <g:if test="${context.hasProperty('assayContextMeasures') && context.assayContextMeasures}">
                     <p>Measure<g:if test="${context.assayContextMeasures.size() > 1}">(s)</g:if>:
                         <g:each in="${context.assayContextMeasures}" var="assayContextMeasure">
@@ -20,7 +20,6 @@
                         </g:each>
                     </p>
                 </g:if>
-            </p>
             </div>
         </caption>
         <tbody>
