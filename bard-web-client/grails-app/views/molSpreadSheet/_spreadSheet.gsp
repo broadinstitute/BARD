@@ -155,7 +155,7 @@
 
     <div class="span10 pull-right">
 <g:if test="${molSpreadSheetData?.getRowCount() > 0}">
-    <export:formats/>
+    <export:formats formats="['csv', 'excel', 'pdf']"/>
 </g:if>
     </div>
 </div>
