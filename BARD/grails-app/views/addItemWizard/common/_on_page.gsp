@@ -36,7 +36,7 @@
                 console.log('calling initializePageOne()');
         	}
         	var autoOpts = {
-        			minLength: 2,
+        			minLength: 1,
         			//source: "/BARD/ontologyJSon/getDescriptors",
         			source: function( request, response ) {            			
             			var sectionPath = $("#sectionPath").val();
@@ -59,7 +59,8 @@
 
         			select: function( event, ui ) {
                         $( "#currentValue" ).val( ui.item.value );
-                        $( "#elementId" ).val( ui.item.elementId );                    
+                        $( "#elementId" ).val( ui.item.elementId );  
+                        $( "#attributeElementId" ).val(ui.item.elementId);                 
                     }
                 			
         	}
@@ -71,12 +72,12 @@
                 console.log('calling initializePagThree()');
         	}
         	var autoOpts = {
-        			minLength: 2,
+        			minLength: 1,
         			//source: "/BARD/ontologyJSon/getDescriptors",
         			source: function( request, response ) {
-            			var cardAssaySection = $("#path").val()
-            			cardAssaySection = "assay protocol> assay component"
-            			var elementId = $("#elementId").val();
+            			var cardAssaySection = $("#sectionPath").val();
+            			//cardAssaySection = "assay protocol> assay component"
+            			var elementId = $("#attributeElementId").val();
             			console.log('cardAssaySection var = ' + cardAssaySection);
             			console.log('elementId var = ' + elementId);
         				$.getJSON( 
@@ -84,7 +85,7 @@
                 				{
                             		term: request.term,
                             		section: cardAssaySection,
-                            		attributeId: 153
+                            		attributeId: elementId
                             	}, 
                             	response 
                         );

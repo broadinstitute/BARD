@@ -23,7 +23,9 @@ class ValueTypeCommand implements Serializable {
 class FixedValueCommand implements Serializable {
 	
 	Long valueId
-	String qualifier
+	String currentChoice
+	String valueQualifier
+	String valueUnits
 }
 
 class AddItemWizardController {
@@ -74,8 +76,10 @@ class AddItemWizardController {
 			]
 			flow.cancel = true;
 			flow.quickSave = true;
+			
 			flow.attribute = null;
 			flow.valueType = null;
+			flow.fixedValue = null;
 
 			success()
 		}
@@ -116,10 +120,7 @@ class AddItemWizardController {
 			}.to "pageTwo"
 			on("toPageTwo") { 
 			}.to "pageTwo"
-			on("toPageThree") { ValueTypeCommand cmd ->
-				 flow.valueType = cmd
-				 flow.page = 3
-				 success()				
+			on("toPageThree") { 	
 			}.to "pageThree"
 			on("toPageFour") {
 				// put your bussiness logic (if applicable) in here
@@ -140,7 +141,12 @@ class AddItemWizardController {
 				flow.page = 2
 				success()
 			}
-			on("next").to "pageThree"
+			on("next"){ValueTypeCommand cmd ->
+				 flow.valueType = cmd
+				 println "calling closure for ValueTypeCommand ${cmd.dump()}"
+				 flow.page = 3
+				 success()							
+			}.to "pageThree"
 			on("previous").to "pageOne"
 			on("toPageOne").to "pageOne"
 			on("toPageThree").to "pageThree"
@@ -160,7 +166,12 @@ class AddItemWizardController {
 				flow.page = 3
 				success()
 			}
-			on("next").to "pageFour"
+			on("next"){ FixedValueCommand cmd ->
+				flow.fixedValue = cmd
+				println "calling closure for FixedValueCommand ${cmd.dump()}"
+				flow.page = 4
+				success()
+			}.to "pageFour"
 			on("previous").to "pageTwo"
 			on("toPageOne").to "pageOne"
 			on("toPageTwo").to "pageTwo"
