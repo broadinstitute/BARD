@@ -24,6 +24,8 @@ class AssayContextMeasure {
 
     static mapping = {
         id(column: 'ASSAY_CONTEXT_MEASURE_ID', generator: 'sequence', params: [sequence: 'ASSAY_CONTEXT_MEASURE_ID_SEQ'])
+        assayContext(lazy: false)
+        measure(lazy: false)
     }
     static constraints = {
         assayContext(nullable: false)

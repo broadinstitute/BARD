@@ -24,7 +24,7 @@ class Measure {
 
     static mapping = {
         id(column: 'MEASURE_ID', generator: 'sequence', params: [sequence: 'MEASURE_ID_SEQ'])
-        resultType(column: 'RESULT_TYPE_ID')
+        resultType(column: 'RESULT_TYPE_ID', lazy: false)
         parentMeasure(column: "PARENT_MEASURE_ID")
         entryUnit(column: "ENTRY_UNIT_ID")
         statsModifier(column: 'STATS_MODIFIER_ID')
