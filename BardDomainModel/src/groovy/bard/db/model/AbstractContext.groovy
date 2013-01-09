@@ -8,23 +8,25 @@ package bard.db.model
  * To change this template use File | Settings | File Templates.
  */
 abstract class AbstractContext {
-        private static final int CONTEXT_NAME_MAX_SIZE = 128
-        private static final int CONTEXT_GROUP_MAX_SIZE = 256
-        private static final int MODIFIED_BY_MAX_SIZE = 40
+    private static final int CONTEXT_NAME_MAX_SIZE = 128
+    private static final int CONTEXT_GROUP_MAX_SIZE = 256
+    private static final int MODIFIED_BY_MAX_SIZE = 40
 
-        String contextName
-        String contextGroup
+    String contextName
+    String contextGroup
 
-        Date dateCreated = new Date()
-        Date lastUpdated
-        String modifiedBy
+    Date dateCreated = new Date()
+    Date lastUpdated
+    String modifiedBy
 
-        static constraints = {
-            contextName(nullable: true, blank: false, maxSize: CONTEXT_NAME_MAX_SIZE)
-            contextGroup(nullable: true, blank: false, maxSize: CONTEXT_GROUP_MAX_SIZE)
+    static constraints = {
+        contextName(nullable: true, blank: false, maxSize: CONTEXT_NAME_MAX_SIZE)
+        contextGroup(nullable: true, blank: false, maxSize: CONTEXT_GROUP_MAX_SIZE)
 
-            dateCreated(nullable: false)
-            lastUpdated(nullable: true)
-            modifiedBy(nullable: true, blank: false, maxSize: MODIFIED_BY_MAX_SIZE)
-        }
+        dateCreated(nullable: false)
+        lastUpdated(nullable: true)
+        modifiedBy(nullable: true, blank: false, maxSize: MODIFIED_BY_MAX_SIZE)
+    }
+
+    abstract List getContextItems()
 }

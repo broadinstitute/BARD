@@ -7,7 +7,7 @@ package bard.db.model
  * Time: 4:18 PM
  * To change this template use File | Settings | File Templates.
  */
-abstract class AbstractDocument {
+abstract class AbstractDocument implements IDocumentType {
 
     private static final int DOCUMENT_NAME_MAX_SIZE = 500
     private static final int DOCUMENT_TYPE_MAX_SIZE = 20
@@ -22,7 +22,7 @@ abstract class AbstractDocument {
 
     static constraints = {
         documentName(blank: false, maxSize: DOCUMENT_NAME_MAX_SIZE)
-        documentType(blank: false, maxSize: DOCUMENT_TYPE_MAX_SIZE, inList: ['Description', 'Protocol', 'Comments', 'Paper', 'External URL', 'Other'])
+        documentType(blank: false, maxSize: DOCUMENT_TYPE_MAX_SIZE, inList: [DOCUMENT_TYPE_DESCRIPTION, DOCUMENT_TYPE_PROTOCOL, DOCUMENT_TYPE_COMMENTS, DOCUMENT_TYPE_PAPER, DOCUMENT_TYPE_EXTERNAL_URL, DOCUMENT_TYPE_OTHER])
         documentContent(nullable: true, blank: false)
         dateCreated(nullable: false)
         lastUpdated(nullable: true)

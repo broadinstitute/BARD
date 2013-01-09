@@ -33,6 +33,7 @@
                     // the new dimensions
                     particleSystem.screenSize(canvas.width, canvas.height)
                     particleSystem.screenPadding(80) // leave an extra 80px of whitespace per side
+                    particleSystem.screenStep( 1 );
 
                     // set up some event handlers to allow for node-dragging
                     that.initMouseHandling()
@@ -117,6 +118,7 @@
                     // for moves and mouseups while dragging
                     var handler = {
                         clicked:function(e){
+                            particleSystem.stop()
                             var pos = $(canvas).offset();
                             _mouseP = arbor.Point(e.pageX-pos.left, e.pageY-pos.top)
                             nearest = dragged = particleSystem.nearest(_mouseP);
@@ -168,7 +170,7 @@
             var graphInJSON = ${pegraph};
             //arbor.ParticleSystem(repulsion, stiffness, friction, gravity, fps, dt, precision)
             var sys = arbor.ParticleSystem(2600, 6, 0.5, true, 55, 0.02, 0.4); // create the system with sensible repulsion/stiffness/friction
-            sys.parameters({gravity:true, stiffness: 6, repulsion: 2600, friction: 0.5}); // use center-gravity to make the graph settle nicely (ymmv)
+            sys.parameters({gravity:true, stiffness: 6, repulsion: 2600, friction: 1.0}); // use center-gravity to make the graph settle nicely (ymmv)
 
             //sys.parameters({gravity:true}); // use center-gravity to make the graph settle nicely (ymmv)
             sys.renderer = Renderer("#viewport"); // our newly created renderer will have its .init() method called shortly by sys...
@@ -178,7 +180,7 @@
             {
                 var keyValues = connectedNodes[i].keyValues;
                 sys.addNode(connectedNodes[i].id,
-                            {name: keyValues.eid, name1: keyValues.stage,
+                            {name: keyValues.eid, name1: keyValues.stage, fixed: true,
                              link: keyValues.eid, assay: keyValues.assay,
                              ename: keyValues.ename});
            }
@@ -200,6 +202,10 @@
                             {name: "", length:.75});
                             //{name: graphInJSON.edges[i].label})
             }
+//            if (connectedNodes + isolatedNodes <= 1) {
+//                //a hack to prevent single node bouncing around
+//                 sys.parameters({ friction: '1.0' });
+//            }
         })
     })(this.jQuery)
     </r:script>
