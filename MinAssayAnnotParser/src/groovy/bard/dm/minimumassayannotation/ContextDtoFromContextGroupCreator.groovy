@@ -6,6 +6,7 @@ import org.apache.poi.ss.usermodel.Row
 import org.apache.poi.ss.usermodel.Sheet
 import org.apache.poi.ss.util.CellReference
 import org.apache.poi.ss.util.CellUtil
+import bard.dm.Log
 
 /**
  * Iterates over all the attribute-pairs in each context and build a contextDTO
@@ -126,7 +127,8 @@ class ContextDtoFromContextGroupCreator {
                 return cell.getCellFormula() as String;
                 break;
             default:
-                throw new RuntimeException("Error extracting cell content: ${cell}")
+                Log.logger.error("Error extracting cell content: ${cell} ${cell.rowIndex} ${cell.columnIndex} ${cell.getCellType()}")
+                return null
         }
     }
 }

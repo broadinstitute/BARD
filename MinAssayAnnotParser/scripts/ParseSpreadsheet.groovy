@@ -28,20 +28,26 @@ List<File> inputFileList = new LinkedList<File>()
 
 FilenameFilter xlsxExtensionFilenameFilter = new FilenameFilter() {
     boolean accept(File dir, String name) {
-        return name.toLowerCase().endsWith(".xlsx")
+        final String lower = name.toLowerCase()
+        return lower.endsWith(".xlsx") || lower.endsWith(".xls")
     }
 }
 
-List<String> inputDirPathArray = ["C:\\Local\\i_drive\\projects\\bard\\dataMigration\\min assay annotation\\waiting qc",
-        "test/exampleData/broadAssays/", "test/exampleData/BurnhamAssays", "test/exampleData/dnarepairmindataspreadsheets",
-        "test/exampleData/minAssayAnnotationSpreadsheets"]
+List<String> inputDirPathArray = 
+    ["C:\\Local\\i_drive\\projects\\bard\\dataMigration\\min assay annotation\\waiting qc",
+            "test/exampleData/broadAssays/", "test/exampleData/BurnhamAssays", "test/exampleData/dnarepairmindataspreadsheets",
+            "test/exampleData/minAssayAnnotationSpreadsheets"]
 
 for (String inputDirPath : inputDirPathArray) {
     File inputDirFile = new File(inputDirPath)
     assert inputDirFile, inputDirPath
-    println(inputDirPath)
-    inputFileList.addAll(inputDirFile.listFiles(xlsxExtensionFilenameFilter))
+
+    List<File> fileList = inputDirFile.listFiles(xlsxExtensionFilenameFilter)
+    inputFileList.addAll(fileList)
+
+    Log.logger.info("loading files from directory: ${inputDirPath} contains ${fileList.size()}")
 }
+
 Log.logger.info("loading ${inputFileList.size()} files found in ${inputDirPathArray.size()} directories")
 
 println("build mapping of columns to attributes and values")
@@ -57,7 +63,7 @@ AssayLoadResultsWriter assayLoadResultsWriter =
 
 final ParseAndBuildAttributeGroups parseAndBuildAttributeGroups = new ParseAndBuildAttributeGroups(loadResultsWriter)
 final Map attributeNameMapping = (new AttributeNameMappingBuilder()).build()
-final AttributesContentsCleaner attributesContentsCleaner = new AttributesContentsCleaner()
+final AttributesContentsCleaner attributesContentsCleaner = new AttributesContentsCleaner(attributeNameMapping)
 final AttributeContentAgainstElementTableValidator attributeContentAgainstElementTableValidator =
     new AttributeContentAgainstElementTableValidator(loadResultsWriter)
 final AssayContextsValidatorCreatorAndPersistor assayContextsValidatorCreatorAndPersistor =
@@ -65,59 +71,63 @@ final AssayContextsValidatorCreatorAndPersistor assayContextsValidatorCreatorAnd
 final MeasureContextsValidatorCreatorAndPersistor measureContextsValidatorCreatorAndPersistor =
     new MeasureContextsValidatorCreatorAndPersistor(modifiedBy, loadResultsWriter)
 
-for (File inputFile : inputFileList) {
-    Log.logger.info("${new Date()} processing file ${inputFile.absolutePath}")
+try {
+    for (File inputFile : inputFileList) {
+        Log.logger.info("${new Date()} processing file ${inputFile.absolutePath}")
 
-    println("Build assay and measure-context (groups) and populate their attribute from the spreadsheet cell contents.")
+        println("Build assay and measure-context (groups) and populate their attribute from the spreadsheet cell contents.")
 
-    try {
-        List<AssayDto> assayDtoList = parseAndBuildAttributeGroups.build(inputFile, START_ROW,
-                [spreadsheetAssayContextGroups, spreadsheetResultTypeContextGroups])
+        try {
+            List<AssayDto> assayDtoList = parseAndBuildAttributeGroups.build(inputFile, START_ROW,
+                    [spreadsheetAssayContextGroups, spreadsheetResultTypeContextGroups])
 
-        println("Clean loaded attributes")
-        attributesContentsCleaner.clean(assayDtoList, attributeNameMapping)
+            println("Clean loaded attributes")
+            attributesContentsCleaner.clean(assayDtoList)
 
-        println("validate loaded attributes")
+            println("validate loaded attributes")
 
-        for (AssayDto assayDto : assayDtoList) {
-            if (assayDto.aid) {
-                if (attributeContentAgainstElementTableValidator.validate(assayDto.assayContextDTOList, attributeNameMapping) &&
-                        attributeContentAgainstElementTableValidator.validate(assayDto.measureContextDTOList, attributeNameMapping)) {
+            for (AssayDto assayDto : assayDtoList) {
+                if (assayDto.aid) {
+                    if (attributeContentAgainstElementTableValidator.validate(assayDto.assayContextDTOList, attributeNameMapping) &&
+                            attributeContentAgainstElementTableValidator.validate(assayDto.measureContextDTOList, attributeNameMapping)) {
 
-                    println("create, check for duplicates, and persist domain objects")
-                    if (assayContextsValidatorCreatorAndPersistor.createAndPersist(assayDto.assayContextDTOList)) {
-                        if (measureContextsValidatorCreatorAndPersistor.createAndPersist(assayDto.measureContextDTOList)) {
-                            assayLoadResultsWriter.write(assayDto, AssayLoadResultsWriter.LoadResultType.success, null)
+                        if (assayContextsValidatorCreatorAndPersistor.createAndPersist(assayDto.assayContextDTOList)) {
+                            if (measureContextsValidatorCreatorAndPersistor.createAndPersist(assayDto.measureContextDTOList)) {
+                                assayLoadResultsWriter.write(assayDto, AssayLoadResultsWriter.LoadResultType.success, null)
+                            } else {
+                                assayLoadResultsWriter.write(assayDto, AssayLoadResultsWriter.LoadResultType.assayContextSuccessOnly,
+                                        "assay contexts loaded but failed to load measure contexts - for details see $contextLoadResultFilePath")
+                            }
                         } else {
-                            assayLoadResultsWriter.write(assayDto, AssayLoadResultsWriter.LoadResultType.assayContextSuccessOnly,
-                                    "assay contexts loaded but failed to load measure contexts - for details see $contextLoadResultFilePath")
+                            assayLoadResultsWriter.write(assayDto, AssayLoadResultsWriter.LoadResultType.fail,
+                                    "failed to load assay contexts (and did not try measure contexts  - for details see $contextLoadResultFilePath")
                         }
                     } else {
                         assayLoadResultsWriter.write(assayDto, AssayLoadResultsWriter.LoadResultType.fail,
-                                "failed to load assay contexts (and did not try measure contexts  - for details see $contextLoadResultFilePath")
+                                "aid had invalid attributes in assay contexts or measure contexts")
                     }
                 } else {
                     assayLoadResultsWriter.write(assayDto, AssayLoadResultsWriter.LoadResultType.fail,
-                            "aid had invalid attributes in assay contexts or measure contexts")
+                            "aid found in cell not a number")
                 }
-            } else {
-                assayLoadResultsWriter.write(assayDto, AssayLoadResultsWriter.LoadResultType.fail,
-                        "aid found in cell not a number")
             }
+        } catch (CouldNotReadExcelFileException e) {
+            final String message = "could not read excel file: ${inputFile.absolutePath} ${e.message}"
+            Log.logger.error(message)
+            loadResultsWriter.write(null, null, null, ContextLoadResultsWriter.LoadResultType.fail, message)
         }
-    } catch (CouldNotReadExcelFileException e) {
-        final String message = "could not read excel file: ${inputFile.absolutePath}"
-        Log.logger.error(message)
-        loadResultsWriter.write(null, null, null, ContextLoadResultsWriter.LoadResultType.fail, message)
     }
+} catch (Exception e) {
+    e.printStackTrace()
+    Log.logger.error(e.message)
+} finally {
+    loadResultsWriter.close()
+    assayLoadResultsWriter.close()
+
+    final Date endDate = new Date()
+    final double durationMin = (endDate.time - startDate.time) / 60000.0
+    Log.logger.info("finished at ${endDate}   duration[min]: ${durationMin}")
+    Log.close()
 }
+return
 
-loadResultsWriter.close()
-assayLoadResultsWriter.close()
-
-final Date endDate = new Date()
-final double durationMin = (endDate.time - startDate.time) / 60000.0
-Log.logger.info("finished at ${endDate}   duration[min]: ${durationMin}")
-Log.close()
-
-return false
