@@ -14,7 +14,7 @@
             <div class="cardTitle">
                 <p>${context.preferredName}</p>
                 <g:if test="${context.hasProperty('assayContextMeasures') && context.assayContextMeasures}">
-                    <p>Measure<g:if test="${context.assayContextMeasures.size() > 1}">(s)</g:if>:
+                    <p>Measure<g:if test="${context.assayContextMeasures.size() > 1}">s</g:if>:
                         <g:each in="${context.assayContextMeasures}" var="assayContextMeasure">
                             <a href="#measures-header">${assayContextMeasure.measure.resultType.label}</a>
                         </g:each>
