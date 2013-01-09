@@ -8,7 +8,7 @@ class CardFactoryService {
 
     private static final String ASSAY_COMPONENT_ROLE = "assay component role"
 
-    Map<String, CardDto> createCardDtoMapForAssay(Assay assay) {
+    Map<String, List<CardDto>> createCardDtoMapForAssay(Assay assay) {
         List<CardDto> cards = new ArrayList<CardDto>()
         if (assay == null || assay.getAssayContexts() == null) {
             return cards.groupBy {it.assaySection}

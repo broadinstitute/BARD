@@ -1,8 +1,8 @@
 $(document).ready(function () {
-	
-	$("#accordion").accordion({ autoHeight:false});
+
+	$("#accordion").accordion({ autoHeight:false, collapsible:true});
 	$("#dialog:ui-dialog").dialog("destroy");
-	
+
 	$("#addNewBtn").button({
         icons:{
             primary:"ui-icon-plus"
@@ -11,7 +11,7 @@ $(document).ready(function () {
         $("#dialog_edit_card").dialog( {title: "Create Card" });
         $("#dialog_edit_card").dialog("open");
     });
-	
+
     $("#dialog_edit_card").dialog({
     	height:180,
     	width:500,
@@ -38,7 +38,7 @@ $(document).ready(function () {
 		   }
 	   }
    ]);
-   
+
    $("#dialog_move_item").dialog({
    	height:300,
    	width:500,
@@ -48,7 +48,7 @@ $(document).ready(function () {
        zIndex: 3999,
        title:"Move card item"
    });
-   
+
    $("#dialog_add_item_wizard_confirm_cancel").dialog({
 	   	height:200,
 	   	width:500,
@@ -58,7 +58,7 @@ $(document).ready(function () {
 	    zIndex: 4000,
 	    title:"Confirm"
   });
-   
+
    $("#dialog_add_item_wizard_confirm_cancel").dialog("option", "buttons",[
    {
 	   text: "OK",
@@ -76,7 +76,7 @@ $(document).ready(function () {
        }
    }
    ]);
-   
+
    $("#dialog_add_item_wizard").dialog({
 	   	height:600,
 	   	width:750,
@@ -139,7 +139,7 @@ $(document).ready(function () {
         zIndex: 3999,
         title:"Delete item?"
     });
-    
+
     initDnd();
 });
 
@@ -245,7 +245,7 @@ function initDnd() {
             }
         });
     });
-    
+
     $(document).ready(function () {
         $("tr.context_item_row").droppable({
             hoverClass:"drophover",
@@ -289,7 +289,7 @@ function initDnd() {
             }
         });
     });
-   
+
 };
 
 function deleteCardItem(itemId, assayContextId){
@@ -324,7 +324,7 @@ function deleteCardItem(itemId, assayContextId){
 }
 
 function setupMoveCardItemForm(){
-	
+
 	   $("#move_item_form").ajaxForm({
 		   url:'../moveCardItem',
 		   type:'POST',
@@ -345,7 +345,7 @@ function setupMoveCardItemForm(){
 //	    	   alert("Submission successfully processed!");
 	       }
 	   });
-	
+
 	$("#dialog_move_item").dialog("option", "buttons", [
 	{
 		text: "Move",
@@ -361,11 +361,11 @@ function setupMoveCardItemForm(){
 	    	$(this).dialog("close");
 	    }
 	}
-	]);		
+	]);
 }
 
 function moveCardItem(assayId, itemId){
-	
+
 	var data = {'assayId':assayId, 'itemId':itemId };
 	$.ajax({
     	type:'POST',
@@ -380,7 +380,7 @@ function moveCardItem(assayId, itemId){
         error:function (jqXHR, textStatus, errorThrown){
         	alert("Error: " + textStatus);
         }
-    });	
+    });
 }
 
 function deleteCard(cardId){
@@ -422,11 +422,11 @@ function editCardName(cardId, cardName) {
 }
 
 function editCardItem(){
-	
+
 }
 
 function launchAddItemWizard(assayContextId, cardSection){
-	
+
 	var data = {'assayContextId':assayContextId, 'cardSection':cardSection};
 	$.ajax({
     	type:'POST',
@@ -440,6 +440,6 @@ function launchAddItemWizard(assayContextId, cardSection){
         error:function (jqXHR, textStatus, errorThrown){
         	alert("Error: " + textStatus + " -> " + errorThrown);
         }
-    });	
+    });
 
 }
