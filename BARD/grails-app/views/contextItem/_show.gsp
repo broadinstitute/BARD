@@ -8,18 +8,27 @@
 
 
 <%-- A template for showing summary for both project and assay def, show as card --%>
-<div id="card-${context.id}" class="span6 card roundedBorder card-table-container">
+<div id="card-${context.id}" class="card roundedBorder card-table-container">
     <table class="table table-hover">
         <caption id="${context.id}" class="assay_context">
-            <div class="cardTitle">${context.preferredName}</div>
+            <div class="cardTitle">
+                <p>${context.preferredName}</p>
+                <g:if test="${context.hasProperty('assayContextMeasures') && context.assayContextMeasures}">
+                    <p>Measure<g:if test="${context.assayContextMeasures.size() > 1}">(s)</g:if>:
+                        <g:each in="${context.assayContextMeasures}" var="assayContextMeasure">
+                            <a href="#measures-header">${assayContextMeasure.measure.resultType.label}</a>
+                        </g:each>
+                    </p>
+                </g:if>
+            </div>
         </caption>
         <tbody>
-            <g:each in="${context.contextItems}" status="i" var="contextItem">
-                <tr id="${contextItem.id}" class='context_item_row'>
-                    <td class="attributeLabel">${contextItem.attributeElement?.label}</td>
-                    <td class="valuedLabel">${contextItem.valueDisplay}</td>
-                </tr>
-            </g:each>
+        <g:each in="${context.contextItems}" status="i" var="contextItem">
+            <tr id="${contextItem.id}" class='context_item_row'>
+                <td class="attributeLabel">${contextItem.attributeElement?.label}</td>
+                <td class="valuedLabel">${contextItem.valueDisplay}</td>
+            </tr>
+        </g:each>
         </tbody>
     </table>
 </div>

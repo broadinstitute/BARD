@@ -1,14 +1,3 @@
-import bard.db.registration.AttributeType
-import bard.dm.minimumassayannotation.Attribute
-import bard.dm.minimumassayannotation.ContextGroup
-import bard.dm.minimumassayannotation.AssayContextGroupsBuilder
-import bard.dm.minimumassayannotation.AttributeNameMappingBuilder
-import bard.dm.minimumassayannotation.ContextDTO
-import bard.dm.minimumassayannotation.ParseAndBuildAttributeGroups
-import bard.dm.minimumassayannotation.AttributesContentsCleaner
-import bard.dm.minimumassayannotation.validateCreatePersist.AttributeContentAgainstElementTableValidator
-import bard.dm.minimumassayannotation.validateCreatePersist.AssayContextsValidatorCreatorAndPersistor
-import bard.dm.minimumassayannotation.validateCreatePersist.MeasureContextsValidatorCreatorAndPersistor
 import bard.dm.Log
 import org.apache.log4j.Level
 import postUploadProcessing.ContextGroupService
@@ -16,6 +5,7 @@ import bard.dm.postUploadProcessing.ContextChange
 import bard.db.registration.AssayContext
 import org.springframework.transaction.TransactionStatus
 
+Log.initializeLogger("test/exampleData/logsAndOutput/dnaRepairLoad.log")
 final Date startDate = new Date()
 Log.logger.info("Start post-processing the spreadsheet uplaods ${startDate}")
 
@@ -58,5 +48,6 @@ AssayContext.withTransaction { TransactionStatus status ->
 final Date endDate = new Date()
 final double durationMin = (endDate.time - startDate.time) / 60000.0
 Log.logger.info("finished at ${endDate}   duration[min]: ${durationMin}")
+Log.close()
 
 return false

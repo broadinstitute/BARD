@@ -13,21 +13,23 @@ import org.apache.log4j.SimpleLayout
  * To change this template use File | Settings | File Templates.
  */
 class Log {
-    static Logger logger = initializeLogger()
+    static Logger logger = null
 
-    static FileAppender fileAppender
+    private static FileAppender fileAppender
 
-    private static String filePath = "test/exampleData/assayDeDuplication.log"
-    //// "test/exampleData/dnaRepairLoad.log"
-    //"test/exampleData/parseCarsSpreadsheet.log"
-
-    private static Logger initializeLogger() {
-        Logger logger = Logger.getLogger("parseCarsSpreadsheetScriptLogger")
+    public static Logger initializeLogger(String filePath) {
+        logger = Logger.getLogger("parseCarsSpreadsheetScriptLogger")
         logger.setLevel(Level.ALL)
 
         fileAppender = new FileAppender(new SimpleLayout(),  filePath, false)
         logger.addAppender(fileAppender)
-
-        return logger
     }
+
+    public static void close() {
+        fileAppender.close()
+        fileAppender = null
+        logger = null
+    }
+
+
 }

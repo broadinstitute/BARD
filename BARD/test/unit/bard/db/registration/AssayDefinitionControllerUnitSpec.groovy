@@ -35,7 +35,6 @@ class AssayDefinitionControllerUnitSpec extends Specification {
 
         then:
         model.assayInstance == assay
-        model.cardDtoMap != null
     }
 
     void 'testFindById()'() {

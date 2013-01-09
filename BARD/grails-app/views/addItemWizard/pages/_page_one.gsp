@@ -19,13 +19,13 @@
  -->
 
 <g:textField class="input-xlarge" id="attributeTextField" name='attributeText' placeholder="Search for Attribute" />
-<input type="hidden" id="elementId" name="elementId"/>
-<input type="hidden" id="path" name="path"/>
-<input type="hidden" id="assayContextId" name="assayContextId"/>
+<input type="hidden" id="elementId" name="elementId" value="${ attribute?.elementId }"/>
+<input type="hidden" id="path" name="path" value="${ attribute?.path }"/>
+<input type="hidden" id="assayContextIdValue" name="assayContextIdValue" value="${ attribute?.assayContextIdValue }"/>
 <span class="help-inline">Search for an item and then choose from auto-suggest to make it your current choice</span>
 
 <label class="control-label" >Current choice:</label>
-<input class="input-xlarge" type="text" id="currentValue" name='currentValue'>
+<input class="input-xlarge" type="text" id="currentValue" name='currentValue' value="${ attribute?.currentValue }">
 <!-- 
 <label id="currentValueDisplay" >Current choice ID:</label>
 <span id="currentValueDisplay" name="currentValueDisplay" class="input-large uneditable-input"></span> 
