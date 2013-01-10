@@ -24,9 +24,7 @@ class AssayDefinitionController {
             render(view: "description", model: [assayInstance: assayInstance])
             return
         }
-
         flash.message = message(code: 'default.created.message', args: [message(code: 'assay.label', default: 'Assay'), assayInstance.id])
-//        render(view: "description", model: [assayInstance: assayInstance])
 		redirect(action: "show", id: assayInstance.id)
     }
 
@@ -37,14 +35,12 @@ class AssayDefinitionController {
             flash.message = message(code: 'default.not.found.message', args: [message(code: 'assay.label', default: 'Assay'), params.id])
             return
         }
-        else
+        else{
             flash.message = null
-
-        Map<String , CardDto> cardDtoMap = cardFactoryService.createCardDtoMapForAssay(assayInstance)
-
-        [assayInstance: assayInstance, cardDtoMap: cardDtoMap]
+        }
+        [assayInstance: assayInstance]
     }
-	
+
 	def edit() {
 		def assayInstance = Assay.get(params.id)
 
@@ -139,7 +135,7 @@ class AssayDefinitionController {
         Map<String , CardDto> cardDtoMap = cardFactoryService.createCardDtoMapForAssay(assayContext.assay)
         render(template: "cards", model: [cardDtoMap: cardDtoMap, assayId: assayId])
     }
-	
+
 	def showMoveItemForm(Long assayId, Long itemId){
 		def assayInstance = Assay.get(assayId)
 		if (!assayInstance) {
@@ -149,7 +145,7 @@ class AssayDefinitionController {
 		Map<String , CardDto> cardDtoMap = cardFactoryService.createCardDtoMapForAssay(assayInstance)
 		render(template: "moveItemForm", model: [cardDtoMap: cardDtoMap, assayId: assayId, itemId: itemId])
 	}
-	
+
 	def moveCardItem(Long cardId, Long assayContextItemId, Long assayId){
 		AssayContext targetAssayContext = AssayContext.findById(cardId)
 		AssayContextItem source = AssayContextItem.findById(assayContextItemId)

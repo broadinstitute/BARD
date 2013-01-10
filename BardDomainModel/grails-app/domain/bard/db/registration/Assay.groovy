@@ -2,8 +2,9 @@ package bard.db.registration
 
 import bard.db.enums.ReadyForExtraction
 import bard.db.experiment.Experiment
+import bard.db.model.AbstractContextOwner
 
-class Assay {
+class Assay extends AbstractContextOwner{
 
     private static final int ASSAY_STATUS_MAX_SIZE = 20
     private static final int ASSAY_NAME_MAX_SIZE = 1000
@@ -31,28 +32,10 @@ class Assay {
     List<AssayContext> assayContexts = [] as List<AssayContext>
     Set<AssayDocument> assayDocuments = [] as Set<AssayDocument>
 
-
-    List<AssayContextItem> getAssayContextItems() {
-        Set<AssayContextItem> assayContextItems = new HashSet<AssayContextItem>()
-        for (AssayContext assayContext : this.assayContexts){
-            assayContextItems.addAll(assayContext.assayContextItems)
-        }
-        return assayContextItems as List<AssayContextItem>
-    }
-
-    static transients = ['assayContextItems']
     static hasMany = [experiments: Experiment,
             measures: Measure,
             assayContexts: AssayContext,
             assayDocuments: AssayDocument]
-
-    static mapping = {
-        id(column: "ASSAY_ID", generator: "sequence", params: [sequence: 'ASSAY_ID_SEQ'])
-        assayContexts(indexColumn: [name: 'DISPLAY_ORDER'], lazy: 'false')
-
-        measures(lazy: false)
-        assayContexts(lazy: false)
-    }
 
     static constraints = {
         assayStatus(maxSize: ASSAY_STATUS_MAX_SIZE, blank: false)
@@ -69,4 +52,50 @@ class Assay {
         lastUpdated(nullable: true)
         modifiedBy(nullable: true, blank: false, maxSize: MODIFIED_BY_MAX_SIZE)
     }
+
+    static mapping = {
+        id(column: "ASSAY_ID", generator: "sequence", params: [sequence: 'ASSAY_ID_SEQ'])
+        assayContexts(indexColumn: [name: 'DISPLAY_ORDER'], lazy: 'false')
+        
+        measures(lazy: false)
+        assayContexts(lazy: false)
+    }
+
+    static transients = ['assayContextItems']
+
+    List<AssayContextItem> getAssayContextItems() {
+        Set<AssayContextItem> assayContextItems = new HashSet<AssayContextItem>()
+        for (AssayContext assayContext : this.assayContexts) {
+            assayContextItems.addAll(assayContext.assayContextItems)
+        }
+        return assayContextItems as List<AssayContextItem>
+    }
+
+
+    /**
+     * duck typing to look like project
+     * @return assayDocuments
+     */
+    Set<AssayDocument> getDocuments() {
+        this.assayDocuments
+    }
+    /**
+     *  duck typing to look like project
+     * @return assayName
+     */
+    String getName() {
+        this.assayName
+    }
+    /**
+     * duck typing to look like project for summary/_show template
+     */
+    String getDescription() {
+        this.assayName
+    }
+
+
+    List<AssayContext> getContexts(){
+        this.assayContexts
+    }
+
 }

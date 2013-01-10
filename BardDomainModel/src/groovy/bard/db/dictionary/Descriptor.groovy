@@ -34,14 +34,14 @@ abstract class Descriptor<T extends Descriptor> {
 
     static constraints = {
 
-        parent(nullable:true)
+        parent(nullable: true)
         element()
         elementStatus(nullable: false, maxSize: ELEMENT_STATUS_MAX_SIZE)
 
         label(nullable: false, unique: true, maxSize: LABEL_MAX_SIZE)
         leaf()
         description(nullable: true, maxSize: DESCRIPTION_MAX_SIZE)
-        fullPath(nullable:true, blank:false,maxSize: FULL_PATH_MAX_SIZE)
+        fullPath(nullable: true, blank: false, maxSize: FULL_PATH_MAX_SIZE)
         abbreviation(nullable: true, maxSize: ABBREVIATION_MAX_SIZE)
 
         synonyms(nullable: true, maxSize: SYNONYMS_MAX_SIZE)
@@ -60,16 +60,29 @@ abstract class Descriptor<T extends Descriptor> {
 //            parent(column: 'PARENT_NODE_ID')
 //        }
 
+    /**
+     *
+     * @return a string representing the ontology path hierarchy in total
+     */
     String generateOntologyBreadCrumb() {
-        getPath().label.join('>')
+        generateOntologyBreadCrumb(path.size())
+    }
+
+    /**
+     *
+     * @param pathLength
+     * @return a string representing the ontology path hierarchy to the specified pathLength
+     */
+    String generateOntologyBreadCrumb(int pathLength) {
+        int toIndexExclusive = Math.min(pathLength, path.size())
+        path.subList(0, toIndexExclusive).collect { it.label }.join(' > ')
     }
 
 
     List<T> getPath() {
         if (parent) {
             parent.getPath() << this
-        }
-        else {
+        } else {
             [this]
         }
     }

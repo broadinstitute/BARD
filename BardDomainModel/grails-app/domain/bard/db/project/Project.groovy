@@ -1,10 +1,11 @@
 package bard.db.project
 
 import bard.db.enums.ReadyForExtraction
+import bard.db.model.AbstractContextOwner
 import bard.db.registration.ExternalReference
 import bard.db.dictionary.Descriptor
 
-class Project {
+class Project extends AbstractContextOwner {
     private static final int PROJECT_NAME_MAX_SIZE = 256
     private static final int READY_FOR_EXTRACTION_MAX_SIZE = 20
     private static final int MODIFIED_BY_MAX_SIZE = 40
@@ -63,27 +64,4 @@ class Project {
         projectSteps.flatten()
     }
 
-    Map<String, List<ProjectContext>> getContextsWithGroup() {
-        Map<String, List<ProjectContext>> m = [:]
-        contexts.each{
-            ProjectContext context ->
- //            String group = context.contextGroup ?context.contextGroup:"no group name"
-            Descriptor descriptor = context.preferredDescriptor
-            String group;
-            if(descriptor){
-
-                List<Descriptor> path = descriptor.getPath()
-                int toIndexExclusive = Math.min(2, path.size())
-                group = path.subList(0,toIndexExclusive).collect{ it.label }.join(' > ')
-            }
-            else {
-                group = 'uncategorized cards'
-            }
-            if (!m.get(group)) {
-                m.put(group, [])
-            }
-            m.get(group).add(context)
-        }
-        return m
-    }
 }
