@@ -31,8 +31,8 @@ class ParseAndBuildAttributeGroups {
         final Workbook wb
         try {
             wb = new XSSFWorkbook(new FileInputStream(inputFile))
-        } catch (IllegalStateException e) {
-            throw new CouldNotReadExcelFileException()
+        } catch (Exception e) {
+            throw new CouldNotReadExcelFileException(e.message, e)
         }
 
         List<AssayDto> assayDtoList = new LinkedList<AssayDto>()
@@ -100,4 +100,7 @@ class ParseAndBuildAttributeGroups {
 }
 
 class CouldNotReadExcelFileException extends Exception {
+    CouldNotReadExcelFileException(String message, Throwable cause) {
+        super(message, cause)
+    }
 }
