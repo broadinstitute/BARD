@@ -26,12 +26,23 @@
             handleSearch('/bardwebclient/bardWebInterface/showProbeList', '', 'probeListTab', 'totalCompounds', 'Probes ', 'probeListDiv');
         });
 
-        $(document).on('search.complete', function () {
-            //We need to disable ajax behaviour on the pagination links for the mobile experiencr to woek
+        $(document).on('search.complete', '#probeList', function () {
+            //Restory the JQuery Mobile navigation button style after overriding the button's html with the total-value.
+            updateNavigationButtonStyle($('#probeListTab'));
+
+            //We need to disable ajax behaviour on the pagination links for the mobile experience to work
             $('#paginateBar a').attr("data-ajax", "false");
             //Adjust the structure thumbnail images to the mobile screen size.
             adjustStructureThumbnailSize()
         });
+
+        $(document).on('search.complete', '#assaysDiv, #compoundsDiv, #projectsDiv', function () {
+            //Restory the JQuery Mobile navigation button style after overriding the button's html with the total-value.
+            updateNavigationButtonStyle($('#assaysTab'));
+            updateNavigationButtonStyle($('#compoundsTab'));
+            updateNavigationButtonStyle($('#projectsTab'));
+        });
+
 
         //Resize structure thumbnails with every window-resize even.
         $(window).resize(adjustStructureThumbnailSize);
@@ -43,13 +54,19 @@
             var height = Math.round(width * 5 / 6);
             $('.structureThumbnail').attr('width', width).attr('height', height);
         }
+
+        function updateNavigationButtonStyle(buttonElement) {
+            var existingHtml = $(buttonElement).text();
+            var newHtml = '<span class="ui-btn-inner ui-btn-corner-all"><span class="ui-btn-text">' + existingHtml + '</span>' + '<span class="ui-icon ui-icon-arrow-r ui-icon-shadow"> </span></span>'
+            $(buttonElement).html(newHtml);
+        }
     </r:script>
 
-    %{--<style>--}%
-    %{--.ui-page {--}%
-    %{---webkit-backface-visibility: hidden;--}%
-    %{--}--}%
-    %{--</style>--}%
+%{--<style>--}%
+%{--.ui-page {--}%
+%{---webkit-backface-visibility: hidden;--}%
+%{--}--}%
+%{--</style>--}%
 </head>
 
 <body>
