@@ -33,6 +33,8 @@ modules = {
 	}
     projectstep {
         resource url: '/js/projectstep/arbor.js'
+        resource url: '/js/projectstep/projectstep.show.js'
+        resource url: '/js/projectstep/projectstep.edit.js'
     }
 	images {
 	}
