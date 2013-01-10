@@ -36,9 +36,13 @@ class SpreadsheetElementsTagLib {
             HillCurveValueHolder hillCurveValueHolder = attrs.spreadSheetActivityStorage.getHillCurveValueHolderList()[0]
             out << """<td class="molSpreadSheet" property="var${currentCol}">
                       <p>"""
+            String mandatePopover = ""
+            if (hillCurveValueHolder?.conc?.size() > 1) {
+                mandatePopover = "drc-popover-link "
+            }
             if (hillCurveValueHolder?.identifier) {
                 out << """<div data-detail-id="drc_${attrs.spreadSheetActivityStorage.sid}_${currentCol}"
-                               class="drc-popover-link btn btn-link"
+                               class="${mandatePopover}btn btn-link"
                                data-original-title="${hillCurveValueHolder.identifier}"
                                data-html="true"
                                data-trigger="hover">
